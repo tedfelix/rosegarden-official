@@ -78,7 +78,7 @@ New features suitable for 0.2
     velocity conversions?
 
 7.  MIDI recording - also requires basic track selection and Record/Mute
-    track buttons.
+    track buttons. [DONE - still needs realtime Segment view of new events]
 
 8.  Transport GUI - play, rwd buttons etc - timer. [DONE]
 

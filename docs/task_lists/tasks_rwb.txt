@@ -4,27 +4,26 @@ Current 0.2 TO-DOs [update 14.1.2001]
 o Bar lines widget (similar to TrackButtons).
   Implementation to allow for:
 
-o Looping
+  - Looping
 
-o Start and End Markers and allow for Composition
-  growth and shrinkage
+  - Start and End Markers for Composition growth and shrinkage
 
-o Allow negative time on segment canvas and transport etc.
+o Allow negative time on segment canvas and transport
 
-o Track addition/deletion and moving
-
-o Segment colouring [low priority obviously!]
+o Track addition/deletion and moving on TrackButtons canvas
 
 o Complete segment edit shortcuts (click/copy/multiple
   segment drag)
 
-o MIDI recording
+o MIDI recording [DONE - first pass]
 
 o Audio.  Still.
   Most likely wait until all the above has been implemented
   before tackling audio.
 
-o Segment level Undo/Redo - eech!
+o Segment level Undo/Redo
+
+o Segment colouring [low priority obviously!]
 
 
 
