@@ -261,7 +261,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 	//Qt just returns the correct metric even if drawing the
 	//incorrect size]
 	
-	for (int sz = 1; sz <= 30; sz += (sz < 6 /*!!! == 1 */ ? 1 : 2)) {
+	for (int sz = 1; sz <= 30; sz += (sz == 1 ? 1 : 2)) {
 
 	    SizeData &sizeData = m_sizes[sz];
 	    unsigned int temp, temp1;

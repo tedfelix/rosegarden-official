@@ -268,7 +268,6 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     clock_t startTime = clock();
 
     bool drawFlag = params.m_drawFlag;
-    int stemLength = params.m_stemLength;
 
     if (params.m_beamed) drawFlag = false;
 
@@ -297,10 +296,7 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     int dotWidth = dot.width();
     if (dotWidth < getNoteBodyWidth()/2) dotWidth = getNoteBodyWidth()/2;
 
-    if (stemLength < 0) {
-	// This should only happen if the note is unbeamed
-	stemLength = getStemLength(params);
-    }
+    int stemLength = getStemLength(params);
 
     if (params.m_marks.size() > 0) {
 	makeRoomForMarks(isStemmed, params);
@@ -491,16 +487,16 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
 int
 NotePixmapFactory::getStemLength(const NotePixmapParameters &params) const
 {
-    //!!! use flagSpacing? or need a makeRoomForFlags in case
-    //they're too long?  (flagSpacing won't work well because we
-    //need more room for flags on downward-pointing stems than
-    //upward ones)
+    if (params.m_beamed && params.m_stemLength >= 0) {
+	return params.m_stemLength;
+    }
 
-    unsigned int stemLength = getStemLength();
+    int stemLength = getStemLength();
 
     int flagCount = m_style->getFlagCount(params.m_noteType);
     int slashCount = params.m_slashes;
-    unsigned int nbh = m_noteBodyHeight;
+    bool stemUp = params.m_stemGoesUp;
+    int nbh = m_noteBodyHeight;
     
     switch (flagCount) {
     case 1: stemLength += nbh / 3; break;
@@ -509,31 +505,38 @@ NotePixmapFactory::getStemLength(const NotePixmapParameters &params) const
     case 4: stemLength += nbh * 2 - nbh / 4; break;
     default: break;
     }
-    if (flagCount > 0 && !params.m_stemGoesUp) {
-	stemLength += nbh / 2;
-    }
     
     int width = 0, height = 0;
 
-    if (m_font->getDimensions(m_style->getFlagCharName(flagCount),
-			      width, height)) {
+    if (flagCount > 0) {
 
-	stemLength = std::min(stemLength, height + nbh);
+	if (!stemUp) stemLength += nbh / 2;
 
-    } else if (m_font->getDimensions(m_style->getPartialFlagCharName(true),
-				     width, height) ||
-	       m_font->getDimensions(m_style->getPartialFlagCharName(false),
-				     width, height)) {
+	if (m_font->getDimensions(m_style->getFlagCharName(flagCount),
+				  width, height)) {
 
-	unsigned int flagSpace = m_noteBodyHeight;
-	(void)m_font->getFlagSpacing(flagSpace);
+	    stemLength = std::max(stemLength, height);
 
-	stemLength = std::min(stemLength,
-			      height + (flagCount - 1) * flagSpace + nbh);
+	} else if (m_font->getDimensions(m_style->getPartialFlagCharName(true),
+					 width, height) ||
+		   m_font->getDimensions(m_style->getPartialFlagCharName(false),
+					 width, height)) {
+	    
+	    unsigned int flagSpace = m_noteBodyHeight;
+	    (void)m_font->getFlagSpacing(flagSpace);
+	    
+	    stemLength = std::max(stemLength,
+				  height + (flagCount - 1) * (int)flagSpace);
+	}
     }
 
     if (slashCount > 3 && flagCount < 3) {
 	stemLength += (slashCount - 3) * (nbh / 2);
+    }
+
+    if (params.m_stemLength >= 0) {
+	if (flagCount == 0) return params.m_stemLength;
+	stemLength = std::max(stemLength, params.m_stemLength);
     }
 
     return stemLength;
