@@ -29,9 +29,7 @@ InstrumentParameterBox::InstrumentParameterBox(QWidget *parent,
                                                WFlags f)
   :QFrame(parent, name, f)
 {
-    setMinimumSize(130, 100);
-    setMaximumSize(130, 100);
-
+    setFixedSize(120, 120);
     initBox();
 }
 
@@ -45,12 +43,12 @@ InstrumentParameterBox::initBox()
     QFont font ("lucidasanstypewriter", 8);
     font.setPixelSize(10);
 
-    QGridLayout *gridLayout = new QGridLayout(this, 2, 2, 8, 1);
+    QGridLayout *gridLayout = new QGridLayout(this, 2, 2, 5, 1);
 
     QLabel *title = new QLabel("Instrument Parameters", this);
     title->setFont(font);
 
-    gridLayout->addMultiCellWidget(title, 0, 0, 0, 1, AlignLeft);
+    gridLayout->addMultiCellWidget(title, 0, 0, 0, 1, AlignLeft|AlignTop);
 
 }
 

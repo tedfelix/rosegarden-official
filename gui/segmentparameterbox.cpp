@@ -32,9 +32,7 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent,
                                          WFlags f)
   :QFrame(parent, name, f)
 {
-    setMinimumWidth(130);
-    setMaximumWidth(130);
-
+    setFixedSize(120, 120);
     initBox();
 }
 
@@ -57,7 +55,7 @@ SegmentParameterBox::initBox()
     QFont font ("lucidasanstypewriter", 8);
     font.setPixelSize(10);
 
-    QGridLayout *gridLayout = new QGridLayout(this, 2, 2, 8, 1);
+    QGridLayout *gridLayout = new QGridLayout(this, 2, 2, 5, 1);
 
     QLabel *repeatLabel = new QLabel("Repeat", this);
     QLabel *quantizeLabel = new QLabel("Quantize", this);
@@ -66,26 +64,22 @@ SegmentParameterBox::initBox()
 
     m_repeatValue = new RosegardenTristateCheckBox(this);
     m_repeatValue->setFont(font);
-    m_repeatValue->setMinimumHeight(comboHeight);
-    m_repeatValue->setMaximumHeight(comboHeight);
+    m_repeatValue->setFixedHeight(comboHeight);
 
     // handle state changes
     connect(m_repeatValue, SIGNAL(pressed()), SLOT(repeatPressed()));
 
     m_quantizeValue = new QComboBox(false, this); // motif style read-only
     m_quantizeValue->setFont(font);
-    m_quantizeValue->setMinimumSize(comboWidth, comboHeight);
-    m_quantizeValue->setMaximumSize(comboWidth, comboHeight);
+    m_quantizeValue->setFixedSize(comboWidth, comboHeight);
 
     m_transposeValue = new QComboBox(false, this); // motif style read-only
     m_transposeValue->setFont(font);
-    m_transposeValue->setMinimumSize(comboWidth, comboHeight);
-    m_transposeValue->setMaximumSize(comboWidth, comboHeight);
+    m_transposeValue->setFixedSize(comboWidth, comboHeight);
 
     m_delayValue = new QComboBox(false, this); // motif style read-only
     m_delayValue->setFont(font);
-    m_delayValue->setMinimumSize(comboWidth, comboHeight);
-    m_delayValue->setMaximumSize(comboWidth, comboHeight);
+    m_delayValue->setFixedSize(comboWidth, comboHeight);
 
     repeatLabel->setFont(font);
     quantizeLabel->setFont(font);
@@ -94,8 +88,7 @@ SegmentParameterBox::initBox()
 
     QLabel *title = new QLabel("Segment Parameters", this);
     title->setFont(font);
-    title->setMinimumHeight(comboHeight);
-    title->setMaximumHeight(comboHeight);
+    title->setFixedHeight(comboHeight);
 
     gridLayout->addMultiCellWidget(title, 0, 0, 0, 1, AlignLeft);
 
@@ -206,34 +199,27 @@ void
 SegmentParameterBox::repeatPressed()
 {
     bool state;
-    bool update = false;
 
     switch(m_repeatValue->state())
     {
         case QButton::Off:
             state = true;
-            update = true;
             break;
 
         case QButton::NoChange:
         case QButton::On:
         default:
             state = false;
-            update = true;
             break;
     }
 
     // update the check box and all current Segments
-    if (update)
-    {
-        m_repeatValue->setChecked(state);
+    m_repeatValue->setChecked(state);
 
-        std::vector<Rosegarden::Segment*>::iterator it;
+    std::vector<Rosegarden::Segment*>::iterator it;
 
-        for (it = m_segments.begin(); it != m_segments.end(); it++)
-            (*it)->setRepeating(state);
-
-    }
+    for (it = m_segments.begin(); it != m_segments.end(); it++)
+        (*it)->setRepeating(state);
 }
 
 
