@@ -29,6 +29,8 @@
 
 #include <vector>
 
+#include <qlistview.h>
+
 #include "editview.h"
 
 class RosegardenGUIDoc;
@@ -62,6 +64,8 @@ public:
 signals:    
 public slots:
 protected:
+
+    QListView *m_eventList;
 
 };
 
