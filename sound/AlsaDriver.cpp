@@ -20,6 +20,9 @@
 
 #include "config.h"
 
+#include <iostream>
+#include <cstdlib>
+
 #ifdef HAVE_ALSA
 
 // ALSA
@@ -37,7 +40,7 @@
 #ifdef HAVE_LIBJACK
 #include <jack/types.h>
 #include <unistd.h> // for usleep
-#include <math.h>
+#include <cmath>
 #endif
 
 // This driver implements MIDI in and out via the ALSA (www.alsa-project.org)
