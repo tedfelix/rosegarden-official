@@ -467,7 +467,7 @@ DSSIPluginInstance::activate()
 	if (!m_program) {
 	    const DSSI_Program_Descriptor *programDescriptor;
 	    if ((programDescriptor = m_descriptor->get_program(m_instanceHandle, 0))) {
-		m_program = QString("%1. %2").arg(0).arg(programDescriptor->Name);
+		m_program = QString("%1. %2").arg(1).arg(programDescriptor->Name);
 	    }
 	}
 

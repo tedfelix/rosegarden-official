@@ -65,7 +65,7 @@ MappedEvent::MappedEvent(InstrumentId id,
 
 	if (e.isa(Note::EventType))
             {
-                m_type = MidiNote;
+                m_type = MidiNoteOneShot;
                 long v = MidiMaxValue;
                 e.get<Int>(BaseProperties::VELOCITY, v);
                 m_data2 = v;

@@ -703,6 +703,7 @@ punchin:
         switch (studio.getInstrumentById(inst)->getType()) {
 
         case Instrument::Midi:
+	case Instrument::SoftSynth:
             recordType = STARTING_TO_RECORD_MIDI;
             SEQMAN_DEBUG << "SequenceManager::record() - starting to record MIDI\n";
             break;

@@ -1480,6 +1480,8 @@ AlsaDriver::stopPlayback()
     if (m_recordStatus == RECORD_MIDI)
         m_recordStatus = ASYNCHRONOUS_MIDI;
 
+    stopClocks();
+
 #ifdef HAVE_LIBJACK
     if (m_jackDriver) {
 	m_jackDriver->stop();
@@ -1492,6 +1494,8 @@ AlsaDriver::stopPlayback()
 	m_jackDriver->releaseAudioQueueLocks();
     }
 #endif
+
+    startClocks();
 }
 
 void
@@ -1799,7 +1803,7 @@ AlsaDriver::getMappedComposition()
 
     // If the input port hasn't connected we shouldn't poll it
     //
-    if(m_midiInputPortConnected == false)
+    if (m_midiInputPortConnected == false)
     {
         return &m_recordComposition;
     }
@@ -2117,7 +2121,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
 	RealTime alsaTimeNow = getAlsaTime();
-	std::cerr << "processMidiOut[" << now << "]: event is at " << midiRelativeTime << " (" << midiRelativeTime - alsaTimeNow << " ahead of queue time)" << std::endl;
+	std::cerr << "processMidiOut[" << now << "]: event is at " << midiRelativeTime << " (" << midiRelativeTime - alsaTimeNow << " ahead of queue time), type " << int((*i)->getType()) << ", duration " << (*i)->getDuration() << std::endl;
 #endif
 
 #ifdef HAVE_LIBJACK
@@ -2212,7 +2216,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 		    //but if I remove it, I get no note-offs for most
 		    //notes during playback.  I'm missing something
 		    //here.
-		    needNoteOff = true;
+//		    needNoteOff = true;
 
 		    if (!isSoftSynth && getSequencerDataBlock()) {
 			Rosegarden::LevelInfo info;
@@ -2393,7 +2397,8 @@ AlsaDriver::processSoftSynthEventOut(InstrumentId id, const snd_seq_event_t *ev,
 
 	RealTime t(ev->time.time.tv_sec, ev->time.time.tv_nsec);
 
-	if (now) t = RealTime::zeroTime;//!!! getSequencerTime();
+//	if (now) t = RealTime::zeroTime;//!!! getSequencerTime();
+	if (now) t = getSequencerTime();
 	else t = t + m_playStartPosition - m_alsaPlayStartTime;
 
 #ifdef DEBUG_ALSA
