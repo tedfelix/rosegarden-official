@@ -71,7 +71,7 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
     if (thruFilter & Rosegarden::MappedEvent::MidiController)
         contThru->setChecked(true);
 
-    if (thruFilter & Rosegarden::MappedEvent::MidiSystemExclusive)
+    if (thruFilter & Rosegarden::MappedEvent::MidiSystemMessage)
         sysThru->setChecked(true);
 
     m_recordBox =
@@ -108,7 +108,7 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
     if (recordFilter & Rosegarden::MappedEvent::MidiController)
         contRecord->setChecked(true);
 
-    if (recordFilter & Rosegarden::MappedEvent::MidiSystemExclusive)
+    if (recordFilter & Rosegarden::MappedEvent::MidiSystemMessage)
         sysRecord->setChecked(true);
 
 
@@ -147,7 +147,7 @@ MidiFilterDialog::slotApply()
         thruFilter |= Rosegarden::MappedEvent::MidiController;
 
     if (dynamic_cast<QCheckBox*>(m_thruBox->find(6))->isChecked())
-        thruFilter |= Rosegarden::MappedEvent::MidiSystemExclusive;
+        thruFilter |= Rosegarden::MappedEvent::MidiSystemMessage;
 
     if (dynamic_cast<QCheckBox*>(m_recordBox->find(0))->isChecked())
         recordFilter |= Rosegarden::MappedEvent::MidiNote;
@@ -168,7 +168,7 @@ MidiFilterDialog::slotApply()
         recordFilter |= Rosegarden::MappedEvent::MidiController;
 
     if (dynamic_cast<QCheckBox*>(m_recordBox->find(6))->isChecked())
-        recordFilter |= Rosegarden::MappedEvent::MidiSystemExclusive;
+        recordFilter |= Rosegarden::MappedEvent::MidiSystemMessage;
 
 
     //if (m_thruBox->

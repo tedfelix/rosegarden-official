@@ -38,6 +38,7 @@
 #include "MappedEvent.h"
 #include "SegmentPerformanceHelper.h"
 #include "BaseProperties.h"
+#include "Midi.h"
 
 #include "rosestrings.h"
 #include "rosegardenguidoc.h"
@@ -987,7 +988,35 @@ unsigned int MetronomeMmapper::getSegmentRepeatCount()
 
 size_t MetronomeMmapper::computeMmappedSize()
 {
-    return m_ticks.size() * sizeof(MappedEvent);
+    KConfig *config = kapp->config();
+    config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
+    bool midiClock = config->readBoolEntry("midiclock", false);
+    bool mtcMaster = config->readBoolEntry("mtcmaster", false);
+
+    // base size for Metronome ticks
+    size_t size = m_ticks.size() * sizeof(MappedEvent);
+    Composition& comp = m_doc->getComposition();
+
+    if (midiClock)
+    {
+        using Rosegarden::Note;
+
+        // Allow room for MIDI clocks
+        int clocks = ( 24 * ( comp.getEndMarker() - comp.getStartMarker() ) ) / 
+            Note(Note::Crotchet).getDuration();
+
+        SEQMAN_DEBUG << "NUMBER OF CLOCK EVENTS CATERED FOR = " << clocks
+            << endl;
+
+        size += clocks * sizeof(MappedEvent);
+    }
+
+    if (mtcMaster)
+    {
+        // Allow room for MTC timing messages (how?)
+    }
+
+    return size;
 }
 
 void MetronomeMmapper::dump()
@@ -1033,7 +1062,98 @@ void MetronomeMmapper::dump()
     if (midiClock)
     {
         // do something
-        SEQMAN_DEBUG << "MetronomeMmapper::dump: - create MIDI CLOCK" << endl;
+        SEQMAN_DEBUG << "MetronomeMmapper::dump - create MIDI CLOCK" << endl;
+
+        int count = comp.getTempoChangeCount();
+        Rosegarden::timeT startTime = 0, endTime = 0;
+        long ppqDuration = 0;
+        double initialTempo = comp.getTempoAt(0);
+
+        if (initialTempo == 0)
+            initialTempo = comp.getDefaultTempo();
+        
+        SEQMAN_DEBUG << "MetronomeMmapper::dump - initial Tempo = "
+                     << initialTempo << endl;
+
+        // initialTempo is in quarter notes per minute at this point
+        //
+        using Rosegarden::Note;
+
+        ppqDuration = double(Note(Note::Crotchet).getDuration());
+
+        Rosegarden::MappedEvent *mE = 0;
+
+        // Count through all the tempo changes inserting clock for
+        // each one.
+        //
+        for (int i = 0; i < comp.getTempoChangeCount(); i++)
+        {
+            std::pair<Rosegarden::timeT, long> tempo = 
+                comp.getRawTempoChange(i);
+            endTime = tempo.first;
+
+            SEQMAN_DEBUG << "MetronomeMmapper::dump - Quarter note duration = "
+                         << ppqDuration << endl;
+
+            SEQMAN_DEBUG << "MetronomeMmapper::dump - "
+                << "startTime = " << startTime
+                << ", endTime = " << endTime
+                << ", step = " << ppqDuration / 24
+                << endl;
+
+            // Insert 24 clocks per quarter note
+            //
+            for (Rosegarden::timeT insertTime = startTime;
+                 insertTime < endTime; insertTime += ppqDuration / 24)
+            {
+                mE = new (bufPos) 
+                    MappedEvent(0, MappedEvent::MidiSystemMessage);
+                mE->setData1(Rosegarden::MIDI_TIMING_CLOCK);
+                mE->setEventTime(comp.getElapsedRealTime(insertTime));
+
+                ++bufPos;
+                /*
+               SEQMAN_DEBUG << "MetronomeMmapper::dump - insert clock" 
+                            << endl;
+                            */
+            }
+
+            // Raw tempos are in quarter notes per hour
+            //
+            Rosegarden::timeT barLength =
+                comp.getBarEndForTime(startTime) - 
+                comp.getBarStartForTime(startTime);
+
+            // reset startTime for next tempo change
+            startTime = endTime + ppqDuration;
+
+        }
+
+        if (startTime < comp.getEndMarker())
+        {
+            //SEQMAN_DEBUG << "Write out final CLOCK" << endl;
+            endTime = comp.getEndMarker();
+
+            /*
+            SEQMAN_DEBUG << "MetronomeMmapper::dump - "
+                << "FINAL CLOCK - startTime = " << startTime
+                << ", endTime = " << endTime
+                << ", step = " << ppqDuration / 24
+                << ", total steps = " << (endTime - startTime) / (ppqDuration/24) << endl;
+                */
+
+            for (Rosegarden::timeT insertTime = startTime;
+                 insertTime < endTime; insertTime += ppqDuration / 24)
+            {
+                mE = new (bufPos) 
+                    MappedEvent(0, MappedEvent::MidiSystemMessage);
+                mE->setData1(Rosegarden::MIDI_TIMING_CLOCK);
+                mE->setEventTime(comp.getElapsedRealTime(insertTime));
+
+                ++bufPos;
+            }
+        }
+
     }
     
     if (mtcMaster)
@@ -1044,6 +1164,10 @@ void MetronomeMmapper::dump()
 
     // Store the number of events at the start of the shared memory region
     *(size_t *)m_mmappedRegion = (bufPos - m_mmappedEventBuffer);
+
+    SEQMAN_DEBUG << "MetronomeMmapper::dump: - "
+                 << "Total events written = " << *(size_t *)m_mmappedRegion
+                 << endl;
 }
 
 

@@ -27,6 +27,7 @@
 
 #include "MappedEvent.h"
 #include "BaseProperties.h"
+#include "Midi.h"
 #include "MidiTypes.h"
  
 namespace Rosegarden
@@ -102,7 +103,8 @@ MappedEvent::MappedEvent(InstrumentId id,
             }
 	else if (e.isa(SystemExclusive::EventType))
             {
-                m_type = MidiSystemExclusive;
+                m_type = MidiSystemMessage;
+                m_data1 = Rosegarden::MIDI_SYSTEM_EXCLUSIVE;
                 SystemExclusive s(e);
                 std::string dataBlock = s.getRawData();
                 DataBlockRepository::getInstance()->registerDataBlockForEvent(dataBlock, this);

@@ -113,7 +113,7 @@ public:
         MidiChannelPressure      = 1 << 4,
         MidiPitchBend            = 1 << 5,
         MidiController           = 1 << 6,
-        MidiSystemExclusive      = 1 << 7,
+        MidiSystemMessage        = 1 << 7,
 
         // Sent from the gui to play an audio file
         Audio                    = 1 << 8,

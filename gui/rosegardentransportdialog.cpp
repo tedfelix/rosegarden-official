@@ -642,9 +642,9 @@ RosegardenTransportDialog::setMidiInLabel(const Rosegarden::MappedEvent *mE)
             }
             break;
 
-        case MappedEvent::MidiSystemExclusive:
+        case MappedEvent::MidiSystemMessage:
             {
-                m_transport->InDisplay->setText(i18n("SYS EXCLSVE"));
+                m_transport->InDisplay->setText(i18n("SYS MESSAGE"));
             }
             break;
 
@@ -716,9 +716,9 @@ RosegardenTransportDialog::setMidiOutLabel(const Rosegarden::MappedEvent *mE)
             }
             break;
 
-        case MappedEvent::MidiSystemExclusive:
+        case MappedEvent::MidiSystemMessage:
             {
-                m_transport->OutDisplay->setText(i18n("SYS EXCLSVE"));
+                m_transport->OutDisplay->setText(i18n("SYS MESSAGE"));
             }
             break;
 

@@ -359,7 +359,19 @@ bool MmappedSegmentsMetaIterator::acceptEvent(MappedEvent *evt, bool evtIsFromMe
     if (evt->getType() == 0) return false; // discard those right away
 
     if (evtIsFromMetronome)
+    {
+        if (evt->getType() == MappedEvent::MidiSystemMessage && 
+                evt->getData1() == Rosegarden::MIDI_TIMING_CLOCK)
+        {
+            std::cout << "MmappedSegmentsMetaIterator::acceptEvent - " 
+                      << "found clock" << std::endl;
+            return true;
+        }
+
+        std::cout << "FOUND NON CLOCK EVENT" << std::endl;
+
         return !m_controlBlockMmapper->isMetronomeMuted();
+    }
         
     // else, evt is not from metronome : first check if we're soloing (i.e. playing only the selected track)
     if (m_controlBlockMmapper->isSolo())
@@ -478,14 +490,14 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool firstFetch,
                 } else if (acceptEvent(evt, evtIsFromMetronome) &&
 
 			   (evt->getEventTime() + evt->getDuration() > startTime)) {
-                    //SEQUENCER_DEBUG << "inserting event\n";
+                    //std::cout << "inserting event" << std::endl;
 
 
                     c->insert(evt);
 
                 } else {
                     
-                    //SEQUENCER_DEBUG << "skipping event\n";
+                    //std::cout << "skipping event" << std::endl;
 		    delete evt;
                 }
             

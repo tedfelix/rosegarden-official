@@ -1869,7 +1869,8 @@ AlsaDriver::getMappedComposition()
 #endif
 
                    MappedEvent *mE = new MappedEvent();
-                   mE->setType(MappedEvent::MidiSystemExclusive);
+                   mE->setType(MappedEvent::MidiSystemMessage);
+                   mE->setData1(Rosegarden::MIDI_SYSTEM_EXCLUSIVE);
                    // chop off SYX and EOX bytes from data block
                    // Fix for 674731 by Pedro Lopez-Cabanillas (20030601)
                    DataBlockRepository::setDataBlockForEvent(mE, data.substr(1, data.length() - 2));
@@ -2129,23 +2130,32 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                 }
                 break;
 
-            case MappedEvent::MidiSystemExclusive:
+            case MappedEvent::MidiSystemMessage:
                 {
                     // pack data between start and end blocks
                     //
+                    if ((*i)->getData1() == Rosegarden::MIDI_SYSTEM_EXCLUSIVE)
+                    {
+                        char out[2];
+                        sprintf(out, "%c", MIDI_SYSTEM_EXCLUSIVE);
+                        std::string data = out;
 
-                    char out[2];
-                    sprintf(out, "%c", MIDI_SYSTEM_EXCLUSIVE);
-                    std::string data = out;
+                        data += DataBlockRepository::getDataBlockForEvent((*i));
 
-                    data += DataBlockRepository::getDataBlockForEvent((*i));
+                        sprintf(out, "%c", MIDI_END_OF_EXCLUSIVE);
+                        data += out;
 
-                    sprintf(out, "%c", MIDI_END_OF_EXCLUSIVE);
-                    data += out;
+                        snd_seq_ev_set_sysex(&event,
+                                             data.length(),
+                                             (char*)(data.c_str()));
+                    }
+                    else
+                    {
+                        std::cerr << "AlsaDriver::processMidiOut - "
+                                  << "unrecognised system message" 
+                                  << std::endl;
+                    }
 
-                    snd_seq_ev_set_sysex(&event,
-                                         data.length(),
-                                         (char*)(data.c_str()));
                 }
                 break;
 
@@ -3241,7 +3251,8 @@ AlsaDriver::sendMMC(MidiByte deviceArg,
 	// Create a plain SysEx
 	//
 	mE = new MappedEvent((*i)->getId(),
-			     MappedEvent::MidiSystemExclusive);
+			     MappedEvent::MidiSystemMessage);
+        mE->setData1(Rosegarden::MIDI_SYSTEM_EXCLUSIVE);
 
 	// Make it a RealTime SysEx
 	mE->addDataByte(MIDI_SYSEX_RT);
@@ -3276,7 +3287,8 @@ AlsaDriver::sendMMC(MidiByte deviceArg,
                 // Create a plain SysEx
                 //
 		mE = new MappedEvent(0, //!!! should be iterating over devices?  (*it)->m_startId,
-				     MappedEvent::MidiSystemExclusive);
+				     MappedEvent::MidiSystemEMessage);
+                mE->setData1(Rosegarden::MIDI_SYSTEM_EXCLUSIVE);
 
 		// Make it a RealTime SysEx
 		mE->addDataByte(MIDI_SYSEX_RT);
