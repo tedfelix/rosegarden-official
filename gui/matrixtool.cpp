@@ -856,7 +856,7 @@ void MatrixMover::handleMouseRelease(Rosegarden::timeT newTime,
 
     if (!m_currentElement || !m_currentStaff) return;
 
-    if (newPitch > int(MatrixVLayout::maxMIDIPitch))
+    if (newPitch > MatrixVLayout::maxMIDIPitch)
         newPitch = MatrixVLayout::maxMIDIPitch;
     if (newPitch < 0)
         newPitch = 0;
