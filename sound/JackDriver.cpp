@@ -31,7 +31,7 @@
 #ifdef HAVE_ALSA
 #ifdef HAVE_LIBJACK
 
-#define DEBUG_JACK_DRIVER 1
+//#define DEBUG_JACK_DRIVER 1
 //#define DEBUG_JACK_PROCESS 1
 
 namespace Rosegarden

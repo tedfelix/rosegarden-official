@@ -165,14 +165,14 @@ install-data-local:
 	$(mkinstalldirs) $(kde_icondir)/hicolor/32x32/apps/
 	- $(INSTALL_DATA) $(srcdir)/pixmaps/icons/cc-hi32-rosegarden.xpm $(DESTDIR)$(kde_icondir)/locolor/32x32/apps/rosegarden.xpm
 	- $(INSTALL_DATA) $(srcdir)/pixmaps/icons/rg-rwb-rose3-32x32.png $(DESTDIR)$(kde_icondir)/hicolor/32x32/apps/rosegarden.png
-	- $(INSTALL_DATA) $(srcdir)/pixmaps/icons/mm-mime-hi32-rosegarden.xpm $(DESTDIR)$(kde_icondir)/hicolor/32x32/mimetypes/x-rosegarden.xpm
-	- $(INSTALL_DATA) $(srcdir)/pixmaps/icons/mm-mime-hi32-rosegarden.xpm $(DESTDIR)$(kde_icondir)/locolor/32x32/mimetypes/x-rosegarden.xpm
+	- $(INSTALL_DATA) $(srcdir)/pixmaps/icons/mm-mime-hi32-rosegarden.png $(DESTDIR)$(kde_icondir)/hicolor/32x32/mimetypes/x-rosegarden.png
+	- $(INSTALL_DATA) $(srcdir)/pixmaps/icons/mm-mime-hi32-rosegarden.png $(DESTDIR)$(kde_icondir)/locolor/32x32/mimetypes/x-rosegarden.png
 	$(mkinstalldirs) $(kde_icondir)/locolor/16x16/apps/
 	$(mkinstalldirs) $(kde_icondir)/hicolor/16x16/apps/
 	- $(INSTALL_DATA) $(srcdir)/pixmaps/icons/cc-hi16-rosegarden.xpm $(DESTDIR)$(kde_icondir)/locolor/16x16/apps/rosegarden.xpm
 	- $(INSTALL_DATA) $(srcdir)/pixmaps/icons/rg-rwb-rose3-16x16.png $(DESTDIR)$(kde_icondir)/hicolor/16x16/apps/rosegarden.png
-	- $(INSTALL_DATA) $(srcdir)/pixmaps/icons/mm-mime-hi16-rosegarden.xpm $(DESTDIR)$(kde_icondir)/hicolor/16x16/mimetypes/x-rosegarden.xpm
-	- $(INSTALL_DATA) $(srcdir)/pixmaps/icons/mm-mime-hi16-rosegarden.xpm $(DESTDIR)$(kde_icondir)/locolor/16x16/mimetypes/x-rosegarden.xpm
+	- $(INSTALL_DATA) $(srcdir)/pixmaps/icons/mm-mime-hi16-rosegarden.png $(DESTDIR)$(kde_icondir)/hicolor/16x16/mimetypes/x-rosegarden.png
+	- $(INSTALL_DATA) $(srcdir)/pixmaps/icons/mm-mime-hi16-rosegarden.png $(DESTDIR)$(kde_icondir)/locolor/16x16/mimetypes/x-rosegarden.png
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/styles
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/misc
