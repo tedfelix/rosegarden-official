@@ -1374,6 +1374,22 @@ RosegardenGUIApp::openFile(QString filePath, ImportType type)
     RosegardenGUIDoc *doc = createDocument(filePath, type);
     if (doc) {
         setDocument(doc);
+
+	kapp->config()->setGroup(Rosegarden::GeneralOptionsConfigGroup);
+	if (kapp->config()->readBoolEntry("alwaysusedefaultstudio", false)) {
+
+	    QString autoloadFile =
+		KGlobal::dirs()->findResource("appdata", "autoload.rg"); 
+
+	    QFileInfo autoloadFileInfo(autoloadFile);
+	    if (autoloadFileInfo.isReadable()) {
+		
+		RG_DEBUG << "Importing default studio from " << autoloadFile << endl;
+		
+		slotImportStudioFromFile(autoloadFile);
+	    }
+	}
+    
         QFileInfo fInfo(filePath);
         m_fileRecent->addURL(fInfo.absFilePath());
     }
@@ -1443,7 +1459,7 @@ RosegardenGUIApp::createDocument(QString filePath, ImportType importType)
     default:
         doc = createDocumentFromRGFile(filePath);
     }
-    
+
     slotEnableTransport(true);
 
     return doc;
