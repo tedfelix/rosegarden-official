@@ -793,7 +793,7 @@ void RosegardenGUIView::slotUpdateInstrumentParameterBox(int id)
 
         // Set solo
         m_instrumentParameterBox->setSolo(
-                comp.isSolo() && track->getId() == comp.getSelectedTrack());
+                comp.isSolo() && (track->getId() == comp.getSelectedTrack()));
     }
 
 }
@@ -1084,6 +1084,7 @@ RosegardenGUIView::slotSetRecord(Rosegarden::InstrumentId id, bool value)
         {
             m_trackEditor->getTrackButtons()->
                 setRecordTrack((*it).second->getPosition());
+            slotUpdateInstrumentParameterBox((*it).second->getInstrument());
         }
     }
 }
@@ -1094,5 +1095,7 @@ RosegardenGUIView::slotSetSolo(Rosegarden::InstrumentId id, bool value)
     RG_DEBUG << "RosegardenGUIView::slotSetSolo - "
              << "id = " << id
              << ",value = " << value << endl;
+
+    emit toggleSolo(value);
 }
 

@@ -758,6 +758,8 @@ void RosegardenGUIApp::initView()
             SIGNAL(segmentsSelected(const Rosegarden::SegmentSelection &)),
             SLOT(slotSegmentsSelected(const Rosegarden::SegmentSelection &)));
 
+    connect(m_view, SIGNAL(toggleSolo(bool)), SLOT(slotToggleSolo(bool)));
+
     m_doc->attachView(m_view);
     setCentralWidget(m_view);
     setCaption(m_doc->getTitle());
@@ -3366,11 +3368,14 @@ RosegardenGUIApp::slotUnsetLoop()
 // Just set the solo value in the Composition equal to the state
 // of the button
 //
-void RosegardenGUIApp::slotToggleSolo()
+void RosegardenGUIApp::slotToggleSolo(bool value)
 {
-    RG_DEBUG << "RosegardenGUIApp::slotToggleSolo\n";
+    RG_DEBUG << "RosegardenGUIApp::slotToggleSolo value = " << value << endl;
 
-    m_doc->getComposition().setSolo(m_transport->SoloButton()->isOn());
+    //m_doc->getComposition().setSolo(m_transport->SoloButton()->isOn());
+    m_doc->getComposition().setSolo(value);
+    m_transport->SoloButton()->setOn(value);
+
     m_doc->slotDocumentModified();
 }
 
@@ -3741,9 +3746,9 @@ RosegardenGUIApp::plugAccelerators(QWidget *widget, QAccel *acc)
                 SLOT(slotToggleMetronome()));
             
         connect(transport->SoloButton(),
-                SIGNAL(clicked()),
+                SIGNAL(toggled(bool)),
                 this,
-                SLOT(slotToggleSolo()));
+                SLOT(slotToggleSolo(bool)));
             
         connect(transport->TimeDisplayButton(),
                 SIGNAL(clicked()),

@@ -819,7 +819,7 @@ public slots:
     /*
      * Toggle the solo mode
      */
-    void slotToggleSolo();
+    void slotToggleSolo(bool);
 
 
     /**

@@ -582,10 +582,13 @@ TrackButtons::slotUpdateTracks()
 void
 TrackButtons::slotSetRecordTrack(int position)
 {
-    // change selected track
-    //emit trackSelected(position);
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::Track *track = comp.getTrackByPosition(position);
 
     setRecordTrack(position);
+    selectLabel(position);
+
+    comp.setSelectedTrack(track->getId());
     emit newRecordButton();
 }
 

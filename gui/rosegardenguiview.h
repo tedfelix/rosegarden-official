@@ -232,6 +232,9 @@ signals:
     //
     void segmentsSelected(const Rosegarden::SegmentSelection&);
 
+    void toggleSolo(bool);
+
+
 protected:
 
     //--------------- Data members ---------------------------------
