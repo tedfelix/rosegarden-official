@@ -227,6 +227,10 @@ public:
     //
     virtual void reinitialiseStudio();
 
+    // Sequencer Slice Size
+    //
+    virtual void setSliceSize(long timeSec, long timeUSec);
+
     //
     //
     //

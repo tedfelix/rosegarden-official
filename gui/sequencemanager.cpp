@@ -56,7 +56,8 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
     m_soundDriverStatus(NO_DRIVER),
     m_transport(transport),
     m_sendStop(false),
-    m_lastRewoundAt(clock())
+    m_lastRewoundAt(clock()),
+    m_sliceFetched(true) // default to true (usually ignored)
 {
 }
 
@@ -466,6 +467,10 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 	    m_mC.insert(mE);
         }
     }
+
+    // Use this flag to synchonise with the last fetch at the GUI side
+    //
+    if (!m_sliceFetched) m_sliceFetched = true;
 
     return &m_mC;
 }
@@ -1802,6 +1807,55 @@ SequenceManager::applyFiltering(const Rosegarden::MappedComposition &mC,
     }
 
     return retMc;
+}
+
+void
+SequenceManager::setSequencerSliceSize(const RealTime &time)
+{
+    if (m_transportStatus == PLAYING ||
+        m_transportStatus == RECORDING_MIDI ||
+        m_transportStatus == RECORDING_AUDIO )
+    {
+        QByteArray data;
+        QDataStream streamOut(data, IO_WriteOnly);
+
+        KConfig* config = kapp->config();
+        config->setGroup("Latency Options");
+
+        if (time == RealTime(0, 0)) // reset to default values
+        {
+            streamOut << config->readLongNumEntry("readaheadsec", 0);
+            streamOut << config->readLongNumEntry("readaheadusec", 40000);
+        }
+        else
+        {
+            streamOut << time.sec;
+            streamOut << time.usec;
+        }
+
+        if (!kapp->dcopClient()->
+                send(ROSEGARDEN_SEQUENCER_APP_NAME,
+                     ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                     "setSliceSize(long int, long int)",
+                     data))
+        {
+            SEQMAN_DEBUG << "couldn't set sequencer slice" << endl;
+            return;
+        }
+
+        SEQMAN_DEBUG << "set sequencer slice = " << time.sec
+                     << "s + " << time.usec << "us" << endl;
+
+        // Ok, set this token and wait for the sequencer to fetch a
+        // new slice.
+        //
+        m_sliceFetched = false;
+
+        // Spin until the sequencer has got the next slice
+        //
+        while (m_sliceFetched == false)
+            kapp->processEvents();
+    }
 }
 
 

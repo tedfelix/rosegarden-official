@@ -1137,3 +1137,20 @@ RosegardenSequencerApp::checkForNewClients()
 
 
 
+void
+RosegardenSequencerApp::setSliceSize(long timeSec, long timeUSec)
+{
+    SEQUENCER_DEBUG << "set slice size = " << timeSec << "secs" << endl;
+    Rosegarden::RealTime newReadAhead(timeSec, timeUSec);
+
+    if (newReadAhead > m_readAhead)
+        m_readAhead = newReadAhead; // extending slice
+    else // shrinking slice, we have to refetch sooner
+    {
+        // for the moment we just keep it simple
+        m_readAhead = newReadAhead;
+    }
+}
+
+
+

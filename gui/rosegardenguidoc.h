@@ -33,6 +33,7 @@
 #include <qxml.h>
 
 #include "rosegardendcop.h"
+#include "rosegardengui.h"
 
 #include "Composition.h"
 #include "Clipboard.h"
@@ -49,7 +50,11 @@ class ViewElementsManager;
 class SegmentItem;
 class RosegardenProgressDialog;
 
-namespace Rosegarden { class AudioPluginManager; }
+namespace Rosegarden
+{
+    class AudioPluginManager; 
+    class SequenceManager;
+}
 
 /**
   * RosegardenGUIDoc provides a document object for a document-view model.
@@ -296,6 +301,12 @@ public:
     // Initialise the MIDI controllers after we've loaded a file
     //
     void initialiseControllers();
+
+    // Get the sequence manager from the app
+    //
+    Rosegarden::SequenceManager* getSequenceManager() 
+        { return (dynamic_cast<RosegardenGUIApp*>(parent()))
+                                         ->getSequenceManager(); }
 
 public slots:
     /**

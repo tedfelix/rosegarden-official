@@ -173,6 +173,11 @@ public:
                               long sliceEndSec, long sliceEndUSec,
                               long firstFetch);
 
+    /*
+     * Get the sequence manager object
+     */
+    Rosegarden::SequenceManager* getSequenceManager() { return m_seqManager; }
+
     /**
      * The Sequencer sends back a MappedComposition full of
      * any MappedEvents that it's recorded.

@@ -58,6 +58,7 @@
 #include "rosegardenconfigurationpage.h"
 #include "eventview.h"
 #include "dialogs.h"
+#include "sequencemanager.h"
 
 using Rosegarden::SimpleRulerScale;
 using Rosegarden::Composition;
@@ -276,7 +277,6 @@ void RosegardenGUIView::slotEditSegment(Rosegarden::Segment* segment)
 void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
 {
     SetWaitCursor waitCursor;
-
     std::vector<Rosegarden::Segment *> segmentsToEdit;
 
     // The logic here is: If we're calling for this operation to
@@ -315,10 +315,15 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
 	return;
     }
 
+    // Tell the sequencer to take a big suck
+    Rosegarden::SequenceManager *sM = getDocument()->getSequenceManager();
+    sM->setSequencerSliceSize(Rosegarden::RealTime(5, 0));
+
     NotationView *notationView =
 	new NotationView(getDocument(), segmentsToEdit, this);
 
     if (!notationView->isOK()) {
+        sM->setSequencerSliceSize(Rosegarden::RealTime(0, 0));
 	delete notationView;
 	return;
     }
@@ -362,6 +367,10 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
         notationView->updateView();
     }
     notationView->show();
+
+    // reset the slice size
+    //
+    sM->setSequencerSliceSize(Rosegarden::RealTime(0, 0));
 }
 
 void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
@@ -936,5 +945,5 @@ RosegardenGUIView::slotDroppedAudio(QString audioDesc)
         slotAddAudioSegmentAndTrack(audioFileId, instrumentId,
                                     startTime, endTime);
     else
-        RG_DEBUG << "instruement id == 0\n";
+        RG_DEBUG << "instrument id == 0\n";
 }
