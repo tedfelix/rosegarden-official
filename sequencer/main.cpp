@@ -115,6 +115,8 @@ int main(int argc, char *argv[])
     QObject::connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
     //app.dcopClient()->setDefaultObject("RosegardenGUIIface");
 
+    app.disableSessionManagement(); // we don't want to be saved or anything
+
     // Started OK
     //
     SEQUENCER_DEBUG << "RosegardenSequencer - started OK" << endl;
