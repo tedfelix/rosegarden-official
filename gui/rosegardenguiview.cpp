@@ -68,6 +68,9 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
       m_rulerScale(0),
       m_trackEditor(0)
 {
+    // accept dnd
+    //setAcceptDrops(true);
+
     RosegardenGUIDoc* doc = getDocument();
 
     // This apparently arbitrary figure is what we think is an
@@ -725,4 +728,12 @@ RosegardenGUIView::slotAddAudioSegmentAndTrack(
     slotAddCommandToHistory(macro);
 }
 
+
+void RosegardenGUIView::dragEnterEvent(QDragEnterEvent *event)
+{
+}
+
+void RosegardenGUIView::dropEvent(QDropEvent*)
+{
+}
 

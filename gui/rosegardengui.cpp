@@ -865,8 +865,11 @@ void RosegardenGUIApp::paintEvent(QPaintEvent* e)
 
 void RosegardenGUIApp::dragEnterEvent(QDragEnterEvent *event)
 {
-    // accept uri drops only
-    event->accept(QUriDrag::canDecode(event));
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::dragEnterEvent()\n";
+
+    // accept uri and text drops only
+    event->accept(QUriDrag::canDecode(event) ||
+                  QTextDrag::canDecode(event));
 }
 
 void RosegardenGUIApp::dropEvent(QDropEvent *event)
@@ -875,17 +878,22 @@ void RosegardenGUIApp::dropEvent(QDropEvent *event)
     // will only accept a dropped URL.  the Qt dnd code can do *much*
     // much more, so please read the docs there
     QStrList uri;
+    QString audioInfo;
 
     // see if we can decode a URI.. if not, just ignore it
     if (QUriDrag::decode(event, uri))
-    {
-        // okay, we have a URI.. process it
-        QString url, target;
-        url = uri.first();
+        {
+            // okay, we have a URI.. process it
+            QString url, target;
+            url = uri.first();
 
-        // load in the file
-        openURL(url);
-    }
+            // load in the file
+            openURL(url);
+        } else if (QTextDrag::decode(event, audioInfo)) {
+            kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::dropEvent() : got audio info "
+                                 << audioInfo << endl;
+        }
+    
 }
 
 
@@ -2809,10 +2817,11 @@ RosegardenGUIApp::slotAudioManager()
                                           Rosegarden::InstrumentId,
                                           const Rosegarden::RealTime&,
                                           const Rosegarden::RealTime&)),
-                SLOT(slotInsertAudioSegmentAndTrack(Rosegarden::AudioFileId,
-                                                    Rosegarden::InstrumentId,
-                                                    const Rosegarden::RealTime&,
-                                                    const Rosegarden::RealTime&)));
+                m_view,
+                SLOT(slotAddAudioSegmentAndTrack(Rosegarden::AudioFileId,
+                                                 Rosegarden::InstrumentId,
+                                                 const Rosegarden::RealTime&,
+                                                 const Rosegarden::RealTime&)));
         connect(m_audioManagerDialog,
                 SIGNAL(cancelPlayingAudioFile(Rosegarden::AudioFileId)),
                 SLOT(slotCancelAudioPlayingFile(Rosegarden::AudioFileId)));
@@ -2963,21 +2972,6 @@ RosegardenGUIApp::slotDeleteSegment(Rosegarden::Segment *segment)
 {
     slotSelectSegment(segment);
     slotDeleteSelectedSegments();
-}
-
-void
-RosegardenGUIApp::slotInsertAudioSegmentAndTrack(
-                               Rosegarden::AudioFileId audioFileId,
-                               Rosegarden::InstrumentId instrumentId,
-                               const Rosegarden::RealTime &startTime,
-                               const Rosegarden::RealTime &endTime)
-{
-    // Insert a Track and an audio Segment
-    //
-    m_view->slotAddAudioSegmentAndTrack(audioFileId,
-                                        instrumentId,
-                                        startTime,
-                                        endTime);
 }
 
 // Tell whoever is interested that a SegmentSelection has changed

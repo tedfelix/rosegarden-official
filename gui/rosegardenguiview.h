@@ -225,6 +225,9 @@ signals:
     void segmentsSelected(const Rosegarden::SegmentSelection&);
 
 protected:
+    virtual void dragEnterEvent(QDragEnterEvent *event);
+    virtual void dropEvent(QDropEvent*);
+
     //--------------- Data members ---------------------------------
 
     Rosegarden::SimpleRulerScale  *m_rulerScale;

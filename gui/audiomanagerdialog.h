@@ -19,10 +19,7 @@
 
 #include <string>
 
-#include <qaccel.h>
 #include <qlistview.h>
-#include <qpushbutton.h>
-#include <qpixmap.h>
 
 #include <kdialogbase.h>
 
@@ -46,70 +43,15 @@
 #define _AUDIOMANAGERDIALOG_H_
 
 class KURL;
+class QPushButton;
+class QPixmap;
+class QAccel;
+class KListView;
 
 namespace Rosegarden
 {
 
 class AudioFileManager;
-
-
-// Add an Id to a QListViewItem
-//
-class AudioListItem : public QListViewItem
-{
-
-public:
-
-    AudioListItem(QListView *parent):QListViewItem(parent),
-                                     m_segment(0) {;}
-
-    AudioListItem(QListViewItem *parent):QListViewItem(parent),
-                                         m_segment(0) {;}
-
-    AudioListItem(QListView *parent,
-                  QString label,
-                  Rosegarden::AudioFileId id):
-                      QListViewItem(parent,
-                                    label,
-                                    "", "", "", "", "", "", ""),
-                                    m_id(id),
-                                    m_segment(0) {;}
-
-    AudioListItem(QListViewItem *parent, 
-                  QString label,
-                  Rosegarden::AudioFileId id):
-                      QListViewItem(parent,
-                                    label,
-                                    "", "", "", "", "", "", ""),
-                                    m_id(id),
-                                    m_segment(0) {;}
-
-
-    Rosegarden::AudioFileId getId() { return m_id; }
-
-    void setStartTime(const Rosegarden::RealTime &time)
-        { m_startTime = time; }
-    Rosegarden::RealTime getStartTime() { return m_startTime; }
-
-    void setDuration(const Rosegarden::RealTime &time)
-        { m_duration = time; }
-    Rosegarden::RealTime getDuration() { return m_duration; }
-
-    void setSegment(Rosegarden::Segment *segment)
-        { m_segment = segment; }
-    Rosegarden::Segment *getSegment() { return m_segment; }
-
-protected:
-    Rosegarden::AudioFileId m_id;
-
-    // for audio segments
-    Rosegarden::RealTime m_startTime;
-    Rosegarden::RealTime m_duration;
-
-    // pointer to a segment
-    Rosegarden::Segment *m_segment;
-
-};
 
 class AudioManagerDialog : public KDialogBase
 {
@@ -199,7 +141,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    QListView        *m_fileList;
+    KListView        *m_fileList;
     QPushButton      *m_addButton;
     QPushButton      *m_deleteButton;
     QPushButton      *m_playButton;
@@ -214,6 +156,9 @@ protected:
     Rosegarden::AudioFileId  m_playingAudioFile;
     AudioPlayingDialog      *m_audioPlayingDialog;
 
+    static const char* const m_listViewLayoutName;
+    static const int         m_maxPreviewWidth;
+    static const int         m_previewHeight;
 };
 
 }

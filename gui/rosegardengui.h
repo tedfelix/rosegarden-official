@@ -790,10 +790,6 @@ public slots:
 
     void slotSelectSegment(Rosegarden::Segment *);
     void slotDeleteSegment(Rosegarden::Segment*);
-    void slotInsertAudioSegmentAndTrack(Rosegarden::AudioFileId,
-                                        Rosegarden::InstrumentId,
-                                        const Rosegarden::RealTime &,
-                                        const Rosegarden::RealTime &);
     void slotSegmentsSelected(const Rosegarden::SegmentSelection &);
 
 private:

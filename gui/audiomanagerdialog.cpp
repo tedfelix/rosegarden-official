@@ -17,19 +17,22 @@
     COPYING included with this distribution for more information.
 */
 
+#include <qpushbutton.h>
+#include <qaccel.h>
 #include <qtooltip.h>
 #include <qdragobject.h>
 #include <qhbox.h>
 #include <qvbuttongroup.h>
-#include <qlistview.h>
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qinputdialog.h>
 
 #include <kurl.h>
+#include <kapplication.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kfiledialog.h>
+#include <klistview.h>
 #include <kio/netaccess.h>
 
 #include "WAVAudioFile.h"
@@ -48,10 +51,101 @@ using std::endl;
 namespace Rosegarden
 {
 
+// Add an Id to a QListViewItem
+//
+class AudioListItem : public QListViewItem
+{
+
+public:
+
+    AudioListItem(QListView *parent):QListViewItem(parent),
+                                     m_segment(0) {;}
+
+    AudioListItem(QListViewItem *parent):QListViewItem(parent),
+                                         m_segment(0) {;}
+
+    AudioListItem(QListView *parent,
+                  QString label,
+                  Rosegarden::AudioFileId id):
+                      QListViewItem(parent,
+                                    label,
+                                    "", "", "", "", "", "", ""),
+                                    m_id(id),
+                                    m_segment(0) {;}
+
+    AudioListItem(QListViewItem *parent, 
+                  QString label,
+                  Rosegarden::AudioFileId id):
+                      QListViewItem(parent,
+                                    label,
+                                    "", "", "", "", "", "", ""),
+                                    m_id(id),
+                                    m_segment(0) {;}
+
+
+    Rosegarden::AudioFileId getId() { return m_id; }
+
+    void setStartTime(const Rosegarden::RealTime &time)
+        { m_startTime = time; }
+    Rosegarden::RealTime getStartTime() { return m_startTime; }
+
+    void setDuration(const Rosegarden::RealTime &time)
+        { m_duration = time; }
+    Rosegarden::RealTime getDuration() { return m_duration; }
+
+    void setSegment(Rosegarden::Segment *segment)
+        { m_segment = segment; }
+    Rosegarden::Segment *getSegment() { return m_segment; }
+
+protected:
+    Rosegarden::AudioFileId m_id;
+
+    // for audio segments
+    Rosegarden::RealTime m_startTime;
+    Rosegarden::RealTime m_duration;
+
+    // pointer to a segment
+    Rosegarden::Segment *m_segment;
+
+};
+
 //---------------------------------------------
 
-static const int maxPreviewWidth = 100;
-static const int previewHeight = 30;
+class AudioListView : public KListView
+{
+public:
+    AudioListView(QWidget *parent = 0, const char *name = 0);
+
+protected:
+    virtual QDragObject* dragObject ();
+};
+
+AudioListView::AudioListView(QWidget *parent, const char *name)
+    : KListView(parent, name)
+{
+    setDragEnabled(true);
+}
+
+QDragObject* AudioListView::dragObject()
+{
+    AudioListItem* item = dynamic_cast<AudioListItem*>(currentItem());
+
+    QString audioData;
+    QTextOStream ts(&audioData);
+    ts << item->getId() << '\n'
+       << item->getStartTime().sec << '\n'
+       << item->getStartTime().usec << '\n'
+       << item->getDuration().sec << '\n'
+       << item->getDuration().usec << '\n';
+    
+    return new QTextDrag(audioData, this);
+}
+
+//---------------------------------------------
+
+const int AudioManagerDialog::m_maxPreviewWidth            = 100;
+const int AudioManagerDialog::m_previewHeight              = 30;
+const char* const AudioManagerDialog::m_listViewLayoutName = "AudioManagerDialog Layout";
 
 AudioManagerDialog::AudioManagerDialog(QWidget *parent,
                                        RosegardenGUIDoc *doc):
@@ -83,7 +177,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     m_renameButton    = new QPushButton(i18n("Rename"), v);
     m_insertButton    = new QPushButton(i18n("Insert"), v);
     m_deleteAllButton = new QPushButton(i18n("Delete All"), v);
-    m_fileList        = new QListView(h);
+    m_fileList        = new AudioListView(h);
 
     // Set the column names
     //
@@ -100,6 +194,8 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     m_fileList->setColumnAlignment(4, Qt::AlignHCenter);
     m_fileList->setColumnAlignment(5, Qt::AlignHCenter);
     m_fileList->setColumnAlignment(6, Qt::AlignHCenter);
+
+    m_fileList->restoreLayout(kapp->config(), m_listViewLayoutName);
 
     // a minimum width for the list box
     //m_fileList->setMinimumWidth(300);
@@ -140,7 +236,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 
 AudioManagerDialog::~AudioManagerDialog()
 {
-    delete m_accelerator;
+    m_fileList->saveLayout(kapp->config(), m_listViewLayoutName);
 }
 
 // Scan the AudioFileManager and populate the m_fileList
@@ -150,7 +246,7 @@ AudioManagerDialog::slotPopulateFileList()
 {
 
     // create pixmap of given size
-    QPixmap *audioPixmap = new QPixmap(maxPreviewWidth, previewHeight);
+    QPixmap *audioPixmap = new QPixmap(m_maxPreviewWidth, m_previewHeight);
 
     // clear file list and disable associated action buttons
     m_fileList->clear();
@@ -455,7 +551,7 @@ AudioManagerDialog::slotInsert()
     if (audioFile == 0)
         return;
 
-    std::cout << "AudioManagerDialog::slotInsert" << std::endl;
+    kdDebug(KDEBUG_AREA) << "AudioManagerDialog::slotInsert\n";
 
     // Find an Audio Instrument and create a Track and insert
     // the audio file over given time parameters.
@@ -491,9 +587,10 @@ AudioManagerDialog::slotInsert()
 
     // Ok, so we've got the first audio instrument
     //
-    if (instr == 0)
+    if (instr == 0) {
+        kdDebug(KDEBUG_AREA) << "AudioManagerDialog::slotInsert() instr = 0\n";
         return;
-    
+    }
 
     // find selected audio file and guess a track
     emit insertAudioSegment(audioFile->getId(),
