@@ -4,7 +4,7 @@
 
  1. Lyrics.  And a bouncing ball to track them with during playback.
 
- 2. Better-calculated progress bars in notation view
+ 2. Better-calculated progress bars in notation view [DONEish]
 
  3. User docs / help
 

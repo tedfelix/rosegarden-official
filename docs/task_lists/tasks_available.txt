@@ -21,6 +21,8 @@ want to do instead.
 
 Tasks suggested by Chris (notation guy):
 
+ -- The event list window could do with some more work.
+
  -- Various import/export filters.  These are usually boring to
  implement, but they're quite useful and help you learn a reasonable
  amount about the way the data structures work.  Good candidates
@@ -30,12 +32,8 @@ Tasks suggested by Chris (notation guy):
  MusicXML (check first whether any other program actually uses it)
  and NIFF (likewise).  ETF is difficult, Brahms should be easy.  We 
  used to ask for Lilypond export here, but Hans Kieserman stepped up
- and wrote that. 
-
- -- We're lacking an event list window, which would be very useful.
- We do now have a window for viewing and editing the properties of a
- single event, accessible from the notation view, but it's not
- particularly well executed.
+ and wrote that.  I think he's now working on MusicXML as well, so
+ perhaps that's out.
 
  -- Anyone with a particular interest in any sort of notation work
  is invited and encouraged to help write support for it into Rosegarden.

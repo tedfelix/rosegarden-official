@@ -36,7 +36,7 @@
 	<Action name="rescale"/>
 	<Action name="auto_split"/>
 	<Action name="collapse"/>
-	<Action name="harmonize_selection"/>
+<!-- 	<Action name="harmonize_selection"/> -->
         <Action name="set_tempo_to_segment_length"/>
   </Menu>
   <Menu name="Tracks">
@@ -126,7 +126,7 @@
       	<Action name="edit_matrix"/>
       	<Action name="edit_notation"/>
 	<Action name="quantize_selection"/>
-	<Action name="harmonize_selection"/>
+<!-- 	<Action name="harmonize_selection"/> -->
 	<Action name="rescale"/>
 	<Action name="auto_split"/>
 	<Action name="collapse"/>
