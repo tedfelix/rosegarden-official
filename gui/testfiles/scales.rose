@@ -1,0 +1,46 @@
+#!Rosegarden
+#
+#  Musical Notation File
+#
+
+RV21
+
+
+Staves 1
+
+
+Name Staff 1
+Clef
+	Clef Name Tenor 
+: Crotchet 0 1 5 0
+: Crotchet 0 1 6 0
+: Crotchet 0 1 7 0
+: Crotchet 0 1 8 0
+: Crotchet 0 1 9 0
+: Crotchet 0 1 10 0
+: Crotchet 0 1 11 0
+: Crotchet 0 1 12 0
+Key
+	Key Name E  maj / C# min
+: Crotchet 0 1 5 0
+: Crotchet 0 1 6 0
+: Crotchet 0 1 7 0
+: Crotchet 0 1 8 0
+: Crotchet 0 1 9 0
+: Crotchet 0 1 10 0
+: Crotchet 0 1 11 0
+: Crotchet 0 1 12 0
+: Crotchet 0 1 5 1
+: Crotchet 0 1 6 1
+: Crotchet 0 1 7 0
+: Crotchet 0 1 8 1
+: Crotchet 0 1 9 1
+: Crotchet 0 1 10 0
+: Crotchet 0 1 11 0
+: Crotchet 0 1 12 1
+End
+
+Bar 0 0 time 4 4
+Stave 0 tags 1 1 connected 0 program 0
+
+End
