@@ -343,6 +343,11 @@ protected:
     void readOptions();
 
     /**
+     * add an item pointing to the example files in the KFileDialog speedbar
+     */
+    void setupFileDialogSpeedbar();
+
+    /**
      * create menus and toolbars
      */
     void setupActions();

@@ -360,6 +360,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 
     emit startupStatusMessage(i18n("Starting..."));
 
+    setupFileDialogSpeedbar();
     readOptions();
 
     // All toolbars should be created before this is called
@@ -1552,6 +1553,25 @@ void RosegardenGUIApp::slotSaveOptions()
 
 //     saveMainWindowSettings(kapp->config(), RosegardenGUIApp::MainWindowConfigGroup);
     kapp->config()->sync();
+}
+
+void RosegardenGUIApp::setupFileDialogSpeedbar()
+{
+    KConfig *config = kapp->config();
+    
+    config->setGroup("KFileDialog Speedbar");
+
+    bool hasSetExamplesItem = config->readBoolEntry("Examples Set", false);
+    
+    if (!hasSetExamplesItem) {
+        
+        config->writeEntry("Description_0", i18n("Example Files"));
+        config->writeEntry("IconGroup_0", 4);
+        config->writeEntry("Icon_0", "folder");
+        config->writeEntry("URL_0", KGlobal::dirs()->findResource("appdata", "examples/"));
+        config->writeEntry("Examples Set", true);
+    }
+    
 }
 
 
