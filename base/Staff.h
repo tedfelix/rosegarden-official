@@ -104,8 +104,12 @@ public:
 protected:
     Staff(Segment &);
 
-    virtual void buildViewElementList(Segment::iterator from,
-                                      Segment::iterator to);
+    /**
+     * Return true if the event should be wrapped
+     * Useful for piano roll where we only want to wrap notes
+     * (always true by default)
+     */
+    virtual bool wrapEvent(Event *);
 
     Segment &m_segment;
     ViewElementList<T> *m_viewElementList;
@@ -140,24 +144,30 @@ ViewElementList<T> *
 Staff<T>::getViewElementList(Segment::iterator from,
 			     Segment::iterator to)
 {
-    if (!m_viewElementList) buildViewElementList(from, to);
+    if (!m_viewElementList) {
 
+        m_viewElementList = new ViewElementList<T>;
+
+        for (Segment::iterator i = from; i != to; ++i) {
+
+            if (!wrapEvent(*i)) continue;
+
+            T *el = new T(*i);
+            m_viewElementList->insert(el);
+        }
+
+        m_segment.addObserver(this);
+
+    }
+    
     return m_viewElementList;
 }
 
 template <class T>
-void
-Staff<T>::buildViewElementList(Segment::iterator from,
-                               Segment::iterator to)
+bool
+Staff<T>::wrapEvent(Event*)
 {
-    m_viewElementList = new ViewElementList<T>;
-
-    for (Segment::iterator i = from; i != to; ++i) {
-        T *el = new T(*i);
-        m_viewElementList->insert(el);
-    }
-
-    m_segment.addObserver(this);
+    return true;
 }
 
 template <class T>
@@ -168,7 +178,7 @@ Staff<T>::insert(Event *e, bool insertInSegment)
         m_segment.insert(e);
         // and let the eventAdded callback do the wrapping
     } else {
-	if (!e->hasViewElement()) {
+	if (!e->hasViewElement() && wrapEvent(e)) {
 	    T *el = new T(e);
 	    m_viewElementList->insert(el);
 	}
@@ -214,8 +224,11 @@ void
 Staff<T>::eventAdded(const Segment *t, Event *e)
 {
     assert(t == &m_segment);
-    T *el = new T(e);
-    m_viewElementList->insert(el);
+
+    if (wrapEvent(e)) {
+        T *el = new T(e);
+        m_viewElementList->insert(el);
+    }
 }
 
 template <class T>
