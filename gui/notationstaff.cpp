@@ -41,6 +41,7 @@
 #include "Event.h"
 #include "Segment.h"
 #include "Quantizer.h"
+#include "Profiler.h"
 #include "NotationTypes.h"
 #include "SegmentNotationHelper.h"
 #include "Selection.h"
@@ -336,7 +337,7 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 			      NotationElementList::iterator to)
 {
     NOTATION_DEBUG << "NotationStaff " << this << "::renderElements()" << endl;
-    START_TIMING;
+    Rosegarden::Profiler profiler("NotationStaff::renderElements");
 
     emit setOperationName(i18n("Rendering staff %1...").arg(getId() + 1));
     emit setProgress(0);
@@ -380,8 +381,6 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 
     NOTATION_DEBUG << "NotationStaff::renderElements: "
 			 << elementCount << " elements rendered" << endl;
-
-    PRINT_ELAPSED("NotationStaff::renderElements");
 }	
 
 void
@@ -389,7 +388,7 @@ NotationStaff::positionElements(timeT from, timeT to)
 {
     NOTATION_DEBUG << "NotationStaff " << this << "::positionElements()"
                          << from << " -> " << to << endl;
-    START_TIMING;
+    Rosegarden::Profiler profiler("NotationStaff::positionElements");
 
     emit setOperationName(i18n("Positioning staff %1...").arg(getId() + 1));
     emit setProgress(0);
@@ -507,7 +506,6 @@ NotationStaff::positionElements(timeT from, timeT to)
 			 << elementsRendered << " elements re-rendered"
 			 << endl;
 
-    PRINT_ELAPSED("NotationStaff::positionElements");
     NotePixmapFactory::dumpStats(std::cerr);
 }
 

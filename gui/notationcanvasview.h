@@ -107,6 +107,8 @@ signals:
     
 protected:
 
+    virtual void drawContents(QPainter *p, int cx, int cy, int cw, int ch);
+
     const LinedStaffManager &m_linedStaffManager;
 
     /**

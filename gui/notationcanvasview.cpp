@@ -80,7 +80,14 @@ NotationCanvasView::setHeightTracking(bool t)
 	canvas()->update();
     }
 }
- 
+
+void
+NotationCanvasView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
+{
+    NOTATION_DEBUG << "NotationCanvasView::drawContents: "
+		   << cx << "," << cy << " / " << cw << "x" << ch << endl;
+    QCanvasView::drawContents(p, cx, cy, cw, ch);
+}
 
 void
 NotationCanvasView::contentsMouseReleaseEvent(QMouseEvent *e)

@@ -33,6 +33,7 @@
 #include "notationsets.h"
 #include "widgets.h"
 #include "Quantizer.h"
+#include "Profiler.h"
 #include "Composition.h"
 #include "SegmentNotationHelper.h"
 
@@ -268,8 +269,7 @@ void
 NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 {
     throwIfCancelled();
-
-    START_TIMING;
+    Rosegarden::Profiler profiler("NotationHLayout::scanStaff");
 
     Segment &segment(staff.getSegment());
     NotationElementList *notes = staff.getViewElementList();
@@ -318,9 +318,6 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 	    (getComposition()->getBarStartForTime(startTime),
 	     getComposition()->getBarEndForTime(endTime));
     }
-
-
-    PRINT_ELAPSED("NotationHLayout::scanStaff: after quantize");
 
     for (int barNo = startBarNo; barNo <= endBarNo; ++barNo) {
 
@@ -505,8 +502,6 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 	barList.erase(ei);
 	ei = barList.end();
     }
-
-    PRINT_ELAPSED("NotationHLayout::scanStaff");
 }
 
 void
@@ -767,7 +762,7 @@ NotationHLayout::getStaffWithWidestBar(int barNo)
 void
 NotationHLayout::reconcileBarsLinear()
 {
-    START_TIMING;
+    Rosegarden::Profiler profiler("NotationHLayout::reconcileBarsLinear");
 
     // Ensure that concurrent bars on all staffs have the same width,
     // which for now we make the maximum width required for this bar
@@ -844,15 +839,13 @@ NotationHLayout::reconcileBarsLinear()
 		   << " to " << m_totalWidth << endl;
 
     m_barPositions[barNo] = m_totalWidth;
-
-    PRINT_ELAPSED("NotationHLayout::reconcileBarsLinear");
 }	
 
 
 void
 NotationHLayout::reconcileBarsPage()
 {
-    START_TIMING;
+    Rosegarden::Profiler profiler("NotationHLayout::reconcileBarsPage");
 
     int barNo = getFirstVisibleBar();
     int barNoThisRow = 0;
@@ -1018,8 +1011,6 @@ NotationHLayout::reconcileBarsPage()
     }
 
     m_barPositions[barNo] = m_totalWidth;
-
-    PRINT_ELAPSED("NotationHLayout::reconcileBarsPage");
 }
 
 
@@ -1115,6 +1106,7 @@ NotationHLayout::AccidentalTable::copyFrom(const AccidentalTable &t)
 void
 NotationHLayout::finishLayout(timeT startTime, timeT endTime)
 {
+    Rosegarden::Profiler profiler("NotationHLayout::finishLayout");
     m_barPositions.clear();
 
     if (m_pageMode && (m_pageWidth > 0.1)) reconcileBarsPage();
@@ -1153,7 +1145,7 @@ NotationHLayout::finishLayout(timeT startTime, timeT endTime)
 void
 NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 {
-    START_TIMING;
+    Rosegarden::Profiler profiler("NotationHLayout::layout");
 
     Staff &staff = *(i->first);
     NotationElementList *notes = staff.getViewElementList();
@@ -1425,8 +1417,6 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
         bdi->second.layoutData.needsLayout = false;
     }
-
-    PRINT_ELAPSED("NotationHLayout::layout");
 }
 
 
