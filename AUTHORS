@@ -57,6 +57,9 @@ Stefan Asserhäll
 Hasso Tepper
     * Estonian translation
 
+Jelmer Vernooij
+    * Dutch translation
+
 ##
 ## Names in there should also be credited in gui/main.cpp, with aboutData.addCredit()
 ##
