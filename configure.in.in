@@ -31,10 +31,10 @@ if test "$ac_header_sys_soundlib_h" = "no"; then
 fi
 
 dnl and libasound is present
-if test "$with_alsa" = "yes"; then
+#if test "$with_alsa" = "yes"; then
   AC_CHECK_LIB(asound,snd_seq_create_simple_port,
                LIBASOUND="-lasound",with_alsa=no)
-fi
+#fi
 AC_SUBST(LIBASOUND)
 
 if test "$with_alsa" = "yes"; then
