@@ -94,6 +94,24 @@ public:
      */
     timeT quantizeByNote(Rosegarden::Event *el, int maxDots = 2);
 
+    /**
+     * Returns the DurationProperty if it exists; otherwise quantizes
+     * the event and then returns that property.  (If the event's
+     * duration has been changed since it was last quantized, or the
+     * last quantization used a different unit, this method may return
+     * the wrong value.)
+     */
+    timeT getQuantizedDuration(Rosegarden::Event *el, int unit = Note::Shortest);
+
+    /**
+     * Returns the NoteDurationProperty if it exists, otherwise
+     * quantizes the event and then returns that property.  (If the
+     * event's duration has been changed since it was last quantized,
+     * or the last quantization used a different maxDots value, this
+     * may return the wrong value.)
+     */
+    timeT getQuantizedNoteDuration(Rosegarden::Event *el, int maxDots = 2);
+
 protected:
 
     Note quantizeByNote(timeT &duration, int dots);

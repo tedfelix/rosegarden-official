@@ -86,41 +86,46 @@ static bool isTimeSig(const Event* e)
 
 TimeSignature Track::getTimeSigAtEnd(timeT &absTimeOfSig) const
 {
-    static TimeSignature defaultSig44(4,4);
+    TimeSignature timesig;
+    absTimeOfSig = 0;
 
     const_reverse_iterator sig = std::find_if(rbegin(), rend(), isTimeSig);
 
     if (sig != rend() ||
         ((*sig) && (*sig)->isa(TimeSignature::EventType))) {
         absTimeOfSig = (*sig)->getAbsoluteTime();
-        return TimeSignature(*(*sig));
+	timesig = TimeSignature(*(*sig));
     }
 
-    return defaultSig44;
+    return timesig;
 }
 
-unsigned int Track::getNbTimeSteps() const
+
+// was called getNbTimeSteps, but getDuration is what it is
+
+unsigned int Track::getDuration() const
 {
     const_iterator lastEl = end();
     --lastEl;
-    unsigned int nbBars = ((*lastEl)->getAbsoluteTime() +
-                           (*lastEl)->getDuration());
-
-    return nbBars;
+    return ((*lastEl)->getAbsoluteTime() +
+	    (*lastEl)->getDuration());
 }
 
 
-void Track::setNbTimeSteps(unsigned int nbTimeSteps)
+void Track::setDuration(unsigned int d)
 {
-    unsigned int currentNbTimeSteps = getNbTimeSteps();
+    unsigned int currentDuration = getDuration();
 
-    cerr << "Track::setNbBars() : current = " << currentNbTimeSteps
-         << " - new : " << nbTimeSteps << endl;
+    cerr << "Track::setDuration() : current = " << currentDuration
+         << " - new : " << d << endl;
 
-    if (nbTimeSteps == currentNbTimeSteps) return; // nothing to do
+    if (d == currentDuration) return; // nothing to do
     
-    if (nbTimeSteps > currentNbTimeSteps) { // fill up with rests
+    if (d > currentDuration) { // fill up with rests
 
+	fillWithRests(d);
+
+/*!!!
         timeT absTimeOfSig = 0;
         TimeSignature signatureAtEnd = getTimeSigAtEnd(absTimeOfSig);
 
@@ -142,7 +147,7 @@ void Track::setNbTimeSteps(unsigned int nbTimeSteps)
         DurationList dlist;
         signatureAtEnd.getDurationListForInterval
             (dlist,
-             nbTimeSteps - currentNbTimeSteps,  // interval duration
+             d - currentDuration,  // interval duration
              newElTime - absTimeOfSig);         // start offset
 
         timeT acc = newElTime;
@@ -153,6 +158,7 @@ void Track::setNbTimeSteps(unsigned int nbTimeSteps)
             insert(e);
             acc += *i;
         }
+*/
 
     } else { // shrink
 
@@ -331,10 +337,15 @@ bool Track::collapse(Event* e, bool& collapseForward, Event*& collapsedEvent)
         // collapse with next event
         e->setDuration(e->getDuration() + (*nextEvent)->getDuration());
 
+
+	//!!! no, absolutely not -- we should re-quantize
+
         Note n = Note::getNearestNote(e->getDuration());
         
         e->set<Int>(Note::NoteType, n.getNoteType());
         e->set<Int>(Note::NoteDots, n.getDots());
+
+
         
         collapsedEvent = *nextEvent;
         collapseForward = true;
@@ -348,10 +359,16 @@ bool Track::collapse(Event* e, bool& collapseForward, Event*& collapsedEvent)
         (*previousEvent)->setDuration(e->getDuration() +
                                       (*previousEvent)->getDuration());
 
+
+
+	//!!! no, absolutely not -- we should re-quantize
+
         Note n = Note::getNearestNote((*previousEvent)->getDuration());
         
         (*previousEvent)->set<Int>(Note::NoteType, n.getNoteType());
         (*previousEvent)->set<Int>(Note::NoteDots, n.getDots());
+
+
 
         collapsedEvent = e;
         erase(elPos);
@@ -436,16 +453,27 @@ Track::iterator Track::findContiguousPrevious(Track::iterator el)
     else return end();
 }
 
+
+//!!! I don't quite understand the logic here.  we can't for example
+//collapse a dotted crotchet rest with a dotted minim rest (total
+//duration: two minims and one quaver), but this method thinks we can.
+//better to add the quantized durations and see if the closest
+//possible note has the same duration as we have
+
 bool Track::canCollapse(Track::iterator a, Track::iterator b)
 {
     time_t durationMax, durationMin;
-
-    if ((*a)->getDuration() > (*b)->getDuration()) {
-        durationMax = (*a)->getDuration();
-        durationMin = (*b)->getDuration();
+    Quantizer q;
+    
+    timeT ad = q.getQuantizedNoteDuration(*a);
+    timeT bd = q.getQuantizedNoteDuration(*b);
+    
+    if (ad > bd) {
+        durationMax = ad;
+        durationMin = bd;
     } else {
-        durationMax = (*b)->getDuration();
-        durationMin = (*a)->getDuration();
+        durationMax = bd;
+        durationMin = ad;
     }
 
     return ((durationMax == durationMin) ||
@@ -493,6 +521,11 @@ bool Track::expandIntoTie(iterator from, iterator to,
                           iterator& lastInsertedEvent)
 {
     cerr << "Track::expandIntoTie(" << baseDuration << ")\n";
+
+
+    //!!! not getDuration, and where does baseDuration come from --
+    //same quantization problem?
+
 
     timeT eventDuration = (*from)->getDuration();
     timeT baseTime = (*from)->getAbsoluteTime();
@@ -598,6 +631,11 @@ bool Track::expandAndInsertEvent(Event *baseEvent, timeT baseDuration,
 {
     insert(baseEvent);
 
+
+    //!!! not getDuration, and where does baseDuration come from --
+    //same quantization problem?
+
+
     timeT eventDuration = baseEvent->getDuration();
     timeT baseTime = baseEvent->getAbsoluteTime();
 
@@ -653,6 +691,57 @@ bool Track::expandAndInsertEvent(Event *baseEvent, timeT baseDuration,
     }
     
 }
+
+
+void Track::fillWithRests(timeT endTime)
+{
+    timeT sigTime;
+    TimeSignature ts(getTimeSigAtEnd(sigTime));
+    timeT duration = getDuration();
+    
+    DurationList dl;
+    ts.getDurationListForInterval(dl, endTime - duration, sigTime);
+
+    timeT acc = duration;
+
+    for (DurationList::iterator i = dl.begin(); i != dl.end(); ++i) {
+	Event *e = new Event("rest");
+	e->setDuration(*i);
+	e->setAbsoluteTime(acc);
+	insert(e);
+	acc += *i;
+    }
+}
+
+
+void Track::insertNote(iterator position, Note note, int pitch)
+{
+    int barNo = getBarNumber(position);
+
+    // Procedure:
+    // 
+    // First, if there is a rest at the insertion position, merge it
+    // with any following rests, if available, until we have at least
+    // the duration of the new note.  Then:
+    // 
+    // 1. If the new note is the same length as an existing note or
+    // rest at that position, chord the existing note or delete the
+    // existing rest and insert.
+    // 
+    // 2. If the new note is shorter than an existing note or rest,
+    // split the existing one and chord or replace the first part.
+    // 
+    // 3. If the new note is longer, split the new note so that the
+    // first part is the same duration as the existing note or rest,
+    // and recurse (to step 1) with both the first and the second part
+    // in turn.
+
+    //... 
+}
+
+
+    
+    
 
 
 void Track::getTimeSlice(timeT absoluteTime, iterator &start, iterator &end)

@@ -782,7 +782,12 @@ void TimeSignature::getDurationListAux(DurationList &dlist, int t) const
     assert(t >= 0);
     int shortestTime = Note(Note::Shortest).getDuration();
 
-    if (t < shortestTime) return;
+    if (t < shortestTime) {
+	// we want to divide the time exactly, even if it means we
+	// can't represent everything quite right in note durations
+	dlist.push_back(t);
+	return;
+    }
     int current;
 
     if ((current = (isDotted() ? m_dottedCrotchetTime : m_crotchetTime)) <= t) {

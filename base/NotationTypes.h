@@ -292,7 +292,9 @@ public:
         // optimisation -- I'm hoping throw() is implemented as a
         // single out-of-line function call, in which case it'll be
         // fine to inline this constructor in code like
-        // "Note(Note::Crotchet, false).getDuration()"
+        // "Note(Note::Crotchet, false).getDuration()".  That's quite
+        // important; I'd even consider not throwing if it'll screw
+        // inlining
 
         if (m_type < Shortest || m_type > Longest) throw BadType();
     
@@ -399,11 +401,6 @@ public:
     int getBeatsPerBar()  const {
         return getBarDuration() / getBeatDuration();
     }
-
-/*
-    static DurationList getNoteDurationList(int start, int duration,
-                                            const TimeSignature &ts);
-*/
 
     // get the "optimal" list of rest durations to make up a bar of
     // this time signature

@@ -360,7 +360,7 @@ void TrackPencil::handleMouseButtonRelase(QMouseEvent*)
         kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMouseReleaseEvent() : shorten m_currentItem = "
                              << m_currentItem << endl;
         // readjust size of corresponding track
-        m_currentItem->getTrack()->setNbTimeSteps(m_currentItem->getItemNbTimeSteps());
+        m_currentItem->getTrack()->setDuration(m_currentItem->getItemNbTimeSteps());
     }
 
     m_currentItem = 0;
@@ -486,7 +486,7 @@ void TrackResizer::handleMouseButtonRelase(QMouseEvent*)
     kdDebug(KDEBUG_AREA) << "TrackResizer: set track nb time steps to "
                          << newNbTimeSteps << endl;
     
-    m_currentItem->getTrack()->setNbTimeSteps(newNbTimeSteps);
+    m_currentItem->getTrack()->setDuration(newNbTimeSteps);
 
     m_currentItem = 0;
 }

@@ -61,6 +61,10 @@ public:
           unsigned int stepsPerBar = 384);
     ~Track();
 
+    
+    //!!! store a quantizer here that other stuff can use too?
+
+
 
     struct BarPosition
     {
@@ -105,8 +109,8 @@ public:
     //!!! This may be obsolete, but we'll think about that more later
     TimeSignature getTimeSigAtEnd(timeT &absTimeOfSig) const;
 
-    unsigned int getNbTimeSteps() const;
-    void         setNbTimeSteps(unsigned int);
+    unsigned int getDuration() const;
+    void         setDuration(unsigned int);
 
     /**
      * Calculates suitable positions for the bar lines, taking into
@@ -173,10 +177,16 @@ public:
      * easily find the corresponding ViewElements to delete), or null
      * if no event was deleted
      */
+
     //!!! we can probably remove collapsedEvent now that
     //ViewElementsManager is a TrackObserver.  Besides, surely the
     //event would have been deleted (by erase()) before the code that
     //called this method was able to look at it?
+
+    //!!! maybe needs a more specific name -- doesn't always collapse,
+    //only if the collapsed notes make a single note of meaningful
+    //duration
+
     bool collapse(Event*, bool& collapseForward, Event*& collapsedEvent);
 
     /**
@@ -267,6 +277,18 @@ public:
      * e.g. if there are more notes at the same absolute time
      */
     bool noteIsInChord(Event *note);
+
+    /**
+     * Fill up the track with rests, from the end of the last event
+     * currently on the track to the endTime given.
+     */
+    void fillWithRests(timeT endTime);
+
+    /**
+     * Inserts a note, doing all the clever split/merge stuff as
+     * appropriate.  Requires up-to-date bar position list.  */
+
+    void insertNote(iterator position, Note note, int pitch);
 
     /**
      * The compare class used by Composition

@@ -77,3 +77,16 @@ TEXT_ITEM := Text String LONG_STRING Position [n]
 
 METRONOME_ITEM := Metronome NOTE_DURATION [n]
 
+FOOTER := ( TIME_SIGNATURE )* ( STAFF_STYLE )*
+
+TIME_SIGNATURE := Bar [staff_number] [bar_number] time [num] [denom]
+		      // timesig num/denom at bar_number in staff staff_number
+		      // -- must be at least one per staff (at bar zero)
+
+STAFF_STYLE := Stave [staff_number] tags [start] [end] connected [n] program [midi_program]
+		      // if start is 1, no repeat marking at start of staff;
+		      // if end is 1, no repeat marking at end of staff.
+		      // if either is >1, there's a repeat at start or end.
+		      // connected -> whether this staff is bracketed with
+		      // the following one (value is 1 for true, 0 for false)
+

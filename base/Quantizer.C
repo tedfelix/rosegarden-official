@@ -51,6 +51,15 @@ Quantizer::quantizeByUnit(Event *e, int unit)
 }
 
 
+timeT
+Quantizer::getQuantizedDuration(Event *e, int unit)
+{
+    long d;
+    if (e->get<Int>(DurationProperty, d)) return (timeT)d;
+    else return quantizeByUnit(e, unit);
+}
+
+
 void
 Quantizer::quantizeByNote(Track::iterator from,
                           Track::iterator to,
@@ -106,6 +115,15 @@ Quantizer::quantizeByNote(timeT &duration, int maxDots)
 
     duration = shortTime;
     return shortNote;
+}
+
+
+timeT
+Quantizer::getQuantizedNoteDuration(Event *e, int maxDots)
+{
+    long d;
+    if (e->get<Int>(NoteDurationProperty, d)) return (timeT)d;
+    else return quantizeByNote(e, maxDots);
 }
 
 

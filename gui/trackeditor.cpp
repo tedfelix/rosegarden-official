@@ -49,7 +49,7 @@ TracksEditor::TracksEditor(RosegardenGUIDoc* doc,
     if (doc) {
 //         kdDebug(KDEBUG_AREA) << "TracksEditor() : doc " << doc << endl;
         docNbTracks = doc->getNbTracks();
-        docNbTimeSteps = doc->getNbTimeSteps();
+        docNbTimeSteps = doc->getDuration();
     }
 
     // TODO: do something clever with docNbTracks and docNbTimeSteps
@@ -140,7 +140,7 @@ TracksEditor::setupTracks()
 
             kdDebug(KDEBUG_AREA) << "TracksEditor::setupTracks() add track"
                                  << " - start idx : " << (*i)->getStartIndex()
-                                 << " - nb time steps : " << (*i)->getNbTimeSteps()
+                                 << " - nb time steps : " << (*i)->getDuration()
                                  << " - instrument : " << (*i)->getInstrument()
                                  << endl;
 
@@ -149,8 +149,8 @@ TracksEditor::setupTracks()
             y = m_vHeader->sectionPos((*i)->getInstrument());
             x = m_hHeader->sectionPos((*i)->getStartIndex());
 
-            TrackItem *newItem = m_tracksCanvas->addPartItem(x, y,
-                                                             (*i)->getNbTimeSteps());    
+            TrackItem *newItem = m_tracksCanvas->addPartItem
+		(x, y, (*i)->getDuration());    
             newItem->setTrack(*i);
         }
         

@@ -63,9 +63,10 @@ public:
     unsigned int getNbTracks() const { return m_tracks.size(); }
 
     // returns the nb of time steps of the longest track
-    unsigned int getNbTimeSteps() const;
+    unsigned int getDuration() const;
     void         clear();
 
+    //!!! dubious
     unsigned int getNbTicksPerBar() const { return m_nbTicksPerBar; }
     void setNbTicksPerBar(unsigned int n) { m_nbTicksPerBar = n; }
 

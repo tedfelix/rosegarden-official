@@ -584,6 +584,9 @@ MidiFile::convertToRosegarden()
           //
           if (endOfLastNote < rosegardenTime )
           {
+	      rosegardenTrack->fillWithRests(rosegardenTime);
+
+	      /*!!!
             rosegardenEvent = new Event;
             rosegardenEvent->setType("rest");
             rosegardenEvent->setDuration(rosegardenTime - endOfLastNote);
@@ -596,6 +599,7 @@ MidiFile::convertToRosegarden()
 #endif
 
             rosegardenTrack->insert(rosegardenEvent);
+	      */
           }
           endOfLastNote = rosegardenTime + rosegardenDuration;
         }

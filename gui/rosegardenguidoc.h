@@ -127,7 +127,7 @@ public:
 //     const Rosegarden::Track*   getTrack(int trackNb) const  { return m_composition[trackNb]; }
 
     unsigned int getNbTracks()    const { return m_composition.getNbTracks(); }
-    unsigned int getNbTimeSteps() const { return m_composition.getNbTimeSteps(); }
+    unsigned int getDuration() const { return m_composition.getDuration(); }
 
 public slots:
 

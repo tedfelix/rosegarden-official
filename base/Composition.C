@@ -88,23 +88,21 @@ Composition::deleteTrack(Track *p)
 }
 
 unsigned int
-Composition::getNbTimeSteps() const
+Composition::getDuration() const
 {
-    unsigned int maxNbTimeSteps = 0;
+    unsigned int maxDuration = 0;
 
     for (trackcontainer::const_iterator i = m_tracks.begin();
          i != m_tracks.end(); ++i) {
 
-        unsigned int trackTotalNbTimeSteps = (*i)->getNbTimeSteps() + (*i)->getStartIndex();
+        unsigned int trackTotal = (*i)->getDuration() + (*i)->getStartIndex();
         
-        if ((*i) && trackTotalNbTimeSteps > maxNbTimeSteps) {
-
-            maxNbTimeSteps = trackTotalNbTimeSteps;
-
+        if ((*i) && trackTotal > maxDuration) {
+            maxDuration = trackTotal;
         }
     }
     
-    return maxNbTimeSteps;
+    return maxDuration;
 }
 
 void
