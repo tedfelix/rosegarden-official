@@ -124,10 +124,6 @@ NotationStaff::changeFont(string fontName, int resolution)
     }
     QColor lineColour(level, level, level);
 
-    //!!! Hope this becomes a permanent change (although we'll
-    //hopefully end up doing page-view stuff too...)
-
-//!!!    for (h = -2 * nbLegerLines; h <= (2*(nbLines + nbLegerLines) - 2); ++h) {
     for (h = 0; h <= (2*nbLines - 2); h += 2) {
 
         for (int i = 0; i < m_npf->getStaffLineThickness(); ++i) {

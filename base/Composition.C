@@ -32,11 +32,15 @@ namespace Rosegarden
 const std::string Composition::BarEventType = "bar";
 const PropertyName Composition::BarNumberProperty = "BarNumber";
 
+const std::string Composition::TempoEventType = "tempo";
+const PropertyName Composition::TempoProperty = "BeatsPerHour";
+
 
 Composition::Composition()
     : m_referenceSegment(0),
-      m_tempo(120),
       m_position(0),
+      m_currentTempo(120.0),
+      m_defaultTempo(120.0),
       m_barPositionsNeedCalculating(true)
 {
     // empty
@@ -53,9 +57,13 @@ void Composition::swap(Composition& c)
 
     Composition *that = &c;
 
-    double tp = this->m_tempo;
-    this->m_tempo = that->m_tempo;
-    that->m_tempo = tp;
+    double tp = this->m_defaultTempo;
+    this->m_defaultTempo = that->m_defaultTempo;
+    that->m_defaultTempo = tp;
+
+    tp = this->m_currentTempo;
+    this->m_currentTempo = that->m_currentTempo;
+    that->m_currentTempo = tp;
 
     m_referenceSegment.swap(c.m_referenceSegment);
 
@@ -438,6 +446,56 @@ Composition::getTimeSignatureAt(timeT t, TimeSignature &timeSig) const
     return (*i)->getAbsoluteTime();
 }
 
+double
+Composition::getTempoAt(timeT t) const
+{
+    Segment::iterator i = m_referenceSegment.findTime(t);
+
+    for (;;) {
+
+	if (i != m_referenceSegment.end() && (*i)->isa(TempoEventType)) {
+	    return (double)((*i)->get<Int>(TempoProperty)) / 60.0;
+	}
+	
+	if (i == m_referenceSegment.begin()) return m_defaultTempo;
+	--i;
+    }
+}
+
+void
+Composition::setPosition(timeT position)
+{
+    if (m_position == position) return;
+
+    if (position > m_position) {
+
+	//!!! some optimisation still available here
+
+	// may be quicker to get j by incrementing from i, if position is
+	// fairly close to m_position
+	Segment::iterator i = m_referenceSegment.findTime(m_position);
+	Segment::iterator j = m_referenceSegment.findTime(position);
+
+	bool useJ = (j != m_referenceSegment.end() &&
+		     (*j)->getAbsoluteTime() == position);
+
+	while (i != j || useJ) {
+
+	    if ((*i)->isa(TempoEventType)) {
+		m_currentTempo = (double)((*i)->get<Int>(TempoProperty)) / 60.0;
+	    }
+
+	    if (useJ && (i == j)) break;
+	    ++i;
+	}
+
+    } else {
+
+	m_currentTempo = getTempoAt(position);
+    }
+
+    m_position = position;
+}
 
 void Composition::eventAdded(const Segment *s, Event *e)
 {

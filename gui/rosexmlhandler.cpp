@@ -84,10 +84,10 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 	m_currentSegment = m_composition.getReferenceSegment();
 	m_currentTime = 0;
 
-    } else if (lcName == "tempo") {
+    } else if (lcName == "default-tempo") {
 
 	QString tempoString = atts.value("value");
-	m_composition.setTempo(tempoString.toInt());
+	m_composition.setDefaultTempo(tempoString.toInt());
 	m_foundTempo = true;
 
     } else if (lcName == "segment") {
@@ -262,7 +262,7 @@ bool
 RoseXmlHandler::endDocument()
 {
   if (m_foundTempo == false)
-    m_composition.setTempo(120.0);
+    m_composition.setDefaultTempo(120.0);
 
   return true;
 }

@@ -28,7 +28,7 @@
 namespace Rosegarden 
 {
 
-enum PropertyType { Int, String, Bool, Tag };
+enum PropertyType { Int, String, Bool };
 
 template <PropertyType P>
 class PropertyDefn

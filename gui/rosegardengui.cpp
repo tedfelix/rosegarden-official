@@ -1092,12 +1092,13 @@ void RosegardenGUIApp::play()
     //
     QDataStream streamOut(data, IO_WriteOnly);
 
+    //!!!
     if (m_doc->getComposition().getTempo() == 0)
     {
       cout <<
        "RosegardenGUIApp::play() - setting Tempo to Default value of 120.000"
         << endl;
-      m_doc->getComposition().setTempo(120.0);
+      m_doc->getComposition().setDefaultTempo(120.0);
     }
     else
     {

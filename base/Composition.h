@@ -50,6 +50,9 @@ public:
     static const std::string BarEventType;
     static const PropertyName BarNumberProperty;
 
+    static const std::string TempoEventType; 
+    static const PropertyName TempoProperty; // stored in beats per hour
+
     typedef std::set<Segment*, Segment::SegmentCmp> segmentcontainer;
 
     typedef segmentcontainer::iterator iterator;
@@ -168,24 +171,41 @@ public:
      */
     timeT getTimeSignatureAt(timeT, TimeSignature &) const;
 
+    /**
+     * Return the tempo in effect at time t.  Can be very slow;
+     * for playback, prefer setPosition plus getTempo.
+     */
+    double getTempoAt(timeT t) const;
+
+    /**
+     * Return the tempo in effect at the current playback position.
+     * Equivalent to getTempoAt(getPosition()), but much quicker.
+     */
+    double getTempo() const { return m_currentTempo; }
+
+    /**
+     * Set a default tempo for the composition.  This will be
+     * overridden by any tempo events we encounter subsequently.
+     */
+    void setDefaultTempo(double tempo) { m_defaultTempo = tempo; }
+
+    /**
+     * Get the current playback position
+     */
+    timeT getPosition() { return m_position; }
+
+    /**
+     * Set the current playback position (causing the current tempo
+     * to be updated also)
+     */
+    void setPosition(timeT position);
+
 
     // Some set<> API delegation
     iterator       begin()       { return m_segments.begin(); }
     const_iterator begin() const { return m_segments.begin(); }
     iterator       end()         { return m_segments.end(); }
     const_iterator end() const   { return m_segments.end(); }
-
-    // Tempo here is only our current Transport tempo which we use on
-    // the GUI and is sent to the Sequencer.
-    //
-    double getTempo() const { return m_tempo; }
-    void setTempo(const double &tempo) { m_tempo = tempo; }
-
-    /// Get playback position
-    timeT getPosition() { return m_position; }
-
-    /// Set playback position
-    void setPosition(const timeT& position) { m_position = position; }
 
 
     // SegmentObserver methods:
@@ -204,9 +224,9 @@ protected:
 
     Quantizer m_quantizer;
 
-    double m_tempo;
-
     timeT m_position;
+    double m_currentTempo;
+    double m_defaultTempo;
 
     /// affects the reference segment in m_referenceSegment
     void calculateBarPositions() const;

@@ -57,7 +57,8 @@ public:
      * Creates a new NotationStaff for the specified Segment
      * \a id is the id of the staff in the NotationView
      */
-    NotationStaff(QCanvas*, Rosegarden::Segment*, unsigned int id,
+    NotationStaff(QCanvas *, Rosegarden::Segment *,
+		  unsigned int id,
                   std::string fontName, int resolution);
     ~NotationStaff();
 
@@ -153,11 +154,11 @@ public:
     void renderElements(NotationElementList::iterator from,
 			NotationElementList::iterator to);
 
-
     /**
      * Call renderElements(from, to) on the whole staff.
      */
     void renderElements();
+
 
     /**
      * Assign suitable coordinates to all the elements on the staff,
@@ -174,10 +175,10 @@ public:
      * the course of the staff, which is needed to support the
      * getClefAndKeyAtX() method.
      *
-     * This method also updates the selected-ness of elements on the 
-     * staff (i.e. it turns the selected ones blue and the unselected
+     * This method also updates the selected-ness of any elements it
+     * sees (i.e. it turns the selected ones blue and the unselected
      * ones black).  As a result -- and for other implementation
-     * details -- it may actually re-generate some sprites.
+     * reasons -- it may actually re-generate some sprites.
      *
      * The from and to arguments are used to indicate the extents of a
      * changed area within the staff.  The actual area within which the

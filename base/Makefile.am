@@ -18,5 +18,6 @@ libbase_la_SOURCES = BaseProperties.C \
 		     Segment.C \
 		     SegmentNotationHelper.C \
 		     SegmentPerformanceHelper.C \
+		     StaffLayout.C \
 		     ViewElement.C
 

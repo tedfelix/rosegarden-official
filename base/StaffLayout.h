@@ -20,6 +20,8 @@
 #ifndef _STAFF_LAYOUT_H_
 #define _STAFF_LAYOUT_H_
 
+#include "Event.h" // for timeT
+
 namespace Rosegarden {
 
 template <class T>
@@ -53,8 +55,8 @@ template <class T>
 class StaffLayout
 {
 public: 
-    StaffLayout() { }
-    virtual ~StaffLayout() { }
+    StaffLayout();
+    virtual ~StaffLayout();
 
     /**
      * Find the Staff whose Y coord range includes y, and return a
@@ -92,7 +94,7 @@ public:
 
     /**
      * Return the y coordinate of the nearest height-on-staff to the
-     * given y at the given x coordinate
+     * given y.
      */
     virtual int getYSnappedToLine(int y) const = 0;
 

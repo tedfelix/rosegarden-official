@@ -487,8 +487,8 @@ MidiFile::convertToRosegarden()
 
     Rosegarden::Composition *composition = new Composition;
 
-    // preset tempo to zero
-    composition->setTempo(0);
+    // preset default tempo
+    composition->setDefaultTempo(120.0);
 
     // precalculate the timing factor
     //
@@ -652,11 +652,9 @@ MidiFile::convertToRosegarden()
 			if (numerator == 0 ) numerator = 4;
 			if (denominator == 0 ) denominator = 4;
 
-			//!!! Change this so as to place time sigs in the
-			// reference segment.
 			rosegardenEvent = Rosegarden::TimeSignature
 			    (numerator, denominator).getAsEvent(rosegardenTime);
-			rosegardenSegment->insert(rosegardenEvent);
+			composition->getReferenceSegment()->insert(rosegardenEvent);
 
 			break;
 
@@ -747,14 +745,11 @@ MidiFile::convertToRosegarden()
 
     // set a tempo based on _timingDivision or default
     //
-    if (composition->getTempo() == 0)
-    {
-	if (m_timingDivision)
-	    // [cc] -- avoid floating-point
-	    composition->setTempo((120 * crotchetTime) / divisor);
-	else
-	    composition->setTempo(120);
-    }
+    if (m_timingDivision)
+	// [cc] -- avoid floating-point
+	composition->setDefaultTempo((120 * crotchetTime) / divisor);
+    else
+	composition->setDefaultTempo(120);
 
     return composition;
 }
