@@ -36,7 +36,9 @@ class Rosegarden::Composition;
 
 
 /**
- * Hydrogen drum machine file importer
+ * Hydrogen drum machine file importer - should work for 0.8.1 and above
+ * assuming they don't change the file spec without telling us.
+ *
  */
 
 class HydrogenLoader : public ProgressReporter
@@ -62,6 +64,9 @@ private:
     static const Rosegarden::PropertyName SKIP_PROPERTY;
 };
 
+typedef std::vector<std::pair<std::string, Rosegarden::Segment*> > SegmentMap;
+typedef std::vector<std::pair<std::string, Rosegarden::Segment*> >::iterator SegmentMapIterator;
+typedef std::vector<std::pair<std::string, Rosegarden::Segment*> >::const_iterator SegmentMapConstIterator;
 
 class HydrogenXMLHandler : public QXmlDefaultHandler
 {
@@ -137,6 +142,9 @@ protected:
     bool                     m_segmentAdded;
     int                      m_currentBar;
     bool                     m_newSegment;
+
+    SegmentMap               m_segmentMap;
+
 };
 
 

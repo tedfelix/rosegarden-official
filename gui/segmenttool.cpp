@@ -709,11 +709,13 @@ void
 SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 {
     SegmentItem *item = m_canvas->findSegmentClickedOn(e->pos());
+    RG_DEBUG << "SegmentSelector::handleMouseButtonPress" << endl;
 
-    // If we're in segmentAddMode then we don't clear the
-    // selection vector
+    // If we're in segmentAddMode or not clicking on an item then we don't 
+    // clear the selection vector.  If we're clicking on an item and it's 
+    // not in the selection - then also clear the selection.
     //
-    if (!m_segmentAddMode) {
+    if (!item || (!m_segmentAddMode && !(item->isSelected()))) {
         clearSelected();
     }
 
