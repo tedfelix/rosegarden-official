@@ -218,8 +218,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_topBarButtons->getLoopRuler()->setBackgroundColor
 	(RosegardenGUIColours::InsertCursorRuler);
 
-    m_bottomBarButtons = 0;
-
     //!!! Experimental.
     Segment *textSegment = new Segment;
     Rosegarden::Composition *composition = &doc->getComposition();
@@ -230,15 +228,14 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     Rosegarden::AnalysisHelper helper;
     helper.labelChords(adapter, *textSegment);
     QWidget *textRuler = new TextRuler(m_hlayout, textSegment, 25, m_centralFrame);
-    setBottomBarButtons(textRuler);
+    setTextRuler(textRuler);
 
-/*
     m_bottomBarButtons = new BarButtons(m_hlayout, 25,
                                         true, m_centralFrame);
     setBottomBarButtons(m_bottomBarButtons);
 
     m_bottomBarButtons->connectRulerToDocPointer(doc);
-*/
+
     m_selectDefaultNote->activate();
 }
 
