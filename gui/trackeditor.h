@@ -53,10 +53,6 @@ public:
 
     bool moveTrack(int section, int fromIdx, int toIdx);
 
-    /// called by parent view widget when reading a music file
-    bool addTrack(unsigned int trackNb,
-                  unsigned int start, unsigned int nbBars);
-    
     TracksCanvas*       canvas()       { return m_tracksCanvas; }
     const TracksCanvas* canvas() const { return m_tracksCanvas; }
 

@@ -50,11 +50,7 @@ TracksEditor::TracksEditor(RosegardenGUIDoc* doc,
         docNbBars = doc->getNbBars();
     }
 
-    if (docNbTracks > 0 && docNbBars > 0) {
-        init(docNbTracks, docNbBars);
-    }
-    else
-        init(64, 100);
+    init(64, 100);
 }
 
 
@@ -138,22 +134,26 @@ TracksEditor::setupTracks()
     if (!m_document) return; // sanity check
     
     const Composition &comp = m_document->getComposition();
-    unsigned int trackNb = 0;
 
     for (Composition::const_iterator i = comp.begin();
-         i != comp.end(); ++i, ++trackNb) {
+         i != comp.end(); ++i) {
 
         if ((*i)) {
 
             kdDebug(KDEBUG_AREA) << "TracksEditor::setupTracks() add track"
-                                 << "Track Nb : " << trackNb
                                  << " - start idx : " << (*i)->getStartIndex()
                                  << " - nb bars : " << (*i)->getNbBars()
+                                 << " - instrument : " << (*i)->getInstrument()
                                  << endl;
 
-            addTrack(trackNb,
-                     (*i)->getStartIndex(),
-                     (*i)->getNbBars());
+            int x = 0, y = 0;
+
+            y = m_vHeader->sectionPos((*i)->getInstrument());
+            // TODO : compute x according to track start
+
+            TrackPartItem *newItem = m_tracksCanvas->addPartItem(x, y,
+                                                                 (*i)->getNbBars());    
+            newItem->setTrack(*i);
         }
         
     }
@@ -173,7 +173,7 @@ TracksEditor::trackOrderChanged(int section, int fromIdx, int toIdx)
 void
 TracksEditor::addTrack(TrackPartItem *p)
 {
-    // find track nb for part
+    // find instrument for part
     //
     int instrument = m_vHeader->sectionAt(static_cast<int>(p->y()));
     p->setInstrument(instrument);
@@ -181,10 +181,6 @@ TracksEditor::addTrack(TrackPartItem *p)
     kdDebug(KDEBUG_AREA) << QString("TracksEditor::addTrack() : track instr is %1 at %2")
         .arg(instrument).arg(p->y())
                          << ", p = " << p << endl;
-
-//     m_trackParts.push_back(p);
-
-    kdDebug(KDEBUG_AREA) << "TracksEditor::addTrack() emitting createNewTrack signal" << endl;
 
     emit createNewTrack(p);
 }
@@ -237,26 +233,6 @@ TracksEditor::moveTrack(int /*section*/, int /*fromIdx*/, int /*toIdx*/)
 
     return true;
 }
-
-
-/// called by parent view widget when reading a music file
-bool TracksEditor::addTrack(unsigned int trackNb,
-                            unsigned int start, unsigned int nbBars)
-{
-    int x = 0, y = 0;
-
-    y = m_vHeader->sectionPos(trackNb);
-    // TODO : compute x according to track start
-    kdDebug(KDEBUG_AREA) << "TracksEditor::addTrack(" << trackNb << ")\n";
-
-    TrackPartItem *newItem = m_tracksCanvas->addPartItem(x, y, nbBars);    
-
-    kdDebug(KDEBUG_AREA) << "TracksEditor::addTrack() emitting createNewTrack signal" << endl;
-    emit createNewTrack(newItem);
-
-    return true;
-}
-
 
 void
 TracksEditor::clear()
