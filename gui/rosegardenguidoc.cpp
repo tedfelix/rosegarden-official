@@ -1314,3 +1314,11 @@ RosegardenGUIDoc::progressDialogDead()
     m_progressDialogDead = true;
 }
 
+void
+RosegardenGUIDoc::slotNewRecordButton()
+{
+    // Inform the sequencer if it's an audio track
+    //
+    std::cout << "RosegardenGUIDoc::slotNewRecordButton()" << std::endl;
+}
+

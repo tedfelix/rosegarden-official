@@ -249,6 +249,12 @@ TrackEditor::init(QWidget* rosegardenguiview,
     connect(this, SIGNAL(stateChange(const QString&, bool)),
             rosegardenguiview, SIGNAL(stateChange(const QString&, bool)));
 
+    connect(m_trackButtons, SIGNAL(modified()),
+            m_document, SLOT(slotDocumentModified()));
+
+    connect(m_trackButtons, SIGNAL(newRecordButton()),
+            m_document, SLOT(slotNewRecordButton()));
+
     // Synchronize bar buttons' scrollview with segment canvas' scrollbar
     //
     connect(m_segmentCanvas->verticalScrollBar(), SIGNAL(valueChanged(int)),
@@ -324,6 +330,7 @@ void TrackEditor::slotTrackButtonsWidthChanged()
     kapp->processEvents();
 
     m_trackButtonScroll->setMinimumWidth(m_trackButtons->width());
+    m_document->setModified(true);
 }
 
 

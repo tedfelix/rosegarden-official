@@ -362,6 +362,8 @@ TrackButtons::slotToggleMutedTrack(int mutedTrack)
         set = false;
 
     m_doc->getComposition().getTrackByIndex(mutedTrack)->setMuted(set);
+
+    emit modified();
 }
 
 void
@@ -400,6 +402,16 @@ TrackButtons::slotUpdateTracks()
 void
 TrackButtons::slotSetRecordTrack(int recordTrack)
 {
+    setRecordButtonDown(recordTrack);
+
+    // set and update
+    m_doc->getComposition().setRecordTrack(recordTrack);
+    emit newRecordButton();
+}
+
+void
+TrackButtons::setRecordButtonDown(int recordTrack)
+{
     if (recordTrack < 0 || recordTrack > (int)m_tracks )
         return;
 
@@ -410,7 +422,6 @@ TrackButtons::slotSetRecordTrack(int recordTrack)
        m_recordButtonGroup->find(m_lastID)->setDown(false);
     }
 
-    m_doc->getComposition().setRecordTrack(recordTrack);
     m_recordButtonGroup->find(recordTrack)->setPalette
 	(QPalette(RosegardenGUIColours::ActiveRecordTrack));
     m_lastID = recordTrack;
@@ -770,5 +781,27 @@ TrackButtons::changeInstrumentLabel(Rosegarden::InstrumentId id, QString label)
     }
 }
 
+
+void
+TrackButtons::slotSynchroniseWithComposition()
+{
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::Track *track;
+
+    for (int i = 0; i < (int)m_tracks; i++)
+    {
+        track = comp.getTrackByPosition(i);
+
+        if (track)
+        {
+            if (track->isMuted())
+                m_muteButtonGroup->find(i)->setDown(true);
+            else
+                m_muteButtonGroup->find(i)->setDown(false);
+        }
+    }
+
+    setRecordButtonDown(comp.getRecordTrack());
+}
 
 

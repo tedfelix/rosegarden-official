@@ -195,6 +195,7 @@ void GeneralConfigurationPage::apply()
     QFileInfo info(externalAudioEditor);
     if (!info.exists() || !info.isExecutable())
     {
+        /*
         QString errorStr =
              i18n("External editor \"") + externalAudioEditor +
              ("\" not found or not executable.\nReverting to last editor.");
@@ -203,6 +204,8 @@ void GeneralConfigurationPage::apply()
         // revert on gui
         m_externalAudioEditorPath->
             setText(m_cfg->readEntry("externalaudioeditor", ""));
+            */
+        m_cfg->writeEntry("externalaudioeditor", "");
     }
     else
         m_cfg->writeEntry("externalaudioeditor", externalAudioEditor);

@@ -91,12 +91,25 @@ public:
     //
     void changeInstrumentLabel(Rosegarden::InstrumentId id, QString label);
 
+    // Set record button down - graphically only
+    //
+    void setRecordButtonDown(int recordTrack);
+
 signals:
     // to emit what Track has been selected
     //
     void widthChanged();
     void trackSelected(int);
     void instrumentSelected(int);
+
+    // document modified (mute button)
+    //
+    void modified();
+
+    // New record button set - if we're setting to an audio track
+    // we need to tell the sequencer for live monitoring purposes.
+    //
+    void newRecordButton();
 
 public slots:
 
@@ -111,6 +124,10 @@ public slots:
     void slotInstrumentSelection(int);
     void slotInstrumentPopupActivated(int);
     void slotInstrumentPopupHiding();
+
+    // ensure track buttons match the Composition
+    //
+    void slotSynchroniseWithComposition();
 
 private:
 
