@@ -945,8 +945,7 @@ void NotationSelector::handleMouseDblClick(Rosegarden::timeT,
     if (m_clickedElement) {
 
 	EventEditDialog *dialog = new EventEditDialog
-	    (m_nParentView, m_nParentView->getNotePixmapFactory(),
-	     *m_clickedElement->event(), true);
+	    (m_nParentView, *m_clickedElement->event(), true);
 
 	if (dialog->exec() == QDialog::Accepted &&
 	    dialog->isModified()) {

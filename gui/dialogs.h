@@ -29,6 +29,7 @@
 
 #include "NotationTypes.h"
 #include "editcommands.h"
+#include "notepixmapfactory.h"
 
 class QWidget;
 class QLineEdit;
@@ -298,7 +299,6 @@ public:
      * through getEvent().
      */
     EventEditDialog(QWidget *parent,
-		    NotePixmapFactory *npf,
 		    const Rosegarden::Event &event,
 		    bool editable = true);
 
@@ -323,7 +323,7 @@ protected:
     void addPersistentProperty(const Rosegarden::PropertyName &);
 
     //--------------- Data members ---------------------------------
-    NotePixmapFactory *m_notePixmapFactory;
+    NotePixmapFactory m_notePixmapFactory;
 
     QLabel *m_durationDisplay;
     QLabel *m_durationDisplayAux;

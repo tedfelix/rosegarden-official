@@ -1097,12 +1097,10 @@ TextEventDialog::slotTypeChanged(const QString &)
 
 
 EventEditDialog::EventEditDialog(QWidget *parent,
-				 NotePixmapFactory *npf,
 				 const Rosegarden::Event &event,
 				 bool editable) :
     KDialogBase(parent, "", true, i18n(editable ? "Edit Event" : "View Event"),
 		(editable ? (Ok | Cancel) : Ok)),
-    m_notePixmapFactory(npf),
     m_durationDisplay(0),
     m_durationDisplayAux(0),
     m_persistentGrid(0),
@@ -1344,7 +1342,7 @@ EventEditDialog::slotDurationChanged(int value)
     Note nearestNote = Note::getNearestNote(timeT(value), 1);
     std::string noteName = nearestNote.getReferenceName();
     noteName = "menu-" + noteName;
-    QPixmap map = m_notePixmapFactory->makeToolbarPixmap(strtoqstr(noteName));
+    QPixmap map = m_notePixmapFactory.makeToolbarPixmap(strtoqstr(noteName));
 
     m_durationDisplay->setPixmap(map);
 
