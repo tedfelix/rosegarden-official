@@ -264,7 +264,7 @@ void MatrixStaff::createLines()
 }
 
 
-const unsigned int MatrixStaff::nbLines = 7 * 8;
+const unsigned int MatrixStaff::nbLines = 127;
     
 //----------------------------------------------------------------------
 
