@@ -18,8 +18,8 @@ Problems with the translations or contributions should be sent to rosegarden-dev
 
 FOR TRANSLATORS
 ------------------------
-Open your language file and start translating!  The KDE project has a tool called KBabel which helps manage translated strings, but any text editor is fine.
-When you are ready to submit your translations, send new files or CVS diffs to the mailing list.  We encourage you to release early and often!
+Open your language file and start translating!  The KDE project has a tool called KBabel which helps manage translated strings, but any text editor that supports UTF-8 is fine.  It is also rumored that the iconv tool is usable for converting to UTF-8 from whatever your editor supports.
+When you are ready to submit your translations, send new files or CVS diffs to the mailing list.  We encourage you to release early and often.
 
 If no translation yet exists for your language, make a copy of the file po/rosegarden.pot.  Name the copied file languageCode.po, where languageCode is the ISO locale code for your language.
 For example, the code for Russian is "ru" (no quotes), so the Russian translation should be found in ru.po.  A locale-specific example is en_GB.po, which is British English.
