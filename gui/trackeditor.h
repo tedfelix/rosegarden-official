@@ -185,7 +185,22 @@ signals:
      */
     void stateChange(const QString&, bool);
 
+    /**
+     * A URI was dropped on the canvas
+     *
+     * @see RosegardenGUI#slotOpenURL()
+     */
+    void droppedURI(QString uri);
+
+    /**
+     * An audio file was dropped from the audio manager dialog
+     */
+    void droppedAudio(QString audioDesc);
+
 protected:
+
+    virtual void dragEnterEvent(QDragEnterEvent *event);
+    virtual void dropEvent(QDropEvent*);
     
     virtual void paintEvent(QPaintEvent* e);
     

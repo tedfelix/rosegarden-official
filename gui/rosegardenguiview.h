@@ -194,16 +194,13 @@ public slots:
                                      const Rosegarden::RealTime &,
                                      const Rosegarden::RealTime &);
 
+    void slotDroppedAudio(QString audioDesc);
+
     /*
      * Commands
      *
      */
     void slotAddCommandToHistory(KCommand *command);
-
-    /*
-     * For re-emission purposes
-     */
-    void slotSendMappedEvent(Rosegarden::MappedEvent *mE);
 
     /*
      * Change the Instrument Label
@@ -225,8 +222,6 @@ signals:
     void segmentsSelected(const Rosegarden::SegmentSelection&);
 
 protected:
-    virtual void dragEnterEvent(QDragEnterEvent *event);
-    virtual void dropEvent(QDropEvent*);
 
     //--------------- Data members ---------------------------------
 

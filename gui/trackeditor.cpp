@@ -21,6 +21,7 @@
 
 #include <algorithm>
 
+#include <qdragobject.h>
 #include <qlayout.h>
 #include <qcanvas.h>
 #include <qlabel.h>
@@ -75,6 +76,9 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
     m_canvasWidth(0),
     m_compositionRefreshStatusId(doc->getComposition().getNewRefreshStatusId())
 {
+    // accept dnd
+    setAcceptDrops(true);
+
     Composition &comp = doc->getComposition();
 
     int tracks = comp.getNbTracks();
@@ -672,4 +676,32 @@ TrackEditor::slotVerticalScrollTrackButtons(int y)
     m_trackButtonScroll->setContentsPos(0, y);
 }
 
-//------------------------------------------------------------
+
+void TrackEditor::dragEnterEvent(QDragEnterEvent *event)
+{
+    event->accept(QUriDrag::canDecode(event) ||
+                  QTextDrag::canDecode(event));
+}
+
+void TrackEditor::dropEvent(QDropEvent* event)
+{
+    // this is a very simplistic implementation of a drop event.  we
+    // will only accept a dropped URL.  the Qt dnd code can do *much*
+    // much more, so please read the docs there
+    QStrList uri;
+    QString audioInfo;
+
+    // if it's a URI, pass it to parent
+    if (QUriDrag::decode(event, uri))
+        {
+            kdDebug(KDEBUG_AREA) << "TrackEditor::dropEvent() : got URI :"
+                                 << uri.first() << endl;
+            emit droppedURI(uri.first());
+            
+        } else if (QTextDrag::decode(event, audioInfo)) {
+            kdDebug(KDEBUG_AREA) << "TrackEditor::dropEvent() : got audio info "
+                                 << audioInfo << endl;
+            emit droppedAudio(audioInfo);
+        }
+    
+}

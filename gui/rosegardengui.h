@@ -110,8 +110,6 @@ public:
 
     /**
      * open a URL
-     *
-     * @param url : a string containing a url (protocol://foo/bar/file.rg)
      */
     virtual void openURL(const QString& url);
 
@@ -244,8 +242,9 @@ protected:
     /**
      * Overridden virtuals for Qt drag 'n drop (XDND)
      */
-    virtual void dragEnterEvent(QDragEnterEvent *event);
-    virtual void dropEvent(QDropEvent *event);
+//     virtual void dragEnterEvent(QDragEnterEvent *event);
+//     virtual void dropEvent(QDropEvent *event);
+
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void keyReleaseEvent(QKeyEvent *event);
 
@@ -360,6 +359,14 @@ protected:
     QString getValidWriteFile(const QString &extension, const QString &label);
  
 public slots:
+
+    /**
+     * open a URL - used for Dn'D
+     *
+     * @param url : a string containing a url (protocol://foo/bar/file.rg)
+     */
+    virtual void slotOpenDroppedURL(QString url);
+
     /**
      * open a new application window by creating a new instance of
      * RosegardenGUIApp

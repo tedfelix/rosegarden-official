@@ -68,9 +68,6 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
       m_rulerScale(0),
       m_trackEditor(0)
 {
-    // accept dnd
-    //setAcceptDrops(true);
-
     RosegardenGUIDoc* doc = getDocument();
 
     // This apparently arbitrary figure is what we think is an
@@ -120,12 +117,24 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
             SIGNAL(editSegmentEventList(Rosegarden::Segment*)),
             SLOT(slotEditSegmentEventList(Rosegarden::Segment*)));
 
+    connect(m_trackEditor,
+            SIGNAL(droppedURI(QString)),
+            parent,
+            SLOT(slotOpenDroppedURL(QString)));
+
+
+    connect(m_trackEditor,
+            SIGNAL(droppedAudio(QString)),
+            this,
+            SLOT(slotDroppedAudio(QString)));
+    
+
     // Re-emit the sendMidiController
     //
     connect(m_instrumentParameterBox,
             SIGNAL(sendMappedEvent(Rosegarden::MappedEvent*)),
             this,
-            SLOT(slotSendMappedEvent(Rosegarden::MappedEvent*)));
+            SIGNAL(sendMappedEvent(Rosegarden::MappedEvent*)));
 
     connect(m_instrumentParameterBox,
             SIGNAL(changeInstrumentLabel(Rosegarden::InstrumentId, QString)),
@@ -269,7 +278,7 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
     // For sending note previews
     //
     connect(notationView, SIGNAL(notePlayed(Rosegarden::MappedEvent*)),
-            this, SLOT(slotSendMappedEvent(Rosegarden::MappedEvent*)));
+            this, SIGNAL(sendMappedEvent(Rosegarden::MappedEvent*)));
 
     // For tempo changes (ugh -- it'd be nicer to make a tempo change
     // command that could interpret all this stuff from the dialog)
@@ -314,7 +323,7 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
     // For sending key presses
     //
     connect(matrixView, SIGNAL(keyPressed(Rosegarden::MappedEvent*)),
-            this, SLOT(slotSendMappedEvent(Rosegarden::MappedEvent*)));
+            this, SIGNAL(sendMappedEvent(Rosegarden::MappedEvent*)));
 
     matrixView->show();
 }
@@ -400,7 +409,7 @@ void RosegardenGUIView::slotEditSegmentEventList(Rosegarden::Segment *p)
     //
     /*
     connect(eventView, SIGNAL(keyPressed(Rosegarden::MappedEvent*)),
-            this, SLOT(slotSendMappedEvent(Rosegarden::MappedEvent*)));
+            this, SIGNAK(sendMappedEvent(Rosegarden::MappedEvent*)));
             */
 
     eventView->show();
@@ -688,13 +697,6 @@ RosegardenGUIView::slotAddCommandToHistory(KCommand *command)
     getCommandHistory()->addCommand(command);
 }
 
-
-void 
-RosegardenGUIView::slotSendMappedEvent(Rosegarden::MappedEvent *mE)
-{
-    emit sendMappedEvent(mE);
-}
-
 void
 RosegardenGUIView::slotChangeInstrumentLabel(Rosegarden::InstrumentId id,
                                              QString label)
@@ -709,7 +711,6 @@ RosegardenGUIView::slotAddAudioSegmentAndTrack(
                                        const Rosegarden::RealTime &startTime,
                                        const Rosegarden::RealTime &endTime)
 {
-
     KMacroCommand *macro = new KMacroCommand("Insert Audio Segment");
 
     Rosegarden::Composition &comp = getDocument()->getComposition();
@@ -728,12 +729,35 @@ RosegardenGUIView::slotAddAudioSegmentAndTrack(
     slotAddCommandToHistory(macro);
 }
 
-
-void RosegardenGUIView::dragEnterEvent(QDragEnterEvent *event)
+void
+RosegardenGUIView::slotDroppedAudio(QString audioDesc)
 {
-}
+    QTextIStream s(&audioDesc);
 
-void RosegardenGUIView::dropEvent(QDropEvent*)
-{
-}
+    Rosegarden::AudioFileId audioFileId;
+    Rosegarden::InstrumentId instrumentId;
+    Rosegarden::RealTime startTime, endTime;
 
+    // read the audio info
+    s >> audioFileId;
+    s >> instrumentId;
+    s >> startTime.sec;
+    s >> startTime.usec;
+    s >> endTime.sec;
+    s >> endTime.usec;
+
+//     kdDebug(KDEBUG_AREA) << "RosegardenGUIView::slotDroppedAudio("
+//                          << audioDesc
+//                          << ") : audioFileId = " << audioFileId
+//                          << " - instrumentId = " << instrumentId
+//                          << " - startTime.sec = " << startTime.sec
+//                          << " - startTime.usec = " << startTime.usec
+//                          << " - endTime.sec = " << endTime.sec
+//                          << " - endTime.usec = " << endTime.usec
+//                          << endl;
+
+    if (instrumentId != 0)
+        slotAddAudioSegmentAndTrack(audioFileId, instrumentId,
+                                    startTime, endTime);
+    
+}

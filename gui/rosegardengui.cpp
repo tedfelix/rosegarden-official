@@ -104,9 +104,6 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
       m_storedLoopEnd(0),
       m_useSequencer(useSequencer)
 {
-    // accept dnd
-    setAcceptDrops(true);
-
     // Try to start the sequencer
     //
     if (m_useSequencer) launchSequencer();
@@ -660,6 +657,20 @@ void RosegardenGUIApp::initView()
 
 void RosegardenGUIApp::openFile(const QString& filePath)
 {
+    static QRegExp midiFile("\\.mid$"), rg21File("\\.rose$");
+
+    if (midiFile.match(filePath) != -1) {
+
+        importMIDIFile(filePath);
+        return;
+
+    } else if (rg21File.match(filePath) != -1) {
+
+        importRG21File(filePath);
+        return;
+
+    }
+
     QFileInfo info(filePath);
 
     if (!info.exists()) {
@@ -863,40 +874,6 @@ void RosegardenGUIApp::paintEvent(QPaintEvent* e)
     KMainWindow::paintEvent(e);
 }
 
-void RosegardenGUIApp::dragEnterEvent(QDragEnterEvent *event)
-{
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::dragEnterEvent()\n";
-
-    // accept uri and text drops only
-    event->accept(QUriDrag::canDecode(event) ||
-                  QTextDrag::canDecode(event));
-}
-
-void RosegardenGUIApp::dropEvent(QDropEvent *event)
-{
-    // this is a very simplistic implementation of a drop event.  we
-    // will only accept a dropped URL.  the Qt dnd code can do *much*
-    // much more, so please read the docs there
-    QStrList uri;
-    QString audioInfo;
-
-    // see if we can decode a URI.. if not, just ignore it
-    if (QUriDrag::decode(event, uri))
-        {
-            // okay, we have a URI.. process it
-            QString url, target;
-            url = uri.first();
-
-            // load in the file
-            openURL(url);
-        } else if (QTextDrag::decode(event, audioInfo)) {
-            kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::dropEvent() : got audio info "
-                                 << audioInfo << endl;
-        }
-    
-}
-
-
 bool RosegardenGUIApp::queryClose()
 {
     return m_doc->saveIfModified();
@@ -953,6 +930,13 @@ void RosegardenGUIApp::slotFileNew()
     }
 }
 
+void RosegardenGUIApp::slotOpenDroppedURL(QString url)
+{
+    kapp->processEvents(); // or else we get a crash because the
+    // track editor is erased too soon
+    openURL(KURL(url));
+}
+
 void RosegardenGUIApp::openURL(const QString& url)
 {
     openURL(KURL(url));
@@ -981,15 +965,7 @@ void RosegardenGUIApp::openURL(const KURL& url)
         return;
     }
 
-    static QRegExp midiFile("\\.mid$"), rg21File("\\.rose$");
-
-    if (midiFile.match(url.path()) != -1) {
-        importMIDIFile(target);
-    } else if (rg21File.match(url.path()) != -1) {
-        importRG21File(target);
-    } else {
-        openFile(target);
-    }
+    openFile(target);
 
     setCaption(url.path());
     m_fileRecent->addURL(url);
