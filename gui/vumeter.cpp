@@ -94,6 +94,10 @@ VUMeter::setLevel(const double &level)
         m_peakTimer.start(1000); // milliseconds of peak hold
     }
 
+#ifdef ALTERNATIVE_COLOUR_THEOREM_A
+    m_lastLevel = m_level;
+#endif
+
     QPainter paint(this);
     drawMeterLevel(&paint);
 }
@@ -142,7 +146,11 @@ VUMeter::drawMeterLevel(QPainter* paint)
 
     // Get the colour from the VelocityColour helper
     //
+#ifdef ALTERNATIVE_COLOUR_THEOREM_A
+    QColor mixedColour = m_velocityColour->getColour(m_lastLevel);
+#else
     QColor mixedColour = m_velocityColour->getColour(m_level);
+#endif
     paint->setPen(mixedColour);
     paint->setBrush(mixedColour);
 
