@@ -22,6 +22,7 @@
 #include <qdir.h>
 #include <qprinter.h>
 #include <qpainter.h>
+#include <qdragobject.h>
 
 // include files for KDE
 #include <kstdaccel.h>
@@ -56,6 +57,9 @@ RosegardenGUIApp::RosegardenGUIApp()
       m_selectDefaultTool(0),
       m_transportStatus(STOPPED)
 {
+    // accept dnd
+    setAcceptDrops(true);
+
     ///////////////////////////////////////////////////////////////////
     // call inits to invoke all other construction parts
     setupActions();
@@ -322,24 +326,22 @@ void RosegardenGUIApp::readOptions()
 	
     m_config->setGroup("General Options");
 
-//     bool viewStatusbar = m_config->readBoolEntry("Show Statusbar", true);
-//     if(viewStatusbar) {
-//         enableStatusBar(KStatusBar::Hide);
-//     } else {
-//         enableStatusBar(KStatusBar::Show);
-//     }
+    bool viewStatusbar = m_config->readBoolEntry("Show Statusbar", true);
+    if(viewStatusbar)
+        statusBar()->show();
+    else
+        statusBar()->hide();
 
-//     bool viewToolbar = m_config->readBoolEntry("Show Toolbar", true);
-//     if(viewToolbar) {
-//         enableToolBar(KToolBar::Hide);
-//     } else {
-//         enableToolBar(KToolBar::Show);
-//     }
+    bool viewToolBar = m_config->readBoolEntry("Show Toolbar", true);
+    if(viewToolBar)
+        toolBar()->show();
+    else
+        toolBar()->hide();
 
-//     // bar position settings
-//     KToolBar::BarPosition toolBarPos;
-//     toolBarPos=(KToolBar::BarPosition) m_config->readNumEntry("ToolBarPos", KToolBar::Top);
-//     toolBar()->setBarPos(toolBarPos);
+    // bar position settings
+    KToolBar::BarPosition toolBarPos;
+    toolBarPos=(KToolBar::BarPosition) m_config->readNumEntry("ToolBarPos", KToolBar::Top);
+    toolBar()->setBarPos(toolBarPos);
 	
     // initialize the recent file list
     //
@@ -394,6 +396,32 @@ void RosegardenGUIApp::readProperties(KConfig* _cfg)
     setCaption(caption+": "+m_doc->getTitle());
 }		
 
+void RosegardenGUIApp::dragEnterEvent(QDragEnterEvent *event)
+{
+    // accept uri drops only
+    event->accept(QUriDrag::canDecode(event));
+}
+
+void RosegardenGUIApp::dropEvent(QDropEvent *event)
+{
+    // this is a very simplistic implementation of a drop event.  we
+    // will only accept a dropped URL.  the Qt dnd code can do *much*
+    // much more, so please read the docs there
+    QStrList uri;
+
+    // see if we can decode a URI.. if not, just ignore it
+    if (QUriDrag::decode(event, uri))
+    {
+        // okay, we have a URI.. process it
+        QString url, target;
+        url = uri.first();
+
+        // load in the file
+        openURL(KURL(url));
+    }
+}
+
+
 bool RosegardenGUIApp::queryClose()
 {
     return m_doc->saveIfModified();
@@ -438,7 +466,7 @@ void RosegardenGUIApp::fileNew()
     statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
-int RosegardenGUIApp::openURL(const KURL& url, int /*mode*/)
+int RosegardenGUIApp::openURL(const KURL& url)
 {
     QString netFile = url.url();
     kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::openURL: " << netFile << endl;
@@ -472,32 +500,13 @@ void RosegardenGUIApp::fileOpen()
 {
     statusMsg(i18n("Opening file..."));
 
-    while( 1 ) {
+    KURL url = KFileDialog::getOpenURL(QString::null, "*.xml", this,
+                                       i18n("Open File"));
+    if ( url.isEmpty() ) { return; }
 
-        KURL url = KFileDialog::getOpenURL(QString::null, "*.xml", this,
-                                           i18n("Open File"));
-        if ( url.isEmpty() ) { return; }
+    openURL(url);
 
-        QString tmpfile;
-        KIO::NetAccess::download( url, tmpfile );
-        int result = openFile(tmpfile, 0);
-        KIO::NetAccess::removeTempFile( tmpfile );
-
-        if (result == OK) {
-
-            setCaption(url.path());
-            m_fileRecent->addURL( url );
-//             setGeneralStatusField(i18n("Done"));
-//             statusbar_slot();
-            break;
-
-        } else if (result == RETRY) {
-        }
-    }
-    
     statusMsg(i18n(IDS_STATUS_DEFAULT));
-
-//     initView();
 }
 
 void RosegardenGUIApp::fileOpenRecent(const KURL &url)
@@ -515,7 +524,7 @@ void RosegardenGUIApp::fileOpenRecent(const KURL &url)
 
 //     initView();
 
-    openURL(url, 0);
+    openURL(url);
 
     statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
@@ -535,8 +544,6 @@ void RosegardenGUIApp::fileSave()
 
 void RosegardenGUIApp::fileSaveAs()
 {
-    //if (!m_doc->isModified()) return;
-
     statusMsg(i18n("Saving file with a new filename..."));
 
     QString newName=KFileDialog::getSaveFileName(QDir::currentDirPath(),
@@ -587,7 +594,8 @@ void RosegardenGUIApp::quit()
     if (memberList) {
 
         for(w=memberList->first(); w!=0; w=memberList->first()) {
-            // only close the window if the closeEvent is accepted. If the user presses Cancel on the saveIfModified() dialog,
+            // only close the window if the closeEvent is accepted. If
+            // the user presses Cancel on the saveIfModified() dialog,
             // the window and the application stay open.
             if (!w->close())
                 break;

@@ -68,7 +68,7 @@ class RosegardenGUIApp : public KMainWindow, virtual public RosegardenGUIIface
 
   friend class RosegardenGUIView;
 
-  public:
+public:
 
     enum { OK,
 	   OS_ERROR,
@@ -91,123 +91,197 @@ class RosegardenGUIApp : public KMainWindow, virtual public RosegardenGUIIface
            STARTINGTOPLAY
     };
 
-    /** construtor of RosegardenGUIApp, calls all init functions to create the application.
+    /**
+     * construtor of RosegardenGUIApp, calls all init functions to
+     * create the application.
      * @see initMenuBar initToolBar
      */
     RosegardenGUIApp();
-    ~RosegardenGUIApp();
-    /** enables menuentries/toolbar items
+
+    virtual ~RosegardenGUIApp();
+
+    /**
+     * enables menuentries/toolbar items
      */
     void enableCommand(int id_);
-    /** disables menuentries/toolbar items
+
+    /**
+     * disables menuentries/toolbar items
      */
     void disableCommand(int id_);
 
-    /** opens a file specified by commandline option
+    /**
+     * opens a file specified by commandline option
      */
     void openDocumentFile(const char *_cmdl=0);
-    /** returns a pointer to the current document connected to the KTMainWindow instance and is used by
-     * the View class to access the document object's methods
+
+    /**
+     * returns a pointer to the current document connected to the
+     * KTMainWindow instance and is used by * the View class to access
+     * the document object's methods
      */	
     RosegardenGUIDoc *getDocument() const; 	
 
-    /** open a file
+    /**
+     * open a file
      */
     virtual int openFile(const QString& url, int mode);
 
     /**
      * Works like openFile but is able to open remote files
      */
-    int openURL(const KURL& url, int mode);
+    int openURL(const KURL& url);
 
     /**
      * imports a Rosegarden 2.1 file
      */
     virtual int importRG21File(const QString &url);
 
-    // the Sequencer accesses this method via DCOP
-    //
+    /**
+     * the Sequencer accesses this method via DCOP
+     */
     const Rosegarden::MappedComposition&
             getSequencerSlice(const int &sliceStart, const int &sliceEnd);
 
-  protected:
-    /** save general Options like all bar positions and status as well as the geometry and the recent file list to the configuration
+protected:
+
+    /**
+     * Overridden virtuals for Qt drag 'n drop (XDND)
+     */
+    virtual void dragEnterEvent(QDragEnterEvent *event);
+    virtual void dropEvent(QDropEvent *event);
+
+    /**
+     * save general Options like all bar positions and status as well
+     * as the geometry and the recent file list to the configuration
      * file
      */ 	
     void saveOptions();
-    /** read general Options again and initialize all variables like the recent file list
+
+    /**
+     * read general Options again and initialize all variables like
+     * the recent file list
      */
     void readOptions();
 
-    /** create menus and toolbars
-     *
+    /**
+     * create menus and toolbars
      */
     void setupActions();
 
-    /** sets up the statusbar for the main window by initialzing a statuslabel.
+    /**
+     * sets up the statusbar for the main window by initialzing a
+     * statuslabel.
      */
     void initStatusBar();
-    /** initializes the document object of the main window that is connected to the view in initView().
+
+    /**
+     * initializes the document object of the main window that is
+     * connected to the view in initView().
      * @see initView();
      */
     void initDocument();
-    /** creates the centerwidget of the KTMainWindow instance and sets it as the view
+
+    /**
+     * creates the centerwidget of the KTMainWindow instance and sets
+     * it as the view
      */
     void initView();
-    /** queryClose is called by KTMainWindow on each closeEvent of a window. Against the
-     * default implementation (only returns true), this calles saveModified() on the document object to ask if the document shall
-     * be saved if Modified; on cancel the closeEvent is rejected.
+
+    /**
+     * queryClose is called by KTMainWindow on each closeEvent of a
+     * window. Against the default implementation (only returns true),
+     * this calles saveModified() on the document object to ask if the
+     * document shall be saved if Modified; on cancel the closeEvent
+     * is rejected.
+     *
      * @see KTMainWindow#queryClose
      * @see KTMainWindow#closeEvent
      */
     virtual bool queryClose();
-    /** queryExit is called by KTMainWindow when the last window of the application is going to be closed during the closeEvent().
-     * Against the default implementation that just returns true, this calls saveOptions() to save the settings of the last window's	
+
+    /**
+     * queryExit is called by KTMainWindow when the last window of the
+     * application is going to be closed during the closeEvent().
+     * Against the default implementation that just returns true, this
+     * calls saveOptions() to save the settings of the last window's
      * properties.
+     *
      * @see KTMainWindow#queryExit
      * @see KTMainWindow#closeEvent
      */
     virtual bool queryExit();
-    /** saves the window properties for each open window during session end to the session config file, including saving the currently
+
+    /**
+     * saves the window properties for each open window during session
+     * end to the session config file, including saving the currently
      * opened file by a temporary filename provided by KApplication.
+     *
      * @see KTMainWindow#saveProperties
      */
     virtual void saveProperties(KConfig *_cfg);
-    /** reads the session config file and restores the application's state including the last opened files and documents by reading the
-     * temporary files saved by saveProperties()
+
+    /**
+     * reads the session config file and restores the application's
+     * state including the last opened files and documents by reading
+     * the temporary files saved by saveProperties()
+     *
      * @see KTMainWindow#readProperties
      */
     virtual void readProperties(KConfig *_cfg);
 
-  public slots:
-    /** open a new application window by creating a new instance of RosegardenGUIApp */
+public slots:
+    /**
+     * open a new application window by creating a new instance of
+     * RosegardenGUIApp
+     */
     void fileNewWindow();
 
-    /** clears the document in the actual view to reuse it as the new document */
+    /**
+     * clears the document in the actual view to reuse it as the new
+     * document
+     */
     virtual void fileNew();
 
-    /** open a file and load it into the document*/
+    /**
+     * open a file and load it into the document
+     */
     void fileOpen();
 
-    /** opens a file from the recent files menu */
+    /**
+     * opens a file from the recent files menu
+     */
     void fileOpenRecent(const KURL&);
 
-    /** save a document */
+    /**
+     * save a document
+     */
     virtual void fileSave();
 
-    /** save a document by a new filename*/
+    /**
+     * save a document by a new filename
+     */
     void fileSaveAs();
 
-    /** asks for saving if the file is modified, then closes the actual file and window*/
+    /**
+     * asks for saving if the file is modified, then closes the actual
+     * file and window
+     */
     virtual void fileClose();
 
-    /** print the actual file */
+    /**
+     * print the actual file
+     */
     void filePrint();
 
-    /** import MIDI file */
+    /**
+     * import MIDI file
+     */
     void importMIDI();
 
-    /** import Rosegarden 2.1 file */
+    /**
+     * import Rosegarden 2.1 file
+     */
     void importRG21();
 
     /**
@@ -218,41 +292,56 @@ class RosegardenGUIApp : public KMainWindow, virtual public RosegardenGUIIface
      */
     virtual void quit();
     
-    /** undo
+    /**
+     * undo
      */
     void editUndo();
-    /** redo
+
+    /**
+     * redo
      */
     void editRedo();
     
-    /** put the marked text/object into the clipboard and remove
-     *	it from the document
+    /**
+     * put the marked text/object into the clipboard and remove * it
+     * from the document
      */
     void editCut();
 
-    /** put the marked text/object into the clipboard
+    /**
+     * put the marked text/object into the clipboard
      */
     void editCopy();
 
-    /** paste the clipboard into the document
+    /**
+     * paste the clipboard into the document
      */
     void editPaste();
 
-    /** toggles the toolbar
+    /**
+     * toggles the toolbar
      */
     void toggleToolBar();
 
-    /** toggles the statusbar
+    /**
+     * toggles the statusbar
      */
     void toggleStatusBar();
 
-    /** changes the statusbar contents for the standard label permanently, used to indicate current actions.
+    /**
+     * changes the statusbar contents for the standard label
+     * permanently, used to indicate current actions.
+     *
      * @param text the text that is displayed in the statusbar
      */
     void statusMsg(const QString &text);
 
-    /** changes the status message of the whole statusbar for two seconds, then restores the last status. This is used to display
-     * statusbar messages that give information about actions for toolbar icons and menuentries.
+    /**
+     * changes the status message of the whole statusbar for two
+     * seconds, then restores the last status. This is used to display
+     * statusbar messages that give information about actions for
+     * toolbar icons and menuentries.
+     *
      * @param text the text that is displayed in the statusbar
      */
     void statusHelpMsg(const QString &text);
@@ -282,37 +371,45 @@ class RosegardenGUIApp : public KMainWindow, virtual public RosegardenGUIIface
      */
     void changeTimeResolution();
 
-    // Set the song position pointer
-    //
+    /**
+     * Set the song position pointer
+     */
     void setPointerPosition(const int &position);
 
-    // Transport controls
-    //
+    /**
+     * Transport controls
+     */
     void play();
     void stop();
     void rewind();
     void fastforward();
 
-    // Sequencer initialization
-    //
+    /**
+     * Sequencer initialization
+     */
     void initSequencer();
 
 private:
 
-    /** the configuration object of the application */
+    /**
+     * the configuration object of the application
+     */
     KConfig* m_config;
 
     KRecentFilesAction* m_fileRecent;
 
-    /** view is the main widget which represents your working area. The View
-     * class should handle all events of the view widget.  It is kept empty so
-     * you can create your view according to your application's needs by
-     * changing the view class.
+    /**
+     * view is the main widget which represents your working area. The
+     * View class should handle all events of the view widget.  It is
+     * kept empty so you can create your view according to your
+     * application's needs by changing the view class.
      */
     RosegardenGUIView* m_view;
 
-    /** doc represents your actual document and is created only once. It keeps
-     * information such as filename and does the serialization of your files.
+    /**
+     * doc represents your actual document and is created only
+     * once. It keeps information such as filename and does the
+     * serialization of your files.
      */
     RosegardenGUIDoc* m_doc;
 
@@ -321,8 +418,9 @@ private:
      */
     KAction* m_selectDefaultTool;
 
-    // Transport (Playback and Recording) status
-    //
+    /**
+     * Transport (Playback and Recording) status
+     */
     TransportStatus m_transportStatus;
  
 };
