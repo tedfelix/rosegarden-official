@@ -424,4 +424,9 @@ EditViewBase::slotTestClipboard()
 		      KXMLGUIClient::StateReverse));
     }
 }
+
+void
+EditViewBase::slotPlaySolo()
+{
+}
  

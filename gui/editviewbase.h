@@ -187,6 +187,8 @@ public slots:
      */
     virtual void slotTestClipboard();
 
+    virtual void slotPlaySolo();
+
 protected:
 
     virtual void paintEvent(QPaintEvent* e);

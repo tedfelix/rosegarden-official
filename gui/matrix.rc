@@ -74,6 +74,8 @@
   <Action name="playback_pointer_forward_bar"/>
   <Action name="playback_pointer_start"/>
   <Action name="playback_pointer_end"/>
+<Separator />
+  <Action name="solo"/>
 </Menu>
 
 <Menu name="Tools">
@@ -114,6 +116,8 @@
   <Action name="stop" />
   <Action name="playback_pointer_to_cursor" />
   <Action name="cursor_to_playback_pointer" />
+<Separator />
+  <Action name="solo"/>
 </ToolBar>
 
 <ToolBar name="actionsToolBar">

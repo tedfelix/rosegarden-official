@@ -569,6 +569,12 @@ void MatrixView::setupActions()
 		SLOT(slotJumpPlaybackToCursor()), actionCollection(),
 		"playback_pointer_to_cursor");
 
+        icon = QIconSet(NotePixmapFactory::toQPixmap(npf.makeToolbarPixmap
+                                                 ("transport-solo")));
+    new KToggleAction(i18n("&Solo"), icon, 0, this,
+                SLOT(slotPlaySolo()), actionCollection(),
+                "toggle_solo");
+
     new KAction(i18n("Set Loop to Selection"), Key_Semicolon + CTRL, this,
 		SLOT(slotPreviewSelection()), actionCollection(),
 		"preview_selection");
