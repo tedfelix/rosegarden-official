@@ -18,35 +18,30 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef VIEWELEMENTSMANAGER_H
-#define VIEWELEMENTSMANAGER_H
+#ifndef _TRACK_H_
+#define _TRACK_H_
 
-#include "Track.h"
+#include <multiset.h>
 #include "Event.h"
-#include "notationelement.h"
 
 /**
-  *@author Guillaume Laurent, Chris Cannam, Rich Bown
-  */
-
-class ViewElementsManager
+ * This class owns the Events its items are pointing at
+ */
+class Track : public multiset<Event*, EventCmp>
 {
-public: 
-    ViewElementsManager(Track&);
-    ~ViewElementsManager();
+public:
+    Track(unsigned int nbBars = 0, unsigned int startIdx = 0);
+    ~Track();
 
-    NotationElementList* notationElementList(Track::iterator from,
-                                             Track::iterator to);
+    unsigned int getStartIndex() const         { return m_startIdx; }
+    void         setStartIndex(unsigned int i) { m_startIdx = i; }
 
-    // overload these for each ViewElement type
-    void insert(NotationElement*);
-    void erase(NotationElementList::iterator);
-
-protected:
-
-    Track               &m_track;
-    NotationElementList *m_notationElements;
+    unsigned int getNbBars() const;
     
+protected:
+    unsigned int m_startIdx;
+    unsigned int m_nbBars;
 };
 
 #endif
+

@@ -22,6 +22,7 @@
 #define ROSEXMLHANDLER_H
 
 #include <qxml.h>
+#include "Composition.h"
 #include "Event.h"
 
 /**Handler for the Rosegarden XML format

@@ -1,4 +1,3 @@
-
 /*
     Rosegarden-4 v0.1
     A sequencer and musical notation editor.
@@ -18,35 +17,34 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef VIEWELEMENTSMANAGER_H
-#define VIEWELEMENTSMANAGER_H
+#include "ViewElement.h"
 
-#include "Track.h"
-#include "Event.h"
-#include "notationelement.h"
-
-/**
-  *@author Guillaume Laurent, Chris Cannam, Rich Bown
-  */
-
-class ViewElementsManager
+ViewElement::ViewElement(Event *e)
+    : m_event(e)
 {
-public: 
-    ViewElementsManager(Track&);
-    ~ViewElementsManager();
+    // nothing
+}
 
-    NotationElementList* notationElementList(Track::iterator from,
-                                             Track::iterator to);
+ViewElement::~ViewElement()
+{
+    // nothing
+}
 
-    // overload these for each ViewElement type
-    void insert(NotationElement*);
-    void erase(NotationElementList::iterator);
+ViewElements::~ViewElements()
+{
+    cerr << "~ViewElements() : this : " << this << endl;
 
-protected:
+    // delete content
+    for(iterator it = begin(); it != end(); ++it) {
+        cerr << "~ViewElements() : delete ViewElement" << endl;
+        delete (*it);
+    }
 
-    Track               &m_track;
-    NotationElementList *m_notationElements;
-    
-};
+}
 
-#endif
+bool
+operator<(const ViewElement &a, const ViewElement &b)
+{
+    return a.event()->getAbsoluteTime() < b.event()->getAbsoluteTime();
+}
+

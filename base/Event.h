@@ -21,20 +21,10 @@
 #ifndef _EVENT_H_
 #define _EVENT_H_
 
-#include <list>
-#include <multiset.h>
+#include "Property.h"
+
 #include <hash_map>
 #include <string>
-
-// Need to associate one of those param names (Int, String etc) with a
-// storage type and a parser/writer.  The storage-type association
-// obviously has to be made at compile-time, with a template.
-
-// This is still a wee bit messy at the moment, but the principle's
-// interesting.  Performance is almost identical to that of the more
-// static-stylee Element (probably dominated by map lookup/insert; a
-// vector might be faster in practice as we expect relatively few
-// properties per element)
 
 struct eqstring
 {
@@ -53,187 +43,13 @@ struct hashstring
 
 hash<const char*> hashstring::_H;
 
-enum PropertyType { Int, String, Bool, Tag };
-
-template <PropertyType P>
-class PropertyDefn
-{
-public:
-    static string name() { return "Undefined"; }
-    struct PropertyDefnNotDefined {
-	PropertyDefnNotDefined() { assert(0); }
-    };
-    typedef PropertyDefnNotDefined basic_type;
-    static basic_type parse(string);
-    static string unparse(basic_type);
-
-};
-
-template <PropertyType P>
-PropertyDefn<P>::basic_type
-PropertyDefn<P>::parse(string)
-{
-    assert(0);
-}
-
-template <PropertyType P>
-string 
-PropertyDefn<P>::unparse(PropertyDefn<P>::basic_type)
-{
-    assert(0);
-}
-
-
-template <>
-class PropertyDefn<Int>
-{
-public:
-    static string name();
-    typedef long basic_type;
-
-    static basic_type parse(string s);
-    static string unparse(basic_type i);
-};
-
-
-template <>
-class PropertyDefn<String>
-{
-public:
-    static string name();
-    typedef string basic_type;
-
-    static basic_type parse(string s);
-    static string unparse(basic_type i);
-};
-
-template <>
-class PropertyDefn<Bool>
-{
-public:
-    static string name();
-    typedef bool basic_type;
-
-    static basic_type parse(string s);
-    static string unparse(basic_type i);
-};
-
-
-class PropertyStoreBase {
-public:
-    virtual ~PropertyStoreBase();
-
-    virtual PropertyType getType() const = 0;
-    virtual string getTypeName() const = 0;
-    virtual PropertyStoreBase *clone() = 0;
-    virtual string unparse() = 0;
-
-#ifndef NDEBUG
-    virtual void dump(ostream&) const = 0;
-#else
-    virtual void dump(ostream&) const {}
-#endif
-};
-
-#ifndef NDEBUG
-inline ostream& operator<<(ostream &out, PropertyStoreBase &e)
-{ e.dump(out); return out; }
-#endif
-
-template <PropertyType P>
-class PropertyStore : public PropertyStoreBase
-{
-public:
-    PropertyStore(PropertyDefn<P>::basic_type d) : m_data(d) { }
-    PropertyStore(const PropertyStore<P> &p) : PropertyStoreBase(p), m_data(p.m_data) { }
-    PropertyStore &operator=(const PropertyStore<P> &p);
-
-    virtual PropertyType getType() const;
-    virtual string getTypeName() const;
-
-    virtual PropertyStoreBase* clone();
-    
-
-    virtual string unparse();
-    
-
-    PropertyDefn<P>::basic_type getData() { return m_data; }
-    void setData(PropertyDefn<P>::basic_type data) { m_data = data; }
-
-#ifndef NDEBUG
-    void dump(ostream&) const;
-#endif
-
-private:
-    PropertyDefn<P>::basic_type m_data;
-};
-
-template <PropertyType P>
-PropertyStore<P>&
-PropertyStore<P>::operator=(const PropertyStore<P> &p) {
-    if (this != &p) m_data = p.m_data;
-    return *this;
-}
-
-template <PropertyType P>
-PropertyType
-PropertyStore<P>::getType() const
-{
-    return P;
-}
-
-template <PropertyType P>
-string
-PropertyStore<P>::getTypeName() const
-{
-    return PropertyDefn<P>::name();
-}
-
-template <PropertyType P>
-PropertyStoreBase*
-PropertyStore<P>::clone()
-{
-    return new PropertyStore<P>(*this);
-}
-
-template <PropertyType P>
-string
-PropertyStore<P>::unparse()
-{
-    return PropertyDefn<P>::unparse(m_data);
-}
-
-#ifndef NDEBUG
-template <PropertyType P>
-void
-PropertyStore<P>::dump(ostream &out) const
-{
-    out << getTypeName() << " - " << m_data;
-}
-#endif
-
-
-//////////////////////////////////////////////////////////////////////
-
-class ViewElement; // defined below
-class ViewElements : public vector<ViewElement*>
-{
-public:
-    ViewElements() : vector<ViewElement*>() {}
-    ViewElements(const ViewElements &e) : vector<ViewElement*>(e) {}
-    ~ViewElements();
-};
-
-//////////////////////////////////////////////////////////////////////
-
-// see rosegarden/docs/discussion/names.txt - Events are the basic datatype
-
 class Event
 {
 private:
 
 public:
-    typedef hash_map<string, PropertyStoreBase*, hashstring, eqstring> PropertyMap;
+    typedef hash_map<string, PropertyStoreBase*, hashstring, eqstring>
+        PropertyMap;
     typedef int timeT;
 
     struct NoData { };
@@ -297,8 +113,6 @@ public:
 #endif
 
 private:
-    void setViewElements(ViewElements*);
-    void scrapViewElements();
     void scrapMap();
     void copyFrom(const Event &e);
 
@@ -423,94 +237,6 @@ public:
     {
         return *e1 < *e2;
     }
-};
-
-
-/**
- * This class owns the Events its items are pointing at
- */
-class Track : public multiset<Event*, EventCmp>
-{
-public:
-    Track(unsigned int nbBars = 0, unsigned int startIdx = 0);
-    ~Track();
-
-    unsigned int getStartIndex() const         { return m_startIdx; }
-    void         setStartIndex(unsigned int i) { m_startIdx = i; }
-
-    unsigned int getNbBars() const;
-    
-protected:
-    unsigned int m_startIdx;
-    unsigned int m_nbBars;
-};
-
-/**
- * A set of tracks.
- * This class owns the event lists it is holding
- * It will delete them on destruction.
- */
-class Composition
-{
-    
-public:
-    typedef vector<Track*> trackcontainer;
-
-    typedef trackcontainer::iterator iterator;
-    typedef trackcontainer::const_iterator const_iterator;
-
-    Composition(unsigned int nbTracks = 64);
-    ~Composition();
-
-    vector<Track*>& tracks() { return m_tracks; }
-
-    bool addTrack(Track *track = 0, int idx = -1);
-    void deleteTrack(int idx);
-
-    unsigned int getNbTracks() const { return m_tracks.size(); }
-    unsigned int getNbBars() const;
-    void         clear();
-
-    unsigned int getNbTicksPerBar() const { return m_nbTicksPerBar; }
-    void setNbTicksPerBar(unsigned int n) { m_nbTicksPerBar = n; }
-
-    // Some vector<> API delegation
-    iterator       begin()       { return m_tracks.begin(); }
-    const_iterator begin() const { return m_tracks.begin(); }
-    iterator       end()         { return m_tracks.end(); }
-    const_iterator end() const   { return m_tracks.end(); }
-
-    Track*       operator[](int i)       { return m_tracks[i]; }
-    const Track* operator[](int i) const { return m_tracks[i]; }
-
-protected:
-    trackcontainer m_tracks;
-
-    unsigned int m_nbTicksPerBar;
-};
-
-
-//////////////////////////////////////////////////////////////////////
-
-
-class ViewElement
-{
-public:
-    ViewElement(Event*);
-    virtual ~ViewElement();
-
-    const Event* event() const { return m_event; }
-    Event*       event()       { return m_event; }
-
-    Event::timeT getAbsoluteTime() const { return event()->getAbsoluteTime(); }
-    void setAbsoluteTime(Event::timeT d) { event()->setAbsoluteTime(d); }
-
-    void dump(ostream&) const;
-
-    friend bool operator<(const ViewElement&, const ViewElement&);
-
-protected:
-    Event *m_event;
 };
 
 #endif

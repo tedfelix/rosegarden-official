@@ -1,20 +1,21 @@
 
 default: libcore.a
 
-all:	test speedtrial libcore.a
+all:	libcore.a
 
 CC	:= g++
 CPPFLAGS	:= -g
+SRCS	:= Property.C Event.C ViewElement.C Track.C Composition.C NotationTypes.C
+OBJS	:= Property.o Event.o ViewElement.o Track.o Composition.o NotationTypes.o
 
-test:	test.o Element.o Event.o
+libcore.a:	$(OBJS)
+	ar rc libcore.a $(OBJS)
 
-libcore.a:	Event.o NotationTypes.o
-	ar rc libcore.a Event.o NotationTypes.o
-
-NotationTypes.o:	NotationTypes.h
+depend:
+	makedepend -- $(CPPFLAGS) -- $(SRCS)
 
 clean:
-	rm -f *.o test speedtrial
+	rm -f *.o 
 
 distclean:	clean
 	rm -f libcore.a

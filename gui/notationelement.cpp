@@ -202,7 +202,7 @@ NotationElementList::findSucceedingChordElements(iterator i,
     }
 
     kdDebug(KDEBUG_AREA) << "NotationElementList::findSucceedingChordElements: pitches are:" << endl;
-    for (int i = 0; i < v.size(); ++i) {
+    for (unsigned int i = 0; i < v.size(); ++i) {
         kdDebug(KDEBUG_AREA) << ((*v[i])->event()->get<Int>("pitch")) <<endl;
     }
 

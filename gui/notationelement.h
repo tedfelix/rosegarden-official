@@ -22,7 +22,7 @@
 #define NOTATIONELEMENT_H
 
 #include <multiset.h>
-#include "Event.h"
+#include "ViewElement.h"
 #include "quantizer.h"
 #include "NotationTypes.h"
 

@@ -191,7 +191,8 @@ NotationHLayout::preparse(NotationElementList::iterator from,
                     int h = p.getHeightOnStaff();
                     el->event()->set<Int>(P_HEIGHT_ON_STAFF, h);
                     el->event()->set<Int>(P_ACCIDENTAL,(int)p.getAccidental());
-                    el->event()->set<String>(P_NOTE_NAME, p.getAsString());
+                    el->event()->set<String>(P_NOTE_NAME, p.getAsString
+                                             (clef, key));
                 } catch (Event::NoData) {
                     kdDebug(KDEBUG_AREA) <<
                         "NotationHLayout::preparse: couldn't get pitch for element"

@@ -31,7 +31,7 @@
 #include <qlist.h>
 #include <qxml.h>
 
-#include "Event.h"
+#include "Composition.h"
 
 // forward declaration of the RosegardenGUI classes
 class RosegardenGUIView;
