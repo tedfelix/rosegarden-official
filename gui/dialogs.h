@@ -347,6 +347,9 @@ public:
     bool isModified() const { return m_modified; }
     Rosegarden::Event getEvent() const;
 
+    // Setup the dialog for a new event type
+    void setupForEvent();
+
 public slots:
     void slotEventTypeChanged(int value);
     void slotAbsoluteTimeChanged(int value);
@@ -358,21 +361,30 @@ public slots:
 protected:
 
     const Rosegarden::Event &m_originalEvent;
-    Rosegarden::Event m_event;
+    Rosegarden::Event        m_event;
 
-    std::string       m_type;
-    Rosegarden::timeT m_absoluteTime;
-    Rosegarden::timeT m_duration;
+    std::string              m_type;
+    Rosegarden::timeT        m_absoluteTime;
+    Rosegarden::timeT        m_duration;
 
-    QLabel           *m_timeLabel;
-    QLabel           *m_durationLabel;
-    QLabel           *m_pitchLabel;
-    QLabel           *m_velocityLabel;
-    QLabel           *m_metaLabel;
+    RosegardenComboBox      *m_typeCombo;
+    QLabel                  *m_timeLabel;
+    QLabel                  *m_durationLabel;
+    QLabel                  *m_pitchLabel;
+    QLabel                  *m_velocityLabel;
+    QLabel                  *m_metaLabel;
 
-    QLineEdit        *m_metaEdit;
+    QLabel                  *m_controllerLabel;
+    QLabel                  *m_controllerLabelValue;
 
-    bool m_modified;
+    QSpinBox                *m_timeSpinBox;
+    QSpinBox                *m_durationSpinBox;
+    QSpinBox                *m_pitchSpinBox;
+    QSpinBox                *m_velocitySpinBox;
+
+    QLineEdit               *m_metaEdit;
+
+    bool                     m_modified;
 };
 
 

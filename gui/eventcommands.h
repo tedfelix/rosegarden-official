@@ -29,8 +29,6 @@ class EventInsertionCommand : public BasicCommand
 {
 public:
     EventInsertionCommand(Rosegarden::Segment &segment,
-                          Rosegarden::timeT time,
-                          Rosegarden::timeT endTime,
                           Rosegarden::Event *event);
 
     virtual ~EventInsertionCommand();

@@ -56,11 +56,17 @@ Features for 1.0 - updated 20030627
 
 - fix step recording icon?  little feet would be more intuitive to me than
   the arrow thing Chris came up with...  Chris??  [dmm]
+  For the record - I like the icon we have at the moment [rwb]
 
 - completely rewrite tutorial for 1.0, using fewer/smaller pixmaps, better
   organization, possibly converting to LDP docbook format [dmm]
 
-- request: integration of fluidsynth
+- request: integration of fluidsynth [dmm]
+  what does this mean exactly? muse's integration means bundling of
+  fluidysnth source code - we don't want to go that far but bear in
+  mind that this could mean as little or as much as we want [rwb]
+
+- control rulers [gl IN PROGESS]
 
 Bugs
 ----
@@ -73,4 +79,5 @@ Many - but additional ones are:
 - can't move the start time of a segment
 - Repeating segment ghosts when moving them.
 - segment preview ghosts when moving them
+- opening files during playback
 

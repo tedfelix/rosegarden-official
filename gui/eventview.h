@@ -104,6 +104,8 @@ public slots:
     // other edit slots
     void slotEditDelete();
     void slotEditInsert();
+    void slotEditEvent();
+    void slotEditEventAdvanced();
 
     // Show RMB menu
     //

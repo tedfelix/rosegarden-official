@@ -399,6 +399,11 @@ EventView::applyLayout(int /*staffNo*/)
 		    arg((*it)->get<Int>(BaseProperties::BEAMED_GROUP_ID));
 	    }
 
+            if ((*it)->has(Rosegarden::ProgramChange::PROGRAM)) {
+                data1Str = QString("%1  ").
+                    arg((*it)->get<Int>(Rosegarden::ProgramChange::PROGRAM));
+            }
+
 	    if ((*it)->getDuration() > 0 ||
 		(*it)->isa(Rosegarden::Note::EventType) ||
 		(*it)->isa(Rosegarden::Note::EventRestType)) {
@@ -645,34 +650,6 @@ EventView::slotEditDelete()
 		++it;
 		continue;
 	    }
-/*!!!
-            // Ensure that item to delete is actually still in the
-            // Segment - when deleting lots of events the list 
-            // view can sometimes get in a mess.  Another bug
-            // somewhere else?
-            //
-            bool check = false;
-
-            for (Rosegarden::Segment::iterator i = m_segments[0]->begin();
-                 i != m_segments[0]->end(); ++i)
-            {
-                if (*i == item->getEvent())
-                {
-                    check = true;
-                    break;
-                }
-            }
-
-            if (!check) 
-            {
-                ++it;
-                continue;
-            }
-*/
-            /*
-            cout << "DELETE EVENT @ " 
-                 << item->getEvent()->getAbsoluteTime() << endl;
-                 */
 
             if (deleteSelection == 0)
                 deleteSelection = 
@@ -706,7 +683,6 @@ EventView::slotEditInsert()
     Rosegarden::timeT insertDuration = 960;
 
     QPtrList<QListViewItem> selection = m_eventList->selectedItems();
-    Rosegarden::Event *event = 0;
 
     if (selection.count() > 0)
     {
@@ -717,25 +693,88 @@ EventView::slotEditInsert()
         {
             insertTime = item->getEvent()->getAbsoluteTime();
             insertDuration = item->getEvent()->getDuration();
-            event = new Rosegarden::Event(*item->getEvent());
         }
     }
 
-    if (event == 0)
+    // Create default event
+    //
+    Rosegarden::Event *event = 
+        new Rosegarden::Event(Rosegarden::Note::EventType,
+                              insertTime,
+                              insertDuration);
+    event->set<Int>(Rosegarden::BaseProperties::PITCH, 70);
+    event->set<Int>(Rosegarden::BaseProperties::VELOCITY, 100);
+
+    SimpleEventEditDialog *dialog = new SimpleEventEditDialog(this, *event);
+
+    if (dialog->exec() == QDialog::Accepted)
     {
-        event = new Rosegarden::Event(
-                Rosegarden::Note::EventType, insertTime, insertDuration);
-
-        event->set<Int>(Rosegarden::BaseProperties::PITCH, 70);
-        event->set<Int>(Rosegarden::BaseProperties::VELOCITY, 100);
+        EventInsertionCommand *command = 
+            new EventInsertionCommand(*m_segments[0],
+                                      new Rosegarden::Event(dialog->getEvent()));
+        addCommandToHistory(command);
     }
+}
 
-    EventInsertionCommand *command = 
-        new EventInsertionCommand(*m_segments[0],
-                                  insertTime,
-                                  insertTime + insertDuration,
-                                  event);
-    addCommandToHistory(command);
+void
+EventView::slotEditEvent()
+{
+    RG_DEBUG << "EventView::slotEditEvent" << endl;
+
+    QPtrList<QListViewItem> selection = m_eventList->selectedItems();
+
+    if (selection.count() > 0)
+    {
+        EventViewItem *item =
+            dynamic_cast<EventViewItem*>(selection.getFirst());
+
+        if (item)
+        {
+            Rosegarden::Event *event = item->getEvent();
+            SimpleEventEditDialog *dialog = 
+                new SimpleEventEditDialog(this, *event);
+
+            if (dialog->exec() == QDialog::Accepted && dialog->isModified())
+            {
+                EventEditCommand *command =
+                    new EventEditCommand(*(item->getSegment()),
+                                         event,
+                                         dialog->getEvent());
+
+                addCommandToHistory(command);
+            }
+        }
+    }
+}
+
+void
+EventView::slotEditEventAdvanced()
+{
+    RG_DEBUG << "EventView::slotEditEventAdvanced" << endl;
+
+    QPtrList<QListViewItem> selection = m_eventList->selectedItems();
+
+    if (selection.count() > 0)
+    {
+        EventViewItem *item =
+            dynamic_cast<EventViewItem*>(selection.getFirst());
+
+        if (item)
+        {
+            Rosegarden::Event *event = item->getEvent();
+            EventEditDialog *dialog = new EventEditDialog(this, *event);
+
+            if (dialog->exec() == QDialog::Accepted && dialog->isModified())
+            {
+                EventEditCommand *command =
+                    new EventEditCommand(*(item->getSegment()),
+                                         event,
+                                         dialog->getEvent());
+
+                addCommandToHistory(command);
+            }
+        }
+    }
 }
 
 
@@ -751,6 +790,14 @@ EventView::setupActions()
     new KAction(i18n("&Insert Event"), Key_I, this,
                 SLOT(slotEditInsert()), actionCollection(),
                 "insert");
+
+    new KAction(i18n("&Edit Event"), Key_E, this,
+                SLOT(slotEditEvent()), actionCollection(),
+                "edit_simple");
+
+    new KAction(i18n("&Advanced Event Editor"), Key_A, this,
+                SLOT(slotEditEventAdvanced()), actionCollection(),
+                "edit_advanced");
 
     createGUI(getRCFileName());
 }
@@ -1001,7 +1048,7 @@ EventView::slotPopupEventEditor(QListViewItem *item)
     if (eItem)
     {
 	Rosegarden::Event *event = eItem->getEvent();
-        EventEditDialog *dialog = new EventEditDialog(this, *event);
+        SimpleEventEditDialog *dialog = new SimpleEventEditDialog(this, *event);
 
         if (dialog->exec() == QDialog::Accepted && dialog->isModified())
         {
@@ -1021,6 +1068,9 @@ EventView::slotPopupMenu(QListViewItem *item, const QPoint &pos, int)
 {
     if (!item) return;
 
+    EventViewItem *eItem = dynamic_cast<EventViewItem*>(item);
+    if (!eItem || !eItem->getEvent()) return;
+
     if (!m_menu) createMenu();
 
     if (m_menu)
@@ -1034,8 +1084,8 @@ void
 EventView::createMenu()
 {
     m_menu = new QPopupMenu(this);
-    m_menu->insertItem(i18n("Open in Simple Event Editor"), 0);
-    m_menu->insertItem(i18n("Open in Full Event Editor"), 1);
+    m_menu->insertItem(i18n("Open in Event Editor"), 0);
+    m_menu->insertItem(i18n("Open in Expert Event Editor"), 1);
 
     connect(m_menu, SIGNAL(activated(int)),
             SLOT(slotMenuActivated(int)));

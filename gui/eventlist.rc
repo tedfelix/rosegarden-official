@@ -7,6 +7,8 @@
 <Menu name="edit" append="new_merge">
   <Action name="insert"/>
   <Action name="delete"/>
+  <Action name="edit_simple"/>
+  <Action name="edit_advanced"/>
   <Separator/>
   <Action name="select_all"/>
 </Menu>

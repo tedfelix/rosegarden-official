@@ -3081,6 +3081,14 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
     if (inst)
     {
+        // Clear temporary buffers
+        //
+        for (unsigned int i = 0 ; i < nframes; ++i)
+        {
+            _tempOutBuffer1[i] = 0.0f;
+            _tempOutBuffer2[i] = 0.0f;
+        }
+
         // Get output buffers
         //
         sample_t *leftBuffer = static_cast<sample_t*>
@@ -3163,6 +3171,14 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
                     inputLevelRight += fabs(inputBufferRight[i]);
                 }
+
+                // always append to output stream
+                _tempOutBuffer1[i] += inputBufferLeft[i];
+
+                if (inputBufferRight)
+                    _tempOutBuffer2[i] += inputBufferRight[i];
+                else
+                    _tempOutBuffer2[i] += inputBufferLeft[i];
             }
 
             inputLevelLeft /= float(nframes);
@@ -3196,6 +3212,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                // append the sample string
                inst->appendToAudioFile(buffer);
             }
+
         }
 
         // Ok, we're playing - so clear the temporary buffers ready
@@ -3204,13 +3221,6 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
         // slice.
         //
 
-        // Clear temporary buffers
-        //
-        for (unsigned int i = 0 ; i < nframes; ++i)
-        {
-            _tempOutBuffer1[i] = 0.0f;
-            _tempOutBuffer2[i] = 0.0f;
-        }
 
         std::vector<PlayableAudioFile*> &audioQueue = inst->getAudioPlayQueue();
         std::vector<PlayableAudioFile*>::iterator it;
@@ -3609,8 +3619,11 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
         }
 
         // Playing plugins that have no current audio input but
-        // nonetheless could still have audio output.
+        // nonetheless could still have audio output.  Also
+        // process buffers in case we have recorded audio that
+        // needs live attention.
         //
+
 #ifdef HAVE_LADSPA
         if (inst->isPlaying())
         {
@@ -3674,6 +3687,56 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 }
             }
         }
+        // Processing for recording or monitoring audio - process live plugins
+        //
+        else if(inst->getRecordStatus() == RECORD_AUDIO ||
+                inst->getRecordStatus() == ASYNCHRONOUS_AUDIO)
+        {
+            PluginInstances list = inst->getUnprocessedPlugins();
+            if (list.size())
+            {
+                // initialise plugin input buffer with recorded samples
+                //
+                for (unsigned int i = 0; i < nframes; ++i)
+                {
+                    _pluginBufferIn1[i] = _tempOutBuffer1[i];
+                    _pluginBufferIn2[i] = _tempOutBuffer2[i];
+                }
+
+                // Process plugins
+                PluginIterator it = list.begin();
+                for (; it != list.end(); ++it)
+                {
+                    // Run the plugin
+                    //
+                    (*it)->run(_jackBufferSize);
+
+                    // Now mix the signal in from the plugin output
+                    //
+                    for (unsigned int i = 0; i < nframes; ++i)
+                    {
+                        _tempOutBuffer1[i] += _pluginBufferOut1[i]; // * volume;
+                            
+                        if ((*it)->getAudioChannelsOut() >= 2)
+                        {
+                            _tempOutBuffer2[i] += _pluginBufferOut2[i]; // * volume;
+                        }
+                        else
+                        {
+                            _tempOutBuffer2[i] += _pluginBufferOut1[i]; // * volume;
+                        }
+                    }
+
+                    // reset input buffer
+                    for (unsigned int i = 0; i < nframes; ++i)
+                    {
+                        _pluginBufferIn1[i] = _pluginBufferOut1[i];
+                        _pluginBufferIn2[i] = _pluginBufferOut2[i];
+                    }
+                }
+            }
+        }
+
 
 #endif // HAVE_LADSPA
         
