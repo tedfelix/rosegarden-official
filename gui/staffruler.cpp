@@ -49,7 +49,7 @@ StaffRuler::StaffRuler(int xPos, int yPos, QCanvas* c)
       m_subStepLineHeight(5),
       m_mainLine(new QCanvasLineGroupable(c, this)),
       m_background(new QCanvasRectangleGroupable(c, this)),
-      m_cursor(new PositionCursor(canvas(), canvas()))
+      m_cursor(new PositionCursor(yPos + 20, canvas(), canvas()))
 {
 
     m_background->setX(0);
@@ -185,7 +185,7 @@ void StaffRuler::handleMouseRelease(QMouseEvent* e)
 
 //////////////////////////////////////////////////////////////////////
 
-PositionCursor::PositionCursor(QCanvas* c, QObject* parent)
+PositionCursor::PositionCursor(int gripHeight, QCanvas* c, QObject* parent)
     : QObject(parent),
       QCanvasItemGroup(c),
       m_grip(new QCanvasRectangleGroupable(c, this)),
@@ -193,7 +193,7 @@ PositionCursor::PositionCursor(QCanvas* c, QObject* parent)
       m_minPos(0)
 {
     m_grip->setX(-5);
-    m_grip->setY(30);
+    m_grip->setY(gripHeight);
     m_grip->setSize(11, 10);
     m_grip->setBrush(magenta);
     m_line->setPoints(0, 0, 0, canvas()->height());

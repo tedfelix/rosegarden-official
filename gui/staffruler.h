@@ -48,7 +48,7 @@ class PositionCursor : public QObject, public QCanvasItemGroup, public ActiveIte
     Q_OBJECT
 
 public:
-    PositionCursor(QCanvas*, QObject* parent = 0);
+    PositionCursor(int gripHeight, QCanvas*, QObject* parent = 0);
 
     int getPosition() const { return int(x()); }
 
