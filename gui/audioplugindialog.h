@@ -21,7 +21,6 @@
 #include <vector>
 
 #include <kdialogbase.h>
-#include <kmainwindow.h>
 
 #include <qhbox.h>
 #include <qdial.h>
@@ -49,7 +48,6 @@ class QCheckBox;
 class QLabel;
 class QGridLayout;
 class QAccel;
-class QTable;
 
 namespace Rosegarden
 {
@@ -186,40 +184,6 @@ protected:
 
 
 } // end of namespace
-
-
-class SynthPluginManagerDialog : public KMainWindow
-{
-    Q_OBJECT
-
-public:
-    SynthPluginManagerDialog(QWidget *parent,
-			     RosegardenGUIDoc *doc);
-
-    virtual ~SynthPluginManagerDialog();
-
-signals:
-    void closing();
-    void pluginSelected(Rosegarden::InstrumentId, int pluginIndex, int plugin);
-
-protected slots:
-    void slotClose();
-    void slotValueChanged(int row, int col);
-
-protected:
-    virtual void closeEvent(QCloseEvent *);
-    void populate();
-
-protected:
-    RosegardenGUIDoc *m_document;
-    Rosegarden::Studio *m_studio;
-    Rosegarden::AudioPluginManager *m_pluginManager;
-
-    QTable *m_synthTable;
-    std::vector<int> m_synthPlugins;
-
-    static const char* const SynthPluginManagerConfigGroup;
-};
 
 
 #endif // _AUDIOPLUGINDIALOG_H_

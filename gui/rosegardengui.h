@@ -1243,6 +1243,8 @@ public slots:
 			       int index, int portIndex, float value);
     void slotPluginProgramChanged(Rosegarden::InstrumentId instrument,
 				  int index, QString program);
+    void slotPluginProgramChanged(Rosegarden::InstrumentId instrument,
+				  int index, int bank, int program);
     void slotPluginDialogDestroyed(Rosegarden::InstrumentId instrument,
 				   int index);
     void slotPluginBypassed(Rosegarden::InstrumentId,

@@ -29,9 +29,11 @@
 #include "PluginIdentifier.h"
 #include "AudioPluginInstance.h"
 #include "MappedCommon.h"
+#include "Exception.h"
 
 #include "rosestrings.h"
 #include "rosedebug.h"
+#include "rosegardengui.h"
 
 #include <kprocess.h>
 #include <klocale.h>
@@ -127,7 +129,8 @@ static int osc_message_handler(const char *path, const char *types, lo_arg **arg
     return 0;
 }
     
-AudioPluginOSCGUIManager::AudioPluginOSCGUIManager() :
+AudioPluginOSCGUIManager::AudioPluginOSCGUIManager(RosegardenGUIApp *app) :
+    m_app(app),
     m_studio(0),
     m_oscBuffer(1023)
 {
@@ -153,6 +156,62 @@ AudioPluginOSCGUIManager::~AudioPluginOSCGUIManager()
 }
 
 void
+AudioPluginOSCGUIManager::startGUI(InstrumentId instrument, int position)
+{
+    RG_DEBUG << "AudioPluginOSCGUIManager::startGUI: " << instrument << "," << position
+	     << endl;
+
+    if (m_guis.find(instrument) != m_guis.end() &&
+	m_guis[instrument].find(position) != m_guis[instrument].end()) {
+	RG_DEBUG << "stopping GUI first" << endl;
+	stopGUI(instrument, position);
+    }
+
+    // check the label
+    Instrument *i = m_studio->getInstrumentById(instrument);
+    if (!i) {
+	RG_DEBUG << "AudioPluginOSCGUIManager::startGUI: no such instrument as "
+		 << instrument << endl;
+	return;
+    }
+
+    AudioPluginInstance *pluginInstance = i->getPlugin(position);
+    if (!pluginInstance) {
+	RG_DEBUG << "AudioPluginOSCGUIManager::startGUI: no plugin at position "
+		 << position << " for instrument " << instrument << endl;
+	return;
+    }
+
+    try {
+	AudioPluginOSCGUI *gui =
+	    new AudioPluginOSCGUI(pluginInstance,
+				  getOSCUrl(instrument,
+					    position,
+					    strtoqstr(pluginInstance->getIdentifier())),
+				  getFriendlyName(instrument,
+						  position,
+						  strtoqstr(pluginInstance->getIdentifier())));
+	m_guis[instrument][position] = gui;
+
+    } catch (Rosegarden::Exception e) {
+
+	RG_DEBUG << "AudioPluginOSCGUIManager::startGUI: failed to start GUI: "
+		 << e.getMessage() << endl;
+    }
+}
+
+void
+AudioPluginOSCGUIManager::stopGUI(InstrumentId instrument, int position)
+{
+    if (m_guis.find(instrument) != m_guis.end() &&
+	m_guis[instrument].find(position) != m_guis[instrument].end()) {
+	delete m_guis[instrument][position];
+	m_guis[instrument].erase(position);
+	if (m_guis[instrument].empty()) m_guis.erase(instrument);
+    }
+}
+
+void
 AudioPluginOSCGUIManager::postMessage(OSCMessage *message)
 {
     RG_DEBUG << "AudioPluginOSCGUIManager::postMessage" << endl;
@@ -170,8 +229,11 @@ AudioPluginOSCGUIManager::getOSCUrl(InstrumentId instrument, int position,
     QString type, soName, label;
     Rosegarden::PluginIdentifier::parseIdentifier(identifier, type, soName, label);
 
-    QString url = QString("%1/%2/%3/%4/%5/%6")
-	.arg(lo_server_thread_get_url(m_serverThread))
+    QString baseUrl = lo_server_thread_get_url(m_serverThread);
+    if (!baseUrl.endsWith("/")) baseUrl += '/';
+
+    QString url = QString("%1%2/%3/%4/%5/%6")
+	.arg(baseUrl)
 	.arg("plugin")
 	.arg(type)
 	.arg(instrument);
@@ -191,13 +253,19 @@ bool
 AudioPluginOSCGUIManager::parseOSCPath(QString path, InstrumentId &instrument,
 				       int &position, QString &method)
 {
+    RG_DEBUG << "AudioPluginOSCGUIManager::parseOSCPath(" << path << ")" << endl;
     if (!m_studio) return false;
 
     QString pluginStr("/plugin/");
 
+    if (path.startsWith("//")) {
+	path = path.right(path.length()-1);
+    }
+
     if (!path.startsWith(pluginStr)) {
 	RG_DEBUG << "AudioPluginOSCGUIManager::parseOSCPath: malformed path "
 		 << path << endl;
+	return;
     }
 
     path = path.right(path.length() - pluginStr.length());
@@ -262,13 +330,12 @@ AudioPluginOSCGUIManager::getFriendlyName(InstrumentId instrument, int position,
     Instrument *i = m_studio->getInstrumentById(instrument);
     if (!i) return i18n("Rosegarden Plugin");
     else {
-	QString str = i18n("Rosegarden: %1: %2").arg(strtoqstr(i->getPresentationName()));
 	if (position == Instrument::SYNTH_PLUGIN_POSITION) {
-	    str = str.arg(i18n("Synth"));
+	    return i18n("Rosegarden: %1").arg(strtoqstr(i->getPresentationName()));
 	} else {
-	    str = str.arg(i18n("Plugin slot %1").arg(position));
+	    return i18n("Rosegarden: %1: %2").arg(strtoqstr(i->getPresentationName()))
+		.arg(i18n("Plugin slot %1").arg(position));
 	}
-	return str;
     }
 }
 
@@ -282,13 +349,136 @@ AudioPluginOSCGUIManager::timerCallback(void *data)
 void
 AudioPluginOSCGUIManager::dispatch()
 {
+    if (!m_studio) return;
+
     while (m_oscBuffer.getReadSpace() > 0) {
 
-	OSCMessage *message;
+	OSCMessage *message = 0;
 	m_oscBuffer.read(&message, 1);
 
-	int target = message->getTarget();
+	int instrument = message->getTarget();
+	int position = message->getTargetData();
 
+	Instrument *i = m_studio->getInstrumentById(instrument);
+	if (!i) continue;
+
+	AudioPluginInstance *pluginInstance = i->getPlugin(position);
+	if (!pluginInstance) continue;
+
+	AudioPluginOSCGUI *gui = 0;
+
+	if (m_guis.find(instrument) == m_guis.end()) {
+	    RG_DEBUG << "AudioPluginOSCGUIManager: no GUI for instrument "
+		     << instrument << endl;
+	} else if (m_guis[instrument].find(position) == m_guis[instrument].end()) {
+	    RG_DEBUG << "AudioPluginOSCGUIManager: no GUI for instrument "
+		     << instrument << ", position " << position << endl;
+	} else {
+	    gui = m_guis[instrument][position];
+	}
+
+	std::string method = message->getMethod();
+
+	char type;
+	const lo_arg *arg;
+
+	// These generally call back on the RosegardenGUIApp.  We'd
+	// like to emit signals, but making AudioPluginOSCGUIManager a
+	// QObject is problematic if it's only conditionally compiled.
+
+	if (method == "control") {
+	    
+	    if (message->getArgCount() != 2) {
+		RG_DEBUG << "AudioPluginOSCGUIManager: wrong number of args ("
+			 << message->getArgCount() << ") for control method"
+			 << endl;
+		goto done;
+	    }
+	    if (!(arg = message->getArg(0, type)) || type != 'i') {
+		RG_DEBUG << "AudioPluginOSCGUIManager: failed to get port number"
+			 << endl;
+		goto done;
+	    }
+	    int port = arg->i;
+	    if (!(arg = message->getArg(1, type)) || type != 'f') {
+		RG_DEBUG << "AudioPluginOSCGUIManager: failed to get port value"
+			 << endl;
+		goto done;
+	    }
+	    float value = arg->f;
+
+	    RG_DEBUG << "AudioPluginOSCGUIManager: setting port " << port
+		     << " to value " << value << endl;
+
+	    m_app->slotPluginPortChanged(instrument, position, port, value);
+
+	} else if (method == "program") {
+
+	    if (message->getArgCount() != 2) {
+		RG_DEBUG << "AudioPluginOSCGUIManager: wrong number of args ("
+			 << message->getArgCount() << ") for program method"
+			 << endl;
+		goto done;
+	    }
+	    if (!(arg = message->getArg(0, type)) || type != 'i') {
+		RG_DEBUG << "AudioPluginOSCGUIManager: failed to get bank number"
+			 << endl;
+		goto done;
+	    }
+	    int bank = arg->i;
+	    if (!(arg = message->getArg(1, type)) || type != 'i') {
+		RG_DEBUG << "AudioPluginOSCGUIManager: failed to get program number"
+			 << endl;
+		goto done;
+	    }
+	    int program = arg->i;
+
+	    //!!! locate correct program
+
+//	    emit pluginPortChanged(instrument, position, port, value);
+
+	} else if (method == "update") {
+
+	    if (message->getArgCount() != 1) {
+		RG_DEBUG << "AudioPluginOSCGUIManager: wrong number of args ("
+			 << message->getArgCount() << ") for update method"
+			 << endl;
+		goto done;
+	    }
+	    if (!(arg = message->getArg(0, type)) || type != 's') {
+		RG_DEBUG << "AudioPluginOSCGUIManager: failed to get GUI URL"
+			 << endl;
+		goto done;
+	    }
+	    QString url = &arg->s;
+	    
+	    if (!gui) {
+		RG_DEBUG << "AudioPluginOSCGUIManager: no GUI for update method"
+			 << endl;
+		goto done;
+	    }
+
+	    gui->setGUIUrl(url);
+	    //!!! and update
+	    
+	    OSCMessage *showMessage = new OSCMessage;
+	    showMessage->setMethod("show");
+	    showMessage->clearArgs();
+	    gui->sendToGUI(showMessage);
+
+	} else if (method == "configure") {
+
+	} else if (method == "midi") {
+
+	} else if (method == "exiting") {
+
+	} else {
+
+	    RG_DEBUG << "AudioPluginOSCGUIManager: unknown method " << method << endl;
+	}
+
+
+/*
 	if (m_guis.find(target) == m_guis.end()) {
 
 	    std::cerr << "Rosegarden: WARNING: AudioPluginOSCGUIManager::slotDispatch: unknown target " << target << std::endl;
@@ -297,14 +487,19 @@ AudioPluginOSCGUIManager::dispatch()
 	} else {
 	    m_guis[target]->acceptFromGUI(message);
 	}
+*/
+
+    done:
+	delete message;
     }
 }
 
-AudioPluginOSCGUI::AudioPluginOSCGUI(AudioPluginInstance *instance,
-				     QString oscUrl) :
-    m_instance(instance),
+AudioPluginOSCGUI::AudioPluginOSCGUI(Rosegarden::AudioPluginInstance *instance,
+				     QString serverURL, QString friendlyName) :
     m_gui(0),
-    m_oscUrl(oscUrl)
+    m_address(0),
+    m_basePath(""),
+    m_serverUrl(serverURL)
 {
     QString identifier = strtoqstr(instance->getIdentifier());
 
@@ -315,13 +510,13 @@ AudioPluginOSCGUI::AudioPluginOSCGUI(AudioPluginInstance *instance,
     if (soInfo.isRelative()) {
 	//!!!
 	RG_DEBUG << "AudioPluginOSCGUI::AudioPluginOSCGUI: Unable to deal with relative .so path " << soName << " yet" << endl;
-	return;
+	throw Rosegarden::Exception("Can't deal with relative .soname");
     }
 
     QDir dir(soInfo.dir());
     if (!dir.cd(soInfo.baseName(TRUE))) {
 	RG_DEBUG << "AudioPluginOSCGUI::AudioPluginOSCGUI: No GUI subdir for plugin .so " << soName << endl;
-	return;
+	throw Rosegarden::Exception("No GUI subdir available");
     }
 
     const QFileInfoList *list = dir.entryInfoList();
@@ -336,10 +531,14 @@ AudioPluginOSCGUI::AudioPluginOSCGUI(AudioPluginInstance *instance,
 	    m_gui = new KProcess();
 
 	    *m_gui << (*i)->filePath()
-		   << m_oscUrl
+		   << m_serverUrl
 		   << soInfo.fileName()
 		   << label
-		   << "blah"; //!!!
+		   << friendlyName;
+
+	    RG_DEBUG << "AudioPluginOSCGUI::AudioPluginOSCGUI: Starting process "
+		     << (*i)->filePath() << " " << m_serverUrl << " "
+		     << soInfo.fileName() << " " << label << " " << friendlyName << endl;
 
 	    if (!m_gui->start(KProcess::NotifyOnExit, KProcess::NoCommunication)) {
 		RG_DEBUG << "AudioPluginOSCGUI::AudioPluginOSCGUI: Couldn't start process " << (*i)->filePath() << endl;
@@ -350,10 +549,27 @@ AudioPluginOSCGUI::AudioPluginOSCGUI(AudioPluginInstance *instance,
 	    }
 	}
     }
+
+    throw Rosegarden::Exception("Failed to start any GUI");
 }
 
 AudioPluginOSCGUI::~AudioPluginOSCGUI()
 {
+    //!!! tell GUI to exit
+}
+
+void
+AudioPluginOSCGUI::setGUIUrl(QString url)
+{
+    if (m_address) lo_address_free(m_address);
+
+    char *host = lo_url_get_hostname(url);
+    char *port = lo_url_get_port(url);
+    m_address = lo_address_new(host, port);
+    free(host);
+    free(port);
+
+    m_basePath = lo_url_get_path(url);
 }
 
 void
@@ -361,6 +577,66 @@ AudioPluginOSCGUI::acceptFromGUI(OSCMessage *message)
 {
     RG_DEBUG << "AudioPluginOSCGUI::acceptFromGUI" << endl;
 
+
+    delete message;
+}
+
+void
+AudioPluginOSCGUI::sendToGUI(OSCMessage *message)
+{
+    if (!m_address) {
+	RG_DEBUG << "AudioPluginOSCGUI::sendToGUI: no address available for GUI"
+		 << endl;
+	delete message;
+	return;
+    }
+
+    QString argSpec = "";
+    const lo_arg *arg[5];
+
+    size_t count = message->getArgCount();
+
+    if (count > 5) {
+	RG_DEBUG << "AudioPluginOSCGUI::sendToGUI: message has too many args ("
+		 << count << ", max is 5)" << endl;
+	delete message;
+	return;
+    }
+
+    for (size_t i = 0; i < count; ++i) {
+	char type;
+	arg[i] = message->getArg(i, type);
+	argSpec += type;
+    }
+
+    QString path = m_basePath + "/" + strtoqstr(message->getMethod());
+
+    switch (count) {
+
+    case 0:
+	lo_send(m_address, path, argSpec);
+	break;
+
+    case 1:
+	lo_send(m_address, path, argSpec, arg[0]);
+	break;
+
+    case 2:
+	lo_send(m_address, path, argSpec, arg[0], arg[1]);
+	break;
+
+    case 3:
+	lo_send(m_address, path, argSpec, arg[0], arg[1], arg[2]);
+	break;
+
+    case 4:
+	lo_send(m_address, path, argSpec, arg[0], arg[1], arg[2], arg[3]);
+	break;
+
+    case 5:
+	lo_send(m_address, path, argSpec, arg[0], arg[1], arg[2], arg[3], arg[4]);
+	break;
+    }
 
     delete message;
 }

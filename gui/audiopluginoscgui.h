@@ -36,6 +36,7 @@
 namespace Rosegarden {
     class AudioPluginInstance;
 }
+class RosegardenGUIApp;
 class AudioPluginOSCGUI;
 class KProcess;
 
@@ -75,10 +76,13 @@ class TimerCallbackAssistant;
 class AudioPluginOSCGUIManager
 {
 public:
-    AudioPluginOSCGUIManager();
+    AudioPluginOSCGUIManager(RosegardenGUIApp *app);
     virtual ~AudioPluginOSCGUIManager();
 
     void setStudio(Rosegarden::Studio *studio) { m_studio = studio; }
+
+    void startGUI(Rosegarden::InstrumentId id, int position);
+    void stopGUI(Rosegarden::InstrumentId id, int position);
 
     void postMessage(OSCMessage *message); // I take over ownership of message
     void dispatch();
@@ -93,12 +97,14 @@ public:
     static void timerCallback(void *data);
 
 protected:
+    RosegardenGUIApp *m_app;
     Rosegarden::Studio *m_studio;
 
     lo_server_thread m_serverThread;
     Rosegarden::RingBuffer<OSCMessage *> m_oscBuffer;
 
-    typedef std::map<int, AudioPluginOSCGUI *> TargetGUIMap;
+    typedef std::map<int, AudioPluginOSCGUI *> IntGUIMap;
+    typedef std::map<int, IntGUIMap> TargetGUIMap;
     TargetGUIMap m_guis;
 
     TimerCallbackAssistant *m_dispatchTimer;
@@ -109,15 +115,19 @@ class AudioPluginOSCGUI
 {
 public:
     AudioPluginOSCGUI(Rosegarden::AudioPluginInstance *instance,
-		      QString oscUrl);
+		      QString serverURL, QString friendlyName);
     virtual ~AudioPluginOSCGUI();
 
+    void setGUIUrl(QString url);
+
     void acceptFromGUI(OSCMessage *message); // I take over ownership of message
+    void sendToGUI(OSCMessage *message); // I take over ownership of message
 
 protected:
-    Rosegarden::AudioPluginInstance *m_instance;
     KProcess *m_gui;
-    QString m_oscUrl;
+    lo_address m_address;
+    QString m_basePath;
+    QString m_serverUrl;
 };
     
 

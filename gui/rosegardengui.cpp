@@ -117,6 +117,7 @@
 #include "segmentparameterbox.h"
 #include "instrumentparameterbox.h"
 #include "audioplugindialog.h"
+#include "audiosynthmanager.h"
 
 #ifdef HAVE_LIBJACK
 #include <jack/jack.h>
@@ -186,7 +187,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 #ifdef HAVE_LIBLO
       //!!! better to create this only if/when needed -- perhaps make it
       // a singleton that creates itself on demand
-      m_pluginGUIManager(new AudioPluginOSCGUIManager()),
+      m_pluginGUIManager(new AudioPluginOSCGUIManager(this)),
 #endif
       m_playTimer(new QTimer(this)),
       m_stopTimer(new QTimer(this))
@@ -5442,7 +5443,7 @@ RosegardenGUIApp::slotShowPluginDialog(QWidget *parent,
 {
     if (!parent) parent = this;
 
-    int key = (index << 24) + instrumentId;
+    int key = (index << 16) + instrumentId;
 
     if (m_pluginDialogs[key]) {
 	m_pluginDialogs[key]->raise();
@@ -5687,10 +5688,19 @@ RosegardenGUIApp::slotPluginProgramChanged(Rosegarden::InstrumentId instrumentId
 }
 
 void
+RosegardenGUIApp::slotPluginProgramChanged(Rosegarden::InstrumentId instrumentId,
+					   int pluginIndex,
+					   int bank,
+					   int program)
+{
+    //!!! how to do this?
+}
+
+void
 RosegardenGUIApp::slotPluginDialogDestroyed(Rosegarden::InstrumentId instrumentId,
 					    int index)
 {
-    int key = (index << 24) + instrumentId;
+    int key = (index << 16) + instrumentId;
     m_pluginDialogs[key] = 0;
 }
 
