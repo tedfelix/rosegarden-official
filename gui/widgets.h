@@ -159,8 +159,6 @@ public:
                              bool modal = TRUE,
                              WFlags f = 0);
 
-    ~RosegardenProgressDialog();
-
     // Set the name of the current operation
     //
     virtual void setOperationName(std::string);
