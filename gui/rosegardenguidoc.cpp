@@ -379,7 +379,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 
     newDocument();
 
-    QFileInfo fileInfo(QFile::encodeName(filename));
+    QFileInfo fileInfo(filename);
     setTitle(fileInfo.fileName());
 
     // Check if file readable with fileInfo ?
@@ -405,8 +405,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     QString fileContents;
     bool cancelled = false, okay = true;
 
-    KFilterDev* fileCompressedDevice = static_cast<KFilterDev*>(KFilterDev::deviceForFile(QFile::encodeName(filename),
-                                                                                          "application/x-gzip"));
+    KFilterDev* fileCompressedDevice = static_cast<KFilterDev*>(KFilterDev::deviceForFile(filename, "application/x-gzip"));
     if (fileCompressedDevice == 0) {
 
         errMsg = i18n("Could not open Rosegarden-4 file");
@@ -839,6 +838,26 @@ void RosegardenGUIDoc::initialiseStudio()
         }
     }
 
+    KConfig* config = kapp->config();
+    config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
+
+    bool faderOuts = config->readEntry("audiofaderouts", false);
+    bool submasterOuts = config->readEntry("audiosubmasterouts", false);
+
+    Rosegarden::MidiByte ports = 0;
+    if (faderOuts) {
+	ports |= Rosegarden::MappedEvent::FaderOuts;
+    }
+    if (submasterOuts) {
+	ports |= Rosegarden::MappedEvent::SubmasterOuts;
+    }
+    Rosegarden::MappedEvent mEports
+	(Rosegarden::MidiInstrumentBase,
+	 Rosegarden::MappedEvent::SystemAudioPorts,
+	 ports);
+
+    Rosegarden::StudioControl::sendMappedEvent(mEports);
+
     RG_DEBUG << "RosegardenGUIDoc::initialiseStudio - "
              << "initialised studio including " << audioCount
              << " audio faders" << endl;
@@ -878,8 +897,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     RG_DEBUG << "RosegardenGUIDoc::saveDocument("
              << filename << ")\n";
 
-    KFilterDev* fileCompressedDevice = static_cast<KFilterDev*>(KFilterDev::deviceForFile(QFile::encodeName(filename),
-                                                                                          "application/x-gzip"));
+    KFilterDev* fileCompressedDevice = static_cast<KFilterDev*>(KFilterDev::deviceForFile(filename, "application/x-gzip"));
     fileCompressedDevice->setOrigFileName("audio/x-rosegarden");
     bool rc = fileCompressedDevice->open(IO_WriteOnly);
 
@@ -1033,8 +1051,7 @@ bool RosegardenGUIDoc::exportStudio(const QString& filename,
     RG_DEBUG << "RosegardenGUIDoc::exportStudio("
                          << filename << ")\n";
 
-    KFilterDev* fileCompressedDevice = static_cast<KFilterDev*>(KFilterDev::deviceForFile(QFile::encodeName(filename),
-                                                                                          "application/x-gzip"));
+    KFilterDev* fileCompressedDevice = static_cast<KFilterDev*>(KFilterDev::deviceForFile(filename, "application/x-gzip"));
     fileCompressedDevice->setOrigFileName("audio/x-rosegarden-device");
     fileCompressedDevice->open(IO_WriteOnly);
     QTextStream outStream(fileCompressedDevice);
