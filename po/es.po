@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-07-29 09:35+0100\n"
-"PO-Revision-Date: 2004-07-28 18:31+0200\n"
+"PO-Revision-Date: 2004-07-29 21:05+0200\n"
 "Last-Translator: Pedro Lopez-Cabanillas <plcl@users.sourceforge.net>\n"
 "Language-Team: Español <rosegarden-devel@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -229,8 +229,7 @@ msgid "Export..."
 msgstr "Exportar..."
 
 #: bankeditor.cpp:763
-msgid ""
-"Import Bank and Program data from a Rosegarden file to the current Device"
+msgid "Import Bank and Program data from a Rosegarden file to the current Device"
 msgstr ""
 "Importar datos de Banco y Programa desde un archivo de Rosegarden para el "
 "dispositivo actual"
@@ -375,6 +374,12 @@ msgid ""
 "In the meantime, you will probably need to make manual adjustments to the "
 "file you've just exported."
 msgstr ""
+"Ha encontrado usted un error de resolución enarmónica en algún punto durante esta "
+"operación. Puede que usted desee guardar una copia de la composición actual, y enviarla "
+"por correo electrónico a dmmcintyr@users.sourceforge.net para ser analizada.\n"
+"\n"
+"Mientras tanto, probablemente necesitará realizar ajustes manuales al archivo que "
+"acaba de exportar. "
 
 #: lilypondio.cpp:1343
 msgid "warning: overlong bar truncated here"
@@ -680,8 +685,7 @@ msgstr ""
 
 #: fonts.cpp:22
 msgid "Inkpen is part of Sibelius, but other fonts may use the same mappings."
-msgstr ""
-"Inkpen es parte de Sibelius, pero otras fuentes pueden usar el mismo mapa."
+msgstr "Inkpen es parte de Sibelius, pero otras fuentes pueden usar el mismo mapa."
 
 #: fonts.cpp:23 fonts.cpp:33 fonts.cpp:38
 msgid "Copyright Sibelius Software Ltd"
@@ -693,8 +697,7 @@ msgstr ""
 
 #: fonts.cpp:27
 msgid "Maestro is part of Finale, but other fonts use the same mappings."
-msgstr ""
-"Maestro es parte de Finale, pero otras fuentes pueden usar el mismo mapa."
+msgstr "Maestro es parte de Finale, pero otras fuentes pueden usar el mismo mapa."
 
 #: fonts.cpp:28 fonts.cpp:43
 msgid "Copyright Coda Inc"
@@ -710,8 +713,7 @@ msgstr "La tipografía Opus es parte de Sibelius."
 
 #: fonts.cpp:37
 msgid "Opus is part of Sibelius, but other fonts may use the same mappings."
-msgstr ""
-"Opus es parte de Sibelius, pero otras fuentes pueden usar el mismo mapa."
+msgstr "Opus es parte de Sibelius, pero otras fuentes pueden usar el mismo mapa."
 
 #: fonts.cpp:41
 msgid "Petrucci"
@@ -1320,27 +1322,27 @@ msgstr "Sincronización"
 
 #: rosegardenconfiguredialog.cpp:1422
 msgid "%1 msec / %2 KB %3"
-msgstr ""
+msgstr "%1 mseg / %2 KB %3"
 
 #: rosegardenconfiguredialog.cpp:1425
 msgid "%1 msec / %2 MB %3"
-msgstr ""
+msgstr "%1 mseg / %2 MB %3"
 
 #: rosegardenconfiguredialog.cpp:1430
 msgid "%1 sec / %2 KB %3"
-msgstr ""
+msgstr "%1 seg / %2 KB %3"
 
 #: rosegardenconfiguredialog.cpp:1433
 msgid "%1 sec / %2 MB %3"
-msgstr ""
+msgstr "%1 seg / %2 MB %3"
 
 #: rosegardenconfiguredialog.cpp:1439
 msgid "%1 msec"
-msgstr ""
+msgstr "%1 mseg"
 
 #: rosegardenconfiguredialog.cpp:1441
 msgid "%1 sec"
-msgstr ""
+msgstr "%1 seg"
 
 #: rosegardenconfiguredialog.cpp:1496
 msgid "%1 KB"
@@ -1903,8 +1905,7 @@ msgstr "Cuantificador heurístico de partitura"
 
 #: widgets.cpp:875
 msgid "Quantize for notation only (leave performance unchanged)"
-msgstr ""
-"Cuantificar para la partitura solamente (dejar la interpretación intacta)"
+msgstr "Cuantificar para la partitura solamente (dejar la interpretación intacta)"
 
 #: widgets.cpp:884
 msgid "Notation parameters"
@@ -2443,8 +2444,7 @@ msgid "JACK Audio subsystem is losing sample frames."
 msgstr "Subsistema de audio JACK está perdiendo muestras."
 
 #: sequencemanager.cpp:1030
-msgid ""
-"Failed to read audio data from disc in time to service the audio subsystem."
+msgid "Failed to read audio data from disc in time to service the audio subsystem."
 msgstr ""
 "Fallo leyendo datos de audio desde disco a tiempo para servir el subsistema "
 "de audio."
@@ -2525,8 +2525,7 @@ msgid "global element must precede note elements"
 msgstr "elemento global debe preceder a elementos de nota"
 
 #: notestyle.cpp:628
-msgid ""
-"global and note elements may have shape or charname attribute, but not both"
+msgid "global and note elements may have shape or charname attribute, but not both"
 msgstr ""
 "elementos globales y notas pueden tener forma o nombre de carácter, pero no "
 "ambos"
@@ -2721,8 +2720,7 @@ msgid "Editor >>"
 msgstr ""
 
 #: tracklabel.cpp:54
-msgid ""
-"Click and hold with left mouse button to assign this Track to an Instrument."
+msgid "Click and hold with left mouse button to assign this Track to an Instrument."
 msgstr ""
 "Pulsar y mantener el botón izquierdo del ratón para asignar esta pista a un "
 "instrumento"
@@ -3192,9 +3190,8 @@ msgstr ""
 "¿Quiere abrirlo en lugar del original?"
 
 #: rosegardengui.cpp:1574
-#, fuzzy
 msgid "Example Files"
-msgstr "Ejemplo"
+msgstr "Archivos de Ejemplo"
 
 #: rosegardengui.cpp:1764
 msgid "Opening a new application window..."
@@ -3478,8 +3475,7 @@ msgstr "Exportar como..."
 #: rosegardengui.cpp:3950 rosegardengui.cpp:3981 rosegardengui.cpp:4013
 #: rosegardengui.cpp:4050 rosegardengui.cpp:4083
 msgid "Export failed.  The file could not be opened for writing."
-msgstr ""
-"Ha fallado la exportación. El archivo no se ha podido abrir para escritura."
+msgstr "Ha fallado la exportación. El archivo no se ha podido abrir para escritura."
 
 #: rosegardengui.cpp:3956 rosegardengui.cpp:3967
 msgid "Exporting Csound score file..."
@@ -3557,10 +3553,8 @@ msgid "Saving current document as default studio..."
 msgstr "Guardando el documento actual como Estudio predeterminado..."
 
 #: rosegardengui.cpp:6204
-msgid ""
-"Are you sure you want to import your default studio and lose the current one?"
-msgstr ""
-"¿Está seguro de querer importar el estudio por omisión y perder el actual?"
+msgid "Are you sure you want to import your default studio and lose the current one?"
+msgstr "¿Está seguro de querer importar el estudio por omisión y perder el actual?"
 
 #: rosegardengui.cpp:6244
 msgid "Import Studio from File"
@@ -4750,14 +4744,12 @@ msgid "Make &Visible"
 msgstr "Hacer &Visible"
 
 #: notationview.cpp:2052
-#, fuzzy
 msgid "Toggle Dot"
-msgstr "redonda"
+msgstr "Conmutar puntillo"
 
 #: notationview.cpp:2056
-#, fuzzy
 msgid "Add Dot"
-msgstr "Añadir %1"
+msgstr "Añadir Puntillo"
 
 #: notationview.cpp:2108
 msgid "%1 pixel"
@@ -5385,9 +5377,8 @@ msgid "No rest duration selected"
 msgstr "No se ha seleccionado duración del silencio"
 
 #: notationviewslots.cpp:1304
-#, fuzzy
 msgid "No note or rest duration selected"
-msgstr "No se ha seleccionado duración del silencio"
+msgstr "No se ha seleccionado duración de nota o silencio"
 
 #: notationviewslots.cpp:1314 notationviewslots.cpp:1324
 #: notationviewslots.cpp:1334 notationviewslots.cpp:1344
@@ -5418,14 +5409,12 @@ msgid "Interpreting selection..."
 msgstr "Interpretando selección..."
 
 #: notationviewslots.cpp:1442
-#, fuzzy
 msgid "Setting note durations..."
-msgstr "Establecer Duración de Segmento..."
+msgstr "Estableciendo duración de notas..."
 
 #: notationviewslots.cpp:1449
-#, fuzzy
 msgid "Adding dot..."
-msgstr "Añadiendo octava..."
+msgstr "Añadiendo puntillo..."
 
 #: notationviewslots.cpp:1471
 msgid "Text: "
@@ -5906,8 +5895,7 @@ msgstr "Error: Incapaz de emparejar el nombre de fuente %1"
 
 #: notefontviewer.cpp:108
 msgid "Warning: No good match for font name %1 (best is %2)"
-msgstr ""
-"Aviso: No hay buena correspondencia para nombre de fuente %1 (el mejor es %2)"
+msgstr "Aviso: No hay buena correspondencia para nombre de fuente %1 (el mejor es %2)"
 
 #: notefontviewer.cpp:116
 msgid "Error: Unable to open best-match font %1"
@@ -5971,8 +5959,7 @@ msgstr "Solapar notas, enlazando con las preexistentes [\"solapamiento\"]"
 
 #: editcommands.cpp:409
 msgid "Overlay notes, ignoring present notes [\"matrix-overlay\"]"
-msgstr ""
-"Solapar notas, ignorando notas preexistentes [\"solapamiento en matriz\"]"
+msgstr "Solapar notas, ignorando notas preexistentes [\"solapamiento en matriz\"]"
 
 #: editcommands.cpp:841
 msgid "Heuristic Notation &Quantize"
@@ -6008,8 +5995,7 @@ msgstr "No se puede abrir el archivo de mapeado de fuente %1"
 
 #: notefont.cpp:1833
 msgid "Can't obtain a default font -- no fonts found"
-msgstr ""
-"No se puede obtener una fuente por omisión -- no se han encontrado fuentes"
+msgstr "No se puede obtener una fuente por omisión -- no se han encontrado fuentes"
 
 #: tempoview.cpp:128
 msgid "Filter"
@@ -6237,13 +6223,12 @@ msgid "&Clear Triggers"
 msgstr "&Limpiar Activadores"
 
 #: editcommands.h:678
-#, fuzzy
 msgid "&Set Note Type"
-msgstr "&Insertar Nota"
+msgstr "E&stablecer Tipo de Nota"
 
 #: editcommands.h:699
 msgid "&Add Dot"
-msgstr ""
+msgstr "&Añadir Puntillo"
 
 #: midipitchlabel.cpp:33
 msgid "C%1"
@@ -6327,6 +6312,13 @@ msgid ""
 "&nbsp;&nbsp;* adjust that instrument's output channel, program, bank, and\n"
 "controllers via the instrument parameters box\n"
 msgstr ""
+"<p>Para configurar una pista para tocar con un determinado instrumento:</p>\n"
+"&nbsp;&nbsp;* haga clic en la etiqueta de la pista y mantenga pulsado el botón un momento<br> \n"
+"&nbsp;&nbsp;* seleccione un dispositivo de salida<br>\n"
+"&nbsp;&nbsp;* seleccione uno de los instrumentos disponibles del dispositivo (#1 - #16)"
+"<br>\n"
+"&nbsp;&nbsp;* ajuste el canal, banco, programa, y controladores del instrumento usando\n"
+"los controles del cuadro de parámetros del instrumento\n"
 
 #: tips.cpp:12
 msgid ""
@@ -6355,6 +6347,10 @@ msgid ""
 "<b>Composition -> Studio -> Save Current Document as Default Studio</b>.</"
 "p>\n"
 msgstr ""
+"<p> \n"
+"Usted puede guardar el documento actual como el estudio predeterminado usando\n"
+"<b>Composición -> Estudio -> Guardar documento actual como Estudio predeterminado</b> "
+"</p>\n"
 
 #: tips.cpp:27
 msgid ""
@@ -6439,7 +6435,6 @@ msgstr ""
 "control más fino?</p>\n"
 
 #: tips.cpp:63
-#, fuzzy
 msgid ""
 "<p>...that you can hold down the Shift key while repositioning or resizing "
 "events in the\n"
@@ -6447,9 +6442,8 @@ msgid ""
 "</p>\n"
 msgstr ""
 "<p>...que puede mantener pulsada la tecla de cambio a mayúsculas mientras "
-"reposiciona segmentos en el lienzo\n"
-"de segmentos para evitar el efecto \"auto-posicionamiento\" y ejercer un "
-"control más fino?</p>\n"
+"reposiciona o redimensiona eventos en la vista del editor de matriz \n"
+"para evitar el efecto de \"auto-posicionamiento\" y ejercer un control más fino?</p>\n"
 
 #: tips.cpp:68
 msgid ""
@@ -6478,16 +6472,15 @@ msgstr ""
 "Lilypond</b></p>\n"
 
 #: tips.cpp:79
-#, fuzzy
 msgid ""
 "<p>...that if you use the quantizer from within the notation view, you can "
 "tell it to quantize only the timing used for notation -- making it possible "
 "to have good looking notation <b>and</b> a human MIDI performance?</p>\n"
 msgstr ""
 "<p>...que si usted usa la cuantificación desde la vista de edición de "
-"partitura, se pueden cuantificar solamente los tiempos usados para la "
+"partitura, puede decirle que cuantifique sólamente los tiempos usados para la "
 "notación de partitura -- haciendo posible tener una partitura elegante <b>y "
-"a la vez</b> una interpretación MIDI completamente humana?</p>\n"
+"a la vez</b> una interpretación MIDI humana?</p>\n"
 
 #: tips.cpp:83
 msgid ""
@@ -6499,7 +6492,6 @@ msgstr ""
 "controles en la caja Parámetros de Segmento de la ventana principal?</p>\n"
 
 #: tips.cpp:88
-#, fuzzy
 msgid ""
 "<p>...that the number of tracks in new documents is based on the contents "
 "of\n"
@@ -6517,7 +6509,7 @@ msgstr ""
 "Si prefiere comenzar con tres pistas o con 43, cree un documento que\n"
 "contenga el número de pistas deseado, mas cualesquiera otras preferencias de "
 "estudio\n"
-"o de documento que desee configurar, y utilice <b>Estudio -> Guardar "
+"o de documento que desee configurar, y utilice <b>Composición -> Estudio -> Guardar "
 "documento actual como \n"
 "Estudio predeterminado</b> para que esta configuración se active por omisión."
 "</p>\n"
@@ -6543,7 +6535,6 @@ msgstr ""
 "la opción que prefiera bajo la pestaña <b>Comportamiento</b>.</p>\n"
 
 #: tips.cpp:107
-#, fuzzy
 msgid ""
 "<p>...that Rosegarden is being developed as a community effort with\n"
 "contributions from around the world?<br><br>\n"
@@ -6556,7 +6547,7 @@ msgstr ""
 "contribuciones procedentes de todas partes del mundo?<br><br>\n"
 "Los principales desarrolladores viven en el Reino Unido y Francia, y hemos "
 "tenido\n"
-"colaboradores de los EEUU, España, Alemania, Rusia y de otros países...</p>\n"
+"colaboradores de los EEUU, España, Alemania, Rusia, Eslovenia y de otros países...</p>\n"
 
 #: tips.cpp:114
 msgid ""
@@ -6662,6 +6653,9 @@ msgid ""
 "and velocity rulers in order to bring the item you wish to adjust into\n"
 "focus.</p>\n"
 msgstr ""
+"<p>...si usted tiene más de una nota o evento de controlador en el mismo tiempo, puede usar\n"
+"las teclas [ y ] para intercambiar el orden en la pila de eventos, en la barra de controladores\n"
+"y de velocidad para traer al frente el ítem que desea ajustar.</p>\n"
 
 #: tips.cpp:161
 msgid ""
@@ -6672,6 +6666,10 @@ msgid ""
 "countdown showing you how much time you have remaining.  In order to extend\n"
 "this, use <b>Composition -> Change Composition Duration</b></p>\n"
 msgstr ""
+"<p>Una composición de Rosegarden no es infinita, y no se expande automáticamente al\n"
+"intentar insertar eventos más allá del final. Durante la grabación, usted verá una cuenta\n"
+"atrás, mostrando el tiempo restante. Para extender dicho tiempo, utilice <b>Composición -> \n"
+"Cambiar Duración de la Composición</b></p>\n"
 
 #: tips.cpp:168
 msgid ""
@@ -6679,6 +6677,8 @@ msgid ""
 "the\n"
 "matrix allows you to edit their performance duration.</p>\n"
 msgstr ""
+"<p> La vista del editor de partitura muestra las notas usando su duración de notación, \n"
+"mientras que el editor de matriz permite editar su duración de ejecución.</p>\n"
 
 #: tips.cpp:173
 msgid ""
@@ -6692,6 +6692,11 @@ msgid ""
 "their performance\n"
 "durations to something less mechanical.</p>\n"
 msgstr ""
+"<p>si usted está trabajando con una interpretación humana y necesita insertar algunas\n"
+"notas nuevas, dichas nuevas notas sonarán durante tanto tiempo como indica su duración\n"
+"escrita. Para fusionar estas notas con una interpretación humana, selecciónelas y utilice \n"
+"<b>Ajuste -> Notas -> Interpretar...</b> desde la ventana del editor de partitura, para\n"
+"interpretar cualesquiera marcadores y masajear su interpretación en algo menos mecánico</p>\n"
 
 #: styles.cpp:1
 msgid "Classical"
@@ -7690,8 +7695,7 @@ msgstr "Crescendo - establecer %1 creciendo desde el mínimo al máximo"
 
 #: dialogs.cpp:3890
 msgid "Diminuendo - set %1 falling from max to min"
-msgstr ""
-"Diminuendo - establecer %1 descendiendo desde el máximo hasta el mínimo"
+msgstr "Diminuendo - establecer %1 descendiendo desde el máximo hasta el mínimo"
 
 #: dialogs.cpp:3893
 msgid "Ringing - set %1 alternating from max to min with both dying to zero"
@@ -7721,8 +7725,7 @@ msgstr "Cambiar Duración de la Composición"
 
 #: dialogs.cpp:4009
 msgid "Set the Start and End bar markers for this Composition"
-msgstr ""
-"Establecer los marcadores de compás Inicial y Final para esta Composición"
+msgstr "Establecer los marcadores de compás Inicial y Final para esta Composición"
 
 #: dialogs.cpp:4013
 msgid "Start Bar"
@@ -8046,50 +8049,3 @@ msgstr "golpe(s)"
 msgid "bar(s)"
 msgstr "compas(es)"
 
-#~ msgid ""
-#~ "<p>...to assign a track to a new instrument, right-click on the track "
-#~ "label.  You'll be presented with a menu listing the available MIDI and "
-#~ "audio devices, where you can select an instrument on one of those devices."
-#~ "</p>\n"
-#~ msgstr ""
-#~ "<p>...para asignar una pista a un nuevo instrumento, pulse con el botón "
-#~ "derecho del ratón sobre la etiqueta de una pista.  Se abrirá un menú "
-#~ "presentando los dispositivos MIDI y audio disponibles, donde puede "
-#~ "seleccionar un instrumento de uno de esos dispositivos.</p>\n"
-
-#~ msgid ""
-#~ "<p>...that you can create a default studio by copying any<br>\n"
-#~ ".rg or .rgd file to\n"
-#~ "<b>~/.kde/share/apps/rosegarden/autoload.rg?</b><br><br>\n"
-#~ "You can also save the current document as an autoload.rg file by using\n"
-#~ "<b>Studio -> Save Current Document as Default Studio</b>.</p>\n"
-#~ msgstr ""
-#~ "<p>...que puede crear un estudio predeterminado copiando cualquier \n"
-#~ "archivo .rg o .rgd a\n"
-#~ "<b>~/.kde/share/apps/rosegarden/autoload.rg?</b><br><br>\n"
-#~ "Puede también guardar el documento actual como un archivo autoload.rg "
-#~ "usando la opción \n"
-#~ "<b>Estudio->Guardar Documento Actual como Estudio Predeterminado</b></p>\n"
-
-#~ msgid ""
-#~ "<p>...that you can toggle all the rulers, instrument parameters, and "
-#~ "several\n"
-#~ "other options simultaneously with <b>Settings -> Toggle All of the Above</"
-#~ "b>?</p>\n"
-#~ msgstr ""
-#~ "<p>...que puede conmutar todas las barras, parámetros de instrumento y "
-#~ "varias\n"
-#~ "otras opciones simultáneamente con <b>Preferencias->Cambiar todo lo de "
-#~ "Arriba</b>?</p>\n"
-
-#~ msgid ""
-#~ "<p>...that you can change various parameters controlling how Rosegarden\n"
-#~ "handles Lilypond export with <b>Settings -> Configure Rosegarden -> "
-#~ "Notation\n"
-#~ "-> Lilypond?</p>\n"
-#~ msgstr ""
-#~ "<p>...que puede cambiar varios parámetros para controlar como gestiona "
-#~ "Rosegarden\n"
-#~ "la exportación hacia Lilypond con <b>Preferencias -> Configurar "
-#~ "Rosegarden -> Partitura ->\n"
-#~ "Lilypond?</p>\n"
