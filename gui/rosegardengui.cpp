@@ -164,6 +164,10 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     emit startupStatusMessage(i18n("Clearing studio data..."));
     m_seqManager->reinitialiseSequencerStudio();
 
+    // Send the transport control statuses for MMC and JACK
+    //
+    m_seqManager->sendTransportControlStatuses();
+
     // Get the plugins available at the sequencer
     //
     emit startupStatusMessage(i18n("Enumerating plugins..."));

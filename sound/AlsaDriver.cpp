@@ -1494,7 +1494,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 
     for (MappedComposition::iterator i = mC.begin(); i != mC.end(); ++i)
     {
-        if ((*i)->getType() == MappedEvent::Audio)
+        if ((*i)->getType() >= MappedEvent::Audio)
             continue;
 
 
@@ -1657,16 +1657,15 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                                           (*i)->getData2());
                 break;
 
+                /*
             case MappedEvent::Audio:
             case MappedEvent::AudioCancel:
             case MappedEvent::AudioLevel:
             case MappedEvent::AudioStopped:
-                break;
-
             case MappedEvent::SystemJackTransport:
             case MappedEvent::SystemMMCTransport:
-                continue;
                 break;
+                */
 
             default:
                 std::cout << "AlsaDriver::processMidiOut - "
@@ -1841,14 +1840,23 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                 case 2:
                     _jackTransportMaster = true;
                     _jackTransportEnabled = true;
+                    std::cout << "AlsaDriver::processEventsOut - "
+                              << "Rosegarden is JACK Transport MASTER"
+                              << std::endl;
                     break;
 
                 case 1:
                     _jackTransportEnabled = true;
+                    std::cout << "AlsaDriver::processEventsOut - "
+                              << "Rosegarden is JACK Transport SLAVE"
+                              << std::endl;
                     break;
 
                 case 0:
                 default:
+                    std::cout << "AlsaDriver::processEventsOut - "
+                              << "Rosegarden JACK Transport DISABLED"
+                              << std::endl;
                     break;
             }
         }
@@ -1861,16 +1869,25 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
             switch ((int)(*i)->getData1())
             {
                 case 2:
+                    std::cout << "AlsaDriver::processEventsOut - "
+                              << "Rosegarden is MMC MASTER"
+                              << std::endl;
                     m_mmcMaster = true;
                     m_mmcEnabled = true;
                     break;
 
                 case 1:
                     m_mmcEnabled = true;
+                    std::cout << "AlsaDriver::processEventsOut - "
+                              << "Rosegarden is MMC SLAVE"
+                              << std::endl;
                     break;
 
                 case 0:
                 default:
+                    std::cout << "AlsaDriver::processEventsOut - "
+                              << "Rosegarden MMC Transport DISABLED"
+                              << std::endl;
                     break;
             }
         }

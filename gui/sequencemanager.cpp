@@ -1932,6 +1932,66 @@ SequenceManager::setTemporarySequencerSliceSize(const RealTime &time)
     }
 }
 
+void
+SequenceManager::sendTransportControlStatuses()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("Sequencer Options");
+
+    bool jackTransport = config->readBoolEntry("jacktransport", false);
+    bool jackMaster = config->readBoolEntry("jackmaster", false);
+
+    bool mmcTransport = config->readBoolEntry("mmctransport", false);
+    bool mmcMaster = config->readBoolEntry("mmcmaster", false);
+
+    int jackValue = 0;
+    if (jackTransport && jackMaster)
+        jackValue = 2;
+    else 
+    {
+        if (jackTransport)
+            jackValue = 1;
+        else
+            jackValue = 0;
+    }
+
+    int mmcValue = 0;
+    if (mmcTransport && mmcMaster)
+        mmcValue = 2;
+    else
+    {
+        if (mmcTransport)
+            mmcValue = 1;
+        else
+            mmcValue = 0;
+    }
+
+    try
+    {
+        Rosegarden::MappedEvent *mE =
+            new Rosegarden::MappedEvent(
+                Rosegarden::MidiInstrumentBase, // InstrumentId
+                Rosegarden::MappedEvent::SystemJackTransport,
+                Rosegarden::MidiByte(jackValue));
+
+        Rosegarden::StudioControl::sendMappedEvent(mE);
+    }
+    catch(...) {;}
+
+    try
+    {
+        Rosegarden::MappedEvent *mE =
+            new Rosegarden::MappedEvent(
+                Rosegarden::MidiInstrumentBase, // InstrumentId
+                Rosegarden::MappedEvent::SystemMMCTransport,
+                Rosegarden::MidiByte(mmcValue));
+
+        Rosegarden::StudioControl::sendMappedEvent(mE);
+    }
+    catch(...) {;}
+
+}
+
 }
 
 

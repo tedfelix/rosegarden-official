@@ -161,6 +161,10 @@ public:
     //
     void reinitialiseSequencerStudio();
 
+    // Send JACK and MMC transport control statuses
+    //
+    void sendTransportControlStatuses();
+
     // Send all note offs and resets to MIDI devices
     //
     void panic();

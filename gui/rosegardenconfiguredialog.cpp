@@ -837,17 +837,17 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     // --------------- JACK Transport ---------------
     //
     label = new QLabel("Enable JACK transport", frame);
-    layout->addWidget(label, 1, 0);
+    layout->addWidget(label, 2, 0);
 
     m_jackTransportEnabled = new QCheckBox(frame);
-    layout->addWidget(m_jackTransportEnabled, 1, 1, Qt::AlignHCenter);
+    layout->addWidget(m_jackTransportEnabled, 2, 1, Qt::AlignHCenter);
 
     label = new QLabel("make Rosegarden master for JACK transport", frame);
-    layout->addWidget(label, 2, 0);
+    layout->addWidget(label, 3, 0);
     label->setIndent(10);
 
     m_jackTransportMaster = new QCheckBox(frame);
-    layout->addWidget(m_jackTransportMaster, 2, 1, Qt::AlignHCenter);
+    layout->addWidget(m_jackTransportMaster, 3, 1, Qt::AlignHCenter);
 
     bool jackMaster = m_cfg->readBoolEntry("jackmaster", false);
     m_jackTransportMaster->setChecked(jackMaster);
@@ -866,17 +866,17 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     // ---------------  MMC Transport -----------------
     //
     label = new QLabel("Enable MMC", frame);
-    layout->addWidget(label, 3, 0);
+    layout->addWidget(label, 5, 0);
     
     m_mmcTransportEnabled = new QCheckBox(frame);
-    layout->addWidget(m_mmcTransportEnabled, 3, 1, Qt::AlignHCenter);
+    layout->addWidget(m_mmcTransportEnabled, 5, 1, Qt::AlignHCenter);
 
     label = new QLabel("make Rosegarden master for MMC", frame);
-    layout->addWidget(label, 4, 0);
+    layout->addWidget(label, 6, 0);
     label->setIndent(10);
 
     m_mmcTransportMaster = new QCheckBox(frame);
-    layout->addWidget(m_mmcTransportMaster, 4, 1, Qt::AlignHCenter);
+    layout->addWidget(m_mmcTransportMaster, 6, 1, Qt::AlignHCenter);
 
     bool mmcMaster = m_cfg->readBoolEntry("mmcmaster", false);
     m_mmcTransportMaster->setChecked(mmcMaster);
@@ -894,12 +894,12 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     // ---------------- Command-line --------------------
     //
     layout->addMultiCellWidget(new QLabel(i18n("Sequencer command line options\n(any change made here will come into effect the next time you start Rosegarden)"), frame),
-                               6, 6,
+                               8, 8,
                                0, 1);
 
-    layout->addWidget(new QLabel(i18n("Options:"), frame), 7, 0);
+    layout->addWidget(new QLabel(i18n("Options:"), frame), 9, 0);
     m_sequencerArguments = new QLineEdit("", frame);
-    layout->addWidget(m_sequencerArguments, 7, 1);
+    layout->addWidget(m_sequencerArguments, 9, 1);
 
     // Get the options
     //
@@ -946,7 +946,7 @@ SequencerConfigurationPage::apply()
     {
         Rosegarden::MappedEvent *mE =
             new Rosegarden::MappedEvent(
-                0, // InstrumentId
+                Rosegarden::MidiInstrumentBase, // InstrumentId
                 Rosegarden::MappedEvent::SystemJackTransport,
                 Rosegarden::MidiByte(jackValue));
 
@@ -960,8 +960,8 @@ SequencerConfigurationPage::apply()
     bool mmcTransport = m_mmcTransportEnabled->isChecked();
     bool mmcMaster = m_mmcTransportMaster->isChecked();
 
-    m_cfg->writeEntry("mmctransport", jackTransport);
-    m_cfg->writeEntry("mmcmaster", jackMaster);
+    m_cfg->writeEntry("mmctransport", mmcTransport);
+    m_cfg->writeEntry("mmcmaster", mmcMaster);
 
     int mmcValue = 0;
 
@@ -981,7 +981,7 @@ SequencerConfigurationPage::apply()
     {
         Rosegarden::MappedEvent *mE =
             new Rosegarden::MappedEvent(
-                0, // InstrumentId
+                Rosegarden::MidiInstrumentBase, // InstrumentId
                 Rosegarden::MappedEvent::SystemMMCTransport,
                 Rosegarden::MidiByte(mmcValue));
 
