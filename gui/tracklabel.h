@@ -76,7 +76,14 @@ public:
 
     virtual void mouseDoubleClickEvent(QMouseEvent *mE)
     {
-        // always highlight this label
+        // Highlight this label alone and cheat using
+        // the released signal
+        //
+        emit released(m_trackNum);
+
+        // Just in case we've got our timing wrong - reapply
+        // this label highlight
+        //
         setLabelHighlight(true);
 
         bool ok = false;
