@@ -55,7 +55,8 @@ class ControlRuler : public RosegardenCanvasView, public Rosegarden::StaffObserv
     friend class ControlItem;
 
 public:
-    ControlRuler(Rosegarden::Staff*,
+    ControlRuler(Rosegarden::PropertyName propertyName,
+                 Rosegarden::Staff*,
                  Rosegarden::RulerScale*,
                  QScrollBar* hsb,
                  QCanvas*,
@@ -73,6 +74,8 @@ public:
 
     void setMaxPropertyValue(int val) { m_maxPropertyValue = val; }
     int getMaxPropertyValue()         { return m_maxPropertyValue; }
+
+    const Rosegarden::PropertyName& getPropertyName()     { return m_propertyName; }
 
     // StaffObserver interface
     virtual void elementAdded(Rosegarden::ViewElement*);
@@ -103,6 +106,8 @@ protected:
     void updateSelection();
 
     //--------------- Data members ---------------------------------
+
+    Rosegarden::PropertyName m_propertyName;
 
     Rosegarden::Staff*      m_staff;
     Rosegarden::RulerScale* m_rulerScale;

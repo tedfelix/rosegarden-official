@@ -30,7 +30,6 @@
 #include <qframe.h>
 
 #include "Staff.h"
-#include "BaseProperties.h"
 #include "controlruler.h"
 #include "colours.h"
 #include "rosestrings.h"
@@ -151,12 +150,12 @@ void ControlItem::setValue(long v)
 
 void ControlItem::updateValue()
 {
-    m_viewElement->event()->set<Rosegarden::Int>(Rosegarden::BaseProperties::VELOCITY, m_value);
+    m_viewElement->event()->set<Rosegarden::Int>(m_controlRuler->getPropertyName(), m_value);
 }
 
 void ControlItem::updateFromValue()
 {
-    if (m_viewElement->event()->get<Rosegarden::Int>(Rosegarden::BaseProperties::VELOCITY, m_value)) {
+    if (m_viewElement->event()->get<Rosegarden::Int>(m_controlRuler->getPropertyName(), m_value)) {
         setHeight(m_controlRuler->valueToHeight(m_value));
     }
 }
@@ -282,12 +281,14 @@ const int ControlRuler::MaxItemHeight = 64 + 5;
 const int ControlRuler::ItemHeightRange = 64;
 
 
-ControlRuler::ControlRuler(Staff* staff,
+ControlRuler::ControlRuler(Rosegarden::PropertyName propertyName,
+                           Staff* staff,
                            Rosegarden::RulerScale* rulerScale,
                            QScrollBar* hsb,
                            QCanvas* c, QWidget* parent,
                            const char* name, WFlags f) :
     RosegardenCanvasView(hsb, c, parent, name, f),
+    m_propertyName(propertyName),
     m_staff(staff),
     m_rulerScale(rulerScale),
     m_currentItem(0),

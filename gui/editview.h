@@ -161,6 +161,7 @@ public slots:
     void slotAddTimeSignature();
 
     virtual void slotShowControlRuler();
+    virtual void slotShowControlRulerForProperty();
 
 protected:
 
@@ -193,7 +194,8 @@ protected:
     /**
      * Add control ruler
      */
-    ControlRuler* makeControlRuler(Rosegarden::Staff* staff,
+    ControlRuler* makeControlRuler(Rosegarden::PropertyName propertyName,
+                                   Rosegarden::Staff* staff,
                                    Rosegarden::RulerScale* rulerScale);
 
     /**

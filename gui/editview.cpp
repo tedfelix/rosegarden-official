@@ -28,6 +28,7 @@
 #include <kstdaction.h>
 #include <kstatusbar.h>
 
+#include "BaseProperties.h"
 #include "Profiler.h"
 #include "SegmentNotationHelper.h"
 #include "AnalysisTypes.h"
@@ -157,7 +158,8 @@ void EditView::addPropertyBox(QWidget *w)
     m_controlBox->addWidget(w);
 }
 
-ControlRuler* EditView::makeControlRuler(Rosegarden::Staff* staff,
+ControlRuler* EditView::makeControlRuler(Rosegarden::PropertyName propertyName,
+                                         Rosegarden::Staff* staff,
                                          Rosegarden::RulerScale* rulerScale)
 {
     if (m_controlRuler) return m_controlRuler;
@@ -165,7 +167,8 @@ ControlRuler* EditView::makeControlRuler(Rosegarden::Staff* staff,
     QCanvas* controlRulerCanvas = new QCanvas(this);
     QSize viewSize = getViewSize();
     controlRulerCanvas->resize(viewSize.width(), ControlRuler::DefaultRulerHeight); // TODO - keep it in sync with main canvas size
-    m_controlRuler = new ControlRuler(staff, rulerScale,
+    m_controlRuler = new ControlRuler(propertyName,
+                                      staff, rulerScale,
                                       m_horizontalScrollBar,
                                       controlRulerCanvas, getCentralFrame());
 
@@ -739,4 +742,8 @@ void EditView::slotShowControlRuler()
         else
             m_controlRuler->show();
     }
+}
+
+void EditView::slotShowControlRulerForProperty()
+{
 }

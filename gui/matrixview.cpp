@@ -2238,7 +2238,8 @@ void
 MatrixView::slotShowControlRuler()
 {
     if (getControlRuler() == 0)
-        makeControlRuler(m_staffs[0], &m_hlayout);
+        makeControlRuler(Rosegarden::BaseProperties::VELOCITY,
+                         m_staffs[0], &m_hlayout);
 
     EditView::slotShowControlRuler();
 }
