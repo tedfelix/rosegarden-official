@@ -3200,6 +3200,8 @@ RosegardenGUIApp::slotUpdatePlaybackPosition()
     }
 
     if (m_audioMixer && m_audioMixer->isVisible()) m_audioMixer->updateMeters(mapper);
+    if (m_midiMixer && m_midiMixer->isVisible()) m_midiMixer->updateMeters(mapper);
+
     m_view->updateMeters(mapper);
 
     if (elapsedTime >= comp.getEndMarker())
@@ -4903,6 +4905,8 @@ RosegardenGUIApp::slotOpenAudioMixer()
 	    m_audioMixer,
 	    SLOT(slotUpdateInstrument(Rosegarden::InstrumentId)));
 
+    plugAccelerators(m_audioMixer, m_audioMixer->getAccelerators());
+
     m_audioMixer->show();
 }
 
@@ -4920,14 +4924,16 @@ RosegardenGUIApp::slotOpenMidiMixer()
     connect(m_midiMixer, SIGNAL(closing()),
             this, SLOT(slotMidiMixerClosed()));
 
-    connect(m_midiMixer, SIGNAL(selectPlugin(QWidget *, Rosegarden::InstrumentId, int)),
-	    this, SLOT(slotShowPluginDialog(QWidget *, Rosegarden::InstrumentId, int)));
-
     connect(this, SIGNAL(documentAboutToChange()),
             m_midiMixer, SLOT(close()));
 
+    /*
+    connect(m_midiMixer, SIGNAL(selectPlugin(QWidget *, Rosegarden::InstrumentId, int)),
+	    this, SLOT(slotShowPluginDialog(QWidget *, Rosegarden::InstrumentId, int)));
+
     connect(m_view, SIGNAL(checkTrackAssignments()),
 	    m_midiMixer, SLOT(slotTrackAssignmentsChanged()));
+            */
 
     connect(m_midiMixer, SIGNAL(play()),
 	    this, SLOT(slotPlay()));
@@ -4951,6 +4957,8 @@ RosegardenGUIApp::slotOpenMidiMixer()
 	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
 	    m_midiMixer,
 	    SLOT(slotUpdateInstrument(Rosegarden::InstrumentId)));
+
+    plugAccelerators(m_midiMixer, m_midiMixer->getAccelerators());
 
     m_midiMixer->show();
 }

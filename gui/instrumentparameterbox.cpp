@@ -136,6 +136,11 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
 
     connect(m_midiInstrumentParameters, SIGNAL(changeInstrumentLabel(Rosegarden::InstrumentId, QString)),
             this, SIGNAL(changeInstrumentLabel(Rosegarden::InstrumentId, QString)));
+
+    connect(m_midiInstrumentParameters,
+	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
+	    this,
+	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)));
 }
 
 InstrumentParameterPanel::InstrumentParameterPanel(RosegardenGUIDoc *doc, 
@@ -1579,19 +1584,22 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
     {
         m_selectedInstrument->setVolume(Rosegarden::MidiByte(value));
     }
-    else if (controller)
+    else // just set the controller (this will create it on the instrument if
+         // it doesn't exist)
     {
         m_selectedInstrument->setControllerValue(Rosegarden::MidiByte(controllerNumber),
                                                  Rosegarden::MidiByte(value));
 
         //RG_DEBUG << "SET CONTROLLER VALUE (" << controllerNumber << ") = " << value << std::endl;
     }
+    /*
     else
     {
         RG_DEBUG << "MIDIInstrumentParameterPanel::slotControllerChanged - "
                  << "no controller retrieved\n";
         return;
     }
+    */
 
     Rosegarden::MappedEvent mE(m_selectedInstrument->getId(), 
                                Rosegarden::MappedEvent::MidiController,
@@ -1600,6 +1608,7 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
     Rosegarden::StudioControl::sendMappedEvent(mE);
 
     emit updateAllBoxes();
+    emit instrumentParametersChanged(m_selectedInstrument->getId());
     
 }
 

@@ -201,7 +201,18 @@ RosegardenFader::position_to_value(int position)
 	value = Rosegarden::AudioLevel::fader_to_dB
 	    (position, m_sliderMax - m_sliderMin, m_type);
     }
-    
+
+    RG_DEBUG << "RosegardenFader::position_to_value - position = " << position
+             << ", new value = " << value << endl;
+
+    if (m_min != m_max) // works for integral case
+    {
+        if (value > m_max) value = float(m_max);
+        if (value < m_min) value = float(m_min);
+    }
+
+    RG_DEBUG << "RosegardenFader::position_to_value - limited value = " << value << endl;
+
     return value;
 }
 
@@ -350,10 +361,12 @@ RosegardenFader::wheelEvent(QWheelEvent *e)
 	if (e->delta() > 0) buttonPosition += 10;
 	else buttonPosition -= 10;
     } else {
-	if (e->delta() > 0) buttonPosition += 1;
-	else buttonPosition -= 1;
+	if (e->delta() > 0) buttonPosition += 2;
+	else buttonPosition -= 2;
     }
+    RG_DEBUG << "RosegardenFader::wheelEvent - button position = " << buttonPosition << endl;
     setFader(position_to_value(buttonPosition));
+
     showFloatText();
 }
 

@@ -29,6 +29,7 @@
 class RosegardenGUIDoc;
 namespace Rosegarden { class Studio; }
 class SequencerMapper;
+class QAccel;
 
 class MixerWindow: public KMainWindow
 {
@@ -36,6 +37,7 @@ class MixerWindow: public KMainWindow
 
 public:
     MixerWindow(QWidget *parent, RosegardenGUIDoc *document);
+    QAccel* getAccelerators() { return m_accelerators; }
 
 signals:
     void closing();
@@ -46,6 +48,9 @@ protected:
     RosegardenGUIDoc *m_document;
     Rosegarden::Studio *m_studio;
     Rosegarden::InstrumentId m_currentId;
+
+    QAccel *m_accelerators;
+
 };
 
 class AudioMixerWindow : public MixerWindow
@@ -196,6 +201,11 @@ public:
      */
     void setupTabs();
 
+    /* 
+     * Update the VU meters
+     */
+    void updateMeters(SequencerMapper *mapper);
+
 signals:
     void play();
     void stop();
@@ -221,12 +231,12 @@ protected:
 
     struct FaderStruct {
 
-        FaderStruct() {}
+        FaderStruct():m_id(0), m_vuMeter(0), m_volumeFader(0) {}
 
         Rosegarden::InstrumentId       m_id;
         MidiMixerVUMeter              *m_vuMeter;
         RosegardenFader               *m_volumeFader;
-        std::vector<RosegardenRotary*> m_controllerRotaries;
+        std::vector<std::pair<Rosegarden::MidiByte, RosegardenRotary*> > m_controllerRotaries;
 
     };
 

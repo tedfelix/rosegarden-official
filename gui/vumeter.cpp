@@ -20,15 +20,13 @@
 */
 
 
-#include "vumeter.h"
-#include "colours.h"
 #include <iostream>
 
 #include "AudioLevel.h"
 
-using std::cout;
-using std::cerr;
-using std::endl;
+#include "vumeter.h"
+#include "colours.h"
+#include "rosedebug.h"
 
 using Rosegarden::AudioLevel;
 
@@ -65,6 +63,7 @@ VUMeter::VUMeter(QWidget *parent,
         case PeakHold:
         case AudioPeakHoldShort:
         case AudioPeakHoldLong:
+        case FixedHeightVisiblePeakHold:
             m_showPeakLevel = true;
             break;
 
@@ -254,6 +253,21 @@ VUMeter::paintEvent(QPaintEvent*)
 	paint.drawPoint(0, height()-1);
 	paint.drawPoint(width()-1, height()-1);
     }
+    else if (m_type == VUMeter::FixedHeightVisiblePeakHold)
+    {
+	paint.setPen(m_background);
+	paint.setBrush(m_background);
+	paint.drawRect(0, 0, width(), height());
+
+        if (m_fallTimerLeft->isActive())
+            drawMeterLevel(&paint);
+        else
+        {
+            meterStop();
+            drawFrame(&paint);
+            drawContents(&paint);
+        }
+    }
     else
     {
         if (m_fallTimerLeft->isActive())
@@ -337,6 +351,8 @@ VUMeter::drawColouredBar(QPainter *paint, int channel,
 	if (channel == 0) {
 
 	    QColor mixedColour = m_velocityColour->getColour(m_levelLeft);
+
+            RG_DEBUG << "VUMeter::drawColouredBar - level = " << m_levelLeft << endl;
 	    
             paint->setPen(mixedColour);
             paint->setBrush(mixedColour);
@@ -409,7 +425,6 @@ VUMeter::drawMeterLevel(QPainter* paint)
 	    paint->setBrush(m_background);
 	    paint->drawRect(0, 0, width(), height());
 
-            cout << "HERE HORIZ STEREO" << endl;
             int x = (m_levelLeft * width()) / m_maxLevel;
             paint->drawRect(0, 0, x, height());
 
@@ -444,11 +459,13 @@ VUMeter::drawMeterLevel(QPainter* paint)
         {
             int y = height() - (m_levelLeft * height()) / m_maxLevel;
 //            paint->drawRect(0, height(), width(), y);
-	    drawColouredBar(paint, 0, 0, height(), width(), y);
+	    drawColouredBar(paint, 0, 0, 0, width(), y);
 
 	    paint->setPen(m_background);
 	    paint->setBrush(m_background);
 	    paint->drawRect(0, 0, width(), y);
+
+            RG_DEBUG << "VUMeter::drawMeterLevel - vertical rect height = " << y << endl;
 
             if (m_showPeakLevel)
             {

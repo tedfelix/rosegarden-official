@@ -39,7 +39,8 @@ public:
         Plain,
         PeakHold,
 	AudioPeakHoldShort, 
-        AudioPeakHoldLong
+        AudioPeakHoldLong,
+        FixedHeightVisiblePeakHold
     } VUMeterType;
 
     typedef enum

@@ -235,6 +235,7 @@ public:
 
 signals:
     void changeInstrumentLabel(Rosegarden::InstrumentId id, QString label);
+    void instrumentParametersChanged(Rosegarden::InstrumentId);
 
 public slots:
     void slotSelectProgram(int index);
