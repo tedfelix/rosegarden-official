@@ -33,6 +33,7 @@
 #include "Instrument.h"
 #include "RealTime.h"
 #include "ExternalTransport.h"
+#include <qstringlist.h>
 
 namespace Rosegarden
 {
@@ -88,6 +89,16 @@ public:
     virtual void setPluginInstanceBypass(InstrumentId id,
                                          int position,
                                          bool value);
+
+    virtual QStringList getPluginInstancePrograms(InstrumentId id,
+						  int position); 
+
+    virtual QString getPluginInstanceProgram(InstrumentId id,
+					     int position); 
+  
+    virtual void setPluginInstanceProgram(InstrumentId id,
+					  int position,
+					  QString program);
 
     virtual RunnablePluginInstance *getSynthPlugin(InstrumentId id);
 

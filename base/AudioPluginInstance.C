@@ -58,7 +58,8 @@ AudioPluginInstance::AudioPluginInstance(unsigned int position):
     m_identifier(""),
     m_position(position),
     m_assigned(false),
-    m_bypass(false)
+    m_bypass(false),
+    m_program("")
 {
 }
 
@@ -99,9 +100,13 @@ AudioPluginInstance::toXmlString()
            << "\" bypassed=\"";
 
     if (m_bypass)
-        plugin << "true";
+        plugin << "true ";
     else
-        plugin << "false";
+        plugin << "false ";
+
+    if (m_program != "") {
+	plugin << "program=\"" << encode(m_program) << "\"";
+    }
 
     plugin << "\">" << std::endl;
 

@@ -811,6 +811,86 @@ AudioInstrumentMixer::setPluginBypass(InstrumentId id, int position, bool bypass
     releaseLock();
 }
 
+QStringList
+AudioInstrumentMixer::getPluginPrograms(InstrumentId id, int position)
+{
+    QStringList programs;
+
+    getLock();
+    
+    RunnablePluginInstance *instance = 0;
+
+    if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
+	
+	instance = m_synths[id];
+
+    } else {
+
+	PluginList::iterator i = m_plugins[id].find(position);
+	if (i != m_plugins[id].end()) {
+	    instance = i->second;
+	}
+    }
+    
+    if (instance) programs = instance->getPrograms();
+    
+    releaseLock();
+
+    return programs;
+}
+
+QString
+AudioInstrumentMixer::getPluginProgram(InstrumentId id, int position)
+{
+    QString program;
+
+    getLock();
+    
+    RunnablePluginInstance *instance = 0;
+
+    if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
+	
+	instance = m_synths[id];
+
+    } else {
+
+	PluginList::iterator i = m_plugins[id].find(position);
+	if (i != m_plugins[id].end()) {
+	    instance = i->second;
+	}
+    }
+    
+    if (instance) program = instance->getCurrentProgram();
+    
+    releaseLock();
+
+    return program;
+}
+
+void
+AudioInstrumentMixer::setPluginProgram(InstrumentId id, int position, QString program)
+{
+    getLock();
+    
+    RunnablePluginInstance *instance = 0;
+
+    if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
+	
+	instance = m_synths[id];
+
+    } else {
+
+	PluginList::iterator i = m_plugins[id].find(position);
+	if (i != m_plugins[id].end()) {
+	    instance = i->second;
+	}
+    }
+    
+    if (instance) instance->selectProgram(program);
+    
+    releaseLock();
+}
+
 void
 AudioInstrumentMixer::resetAllPlugins()
 {

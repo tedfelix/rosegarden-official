@@ -61,6 +61,7 @@ public:
     virtual sample_t **getAudioOutputBuffers() { return m_outputBuffers; }
 
     virtual QStringList getPrograms();
+    virtual QString getCurrentProgram();
     virtual void selectProgram(QString program);
 
     virtual void activate();
@@ -128,6 +129,7 @@ protected:
     size_t                    m_sampleRate;
     
     bool                      m_bypassed;
+    QString                   m_program;
 };
 
 };

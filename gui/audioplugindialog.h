@@ -26,6 +26,7 @@
 #include <qhbox.h>
 #include <qdial.h>
 #include <qpushbutton.h>
+#include <qstringlist.h>
 
 #include "Instrument.h"
 
@@ -127,6 +128,7 @@ public slots:
     void slotCategorySelected(int);
     void slotPluginSelected(int index);
     void slotPluginPortChanged(float value);
+    void slotPluginProgramChanged(const QString &value);
     void slotBypassChanged(bool);
     void slotCopy();
     void slotPaste();
@@ -135,6 +137,7 @@ public slots:
 signals:
     void pluginSelected(Rosegarden::InstrumentId, int pluginIndex, int plugin);
     void pluginPortChanged(Rosegarden::InstrumentId, int pluginIndex, int portIndex, float value);
+    void pluginProgramChanged(Rosegarden::InstrumentId, int pluginIndex, QString program);
 
     // is the plugin being bypassed
     void bypassed(Rosegarden::InstrumentId, int pluginIndex, bool bp);
@@ -147,6 +150,7 @@ protected:
     virtual void closeEvent(QCloseEvent *e);
 
     void makePluginParamsBox(QWidget*);
+    QStringList getProgramsForInstance(AudioPluginInstance *inst, int &current);
 
     //--------------- Data members ---------------------------------
 
@@ -166,6 +170,7 @@ protected:
     QPushButton         *m_pasteButton;
     QPushButton         *m_defaultButton;
 
+    KComboBox           *m_programCombo;
     std::vector<PluginControl*> m_pluginWidgets;
     QGridLayout         *m_gridLayout;
 

@@ -241,6 +241,10 @@ DSSIPluginInstance::getPrograms()
 {
     QStringList programs;
 
+#ifdef DEBUG_DSSI
+    std::cerr << "DSSIPluginInstance::getPrograms" << std::endl;
+#endif
+
     if (!m_descriptor || !m_descriptor->get_program) return programs;
 
     unsigned long index = 0;
@@ -255,10 +259,20 @@ DSSIPluginInstance::getPrograms()
     return programs;
 }
 
+QString
+DSSIPluginInstance::getCurrentProgram()
+{
+    return m_program;
+}
+
 void
 DSSIPluginInstance::selectProgram(QString program)
 {
     // better if this were more efficient!
+
+#ifdef DEBUG_DSSI
+    std::cerr << "DSSIPluginInstance::selectProgram(" << program << ")" << std::endl;
+#endif
 
     if (!m_descriptor || !m_descriptor->get_program || !m_descriptor->select_program) return;
 
@@ -275,6 +289,11 @@ DSSIPluginInstance::selectProgram(QString program)
 	if (name == program) {
 	    bankNo = programDescriptor.Bank;
 	    programNo = programDescriptor.Program;
+
+#ifdef DEBUG_DSSI
+	    std::cerr << "DSSIPluginInstance::selectProgram(" << program << "): found at bank " << bankNo << ", program " << programNo << std::endl;
+#endif
+
 	    found = true;
 	    break;
 	}
@@ -282,6 +301,7 @@ DSSIPluginInstance::selectProgram(QString program)
 
     if (found) {
 	m_descriptor->select_program(m_instanceHandle, bankNo, programNo);
+	m_program = program;
     }
 }
 
@@ -295,6 +315,19 @@ DSSIPluginInstance::activate()
     if (!m_descriptor || !m_descriptor->LADSPA_Plugin->activate) return;
     m_eventBuffer.reset();
     m_descriptor->LADSPA_Plugin->activate(m_instanceHandle);
+
+    if (m_descriptor->get_program && m_descriptor->select_program) {
+
+	if (!m_program) {
+	    DSSI_Program_Descriptor programDescriptor;
+	    if (m_descriptor->get_program(m_instanceHandle, 0, &programDescriptor)) {
+		m_program = QString("%1. %2").arg(0).arg(programDescriptor.Name);
+		free(programDescriptor.Name);
+	    }
+	}
+
+	if (m_program) selectProgram(m_program);
+    }
 }
 
 void

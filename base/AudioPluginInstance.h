@@ -40,9 +40,6 @@ class PluginPort
 public:
     typedef enum
     {
-    // Currently things will go wrong if these values differ
-    // from the same constants in LADSPA.  That's bad.
-	//!!! no longer true
         Input    = 0x01,
         Output   = 0x02,
         Control  = 0x04,
@@ -51,7 +48,6 @@ public:
 
     typedef enum
     {
-    // These are our own, though.
         NoHint      = 0x00,
 	Toggled     = 0x01,
 	Integer     = 0x02,
@@ -134,6 +130,9 @@ public:
     void setBypass(bool bypass) { m_bypass = bypass; }
     bool isBypassed() const { return m_bypass; }
 
+    void setProgram(std::string program) { m_program = program; }
+    std::string getProgram() const { return m_program; }
+
     int getMappedId() const { return m_mappedId; }
     void setMappedId(int value) { m_mappedId = value; }
 
@@ -149,6 +148,8 @@ protected:
     //
     bool                               m_assigned; 
     bool                               m_bypass;
+
+    std::string                        m_program;
 
 };
 

@@ -124,7 +124,6 @@ LADSPAPluginFactory::populatePluginSlot(QString identifier, MappedPluginSlot &sl
 	slot.setProperty(MappedPluginSlot::Copyright, descriptor->Copyright);
 	slot.setProperty(MappedPluginSlot::PortCount, descriptor->PortCount);
 	slot.setProperty(MappedPluginSlot::Category, m_taxonomy[descriptor->UniqueID]);
-
 	slot.destroyChildren();
 	
 	for (unsigned long i = 0; i < descriptor->PortCount; i++) {

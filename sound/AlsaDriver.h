@@ -155,6 +155,30 @@ public:
 #endif
     }
 
+    virtual QStringList getPluginInstancePrograms(InstrumentId id,
+						  int position) {
+#ifdef HAVE_LIBJACK
+	if (m_jackDriver) return m_jackDriver->getPluginInstancePrograms(id, position);
+#endif
+	return QStringList();
+    }
+
+    virtual QString getPluginInstanceProgram(InstrumentId id,
+					     int position) {
+#ifdef HAVE_LIBJACK
+	if (m_jackDriver) return m_jackDriver->getPluginInstanceProgram(id, position);
+#endif
+	return QString();
+    }
+    
+    virtual void setPluginInstanceProgram(InstrumentId id,
+					  int position,
+					  QString program) {
+#ifdef HAVE_LIBJACK
+	if (m_jackDriver) m_jackDriver->setPluginInstanceProgram(id, position, program);
+#endif
+    }
+
     virtual bool checkForNewClients();
 
     virtual void setLoop(const RealTime &loopStart, const RealTime &loopEnd);

@@ -1791,6 +1791,24 @@ JackDriver::setPluginInstanceBypass(InstrumentId id, int position, bool value)
     if (m_instrumentMixer) m_instrumentMixer->setPluginBypass(id, position, value);
 }
 
+QStringList
+JackDriver::getPluginInstancePrograms(InstrumentId id, int position)
+{
+    if (m_instrumentMixer) return m_instrumentMixer->getPluginPrograms(id, position);
+}
+
+QString
+JackDriver::getPluginInstanceProgram(InstrumentId id, int position)
+{
+    if (m_instrumentMixer) return m_instrumentMixer->getPluginProgram(id, position);
+}
+
+void 
+JackDriver::setPluginInstanceProgram(InstrumentId id, int position, QString program)
+{
+    if (m_instrumentMixer) m_instrumentMixer->setPluginProgram(id, position, program);
+}
+
 RunnablePluginInstance *
 JackDriver::getSynthPlugin(InstrumentId id)
 {

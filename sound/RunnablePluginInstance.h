@@ -77,6 +77,7 @@ public:
     virtual sample_t **getAudioOutputBuffers() = 0;
 
     virtual QStringList getPrograms() { return QStringList(); }
+    virtual QString getCurrentProgram() { return QString(); }
     virtual void selectProgram(QString) { }
 
     virtual void setPortValue(unsigned int port, float value) = 0;

@@ -1588,10 +1588,6 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_instrument->setControllerValue(type, value);
         }
 
-//!!! This shouldn't really depend on LADSPA, we could have other plugin
-// types as well.
-#ifdef HAVE_LADSPA
-
     } else if (lcName == "plugin" || lcName == "synth") {
 
         if (m_section != InInstrument)
@@ -1607,14 +1603,21 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         {
             // Get the details
 	    int position;
-	    bool bypassed = false;
 	    if (lcName == "synth") {
 		position = Rosegarden::Instrument::SYNTH_PLUGIN_POSITION;
 	    } else {
 		position = atts.value("position").toInt();
-		QString bpStr = atts.value("bypassed");
-		if (bpStr.lower() == "true")
-		    bypassed = true;
+	    }
+
+	    bool bypassed = false;
+	    QString bpStr = atts.value("bypassed");
+	    if (bpStr.lower() == "true")
+		bypassed = true;
+
+	    std::string program = "";
+	    QString progStr = atts.value("program");
+	    if (progStr) {
+		program = qstrtostr(progStr);
 	    }
 
 	    // Plugins are identified by a structured identifier
@@ -1648,6 +1651,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 		    m_plugin->setAssigned(true);
 		    m_plugin->setBypass(bypassed);
 		    m_plugin->setIdentifier(plugin->getIdentifier().data());
+		    if (program != "") {
+			m_plugin->setProgram(program);
+		    }
 		}
             } else {
 		// we shouldn't be halting import of the RG file just because
@@ -1680,20 +1686,6 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         {
             m_plugin->addPort(portId, value);
         }
-
-#else
-
-        // just ignore them
-
-    } else if (lcName == "plugin") {
-
-        ;
-
-    } else if (lcName == "port") {
-
-        ;
-
-#endif // HAVE_LADSPA
 
     } else if (lcName == "metronome") {
 

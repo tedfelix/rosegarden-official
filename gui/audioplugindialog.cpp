@@ -43,8 +43,11 @@
 #include "rosestrings.h"
 #include "colours.h"
 #include "rosegardenguidoc.h"
+#include "studiocontrol.h"
 
 #include "rosedebug.h"
+
+#include "MappedStudio.h"
 
 namespace Rosegarden
 {
@@ -258,6 +261,8 @@ AudioPluginDialog::slotPluginSelected(int i)
     QWidget* parent = dynamic_cast<QWidget*>(m_pluginParamsBox->parent());
 
     delete m_pluginParamsBox;
+    m_pluginWidgets.clear(); // The widgets are deleted with the parameter box
+    m_programCombo = 0;
 
     makePluginParamsBox(parent);
     
@@ -277,16 +282,29 @@ AudioPluginDialog::slotPluginSelected(int i)
         // Set the identifier on our own instance - clear the ports down
         //
         AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
-        if (inst)
-        {
-            inst->setIdentifier(plugin->getIdentifier().data());
+	if (!inst) return;
 
-            // Only clear ports if this method is accessed by user
-            // action (after the constructor)
-            //
-            if (m_generating == false)
-                inst->clearPorts();
-        }
+	inst->setIdentifier(plugin->getIdentifier().data());
+
+	// Only clear ports if this method is accessed by user
+	// action (after the constructor)
+	//
+	if (m_generating == false) inst->clearPorts();
+
+	int current = 0;
+	QStringList programs = getProgramsForInstance(inst, current);
+
+	if (programs.count() > 0) {
+	    m_programCombo = new KComboBox(m_pluginParamsBox);
+	    m_programCombo->insertStringList(programs);
+	    m_programCombo->setCurrentItem(current);
+	    m_gridLayout->addMultiCellWidget(new QLabel(i18n("Program:  "), m_pluginParamsBox),
+					     0, 0, 0, 0, Qt::AlignRight);
+	    m_gridLayout->addMultiCellWidget(m_programCombo,
+					     0, 0, 1, 7, Qt::AlignLeft);
+	    connect(m_programCombo, SIGNAL(activated(const QString &)),
+		    this, SLOT(slotPluginProgramChanged(const QString &)));
+	}
 
         PortIterator it = plugin->begin();
         int count = 0;
@@ -355,6 +373,25 @@ AudioPluginDialog::slotPluginSelected(int i)
     setFixedSize(minimumSizeHint());
 }
 
+QStringList
+AudioPluginDialog::getProgramsForInstance(AudioPluginInstance *inst, int &current)
+{
+    QStringList list;
+    int mappedId = inst->getMappedId();
+    QString currentProgram = strtoqstr(inst->getProgram());
+
+    MappedObjectPropertyList propertyList = StudioControl::getStudioObjectProperty
+	(mappedId, MappedPluginSlot::Programs);
+
+    for (MappedObjectPropertyList::iterator i = propertyList.begin();
+	 i != propertyList.end(); ++i) {
+	if (*i == currentProgram) current = list.count();
+	list.append(*i);
+    }
+
+    return list;
+}
+
 void
 AudioPluginDialog::slotPluginPortChanged(float value)
 {
@@ -370,6 +407,16 @@ AudioPluginDialog::slotPluginPortChanged(float value)
 
     emit pluginPortChanged(m_instrument->getId(),
 			   m_index, control->getIndex(), value);
+}
+
+void
+AudioPluginDialog::slotPluginProgramChanged(const QString &value)
+{
+    // store the new value
+    AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
+    inst->setProgram(qstrtostr(value));
+
+    emit pluginProgramChanged(m_instrument->getId(), m_index, value);
 }
 
 void

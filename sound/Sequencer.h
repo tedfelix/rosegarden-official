@@ -303,13 +303,26 @@ public:
                                     int position,
                                     unsigned long portNumber,
                                     float value)
-       { m_soundDriver->
-            setPluginInstancePortValue(id, position, portNumber, value); }
+        { m_soundDriver->
+             setPluginInstancePortValue(id, position, portNumber, value); }
 
     void setPluginInstanceBypass(InstrumentId id,
                                  int position,
                                  bool value)
-       { m_soundDriver->setPluginInstanceBypass(id, position, value); }
+        { m_soundDriver->setPluginInstanceBypass(id, position, value); }
+
+    QStringList getPluginInstancePrograms(InstrumentId id,
+					  int position)
+        { return m_soundDriver->getPluginInstancePrograms(id, position); }
+
+    QString getPluginInstanceProgram(InstrumentId id,
+				     int position)
+        { return m_soundDriver->getPluginInstanceProgram(id, position); }
+    
+    void setPluginInstanceProgram(InstrumentId id,
+				  int position,
+				  QString program)
+        { m_soundDriver->setPluginInstanceProgram(id, position, program); }
 
     // Check to see if there are any new Devices/Instruments for 
     // us to see.

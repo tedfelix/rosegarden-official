@@ -21,6 +21,7 @@
 #include <string>
 #include <vector>
 #include <list>
+#include <qstringlist.h>
 
 #include "Device.h"
 #include "MappedComposition.h"
@@ -196,6 +197,16 @@ public:
     virtual void setPluginInstanceBypass(InstrumentId id,
                                          int position,
                                          bool value) = 0;
+
+    virtual QStringList getPluginInstancePrograms(InstrumentId id,
+						  int position) = 0;
+
+    virtual QString getPluginInstanceProgram(InstrumentId id,
+					     int position) = 0;
+    
+    virtual void setPluginInstanceProgram(InstrumentId id,
+					  int position,
+					  QString program) = 0;
 
     // Poll for new clients (for new Devices/Instruments)
     //

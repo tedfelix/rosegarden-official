@@ -730,9 +730,6 @@ void RosegardenGUIDoc::initialiseStudio()
 
             audioCount++;
 
-//!!! do this regardless of whether we have ladspa or not?
-#ifdef HAVE_LADSPA
-
             // Initialise all the plugins for this Instrument
             //
             Rosegarden::AudioPluginInstance *plugin;
@@ -785,6 +782,15 @@ void RosegardenGUIDoc::initialiseStudio()
                          Rosegarden::MappedPluginSlot::Bypassed,
                          Rosegarden::MappedObjectValue(plugin->isBypassed()));
 
+                    // Set the program
+                    //
+		    if (plugin->getProgram() != "") {
+			Rosegarden::StudioControl::setStudioObjectProperty
+			    (pluginMappedId,
+			     Rosegarden::MappedPluginSlot::Program,
+			     strtoqstr(plugin->getProgram()));
+		    }
+
                     Rosegarden::PortInstanceIterator portIt;
 
                     for (portIt = plugin->begin();
@@ -799,8 +805,6 @@ void RosegardenGUIDoc::initialiseStudio()
                     }
                 }
             }
-#endif // HAVE_LADSPA
-
         }
     }
 

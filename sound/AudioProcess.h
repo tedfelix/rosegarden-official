@@ -180,6 +180,9 @@ public:
     void setPluginPortValue(InstrumentId id, int position,
 			    unsigned int port, float value);
     void setPluginBypass(InstrumentId, int position, bool bypass);
+    QStringList getPluginPrograms(InstrumentId, int);
+    QString getPluginProgram(InstrumentId, int);
+    void setPluginProgram(InstrumentId, int, QString);
     void resetAllPlugins();
 
     RunnablePluginInstance *getSynthPlugin(InstrumentId id) { return m_synths[id]; }

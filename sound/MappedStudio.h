@@ -23,6 +23,7 @@
 #include <string>
 #include <vector>
 #include <qdatastream.h>
+#include <qstringlist.h>
 
 #include "MappedCommon.h"
 #include "Instrument.h"
@@ -111,7 +112,12 @@ public:
     // Not a requirement - but an occasionally useful method
     //
     virtual void setProperty(const MappedObjectProperty & /*property*/,
-                             MappedObjectValueList /*value*/) {;}
+                             MappedObjectValueList /*value*/) { }
+
+    // Only relevant to objects that have list properties
+    //
+    virtual void setPropertyList(const MappedObjectProperty &,
+				 const QStringList &) { }
 
     // Ownership
     //
@@ -448,6 +454,8 @@ public:
     static const MappedObjectProperty Category;
     static const MappedObjectProperty PortCount;
     static const MappedObjectProperty Ports;
+    static const MappedObjectProperty Program;
+    static const MappedObjectProperty Programs;
     static const MappedObjectProperty Instrument;
     static const MappedObjectProperty Position;
     static const MappedObjectProperty Bypassed;
@@ -469,6 +477,9 @@ public:
 
     virtual void setProperty(const MappedObjectProperty &property,
                              QString value);
+
+    virtual void setPropertyList(const MappedObjectProperty &,
+				 const QStringList &);
 
     void setPort(unsigned long portNumber, float value);
 

@@ -149,13 +149,12 @@ int main(int argc, char **argv)
         cout << "sizeof event after some properties set : "
              << sizeof e << endl;
 
-/*
         try {
                 cout << "duration is " << e.get<String>(DURATION_PROPERTY) << endl;
         } catch (Event::BadType bt) {
                 cout << "Correctly caught BadType when trying to get<String> of duration" << endl;
         }
-*/
+
         string s;
     
         if (!e.get<String>(DURATION_PROPERTY, s)) {
@@ -163,13 +162,13 @@ int main(int argc, char **argv)
         } else {
                 cerr << "ERROR AT " << __LINE__ << endl;
         }
-/*    
+
         try {
                 cout << "dummy prop is " << e.get<String>(NONEXISTENT_PROPERTY) << endl;
         } catch (Event::NoData bt) {
                 cout << "Correctly caught NoData when trying to get non existent property" << endl;
         }
-*/
+
         if (!e.get<String>(NONEXISTENT_PROPERTY, s)) {
                 cout << "Correctly got error when trying to get<String> of non existent property" << endl;
         } else {

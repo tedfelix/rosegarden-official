@@ -5495,6 +5495,11 @@ RosegardenGUIApp::slotShowPluginDialog(QWidget *parent,
 	    SIGNAL(pluginPortChanged(Rosegarden::InstrumentId, int, int, float)),
 	    this,
 	    SLOT(slotPluginPortChanged(Rosegarden::InstrumentId, int, int, float)));
+    
+    connect(dialog,
+	    SIGNAL(pluginProgramChanged(Rosegarden::InstrumentId, int, QString)),
+	    this,
+	    SLOT(slotPluginProgramChanged(Rosegarden::InstrumentId, int, QString)));
 
     connect(dialog,
 	    SIGNAL(bypassed(Rosegarden::InstrumentId, int, bool)),
@@ -5564,12 +5569,10 @@ RosegardenGUIApp::slotPluginSelected(Rosegarden::InstrumentId instrumentId,
 		     << " - UniqueId = " << plgn->getUniqueId()
 		     << endl;
 	    
-#ifdef HAVE_LADSPA
 	    Rosegarden::StudioControl::setStudioObjectProperty
 		(inst->getMappedId(),
 		 Rosegarden::MappedPluginSlot::Identifier,
 		 plgn->getIdentifier());
-#endif
 	}
 	else
 	{
@@ -5586,7 +5589,6 @@ RosegardenGUIApp::slotPluginSelected(Rosegarden::InstrumentId instrumentId,
 	    inst->setMappedId(newId);
 	    inst->setAssigned(true);
 	    
-#ifdef HAVE_LADSPA
 	    // set the instrument id
 	    Rosegarden::StudioControl::setStudioObjectProperty
 		(newId,
@@ -5604,7 +5606,6 @@ RosegardenGUIApp::slotPluginSelected(Rosegarden::InstrumentId instrumentId,
 		(newId,
 		 Rosegarden::MappedPluginSlot::Identifier,
 		     plgn->getIdentifier());
-#endif
 	}
     }
     
@@ -5625,9 +5626,6 @@ RosegardenGUIApp::slotPluginPortChanged(Rosegarden::InstrumentId instrumentId,
 
     if (inst)
     {
-
-#ifdef HAVE_LADSPA
-
         Rosegarden::StudioControl::
             setStudioPluginPort(inst->getMappedId(),
                                 portIndex,
@@ -5640,13 +5638,35 @@ RosegardenGUIApp::slotPluginPortChanged(Rosegarden::InstrumentId instrumentId,
 
         // Set modified
         m_doc->slotDocumentModified();
-
-#endif // HAVE_LADSPA
-
-	(void)portIndex; // avoid compiler warnings
-	(void)value;
     }
 
+}
+
+void
+RosegardenGUIApp::slotPluginProgramChanged(Rosegarden::InstrumentId instrumentId,
+					   int pluginIndex,
+					   QString program)
+{
+    Rosegarden::Instrument *instrument = m_doc->getStudio().
+        getInstrumentById(instrumentId);
+    
+    Rosegarden::AudioPluginInstance *inst = instrument->getPlugin(pluginIndex);
+
+    if (inst)
+    {
+        Rosegarden::StudioControl::
+            setStudioObjectProperty(inst->getMappedId(),
+				    Rosegarden::MappedPluginSlot::Program,
+				    program);
+                                
+        RG_DEBUG << "RosegardenGUIApp::slotPluginProgramChanged - "
+                 << "setting plugin program ("
+		 << inst->getMappedId() << ") to "
+                 << program << endl;
+
+        // Set modified
+        m_doc->slotDocumentModified();
+    }
 }
 
 void
@@ -5668,12 +5688,10 @@ RosegardenGUIApp::slotPluginBypassed(Rosegarden::InstrumentId instrumentId,
 
     if (inst)
     {
-#ifdef HAVE_LADSPA
         Rosegarden::StudioControl::setStudioObjectProperty
             (inst->getMappedId(),
              Rosegarden::MappedPluginSlot::Bypassed,
              Rosegarden::MappedObjectValue(bp));
-#endif // HAVE_LADSPA
 
         // Set the bypass on the instance
         //

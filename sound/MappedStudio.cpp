@@ -122,6 +122,8 @@ const MappedObjectProperty MappedPluginSlot::Ports = "ports";
 const MappedObjectProperty MappedPluginSlot::Instrument = "instrument";
 const MappedObjectProperty MappedPluginSlot::Position = "position";
 const MappedObjectProperty MappedPluginSlot::Bypassed = "bypassed";
+const MappedObjectProperty MappedPluginSlot::Programs = "programs";
+const MappedObjectProperty MappedPluginSlot::Program = "program";
 
 const MappedObjectProperty MappedPluginPort::PortNumber = "portnumber";
 const MappedObjectProperty MappedPluginPort::Name = "name";
@@ -1215,6 +1217,25 @@ MappedPluginSlot::getPropertyList(const MappedObjectProperty &property)
 	list.push_back(Author);
 	list.push_back(Copyright);
 	list.push_back(Category);
+    } else if (property == Programs) {
+
+	// The set of available programs is dynamic -- it can change
+	// while a plugin is instantiated.  So we query it on demand
+	// each time.
+
+        MappedStudio *studio =
+            dynamic_cast<MappedStudio*>(getParent());
+
+	if (studio) {
+	    QStringList programs =
+		studio->getSequencer()->getPluginInstancePrograms(m_instrument,
+								  m_position);
+
+	    for (int i = 0; i < programs.count(); ++i) {
+		list.push_back(programs[i]);
+	    }
+	}
+
     } else {
 	std::cerr << "MappedPluginSlot::getPropertyList: not a list property"
 		  << std::endl;
@@ -1261,8 +1282,16 @@ MappedPluginSlot::getProperty(const MappedObjectProperty &property,
 	value = m_copyright;
     } else if (property == Category) {
 	value = m_category;
-    } else {
+    } else if (property == Program) {
+	
+        MappedStudio *studio =
+            dynamic_cast<MappedStudio*>(getParent());
 
+	if (studio) {
+	    value = studio->getSequencer()->getPluginInstanceProgram(m_instrument,
+								     m_position);
+	}
+    } else {
 #ifdef DEBUG_MAPPEDSTUDIO
         std::cerr << "MappedPluginSlot::getProperty - "
                   << "unsupported or non-scalar property" << std::endl;
@@ -1350,6 +1379,16 @@ MappedPluginSlot::setProperty(const MappedObjectProperty &property,
 	m_copyright = value;
     } else if (property == Category) {
 	m_category = value;
+    } else if (property == Program) {
+	
+        MappedStudio *studio =
+            dynamic_cast<MappedStudio*>(getParent());
+
+	if (studio) {
+	    studio->getSequencer()->setPluginInstanceProgram(m_instrument,
+							     m_position,
+							     value);
+	}
     } else {
 
 #ifdef DEBUG_MAPPEDSTUDIO
@@ -1358,6 +1397,16 @@ MappedPluginSlot::setProperty(const MappedObjectProperty &property,
 #endif
     }
 }
+
+void
+MappedPluginSlot::setPropertyList(const MappedObjectProperty &property,
+				  const QStringList &values)
+{
+#ifdef DEBUG_MAPPEDSTUDIO
+    std::cerr << "MappedPluginSlot::setPropertyList - "
+	      << "not a list property" << std::endl;
+#endif
+}	
 
 void
 MappedPluginSlot::setPort(unsigned long portNumber, float value)
