@@ -280,9 +280,9 @@ void RosegardenGUIView::slotEditSegment(Rosegarden::Segment* segment)
     } else {
 
 	Rosegarden::GeneralConfigurationPage::DoubleClickClient client =
-	    kapp->config()->readUnsignedNumEntry
+	    (Rosegarden::GeneralConfigurationPage::DoubleClickClient)(kapp->config()->readUnsignedNumEntry
 	    ("doubleclickclient",
-	     Rosegarden::GeneralConfigurationPage::NotationView);
+	     (unsigned int)Rosegarden::GeneralConfigurationPage::NotationView));
 
 	if (client == Rosegarden::GeneralConfigurationPage::MatrixView) {
 	    slotEditSegmentMatrix(segment);
