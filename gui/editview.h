@@ -74,7 +74,8 @@ public:
     EditView(RosegardenGUIDoc *doc,
              std::vector<Rosegarden::Segment *> segments,
              bool hasTwoCols,
-             QWidget *parent);
+             QWidget *parent,
+             const char *name = 0);
 
     virtual ~EditView();
 
@@ -263,12 +264,15 @@ protected:
 
     QFrame* getCentralFrame() { return m_centralFrame; }
 
+    void initSegmentRefreshStatusIds();
+
     //--------------- Data members ---------------------------------
 
     KConfig* m_config;
 
     RosegardenGUIDoc* m_document;
     std::vector<Rosegarden::Segment *> m_segments;
+    std::vector<unsigned int> m_segmentsRefreshStatusIds;
 
     EditTool*    m_tool;
     EditToolBox* m_toolBox;

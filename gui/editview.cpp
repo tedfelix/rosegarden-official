@@ -43,8 +43,8 @@ const unsigned int EditView::ID_STATUS_MSG = 1;
 EditView::EditView(RosegardenGUIDoc *doc,
                    std::vector<Rosegarden::Segment *> segments,
                    bool hasTwoCols,
-                   QWidget *parent)
-    : KMainWindow(parent),
+                   QWidget *parent, const char *name)
+    : KMainWindow(parent, name),
       m_config(kapp->config()),
       m_document(doc),
       m_segments(segments),
@@ -60,6 +60,8 @@ EditView::EditView(RosegardenGUIDoc *doc,
       m_bottomBarButtons(0),
       m_mainCol(hasTwoCols ? 1 : 0)
 {
+    initSegmentRefreshStatusIds();
+
     setCentralWidget(m_centralFrame);
 
     m_centralFrame->setMargin(0);
@@ -222,75 +224,79 @@ void EditView::slotToggleStatusBar()
 
 void EditView::slotCommandExecuted(Command *command)
 {
-    // might be better done with a visitor pattern or some such
+    kdDebug(KDEBUG_AREA) << "EditView::slotCommandExecuted() - "
+                         << name() << " update()\n";
+    update();
 
-    if (dynamic_cast<IntraSegmentCommand *>(command) != 0) {
+//     // might be better done with a visitor pattern or some such
 
-        BasicCommand *basicCommand = 0;
+//     if (dynamic_cast<IntraSegmentCommand *>(command) != 0) {
 
-	//!!! check that the affected segment is one of ours
+//         BasicCommand *basicCommand = 0;
 
-        if ((basicCommand = dynamic_cast<BasicCommand *>(command)) != 0) {
-            refreshSegment(&basicCommand->getSegment(),
-                           basicCommand->getBeginTime(),
-                           basicCommand->getRelayoutEndTime());
-        } else {
-            // partial segment command, but not a basic command
-            Rosegarden::Segment *segment = &basicCommand->getSegment();
-            refreshSegment(segment);
-        }
+// 	//!!! check that the affected segment is one of ours
 
-        return;
-    }
+//         if ((basicCommand = dynamic_cast<BasicCommand *>(command)) != 0) {
+//             refreshSegment(&basicCommand->getSegment(),
+//                            basicCommand->getBeginTime(),
+//                            basicCommand->getRelayoutEndTime());
+//         } else {
+//             // partial segment command, but not a basic command
+//             Rosegarden::Segment *segment = &basicCommand->getSegment();
+//             refreshSegment(segment);
+//         }
 
-    SegmentCommand *segmentCommand = dynamic_cast<SegmentCommand *>(command);
-    if (segmentCommand) {
+//         return;
+//     }
+
+//     SegmentCommand *segmentCommand = dynamic_cast<SegmentCommand *>(command);
+//     if (segmentCommand) {
         
-        SegmentCommand::SegmentSet segments;
-        segmentCommand->getSegments(segments);
+//         SegmentCommand::SegmentSet segments;
+//         segmentCommand->getSegments(segments);
 
-	// For the moment we'll have to close the view if any of the
-	// segments we handle has been deleted.  Any other changes,
-	// and we should probably redraw everything.  How tedious.
+// 	// For the moment we'll have to close the view if any of the
+// 	// segments we handle has been deleted.  Any other changes,
+// 	// and we should probably redraw everything.  How tedious.
 
-	bool foundOne = false;
+// 	bool foundOne = false;
 
-	for (int i = 0; i < m_segments.size(); ++i) {
+// 	for (int i = 0; i < m_segments.size(); ++i) {
 
-	    if (!m_segments[i]->getComposition()) {
-		// oops, I think we've been deleted
-		close();
-		return;
-	    } else if (segments.find(m_segments[i]) != segments.end()) {
-		foundOne = true;
-		break;
-	    }
-	}
+// 	    if (!m_segments[i]->getComposition()) {
+// 		// oops, I think we've been deleted
+// 		close();
+// 		return;
+// 	    } else if (segments.find(m_segments[i]) != segments.end()) {
+// 		foundOne = true;
+// 		break;
+// 	    }
+// 	}
 
-	if (foundOne) refreshSegment(0);
-        return;
-    }
+// 	if (foundOne) refreshSegment(0);
+//         return;
+//     }
 
-    TimeAndTempoChangeCommand *timeCommand =
-        dynamic_cast<TimeAndTempoChangeCommand *>(command);
-    if (timeCommand) {
-	refreshSegment(0);
-        return;
-    }
+//     TimeAndTempoChangeCommand *timeCommand =
+//         dynamic_cast<TimeAndTempoChangeCommand *>(command);
+//     if (timeCommand) {
+// 	refreshSegment(0);
+//         return;
+//     }
 
-    CompoundCommand *compoundCommand =
-	dynamic_cast<CompoundCommand *>(command);
-    if (compoundCommand) {
-	for (int i = 0; i < compoundCommand->getCommandCount(); ++i) {
-	    slotCommandExecuted(compoundCommand->getCommand(i));
-	}
-	return;
-    }
+//     CompoundCommand *compoundCommand =
+// 	dynamic_cast<CompoundCommand *>(command);
+//     if (compoundCommand) {
+// 	for (int i = 0; i < compoundCommand->getCommandCount(); ++i) {
+// 	    slotCommandExecuted(compoundCommand->getCommand(i));
+// 	}
+// 	return;
+//     }
 
-    kdDebug(KDEBUG_AREA)
-        << "Warning: EditView::slotCommandExecuted:\n"
-        << "Unknown sort of Command, don't know how to refresh"
-        << endl;
+//     kdDebug(KDEBUG_AREA)
+//         << "Warning: EditView::slotCommandExecuted:\n"
+//         << "Unknown sort of Command, don't know how to refresh"
+//         << endl;
 }
 
 //
@@ -335,3 +341,11 @@ void EditView::slotActiveItemPressed(QMouseEvent* e,
     }
 
 }
+
+void EditView::initSegmentRefreshStatusIds()
+{
+    for(unsigned int i = 0; i < m_segments.size(); ++i) {
+        m_segmentsRefreshStatusIds.push_back(m_segments[i]->getNewRefreshStatusId());
+    }
+}
+

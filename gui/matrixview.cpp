@@ -59,7 +59,7 @@ using Rosegarden::timeT;
 MatrixView::MatrixView(RosegardenGUIDoc *doc,
                        std::vector<Segment *> segments,
                        QWidget *parent)
-    : EditView(doc, segments, true, parent),
+    : EditView(doc, segments, true, parent, "matrixview"),
       m_currentEventSelection(0),
       m_hlayout(&doc->getComposition()),
       m_vlayout(),
@@ -155,6 +155,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
         kdDebug(KDEBUG_AREA) << "MatrixView : rendering elements\n";
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 	    m_staffs[i]->positionAllElements();
+            m_staffs[i]->getSegment().refreshStatus(m_segmentsRefreshStatusIds[i]).setNeedsRefresh(false);
+
         }
     }
 
@@ -299,19 +301,52 @@ bool MatrixView::applyLayout(int /*staffNo*/)
 void MatrixView::refreshSegment(Segment *segment,
 				timeT startTime, timeT endTime)
 {
-    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	if (!segment || &m_staffs[i]->getSegment() == segment) {
-	    applyLayout();
-	    timeT from(startTime), to(endTime);
-	    if (from == to) {
-		from = m_staffs[i]->getSegment().getStartTime();
-		to   = m_staffs[i]->getSegment().getEndTime();
-	    }
-	    m_staffs[i]->positionElements(from, to);
-	    updateView();
-	    return;
-	}
+    kdDebug(KDEBUG_AREA) << "MatrixView::refreshSegment(" << startTime
+                         << ", " << endTime << ")\n";
+
+    applyLayout();
+
+    if (endTime == 0) endTime = segment->getEndTime();
+    else if (startTime == endTime) {
+        startTime = segment->getStartTime();
+        endTime   = segment->getEndTime();
     }
+
+    m_staffs[0]->positionElements(startTime, endTime);
+}
+
+void MatrixView::paintEvent(QPaintEvent* e)
+{
+    kdDebug(KDEBUG_AREA) << "MatrixView::paintEvent()\n";
+
+    bool needUpdate = false;
+    
+    // Scan all segments and check if they've been modified
+    //
+    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+
+        Segment& segment = m_staffs[i]->getSegment();
+        unsigned int refreshStatusId = m_segmentsRefreshStatusIds[i];
+        Rosegarden::SegmentRefreshStatus &refreshStatus = segment.refreshStatus(refreshStatusId);
+        
+        if (refreshStatus.needsRefresh()) {
+
+            timeT startTime = refreshStatus.from(),
+                endTime = refreshStatus.to();
+
+            refreshSegment(&segment, startTime, endTime);
+            refreshStatus.setNeedsRefresh(false);
+            needUpdate = true;
+        }
+    }
+
+    EditView::paintEvent(e);
+
+    if (needUpdate)  {
+        kdDebug(KDEBUG_AREA) << "MatrixView::paintEvent() - calling updateView\n";
+        updateView();
+    }
+
 }
 
 QSize MatrixView::getViewSize()

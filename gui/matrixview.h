@@ -48,6 +48,25 @@ class PianoKeyboard;
 
 class QMouseEvent;
 
+// class RefreshStack
+// {
+// public:
+//     RefreshStack() : m_from(0), m_to(0), m_needsRefresh(true) {}
+//     void push(Rosegarden::timeT from, Rosegarden::timeT to);
+
+//     Rosegarden::timeT from() { return m_from; }
+//     Rosegarden::timeT to()   { return m_to; }
+
+//     bool needsRefresh() { return m_needsRefresh; }
+//     bool setNeedsRefresh(bool s) { m_needsRefresh = s; }
+
+// protected:
+//     Rosegarden::timeT m_from;
+//     Rosegarden::timeT m_to;
+//     bool m_needsRefresh;
+// };
+
+
 /**
  * Matrix ("Piano Roll") View
  *
@@ -167,6 +186,8 @@ public slots:
 
 protected:
 
+    virtual void paintEvent(QPaintEvent* e);
+    
     /**
      * save general Options like all bar positions and status as well
      * as the geometry and the recent file list to the configuration
@@ -202,6 +223,8 @@ protected:
     virtual MatrixCanvasView *getCanvasView();
 
     //--------------- Data members ---------------------------------
+
+//     RefreshStack m_refreshStack;
 
     /// The current selection of Events (for cut/copy/paste)
     Rosegarden::EventSelection* m_currentEventSelection;
