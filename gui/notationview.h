@@ -539,6 +539,12 @@ public slots:
     /// Changes the hlayout spacing of the staffs on the view
     void slotChangeSpacingFromAction();
 
+    /// Note-on received asynchronously -- consider step-by-step editing [should be moved to a base class]
+    void slotInsertableNoteOnReceived(int pitch);
+
+    /// Note-off received asynchronously -- consider step-by-step editing [should be moved to a base class]
+    void slotInsertableNoteOffReceived(int pitch);
+
 signals:
     /**
      * Emitted when the note selected in the palette changes

@@ -1704,3 +1704,16 @@ NotationView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
 
     m_hoveredOverAbsoluteTime->setText(message);
 }
+
+void
+NotationView::slotInsertableNoteOnReceived(int pitch)
+{
+    NOTATION_DEBUG << "NotationView::slotInsertableNoteOnReceived: " << pitch << endl;
+}
+
+void
+NotationView::slotInsertableNoteOffReceived(int pitch)
+{
+    NOTATION_DEBUG << "NotationView::slotInsertableNoteOffReceived: " << pitch << endl;
+}
+

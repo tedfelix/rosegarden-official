@@ -1,4 +1,32 @@
 
+
+Post-0.9 task list
+==================
+
+1. Restore "fix smoothing"
+
+2. Fix "make viable" particularly, "de-counterpoint" also
+
+3. instrument-id problem as below
+
+4. step-by-step editing
+
+5. test normalizeRests with restaurant.mid etc, fix other !!! items
+
+6. lyrics don't cope with chords
+
+7. lilypond i/o shouldn't be using noteIsInChord
+
+8. When inserting a note, use the Interpret code to calculate
+    a velocity for it
+
+9. Dragging notes &c
+
+10. Interpret gets slurs wrong
+
+11. Random rests in bundle at start of staff following complex MIDI import
+
+
 Priorities for 0.9
 ==================
 

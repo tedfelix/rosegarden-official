@@ -121,6 +121,7 @@ ModifyDeviceMappingCommand::execute()
     for(; it != tracks.end(); it++)
     {
         instr = m_studio->getInstrumentById(it->second->getInstrument());
+	if (!instr || !instr->getDevice()) continue;
 
         if (instr->getDevice()->getId() == m_fromDevice)
         {

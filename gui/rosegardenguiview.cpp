@@ -367,13 +367,13 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
     // For tempo changes (ugh -- it'd be nicer to make a tempo change
     // command that could interpret all this stuff from the dialog)
     //
-    connect(notationView, SIGNAL(selectTrack(int)),
-            this, SLOT(slotSelectTrackSegments(int)));
-
     connect(notationView, SIGNAL(changeTempo(Rosegarden::timeT, double,
 					     TempoDialog::TempoDialogAction)),
 	    parent(), SLOT(slotChangeTempo(Rosegarden::timeT, double,
 				      TempoDialog::TempoDialogAction)));
+
+    connect(notationView, SIGNAL(selectTrack(int)),
+            this, SLOT(slotSelectTrackSegments(int)));
 
     connect(notationView, SIGNAL(play()),
 	    parent(), SLOT(slotPlay()));
@@ -389,6 +389,11 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
 	    parent(), SLOT(slotRewindToBeginning()));
     connect(notationView, SIGNAL(jumpPlaybackTo(Rosegarden::timeT)),
 	    getDocument(), SLOT(slotSetPointerPosition(Rosegarden::timeT)));
+
+    connect(sM, SIGNAL(insertableNoteOnReceived(int)),
+	    notationView, SLOT(slotInsertableNoteOnReceived(int)));
+    connect(sM, SIGNAL(insertableNoteOffReceived(int)),
+	    notationView, SLOT(slotInsertableNoteOffReceived(int)));
 
     // Encourage the notation view window to open to the same
     // interval as the current segment view

@@ -1289,7 +1289,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
             } else {
 
-		// if we aren't recording, consider invoking any
+		// if we aren't playing or recording, consider invoking any
 		// step-by-step clients
 
 		if (m_transportStatus == STOPPED ||
