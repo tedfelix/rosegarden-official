@@ -499,6 +499,11 @@ public slots:
     void slotHarmonizeSelection();
 
     /**
+     * Merge the selected segments
+     */
+    void slotMergeSegments();
+
+    /**
      * Tempo to Segment length
      */
     void slotTempoToSegmentLength();

@@ -1002,6 +1002,73 @@ SegmentAutoSplitCommand::unexecute()
 }
 
 
+SegmentMergeCommand::SegmentMergeCommand(const Rosegarden::SegmentSelection &
+					 segments) :
+    XKCommand(getGlobalName()),
+    m_newSegment(0),
+    m_detached(false) // true if the old segments are detached, not the new
+{
+    for (Rosegarden::SegmentSelection::iterator i = segments.begin();
+	 i != segments.end(); ++i) {
+	m_oldSegments.push_back(*i);
+    }
+    assert(m_oldSegments.size() > 0);
+}
+
+SegmentMergeCommand::~SegmentMergeCommand()
+{
+    if (m_detached) {
+	for (unsigned int i = 0; i < m_oldSegments.size(); ++i) {
+	    delete m_oldSegments[i];
+	}
+    } else {
+	delete m_newSegment;
+    }
+}
+
+void
+SegmentMergeCommand::execute()
+{
+    Composition *composition = 0;
+
+    if (!m_newSegment) {
+
+	m_newSegment = new Segment(*m_oldSegments[0]);
+	composition = m_oldSegments[0]->getComposition();
+
+	for (unsigned int i = 0; i < m_oldSegments.size(); ++i) {
+
+	    for (Segment::iterator si = m_oldSegments[i]->begin();
+		 m_oldSegments[i]->isBeforeEndMarker(si); ++si) {
+		m_newSegment->insert(new Event(**si));
+	    }
+	}
+	
+    } else {
+	composition = m_newSegment->getComposition();
+    }
+
+    composition->addSegment(m_newSegment);
+
+    for (unsigned int i = 0; i < m_oldSegments.size(); ++i) {
+	composition->detachSegment(m_oldSegments[i]);
+    }
+    
+    m_detached = true;
+}
+
+void
+SegmentMergeCommand::unexecute()
+{
+    for (unsigned int i = 0; i < m_oldSegments.size(); ++i) {
+	m_newSegment->getComposition()->addSegment(m_oldSegments[i]);
+    }
+
+    m_newSegment->getComposition()->detachSegment(m_newSegment);
+    m_detached = false;
+}
+
+
 SegmentRescaleCommand::SegmentRescaleCommand(Segment *s,
 					     int multiplier,
 					     int divisor) :

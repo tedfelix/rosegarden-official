@@ -369,6 +369,11 @@ void RosegardenGUIApp::setupActions()
                               actionCollection(), "join");
     action->setExclusiveGroup("segmenttools");
 
+    new KAction(i18n(SegmentMergeCommand::getGlobalName()),
+                0,
+                this, SLOT(slotMergeSegments()),
+                actionCollection(), "collapse");
+
     new KAction(i18n("Turn Re&peats into Copies"),
                 0,
                 this, SLOT(slotRepeatingSegments()),
@@ -1279,6 +1284,27 @@ void RosegardenGUIApp::slotQuantizeSelection()
     }
 
     m_view->slotAddCommandToHistory(command);
+}
+
+void RosegardenGUIApp::slotMergeSegments()
+{
+    if (!m_view->haveSelection()) return;
+
+    //!!! this should all be in rosegardenguiview
+    //!!! should it?
+
+    Rosegarden::SegmentSelection selection = m_view->getSelection();
+    if (selection.size() == 0) return;
+
+    for (Rosegarden::SegmentSelection::iterator i = selection.begin();
+	 i != selection.end(); ++i) {
+	if ((*i)->getType() != Rosegarden::Segment::Internal) {
+	    KMessageBox::sorry(this, i18n("Can't collapse Audio segments"));
+	    return;
+	}
+    }
+
+    m_view->slotAddCommandToHistory(new SegmentMergeCommand(selection));
 }
 
 void RosegardenGUIApp::slotRescaleSelection()

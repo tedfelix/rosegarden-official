@@ -31,6 +31,7 @@
 #include "NotationTypes.h"
 #include "rosegardenguidoc.h"
 #include "AudioFileManager.h"
+#include "Selection.h"
 
 #ifdef RGKDE3
 typedef KNamedCommand XKCommand;
@@ -326,6 +327,24 @@ private:
     Rosegarden::Segment *m_segment;
     Rosegarden::Composition *m_composition;
     std::vector<Rosegarden::Segment *> m_newSegments;
+    bool m_detached;
+};
+
+
+class SegmentMergeCommand : public XKCommand
+{
+public:
+    SegmentMergeCommand(const Rosegarden::SegmentSelection &segments);
+    virtual ~SegmentMergeCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+    static QString getGlobalName() { return "&Collapse Segments"; }
+    
+private:
+    std::vector<Rosegarden::Segment *> m_oldSegments;
+    Rosegarden::Segment *m_newSegment;
     bool m_detached;
 };
 

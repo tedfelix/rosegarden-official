@@ -132,9 +132,10 @@
 #34 0x080b9983 in main (argc=2, argv=0xbfffe074) at main.cpp:496
 #35 0x4102f9ed in __libc_start_main () from /lib/libc.so.6
 
-31. Merge Segments in main view
+31. Merge Segments in main view (and how should we arrange Auto-Split
+    stuff on menus etc?)
 
-32. "Delete Tracks" and "Rename Tracks" on menu in notation view (latter
+32. "Delete Tracks" and "Rename Tracks" on menu in main view (latter
     kind of a dup with "make it a command"
 
 33. Thoroughly scan all following task lists to find more stuff to do...

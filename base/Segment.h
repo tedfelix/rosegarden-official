@@ -120,12 +120,7 @@ public:
     TrackId getTrack() const { return m_track; }
 
     /**
-     * Set the track number this Segment is associated with.  It is
-     * usually VERY DANGEROUS to call this on a Segment that has been
-     * stored in a Composition, because the Composition uses the track
-     * number as part of the ordering for Segments and if the number
-     * changes the ordering may break.  If your Segment is already in a
-     * Composition, use Composition::setSegmentTrack instead.
+     * Set the track number this Segment is associated with.
      */
     void setTrack(TrackId i);
 
