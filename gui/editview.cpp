@@ -28,6 +28,7 @@
 #include <klocale.h>
 #include <kstdaction.h>
 #include <kstatusbar.h>
+#include <klistbox.h>
 
 #include "BaseProperties.h"
 #include "Profiler.h"
@@ -49,6 +50,8 @@
 #include "controlruler.h"
 
 #include "rosedebug.h"
+
+using Rosegarden::PropertyName;
 
 //----------------------------------------------------------------------
 const unsigned int EditView::CONTROLS_ROW         = 0;
@@ -164,7 +167,7 @@ void EditView::addPropertyBox(QWidget *w)
     m_controlBox->addWidget(w);
 }
 
-ControlRuler* EditView::makeControlRuler(Rosegarden::PropertyName propertyName)
+ControlRuler* EditView::makeControlRuler(PropertyName propertyName)
 {
     QCanvas* controlRulerCanvas = new QCanvas(this);
     QSize viewSize = getViewSize();
@@ -754,7 +757,7 @@ void EditView::slotToggleControlRulers()
         m_controlRulers->show();
 }
 
-ControlRuler* EditView::findRuler(Rosegarden::PropertyName propertyName, int &index)
+ControlRuler* EditView::findRuler(PropertyName propertyName, int &index)
 {
     for(index = 0; index < m_controlRulers->count(); ++index) {
         ControlRuler* ruler = dynamic_cast<ControlRuler*>(m_controlRulers->page(index));
@@ -764,7 +767,7 @@ ControlRuler* EditView::findRuler(Rosegarden::PropertyName propertyName, int &in
     return 0;
 }
 
-void EditView::showPropertyControlRuler(Rosegarden::PropertyName propertyName)
+void EditView::showPropertyControlRuler(PropertyName propertyName)
 {
     int index = 0;
     
@@ -791,6 +794,37 @@ void EditView::slotShowVelocityControlRuler()
     showPropertyControlRuler(Rosegarden::BaseProperties::VELOCITY);
 }
 
+class QListBoxRGProperty : public QListBoxText
+{
+public:
+    QListBoxRGProperty(QListBox* parent, PropertyName propertyName);
+    const PropertyName& getPropertyName() { return m_propertyName; }
+protected:
+    PropertyName m_propertyName;
+};
+
+QListBoxRGProperty::QListBoxRGProperty(QListBox* parent, PropertyName propertyName)
+    : QListBoxText(parent, propertyName.c_str()),
+      m_propertyName(propertyName)
+{
+}
+
+
+
 void EditView::slotShowPropertyControlRuler()
 {
+    KDialogBase propChooserDialog(this, "propertychooserdialog", true, i18n("Select event property"),
+                                  KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok);
+    
+    KListBox* propList = new KListBox(propChooserDialog.makeVBoxMainWidget());
+    new QListBoxRGProperty(propList, Rosegarden::BaseProperties::VELOCITY.c_str());
+
+    int rc = propChooserDialog.exec();
+    if (rc == QDialog::Accepted) {
+        QListBoxRGProperty* item = dynamic_cast<QListBoxRGProperty*>(propList->selectedItem());
+        if (item) {
+            PropertyName property = item->getPropertyName();
+            showPropertyControlRuler(property);
+        }
+    }
 }
