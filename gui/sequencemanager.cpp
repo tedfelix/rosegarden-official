@@ -1153,6 +1153,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
         // the moment.  aRts automatically does MIDI through,
         // this does it to the currently selected instrument.
         //
+        showVisuals(retMC);
         Rosegarden::StudioControl::sendMappedComposition(retMC);
 #endif 
     }
@@ -1470,6 +1471,7 @@ SequenceManager::preparePlayback()
     }
 
     // Send the MappedComposition if it's got anything in it
+    showVisuals(mC);
     Rosegarden::StudioControl::sendMappedComposition(mC);
 
     // Set up the audio playback latency
@@ -1521,6 +1523,7 @@ SequenceManager::resetControllers()
 
         mC.insert(mE);
     }
+    showVisuals(mC);
     Rosegarden::StudioControl::sendMappedComposition(mC);
 }
 
@@ -1701,9 +1704,29 @@ SequenceManager::panic()
         }
     }
 
+    showVisuals(mC);
     Rosegarden::StudioControl::sendMappedComposition(mC);
 
     resetControllers();
+}
+
+// In this case we only route MIDI events to the transport ticker
+//
+void
+SequenceManager::showVisuals(const Rosegarden::MappedComposition &mC)
+{
+    RosegardenGUIView *v;
+
+    MappedComposition::iterator it = mC.begin();
+    for (; it != mC.end(); it++)
+    {
+        for (v = m_doc->pViewList->first(); v != 0;
+             v = m_doc->pViewList->next())
+        {
+            //v->showVisuals(*it);
+            m_transport->setMidiOutLabel(*it);
+        }
+    }
 }
 
 }

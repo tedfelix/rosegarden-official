@@ -147,6 +147,10 @@ public:
     //
     void panic();
 
+    // Send an MC to the view
+    //
+    void showVisuals(const Rosegarden::MappedComposition &mC);
+
 public slots:
     // Empty the m_clearToSend flag
     //
