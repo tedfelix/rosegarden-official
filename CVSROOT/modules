@@ -25,7 +25,7 @@
 # can be useful for creating a module that consists of many directories
 # spread out over the entire source repository.
 
-toplevel -a !gui/rosegardengui !gui/admin !gui/po gui
+toplevel -a -l gui
 
 # Make a module named 'gui' out of the gui/rosegardengui dir 
 #gui gui/rosegardengui
