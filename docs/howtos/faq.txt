@@ -25,7 +25,7 @@ the more recent tar balls there are three admin directories:
 The admin and admin_kde3 directories should be identical and hence we
 build Rosegarden for KDE3 by default.  If you want to build for KDE2
 then follow the instructions in the INSTALL file - basically you've
-got to remove the existing admin/ directory, copy the admin_kde2/to
+got to remove the existing admin/ directory, copy the admin_kde2/ to
 admin/ and then run "make -f Makefile.cvs" in the top level before
 configuring and then building.
 
@@ -66,8 +66,8 @@ installed into a non-standard place which you need to add to your
 KDEDIRS environment variable before you can start it correctly.
 
 
-Rosegarden is crashing at start up
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Rosegarden is crashing at startup
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Try running up the sequencer by itself first to see if it's a problem
 with that or the main part of the program.  Run:
 
@@ -96,7 +96,7 @@ development environment.  The necessary tweaks to make your system
 build Rosegarden correctly are involved and lengthy and probably
 best left to Mandrake themselves to explain.  All in all if it doesn't
 work out of the box for you then it's probably best if you just forgot
-about Mandrake 8.2 altogether and tried either 8.1 or a later version.
+about Mandrake 8.2 altogether and try either 8.1 or a later version.
 
 The Composition View
 --------------------
