@@ -213,7 +213,7 @@ KeySignatureDialog::regenerateKeyCombo()
 }
 
 Rosegarden::Key
-KeySignatureDialog::getKey()
+KeySignatureDialog::getKey() const
 {
     return m_key;
 }
