@@ -103,6 +103,12 @@ public:
     /// Returns true if the wrapped event is a note
     bool isNote() const;
 
+    /// Returns true if the wrapped event is a tuplet
+    bool isTuplet() const;
+
+    /// Returns true if the wrapped event is a grace note
+    bool isGrace() const;
+
     /**
      * Sets the canvas item representing this notation element on screen.
      *

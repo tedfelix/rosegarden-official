@@ -79,7 +79,9 @@ public:
      * too much state for its methods to be const, but you should
      * treat the returned reference as if it were const anyway.
      */
-    virtual NotePixmapFactory& getNotePixmapFactory() { return *m_npf; }
+    virtual NotePixmapFactory& getNotePixmapFactory() {
+	return *m_notePixmapFactory;
+    }
 
     /**
      * Generate or re-generate sprites for all the elements between
@@ -314,7 +316,8 @@ protected:
 
     void truncateClefsAndKeysAt(int);
 
-    NotePixmapFactory *m_npf;
+    NotePixmapFactory *m_notePixmapFactory;
+    NotePixmapFactory *m_graceNotePixmapFactory;
     QCanvasSimpleSprite *m_previewSprite;
     QCanvasSimpleSprite *m_staffName;
     Rosegarden::Quantizer *m_legatoQuantizer;

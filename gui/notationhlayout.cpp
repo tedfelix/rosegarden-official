@@ -211,7 +211,7 @@ NotationHLayout::getStartOfQuantizedSlice(const NotationElementList *notes,
 	--j;
 
 	timeT absTime;
-	if ((*j)->event()->has(BEAMED_GROUP_TUPLET_BASE)) {
+	if ((*j)->isTuplet()) {
 	    absTime = (*j)->getAbsoluteTime();
 	} else {
 	    absTime = m_legatoQuantizer->getQuantizedAbsoluteTime((*j)->event());
@@ -534,10 +534,13 @@ NotationHLayout::scanChord(NotationElementList *notes,
     AccidentalTable newAccTable(accTable);
     Accidental someAccidental = NoAccidental;
     bool barEndsInChord = false;
+    bool grace = false;
 
     for (unsigned int i = 0; i < chord.size(); ++i) {
 	
 	NotationElement *el = *chord[i];
+
+	if (el->isGrace()) grace = true;
 	
 	long pitch = 64;
 	if (!el->event()->get<Int>(PITCH, pitch)) {
@@ -579,6 +582,11 @@ NotationHLayout::scanChord(NotationElementList *notes,
 
     if (chord.hasNoteHeadShifted()) {
 	fixedWidth += m_npf->getNoteBodyWidth();
+    }
+
+    if (grace) {
+	fixedWidth += m_npf->getNoteBodyWidth();
+	return 0;
     }
 
     NotationElementList::iterator myShortest = chord.getShortestElement();
@@ -1290,7 +1298,8 @@ NotationHLayout::positionChord(StaffType &staff,
     timeT barDuration = bdi->second.sizeData.actualDuration;
     if (barDuration == 0) barDuration = timeSignature.getBarDuration();
 
-    long delta = (((int)bdi->second.sizeData.idealWidth - bdi->second.sizeData.fixedWidth) *
+    long delta = (((int)bdi->second.sizeData.idealWidth -
+		        bdi->second.sizeData.fixedWidth) *
 		  getSpacingDuration(staff, itr)) /
 	barDuration;
 
@@ -1304,6 +1313,14 @@ NotationHLayout::positionChord(StaffType &staff,
     if (delta > 2 * noteWidth) {
         int shift = (delta - 2 * noteWidth) / 5;
 	baseX += std::min(shift, (m_npf->getNoteBodyWidth() * 3 / 2));
+    }
+
+    // Special case for grace notes (spacing not proportional to
+    // duration)
+
+    if ((*itr)->isGrace()) {
+	baseX = unmodifiedBaseX;
+	delta = noteWidth;
     }
 
     // Find out whether the chord contains any accidentals, and if so,

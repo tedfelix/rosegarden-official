@@ -55,8 +55,7 @@ public:
 
     /**
      * Returns the duration of the note event pointed to by i, taking
-     * into account any ties the note may have and any performance
-     * quantization specified in the Segment.
+     * into account any ties the note may have, grace note status etc.
      * 
      * If the note is the first of two or more tied notes, this will
      * return the accumulated duration of the whole series of notes
@@ -92,6 +91,11 @@ public:
      * any tempo changes occurring during the event at i.
      */
     RealTime getRealSoundingDuration(iterator i);
+
+protected:
+    timeT adjustAbsoluteTimeOfGraceNote(iterator i);
+    timeT adjustAbsoluteTimeForGraceNotes(iterator i);
+    timeT adjustDurationForGraceNotes(iterator i, timeT t);
 };
 
 }

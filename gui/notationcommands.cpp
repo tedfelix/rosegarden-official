@@ -414,13 +414,35 @@ GroupMenuBreakCommand::modifySegment()
     helper.unbeam(getStartTime(), getEndTime());
 }
 
+GroupMenuGraceCommand::GroupMenuGraceCommand(Rosegarden::EventSelection &selection) :
+    BasicCommand(getGlobalName(),
+		 selection.getSegment(),
+		 selection.getStartTime(),
+		 getEffectiveEndTime(selection),
+		 true),
+    m_selection(&selection)
+{ 
+}
+
+timeT
+GroupMenuGraceCommand::getEffectiveEndTime(Rosegarden::EventSelection &
+					   selection)
+{
+    EventSelection::eventcontainer::iterator i =
+	selection.getSegmentEvents().end();
+    if (i == selection.getSegmentEvents().begin())
+	return selection.getEndTime();
+    --i;
+
+    Segment::iterator si = selection.getSegment().findTime
+	((*i)->getAbsoluteTime() + (*i)->getDuration());
+    if (si == selection.getSegment().end()) return selection.getEndTime();
+    else return (*si)->getAbsoluteTime() + 1;
+}
+
 void
 GroupMenuGraceCommand::modifySegment()
 {
-    //!!! problem for undo: we also modify things that start at the
-    // end time of the last note in the selection -- perhaps better
-    // make this a basic command and work out the end time ourselves
-
     Segment &s(getSegment());
     timeT startTime = getStartTime();
     timeT endOfLastGraceNote = startTime;
@@ -470,6 +492,7 @@ GroupMenuGraceCommand::modifySegment()
 	    (**i0, startTime,
 	     (*i0)->getDuration() > 0 ?
 	     (*i0)->getDuration() + (endOfLastGraceNote - startTime) : 0);
+	e->set<Bool>(HAS_GRACE_NOTES, true);
 	
 	newEvents.push_back(e);
 	oldSegmentIterators.push_back(i0);

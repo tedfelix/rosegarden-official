@@ -85,25 +85,67 @@ SegmentPerformanceHelper::getTiedNotes(iterator i)
 timeT
 SegmentPerformanceHelper::getSoundingAbsoluteTime(iterator i)
 {
+    if ((*i)->has(GRACE_NOMINAL_DURATION)) {
+
+	return adjustAbsoluteTimeOfGraceNote(i);
+
+    } else if ((*i)->has(HAS_GRACE_NOTES) &&
+	       (*i)->get<Bool>(HAS_GRACE_NOTES)) {
+
+	return adjustAbsoluteTimeForGraceNotes(i);
+    }
+
     return (*i)->getAbsoluteTime();
+}
+
+timeT
+SegmentPerformanceHelper::adjustAbsoluteTimeOfGraceNote(iterator i)
+{
+    return (*i)->getAbsoluteTime();//!!!
+}
+
+timeT
+SegmentPerformanceHelper::adjustAbsoluteTimeForGraceNotes(iterator i)
+{
+    return (*i)->getAbsoluteTime();//!!!
 }
 
 
 timeT
 SegmentPerformanceHelper::getSoundingDuration(iterator i)
 {
-    if (!(*i)->has(TIED_FORWARD) && !(*i)->has(TIED_BACKWARD)) {
-	return (*i)->getDuration();
-    }
-
-    iteratorcontainer c(getTiedNotes(i));
     timeT d = 0;
 
-    for (iteratorcontainer::iterator ci = c.begin(); ci != c.end(); ++ci) {
-	d += (**ci)->getDuration();
+    if (!(*i)->has(TIED_FORWARD) && !(*i)->has(TIED_BACKWARD)) {
+
+	d = (*i)->getDuration();
+
+    } else {
+
+	iteratorcontainer c(getTiedNotes(i));
+
+	for (iteratorcontainer::iterator ci = c.begin(); ci != c.end(); ++ci) {
+	    d += (**ci)->getDuration();
+	}
+    }
+
+    if (d == 0) {
+	if ((*i)->has(GRACE_NOMINAL_DURATION)) {
+	    return (*i)->get<Int>(GRACE_NOMINAL_DURATION);
+	}
+    } else if ((*i)->has(HAS_GRACE_NOTES) &&
+	       (*i)->get<Bool>(HAS_GRACE_NOTES)) {
+	return adjustDurationForGraceNotes(i, d);
     }
 
     return d;
+}
+
+
+timeT
+SegmentPerformanceHelper::adjustDurationForGraceNotes(iterator i, timeT d)
+{
+    return d;//!!!
 }
 
 

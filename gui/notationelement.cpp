@@ -28,6 +28,7 @@
 #include "rosedebug.h"
 
 #include "NotationTypes.h"
+#include "BaseProperties.h"
 #include "Event.h"
 #include "Quantizer.h"
 
@@ -87,6 +88,18 @@ bool
 NotationElement::isNote() const
 {
     return event()->isa(Note::EventType);
+}
+
+bool
+NotationElement::isTuplet() const
+{
+    return event()->has(Rosegarden::BaseProperties::BEAMED_GROUP_TUPLET_BASE);
+}
+
+bool
+NotationElement::isGrace() const
+{
+    return event()->has(Rosegarden::BaseProperties::GRACE_NOMINAL_DURATION);
 }
 
 void

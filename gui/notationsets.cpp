@@ -178,7 +178,8 @@ Chord::Chord(const NotationElementList &nel, NELIterator i,
     NotationSet(nel, i, q, p),
     m_clef(clef),
     m_key(key),
-    m_time(q->getQuantizedAbsoluteTime((*i)->event()))
+    m_time(q->getQuantizedAbsoluteTime((*i)->event())),
+    m_subordering((*i)->event()->getSubOrdering())
 {
     initialise();
 
@@ -212,7 +213,8 @@ Chord::~Chord()
 bool Chord::test(const NELIterator &i)
 {
     return ((*i)->isNote() &&
-	    getQuantizer().getQuantizedAbsoluteTime((*i)->event()) == m_time);
+	    getQuantizer().getQuantizedAbsoluteTime((*i)->event()) == m_time &&
+	    (*i)->event()->getSubOrdering() == m_subordering);
 }
 
 void Chord::sample(const NELIterator &i)

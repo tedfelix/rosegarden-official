@@ -48,6 +48,7 @@ extern const PropertyName BEAMED_GROUP_UNTUPLED_COUNT;
 extern const PropertyName TUPLET_NOMINAL_DURATION;
 
 extern const PropertyName GRACE_NOMINAL_DURATION;
+extern const PropertyName HAS_GRACE_NOTES;
 
 extern const std::string GROUP_TYPE_BEAMED;
 extern const std::string GROUP_TYPE_TUPLED;

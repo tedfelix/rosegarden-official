@@ -250,17 +250,16 @@ private:
 };
 
 
-class GroupMenuGraceCommand : public BasicSelectionCommand
+class GroupMenuGraceCommand : public BasicCommand
 {
 public:
-    GroupMenuGraceCommand(Rosegarden::EventSelection &selection) :
-	BasicSelectionCommand(getGlobalName(), selection, true),
-	m_selection(&selection) { }
+    GroupMenuGraceCommand(Rosegarden::EventSelection &selection);
 
     static QString getGlobalName() { return "Make &Grace Notes"; }
 
 protected:
     virtual void modifySegment();
+    Rosegarden::timeT getEffectiveEndTime(Rosegarden::EventSelection &);
     Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
 };
 

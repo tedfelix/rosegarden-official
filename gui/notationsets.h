@@ -164,6 +164,7 @@ private:
     const Rosegarden::Clef &m_clef;
     const Rosegarden::Key &m_key;
     Rosegarden::timeT m_time;
+    int m_subordering;
 };
 
 
