@@ -50,8 +50,11 @@ public:
     static const unsigned int linesOffset;
 protected:
 
+    void makeInvisibleLine(int y);
+
     Clef m_currentKey;
     unsigned int m_barLineHeight;
+    unsigned int m_horizLineLength;
     vector<int> m_pitchToHeight;
 };
 
