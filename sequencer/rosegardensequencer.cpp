@@ -614,8 +614,12 @@ bool MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(Rosegarden::Map
 
                 if (evt->getType() == MappedEvent::TimeSignature) {
                     // do something
-                } else if (evt->getType() == MappedEvent::TempoSignature) {
+                    SEQUENCER_DEBUG << "timeSig event\n";
+
+                } else if (evt->getType() == MappedEvent::Tempo) {
                     // do something else
+                    SEQUENCER_DEBUG << "tempo event\n";
+
                 } else if (acceptEvent(evt, evtIsFromMetronome)) {
                     SEQUENCER_DEBUG << "inserting event\n";
                     c->insert(evt);
