@@ -24,10 +24,12 @@
 
 
 #include <string>
+#include <vector>
 
 #include "Instrument.h"
 #include "Device.h"
 #include "MappedComposition.h"
+#include "MappedInstrument.h"
 #include "RealTime.h"
 
 // Abstract base to support SoundDrivers such as aRts and ALSA
@@ -43,14 +45,15 @@ namespace Rosegarden
 class SoundDriver
 {
 public:
-    SoundDriver(const std::string &name):m_name(name) {;}
-    virtual ~SoundDriver() {;}
+    SoundDriver(const std::string &name);
+    virtual ~SoundDriver();
 
     virtual void generateInstruments() = 0;
 
     virtual void initialiseMidi() = 0;
     virtual void initialiseAudio() = 0;
     virtual void initialisePlayback() = 0;
+    virtual void stopPlayback() = 0;
     virtual void resetPlayback() = 0;
     virtual void allNotesOff() = 0;
     virtual void processNotesOff(const RealTime &time) = 0;
@@ -68,9 +71,12 @@ public:
                                 const RealTime &playLatency,
                                 bool now) = 0;
 
+    MappedInstrument* getMappedInstrument(InstrumentId id);
+
 protected:
     std::string    m_name;
-    InstrumentList m_instruments;
+    //InstrumentList m_instruments;
+    std::vector<Rosegarden::MappedInstrument*> m_instruments;
 
 };
 

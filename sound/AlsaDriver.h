@@ -83,6 +83,7 @@ public:
     virtual void initialiseMidi();
     virtual void initialiseAudio();
     virtual void initialisePlayback();
+    virtual void stopPlayback();
     virtual void resetPlayback();
     virtual void allNotesOff();
     virtual void processNotesOff(const RealTime &time);

@@ -24,6 +24,7 @@
 //
 
 #include "AlsaDriver.h"
+#include "MappedInstrument.h"
 
 // ALSA
 #include <alsa/asoundlib.h>
@@ -146,11 +147,9 @@ AlsaDriver::addInstrument(Instrument::InstrumentType type,
 
     m_alsaInstruments.push_back(alsaInstr);
 
-    Instrument *instr = new Instrument(m_runningId,
-                                       type,
-                                       name,
-                                       channel,
-                                       0);
+    MappedInstrument *instr = new MappedInstrument(type,
+                                                   channel,
+                                                   m_runningId);
 
     m_instruments.push_back(instr);
                                    
@@ -204,9 +203,28 @@ AlsaDriver::initialisePlayback()
     snd_seq_queue_tempo_alloca(&qtempo);
     memset(qtempo, 0, snd_seq_queue_tempo_sizeof());
     snd_seq_queue_tempo_set_ppq(qtempo, resolution);
-    snd_seq_queue_tempo_set_tempo(qtempo, 60*1000000/tempo);
+    snd_seq_queue_tempo_set_tempo(qtempo, (unsigned int)(60.0*1000000.0/tempo));
     int ret = snd_seq_set_queue_tempo(m_handle, m_queue, qtempo);
+
+    // Start the timer
+    snd_seq_start_queue(m_handle, m_queue, 0);
+
+    snd_seq_drain_output(m_handle);
+    //snd_seq_flush_output(m_handle);
 }
+
+
+void
+AlsaDriver::stopPlayback()
+{
+    snd_seq_stop_queue(m_handle, m_queue, 0);
+
+    snd_seq_drain_output(m_handle);
+    //snd_seq_flush_output(m_handle);
+
+}
+
+
 
 void
 AlsaDriver::resetPlayback()
@@ -248,10 +266,56 @@ AlsaDriver::getMappedComposition(const RealTime & /*playLatency*/)
 }
     
 void
-AlsaDriver::processMidiOut(const MappedComposition &/*mC*/,
-                           const RealTime &/*playLatency*/,
-                           bool /*now*/)
+AlsaDriver::processMidiOut(const MappedComposition &mC,
+                           const RealTime &playLatency,
+                           bool now)
 {
+
+    snd_seq_event_t *event= new snd_seq_event_t();
+
+    Rosegarden::RealTime midiRelativeTime;
+    Rosegarden::RealTime midiRelativeStopTime;
+    Rosegarden::MappedInstrument *instrument;
+    MidiByte channel;
+
+    for (MappedComposition::iterator i = mC.begin(); i != mC.end(); ++i)
+    {
+        if ((*i)->getType() == MappedEvent::Audio)
+            continue;
+
+        instrument = getMappedInstrument((*i)->getInstrument());
+ 
+        if (instrument != 0)
+            channel = instrument->getChannel();
+        else
+            channel = 0;
+
+        event->data.note.channel = channel;
+
+        switch((*i)->getType())
+        {
+            case MappedEvent::MidiNote:
+                event->data.note.note = (*i)->getPitch();
+                event->data.note.velocity = (*i)->getVelocity();
+                event->data.note.duration = 1000; //(*i)->getDuration();
+                break;
+
+            case MappedEvent::MidiProgramChange:
+            case MappedEvent::MidiKeyPressure:
+            case MappedEvent::MidiChannelPressure:
+            case MappedEvent::MidiPitchWheel:
+            case MappedEvent::MidiController:
+            default:
+                break;
+        }
+
+        snd_seq_event_output(m_handle, event);
+
+        // add note to note off stack
+        //
+    }
+
+    //processNotesOff(time);
 }
 
 }

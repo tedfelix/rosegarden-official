@@ -62,6 +62,13 @@ ArtsDriver::initialisePlayback()
 }
 
 void
+ArtsDriver::stopPlayback()
+{
+}
+
+
+
+void
 ArtsDriver::resetPlayback()
 {
 }
