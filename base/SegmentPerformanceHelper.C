@@ -72,6 +72,8 @@ SegmentPerformanceHelper::getTiedNotes(iterator i)
             !tiedBack) break;
 
         d += e->getDuration();
+	c.push_back(i);
+
         if (!e->get<Bool>(TIED_FORWARD, tiedForward) ||
             !tiedForward) return c;
     }
