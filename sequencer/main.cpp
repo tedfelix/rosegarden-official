@@ -115,7 +115,9 @@ int main(int argc, char *argv[])
     QObject::connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
     //app.dcopClient()->setDefaultObject("RosegardenGUIIface");
 
-    app.disableSessionManagement(); // we don't want to be saved or anything
+    app.disableSessionManagement(); // we don't want to be
+                                    // saved/restored by session
+                                    // management, only run by the GUI
 
     // Started OK
     //
