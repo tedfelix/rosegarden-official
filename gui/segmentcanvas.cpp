@@ -817,8 +817,7 @@ void SegmentCanvas::updateAllSegmentItems()
             if (segment) {
                 if (!segment->getComposition()) {
                     // this segment has been deleted
-		    removeFromSelection(segment);
-                    delete item;
+                    delete item; // will automatically remove it from the selection
                     foundOneSegmentDeleted = true;
                 }
                 else {
@@ -873,21 +872,6 @@ void SegmentCanvas::updateSegmentItem(Segment *segment)
     }
 
     slotUpdate();
-}
-
-void SegmentCanvas::removeSegmentItem(Segment *segment)
-{
-    SegmentItem *item = findSegmentItem(segment);
-    removeFromSelection(segment);
-    delete item;
-}
-
-void
-SegmentCanvas::removeFromSelection(Segment *segment)
-{
-    SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(m_tool);
-    if (!selTool) return;
-    selTool->removeFromSelection(segment);
 }
 
 void

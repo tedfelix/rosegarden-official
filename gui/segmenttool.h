@@ -226,10 +226,19 @@ public:
 public slots:
     void slotSelectSegmentItem(SegmentItem *selectedItem);
 
+    /**
+     * Connected to the destroyed() signal of the selected segment items
+     *
+     * This is for maintaining the list of selected items
+     */
+    void slotDestroyedSegmentItem(QObject*);
+
 signals:
     void selectedSegments(const Rosegarden::SegmentSelection &);
 
-private:
+protected:
+    void addToSelection(SegmentItem*);
+
     typedef std::pair<QPoint, SegmentItem *> SegmentItemPair;
     typedef std::vector<SegmentItemPair> SegmentItemList;
 

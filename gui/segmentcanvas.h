@@ -47,7 +47,7 @@ class QPopupMenu;
  * The graphical item (rectangle) which represents a Segment
  * on the SegmentCanvas.
  */
-class SegmentItem : public QCanvasRectangle
+class SegmentItem : public QObject, public QCanvasRectangle
 {
 
 public:
@@ -246,16 +246,6 @@ public:
      * is found.
      */
     void updateSegmentItem(Rosegarden::Segment *segment);
-
-    /**
-     * Find the item corresponding to this segment and remove it
-     */
-    void removeSegmentItem(Rosegarden::Segment *segment);
-
-    /**
-     * Remove the given segment from the selection, if it's in it
-     */
-    void removeFromSelection(Rosegarden::Segment *segment);
 
     /**
      * Add the given Segment to the selection, if we know anything about it

@@ -471,6 +471,11 @@ SegmentSelector::removeFromSelection(Rosegarden::Segment *segment)
     for (SegmentItemList::iterator i = m_selectedItems.begin();
 	 i != m_selectedItems.end(); ++i) {
 	if (i->second->getSegment() == segment) {
+
+//             RG_DEBUG << "SegmentSelector::removeFromSelection() SegmentItem = "
+//                      << i->second << endl;
+
+            i->second->disconnect(this); // disconnect the item's 'destroyed' signal
 	    m_selectedItems.erase(i);
 	    return;
 	}
@@ -482,12 +487,28 @@ SegmentSelector::addToSelection(Rosegarden::Segment *segment)
 {
     SegmentItem *item = m_canvas->getSegmentItem(segment);
     if (!item) return;
+
+    addToSelection(item); 
+}
+
+void
+SegmentSelector::addToSelection(SegmentItem* item)
+{
+    RG_DEBUG << "SegmentSelector::addToSelection() SegmentItem = "
+             << item << endl;
+
+    // Check that the segment isn't already selected
     for (SegmentItemList::iterator i = m_selectedItems.begin();
 	 i != m_selectedItems.end(); ++i) {
+//         RG_DEBUG << "SegmentSelector::addToSelection() SegmentItem already in selection\n";
 	if (i->second == item) return;
     }
+
     m_selectedItems.push_back
 	(SegmentItemPair(QPoint(int(item->x()), int(item->y())), item));
+
+    connect(item, SIGNAL(destroyed(QObject*)),
+            this, SLOT(slotDestroyedSegmentItem(QObject*)));
 }
 
 void
@@ -500,6 +521,7 @@ SegmentSelector::clearSelected()
          it != m_selectedItems.end();
          it++)
     {
+        it->second->disconnect(this);
         it->second->setSelected(false, m_canvas->getSegmentBrush());
     }
 
@@ -625,11 +647,32 @@ SegmentSelector::slotSelectSegmentItem(SegmentItem *selectedItem)
     // then don't set the m_currentItem
     //
     selectedItem->setSelected(true, m_canvas->getHighlightBrush());
-    m_selectedItems.push_back(SegmentItemPair
-                 (QPoint((int)selectedItem->x(), (int)selectedItem->y()),
-                  selectedItem));
+    addToSelection(selectedItem);
     m_canvas->canvas()->update();
 }
+
+void
+SegmentSelector::slotDestroyedSegmentItem(QObject *destroyedObject)
+{
+    // doesn't work, because the signal is emitted from the QObject's dtor
+    //
+//     SegmentItem* destroyedItem = dynamic_cast<SegmentItem*>(destroyedObject);
+
+    RG_DEBUG << "SegmentSelector::slotDestroyedSegmentItem : destroyedObject : " << destroyedObject << endl;
+
+    for (SegmentItemList::iterator i = m_selectedItems.begin();
+         i != m_selectedItems.end(); ++i) {
+        
+        if (i->second == destroyedObject) {
+            RG_DEBUG << "SegmentSelector::slotDestroyedSegmentItem : found destroyedObject\n";
+            m_selectedItems.erase(i);
+            return;
+        }
+    }
+    
+    RG_DEBUG << "SegmentSelector::slotDestroyedSegmentItem : WARNING - destroyedObject not found - this is probably a bug\n";
+}
+
 
 void
 SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
