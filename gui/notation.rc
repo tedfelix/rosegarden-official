@@ -127,7 +127,8 @@ etc
   <Action name="crescendo"/>
   <Action name="decrescendo"/>
   <Action name="remove_indications"/>
-  <Separator/>
+</Menu>
+
   <Menu name="Marks">
     <text>&amp;Marks</text>
     <Action name="remove_marks"/>
@@ -149,7 +150,6 @@ etc
     <Separator/>
     <Action name="add_text_mark"/>
   </Menu>
-</Menu>
 
 <Menu name="Transforms">
   <text>Trans&amp;forms</text>
