@@ -110,12 +110,15 @@ bool RosegardenGUIDoc::saveIfModified()
 
     if(m_modified) {
         RosegardenGUIApp *win=(RosegardenGUIApp *) parent();
-        int want_save = KMessageBox::warningYesNoCancel(win, i18n("Warning"),
+        int want_save = KMessageBox::warningYesNoCancel(win,
                                                         i18n("The current file has been modified.\n"
-                                                             "Do you want to save it?"));
+                                                             "Do you want to save it?"),
+                                                        i18n("Warning"));
+        kdDebug(KDEBUG_AREA) << "want_save = " << want_save << endl;
+
         switch(want_save)
             {
-            case 1:
+            case KMessageBox::Yes:
                 if (m_title == i18n("Untitled")) {
                     win->slotFileSaveAs();
                 } else {
@@ -126,13 +129,13 @@ bool RosegardenGUIDoc::saveIfModified()
                 completed=true;
                 break;
 
-            case 2:
+            case KMessageBox::No:
                 setModified(false);
                 deleteContents();
                 completed=true;
                 break;	
 
-            case 3:
+            case KMessageBox::Cancel:
                 completed=false;
                 break;
 
