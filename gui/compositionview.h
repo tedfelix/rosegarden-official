@@ -68,19 +68,22 @@ public:
     QPen getPen() const           { return m_pen; }
 
     // repeating segments
-    void setRepeatMarks(const repeatmarks& rm) { m_repeatMarks = rm; }
-    const repeatmarks&  getRepeatMarks() const  { return m_repeatMarks; }
-    bool isRepeating() const      { return m_repeatMarks.size() > 0; }
+    void                setRepeatMarks(const repeatmarks& rm) { m_repeatMarks = rm; }
+    const repeatmarks&  getRepeatMarks() const                { return m_repeatMarks; }
+    bool                isRepeating() const                   { return m_repeatMarks.size() > 0; }
+    int                 getBaseWidth() const                  { return m_baseWidth; }
+    void                setBaseWidth(int bw)                  { m_baseWidth = bw; }
 
     static const QColor DefaultPenColor;
     static const QColor DefaultBrushColor;
 
 protected:
-    bool   m_selected;
-    bool   m_needUpdate;
-    QBrush m_brush;
-    QPen   m_pen;
+    bool        m_selected;
+    bool        m_needUpdate;
+    QBrush      m_brush;
+    QPen        m_pen;
     repeatmarks m_repeatMarks;
+    int         m_baseWidth;
 };
 
 class CompositionModel : public QObject
@@ -181,6 +184,7 @@ protected:
     bool isTmpSelected(const Rosegarden::Segment*) const;
     bool wasTmpSelected(const Rosegarden::Segment*) const;
     bool isMoving(const Rosegarden::Segment*) const;
+    void computeRepeatMarks(CompositionRect& sr, const Rosegarden::Segment* s);
 
     //--------------- Data members ---------------------------------
     Rosegarden::Composition&     m_composition;
@@ -199,21 +203,25 @@ protected:
 
 class CompositionItemImpl : public _CompositionItem {
 public:
-    CompositionItemImpl(Rosegarden::Segment& s, const QRect&);
-    virtual bool isRepeating() const              { return m_segment.isRepeating(); }
-    virtual QRect rect() const                    { return m_rect; }
+    CompositionItemImpl(Rosegarden::Segment& s, const CompositionRect&);
+    virtual bool isRepeating() const              { return m_rect.isRepeating(); }
+    virtual QRect rect() const;
     virtual void moveBy(int x, int y)             { m_rect.moveBy(x, y); }
     virtual void moveTo(int x, int y)             { m_rect.setRect(x, y, m_rect.width(), m_rect.height()); }
     virtual void setX(int x)                      { m_rect.setX(x); }
     virtual void setY(int y)                      { m_rect.setY(y); }
     virtual void setWidth(int w)                  { m_rect.setWidth(w); }
+
     Rosegarden::Segment* getSegment()             { return &m_segment; }
     const Rosegarden::Segment* getSegment() const { return &m_segment; }
 
 protected:
+    // recompute the repeat marks after an X-wise move
+    void refreshRepeatMarks(int newX, int newWidth = -1);
+
     //--------------- Data members ---------------------------------
     Rosegarden::Segment& m_segment;
-    QRect m_rect;
+    CompositionRect m_rect;
 };
 
 class CompositionView : public RosegardenScrollView 

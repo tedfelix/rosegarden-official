@@ -58,7 +58,12 @@ timeT CompositionItemHelper::getEndTime(const CompositionItem& item, const Roseg
     timeT t = 0;
 
     if (item) {
-        t = std::max(grid.snapX(item->rect().x() + item->rect().width()) - 1, 0L);
+        QRect itemRect = item->rect();
+        
+        RG_DEBUG << "CompositionItemHelper::getEndTime() : rect width = "
+                 << itemRect.width() << endl;
+
+        t = std::max(grid.snapX(itemRect.x() + itemRect.width()) - 1, 0L);
     }
 
     return t;
@@ -119,26 +124,6 @@ CompositionItem CompositionItemHelper::findSiblingCompositionItem(const Composit
     return referenceItem;
 }
 
-bool CompositionItemHelper::itemHasChanged(const CompositionItem& item, const Rosegarden::SnapGrid& grid)
-{
-    Segment* segment    = getSegment(item);
-    Rosegarden::TrackId itemTrackId = getTrackPos(item, grid);
-    timeT itemStartTime = getStartTime(item, grid);
-    timeT itemEndTime   = getEndTime(item, grid);
-
-    RG_DEBUG << "CompositionHelper::itemHasChanged : moving segment - itemStartTime = "
-             << itemStartTime << " - segmentStartTime = " << segment->getStartTime()
-             << " - itemEndTime = " << itemEndTime << " - segmentEndTime = " << segment->getRepeatEndTime()
-             << " - itemTrackId = " << itemTrackId << " - segmentTrackId = " << segment->getTrack()
-             << endl;
-
-
-    return (itemStartTime != segment->getStartTime() ||
-            itemEndTime   != segment->getRepeatEndTime() ||
-            itemTrackId   != segment->getTrack());
-    
-}
-
 bool operator<(const CompositionRect& a, const CompositionRect& b)
 {
     return a.width() < b.width();
@@ -150,7 +135,9 @@ bool operator<(const CompositionItem& a, const CompositionItem& b)
 }
 
 
-
+//
+// CompositionModelImpl
+//
 CompositionModelImpl::CompositionModelImpl(Rosegarden::Composition& compo,
                                            Rosegarden::RulerScale *rulerScale,
                                            int vStep)
@@ -193,25 +180,9 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
             if (pTmpSelected != tmpSelected)
                 sr.setNeedsFullUpdate(true);
 
-            if (s->isRepeating()) {
+            if (s->isRepeating())
+                computeRepeatMarks(sr, s);
 
-                timeT startTime = s->getStartTime();
-                timeT endTime = s->getEndMarkerTime();
-                timeT repeatInterval = endTime - startTime;
-                timeT repeatStart = endTime;
-                timeT repeatEnd = s->getRepeatEndTime();
-                sr.setWidth(int(nearbyint(m_grid.getRulerScale()->getWidthForDuration(repeatStart,
-                                                                             repeatEnd - repeatStart))));
-
-                CompositionRect::repeatmarks repeatMarks;
-                
-                for(timeT repeatMark = repeatStart; repeatMark < repeatEnd; repeatMark += repeatInterval) {
-                    repeatMarks.push_back(int(nearbyint(m_grid.getRulerScale()->getXForTime(repeatMark))));
-                }
-                sr.setRepeatMarks(repeatMarks);
-
-            }
-            
             if (s != m_recordingSegment) {
                 QColor brushColor = GUIPalette::convertColour(m_composition.getSegmentColourMap().getColourByIndex(s->getColourIndex()));
                 sr.setBrush(brushColor);
@@ -251,6 +222,29 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
 
     return m_res;
 }
+
+void CompositionModelImpl::computeRepeatMarks(CompositionRect& sr, const Segment* s)
+{
+    if (s->isRepeating()) { // this works only at the creation of the CompositionRect - need a way to refresh those marks when segment is moved along X
+
+        timeT startTime = s->getStartTime();
+        timeT endTime = s->getEndMarkerTime();
+        timeT repeatInterval = endTime - startTime;
+        timeT repeatStart = endTime;
+        timeT repeatEnd = s->getRepeatEndTime();
+        sr.setWidth(int(nearbyint(m_grid.getRulerScale()->getWidthForDuration(repeatStart,
+                                                                              repeatEnd - repeatStart))));
+
+        CompositionRect::repeatmarks repeatMarks;
+                
+        for(timeT repeatMark = repeatStart; repeatMark < repeatEnd; repeatMark += repeatInterval) {
+            repeatMarks.push_back(int(nearbyint(m_grid.getRulerScale()->getXForTime(repeatMark))));
+        }
+        sr.setRepeatMarks(repeatMarks);
+        sr.setBaseWidth(repeatMarks[0] - sr.x());
+    }
+}
+
 
 void CompositionModelImpl::setSelectionRect(const QRect& r)
 {
@@ -344,6 +338,7 @@ CompositionModel::itemcontainer CompositionModelImpl::getItemsAt(const QPoint& p
         CompositionRect sr = computeSegmentRect(*s, m_composition, m_grid);
         if (sr.contains(point)) {
             RG_DEBUG << "CompositionModelImpl::getItemsAt() adding " << sr << endl;
+            computeRepeatMarks(sr, s);
             res.push_back(CompositionItem(new CompositionItemImpl(*s, sr)));
         } else {
             RG_DEBUG << "CompositionModelImpl::getItemsAt() skiping " << sr << endl;
@@ -497,18 +492,65 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s,
                  << " w = " << w << endl;
     } else {
         w = int(nearbyint(grid.getRulerScale()->getWidthForDuration(startTime, endTime - startTime)));
-        RG_DEBUG << "CompositionModelImpl::computeSegmentRect : s is NOT repeating";
+        RG_DEBUG << "CompositionModelImpl::computeSegmentRect : s is NOT repeating"
+                 << " w = " << w << endl;
     }
 
     return CompositionRect(x, y, w, h);
 }
 
-CompositionItemImpl::CompositionItemImpl(Segment& s, const QRect& rect)
+//
+// CompositionItemImpl
+//
+CompositionItemImpl::CompositionItemImpl(Segment& s, const CompositionRect& rect)
     : m_segment(s),
       m_rect(rect)
 {
 }
 
+QRect CompositionItemImpl::rect() const
+{
+    QRect res = m_rect;
+    if (m_rect.isRepeating()) {
+        CompositionRect::repeatmarks repeatMarks = m_rect.getRepeatMarks();
+        int neww = m_rect.getBaseWidth();
+        
+        RG_DEBUG << "CompositionItemImpl::rect() -  width = "
+                 << m_rect.width() << " - base w = " << neww << endl;
+        res.setWidth(neww);
+    } else {
+        RG_DEBUG << "CompositionItemImpl::rect() m_rect not repeating\n";
+    }
+    
+
+    return res;
+}
+
+void CompositionItemImpl::refreshRepeatMarks(int newX, int newWidth)
+{
+    int deltaX = 0, deltaW = 0;
+    
+    if (newX >= 0) {
+        deltaX = newX - m_rect.x();
+    }
+    if (newWidth >= 0) {
+        deltaW = newWidth - m_rect.width();
+    }
+    
+    
+    CompositionRect::repeatmarks repeatMarks = m_rect.getRepeatMarks();
+    for(int i = 0; i < repeatMarks.size(); ++i) {
+        repeatMarks[i] += deltaX;
+    }
+
+    m_rect.setRepeatMarks(repeatMarks);
+    
+}
+
+
+//
+// CompositionView
+//
 CompositionView::CompositionView(RosegardenGUIDoc* doc,
                                  CompositionModel* model,
                                  QWidget * parent, const char * name, WFlags f)

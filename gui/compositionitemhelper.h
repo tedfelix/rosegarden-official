@@ -39,12 +39,6 @@ public:
      */
     static CompositionItem findSiblingCompositionItem(const CompositionModel::itemcontainer& items, const CompositionItem& referenceItem);
 
-    /**
-     * return whether the CompositionItem has been changed compared to the segment it represents
-     * Use CompositionItem::hasChanged() instead
-     */
-    static bool itemHasChanged(const CompositionItem& item, const Rosegarden::SnapGrid&);
-
 };
 
 #endif
