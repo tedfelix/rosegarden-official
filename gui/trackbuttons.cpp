@@ -281,8 +281,8 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
             m_recordSigMapper, SLOT(map()));
     connect(mute, SIGNAL(stateChanged(bool)),
             m_muteSigMapper, SLOT(map()));
-    m_recordSigMapper->setMapping(record, trackId);
-    m_muteSigMapper->setMapping(mute, trackId);
+    m_recordSigMapper->setMapping(record, track->getPosition());
+    m_muteSigMapper->setMapping(mute, track->getPosition());
 
     // Store the KLedButton
     //
@@ -450,18 +450,15 @@ TrackButtons::mutedTracks()
 //
 //
 void
-TrackButtons::slotToggleMutedTrack(int mutedTrack)
+TrackButtons::slotToggleMutedTrack(int mutedTrackPos)
 {
-    RG_DEBUG << "TrackButtons::slotToggleMutedTrack(" << mutedTrack << ")\n";
+    RG_DEBUG << "TrackButtons::slotToggleMutedTrack(" << mutedTrackPos << ")\n";
 
-    if (mutedTrack < 0 || mutedTrack > (int)m_tracks )
+    if (mutedTrackPos < 0 || mutedTrackPos > (int)m_tracks )
         return;
 
     Rosegarden::Track *track = 
-        m_doc->getComposition().getTrackByPosition(mutedTrack);
-
-    RG_DEBUG << "TrackButtons::slotToggleMutedTrack - track = " << mutedTrack
-             << " is " << !track->isMuted() << endl;
+        m_doc->getComposition().getTrackByPosition(mutedTrackPos);
 
     emit muteButton(track->getId(), !track->isMuted()); // will set the value
 }
@@ -1068,7 +1065,12 @@ TrackButtons::setMuteButton(TrackId track, bool value)
     Rosegarden::Track *trackObj = m_doc->getComposition().getTrackById(track);
     if (trackObj == 0) return;
 
-    m_muteLeds[trackObj->getPosition()]->setState(value ? KLed::Off : KLed::On);
+    int pos = trackObj->getPosition();
+
+    RG_DEBUG << "TrackButtons::setMuteButton() trackId = "
+             << track << ", pos = " << pos << endl;
+    
+    m_muteLeds[pos]->setState(value ? KLed::Off : KLed::On);
 }
 
 
