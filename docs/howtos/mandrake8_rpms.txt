@@ -7,6 +7,7 @@ These RPMs are all taken from the two CD Mandrake 8.0 set
  libarts2-devel-2.1.1-7mdk.i586.rpm
  libjpeg62-devel-6b-19mdk.i586.rpm
  libpng2-devel-1.0.9-1mdk.i586.rpm 
+ alsa-lib-devel-0.5.10-2mdk
 
 Depending on how you've installed your system you might need
 to install more extra packages than this.  Make sure that you have
@@ -14,4 +15,4 @@ all the "sound" or "multimedia" related packages and their -devel-
 equivalents if you're in any doubt.
 
 RB
-11.10.2001
+30.10.2001
