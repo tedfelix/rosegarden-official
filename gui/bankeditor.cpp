@@ -254,7 +254,7 @@ MidiProgramsEditor::clearAll()
 void
 MidiProgramsEditor::populateBank(QListViewItem* item)
 {
-    RG_DEBUG << "MidiProgramsEditor::slotPopulateBank" << endl;
+    RG_DEBUG << "MidiProgramsEditor::populateBank" << endl;
 
     MidiBankListViewItem* bankItem = dynamic_cast<MidiBankListViewItem*>(item);
     if (!bankItem) return;
@@ -267,7 +267,7 @@ MidiProgramsEditor::populateBank(QListViewItem* item)
 
     setBankName(item->text(0));
 
-    RG_DEBUG << "MidiProgramsEditor::slotPopulateBank : bankItem->getBank = "
+    RG_DEBUG << "MidiProgramsEditor::populateBank : bankItem->getBank = "
              << bankItem->getBank() << endl;
 
     m_currentBank = &(m_bankList[bankItem->getBank()]); // device->getBankByIndex(bankItem->getBank());
@@ -363,7 +363,15 @@ struct ProgramCmp
     bool operator()(const Rosegarden::MidiProgram &p1,
                     const Rosegarden::MidiProgram &p2)
     {
-        return (p1.program < p2.program);
+        if (p1.program == p2.program)
+        {
+            if (p1.msb == p2.msb)
+                return (p1.lsb < p2.lsb);
+            else
+                return (p1.msb < p2.msb);
+        }
+        else
+            return (p1.program < p2.program);
     }
 };
 
@@ -817,6 +825,9 @@ BankEditorDialog::slotApply()
     }
     else
     {
+        MidiProgramsEditor::MidiProgramContainer::iterator it =
+            m_programList.begin();
+
         command = new ModifyDeviceCommand(m_studio,
                                           m_lastDevice,
                                           m_deviceList[m_lastDevice],
@@ -824,15 +835,6 @@ BankEditorDialog::slotApply()
                                           m_programList,
                                           true);
 
-        /*
-        MidiProgramsEditor::MidiProgramContainer::iterator
-            it = m_programList.begin();
-
-        for (; it != m_programList.end(); it++)
-        {
-            cout << "PROGRAM = " << it->name << endl;
-        }
-        */
     }
     addCommandToHistory(command);
 

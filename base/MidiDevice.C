@@ -193,6 +193,24 @@ MidiDevice::getProgramByIndex(int index)
     return (*m_programList)[index];
 }
 
+MidiProgram*
+MidiDevice::getProgram(MidiByte msb, MidiByte lsb, int index)
+{
+    ProgramList::iterator it;
+    int count = 0;
+
+    for (it = m_programList->begin(); it != m_programList->end(); it++)
+    {
+        if ((*it)->msb == msb && (*it)->lsb == lsb)
+        {
+            if (count == index)
+                return (*it);
+            count++;
+        }
+    }
+
+    return 0;
+}
 
 std::string
 MidiDevice::toXmlString()

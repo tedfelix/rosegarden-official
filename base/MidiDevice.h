@@ -73,10 +73,11 @@ public:
     void clearBankList();
     void clearProgramList();
 
-    // Retreive some stuff
+    // Retreive by different criteria
     //
     MidiBank* getBankByIndex(int index);
     MidiProgram* getProgramByIndex(int index);
+    MidiProgram* getProgram(MidiByte msb, MidiByte lsb, int index);
 
     virtual std::string toXmlString();
 

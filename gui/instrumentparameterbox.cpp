@@ -204,11 +204,56 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
     if (m_selectedInstrument == 0)
         return;
 
-    Rosegarden::MidiProgram *prg = 
-        dynamic_cast<Rosegarden::MidiDevice*>
+    Rosegarden::MidiProgram *prg;
+
+    Rosegarden::MidiByte msb = 0;
+    Rosegarden::MidiByte lsb = 0;
+
+    if (m_selectedInstrument->sendsBankSelect())
+    {
+        msb = m_selectedInstrument->getMSB();
+        lsb = m_selectedInstrument->getLSB();
+        prg =
+            dynamic_cast<Rosegarden::MidiDevice*>
+            (m_selectedInstrument->getDevice())->getProgram(msb, lsb, index);
+
+        // Send the bank select message before any PC message
+        //
+        try
+        {
+            Rosegarden::MappedEvent *mE = 
+                new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                        Rosegarden::MappedEvent::MidiController,
+                                        Rosegarden::MIDI_CONTROLLER_BANK_MSB,
+                                        msb);
+            Rosegarden::StudioControl::sendMappedEvent(mE);
+
+            mE = new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                        Rosegarden::MappedEvent::MidiController,
+                                        Rosegarden::MIDI_CONTROLLER_BANK_LSB,
+                                        lsb);
+            // Send the lsb
+            //
+            Rosegarden::StudioControl::sendMappedEvent(mE);
+        }
+        catch(...) {}
+        RG_DEBUG << "sending bank select " << msb << " : " << lsb << endl;
+    }
+    else
+    {
+        prg = dynamic_cast<Rosegarden::MidiDevice*>
             (m_selectedInstrument->getDevice())->getProgramByIndex(index);
+    }
+
+    if (prg == 0)
+    {
+        RG_DEBUG << "program change not found in bank" << endl;
+        return;
+    }
 
     m_selectedInstrument->setProgramChange(prg->program);
+
+    RG_DEBUG << "sending program change " << prg->program << endl;
 
     try
     {
