@@ -1421,6 +1421,11 @@ MIDIInstrumentParameterPanel::populateVariationList()
 	m_variationValue->hide();
 	
     } else {
+	//!!! seem to have problems here -- the grid layout doesn't
+	//like us adding stuff in the middle so if we go from 1
+	//visible row (say program) to 2 (program + variation) the
+	//second one overlaps the control knobs
+
 	m_variationLabel->show();
 	m_variationCheckBox->show();
 	m_variationValue->show();
@@ -1539,14 +1544,19 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
 
     const Rosegarden::MidiBank *bank = &m_banks[index];
 
-//!!! wrong now
-
-    m_selectedInstrument->setMSB(bank->getMSB());
-    m_selectedInstrument->setLSB(bank->getLSB());
+    if (md->getVariationType() != MidiDevice::VariationFromLSB) {
+	m_selectedInstrument->setLSB(bank->getLSB());
+    }
+    if (md->getVariationType() != MidiDevice::VariationFromMSB) {
+	m_selectedInstrument->setMSB(bank->getMSB());
+    }
 
     // repopulate program list (variation list is populated by slotSelectProgram)
     populateProgramList();
 
+    sendBankAndProgram();
+
+/*!!!
     Rosegarden::MappedEvent *mE = 
         new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
                                     Rosegarden::MappedEvent::MidiController,
@@ -1561,9 +1571,10 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
     // Send the lsb
     //
     Rosegarden::StudioControl::sendMappedEvent(mE);
-
+    
     // also need to resend Program change to activate new program
     slotSelectProgram(m_selectedInstrument->getProgramChange());
+*/
 
     emit updateAllBoxes();
 }
@@ -1571,62 +1582,14 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
 void
 MIDIInstrumentParameterPanel::slotSelectProgram(int index)
 {
-    if (m_selectedInstrument == 0)
-        return;
-
-    MidiDevice *md = dynamic_cast<MidiDevice*>
-	(m_selectedInstrument->getDevice());
-    if (!md) {
-	std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotSelectBank: No MidiDevice for Instrument "
-		  << m_selectedInstrument->getId() << std::endl;
-	return;
-    }
-
     const Rosegarden::MidiProgram *prg = &m_programs[index];
-    
-    if (m_selectedInstrument->sendsBankSelect())
-    {
-        // Send the bank select message before any PC message
-        //
-        Rosegarden::MappedEvent *mE = 
-            new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                    Rosegarden::MappedEvent::MidiController,
-                                    Rosegarden::MIDI_CONTROLLER_BANK_MSB,
-                                    prg->getBank().getMSB());
-        Rosegarden::StudioControl::sendMappedEvent(mE);
-
-        mE = new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                    Rosegarden::MappedEvent::MidiController,
-                                    Rosegarden::MIDI_CONTROLLER_BANK_LSB,
-                                    prg->getBank().getLSB());
-        Rosegarden::StudioControl::sendMappedEvent(mE);
-
-//        RG_DEBUG << "sending bank select "
-//		 << bank.getMSB() << " : "
-//		 << bank.getLSB() << endl;
-    }
-
-    if (prg == 0)
-    {
-	//!!! how will we deal with case where banks/programs have been deleted between gui interactions? should store indices after all?
+    if (prg == 0) {
         RG_DEBUG << "program change not found in bank" << endl;
         return;
     }
-
     m_selectedInstrument->setProgramChange(prg->getProgram());
 
-    RG_DEBUG << "sending program change " << prg->getProgram() << endl;
-
-    //!!! wrong now
-
-    Rosegarden::MappedEvent *mE = 
-     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                 Rosegarden::MappedEvent::MidiProgramChange,
-                                 prg->getProgram(),
-                                 (Rosegarden::MidiByte)0);
-    // Send the controller change
-    //
-    Rosegarden::StudioControl::sendMappedEvent(mE);
+    sendBankAndProgram();
 
     populateVariationList();
 
@@ -1639,7 +1602,71 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
 void
 MIDIInstrumentParameterPanel::slotSelectVariation(int index)
 {
-//!!! implement
+    MidiDevice *md = dynamic_cast<MidiDevice*>
+	(m_selectedInstrument->getDevice());
+    if (!md) {
+	std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotSelectVariation: No MidiDevice for Instrument "
+		  << m_selectedInstrument->getId() << std::endl;
+	return;
+    }
+
+    if (index < 0 || index > m_variations.size()) {
+	std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotSelectVariation: index " << index << " out of range" << std::endl;
+	return;
+    }
+
+    Rosegarden::MidiByte v = m_variations[index];
+    
+    if (md->getVariationType() == MidiDevice::VariationFromLSB) {
+	m_selectedInstrument->setLSB(v);
+    } else if (md->getVariationType() == MidiDevice::VariationFromMSB) {
+	m_selectedInstrument->setMSB(v);
+    }
+
+    sendBankAndProgram();
+}
+
+void
+MIDIInstrumentParameterPanel::sendBankAndProgram()
+{
+    if (m_selectedInstrument == 0)
+        return;
+
+    MidiDevice *md = dynamic_cast<MidiDevice*>
+	(m_selectedInstrument->getDevice());
+    if (!md) {
+	std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotSelectBank: No MidiDevice for Instrument "
+		  << m_selectedInstrument->getId() << std::endl;
+	return;
+    }
+
+    if (m_selectedInstrument->sendsBankSelect()) {
+
+        // Send the bank select message before any PC message
+        //
+        Rosegarden::MappedEvent *mE = 
+            new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+				     Rosegarden::MappedEvent::MidiController,
+				     Rosegarden::MIDI_CONTROLLER_BANK_MSB,
+				     m_selectedInstrument->getMSB());
+        Rosegarden::StudioControl::sendMappedEvent(mE);
+
+        mE = new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+				     Rosegarden::MappedEvent::MidiController,
+				     Rosegarden::MIDI_CONTROLLER_BANK_LSB,
+				     m_selectedInstrument->getLSB());
+        Rosegarden::StudioControl::sendMappedEvent(mE);
+    }
+
+    Rosegarden::MappedEvent *mE = 
+     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                 Rosegarden::MappedEvent::MidiProgramChange,
+                                 m_selectedInstrument->getProgramChange(),
+                                 (Rosegarden::MidiByte)0);
+
+    // Send the controller change
+    //
+    Rosegarden::StudioControl::sendMappedEvent(mE);
 }
 
 void

@@ -252,6 +252,9 @@ protected:
     // fill (or hide) variation combo based on current bank and program
     void populateVariationList();
 
+    // send the bank and program events relevant to this instrument
+    void sendBankAndProgram();
+
     //--------------- Data members ---------------------------------
 
     QLabel             *m_connectionLabel;
