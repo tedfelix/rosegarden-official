@@ -148,6 +148,7 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
     m_countdownDialog(0),
     m_countdownTimer(new QTimer(doc)),
     m_recordTime(new QTime()),
+    m_compositionRefreshStatusId(m_doc->getComposition().getNewRefreshStatusId()),
     m_updateRequested(true)
 {
     m_countdownDialog = new CountdownDialog(dynamic_cast<QWidget*>
