@@ -35,6 +35,7 @@ class QLabel;
 class QComboBox;
 class QRadioButton;
 class NotePixmapFactory;
+class QGrid;
 
 
 // Definitions of various simple dialogs that may be used in multiple
@@ -255,6 +256,57 @@ protected:
 public slots:
     void slotTextChanged(const QString &);
     void slotTypeChanged(const QString &);
+};
+
+
+class EventEditDialog : public KDialogBase
+{
+    Q_OBJECT
+
+public:
+    /**
+     * Construct an event-edit dialog showing the properties of the
+     * given event.  If editable is false, the user will not be allowed
+     * to modify the event; otherwise the event will be editable and
+     * the resulting edited version can subsequently be queried
+     * through getEvent().
+     */
+    EventEditDialog(QWidget *parent, const Rosegarden::Event &event,
+		    bool editable = true);
+
+    bool isModified() const;
+    Rosegarden::Event getEvent() const;
+
+protected:
+    const Rosegarden::Event &m_originalEvent;
+    Rosegarden::Event m_event;
+
+    QLabel *m_absoluteTimeDisplay;
+    QLabel *m_durationDisplay;
+
+    QGrid *m_persistentGrid;
+    QGrid *m_nonPersistentGrid;
+
+    std::string m_type;
+    Rosegarden::timeT m_absoluteTime;
+    Rosegarden::timeT m_duration;
+    int m_subOrdering;
+
+public slots:
+    void slotEventTypeChanged(const QString &);
+    void slotAbsoluteTimeChanged(int value);
+    void slotDurationChanged(int value);
+    void slotSubOrderingChanged(int value);
+
+    void slotIntPropertyChanged(int);
+    void slotBoolPropertyChanged();
+    void slotStringPropertyChanged(const QString &);
+
+    void slotPropertyDeleted();
+    void slotPropertyMadePersistent();
+
+protected:
+    void addPersistentProperty(const Rosegarden::PropertyName &);
 };
 
 

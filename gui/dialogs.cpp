@@ -26,13 +26,16 @@
 #include <qlabel.h>
 #include <qhbox.h>
 #include <qvbox.h>
+#include <qspinbox.h>
 #include <qcombobox.h>
 #include <qcheckbox.h>
 #include <qgroupbox.h>
 #include <qradiobutton.h>
+#include <qpushbutton.h>
 #include <qbuttongroup.h>
 #include <qlayout.h>
 #include <qtooltip.h>
+#include <qobjectlist.h>
 
 #include <klocale.h>
 #include <karrowbutton.h>
@@ -169,7 +172,7 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
     m_normalizeRestsButton = new QCheckBox
 	(i18n("Normalize subsequent rests"), groupBox);
     m_normalizeRestsButton->setChecked(true);
-    QObject::connect(m_hideSignatureButton, SIGNAL(released()), this,
+    QObject::connect(m_hideSignatureButton, SIGNAL(clicked()), this,
 		     SLOT(slotUpdateCommonTimeButton()));
     slotUpdateCommonTimeButton();
 }
@@ -600,15 +603,15 @@ PasteNotationDialog::PasteNotationDialog(QWidget *parent,
 	(i18n("Make this the default paste type"), setAsDefaultGroup);
     m_setAsDefaultButton->setChecked(true);
 
-    QObject::connect(m_restrictedButton, SIGNAL(released()),
+    QObject::connect(m_restrictedButton, SIGNAL(clicked()),
 		     this, SLOT(slotPasteTypeChanged()));
-    QObject::connect(m_simpleButton, SIGNAL(released()),
+    QObject::connect(m_simpleButton, SIGNAL(clicked()),
 		     this, SLOT(slotPasteTypeChanged()));
-    QObject::connect(m_openAndPasteButton, SIGNAL(released()),
+    QObject::connect(m_openAndPasteButton, SIGNAL(clicked()),
 		     this, SLOT(slotPasteTypeChanged()));
-    QObject::connect(m_noteOverlayButton, SIGNAL(released()),
+    QObject::connect(m_noteOverlayButton, SIGNAL(clicked()),
 		     this, SLOT(slotPasteTypeChanged()));
-    QObject::connect(m_matrixOverlayButton, SIGNAL(released()),
+    QObject::connect(m_matrixOverlayButton, SIGNAL(clicked()),
 		     this, SLOT(slotPasteTypeChanged()));
 }
 
@@ -1056,6 +1059,301 @@ TextEventDialog::slotTypeChanged(const QString &)
 
 	m_staffAboveLabel->hide();
 	m_staffBelowLabel->show();
+    }
+}
+
+
+EventEditDialog::EventEditDialog(QWidget *parent,
+				 const Rosegarden::Event &event,
+				 bool editable) :
+    KDialogBase(parent, 0, true, i18n(editable ? "Edit Event" : "View Event"),
+		(editable ? (Ok | Cancel) : Ok)),
+    m_originalEvent(event),
+    m_event(event),
+    m_type(event.getType()),
+    m_absoluteTime(event.getAbsoluteTime()),
+    m_duration(event.getDuration()),
+    m_subOrdering(event.getSubOrdering())
+{
+    QVBox *vbox = makeVBoxMainWidget();
+
+    QGroupBox *intrinsicBox = new QGroupBox
+	(1, Horizontal, i18n("Intrinsics"), vbox);
+
+    QGrid *intrinsicGrid = new QGrid(3, QGrid::Horizontal, intrinsicBox);
+
+    new QLabel(i18n("Event type: "), intrinsicGrid);
+    new QLabel("", intrinsicGrid);
+    QLineEdit *lineEdit = new QLineEdit(intrinsicGrid);
+    lineEdit->setText(event.getType().c_str());
+
+    new QLabel(i18n("Absolute time: "), intrinsicGrid);
+    m_absoluteTimeDisplay = new QLabel("(note)", intrinsicGrid);
+
+    QSpinBox *absoluteTime = new QSpinBox
+	(INT_MIN, INT_MAX, Note(Note::Shortest).getDuration(), intrinsicGrid);
+    absoluteTime->setValue(event.getAbsoluteTime());
+    QObject::connect(absoluteTime, SIGNAL(valueChanged(int)),
+		     this, SLOT(slotAbsoluteTimeChanged(int)));
+    slotAbsoluteTimeChanged(event.getAbsoluteTime());
+
+    new QLabel(i18n("Duration: "), intrinsicGrid);
+    m_durationDisplay = new QLabel("(note)", intrinsicGrid);
+
+    QSpinBox *duration = new QSpinBox
+	(0, INT_MAX, Note(Note::Shortest).getDuration(), intrinsicGrid);
+    duration->setValue(event.getDuration());
+    QObject::connect(duration, SIGNAL(valueChanged(int)),
+		     this, SLOT(slotDurationChanged(int)));
+    slotDurationChanged(event.getDuration());
+
+    new QLabel(i18n("Sub-ordering: "), intrinsicGrid);
+    new QLabel("", intrinsicGrid);
+    
+    QSpinBox *subOrdering = new QSpinBox(-100, 100, 1, intrinsicGrid);
+    subOrdering->setValue(event.getSubOrdering());
+    QObject::connect(subOrdering, SIGNAL(valueChanged(int)),
+		     this, SLOT(slotSubOrderingChanged(int)));
+    slotSubOrderingChanged(event.getSubOrdering());
+
+    QGroupBox *persistentBox = new QGroupBox
+	(1, Horizontal, i18n("Persistent properties"), vbox);
+    m_persistentGrid = new QGrid(4, QGrid::Horizontal, persistentBox);
+
+    QLabel *label = new QLabel(i18n("Name"), m_persistentGrid);
+    QFont font(label->font());
+    font.setBold(true);
+    label->setFont(font);
+    
+    label = new QLabel(i18n("Type"), m_persistentGrid);
+    label->setFont(font);
+    label = new QLabel(i18n("Value"), m_persistentGrid);
+    label->setFont(font);
+    label = new QLabel("", m_persistentGrid);
+    label->setFont(font);
+
+    Rosegarden::Event::PropertyNames p = event.getPersistentPropertyNames();
+
+    for (Rosegarden::Event::PropertyNames::iterator i = p.begin();
+	 i != p.end(); ++i) {
+	addPersistentProperty(*i);
+    }
+
+    QGroupBox *nonPersistentBox = new QGroupBox
+	(1, Horizontal, i18n("Non-persistent properties"), vbox);
+    new QLabel(i18n("These will be lost if the event is modified."),
+	       nonPersistentBox);
+
+    m_nonPersistentGrid = new QGrid
+	(4, QGrid::Horizontal, nonPersistentBox);
+    m_nonPersistentGrid->setSpacing(4);
+
+    label = new QLabel(i18n("Name       "), m_nonPersistentGrid);
+    label->setFont(font);
+    label = new QLabel(i18n("Type       "), m_nonPersistentGrid);
+    label->setFont(font);
+    label = new QLabel(i18n("Value      "), m_nonPersistentGrid);
+    label->setFont(font);
+    label = new QLabel("", m_nonPersistentGrid);
+    label->setFont(font);
+
+    p = event.getNonPersistentPropertyNames();
+
+    for (Rosegarden::Event::PropertyNames::iterator i = p.begin();
+	 i != p.end(); ++i) {
+
+	new QLabel(i->c_str(), m_nonPersistentGrid, i->c_str());
+	new QLabel(event.getPropertyTypeAsString(*i).c_str(), m_nonPersistentGrid, i->c_str());
+	new QLabel(event.getAsString(*i).c_str(), m_nonPersistentGrid, i->c_str());
+	QPushButton *button = new QPushButton("P", m_nonPersistentGrid, i->c_str());
+	button->setFixedSize(QSize(24, 24));
+	QToolTip::add(button, i18n("Make persistent"));
+	QObject::connect(button, SIGNAL(clicked()),
+			 this, SLOT(slotPropertyMadePersistent()));
+    }
+}
+
+
+void
+EventEditDialog::addPersistentProperty(const Rosegarden::PropertyName &name)
+{
+    QLabel *label = new QLabel(name.c_str(), m_persistentGrid, name.c_str());
+    label->show();
+    label = new QLabel(m_originalEvent.getPropertyTypeAsString(name).c_str(),
+		       m_persistentGrid, name.c_str());
+    label->show();
+
+    Rosegarden::PropertyType type(m_originalEvent.getPropertyType(name));
+    switch (type) {
+	
+    case Rosegarden::Int:
+    {
+	QSpinBox *spinBox = new QSpinBox
+	    (INT_MIN, INT_MAX, 1, m_persistentGrid, name.c_str());
+	spinBox->setValue(m_originalEvent.get<Rosegarden::Int>(name));
+	QObject::connect(spinBox, SIGNAL(valueChanged(int)),
+			 this, SLOT(slotIntPropertyChanged(int)));
+	spinBox->show();
+	break;
+    }
+    
+    case Rosegarden::Bool:
+    {
+	QCheckBox *checkBox = new QCheckBox
+	    ("", m_persistentGrid, name.c_str());
+	checkBox->setChecked(m_originalEvent.get<Rosegarden::Bool>(name));
+	QObject::connect(checkBox, SIGNAL(clicked()),
+			 this, SLOT(slotBoolPropertyChanged()));
+	checkBox->show();
+	break;
+    }
+    
+    case Rosegarden::String:
+    {
+	QLineEdit *lineEdit = new QLineEdit
+	    (m_originalEvent.get<Rosegarden::String>(name).c_str(),
+	     m_persistentGrid, name.c_str());
+	QObject::connect(lineEdit, SIGNAL(textChanged(const QString &)),
+			 this, SLOT(slotStringPropertyChanged(const QString &)));
+	lineEdit->show();
+	break;
+    }
+    }
+    
+    QPushButton *button = new QPushButton("X", m_persistentGrid, name.c_str());
+    button->setFixedSize(QSize(24, 24));
+    QToolTip::add(button, i18n("Delete this property"));
+    QObject::connect(button, SIGNAL(clicked()),
+		     this, SLOT(slotPropertyDeleted()));
+    button->show();
+}
+
+
+void
+EventEditDialog::slotEventTypeChanged(const QString &type)
+{
+    m_type = type.latin1();
+}
+
+void
+EventEditDialog::slotAbsoluteTimeChanged(int value)
+{
+    m_absoluteTime = value;
+}
+
+void
+EventEditDialog::slotDurationChanged(int value)
+{
+    m_duration = value;
+}
+
+void
+EventEditDialog::slotSubOrderingChanged(int value)
+{
+    m_subOrdering = value;
+}
+
+void
+EventEditDialog::slotIntPropertyChanged(int value) 
+{
+    const QObject *s = sender();
+    const QSpinBox *spinBox = dynamic_cast<const QSpinBox *>(s);
+    if (!spinBox) return;
+
+    QString propertyName = spinBox->name();
+    m_event.set<Rosegarden::Int>(propertyName.latin1(), value);
+}
+
+void
+EventEditDialog::slotBoolPropertyChanged()
+{ 
+    const QObject *s = sender();
+    const QCheckBox *checkBox = dynamic_cast<const QCheckBox *>(s);
+    if (!checkBox) return;
+
+    QString propertyName = checkBox->name();
+    bool checked = checkBox->isChecked();
+
+    m_event.set<Rosegarden::Bool>(propertyName.latin1(), checked);
+}
+
+void
+EventEditDialog::slotStringPropertyChanged(const QString &value)
+{
+    const QObject *s = sender();
+    const QLineEdit *lineEdit = dynamic_cast<const QLineEdit *>(s);
+    if (!lineEdit) return;
+    
+    QString propertyName = lineEdit->name();
+    m_event.set<Rosegarden::String>(propertyName.latin1(), value.latin1());
+}
+
+void
+EventEditDialog::slotPropertyDeleted()
+{
+    const QObject *s = sender();
+    const QPushButton *pushButton = dynamic_cast<const QPushButton *>(s);
+    if (!pushButton) return;
+
+    QString propertyName = pushButton->name();
+
+    QObjectList *list = m_persistentGrid->queryList(0, propertyName, false);
+    QObjectListIt i(*list);
+    QObject *obj;
+    while ((obj = i.current()) != 0) {
+	++i;
+	delete obj;
+    }
+    delete list;
+
+    m_event.unset(propertyName.latin1());
+}
+
+void
+EventEditDialog::slotPropertyMadePersistent()
+{
+    const QObject *s = sender();
+    const QPushButton *pushButton = dynamic_cast<const QPushButton *>(s);
+    if (!pushButton) return;
+
+    QString propertyName = pushButton->name();
+
+    QObjectList *list = m_nonPersistentGrid->queryList(0, propertyName, false);
+    QObjectListIt i(*list);
+    QObject *obj;
+    while ((obj = i.current()) != 0) {
+	++i;
+	delete obj;
+    }
+    delete list;
+
+    addPersistentProperty(propertyName.latin1());
+
+    Rosegarden::PropertyType type =
+	m_originalEvent.getPropertyType(propertyName.latin1());
+
+    switch (type) {
+
+    case Rosegarden::Int:
+	m_event.set<Rosegarden::Int>
+	    (propertyName.latin1(),
+	     m_originalEvent.get<Rosegarden::Int>
+	     (propertyName.latin1()));
+	break;
+
+    case Rosegarden::Bool:
+	m_event.set<Rosegarden::Bool>
+	    (propertyName.latin1(),
+	     m_originalEvent.get<Rosegarden::Bool>
+	     (propertyName.latin1()));
+	break;
+
+    case Rosegarden::String:
+	m_event.set<Rosegarden::String>
+	    (propertyName.latin1(),
+	     m_originalEvent.get<Rosegarden::String>
+	     (propertyName.latin1()));
+	break;
     }
 }
 

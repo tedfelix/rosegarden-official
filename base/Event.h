@@ -142,7 +142,10 @@ public:
     void setPersistence(const PropertyName &name, bool persistent);
     // throw (NoData);
 
-    std::string getPropertyType(const PropertyName &name) const;
+    PropertyType getPropertyType(const PropertyName &name) const;
+    // throw (NoData);
+
+    std::string getPropertyTypeAsString(const PropertyName &name) const;
     // throw (NoData);
 
     std::string getAsString(const PropertyName &name) const;

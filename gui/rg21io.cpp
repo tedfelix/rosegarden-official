@@ -582,6 +582,7 @@ void RG21Loader::closeSegmentOrComposition()
 	Rosegarden::Track *track = new Rosegarden::Track
 	    (trackId, m_currentInstrumentId, trackId,
 	     m_currentStaffName.latin1(), false); 
+	m_currentInstrumentId = (++m_currentInstrumentId) % 16;
 
 	m_composition->addTrack(track);
         m_composition->addSegment(m_currentSegment);

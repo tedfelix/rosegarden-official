@@ -119,8 +119,22 @@ Event::unset(const PropertyName &name)
 }
     
 
-string
+PropertyType
 Event::getPropertyType(const PropertyName &name) const
+    // throw (NoData)
+{
+    PropertyMap::const_iterator i;
+    const PropertyMap *map = find(name, i);
+    if (map) {
+        return i->second->getType();
+    } else {
+        throw NoData();
+    }
+}
+      
+
+string
+Event::getPropertyTypeAsString(const PropertyName &name) const
     // throw (NoData)
 {
     PropertyMap::const_iterator i;

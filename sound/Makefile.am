@@ -20,19 +20,19 @@ libRosegardenSound_la_SOURCES = AudioFile.cpp \
                                 SoundFile.cpp
 
 lib_LTLIBRARIES = libRosegardenSequencer.la
-libRosegardenSequencer_la_SOURCES = ArtsDriver.cpp \
+libRosegardenSequencer_la_SOURCES = ArtsDriver.cpp\
+				    AlsaDriver.cpp \
                                     MidiArts.cc \
                                     MidiRecord.cpp \
                                     Sequencer.cpp \
                                     SoundDriver.cpp
-#AlsaDriver.cpp 
 
 # the library search path. 
 libRosegardenSequencer_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -module -no-undefined
 
 # the libraries to link against. Be aware of the order. First the libraries,
 # that depend on the following ones.
-libRosegardenSequencer_la_LIBADD   = -lartsmidi -lqt -lsoundserver_idl libRosegardenSound.la ../base/libbase.la -lartsflow -lartsmodules 
+libRosegardenSequencer_la_LIBADD   = -lartsmidi -lqt -lsoundserver_idl libRosegardenSound.la ../base/libbase.la -lartsflow -lartsmodules -lasound
 
 # make messages.po. Move this one to ../po/ and "make merge" in po
 # the -x is for skipping messages already translated in kdelibs

@@ -215,7 +215,7 @@ XmlStorableEvent::toXmlString(timeT expectedTime) const
 
 	res += QString("<property name=\"%1\" %2=\"%3\"/>")
 	    .arg((*i).c_str())
-	    .arg(QString(getPropertyType(*i).c_str()).lower())
+	    .arg(QString(getPropertyTypeAsString(*i).c_str()).lower())
 	    .arg(getAsString(*i).c_str());
     }
   

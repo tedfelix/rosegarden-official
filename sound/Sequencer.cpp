@@ -23,7 +23,6 @@
 
 #include "Sequencer.h"
 
-
 #ifdef HAVE_ALSA
 #include "AlsaDriver.h"
 #else

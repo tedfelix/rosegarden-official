@@ -795,6 +795,13 @@ void NotationSelector::handleMouseDblClick(Rosegarden::timeT,
     NotationStaff *staff = m_nParentView->getStaff(staffNo);
     if (!staff) return;
 
+    if (m_clickedElement) {
+	//!!! testing
+	EventEditDialog *dialog = new EventEditDialog
+	    (m_nParentView, *m_clickedElement->event(), true);
+	(void)dialog->exec();
+    }
+
     QRect rect = staff->getBarExtents(e->x(), e->y());
 
     m_selectionRect->setX(rect.x() + 1);

@@ -857,9 +857,17 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
     count.setNum(params.m_tupletCount);
     QRect cr = m_tupletCountFontMetrics.boundingRect(count);
 
-    int w = (params.m_tuplingLineWidth - cr.width())/2 - countSpace;
+    int tlw = params.m_tuplingLineWidth;
+    int indent = m_noteBodyWidth / 2;
+    
+    if (tlw < (cr.width() + countSpace * 2 + m_noteBodyWidth * 2)) {
+	tlw += m_noteBodyWidth;
+	indent = 0;
+    }
 
-    int startX = m_left + m_noteBodyWidth / 2;
+    int w = (tlw - cr.width())/2 - countSpace;
+
+    int startX = m_left + indent;
     int endX = startX + w;
 
     int startY = params.m_tuplingLineY + m_above + m_noteBodyHeight / 2;
