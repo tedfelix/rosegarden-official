@@ -1072,12 +1072,16 @@ NotationView::insertNote(int height, const QPoint &eventPos)
 	//!!! should do this if we're between two events in the same
 	//group, as well
 	long groupNo;
-	if ((*closestNote)->event()->get<Int>(P_BEAMED_GROUP_NO, groupNo)) {
+	if ((*closestNote)->event()->get<Int>
+            (Track::BeamedGroupIdPropertyName, groupNo)) {
+
 	    newNotationElement->event()->setMaybe<Int>
-                (P_BEAMED_GROUP_NO, groupNo);
+                (Track::BeamedGroupIdPropertyName, groupNo);
+
 	    newNotationElement->event()->setMaybe<String>
-		(P_BEAMED_GROUP_TYPE,
-		 (*closestNote)->event()->get<String>(P_BEAMED_GROUP_TYPE));
+		(Track::BeamedGroupTypePropertyName,
+		 (*closestNote)->event()->get<String>
+                 (Track::BeamedGroupTypePropertyName));
 	}
 
         kdDebug(KDEBUG_AREA) << "new event is: " << (*newNotationElement) << endl;

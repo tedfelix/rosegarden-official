@@ -41,9 +41,6 @@
 #include "xmlstorableevent.h"
 #include "Event.h"
 
-#include "notationproperties.h" // for BEAMED_GROUP stuff, but we shouldn't
-                                // really be including notation headers here
-
 QList<RosegardenGUIView> *RosegardenGUIDoc::pViewList = 0L;
 
 using Rosegarden::Composition;
@@ -253,10 +250,11 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
              i != (*trks)->end(); ++i) {
 
             long group;
-            if ((*i)->get<Int>(P_BEAMED_GROUP_NO, group)) {
+            if ((*i)->get<Int>(Track::BeamedGroupIdPropertyName, group)) {
                 if (group != currentGroup) {
                     if (currentGroup != -1) fileStream << "</group>" << endl;
-                    std::string type = (*i)->get<String>(P_BEAMED_GROUP_TYPE);
+                    std::string type = (*i)->get<String>
+                        (Track::BeamedGroupTypePropertyName);
                     fileStream << "<group type=\""
                                << type.c_str() << "\">" << endl;
                     currentGroup = group;

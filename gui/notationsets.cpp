@@ -23,6 +23,8 @@
 #include "rosedebug.h"
 #include "staff.h"
 #include "Equation.h"
+#include "Track.h"
+
 #include <cstring>
 
 using Rosegarden::Event;
@@ -32,6 +34,7 @@ using Rosegarden::Bool;
 using Rosegarden::Clef;
 using Rosegarden::Key;
 using Rosegarden::Note;
+using Rosegarden::Track;
 using Rosegarden::Equation;
 using Rosegarden::timeT;
 
@@ -286,15 +289,16 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
     m_weightBelow(0),
     m_type(Beamed)
 {
-    if (!(*i)->event()->get<Rosegarden::Int>(P_BEAMED_GROUP_NO, m_groupNo))
-        m_groupNo = -1;
+    if (!(*i)->event()->get<Rosegarden::Int>
+        (Track::BeamedGroupIdPropertyName, m_groupNo)) m_groupNo = -1;
 
     initialise();
     
     if ((i = getInitialElement()) != getList().end()) {
 
         try {
-            std::string t = (*i)->event()->get<String>(P_BEAMED_GROUP_TYPE);
+            std::string t = (*i)->event()->get<String>
+                (Track::BeamedGroupTypePropertyName);
             if (strcasecmp(t.c_str(), "beamed")) {
                 m_type = Beamed;
             } else if (strcasecmp(t.c_str(), "tupled")) {
@@ -317,8 +321,8 @@ NotationGroup::~NotationGroup()
 bool NotationGroup::test(const NELIterator &i)
 {
     long n;
-    return ((*i)->event()->get<Rosegarden::Int>(P_BEAMED_GROUP_NO, n) &&
-            n == m_groupNo);
+    return ((*i)->event()->get<Rosegarden::Int>
+            (Track::BeamedGroupIdPropertyName, n) && n == m_groupNo);
 }
 
 void

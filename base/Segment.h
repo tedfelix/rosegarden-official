@@ -22,6 +22,7 @@
 #define _TRACK_H_
 
 #include <set>
+#include <string>
 #include "Event.h"
 
 namespace Rosegarden 
@@ -39,6 +40,14 @@ public:
           unsigned int stepsPerBar = 384);
     ~Track();
 
+    // Note that these should be non-persistent properties, because
+    // the code that writes out XML converts them to
+    // <group>...</group> instead of writing them as explicit
+    // properties of the events
+    
+    static const std::string BeamedGroupIdPropertyName;
+    static const std::string BeamedGroupTypePropertyName;
+
     timeT getStartIndex() const         { return m_startIdx; }
     void  setStartIndex(timeT i);
 
@@ -54,7 +63,7 @@ public:
      * Returns an event group id
      * The id is guaranteed to be unique within the track
      */
-//!!!    int getNextGroupId() const;
+    int getNextGroupId() const;
 
     /**
      * Expands events in the [from, to[ interval into 
@@ -123,7 +132,7 @@ protected:
     timeT m_startIdx;
     unsigned int m_instrument;
 
-//!!!    mutable int m_groupId;
+    mutable int m_groupId;
 };
 
 }

@@ -21,8 +21,6 @@
 #include "rosedebug.h"
 #include "rosexmlhandler.h"
 #include "xmlstorableevent.h"
-#include "notationproperties.h" // for group no & type --
-                                // shouldn't really be including notation*.h
 
 #include <klocale.h>
 
@@ -39,7 +37,7 @@ RoseXmlHandler::RoseXmlHandler(Composition &composition)
       m_chordDuration(0),
       m_inChord(false),
       m_inGroup(false),
-      m_groupNo(0)
+      m_groupId(0)
 {
 //     kdDebug(KDEBUG_AREA) << "RoseXmlHandler() : composition size : "
 //                          << m_composition.getNbTracks()
@@ -110,8 +108,10 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         m_currentEvent->setAbsoluteTime(m_currentTime);
 
         if (m_inGroup) {
-            m_currentEvent->setMaybe<Int>(P_BEAMED_GROUP_NO, m_groupNo);
-            m_currentEvent->setMaybe<String>(P_BEAMED_GROUP_TYPE, m_groupType);
+            m_currentEvent->setMaybe<Int>
+                (Track::BeamedGroupIdPropertyName, m_groupId);
+            m_currentEvent->setMaybe<String>
+                (Track::BeamedGroupTypePropertyName, m_groupType);
         }
         
         if (!m_inChord) {
@@ -142,8 +142,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         }
         
         m_inGroup = true;
-        m_groupNo++;
-//        m_groupNo = m_currentTrack->getNextGroupId();
+        m_groupId = m_currentTrack->getNextGroupId();
         m_groupType = atts.value("type");
 
     } else if (lcName == "property") {

@@ -69,7 +69,7 @@ protected:
     bool m_inChord;
     bool m_inGroup;
     std::string m_groupType;
-    int m_groupNo;
+    int m_groupId;
 
     QString m_errorString;
 };

@@ -24,13 +24,17 @@ namespace Rosegarden
 {
 using std::cerr;
 using std::endl;
+using std::string;
+
+const string Track::BeamedGroupIdPropertyName   = "BGroupId";
+const string Track::BeamedGroupTypePropertyName = "BGroupType";
     
 Track::Track(unsigned int nbTimeSteps, timeT startIdx,
              unsigned int stepsPerBar)
     : std::multiset<Event*, Event::EventCmp>(),
     m_startIdx(startIdx),
-    m_instrument(0) /*!!!,
-                      m_groupId(0)*/
+    m_instrument(0),
+    m_groupId(0)
 {
     unsigned int initialTime = m_startIdx;
     
@@ -161,12 +165,10 @@ TimeSignature Track::getTimeSigAtEnd() const
     return defaultSig44;
 }
 
-/*!!!
 int Track::getNextGroupId() const
 {
     return m_groupId++;
 }
-*/
 
 bool Track::expandIntoGroup(iterator i,
                             timeT baseDuration,
