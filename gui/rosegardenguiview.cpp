@@ -549,7 +549,7 @@ void RosegardenGUIView::slotSelectTrackSegments(int trackId)
             track = comp.getTrackByIndex(trackId);
             instr = studio.getInstrumentById(track->getInstrument());
 
-            if (instr->getType() == Rosegarden::Instrument::Midi)
+            if (instr && instr->getType() == Rosegarden::Instrument::Midi)
             {
                 comp.setRecordTrack(trackId);
                 getTrackEditor()->getTrackButtons()->slotSetRecordTrack(trackId);
