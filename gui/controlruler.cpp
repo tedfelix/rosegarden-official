@@ -666,6 +666,7 @@ ControlRuler::ControlRuler(Segment *segment,
                            const char* name, WFlags f) :
     RosegardenCanvasView(c, parent, name, f),
     m_parentEditView(parentView),
+    m_mainHorizontalScrollBar(0),
     m_rulerScale(rulerScale),
     m_eventSelection(new EventSelection(*segment)),
     m_segment(segment),
@@ -937,6 +938,11 @@ ControlRuler::contentsWheelEvent(QWheelEvent *e)
 {
     // not sure what to do yet
     QCanvasView::contentsWheelEvent(e);
+}
+
+QScrollBar* ControlRuler::getMainHorizontalScrollBar()
+{
+    return m_mainHorizontalScrollBar ? m_mainHorizontalScrollBar : horizontalScrollBar();
 }
 
 void ControlRuler::updateSelection()

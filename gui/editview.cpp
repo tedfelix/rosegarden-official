@@ -289,7 +289,7 @@ void EditView::addRuler(QWidget* w)
                 w, SLOT(slotScrollHoriz(int)));
         connect(m_canvasView->horizontalScrollBar(), SIGNAL(sliderMoved(int)),
                 w, SLOT(slotScrollHoriz(int)));
-    }
+    }    
 }
 
 void EditView::addPropertyBox(QWidget *w)
@@ -310,6 +310,8 @@ PropertyControlRuler* EditView::makePropertyControlRuler(PropertyName propertyNa
 	(propertyName, getCurrentStaff(), getHLayout(), this,
 	 controlRulerCanvas, m_controlRulers);
 
+    controlRuler->setMainHorizontalScrollBar(m_canvasView->horizontalScrollBar());
+
     return controlRuler;
 }
 
@@ -325,6 +327,8 @@ ControllerEventsRuler* EditView::makeControllerEventRuler(ControlParameter *cont
     ControllerEventsRuler* controlRuler = new ControllerEventsRuler
 	(getCurrentSegment(), getHLayout(), this,
 	 controlRulerCanvas, m_controlRulers, controller);
+
+    controlRuler->setMainHorizontalScrollBar(m_canvasView->horizontalScrollBar());
 
     return controlRuler;
 }

@@ -74,7 +74,7 @@ void RosegardenCanvasView::slotUpdate()
 //
 void RosegardenCanvasView::slotScrollHoriz(int hpos)
 {
-    QScrollBar* hbar = horizontalScrollBar();
+    QScrollBar* hbar = getMainHorizontalScrollBar();
 
     /* Lots of performance hitting debug
     RG_DEBUG << "RosegardenCanvasView::slotScrollHoriz: hpos is " << hpos
@@ -112,7 +112,7 @@ void RosegardenCanvasView::slotScrollHoriz(int hpos)
 
 void RosegardenCanvasView::slotScrollHorizSmallSteps(int hpos)
 {
-    QScrollBar* hbar = horizontalScrollBar();
+    QScrollBar* hbar = getMainHorizontalScrollBar();
 
     int diff = 0;
 
@@ -177,7 +177,7 @@ void RosegardenCanvasView::slotScrollVertToTop(int vpos)
 
 void RosegardenCanvasView::slotSetScrollPos(const QPoint &pos)
 {
-    horizontalScrollBar()->setValue(pos.x());
+    getMainHorizontalScrollBar()->setValue(pos.x());
     verticalScrollBar()->setValue(pos.y());
 }
 

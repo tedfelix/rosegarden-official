@@ -105,7 +105,9 @@ protected:
     
     virtual void resizeEvent(QResizeEvent*);
     virtual void setHBarGeometry(QScrollBar &hbar, int x, int y, int w, int h);
-    
+
+    virtual QScrollBar* getMainHorizontalScrollBar() { return horizontalScrollBar(); }
+
     //--------------- Data members ---------------------------------
 
     QWidget* m_bottomWidget;

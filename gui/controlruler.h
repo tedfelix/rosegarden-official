@@ -85,6 +85,8 @@ public:
     void flipForwards();
     void flipBackwards();
 
+    void setMainHorizontalScrollBar(QScrollBar* s ) { m_mainHorizontalScrollBar = s; }
+
 signals:
     void stateChange(const QString&, bool);
 
@@ -100,9 +102,13 @@ protected:
     virtual void contentsWheelEvent(QWheelEvent*);
     virtual void contentsContextMenuEvent(QContextMenuEvent*);
 
+    virtual QScrollBar* getMainHorizontalScrollBar();
+
     virtual void computeStaffOffset() {};
 
     virtual void layoutItem(ControlItem*);
+
+
 
     // Stacking of the SegmentItems on the canvas
     //
@@ -124,6 +130,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     EditViewBase*               m_parentEditView;
+    QScrollBar*                 m_mainHorizontalScrollBar;
     Rosegarden::RulerScale*     m_rulerScale;
     Rosegarden::EventSelection* m_eventSelection;
     Rosegarden::Segment*        m_segment;
