@@ -66,6 +66,8 @@ using std::vector;
 
 static clock_t drawBeamsTime = 0;
 static clock_t makeNotesTime = 0;
+static int drawBeamsCount = 0;
+static int drawBeamsBeamCount = 0;
 
 NotePixmapParameters::NotePixmapParameters(Note::Type noteType,
                                            int dots,
@@ -243,9 +245,12 @@ NotePixmapFactory::dumpStats(std::ostream &s)
       << (makeNotesTime * 1000 / CLOCKS_PER_SEC) << "ms\n"
       << "drawBeams: "
       << (drawBeamsTime * 1000 / CLOCKS_PER_SEC) << "ms"
+      << " (drew " << drawBeamsCount << " individual points in " << drawBeamsBeamCount << " beams)" 
       << endl;
     makeNotesTime = 0;
     drawBeamsTime = 0;
+    drawBeamsCount = 0;
+    drawBeamsBeamCount = 0;
 #endif
 }
 
@@ -742,17 +747,20 @@ NotePixmapFactory::drawShallowLine(int x0, int y0, int x1, int y1,
         m_p.setPen(colours[quartile]);
         m_p.drawPoint(cx, cy);
         m_pm.drawPoint(cx, cy);
+	drawBeamsCount ++;
 
 	if (thickness > 1) m_p.setPen(Qt::black);
 	while (++off < thickness) {
             m_p.drawPoint(cx, cy + off);
             m_pm.drawPoint(cx, cy + off);
+	    drawBeamsCount ++;
         }
         
         m_p.setPen(colours[4 - quartile]);
         m_p.drawPoint(cx, cy + off);
         m_pm.drawPoint(cx, cy + off);
-
+	drawBeamsCount ++;
+	    
         ++cx;
     }
 
@@ -797,6 +805,7 @@ NotePixmapFactory::drawBeams(const QPoint &s1,
         drawShallowLine(startX, startY + y, startX + width,
                         startY + (int)(width*grad) + y,
                         thickness, smooth);
+	    drawBeamsBeamCount ++;
     }
 
     int partWidth = width / 3;
@@ -809,6 +818,7 @@ NotePixmapFactory::drawBeams(const QPoint &s1,
             drawShallowLine(startX, startY + y, startX + partWidth,
                             startY + (int)(partWidth*grad) + y,
                             thickness, smooth);
+	    drawBeamsBeamCount ++;
         }
     }
     
@@ -821,6 +831,7 @@ NotePixmapFactory::drawBeams(const QPoint &s1,
             drawShallowLine(startX, startY + y, startX + partWidth,
                             startY + (int)(partWidth*grad) + y,
                             thickness, smooth);
+	    drawBeamsBeamCount ++;
         }
     }
 
@@ -1494,8 +1505,12 @@ NotePixmapFactory::makeTextPixmap(const Rosegarden::Text &text)
 	large = true;
     }
 
-    QFont textFont
-	("new century schoolbook", (large ? 16 : 12), weight, italic);
+    QFont textFont;
+    textFont.setStyleHint(QFont::Serif);
+    textFont.setPixelSize(large ? 16 : 12);
+    textFont.setWeight(weight);
+    textFont.setItalic(italic);
+//!!!	("new century schoolbook", (large ? 16 : 12), weight, italic);
 
     if (large) textFont.setPixelSize(getLineSpacing() * 2);
     else textFont.setPixelSize(getLineSpacing() * 5 / 3);
@@ -1530,6 +1545,7 @@ NotePixmapFactory::createPixmapAndMask(int width, int height)
     m_generatedMask->fill(Qt::color0);
 
     // initiate painting
+    
     m_p.begin(m_generatedPixmap);
     m_pm.begin(m_generatedMask);
 

@@ -151,7 +151,8 @@ NoteActionData::NoteActionData(const QString& _title,
 
 NotationView::NotationView(RosegardenGUIDoc *doc,
                            vector<Segment *> segments,
-                           QWidget *parent) :
+                           QWidget *parent,
+			   bool showProgressive) :
     EditView(doc, segments, false, parent, "notationview"),
     m_properties(getViewLocalPropertyPrefix()),
     m_currentEventSelection(0),
@@ -222,9 +223,9 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	(RosegardenGUIColours::InsertCursorRuler);
 
     m_chordNameRuler = new ChordNameRuler
-	(&m_hlayout, &doc->getComposition(), 20, getCentralFrame());
+	(&m_hlayout, 0, 20, getCentralFrame());
     addRuler(m_chordNameRuler);
-    m_chordNameRuler->show();
+    if (showProgressive) m_chordNameRuler->show();
     m_chordNamesVisible = true;
 
     m_tempoRuler = new TempoRuler
@@ -237,8 +238,11 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                                         true, getCentralFrame());
     setBottomBarButtons(m_bottomBarButtons);
     
-    show();
-    kapp->processEvents();
+    if (showProgressive) {
+	show();
+	kapp->processEvents();
+    }
+    m_chordNameRuler->setComposition(&doc->getComposition());
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new NotationStaff(canvas(), segments[i], i,
@@ -397,7 +401,7 @@ void NotationView::positionStaffs()
             m_staffs[i]->setConnectingLineLength(trackHeights[track]);
         }
         
-        m_staffs[i]->setX(0);
+        m_staffs[i]->setX(20);
 	m_staffs[i]->setY(trackCoords[track]);
     }
 }    
@@ -670,19 +674,23 @@ void NotationView::setupActions()
                 SLOT(slotTransformsRestoreStems()), actionCollection(),
                 "restore_stems");
 
-    new KAction(TransformsMenuTransposeCommand::getGlobalName(1), 0, this,
+    new KAction(TransformsMenuTransposeCommand::getGlobalName(1), 0,
+		Key_Up, this,
                 SLOT(slotTransformsTransposeUp()), actionCollection(),
                 "transpose_up");
 
-    new KAction(TransformsMenuTransposeCommand::getGlobalName(12), 0, this,
+    new KAction(TransformsMenuTransposeCommand::getGlobalName(12), 0,
+		Key_Up + CTRL, this,
                 SLOT(slotTransformsTransposeUpOctave()), actionCollection(),
                 "transpose_up_octave");
 
-    new KAction(TransformsMenuTransposeCommand::getGlobalName(-1), 0, this,
+    new KAction(TransformsMenuTransposeCommand::getGlobalName(-1), 0,
+		Key_Down, this,
                 SLOT(slotTransformsTransposeDown()), actionCollection(),
                 "transpose_down");
 
-    new KAction(TransformsMenuTransposeCommand::getGlobalName(-12), 0, this,
+    new KAction(TransformsMenuTransposeCommand::getGlobalName(-12), 0,
+		Key_Down + CTRL, this,
                 SLOT(slotTransformsTransposeDownOctave()), actionCollection(),
                 "transpose_down_octave");
 
@@ -770,38 +778,65 @@ void NotationView::setupActions()
             toolbarAction->setChecked(true);
     }
 
+    new KAction(i18n("Cursor &Back"), 0, Key_Left, this,
+		SLOT(slotStepBackward()), actionCollection(),
+		"cursor_back");
+
+    new KAction(i18n("Cursor &Forward"), 0, Key_Right, this,
+		SLOT(slotStepForward()), actionCollection(),
+		"cursor_forward");
+
+    new KAction(i18n("Cursor Ba&ck Bar"), 0, Key_Left + CTRL, this,
+		SLOT(slotJumpBackward()), actionCollection(),
+		"cursor_back_bar");
+
+    new KAction(i18n("Cursor For&ward Bar"), 0, Key_Right + CTRL, this,
+		SLOT(slotJumpForward()), actionCollection(),
+		"cursor_forward_bar");
+
+    new KAction(i18n("Cursor &Up Staff"), 0, Key_Up + SHIFT, this,
+		SLOT(slotCurrentStaffUp()), actionCollection(),
+		"cursor_up_staff");
+
+    new KAction(i18n("Cursor &Down Staff"), 0, Key_Down + SHIFT, this,
+		SLOT(slotCurrentStaffDown()), actionCollection(),
+		"cursor_down_staff");
+
+    new KAction(i18n("Cursor to &Playback Pointer"), 0, this,
+		SLOT(slotJumpCursorToPlayback()), actionCollection(),
+		"cursor_to_playback_pointer");
+
+    new KAction(i18n("Re&wind"), 0, Key_End, this,
+		SIGNAL(rewindPlayback()), actionCollection(),
+		"playback_pointer_back_bar");
+
+    new KAction(i18n("&Fast Forward"), 0, Key_PageDown, this,
+		SIGNAL(fastForwardPlayback()), actionCollection(),
+		"playback_pointer_forward_bar");
+
+    new KAction(i18n("Rewind to &Beginning"), 0, this,
+		SIGNAL(rewindPlaybackToBeginning()), actionCollection(),
+		"playback_pointer_start");
+
+    new KAction(i18n("Fast Forward to &End"), 0, this,
+		SIGNAL(fastForwardPlaybackToEnd()), actionCollection(),
+		"playback_pointer_end");
+
+    new KAction(i18n("Fast Forward to &End"), 0, this,
+		SIGNAL(fastForwardPlaybackToEnd()), actionCollection(),
+		"playback_pointer_end");
+
+    new KAction(i18n("Playback Pointer to &Cursor"), 0, this,
+		SLOT(slotJumpPlaybackToCursor()), actionCollection(),
+		"playback_pointer_to_cursor");
+
     QAccel *accelerators(getAccelerators());
-
-    accelerators->connectItem(accelerators->insertItem(Key_Left),
-			      this, SLOT(slotStepBackward()));
-    accelerators->connectItem(accelerators->insertItem(Key_Right),
-			      this, SLOT(slotStepForward()));
-
-    accelerators->connectItem(accelerators->insertItem(Key_Left + CTRL),
-			      this, SLOT(slotJumpBackward()));
-    accelerators->connectItem(accelerators->insertItem(Key_Right + CTRL),
-			      this, SLOT(slotJumpForward()));
 
     accelerators->connectItem(accelerators->insertItem(Key_Left + SHIFT),
 			      this, SLOT(slotExtendSelectionBackward()));
     accelerators->connectItem(accelerators->insertItem(Key_Right + SHIFT),
 			      this, SLOT(slotExtendSelectionForward()));
 
-    accelerators->connectItem(accelerators->insertItem(Key_Up),
-			      this, SLOT(slotTransformsTransposeUp()));
-    accelerators->connectItem(accelerators->insertItem(Key_Down),
-			      this, SLOT(slotTransformsTransposeDown()));
-
-    accelerators->connectItem(accelerators->insertItem(Key_Up + CTRL),
-			      this, SLOT(slotTransformsTransposeUpOctave()));
-    accelerators->connectItem(accelerators->insertItem(Key_Down + CTRL),
-			      this, SLOT(slotTransformsTransposeDownOctave()));
-
-    accelerators->connectItem(accelerators->insertItem(Key_Up + SHIFT),
-			      this, SLOT(slotCurrentStaffUp()));
-    accelerators->connectItem(accelerators->insertItem(Key_Down + SHIFT),
-			      this, SLOT(slotCurrentStaffDown()));
-    
     KStdAction::showStatusbar(this, SLOT(slotToggleStatusBar()), actionCollection());
 
     KStdAction::saveOptions(this, SLOT(save_options()), actionCollection());
@@ -1181,9 +1216,6 @@ void NotationView::setCurrentSelection(EventSelection* s)
 void NotationView::setSingleSelectedEvent(int staffNo, Event *event)
 {
     setSingleSelectedEvent(getStaff(staffNo)->getSegment(), event);
-    //!!! bring event into view -- setScrollHoriz with the canvas x-coord
-    // corresponding to layout x-coord calculated by notationhlayout given
-    // the time of the given event...
 }
 
 void NotationView::setSingleSelectedEvent(Segment &segment, Event *event)
@@ -2149,6 +2181,35 @@ NotationView::slotSetInsertCursorPosition(timeT t, bool scroll)
 }
 
 void
+NotationView::slotSetInsertCursorAndRecentre(timeT t, double cx, int)
+{
+    slotSetInsertCursorPosition(t, false);
+
+    // get current canvas x of insert cursor
+    
+    double ccx;
+
+    NotationStaff *staff = m_staffs[m_currentStaff];
+    NotationElementList::iterator i = 
+	staff->getViewElementList()->findTime(t);
+
+    if (i == staff->getViewElementList()->end()) {
+	if (i == staff->getViewElementList()->begin()) return;
+        double lx, lwidth;
+	--i;
+	ccx = (*i)->getCanvasX();
+	(*i)->getLayoutAirspace(lx, lwidth);
+	ccx += lwidth;
+    } else {
+	ccx = (*i)->getCanvasX();
+    }
+
+    QScrollBar* hbar = m_horizontalScrollBar;
+    hbar->setValue(hbar->value() - (cx - ccx));
+}
+
+
+void
 NotationView::slotStepBackward()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
@@ -2191,7 +2252,18 @@ NotationView::slotJumpForward()
     timeT time = segment.getBarEndForTime(m_insertionTime);
     slotSetInsertCursorPosition(time);
 }
-    
+
+void
+NotationView::slotJumpCursorToPlayback()
+{
+    slotSetInsertCursorPosition(m_document->getComposition().getPosition());
+}
+
+void
+NotationView::slotJumpPlaybackToCursor()
+{
+    emit jumpPlaybackTo(getInsertionTime());
+}
 
 //////////////////////////////////////////////////////////////////////
 

@@ -164,8 +164,10 @@ BarButtonsWidget::BarButtonsWidget(RulerScale *rulerScale,
       m_width(-1),
       m_rulerScale(rulerScale)
 {
-    m_barFont = new QFont("helvetica", 12);
-    m_barFont->setPixelSize(12);
+//    m_barFont = new QFont("helvetica", 12);
+//    m_barFont->setPixelSize(12);
+    m_barFont = new QFont();
+    m_barFont->setPointSize(10);
 }
 
 BarButtonsWidget::~BarButtonsWidget()

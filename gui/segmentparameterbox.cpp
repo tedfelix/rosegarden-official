@@ -38,10 +38,8 @@
 using Rosegarden::Note;
 
 SegmentParameterBox::SegmentParameterBox(RosegardenGUIView *view,
-                                         QWidget *parent,
-                                         const char *name,
-                                         WFlags)
-    : QGroupBox(i18n("Segment Parameters"), parent, name),
+                                         QWidget *parent)
+    : RosegardenParameterBox(i18n("Segment Parameters"), parent),
       m_standardQuantizations(Rosegarden::StandardQuantization::getStandardQuantizations()),
       m_view(view),
       m_tranposeRange(24)
@@ -65,13 +63,7 @@ SegmentParameterBox::~SegmentParameterBox()
 void
 SegmentParameterBox::initBox()
 {
-    QFont ourFont = font();
-    ourFont.setPointSize(10);
-    ourFont.setBold(true);
-    setFont(ourFont);
-
-    QFont font;
-    font.setPointSize(10);
+    QFont font(getFont());
 
     QFontMetrics fontMetrics(font);
     // magic numbers: 13 is the height of the menu pixmaps, 10 is just 10

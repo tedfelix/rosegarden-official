@@ -221,6 +221,7 @@ protected:
 
     QPixmap *m_generatedPixmap;
     QBitmap *m_generatedMask;
+    
     QPainter m_p;
     QPainter m_pm;
 

@@ -172,9 +172,9 @@ void RosegardenGUIView::print(KPrinter *pPrinter, Composition* p)
         segmentsToEdit.push_back(*i);
     }
 
-    NotationView *notationView = new NotationView(getDocument(), segmentsToEdit, this);
+    NotationView *notationView =
+	new NotationView(getDocument(), segmentsToEdit, this, false);
     notationView->setPageMode(true);
-//     notationView->show();
     notationView->print(&printpainter);
 
     printpainter.end();
@@ -251,6 +251,17 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
 					     TempoDialog::TempoDialogAction)),
 	    par, SLOT(slotChangeTempo(Rosegarden::timeT, double,
 				      TempoDialog::TempoDialogAction)));
+
+    connect(notationView, SIGNAL(fastForwardPlayback()),
+	    par, SLOT(slotFastforward()));
+    connect(notationView, SIGNAL(rewindPlayback()),
+	    par, SLOT(slotRewind()));
+    connect(notationView, SIGNAL(fastForwardPlaybackToEnd()),
+	    par, SLOT(slotFastForwardToEnd()));
+    connect(notationView, SIGNAL(rewindPlaybackToBeginning()),
+	    par, SLOT(slotRewindToBeginning()));
+    connect(notationView, SIGNAL(jumpPlaybackTo(Rosegarden::timeT)),
+	    getDocument(), SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
     notationView->show();
 }

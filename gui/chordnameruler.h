@@ -59,6 +59,10 @@ public:
 
     ~ChordNameRuler();
 
+    void setComposition(Rosegarden::Composition *composition) {
+	m_composition = composition;
+    }
+
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
 

@@ -156,6 +156,9 @@ void SegmentItem::makeFont()
 
 void SegmentItem::drawShape(QPainter& painter)
 {
+    QCanvasRectangle::drawShape(painter);
+    Rosegarden::RulerScale *rulerScale = m_snapGrid->getRulerScale();
+
     QRect previewRect =
 	painter.hasClipping() ?
 	painter.clipRegion().boundingRect() :
@@ -164,8 +167,13 @@ void SegmentItem::drawShape(QPainter& painter)
     previewRect.moveBy(-painter.worldMatrix().dx(),
 		       -painter.worldMatrix().dy());
 
-    QCanvasRectangle::drawShape(painter);
-    Rosegarden::RulerScale *rulerScale = m_snapGrid->getRulerScale();
+    previewRect = previewRect.intersect(rect());
+
+//    if (previewRect.width() <= 0 || previewRect.height() <= 0) return;
+
+    timeT startTime = rulerScale->getTimeForX(previewRect.x());
+    timeT   endTime = rulerScale->getTimeForX(previewRect.x() +
+					      previewRect.width());
 
     if (m_showPreview && m_segment &&
 	m_segment->getType() == Rosegarden::Segment::Audio)
@@ -174,7 +182,15 @@ void SegmentItem::drawShape(QPainter& painter)
         // a vector of floats (normalised between -1.0 and +1.0)
         // and then draw over the period we're viewing.
         //
-
+/*
+	if (!painter.hasClipping())
+	    kdDebug(KDEBUG_AREA) << "SegmentCanvas::drawShape: clipping is off " << endl;
+	kdDebug(KDEBUG_AREA) << "SegmentCanvas::drawShape: rect is "
+			     << previewRect.width() << "x"
+			     << previewRect.height() << " at "
+			     << previewRect.x() << ","
+			     << previewRect.y() << endl;
+*/
         // Set up pen and get rectangle
         painter.setPen(RosegardenGUIColours::SegmentAudioPreview);
         
@@ -183,12 +199,22 @@ void SegmentItem::drawShape(QPainter& painter)
         Rosegarden::AudioFileManager &aFM = m_doc->getAudioFileManager();
         Rosegarden::Composition &comp = m_doc->getComposition();
 
+	timeT audioStart =
+	    (startTime - m_segment->getStartTime()) +
+	    m_segment->getAudioStartTime();
+
+	timeT audioEnd = 
+	    (endTime - m_segment->getStartTime()) +
+	    m_segment->getAudioStartTime();
+
+	if (audioEnd > m_segment->getAudioEndTime()) {
+	    audioEnd = m_segment->getAudioEndTime();
+	}
+
         std::vector<float> values =
             aFM.getPreview(m_segment->getAudioFileID(),
-                           comp.getElapsedRealTime(
-                               m_segment->getAudioStartTime()),
-                           comp.getElapsedRealTime(
-                               m_segment->getAudioEndTime()),
+                           comp.getElapsedRealTime(audioStart),
+			   comp.getElapsedRealTime(audioEnd),
                            previewRect.width());
 
         std::vector<float>::iterator it;
@@ -221,22 +247,10 @@ void SegmentItem::drawShape(QPainter& painter)
 
 	    painter.setPen(RosegardenGUIColours::SegmentInternalPreview);
 
-	    timeT startTime = rulerScale->getTimeForX(previewRect.x());
-	    timeT   endTime = rulerScale->getTimeForX(previewRect.x() +
-						      previewRect.width());
-
 	    Segment::iterator start = m_segment->findNearestTime(startTime);
 	    Segment::iterator end = m_segment->findTime(endTime);
 	    if (start == m_segment->end()) start = m_segment->begin();
 	    else start = m_segment->findTime((*start)->getAbsoluteTime());
-
-// 	    if (!painter.hasClipping())
-// 		kdDebug(KDEBUG_AREA) << "SegmentCanvas::drawShape: clipping is off " << endl;
-// 	    kdDebug(KDEBUG_AREA) << "SegmentCanvas::drawShape: rect is "
-// 				 << previewRect.width() << "x"
-// 				 << previewRect.height() << " at "
-// 				 << previewRect.x() << ","
-// 				 << previewRect.y() << endl;
 
 	    for (Segment::iterator i = start; i != end; ++i) {
 

@@ -292,6 +292,9 @@ NoteInserter::handleMouseRelease(Rosegarden::timeT,
     if (lastInsertedEvent) {
 	m_nParentView->setSingleSelectedEvent
 	    (m_clickStaffNo, lastInsertedEvent);
+	m_nParentView->slotSetInsertCursorAndRecentre
+	    (lastInsertedEvent->getAbsoluteTime() +
+	     lastInsertedEvent->getDuration(), e->x(), (int)e->y());
     }
 }
 

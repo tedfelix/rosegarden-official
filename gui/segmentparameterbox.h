@@ -45,7 +45,7 @@ class KCommand;
 #ifndef _SEGMENTPARAMETERBOX_H_
 #define _SEGMENTPARAMETERBOX_H_
 
-class SegmentParameterBox : public QGroupBox
+class SegmentParameterBox : public RosegardenParameterBox
 {
 Q_OBJECT
 
@@ -59,9 +59,7 @@ public:
     } Tristate;
 
     SegmentParameterBox(RosegardenGUIView *view,
-                        QWidget *parent=0,
-                        const char *name=0,
-                        WFlags f=0);
+                        QWidget *parent=0);
     ~SegmentParameterBox();
 
     // Use Segments to update GUI parameters

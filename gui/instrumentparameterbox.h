@@ -22,6 +22,7 @@
 #include <qgroupbox.h>
 #include <qlabel.h>
 
+#include "widgets.h"
 #include "Instrument.h"
 #include "MappedEvent.h"
 
@@ -34,12 +35,12 @@
 class RosegardenComboBox;
 class QCheckBox;
 
-class InstrumentParameterBox : public QGroupBox
+class InstrumentParameterBox : public RosegardenParameterBox
 {
 Q_OBJECT
 
 public:
-    InstrumentParameterBox(QWidget *parent=0, const char *name=0, WFlags f=0);
+    InstrumentParameterBox(QWidget *parent = 0);
     ~InstrumentParameterBox();
 
     void useInstrument(Rosegarden::Instrument *instrument);

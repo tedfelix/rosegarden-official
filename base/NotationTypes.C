@@ -791,7 +791,7 @@ NotationDisplayPitch::displayPitchToRawPitch(int height,
 
     bool sharp = key.isSharp();
 
-    vector<int> ah(key.getAccidentalHeights(clef));
+    vector<int> ah(key.getAccidentalHeights(Clef(Clef::Treble)));
     for (vector<int>::const_iterator i = ah.begin(); i != ah.end(); ++i) {
 
         if (Key::canonicalHeight(*i) == Key::canonicalHeight(height)) {

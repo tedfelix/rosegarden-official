@@ -21,7 +21,10 @@
 
 #include <iostream>
 
+#include <qfontdatabase.h>
+
 #include "widgets.h"
+#include "rosedebug.h"
 
 void
 RosegardenComboBox::wheelEvent(QWheelEvent *e)
@@ -98,4 +101,52 @@ RosegardenSpinBox::mapTextToValue(bool *ok)
     return 120; // default
 }
 
+
+RosegardenParameterBox::RosegardenParameterBox(QString label,
+					       QWidget *parent,
+					       const char *name) :
+    QGroupBox(label, parent, name)
+{
+
+/*
+    QFontDatabase db;
+    QValueList<int> sizes(db.smoothSizes(m_font.family(),
+					 db.styleString(m_font)));
+
+    kdDebug(KDEBUG_AREA) << "Family: " << m_font.family()
+			 << ", style: " << db.styleString(m_font) << endl;
+    
+    int size = -1;
+    int plainSize = m_font.pointSize();
+
+    for (QValueList<int>::Iterator it = sizes.begin();
+	 it != sizes.end(); ++it) {
+
+	kdDebug(KDEBUG_AREA) << "Found size " << *it << endl;
+
+	// find largest size no more than 90% of the plain size
+	// and at least 9pt, assuming they're in ascending order
+	if (*it >= plainSize) break;
+	else if (*it >= 9 && *it <= (plainSize*9)/10) size = *it;
+    }
+
+    kdDebug(KDEBUG_AREA) << "Default font: " << plainSize
+			 << ", my font: " << size << endl;
+    if (size > 0) {
+	m_font.setPointSize(size);
+    } else {
+	m_font.setPointSize(plainSize * 9 / 10);
+    }
+*/
+
+    QFont plainFont;
+    plainFont.setPointSize(plainFont.pointSize() * 9 / 10);
+    m_font = plainFont;
+
+    QFont boldFont;
+    boldFont.setPointSize(int(boldFont.pointSize() * 9.5 / 10.0 + 0.5));
+    boldFont.setBold(true);
+
+    setFont(boldFont);
+}
 

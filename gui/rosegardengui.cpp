@@ -81,8 +81,8 @@ using Rosegarden::timeT;
 
 RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
     : KMainWindow(0), RosegardenIface(this), DCOPObject("RosegardenIface"),
-      m_actionsSetup(false),
       m_config(kapp->config()),
+      m_actionsSetup(false),
       m_fileRecent(0),
       m_view(0),
       m_doc(0),
@@ -393,13 +393,13 @@ void RosegardenGUIApp::setupActions()
 
     m_recordTransport->setGroup("transportcontrols");
 
-    m_rewindEndTransport = new KAction(i18n("Rewind to Beginning"), 0, 0, this,
+    m_rewindEndTransport = new KAction(i18n("Rewind to &Beginning"), 0, 0, this,
                                        SLOT(slotRewindToBeginning()), actionCollection(),
                                        "rewindtobeginning");
 
     m_rewindEndTransport->setGroup("transportcontrols");
 
-    m_ffwdEndTransport = new KAction(i18n("Fast Forward to End"), 0, 0, this,
+    m_ffwdEndTransport = new KAction(i18n("Fast Forward to &End"), 0, 0, this,
                                      SLOT(slotFastForwardToEnd()), actionCollection(),
                                      "fastforwardtoend");
 

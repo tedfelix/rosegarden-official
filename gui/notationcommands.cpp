@@ -56,6 +56,9 @@ using std::cerr;
 using std::endl;
 
 
+// The endTime passed in is the end of the affected section, not
+// necessarily the same as time + note.getDuration()
+
 NoteInsertionCommand::NoteInsertionCommand(Segment &segment, timeT time,
                                            timeT endTime, Note note, int pitch,
                                            Accidental accidental,

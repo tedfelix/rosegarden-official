@@ -63,7 +63,7 @@ etc
     <Action name="noteheads_white"/>
   </Menu>
   <Separator/>
-  <Action name="tie"/>
+<!--  <Action name="tie"/> -->
   <Action name="slur"/>
   <Action name="crescendo"/>
   <Action name="decrescendo"/>
@@ -71,7 +71,7 @@ etc
 </Menu>
 
   <Menu name="Marks">
-    <text>&amp;Marks</text>
+    <text>Mar&amp;ks</text>
     <Action name="remove_marks"/>
     <Separator/>
     <Action name="add_accent"/>
@@ -99,6 +99,7 @@ etc
   <Separator/>
   <Action name="collapse_notes"/>
   <Action name="tie_notes"/>
+  <Action name="untie_notes"/>
   <Action name="make_notes_viable"/>
   <Separator/>
   <Action name="quantize"/>
@@ -118,6 +119,29 @@ etc
   <Action name="retrograde"/>
 </Menu>
 
+<Menu name="Move">
+  <text>&amp;Move</text>
+  <Action name="cursor_back"/>
+  <Action name="cursor_forward"/>
+  <Action name="cursor_back_bar"/>
+  <Action name="cursor_forward_bar"/>
+  <Action name="cursor_start"/>
+  <Action name="cursor_end"/>
+<Separator/>
+  <Action name="cursor_to_playback_pointer"/>
+  <Action name="playback_pointer_to_cursor"/>
+<Separator/>
+  <Action name="cursor_up_staff"/>
+  <Action name="cursor_down_staff"/>
+<Separator/>
+  <Menu name="Transport">
+  <text>&amp;Transport</text>
+  <Action name="playback_pointer_back_bar"/>
+  <Action name="playback_pointer_forward_bar"/>
+  <Action name="playback_pointer_start"/>
+  <Action name="playback_pointer_end"/>
+  </Menu>
+</Menu>
 
 <Menu name="Tools">
   <text>&amp;Tools</text>

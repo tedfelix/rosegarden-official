@@ -38,10 +38,8 @@
 #include "rosestrings.h"
 #include "rosedebug.h"
 
-InstrumentParameterBox::InstrumentParameterBox(QWidget *parent,
-                                               const char *name,
-                                               WFlags)
-    : QGroupBox(i18n("Instrument Parameters"), parent, name),
+InstrumentParameterBox::InstrumentParameterBox(QWidget *parent)
+    : RosegardenParameterBox(i18n("Instrument Parameters"), parent),
       m_instrumentLabel(new QLabel(this)),
       m_channelLabel(new QLabel(i18n("Channel"), this)),
       m_panLabel(new QLabel(i18n("Pan"), this)),
@@ -69,24 +67,21 @@ InstrumentParameterBox::~InstrumentParameterBox()
 void
 InstrumentParameterBox::initBox()
 {
-    QFont plainFont;
-    plainFont.setPointSize(10);
-    QFont boldFont(plainFont);
-    boldFont.setBold(true);
-
-    setFont(boldFont);
-
     QGridLayout *gridLayout = new QGridLayout(this, 6, 3, 8, 1);
 
-    m_instrumentLabel->setFont(plainFont);
-    m_channelLabel->setFont(plainFont);
-    m_panLabel->setFont(plainFont);
-    m_velocityLabel->setFont(plainFont);
-    m_programLabel->setFont(plainFont);
-    m_bankLabel->setFont(plainFont);
-    m_channelValue->setFont(plainFont);
-    m_panValue->setFont(plainFont);
-    m_velocityValue->setFont(plainFont);
+    m_instrumentLabel->setFont(getFont());
+
+    m_channelLabel->setFont(getFont());
+    m_panLabel->setFont(getFont());
+    m_velocityLabel->setFont(getFont());
+    m_programLabel->setFont(getFont());
+    m_bankLabel->setFont(getFont());
+
+    m_bankValue->setFont(getFont());
+    m_programValue->setFont(getFont());
+    m_channelValue->setFont(getFont());
+    m_panValue->setFont(getFont());
+    m_velocityValue->setFont(getFont());
 
     gridLayout->addRowSpacing(0, 8);
 

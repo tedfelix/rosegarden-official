@@ -45,6 +45,7 @@ class NotationToolBox;
 class PositionCursor;
 class ActiveItem;
 class NoteActionData;
+class ChordNameRuler;
 
 /**
  * NotationView is a view for one or more Staff objects, each of
@@ -69,7 +70,8 @@ class NotationView : public EditView,
 public:
     NotationView(RosegardenGUIDoc *doc,
                  std::vector<Rosegarden::Segment *> segments,
-                 QWidget *parent);
+                 QWidget *parent,
+		 bool showProgressive = true); // update during initial render?
     ~NotationView();
 
     /**
@@ -350,31 +352,41 @@ public slots:
      */
     void slotHoveredOverAbsoluteTimeChanged(unsigned int);
 
-    /// Set the time pointer position during playback
+    /// Set the time pointer position during playback (purely visual, doesn't affect playback)
     void slotSetPointerPosition(Rosegarden::timeT position, bool scroll = true);
 
     /// Set the current staff to the one containing the given canvas Y coord
     void slotSetCurrentStaff(int canvasY);
 
-    /// Set the insertion pointer position (from the top LoopRuler)
+    /// Set the insert cursor position (from the top LoopRuler)
     void slotSetInsertCursorPosition(Rosegarden::timeT position,
 				     bool scroll = true);
 
-    /// Set the insertion pointer position from a mouse event location
+    /// Set the insert cursor position from a mouse event location
     void slotSetInsertCursorPosition(double canvasX, int canvasY,
 				     bool scroll = true);
 
-    /// Step back one event with the insertion pointer position
+    /// Set the insert cursor position and scroll so it's at given point
+    void slotSetInsertCursorAndRecentre(Rosegarden::timeT position,
+					double cx, int cy);
+
+    /// Step back one event with the insert cursor position
     void slotStepBackward();
 
-    /// Step forward one event with the insertion pointer position
+    /// Step forward one event with the insert cursor position
     void slotStepForward();
 
-    /// Step back one bar with the insertion pointer position
+    /// Step back one bar with the insert cursor position
     void slotJumpBackward();
 
-    /// Step forward one bar with the insertion pointer position
+    /// Step forward one bar with the insert cursor position
     void slotJumpForward();
+
+    /// Set insert cursor to playback pointer position
+    void slotJumpCursorToPlayback();
+
+    /// Set playback pointer to insert cursor position (affects playback)
+    void slotJumpPlaybackToCursor();
 
     /// Change the current staff to the one preceding the current one
     void slotCurrentStaffUp();
@@ -425,6 +437,12 @@ signals:
     void changeTempo(Rosegarden::timeT,  // tempo change time
                      double,             // tempo value
                      TempoDialog::TempoDialogAction); // tempo action
+
+    void fastForwardPlayback();
+    void rewindPlayback();
+    void fastForwardPlaybackToEnd();
+    void rewindPlaybackToBeginning();
+    void jumpPlaybackTo(Rosegarden::timeT);
 
 protected:
     /**
@@ -507,12 +525,12 @@ protected:
     virtual NotationCanvasView* getCanvasView();
 
     /**
-     * Return the time at which the insertion pointer may be found.
+     * Return the time at which the insert cursor may be found.
      */
     Rosegarden::timeT getInsertionTime();
 
     /**
-     * Return the time at which the insertion pointer may be found,
+     * Return the time at which the insert cursor may be found,
      * and the time signature, clef and key at that time.
      */
     Rosegarden::timeT getInsertionTime(Rosegarden::Event *&clefEvt,
@@ -556,7 +574,7 @@ protected:
 
     BarButtons *m_topBarButtons;
     BarButtons *m_bottomBarButtons;
-    QWidget *m_chordNameRuler;
+    ChordNameRuler *m_chordNameRuler;
     QWidget *m_tempoRuler;
     bool m_chordNamesVisible;
     bool m_temposVisible;

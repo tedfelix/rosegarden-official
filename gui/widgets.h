@@ -23,6 +23,8 @@
 #include <qcombobox.h>
 #include <qlabel.h>
 #include <qspinbox.h>
+#include <qgroupbox.h>
+#include <qfont.h>
 
 #ifndef _WIDGETS_H_
 #define _WIDGETS_H_
@@ -112,6 +114,26 @@ protected:
 
 signals:
     double m_doubleValue;
+};
+
+
+/**
+ * Specialisation of QGroupBox that selects a slightly-smaller-
+ * than-normal font size and draws its title in bold.  Not
+ * terrifically exciting.
+ */
+class RosegardenParameterBox : public QGroupBox
+{
+    Q_OBJECT
+public:
+    RosegardenParameterBox(QString label,
+			   QWidget *parent = 0,
+			   const char *name = 0);
+
+    QFont getFont() const { return m_font; }
+
+private:
+    QFont m_font;
 };
 
 #endif // _WIDGETS_H_
