@@ -1313,7 +1313,7 @@ void ClefInserter::handleClick(int height, const QPoint &eventPos,
         return;
     }
 
-//     Rosegarden::timeT absTime = (*closestNote)->getAbsoluteTime();
+     Rosegarden::timeT absTime = (*closestNote)->getAbsoluteTime();
 //     double closestNoteX = (*closestNote)->getEffectiveX();
     
     TrackNotationHelper nt(m_parentView.getTrack());
