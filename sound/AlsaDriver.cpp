@@ -2755,6 +2755,9 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                                           4096, // play buffer size
                                           ringBuffer);
 
+                // segment runtime id
+                audioFile->setRuntimeSegmentId((*i)->getRuntimeSegmentId());
+
                 // This is thread safe as we push the audio file into a holding queue
                 // which is pushed onto the actual audio queue at pushPlayableAudioQueue()
                 //
@@ -3527,7 +3530,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
         float peakLevelLeft, peakLevelRight;
 
 
-        int cnt = 0;
+        //int cnt = 0;
 
         for (it = audioQueue.begin(); it != audioQueue.end(); ++it)
         {
@@ -4858,6 +4861,10 @@ AlsaDriver::jackDiskThread(void *arg)
             {
                 audioQueue = inst->getAudioPlayQueueNotDefunct();
 
+                // Clear this down and refill every time
+                //
+                inst->clearPlayingAudioFiles();
+
                 for (it = audioQueue.begin(); it != audioQueue.end(); ++it)
                 {
                     if (!(*it)->isInitialised())
@@ -4869,6 +4876,9 @@ AlsaDriver::jackDiskThread(void *arg)
 #ifdef FINE_DEBUG_DISK_THREAD
                     std::cerr << ", is now = " << (*it)->getRingBuffer()->readSpace() << std::endl;
 #endif 
+                    // Add this to the segment audio vector
+                    //
+                    inst->addPlayingAudioSegmentId((*it)->getRuntimeSegmentId());
 
                 }
 
@@ -4901,7 +4911,24 @@ AlsaDriver::jackDiskThread(void *arg)
 
 #endif // HAVE_LIBJACK
 
+std::vector<int>
+AlsaDriver::getPlayingAudioFiles()
+{
+#ifdef HAVE_LIBJACK
+    if (pthread_mutex_trylock(&_diskThreadLock) != EBUSY)
+    {
+        return m_playingAudioSegments;
+        pthread_mutex_unlock(&_diskThreadLock);
+    }
+    return std::vector<int>();
+#else
+    return m_playingAudioSegments;
+#endif
 }
+
+
+}
+
 
 
 #endif // HAVE_ALSA

@@ -323,6 +323,8 @@ public:
 
     QString getStatusLog() { return m_soundDriver->getStatusLog(); }
 
+    std::vector<int> getPlayingAudioFiles() { return m_soundDriver->getPlayingAudioFiles(); }
+
 protected:
 
     SoundDriver                                *m_soundDriver;

@@ -163,6 +163,12 @@ public:
     //
     void initialise();
 
+    // Segment id that allows us to crosscheck against playing audio
+    // segments.
+    //
+    int getRuntimeSegmentId() const { return m_runtimeSegmentId; }
+    void setRuntimeSegmentId(int id) { m_runtimeSegmentId = id; }
+
 protected:
 
 
@@ -203,6 +209,8 @@ protected:
     // So we know not to delete the RingBuffer when this object dies
     //
     bool                  m_externalRingbuffer;
+
+    int                   m_runtimeSegmentId;
 
 };
 
@@ -406,6 +414,11 @@ public:
 				  unsigned int) { return ""; }
     virtual void setConnection(DeviceId, QString) { }
     virtual void setPlausibleConnection(DeviceId id, QString c) { setConnection(id, c); }
+
+    // Get a list of run time segment ids from the playing audio files - subclasses
+    // might need to make sure this is thread safe.
+    //
+    virtual std::vector<int> getPlayingAudioFiles() = 0;
 
     // Return the whole audio play queue
     //

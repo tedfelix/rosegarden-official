@@ -176,6 +176,10 @@ public:
     virtual void setConnection(DeviceId deviceId, QString connection);
     virtual void setPlausibleConnection(DeviceId deviceId, QString connection);
 
+    virtual std::vector<int> getPlayingAudioFiles();
+    void clearPlayingAudioFiles() { m_playingAudioSegments.clear(); }
+    void addPlayingAudioSegmentId(int id) { m_playingAudioSegments.push_back(id); }
+
 #ifdef HAVE_LADSPA
 
     LADSPAPluginInstance* getPlugin(InstrumentId id, int position);
@@ -362,6 +366,10 @@ private:
     ClientPortPair getPortByName(std::string name);
 
     DeviceId getSpareDeviceId();
+
+    // Vector of currently playing audio segments
+    //
+    std::vector<int>            m_playingAudioSegments;
 };
 
 }

@@ -455,15 +455,13 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool firstFetch,
                               */
 
                     evt->setAudioStartMarker(startTime);
+                    m_playingAudioSegments.push_back(evt->getRuntimeSegmentId());
                 }
 
-                /*
-                if (evt->getType() == MappedEvent::Audio) {
-                
-                    if (evt->getEventTime() < endTime)
-                        evt->setEventTime(evt->getEventTime() - Rosegarden::RealTime(1, 0));
+                if (evt->getType() == MappedEvent::Audio) 
+                {
+                    m_playingAudioSegments.push_back(evt->getRuntimeSegmentId());
                 }
-                */
 
                 if (evt->getType() == MappedEvent::TimeSignature) {
                     // do something
@@ -525,40 +523,17 @@ void MmappedSegmentsMetaIterator::resetIteratorForSegment(const QString& filenam
     }
 }
 
-std::vector<int>
-MmappedSegmentsMetaIterator::getPlayingMappedAudioSegments()
+void
+MmappedSegmentsMetaIterator::stopPlayingAudioSegment(int segmentRuntimeId)
 {
-    std::vector<int> playingAudioSegments;
-    std::vector<int>::const_iterator pIt;
-
-    for(unsigned int i = 0; i < m_iterators.size(); ++i)
+    for (std::vector<int>::iterator it = m_playingAudioSegments.begin();
+         it != m_playingAudioSegments.end(); ++it)
     {
-        MmappedSegment::iterator* iter = m_iterators[i];
-        if (iter->atEnd()) continue;
-
-        MappedEvent *evt = new MappedEvent(*(*iter));
-        if (evt && evt->getType() == MappedEvent::Audio)
+        if ((*it) == segmentRuntimeId)
         {
-            // Only add a unique audio id
-            //
-            bool add = true;
-            for (pIt = playingAudioSegments.begin(); pIt != playingAudioSegments.end(); ++pIt)
-            {
-                if ((*pIt) == evt->getRuntimeSegmentId())
-                {
-                    add = false;
-                    break;
-                }
-            }
-
-            if (add) playingAudioSegments.push_back(evt->getRuntimeSegmentId());
-
+            m_playingAudioSegments.erase(it);
+            break;
         }
     }
-
-    return playingAudioSegments;
 }
-
-
-
 

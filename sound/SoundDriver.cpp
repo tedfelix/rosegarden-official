@@ -47,7 +47,8 @@ PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
         m_ringBufferThreshold(0),
         m_playBufferSize(playBufferSize),
         m_initialised(false),
-        m_externalRingbuffer(false)
+        m_externalRingbuffer(false),
+        m_runtimeSegmentId(-1)
 {
 #define DEBUG_PLAYABLE_CONSTRUCTION
 #ifdef DEBUG_PLAYABLE_CONSTRUCTION

@@ -264,6 +264,10 @@ RosegardenSequencerApp::startPlaying()
     // ready for new playback
     m_sequencer->initialisePlayback(m_songPosition, m_playLatency);
 
+    // Ensure that the audio playing checks are cleared down
+    //
+    m_metaIterator->clearPlayingAudioSegments();
+
     m_mC.clear();
     m_mC = *fetchEvents(m_songPosition, m_songPosition + m_readAhead, true);
 
@@ -317,20 +321,15 @@ RosegardenSequencerApp::keepPlaying()
         notifyVisuals(&m_mC);
 
         m_lastFetchSongPosition = m_lastFetchSongPosition + m_readAhead;
-    }
 
-    // Work out what audio files should be playing in the sounddriver
-    //
-    /*
-    if (m_metaIterator)
-    {
-        std::vector<int> audioFiles = m_metaIterator->getPlayingMappedAudioSegments();
-        for (std::vector<int>::iterator it = audioFiles.begin(); it != audioFiles.end(); ++it)
+        // Ensure that the audio we're playing is the audio we should be playing
+        //
+        if (m_metaIterator)
         {
-            std::cout << "RUNNING SEGMENT ID = " << *it << std::endl;
+            rationalisePlayingAudio(m_metaIterator->getPlayingAudioSegments());
         }
+
     }
-    */
 
     return true; // !isEndOfCompReached(); - until we sort this out, we don't stop at end of comp.
 }
@@ -1453,5 +1452,58 @@ void RosegardenSequencerApp::dumpFirstSegment()
 
 }
 
+
+void RosegardenSequencerApp::rationalisePlayingAudio(const std::vector<int> &segmentAudio)
+{
+    return;
+
+    std::vector<int> driverAudio = m_sequencer->getPlayingAudioFiles();
+
+    //std::cout << "DRIVER FILES  = " << driverAudio.size() << std::endl;
+    //std::cout << "SEGMENT FILES = " << segmentAudio.size() << std::endl << std::endl;
+
+    // Check for playing audio that shouldn't be
+    //
+    for (std::vector<int>::const_iterator it = driverAudio.begin(); it != driverAudio.end(); ++it)
+    {
+        bool segment = false;
+        for (std::vector<int>::const_iterator sIt = segmentAudio.begin();
+             sIt != segmentAudio.end(); ++sIt)
+        {
+            if ((*it) == (*sIt))
+            {
+                segment = true;
+                break;
+            }
+        }
+
+        if (segment == false)
+        {
+            std::cerr << "SHOULDN'T BE PLAYING " << *it << std::endl;
+        }
+    }
+
+    // Check for audio that should be that isn't
+    //
+    for (std::vector<int>::const_iterator sIt = segmentAudio.begin(); sIt != segmentAudio.end(); ++sIt)
+    {
+        bool driver = false;
+        for (std::vector<int>::const_iterator it = driverAudio.begin(); it != driverAudio.end(); ++it)
+        {
+            if ((*it) == (*sIt))
+            {
+                driver = true;
+                break;
+            }
+        }
+
+        if (driver == false)
+        {
+            std::cerr << "SHOULD BE PLAYING " << *sIt << std::endl;
+        }
+
+    }
+
+}
 
 

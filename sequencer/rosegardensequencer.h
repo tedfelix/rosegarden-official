@@ -325,6 +325,12 @@ public:
     //
     void initialiseStudio();
 
+    // Ensure that the sequencer is only playing audio files that is should
+    // be - a vector of playing audio files from the metaiterator is compared
+    // against the PlayableAudioFiles at the SoundDriver.
+    //
+    void rationalisePlayingAudio(const std::vector<int> &playingAudioSegments);
+
 public slots:
 
     // Check for new clients - on timeout
