@@ -912,7 +912,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         // The contact details for the maintainer of the banks/programs
         // information.
         //
-        if (m_device->getType() == Rosegarden::Device::Midi)
+        if (m_device && m_device->getType() == Rosegarden::Device::Midi)
         {
             QString name = atts.value("name");
             QString email = atts.value("email");
