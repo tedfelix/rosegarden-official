@@ -11,6 +11,7 @@ var zones = [
 { "v":"4", "name":"faq",         "label":"faq",          "url":"faq.html" },
 { "v":"4", "name":"list",        "label":"mailing-lists", "url":"list.html" },
 { "v":"4", "name":"contact",         "label":"contact",          "url":"authors.html" },
+{ "v":"4", "name":"links",         "label":"links",          "url":"links.html" },
 { "v":"2.1", "name":"index",       "label":"home",         "url":"index.html" },
 { "v":"2.1", "name":"features",    "label":"features",     "url":"features.html" },
 { "v":"2.1", "name":"faq",         "label":"faq",          "url":"faq.html" },
