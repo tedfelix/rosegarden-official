@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "POT-Creation-Date: 2003-04-27 18:02+0200\n"
-"PO-Revision-Date: 2003-04-29 14:49+0400\n"
+"PO-Revision-Date: 2003-04-29 18:23+0400\n"
 "Last-Translator: Alexandre Prokoudine <avp@altlinux.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -220,7 +220,7 @@ msgstr "&Транспозиция"
 
 #: rc.cpp:6 rc.cpp:22 rosegardengui.cpp:415 matrixview.cpp:433
 msgid "&Move"
-msgstr "&Передвигать"
+msgstr "&Перемещение"
 
 #: rc.cpp:7 rc.cpp:23 rc.cpp:46
 msgid "T&ransport"
@@ -3756,7 +3756,7 @@ msgstr "Переместить сегменты"
 
 #: matrixtool.cpp:766
 msgid "Move Event"
-msgstr "Ререместить событие"
+msgstr "Переместить событие"
 
 #: matrixtool.cpp:769
 msgid "Move Events"
@@ -3776,19 +3776,27 @@ msgstr "Фильтры событий"
 
 #: eventview.cpp:162 midifilter.cpp:45 midifilter.cpp:81
 msgid "Note"
-msgstr "Нота"
+msgstr ""
+"Нота\n"
+"(Note)"
 
 #: eventview.cpp:163 midifilter.cpp:46 midifilter.cpp:82
 msgid "Program Change"
-msgstr "Program Change"
+msgstr ""
+"Смена программы\n"
+"(Program Change)"
 
 #: eventview.cpp:164 midifilter.cpp:50 midifilter.cpp:86
 msgid "Controller"
-msgstr "Controller"
+msgstr ""
+"Контроллер\n"
+"(Controller)"
 
 #: eventview.cpp:165 midifilter.cpp:49 midifilter.cpp:85
 msgid "Pitch Bend"
-msgstr "Pitch Bend"
+msgstr ""
+"Колесо высоты тона\n"
+"(Pitch Bend)"
 
 #: eventview.cpp:166 midifilter.cpp:51 midifilter.cpp:87
 msgid "System Exclusive"
@@ -3796,11 +3804,15 @@ msgstr "System Exclusive"
 
 #: eventview.cpp:167 midifilter.cpp:47 midifilter.cpp:83
 msgid "Key Pressure"
-msgstr "Key Pressure"
+msgstr ""
+"Давление на клавишу\n"
+"(Key Pressure)"
 
 #: eventview.cpp:168 midifilter.cpp:48 midifilter.cpp:84
 msgid "Channel Pressure"
-msgstr "Channel Pressure"
+msgstr ""
+"Давление для всех клавиш одного канала\n"
+"(Channel Pressure)"
 
 #: eventview.cpp:169
 msgid "Rest"
@@ -4062,15 +4074,17 @@ msgstr "Переименовать выбранный звуковой файл"
 msgid ""
 "Insert the current audio file at the bottom of your composition in a new "
 "audio track."
-msgstr "Вставить выбранный звуковой файл в конец композиции как новую звуковую дорожку"
+msgstr ""
+"Вставить выбранный звуковой файл в конец композиции как новую звуковую "
+"дорожку"
 
 #: audiomanagerdialog.cpp:191
 msgid ""
 "Remove all audio files (and any representations of them) from this dialog "
 "and the composition."
 msgstr ""
-"Удалить все звуковые файлы (в любых их ипостасях) как из этого диалога, так и из "
-"композиции"
+"Удалить все звуковые файлы (в любых их ипостасях) как из этого диалога, так "
+"и из композиции"
 
 #: audiomanagerdialog.cpp:194
 msgid "Export this audio file."
@@ -4118,7 +4132,9 @@ msgstr "Экспортируется звуковой файл..."
 
 #: audiomanagerdialog.cpp:606
 msgid "Really delete audio file \"%1\" and all associated audio segments ?"
-msgstr "Вы действительно хотите удалить звуковой файл \"%1\" и связанные с ним сегменты?"
+msgstr ""
+"Вы действительно хотите удалить звуковой файл \"%1\" и связанные с ним "
+"сегменты?"
 
 #: audiomanagerdialog.cpp:679
 msgid "Select one or more Audio Files"
