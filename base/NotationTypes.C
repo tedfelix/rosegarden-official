@@ -221,8 +221,6 @@ Event *Clef::getAsEvent(timeT absoluteTime) const
 //////////////////////////////////////////////////////////////////////
 // Key
 //////////////////////////////////////////////////////////////////////
-__HASH_NS::hash<const char *> hashstring::_H;
-
 
 const string Key::EventType = "keychange";
 const int Key::EventSubOrdering = -200;
