@@ -1695,12 +1695,11 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                 break;
 
             default:
+            case MappedEvent::InvalidMappedEvent:
                 std::cout << "AlsaDriver::processMidiOut - "
-                          << "unrecognised event type"
+                          << "skipping unrecognised or invalid MappedEvent type"
                           << std::endl;
-                delete event;
-                snd_seq_drain_output(m_midiHandle);
-                return;
+                continue;
         }
 
         if (now || m_playing == false)

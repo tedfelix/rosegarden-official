@@ -67,6 +67,11 @@ public:
     // the element in case you want to write it into another element
     //
     virtual std::string toXmlString();
+
+    // Assignment
+    //
+    Configuration& operator=(const Configuration &);
+
 private:
 
 };

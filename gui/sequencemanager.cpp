@@ -447,6 +447,15 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
                                              eventTime,
                                              duration);
 
+            // If the event doesn't translate to a MappedEvent type
+            // then skip it.
+            //
+            if (mE->getType() == Rosegarden::MappedEvent::InvalidMappedEvent)
+            {
+                delete mE;
+                continue;
+            }
+
             // Do some more tweaking if we've got a note
             //
             if ((*j)->isa(Rosegarden::Note::EventType))

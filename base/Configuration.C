@@ -67,6 +67,20 @@ Configuration::toXmlString()
     return config.str();
 }
 
+Configuration&
+Configuration::operator=(const Configuration &conf)
+{
+    clear();
+
+    for (const_iterator i = conf.begin(); i != conf.end(); ++i)
+    {
+        //insert<PropertyStore<P> *>((i)->first, (i)->second);
+    }
+
+    return (*this);
+}
+
+
 
 namespace CompositionMetadataKeys
 {

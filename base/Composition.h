@@ -106,8 +106,8 @@ public:
 	return &m_tracks;
     }
  
-    const trackcontainer* getTracks() const {
-	return &m_tracks;
+    const trackcontainer getTracks() const {
+	return m_tracks;
     }
 
     TrackId getMinTrackId() const;

@@ -267,7 +267,7 @@ Composition::Composition(const Composition &comp):
     m_tracks.clear();
     m_segments.clear();
 
-    m_tracks = *(comp.getTracks());
+    m_tracks = comp.getTracks();
     m_segments = comp.getSegments();
 
     for (segmentcontainer::iterator i = this->m_segments.begin();
@@ -285,8 +285,8 @@ Composition::operator=(const Composition &comp)
 
     // Copy track information
     //
-    trackcontainer *tracks = comp.getTracks();
-    for (trackcontainer::iterator i = tracks->begin(); i != tracks->end(); ++i) 
+    trackcontainer tracks = comp.getTracks();
+    for (trackcontainer::iterator i = tracks.begin(); i != tracks.end(); ++i) 
 	m_tracks[i->first] = new Track(*(i->second));
 
     // Copy segments
@@ -320,10 +320,18 @@ Composition::operator=(const Composition &comp)
     m_barPositionsNeedCalculating = true;
     m_tempoTimestampsNeedCalculating = true;
 
-    // causes crash at the mo
-    //m_copyright = comp.getCopyrightNote();
-
     m_metadata = comp.getMetadata();
+
+    // causes crash at the mo
+    try
+    {
+        m_copyright = comp.getCopyrightNote();
+    }
+    catch (Configuration::NoData)
+    {
+        m_copyright = "";
+    }
+
     m_playMetronome = comp.usePlayMetronome();
     m_recordMetronome = comp.useRecordMetronome();
     m_needsRefresh = true;
@@ -1073,8 +1081,8 @@ Composition::getMinTrackId() const
 {
     long m = -1;
 
-    for (trackcontainer::const_iterator i = getTracks()->begin();
-	 i != getTracks()->end(); ++i) {
+    for (trackcontainer::const_iterator i = getTracks().begin();
+	 i != getTracks().end(); ++i) {
 	if (long(i->second->getId()) < m || m == -1) {
 	    m = i->second->getId();
 	}
@@ -1089,8 +1097,8 @@ Composition::getMaxTrackId() const
 {
     long m = -1;
 
-    for (trackcontainer::const_iterator i = getTracks()->begin();
-	 i != getTracks()->end(); ++i) {
+    for (trackcontainer::const_iterator i = getTracks().begin();
+	 i != getTracks().end(); ++i) {
 	if (long(i->second->getId()) > m) {
 	    m = i->second->getId();
 	}
