@@ -394,14 +394,6 @@ protected:
      */
     virtual void showVisuals(const Rosegarden::MappedComposition &mC);
 
-
-    /*
-     * place clicktrack events into the global MappedComposition
-     *
-     */
-//     void insertMetronomeClicks(Rosegarden::timeT sliceStart,
-//                                Rosegarden::timeT sliceEnd);
-
     /**
      * Create a new audio file for the sequencer and return the
      * path to it as a QString.
