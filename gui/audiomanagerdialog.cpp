@@ -173,7 +173,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     m_deleteButton    = new QPushButton(i18n("Remove Audio File"), v);
     m_playButton      = new QPushButton(i18n("Play Preview"), v);
     m_renameButton    = new QPushButton(i18n("Rename File"), v);
-    m_insertButton    = new QPushButton(i18n("Insert into Composition"), v);
+    m_insertButton    = new QPushButton(i18n("Insert into Selected Audio Track"), v);
     m_deleteAllButton = new QPushButton(i18n("Remove All Audio Files"), v);
     m_exportButton    = new QPushButton(i18n("Export Audio File"), v);
     m_fileList        = new AudioListView(h);
@@ -191,7 +191,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
             i18n("Rename the currently selected audio file."));
 
     QToolTip::add(m_insertButton,
-            i18n("Insert the current audio file at the bottom of your composition in a new audio track."));
+            i18n("Insert the current audio file in your composition, on the selected audio track."));
 
     QToolTip::add(m_deleteAllButton,
             i18n("Remove all audio files (and any representations of them) from this dialog and the composition."));
@@ -703,12 +703,12 @@ AudioManagerDialog::slotAdd()
 
 // Enable these action buttons
 void
-AudioManagerDialog::slotEnableButtons()
+AudioManagerDialog::enableButtons()
 {
-    m_deleteButton->setDisabled(false);
-    m_renameButton->setDisabled(false);
-    m_insertButton->setDisabled(false);
-    m_deleteAllButton->setDisabled(false);
+    m_deleteButton->setEnabled(true);
+    m_renameButton->setEnabled(true);
+    m_insertButton->setEnabled(isSelectedTrackAudio());
+    m_deleteAllButton->setEnabled(true);
     m_exportButton->setDisabled(true);
 
     if (m_audiblePreview)
@@ -788,7 +788,7 @@ AudioManagerDialog::slotRename()
 void
 AudioManagerDialog::slotSelectionChanged(QListViewItem *item)
 {
-    slotEnableButtons();
+    enableButtons();
 
     AudioListItem *aItem = dynamic_cast<AudioListItem*>(item);
 
@@ -897,10 +897,6 @@ AudioManagerDialog::slotCommandExecuted(KCommand*)
 }
 
 
-// Pass in a set of Segment to select - we check for embedded audio
-// segments and if we find exactly one we highlight it.  If we don't
-// we unselect everything.
-//
 void
 AudioManagerDialog::slotSegmentSelection(
         const Rosegarden::SegmentSelection &segments)
@@ -1092,5 +1088,27 @@ AudioManagerDialog::addAudioFile(const QString &filePath)
 }
 
 
+bool
+AudioManagerDialog::isSelectedTrackAudio()
+{
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::Studio &studio = m_doc->getStudio();
+
+    Rosegarden::TrackId currentTrackId = comp.getSelectedTrack();
+    Rosegarden::Track *track = comp.getTrackById(currentTrackId);
+
+    if (track) {
+	Rosegarden::InstrumentId ii = track->getInstrument();
+	Rosegarden::Instrument *instrument = studio.getInstrumentById(ii);
+
+	if (instrument &&
+	    instrument->getType() == Rosegarden::Instrument::Audio)
+            return true;
+    }
+    
+    return false;
+    
+}
+ 
 }
 

@@ -100,7 +100,6 @@ public slots:
     void slotDelete();
     void slotPlayPreview();
     void slotRename();
-    void slotEnableButtons();
     void slotInsert();
     void slotDeleteAll();
     void slotExportAudio();
@@ -116,12 +115,21 @@ public slots:
     //
     void slotCommandExecuted(KCommand *);
 
-    // Accept a list of Segments and highlight accordingly
-    //
+    /**
+     * Accept a list of Segments and highlight accordingly
+     * Used to reflect a selection on the main view
+     * (when the user selects an audio track, the corresponding item
+     * in the audio manager should be selected in turn)
+     *
+     * We check for embedded audio segments and if we find exactly one
+     * we highlight it.  If we don't we unselect everything.
+     *
+     */
     void slotSegmentSelection(const Rosegarden::SegmentSelection &);
 
-    // Cancel the currently playing audio file
-    //
+    /**
+     * Cancel the currently playing audio file
+     */
     void slotCancelPlayingAudioFile();
 
     void slotClose();
@@ -151,7 +159,9 @@ signals:
 
 protected:
     bool addFile(const KURL& kurl);
+    bool isSelectedTrackAudio();
     void selectFileListItemNoSignal(QListViewItem*);
+    void enableButtons();
 
     virtual void dragEnterEvent(QDragEnterEvent *event);
     virtual void dropEvent(QDropEvent*);
