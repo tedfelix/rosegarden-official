@@ -64,10 +64,13 @@ using Rosegarden::timeT;
 using Rosegarden::Segment;
 using Rosegarden::TrackId;
 
+static double _pointerWidth = 2.0;
+
 TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
                          QWidget* rosegardenguiview,
 			 RulerScale *rulerScale,
                          bool showTrackLabels,
+                         double initialUnitsPerPixel,
 			 QWidget* parent, const char* name,
 			 WFlags) :
     DCOPObject("TrackEditorIface"),
@@ -81,7 +84,8 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
     m_trackButtonScroll(0),
     m_showTrackLabels(showTrackLabels),
     m_canvasWidth(0),
-    m_compositionRefreshStatusId(doc->getComposition().getNewRefreshStatusId())
+    m_compositionRefreshStatusId(doc->getComposition().getNewRefreshStatusId()),
+    m_initialUnitsPerPixel(initialUnitsPerPixel)
 {
     // accept dnd
     setAcceptDrops(true);
@@ -156,7 +160,8 @@ TrackEditor::init(QWidget* rosegardenguiview)
     // Segment Canvas
     //
     m_segmentCanvas = new SegmentCanvas(m_doc,
-                                        m_rulerScale,
+                                        new Rosegarden::SimpleRulerScale(*(
+                                            dynamic_cast<Rosegarden::SimpleRulerScale*>(m_rulerScale))),
                                         getTrackCellHeight(),
                                         canvas, this);
 
@@ -287,8 +292,9 @@ void TrackEditor::slotReadjustCanvasSize()
     Composition &comp = m_doc->getComposition();
     int lastBar = comp.getBarNumber(comp.getEndMarker());
     
-    m_canvasWidth = (int)(m_rulerScale->getBarPosition(lastBar) +
-                          m_rulerScale->getBarWidth(lastBar));
+    RulerScale *ruler = m_segmentCanvas->grid().getRulerScale();
+    m_canvasWidth = (int)(ruler->getBarPosition(lastBar) +
+                          ruler->getBarWidth(lastBar));
 
     // Not very satisfactory
     //
@@ -305,9 +311,14 @@ void TrackEditor::slotReadjustCanvasSize()
     m_segmentCanvas->canvas()->resize(m_canvasWidth, canvasHeight);
 
 
-    RG_DEBUG << "TrackEditor::slotReadjustCanvasSize - done" << endl;
+    Rosegarden::SimpleRulerScale *sRuler = 
+        dynamic_cast<Rosegarden::SimpleRulerScale*>(m_rulerScale);
 
-    m_pointer->setSize(3, canvasHeight);
+    int width = int(rint((_pointerWidth * sRuler->getUnitsPerPixel()) / m_initialUnitsPerPixel));
+
+    m_pointer->setSize(width, m_segmentCanvas->canvas()->height());
+
+    RG_DEBUG << "TrackEditor::slotReadjustCanvasSize - done" << endl;
 }
 
 void TrackEditor::slotTrackButtonsWidthChanged()
@@ -481,19 +492,31 @@ void
 TrackEditor::slotSetPointerPosition(Rosegarden::timeT position)
 {
 
-//     RG_DEBUG << "TrackEditor::slotSetPointerPosition: time is " << position << endl;
+    //RG_DEBUG << "TrackEditor::setPointerPosition: time is " << position << endl;
     if (!m_pointer) return;
 
-    m_pointer->setSize(3, m_segmentCanvas->canvas()->height());
+    Rosegarden::SimpleRulerScale *ruler = 
+        dynamic_cast<Rosegarden::SimpleRulerScale*>(m_rulerScale);
 
-    double canvasPosition = m_rulerScale->getXForTime(position);
-    double distance = (double)canvasPosition - m_pointer->x();
+    if (!ruler) return;
+
+    // scale by the x scale factor
+    /*
+    RG_DEBUG << "TrackEditor::setPointerPosition - scale = " << ruler->getUnitsPerPixel() << endl;
+    */
+    int width = int(rint((_pointerWidth * ruler->getUnitsPerPixel()) / m_initialUnitsPerPixel));
+
+    m_pointer->setSize(width, m_segmentCanvas->canvas()->height());
+
+    double pos = m_segmentCanvas->grid().getRulerScale()->getXForTime(position);
+    double distance = pos - m_pointer->x();
 
     if (distance < 0.0) distance = -distance;
     if (distance >= 1.0) {
 
-	m_pointer->setX(canvasPosition - 1);
-        getSegmentCanvas()->slotScrollHoriz((int)canvasPosition);
+	m_pointer->setX(pos);
+        getSegmentCanvas()->slotScrollHoriz(int(double(position) / ruler->getUnitsPerPixel()));
+
 	emit needUpdate();
     }
 }
@@ -658,7 +681,7 @@ void TrackEditor::dropEvent(QDropEvent* event)
     QString text;
 
     int heightAdjust = 0;
-    int widthAdjust = 0;
+    //int widthAdjust = 0;
 
     // Adjust any drop event height position by visible rulers
     //

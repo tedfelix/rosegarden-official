@@ -24,6 +24,7 @@
 #include <qvbox.h>
 #include <qpushbutton.h>
 #include <qfileinfo.h>
+#include <qwmatrix.h>
 
 // KDE includes
 #include <kdebug.h>
@@ -69,6 +70,18 @@ using Rosegarden::SimpleRulerScale;
 using Rosegarden::Composition;
 using Rosegarden::timeT;
 
+// Use this to define the basic unit of the main QCanvas size - increasing this
+// gives us greater resolution at higher zoom values (as we no longer resize the
+// canvas but zoom the QCanvasView
+//
+// This apparently arbitrary figure is what we think is an
+// appropriate width in pixels for a 4/4 bar.  Beware of making it
+// too narrow, as shorter bars will be proportionally smaller --
+// the visual difference between 2/4 and 4/4 is perhaps greater
+// than it sounds.
+//
+
+static double barWidth44 = 500.0;
 
 RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
                                      SegmentParameterBox* segmentParameterBox,
@@ -82,18 +95,10 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
       m_instrumentParameterBox(instrumentParameterBox)
 {
     RosegardenGUIDoc* doc = getDocument();
+    Composition *comp = &doc->getComposition();
 
-    // This apparently arbitrary figure is what we think is an
-    // appropriate width in pixels for a 4/4 bar.  Beware of making it
-    // too narrow, as shorter bars will be proportionally smaller --
-    // the visual difference between 2/4 and 4/4 is perhaps greater
-    // than it sounds.
-
-    double barWidth44 = 100.0;  // so random, so rare
     double unitsPerPixel =
         Rosegarden::TimeSignature(4, 4).getBarDuration() / barWidth44;
-
-    Composition *comp = &doc->getComposition();
     m_rulerScale = new SimpleRulerScale(comp, 0, unitsPerPixel);
 
 //     QHBox *hbox = new QHBox(this);
@@ -119,7 +124,7 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
     // query it for placement information
     //
     m_trackEditor  = new TrackEditor(doc, this,
-                                     m_rulerScale, showTrackLabels, this /*hbox*/);
+                                     m_rulerScale, showTrackLabels, unitsPerPixel, this /*hbox*/);
 
     connect(m_trackEditor->getSegmentCanvas(),
             SIGNAL(editSegment(Rosegarden::Segment*)),
@@ -713,7 +718,15 @@ void RosegardenGUIView::setZoomSize(double size)
 {
     m_rulerScale->setUnitsPerPixel(size);
 
-    m_trackEditor->slotReadjustCanvasSize();
+    //m_trackEditor->slotReadjustCanvasSize();
+    RG_DEBUG << "RosegardenGUIView::setZoomSize - " << size << endl;
+
+    double duration44 = Rosegarden::TimeSignature(4,4).getBarDuration();
+
+    QWMatrix zoomMatrix;
+    zoomMatrix.scale(duration44/(size * barWidth44), 1.0);
+    m_trackEditor->getSegmentCanvas()->setWorldMatrix(zoomMatrix);
+
     m_trackEditor->slotSetPointerPosition
 	(getDocument()->getComposition().getPosition());
 
@@ -1043,10 +1056,12 @@ RosegardenGUIView::updateMeters(SequencerMapper *mapper)
 
             if (info.level == 0) continue;
 
+            /*
             RG_DEBUG << "RosegardenGUIView::updateMeters - "
                      << "Instrument ID " << instrumentId
                      << " is getting value " << info.level / 127.0
                      << endl;
+                     */
 
 	    m_trackEditor->getTrackButtons()->slotSetMetersByInstrument
 		(info.level / 127.0, instrumentId);

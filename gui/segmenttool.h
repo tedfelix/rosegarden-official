@@ -208,7 +208,7 @@ public:
     virtual void handleMouseButtonRelease(QMouseEvent*);
     virtual int  handleMouseMove(QMouseEvent*);
 
-    static bool cursorIsCloseEnoughToEdge(SegmentItem*, QMouseEvent*, int);
+    static bool cursorIsCloseEnoughToEdge(SegmentItem*, const QPoint&, int);
 
     void setEdgeThreshold(int e) { m_edgeThreshold = e; }
     int getEdgeThreshold() { return m_edgeThreshold; }

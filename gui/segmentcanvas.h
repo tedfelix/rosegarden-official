@@ -122,6 +122,7 @@ public:
     /// show or hide the repeat rect.  also suspends preview if hidden
     void showRepeatRect(bool);
 
+    virtual void draw(QPainter&);
     virtual void drawShape(QPainter&);
 
     SegmentItemPreview* getPreview() { return m_preview; }
@@ -163,6 +164,8 @@ private:
     static QFont *m_font;
     static QFontMetrics *m_fontMetrics;
     static int m_fontHeight;
+    double     m_fontScale; // we have to use this scale factor as the QCanvas doesn't
+                            // have a clue about the QWMatrix
 };
 
 

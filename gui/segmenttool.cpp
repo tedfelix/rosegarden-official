@@ -134,7 +134,10 @@ SegmentTool::handleRightButtonPress(QMouseEvent *e)
     
     RG_DEBUG << "SegmentTool::handleRightButtonPress()\n";
 
-    SegmentItem *item = m_canvas->findSegmentClickedOn(e->pos());
+    QWMatrix matrix = m_canvas->worldMatrix().invert();
+    QPoint tPos = matrix.map(e->pos());
+
+    SegmentItem *item = m_canvas->findSegmentClickedOn(tPos);
 
     if (item) {
         m_currentItem = item;
@@ -210,15 +213,18 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
     m_newRect = false;
     m_currentItem = 0;
 
+    QWMatrix matrix = m_canvas->worldMatrix().invert();
+    QPoint tPos = matrix.map(e->pos());
+
     // Check if we're clicking on a rect
     //
-    SegmentItem *item = m_canvas->findSegmentClickedOn(e->pos());
+    SegmentItem *item = m_canvas->findSegmentClickedOn(tPos);
 
     if (item) return;
 
     m_canvas->setSnapGrain(false);
 
-    int trackPosition = m_canvas->grid().getYBin(e->pos().y());
+    int trackPosition = m_canvas->grid().getYBin(tPos.y());
     Rosegarden::Track *t = m_doc->getComposition().getTrackByPosition(trackPosition);
 
     if (!t) return;
@@ -229,8 +235,8 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
     //
     if (track >= TrackId(m_doc->getComposition().getNbTracks())) return;
 
-    timeT time = m_canvas->grid().snapX(e->pos().x(), SnapGrid::SnapLeft);
-    timeT duration = m_canvas->grid().getSnapTime(double(e->pos().x()));
+    timeT time = m_canvas->grid().snapX(tPos.x(), SnapGrid::SnapLeft);
+    timeT duration = m_canvas->grid().getSnapTime(double(tPos.x()));
     if (duration == 0) duration = Note(Note::Shortest).getDuration();
     
     m_currentItem = m_canvas->
@@ -238,6 +244,7 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
     m_newRect = true;
     
     m_canvas->slotUpdate();
+
 }
 
 void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
@@ -294,13 +301,16 @@ int SegmentPencil::handleMouseMove(QMouseEvent *e)
 
     m_canvas->setSnapGrain(false);
 
-    SnapGrid::SnapDirection direction = SnapGrid::SnapRight;
-    if (e->pos().x() < m_currentItem->x()) direction = SnapGrid::SnapLeft;
+    QWMatrix matrix = m_canvas->worldMatrix().invert();
+    QPoint tPos = matrix.map(e->pos());
 
-    timeT snap = m_canvas->grid().getSnapTime(double(e->pos().x()));
+    SnapGrid::SnapDirection direction = SnapGrid::SnapRight;
+    if (tPos.x() < m_currentItem->x()) direction = SnapGrid::SnapLeft;
+
+    timeT snap = m_canvas->grid().getSnapTime(double(tPos.x()));
     if (snap == 0) snap = Note(Note::Shortest).getDuration();
 
-    timeT time = m_canvas->grid().snapX(e->pos().x(), direction);
+    timeT time = m_canvas->grid().snapX(tPos.x(), direction);
     timeT startTime = m_currentItem->getStartTime();
 
     if (time >= startTime) {
@@ -321,6 +331,7 @@ int SegmentPencil::handleMouseMove(QMouseEvent *e)
     m_currentItem->setEndTime(time);
 
     m_canvas->slotUpdate();
+
     return FollowHorizontal;
 }
 
@@ -341,7 +352,10 @@ void SegmentEraser::ready()
 
 void SegmentEraser::handleMouseButtonPress(QMouseEvent *e)
 {
-    m_currentItem = m_canvas->findSegmentClickedOn(e->pos());
+    QWMatrix matrix = m_canvas->worldMatrix().invert();
+    QPoint tPos = matrix.map(e->pos());
+
+    m_currentItem = m_canvas->findSegmentClickedOn(tPos);
 }
 
 void SegmentEraser::handleMouseButtonRelease(QMouseEvent*)
@@ -389,15 +403,18 @@ void SegmentMover::ready()
 
 void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
 {
-    SegmentItem *item = m_canvas->findSegmentClickedOn(e->pos());
+    QWMatrix matrix = m_canvas->worldMatrix().invert();
+    QPoint tPos = matrix.map(e->pos());
+
+    SegmentItem *item = m_canvas->findSegmentClickedOn(tPos);
     SegmentSelector* selector = dynamic_cast<SegmentSelector*>
             (getToolBox()->getTool("segmentselector"));
 
-
     if (item) {
+
         m_currentItem = item;
 	m_currentItemStartX = item->x();
-	m_clickPoint = e->pos();
+	m_clickPoint = tPos;
 
         m_foreGuide->setX(int(m_canvas->grid().getRulerScale()->
                           getXForTime(item->getSegment()->getStartTime())) - 2);
@@ -423,7 +440,6 @@ void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
         // Don't update until the move
         //
         //m_canvas->canvas()->update();
-
     } else {
         // check for addmode - clear the selection if not
         selector->clearSelected();
@@ -512,9 +528,12 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
 
 	m_canvas->setSnapGrain(true);
 
+        QWMatrix matrix = m_canvas->worldMatrix().invert();
+        QPoint tPos = matrix.map(e->pos());
+
         // prevent item from being dragged out of screen.
         //
-	int newX = e->x() - m_clickPoint.x() + int(m_currentItemStartX);
+	int newX = tPos.x() - m_clickPoint.x() + int(m_currentItemStartX);
 
         RG_DEBUG << "SegmentMover::handleMouseMove : newX = "
                  << newX
@@ -528,12 +547,16 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
         if (newX >= m_canvas->canvas()->width() - 20)
             newX = m_canvas->canvas()->width() - 20;
 
-        int newY = e->y();
+        int newY = tPos.y();
         if (newY < 0) newY = 0;
         if ((newY + m_currentItem->height()) >= m_canvas->canvas()->height())
             newY = m_canvas->canvas()->height() - m_currentItem->height();
 
 	timeT newStartTime = m_canvas->grid().snapX(newX);
+
+        // We shouldn't have the initial ratio reset around these modifiers
+        // otherwise the rulers refresh to the wrong Ratio
+        //
 	m_currentItem->setEndTime(m_currentItem->getEndTime() + newStartTime -
 				  m_currentItem->getStartTime());
 	m_currentItem->setStartTime(newStartTime);
@@ -681,17 +704,20 @@ void SegmentResizer::ready()
 void SegmentResizer::handleMouseButtonPress(QMouseEvent *e)
 {
     RG_DEBUG << "SegmentResizer::handleMouseButtonPress" << endl;
-
     SegmentSelector* selector = dynamic_cast<SegmentSelector*>
             (getToolBox()->getTool("segmentselector"));
     if (selector) selector->clearSelected();
 
-    SegmentItem* item = m_canvas->findSegmentClickedOn(e->pos());
+    QWMatrix matrix = m_canvas->worldMatrix().invert();
+    QPoint tPos = matrix.map(e->pos());
 
-    if (item /*&& cursorIsCloseEnoughToEdge(item, e, m_edgeThreshold)*/) {
+    SegmentItem* item = m_canvas->findSegmentClickedOn(tPos);
+
+    if (item) {
+        RG_DEBUG << "SegmentResizer::handleMouseButtonPress - got item" << endl;
         m_currentItem = item;
         if (selector) selector->slotSelectSegmentItem(item);
-    } 
+    }
 }
 
 void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
@@ -728,10 +754,14 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
 
     m_canvas->setSnapGrain(true);
 
-    timeT time = m_canvas->grid().snapX(e->pos().x());
+    QWMatrix matrix = m_canvas->worldMatrix().invert();
+    QPoint tPos = matrix.map(e->pos());
+
+    timeT time = m_canvas->grid().snapX(tPos.x());
     timeT duration = time - m_currentItem->getStartTime();
 
-    timeT snap = m_canvas->grid().getSnapTime(double(e->pos().x()));
+    timeT snap = m_canvas->grid().getSnapTime(double(tPos.x()));
+
     if (snap == 0) snap = Note(Note::Shortest).getDuration();
 
     if ((duration > 0 && duration <  snap) ||
@@ -748,13 +778,14 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
         m_currentItem->getPreview()->setPreviewCurrent(false);
 
     m_canvas->canvas()->update();
+
     return FollowHorizontal;
 }
 
-bool SegmentResizer::cursorIsCloseEnoughToEdge(SegmentItem* p, QMouseEvent* e,
+bool SegmentResizer::cursorIsCloseEnoughToEdge(SegmentItem* p, const QPoint &coord,
 					       int edgeThreshold)
 {
-    return (abs(p->rect().x() + p->rect().width() - e->x()) < edgeThreshold);
+    return (abs(p->rect().x() + p->rect().width() - coord.x()) < edgeThreshold);
 }
 
 //////////////////////////////
@@ -877,8 +908,10 @@ SegmentSelector::clearSelected()
 void
 SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 {
-    SegmentItem *item = m_canvas->findSegmentClickedOn(e->pos());
     RG_DEBUG << "SegmentSelector::handleMouseButtonPress" << endl;
+    QWMatrix matrix = m_canvas->worldMatrix().invert();
+    QPoint tPos = matrix.map(e->pos());
+    SegmentItem *item = m_canvas->findSegmentClickedOn(tPos);
 
     // If we're in segmentAddMode or not clicking on an item then we don't 
     // clear the selection vector.  If we're clicking on an item and it's 
@@ -899,9 +932,11 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
         if (threshold > 10) threshold = 10;
 
 	if (!m_segmentAddMode &&
-	    SegmentResizer::cursorIsCloseEnoughToEdge(item, e, threshold)) {
-            SegmentResizer* resizer = dynamic_cast<SegmentResizer*>
-                    (getToolBox()->getTool(SegmentResizer::ToolName));
+	    SegmentResizer::cursorIsCloseEnoughToEdge(item, tPos, threshold)) {
+            SegmentResizer* resizer = 
+                dynamic_cast<SegmentResizer*>(getToolBox()->
+                    getTool(SegmentResizer::ToolName));
+
             resizer->setEdgeThreshold(threshold);
 
             // For the moment we only allow resizing of a single segment
@@ -921,6 +956,7 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
             //
             m_currentItem = item;
             m_clickPoint = e->pos();
+            m_clickPoint = tPos;
 
             slotSelectSegmentItem(m_currentItem);
 
@@ -964,9 +1000,10 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
             QCanvasRectangle *rect  = m_canvas->getSelectionRectangle();
 
             if (rect) {
+
                 rect->show();
-                rect->setX(e->x());
-                rect->setY(e->y());
+                rect->setX(tPos.x());
+                rect->setY(tPos.y());
                 rect->setSize(0, 0);
             }
         }
@@ -1163,6 +1200,9 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 	return m_dispatchTool->handleMouseMove(e);
     }
 
+    QWMatrix matrix = m_canvas->worldMatrix().invert();
+    QPoint tPos = matrix.map(e->pos());
+
     if (!m_currentItem)  {
 
 	RG_DEBUG << "SegmentSelector::handleMouseMove: no current item" << endl;
@@ -1174,11 +1214,13 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
             selectionRect->show();
 
             // same as for notation view
-            int w = int(e->x() - selectionRect->x());
-            int h = int(e->y() - selectionRect->y());
+            int w = int(tPos.x() - selectionRect->x());
+            int h = int(tPos.y() - selectionRect->y());
             if (w > 0) ++w; else --w;
             if (h > 0) ++h; else --h;
 
+            // Translate these points
+            //
             selectionRect->setSize(w, h);
 
 	    m_canvas->canvas()->update();
@@ -1304,8 +1346,8 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 	     it != m_selectedItems.end();
 	     it++)
 	{
-	    int x = e->pos().x() - m_clickPoint.x(),
-		y = e->pos().y() - m_clickPoint.y();
+	    int x = tPos.x() - m_clickPoint.x(),
+		y = tPos.y() - m_clickPoint.y();
 
 	    const int inertiaDistance = m_canvas->grid().getYSnap() / 3;
 	    if (!m_passedInertiaEdge &&
@@ -1316,12 +1358,13 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 		m_passedInertiaEdge = true;
 	    }
 
-
 	    timeT newStartTime = m_canvas->grid().snapX(it->first.x() + x);
+
 	    it->second->setEndTime(it->second->getEndTime() + newStartTime -
 				   it->second->getStartTime());
 	    it->second->setStartTime(newStartTime);
             it->second->showRepeatRect(false);
+
 
 	    TrackId track;
             int newY=it->first.y() + y;
@@ -1359,10 +1402,12 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
             }
             */
 
+
             // This is during a "mover" so don't use the normalised (i.e.
             // proper) TrackPosition value yet.
             //
 	    it->second->setTrackPosition(track);
+
 	}
 
         guideX = int(m_currentItem->x());
@@ -1402,9 +1447,12 @@ void SegmentSplitter::ready()
 void
 SegmentSplitter::handleMouseButtonPress(QMouseEvent *e)
 {
+    QWMatrix matrix = m_canvas->worldMatrix().invert();
+    QPoint tPos = matrix.map(e->pos());
+
     // Remove cursor and replace with line on a SegmentItem
     // at where the cut will be made
-    SegmentItem *item = m_canvas->findSegmentClickedOn(e->pos());
+    SegmentItem *item = m_canvas->findSegmentClickedOn(tPos);
 
     if (item)
     {
@@ -1421,7 +1469,10 @@ SegmentSplitter::handleMouseButtonPress(QMouseEvent *e)
 void
 SegmentSplitter::handleMouseButtonRelease(QMouseEvent *e)
 {
-    SegmentItem *item = m_canvas->findSegmentClickedOn(e->pos());
+    QWMatrix matrix = m_canvas->worldMatrix().invert();
+    QPoint tPos = matrix.map(e->pos());
+
+    SegmentItem *item = m_canvas->findSegmentClickedOn(tPos);
 
     if (item)
     {
@@ -1431,14 +1482,14 @@ SegmentSplitter::handleMouseButtonRelease(QMouseEvent *e)
         {
             AudioSegmentSplitCommand *command =
                 new AudioSegmentSplitCommand( item->getSegment(),
-                                    m_canvas->grid().snapX(e->pos().x()));
+                                    m_canvas->grid().snapX(tPos.x()));
             addCommandToHistory(command);
         }
         else
         {
             SegmentSplitCommand *command =
                 new SegmentSplitCommand(item->getSegment(),
-                                    m_canvas->grid().snapX(e->pos().x()));
+                                    m_canvas->grid().snapX(tPos.x()));
             addCommandToHistory(command);
         }
 
@@ -1453,7 +1504,10 @@ SegmentSplitter::handleMouseButtonRelease(QMouseEvent *e)
 int
 SegmentSplitter::handleMouseMove(QMouseEvent *e)
 {
-    SegmentItem *item = m_canvas->findSegmentClickedOn(e->pos());
+    QWMatrix matrix = m_canvas->worldMatrix().invert();
+    QPoint tPos = matrix.map(e->pos());
+
+    SegmentItem *item = m_canvas->findSegmentClickedOn(tPos);
 
     if (item)
     {
@@ -1476,17 +1530,21 @@ SegmentSplitter::drawSplitLine(QMouseEvent *e)
 { 
     m_canvas->setSnapGrain(true);
 
+    QWMatrix matrix = m_canvas->worldMatrix().invert();
+    QPoint tPos = matrix.map(e->pos());
+
     // Turn the real X into a snapped X
     //
-    timeT xT = m_canvas->grid().snapX(e->pos().x());
+    timeT xT = m_canvas->grid().snapX(tPos.x());
     int x = (int)(m_canvas->grid().getRulerScale()->getXForTime(xT));
 
     // Need to watch y doesn't leak over the edges of the
     // current Segment.
     //
-    int y = m_canvas->grid().snapY(e->pos().y());
+    int y = m_canvas->grid().snapY(tPos.y());
 
     m_canvas->slotShowSplitLine(x, y);
+
 }
 
 

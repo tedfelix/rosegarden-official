@@ -134,6 +134,7 @@ void SegmentRepeatRectangle::drawShape(QPainter& painter)
         painter.drawRect(pos, int(y()), rWidth, height);
         pos += rWidth;
     }
+
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -548,7 +549,9 @@ SegmentItem::SegmentItem(Segment *segment,
     m_overrideColour(false),
     m_preview(0),
     m_showPreview(showPreview),
-    m_suspendPreview(false)
+    m_suspendPreview(false),
+    m_fontScale(1.0)
+
 {
     if (!m_font) makeFont();
 
@@ -603,6 +606,13 @@ void SegmentItem::makeFont()
     m_fontHeight = m_fontMetrics->boundingRect("|^M,g").height();
 }
 
+void SegmentItem::draw(QPainter& painter)
+{
+    m_fontScale = painter.worldMatrix().m11();
+    //RG_DEBUG << "SegmentItem::draw - update font scale = " << m_fontScale << endl;
+    QCanvasRectangle::draw(painter);
+}
+
 void SegmentItem::drawShape(QPainter& painter)
 {
 //    RG_DEBUG << "SegmentItem::drawShape: my width is " << width() << endl;
@@ -642,8 +652,6 @@ void SegmentItem::drawShape(QPainter& painter)
         painter.drawRect(intersection);
     }
 
-    painter.restore();
-
     if (m_preview && m_showPreview) {
 /*!!!
 	Rosegarden::Colour col;
@@ -664,13 +672,25 @@ void SegmentItem::drawShape(QPainter& painter)
     // draw label
     if (m_segment) 
     {
+
+        //RG_DEBUG << "SegmentItem::drawShape - has world Xform = " << painter.hasWorldXForm() << endl;
+
         // Don't show label if we're showing the preview
         //
         if (m_showPreview && m_segment->getType() == Rosegarden::Segment::Audio)
             return;
 
+        // Store the current transform matrix in something local
+        //
+        QWMatrix matrix = painter.worldMatrix();
+
+        // Unset the global transform so we don't bend the text
+        //
+        bool state = painter.hasWorldXForm();
+        painter.setWorldXForm(false);
         painter.setFont(*m_font);
-        QRect labelRect = rect();
+
+        QRect labelRect = matrix.mapRect(rect()); // map the rectangle to the transform
         int x = labelRect.x() + 3;
         int y = labelRect.y();
 
@@ -686,6 +706,7 @@ void SegmentItem::drawShape(QPainter& painter)
                 {
                     labelRect.setX(wX);
                     labelRect.setY(wY);
+
                     painter.drawText(labelRect,
                                      Qt::AlignLeft|Qt::AlignVCenter,
                                      m_label);
@@ -696,12 +717,20 @@ void SegmentItem::drawShape(QPainter& painter)
         labelRect.setY(y);
         painter.setPen(RosegardenGUIColours::SegmentLabel);
         painter.drawText(labelRect, Qt::AlignLeft|Qt::AlignVCenter, m_label);
+
+        // Reenable the transform state
+        //
+        painter.setWorldXForm(state);
     }
+
+    painter.restore();
 
 }
 
 void SegmentItem::recalculateRectangle(bool inheritFromSegment)
 {
+    // Ok, now draw as before
+    //
     canvas()->setChanged(rect());
 
     // Get our segment colour
@@ -779,10 +808,11 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
     //
     bool dots = false;
 
+    // How do we make this allow for a world transformation matrix?
+    //
     while (m_label.length() > 0 &&
-	   (m_fontMetrics->boundingRect
-	    (dots ? (m_label + "...") : m_label).width() >
-	    width() - 5)) {
+	   (double(m_fontMetrics->boundingRect(
+            dots ? (m_label + "...") : m_label).width()) / m_fontScale) > double(width() - 5)) {
 	if (!dots && m_label.length() > 6) {
 	    m_label.truncate(m_label.length() - 4);
 	    dots = true;

@@ -171,6 +171,15 @@ SimpleRulerScale::SimpleRulerScale(Composition *composition,
     // nothing
 }
 
+SimpleRulerScale::SimpleRulerScale(const SimpleRulerScale &ruler):
+    RulerScale(ruler.getComposition()),
+    m_origin(ruler.getOrigin()),
+    m_ratio(ruler.getUnitsPerPixel())
+{
+    // nothing
+}
+
+
 SimpleRulerScale::~SimpleRulerScale()
 {
     // nothing

@@ -72,6 +72,7 @@ public:
                 QWidget* rosegardenguiview,
                 Rosegarden::RulerScale *rulerScale,
                 bool showTrackLabels,
+                double initialUnitsPerPixel = 0,
                 QWidget* parent = 0, const char* name = 0,
                 WFlags f=0);
 
@@ -242,6 +243,8 @@ protected:
     typedef std::map<Rosegarden::Segment *, unsigned int>
         SegmentRefreshStatusIdMap;
     SegmentRefreshStatusIdMap m_segmentsRefreshStatusIds;
+
+    double                   m_initialUnitsPerPixel;
 };
 
 #endif

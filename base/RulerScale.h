@@ -137,12 +137,13 @@ public:
      */
     SimpleRulerScale(Composition *composition,
 		     double origin, double unitsPerPixel);
+    SimpleRulerScale(const SimpleRulerScale &ruler);
     virtual ~SimpleRulerScale();
 
-    double getOrigin() { return m_origin; }
+    double getOrigin() const { return m_origin; }
     void   setOrigin(double origin) { m_origin = origin; }
 
-    double getUnitsPerPixel() { return m_ratio; }
+    double getUnitsPerPixel() const { return m_ratio; }
     void   setUnitsPerPixel(double ratio) { m_ratio = ratio; }
 
     virtual double getBarPosition(int n);
