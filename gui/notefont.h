@@ -36,12 +36,22 @@
 #include "Exception.h"
 
 
+typedef std::pair<QString, int> SystemFontSpec;
+
+class SystemFont
+{
+public:
+    virtual QPixmap renderChar(unsigned int code, bool autocrop) = 0;
+
+    static SystemFont *loadSystemFont(const SystemFontSpec &spec);
+};
+
+
 // Helper class for looking up information about a font
 
 class NoteFontMap : public QXmlDefaultHandler
 {
 public:
-    typedef void *SystemFont; // the .cpp file will know what this is
     typedef Rosegarden::Exception MappingFileReadFailed;
 
     NoteFontMap(std::string name); // load and parse the XML mapping file
@@ -78,7 +88,7 @@ public:
     bool getSrc(int size, CharName charName, std::string &src) const;
     bool getInversionSrc(int size, CharName charName, std::string &src) const;
 
-    bool getSystemFont(int size, CharName charName, SystemFont &font, int &charBase) const;
+    SystemFont *getSystemFont(int size, CharName charName, int &charBase) const;
     bool getCode(int size, CharName charName, int &code) const;
     bool getInversionCode(int size, CharName charName, int &code) const;
 
@@ -291,9 +301,8 @@ private:
     typedef std::map<int, SizeData> SizeDataMap;
     SizeDataMap m_sizes;
 
-    typedef std::pair<QString, int> SystemFontSpec;
     typedef std::map<int, QString> SystemFontNameMap;
-    typedef std::map<SystemFontSpec, SystemFont> SystemFontMap;
+    typedef std::map<SystemFontSpec, SystemFont *> SystemFontMap;
     SystemFontNameMap m_systemFontNames;
     mutable SystemFontMap m_systemFontCache;
 
@@ -305,9 +314,6 @@ private:
     std::string *m_characterDestination;
     std::string m_hotspotCharName;
     QString m_errorString;
-
-    SystemFont loadSystemFont(const SystemFontSpec &spec) const;
-    void freeSystemFont(SystemFont &font) const;
 
     bool checkFile(int size, std::string &src) const;
     QString m_fontDirectory;

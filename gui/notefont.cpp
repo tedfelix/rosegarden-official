@@ -107,7 +107,7 @@ NoteFontMap::~NoteFontMap()
 {
     for (SystemFontMap::iterator i = m_systemFontCache.begin();
 	 i != m_systemFontCache.end(); ++i) {
-	freeSystemFont(i->second);
+	delete i->second;
     }
 }
 
@@ -498,10 +498,12 @@ NoteFontMap::startElement(const QString &, const QString &,
 		return false;
 	    }
 
-	    SystemFont font = loadSystemFont(SystemFontSpec(name, 12));
+	    SystemFont *font = SystemFont::loadSystemFont
+		(SystemFontSpec(name, 12));
+
 	    if (font) {
 		m_systemFontNames[n] = name;
-		freeSystemFont(font);
+		delete font;
 	    } else {
 		cerr << QString("Warning: Unable to load font \"%1\"").arg(name) << endl;
 		m_ok = false;
@@ -512,10 +514,12 @@ NoteFontMap::startElement(const QString &, const QString &,
 	    bool have = false;
 	    QStringList list = QStringList::split(",", names, false);
 	    for (QStringList::Iterator i = list.begin(); i != list.end(); ++i) {
-		SystemFont font = loadSystemFont(SystemFontSpec(*i, 12));
+		SystemFont *font = SystemFont::loadSystemFont
+		    (SystemFontSpec(*i, 12));
 		if (font) {
 		    m_systemFontNames[n] = *i;
 		    have = true;
+		    delete font;
 		    break;
 		}
 	    }
@@ -582,61 +586,6 @@ NoteFontMap::getCharNames() const
     }
 
     return names;
-}
-
-NoteFontMap::SystemFont
-NoteFontMap::loadSystemFont(const SystemFontSpec &spec) const
-{
-    QString name = spec.first;
-    int size = spec.second;
-
-    NOTATION_DEBUG << "NoteFontMap::checkFont: name is " << name << ", size " << size << endl;
-
-    if (name == "DEFAULT") {
-	QFont *font = new QFont();
-	font->setPixelSize(size);
-	return font;
-    }
-
-    QFont *font = new QFont(name, size, QFont::Normal);
-    font->setPixelSize(size);
-
-    QFontInfo info(*font);
-
-    NOTATION_DEBUG << "NoteFontMap::checkFont: have family " << info.family() << ", size " << info.pixelSize() << " (exactMatch " << info.exactMatch() << ")" << endl;
-
-//    return info.exactMatch();
-
-    // The Qt documentation says:
-    //
-    //   bool QFontInfo::exactMatch() const
-    //   Returns TRUE if the matched window system font is exactly the
-    //   same as the one specified by the font; otherwise returns FALSE.
-    //
-    // My arse.  I specify "feta", I get "Verdana", and exactMatch
-    // returns true.  Uh huh.
-    //
-    // UPDATE: in newer versions of Qt, I specify "fughetta", I get
-    // "Fughetta [macromedia]", and exactMatch returns false.  Just as
-    // useless, but in a different way.
-
-    QString family = info.family().lower();
-
-    if (family == name.lower()) return font;
-    else {
-	int bracket = family.find(" [");
-	if (bracket > 1) family = family.left(bracket);
-	if (family == name.lower()) return font;
-    }
-
-    delete font;
-    return 0;
-}
-
-void
-NoteFontMap::freeSystemFont(SystemFont &font) const
-{
-    delete ((QFont *)font);
 }
 
 bool
@@ -710,9 +659,8 @@ NoteFontMap::getInversionSrc(int size, CharName charName, string &src) const
     return checkFile(size, src);
 }
 
-bool
-NoteFontMap::getSystemFont(int size, CharName charName,
-			   SystemFont &font, int &charBase)
+SystemFont *
+NoteFontMap::getSystemFont(int size, CharName charName, int &charBase)
     const
 {
     SymbolDataMap::const_iterator i = m_data.find(charName);
@@ -738,18 +686,17 @@ NoteFontMap::getSystemFont(int size, CharName charName,
     SystemFontSpec spec(fontName, fontHeight);
     SystemFontMap::const_iterator fi = m_systemFontCache.find(spec);
     if (fi != m_systemFontCache.end()) {
-	font = fi->second;
-	return true;
+	return fi->second;
     }
 
-    font = loadSystemFont(spec);
-    if (!font) return false;
+    SystemFont *font = SystemFont::loadSystemFont(spec);
+    if (!font) return 0;
     m_systemFontCache[spec] = font;
 
     NOTATION_DEBUG << "NoteFontMap::getFont: loaded font " << fontName
 		   << " at pixel size " << fontHeight << endl;
 
-    return true;
+    return font;
 }
 
 bool
@@ -1156,10 +1103,10 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
 	    return false;
 	}
 
-	NoteFontMap::SystemFont systemFont;
-	ok = m_fontMap.getSystemFont(m_size, charName, systemFont, charBase);
+	SystemFont *systemFont =
+	    m_fontMap.getSystemFont(m_size, charName, charBase);
 
-	if (!ok || !systemFont) {
+	if (!systemFont) {
 	    if (!inverted && m_fontMap.hasInversion(m_size, charName)) {
 		if (!getPixmap(charName, pixmap, !inverted)) return false;
 		found = new QPixmap(PixmapFunctions::flipVertical(pixmap));
@@ -1176,39 +1123,8 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
 	    return false;
 	}
 	
-	QFont *font = (QFont *)systemFont;
-	if (!font) {
-	    cerr << "NoteFont::getPixmap: dynamic_cast to QFont* failed!" << endl;
-	    return false;
-	}
-	QFontMetrics metrics(*font);
-	QChar qc(code + charBase);
-	QRect bounding = metrics.boundingRect(qc);
-
-	if (m_fontMap.shouldAutocrop()) {
-	    found = new QPixmap(bounding.width(), bounding.height() + 1);
-	} else {
-	    found = new QPixmap(metrics.width(qc), metrics.height());
-	}
-
-	found->fill();
-	QPainter painter;
-	painter.begin(found);
-	painter.setFont(*font);
-	painter.setPen(Qt::black);
-
-	NOTATION_DEBUG << "NoteFont::getPixmap: Drawing character code "
-		       << code << " (string " << QString(qc) << ") for character " << charName.getName() << endl;
-
-	if (m_fontMap.shouldAutocrop()) {
-	    painter.drawText(-bounding.left(), -bounding.top(), qc);
-	} else {
-	    painter.drawText(0, metrics.ascent(), qc);
-	}
-
-	painter.end();
-
-	found->setMask(PixmapFunctions::generateMask(*found, Qt::white.rgb()));
+	found = new QPixmap(systemFont->renderChar(code + charBase,
+						   m_fontMap.shouldAutocrop()));
 	add(charName, inverted, found);
 	pixmap = *found;
 	return true;
@@ -1479,3 +1395,98 @@ NoteFontFactory::isAvailableInSize(std::string fontName, int size)
 std::set<std::string> NoteFontFactory::m_fontNames;
 std::map<std::pair<std::string, int>, NoteFont *> NoteFontFactory::m_fonts;
 
+
+class SystemFontQt : public SystemFont
+{
+public:
+    SystemFontQt(QFont &font) : m_font(font) { }
+    virtual ~SystemFontQt() { }
+    virtual QPixmap renderChar(unsigned int code, bool autocrop);
+
+private:
+    QFont m_font;
+};
+
+QPixmap
+SystemFontQt::renderChar(unsigned int code, bool autocrop)
+{
+    QFontMetrics metrics(m_font);
+    QChar qc(code);
+    QRect bounding = metrics.boundingRect(qc);
+
+    QPixmap map;
+
+    if (autocrop) {
+	map = QPixmap(bounding.width(), bounding.height() + 1);
+    } else {
+	map = QPixmap(metrics.width(qc), metrics.height());
+    }
+    
+    map.fill();
+    QPainter painter;
+    painter.begin(&map);
+    painter.setFont(m_font);
+    painter.setPen(Qt::black);
+    
+    NOTATION_DEBUG << "SystemFontQt::renderChar: Drawing character code "
+		   << code << " (string " << QString(qc) << ")" << endl;
+    
+    if (autocrop) {
+	painter.drawText(-bounding.left(), -bounding.top(), qc);
+    } else {
+	painter.drawText(0, metrics.ascent(), qc);
+    }
+    
+    painter.end();
+    map.setMask(PixmapFunctions::generateMask(map, Qt::white.rgb()));
+    return map;
+}
+
+
+SystemFont *
+SystemFont::loadSystemFont(const SystemFontSpec &spec)
+{
+    QString name = spec.first;
+    int size = spec.second;
+
+    NOTATION_DEBUG << "SystemFont::loadSystemFont: name is " << name << ", size " << size << endl;
+
+    if (name == "DEFAULT") {
+	QFont font;
+	font.setPixelSize(size);
+	return new SystemFontQt(font);
+    }
+
+    QFont font(name, size, QFont::Normal);
+    font.setPixelSize(size);
+
+    QFontInfo info(font);
+
+    NOTATION_DEBUG << "NoteFontMap::checkFont: have family " << info.family() << ", size " << info.pixelSize() << " (exactMatch " << info.exactMatch() << ")" << endl;
+
+//    return info.exactMatch();
+
+    // The Qt documentation says:
+    //
+    //   bool QFontInfo::exactMatch() const
+    //   Returns TRUE if the matched window system font is exactly the
+    //   same as the one specified by the font; otherwise returns FALSE.
+    //
+    // My arse.  I specify "feta", I get "Verdana", and exactMatch
+    // returns true.  Uh huh.
+    //
+    // UPDATE: in newer versions of Qt, I specify "fughetta", I get
+    // "Fughetta [macromedia]", and exactMatch returns false.  Just as
+    // useless, but in a different way.
+
+    QString family = info.family().lower();
+
+    if (family == name.lower()) return new SystemFontQt(font);
+    else {
+	int bracket = family.find(" [");
+	if (bracket > 1) family = family.left(bracket);
+	if (family == name.lower()) return new SystemFontQt(font);
+    }
+
+    return 0;
+}
