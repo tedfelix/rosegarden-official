@@ -1,0 +1,83 @@
+From: Amanda Walker (amanda@visix.com)
+Subject: Re: Sample rate conversion (formerly Sample Theroy:Boring) 
+Newsgroups: rec.music.synth
+
+View: Complete Thread (3 articles) | Original Format Date: 1992-04-02 09:12:19 PST 
+
+Mike.Rivers@f440.n109.z1.fidonet.org (Mike Rivers) writes:
+> What are some of the problems with doing sample rate conversion with
+> software?
+
+Basically, it's just harder than it seems.  You can't just average or
+interpolate samples (which is what most software, at least on the low
+end, does to accomplish rate conversion), although it's good enough for
+some applications.  If you need to do it in real time, the two sampling
+rates are related by an integral factor, and you can live with some
+phase distortion at the high end (personal computer music playing
+programs, for example).
+
+For the general case, though, you need quite a bit of digital filtering
+horsepower.  Here's the general procedure.  If Fold = the original
+sampling rate, Fnew = the new sampling rate, and Flcm = the least common
+multiple of the other two,
+
+- Upsample the source to Flcm (if the sampling rates are close, this
+will of course be rather high).  Ideally, this involves a brick-wall
+lowpass filter with a cutoff at Flcm/2 rather than simple linear
+interpolation, to avoid frequency and phase distortion.  This step can
+be looked at as an application of oversampling, but with a much higher
+multiplier than is usually used for D/A conversion.
+
+- Lowpass filter the upsampled signal again with a brick wall filter that
+cuts off at half the new sample rate
+
+- Decimate the upsampled signal to the new sample rate (i.e., pick every
+nth sample where n = Flcm/Fnew).
+
+In practice, the two filter stages are combined into a single lowpass
+filter with a cutoff at min(Fold/2, Fnew/2).  The closer the two sample
+rates are, the less elbow room there is for filtering out distortion,
+and the more accurate the filters need to be.  An ideal lowpass filter
+is not actually implementable in the real world, but it can be
+approached more and more closely with the application of more and more
+DSP horsepower.  Generally, the goal is a high-order FIR filter with
+linear phase (which corresponds to a constant group delay, which is
+realized as a delay in the output sample sequence, without any other
+phase distortion).  For applications which do not need real-time
+alignment, such as recording, even this can be compensated for (by
+offsetting the timebase), resulting in what is effectively zero phase
+distortion.  The higher order the filter, the better the frequency and
+phase response, and the more CPU power it takes.
+
+> They've been promising sample rate conversion for the past
+> year, but I understand that it doesn't work (either very well or at
+> all, depending on who you listen to) converting between the popular
+> DAT sampling rates of 44.1 and 48 kHz.
+
+This is probably because sample rate conversion is hardest when the
+rates are closest together (making their LCM very high).
+
+> Does it make sense to wait, or go for what's available
+> now and hope that they'll get the sample rate conversion together
+> eventually?
+
+Depends on your needs.  While the above process gives you maxmial
+accuracy, it may be overkill for most purposes.  Downsampling (such as
+48k->44.1k) can be faked pretty effectively by simply dropping source
+samples as necessary to keep in sync.  This is how most sampling synths
+work, for example.  Likewise, upsampling can be faked pretty effectively
+by linear interpolation (again, this is the way that most sampling
+synths do it).  It's very cheap computationally, relies on the
+reconstruction filter (which you need anyway) to catch most of the
+distortion, and sounds "good enough" for most people.  On the other
+hand, I wouldn't use it to master a CD...
+
+If you are really interested in this kind of stuff, or DSP in general, I
+will repeat my recommendation of Oppenheim & Schafer's
+_Discrete-Time_Signal_Processing_, published by Prentice Hall (ISBN
+0-13-216292-X).  If you could pass freshman calculus, you should be able
+to handle the math just fine.
+
+
+Amanda Walker                                                 amanda@visix.com
+Visix Software Inc.          
