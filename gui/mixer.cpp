@@ -373,18 +373,25 @@ MixerWindow::slotRoutingButtonPressed()
     QPopupMenu *menu = new QPopupMenu(this);
 
     int submasterCount = m_studio->getBusses().size() - 1;
+    int mid = 1;
 
     if (output) {
 
-	menu->insertItem(i18n("Master"));
+	menu->insertItem(i18n("Master"),
+			 this, SLOT(slotOutputChanged(int)), 0, mid);
+	menu->setItemParameter(mid, mid-1);
+	++mid;
 
 	for (int i = 0; i < submasterCount; ++i) {
-	    menu->insertItem(i18n("Sub %1").arg(i+1));
+	    menu->insertItem(i18n("Sub %1").arg(i+1),
+			     this, SLOT(slotOutputChanged(int)), 0, mid);
+	    menu->setItemParameter(mid, mid-1);
+	    ++mid;
 	}
 
-	connect(menu, SIGNAL(activated(int)), this, SLOT(slotOutputChanged(int)));
-
     } else {
+
+	// id/param stuff as above
 
 	int jackAudioInputs = m_studio->getRecordIns().size();
 
@@ -432,16 +439,26 @@ MixerWindow::slotInputChanged(int i)
 void
 MixerWindow::slotOutputChanged(int i)
 {
+    RG_DEBUG << "MixerWindow::slotOutputChanged(" << i << ") for instrument "
+	     << m_currentId << endl;
+
     Rosegarden::Instrument *instrument = m_studio->getInstrumentById(m_currentId);
     if (!instrument) return;
 
     Rosegarden::BussId bussId = instrument->getAudioOutput();
+    RG_DEBUG << "MixerWindow::slotOutputChanged(" << i << ") for instrument "
+	     << m_currentId << endl;
+
     Rosegarden::Buss *oldBuss = m_studio->getBussById(bussId);
     Rosegarden::Buss *newBuss = m_studio->getBussById(i);
-    if (!oldBuss || !newBuss) return;
+    if (!newBuss) return;
 
-    Rosegarden::StudioControl::disconnectStudioObjects(instrument->getMappedId(),
-						       oldBuss->getMappedId());
+    if (oldBuss) {
+	Rosegarden::StudioControl::disconnectStudioObjects(instrument->getMappedId(),
+							   oldBuss->getMappedId());
+    } else {
+	Rosegarden::StudioControl::disconnectStudioObject(instrument->getMappedId());
+    }
 
     Rosegarden::StudioControl::connectStudioObjects(instrument->getMappedId(),
 						    newBuss->getMappedId());
