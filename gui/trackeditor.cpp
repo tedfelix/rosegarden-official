@@ -363,7 +363,10 @@ void TrackEditor::paintEvent(QPaintEvent* e)
     if (isCompositionModified()) {
         m_segmentCanvas->updateAllSegmentItems();
 
-        // TODO : track buttons
+        m_trackButtons->slotUpdateTracks();
+
+        m_segmentCanvas->canvas()->resize(m_canvasWidth,
+                                          getTrackCellHeight() * m_document->getComposition().getNbTracks());
 
         setCompositionModified(false);
     }
