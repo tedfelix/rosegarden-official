@@ -510,6 +510,7 @@ AudioBussMixer::threadRun()
 
 	RealTime t = m_driver->getAudioMixBufferLength();
 	t = t / 2;
+	if (t < RealTime(0, 10000000)) t = RealTime(0, 10000000); // 10ms minimum
 
 	struct timeval now;
 	gettimeofday(&now, 0);
@@ -752,7 +753,9 @@ AudioInstrumentMixer::generateBuffers()
 	MappedAudioFader *fader = m_driver->getMappedStudio()->getAudioFader(id);
 
 	if (!fader) {
-//	    std::cerr << "WARNING: AudioInstrumentMixer::generateBuffers: no fader for audio instrument " << id << std::endl;
+#ifdef DEBUG_MIXER
+	    std::cerr << "AudioInstrumentMixer::generateBuffers: no fader for audio instrument " << id << std::endl;
+#endif
 	    continue;
 	}
 
@@ -865,6 +868,10 @@ AudioInstrumentMixer::processBlocks(bool forceFill, bool &readSomething)
     InstrumentId instrumentBase;
     int instrumentCount;
     m_driver->getAudioInstrumentNumbers(instrumentBase, instrumentCount);
+
+#ifdef DEBUG_MIXER
+    std::cerr << "AudioInstrumentMixer::processBlocks(" << forceFill << ")" << std::endl;
+#endif
 
     for (InstrumentId id = instrumentBase;
 	 id < instrumentBase + instrumentCount; ++id) {
@@ -1289,8 +1296,6 @@ AudioInstrumentMixer::kick(bool wantLock)
 {
     if (wantLock) getLock();
 
-//    Rosegarden::Profiler profiler("AudioInstrumentMixer::kick");
-
     bool readSomething = false;
     processBlocks(false, readSomething);
 //    if (m_bussMixer) m_bussMixer->signal();
@@ -1312,6 +1317,7 @@ AudioInstrumentMixer::threadRun()
 
 	RealTime t = m_driver->getAudioMixBufferLength();
 	t = t / 2;
+	if (t < RealTime(0, 10000000)) t = RealTime(0, 10000000); // 10ms minimum
 
 	struct timeval now;
 	gettimeofday(&now, 0);
@@ -1405,8 +1411,6 @@ AudioFileReader::kick(bool wantLock)
 {
     if (wantLock) getLock();
 
-//    Rosegarden::Profiler profiler("AudioFileReader::kick");
-
     PlayableAudioFileList audioQueue;
     PlayableAudioFileList::iterator it;
 	
@@ -1450,6 +1454,7 @@ AudioFileReader::threadRun()
 
 	    RealTime t = m_driver->getAudioReadBufferLength();
 	    t = t / 2;
+	    if (t < RealTime(0, 10000000)) t = RealTime(0, 10000000); // 10ms minimum
 
 	    struct timeval now;
 	    gettimeofday(&now, 0);
@@ -1580,8 +1585,6 @@ AudioFileWriter::kick(bool wantLock)
 {
     if (wantLock) getLock();
 
-//    Rosegarden::Profiler profiler("AudioFileWriter::kick");
-
     InstrumentId instrumentBase;
     int instrumentCount;
     m_driver->getAudioInstrumentNumbers(instrumentBase, instrumentCount);
@@ -1624,7 +1627,8 @@ AudioFileWriter::threadRun()
 
 	RealTime t = m_driver->getAudioWriteBufferLength();
 	t = t / 2;
-	
+	if (t < RealTime(0, 10000000)) t = RealTime(0, 10000000); // 10ms minimum
+
 	struct timeval now;
 	gettimeofday(&now, 0);
 	t = t + RealTime(now.tv_sec, now.tv_usec * 1000);

@@ -1060,7 +1060,9 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     layout->addWidget(m_readAhead, 1, 2);
     layout->addWidget(m_readAheadLabel, 2, 2, Qt::AlignHCenter);
 
-    int readAheadValue = m_cfg->readLongNumEntry("readaheadusec", 80000) / 1000;
+    int readAheadValue =
+	m_cfg->readLongNumEntry("readaheadsec", 0) * 1000 +
+	m_cfg->readLongNumEntry("readaheadusec", 80000) / 1000;
     updateTimeSlider(readAheadValue, 1, 9, 10, m_readAhead, m_readAheadLabel,
 		     0);
 
@@ -1083,7 +1085,9 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     layout->addWidget(m_audioMix, 3, 2);
     layout->addWidget(m_audioMixLabel, 4, 2, Qt::AlignHCenter);
 
-    int audioMixValue = m_cfg->readLongNumEntry("audiomixusec", 60000) / 1000;
+    int audioMixValue =
+	m_cfg->readLongNumEntry("audiomixsec", 0) * 1000 +	
+	m_cfg->readLongNumEntry("audiomixusec", 60000) / 1000;
     updateTimeSlider(audioMixValue, 0, 8, 10, m_audioMix, m_audioMixLabel,
 		     i18n("per audio instrument"));
 
@@ -1106,7 +1110,9 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     layout->addWidget(m_audioRead, 5, 2);
     layout->addWidget(m_audioReadLabel, 6, 2, Qt::AlignHCenter);
 
-    int audioReadValue = m_cfg->readLongNumEntry("audioreadusec", 80000) / 1000;
+    int audioReadValue =
+	m_cfg->readLongNumEntry("audioreadsec", 0) * 1000 +
+	m_cfg->readLongNumEntry("audioreadusec", 80000) / 1000;
     updateTimeSlider(audioReadValue, 1, 9, 10, m_audioRead, m_audioReadLabel,
 		     i18n("per file"));
 
@@ -1130,7 +1136,9 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     layout->addWidget(m_audioWrite, 7, 2);
     layout->addWidget(m_audioWriteLabel, 8, 2, Qt::AlignHCenter);
 
-    int audioWriteValue = m_cfg->readLongNumEntry("audiowriteusec", 200000) / 1000;
+    int audioWriteValue =
+	m_cfg->readLongNumEntry("audiowritesec", 0) * 1000 +
+	m_cfg->readLongNumEntry("audiowriteusec", 200000) / 1000;
     updateTimeSlider(audioWriteValue, 0, 9, 100, m_audioWrite, m_audioWriteLabel, "");
 
     connect(m_audioWrite,
@@ -1462,17 +1470,21 @@ SequencerConfigurationPage::apply()
     m_cfg->writeEntry("sfxloadpath", m_sfxLoadPath->text());
     m_cfg->writeEntry("soundfontpath", m_soundFontPath->text());
 
-    m_cfg->writeEntry("readaheadusec", (10 * (1 << m_readAhead->value())) * 1000);
-    m_cfg->writeEntry("readaheadsec", 0L);
+    long usec = (10 * (1 << m_readAhead->value())) * 1000;
+    m_cfg->writeEntry("readaheadusec",  usec % 1000000L);
+    m_cfg->writeEntry("readaheadsec",   usec / 1000000L);
+
+    usec = (10 * (1 << m_audioMix->value())) * 1000;
+    m_cfg->writeEntry("audiomixusec",   usec % 1000000L);
+    m_cfg->writeEntry("audiomixsec",    usec / 1000000L);
+
+    usec = (10 * (1 << m_audioRead->value())) * 1000;
+    m_cfg->writeEntry("audioreadusec",  usec % 1000000L);
+    m_cfg->writeEntry("audioreadsec",   usec / 1000000L);
     
-    m_cfg->writeEntry("audiomixusec", (10 * (1 << m_audioMix->value())) * 1000);
-    m_cfg->writeEntry("audiomixsec", 0L);
-    
-    m_cfg->writeEntry("audioreadusec", (10 * (1 << m_audioRead->value())) * 1000);
-    m_cfg->writeEntry("audioreadsec", 0L);
-    
-    m_cfg->writeEntry("audiowriteusec", (100 * (1 << m_audioWrite->value())) * 1000);
-    m_cfg->writeEntry("audiowritesec", 0L);
+    usec = (100 * (1 << m_audioWrite->value())) * 1000;
+    m_cfg->writeEntry("audiowriteusec", usec % 1000000L);
+    m_cfg->writeEntry("audiowritesec",  usec / 1000000L);
 
     m_cfg->writeEntry("smallaudiofilekbytes", 1 << m_smallFile->value());
 

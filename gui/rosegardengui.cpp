@@ -843,7 +843,7 @@ void RosegardenGUIApp::setupActions()
                                      "fastforwardtoend");
     m_ffwdEndTransport->setGroup(RosegardenTransportDialog::ConfigGroup);
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "transport-tracking"));
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/transport-tracking.xpm"));
     (new KToggleAction(i18n("Scro&ll to Follow Playback"), icon, 0, this,
 		       SLOT(slotToggleTracking()), actionCollection(),
 		       "toggle_tracking"))->setChecked(true);
