@@ -19,6 +19,8 @@
     COPYING included with this distribution for more information.
 */
 
+#include <ctime>
+
 #include <qapplication.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
