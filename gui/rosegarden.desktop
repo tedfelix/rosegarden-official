@@ -1,11 +1,12 @@
 # KDE Config File  
 [KDE Desktop Entry]
 Type=Application
+Categories=AudioVideo;Application;X-SuSE-Sequencer;X-Red-Hat-Base;
 Exec=rosegarden -caption "%c" %i %m  
 Icon=rosegarden.xpm
 MiniIcon=rosegarden.xpm
 DocPath=rosegarden/index.html
-Comment=
+Comment=MIDI and Audio Sequencer and Editor
 Comment[de]=
 Terminal=0
 Name=Rosegarden
