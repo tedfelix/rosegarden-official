@@ -1,2 +1,2 @@
 #
-SUBDIRS = handbook
+SUBDIRS = rosegarden
