@@ -82,12 +82,14 @@ SoundFile::getBytes(std::ifstream *file, unsigned int numberOfBytes)
     for (int i = 0; i < file->gcount(); i++)
         rS += (unsigned char)fileBytes[i];
 
+#ifdef DEBUG_SOUNDFILE
     // complain but return
     //
     if (rS.length() < numberOfBytes)
         std::cerr << "SoundFile::getBytes() - couldn't get all bytes ("
                   << rS.length() << " from " << numberOfBytes << ")"
                   << std::endl;
+#endif
 
     // clear down
     delete [] fileBytes;
@@ -183,12 +185,14 @@ SoundFile::getBytes(unsigned int numberOfBytes)
 
     }
 
+#ifdef DEBUG_SOUNDFILE
     // complain but return
     //
     if (rS.length() < numberOfBytes)
         std::cerr << "SoundFile::getBytes() buffered - couldn't get all bytes ("
                   << rS.length() << " from " << numberOfBytes << ")"
                   << std::endl;
+#endif 
 
     delete [] fileBytes;
 

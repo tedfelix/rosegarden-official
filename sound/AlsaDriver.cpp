@@ -237,6 +237,12 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
 
 AlsaDriver::~AlsaDriver()
 {
+    shutdown();
+}
+
+void
+AlsaDriver::shutdown()
+{
     AUDIT_START;
     AUDIT_STREAM << "AlsaDriver::~AlsaDriver - shutting down" << std::endl;
 
@@ -1923,7 +1929,7 @@ AlsaDriver::processAudioQueue(const RealTime &playLatency, bool now)
 
     // Clear any defunct files from the queue
     //
-    //clearDefunctFromAudioPlayQueue();
+    clearDefunctFromAudioPlayQueue();
 
 }
 
@@ -3379,7 +3385,9 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
         // If there is something on the audio queue then make sure
         // the disk thread is running (and hence ensuring the ring
-        // buffers are full).
+        // buffers are full).  This is a signal to another thread
+        // through the condition value - not sure if this is 
+        // strictly realtime safe though..
         //
         if (audioQueue.size() > 0)
         {
@@ -3398,26 +3406,15 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
         for (it = audioQueue.begin(); it != audioQueue.end(); ++it)
         {
-            // Another thread could've cleared down all the
+            // Another (JACK) thread could've cleared down all the
             // PlayableAudioFiles already.  As we've already
             // noted we must be careful.
             //
-            if ( /*inst->isPlaying() &&*/
-                (*it)->getStatus() == PlayableAudioFile::PLAYING)
+            if ((*it)->getStatus() == PlayableAudioFile::PLAYING)
             {
-
-                // make sure we haven't stopped playing because if we
-                // have the iterator is invalid
-                //
-
-                /*
-                if (!inst->isPlaying())
-                    continue;
-                    */
 
                 int channels = (*it)->getChannels();
                 int bytes = (*it)->getBitsPerSample() / 8;
-
 
                 // How many frames to fetch will actually be
                 // decided by sampling rate differences.  At 
@@ -3437,11 +3434,6 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                     fetchFrames = (jack_nframes_t)((double)(nframes) *
                                                  (((double)(sampleRate))/
                                                   ((double)(_jackSampleRate))));
-
-                    /*
-                    std::cerr << "RATE MISMATCH : will fetch "
-                               << fetchFrames << " frames" << std::endl;
-                               */
                 }
 
                 // Get some frames from the PlayableAudioFile - this
@@ -3449,15 +3441,28 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 //
                 samples = (*it)->getSampleFrames(fetchFrames);
 
-                // If we can't fetch everything then we must be at
-                // the end of the AudioFile.  (disable for the
-                // moment)
+                // If we can't fetch a whole slice then ensure that
+                // the end of it is silenced.  In a moment we'll be
+                // interating through this string using pointers
+                // which can easily blast through the end of it
+                // and into free (noisy) space.
                 //
-
-                /*
-                if (samples.length() !=
+                if (samples.length() <
                     (fetchFrames * (*it)->getBytesPerSample()))
                 {
+                    int bytesToFill = (fetchFrames * (*it)->getBytesPerSample()) - samples.length();
+                    std::string empty;
+                    for (int i = 0; i < bytesToFill; ++i)
+                        empty += " ";
+
+                    samples += empty;
+
+//#define FINE_DEBUG_DISK_THREAD
+#ifdef FINE_DEBUG_DISK_THREAD
+                    std::cerr << "Found short fetch, appending  " << bytesToFill << " BYTES" << std::endl;
+#endif
+                        
+                    /*
                     (*it)->setStatus(PlayableAudioFile::DEFUNCT);
 
                     // Simple event to inform that AudioFileId has
@@ -3479,8 +3484,8 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                     // return
                     if (_jackMappedEventCounter >= _jackMappedEventsMax)
                         _jackMappedEventCounter = 0;
-                }
                 */
+                }
 
 
                 // How do we convert the audio files into a format that
@@ -4002,54 +4007,16 @@ AlsaDriver::jackSampleRate(jack_nframes_t nframes, void *)
 }
 
 void
-AlsaDriver::jackShutdown(void * /*arg*/)
+AlsaDriver::jackShutdown(void *arg)
 {
 #ifdef DEBUG_ALSA
-    std::cerr << "AlsaDriver::jackShutdown() - received" << std::endl;
+    std::cerr << "AlsaDriver::jackShutdown() - callback received" << std::endl;
 #endif
 
-    // Old restart code can be abandoned
-    //
-    /*
     AlsaDriver *inst = static_cast<AlsaDriver*>(arg);
-    if (inst)
-    {
-        // Shutdown audio references
-        //
-        inst->shutdownAudio();
+    if (inst) inst->shutdown();
 
-        // And then restart Audio
-        //
-        std::cerr << "AlsaDriver::jackShutdown() - received, " 
-                  << "restarting..." << std::endl;
-
-        inst->initialiseAudio();
-    }
-    */
-}
-
-void
-AlsaDriver::shutdownAudio()
-{
-#ifdef DEBUG_ALSA
-    std::cerr << "AlsaDriver::shutdownAudio - JACK shutdown callback"
-              << std::endl;
-#endif
-    /*
-    if (m_audioClient)
-    {
-        std::cerr << "AlsaDriver::shutdownAudio - "
-                  << "shutting down JACK client" << std::endl;
-        jack_deactivate(m_audioClient);
-        m_audioClient = 0;
-
-        // Hmm, this sometimes just hangs our subsequent JACK calls -
-        // probably leave it out for the moment.
-        //
-        //jack_client_close(m_audioClient);
-        //
-    }
-    */
+    delete inst;
 }
 
 int
@@ -4858,7 +4825,7 @@ AlsaDriver::jackDiskThread(void *arg)
 {
     AlsaDriver *inst = static_cast<AlsaDriver*>(arg);
 
-#define DEBUG_DISK_THREAD
+//#define DEBUG_DISK_THREAD
 #ifdef DEBUG_DISK_THREAD
     std::cerr << "AlsaDriver::jackDiskThread - starting" << std::endl;
 #endif 
@@ -4870,7 +4837,7 @@ AlsaDriver::jackDiskThread(void *arg)
         pthread_setcanceltype (PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
         pthread_mutex_lock(&_diskThreadLock);
 
-        std::vector<PlayableAudioFile*> &audioQueue = inst->getAudioPlayQueueNotDefunct();
+        std::vector<PlayableAudioFile*> audioQueue = inst->getAudioPlayQueueNotDefunct();
         std::vector<PlayableAudioFile*>::iterator it;
 
         while(true)
@@ -4890,17 +4857,21 @@ AlsaDriver::jackDiskThread(void *arg)
 
                 unsigned int writeSpace = (*it)->getRingBuffer()->writeSpace();
 
-#ifdef DEBUG_DISK_THREAD
-                std::cerr << "READSPACE = " << readSpace << std::endl;
-                std::cerr << "WRITESPACE = " << writeSpace << std::endl;
+#ifdef FINE_DEBUG_DISK_THREAD
+                std::cerr << "AUDIO FILE " << (*it)->getAudioFile()->getId()
+                          << " available buffer was = " << readSpace;
 #endif
 
                 if (readSpace < fillLevel)
                 {
                     // bytePerSample takes into account the number
                     // of channels - calculate frames
-                    (*it)->fillRingBuffer(fillLevel);
+                    (*it)->fillRingBuffer(writeSpace);
                 }
+
+#ifdef FINE_DEBUG_DISK_THREAD
+                std::cerr << ", is now = " << (*it)->getRingBuffer()->readSpace() << std::endl;
+#endif 
 
             }
 

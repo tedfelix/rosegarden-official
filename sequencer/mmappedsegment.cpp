@@ -373,11 +373,14 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil
 
             MappedEvent *evt = new MappedEvent(*(*iter));
 
+            /*
             if (evt->getType() == MappedEvent::Audio) {
                 
-                if (evt->getEventTime() < endTime + (Rosegarden::RealTime(1, 0)))
+                if (evt->getEventTime() < endTime)
+                    evt->setEventTime(evt->getEventTime() - Rosegarden::RealTime(1, 0));
                     c->insert(evt);
             }
+            */
 
             if (evt->getEventTime() < endTime) {
                 if (evtIsFromMetronome) {
@@ -416,7 +419,6 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil
 
                 } else if (acceptEvent(evt, evtIsFromMetronome)) {
                     SEQUENCER_DEBUG << "inserting event\n";
-                    std::cerr << "TYPE = " << evt->getType() << std::endl;
                     c->insert(evt);
 
                 } else {

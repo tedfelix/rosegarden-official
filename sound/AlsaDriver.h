@@ -60,6 +60,9 @@ public:
     AlsaDriver(MappedStudio *studio);
     virtual ~AlsaDriver();
 
+    // shutdown everything that's currently open
+    void shutdown();
+
     virtual void initialise();
     virtual void initialisePlayback(const RealTime &position,
                                     const RealTime &playLatency);
@@ -216,10 +219,6 @@ public:
 
     jack_port_t* getJackOutputPortLeft() { return m_jackOutputPortLeft; }
     jack_port_t* getJackOutputPortRight() { return m_jackOutputPortRight; }
-
-    // clear down audio connections if we're restarting
-    //
-    void shutdownAudio();
 
     // A new audio file for storage of our recorded samples - the
     // file stays open so we can append samples at will.  We must

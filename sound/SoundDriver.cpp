@@ -23,7 +23,7 @@
 #include "WAVAudioFile.h"
 #include "MappedStudio.h"
 
-#define DEBUG_PLAYABLE 1
+//#define DEBUG_PLAYABLE 1
 
 namespace Rosegarden
 {
@@ -55,7 +55,7 @@ PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
     // if no external ringbuffer then create one
     if (m_ringBuffer == 0)
     {
-        m_ringBuffer = new RingBuffer(262176);
+        m_ringBuffer = new RingBuffer(32767); // 32k ringbuffer
     }
 
 }
@@ -420,8 +420,10 @@ SoundDriver::clearDefunctFromAudioPlayQueue()
     for (dLit = dList.begin(); dLit != dList.end(); ++dLit)
         m_audioPlayQueue.erase(*dLit);
 
+#ifdef DEBUG_SOUNDRIVER
     if (dList.size())
         std::cout << "REMOVED " << dList.size() << " DEFUNCT AUDIO FILES" << std::endl;
+#endif 
 
 }
 
