@@ -297,7 +297,8 @@ NotationStaff::getElementUnderLayoutX(double x,
 	if (x >= airX && x < airX + airWidth) {
 	    return it;
 	} else if (!before) {
-	    break;
+	    if (it != notes->begin()) --it;
+	    return it;
 	}
     }
 
