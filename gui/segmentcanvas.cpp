@@ -381,9 +381,32 @@ void SegmentNotationPreview::drawShape(QPainter& painter)
         // draw rectangles, discarding those which are clipped
         //
         QRect p = *i;
+        int scaledX = int(m_rulerScale->getXForTime((*i).x()));
+        int scaledWidth = int(m_rulerScale->getXForTime((*i).width()));
+        if (!scaledWidth) scaledWidth = 1;
+
+        p.setX(scaledX);
+        p.setWidth(scaledWidth);
+
 	if (p.x() > (viewportRect.x() + viewportRect.width())) break;
         if ((p.x() + p.width()) >= viewportRect.x()) {
+
             painter.drawRect(p);
+
+            /*
+            RG_DEBUG << "SegmentNotationPreview::drawShape - "
+                     << "p.x() = " << p.x()
+                     << ", p.width() = " << p.width()
+                     << ", p.y() = " << p.y()
+                     << ", p.height() = " << p.height()
+                     << endl;
+
+            QRect tRect = painter.xFormDev(p);
+            RG_DEBUG << "SegmentNotationPreview::drawShape -  transformed "
+                     << "p.x() = " << tRect.x()
+                     << ", p.width() = " << tRect.width()
+                     << endl;
+                     */
         }
     }
 
@@ -436,8 +459,19 @@ void SegmentNotationPreview::updatePreview()
 	if (eventEnd > m_segment->getEndMarkerTime()) {
 	    eventEnd = m_segment->getEndMarkerTime();
 	}
-        double x0 = m_rulerScale->getXForTime(eventStart) - rect().x();
-        double x1 = m_rulerScale->getXForTime(eventEnd) - rect().x();
+
+        // FIX for 904300 - store the time rather than the position
+        // and then scale with rulerScale.  Inefficient I'd imagine
+        // but at least it works.
+        //
+        double x0 = eventStart - m_rulerScale->getTimeForX(rect().x());
+        double x1 = eventEnd - m_rulerScale->getTimeForX(rect().x());
+
+        /*
+        RG_DEBUG << "SegmentNotationPreview::updatePreview - "
+                 << "x0 = " << x0
+                 << ", x1 = " << x1 << endl;
+                 */
 
         int width = (int)(x1 - x0) - 2;
 	if (width < 1) width = 1;
@@ -997,6 +1031,8 @@ void SegmentCanvas::updateAllSegmentItems()
 
 void SegmentCanvas::updateSegmentItem(Segment *segment)
 {
+    RG_DEBUG << "SegmentCanvas::updateSegmentItem" << endl;
+
     SegmentItem *item = findSegmentItem(segment);
     if (!item) {
 	addSegmentItem(segment);

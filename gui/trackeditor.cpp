@@ -303,6 +303,9 @@ void TrackEditor::slotReadjustCanvasSize()
 
     m_segmentCanvas->canvas()->resize(m_canvasWidth, canvasHeight);
 
+
+    RG_DEBUG << "TrackEditor::slotReadjustCanvasSize - done" << endl;
+
     m_pointer->setSize(3, canvasHeight);
 }
 
