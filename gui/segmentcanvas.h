@@ -22,13 +22,15 @@
 #ifndef SEGMENTCANVAS_H
 #define SEGMENTCANVAS_H
 
+#include <list>
+
 #include "Event.h"
 #include "Track.h"
 #include "RulerScale.h"
 
 #include <qwidget.h>
-#include <qcanvas.h>
-#include <list>
+
+#include "rosegardencanvasview.h"
 
 namespace Rosegarden {
     class Segment;
@@ -154,7 +156,7 @@ class SegmentTool;
  *
  * @see TrackEditor
  */
-class SegmentCanvas : public QCanvasView
+class SegmentCanvas : public RosegardenCanvasView
 {
     Q_OBJECT
 
@@ -172,7 +174,6 @@ public:
     SegmentCanvas(Rosegarden::RulerScale *,QScrollBar*,  int vStep,
                   QCanvas*,
 		  QWidget* parent=0, const char* name=0, WFlags f=0);
-    ~SegmentCanvas();
 
     /// Remove all items
     void clear();
@@ -245,11 +246,7 @@ public:
 				  Rosegarden::timeT duration);
     void deleteRecordingSegmentItem();
 
-    virtual void polish();
-
 public slots:
-    /// Update the SegmentCanvas after a change of content
-    virtual void slotUpdate();
 
     /// Set the current segment editing tool
     void slotSetTool(SegmentCanvas::ToolType);
@@ -366,8 +363,6 @@ private:
     QBrush m_highlightBrush;
     QPen m_pen;
     QPopupMenu *m_editMenu;
-
-    QScrollBar *m_horizontalScrollBar;
 
     bool m_fineGrain;
 };

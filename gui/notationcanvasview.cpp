@@ -32,9 +32,10 @@
 using namespace NotationProperties;
 
 NotationCanvasView::NotationCanvasView(const LinedStaffManager<NotationElement> &staffmgr,
+                                       QScrollBar *horizBar,
 				       QCanvas *viewing, QWidget *parent,
                                        const char *name, WFlags f) :
-    QCanvasView(viewing, parent, name, f),
+    RosegardenCanvasView(horizBar, viewing, parent, name, f),
     m_linedStaffManager(staffmgr),
     m_lastYPosNearStaff(0),
     m_currentStaff(0),

@@ -22,8 +22,9 @@
 #ifndef NOTATIONCANVASVIEW_H
 #define NOTATIONCANVASVIEW_H
 
-#include <qcanvas.h>
 #include <vector>
+
+#include "rosegardencanvasview.h"
 
 class NotationElement;
 class QCanvasItemGroup;
@@ -43,13 +44,14 @@ class NotationStaff;
  *@see NotationView
  */
 
-class NotationCanvasView : public QCanvasView
+class NotationCanvasView : public RosegardenCanvasView
 {
     Q_OBJECT
 
 public:
     NotationCanvasView(const LinedStaffManager<NotationElement> &staffmgr,
-		       QCanvas *viewing=0, QWidget *parent=0,
+                       QScrollBar *horizBar,
+		       QCanvas *viewing, QWidget *parent=0,
                        const char *name=0, WFlags f=0);
 
     ~NotationCanvasView();

@@ -41,6 +41,7 @@ class QCanvasView;
 class ActiveItem;
 class BarButtons;
 class QVBox;
+class QGridLayout;
 
 class EditView : public KMainWindow
 {
@@ -169,6 +170,9 @@ public slots:
 
 protected:
 
+    void setTopBarButtons(QWidget*);
+    void setBottomBarButtons(QWidget*);
+
     /**
      * Set the current Notation tool (note inserter, rest inserter, eraser...)
      *
@@ -227,10 +231,11 @@ protected:
     virtual void setCanvasView(QCanvasView *cv);
     QCanvasView *m_canvasView;
 
-    QScrollView *m_topBarButtonsView;
-    QScrollView *m_bottomBarButtonsView;
-
-    QVBox *m_topBox;
+    QFrame      *m_centralFrame;
+    QScrollBar  *m_horizontalScrollBar;
+    QGridLayout *m_grid;
+    QWidget     *m_topBarButtons;
+    QWidget     *m_bottomBarButtons;
 };
 
 #endif

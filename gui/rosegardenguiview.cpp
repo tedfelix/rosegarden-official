@@ -48,7 +48,8 @@ using Rosegarden::SimpleRulerScale;
 
 RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     : QVBox(parent),
-      m_rulerScale(0)
+      m_rulerScale(0),
+      m_trackEditor(0)
 {
     RosegardenGUIDoc* doc = getDocument();
 

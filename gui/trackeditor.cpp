@@ -23,6 +23,7 @@
 
 #include <qlayout.h>
 #include <qcanvas.h>
+#include <qlabel.h>
 
 #include <kcommand.h>
 #include <kmessagebox.h>
@@ -53,7 +54,7 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
 			 RulerScale *rulerScale,
 			 QWidget* parent, const char* name,
 			 WFlags) :
-    QWidget(parent, name),
+    QFrame(parent, name),
     DCOPObject("TrackEditorIface"),
     m_document(doc),
     m_rulerScale(rulerScale),
@@ -244,6 +245,12 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     m_pointer->setPoints(0, 0, 0, canvas->height());
     m_pointer->setZ(10);
     m_pointer->show();
+
+
+    grid->addWidget(new QLabel("Label1", this), 0, 0);
+    grid->addWidget(new QLabel("Label2", this), 2, 0);
+    grid->addWidget(new QLabel("Label3", this), 3, 0);
+
 }
 
 void TrackEditor::slotScrollTrackButtons(int newPos)

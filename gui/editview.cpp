@@ -25,8 +25,7 @@
 #include <klocale.h>
 #include <kstdaction.h>
 
-#include <qvbox.h>
-#include <qhbox.h>
+#include <qlayout.h>
 
 #include "editview.h"
 #include "edittool.h"
@@ -51,36 +50,16 @@ EditView::EditView(RosegardenGUIDoc *doc,
       m_tool(0),
       m_toolBox(0),
       m_activeItem(0),
-      m_canvasView(0)
+      m_canvasView(0),
+      m_centralFrame(new QFrame(this)),
+      m_horizontalScrollBar(new QScrollBar(Horizontal, m_centralFrame)),
+      m_grid(new QGridLayout(m_centralFrame, 4, 0)), // 4 rows, 0 cols
+      m_topBarButtons(0),
+      m_bottomBarButtons(0)
 {
-    m_topBox = new QVBox(this);
-    setCentralWidget(m_topBox);
+    setCentralWidget(m_centralFrame);
 
-    QHBox *topSplit = new QHBox(m_topBox);
-    
-    m_topBox->setSpacing(0);
-    m_topBox->setMargin(0);
-
-    topSplit->setMinimumHeight(29);//!!!
-    topSplit->setMaximumHeight(29);//!!!
-    topSplit->setSpacing(0);
-    topSplit->setMargin(0);
-//    topSplit->setFrameStyle(Plain);
-
-    QLabel *label = new QLabel(topSplit);
-    label->setMinimumWidth(20);//!!!
-    label->setMaximumWidth(20);//!!!
-    label->setMinimumHeight(29);//!!!
-    label->setMaximumHeight(29);//!!!
-
-    m_topBarButtonsView = new QScrollView(topSplit);
-    m_topBarButtonsView->setHScrollBarMode(QScrollView::AlwaysOff);
-    m_topBarButtonsView->setVScrollBarMode(QScrollView::AlwaysOff);
-
-    m_topBarButtonsView->setMinimumHeight(29);//!!!
-    m_topBarButtonsView->setMaximumHeight(29);//!!!
-
-    m_bottomBarButtonsView = 0; // until later
+    m_centralFrame->setMargin(0);
 
     // add undo and redo to edit menu and toolbar
     getCommandHistory()->attachView(actionCollection());
@@ -88,6 +67,8 @@ EditView::EditView(RosegardenGUIDoc *doc,
     QObject::connect
 	(getCommandHistory(), SIGNAL(commandExecuted(KCommand *)),
 	 this,		      SLOT(slotCommandExecuted(KCommand *)));
+
+    m_grid->addWidget(m_horizontalScrollBar, 3, 0);
 }
 
 EditView::~EditView()
@@ -97,43 +78,48 @@ EditView::~EditView()
 
 void EditView::setCanvasView(QCanvasView *canvasView)
 {
+    delete m_canvasView;
     m_canvasView = canvasView;
+    m_grid->addWidget(m_canvasView, 1, 0);
+    m_canvasView->setHScrollBarMode(QScrollView::AlwaysOff);
 
-    if (m_canvasView) {
+    m_horizontalScrollBar->setRange(m_canvasView->horizontalScrollBar()->minValue(),
+                                    m_canvasView->horizontalScrollBar()->maxValue());
 
-	//!!! factor out (with ctor)
+    m_horizontalScrollBar->setSteps(m_canvasView->horizontalScrollBar()->lineStep(),
+                                    m_canvasView->horizontalScrollBar()->pageStep());
 
-	QHBox *bottomSplit = new QHBox(m_topBox);
+    connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
+            m_canvasView->horizontalScrollBar(), SIGNAL(valueChanged(int)));
+    connect(m_horizontalScrollBar, SIGNAL(sliderMoved(int)),
+            m_canvasView->horizontalScrollBar(), SIGNAL(sliderMoved(int)));
 
-	bottomSplit->setMinimumHeight(29);//!!!
-	bottomSplit->setMaximumHeight(29);//!!!
-	bottomSplit->setSpacing(0);
-	bottomSplit->setMargin(0);
-//    bottomSplit->setFrameStyle(Plain);
-
-	QLabel *label = new QLabel(bottomSplit);
-	label->setMinimumWidth(20);//!!!
-	label->setMaximumWidth(20);//!!!
-	label->setMinimumHeight(29);//!!!
-	label->setMaximumHeight(29);//!!!
-	
-	m_bottomBarButtonsView = new QScrollView(bottomSplit);
-	m_bottomBarButtonsView->setHScrollBarMode(QScrollView::AlwaysOff);
-	m_bottomBarButtonsView->setVScrollBarMode(QScrollView::AlwaysOff);
-	
-	m_bottomBarButtonsView->setMinimumHeight(29);//!!!
-	m_bottomBarButtonsView->setMaximumHeight(29);//!!!
-
-//	connect(m_trackEditorScrollView, SIGNAL(contentsMoving(int, int)),
-//		trackButtonsView,        SLOT(setContentsPos(int, int)));
-
-	connect(m_canvasView,       SIGNAL(contentsMoving(int, int)),
-		m_topBarButtonsView,  SLOT(setContentsPos(int, int)));
-
-	connect(m_canvasView,          SIGNAL(contentsMoving(int, int)),
-		m_bottomBarButtonsView,  SLOT(setContentsPos(int, int)));
-    }
 }
+
+void EditView::setTopBarButtons(QWidget* w)
+{
+    delete m_topBarButtons;
+    m_topBarButtons = w;
+    m_grid->addWidget(w, 0, 0);
+
+    connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
+            m_topBarButtons, SLOT(slotScrollHoriz(int)));
+    connect(m_horizontalScrollBar, SIGNAL(sliderMoved(int)),
+            m_topBarButtons, SLOT(slotScrollHoriz(int)));
+}
+
+void EditView::setBottomBarButtons(QWidget* w)
+{
+    delete m_bottomBarButtons;
+    m_bottomBarButtons = w;
+    m_grid->addWidget(w, 2, 0);
+
+    connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
+            m_bottomBarButtons, SLOT(slotScrollHoriz(int)));
+    connect(m_horizontalScrollBar, SIGNAL(sliderMoved(int)),
+            m_bottomBarButtons, SLOT(slotScrollHoriz(int)));
+}
+
 
 
 void EditView::readjustViewSize(QSize requestedSize, bool exact)

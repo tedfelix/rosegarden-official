@@ -22,14 +22,9 @@
 #ifndef SEGMENTSEDITOR_H
 #define SEGMENTSEDITOR_H
 
-#include <list>
-#include <qwidget.h>
-#include <qheader.h>
-#include <qcanvas.h>
-#include "trackheader.h"
+#include <qframe.h>
 
 #include "trackseditoriface.h"
-#include "multiviewcommandhistory.h"
 
 #include "Event.h" // for timeT
 #include "Track.h"
@@ -40,6 +35,9 @@ class SegmentCanvas;
 class RosegardenGUIDoc;
 class BarButtons;
 class TrackButtons;
+class MultiViewCommandHistory;
+class KCommand;
+class QCanvasLine;
 
 /**
  * Global widget for segment edition.
@@ -49,7 +47,7 @@ class TrackButtons;
  *
  * @see SegmentCanvas
  */
-class TrackEditor : public QWidget, virtual public TrackEditorIface
+class TrackEditor : public QFrame, virtual public TrackEditorIface
 {
     Q_OBJECT
 public:

@@ -126,18 +126,18 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     
     setBackgroundMode(PaletteBase);
 
-    setCanvasView(new NotationCanvasView
-		  (*this, new QCanvas(width() * 2, height() * 2),
-		   m_topBox));
-
-//    setCentralWidget(m_canvasView);
+    QCanvas *tCanvas = new QCanvas(this);
+    tCanvas->resize(width() * 2, height() * 2);
+    
+    setCanvasView(new NotationCanvasView(*this, m_horizontalScrollBar,
+                                         tCanvas, m_centralFrame));
 
     //
     // Connect signals
     //
     QObject::connect
         (getCanvasView(), SIGNAL(itemPressed(int, int, QMouseEvent*, NotationElement*)),
-         this,         SLOT  (slotItemPressed(int, int, QMouseEvent*, NotationElement*)));
+         this,            SLOT  (slotItemPressed(int, int, QMouseEvent*, NotationElement*)));
 
     QObject::connect
         (getCanvasView(), SIGNAL(activeItemPressed(QMouseEvent*, QCanvasItem*)),
@@ -201,25 +201,23 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
         }
     }
 
-    m_topBarButtons = new BarButtons
-	(m_hlayout, 25, false, m_topBarButtonsView);
 
-    QObject::connect
-	(m_topBarButtons->getLoopRuler(),
-	 SIGNAL(setPointerPosition(Rosegarden::timeT)),
-	 this, SLOT(slotSetInsertCursorPosition(Rosegarden::timeT)));
+    m_topBarButtons = new BarButtons(m_hlayout, 25,
+                                     false, m_centralFrame);
 
-    m_topBarButtons->getLoopRuler()->setBackgroundColor
-	(RosegardenGUIColours::InsertCursorRuler);
+    setTopBarButtons(m_topBarButtons);
 
-    m_topBarButtons->setMinimumWidth(canvas()->width());
-    m_topBarButtonsView->addChild(m_topBarButtons);
+    QObject::connect(m_topBarButtons->getLoopRuler(),
+                     SIGNAL(setPointerPosition(Rosegarden::timeT)),
+                     this, SLOT(slotSetInsertCursorPosition(Rosegarden::timeT)));
 
-    m_bottomBarButtons = new BarButtons
-	(m_hlayout, 25, true, m_bottomBarButtonsView);
+    m_topBarButtons->getLoopRuler()->setBackgroundColor(RosegardenGUIColours::InsertCursorRuler);
+
+    m_bottomBarButtons = new BarButtons(m_hlayout, 25,
+                                        true, m_centralFrame);
     m_bottomBarButtons->connectRulerToDocPointer(doc);
-    m_bottomBarButtons->setMinimumWidth(canvas()->width());
-    m_bottomBarButtonsView->addChild(m_bottomBarButtons);
+
+    setBottomBarButtons(m_bottomBarButtons);
 
     m_selectDefaultNote->activate();
 }
@@ -921,11 +919,11 @@ void
 NotationView::setPageMode(bool pageMode)
 {
     if (pageMode) {
-	m_topBarButtonsView->hide();
-	m_bottomBarButtonsView->hide();
+	m_topBarButtons->hide();
+	m_bottomBarButtons->hide();
     } else {
-	m_topBarButtonsView->show();
-	m_bottomBarButtonsView->show();
+	m_topBarButtons->show();
+	m_bottomBarButtons->show();
     }
 
     m_hlayout->setPageMode(pageMode);

@@ -188,7 +188,7 @@ SegmentCanvas::SegmentCanvas(RulerScale *rulerScale, QScrollBar* hsb,
                              int vStep,
 			     QCanvas* c, QWidget* parent,
 			     const char* name, WFlags f) :
-    QCanvasView(c, parent, name, f),
+    RosegardenCanvasView(hsb, c, parent, name, f),
     m_tool(0),
     m_grid(rulerScale, vStep),
     m_currentItem(0),
@@ -198,39 +198,13 @@ SegmentCanvas::SegmentCanvas(RulerScale *rulerScale, QScrollBar* hsb,
     m_highlightBrush(RosegardenGUIColours::SegmentHighlightBlock),
     m_pen(RosegardenGUIColours::SegmentBorder),
     m_editMenu(new QPopupMenu(this)),
-    m_horizontalScrollBar(hsb),
     m_fineGrain(false)
 {
     QWhatsThis::add(this, i18n("Segments Canvas - Create and manipulate your segments here"));
 
 }
 
-SegmentCanvas::~SegmentCanvas()
-{
-}
-
-void SegmentCanvas::polish()
-{
-    QCanvasView::polish();
-    slotUpdate();
-}
-
-
-void
-SegmentCanvas::slotUpdate()
-{
-    canvas()->update();
-
-    m_horizontalScrollBar->setRange(horizontalScrollBar()->minValue(),
-                                    horizontalScrollBar()->maxValue());
-
-    m_horizontalScrollBar->setSteps(horizontalScrollBar()->lineStep(),
-                                    horizontalScrollBar()->pageStep());
-
-}
-
-void
-SegmentCanvas::slotSetTool(ToolType t)
+void SegmentCanvas::slotSetTool(ToolType t)
 {
     kdDebug(KDEBUG_AREA) << "SegmentCanvas::slotSetTool(" << t << ")"
                          << this << "\n";
@@ -268,8 +242,7 @@ SegmentCanvas::slotSetTool(ToolType t)
     }
 }
 
-void
-SegmentCanvas::updateSegmentItem(Segment *segment)
+void SegmentCanvas::updateSegmentItem(Segment *segment)
 {
     SegmentItem *item = findSegmentItem(segment);
     if (!item) {
@@ -279,14 +252,13 @@ SegmentCanvas::updateSegmentItem(Segment *segment)
     }
 }
 
-void
-SegmentCanvas::removeSegmentItem(Segment *segment)
+void SegmentCanvas::removeSegmentItem(Segment *segment)
 {
     SegmentItem *item = findSegmentItem(segment);
     delete item;
 }
 
-SegmentItem *
+SegmentItem*
 SegmentCanvas::findSegmentItem(Rosegarden::Segment *segment)
 {
     //!!! slow.
@@ -403,8 +375,7 @@ void SegmentCanvas::clear()
 
 // Show the split line. This is where we perform Segment splits.
 //
-void
-SegmentCanvas::slotShowSplitLine(int x, int y)
+void SegmentCanvas::slotShowSplitLine(int x, int y)
 {
     if (m_splitLine == 0)
         m_splitLine = new SegmentSplitLine(x, y,
@@ -419,8 +390,7 @@ SegmentCanvas::slotShowSplitLine(int x, int y)
 
 // Hide the split line
 //
-void
-SegmentCanvas::slotHideSplitLine()
+void SegmentCanvas::slotHideSplitLine()
 {
     m_splitLine->hideLine();
     slotUpdate();
@@ -454,8 +424,8 @@ SegmentCanvas::addSegmentItem(Segment *segment)
     return newItem;
 }
 
-void
-SegmentCanvas::showRecordingSegmentItem(TrackId track, timeT startTime, timeT duration)
+void SegmentCanvas::showRecordingSegmentItem(TrackId track,
+                                             timeT startTime, timeT duration)
 {
     if (m_recordingSegment) {
 
@@ -475,8 +445,7 @@ SegmentCanvas::showRecordingSegmentItem(TrackId track, timeT startTime, timeT du
 }
 
 
-void
-SegmentCanvas::deleteRecordingSegmentItem()
+void SegmentCanvas::deleteRecordingSegmentItem()
 {
     if (m_recordingSegment) {
 	m_recordingSegment->setVisible(false);
@@ -508,8 +477,7 @@ void SegmentCanvas::slotOnEditAudio()
 // passed Segment pointer
 //
 //
-void
-SegmentCanvas::slotSelectSegments(std::list<Rosegarden::Segment*> segments)
+void SegmentCanvas::slotSelectSegments(std::list<Rosegarden::Segment*> segments)
 {
     SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(m_tool);
 
@@ -542,8 +510,7 @@ SegmentCanvas::slotSelectSegments(std::list<Rosegarden::Segment*> segments)
 // can add Selections to the one we currently have
 //
 //
-void
-SegmentCanvas::slotSetSelectAdd(const bool &value)
+void SegmentCanvas::slotSetSelectAdd(const bool &value)
 {
     SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(m_tool);
 
@@ -559,8 +526,7 @@ SegmentCanvas::slotSetSelectAdd(const bool &value)
 // the default movement behaviour for selection).
 //
 //
-void
-SegmentCanvas::slotSetSelectCopy(const bool &value)
+void SegmentCanvas::slotSetSelectCopy(const bool &value)
 {
     SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(m_tool);
 
@@ -570,8 +536,7 @@ SegmentCanvas::slotSetSelectCopy(const bool &value)
 }
 
 
-void
-SegmentCanvas::setSnapGrain(bool fine)
+void SegmentCanvas::setSnapGrain(bool fine)
 {
     if (m_fineGrain) {
 	grid().setSnapTime(SnapGrid::NoSnap);
@@ -581,8 +546,7 @@ SegmentCanvas::setSnapGrain(bool fine)
 }
 
 
-void
-SegmentCanvas::slotSetFineGrain(bool value)
+void SegmentCanvas::slotSetFineGrain(bool value)
 {
     m_fineGrain = value;
 }
