@@ -1004,19 +1004,13 @@ void Track::makeBeamedGroup(iterator from, iterator to, string type)
 void Track::autoBeam(iterator from, iterator to, string type)
 {
     int barNo = getBarNumber(from);
-
     TimeSignature tsig = m_barPositions[barNo].timeSignature;
 
     int num = tsig.getNumerator();
     int denom = tsig.getDenominator();
 
-    // I'm still trying to work out how this old code works...
-
     timeT average;
-    timeT minimum;
-
-    // Completely ad-hoc heuristics for determining suitable group
-    // sizes:
+    timeT minimum = 0;
 
     // If the denominator is 2 or 4, beam in twos (3/4, 6/2 etc).
     
@@ -1024,32 +1018,25 @@ void Track::autoBeam(iterator from, iterator to, string type)
 
         if (num % 3) {
             average = Note(Note::Quaver).getDuration();
-            minimum = Note(Note::Semiquaver).getDuration();
         } else {
-            average = minimum = Note(Note::Semiquaver).getDuration();
+            average = Note(Note::Semiquaver).getDuration();
+            minimum = average;
         }
 
     } else {
 
-        // special hack for 6/8
-
-        if (num == 6 && denom == 8) {
-
+        if (num == 6 && denom == 8) { // special hack for 6/8
             average = 3 * Note(Note::Quaver).getDuration();
-            minimum = average / 2;
 
         } else {
-
             // find a divisor (at least 2) for the numerator
-
             int n = 2;
             while (num % n != 0) ++n;
-
             average = n * Note(Note::Semiquaver).getDuration();
-            minimum = average / 2;
         }
     }
 
+    if (minimum == 0) minimum = average / 2;
     if (denom > 4) average /= 2;
 
     autoBeamAux(from, to, average, minimum, average * 4, tsig, type);
