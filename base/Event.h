@@ -271,6 +271,7 @@ public:
 #ifndef NDEBUG
     void dump(std::ostream&) const;
 #else
+#error Plog
     void dump(std::ostream&) const {}
 #endif
     static void dumpStats(std::ostream&);
@@ -376,6 +377,8 @@ private:
     static int m_hasCount;
     static int m_unsetCount;
     static clock_t m_lastStats;
+#else
+#error Plog2
 #endif
 };
 

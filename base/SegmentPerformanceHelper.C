@@ -41,25 +41,58 @@ SegmentPerformanceHelper::getTiedNotes(iterator i)
 
     Event *e = *i;
     if (!e->isa(Note::EventType)) return c;
+    Segment::iterator j(i);
 
     bool tiedBack = false, tiedForward = false;
     e->get<Bool>(TIED_BACKWARD, tiedBack);
     e->get<Bool>(TIED_FORWARD, tiedForward);
 
-    if (tiedBack) return iteratorcontainer();
-    else if (!tiedForward) return c;
-
-    timeT t = e->getAbsoluteTime();
     timeT d = e->getDuration();
+    timeT t = e->getAbsoluteTime();
 
     if (!e->has(PITCH)) return c;
     int pitch = e->get<Int>(PITCH);
 
-    for (;;) {
-	while (++i != end() && !(*i)->isa(Note::EventType));
-        if (i == end()) return c;
+    bool valid = false;
 
-        e = *i;
+    if (tiedBack) {
+	// #1171463: If we can find no preceding TIED_FORWARD event,
+	// then we remove this property
+	
+	while (j != begin()) {
+
+	    --j;
+	    if (!(*j)->isa(Note::EventType)) continue;
+	    e = *j; // can reuse e because this branch always returns
+
+	    timeT t2 = e->getAbsoluteTime() + e->getDuration();
+	    if (t2 < t) break;
+
+	    if (t2 > t || !e->has(PITCH) ||
+		e->get<Int>(PITCH) != pitch) continue;
+
+	    bool prevTiedForward = false;
+	    if (!e->get<Bool>(TIED_FORWARD, prevTiedForward) ||
+		!prevTiedForward) break;
+
+	    valid = true;
+	    break;
+	}
+
+	if (valid) {
+	    return iteratorcontainer();
+	} else {
+	    (*i)->unset(TIED_BACKWARD);
+	    return c;
+	}
+    }
+    else if (!tiedForward) return c;
+
+    for (;;) {
+	while (++j != end() && !(*j)->isa(Note::EventType));
+        if (j == end()) return c;
+
+        e = *j;
 
         timeT t2 = e->getAbsoluteTime();
         
@@ -71,10 +104,17 @@ SegmentPerformanceHelper::getTiedNotes(iterator i)
             !tiedBack) break;
 
         d += e->getDuration();
-	c.push_back(i);
+	c.push_back(j);
+	valid = true;
 
         if (!e->get<Bool>(TIED_FORWARD, tiedForward) ||
             !tiedForward) return c;
+    }
+
+    if (!valid) {
+	// Related to #1171463: If we can find no following
+	// TIED_BACKWARD event, then we remove this property
+	(*i)->unset(TIED_FORWARD);
     }
 
     return c;
@@ -93,21 +133,36 @@ SegmentPerformanceHelper::getSoundingDuration(iterator i)
     timeT d = 0;
 
     if (!(*i)->has(TIED_BACKWARD)) {
+	
+	// Formerly we just returned d in this case, but now we check
+	// with getTiedNotes so as to remove any bogus backward ties
+	// that have no corresponding forward tie.  Unfortunately this
+	// is quite a bit slower.
 
-	if (!(*i)->has(TIED_FORWARD) || !(*i)->isa(Note::EventType)) {
+	//!!! optimize. at least we should add a marker property to
+	//anything we've already processed from this helper this time
+	//around.
 
-	    d = (*i)->getDuration();
+	iteratorcontainer c(getTiedNotes(i));
+	
+	if (c.empty()) { // the tie back is valid
+	    return 0;
+	}
+    }
 
-	} else {
+    if (!(*i)->has(TIED_FORWARD) || !(*i)->isa(Note::EventType)) {
 
-	    // tied forward but not back
+	d = (*i)->getDuration();
 
-	    iteratorcontainer c(getTiedNotes(i));
+    } else {
+
+	// tied forward but not back
+
+	iteratorcontainer c(getTiedNotes(i));
 	    
-	    for (iteratorcontainer::iterator ci = c.begin();
-		 ci != c.end(); ++ci) {
-		d += (**ci)->getDuration();
-	    }
+	for (iteratorcontainer::iterator ci = c.begin();
+	     ci != c.end(); ++ci) {
+	    d += (**ci)->getDuration();
 	}
     }
 
