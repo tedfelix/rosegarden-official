@@ -658,45 +658,9 @@ void RosegardenGUIApp::initView()
         m_audioManagerDialog->slotPopulateFileList();
 }
 
-bool RosegardenGUIApp::openDocumentFile(const char* _cmdl)
+void RosegardenGUIApp::openFile(const QString& filePath)
 {
-    KTmpStatusMsg msg(i18n("Opening file..."), statusBar());
-    
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::openDocumentFile("
-                         << _cmdl << ")" << endl;
-
-    m_doc->saveIfModified();
-    m_doc->closeDocument();
-
-    slotEnableTransport(false); // disable transport prior to loading
-    // we can't process transport events while reading the file
-
-    if (m_doc->openDocument(_cmdl)) {
-
-        initView();
-        return true;
-    }
-
-    return false;
-}
-
-void RosegardenGUIApp::openFile(const QString& url)
-{
-
-    setCaption(url);
-    KURL *u = new KURL( url );
-
-    if (u->isMalformed()) {
-        KMessageBox::sorry(this, i18n("This is not a valid filename.\n"));
-        return;
-    }
-
-    if (!u->isLocalFile()) {
-        KMessageBox::sorry(this, i18n("This is not a local file.\n"));
-        return;
-    }
-
-    QFileInfo info(u->path());
+    QFileInfo info(filePath);
 
     if (!info.exists()) {
         KMessageBox::sorry(this, i18n("The specified file does not exist"));
@@ -708,7 +672,7 @@ void RosegardenGUIApp::openFile(const QString& url)
         return;
     }
 
-    QFile file(u->path());
+    QFile file(filePath);
 
     if (!file.open(IO_ReadOnly)) {
         KMessageBox::sorry(this, i18n("You do not have read permission to this file."));
@@ -717,12 +681,12 @@ void RosegardenGUIApp::openFile(const QString& url)
 
     // Stop if playing
     //
-    if (m_seqManager->getTransportStatus() == PLAYING)
+    if (m_seqManager && m_seqManager->getTransportStatus() == PLAYING)
       slotStop();
 
     m_doc->closeDocument();
     slotEnableTransport(false);
-    m_doc->openDocument(u->path());
+    m_doc->openDocument(filePath);
 
     initView();
 
@@ -2395,14 +2359,14 @@ bool RosegardenGUIApp::performAutoload()
     kdDebug(KDEBUG_AREA)
         << "RosegardenGUIApp::performAutoload() - autoloading\n";
 
-    bool res = openDocumentFile(autoloadFile.utf8().data());
+    openFile(autoloadFile);
 
     // So we don't get the "autoload" title
     //
     m_doc->setTitle(i18n("Untitled"));
     setCaption(m_doc->getTitle());
 
-    return res;
+    return true;
 }
 
 

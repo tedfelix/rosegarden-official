@@ -97,13 +97,6 @@ public:
     virtual ~RosegardenGUIApp();
 
     /**
-     * opens a file specified by commandline option
-     *
-     * @return true if file was successfully opened, false otherwise
-     */
-    bool openDocumentFile(const char *_cmdl=0);
-
-    /**
      * returns a pointer to the current document connected to the
      * KTMainWindow instance and is used by * the View class to access
      * the document object's methods
