@@ -25,7 +25,7 @@
 
 template <class T>
 LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
-			  int id, int resolution, int lineThickness) :
+                          int id, int resolution, int lineThickness) :
     Rosegarden::Staff<T>(*segment),
     m_canvas(canvas),
     m_id(id),
@@ -45,8 +45,8 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
 
 template <class T>
 LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
-			  int id, int resolution, int lineThickness,
-			  double pageWidth, int rowSpacing) :
+                          int id, int resolution, int lineThickness,
+                          double pageWidth, int rowSpacing) :
     Rosegarden::Staff<T>(*segment),
     m_canvas(canvas),
     m_id(id),
@@ -66,8 +66,8 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
 
 template <class T>
 LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
-			  int id, int resolution, int lineThickness,
-			  bool pageMode, double pageWidth, int rowSpacing) :
+                          int id, int resolution, int lineThickness,
+                          bool pageMode, double pageWidth, int rowSpacing) :
     Rosegarden::Staff<T>(*segment),
     m_canvas(canvas),
     m_id(id),
@@ -174,9 +174,9 @@ double
 LinedStaff<T>::getTotalWidth() const
 {
     if (m_pageMode) {
-	return getCanvasXForRightOfRow(getRowForLayoutX(m_endLayoutX)) - m_x;
+        return getCanvasXForRightOfRow(getRowForLayoutX(m_endLayoutX)) - m_x;
     } else {
-	return getCanvasXForLayoutX(m_endLayoutX) - m_x;
+        return getCanvasXForLayoutX(m_endLayoutX) - m_x;
     }
 }
 
@@ -185,7 +185,7 @@ int
 LinedStaff<T>::getTotalHeight() const
 {
     return getCanvasYForTopOfStaff(getRowForLayoutX(m_endLayoutX)) +
-	getHeightOfRow() - m_y;
+        getHeightOfRow() - m_y;
 }
 
 template <class T>
@@ -201,22 +201,22 @@ LinedStaff<T>::containsCanvasY(int y) const
 {
     if (m_pageMode) {
 
-	int row;
+        int row;
     
-	for (row  = getRowForLayoutX(m_startLayoutX);
-	     row <= getRowForLayoutX(m_endLayoutX); ++row) {
-	    if (y >= getCanvasYForTopOfStaff(row) &&
-		y <  getCanvasYForTopOfStaff(row) + getHeightOfRow()) {
-		return true;
-	    }
-	}
+        for (row  = getRowForLayoutX(m_startLayoutX);
+             row <= getRowForLayoutX(m_endLayoutX); ++row) {
+            if (y >= getCanvasYForTopOfStaff(row) &&
+                y <  getCanvasYForTopOfStaff(row) + getHeightOfRow()) {
+                return true;
+            }
+        }
 
-	return false;
+        return false;
 
     } else {
-	
-	return (y >= getCanvasYForTopOfStaff() &&
-		y <  getCanvasYForTopOfStaff() + getHeightOfRow());
+        
+        return (y >= getCanvasYForTopOfStaff() &&
+                y <  getCanvasYForTopOfStaff() + getHeightOfRow());
     }
 }
 
@@ -226,9 +226,9 @@ LinedStaff<T>::getCanvasYForHeight(int h, int baseY) const
 {
     int y;
     if (baseY >= 0) {
-	y = getCanvasYForTopLine(getRowForCanvasCoords(m_x, baseY));
+        y = getCanvasYForTopLine(getRowForCanvasCoords(m_x, baseY));
     } else {
-	y = getCanvasYForTopLine();
+        y = getCanvasYForTopLine();
     }
 
     y += getLayoutYForHeight(h);
@@ -254,13 +254,13 @@ LinedStaff<T>::getHeightAtCanvasY(int y) const
     // by calling getCanvasYForHeight a few times... ugh
 
 //    kdDebug(KDEBUG_AREA) << "\nNotationStaff::heightOfYCoord: y = " << y
-//			 << ", getTopLineOffset() = " << getTopLineOffset()
-//			 << ", getLineSpacing() = " << m_npf->getLineSpacing()
-//			 << endl;
+//                         << ", getTopLineOffset() = " << getTopLineOffset()
+//                         << ", getLineSpacing() = " << m_npf->getLineSpacing()
+//                         << endl;
 
     int row = getRowForCanvasCoords(m_x, y);
     int ph = (y - getCanvasYForTopLine(row)) * getHeightPerLine() /
-	getLineSpacing();
+        getLineSpacing();
     ph = getTopLineHeight() - ph;
 
     int i;
@@ -271,25 +271,25 @@ LinedStaff<T>::getHeightAtCanvasY(int y) const
     int testMd = 1000;
 
     for (i = -1; i <= 1; ++i) {
-	int d = y - getCanvasYForHeight(ph + i, y);
-	if (d < 0) d = -d;
-	if (d < md) { md = d; mi = i; }
-	if (d < testMd) { testMd = d; testi = i; }
+        int d = y - getCanvasYForHeight(ph + i, y);
+        if (d < 0) d = -d;
+        if (d < md) { md = d; mi = i; }
+        if (d < testMd) { testMd = d; testi = i; }
     }
     
     if (mi > -2) {
-	kdDebug(KDEBUG_AREA) << "LinedStaff::getHeightAtCanvasY: " << y
-			     << " -> " << (ph + mi) << " (mi is " << mi << ", distance "
-			     << md << ")" << endl;
-	if (mi == 0) {
-	    kdDebug(KDEBUG_AREA) << "GOOD APPROXIMATION" << endl;
-	} else {
-	    kdDebug(KDEBUG_AREA) << "BAD APPROXIMATION" << endl;
-	}
-	return ph + mi;
+        kdDebug(KDEBUG_AREA) << "LinedStaff::getHeightAtCanvasY: " << y
+                             << " -> " << (ph + mi) << " (mi is " << mi << ", distance "
+                             << md << ")" << endl;
+        if (mi == 0) {
+            kdDebug(KDEBUG_AREA) << "GOOD APPROXIMATION" << endl;
+        } else {
+            kdDebug(KDEBUG_AREA) << "BAD APPROXIMATION" << endl;
+        }
+        return ph + mi;
     } else {
-	kdDebug(KDEBUG_AREA) << "LinedStaff::getHeightAtCanvasY: heuristic got " << ph << ", nothing within range (closest was " << (ph + testi) << " which is " << testMd << " away)" << endl;
-	return 0;
+        kdDebug(KDEBUG_AREA) << "LinedStaff::getHeightAtCanvasY: heuristic got " << ph << ", nothing within range (closest was " << (ph + testi) << " which is " << testMd << " away)" << endl;
+        return 0;
     }
 }
 
@@ -301,22 +301,22 @@ LinedStaff<T>::getBarExtents(double x, int y) const
 
     for (int i = 1; i < m_barLines.size(); ++i) {
 
-	int layoutX = m_barLines[i].first;
-	int barRow = getRowForLayoutX(layoutX);
+        int layoutX = m_barLines[i].first;
+        int barRow = getRowForLayoutX(layoutX);
 
-	QCanvasLine *line = m_barLines[i].second;
+        QCanvasLine *line = m_barLines[i].second;
 
-	if (m_pageMode && (barRow < row)) continue;
-	if (line->x() <= x) continue;
+        if (m_pageMode && (barRow < row)) continue;
+        if (line->x() <= x) continue;
 
-	return QRect(m_barLines[i-1].second->x(),
-		     getCanvasYForTopOfStaff(barRow),
-		     line->x() - m_barLines[i-1].second->x(),
-		     getHeightOfRow());
+        return QRect(int(m_barLines[i-1].second->x()),
+                     getCanvasYForTopOfStaff(barRow),
+                     int(line->x() - m_barLines[i-1].second->x()),
+                     getHeightOfRow());
     }
 
     // failure
-    return QRect(m_x, getCanvasYForTopOfStaff(), 4, getHeightOfRow());
+    return QRect(int(m_x), getCanvasYForTopOfStaff(), 4, getHeightOfRow());
 }
 
 template <class T>
@@ -338,23 +338,24 @@ LinedStaff<T>::sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout)
     
     for (unsigned int i = 0; i < barCount; ++i) {
 
-	if (layout.isBarLineVisible(*this, i)) {
+        if (layout.isBarLineVisible(*this, i)) {
 
-	    double x = layout.getBarLineX(*this, i);
+            double x = layout.getBarLineX(*this, i);
 
-	    if (!haveXLeft && layout.isBarLineVisible(*this, i)) {
-		xleft = x;
-		haveXLeft = true;
-	    }
+            if (!haveXLeft && layout.isBarLineVisible(*this, i)) {
+                xleft = x;
+                haveXLeft = true;
+            }
 
-	    insertBar(x, layout.isBarLineCorrect(*this, i));
+            insertBar(int(x), layout.isBarLineCorrect(*this, i));
 
-	    Rosegarden::Event *timeSig =
-		layout.getTimeSignatureInBar(*this, i, x);
-	    if (timeSig && i < barCount - 1) {
-		insertTimeSignature(x, Rosegarden::TimeSignature(*timeSig));
-	    }
-	}
+            Rosegarden::Event *timeSig =
+                layout.getTimeSignatureInBar(*this, i, x);
+            if (timeSig && i < barCount - 1) {
+                insertTimeSignature(int(x),
+                                    Rosegarden::TimeSignature(*timeSig));
+            }
+        }
     }
 
     m_startLayoutX = xleft;
@@ -369,13 +370,13 @@ void
 LinedStaff<T>::deleteBars()
 {
     for (BarLineList::iterator i = m_barLines.begin();
-	 i != m_barLines.end(); ++i) {
-	delete i->second;
+         i != m_barLines.end(); ++i) {
+        delete i->second;
     }
 
     for (BarLineList::iterator i = m_barConnectingLines.begin();
-	 i != m_barConnectingLines.end(); ++i) {
-	delete i->second;
+         i != m_barConnectingLines.end(); ++i) {
+        delete i->second;
     }
 
     m_barLines.clear();
@@ -393,42 +394,42 @@ LinedStaff<T>::insertBar(int layoutX, bool isCorrect)
     for (int i = 0; i < barThickness; ++i) {
 
         QCanvasLine *line = new QCanvasLine(m_canvas);
-	int row = getRowForLayoutX(layoutX);
+        int row = getRowForLayoutX(layoutX);
 
         line->setPoints(0, 0, 0, getBarLineHeight());
         line->moveBy
-	    (getCanvasXForLayoutX(layoutX) + i, getCanvasYForTopLine(row));
+            (getCanvasXForLayoutX(layoutX) + i, getCanvasYForTopLine(row));
 
         if (isCorrect) line->setPen(QPen(RosegardenGUIColours::BarLine, 1));
         else line->setPen(QPen(RosegardenGUIColours::BarLineIncorrect, 1));
-	line->setZ(-1);
+        line->setZ(-1);
         line->show();
 
-	BarLine barLine(layoutX, line);
+        BarLine barLine(layoutX, line);
         BarLineList::iterator insertPoint = lower_bound
-	    (m_barLines.begin(), m_barLines.end(), barLine, compareBars);
+            (m_barLines.begin(), m_barLines.end(), barLine, compareBars);
         m_barLines.insert(insertPoint, barLine);
 
-	if (m_connectingLineLength > 0) {
+        if (m_connectingLineLength > 0) {
 
-	    line = new QCanvasLine(m_canvas);
-	    
-	    line->setPoints(0, 0, 0, m_connectingLineLength);
-	    line->moveBy
-		(getCanvasXForLayoutX(layoutX) + i,
-		 getCanvasYForTopLine(row));
+            line = new QCanvasLine(m_canvas);
+            
+            line->setPoints(0, 0, 0, m_connectingLineLength);
+            line->moveBy
+                (getCanvasXForLayoutX(layoutX) + i,
+                 getCanvasYForTopLine(row));
 
-	    line->setPen
-		(QPen(RosegardenGUIColours::StaffConnectingLine, 1));
-	    line->setZ(-3);
-	    line->show();
+            line->setPen
+                (QPen(RosegardenGUIColours::StaffConnectingLine, 1));
+            line->setZ(-3);
+            line->show();
 
-	    BarLine connectingLine(layoutX, line);
-	    insertPoint = lower_bound
-		(m_barConnectingLines.begin(), m_barConnectingLines.end(),
-		 connectingLine, compareBars);
-	    m_barConnectingLines.insert(insertPoint, connectingLine);
-	}
+            BarLine connectingLine(layoutX, line);
+            insertPoint = lower_bound
+                (m_barConnectingLines.begin(), m_barConnectingLines.end(),
+                 connectingLine, compareBars);
+            m_barConnectingLines.insert(insertPoint, connectingLine);
+        }
     }
 }
 
@@ -468,17 +469,16 @@ LinedStaff<T>::resizeStaffLines()
     int  lastRow = getRowForLayoutX(m_endLayoutX);
 
     kdDebug(KDEBUG_AREA) << "LinedStaff::resizeStaffLines: firstRow "
-			 << firstRow << ", lastRow " << lastRow
-			 << " (startLayoutX " << m_startLayoutX
-			 << ", endLayoutX " << m_endLayoutX << ")" <<  endl;
+                         << firstRow << ", lastRow " << lastRow
+                         << " (startLayoutX " << m_startLayoutX
+                         << ", endLayoutX " << m_endLayoutX << ")" <<  endl;
 
     assert(lastRow >= firstRow);
     
     int i;
-
     while ((int)m_staffLines.size() <= lastRow) {
-	m_staffLines.push_back(LineList());
-	m_staffConnectingLines.push_back(0);
+        m_staffLines.push_back(LineList());
+        m_staffConnectingLines.push_back(0);
     }
 
     // Remove all the staff lines that precede the start of the staff
@@ -489,24 +489,24 @@ LinedStaff<T>::resizeStaffLines()
 
     while (i <= lastRow) {
 
-	double x0;
-	double x1;
+        double x0;
+        double x1;
 
-	if (i == firstRow) {
-	    x0 = getCanvasXForLayoutX(m_startLayoutX);
-	} else {
-	    x0 = getCanvasXForLeftOfRow(i);
-	}
+        if (i == firstRow) {
+            x0 = getCanvasXForLayoutX(m_startLayoutX);
+        } else {
+            x0 = getCanvasXForLeftOfRow(i);
+        }
 
-	if (i == lastRow) {
-	    x1 = getCanvasXForLayoutX(m_endLayoutX);
-	} else {
-	    x1 = getCanvasXForRightOfRow(i);
-	}
+        if (i == lastRow) {
+            x1 = getCanvasXForLayoutX(m_endLayoutX);
+        } else {
+            x1 = getCanvasXForRightOfRow(i);
+        }
 
-	resizeStaffLineRow(i, x0, x1 - x0);
+        resizeStaffLineRow(i, x0, x1 - x0);
 
-	++i;
+        ++i;
     }
 
     // now i == lastRow + 1
@@ -522,7 +522,7 @@ void
 LinedStaff<T>::clearStaffLineRow(int row)
 {
     for (int h = 0; h < (int)m_staffLines[row].size(); ++h) {
-	delete m_staffLines[row][h];
+        delete m_staffLines[row][h];
     }
     m_staffLines[row].clear();
 
@@ -538,8 +538,8 @@ void
 LinedStaff<T>::resizeStaffLineRow(int row, double x, double length)
 {
 //    kdDebug(KDEBUG_AREA) << "LinedStaff::resizeStaffLineRow: row "
-//			 << row << ", offset " << offset << ", length " 
-//			 << length << ", pagewidth " << getPageWidth() << endl;
+//                         << row << ", offset " << offset << ", length " 
+//                         << length << ", pagewidth " << getPageWidth() << endl;
 
 
     // If the resolution is 8 or less, we want to reduce the blackness
@@ -561,8 +561,8 @@ LinedStaff<T>::resizeStaffLineRow(int row, double x, double length)
   bar positions to sort this out
 
     if (m_pageMode && row > 0 && offset == 0.0) {
-	offset = (double)m_npf->getBarMargin() / 2;
-	length -= offset;
+        offset = (double)m_npf->getBarMargin() / 2;
+        length -= offset;
     }
 */
     QCanvasLine *line;
@@ -572,11 +572,11 @@ LinedStaff<T>::resizeStaffLineRow(int row, double x, double length)
     line = 0;
 
     if (m_pageMode && m_connectingLineLength > 0.1) {
-	line = new QCanvasLine(m_canvas);
-	y = getCanvasYForTopLine(row);
-	line->setPoints(x + length - 1, y, x + length - 1,
-			y + m_connectingLineLength);
- 	line->setPen
+        line = new QCanvasLine(m_canvas);
+        y = getCanvasYForTopLine(row);
+        line->setPoints(int(x + length - 1), y, int(x + length - 1),
+                        y + m_connectingLineLength);
+         line->setPen
             (QPen(RosegardenGUIColours::StaffConnectingTerminatingLine, 1));
         line->setZ(-2);
         line->show();
@@ -585,57 +585,57 @@ LinedStaff<T>::resizeStaffLineRow(int row, double x, double length)
     m_staffConnectingLines[row] = line;
 
     while ((int)m_staffLines[row].size() <= getLineCount() * m_lineThickness) {
-	m_staffLines[row].push_back(0);
+        m_staffLines[row].push_back(0);
     }
 
     int lineIndex = 0;
 
     for (h = 0; h < getLineCount(); ++h) {
 
-	for (j = 0; j < m_lineThickness; ++j) {
+        for (j = 0; j < m_lineThickness; ++j) {
 
-	    if (m_staffLines[row][lineIndex] != 0) {
-		line = m_staffLines[row][lineIndex];
-	    } else {
-		line = new QCanvasLine(m_canvas);
-	    }
+            if (m_staffLines[row][lineIndex] != 0) {
+                line = m_staffLines[row][lineIndex];
+            } else {
+                line = new QCanvasLine(m_canvas);
+            }
 
-	    y = getCanvasYForHeight
-		(getBottomLineHeight() + getHeightPerLine() * h,
-		 getCanvasYForTopLine(row)) + j;
+            y = getCanvasYForHeight
+                (getBottomLineHeight() + getHeightPerLine() * h,
+                 getCanvasYForTopLine(row)) + j;
 
-	    kdDebug(KDEBUG_AREA) << "LinedStaff: drawing line from ("
-				 << x << "," << y << ") to (" << (x+length-1)
-				 << "," << y << ")" << endl;
+            kdDebug(KDEBUG_AREA) << "LinedStaff: drawing line from ("
+                                 << x << "," << y << ") to (" << (x+length-1)
+                                 << "," << y << ")" << endl;
 
-	    line->setPoints(x, y, x + length - 1, y);
+            line->setPoints(int(x), y, int(x + length - 1), y);
 
-//	    if (j > 0) line->setSignificant(false);
+//            if (j > 0) line->setSignificant(false);
 
-	    line->setPen(QPen(lineColour, 1));
-	    line->setZ(z);
+            line->setPen(QPen(lineColour, 1));
+            line->setZ(z);
 
-	    if (m_staffLines[row][lineIndex] == 0) {
-		m_staffLines[row][lineIndex] = line;
-	    }
+            if (m_staffLines[row][lineIndex] == 0) {
+                m_staffLines[row][lineIndex] = line;
+            }
 
-	    line->show();
+            line->show();
 
-	    ++lineIndex;
-	}
+            ++lineIndex;
+        }
     }
 
     while (lineIndex < (int)m_staffLines[row].size()) {
-	delete m_staffLines[row][lineIndex];
-	m_staffLines[row][lineIndex] = 0;
-	++lineIndex;
+        delete m_staffLines[row][lineIndex];
+        m_staffLines[row][lineIndex] = 0;
+        ++lineIndex;
     }
 }    
 
 template <class T>
 void
 LinedStaff<T>::renderElements(Rosegarden::ViewElementList<T>::iterator,
-			      Rosegarden::ViewElementList<T>::iterator)
+                              Rosegarden::ViewElementList<T>::iterator)
 {
     // nothing -- we assume rendering will be done by the implementation
     // of positionElements
@@ -646,6 +646,6 @@ void
 LinedStaff<T>::renderElements()
 {
     renderElements(getViewElementList()->begin(),
-		   getViewElementList()->end());
+                   getViewElementList()->end());
 }
 
