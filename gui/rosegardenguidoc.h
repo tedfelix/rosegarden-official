@@ -36,7 +36,6 @@
 #include "rosegardengui.h"
 
 #include "Composition.h"
-#include "Clipboard.h"
 #include "MappedComposition.h"
 #include "multiviewcommandhistory.h"
 #include "AudioFileManager.h"
@@ -231,7 +230,7 @@ public:
     /**
      * returns the cut/copy/paste clipboard
      */
-    Rosegarden::Clipboard *getClipboard() { return m_clipboard; }
+    Rosegarden::Clipboard *getClipboard();
 
     /**
      * Returns whether the sequencer us running
@@ -493,8 +492,6 @@ protected:
     Rosegarden::timeT m_endOfLastRecordedNote;  // we use this for rest filling
 
     MultiViewCommandHistory *m_commandHistory;
-
-    Rosegarden::Clipboard *m_clipboard;
 
     /**
      * the Studio

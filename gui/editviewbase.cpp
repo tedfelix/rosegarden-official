@@ -42,6 +42,7 @@
 #include "multiviewcommandhistory.h"
 #include "ktmpstatusmsg.h"
 #include "barbuttons.h"
+#include "Clipboard.h"
 
 #include "rosedebug.h"
 

@@ -60,6 +60,7 @@ namespace Rosegarden
     class AudioPluginManager;
     class RosegardenTransportDialog;
     class SequenceManager;
+    class Clipboard;
 }
 
 class RosegardenProgressBar;
@@ -277,6 +278,11 @@ public:
      * the gui know and tell the user.
      */
     virtual void skippedSlices(unsigned int slices);
+
+    /*
+     * Return the clipboard
+     */
+    Rosegarden::Clipboard* getClipboard() { return m_clipboard; }
 
 protected:
 
@@ -1035,6 +1041,8 @@ private:
     Rosegarden::AudioPluginManager *m_pluginManager;
 
     QTimer* m_autoSaveTimer;
+
+    Rosegarden::Clipboard *m_clipboard;
 
 };
 

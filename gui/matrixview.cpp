@@ -76,6 +76,7 @@
 #include "controlruler.h"
 #include "studiocontrol.h"
 #include "sequencemanager.h"
+#include "Clipboard.h"
 
 #include "rosedebug.h"
 

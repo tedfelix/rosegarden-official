@@ -90,6 +90,7 @@
 #include "bankeditor.h"
 #include "midifilter.h"
 #include "SegmentNotationHelper.h"
+#include "Clipboard.h"
 
 //!!! ditch these when harmonize() moves out
 #include "CompositionTimeSliceAdapter.h"
@@ -117,7 +118,8 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
       m_storedLoopStart(0),
       m_storedLoopEnd(0),
       m_useSequencer(useSequencer),
-      m_autoSaveTimer(new QTimer(this))
+      m_autoSaveTimer(new QTimer(this)),
+      m_clipboard(new Rosegarden::Clipboard)
 {
     if (startupStatusMessageReceiver) {
 	QObject::connect(this, SIGNAL(startupStatusMessage(const QString &)),
@@ -1431,7 +1433,7 @@ void RosegardenGUIApp::slotEditCut()
 
     Rosegarden::SegmentSelection selection(m_view->getSelection());
     m_doc->getCommandHistory()->addCommand
-	(new CutCommand(selection, m_doc->getClipboard()));
+	(new CutCommand(selection, m_clipboard));
 }
 
 void RosegardenGUIApp::slotEditCopy()
@@ -1441,13 +1443,12 @@ void RosegardenGUIApp::slotEditCopy()
 
     Rosegarden::SegmentSelection selection(m_view->getSelection());
     m_doc->getCommandHistory()->addCommand
-	(new CopyCommand(selection, m_doc->getClipboard()));
+	(new CopyCommand(selection, m_clipboard));
 }
 
 void RosegardenGUIApp::slotEditPaste()
 {
-    Rosegarden::Clipboard *clipboard = m_doc->getClipboard();
-    if (clipboard->isEmpty()) {
+    if (m_clipboard->isEmpty()) {
 	KTmpStatusMsg msg(i18n("Clipboard is empty"), this);
 	return;
     }
@@ -1458,7 +1459,7 @@ void RosegardenGUIApp::slotEditPaste()
     timeT insertionTime = m_doc->getComposition().getPosition();
     m_doc->getCommandHistory()->addCommand
 	(new PasteSegmentsCommand(&m_doc->getComposition(),
-				  clipboard, insertionTime));
+				  m_clipboard, insertionTime));
 }
 
 void RosegardenGUIApp::slotSelectAll()
@@ -3559,14 +3560,14 @@ RosegardenGUIApp::slotStateChanged(const QString& s,
 void
 RosegardenGUIApp::slotTestClipboard()
 {
-    if (m_doc->getClipboard()->isEmpty()) {
+    if (m_clipboard->isEmpty()) {
 	stateChanged("have_clipboard", KXMLGUIClient::StateReverse);
 	stateChanged("have_clipboard_single_segment",
 		     KXMLGUIClient::StateReverse);
     } else {
 	stateChanged("have_clipboard", KXMLGUIClient::StateNoReverse);
 	stateChanged("have_clipboard_single_segment",
-		     (m_doc->getClipboard()->isSingleSegment() ?
+		     (m_clipboard->isSingleSegment() ?
 		      KXMLGUIClient::StateNoReverse :
 		      KXMLGUIClient::StateReverse));
     }

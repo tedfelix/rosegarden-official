@@ -44,7 +44,6 @@
 
 // application specific includes
 #include "Event.h"
-#include "Clipboard.h"
 #include "BaseProperties.h"
 #include "SegmentNotationHelper.h"
 #include "NotationTypes.h"
@@ -100,7 +99,6 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
       m_autoSaved(false),
       m_recordSegment(0), m_endOfLastRecordedNote(0),
       m_commandHistory(new MultiViewCommandHistory()),
-      m_clipboard(new Rosegarden::Clipboard),
       m_pluginManager(pluginManager),
       m_autoSavePeriod(0),
       m_beingDestroyed(false)
@@ -131,7 +129,6 @@ RosegardenGUIDoc::~RosegardenGUIDoc()
 
     deleteEditViews();
     delete m_commandHistory; // must be deleted before the Composition is
-    delete m_clipboard;
 }
 
 unsigned int
@@ -1776,6 +1773,16 @@ RosegardenGUIDoc::copyStudio(const Rosegarden::Studio &studio)
 {
     m_studio.copy(studio);
 }
+
+// Get the clipboard from the parent application
+//
+Rosegarden::Clipboard*
+RosegardenGUIDoc::getClipboard()
+{
+    RosegardenGUIApp *app = (RosegardenGUIApp*)parent();
+    return app->getClipboard();
+}
+
 
 
 
