@@ -1,6 +1,6 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 
-EXTRA_DIST = rosegardengui.kdevprj AUTHORS COPYING ChangeLog INSTALL README TODO rosegardengui.lsm 
+EXTRA_DIST = AUTHORS COPYING ChangeLog INSTALL README TODO rosegardengui.lsm 
 
 ####### kdevelop will overwrite this part!!! (end)############
 
