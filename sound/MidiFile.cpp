@@ -435,6 +435,14 @@ MidiFile::convertToRosegarden()
   // preset tempo to zero
   composition->setTempo(0);
 
+  // precalculate the timing factor
+  //
+  float timingFactor = 0.0;
+
+  if ( _timingDivision )
+    timingFactor = (float) Note(Note::Crotchet).getDuration() /
+                   (float) _timingDivision;
+
   for ( unsigned int i = 0; i < _numberOfTracks; i++ )
   {
     trackTime = 0;
@@ -515,10 +523,8 @@ MidiFile::convertToRosegarden()
 
         if (_timingDivision)
         {
-          rosegardenTime = midiEvent->time() *
-                    Note(Note::Crotchet).getDuration() / _timingDivision;
-          rosegardenDuration = midiEvent->duration() * 
-                    Note(Note::Crotchet).getDuration() / _timingDivision;
+          rosegardenTime = (timeT) ( midiEvent->time() * timingFactor ) ;
+          rosegardenDuration = (timeT) ( midiEvent->duration() *  timingFactor );
         }
 
 
@@ -694,8 +700,7 @@ MidiFile::convertToRosegarden()
   if (composition->getTempo() == 0)
   {
     if (_timingDivision)
-      composition->setTempo(Note(Note::Crotchet).getDuration()
-                            /_timingDivision * 120);
+      composition->setTempo(((timeT)(timingFactor * 120)));
     else
       composition->setTempo(120);
   }
