@@ -52,7 +52,7 @@ BWFAudioFile::BWFAudioFile(const std::string &fileName,
                            unsigned int channels = 1,
                            unsigned int sampleRate = 48000,
                            unsigned int bytesPerSecond = 6000,
-                           unsigned int bytesPerSample = 2,
+                           unsigned int bytesPerFrame = 2,
                            unsigned int bitsPerSample = 16):
     RIFFAudioFile(0, "", fileName)
 {
@@ -60,7 +60,7 @@ BWFAudioFile::BWFAudioFile(const std::string &fileName,
     m_bitsPerSample = bitsPerSample;
     m_sampleRate = sampleRate;
     m_bytesPerSecond = bytesPerSecond;
-    m_bytesPerSample = bytesPerSample;
+    m_bytesPerFrame = bytesPerFrame;
     m_channels = channels;
 }
 

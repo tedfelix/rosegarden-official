@@ -21,6 +21,9 @@
 
 #include "SoundFile.h"
 
+
+//#define DEBUG_SOUNDFILE 1
+
 namespace Rosegarden
 
 {

@@ -50,26 +50,22 @@ public:
     virtual ~ArtsDriver();
 
     virtual void initialise();
-    virtual void initialisePlayback(const RealTime &position,
-                                    const RealTime &playLatency);
+    virtual void initialisePlayback(const RealTime &position);
     virtual void stopPlayback();
-    virtual void resetPlayback(const RealTime &position,
-                               const RealTime &latency);
+    virtual void resetPlayback(const RealTime &position);
     virtual void allNotesOff();
     virtual void processNotesOff(const RealTime &time);
 
     virtual RealTime getSequencerTime();
 
-    virtual MappedComposition*
-        getMappedComposition(const RealTime &playLatency);
+    virtual MappedComposition *getMappedComposition();
     
     virtual void processEventsOut(const MappedComposition &mC,
-                                  const RealTime &playLatency,
                                   bool now);
 
     virtual bool record(RecordStatus recordStatus);
 
-    virtual void processPending(const RealTime &playLatency);
+    virtual void processPending();
 
     // Not supported
     //
@@ -80,8 +76,7 @@ public:
     void initialiseAudio();
 
     void processMidiIn(const Arts::MidiCommand &midiCommand,
-                       const Arts::TimeStamp &timeStamp,
-                       const Rosegarden::RealTime &playLatency);
+                       const Arts::TimeStamp &timeStamp);
 
     // Some Arts helper methods 'cos the basic Arts::TimeStamp
     // method is a bit unhelpful
@@ -96,7 +91,7 @@ public:
     {
         return (aggregateTime(deltaTime(ts, m_artsRecordStartTime),
                 Arts::TimeStamp(m_playStartPosition.sec,
-                m_playStartPosition.usec)));
+				m_playStartPosition.usec())));
     }
 
     // Plugin instance management - do nothing for the moment
@@ -124,17 +119,21 @@ public:
     virtual void setLoop(const RealTime &/*loopStart*/,
                          const RealTime &/*loopEnd*/) {;}
 
-    virtual void sendMidiClock(const RealTime &/*playLatency*/) {;}
+    virtual void sendMidiClock() {;}
+
+    virtual void getAudioInstrumentNumbers(InstrumentId &audioInstrumentBase,
+					   int &audioInstrumentCount) {
+	audioInstrumentBase = AudioInstrumentBase;
+	audioInstrumentCount = 16;
+    }
 
     virtual std::vector<PlayableAudioFile*> getPlayingAudioFiles() 
         { return std::vector<PlayableAudioFile*>(); }
 
 protected:
     virtual void generateInstruments();
-    virtual void processAudioQueue(const RealTime &playLatency,
-                                   bool now);
+    virtual void processAudioQueue(bool now);
     virtual void processMidiOut(const MappedComposition &mC,
-                                const RealTime &playLatency,
                                 bool now);
 
     void sendDeviceController(MidiByte controller, MidiByte value);

@@ -151,7 +151,7 @@ MarkerEditorDialog::updatePosition()
     long hours = rT.sec / (60 * 60);
     long mins = rT.sec / 60;
     long secs = rT.sec;
-    long msecs = rT.usec / 1000;
+    long msecs = rT.msec();
 
     QString realTime, secsStr;
     if (hours) realTime += QString("%1h ").arg(hours);

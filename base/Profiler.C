@@ -103,7 +103,7 @@ Profiler::Profiler(const char* c, bool showOnDestruct)
 
     struct timeval tv;
     (void)gettimeofday(&tv, 0);
-    m_startTime = RealTime(tv.tv_sec, tv.tv_usec);
+    m_startTime = RealTime(tv.tv_sec, tv.tv_usec * 1000);
 #endif
 }
 
@@ -115,7 +115,7 @@ Profiler::update()
 
     struct timeval tv;
     (void)gettimeofday(&tv, 0);
-    RealTime elapsedTime = RealTime(tv.tv_sec, tv.tv_usec) - m_startTime;
+    RealTime elapsedTime = RealTime(tv.tv_sec, tv.tv_usec * 1000) - m_startTime;
 
     cerr << "Profiler : id = " << m_c
 	 << " - elapsed so far = " << ((elapsedCPU * 1000) / CLOCKS_PER_SEC)
@@ -130,7 +130,7 @@ Profiler::~Profiler()
 
     struct timeval tv;
     (void)gettimeofday(&tv, 0);
-    RealTime elapsedTime = RealTime(tv.tv_sec, tv.tv_usec) - m_startTime;
+    RealTime elapsedTime = RealTime(tv.tv_sec, tv.tv_usec * 1000) - m_startTime;
 
     Profiles::getInstance()->accumulate(m_c, elapsedCPU, elapsedTime);
 

@@ -131,7 +131,7 @@ MP3AudioFile::parseHeader()
          }
     }
     
-    if (foundMP3 == false || hS.length() < bufferLength)
+    if (foundMP3 == false || (int)hS.length() < bufferLength)
     {
         std::string mess = std::string("\"")+ m_fileName +
             std::string("\" doesn't appear to be a valid MP3 file");

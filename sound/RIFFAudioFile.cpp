@@ -43,14 +43,14 @@ RIFFAudioFile::RIFFAudioFile(const std::string &fileName,
                              unsigned int channels = 1,
                              unsigned int sampleRate = 48000,
                              unsigned int bytesPerSecond = 6000,
-                             unsigned int bytesPerSample = 2,
+                             unsigned int bytesPerFrame = 2,
                              unsigned int bitsPerSample = 16):
     AudioFile(0, "", fileName)
 {
     m_bitsPerSample = bitsPerSample;
     m_sampleRate = sampleRate;
     m_bytesPerSecond = bytesPerSecond;
-    m_bytesPerSample = bytesPerSample;
+    m_bytesPerFrame = bytesPerFrame;
     m_channels = channels;
 }
 
@@ -69,7 +69,7 @@ RIFFAudioFile::printStats()
          << "sample rate      : " << m_sampleRate << endl
          << "bytes per second : " << m_bytesPerSecond << endl
          << "bits per sample  : " << m_bitsPerSample << endl
-         << "bytes per sample : " << m_bytesPerSample << endl
+         << "bytes per frame  : " << m_bytesPerFrame << endl
          << "file length      : " << m_fileSize << " bytes" << endl
          << endl;
 }
@@ -96,8 +96,8 @@ RIFFAudioFile::scanForward(std::ifstream *file, const RealTime &time)
     if (file == 0) return false;
 
     unsigned int totalSamples = m_sampleRate * time.sec +
-                        ( ( m_sampleRate * time.usec ) / 1000000 );
-    unsigned int totalBytes = totalSamples * m_bytesPerSample;
+                            ( ( m_sampleRate * time.usec() ) / 1000000 );
+    unsigned int totalBytes = totalSamples * m_bytesPerFrame;
 
     m_loseBuffer = true;
 
@@ -177,10 +177,9 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
     // Ok, we're past all the header information in the data chunk.
     // Now, how much do we scan forward?
     //
-    unsigned int totalSamples = m_sampleRate * time.sec +
-       ((unsigned int)((double(m_sampleRate) * double(time.usec)) / 1000000.0));
+    size_t totalFrames = RealTime::realTime2Frame(time, m_sampleRate);
 
-    unsigned int totalBytes = totalSamples * m_bytesPerSample;
+    unsigned int totalBytes = totalFrames * m_bytesPerFrame;
 
     // When using seekg we have to keep an eye on the boundaries ourselves
     //
@@ -219,7 +218,7 @@ RIFFAudioFile::getSampleFrames(std::ifstream *file, unsigned int frames)
     // Bytes per sample already takes into account the number
     // of channels we're using
     //
-    long totalBytes = frames * m_bytesPerSample;
+    long totalBytes = frames * m_bytesPerFrame;
     return getBytes(file, totalBytes);
 }
 
@@ -242,9 +241,9 @@ RIFFAudioFile::getSampleFrameSlice(std::ifstream *file, const RealTime &time)
     if (file == 0) return std::string("");
 
     long totalSamples = m_sampleRate * time.sec +
-                        ( ( m_sampleRate * time.usec ) / 1000000 );
+                        ( ( m_sampleRate * time.usec() ) / 1000000 );
 
-    long totalBytes = totalSamples * m_channels * m_bytesPerSample;
+    long totalBytes = totalSamples * m_channels * m_bytesPerFrame;
     return getBytes(file, totalBytes);
 }
 
@@ -273,15 +272,13 @@ RIFFAudioFile::getLength()
         headerLength += (16 + 8);
     }
 
-    // bytesPerSample allows for number of channels
-    //
-    double frames = (m_fileSize - headerLength)/m_bytesPerSample;
+    double frames = (m_fileSize - headerLength)/m_bytesPerFrame;
     double seconds = frames / ((double)m_sampleRate);
 
     int secs = int(seconds);
-    int usecs = int((seconds - secs) * 1000000.0);
+    int nsecs = int((seconds - secs) * 1000000000.0);
 
-    return RealTime(secs, usecs);
+    return RealTime(secs, nsecs);
 }
 
 
@@ -435,7 +432,7 @@ RIFFAudioFile::readFormatChunk()
     //
     m_sampleRate = getIntegerFromLittleEndian(hS.substr(24,4));
     m_bytesPerSecond = getIntegerFromLittleEndian(hS.substr(28,4));
-    m_bytesPerSample = getIntegerFromLittleEndian(hS.substr(32,2));
+    m_bytesPerFrame = getIntegerFromLittleEndian(hS.substr(32,2));
     m_bitsPerSample = getIntegerFromLittleEndian(hS.substr(34,2));
 
     //printStats();
@@ -484,7 +481,7 @@ RIFFAudioFile::writeFormatChunk()
     outString += getLittleEndianFromInteger(m_bytesPerSecond, 4);
 
     // bytes per sample
-    outString += getLittleEndianFromInteger(m_bytesPerSample, 2);
+    outString += getLittleEndianFromInteger(m_bytesPerFrame, 2);
 
     // bits per sample
     outString += getLittleEndianFromInteger(m_bitsPerSample, 2);

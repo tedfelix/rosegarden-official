@@ -64,6 +64,8 @@ k_dcop:
     virtual void record() = 0;
     virtual void rewindToBeginning() = 0;
     virtual void fastForwardToEnd() = 0;
+    virtual void jumpToTime(int sec, int usec) = 0;
+    virtual void startAtTime(int sec, int usec) = 0;
 
     // Sequencer updates GUI with status
     //

@@ -169,10 +169,10 @@ bool ConfigurationXmlSubHandler::characters(const QString& chars)
         int sepIdx = ch.find(',');
         
         rt.sec = ch.left(sepIdx).toInt();
-        rt.usec = ch.mid(sepIdx + 1).toInt();
+        rt.nsec = ch.mid(sepIdx + 1).toInt();
 
         RG_DEBUG << "\"" << m_propertyName << "\" "
-                 << "sec = " << rt.sec << ", usec = " << rt.usec << endl;
+                 << "sec = " << rt.sec << ", nsec = " << rt.nsec << endl;
 
         m_configuration->set<Rosegarden::RealTimeT>(qstrtostr(m_propertyName), rt);
 
@@ -696,12 +696,19 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 	    m_currentSegment->setDelay(delay);
 	}
 
+	QString rtDelaynSec = atts.value("rtdelaynsec");
 	QString rtDelayuSec = atts.value("rtdelayusec");
 	QString rtDelaySec = atts.value("rtdelaysec");
-	if (rtDelaySec && rtDelayuSec) {
-	    m_currentSegment->setRealTimeDelay
-		(Rosegarden::RealTime(rtDelaySec.toLong(),
-				      rtDelayuSec.toLong()));
+	if (rtDelaySec && (rtDelaynSec || rtDelayuSec)) {
+	    if (rtDelaynSec) {
+		m_currentSegment->setRealTimeDelay
+		    (Rosegarden::RealTime(rtDelaySec.toInt(),
+					  rtDelaynSec.toInt()));
+	    } else {
+		m_currentSegment->setRealTimeDelay 
+		    (Rosegarden::RealTime(rtDelaySec.toInt(),
+					  rtDelayuSec.toInt() * 1000));
+	    }
 	}
 
         QString transposeStr = atts.value("transpose");
@@ -881,7 +888,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         // convert to RealTime from float
         int sec = (int)marker;
         int usec = (int)((marker - ((float)sec)) * 1000000.0);
-        m_currentSegment->setAudioStartTime(Rosegarden::RealTime(sec, usec));
+        m_currentSegment->setAudioStartTime(Rosegarden::RealTime(sec, usec * 1000));
 
 
     } else if (lcName == "end") {
@@ -903,7 +910,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         int sec = (int)marker;
         int usec = (int)((marker - ((float)sec)) * 1000000.0);
-        Rosegarden::RealTime markerTime(sec, usec);
+        Rosegarden::RealTime markerTime(sec, usec * 1000);
 
         if (markerTime < m_currentSegment->getAudioStartTime())
         {

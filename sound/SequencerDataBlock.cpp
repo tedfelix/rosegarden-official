@@ -30,7 +30,7 @@ SequencerDataBlock::SequencerDataBlock(bool initialise)
     if (initialise) {
 	m_controlBlock = 0;
 	m_positionSec = 0;
-	m_positionUsec = 0;
+	m_positionNsec = 0;
 	m_visualEventIndex = 0;
 	*((MappedEvent *)&m_visualEvent) = MappedEvent();
 	m_haveVisualEvent = false;

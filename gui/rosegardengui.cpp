@@ -2141,7 +2141,7 @@ void RosegardenGUIApp::slotTempoToSegmentLength()
             seg->getAudioEndTime() - seg->getAudioStartTime();
 
         double beatLengthUsec =
-            double(segDuration.sec * 1000000 + segDuration.usec) /
+            double(segDuration.sec * 1000000 + segDuration.usec()) /
             double(beats);
 
         // New tempo is a minute divided by time of beat
@@ -3852,6 +3852,21 @@ void RosegardenGUIApp::slotPlay()
     //
     m_playTimer->start(23);
 }
+
+void RosegardenGUIApp::slotJumpToTime(int sec, int usec)
+{
+    Rosegarden::Composition *comp = &m_doc->getComposition();
+    Rosegarden::timeT t = comp->getElapsedTimeForRealTime
+	(Rosegarden::RealTime(sec, usec * 1000));
+    m_doc->setPointerPosition(t);
+}
+
+void RosegardenGUIApp::slotStartAtTime(int sec, int usec)
+{
+    slotJumpToTime(sec, usec);
+    slotPlay();
+}
+
 
 // Send stop request to Sequencer.  This'll set the flag 
 // to attempt a stop next time a good window appears.

@@ -48,20 +48,30 @@ public:
     // play from a given time with given parameters
     //
     virtual int play(long timeSec,
-                     long timeUsec,
-                     long playLatencySec,
-                     long playLatencyUSec,
+                     long timeNsec,
                      long readAheadSec,
-                     long readAheadUSec) = 0;
+                     long readAheadNsec,
+                     long audioMixSec,
+                     long audioMixNsec,
+                     long audioReadSec,
+                     long audioReadNsec,
+                     long audioWriteSec,
+                     long audioWriteNsec,
+		     long smallFileSize) = 0;
 
     // record from a given time with given parameters
     //
     virtual int record(long timeSec,
-                       long timeUSec,
-                       long playLatencySec,
-                       long playLatencyUSec,
+                       long timeNsec,
                        long readAheadSec,
-                       long readAheadUSec,
+                       long readAheadNsec,
+		       long audioMixSec,
+		       long audioMixNsec,
+		       long audioReadSec,
+		       long audioReadNsec,
+		       long audioWriteSec,
+		       long audioWriteNsec,
+		       long smallFileSize,
                        int recordMode) = 0;
 
     // stop the sequencer
@@ -70,14 +80,14 @@ public:
 
     // Set the sequencer to a given time
     //
-    virtual void jumpTo(long posSec, long posUSec) = 0;
+    virtual void jumpTo(long posSec, long posNsec) = 0;
 
     // Set a loop on the sequencer
     //
     virtual void setLoop(long loopStartSec,
-                         long loopStartUSec,
+                         long loopStartNsec,
                          long loopEndSec,
-                         long loopEndUSec) = 0;
+                         long loopEndNsec) = 0;
 
     // Get the status of the Sequencer
     //
@@ -110,11 +120,11 @@ public:
                                     unsigned char pitch,
                                     unsigned char velocity,
                                     long absTimeSec,
-                                    long absTimeUsec,
+                                    long absTimeNsec,
                                     long durationSec,
-                                    long durationUsec,
+                                    long durationNsec,
                                     long audioStartMarkerSec,
-                                    long audioStartMarkerUSec) = 0;
+                                    long audioStartMarkerNsec) = 0;
 
     // The proper implementation
     //
@@ -140,9 +150,9 @@ public:
     
     // Create a device of the given type and direction (corresponding
     // to MidiDevice::DeviceDirection enum) and return its id.
-    // The device will have no connection by default.
+    // The device will have no connection by default.  Direction is
+    // currently ignored for non-MIDI devices.
     // Do not use this unless canReconnect(type) returned true.
-//!!! oops -- direction not used unless type == midi -- fix api please
     //
     virtual unsigned int addDevice(int type, unsigned int direction) = 0;
 
@@ -155,18 +165,16 @@ public:
 
     // Return the number of permissible connections for a device of
     // the given type and direction (corresponding to MidiDevice::
-    // DeviceDirection enum).
+    // DeviceDirection enum).  Direction is ignored for non-MIDI devices.
     // Returns zero if devices of this type are non-reconnectable
     // (i.e. if canReconnect(type) would return false).
-//!!! oops -- direction not used unless type == midi -- fix api please
     //
     virtual unsigned int getConnections(int type, unsigned int direction) = 0;
 
     // Return one of the set of permissible connections for a device of
     // the given type and direction (corresponding to MidiDevice::
-    // DeviceDirection enum).
+    // DeviceDirection enum).  Direction is ignored for non-MIDI devices.
     // Returns the empty string for invalid parameters.
-//!!! oops -- direction not used unless type == midi -- fix api please
     // 
     virtual QString getConnection(int type,
 				  unsigned int direction,
@@ -184,6 +192,27 @@ public:
     // 
     virtual void setPlausibleConnection(unsigned int deviceId,
 					QString idealConnection) = 0;
+
+    // Return the number of different timers we are capable of
+    // sychronising against.  This may return 0 if the driver has no
+    // ability to change the current timer.
+    //
+    virtual unsigned int getTimers() = 0;
+
+    // Return the name of a timer from the available set (where
+    // n is between 0 and the return value from getTimers() - 1).
+    //
+    virtual QString getTimer(unsigned int n) = 0;
+
+    // Return the name of the timer we are currently synchronising
+    // against.
+    // 
+    virtual QString getCurrentTimer() = 0;
+
+    // Set the timer we are currently synchronising against.
+    // Invalid arguments are simply ignored.
+    //
+    virtual void setCurrentTimer(QString timer) = 0;
 
     // Set audio monitoring Instrument - tells the sequencer that the
     // gui is currently monitoring audio and which Instrument to report
@@ -249,7 +278,7 @@ public:
     // note when the TEMPO changes - this is to allow the sequencer
     // to generate MIDI clock (at 24 PPQN).
     //
-    virtual void setQuarterNoteLength(long timeSec, long timeUSec) = 0;
+    virtual void setQuarterNoteLength(long timeSec, long timeNsec) = 0;
 
     // Return a (potentially lengthy) human-readable status log
     //

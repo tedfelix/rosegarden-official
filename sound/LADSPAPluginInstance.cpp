@@ -19,6 +19,7 @@
 */
 
 #include <iostream>
+#include <cassert>
 
 #include "LADSPAPluginInstance.h"
 
@@ -31,28 +32,91 @@ namespace Rosegarden
 LADSPAPluginInstance::LADSPAPluginInstance(Rosegarden::InstrumentId instrument,
                                            unsigned long ladspaId,
                                            int position,
+					   unsigned long sampleRate,
+					   size_t bufferSize,
                                            const LADSPA_Descriptor* descriptor):
-        m_instrument(instrument),
-        m_ladspaId(ladspaId),
-        m_position(position),
-        m_instanceHandle(0),
-        m_descriptor(descriptor),
-        m_processed(false),
-        m_bypassed(false)
+    m_instrument(instrument),
+    m_ladspaId(ladspaId),
+    m_position(position),
+    m_instanceHandle(0),
+    m_descriptor(descriptor),
+    m_bufferSize(bufferSize),
+    m_processed(false),
+    m_bypassed(false)
+{
+    init();
+
+    m_inputBuffers = new sample_t*[m_audioPortsIn.size()];
+    m_outputBuffers = new sample_t*[m_audioPortsOut.size()];
+
+    for (size_t i = 0; i < m_audioPortsIn.size(); ++i) {
+	m_inputBuffers[i] = new sample_t[bufferSize];
+    }
+    for (size_t i = 0; i < m_audioPortsOut.size(); ++i) {
+	m_outputBuffers[i] = new sample_t[bufferSize];
+    }
+
+    m_ownBuffers = true;
+
+    instantiate(sampleRate);
+    connectPorts();
+
+    /*
+    std::cout << m_audioPortsIn.size() << " AUDIO PORTS IN" << std::endl;
+    std::cout << m_audioPortsOut.size() << " AUDIO PORTS OUT" << std::endl;
+    std::cout << m_controlPorts.size() << " CONTROL PORTS" << std::endl;
+    */
+}
+
+LADSPAPluginInstance::LADSPAPluginInstance(Rosegarden::InstrumentId instrument,
+                                           unsigned long ladspaId,
+                                           int position,
+					   unsigned long sampleRate,
+					   size_t bufferSize,
+					   sample_t **inputBuffers,
+					   sample_t **outputBuffers,
+                                           const LADSPA_Descriptor* descriptor):
+    m_instrument(instrument),
+    m_ladspaId(ladspaId),
+    m_position(position),
+    m_instanceHandle(0),
+    m_descriptor(descriptor),
+    m_bufferSize(bufferSize),
+    m_inputBuffers(inputBuffers),
+    m_outputBuffers(outputBuffers),
+    m_ownBuffers(false),
+    m_processed(false),
+    m_bypassed(false)
+{
+    init();
+
+    /*
+    std::cout << m_audioPortsIn.size() << " AUDIO PORTS IN" << std::endl;
+    std::cout << m_audioPortsOut.size() << " AUDIO PORTS OUT" << std::endl;
+    std::cout << m_controlPorts.size() << " CONTROL PORTS" << std::endl;
+    */
+
+    instantiate(sampleRate);
+    connectPorts();
+}
+
+
+void
+LADSPAPluginInstance::init()
 {
     // Discover ports numbers and identities
     //
-    for (unsigned long i = 0; i < descriptor->PortCount; ++i)
+    for (unsigned long i = 0; i < m_descriptor->PortCount; ++i)
     {
-        if (LADSPA_IS_PORT_AUDIO(descriptor->PortDescriptors[i]))
+        if (LADSPA_IS_PORT_AUDIO(m_descriptor->PortDescriptors[i]))
         {
-            if (LADSPA_IS_PORT_INPUT(descriptor->PortDescriptors[i]))
+            if (LADSPA_IS_PORT_INPUT(m_descriptor->PortDescriptors[i]))
                 m_audioPortsIn.push_back(i);
             else
                 m_audioPortsOut.push_back(i);
         }
         else
-        if (LADSPA_IS_PORT_CONTROL(descriptor->PortDescriptors[i]))
+        if (LADSPA_IS_PORT_CONTROL(m_descriptor->PortDescriptors[i]))
         {
             //cout << "ADDING CONTROL PORT" << endl;
             LADSPA_Data *data = new LADSPA_Data(0.0);
@@ -65,13 +129,6 @@ LADSPAPluginInstance::LADSPAPluginInstance(Rosegarden::InstrumentId instrument,
                       << "unrecognised port type" << std::endl;
 #endif
     }
-
-    /*
-    std::cout << m_audioPortsIn.size() << " AUDIO PORTS IN" << std::endl;
-    std::cout << m_audioPortsOut.size() << " AUDIO PORTS OUT" << std::endl;
-    std::cout << m_controlPorts.size() << " CONTROL PORTS" << std::endl;
-    */
-
 }
 
 LADSPAPluginInstance::~LADSPAPluginInstance()
@@ -80,11 +137,22 @@ LADSPAPluginInstance::~LADSPAPluginInstance()
         delete m_controlPorts[i].second;
 
     m_controlPorts.erase(m_controlPorts.begin(), m_controlPorts.end());
+
+    if (m_ownBuffers) {
+	for (size_t i = 0; i < m_audioPortsIn.size(); ++i) {
+	    delete[] m_inputBuffers[i];
+	}
+	for (size_t i = 0; i < m_audioPortsOut.size(); ++i) {
+	    delete[] m_outputBuffers[i];
+	}
+
+	delete[] m_inputBuffers;
+	delete[] m_outputBuffers;
+    }
+
     m_audioPortsIn.clear();
     m_audioPortsOut.clear();
 }
-
-
 
 
 void
@@ -111,35 +179,28 @@ LADSPAPluginInstance::activate()
 }
 
 void
-LADSPAPluginInstance::connectPorts(LADSPA_Data *dataIn1,
-                                   LADSPA_Data *dataIn2,
-                                   LADSPA_Data *dataOut1,
-                                   LADSPA_Data *dataOut2)
+LADSPAPluginInstance::connectPorts()
 {
     if (m_descriptor == 0) return;
+
+    assert(sizeof(LADSPA_Data) == sizeof(float));
+    assert(sizeof(sample_t) == sizeof(float));
 
     // Ensure we connect _all_ audio ports to our two
     // choices.
     //
-    LADSPA_Data *dataIn = dataIn1;
     for (unsigned int i = 0; i < m_audioPortsIn.size(); ++i)
     {
         m_descriptor->connect_port(m_instanceHandle,
                                    m_audioPortsIn[i],
-                                   dataIn);
-        if (dataIn == dataIn1) dataIn = dataIn2;
-        else dataIn = dataIn1;
+                                   (LADSPA_Data *)m_inputBuffers[i]);
     }
 
-    LADSPA_Data *dataOut = dataOut1;
     for (unsigned int i = 0; i < m_audioPortsOut.size(); ++i)
     {
         m_descriptor->connect_port(m_instanceHandle,
                                    m_audioPortsOut[i],
-                                   dataOut);
-
-        if (dataOut == dataOut1) dataOut = dataOut2;
-        else dataOut = dataOut1;
+                                   (LADSPA_Data *)m_outputBuffers[i]);
     }
 
     // Connect all control ports
@@ -154,7 +215,7 @@ LADSPAPluginInstance::connectPorts(LADSPA_Data *dataIn1,
 }
 
 void
-LADSPAPluginInstance::setPortValue(unsigned long portNumber, LADSPA_Data value)
+LADSPAPluginInstance::setPortValue(unsigned int portNumber, float value)
 {
     for (unsigned int i = 0; i < m_controlPorts.size(); ++i)
     {
@@ -171,7 +232,7 @@ LADSPAPluginInstance::setPortValue(unsigned long portNumber, LADSPA_Data value)
 }
 
 void
-LADSPAPluginInstance::run(unsigned long sampleCount)
+LADSPAPluginInstance::run()
 {
     if (m_descriptor && m_descriptor->run)
     {
@@ -179,7 +240,7 @@ LADSPAPluginInstance::run(unsigned long sampleCount)
         std::cout << "LADSPAPluginInstance::run - running plugin "
                   << "for " << sampleCount << " frames" << std::endl;
                   */
-        m_descriptor->run(m_instanceHandle, sampleCount);
+        m_descriptor->run(m_instanceHandle, m_bufferSize);
         m_processed = true;
     }
 }

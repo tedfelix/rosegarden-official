@@ -252,22 +252,33 @@ SequenceManager::play()
         startPos = comp.getElapsedRealTime(comp.getLoopStart());
 
     KConfig* config = kapp->config();
-    config->setGroup(Rosegarden::LatencyOptionsConfigGroup);
+    config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
 
     // playback start position
     streamOut << startPos.sec;
-    streamOut << startPos.usec;
+    streamOut << startPos.nsec;
 
-    // playback latency
-    streamOut << config->readLongNumEntry("playbacklatencysec", 0);
-    streamOut << config->readLongNumEntry("playbacklatencyusec", 100000);
+    // event read ahead
+    streamOut << config->readLongNumEntry("readaheadsec", 0);
+    streamOut << config->readLongNumEntry("readaheadusec", 80000) * 1000;
 
     // read ahead slice
-    streamOut << config->readLongNumEntry("readaheadsec", 0);
-    streamOut << config->readLongNumEntry("readaheadusec", 40000);
+    streamOut << config->readLongNumEntry("audiomixsec", 0);
+    streamOut << config->readLongNumEntry("audiomixusec", 60000) * 1000;
+
+    // read ahead slice
+    streamOut << config->readLongNumEntry("audioreadsec", 0);
+    streamOut << config->readLongNumEntry("audioreadusec", 80000) * 1000;
+
+    // read ahead slice
+    streamOut << config->readLongNumEntry("audiowritesec", 0);
+    streamOut << config->readLongNumEntry("audiowriteusec", 200000) * 1000;
+
+    // small file size
+    streamOut << config->readLongNumEntry("smallaudiofilekbytes", 128);
 
     // Send Play to the Sequencer
-    if (!rgapp->sequencerCall("play(long int, long int, long int, long int, long int, long int)",
+    if (!rgapp->sequencerCall("play(long int, long int, long int, long int, long int, long int, long int, long int, long int, long int, long int)",
                               replyType, replyData, data)) {
         m_transportStatus = STOPPED;
         return;
@@ -471,7 +482,7 @@ SequenceManager::sendSequencerJump(const Rosegarden::RealTime &time)
     QByteArray data;
     QDataStream streamOut(data, IO_WriteOnly);
     streamOut << time.sec;
-    streamOut << time.usec;
+    streamOut << time.nsec;
 
     rgapp->sequencerSend("jumpTo(long int, long int)", data);
 }
@@ -547,7 +558,7 @@ SequenceManager::record(bool toggled)
 
             // Send Record to the Sequencer to signal it to drop out of record mode
             //
-            if (!rgapp->sequencerCall("record(long int, long int, long int, long int, long int, long int, int)",
+            if (!rgapp->sequencerCall("record(long int, long int, long int, long int, int)",
                                   replyType, replyData, data))
             {
                 m_transportStatus = STOPPED;
@@ -694,24 +705,35 @@ punchin:
 
         // playback start position
         streamOut << startPos.sec;
-        streamOut << startPos.usec;
+        streamOut << startPos.nsec;
     
         // set group
         config->setGroup(Rosegarden::LatencyOptionsConfigGroup);
 
-        // playback latency
-        streamOut << config->readLongNumEntry("playbacklatencysec", 0);
-        streamOut << config->readLongNumEntry("playbacklatencyusec", 100000);
-
         // read ahead slice
         streamOut << config->readLongNumEntry("readaheadsec", 0);
-        streamOut << config->readLongNumEntry("readaheadusec", 40000);
+        streamOut << config->readLongNumEntry("readaheadusec", 80000) * 1000;
+
+	// read ahead slice
+	streamOut << config->readLongNumEntry("audiomixsec", 0);
+	streamOut << config->readLongNumEntry("audiomixusec", 60000) * 1000;
+
+	// read ahead slice
+	streamOut << config->readLongNumEntry("audioreadsec", 0);
+	streamOut << config->readLongNumEntry("audioreadusec", 100000) * 1000;
+
+	// read ahead slice
+	streamOut << config->readLongNumEntry("audiowritesec", 0);
+	streamOut << config->readLongNumEntry("audiowriteusec", 200000) * 1000;
+
+	// small file size
+	streamOut << config->readLongNumEntry("smallaudiofilekbytes", 128);
     
         // record type
         streamOut << (int)recordType;
     
         // Send Play to the Sequencer
-        if (!rgapp->sequencerCall("record(long int, long int, long int, long int, long int, long int, int)",
+        if (!rgapp->sequencerCall("record(long int, long int, long int, long int, long int, long int, long int, long int, long int, long int, long int, int)",
                                   replyType, replyData, data)) {
             // failed
             m_transportStatus = STOPPED;
@@ -931,9 +953,9 @@ SequenceManager::setLoop(const timeT &lhs, const timeT &rhs)
             m_doc->getComposition().getElapsedRealTime(rhs);
 
     streamOut << loopStart.sec;
-    streamOut << loopStart.usec;
+    streamOut << loopStart.nsec;
     streamOut << loopEnd.sec;
-    streamOut << loopEnd.usec;
+    streamOut << loopEnd.nsec;
   
     rgapp->sequencerSend("setLoop(long int, long int, long int, long int)", data);
 }
@@ -1048,7 +1070,7 @@ SequenceManager::preparePlayback(bool forceProgramChanges)
 
     int jackSec = config->readLongNumEntry("jackplaybacklatencysec", 0);
     int jackUSec = config->readLongNumEntry("jackplaybacklatencyusec", 0);
-    m_playbackAudioLatency = Rosegarden::RealTime(jackSec, jackUSec);
+    m_playbackAudioLatency = Rosegarden::RealTime(jackSec, jackUSec * 1000);
 
 }
 

@@ -1900,7 +1900,7 @@ NotationView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
     timeT t = time;
     Rosegarden::RealTime rt =
         getDocument()->getComposition().getElapsedRealTime(t);
-    long ms = rt.usec / 1000;
+    long ms = rt.msec();
 
     QString message;
     QString format("%ld (%ld.%03lds)");

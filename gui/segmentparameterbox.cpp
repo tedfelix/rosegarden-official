@@ -419,7 +419,7 @@ SegmentParameterBox::populateBoxFromSegments()
 	Rosegarden::timeT myDelay = (*it)->getDelay();
 	if (myDelay == 0) {
 	    myDelay = -((*it)->getRealTimeDelay().sec * 1000 +
-			(*it)->getRealTimeDelay().usec / 1000);
+			(*it)->getRealTimeDelay().msec());
 	}
 
         if (myDelay != 0) 
@@ -687,8 +687,8 @@ SegmentParameterBox::slotDelayTimeChanged(Rosegarden::timeT delayValue)
 	for (it = m_segments.begin(); it != m_segments.end(); it++) {
 	    (*it)->setDelay(0);
 	    int sec = (-delayValue) / 1000;
-	    int usec = ((-delayValue) - 1000*sec) * 1000;
-	    (*it)->setRealTimeDelay(Rosegarden::RealTime(sec, usec));
+	    int nsec = ((-delayValue) - 1000*sec) * 1000000;
+	    (*it)->setRealTimeDelay(Rosegarden::RealTime(sec, nsec));
 	}
     } else {
 

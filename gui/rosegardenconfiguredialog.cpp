@@ -743,66 +743,12 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
                                                    KConfig *cfg,
                                                    QWidget *parent,
                                                    const char *name)
-    : TabbedConfigurationPage(doc, cfg, parent, name),
-      m_readAhead(0),
-      m_playback(0)
+    : TabbedConfigurationPage(doc, cfg, parent, name)
 {
 //     Rosegarden::Configuration &config = doc->getConfiguration();
     m_cfg->setGroup(Rosegarden::LatencyOptionsConfigGroup);
 
-    QFrame *frame = new QFrame(m_tabWidget, "general latency");
-    QGridLayout *layout = new QGridLayout(frame, 6, 3,
-                                          10, 5);
-
-    layout->addMultiCellWidget(new QLabel(i18n("Higher latency improves playback quality on slower systems but reduces\noverall sequencer response.  Modifications to these values take effect\nfrom the next time playback or recording begins."), frame),
-                               0, 0,
-                               0, 3);
-
-    layout->addWidget(new QLabel(i18n("Read ahead (in ms)"), frame), 1, 0);
-    layout->addWidget(new QLabel(i18n("Playback (in ms)"), frame), 3, 0);
-
-    m_readAhead = new QSlider(Horizontal, frame);
-
-    m_readAhead->setMinValue(20);
-    layout->addWidget(new QLabel("20", frame), 2, 1);
-
-    m_readAhead->setMaxValue(300);
-    layout->addWidget(new QLabel("300", frame), 2, 3);
-
-    int readAheadValue = m_cfg->readLongNumEntry("readaheadusec", 80000) / 1000;
-    m_readAhead->setValue(readAheadValue);
-    m_readAhead->setTickmarks(QSlider::Below);
-    layout->addWidget(m_readAhead, 2, 2);
-
-    m_readAheadLabel = new QLabel(QString("%1").arg(readAheadValue), frame);
-    layout->addWidget(m_readAheadLabel, 1, 2, Qt::AlignHCenter);
-
-    connect(m_readAhead,
-            SIGNAL(valueChanged(int)),
-            SLOT(slotReadAheadChanged(int)));
-
-    m_playback = new QSlider(Horizontal, frame);
-
-    m_playback->setMinValue(0);
-    layout->addWidget(new QLabel("0", frame), 4, 1);
-
-    m_playback->setMaxValue(100);
-    layout->addWidget(new QLabel("100", frame), 4, 3);
-
-    int playbackValue = m_cfg->readLongNumEntry("playbacklatencyusec", 10000)
-                        / 1000;
-    m_playback->setValue(playbackValue);
-    m_playback->setTickmarks(QSlider::Below);
-    layout->addWidget(m_playback, 4, 2);
-
-    m_playbackLabel = new QLabel(QString("%1").arg(playbackValue), frame);
-    layout->addWidget(m_playbackLabel, 3, 2, Qt::AlignHCenter);
-    connect(m_playback,
-            SIGNAL(valueChanged(int)),
-            SLOT(slotPlaybackChanged(int)));
-
-    addTab(frame, i18n("MIDI Latency"));
-
+#ifdef NOT_DEFINED
 #ifdef HAVE_LIBJACK
     frame = new QFrame(m_tabWidget, i18n("JACK latency"));
     layout = new QGridLayout(frame, 6, 5, 10, 10);
@@ -869,24 +815,13 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
 
     addTab(frame, i18n("JACK Latency"));
 #endif  // HAVE_LIBJACK
+#endif // NOT_DEFINED
 
 }
 
 void LatencyConfigurationPage::apply()
 {
     m_cfg->setGroup(Rosegarden::LatencyOptionsConfigGroup);
-
-//     Rosegarden::Configuration &config = m_doc->getConfiguration();
-//     config.setReadAhead((RealTime(0, (readAhead * 1000))));
-//     config.setPlaybackLatency((RealTime(0, (playback * 1000))));
-
-    int readAhead = getReadAheadValue();
-    m_cfg->writeEntry("readaheadusec", readAhead * 1000);
-    m_cfg->writeEntry("readaheadsec", 0L);
-    
-    int playback = getPlaybackValue();
-    m_cfg->writeEntry("playbacklatencyusec", playback * 1000);
-    m_cfg->writeEntry("playbacklatencysec", 0L);
 
 #ifdef HAVE_LIBJACK
 
@@ -905,24 +840,14 @@ void LatencyConfigurationPage::apply()
 //
 void LatencyConfigurationPage::slotFetchLatencyValues()
 {
-    int jackPlaybackValue = m_doc->getAudioPlayLatency().usec / 1000 +
+    int jackPlaybackValue = m_doc->getAudioPlayLatency().msec() +
                             m_doc->getAudioPlayLatency().sec * 1000;
 
     m_jackPlayback->setValue(jackPlaybackValue);
 
-    int jackRecordValue = m_doc->getAudioRecordLatency().usec / 1000 +
+    int jackRecordValue = m_doc->getAudioRecordLatency().msec() +
                           m_doc->getAudioRecordLatency().sec * 1000;
     m_jackRecord->setValue(jackRecordValue);
-}
-
-void LatencyConfigurationPage::slotReadAheadChanged(int value)
-{
-    m_readAheadLabel->setNum(value);
-}
-
-void LatencyConfigurationPage::slotPlaybackChanged(int value)
-{
-    m_playbackLabel->setNum(value);
 }
 
 
@@ -1040,6 +965,145 @@ SequencerConfigurationPage::SequencerConfigurationPage(
 
     addTab(frame, i18n("Startup"));
 
+    frame = new QFrame(m_tabWidget);
+    layout = new QGridLayout(frame, 10, 3,
+			     10, 5);
+
+    layout->addMultiCellWidget(new QLabel(i18n("Longer buffers usually improve playback quality, but use more memory and slow response."), frame),
+                               0, 0,
+                               0, 3);
+
+    layout->addWidget(new QLabel(i18n("Event read-ahead (ms)"), frame), 1, 0);
+    layout->addWidget(new QLabel(i18n("Audio mix buffer (ms)"), frame), 3, 0);
+    layout->addWidget(new QLabel(i18n("Audio file read buffer (ms)"), frame), 5, 0);
+    layout->addWidget(new QLabel(i18n("Audio file write buffer (ms)"), frame), 7, 0);
+    layout->addWidget(new QLabel(i18n("Per-file limit for cacheable audio files"), frame), 9, 0);
+
+    m_readAhead = new QSlider(Horizontal, frame);
+
+    m_readAhead->setMinValue(20);
+    layout->addWidget(new QLabel("20", frame), 2, 1);
+
+    m_readAhead->setMaxValue(500);
+    layout->addWidget(new QLabel("500", frame), 2, 3);
+    
+    m_readAhead->setLineStep(20);
+    m_readAhead->setPageStep(20);
+
+    int readAheadValue = m_cfg->readLongNumEntry("readaheadusec", 80000) / 1000;
+    m_readAhead->setValue(readAheadValue);
+    m_readAhead->setTickmarks(QSlider::Below);
+    layout->addWidget(m_readAhead, 2, 2);
+
+    m_readAheadLabel = new QLabel(QString("%1").arg(readAheadValue), frame);
+    layout->addWidget(m_readAheadLabel, 1, 2, Qt::AlignHCenter);
+
+    connect(m_readAhead,
+            SIGNAL(valueChanged(int)),
+            SLOT(slotReadAheadChanged(int)));
+
+    m_audioMix = new QSlider(Horizontal, frame);
+
+    m_audioMix->setMinValue(20);
+    layout->addWidget(new QLabel("20", frame), 4, 1);
+
+    m_audioMix->setMaxValue(500);
+    layout->addWidget(new QLabel("500", frame), 4, 3);
+
+    m_audioMix->setLineStep(20);
+    m_audioMix->setPageStep(20);
+
+    int audioMixValue = m_cfg->readLongNumEntry("audiomixusec", 60000) / 1000;
+    m_audioMix->setValue(audioMixValue);
+    m_audioMix->setTickmarks(QSlider::Below);
+    layout->addWidget(m_audioMix, 4, 2);
+
+    m_audioMixLabel = new QLabel(QString("%1").arg(audioMixValue), frame);
+    layout->addWidget(m_audioMixLabel, 3, 2, Qt::AlignHCenter);
+
+    connect(m_audioMix,
+            SIGNAL(valueChanged(int)),
+            SLOT(slotAudioMixChanged(int)));
+
+
+    m_audioRead = new QSlider(Horizontal, frame);
+
+    m_audioRead->setMinValue(20);
+    layout->addWidget(new QLabel("20", frame), 6, 1);
+
+    m_audioRead->setMaxValue(500);
+    layout->addWidget(new QLabel("500", frame), 6, 3);
+
+    m_audioRead->setLineStep(20);
+    m_audioRead->setPageStep(20);
+
+    int audioReadValue = m_cfg->readLongNumEntry("audioreadusec", 80000) / 1000;
+    m_audioRead->setValue(audioReadValue);
+    m_audioRead->setTickmarks(QSlider::Below);
+    layout->addWidget(m_audioRead, 6, 2);
+
+    m_audioReadLabel = new QLabel(QString("%1").arg(audioReadValue), frame);
+    layout->addWidget(m_audioReadLabel, 5, 2, Qt::AlignHCenter);
+
+    connect(m_audioRead,
+            SIGNAL(valueChanged(int)),
+            SLOT(slotAudioReadChanged(int)));
+
+
+    m_audioWrite = new QSlider(Horizontal, frame);
+
+    m_audioWrite->setMinValue(50);
+    layout->addWidget(new QLabel("50", frame), 8, 1);
+
+    m_audioWrite->setMaxValue(1000);
+    layout->addWidget(new QLabel("1000", frame), 8, 3);
+
+    m_audioWrite->setLineStep(50);
+    m_audioWrite->setPageStep(50);
+
+    int audioWriteValue = m_cfg->readLongNumEntry("audiowriteusec", 200000) / 1000;
+    m_audioWrite->setValue(audioWriteValue);
+    m_audioWrite->setTickmarks(QSlider::Below);
+    layout->addWidget(m_audioWrite, 8, 2);
+
+    m_audioWriteLabel = new QLabel(QString("%1").arg(audioWriteValue), frame);
+    layout->addWidget(m_audioWriteLabel, 7, 2, Qt::AlignHCenter);
+
+    connect(m_audioWrite,
+            SIGNAL(valueChanged(int)),
+            SLOT(slotAudioWriteChanged(int)));
+
+
+    m_smallFile = new QSlider(Horizontal, frame);
+
+    m_smallFile->setMinValue(5);
+    layout->addWidget(new QLabel("32KB", frame), 10, 1);
+
+    m_smallFile->setMaxValue(15);
+    layout->addWidget(new QLabel("32MB", frame), 10, 3);
+
+    int smallFileValue = m_cfg->readLongNumEntry("smallaudiofilekbytes", 128);
+    int powerOfTwo = 1;
+    while (1 << powerOfTwo < smallFileValue) ++powerOfTwo;
+    m_smallFile->setValue(powerOfTwo);
+    m_smallFile->setTickmarks(QSlider::Below);
+    layout->addWidget(m_smallFile, 10, 2);
+
+    if (smallFileValue < 1024) {
+	m_smallFileLabel = new QLabel(QString("%1KB").arg(smallFileValue),
+				      frame);
+    } else {
+	m_smallFileLabel = new QLabel(QString("%1MB").arg(smallFileValue/1024),
+				      frame);
+    }
+    layout->addWidget(m_smallFileLabel, 9, 2, Qt::AlignHCenter);
+
+    connect(m_smallFile,
+            SIGNAL(valueChanged(int)),
+            SLOT(slotSmallFileChanged(int)));
+
+    addTab(frame, i18n("Buffers"));
+
 
     // ------------------ Record tab ---------------------
     //
@@ -1081,14 +1145,31 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     //  -------------- Synchronisation tab -----------------
     //
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame, 4, 2, 10, 5);
+    layout = new QGridLayout(frame, 5, 2, 10, 5);
+
+    // Timer selection
+    // 
+    label = new QLabel(i18n("Sequencer timer"), frame);
+    layout->addWidget(label, 0, 0);
+
+    m_timer = new KComboBox(frame);
+    layout->addWidget(m_timer, 0, 1); //, Qt::AlignHCenter);
+
+    QStringList timers = m_doc->getTimers();
+    QString currentTimer = m_doc->getCurrentTimer();
+    currentTimer = m_cfg->readEntry("timer", currentTimer);
+
+    for (unsigned int i = 0; i < timers.size(); ++i) {
+	m_timer->insertItem(timers[i]);
+	if (timers[i] == currentTimer) m_timer->setCurrentItem(i);
+    }
 
     // MIDI Clock
     //
     label = new QLabel(i18n("Send MIDI Clock and System messages"), frame);
-    layout->addWidget(label, 0, 0);
+    layout->addWidget(label, 1, 0);
     m_midiClockEnabled = new QCheckBox(frame);
-    layout->addWidget(m_midiClockEnabled, 0, 1);
+    layout->addWidget(m_midiClockEnabled, 1, 1);
 
     bool midiClock = m_cfg->readBoolEntry("midiclock", false);
     m_midiClockEnabled->setChecked(midiClock);
@@ -1096,14 +1177,14 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     // JACK Transport
     //
     label = new QLabel(i18n("JACK transport mode"), frame);
-    layout->addWidget(label, 1, 0);
+    layout->addWidget(label, 2, 0);
 
     m_jackTransport = new KComboBox(frame);
-    layout->addWidget(m_jackTransport, 1, 1); //, Qt::AlignHCenter);
+    layout->addWidget(m_jackTransport, 2, 1); //, Qt::AlignHCenter);
 
-    m_jackTransport->insertItem(i18n("off"));
-    m_jackTransport->insertItem(i18n("JACK Slave"));
-    m_jackTransport->insertItem(i18n("JACK Master"));
+    m_jackTransport->insertItem(i18n("Ignore JACK transport"));
+    m_jackTransport->insertItem(i18n("Sync"));
+    m_jackTransport->insertItem(i18n("Sync, and offer timebase master"));
 
     bool jackMaster = m_cfg->readBoolEntry("jackmaster", false);
     bool jackTransport = m_cfg->readBoolEntry("jacktransport", false);
@@ -1121,12 +1202,12 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     // MMC Transport
     //
     label = new QLabel(i18n("MMC transport mode"), frame);
-    layout->addWidget(label, 2, 0);
+    layout->addWidget(label, 3, 0);
     
     m_mmcTransport = new KComboBox(frame);
-    layout->addWidget(m_mmcTransport, 2, 1); //, Qt::AlignHCenter);
+    layout->addWidget(m_mmcTransport, 3, 1); //, Qt::AlignHCenter);
 
-    m_mmcTransport->insertItem(i18n("off"));
+    m_mmcTransport->insertItem(i18n("Off"));
     m_mmcTransport->insertItem(i18n("MMC Slave"));
     m_mmcTransport->insertItem(i18n("MMC Master"));
 
@@ -1145,6 +1226,46 @@ SequencerConfigurationPage::SequencerConfigurationPage(
 
 
     addTab(frame, i18n("Synchronisation"));
+}
+
+void
+SequencerConfigurationPage::slotReadAheadChanged(int v)
+{
+    // event read-ahead must always be at least 10ms more than
+    // the audio mix or read buffer, and the read buffer should
+    // be at least as long as the mix buffer.
+
+    if (m_audioMix->value() > v-10) m_audioMix->setValue(v-10);
+    m_readAheadLabel->setNum(v);
+}
+
+void
+SequencerConfigurationPage::slotAudioMixChanged(int v)
+{
+    if (m_readAhead->value() < v+10) m_readAhead->setValue(v+10);
+    m_audioMixLabel->setNum(v);
+}
+
+void
+SequencerConfigurationPage::slotAudioReadChanged(int v)
+{
+    m_audioReadLabel->setNum(v);
+}
+
+void
+SequencerConfigurationPage::slotAudioWriteChanged(int v)
+{
+    m_audioWriteLabel->setNum(v);
+}
+
+void
+SequencerConfigurationPage::slotSmallFileChanged(int v)
+{
+    QString text;
+    v = 1 << v;
+    if (v < 1024) text = QString("%1KB").arg(v);
+    else text = QString("%1MB").arg(v/1024);
+    m_smallFileLabel->setText(text);
 }
 
 void
@@ -1180,6 +1301,20 @@ SequencerConfigurationPage::apply()
     m_cfg->writeEntry("alwayssendcontrollers",
                        m_sendControllersAtPlay->isChecked());
 
+    m_cfg->writeEntry("readaheadusec", m_readAhead->value() * 1000);
+    m_cfg->writeEntry("readaheadsec", 0L);
+    
+    m_cfg->writeEntry("audiomixusec", m_audioMix->value() * 1000);
+    m_cfg->writeEntry("audiomixsec", 0L);
+    
+    m_cfg->writeEntry("audioreadusec", m_audioRead->value() * 1000);
+    m_cfg->writeEntry("audioreadsec", 0L);
+    
+    m_cfg->writeEntry("audiowriteusec", m_audioWrite->value() * 1000);
+    m_cfg->writeEntry("audiowritesec", 0L);
+
+    m_cfg->writeEntry("smallaudiofilekbytes", 1 << m_smallFile->value());
+
 #ifdef HAVE_LIBJACK
 
     // Jack control
@@ -1201,6 +1336,11 @@ SequencerConfigurationPage::apply()
 
     Rosegarden::StudioControl::sendMappedEvent(mEjackInputs);
 
+    
+
+    m_cfg->writeEntry("timer", m_timer->currentText());
+    m_doc->setCurrentTimer(m_timer->currentText());
+    
 
 
     // Write the JACK entry
@@ -1363,7 +1503,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
     layout->addWidget
         (new QLabel(i18n("%1 minutes %2.%3%4 seconds (%5 units, %6 bars)")
                     .arg(rtd.sec / 60).arg(rtd.sec % 60)
-                    .arg(rtd.usec / 100000).arg((rtd.usec / 10000) % 10)
+                    .arg(rtd.msec() / 100).arg((rtd.msec() / 10) % 10)
                     .arg(d).arg(doc->getComposition().getBarNumber(d) + 1),
                     frame), 1, 1);
 
@@ -1713,6 +1853,17 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
     connect(page, SIGNAL(updateAutoSaveInterval(unsigned int)),
             this, SIGNAL(updateAutoSaveInterval(unsigned int)));
 
+    // Sequencer Page
+    //
+    pageWidget = addPage(SequencerConfigurationPage::iconLabel(),
+                         SequencerConfigurationPage::title(),
+                         loadIcon(SequencerConfigurationPage::iconName()));
+    vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
+    page = new SequencerConfigurationPage(doc, cfg, pageWidget);
+    vlay->addWidget(page);
+    page->setPageIndex(pageIndex(pageWidget));
+    m_configurationPages.push_back(page);
+
     // Notation Page
     pageWidget = addPage(NotationConfigurationPage::iconLabel(),
                          NotationConfigurationPage::title(),
@@ -1722,24 +1873,13 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
     vlay->addWidget(page);
     page->setPageIndex(pageIndex(pageWidget));
     m_configurationPages.push_back(page);
-
+/*
     // Matrix Page
     pageWidget = addPage(MatrixConfigurationPage::iconLabel(),
                          MatrixConfigurationPage::title(),
                          loadIcon(MatrixConfigurationPage::iconName()));
     vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
     page = new MatrixConfigurationPage(cfg, pageWidget);
-    vlay->addWidget(page);
-    page->setPageIndex(pageIndex(pageWidget));
-    m_configurationPages.push_back(page);
-
-    // Sequencer Page
-    //
-    pageWidget = addPage(SequencerConfigurationPage::iconLabel(),
-                         SequencerConfigurationPage::title(),
-                         loadIcon(SequencerConfigurationPage::iconName()));
-    vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
-    page = new SequencerConfigurationPage(doc, cfg, pageWidget);
     vlay->addWidget(page);
     page->setPageIndex(pageIndex(pageWidget));
     m_configurationPages.push_back(page);
@@ -1754,7 +1894,7 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
     vlay->addWidget(page);
     page->setPageIndex(pageIndex(pageWidget));
     m_configurationPages.push_back(page);
-
+*/
 }
 
 //------------------------------------------------------------

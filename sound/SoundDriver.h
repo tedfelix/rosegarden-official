@@ -1,35 +1,33 @@
 // -*- c-indentation-style:"stroustrup" c-basic-offset: 4 -*-
 /*
-  Rosegarden-4
-  A sequencer and musical notation editor.
+    Rosegarden-4
+    A sequencer and musical notation editor.
 
-  This program is Copyright 2000-2003
-  Guillaume Laurent   <glaurent@telegraph-road.org>,
-  Chris Cannam        <cannam@all-day-breakfast.com>,
-  Richard Bown        <bownie@bownie.com>
+    This program is Copyright 2000-2003
+        Guillaume Laurent   <glaurent@telegraph-road.org>,
+        Chris Cannam        <cannam@all-day-breakfast.com>,
+        Richard Bown        <bownie@bownie.com>
 
-  The moral right of the authors to claim authorship of this work
-  has been asserted.
+    The moral right of the authors to claim authorship of this work
+    has been asserted.
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.  See the file
-  COPYING included with this distribution for more information.
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
 */
 
 #include <string>
 #include <vector>
+#include <list>
 
-#include "Instrument.h"
 #include "Device.h"
 #include "MappedComposition.h"
 #include "MappedInstrument.h"
-#include "RealTime.h"
-#include "AudioFile.h"
 #include "MappedDevice.h"
-#include "RingBuffer.h"
 #include "SequencerDataBlock.h"
+#include "PlayableAudioFile.h"
 
 // Abstract base to support SoundDrivers such as aRts and ALSA.
 //
@@ -69,178 +67,6 @@ typedef enum
     MIDI_OK   = 0x02           // MIDI's OK
 } SoundDriverStatus;
 
-
-// PlayableAudioFile is queued on the m_audioPlayQueue and
-// played by processAudioQueue() in Sequencer.  State changes
-// through playback and it's finally discarded when done.
-//
-// To enable us to have multiple file handles on real AudioFile
-// we store the file handle with this class.
-//
-//
-class PlayableAudioFile
-{
-public:
-
-    typedef enum
-    {
-        IDLE,
-        PLAYING,
-        DEFUNCT
-    } PlayStatus;
-
-
-    PlayableAudioFile(InstrumentId instrumentId,
-                      AudioFile *audioFile,
-                      const RealTime &startTime,
-                      const RealTime &startIndex,
-                      const RealTime &duration,
-                      unsigned int playBufferSize = 1024,
-                      RingBuffer *ringBuffer = 0);
-    PlayableAudioFile(const PlayableAudioFile &pAF);
-
-    ~PlayableAudioFile();
-
-    void setStatus(const PlayStatus &status) { m_status = status; }
-    PlayStatus getStatus() const { return m_status; }
-
-    void setStartTime(const RealTime &time) { m_startTime = time; }
-    RealTime getStartTime() const { return m_startTime; }
-
-    void setDuration(const RealTime &time) { m_duration = time; }
-    RealTime getDuration() const { return m_duration; }
-    RealTime getEndTime() const { return m_startTime + m_duration; }
-
-    void setStartIndex(const RealTime &time) { m_startIndex = time; }
-    RealTime getStartIndex() const { return m_startIndex; }
-
-    // Get audio file for interrogation
-    //
-    AudioFile* getAudioFile() const { return m_audioFile; }
-
-    // Get instrument ID - we need to be able to map back
-    // at the GUI.
-    //
-    InstrumentId getInstrument() const { return m_instrumentId; }
-
-    // Reaches through to AudioFile interface using our local file handle
-    //
-    //
-    bool scanTo(const RealTime &time);
-
-    // Get the sample frames from the file
-    //
-    char* getSampleFrames(unsigned int frames);
-    std::string getSampleFrameSlice(const RealTime &time);
-
-    // Two important numbers also reaching through to AudioFile
-    //
-    unsigned int getChannels();
-    unsigned int getBitsPerSample();
-    unsigned int getSampleRate();
-    unsigned int getBytesPerSample();
-
-    // Using these methods we can load up the audio file with
-    // an external ringbuffer to use in favour of an internally
-    // generated one.  The caller is in charge of deleting the
-    // old buffer if we change.
-    //
-    void setRingBuffer(RingBuffer *rB) { m_ringBuffer = rB; }
-    RingBuffer* getRingBuffer() const { return m_ringBuffer; }
-    int getRingBufferThreshold() const { return m_ringBufferThreshold; }
-
-    unsigned int getPlayBufferSize() const { return m_playBufferSize; }
-
-    // Let this object work out whether the RingBuffer needs filling -
-    // this will hopefully provide better performance when multiple audio
-    // files are accessing the disk at the same time.
-    //
-    void fillRingBuffer();
-
-    // Push a number of frames into the ringbuffer
-    //
-    void fillRingBuffer(int bytes);
-
-    // Are we initialised yet?
-    //
-    bool isInitialised() const { return m_initialised; }
-
-    // First time initialise done from disk thread
-    //
-    void initialise();
-
-    // Segment id that allows us to crosscheck against playing audio
-    // segments.
-    //
-    int getRuntimeSegmentId() const { return m_runtimeSegmentId; }
-    void setRuntimeSegmentId(int id) { m_runtimeSegmentId = id; }
-
-protected:
-
-
-    RealTime              m_startTime;
-    RealTime              m_startIndex;
-    RealTime              m_duration;
-    PlayStatus            m_status;
-
-    // Performance file handle - must open non-blocking to
-    // allow other potential PlayableAudioFiles access to
-    // the same file.
-    //
-    std::ifstream        *m_file;
-
-    // AudioFile handle
-    //
-    AudioFile            *m_audioFile;
-
-    // Originating Instrument Id
-    //
-    InstrumentId          m_instrumentId;
-
-    // Our file i/o buffer
-    //
-    RingBuffer           *m_ringBuffer;
-    int                   m_ringBufferThreshold;
-
-    // Our local fixed size playbuffer which takes from the RingBuffer
-    //
-    char                 *m_playBuffer;
-    unsigned int          m_playBufferSize;
-
-    // Have we initialised yet?  Don't do this from the constructor as we want
-    // the disk thread to pick up the slack.
-    //
-    bool                  m_initialised;
-
-    // So we know not to delete the RingBuffer when this object dies
-    //
-    bool                  m_externalRingbuffer;
-
-    int                   m_runtimeSegmentId;
-
-};
-
-// A wrapper class for writing out a recording file
-//
-class RecordableAudioFile
-{
-public:
-    RecordableAudioFile(const std::string &filePath,
-                        InstrumentId instrumentId,
-                        AudioFile *audioFile);
-
-    void fillRingBuffer(const std::string &data);
-
-protected:
-    std::string           m_path;
-    AudioFile            *m_audioFile;
-
-    InstrumentId          m_recordingId;
-    RingBuffer           *m_ringBuffer;
-
-
-
-};
 
 // The NoteOffQueue holds a time ordered set of
 // pending MIDI NOTE OFF events.
@@ -296,6 +122,9 @@ private:
 
 
 class MappedStudio;
+class ExternalTransport;
+
+typedef std::vector<PlayableAudioFile *> PlayableAudioFileList;
 
 // The abstract SoundDriver
 //
@@ -308,21 +137,20 @@ public:
 
     virtual void initialise() = 0;
 
-    virtual void initialisePlayback(const RealTime &position,
-                                    const RealTime &playLatency) = 0;
+    virtual void initialisePlayback(const RealTime &position) = 0;
     virtual void stopPlayback() = 0;
-    virtual void resetPlayback(const RealTime &position,
-                               const RealTime &latency) = 0;
+    virtual void resetPlayback(const RealTime &position) = 0;
     virtual void allNotesOff() = 0;
     virtual void processNotesOff(const RealTime &time) = 0;
     
     virtual RealTime getSequencerTime() = 0;
 
-    virtual MappedComposition*
-        getMappedComposition(const RealTime &playLatency) = 0;
+    virtual MappedComposition *getMappedComposition() = 0;
+
+    virtual void startClocks() { }
+    virtual void stopClocks() { }
 
     virtual void processEventsOut(const MappedComposition &mC,
-                                  const RealTime &playLatency,
                                   bool now) = 0;
 
     // Activate a recording state
@@ -331,7 +159,7 @@ public:
 
     // Process anything that's pending
     //
-    virtual void processPending(const RealTime &playLatency) = 0;
+    virtual void processPending() = 0;
 
     // Get the driver's operating sample rate
     //
@@ -372,7 +200,7 @@ public:
 
     // Send the MIDI clock
     //
-    virtual void sendMidiClock(const RealTime &playLatency) = 0;
+    virtual void sendMidiClock() = 0;
 
     virtual QString getStatusLog() { return ""; }
 
@@ -392,6 +220,12 @@ public:
     // Are we playing?
     //
     bool isPlaying() const { return m_playing; }
+
+    // Are we counting?  (Default implementation is always counting,
+    // but if a subclass implements stopClocks/startClocks then that
+    // won't always be the case.)
+    //
+    virtual bool areClocksRunning() const { return true; }
 
     RealTime getStartPosition() const { return m_playStartPosition; }
     RecordStatus getRecordStatus() const { return m_recordStatus; }
@@ -423,18 +257,24 @@ public:
     virtual void setConnection(DeviceId, QString) { }
     virtual void setPlausibleConnection(DeviceId id, QString c) { setConnection(id, c); }
 
-    // Get a list of run time segment ids from the playing audio files - subclasses
-    // might need to make sure this is thread safe.
-    //
-    virtual std::vector<PlayableAudioFile*> getPlayingAudioFiles() = 0;
+    virtual unsigned int getTimers() { return 0; }
+    virtual QString getTimer(unsigned int n) { return ""; }
+    virtual QString getCurrentTimer() { return ""; }
+    virtual void setCurrentTimer(QString) { }
+
+    virtual void getAudioInstrumentNumbers(InstrumentId &, int &) = 0;
 
     // Return the whole audio play queue
     //
-    std::vector<PlayableAudioFile*>& getAudioPlayQueue() { return m_audioPlayQueue; }
+    PlayableAudioFileList getAudioPlayQueue();
 
     // Just non-defunct queue members
     //
-    std::vector<PlayableAudioFile*> getAudioPlayQueueNotDefunct();
+    PlayableAudioFileList getAudioPlayQueueNotDefunct();
+
+    // Just non-defunct queue members on a particular audio instrument
+    //
+    PlayableAudioFileList getAudioPlayQueuePerInstrument(InstrumentId);
 
     // Clear the queue
     //
@@ -450,23 +290,6 @@ public:
     bool addAudioFile(const std::string &fileName, unsigned int id);
     bool removeAudioFile(unsigned int id);
                     
-    // Queue up an audio sample for playing - we use the
-    // m_audioPlayThreadQueue to make sure all queue add
-    // operations are thread-safe.
-    //
-    bool queueAudio(InstrumentId instrumentId,
-                    AudioFileId audioFileId,
-                    const RealTime &absoluteTime,
-                    const RealTime &audioStartMarker,
-                    const RealTime &duration,
-                    const RealTime &playLatency);
-
-    // Move the pending thread queue across to the real queue
-    // at a safe point in time (when another thread isn't
-    // accessing the vector.
-    //
-    void pushPlayableAudioQueue();
-
     // Recording filename
     //
     void setRecordingFilename(const std::string &file)
@@ -488,6 +311,19 @@ public:
 
     void setAudioRecordLatency(const RealTime &l) { m_audioRecordLatency = l; }
     RealTime getAudioRecordLatency() { return m_audioRecordLatency; }
+
+    void setAudioBufferSizes(RealTime mix, RealTime read, RealTime write,
+			     int smallFileSize) {
+	m_audioMixBufferLength = mix;
+	m_audioReadBufferLength = read;
+	m_audioWriteBufferLength = write;
+	m_smallFileSize = smallFileSize;
+    }
+
+    RealTime getAudioMixBufferLength() { return m_audioMixBufferLength; }
+    RealTime getAudioReadBufferLength() { return m_audioReadBufferLength; }
+    RealTime getAudioWriteBufferLength() { return m_audioWriteBufferLength; }
+    int getSmallFileSize() { return m_smallFileSize; }
 
     // Cancel the playback of an audio file - either by instrument and audio file id
     // or by audio segment id.
@@ -527,7 +363,7 @@ public:
 
     // Set MIDI clock interval
     //
-    void setMIDIClockInterval(long usecs) { m_midiClockInterval = usecs; }
+    void setMIDIClockInterval(RealTime interval) { m_midiClockInterval = interval; }
 
     // Get and set the mapper which may optionally be used to
     // store recording levels etc for communication back to the GUI.
@@ -537,14 +373,20 @@ public:
     SequencerDataBlock *getSequencerDataBlock() { return m_sequencerDataBlock; }
     void setSequencerDataBlock(SequencerDataBlock *d) { m_sequencerDataBlock = d; }
 
+    ExternalTransport *getExternalTransportControl() const {
+	return m_externalTransport;
+    }
+    void setExternalTransportControl(ExternalTransport *transport) {
+	m_externalTransport = transport;
+    }
+
+
 protected:
     // Helper functions to be implemented by subclasses
     //
     virtual void processMidiOut(const MappedComposition &mC,
-                                const RealTime &playLatency,
                                 bool now) = 0;
-    virtual void processAudioQueue(const RealTime &playLatency,
-                                   bool now) = 0;
+    virtual void processAudioQueue(bool now) = 0;
     virtual void generateInstruments() = 0;
 
     // Audio
@@ -587,7 +429,7 @@ protected:
     // using threads then make sure you mutex access to this
     // vector.
     //
-    std::vector<PlayableAudioFile*>             m_audioPlayQueue;
+    std::list<PlayableAudioFile *>              m_audioPlayQueue;
 
     // A list of AudioFiles that we can play.
     //
@@ -603,6 +445,11 @@ protected:
     RealTime                                    m_audioPlayLatency;
     RealTime                                    m_audioRecordLatency;
 
+    RealTime m_audioMixBufferLength;
+    RealTime m_audioReadBufferLength;
+    RealTime m_audioWriteBufferLength;
+    int m_smallFileSize;
+
     // Virtual studio hook
     //
     MappedStudio                *m_studio;
@@ -610,6 +457,10 @@ protected:
     // Sequencer data block for communication back to GUI
     //
     SequencerDataBlock          *m_sequencerDataBlock;
+    
+    // Controller to make externally originated transport requests on
+    //
+    ExternalTransport           *m_externalTransport;
 
     std::vector<std::string>     m_args;
 
@@ -619,10 +470,10 @@ protected:
     bool                         m_mmcMaster;
     MidiByte                     m_mmcId;      // device id
 
-    // MIDI clock interval - microseconds
+    // MIDI clock interval
     //
     bool                         m_midiClockEnabled;
-    long                         m_midiClockInterval;
+    RealTime                     m_midiClockInterval;
     RealTime                     m_midiClockSendTime;
 
     // MIDI Song Position pointer

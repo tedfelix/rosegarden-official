@@ -86,8 +86,7 @@ protected:
     std::string getBytes(std::ifstream *file, unsigned int numberOfBytes);
 
     // write some bytes to an output stream
-    void putBytes(std::ofstream *file,
-                  const std::string outputString);
+    void putBytes(std::ofstream *file, const std::string outputString);
 
     // Read buffering - define chunk size and buffer file reading
     //

@@ -130,16 +130,12 @@ namespace CompositionMetadataKeys
 
 
 // Keep these in lower case
-const PropertyName DocumentConfiguration::MetronomeDevice        = "metronomedevice";
-const PropertyName DocumentConfiguration::FetchLatency          = "fetchlatency";
 const PropertyName DocumentConfiguration::SequencerOptions      = "sequenceroptions";
 const PropertyName DocumentConfiguration::ZoomLevel             = "zoomlevel";
 
 
 DocumentConfiguration::DocumentConfiguration()
 {
-    set<Int>(MetronomeDevice, 0);
-    set<RealTimeT>(FetchLatency,      RealTime(0, 50000));    
     set<Int>(ZoomLevel, 0);
 }
     
@@ -177,12 +173,7 @@ DocumentConfiguration::toXmlString()
 
     std::stringstream config;
 
-    config << endl << "<configuration>" << endl
-           << "    <" << MetronomeDevice        << " type=\"Int\">" << get<Int>(MetronomeDevice)        << "</" << MetronomeDevice        << ">\n";
-
-    RealTime r = get<RealTimeT>(FetchLatency);
-    
-    config << "    <" << FetchLatency << " type=\"RealTime\">" << r.sec << "," << r.usec << "</" << FetchLatency << ">" << endl;
+    config << endl << "<configuration>" << endl;
 
     config << "    <" << ZoomLevel << " type=\"Int\">" << get<Int>(ZoomLevel)
            << "</" << ZoomLevel << ">\n";

@@ -31,37 +31,40 @@ namespace Rosegarden
 struct RealTime
 {
     int sec;
-    int usec;
+    int nsec;
 
-    RealTime(): sec(0), usec(0) {}
-    RealTime(int s, int u);
+    int usec() const { return nsec / 1000; }
+    int msec() const { return nsec / 1000000; }
+
+    RealTime(): sec(0), nsec(0) {}
+    RealTime(int s, int n);
 
     RealTime(const RealTime &r) :
-	sec(r.sec), usec(r.usec) { }
+	sec(r.sec), nsec(r.nsec) { }
 
     RealTime &operator=(const RealTime &r) {
-	sec = r.sec; usec = r.usec; return *this;
+	sec = r.sec; nsec = r.nsec; return *this;
     }
 
     RealTime operator+(const RealTime &r) const {
-	return RealTime(sec + r.sec, usec + r.usec);
+	return RealTime(sec + r.sec, nsec + r.nsec);
     }
     RealTime operator-(const RealTime &r) const {
-	return RealTime(sec - r.sec, usec - r.usec);
+	return RealTime(sec - r.sec, nsec - r.nsec);
     }
 
     bool operator <(const RealTime &r) const {
-	if (sec == r.sec) return usec < r.usec;
+	if (sec == r.sec) return nsec < r.nsec;
 	else return sec < r.sec;
     }
 
     bool operator >(const RealTime &r) const {
-	if (sec == r.sec) return usec > r.usec;
+	if (sec == r.sec) return nsec > r.nsec;
 	else return sec > r.sec;
     }
 
     bool operator==(const RealTime &r) const {
-        return (sec == r.sec && usec == r.usec);
+        return (sec == r.sec && nsec == r.nsec);
     }
  
     bool operator!=(const RealTime &r) const {
@@ -69,12 +72,12 @@ struct RealTime
     }
  
     bool operator>=(const RealTime &r) const {
-        if (sec == r.sec) return usec >= r.usec;
+        if (sec == r.sec) return nsec >= r.nsec;
         else return sec >= r.sec;
     }
 
     bool operator<=(const RealTime &r) const {
-        if (sec == r.sec) return usec <= r.usec;
+        if (sec == r.sec) return nsec <= r.nsec;
         else return sec <= r.sec;
     }
 
@@ -85,6 +88,11 @@ struct RealTime
     double operator/(const RealTime &r) const;
 
     std::string toString() const;
+
+    // Convenience functions for handling sample frames
+    //
+    static long realTime2Frame(const RealTime &r, unsigned int sampleRate);
+    static RealTime frame2RealTime(long frame, unsigned int sampleRate);
 
     static const RealTime zeroTime;
 };

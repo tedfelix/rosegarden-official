@@ -59,16 +59,18 @@ RosegardenSequencerApp::RosegardenSequencerApp(
     m_transportStatus(STOPPED),
     m_songPosition(0, 0),
     m_lastFetchSongPosition(0, 0),
-    m_playLatency(0, 50000),       // default value
-    m_readAhead(0, 40000),         // default value
-    //m_audioPlayLatency(0, 0),
-    //m_audioRecordLatency(0, 0),
+    m_readAhead(0, 80000000),         // default value
+    m_audioMix(0, 60000000),         // default value
+    m_audioRead(0, 100000000),         // default value
+    m_audioWrite(0, 200000000),         // default value
+    m_smallFileSize(128),
     m_loopStart(0, 0),
     m_loopEnd(0, 0),
     m_studio(new Rosegarden::MappedStudio()),
     m_segmentFilesPath(KGlobal::dirs()->resourceDirs("tmp").first()),
     m_metaIterator(0),
     m_controlBlockMmapper(0),
+    m_transportToken(0),
     m_isEndOfCompReached(false)
 {
     SEQUENCER_DEBUG << "Registering with DCOP server" << endl;
@@ -101,7 +103,11 @@ RosegardenSequencerApp::RosegardenSequencerApp(
         close();
     }
 
+    m_sequencer->setAudioBufferSizes(m_audioMix, m_audioRead, m_audioWrite,
+				     m_smallFileSize);
+
     m_sequencer->setSequencerDataBlock(m_sequencerMapper.getSequencerDataBlock());
+    m_sequencer->setExternalTransportControl(this);
 
     // set this here and now so we can accept async midi events
     //
@@ -134,15 +140,16 @@ RosegardenSequencerApp::quit()
 }
 
 
-// We just "send" to this - no call (removed post 0.1
-// to prevent hangs)
-//
 void
 RosegardenSequencerApp::stop()
 {
     // set our state at this level to STOPPING (pending any
     // unfinished NOTES)
     m_transportStatus = STOPPING;
+
+    // report
+    //
+    SEQUENCER_DEBUG << "RosegardenSequencerApp::stop() - stopping" << endl;
 
     // process pending NOTE OFFs and stop the Sequencer
     m_sequencer->stopPlayback();
@@ -151,16 +158,15 @@ RosegardenSequencerApp::stop()
     // we've stopped.
     //
     m_songPosition.sec = 0;
-    m_songPosition.usec = 0;
+    m_songPosition.nsec = 0;
     m_lastFetchSongPosition.sec = 0;
-    m_lastFetchSongPosition.usec = 0;
-
+    m_lastFetchSongPosition.nsec = 0;
 
     cleanupMmapData();
 
-    // report
-    //
-    SEQUENCER_DEBUG << "RosegardenSequencerApp::stop() - stopping" << endl;
+    Rosegarden::Profiles::getInstance()->dump();
+    
+    incrementTransportToken();
 
 }
 
@@ -183,6 +189,7 @@ RosegardenSequencerApp::fetchEvents(const Rosegarden::RealTime &start,
     // finished with them.
     //
     //
+/*
     if (isLooping() == true && end >= m_loopEnd)
     {
         Rosegarden::RealTime loopOverlap = end - m_loopEnd;
@@ -216,6 +223,7 @@ RosegardenSequencerApp::fetchEvents(const Rosegarden::RealTime &start,
 	else return new Rosegarden::MappedComposition();
     }
     else
+*/
         return getSlice(start, end, firstFetch);
 }
 
@@ -258,7 +266,7 @@ RosegardenSequencerApp::startPlaying()
 
     // This will reset the Sequencer's internal clock
     // ready for new playback
-    m_sequencer->initialisePlayback(m_songPosition, m_playLatency);
+    m_sequencer->initialisePlayback(m_songPosition);
 
     // Ensure that the audio playing checks are cleared down
     //
@@ -270,7 +278,16 @@ RosegardenSequencerApp::startPlaying()
     // process whether we need to or not as this also processes
     // the audio queue for us
     //
-    m_sequencer->processEventsOut(m_mC, m_playLatency, false);
+    m_sequencer->processEventsOut(m_mC, false);
+
+//    SEQUENCER_DEBUG << "RosegardenSequencerApp::startPlaying: pausing to simulate high-load environment" << endl;
+//    ::sleep(1);
+
+    // and only now do we signal to start the clock
+    //
+    m_sequencer->startClocks();
+
+    incrementTransportToken();
 
     return true; // !isEndOfCompReached();
 }
@@ -294,31 +311,25 @@ RosegardenSequencerApp::keepPlaying()
     // Again, process whether we need to or not to keep
     // the Sequencer up-to-date with audio events
     //
-    m_sequencer->processEventsOut(m_mC, m_playLatency, false);
-    
-    // Ensure that the audio we're playing is the audio we should be playing
-    //
-    if (m_metaIterator)
-    {
-	rationalisePlayingAudio(m_metaIterator->
-				getPlayingAudioFiles(m_songPosition));
-    }
+    m_sequencer->processEventsOut(m_mC, false);
     
     return true; // !isEndOfCompReached(); - until we sort this out, we don't stop at end of comp.
 }
 
 // Return current Sequencer time in GUI compatible terms
-// remembering that our playback is delayed by m_playLatency
-// ticks from our current m_songPosition.
 //
 void
 RosegardenSequencerApp::updateClocks()
 {
     Rosegarden::Profiler profiler("RosegardenSequencerApp::updateClocks");
 
+    checkExternalTransport();
+
+//SEQUENCER_DEBUG << "RosegardenSequencerApp::updateClocks" << endl; 
+
     // Attempt to send MIDI clock 
     //
-    m_sequencer->sendMidiClock(m_playLatency);
+    m_sequencer->sendMidiClock();
 
     // If we're not playing etc. then that's all we need to do
     //
@@ -331,35 +342,26 @@ RosegardenSequencerApp::updateClocks()
 
     // Go around the loop if we've reached the end
     //
-    if (isLooping() && newPosition >= m_loopEnd + m_playLatency)
+    if (isLooping() && newPosition >= m_loopEnd)
     {
-
         // Remove the loop width from the song position and send
-        // this position (minus m_playLatency) to the GUI
-        /*
-        m_songPosition = newPosition - (m_loopEnd - m_loopStart);
-        newPosition = m_songPosition - m_playLatency;
-        m_lastFetchSongPosition =
-                m_lastFetchSongPosition - (m_loopEnd - m_loopStart);
-                */
-
-        // forgetting the fancy stuff brings superior results
+        // this position to the GUI
         //
         newPosition = m_songPosition = m_lastFetchSongPosition = m_loopStart;
 
+	m_sequencer->stopClocks();
+
         // Reset playback using this jump
         //
-        m_sequencer->resetPlayback(m_loopStart, m_playLatency);
+        m_sequencer->resetPlayback(m_loopStart);
 
-
+	m_sequencer->startClocks();
     }
     else
     {
         m_songPosition = newPosition;
 
-        if (m_songPosition > m_sequencer->getStartPosition() + m_playLatency)
-            newPosition = newPosition - m_playLatency;
-        else
+        if (m_songPosition <= m_sequencer->getStartPosition())
             newPosition = m_sequencer->getStartPosition();
     }
 
@@ -402,20 +404,47 @@ RosegardenSequencerApp::sleep(const Rosegarden::RealTime &rt)
 // Sets the Sequencer object and this object to the new time 
 // from where playback can continue.
 //
-//
 void
-RosegardenSequencerApp::jumpTo(long posSec, long posUsec)
+RosegardenSequencerApp::jumpTo(long posSec, long posNsec)
 {
-    SEQUENCER_DEBUG << "RosegardenSequencerApp::jumpTo(" << posSec << ", " << posUsec << ")\n";
+    SEQUENCER_DEBUG << "RosegardenSequencerApp::jumpTo(" << posSec << ", " << posNsec << ")\n";
 
-    if (posSec < 0 && posUsec < 0)
+    if (posSec < 0 && posNsec < 0)
         return;
 
-    m_songPosition = m_lastFetchSongPosition =
-            Rosegarden::RealTime(posSec, posUsec);
+    m_sequencer->stopClocks();
 
-    m_sequencer->resetPlayback(m_songPosition,
-                               m_playLatency);
+    m_songPosition = m_lastFetchSongPosition =
+	Rosegarden::RealTime(posSec, posNsec);
+
+    if (m_sequencerMapper.getSequencerDataBlock()) {
+	m_sequencerMapper.getSequencerDataBlock()->setPositionPointer
+	    (m_songPosition);
+    }
+
+    m_sequencer->resetPlayback(m_songPosition);
+
+    // Now prebuffer as in startPlaying:
+    
+    // Ensure that the audio playing checks are cleared down
+    //
+    m_metaIterator->clearPlayingAudioSegments();
+
+    m_mC.clear();
+    m_mC = *fetchEvents(m_songPosition, m_songPosition + m_readAhead, true);
+
+    // process whether we need to or not as this also processes
+    // the audio queue for us
+    //
+    m_sequencer->processEventsOut(m_mC, false);
+
+//!!!    SEQUENCER_DEBUG << "RosegardenSequencerApp::jumpTo: pausing to simulate high-load environment" << endl;
+//!!!    ::sleep(1);
+
+    m_sequencer->startClocks();
+    
+    incrementTransportToken();
+
     return;
 }
 
@@ -424,8 +453,7 @@ RosegardenSequencerApp::jumpTo(long posSec, long posUsec)
 void
 RosegardenSequencerApp::processRecordedMidi()
 {
-    Rosegarden::MappedComposition *mC =
-	m_sequencer->getMappedComposition(m_playLatency);
+    Rosegarden::MappedComposition *mC = m_sequencer->getMappedComposition();
 
     if (mC->empty() || !m_controlBlockMmapper) return;
 
@@ -440,7 +468,7 @@ RosegardenSequencerApp::processRecordedMidi()
     m_sequencerMapper.updateRecordingBuffer(mC);
 
     applyFiltering(mC, m_controlBlockMmapper->getThruFilter());
-    m_sequencer->processEventsOut(*mC, Rosegarden::RealTime::zeroTime, true);
+    m_sequencer->processEventsOut(*mC, true);
 }
 
 
@@ -465,11 +493,10 @@ RosegardenSequencerApp::processRecordedAudio()
 void
 RosegardenSequencerApp::processAsynchronousEvents()
 {
-    Rosegarden::MappedComposition *mC =
-	m_sequencer->getMappedComposition(m_playLatency);
+    Rosegarden::MappedComposition *mC = m_sequencer->getMappedComposition();
 
     if (mC->empty()) {
-	m_sequencer->processPending(m_playLatency);
+	m_sequencer->processPending();
 	return;
     }
 
@@ -500,7 +527,7 @@ RosegardenSequencerApp::processAsynchronousEvents()
     arg << mC;
 
     applyFiltering(mC, m_controlBlockMmapper->getThruFilter());
-    m_sequencer->processEventsOut(*mC, Rosegarden::RealTime::zeroTime, true);
+    m_sequencer->processEventsOut(*mC, true);
 
     SEQUENCER_DEBUG << "processAsynchronousEvents: sent " << mC->size() << " events" << endl;
 
@@ -519,7 +546,7 @@ RosegardenSequencerApp::processAsynchronousEvents()
     // Process any pending events (Note Offs or Audio) as part of
     // same procedure.
     //
-    m_sequencer->processPending(m_playLatency);
+    m_sequencer->processPending();
 }
 
 
@@ -539,8 +566,11 @@ RosegardenSequencerApp::applyFiltering(Rosegarden::MappedComposition *mC,
 
 int
 RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
-                               const Rosegarden::RealTime &playLatency,
                                const Rosegarden::RealTime &readAhead,
+                               const Rosegarden::RealTime &audioMix,
+                               const Rosegarden::RealTime &audioRead,
+                               const Rosegarden::RealTime &audioWrite,
+			       long smallFileSize,
                                int recordMode)
 {
     TransportStatus localRecordMode = (TransportStatus) recordMode;
@@ -576,7 +606,7 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
         // Get the Sequencer to prepare itself for recording - if
         // this fails we stop.
         //
-        if(m_sequencer->record(Rosegarden::RECORD_MIDI) == false)
+        if (m_sequencer->record(Rosegarden::RECORD_MIDI) == false)
         {
             stop();
             return 0;
@@ -639,19 +669,11 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
     //
     m_transportStatus = localRecordMode;
 
-    /*
-
-    // Work out the record latency
-    Rosegarden::RealTime recordLatency = playLatency;
-    if (m_audioRecordLatency > recordLatency)
-        recordLatency = m_audioRecordLatency;
-    */
-
     // Ensure that playback is initialised
     //
-    m_sequencer->initialisePlayback(m_songPosition, playLatency);
+    m_sequencer->initialisePlayback(m_songPosition);
 
-    return play(time, playLatency, readAhead);
+    return play(time, readAhead, audioMix, audioRead, audioWrite, smallFileSize);
 }
 
 // We receive a starting time from the GUI which we use as the
@@ -663,8 +685,11 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
 //
 int
 RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
-                             const Rosegarden::RealTime &playLatency, 
-                             const Rosegarden::RealTime &readAhead)
+                             const Rosegarden::RealTime &readAhead,
+                             const Rosegarden::RealTime &audioMix,
+                             const Rosegarden::RealTime &audioRead,
+                             const Rosegarden::RealTime &audioWrite,
+			     long smallFileSize)
 {
     if (m_transportStatus == PLAYING || m_transportStatus == STARTING_TO_PLAY)
         return true;
@@ -684,6 +709,11 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
     //
     m_songPosition = time;
 
+    if (m_sequencerMapper.getSequencerDataBlock()) {
+	m_sequencerMapper.getSequencerDataBlock()->setPositionPointer
+	    (m_songPosition);
+    }
+
     if (m_transportStatus != RECORDING_MIDI &&
         m_transportStatus != RECORDING_AUDIO &&
         m_transportStatus != STARTING_TO_RECORD_MIDI &&
@@ -692,20 +722,23 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
         m_transportStatus = STARTING_TO_PLAY;
     }
 
-    // Set up latencies
+    //!!! Stop the clocks while we do all the dirty work.  We'll
+    //restart them at the end of startPlaying().
+    m_sequencer->stopClocks();
+
+    // Set up buffer size
     //
-    m_playLatency = playLatency;
     m_readAhead = readAhead;
     if (m_readAhead == Rosegarden::RealTime::zeroTime)
         m_readAhead.sec = 1;
 
-    // Ensure that we have time for audio synchronisation
-    //
-    /*
-    if (m_audioPlayLatency > m_playLatency)
-        m_playLatency = m_audioPlayLatency;
-        */
+    m_audioMix = audioMix;
+    m_audioRead = audioRead;
+    m_audioWrite = audioWrite;
+    m_smallFileSize = smallFileSize;
 
+    m_sequencer->setAudioBufferSizes(m_audioMix, m_audioRead, m_audioWrite,
+				     m_smallFileSize);
 
     cleanupMmapData();
 
@@ -864,16 +897,24 @@ void RosegardenSequencerApp::closeAllSegments()
 //
 int
 RosegardenSequencerApp::play(long timeSec,
-                             long timeUsec,
-                             long playLatencySec,
-                             long playLatencyUSec,
+                             long timeNSec,
                              long readAheadSec,
-                             long readAheadUSec)
+                             long readAheadNSec,
+			     long audioMixSec,
+			     long audioMixNsec,
+			     long audioReadSec,
+			     long audioReadNsec,
+			     long audioWriteSec,
+			     long audioWriteNsec,
+			     long smallFileSize)
 
 {
-    return play(Rosegarden::RealTime(timeSec, timeUsec),
-                Rosegarden::RealTime(playLatencySec, playLatencyUSec),
-                Rosegarden::RealTime(readAheadSec, readAheadUSec));
+    return play(Rosegarden::RealTime(timeSec, timeNSec),
+                Rosegarden::RealTime(readAheadSec, readAheadNSec),
+		Rosegarden::RealTime(audioMixSec, audioMixNsec),
+		Rosegarden::RealTime(audioReadSec, audioReadNsec),
+		Rosegarden::RealTime(audioWriteSec, audioWriteNsec),
+		smallFileSize);
 }
 
 
@@ -886,17 +927,25 @@ RosegardenSequencerApp::play(long timeSec,
 //
 int
 RosegardenSequencerApp::record(long timeSec,
-                               long timeUSec,
-                               long playLatencySec,
-                               long playLatencyUSec,
+                               long timeNSec,
                                long readAheadSec,
-                               long readAheadUSec,
+                               long readAheadNSec,
+			       long audioMixSec,
+			       long audioMixNsec,
+			       long audioReadSec,
+			       long audioReadNsec,
+			       long audioWriteSec,
+			       long audioWriteNsec,
+			       long smallFileSize,
                                int recordMode)
 
 {
-    return record(Rosegarden::RealTime(timeSec, timeUSec),
-                  Rosegarden::RealTime(playLatencySec, playLatencyUSec),
-                  Rosegarden::RealTime(readAheadSec, readAheadUSec),
+    return record(Rosegarden::RealTime(timeSec, timeNSec),
+                  Rosegarden::RealTime(readAheadSec, readAheadNSec),
+		  Rosegarden::RealTime(audioMixSec, audioMixNsec),
+		  Rosegarden::RealTime(audioReadSec, audioReadNsec),
+		  Rosegarden::RealTime(audioWriteSec, audioWriteNsec),
+		  smallFileSize,
                   recordMode);
 }
 
@@ -914,12 +963,12 @@ RosegardenSequencerApp::setLoop(const Rosegarden::RealTime &loopStart,
 
 void
 RosegardenSequencerApp::setLoop(long loopStartSec,
-                                long loopStartUSec,
+                                long loopStartNSec,
                                 long loopEndSec,
-                                long loopEndUSec)
+                                long loopEndNSec)
 {
-    setLoop(Rosegarden::RealTime(loopStartSec, loopStartUSec),
-            Rosegarden::RealTime(loopEndSec, loopEndUSec));
+    setLoop(Rosegarden::RealTime(loopStartSec, loopStartNSec),
+            Rosegarden::RealTime(loopEndSec, loopEndNSec));
 }
 
 
@@ -973,7 +1022,7 @@ RosegardenSequencerApp::processSequencerSlice(Rosegarden::MappedComposition mC)
 {
     // Use the "now" API
     //
-    m_sequencer->processEventsOut(mC, Rosegarden::RealTime::zeroTime, true);
+    m_sequencer->processEventsOut(mC, true);
 }
 
 void
@@ -982,11 +1031,11 @@ RosegardenSequencerApp::processMappedEvent(unsigned int id,
                                            unsigned char pitch,
                                            unsigned char velocity,
                                            long absTimeSec,
-                                           long absTimeUsec,
+                                           long absTimeNsec,
                                            long durationSec,
-                                           long durationUsec,
+                                           long durationNsec,
                                            long audioStartMarkerSec,
-                                           long audioStartMarkerUSec)
+                                           long audioStartMarkerNSec)
 {
     MappedEvent *mE =
         new MappedEvent(
@@ -994,9 +1043,9 @@ RosegardenSequencerApp::processMappedEvent(unsigned int id,
             (MappedEvent::MappedEventType)type,
             (Rosegarden::MidiByte)pitch,
             (Rosegarden::MidiByte)velocity,
-            Rosegarden::RealTime(absTimeSec, absTimeUsec),
-            Rosegarden::RealTime(durationSec, durationUsec),
-            Rosegarden::RealTime(audioStartMarkerSec, audioStartMarkerUSec));
+            Rosegarden::RealTime(absTimeSec, absTimeNsec),
+            Rosegarden::RealTime(durationSec, durationNsec),
+            Rosegarden::RealTime(audioStartMarkerSec, audioStartMarkerNSec));
 
     Rosegarden::MappedComposition mC;
 
@@ -1012,7 +1061,7 @@ RosegardenSequencerApp::processMappedEvent(unsigned int id,
 
     mC.insert(mE);
 
-    m_sequencer->processEventsOut(mC, Rosegarden::RealTime::zeroTime, true);
+    m_sequencer->processEventsOut(mC, true);
 }
 
 void
@@ -1020,7 +1069,7 @@ RosegardenSequencerApp::processMappedEvent(MappedEvent mE)
 {
     Rosegarden::MappedComposition mC;
     mC.insert(new MappedEvent(mE));
-    m_sequencer->processEventsOut(mC, Rosegarden::RealTime::zeroTime, true);
+    m_sequencer->processEventsOut(mC, true);
 }
 
 // Get the MappedDevice (DCOP wrapped vector of MappedInstruments)
@@ -1080,6 +1129,30 @@ RosegardenSequencerApp::setPlausibleConnection(unsigned int deviceId,
 					       QString connection)
 {
     m_sequencer->setPlausibleConnection(deviceId, connection);
+}
+
+unsigned int
+RosegardenSequencerApp::getTimers()
+{
+    return m_sequencer->getTimers();
+}
+
+QString
+RosegardenSequencerApp::getTimer(unsigned int n)
+{
+    return m_sequencer->getTimer(n);
+}
+
+QString
+RosegardenSequencerApp::getCurrentTimer()
+{
+    return m_sequencer->getCurrentTimer();
+}
+
+void
+RosegardenSequencerApp::setCurrentTimer(QString timer)
+{
+    m_sequencer->setCurrentTimer(timer);
 }
 
 void
@@ -1367,13 +1440,9 @@ RosegardenSequencerApp::slotCheckForNewClients()
 // Set the MIDI Clock period in microseconds
 //
 void
-RosegardenSequencerApp::setQuarterNoteLength(long timeSec, long timeUSec)
+RosegardenSequencerApp::setQuarterNoteLength(long timeSec, long timeNSec)
 {
-    long usecs =
-        long((double(timeSec) * 1000000.0 + double(timeUSec)) / 24.0);
-
-    //SEQUENCER_DEBUG << "sending MIDI clock every " << usecs << " usecs" << endl;
-    m_sequencer->setMIDIClockInterval(usecs);
+    m_sequencer->setMIDIClockInterval(Rosegarden::RealTime(timeSec, timeNSec));
 }
 
 QString
@@ -1412,178 +1481,144 @@ void RosegardenSequencerApp::dumpFirstSegment()
 }
 
 
-//#define DEBUG_RATIONALISE_AUDIO 1
-
-void RosegardenSequencerApp::rationalisePlayingAudio(const std::vector<MappedEvent*> &segmentAudio)
+Rosegarden::ExternalTransport::TransportToken
+RosegardenSequencerApp::transportChange(TransportRequest request)
 {
-    using Rosegarden::PlayableAudioFile;
+    TransportPair pair(request, Rosegarden::RealTime::zeroTime);
+    m_transportRequests.push_back(pair);
 
-    std::vector<PlayableAudioFile*> driverAudio =
-	m_sequencer->getPlayingAudioFiles();
+    std::cout << "RosegardenSequencerApp::transportJump: " << request << std::endl;
 
-#ifdef DEBUG_RATIONALISE_AUDIO
-    std::cout << "Song time: " << m_songPosition << ", play lat " << m_playLatency
-	      << " (+lat " << (m_songPosition+m_playLatency) << ", -lat "
-	      << (m_songPosition-m_playLatency) << ")" << std::endl;
-    std::cout << "Files playing now on driver: " << driverAudio.size() << std::endl;
-
-    for (size_t i = 0; i < driverAudio.size(); ++i) {
-	std::cout << i << ": id " << driverAudio[i]->getRuntimeSegmentId()
-		  << " inst " << driverAudio[i]->getInstrument()
-		  << " " << driverAudio[i]->getStartTime() << " -> "
-		  << driverAudio[i]->getEndTime() << " index "
-		  << driverAudio[i]->getStartIndex() << std::endl;
-    }
-
-    std::cout << "Files to play from segments: " << segmentAudio.size() << std::endl;
-    for (size_t i = 0; i < segmentAudio.size(); ++i) {
-	std::cout << i << ": id " << segmentAudio[i]->getRuntimeSegmentId()
-		  << " inst " << segmentAudio[i]->getInstrument()
-		  << " " << segmentAudio[i]->getEventTime() << " -> "
-		  << (segmentAudio[i]->getEventTime() + segmentAudio[i]->getDuration()) << " index "
-		  << segmentAudio[i]->getAudioStartMarker() << std::endl;
-    }
-#endif
-
-    // Check for playing audio that shouldn't be
-    //
-    for (std::vector<PlayableAudioFile*>::const_iterator it = driverAudio.begin();
-         it != driverAudio.end(); ++it)
-    {
-        bool segment = false;
-        for (std::vector<MappedEvent*>::const_iterator sIt = segmentAudio.begin();
-             sIt != segmentAudio.end(); ++sIt)
-        {
-            // Check for correct instrument and segment id - we should
-            // also check if playback in the file is at the correct
-            // place really too.
-            //
-            if ((*it)->getRuntimeSegmentId() == (*sIt)->getRuntimeSegmentId() &&
-                (*it)->getInstrument() ==  (*sIt)->getInstrument() &&
-                (*it)->getEndTime() == (*sIt)->getEventTime() + (*sIt)->getDuration()+ m_playLatency)
-            {
-#ifdef DEBUG_RATIONALISE_AUDIO
-                std::cout << "MATCHED SEGMENT AND DRIVER (no need to stop)" << std::endl;
-#endif
-                segment = true;
-                break;
-            }
-        }
-
-        if (segment == false)
-        {
-            // We're found an audio segment that shouldn't be playing
-            // - stop it through the normal channels.  Send a cancel
-            // event to the driver.
-            //
-            MappedEvent mE;
-            mE.setType(Rosegarden::MappedEvent::AudioCancel);
-            mE.setRuntimeSegmentId((*it)->getRuntimeSegmentId());
-	    mE.setEventTime((*it)->getStartTime());
-
-#ifdef DEBUG_RATIONALISE_AUDIO
-            std::cout << "RosegardenSequencerApp::rationalisePlayingAudio - " 
-                      << "stopping audio segment = " << (*it)->getRuntimeSegmentId() 
-                      << std::endl;
-#endif
-
-            processMappedEvent(mE);
-        }
-    }
- 
-    // Check for audio that should be that isn't - remember that the
-    // segment slice we get from the mmappedsegmentiterator is
-    // advanced anyway so ensure that the the segment slice we have is
-    // actually in the playing region.
-    //
-    for (std::vector<MappedEvent*>::const_iterator sIt = segmentAudio.begin();
-         sIt != segmentAudio.end(); ++sIt)
-    {
-        if (m_songPosition <= (*sIt)->getEventTime()) {
-#ifdef DEBUG_RATIONALISE_AUDIO
-	    std::cout << "Ignoring audio at " << (*sIt)->getEventTime() << " that hasn't started yet" << std::endl;
-#endif
-	    continue;
-	}
-	if (m_songPosition >= (*sIt)->getEventTime() + (*sIt)->getDuration()) {
-#ifdef DEBUG_RATIONALISE_AUDIO
-	    std::cout << "Ignoring audio ending at " << (*sIt)->getEventTime() - (*sIt)->getDuration() << " that's already ended" << std::endl;
-#endif
-	    continue;
-	}
-
-        bool driver = false;
-
-        for (std::vector<PlayableAudioFile*>::const_iterator it = driverAudio.begin();
-             it != driverAudio.end(); ++it)
-        {
-            if ((*it)->getRuntimeSegmentId() == (*sIt)->getRuntimeSegmentId() &&
-                (*it)->getInstrument() ==  (*sIt)->getInstrument() &&
-                (*it)->getEndTime() == (*sIt)->getEventTime() + (*sIt)->getDuration() + m_playLatency)
-            {
-#ifdef DEBUG_RATIONALISE_AUDIO
-                std::cout << "MATCHED SEGMENT AND DRIVER (no need to start)" << std::endl;
-#endif
-                driver = true;
-                break;
-            }
-
-            else
-            {
-#ifdef DEBUG_RATIONALISE_AUDIO
-                std::cout << "MISMATCH" << std::endl;
-                std::cout << "DRIVER ID = " << (*it)->getRuntimeSegmentId() 
-                          << ", SEGMENT ID = " << (*sIt)->getRuntimeSegmentId()
-                          << std::endl;
-                std::cout << "DRIVER INS = " << (*it)->getInstrument()
-                          << std::endl;
-                std::cout << "SEGMENT INS = " << (*sIt)->getInstrument()
-                          << std::endl;
-                std::cout << "DRIVER TIME = " << (*it)->getEndTime()
-                          << "\nSEGMENT TIME = " << ((*sIt)->getEventTime() + (*sIt)->getDuration() + m_playLatency)
-			  << " (" << (*sIt)->getEventTime()
-			  << " + " << (*sIt)->getDuration()
-			  << " + " << m_playLatency << ")"
-                          << std::endl << std::endl;
-#endif
-            }
-        }
-
-        if (driver == false)
-        {
-            // There's an audio event that should be playing that isn't - start
-            // it adjusting for current position.
-            //
-            MappedEvent audioSegment(m_metaIterator->
-                    getAudioSegment((*sIt)->getRuntimeSegmentId()));
-#ifdef DEBUG_RATIONALISE_AUDIO
-	    std::cout << "RosegardenSequencerApp::rationalisePlayingAudio: about to fiddle with segment " << (*sIt)->getRuntimeSegmentId() << std::endl;
-	    std::cout << "RosegardenSequencerApp::rationalisePlayingAudio: event time before " << audioSegment.getEventTime() << ", duration " << audioSegment.getDuration() << ", start marker " << audioSegment.getAudioStartMarker() << ", song time " << m_songPosition << std::endl;
-#endif
-
-	    Rosegarden::RealTime offset =
-		m_songPosition - audioSegment.getEventTime();
-
-	    // Normally this start time is adjusted for latency in
-	    // AlsaDriver::processEventsOut.  But because we call it
-	    // via processMappedEvent below, and that's normally
-	    // intended for events that want to be sent immediately,
-	    // it makes the adjustment as if play latency was zero.
-	    // So we have to adjust here instead.
-	    audioSegment.setEventTime(m_songPosition + m_playLatency);
-	    audioSegment.setAudioStartMarker(audioSegment.getAudioStartMarker() + offset);
-	    audioSegment.setDuration(audioSegment.getDuration() - offset);
-
-#ifdef DEBUG_RATIONALISE_AUDIO
-	    std::cout << "RosegardenSequencerApp::rationalisePlayingAudio: event time after " << audioSegment.getEventTime() << ", duration " << audioSegment.getDuration() << ", start marker " << audioSegment.getAudioStartMarker() << std::endl;
-
-            std::cout << "RosegardenSequencerApp::rationalisePlayingAudio - " 
-                      << " starting audio segment = " << audioSegment.getRuntimeSegmentId()
-                      << std::endl;
-#endif
-            processMappedEvent(audioSegment);
-        }
-    }
+    if (request == TransportNoChange) return m_transportToken;
+    else return m_transportToken + 1;
 }
 
+Rosegarden::ExternalTransport::TransportToken
+RosegardenSequencerApp::transportJump(TransportRequest request,
+				      Rosegarden::RealTime rt)
+{
+    TransportPair pair(request, rt);
+    m_transportRequests.push_back(pair);
+
+    std::cout << "RosegardenSequencerApp::transportJump: " << request << ", " << rt << std::endl;
+
+    if (request == TransportNoChange) return m_transportToken;
+    else return m_transportToken + 1;
+}
+
+bool
+RosegardenSequencerApp::isTransportSyncComplete(TransportToken token)
+{
+    std::cout << "RosegardenSequencerApp::isTransportSyncComplete: token " << token << ", current token " << m_transportToken << std::endl;
+    return m_transportToken >= token;
+}
+
+bool
+RosegardenSequencerApp::checkExternalTransport()
+{
+    bool rv = (!m_transportRequests.empty());
+
+    while (!m_transportRequests.empty()) {
+
+	TransportPair pair = *m_transportRequests.begin();
+	m_transportRequests.pop_front();
+
+	QByteArray data;
+
+	switch (pair.first) {
+	    
+	case TransportNoChange:
+	    break;
+	
+	case TransportStop:
+	    kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+				     ROSEGARDEN_GUI_IFACE_NAME,
+				     "stop()",
+				     data);
+	    break;
+	
+	case TransportStart:
+	    kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+				     ROSEGARDEN_GUI_IFACE_NAME,
+				     "play()",
+				     data);
+	    break;
+	
+	case TransportPlay:
+	    kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+				     ROSEGARDEN_GUI_IFACE_NAME,
+				     "play()",
+				     data);
+	    break;
+	
+	case TransportRecord:
+	    kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+				     ROSEGARDEN_GUI_IFACE_NAME,
+				     "record()",
+				     data);
+	    break;
+	
+	case TransportJumpToTime:
+	{
+	    QDataStream arg(data, IO_WriteOnly);
+	    arg << (int)pair.second.sec;
+	    arg << (int)pair.second.usec();
+	    
+	    kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+				     ROSEGARDEN_GUI_IFACE_NAME,
+				     "jumpToTime(int, int)",
+				     data);
+
+	    if (m_transportStatus == PLAYING ||
+		m_transportStatus != RECORDING_MIDI &&
+		m_transportStatus != RECORDING_AUDIO) {
+		jumpTo(pair.second.sec, pair.second.usec() * 1000);
+	    }
+
+	    incrementTransportToken();
+	    break;
+	}
+	
+	case TransportStartAtTime:
+	{
+	    QDataStream arg(data, IO_WriteOnly);
+	    arg << (int)pair.second.sec;
+	    arg << (int)pair.second.usec();
+	    
+	    kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+				     ROSEGARDEN_GUI_IFACE_NAME,
+				     "startAtTime(int, int)",
+				     data);
+	    break;
+	}
+	
+	case TransportStopAtTime:
+	{
+	    kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+				     ROSEGARDEN_GUI_IFACE_NAME,
+				     "stop()",
+				     data);
+
+	    QDataStream arg(data, IO_WriteOnly);
+	    arg << (int)pair.second.sec;
+	    arg << (int)pair.second.usec();
+	    
+	    kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+				     ROSEGARDEN_GUI_IFACE_NAME,
+				     "jumpToTime(int, int)",
+				     data);
+	    break;
+	}
+	}
+    }
+
+    return rv;
+}
+
+void
+RosegardenSequencerApp::incrementTransportToken()
+{
+    ++m_transportToken;
+    std::cout << "RosegardenSequencerApp::incrementTransportToken: incrementing to " << m_transportToken << std::endl;
+}
 

@@ -839,7 +839,7 @@ void RosegardenGUIDoc::saveSegment(QTextStream& outStream, Segment *segment, KPr
 
     if (segment->getRealTimeDelay() != Rosegarden::RealTime::zeroTime) {
         outStream << "\" rtdelaysec=\"" << segment->getRealTimeDelay().sec 
-                  << "\" rtdelayusec=\"" << segment->getRealTimeDelay().usec;
+                  << "\" rtdelaynsec=\"" << segment->getRealTimeDelay().nsec;
     }
 
     if (segment->getColourIndex() != 0) {
@@ -861,14 +861,14 @@ void RosegardenGUIDoc::saveSegment(QTextStream& outStream, Segment *segment, KPr
         // once all this code is centralised
         //
         time.sprintf("%d.%06d", segment->getAudioStartTime().sec,
-                     segment->getAudioStartTime().usec);
+                     segment->getAudioStartTime().usec());
 
         outStream << "   <begin index=\""
                   << time
                   << "\"/>\n";
 
         time.sprintf("%d.%06d", segment->getAudioEndTime().sec,
-                     segment->getAudioEndTime().usec);
+                     segment->getAudioEndTime().usec());
 
         outStream << "   <end index=\""
                   << time
@@ -1481,6 +1481,13 @@ RosegardenGUIDoc::syncDevices()
     if (!isSequencerRunning())
         return;
 
+    // Set the default timer first (we don't have to do this every
+    // time, but this is the most convenient place to do it)
+    kapp->config()->setGroup(Rosegarden::SequencerOptionsConfigGroup);
+    QString currentTimer = getCurrentTimer();
+    currentTimer = kapp->config()->readEntry("timer", currentTimer);
+    setCurrentTimer(currentTimer);
+
     QByteArray replyData;
     QCString replyType;
 
@@ -1792,7 +1799,7 @@ RosegardenGUIDoc::stopRecordingAudio()
     int recordSec = config->readLongNumEntry("jackrecordlatencysec", 0);
     int recordUSec = config->readLongNumEntry("jackrecordlatencyusec", 0);
 
-    Rosegarden::RealTime jackLatency(recordSec, recordUSec);
+    Rosegarden::RealTime jackLatency(recordSec, recordUSec * 1000);
     Rosegarden::RealTime adjustedStartTime =
         m_composition.getElapsedRealTime(m_recordSegment->getStartTime()) -
         jackLatency;
@@ -1980,6 +1987,103 @@ RosegardenGUIDoc::getAudioRecordLatency()
 
     return (result.getRealTime());
 }
+
+QStringList
+RosegardenGUIDoc::getTimers()
+{
+    QStringList list;
+
+    QCString replyType;
+    QByteArray replyData;
+
+    if (!rgapp->sequencerCall("getTimers()", replyType, replyData)) {
+        RG_DEBUG << "RosegardenGUIDoc::getTimers - "
+                 << "failed to contact Rosegarden sequencer" << endl;
+        return list;
+    }
+    
+    if (replyType != "unsigned int") {
+	RG_DEBUG << "RosegardenGUIDoc::getTimers - "
+		 << "wrong reply type (" << replyType << ") from sequencer" << endl;
+	return list;
+    }
+
+    QDataStream streamIn(replyData, IO_ReadOnly);
+    unsigned int count = 0;
+    streamIn >> count;
+
+    for (unsigned int i = 0; i < count; ++i) {
+
+	QByteArray data;
+	QDataStream streamOut(data, IO_WriteOnly);
+
+	streamOut << i;
+
+	if (!rgapp->sequencerCall("getTimer(unsigned int)",
+				  replyType, replyData, data)) {
+	    RG_DEBUG << "RosegardenGUIDoc::getTimers - "
+		     << "failed to contact Rosegarden sequencer" << endl;
+	    return list;
+	}
+    
+	if (replyType != "QString") {
+	    RG_DEBUG << "RosegardenGUIDoc::getTimers - "
+		     << "wrong reply type (" << replyType << ") from sequencer" << endl;
+	    return list;
+	}
+
+	QDataStream streamIn(replyData, IO_ReadOnly);
+	QString name;
+	streamIn >> name;
+	
+	list.push_back(name);
+    }
+
+    return list;
+}
+
+QString
+RosegardenGUIDoc::getCurrentTimer()
+{
+    QCString replyType;
+    QByteArray replyData;
+
+    if (!rgapp->sequencerCall("getCurrentTimer()", replyType, replyData)) {
+        RG_DEBUG << "RosegardenGUIDoc::getCurrentTimer - "
+                 << "failed to contact Rosegarden sequencer" << endl;
+        return "";
+    }
+    
+    if (replyType != "QString") {
+	RG_DEBUG << "RosegardenGUIDoc::getCurrentTimer - "
+		 << "wrong reply type (" << replyType << ") from sequencer" << endl;
+	return "";
+    }
+
+    QDataStream streamIn(replyData, IO_ReadOnly);
+    QString name;
+    streamIn >> name;
+    return name;
+}
+
+void
+RosegardenGUIDoc::setCurrentTimer(QString name)
+{
+    QCString replyType;
+    QByteArray replyData;
+
+    QByteArray data;
+    QDataStream streamOut(data, IO_WriteOnly);
+    
+    streamOut << name;
+    
+    if (!rgapp->sequencerCall("setCurrentTimer(QString)",
+			      replyType, replyData, data)) {
+	RG_DEBUG << "RosegardenGUIDoc::setCurrentTimer - "
+		 << "failed to contact Rosegarden sequencer" << endl;
+    }
+}    
+    
 
 // This is like SequenceManager::preparePlayback() but we only do it
 // once per file load as it takes a bit longer.

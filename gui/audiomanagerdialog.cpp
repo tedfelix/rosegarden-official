@@ -142,9 +142,9 @@ QDragObject* AudioListView::dragObject()
     ts << "AudioFileManager\n"
        << item->getId() << '\n'
        << item->getStartTime().sec << '\n'
-       << item->getStartTime().usec << '\n'
+       << item->getStartTime().nsec << '\n'
        << item->getDuration().sec << '\n'
-       << item->getDuration().usec << '\n';
+       << item->getDuration().nsec << '\n';
 
     RG_DEBUG << "AudioListView::dragObject - "
              << "file id = " << item->getId()
@@ -389,7 +389,7 @@ AudioManagerDialog::slotPopulateFileList()
         // Duration
         //
         length = (*it)->getLength();
-        msecs.sprintf("%03d", length.usec / 1000);
+        msecs.sprintf("%03d", length.nsec / 1000000);
         item->setText(1, QString("%1.%2s").arg(length.sec).arg(msecs));
 
         // set start time and duration
@@ -447,7 +447,7 @@ AudioManagerDialog::slotPopulateFileList()
 
                 // Write segment duration
                 //
-                msecs.sprintf("%03d", segmentDuration.usec / 1000);
+                msecs.sprintf("%03d", segmentDuration.nsec / 1000000);
                 childItem->setText(1, QString("%1.%2s")
                                           .arg(segmentDuration.sec)
                                           .arg(msecs));
@@ -627,7 +627,7 @@ AudioManagerDialog::slotDelete()
         return;
     }
 
-    QString question = QString(i18n("Really delete audio file \"%1\" and all associated audio segments ?"))
+    QString question = QString(i18n("Really unload audio file \"%1\" and remove all associated audio segments ?"))
         .arg(QString(audioFile->getFilename().c_str()));
 
     // Ask the question

@@ -836,16 +836,16 @@ RealTime
 Composition::time2RealTime(timeT tsec, double tempo) const
 {
     double factor = Note(Note::Crotchet).getDuration() * tempo;
-    long sec = (long)((60.0 * (double)tsec) / factor);
-    timeT tusec = tsec - realTime2Time(RealTime(sec, 0), tempo);
-    long usec = (long)((6e7L * (double)tusec) / factor);
+    int sec = (long)((60.0 * (double)tsec) / factor);
+    timeT tnsec = tsec - realTime2Time(RealTime(sec, 0), tempo);
+    int nsec = (long)((60000000000.0 * (double)tnsec) / factor);
 
-    RealTime rt(sec, usec);
+    RealTime rt(sec, nsec);
 
 #ifdef DEBUG_TEMPO_STUFF
-    cerr << "Composition::time2RealTime: sec " << sec << ", usec "
-	 << usec << ", tempo " << tempo
-	 << ", factor " << factor << ", tsec " << tsec << ", tusec " << tusec << ", rt " << rt << endl;
+    cerr << "Composition::time2RealTime: sec " << sec << ", nsec "
+	 << nsec << ", tempo " << tempo
+	 << ", factor " << factor << ", tsec " << tsec << ", tnsec " << tnsec << ", rt " << rt << endl;
 #endif
 
     return rt;
@@ -856,14 +856,14 @@ Composition::realTime2Time(RealTime rt, double tempo) const
 {
     double factor = Note(Note::Crotchet).getDuration() * tempo;
     double tsec = ((double)rt.sec * factor) / 60.0;
-    double tusec = ((double)rt.usec * factor);
+    double tnsec = ((double)rt.nsec * factor);
 
-    double t = tsec + (tusec / 6e7L);
+    double t = tsec + (tnsec / 60000000000.0);
 
 #ifdef DEBUG_TEMPO_STUFF
-    cerr << "Composition::realTime2Time: rt.sec " << rt.sec << ", rt.usec "
-	 << rt.usec << ", tempo " << tempo
-	 << ", factor " << factor << ", tsec " << tsec << ", tusec " << tusec << ", t " << t << endl;
+    cerr << "Composition::realTime2Time: rt.sec " << rt.sec << ", rt.nsec "
+	 << rt.nsec << ", tempo " << tempo
+	 << ", factor " << factor << ", tsec " << tsec << ", tnsec " << tnsec << ", t " << t << endl;
 #endif
 
     return (timeT)t;

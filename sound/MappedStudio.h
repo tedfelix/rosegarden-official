@@ -19,8 +19,8 @@
   COPYING included with this distribution for more information.
 */
 
-#include <string> 
-
+#include <map>
+#include <string>
 #include <qdatastream.h>
 
 #include "MappedCommon.h"
@@ -113,6 +113,9 @@ public:
     virtual MappedObjectPropertyList
         getPropertyList(const MappedObjectProperty &property) = 0;
 
+    virtual bool getProperty(const MappedObjectProperty &property,
+			     MappedObjectValue &value) = 0;
+
     virtual void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value) = 0;
 
@@ -173,6 +176,8 @@ private:
 
 };
 
+
+class MappedAudioFader;
 
 // Works as a factory and virtual plug-board for all our other
 // objects whether they be MIDI or audio.
@@ -236,12 +241,15 @@ public:
     virtual MappedObjectPropertyList getPropertyList(
             const MappedObjectProperty &property);
 
+    virtual bool getProperty(const MappedObjectProperty &property,
+			     MappedObjectValue &value);
+
     virtual void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value);
 
-    // Get an audio fader for an InstrumentId
+    // Get an audio fader for an InstrumentId.  Convenience function.
     //
-    MappedObject* getAudioFader(Rosegarden::InstrumentId id);
+    MappedAudioFader *getAudioFader(Rosegarden::InstrumentId id);
 
     MappedObject* getPluginInstance(Rosegarden::InstrumentId id,
                                     int position);
@@ -299,12 +307,19 @@ private:
     //
     MappedObjectId             m_runningObjectId;
 
-    // All of our mapped (virtual) studio resides in this vector as
+    // All of our mapped (virtual) studio resides in this container as
     // well as having all their parent/child relationships.  Because
     // some things are just blobs with no connections we need to
     // maintain both - don't forget about this.
     //
-    std::vector<MappedObject*> m_objects;
+    // Note that object IDs are globally unique, not just unique within
+    // a category.
+    //
+    typedef std::map<MappedObjectId, MappedObject *> MappedObjectCategory;
+    typedef std::map<MappedObjectType, MappedObjectCategory> MappedObjectMap;
+    MappedObjectMap m_objects;
+    
+//    std::vector<MappedObject*> m_objects;
 
     // Sequencer object
     //
@@ -314,7 +329,7 @@ private:
 
 // A connectable AudioObject that provides a connection framework
 // for MappedAudioFader and MappedAudioBuss (for example).  An
-// asbtract base class.
+// abstract base class.
 //
 // n input connections and m output connections - subclasses
 // can do the cleverness if n != m
@@ -384,8 +399,13 @@ public:
     virtual MappedObjectPropertyList getPropertyList(
                         const MappedObjectProperty &property);
 
+    virtual bool getProperty(const MappedObjectProperty &property,
+			     MappedObjectValue &value);
+
     virtual void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value);
+
+    Rosegarden::InstrumentId getInstrument() const { return m_instrumentId; }
 
 protected:
 
@@ -460,6 +480,9 @@ public:
     virtual MappedObjectPropertyList getPropertyList(
                         const MappedObjectProperty &property);
 
+    virtual bool getProperty(const MappedObjectProperty &property,
+			     MappedObjectValue &value);
+
     virtual void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value);
 
@@ -522,6 +545,9 @@ public:
 
     virtual MappedObjectPropertyList getPropertyList(
                         const MappedObjectProperty &property);
+
+    virtual bool getProperty(const MappedObjectProperty &property,
+			     MappedObjectValue &value);
 
     virtual void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value);
@@ -603,6 +629,9 @@ public:
     //
     virtual MappedObjectPropertyList getPropertyList(
             const MappedObjectProperty &property);
+
+    virtual bool getProperty(const MappedObjectProperty &property,
+			     MappedObjectValue &value);
 
     virtual void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value);

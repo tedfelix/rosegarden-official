@@ -34,11 +34,11 @@ namespace Rosegarden
 class MappedRealTime : public RealTime
 {
 public:
-    MappedRealTime():RealTime(0, 0) {;}
-    MappedRealTime(const RealTime &t):RealTime(t.sec, t.usec) {;}
+    MappedRealTime() : RealTime(0, 0) {;}
+    MappedRealTime(const RealTime &t) : RealTime(t.sec, t.nsec) {;}
 
     // Return as RealTime
-    RealTime getRealTime() { return RealTime(sec, usec); }
+    RealTime getRealTime() { return RealTime(sec, nsec); }
 
     // DCOP datastream
     //

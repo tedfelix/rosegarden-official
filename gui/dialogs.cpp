@@ -1385,12 +1385,12 @@ EventEditDialog::addPersistentProperty(const Rosegarden::PropertyName &name)
 	QObject::connect(spinBox, SIGNAL(valueChanged(int)),
 			 this, SLOT(slotRealTimePropertyChanged(int)));
 
-        // useconds
+        // nseconds
         //
 	spinBox = new QSpinBox
 	    (INT_MIN, INT_MAX, 1,
-             hbox, strtoqstr(name) + "%usec");
-	spinBox->setValue(realTime.usec);
+             hbox, strtoqstr(name) + "%nsec");
+	spinBox->setValue(realTime.nsec);
 
 	QObject::connect(spinBox, SIGNAL(valueChanged(int)),
 			 this, SLOT(slotRealTimePropertyChanged(int)));
@@ -1511,14 +1511,14 @@ EventEditDialog::slotRealTimePropertyChanged(int value)
     QString propertyFullName = spinBox->name();
 
     QString propertyName = propertyFullName.section('%', 0, 0),
-        usecOrSec =  propertyFullName.section('%', 1, 1);
+               nsecOrSec = propertyFullName.section('%', 1, 1);
 
     Rosegarden::RealTime realTime = m_event.get<RealTimeT>(qstrtostr(propertyName));
 
-    if (usecOrSec == "sec")
+    if (nsecOrSec == "sec")
         realTime.sec = value;
     else 
-        realTime.usec = value;
+        realTime.nsec = value;
 
     m_event.set<Int>(qstrtostr(propertyName), value);
 }
@@ -2698,7 +2698,7 @@ TempoDialog::populateTempo()
 
     Rosegarden::RealTime tempoTime = comp.getElapsedRealTime(m_tempoTime);
     QString milliSeconds;
-    milliSeconds.sprintf("%03d", tempoTime.usec / 1000);
+    milliSeconds.sprintf("%03d", tempoTime.msec());
     m_tempoTimeLabel->setText(i18n("%1.%2 s,").arg(tempoTime.sec)
 			      .arg(milliSeconds));
 
@@ -2726,7 +2726,7 @@ TempoDialog::populateTempo()
 
 	    Rosegarden::RealTime lastRT = comp.getElapsedRealTime(lastTempoTime);
 	    QString lastms;
-	    lastms.sprintf("%03d", lastRT.usec / 1000);
+	    lastms.sprintf("%03d", lastRT.msec());
 	    int lastBar = comp.getBarNumber(lastTempoTime);
 	    m_tempoChangeBeforeAt->setText
 		(i18n("        (at %1.%2 s, in bar %3)").arg(lastRT.sec)
@@ -3461,11 +3461,11 @@ AudioSplitDialog::drawPreview()
 
     // Start time
     //
-    char usecs[100];
-    sprintf(usecs, "%03ld", m_segment->getAudioStartTime().usec / 1000);
+    char msecs[100];
+    sprintf(msecs, "%03d", m_segment->getAudioStartTime().msec());
     QString startText = QString("%1.%2s")
                               .arg(m_segment->getAudioStartTime().sec)
-                              .arg(usecs);
+                              .arg(msecs);
     QCanvasText *text = new QCanvasText(m_canvas);
     text->setColor(
             kapp->palette().color(QPalette::Active, QColorGroup::Shadow));
@@ -3485,10 +3485,10 @@ AudioSplitDialog::drawPreview()
     
     // End time
     //
-    sprintf(usecs, "%03ld", m_segment->getAudioEndTime().usec / 1000);
+    sprintf(msecs, "%03d", m_segment->getAudioEndTime().msec());
     QString endText = QString("%1.%2s")
                             .arg(m_segment->getAudioEndTime().sec)
-                            .arg(usecs);
+                            .arg(msecs);
     text = new QCanvasText(m_canvas);
     text->setColor(
             kapp->palette().color(QPalette::Active, QColorGroup::Shadow));
@@ -3529,7 +3529,7 @@ AudioSplitDialog::drawSplits(int threshold)
     Rosegarden::RealTime length = m_segment->getAudioEndTime() - 
         m_segment->getAudioStartTime();
     double ticksPerUsec = double(m_previewWidth) /
-                          double((length.sec * 1000000.0) + length.usec);
+                          double((length.sec * 1000000.0) + length.usec());
 
     int startX = (m_canvasWidth - m_previewWidth) / 2;
     int halfHeight = m_canvasHeight / 2;
@@ -3539,10 +3539,10 @@ AudioSplitDialog::drawSplits(int threshold)
     for (it = splitPoints.begin(); it != splitPoints.end(); it++)
     {
         x1 = int(ticksPerUsec * double(double(it->first.sec) *
-                    1000000.0 + (double)it->first.usec));
+                    1000000.0 + (double)it->first.usec()));
 
         x2 = int(ticksPerUsec * double(double(it->second.sec) *
-                    1000000.0 + double(it->second.usec)));
+                    1000000.0 + double(it->second.usec())));
 
         QCanvasRectangle *rect = new QCanvasRectangle(m_canvas);
         rect->setX(startX + x1);
@@ -4589,7 +4589,7 @@ ManageMetronomeDialog::slotPreviewPitch(int pitch)
                                    pitch,
                                    Rosegarden::MidiMaxValue,
                                    Rosegarden::RealTime::zeroTime,
-                                   Rosegarden::RealTime(0, 10000),
+                                   Rosegarden::RealTime(0, 10000000),
                                    Rosegarden::RealTime::zeroTime);
 
 	Rosegarden::StudioControl::sendMappedEvent(mE);

@@ -6,9 +6,6 @@ Features for 1.0 - updated 20030923
 
 - LADCCA integration
 
-- Change setPositionPointer calls to a mmapped model (gui will need
-  its own timer to inspect mmapped file) [DONE]
-
 - punch in record [rwb] [HALF COMPLETE]
 
 - audio threading for file r/w access [rwb]
@@ -63,6 +60,9 @@ Features for 1.0 - updated 20030923
 
 Completed
 ---------
+
+- Change setPositionPointer calls to a mmapped model (gui will need
+  its own timer to inspect mmapped file) [DONE]
 
 - playlists (essential for demos!) [DONE --gl]
 

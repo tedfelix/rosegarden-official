@@ -386,6 +386,10 @@ public:
 
     Rosegarden::Segment *getRecordSegment() { return m_recordSegment; }
 
+    QStringList getTimers();
+    QString getCurrentTimer();
+    void setCurrentTimer(QString);
+
     /**
      * return the list of the views currently connected to the document
      */

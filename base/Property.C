@@ -93,15 +93,15 @@ PropertyDefn<RealTimeT>::basic_type
 PropertyDefn<RealTimeT>::parse(string s)
 {
     string sec = s.substr(0, s.find('/')),
-        usec =  s.substr(s.find('/') + 1);
+          nsec = s.substr(s.find('/') + 1);
 
-    return RealTime(atoi(sec.c_str()), atoi(usec.c_str()));
+    return RealTime(atoi(sec.c_str()), atoi(nsec.c_str()));
 }
 
 string
 PropertyDefn<RealTimeT>::unparse(PropertyDefn<RealTimeT>::basic_type i)
 {
-    static char buffer[256]; sprintf(buffer, "%ld/%ld", i.sec, i.usec);
+    static char buffer[256]; sprintf(buffer, "%d/%d", i.sec, i.nsec);
     return buffer;
 }
 

@@ -58,6 +58,7 @@ namespace Rosegarden
 
 class MappedInstrument;
 class MappedStudio;
+class ExternalTransport;
 
 class Sequencer
 {
@@ -67,18 +68,16 @@ public:
 
     // Control playback - initialisePlayback starts us playing
     //
-    void initialisePlayback(const Rosegarden::RealTime &startTime,
-                            const Rosegarden::RealTime &playLatency)
-        { m_soundDriver->initialisePlayback(startTime, playLatency); }
+    void initialisePlayback(const Rosegarden::RealTime &startTime)
+        { m_soundDriver->initialisePlayback(startTime); }
 
     void stopPlayback() { m_soundDriver->stopPlayback(); }
 
     // Reset internal states while playing (like when looping
     // and jumping to a new time)
     //
-    void resetPlayback(const Rosegarden::RealTime &position,
-                       const Rosegarden::RealTime &playLatency)
-        { m_soundDriver->resetPlayback(position, playLatency); }
+    void resetPlayback(const Rosegarden::RealTime &position)
+        { m_soundDriver->resetPlayback(position); }
 
     // Control recording (input) state
     //
@@ -88,16 +87,18 @@ public:
     // While recording returns a wrapped MappedComposition of
     // the latest MappedEvents
     //
-    MappedComposition* getMappedComposition(const Rosegarden::RealTime &pL)
-        { return m_soundDriver->getMappedComposition(pL); }
+    MappedComposition* getMappedComposition()
+        { return m_soundDriver->getMappedComposition(); }
+
+    void startClocks() { m_soundDriver->startClocks(); }
+    void stopClocks()  { m_soundDriver->stopClocks(); }
 
     // Process MappedComposition into MIDI and audio events at
     // the driver level and queue for output.
     //
     void processEventsOut(const Rosegarden::MappedComposition &mC,
-                          const Rosegarden::RealTime &playLatency,
                           bool now) // send everything immediately
-        { m_soundDriver->processEventsOut(mC, playLatency, now); }
+        { m_soundDriver->processEventsOut(mC, now); }
 
     // Return the sequencer time
     //
@@ -133,23 +134,6 @@ public:
         { return m_soundDriver->addAudioFile(fileName, id); }
     bool removeAudioFile(const unsigned int &id)
         { return m_soundDriver->removeAudioFile(id); }
-
-    // Queue up an audio sample for playing
-    //
-    bool queueAudio(InstrumentId instrumentId,
-                    AudioFileId audioFileId,
-                    const RealTime &absoluteTime,
-                    const RealTime &audioStartMarker,
-                    const RealTime &duration,
-                    const RealTime &playLatency)
-    {
-        return m_soundDriver->queueAudio(instrumentId,
-                                         audioFileId,
-                                         absoluteTime,
-                                         audioStartMarker,
-                                         duration,
-                                         playLatency);
-    }
 
     // Set a MappedInstrument at the Sequencer level
     //
@@ -221,11 +205,31 @@ public:
 	m_soundDriver->setPlausibleConnection(deviceId, connection);
     }
 
+    unsigned int getTimers()
+    {
+	return m_soundDriver->getTimers();
+    }
+
+    QString getTimer(unsigned int n)
+    {
+	return m_soundDriver->getTimer(n);
+    }
+
+    QString getCurrentTimer()
+    {
+	return m_soundDriver->getCurrentTimer();
+    }
+
+    void setCurrentTimer(QString timer)
+    {
+	m_soundDriver->setCurrentTimer(timer);
+    }
+
     // Process anything that needs to go on in the background 
     // (NoteOffs etc).
     //
-    void processPending(const RealTime &playLatency)
-        { m_soundDriver->processPending(playLatency); }
+    void processPending()
+        { m_soundDriver->processPending(); }
 
     // set the file we're using for audio recording - we only currently
     // support recording of a single track at a time
@@ -251,6 +255,10 @@ public:
 
     RealTime getAudioRecordLatency()
         { return m_soundDriver->getAudioRecordLatency(); }
+
+    void setAudioBufferSizes(RealTime mix, RealTime read, RealTime write,
+			     int smallFileSize) 
+    { m_soundDriver->setAudioBufferSizes(mix, read, write, smallFileSize); }
 
     // Sample rate
     //
@@ -313,21 +321,21 @@ public:
 
     // Set the time between MIDI clocks
     //
-    void setMIDIClockInterval(long interval)
+    void setMIDIClockInterval(RealTime interval)
         { m_soundDriver->setMIDIClockInterval(interval); }
 
     // Send the MIDI clock now
     //
-    void sendMidiClock(const RealTime &playLatency)
-        { m_soundDriver->sendMidiClock(playLatency); }
+    void sendMidiClock()
+        { m_soundDriver->sendMidiClock(); }
 
     void setSequencerDataBlock(SequencerDataBlock *db)
         { m_soundDriver->setSequencerDataBlock(db); }
 
-    QString getStatusLog() { return m_soundDriver->getStatusLog(); }
+    void setExternalTransportControl(ExternalTransport *transport)
+        { m_soundDriver->setExternalTransportControl(transport); }
 
-    std::vector<PlayableAudioFile*> getPlayingAudioFiles()
-        { return m_soundDriver->getPlayingAudioFiles(); }
+    QString getStatusLog() { return m_soundDriver->getStatusLog(); }
 
     void sleep(const Rosegarden::RealTime &rt)
         { return m_soundDriver->sleep(rt); }

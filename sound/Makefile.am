@@ -19,6 +19,7 @@ COMPILE_FIRST = libRosegardenSound
 noinst_LTLIBRARIES = libRosegardenSound.la
 libRosegardenSound_la_SOURCES = AudioFile.cpp \
                                 AudioFileManager.cpp \
+				AudioProcess.cpp \
                                 BWFAudioFile.cpp \
 				ControlBlock.cpp \
                                 MappedComposition.cpp \
@@ -34,7 +35,6 @@ libRosegardenSound_la_SOURCES = AudioFile.cpp \
                                 PeakFileManager.cpp \
                                 Plugins.cpp \
                                 RIFFAudioFile.cpp \
-                                RingBuffer.cpp \
 				SequencerDataBlock.cpp \
                                 SF2PatchExtractor.cpp \
                                 SoundFile.cpp \
@@ -46,7 +46,9 @@ lib_LTLIBRARIES = libRosegardenSequencer.la
 EXTRA_libRosegardenSequencer_la_SOURCES = MidiArts.cc \
                                           ArtsDriver.cpp \
                                           AlsaDriver.cpp \
+					  JackDriver.cpp \
                                           MidiRecord.cpp \
+					  PlayableAudioFile.cpp \
                                           SoundDriver.cpp \
                                           Sequencer.cpp
 
@@ -56,14 +58,17 @@ EXTRA_libRosegardenSequencer_la_SOURCES = MidiArts.cc \
 
 # No sound support (use DummyDriver)
 if NO_SOUND
-libRosegardenSequencer_la_SOURCES = SoundDriver.cpp \
+libRosegardenSequencer_la_SOURCES = PlayableAudioFile.cpp \
+				    SoundDriver.cpp \
                                     Sequencer.cpp
 else
 
 if HAVE_ALSA
 libRosegardenSequencer_la_SOURCES = AlsaDriver.cpp \
                                     AlsaPort.cpp \
+				    JackDriver.cpp \
                                     LADSPAPluginInstance.cpp \
+				    PlayableAudioFile.cpp \
                                     Sequencer.cpp \
                                     SoundDriver.cpp
 
@@ -74,6 +79,7 @@ arts_libs=-lsoundserver_idl -lartsmidi -lartsflow -lartsmodules -lartskde
 libRosegardenSequencer_la_SOURCES = MidiArts.cc \
                                     ArtsDriver.cpp \
                                     MidiRecord.cpp \
+				    PlayableAudioFile.cpp \
                                     Sequencer.cpp \
                                     SoundDriver.cpp
 endif

@@ -127,8 +127,9 @@ ArtsDriver::generateInstruments()
                                                        1);
         m_instruments.push_back(instr);
     }
-
 }
+
+
 
 void
 ArtsDriver::initialise()
@@ -327,8 +328,7 @@ ArtsDriver::initialiseAudio()
 }
 
 void
-ArtsDriver::initialisePlayback(const Rosegarden::RealTime &position,
-                               const Rosegarden::RealTime &/*playLatency*/)
+ArtsDriver::initialisePlayback(const Rosegarden::RealTime &position)
 {
 #ifdef DEBUG_ARTS
     cout << "ArtsDriver - initialisePlayback" << endl;
@@ -357,20 +357,18 @@ ArtsDriver::stopPlayback()
 
 
 void
-ArtsDriver::resetPlayback(const RealTime &position,
-                          const RealTime &latency)
+ArtsDriver::resetPlayback(const RealTime &position)
 {
     //allNotesOff();
     RealTime artsPlayStartTime = RealTime(m_artsPlayStartTime.sec,
-                                          m_artsPlayStartTime.usec);
+                                          m_artsPlayStartTime.usec * 1000);
 
     // save the modification period
     RealTime  modifyNoteOff = m_playStartPosition - artsPlayStartTime;
 
-    m_artsPlayStartTime = deltaTime(m_midiPlayPort.time(),
-                                    Arts::TimeStamp(latency.sec, latency.usec));
+    m_artsPlayStartTime = m_midiPlayPort.time();
     artsPlayStartTime = RealTime(m_artsPlayStartTime.sec,
-                                 m_artsPlayStartTime.usec);
+                                 m_artsPlayStartTime.usec * 1000);
 
     m_playStartPosition = position;
 
@@ -408,7 +406,7 @@ ArtsDriver::allNotesOff()
         //
         noteOff = (*i)->getRealTime();
         event.time = aggregateTime(m_artsPlayStartTime,
-                       Arts::TimeStamp(noteOff.sec, noteOff.usec));
+                       Arts::TimeStamp(noteOff.sec, noteOff.usec()));
 
         event.command.data1 = (*i)->getPitch();
         event.command.data2 = 127;
@@ -439,7 +437,7 @@ ArtsDriver::processNotesOff(const RealTime &time)
             // Conversion from RealTime to Arts::TimeStamp
             noteOffTime = (*i)->getRealTime();
             event.time = aggregateTime(m_artsPlayStartTime,
-                           Arts::TimeStamp(noteOffTime.sec, noteOffTime.usec));
+                           Arts::TimeStamp(noteOffTime.sec, noteOffTime.usec()));
 
             event.command.data1 = (*i)->getPitch();
             event.command.data2 = 127;
@@ -456,10 +454,10 @@ ArtsDriver::processNotesOff(const RealTime &time)
 }
 
 void
-ArtsDriver::processAudioQueue(const RealTime &/*playLatency*/, bool /*now*/)
+ArtsDriver::processAudioQueue(bool /*now*/)
 {
     // Now check queue for events that need playing
-    std::vector<PlayableAudioFile*>::iterator it;
+    std::list<PlayableAudioFile*>::iterator it;
     RealTime currentTime = getSequencerTime();
 
     for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); ++it)
@@ -531,8 +529,8 @@ ArtsDriver::getSequencerTime()
         Arts::TimeStamp artsTimeNow = m_midiPlayPort.time();
 
         Rosegarden::RealTime internalRelativeTime =
-        Rosegarden::RealTime(artsTimeNow.sec, artsTimeNow.usec) -
-        Rosegarden::RealTime(m_artsPlayStartTime.sec, m_artsPlayStartTime.usec);
+        Rosegarden::RealTime(artsTimeNow.sec, artsTimeNow.usec * 1000) -
+        Rosegarden::RealTime(m_artsPlayStartTime.sec, m_artsPlayStartTime.usec * 1000);
         return (m_playStartPosition + internalRelativeTime);
     }
 
@@ -540,7 +538,7 @@ ArtsDriver::getSequencerTime()
 }
 
 MappedComposition*
-ArtsDriver::getMappedComposition(const RealTime &playLatency)
+ArtsDriver::getMappedComposition()
 {
     // clear out our global segment
     m_recordComposition.clear();
@@ -565,8 +563,7 @@ ArtsDriver::getMappedComposition(const RealTime &playLatency)
          midiQueueIt++)
     {
         processMidiIn(midiQueueIt->command,
-                      recordTime(midiQueueIt->time),
-                      playLatency);
+                      recordTime(midiQueueIt->time));
     }
 
     // Free the returned std::vector from here as the aRts stub
@@ -578,7 +575,6 @@ ArtsDriver::getMappedComposition(const RealTime &playLatency)
     
 void
 ArtsDriver::processMidiOut(const MappedComposition &mC,
-                           const RealTime &playLatency,
                            bool now)
 {
     Arts::MidiEvent event;
@@ -610,15 +606,14 @@ ArtsDriver::processMidiOut(const MappedComposition &mC,
         if (!now)
             assert((*i)->getEventTime() >= m_playStartPosition);
 
-        // Relative to start of the piece including play latency
+        // Relative to start of the piece
         //
-        midiRelativeTime = (*i)->getEventTime() - m_playStartPosition +
-                            playLatency;
+        midiRelativeTime = (*i)->getEventTime() - m_playStartPosition;
 
         // Add the aRts play start time
         //
         event.time = aggregateTime(m_artsPlayStartTime,
-                  Arts::TimeStamp(midiRelativeTime.sec, midiRelativeTime.usec));
+                  Arts::TimeStamp(midiRelativeTime.sec, midiRelativeTime.usec()));
 
         // Use the duration to find out when it ends
         //
@@ -753,7 +748,7 @@ ArtsDriver::processMidiOut(const MappedComposition &mC,
     // not processing any NOTE ONs.
     //
     //
-    if (midiRelativeTime.sec == 0 && midiRelativeTime.usec == 0)
+    if (midiRelativeTime.sec == 0 && midiRelativeTime.nsec == 0)
     {
         Arts::TimeStamp now = m_midiPlayPort.time();
         int sec = now.sec - m_artsPlayStartTime.sec;
@@ -767,7 +762,7 @@ ArtsDriver::processMidiOut(const MappedComposition &mC,
 
         Arts::TimeStamp relativeNow(sec, usec);
         midiRelativeTime =
-               Rosegarden::RealTime(relativeNow.sec, relativeNow.usec);
+               Rosegarden::RealTime(relativeNow.sec, relativeNow.usec * 1000);
     }
 
     // Process NOTE OFFs for current time
@@ -804,18 +799,13 @@ ArtsDriver::deltaTime(const Arts::TimeStamp &ts1, const Arts::TimeStamp &ts2)
 
 void
 ArtsDriver::processMidiIn(const Arts::MidiCommand &midiCommand,
-                          const Arts::TimeStamp &timeStamp,
-                          const RealTime &playLatency)
+                          const Arts::TimeStamp &timeStamp)
 {
 
     Rosegarden::MidiByte channel;
     Rosegarden::MidiByte message;
     Rosegarden::RealTime guiTimeStamp(timeStamp.sec, timeStamp.usec);
   
-    // Remove the playback latency from the timing
-    //
-    guiTimeStamp = guiTimeStamp - playLatency;
-
     channel = midiCommand.status & MIDI_CHANNEL_NUM_MASK;
     message = midiCommand.status & MIDI_MESSAGE_TYPE_MASK;
 
@@ -859,7 +849,7 @@ ArtsDriver::processMidiIn(const Arts::MidiCommand &midiCommand,
 
                 // for the moment, ensure we're positive like this
                 //
-                assert(duration.sec >= 0 || duration.usec >= 0 );
+                assert(duration.sec >= 0 || duration.nsec >= 0 );
 
                 // set the duration
                 m_noteOnMap[chanNoteKey]->setDuration(duration);
@@ -958,7 +948,6 @@ ArtsDriver::processMidiIn(const Arts::MidiCommand &midiCommand,
 
 void
 ArtsDriver::processEventsOut(const MappedComposition &mC,
-                             const RealTime &playLatency,
                              bool now)
 {
     // Start playback if it isn't already
@@ -989,10 +978,10 @@ ArtsDriver::processEventsOut(const MappedComposition &mC,
     }
 
     // do MIDI events
-    processMidiOut(mC, playLatency, now);
+    processMidiOut(mC, now);
 
     // do any audio events
-    processAudioQueue(playLatency, now);
+    processAudioQueue(now);
 }
 
 bool
@@ -1033,14 +1022,13 @@ ArtsDriver::record(RecordStatus recordStatus)
 }
 
 void
-ArtsDriver::processPending(const RealTime &playLatency)
+ArtsDriver::processPending()
 {
     if (m_playing)
     {
         Arts::TimeStamp artsTime = aggregateTime(m_artsPlayStartTime,
                                                  m_midiPlayPort.time());
-        processNotesOff(Rosegarden::RealTime(artsTime.sec, artsTime.usec) +
-                        playLatency);
+        processNotesOff(Rosegarden::RealTime(artsTime.sec, artsTime.usec * 1000));
     }
 }
 

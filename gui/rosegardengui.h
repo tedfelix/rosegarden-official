@@ -198,6 +198,8 @@ public:
     virtual void record()             { slotRecord(); }
     virtual void rewindToBeginning()  { slotRewindToBeginning(); }
     virtual void fastForwardToEnd()   { slotFastForwardToEnd(); }
+    virtual void jumpToTime(int sec, int usec) { slotJumpToTime(sec, usec); }
+    virtual void startAtTime(int sec, int usec) { slotStartAtTime(sec, usec); }
 
     /**
      * Start the sequencer auxiliary process
@@ -894,6 +896,8 @@ public slots:
     void slotToggleRecord();
     void slotRewindToBeginning();
     void slotFastForwardToEnd();
+    void slotJumpToTime(int sec, int usec);
+    void slotStartAtTime(int sec, int usec);
     void slotRefreshTimeDisplay();
 
 

@@ -1,21 +1,22 @@
 // -*- c-indentation-style:"stroustrup" c-basic-offset: 4 -*-
+
 /*
-  Rosegarden-4
-  A sequencer and musical notation editor.
+    Rosegarden-4
+    A sequencer and musical notation editor.
 
-  This program is Copyright 2000-2003
-  Guillaume Laurent   <glaurent@telegraph-road.org>,
-  Chris Cannam        <cannam@all-day-breakfast.com>,
-  Richard Bown        <bownie@bownie.com>
+    This program is Copyright 2000-2003
+        Guillaume Laurent   <glaurent@telegraph-road.org>,
+        Chris Cannam        <cannam@all-day-breakfast.com>,
+        Richard Bown        <bownie@bownie.com>
 
-  The moral right of the authors to claim authorship of this work
-  has been asserted.
+    The moral right of the authors to claim authorship of this work
+    has been asserted.
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.  See the file
-  COPYING included with this distribution for more information.
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
 */
 
 #include <vector>
@@ -29,60 +30,62 @@
 #ifdef HAVE_LADSPA
 
 #include <ladspa.h>
+#include "RunnablePluginInstance.h"
 
 namespace Rosegarden
 {
 
-// LADSPA plugin instance
+// LADSPA plugin instance.  LADSPA is a variable block size API, but
+// for one reason and another it's more convenient to use a fixed
+// block size in this wrapper.
 //
-class LADSPAPluginInstance
+class LADSPAPluginInstance : public RunnablePluginInstance
 {
 public:
+    // Constructor that creates the buffers internally
+    // 
     LADSPAPluginInstance(Rosegarden::InstrumentId instrument,
                          unsigned long ladspaId,
                          int position,
+			 unsigned long sampleRate,
+			 size_t bufferSize,
                          const LADSPA_Descriptor* descriptor);
 
-    ~LADSPAPluginInstance();
+    // Constructor that uses shared buffers
+    // 
+    LADSPAPluginInstance(Rosegarden::InstrumentId instrument,
+                         unsigned long ladspaId,
+                         int position,
+			 unsigned long sampleRate,
+			 size_t bufferSize,
+			 sample_t **inputBuffers,
+			 sample_t **outputBuffers,
+                         const LADSPA_Descriptor* descriptor);
+
+    virtual ~LADSPAPluginInstance();
 
     Rosegarden::InstrumentId getInstrument() const { return m_instrument; }
     unsigned long getLADSPAId() const { return m_ladspaId; }
     int getPosition() const { return m_position; }
 
-    // Connection of data (and behind the scenes control) ports
-    //
-    void connectPorts(LADSPA_Data *dataIn1,
-                      LADSPA_Data *dataIn2,
-                      LADSPA_Data *dataOut1,
-                      LADSPA_Data *dataOut2);
-
     // Set control ports
     //
-    void setPortValue(unsigned long portNumber, LADSPA_Data value);
+    virtual void setPortValue(unsigned int portNumber, float value);
+
+    // RunnablePluginInstance API
+    //
+    virtual void run();
+    virtual size_t getBufferSize() { return m_bufferSize; }
+    virtual size_t getAudioInputCount() { return m_audioPortsIn.size(); }
+    virtual size_t getAudioOutputCount() { return m_audioPortsOut.size(); }
+    virtual sample_t **getAudioInputBuffers() { return m_inputBuffers; }
+    virtual sample_t **getAudioOutputBuffers() { return m_outputBuffers; }
 
     // Plugin control
     //
-    void instantiate(unsigned long sampleRate);
     void activate();
-    void run(unsigned long sampleCount);
     void deactivate();
     void cleanup();
-
-    // Audio channels out to mix
-    unsigned int getAudioChannelsOut() const { return m_audioPortsOut.size(); }
-
-    // During operation we need to know which plugins have
-    // already been processed as part of the playable audio
-    // file loop and which should still be run() outside 
-    // this loop.
-    //
-    bool hasBeenProcessed() const { return m_processed; }
-    void setProcessed(bool value) { m_processed = value; }
-
-    // Do we want to bypass this plugin?
-    //
-    bool isBypassed() const { return m_bypassed; }
-    void setBypassed(bool value) { m_bypassed = value; }
 
     // Order by instrument and then position
     //
@@ -99,6 +102,12 @@ public:
     };
 
 protected:
+    void init();
+    void instantiate(unsigned long sampleRate);
+
+    // Connection of data (and behind the scenes control) ports
+    //
+    void connectPorts();
     
     Rosegarden::InstrumentId  m_instrument;
     unsigned long             m_ladspaId;
@@ -111,17 +120,19 @@ protected:
     std::vector<int>          m_audioPortsIn;
     std::vector<int>          m_audioPortsOut;
 
+    size_t                    m_bufferSize;
+    sample_t                **m_inputBuffers;
+    sample_t                **m_outputBuffers;
+    bool                      m_ownBuffers;
+    
     bool                      m_processed;
     bool                      m_bypassed;
-
 };
 
 typedef std::vector<LADSPAPluginInstance*> PluginInstances;
-typedef std::vector<LADSPAPluginInstance*>::iterator PluginIterator;
+
 typedef std::multiset<LADSPAPluginInstance*,
-          LADSPAPluginInstance::PluginCmp> OrderedPluginList;
-typedef std::multiset<LADSPAPluginInstance*,
-          LADSPAPluginInstance::PluginCmp>::iterator OrderedPluginIterator;
+		      LADSPAPluginInstance::PluginCmp> OrderedPluginList;
 
 };
 

@@ -44,6 +44,47 @@ protected:
 };
 */
 
+// We need one of these because the QSlider is stupid and won't
+// let us have the maximum value of the slider at the top.  Or
+// just I can't find a way of doing it.  Anyway, this is a 
+// vertically aligned volume/MIDI fader.
+//
+class RosegardenFader : public QSlider
+{
+    Q_OBJECT
+public:
+    RosegardenFader(QWidget *parent);
+
+public slots:
+    void slotValueChanged(int);
+
+    // Use this in preference to setValue - horrible hack but it's
+    // quicker than fiddling about with the insides of QSlider.
+    //
+    virtual void setFader(int);
+
+    int faderLevel() const { return maxValue() - value(); }
+
+    void slotFloatTimeout();
+
+    // Prependable text for tooltip
+    //
+    void setPrependText(const QString &text) { m_prependText = text; }
+
+signals:
+    void faderChanged(int);
+
+protected slots:
+    void slotShowFloatText();
+
+protected:
+
+    RosegardenTextFloat *m_float;
+    QTimer              *m_floatTimer;
+
+    QString              m_prependText;
+};
+
 
 class AudioFaderWidget : public QWidget
 {

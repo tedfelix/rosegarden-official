@@ -349,92 +349,6 @@ void CurrentProgressDialog::slotCurrentProgressDialogDestroyed()
 CurrentProgressDialog* CurrentProgressDialog::m_instance = 0;
 RosegardenProgressDialog* CurrentProgressDialog::m_currentProgressDialog = 0;
 
-//----------------------------------------
-
-RosegardenFader::RosegardenFader(QWidget *parent):
-    QSlider(Qt::Vertical, parent),
-    m_float(new RosegardenTextFloat(this)),
-    m_floatTimer(new QTimer()),
-    m_prependText("")
-{
-    connect(this, SIGNAL(valueChanged(int)),
-            this, SLOT(slotValueChanged(int)));
-
-    connect(this, SIGNAL(sliderPressed()),
-            this, SLOT(slotShowFloatText()));
-
-    // connect timer
-    connect(m_floatTimer, SIGNAL(timeout()), this, SLOT(slotFloatTimeout()));
-
-    m_float->hide(); // hide the floater
-}
-
-// We invert the value - so that it appear the top of the fader
-// is our maximum and vice versa.  For the moment we only catch
-// and re-emit this signal - so beware.
-//
-void
-RosegardenFader::slotValueChanged(int value)
-{
-    int adjValue = maxValue() - value;
-    if (adjValue < 0) adjValue = 0;
-
-    emit faderChanged(adjValue);
-
-    slotShowFloatText();
-}
-
-void 
-RosegardenFader::setFader(int value)
-{
-    emit faderChanged(value);
-
-    value = maxValue() - value;
-
-    if (value > maxValue()) value = maxValue();
-    if (value < minValue()) value = minValue();
-
-    setValue(value);
-}
-
-void
-RosegardenFader::slotShowFloatText()
-{
-    float dbValue = 10.0 * log10(float(maxValue() - value())/100.0);
-
-    // draw on the float text
-    //m_float->setText(QString("%1").arg(maxValue() - value()));
-    m_float->setText(QString("%1%2 dB").arg(m_prependText).arg(dbValue));
-
-    // Reposition - we need to sum the relative positions up to the
-    // topLevel or dialog to please move().
-    //
-    QWidget *par = parentWidget();
-    QPoint totalPos = this->pos();
-
-    while (par->parentWidget() && !par->isTopLevel() && !par->isDialog())
-    {
-        totalPos += par->pos();
-        par = par->parentWidget();
-    }
-    // Move just top/right
-    //
-    m_float->move(totalPos + QPoint(width() + 2, 0));
-
-    // Show
-    m_float->show();
-
-    // one shot, 500ms
-    m_floatTimer->start(500, true);
-}
-
-
-void
-RosegardenFader::slotFloatTimeout()
-{
-    m_float->hide();
-}
-
 
 
 // ------------------ RosegardenRotary -----------------
@@ -1662,9 +1576,9 @@ RosegardenTimeWidget::populate()
 	if (m_msec) {
 	    m_msec->setMinValue(0);
 	    m_msec->setMaxValue(999);
-	    m_msec->setValue(rt.usec / 1000);
+	    m_msec->setValue(rt.msec());
 	} else {
-	    m_msecLabel->setText(QString("%1").arg(rt.usec / 1000));
+	    m_msecLabel->setText(QString("%1").arg(rt.msec()));
 	}
 
 	bool change = (m_composition->getTempoChangeNumberAt(endTime) !=
@@ -1776,9 +1690,9 @@ RosegardenTimeWidget::populate()
 	if (m_msec) {
 	    m_msec->setMinValue(0);
 	    m_msec->setMaxValue(999);
-	    m_msec->setValue(rt.usec / 1000);
+	    m_msec->setValue(rt.msec());
 	} else {
-	    m_msecLabel->setText(QString("%1").arg(rt.usec / 1000));
+	    m_msecLabel->setText(QString("%1").arg(rt.msec()));
 	}
     }
 
@@ -1896,6 +1810,6 @@ RosegardenTimeWidget::slotSecOrMSecChanged(int)
     int sec = m_sec->value();
     int msec = m_msec->value();
 
-    slotSetRealTime(Rosegarden::RealTime(sec, msec * 1000));
+    slotSetRealTime(Rosegarden::RealTime(sec, msec * 1000000));
 }
 

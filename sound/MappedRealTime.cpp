@@ -28,7 +28,7 @@ QDataStream&
 operator>>(QDataStream &dS, MappedRealTime *mRT)
 {
     dS >> mRT->sec;
-    dS >> mRT->usec;
+    dS >> mRT->nsec;
     return dS;
 }
 
@@ -36,7 +36,7 @@ QDataStream&
 operator<<(QDataStream &dS, MappedRealTime *mRT)
 {
     dS << mRT->sec;
-    dS << mRT->usec;
+    dS << mRT->nsec;
     return dS;
 }
 
@@ -44,7 +44,7 @@ QDataStream&
 operator>>(QDataStream &dS, MappedRealTime &mRT)
 {
     dS >> mRT.sec;
-    dS >> mRT.usec;
+    dS >> mRT.nsec;
     return dS;
 }
 
@@ -53,7 +53,7 @@ QDataStream&
 operator<<(QDataStream &dS, const MappedRealTime &mRT)
 {
     dS << mRT.sec;
-    dS << mRT.usec;
+    dS << mRT.nsec;
     return dS;
 }
 

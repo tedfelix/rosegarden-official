@@ -48,7 +48,7 @@ main(int /*argc*/, char ** /*argv*/)
 
     while (true)
     {
-       mC = arts->getMappedComposition(Rosegarden::RealTime(0, 40));
+       mC = arts->getMappedComposition(Rosegarden::RealTime(0, 40000));
        cout << "COMPOSITION = " << mC->size() << endl;
        sleep(1);
     }

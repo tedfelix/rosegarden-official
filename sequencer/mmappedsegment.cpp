@@ -230,19 +230,19 @@ operator<<(kdbgstream &out, const Rosegarden::RealTime &rt)
 	out << " ";
     }
 
-    long s = (rt.sec < 0 ? -rt.sec : rt.sec);
-    long u = (rt.usec < 0 ? -rt.usec : rt.usec);
+    int s = (rt.sec < 0 ? -rt.sec : rt.sec);
+    int n = (rt.nsec < 0 ? -rt.nsec : rt.nsec);
 
     out << s << ".";
 
-    long uu(u);
-    if (uu == 0) out << "00000";
-    else while (uu < 100000) {
+    int nn(n);
+    if (nn == 0) out << "00000000";
+    else while (nn < (1000000000 / 10)) {
 	out << "0";
-	uu *= 10;
+	nn *= 10;
     }
     
-    out << u << "R";
+    out << n << "R";
     return out;
 }
 
@@ -294,7 +294,7 @@ void MmappedSegmentsMetaIterator::clear()
 
 void MmappedSegmentsMetaIterator::reset()
 {
-    m_currentTime.sec = m_currentTime.usec = 0;
+    m_currentTime.sec = m_currentTime.nsec = 0;
 
     for(segmentiterators::iterator i = m_iterators.begin(); i != m_iterators.end(); ++i) {
         (*i)->reset();
@@ -441,43 +441,6 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool firstFetch,
                                 << endl;
 #endif
 
-                // If this is the first slice we cut, that event is
-                // audio and partially overlaps the slice, fix the
-                // audio start marker and stuff it in.
-                //
-                if (evt->getType() == MappedEvent::Audio)
-                {
-                    if (evt->getEventTime() < startTime) 
-                    {
-                        if (firstFetch)
-                        {
-
-			    Rosegarden::RealTime offset =
-				startTime - evt->getEventTime();
-
-                            std::cout << "fillCompositionWithEventsUntil : "
-				      << "adjusting event audio start marker"
-				      << " to " << evt->getAudioStartMarker() + offset << endl;
-
-                            // Reset event timings
-                            //
-                            evt->setAudioStartMarker(evt->getAudioStartMarker() + offset);
-                            evt->setEventTime(evt->getEventTime() + offset);
-                            evt->setDuration(evt->getDuration() - offset);
-                        }
-                        else
-                        {
-                            // Ignore an audio event if we're not first fetch
-                            // and the start time is before current slice -
-                            // it must already be playing (or will soon be 
-                            // started by the "rationalise" code).
-                            //
-                            continue;
-                        }
-                    }
-                }
-
-
                 if (evt->getType() == MappedEvent::TimeSignature) {
                     // do something
                     //SEQUENCER_DEBUG << "timeSig event\n";
@@ -556,6 +519,8 @@ MmappedSegmentsMetaIterator::stopPlayingAudioSegment(int segmentRuntimeId)
     }
 }
 
+//!!! is this obsolete?
+//!!! we might need it for dropping in in the middle of a file (e.g. unmuting)
 std::vector<MappedEvent*>& 
 MmappedSegmentsMetaIterator::getPlayingAudioFiles(const Rosegarden::RealTime &songPosition)
 {

@@ -183,11 +183,11 @@ operator<<(QDataStream &dS, MappedEvent *mE)
     dS << (unsigned int)mE->getData1();
     dS << (unsigned int)mE->getData2();
     dS << (unsigned int)mE->getEventTime().sec;
-    dS << (unsigned int)mE->getEventTime().usec;
+    dS << (unsigned int)mE->getEventTime().nsec;
     dS << (unsigned int)mE->getDuration().sec;
-    dS << (unsigned int)mE->getDuration().usec;
+    dS << (unsigned int)mE->getDuration().nsec;
     dS << (unsigned int)mE->getAudioStartMarker().sec;
-    dS << (unsigned int)mE->getAudioStartMarker().usec;
+    dS << (unsigned int)mE->getAudioStartMarker().nsec;
     dS << (unsigned long)mE->getDataBlockId();
     dS << mE->getRuntimeSegmentId();
 
@@ -203,11 +203,11 @@ operator<<(QDataStream &dS, const MappedEvent &mE)
     dS << (unsigned int)mE.getData1();
     dS << (unsigned int)mE.getData2();
     dS << (unsigned int)mE.getEventTime().sec;
-    dS << (unsigned int)mE.getEventTime().usec;
+    dS << (unsigned int)mE.getEventTime().nsec;
     dS << (unsigned int)mE.getDuration().sec;
-    dS << (unsigned int)mE.getDuration().usec;
+    dS << (unsigned int)mE.getDuration().nsec;
     dS << (unsigned int)mE.getAudioStartMarker().sec;
-    dS << (unsigned int)mE.getAudioStartMarker().usec;
+    dS << (unsigned int)mE.getAudioStartMarker().nsec;
     dS << (unsigned long)mE.getDataBlockId();
     dS << mE.getRuntimeSegmentId();
 
@@ -218,8 +218,8 @@ QDataStream&
 operator>>(QDataStream &dS, MappedEvent *mE)
 {
     unsigned int trackId = 0, instrument = 0, type = 0, data1 = 0, data2 = 0;
-    long eventTimeSec = 0, eventTimeUsec = 0, durationSec = 0, durationUsec = 0,
-        audioSec = 0, audioUsec = 0;
+    long eventTimeSec = 0, eventTimeNsec = 0, durationSec = 0, durationNsec = 0,
+        audioSec = 0, audioNsec = 0;
     std::string dataBlock;
     unsigned long dataBlockId = 0;
     int runtimeSegmentId = -1;
@@ -230,11 +230,11 @@ operator>>(QDataStream &dS, MappedEvent *mE)
     dS >> data1;
     dS >> data2;
     dS >> eventTimeSec;
-    dS >> eventTimeUsec;
+    dS >> eventTimeNsec;
     dS >> durationSec;
-    dS >> durationUsec;
+    dS >> durationNsec;
     dS >> audioSec;
-    dS >> audioUsec;
+    dS >> audioNsec;
     dS >> dataBlockId;
     dS >> runtimeSegmentId;
 
@@ -243,9 +243,9 @@ operator>>(QDataStream &dS, MappedEvent *mE)
     mE->setType((MappedEvent::MappedEventType)type);
     mE->setData1((MidiByte)data1);
     mE->setData2((MidiByte)data2);
-    mE->setEventTime(RealTime(eventTimeSec, eventTimeUsec));
-    mE->setDuration(RealTime(durationSec, durationUsec));
-    mE->setAudioStartMarker(RealTime(audioSec, audioUsec));
+    mE->setEventTime(RealTime(eventTimeSec, eventTimeNsec));
+    mE->setDuration(RealTime(durationSec, durationNsec));
+    mE->setAudioStartMarker(RealTime(audioSec, audioNsec));
     mE->setDataBlockId(dataBlockId);
     mE->setRuntimeSegmentId(runtimeSegmentId);
 
@@ -256,8 +256,8 @@ QDataStream&
 operator>>(QDataStream &dS, MappedEvent &mE)
 {
     unsigned int trackId = 0, instrument = 0, type = 0, data1 = 0, data2 = 0;
-    long eventTimeSec = 0, eventTimeUsec = 0, durationSec = 0, durationUsec = 0,
-        audioSec = 0, audioUsec = 0;
+    long eventTimeSec = 0, eventTimeNsec = 0, durationSec = 0, durationNsec = 0,
+        audioSec = 0, audioNsec = 0;
     std::string dataBlock;
     unsigned long dataBlockId = 0;
     int runtimeSegmentId = -1;
@@ -268,11 +268,11 @@ operator>>(QDataStream &dS, MappedEvent &mE)
     dS >> data1;
     dS >> data2;
     dS >> eventTimeSec;
-    dS >> eventTimeUsec;
+    dS >> eventTimeNsec;
     dS >> durationSec;
-    dS >> durationUsec;
+    dS >> durationNsec;
     dS >> audioSec;
-    dS >> audioUsec;
+    dS >> audioNsec;
     dS >> dataBlockId;
     dS >> runtimeSegmentId;
 
@@ -281,9 +281,9 @@ operator>>(QDataStream &dS, MappedEvent &mE)
     mE.setType((MappedEvent::MappedEventType)type);
     mE.setData1((MidiByte)data1);
     mE.setData2((MidiByte)data2);
-    mE.setEventTime(RealTime(eventTimeSec, eventTimeUsec));
-    mE.setDuration(RealTime(durationSec, durationUsec));
-    mE.setAudioStartMarker(RealTime(audioSec, audioUsec));
+    mE.setEventTime(RealTime(eventTimeSec, eventTimeNsec));
+    mE.setDuration(RealTime(durationSec, durationNsec));
+    mE.setAudioStartMarker(RealTime(audioSec, audioNsec));
     mE.setDataBlockId(dataBlockId);
     mE.setRuntimeSegmentId(runtimeSegmentId);
 

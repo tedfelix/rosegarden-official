@@ -556,11 +556,11 @@ int main(int argc, char *argv[])
 	gettimeofday(&now, 0);
 
 	Rosegarden::RealTime visibleFor =
-	    Rosegarden::RealTime(now.tv_sec, now.tv_usec) -
-	    Rosegarden::RealTime(logoShowTime.tv_sec, logoShowTime.tv_usec);
+	    Rosegarden::RealTime(now.tv_sec, now.tv_usec * 1000) -
+	    Rosegarden::RealTime(logoShowTime.tv_sec, logoShowTime.tv_usec * 1000);
 
         if (visibleFor < Rosegarden::RealTime(2, 0)) {
-	    int waitTime = visibleFor.sec * 1000 + visibleFor.usec / 1000;
+	    int waitTime = visibleFor.sec * 1000 + visibleFor.msec();
             QTimer::singleShot(2500 - waitTime, startLogo, SLOT(close()));
         } else {
             startLogo->close();

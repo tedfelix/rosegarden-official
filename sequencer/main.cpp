@@ -54,12 +54,27 @@ static KCmdLineOptions options[] =
     };
 
 static void
+cleanup()
+{
+    RosegardenSequencerApp *tmpRoseSeq = roseSeq;
+
+    if (roseSeq) {
+	roseSeq = 0;
+        delete tmpRoseSeq;
+    }
+}    
+
+static bool _mainThread = false; // set true later
+static bool _exiting = false;
+
+static void
 signalHandler(int /*sig*/)
 {
-    if (roseSeq)
-        delete roseSeq;
-
-    exit(0);
+    if (_mainThread) {
+	_exiting = true;
+	cleanup();
+	exit(0);
+    }
 }
 
 int main(int argc, char *argv[])
@@ -136,11 +151,6 @@ int main(int argc, char *argv[])
     // make sure the loop doesn't eat up all the
     // processor - we're not in that much of a rush!
     //
-    // Soon perhaps we'll put some throttling into
-    // the loop sleep time(s) to allow for dropped
-    // notes etc. .. ?
-    //
-    //
     TransportStatus lastSeqStatus = roseSeq->getStatus();
 
     // Register signal handler
@@ -150,18 +160,13 @@ int main(int argc, char *argv[])
     signal(SIGHUP, signalHandler);
     signal(SIGQUIT, signalHandler);
 
-    Rosegarden::RealTime sleepTime = Rosegarden::RealTime(0, 10000);
+    _mainThread = true;
 
-    while (roseSeq && roseSeq->getStatus() != QUIT)
+    Rosegarden::RealTime sleepTime = Rosegarden::RealTime(0, 10000000);
+
+    while (!_exiting && roseSeq && roseSeq->getStatus() != QUIT)
     {
-        // Update internal clock and send pointer position
-        // change event to GUI - this is the heartbeat of
-        // the Sequencer - it doesn't tick over without
-        // this call.
-        //
-        // Also attempt to send the MIDI clock at this point.
-        //
-        roseSeq->updateClocks();
+	bool atLeisure = true;
 
 	switch(roseSeq->getStatus())
 	{
@@ -252,8 +257,10 @@ int main(int argc, char *argv[])
 	    break;
 
 	case STOPPING:
+	    // There's no call to roseSeq to actually process the
+	    // stop, because this arises from a DCOP call from the GUI
+	    // direct to roseSeq to start with
 	    roseSeq->setStatus(STOPPED);
-	    Rosegarden::Profiles::getInstance()->dump(); //!!!
 	    SEQUENCER_DEBUG << "RosegardenSequencer - Stopped" << endl;
 	    break;
 
@@ -271,16 +278,30 @@ int main(int argc, char *argv[])
 	    break;
 	}
 
-        if (lastSeqStatus != roseSeq->getStatus())
-            roseSeq->notifySequencerStatus();
+        // Update internal clock and send pointer position
+        // change event to GUI - this is the heartbeat of
+        // the Sequencer - it doesn't tick over without
+        // this call.
+        //
+        // Also attempt to send the MIDI clock at this point.
+        //
+        roseSeq->updateClocks();
 
-        lastSeqStatus = roseSeq->getStatus();
+	// we want to process transport changes immediately
+        if (roseSeq->checkExternalTransport()) {
+	    atLeisure = false;
+	} else if (lastSeqStatus != roseSeq->getStatus()) {
+	    SEQUENCER_DEBUG << "Sequencer status changed from " << lastSeqStatus << " to " << roseSeq->getStatus() << endl;
+            roseSeq->notifySequencerStatus();
+	    lastSeqStatus = roseSeq->getStatus();
+	    atLeisure = false;
+	}
 
 	app.processEvents();
-	roseSeq->sleep(sleepTime);
+	if (atLeisure) roseSeq->sleep(sleepTime);
     }
 
     int rv = app.exec();
-    delete roseSeq;
+    cleanup();
     return rv;
 }

@@ -53,11 +53,11 @@ public:
     SequencerDataBlock(bool initialise);
 
     RealTime getPositionPointer() const {
-	return RealTime(m_positionSec, m_positionUsec);
+	return RealTime(m_positionSec, m_positionNsec);
     }
     void setPositionPointer(const RealTime &rt) {
 	m_positionSec = rt.sec;
-	m_positionUsec = rt.usec;
+	m_positionNsec = rt.nsec;
     }
     
     bool getVisual(MappedEvent &ev) const;
@@ -86,7 +86,7 @@ protected:
     // it anyway).  Likewise we use char[] instead of MappedEvents
 
     int m_positionSec;
-    int m_positionUsec;
+    int m_positionNsec;
 
     int m_visualEventIndex;
     bool m_haveVisualEvent;

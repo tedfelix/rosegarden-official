@@ -51,8 +51,11 @@
 #include "Sequencer.h"
 #include "Event.h"
 #include "MappedStudio.h"
+#include "ExternalTransport.h"
 #include "mmappedsegment.h"
 #include "sequencermapper.h"
+
+#include <deque>
 
 class KURL;
 class KRecentFilesAction;
@@ -68,7 +71,8 @@ namespace Rosegarden { class MappedInstrument; }
  * The sequencer application
  */
 class RosegardenSequencerApp : public KMainWindow,
-                               virtual public RosegardenSequencerIface
+                               virtual public RosegardenSequencerIface,
+			       public Rosegarden::ExternalTransport
 {
     Q_OBJECT
 
@@ -87,13 +91,19 @@ public:
     // Based on RealTime timestamps
     //
     int play(const Rosegarden::RealTime &position,
-             const Rosegarden::RealTime &playLatency,
-             const Rosegarden::RealTime &readAhead);
+             const Rosegarden::RealTime &readAhead,
+	     const Rosegarden::RealTime &audioMix,
+	     const Rosegarden::RealTime &audioRead,
+	     const Rosegarden::RealTime &audioWrite,
+	     long smallFileSize);
 
     // recording
     int record(const Rosegarden::RealTime &position,
-               const Rosegarden::RealTime &playLatency,
                const Rosegarden::RealTime &readAhead,
+	       const Rosegarden::RealTime &audioMix,
+	       const Rosegarden::RealTime &audioRead,
+	       const Rosegarden::RealTime &audioWrite,
+	       long smallFileSize,
                int recordMode);
 
     // looping
@@ -104,20 +114,30 @@ public:
     // Play wrapper for DCOP
     //
     virtual int play(long timeSec,
-                     long timeUsec,
-                     long playLatencySec,
-                     long playLatencyUSec,
+                     long timeNsec,
                      long readAheadSec,
-                     long readAheadUSec);
+                     long readAheadNsec,
+		     long audioMixSec,
+		     long audioMixNsec,
+		     long audioReadSec,
+		     long audioReadNsec,
+		     long audioWriteSec,
+		     long audioWriteNsec,
+		     long smallFileSize);
 
     // Record wrapper for DCOP
     //
     virtual int record(long timeSec,
-                       long timeUSec,
-                       long playLatencySec,
-                       long playLatencyUSec,
+                       long timeNsec,
                        long readAheadSec,
-                       long readAheadUSec,
+                       long readAheadNsec,
+		       long audioMixSec,
+		       long audioMixNsec,
+		       long audioReadSec,
+		       long audioReadNsec,
+		       long audioWriteSec,
+		       long audioWriteNsec,
+		       long smallFileSize,
                        int recordMode);
 
     
@@ -125,12 +145,12 @@ public:
     // of RealTime for DCOP)
     //
     //
-    virtual void jumpTo(long posSec, long posUsec);
+    virtual void jumpTo(long posSec, long posNsec);
 
     // Set a loop on the Sequencer
     //
-    virtual void setLoop(long loopStartSec, long loopStartUSec,
-                         long loopEndSec, long loopEndUSec);
+    virtual void setLoop(long loopStartSec, long loopStartNsec,
+                         long loopEndSec, long loopEndNsec);
  
     // Return the Sound system status (audio/MIDI)
     //
@@ -166,11 +186,11 @@ public:
                                     unsigned char pitch,
                                     unsigned char velocity,
                                     long absTimeSec,
-                                    long absTimeUsec,
+                                    long absTimeNsec,
                                     long durationSec,
-                                    long durationUsec,
+                                    long durationNsec,
                                     long audioStartMarkerSec,
-                                    long audioStartMarkerUSec);
+                                    long audioStartMarkerNsec);
 
     // And now do it properly
     //
@@ -189,6 +209,11 @@ public:
     virtual void setPlausibleConnection(unsigned int deviceId,
 					QString idealConnection);
     
+    virtual unsigned int getTimers();
+    virtual QString getTimer(unsigned int n);
+    virtual QString getCurrentTimer();
+    virtual void setCurrentTimer(QString timer);
+
     // Audio monitoring
     //
     virtual void setAudioMonitoring(long value);
@@ -251,7 +276,7 @@ public:
 
     // Set Quarter note length
     //
-    virtual void setQuarterNoteLength(long timeSec, long timeUSec);
+    virtual void setQuarterNoteLength(long timeSec, long timeNsec);
 
     // Get a status report
     // 
@@ -277,6 +302,8 @@ public:
 
     // Update internal clock and send GUI position pointer movement
     void updateClocks();
+
+    bool checkExternalTransport();
 
     // Sends status changes up to GUI
     void notifySequencerStatus();
@@ -332,11 +359,17 @@ public:
     //
     void initialiseStudio();
 
-    // Ensure that the sequencer is only playing audio files that is should
-    // be - a vector of playing audio files from the metaiterator is compared
-    // against the PlayableAudioFiles at the SoundDriver.
+
+    // --------- EXTERNAL TRANSPORT INTERFACE METHODS --------
     //
-    void rationalisePlayingAudio(const std::vector<MappedEvent*> &playingAudioSegments);
+    // Whereas the DCOP interface (above) is for the GUI to call to
+    // make the sequencer follow its wishes, this interface is for
+    // external clients to call (via some low-level audio callback)
+    // and requires sychronising with the GUI.
+    
+    TransportToken transportChange(TransportRequest);
+    TransportToken transportJump(TransportRequest, Rosegarden::RealTime);
+    bool isTransportSyncComplete(TransportToken token);
 
 public slots:
 
@@ -366,6 +399,7 @@ protected:
 
     void setEndOfCompReached(bool e) { m_isEndOfCompReached = e; }
     bool isEndOfCompReached() { return m_isEndOfCompReached; }
+    void incrementTransportToken();
 
     //--------------- Data members ---------------------------------
 
@@ -376,17 +410,11 @@ protected:
     Rosegarden::RealTime m_songPosition;
     Rosegarden::RealTime m_lastFetchSongPosition;
 
-    // Latency - m_playLatency  - how long we add to all events to make
-    //                            sure they play in a synchronised manner
-    //
-    //         - m_readAhead    - how far ahead in the composition we keep
-    //                            the output queue full to
-    //
-    // We can throttle these values internally at first, make them
-    // user defineable or even auto-throttle them possibly.
-    //
-    Rosegarden::RealTime m_playLatency;
     Rosegarden::RealTime m_readAhead;
+    Rosegarden::RealTime m_audioMix;
+    Rosegarden::RealTime m_audioRead;
+    Rosegarden::RealTime m_audioWrite;
+    int m_smallFileSize;
 
     /*
 
@@ -434,6 +462,10 @@ protected:
     Rosegarden::MappedComposition   m_mC;
     ControlBlockMmapper            *m_controlBlockMmapper;
     SequencerMmapper                m_sequencerMapper;
+
+    typedef std::pair<TransportRequest, Rosegarden::RealTime> TransportPair;
+    std::deque<TransportPair>       m_transportRequests;
+    TransportToken                  m_transportToken;
 
     bool                            m_isEndOfCompReached;
 };

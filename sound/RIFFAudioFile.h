@@ -50,7 +50,7 @@ public:
                   unsigned int channels,
                   unsigned int sampleRate,
                   unsigned int bytesPerSecond,
-                  unsigned int bytesPerSample,
+                  unsigned int bytesPerFrame,
                   unsigned int bitsPerSample);
 
     ~RIFFAudioFile();
@@ -111,7 +111,7 @@ public:
 
     // Accessors
     //
-    virtual unsigned int getBytesPerFrame() { return m_bytesPerSample; }
+    virtual unsigned int getBytesPerFrame() { return m_bytesPerFrame; }
     unsigned int getBytesPerSecond() { return m_bytesPerSecond; }
 
     // Allow easy identification of wav file type
@@ -132,7 +132,7 @@ protected:
     void writeFormatChunk();
 
     unsigned int   m_bytesPerSecond;
-    unsigned int   m_bytesPerSample;
+    unsigned int   m_bytesPerFrame;
 };
 
 }

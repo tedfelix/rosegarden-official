@@ -1,21 +1,22 @@
 // -*- c-indentation-style:"stroustrup" c-basic-offset: 4 -*-
+
 /*
-  Rosegarden-4
-  A sequencer and musical notation editor.
+    Rosegarden-4
+    A sequencer and musical notation editor.
 
-  This program is Copyright 2000-2003
-  Guillaume Laurent   <glaurent@telegraph-road.org>,
-  Chris Cannam        <cannam@all-day-breakfast.com>,
-  Richard Bown        <bownie@bownie.com>
+    This program is Copyright 2000-2003
+        Guillaume Laurent   <glaurent@telegraph-road.org>,
+        Chris Cannam        <cannam@all-day-breakfast.com>,
+        Richard Bown        <bownie@bownie.com>
 
-  The moral right of the authors to claim authorship of this work
-  has been asserted.
+    The moral right of the authors to claim authorship of this work
+    has been asserted.
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.  See the file
-  COPYING included with this distribution for more information.
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
 */
 
 // Specialisation of SoundDriver to support ALSA (http://www.alsa-project.org)
@@ -36,19 +37,11 @@
 #include "SoundDriver.h"
 #include "Instrument.h"
 #include "Device.h"
-#include "LADSPAPluginInstance.h"
 #include "AlsaPort.h"
 
-// jack includes
-//
 #ifdef HAVE_LIBJACK
-#include <jack/jack.h>
-
-// convenience
-typedef jack_default_audio_sample_t sample_t;
-
+#include "JackDriver.h"
 #endif
-
 
 namespace Rosegarden
 {
@@ -63,28 +56,35 @@ public:
     void shutdown();
 
     virtual void initialise();
-    virtual void initialisePlayback(const RealTime &position,
-                                    const RealTime &playLatency);
+    virtual void initialisePlayback(const RealTime &position);
     virtual void stopPlayback();
-    virtual void resetPlayback(const RealTime &position,
-                               const RealTime &latency);
+    virtual void resetPlayback(const RealTime &position);
     virtual void allNotesOff();
     virtual void processNotesOff(const RealTime &time);
 
     virtual RealTime getSequencerTime();
 
-    virtual MappedComposition*
-        getMappedComposition(const RealTime &playLatency);
+    virtual MappedComposition *getMappedComposition();
     
     virtual bool record(RecordStatus recordStatus);
 
+    virtual void startClocks();
+    virtual void startClocksApproved(); // called by JACK driver in sync mode
+    virtual void stopClocks();
+    virtual bool areClocksRunning() { return m_queueRunning; }
+
     virtual void processEventsOut(const MappedComposition &mC,
-                                  const RealTime &playLatency, 
                                   bool now);
 
     // Return the sample rate
     //
-    virtual unsigned int getSampleRate() const;
+    virtual unsigned int getSampleRate() const {
+#ifdef HAVE_LIBJACK
+	return m_jackDriver->getSampleRate();
+#else
+	return 0;
+#endif
+    }
 
     // initialise subsystems
     //
@@ -98,7 +98,7 @@ public:
 
     // Process pending
     //
-    virtual void processPending(const RealTime &playLatency);
+    virtual void processPending();
 
     // We can return audio control signals to the gui using MappedEvents.
     // Meter levels or audio file completions can go in here.
@@ -110,22 +110,42 @@ public:
     //
     virtual void setPluginInstance(InstrumentId id,
                                    unsigned long pluginId,
-                                   int position);
+                                   int position) {
+#ifdef HAVE_LIBJACK
+	m_jackDriver->setPluginInstance(id, pluginId, position);
+#endif
+    }
 
-    virtual void removePluginInstance(InstrumentId id, int position);
+    virtual void removePluginInstance(InstrumentId id, int position) {
+#ifdef HAVE_LIBJACK
+	m_jackDriver->removePluginInstance(id, position);
+#endif
+    }
 
     // Remove all plugin instances
     //
-    virtual void removePluginInstances();
+    virtual void removePluginInstances() {
+#ifdef HAVE_LIBJACK
+	m_jackDriver->removePluginInstances();
+#endif
+    }
 
     virtual void setPluginInstancePortValue(InstrumentId id,
                                             int position,
                                             unsigned long portNumber,
-                                            float value);
+                                            float value) {
+#ifdef HAVE_LIBJACK
+	m_jackDriver->setPluginInstancePortValue(id, position, portNumber, value);
+#endif
+    }
 
     virtual void setPluginInstanceBypass(InstrumentId id,
                                          int position,
-                                         bool value);
+                                         bool value) {
+#ifdef HAVE_LIBJACK
+	m_jackDriver->setPluginInstanceBypass(id, position, value);
+#endif
+    }
 
     virtual bool checkForNewClients();
 
@@ -133,7 +153,7 @@ public:
 
     // Send the MIDI clock
     //
-    virtual void sendMidiClock(const RealTime &playLatency);
+    virtual void sendMidiClock();
 
     virtual void sleep(const RealTime &);
 
@@ -178,67 +198,20 @@ public:
     virtual void setConnection(DeviceId deviceId, QString connection);
     virtual void setPlausibleConnection(DeviceId deviceId, QString connection);
 
-    virtual std::vector<PlayableAudioFile*> getPlayingAudioFiles();
-    void clearPlayingAudioFiles() { m_playingAudioFiles.clear(); }
-    void addPlayingAudioFile(PlayableAudioFile *pA) { m_playingAudioFiles.push_back(pA); }
-    bool removePlayingAudioFile(PlayableAudioFile *pA);
+    virtual unsigned int getTimers();
+    virtual QString getTimer(unsigned int);
+    virtual QString getCurrentTimer();
+    virtual void setCurrentTimer(QString);
 
-#ifdef HAVE_LADSPA
-
-    LADSPAPluginInstance* getPlugin(InstrumentId id, int position);
-
-    // Return a list of plugin instances that haven't been run()
-    //
-    PluginInstances& getUnprocessedPlugins();
-
-    // Return an ordered list of plugins for an Instrument
-    //
-    PluginInstances& getInstrumentPlugins(InstrumentId id);
-
-    // Reset all plugin processed states (start of a new process() loop)
-    //
-    void setAllPluginsToUnprocessed();
-
-    // Reset all plugins audio state (when looping or when playback stops)
-    //
-    void resetAllPlugins();
-
-#endif // HAVE_LADSPA
-
-
+    virtual void getAudioInstrumentNumbers(InstrumentId &audioInstrumentBase,
+					   int &audioInstrumentCount) {
+	audioInstrumentBase = AudioInstrumentBase;
 #ifdef HAVE_LIBJACK
-
-    // Create a set of JACK input ports (and for the moment)
-    // we do default connections to JACK terminal ports.
-    //
-    // If the deactivate flag is set then we deactivate and reactivate
-    // the client when modifying the number of input ports.
-    //
-    //
-    void createJackInputPorts(unsigned int ports, bool deactivate);
-
-    // Modify input ports
-    //
-    unsigned int getJackInputPorts() const { return m_jackInputPorts.size(); }
-
-    jack_port_t* getJackInputPort(unsigned int portNumber)
-        { return m_jackInputPorts[portNumber]; }
-
-    jack_port_t* getJackOutputPortLeft() { return m_jackOutputPortLeft; }
-    jack_port_t* getJackOutputPortRight() { return m_jackOutputPortRight; }
-
-    // A new audio file for storage of our recorded samples - the
-    // file stays open so we can append samples at will.  We must
-    // explicitly close the file eventually though to make sure
-    // the integrity is correct (sample sizes must be written).
-    //
-    // These public methods are required in this file because we
-    // need access to this file from the static jackProcess member.
-    //
-    bool createAudioFile(const std::string &fileName);
-    void appendToAudioFile(const std::string &buffer);
-
+	audioInstrumentCount = 16;
+#else
+	audioInstrumentCount = 0;
 #endif
+    }
 
     virtual QString getStatusLog();
 
@@ -254,31 +227,17 @@ protected:
      */
     virtual void generatePortList(AlsaPortList *newPorts = 0);
     virtual void generateInstruments();
+
+    virtual void generateTimerList();
+
     void addInstrumentsForDevice(MappedDevice *device);
     MappedDevice *createMidiDevice(AlsaPortDescription *,
 				   MidiDevice::DeviceDirection);
 
     virtual void processMidiOut(const MappedComposition &mC,
-                                const RealTime &playLatency,
                                 bool now);
 
-    virtual void processAudioQueue(const RealTime &playLatency,
-                                   bool now);
-
-#ifdef HAVE_LIBJACK
-
-    // Gathers JACK transport information from current driver
-    // status and informs JACK server.
-    //
-    void sendJACKTransportState();
-
-    // Get a JACk frame from a RealTime
-    //
-    jack_nframes_t getJACKFrame(const RealTime &time);
-
-
-#endif // HAVE_LIBJACK
-
+    virtual void processAudioQueue(bool now) { }
 
 private:
     RealTime getAlsaTime();
@@ -291,7 +250,6 @@ private:
 
     AlsaPortList m_alsaPorts;
 
-
     // ALSA MIDI/Sequencer stuff
     //
     snd_seq_t                   *m_midiHandle;
@@ -301,11 +259,6 @@ private:
     int                          m_maxClients;
     int                          m_maxPorts;
     int                          m_maxQueues;
-
-    // ALSA Audio/PCM stuff
-    //
-    snd_pcm_t                   *m_audioHandle;
-    snd_pcm_stream_t             m_audioStream;
 
     NoteOffQueue                 m_noteOffQueue;
 
@@ -321,43 +274,9 @@ private:
     RealTime                     m_loopEndTime;
     bool                         m_looping;
 
-    // sending of audio meter data in MappedComposition return stream
-    //
-    bool                         m_audioMeterSent;
-
 #ifdef HAVE_LIBJACK
-
-    static int  jackProcess(jack_nframes_t nframes, void *arg);
-    static int  jackBufferSize(jack_nframes_t nframes, void *arg);
-    static int  jackSampleRate(jack_nframes_t nframes, void *arg);
-    static void jackShutdown(void *arg);
-    static int  jackGraphOrder(void *);
-    static int  jackXRun(void *);
-
-    static void* jackDiskThread(void *arg);
-
-    jack_client_t               *m_audioClient;
-    std::vector<jack_port_t*>    m_jackInputPorts;
-    jack_port_t                 *m_jackOutputPortLeft;
-    jack_port_t                 *m_jackOutputPortRight;
-
-    jack_nframes_t               m_transportPosition;
-
-#endif // HAVE_LIBJACK
-
-#ifdef HAVE_LADSPA
-
-    // Change this container to something a bit more efficient for
-    // finding lots of plugins once we have lots of plugins available.
-    //
-    PluginInstances              m_pluginInstances;
-
-    // List to save realloc everytime through
-    //
-    PluginInstances              m_retPluginList; 
-    OrderedPluginList            m_orderedPluginList;
-
-#endif // HAVE_LADSPA
+    JackDriver *m_jackDriver;
+#endif
 
     typedef std::map<DeviceId, ClientPortPair> DevicePortMap;
     DevicePortMap m_devicePortMap;
@@ -370,10 +289,18 @@ private:
 
     DeviceId getSpareDeviceId();
 
-    // Vector of currently playing audio segments - to inform the
-    // sequencer what we have playing at the driver currently.
-    //
-    std::vector<PlayableAudioFile*> m_playingAudioFiles;
+    struct AlsaTimerInfo {
+	int clas;
+	int sclas;
+	int card;
+	int device;
+	int subdevice;
+	std::string name;
+    };
+    std::vector<AlsaTimerInfo> m_timers;
+    std::string m_currentTimer;
+
+    bool m_queueRunning;
 };
 
 }

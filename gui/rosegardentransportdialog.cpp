@@ -342,10 +342,10 @@ RosegardenTransportDialog::displayRealTime(const Rosegarden::RealTime &rt)
 	}
     }
          
-    m_tenThousandths = ( st.usec / 100 ) % 10;
-    m_thousandths = ( st.usec / 1000 ) % 10;
-    m_hundreths = ( st.usec / 10000 ) % 10;
-    m_tenths = ( st.usec / 100000 ) % 10;
+    m_tenThousandths = ( st.usec() / 100 ) % 10;
+    m_thousandths = ( st.usec() / 1000 ) % 10;
+    m_hundreths = ( st.usec() / 10000 ) % 10;
+    m_tenths = ( st.usec() / 100000 ) % 10;
 
     m_unitSeconds = ( st.sec ) % 10;
     m_tenSeconds = ( st.sec / 10 ) % 6;
@@ -390,14 +390,14 @@ RosegardenTransportDialog::displaySMPTETime(const Rosegarden::RealTime &rt)
     }
 
     m_tenThousandths =
-	(( st.usec * m_framesPerSecond * m_bitsPerFrame) / 1000000 ) % 10;
+	(( st.usec() * m_framesPerSecond * m_bitsPerFrame) / 1000000 ) % 10;
     m_thousandths =
-	(( st.usec * m_framesPerSecond * m_bitsPerFrame) / 10000000 ) % 
+	(( st.usec() * m_framesPerSecond * m_bitsPerFrame) / 10000000 ) % 
 	(m_bitsPerFrame / 10);
     m_hundreths =
-	(( st.usec * m_framesPerSecond) / 1000000 ) % 10;
+	(( st.usec() * m_framesPerSecond) / 1000000 ) % 10;
     m_tenths = 
-	(( st.usec * m_framesPerSecond) / 10000000 ) % 10;
+	(( st.usec() * m_framesPerSecond) / 10000000 ) % 10;
 
     m_unitSeconds = ( st.sec ) % 10;
     m_tenSeconds = ( st.sec / 10 ) % 6;
@@ -573,7 +573,7 @@ RosegardenTransportDialog::setTempo(const double &tempo)
     double qnD = 60.0/tempo;
     Rosegarden::RealTime qnTime =
         Rosegarden::RealTime(long(qnD),
-                             long((qnD - double(long(qnD))) * 1000000.0));
+                             long((qnD - double(long(qnD))) * 1000000000.0));
 
     StudioControl::sendQuarterNoteLength(qnTime);
 }

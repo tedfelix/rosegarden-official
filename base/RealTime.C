@@ -32,18 +32,29 @@
 
 namespace Rosegarden {
 
-RealTime::RealTime(int s, int u) :
-    sec(s), usec(u)
+// A RealTime consists of two ints that must be at least 32 bits each.
+// A signed 32-bit int can store values exceeding +/- 2 billion.  This
+// means we can safely use our lower int for nanoseconds, as there are
+// 1 billion nanoseconds in a second and we need to handle double that
+// because of the implementations of addition etc that we use.
+//
+// The maximum valid RealTime on a 32-bit system is somewhere around
+// 68 years: 999999999 nanoseconds longer than the classic Unix epoch.
+
+#define ONE_BILLION 1000000000
+
+RealTime::RealTime(int s, int n) :
+    sec(s), nsec(n)
 {
     if (sec == 0) {
-	while (usec <= -1000000) { usec += 1000000; --sec; }
-	while (usec >=  1000000) { usec -= 1000000; ++sec; }
+	while (nsec <= -ONE_BILLION) { nsec += ONE_BILLION; --sec; }
+	while (nsec >=  ONE_BILLION) { nsec -= ONE_BILLION; ++sec; }
     } else if (sec < 0) {
-	while (usec <= -1000000) { usec += 1000000; --sec; }
-	while (usec > 0)         { usec -= 1000000; ++sec; }
+	while (nsec <= -ONE_BILLION) { nsec += ONE_BILLION; --sec; }
+	while (nsec > 0)             { nsec -= ONE_BILLION; ++sec; }
     } else { 
-	while (usec >= 1000000)  { usec -= 1000000; ++sec; }
-	while (usec < 0)         { usec += 1000000; --sec; }
+	while (nsec >=  ONE_BILLION) { nsec -= ONE_BILLION; ++sec; }
+	while (nsec < 0)             { nsec += ONE_BILLION; --sec; }
     }
 }
 
@@ -57,18 +68,18 @@ std::ostream &operator<<(std::ostream &out, const RealTime &rt)
     }
 
     int s = (rt.sec < 0 ? -rt.sec : rt.sec);
-    int u = (rt.usec < 0 ? -rt.usec : rt.usec);
+    int n = (rt.nsec < 0 ? -rt.nsec : rt.nsec);
 
     out << s << ".";
 
-    int uu(u);
-    if (uu == 0) out << "00000";
-    else while (uu < 100000) {
+    int nn(n);
+    if (nn == 0) out << "00000000";
+    else while (nn < (ONE_BILLION / 10)) {
 	out << "0";
-	uu *= 10;
+	nn *= 10;
     }
     
-    out << u << "R";
+    out << n << "R";
     return out;
 }
 
@@ -91,17 +102,47 @@ RealTime::toString() const
 RealTime
 RealTime::operator/(int d) const
 {
-    return RealTime(sec / d, (usec + 1000000 * (sec % d)) / d);
+    int secdiv = sec / d;
+    int secrem = sec % d;
+
+    double nsecdiv = (double(nsec) + ONE_BILLION * double(secrem)) / d;
+    
+    return RealTime(secdiv, int(nsecdiv + 0.5));
 }
 
 double 
 RealTime::operator/(const RealTime &r) const
 {
-    double lTotal = double(sec) * 1000000.0 + double(usec);
-    double rTotal = double(r.sec) * 1000000.0 + double(r.usec);
+    double lTotal = double(sec) * ONE_BILLION + double(nsec);
+    double rTotal = double(r.sec) * ONE_BILLION + double(r.nsec);
     
     if (rTotal == 0) return 0.0;
     else return lTotal/rTotal;
+}
+
+long
+RealTime::realTime2Frame(const RealTime &time, unsigned int sampleRate)
+{
+    // We like integers.  The last term is always zero unless the
+    // sample rate is greater than 1MHz, but hell, you never know...
+
+    long frame =
+	time.sec * sampleRate +
+	(time.msec() * sampleRate) / 1000 +
+	((time.usec() - 1000 * time.msec()) * sampleRate) / 1000000 +
+	((time.nsec - 1000 * time.usec()) * sampleRate) / 1000000000;
+
+    return frame;
+}
+
+RealTime
+RealTime::frame2RealTime(long frame, unsigned int sampleRate)
+{
+    RealTime rt;
+    rt.sec = frame / sampleRate;
+    frame -= rt.sec * sampleRate;
+    rt.nsec = (int)(((float(frame) * 1000000) / sampleRate) * 1000);
+    return rt;
 }
 
 const RealTime RealTime::zeroTime(0,0);

@@ -121,8 +121,6 @@ public:
     virtual std::string toXmlString();
 
     // Property names
-    static const PropertyName MetronomeDevice;
-    static const PropertyName FetchLatency;
     static const PropertyName SequencerOptions;
 
     static const PropertyName PluginTaxonomyFile;

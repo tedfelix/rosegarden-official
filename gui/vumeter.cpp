@@ -138,18 +138,26 @@ VUMeter::setLevel(double leftLevel, double rightLevel)
     m_levelStepRight = m_baseLevelStep;
 
     // Only start the timer when we need it
-    if(m_fallTimerLeft->isActive() == false)
-    {
-        m_fallTimerLeft->start(40); // 40 ms per level fall iteration
-        meterStart();
+    if (m_levelLeft > 0) {
+	if (m_fallTimerLeft->isActive() == false) {
+	    m_fallTimerLeft->start(40); // 40 ms per level fall iteration
+	    meterStart();
+	}
     }
 
-    if (m_fallTimerRight && m_fallTimerRight->isActive() == false)
-    {
-        m_fallTimerRight->start(40); // 40 ms per level fall iteration
-        meterStart();
+    if (m_levelRight > 0) {
+	if (m_fallTimerRight && m_fallTimerRight->isActive() == false) {
+	    m_fallTimerRight->start(40); // 40 ms per level fall iteration
+	    meterStart();
+	}
+    }    
+/*
+    if (m_levelLeft  == 0 &&
+	m_levelRight == 0) {
+	meterStop();
+	return;
     }
-
+*/
     // Reset level and reset timer if we're exceeding the
     // current peak
     //

@@ -220,7 +220,7 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
 
     int width = m_values.size() / (m_channels * (m_showMinima ? 2 : 1));
     it = m_values.begin();
-    float h1, h2, l1, l2;
+    float h1, h2, l1 = 0, l2 = 0;
 
     for (int i = 0; i < width; i++)
     {
@@ -234,7 +234,6 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
                     l1 = *(it++);
                     l2 = l1;
                 }
-
             }
             else {
 

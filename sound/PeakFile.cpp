@@ -775,7 +775,7 @@ PeakFile::getPreview(const RealTime &startTime,
 int
 PeakFile::getPeak(const RealTime &time)
 {
-    double frames = ((time.sec * 1000000.0) + time.usec) *
+    double frames = ((time.sec * 1000000.0) + time.usec()) *
                         m_audioFile->getSampleRate() / 1000000.0;
     return int(frames / double(m_blockSize));
 }
@@ -785,7 +785,7 @@ PeakFile::getTime(int peak)
 {
     int usecs = int((double)peak * (double)m_blockSize *
         double(1000000.0) / double(m_audioFile->getSampleRate()));
-    return RealTime(usecs/1000000, usecs % 1000000);
+    return RealTime(usecs/1000000, (usecs % 1000000) * 1000);
 }
 
 // Get pairs of split points for areas that exceed a percentage

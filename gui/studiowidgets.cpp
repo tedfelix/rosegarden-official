@@ -35,6 +35,117 @@
 #include "constants.h"
 #include "rosedebug.h"
 
+#include <cmath>
+
+//----------------------------------------
+
+RosegardenFader::RosegardenFader(QWidget *parent):
+    QSlider(Qt::Vertical, parent),
+    m_float(new RosegardenTextFloat(this)),
+    m_floatTimer(new QTimer()),
+    m_prependText("")
+{
+    connect(this, SIGNAL(valueChanged(int)),
+            this, SLOT(slotValueChanged(int)));
+
+    connect(this, SIGNAL(sliderPressed()),
+            this, SLOT(slotShowFloatText()));
+
+    // connect timer
+    connect(m_floatTimer, SIGNAL(timeout()), this, SLOT(slotFloatTimeout()));
+
+    m_float->hide(); // hide the floater
+}
+
+// We invert the value - so that it appear the top of the fader
+// is our maximum and vice versa.  For the moment we only catch
+// and re-emit this signal - so beware.
+//
+void
+RosegardenFader::slotValueChanged(int value)
+{
+    int adjValue = maxValue() - value;
+    if (adjValue < 0) adjValue = 0;
+
+    emit faderChanged(adjValue);
+
+    slotShowFloatText();
+}
+
+void 
+RosegardenFader::setFader(int value)
+{
+    emit faderChanged(value);
+
+    value = maxValue() - value;
+
+    if (value > maxValue()) value = maxValue();
+    if (value < minValue()) value = minValue();
+
+    setValue(value);
+}
+
+void
+RosegardenFader::slotShowFloatText()
+{
+    // A fader linearly represents dB values such that 0dB is at
+    // maximum fader value less 20 and 10dB is at maximum.  As a
+    // special case, 0 on the fader is silence.
+
+    //!!! no, have a better characteristic -- need to formalise
+     //this somewhere, and probably store volume levels in the xml as
+     //dB as well
+
+//    float dbValue = 10.0 * log10(float(maxValue() - value())/100.0);
+
+    // draw on the float text
+    
+    float value = faderLevel();
+
+    if (value != 0) {
+
+	value = value - 105.0;
+	if (value > 0.0) value /= 7.0;
+	else value /= 13.0;
+	float dB = powf(value, 2.0);
+	if (value < 0.0) dB = -dB;
+
+//	float dB = (value - maxValue() + 20.0) / 2.0;
+	m_float->setText(QString("%1%2 dB").arg(m_prependText).arg(dB));
+    } else {
+	m_float->setText(QString("%1-Inf dB").arg(m_prependText));
+    }
+
+    // Reposition - we need to sum the relative positions up to the
+    // topLevel or dialog to please move().
+    //
+    QWidget *par = parentWidget();
+    QPoint totalPos = this->pos();
+
+    while (par->parentWidget() && !par->isTopLevel() && !par->isDialog())
+    {
+        totalPos += par->pos();
+        par = par->parentWidget();
+    }
+    // Move just top/right
+    //
+    m_float->move(totalPos + QPoint(width() + 2, 0));
+
+    // Show
+    m_float->show();
+
+    // one shot, 500ms
+    m_floatTimer->start(500, true);
+}
+
+
+void
+RosegardenFader::slotFloatTimeout()
+{
+    m_float->hide();
+}
+
+
 // ---------------- AudioFaderWidget ------------------
 //
 

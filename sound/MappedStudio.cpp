@@ -27,6 +27,8 @@
 #include "MappedStudio.h"
 #include "Sequencer.h"
 
+#include <pthread.h> // for mutex
+
 #define DEBUG_MAPPEDSTUDIO 1
 
 // liblrdf - LADSPA naming library
@@ -34,6 +36,10 @@
 #ifdef HAVE_LIBLRDF
 #include "lrdf.h"
 #endif // HAVE_LIBLRDF
+
+static pthread_mutex_t _mappedObjectContainerLock =
+    PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP;
+
 
 // These four functions are stolen and adapted from Qt3 qvaluevector.h
 //
@@ -292,11 +298,13 @@ MappedObject*
 MappedStudio::createObject(MappedObjectType type,
                            bool readOnly)
 {
+    pthread_mutex_lock(&_mappedObjectContainerLock);
+
     MappedObject *mO = 0;
 
     // Ensure we've got an empty slot
     //
-    while(getObject(m_runningObjectId))
+    while (getObject(m_runningObjectId))
         m_runningObjectId++;
 
     mO = createObject(type, m_runningObjectId, readOnly);
@@ -305,6 +313,7 @@ MappedStudio::createObject(MappedObjectType type,
     //
     if (mO) m_runningObjectId++;
 
+    pthread_mutex_unlock(&_mappedObjectContainerLock);
     return mO;
 }
 
@@ -313,8 +322,13 @@ MappedStudio::createObject(MappedObjectType type,
                            MappedObjectId id,
                            bool readOnly)
 {
+    pthread_mutex_lock(&_mappedObjectContainerLock);
+
     // fail if the object already exists and it's not zero
-    if (id != 0 && getObject(id)) return 0;
+    if (id != 0 && getObject(id)) {
+	pthread_mutex_unlock(&_mappedObjectContainerLock);
+	return 0;
+    }
 
     MappedObject *mO = 0;
 
@@ -361,8 +375,10 @@ MappedStudio::createObject(MappedObjectType type,
     // Insert
     if (mO)
     {
-        m_objects.push_back(mO);
+        m_objects[type][id] = mO;
     }
+
+    pthread_mutex_unlock(&_mappedObjectContainerLock);
 
     return mO;
 }
@@ -370,26 +386,36 @@ MappedStudio::createObject(MappedObjectType type,
 MappedObject*
 MappedStudio::getObjectOfType(MappedObjectType type)
 {
-    std::vector<MappedObject*>::iterator it;
-    for (it = m_objects.begin(); it != m_objects.end(); it++)
-        if ((*it)->getType() == type)
-            return (*it);
-    return 0;
+    MappedObject *rv = 0;
+
+    pthread_mutex_lock(&_mappedObjectContainerLock);
+
+    MappedObjectCategory &category = m_objects[type];
+    if (!category.empty()) rv = category.begin()->second;
+
+    pthread_mutex_unlock(&_mappedObjectContainerLock);
+
+    return rv;
 }
 
 
 bool
 MappedStudio::destroyObject(MappedObjectId id)
 {
-    MappedObject *obj =  getObject(id);
+    pthread_mutex_lock(&_mappedObjectContainerLock);
 
-    if (obj)
-    {
+    MappedObject *obj = getObject(id);
+
+    bool rv = false;
+
+    if (obj) {
         obj->destroy();
-        return true;
+	rv = true;
     }
 
-    return false;
+    pthread_mutex_unlock(&_mappedObjectContainerLock);
+
+    return rv;
 }
 
 bool
@@ -409,30 +435,47 @@ MappedStudio::connectObjects(MappedObjectId /*mId1*/, MappedObjectId /*mId2*/)
 void
 MappedStudio::clear()
 {
-    std::vector<MappedObject*>::iterator it;
-    for (it = m_objects.begin(); it != m_objects.end(); it++)
-        delete (*it);
+    pthread_mutex_lock(&_mappedObjectContainerLock);
 
-    m_objects.erase(m_objects.begin(), m_objects.end());
+    for (MappedObjectMap::iterator i = m_objects.begin();
+	 i != m_objects.end(); ++i) {
+
+	for (MappedObjectCategory::iterator j = i->second.begin();
+	     j != i->second.end(); ++j) {
+
+	    delete j->second;
+	}
+    }
+
+    m_objects.clear();
 
     // reset running object id
     m_runningObjectId = 1;
+
+    pthread_mutex_unlock(&_mappedObjectContainerLock);
 }
 
 bool
 MappedStudio::clearObject(MappedObjectId id)
 {
-    std::vector<MappedObject*>::iterator it;
-    for (it = m_objects.begin(); it != m_objects.end(); it++)
-    {
-        if ((*it)->getId() == id)
-        {
-            m_objects.erase(it);
-            return true;
-        }
+    bool rv = false;
 
+    pthread_mutex_lock(&_mappedObjectContainerLock);
+
+    for (MappedObjectMap::iterator i = m_objects.begin();
+	 i != m_objects.end(); ++i) {
+
+	MappedObjectCategory::iterator j = i->second.find(id);
+	if (j != i->second.end()) {
+	    i->second.erase(j);
+	    rv = true;
+	    break;
+	}
     }
-    return false;
+
+    pthread_mutex_unlock(&_mappedObjectContainerLock);
+
+    return rv;
 }
 
 
@@ -449,17 +492,31 @@ MappedStudio::getPropertyList(const MappedObjectProperty &property)
     return list;
 }
 
+bool
+MappedStudio::getProperty(const MappedObjectProperty &,
+			  MappedObjectValue &)
+{
+    return false;
+}
 
 MappedObject*
 MappedStudio::getObject(MappedObjectId id)
 {
-    std::vector<MappedObject*>::iterator it;
+    pthread_mutex_lock(&_mappedObjectContainerLock);
+    MappedObject *rv = 0;
 
-    for (it = m_objects.begin(); it != m_objects.end(); it++)
-        if ((*it)->getId() == id)
-            return (*it);
+    for (MappedObjectMap::iterator i = m_objects.begin();
+	 i != m_objects.end(); ++i) {
 
-    return 0;
+	MappedObjectCategory::iterator j = i->second.find(id);
+	if (j != i->second.end()) {
+	    rv = j->second;
+	    break;
+	}
+    }
+
+    pthread_mutex_unlock(&_mappedObjectContainerLock);
+    return rv;
 }
 
 MappedObject*
@@ -471,28 +528,24 @@ MappedStudio::getFirst(MappedObjectType type)
 MappedObject*
 MappedStudio::getNext(MappedObject *object)
 {
-    MappedObjectType type = Studio;
+    pthread_mutex_lock(&_mappedObjectContainerLock);
 
-    std::vector<MappedObject*>::iterator it = m_objects.begin();
+    MappedObjectCategory &category = m_objects[object->getType()];
 
-    while (it != m_objects.end())
-    {
-        if (object->getId() == (*it)->getId())
-        {
-            type = (*it)->getType();
-            it++;
-            break;
-        }
-        it++;
+    bool next = false;
+    MappedObject *rv = 0;
+
+    for (MappedObjectCategory::iterator i = category.begin();
+	 i != category.end(); ++i) {
+	if (i->second->getId() == object->getId()) next = true;
+	else if (next) {
+	    rv = i->second;
+	    break;
+	}
     }
-
-    for (; it != m_objects.end(); it++)
-    {
-        if (type == (*it)->getType())
-            return (*it);
-    }
-
-    return 0;
+    
+    pthread_mutex_unlock(&_mappedObjectContainerLock);
+    return rv;
 }
 
 void
@@ -510,79 +563,56 @@ MappedStudio::setProperty(const MappedObjectProperty &property,
 void
 MappedStudio::clearTemporaries()
 {
-    std::vector<MappedObject*>::iterator it = m_objects.begin();
-    std::vector<std::vector<MappedObject*>::iterator> dead;
+    std::cerr << "MappedStudio::clearTemporaries" << std::endl;
+    pthread_mutex_lock(&_mappedObjectContainerLock);
 
-    while (it != m_objects.end())
-    {
-        if (!(*it)->isReadOnly())
-        {
-            delete (*it);
-            dead.push_back(it);
-        }
+    MappedObjectId maxId = 1;
 
-        it++;
+    for (MappedObjectMap::iterator i = m_objects.begin();
+	 i != m_objects.end(); ++i) {
+
+	for (MappedObjectCategory::iterator j = i->second.begin();
+	     j != i->second.end(); ) {
+
+	    MappedObjectCategory::iterator k = j;
+	    ++k;
+
+	    if (!j->second->isReadOnly()) {
+		delete j->second;
+		i->second.erase(j);
+	    } else {
+		if (j->second->getId() > maxId) {
+		    maxId = j->second->getId();
+		}
+	    }
+
+	    j = k;
+	}
     }
 
-    std::vector<std::vector<MappedObject*>::iterator>::iterator dIt;
-    dIt = dead.end();
-
-    if (dIt != dead.begin())
-    {
-#ifdef DEBUG_MAPPEDSTUDIO
-        std::cout << "MappedStudio::clearTemporaries - "
-                  << "clearing " << dead.size() << " temporary objects"
-                  << std::endl;
-#endif
-        do
-        {
-            dIt--;
-            m_objects.erase(*dIt);
-    
-        } while(dIt != dead.begin());
-    }
-
-    int count = 0;
-    m_runningObjectId = 0;
-    for (it = m_objects.begin(); it != m_objects.end(); ++it)
-    {
-        if ((*it)->getId() >= m_runningObjectId)
-        {
-            count++;
-            m_runningObjectId = (*it)->getId() + 1;
-        }
-    }
-
-    /*
-    std::cout << "CLEARED TEMPORARIES AND LEFT " << count << " OBJECTS - "
-              << " new running id = " << m_runningObjectId << endl;
-              */
-
+    m_runningObjectId = maxId + 1;
+    pthread_mutex_unlock(&_mappedObjectContainerLock);
 }
 
-MappedObject*
+MappedAudioFader *
 MappedStudio::getAudioFader(Rosegarden::InstrumentId id)
 {
-    std::vector<MappedObject*>::iterator it = m_objects.begin();
-    std::vector<std::vector<MappedObject*>::iterator> dead;
+    pthread_mutex_lock(&_mappedObjectContainerLock);
 
-    while (it != m_objects.end())
-    {
-        if ((*it)->getType() == MappedObject::AudioFader)
-        {
-            // compare InstrumentId
-            //
-            MappedObjectPropertyList list = (*it)->
-                getPropertyList(MappedObject::Instrument);
+    MappedObjectCategory &category = m_objects[AudioFader];
+    MappedAudioFader *rv = 0;
 
-            if (Rosegarden::InstrumentId(list[0].toInt()) == id)
-                return (*it);
-        }
-        it++;
+    for (MappedObjectCategory::iterator i = category.begin();
+	 i != category.end(); ++i) {
+	MappedAudioFader *fader = dynamic_cast<MappedAudioFader *>(i->second);
+	if (fader->getInstrument() == id) {
+	    rv = fader;
+	    break;
+	}
     }
 
-    return 0;
-
+    pthread_mutex_unlock(&_mappedObjectContainerLock);
+    return rv;
 }
 
 MappedObject*
@@ -805,6 +835,30 @@ MappedAudioFader::getPropertyList(const MappedObjectProperty &property)
     return list;
 }
 
+bool
+MappedAudioFader::getProperty(const MappedObjectProperty &property,
+			      MappedObjectValue &value)
+{
+    if (property == FaderLevel) {
+	value = m_level;
+    } else if (property == Instrument) {
+	value = m_instrumentId;
+    } else if (property == FaderRecordLevel) {
+	value = m_recordLevel;
+    } else if (property == Channels) {
+	value = m_channels;
+    } else if (property == Pan) {
+	value = m_pan;
+    } else {
+#ifdef DEBUG_MAPPEDSTUDIO
+        std::cerr << "MappedAudioFader::getProperty - "
+                  << "unsupported or non-scalar property" << std::endl;
+#endif
+        return false;
+    }
+    return true;
+}
+
 void
 MappedAudioFader::setProperty(const MappedObjectProperty &property,
                               MappedObjectValue value)
@@ -902,6 +956,8 @@ MappedObjectPropertyList
 MappedAudioPluginManager::getPropertyList(const MappedObjectProperty &property)
 {
     MappedObjectPropertyList list;
+
+    std::cerr << "MappedAudioPluginManager::getPropertyList(" << property << ")" << std::endl;
 
     if (property == "")
     {
@@ -1008,14 +1064,26 @@ MappedAudioPluginManager::getPropertyList(const MappedObjectProperty &property)
                 plugin = dynamic_cast<MappedLADSPAPlugin*>
                             (studio->getNext(plugin));
             }
+
+	    std::cerr << "found a plugin, next is " << plugin << std::endl;
         }
 
     }
 
 #endif // HAVE_LADSPA
 
+    std::cerr << "returning" << std::endl;
+
     return list;
 }
+
+bool
+MappedAudioPluginManager::getProperty(const MappedObjectProperty &,
+				      MappedObjectValue &)
+{
+    return false; // have no scalar properties
+}
+
 
 #ifdef HAVE_LIBLRDF
 static bool useLRDF = false;
@@ -1673,8 +1741,33 @@ MappedLADSPAPlugin::getPropertyList(const MappedObjectProperty &property)
     }
 
     return list;
-
 }
+
+
+bool
+MappedLADSPAPlugin::getProperty(const MappedObjectProperty &property,
+				MappedObjectValue &value)
+{
+    if (property == UniqueId) {
+	value = m_uniqueId;
+    } else if (property == PortCount) {
+	value = m_portCount;
+    } else if (property == Instrument) {
+	value = m_instrument;
+    } else if (property == Position) {
+	value = m_position;
+    } else if (property == Bypassed) {
+	value = m_bypassed;
+    } else {
+#ifdef DEBUG_MAPPEDSTUDIO
+        std::cerr << "MappedLADSPAPlugin::getProperty - "
+                  << "unsupported or non-scalar property" << std::endl;
+#endif
+        return false;
+    }
+    return true;
+}
+
 
 void
 MappedLADSPAPlugin::setProperty(const MappedObjectProperty &property,
@@ -1865,6 +1958,24 @@ MappedLADSPAPort::getPropertyList(const MappedObjectProperty &property)
 
 
     return list;
+}
+
+bool
+MappedLADSPAPort::getProperty(const MappedObjectProperty &property,
+			      MappedObjectValue &value)
+{
+    if (property == Default) {
+	value = m_default;
+    } else if (property == Value) {
+	value = m_value;
+    } else {
+#ifdef DEBUG_MAPPEDSTUDIO
+        std::cerr << "MappedLADSPAPort::getProperty - "
+                  << "unsupported or non-scalar property" << std::endl;
+#endif
+        return false;
+    }
+    return true;
 }
 
 void

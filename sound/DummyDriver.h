@@ -40,22 +40,18 @@ public:
     virtual ~DummyDriver() {;}
 
     virtual void initialise()  { m_recordComposition.clear();}
-    virtual void initialisePlayback(const RealTime & /*position*/,
-                                    const RealTime & /*playLatency*/) {;}
+    virtual void initialisePlayback(const RealTime & /*position*/) {;}
     virtual void stopPlayback() {;}
-    virtual void resetPlayback(const RealTime & /*position*/,
-                               const RealTime & /*latency*/) {;}
+    virtual void resetPlayback(const RealTime & /*position*/) {;}
     virtual void allNotesOff()  {;}
     virtual void processNotesOff(const RealTime & /*time*/) {;}
     
     virtual RealTime getSequencerTime() { return RealTime(0, 0);}
 
-    virtual MappedComposition*
-        getMappedComposition(const RealTime & /*playLatency*/)
+    virtual MappedComposition* getMappedComposition()
         { return &m_recordComposition;}
 
     virtual void processEventsOut(const MappedComposition & /*mC*/,
-                                  const Rosegarden::RealTime & /*playLatency*/,
                                   bool /*now*/) {;}
 
     // Activate a recording state
@@ -65,7 +61,7 @@ public:
 
     // Process anything that's pending
     //
-    virtual void processPending(const RealTime & /*playLatency*/ ) {;}
+    virtual void processPending() {;}
 
     // Sample rate
     //
@@ -100,17 +96,19 @@ public:
     virtual void setLoop(const RealTime &/*loopStart*/,
                          const RealTime &/*loopEnd*/) {;}
 
-    virtual void sendMidiClock(const RealTime &/*playLatency*/) {;}
+    virtual void sendMidiClock() {;}
 
     virtual std::vector<PlayableAudioFile*> getPlayingAudioFiles()
         { return std::vector<PlayableAudioFile*>(); }
 
+    virtual void getAudioInstrumentNumbers(InstrumentId &i, int &n) {
+	i = 0; n = 0;
+    }
+
 protected:
     virtual void processMidiOut(const MappedComposition & /*mC*/,
-                                const RealTime & /*playLatency*/,
                                 bool /*now*/) {;}
-    virtual void processAudioQueue(const RealTime & /*playLatency*/,
-                                   bool /*now*/) {;}
+    virtual void processAudioQueue(bool /*now*/) {;}
     virtual void generateInstruments()  {;}
 
 };

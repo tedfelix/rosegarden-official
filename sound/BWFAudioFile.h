@@ -45,7 +45,7 @@ public:
                   unsigned int channels,
                   unsigned int sampleRate,
                   unsigned int bytesPerSecond,
-                  unsigned int bytesPerSample,
+                  unsigned int bytesPerFrame,
                   unsigned int bitsPerSample);
 
     ~BWFAudioFile();

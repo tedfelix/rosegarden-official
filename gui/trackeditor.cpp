@@ -733,9 +733,9 @@ void TrackEditor::dropEvent(QDropEvent* event)
             s >> id;
             s >> audioFileId;
             s >> startTime.sec;
-            s >> startTime.usec;
+            s >> startTime.nsec;
             s >> endTime.sec;
-            s >> endTime.usec;
+            s >> endTime.nsec;
 
             if (id == "AudioFileManager") { // only create something if this is data from the right client
                 
@@ -762,9 +762,9 @@ void TrackEditor::dropEvent(QDropEvent* event)
                         t << trackPos << "\n"; // track id
                         t << time << "\n"; // time on canvas
                         t << startTime.sec << "\n";
-                        t << startTime.usec << "\n";
+                        t << startTime.nsec << "\n";
                         t << endTime.sec << "\n";
-                        t << endTime.usec << "\n";
+                        t << endTime.nsec << "\n";
 
                         emit droppedAudio(audioText);
                     }

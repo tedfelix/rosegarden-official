@@ -1129,7 +1129,7 @@ MatrixView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
     timeT t = time;
     Rosegarden::RealTime rt =
 	getDocument()->getComposition().getElapsedRealTime(t);
-    long ms = rt.usec / 1000;
+    long ms = rt.msec();
 
     // At the advice of doc.trolltech.com/3.0/qstring.html#sprintf
     // we replaced this    QString format("%ld (%ld.%03lds)");
@@ -1275,7 +1275,7 @@ void MatrixView::slotKeyPressed(unsigned int y, bool repeating)
                                evPitch,
                                Rosegarden::MidiMaxValue,
                                Rosegarden::RealTime::zeroTime,
-                               Rosegarden::RealTime(0, 500000),
+                               Rosegarden::RealTime(0, 500000000),
                                Rosegarden::RealTime::zeroTime);
     Rosegarden::StudioControl::sendMappedEvent(mE);
 
@@ -1344,7 +1344,7 @@ void MatrixView::slotKeySelected(unsigned int y, bool repeating)
                                evPitch,
                                Rosegarden::MidiMaxValue,
                                Rosegarden::RealTime::zeroTime,
-                               Rosegarden::RealTime(0, 500000),
+                               Rosegarden::RealTime(0, 500000000),
                                Rosegarden::RealTime::zeroTime);
     Rosegarden::StudioControl::sendMappedEvent(mE);
 }
@@ -1498,7 +1498,7 @@ void MatrixView::playNote(const Rosegarden::Segment &segment, int pitch)
                                pitch,
                                Rosegarden::MidiMaxValue,
                                Rosegarden::RealTime::zeroTime,
-                               Rosegarden::RealTime(0, 500000),
+                               Rosegarden::RealTime(0, 500000000),
                                Rosegarden::RealTime::zeroTime);
 
     Rosegarden::StudioControl::sendMappedEvent(mE);

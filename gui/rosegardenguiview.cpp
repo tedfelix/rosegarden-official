@@ -1252,9 +1252,9 @@ RosegardenGUIView::slotDroppedAudio(QString audioDesc)
     s >> trackId;
     s >> position;
     s >> startTime.sec;
-    s >> startTime.usec;
+    s >> startTime.nsec;
     s >> endTime.sec;
-    s >> endTime.usec;
+    s >> endTime.nsec;
 
     RG_DEBUG << "RosegardenGUIView::slotDroppedAudio("
                          //<< audioDesc
@@ -1262,9 +1262,9 @@ RosegardenGUIView::slotDroppedAudio(QString audioDesc)
                          << " - trackId = " << trackId
                          << " - position = " << position
                          << " - startTime.sec = " << startTime.sec
-                         << " - startTime.usec = " << startTime.usec
+                         << " - startTime.nsec = " << startTime.nsec
                          << " - endTime.sec = " << endTime.sec
-                         << " - endTime.usec = " << endTime.usec
+                         << " - endTime.nsec = " << endTime.nsec
                          << endl;
 
     slotAddAudioSegment(audioFileId, trackId, position, startTime, endTime);

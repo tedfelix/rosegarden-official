@@ -297,9 +297,6 @@ public:
     static QString iconLabel() { return i18n("Latency"); }
     static QString title()     { return i18n("Sequencer Latency"); }
 
-    int getReadAheadValue() { return m_readAhead->value(); }
-    int getPlaybackValue()  { return m_playback->value(); }
-
     int getJACKPlaybackValue() { return m_jackPlayback->value(); }
     int getJACKRecordValue() { return m_jackRecord->value(); }
 
@@ -308,20 +305,9 @@ protected slots:
     //
     void slotFetchLatencyValues();
 
-
-    // To ensure that read ahead is never less than playback
-    //
-    void slotReadAheadChanged(int);
-    void slotPlaybackChanged(int);
-
 protected:
 
     //--------------- Data members ---------------------------------
-
-    QSlider* m_readAhead;
-    QSlider* m_playback;
-    QLabel*  m_readAheadLabel;
-    QLabel*  m_playbackLabel;
 
     QSlider* m_jackPlayback;
     QSlider* m_jackRecord;
@@ -451,6 +437,12 @@ public:
 
 protected slots:
 
+    void slotReadAheadChanged(int);
+    void slotAudioMixChanged(int);
+    void slotAudioReadChanged(int);
+    void slotAudioWriteChanged(int);
+    void slotSmallFileChanged(int);
+
     void slotShowStatus();
     void slotJackToggled();
 
@@ -467,8 +459,20 @@ protected:
 
     // Latency
     QCheckBox *m_midiClockEnabled;
+    QComboBox *m_timer;
     QComboBox *m_jackTransport;
     QComboBox *m_mmcTransport;
+
+    QSlider* m_readAhead;
+    QSlider* m_audioMix;
+    QSlider* m_audioRead;
+    QSlider* m_audioWrite;
+    QSlider* m_smallFile;
+    QLabel*  m_readAheadLabel;
+    QLabel*  m_audioMixLabel;
+    QLabel*  m_audioReadLabel;
+    QLabel*  m_audioWriteLabel;
+    QLabel*  m_smallFileLabel;
 
 #ifdef HAVE_LIBJACK
     // Number of JACK input ports our RG client creates - 

@@ -59,6 +59,7 @@ main(int argc, char **argv)
     }
 
     snd_seq_drain_output(handle);
+
     for (i = 0; i < 120; ++i) {
 	snd_seq_queue_status_t *status;
 	const snd_seq_real_time_t *rtime;

@@ -255,7 +255,7 @@ StudioControl::sendQuarterNoteLength(const Rosegarden::RealTime &length)
     QDataStream streamOut(data, IO_WriteOnly);
 
     streamOut << length.sec;
-    streamOut << length.usec;
+    streamOut << length.nsec;
 
     rgapp->sequencerSend("setQuarterNoteLength(long int, long int)", data);
 }
