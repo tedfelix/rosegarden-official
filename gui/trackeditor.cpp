@@ -55,6 +55,7 @@
 #include "segmenttool.h"
 #include "qdeferscrollview.h"
 #include "rosegardenguiview.h"
+#include "sequencemanager.h"
 
 #include "rosedebug.h"
 
@@ -523,9 +524,17 @@ TrackEditor::slotSetPointerPosition(Rosegarden::timeT position)
 // 	if (m_playTracking) {
 // 	    getSegmentCanvas()->slotScrollHoriz(int(double(position) / ruler->getUnitsPerPixel()));
 // 	}
+	
+	if (m_doc && m_doc->getSequenceManager() &&
+	    (m_doc->getSequenceManager()->getTransportStatus() != STOPPED)) {
 
-        if (m_playTracking && getSegmentCanvas()->isTimeForSmoothScroll()) {
-            getSegmentCanvas()->slotScrollHorizSmallSteps(int(double(position) / ruler->getUnitsPerPixel()));
+	    if (m_playTracking) {
+		getSegmentCanvas()->slotScrollHoriz(int(double(position) / ruler->getUnitsPerPixel()));
+	    }
+	} else {
+	    if (getSegmentCanvas()->isTimeForSmoothScroll()) {
+		getSegmentCanvas()->slotScrollHorizSmallSteps(int(double(position) / ruler->getUnitsPerPixel()));
+	    }
         }
 
 	emit needUpdate();
