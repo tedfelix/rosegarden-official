@@ -1,3 +1,5 @@
+// -*- c-basic-offset: 4 -*-
+
 /*
     Rosegarden-4
     A sequencer and musical notation editor.
@@ -64,12 +66,9 @@ std::ostream &operator<<(std::ostream &out, const RealTime &rt)
 }
 
 RealTime
-RealTime::operator/(double d) const
+RealTime::operator/(long d) const
 {
-    // not a good implementation -- potential for overflow on the long
-    double total = double(sec) * 1000000.0 + double(usec);
-    long usec = long(total / d);
-    return RealTime(usec / 1000000, usec % 1000000);
+    return RealTime(sec / d, (usec + 1000000 * (sec % d)) / d);
 }
 
 double 

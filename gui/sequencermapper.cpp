@@ -34,9 +34,6 @@
 #include "RealTime.h"
 #include "Exception.h"
 
-//!!!
-#define EXPERIMENTAL_SHM_NAME "/sequencer_experimental"
-
 SequencerMapper::SequencerMapper(const QString filename)
     : m_fd(-1),
       m_mmappedSize(0),
@@ -57,23 +54,21 @@ SequencerMapper::~SequencerMapper()
 void
 SequencerMapper::map()
 {
-//    QFileInfo fInfo(m_filename);
-//    if (!fInfo.exists()) {
-//        RG_DEBUG << "SequencerMapper::map() : file " << m_filename << " doesn't exist\n";
-//        throw Rosegarden::Exception("file not found");
-//    }
+    QFileInfo fInfo(m_filename);
+    if (!fInfo.exists()) {
+        RG_DEBUG << "SequencerMapper::map() : file " << m_filename << " doesn't exist\n";
+        throw Rosegarden::Exception("file not found");
+    }
 
-    m_fd = ::shm_open(EXPERIMENTAL_SHM_NAME, O_RDWR, S_IRUSR | S_IWUSR);
+    m_fd = ::open(m_filename.latin1(), O_RDWR);
 
     if (m_fd < 0) {
-	RG_DEBUG << "SequencerMmapper : Couldn't open shm " << EXPERIMENTAL_SHM_NAME
+	RG_DEBUG << "SequencerMapper::map() : Couldn't open " << m_filename
                      << endl;
-        throw Rosegarden::Exception("Couldn't open " + std::string(EXPERIMENTAL_SHM_NAME));
+        throw Rosegarden::Exception("Couldn't open " + std::string(m_filename.data()));
     }
 
     m_mmappedSize = sizeof(Rosegarden::RealTime);
-
-//    m_fd = ::open(m_filename.latin1(), O_RDWR);
 
     m_mmappedBuffer = (long*)::mmap(0, m_mmappedSize, PROT_READ, MAP_SHARED, m_fd, 0);
 

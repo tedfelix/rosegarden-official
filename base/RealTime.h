@@ -1,3 +1,4 @@
+// -*- c-basic-offset: 4 -*-
 
 /*
     Rosegarden-4
@@ -77,7 +78,7 @@ struct RealTime
         else return sec <= r.sec;
     }
 
-    RealTime operator/(double d) const;
+    RealTime operator/(long d) const;
 
     // Find the fractional difference between times
     //

@@ -40,9 +40,6 @@
 #define MREMAP_MAYMOVE 1
 #endif
 
-//!!!
-#define EXPERIMENTAL_SHM_NAME "/sequencer_experimental"
-
 SequencerMmapper::SequencerMmapper():
     m_fileName(createFileName()),
     m_needsRefresh(true),
@@ -51,20 +48,15 @@ SequencerMmapper::SequencerMmapper():
     m_mmappedSize(sizeof(Rosegarden::RealTime))
 {
     // just in case
-//    QFile::remove(m_fileName);
+    QFile::remove(m_fileName);
 
-//    m_fd = ::open(m_fileName.latin1(), O_RDWR|O_CREAT|O_TRUNC,
-//                  S_IRUSR|S_IWUSR);
-
-    m_fd = ::shm_open(EXPERIMENTAL_SHM_NAME, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
+    m_fd = ::open(m_fileName.latin1(), O_RDWR|O_CREAT|O_TRUNC,
+                  S_IRUSR|S_IWUSR);
 
     if (m_fd < 0) {
-//        SEQUENCER_DEBUG << "SequencerMmapper : Couldn't open " << m_fileName
-//                     << endl;
-//        throw Rosegarden::Exception("Couldn't open " + std::string(m_fileName.data()));
-        SEQUENCER_DEBUG << "SequencerMmapper : Couldn't open shm " << EXPERIMENTAL_SHM_NAME
+        SEQUENCER_DEBUG << "SequencerMmapper : Couldn't open " << m_fileName
                      << endl;
-        throw Rosegarden::Exception("Couldn't open " + std::string(EXPERIMENTAL_SHM_NAME));
+        throw Rosegarden::Exception("Couldn't open " + std::string(m_fileName.data()));
     }
 
     setFileSize(m_mmappedSize);
@@ -92,8 +84,7 @@ SequencerMmapper::~SequencerMmapper()
 {
     ::munmap(m_mmappedBuffer, m_mmappedSize);
     ::close(m_fd);
-//    QFile::remove(m_fileName);
-    ::shm_unlink(EXPERIMENTAL_SHM_NAME);
+    QFile::remove(m_fileName);
 }
     
 void
@@ -112,8 +103,6 @@ SequencerMmapper::refresh()
         std::cout << "SEC = " << *((long*)m_mmappedBuffer)
                   << ", USEC = " << (long)(*bufPos) << std::endl;
                   */
-
-//!!!        ::msync(m_mmappedBuffer, m_mmappedSize, MS_ASYNC);
 
         //rgapp->sequencerSend("remapControlBlock()");
 
@@ -142,12 +131,12 @@ SequencerMmapper::init()
 
     m_position = Rosegarden::RealTime(0, 0);
     refresh();
+    ::msync(m_mmappedBuffer, m_mmappedSize, MS_ASYNC);
 }
 
 void
 SequencerMmapper::setFileSize(size_t size)
 {
-/*!!!
     SEQUENCER_DEBUG << "SequencerMmapper : setting size of "
                  << m_fileName << " to " << size << endl;
     // rewind
@@ -168,13 +157,6 @@ SequencerMmapper::setFileSize(size_t size)
                   << m_fileName << std::endl;
         throw Rosegarden::Exception("write failed");
     }
-*/
-
-    if (::ftruncate(m_fd, size) != 0) {
-        std::cerr << "WARNING: SequencerMmapper : Couldn't resize " << EXPERIMENTAL_SHM_NAME << std::endl;
-        throw Rosegarden::Exception("ftruncate failed");
-    }
-	
 }
 
 QString
