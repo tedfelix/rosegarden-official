@@ -184,8 +184,7 @@ TracksCanvas::findPartClickedOn(QPoint pos)
     return 0;
 }
 
-void
-TracksCanvas::contentsMousePressEvent(QMouseEvent* e)
+void TracksCanvas::contentsMousePressEvent(QMouseEvent* e)
 {
     if (e->button() == LeftButton) { // delegate event handling to tool
 
@@ -202,6 +201,16 @@ TracksCanvas::contentsMousePressEvent(QMouseEvent* e)
 
             m_editMenu->exec(QCursor::pos());
         }
+    }
+}
+
+void TracksCanvas::contentsMouseDoubleClickEvent(QMouseEvent* e)
+{
+    TrackItem *item = findPartClickedOn(e->pos());
+
+    if (item) {
+        m_currentItem = item;
+        emit editTrack(m_currentItem->getTrack());
     }
 }
 

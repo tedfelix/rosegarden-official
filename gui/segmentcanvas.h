@@ -116,9 +116,10 @@ public slots:
     virtual void update();
 
 protected:
-    void contentsMousePressEvent(QMouseEvent*);
-    void contentsMouseReleaseEvent(QMouseEvent*);
-    void contentsMouseMoveEvent(QMouseEvent*);
+    virtual void contentsMousePressEvent(QMouseEvent*);
+    virtual void contentsMouseReleaseEvent(QMouseEvent*);
+    virtual void contentsMouseMoveEvent(QMouseEvent*);
+    virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
     virtual void wheelEvent(QWheelEvent*);
 
 protected slots:
