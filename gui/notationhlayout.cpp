@@ -488,7 +488,7 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 			   actualBarEnd - barTimes.first);
 	}
 
-	if ((endTime > startTime) && (barNo % 5 == 0)) {
+	if ((endTime > startTime) && (barNo % 20 == 0)) {
 	    emit setProgress((barTimes.second - startTime) * 95 /
 			     (endTime - startTime));
 	    kapp->processEvents(50);

@@ -143,6 +143,13 @@ public:
      */
     virtual void positionElements(Rosegarden::timeT from,
 				  Rosegarden::timeT to);
+
+    virtual void markChanged(Rosegarden::timeT from = 0,
+			     Rosegarden::timeT to = 0,
+			     bool movedOnly = false);
+
+    virtual void checkRendered(Rosegarden::timeT from,
+			       Rosegarden::timeT to);
     
     /**
      * Insert time signature at x-coordinate \a x.
@@ -343,6 +350,12 @@ protected:
     int m_barNumbersEvery;
     bool m_colourQuantize;
     bool m_showUnknowns;
+
+    enum BarStatus { UnRendered = 0, Rendered, Positioned };
+    typedef __HASH_NS::hash_map<int, BarStatus> BarStatusMap;
+    BarStatusMap m_status;
+    std::pair<int, int> m_lastRenderCheck;
+    bool m_ready;
 };
 
 #endif

@@ -148,7 +148,8 @@ NotationView::slotChangeSpacing(int spacing)
     applyLayout();
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-        m_staffs[i]->positionAllElements();
+	m_staffs[i]->markChanged();
+//!!!        m_staffs[i]->positionAllElements();
     }
 
     updateView();
@@ -311,8 +312,9 @@ NotationView::slotChangeFont(std::string newName, int newSize)
     if (!layoutApplied) KMessageBox::sorry(0, "Couldn't apply layout");
     else {
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-            m_staffs[i]->renderAllElements();
-            m_staffs[i]->positionAllElements();
+	    m_staffs[i]->markChanged();
+//!!!            m_staffs[i]->renderAllElements();
+//!!!            m_staffs[i]->positionAllElements();
         }
     }
 

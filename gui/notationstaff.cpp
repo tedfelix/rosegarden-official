@@ -47,6 +47,7 @@
 #include "Selection.h"
 #include "Composition.h"
 #include "BaseProperties.h"
+#include "Profiler.h"
 
 using Rosegarden::timeT;
 using Rosegarden::Segment;
@@ -88,7 +89,8 @@ NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
     m_legerLineCount(8),
     m_barNumbersEvery(0),
     m_colourQuantize(true),
-    m_showUnknowns(true)
+    m_showUnknowns(true),
+    m_ready(false)
 {
     KConfig *config = kapp->config();
     config->setGroup(NotationView::ConfigGroup);
@@ -341,7 +343,7 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 
     emit setOperationName(i18n("Rendering staff %1...").arg(getId() + 1));
     emit setProgress(0);
-    kapp->processEvents();
+//!!!    kapp->processEvents();
 
     throwIfCancelled();
 
@@ -370,11 +372,11 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 			    currentClef, selected);
 
 	if ((endTime > startTime) &&
-	    (++elementCount % 100 == 0)) {
+	    (++elementCount % 200 == 0)) {
 
 	    timeT myTime = (*it)->getViewAbsoluteTime();
 	    emit setProgress((myTime - startTime) * 100 / (endTime - startTime));
-	    kapp->processEvents();
+//!!!	    kapp->processEvents();
 	    throwIfCancelled();
 	}
     }
@@ -392,7 +394,7 @@ NotationStaff::positionElements(timeT from, timeT to)
 
     emit setOperationName(i18n("Positioning staff %1...").arg(getId() + 1));
     emit setProgress(0);
-    kapp->processEvents();
+//!!!    kapp->processEvents();
     throwIfCancelled();
 
     const NotationProperties &properties(m_notationView->getProperties());
@@ -400,9 +402,23 @@ NotationStaff::positionElements(timeT from, timeT to)
     int elementsPositioned = 0;
     int elementsRendered = 0; // diagnostic
     
-    timeT nextBarTime;
-    NotationElementList::iterator beginAt = findUnchangedBarStart(from);
-    NotationElementList::iterator endAt = findUnchangedBarEnd(to, nextBarTime);
+    Rosegarden::Composition *composition = getSegment().getComposition();
+
+    timeT nextBarTime = composition->getBarEndForTime(to);
+
+/*
+    NotationElementList::iterator beginAt =
+	findUnchangedBarStart(from, usePreciseEndTimes);
+    NotationElementList::iterator endAt =
+	findUnchangedBarEnd(to, nextBarTime, usePreciseEndTimes);
+*/
+
+    NotationElementList::iterator beginAt =
+	getViewElementList()->findTime(composition->getBarStartForTime(from));
+
+    NotationElementList::iterator endAt =
+	getViewElementList()->findTime(composition->getBarEndForTime(to));
+
     if (beginAt == getViewElementList()->end()) return;
 
     truncateClefsAndKeysAt(static_cast<int>((*beginAt)->getLayoutX()));
@@ -493,10 +509,10 @@ NotationStaff::positionElements(timeT from, timeT to)
 	el->setSelected(selected);
 
 	if ((to > from) &&
-	    (++elementsPositioned % 200 == 0)) {
+	    (++elementsPositioned % 300 == 0)) {
 	    timeT myTime = (*it)->getViewAbsoluteTime();
 	    emit setProgress((myTime - from) * 100 / (to - from));
-	    kapp->processEvents();
+//!!!	    kapp->processEvents();
 	    throwIfCancelled();
 	}
     }
@@ -1103,4 +1119,134 @@ NotationStaff::eventRemoved(const Rosegarden::Segment *segment,
 Rosegarden::ViewElement* NotationStaff::makeViewElement(Rosegarden::Event* e)
 {
     return new NotationElement(e);
+}
+
+void
+NotationStaff::markChanged(timeT from, timeT to, bool movedOnly)
+{
+    // first time through this, m_ready is false -- we mark it true
+
+    if (from == to) m_status.clear();
+    else {
+	
+	Rosegarden::Composition *composition = getSegment().getComposition();
+
+	//!!! should do this using segment end times etc., not composition's
+
+	timeT nextBarTime = 0; // we only use this -- not an ideal api any more
+	NotationElementList::iterator i = findUnchangedBarEnd(to, nextBarTime);
+
+	int finalBar = composition->getNbBars() - 1;
+	if (nextBarTime > 0) finalBar = composition->getBarNumber(nextBarTime);
+
+	int fromBar = composition->getBarNumber(from);
+	int toBar   = composition->getBarNumber(to);
+	if (finalBar < toBar) finalBar = toBar;
+
+	for (int bar = fromBar; bar <= finalBar; ++bar) {
+
+	    if (bar > toBar) movedOnly = true;
+	    
+	    if (bar >= m_lastRenderCheck.first &&
+		bar <= m_lastRenderCheck.second) {
+
+		if (!movedOnly || m_status[bar] == UnRendered) {
+		    renderElements
+			(getViewElementList()->findTime(composition->getBarStart(bar)),
+			 getViewElementList()->findTime(composition->getBarEnd(bar)));
+		}
+		positionElements(composition->getBarStart(bar),
+				 composition->getBarEnd(bar));
+		m_status[bar] = Positioned;
+
+	    } else if (!m_ready) {
+		// first time through -- we don't need a separate render phase,
+		// only to mark as not yet positioned
+		m_status[bar] = Rendered;
+
+	    } else if (movedOnly) {
+		if (m_status[bar] == Positioned) m_status[bar] = Rendered;
+
+	    } else {
+		m_status[bar] = UnRendered;
+	    }
+	}
+    }
+
+    m_ready = true;
+}
+
+void
+NotationStaff::checkRendered(timeT from, timeT to)
+{
+    if (!m_ready) return;
+    Rosegarden::Composition *composition = getSegment().getComposition();
+
+//    NOTATION_DEBUG << "NotationStaff::checkRendered: " << from << " -> " << to << endl;
+
+    int fromBar = composition->getBarNumber(from);
+    int toBar   = composition->getBarNumber(to);
+
+    if (fromBar > toBar) std::swap(fromBar, toBar);
+
+    for (int bar = fromBar; bar <= toBar; ++bar) {
+//	NOTATION_DEBUG << "NotationStaff::checkRendered: bar " << bar << " status "
+//		       << m_status[bar] << endl;
+    
+	switch (m_status[bar]) {
+	    
+	case UnRendered:
+	    renderElements
+		(getViewElementList()->findTime(composition->getBarStart(bar)),
+		 getViewElementList()->findTime(composition->getBarEnd(bar)));
+	    
+	case Rendered:
+	    positionElements
+		(composition->getBarStart(bar),
+		 composition->getBarEnd(bar));
+	}
+
+	m_status[bar] = Positioned;
+    }
+
+    m_lastRenderCheck = std::pair<int, int>(fromBar, toBar);
+
+/*
+    int rangeStart = fromBar;
+
+    for (int bar = fromBar; bar <= toBar; ++bar) {
+	NOTATION_DEBUG << "NotationStaff::checkRendered: bar " << bar << " status "
+		       << m_status[bar] << endl;
+    
+	if (m_status[bar]) {
+	    if (bar > rangeStart) {
+		positionElements(composition->getBarStart(rangeStart),
+				 composition->getBarStart(bar),
+				 true);
+	    }
+	    rangeStart = bar + 1;
+	} else {
+	    m_status[bar] = true;
+	}
+    }
+    if (toBar >= rangeStart) {
+	positionElements(composition->getBarStart(rangeStart),
+			 composition->getBarEnd(toBar),
+			 true);
+    }
+*/
+/*
+    if (from >= m_rendered.from() && to <= m_rendered.to()) return;
+
+    if (from < m_rendered.from()) {
+	if (to <= m_rendered.to()) {
+	    to = m_rendered.from();
+	}
+    } else {
+	from = m_rendered.to();
+    }
+
+    positionElements(from, to);
+    m_rendered.push(from, to);
+*/
 }

@@ -2036,7 +2036,8 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
     if (!layoutApplied) KMessageBox::sorry(0, "Couldn't apply layout");
     else {
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-            m_staffs[i]->positionAllElements();
+	    m_staffs[i]->markChanged();
+//!!!            m_staffs[i]->positionAllElements();
         }
     }
 
@@ -2620,7 +2621,7 @@ void NotationView::refreshSegment(Segment *segment,
 
         Segment *ssegment = &m_staffs[i]->getSegment();
         bool thisStaff = (ssegment == segment || segment == 0);
-
+/*
         NotationElementList *notes = m_staffs[i]->getViewElementList();
         NotationElementList::iterator starti = notes->begin();
         NotationElementList::iterator endi = notes->end();
@@ -2638,10 +2639,14 @@ void NotationView::refreshSegment(Segment *segment,
         NOTATION_DEBUG << "NotationView::refreshSegment: "
                              << "start = " << startTime << ", end = " << endTime << ", barStart = " << barStartTime << ", barEnd = " << barEndTime << endl;
 
+*/
+	m_staffs[i]->markChanged(startTime, endTime, !thisStaff);
+/*!!!
         if (thisStaff) {
             m_staffs[i]->renderElements(starti, endi);
         }
         m_staffs[i]->positionElements(barStartTime, barEndTime);
+*/
     }
 
     PixmapArrayGC::deleteAll();
@@ -2996,4 +3001,18 @@ void NotationView::removeProgressEventFilter()
 NotationView::NoteActionDataMap* NotationView::m_noteActionDataMap = 0;
 NotationView::MarkActionDataMap* NotationView::m_markActionDataMap = 0;
 const char* const NotationView::ConfigGroup = "Notation Options";
+
+void
+NotationView::checkRendered(double cx0, double cx1)
+{
+    for (int i = 0; i < m_staffs.size(); ++i) {
+	NotationStaff *staff = m_staffs[i];
+	LinedStaff::LinedStaffCoords cc0 = staff->getLayoutCoordsForCanvasCoords(cx0, 0);
+	LinedStaff::LinedStaffCoords cc1 = staff->getLayoutCoordsForCanvasCoords(cx1,
+										 staff->getTotalHeight() + staff->getY());
+	timeT t0 = m_hlayout->getTimeForX(cc0.first);
+	timeT t1 = m_hlayout->getTimeForX(cc1.first);
+	staff->checkRendered(t0, t1);
+    }
+}
 

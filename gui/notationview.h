@@ -262,6 +262,10 @@ public:
      */
     virtual void print(bool previewOnly = false);
 
+    
+    void checkRendered(double cx0, double cx1);
+
+
 public slots:
 
     /**

@@ -30,6 +30,9 @@
 #include "rosestrings.h"
 #include "rosedebug.h"
 
+//!!!
+#include "notationview.h"
+
 
 NotationCanvasView::NotationCanvasView(const LinedStaffManager &staffmgr,
 				       QCanvas *viewing, QWidget *parent,
@@ -79,14 +82,6 @@ NotationCanvasView::setHeightTracking(bool t)
 	m_heightMarker->hide();
 	canvas()->update();
     }
-}
-
-void
-NotationCanvasView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
-{
-    NOTATION_DEBUG << "NotationCanvasView::drawContents: "
-		   << cx << "," << cy << " / " << cw << "x" << ch << endl;
-    QCanvasView::drawContents(p, cx, cy, cw, ch);
 }
 
 void
@@ -403,3 +398,20 @@ NotationCanvasView::getElementAtXCoord(QMouseEvent *e) // any old element
 
     return 0;
 }
+
+
+//!!!
+void
+NotationCanvasView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
+{
+
+    NOTATION_DEBUG << "NotationCanvasView::drawContents (" << cx << "," << cy
+		   << ") " << cw << "x" << ch << endl;
+
+    NotationView *nview = (NotationView *)(&m_linedStaffManager);
+    nview->checkRendered(std::min(contentsX(), cx),
+			 std::max(contentsX() + contentsWidth(), cx + cw));
+    QCanvasView::drawContents(p, cx, cy, cw, ch);
+}
+
+
