@@ -949,7 +949,7 @@ RosegardenGUIApp::getSequencerSlice(const Rosegarden::timeT &sliceStart,
                 // insert event
                 Rosegarden::MappedEvent *me =
                                   new Rosegarden::MappedEvent(**j, duration);
-                me->setInstrument((*i)->getInstrument());
+                me->setTrack((*i)->getTrack());
                 mappComp.insert(me);
             }
         }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE rosegarden-data>
 <rosegarden-data>
-<Track instrument="2" start="10">
+<Track track="2" start="10">
 	<event type="note" duration="12" pitch="60"/>
 	<event type="note" duration="24" pitch="61"/>
 	<event type="note" duration="48" pitch="60"/>

@@ -154,9 +154,9 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     readOptions();
 
     if (segments.size() == 1) {
-        setCaption(QString("%1 - Segment Instrument #%2")
+        setCaption(QString("%1 - Segment Track #%2")
                    .arg(doc->getTitle())
-                   .arg(segments[0]->getInstrument()));
+                   .arg(segments[0]->getTrack()));
     } else if (segments.size() == doc->getComposition().getNbSegments()) {
         setCaption(QString("%1 - All Segments")
                    .arg(doc->getTitle()));

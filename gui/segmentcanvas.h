@@ -52,11 +52,11 @@ public:
     /// Return the number of the bar at which the item's segment starts
     int getStartBar() const;
 
-    /// Return the instrument for the item's segment
-    int getInstrument() const;
+    /// Return the track for the item's segment
+    int getTrack() const;
 
-    /// Set the instrument for the item's segment
-    void setInstrument(int i);
+    /// Set the track for the item's segment
+    void setTrack(int t);
 
     /// Set the segment this SegmentItem will represent
     void setSegment(Rosegarden::Segment *p)  { m_segment = p; }
@@ -222,7 +222,7 @@ signals:
      * Emitted when a Segment is moved to a different start time
      * (horizontally) or instrument (vertically)
      */
-    void updateSegmentInstrumentAndStartIndex(SegmentItem*);
+    void updateSegmentTrackAndStartIndex(SegmentItem*);
 
     void editSegmentNotation(Rosegarden::Segment*);
     void editSegmentMatrix(Rosegarden::Segment*);
@@ -311,7 +311,7 @@ public:
     virtual void handleMouseMove(QMouseEvent*);
 
 signals:
-    void updateSegmentInstrumentAndStartIndex(SegmentItem*);
+    void updateSegmentTrackAndStartIndex(SegmentItem*);
 };
 
 /**

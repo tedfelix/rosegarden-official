@@ -279,7 +279,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 
         //--------------------------
         fileStream << QString("<segment instrument=\"%1\" start=\"%2\">")
-            .arg((*trks)->getInstrument())
+            .arg((*trks)->getTrack())
             .arg((*trks)->getStartIndex()) << endl;
 
         long currentGroup = -1;
@@ -398,13 +398,13 @@ RosegardenGUIDoc::xmlParse(QFile &file, QString &errMsg)
 
 
 void
-RosegardenGUIDoc::createNewSegment(SegmentItem *p, int instrument)
+RosegardenGUIDoc::createNewSegment(SegmentItem *p, int track)
 {
     kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewSegment(item : "
                          << p << ")\n";
 
     Segment *newSegment = new Segment();
-    newSegment->setInstrument(instrument);
+    newSegment->setTrack(track);
 
     kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewSegment() new segment = "
                          << newSegment << endl;

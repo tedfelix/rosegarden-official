@@ -420,7 +420,7 @@ timeT RG21Loader::convertRG21Duration(QStringList::Iterator& i)
 void RG21Loader::closeSegmentOrComposition()
 {
     if (m_currentSegment) {
-        m_currentSegment->setInstrument(m_currentSegmentNb - 1);
+        m_currentSegment->setTrack(m_currentSegmentNb - 1);
         m_composition->addSegment(m_currentSegment);
         m_currentSegment = 0;
         m_currentSegmentTime = 0;

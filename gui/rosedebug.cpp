@@ -55,7 +55,7 @@ operator<<(kdbgstream &dbg, const Rosegarden::Event &e)
 kdbgstream&
 operator<<(kdbgstream &dbg, const Rosegarden::Segment &t)
 {
-    dbg << "Segment for instrument " << t.getInstrument()
+    dbg << "Segment for instrument " << t.getTrack()
         << " starting at " << t.getStartIndex() << endl;
 
     for(Rosegarden::Segment::const_iterator i = t.begin();

@@ -37,7 +37,7 @@
 namespace Rosegarden
 {
 
-typedef unsigned int instrumentT;
+typedef unsigned int trackT;
 typedef unsigned int velocityT;
 
 class MappedEvent
@@ -54,25 +54,25 @@ public:
     MappedEvent(const Event &e, timeT duration);
 
     MappedEvent(const int &pitch, const timeT &absTime, const timeT &duration,
-                const velocityT &velocity, const instrumentT &instrument):
+                const velocityT &velocity, const trackT &track):
         m_pitch(pitch),
         m_absoluteTime(absTime),
         m_duration(duration),
         m_velocity(velocity),
-        m_instrument(instrument) {;}
+        m_track(track) {;}
     ~MappedEvent() {;}
 
     void setPitch(const int &p) { m_pitch = p; }
     void setAbsoluteTime(const timeT &a) { m_absoluteTime = a; }
     void setDuration(const timeT &d) { m_duration = d; }
-    void setInstrument(const instrumentT &i) { m_instrument = i; }
+    void setTrack(const trackT &i) { m_track = i; }
     void setVelocity(const velocityT &v) { m_velocity = v; }
 
     int   getPitch() const { return m_pitch; }
     timeT getAbsoluteTime() const { return m_absoluteTime; }
     timeT getDuration() const { return m_duration; }
     velocityT getVelocity() const { return m_velocity; }
-    instrumentT getInstrument() const { return m_instrument; }
+    trackT getTrack() const { return m_track; }
 
     struct MappedEventCmp
     {
@@ -90,7 +90,7 @@ private:
     timeT        m_absoluteTime;
     timeT        m_duration;
     velocityT    m_velocity;
-    instrumentT  m_instrument;
+    trackT       m_track;
 
 };
 

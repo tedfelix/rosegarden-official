@@ -60,14 +60,14 @@ int SegmentItem::getStartBar() const
     return (int)(x() / m_widthToDurationRatio * m_barResolution);
 }
 
-int SegmentItem::getInstrument() const
+int SegmentItem::getTrack() const
 {
-    return m_segment->getInstrument();
+    return m_segment->getTrack();
 }
 
-void SegmentItem::setInstrument(int i)
+void SegmentItem::setTrack(int t)
 {
-    m_segment->setInstrument(i);
+    m_segment->setTrack(t);
 }
 
 void SegmentItem::setWidthToDurationRatio(unsigned int r)
@@ -442,8 +442,8 @@ SegmentMover::SegmentMover(SegmentCanvas *c)
 {
     m_canvas->setCursor(Qt::sizeAllCursor);
 
-    connect(this, SIGNAL(updateSegmentInstrumentAndStartIndex(SegmentItem*)),
-            c,    SIGNAL(updateSegmentInstrumentAndStartIndex(SegmentItem*)));
+    connect(this, SIGNAL(updateSegmentTrackAndStartIndex(SegmentItem*)),
+            c,    SIGNAL(updateSegmentTrackAndStartIndex(SegmentItem*)));
 
     kdDebug(KDEBUG_AREA) << "SegmentMover()\n";
 }
@@ -461,7 +461,7 @@ void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
 void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
 {
     if (m_currentItem)
-        emit updateSegmentInstrumentAndStartIndex(m_currentItem);
+        emit updateSegmentTrackAndStartIndex(m_currentItem);
 
     m_currentItem = 0;
 }

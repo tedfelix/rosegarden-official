@@ -143,7 +143,7 @@ Sequencer::record(const RecordStatus& recordStatus)
 	     << m_recordStartTime.usec << endl;
                                      
 	m_recordSegment = new Segment;
-	m_recordSegment->setInstrument(1);
+	m_recordSegment->setTrack(1);
 	m_recordSegment->setStartIndex(0);
 
     }

@@ -92,12 +92,12 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
     } else if (lcName == "segment") {
 
-        int instrument = -1, startIndex = 0;
-        QString instrumentNbStr = atts.value("instrument");
-        if (instrumentNbStr) {
-            instrument = instrumentNbStr.toInt();
+        int track = -1, startIndex = 0;
+        QString trackNbStr = atts.value("track");
+        if (trackNbStr) {
+            track = trackNbStr.toInt();
 //             kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : segment instr. nb = "
-//                                  << instrumentNb << endl;
+//                                  << trackNb << endl;
         }
 
         QString startIdxStr = atts.value("start");
@@ -108,7 +108,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         }
         
         m_currentSegment = new Segment;
-        m_currentSegment->setInstrument(instrument);
+        m_currentSegment->setTrack(track);
         m_currentSegment->setStartIndex(startIndex);
 	m_currentTime = startIndex;
 

@@ -42,7 +42,7 @@ int                       sliceSize;
 int                       pitch;
 timeT                     absTime;
 timeT                     duration;
-instrumentT               instrument;
+trackT                    track;
 velocityT                 velocity;
 
 
@@ -103,7 +103,7 @@ MappedComposition::MappedComposition(Rosegarden::Composition &comp,
 	    {
 		// insert event
 		MappedEvent *me = new MappedEvent(**j, duration);
-		me->setInstrument((*i)->getInstrument());
+		me->setTrack((*i)->getTrack());
 		this->insert(me);
 	    }
 	}
@@ -126,7 +126,7 @@ operator<<(QDataStream &dS, const MappedComposition &mC)
 	dS << (*it)->getAbsoluteTime();
 	dS << (*it)->getDuration();
 	dS << (*it)->getVelocity();
-	dS << (*it)->getInstrument();
+	dS << (*it)->getTrack();
     }
 
     return dS;
@@ -146,10 +146,10 @@ operator>>(QDataStream &dS, MappedComposition &mC)
 	dS >> absTime;
 	dS >> duration;
 	dS >> velocity;
-	dS >> instrument;
+	dS >> track;
 
 	insertEvent = new MappedEvent(pitch, absTime, duration,
-				      velocity, instrument);
+				      velocity, track);
 	mC.insert(insertEvent);
 
 	sliceSize--;

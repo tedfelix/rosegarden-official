@@ -461,7 +461,7 @@ MidiFile::convertToRosegarden()
     Rosegarden::Segment *rosegardenSegment;
     Rosegarden::Event *rosegardenEvent;
     unsigned long segmentTime;
-    unsigned int compositionSegment = 0;
+    unsigned int compositionTrack = 0;
     bool noteOffFound;
     bool notesOnSegment;
 
@@ -556,7 +556,7 @@ MidiFile::convertToRosegarden()
 	{
 	    // Create Segment on Composition object
 	    rosegardenSegment = new Segment;
-	    rosegardenSegment->setInstrument(compositionSegment);
+	    rosegardenSegment->setTrack(compositionTrack);
 	    rosegardenSegment->setStartIndex(0);
 	    SegmentNotationHelper notationSegment(*rosegardenSegment); //cc
 
@@ -568,7 +568,7 @@ MidiFile::convertToRosegarden()
 	    // Rosegarden segment number
 	    //
 	    composition->addSegment(rosegardenSegment);
-	    compositionSegment++;
+	    compositionTrack++;
 
 	    for ( midiEvent = (m_midiComposition[i].begin());
 		  midiEvent != (m_midiComposition[i].end());

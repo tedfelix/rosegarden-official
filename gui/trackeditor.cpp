@@ -125,8 +125,8 @@ TrackEditor::init(unsigned int nbSegments, unsigned int nbBars)
     QObject::connect(m_segmentsCanvas, SIGNAL(updateSegmentDuration(SegmentItem*)),
                      this,           SLOT(updateSegmentDuration(SegmentItem*)));
 
-    QObject::connect(m_segmentsCanvas, SIGNAL(updateSegmentInstrumentAndStartIndex(SegmentItem*)),
-                     this,           SLOT(updateSegmentInstrumentAndStartIndex(SegmentItem*)));
+    QObject::connect(m_segmentsCanvas, SIGNAL(updateSegmentTrackAndStartIndex(SegmentItem*)),
+                     this,           SLOT(updateSegmentTrackAndStartIndex(SegmentItem*)));
 
     // create the position pointer
     m_pointer = new QCanvasLine(canvas);
@@ -153,14 +153,14 @@ TrackEditor::setupSegments()
             kdDebug(KDEBUG_AREA) << "TrackEditor::setupSegments() add segment"
                                  << " - start idx : " << (*i)->getStartIndex()
                                  << " - nb time steps : " << (*i)->getDuration()
-                                 << " - instrument : " << (*i)->getInstrument()
+                                 << " - track : " << (*i)->getTrack()
                                  << endl;
 
 	    int startBar = comp.getBarNumber((*i)->getStartIndex(), true);
 	    int barCount = comp.getBarNumber((*i)->getEndIndex(), true)
 		- startBar +1;
 
-            int y = m_vHeader->sectionPos((*i)->getInstrument());
+            int y = m_vHeader->sectionPos((*i)->getTrack());
 	    int x = m_hHeader->sectionPos(startBar);
 
             SegmentItem *newItem = m_segmentsCanvas->addPartItem(x, y, barCount);
@@ -171,7 +171,7 @@ TrackEditor::setupSegments()
 }
 
 
-void TrackEditor::addSegment(int instrument, int start,
+void TrackEditor::addSegment(int track, int start,
                             unsigned int nbTimeSteps)
 {
     if (!m_document) return; // sanity check
@@ -179,14 +179,14 @@ void TrackEditor::addSegment(int instrument, int start,
     Composition &comp = m_document->getComposition();
 
     Rosegarden::Segment* segment = new Rosegarden::Segment(start);
-    segment->setInstrument(instrument);
+    segment->setTrack(track);
     comp.addSegment(segment);
     segment->setDuration(nbTimeSteps);
 
     int startBar = comp.getBarNumber(start, true);
     int barCount = comp.getBarNumber(start + nbTimeSteps, true) - startBar + 1;
 
-    int y = m_vHeader->sectionPos(instrument);
+    int y = m_vHeader->sectionPos(track);
     int x = m_hHeader->sectionPos(startBar);
 
     SegmentItem *newItem = m_segmentsCanvas->addPartItem(x, y, barCount);
@@ -209,14 +209,14 @@ void TrackEditor::segmentOrderChanged(int section, int fromIdx, int toIdx)
 void
 TrackEditor::addSegment(SegmentItem *p)
 {
-    // first find instrument for part, as it is used for indexing
+    // first find track for part, as it is used for indexing
     //
-    int instrument = m_vHeader->sectionAt(static_cast<int>(p->y()));
+    int track = m_vHeader->sectionAt(static_cast<int>(p->y()));
 
-    emit createNewSegment(p, instrument);
+    emit createNewSegment(p, track);
 
-    kdDebug(KDEBUG_AREA) << QString("TrackEditor::addSegment() : segment instr is %1 at y=%2")
-        .arg(instrument).arg(p->y())
+    kdDebug(KDEBUG_AREA) << QString("TrackEditor::addSegment() : segment track is %1 at y=%2")
+        .arg(track).arg(p->y())
                          << ", p = " << p << endl;
 
 }
@@ -253,19 +253,19 @@ void TrackEditor::updateSegmentDuration(SegmentItem *i)
 }
 
 
-void TrackEditor::updateSegmentInstrumentAndStartIndex(SegmentItem *i)
+void TrackEditor::updateSegmentTrackAndStartIndex(SegmentItem *i)
 {
     Composition& composition = m_document->getComposition();
 
-    int instrument = m_vHeader->sectionAt(int(i->y()));
+    int track = m_vHeader->sectionAt(int(i->y()));
     int startBar = m_hHeader->sectionAt(int(i->x()));
     timeT startIndex = composition.getBarRange(startBar, false).first;
 
-    kdDebug(KDEBUG_AREA) << "TrackEditor::updateSegmentInstrumentAndStartIndex() : set instrument to "
-                         << instrument
+    kdDebug(KDEBUG_AREA) << "TrackEditor::updateSegmentTrackAndStartIndex() : set track to "
+                         << track
                          << " - start Index to : " << startIndex << endl;
 
-    i->setInstrument(instrument);
+    i->setTrack(track);
     i->getSegment()->setStartIndex(startIndex);
 }
 
@@ -280,7 +280,7 @@ void TrackEditor::updateSegmentOrder()
         SegmentItem *segmentItem = dynamic_cast<SegmentItem*>(item);
         
         if (segmentItem) {
-            segmentItem->setY(m_vHeader->sectionPos(segmentItem->getInstrument()));
+            segmentItem->setY(m_vHeader->sectionPos(segmentItem->getTrack()));
         }
     }
 }

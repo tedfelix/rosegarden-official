@@ -34,7 +34,7 @@ namespace Rosegarden
 
 /**
  * Segment is the container for a set of Events that are all played on
- * the same instrument.  Each event has an absolute starting time,
+ * the same track.  Each event has an absolute starting time,
  * which is used as the index within the segment.  Multiple events may
  * have the same absolute time.
  * 
@@ -69,8 +69,8 @@ public:
 
     timeT getEndIndex() const { return m_startIdx + getDuration(); }
 
-    unsigned int getInstrument() const         { return m_instrument; }
-    void         setInstrument(unsigned int i) { m_instrument = i; }
+    unsigned int getTrack() const         { return m_track; }
+    void         setTrack(unsigned int i) { m_track = i; }
 
     /**
      * Note that a Segment does not have to be in a Composition;
@@ -200,10 +200,10 @@ public:
     {
         bool operator()(const Segment* a, const Segment* b) const 
         {
-            if (a->getInstrument() == b->getInstrument())
+            if (a->getTrack() == b->getTrack())
                 return a->getStartIndex() < b->getStartIndex();
 
-            return a->getInstrument() < b->getInstrument();
+            return a->getTrack() < b->getTrack();
         }
     };
 
@@ -225,7 +225,7 @@ public:
 
 private:
     timeT m_startIdx;
-    unsigned int m_instrument;
+    unsigned int m_track;
 
     mutable int m_id;
 

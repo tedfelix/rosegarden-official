@@ -4,7 +4,7 @@
 <reference-segment>
 <event type="timesignature" subordering="-10"><property name="numerator" int="4"/><property name="denominator" int="4"/></event>
 </reference-segment>
-<segment instrument="0" start="0">
+<segment track="0" start="0">
 <chord>
 	<event type="clefchange" subordering="-30"><property name="clef" string="tenor"/></event>
 	<event type="keychange" subordering="-20"><property name="key" string="A major"/></event>
@@ -837,7 +837,7 @@
 	<event type="note" duration="384"><property name="pitch" int="69"/><property name="marks" int="1"/><property name="TiedBackward" bool="true"/><property name="mark1" string="pause"/></event>
 </chord>
 </segment>
-<segment instrument="1" start="0">
+<segment track="1" start="0">
 <chord>
 	<event type="clefchange" subordering="-30"><property name="clef" string="treble"/></event>
 	<event type="keychange" subordering="-20"><property name="key" string="A major"/></event>
@@ -2121,7 +2121,7 @@
 	<event type="note" duration="384"><property name="pitch" int="66"/><property name="marks" int="1"/><property name="mark1" string="pause"/></event>
 </chord>
 </segment>
-<segment instrument="2" start="0">
+<segment track="2" start="0">
 <chord>
 	<event type="clefchange" subordering="-30"><property name="clef" string="bass"/></event>
 	<event type="keychange" subordering="-20"><property name="key" string="A major"/></event>

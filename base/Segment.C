@@ -40,7 +40,7 @@ using std::string;
 Segment::Segment(timeT startIdx) :
     std::multiset<Event*, Event::EventCmp>(),
     m_startIdx(startIdx),
-    m_instrument(0),
+    m_track(0),
     m_id(0),
     m_composition(0),
     m_quantizer(0)
