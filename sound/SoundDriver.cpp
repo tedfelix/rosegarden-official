@@ -26,7 +26,8 @@
 namespace Rosegarden
 {
 
-PlayableAudioFile::PlayableAudioFile(AudioFile *audioFile,
+PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
+                                     AudioFile *audioFile,
                                      const RealTime &startTime,
                                      const RealTime &startIndex,
                                      const RealTime &duration):
@@ -35,7 +36,8 @@ PlayableAudioFile::PlayableAudioFile(AudioFile *audioFile,
         m_duration(duration),
         m_status(IDLE),
         m_file(0),
-        m_audioFile(audioFile)
+        m_audioFile(audioFile),
+        m_instrumentId(instrumentId)
 {
     m_file = new std::ifstream(m_audioFile->getFilename().c_str(),
                                std::ios::in | std::ios::binary);
@@ -334,13 +336,14 @@ SoundDriver::clearAudioFiles()
 
 
 bool
-SoundDriver::queueAudio(unsigned int id,
+SoundDriver::queueAudio(InstrumentId instrumentId,
+                        AudioFileId audioFileId,
                         const RealTime &absoluteTime,
                         const RealTime &audioStartMarker,
                         const RealTime &duration,
                         const RealTime &playLatency)
 {
-    AudioFile* audioFile = getAudioFile(id);
+    AudioFile* audioFile = getAudioFile(audioFileId);
 
     if (audioFile == 0)
         return false;
@@ -351,7 +354,8 @@ SoundDriver::queueAudio(unsigned int id,
     // register the AudioFile in the playback queue
     //
     PlayableAudioFile *newAF =
-                         new PlayableAudioFile(audioFile,
+                         new PlayableAudioFile(instrumentId,
+                                               audioFile,
                                                absoluteTime + playLatency,
                                                audioStartMarker - absoluteTime,
                                                duration);

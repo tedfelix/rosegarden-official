@@ -1424,7 +1424,8 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
             if (audioFile)
             { 
                 PlayableAudioFile *audioFile =
-                    new PlayableAudioFile(getAudioFile((*i)->getAudioID()),
+                    new PlayableAudioFile((*i)->getInstrument(),
+                                          getAudioFile((*i)->getAudioID()),
                                           (*i)->getEventTime() - playLatency,
                                           (*i)->getAudioStartMarker(),
                                           (*i)->getDuration());
@@ -1813,9 +1814,9 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                     // now stopped playing.
                     //
                     MappedEvent *mE =
-                        new MappedEvent((*it)->getAudioFile()->getId(),
+                        new MappedEvent((*it)->getInstrument(),
                                         MappedEvent::AudioStopped,
-                                        0);
+                                        (*it)->getAudioFile()->getId());
 
                     // send completion event
                     inst->insertMappedEventForReturn(mE);
@@ -1970,9 +1971,12 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
             for (it = audioQueue.begin(); it != audioQueue.end(); it++)
             {
                 MappedEvent *mE =
-                    new MappedEvent((*it)->getAudioFile()->getId(),
+                    new MappedEvent((*it)->getInstrument(),
                                     MappedEvent::AudioLevel,
-                                    0,    // pitch
+
+                                    // hmm, watch conversion here
+
+                                    (*it)->getAudioFile()->getId(),
                                     100); // velocity
 
                 // send completion event

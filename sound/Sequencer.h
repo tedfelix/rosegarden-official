@@ -135,15 +135,19 @@ public:
 
     // Queue up an audio sample for playing
     //
-    bool queueAudio(const unsigned int &id,
+    bool queueAudio(InstrumentId instrumentId,
+                    AudioFileId audioFileId,
                     const RealTime &absoluteTime,
                     const RealTime &audioStartMarker,
                     const RealTime &duration,
                     const RealTime &playLatency)
     {
-        return m_soundDriver->queueAudio(id, absoluteTime,
+        return m_soundDriver->queueAudio(instrumentId,
+                                         audioFileId,
+                                         absoluteTime,
                                          audioStartMarker,
-                                         duration, playLatency);
+                                         duration,
+                                         playLatency);
     }
 
     // Set a MappedInstrument at the Sequencer level

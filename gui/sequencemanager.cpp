@@ -950,8 +950,11 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC)
                 if ((*i)->getType() == Rosegarden::MappedEvent::AudioStopped)
                 {
                     cout << "AUDIO FILE ID = "
+                         << (*i)->getData1()
+                         << " - FILE STOPPED - " 
+                         << "INSTRUMENT = "
                          << (*i)->getInstrument()
-                         << " - FILE STOPPED" << endl;
+                         << endl;
                 }
 
                 if ((*i)->getType() == Rosegarden::MappedEvent::AudioLevel)
@@ -960,6 +963,14 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC)
                          << (int)(*i)->getVelocity()
                          << " for INSTRUMENT "
                          << (*i)->getInstrument() << endl;
+
+                    // Create a:
+                    //
+                    // m_doc->showVisuals();
+
+                    // and ensure that m_view->showVisuals can handle
+                    // audio file thing
+                    //
                 }
                 continue;
             }

@@ -64,12 +64,8 @@ public:
     } PlayStatus;
 
 
-    PlayableAudioFile(AudioFile *audioFile,
-                      const RealTime &startTime,
-                      const RealTime &startIndex,
-                      const RealTime &duration);
-
-    PlayableAudioFile(unsigned int id,
+    PlayableAudioFile(InstrumentId instrumentId,
+                      AudioFile *audioFile,
                       const RealTime &startTime,
                       const RealTime &startIndex,
                       const RealTime &duration);
@@ -91,6 +87,11 @@ public:
     // Get audio file for interrogation
     //
     AudioFile* getAudioFile() { return m_audioFile; }
+
+    // Get instrument ID - we need to be able to map back
+    // at the GUI.
+    //
+    InstrumentId getInstrument() { return m_instrumentId; }
 
     // Reaches through to AudioFile interface using our local file handle
     //
@@ -122,6 +123,10 @@ private:
     // AudioFile handle
     //
     AudioFile            *m_audioFile;
+
+    // Originating Instrument Id
+    //
+    InstrumentId          m_instrumentId;
 
 };
 
@@ -280,7 +285,8 @@ public:
     // m_audioPlayThreadQueue to make sure all queue add
     // operations are thread-safe.
     //
-    bool queueAudio(unsigned int id,
+    bool queueAudio(InstrumentId instrumentId,
+                    AudioFileId audioFileId,
                     const RealTime &absoluteTime,
                     const RealTime &audioStartMarker,
                     const RealTime &duration,
