@@ -652,7 +652,8 @@ NotationGroup::applyBeam(NotationStaff &staff)
 
     for (NELIterator i = getInitialNote(); i != getList().end(); ++i) {
 
-        if ((*i)->isNote()) {
+        if ((*i)->isNote() &&
+	    (*i)->event()->get<Int>(NOTE_TYPE) < Note::Crotchet) {
 
 	    Chord chord(getList(), i, &getQuantizer(), m_clef, m_key);
 	    unsigned int j;
@@ -664,15 +665,17 @@ NotationGroup::applyBeam(NotationStaff &staff)
 		el->event()->setMaybe<Bool>(STEM_UP, beam.aboveNotes);
 		el->event()->setMaybe<Bool>(CHORD_PRIMARY_NOTE, false);
 		el->event()->setMaybe<Bool>(DRAW_FLAG, false);
-		el->event()->setMaybe<Bool>(BEAMED, false); // set later
+		el->event()->setMaybe<Bool>(BEAMED, true);
 	    }
 
 	    if (beam.aboveNotes) j = 0;
 	    else j = chord.size() - 1;
 
 	    NotationElement *el = (*chord[j]);
+	    el->event()->setMaybe<Bool>(BEAMED, false); // set later
+	    el->event()->setMaybe<Bool>(DRAW_FLAG, true); // set later
+	    
 	    int x = (int)el->getLayoutX();
-
 	    int myY = (int)(gradient * (x - initialX)) + beam.startY;
 
             int beamCount = Note(el->event()->get<Int>
@@ -718,25 +721,9 @@ NotationGroup::applyBeam(NotationStaff &staff)
 		    el->event()->setMaybe<Bool>(DRAW_FLAG, false);
 		    prevEl->event()->setMaybe<Bool>(BEAMED, true);
 		    prevEl->event()->setMaybe<Bool>(DRAW_FLAG, false);
-		} else {
-		    el->event()->setMaybe<Bool>(DRAW_FLAG, true);
-		    if (!prevEl->event()->get<Bool>(BEAMED)) {
-			prevEl->event()->set<Bool>(DRAW_FLAG, true);
-		    }
 		}
-/*!!!
-		if (beamCount == 0) {
-		    int prevprevBeamCount = 0;
-		    if (prevprev != getList().end()) {
-			prevprevBeamCount =
-			    Note((*prevprev)->event()->get<Int>
-				 (NOTE_TYPE)).getFlagCount();
-		    }
-		    if (prevprevBeamCount == 0) {
-			prevEl->event()->setMaybe<Bool>(DRAW_FLAG, true);
-			prevEl->event()->setMaybe<Bool>(BEAMED, false);
-		    }
-		    } else*/ if (beamCount >= prevBeamCount) {
+
+		if (beamCount >= prevBeamCount) {
                     prevEl->event()->setMaybe<Bool>
                         (BEAM_THIS_PART_BEAMS, false);
                     if (prevprev != getList().end()) {
@@ -767,7 +754,15 @@ NotationGroup::applyBeam(NotationStaff &staff)
             prevprev = prev;
 	    prev = chord[j];
 	    i = chord.getFinalElement();
-        }
+
+        } else if ((*i)->isNote()) {
+	    
+	    if (i == initialNote || i == finalNote) {
+		(*i)->event()->setMaybe<Bool>(STEM_UP, beam.aboveNotes);
+	    } else {
+		(*i)->event()->setMaybe<Bool>(STEM_UP, !beam.aboveNotes);
+	    }
+	}
 
         if (i == finalNote) break;
 
@@ -777,6 +772,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
         long gid = -1;
         if (!(*i)->event()->get<Int>(BEAMED_GROUP_ID, gid)
             || gid != m_groupNo) break;
+
     }
 }
 
@@ -793,38 +789,55 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
 
     NELIterator initialNote(getInitialNote()),
 	          finalNote(  getFinalNote()),
+
    	     initialElement(getInitialElement()),
 	       finalElement(  getFinalElement());
 
-    //!!! We'd like to attach the line to the initial element, even if it's
-    // a rest, but we can't do that in notationstaff or notepixmapfactory
-    int initialX = (int)(*initialNote)->getLayoutX();
+    NELIterator initialNoteOrRest(initialElement);
+    while (initialNoteOrRest != finalElement &&
+	   !((*initialNoteOrRest)->isNote() || 
+	     (*initialNoteOrRest)->isRest())) {
+	++initialNoteOrRest;
+    }
+    if (!(*initialNoteOrRest)->isRest()) initialNoteOrRest = initialNote;
+    if (initialNoteOrRest == staff.getViewElementList()->end()) return;
+
+    kdDebug(KDEBUG_AREA) << "NotationGroup::applyTuplingLine: first element is " << ((*initialNoteOrRest)->isNote() ? "Note" : "Non-Note") << ", last is " << ((*finalElement)->isNote() ? "Note" : "Non-Note") << endl;
+
+    int initialX = (int)(*initialNoteOrRest)->getLayoutX();
     int   finalX = (int)(*finalElement)->getLayoutX();
-    
-    // only notes have height
-    int initialY = staff.getLayoutYForHeight(height(initialNote));
-    int   finalY = staff.getLayoutYForHeight(height(  finalNote));
-/*
-    int dist = (beam.startY - initialY) / 2;
-    int startY = initialY - dist;
-*/
-    int   startY = initialY - (beam.startY - initialY);
-    int     endY =
-	startY + (int)((finalX - initialX) * ((double)beam.gradient / 100.0));
 
-    int nh = staff.getNotePixmapFactory().getNoteBodyHeight();
-    if (startY < initialY) {
-	if (initialY - startY > nh * 3) startY  = initialY - nh * 3;
-	if (  finalY -   endY < nh * 2) startY -= nh * 2 - (finalY - endY);
+    if (initialNote == staff.getViewElementList()->end() &&
+	  finalNote == staff.getViewElementList()->end()) {
+
+	Event *e = (*initialNoteOrRest)->event();
+	e->setMaybe<Int>(TUPLING_LINE_MY_Y, staff.getLayoutYForHeight(12));
+	e->setMaybe<Int>(TUPLING_LINE_WIDTH, finalX - initialX);
+	e->setMaybe<Int>(TUPLING_LINE_GRADIENT, 0);
+
     } else {
-	if (startY - initialY > nh * 3) startY  = initialY + nh * 3;
-	if (  endY -   finalY < nh * 2) startY += nh * 2 - (endY - finalY);
-    }	
     
-    (*initialNote)->event()->setMaybe<Int>(TUPLING_LINE_MY_Y, startY);
-    (*initialNote)->event()->setMaybe<Int>(TUPLING_LINE_WIDTH, finalX - initialX);
-    (*initialNote)->event()->setMaybe<Int>(TUPLING_LINE_GRADIENT, beam.gradient);
+	// only notes have height
+	int initialY = staff.getLayoutYForHeight(height(initialNote));
+	int   finalY = staff.getLayoutYForHeight(height(  finalNote));
 
-//    kdDebug(KDEBUG_AREA) << "NotationGroup::applyTuplingLine: my-y: " << startY << ", width: " << (finalX - initialX) << ", gradient: " << beam.gradient << endl;
+	int   startY = initialY - (beam.startY - initialY);
+	int     endY =   startY + (int)((finalX - initialX) *
+					((double)beam.gradient / 100.0));
+
+	int nh = staff.getNotePixmapFactory().getNoteBodyHeight();
+	if (startY < initialY) {
+	    if (initialY - startY > nh * 3) startY  = initialY - nh * 3;
+	    if (  finalY -   endY < nh * 2) startY -= nh * 2 - (finalY - endY);
+	} else {
+	    if (startY - initialY > nh * 3) startY  = initialY + nh * 3;
+	    if (  endY -   finalY < nh * 2) startY += nh * 2 - (endY - finalY);
+	}	
+	
+	Event *e = (*initialNoteOrRest)->event();
+	e->setMaybe<Int>(TUPLING_LINE_MY_Y, startY);
+	e->setMaybe<Int>(TUPLING_LINE_WIDTH, finalX - initialX);
+	e->setMaybe<Int>(TUPLING_LINE_GRADIENT, beam.gradient);
+    }
 }
 

@@ -152,6 +152,11 @@ void EditView::readjustViewSize(QSize requestedSize, bool exact)
     newSize.setWidth(((requestedWidth / windowWidth) + 1) * windowWidth);
     newSize.setHeight(((requestedHeight / windowHeight) + 1) * windowHeight);
 
+    kdDebug(KDEBUG_AREA) << "EditView::readjustViewSize: requested ("
+			 << requestedSize.width() << ", " << requestedSize.height() 
+			 << "), getting (" << newSize.width() <<", "
+			 << newSize.height() << ")" << endl;
+
     setViewSize(newSize);
 }
 

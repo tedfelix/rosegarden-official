@@ -1162,6 +1162,29 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 		el->setLayoutAirspace(x, delta);
 	    }
 
+	    if (it != to && (*it)->event()->has(BEAMED_GROUP_ID)) {
+
+		NotationElementList::iterator scooter(it);
+		++scooter;
+
+		long groupId = (*it)->event()->get<Int>(BEAMED_GROUP_ID);
+		long nextGroupId = groupId;
+
+		if (scooter == to ||
+		    !(*scooter)->event()->get<Int>(BEAMED_GROUP_ID, nextGroupId) ||
+		    (groupId != nextGroupId)) {
+
+		    kdDebug(KDEBUG_AREA) << "Moving from group " << groupId << " to group " << nextGroupId << " after event at " << (*it)->getAbsoluteTime() << endl;
+		    
+		    NotationStaff &notationStaff =
+			dynamic_cast<NotationStaff &>(staff);
+		    NotationGroup group(*staff.getViewElementList(), it,
+					getQuantizer(), clef, key);
+		    group.applyBeam(notationStaff);
+		    group.applyTuplingLine(notationStaff);
+		}
+	    }
+
             x += delta;
         }
 
@@ -1210,7 +1233,7 @@ NotationHLayout::positionRest(StaffType &staff,
         shift = std::min(shift, (baseWidth * 3));
         rest->setLayoutX(rest->getLayoutX() + shift);
     }
-                
+ 
     return delta;
 }
 
@@ -1374,6 +1397,7 @@ NotationHLayout::positionChord(StaffType &staff,
 	if (subItr == to) barEndsInChord = true;
 	(*subItr)->setLayoutX(baseX);
 	if (groupId < 0) (*chord[i])->event()->unset(BEAMED);
+	else (*chord[i])->event()->set<Int>(BEAMED_GROUP_ID, groupId);//!!!
     }
 
     itr = chord.getFinalElement();
@@ -1381,7 +1405,7 @@ NotationHLayout::positionChord(StaffType &staff,
     if (groupId < 0) return delta;
 
     // Finally set the beam data
-
+/*!!!
     long nextGroupId = -1;
     NotationElementList::iterator scooter(itr);
     ++scooter;
@@ -1396,7 +1420,7 @@ NotationHLayout::positionChord(StaffType &staff,
 	group.applyBeam(notationStaff);
 	group.applyTuplingLine(notationStaff);
     }
-
+*/
     return delta;
 }
 

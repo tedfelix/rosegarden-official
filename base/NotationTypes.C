@@ -1167,10 +1167,17 @@ void TimeSignature::getDurationListForInterval(DurationList &dlist,
 
 	    while ( !(offset % currentDuration == 0
 		      && durationRemaining >= currentDuration)
-		    && currentDuration > 1 ) {
+/*		    && currentDuration > 1 */ ) {
+
+		// cc:
+		if (currentDuration <= Note(Note::Shortest).getDuration()) {
+		    currentDuration  = durationRemaining;
+		    break;
+		}
 
 		currentDuration /= 2;
-		if (currentDuration == 0) currentDuration = 1;
+
+//		if (currentDuration == 0) currentDuration = 1;
 
 	    }
 
