@@ -31,11 +31,14 @@
 #include <MappedComposition.h>
 #include "rosegardendcop.h"
 
+#include <signal.h>
+
 using std::cout;
 using std::cerr;
 using std::endl;
 
 static const char *description = I18N_NOOP("RosegardenSequencer");
+static RosegardenSequencerApp *roseSeq = 0;
     
 static KCmdLineOptions options[] =
     {
@@ -43,6 +46,15 @@ static KCmdLineOptions options[] =
         { 0, 0, 0 }
         // INSERT YOUR COMMANDLINE OPTIONS HERE
     };
+
+static void
+signalHandler(int /*sig*/)
+{
+    if (roseSeq)
+        delete roseSeq;
+
+    exit(0);
+}
 
 int main(int argc, char *argv[])
 {
@@ -56,7 +68,6 @@ int main(int argc, char *argv[])
     KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
 
     KApplication app;
-    RosegardenSequencerApp *roseSeq = 0;
 
 
     if (argc > 1)
@@ -119,12 +130,19 @@ int main(int argc, char *argv[])
     //
     TransportStatus lastSeqStatus = roseSeq->getStatus();
 
+    // Register signal handler
+    //
+    signal(SIGINT, signalHandler);
+    signal(SIGTERM, signalHandler);
+    signal(SIGHUP, signalHandler);
+    signal(SIGQUIT, signalHandler);
+
     // sleep time is 5000 microseconds
     //
     const int sequencerSleep = 5000;
-    int sendAliveCount = 0;
+    //int sendAliveCount = 0;
 
-    while(roseSeq->getStatus() != QUIT)
+    while(roseSeq && roseSeq->getStatus() != QUIT)
     {
         // process any pending events (5ms of events)
         //

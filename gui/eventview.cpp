@@ -30,6 +30,8 @@
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
+#include <qcheckbox.h>
+#include <qbuttongroup.h>
 
 #include <klistview.h>
 
@@ -119,7 +121,7 @@ EventView::EventView(RosegardenGUIDoc *doc,
                      std::vector<Rosegarden::Segment *> segments,
                      QWidget *parent):
     EditViewBase(doc, segments, 2, parent, "eventview"),
-    m_eventFilter(Note|Text|SysEx|Controller|ProgramChange|Rest),
+    m_eventFilter(Note|Text|SysEx|Controller|ProgramChange|Rest|PitchBend),
     m_doc(doc)
 {
 
@@ -129,47 +131,29 @@ EventView::EventView(RosegardenGUIDoc *doc,
     m_grid->addWidget(filterBox, 2, 0);
     filterBox->setSpacing(5);
 
+    /*
     QLabel *label = new QLabel(i18n("Filters"), filterBox);
     label->setAlignment(Qt::AlignHCenter);
     label->setFixedHeight(20);
+    */
 
-    // define some note filtering buttons
+    // define some note filtering buttons in a group
     //
-    m_noteFilter = new QPushButton(i18n("Notes"), filterBox);
-    m_restFilter = new QPushButton(i18n("Rests"), filterBox);
-    m_programFilter = new QPushButton(i18n("Program Change"), filterBox);
-    m_controllerFilter = new QPushButton(i18n("Controller"), filterBox);
-    m_sysExFilter = new QPushButton(i18n("System Exclusive"), filterBox);
-    m_textFilter = new QPushButton(i18n("Text"), filterBox);
-    m_pitchBendFilter = new QPushButton(i18n("Pitch Bend"), filterBox);
+    m_filterGroup =
+        new QButtonGroup(1, Horizontal, i18n("Event filters"), filterBox);
 
-    m_noteFilter->setToggleButton(true);
-    connect(m_noteFilter, SIGNAL(toggled(bool)),
-            SLOT(slotNoteFilter(bool)));
+    m_noteCheckBox = new QCheckBox(i18n("Note"), m_filterGroup);
+    m_restCheckBox = new QCheckBox(i18n("Rest"), m_filterGroup);
+    m_pitchBendCheckBox = new QCheckBox(i18n("Pitch Bend"), m_filterGroup);
+    m_programCheckBox = new QCheckBox(i18n("Program Change"), m_filterGroup);
+    m_controllerCheckBox = new QCheckBox(i18n("Controller"), m_filterGroup);
+    m_sysExCheckBox = new QCheckBox(i18n("System Exclusive"), m_filterGroup);
+    m_textCheckBox = new QCheckBox(i18n("Text"), m_filterGroup);
 
-    m_programFilter->setToggleButton(true);
-    connect(m_programFilter, SIGNAL(toggled(bool)),
-            SLOT(slotProgramFilter(bool)));
-
-    m_controllerFilter->setToggleButton(true);
-    connect(m_controllerFilter, SIGNAL(toggled(bool)),
-            SLOT(slotControllerFilter(bool)));
-
-    m_sysExFilter->setToggleButton(true);
-    connect(m_sysExFilter, SIGNAL(toggled(bool)),
-            SLOT(slotSysExFilter(bool)));
-
-    m_textFilter->setToggleButton(true);
-    connect(m_textFilter, SIGNAL(toggled(bool)),
-            SLOT(slotTextFilter(bool)));
-
-    m_restFilter->setToggleButton(true);
-    connect(m_restFilter, SIGNAL(toggled(bool)),
-            SLOT(slotRestFilter(bool)));
-
-    m_restFilter->setToggleButton(true);
-    connect(m_pitchBendFilter, SIGNAL(toggled(bool)),
-            SLOT(slotPitchBendFilter(bool)));
+    // Connect up
+    //
+    connect(m_filterGroup, SIGNAL(released(int)),
+            SLOT(slotModifyFilter(int)));
 
     m_eventList = new KListView(getCentralFrame());
     m_grid->addWidget(m_eventList, 2, 1);
@@ -360,81 +344,86 @@ EventView::slotSaveOptions()
     m_eventList->saveLayout(m_config, LayoutConfigGroupName);
 }
 
-void
-EventView::slotNoteFilter(bool value)
+void 
+EventView::slotModifyFilter(int button)
 {
-    if (value)
-        m_eventFilter |= EventView::Note;
+    QCheckBox *checkBox = dynamic_cast<QCheckBox*>(m_filterGroup->find(button));
+
+    if (checkBox == 0) return;
+
+    if (checkBox->isChecked())
+    {
+        switch (button)
+        {
+            case 0:
+                m_eventFilter |= EventView::Note;
+                break;
+
+            case 1:
+                m_eventFilter |= EventView::Rest;
+                break;
+
+            case 2:
+                m_eventFilter |= EventView::PitchBend;
+                break;
+
+            case 3:
+                m_eventFilter |= EventView::ProgramChange;
+                break;
+
+            case 4:
+                m_eventFilter |= EventView::Controller;
+                break;
+
+            case 5:
+                m_eventFilter |= EventView::SysEx;
+                break;
+
+            case 6:
+                m_eventFilter |= EventView::Text;
+                break;
+
+            default:
+                break;
+        }
+
+    }
     else
-        m_eventFilter ^= EventView::Note;
+    {
+        switch (button)
+        {
+            case 0:
+                m_eventFilter ^= EventView::Note;
+                break;
 
-    applyLayout(0);
-}
+            case 1:
+                m_eventFilter ^= EventView::Rest;
+                break;
 
+            case 2:
+                m_eventFilter ^= EventView::PitchBend;
+                break;
 
-void
-EventView::slotProgramFilter(bool value)
-{
-    if (value)
-        m_eventFilter |= EventView::ProgramChange;
-    else
-        m_eventFilter ^= EventView::ProgramChange;
+            case 3:
+                m_eventFilter ^= EventView::ProgramChange;
+                break;
 
-    applyLayout(0);
-}
+            case 4:
+                m_eventFilter ^= EventView::Controller;
+                break;
 
-void
-EventView::slotControllerFilter(bool value)
-{
-    if (value)
-        m_eventFilter |= EventView::Controller;
-    else
-        m_eventFilter ^= EventView::Controller;
+            case 5:
+                m_eventFilter ^= EventView::SysEx;
+                break;
 
-    applyLayout(0);
-}
+            case 6:
+                m_eventFilter ^= EventView::Text;
+                break;
 
-
-void
-EventView::slotSysExFilter(bool value)
-{
-    if (value)
-        m_eventFilter |= EventView::SysEx;
-    else
-        m_eventFilter ^= EventView::SysEx;
-
-    applyLayout(0);
-}
-
-void
-EventView::slotTextFilter(bool value)
-{
-    if (value)
-        m_eventFilter |= EventView::Text;
-    else
-        m_eventFilter ^= EventView::Text;
-
-    applyLayout(0);
-}
-
-void
-EventView::slotPitchBendFilter(bool value)
-{
-    if (value)
-        m_eventFilter |= EventView::PitchBend;
-    else
-        m_eventFilter ^= EventView::PitchBend;
-
-    applyLayout(0);
-}
-
-void
-EventView::slotRestFilter(bool value)
-{
-    if (value)
-        m_eventFilter |= EventView::Rest;
-    else
-        m_eventFilter ^= EventView::Rest;
+            default:
+                break;
+        }
+    }
 
     applyLayout(0);
 }
@@ -444,39 +433,39 @@ void
 EventView::setButtonsToFilter()
 {
     if (m_eventFilter & Note)
-        m_noteFilter->setOn(true);
+        m_noteCheckBox->setChecked(true);
     else
-        m_noteFilter->setOn(false);
+        m_noteCheckBox->setChecked(false);
 
     if (m_eventFilter & ProgramChange)
-        m_programFilter->setOn(true);
+        m_programCheckBox->setChecked(true);
     else
-        m_programFilter->setOn(false);
+        m_programCheckBox->setChecked(false);
 
     if (m_eventFilter & Controller)
-        m_controllerFilter->setOn(true);
+        m_controllerCheckBox->setChecked(true);
     else
-        m_controllerFilter->setOn(false);
+        m_controllerCheckBox->setChecked(false);
 
     if (m_eventFilter & SysEx)
-        m_sysExFilter->setOn(true);
+        m_sysExCheckBox->setChecked(true);
     else
-        m_sysExFilter->setOn(false);
+        m_sysExCheckBox->setChecked(false);
 
     if (m_eventFilter & Text)
-        m_textFilter->setOn(true);
+        m_textCheckBox->setChecked(true);
     else
-        m_textFilter->setOn(false);
+        m_textCheckBox->setChecked(false);
 
     if (m_eventFilter & Rest)
-        m_restFilter->setOn(true);
+        m_restCheckBox->setChecked(true);
     else
-        m_restFilter->setOn(false);
+        m_restCheckBox->setChecked(false);
 
     if (m_eventFilter & PitchBend)
-        m_pitchBendFilter->setOn(true);
+        m_pitchBendCheckBox->setChecked(true);
     else
-        m_pitchBendFilter->setOn(false);
+        m_pitchBendCheckBox->setChecked(false);
 
 }
 

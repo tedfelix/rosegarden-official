@@ -152,6 +152,7 @@ public slots:
     void slotEditSegmentMatrix(Rosegarden::Segment*);
     void slotEditSegmentAudio(Rosegarden::Segment*);
     void slotEditSegmentEventList(Rosegarden::Segment*);
+    void slotSegmentAutoSplit(Rosegarden::Segment*);
 
     /**
      *

@@ -52,7 +52,7 @@ using std::endl;
 // Initialisation of the driver is performed at construction
 //
 //
-Sequencer::Sequencer(MappedStudio *studio)
+Sequencer::Sequencer(MappedStudio *studio):m_soundDriver(0)
 {
 #ifdef NO_SOUND
     m_soundDriver = new DummyDriver(studio);
@@ -71,7 +71,11 @@ Sequencer::Sequencer(MappedStudio *studio)
 
 Sequencer::~Sequencer()
 {
-    delete m_soundDriver;
+    if (m_soundDriver)
+    {
+        std::cout << "Sequencer::~Sequencer" << std::endl;
+        delete m_soundDriver;
+    }
 }
 
 

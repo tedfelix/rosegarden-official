@@ -86,7 +86,11 @@ RosegardenSequencerApp::RosegardenSequencerApp():
 
 RosegardenSequencerApp::~RosegardenSequencerApp()
 {
-    delete m_sequencer;
+    if (m_sequencer)
+    {
+        std::cout << "RosegardenSequencer - shutting down" << std::endl;
+        delete m_sequencer;
+    }
 }
 
 void

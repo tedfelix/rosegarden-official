@@ -36,6 +36,8 @@ class RosegardenGUIDoc;
 class KListView;
 class QListViewItem;
 class QPushButton;
+class QCheckBox;
+class QButtonGroup;
 
 class EventView : public EditViewBase
 {
@@ -82,17 +84,13 @@ public:
     void setButtonsToFilter();
 
 public slots:
-    void slotNoteFilter(bool);
-    void slotProgramFilter(bool);
-    void slotControllerFilter(bool);
-    void slotSysExFilter(bool);
-    void slotTextFilter(bool);
-    void slotRestFilter(bool);
-    void slotPitchBendFilter(bool);
-
     // on double click on the event list
     //
     void slotPopupEventEditor(QListViewItem*);
+
+    // Change filter parameters
+    //
+    void slotModifyFilter(int);
 
 protected slots:
 
@@ -106,13 +104,14 @@ protected:
     KListView   *m_eventList;
     int          m_eventFilter;
 
-    QPushButton *m_noteFilter;
-    QPushButton *m_textFilter;
-    QPushButton *m_sysExFilter;
-    QPushButton *m_programFilter;
-    QPushButton *m_controllerFilter;
-    QPushButton *m_restFilter;
-    QPushButton *m_pitchBendFilter;
+    QButtonGroup   *m_filterGroup;
+    QCheckBox      *m_noteCheckBox;
+    QCheckBox      *m_textCheckBox;
+    QCheckBox      *m_sysExCheckBox;
+    QCheckBox      *m_programCheckBox;
+    QCheckBox      *m_controllerCheckBox;
+    QCheckBox      *m_restCheckBox;
+    QCheckBox      *m_pitchBendCheckBox;
 
     RosegardenGUIDoc *m_doc;
     static const char* const LayoutConfigGroupName;

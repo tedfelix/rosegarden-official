@@ -99,6 +99,8 @@ static const float  _16bitSampleMax = (float)(0xffff/2);
 
 #endif
 
+static bool              _threadSafeClosing;
+
 // a global AudioFile works for the threads - it didn't want to
 // work out of the instance returned to the JACK callbacks.
 //
@@ -119,28 +121,68 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
     m_currentPair(-1, -1),
     m_addedMetronome(false),
     m_audioMeterSent(false)
+
+
+#ifdef HAVE_JACK
+    ,m_audioClient(0)
+#endif
+
 {
     std::cout << "Rosegarden AlsaDriver - " << m_name << std::endl;
+
 #ifdef HAVE_JACK
     _jackBufferSize = 0;
     _jackSampleRate = 0;
     _usingAudioQueueVector = false;
     _passThroughCounter = 0;
 #endif
+
+    _threadSafeClosing = false;
 }
 
 AlsaDriver::~AlsaDriver()
 {
-    snd_seq_stop_queue(m_midiHandle, m_queue, 0);
-    snd_seq_close(m_midiHandle);
+    std::cout << "AlsaDriver::~AlsaDriver - shutting down" << std::endl;
+
+    if (_threadSafeClosing == false)
+    {
+        _threadSafeClosing = true;
+
+        if (m_midiHandle)
+        {
+            snd_seq_stop_queue(m_midiHandle, m_queue, 0);
+            snd_seq_close(m_midiHandle);
+            m_midiHandle = 0;
+        }
+
 
 #ifdef HAVE_JACK
-    jack_client_close(m_audioClient);
+        if (m_audioClient)
+        {
+            std::cout << "AlsaDriver::~AlsaDriver - unregistering JACK ports"
+                      << std::endl;
 
-    delete [] _leftTempBuffer;
-    delete [] _rightTempBuffer;
+            jack_port_unregister(m_audioClient, m_audioInputPort);
+            jack_port_unregister(m_audioClient, m_audioOutputPortLeft);
+            jack_port_unregister(m_audioClient, m_audioOutputPortRight);
 
+            if (jack_deactivate(m_audioClient))
+            {
+                std::cerr << "AlsaDriver::~AlsaDriver - deactivation failed"
+                          << std::endl;
+            }
+            else
+            {
+                std::cerr << "AlsaDriver::~AlsaDriver - JACK client deactivated"
+                          << "AlsaDriver::~AlsaDriver - closing JACK client"
+                          << std::endl;
+                jack_client_close(m_audioClient);
+            }
+
+        }
 #endif // HAVE_JACK
+
+    }
 
 }
 
@@ -2188,10 +2230,14 @@ AlsaDriver::jackSampleRate(jack_nframes_t nframes, void *)
 }
 
 void
-AlsaDriver::jackShutdown(void *arg)
+AlsaDriver::jackShutdown(void * /*arg*/)
 {
-    AlsaDriver *inst = static_cast<AlsaDriver*>(arg);
+    std::cout << "AlsaDriver::jackShutdown() - received" << std::endl;
 
+    // Old restart code can be abandoned
+    //
+    /*
+    AlsaDriver *inst = static_cast<AlsaDriver*>(arg);
     if (inst)
     {
         // Shutdown audio references
@@ -2205,16 +2251,21 @@ AlsaDriver::jackShutdown(void *arg)
 
         inst->initialiseAudio();
     }
+    */
 }
 
 void
 AlsaDriver::shutdownAudio()
 {
+    std::cout << "AlsaDriver::shutdownAudio - JACK shutdown callback"
+              << std::endl;
+    /*
     if (m_audioClient)
     {
         std::cout << "AlsaDriver::shutdownAudio - "
                   << "shutting down JACK client" << std::endl;
         jack_deactivate(m_audioClient);
+        m_audioClient = 0;
 
         // Hmm, this sometimes just hangs our subsequent JACK calls -
         // probably leave it out for the moment.
@@ -2222,6 +2273,7 @@ AlsaDriver::shutdownAudio()
         //jack_client_close(m_audioClient);
         //
     }
+    */
 }
 
 int

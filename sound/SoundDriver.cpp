@@ -162,6 +162,7 @@ SoundDriver::SoundDriver(MappedStudio *studio, const std::string &name):
 
 SoundDriver::~SoundDriver()
 {
+    std::cout << "SoundDriver::~SoundDriver" << std::endl;
 }
 
 MappedInstrument*
