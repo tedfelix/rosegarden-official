@@ -20,15 +20,14 @@ o Matrix Hypereditor [HALF COMPLETED]
 
 o Fix segment audio drag and drop
 
-o Plugins - tidying up unused libraries
+o Plugins - tidying up unused libraries [WORKS but maybe not COMPLETE]
 
 o Tidy up AudioFiles:
    - hardcoded format segment values
    - BWF format writing/reading
    - exceptions and return values
 
-o "Revert file" option
-
+o "Revert file" option [HALF COMPLETED]
 
 o Matrix tools - cut and join 
                - multiple resize [DONE]

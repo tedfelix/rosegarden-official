@@ -194,6 +194,10 @@ void RosegardenGUIApp::setupActions()
     KStdAction::close (this, SLOT(slotFileClose()),         actionCollection());
     KStdAction::print (this, SLOT(slotFilePrint()),         actionCollection());
 
+    new KAction(i18n("Re&vert"), 0, 0, this,
+                SLOT(slotRevertToSaved()), actionCollection(),
+                "file_revert");
+
     new KAction(i18n("Import &MIDI file..."), 0, 0, this,
                 SLOT(slotImportMIDI()), actionCollection(),
                 "file_import_midi");
@@ -1666,6 +1670,18 @@ void RosegardenGUIApp::slotAddTracks()
     }
 }
 
+
+void RosegardenGUIApp::slotRevertToSaved()
+{
+    std::cout << "RosegardenGUIApp::slotRevertToSaved" << std::endl;
+
+    /*
+    if(m_doc->isModified())
+    {
+        ;
+    }
+    */
+}
 
 void RosegardenGUIApp::slotImportMIDI()
 {

@@ -414,6 +414,11 @@ public slots:
     void slotImportMIDI();
 
     /**
+     * Revert to last loaded file
+     */
+    void slotRevertToSaved();
+
+    /**
      * Let the user select a Rosegarden 2.1 file for import 
      */
     void slotImportRG21();

@@ -4,6 +4,7 @@
 
 <MenuBar>
   <Menu name="file"><text>&amp;File</text>
+  <Action name="file_revert"/>
     <Menu name="import" append="new_merge"><text>&amp;Import</text>
       <Action name="file_import_midi" />
       <Action name="file_import_rg21" />
