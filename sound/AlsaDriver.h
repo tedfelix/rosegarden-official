@@ -238,6 +238,7 @@ protected:
     virtual void generateInstruments();
 
     virtual void generateTimerList();
+    virtual std::string getAutoTimer();
 
     void addInstrumentsForDevice(MappedDevice *device);
     MappedDevice *createMidiDevice(AlsaPortDescription *,
@@ -305,6 +306,7 @@ private:
 	int device;
 	int subdevice;
 	std::string name;
+	long resolution;
     };
     std::vector<AlsaTimerInfo> m_timers;
     std::string m_currentTimer;

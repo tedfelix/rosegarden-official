@@ -56,6 +56,7 @@ using std::endl;
 
 static pthread_mutex_t _returnCompositionLock = PTHREAD_MUTEX_INITIALIZER;
 
+#define AUTO_TIMER_NAME "(auto)"
 
 
 namespace Rosegarden
@@ -239,6 +240,8 @@ AlsaDriver::generateTimerList()
     snd_timer_query_t *timerQuery;
     char timerName[64];
 
+    m_timers.clear();
+
     if (snd_timer_query_open(&timerQuery, "hw", 0) >= 0) {
 
 	snd_timer_id_set_class(timerId, SND_TIMER_CLASS_NONE);
@@ -254,7 +257,8 @@ AlsaDriver::generateTimerList()
 		snd_timer_id_get_card(timerId),
 		snd_timer_id_get_device(timerId),
 		snd_timer_id_get_subdevice(timerId),
-		""
+		"",
+		0
 	    };
 
 	    if (info.card < 0) info.card = 0;
@@ -274,6 +278,7 @@ AlsaDriver::generateTimerList()
 	    if (snd_timer_info(timerHandle, timerInfo) < 0) continue;
 
 	    info.name = snd_timer_info_get_name(timerInfo);
+	    info.resolution = snd_timer_info_get_resolution(timerInfo);
 	    snd_timer_close(timerHandle);
 
 //	    std::cerr << "adding timer: " << info.name << std::endl;
@@ -285,6 +290,49 @@ AlsaDriver::generateTimerList()
     }
 }
 
+
+std::string
+AlsaDriver::getAutoTimer()
+{
+    // Look for the apparent best-choice timer
+
+    if (m_timers.empty()) return "";
+
+    if (m_jackDriver) {
+
+	// look for the first PCM playback timer; that's all we know
+	// about for now (until JACK becomes able to tell us which PCM
+	// it's on)
+
+	for (std::vector<AlsaTimerInfo>::iterator i = m_timers.begin();
+	     i != m_timers.end(); ++i) {
+	    if (i->sclas != SND_TIMER_SCLASS_NONE) continue;
+	    if (i->clas == SND_TIMER_CLASS_PCM) return i->name;
+	}
+    }
+
+    // look for the system RTC timer if available, system timer
+    // otherwise
+
+    for (std::vector<AlsaTimerInfo>::iterator i = m_timers.begin();
+	 i != m_timers.end(); ++i) {
+	if (i->sclas != SND_TIMER_SCLASS_NONE) continue;
+	if (i->clas == SND_TIMER_CLASS_GLOBAL) {
+	    if (i->device == SND_TIMER_GLOBAL_RTC) return i->name;
+	}
+    }
+
+    for (std::vector<AlsaTimerInfo>::iterator i = m_timers.begin();
+	 i != m_timers.end(); ++i) {
+	if (i->sclas != SND_TIMER_SCLASS_NONE) continue;
+	if (i->clas == SND_TIMER_CLASS_GLOBAL) {
+	    if (i->device == SND_TIMER_GLOBAL_SYSTEM) return i->name;
+	}
+    }
+
+    return m_timers.begin()->name;
+}
+    
 
 void
 AlsaDriver::generatePortList(AlsaPortList *newPorts)
@@ -963,13 +1011,14 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
 unsigned int
 AlsaDriver::getTimers()
 {
-    return m_timers.size();
+    return m_timers.size() + 1; // one extra for auto
 }
 
 QString
 AlsaDriver::getTimer(unsigned int n)
 {
-    return m_timers[n].name.c_str();
+    if (n == 0) return AUTO_TIMER_NAME;
+    else return m_timers[n-1].name.c_str();
 }
 
 QString
@@ -986,6 +1035,10 @@ AlsaDriver::setCurrentTimer(QString timer)
     if (timer == getCurrentTimer()) return;
 
     std::string name(timer.data());
+
+    if (name == AUTO_TIMER_NAME) {
+	name = getAutoTimer();
+    }
 
     // Stop and restart the queue around the timer change.  We don't
     // call stopClocks/startClocks here because they do the wrong
@@ -1023,6 +1076,15 @@ AlsaDriver::setCurrentTimer(QString timer)
 
 	    audit << "    Current timer set to \"" << name << "\""
 			 << std::endl;
+
+	    if (m_timers[i].clas == SND_TIMER_CLASS_GLOBAL &&
+		m_timers[i].device == SND_TIMER_GLOBAL_SYSTEM) {
+		long hz = 1000000000 / m_timers[i].resolution;
+		if (hz < 990) {
+		    audit << "    WARNING: using system timer with only "
+			  << hz << "Hz resolution!" << std::endl;
+		}
+	    }
 
 	    break;
 	}
@@ -1203,10 +1265,7 @@ AlsaDriver::initialiseMidi()
     m_driverStatus |= MIDI_OK;
 
     generateTimerList();
-    
-    if (m_timers.size() > 0) {
-	setCurrentTimer(m_timers[0].name.c_str());
-    }
+    setCurrentTimer(AUTO_TIMER_NAME);
 
     int result;
 
