@@ -22,11 +22,7 @@
 #include "AudioDevice.h"
 #include "Instrument.h"
 
-#if (__GNUC__ < 3)
-#include <strstream>
-#else
-#include <sstream>
-#endif
+#include <cstdio>
 
 
 namespace Rosegarden
@@ -50,22 +46,20 @@ AudioDevice::~AudioDevice()
 void
 AudioDevice::createInstruments()
 {
-
-#if (__GNUC__ < 3)
-    std::ostrstream instrumentName;
-#else
-    std::ostringstream instrumentName;
-#endif
+    char instNum[100];
 
     // for the moment just create an arbitrary number of audio tracks
     for (InstrumentId i = 0; i < 8; i++)
     {
-        instrumentName << m_name.c_str() << " #" << i << std::ends;
+        sprintf(instNum, "%d", i);
+        std::string name = m_name.c_str() +
+                           std::string(" #") +
+                           std::string(instNum);
 
         m_instruments.push_back(
                 new Instrument(i + AudioInstrumentBase, // id
                                Instrument::Audio,       // type
-                               instrumentName.str()));  // name
+                               name));                  // name
     }
 
 }

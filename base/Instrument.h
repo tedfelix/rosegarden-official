@@ -37,9 +37,11 @@ namespace Rosegarden
 typedef unsigned int InstrumentId;
 typedef unsigned char MidiByte;
 
+// Instrument number groups
+//
 const InstrumentId SystemInstrumentBase = 0;
-const InstrumentId MidiInstrumentBase   = 1000;
-const InstrumentId AudioInstrumentBase  = 2000;
+const InstrumentId AudioInstrumentBase  = 1000;
+const InstrumentId MidiInstrumentBase   = 2000;
 
 const MidiByte MidiMaxValue = 127;
 const MidiByte MidiMidValue = 64;

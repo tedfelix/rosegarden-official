@@ -59,6 +59,19 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
 
     Composition &comp = m_doc->getComposition();
 
+    // Add the audio instruments
+    //
+    std::vector<AudioDevice*>::iterator adIt;
+
+    for (adIt = m_audioDevices.begin(); adIt != m_audioDevices.end(); adIt++)
+    {
+        std::vector<Instrument*> instruments = (*adIt)->getInstruments();
+        std::vector<Instrument*>::iterator iit;
+
+        for (iit = instruments.begin(); iit != instruments.end(); iit++)
+            comp.addInstrument(*iit);
+    }
+
     // Add the Midi instruments
     //
     std::vector<MidiDevice*>::iterator mdIt;
@@ -72,18 +85,6 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
             comp.addInstrument(*iit);
     }
 
-    // Add the audio instruments
-    //
-    std::vector<AudioDevice*>::iterator adIt;
-
-    for (adIt = m_audioDevices.begin(); adIt != m_audioDevices.end(); adIt++)
-    {
-        std::vector<Instrument*> instruments = (*adIt)->getInstruments();
-        std::vector<Instrument*>::iterator iit;
-
-        for (iit = instruments.begin(); iit != instruments.end(); iit++)
-            comp.addInstrument(*iit);
-    }
     
 }
 

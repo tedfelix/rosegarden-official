@@ -22,11 +22,7 @@
 #include "MidiDevice.h"
 #include "Instrument.h"
 
-#if (__GNUC__ < 3)
-#include <strstream>
-#else
-#include <sstream>
-#endif
+#include <cstdio>
 
 namespace Rosegarden
 {
@@ -52,20 +48,18 @@ MidiDevice::~MidiDevice()
 void
 MidiDevice::createInstruments()
 {
-#if (__GNUC__ < 3)
-    std::ostrstream instrumentName;
-#else
-    std::ostringstream instrumentName;
-#endif
+    char instNum[100];
 
     for (InstrumentId i = 0; i < 16; i++)
     {
-        instrumentName << m_name.c_str() << " #" << i << std::ends;
+        sprintf(instNum, "%d", i);
+        std::string name = m_name.c_str()+
+                           std::string(" #") +std::string(instNum);
 
         m_instruments.push_back(
             new Instrument(i + MidiInstrumentBase,    // id
                            Instrument::Midi,          // type
-                           instrumentName.str(),      // name
+                           name,                      // name
                            (MidiByte)i));             // channel
     }
 
