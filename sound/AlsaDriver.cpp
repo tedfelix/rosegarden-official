@@ -4875,11 +4875,9 @@ AlsaDriver::jackDiskThread(void *arg)
 
                 for (it = audioQueue.begin(); it != audioQueue.end(); ++it)
                 {
-//                     if (!(*it)->isInitialised())
-//                         (*it)->initialise(); // start audio buffering
-//                     else
-                        (*it)->fillRingBuffer(); // Let the audio file work out if the buffers
-                                                 // need filling and if so by how much.
+                    (*it)->fillRingBuffer();
+                    // Let the audio file work out if the buffers
+                    // need filling and if so by how much.
 
 #ifdef FINE_DEBUG_DISK_THREAD
                     std::cerr << ", is now = " << (*it)->getRingBuffer()->readSpace() << std::endl;
