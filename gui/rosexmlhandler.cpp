@@ -1219,6 +1219,18 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             //RG_DEBUG << "ADDING PORT " << portId << " VALUE = " << value << endl;
         }
 
+#else
+
+        // just ignore them
+
+    } else if (lcName == "plugin") {
+
+        ;
+
+    } else if (lcName == "port") {
+
+        ;
+
 #endif // HAVE_LADSPA
 
     } else if (lcName == "metronome") {
