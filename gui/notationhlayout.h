@@ -21,43 +21,7 @@
 #include "layoutengine.h"
 #include "quantizer.h"
 #include "notationelement.h"
-
-
-class Scale
-{
-public:
-
-    enum KeySignature {
-        C,      // no sharps
-        G,      // 1 sharp
-        D,      // 2 sharps
-        A,      // 3 sharps
-        E,      // 4 sharps
-        B,      // 5 sharps
-        Fsharp, // 6 sharps
-        Csharp, // 7 sharps
-        F,      // 1 flat
-        Bflat,  // 2 flats
-        Eflat,  // 3 flats
-        Aflat,  // 4 flats
-        Dflat,  // 5 flats
-        Gflat,  // 6 flats
-        Cflat   // 7 flats
-    };
-
-    Scale(KeySignature keysig);
-    KeySignature key() const { return m_keySignature; }
-    bool useSharps() const { return m_useSharps; }
-    bool pitchIsInScale(unsigned int pitch) const;
-    bool pitchIsDecorated(unsigned int pitch) const { return !pitchIsInScale(pitch); }
-    bool noteIsDecorated(const NotationElement &el) const;
-
-protected:
-    KeySignature m_keySignature;
-    bool m_useSharps;
-    vector<bool> m_notes;
-};
-
+#include "scale.h"
 
 /**
   *@author Guillaume Laurent, Chris Cannam, Rich Bown

@@ -636,12 +636,10 @@ NotationView::insertNote(int pitch, const QPoint &eventPos)
 
         kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : Couldn't find closest note" << endl;
         KMessageBox::error(0, "Couldn't find closest note");
+        delete insertedEvent;
         return;
     }
 
-    //
-    // BIG TODO : insert event too
-    //
 
 //     kdDebug(KDEBUG_AREA) << "NotationView::insertNote() : Elements before relayout : "
 //                          << endl << *m_notationElements << endl;
