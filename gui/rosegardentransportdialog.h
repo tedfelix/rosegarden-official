@@ -65,6 +65,8 @@ signals:
 
 private:
     void loadPixmaps();
+    void resetFonts();
+    void resetFont(QWidget *);
 
     //--------------- Data members ---------------------------------
 

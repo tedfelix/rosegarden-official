@@ -51,6 +51,8 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     m_lastTenThousandths(0),
     m_tempo(0)
 {
+    resetFonts();
+
     // set the LCD frame background to black
     //
     LCDBoxFrame->setBackgroundColor(Qt::black);
@@ -133,6 +135,29 @@ RosegardenTransportDialog::loadPixmaps()
     fileName = QString("%1/transport/led--.xpm").arg(pixmapDir);
     m_lcdNegative.load(fileName);
 
+}
+
+void
+RosegardenTransportDialog::resetFonts()
+{
+    resetFont(TimeSigLabel);
+    resetFont(TimeSigDisplay);
+    resetFont(TempoLabel);
+    resetFont(TempoDisplay);
+    resetFont(DivisionLabel);
+    resetFont(DivisionDisplay);
+    resetFont(InLabel);
+    resetFont(InDisplay);
+    resetFont(OutLabel);
+    resetFont(OutDisplay);
+}
+
+void
+RosegardenTransportDialog::resetFont(QWidget *w)
+{
+    QFont font = w->font();
+    font.setPixelSize(10);
+    w->setFont(font);
 }
 
 // Display a time from a pointer position - calculates all
@@ -252,8 +277,8 @@ RosegardenTransportDialog::setMidiInLabel(const Rosegarden::MappedEvent *mE)
     assert(mE > 0);
 
     MidiPitchLabel *midiPitchLabel = new MidiPitchLabel(mE->getPitch());
-    MidiInLabel->setText(midiPitchLabel->getQString() +
-                         QString("  %1").arg(mE->getVelocity()));
+    InDisplay->setText(midiPitchLabel->getQString() +
+		       QString("  %1").arg(mE->getVelocity()));
 
     // Reset the timer if it's already running
     //
@@ -271,7 +296,7 @@ RosegardenTransportDialog::setMidiInLabel(const Rosegarden::MappedEvent *mE)
 void
 RosegardenTransportDialog::clearMidiInLabel()
 {
-    MidiInLabel->setText(QString("no events in"));
+    InDisplay->setText(i18n(QString("NO EVENTS")));
 }
 
 
@@ -283,8 +308,8 @@ RosegardenTransportDialog::setMidiOutLabel(const Rosegarden::MappedEvent *mE)
     assert(mE > 0);
 
     MidiPitchLabel *midiPitchLabel = new MidiPitchLabel(mE->getPitch());
-    MidiOutLabel->setText(midiPitchLabel->getQString() +
-                          QString("  %1").arg(mE->getVelocity()));
+    OutDisplay->setText(midiPitchLabel->getQString() +
+			QString("  %1").arg(mE->getVelocity()));
 
     // Reset the timer if it's already running
     //
@@ -302,7 +327,7 @@ RosegardenTransportDialog::setMidiOutLabel(const Rosegarden::MappedEvent *mE)
 void
 RosegardenTransportDialog::clearMidiOutLabel()
 {
-    MidiOutLabel->setText(QString("no events out"));
+    OutDisplay->setText(i18n(QString("NO EVENTS")));
 }
 
 void
