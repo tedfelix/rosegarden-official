@@ -85,7 +85,7 @@ signals:
      *
      * \a noteName contains the MIDI name of the corresponding note
      */
-    void hoveredOverNoteChange(const QString &noteName);
+    void hoveredOverNoteChanged(const QString &noteName);
 
     /**
      * Emitted when the mouse cursor moves to a note which is at a
@@ -94,7 +94,7 @@ signals:
      * \a time is set to the absolute time of the note the cursor is
      * hovering on
      */
-    void hoveredOverAbsoluteTimeChange(unsigned int time);
+    void hoveredOverAbsoluteTimeChanged(unsigned int time);
 
     /**
      * Emitted when the mouse cursor moves (used by the selection tool)

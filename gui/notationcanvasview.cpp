@@ -90,7 +90,7 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
 
     if (!m_currentStaff) {
 
-	emit hoveredOverNoteChange(QString::null);
+	emit hoveredOverNoteChanged(QString::null);
 	if (prevStaff) {
 	    m_positionMarker->hide();
 	    canvas()->update();
@@ -113,7 +113,7 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
 		needUpdate = true;
 	    }
 
-	    emit hoveredOverNoteChange
+	    emit hoveredOverNoteChanged
 		(m_currentStaff->getNoteNameAtCanvasCoords
 		 (e->x(), e->y()).c_str());
 	}
@@ -123,7 +123,7 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
 
     NotationElement *elt = getElementAtXCoord(e);
     if (elt) {
-	emit hoveredOverAbsoluteTimeChange(elt->getAbsoluteTime());
+	emit hoveredOverAbsoluteTimeChanged(elt->getAbsoluteTime());
     }
 
     // if(tracking) ??

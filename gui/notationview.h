@@ -321,9 +321,9 @@ public slots:
      * Called when the mouse cursor moves over a note which is at a
      * different time on the staff
      *
-     * @see NotationCanvasView#hoveredOverNoteChange()
+     * @see NotationCanvasView#hoveredOverAbsoluteTimeChange()
      */
-    void hoveredOverAbsoluteTimeChange(unsigned int);
+    void hoveredOverAbsoluteTimeChanged(unsigned int);
 
      /// Set the time pointer position during playback
     void setPositionPointer(const int &position);

@@ -148,12 +148,12 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
          this,         SLOT  (mouseReleased(QMouseEvent*)));
 
     QObject::connect
-        (m_canvasView, SIGNAL(hoveredOverNoteChange (const QString&)),
+        (m_canvasView, SIGNAL(hoveredOverNoteChanged(const QString&)),
          this,         SLOT  (hoveredOverNoteChanged(const QString&)));
 
     QObject::connect
-        (m_canvasView, SIGNAL(hoveredOverAbsoluteTimeChange(unsigned int)),
-         this,         SLOT  (hoveredOverAbsoluteTimeChange(unsigned int)));
+        (m_canvasView, SIGNAL(hoveredOverAbsoluteTimeChanged(unsigned int)),
+         this,         SLOT  (hoveredOverAbsoluteTimeChanged(unsigned int)));
 
     //
     // Window appearance (options, title...)
@@ -2114,7 +2114,7 @@ NotationView::hoveredOverNoteChanged(const QString &noteName)
 }
 
 void
-NotationView::hoveredOverAbsoluteTimeChange(unsigned int time)
+NotationView::hoveredOverAbsoluteTimeChanged(unsigned int time)
 {
     m_hoveredOverAbsoluteTime->setText(QString(" Time: %1").arg(time));
 }
