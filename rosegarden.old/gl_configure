@@ -1,0 +1,1 @@
+USER_LDFLAGS="-Lrosegarden_core -lcore" CXX="g++ -O0 -g3 -Wall -Irosegarden_core" ./configure --enable-debug --with-qt-dir=/opt/kde2/qt2 --prefix=/opt/kde2
