@@ -378,14 +378,24 @@ SoundDriver::cancelAudioFile(MappedEvent *mE)
         else
         {
             if ((*it)->getRuntimeSegmentId() == mE->getRuntimeSegmentId() &&
-		(*it)->getStartTime() == mE->getEventTime())
+		(*it)->getStartTime() == mE->getEventTime()) {
+#ifdef DEBUG_PLAYABLE
+		std::cerr << "audio file match: ids "
+			  << (*it)->getRuntimeSegmentId() << " vs "
+			  << mE->getRuntimeSegmentId() << ", times "
+			  << (*it)->getStartTime() << " vs "
+			  << mE->getEventTime() << ", status "
+			  << (*it)->getStatus() << std::endl;
+#endif
                 (*it)->setStatus(PlayableAudioFile::DEFUNCT);
-	    else {
+	    } else {
+#ifdef DEBUG_PLAYABLE
 		std::cerr << "audio file mismatch: ids "
 			  << (*it)->getRuntimeSegmentId() << " vs "
 			  << mE->getRuntimeSegmentId() << ", times "
 			  << (*it)->getStartTime() << " vs "
 			  << mE->getEventTime() << std::endl;
+#endif
 	    }
         }
     }

@@ -104,6 +104,7 @@
 #include "bankeditor.h"
 #include "deviceeditor.h"
 #include "devicemanager.h"
+#include "mixer.h"
 #include "midifilter.h"
 #include "controleditor.h"
 #include "markereditor.h"
@@ -154,6 +155,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
       m_clipboard(new Rosegarden::Clipboard),
       m_playList(0),
       m_deviceManager(0),
+      m_mixer(0),
       m_bankEditor(0),
       m_markerEditor(0),
       m_playTimer(new QTimer(this))
@@ -705,15 +707,19 @@ void RosegardenGUIApp::setupActions()
     //
     // Studio menu
     //
-    new KAction(i18n("Manage MIDI &Devices..."), 0, this,
+    new KAction(i18n("Mi&xer"), 0, this,
+		SLOT(slotOpenMixer()),
+		actionCollection(), "open_mixer");
+
+    new KAction(i18n("Manage MIDI &Devices"), 0, this,
                 SLOT(slotManageMIDIDevices()),
                 actionCollection(), "manage_devices");
 
-    new KAction(i18n("Modify MIDI &Filters..."), 0, this,
+    new KAction(i18n("Modify MIDI &Filters"), 0, this,
                 SLOT(slotModifyMIDIFilters()),
                 actionCollection(), "modify_midi_filters");
 
-    new KAction(i18n("Manage &Metronome..."), 0, this,
+    new KAction(i18n("Manage &Metronome"), 0, this,
                 SLOT(slotManageMetronome()),
                 actionCollection(), "manage_metronome");
 
@@ -4640,6 +4646,25 @@ RosegardenGUIApp::slotManageMIDIDevices()
 }
 
 void
+RosegardenGUIApp::slotOpenMixer()
+{
+    if (m_mixer) {
+	m_mixer->raise();
+	return;
+    }
+
+    m_mixer = new MixerWindow(this, m_doc);
+    
+    connect(m_mixer, SIGNAL(closing()),
+            this, SLOT(slotMixerClosed()));
+
+    connect(this, SIGNAL(documentAboutToChange()),
+            m_mixer, SLOT(close()));
+
+    m_mixer->show();
+}
+
+void
 RosegardenGUIApp::slotEditControlParameters(Rosegarden::DeviceId device)
 {
     for (std::set<ControlEditorDialog *>::iterator i = m_controlEditors.begin();
@@ -4801,6 +4826,12 @@ RosegardenGUIApp::slotDeviceManagerClosed()
     }
     
     m_deviceManager = 0;
+}
+
+void
+RosegardenGUIApp::slotMixerClosed()
+{
+    m_mixer = 0;
 }
 
 void

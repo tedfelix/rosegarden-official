@@ -248,6 +248,13 @@ public:
         { return m_soundDriver->getAudioMonitoringInstrument(); }
     
 
+    PlayableAudioFileList getAudioPlayQueue()
+    { return m_soundDriver->getAudioPlayQueue(); }
+
+    PlayableAudioFileList getAudioPlayQueueNotDefunct()
+    { return m_soundDriver->getAudioPlayQueueNotDefunct(); }
+	
+
     // Audio latenices from audio driver
     //
     RealTime getAudioPlayLatency()

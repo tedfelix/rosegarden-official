@@ -78,6 +78,8 @@
   </Menu>
   <Menu name="Studio">
         <text>&amp;Studio</text>
+        <Action name="open_mixer"/>
+        <Separator/>
         <Action name="manage_devices"/>
 	<Action name="manage_metronome"/>
         <Action name="modify_midi_filters"/>

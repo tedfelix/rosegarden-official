@@ -50,6 +50,7 @@ rosegarden_SOURCES = \
 	matrixvlayout.cpp \
         midifilter.cpp \
         midipitchlabel.cpp \
+	mixer.cpp \
 	multiviewcommandhistory.cpp \
 	mupio.cpp \
         musicxmlio.cpp \

@@ -559,6 +559,8 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     if (!m_mixer) {
 	return 0;
     }
+
+    bool wroteSomething = false;
     
 //    Rosegarden::Profiler profiler("JackProcess, clocks running");
 
@@ -638,6 +640,8 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	    m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
 				inputBufferLeft, 1, nframes);
 	}
+
+	wroteSomething = true;
 
 	sample_t totalLeft = 0.0, totalRight = 0.0;
 
@@ -722,6 +726,9 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	    sdb->setTrackLevelsForInstrument(id, info);
 	}
     }
+
+    if (m_alsaDriver->isPlaying()) m_mixer->signal();
+    if (wroteSomething) m_fileWriter->signal();
 
     return 0;
 }

@@ -64,6 +64,9 @@ AudioMixer::AudioMixer(SoundDriver *driver,
     pthread_mutex_t  initialisingMutex = PTHREAD_MUTEX_INITIALIZER;
     memcpy(&m_lock, &initialisingMutex, sizeof(pthread_mutex_t));
 
+    pthread_cond_t initialisingCondition = PTHREAD_COND_INITIALIZER;
+    memcpy(&m_condition, &initialisingCondition, sizeof(pthread_cond_t));
+
     pthread_create(&m_thread, NULL, threadRun, this);
     pthread_detach(m_thread);
 }
@@ -133,6 +136,15 @@ AudioMixer::releaseLock()
     std::cerr << "OK" << std::endl;
 #endif
     return rv;
+}
+
+void
+AudioMixer::signal()
+{
+#ifdef DEBUG_LOCKS
+    std::cerr << "AudioMixer::signal()" << std::endl;
+#endif
+    pthread_cond_signal(&m_condition);
 }
 
 void
@@ -378,7 +390,8 @@ AudioMixer::fillBuffers(const RealTime &currentTime)
     std::cerr << "AudioMixer::fillBuffers(" << currentTime <<")" << std::endl;
 #endif
 
-    processBlocks(true);
+    bool discard;
+    processBlocks(true, discard);
 
     releaseLock();
 }
@@ -422,7 +435,7 @@ static inline void denormalKill(float *buffer, int size)
 }
 
 void
-AudioMixer::processBlocks(bool forceFill)
+AudioMixer::processBlocks(bool forceFill, bool &readSomething)
 {
     InstrumentId instrumentBase;
     int instrumentCount;
@@ -490,7 +503,7 @@ AudioMixer::processBlocks(bool forceFill)
 		continue;
 	    }
 	    
-	    if (processBlock(id, files[id], forceFill)) {
+	    if (processBlock(id, files[id], forceFill, readSomething)) {
 		more = true;
 	    }
 	}
@@ -546,7 +559,7 @@ AudioMixer::processEmptyBlocks(InstrumentId id)
 
 bool
 AudioMixer::processBlock(InstrumentId id, PlayableAudioFileList &audioQueue,
-			 bool forceFill)
+			 bool forceFill, bool &readSomething)
 {
     BufferRec &rec = m_bufferMap[id];
     RealTime bufferTime = rec.filledTo;
@@ -707,6 +720,8 @@ AudioMixer::processBlock(InstrumentId id, PlayableAudioFileList &audioQueue,
 		(*it)->skipSamples(ch, m_blockSize);
 		++ch;
 	    }
+
+	    readSomething = true;
 	}
     }
 
@@ -842,19 +857,18 @@ AudioMixer::processBlock(InstrumentId id, PlayableAudioFileList &audioQueue,
 }
 
 void
-AudioMixer::kick(bool waitForLocks)
+AudioMixer::kick(bool wantLock)
 {
-    if (waitForLocks) {
-	getLock();
-    } else {
-	if (tryLock() == EBUSY) return;
-    }
+    if (wantLock) getLock();
 
 //    Rosegarden::Profiler profiler("AudioMixer::kick");
 
-    processBlocks(false);
+    bool readSomething;
+    processBlocks(false, readSomething);
+    if (readSomething) m_fileReader->signal();
     m_fileReader->updateDefunctStatuses();
-    releaseLock();
+
+    if (wantLock) releaseLock();
 }
 
 
@@ -866,20 +880,34 @@ AudioMixer::threadRun(void *arg)
 
     pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
 
+    inst->getLock();
+
     while (1) {
 	if (inst->m_driver->areClocksRunning()) {
-//!!!	    inst->kick(false);
-	    inst->kick(true);
+	    inst->kick(false);
 	}
 
-	RealTime bufferLength = inst->m_driver->getAudioMixBufferLength();
-	int sleepusec = bufferLength.usec() + bufferLength.sec * 1000000;
-	sleepusec /= 4;
-	if (sleepusec > 20000) sleepusec = 20000;
+	RealTime length = inst->m_driver->getAudioMixBufferLength();
+	length = length / 4;
 
-	usleep(sleepusec);
+//	if (length > RealTime(0, 20000000)) length = RealTime(0, 20000000);
+
+//	int sleepusec = bufferLength.usec() + bufferLength.sec * 1000000;
+//	sleepusec /= 4;
+//	if (sleepusec > 20000) sleepusec = 20000;
+
+	//!!! actually this is probably too demanding... we probably
+	// only want to do this every occasionally as before... restore
+	// a nanosleep or something here? ... but not in write thread.
+
+	struct timespec timeout;
+	timeout.tv_sec = length.sec;
+	timeout.tv_nsec = length.nsec;
+	pthread_cond_timedwait(&inst->m_condition, &inst->m_lock, &timeout);
+
     }
 
+    inst->releaseLock();
     return 0;
 }
 
@@ -893,6 +921,9 @@ AudioFileReader::AudioFileReader(SoundDriver *driver,
 {
     pthread_mutex_t  initialisingMutex = PTHREAD_MUTEX_INITIALIZER;
     memcpy(&m_lock, &initialisingMutex, sizeof(pthread_mutex_t));
+
+    pthread_cond_t initialisingCondition = PTHREAD_COND_INITIALIZER;
+    memcpy(&m_condition, &initialisingCondition, sizeof(pthread_cond_t));
 
     pthread_create(&m_thread, NULL, threadRun, this);
     pthread_detach(m_thread);
@@ -954,6 +985,16 @@ AudioFileReader::releaseLock()
 }
 
 void
+AudioFileReader::signal()
+{
+#ifdef DEBUG_LOCKS
+    std::cerr << "AudioFileReader::signal()" << std::endl;
+#endif
+    pthread_cond_signal(&m_condition);
+}
+
+
+void
 AudioFileReader::updateReadyStatuses(PlayableAudioFileList &audioQueue)
 {
     getLock();
@@ -990,7 +1031,10 @@ AudioFileReader::updateDefunctStatuses()
 	 it != audioQueue.end(); ++it) {
 
 	PlayableAudioFile *file = *it;
-	if (file->getStatus() == PlayableAudioFile::DEFUNCT) continue;
+	if (file->getStatus() == PlayableAudioFile::DEFUNCT) {
+	    someDefunct = true;
+	    continue;
+	}
 
 	if (file->isFinished()) {
 #ifdef DEBUG_READER
@@ -1012,13 +1056,9 @@ AudioFileReader::updateDefunctStatuses()
 }
 
 bool
-AudioFileReader::kick(bool waitForLocks)
+AudioFileReader::kick(bool wantLock)
 {
-    if (waitForLocks) {
-	getLock();
-    } else {
-	if (tryLock() == EBUSY) return false;
-    }
+    if (wantLock) getLock();
 
 //    Rosegarden::Profiler profiler("AudioFileReader::kick");
 
@@ -1051,7 +1091,7 @@ AudioFileReader::kick(bool waitForLocks)
 	}
     }
     
-    releaseLock();
+    if (wantLock) releaseLock();
 
     return someFilled;
 }
@@ -1064,19 +1104,23 @@ AudioFileReader::threadRun(void *arg)
 
     pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
 
+    inst->getLock();
+
     while (1) {
-//!!!	if (!inst->kick(false)) {
-	if (!inst->kick(true)) {
 
-	    RealTime bufferLength =
-		inst->m_driver->getAudioReadBufferLength();
-	    int sleepusec = bufferLength.usec() + bufferLength.sec * 1000000;
-	    sleepusec /= 5;
-	    if (sleepusec > 20000) sleepusec = 20000;
+	if (!inst->kick(false)) {
 
-	    usleep(sleepusec);
+	    RealTime length = inst->m_driver->getAudioReadBufferLength();
+	    length = length / 2;
+
+	    struct timespec timeout;
+	    timeout.tv_sec = length.sec;
+	    timeout.tv_nsec = length.nsec;
+	    pthread_cond_timedwait(&inst->m_condition, &inst->m_lock, &timeout);
 	}
     }
+
+    inst->releaseLock();
 
     return 0;
 }
@@ -1105,6 +1149,9 @@ AudioFileWriter::AudioFileWriter(SoundDriver *driver,
 
     pthread_mutex_t  initialisingMutex = PTHREAD_MUTEX_INITIALIZER;
     memcpy(&m_lock, &initialisingMutex, sizeof(pthread_mutex_t));
+
+    pthread_cond_t initialisingCondition = PTHREAD_COND_INITIALIZER;
+    memcpy(&m_condition, &initialisingCondition, sizeof(pthread_cond_t));
 
     pthread_create(&m_thread, NULL, threadRun, this);
     pthread_detach(m_thread);
@@ -1166,6 +1213,16 @@ AudioFileWriter::releaseLock()
 #endif
     return rv;
 }
+
+void
+AudioFileWriter::signal()
+{
+#ifdef DEBUG_LOCKS
+    std::cerr << "AudioFileWriter::signal()" << std::endl;
+#endif
+    pthread_cond_signal(&m_condition);
+}
+
 
 bool
 AudioFileWriter::createRecordFile(InstrumentId id,
@@ -1249,13 +1306,9 @@ AudioFileWriter::closeRecordFile(InstrumentId id, AudioFileId &returnedId)
     
 
 void
-AudioFileWriter::kick(bool waitForLocks)
+AudioFileWriter::kick(bool wantLock)
 {
-    if (waitForLocks) {
-	getLock();
-    } else {
-	if (tryLock() == EBUSY) return;
-    }
+    if (wantLock) getLock();
 
 //    Rosegarden::Profiler profiler("AudioFileWriter::kick");
 
@@ -1289,7 +1342,7 @@ AudioFileWriter::kick(bool waitForLocks)
 	}
     }
     
-    releaseLock();
+    if (wantLock) releaseLock();
 }
 
 void *
@@ -1300,16 +1353,22 @@ AudioFileWriter::threadRun(void *arg)
 
     pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
 
+    inst->getLock();
+
     while (1) {
+
 	inst->kick(false);
 
-	RealTime bufferLength = inst->m_driver->getAudioWriteBufferLength();
-	int sleepusec = bufferLength.usec() + bufferLength.sec * 1000000;
-	sleepusec /= 4;
-	if (sleepusec > 20000) sleepusec = 20000;
-
-	usleep(sleepusec);
+	RealTime length = inst->m_driver->getAudioWriteBufferLength();
+	length = length / 2;
+	
+	struct timespec timeout;
+	timeout.tv_sec = length.sec;
+	timeout.tv_nsec = length.nsec;
+	pthread_cond_timedwait(&inst->m_condition, &inst->m_lock, &timeout);
     }
+
+    inst->releaseLock();
 
     return 0;
 }

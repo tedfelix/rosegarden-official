@@ -519,8 +519,6 @@ MmappedSegmentsMetaIterator::stopPlayingAudioSegment(int segmentRuntimeId)
     }
 }
 
-//!!! is this obsolete?
-//!!! we might need it for dropping in in the middle of a file (e.g. unmuting)
 std::vector<MappedEvent*>& 
 MmappedSegmentsMetaIterator::getPlayingAudioFiles(const Rosegarden::RealTime &songPosition)
 {
@@ -577,17 +575,17 @@ MmappedSegmentsMetaIterator::getPlayingAudioFiles(const Rosegarden::RealTime &so
                 songPosition < evt.getEventTime() + evt.getDuration())
             {
 
-#define PLAYING_AUDIO_FILES_DEBUG
+#define PLAYING_AUDIO_FILES_DEBUG 1
 #ifdef PLAYING_AUDIO_FILES_DEBUG
 //                std::cout << "MmappedSegmentsMetaIterator::getPlayingAudioFiles - "
 //                          << "instrument id = " << evt.getInstrument() << std::endl;
 
-                /*
-                std::cout << "MmappedSegmentsMetaIterator::getPlayingAudioFiles - "
-                          << "audio event time     = " << evt.getEventTime() << std::endl;
-                std::cout << "MmappedSegmentsMetaIterator::getPlayingAudioFiles - "
-                          << "audio event duration = " << evt.getDuration() << std::endl;
-                          */
+
+//                std::cout << "MmappedSegmentsMetaIterator::getPlayingAudioFiles - "
+//                          << " id " << evt.getRuntimeSegmentId() << ", audio event time     = " << evt.getEventTime() << std::endl;
+//                std::cout << "MmappedSegmentsMetaIterator::getPlayingAudioFiles - "
+//                          << "audio event duration = " << evt.getDuration() << std::endl;
+
 
 #endif // PLAYING_AUDIO_FILES_DEBUG
 

@@ -40,18 +40,14 @@ class RosegardenFader : public QWidget
 public:
     /**
      * Construct a dB fader.  The fader calculates its orientation
-     * based on the given dimensions.  Note that the longer dimension
-     * will be taken as the length of the slider, so the entire fader
-     * widget will be longer or taller than that.
+     * based on the given dimensions.
      */
     RosegardenFader(Rosegarden::AudioLevel::FaderType,
 		    int width, int height, QWidget *parent);
 
     /**
      * Construct a fader on an integral scale.  The fader calculates
-     * its orientation based on the given dimensions.  Note that the
-     * longer dimension will be taken as the length of the slider, so
-     * the entire fader widget will be longer or taller than that.
+     * its orientation based on the given dimensions.
      */
     RosegardenFader(int min, int max, int deflt,
 		    int width, int height, QWidget *parent);
@@ -104,7 +100,15 @@ protected:
 
     RosegardenTextFloat *m_float;
     QTimer              *m_floatTimer;
+/*
+    QPixmap *groovePixmap();
+    QPixmap *buttonPixmap();
 
+    typedef std::pair<int, int> SizeRec;
+    typedef std::pair<QPixmap, QPixmap> PixmapRec;
+    typedef std::map<SizeRec, PixmapRec> PixmapCache;
+    static PixmapCache m_pixmapCache;
+*/
     //!!! we should really get all sophisticated and cache these
     //shared among faders of a given dimension
     QPixmap *m_groovePixmap;
@@ -125,6 +129,8 @@ public:
     
     AudioFaderWidget(QWidget *parent,
                      LayoutType type,
+		     QString id = "",
+		     bool haveInOut = true,
                      const char *name = 0);
 
     void setAudioChannels(int);
@@ -148,6 +154,8 @@ public:
 
     KComboBox                 *m_audioInput; 
     KComboBox                 *m_audioOutput; 
+
+    QString                    m_id;
 
 signals:
     void audioChannelsChanged(int);

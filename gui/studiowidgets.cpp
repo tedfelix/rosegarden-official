@@ -54,13 +54,14 @@ RosegardenFader::RosegardenFader(Rosegarden::AudioLevel::FaderType type,
     m_groovePixmap(0),
     m_buttonPixmap(0)
 {
+    setBackgroundMode(Qt::NoBackground);
     setFixedSize(w, h); // provisional
     calculateButtonPixmap();
-    if (m_vertical) {
-	setFixedSize(w, h + m_buttonPixmap->height() + 4);
-    } else {
-	setFixedSize(w + m_buttonPixmap->width() + 4, h);
-    }
+//    if (m_vertical) {
+//	setFixedSize(w, h + m_buttonPixmap->height() + 4);
+//    } else {
+//	setFixedSize(w + m_buttonPixmap->width() + 4, h);
+//    }
 
     if (m_vertical) {
 	m_sliderMin = m_buttonPixmap->height()/2 + 2;
@@ -90,13 +91,14 @@ RosegardenFader::RosegardenFader(int min, int max, int deflt,
     m_groovePixmap(0),
     m_buttonPixmap(0)
 {
+    setBackgroundMode(Qt::NoBackground);
     setFixedSize(w, h); // provisional
     calculateButtonPixmap();
-    if (m_vertical) {
-	setFixedSize(w, h + m_buttonPixmap->height() + 4);
-    } else {
-	setFixedSize(w + m_buttonPixmap->width() + 4, h);
-    }
+//    if (m_vertical) {
+//	setFixedSize(w, h + m_buttonPixmap->height() + 4);
+//    } else {
+//	setFixedSize(w + m_buttonPixmap->width() + 4, h);
+//    }
 
     if (m_vertical) {
 	m_sliderMin = m_buttonPixmap->height()/2 + 2;
@@ -126,14 +128,15 @@ RosegardenFader::RosegardenFader(int min, int max, int deflt,
     m_groovePixmap(0),
     m_buttonPixmap(0)
 {
+    setBackgroundMode(Qt::NoBackground);
     calculateButtonPixmap();
-    if (vertical) {
-	setFixedSize(m_buttonPixmap->width(),
-		     (max - min) + m_buttonPixmap->height() + 4);
-    } else {
-	setFixedSize((max - min) + m_buttonPixmap->height() + 4,
-		     m_buttonPixmap->height());
-    }
+//    if (vertical) {
+//	setFixedSize(m_buttonPixmap->width(),
+//		     (max - min) + m_buttonPixmap->height() + 4);
+//    } else {
+//	setFixedSize((max - min) + m_buttonPixmap->height() + 4,
+//		     m_buttonPixmap->height());
+//    }
 
     if (m_vertical) {
 	m_sliderMin = m_buttonPixmap->height()/2 + 2;
@@ -239,10 +242,11 @@ RosegardenFader::paintEvent(QPaintEvent *)
 			 0, aboveButton,
 			 buttonMargin, m_buttonPixmap->height());
 
-	paint.drawPixmap(width() - buttonMargin, aboveButton,
+	paint.drawPixmap(m_buttonPixmap->width(), aboveButton,
 			 *m_groovePixmap,
-			 width() - buttonMargin, aboveButton,
-			 buttonMargin, m_buttonPixmap->height());
+			 m_buttonPixmap->width(), aboveButton,
+			 width() - m_buttonPixmap->width(),
+			 m_buttonPixmap->height());
 
     } else {
 //!!!update
@@ -393,6 +397,9 @@ RosegardenFader::calculateGroovePixmap()
 	QPainter paint(m_groovePixmap);
 	paint.setBrush(colorGroup().background());
 
+	paint.setPen(colorGroup().mid());
+	paint.drawRect(0, 0, width(), height());
+ 
 	if (m_integral) {
 	    //!!!
 	} else {
@@ -402,8 +409,8 @@ RosegardenFader::calculateGroovePixmap()
 		    position < m_sliderMax - m_sliderMin) {
 		    if (dB == 0) paint.setPen(colorGroup().dark());
 		    else paint.setPen(colorGroup().midlight());
-		    paint.drawLine(0, (m_sliderMax - position),
-				   width()-1, (m_sliderMax - position));
+		    paint.drawLine(1, (m_sliderMax - position),
+				   width()-2, (m_sliderMax - position));
 		}
 		if (dB < -10) dB += 10;
 		else dB += 2;
@@ -498,9 +505,12 @@ RosegardenFader::calculateButtonPixmap()
 
 AudioFaderWidget::AudioFaderWidget(QWidget *parent,
 				   LayoutType type,
+				   QString id,
+				   bool haveInOut,
                                    const char *name):
     QFrame(parent, name),
     m_signalMapper(new QSignalMapper(this)),
+    m_id(id),
     m_isStereo(false)
 {
     // Plugin box
@@ -512,7 +522,11 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
     for (int i = 0; i < 5; i++)
     {
         plugin = new QPushButton(pluginVbox);
-        plugin->setText(i18n("<no plugin>"));
+	if (type == FaderStrip) {
+	    plugin->setText(i18n("<none>"));
+	} else {
+	    plugin->setText(i18n("<no plugin>"));
+	}
 
         QToolTip::add(plugin, i18n("Audio plugin button"));
 
@@ -586,8 +600,13 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
     m_soloButton->setMaximumWidth(m_stereoButton->width());
     m_recordButton->setMaximumWidth(m_stereoButton->width());
 
-    m_audioInput = new KComboBox(this);
-    m_audioOutput = new KComboBox(this);
+    if (haveInOut) {
+	m_audioInput = new KComboBox(this);
+	m_audioOutput = new KComboBox(this);
+    } else {
+	m_audioInput = 0;
+	m_audioOutput = 0;
+    }
 
     // Tooltips.  Use more verbose ones for the fader box than the
     // strip.
@@ -614,23 +633,39 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
     if (type == FaderStrip)
     {
 	setFrameStyle(Box | Sunken);
-	
-        grid = new QGridLayout(this, 10, 4, 0, 1);
+	setLineWidth(1);
 
-	grid->addMultiCellWidget(m_audioInput, 0, 0, 1, 3, AlignLeft);
-	
-	grid->addMultiCellWidget(m_audioOutput, 1, 1, 1, 3, AlignLeft);
+        grid = new QGridLayout(this, haveInOut ? 7 : 5, 2, 0, 1);
 
-	grid->addMultiCellWidget(m_fader, 2, 8, 1, 1, AlignRight);
-	grid->addMultiCellWidget(m_vuMeter, 2, 8, 2, 2, AlignCenter);
+	int row = 0;
+	if (haveInOut) {
+	    grid->addMultiCellWidget(m_audioInput, 0, 0, 0, 1, AlignCenter);
+	    grid->addMultiCellWidget(m_audioOutput, 1, 1, 0, 1, AlignCenter);
+	    row = 2;
+	}
 
-	grid->addWidget(m_muteButton, 3, 3, AlignLeft);
-	grid->addWidget(m_soloButton, 4, 3, AlignLeft);
-	grid->addWidget(m_recordButton, 5, 3, AlignLeft);	
-	grid->addWidget(m_pan, 6, 3, AlignLeft);
-	grid->addWidget(m_stereoButton, 7, 3, AlignLeft);
+	if (id != "") {
+	    grid->addWidget(new QLabel(id, this), row, 0, AlignCenter);
+	    grid->addWidget(m_pan, row, 1, AlignCenter);
+	} else {
+	    grid->addMultiCellWidget(m_pan, row, row, 0, 1, AlignCenter);
+	}
+
+	++row;
+
+	grid->addMultiCellWidget(m_fader, row, row, 0, 0, AlignRight);
+	grid->addMultiCellWidget(m_vuMeter, row, row, 1, 1, AlignLeft);
+
+	++row;
+	grid->addWidget(m_muteButton, row, 0, AlignCenter);
+	grid->addWidget(m_soloButton, row, 1, AlignCenter);
+
+	++row;
+	grid->addWidget(m_recordButton, row, 0, AlignCenter);	
+	grid->addWidget(m_stereoButton, row, 1, AlignCenter);
 	
-        grid->addMultiCellWidget(pluginVbox, 9, 9, 1, 3, AlignCenter);
+	++row;
+        grid->addMultiCellWidget(pluginVbox, row, row, 0, 1, AlignCenter);
     }
     else
     {
@@ -651,19 +686,26 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
         grid->addWidget(m_pan,                  5, 5, AlignLeft);
         grid->addWidget(m_stereoButton,         6, 5, AlignLeft);
 
-	QLabel *inputLabel = new QLabel(i18n("In:"), this);
-        grid->addWidget(inputLabel,             0, 1, AlignRight);
-        grid->addMultiCellWidget(m_audioInput,  0, 0, 2, 5, AlignLeft);
+	if (haveInOut) {
 
-	QLabel *outputLabel = new QLabel(i18n("Out:"), this);
-        grid->addWidget(outputLabel,             1, 1, AlignRight);
-        grid->addMultiCellWidget(m_audioOutput,  1, 1, 2, 5, AlignLeft);
+	    QLabel *inputLabel = new QLabel(i18n("In:"), this);
+	    grid->addWidget(inputLabel,             0, 1, AlignRight);
+	    grid->addMultiCellWidget(m_audioInput,  0, 0, 2, 5, AlignLeft);
+
+	    QLabel *outputLabel = new QLabel(i18n("Out:"), this);
+	    grid->addWidget(outputLabel,             1, 1, AlignRight);
+	    grid->addMultiCellWidget(m_audioOutput,  1, 1, 2, 5, AlignLeft);
+	}
     }
 
     for (int i = 0; i < 5; ++i) {
         // Force width
 	if (type == FaderStrip) {
-	    m_plugins[i]->setMaximumWidth(70);
+	    m_plugins[i]->setMaximumWidth(50);
+	    if (haveInOut) {
+		m_audioInput->setMaximumWidth(50);
+		m_audioOutput->setMaximumWidth(50);
+	    }
 	} else {
 	    m_plugins[i]->setFixedWidth(m_plugins[i]->width());
 	}
@@ -692,6 +734,8 @@ AudioFaderWidget::setAudioChannels(int channels)
                      << ")" << endl;
 	    return;
     }
+
+    if (!m_audioInput) return;
 
     // Populate audio inputs accordingly
     //

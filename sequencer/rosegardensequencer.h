@@ -397,6 +397,7 @@ protected:
     void cleanupMmapData();
     void initMetaIterator();
 
+    void rationalisePlayingAudio();
     void setEndOfCompReached(bool e) { m_isEndOfCompReached = e; }
     bool isEndOfCompReached() { return m_isEndOfCompReached; }
     void incrementTransportToken();

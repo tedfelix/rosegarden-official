@@ -289,7 +289,8 @@ PlayableAudioFile::isBufferable(const RealTime &currentTime)
 	// Note that all ringbuffers have the same size and all are to be
 	// reset in fillBuffers, so we can just compare against the first here
 
-	if (gapFrames > m_ringBuffers[0]->getSize() - m_ringBufferThreshold) {
+//!!!	if (gapFrames > m_ringBuffers[0]->getSize() - m_ringBufferThreshold) {
+	if (gapFrames > m_ringBuffers[0]->getSize()) {
 	    return false;
 	}
 
@@ -341,7 +342,8 @@ PlayableAudioFile::fillBuffers(const RealTime &currentTime)
 	// Note that all ringbuffers have the same size and all are to be
 	// reset, so we can just compare against the first here
 
-	if (gapFrames > m_ringBuffers[0]->getSize() - m_ringBufferThreshold) {
+//!!!	if (gapFrames > m_ringBuffers[0]->getSize() - m_ringBufferThreshold) {
+	if (gapFrames > m_ringBuffers[0]->getSize()) {
 	    return false;
 	} else {
 #ifdef DEBUG_PLAYABLE
@@ -395,9 +397,11 @@ PlayableAudioFile::updateBuffers()
 	if (ch == 0 || writeSpace < frames) frames = writeSpace;
     }
 
-    if (frames < m_ringBufferThreshold) {
+//!!!    if (frames < m_ringBufferThreshold) {
+    if (frames == 0) {
 #ifdef DEBUG_PLAYABLE
-	std::cout << "PlayableAudioFile::updateBuffers: " << frames << " < " << m_ringBufferThreshold << ", ignoring" << std::endl;
+	std::cout << "PlayableAudioFile::updateBuffers: " << frames << " == 0, ignoring" << std::endl;
+//	std::cout << "PlayableAudioFile::updateBuffers: " << frames << " < " << m_ringBufferThreshold << ", ignoring" << std::endl;
 	return;
 #endif
     }

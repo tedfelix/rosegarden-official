@@ -47,11 +47,12 @@ public:
 	       unsigned int blockSize);
     virtual ~AudioMixer();
 
-    void kick(bool waitForLocks = true);
+    void kick(bool wantLock = true);
 
     int getLock();
     int tryLock();
     int releaseLock();
+    void signal();
 
     void setPlugin(InstrumentId id, int position, unsigned int pluginId);
     void removePlugin(InstrumentId id, int position);
@@ -98,9 +99,10 @@ public:
 protected:
     static void *threadRun(void *arg);
 
-    void processBlocks(bool forceFill);
+    void processBlocks(bool forceFill, bool &readSomething);
     void processEmptyBlocks(InstrumentId id);
-    bool processBlock(InstrumentId id, PlayableAudioFileList&, bool forceFill);
+    bool processBlock(InstrumentId id, PlayableAudioFileList&, bool forceFill,
+		      bool &readSomething);
     void generateBuffers();
 
     SoundDriver      *m_driver;
@@ -111,6 +113,7 @@ protected:
 
     pthread_t         m_thread;
     pthread_mutex_t   m_lock;
+    pthread_cond_t    m_condition;
 
     typedef std::map<int, RunnablePluginInstance *> PluginList;
     typedef std::map<InstrumentId, PluginList> PluginMap;
@@ -150,11 +153,12 @@ public:
 		    unsigned int sampleRate);
     virtual ~AudioFileReader();
 
-    bool kick(bool waitForLocks = true);
+    bool kick(bool wantLock = true);
 
     int getLock();
     int tryLock();
     int releaseLock();
+    void signal();
 
     void updateReadyStatuses(PlayableAudioFileList &audioQueue);
     void updateDefunctStatuses();
@@ -167,6 +171,7 @@ protected:
 
     pthread_t       m_thread;
     pthread_mutex_t m_lock;
+    pthread_cond_t  m_condition;
 };
 
 
@@ -179,11 +184,12 @@ public:
 		    unsigned int sampleRate);
     virtual ~AudioFileWriter();
 
-    void kick(bool waitForLocks = true);
+    void kick(bool wantLock = true);
 
     int getLock();
     int tryLock();
     int releaseLock();
+    void signal();
 
     bool createRecordFile(InstrumentId id, const std::string &fileName);
     bool closeRecordFile(InstrumentId id, AudioFileId &returnedId);
@@ -198,6 +204,7 @@ protected:
 
     pthread_t       m_thread;
     pthread_mutex_t m_lock;
+    pthread_cond_t  m_condition;
 
     typedef std::pair<AudioFile *, RecordableAudioFile *> FilePair;
     typedef std::map<InstrumentId, FilePair> FileMap;
