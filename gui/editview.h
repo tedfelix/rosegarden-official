@@ -160,7 +160,7 @@ public slots:
     void slotAddTempo();
     void slotAddTimeSignature();
 
-    void slotShowControlRuler(bool);
+    virtual void slotShowControlRuler();
 
 protected:
 

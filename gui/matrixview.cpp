@@ -314,11 +314,6 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 	(&m_hlayout, &doc->getComposition(), 0, 20, false, getCentralFrame());
     addRuler(m_tempoRuler);
 
-    // Same, but editable
-    //
-    makeControlRuler(m_staffs[0], &m_hlayout);
-    slotShowControlRuler(true);
-
     // Scroll view to centre middle-C and warp to pointer position
     //
     m_canvasView->scrollBy(0, m_staffs[0]->getCanvasYForHeight(60) / 2);
@@ -2227,6 +2222,17 @@ MatrixView::slotStepByStepTargetRequested(QObject *obj)
     }
     action->setChecked(obj == this);
 }
+
+/// overridden from EditView
+void
+MatrixView::slotShowControlRuler()
+{
+    if (getControlRuler() == 0)
+        makeControlRuler(m_staffs[0], &m_hlayout);
+
+    EditView::slotShowControlRuler();
+}
+
 
 
 const char* const MatrixView::ConfigGroup = "Matrix Options";

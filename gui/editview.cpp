@@ -492,6 +492,10 @@ EditView::setupActions()
     new KAction(AddTimeSignatureCommand::getGlobalName(), 0, this,
                 SLOT(slotAddTimeSignature()), actionCollection(),
                 "add_time_signature");
+
+    new KToggleAction(i18n("Show Velocity Control Ruler"), 0, this,
+                      SLOT(slotShowControlRuler()), actionCollection(),
+                      "show_control_ruler");
 }
 
 void
@@ -724,15 +728,15 @@ void EditView::slotAddTimeSignature()
     delete dialog;
 }                       
 
-void EditView::slotShowControlRuler(bool show)
+void EditView::slotShowControlRuler()
 {
+    // the control ruler should be created by the overriding implementation
+    // of this slot
+    //
     if (m_controlRuler) {
-        // Qt 3.1 only
-        // m_controlRuler->setShown(show);
-
-        if (show)
-            m_controlRuler->show();
-        else
+        if (m_controlRuler->isVisible())
             m_controlRuler->hide();
+        else
+            m_controlRuler->show();
     }
 }

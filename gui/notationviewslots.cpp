@@ -1763,3 +1763,12 @@ NotationView::slotStepByStepTargetRequested(QObject *obj)
     action->setChecked(obj == this);
 }
 
+/// overridden from EditView
+void
+NotationView::slotShowControlRuler()
+{
+    if (getControlRuler() == 0)
+        makeControlRuler(m_staffs[0], m_hlayout);
+
+    EditView::slotShowControlRuler();
+}

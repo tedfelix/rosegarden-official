@@ -21,6 +21,8 @@
   <Action name="page_mode"/>
 <Separator/>
   <Action name="lyric_editor"/>
+  <Separator/>
+    <Action name="show_control_ruler"/>
 </Menu>
 
 <Menu name="edit">

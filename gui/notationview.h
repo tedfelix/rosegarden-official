@@ -555,6 +555,9 @@ public slots:
     /// The given QObject has originated a step-by-step-editing request
     void slotStepByStepTargetRequested(QObject *);
 
+    /// overridden from EditView
+    virtual void slotShowControlRuler();
+
 signals:
     /**
      * Emitted when the note selected in the palette changes
