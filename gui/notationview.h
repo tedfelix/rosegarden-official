@@ -349,16 +349,16 @@ signals:
     void changeCurrentNote(bool isRest, Rosegarden::Note::Type);
 
     /**
+     * Emitted when a new accidental has been choosen by the user
+     */
+    void changeAccidental(Rosegarden::Accidental);
+
+    /**
      * Emitted when the selection has been cut or copied
      *
      * @see NotationSelector#hideSelection
      */
     void usedSelection();
-
-    /**
-     * Emitted when a new accidental has been choosen by the user
-     */
-    void changeAccidental(Rosegarden::Accidental);
 
 protected:
 
