@@ -1894,7 +1894,7 @@ void NotationSelector::handleMousePress(int, int,
     m_selectionRect->show();
     m_updateRect = true;
 
-    m_parentView.setCursorPosition(p.x());
+    //m_parentView.setCursorPosition(p.x());
 }
 
 void NotationSelector::handleMouseMove(QMouseEvent* e)
