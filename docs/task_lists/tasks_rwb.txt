@@ -26,8 +26,6 @@ o audio/MIDI looping and start position (performance)
 
 o MIDI export broken for key sig and SysExs [CC?]
 
-o "Revert file" option [HALF COMPLETED]
-
 o Multiple Document Interface - at least internally capable
   of handling multiple documents.   Two phases:
 
@@ -41,6 +39,9 @@ Fixed for next release
 o ALSA client detection bug on laptop - going from no clients
   to one client causes big loop of death.  Appear that alive()
   is getting sent twice from the GUI..? [FIXED]
+
+o "Revert file" option [DONE]
+
 
 
 Smaller stuff

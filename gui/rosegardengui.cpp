@@ -807,10 +807,14 @@ void RosegardenGUIApp::openFile(const QString& filePath)
 
     if (midiFile.match(filePath.lower()) != -1) {
 
+        if (!m_doc->saveIfModified()) return;
+
         importMIDIFile(filePath);
         return;
 
     } else if (rg21File.match(filePath.lower()) != -1) {
+
+        if (!m_doc->saveIfModified()) return;
 
         importRG21File(filePath);
         return;
@@ -1930,12 +1934,16 @@ void RosegardenGUIApp::slotRevertToSaved()
 {
     std::cout << "RosegardenGUIApp::slotRevertToSaved" << std::endl;
 
-    /*
     if(m_doc->isModified())
     {
-        ;
+	int revert =
+            KMessageBox::questionYesNo(this,
+                   i18n("Revert modified document to previous saved version?"));
+
+        if (revert == KMessageBox::No) return;
+
+        openFile(m_doc->getAbsFilePath());
     }
-    */
 }
 
 void RosegardenGUIApp::slotImportMIDI()
@@ -2054,9 +2062,13 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
             midiFile->convertToRosegarden(&newDoc->getComposition(), append);
     }
 
-    delete midiFile;
 
+    // Swap and clear down
+    //
     (*m_doc) = (*newDoc);
+
+    delete midiFile;
+    delete newDoc;
 
     // Set modification flag
     //
@@ -2064,7 +2076,11 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 
     // Set the caption
     //
-    if (!merge) m_doc->setTitle(QFileInfo(file).fileName());
+    if (!merge)
+    {
+        m_doc->setTitle(QFileInfo(file).fileName());
+        m_doc->setAbsFilePath(QFileInfo(file).absFilePath());
+    }
 
     m_fileRecent->addURL(file);
 
@@ -2154,6 +2170,8 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 
 void RosegardenGUIApp::slotImportRG21()
 {
+    if (!m_doc->saveIfModified()) return;
+
     KURL url = KFileDialog::getOpenURL(":ROSEGARDEN21", "*.rose|Rosegarden 2.1 file", this,
                                        i18n("Open Rosegarden 2.1 File"));
     if (url.isEmpty()) { return; }
@@ -2173,8 +2191,6 @@ void RosegardenGUIApp::slotImportRG21()
 
 void RosegardenGUIApp::importRG21File(const QString &file)
 {
-    if (!m_doc->saveIfModified()) return;
-
     KStartupLogo::hideIfStillThere();
     RosegardenProgressDialog progressDlg(i18n("Importing Rosegarden 2.1 file..."),
                                          100,
@@ -2208,6 +2224,8 @@ void RosegardenGUIApp::importRG21File(const QString &file)
     // Set the caption and add recent
     //
     m_doc->setTitle(QFileInfo(file).fileName());
+    m_doc->setAbsFilePath(QFileInfo(file).absFilePath());
+
     m_fileRecent->addURL(file);
 
 
