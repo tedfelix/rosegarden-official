@@ -5,11 +5,11 @@
 #include "Element2.h"
 
 enum Accidental {
-  NoAccidental, Sharp, Flat, Natural, DoubleSharp, DoubleFlat
+    NoAccidental, Sharp, Flat, Natural, DoubleSharp, DoubleFlat
 };
 
 enum Clef {
-  TrebleClef, TenorClef, AltoClef, BassClef
+    TrebleClef, TenorClef, AltoClef, BassClef
 };
 
 
@@ -23,128 +23,129 @@ enum Clef {
 
 class Key {
 public:
-  static const string ElementPackage;
-  static const string ElementType;
-  static const string KeyPropertyName;
-  static const Key DefaultKey;
-  struct BadKeyName { };
+    static const string ElementPackage;
+    static const string ElementType;
+    static const string KeyPropertyName;
+    static const Key DefaultKey;
+    struct BadKeyName { };
   
-  Key(Element2 &e)
-    throw (Element2::NoData, Element2::BadType, BadKeyName) :
-    m_accidentalHeights(0) {
-    checkMap();
-    if (e.package() != ElementPackage || e.type() != ElementType) {
-      throw Element2::BadType();
+    Key(Element2 &e)
+        throw (Element2::NoData, Element2::BadType, BadKeyName) :
+        m_accidentalHeights(0) {
+        checkMap();
+        if (e.package() != ElementPackage || e.type() != ElementType) {
+            throw Element2::BadType();
+        }
+        m_name = e.get<String>(KeyPropertyName);
+        if (m_keyDetailMap.find(m_name) == m_keyDetailMap.end()) {
+            throw BadKeyName();
+        }
     }
-    m_name = e.get<String>(KeyPropertyName);
-    if (m_keyDetailMap.find(m_name) == m_keyDetailMap.end()) {
-      throw BadKeyName();
+
+    Key(string name)
+        throw (BadKeyName)
+        : m_name(name), m_accidentalHeights(0) {
+        checkMap();
+        if (m_keyDetailMap.find(m_name) == m_keyDetailMap.end()) {
+            throw BadKeyName();
+        }
+    }    
+
+    Key(const Key &kc) : m_name(kc.m_name), m_accidentalHeights(0) { }
+    virtual ~Key() { delete m_accidentalHeights; }
+
+    Key &operator=(const Key &kc) {
+        m_name = kc.m_name;
+        m_accidentalHeights = 0;
+        return *this;
     }
-  }
 
-  Key(string name)
-    throw (BadKeyName)
-    : m_name(name), m_accidentalHeights(0) {
-    checkMap();
-    if (m_keyDetailMap.find(m_name) == m_keyDetailMap.end()) {
-      throw BadKeyName();
+    bool isMinor() {
+        return m_keyDetailMap[m_name].m_minor;
     }
-  }    
 
-  Key(const Key &kc) : m_name(kc.m_name), m_accidentalHeights(0) { }
-  virtual ~Key() { delete m_accidentalHeights; }
-
-  Key &operator=(const Key &kc) {
-    m_name = kc.m_name;
-    m_accidentalHeights = 0;
-    return *this;
-  }
-
-  bool isMinor() {
-    return m_keyDetailMap[m_name].m_minor;
-  }
-
-  bool isSharp() {
-    return m_keyDetailMap[m_name].m_sharps;
-  }
-
-  int getAccidentalCount() {
-    return m_keyDetailMap[m_name].m_sharpCount;
-  }
-
-  Key getEquivalent() { // e.g. called on C major, return A minor
-    return Key(m_keyDetailMap[m_name].m_equivalence);
-  }
-
-  string getName() {
-    return m_name;
-  }
-
-  string getRosegarden2Name() {
-    return m_keyDetailMap[m_name].m_rg2name;
-  }
-
-  vector<int> getAccidentalHeights() {
-    // staff positions of accidentals, if we're in the treble clef
-    checkAccidentalHeights();
-    return *m_accidentalHeights;
-  }
-
-  Element2 getAsElement() {
-    Element2 e(ElementPackage, ElementType);
-    e.set<String>(KeyPropertyName, m_name);
-    return e;
-  }
-
-  static vector<Key> getKeys(bool minor = false) {
-    checkMap();
-    vector<Key> result;
-    for (KeyDetailMap::const_iterator i = m_keyDetailMap.begin();
-         i != m_keyDetailMap.end(); ++i) {
-      if ((*i).second.m_minor == minor) {
-        result.push_back(Key((*i).first));
-      }
+    bool isSharp() {
+        return m_keyDetailMap[m_name].m_sharps;
     }
-    return result;
-  }
+
+    int getAccidentalCount() {
+        return m_keyDetailMap[m_name].m_sharpCount;
+    }
+
+    Key getEquivalent() { // e.g. called on C major, return A minor
+        return Key(m_keyDetailMap[m_name].m_equivalence);
+    }
+
+    string getName() {
+        return m_name;
+    }
+
+    string getRosegarden2Name() {
+        return m_keyDetailMap[m_name].m_rg2name;
+    }
+
+    vector<int> getAccidentalHeights() {
+        // staff positions of accidentals, if we're in the treble clef
+        checkAccidentalHeights();
+        return *m_accidentalHeights;
+    }
+
+    Element2 getAsElement() {
+        Element2 e(ElementPackage, ElementType);
+        e.set<String>(KeyPropertyName, m_name);
+        return e;
+    }
+
+    static vector<Key> getKeys(bool minor = false) {
+        checkMap();
+        vector<Key> result;
+        for (KeyDetailMap::const_iterator i = m_keyDetailMap.begin();
+             i != m_keyDetailMap.end(); ++i) {
+            if ((*i).second.m_minor == minor) {
+                result.push_back(Key((*i).first));
+            }
+        }
+        return result;
+    }
 
 private:
-  string m_name;
-  vector<int> *m_accidentalHeights;
+    string m_name;
+    vector<int> *m_accidentalHeights;
 
-  struct KeyDetails {
-    bool   m_sharps;
-    bool   m_minor;
-    int    m_sharpCount;
-    string m_equivalence;
-    string m_rg2name;
+    struct KeyDetails {
+        bool   m_sharps;
+        bool   m_minor;
+        int    m_sharpCount;
+        string m_equivalence;
+        string m_rg2name;
 
-    KeyDetails() : // ctor needed in order to live in a hash_map
-      m_sharps(false), m_minor(false), m_sharpCount(0),
-      m_equivalence(""), m_rg2name("") { }
+        KeyDetails() : // ctor needed in order to live in a hash_map
+            m_sharps(false), m_minor(false), m_sharpCount(0),
+            m_equivalence(""), m_rg2name("") { }
 
-    KeyDetails(bool sharps, bool minor, int sharpCount,
-               string equivalence, string rg2name) :
-      m_sharps(sharps), m_minor(minor), m_sharpCount(sharpCount),
-      m_equivalence(equivalence), m_rg2name(rg2name) { }
+        KeyDetails(bool sharps, bool minor, int sharpCount,
+                   string equivalence, string rg2name) :
+            m_sharps(sharps), m_minor(minor), m_sharpCount(sharpCount),
+            m_equivalence(equivalence), m_rg2name(rg2name) { }
 
-    KeyDetails(const KeyDetails &d) :
-      m_sharps(d.m_sharps), m_minor(d.m_minor), m_sharpCount(d.m_sharpCount),
-      m_equivalence(d.m_equivalence), m_rg2name(d.m_rg2name) { }
+        KeyDetails(const KeyDetails &d) :
+            m_sharps(d.m_sharps), m_minor(d.m_minor),
+            m_sharpCount(d.m_sharpCount), m_equivalence(d.m_equivalence),
+            m_rg2name(d.m_rg2name) { }
 
-    KeyDetails &operator=(const KeyDetails &d) {
-      if (&d == this) return *this;
-      m_sharps = d.m_sharps; m_minor = d.m_minor;
-      m_sharpCount = d.m_sharpCount; m_equivalence = d.m_equivalence;
-      m_rg2name = d.m_rg2name;
-      return *this;
-    }
-  };
+        KeyDetails &operator=(const KeyDetails &d) {
+            if (&d == this) return *this;
+            m_sharps = d.m_sharps; m_minor = d.m_minor;
+            m_sharpCount = d.m_sharpCount; m_equivalence = d.m_equivalence;
+            m_rg2name = d.m_rg2name;
+            return *this;
+        }
+    };
 
-  typedef hash_map<string, KeyDetails, hashstring, eqstring> KeyDetailMap;
-  static KeyDetailMap m_keyDetailMap;
-  static void checkMap();
-  void checkAccidentalHeights();
+    typedef hash_map<string, KeyDetails, hashstring, eqstring> KeyDetailMap;
+    static KeyDetailMap m_keyDetailMap;
+    static void checkMap();
+    void checkAccidentalHeights();
 };
 
 const string Key::ElementPackage = "core";
@@ -192,29 +193,29 @@ const Key Key::DefaultKey = Key("C major");
 class NotationDisplayPitch
 {
 public:
-  NotationDisplayPitch(int pitch, Clef clef, Key key) {
-    //!!! explicit accidentals in the note event properties?
-    rawPitchToDisplayPitch(pitch, clef, key, m_heightOnStaff, m_accidental);
-  }
+    NotationDisplayPitch(int pitch, Clef clef, Key key) {
+        //!!! explicit accidentals in the note event properties?
+        rawPitchToDisplayPitch(pitch, clef, key, m_heightOnStaff, m_accidental);
+    }
 
-  NotationDisplayPitch(int heightOnStaff, Accidental accidental) :
-    m_heightOnStaff(heightOnStaff), m_accidental(accidental) { }
+    NotationDisplayPitch(int heightOnStaff, Accidental accidental) :
+        m_heightOnStaff(heightOnStaff), m_accidental(accidental) { }
 
-  int getHeightOnStaff() { return m_heightOnStaff; }
-  Accidental getAccidental() { return m_accidental; }
+    int getHeightOnStaff() { return m_heightOnStaff; }
+    Accidental getAccidental() { return m_accidental; }
 
-  int getPerformancePitch(Clef clef, Key key) {
-    int p = 0;
-    displayPitchToRawPitch(m_heightOnStaff, m_accidental, clef, key, p);
-    return p;
-  }
+    int getPerformancePitch(Clef clef, Key key) {
+        int p = 0;
+        displayPitchToRawPitch(m_heightOnStaff, m_accidental, clef, key, p);
+        return p;
+    }
 
 private:
-  int m_heightOnStaff;
-  Accidental m_accidental;
+    int m_heightOnStaff;
+    Accidental m_accidental;
 
-  void rawPitchToDisplayPitch(int, Clef, Key, int &, Accidental &);
-  void displayPitchToRawPitch(int, Accidental, Clef, Key, int &);
+    void rawPitchToDisplayPitch(int, Clef, Key, int &, Accidental &);
+    void displayPitchToRawPitch(int, Accidental, Clef, Key, int &);
 };
 
 
@@ -229,56 +230,56 @@ private:
 class Note
 {
 public:
-  typedef int Type; // not an enum, too much arithmetic at stake
-  struct BadType { };
+    typedef int Type; // not an enum, too much arithmetic at stake
+    struct BadType { };
 
-  // define both sorts of names; some people prefer the American
-  // names, but I just can't remember which of them is which
+    // define both sorts of names; some people prefer the American
+    // names, but I just can't remember which of them is which
 
-  static const Type SixtyFourthNote, ThirtySecondNote, SixteenthNote,
-    EighthNote, QuarterNote, HalfNote, WholeNote;
+    static const Type SixtyFourthNote, ThirtySecondNote, SixteenthNote,
+        EighthNote, QuarterNote, HalfNote, WholeNote;
 
-  static const Type Hemidemisemiquaver, Demisemiquaver, Semiquaver,
-    Quaver, Crotchet, Minim, Semibreve, Breve;
+    static const Type Hemidemisemiquaver, Demisemiquaver, Semiquaver,
+        Quaver, Crotchet, Minim, Semibreve, Breve;
 
-  static const Type Shortest, Longest;
+    static const Type Shortest, Longest;
 
-  Note(Type type, bool dotted = false) throw (BadType) :
-    m_type(type), m_dotted(dotted) {
-    if (m_type < Shortest || m_type > Longest) throw BadType();
-  }
+    Note(Type type, bool dotted = false) throw (BadType) :
+        m_type(type), m_dotted(dotted) {
+        if (m_type < Shortest || m_type > Longest) throw BadType();
+    }
 
-  Note(const string &s) throw (BadType);
+    Note(const string &s) throw (BadType);
 
-  Note(const Note &n) : m_type(n.m_type), m_dotted(n.m_dotted) { }
-  virtual ~Note() { }
+    Note(const Note &n) : m_type(n.m_type), m_dotted(n.m_dotted) { }
+    virtual ~Note() { }
 
-  Note &operator=(const Note &n) {
-    if (&n == this) return *this;
-    m_type = n.m_type;
-    m_dotted = n.m_dotted;
-    return *this;
-  }
+    Note &operator=(const Note &n) {
+        if (&n == this) return *this;
+        m_type = n.m_type;
+        m_dotted = n.m_dotted;
+        return *this;
+    }
 
-  bool isFilled()     { return m_type <= Crotchet; }
-  bool isDotted()     { return m_dotted; }
-  bool isStalked()    { return m_type <= Minim; }
-  bool getTailCount() { return m_type >= Crotchet ? 0 : Crotchet - m_type; }
+    bool isFilled()     { return m_type <= Crotchet; }
+    bool isDotted()     { return m_dotted; }
+    bool isStalked()    { return m_type <= Minim; }
+    bool getTailCount() { return m_type >= Crotchet ? 0 : Crotchet - m_type; }
 
-  int  getDuration()  {
-    int d = 6;
-    for (int t = m_type; t > Hemidemisemiquaver; --t) d *= 2;
-    return (m_dotted ? (d + d/2) : d);
-  }
+    int  getDuration()  {
+        int d = 6;
+        for (int t = m_type; t > Hemidemisemiquaver; --t) d *= 2;
+        return (m_dotted ? (d + d/2) : d);
+    }
 
-  // these default to whatever I am:
-  string getEnglishName(Type type = -1, bool dotted = false);
-  string getAmericanName(Type type = -1, bool dotted = false);
-  string getShortName(Type type = -1, bool dotted = false);
+    // these default to whatever I am:
+    string getEnglishName(Type type = -1, bool dotted = false);
+    string getAmericanName(Type type = -1, bool dotted = false);
+    string getShortName(Type type = -1, bool dotted = false);
   
 private:
-  Type m_type;
-  bool m_dotted;
+    Type m_type;
+    bool m_dotted;
 };
 
 const Note::Type Note::SixtyFourthNote     = 0;
