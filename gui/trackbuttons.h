@@ -68,6 +68,12 @@ public:
     //
     list<int> mutedTracks();
 
+    // Set the buttons
+    //
+    void setRecordTrack(const int &recordTrack);
+    void setMutedTrack(const int &mutedTrack);
+
+
 private:
 
     void drawButtons();

@@ -38,7 +38,8 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
 
     m_tracks = vHeader->count();
     //m_offset = vHeader->offset();
-    m_offset = 19;
+    //m_offset = 19;
+    m_offset = vHeader->sectionPos(1) - 7;
     m_cellSize = vHeader->sectionSize(0);
     drawButtons();
 }
@@ -100,7 +101,7 @@ TrackButtons::drawButtons()
     for (int i = 0; i < m_tracks; i++)
     {
         track = new QHBox(this);
-        track->setMinimumWidth(42);
+        track->setMinimumWidth(40);
         mute = new QPushButton(track);
         record = new QPushButton(track);
 
@@ -110,7 +111,7 @@ TrackButtons::drawButtons()
         m_muteButtonGroup->insert(mute, i);
 
         mute->setToggleButton(true);
-        //record->setToggleButton(true);
+        record->setToggleButton(true);
 
         mute->setText("M");
         record->setText("R"); 
@@ -130,6 +131,9 @@ TrackButtons::drawButtons()
 }
 
 
+// Return the track that's currently set for recording
+//
+//
 int
 TrackButtons::selectedRecordTrack()
 {
@@ -145,18 +149,45 @@ TrackButtons::selectedRecordTrack()
 
 // Create and return a list of all muted tracks
 //
+//
 list<int>
 TrackButtons::mutedTracks()
 {
-  list<int> mutedTracks;
+    list<int> mutedTracks;
 
-  for (int i = 0; i < m_tracks; i++)
-  {
-    if (m_muteButtonGroup->find(i)->isDown())
-      mutedTracks.push_back(i);
-  }
+    for (int i = 0; i < m_tracks; i++)
+    {
+        if (m_muteButtonGroup->find(i)->isDown())
+            mutedTracks.push_back(i);
+    }
 
-  return mutedTracks;
+    return mutedTracks;
+}
+
+
+// Set the record button (button group is exclusive)
+//
+//
+void
+TrackButtons::setRecordTrack(const int &recordTrack)
+{
+    if ( recordTrack < 0 || recordTrack > m_tracks )
+        return;
+
+    m_recordButtonGroup->find(recordTrack)->setDown(true);
+}
+
+
+// Set a mute button
+//
+//
+void
+TrackButtons::setMutedTrack(const int &mutedTrack)
+{
+    if (mutedTrack < 0 || mutedTrack > m_tracks )
+        return;
+
+    m_muteButtonGroup->find(mutedTrack)->setDown(true);
 }
 
 

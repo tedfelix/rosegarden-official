@@ -11,6 +11,7 @@ libbase_la_SOURCES = BaseProperties.C \
 		     Composition.C \
 		     Equation.C \
 		     Event.C \
+                     Instrument.C \
 		     NotationTypes.C \
                      Property.C \
 		     PropertyName.C \
@@ -19,5 +20,6 @@ libbase_la_SOURCES = BaseProperties.C \
 		     SegmentNotationHelper.C \
 		     SegmentPerformanceHelper.C \
 		     StaffLayout.C \
+                     Track.C \
 		     ViewElement.C
 

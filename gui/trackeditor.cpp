@@ -93,7 +93,7 @@ TrackEditor::init(unsigned int nbSegments, unsigned int nbBars)
     // set up vert. header
     for (int i = 0; i < m_vHeader->count(); ++i) {
         m_vHeader->resizeSection(i, 25);
-        m_vHeader->setLabel(i, QString("Instr. %1").arg(i));
+        m_vHeader->setLabel(i, QString("Track %1").arg(i));
     }
 
     m_vHeader->setMinimumWidth(100);
