@@ -306,7 +306,12 @@ public:
     void setMaxValue(float max) { m_maxValue = max; }
     float getMaxValue() const { return m_maxValue; }
 
+    void setStep(float step) { m_step = step; }
     float getStep() const { return m_step; }
+
+    void setPageStep(float step) { m_pageStep = step; }
+    float getPageStep() const { return m_pageStep; }
+
     int getSize() const { return m_size; }
 
     // Position
@@ -336,6 +341,7 @@ protected:
     float m_position;
     bool  m_buttonPressed;
     int   m_lastY;
+    int   m_lastX;
 };
 
 

@@ -31,6 +31,7 @@
 #include <qapplication.h>
 #include <qcursor.h>
 #include <qpainter.h>
+#include <qtooltip.h>
 
 #include "widgets.h"
 #include "rosedebug.h"
@@ -415,9 +416,11 @@ RosegardenRotary::RosegardenRotary(QWidget *parent,
     m_lastPosition(initialPosition),
     m_position(initialPosition),
     m_buttonPressed(false),
-    m_lastY(0)
+    m_lastY(0),
+    m_lastX(0)
 {
     setFixedSize(size, size);
+    QToolTip::add(this, i18n("Click n' Drag - up and down or left to right"));
 }
 
 
@@ -444,6 +447,7 @@ RosegardenRotary::mousePressEvent(QMouseEvent *e)
     {
         m_buttonPressed = true;
         m_lastY = e->y();
+        m_lastX = e->x();
     }
 }
 
@@ -454,6 +458,7 @@ RosegardenRotary::mouseReleaseEvent(QMouseEvent *e)
     {
         m_buttonPressed = false;
         m_lastY = 0;
+        m_lastX = 0;
     }
 }
 
@@ -462,7 +467,10 @@ RosegardenRotary::mouseMoveEvent(QMouseEvent *e)
 {
     if (m_buttonPressed)
     {
-        float newValue = m_position + (m_lastY - float(e->y())) * m_step;
+        // Dragging by x or y axis when clicked modifies value
+        //
+        float newValue = m_position +
+            (m_lastY - float(e->y()) + float(e->x()) - m_lastX) * m_step;
 
         if (newValue > m_maxValue)
             m_position = m_maxValue;
@@ -476,6 +484,7 @@ RosegardenRotary::mouseMoveEvent(QMouseEvent *e)
         if (m_lastPosition == m_position) return;
 
         m_lastY = e->y();
+        m_lastX = e->x();
 
         drawPosition();
 
@@ -502,6 +511,9 @@ RosegardenRotary::wheelEvent(QWheelEvent *e)
     emit valueChanged(m_position);
 }
 
+// Draw the position line - note that we adjust for the minimum value
+// so that the knobs always work "vertically"
+//
 void
 RosegardenRotary::drawPosition()
 {
@@ -512,7 +524,7 @@ RosegardenRotary::drawPosition()
     // Undraw the previous line
     //
     double angle = (0.2 * M_PI) // offset 
-                   + (1.6 * M_PI * (double(m_lastPosition) /  // value
+                   + (1.6 * M_PI * (double(m_lastPosition - m_minValue) /
                      (double(m_maxValue) - double(m_minValue))));
 
     double x = hyp - 0.8 * hyp * sin(angle);
@@ -524,7 +536,7 @@ RosegardenRotary::drawPosition()
     // Draw the new position
     //
     angle = (0.2 * M_PI) // offset 
-                   + (1.6 * M_PI * (double(m_position) /  // value
+                   + (1.6 * M_PI * (double(m_position - m_minValue) /
                      (double(m_maxValue) - double(m_minValue))));
 
     x = hyp - 0.8 * hyp * sin(angle);
