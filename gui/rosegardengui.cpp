@@ -71,7 +71,8 @@ RosegardenGUIApp::RosegardenGUIApp()
       m_playLatency(0, 100000),
       m_fetchLatency(0, 50000),
       m_transportStatus(STOPPED),
-      m_sequencerProcess(0)
+      m_sequencerProcess(0),
+      m_soundSystemStatus(Rosegarden::NO_SEQUENCE_SUBSYS)
 {
     // accept dnd
     setAcceptDrops(true);
@@ -83,7 +84,7 @@ RosegardenGUIApp::RosegardenGUIApp()
     initStatusBar();
     initDocument();
     initView();
-	
+
     readOptions();
 
     actionCollection()->action("draw")->activate();
@@ -93,7 +94,7 @@ RosegardenGUIApp::RosegardenGUIApp()
 //     disableCommand(ID_FILE_SAVE);
 //     disableCommand(ID_FILE_SAVE_AS);
 //     disableCommand(ID_FILE_PRINT);
- 	
+ 
 //     disableCommand(ID_EDIT_CUT);
 //     disableCommand(ID_EDIT_COPY);
 //     disableCommand(ID_EDIT_PASTE);
@@ -1364,6 +1365,13 @@ void RosegardenGUIApp::play()
     if (!m_sequencerProcess && !launchSequencer())
         return;
 
+    // For the moment just throw this check in here
+    // (see the note on the method for how we should
+    // eventually use it)
+    //
+    if(!getSoundSystemStatus())
+        return;
+
     // make sure we toggle the play button
     // 
     if (m_transport->PlayButton->state() == QButton::Off)
@@ -1591,7 +1599,8 @@ bool RosegardenGUIApp::launchSequencer()
 {
     if (m_sequencerProcess) return true;
 
-    // If we've already registered a sequencer then we can use that one
+    // If we've already registered a sequencer then don't start another
+    // one
     //
     if (kapp->dcopClient()->
         isApplicationRegistered(QCString(ROSEGARDEN_SEQUENCER_APP_NAME)))
@@ -1721,6 +1730,13 @@ RosegardenGUIApp::record()
     // ensure these exist
     //
     if (!m_sequencerProcess && !launchSequencer())
+        return;
+
+    // For the moment just throw this check in here
+    // (see the note on the method for how we should
+    // eventually use it)
+    //
+    if(!getSoundSystemStatus())
         return;
 
     // Some locals
@@ -2070,7 +2086,6 @@ void
 RosegardenGUIApp::showVisuals(const Rosegarden::MappedComposition &mC)
 {
     Rosegarden::MappedComposition::iterator it;
-    double value;
 
     for (it = mC.begin(); it != mC.end(); ++it )
     {
@@ -2081,6 +2096,63 @@ RosegardenGUIApp::showVisuals(const Rosegarden::MappedComposition &mC)
         }
     }
 
+}
+
+// Once we have proper initialisation of the Sequencer we can use
+// this method properly (i.e. once) - at the moment we just call
+// it whenever we try to start the Sequencer
+//
+bool
+RosegardenGUIApp::getSoundSystemStatus()
+{
+    QByteArray data;
+    QCString replyType;
+    QByteArray replyData;
+
+    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                  "getSoundSystemStatus()",
+                                  data, replyType, replyData))
+    {
+        // failed - pop up and disable sequencer options
+        KMessageBox::error(this,
+        i18n("Failed to contact Rosegarden sequencer"));
+    }
+    else
+    {
+        QDataStream streamIn(replyData, IO_ReadOnly);
+        int result;
+        streamIn >> result;
+        m_soundSystemStatus = (Rosegarden::SoundSystemStatus) result;
+
+        switch(m_soundSystemStatus)
+        {
+            case Rosegarden::MIDI_AND_AUDIO_SUBSYS_OK:
+                // we're fine
+                break;
+
+            case Rosegarden::MIDI_SUBSYS_OK:
+                KMessageBox::error(this,
+                        i18n("Audio subsystem has failed to initialise"));
+                return false;
+                break;
+
+            case Rosegarden::AUDIO_SUBSYS_OK:
+                KMessageBox::error(this,
+                        i18n("MIDI subsystem has failed to initialise"));
+                return false;
+                break;
+                
+            case Rosegarden::NO_SEQUENCE_SUBSYS:
+            default:
+                KMessageBox::error(this,
+                   i18n("MIDI and Audio subsystems have failed to initialise"));
+                return false;
+                break;
+        }
+    }
+
+    return true;
 }
 
 

@@ -43,6 +43,7 @@
 // the sequencer interface
 //
 #include <MappedEvent.h>
+#include "Sound.h"
 
 class KURL;
 class KRecentFilesAction;
@@ -145,6 +146,14 @@ public:
      *
      */
     void processAsynchronousMidi(const Rosegarden::MappedComposition &mC);
+
+    /**
+     *
+     * Query the sequencer to find out if the sound systems initialised
+     * correctly
+     *
+     */
+    bool getSoundSystemStatus();
 
 protected:
 
@@ -544,6 +553,10 @@ private:
     // transport dialog pointer
     //
     Rosegarden::RosegardenTransportDialog *m_transport;
+
+    // A local copy of the last SoundSystem status
+    // 
+    Rosegarden::SoundSystemStatus m_soundSystemStatus;
 };
  
 #endif // ROSEGARDENGUI_H

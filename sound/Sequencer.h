@@ -54,6 +54,7 @@
 #include "MidiRecord.h"
 #include "MidiEvent.h"
 #include "AudioFile.h"
+#include "Sound.h"
 
 
 namespace Rosegarden
@@ -172,14 +173,6 @@ public:
 	RECORD_AUDIO
     } RecordStatus;
 
-    typedef enum
-    {
-        MIDI_AND_AUDIO_SUBSYS_OK,  // Everything's OK
-        MIDI_SUBSYS_OK,            // MIDI's OK
-        AUDIO_SUBSYS_OK,           // AUDIO's OK
-        NO_SEQUENCE_SUBSYS         // Nothing's OK
-    } SequencerStatus;
-
     Sequencer();
     ~Sequencer();
 
@@ -268,7 +261,7 @@ public:
 
     // Return the status of the sound systems
     //
-    SequencerStatus getStatus() const { return m_sequencerStatus; }
+    SoundSystemStatus getStatus() const { return m_sequencerStatus; }
 
     void setPlayStartPosition(const Rosegarden::RealTime &pos)
         { m_playStartPosition = pos; }
@@ -363,7 +356,7 @@ private:
 
     // State of the sequencer
     //
-    SequencerStatus        m_sequencerStatus;
+    SoundSystemStatus       m_sequencerStatus;
 
     std::vector<AudioFile*> m_audioFiles;
     Rosegarden::Sequencer  *m_sequencer;
