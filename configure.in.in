@@ -25,18 +25,9 @@ AC_ARG_WITH(arts, [  --with-arts             enable aRts support (at cost of ALS
   fi
 ], with_alsa=yes)
 
-dnl only use ALSA when sys/soundlib.h is found
-if test "$ac_header_sys_soundlib_h" = "no"; then
-  with_alsa=no
+if test "$with_alsa" = "yes"; then
+  AM_PATH_ALSA(0.9.0, with_alsa=yes, with_alsa=no)
 fi
-
-
-dnl and libasound is present
-#if test "$with_alsa" = "yes"; then
-  AC_CHECK_LIB(asound,snd_seq_create_simple_port,
-               LIBASOUND="-lasound",with_alsa=no)
-#fi
-AC_SUBST(LIBASOUND)
 
 if test "$with_alsa" = "yes"; then
   AC_DEFINE(HAVE_ALSA, 1, [Define if you have ALSA support])
