@@ -91,8 +91,8 @@ DISTCLEANFILES = $(sound_METASOURCES) MidiArts.h MidiArts.cc
 # some test programs
 #
 #
-#bin_PROGRAMS = audiotest
-#miditest_SOURCES = miditest.cpp
+#bin_PROGRAMS = showtax
+#showtax_SOURCES = showtaxonomy.cpp
 #miditest_LDADD = -lasound -lqt libRosegardenSound.la libRosegardenSequencer.la ./base/libbase.la
 
 #audiotest_SOURCES = audiotest.cpp

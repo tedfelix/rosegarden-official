@@ -27,6 +27,12 @@
 #include "MappedStudio.h"
 #include "Sequencer.h"
 
+// liblrdf - LADSPA naming library
+//
+#ifdef HAVE_LIBLRDF
+#include "lrdf.h"
+#endif // HAVE_LIBLRDF
+
 // These two functions are stolen and adapted from Qt3 qvaluevector.h
 //
 // ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
@@ -89,6 +95,7 @@ const MappedObjectProperty MappedLADSPAPort::RangeLower = "rangelower";
 const MappedObjectProperty MappedLADSPAPort::RangeUpper = "rangeupper";
 const MappedObjectProperty MappedLADSPAPort::Value = "value";
 const MappedObjectProperty MappedLADSPAPort::PortNumber = "portNumber";
+const MappedObjectProperty MappedLADSPAPort::Default = "default";
 
 #endif // HAVE_LADSPA
 
@@ -841,9 +848,33 @@ MappedAudioPluginManager::discoverPlugins(MappedStudio *studio)
     QDir dir(QString(m_path.c_str()), "*.so");
     clearPlugins(studio);
 
+
+    std::cout << "MappedAudioPluginManager::discoverPlugins - "
+	      << "discovering plugins" << std::endl;
+#ifdef HAVE_LIBLRDF
+    // Initialise liblrdf and read the description files 
+    //
+    lrdf_init();
+    if (lrdf_read_file("file:ladspa.rdfs") ||
+        lrdf_read_file("file:example.rdf"))
+    {
+	std::cerr << "MappedAudioPluginManager::discoverPlugins - "
+	          << "can't find plugin description files" << std::endl;
+    }
+
+
+#endif // HAVE_LIBLRDF
+
     for (unsigned int i = 0; i < dir.count(); i++ )
         enumeratePlugin(studio,
                 m_path + std::string("/") + std::string(dir[i].data()));
+
+#ifdef HAVE_LIBLRDF
+    // Cleanup after the RDF library
+    //
+    lrdf_cleanup();
+#endif // HAVE_LIBLRDF
+
     
 }
 
@@ -1081,6 +1112,10 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
 
     descrFn = (LADSPA_Descriptor_Function)dlsym(pluginHandle,
                                                 "ladspa_descriptor");
+#ifdef HAVE_LIBLRDF
+    char *def_uri;
+    lrdf_defaults *defs;
+#endif // HAVE_LIBLRDF
 
     if (descrFn)
     {
@@ -1131,7 +1166,42 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
 
                     
                     //plugin->setDescriptor(descriptor);
+
+#ifdef HAVE_LIBLRDF
+                    // If we have liblrdf then we can go to town and also
+                    // generate port defaults for this plugin
+                    //
+                    def_uri = lrdf_get_default_uri(descriptor->UniqueID);
+                    if (def_uri == NULL)
+                    {
+                        std::cout << "NO DESCRIPTOR FOR PLUGIN UID = "
+                                  << descriptor->UniqueID << std::endl;
+                    }
+                    else
+                    {
+                        std::cout << "Defaults for plugin "
+                                  << descriptor->UniqueID 
+                                  << " : " <<
+                                  lrdf_get_setting_metadata(def_uri, "title")
+                                  << std::endl;
+
+                        defs = lrdf_get_setting_values(def_uri);
+                        for (int i=0; i < defs->count; i++) {
+                            std::cout << "PORT "
+                                      << defs->items[i].pid
+                                      << " ("
+                                      << defs->items[i].label
+                                      << ") "
+                                      << defs->items[i].value
+                                      << std::endl;
+                        }
+
+                        lrdf_free_setting_values(defs);
+                    }
                 }
+
+#endif // HAVE_LIBLRDF
+
                 index++;
             }
         }
@@ -1143,6 +1213,7 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
                   << std::endl;
 
 #endif // HAVE_LADSPA
+
 }
 
 void
@@ -1450,6 +1521,7 @@ MappedLADSPAPort::MappedLADSPAPort(MappedObject *parent,
                                    bool readOnly):
     MappedObject(parent, "MappedAudioPluginPort", LADSPAPort, id, readOnly),
     m_value(0.0),
+    m_default(0.0),
     m_portNumber(0)
 {
 }
@@ -1467,7 +1539,11 @@ MappedLADSPAPort::getPropertyList(const MappedObjectProperty &property)
         list.push_back("rangelower");
         list.push_back("rangeupper");
     }
-    else
+    else if (property == MappedLADSPAPort::Default)
+    {
+	list.push_back(QString("%1").arg(m_default));
+    }
+    else 
     {
         if (property == MappedLADSPAPort::Value)
         {
@@ -1475,7 +1551,6 @@ MappedLADSPAPort::getPropertyList(const MappedObjectProperty &property)
                       << "value = " << m_value << std::endl;
             list.push_back(MappedObjectProperty("%1").arg(m_value));
         }
-
     }
 
 
@@ -1513,6 +1588,10 @@ MappedLADSPAPort::setProperty(const MappedObjectProperty &property,
     else if (property == MappedLADSPAPort::PortNumber)
     {
         m_portNumber =  ((unsigned long)value);
+    }
+    else if (property == MappedLADSPAPort::Default)
+    {
+	m_default = ((MappedObjectValue)value);
     }
 
 }

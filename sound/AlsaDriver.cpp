@@ -2702,8 +2702,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 if (list.size())
                 {
                     //cout << "GOT " << list.size() << " PLUGINS" << endl;
-
-                    int c = 0;
+                    //int c = 0;
 
                     PluginIterator pIt = list.begin();
                     for (; pIt != list.end(); pIt++)

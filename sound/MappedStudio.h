@@ -451,6 +451,7 @@ public:
     static const MappedObjectProperty RangeLower;
     static const MappedObjectProperty RangeUpper;
     static const MappedObjectProperty Value;
+    static const MappedObjectProperty Default;
 
     static const MappedObjectProperty PortNumber;
 
@@ -495,6 +496,7 @@ protected:
     LADSPA_PortDescriptor m_portDescriptor;
 
     MappedObjectValue     m_value;
+    MappedObjectValue     m_default;  // default value
     unsigned long         m_portNumber;
 
 };

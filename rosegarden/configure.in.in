@@ -55,7 +55,7 @@ if test "$with_jack" = "yes"; then
 
 dnl  AC_DEFINE(HAVE_JACK, 1, [Define if you have JACK support])
 dnl  AC_SUBST(JACKLIB)
-dnl  AC_CHECK_FUNCS(libRosegardenSequencer.la, [],
+dnl  AC_CHECK_FUNCS(libRosegaddenSequencer.la, [],
 dnl                 [JACKLIB="-ljack"])
 
 fi
@@ -104,6 +104,7 @@ fi
 
 if test "$with_ladspa" = "yes"; then
   AC_DEFINE(HAVE_LADSPA, 1, [Define if you have LADSPA])
+  AC_CHECK_LIB(lrdf, lrdf_dump)
 fi
 
 ###################
@@ -162,19 +163,19 @@ echo
 echo "Installation Summary"
 echo "--------------------"
 echo
-echo "Install Directory     :  $prefix"
+echo "Install Directory         :  $prefix"
 echo
 if test "$with_sound" = "no"; then
     echo "No sound support configured"
 else
-    echo "ALSA MIDI support     : ${with_alsa}"
-    echo "JACK audio support    : ${with_jack}"
-    echo "LADSPA plugin support : ${with_ladspa}"
+    echo "ALSA MIDI support         : ${with_alsa}"
+    echo "JACK audio support        : ${with_jack}"
+    echo "LADSPA plugin support     : ${with_ladspa}"
 
     if test "$with_alsa" = "yes"; then
-        echo "aRTS MIDI and audio   : no"
+        echo "aRTS MIDI and audio       : no"
     else
-        echo "aRTS MIDI and audio   : yes"
+        echo "aRTS MIDI and audio       : yes"
     fi
 fi
 echo
