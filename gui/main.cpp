@@ -467,6 +467,8 @@ int main(int argc, char *argv[])
 
     } else {
 
+        app.setNoSequencerMode(!args->isSet("sequencer"));
+
         rosegardengui = new RosegardenGUIApp(args->isSet("sequencer"),
                                              startLogo);
 

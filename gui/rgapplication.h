@@ -34,7 +34,7 @@
 class RosegardenApplication : public KUniqueApplication
 {
 public:
-    RosegardenApplication(): KUniqueApplication() {;}
+    RosegardenApplication(): KUniqueApplication(), m_noSequencerMode(false) {}
 
     /**
      * Handle the attempt at creation of a new instance - 
@@ -55,6 +55,13 @@ public:
     static RosegardenApplication* rgApp();
 
     static QByteArray Empty;
+
+    void setNoSequencerMode(bool m=true) { m_noSequencerMode = m; }
+    bool noSequencerMode() { return m_noSequencerMode; }
+
+protected:
+    
+    bool m_noSequencerMode;
 };
 
 #define rgapp RosegardenApplication::rgApp()

@@ -46,11 +46,14 @@ int RosegardenApplication::newInstance()
 
 bool RosegardenApplication::isSequencerRegistered()
 {
+    if (noSequencerMode()) return false;
     return dcopClient()->isApplicationRegistered(ROSEGARDEN_SEQUENCER_APP_NAME);
 }
 
 void RosegardenApplication::sequencerSend(QCString s, QByteArray params)
 {
+    if (noSequencerMode()) return;
+
     if (!dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
                             ROSEGARDEN_SEQUENCER_IFACE_NAME,
                             s, params))
@@ -59,6 +62,8 @@ void RosegardenApplication::sequencerSend(QCString s, QByteArray params)
 
 void RosegardenApplication::sequencerCall(QCString s, QCString& replyType, QByteArray& replyData, QByteArray params, bool useEventLoop)
 {
+    if (noSequencerMode()) return;
+
     if (!dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
                             ROSEGARDEN_SEQUENCER_IFACE_NAME,
                             s, params, replyType, replyData, useEventLoop))
