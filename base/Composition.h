@@ -750,7 +750,6 @@ protected:
     bool                              m_recordMetronome;
 
     RefreshStatusArray<RefreshStatus> m_refreshStatusArray;
-    bool                              m_needsRefresh;
 
     ColourMap                         m_segmentColourMap;
 

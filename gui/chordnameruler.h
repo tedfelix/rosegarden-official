@@ -82,6 +82,8 @@ public:
     virtual void endMarkerTimeChanged(const Rosegarden::Segment *, bool);
     virtual void segmentDeleted(const Rosegarden::Segment *);
 
+    void initCache() { recalculate(true); }
+
 public slots:
     void slotScrollHoriz(int x);
 

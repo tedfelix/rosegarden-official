@@ -96,6 +96,8 @@ ChordNameRuler::~ChordNameRuler()
 void
 ChordNameRuler::setComposition(Rosegarden::Composition *composition)
 {
+    if (m_composition == composition) return;
+
     for (SegmentSelection::iterator si = m_segments.begin();
 	 si != m_segments.end(); ++si) {
 	(*si)->removeObserver(this);
@@ -103,7 +105,8 @@ ChordNameRuler::setComposition(Rosegarden::Composition *composition)
     m_segments.clear();
 
     m_composition = composition;
-    m_compositionRefreshStatusId = composition->getNewRefreshStatusId();
+    if (m_composition)
+	m_compositionRefreshStatusId = composition->getNewRefreshStatusId();
     m_currentSegment = 0;
 }
 
@@ -201,7 +204,15 @@ void
 ChordNameRuler::recalculate(bool regetSegments)
 {
     Rosegarden::Profiler profiler("ChordNameRuler::recalculate", true);
-    std::cerr << "ChordNameRuler::recalculate(" << regetSegments << ")" << std::endl;
+    RG_DEBUG << "ChordNameRuler[" << this << "]::recalculate(" << regetSegments << ")" << endl;
+
+    Rosegarden::RefreshStatus &rs =
+	m_composition->getRefreshStatus(m_compositionRefreshStatusId);
+    if (rs.needsRefresh()) {
+	regetSegments = true;
+	rs.setNeedsRefresh(false);
+    }
+    m_needsRecalculate = false;
 
     if (regetSegments) {
 
@@ -217,9 +228,9 @@ ChordNameRuler::recalculate(bool regetSegments)
 		Rosegarden::Instrument *instr = m_studio->getInstrumentById
 		    (m_composition->getTrackById(ti)->getInstrument());
 
-		//!!! Need general percussion-bank technique:
-		if (instr && instr->getInstrumentType() == Rosegarden::Instrument::Midi &&
-		    instr->getMidiChannel() == 9) { //!!! hardcoded...
+		if (instr &&
+		    instr->getInstrumentType() == Rosegarden::Instrument::Midi &&
+		    instr->isPercussion()) {
 		    continue;
 		}
 	    }
@@ -231,10 +242,14 @@ ChordNameRuler::recalculate(bool regetSegments)
 	     si != m_segments.end(); ++si) {
 
 	    if (ss.find(*si) == ss.end()) {
+
 		//!!! this is probably unsafe -- the segment has been removed
 		// from the composition so it might have been destroyed
 		(*si)->removeObserver(this);
 		m_segments.erase(*si);
+
+		RG_DEBUG << "Segment deleted, updating (now have " << m_segments.size() << " segments)" << endl;
+
 	    }
 	}
 
@@ -244,6 +259,8 @@ ChordNameRuler::recalculate(bool regetSegments)
 	    if (m_segments.find(*si) == m_segments.end()) {
 		(*si)->addObserver(this);
 		m_segments.insert(*si);
+		RG_DEBUG << "Segment created, adding (now have " << m_segments.size() << " segments)" << endl;
+
 	    }
 	}
 
@@ -294,8 +311,6 @@ ChordNameRuler::recalculate(bool regetSegments)
     
     AnalysisHelper helper;
     helper.labelChords(adapter, *m_chordSegment);
-
-    m_needsRecalculate = false;
 }
 
 void
@@ -315,7 +330,6 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
 	if (rs.needsRefresh()) {
 
 	    recalculate(true);
-	    rs.setNeedsRefresh(false);
 
 	} else if (m_needsRecalculate) {
 

@@ -215,8 +215,7 @@ Composition::Composition() :
     m_loopStart(0),
     m_loopEnd(0),
     m_playMetronome(false),
-    m_recordMetronome(true),
-    m_needsRefresh(true)
+    m_recordMetronome(true)
 {
     // nothing else
 }

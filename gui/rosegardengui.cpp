@@ -3782,11 +3782,16 @@ void RosegardenGUIApp::slotChangeZoom(int)
     if (m_view)
         m_view->setZoomSize(m_zoomSlider->getCurrentSize());
 
-    m_doc->getConfiguration().set<Rosegarden::Int>
-                 (Rosegarden::DocumentConfiguration::ZoomLevel,
-                  int(m_zoomSlider->getCurrentSize() * 1000.0));
+    long newZoom = int(m_zoomSlider->getCurrentSize() * 1000.0);
+    
+    if (m_doc->getConfiguration().get<Rosegarden::Int>
+	(Rosegarden::DocumentConfiguration::ZoomLevel) != newZoom) {
 
-    m_doc->slotDocumentModified();
+	m_doc->getConfiguration().set<Rosegarden::Int>
+	    (Rosegarden::DocumentConfiguration::ZoomLevel, newZoom);
+	
+	m_doc->slotDocumentModified();
+    }
 }
 
 
@@ -3880,7 +3885,7 @@ RosegardenGUIApp::slotChangeTempo(Rosegarden::timeT time,
 
     if (m_view && m_view->getTrackEditor()->getChordNameRuler())
     {
-        m_view->getTrackEditor()->getChordNameRuler()->repaint();
+//!!!        m_view->getTrackEditor()->getChordNameRuler()->repaint();
         m_view->getTrackEditor()->getChordNameRuler()->update();
     }
 
