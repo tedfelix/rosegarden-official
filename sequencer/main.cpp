@@ -153,11 +153,20 @@ int main(int argc, char *argv[])
     struct timeval tv;
     (void)gettimeofday(&tv, 0);
     Rosegarden::RealTime lastTick = Rosegarden::RealTime(tv.tv_sec, tv.tv_usec);
-    Rosegarden::RealTime timePerTick = Rosegarden::RealTime(0, 10000);
+    Rosegarden::RealTime timePerTick = Rosegarden::RealTime(0, 5000);
 
     while (roseSeq && roseSeq->getStatus() != QUIT)
     {
 	Rosegarden::RealTime waitTime = Rosegarden::RealTime::zeroTime;
+
+        // Update internal clock and send pointer position
+        // change event to GUI - this is the heartbeat of
+        // the Sequencer - it doesn't tick over without
+        // this call.
+        //
+        // Also attempt to send the MIDI clock at this point.
+        //
+        roseSeq->updateClocks();
 
 	switch(roseSeq->getStatus())
 	{
@@ -266,15 +275,6 @@ int main(int argc, char *argv[])
 	    roseSeq->processAsynchronousEvents();
 	    break;
 	}
-
-        // Update internal clock and send pointer position
-        // change event to GUI - this is the heartbeat of
-        // the Sequencer - it doesn't tick over without
-        // this call.
-        //
-        // Also attempt to send the MIDI clock at this point.
-        //
-        roseSeq->updateClocks();
 
         if (lastSeqStatus != roseSeq->getStatus())
             roseSeq->notifySequencerStatus();
