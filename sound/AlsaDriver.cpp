@@ -2016,6 +2016,8 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
 
             case SND_SEQ_EVENT_KEYPRESS:
                 {
+                    // Fix for 632964 by Pedro Lopez-Cabanillas (20030523)
+                    //
                     MappedEvent *mE = new MappedEvent();
                     mE->setType(MappedEvent::MidiKeyPressure);
                     mE->setEventTime(eventTime);
@@ -2049,6 +2051,8 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
 
             case SND_SEQ_EVENT_PITCHBEND:
                 {
+                    // Fix for 711889 by Pedro Lopez-Cabanillas (20030523)
+                    //
                     int s = event->data.control.value + 8192;
                     int d1 = (s >> 7) & 0x7f; // data1 = MSB
                     int d2 = s & 0x7f; // data2 = LSB
@@ -2063,6 +2067,8 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
 
             case SND_SEQ_EVENT_CHANPRESS:
                 {
+                    // Fixed by Pedro Lopez-Cabanillas (20030523)
+                    //
                     int s = event->data.control.value & 0x7f;
                     MappedEvent *mE = new MappedEvent();
                     mE->setType(MappedEvent::MidiChannelPressure);
@@ -2266,6 +2272,15 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                                             (*i)->getPitch(),
                                             (*i)->getVelocity(),
                                             eventDuration);
+
+                        /*
+                        std::cout << "NOTE OUT : pitch = " 
+                                  << int((*i)->getPitch())
+                                  << ", velocity = "
+                                  << int((*i)->getVelocity())
+                                  << " at time " 
+                                  << (*i)->getEventTime() << std::endl;
+                                  */
                     }
                 }
                 break;

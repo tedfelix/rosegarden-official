@@ -587,7 +587,9 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
                     continue;
                 }
 
-                // chop off the EOX
+                // chop off the EOX 
+                // length fixed by Pedro Lopez-Cabanillas (20030523)
+                //
                 metaMessage = metaMessage.substr(0, metaMessage.length()-1);
 
                 midiEvent = new MidiEvent(deltaTime,
