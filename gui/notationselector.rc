@@ -2,7 +2,7 @@
 
 <kpartgui name="Rosegarden::NotationTool" version="1">
 
-<Menu name="NotationSelector">
+<Menu noMerge="1" name="NotationSelector">
   <Action name="insert" />
   <Action name="erase" />
 </Menu>
