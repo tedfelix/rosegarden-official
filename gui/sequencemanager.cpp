@@ -1150,6 +1150,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
                 continue;
             }
+
 #ifdef HAVE_ALSA
             (*i)->setInstrument(id);
 #endif

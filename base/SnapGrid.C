@@ -56,8 +56,14 @@ SnapGrid::setSnapTime(timeT snap)
 timeT
 SnapGrid::getSnapTime(double x) const
 {
-    if (m_snapTime == NoSnap) return 0;
     timeT time = m_rulerScale->getTimeForX(x);
+    return getSnapTime(time);
+}
+
+timeT
+SnapGrid::getSnapTime(timeT time) const
+{
+    if (m_snapTime == NoSnap) return 0;
 
     Rosegarden::Composition *composition = m_rulerScale->getComposition();
     int barNo = composition->getBarNumber(time);

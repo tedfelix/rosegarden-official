@@ -161,7 +161,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 			   bool showProgressive) :
     EditView(doc, segments, 1, parent, "notationview"),
     m_properties(getViewLocalPropertyPrefix()),
-    m_currentEventSelection(0),
     m_legatoQuantizer(new Quantizer(Quantizer::RawEventData,
 				    getViewLocalPropertyPrefix() + "Q",
 				    Quantizer::LegatoQuantize)),
@@ -428,7 +427,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                            KPrinter *printer)
     : EditView(doc, segments, 1, 0, "printview"),
     m_properties(getViewLocalPropertyPrefix()),
-    m_currentEventSelection(0),
     m_legatoQuantizer(new Quantizer(Quantizer::RawEventData,
 				    getViewLocalPropertyPrefix() + "Q",
 				    Quantizer::LegatoQuantize)),
@@ -823,88 +821,7 @@ void NotationView::setupActions()
 	 actionCollection(), QString("switch_from_rest_to_note"));
 
 
-    const char *notePitchNames[] = {
-	"Do", "Re", "Mi", "Fa", "So", "La", "Ti"
-    };
-    const Key notePitchKeys[3][7] = {
-	{
-	    Key_A, Key_S, Key_D, Key_F, Key_J, Key_K, Key_L,
-	},
-	{
-	    Key_Q, Key_W, Key_E, Key_R, Key_U, Key_I, Key_O,
-	},
-	{
-	    Key_Z, Key_X, Key_C, Key_V, Key_B, Key_N, Key_M,
-	},
-    };
-
-    KActionMenu *insertNoteActionMenu =
-	new KActionMenu(i18n("&Insert Note"), this, "insert_note_actionmenu");
-
-    for (int octave = 0; octave <= 2; ++octave) {
-
-	KActionMenu *menu = insertNoteActionMenu;
-	if (octave == 1) {
-	    menu = new KActionMenu(i18n("&Upper Octave"), this,
-				   "insert_note_actionmenu_upper_octave");
-	    insertNoteActionMenu->insert(new KActionSeparator(this));
-	    insertNoteActionMenu->insert(menu);
-	} else if (octave == 2) {
-	    menu = new KActionMenu(i18n("&Lower Octave"), this,
-				   "insert_note_actionmenu_lower_octave");
-	    insertNoteActionMenu->insert(menu);
-	}
-
-	for (unsigned int i = 0; i < 7; ++i) {
-
-	    KAction *insertNoteAction = 0;
-
-	    QString octaveSuffix;
-	    if (octave == 1) octaveSuffix = "_high";
-	    else if (octave == 2) octaveSuffix = "_low";
-
-	    // do and fa lack a flat
-
-	    if (i != 0 && i != 3) {
-      
-		insertNoteAction =
-		    new KAction
-		    (i18n(QString(notePitchNames[i]) + " flat"),
-		     CTRL + SHIFT + notePitchKeys[octave][i],
-		     this, SLOT(slotInsertNoteFromAction()), actionCollection(),
-		     QString("insert_%1_flat%2").arg(i).arg(octaveSuffix));
-
-		menu->insert(insertNoteAction);
-	    }
-
-	    insertNoteAction =
-		new KAction
-		(i18n(QString(notePitchNames[i])),
-		 notePitchKeys[octave][i],
-		 this, SLOT(slotInsertNoteFromAction()), actionCollection(),
-		 QString("insert_%1%2").arg(i).arg(octaveSuffix));
-
-	    menu->insert(insertNoteAction);
-
-	    // and mi and ti lack a sharp
-
-	    if (i != 2 && i != 6) {
-
-		insertNoteAction =
-		    new KAction
-		    (i18n(QString(notePitchNames[i]) + " sharp"),
-		     SHIFT + notePitchKeys[octave][i],
-		     this, SLOT(slotInsertNoteFromAction()), actionCollection(),
-		     QString("insert_%1_sharp%2").arg(i).arg(octaveSuffix));
-
-		menu->insert(insertNoteAction);
-	    }
-
-	    if (i < 6) menu->insert(new KActionSeparator(this));
-	}
-    }
-
-    actionCollection()->insert(insertNoteActionMenu);
+    createInsertPitchActionMenu();
 
 
     // setup Notes menu & toolbar
@@ -1900,6 +1817,12 @@ NotationCanvasView* NotationView::getCanvasView()
     return dynamic_cast<NotationCanvasView *>(m_canvasView);
 }
 
+Rosegarden::Segment *
+NotationView::getCurrentSegment()
+{
+    NotationStaff *staff = getStaff(m_currentStaff);
+    return (staff ? &staff->getSegment() : 0);
+}
 
 timeT
 NotationView::getInsertionTime()
@@ -1909,8 +1832,8 @@ NotationView::getInsertionTime()
 
 
 timeT
-NotationView::getInsertionTime(Event *&clefEvt,
-			       Event *&keyEvt)
+NotationView::getInsertionTime(Rosegarden::Clef &clef,
+			       Rosegarden::Key &key)
 {
     // This fuss is solely to recover the clef and key: we already
     // set m_insertionTime to the right value when we first placed
@@ -1920,7 +1843,14 @@ NotationView::getInsertionTime(Event *&clefEvt,
     NotationStaff *staff = m_staffs[m_currentStaff];
     double layoutX = staff->getLayoutXOfInsertCursor();
     if (layoutX < 0) layoutX = 0;
+    Rosegarden::Event *clefEvt = 0, *keyEvt = 0;
     (void)staff->getElementUnderLayoutX(layoutX, clefEvt, keyEvt);
+    
+    if (clefEvt) clef = Rosegarden::Clef(*clefEvt);
+    else clef = Rosegarden::Clef();
+
+    if (keyEvt) key = Rosegarden::Key(*keyEvt);
+    else key = Rosegarden::Key();
 
     return m_insertionTime;
 }

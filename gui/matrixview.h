@@ -101,9 +101,8 @@ public:
 
     virtual void updateView();
 
-    void setCurrentSelection(Rosegarden::EventSelection* s, bool preview = false);
-    Rosegarden::EventSelection* getCurrentSelection()
-        { return m_currentEventSelection; }
+    virtual void setCurrentSelection(Rosegarden::EventSelection* s,
+				     bool preview = false);
 
     /**
      * Set the current event selection to a single event
@@ -223,13 +222,6 @@ public slots:
     void slotPreviewSelection();
     void slotClearLoop();
     void slotClearSelection();
-    
-    void slotExtendSelectionBackward();
-    void slotExtendSelectionForward();
-    void slotExtendSelectionBackwardBar();
-    void slotExtendSelectionForwardBar();
-    void slotExtendSelectionBackward(bool bar);
-    void slotExtendSelectionForward(bool bar);
 
     /// edition tools
     void slotPaintSelected();
@@ -248,13 +240,6 @@ public slots:
     void slotVelocityUp();
     void slotVelocityDown();
 
-    /// move
-    void slotStepBackward();
-    void slotStepForward();
-    void slotJumpBackward();
-    void slotJumpForward();
-    void slotJumpToStart();
-    void slotJumpToEnd();
     void slotJumpCursorToPlayback();
     void slotJumpPlaybackToCursor();
 
@@ -303,8 +288,11 @@ public slots:
     /*
      * Set the insertion pointer position (from the bottom LoopRuler)
      */
-    void slotSetInsertCursorPosition(Rosegarden::timeT position,
-				     bool scroll = true);
+    void slotSetInsertCursorPosition(Rosegarden::timeT position, bool scroll);
+
+    virtual void slotSetInsertCursorPosition(Rosegarden::timeT position) {
+	slotSetInsertCursorPosition(position, true);
+    }
 
     /*
      * Catch the keyboard being pressed
@@ -362,9 +350,15 @@ public slots:
      */
     void slotSelectAll();
 
+    /**
+     * Keyboard insert
+     */
+    void slotInsertNoteFromAction();
+
 protected:
 
-    Rosegarden::timeT getInsertionTime();
+    virtual Rosegarden::Segment *getCurrentSegment();
+    virtual Rosegarden::timeT getInsertionTime();
 
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void keyReleaseEvent(QKeyEvent *event);
@@ -419,16 +413,6 @@ protected:
     void initZoomToolbar();
 
     //--------------- Data members ---------------------------------
-
-//     RefreshStack m_refreshStack;
-
-    /// The current selection of Events (for cut/copy/paste)
-    Rosegarden::EventSelection* m_currentEventSelection;
-
-    // A push stack full of real events
-    //
-    std::vector<Rosegarden::Event> m_pushedEvents;
-    Rosegarden::Segment *m_pushSegment;
 
     std::vector<MatrixStaff*> m_staffs;
 

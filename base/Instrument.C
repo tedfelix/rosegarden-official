@@ -232,11 +232,12 @@ Instrument::toXmlString()
 
 }
 
+
 // Return a program name given a bank select (and whether
 // we send it or not)
 //
 std::string
-Instrument::getProgramName()
+Instrument::getProgramName() const
 {
     std::string programName;
 

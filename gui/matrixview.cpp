@@ -51,6 +51,7 @@
 #include "matrixhlayout.h"
 #include "matrixvlayout.h"
 #include "matrixtool.h"
+#include "matrixcommands.h"
 #include "dialogs.h"
 #include "rosestrings.h"
 #include "rosegardenguidoc.h"
@@ -82,8 +83,6 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
                        std::vector<Segment *> segments,
                        QWidget *parent)
     : EditView(doc, segments, 3, parent, "matrixview"),
-      m_currentEventSelection(0),
-      m_pushSegment(0),
       m_hlayout(&doc->getComposition()),
       m_vlayout(),
       m_snapGrid(new Rosegarden::SnapGrid(&m_hlayout)),
@@ -551,6 +550,9 @@ void MatrixView::setupActions()
     new KAction(i18n("Clear Selection"), Key_Escape, this,
 		SLOT(slotClearSelection()), actionCollection(),
 		"clear_selection");
+
+    //!!! need slotInsertNoteFromAction() after notationviewslots.cpp
+    createInsertPitchActionMenu();
 
     createGUI(getRCFileName());
 
@@ -1157,6 +1159,42 @@ void MatrixView::slotVerticalScrollPianoKeyboard(int y)
         m_pianoView->setContentsPos(0, y);
 }
 
+void MatrixView::slotInsertNoteFromAction()
+{
+    const QObject *s = sender();
+    QString name = s->name();
+
+    Segment &segment = *getCurrentSegment();
+    int pitch = 0;
+
+    try {
+
+	pitch = getPitchFromNoteInsertAction(name);
+
+    } catch (...) {
+	
+	KMessageBox::sorry
+	    (this, QString(i18n("Unknown note insert action %1").arg(name)));
+	return;
+    }
+
+    KTmpStatusMsg msg(i18n("Inserting note"), this);
+	
+    MATRIX_DEBUG << "Inserting note at pitch " << pitch << endl;
+
+    Rosegarden::Event modelEvent(Rosegarden::Note::EventType, 0, 1);
+    modelEvent.set<Rosegarden::Int>(Rosegarden::BaseProperties::PITCH, pitch);
+    Rosegarden::timeT time(getInsertionTime());
+    Rosegarden::timeT endTime(time + m_snapGrid->getSnapTime(time));
+
+    MatrixInsertionCommand* command = 
+	new MatrixInsertionCommand(segment, time, endTime, &modelEvent);
+
+    addCommandToHistory(command);
+    
+    slotSetInsertCursorPosition(endTime); //!!! + chord mode?
+}
+
 void MatrixView::closeWindow()
 {
     delete this;
@@ -1680,6 +1718,13 @@ MatrixView::removeControlRuler(unsigned int number)
 }
 
 
+Rosegarden::Segment *
+MatrixView::getCurrentSegment()
+{
+    MatrixStaff *staff = getStaff(0);
+    return (staff ? &staff->getSegment() : 0);
+}
+
 timeT
 MatrixView::getInsertionTime()
 {
@@ -1693,6 +1738,7 @@ MatrixView::getInsertionTime()
 // duplicates of those in NotationView.  We should probably
 // factor these out -- but where to?
 
+/*!!!
 
 void
 MatrixView::slotStepBackward()
@@ -1764,6 +1810,8 @@ MatrixView::slotJumpToEnd()
     slotSetInsertCursorPosition(time);
 }    
 
+*/
+
 void
 MatrixView::slotJumpCursorToPlayback()
 {
@@ -1776,6 +1824,7 @@ MatrixView::slotJumpPlaybackToCursor()
     emit jumpPlaybackTo(getInsertionTime());
 }
 
+/*!!!
 
 void MatrixView::slotExtendSelectionBackward()
 {
@@ -1896,7 +1945,7 @@ void MatrixView::slotExtendSelectionForward(bool bar)
     
     setCurrentSelection(es);
 }
-
+*/
 
 void
 MatrixView::slotSelectAll()

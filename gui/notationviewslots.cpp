@@ -289,6 +289,7 @@ NotationView::slotChangeFont(std::string newName, int newSize)
 	if (thisOne) m_fontCombo->setCurrentItem(i);
 	KToggleAction *action = dynamic_cast<KToggleAction *>
 	    (actionCollection()->action("note_font_" + strtoqstr(f[i])));
+	NOTATION_DEBUG << "inspecting " << f[i] << (action ? ", have action" : ", no action") << endl;
 	if (action) action->setChecked(thisOne);
 	else {
 	    NOTATION_DEBUG
@@ -298,15 +299,21 @@ NotationView::slotChangeFont(std::string newName, int newSize)
 	}
     }
 
+    NOTATION_DEBUG << "about to reinitialise sizes" << endl;
+
     std::vector<int> sizes = NotePixmapFactory::getAvailableSizes(m_fontName);
     m_fontSizeSlider->reinitialise(sizes, m_fontSize);
     setupFontSizeMenu(oldName);
 
     m_hlayout->setNotePixmapFactory(m_notePixmapFactory);
 
+    NOTATION_DEBUG << "about to change font" << endl;
+
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         m_staffs[i]->changeFont(m_fontName, m_fontSize);
     }
+
+    NOTATION_DEBUG << "about to position staffs" << endl;
 
     positionStaffs();
 
@@ -470,6 +477,7 @@ void NotationView::slotEditGeneralPaste()
     }
 }
 
+/*!!!
 void NotationView::slotExtendSelectionBackward()
 {
     slotExtendSelectionBackward(false);
@@ -585,7 +593,7 @@ void NotationView::slotExtendSelectionForward(bool bar)
     
     setCurrentSelection(es);
 }
-
+*/
 
 void NotationView::slotPreviewSelection()
 {
@@ -617,6 +625,9 @@ void NotationView::slotClearSelection()
     }
 }
 
+
+//!!! these should be in matrix too
+
 void NotationView::slotEditSelectFromStart()
 {
     timeT t = getInsertionTime();
@@ -632,7 +643,7 @@ void NotationView::slotEditSelectToEnd()
     Segment &segment = m_staffs[m_currentStaff]->getSegment();
     setCurrentSelection(new EventSelection(segment,
 					   t,
-					   segment.getEndTime()));
+					   segment.getEndMarkerTime()));
 }
 
 void NotationView::slotEditSelectWholeStaff()
@@ -640,7 +651,7 @@ void NotationView::slotEditSelectWholeStaff()
     Segment &segment = m_staffs[m_currentStaff]->getSegment();
     setCurrentSelection(new EventSelection(segment,
 					   segment.getStartTime(),
-					   segment.getEndTime()));
+					   segment.getEndMarkerTime()));
 }
 
 void NotationView::slotToggleNotesToolBar()
@@ -1010,69 +1021,25 @@ void NotationView::slotInsertNoteFromAction()
 	return;
     }
 
-    if (name.left(7) == "insert_") {
-	name = name.right(name.length()-7);
-	
-	KTmpStatusMsg msg(i18n("Inserting note"), this);
-	
-	int modify = 0;
-	int octave = 0;
+    int pitch = 0;
 
-	if (name.right(5) == "_high") {
-	    
-	    octave = 1;
-	    name = name.left(name.length()-5);
-	
-	} else if (name.right(4) == "_low") {
+    try {
 
-	    octave = -1;
-	    name = name.left(name.length()-4);
-	}
+	pitch = getPitchFromNoteInsertAction(name);
 
-	if (name.right(6) == "_sharp") {
-
-	    modify = 1;
-	    name = name.left(name.length()-6);
-
-	} else if (name.right(5) == "_flat") {
-
-	    modify = -1;
-	    name = name.left(name.length()-5);
-	}
-
-	int scalePitch = name.toInt();
-	
-	if (scalePitch < 0 || scalePitch > 7) {
-	    NOTATION_DEBUG << "NotationView::slotInsertNoteFromAction: pitch "
-			   << scalePitch << " out of range, using 0" <<endl;
-	    scalePitch = 0;
-	}
-
-	Event *clefEvt = 0, *keyEvt = 0;
-	timeT time = getInsertionTime(clefEvt, keyEvt);
-
-	Rosegarden::Key key;
-	if (keyEvt) key = Rosegarden::Key(*keyEvt);
-
-	Rosegarden::Clef clef;
-	if (clefEvt) clef = Rosegarden::Clef(*clefEvt);
-
-	int pitch =
-	    key.getTonicPitch() + 60 + 12*(octave + clef.getOctave()) + modify;
-
-	static int scale[] = { 0, 2, 4, 5, 7, 9, 11 };
-	pitch += scale[scalePitch];
-	
-	NOTATION_DEBUG << "Inserting note at pitch " << pitch << " with modifier " << modify << endl;
-
-	noteInserter->insertNote(segment, time, pitch,
-				 Rosegarden::Accidentals::NoAccidental);
-
-    } else {
+    } catch (...) {
 	
 	KMessageBox::sorry
 	    (this, QString(i18n("Unknown note insert action %1").arg(name)));
+	return;
     }
+
+    KTmpStatusMsg msg(i18n("Inserting note"), this);
+	
+    NOTATION_DEBUG << "Inserting note at pitch " << pitch << endl;
+    
+    noteInserter->insertNote(segment, getInsertionTime(), pitch,
+			     Rosegarden::Accidentals::NoAccidental);
 }
 
 void NotationView::slotInsertRest()
@@ -1240,12 +1207,10 @@ void NotationView::slotMarksRemoveMarks()
 void NotationView::slotEditAddClef()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
-    Event *clefEvt = 0, *keyEvt = 0;
     Segment &segment = staff->getSegment();
-    timeT insertionTime = getInsertionTime(clefEvt, keyEvt);
-
     Rosegarden::Clef clef;
-    if (clefEvt) clef = Rosegarden::Clef(*clefEvt);
+    Rosegarden::Key key;
+    timeT insertionTime = getInsertionTime(clef, key);
     
     ClefDialog *dialog = new ClefDialog(this, m_notePixmapFactory, clef);
     
@@ -1267,8 +1232,7 @@ void NotationView::slotEditAddClef()
 
 void NotationView::slotEditAddTempo()
 {
-    Event *clefEvt = 0, *keyEvt = 0;
-    timeT insertionTime = getInsertionTime(clefEvt, keyEvt);
+    timeT insertionTime = getInsertionTime();
 
     TempoDialog *tempoDlg = new TempoDialog(this, m_document);
 
@@ -1286,10 +1250,9 @@ void NotationView::slotEditAddTempo()
 void NotationView::slotEditAddTimeSignature()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
-    Event *clefEvt = 0, *keyEvt = 0;
     Segment &segment = staff->getSegment();
     Rosegarden::Composition *composition = segment.getComposition();
-    timeT insertionTime = getInsertionTime(clefEvt, keyEvt);
+    timeT insertionTime = getInsertionTime();
 
     int barNo = composition->getBarNumber(insertionTime);
     bool atStartOfBar = (insertionTime == composition->getBarStart(barNo));
@@ -1335,9 +1298,11 @@ void NotationView::slotEditAddTimeSignature()
 void NotationView::slotEditAddKeySignature()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
-    Event *clefEvt = 0, *keyEvt = 0;
+//    Event *clefEvt = 0, *keyEvt = 0;
     Segment &segment = staff->getSegment();
-    timeT insertionTime = getInsertionTime(clefEvt, keyEvt);
+    Rosegarden::Clef clef;
+    Rosegarden::Key key;
+    timeT insertionTime = getInsertionTime(clef, key);
     
 /*!!!
 	Rosegarden::Key key;
@@ -1349,10 +1314,10 @@ void NotationView::slotEditAddKeySignature()
 	(&m_document->getComposition(), insertionTime,
 	 m_document->getComposition().getDuration());
     Rosegarden::AnalysisHelper helper;
-    Rosegarden::Key key = helper.guessKey(adapter);
+    key = helper.guessKey(adapter);
 
-    Rosegarden::Clef clef;
-    if (clefEvt) clef = Rosegarden::Clef(*clefEvt);
+//    Rosegarden::Clef clef;
+//    if (clefEvt) clef = Rosegarden::Clef(*clefEvt);
 
     KeySignatureDialog *dialog =
 	new KeySignatureDialog
@@ -1608,7 +1573,7 @@ NotationView::doDeferredCursorMove()
     updateView();
 }
 
-
+/*!!!
 void
 NotationView::slotStepBackward()
 {
@@ -1676,7 +1641,7 @@ NotationView::slotJumpToEnd()
     timeT time = segment.getEndMarkerTime();
     slotSetInsertCursorPosition(time);
 }    
-
+*/
 void
 NotationView::slotJumpCursorToPlayback()
 {
@@ -1688,17 +1653,6 @@ NotationView::slotJumpPlaybackToCursor()
 {
     emit jumpPlaybackTo(getInsertionTime());
 }
-
-//////////////////////////////////////////////////////////////////////
-/*!!!
-void NotationView::slotToggleTriplet()
-{
-    NOTATION_DEBUG << "NotationView::slotToggleTriplet()\n";
-    
-    m_tupletMode = !m_tupletMode;
-    emit changeTupletMode(m_tupletMode);
-}
-*/
 
 //----------------------------------------
 // Accidentals

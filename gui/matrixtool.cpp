@@ -29,6 +29,7 @@
 #include "matrixtool.h"
 #include "matrixview.h"
 #include "matrixstaff.h"
+#include "matrixcommands.h"
 #include "velocitycolour.h"
 
 #include "rosestrings.h"
@@ -36,6 +37,9 @@
 
 using Rosegarden::EventSelection;
 using Rosegarden::SnapGrid;
+using Rosegarden::Event;
+using Rosegarden::Note;
+using Rosegarden::timeT;
 using std::cout;
 using std::cerr;
 using std::endl;
@@ -99,172 +103,6 @@ MatrixTool::MatrixTool(const QString& menuName, MatrixView* parent)
 }
 
 
-using Rosegarden::Event;
-using Rosegarden::Note;
-using Rosegarden::timeT;
-
-#include "basiccommand.h"
-#include "Segment.h"
-
-class MatrixInsertionCommand : public BasicCommand
-{
-public:
-    MatrixInsertionCommand(Rosegarden::Segment &segment,
-                           timeT time,
-                           timeT endTime,
-                           MatrixStaff*,
-                           Rosegarden::Event *event);
-
-    virtual ~MatrixInsertionCommand();
-    
-protected:
-    virtual void modifySegment();
-
-    MatrixStaff* m_staff;
-    Rosegarden::Event* m_event;
-};
-
-MatrixInsertionCommand::MatrixInsertionCommand(Rosegarden::Segment &segment,
-                                               timeT time,
-                                               timeT endTime,
-                                               MatrixStaff* staff,
-                                               Event *event) :
-    BasicCommand(i18n("Insert Note"), segment, time, endTime),
-    m_staff(staff),
-    m_event(new Event(*event,
-                      std::min(time, endTime),
-                      (time < endTime) ? endTime - time : time - endTime))
-{
-    // nothing
-}
-
-MatrixInsertionCommand::~MatrixInsertionCommand()
-{
-    delete m_event;
-}
-
-void MatrixInsertionCommand::modifySegment()
-{
-    MATRIX_DEBUG << "MatrixInsertionCommand::modifySegment()\n";
-
-    Rosegarden::SegmentMatrixHelper helper(getSegment());
-    helper.insertNote(new Event(*m_event));
-}
-
-//------------------------------
-
-class MatrixEraseCommand : public BasicCommand
-{
-public:
-    MatrixEraseCommand(Rosegarden::Segment &segment,
-                       MatrixStaff*,
-                       Rosegarden::Event *event);
-
-    virtual Rosegarden::timeT getRelayoutEndTime();
-
-protected:
-    virtual void modifySegment();
-
-    MatrixStaff* m_staff;
-    Rosegarden::Event *m_event; // only used on 1st execute (cf bruteForceRedo)
-    Rosegarden::timeT m_relayoutEndTime;
-};
-
-MatrixEraseCommand::MatrixEraseCommand(Rosegarden::Segment &segment,
-                                       MatrixStaff* staff,
-                                       Event *event) :
-    BasicCommand(i18n("Erase Note"),
-                 segment,
-		 event->getAbsoluteTime(),
-		 event->getAbsoluteTime() + event->getDuration(),
-		 true),
-    m_staff(staff),
-    m_event(event),
-    m_relayoutEndTime(getEndTime())
-{
-    // nothing
-}
-
-timeT MatrixEraseCommand::getRelayoutEndTime()
-{
-    return m_relayoutEndTime;
-}
-
-void MatrixEraseCommand::modifySegment()
-{
-    Rosegarden::SegmentMatrixHelper helper(getSegment());
-
-    std::string eventType = m_event->getType();
-
-    if (eventType == Note::EventType) {
-
-	helper.deleteNote(m_event, false);
-
-    }
-}
-
-//------------------------------
-
-class MatrixModifyCommand : public BasicCommand
-{
-public:
-    MatrixModifyCommand(Rosegarden::Segment &segment,
-                        MatrixStaff*,
-                        Rosegarden::Event *oldEvent,
-                        Rosegarden::Event *newEvent,
-                        bool isMove);
-
-protected:
-    virtual void modifySegment();
-
-    int m_newPitch;
-
-    MatrixStaff       *m_staff;
-    Rosegarden::Event *m_oldEvent;
-    Rosegarden::Event *m_newEvent;
-};
-
-MatrixModifyCommand::MatrixModifyCommand(Rosegarden::Segment &segment,
-                                         MatrixStaff* staff,
-                                         Rosegarden::Event *oldEvent,
-                                         Rosegarden::Event *newEvent,
-                                         bool isMove):
-      BasicCommand((isMove ? i18n("Move Note") : i18n("Modify Note")),
-                   segment,
-                   std::min(newEvent->getAbsoluteTime(),
-                            oldEvent->getAbsoluteTime()), 
-                   std::max(oldEvent->getAbsoluteTime() +
-                            oldEvent->getDuration(), 
-                            newEvent->getAbsoluteTime() +
-                            newEvent->getDuration()),
-                   true),
-    m_staff(staff),
-    m_oldEvent(oldEvent),
-    m_newEvent(newEvent)
-{
-}
-
-void MatrixModifyCommand::modifySegment()
-{
-    std::string eventType = m_oldEvent->getType();
-
-    if (eventType == Note::EventType) {
-
-	timeT normalizeStart = std::min(m_newEvent->getAbsoluteTime(),
-					m_oldEvent->getAbsoluteTime());
-
-	timeT normalizeEnd = std::max(m_newEvent->getAbsoluteTime() +
-				      m_newEvent->getDuration(),
-				      m_oldEvent->getAbsoluteTime() +
-				      m_oldEvent->getDuration());
-
-        Rosegarden::Segment &segment(getSegment());
-        segment.insert(m_newEvent);
-        segment.eraseSingle(m_oldEvent);
-        segment.normalizeRests(normalizeStart, normalizeEnd);
-    }
-}
-
 //------------------------------
 
 
@@ -305,7 +143,8 @@ void MatrixPainter::handleLeftButtonPress(Rosegarden::timeT time,
 
     m_currentStaff = m_mParentView->getStaff(staffNo);
  
-    Event *el = new Event(Note::EventType, time, grid.getSnapTime(p.x()));
+    Event *el = new Event(Note::EventType, time,
+			  grid.getSnapTime(double(p.x())));
     el->set<Rosegarden::Int>(Rosegarden::BaseProperties::PITCH, pitch);
     el->set<Rosegarden::Int>(Rosegarden::BaseProperties::VELOCITY, 100);
 
@@ -388,7 +227,6 @@ void MatrixPainter::handleMouseRelease(Rosegarden::timeT endTime,
 	new MatrixInsertionCommand(m_currentStaff->getSegment(),
 				   time,
                                    endTime,
-				   m_currentStaff,
 				   m_currentElement->event());
     
     m_mParentView->addCommandToHistory(command);
@@ -423,8 +261,7 @@ void MatrixEraser::handleLeftButtonPress(Rosegarden::timeT,
     m_currentStaff = m_mParentView->getStaff(staffNo);
 
     MatrixEraseCommand* command =
-        new MatrixEraseCommand(m_currentStaff->getSegment(),
-                               m_currentStaff, el->event());
+        new MatrixEraseCommand(m_currentStaff->getSegment(), el->event());
 
     m_mParentView->addCommandToHistory(command);
 
@@ -925,7 +762,6 @@ void MatrixMover::handleMouseRelease(Rosegarden::timeT newTime,
 
             macro->addCommand(
                     new MatrixModifyCommand(m_currentStaff->getSegment(),
-                                            m_currentStaff,
                                             (*it),
                                             newEvent,
                                             true));
@@ -1075,7 +911,6 @@ void MatrixResizer::handleMouseRelease(Rosegarden::timeT newTime,
 
             macro->addCommand(
                     new MatrixModifyCommand(m_currentStaff->getSegment(),
-                                            m_currentStaff,
                                             *it,
                                             newEvent,
                                             false));

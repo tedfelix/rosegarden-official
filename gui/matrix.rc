@@ -67,6 +67,9 @@
   <Action name="draw" />
   <Action name="erase" />
   <Action name="resize" />
+
+  <Separator/>
+  <Action name="insert_note_actionmenu"/>
 </Menu>
 
 </MenuBar>

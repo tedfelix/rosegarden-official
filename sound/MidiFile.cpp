@@ -1133,14 +1133,26 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
              el != (*segment)->end(); ++el)
         {
             midiEventAbsoluteTime =
-                (*el)->getAbsoluteTime() * m_timingDivision / crotchetDuration;
+		(*el)->getAbsoluteTime() + (*segment)->getDelay();
 
 	    timeT absoluteTimeLimit = midiEventAbsoluteTime;
 	    if ((*segment)->isRepeating()) {
-		absoluteTimeLimit =
-		    ((*segment)->getRepeatEndTime() - 1) * m_timingDivision /
-		    crotchetDuration;
+		absoluteTimeLimit = ((*segment)->getRepeatEndTime() - 1) +
+		    (*segment)->getDelay();
 	    }
+
+	    if ((*segment)->getRealTimeDelay() != Rosegarden::RealTime(0, 0)) {
+		RealTime evRT = comp.getElapsedRealTime(midiEventAbsoluteTime);
+		timeT timeBeforeDelay = midiEventAbsoluteTime;
+		midiEventAbsoluteTime = comp.getElapsedTimeForRealTime
+		    (evRT + (*segment)->getRealTimeDelay());
+		absoluteTimeLimit += (midiEventAbsoluteTime - timeBeforeDelay);
+	    }
+
+	    midiEventAbsoluteTime =
+		midiEventAbsoluteTime * m_timingDivision / crotchetDuration;
+	    absoluteTimeLimit =
+		absoluteTimeLimit * m_timingDivision / crotchetDuration;
 
 	    while (midiEventAbsoluteTime <= absoluteTimeLimit) {
 
@@ -1150,13 +1162,16 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
 			midiVelocity = (*el)->get<Int>(BaseProperties::VELOCITY);
 		    else
 			midiVelocity = 127;
+
+		    int pitch = (*el)->get<Int>(BaseProperties::PITCH);
+		    pitch += (*segment)->getTranspose();
                               
 		    // insert the NOTE_ON at the appropriate channel
 		    //
 		    midiEvent = 
 			new MidiEvent(midiEventAbsoluteTime,
 				      MIDI_NOTE_ON | midiChannel,
-				      (*el)->get<Int>(BaseProperties::PITCH),
+				      pitch,
 				      midiVelocity);
 
 		    m_midiComposition[trackNumber].push_back(midiEvent);
@@ -1175,7 +1190,7 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
 		    midiEvent =
 			new MidiEvent(midiEventEndTime,
 				      MIDI_NOTE_OFF | midiChannel,
-				      (*el)->get<Int>(BaseProperties::PITCH),
+				      pitch,
 				      127); // full volume silence
 
 		    m_midiComposition[trackNumber].push_back(midiEvent);

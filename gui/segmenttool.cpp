@@ -94,7 +94,7 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
     if (track >= TrackId(m_doc->getComposition().getNbTracks())) return;
 
     timeT time = m_canvas->grid().snapX(e->pos().x(), SnapGrid::SnapLeft);
-    timeT duration = m_canvas->grid().getSnapTime(e->pos().x());
+    timeT duration = m_canvas->grid().getSnapTime(double(e->pos().x()));
     if (duration == 0) duration = Note(Note::Shortest).getDuration();
     
     m_currentItem = m_canvas->addSegmentItem(track, time, time + duration);
@@ -132,7 +132,7 @@ int SegmentPencil::handleMouseMove(QMouseEvent *e)
     SnapGrid::SnapDirection direction = SnapGrid::SnapRight;
     if (e->pos().x() < m_currentItem->x()) direction = SnapGrid::SnapLeft;
 
-    timeT snap = m_canvas->grid().getSnapTime(e->pos().x());
+    timeT snap = m_canvas->grid().getSnapTime(double(e->pos().x()));
     if (snap == 0) snap = Note(Note::Shortest).getDuration();
 
     timeT time = m_canvas->grid().snapX(e->pos().x(), direction);
@@ -362,7 +362,7 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
     timeT time = m_canvas->grid().snapX(e->pos().x());
     timeT duration = time - m_currentItem->getStartTime();
 
-    timeT snap = m_canvas->grid().getSnapTime(e->pos().x());
+    timeT snap = m_canvas->grid().getSnapTime(double(e->pos().x()));
     if (snap == 0) snap = Note(Note::Shortest).getDuration();
 
     if ((duration > 0 && duration <  snap) ||

@@ -60,14 +60,20 @@ public:
     void setSnapTime(timeT snap);
 
     /**
-     * Return the snap size of the grid, at the given
-     * x-coordinate.  (The x-coordinate is required in
-     * case the built-in snap size is SnapToBar,
-     * SnapToBeat or SnapToUnit, in which case we need
-     * to know the current time signature.)
-     * Returns zero for NoSnap.
+     * Return the snap size of the grid, at the given x-coordinate.
+     * (The x-coordinate is required in case the built-in snap size is
+     * SnapToBar, SnapToBeat or SnapToUnit, in which case we need to
+     * know the current time signature.)  Returns zero for NoSnap.
      */
     timeT getSnapTime(double x) const;
+
+    /**
+     * Return the snap size of the grid, at the given time.  (The time
+     * is required in case the built-in snap size is SnapToBar,
+     * SnapToBeat or SnapToUnit, in which case we need to know the
+     * current time signature.)  Returns zero for NoSnap.
+     */
+    timeT getSnapTime(timeT t) const;
 
     /**
      * Snap a given x-coordinate to the nearest time on

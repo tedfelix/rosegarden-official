@@ -54,12 +54,12 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 {
     QPoint p = inverseMapPoint(e->pos());
 
-    if (m_snapGrid->getSnapTime(p.x()))
-        m_lastSnap = m_snapGrid->getSnapTime(p.x());
+    if (m_snapGrid->getSnapTime(double(p.x())))
+        m_lastSnap = m_snapGrid->getSnapTime(double(p.x()));
 
     updateGridSnap(e);
 
-    MATRIX_DEBUG << "MatrixCanvasView::contentsMousePressEvent: snap time is " << m_snapGrid->getSnapTime(p.x()) << endl;
+    MATRIX_DEBUG << "MatrixCanvasView::contentsMousePressEvent: snap time is " << m_snapGrid->getSnapTime(double(p.x())) << endl;
 
     timeT evTime = m_snapGrid->snapX(p.x(), SnapGrid::SnapLeft);
     int evPitch = m_staff.getHeightAtCanvasY(p.y());
@@ -119,8 +119,8 @@ void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
 {
     QPoint p = inverseMapPoint(e->pos());
 
-    if (m_snapGrid->getSnapTime(p.x()))
-        m_lastSnap = m_snapGrid->getSnapTime(p.x());
+    if (m_snapGrid->getSnapTime(double(p.x())))
+        m_lastSnap = m_snapGrid->getSnapTime(double(p.x()));
 
     updateGridSnap(e);
 

@@ -27,6 +27,7 @@ rosegarden_SOURCES = \
         loopruler.cpp \
 	main.cpp \
 	matrixcanvasview.cpp \
+	matrixcommands.cpp \
 	matrixelement.cpp \
 	matrixhlayout.cpp \
         matrixparameterbox.cpp \

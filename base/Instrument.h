@@ -172,7 +172,7 @@ public:
     // Return a string describing the current program for
     // this Instrument
     //
-    std::string getProgramName();
+    std::string getProgramName() const;
 
     PluginInstanceIterator beginPlugins() { return m_audioPlugins.begin(); }
     PluginInstanceIterator endPlugins() { return m_audioPlugins.end(); }

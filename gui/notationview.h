@@ -55,8 +55,7 @@ class NotationHLayout;
 class NotationVLayout;
 class NotationStaff;
 
-namespace Rosegarden { class Progress; class Segment;
-class EventSelection; class MappedEvent; }
+namespace Rosegarden { class Progress; class Segment; class MappedEvent; }
 using Rosegarden::timeT;
 
 /**
@@ -159,11 +158,8 @@ public:
      * Set the current event selection
      * @see NotationSelector
      */
-    void setCurrentSelection(Rosegarden::EventSelection*, bool preview = false);
-
-    const Rosegarden::EventSelection *getCurrentSelection() {
-	return m_currentEventSelection;
-    }
+    virtual void setCurrentSelection(Rosegarden::EventSelection*,
+				     bool preview = false);
 
     /**
      * Set the current event selection to a single event
@@ -324,12 +320,14 @@ public slots:
     void slotUpdateInsertModeStatus();
 
     /// edit menu
+/*!!!
     void slotExtendSelectionBackward();
     void slotExtendSelectionForward();
     void slotExtendSelectionBackwardBar();
     void slotExtendSelectionForwardBar();
     void slotExtendSelectionBackward(bool bar);
     void slotExtendSelectionForward(bool bar);
+*/
     void slotPreviewSelection();
     void slotClearLoop();
     void slotClearSelection();
@@ -439,7 +437,7 @@ public slots:
     void slotSetInsertCursorPosition(Rosegarden::timeT position,
 				     bool scroll, bool updateNow);
 
-    void slotSetInsertCursorPosition(Rosegarden::timeT position) {
+    virtual void slotSetInsertCursorPosition(Rosegarden::timeT position) {
 	slotSetInsertCursorPosition(position, true, true);
     }
 
@@ -465,7 +463,7 @@ public slots:
 					double cx, double cy) {
 	slotSetInsertCursorAndRecentre(position, cx, cy, true);
     }
-
+/*!!!
     /// Step back one event with the insert cursor position
     void slotStepBackward();
 
@@ -483,7 +481,7 @@ public slots:
 
     /// Zip forward to the end of the segment
     void slotJumpToEnd();
-
+*/
     /// Set insert cursor to playback pointer position
     void slotJumpCursorToPlayback();
 
@@ -668,17 +666,19 @@ protected:
 
     virtual NotationCanvasView* getCanvasView();
 
+    virtual Rosegarden::Segment *getCurrentSegment();
+
     /**
      * Return the time at which the insert cursor may be found.
      */
-    Rosegarden::timeT getInsertionTime();
+    virtual Rosegarden::timeT getInsertionTime();
 
     /**
      * Return the time at which the insert cursor may be found,
      * and the time signature, clef and key at that time.
      */
-    Rosegarden::timeT getInsertionTime(Rosegarden::Event *&clefEvt,
-				       Rosegarden::Event *&keyEvt);
+    virtual Rosegarden::timeT getInsertionTime(Rosegarden::Clef &clef,
+					       Rosegarden::Key &key);
 
     void doDeferredCursorMove();
 
@@ -694,9 +694,6 @@ protected:
     //--------------- Data members ---------------------------------
 
     NotationProperties m_properties;
-
-    /// The current selection of Events (for cut/copy/paste)
-    Rosegarden::EventSelection* m_currentEventSelection;
 
     Rosegarden::Quantizer *m_legatoQuantizer;
 
