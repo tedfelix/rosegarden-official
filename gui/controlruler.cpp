@@ -591,19 +591,12 @@ PropertyViewRuler::paintEvent(QPaintEvent* e)
 
     paint.setPen(RosegardenGUIColours::MatrixElementBorder);
 
-    paint.setClipRegion(e->region());
-    paint.setClipRect(e->rect().normalize());
-
-    QRect clipRect = paint.clipRegion().boundingRect();
+    QRect clipRect = e->rect().normalize();
 
     timeT from = m_rulerScale->getTimeForX
        (clipRect.x() - m_currentXOffset - m_xorigin);
-//     timeT   to = m_rulerScale->getTimeForX
-//        (clipRect.x() + clipRect.width() - m_currentXOffset + 100 - m_xorigin);
-
 
     Segment::iterator it = m_segment->findNearestTime(from);
-    //Segment::iterator it = m_segment->begin();
 
     for (; m_segment->isBeforeEndMarker(it); it++) {
         long value = 0;
@@ -614,7 +607,11 @@ PropertyViewRuler::paintEvent(QPaintEvent* e)
         int x = int(m_rulerScale->getXForTime((*it)->getAbsoluteTime()))
             + m_currentXOffset + int(m_xorigin);
 
-        if ((x * getHScaleFactor()) > (clipRect.x() + clipRect.width())) break;
+        int xPos = x * getHScaleFactor();
+
+        if (xPos < clipRect.x()) continue;
+
+        if (xPos > (clipRect.x() + clipRect.width())) break;
 
         // include fiddle factor (+2)
         int width = 
