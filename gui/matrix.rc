@@ -183,6 +183,7 @@
     <Action name="edit_cut"/>
     <Action name="edit_copy"/>
     <Action name="quantize"/>
+    <Action name="legato"/>
     <Action name="rescale"/>
     <Action name="double_speed"/>
     <Action name="half_speed"/>
