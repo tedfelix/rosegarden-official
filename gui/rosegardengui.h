@@ -608,6 +608,16 @@ public slots:
     void slotHarmonizeSelection();
 
     /**
+     * Set the start times of the selected segments
+     */
+    void slotSetSegmentStartTimes();
+
+    /**
+     * Set the durations of the selected segments
+     */
+    void slotSetSegmentDurations();
+
+    /**
      * Merge the selected segments
      */
     void slotJoinSegments();

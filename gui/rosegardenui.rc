@@ -49,7 +49,9 @@
         <Action name="quantize_selection"/>
         <Action name="rescale"/>
 <!--    <Action name="harmonize_selection"/> -->
-        <Separator/>
+        <Action name="set_segment_start"/>
+        <Action name="set_segment_duration"/>
+	<Separator/>
         <Action name="auto_split"/>
         <Action name="split_by_pitch"/>
         <Action name="join_segments"/>
@@ -247,6 +249,8 @@
         <Action name="rescale"/>
         <Action name="auto_split"/>
         <Action name="split_by_pitch"/>
+        <Action name="set_segment_start"/>
+        <Action name="set_segment_duration"/>
         <Action name="collapse"/>
         <Action name="set_tempo_to_segment_length"/>
         <Action name="repeats_to_real_copies"/>

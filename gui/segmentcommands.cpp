@@ -570,13 +570,13 @@ SegmentReconfigureCommand::~SegmentReconfigureCommand()
 void
 SegmentReconfigureCommand::addSegment(Segment *segment,
 				      timeT startTime,
-				      timeT endTime,
+				      timeT endMarkerTime,
 				      TrackId track)
 {
     SegmentRec record;
     record.segment = segment;
     record.startTime = startTime;
-    record.endTime = endTime;
+    record.endMarkerTime = endMarkerTime;
     record.track = track;
     m_records.push_back(record);
 }
@@ -611,7 +611,7 @@ SegmentReconfigureCommand::swap()
 	// previous values back in to the record for use in the
 	// next iteration of the execute/unexecute cycle
 
-	timeT currentEndTime = i->segment->getEndMarkerTime();
+	timeT currentEndMarkerTime = i->segment->getEndMarkerTime();
 	timeT currentStartTime = i->segment->getStartTime();
 	TrackId currentTrack = i->segment->getTrack();
 
@@ -620,9 +620,9 @@ SegmentReconfigureCommand::swap()
 	    i->startTime = currentStartTime;
 	}
 
-	if (currentEndTime != i->endTime) {
-	    i->segment->setEndMarkerTime(i->endTime);
-	    i->endTime = currentEndTime;
+	if (currentEndMarkerTime != i->endMarkerTime) {
+	    i->segment->setEndMarkerTime(i->endMarkerTime);
+	    i->endMarkerTime = currentEndMarkerTime;
 	}
 
 	if (currentTrack != i->track) {

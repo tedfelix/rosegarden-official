@@ -252,14 +252,14 @@ public:
     struct SegmentRec {
         Rosegarden::Segment *segment;
         Rosegarden::timeT startTime;
-        Rosegarden::timeT endTime;
+        Rosegarden::timeT endMarkerTime;
         Rosegarden::TrackId track;
     };
     typedef std::vector<SegmentRec> SegmentRecSet;
 
     void addSegment(Rosegarden::Segment *segment,
                     Rosegarden::timeT startTime,
-                    Rosegarden::timeT endTime,
+                    Rosegarden::timeT endMarkerTime,
                     Rosegarden::TrackId track);
 
     void addSegments(const SegmentRecSet &records);

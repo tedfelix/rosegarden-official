@@ -1131,7 +1131,7 @@ PitchDialog::getPitch() const
 TimeDialog::TimeDialog(QWidget *parent, QString title,
 		       Rosegarden::Composition *composition,
 		       Rosegarden::timeT defaultTime) :
-    KDialogBase(parent, 0, true, title, User1 | Ok)
+    KDialogBase(parent, 0, true, title, User1 | Ok | Cancel)
 {
     QVBox *vbox = makeVBoxMainWidget();
     m_timeWidget = new RosegardenTimeWidget
@@ -1146,7 +1146,7 @@ TimeDialog::TimeDialog(QWidget *parent, QString title,
 		       Rosegarden::Composition *composition,
 		       Rosegarden::timeT startTime,
 		       Rosegarden::timeT defaultTime) :
-    KDialogBase(parent, 0, true, title, User1 | Ok)
+    KDialogBase(parent, 0, true, title, User1 | Ok | Cancel)
 {
     QVBox *vbox = makeVBoxMainWidget();
     m_timeWidget = new RosegardenTimeWidget

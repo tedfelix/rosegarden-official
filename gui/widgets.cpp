@@ -1376,7 +1376,7 @@ void
 RosegardenTimeWidget::init()
 {
     int denoms[] = {
-	64, 48, 32, 24, 16, 12, 8, 6, 4, 3, 2, 1
+	1, 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64, 96, 128
     };
 
     QFrame *frame = new QFrame(this);
@@ -1394,7 +1394,20 @@ RosegardenTimeWidget::init()
 	for (size_t i = 0; i < sizeof(denoms)/sizeof(denoms[0]); ++i) {
 
 	    Rosegarden::timeT duration =
-		Rosegarden::Note(Rosegarden::Note::WholeNote).getDuration() / denoms[i];
+		Rosegarden::Note(Rosegarden::Note::Breve).getDuration() / denoms[i];
+
+	    if (denoms[i] > 1 && denoms[i] < 128 && (denoms[i] % 3) != 0) {
+		// not breve or hemidemi, not a triplet
+		Rosegarden::timeT dottedDuration = duration * 3 / 2;
+		m_noteDurations.push_back(dottedDuration);
+		Rosegarden::timeT error = 0;
+		QString label = NotationStrings::makeNoteMenuLabel
+		    (dottedDuration, false, error);
+		QPixmap pmap = NotePixmapFactory::toQPixmap
+		    (NotePixmapFactory::makeNoteMenuPixmap(dottedDuration, error));
+		m_note->insertItem(pmap, label); // ignore error
+	    }		
+
 	    m_noteDurations.push_back(duration);
 	    Rosegarden::timeT error = 0;
 	    QString label = NotationStrings::makeNoteMenuLabel
@@ -1402,17 +1415,6 @@ RosegardenTimeWidget::init()
 	    QPixmap pmap = NotePixmapFactory::toQPixmap
 		(NotePixmapFactory::makeNoteMenuPixmap(duration, error));
 	    m_note->insertItem(pmap, label); // ignore error
-
-	    if (i > 0 && (i % 2) == 0) { // not hemidemi, not a triplet
-		duration = duration * 3 / 2;
-		m_noteDurations.push_back(duration);
-		Rosegarden::timeT error = 0;
-		QString label = NotationStrings::makeNoteMenuLabel
-		    (duration, false, error);
-		QPixmap pmap = NotePixmapFactory::toQPixmap
-		    (NotePixmapFactory::makeNoteMenuPixmap(duration, error));
-		m_note->insertItem(pmap, label); // ignore error
-	    }		
 	}
 	connect(m_note, SIGNAL(activated(int)),
 		this, SLOT(slotNoteChanged(int)));

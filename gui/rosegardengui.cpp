@@ -565,6 +565,14 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotSplitSelectionByPitch()), actionCollection(),
                 "split_by_pitch");
 
+    new KAction(i18n("Set Start Time..."), 0, this,
+		SLOT(slotSetSegmentStartTimes()), actionCollection(),
+		"set_segment_start");
+
+    new KAction(i18n("Set Duration..."), 0, this,
+		SLOT(slotSetSegmentDurations()), actionCollection(),
+		"set_segment_duration");
+
     new KAction(SegmentMergeCommand::getGlobalName(),
                 0,
                 this, SLOT(slotJoinSegments()),
@@ -1872,6 +1880,86 @@ void RosegardenGUIApp::slotSplitSelectionByPitch()
 
     if (haveSomething) m_view->slotAddCommandToHistory(command);
     //!!! else complain
+}
+
+
+void
+RosegardenGUIApp::slotSetSegmentStartTimes()
+{
+    if (!m_view->haveSelection()) return;
+
+    Rosegarden::SegmentSelection selection = m_view->getSelection();
+    if (selection.empty()) return;
+
+    Rosegarden::timeT someTime = (*selection.begin())->getStartTime();
+
+    TimeDialog *dialog = new TimeDialog(m_view, i18n("Segment Start Time"),
+					&m_doc->getComposition(),
+					someTime);
+
+    if (dialog->exec() == QDialog::Accepted) {
+
+	bool plural = (selection.size() > 1);
+	
+	SegmentReconfigureCommand *command =
+	    new SegmentReconfigureCommand(plural ?
+					  i18n("Set Segment Start Times") :
+					  i18n("Set Segment Start Time"));
+	
+	for (Rosegarden::SegmentSelection::iterator i = selection.begin();
+	     i != selection.end(); ++i) {
+
+	    command->addSegment
+		(*i, dialog->getTime(),
+		 (*i)->getEndMarkerTime() - (*i)->getStartTime() + dialog->getTime(),
+		 (*i)->getTrack());
+	}
+
+        m_view->slotAddCommandToHistory(command);
+    }
+}
+
+
+void
+RosegardenGUIApp::slotSetSegmentDurations()
+{
+    if (!m_view->haveSelection()) return;
+
+    Rosegarden::SegmentSelection selection = m_view->getSelection();
+    if (selection.empty()) return;
+
+    Rosegarden::timeT someTime =
+	(*selection.begin())->getStartTime();
+
+    Rosegarden::timeT someDuration =
+	(*selection.begin())->getEndMarkerTime() -
+	(*selection.begin())->getStartTime();
+
+    TimeDialog *dialog = new TimeDialog(m_view, i18n("Segment Duration"),
+					&m_doc->getComposition(),
+					someTime,
+					someDuration);
+
+    if (dialog->exec() == QDialog::Accepted) {
+
+	bool plural = (selection.size() > 1);
+	
+	SegmentReconfigureCommand *command =
+	    new SegmentReconfigureCommand(plural ?
+					  i18n("Set Segment Durations") :
+					  i18n("Set Segment Duration"));
+	
+	for (Rosegarden::SegmentSelection::iterator i = selection.begin();
+	     i != selection.end(); ++i) {
+
+	    command->addSegment
+		(*i, (*i)->getStartTime(),
+		 (*i)->getStartTime() + dialog->getTime(),
+		 (*i)->getTrack());
+	}
+
+        m_view->slotAddCommandToHistory(command);
+    }
 }
 
 
