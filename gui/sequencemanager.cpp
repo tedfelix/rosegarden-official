@@ -157,6 +157,7 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 
         bool seekFlag = false;
 
+
         // We must scan the whole Segment in case we're repeating it
         for (Segment::iterator j = (*it)->begin();
                                j != (*it)->end();
@@ -234,11 +235,20 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 
                 Rosegarden::InstrumentId instrument = comp.
                          getTrackByIndex(track)->getInstrument();
+
+                // Add any performance delay
+                eventTime = eventTime + 
+                        comp.getElapsedRealTime((*it)->getDelay());
+
                 // insert event
-                Rosegarden::MappedEvent *me =
+                Rosegarden::MappedEvent *mE =
                       new Rosegarden::MappedEvent(**j, eventTime, duration,
                                                   instrument, track);
-                m_mC.insert(me);
+
+                // Add any performance transposition
+                mE->setPitch(mE->getPitch() + ((*it)->getTranspose()));
+
+                m_mC.insert(mE);
             }
         }
     }

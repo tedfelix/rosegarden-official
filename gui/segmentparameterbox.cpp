@@ -25,6 +25,7 @@
 
 #include "Segment.h"
 #include "Quantizer.h"
+#include "NotationTypes.h"
 
 #include "notepixmapfactory.h"
 
@@ -77,8 +78,7 @@ SegmentParameterBox::initBox()
     m_repeatValue->setFixedHeight(comboHeight);
 
     // handle state changes
-    connect(m_repeatValue, SIGNAL(pressed()), SLOT(repeatPressed()));
-
+    connect(m_repeatValue, SIGNAL(pressed()), SLOT(slotRepeatPressed()));
 
     // motif style read-only combo
     m_quantizeValue = new RosegardenComboBox(false, this);
@@ -98,10 +98,26 @@ SegmentParameterBox::initBox()
     m_transposeValue->setFont(plainFont);
     m_transposeValue->setFixedSize(comboWidth, comboHeight);
 
+    // handle transpose combo changes
+    connect(m_transposeValue, SIGNAL(activated(int)),
+            SLOT(slotTransposeSelected(int)));
+
+    // and text changes
+    connect(m_transposeValue, SIGNAL(textChanged(const QString&)),
+            SLOT(slotTransposeTextChanged(const QString&)));
+
     // motif style read-only combo
     m_delayValue = new RosegardenComboBox(true, this);
     m_delayValue->setFont(plainFont);
     m_delayValue->setFixedSize(comboWidth, comboHeight);
+
+    // handle delay combo changes
+    connect(m_delayValue, SIGNAL(activated(int)),
+            SLOT(slotDelaySelected(int)));
+    //
+    // handle text changes for delay
+    connect(m_delayValue, SIGNAL(textChanged(const QString&)),
+            SLOT(slotDelayTextChanged(const QString &)));
 
     repeatLabel->setFont(plainFont);
     quantizeLabel->setFont(plainFont);
@@ -155,10 +171,18 @@ SegmentParameterBox::initBox()
     {
         m_transposeValue->insertItem(QString("%1").arg(i));
     }
-    m_transposeValue->setCurrentItem(range);
+    m_transposeValue->setCurrentItem(-1);
 
-    // single value for delay for the moment
-    m_delayValue->insertItem(QString("0"));
+    // initial delay values as function of sequencer resolution
+    for(int i = 0; i < 4; i++)
+    {
+        m_delayValue->insertItem(QString("%1").
+                arg(Rosegarden::Note(Rosegarden::Note::Crotchet, false).
+                    getDuration() * i));
+    }
+
+    // set delay blank initially
+    m_delayValue->setCurrentItem(-1);
 
 }
 
@@ -179,15 +203,22 @@ SegmentParameterBox::useSegments(std::vector<Rosegarden::Segment*> segments)
 }
 
 // Use the currently selected Segments to populate the fields in
-// this box
+// this box.  All fields (whether they're Checkbox or Combobox)
+// are tristate because we can have "All", "Some" or "None" of
+// the selected Segments at a given state.
 //
 void
 SegmentParameterBox::populateBoxFromSegments()
 {
     std::vector<Rosegarden::Segment*>::iterator it;
-    Tristate repeat = None;
+    Tristate repeated = None;
     Tristate quantized = None;
+    Tristate transposed = None;
+    Tristate delayed = None;
+
     Rosegarden::Quantizer qntzLevel;
+    Rosegarden::timeT delayLevel = 0;
+    int transposeLevel = 0;
 
     for (it = m_segments.begin(); it != m_segments.end(); it++)
     {
@@ -195,19 +226,21 @@ SegmentParameterBox::populateBoxFromSegments()
         if ((*it)->isRepeating())
         {
             if (it == m_segments.begin())
-                repeat = All;
+                repeated = All;
             else
             {
-                if (repeat == None)
-                    repeat = Some;
+                if (repeated == None)
+                    repeated = Some;
             }
         }
         else
         {
-            if (repeat == All)
-                repeat = Some;
+            if (repeated == All)
+                repeated = Some;
         }
 
+        // Quantization
+        //
         if ((*it)->hasQuantization())
         {
             if (it == m_segments.begin())
@@ -231,9 +264,56 @@ SegmentParameterBox::populateBoxFromSegments()
                 quantized = Some;
         }
 
+        // Transpose 
+        //
+        if ((*it)->getTranspose() != 0)
+        {
+            if (it == m_segments.begin())
+            {
+                transposed = All;
+                transposeLevel = (*it)->getTranspose();
+            }
+            else
+            {
+                if (transposed == None ||
+                       (transposed == All &&
+                            transposeLevel != (*it)->getTranspose()))
+                    transposed = Some;
+            }
+
+        }
+        else
+        {
+            if (transposed == All)
+                transposed = Some;
+        }
+
+        // Delay
+        //
+        if ((*it)->getDelay() != 0)
+        {
+            if (it == m_segments.begin())
+            {
+                delayed = All;
+                delayLevel = (*it)->getDelay();
+            }
+            else
+            {
+                if (delayed == None ||
+                        (delayed == All &&
+                             delayLevel != (*it)->getDelay()))
+                    delayed = Some;
+            }
+        }
+        else
+        {
+            if (delayed == All)
+                delayed = Some;
+        }
+
     }
 
-    switch(repeat)
+    switch(repeated)
     {
         case All:
             m_repeatValue->setChecked(true);
@@ -275,6 +355,32 @@ SegmentParameterBox::populateBoxFromSegments()
         case None:
         default:
             m_quantizeValue->setCurrentItem(m_quantizeValue->count()-1);
+            break;
+    }
+
+    switch(transposed)
+    {
+        case All:
+            m_transposeValue->setEditText(QString("%1").arg(transposeLevel));
+            break;
+
+        case Some:
+        case None:
+        default:
+            m_transposeValue->setEditText("");
+            break;
+    }
+
+    switch(delayed)
+    {
+        case All:
+            m_delayValue->setEditText(QString("%1").arg(delayLevel));
+            break;
+
+        case Some:
+        case None:
+        default:
+            m_delayValue->setEditText("");
             break;
     }
 }
@@ -320,6 +426,47 @@ SegmentParameterBox::slotQuantizeSelected(int qLevel)
 }
 
 
+
+void
+SegmentParameterBox::slotTransposeTextChanged(const QString &text)
+{
+    if (text.isEmpty())
+        return;
+
+    int transposeValue = text.toInt();
+
+    std::vector<Rosegarden::Segment*>::iterator it;
+    for (it = m_segments.begin(); it != m_segments.end(); it++)
+        (*it)->setTranspose(transposeValue);
+
+}
+
+void 
+SegmentParameterBox::slotTransposeSelected(int value)
+{
+    slotTransposeTextChanged(m_transposeValue->text(value));
+}
+
+
+void
+SegmentParameterBox::slotDelayTextChanged(const QString &text)
+{
+    if (text.isEmpty())
+        return;
+
+    int delayValue = text.toInt();
+
+    std::vector<Rosegarden::Segment*>::iterator it;
+    for (it = m_segments.begin(); it != m_segments.end(); it++)
+        (*it)->setDelay(delayValue);
+
+}
+
+void
+SegmentParameterBox::slotDelaySelected(int value)
+{
+    slotDelayTextChanged(m_delayValue->text(value));
+}
 
 
 

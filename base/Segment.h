@@ -422,6 +422,12 @@ public:
     bool isRepeating() const { return m_repeating; }
     void setRepeating(bool value) { m_repeating = value; }
 
+    Rosegarden::timeT getDelay() const { return m_delay; }
+    void setDelay(const Rosegarden::timeT &delay) { m_delay = delay; }
+
+    int getTranspose() const { return m_transpose; }
+    void setTranspose(const int &transpose) { m_transpose = transpose; }
+
 private:
     timeT m_startIdx;
     unsigned int m_track;
@@ -451,6 +457,9 @@ private:
     bool m_repeating;           // is this segment repeating?
     Quantizer *m_quantizer;
     bool m_quantize;
+
+    int m_transpose;            // all Events tranpose
+    Rosegarden::timeT m_delay;  // all Events delay
 };
 
 

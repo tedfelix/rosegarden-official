@@ -163,9 +163,15 @@ public:
     TrackId getTrack() const { return m_track; }
 
 
-    // Pitch
+    // Pitch - keep with MIDI limits when setting
     //
-    void setPitch(const int &p) { m_pitch = p; }
+    void setPitch(const int &p)
+    {
+        m_pitch = p;
+        if (m_pitch < 0) m_pitch = 0;
+        if (m_pitch > 127) m_pitch = 127;
+    }
+
     int getPitch() const { return m_pitch; }
 
     // Also use the pitch as the Audio file ID

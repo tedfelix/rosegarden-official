@@ -131,6 +131,12 @@ public slots:
     void slotRepeatPressed();
     void slotQuantizeSelected(int);
 
+    void slotTransposeSelected(int);
+    void slotTransposeTextChanged(const QString &);
+
+    void slotDelaySelected(int);
+    void slotDelayTextChanged(const QString &);
+
 private:
     void initBox();
     void populateBoxFromSegments();

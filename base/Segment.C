@@ -50,7 +50,9 @@ Segment::Segment(SegmentType segmentType, timeT startIdx) :
     m_audioEndIdx(0),
     m_repeating(false),
     m_quantizer(new Quantizer("SegmentQ")),
-    m_quantize(false)
+    m_quantize(false),
+    m_transpose(0),
+    m_delay(0)
 {
     // nothing
 }
