@@ -371,6 +371,10 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     RosegardenProgressDialog progressDlg(i18n("Reading file..."),
                                          100,
                                          (QWidget*)parent());
+
+    connect(&progressDlg, SIGNAL(cancelClicked()),
+            this, SLOT(slotPreviewCancel()));
+
     progressDlg.setMinimumDuration(500);
     progressDlg.setAutoReset(true); // we're re-using it for the preview generation
     setAbsFilePath(fileInfo.absFilePath());	
@@ -481,6 +485,16 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 
     return true;
 }
+
+void
+RosegardenGUIDoc::slotPreviewCancel()
+{
+    RG_DEBUG << "RosegardenGUIDoc::slotPreviewCancel" << endl;
+    m_audioFileManager.stopPreview();
+    CurrentProgressDialog::freeze();
+}
+
+
 
 void 
 RosegardenGUIDoc::mergeDocument(RosegardenGUIDoc *doc,
@@ -1913,6 +1927,9 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::AudioFileId /*id*/)
     //
     RosegardenProgressDialog progressDlg(i18n("Generating audio preview..."),
                                          100, (QWidget*)parent());
+
+    connect(&progressDlg, SIGNAL(cancelClicked()),
+            this, SLOT(slotPreviewCancel()));
 
     connect(&m_audioFileManager, SIGNAL(setProgress(int)),
             progressDlg.progressBar(), SLOT(setValue(int)));

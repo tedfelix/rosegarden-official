@@ -312,9 +312,20 @@ PeakFileManager::stopPreview()
     {
         // Stop processing
         //
+        QString fileName = QString(m_currentPeakFile->getFilename().data());
         m_currentPeakFile->setProcessingPeaks(false);
-        m_currentPeakFile->close();
         m_currentPeakFile->disconnect();
+
+        QFile file(fileName);
+        bool removed = file.remove();
+
+#ifdef DEBUG_PEAKFILEMANAGER
+        if (removed)
+        {
+            std::cout << "PeakFileManager::stopPreview() - removed preview"
+                      << std::endl;
+        }
+#endif
         //delete m_currentPeakFile;
         //m_currentPeakFile = 0;
     }

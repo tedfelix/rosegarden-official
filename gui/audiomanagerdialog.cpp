@@ -993,10 +993,8 @@ AudioManagerDialog::addFile(const KURL& kurl)
     RosegardenProgressDialog progressDlg(i18n("Generating audio preview..."),
                                          100,
                                          this);
-    /*
     connect(&progressDlg, SIGNAL(cancelClicked()), 
             this, SLOT(slotAddCancel()));
-            */
 
     CurrentProgressDialog::set(&progressDlg);
 
@@ -1055,6 +1053,9 @@ AudioManagerDialog::addFile(const KURL& kurl)
         //return false;
     }
 
+    disconnect(&progressDlg, SIGNAL(cancelClicked()),
+               this, SLOT(slotAddCancel()));
+
     slotPopulateFileList();
 
     // tell the sequencer
@@ -1067,8 +1068,8 @@ void
 AudioManagerDialog::slotAddCancel()
 {
     RG_DEBUG << "AudioManagerDialog::slotAddCancel" << endl;
-    CurrentProgressDialog::freeze();
     m_doc->getAudioFileManager().stopPreview();
+    CurrentProgressDialog::freeze();
 }
 
 

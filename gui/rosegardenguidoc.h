@@ -437,6 +437,10 @@ public slots:
 
     void slotDocColoursChanged();
 
+    // Cancelling an audio preview
+    //
+    void slotPreviewCancel();
+
 signals:
     /**
      * Emitted when document is modified or saved
