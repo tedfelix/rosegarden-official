@@ -45,6 +45,7 @@
 #include "SegmentNotationHelper.h"
 #include "AnalysisTypes.h"
 #include "CompositionTimeSliceAdapter.h"
+#include "MidiTypes.h"
 
 #include "editview.h"
 #include "rosestrings.h"
@@ -752,11 +753,25 @@ EditView::setupAddControlRulerMenu()
         const Rosegarden::ControlList &list = md->getControlParameters();
 
         int i = 0;
+        QString itemStr;
+
         for (Rosegarden::ControlList::const_iterator it = list.begin();
 	     it != list.end(); ++it)
         {
-            QString itemStr = i18n("%1 ruler (%2)").arg(strtoqstr(it->getName()))
-                                                   .arg(int(it->getControllerValue()));
+            if (it->getType() == Rosegarden::Controller::EventType)
+            {
+                QString hexValue;
+                hexValue.sprintf("(0x%x)", it->getControllerValue());
+
+                itemStr = i18n("%1 Controller %2 %3").arg(strtoqstr(it->getName()))
+                                                     .arg(it->getControllerValue())
+                                                     .arg(hexValue);
+
+            } else if (it->getType() == Rosegarden::PitchBend::EventType)
+                itemStr = i18n("Pitch Bend");
+            else
+                itemStr = i18n("Unsupported Event Type");
+
             addControlRulerMenu->insertItem(itemStr, i++);
         }
 

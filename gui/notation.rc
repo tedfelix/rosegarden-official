@@ -24,7 +24,7 @@
     <Action name="show_velocity_control_ruler"/>
     <Action name="show_controller_events_ruler"/>
 <!--    <Action name="add_control_ruler"/> -->
-    <Menu name="add_control_ruler"><text>Add Control Ruler</text></Menu>
+    <Menu name="add_control_ruler"><text>Add Event Ruler</text></Menu>
 </Menu>
 
 <Menu name="edit">

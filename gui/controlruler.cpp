@@ -341,8 +341,9 @@ void ControlItem::handleMouseMove(QMouseEvent*, int /*deltaX*/, int deltaY)
     canvas()->update();
 }
 
-void ControlItem::handleMouseWheel(QWheelEvent*)
+void ControlItem::handleMouseWheel(QWheelEvent *)
 {
+    RG_DEBUG << "ControlItem::handleMouseWheel - got wheel event" << endl;
 }
 
 void ControlItem::setSelected(bool s)
@@ -644,7 +645,11 @@ void ControlRuler::setControlTool(ControlTool* tool)
 
 void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
 {
-    if (e->button() == Qt::RightButton) return;
+    if (e->button() != Qt::LeftButton)
+    {
+        m_numberFloat->hide();
+        return;
+    }
 
     RG_DEBUG << "ControlRuler::contentsMousePressEvent()\n";
 
@@ -679,8 +684,6 @@ void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
                 ElementAdapter* adapter = item->getElementAdapter();
                 m_eventSelection->addEvent(adapter->getEvent());
             }
-            
-
         }
     }
 
@@ -690,7 +693,11 @@ void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
 
 void ControlRuler::contentsMouseReleaseEvent(QMouseEvent* e)
 {
-    if (e->button() == Qt::RightButton) return;
+    if (e->button() != Qt::LeftButton)
+    {
+        m_numberFloat->hide();
+        return;
+    }
     
     if (m_selecting) {
         updateSelection();
@@ -1009,12 +1016,13 @@ ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment& segment,
     for(Segment::iterator i = m_segment.begin();
         i != m_segment.end(); ++i) {
 
-        // skip if not a ControllerEvent
-        if (!(*i)->isa(Rosegarden::Controller::EventType)) continue;
+        // skip if not the same type of event that we're expecting
+        //
+        if (m_controller->getType() != (*i)->getType()) continue;
 
         // Check for specific controller value if we need to 
         //
-        if (m_controller)
+        if (m_controller->getType() == Rosegarden::Controller::EventType)
         {
             try
             {
@@ -1026,8 +1034,16 @@ ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment& segment,
             {
                 continue;
             }
+        } else if (m_controller->getType() == Rosegarden::PitchBend::EventType)
+        {
+            // do something
+            RG_DEBUG << "ControllerEventsRuler::ControllerEventsRuler - " 
+                     << "found pitch bend" << endl;
+            continue;
         }
-        
+        else
+            continue;
+
         RG_DEBUG << "ControllerEventsRuler: adding element\n";
 
  	double x = m_rulerScale->getXForTime((*i)->getAbsoluteTime());
@@ -1037,6 +1053,52 @@ ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment& segment,
     }
     
     setMenuName("controller_events_ruler_menu");
+
+    // Draw the background lines
+    //
+    drawBackground();
+}
+
+void
+ControllerEventsRuler::drawBackground()
+{
+    // Draw some minimum and maximum controller value guide lines
+    //
+    QCanvasLine *topLine = new QCanvasLine(canvas());
+    QCanvasLine *topQLine = new QCanvasLine(canvas());
+    QCanvasLine *midLine = new QCanvasLine(canvas());
+    QCanvasLine *botQLine = new QCanvasLine(canvas());
+    QCanvasLine *bottomLine = new QCanvasLine(canvas());
+    //m_controlLine->setPoints(m_controlLineX, m_controlLineY, m_controlLineX, m_controlLineY);
+    int cHeight = canvas()->height();
+    int cWidth = canvas()->width();
+
+    topLine->setPen(QColor(127, 127, 127));
+    topLine->setPoints(0, 0, cWidth, 0);
+    topLine->setZ(-10);
+    topLine->show();
+
+    topQLine->setPen(QColor(192, 192, 192));
+    topQLine->setPoints(0, cHeight/4, cWidth, cHeight/4);
+    topQLine->setZ(-10);
+    topQLine->show();
+
+    midLine->setPen(QColor(127, 127, 127));
+    midLine->setPoints(0, cHeight/2, cWidth, cHeight/2);
+    midLine->setZ(-10);
+    midLine->show();
+
+    botQLine->setPen(QColor(192, 192, 192));
+    botQLine->setPoints(0, 3*cHeight/4, cWidth, 3*cHeight/4);
+    botQLine->setZ(-10);
+    botQLine->show();
+
+    bottomLine->setPen(QColor(127, 127, 127));
+    bottomLine->setPoints(0, cHeight - 1, cWidth, cHeight - 1);
+    bottomLine->setZ(-10);
+    bottomLine->show();
+
+    canvas()->update();
 }
 
 
@@ -1051,8 +1113,21 @@ QString ControllerEventsRuler::getName()
 {
     if (m_controller) 
     {
-        QString name = QString("%1 (%2)").arg(strtoqstr(m_controller->getName()))
-                                         .arg(int(m_controller->getControllerValue()));
+        QString name = i18n("Unsupported Event Type");
+
+        if (m_controller->getType() == Rosegarden::Controller::EventType)
+        {
+            QString hexValue;
+            hexValue.sprintf("0x%x", m_controller->getControllerValue());
+
+            name = QString("%1 (%2 / %3)").arg(strtoqstr(m_controller->getName()))
+                                          .arg(int(m_controller->getControllerValue()))
+                                          .arg(hexValue);
+        }
+        else if (m_controller->getType() == Rosegarden::PitchBend::EventType)
+        {
+            name = i18n("Pitch Bend");
+        }
 
         return name;
     }
@@ -1061,7 +1136,7 @@ QString ControllerEventsRuler::getName()
 
 void ControllerEventsRuler::eventAdded(const Segment*, Event *e)
 {
-    if (!e->isa(Rosegarden::Controller::EventType)) return;
+    if (e->getType() != m_controller->getType()) return;
 
     // Check for specific controller value if we need to 
     //
@@ -1090,7 +1165,7 @@ void ControllerEventsRuler::eventAdded(const Segment*, Event *e)
 
 void ControllerEventsRuler::eventRemoved(const Segment*, Event *e)
 {
-    if (!e->isa(Rosegarden::Controller::EventType)) return;
+    if (e->getType() != m_controller->getType()) return;
 
     clearSelectedItems();
 
@@ -1207,7 +1282,11 @@ void ControllerEventsRuler::contentsMousePressEvent(QMouseEvent *e)
 {
     if (!m_controlLineShowing)
     {
+        if (e->button() == MidButton)
+            m_lastEventPos = inverseMapPoint(e->pos());
+        
         ControlRuler::contentsMousePressEvent(e); // send super
+
         return;
     }
 
@@ -1237,7 +1316,11 @@ void ControllerEventsRuler::contentsMouseReleaseEvent(QMouseEvent *e)
 {
     if (!m_controlLineShowing)
     {
-        ControlRuler::contentsMouseReleaseEvent(e); // send super
+        if (e->button() == MidButton)
+            insertControllerEvent();
+
+         ControlRuler::contentsMouseReleaseEvent(e); // send super
+
         return;
     }
     else
@@ -1264,13 +1347,20 @@ void ControllerEventsRuler::contentsMouseReleaseEvent(QMouseEvent *e)
         this->setCursor(Qt::arrowCursor);
         canvas()->update();
     }
-
 }
 
 void ControllerEventsRuler::contentsMouseMoveEvent(QMouseEvent *e)
 {
     if (!m_controlLineShowing)
     {
+        // Don't send super if we're using the middle button
+        //
+        if (e->button() == MidButton)
+        {
+            m_lastEventPos = inverseMapPoint(e->pos());
+            return;
+        }
+
         ControlRuler::contentsMouseMoveEvent(e); // send super
         return;
     }
@@ -1294,7 +1384,8 @@ void ControllerEventsRuler::layoutItem(ControlItem* item)
 
     item->setWidth(width);
 
-    RG_DEBUG << "ControllerEventsRuler::layoutItem ControlItem x = " << x << " - width = " << width << endl;
+    RG_DEBUG << "ControllerEventsRuler::layoutItem ControlItem x = " << x 
+             << " - width = " << width << endl;
 }
 
 void

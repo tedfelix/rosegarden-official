@@ -213,6 +213,9 @@ public:
 
 protected:
 
+    // draw some lines to help us draw events
+    void drawBackground();
+
     // Let's override these again here
     //
     virtual void contentsMousePressEvent(QMouseEvent*);
