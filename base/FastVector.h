@@ -538,7 +538,7 @@ void FastVector<T>::insert(size_type index, const T&t)
 
 template <class T>
 template <class InputIterator>
-FastVector<T>::iterator FastVector<T>::insert
+typename FastVector<T>::iterator FastVector<T>::insert
 (const FastVector<T>::iterator &p, InputIterator &i, InputIterator &j)
 {
     size_type n = p.m_i;
@@ -550,7 +550,7 @@ FastVector<T>::iterator FastVector<T>::insert
 }
 
 template <class T>
-FastVector<T>::iterator FastVector<T>::erase
+typename FastVector<T>::iterator FastVector<T>::erase
 (const FastVector<T>::iterator &i, const FastVector<T>::iterator &j)
 {
     assert(i.m_v == this && j.m_v == this && j.m_i >= i.m_i);

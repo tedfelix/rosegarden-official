@@ -151,7 +151,7 @@ ViewElementList<T>::eraseSingle(T *el)
 }
 
 template <class T>
-ViewElementList<T>::iterator
+typename ViewElementList<T>::iterator
 ViewElementList<T>::findPrevious(const std::string &type, iterator i)
 
 {
@@ -167,7 +167,7 @@ ViewElementList<T>::findPrevious(const std::string &type, iterator i)
 }
 
 template <class T>
-ViewElementList<T>::iterator
+typename ViewElementList<T>::iterator
 ViewElementList<T>::findNext(const std::string &type, iterator i)
 {
     if (i == end()) return i;
@@ -176,7 +176,7 @@ ViewElementList<T>::findNext(const std::string &type, iterator i)
 }
 
 template <class T>
-ViewElementList<T>::iterator
+typename ViewElementList<T>::iterator
 ViewElementList<T>::findSingle(T *el)
 {
     iterator res = end();
@@ -194,7 +194,7 @@ ViewElementList<T>::findSingle(T *el)
 }
 
 template <class T>
-ViewElementList<T>::iterator
+typename ViewElementList<T>::iterator
 ViewElementList<T>::findTime(timeT time) const
 {
     Event dummy("dummy", time, 0, MIN_SUBORDERING);

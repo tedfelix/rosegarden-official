@@ -833,8 +833,8 @@ LinedStaff<T>::hideInsertCursor()
 
 template <class T>
 void
-LinedStaff<T>::renderElements(Rosegarden::ViewElementList<T>::iterator,
-                              Rosegarden::ViewElementList<T>::iterator)
+LinedStaff<T>::renderElements(typename Rosegarden::ViewElementList<T>::iterator,
+                              typename Rosegarden::ViewElementList<T>::iterator)
 {
     // nothing -- we assume rendering will be done by the implementation
     // of positionElements

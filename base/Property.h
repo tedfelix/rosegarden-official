@@ -45,7 +45,7 @@ public:
 };
 
 template <PropertyType P>
-PropertyDefn<P>::basic_type
+typename PropertyDefn<P>::basic_type
 PropertyDefn<P>::parse(std::string)
 {
     throw(0);
@@ -121,7 +121,7 @@ template <PropertyType P>
 class PropertyStore : public PropertyStoreBase
 {
 public:
-    PropertyStore(PropertyDefn<P>::basic_type d) :
+    PropertyStore(typename PropertyDefn<P>::basic_type d) :
         m_data(d) { }
     PropertyStore(const PropertyStore<P> &p) :
         PropertyStoreBase(p), m_data(p.m_data) { }
@@ -134,8 +134,8 @@ public:
     
     virtual std::string unparse() const;
 
-    PropertyDefn<P>::basic_type getData() { return m_data; }
-    void setData(PropertyDefn<P>::basic_type data) { m_data = data; }
+    typename PropertyDefn<P>::basic_type getData() { return m_data; }
+    void setData(typename PropertyDefn<P>::basic_type data) { m_data = data; }
 
     virtual size_t getStorageSize() const { return sizeof(*this); }
 
@@ -144,7 +144,7 @@ public:
 #endif
 
 private:
-    PropertyDefn<P>::basic_type m_data;
+    typename PropertyDefn<P>::basic_type m_data;
 };
 
 template <PropertyType P>

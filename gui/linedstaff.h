@@ -377,8 +377,8 @@ public:
      * elements is slow, however, it makes sense to do it here
      * because this method may be called less often.
      */
-    virtual void renderElements(Rosegarden::ViewElementList<T>::iterator from,
-				Rosegarden::ViewElementList<T>::iterator to);
+    virtual void renderElements(typename Rosegarden::ViewElementList<T>::iterator from,
+				typename Rosegarden::ViewElementList<T>::iterator to);
 
     /**
      * Call renderElements(from, to) on the whole staff.

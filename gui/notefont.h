@@ -34,12 +34,6 @@
 #include "PropertyName.h"
 #include "NotationTypes.h"
 
-#if (__GNUC__ < 3)
-#include <hash_map>
-#else
-#include <ext/hash_map>
-#endif
-
 typedef Rosegarden::PropertyName CharName;
 typedef Rosegarden::PropertyNameHash CharNameHash;
 typedef Rosegarden::PropertyNamesEqual CharNamesEqual;
@@ -204,15 +198,15 @@ private:
     std::string m_type;
     bool m_smooth;
 
-    typedef std::hash_map<CharName, SymbolData,
+    typedef __HASH_NS::hash_map<CharName, SymbolData,
                           CharNameHash, CharNamesEqual> SymbolDataMap;
     SymbolDataMap m_data;
 
-    typedef std::hash_map<CharName, HotspotData,
+    typedef __HASH_NS::hash_map<CharName, HotspotData,
                           CharNameHash, CharNamesEqual> HotspotDataMap;
     HotspotDataMap m_hotspots;
 
-    typedef std::hash_map<int, SizeData> SizeDataMap;
+    typedef __HASH_NS::hash_map<int, SizeData> SizeDataMap;
     SizeDataMap m_sizes;
 
     // For use when reading the XML file:
@@ -326,7 +320,7 @@ private:
     typedef std::pair<QPixmap *, QPixmap *>
             PixmapPair;
 
-    typedef std::hash_map<CharName, PixmapPair, CharNameHash, CharNamesEqual>
+    typedef __HASH_NS::hash_map<CharName, PixmapPair, CharNameHash, CharNamesEqual>
             PixmapMap;
 
     typedef std::map<std::string, PixmapMap *>

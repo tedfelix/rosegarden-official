@@ -92,7 +92,7 @@ protected:
 
     Segment &m_segment;
     ViewElementList<T> *m_viewElementList;
-    ViewElementList<T>::iterator findEvent(Rosegarden::Event *);
+    typename ViewElementList<T>::iterator findEvent(Rosegarden::Event *);
 };
 
 
@@ -150,16 +150,16 @@ Staff<T>::wrapEvent(Event*)
 }
 
 template <class T>
-ViewElementList<T>::iterator
+typename ViewElementList<T>::iterator
 Staff<T>::findEvent(Event *e)
 {
     T dummy(e);
 
-    std::pair<ViewElementList<T>::iterator,
-	      ViewElementList<T>::iterator>
+    std::pair<typename ViewElementList<T>::iterator,
+	      typename ViewElementList<T>::iterator>
         r = m_viewElementList->equal_range(&dummy);
 
-    for (ViewElementList<T>::iterator i = r.first; i != r.second; ++i) {
+    for (typename ViewElementList<T>::iterator i = r.first; i != r.second; ++i) {
         if ((*i)->event() == e) {
             return i;
         }
@@ -189,7 +189,7 @@ Staff<T>::eventRemoved(const Segment *t, Event *e)
 
     // If we have it, lose it
 
-    ViewElementList<T>::iterator i = findEvent(e);
+    typename ViewElementList<T>::iterator i = findEvent(e);
     if (i != m_viewElementList->end()) {
         m_viewElementList->erase(i);
         return;

@@ -219,11 +219,13 @@ struct eqstring {
 };
 
 struct hashstring {
-    static std::hash<const char *> _H;
+    static __HASH_NS::hash<const char *> _H;
     size_t operator() (const std::string &s) const { return _H(s.c_str()); }
 };
 
-std::hash<const char *> hashstring::_H;
+#if !defined(__GNUC__) || __GNUC__ < 3
+__HASH_NS::hash<const char *> hashstring::_H;
+#endif
 
 /**
  * All we store in a key Event is the name of the key.  A Key object
@@ -407,7 +409,7 @@ private:
     };
 
 
-    typedef std::hash_map<std::string, KeyDetails, hashstring, eqstring>
+    typedef __HASH_NS::hash_map<std::string, KeyDetails, hashstring, eqstring>
         KeyDetailMap;
     static KeyDetailMap m_keyDetailMap;
     static void checkMap();

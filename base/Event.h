@@ -33,9 +33,19 @@
 #endif
 
 #if (__GNUC__ < 3)
+
 #include <hash_map>
+#define __HASH_NS std
+
 #else
+
 #include <ext/hash_map>
+#if (__GNUC_MINOR__ >= 1)
+#define __HASH_NS __gnu_cxx
+#else
+#define __HASH_NS std
+#endif
+
 #endif
 
 namespace Rosegarden 
@@ -127,12 +137,12 @@ public:
     bool  has(const PropertyName &name) const;
 
     template <PropertyType P>
-    PropertyDefn<P>::basic_type get(const PropertyName &name) const;
+    typename PropertyDefn<P>::basic_type get(const PropertyName &name) const;
     // throw (NoData, BadType);
 
     // no throw, returns bool
     template <PropertyType P>
-    bool get(const PropertyName &name, PropertyDefn<P>::basic_type &val) const;
+    bool get(const PropertyName &name, typename PropertyDefn<P>::basic_type &val) const;
 
     template <PropertyType P>
     bool isPersistent(const PropertyName &name) const;
@@ -152,13 +162,13 @@ public:
     // throw (NoData);
 
     template <PropertyType P>
-    void set(const PropertyName &name, PropertyDefn<P>::basic_type value,
+    void set(const PropertyName &name, typename PropertyDefn<P>::basic_type value,
              bool persistent = true);
     // throw (BadType);
 
     // set non-persistent, but only if there's no persistent value already
     template <PropertyType P>
-    void setMaybe(const PropertyName &name, PropertyDefn<P>::basic_type value);
+    void setMaybe(const PropertyName &name, typename PropertyDefn<P>::basic_type value);
     // throw (BadType);
 
     template <PropertyType P>
@@ -221,10 +231,10 @@ protected:
     void setSubOrdering(int o)	       { unshare(); m_data->m_subOrdering = o; }
 
 private:
-    struct PropertyMap : public std::hash_map<PropertyName,
-					      PropertyStoreBase *,
-					      PropertyNameHash,
-					      PropertyNamesEqual>
+    struct PropertyMap : public __HASH_NS::hash_map<PropertyName,
+				         PropertyStoreBase *,
+					 PropertyNameHash,
+					 PropertyNamesEqual>
     {
 	~PropertyMap() {
 	    clear();
@@ -313,7 +323,7 @@ private:
 
 template <PropertyType P>
 bool
-Event::get(const PropertyName &name, PropertyDefn<P>::basic_type &val) const
+Event::get(const PropertyName &name, typename PropertyDefn<P>::basic_type &val) const
 {
 #ifndef NDEBUG
     ++m_getCount;
@@ -345,7 +355,7 @@ Event::get(const PropertyName &name, PropertyDefn<P>::basic_type &val) const
 
 
 template <PropertyType P>
-PropertyDefn<P>::basic_type
+typename PropertyDefn<P>::basic_type
 Event::get(const PropertyName &name) const
     // throw (NoData, BadType)
 {
@@ -425,7 +435,7 @@ Event::setPersistence(const PropertyName &name, bool persistent)
 
 template <PropertyType P>
 void
-Event::set(const PropertyName &name, PropertyDefn<P>::basic_type value,
+Event::set(const PropertyName &name, typename PropertyDefn<P>::basic_type value,
            bool persistent)
     // throw (BadType)
 {
@@ -472,7 +482,7 @@ Event::set(const PropertyName &name, PropertyDefn<P>::basic_type value,
 
 template <PropertyType P>
 void
-Event::setMaybe(const PropertyName &name, PropertyDefn<P>::basic_type value)
+Event::setMaybe(const PropertyName &name, typename PropertyDefn<P>::basic_type value)
     // throw (BadType)
 {
 #ifndef NDEBUG
