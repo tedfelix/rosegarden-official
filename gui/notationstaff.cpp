@@ -1735,3 +1735,44 @@ NotationStaff::doRenderWork(timeT from, timeT to)
 
     return false;
 }
+
+LinedStaff::BarStyle
+NotationStaff::getBarStyle(int barNo) const
+{
+    Rosegarden::Segment *s = &getSegment();
+    Rosegarden::Composition *c = s->getComposition();
+
+    int firstBar = c->getBarNumber(s->getStartTime());
+    int lastNonEmptyBar = c->getBarNumber(s->getEndMarkerTime() - 1);
+
+    // Currently only the first and last bar in a segment have any
+    // possibility of getting special treatment:
+    if (barNo > firstBar && barNo <= lastNonEmptyBar) return PlainBar;
+
+    // First and last bar in a repeating segment get repeat bars.
+    
+    if (s->isRepeating()) {
+	if (barNo == firstBar) return RepeatStartBar;
+	else if (barNo == lastNonEmptyBar + 1) return RepeatEndBar;
+    }
+
+    if (barNo <= lastNonEmptyBar) return PlainBar;
+
+    // Last bar on a given track gets heavy double bars.  Exploit the
+    // fact that Composition's iterator returns segments in track
+    // order.
+
+    Rosegarden::Segment *lastSegmentOnTrack = 0;
+    
+    for (Rosegarden::Composition::iterator i = c->begin(); i != c->end(); ++i) {
+	if ((*i)->getTrack() == s->getTrack()) {
+	    lastSegmentOnTrack = *i;
+	} else if (lastSegmentOnTrack != 0) {
+	    break;
+	}
+    }
+
+    if (&getSegment() == lastSegmentOnTrack) return HeavyDoubleBar;
+    else return PlainBar;
+}
+

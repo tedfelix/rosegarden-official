@@ -586,7 +586,7 @@ protected:
     virtual void deleteBars();
     virtual void insertBar(double layoutX, double width, bool isCorrect,
 			   const Rosegarden::TimeSignature &,
-			   int barNo);
+			   int barNo, bool showBarNo);
 
     // The default implementations of the following two are empty.
     virtual void deleteTimeSignatures();

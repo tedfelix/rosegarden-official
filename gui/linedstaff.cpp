@@ -715,16 +715,17 @@ LinedStaff::sizeStaff(Rosegarden::HorizontalLayoutEngine &layout)
 
 //	RG_DEBUG << "LinedStaff::sizeStaff: inserting bar at " << x << " on staff " << this << endl;
 	
-	int displayBarNo = 0;
-	if (showBarNumbersEvery() > 0 &&
-	    ((barNo + 1) % showBarNumbersEvery()) == 0) displayBarNo = barNo + 1;
+	bool showBarNo = 
+	    (showBarNumbersEvery() > 0 &&
+	     ((barNo + 1) % showBarNumbersEvery()) == 0);
 
 	insertBar(x,
 		  ((barNo == lastBar) ? 0 :
 		   (layout.getBarPosition(barNo + 1) - x)),
 		  layout.isBarCorrectOnStaff(*this, barNo - 1),
 		  currentTimeSignature,
-		  displayBarNo);
+		  barNo,
+		  showBarNo);
     }
 
     m_startLayoutX = xleft;
@@ -765,7 +766,8 @@ LinedStaff::deleteBars()
 
 void
 LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
-		      const Rosegarden::TimeSignature &timeSig, int barNo)
+		      const Rosegarden::TimeSignature &timeSig,
+		      int barNo, bool showBarNo)
 {
 //    RG_DEBUG << "insertBar: " << layoutX << ", " << width
 //			 << ", " << isCorrect << endl;
@@ -787,12 +789,25 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
     double x = getCanvasXForLayoutX(layoutX);
     int y = getCanvasYForTopLine(row);
 
+    bool firstBarInRow = false, lastBarInRow = false;
+
+    if (m_pageMode != LinearMode &&
+	(getRowForLayoutX(layoutX) >
+	 getRowForLayoutX(layoutX - getMargin() - 2))) firstBarInRow = true;
+
+    if (m_pageMode != LinearMode &&
+	width > 0.01 && // width == 0 for final bar in staff
+	(getRowForLayoutX(layoutX) <
+	 getRowForLayoutX(layoutX + width + getMargin() + 2))) lastBarInRow = true;
+
+    BarStyle style = getBarStyle(barNo);
+
+    if (style == RepeatBothBar && firstBarInRow) style = RepeatStartBar;
+
     BarLine *line = new BarLine(m_canvas, layoutX,
 				getBarLineHeight(), barThickness, getLineSpacing(),
-				PlainBar); //!!!
+				style);
 
-//!!!    QCanvasRectangle *line = new QCanvasRectangle
-//	(0, 0, barThickness, getBarLineHeight(), m_canvas);
     line->moveBy(x, y);
 
     if (isCorrect) {
@@ -808,27 +823,19 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 
     // The bar lines have to be in order of layout-x (there's no
     // such interesting stipulation for beat or connecting lines)
-//!!!    BarLine barLine(layoutX, line);
     BarLineList::iterator insertPoint = lower_bound
 	(m_barLines.begin(), m_barLines.end(), line, compareBars);
     m_barLines.insert(insertPoint, line);
 
-    if (m_pageMode != LinearMode &&
-	width > 0.01 && // width == 0 for final bar in staff
-	(getRowForLayoutX(layoutX) <
-	 getRowForLayoutX(layoutX + width + getMargin() + 2))) {
-
-	// end of this row
+    if (lastBarInRow) {
 
 	double xe = x + width - barThickness;
+	style = getBarStyle(barNo + 1);
+	if (style == RepeatBothBar) style = RepeatEndBar;
 
 	BarLine *eline = new BarLine(m_canvas, layoutX,
 				     getBarLineHeight(), barThickness, getLineSpacing(),
-				     PlainBar); //!!!
-/*!!!
-	QCanvasRectangle *eline = new QCanvasRectangle
-	    (0, 0, barThickness, getBarLineHeight(), m_canvas);
-*/
+				     style);
 	eline->moveBy(xe, y);
 
 	eline->setPen(RosegardenGUIColours::BarLine);
@@ -837,18 +844,17 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 	eline->setZ(-1);
 	eline->show();
 
-//!!!	BarLine barLine(layoutX, eline);
 	BarLineList::iterator insertPoint = lower_bound
 	    (m_barLines.begin(), m_barLines.end(), line, compareBars);
 	m_barLines.insert(insertPoint, line);
     }
 
-    if (barNo > 0) {
+    if (showBarNo) {
 
 	QFont font;
 	font.setPixelSize(m_resolution * 3 / 2);
 	QFontMetrics metrics(font);
-	QString text = QString("%1").arg(barNo);
+	QString text = QString("%1").arg(barNo + 1);
 
 	QCanvasItem *barNoText = new QCanvasText(text, font, m_canvas);
 	barNoText->setX(x);
@@ -1056,7 +1062,8 @@ LinedStaff::resizeStaffLineRow(int row, double x, double length)
 
     delete m_staffConnectingLines[row];
 
-    if (m_pageMode != LinearMode && m_connectingLineLength > 0.1) { //!!! handle multi page
+    if (m_pageMode != LinearMode && m_connectingLineLength > 0.1) {
+
 	// rather arbitrary (dup in insertBar)
 	int barThickness = m_resolution / 12 + 1;
         y = getCanvasYForTopLine(row);
@@ -1067,6 +1074,7 @@ LinedStaff::resizeStaffLineRow(int row, double x, double length)
         line->setZ(-2);
         line->show();
 	m_staffConnectingLines[row] = line;
+
     } else {
 	m_staffConnectingLines[row] = 0;
     }

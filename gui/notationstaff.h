@@ -324,6 +324,8 @@ protected:
     virtual int getHeightPerLine() const     { return 2; }
     virtual int showBarNumbersEvery() const  { return m_barNumbersEvery; }
 
+    virtual BarStyle getBarStyle(int barNo) const;
+
     /** 
      * Assign a suitable sprite to the given element (the clef is
      * needed in case it's a key event, in which case we need to judge
