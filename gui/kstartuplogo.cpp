@@ -30,9 +30,11 @@
 #include <kapp.h>
 #include <kstddirs.h>
 
+#include <unistd.h>
+
 KStartupLogo::KStartupLogo(QWidget * parent, const char *name)
     : QWidget(parent,name,
-              WStyle_NoBorderEx | WStyle_Customize | WDestructiveClose),
+              /* WType_Popup | */ WStyle_Dialog | WStyle_StaysOnTop /* | WStyle_NoBorderEx | WStyle_Customize | WDestructiveClose*/),
     m_bReadyToHide(false)
 {
     m_pixmap.load(locate("appdata", "pixmaps/splash.png"));
