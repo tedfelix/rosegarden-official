@@ -3,8 +3,8 @@
 <kpartgui name="Rosegarden::NotationTool" version="1">
 
 <Menu name="NotationEraser">
-  <Action name="insert" />
   <Action name="select" />
+  <Action name="insert" />
   <Separator/>
   <Action name="toggle_rest_collapse" />
 </Menu>

@@ -446,27 +446,27 @@ PasteNotationDialog::PasteNotationDialog(QWidget *parent,
 	(1, Horizontal, i18n("Paste type"), vbox);
 
     m_pasteIntoGapButton = new QRadioButton
-	(i18n("Paste into an existing gap"), pasteTypeGroup);
+	(i18n("Paste into an existing gap [\"restricted\"]"), pasteTypeGroup);
     if (m_defaultType == PasteNotationCommand::PasteIntoGap) {
 	m_pasteIntoGapButton->setChecked(true);
     }
     m_pasteDestructiveButton = new QRadioButton
-	(i18n("Erase existing events to make room"), pasteTypeGroup);
+	(i18n("Erase existing events to make room [\"simple\"]"), pasteTypeGroup);
     if (m_defaultType == PasteNotationCommand::PasteDestructive) {
 	m_pasteDestructiveButton->setChecked(true);
     }
     m_openAndPasteButton = new QRadioButton
-	(i18n("Move existing events out of the way"), pasteTypeGroup);
+	(i18n("Move existing events out of the way [\"open-n-paste\"]"), pasteTypeGroup);
     if (m_defaultType == PasteNotationCommand::OpenAndPaste) {
 	m_openAndPasteButton->setChecked(true);
     }
     m_pasteOverlayButton = new QRadioButton
-	(i18n("Overlay notes, tying against present notes"), pasteTypeGroup);
+	(i18n("Overlay notes, tying against present notes [\"note-overlay\"]"), pasteTypeGroup);
     if (m_defaultType == PasteNotationCommand::PasteOverlay) {
 	m_pasteOverlayButton->setChecked(true);
     }
     m_pasteOverlayRawButton = new QRadioButton
-	(i18n("Overlay notes, ignoring present notes"), pasteTypeGroup);
+	(i18n("Overlay notes, ignoring present notes [\"matrix-overlay\"]"), pasteTypeGroup);
     if (m_defaultType == PasteNotationCommand::PasteOverlayRaw) {
 	m_pasteOverlayRawButton->setChecked(true);
     }

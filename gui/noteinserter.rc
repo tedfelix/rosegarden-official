@@ -3,9 +3,9 @@
 <kpartgui name="Rosegarden::NotationTool" version="1">
 
 <Menu noMerge="1" name="NoteInserter">
-  <Action name="rests" />
-  <Action name="erase" />
   <Action name="select" />
+  <Action name="erase" />
+  <Action name="rests" />
   <Separator/>
   <Action name="toggle_dot" />
   <Separator/>
