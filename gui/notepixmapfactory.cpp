@@ -441,24 +441,17 @@ NotePixmapFactory::makeRestPixmap(Note::Type note, bool dotted)
 }
 
 QCanvasPixmap
-NotePixmapFactory::makeClefPixmap(string type) const
+NotePixmapFactory::makeClefPixmap(Clef clef) const
 {
-    try {
-	Clef clef(type);
-	string filename = m_pixmapDirectory.latin1();
-        filename += string("/clef-") + clef.getClefType() + ".xpm";
-	return QCanvasPixmap(filename.c_str());
-    } catch (Clef::BadClefName) {
-	kdDebug(KDEBUG_AREA) << "Bad clef name \"" << type << "\"" << endl;
-	return QCanvasPixmap(m_pixmapDirectory + "/clef-treble.xpm");
-    }
-
+    QString filename = m_pixmapDirectory;
+    filename += QString("/clef-") + clef.getClefType().c_str() + ".xpm";
+    return QCanvasPixmap(filename);
 }
 
 int NotePixmapFactory::getClefWidth() const
 {
     if (m_clefWidth < 0) {
-        QCanvasPixmap p(makeClefPixmap(Clef::DefaultClef.getClefType()));
+        QCanvasPixmap p(makeClefPixmap(Clef::DefaultClef));
         m_clefWidth = p.width();
     }
     return m_clefWidth;

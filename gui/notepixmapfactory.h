@@ -128,7 +128,7 @@ public:
                                  bool stalkGoesUp = true);
 
     QCanvasPixmap makeRestPixmap(Note::Type note, bool dotted);
-    QCanvasPixmap makeClefPixmap(string type) const;
+    QCanvasPixmap makeClefPixmap(Clef clef) const;
     QCanvasPixmap makeKeyPixmap(string type, string cleftype);
     QCanvasPixmap makeUnknownPixmap();
 
