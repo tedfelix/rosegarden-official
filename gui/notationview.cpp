@@ -23,6 +23,7 @@
 #include <qstring.h>
 #include <qregexp.h>
 #include <qpaintdevicemetrics.h>
+#include <qpixmap.h>
 
 #include <qtimer.h> // delete me
 
@@ -30,6 +31,8 @@
 #include <kstatusbar.h>
 #include <klocale.h>
 #include <kconfig.h>
+#include <kstddirs.h>
+#include <kglobal.h>
 #include <kaction.h>
 #include <kstdaction.h>
 #include <kapp.h>
@@ -239,6 +242,19 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     QCanvas *tCanvas = new QCanvas(this);
     tCanvas->resize(width() * 2, height() * 2);
+
+    m_config->setGroup("General Options");
+    if (m_config->readBoolEntry("backgroundtextures", false)) {
+	QPixmap background;
+	QString pixmapDir =
+	    KGlobal::dirs()->findResource("appdata", "pixmaps/");
+	if (background.load(QString("%1/misc/bg-paper-white.xpm").
+			    arg(pixmapDir))) {
+	    tCanvas->setBackgroundPixmap(background);
+	}
+    }
+    m_config->setGroup("Notation Options");
+
 
     setCanvasView(new NotationCanvasView(*this, m_horizontalScrollBar,
                                          tCanvas, getCentralFrame()));

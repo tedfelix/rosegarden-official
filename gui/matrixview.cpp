@@ -27,11 +27,13 @@
 #include <qslider.h>
 #include <qtimer.h>
 #include <qinputdialog.h>
+#include <qpixmap.h>
 
 #include <kapp.h>
 #include <kconfig.h>
 #include <kaction.h>
 #include <kstddirs.h>
+#include <kglobal.h>
 #include <klocale.h>
 #include <kstdaction.h>
 #include <kmessagebox.h>
@@ -110,6 +112,18 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     initStatusBar();
 
     QCanvas *tCanvas = new QCanvas(this);
+
+    m_config->setGroup("General Options");
+    if (m_config->readBoolEntry("backgroundtextures", false)) {
+	QPixmap background;
+	QString pixmapDir =
+	    KGlobal::dirs()->findResource("appdata", "pixmaps/");
+	if (background.load(QString("%1/misc/bg-paper-white.xpm").
+			    arg(pixmapDir))) {
+	    tCanvas->setBackgroundPixmap(background);
+	}
+    }
+    m_config->setGroup("Matrix Options");
 
     MATRIX_DEBUG << "MatrixView : creating staff\n";
 

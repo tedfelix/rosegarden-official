@@ -183,6 +183,7 @@ protected:
     QSpinBox*  m_midiPitchOffset;
     QLineEdit* m_externalAudioEditorPath;
     QCheckBox* m_selectorGreedyMode;
+    QCheckBox* m_backgroundTextures;
     QSpinBox*  m_autosaveInterval;
     QComboBox* m_nameStyle;
 };

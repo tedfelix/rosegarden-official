@@ -37,6 +37,7 @@
 #include <qlineedit.h>
 #include <qlistview.h>
 #include <qtooltip.h>
+#include <qvbox.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -122,7 +123,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg, RosegardenGUIDo
     //
     QFrame *frame = new QFrame(m_tabWidget);
     QGridLayout *layout = new QGridLayout(frame,
-                                          6, 2, // nbrow, nbcol
+                                          7, 2, // nbrow, nbcol
                                           10, 5);
 
     layout->addWidget(new QLabel(i18n("Default editor (for double-click on segment)"),
@@ -135,8 +136,14 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg, RosegardenGUIDo
                                  frame), 3, 0);
     layout->addWidget(new QLabel(i18n("Selector greedy mode"),
                                  frame), 4, 0);
+
+    QVBox *box = new QVBox(frame);
+    new QLabel(i18n("Use textured backgrounds on canvas areas"), box);
+    new QLabel(i18n("    (takes effect only from next restart)"), box);
+    layout->addWidget(box, 5, 0);
+
     layout->addWidget(new QLabel(i18n("Auto-save interval (in seconds)"),
-                                 frame), 5, 0);
+                                 frame), 6, 0);
 
     m_client = new QComboBox(frame);
     m_client->insertItem(i18n("Notation"));
@@ -172,9 +179,15 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg, RosegardenGUIDo
     m_selectorGreedyMode->setChecked(m_cfg->readBoolEntry("selectorgreedymode",
                                                           true));
 
+    m_backgroundTextures = new QCheckBox(frame);
+    layout->addWidget(m_backgroundTextures, 5, 1);
+
+    m_backgroundTextures->setChecked(m_cfg->readBoolEntry("backgroundtextures",
+                                                          false));
+
     m_autosaveInterval = new QSpinBox(0, 600, 10, frame);
     m_autosaveInterval->setValue(m_cfg->readUnsignedNumEntry("autosaveinterval", 60));
-    layout->addWidget(m_autosaveInterval, 5, 1);
+    layout->addWidget(m_autosaveInterval, 6, 1);
 
     addTab(frame, i18n("General"));
 
@@ -252,6 +265,9 @@ void GeneralConfigurationPage::apply()
     NotationSelector::setGreedyMode(greedyMode);
     SegmentSelector::setGreedyMode(greedyMode);
     m_cfg->writeEntry("selectorgreedymode", m_selectorGreedyMode->isChecked());
+
+    bool textures = m_backgroundTextures->isChecked();
+    m_cfg->writeEntry("backgroundtextures", m_backgroundTextures->isChecked());
 
     unsigned int autosaveInterval = m_autosaveInterval->value();
     m_cfg->writeEntry("autosaveinterval", autosaveInterval);

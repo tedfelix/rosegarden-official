@@ -27,9 +27,13 @@
 #include <qlabel.h>
 #include <qaccel.h>
 #include <qtimer.h>
+#include <qpixmap.h>
 
 #include <kmessagebox.h>
 #include <kapp.h>
+#include <kglobal.h>
+#include <kconfig.h>
+#include <kstddirs.h>
 
 #include "RulerScale.h"
 #include "Track.h"
@@ -137,6 +141,16 @@ TrackEditor::init(QWidget* rosegardenguiview)
     QCanvas *canvas = new QCanvas(this);
     canvas->resize(100, 100); // call slotReadjustCanvasSize later
     canvas->setBackgroundColor(RosegardenGUIColours::SegmentCanvas);
+
+    kapp->config()->setGroup("General Options");
+    if (kapp->config()->readBoolEntry("backgroundtextures", false)) {
+	QPixmap background;
+	QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+	if (background.load(QString("%1/misc/bg-paper-grey.xpm").
+			    arg(pixmapDir))) {
+	    canvas->setBackgroundPixmap(background);
+	}
+    }
 
     int trackLabelWidth = 230;
     int barButtonsHeight = 25;
