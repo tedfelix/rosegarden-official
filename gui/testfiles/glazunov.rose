@@ -1,0 +1,2251 @@
+#!Rosegarden
+#
+#  Musical Notation File
+#
+
+RV21
+
+
+Staves 3
+
+
+Name Cello
+Metronome
+	Crotchet 76
+Clef
+	Clef Name Tenor 
+Key
+	Key Name A  maj / F# min
+Text
+	String Lento
+	Position 1
+Rest
+	Semibreve rest
+Rest
+	Semibreve rest
+Rest
+	Semibreve rest
+Rest
+	Minim rest
+Rest
+	Crotchet rest
+Text
+	String mp
+	Position 6
+: Crotchet 0 1 5 1
+Text
+	String dolce ed appassionato
+	Position 0
+: Dotted minim 0 1 10 0
+Mark start 0 Tie
+Group
+	Beamed
+	: Quaver 0 1 10 0
+	Mark end 0
+	: Semiquaver 0 1 9 1
+	: Semiquaver 0 1 8 1
+	End
+: Dotted minim 0 1 9 1
+: Crotchet 0 1 5 1
+: Minim 0 1 8 1
+Mark start 1 Tie
+Group
+	Beamed
+	: Quaver 0 1 8 1
+	Mark end 1
+	: Semiquaver 0 1 7 0
+	Mark start 2 Slur
+	: Semiquaver 0 1 6 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 5 1
+	: Semiquaver 0 1 4 0
+	: Semiquaver 0 1 5 1
+	: Semiquaver 0 1 6 0
+	Mark end 2
+	End
+: Dotted minim 0 1 7 0
+Group
+	Beamed
+	: Quaver 0 1 7 0
+	Mark start 3 Slur
+	: Quaver 0 1 8 1
+	Mark end 3
+	End
+: Dotted crotchet 0 1 6 0
+Mark start 4 Slur
+: Quaver 0 1 7 0
+Mark end 4
+: Crotchet 0 1 5 1
+Mark start 5 Crescendo
+Group
+	Beamed
+	: Quaver 0 1 5 1
+	Mark start 6 Slur
+	: Quaver 0 1 10 0
+	Mark end 5
+	Mark end 6
+	End
+Group
+	Beamed
+	: Quaver 0 1 10 0
+	Mark start 7 Slur
+	: Quaver 0 1 11 0
+	Mark end 7
+	End
+: Crotchet 0 1 9 1
+Mark start 8 Slur
+Mark start 9 Tie
+Group
+	Beamed
+	: Quaver 0 1 9 1
+	Mark start 10 Decrescendo
+	Mark end 9
+	: Quaver 0 1 10 0
+	Mark end 8
+	End
+: Crotchet 0 1 8 1
+Mark end 10
+Mark start 11 Slur
+Mark start 12 Tie
+Text
+	String p
+	Position 6
+Group
+	Beamed
+	: Quaver 0 1 8 1
+	Mark end 12
+	: Quaver 0 1 6 1
+	Mark start 13 Crescendo
+	Mark end 11
+	End
+: Crotchet 0 1 7 0
+Mark start 14 Slur
+Mark start 15 Tie
+Text
+	String allargando poco
+	Position 0
+Group
+	Beamed
+	: Quaver 0 1 7 0
+	Mark end 15
+	: Quaver 0 1 5 1
+	Mark end 14
+	End
+: Crotchet 0 1 6 0
+Mark end 13
+Text
+	String f
+	Position 6
+Mark start 16 Slur
+Group
+	Beamed
+	: Quaver 0 1 4 1
+	: Quaver 0 1 5 1
+	: Quaver 0 1 9 1
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 8 1
+	Mark end 16
+	End
+Group
+	Beamed
+	: Quaver 0 1 7 0
+	Mark start 17 Decrescendo
+	Mark start 18 Slur
+	: Quaver 0 1 6 1
+	: Quaver 0 1 2 1
+	Mark end 17
+	: Quaver 0 1 3 0
+	Mark end 18
+	End
+Text
+	String animando
+	Position 0
+Mark start 19 Slur
+: Quaver 0 1 4 4
+Mark start 20 Crescendo
+: Crotchet 0 1 5 1
+Mark end 19
+Group
+	Beamed
+	: Quaver 4 1 6 0
+	Mark end 20
+	Mark start 21 Tie
+	End
+Group
+	Beamed
+	: Quaver 0 1 6 0
+	Mark end 21
+	: Quaver 0 1 5 1
+	Mark start 22 Decrescendo
+	Mark start 23 Slur
+	: Quaver 0 1 2 1
+	: Quaver 0 1 3 0
+	Mark end 22
+	Mark end 23
+	End
+Group
+	Beamed
+	: Quaver 0 1 4 0
+	Mark start 24 Crescendo
+	Mark start 25 Slur
+	: Quaver 0 1 5 1
+	: Quaver 0 1 7 0
+	Mark end 25
+	: Quaver 4 1 6 0
+	Mark end 24
+	Mark start 26 Tie
+	End
+Group
+	Beamed
+	: Quaver 0 1 6 0
+	Mark end 26
+	: Quaver 0 1 5 1
+	Mark start 27 Decrescendo
+	Mark start 28 Slur
+	: Quaver 0 1 2 1
+	: Quaver 0 1 3 0
+	Mark end 27
+	Mark end 28
+	End
+Group
+	Beamed
+	: Quaver 0 1 4 0
+	Mark start 29 Crescendo
+	Mark start 30 Slur
+	: Quaver 0 1 6 0
+	: Quaver 0 1 9 1
+	: Quaver 0 1 8 1
+	Mark end 30
+	End
+Group
+	Beamed
+	: Quaver 0 1 7 1
+	Mark start 31 Slur
+	: Quaver 0 1 9 1
+	: Quaver 0 1 11 0
+	: Quaver 0 1 10 0
+	Mark end 29
+	Mark end 31
+	End
+Text
+	String calando
+	Position 0
+Mark start 32 Slur
+: Crotchet 0 1 10 0
+: Minim 0 1 9 1
+Mark start 33 Decrescendo
+Mark end 32
+: Crotchet 0 1 5 1
+Mark end 33
+Text
+	String Tempo I.
+	Position 0
+: Dotted minim 0 1 10 0
+Group
+	Beamed
+	: Semiquaver 0 1 9 1
+	Mark start 34 Slur
+	: Semiquaver 0 1 8 1
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 8 1
+	Mark end 34
+	End
+: Dotted minim 0 1 9 1
+: Crotchet 0 1 5 1
+Mark start 35 Slur
+: Quaver 0 1 8 1
+Mark end 35
+Group
+	Beamed
+	Rest
+		Quaver rest
+	: Crotchet 0 1 8 1
+	Mark start 36 Tie
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 8 1
+	Mark end 36
+	: Semiquaver 0 1 10 0
+	Mark start 37 Slur
+	: Semiquaver 0 1 9 1
+	: Semiquaver 0 1 8 1
+	: Demisemiquaver 0 1 7 0
+	: Demisemiquaver 0 1 6 0
+	: Demisemiquaver 0 1 5 1
+	: Demisemiquaver 0 1 4 0
+	: Demisemiquaver 0 1 3 0
+	: Demisemiquaver 0 1 4 0
+	: Demisemiquaver 0 1 5 1
+	: Demisemiquaver 0 1 6 0
+	Mark end 37
+	End
+: Dotted minim 0 1 7 0
+Group
+	Beamed
+	: Quaver 0 1 7 0
+	Mark start 38 Slur
+	: Quaver 0 1 8 1
+	Mark end 38
+	End
+: Dotted crotchet 0 1 6 0
+Mark start 39 Slur
+: Quaver 0 1 7 0
+Mark end 39
+: Crotchet 0 1 5 1
+Mark start 40 Crescendo
+Group
+	Beamed
+	: Quaver 0 1 5 1
+	Mark start 41 Slur
+	: Quaver 0 1 10 0
+	Mark end 40
+	Mark end 41
+	End
+Group
+	Beamed
+	: Quaver 0 1 10 0
+	Mark start 42 Slur
+	: Quaver 0 1 11 0
+	Mark end 42
+	End
+: Crotchet 0 1 9 1
+Mark start 43 Slur
+Mark start 44 Tie
+Group
+	Beamed
+	: Quaver 0 1 9 1
+	Mark end 44
+	: Quaver 0 1 10 0
+	Mark end 43
+	End
+: Crotchet 0 1 8 1
+Mark start 45 Decrescendo
+Mark end 45
+Mark start 46 Slur
+Mark start 47 Tie
+Group
+	Beamed
+	: Quaver 0 1 8 1
+	Mark end 47
+	: Quaver 0 1 6 1
+	Mark end 46
+	End
+: Crotchet 0 1 7 0
+Mark start 48 Slur
+Mark start 49 Tie
+Group
+	Beamed
+	: Quaver 0 1 7 0
+	Mark start 50 Crescendo
+	Mark end 49
+	: Quaver 0 1 5 1
+	Mark end 48
+	End
+: Crotchet 0 1 6 0
+Mark end 50
+: Dotted crotchet 0 1 2 1
+Mark start 51 Slur
+Group
+	Beamed
+	: Quaver 0 1 3 1
+	: Quaver 0 1 1 1
+	Mark end 51
+	End
+Rest
+	Quaver rest
+Text
+	String mf
+	Position 6
+: Crotchet 0 1 4 0
+: Minim 0 1 8 1
+Mark start 52 Tie
+Group
+	Beamed
+	: Quaver 0 1 8 1
+	Mark end 52
+	: Semiquaver 0 1 7 0
+	Mark start 53 Slur
+	: Semiquaver 0 1 6 0
+	End
+Group
+	Tupled 16 6
+	: Semiquaver 0 1 5 1
+	: Semiquaver 0 1 4 0
+	: Semiquaver 0 1 5 1
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 8 1
+	End
+: Quaver 0 1 9 1
+Mark end 53
+Rest
+	Semiquaver rest
+: Semiquaver 0 1 10 0
+: Crotchet 0 1 8 1
+Mark start 54 Tie
+: Quaver 0 1 8 1
+Mark end 54
+Rest
+	Quaver rest
+Text
+	String f
+	Position 6
+: Crotchet 0 1 8 1
+: Minim 0 1 11 0
+Mark start 55 Tie
+Group
+	Beamed
+	: Quaver 0 1 11 0
+	Mark end 55
+	: Semiquaver 0 1 10 0
+	Mark start 56 Slur
+	: Semiquaver 0 1 9 1
+	End
+Group
+	Tupled 16 6
+	: Semiquaver 0 1 8 1
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 8 1
+	: Semiquaver 0 1 9 1
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 11 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 12 1
+	Mark end 56
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 13 0
+	End
+: Minim 0 1 11 0
+Group
+	Beamed
+	: Quaver 2 1 11 0
+	: Quaver 2 1 12 1
+	End
+: Crotchet 0 1 11 0
+Mark start 57 Crescendo
+Group
+	Beamed
+	: Quaver 2 1 10 0
+	: Quaver 2 1 11 0
+	End
+: Crotchet 0 1 10 0
+Group
+	Beamed
+	: Quaver 2 1 9 1
+	: Quaver 2 1 10 0
+	Mark end 57
+	End
+Text
+	String ff
+	Position 6
+Group
+	Beamed
+	: Quaver 0 1 9 1
+	: Quaver 0 1 8 1
+	: Quaver 2 1 3 0
+	: Quaver 2 1 4 0
+	End
+: Dotted crotchet 0 1 5 1
+Mark start 58 Decrescendo
+Mark end 58
+Mark start 59 Tie
+: Semiquaver 0 1 5 1
+Mark end 59
+: Semiquaver 0 1 5 1
+Text
+	String meno
+	Position 4
+: Dotted crotchet 0 1 10 0
+Text
+	String f
+	Position 6
+Group
+	Beamed
+	: Semiquaver 0 1 9 1
+	: Semiquaver 0 1 8 1
+	End
+: Dotted crotchet 0 1 9 1
+Mark start 60 Decrescendo
+Mark start 61 Slur
+: Quaver 0 1 5 1
+Mark end 60
+Mark end 61
+: Minim 0 1 8 1
+Mark start 62 Tie
+: Quaver 0 1 8 1
+Mark end 62
+Rest
+	Quaver rest
+Rest
+	Crotchet rest
+Precedes Double
+Clef
+	Clef Name Tenor 
+Metronome
+	Crotchet 96
+Key
+	Key Name D  maj / B  min
+Text
+	String mf
+	Position 6
+Mark start 63 Slur
+: Crotchet 0 1 3 0
+Text
+	String Poco piu mosso
+	Position 1
+Group
+	Beamed
+	: Quaver 0 1 6 0
+	: Quaver 0 1 7 0
+	Mark end 63
+	End
+: Dotted crotchet 0 1 8 1
+Mark start 64 Slur
+: Quaver 0 1 7 0
+Mark end 64
+Group
+	Beamed
+	: Quaver 0 1 6 0
+	Mark start 65 Slur
+	: Quaver 0 1 5 1
+	: Quaver 0 1 4 0
+	: Quaver 0 1 7 0
+	Mark end 65
+	End
+: Crotchet 2 1 5 1
+Mark start 66 Decrescendo
+Mark start 67 Slur
+: Crotchet 2 1 3 0
+Mark end 66
+Mark end 67
+Text
+	String p
+	Position 6
+Mark start 68 Slur
+Group
+	Beamed
+	: Quaver 0 1 6 0
+	: Quaver 0 1 7 0
+	Mark end 68
+	: Quaver 2 1 8 1
+	: Quaver 2 1 9 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 8 1
+	Mark start 69 Slur
+	Mark start 70 Crescendo
+	: Quaver 0 1 9 0
+	Mark end 69
+	End
+Group
+	Beamed
+	: Quaver 0 1 7 0
+	Mark start 71 Slur
+	: Quaver 0 1 8 1
+	Mark end 71
+	End
+Group
+	Beamed
+	: Quaver 0 1 7 0
+	Mark start 72 Slur
+	: Quaver 0 1 8 1
+	Mark end 72
+	: Quaver 0 1 6 0
+	Mark start 73 Slur
+	: Quaver 0 1 7 0
+	Mark end 73
+	Mark end 70
+	End
+Text
+	String mf
+	Position 6
+: Minim 4 1 3 0
+: Crotchet 0 1 10 0
+Mark start 74 Slur
+Group
+	Beamed
+	: Quaver 0 1 9 0
+	: Quaver 0 1 8 1
+	Mark end 74
+	End
+: Dotted crotchet 0 1 11 0
+Mark start 75 Slur
+: Quaver 0 1 10 0
+Mark end 75
+Group
+	Beamed
+	: Quaver 0 1 9 0
+	Mark start 76 Slur
+	: Quaver 0 1 8 1
+	: Quaver 0 1 7 0
+	: Quaver 0 1 10 0
+	Mark end 76
+	End
+: Minim 0 1 8 1
+Mark start 77 Tie
+Group
+	Beamed
+	: Quaver 0 1 8 1
+	Mark end 77
+	: Quaver 0 1 6 0
+	Mark start 78 Slur
+	Mark start 79 Crescendo
+	: Quaver 0 1 5 1
+	: Quaver 0 1 4 0
+	Mark end 78
+	End
+Group
+	Beamed
+	: Quaver 0 1 5 1
+	Mark start 80 Slur
+	: Quaver 0 1 8 1
+	: Quaver 0 1 5 1
+	: Quaver 0 1 3 0
+	Mark end 80
+	Mark end 79
+	End
+Text
+	String f
+	Position 6
+Mark start 81 Slur
+: Dotted crotchet 0 1 2 1
+: Quaver 0 1 1 1
+Mark start 82 Decrescendo
+Mark end 81
+: Crotchet 0 1 1 1
+Mark start 83 Slur
+: Crotchet 0 1 8 1
+Mark end 82
+Mark end 83
+Text
+	String p
+	Position 6
+: Crotchet 0 1 9 4
+Group
+	Beamed
+	: Quaver 0 1 10 0
+	: Quaver 0 1 11 0
+	End
+: Dotted crotchet 0 1 10 0
+Mark start 84 Slur
+: Quaver 0 1 7 0
+Mark end 84
+Group
+	Beamed
+	: Quaver 0 1 9 0
+	Mark start 85 Slur
+	: Quaver 0 1 8 1
+	Mark end 85
+	: Quaver 0 1 7 0
+	: Quaver 0 1 11 0
+	End
+: Dotted crotchet 0 1 10 0
+Mark start 86 Slur
+Mark start 87 Crescendo
+: Quaver 0 1 9 0
+Mark end 86
+Mark end 87
+Text
+	String mf
+	Position 6
+Group
+	Beamed
+	: Quaver 0 1 8 1
+	Mark start 88 Slur
+	: Quaver 0 1 13 0
+	Mark end 88
+	Mark start 89 Crescendo
+	: Quaver 2 1 12 1
+	: Quaver 2 1 11 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 10 1
+	Mark start 90 Slur
+	: Quaver 0 1 11 0
+	Mark end 90
+	: Quaver 2 1 10 4
+	: Quaver 2 1 9 0
+	Mark end 89
+	End
+Text
+	String f
+	Position 6
+Group
+	Beamed
+	: Quaver 0 1 8 1
+	Mark start 91 Slur
+	: Quaver 0 1 11 0
+	Mark end 91
+	: Quaver 2 1 10 0
+	: Quaver 2 1 9 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 8 1
+	Mark start 92 Slur
+	Mark start 93 Decrescendo
+	: Quaver 0 1 9 0
+	Mark end 92
+	: Quaver 2 1 8 1
+	: Quaver 2 1 7 0
+	Mark end 93
+	End
+Text
+	String mf
+	Position 6
+: Crotchet 0 1 6 0
+Mark start 94 Slur
+Group
+	Beamed
+	: Quaver 0 1 9 0
+	: Quaver 0 1 10 0
+	Mark end 94
+	End
+: Dotted crotchet 0 1 11 0
+Mark start 95 Slur
+: Quaver 0 1 10 0
+Mark end 95
+Group
+	Beamed
+	: Quaver 0 1 9 0
+	Mark start 96 Slur
+	: Quaver 0 1 8 1
+	: Quaver 0 1 7 0
+	: Quaver 0 1 10 0
+	Mark end 96
+	End
+: Dotted crotchet 0 1 8 1
+Mark start 97 Slur
+Mark start 98 Decrescendo
+: Quaver 0 1 7 0
+Mark end 97
+Mark end 98
+Text
+	String p
+	Position 6
+Mark start 99 Slur
+Group
+	Beamed
+	: Quaver 0 1 6 0
+	: Quaver 0 1 5 1
+	: Quaver 0 1 4 0
+	: Quaver 0 1 7 0
+	Mark end 99
+	End
+: Dotted crotchet 0 1 5 1
+Mark start 100 Slur
+: Quaver 0 1 4 0
+Mark end 100
+Text
+	String riten.
+	Position 0
+: Dotted crotchet 0 1 3 0
+Mark start 101 Slur
+Mark start 102 Crescendo
+: Quaver 0 1 4 0
+Mark end 101
+Mark end 102
+: Dotted crotchet 0 1 2 1
+Mark start 103 Slur
+Mark start 104 Decrescendo
+: Quaver 0 1 1 1
+Mark end 103
+Mark end 104
+Precedes Double
+Metronome
+	Crotchet 76
+Clef
+	Clef Name Tenor 
+Text
+	String Tempo I
+	Position 1
+Key
+	Key Name A  maj / F# min
+Group
+	Beamed
+	: Quaver 0 1 1 1
+	End
+Text
+	String p
+	Position 6
+Group
+	Beamed
+	: Quaver 1 1 -2 1
+	Mark start 105 Slur
+	: Quaver 1 1 -1 1
+	: Quaver 1 1 0 1
+	Mark end 105
+	End
+Group
+	Beamed
+	: Quaver 1 1 1 1
+	Mark start 106 Slur
+	: Quaver 1 1 2 1
+	End
+: Crotchet 2 1 3 0
+Mark end 106
+Group
+	Beamed
+	Rest
+		Quaver rest
+	: Quaver 1 1 2 1
+	Mark start 107 Slur
+	: Quaver 1 1 3 0
+	: Quaver 1 1 4 0
+	Mark end 107
+	End
+Group
+	Beamed
+	: Quaver 1 1 5 1
+	Mark start 108 Slur
+	: Quaver 1 1 6 0
+	End
+: Crotchet 2 1 7 0
+Mark end 108
+Group
+	Beamed
+	Rest
+		Quaver rest
+	: Quaver 1 1 1 1
+	Mark start 109 Slur
+	: Quaver 1 1 2 1
+	: Quaver 1 1 3 0
+	Mark end 109
+	End
+Group
+	Beamed
+	: Quaver 1 1 4 0
+	Mark start 110 Slur
+	: Quaver 1 1 5 1
+	End
+: Crotchet 2 1 6 0
+Mark end 110
+Group
+	Beamed
+	Rest
+		Quaver rest
+	: Quaver 1 1 4 0
+	Mark start 111 Slur
+	: Quaver 1 1 5 1
+	: Quaver 1 1 6 0
+	Mark end 111
+	End
+Group
+	Beamed
+	: Quaver 1 1 7 0
+	Mark start 112 Slur
+	: Quaver 1 1 8 1
+	Mark end 112
+	End
+: Crotchet 0 1 9 0
+Mark start 113 Tie
+Mark start 114 Slur
+Group
+	Beamed
+	: Quaver 0 1 9 4
+	Mark end 113
+	: Quaver 0 1 7 0
+	Mark end 114
+	End
+: Crotchet 0 1 8 1
+Mark start 115 Tie
+Mark start 116 Slur
+Group
+	Beamed
+	: Quaver 0 1 8 1
+	Mark end 115
+	: Quaver 0 1 6 0
+	Mark end 116
+	End
+: Crotchet 0 1 7 0
+Group
+	Beamed
+	: Quaver 0 1 7 1
+	Mark start 117 Slur
+	Mark start 118 Crescendo
+	: Quaver 0 1 8 1
+	: Quaver 0 1 9 1
+	: Quaver 0 1 12 1
+	Mark end 117
+	Mark end 118
+	End
+Group
+	Beamed
+	Text
+		String f
+		Position 6
+	Mark start 119 Decrescendo
+	: Quaver 0 1 11 0
+	Mark start 120 Slur
+	: Quaver 0 1 10 0
+	Mark end 120
+	Mark end 119
+	End
+Group
+	Beamed
+	Text
+		String p
+		Position 6
+	: Quaver 0 1 6 0
+	: Quaver 0 1 7 4
+	End
+Text
+	String allargando poco
+	Position 0
+: Dotted crotchet 0 1 5 1
+Mark start 121 Slur
+Mark start 122 Crescendo
+: Quaver 0 1 6 0
+Mark end 121
+: Crotchet 0 1 4 0
+Group
+	Beamed
+	: Quaver 0 1 4 0
+	Mark start 123 Slur
+	: Quaver 0 1 9 0
+	Mark end 123
+	Mark end 122
+	End
+Text
+	String ff
+	Position 6
+Group
+	Beamed
+	: Quaver 0 1 9 0
+	Mark start 124 Slur
+	: Quaver 0 1 8 1
+	Mark end 124
+	: Quaver 2 1 3 0
+	: Quaver 2 1 4 0
+	End
+: Dotted crotchet 0 1 5 1
+Mark start 125 Slur
+Mark start 126 Decrescendo
+: Quaver 0 1 3 0
+Mark end 125
+Mark end 126
+Clef
+	Clef Name Bass  
+Group
+	Beamed
+	: Quaver 4 1 9 1
+	Mark start 127 Slur
+	: Quaver 0 1 8 1
+	: Quaver 0 1 4 1
+	: Quaver 0 1 5 1
+	Mark end 127
+	End
+Group
+	Beamed
+	: Quaver 0 1 6 1
+	Mark start 128 Slur
+	: Quaver 0 1 7 1
+	: Quaver 1 1 8 1
+	: Quaver 1 1 9 1
+	Mark end 128
+	End
+Group
+	Beamed
+	: Quaver 4 1 11 0
+	Mark start 129 Slur
+	: Quaver 0 1 10 0
+	: Quaver 0 1 6 1
+	: Quaver 0 1 7 1
+	Mark end 129
+	End
+Group
+	Beamed
+	: Quaver 0 1 8 1
+	Mark start 130 Slur
+	: Quaver 0 1 9 1
+	: Quaver 1 1 10 0
+	: Quaver 1 1 11 0
+	Mark end 130
+	End
+Clef
+	Clef Name Tenor 
+Group
+	Beamed
+	: Quaver 4 1 6 0
+	Mark start 131 Slur
+	Mark start 132 Crescendo
+	: Quaver 0 1 5 1
+	: Quaver 0 1 2 1
+	: Quaver 0 1 3 0
+	Mark end 131
+	End
+Group
+	Beamed
+	: Quaver 0 1 4 0
+	Mark start 133 Slur
+	: Quaver 0 1 5 1
+	: Quaver 1 1 6 1
+	: Quaver 1 1 7 1
+	Mark end 133
+	Mark end 132
+	End
+Text
+	String rallent.
+	Position 0
+Text
+	String f
+	Position 6
+: Dotted minim 4 1 9 1
+Mark start 134 Slur
+: Crotchet 0 1 8 1
+Mark end 134
+Text
+	String dim.
+	Position 4
+: Semibreve 0 1 10 0
+Mark start 135 Tie
+: Semibreve 80 1 10 0
+Mark end 135
+Mark start 136 Decrescendo
+Mark end 136
+Precedes Double
+End
+
+Name Piano
+Clef
+	Clef Name Treble
+Key
+	Key Name A  maj / F# min
+Text
+	String p
+	Position 6
+: Crotchet 2 1 -2 1
+Mark start 137 Crescendo
+: Crotchet 0 3 -4 0 -2 1 3 0
+: Minim 0 3 3 0 5 1 10 0
+: Crotchet 2 1 -1 1
+: Crotchet 0 3 -4 0 -2 1 3 0
+: Minim 0 3 3 0 5 1 10 0
+Mark end 137
+Text
+	String mf
+	Position 6
+: Crotchet 2 1 0 1
+: Crotchet 0 3 -4 0 -2 1 3 0
+: Minim 0 3 3 0 5 1 10 0
+: Dotted minim 0 1 0 0
+Mark start 138 Tie
+Mark start 139 Slur
+Mark start 140 Decrescendo
+: Quaver 0 1 0 0
+Mark end 138
+: Quaver 0 1 1 1
+Mark end 139
+Mark end 140
+Text
+	String p
+	Position 6
+: Crotchet 2 1 1 1
+: Crotchet 0 3 -4 0 -2 1 3 0
+: Minim 0 3 3 0 5 1 10 0
+Rest
+	Crotchet rest
+: Crotchet 0 4 -2 1 2 1 3 0 5 1
+: Minim 0 3 5 1 9 1 12 1
+Rest
+	Crotchet rest
+: Crotchet 0 4 1 1 3 0 5 1 8 1
+: Minim 0 3 8 1 10 0 15 1
+Rest
+	Crotchet rest
+: Crotchet 0 4 0 0 3 0 5 1 10 0
+: Crotchet 0 3 10 0 12 1 17 0
+: Crotchet 0 1 -2 1
+Mark start 141 Tie
+Mark start 142 Slur
+Group
+	Beamed
+	: Quaver 0 1 -2 1
+	Mark end 141
+	: Quaver 0 1 -4 1
+	Mark end 142
+	End
+: Crotchet 0 1 -3 0
+Mark start 143 Tie
+Mark start 144 Slur
+Mark start 145 Crescendo
+Group
+	Beamed
+	: Quaver 0 1 -3 0
+	Mark end 143
+	: Quaver 0 1 -5 1
+	Mark end 144
+	End
+: Crotchet 0 1 -4 4
+Mark end 145
+Text
+	String mf
+	Position 6
+Mark start 146 Decrescendo
+: Minim 0 2 -3 0 -2 1
+: Crotchet 0 2 -4 0 -2 1
+Mark end 146
+Group
+	Beamed
+	: Quaver 0 2 3 0 10 0
+	Mark start 147 Slur
+	Text
+		String p
+		Position 6
+	: Quaver 0 2 4 0 11 0
+	Mark end 147
+	End
+: Dotted crotchet 0 2 2 1 9 1
+Mark start 148 Slur
+Mark start 149 Crescendo
+: Quaver 0 2 3 0 10 0
+Mark end 148
+: Crotchet 0 2 1 1 8 1
+Group
+	Beamed
+	: Quaver 0 2 1 1 8 1
+	Mark start 150 Slur
+	: Quaver 0 2 6 0 13 0
+	Mark end 150
+	Mark end 149
+	End
+Text
+	String f
+	Position 6
+Group
+	Beamed
+	: Quaver 0 2 6 0 13 0
+	Mark start 151 Slur
+	: Quaver 0 2 5 1 12 1
+	: Quaver 0 2 0 0 7 0
+	: Quaver 0 2 1 1 8 1
+	Mark end 151
+	End
+: Minim 0 2 2 1 9 1
+Mark start 152 Tie
+Mark start 153 Decrescendo
+Mark end 153
+: Quaver 0 2 2 1 9 1
+Mark end 152
+Rest
+	Quaver rest
+Text
+	String mf
+	Position 6
+Group
+	Beamed
+	Rest
+		Quaver rest
+	: Quaver 4 2 1 1 4 0
+	Mark start 154 Slur
+	End
+: Crotchet 0 2 2 1 4 0
+Mark end 154
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+Rest
+	Quaver rest
+: Quaver 4 2 1 1 4 0
+Mark start 155 Slur
+: Crotchet 0 2 2 1 4 0
+Mark end 155
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+Text
+	String p
+	Position 6
+: Minim 0 2 -3 0 -1 0
+Mark start 156 Crescendo
+: Crotchet 0 2 -3 0 -1 0
+Mark end 156
+Text
+	String mf
+	Position 6
+: Minim 0 2 -3 0 -1 0
+: Crotchet 0 2 -3 0 -2 1
+Mark start 157 Decrescendo
+Rest
+	Crotchet rest
+Mark end 157
+Group
+	Beamed
+	Rest
+		Quaver rest
+	End
+Text
+	String p
+	Position 6
+Group
+	Beamed
+	: Quaver 1 2 3 0 5 1
+	: Quaver 1 3 3 0 5 1 6 1
+	: Quaver 1 3 3 0 5 1 7 1
+	End
+Group
+	Beamed
+	: Quaver 1 3 3 0 5 1 8 1
+	: Quaver 1 3 3 0 5 1 10 0
+	End
+Rest
+	Crotchet rest
+Group
+	Beamed
+	Rest
+		Quaver rest
+	End
+Group
+	Beamed
+	: Quaver 1 2 5 1 9 1
+	: Quaver 1 3 5 1 9 1 10 0
+	: Quaver 1 3 5 1 9 1 11 0
+	End
+Group
+	Beamed
+	: Quaver 1 3 5 1 9 1 12 1
+	: Quaver 1 2 7 0 14 0
+	End
+Rest
+	Crotchet rest
+Group
+	Beamed
+	Rest
+		Quaver rest
+	End
+Group
+	Beamed
+	: Quaver 1 3 5 1 8 1 12 1
+	: Quaver 1 3 6 0 8 1 13 0
+	: Quaver 1 3 7 0 12 1 14 0
+	End
+Group
+	Beamed
+	: Quaver 1 3 8 1 12 1 15 1
+	: Quaver 1 2 10 0 17 0
+	End
+Rest
+	Crotchet rest
+Group
+	Beamed
+	Rest
+		Quaver rest
+	: Quaver 1 3 0 0 5 1 7 0
+	: Quaver 1 3 1 1 5 1 8 1
+	: Quaver 1 3 2 1 5 1 9 1
+	End
+Group
+	Beamed
+	: Quaver 1 3 3 0 5 1 10 0
+	: Quaver 1 2 5 1 12 1
+	End
+: Crotchet 0 1 -2 1
+Mark start 158 Tie
+Mark start 159 Slur
+Group
+	Beamed
+	: Quaver 0 1 -2 1
+	Mark end 158
+	: Quaver 0 1 -4 1
+	Mark end 159
+	End
+: Crotchet 0 1 -3 0
+Mark start 160 Tie
+Mark start 161 Slur
+Group
+	Beamed
+	: Quaver 0 1 -3 0
+	Mark end 160
+	Mark start 162 Crescendo
+	: Quaver 0 1 -5 1
+	Mark end 161
+	End
+: Crotchet 0 1 -4 4
+Mark end 162
+: Minim 0 2 -3 0 -2 1
+Mark start 163 Slur
+Mark start 164 Decrescendo
+: Crotchet 0 2 -4 0 -2 1
+Mark end 163
+Mark end 164
+Text
+	String p
+	Position 6
+Group
+	Beamed
+	: Quaver 0 2 3 0 10 0
+	Mark start 165 Slur
+	: Quaver 0 2 4 0 11 0
+	Mark end 165
+	End
+: Dotted crotchet 0 2 2 1 9 1
+Mark start 166 Slur
+: Quaver 0 2 3 0 10 0
+Mark end 166
+: Crotchet 0 2 1 1 8 1
+Mark start 167 Crescendo
+Group
+	Beamed
+	: Quaver 0 2 1 1 8 1
+	Mark start 168 Slur
+	: Quaver 0 2 6 0 13 0
+	Mark end 168
+	Mark end 167
+	End
+Text
+	String mf
+	Position 6
+Group
+	Beamed
+	: Quaver 0 3 6 0 8 1 13 0
+	Mark start 169 Slur
+	: Quaver 0 3 7 0 8 1 14 0
+	End
+: Crotchet 0 3 5 1 8 1 12 1
+Mark start 170 Tie
+Mark start 171 Decrescendo
+Group
+	Beamed
+	: Quaver 0 3 5 1 8 1 12 1
+	Mark end 170
+	: Quaver 0 3 6 0 8 1 13 0
+	End
+: Crotchet 0 2 4 0 11 0
+Mark end 169
+Mark end 171
+Rest
+	Crotchet rest
+Text
+	String mf
+	Position 6
+: Crotchet 0 4 -3 0 -1 0 1 1 4 0
+: Minim 0 4 1 1 4 0 6 0 8 1
+Rest
+	Crotchet rest
+Text
+	String p
+	Position 6
+Group
+	Tupled 16 9
+	: Demisemiquaver 0 1 8 1
+	Mark start 172 Slur
+	: Demisemiquaver 0 1 7 0
+	: Demisemiquaver 0 1 6 0
+	: Demisemiquaver 0 1 5 1
+	: Demisemiquaver 0 1 4 0
+	: Demisemiquaver 0 1 5 1
+	: Demisemiquaver 0 1 6 0
+	: Demisemiquaver 0 1 7 0
+	: Demisemiquaver 0 1 8 1
+	End
+Group
+	Beamed
+	: Quaver 0 1 9 1
+	Mark end 172
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 10 0
+	End
+: Quaver 0 1 8 1
+Rest
+	Quaver rest
+Rest
+	Crotchet rest
+Text
+	String f
+	Position 6
+: Crotchet 0 4 1 1 4 0 6 0 8 1
+: Minim 0 4 4 0 6 0 8 1 11 0
+Rest
+	Crotchet rest
+Text
+	String mf
+	Position 6
+Group
+	Tupled 16 9
+	: Demisemiquaver 0 1 11 0
+	Mark start 173 Slur
+	: Demisemiquaver 0 1 10 0
+	: Demisemiquaver 0 1 9 1
+	: Demisemiquaver 0 1 8 1
+	: Demisemiquaver 0 1 7 0
+	: Demisemiquaver 0 1 8 1
+	: Demisemiquaver 0 1 9 1
+	: Demisemiquaver 0 1 10 0
+	: Demisemiquaver 0 1 11 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 12 1
+	Mark end 173
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 13 0
+	End
+: Quaver 0 1 11 0
+Rest
+	Quaver rest
+Rest
+	Quaver rest
+Text
+	String mf
+	Position 6
+: Quaver 0 3 -3 0 -1 0 1 1
+Rest
+	Crotchet rest
+Mark start 174 Crescendo
+Rest
+	Quaver rest
+: Quaver 0 3 -6 1 -3 0 -1 0
+Rest
+	Crotchet rest
+Mark end 174
+Text
+	String f
+	Position 6
+: Minim 0 3 -6 1 -4 0 -2 1
+Text
+	String mf
+	Position 6
+Mark start 175 Slur
+Group
+	Beamed
+	: Quaver 0 3 3 0 5 1 9 1
+	: Quaver 0 3 3 0 5 1 8 1
+	Mark end 175
+	: Quaver 0 2 1 1 3 0
+	: Quaver 0 3 1 1 3 0 4 0
+	End
+: Crotchet 0 1 5 1
+Mark start 176 Slur
+: Minim 0 1 6 1
+Mark start 177 Decrescendo
+: Crotchet 0 1 7 1
+Mark end 177
+: Crotchet 0 3 1 1 5 1 8 1
+Mark end 176
+: Crotchet 0 3 8 1 9 1 13 0
+Mark start 178 Slur
+: Quaver 0 3 8 1 10 0 15 1
+Mark end 178
+Rest
+	Quaver rest
+Rest
+	Crotchet rest
+Precedes Double
+Clef
+	Clef Name Treble
+Text
+	String mf
+	Position 6
+Key
+	Key Name D  maj / B  min
+: Minim 0 4 -6 1 -4 0 -1 0 1 1
+Group
+	Beamed
+	Rest
+		Quaver rest
+	: Quaver 0 1 3 0
+	Mark start 179 Slur
+	: Quaver 0 1 4 0
+	: Quaver 0 1 5 1
+	End
+: Crotchet 0 3 -1 0 1 1 6 0
+Mark end 179
+: Crotchet 0 3 0 0 4 0 7 0
+Group
+	Beamed
+	: Quaver 0 3 -2 1 0 0 3 0
+	Mark start 180 Slur
+	Mark start 181 Decrescendo
+	: Quaver 0 3 -2 1 0 0 7 0
+	: Quaver 0 3 -2 1 0 0 8 1
+	: Quaver 0 3 -2 1 0 0 9 0
+	Mark end 180
+	Mark end 181
+	End
+: Crotchet 0 2 3 0 10 0
+Mark start 182 Slur
+: Crotchet 0 4 -4 0 1 1 3 0 10 0
+Mark start 183 Crescendo
+Rest
+	Crotchet rest
+: Crotchet 0 4 -4 0 0 0 2 0 10 0
+: Crotchet 0 1 10 0
+: Crotchet 0 4 -3 0 -1 0 1 1 10 0
+Mark end 183
+Mark end 182
+Group
+	Beamed
+	: Quaver 0 2 -2 1 10 0
+	End
+Group
+	Beamed
+	: Quaver 0 3 -2 1 3 0 10 0
+	Mark start 184 Slur
+	: Quaver 0 3 -2 1 4 0 11 0
+	: Quaver 0 3 -2 1 5 1 12 1
+	End
+: Quaver 0 2 6 0 13 0
+Mark end 184
+Rest
+	Quaver rest
+Rest
+	Crotchet rest
+Group
+	Beamed
+	: Quaver 0 1 -1 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 4 0
+	Mark start 185 Slur
+	: Quaver 0 3 -3 0 3 0 5 1
+	: Quaver 0 3 -3 0 3 0 6 1
+	End
+Group
+	Beamed
+	: Quaver 0 3 2 0 4 0 7 0
+	: Quaver 0 3 2 0 4 0 8 1
+	End
+Group
+	Beamed
+	: Quaver 0 3 0 0 3 0 9 0
+	Mark end 185
+	: Quaver 0 2 0 0 3 0
+	End
+Group
+	Beamed
+	: Quaver 0 2 1 1 3 0
+	End
+Group
+	Beamed
+	: Quaver 0 3 1 1 3 0 8 1
+	Mark start 186 Slur
+	: Quaver 0 3 2 1 7 0 9 1
+	: Quaver 0 3 3 1 7 0 10 1
+	End
+Group
+	Beamed
+	: Quaver 0 3 4 0 6 0 11 0
+	: Quaver 0 3 5 1 6 0 12 1
+	End
+: Crotchet 0 3 6 0 8 1 13 0
+Mark end 186
+: Crotchet 0 3 5 1 8 1 12 1
+Mark start 187 Crescendo
+Group
+	Beamed
+	: Quaver 0 3 5 1 10 0 12 1
+	: Quaver 0 3 6 1 8 1 13 1
+	Mark end 187
+	End
+Text
+	String f
+	Position 6
+Mark start 188 Slur
+Mark start 189 Decrescendo
+: Dotted crotchet 0 4 7 1 11 0 12 1 14 1
+: Quaver 0 2 8 1 15 1
+Mark end 188
+: Crotchet 0 4 8 1 10 0 12 1 15 1
+Mark end 189
+Text
+	String p
+	Position 6
+: Crotchet 0 3 -3 0 1 1 3 0
+: Minim 0 3 -3 0 0 0 2 4
+Mark start 190 Slur
+Group
+	Beamed
+	: Quaver 0 3 -4 0 0 0 3 0
+	Mark end 190
+	End
+: Quaver 0 2 3 0 7 0
+Mark start 191 Slur
+: Crotchet 0 2 5 1 10 0
+Mark end 191
+: Minim 0 3 -3 0 0 0 2 0
+Mark start 192 Slur
+Group
+	Beamed
+	: Quaver 0 3 -4 0 0 0 3 0
+	Mark end 192
+	End
+: Quaver 0 2 3 0 7 0
+Mark start 193 Slur
+: Crotchet 0 2 5 1 10 0
+Mark end 193
+Text
+	String mf
+	Position 6
+Rest
+	Crotchet rest
+: Crotchet 0 2 6 0 8 1
+Mark start 194 Crescendo
+Mark start 195 Slur
+: Dotted crotchet 0 2 2 0 7 0
+Group
+	Beamed
+	: Quaver 0 1 4 0
+	Mark end 194
+	End
+Text
+	String f
+	Position 6
+Group
+	Beamed
+	: Quaver 0 2 1 1 6 0
+	Mark end 195
+	: Quaver 0 2 4 0 8 1
+	Mark start 196 Slur
+	End
+: Crotchet 0 2 6 0 11 0
+Mark end 196
+: Dotted crotchet 0 2 -4 1 -1 0
+Mark start 197 Decrescendo
+Mark start 198 Slur
+: Quaver 0 2 -4 1 -2 1
+Mark end 197
+Group
+	Beamed
+	: Quaver 0 1 -3 0
+	Mark end 198
+	: Quaver 0 2 4 0 9 0
+	End
+: Crotchet 0 2 6 0 11 0
+Text
+	String mf
+	Position 6
+: Crotchet 0 2 -3 0 -1 0
+Mark start 199 Slur
+: Crotchet 0 1 -1 1
+Mark end 199
+: Minim 0 2 -3 0 0 0
+Group
+	Beamed
+	: Quaver 0 2 -3 0 0 0
+	Mark start 200 Slur
+	Mark start 201 Decrescendo
+	: Quaver 0 2 -3 0 -1 4
+	End
+: Crotchet 0 2 -4 1 -2 1
+Mark end 200
+Mark end 201
+Clef
+	Clef Name Bass  
+Text
+	String p
+	Position 6
+: Minim 0 2 8 1 11 0
+Group
+	Beamed
+	: Quaver 0 2 8 1 11 0
+	Mark start 202 Slur
+	: Quaver 0 2 8 1 10 0
+	End
+: Crotchet 0 2 7 1 9 1
+Mark end 202
+: Crotchet 0 1 8 1
+Mark start 203 Slur
+Mark start 204 Crescendo
+: Crotchet 0 1 6 0
+Mark end 203
+Mark end 204
+: Crotchet 0 1 8 1
+Mark start 205 Decrescendo
+Clef
+	Clef Name Treble
+: Crotchet 0 1 5 1
+Mark end 205
+Precedes Double
+Key
+	Key Name A  maj / F# min
+Text
+	String p
+	Position 6
+: Dotted minim 0 3 3 0 5 1 10 0
+Mark start 206 Tie
+Group
+	Beamed
+	: Quaver 0 3 3 0 5 1 10 0
+	Mark end 206
+	: Semiquaver 0 3 3 0 5 1 9 1
+	Mark start 207 Slur
+	: Semiquaver 0 3 3 0 5 1 8 1
+	Mark end 207
+	End
+: Minim 0 3 4 0 6 0 9 1
+Mark start 208 Slur
+: Crotchet 0 3 2 1 5 1 9 1
+Mark end 208
+: Crotchet 0 1 5 1
+: Minim 0 3 3 0 5 1 8 1
+Mark start 209 Slur
+Group
+	Beamed
+	: Quaver 0 3 1 1 4 0 8 1
+	Mark end 209
+	: Semiquaver 0 1 7 0
+	Mark start 210 Slur
+	: Semiquaver 0 1 6 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 5 1
+	: Semiquaver 0 1 4 0
+	: Semiquaver 0 1 5 1
+	: Semiquaver 0 1 6 0
+	Mark end 210
+	End
+: Minim 0 3 2 4 4 0 7 0
+: Crotchet 0 3 0 0 3 0 7 0
+Group
+	Beamed
+	: Quaver 0 1 7 0
+	Mark start 211 Slur
+	: Quaver 0 1 8 1
+	Mark end 211
+	End
+: Dotted crotchet 0 1 6 0
+Mark start 212 Slur
+: Quaver 0 1 7 0
+Mark end 212
+: Crotchet 0 1 5 1
+Group
+	Beamed
+	: Quaver 0 1 5 1
+	Mark start 213 Slur
+	Mark start 214 Crescendo
+	: Quaver 0 2 3 0 10 0
+	Mark end 213
+	End
+Group
+	Beamed
+	: Quaver 0 3 3 0 5 1 10 0
+	Mark start 215 Slur
+	: Quaver 0 3 4 0 5 1 11 0
+	Mark end 215
+	End
+: Crotchet 0 3 2 1 5 1 9 1
+Mark start 216 Tie
+Mark end 214
+Text
+	String f
+	Position 6
+Group
+	Beamed
+	: Quaver 0 3 2 1 5 1 9 1
+	Mark end 216
+	: Quaver 0 3 3 0 5 1 10 0
+	Mark start 217 Decrescendo
+	Mark end 217
+	Text
+		String p
+		Position 6
+	: Crotchet 0 3 4 0 8 1 11 0
+	Mark start 218 Tie
+	End
+Group
+	Beamed
+	: Quaver 0 3 4 0 8 1 11 0
+	Mark end 218
+	Mark start 219 Crescendo
+	: Quaver 0 3 2 1 8 1 9 1
+	End
+: Crotchet 0 3 3 0 7 0 10 0
+Mark start 220 Tie
+Group
+	Beamed
+	: Quaver 0 3 3 0 7 0 10 0
+	Mark end 220
+	: Quaver 0 3 1 1 7 0 8 1
+	End
+: Crotchet 0 4 2 4 4 0 6 0 9 4
+Mark end 219
+Text
+	String f
+	Position 6
+Group
+	Beamed
+	: Quaver 0 4 0 1 3 0 5 1 7 1
+	Mark start 221 Slur
+	: Quaver 0 4 1 1 3 0 5 1 8 1
+	End
+Group
+	Beamed
+	: Quaver 0 3 3 0 5 1 12 1
+	Mark end 221
+	: Semiquaver 0 2 3 0 5 1
+	: Semiquaver 0 4 3 0 4 0 5 1 11 0
+	End
+Group
+	Beamed
+	: Quaver 0 3 3 0 5 1 10 0
+	Mark start 222 Decrescendo
+	: Quaver 0 3 2 1 5 1 9 1
+	: Quaver 0 2 -2 1 5 1
+	: Quaver 0 3 -1 1 5 1 6 1
+	Mark end 222
+	End
+Text
+	String mf
+	Position 6
+: Quaver 4 4 0 1 3 0 5 1 7 1
+Mark start 223 Slur
+: Dotted crotchet 0 4 1 1 3 0 5 1 8 1
+Mark start 224 Tie
+: Minim 0 4 1 1 3 0 5 1 8 1
+Mark end 223
+Mark end 224
+: Quaver 4 4 2 1 5 1 8 1 9 1
+Mark start 225 Slur
+: Dotted crotchet 0 4 3 0 5 1 8 1 10 0
+Mark start 226 Tie
+: Minim 0 4 3 0 5 1 8 1 10 0
+Mark end 225
+Mark end 226
+: Quaver 4 4 4 1 8 1 10 0 11 1
+Mark start 227 Slur
+: Dotted crotchet 0 4 5 1 8 1 10 0 12 1
+Mark start 228 Tie
+: Minim 0 4 5 1 8 1 10 0 12 1
+Mark end 228
+Mark end 227
+Rest
+	Crotchet rest
+Text
+	String f
+	Position 6
+: Crotchet 0 3 3 0 5 1 10 0
+: Minim 0 3 10 0 12 1 17 0
+Rest
+	Minim rest
+Text
+	String p
+	Position 6
+: Minim 0 4 1 1 3 0 5 1 8 1
+: Semibreve 80 3 -4 0 -2 1 1 1
+Precedes Double
+End
+
+Name Piano
+Clef
+	Clef Name Bass  
+Key
+	Key Name A  maj / F# min
+Rest
+	Crotchet rest
+: Crotchet 0 2 -4 0 3 0
+: Minim 0 1 10 0
+Rest
+	Crotchet rest
+: Crotchet 0 2 -2 1 5 1
+: Minim 0 1 11 0
+Rest
+	Crotchet rest
+: Crotchet 0 2 -2 1 5 1
+: Minim 0 1 12 1
+Rest
+	Semibreve rest
+Rest
+	Crotchet rest
+: Crotchet 0 2 1 1 8 1
+: Minim 0 3 8 1 10 0 12 1
+Rest
+	Crotchet rest
+: Crotchet 0 2 0 0 7 0
+: Minim 0 4 7 0 10 0 12 1 16 1
+Rest
+	Crotchet rest
+: Crotchet 0 2 -1 0 6 0
+: Minim 0 4 6 0 10 0 12 1 15 1
+Rest
+	Crotchet rest
+: Crotchet 0 2 -4 0 3 0
+: Crotchet 0 3 10 0 12 1 14 0
+Rest
+	Crotchet rest
+: Crotchet 0 2 4 0 9 0
+Mark start 229 Slur
+: Crotchet 0 2 4 0 8 1
+Mark end 229
+: Crotchet 0 2 5 1 7 1
+Mark start 230 Slur
+: Crotchet 0 2 5 1 8 1
+Mark end 230
+: Dotted crotchet 0 2 -2 1 6 1
+Mark start 231 Slur
+: Quaver 0 1 7 1
+Mark end 231
+: Crotchet 0 2 1 1 5 1
+Mark start 232 Slur
+: Crotchet 0 2 8 1 12 1
+Mark end 232
+: Crotchet 0 3 5 1 9 1 12 1
+Mark start 233 Slur
+: Crotchet 0 3 7 0 9 1 11 0
+Mark end 233
+: Crotchet 0 3 4 0 8 1 11 0
+Mark start 234 Slur
+: Crotchet 0 3 6 0 8 1 10 0
+Mark end 234
+: Crotchet 0 3 2 1 7 0 9 1
+Mark start 235 Slur
+: Crotchet 0 4 2 1 7 0 9 1 12 1
+Mark end 235
+: Minim 0 4 2 1 8 1 9 1 11 1
+: Crotchet 0 4 5 1 7 1 9 1 11 4
+Group
+	Beamed
+	Rest
+		Quaver rest
+	End
+: Quaver 4 2 8 1 13 0
+Mark start 236 Slur
+: Crotchet 0 2 7 1 9 1
+Mark end 236
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+Rest
+	Quaver rest
+: Quaver 4 2 8 1 13 0
+Mark start 237 Slur
+: Crotchet 0 2 7 1 9 1
+Mark end 237
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+: Crotchet 0 2 3 0 10 0
+Mark start 238 Slur
+: Crotchet 0 2 2 1 9 1
+: Crotchet 0 2 1 1 8 1
+Mark end 238
+: Minim 0 2 0 1 7 1
+: Crotchet 0 2 0 1 7 1
+Rest
+	Crotchet rest
+Rest
+	Quaver rest
+Group
+	Beamed
+	: Quaver 1 3 8 1 10 0 12 1
+	: Quaver 1 3 8 1 10 0 12 1
+	: Quaver 1 3 8 1 10 0 12 1
+	End
+Group
+	Beamed
+	: Quaver 1 3 8 1 10 0 12 1
+	: Quaver 1 3 8 1 10 0 12 1
+	End
+Rest
+	Crotchet rest
+Group
+	Beamed
+	Rest
+		Quaver rest
+	End
+Group
+	Beamed
+	: Quaver 1 4 7 0 10 0 12 1 16 1
+	: Quaver 1 4 7 0 10 0 12 1 16 1
+	: Quaver 1 4 7 0 10 0 12 1 16 1
+	End
+Group
+	Beamed
+	: Quaver 1 4 7 0 10 0 12 1 16 1
+	: Quaver 1 4 7 0 10 0 12 1 16 1
+	End
+Rest
+	Crotchet rest
+Rest
+	Quaver rest
+Group
+	Beamed
+	: Quaver 1 4 6 0 10 0 12 1 15 1
+	: Quaver 1 4 6 0 10 0 12 1 15 1
+	: Quaver 1 4 6 0 10 0 12 1 15 1
+	End
+Group
+	Beamed
+	: Quaver 1 4 6 0 10 0 12 1 15 1
+	: Quaver 1 4 6 0 10 0 12 1 15 1
+	End
+Rest
+	Crotchet rest
+Group
+	Beamed
+	Rest
+		Quaver rest
+	: Quaver 0 3 10 0 12 1 14 0
+	: Quaver 0 3 10 0 12 1 14 0
+	: Quaver 0 3 10 0 12 1 14 0
+	End
+Group
+	Beamed
+	: Quaver 0 3 10 0 12 1 14 0
+	: Quaver 0 3 10 0 12 1 14 0
+	End
+Rest
+	Crotchet rest
+: Crotchet 0 2 4 0 9 4
+Mark start 239 Slur
+: Crotchet 0 2 4 0 8 1
+Mark end 239
+: Crotchet 0 2 5 1 7 1
+Mark start 240 Slur
+: Crotchet 0 2 5 1 8 1
+Mark end 240
+: Dotted crotchet 0 2 -2 1 6 1
+Mark start 241 Slur
+: Quaver 0 1 7 1
+Mark end 241
+: Crotchet 0 2 1 1 5 1
+Mark start 242 Slur
+: Crotchet 0 2 8 1 12 1
+Mark end 242
+: Crotchet 0 3 5 1 9 1 12 1
+Mark start 243 Slur
+: Crotchet 0 3 7 0 9 1 11 0
+Mark end 243
+: Crotchet 0 3 4 0 8 1 11 0
+Mark start 244 Slur
+: Crotchet 0 3 6 0 8 1 10 0
+Mark end 244
+: Minim 0 2 8 1 14 0
+: Crotchet 0 3 4 0 8 1 13 0
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+: Crotchet 0 3 0 0 4 0 9 1
+: Minim 0 3 7 0 9 1 13 0
+Rest
+	Crotchet rest
+: Crotchet 0 3 4 0 8 1 13 0
+: Crotchet 0 3 11 0 13 0 15 1
+Mark start 245 Tie
+: Quaver 0 3 11 0 13 0 15 1
+Mark end 245
+Rest
+	Quaver rest
+Rest
+	Crotchet rest
+: Crotchet 0 3 0 0 4 0 9 1
+: Minim 0 3 7 0 9 1 13 0
+Rest
+	Crotchet rest
+: Crotchet 0 3 4 0 8 1 13 0
+: Crotchet 0 3 11 0 13 0 15 1
+Mark start 246 Tie
+: Quaver 0 3 11 0 13 0 15 1
+Mark end 246
+Rest
+	Quaver rest
+Rest
+	Quaver rest
+: Quaver 0 2 -5 1 2 1
+Rest
+	Crotchet rest
+Rest
+	Quaver rest
+: Quaver 0 2 -3 0 4 0
+Rest
+	Crotchet rest
+: Minim 0 2 -2 1 5 1
+Rest
+	Minim rest
+: Minim 0 4 12 1 15 1 17 0 19 1
+: Minim 0 5 5 1 11 0 12 1 16 1 19 1
+: Crotchet 0 3 8 1 10 0 12 1
+Clef
+	Clef Name Treble
+: Crotchet 0 2 4 0 6 0
+Mark start 247 Slur
+: Quaver 0 2 1 1 5 1
+Mark end 247
+Rest
+	Quaver rest
+Rest
+	Crotchet rest
+Precedes Double
+Clef
+	Clef Name Bass  
+Key
+	Key Name D  maj / B  min
+: Minim 0 3 -1 0 3 0 6 0
+Rest
+	Crotchet rest
+: Crotchet 0 3 3 0 9 0 12 1
+: Crotchet 0 3 4 0 8 1 11 0
+: Crotchet 0 2 2 0 11 0
+: Crotchet 0 2 3 0 10 0
+: Crotchet 0 2 2 0 9 0
+: Crotchet 0 2 1 1 8 1
+: Crotchet 0 2 -1 0 6 0
+: Crotchet 0 2 -2 1 5 1
+: Crotchet 0 2 -4 0 3 0
+: Crotchet 0 2 -6 1 1 1
+: Crotchet 0 2 -5 0 2 0
+: Crotchet 0 2 -4 0 3 0
+: Crotchet 0 4 9 0 10 0 12 1 14 0
+: Crotchet 0 4 8 1 10 0 13 0 17 0
+: Crotchet 0 1 6 0
+: Crotchet 0 2 2 0 9 0
+: Crotchet 0 2 1 1 8 1
+: Crotchet 0 2 0 0 7 0
+: Crotchet 0 2 -2 1 5 1
+: Crotchet 0 2 -1 0 6 0
+: Crotchet 0 2 -2 1 5 1
+: Crotchet 0 2 -3 0 4 0
+: Crotchet 0 2 -5 1 2 1
+: Crotchet 0 2 -4 0 3 0
+: Crotchet 0 2 -3 0 4 0
+: Crotchet 0 2 -2 1 5 1
+: Crotchet 0 2 5 1 12 1
+: Crotchet 0 2 1 1 8 1
+: Crotchet 0 2 -1 1 6 1
+: Crotchet 0 2 0 0 7 0
+: Crotchet 0 2 -1 4 6 4
+: Crotchet 0 2 -2 1 5 1
+: Crotchet 0 2 -4 0 3 0
+: Crotchet 0 2 0 0 7 0
+: Crotchet 0 2 -1 0 6 0
+: Crotchet 0 2 -2 1 5 1
+: Crotchet 0 2 -4 0 3 0
+: Crotchet 0 3 6 0 8 1 10 0
+Mark start 248 Slur
+Group
+	Beamed
+	: Quaver 0 3 6 0 8 1 10 1
+	: Quaver 0 3 6 0 8 1 11 0
+	Mark end 248
+	End
+: Quaver 0 3 7 0 9 0 12 1
+Mark start 249 Slur
+: Crotchet 0 3 7 0 9 0 11 0
+: Quaver 0 3 7 0 9 0 12 1
+Mark end 249
+: Crotchet 0 3 8 1 11 0 13 0
+Group
+	Beamed
+	: Quaver 0 3 6 0 11 0 13 0
+	: Quaver 0 3 7 0 11 0 13 0
+	End
+: Minim 0 1 8 1
+Mark start 250 Slur
+: Crotchet 0 1 9 0
+Mark end 250
+Rest
+	Crotchet rest
+: Crotchet 0 2 2 0 9 0
+Mark start 251 Slur
+: Crotchet 0 2 1 1 8 1
+Mark end 251
+: Crotchet 0 2 0 0 7 0
+Mark start 252 Slur
+: Crotchet 0 2 -2 1 5 1
+Mark end 252
+Group
+	Beamed
+	: Quaver 0 2 -1 0 6 0
+	Mark start 253 Slur
+	: Quaver 0 2 0 0 7 0
+	End
+: Crotchet 0 2 1 1 8 1
+Mark end 253
+: Crotchet 0 2 -3 0 4 0
+Mark start 254 Slur
+: Crotchet 0 2 -5 1 2 1
+Mark end 254
+Group
+	Beamed
+	: Quaver 0 2 -4 0 3 0
+	Mark start 255 Slur
+	: Quaver 0 2 -3 0 4 0
+	End
+: Crotchet 0 2 -2 1 5 1
+Mark end 255
+: Crotchet 0 2 -1 0 6 0
+: Crotchet 0 2 -3 0 4 0
+: Crotchet 0 2 -2 1 5 1
+: Crotchet 0 3 -2 1 5 1 7 1
+Precedes Double
+Key
+	Key Name A  maj / F# min
+: Semibreve 0 3 8 1 10 0 12 1
+: Minim 0 3 8 1 11 0 13 0
+Mark start 256 Slur
+: Minim 0 3 7 0 9 1 12 1
+Mark end 256
+: Minim 0 3 7 0 10 0 12 1
+Mark start 257 Slur
+: Minim 0 3 6 0 8 1 11 0
+Mark end 257
+: Minim 0 3 6 0 9 4 11 0
+Mark start 258 Slur
+: Crotchet 0 3 5 1 7 0 10 0
+Mark end 258
+Rest
+	Crotchet rest
+: Crotchet 0 2 6 0 10 0
+Mark start 259 Slur
+: Crotchet 0 2 8 1 10 0
+Mark end 259
+: Crotchet 0 2 10 0 12 1
+Mark start 260 Slur
+: Crotchet 0 2 3 0 12 1
+Mark end 260
+Group
+	Beamed
+	: Quaver 0 2 5 1 12 1
+	Mark start 261 Slur
+	: Quaver 0 2 6 1 12 1
+	End
+: Crotchet 0 2 7 1 12 1
+Mark end 261
+: Crotchet 0 2 8 1 12 1
+: Crotchet 0 2 4 0 11 0
+: Crotchet 0 2 1 1 8 1
+: Crotchet 0 2 3 0 10 0
+: Crotchet 0 2 0 0 7 0
+: Crotchet 0 2 2 4 9 4
+: Crotchet 0 2 -2 1 5 1
+: Crotchet 0 3 -2 1 5 1 14 0
+: Minim 0 3 5 1 11 0 14 1
+: Semibreve 0 3 1 1 5 1 10 0
+: Semibreve 0 4 1 1 5 1 8 1 12 1
+: Semibreve 0 2 8 1 10 0
+Rest
+	Crotchet rest
+: Crotchet 0 3 1 1 5 1 10 0
+: Minim 0 3 8 1 12 1 17 0
+Rest
+	Minim rest
+: Minim 0 3 8 1 10 0 12 1
+: Semibreve 80 2 -6 1 1 1
+Precedes Double
+End
+
+Bar 0 0 time 4 4
+Bar 1 0 time 4 4
+Bar 2 0 time 4 4
+Stave 0 tags 1 1 connected 0 program 42
+Stave 1 tags 1 1 connected 1 program 0
+Stave 2 tags 1 1 connected 0 program 0
+
+End

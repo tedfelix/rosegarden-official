@@ -172,6 +172,10 @@ void Track::calculateBarPositions()
 
     iterator i(begin());
 
+    //!!! we should probably be resynchronising with the absoluteTime
+    //and barDuration each time we insert a barline... somehow,
+    //without breaking time signature support
+
     for (; i != end(); ++i) {
 
         Event *e = *i;

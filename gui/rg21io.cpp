@@ -33,6 +33,11 @@ using Rosegarden::Track;
 using Rosegarden::Int;
 using Rosegarden::String;
 using Rosegarden::Clef;
+using Rosegarden::Accidental;
+using Rosegarden::Sharp;
+using Rosegarden::Flat;
+using Rosegarden::Natural;
+using Rosegarden::NoAccidental;
 
 RG21Loader::RG21Loader(const QString& fileName)
     : m_file(fileName),
@@ -73,7 +78,7 @@ bool RG21Loader::parseClef()
     
     m_currentTrack->insert(clefEvent);
 
-    if (clefName == "trebble")
+    if (clefName == "treble")
         m_currentClef = Clef(Clef::Treble);
     else if (clefName == "tenor")
         m_currentClef = Clef(Clef::Tenor);
@@ -242,9 +247,18 @@ void RG21Loader::closeTrackOrComposition()
 /// snarfed from RG21 sources
 long RG21Loader::convertRG21Pitch(long pitch, int noteModifier)
 {
-    Rosegarden::NotationDisplayPitch displayPitch(pitch,
-                                                  m_currentClef,
-                                                  m_currentKey);
+//    Rosegarden::NotationDisplayPitch displayPitch(pitch,
+//                                                  m_currentClef,
+//                                                  m_currentKey);
+
+    Accidental accidental =
+        (noteModifier & ModSharp)   ? Sharp :
+        (noteModifier & ModFlat)    ? Flat  :
+        (noteModifier & ModNatural) ? Natural : NoAccidental;
+ 
+    // the "pitch" we read from the file is actually a "height on
+    // staff" in rg4 terminology
+    Rosegarden::NotationDisplayPitch displayPitch(pitch, accidental);
 
     long rtn = displayPitch.getPerformancePitch(m_currentClef,
                                                 m_currentKey);
