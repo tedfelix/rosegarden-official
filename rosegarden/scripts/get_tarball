@@ -1,0 +1,5 @@
+#!/bin/sh
+
+cd /home/glaurent/tmp
+
+wget http://cvs.sourceforge.net/cvstarballs/rosegarden-cvsroot.tar.gz
