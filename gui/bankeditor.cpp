@@ -37,6 +37,8 @@
 #include <kmessagebox.h>
 #include <klistview.h>
 #include <klineedit.h>
+#include <kfiledialog.h>
+#include <kio/netaccess.h>
 
 #include "bankeditor.h"
 #include "widgets.h"
@@ -527,6 +529,10 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_deleteBank     = new QPushButton(i18n("Delete Bank"),             bankBox);
     m_deleteAllBanks = new QPushButton(i18n("Delete All Device Banks"), bankBox);
 
+    m_importBanks = new QPushButton(i18n("Import Bank to Device"), bankBox);
+    m_exportBanks = new QPushButton(i18n("Export Banks"), bankBox);
+
+
     connect(m_listView, SIGNAL(currentChanged(QListViewItem*)),
             this,       SLOT(slotPopulateDevice(QListViewItem*)));
 
@@ -586,6 +592,12 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     connect(m_deleteAllBanks, SIGNAL(clicked()),
             this, SLOT(slotDeleteAllBanks()));
+
+    connect(m_importBanks, SIGNAL(clicked()),
+            this, SLOT(slotImportBank()));
+
+    connect(m_exportBanks, SIGNAL(clicked()),
+            this, SLOT(slotExportBankI()));
 
     // Check for no Midi devices and disable everything
     //
@@ -919,6 +931,84 @@ BankEditorDialog::getCommandHistory()
 {
     return m_doc->getCommandHistory();
 }
+
+void
+BankEditorDialog::slotImportBank()
+{
+    KURL url = KFileDialog::getOpenURL(":ROSEGARDEN", "*.rg",
+                            this, i18n("Import Banks from Rosegarden File"));
+
+    if (url.isEmpty()) return;
+
+    QString target;
+    if (KIO::NetAccess::download(url, target) == false) {
+        KMessageBox::error(this, QString(i18n("Cannot download file %1"))
+                           .arg(url.prettyURL()));
+        return;
+    }
+
+    RosegardenGUIDoc *doc = new RosegardenGUIDoc(this, false, 0);
+
+    // Add some dummy devices for bank population when we open the document.
+    // We guess that the file won't have more than 8 devices.
+    //
+    for (unsigned int i = 0; i < 8; i++)
+    {
+        doc->getStudio().addDevice(std::string("Dummy MIDI Device"),
+                                   i,
+                                   Rosegarden::Device::Midi);
+
+    }
+
+    if (doc->openDocument(target)) {
+
+        Rosegarden::DeviceList *list = doc->getStudio().getDevices();
+        Rosegarden::DeviceListIterator it = list->begin();
+        unsigned int count = 0;
+
+        if (list->size() == 0)
+        {
+             KMessageBox::sorry(this, i18n("No Banks found"));
+             return;
+        }
+        else
+        for (; it != list->end(); ++it)
+        {
+            Rosegarden::MidiDevice *device = 
+                dynamic_cast<Rosegarden::MidiDevice*>(*it);
+
+            if (device)
+            {
+                std::vector<Rosegarden::MidiBank> banks = device->getBanks();
+
+                // We've got a bank on a Device fom this file
+                //
+                if (banks.size())
+                {
+                    if (device->getName() == "")
+                    {
+                        std::cout << "DEVICE " << count++ << std::endl;
+                    }
+                    else
+                    {
+                        std::cout << "DEVICE NAME = "
+                                  << device->getName() << std::endl;
+                    }
+                }
+            }
+
+        }
+
+    }
+
+    delete doc;
+}
+
+void
+BankEditorDialog::slotExportBank()
+{
+}
+
 
 void MidiProgramsEditor::blockAllSignals(bool block)
 {

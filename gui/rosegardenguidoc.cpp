@@ -337,9 +337,12 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
         KMessageBox::error(0, strtoqstr(e));
     }
 
-    // Initialise MIDI controllers
-    //
-    initialiseControllers();
+    if (m_useSequencer)
+    {
+        // Initialise MIDI controllers
+        //
+        initialiseControllers();
+    }
 
     return true;
 }

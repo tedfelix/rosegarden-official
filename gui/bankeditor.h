@@ -183,6 +183,9 @@ public slots:
     void slotDeleteBank();
     void slotDeleteAllBanks();
 
+    void slotImportBank();
+    void slotExportBank();
+
     void slotModifyDeviceOrBankName(QListViewItem*, const QString&,int);
 
 protected:
@@ -200,6 +203,9 @@ protected:
     QPushButton             *m_addBank;
     QPushButton             *m_deleteBank;
     QPushButton             *m_deleteAllBanks;
+
+    QPushButton             *m_importBanks;
+    QPushButton             *m_exportBanks;
 
     std::vector<std::string>                     m_deviceList;
     MidiProgramsEditor::MidiBankContainer        m_bankList;
