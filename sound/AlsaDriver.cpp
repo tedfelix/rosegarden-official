@@ -34,6 +34,7 @@
 #ifdef HAVE_JACK
 #include <jack/types.h>
 #include <unistd.h> // for usleep
+#include <math.h>
 #endif
 
 // This driver implements MIDI in and out via the ALSA (www.alsa-project.org)
@@ -79,6 +80,8 @@ namespace Rosegarden
 static nframes_t    _jackBufferSize;
 static unsigned int _jackSampleRate;
 static bool         _usingAudioQueueVector;
+static sample_t    *_leftTempBuffer;
+static sample_t    *_rightTempBuffer;
 #endif
 
 AlsaDriver::AlsaDriver():
@@ -110,6 +113,10 @@ AlsaDriver::~AlsaDriver()
 
 #ifdef HAVE_JACK
     jack_client_close(m_audioClient);
+
+    delete [] _leftTempBuffer;
+    delete [] _rightTempBuffer;
+
 #endif // HAVE_JACK
 
 }
@@ -661,6 +668,9 @@ AlsaDriver::initialiseAudio()
     //
     _jackBufferSize = jack_get_buffer_size(m_audioClient);
 
+    _leftTempBuffer = new sample_t[_jackBufferSize];
+    _rightTempBuffer = new sample_t[_jackBufferSize];
+
     // Activate the client
     //
     if (jack_activate(m_audioClient))
@@ -681,10 +691,12 @@ AlsaDriver::initialiseAudio()
               << std::endl;
 
 
+    /*
     std::cout << "AlsaDriver::initialiseAudio - "
               << "JACK read latency  = "
               << jack_port_get_latency(m_audioInputPort) 
               << std::endl;
+              */
 
 
     /*
@@ -931,14 +943,14 @@ AlsaDriver::processNotesOff(const RealTime &time)
 }
 
 void
-AlsaDriver::processAudioQueue()
+AlsaDriver::processAudioQueue(const RealTime &playLatency)
 {
     std::vector<PlayableAudioFile*>::iterator it;
-    RealTime currentTime = getSequencerTime();
+    RealTime currentTime = getSequencerTime() + playLatency + playLatency;
 
     for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); ++it)
     {
-        if ((*it)->getStartTime() >= currentTime &&
+        if (currentTime >= (*it)->getStartTime() &&
             (*it)->getStatus() == PlayableAudioFile::IDLE)
         {
             (*it)->setStatus(PlayableAudioFile::PLAYING);
@@ -1369,7 +1381,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
     processMidiOut(mC, playLatency, now);
 
     // do any audio events
-    processAudioQueue();
+    processAudioQueue(playLatency);
 
 }
 
@@ -1507,6 +1519,12 @@ AlsaDriver::processPending(const RealTime &playLatency)
 //
 
 #ifdef HAVE_JACK
+
+
+// The "process" callback is where we do all the work of
+// turning a sample file into a sound.  We de-interleave
+// a WAV and send it out as needs be.
+//
 int
 AlsaDriver::jackProcess(nframes_t nframes, void *arg)
 {
@@ -1514,10 +1532,6 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
 
     if (inst)
     {
-        // protect the audio queue vector from outside intervention
-        //
-        _usingAudioQueueVector = true;
-
         // Get output buffer
         //
         sample_t *leftBuffer = static_cast<sample_t*>
@@ -1527,17 +1541,27 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
             (jack_port_get_buffer(inst->getJackOutputPortRight(),
                                   nframes));
 
-        // Send out silence if we're not playing
+        // Clear temporary buffers
+        //
+        for (unsigned int i = 0 ; i < nframes; i++)
+        {
+            _leftTempBuffer[i] = 0.0f;
+            _rightTempBuffer[i] = 0.0f;
+        }
+
+        // Return if we're not playing yet
         //
         if (!inst->isPlaying())
         {
+            // Ensure we start with silence
+            //
             float silence = 0.0;
-
+    
             for (unsigned int i = 0 ; i < nframes; i++)
             {
                 (*leftBuffer) = silence;
                 leftBuffer++;
-
+    
                 (*rightBuffer) = silence;
                 rightBuffer++;
             }
@@ -1550,13 +1574,23 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
         std::vector<PlayableAudioFile*> &audioQueue = inst->getAudioPlayQueue();
         std::vector<PlayableAudioFile*>::iterator it;
 
+        // From here on in protect the audio queue vector from
+        // outside intervention until we've finished with it.
+        // Don't forget to relinquish it at the end of this block.
+        //
+        _usingAudioQueueVector = true;
+
+
+        int layerCount = 0;
+        int elementCount = 0;
+
         for (it = audioQueue.begin(); it != audioQueue.end(); it++)
         {
 
             // Another thread could've cleared down all the
             // PlayableAudioFiles already.
             //
-            if (inst->isPlaying() && (*it) &&
+            if (inst->isPlaying() &&
                 (*it)->getStatus() == PlayableAudioFile::PLAYING)
             {
                 // get the samples from the WAV and then throw at JACK
@@ -1564,7 +1598,6 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
 
                 // store the samples in a string
                 std::string samples;
-
 
                 // make sure we haven't stopped playing because if we
                 // have the iterator is invalid
@@ -1593,6 +1626,8 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
                 char *endOfSamples = samplePtr + samples.length();
                 float outBytes;
 
+                elementCount = 0;
+
                 while (samplePtr < endOfSamples)
                 {
                     switch(bytes)
@@ -1607,12 +1642,11 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
 
                         case 2: // for 16-bit samples
                             outBytes = (*((short*)(samplePtr))) / 32767.0f;
-                            //outBytes = (*samplePtr))) / 32767.0f;
                             //assert(outBytes >= -1 && outBytes <= 1);
                             samplePtr += 2;
 
-                            (*leftBuffer) = outBytes;
-                            leftBuffer++;
+                            //(*leftBuffer) = outBytes;
+                            _leftTempBuffer[elementCount] += outBytes;
 
                             // Get other sample if we have one
                             //
@@ -1624,8 +1658,10 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
                                 samplePtr += 2;
                             }
 
-                            (*rightBuffer) = outBytes;
-                            rightBuffer++;
+
+                            //(*rightBuffer) = outBytes;
+                            _rightTempBuffer[elementCount] += outBytes;
+                            elementCount++;
                             break;
 
                         default:
@@ -1648,6 +1684,16 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
                     rightBuffer++;
                 }
             }
+
+            layerCount++;
+        }
+
+        // Transfer sum
+        //
+        for (unsigned int i = 0 ; i < nframes; i++)
+        {
+            *(leftBuffer++) = _leftTempBuffer[i];
+            *(rightBuffer++) = _rightTempBuffer[i];
         }
 
         // Process any queue vector operations now it's safe to do so
@@ -1660,6 +1706,7 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
             inst->clearAudioPlayQueue();
 
         _usingAudioQueueVector = false;
+
     }
 
 
@@ -1674,6 +1721,13 @@ AlsaDriver::jackBufferSize(nframes_t nframes, void *)
     std::cout << "AlsaDriver::jackBufferSize - buffer size changed to "
               << nframes << std::endl;
     _jackBufferSize = nframes;
+
+    // Recreate our temporary mix buffers to the new size
+    //
+    delete [] _leftTempBuffer;
+    delete [] _rightTempBuffer;
+    _leftTempBuffer = new sample_t[_jackBufferSize];
+    _rightTempBuffer = new sample_t[_jackBufferSize];
 
     return 0;
 }

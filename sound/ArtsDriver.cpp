@@ -389,7 +389,7 @@ ArtsDriver::processNotesOff(const RealTime &time)
 }
 
 void
-ArtsDriver::processAudioQueue()
+ArtsDriver::processAudioQueue(const RealTime &playLatency)
 {
     // Now check queue for events that need playing
     std::vector<PlayableAudioFile*>::iterator it;
@@ -397,7 +397,7 @@ ArtsDriver::processAudioQueue()
 
     for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); ++it)
     {
-        if ((*it)->getStartTime() >= currentTime && 
+        if (currentTime >= (*it)->getStartTime() && 
             (*it)->getStatus() == PlayableAudioFile::IDLE)
         {
             /*
@@ -914,7 +914,7 @@ ArtsDriver::processEventsOut(const MappedComposition &mC,
     processMidiOut(mC, playLatency, now);
 
     // do any audio events
-    processAudioQueue();
+    processAudioQueue(playLatency);
 }
 
 void

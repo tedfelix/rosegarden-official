@@ -153,7 +153,7 @@ protected:
                                 const RealTime &playLatency,
                                 bool now);
 
-    virtual void processAudioQueue();
+    virtual void processAudioQueue(const RealTime &playLatency);
 
 private:
     RealTime getAlsaTime();

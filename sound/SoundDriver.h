@@ -285,7 +285,7 @@ protected:
     virtual void processMidiOut(const MappedComposition &mC,
                                 const RealTime &playLatency,
                                 bool now) = 0;
-    virtual void processAudioQueue() = 0;
+    virtual void processAudioQueue(const RealTime &playLatency) = 0;
     virtual void generateInstruments() = 0;
 
     // Audio
