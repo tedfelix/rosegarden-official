@@ -75,7 +75,7 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
     //     }
 
     emit mousePressed(evTime, evPitch, e, 0);
-    
+
 }
 
 void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
@@ -536,17 +536,17 @@ void MatrixView::mousePressed(Rosegarden::timeT time, int pitch,
     kdDebug(KDEBUG_AREA) << "MatrixView::mousePressed at pitch "
                          << pitch << ", time " << time << endl;
 
-    m_tool->handleMousePress(pitch, time, 0, e, el);
+    m_tool->handleMousePress(time, pitch, 0, e, el);
 }
 
 void MatrixView::mouseMoved(Rosegarden::timeT time, QMouseEvent* e)
 {
-    m_tool->handleMouseMove(0, time, e);
+    m_tool->handleMouseMove(time, 0, e);
 }
 
 void MatrixView::mouseReleased(Rosegarden::timeT time, QMouseEvent* e)
 {
-    m_tool->handleMouseRelease(0, time, e);
+    m_tool->handleMouseRelease(time, 0, e);
 }
 
 
@@ -581,6 +581,121 @@ void MatrixView::slotEditCopy()
 void MatrixView::slotEditPaste()
 {
 }
+
+
+
+//////////////////////////////////////////////////////////////////////
+// Move this to base
+
+#include "SegmentNotationHelper.h"
+
+namespace Rosegarden {
+class SegmentMatrixHelper : protected SegmentNotationHelper
+{
+public:
+    SegmentMatrixHelper(Segment &t) : SegmentNotationHelper(t) { }
+
+    SegmentHelper::segment;
+
+    iterator insertNote(Event*);
+
+    iterator deleteNote(Event*);
+
+protected:
+    iterator insertSingleSomething(iterator i, Event* e);
+
+};
+
+Segment::iterator SegmentMatrixHelper::insertNote(Event* e)
+{
+    iterator i, j;
+
+    segment().getTimeSlice(e->getAbsoluteTime(), i, j);
+
+    timeT duration = e->getDuration();
+
+    while (i != end() && (*i)->getDuration() == 0) ++i;
+
+    if (i == end()) {
+	return insertSingleSomething(i, e);
+    }
+
+    // If there's a rest at the insertion position, merge it with any
+    // following rests, if available, until we have at least the
+    // duration of the new note.
+    collapseRestsForInsert(i, duration);
+
+    timeT existingDuration = (*i)->getDuration();
+
+    if (duration == existingDuration) {
+
+        // 1. If the new note or rest is the same length as an
+        // existing note or rest at that position, chord the existing
+        // note or delete the existing rest and insert.
+
+	cerr << "Durations match; doing simple insert" << endl;
+
+    } else if (duration < existingDuration) {
+
+        cerr << "Found rest, splitting" << endl;
+        iterator last = expandIntoTie(i, duration);
+
+        // Recover viability for the second half of any split rest
+
+        if (last != end() && !isViable(*last, 1)) {
+            makeRestViable(last);
+        }
+
+    } else if (duration > existingDuration) {
+        // Do nothing - should never happen
+
+    }
+    
+    return insertSingleSomething(i, e);
+    
+}
+
+
+Segment::iterator
+SegmentMatrixHelper::insertSingleSomething(iterator i, Event* e)
+{
+    timeT time;
+    bool eraseI = false;
+
+    if (i == end()) {
+	time = segment().getDuration();
+    } else {
+	time = (*i)->getAbsoluteTime();
+	if ((*i)->isa(Note::EventRestType)) eraseI = true;
+    }
+
+//     e->setAbsoluteTime(time);
+//     e->setDuration(duration);
+
+//     if (!isRest) {
+//         e->set<Int>(PITCH, pitch);
+//         if (acc != Accidentals::NoAccidental) {
+//             e->set<String>(ACCIDENTAL, acc);
+//         }
+//         setInsertedNoteGroup(e, i);
+//     }
+
+    if (eraseI) erase(i);
+
+    return insert(e);
+}
+
+Segment::iterator SegmentMatrixHelper::deleteNote(Event* e)
+{
+    return begin();
+}
+
+
+
+} // closing namespace Rosegarden
+
+// Move this to base - end
+//////////////////////////////////////////////////////////////////////
 
 
 //////////////////////////////////////////////////////////////////////
@@ -657,7 +772,7 @@ void MatrixPainter::handleLeftButtonPress(Rosegarden::timeT time,
     
     time = (time / noteDuration) * noteDuration;
 
-    Event* el = newNote.getAsNoteEvent(pitch, time);
+    Event* el = newNote.getAsNoteEvent(time, pitch);
 
     m_currentElement = new MatrixElement(el);
 
@@ -714,7 +829,9 @@ void MatrixPainter::handleMouseRelease(Rosegarden::timeT,
     //
     if (m_currentElement->getDuration() != 0) {
         
-        m_currentStaff->insert(m_currentElement->event(), true);
+        //m_currentStaff->insert(m_currentElement->event(), true);
+        Rosegarden::SegmentMatrixHelper helper(m_currentStaff->getSegment());
+        helper.insertNote(m_currentElement->event());
 
     } else {
 
@@ -733,3 +850,4 @@ void MatrixPainter::setResolution(Rosegarden::Note::Type note)
 
 
 const QString MatrixPainter::ToolName = "painter";
+
