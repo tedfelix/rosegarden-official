@@ -553,42 +553,37 @@ MmappedSegmentsMetaIterator::getPlayingAudioSegments(const Rosegarden::RealTime 
 {
     m_playingAudioSegments.clear();
 
-    MmappedSegment::iterator *iter;
-
     for(mmappedsegments::iterator i = m_segments.begin(); i != m_segments.end(); ++i)
     {
-        iter = new MmappedSegment::iterator(i->second);
+        MmappedSegment::iterator iter(i->second);
 
-        while (!iter->atEnd()) 
+        while (!iter.atEnd())
         {
-            MappedEvent *evt = new MappedEvent(*(*iter));
+            MappedEvent evt(*iter);
 
             // If there's an audio event and it should be playing at this time
             // then flag as such.
             // 
-            if (evt->getType() == MappedEvent::Audio && 
-                songPosition > evt->getEventTime() &&
-                songPosition < evt->getEventTime() + evt->getDuration())
+            if (evt.getType() == MappedEvent::Audio && 
+                songPosition > evt.getEventTime() &&
+                songPosition < evt.getEventTime() + evt.getDuration())
             {
                 // Check for this track being muted
                 //
-                if (m_controlBlockMmapper->isTrackMuted(evt->getTrackId()) == false)
+                if (m_controlBlockMmapper->isTrackMuted(evt.getTrackId()) == false)
                    /* &&
                     if (m_controlBlockMmapper->isSolo() == false ||
                             return (evt->getTrackId() == m_controlBlockMmapper->getSelectedTrack());
 
                             */
                 {
-                    m_playingAudioSegments.push_back(evt->getRuntimeSegmentId());
+                    m_playingAudioSegments.push_back(evt.getRuntimeSegmentId());
                 }
             }
 
-            delete evt;
-
-            ++(*iter);
+            ++iter;
         }
 
-        delete iter;
     }
 
     return m_playingAudioSegments;
@@ -597,28 +592,25 @@ MmappedSegmentsMetaIterator::getPlayingAudioSegments(const Rosegarden::RealTime 
 
 // Get a MappedEvent that describes an audio segment - the caller frees this
 //
-MappedEvent* 
+MappedEvent*
 MmappedSegmentsMetaIterator::getAudioSegment(int segmentId)
 {
-    MmappedSegment::iterator *iter;
 
     for (mmappedsegments::iterator i = m_segments.begin(); i != m_segments.end(); ++i)
     {
-        iter = new MmappedSegment::iterator(i->second);
+        MmappedSegment::iterator iter(i->second);
 
-         while (!iter->atEnd())
+         while (!iter.atEnd())
          {
-            MappedEvent *evt = new MappedEvent(*(*iter));
+            MappedEvent evt(*iter);
 
-            if (evt->getType() == MappedEvent::Audio &&
-                evt->getRuntimeSegmentId() == segmentId)
-                return evt;
+            if (evt.getType() == MappedEvent::Audio &&
+                evt.getRuntimeSegmentId() == segmentId)
+                return new MappedEvent(evt);
 
-            delete evt;
-            ++(*iter);
+            ++iter;
          }
 
-        delete iter;
     }
 
 
