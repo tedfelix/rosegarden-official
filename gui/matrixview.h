@@ -36,11 +36,56 @@ namespace Rosegarden { class Segment; }
 
 class RosegardenGUIDoc;
 
-class MatrixElement : public QCanvasRectangle
+class MatrixElement : public Rosegarden::ViewElement
 {
 public:
-    MatrixElement(QCanvas *canvas);
-    MatrixElement(const QRect&, QCanvas* canvas);
+    MatrixElement(Rosegarden::Event *event);
+
+    virtual ~MatrixElement();
+
+    void createCanvasRect(QCanvas* c, const QRect&);
+
+    /**
+     * Returns the X coordinate of the element, as computed by the
+     * layout. This is not the coordinate of the associated canvas
+     * item.
+     *
+     * @see getEffectiveX()
+     */
+    double getLayoutX() { return m_rect.x(); }
+
+    /**
+     * Returns the Y coordinate of the element, as computed by the
+     * layout. This is not the coordinate of the associated canvas
+     * item.
+     *
+     * @see getEffectiveY()
+     */
+    double getLayoutY() { return m_rect.y(); }
+
+    /**
+     * Sets the X coordinate which was computed by the layout engine
+     * @see getLayoutX()
+     */
+    void setLayoutX(double x) { m_rect.setX(int(x)); }
+
+    /**
+     * Sets the Y coordinate which was computed by the layout engine
+     * @see getLayoutY()
+     */
+    void setLayoutY(double y) { m_rect.setY(int(y)); }
+
+
+    void setXOffset(double x) { m_xOffset = x; }
+    void setYOffset(double y) { m_yOffset = y; }
+
+protected:
+    QCanvasRectangle* m_canvasRect;
+
+    QRect m_rect;
+
+    double m_xOffset;
+    double m_yOffset;
 };
 
 
@@ -96,7 +141,36 @@ public:
      * Perform the layout
      */
     void layout(StaffType&);
+
+protected:
+    double m_totalWidth;
 };
+
+//------------------------------------------------------------
+
+typedef Rosegarden::ViewElementList<MatrixElement> MatrixElementList;
+
+class MatrixStaff : public Rosegarden::Staff<MatrixElement>
+{
+public:
+    MatrixStaff(QCanvas*, Rosegarden::Segment*, unsigned int id);
+
+    void renderElements(MatrixElementList::iterator from,
+			MatrixElementList::iterator to);
+
+    /**
+     * Call renderElements(from, to) on the whole staff.
+     */
+    void renderElements();
+
+    int getId() { return m_id; }
+
+protected:
+    QCanvas* m_canvas;
+
+    unsigned int m_id;
+};
+
 
 //------------------------------------------------------------
 
@@ -169,6 +243,11 @@ protected:
     //--------------- Data members ---------------------------------
 
     MatrixCanvasView* m_canvasView;
+
+    std::vector<MatrixStaff*> m_staffs;
+    
+    MatrixHLayout* m_hLayout;
+    MatrixVLayout* m_vLayout;
 };
 
 

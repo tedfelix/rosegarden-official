@@ -24,6 +24,7 @@
 #include <kaction.h>
 #include <klocale.h>
 #include <kstdaction.h>
+#include <kmessagebox.h>
 
 #include "matrixview.h"
 #include "rosegardenguidoc.h"
@@ -41,18 +42,94 @@ MatrixCanvasView::~MatrixCanvasView()
 
 //----------------------------------------------------------------------
 
-MatrixElement::MatrixElement(QCanvas *canvas)
-    : QCanvasRectangle(canvas)
+MatrixVLayout::MatrixVLayout()
 {
-    setBrush(blue);
 }
 
-MatrixElement::MatrixElement(const QRect& r, QCanvas* canvas)
-    : QCanvasRectangle(r, canvas)
+MatrixVLayout::~MatrixVLayout()
 {
-    setBrush(blue);
 }
 
+void MatrixVLayout::layout(MatrixVLayout::StaffType& staff)
+{
+    MatrixElementList *notes = staff.getViewElementList();
+
+    MatrixElementList::iterator from = notes->begin();
+    MatrixElementList::iterator to = notes->end();
+    MatrixElementList::iterator i;
+
+    for (i = from; i != to; ++i) {
+
+        MatrixElement *el = (*i);
+
+    }
+    
+}
+
+//-----------------------------------
+
+MatrixHLayout::MatrixHLayout()
+    : m_totalWidth(0)
+{
+}
+
+MatrixHLayout::~MatrixHLayout()
+{
+}
+
+void MatrixHLayout::layout(MatrixHLayout::StaffType& staff)
+{
+    m_totalWidth = 0;
+}
+
+double MatrixHLayout::getTotalWidth()
+{
+    return m_totalWidth;
+}
+
+unsigned int MatrixHLayout::getBarLineCount(StaffType &staff)
+{
+    return 0;
+}
+
+double MatrixHLayout::getBarLineX(StaffType &staff, unsigned int barNo)
+{
+    return 0;
+}
+
+//----------------------------------------------------------------------
+
+MatrixElement::MatrixElement(Rosegarden::Event *event)
+    : Rosegarden::ViewElement(event),
+      m_canvasRect(0),
+      m_xOffset(0.0),
+      m_yOffset(0.0)
+{
+}
+
+MatrixElement::~MatrixElement()
+{
+    delete m_canvasRect;
+}
+
+void MatrixElement::createCanvasRect(QCanvas* c, const QRect& r)
+{
+    delete m_canvasRect;
+
+    m_canvasRect = new QCanvasRectangle(r, c);
+
+    m_canvasRect->setBrush(Qt::blue);
+}
+
+
+//----------------------------------------------------------------------
+MatrixStaff::MatrixStaff(QCanvas* c, Rosegarden::Segment* segment,
+                         unsigned int id)
+    : Rosegarden::Staff<MatrixElement>(*segment),
+      m_canvas(c),
+      m_id(id)
+{
+}
 
 //----------------------------------------------------------------------
 
@@ -65,6 +142,9 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
                                         this))
 {
     setCentralWidget(m_canvasView);
+
+    for (unsigned int i = 0; i < segments.size(); ++i)
+        m_staffs.push_back(new MatrixStaff(canvas(), segments[i], i));
 
     applyLayout();
 }
@@ -117,6 +197,10 @@ void MatrixView::initStatusBar()
 
 bool MatrixView::applyLayout()
 {
+    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+        m_hLayout->layout(*m_staffs[i]);
+        m_vLayout->layout(*m_staffs[i]);
+    }
 }
 
 
