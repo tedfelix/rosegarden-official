@@ -427,15 +427,19 @@ AlsaDriver::generateInstruments()
              */
 
 	char clientId[60];
+	PortDirection dir((*it)->m_direction);
 
 	if ((*it)->m_client < 64)
-	    sprintf(clientId, "System MIDI device %d",
+	    sprintf(clientId, "System %s MIDI device %d",
+		    (dir == Duplex ? "duplex" : dir == WriteOnly ? "write-only" : "read-only"),
 		    systemClientNo++);
 	else if ((*it)->m_client < 128)
-	    sprintf(clientId, "Hardware MIDI device %d",
+	    sprintf(clientId, "Hardware %s MIDI device %d",
+		    (dir == Duplex ? "duplex" : dir == WriteOnly ? "write-only" : "read-only"),
 		    hardwareClientNo++);
 	else
-	    sprintf(clientId, "Software MIDI device %d",
+	    sprintf(clientId, "Software %s MIDI device %d",
+		    (dir == Duplex ? "duplex" : dir == WriteOnly ? "write-only" : "read-only"),
 		    softwareClientNo++);
 
 	std::string clientName = clientId;
@@ -2131,7 +2135,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
             Rosegarden::DeviceId recordDevice =
                (Rosegarden::DeviceId)((*i)->getData1());
 
-            int recordPort = (int)((*i)->getData2());
+//!!!            int recordPort = (int)((*i)->getData2());
 
             // Unset connections
             //
@@ -2139,7 +2143,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 
             // Special case to set for all record ports
             //
-            if (recordDevice == 255 && recordPort == 255)
+            if (recordDevice == 255 /*!!! && recordPort == 255 */)
             {
                 /* set all record devices */
                 std::cout << "AlsaDriver::processEventsOut - "
@@ -2171,7 +2175,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
             {
                 // Otherwise just for the one device and port
                 //
-                setRecordDevice(recordDevice, recordPort);
+                setRecordDevice(recordDevice /*!!!, recordPort */);
             }
         }
 
@@ -3457,8 +3461,24 @@ AlsaDriver::setPluginInstanceBypass(InstrumentId id,
 // MIDI record device.
 //
 void
-AlsaDriver::setRecordDevice(Rosegarden::DeviceId id, int port)
+AlsaDriver::setRecordDevice(Rosegarden::DeviceId id /*!!!, int port */)
 {
+    // Locate a suitable port
+    //
+    if (m_devicePortMap.find(id) == m_devicePortMap.end()) {
+        std::cerr << "AlsaDriver::setRecordDevice - "
+                  << "couldn't match device id (" << id << ") to ALSA port"
+                  << std::endl;
+        return;
+    }
+
+    ClientPortPair pair = m_devicePortMap[id];
+
+    snd_seq_addr_t sender, dest;
+    dest.client = pair.first;
+    dest.port = pair.second;
+
+#ifdef NOT_DEFINED
     Rosegarden::InstrumentId typicalId = 0;
 
     // Find a typical InstrumentId for this device
@@ -3473,11 +3493,6 @@ AlsaDriver::setRecordDevice(Rosegarden::DeviceId id, int port)
         }
     }
 
-    // Locate a suitable port
-    //
-    snd_seq_addr_t sender, dest;
-    dest.client = m_client;
-    dest.port = m_port;
 
     std::vector<AlsaPortDescription *>::iterator it = m_alsaPorts.begin();
     for (; it != m_alsaPorts.end(); ++it)
@@ -3507,6 +3522,7 @@ AlsaDriver::setRecordDevice(Rosegarden::DeviceId id, int port)
                   << ") to record device" << std::endl;
         return;
     }
+#endif
 
     snd_seq_port_subscribe_t *subs;
     snd_seq_port_subscribe_alloca(&subs);

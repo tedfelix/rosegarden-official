@@ -30,10 +30,7 @@ MappedInstrument::MappedInstrument():
     m_channel(0),
     m_id(0),
     m_name(std::string("")),
-//!!!    m_port(0),
     m_audioChannels(0)
-/*!!!,
-  m_direction(WriteOnly)*/
 {
 }
 
@@ -44,16 +41,13 @@ MappedInstrument::MappedInstrument(Instrument::InstrumentType type,
     m_channel(channel),
     m_id(id),
     m_name(std::string("")),
-//!!!    m_port(0),
-    m_audioChannels(0)/*!!!,
-			m_direction(WriteOnly)*/
+    m_audioChannels(0)
 {
 }
 
 MappedInstrument::MappedInstrument(Instrument::InstrumentType type,
                                    MidiByte channel,
                                    InstrumentId id,
-//!!!                                   int port,
                                    const std::string &name,
                                    DeviceId device):
     m_type(type),
@@ -61,9 +55,7 @@ MappedInstrument::MappedInstrument(Instrument::InstrumentType type,
     m_id(id),
     m_name(name),
     m_device(device),
-//!!!    m_port(port),
-    m_audioChannels(0)/*!!!,
-			m_direction(WriteOnly)*/
+    m_audioChannels(0)
 {
 }
 
@@ -73,9 +65,7 @@ MappedInstrument::MappedInstrument(const Instrument &instr):
     m_id(instr.getId()),
     m_name(instr.getName()),
     m_device((instr.getDevice())->getId()),
-//!!!    m_port(0),
-    m_audioChannels(instr.getAudioChannels())/*!!!,
-					       m_direction(WriteOnly)*/
+    m_audioChannels(instr.getAudioChannels())
 {
 }
 
@@ -85,17 +75,14 @@ MappedInstrument::MappedInstrument(Instrument *instr):
     m_id(instr->getId()),
     m_name(instr->getName()),
     m_device(instr->getDevice()->getId()),
-//!!!    m_port(0),
-    m_audioChannels(instr->getAudioChannels())/*!!!,
-						m_direction(WriteOnly)*/
+    m_audioChannels(instr->getAudioChannels())
 {
 }
 
 QDataStream&
 operator>>(QDataStream &dS, MappedInstrument *mI)
 {
-    unsigned int type, channel, id, device, audioChannels;//!!!, direction;
-//!!!    int port;
+    unsigned int type, channel, id, device, audioChannels;
     QString name;
 
     dS >> type;
@@ -103,18 +90,14 @@ operator>>(QDataStream &dS, MappedInstrument *mI)
     dS >> id;
     dS >> name;
     dS >> device;
-//!!!    dS >> port;
     dS >> audioChannels;
-//!!!    dS >> direction;
 
     mI->setType(Instrument::InstrumentType(type));
     mI->setChannel(MidiByte(channel));
     mI->setId(InstrumentId(id));
     mI->setName(std::string(name.data()));
     mI->setDevice(DeviceId(device));
-//!!!    mI->setPort(port);
     mI->setAudioChannels(audioChannels);
-//!!!    mI->setDirection((PortDirection)direction);
 
     return dS;
 }
@@ -122,8 +105,7 @@ operator>>(QDataStream &dS, MappedInstrument *mI)
 QDataStream&
 operator>>(QDataStream &dS, MappedInstrument &mI)
 {
-    unsigned int type, channel, id, device, audioChannels;//!!!, direction;
-//!!!    int port;
+    unsigned int type, channel, id, device, audioChannels;
     QString name;
 
     dS >> type;
@@ -131,18 +113,14 @@ operator>>(QDataStream &dS, MappedInstrument &mI)
     dS >> id;
     dS >> name;
     dS >> device;
-//!!!    dS >> port;
     dS >> audioChannels;
-//!!!    dS >> direction;
 
     mI.setType(Instrument::InstrumentType(type));
     mI.setChannel(MidiByte(channel));
     mI.setId(InstrumentId(id));
     mI.setName(std::string(name.data()));
     mI.setDevice(DeviceId(device));
-//!!!    mI.setPort(port);
     mI.setAudioChannels(audioChannels);
-//!!!    mI.setDirection((PortDirection)direction);
 
     return dS;
 }
@@ -155,9 +133,7 @@ operator<<(QDataStream &dS, MappedInstrument *mI)
     dS << (unsigned int)mI->getId();;
     dS << QString(mI->getName().c_str());
     dS << (unsigned int)mI->getDevice();
-//!!!    dS << (int)mI->getPort();
     dS << (unsigned int)mI->getAudioChannels();
-//!!!    dS << (unsigned int)mI->getDirection();
 
     return dS;
 }
@@ -171,9 +147,7 @@ operator<<(QDataStream &dS, const MappedInstrument &mI)
     dS << (unsigned int)mI.getId();;
     dS << QString(mI.getName().c_str());
     dS << (unsigned int)mI.getDevice();
-//!!!    dS << (int)mI.getPort();
     dS << (unsigned int)mI.getAudioChannels();
-//!!!    dS << (unsigned int)mI.getDirection();
 
     return dS;
 }

@@ -53,7 +53,6 @@ public:
     MappedInstrument(Instrument::InstrumentType type,
                      MidiByte channel,
                      InstrumentId id,
-//!!!                     int port,
                      const std::string &name,
                      DeviceId device);
 
@@ -77,19 +76,11 @@ public:
 
     void setDevice(DeviceId device) { m_device = device; }
     DeviceId getDevice() const { return m_device; }
-/*!!!
-    void setPort(int port) { m_port = port; }
-    int getPort() const { return m_port; }
-*/
+
     // How many audio channels we've got on this audio MappedInstrument
     //
     unsigned int getAudioChannels() const { return m_audioChannels; }
     void setAudioChannels(unsigned int channels) { m_audioChannels = channels; }
-
-/*!!! no -- query from device instead please
-    PortDirection getDirection() const { return m_direction; }
-    void setDirection(PortDirection direction) { m_direction = direction; }
-*/
 
     friend QDataStream& operator>>(QDataStream &dS, MappedInstrument *mI);
     friend QDataStream& operator<<(QDataStream &dS, MappedInstrument *mI);
@@ -104,21 +95,10 @@ private:
     std::string                 m_name;
     DeviceId                    m_device;
 
-    // If this is a MIDI MappedInstrument then we might have a port
-    // number.
-    //
-//!!    int                         m_port;
-
     // If this is an audio MappedInstrument then how many channels
     // are associated with it?
     //
     unsigned int                m_audioChannels;
-
-    // Instrument direction - like PortDirection shows what we
-    // can do with this Instrument.
-    //
-//!!!    PortDirection               m_direction;
-
 };
 
 }

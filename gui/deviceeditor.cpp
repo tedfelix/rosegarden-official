@@ -140,6 +140,9 @@ DeviceEditorDialog::DeviceEditorDialog(QWidget *parent,
 	QComboTableItem *item = new QComboTableItem(m_table, connectionList, false);
 	item->setCurrentItem(currentConnectionIndex);
 	m_table->setItem(deviceCount, 1, item);
+
+	m_table->adjustRow(deviceCount);
+	++deviceCount;
     }
 
     m_table->adjustColumn(0);

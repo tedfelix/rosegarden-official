@@ -160,7 +160,7 @@ public:
 
     // Set the record device
     //
-    void setRecordDevice(Rosegarden::DeviceId id, int port);
+    void setRecordDevice(Rosegarden::DeviceId id /*!!!, int port */);
     void unsetRecordDevices();
 
     virtual bool canReconnect(Rosegarden::Device::DeviceType type);
