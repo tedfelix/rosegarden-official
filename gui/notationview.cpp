@@ -90,7 +90,7 @@ EventSelection::~EventSelection()
 
 bool EventSelection::contains(Event *e) const
 {
-    for (eventcontainer::iterator i = m_trackEvents.begin(); 
+    for (eventcontainer::const_iterator i = m_trackEvents.begin(); 
 	 i != m_trackEvents.end(); ++i) {
 	if ((*i) == e) return true;
     }
