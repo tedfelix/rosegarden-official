@@ -83,9 +83,10 @@ public:
     /**
      * construtor of RosegardenGUIApp, calls all init functions to
      * create the application.
+     * \arg useSequencer : if true, the sequencer is launched
      * @see initMenuBar initToolBar
      */
-    RosegardenGUIApp();
+    RosegardenGUIApp(bool useSequencer = true);
 
     virtual ~RosegardenGUIApp();
 
@@ -687,6 +688,7 @@ private:
     Rosegarden::timeT m_storedLoopStart;
     Rosegarden::timeT m_storedLoopEnd;
 
+    bool m_useSequencer;
 };
 
 /**

@@ -69,7 +69,7 @@ using Rosegarden::timeT;
 
 static Rosegarden::MappedComposition mappComp;
 
-RosegardenGUIApp::RosegardenGUIApp()
+RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
     : KMainWindow(0), RosegardenIface(this), DCOPObject("RosegardenIface"),
       m_config(kapp->config()),
       m_fileRecent(0),
@@ -80,14 +80,16 @@ RosegardenGUIApp::RosegardenGUIApp()
       m_transport(0),
       m_originatingJump(false),
       m_storedLoopStart(0),
-      m_storedLoopEnd(0)
+      m_storedLoopEnd(0),
+      m_useSequencer(useSequencer)
 {
     // accept dnd
     setAcceptDrops(true);
 
     // Try to start the sequencer
     //
-    launchSequencer();
+    if (m_useSequencer) launchSequencer();
+    else kdDebug(KDEBUG_AREA) << "RosegardenGUIApp : don't use sequencer\n";
 
     ///////////////////////////////////////////////////////////////////
     // call inits to invoke all other construction parts
