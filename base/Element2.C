@@ -81,8 +81,10 @@ Element2::Element2(const string &package, const string &type)
 }
 
 Element2::Element2(const Element2 &e)
-    : m_duration(0),
-      m_absoluteTime(0),
+    : m_package(e.package()),
+      m_type(e.type()),
+      m_duration(e.duration()),
+      m_absoluteTime(e.absoluteTime()),
       m_viewElements(0)
 {
     copyFrom(e);
