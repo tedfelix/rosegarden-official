@@ -23,6 +23,7 @@
 
 #include "Event.h"
 #include "Segment.h"
+#include "Studio.h"
 #include "SegmentNotationHelper.h"
 #include "Composition.h"
 #include "NotationTypes.h"
@@ -55,18 +56,21 @@ using namespace Rosegarden::Marks;
 
 using namespace Rosegarden::BaseProperties;
 
-RG21Loader::RG21Loader(const QString& fileName)
+RG21Loader::RG21Loader(const QString& fileName, Rosegarden::Studio *studio)
     : m_file(fileName),
       m_stream(0),
+      m_studio(studio),
       m_composition(0),
       m_currentSegment(0),
       m_currentSegmentTime(0),
       m_currentSegmentNb(0),
       m_currentClef(Clef::Treble),
+      m_currentInstrumentId(Rosegarden::MidiInstrumentBase),
       m_inGroup(false),
       m_tieStatus(0),
       m_nbStaves(0)
 {
+    m_studio->unassignAllInstruments();
 
     if (m_file.open(IO_ReadOnly)) {
 
@@ -494,7 +498,29 @@ bool RG21Loader::parseBarType()
 
 bool RG21Loader::parseStaveType()
 {
-    // not implemented yet
+    //!!! tags & connected are not yet implemented
+
+    if (m_tokens.count() < 9) return false;
+    if (!m_composition) return false;
+
+    bool isNumeric = false;
+
+    int staffNo = m_tokens[1].toInt(&isNumeric);
+    if (!isNumeric) return false;
+
+    int programNo = m_tokens[8].toInt();
+
+    if (staffNo < m_composition->getNbTracks()) {
+
+	Rosegarden::Track *track = m_composition->getTrackByIndex(staffNo);
+
+	if (track) {
+	    Rosegarden::Instrument *instr =
+		m_studio->assignMidiProgramToInstrument(programNo, false);
+	    track->setInstrument(instr->getID());
+	} 
+    }
+
     return true;
 }
 
@@ -528,11 +554,21 @@ timeT RG21Loader::convertRG21Duration(QStringList::Iterator& i)
 void RG21Loader::closeSegmentOrComposition()
 {
     if (m_currentSegment) {
-        m_currentSegment->setTrack(m_currentSegmentNb - 1);
+
+	Rosegarden::TrackId trackId = m_currentSegmentNb - 1;
+
+        m_currentSegment->setTrack(trackId);
+
+	Rosegarden::Track *track = new Rosegarden::Track
+	    (trackId, m_currentInstrumentId, trackId,
+	     m_currentStaffName.latin1(), false); 
+
+	m_composition->addTrack(track);
         m_composition->addSegment(m_currentSegment);
         m_currentSegment = 0;
         m_currentSegmentTime = 0;
         m_currentClef = Clef(Clef::Treble);
+
     } else {
         // ??
     }

@@ -29,6 +29,7 @@
 
 #include "NotationTypes.h"
 
+class Rosegarden::Studio;
 class Rosegarden::Composition;
 class Rosegarden::Segment;
 
@@ -41,7 +42,7 @@ public:
     /**
      * Load and parse the RG2.1 file \a fileName
      */
-    RG21Loader(const QString& fileName);
+    RG21Loader(const QString& fileName, Rosegarden::Studio *);
 
     ~RG21Loader();
     
@@ -107,12 +108,14 @@ protected:
     QFile m_file;
     QTextStream *m_stream;
 
+    Rosegarden::Studio *m_studio;
     Rosegarden::Composition* m_composition;
     Rosegarden::Segment* m_currentSegment;
     unsigned int m_currentSegmentTime;
     unsigned int m_currentSegmentNb;
     Rosegarden::Clef m_currentClef;
     Rosegarden::Key m_currentKey;
+    Rosegarden::InstrumentId m_currentInstrumentId;
 
     typedef std::map<int, Rosegarden::Event *> EventIdMap;
     EventIdMap m_indicationsExtant;

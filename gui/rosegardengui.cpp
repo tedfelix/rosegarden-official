@@ -1326,7 +1326,7 @@ void RosegardenGUIApp::importRG21File(const QString &file)
 {
     SetWaitCursor waitCursor;
 
-    RG21Loader rg21Loader(file);
+    RG21Loader rg21Loader(file, &m_doc->getStudio());
 
     m_doc->closeDocument();
     m_doc->newDocument();
