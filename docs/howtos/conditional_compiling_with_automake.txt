@@ -1,0 +1,47 @@
+Very useful piece of information found on Google groups:
+
+http://groups.google.com/groups?hl=en&threadm=716d9078.0204171044.50322f9e%40posting.google.com&rnum=1&prev=/groups%3Fq%3DAM_CONDITIONAL%26hl%3Den%26scoring%3Dd%26selm%3D716d9078.0204171044.50322f9e%2540posting.google.com%26rnum%3D1
+
+-------------------------------------------------------------------------------
+
+If you wish to conditionally compile `hello-linux.c' in hello, you
+should have your configure.in conditionally add its object file
+(hello-linux.o) to LIBOBJS if it needs to be built and linked in. For
+example:
+
+  AC_SUBST(LIBOBJS)
+      AC_CHECK_FUNCS(hello, [],
+                          [LIBOBJS="$LIBOBJS hello-linux.o"])
+
+      Then, in your `Makefile.am', add @LIBOBJS@ to the hello_LDADD
+      variable:
+
+      hello_LDADD = @LIBOBJS@
+
+      Due to the special treatment of @LIBOJBS@ when it appears in _LADD
+      variables (see "Special handling for LIBOBJS and ALLOCA"),
+      hello-linux.c will be automatically recognized as the parent of
+      hello-linux.o, and it will be added to the program's sources (and the
+              list of files to distrubute).
+      ---------------------------------------------------------------------------
+
+      I've added this suggestion to the GNATs bug tracker for automake, but
+      I'm adding it here so that other hapless fools like me can find it on
+      Usenet, too.
+
+      Finally, I also discovered that an alternative method of getting
+      conditional files to compile is to put them into hello_DEPENDENCIES as
+      well as hello_LDADD.  In this case you can use whatever macro name you
+      want instead of LIBOBJS. But I'm assuming that the @LIBOBJS@ method is
+      best (it seems to link the source files for the conditionally compiled
+              objects into the distribution information).
+
+      Cheers,
+
+      --
+      -----------------------------------------------------------------------
+      | Jason Duell                               jcduell@lbl.gov
+      | NERSC Future Technologies Group           Tel: +1-510-495-2354
+      | Lawrence Berkeley National Laboratory     Fax: +1-510-495-2998
+      |
+
