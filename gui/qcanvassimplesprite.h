@@ -70,6 +70,27 @@ protected:
 
 };
 
+class MatrixElement;
+
+/**
+ * A QCanvasRectangle referencing a MatrixElement
+ */
+class QCanvasMatrixRectangle : public QCanvasRectangle
+{
+public:
+    QCanvasMatrixRectangle(MatrixElement&, QCanvas*);
+
+    virtual ~QCanvasMatrixRectangle();
+    
+    MatrixElement& getMatrixElement() { return m_matrixElement; }
+    
+protected:
+    //--------------- Data members ---------------------------------
+
+    MatrixElement& m_matrixElement;
+
+};
+
 
 /**
  * A GC for QCanvasPixmapArray which have to be deleted seperatly

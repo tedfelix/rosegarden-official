@@ -128,6 +128,19 @@ QCanvasNotationSprite::~QCanvasNotationSprite()
 
 //////////////////////////////////////////////////////////////////////
 
+QCanvasMatrixRectangle::QCanvasMatrixRectangle(MatrixElement& n,
+                                               QCanvas* canvas)
+    : QCanvasRectangle(canvas),
+      m_matrixElement(n)
+{
+}
+
+QCanvasMatrixRectangle::~QCanvasMatrixRectangle()
+{
+}
+
+//////////////////////////////////////////////////////////////////////
+
 void PixmapArrayGC::registerForDeletion(QCanvasPixmapArray* array)
 {
     m_pixmapArrays.push_back(array);
