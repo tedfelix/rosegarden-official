@@ -128,6 +128,9 @@ namespace RosegardenGUIColours
     extern const QColor MuteTrackLED;
     extern const QColor RecordTrackLED;
 
+    extern const QColor PlaybackFaderOutline;
+    extern const QColor RecordFaderOutline;
+
     Rosegarden::Colour convertColour(const QColor &input);
     QColor convertColour(const Rosegarden::Colour &input);
 

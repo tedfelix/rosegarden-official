@@ -67,6 +67,8 @@ public:
 		    bool vertical, QWidget *parent);
 
     virtual ~RosegardenFader();
+    
+    void setOutlineColour(QColor);
 
     float getFaderLevel() const;
 
@@ -111,8 +113,11 @@ protected:
     QPixmap *groovePixmap();
     QPixmap *buttonPixmap();
 
+    QColor m_outlineColour;
+
     typedef std::pair<int, int> SizeRec;
-    typedef std::pair<QPixmap *, QPixmap *> PixmapRec;
+    typedef std::map<unsigned int, QPixmap *> ColourPixmapRec; // key is QColor::pixel()
+    typedef std::pair<ColourPixmapRec, QPixmap *> PixmapRec;
     typedef std::map<SizeRec, PixmapRec> PixmapCache;
     static PixmapCache m_pixmapCache;
 };

@@ -124,6 +124,9 @@ namespace RosegardenGUIColours
     const QColor MuteTrackLED = QColor(211, 194, 238, QColor::Hsv);
     const QColor RecordTrackLED = QColor(0, 250, 225, QColor::Hsv);
 
+    const QColor PlaybackFaderOutline = QColor(211, 194, 238, QColor::Hsv);
+    const QColor RecordFaderOutline = QColor(0, 250, 225, QColor::Hsv);
+
 Rosegarden::Colour
 convertColour (const QColor &input)
 {

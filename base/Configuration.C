@@ -131,11 +131,11 @@ namespace CompositionMetadataKeys
 
     std::vector<PropertyName> getFixedKeys() {
 	std::vector<PropertyName> keys;
-	keys.push_back(Copyright);
 	keys.push_back(Composer);
 	keys.push_back(Title);
 	keys.push_back(Subtitle);
 	keys.push_back(Arranger);
+	keys.push_back(Copyright);
 	return keys;
     }
 }

@@ -298,6 +298,11 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)));
 
     connect(this,
+	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
+	    m_instrumentParameterBox,
+	    SIGNAL(slotInstrumentParametersChanged(Rosegarden::InstrumentId)));
+
+    connect(this,
 	    SIGNAL(pluginSelected(Rosegarden::InstrumentId, int, int)),
 	    m_instrumentParameterBox,
 	    SLOT(slotPluginSelected(Rosegarden::InstrumentId, int, int)));
@@ -1799,6 +1804,23 @@ void RosegardenGUIApp::slotFileOpen()
 {
     slotStatusHelpMsg(i18n("Opening file..."));
 
+    kapp->config()->setGroup(Rosegarden::GeneralOptionsConfigGroup);
+
+    QString lastOpenedVersion =
+	kapp->config()->readEntry("Last File Opened Version", "none");
+
+    if (lastOpenedVersion != VERSION) {
+
+	// We haven't opened any files with this version of the
+	// program before.  Default to the examples directory.
+
+	QString examplesDir = KGlobal::dirs()->findResource("appdata", "examples/");
+	kapp->config()->setGroup("Recent Dirs");
+	QString recentString = kapp->config()->readEntry("ROSEGARDEN", "");
+	kapp->config()->writeEntry
+	    ("ROSEGARDEN", QString("file:%1,%2").arg(examplesDir).arg(recentString));
+    }	
+
     KURL url = KFileDialog::getOpenURL
 	(
 #if KDE_VERSION >= 196614 
@@ -1817,6 +1839,9 @@ void RosegardenGUIApp::slotFileOpen()
         
         }
     }
+
+    kapp->config()->setGroup(Rosegarden::GeneralOptionsConfigGroup);
+    kapp->config()->writeEntry("Last File Opened Version", VERSION);
 
     openURL(url);
 }
@@ -5277,15 +5302,10 @@ RosegardenGUIApp::slotOpenAudioMixer()
 
     connect(m_audioMixer,
 	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
-	    m_instrumentParameterBox,
-	    SLOT(slotInstrumentParametersChanged(Rosegarden::InstrumentId)));
+	    this,
+	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)));
 
-    connect(m_audioMixer,
-	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
-	    m_view,
-	    SLOT(slotUpdateAudioPreviews(Rosegarden::InstrumentId)));
-
-    connect(m_instrumentParameterBox,
+    connect(this,
 	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
 	    m_audioMixer,
 	    SLOT(slotUpdateInstrument(Rosegarden::InstrumentId)));
@@ -5344,10 +5364,10 @@ RosegardenGUIApp::slotOpenMidiMixer()
 
     connect(m_midiMixer,
 	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
-	    m_instrumentParameterBox,
-	    SLOT(slotInstrumentParametersChanged(Rosegarden::InstrumentId)));
+	    this,
+	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)));
 
-    connect(m_instrumentParameterBox,
+    connect(this,
 	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
 	    m_midiMixer,
 	    SLOT(slotUpdateInstrument(Rosegarden::InstrumentId)));

@@ -102,25 +102,6 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
         Rosegarden::TimeSignature(4, 4).getBarDuration() / barWidth44;
     m_rulerScale = new SimpleRulerScale(comp, 0, unitsPerPixel);
 
-//     QHBox *hbox = new QHBox(this);
-
-//     m_vbox = new QFrame(parametersDock /*hbox*/);
-//     parametersDock->setWidget(m_vbox);
-
-//     m_vboxLayout = new QVBoxLayout(m_vbox, 5);
-
-    // Segment and Instrument Parameter Boxes [rwb]
-    //
-//     m_segmentParameterBox = new SegmentParameterBox(this, m_vbox);
-//     m_vboxLayout->addWidget(m_segmentParameterBox);
-
-//     connect(m_segmentParameterBox, SIGNAL(documentModified()),
-//             doc, SLOT(slotDocumentModified()));
-
-//     m_instrumentParameterBox = new InstrumentParameterBox(getDocument(), m_vbox);
-//     m_vboxLayout->addWidget(m_instrumentParameterBox);
-//     m_vboxLayout->addStretch();
-
     // Construct the trackEditor first so we can then
     // query it for placement information
     //

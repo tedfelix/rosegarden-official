@@ -36,7 +36,6 @@
 #include <kglobal.h>
 #include <kaction.h>
 #include <kstdaction.h>
-#include <kstddirs.h>
 #include <kglobal.h>
 #include <kapp.h>
 #include <kprinter.h>

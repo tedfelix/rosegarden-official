@@ -71,7 +71,6 @@
 #include "editcommands.h"
 #include "notationcommands.h"
 #include "qdeferscrollview.h"
-//!!!#include "matrixparameterbox.h"
 #include "instrumentparameterbox.h"
 #include "velocitycolour.h"
 #include "widgets.h"
@@ -182,7 +181,6 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     m_grid->addWidget(m_pianoView, CANVASVIEW_ROW, 1);
 
-//    m_parameterBox = new MatrixParameterBox(getDocument(), m_dockLeft, "matrixparameterbox");
     m_parameterBox = new InstrumentParameterBox(getDocument(), m_dockLeft);
     m_dockLeft->setWidget(m_parameterBox);
 
@@ -203,7 +201,19 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
 	    app,
 	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)));
-
+    connect(m_parameterBox,
+	    SIGNAL(selectPlugin(QWidget *, Rosegarden::InstrumentId, int)),
+	    app,
+	    SLOT(slotShowPluginDialog(QWidget *, Rosegarden::InstrumentId, int)));
+    connect(m_parameterBox,
+	    SIGNAL(showPluginGUI(Rosegarden::InstrumentId, int)),
+	    app,
+	    SLOT(slotShowPluginGUI(Rosegarden::InstrumentId, int)));
+    connect(parent, // RosegardenGUIView
+	    SIGNAL(checkTrackAssignments()),
+	    this,
+	    SLOT(slotCheckTrackAssignments()));
+    
     // Set the instrument we're using on this segment
     //
     Rosegarden::Track *track =
@@ -785,6 +795,17 @@ void MatrixView::slotParametersDockedBack(KDockWidget* dw, KDockWidget::DockPosi
     }
 }
 
+void MatrixView::slotCheckTrackAssignments()
+{
+    Rosegarden::Track *track =
+        m_staffs[0]->getSegment().getComposition()->
+	getTrackById(m_staffs[0]->getSegment().getTrack());
+
+    Rosegarden::Instrument *instr = getDocument()->getStudio().
+        getInstrumentById(track->getInstrument());
+
+    m_parameterBox->useInstrument(instr);
+}
 
 void MatrixView::initStatusBar()
 {

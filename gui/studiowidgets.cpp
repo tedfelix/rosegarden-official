@@ -80,6 +80,8 @@ RosegardenFader::RosegardenFader(Rosegarden::AudioLevel::FaderType type,
 	m_sliderMax = width() - m_sliderMin;
     }	
 
+    m_outlineColour = colorGroup().mid();
+
     calculateGroovePixmap();
     setFader(0.0);
 
@@ -115,6 +117,8 @@ RosegardenFader::RosegardenFader(int min, int max, int deflt,
 	m_sliderMax = width() - m_sliderMin;
     }	
 
+    m_outlineColour = colorGroup().mid();
+
     calculateGroovePixmap();
     setFader(deflt);
 
@@ -144,6 +148,8 @@ RosegardenFader::RosegardenFader(int min, int max, int deflt,
 	m_sliderMax = width() - m_sliderMin;
     }	
 
+    m_outlineColour = colorGroup().mid();
+
     calculateGroovePixmap();
     setFader(deflt);
 
@@ -155,19 +161,33 @@ RosegardenFader::~RosegardenFader()
 {
 }
 
+void
+RosegardenFader::setOutlineColour(QColor c)
+{
+    m_outlineColour = c;
+    calculateGroovePixmap();
+}
+
 QPixmap *
 RosegardenFader::groovePixmap()
 {
     PixmapCache::iterator i = m_pixmapCache.find(SizeRec(width(), height()));
-    if (i != m_pixmapCache.end()) return i->second.first;
-    else return 0;
+    if (i != m_pixmapCache.end()) {
+	ColourPixmapRec::iterator j = i->second.first.find(m_outlineColour.pixel());
+	if (j != i->second.first.end()) {
+	    return j->second;
+	}
+    }
+    return 0;
 }
 
 QPixmap *
 RosegardenFader::buttonPixmap()
 {
     PixmapCache::iterator i = m_pixmapCache.find(SizeRec(width(), height()));
-    if (i != m_pixmapCache.end()) return i->second.second;
+    if (i != m_pixmapCache.end()) {
+	return i->second.second;
+    }
     else return 0;
 }
 
@@ -425,11 +445,9 @@ RosegardenFader::slotFloatTimeout()
 void
 RosegardenFader::calculateGroovePixmap()
 {
-    PixmapCache::iterator i = m_pixmapCache.find(SizeRec(width(), height()));
-    if (i != m_pixmapCache.end() && i->second.first) return;
-    
-    QPixmap *& map = m_pixmapCache[SizeRec(width(), height())].first;
+    QPixmap *& map = m_pixmapCache[SizeRec(width(), height())].first[m_outlineColour.pixel()];
 
+    delete map;
     map = new QPixmap(width(), height());
     map->fill(colorGroup().background());
     QPainter paint(map);
@@ -437,7 +455,7 @@ RosegardenFader::calculateGroovePixmap()
 
     if (m_vertical) {
 
-	paint.setPen(colorGroup().mid());
+	paint.setPen(m_outlineColour);
 	paint.drawRect(0, 0, width(), height());
  
 	if (m_integral) {
@@ -994,6 +1012,8 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     m_recordFader = new RosegardenFader(Rosegarden::AudioLevel::ShortFader,
 					20, m_vuMeter->height(), faderHbox);
 
+    m_recordFader->setOutlineColour(RosegardenGUIColours::RecordFaderOutline);
+
     delete m_vuMeter; // only used the first one to establish height,
 		      // actually want it after the record fader in
 		      // hbox
@@ -1001,6 +1021,8 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
 
     m_fader = new RosegardenFader(Rosegarden::AudioLevel::ShortFader,
 				  20, m_vuMeter->height(), faderHbox);
+
+    m_fader->setOutlineColour(RosegardenGUIColours::PlaybackFaderOutline);
 
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
     m_monoPixmap.load(QString("%1/misc/mono.xpm").arg(pixmapDir));

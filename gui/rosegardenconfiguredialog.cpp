@@ -1898,6 +1898,8 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
                                  .arg(internalSegments + audioSegments),
                                  frame), 4, 1);
     
+    layout->setRowStretch(5, 2);
+
     addTab(frame, i18n("Statistics"));
 
     frame = new QFrame(m_tabWidget);
@@ -2176,6 +2178,8 @@ AudioConfigurationPage::AudioConfigurationPage(RosegardenGUIDoc *doc,
             frame), 2, 0);
 
     layout->addWidget(m_minutesAtStereo, 2, 1, AlignCenter);
+
+    layout->setRowStretch(3, 2);
 
     calculateStats();
 

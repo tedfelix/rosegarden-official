@@ -101,6 +101,7 @@ public:
 		      QString &method);
 
     static void timerCallback(void *data);
+    static void guiExitedCallback(void *data);
 
 protected:
     RosegardenGUIApp *m_app;
@@ -147,6 +148,10 @@ protected:
     
 
 #endif // HAVE_LIBLO
+
+/* This assistant class is here simply to work around the fact that
+   AudioPluginOSCGUI cannot be a QObject because it's only
+   conditionally compiled. */
 
 class TimerCallbackAssistant : public QObject
 {

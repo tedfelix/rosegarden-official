@@ -455,6 +455,10 @@ protected slots:
      */
     void slotParametersDockedBack(KDockWidget*, KDockWidget::DockPosition);
 
+    /**
+     * The instrument for this track may have changed
+     */
+    void slotCheckTrackAssignments();
     
 protected:
     virtual Rosegarden::RulerScale* getHLayout();
