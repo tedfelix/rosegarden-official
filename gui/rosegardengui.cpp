@@ -815,6 +815,14 @@ void RosegardenGUIApp::initView()
     // set the highlighted track
     m_swapView->slotSelectTrackSegments(comp.getSelectedTrack());
 
+    connect(m_swapView, SIGNAL(stateChange(const QString&, bool)),
+            this,   SLOT  (slotStateChanged(const QString&, bool)));
+
+    // make sure we show
+    //
+    RosegardenGUIView *oldView = m_view;
+    m_view = m_swapView;
+
     // We only check for the SequenceManager to make sure
     // we're not on the first pass though - we don't want
     // to send these toggles twice on initialisation.
@@ -822,7 +830,7 @@ void RosegardenGUIApp::initView()
     // Clunky but we just about get away with it for the
     // moment.
     //
-    if(m_seqManager != 0)
+    if (m_seqManager != 0)
     {
         slotToggleSegmentParameters();
         slotToggleInstrumentParameters();
@@ -847,15 +855,8 @@ void RosegardenGUIApp::initView()
 
     }
 
-    connect(m_swapView, SIGNAL(stateChange(const QString&, bool)),
-            this,   SLOT  (slotStateChanged(const QString&, bool)));
-
-    delete m_view;
-
-    // make sure we show
-    //
-    m_view = m_swapView;
     m_view->show();
+    delete oldView;
 
     // We have to do this to make sure that the 2nd call ("select")
     // actually has any effect. Activating the same radio action
@@ -2405,6 +2406,9 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
     // sets the composition's end marker time which is needed here)
 
     if (merge) return; // need to work out how to only clean merged segments
+    
+    progressDlg.slotSetOperationName(i18n("Calculating notation..."));
+    kapp->processEvents();
 
     Rosegarden::Composition *comp = &m_doc->getComposition();
 
@@ -2452,7 +2456,7 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
         progressDlg.progressBar()->advance(progressPer);
     }
 
-    KMacroCommand *command = new KMacroCommand(i18n("Guess Notation"));
+    KMacroCommand *command = new KMacroCommand(i18n("Calculate Notation"));
     //int count = 0;
 
     for (Rosegarden::Composition::iterator i = comp->begin();

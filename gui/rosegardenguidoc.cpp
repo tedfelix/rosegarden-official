@@ -1162,8 +1162,11 @@ RosegardenGUIDoc::stopRecordingMidi()
     // don't need to do so
     if (m_recordSegment->getComposition() != 0) {
 
-	// Quantize for notation only -- doesn't affect performance timings
-	m_commandHistory->addCommand
+	// Quantize for notation only -- doesn't affect performance timings.
+
+	KMacroCommand *command = new KMacroCommand(i18n("Insert Recorded MIDI"));
+
+	command->addCommand
 	    (new EventQuantizeCommand
 	     (*m_recordSegment,
 	      m_recordSegment->getStartTime(),
@@ -1172,9 +1175,11 @@ RosegardenGUIDoc::stopRecordingMidi()
 	      Rosegarden::Quantizer::NotationPrefix,
 	      true));
 
-	m_commandHistory->addCommand
+	command->addCommand
 	    (new SegmentRecordCommand
 	     (m_recordSegment));
+
+	m_commandHistory->addCommand(command);
     }
 
     m_recordSegment = 0;
