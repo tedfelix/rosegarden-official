@@ -49,6 +49,7 @@
 #include <kkeydialog.h>
 #include <kaction.h>
 #include <kstdaction.h>
+#include <ktip.h>
 
 // application specific includes
 #include "kstartuplogo.h"
@@ -348,11 +349,23 @@ void RosegardenGUIApp::setupActions()
                                        actionCollection(),
                                        "show_previews");
 
+    m_viewAll = new KAction(i18n("Toggle &All of the Above"), 0, this,
+                                  SLOT(slotToggleAll()),
+                                  actionCollection(),
+                                  "toggle_all");
+
     m_viewTipsOnStartup =
         new KToggleAction(i18n("Show &Tips on startup"), 0, this,
-                          SLOT(slotToggleShowTips()),
+                          SLOT(slotToggleShowTipsOnStartup()),
                           actionCollection(),
                           "show_tips_on_startup");
+
+    m_viewTipsNow =
+        new KAction(i18n("Show &Tip of the Day"), 0, this,
+                    SLOT(slotShowTips()),
+                    actionCollection(),
+                    "show_tips_now");
+
 
     // Standard Actions 
     //
@@ -1107,6 +1120,10 @@ void RosegardenGUIApp::readOptions()
     m_viewPreviews->setChecked(opt);
     slotTogglePreviews();
 
+    m_config->setGroup("TipOfDay");
+    opt = m_config->readBoolEntry("RunOnStart", true);
+    m_viewTipsOnStartup->setChecked(opt);
+
     // initialise the recent file list
     //
     m_fileRecent->loadEntries(m_config);
@@ -1839,6 +1856,30 @@ void RosegardenGUIApp::slotToggleChordNameRuler()
 void RosegardenGUIApp::slotTogglePreviews()
 {
     m_view->slotShowPreviews(m_viewPreviews->isChecked());
+}
+
+void RosegardenGUIApp::slotToggleAll()
+{
+    m_viewRulers->setChecked(!m_viewRulers->isChecked());
+    slotToggleRulers();
+   
+    m_viewChordNameRuler->setChecked(!m_viewChordNameRuler->isChecked());
+    slotToggleChordNameRuler();
+    
+    m_viewTempoRuler->setChecked(!m_viewTempoRuler->isChecked());
+    slotToggleTempoRuler();
+    
+    m_viewPreviews->setChecked(!m_viewPreviews->isChecked());
+    slotTogglePreviews();
+    
+    m_viewTrackLabels->setChecked(!m_viewTrackLabels->isChecked());
+    slotToggleTrackLabels();
+
+    m_viewSegmentParameters->setChecked(!m_viewSegmentParameters->isChecked());
+    slotToggleSegmentParameters();
+    
+    m_viewInstrumentParameters->setChecked(!m_viewInstrumentParameters->isChecked());
+    slotToggleInstrumentParameters();
 }
 
 
@@ -3068,10 +3109,10 @@ RosegardenGUIApp:: processRecordedAudio(long recordTimeSec,
 void RosegardenGUIApp::notifySequencerStatus(const int& status)
 {
     stateChanged("not_playing",
-		 (status == PLAYING ||
-		  status == RECORDING_MIDI ||
-		  status == RECORDING_AUDIO) ?
-		 KXMLGUIClient::StateReverse : KXMLGUIClient::StateNoReverse);
+                 (status == PLAYING ||
+                  status == RECORDING_MIDI ||
+                  status == RECORDING_AUDIO) ?
+                 KXMLGUIClient::StateReverse : KXMLGUIClient::StateNoReverse);
 
     if (m_seqManager)
         m_seqManager->setTransportStatus((TransportStatus) status);
@@ -4089,7 +4130,7 @@ RosegardenGUIApp::slotSaveDefaultStudio()
     RG_DEBUG << "RosegardenGUIApp::slotSaveDefaultStudio\n";
 
     int reply = KMessageBox::warningYesNo
-	(this, i18n("Are you sure you want to save this as your default studio?"));
+        (this, i18n("Are you sure you want to save this as your default studio?"));
     
     if (reply != KMessageBox::Yes) return;
 
@@ -4141,9 +4182,17 @@ RosegardenGUIApp::slotUpdateAutoSaveInterval(unsigned int interval)
 
 
 void
-RosegardenGUIApp::slotToggleShowTips()
+RosegardenGUIApp::slotToggleShowTipsOnStartup()
 {
-    RG_DEBUG << "RosegardenGUIApp::slotToggleShowTips" << endl;
+    RG_DEBUG << "RosegardenGUIApp::slotToggleShowTipsOnStartup" << endl;
+    KTipDialog::setShowOnStart(m_viewTipsOnStartup->isChecked());
+}
+
+void
+RosegardenGUIApp::slotShowTips()
+{
+    RG_DEBUG << "RosegardenGUIApp::slotShowTips" << endl;
+    KTipDialog::showTip(locate("data", "rosegarden/tips"), true);
 }
 
 const void* RosegardenGUIApp::SequencerExternal = (void*)-1;

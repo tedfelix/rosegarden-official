@@ -95,7 +95,7 @@ public:
      * @see initMenuBar initToolBar
      */
     RosegardenGUIApp(bool useSequencer = true,
-		     QObject *startupStatusMessageReceiver = 0);
+                     QObject *startupStatusMessageReceiver = 0);
 
     virtual ~RosegardenGUIApp();
 
@@ -103,8 +103,8 @@ public:
      * returns a pointer to the current document connected to the
      * KTMainWindow instance and is used by * the View class to access
      * the document object's methods
-     */	
-    RosegardenGUIDoc *getDocument() const; 	
+     */ 
+    RosegardenGUIDoc *getDocument() const;      
 
     /**
      * open a file
@@ -376,7 +376,7 @@ protected:
      *
      */
     void insertMetronomeClicks(Rosegarden::timeT sliceStart,
-			       Rosegarden::timeT sliceEnd);
+                               Rosegarden::timeT sliceEnd);
 
     /**
      * Plug a widget into our common accelerators
@@ -862,9 +862,19 @@ public slots:
     void slotTogglePreviews();
 
     /**
-     * Toggle tips
+     * Toggle everything except the Transport Toolbar simultaneously
      */
-    void slotToggleShowTips();
+    void slotToggleAll();
+
+    /**
+     * Toggle tips at startup
+     */
+    void slotToggleShowTipsOnStartup();
+
+    /**
+     * Display tip-of-day dialog on demand
+     */
+    void slotShowTips();
 
     /*
      * Select Track up or down
@@ -876,7 +886,7 @@ public slots:
      * save general Options like all bar positions and status as well
      * as the geometry and the recent file list to the configuration
      * file
-     */ 	
+     */         
     void slotSaveOptions();
 
     /**
@@ -1014,7 +1024,9 @@ private:
     KToggleAction* m_viewTempoRuler;
     KToggleAction* m_viewChordNameRuler;
     KToggleAction* m_viewPreviews;
+    KAction* m_viewAll;
     KToggleAction* m_viewTipsOnStartup;
+    KAction* m_viewTipsNow;
 
     KAction *m_playTransport;
     KAction *m_stopTransport;

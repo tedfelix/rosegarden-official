@@ -107,9 +107,11 @@
          <Action name="show_tracklabels"           append="show_merge" />
          <Action name="show_segment_parameters"    append="show_merge" />
          <Action name="show_instrument_parameters" append="show_merge" />
+         <Action name="toggle_all"                 append="show_merge" />
   </Menu>
   <Menu name="help">
         <Action name="show_tips_on_startup"/>
+        <Action name="show_tips_now"/>
   </Menu>
 
 </MenuBar>
@@ -253,7 +255,7 @@
 
 <State name="not_playing">
      <enable>
-	<Action name="manage_devices"/>
+        <Action name="manage_devices"/>
      </enable>
 </State>
 

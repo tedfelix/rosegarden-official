@@ -29,6 +29,7 @@
 #include <kconfig.h>
 #include <kmessagebox.h>
 #include <kstddirs.h>
+#include <ktip.h>
 
 #include "rosestrings.h"
 #include "rosedebug.h"
@@ -320,54 +321,54 @@ void testInstalledVersion()
     QString installedVersion;
 
     if (versionLocation) {
-	QFile versionFile(versionLocation);
-	if (versionFile.open(IO_ReadOnly)) {
-	    QTextStream text(&versionFile);
-	    QString s = text.readLine().stripWhiteSpace();
-	    versionFile.close();
-	    if (s) {
-		if (s == VERSION) return;
-		installedVersion = s;
-	    }
-	}
+        QFile versionFile(versionLocation);
+        if (versionFile.open(IO_ReadOnly)) {
+            QTextStream text(&versionFile);
+            QString s = text.readLine().stripWhiteSpace();
+            versionFile.close();
+            if (s) {
+                if (s == VERSION) return;
+                installedVersion = s;
+            }
+        }
     }
 
     if (installedVersion) {
 
-	KMessageBox::detailedError
-	    (0,
-	     i18n("Installation contains the wrong version of Rosegarden."),
-	     QString(i18n(" The wrong versions of Rosegarden's data files were\n"
-		  " found in the standard KDE installation directories.\n"
-		  " (I am %1, but the installed files are for version %2.)\n\n"
-		  " This may mean one of the following:\n\n"
-		  " 1. This is a new upgrade of Rosegarden, and it has not yet been\n"
-		  "     installed.  If you compiled it yourself, check that you have\n"
-		  "     run \"make install\" and that the procedure completed\n"
-		  "     successfully.\n\n"
-		  " 2. The upgrade was installed in a non-standard directory,\n"
-		  "     and an old version was found in a standard directory.  If so,\n"
-		  "     you will need to add the correct directory to your KDEDIRS\n"
-		  "     environment variable before you can run it.")).arg(VERSION).arg(installedVersion),
-	     i18n("Installation problem"));
-	
+        KMessageBox::detailedError
+            (0,
+             i18n("Installation contains the wrong version of Rosegarden."),
+             QString(i18n(" The wrong versions of Rosegarden's data files were\n"
+                  " found in the standard KDE installation directories.\n"
+                  " (I am %1, but the installed files are for version %2.)\n\n"
+                  " This may mean one of the following:\n\n"
+                  " 1. This is a new upgrade of Rosegarden, and it has not yet been\n"
+                  "     installed.  If you compiled it yourself, check that you have\n"
+                  "     run \"make install\" and that the procedure completed\n"
+                  "     successfully.\n\n"
+                  " 2. The upgrade was installed in a non-standard directory,\n"
+                  "     and an old version was found in a standard directory.  If so,\n"
+                  "     you will need to add the correct directory to your KDEDIRS\n"
+                  "     environment variable before you can run it.")).arg(VERSION).arg(installedVersion),
+             i18n("Installation problem"));
+        
     } else {
 
-	KMessageBox::detailedError
-	    (0,
-	     i18n("Rosegarden does not appear to have been installed."),
-	     i18n(" One or more of Rosegarden's data files could not be\n"
-		  " found in the standard KDE installation directories.\n\n"
-		  " This may mean one of the following:\n\n"
-		  " 1. Rosegarden has not been correctly installed.  If you compiled\n"
-		  "     it yourself, check that you have run \"make install\" and that\n"
-		  "     the procedure completed successfully.\n\n"
-		  " 2. Rosegarden has been installed in a non-standard directory,\n"
-		  "     and you need to add this directory to your KDEDIRS environment\n"
-		  "     variable before you can run it.  This may be the case if you\n"
-		  "     installed into $HOME or a local third-party package directory\n"
-		  "     like /usr/local or /opt."),
-	     i18n("Installation problem"));
+        KMessageBox::detailedError
+            (0,
+             i18n("Rosegarden does not appear to have been installed."),
+             i18n(" One or more of Rosegarden's data files could not be\n"
+                  " found in the standard KDE installation directories.\n\n"
+                  " This may mean one of the following:\n\n"
+                  " 1. Rosegarden has not been correctly installed.  If you compiled\n"
+                  "     it yourself, check that you have run \"make install\" and that\n"
+                  "     the procedure completed successfully.\n\n"
+                  " 2. Rosegarden has been installed in a non-standard directory,\n"
+                  "     and you need to add this directory to your KDEDIRS environment\n"
+                  "     variable before you can run it.  This may be the case if you\n"
+                  "     installed into $HOME or a local third-party package directory\n"
+                  "     like /usr/local or /opt."),
+             i18n("Installation problem"));
     }
 
     exit(1);
@@ -413,9 +414,9 @@ int main(int argc, char *argv[])
 
     if (config->readBoolEntry("Logo",true) && (!kapp->isRestored() && args->isSet("splash")) )
     {
-	RG_DEBUG << "main: Showing startup logo\n";
-	startLogo = KStartupLogo::getInstance();
-	startLogo->show();
+        RG_DEBUG << "main: Showing startup logo\n";
+        startLogo = KStartupLogo::getInstance();
+        startLogo->show();
     }
 
     clock_t logoShowTime = clock();
@@ -430,7 +431,7 @@ int main(int argc, char *argv[])
         // RESTORE(RosegardenGUIApp);
         int n = 1;
         while (KMainWindow::canBeRestored(n)) {
-	    // memory leak if more than one can be restored?
+            // memory leak if more than one can be restored?
             (rosegardengui = new RosegardenGUIApp)->restore(n);
             n++;
         }
@@ -438,19 +439,19 @@ int main(int argc, char *argv[])
     } else {
 
         rosegardengui = new RosegardenGUIApp(args->isSet("sequencer"),
-					     startLogo);
+                                             startLogo);
 
         app.setMainWidget(rosegardengui);
 
         rosegardengui->show();
 
-	// raise start logo
-	//
-	if (startLogo) {
-	    startLogo->raise();
-	    startLogo->setHideEnabled(true);
-	    QApplication::flushX();
-	}
+        // raise start logo
+        //
+        if (startLogo) {
+            startLogo->raise();
+            startLogo->setHideEnabled(true);
+            QApplication::flushX();
+        }
 
         if (args->count()) {
             rosegardengui->openFile(args->arg(0));
@@ -466,7 +467,7 @@ int main(int argc, char *argv[])
     //
     if (startLogo) {
         startLogo->raise();
-	startLogo->setHideEnabled(true);
+        startLogo->setHideEnabled(true);
         QApplication::flushX();
     }
 
@@ -488,18 +489,25 @@ int main(int argc, char *argv[])
 
 
     if (startLogo) {
-	
-	// pause to ensure the logo has been visible for a reasonable
-	// length of time, just 'cos it looks a bit silly to show it
-	// and remove it immediately
+        
+        // pause to ensure the logo has been visible for a reasonable
+        // length of time, just 'cos it looks a bit silly to show it
+        // and remove it immediately
 
-	int visibleFor = (clock() - logoShowTime) * 1000 / CLOCKS_PER_SEC;
+        int visibleFor = (clock() - logoShowTime) * 1000 / CLOCKS_PER_SEC;
 
-	if (visibleFor < 2000) {
-	    QTimer::singleShot(2500 - visibleFor, startLogo, SLOT(close()));
-	} else {
-	    startLogo->close();
-	}
+        if (visibleFor < 2000) {
+            QTimer::singleShot(2500 - visibleFor, startLogo, SLOT(close()));
+        } else {
+            startLogo->close();
+        }
+    }
+
+    config->setGroup("TipOfDay");
+    if (config->readBoolEntry("RunOnStart",true))
+    {
+        RG_DEBUG << "main: Showing Tips\n";
+        KTipDialog::showTip(locate("data", "rosegarden/tips"), true);
     }
 
     return app.exec();
