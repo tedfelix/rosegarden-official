@@ -34,6 +34,7 @@
 #include "notationview.h"
 #include "notationelement.h"
 #include "NotationTypes.h"
+#include "notationproperties.h"
 
 #include "staff.h"
 #include "notepixmapfactory.h"
@@ -111,21 +112,23 @@ RestSplitter::m_baseRestDuration = 384; // whole note rest
 
 NotationView::NotationView(RosegardenGUIDoc* doc,
                            unsigned int trackNb,
-                           QWidget *parent)
-    : KMainWindow(parent),
-      m_config(kapp->config()),
-      m_document(doc),
-      m_currentNotePixmap(0),
-      m_canvasView(new NotationCanvasView(new QCanvas(width() * 2,
-                                                      height() * 2),
-                                          this)),
-      m_mainStaff(new Staff(canvas())),
-      m_currentStaff(m_mainStaff),
-      m_viewElementsManager(0),
-      m_notationElements(0),
-      m_hlayout(0),
-      m_vlayout(0),
-      m_currentSelectedNote(Note::QuarterNote)
+                           QWidget *parent,
+                           int resolution) :
+    KMainWindow(parent),
+    m_config(kapp->config()),
+    m_document(doc),
+    m_currentNotePixmap(0),
+    m_canvasView(new NotationCanvasView(new QCanvas(width() * 2,
+                                                    height() * 2),
+                                        this)),
+    m_mainStaff(new Staff(canvas(), resolution)),
+    m_currentStaff(m_mainStaff),
+    m_notePixmapFactory(m_currentStaff->getNotePixmapFactory()),
+    m_viewElementsManager(0),
+    m_notationElements(0),
+    m_hlayout(0),
+    m_vlayout(0),
+    m_currentSelectedNote(Note::QuarterNote)
 {
 
     kdDebug(KDEBUG_AREA) << "NotationView ctor" << endl;
@@ -177,9 +180,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     m_mainStaff->show();
 
     m_vlayout = new NotationVLayout(*m_mainStaff, *m_notationElements);
-    m_hlayout = new NotationHLayout(*m_mainStaff, *m_notationElements,
-                                    (Staff::noteWidth + 2) * 4, // this shouldn't be constant
-                                    40);
+    m_hlayout = new NotationHLayout(*m_mainStaff, *m_notationElements);
 
     if (applyLayout()) {
 
@@ -343,7 +344,7 @@ NotationView::showElements(NotationElementList::iterator from,
 
 //    static ChordPixmapFactory npf(*m_mainStaff);
     // let's revert to this for now
-    static NotePixmapFactory npf;
+    NotePixmapFactory &npf(m_notePixmapFactory);
     string currentClef = Clef::DefaultClef.getName();
 
     for (NotationElementList::iterator it = from; it != to; ++it) {
@@ -357,34 +358,29 @@ NotationView::showElements(NotationElementList::iterator from,
 
             if ((*it)->isNote()) {
 
-                Note::Type note =
-                    (*it)->event()->get<Int>("Notation::NoteType");
-                bool dotted =
-                    (*it)->event()->get<Bool>("Notation::NoteDotted");
+                Note::Type note = (*it)->event()->get<Int>(P_NOTE_TYPE);
+                bool dotted = (*it)->event()->get<Bool>(P_NOTE_DOTTED);
 
                 Accidental accident = NoAccidental;
 
                 long acc;
-                if ((*it)->event()->get<Int>("Notation::Accidental", acc)) {
+                if ((*it)->event()->get<Int>(P_ACCIDENTAL, acc)) {
                     accident = Accidental(acc);
                 }
 
                 bool up = true;
-                (void)((*it)->event()->get<Bool>("computed-stalk-up", up));
+                (void)((*it)->event()->get<Bool>(P_STALK_UP, up));
 
 		kdDebug(KDEBUG_AREA) << "NotationElement::showElements(): found a note of type " << note << " with accidental " << accident << endl;
                 
-                QCanvasPixmap notePixmap(npf.makeNotePixmap(note, dotted,
-                                                            accident,
-                                                            true, up));
+                QCanvasPixmap notePixmap
+                    (npf.makeNotePixmap(note, dotted, accident, true, up));
                 sprite = new QCanvasSimpleSprite(&notePixmap, canvas());
 
             } else if ((*it)->isRest()) {
 
-                Note::Type note =
-                    (*it)->event()->get<Int>("Notation::NoteType");
-                bool dotted =
-                    (*it)->event()->get<Bool>("Notation::NoteDotted");
+                Note::Type note = (*it)->event()->get<Int>(P_NOTE_TYPE);
+                bool dotted = (*it)->event()->get<Bool>(P_NOTE_DOTTED);
 
                 QCanvasPixmap notePixmap(npf.makeRestPixmap(note, dotted));
                 sprite = new QCanvasSimpleSprite(&notePixmap, canvas());
@@ -465,17 +461,30 @@ NotationView::showBars(NotationElementList::iterator from,
 bool
 NotationView::applyLayout()
 {
-    // we have to apply the vertical layout first, because it
-    // calculates accidentals which may be relevant when doing
-    // horizontal layout.  at the moment there are no dependencies the
-    // other way around; if we find any, we may need to introduce an
-    // extra pass before either of these
+    bool rcp = applyHorizontalPreparse();
     bool rcv = applyVerticalLayout();
     bool rch = applyHorizontalLayout();
 
     kdDebug(KDEBUG_AREA) << "NotationView::applyLayout() : done" << endl;
 
-    return rch && rcv;
+    return rcp && rch && rcv;
+}
+
+
+bool
+NotationView::applyHorizontalPreparse()
+{
+    if (!m_hlayout) {
+        KMessageBox::error(0, "No Horizontal Layout engine");
+        return false;
+    }
+
+    m_hlayout->reset();
+    m_hlayout->preparse(m_notationElements->begin(), m_notationElements->end());
+
+    kdDebug(KDEBUG_AREA) << "NotationView::applyHorizontalPreparse() : done" << endl;
+
+    return m_hlayout->status() == 0;
 }
 
 
@@ -487,8 +496,7 @@ NotationView::applyHorizontalLayout()
         return false;
     }
 
-    m_hlayout->reset();
-    m_hlayout->layout(m_notationElements->begin(), m_notationElements->end());
+    m_hlayout->layout();
 
     kdDebug(KDEBUG_AREA) << "NotationView::applyHorizontalLayout() : done" << endl;
 
@@ -689,7 +697,8 @@ NotationView::insertNote(int pitch, const QPoint &eventPos)
     //
     NotationElement *newNotationElement = new NotationElement(insertedEvent);
 
-    newNotationElement->event()->set<Int>("Notation::NoteType", m_currentSelectedNote);
+    newNotationElement->event()->set<Int>(P_NOTE_TYPE, m_currentSelectedNote);
+    newNotationElement->event()->set<Bool>(P_NOTE_DOTTED, false);
     newNotationElement->event()->set<String>("Name", "INSERTED_NOTE");
 
     NotationElementList::iterator redoLayoutStart = closestNote;
@@ -732,11 +741,7 @@ NotationView::insertNote(int pitch, const QPoint &eventPos)
 //     kdDebug(KDEBUG_AREA) << "NotationView::insertNote() : Elements before relayout : "
 //                          << endl << *m_notationElements << endl;
 
-//!!!    (*m_vlayout)(newNotationElement);
-
-    // we have to apply the vertical layout first: see applyLayout()
-    applyVerticalLayout(); // TODO : be more subtle than this
-    applyHorizontalLayout(); // TODO : be more subtle than this
+    applyLayout(); // TODO : be more subtle than this
 
 //     kdDebug(KDEBUG_AREA) << "NotationView::insertNote() : Elements after relayout : "
 //                          << endl << *m_notationElements << endl;
@@ -894,6 +899,9 @@ NotationView::perfTest()
     cout << (et-st)*10 << "ms" << endl;
 }
 
+
+#ifdef NOT_DEFINED
+
 void
 NotationView::test()
 {
@@ -970,3 +978,4 @@ NotationView::test()
     chordSprite->move(50, 50);
    
 }
+#endif

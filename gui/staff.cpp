@@ -26,10 +26,12 @@
 
 #include "rosedebug.h"
 
-Staff::Staff(QCanvas *canvas)
-    : QCanvasItemGroup(canvas),
-      m_barLineHeight(0),
-      m_horizLineLength(0)
+Staff::Staff(QCanvas *canvas, int resolution) :
+    QCanvasItemGroup(canvas),
+    m_barLineHeight(0),
+    m_horizLineLength(0),
+    m_resolution(resolution),
+    m_npf(resolution)
 {
     // horizontal lines
 
@@ -65,32 +67,28 @@ Staff::Staff(QCanvas *canvas)
         }
     }
 
-    //
     // Add vertical lines
     //
-    QCanvasLineGroupable *staffVertLine = new QCanvasLineGroupable(canvas, this);
+    QCanvasLineGroupable *staffVertLine =
+        new QCanvasLineGroupable(canvas, this);
 
-    m_barLineHeight = nbLines * lineWidth - lineWidth / 2 - 5;
+    m_barLineHeight = (nbLines - 1) * m_npf.getLineSpacing();
 
     // First line - thick
     //
     QPen pen(black, 3);
     pen.setCapStyle(Qt::SquareCap);
     staffVertLine->setPen(pen);
-
-    staffVertLine->setPoints(0,linesOffset + 1,
-                             0,m_barLineHeight + linesOffset - 1);
+    staffVertLine->setPoints(0, linesOffset + 1,
+                             0, m_barLineHeight + linesOffset - 1);
 
     // Second line - thin
     //
     staffVertLine = new QCanvasLineGroupable(canvas, this);
-
-    staffVertLine->setPoints(4,linesOffset,
-                             4,m_barLineHeight + linesOffset);
-
+    staffVertLine->setPoints(4, linesOffset,
+                             4, m_barLineHeight + linesOffset);
 
     setActive(false);  // don't react to mousePress events
-
 }
 
 Staff::~Staff()
@@ -103,9 +101,10 @@ Staff::~Staff()
 int Staff::yCoordOfHeight(int h) const
 {
     // 0 is bottom staff-line, 8 is top one
-    int y = ((8 - h) * lineWidth) / 2 + linesOffset + ((h % 2 == 1) ? 1 : 0);
+    int y = ((8 - h) * m_npf.getLineSpacing()) / 2 +
+        linesOffset + ((h % 2 == 1) ? 1 : 0);
     kdDebug(KDEBUG_AREA) << "Staff::yCoordOfHeight: height is " << h
-                         << ", lineWidth is " << lineWidth
+                         << ", lineWidth is " << m_npf.getLineSpacing()
                          << ", linesOffset is " << linesOffset
                          << ", y is " << y << endl;
     return y;
@@ -131,7 +130,7 @@ Staff::insertBar(unsigned int barPos, bool correct)
     QCanvasLineGroupable* barLine = new QCanvasLineGroupable(canvas(), this);
 
     barLine->setPoints(0, linesOffset,
-                       0, barLineHeight() + linesOffset);
+                       0, getBarLineHeight() + linesOffset);
     barLine->moveBy(barPos + x(), y());
     if (!correct) barLine->setPen(QPen(red, 1));
     barLine->show();
@@ -148,9 +147,9 @@ Staff::deleteBars(unsigned int fromPos)
 {
     kdDebug(KDEBUG_AREA) << "Staff::deleteBars from " << fromPos << endl;
 
-    barlines::iterator startDeletePoint = lower_bound(m_barLines.begin(),
-                                                      m_barLines.end(),
-                                                      fromPos, compareBarToPos);
+    barlines::iterator startDeletePoint =
+        lower_bound(m_barLines.begin(), m_barLines.end(),
+                    fromPos, compareBarToPos);
 
     if (startDeletePoint != m_barLines.end())
         kdDebug(KDEBUG_AREA) << "startDeletePoint pos : "
@@ -174,12 +173,6 @@ Staff::deleteBars()
     m_barLines.clear();
 }
 
-
-const int Staff::noteHeight = 8;
-const int Staff::lineWidth = noteHeight + 1;
-const int Staff::noteWidth = 9;
-const int Staff::accidentWidth = 6;
-const int Staff::stalkLen = noteHeight * 7/2 - 6;
 const int Staff::nbLines = 5;
 const int Staff::linesOffset = 8;
 

@@ -21,6 +21,8 @@
 #include "notationvlayout.h"
 #include "rosedebug.h"
 #include "NotationTypes.h"
+#include "notepixmapfactory.h"
+#include "notationproperties.h"
 
 NotationVLayout::NotationVLayout(Staff &staff, NotationElementList &elements) :
     m_staff(staff), m_elements(elements)
@@ -36,6 +38,9 @@ void
 NotationVLayout::layout(NotationElementList::iterator from,
                         NotationElementList::iterator to)
 { 
+    NotationElementList::iterator i;
+
+#ifdef NOT_DEFINED // should no longer be needed (now we preparse)
     // right: the elements store their pitches, we need their heights.
     // for this we need to use a NotationDisplayPitch object, passing
     // the relevant clef and key, which we need to obtain from the
@@ -44,52 +49,48 @@ NotationVLayout::layout(NotationElementList::iterator from,
     Clef clef; // default to defaults
     Key key;
 
-    NotationElementList::iterator i;
-
     i = m_elements.findPrevious(Clef::EventPackage, Clef::EventType, from);
     if (i != m_elements.end()) clef = Clef(*(*i)->event());
 
     i = m_elements.findPrevious(Key::EventPackage, Key::EventType, from);
     if (i != m_elements.end()) key = Key(*(*i)->event());
+#endif
 
     for (i = from; i != to; ++i) {
 
         NotationElement *el = (*i);
+        el->setY(0);
 
         if (el->isRest()) {
 
-            // all rest pixmaps are sized so that they will be correctly
-            // displayed when set to align on the top staff line (height 8)
+            // rest pixmaps are sized so that they will be correctly
+            // displayed when set to align on the top staff line
             el->setY(m_staff.yCoordOfHeight(8));
 
         } else if (el->isNote()) {
 
             try {
-                int pitch = el->event()->get<Int>("pitch");
-                kdDebug(KDEBUG_AREA) << "pitch : " << pitch << endl;
-                NotationDisplayPitch p(pitch, clef, key);
-                int h = p.getHeightOnStaff();
-                el->setY(m_staff.yCoordOfHeight(h));
-                el->event()->set<Int>("Notation::Accidental",
-                                      (int)p.getAccidental());
-                el->event()->set<Bool>("computed-stalk-up", h <= 4); 
-                kdDebug(KDEBUG_AREA) << "NotationVLayout::layout : pitch : "
-                                     << pitch << " - y : " << el->y() << endl;
+                el->setY(m_staff.yCoordOfHeight(el->event()->get<Int>(P_HEIGHT_ON_STAFF)));
             } catch (Event::NoData) {
                 kdDebug(KDEBUG_AREA) <<
-                    "NotationVLayout::layout : couldn't get pitch for element"
+                    "NotationVLayout::layout : couldn't get properties for element (has NotationHLayout::preparse run?)"
                                      << endl;
-                el->setY(0);
             }
         
         } else {
 
-            el->setY(0);
-            
             if (el->event()->isa(Clef::EventPackage, Clef::EventType)) {
-                clef = Clef(*el->event());
+
+                // clef pixmaps are sized so that they will be
+                // correctly displayed when set to align one leger
+                // line above the top staff line... well, almost
+                el->setY(m_staff.yCoordOfHeight(10) + 1);
+//                clef = Clef(*el->event());
+
             } else if (el->event()->isa(Key::EventPackage, Key::EventType)) {
-                key = Key(*el->event());
+
+                el->setY(m_staff.yCoordOfHeight(12));
+//                key = Key(*el->event());
             }
         }
     }

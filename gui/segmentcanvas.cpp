@@ -93,6 +93,8 @@ TracksCanvas::TracksCanvas(int gridH, int gridV,
 {
     m_editMenu->insertItem(I18N_NOOP("Edit"),
                            this, SLOT(onEdit()));
+    m_editMenu->insertItem(I18N_NOOP("Edit Small"),
+                           this, SLOT(onEditSmall()));
 }
 
 TracksCanvas::~TracksCanvas()
@@ -248,4 +250,10 @@ void
 TracksCanvas::onEdit()
 {
     emit editTrackPart(m_currentItem->part());
+}
+
+void
+TracksCanvas::onEditSmall()
+{
+    emit editTrackPartSmall(m_currentItem->part());
 }

@@ -33,7 +33,6 @@ class NotationElementList;
 
 class NotationElement : public ViewElement
 {
-
 public:
     NotationElement(Event *event);
 

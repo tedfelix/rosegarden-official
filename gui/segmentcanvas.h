@@ -100,11 +100,13 @@ protected slots:
     * editTrackPart(TrackPart*)
     */
     void onEdit();
+    void onEditSmall();
 
 signals:
     void addTrackPart(TrackPart*);
     void deleteTrackPart(TrackPart*);
     void editTrackPart(TrackPart*);
+    void editTrackPartSmall(TrackPart*);
 
 private:
     bool m_newRect;

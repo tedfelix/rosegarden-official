@@ -57,6 +57,8 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
 
     connect(tracksEditor->canvas(), SIGNAL(editTrackPart(TrackPart*)),
             SLOT(editTrackNotation(TrackPart*)));
+    connect(tracksEditor->canvas(), SIGNAL(editTrackPartSmall(TrackPart*)),
+            SLOT(editTrackNotationSmall(TrackPart*)));
 
     connect(tracksEditor,  SIGNAL(createNewTrack(unsigned int, unsigned int, unsigned int)),
             getDocument(), SLOT  (createNewTrack(unsigned int, unsigned int, unsigned int)));
@@ -113,7 +115,19 @@ RosegardenGUIView::editTrackNotation(TrackPart* p)
     
     kdDebug(KDEBUG_AREA) << "RosegardenGUIView::editTrackNotation() : showing track " << trackNb << endl;
 
-    m_notationView = new NotationView(getDocument(), trackNb, this);
+    m_notationView = new NotationView(getDocument(), trackNb, this, 9);
+ 
+    m_notationView->show();
+}
+
+void
+RosegardenGUIView::editTrackNotationSmall(TrackPart* p)
+{
+    unsigned int trackNb = p->trackNb();
+    
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIView::editTrackNotationSmall() : showing track " << trackNb << endl;
+
+    m_notationView = new NotationView(getDocument(), trackNb, this, 5);
  
     m_notationView->show();
 }

@@ -18,37 +18,18 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef QUANTIZER_H
-#define QUANTIZER_H
+#ifndef _NOTATION_PROPERTIES_H_
+#define _NOTATION_PROPERTIES_H_
 
-#include "Event.h"
+// Property names for properties that are computed and cached within
+// the notation module, but that need not necessarily be saved with
+// the file
 
-/**
-  *@author Guillaume Laurent, Chris Cannam, Rich Bown
-  */
-
-class Quantizer
-{
-public:
-    Quantizer();
-
-    /**
-     * sets the 'Notation::NoteType' and 'QuantizedDuration' properties
-     * does not change the element duration
-     */
-    void quantize(Track::iterator from,
-                  Track::iterator to);
-
-    /**
-     * quantize one element to a Note
-     * sets the 'Notation::NoteType' and 'QuantizedDuration' properties
-     */
-    void quantize(Event *el);
-
-protected:
-
-    /// actual quantizer
-    void quantize(Event::timeT duration, int &high, int &low);
-};
+#define P_QUANTIZED_DURATION "Cache::QuantizedDuration"
+#define P_NOTE_TYPE "Cache::Notation::NoteType"
+#define P_NOTE_DOTTED "Cache::Notation::NoteDotted"
+#define P_ACCIDENTAL "Cache::Notation::Accidental"
+#define P_HEIGHT_ON_STAFF "Cache::Notation::HeightOnStaff"
+#define P_STALK_UP "Cache::Notation::StalkUp"
 
 #endif

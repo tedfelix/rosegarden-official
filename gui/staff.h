@@ -24,40 +24,43 @@
 #include <vector>
 
 #include "qcanvasitemgroup.h"
+#include "notepixmapfactory.h"
 
 class QCanvasLineGroupable;
-
 
 class Staff : public QCanvasItemGroup
 {
 public:
     typedef vector<QCanvasLineGroupable*> barlines;
     
-    Staff(QCanvas*);
+    Staff(QCanvas *, int resolution);
     ~Staff();
 
-    int yCoordOfHeight(int height) const;
+    // bit dubious, really -- I'd rather have a NotePixmapFactory that
+    // worked even through a const reference, but most of its drawing
+    // methods are necessarily non-const because it stores so much
+    // state internally
+    NotePixmapFactory &getNotePixmapFactory() { return m_npf; }
 
-    /// Returns the height of a bar line
-    unsigned int barLineHeight() const { return m_barLineHeight; }
+    int yCoordOfHeight(int height) const;
+    unsigned int getBarLineHeight() const { return m_barLineHeight; }
+    unsigned int getBarMargin() const { return m_resolution * 2; }
+    unsigned int getNoteMargin() const { return m_resolution / 4; }
 
     void insertBar(unsigned int barPos, bool correct);
     void deleteBars(unsigned int fromPos);
     void deleteBars();
 
-    static const int noteHeight;     // height of a note body
-    static const int noteWidth;      // width of a note body
-    static const int lineWidth;      // delta-y from one staff line to next
-    static const int accidentWidth;  // width of an accidental
-    static const int stalkLen;       // length of the stalk of a note (bad!)
     static const int nbLines;        // number of main lines on the staff
     static const int linesOffset;    // from top of canvas to top line (bad!)
 
 protected:
     int m_barLineHeight;
     int m_horizLineLength;
+    int m_resolution;
 
     barlines m_barLines;
+    NotePixmapFactory m_npf;
 };
 
 #endif

@@ -31,7 +31,8 @@ NotationCanvasView::NotationCanvasView(QCanvas *viewing, QWidget *parent,
                                        const char *name, WFlags f)
     : QCanvasView(viewing, parent, name, f),
       m_currentHighlightedLine(0),
-      m_dualArrow(new QCanvasSimpleSprite("pixmaps/dual-arrow.xpm", canvas())),
+      //!!! resolution from staff! or get the NPF to make arrow, or whatever
+      m_dualArrow(new QCanvasSimpleSprite("pixmaps/9/dual-arrow.xpm", canvas())),
       m_lastYPosNearStaff(0)
 {
 //     setCurrentNotePixmap(m_notePixmapFactory.makeNotePixmap(Note::WholeNote));

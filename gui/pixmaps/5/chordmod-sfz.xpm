@@ -1,0 +1,8 @@
+/* XPM */
+static char * chordmod_sfz_xpm[] = {
+"5 3 2 1",
+" 	c None",
+".	c black",
+"   ..",
+".. . ",
+".. . "};

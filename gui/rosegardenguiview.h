@@ -71,6 +71,7 @@ public:
 
 public slots:
     void editTrackNotation(TrackPart*);
+    void editTrackNotationSmall(TrackPart*);
 
 protected:
     NotationView* m_notationView;

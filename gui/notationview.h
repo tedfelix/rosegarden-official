@@ -41,7 +41,8 @@ class NotationView : public KMainWindow
     Q_OBJECT
 public:
 
-    NotationView(RosegardenGUIDoc* doc, unsigned int trackNb, QWidget *parent);
+    NotationView(RosegardenGUIDoc* doc, unsigned int trackNb, QWidget *parent,
+                 int resolution);
     ~NotationView();
 
     const RosegardenGUIDoc *getDocument() const { return m_document; }
@@ -64,10 +65,13 @@ public:
     /// Normally calls applyHorizontalLayout() then applyVerticalLayout()
     virtual bool applyLayout();
 
-    /// Set the 'y'-coord on all doc elements - should be called before applyVerticalLayout()
+    /// Calculate cached values for use in layout
+    virtual bool applyHorizontalPreparse();
+
+    /// Set the 'x'-coord on all doc elements - should be called after applyHorizontalPreparse()
     virtual bool applyHorizontalLayout();
 
-    /// Set the 'x'-coord on all doc elements - should be called after applyHorizontalLayout()
+    /// Set the 'y'-coord on all doc elements - should be called after applyHorizontalLayout()
     virtual bool applyVerticalLayout();
     
     void setHorizontalLayoutEngine(NotationHLayout* e) { m_hlayout = e; }
@@ -182,7 +186,9 @@ protected:
 
 
     void perfTest();
+#ifdef NOT_DEFINED
     void test();
+#endif
 
     KConfig* m_config;
 
@@ -195,17 +201,15 @@ protected:
 
     Staff* m_mainStaff;
     Staff* m_currentStaff;
+    NotePixmapFactory &m_notePixmapFactory;
 
     ViewElementsManager* m_viewElementsManager;
-
     NotationElementList* m_notationElements;
     
     NotationHLayout* m_hlayout;
     NotationVLayout* m_vlayout;
 
     Note::Type m_currentSelectedNote;
-    NotePixmapFactory m_notePixmapFactory;
-	
 };
 
 #endif

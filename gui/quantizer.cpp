@@ -20,8 +20,8 @@
 
 #include "rosedebug.h"
 #include "quantizer.h"
-#include "notepixmapfactory.h"
 #include "NotationTypes.h"
+#include "notationproperties.h"
 
 Quantizer::Quantizer()
 {
@@ -62,9 +62,9 @@ Quantizer::quantize(Event *el)
 
     Note note = Note::getNearestNote(qd);
 
-    el->set<Int>("Notation::NoteType", note.getType());
-    el->set<Bool>("Notation::NoteDotted", note.isDotted());
-    el->set<Int>("QuantizedDuration", qd);
+    el->set<Int>(P_NOTE_TYPE, note.getType());
+    el->set<Bool>(P_NOTE_DOTTED, note.isDotted());
+    el->set<Int>(P_QUANTIZED_DURATION, qd);
 
     kdDebug(KDEBUG_AREA) << "Quantized to duration : "
                           << qd << " - note : " << note.getType()

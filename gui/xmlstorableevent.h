@@ -27,15 +27,6 @@
 
 /**
   *@author Guillaume Laurent, Chris Cannam, Rich Bown
-  *
-  * Currently defined types (event->type()) :
-  *
-  * "note", "rest", "keychange"
-  *
-  * Currently defined properties :
-  *
-  * "pitch", "QuantizedDuration", "Notation::NoteType", "Notation:Accident"
-  *
   */
 class XmlStorableEvent : public Event
 {

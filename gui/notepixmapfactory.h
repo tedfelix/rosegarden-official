@@ -24,7 +24,6 @@
 #include <vector>
 #include <qcanvas.h>
 
-#include "staff.h"
 #include "NotationTypes.h"
 
 typedef vector<int> ChordPitches;
@@ -58,9 +57,11 @@ public:
 
     void setNoteBodySizes(QSize empty, QSize filled);
     void setTailWidth(unsigned int);
+    void setStalkLength(unsigned int);
     void setAccidentalsWidth(unsigned int sharp,
                              unsigned int flat,
                              unsigned int natural);
+    void setAccidentalHeight(unsigned int height);
     void setDotSize(QSize size);
 
 protected:
@@ -76,6 +77,8 @@ protected:
     unsigned int m_sharpWidth;
     unsigned int m_flatWidth;
     unsigned int m_naturalWidth;
+    unsigned int m_accidentalHeight;
+    unsigned int m_stalkLength;
 
     Note::Type m_note;
     Accidental m_accidental;
@@ -105,8 +108,7 @@ protected:
 class NotePixmapFactory
 {
 public:
-
-    NotePixmapFactory();
+    NotePixmapFactory(int resolution);
     ~NotePixmapFactory();
 
     /**
@@ -114,22 +116,37 @@ public:
      *
      * @param note : note type
      * @param drawTail : if the pixmap should have a tail or not
-     *   (useful when the tail should be collapsed with the one of a neighboring note)
+     *   (useful when the tail should be collapsed with the one of a
+     *    neighboring note)
      * @param stalkGoesUp : if the note's stalk should go up or down
      */
     QCanvasPixmap makeNotePixmap(Note::Type note,
                                  bool dotted,
                                  Accidental accidental = NoAccidental,
-                                 bool drawTail = false,
+                                 bool drawTail = true,
                                  bool stalkGoesUp = true);
 
     QCanvasPixmap makeRestPixmap(Note::Type note, bool dotted);
-
     QCanvasPixmap makeClefPixmap(string type);
-
     QCanvasPixmap makeKeyPixmap(string type, string cleftype);
 
+    int getNoteBodyHeight() const   { return m_noteBodyEmpty.height(); }
+    int getNoteBodyWidth() const    { return m_noteBodyEmpty.width(); }
+    int getLineSpacing() const      { return getNoteBodyHeight() + 1; }
+    int getAccidentalWidth() const  { return m_accidentalSharp.width(); }
+    int getAccidentalHeight() const { return m_accidentalSharp.height(); }
+
+// 8 * 7 / 2 - 6 = 56 / 2 - 6 = 28 - 6 = 22
+// 4 * 7 / 2 - 6 = 28 / 2 - 6 = 14 - 6 = 8
+// 8 * 11 / 4 = 88 / 4 = 22
+// 4 * 11 / 4 = 11
+
+    int getStalkLength() const      { return getNoteBodyHeight() * 11/4; }
+
 protected:
+    int m_resolution;
+    QString m_pixmapDirectory;
+
     const QPixmap* tailUp(Note::Type note) const;
     const QPixmap* tailDown(Note::Type note) const;
 
@@ -138,18 +155,12 @@ protected:
     void drawDot();
 
     void createPixmapAndMask(int width = -1, int height = -1);
-
     NotePixmapOffsets m_offsets;
-
     unsigned int m_generatedPixmapHeight;
-    unsigned int m_noteBodyHeight;
-    unsigned int m_noteBodyWidth;
-    unsigned int m_tailWidth;
-
     QPixmap *m_generatedPixmap;
     QBitmap *m_generatedMask;
-
-    QPainter m_p, m_pm;
+    QPainter m_p;
+    QPainter m_pm;
 
     QPixmap m_noteBodyFilled;
     QPixmap m_noteBodyEmpty;
@@ -166,7 +177,13 @@ protected:
 
     static QPoint m_pointZero;
 
+private:
+    NotePixmapFactory(const NotePixmapFactory &);
+    NotePixmapFactory &operator=(const NotePixmapFactory &);
 };
+
+
+#ifdef NOT_DEFINED
 
 /**
  * Generates QCanvasPixmaps for chords - currently broken
@@ -198,6 +215,7 @@ public:
 protected:
     const Staff &m_referenceStaff;
 };
-    
+
+#endif    
 
 #endif

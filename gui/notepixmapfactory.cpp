@@ -27,7 +27,6 @@
 #include "rosedebug.h"
 #include "rosegardenguiview.h"
 #include "notepixmapfactory.h"
-#include "staff.h"
 #include "NotationTypes.h"
 
 
@@ -97,7 +96,7 @@ NotePixmapOffsets::computePixmapSize()
     if (m_noteHasStalk) {
 
         m_pixmapSize.setHeight(m_bodySize.height() / 2 +
-                               Staff::stalkLen +
+                               m_stalkLength +
                                m_accidentalStalkSize.height());
 
         if (m_note < Note::QuarterNote) {
@@ -248,6 +247,18 @@ NotePixmapOffsets::setTailWidth(unsigned int s)
 }
 
 void
+NotePixmapOffsets::setStalkLength(unsigned int s)
+{
+    m_stalkLength = s;
+}
+
+void
+NotePixmapOffsets::setAccidentalHeight(unsigned int h)
+{
+    m_accidentalHeight = h;
+}
+
+void
 NotePixmapOffsets::setAccidentalsWidth(unsigned int sharp,
                                      unsigned int flat,
                                      unsigned int natural)
@@ -263,48 +274,41 @@ void NotePixmapOffsets::setDotSize(QSize size)
 }
 
 
-
-NotePixmapFactory::NotePixmapFactory()
-    : m_generatedPixmapHeight(0),
-      m_noteBodyHeight(0),
-      m_tailWidth(0),
-      m_noteBodyFilled("pixmaps/note-bodyfilled.xpm"),
-      m_noteBodyEmpty("pixmaps/note-bodyempty.xpm"),
-      m_accidentalSharp("pixmaps/notemod-sharp.xpm"),
-      m_accidentalFlat("pixmaps/notemod-flat.xpm"),
-      m_accidentalNatural("pixmaps/notemod-natural.xpm"),
-      m_dot("pixmaps/dot.xpm")
+NotePixmapFactory::NotePixmapFactory(int resolution) :
+    m_resolution(resolution),
+    m_pixmapDirectory(QString("pixmaps/%1").arg(resolution)),
+    m_generatedPixmapHeight(0),
+    m_noteBodyFilled(m_pixmapDirectory + "/note-bodyfilled.xpm"),
+    m_noteBodyEmpty(m_pixmapDirectory + "/note-bodyempty.xpm"),
+    m_accidentalSharp(m_pixmapDirectory + "/notemod-sharp.xpm"),
+    m_accidentalFlat(m_pixmapDirectory + "/notemod-flat.xpm"),
+    m_accidentalNatural(m_pixmapDirectory + "/notemod-natural.xpm"),
+    m_dot(m_pixmapDirectory + "/dot.xpm")
 {
-    // Yes, this is not a mistake. Don't ask me why - Chris named those
-    QString pixmapTailUpFileName("pixmaps/tail-up-%1.xpm"),
-        pixmapTailDownFileName("pixmaps/tail-down-%1.xpm");
+    QString pixmapTailUpFileName(m_pixmapDirectory + "/tail-up-%1.xpm"),
+          pixmapTailDownFileName(m_pixmapDirectory + "/tail-down-%1.xpm");
 
     for (unsigned int i = 0; i < 4; ++i) {
-        
         m_tailsUp.push_back(new QPixmap(pixmapTailDownFileName.arg(i+1)));
         m_tailsDown.push_back(new QPixmap(pixmapTailUpFileName.arg(i+1)));
     }
 
-    //////////////////////////////////////////////////////
-    m_generatedPixmapHeight = m_noteBodyEmpty.height() / 2 + Staff::stalkLen;
-    m_noteBodyHeight        = m_noteBodyEmpty.height();
-    m_noteBodyWidth         = m_noteBodyEmpty.width();
-    //////////////////////////////////////////////////////
+    m_generatedPixmapHeight = getNoteBodyHeight() / 2 + getStalkLength();
 
-    // Load rests
-    m_rests.push_back(new QPixmap("pixmaps/rest-hemidemisemi.xpm"));
-    m_rests.push_back(new QPixmap("pixmaps/rest-demisemi.xpm"));
-    m_rests.push_back(new QPixmap("pixmaps/rest-semiquaver.xpm"));
-    m_rests.push_back(new QPixmap("pixmaps/rest-quaver.xpm"));
-    m_rests.push_back(new QPixmap("pixmaps/rest-crotchet.xpm"));
-    m_rests.push_back(new QPixmap("pixmaps/rest-minim.xpm"));
-    m_rests.push_back(new QPixmap("pixmaps/rest-semibreve.xpm"));
+    m_rests.push_back(new QPixmap(m_pixmapDirectory + "/rest-hemidemisemi.xpm"));
+    m_rests.push_back(new QPixmap(m_pixmapDirectory + "/rest-demisemi.xpm"));
+    m_rests.push_back(new QPixmap(m_pixmapDirectory + "/rest-semiquaver.xpm"));
+    m_rests.push_back(new QPixmap(m_pixmapDirectory + "/rest-quaver.xpm"));
+    m_rests.push_back(new QPixmap(m_pixmapDirectory + "/rest-crotchet.xpm"));
+    m_rests.push_back(new QPixmap(m_pixmapDirectory + "/rest-minim.xpm"));
+    m_rests.push_back(new QPixmap(m_pixmapDirectory + "/rest-semibreve.xpm"));
 
     // Init offsets
     m_offsets.setNoteBodySizes(m_noteBodyEmpty.size(),
                                m_noteBodyFilled.size());
 
     m_offsets.setTailWidth(m_tailsUp[0]->width());
+    m_offsets.setStalkLength(getStalkLength());
     m_offsets.setAccidentalsWidth(m_accidentalSharp.width(),
                                 m_accidentalFlat.width(),
                                 m_accidentalNatural.width());
@@ -325,7 +329,6 @@ NotePixmapFactory::~NotePixmapFactory()
 }
 
 
-
 QCanvasPixmap
 NotePixmapFactory::makeNotePixmap(Note::Type note,
                                   bool dotted,
@@ -333,7 +336,6 @@ NotePixmapFactory::makeNotePixmap(Note::Type note,
                                   bool drawTail,
                                   bool stalkGoesUp)
 {
-
     kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeNotePixmap: note is "
                          << note << ", dotted is " << dotted << endl;
 
@@ -432,15 +434,14 @@ NotePixmapFactory::makeRestPixmap(Note::Type note, bool dotted)
 QCanvasPixmap
 NotePixmapFactory::makeClefPixmap(string type)
 {
-    static string defaultClefFile = "pixmaps/clef-treble.xpm";
-
     try {
 	Clef clef(type);
-	string filename = "pixmaps/clef-" + clef.getName() + ".xpm";
+	string filename = m_pixmapDirectory.latin1();
+        filename += string("/clef-") + clef.getName() + ".xpm";
 	return QCanvasPixmap(filename.c_str());
     } catch (Clef::BadClefName) {
 	kdDebug(KDEBUG_AREA) << "Bad clef name \"" << type << "\"" << endl;
-	return QCanvasPixmap(defaultClefFile.c_str());
+	return QCanvasPixmap(m_pixmapDirectory + "/clef-treble.xpm");
     }
 }
 
@@ -457,20 +458,28 @@ NotePixmapFactory::makeKeyPixmap(string type, string cleftype)
         QPixmap &accidentalPixmap
             (key.isSharp() ? m_accidentalSharp : m_accidentalFlat);
 
-        createPixmapAndMask((Staff::accidentWidth - 1) * ah.size(),
-                            Staff::lineWidth * 6 + 1);
-
         int x = 0;
+        int lw = getLineSpacing();
+        int delta = getAccidentalWidth() - (key.isSharp() ? 1 : 2);
+
+        createPixmapAndMask(delta * ah.size() + 2, lw * 8 + 1);
 
         for (unsigned int i = 0; i < ah.size(); ++i) {
 
             int h = ah[i];
-            int y = ((8 - h) * Staff::lineWidth) / 2 + ((h % 2 == 1) ? 1 : 0);
+            int y = (lw * 2) + ((8 - h) * lw) / 2// + ((h % 2 == 1) ? 1 : 0)
+                - (getAccidentalHeight() / 2);
+
+            // tricky one: sharps and flats are the same size, but
+            // they have different "centres"
+            if (!key.isSharp()) y -= 2;
+
+            kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeKeyPixmap: Have height " << h << ", translates to y " << y << endl;
 
             m_p.drawPixmap(x, y, accidentalPixmap);
             m_pm.drawPixmap(x, y, *(accidentalPixmap.mask()));
 
-            x += Staff::accidentWidth - 1;
+            x += delta;
         }
 
         m_p.end();
@@ -486,9 +495,11 @@ NotePixmapFactory::makeKeyPixmap(string type, string cleftype)
         return p;
 
     } catch (Key::BadKeyName) {
-        return QCanvasPixmap("pixmaps/dot.xpm"); // why not?
+        kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeKeyPixmap: Bad key name " << type << endl;
+        return QCanvasPixmap(m_pixmapDirectory + "/blank.xpm");
     } catch (Clef::BadClefName) {
-        return QCanvasPixmap("pixmaps/dot.xpm"); // why not?
+        kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeKeyPixmap: Bad clef name " << cleftype << endl;
+        return QCanvasPixmap(m_pixmapDirectory + "/blank.xpm");
     }
 }
         
@@ -565,7 +576,6 @@ NotePixmapFactory::tailDown(Note::Type note) const
         throw -1;
     }
 }
-
 
 
 void
@@ -671,6 +681,8 @@ NotePixmapFactory::drawAccidental(Accidental accidental, bool /*stalkGoesUp*/)
 QPoint
 NotePixmapFactory::m_pointZero;
 
+
+#ifdef NOT_DEFINED
 
 //////////////////////////////////////////////////////////////////////
 
@@ -846,3 +858,4 @@ ChordPixmapFactory::makeChordPixmap(const chordpitches &pitches,
 
 */
 
+#endif
