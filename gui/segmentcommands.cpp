@@ -1406,12 +1406,24 @@ void AddTracksCommand::execute()
 {
     using Rosegarden::Track;
 
+    Rosegarden::TrackId trackId;
     unsigned int currentNbTracks = m_composition->getNbTracks();
 
+    int highPosition = 0;
+    Rosegarden::Composition::trackiterator it =
+        m_composition->getTracks().begin();
+
+    for (; it != m_composition->getTracks().end(); ++it)
+    {
+        if ((*it).second->getPosition() > highPosition)
+            highPosition = (*it).second->getPosition();
+    }
+
     for (unsigned int i = 0; i < m_nbNewTracks; ++i) {
-        Track* track = new Rosegarden::Track;
-        track->setId(i + currentNbTracks);
-        track->setPosition(i + currentNbTracks);
+
+        trackId = m_composition->getNewTrackId();
+        Track* track = new Rosegarden::Track(trackId);
+        track->setPosition(highPosition + currentNbTracks);
         track->setInstrument(m_instrumentId);
 
         m_composition->addTrack(track);
@@ -1516,17 +1528,6 @@ void DeleteTracksCommand::execute()
     {
         for (tit = tracks.begin(); tit != tracks.end(); ++tit)
         {
-            /*
-            if ((*tit).second->getId() > (*otIt)->getId())
-            {
-                (*tit).second->setId((*tit).second->getId() - 1);
-
-                // Don't forget we're using a map for the tracks too
-                // and the map value needs to be updated.  Urgh.
-                //
-            }
-            */
-
             if ((*tit).second->getPosition() > (*otIt)->getPosition())
             {
                 (*tit).second->setPosition((*tit).second->getPosition() - 1);
@@ -1543,17 +1544,6 @@ void DeleteTracksCommand::execute()
              << endl;
     }
     */
-
-    // Sort out the record track - make sure it's valid
-    //
-    /*
-    Rosegarden::TrackId recordTrack = m_composition.getRecordTrack();
-    int recordPosition = m_composition.getTrackById(recordTrack)->getPosition();
-
-    if (recordPosition == 0) recordPosition = 
-    if (m_composition.getTrackByPosition(recordPosition - 1)
-    */
-    m_composition->setRecordTrack(m_composition->getTrackByPosition(0)->getId());
 
     m_detached = true;
 }
@@ -1574,11 +1564,6 @@ void DeleteTracksCommand::unexecute()
     {
         for (tit = tracks.begin(); tit != tracks.end(); ++tit)
         {
-            /*
-            if ((*tit).second->getId() >= (*otIt)->getId())
-                (*tit).second->setId((*tit).second->getId() + 1);
-                */
-
             if ((*tit).second->getPosition() >= (*otIt)->getPosition())
                 (*tit).second->setPosition((*tit).second->getPosition() + 1);
         }

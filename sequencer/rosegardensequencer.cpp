@@ -59,6 +59,8 @@ RosegardenSequencerApp::RosegardenSequencerApp(
     m_studio(new Rosegarden::MappedStudio()),
     m_oldSliceSize(0, 0)
 {
+    SEQUENCER_DEBUG << "Registering with DCOP server" << endl;
+
     // Without DCOP we are nothing
     QCString realAppId = kapp->dcopClient()->registerAs(kapp->name(), false);
 

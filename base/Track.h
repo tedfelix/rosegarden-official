@@ -53,20 +53,22 @@ class Track : public XmlExportable
 public:
     Track();
     Track(TrackId id,
-          InstrumentId instrument, 
-          int position,
-          const std::string &label,
-          bool muted);
+          InstrumentId instrument = 0,
+          int position =0 ,
+          const std::string &label = "",
+          bool muted = false);
 
 private:
     Track(const Track &);
     Track operator=(const Track &);
 
+    // Only allow this through the constructor
+    void setId(TrackId id) { m_id = id; }
+
 public:
 
     ~Track();
 
-    void setId(TrackId id) { m_id = id; }
     TrackId getId() const { return m_id; }
 
     void setMuted(bool muted) { m_muted = muted; }

@@ -241,7 +241,8 @@ Composition::Composition() :
 //     m_countInBars(DefaultCountInBars),
     m_playMetronome(false),
     m_recordMetronome(true),
-    m_needsRefresh(true)
+    m_needsRefresh(true),
+    m_highestTrackId(0)
 {
     // nothing else
 }
@@ -1007,6 +1008,10 @@ void Composition::addTrack(Track *track)
                    << __FILE__ << ":" << __LINE__ << std::endl;
         // throw Exception("track id already present");
     }
+
+    // Keep a track of the highest TrackId used
+    //
+    if (track->getId() > m_highestTrackId) m_highestTrackId = track->getId();
 }
 
 
@@ -1235,6 +1240,15 @@ Composition::getTrackByPosition(int position)
     return 0;
 
 }
+
+Rosegarden::TrackId
+Composition::getNewTrackId() const
+{
+    if (m_tracks.size() == 0) return 0;
+    return m_highestTrackId + 1;
+}
+
+
 
 }
 

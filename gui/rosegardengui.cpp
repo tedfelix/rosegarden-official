@@ -2003,10 +2003,47 @@ void RosegardenGUIApp::slotDeleteTrack()
 {
     if (!m_view) return;
 
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::TrackId trackId = comp.getSelectedTrack();
+    Rosegarden::Track *track = comp.getTrackById(trackId);
+
+    if (track == 0) return;
+
+    // Always have at least one track in a composition
+    //
+    if (comp.getNbTracks() == 1) return;
+
+    int position = track->getPosition();
+
+    // Delete the track
+    //
     std::vector<Rosegarden::TrackId> tracks;
-    tracks.push_back(m_doc->getComposition().getSelectedTrack());
+    tracks.push_back(trackId);
 
     m_view->slotDeleteTracks(tracks);
+
+    // Select a new valid track
+    //
+    if (comp.getTrackByPosition(position))
+        trackId = comp.getTrackByPosition(position)->getId();
+    else if (comp.getTrackByPosition(position - 1))
+        trackId = comp.getTrackByPosition(position - 1)->getId();
+    else 
+    {
+        RG_DEBUG << "RosegardenGUIApp::slotDeleteTrack - "
+                 << "can't select a highlighted track after delete"
+                 << endl;
+    }
+
+    comp.setSelectedTrack(trackId);
+
+    Rosegarden::Instrument *inst = m_doc->getStudio().
+        getInstrumentById(comp.getTrackById(trackId)->getInstrument());
+
+    if (inst && inst->getType() == Rosegarden::Instrument::Midi)
+        comp.setRecordTrack(trackId);
+
+    m_view->slotSelectTrackSegments(trackId);
 }
 
 void RosegardenGUIApp::slotMoveTrackDown()

@@ -615,6 +615,11 @@ public:
     ReferenceSegment getTempoSegment() const { return m_tempoSegment; }
 
 
+    //// Get the highest running track id (generated and kept
+    //// through addTrack)
+    ////
+    Rosegarden::TrackId getNewTrackId() const;
+
 protected:
 
     static const PropertyName NoAbsoluteTimeProperty;
@@ -649,47 +654,47 @@ protected:
     TrackId getClosestValidTrackId(TrackId id) const;
     
     //--------------- Data members ---------------------------------
-
-    trackcontainer m_tracks;
-    segmentcontainer m_segments;
+    //
+    trackcontainer                    m_tracks;
+    segmentcontainer                  m_segments;
 
     // The track we can record on
     //
-    Rosegarden::TrackId m_recordTrack;
+    Rosegarden::TrackId               m_recordTrack;
 
     // Are we soloing and if so which Track?
     //
-    bool                m_solo;
-    Rosegarden::TrackId m_selectedTrack;
+    bool                              m_solo;
+    Rosegarden::TrackId               m_selectedTrack;
 
     /// Contains time signature events
-    mutable ReferenceSegment m_timeSigSegment;
+    mutable ReferenceSegment          m_timeSigSegment;
 
     /// Contains tempo events
-    mutable ReferenceSegment m_tempoSegment;
+    mutable ReferenceSegment          m_tempoSegment;
 
-    BasicQuantizer *m_basicQuantizer;
-    NotationQuantizer *m_notationQuantizer;
+    BasicQuantizer                   *m_basicQuantizer;
+    NotationQuantizer                *m_notationQuantizer;
 
-    timeT m_position;
-    double m_defaultTempo;
+    timeT                             m_position;
+    double                            m_defaultTempo;
 
     // Notional Composition markers - these define buffers for the
     // start and end of the piece, Segments can still exist outside
     // of these markers - these are for visual and playback cueing.
     //
-    timeT m_startMarker;
-    timeT m_endMarker;
+    timeT                             m_startMarker;
+    timeT                             m_endMarker;
 
     // Loop start and end positions.  If they're both the same
     // value (usually 0) then there's no loop set.
     //
-    timeT m_loopStart;
-    timeT m_loopEnd;
+    timeT                             m_loopStart;
+    timeT                             m_loopEnd;
 
     /// affects m_timeSigSegment
     void calculateBarPositions() const;
-    mutable bool m_barPositionsNeedCalculating;
+    mutable bool                      m_barPositionsNeedCalculating;
     ReferenceSegment::iterator getTimeSignatureAtAux(timeT t) const;
 
     /// affects m_tempoSegment
@@ -698,15 +703,16 @@ protected:
     RealTime time2RealTime(timeT time, double tempo) const;
     timeT realTime2Time(RealTime rtime, double tempo) const;
 
-    Configuration m_metadata;
+    Configuration                     m_metadata;
 
-    bool m_playMetronome;
-    bool m_recordMetronome;
+    bool                              m_playMetronome;
+    bool                              m_recordMetronome;
 
     RefreshStatusArray<RefreshStatus> m_refreshStatusArray;
 
-    bool m_needsRefresh;
+    bool                              m_needsRefresh;
 
+    TrackId                           m_highestTrackId;
 
 };
 

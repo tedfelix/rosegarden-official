@@ -620,11 +620,13 @@ void RosegardenGUIView::slotSelectTrackSegments(int trackId)
 {
     // update the instrument parameter box
     Composition &comp = getDocument()->getComposition();
+    Rosegarden::Track *track = comp.getTrackById(trackId);
+
+    if (track == 0) return;
 
     // Show the selection on the track buttons.  Find the position.
     //
-    int position = (comp.getTrackById(trackId))->getPosition();
-    m_trackEditor->getTrackButtons()->selectLabel(position);
+    m_trackEditor->getTrackButtons()->selectLabel(track->getPosition());
 
     Rosegarden::SegmentSelection segments;
 
@@ -649,7 +651,6 @@ void RosegardenGUIView::slotSelectTrackSegments(int trackId)
     // and the one we're going to is MIDI.
     //
     Rosegarden::Studio &studio = getDocument()->getStudio();
-    Rosegarden::Track *track = comp.getTrackById(comp.getRecordTrack());
 
     if (track)
     {
@@ -658,15 +659,8 @@ void RosegardenGUIView::slotSelectTrackSegments(int trackId)
 
         if (instr && instr->getType() == Rosegarden::Instrument::Midi)
         {
-            track = comp.getTrackById(trackId);
-            instr = studio.getInstrumentById(track->getInstrument());
-
-            if (instr && instr->getType() == Rosegarden::Instrument::Midi)
-            {
-                comp.setRecordTrack(trackId);
-                getTrackEditor()->
-                    getTrackButtons()->slotSetRecordTrack(position);
-            }
+            getTrackEditor()->getTrackButtons()->
+                slotSetRecordTrack(track->getPosition());
         }
     }
     
