@@ -385,6 +385,10 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotMergeRG21()), actionCollection(),
                 "file_merge_rg21");
 
+    new KAction(i18n("Merge &Hydrogen file..."), 0, 0, this,
+                SLOT(slotMergeHydrogen()), actionCollection(),
+                "file_merge_hydrogen");
+
     new KAction(i18n("Export &MIDI file..."), 0, 0, this,
                 SLOT(slotExportMIDI()), actionCollection(),
                 "file_export_midi");
@@ -1713,7 +1717,7 @@ void RosegardenGUIApp::openURL(const KURL& url)
 
     RG_DEBUG << "RosegardenGUIApp::openURL: target : " << target << endl;
 
-     if (!m_doc->saveIfModified()) return;
+    if (!m_doc->saveIfModified()) return;
 
     openFile(target);
 
@@ -2931,7 +2935,7 @@ void RosegardenGUIApp::slotMergeMIDI()
 
     QString tmpfile;
     KIO::NetAccess::download(url, tmpfile);
-    mergeFile(tmpfile);
+    mergeFile(tmpfile, ImportMIDI);
 
     KIO::NetAccess::removeTempFile( tmpfile );
 }
@@ -3104,7 +3108,7 @@ void RosegardenGUIApp::slotMergeRG21()
 
     QString tmpfile;
     KIO::NetAccess::download(url, tmpfile);
-    mergeFile(tmpfile);
+    mergeFile(tmpfile, ImportRG21);
 
     KIO::NetAccess::removeTempFile( tmpfile );
 }
@@ -3181,6 +3185,26 @@ RosegardenGUIApp::slotImportHydrogen()
     KIO::NetAccess::removeTempFile(tmpfile);
 }
 
+void RosegardenGUIApp::slotMergeHydrogen()
+{
+    KURL url = KFileDialog::getOpenURL
+        (
+#if KDE_VERSION >= 196614
+         ":HYDROGEN",
+#else
+         QString::null,
+#endif
+         i18n("*.h2song|Hydrogen files\n*|All files"), this,
+         i18n("Open Hydrogen File"));
+    if (url.isEmpty()) { return; }
+
+    QString tmpfile;
+    KIO::NetAccess::download(url, tmpfile);
+    mergeFile(tmpfile, ImportHydrogen);
+
+    KIO::NetAccess::removeTempFile( tmpfile );
+}
+
 RosegardenGUIDoc*
 RosegardenGUIApp::createDocumentFromHydrogenFile(QString file)
 {
@@ -3231,9 +3255,9 @@ RosegardenGUIApp::createDocumentFromHydrogenFile(QString file)
 }
 
 void
-RosegardenGUIApp::mergeFile(QString filePath)
+RosegardenGUIApp::mergeFile(QString filePath, ImportType type)
 {
-    RosegardenGUIDoc *doc = createDocument(filePath);
+    RosegardenGUIDoc *doc = createDocument(filePath, type);
 
     if (doc) {
 	if (m_doc) {

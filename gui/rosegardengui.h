@@ -143,7 +143,12 @@ public:
     /**
      * merge a file with the existing document
      */ 
-    virtual void mergeFile(QString filePath);
+    virtual void mergeFile(QString filePath) { mergeFile(filePath, ImportCheckType); }
+    
+    /**
+     * merge a file, explicitly specifying its type
+     */
+    void mergeFile(QString filePath, ImportType type);
 
     /**
      * open a URL
@@ -526,6 +531,11 @@ public slots:
      * Let the user select a MIDI file for merge
      */
     void slotMergeRG21();
+
+    /**
+     * Select a Hydrogen drum machine file for merge
+     */
+    void slotMergeHydrogen();
 
     /**
      * Let the user enter a MIDI file to export to
