@@ -257,6 +257,7 @@ public slots:
     void slotLinearMode();
     void slotPageMode();
     void slotLabelChords();
+    void slotShowTempos();
 
     /// group slots
     void slotGroupBeam();
@@ -500,7 +501,9 @@ protected:
     BarButtons *m_topBarButtons;
     BarButtons *m_bottomBarButtons;
     QWidget *m_chordNameRuler;
+    QWidget *m_tempoRuler;
     bool m_chordNamesVisible;
+    bool m_temposVisible;
 
     bool m_tupletMode;
     

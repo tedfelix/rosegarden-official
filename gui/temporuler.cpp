@@ -21,58 +21,49 @@
 
 #include <qpainter.h>
 
-#include "textruler.h"
+#include "temporuler.h"
 #include "colours.h"
 #include "rosedebug.h"
-#include "Event.h"
-#include "Segment.h"
-#include "NotationTypes.h"
+#include "Composition.h"
 #include "RulerScale.h"
 
 using Rosegarden::RulerScale;
-using Rosegarden::Segment;
-using Rosegarden::Event;
-using Rosegarden::Text;
-using Rosegarden::String;
+using Rosegarden::Composition;
 using Rosegarden::timeT;
 
 
-TextRuler::TextRuler(RulerScale *rulerScale,
-		     Segment *segment,
-                     int height,
-                     QWidget *parent,
-                     const char *name)
+TempoRuler::TempoRuler(RulerScale *rulerScale,
+		       Composition *composition,
+		       int height,
+		       QWidget *parent,
+		       const char *name)
     : QWidget(parent, name),
       m_height(height),
       m_currentXOffset(0),
       m_width(-1),
-      m_segment(segment),
+      m_composition(composition),
       m_rulerScale(rulerScale),
       m_font("helvetica", 12),
       m_fontMetrics(m_font)
 {
-    m_mySegmentMaybe = (m_segment->getComposition() != 0);
     setBackgroundColor(RosegardenGUIColours::TextRulerBackground);
-
     m_font.setPixelSize(10);
 }
 
-TextRuler::~TextRuler()
+TempoRuler::~TempoRuler()
 {
-    if (m_mySegmentMaybe && !m_segment->getComposition()) {
-	delete m_segment;
-    }
+    // nothing
 }
 
 void
-TextRuler::slotScrollHoriz(int x)
+TempoRuler::slotScrollHoriz(int x)
 {
     m_currentXOffset = -x;
     repaint();
 }
 
 QSize
-TextRuler::sizeHint() const
+TempoRuler::sizeHint() const
 {
     //!!! could be improved upon
 
@@ -86,7 +77,7 @@ TextRuler::sizeHint() const
 }
 
 QSize
-TextRuler::minimumSizeHint() const
+TempoRuler::minimumSizeHint() const
 {
     double firstBarWidth = m_rulerScale->getBarWidth(0);
     QSize res = QSize(int(firstBarWidth), m_height);
@@ -94,7 +85,7 @@ TextRuler::minimumSizeHint() const
 }
 
 void
-TextRuler::paintEvent(QPaintEvent* e)
+TempoRuler::paintEvent(QPaintEvent* e)
 {
     QPainter paint(this);
     paint.setPen(RosegardenGUIColours::TextRulerForeground);
@@ -109,27 +100,26 @@ TextRuler::paintEvent(QPaintEvent* e)
     timeT   to = m_rulerScale->getTimeForX
 	(clipRect.x() + clipRect.width() - m_currentXOffset + 100);
 
-    for (Segment::iterator i = m_segment->findTime(from);
-	 i != m_segment->findTime(to) && i != m_segment->end(); ++i) {
-	
-	if (!(*i)->isa(Text::EventType)) continue;
+    QRect boundsForHeight = m_fontMetrics.boundingRect("^j|lM");
+    int fontHeight = boundsForHeight.height();
+    int textY = (height() - 6)/2 + fontHeight/2;
 
-	std::string text;
-	if (!(*i)->get<String>(Text::TextPropertyName, text)) {
-	    kdDebug(KDEBUG_AREA)
-		<< "Warning: TextRuler::paintEvent: No text in text event"
-		<< endl;
-	    continue;
-	}
+    for (int tempoNo = m_composition->getTempoChangeNumberAt(from) + 1;
+	 tempoNo <= m_composition->getTempoChangeNumberAt(to); ++tempoNo) {
 
-	QRect bounds = m_fontMetrics.boundingRect(text.c_str());
+	std::pair<timeT, long> tempoChange =
+	    m_composition->getRawTempoChange(tempoNo);
 
-	double x = m_rulerScale->getXForTime((*i)->getAbsoluteTime()) +
-	    m_currentXOffset - bounds.width()/2;
+	timeT time = tempoChange.first;
+	long tempo = tempoChange.second;
+	QString tempoString = QString("%1").arg(tempo / 60);
+	QRect bounds = m_fontMetrics.boundingRect(tempoString);
 
-	int y = height()/2 + bounds.height()/2;
+	double x = m_rulerScale->getXForTime(time) + m_currentXOffset;
+	paint.drawLine(x, height() - 4, x, height());
 
-	paint.drawText(x, y, text.c_str());
+	x -= bounds.width() / 2;
+	paint.drawText(x, textY, tempoString);
     }
 }
 

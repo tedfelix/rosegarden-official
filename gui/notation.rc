@@ -18,6 +18,7 @@ etc
 -->
   <Separator/>
   <Action name="label_chords"/>
+  <Action name="display_tempo_changes"/>
 </Menu>
 
 <Menu name="edit">

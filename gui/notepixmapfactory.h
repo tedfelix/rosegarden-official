@@ -148,6 +148,7 @@ public:
     QCanvasPixmap makeSlurPixmap(int length, int dy, bool above);
     QCanvasPixmap makeUnknownPixmap();
     QCanvasPixmap makeToolbarPixmap(const char *name);
+    QCanvasPixmap makeClefDisplayPixmap(const Rosegarden::Clef &clef);
     QCanvasPixmap makeKeyDisplayPixmap(const Rosegarden::Key &key,
 				       const Rosegarden::Clef &clef);
     QCanvasPixmap makeTextPixmap(const Rosegarden::Text &text);

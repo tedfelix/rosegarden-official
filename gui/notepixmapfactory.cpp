@@ -1126,6 +1126,25 @@ NotePixmapFactory::makeKeyPixmap(const Key &key, const Clef &clef)
 }
 
 QCanvasPixmap
+NotePixmapFactory::makeClefDisplayPixmap(const Clef &clef)
+{
+    QCanvasPixmap clefPixmap(m_font->getCanvasPixmap(getClefCharName(clef)));
+
+    int lw = getLineSpacing();
+    int width = clefPixmap.width() + 6 * getNoteBodyWidth();
+
+    createPixmapAndMask(width, lw * 8 + 1);
+
+    int h = clef.getAxisHeight();
+    int y = (lw * 2) + ((8 - h) * lw) / 2;
+    int x = 3 * getNoteBodyWidth();
+    m_p.drawPixmap(x, y - clefPixmap.offsetY(), clefPixmap);
+    m_pm.drawPixmap(x, y - clefPixmap.offsetY(), *(clefPixmap.mask()));
+
+    return makeCanvasPixmap(m_pointZero);
+}
+
+QCanvasPixmap
 NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef)
 {
     std::vector<int> ah = key.getAccidentalHeights(clef);

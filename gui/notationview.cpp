@@ -65,6 +65,7 @@
 #include "dialogs.h"
 
 #include "chordnameruler.h"
+#include "temporuler.h"
 
 #include "CompositionTimeSliceAdapter.h"
 #include "AnalysisTypes.h"
@@ -214,6 +215,12 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     addRuler(m_chordNameRuler);
     m_chordNameRuler->hide();
     m_chordNamesVisible = false;
+
+    m_tempoRuler = new TempoRuler
+	(&m_hlayout, &doc->getComposition(), 20, getCentralFrame());
+    addRuler(m_tempoRuler);
+    m_tempoRuler->hide();
+    m_temposVisible = false;
 
     m_bottomBarButtons = new BarButtons(&m_hlayout, 25,
                                         true, getCentralFrame());
@@ -526,6 +533,10 @@ void NotationView::setupActions()
     new KToggleAction
 	(i18n("Label &Chords"), 0, this, SLOT(slotLabelChords()),
 	 actionCollection(), "label_chords");
+
+    new KToggleAction
+	(i18n("Display &Tempo Changes"), 0, this, SLOT(slotShowTempos()),
+	 actionCollection(), "display_tempo_changes");
 
     // setup Group menu
     new KAction(GroupMenuBeamCommand::getGlobalName(), 0, this,
@@ -896,10 +907,12 @@ NotationView::setPageMode(bool pageMode)
 	if (m_topBarButtons) m_topBarButtons->hide();
 	if (m_bottomBarButtons) m_bottomBarButtons->hide();
 	if (m_chordNameRuler) m_chordNameRuler->hide();
+	if (m_tempoRuler) m_tempoRuler->hide();
     } else {
 	if (m_topBarButtons) m_topBarButtons->show();
 	if (m_bottomBarButtons) m_bottomBarButtons->show();
 	if (m_chordNameRuler && m_chordNamesVisible) m_chordNameRuler->show();
+	if (m_tempoRuler && m_temposVisible) m_tempoRuler->show();
     }
 
     m_hlayout.setPageMode(pageMode);
@@ -1990,6 +2003,18 @@ void NotationView::slotLabelChords()
 	m_chordNameRuler->hide();
     } else {
 	m_chordNameRuler->show();
+    }
+}
+
+void NotationView::slotShowTempos()
+{
+    if (m_hlayout.getPageMode()) return;
+    m_temposVisible = !m_temposVisible;
+
+    if (!m_temposVisible) {
+	m_tempoRuler->hide();
+    } else {
+	m_tempoRuler->show();
     }
 }
 
