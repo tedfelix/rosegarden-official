@@ -85,7 +85,7 @@ void Profiles::dump()
         cerr << "-> " << *i << ": real: " 
 	     << m_profiles[*i].first << " calls, "
 	     << m_profiles[*i].second.second << ", "
-	     << (m_profiles[*i].second.second / m_profiles[*i].second.first)
+	     << (m_profiles[*i].second.second / m_profiles[*i].first)
 	     << "/call"
 	     << endl;
     }

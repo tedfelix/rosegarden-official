@@ -33,6 +33,7 @@
 
 #include "RealTime.h"
 #include "Exception.h"
+#include "MappedEvent.h"
 
 SequencerMapper::SequencerMapper(const QString filename)
     : m_fd(-1),
@@ -68,7 +69,9 @@ SequencerMapper::map()
         throw Rosegarden::Exception("Couldn't open " + std::string(m_filename.data()));
     }
 
-    m_mmappedSize = sizeof(Rosegarden::RealTime);
+    m_mmappedSize =
+	sizeof(Rosegarden::RealTime) + sizeof(bool) +
+	sizeof(Rosegarden::MappedEvent);
 
     m_mmappedBuffer = (long*)::mmap(0, m_mmappedSize, PROT_READ, MAP_SHARED, m_fd, 0);
 
@@ -84,50 +87,30 @@ SequencerMapper::map()
                     << (void*)m_mmappedBuffer << "," << m_mmappedSize << endl;
 }
 
-bool
-SequencerMapper::remap()
-{
-/*
-    QFileInfo fInfo(m_filename);
-    size_t newSize = fInfo.size();
-
-    SEQUENCER_DEBUG << "remap() from " << m_mmappedSize << " to "
-                    << newSize << endl;
-
-    if (m_mmappedSize == newSize) {
-
-        SEQUENCER_DEBUG << "remap() : sizes are identical, remap not forced - "
-                        << "nothing to do\n";
-        return false;
-    }
-
-#ifdef linux
-    m_mmappedBuffer = (MappedEvent*)::mremap(m_mmappedBuffer, m_mmappedSize, newSize, MREMAP_MAYMOVE);
-#else
-    ::munmap(m_mmappedBuffer, m_mmappedSize);
-    m_mmappedBuffer = (MappedEvent*)::mmap(0, newSize, PROT_READ, MAP_SHARED, m_fd, 0);
-#endif
-
-    if (m_mmappedBuffer == (void*)-1) {
-
-            SEQUENCER_DEBUG << QString("mremap failed : (%1) %2\n").
-                arg(errno).arg(strerror(errno));
-
-            throw Rosegarden::Exception("mremap failed");
-    }
-
-    m_mmappedSize = newSize;
-    m_nbMappedEvents = m_mmappedSize / sizeof(MappedEvent);
-
-    return true;
-*/
-    return true;
-}
-
 void 
 SequencerMapper::unmap()
 {
     ::munmap(m_mmappedBuffer, m_mmappedSize);
     ::close(m_fd);
+}
+
+Rosegarden::RealTime
+SequencerMapper::getPositionPointer() const
+{
+    char *buf = (char *)m_mmappedBuffer;
+    return *(Rosegarden::RealTime *)buf;
+}
+
+bool
+SequencerMapper::getVisual(Rosegarden::MappedEvent &ev) const
+{
+    char *buf = (char *)m_mmappedBuffer;
+    buf += sizeof(Rosegarden::RealTime);
+
+    bool haveEvent = *(bool *)buf;
+    buf += sizeof(bool);
+
+    if (haveEvent) ev = *(Rosegarden::MappedEvent *)buf;
+    return haveEvent;
 }
 

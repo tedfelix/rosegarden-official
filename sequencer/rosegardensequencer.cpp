@@ -287,6 +287,15 @@ RosegardenSequencerApp::startPlaying()
 void
 RosegardenSequencerApp::notifyVisuals(Rosegarden::MappedComposition *mC)
 {
+    Rosegarden::MappedComposition::iterator i = mC->end();
+    if (i == mC->begin()) {
+	m_sequencerMapper.updateVisual(0);
+    } else {
+	--i;
+	m_sequencerMapper.updateVisual(*i);
+    }
+
+/*!!!
     // Tell the gui that we're processing these events next
     //
     QByteArray data;
@@ -302,6 +311,7 @@ RosegardenSequencerApp::notifyVisuals(Rosegarden::MappedComposition *mC)
                         << " - can't call RosegardenGUI client"
                         << endl;
     }
+*/
 }
 
 bool

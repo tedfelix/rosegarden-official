@@ -24,15 +24,18 @@
 #include <qstring.h>
 #include "RealTime.h"
 
+namespace Rosegarden { class MappedEvent; }
+
 class SequencerMmapper
 {
 public:
     SequencerMmapper();
     ~SequencerMmapper();
     
-    QString getFileName() { return m_fileName; }
-    void refresh();
     void updatePositionPointer(Rosegarden::RealTime time);
+    void updateVisual(Rosegarden::MappedEvent *ev);
+
+    QString getFileName() { return m_fileName; }
 
 protected:
 
@@ -43,14 +46,9 @@ protected:
     //--------------- Data members ---------------------------------
     //
     QString               m_fileName;
-    bool                  m_needsRefresh;
     int                   m_fd;
     void*                 m_mmappedBuffer;
     size_t                m_mmappedSize;
-
-    // Our position to map
-    //
-    Rosegarden::RealTime  m_position;
 };
 
 

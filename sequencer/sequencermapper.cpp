@@ -34,6 +34,7 @@
 
 #include "RealTime.h"
 #include "Exception.h"
+#include "MappedEvent.h"
 
 // Seems not to be properly defined under some gcc 2.95 setups
 #ifndef MREMAP_MAYMOVE
@@ -42,16 +43,17 @@
 
 SequencerMmapper::SequencerMmapper():
     m_fileName(createFileName()),
-    m_needsRefresh(true),
     m_fd(-1),
     m_mmappedBuffer(0),
-    m_mmappedSize(sizeof(Rosegarden::RealTime))
+    m_mmappedSize(sizeof(Rosegarden::RealTime) + sizeof(bool) +
+		  sizeof(Rosegarden::MappedEvent))
 {
     // just in case
     QFile::remove(m_fileName);
 
-    m_fd = ::open(m_fileName.latin1(), O_RDWR|O_CREAT|O_TRUNC,
-                  S_IRUSR|S_IWUSR);
+    m_fd = ::open(m_fileName.latin1(),
+		  O_RDWR | O_CREAT | O_TRUNC,
+                  S_IRUSR | S_IWUSR);
 
     if (m_fd < 0) {
         SEQUENCER_DEBUG << "SequencerMmapper : Couldn't open " << m_fileName
@@ -69,7 +71,8 @@ SequencerMmapper::SequencerMmapper():
                              MAP_SHARED, m_fd, 0);
 
     if (m_mmappedBuffer == (void*)-1) {
-        SEQUENCER_DEBUG << QString("mmap failed : (%1) %2\n").arg(errno).arg(strerror(errno));
+        SEQUENCER_DEBUG <<
+	    QString("mmap failed : (%1) %2\n").arg(errno).arg(strerror(errno));
         throw Rosegarden::Exception("mmap failed");
     }
 
@@ -86,41 +89,31 @@ SequencerMmapper::~SequencerMmapper()
     ::close(m_fd);
     QFile::remove(m_fileName);
 }
-    
-void
-SequencerMmapper::refresh()
-{
-    SEQUENCER_DEBUG << "SequencerMmapper : refresh\n";
-
-    if (m_needsRefresh) {
-
-        long *bufPos = (long*)m_mmappedBuffer;
-
-        *bufPos++ = m_position.sec;
-        *bufPos = m_position.usec;
-
-        /*
-        std::cout << "SEC = " << *((long*)m_mmappedBuffer)
-                  << ", USEC = " << (long)(*bufPos) << std::endl;
-                  */
-
-        //rgapp->sequencerSend("remapControlBlock()");
-
-        m_needsRefresh = false;
-    }
-}
 
 void
 SequencerMmapper::updatePositionPointer(Rosegarden::RealTime time)
 {
-    /*
-    SEQUENCER_DEBUG << "SequencerMmapper::updatePositionPointer - "
-                    << " position = " << time << endl;
-                    */
+    Rosegarden::RealTime *ptr = (Rosegarden::RealTime *)m_mmappedBuffer;
+    *ptr = time;
+}
 
-    m_position = time;
-    m_needsRefresh = true;
-    refresh();
+void
+SequencerMmapper::updateVisual(Rosegarden::MappedEvent *ev)
+{
+    char *buf = (char *)m_mmappedBuffer;
+    buf += sizeof(Rosegarden::RealTime);
+
+    bool *haveEventPtr = (bool *)buf;
+    buf += sizeof(bool);
+
+    Rosegarden::MappedEvent *eventPtr = (Rosegarden::MappedEvent *)buf;
+
+    if (ev) {
+	*haveEventPtr = true;
+	*eventPtr = *ev;
+    } else {
+	*haveEventPtr = false;
+    }
 }
 
 
@@ -129,8 +122,8 @@ SequencerMmapper::init()
 {
     SEQUENCER_DEBUG << "SequencerMmapper::initControlBlock()\n";
 
-    m_position = Rosegarden::RealTime(0, 0);
-    refresh();
+    updatePositionPointer(Rosegarden::RealTime::zeroTime);
+    updateVisual(0);
     ::msync(m_mmappedBuffer, m_mmappedSize, MS_ASYNC);
 }
 
@@ -142,7 +135,6 @@ SequencerMmapper::setFileSize(size_t size)
     // rewind
     ::lseek(m_fd, 0, SEEK_SET);
 
-    //
     // enlarge the file
     // (seek() to wanted size, then write a byte)
     //
@@ -162,6 +154,7 @@ SequencerMmapper::setFileSize(size_t size)
 QString
 SequencerMmapper::createFileName()
 {
-    return KGlobal::dirs()->resourceDirs("tmp").first() + "/rosegarden_sequencer_timing_block";
+    return KGlobal::dirs()->resourceDirs("tmp").first() +
+	"/rosegarden_sequencer_timing_block";
 }
 

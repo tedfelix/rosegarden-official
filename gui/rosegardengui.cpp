@@ -2874,10 +2874,13 @@ RosegardenGUIApp::slotUpdatePlaybackPosition()
     //
     if (!m_seqManager || !m_seqManager->getSequencerMapper()) return;
 
-    long* ptr = (long*)m_seqManager->getSequencerMapper()->getBuffer();
-    long sec = *(ptr++);
-    long usec = *ptr;
-    Rosegarden::RealTime position(sec, usec);
+    SequencerMapper *mapper = m_seqManager->getSequencerMapper();
+
+    Rosegarden::MappedEvent ev;
+    bool haveEvent = mapper->getVisual(ev);
+    if (haveEvent) m_transport->setMidiOutLabel(&ev);
+
+    Rosegarden::RealTime position = mapper->getPositionPointer();
 
     Rosegarden::Composition &comp = m_doc->getComposition();
     timeT elapsedTime = comp.getElapsedTimeForRealTime(position);

@@ -22,6 +22,9 @@
 #define _GUI_SEQUENCERMAPPER_H_
 
 #include <qstring.h>
+#include "RealTime.h"
+
+namespace Rosegarden { class MappedEvent; }
 
 class SequencerMapper
 {
@@ -29,10 +32,10 @@ public:
     SequencerMapper(const QString filename);
     ~SequencerMapper();
 
-    bool remap();
+    Rosegarden::RealTime getPositionPointer() const;
+    bool getVisual(Rosegarden::MappedEvent &) const;
+    
     QString getFileName() const { return m_filename; }
-    void* getBuffer() { return m_mmappedBuffer; }
-    size_t getSize() const { return m_mmappedSize; }
 
 protected:
     void map();
