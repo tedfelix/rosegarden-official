@@ -1871,10 +1871,12 @@ AlsaDriver::processAudioQueue(const RealTime &playLatency, bool now)
 RealTime
 AlsaDriver::getSequencerTime()
 {
-    if(m_playing)
-       return getAlsaTime() + m_playStartPosition - m_alsaPlayStartTime;
+    RealTime t(0, 0);
 
-    return RealTime(0, 0);
+    if (m_playing)
+       t = getAlsaTime() + m_playStartPosition - m_alsaPlayStartTime;
+
+    return t;
 }
 
 // Gets the time of the ALSA queue

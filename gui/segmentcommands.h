@@ -196,6 +196,8 @@ public:
                          Rosegarden::timeT endTime);
     virtual ~SegmentInsertCommand();
 
+    Rosegarden::Segment *getSegment() const; // after invocation
+
     virtual void execute();
     virtual void unexecute();
     

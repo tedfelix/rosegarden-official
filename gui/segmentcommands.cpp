@@ -422,6 +422,12 @@ SegmentInsertCommand::~SegmentInsertCommand()
     }
 }
 
+Rosegarden::Segment *
+SegmentInsertCommand::getSegment() const
+{
+    return m_segment;
+}
+
 void
 SegmentInsertCommand::execute()
 {

@@ -248,12 +248,34 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent*)
                                      m_currentItem->getStartTime(),
                                      m_currentItem->getEndTime());
 
-        addCommandToHistory(command);
-    }
+	delete m_currentItem;
+	m_currentItem = 0;
+	m_newRect = false;
 
-    delete m_currentItem;
-    m_currentItem = 0;
-    m_newRect = false;
+        addCommandToHistory(command);
+
+	// add the SegmentItem by hand, instead of allowing the usual
+	// update mechanism to spot it.  This way we can select the
+	// segment as we add it; otherwise we'd have no way to know
+	// that the segment was created by this tool rather than by
+	// e.g. a simple file load
+	SegmentSelector* selector = dynamic_cast<SegmentSelector*>
+	    (getToolBox()->getTool("segmentselector"));
+	Rosegarden::Segment *segment = command->getSegment();
+	SegmentItem *item = m_canvas->addSegmentItem(segment);
+
+	Rosegarden::SegmentSelection selection;
+	selection.insert(segment);
+	selector->clearSelected();
+	emit selectedSegments(selection);
+	selector->slotSelectSegmentItem(item);
+
+    } else {
+
+	delete m_currentItem;
+	m_currentItem = 0;
+	m_newRect = false;
+    }
 }
 
 int SegmentPencil::handleMouseMove(QMouseEvent *e)

@@ -1888,3 +1888,58 @@ int NotePixmapFactory::getTextWidth(const Rosegarden::Text &text) const {
     return metrics.boundingRect(strtoqstr(text.getText())).width() + 4;
 }
 
+/**
+
+
+
+
+
+
+
+
+
+        you shall above all things be glad and young.
+        For if you're young, whatever life you wear
+
+        it will become you;and if you are glad
+        whatever's living will yourself become.
+        Girlboys may nothing more than boygirls need:
+        i can entirely her only love
+
+        whose any mystery makes every man's
+        flesh put space on;and his mind take off time
+
+        that you should ever think,may god forbid
+        and(in his mercy)your true lover spare:
+        for that way knowledge lies,the foetal grave
+        called progress,and negation's dead undoom.
+
+        I'd rather learn from one bird how to sing
+        than teach ten thousand stars how not to dance
+
+
+
+        e.e. cummings
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        it's been a while since we had any poetry in here
+
+
+
+*/
+

@@ -427,6 +427,8 @@ RosegardenSequencerApp::updateClocks(bool clearToSend)
     arg << newPosition.sec;
     arg << newPosition.usec;
     arg << long(clearToSend);
+
+//    std::cerr << "Calling setPointerPosition(" << newPosition.sec << "," << newPosition.usec << "," << long(clearToSend) << ")" << std::endl;
     
     if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                       ROSEGARDEN_GUI_IFACE_NAME,

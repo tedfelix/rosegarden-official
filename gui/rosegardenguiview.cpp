@@ -820,6 +820,7 @@ void RosegardenGUIView::slotSelectAllSegments()
     emit stateChange("have_selection", true);
 
     // inform
+    //!!! inform what? is this signal actually used?
     emit segmentsSelected(segments);
 }
     

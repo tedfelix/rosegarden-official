@@ -122,7 +122,7 @@ label must be visible for this to work.)</p>
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>...that you can configure what happens when you double-click on a segment?  Go to <b>Settings -> Configure Rosegarden</b> and choose your preferred editor under the <b>Behaviour</b> tab.</p>
+<p>...that you can configure what happens when you double-click on a segment?  Go to <b>Settings -> Configure Rosegarden</b> and choose your preferred editing window under the <b>Behaviour</b> tab.</p>
 </html>
 </tip>
 <tip category="Rosegarden|General">
@@ -173,7 +173,7 @@ feature.<br><br>
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>...that you can set a loop in the main window by clicking-and-dragging on the time ruler with Shift pressed?  (If the ruler isn't visible, use <b>Settings n-> Show Rulers</b>.)</p>
+<p>...that you can set a loop in the main window by clicking-and-dragging on the time ruler with Shift pressed?  (If the ruler isn't visible, use <b>Settings -> Show Rulers</b>.)</p>
 </html>
 </tip>
 <tip category="Rosegarden|General">

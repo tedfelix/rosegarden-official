@@ -257,10 +257,10 @@ void
 SegmentParameterBox::populateBoxFromSegments()
 {
     std::vector<Rosegarden::Segment*>::iterator it;
-    Tristate repeated = None;
-    Tristate quantized = None;
-    Tristate transposed = None;
-    Tristate delayed = None;
+    Tristate repeated = NotApplicable;
+    Tristate quantized = NotApplicable;
+    Tristate transposed = NotApplicable;
+    Tristate delayed = NotApplicable;
 
     Rosegarden::timeT qntzLevel = 0;
     // At the moment we have no negative delay, so we use negative
@@ -275,6 +275,12 @@ SegmentParameterBox::populateBoxFromSegments()
 
     for (it = m_segments.begin(); it != m_segments.end(); it++)
     {
+	// ok, first thing is we know we have at least one segment
+	if (repeated == NotApplicable) repeated = None;
+	if (quantized == NotApplicable) quantized = None;
+	if (transposed == NotApplicable) transposed = None;
+	if (delayed == NotApplicable) delayed = None;
+
         // Set label to "*" when multiple labels don't match
         //
         if (strtoqstr((*it)->getLabel()) != m_label->text())
@@ -388,10 +394,13 @@ SegmentParameterBox::populateBoxFromSegments()
             break;
 
         case None:
+        case NotApplicable:
         default:
             m_repeatValue->setChecked(false);
             break;
     }
+
+    m_repeatValue->setEnabled(repeated != NotApplicable);
 
     switch(quantized)
     {
@@ -422,6 +431,8 @@ SegmentParameterBox::populateBoxFromSegments()
             break;
     }
 
+    m_quantizeValue->setEnabled(quantized != NotApplicable);
+
     switch(transposed)
     {
         case All:
@@ -450,6 +461,8 @@ SegmentParameterBox::populateBoxFromSegments()
             break;
     }
 
+    m_transposeValue->setEnabled(transposed != NotApplicable);
+
     m_delayValue->blockSignals(true);
     
     switch(delayed)
@@ -476,6 +489,9 @@ SegmentParameterBox::populateBoxFromSegments()
             m_delayValue->setEditText("");
             break;
     }
+
+    m_delayValue->setEnabled(delayed != NotApplicable);
+
     m_delayValue->blockSignals(false);
 }
 

@@ -57,7 +57,8 @@ public:
     {
         None,
         Some,
-        All
+        All,
+	NotApplicable // no applicable segments selected
     } Tristate;
 
     SegmentParameterBox(RosegardenGUIView *view,
