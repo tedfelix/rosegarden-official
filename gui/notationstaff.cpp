@@ -254,13 +254,13 @@ NotationStaff::positionElements(timeT from, timeT to)
 	if ((*it)->event()->isa(Clef::EventType)) {
 
 	    currentClef = Clef(*(*it)->event());
-	    m_clefChanges.push_back(ClefChange((*it)->getLayoutX(),
+	    m_clefChanges.push_back(ClefChange(int((*it)->getLayoutX()),
 					       currentClef));
 
 	} else if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
 
 	    currentKey = Rosegarden::Key(*(*it)->event());
-	    m_keyChanges.push_back(KeyChange((*it)->getLayoutX(),
+	    m_keyChanges.push_back(KeyChange(int((*it)->getLayoutX()),
 					     currentKey));
 	}
 
