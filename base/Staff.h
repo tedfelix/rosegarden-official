@@ -107,6 +107,7 @@ protected:
 
     void notifyAdd(ViewElement *) const;
     void notifyRemove(ViewElement *) const;
+    void notifySourceDeletion() const;
 
     //--------------- Data members ---------------------------------
 
@@ -126,6 +127,9 @@ class StaffObserver
 public:
     virtual void elementAdded(ViewElement *) = 0;
     virtual void elementRemoved(ViewElement *) = 0;
+
+    /// called when the observed object is being deleted
+    virtual void sourceDeleted() = 0;
 };
 
 

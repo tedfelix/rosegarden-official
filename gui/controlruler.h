@@ -79,6 +79,7 @@ public:
     // StaffObserver interface
     virtual void elementAdded(Rosegarden::ViewElement*);
     virtual void elementRemoved(Rosegarden::ViewElement*);
+    virtual void sourceDeleted();
 
     static const int DefaultRulerHeight;
     static const int MinItemHeight;

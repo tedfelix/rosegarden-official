@@ -34,6 +34,7 @@ Staff::Staff(Segment &t) :
 Staff::~Staff()
 {
     if (m_viewElementList) m_segment.removeObserver(this);
+    notifySourceDeletion();
 }
 
 ViewElementList *
@@ -184,6 +185,15 @@ Staff::notifyRemove(ViewElement *e) const
     for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
 	(*i)->elementRemoved(e);
+    }
+}
+
+void
+Staff::notifySourceDeletion() const
+{
+    for (ObserverSet::const_iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->sourceDeleted();
     }
 }
 

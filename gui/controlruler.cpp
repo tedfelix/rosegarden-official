@@ -310,9 +310,8 @@ ControlRuler::ControlRuler(Staff* staff,
 
 ControlRuler::~ControlRuler()
 {
-//     m_staff->removeObserver(this);
-// crashes because the staff is already gone when we're calling this
-// gotta be more clever than this.
+    if (m_staff)
+        m_staff->removeObserver(this);
 }
 
 void ControlRuler::init()
@@ -356,6 +355,11 @@ void ControlRuler::elementRemoved(ViewElement *el)
             }
         }
     }
+}
+
+void ControlRuler::sourceDeleted()
+{
+    m_staff = 0;
 }
 
 
