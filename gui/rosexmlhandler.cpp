@@ -626,15 +626,14 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
         m_currentSegment->setAudioEndTime(markerTime);
 
-        // convert both times independently and then set duration
-        // according to difference.
-        /*
-        timeT absStart =
-            getComposition().getElapsedTimeForRealTime(
-                    m_currentSegment->getAudioStartTime());
-                    */
+        // Ensure we set end time according to correct RealTime end of Segment
+        //
+        Rosegarden::RealTime realEndTime = getComposition().
+                getElapsedRealTime(m_currentSegment->getStartTime()) +
+                m_currentSegment->getAudioEndTime() -
+                m_currentSegment->getAudioStartTime();
 
-        timeT absEnd = getComposition().getElapsedTimeForRealTime(markerTime);
+        timeT absEnd = getComposition().getElapsedTimeForRealTime(realEndTime);
 	m_currentSegment->setEndTime(absEnd);
 
     } else if (lcName == "device") {
