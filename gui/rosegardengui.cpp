@@ -1072,7 +1072,11 @@ void RosegardenGUIApp::slotFileNew()
 void RosegardenGUIApp::slotOpenDroppedURL(QString url)
 {
     kapp->processEvents(); // or else we get a crash because the
-    // track editor is erased too soon
+    // track editor is erased too soon - it is the originator of the signal
+    // this slot is connected to.
+
+    if (!m_doc->saveIfModified()) return;
+
     openURL(KURL(url));
 }
 
