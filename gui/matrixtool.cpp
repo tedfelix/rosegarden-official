@@ -821,8 +821,14 @@ int MatrixMover::handleMouseMove(Rosegarden::timeT newTime,
 
         if (element)
         {
-            element->setLayoutX(element->getLayoutX() + diffX);
-            element->setLayoutY(element->getLayoutY() + diffY);
+            newX = element->getLayoutX() + diffX;
+            if (newX < 0) newX = 0;
+
+            newY = element->getLayoutY() + diffY;
+            if (newY < 0) newY = 0;
+            
+            element->setLayoutX(newX);
+            element->setLayoutY(newY);
             m_currentStaff->positionElement(element);
         }
 
