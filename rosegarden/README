@@ -7,9 +7,7 @@ developers and other interested parties.  It is not yet really stable
 enough for use by end users but it might prove to be of some interest.
 
 Note that Rosegarden-4 is largely not based on Rosegarden-2.1 code and
-is not yet a solution for people who find Rosegarden-2.1 in any way
-unreliable or limiting.  This program is far more unreliable and far
-more limiting.
+is not a direct replacement for Rosegarden-2.1.
 
 
 Build requirements
@@ -115,23 +113,27 @@ starting-points include:
 Authors and copyright
 ---------------------
 
-Rosegarden-4 is Copyright 2000-2002 Guillaume Laurent, Chris Cannam
-and Richard Bown.
+* Rosegarden-4 is Copyright 2000-2002 Guillaume Laurent, Chris Cannam
+  and Richard Bown.
 
-The moral right of Guillaume Laurent, Chris Cannam and Richard Bown to
-be identified as the authors of this work has been asserted.
+* The moral right of Guillaume Laurent, Chris Cannam and Richard Bown
+  to be identified as the authors of this work has been asserted.
 
-Parts of Rosegarden-4 are derived from Rosegarden 2.1, which is
-Copyright 1994 - 2001 Chris Cannam, Andrew Green, Richard Bown and
-Guillaume Laurent.
+* Parts of Rosegarden-4 are derived from Rosegarden 2.1, which is
+  Copyright 1994 - 2001 Chris Cannam, Andrew Green, Richard Bown and
+  Guillaume Laurent.
 
-For musical notation display Rosegarden-4 uses pixmaps derived from
-the Feta font, part of the Lilypond software (http://lilypond.org/)
-which is Copyright 1997 - 2001 Jan Nieuwenhuizen and Han-Wen Nienhuys.
+* For musical notation display Rosegarden-4 uses pixmaps derived from
+  the Feta font, part of the Lilypond software (http://lilypond.org/)
+  which is Copyright 1997 - 2001 Jan Nieuwenhuizen and Han-Wen Nienhuys.
 
-The Rosegarden splash-screen image is from a 1900 postcard of Thornden
-Park at Syracuse University, Syracuse, NY, used with thanks to the
-staff of Syracuse University.
+* Other major contributors include Randall Farmer, Ron Kuris, and Hans
+  Kieserman.  See AUTHORS for more details, and the individual source
+  files for copyright attributions.
+
+* The Rosegarden splash-screen image is from a 1900 postcard of Thornden
+  Park at Syracuse University, Syracuse, NY, used with thanks to the
+  staff of Syracuse University.
 
 Rosegarden-4 is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
