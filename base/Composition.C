@@ -186,7 +186,7 @@ Composition::Composition() :
     m_position(0),
     m_defaultTempo(120.0),
     m_startMarker(0),
-    m_endMarker(getBarRange(m_defaultNbBars).second),
+    m_endMarker(getBarRange(m_defaultNbBars).first),
     m_loopStart(0),
     m_loopEnd(0),
     m_playMetronome(false),
@@ -362,7 +362,7 @@ Composition::clear()
     m_loopEnd = 0;
     m_position = 0;
     m_startMarker = 0;
-    m_endMarker = getBarRange(m_defaultNbBars).second;
+    m_endMarker = getBarRange(m_defaultNbBars).first;
     m_solo = false;
     m_selectedTrack = 0;
     updateRefreshStatuses();
