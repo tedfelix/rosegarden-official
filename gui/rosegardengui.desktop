@@ -1,0 +1,12 @@
+# KDE Config File  
+[KDE Desktop Entry]
+Type=Application
+Exec=rosegardengui -caption "%c" %i %m  
+Icon=rosegardengui.xpm
+MiniIcon=rosegardengui.xpm
+DocPath=rosegardengui/index.html
+Comment=
+Comment[de]=
+Terminal=0
+Name=RosegardenGUI
+Name[de]=RosegardenGUI
