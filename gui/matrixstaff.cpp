@@ -99,7 +99,8 @@ void MatrixStaff::positionElement(MatrixElement* el)
 
     // get velocity for colouring
     using Rosegarden::BaseProperties::VELOCITY;
-    int velocity = el->event()->get<Rosegarden::Int>(VELOCITY);
+    long velocity = 127;
+    el->event()->get<Rosegarden::Int>(VELOCITY, velocity);
 
     el->setCanvas(m_canvas);
     el->setColour(m_elementColour->getColour(velocity));
