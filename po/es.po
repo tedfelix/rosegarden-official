@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-10-03 11:09+0200\n"
-"PO-Revision-Date: 2004-07-29 21:05+0200\n"
+"PO-Revision-Date: 2004-12-04 16:25+0100\n"
 "Last-Translator: Pedro Lopez-Cabanillas <plcl@users.sourceforge.net>\n"
 "Language-Team: Español <rosegarden-devel@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -135,9 +135,9 @@ msgid ""
 "Lilypond fonts copyright 1997 - 2004 Han-Wen Nienhuys and Jan Nieuwenhuizen"
 msgstr ""
 "Copyright 2000 - 2004 Guillaume Laurent, Chris Cannam, Richard Bown\n"
-"Parts copyright 1994 - 2004 Chris Cannam, Andy Green, Richard Bown, "
+"Porciones copyright 1994 - 2004 Chris Cannam, Andy Green, Richard Bown, "
 "Guillaume Laurent\n"
-"Lilypond fonts copyright 1997 - 2004 Han-Wen Nienhuys and Jan Nieuwenhuizen"
+"Tipografías de Lilypond copyright 1997 - 2004 Han-Wen Nienhuys y Jan Nieuwenhuizen"
 
 #: main.cpp:422
 msgid "Chord labelling code"
@@ -232,9 +232,8 @@ msgid "Original designs for rotary controllers"
 msgstr "diseños originales para controles rotatorios"
 
 #: main.cpp:438
-#, fuzzy
 msgid "Japanese translation"
-msgstr "traducción al italiano"
+msgstr "traducción al japonés"
 
 #: main.cpp:440 _translatorinfo.cpp:1
 msgid ""
@@ -400,8 +399,7 @@ msgid "Export..."
 msgstr "Exportar..."
 
 #: bankeditor.cpp:763
-msgid ""
-"Import Bank and Program data from a Rosegarden file to the current Device"
+msgid "Import Bank and Program data from a Rosegarden file to the current Device"
 msgstr ""
 "Importar datos de Banco y Programa desde un archivo de Rosegarden para el "
 "dispositivo actual"
@@ -1079,16 +1077,15 @@ msgstr "error desconocido"
 
 #: notefont.cpp:95
 msgid "Can't open font mapping file %1 or %2"
-msgstr "No se puede abrir el archivo de mapeado de fuentes %1 o %2"
+msgstr "No se puede abrir el archivo de mapeado de tipografías %1 o %2"
 
 #: notefont.cpp:99
 msgid "Can't open font mapping file %1"
-msgstr "No se puede abrir el archivo de mapeado de fuente %1"
+msgstr "No se puede abrir el archivo de mapeado de tipografía %1"
 
 #: notefont.cpp:1833
 msgid "Can't obtain a default font -- no fonts found"
-msgstr ""
-"No se puede obtener una fuente por omisión -- no se han encontrado fuentes"
+msgstr "No se puede obtener una tipografía por omisión -- no se han encontrado tipografías"
 
 #: rosegardenguiview.cpp:198
 msgid "No non-audio segments in composition"
@@ -1187,9 +1184,8 @@ msgid "No accidental"
 msgstr "Sin alteraciones"
 
 #: notationview.cpp:1338
-#, fuzzy
 msgid "Follow previous accidental"
-msgstr "Forzando alteraciones"
+msgstr "Seguir alteración anterior"
 
 #: notationview.cpp:1339
 msgid "Sharp"
@@ -1525,11 +1521,11 @@ msgstr "%1 pixels"
 
 #: notationview.cpp:2142
 msgid "  Font:  "
-msgstr "  Fuente  "
+msgstr "  Tipografía:  "
 
 #: notationview.cpp:2169
 msgid "Unknown font \"%1\", using default"
-msgstr "Tipo de letra \"%1\" desconocido, usando predeterminado"
+msgstr "Tipografía \"%1\" desconocida, usando predeterminada"
 
 #: notationview.cpp:2177
 msgid "  Size:  "
@@ -1577,36 +1573,31 @@ msgstr "silencio"
 
 #: notationview.cpp:3588
 msgid "%1 - Segment Track #%2 - Notation"
-msgstr ""
+msgstr "%1 - Segmento Pista #%2 - Partitura"
 
 #: notationview.cpp:3594
-#, fuzzy
 msgid "%1 - All Segments - Notation"
-msgstr "Duración del Segmento de Audio"
+msgstr "%1 - Todos los segmentos - Partitura"
 
 #: notationview.cpp:3599
-#, fuzzy
 msgid "%1 - %2 Segments - Notation"
-msgstr "Duración del Segmento"
+msgstr "%1 - %2 Segmentos - Partitura"
 
 #: rosegardentempo.cpp:35
-#, fuzzy
 msgid "Set Tempo"
-msgstr "Establecer Tempo global"
+msgstr "Establecer Tempo"
 
 #: rosegardentempo.cpp:44
-#, fuzzy
 msgid "Modify Tempo"
-msgstr "Modificar Nota"
+msgstr "Modificar Tempo"
 
 #: rosegardentempo.cpp:51
 msgid "Change this tempo to"
-msgstr ""
+msgstr "Cambiar este tempo a"
 
 #: rosegardentempo.cpp:55
-#, fuzzy
 msgid "Tempo at time"
-msgstr "Tempo   "
+msgstr "Tempo en"
 
 #: rosegardentempo.cpp:59 rosegardentempo.cpp:70 eventfilter.cpp:378
 #: eventfilter.cpp:379
@@ -1614,9 +1605,8 @@ msgid "0"
 msgstr "0"
 
 #: rosegardentempo.cpp:66
-#, fuzzy
 msgid "is currently"
-msgstr "Actual"
+msgstr "es actualmente"
 
 #: notationtool.cpp:180
 msgid "Auto-Beam when appropriate"
@@ -2455,8 +2445,7 @@ msgstr "Exportar como..."
 #: rosegardengui.cpp:3967 rosegardengui.cpp:3998 rosegardengui.cpp:4030
 #: rosegardengui.cpp:4067 rosegardengui.cpp:4100
 msgid "Export failed.  The file could not be opened for writing."
-msgstr ""
-"Ha fallado la exportación. El archivo no se ha podido abrir para escritura."
+msgstr "Ha fallado la exportación. El archivo no se ha podido abrir para escritura."
 
 #: rosegardengui.cpp:3973 rosegardengui.cpp:3984
 msgid "Exporting Csound score file..."
@@ -2532,7 +2521,7 @@ msgstr "Lista de Ejecución"
 
 #: rosegardengui.cpp:6068
 msgid "http://www.rosegardenmusic.com/resources/tutorial/using_en.shtml"
-msgstr ""
+msgstr "http://www.rosegardenmusic.com/resources/tutorial/using_en.shtml"
 
 #: rosegardengui.cpp:6145
 msgid "Queueing MIDI panic events for tranmission..."
@@ -2547,10 +2536,8 @@ msgid "Saving current document as default studio..."
 msgstr "Guardando el documento actual como Estudio predeterminado..."
 
 #: rosegardengui.cpp:6239
-msgid ""
-"Are you sure you want to import your default studio and lose the current one?"
-msgstr ""
-"¿Está seguro de querer importar el estudio por omisión y perder el actual?"
+msgid "Are you sure you want to import your default studio and lose the current one?"
+msgstr "¿Está seguro de querer importar el estudio por omisión y perder el actual?"
 
 #: rosegardengui.cpp:6274
 msgid "Import Studio from File"
@@ -2582,8 +2569,7 @@ msgid "<no instrument>"
 msgstr "<sin instrumento>"
 
 #: tracklabel.cpp:54
-msgid ""
-"Click and hold with left mouse button to assign this Track to an Instrument."
+msgid "Click and hold with left mouse button to assign this Track to an Instrument."
 msgstr ""
 "Pulsar y mantener el botón izquierdo del ratón para asignar esta pista a un "
 "instrumento"
@@ -3310,8 +3296,7 @@ msgstr "Crescendo - establecer %1 creciendo desde el mínimo al máximo"
 
 #: dialogs.cpp:3907
 msgid "Diminuendo - set %1 falling from max to min"
-msgstr ""
-"Diminuendo - establecer %1 descendiendo desde el máximo hasta el mínimo"
+msgstr "Diminuendo - establecer %1 descendiendo desde el máximo hasta el mínimo"
 
 #: dialogs.cpp:3910
 msgid "Ringing - set %1 alternating from max to min with both dying to zero"
@@ -3341,8 +3326,7 @@ msgstr "Cambiar Duración de la Composición"
 
 #: dialogs.cpp:4026
 msgid "Set the Start and End bar markers for this Composition"
-msgstr ""
-"Establecer los marcadores de compás Inicial y Final para esta Composición"
+msgstr "Establecer los marcadores de compás Inicial y Final para esta Composición"
 
 #: dialogs.cpp:4030
 msgid "Start Bar"
@@ -3545,7 +3529,7 @@ msgstr "no especificar"
 
 #: dialogs.cpp:4808
 msgid "Lilypond font size"
-msgstr "Tamaño de fuente de Lilypond"
+msgstr "Tamaño de fuente tipográfica de Lilypond"
 
 #: dialogs.cpp:4822
 msgid "Export Document Properties as \\header block"
@@ -3740,8 +3724,7 @@ msgid "JACK Audio subsystem is losing sample frames."
 msgstr "Subsistema de audio JACK está perdiendo muestras."
 
 #: sequencemanager.cpp:1032
-msgid ""
-"Failed to read audio data from disc in time to service the audio subsystem."
+msgid "Failed to read audio data from disc in time to service the audio subsystem."
 msgstr ""
 "Fallo leyendo datos de audio desde disco a tiempo para servir el subsistema "
 "de audio."
@@ -3965,6 +3948,8 @@ msgid ""
 "Click and drag up and down or left and right to modify.\n"
 "Double click to edit value directly."
 msgstr ""
+"Hacer clic y arrastrar arriba y abajo o a izquierda y derecha para modificar.\n"
+"Doble clic para editar el valor directamente."
 
 #: widgets.cpp:724
 msgid "Select a new value"
@@ -3996,8 +3981,7 @@ msgstr "Cuantificador heurístico de partitura"
 
 #: widgets.cpp:880
 msgid "Quantize for notation only (leave performance unchanged)"
-msgstr ""
-"Cuantificar para la partitura solamente (dejar la interpretación intacta)"
+msgstr "Cuantificar para la partitura solamente (dejar la interpretación intacta)"
 
 #: widgets.cpp:889
 msgid "Notation parameters"
@@ -4057,7 +4041,7 @@ msgstr "Parámetros de rejilla"
 
 #: widgets.cpp:939
 msgid "Swing:"
-msgstr ""
+msgstr "Swing:"
 
 #: widgets.cpp:944
 msgid "Iterative amount:"
@@ -4600,7 +4584,7 @@ msgstr "Proporciona una señal de metrónomo para tocar con ella"
 #: rc.cpp:311 rosegardentransport.cpp:1735 mixer.cpp:342
 #, no-c-format
 msgid "Solo"
-msgstr ""
+msgstr "Solo"
 
 #: rc.cpp:313 rosegardentransport.cpp:1736
 #, no-c-format
@@ -4715,16 +4699,16 @@ msgstr "Mapas de pixels Feta"
 
 #: fonts.cpp:2 fonts.cpp:7
 msgid "GNU Lilypond"
-msgstr ""
+msgstr "GNU Lilypond"
 
 #: fonts.cpp:3 fonts.cpp:8
 msgid "Copyright (c) 1997--2003 Han-Wen Nienhuys and Jan Nieuwenhuizen"
-msgstr ""
+msgstr "Copyright (c) 1997--2003 Han-Wen Nienhuys y Jan Nieuwenhuizen"
 
 #: fonts.cpp:4 fonts.cpp:9 fonts.cpp:14 fonts.cpp:19 fonts.cpp:24 fonts.cpp:29
 #: fonts.cpp:34 fonts.cpp:39 fonts.cpp:44 fonts.cpp:49 fonts.cpp:54
 msgid "Chris Cannam"
-msgstr ""
+msgstr "Chris Cannam"
 
 #: fonts.cpp:5 fonts.cpp:40
 msgid "pixmap"
@@ -4732,7 +4716,7 @@ msgstr "mapa de pixels"
 
 #: fonts.cpp:6
 msgid "Feta"
-msgstr ""
+msgstr "Feta"
 
 #: fonts.cpp:10 fonts.cpp:15 fonts.cpp:20 fonts.cpp:25 fonts.cpp:30
 #: fonts.cpp:35 fonts.cpp:45 fonts.cpp:50 fonts.cpp:55
@@ -4741,110 +4725,107 @@ msgstr "escalable"
 
 #: fonts.cpp:11
 msgid "Fughetta"
-msgstr ""
+msgstr "Fughetta"
 
 #: fonts.cpp:12
 msgid ""
 "Created by Blake Hodgetts; freely redistributable.  See http://www.efh.org/"
 "~bch/aboutfonts.html"
 msgstr ""
-"Creado por Blake Hodgetts; libremente redistribuible.  Ver http://www.efh."
+"Creada por Blake Hodgetts; libremente redistribuible.  Ver http://www.efn."
 "org/~bch/aboutfonts.html"
 
 #: fonts.cpp:13
 msgid "Copyright 1995-1999 Blake Hodgetts"
-msgstr ""
+msgstr "Copyright 1995-1999 Blake Hodgetts"
 
 #: fonts.cpp:16
 msgid "Inkpen"
-msgstr ""
+msgstr "Inkpen"
 
 #: fonts.cpp:17
 msgid "Inkpen is part of Sibelius, but other fonts may use the same mappings."
-msgstr ""
-"Inkpen es parte de Sibelius, pero otras fuentes pueden usar el mismo mapa."
+msgstr "Inkpen es parte de Sibelius, pero otras tipografías pueden usar el mismo mapa."
 
 #: fonts.cpp:18 fonts.cpp:28
 msgid "Copyright Sibelius Software Ltd"
-msgstr ""
+msgstr "Copyright Sibelius Software Ltd"
 
 #: fonts.cpp:21
 msgid "Maestro"
-msgstr ""
+msgstr "Maestro"
 
 #: fonts.cpp:22
 msgid "Maestro is part of Finale, but other fonts use the same mappings."
-msgstr ""
-"Maestro es parte de Finale, pero otras fuentes pueden usar el mismo mapa."
+msgstr "Maestro es parte de Finale, pero otras tipografías pueden usar el mismo mapa."
 
 #: fonts.cpp:23 fonts.cpp:33
 msgid "Copyright Coda Inc"
-msgstr ""
+msgstr "Copyright Coda Inc"
 
 #: fonts.cpp:26
 msgid "Opus"
-msgstr ""
+msgstr "Opus"
 
 #: fonts.cpp:27
 msgid "Opus is part of Sibelius, but other fonts may use the same mappings."
-msgstr ""
-"Opus es parte de Sibelius, pero otras fuentes pueden usar el mismo mapa."
+msgstr "Opus es parte de Sibelius, pero otras tipografías pueden usar el mismo mapa."
 
 #: fonts.cpp:31
 msgid "Petrucci"
-msgstr ""
+msgstr "Petrucci"
 
 #: fonts.cpp:32
 msgid "Petrucci is part of Finale, but other fonts use the same mappings."
-msgstr "Petrucci es parte de Finale, pero otras fuentes usan el mismo mapa"
+msgstr "Petrucci es parte de Finale, pero otras tipografías usan el mismo mapa"
 
 #: fonts.cpp:36
 msgid "RG21"
-msgstr ""
+msgstr "RG21"
 
 #: fonts.cpp:37
 msgid "Rosegarden 2.1"
-msgstr ""
+msgstr "Rosegarden 2.1"
 
 #: fonts.cpp:38
 msgid "Copyright (c) 1994--2001 Chris Cannam"
-msgstr ""
+msgstr "Copyright (c) 1994--2001 Chris Cannam"
 
 #: fonts.cpp:41
 msgid "Sonata"
-msgstr ""
+msgstr "Sonata"
 
 #: fonts.cpp:42
 msgid "Adobe"
-msgstr ""
+msgstr "Adobe"
 
 #: fonts.cpp:43
 msgid "Copyright Adobe Inc"
-msgstr ""
+msgstr "Copyright Adobe Inc"
 
 #: fonts.cpp:46
 msgid "Steinberg"
-msgstr ""
+msgstr "Steinberg"
 
 #: fonts.cpp:47
 msgid "The Steinberg Notation font is part of Cubase."
-msgstr "La fuente de partitura de Steinberg es parte de Cubase."
+msgstr "La tipografía de partitura de Steinberg es parte de Cubase."
 
 #: fonts.cpp:48
 msgid "Copyright Steinberg Inc"
-msgstr ""
+msgstr "Copyright Steinberg Inc"
 
 #: fonts.cpp:51
 msgid "Xinfonia"
-msgstr ""
+msgstr "Xinfonia"
 
 #: fonts.cpp:52
 msgid "xemo.org"
-msgstr ""
+msgstr "xemo.org"
 
 #: fonts.cpp:53
 msgid "Copyright 2001-2003 Xemus Software LLC"
-msgstr ""
+msgstr "Copyright 2001-2003 Xemus Software LLC"
 
 #: segmentcommands.h:163
 msgid "Quick-Copy Segment"
@@ -4916,19 +4897,19 @@ msgstr "Cambiar Mapa de Color de Segmento..."
 
 #: styles.cpp:1
 msgid "Classical"
-msgstr ""
+msgstr "Classical"
 
 #: styles.cpp:2
 msgid "Cross"
-msgstr ""
+msgstr "Cross"
 
 #: styles.cpp:3
 msgid "Mensural"
-msgstr ""
+msgstr "Mensural"
 
 #: styles.cpp:4
 msgid "Triangle"
-msgstr ""
+msgstr "Triangle"
 
 #: segmentcommands.cpp:85
 msgid "Repeat Segments"
@@ -5217,19 +5198,19 @@ msgstr "Color"
 
 #: segmentparameterbox.cpp:85
 msgid "Audio auto-fade"
-msgstr ""
+msgstr "Fundido automático de Audio"
 
 #: segmentparameterbox.cpp:86
 msgid "Fade in"
-msgstr ""
+msgstr "Subida gradual"
 
 #: segmentparameterbox.cpp:87
 msgid "Fade out"
-msgstr ""
+msgstr "Desvanecimiento"
 
 #: segmentparameterbox.cpp:173 segmentparameterbox.cpp:180
 msgid " ms"
-msgstr ""
+msgstr " ms"
 
 #: segmentparameterbox.cpp:275 segmentparameterbox.cpp:603
 msgid "%1 ms"
@@ -5340,7 +5321,7 @@ msgstr "Sint.%1"
 
 #: mixer.cpp:477 studiowidgets.cpp:828 studiowidgets.cpp:849
 msgid "Sub %1"
-msgstr ""
+msgstr "Sub %1"
 
 #: mixer.cpp:521 mixer.cpp:522
 msgid "Audio record level"
@@ -5356,7 +5337,7 @@ msgstr "Nivel principal de salida de Audio"
 
 #: mixer.cpp:567 studiowidgets.cpp:826 studiowidgets.cpp:848
 msgid "Master"
-msgstr ""
+msgstr "Master"
 
 #: mixer.cpp:1508
 msgid "MIDI Mixer"
@@ -5392,8 +5373,7 @@ msgstr "Solapar notas, enlazando con las preexistentes [\"solapamiento\"]"
 
 #: editcommands.cpp:419
 msgid "Overlay notes, ignoring present notes [\"matrix-overlay\"]"
-msgstr ""
-"Solapar notas, ignorando notas preexistentes [\"solapamiento en matriz\"]"
+msgstr "Solapar notas, ignorando notas preexistentes [\"solapamiento en matriz\"]"
 
 #: editcommands.cpp:859
 msgid "Heuristic Notation &Quantize"
@@ -5720,17 +5700,16 @@ msgid "Open in Expert Event Editor"
 msgstr "Abrir en el Editor Avanzado de Eventos"
 
 #: eventview.cpp:1642
-#, fuzzy
 msgid "%1 - Triggered Segment: %2"
-msgstr "Añadir un Segmento Activado"
+msgstr "%1 - Segmento activado: %2"
 
 #: eventview.cpp:1649
 msgid "%1 - Segment Track #%2 - Event List"
-msgstr ""
+msgstr "%1 - Segmento Pista #%2 - Lista de eventos"
 
 #: eventview.cpp:1655
 msgid "%1 - %2 Segments - Event List"
-msgstr ""
+msgstr "%1 - %2 Segmentos - Lista de Eventos"
 
 #: notationstrings.cpp:42
 msgid "%1-dotted-%2"
@@ -6234,20 +6213,19 @@ msgstr "Eliminar Activadores"
 
 #: matrixview.cpp:2405
 msgid "%1 - Segment Track #%2 - Matrix"
-msgstr ""
+msgstr "%1 - Segmento Pista #%2 - Matriz"
 
 #: matrixview.cpp:2411
 msgid "%1 - All Segments - Matrix"
-msgstr ""
+msgstr "%1 - Todos los segmentos - Matriz"
 
 #: matrixview.cpp:2416
 msgid "%1 - %2 Segments - Matrix "
-msgstr ""
+msgstr "%1 - %2 Segmentos - Matriz"
 
 #: matrixview.cpp:2461
-#, fuzzy
 msgid "Can't insert note: No grid duration selected"
-msgstr "No es posible insertar nota: No hay una duración seleccionada"
+msgstr "No es posible insertar nota: No hay una duración de rejilla seleccionada"
 
 #: matrixview.cpp:2511 notationviewslots.cpp:77
 msgid " Chord"
@@ -6322,7 +6300,7 @@ msgstr "Colocando pentagrama %1..."
 
 #: notationstaff.cpp:1189 notationviewslots.cpp:1732
 msgid "Sustain"
-msgstr ""
+msgstr "Sostenido"
 
 #: notationviewslots.cpp:75
 msgid " Triplet Chord"
@@ -6346,15 +6324,15 @@ msgstr "Acción de proporción desconocida %1"
 
 #: notationviewslots.cpp:235
 msgid "Unknown font action %1"
-msgstr "Acción de fuente desconocida %1"
+msgstr "Acción de tipografía desconocida %1"
 
 #: notationviewslots.cpp:252
 msgid "Unknown font size %1"
-msgstr "Tamaño de fuente desconocido %1"
+msgstr "Tamaño de tipografía desconocido %1"
 
 #: notationviewslots.cpp:256
 msgid "Unknown font size action %1"
-msgstr "Acción de tamaño de fuente desconocido %1"
+msgstr "Acción de tamaño de tipografía desconocido %1"
 
 #: notationviewslots.cpp:469
 msgid ""
@@ -6652,11 +6630,11 @@ msgstr "Maestro L"
 
 #: studiowidgets.cpp:840
 msgid "Sub %1 R"
-msgstr ""
+msgstr "Sub %1 R"
 
 #: studiowidgets.cpp:841
 msgid "Sub %1 L"
-msgstr ""
+msgstr "Sub %1 L"
 
 #: studiowidgets.cpp:1004
 msgid "Synth plugin button"
@@ -6664,7 +6642,7 @@ msgstr "Botón de plugin de Sintetizador"
 
 #: studiowidgets.cpp:1045 audioplugindialog.cpp:88
 msgid "Editor"
-msgstr ""
+msgstr "Editor"
 
 #: studiowidgets.cpp:1061
 msgid "Set the audio pan position in the stereo field"
@@ -6711,8 +6689,7 @@ msgid "global element must precede note elements"
 msgstr "elemento global debe preceder a elementos de nota"
 
 #: notestyle.cpp:628
-msgid ""
-"global and note elements may have shape or charname attribute, but not both"
+msgid "global and note elements may have shape or charname attribute, but not both"
 msgstr ""
 "elementos globales y notas pueden tener forma o nombre de carácter, pero no "
 "ambos"
@@ -7212,11 +7189,11 @@ msgstr "Medida del Compás   "
 
 #: tempoview.cpp:272
 msgid "%1.%2%3"
-msgstr ""
+msgstr "%1.%2%3"
 
 #: tempoview.cpp:282
 msgid "%1.%2%3 qpm (%4.%5%6 bpm)   "
-msgstr ""
+msgstr "%1.%2%3 qpm (%4.%5%6 bpm)   "
 
 #: tempoview.cpp:291
 msgid "Tempo   "
@@ -7365,20 +7342,19 @@ msgstr "Banco %1 %2"
 
 #: notefontviewer.cpp:100
 msgid "Error: Unable to match font name %1"
-msgstr "Error: Incapaz de emparejar el nombre de fuente %1"
+msgstr "Error: Incapaz de emparejar el nombre de tipografía %1"
 
 #: notefontviewer.cpp:108
 msgid "Warning: No good match for font name %1 (best is %2)"
-msgstr ""
-"Aviso: No hay buena correspondencia para nombre de fuente %1 (el mejor es %2)"
+msgstr "Aviso: No hay buena correspondencia para nombre de tipografía %1 (el mejor es %2)"
 
 #: notefontviewer.cpp:116
 msgid "Error: Unable to open best-match font %1"
-msgstr "Error: Incapaz de abrir la mejor correspondencia para fuente %1"
+msgstr "Error: Incapaz de abrir la mejor correspondencia para tipografía %1"
 
 #: notefontviewer.cpp:290
 msgid "Note Font Viewer: %1"
-msgstr "Visor de Fuente de Nota: %1"
+msgstr "Visor de tipografía de partitura: %1"
 
 #: notefontviewer.cpp:296
 msgid "  Component: "
@@ -7474,7 +7450,7 @@ msgstr "Gestionar Segmentos Activados"
 
 #: triggermanager.cpp:145
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: triggermanager.cpp:150
 msgid "Triggers"
@@ -7538,11 +7514,11 @@ msgstr "Plugin de Rosegarden"
 
 #: audiopluginoscgui.cpp:454
 msgid "Rosegarden: %1"
-msgstr ""
+msgstr "Rosegarden: %1"
 
 #: audiopluginoscgui.cpp:456
 msgid "Rosegarden: %1: %2"
-msgstr ""
+msgstr "Rosegarden: %1: %2"
 
 #: audiopluginoscgui.cpp:457
 msgid "Plugin slot %1"
@@ -7562,7 +7538,7 @@ msgstr "Controles"
 
 #: audiosynthmanager.cpp:138
 msgid "Editor >>"
-msgstr ""
+msgstr "Editor >>"
 
 #: rosegardenconfiguredialog.cpp:160
 msgid "Note name style"
@@ -7643,29 +7619,27 @@ msgstr "Camino del editor externo de audio"
 
 #: rosegardenconfiguredialog.cpp:346
 msgid "Notation font"
-msgstr "Fuente de partitura"
+msgstr "Tipografía de partitura"
 
 #: rosegardenconfiguredialog.cpp:349
 msgid "Font size for single-staff views"
-msgstr "Tamaño de fuente tamaño para vistas de un solo pentagrama"
+msgstr "Tamaño de tipografía para la vista de un solo pentagrama"
 
 #: rosegardenconfiguredialog.cpp:352
 msgid "Font size for multi-staff views"
-msgstr "Tamaño de fuente para vistas de múltiples pentagramas"
+msgstr "Tamaño de tipografía para la vista de varios pentagramas"
 
 #: rosegardenconfiguredialog.cpp:355
 msgid "Font size for printing (pt)"
-msgstr "Tamaño de fuente para imprimir (pt)"
+msgstr "Tamaño de tipografía para imprimir (pt)"
 
 #: rosegardenconfiguredialog.cpp:358
-#, fuzzy
 msgid "Text font"
-msgstr "Texto: "
+msgstr "Tipografía de texto"
 
 #: rosegardenconfiguredialog.cpp:361
-#, fuzzy
 msgid "Time Signature font"
-msgstr "Medida del Compás"
+msgstr "Tipografía de medida de compás"
 
 #: rosegardenconfiguredialog.cpp:369
 msgid "Origin:"
@@ -8017,11 +7991,11 @@ msgstr "por archivo"
 
 #: rosegardenconfiguredialog.cpp:1265
 msgid "32KB"
-msgstr ""
+msgstr "32KB"
 
 #: rosegardenconfiguredialog.cpp:1266
 msgid "32MB"
-msgstr ""
+msgstr "32MB"
 
 #: rosegardenconfiguredialog.cpp:1288
 msgid "Audio mix and monitor mode:"
@@ -8033,7 +8007,7 @@ msgstr "Baja latencia"
 
 #: rosegardenconfiguredialog.cpp:1291
 msgid "Buffered"
-msgstr ""
+msgstr "Buffered"
 
 #: rosegardenconfiguredialog.cpp:1297
 msgid "Create post-fader outputs for audio instruments"
@@ -8101,11 +8075,11 @@ msgstr "%1 seg"
 
 #: rosegardenconfiguredialog.cpp:1535
 msgid "%1 KB"
-msgstr ""
+msgstr "%1 KB"
 
 #: rosegardenconfiguredialog.cpp:1536
 msgid "%1 MB"
-msgstr ""
+msgstr "%1 MB"
 
 #: rosegardenconfiguredialog.cpp:1573
 msgid "sfxload path"
@@ -8121,7 +8095,7 @@ msgstr "%1 minutos %2.%3%4 segundos (%5 unidades, %6 compases)"
 
 #: rosegardenconfiguredialog.cpp:1845
 msgid "Copyright"
-msgstr ""
+msgstr "Copyright"
 
 #: rosegardenconfiguredialog.cpp:1847
 msgid "Composer"
@@ -8256,46 +8230,30 @@ msgid "Document Properties"
 msgstr "Propiedades del Documento"
 
 #: kde32_kfontrequester.cpp:105
-#, fuzzy
 msgid "Click to select a font"
-msgstr "Cambiar a herramienta de selección"
+msgstr "Hacer clic para seleccionar una tipografía"
 
 #: kde32_kfontrequester.cpp:112
 msgid "Preview of the selected font"
-msgstr ""
+msgstr "Previsualizar la tipografía seleccionada"
 
 #: kde32_kfontrequester.cpp:114
 msgid ""
 "This is a preview of the selected font. You can change it by clicking the "
 "\"Choose...\" button."
 msgstr ""
+"Esta es una previsualización de la tipografía seleccionada. Puede cambiarla "
+"pulsando el botón \"Elegir...\"."
 
 #: kde32_kfontrequester.cpp:120
 msgid "Preview of the \"%1\" font"
-msgstr ""
+msgstr "Previsualización de la tipografía \"%1\""
 
 #: kde32_kfontrequester.cpp:122
 msgid ""
 "This is a preview of the \"%1\" font. You can change it by clicking the "
 "\"Choose...\" button."
 msgstr ""
+"Esta es una previsualización de la tipografía \"%1\". Puede cambiarla pulsando "
+"el botón \"Elegir...\"."
 
-#~ msgid "The Opus font is part of Sibelius."
-#~ msgstr "La tipografía Opus es parte de Sibelius."
-
-#~ msgid "Sync, and offer timebase master"
-#~ msgstr "Sincronizar, y ofrecer maestro de tiempo"
-
-#~ msgid "Show Tip of the &Day"
-#~ msgstr "Mostrar sugerencia del &Día"
-
-#~ msgid "&Quantize Notes"
-#~ msgstr "&Cuantificar Notas"
-
-#~ msgid ""
-#~ "ERROR: Event in chord at %1 has no HEIGHT_ON_STAFF property!\n"
-#~ "This is a bug (the program would previously have crashed by now)"
-#~ msgstr ""
-#~ "ERROR: El evento en el acorde en %1 no tiene la propiedad "
-#~ "HEIGHT_ON_STAFF\n"
-#~ "Esto es un bug (el programa debería haber fallado ya)"
