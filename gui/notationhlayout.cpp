@@ -400,12 +400,6 @@ NotationHLayout::AccidentalTable::getDisplayAccidental(Accidental accidental,
             return NoAccidental;
         } else if (accidental == NoAccidental || accidental == Natural) {
             return Natural;
-/*!!!
-        if (accidental == NoAccidental || accidental == Natural) {
-            return Natural;
-        } else if (accidental == (*this)[height]) {
-            return NoAccidental;
-*/
         } else {
             //!!! aargh.  What we really want to do now is have two
             //accidentals shown: first a natural, then the one
@@ -451,6 +445,8 @@ NotationHLayout::reconcileBars()
 
         Staff *staff = i->first;
         BarDataList &list = i->second;
+
+        if (list.size() > 0 && list[0].barNo < 0) continue; // done it already
 
         Track &track = staff->getViewElementsManager()->getTrack();
         const Track &refTrack = *(track.getReferenceTrack());
@@ -499,12 +495,13 @@ NotationHLayout::reconcileBars()
 
 		BarData &bd(list[barNo]);
 
-		if (bd.idealWidth < maxWidth) {
+		if (bd.idealWidth != maxWidth) {
 		    if (bd.idealWidth > 0) {
 			float ratio = (float)maxWidth / (float)bd.idealWidth;
 			bd.fixedWidth += bd.fixedWidth * int((ratio - 1.0)/2.0);
 		    }
 		    bd.idealWidth = maxWidth;
+                    bd.widthChanged = true;
 		}
 	    }
 	}
@@ -565,6 +562,8 @@ NotationHLayout::layout(BarDataMap::iterator i)
 	barX += bdi->idealWidth;
 
         if (bdi->barNo < 0) continue; // fake bar
+//!!! This doesn't seem to do what I expect...
+//        if (bdi->widthChanged == false) continue; // laid out already
 
         bool haveAccidentalInThisChord = false;
 
@@ -733,6 +732,8 @@ NotationHLayout::layout(BarDataMap::iterator i)
             x += delta;
             kdDebug(KDEBUG_AREA) << "x = " << x << endl;
         }
+
+        bdi->widthChanged = false;
     }
 
     if (x > m_totalWidth) m_totalWidth = x;
@@ -797,9 +798,14 @@ int NotationHLayout::getComfortableGap(const NotePixmapFactory &npf,
 }        
 
 void
-NotationHLayout::reset()
+NotationHLayout::reset(Staff *staff)
 {
-    m_barData.clear();
+    if (!staff) {
+        m_barData.clear();
+    } else {
+        getBarData(*staff).clear();
+    }
+
     m_totalWidth = 0;
 }
 

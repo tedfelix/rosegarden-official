@@ -65,9 +65,6 @@ public:
     const RosegardenGUIDoc *getDocument() const { return m_document; }
     RosegardenGUIDoc *getDocument() { return m_document; }
 
-    //!!! The showElements/showBars methods arguably no longer have
-    //the most useful declarations, now we're in multi-staff world
-
     /// draw all elements
     virtual bool showElements(int staffNo);
 
@@ -76,20 +73,20 @@ public:
 			      NotationElementList::iterator from,
                               NotationElementList::iterator to);
 
-    /// draw all elements in range, with dx,dy offset
-    virtual bool showElements(int staffNo,
-			      NotationElementList::iterator from,
-                              NotationElementList::iterator to,
-                              double dxoffset, double dyoffset);
-
     /// draw all elements in range at coordinates relative to the specified canvas item
-    virtual bool showElements(int staffNo,
-			      NotationElementList::iterator from,
+    virtual bool showElements(NotationElementList::iterator from,
                               NotationElementList::iterator to,
-                              QCanvasItem*);
+                              QCanvasItem*,
+                              bool positionOnly = false);
+
+    /// draw all elements in range, with dx,dy offset
+    virtual bool showElements(NotationElementList::iterator from,
+                              NotationElementList::iterator to,
+                              double dxoffset, double dyoffset,
+                              bool positionOnly = false);
 
     /// Calls all the relevant preparse and layout methods
-    virtual bool applyLayout();
+    virtual bool applyLayout(int staffNo = -1);
 
     /// Calculate cached values for use in horizontal layout
     virtual bool applyHorizontalPreparse(int staff);
@@ -317,9 +314,9 @@ protected:
     void toggleNamedToolBar(const QString& toolBarName);
     
     /**
-     * redo the layout after insertion
+     * redo the layout after insertion.  default is all staffs
      */
-    void redoLayout();
+    void redoLayout(int staffNo = -1);
 
     /**
      * readjust the width of the canvas after a layout

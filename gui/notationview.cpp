@@ -448,28 +448,28 @@ void NotationView::initStatusBar()
 bool NotationView::showElements(int staffNo)
 {
     NotationElementList *notes = m_staffs[staffNo]->getNotationElementList();
-    return showElements(staffNo, notes->begin(), notes->end(), m_staffs[staffNo]);
+    return showElements(notes->begin(), notes->end(), m_staffs[staffNo]);
 }
 
 bool NotationView::showElements(int staffNo,
 				NotationElementList::iterator from,
                                 NotationElementList::iterator to)
 {
-    return showElements(staffNo, from, to, m_staffs[staffNo]);
+    return showElements(from, to, m_staffs[staffNo]);
 }
 
-bool NotationView::showElements(int staffNo,
-				NotationElementList::iterator from,
+bool NotationView::showElements(NotationElementList::iterator from,
                                 NotationElementList::iterator to,
-                                QCanvasItem *item)
+                                QCanvasItem *item,
+                                bool positionOnly)
 {
-    return showElements(staffNo, from, to, item->x(), item->y());
+    return showElements(from, to, item->x(), item->y(), positionOnly);
 }
 
-bool NotationView::showElements(int staffNo,
-				NotationElementList::iterator from,
+bool NotationView::showElements(NotationElementList::iterator from,
                                 NotationElementList::iterator to,
-                                double dxoffset, double dyoffset)
+                                double dxoffset, double dyoffset,
+                                bool positionOnly)
 {
     kdDebug(KDEBUG_AREA) << "NotationView::showElements()" << endl;
 
@@ -479,6 +479,11 @@ bool NotationView::showElements(int staffNo,
     Clef currentClef; // default is okay to start with
 
     for (NotationElementList::iterator it = from; it != to; ++it) {
+
+        if (positionOnly) {
+            (*it)->reposition(dxoffset, dyoffset);
+            continue;
+        }
 
         //
         // process event
@@ -657,8 +662,8 @@ bool NotationView::showBars(int staffNo,
     for (NotationHLayout::BarDataList::const_iterator it = barData.begin();
          it != barData.end(); ++it) {
 
-	kdDebug(KDEBUG_AREA) << "Adding bar number " << it->barNo
-			     << " at pos " << it->x << endl;
+//	kdDebug(KDEBUG_AREA) << "Adding bar number " << it->barNo
+//			     << " at pos " << it->x << endl;
 
 	if (it->barNo >= 0) staff->insertBar(it->x, it->correct);
     }
@@ -667,20 +672,22 @@ bool NotationView::showBars(int staffNo,
 }
 
 
-bool NotationView::applyLayout()
+bool NotationView::applyLayout(int staffNo)
 {
     kdDebug(KDEBUG_AREA) << "NotationView::applyLayout() : entering; we have " << m_staffs.size() << " staffs" << endl;
 
-    m_hlayout->reset(); // state applies to all staffs
-
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+
+        if (staffNo >= 0 && (int)i != staffNo) continue;
 	kdDebug(KDEBUG_AREA) << "NotationView::applyLayout(): staff "<< i << endl;
+        m_hlayout->reset(m_staffs[i]); // state applies to all staffs
 	bool rcp = applyHorizontalPreparse(i);
 	bool rcv = applyVerticalLayout(i);
 	if (!(rcp && rcv)) return false;
     }
 
-    // horizontal layout applies to all staffs, unlike preparse
+    // horizontal layout applies to all staffs, unlike preparse, and
+    // has to be carried out on all staffs even if only one has changed
     bool rch = applyHorizontalLayout();
     if (!rch) return false;
 
@@ -1243,9 +1250,9 @@ NotationView::findClosestNote(double eventX, Event *&timeSignature,
 }
 
 
-void NotationView::redoLayout()
+void NotationView::redoLayout(int staffNo)
 {
-    applyLayout(); // TODO : be more subtle than this
+    applyLayout(staffNo); // TODO : be more subtle than this
 
     //!!! sadly we can't just redo from a given position, because
     //things like beamed notes earlier in the same group may need to
@@ -1254,7 +1261,8 @@ void NotationView::redoLayout()
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 	NotationElementList *notes = m_staffs[i]->getNotationElementList();
-	showElements(i, notes->begin(), notes->end(), m_staffs[i]);
+	showElements(notes->begin(), notes->end(), m_staffs[i],
+                     (staffNo >= 0 && (int)i != staffNo));
 	showBars(i, notes->begin(), notes->end());
     }
 }
@@ -1354,7 +1362,7 @@ NoteInserter::handleClick(int height, const QPoint &eventPos,
 
     doInsert(nt, (*closestNote)->getAbsoluteTime(), note, pitch, m_accidental);
 
-    m_parentView.redoLayout();
+    m_parentView.redoLayout(staffNo);
 }
 
 void NoteInserter::doInsert(TrackNotationHelper& nt,
@@ -1418,7 +1426,7 @@ void ClefInserter::handleClick(int /*height*/, const QPoint &eventPos,
 	(m_parentView.getStaff(staffNo)->getViewElementsManager()->getTrack());
     nt.insertClef(absTime, m_clef);
 
-    m_parentView.redoLayout();
+    m_parentView.redoLayout(staffNo);
 }
 
 
@@ -1469,5 +1477,5 @@ void NotationEraser::handleClick(int, const QPoint&,
     }
     
     if (needLayout) // TODO : be more subtle
-        m_parentView.redoLayout();
+        m_parentView.redoLayout(staffNo);
 }

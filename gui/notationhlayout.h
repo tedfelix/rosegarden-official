@@ -51,7 +51,7 @@ public:
      * Resets internal data stores, notably the BarDataMap that is
      * used to retain the data computed by preparse().
      */
-    void reset();
+    void reset(Staff *staff = 0);
 
     /// Tries to harmonize the bar positions for all the staves
     void reconcileBars();
@@ -70,11 +70,12 @@ public:
         int idealWidth;       // theoretical width of bar following barline
         int fixedWidth;       // minimum possible width of bar following barline
 	bool correct;         // bar preceding barline has correct duration
+        bool widthChanged;
         
         BarData(int ibarno, NotationElementList::iterator istart,
                 int ix, int iwidth, int fwidth, bool icorrect) :
             barNo(ibarno), start(istart), x(ix), idealWidth(iwidth),
-            fixedWidth(fwidth), correct(icorrect) { }
+            fixedWidth(fwidth), correct(icorrect), widthChanged(true) { }
     };
 
     typedef FastVector<BarData> BarDataList;

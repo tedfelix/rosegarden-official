@@ -108,6 +108,12 @@ NotationElement::setCanvasItem(QCanvasItem *e, double dxoffset, double dyoffset)
     e->move(m_x + dxoffset, m_y + dyoffset);
 }
 
+void
+NotationElement::reposition(double dxoffset, double dyoffset)
+{
+    m_canvasItem->move(m_x + dxoffset, m_y + dyoffset);
+}
+
 //////////////////////////////////////////////////////////////////////
 
 NotationElementList::~NotationElementList()

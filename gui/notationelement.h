@@ -102,6 +102,14 @@ public:
      */
     void setCanvasItem(QCanvasItem *e, double dxoffset, double dyoffset);
 
+    /**
+     * Reset the position of the canvas item (which is assumed to
+     * exist already) to the stored x and y coordinates with the given
+     * offset.  For use when x and y have changed, as well as when
+     * the offset has changed.
+     */
+    void reposition(double dxoffset, double dyoffset);
+
     /// Returns the associated canvas item
     QCanvasItem* canvasItem() { return m_canvasItem; }
 

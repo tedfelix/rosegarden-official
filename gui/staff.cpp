@@ -126,7 +126,7 @@ compareBarToPos(QCanvasLineGroupable *barLine1, unsigned int pos)
 
 void Staff::insertBar(unsigned int barPos, bool correct)
 {
-    kdDebug(KDEBUG_AREA) << "Staff::insertBar(" << barPos << ")\n";
+//    kdDebug(KDEBUG_AREA) << "Staff::insertBar(" << barPos << ")\n";
 
     QCanvasLineGroupable* barLine = new QCanvasLineGroupable(canvas(), this);
 
