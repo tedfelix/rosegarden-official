@@ -25,7 +25,8 @@
 #include <vector>
 
 #include <kdialogbase.h>
-#include <qlineedit.h>
+#include <qlistview.h>
+#include <qvgroupbox.h>
 
 #include "Instrument.h"
 
@@ -39,28 +40,107 @@ class QRadioButton;
 class RosegardenGUIDoc;
 class MultiViewCommandHistory;
 class KCommand;
+class BankEditorDialog;
+class KListView;
+class KLineEdit;
 
 namespace Rosegarden { class Studio; class MidiDevice; }
 
-class ProgramLine : public QLineEdit
+class MidiDeviceListViewItem : public QListViewItem
 {
-    Q_OBJECT
-
 public:
-    ProgramLine(QWidget *parent, int id);
+    MidiDeviceListViewItem(int deviceNb,
+                           QListView* parent, QString name);
 
-    int getId() const { return m_id; }
-    void setId(int id) { m_id = id; }
+    MidiDeviceListViewItem(int deviceNb,
+                           QListViewItem* parent, QString name,
+                           QString msb, QString lsb);
 
-public slots:
-    void slotNewText(const QString &);
-
-signals:
-    void newText(const QString&, int);
+    int getDevice()   { return m_deviceNb; }
 
 protected:
-    int m_id;
 
+    //--------------- Data members ---------------------------------
+    int m_deviceNb;
+};
+
+class MidiBankListViewItem : public MidiDeviceListViewItem
+{
+public:
+    MidiBankListViewItem(int deviceNb,
+                         int bankNb,
+                         QListViewItem* parent, QString name,
+                         QString msb, QString lsb);
+
+    int getBank()     { return m_bankNb; }
+
+protected:
+
+    //--------------- Data members ---------------------------------
+    int    m_bankNb;
+};
+
+class MidiProgramsEditor : public QVGroupBox
+{
+    Q_OBJECT
+public:
+    MidiProgramsEditor(BankEditorDialog *bankEditor,
+                       QWidget *parent,
+                       const char *name = 0);
+
+    typedef std::vector<Rosegarden::MidiProgram> MidiProgramContainer;
+    typedef std::vector<Rosegarden::MidiBank>    MidiBankContainer;
+    
+    int ensureUniqueMSB(int msb, bool ascending);
+    int ensureUniqueLSB(int lsb, bool ascending);
+
+    // Does the banklist contain this combination already?
+    //
+    bool banklistContains(int msb, int lsb);
+
+    MidiProgramContainer
+        getBankSubset(Rosegarden::MidiByte msb, Rosegarden::MidiByte lsb);
+
+    Rosegarden::MidiBank* getCurrentBank();
+
+    /// Set the currently loaded programs to new MSB and LSB
+    void modifyCurrentPrograms(int oldMSB, int oldLSB,
+                               int msb, int lsb);
+
+    // Get a program
+    //
+    Rosegarden::MidiProgram* getProgram(int msb, int lsb, int program);
+
+    void setBankName(const QString& s);
+
+public slots:
+    void slotPopulateBank(QListViewItem*);
+
+    // Check that any new MSB/LSB combination is unique for this device
+    //
+    void slotNewMSB(int value);
+    void slotNewLSB(int value);
+
+    void slotProgramChanged(const QString&);
+
+protected:
+
+    void blockAllSignals(bool block);
+
+    //--------------- Data members ---------------------------------
+    BankEditorDialog*        m_bankEditor;
+
+    std::vector<KLineEdit*>  m_programNames;
+
+    QFrame                   *m_mainFrame;
+
+    QLabel                   *m_bankName;
+    QSpinBox                 *m_msb;
+    QSpinBox                 *m_lsb;
+
+    Rosegarden::MidiBank     *m_currentBank;
+    MidiBankContainer        &m_bankList;
+    MidiProgramContainer     &m_programList;
 };
 
 class BankEditorDialog : public KDialogBase
@@ -71,39 +151,25 @@ public:
     BankEditorDialog(QWidget *parent,
                      RosegardenGUIDoc *doc);
 
-    typedef std::vector<Rosegarden::MidiProgram> MidiProgramContainer;
-    typedef std::vector<Rosegarden::MidiBank>    MidiBankContainer;
-    
-    MidiProgramContainer
-        getBankSubset(Rosegarden::MidiByte msb, Rosegarden::MidiByte lsb);
-
-    std::pair<int, int> getFirstFreeBank(int device);
-
-    int ensureUniqueMSB(int msb, bool ascending);
-    int ensureUniqueLSB(int lsb, bool ascending);
-
-    // Does the banklist contain this combination already?
-    //
-    bool banklistContains(int msb, int lsb);
-
-    // Set the currently loaded programs to new MSB and LSB
-    //
-    void modifyCurrentPrograms(int oldMSB, int oldLSB,
-                               int msb, int lsb);
-
-    void setModified(bool value);
+    std::pair<int, int> getFirstFreeBank(QListViewItem*);
 
     void addCommandToHistory(KCommand *command);
     MultiViewCommandHistory* getCommandHistory();
 
-    // Get a program
+    Rosegarden::MidiBank* getCurrentBank() { return m_programEditor->getCurrentBank(); }
+
+    // Get a MidiDevice from an index number
     //
-    Rosegarden::MidiProgram* getProgram(int msb, int lsb, int program);
+    Rosegarden::MidiDevice* getMidiDevice(int);
+    Rosegarden::MidiDevice* getMidiDevice(QListViewItem*);
+    Rosegarden::MidiDevice* getCurrentMidiDevice();
+    MidiProgramsEditor::MidiBankContainer&      getBankList()     { return m_bankList; }
+    MidiProgramsEditor::MidiProgramContainer&   getProgramList()  { return m_programList; }
+
+    void setModified(bool value);
 
 public slots:
-    void slotPopulateBank(int bank);
-    void slotPopulateDevice(int device);
-    void slotPopulateDeviceBank(int device, int bank);
+    void slotPopulateDevice(QListViewItem*);
 
     void slotOk();
     void slotApply();
@@ -112,43 +178,29 @@ public slots:
     void slotDeleteBank();
     void slotDeleteAllBanks();
 
-    void slotModifyBankName(const QString&);
-    void slotModifyDeviceName(const QString&);
-
-    void slotProgramChanged(const QString&, int);
-
-    // Check that any new MSB/LSB combination is unique for this device
-    //
-    void slotNewMSB(int value);
-    void slotNewLSB(int value);
+    void slotModifyDeviceOrBankName(QListViewItem*, const QString&,int);
 
 protected:
-    // Get a MidiDevice from an index number
-    //
-    Rosegarden::MidiDevice* getMidiDevice(int number);
+    MidiDeviceListViewItem* getParentDeviceItem(QListViewItem*);
 
     //--------------- Data members ---------------------------------
     Rosegarden::Studio      *m_studio;
     RosegardenGUIDoc        *m_doc;
 
-    QTabWidget              *m_programTab;
-    RosegardenComboBox      *m_deviceCombo;
-    RosegardenComboBox      *m_bankCombo;
-    QSpinBox                *m_msb;
-    QSpinBox                *m_lsb;
-    std::vector<ProgramLine*>  m_programNames;
+    
+    MidiProgramsEditor      *m_programEditor;
+    KListView               *m_listView;
 
     QPushButton             *m_addBank;
     QPushButton             *m_deleteBank;
     QPushButton             *m_deleteAllBanks;
 
-    QFrame                  *m_mainFrame;
-
-    std::vector<std::string>                 m_deviceList;
-    MidiBankContainer        m_bankList;
-    MidiProgramContainer     m_programList;
+    std::vector<std::string>                     m_deviceList;
+    MidiProgramsEditor::MidiBankContainer        m_bankList;
+    MidiProgramsEditor::MidiProgramContainer     m_programList;
 
     bool                     m_modified;
+    bool                     m_replaceBankList;
 
     int                      m_lastDevice;
     int                      m_lastMSB;
