@@ -1345,6 +1345,11 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
                }
                break;
 
+
+            case SND_SEQ_EVENT_SENSING:
+               // MIDI device is still there
+               break;
+
             default:
                std::cerr << "AlsaDriver::getMappedComposition - "
                          << "got unrecognised MIDI event type = "
@@ -1450,15 +1455,29 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                                         (*i)->getPitch(),
                                         (*i)->getVelocity(),
                                         duration);
+                    cout << "ONE SHOT" << endl;
                 }
                 break;
 
             case MappedEvent::MidiNote:
-                snd_seq_ev_set_note(event,
-                                    channel,
-                                    (*i)->getPitch(),
-                                    (*i)->getVelocity(),
-                                    eventDuration);
+                // If we've got an "infinite" note then just noteon -
+                // else send the duration.
+                //
+                if ((*i)->getDuration() == Rosegarden::RealTime(-1, 0))
+                {
+                    snd_seq_ev_set_noteon(event,
+                                          channel,
+                                          (*i)->getPitch(),
+                                          (*i)->getVelocity());
+                }
+                else
+                {
+                    snd_seq_ev_set_note(event,
+                                        channel,
+                                        (*i)->getPitch(),
+                                        (*i)->getVelocity(),
+                                        eventDuration);
+                }
                 break;
 
             case MappedEvent::MidiProgramChange:

@@ -60,7 +60,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
 
     makePluginParamsBox(vbox);
 
-    m_pluginList = new RosegardenComboBox(true, pluginSelectionBox);
+    m_pluginList = new RosegardenComboBox(false, pluginSelectionBox);
     m_pluginList->insertItem(i18n("(none)"));
 
     QHBox *h = new QHBox(pluginSelectionBox);
