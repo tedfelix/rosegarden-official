@@ -21,6 +21,7 @@ rosegarden_SOURCES = \
 	edittool.cpp \
 	editview.cpp \
 	editviewbase.cpp \
+        eventcommands.cpp \
 	eventfilter.cpp \
         eventview.cpp \
         instrumentlabel.cpp \

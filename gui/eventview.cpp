@@ -50,6 +50,7 @@
 #include "matrixtool.h"
 #include "sequencemanager.h"
 #include "rosedebug.h"
+#include "eventcommands.h"
 
 #include "Segment.h"
 #include "SegmentPerformanceHelper.h"
@@ -439,6 +440,9 @@ EventView::applyLayout(int /*staffNo*/)
 
         m_eventList->setSelected(m_eventList->itemAtIndex(index), true);
         m_eventList->setCurrentItem(m_eventList->itemAtIndex(index));
+
+        // ensure visible
+        m_eventList->ensureItemVisible(m_eventList->itemAtIndex(index));
     }
 
     m_listSelection.clear();
@@ -624,9 +628,37 @@ EventView::slotEditDelete()
 
         if (item)
         {
+            // Ensure that item to delete is actually still in the
+            // Segment - when deleting lots of events the list 
+            // view can sometimes get in a mess.  Another bug
+            // somewhere else?
+            //
+            bool check = false;
+
+            for (Rosegarden::Segment::iterator i = m_segments[0]->begin();
+                 i != m_segments[0]->end(); ++i)
+            {
+                if (*i == item->getEvent())
+                {
+                    check = true;
+                    break;
+                }
+            }
+
+            if (!check) 
+            {
+                ++it;
+                continue;
+            }
+
+            /*
+            cout << "DELETE EVENT @ " 
+                 << item->getEvent()->getAbsoluteTime() << endl;
+                 */
+
             if (deleteSelection == 0)
                 deleteSelection = 
-                    new Rosegarden::EventSelection(*(item->getSegment()));
+                    new Rosegarden::EventSelection(*m_segments[0]);
 
             deleteSelection->addEvent(item->getEvent());
         }
@@ -651,6 +683,41 @@ void
 EventView::slotEditInsert()
 {
     RG_DEBUG << "EventView::slotEditInsert" << endl;
+
+    Rosegarden::timeT insertTime = m_segments[0]->getStartTime();
+    Rosegarden::timeT insertDuration = 960;
+
+    QPtrList<QListViewItem> selection = m_eventList->selectedItems();
+    Rosegarden::Event *event = 0;
+
+    if (selection.count() > 0)
+    {
+        EventViewItem *item =
+            dynamic_cast<EventViewItem*>(selection.getFirst());
+
+        if (item)
+        {
+            insertTime = item->getEvent()->getAbsoluteTime();
+            insertDuration = item->getEvent()->getDuration();
+            event = new Rosegarden::Event(*item->getEvent());
+        }
+    }
+
+    if (event == 0)
+    {
+        event = new Rosegarden::Event(
+                Rosegarden::Note::EventType, insertTime, insertDuration);
+
+        event->set<Int>(Rosegarden::BaseProperties::PITCH, 70);
+        event->set<Int>(Rosegarden::BaseProperties::VELOCITY, 100);
+    }
+
+    EventInsertionCommand *command = 
+        new EventInsertionCommand(*m_segments[0],
+                                  insertTime,
+                                  insertTime + insertDuration,
+                                  event);
+    addCommandToHistory(command);
 }
 
 
@@ -663,7 +730,7 @@ EventView::setupActions()
                 SLOT(slotEditDelete()), actionCollection(),
                 "delete");
 
-    new KAction(i18n("&Insert Event"), 0, this,
+    new KAction(i18n("&Insert Event"), Key_I, this,
                 SLOT(slotEditInsert()), actionCollection(),
                 "insert");
 
