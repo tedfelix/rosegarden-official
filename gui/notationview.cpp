@@ -30,79 +30,14 @@
 #include "rosegardenguidoc.h"
 #include "notationview.h"
 
-#include "qcanvasspritegroupable.h"
-#include "qcanvaslinegroupable.h"
 #include "staff.h"
 #include "notepixmapfactory.h"
+#include "qcanvaslinegroupable.h"
 #include "qcanvassimplesprite.h"
 #include "quantizer.h"
 #include "resource.h"
 
 #include "rosedebug.h"
-
-
-NotationCanvasView::NotationCanvasView(QCanvas *viewing=0, QWidget *parent=0,
-                                       const char *name=0, WFlags f=0)
-    : QCanvasView(viewing, parent, name, f),
-      m_movingItem(0),
-      m_draggingItem(false)
-{
-}
-
-
-void
-NotationCanvasView::contentsMouseReleaseEvent (QMouseEvent *e)
-{
-    m_draggingItem = false;
-    canvas()->update();
-}
-
-void
-NotationCanvasView::contentsMouseMoveEvent (QMouseEvent *e)
-{
-    if(m_draggingItem) {
-        m_movingItem->move(e->x(), e->y());
-        canvas()->update();
-    }
-}
-
-void
-NotationCanvasView::contentsMousePressEvent (QMouseEvent *e)
-{
-    kdDebug(KDEBUG_AREA) << "mousepress" << endl;
-
-    QCanvasItemList itemList = canvas()->collisions(e->pos());
-
-    if(itemList.isEmpty()) { // click was not on an item
-        kdDebug(KDEBUG_AREA) << "mousepress : Not on an item" << endl;
-        return;
-    }
-
-    QCanvasItem *item = itemList.first();
-
-    QCanvasGroupableItem *gitem;
-
-    if((gitem = dynamic_cast<QCanvasGroupableItem*>(item))) {
-        kdDebug(KDEBUG_AREA) << "mousepress : Groupable item" << endl;
-        QCanvasItemGroup *t = gitem->group();
-
-        if(t->active())
-            m_movingItem = t;
-        else {
-            kdDebug(KDEBUG_AREA) << "mousepress : Unmoveable groupable item" << endl;
-            m_movingItem = 0; // this is not a moveable item
-            return;
-        }
-    } else {
-        m_movingItem = item;
-    }
-
-    m_draggingItem = true;
-    m_movingItem->move(e->x(), e->y());
-    canvas()->update();
-}
-
-
 
 
 NotationView::NotationView(RosegardenGUIDoc* doc, QWidget *parent)
