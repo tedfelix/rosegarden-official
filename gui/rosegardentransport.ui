@@ -11,8 +11,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>308</width>
-            <height>134</height>
+            <width>307</width>
+            <height>122</height>
         </rect>
     </property>
     <property stdset="1">
@@ -30,8 +30,8 @@
             <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>308</width>
-                <height>134</height>
+                <width>307</width>
+                <height>122</height>
             </rect>
         </property>
         <property stdset="1">
@@ -42,206 +42,6 @@
             <name>frameShadow</name>
             <enum>Raised</enum>
         </property>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>StopButton</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>39</x>
-                    <y>55</y>
-                    <width>40</width>
-                    <height>40</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>cursor</name>
-                <cursor>13</cursor>
-            </property>
-            <property stdset="1">
-                <name>focusPolicy</name>
-                <enum>NoFocus</enum>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string></string>
-            </property>
-            <property stdset="1">
-                <name>pixmap</name>
-                <pixmap>image0</pixmap>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Stop</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>RewindEndButton</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>2</x>
-                    <y>92</y>
-                    <width>40</width>
-                    <height>40</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>cursor</name>
-                <cursor>13</cursor>
-            </property>
-            <property stdset="1">
-                <name>focusPolicy</name>
-                <enum>NoFocus</enum>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string></string>
-            </property>
-            <property stdset="1">
-                <name>pixmap</name>
-                <pixmap>image1</pixmap>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Rewind to beginning</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>PlayButton</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>76</x>
-                    <y>55</y>
-                    <width>77</width>
-                    <height>40</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>cursor</name>
-                <cursor>13</cursor>
-            </property>
-            <property stdset="1">
-                <name>focusPolicy</name>
-                <enum>NoFocus</enum>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string></string>
-            </property>
-            <property stdset="1">
-                <name>pixmap</name>
-                <pixmap>image2</pixmap>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>default</name>
-                <bool>false</bool>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Play</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>RecordButton</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>39</x>
-                    <y>92</y>
-                    <width>40</width>
-                    <height>40</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>cursor</name>
-                <cursor>13</cursor>
-            </property>
-            <property stdset="1">
-                <name>focusPolicy</name>
-                <enum>NoFocus</enum>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string></string>
-            </property>
-            <property stdset="1">
-                <name>pixmap</name>
-                <pixmap>image3</pixmap>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Record</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>RewindButton</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>2</x>
-                    <y>55</y>
-                    <width>40</width>
-                    <height>40</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>cursor</name>
-                <cursor>13</cursor>
-            </property>
-            <property stdset="1">
-                <name>focusPolicy</name>
-                <enum>NoFocus</enum>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string></string>
-            </property>
-            <property stdset="1">
-                <name>pixmap</name>
-                <pixmap>image4</pixmap>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Rewind</string>
-            </property>
-        </widget>
         <widget>
             <class>QFrame</class>
             <property stdset="1">
@@ -282,7 +82,7 @@
                 </property>
                 <property stdset="1">
                     <name>pixmap</name>
-                    <pixmap>image5</pixmap>
+                    <pixmap>image0</pixmap>
                 </property>
                 <property stdset="1">
                     <name>scaledContents</name>
@@ -310,7 +110,7 @@
                 </property>
                 <property stdset="1">
                     <name>pixmap</name>
-                    <pixmap>image5</pixmap>
+                    <pixmap>image0</pixmap>
                 </property>
                 <property stdset="1">
                     <name>scaledContents</name>
@@ -338,7 +138,7 @@
                 </property>
                 <property stdset="1">
                     <name>pixmap</name>
-                    <pixmap>image5</pixmap>
+                    <pixmap>image0</pixmap>
                 </property>
                 <property stdset="1">
                     <name>scaledContents</name>
@@ -366,7 +166,7 @@
                 </property>
                 <property stdset="1">
                     <name>pixmap</name>
-                    <pixmap>image5</pixmap>
+                    <pixmap>image0</pixmap>
                 </property>
                 <property stdset="1">
                     <name>scaledContents</name>
@@ -394,7 +194,7 @@
                 </property>
                 <property stdset="1">
                     <name>pixmap</name>
-                    <pixmap>image5</pixmap>
+                    <pixmap>image0</pixmap>
                 </property>
                 <property stdset="1">
                     <name>scaledContents</name>
@@ -422,7 +222,7 @@
                 </property>
                 <property stdset="1">
                     <name>pixmap</name>
-                    <pixmap>image5</pixmap>
+                    <pixmap>image0</pixmap>
                 </property>
                 <property stdset="1">
                     <name>scaledContents</name>
@@ -450,7 +250,7 @@
                 </property>
                 <property stdset="1">
                     <name>pixmap</name>
-                    <pixmap>image5</pixmap>
+                    <pixmap>image0</pixmap>
                 </property>
                 <property stdset="1">
                     <name>scaledContents</name>
@@ -478,7 +278,7 @@
                 </property>
                 <property stdset="1">
                     <name>pixmap</name>
-                    <pixmap>image5</pixmap>
+                    <pixmap>image0</pixmap>
                 </property>
                 <property stdset="1">
                     <name>scaledContents</name>
@@ -506,7 +306,7 @@
                 </property>
                 <property stdset="1">
                     <name>pixmap</name>
-                    <pixmap>image6</pixmap>
+                    <pixmap>image1</pixmap>
                 </property>
                 <property stdset="1">
                     <name>scaledContents</name>
@@ -534,7 +334,7 @@
                 </property>
                 <property stdset="1">
                     <name>pixmap</name>
-                    <pixmap>image6</pixmap>
+                    <pixmap>image1</pixmap>
                 </property>
                 <property stdset="1">
                     <name>scaledContents</name>
@@ -562,7 +362,7 @@
                 </property>
                 <property stdset="1">
                     <name>pixmap</name>
-                    <pixmap>image5</pixmap>
+                    <pixmap>image0</pixmap>
                 </property>
                 <property stdset="1">
                     <name>scaledContents</name>
@@ -590,7 +390,7 @@
                 </property>
                 <property stdset="1">
                     <name>pixmap</name>
-                    <pixmap>image5</pixmap>
+                    <pixmap>image0</pixmap>
                 </property>
                 <property stdset="1">
                     <name>scaledContents</name>
@@ -606,15 +406,215 @@
             <class>QPushButton</class>
             <property stdset="1">
                 <name>name</name>
+                <cstring>RewindButton</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>2</x>
+                    <y>53</y>
+                    <width>40</width>
+                    <height>34</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>cursor</name>
+                <cursor>13</cursor>
+            </property>
+            <property stdset="1">
+                <name>focusPolicy</name>
+                <enum>NoFocus</enum>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string></string>
+            </property>
+            <property stdset="1">
+                <name>pixmap</name>
+                <pixmap>image2</pixmap>
+            </property>
+            <property>
+                <name>toolTip</name>
+                <string>Rewind</string>
+            </property>
+        </widget>
+        <widget>
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>StopButton</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>39</x>
+                    <y>53</y>
+                    <width>41</width>
+                    <height>34</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>cursor</name>
+                <cursor>13</cursor>
+            </property>
+            <property stdset="1">
+                <name>focusPolicy</name>
+                <enum>NoFocus</enum>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string></string>
+            </property>
+            <property stdset="1">
+                <name>pixmap</name>
+                <pixmap>image3</pixmap>
+            </property>
+            <property>
+                <name>toolTip</name>
+                <string>Stop</string>
+            </property>
+        </widget>
+        <widget>
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>PlayButton</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>77</x>
+                    <y>53</y>
+                    <width>77</width>
+                    <height>34</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>cursor</name>
+                <cursor>13</cursor>
+            </property>
+            <property stdset="1">
+                <name>focusPolicy</name>
+                <enum>NoFocus</enum>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string></string>
+            </property>
+            <property stdset="1">
+                <name>pixmap</name>
+                <pixmap>image4</pixmap>
+            </property>
+            <property stdset="1">
+                <name>toggleButton</name>
+                <bool>true</bool>
+            </property>
+            <property stdset="1">
+                <name>default</name>
+                <bool>false</bool>
+            </property>
+            <property stdset="1">
+                <name>toggleButton</name>
+                <bool>true</bool>
+            </property>
+            <property>
+                <name>toolTip</name>
+                <string>Play</string>
+            </property>
+        </widget>
+        <widget>
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
                 <cstring>PauseButton</cstring>
             </property>
             <property stdset="1">
                 <name>geometry</name>
                 <rect>
-                    <x>150</x>
-                    <y>55</y>
+                    <x>151</x>
+                    <y>53</y>
                     <width>40</width>
-                    <height>40</height>
+                    <height>34</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>cursor</name>
+                <cursor>13</cursor>
+            </property>
+            <property stdset="1">
+                <name>focusPolicy</name>
+                <enum>NoFocus</enum>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string></string>
+            </property>
+            <property stdset="1">
+                <name>pixmap</name>
+                <pixmap>image5</pixmap>
+            </property>
+            <property>
+                <name>toolTip</name>
+                <string>Pause</string>
+            </property>
+        </widget>
+        <widget>
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>LoopButton</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>39</x>
+                    <y>85</y>
+                    <width>40</width>
+                    <height>34</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>cursor</name>
+                <cursor>13</cursor>
+            </property>
+            <property stdset="1">
+                <name>focusPolicy</name>
+                <enum>NoFocus</enum>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string></string>
+            </property>
+            <property stdset="1">
+                <name>pixmap</name>
+                <pixmap>image6</pixmap>
+            </property>
+            <property stdset="1">
+                <name>toggleButton</name>
+                <bool>true</bool>
+            </property>
+            <property stdset="1">
+                <name>toggleButton</name>
+                <bool>true</bool>
+            </property>
+            <property>
+                <name>toolTip</name>
+                <string>Loop</string>
+            </property>
+        </widget>
+        <widget>
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>RecordButton</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>2</x>
+                    <y>85</y>
+                    <width>40</width>
+                    <height>34</height>
                 </rect>
             </property>
             <property stdset="1">
@@ -633,48 +633,32 @@
                 <name>pixmap</name>
                 <pixmap>image7</pixmap>
             </property>
+            <property stdset="1">
+                <name>toggleButton</name>
+                <bool>true</bool>
+            </property>
+            <property stdset="1">
+                <name>toggleButton</name>
+                <bool>true</bool>
+            </property>
             <property>
                 <name>toolTip</name>
-                <string>Pause</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QLabel</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>TextLabel1</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>233</x>
-                    <y>46</y>
-                    <width>40</width>
-                    <height>16</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>Tempo</string>
-            </property>
-            <property>
-                <name>buddy</name>
-                <cstring></cstring>
+                <string>Record</string>
             </property>
         </widget>
         <widget>
             <class>QPushButton</class>
             <property stdset="1">
                 <name>name</name>
-                <cstring>FfwdButton</cstring>
+                <cstring>FfwdEndButton</cstring>
             </property>
             <property stdset="1">
                 <name>geometry</name>
                 <rect>
-                    <x>187</x>
-                    <y>55</y>
+                    <x>150</x>
+                    <y>85</y>
                     <width>40</width>
-                    <height>40</height>
+                    <height>34</height>
                 </rect>
             </property>
             <property stdset="1">
@@ -695,7 +679,179 @@
             </property>
             <property>
                 <name>toolTip</name>
+                <string>Fast forward to end</string>
+            </property>
+        </widget>
+        <widget>
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>RewindEndButton</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>113</x>
+                    <y>85</y>
+                    <width>40</width>
+                    <height>34</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>cursor</name>
+                <cursor>13</cursor>
+            </property>
+            <property stdset="1">
+                <name>focusPolicy</name>
+                <enum>NoFocus</enum>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string></string>
+            </property>
+            <property stdset="1">
+                <name>pixmap</name>
+                <pixmap>image9</pixmap>
+            </property>
+            <property>
+                <name>toolTip</name>
+                <string>Rewind to beginning</string>
+            </property>
+        </widget>
+        <widget>
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>SoloButton</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>76</x>
+                    <y>85</y>
+                    <width>40</width>
+                    <height>34</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>cursor</name>
+                <cursor>13</cursor>
+            </property>
+            <property stdset="1">
+                <name>focusPolicy</name>
+                <enum>NoFocus</enum>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string></string>
+            </property>
+            <property stdset="1">
+                <name>pixmap</name>
+                <pixmap>image10</pixmap>
+            </property>
+            <property stdset="1">
+                <name>toggleButton</name>
+                <bool>true</bool>
+            </property>
+            <property stdset="1">
+                <name>default</name>
+                <bool>false</bool>
+            </property>
+            <property stdset="1">
+                <name>toggleButton</name>
+                <bool>true</bool>
+            </property>
+            <property stdset="1">
+                <name>flat</name>
+                <bool>true</bool>
+            </property>
+            <property>
+                <name>toolTip</name>
+                <string>Solo</string>
+            </property>
+        </widget>
+        <widget>
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>FfwdButton</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>188</x>
+                    <y>53</y>
+                    <width>40</width>
+                    <height>34</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>cursor</name>
+                <cursor>13</cursor>
+            </property>
+            <property stdset="1">
+                <name>focusPolicy</name>
+                <enum>NoFocus</enum>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string></string>
+            </property>
+            <property stdset="1">
+                <name>pixmap</name>
+                <pixmap>image11</pixmap>
+            </property>
+            <property>
+                <name>toolTip</name>
                 <string>Fast forward</string>
+            </property>
+        </widget>
+        <widget>
+            <class>QLineEdit</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>TempoLineEdit</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>232</x>
+                    <y>93</y>
+                    <width>68</width>
+                    <height>22</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>focusPolicy</name>
+                <enum>NoFocus</enum>
+            </property>
+            <property>
+                <name>toolTip</name>
+                <string>Tempo</string>
+            </property>
+        </widget>
+        <widget>
+            <class>QLabel</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>TextLabel1</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>261</x>
+                    <y>76</y>
+                    <width>40</width>
+                    <height>16</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>Tempo</string>
+            </property>
+            <property>
+                <name>buddy</name>
+                <cstring></cstring>
             </property>
         </widget>
         <widget>
@@ -763,30 +919,6 @@
             </widget>
         </widget>
         <widget>
-            <class>QLineEdit</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>TempoLineEdit</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>233</x>
-                    <y>63</y>
-                    <width>68</width>
-                    <height>24</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>focusPolicy</name>
-                <enum>NoFocus</enum>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Tempo</string>
-            </property>
-        </widget>
-        <widget>
             <class>QFrame</class>
             <property stdset="1">
                 <name>name</name>
@@ -795,10 +927,10 @@
             <property stdset="1">
                 <name>geometry</name>
                 <rect>
-                    <x>233</x>
-                    <y>99</y>
+                    <x>232</x>
+                    <y>47</y>
                     <width>69</width>
-                    <height>29</height>
+                    <height>28</height>
                 </rect>
             </property>
             <property stdset="1">
@@ -819,7 +951,7 @@
                     <name>geometry</name>
                     <rect>
                         <x>8</x>
-                        <y>6</y>
+                        <y>5</y>
                         <width>24</width>
                         <height>16</height>
                     </rect>
@@ -838,8 +970,8 @@
                 <property stdset="1">
                     <name>geometry</name>
                     <rect>
-                        <x>38</x>
-                        <y>6</y>
+                        <x>39</x>
+                        <y>5</y>
                         <width>24</width>
                         <height>17</height>
                     </rect>
@@ -850,216 +982,56 @@
                 </property>
             </widget>
         </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>FfwdEndButton</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>187</x>
-                    <y>92</y>
-                    <width>40</width>
-                    <height>40</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>cursor</name>
-                <cursor>13</cursor>
-            </property>
-            <property stdset="1">
-                <name>focusPolicy</name>
-                <enum>NoFocus</enum>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string></string>
-            </property>
-            <property stdset="1">
-                <name>pixmap</name>
-                <pixmap>image9</pixmap>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Fast forward to end</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>SoloButton</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>76</x>
-                    <y>92</y>
-                    <width>40</width>
-                    <height>40</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>cursor</name>
-                <cursor>13</cursor>
-            </property>
-            <property stdset="1">
-                <name>focusPolicy</name>
-                <enum>NoFocus</enum>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string></string>
-            </property>
-            <property stdset="1">
-                <name>pixmap</name>
-                <pixmap>image10</pixmap>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>default</name>
-                <bool>false</bool>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>flat</name>
-                <bool>true</bool>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Solo</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>LoopButton</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>113</x>
-                    <y>92</y>
-                    <width>40</width>
-                    <height>40</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>cursor</name>
-                <cursor>13</cursor>
-            </property>
-            <property stdset="1">
-                <name>focusPolicy</name>
-                <enum>NoFocus</enum>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string></string>
-            </property>
-            <property stdset="1">
-                <name>pixmap</name>
-                <pixmap>image11</pixmap>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Loop</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>BlankButton</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>150</x>
-                    <y>92</y>
-                    <width>40</width>
-                    <height>40</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>cursor</name>
-                <cursor>13</cursor>
-            </property>
-            <property stdset="1">
-                <name>focusPolicy</name>
-                <enum>NoFocus</enum>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string></string>
-            </property>
-        </widget>
     </widget>
 </widget>
 <images>
     <image>
         <name>image0</name>
-        <data format="XPM.GZ" length="606">789cddd0bf0ac2301006f03d4f71345b116b4b0b11f1111447411c7277e99fa10a5a0711df5d2f6d202088b3df65b8df97edb214f6bb0da499ba0e76e808a8b51748f9d6f7f7c371fd50496e405e0e793253c91c08b6e79393bd79ef7ae1236c279623d9d3c8086ba141b33428a4893cd209b1c4024b61e7c9e89085564815155409b5279325ff8b13ddc8f947beb7da8660d41287b8a8ad9b90ff6ba90d895bdd85c4d7f9e9becf957a0101af9593</data>
-    </image>
-    <image>
-        <name>image1</name>
-        <data format="XPM.GZ" length="813">789c65d1496ec3201480e1bd4f81c22eaa9c802750d523b4eab252d505606730b133394355f5eef57b90a810bce1fb858580d9947cbcbf92e92c390e6a581b6256ea40a6f5a9ebbe3fbf5e7e9209cb09678497844d9e92494a0c79dbf60dcced38a7731cc0de3377dc23c5f821db3b0570e9691c1b2097dc7009d4c08c65f30c373d004b55ca52018fc02aab589501779e85e380d495743cdda9815bcfda5101452698c0c59d67e1b8416a21052e5e03652e99e3f9469903179e85a3411a594b035c0195514a212f409d6bae7171ed593a5e81a630dc14408aac4d636a7c8260b842695c94468cffdd4b8365b15c8565dddab06c5a1b14daf53628740be17fd9591b96bd8d4bff509ac343a1c7b8a47488761f0f75eaa39252159f22a59b362a293d5f6ee57af1d7456fe5f15683f2fb9cfc019c4fb8f0</data>
-    </image>
-    <image>
-        <name>image2</name>
-        <data format="XPM.GZ" length="975">789c85d0bb6ac3301480e1dd4f219c2d94c4bad932a543b2b7742c940ebac64ee25c9d6be9bb37e7d8434805953cf8fb8f3142e321f9787f25c371b26f755b5b622bbd234377689acbe7d7cb7792b28cdc1e9e119a3e25e98858f2b65e79780fb7f741860bb8eb293a3648051b78ee693bd6409ac1065aa4820d343d6dc70d90954cb112b80072ca05c7235d9025571ca733a0a042089c1e8092c94c32e01ea9a5931a3805e62ca7394e57489dbb1ca70360c10b5a70e01c690a5718e004a8b8a21d1dd228a7904760294a590ae016a885a61a79ea293b5e91567b6d814ba01186199c564867b471400db4d2322b816dcfbce31ae9acb6f8b1efe93b8e22ebdf3ed0f16eacf3d11ec2ac8af750cf7db487b058c67b6856eb680f61b3f5d11e76fb36dac341c7ba39c6fe833ff9db37a7d839cffd211ffae51abb877a12bdb7e9dda5dd773f8af78795fe3c27bfb214d96d</data>
-    </image>
-    <image>
-        <name>image3</name>
-        <data format="XPM.GZ" length="768">789c6dd2c96e83301006e03b4f61851baa0866b7aa3e42ab1e2b553d18db2c09fb72a8aabe7be3195320ca9cf8fe013c8c383be4e3fd9538676b9af95c09224a3e12472e4df3fdf9f5f2639d6842684afc80d0d393757289206f5dabf4f57cbbb685e4110f351b43c58566af29a358c65cf3b23209341532a1c8ca502699668d4c590aec908c32386831640c0e1a0d258e2180ca4f7da63921833080f9b9a108a02b91a1174277300c439839474651e46b5e0d59045d1b19d318ba85a68abd5b699686c24b355b244d293043fa9e0f37bbf7b58536cf845487302fb0ca6a0b65f15f9735bc16bbaa316cf659d162681fc2a283501ec31ec2ec180e8fc2fcd1e3f0c3b8ea188e3867b9cf26337cb5cbca79fdcced05e5b22da46e3113c7d5d5fd90abe56e9ffb25ff3e5b7f3bbcc675</data>
-    </image>
-    <image>
-        <name>image4</name>
-        <data format="XPM.GZ" length="864">789c5dcfcb6ea3301886e17daec20abba82218db01349a454fcb197559a9eac207726ae2a439b44daade7bfdfd7603aa2d593c2f60f078c41e1ffeb1d178b03fe8c3c2323bd73b3672c7f5faf4f4fcf77330e492f19a09c1f8f06a30cc9965ff37bec5b50fd75941035c24cac817621d26717f610d1e136de41ae405979c1efe20d698e0162c0b4cf02d51465e83828ba26cc003b111b520ce40c96521e9ff6f1365e489a8652d35f80aaa5215aa04db4415e9c04939e113e214ac44a52a015aa2a95c654003d6229c80eeee1255e43bd8c88637129c27aac833d1364d63c1fb441779076aa979e43251697af70634d29486b8223ad31a076e40abecc42a50139dd596ee66896d644e234bcba5688360bb92b936acd35957e68b50962f5d59ad7d9b6fb6fe52b299f76df6ea2f259bfa5076be2bcb7dc0e1d895cd9bff19a9bcfbdf05fb7abfe8957cf51170daf64a7ec6b7b07ff7872e947cda2ffa3a94b05fef5c37c71667e9957c87b39f6f7b25bbc3721fcad79fc1373c43c7b2</data>
-    </image>
-    <image>
-        <name>image5</name>
         <data format="XPM.GZ" length="923">789c9d924d0a83301085f739c5e0eca454ad1184d22314ba2c942e261169176e5abb28a577afd1980cfe54705cbd2fc973f2325108e7d311c2483c6baaef1af48d1e1016afaa7a5fae878f087631a4122424c146045bd080715b46a29132913a4f8d5446e6695ee8cc483252670595657b76a21639122b858e2b4efd7e6c3e5faae7481c2329c7492d72232c6ffeea8d8c58c747f6db757c64ef38bb2e2acf790acd02fecf1f87fb7b4e7c01c9f3619b1d1fb7b98a4fd8afe213f696b35bcd713b4a5d9f1c778367df8b4fa7cb9353b211cee6ffdd8b1f2c0ac43d</data>
     </image>
     <image>
-        <name>image6</name>
+        <name>image1</name>
         <data format="XPM.GZ" length="412">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade652325530365130513054d2e152d253485650360003105719c435313449b630067193405c0b638b946453103711c44d364d494c4b03eb05017a3194131393c08ca4c444652a1808320fcc009947175fd45a730100351049ee</data>
     </image>
     <image>
+        <name>image2</name>
+        <data format="XPM.GZ" length="986">789c45d0496fe2301806e03bbf2222373472b3388b359a43e94617285d0e954673b09d5028051a20047734ff7df22d4dfd45519ef7b5a5242703ef653af60627bddd5eef17d6b373bdf50645bd5ab9df7f7efdedf5c3d86b2f997b61ff47af2f3ceb4d36eb129e5dfbec07b8803553123f98397188cc618047a6259e01c300063846e630c073a6258e80510003ac98923841aa2827de7654c037a6251e80711807317edd15531257cc9cf88e54b18df1ec1e284319486c1f989278cfcc89d7482dadd4c05360122541120117489d8609b61b601aa5498aed2b5311a7489d16296e6e80599c25590cfc642a628134599119e01d308fdbff8aed92a9885ba469899b9f9905b1042aa942258137cc847881b4aa5016f804d452871adb476642edec8bd4ee989ab846da96b879ce2c89966822e225d04813193c6b982951230ba34d01f4992551b4cbd7babd192d38f06d510a317b9d73e0cf176f4b317b5fad39309b8f6abbdbd7070efce6e8aacfd3a1e3403743e7cece6bf7155c1c1d2f0e2e0f80fa3bf0d757ce8dae475d20f4cdadabee9a7117b4c9a45afacdb80b84dede2f853f7de802a11f9fda177e36a2ffef67ef3faa78e0c9</data>
+    </image>
+    <image>
+        <name>image3</name>
+        <data format="XPM.GZ" length="627">789cbdcf416e83301005d03da7b060872a028e6db0a21ea1559795aa2ec66312480224401755d5bb3733a648e901fa6131efdb1678938ad79727916ea26986b945810d8c22f51f5df7f9f6fef815c58512b7574a51c40f519c0914cf435fd37cbacd49ce21f6cc2ac7bc225e028b3cf0482c727a8803515a59494b3c2fc4c091a840a102e29ea8a5ceb5245e17eac09a09da6ade3c118d34daf0ea8109c61a5e6d89e5b6d4e596e88956596d15b163a2f516890d11106a60ce814e063aa2534e3a3e8b0b4d2030bd03e789c9c23a30bb4b6812701c84df067cbda71c9a6469b03d9e28e70ed6a6e766f897e6f2e7ebe0af23655aff308399e3d65bdcddf47b17fd00d9729aa0</data>
+    </image>
+    <image>
+        <name>image4</name>
+        <data format="XPM.GZ" length="890">789c6dd2c96ec2301006e07b9e22821baa20deb2a8ea81fdd4aac74a550f5e02249004086babbe7b99b12b55a6760efefe19cb4e94412f7c7b7d0e7b83a03dc843a143bd92fbb0678e55757dff78fa0a3a240e6f0f1321e93c049d7ea8c397a6ce615dded6dd0807b076e49663c7d4728d4c6102978eda72012411e1049b77c81426f00ca419d534031e818cb088e195868edcb241664c336c96404e78c4b1ba72e49657a0a042080adc23a530420227c098c622c6ea1c29631363756399104b054c582212061c21554a1205dc0253966629562f487523564f9619b19c01339d994c03bb40c925911c58380acb4fa4965262f3d431b7ac2c15b56c818a2baa70af768c2d73a4515219a071cc2d0f402d34d502ff046ffc66dd7f32a9b4f1b27cb15c15775959ae3755ee6765dd6c733f2bcbddbe3df859591f4fe62e3b5ffc6c71fdf4f6d6c391f6ce184fa6de5d96cdccbbb369e6adff6efd22bfff06a6ff27fb7e0c7e0049a2c8ba</data>
+    </image>
+    <image>
+        <name>image5</name>
+        <data format="XPM.GZ" length="650">789ccdd0bd4ec4300c00e0bd4f11355b85b8d64daa56271e01c48884181c27fdbbebcfc13120c4bb53bb95eec4002b5664f9b33324de25eae9f15e25bbe8ed8ce78e14b5f8aa12ff3e0c1fcf2f779f519c158a4fa5b2f8268a6f15a987690c5cf74bad5309e68199a599c98433135228411884151054cc1333aff23217d61b69e5c034684a83cc8969c15616985e88d65b99b6cc020a5bc8b463a2418b8679141222129336869523d319074e2e371b8b955ae85d709ee95612ac44265902b2b2991ff14b4fa3d64bd6e82e3df2a1a62684b6b9f4baba3f1c9bbe1fc6ffd9a3693e5133cfd76fd64b7072577ffb7b2f5ffbe81b2a9b985d</data>
+    </image>
+    <image>
+        <name>image6</name>
+        <data format="XPM.GZ" length="1725">789cedd0cb6eda401480e13d4f61c10e55c497b1f1a8ea225c024980b0ac54753117278031f6803181a8ef5e9f7346a225f4f20039e3853feb97ed999bb6f3753e75da378d5d29caa572d4426c9db6de67d9f1dbf72f6f8d66e03af5c598e3353f359a1d4739b37c93c0bda9ef5b2e0eb0b064c43e328605bcb554c419d0733de6613c40c6b0807b4b457c01fa2e2ce0c292114b24f7639f034f968af80c0cbcc00df0ff9f2c197189e4411c609c5b2ae2039079cc651857968c7887142c660298582ae21118faa11bfac047cb9038478a9087181f2c35f11518f9911761bcb20c89f74811f108e3a1a5266e81dda01b7603e00629bbbc2b81da521327c038a84f1de39e65481c2165ac638c532067dce30c38b50c890aa938e70a98596aa2040a2584408e2d13e20e2899f425be6a6d191105524b2135b06599103b7f9d8fe27f8ad61f0a21954e9e5f16cb552ad7570a916df2c2d8596c95b82c76abb230fbeaf07a381c4fb7a638f5d61745d23783614a0f55efce987d7a5114e6343affdeb832e67efd7b614c25cf85488b77c583e93f4ea6186579be599ad9e8e22be3aa6ffa65553f4e9f603783e1eedd794ceacdce74275d4090a7bb2b2736ce46f79d8eac776d8aeb677a9e79f9afe2d7f9282e8a1f9f1b3f019cb163e7</data>
+    </image>
+    <image>
         <name>image7</name>
-        <data format="XPM.GZ" length="695">789cddd0bd8ac3300c07f03d4f21922d1c6e1c5270297d84968e07c70d96e4d671dd16fa3194e3defd22274342b7de56098c7e7f2f42b3123eb76b2867d9f5666f2d01797b8192efc7e3e3eb7bf593e5da405d816e40e71f59ae8060733e39997d3717552a6118d8f4e444232d6c85da68d28907615d490bddc0a6e75e68d02c0c0a6920f7dc092d596b491885c8e89085564873aa692e2c12992ca55f1ce87aaaa77a252dba5594ea1e1ca7c4ec1432f36e9ceebd6f157aefdf30a5100e0a430893b488b1bb4e8c71729d7f5cfd7799fd0197e69fd5</data>
+        <data format="XPM.GZ" length="582">789c65d0c96ac3301006e0bb9f42d837531cd9968d43e82334f458283d2892bc2f499a1e4ae9bb37b3443674f061be5f98d168178bb7d71711ef82cf9bbe754698565f456cbfa6e9fbfde3f927085325e0db8b347c0ac24418715c6607fde5de47b6288b32034e9e1ad8332d51235d2633093c31ab6c0fec9886d8107395e3d08869723c1d894a2a3c354c459c9946e1dc33b190055ed2015d29ef05ac998a38302b590117a621b6c4b44a9196f8d828818af4c960c389755075e393d671759c68e72bc2a45f033760326e1237e1636e93f15f32e3b36c931e67d56bb0d0f4c607f5996fd83d82d16f110df4cbba57925cc6b9a74d7f0fc11f42859328</data>
     </image>
     <image>
         <name>image8</name>
-        <data format="XPM.GZ" length="864">789c5dd0cb8edb201406e07d9e02c5bba8f21803b1adaa8bb92d5b7559a9ea828b9d3883934c2e3393547df7f21f50830ad211dfef0b07ee16ecc7f7af6c71373b9ef469b4ccaef5812ddc799a2e3f7f7df93d9b73c978cb84607cfe69362f9965df76db1e6b1fd6454503dc24cac835b10d9378fec7163c26dac81dc82b2e39bd7c21b698e004d61526f8962823ef41c1455577e089d88956101d28b9ac24f5ff9828233f885ab65283afa0aa55a56a704854912b70592ff992d8838d685423404d348d6b0c68c0568413d0d343a28a7c073bd9f14e822f892af24ab45dd759f029d1453e835a6a1e39262a4ddf3e80469ada10f744677ae3c02d68955d5a055aa2b3dad2d322b18f2ccba22c5329cb9868c8d82c717d580eab224bd66348362f59e2a76d39f8dd3e4bfc6b3178ef8a2cf18790f8bec892e32994f3982571bc6dff4ffc7b966c505c714ba68f502efbdb7fce23f6ba66bbf7a143bfca3a0cbd0dfedede12f43f1c1f6ee77abce2ec87ec369e700fcff1cae67f3ecffe02d111c719</data>
+        <data format="XPM.GZ" length="702">789c5dcf4b6ec3201080e1bd4f81cc2eaa9c80c105553d42ab2e2b555dc0e0c409b1f3725eaa7af7668044b5475ef0fd0881a713f2f9f14626d3ecd09b7e09041ab32713776cdbebd7f7eb4f9633416e1f7f262c7fcaf2820079df7435aefd6d4d676190bb4411b94854910724530c9842f648aeb9e26177f3a0462e1321f28c2c59392bc31bd68922728f144c081178424a2e679223db441d794156bc6255a04b94912ba42a155325f21868955316b98dd42cb2466ad05a03d2228d30d208e43c108c3161b749ac23bb48cb230dd20a5bd970f61ae86c6d1d92224102078984c42ab2780ca545118bb1108aabef65be700d96e5ea51bc5fd7e3e27ddbd151f19bedb878bf1b97fd6158fa230c4f9d3a3ab8eb5cc3e0f6e662e8f08590fecb5cefe5ffe4bf2fd91ffbbda179</data>
     </image>
     <image>
         <name>image9</name>
-        <data format="XPM.GZ" length="813">789c65d1c96ec3201080e1bb9f02855b543531de40551fa1558f95aa1e6070129c90d559aaaaefdecc405a99e08bbf5fd8183c19b3f7b717369e64875ef70e182cf49e8dedd1fbaf8fcfe7ef6c94974ce44cd42c1f3d64a34706ec75b36ef1de5deff99406d24796813ba2bc5ec4ee8f12398b84c00552280142210159e4c5b4a045f7c85ad7aad6c803b2299abc2990dbc82ab0279a46051eff68909b481b6891b290b9a4c9ebc82a70453452499abc44aa52e581e71b55899c4756818608ca2a40b6480d5a6be209694a230c4dd69175e005091508a8909c68a1054bbf60308685f35bd18653017b2bed6c4e65f15f5cb74c8beb5669717ecd93e2fc8627c5b9ed5d71bbbbe2d3b24f9f3a246ff67db2ba3ff26417960fbfb95bf1e1be4e679eec9dc7133b5dd233bc3f552a3f4fd92f82c9b8bc</data>
+        <data format="XPM.GZ" length="702">789c5dcfdd6ac32014c0f1fb3c85c4bb32d26a3455c61e61639783b10b3db1495bd3cff48bb1775f8fdad2e6e085bfbf083a1e91afcf77321a67fbdef47320d09a1d19d587aebb7cffbcfd663913e4baf894b0fc25cb0b02e463bd72b8f7d73d9d84416e1345e43c5145ee904c31600a794072cd150fa79b3b35b24984c813b264e5a40c6f58268ac83d52302144e01129b99c488e5c25eac833b2e215ab026da28c9c2155a9982a917da055b5b2c875a4669106a9416b0dc81a69849146201781608c09a76da28bec222d8f74482b6c65c3dd4b606d9dad91140912384824245691454169719f588c0d80daddcaacc1d0daf9e2a998a5f70f85762bef9fca7ae39fcbd6fb41d9ed87a581fe302805ed8e83727d9f390d4a41ddb9bd958b4b9f825b799cfcef35fb07f4d4a183</data>
     </image>
     <image>
         <name>image10</name>
-        <data format="XPM.GZ" length="1170">789ca5d2cb8e9b301480e17d9e02855d5475b818825575910c09736bd565a5aa8b639b04480221e40655dfbd738ebd21a49bd666c1a7ff4880c5c3c4fafeed8b357918354738e6d292191cac893aed76ed8f9f9f7f8dc69e6bbd5fccb1dcf187d1f8a325adaf5599e2fde5fdde7668216b43a6591223dcc8b9a1d42c90ae831bb930649a3931c28d3c1b4acd47a4e7e04666864c7343e45ee471e4ce506aee91beeb3b3e7dce2b91fbd2a7fa86642e638cea131158c400991a4acd1932f00227f0902f8681a62242c0031a6e0c95e615197aa11bd270651868ae8910f290868f864a5322a762caa70299182acd1619f95110f9c82d51443ca27a30549a4b24673ce00c79224aaeb8443e2381810b548561a00944090034bc324c356da460c21334dc19869a315109108a7eaa7bebff820d02ec3b01a44a95844158adb33c2f36ebd56dd8eecab4dad7fbc36d90792d57dbe6781a84f365776d6dbb1b3c6356d6f3c76af856b13d5bd49772dfc6fd10c75d17a79b4bd1403fd8cba4b5e365513e3df7035cf3f316b6f9fc45f4439764f56bf356664977f370a8b2225f646bb87f56c9f0acfe7ebafdf50fe1f7a7d11f735cfc01</data>
+        <data format="XPM.GZ" length="1011">789c8dd24d6fa3301006e07b7e050ab768d502b6016bb587a46993546ab5c795aa1ec6365f49f34d9226abfef732631f0255b58b11f2f3cec8608bdb81f7e7f79337b8eded6ba82bede91276dec01c96cbf3cbebafbfbd7e987acdcd9a67ff47af7fe369ef79bdca707e69e67e90e240d68eda72880c031cc8b523b7dc12531cc837476d794646010e64e5c82d4ba28cd24822174816b280d1171e1cb96541942c65d4bc42f290079caa53476eb92402d71c90774811092122e49108c208aa3e22e3280e63aabe13213631557364c2923061c8cc51588e892a9189426e90296b0e83aa23476169882a9529359f1c8de50e29b90c2547ce1d85e58ca8a5941af9e0682cef91c021046ade3b0acb09510300356bc7cc5221155791a266708c2d7da251a00cfd365fae7fa53e28057e37d526cb8ceea42a2fcaaac8543b9d2fde96abf562de4e37db6ab3cbb37d3bdd55f5e178527e67ddf7f365b8c8f6fe75eafb7a7477be6cc7709dc2fde961322aebe3e43a5579399dcd8ae1a36ead60caf56aba2d0db4df961faab2c83bbb68763c1e9fba3bfee674fee37c3f7ef63e01b4ebdb2a</data>
     </image>
     <image>
         <name>image11</name>
-        <data format="XPM.GZ" length="1740">789ce5d2c98e9b401006e0bb9f02999b15cdb074635a510e1e2f633ce3656e91a21c7ac1e3056cd3c6db4479f750d5ad2c5e22e512454a35073ef403d505f70de7e364e834ee6bdb929773e9c819d74e43edf2fcf4e9f3872fb57ae839d541a8e3d7dfd5ea778e7446eb550ae7ba3a773d2c6061490c3bc81816f0c1521a8e81bee7131fc35d640c0bb8b794863360e0c102ce2d89e10ec9823860c096a5347c05867ee885d8ffc492182e902c8c430c6f2ca5e11390f8c423183e5812c347242731e1c0a9a5347c03d2807a34003e5b52c31724a78c62f868a90c4fc02888fc08c34b4b6a3840f2884518ee592ac32db01936693304ae91a2c99a02985a2ac321300eaba963b86d490dfb4811ab18c3199011e633021c59524385948c31095c592a4309e492738e4c2c53c312288808043e2ab78c0c0552092e14d0b54c0d39505219488affe76feb2f265cf7dfe8e34f12dc947b2321a44aa7afb3f96299c9fc4a42acd69b42db9a6f95384f94cb5da1f787e3e9787c6b3de8a2d5cecf12d38eeef6328977aaf6a3d6fbec2c51e856ff477bc941eb41fe6b42eb83fcde7122b2e222f1a43bcfc391c496379bf5428ffb676f490e1dddd91daacbd90476d3ed9517f318569b1da777d91c029bac1497134b56fd412964b56b5d24b7a60e95bbab97ddb599fe54eeadef72bdfeb3c4d7f7b56fd1b86af3</data>
+        <data format="XPM.GZ" length="896">789c4dcf4b6fa3301007f07b3e050ab768453118b0b5da43933ed247a23dae54edc10f52d23c48c0499a56fbdd979931693dc8f2ef3f83c057a3e0cfef5930ba1ab44eb9a5094ca59a60640f9bcdf9e5efafcfc190a541f7f02460c31f83611498605e6f4b38bbee1cc6b880379e9cb8450a2860eb698867228b89d740164301df3d39718c1450c0074f433c0193180ad87872e287a7203e025396c68904ae7ba678bb2552a622c5ee2d91c7c43720673d9f3c39c7776b4f413c2015375c0137c04ce52c435a609ee4324f8047a4ca6d8edd09b0488bac4881af485dc84203ef3d2d710f14a9c8040eaf3c25718ad4c20a1c5e0025974c72e09d67462c91465a698073a262c41d5071c5140e5748a394c2aef12c89cf40cd75a2715879e644eda98821d276b4c09967498c42154591d661b74718185b86d1e2b5ba04d5f2ad0c57eb4d15f6c17a5beff64d6bcd2570ede17872ef477509dcf9e3dab9f1e42ba075fa16b45be76e6ebf82a61e3bb7bcbb04a7c9fdc9ada7ba0f1e266adf3c2ec2d0074fddf756f55ef57ffa3cd5b36837c7cb0cfffd1cfc076663cdb6</data>
     </image>
 </images>
 <tabstops>
