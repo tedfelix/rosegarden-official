@@ -132,28 +132,21 @@ NotationStaff::deleteTimeSignatures()
     m_timeSigs.clear();
 }
 
-//!!! to lined staff?
 void
 NotationStaff::getClefAndKeyAtCanvasCoords(double cx, int cy,
 					   Clef &clef, 
 					   Rosegarden::Key &key) const
 {
-    cx -= m_x;
-
+    LinedStaffCoords layoutCoords = getLayoutCoordsForCanvasCoords(cx, cy);
     int i;
-    int row = getRowForCanvasCoords(cx, cy);
-
-    //??? do I have this right?
-    //!!! rewrite taking advantage of cleaner LinedStaff API, even
-    // if we don't move to LinedStaff itself
 
     for (i = 0; i < m_clefChanges.size(); ++i) {
-	if (m_clefChanges[i].first > (m_pageWidth * row) + cx) break;
+	if (m_clefChanges[i].first > layoutCoords.first) break;
 	clef = m_clefChanges[i].second;
     }
 
     for (i = 0; i < m_keyChanges.size(); ++i) {
-	if (m_keyChanges[i].first > (m_pageWidth * row) + cx) break;
+	if (m_keyChanges[i].first > layoutCoords.first) break;
 	key = m_keyChanges[i].second;
     }
 }
@@ -167,8 +160,6 @@ NotationStaff::getClosestElementToCanvasCoords(double cx, int cy,
 					       unsigned int proximityThreshold)
 {
     START_TIMING;
-
-    //!!! slow
 
     double minDist = 10e9, prevDist = 10e9;
 
@@ -234,7 +225,7 @@ NotationStaff::getNoteNameAtCanvasCoords(double x, int y,
 					 Rosegarden::Accidental acc) const
 {
 //!!! getting wrong results for clef here -- changes within staff
-// not being taken into account properly
+// not being taken into account properly?
 
     Rosegarden::Clef clef;
     Rosegarden::Key key;
