@@ -34,4 +34,12 @@ Nice to have :
 - all the notation elegances (more precise description needed here)
 
 
+Not sure :
+
+- track properties dialog
+
+- moveable begin and end markers in tracks
+
+- clean up XML code so that it's not spread over RosegardenGUIDoc and
+  RoseXMLHandler
 
