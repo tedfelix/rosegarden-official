@@ -29,10 +29,6 @@
 #include "notationstaff.h"
 #include "qcanvassimplesprite.h"
 #include "notationproperties.h"
-#include "Selection.h"
-#include "Composition.h"
-#include "BaseProperties.h"
-
 #include "rosestrings.h"
 #include "rosedebug.h"
 #include "colours.h"
@@ -44,6 +40,10 @@
 #include "Progress.h"
 #include "Quantizer.h"
 #include "NotationTypes.h"
+#include "SegmentNotationHelper.h"
+#include "Selection.h"
+#include "Composition.h"
+#include "BaseProperties.h"
 
 using Rosegarden::timeT;
 using Rosegarden::Segment;
@@ -403,8 +403,9 @@ NotationStaff::positionElements(timeT from, timeT to)
     if (beginAt == getViewElementList()->end()) return;
 
     truncateClefsAndKeysAt((*beginAt)->getLayoutX());
-    Clef currentClef; // default is okay to start with
-    Rosegarden::Key currentKey; // likewise
+
+    Clef currentClef; // used for rendering key sigs
+    bool haveCurrentClef = false;
 
     for (NotationElementList::iterator it = beginAt, nextIt = beginAt;
 	 it != endAt; it = nextIt) {
@@ -416,12 +417,21 @@ NotationStaff::positionElements(timeT from, timeT to)
 	    currentClef = Clef(*(*it)->event());
 	    m_clefChanges.push_back(ClefChange(int((*it)->getLayoutX()),
 					       currentClef));
+	    haveCurrentClef = true;
 
 	} else if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
 
-	    currentKey = Rosegarden::Key(*(*it)->event());
-	    m_keyChanges.push_back(KeyChange(int((*it)->getLayoutX()),
-					     currentKey));
+	    m_keyChanges.push_back
+		(KeyChange(int((*it)->getLayoutX()),
+			   Rosegarden::Key(*(*it)->event())));
+
+	    if (!haveCurrentClef) { // need this to know how to present the key
+		Rosegarden::SegmentNotationHelper helper(getSegment());
+		Rosegarden::Key someKey;
+		helper.getClefAndKeyAt
+		    ((*it)->getAbsoluteTime(), currentClef, someKey);
+		haveCurrentClef = true;
+	    }
 	}
 
 	bool selected = false;

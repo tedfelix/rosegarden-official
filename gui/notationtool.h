@@ -420,7 +420,7 @@ protected:
     /**
      * Set the current selection on the parent NotationView
      */
-    void setViewCurrentSelection();
+    void setViewCurrentSelection(bool preview);
 
     //--------------- Data members ---------------------------------
 

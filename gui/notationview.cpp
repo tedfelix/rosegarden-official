@@ -37,6 +37,7 @@
 #include "Quantizer.h"
 #include "Selection.h"
 #include "Progress.h"
+#include "BaseProperties.h"
 
 #include "Profiler.h"
 
@@ -1314,8 +1315,9 @@ void NotationView::setCurrentSelectedNote(NoteActionData noteAction)
 }
 
 
-void NotationView::setCurrentSelection(EventSelection* s)
+void NotationView::setCurrentSelection(EventSelection* s, bool preview)
 {
+    if (!m_currentEventSelection && !s) return;
     bool usingProgressBar = false;
 
     if (!m_progress) {
@@ -1326,15 +1328,7 @@ void NotationView::setCurrentSelection(EventSelection* s)
 	}
     }
 
-    if (m_currentEventSelection) {
-        m_currentEventSelection->removeSelectionFromSegment
-	    (m_properties.SELECTED);
-        getStaff(m_currentEventSelection->getSegment())->positionElements
-            (m_currentEventSelection->getStartTime(),
-             m_currentEventSelection->getEndTime());
-    }
-
-    delete m_currentEventSelection;
+    EventSelection *oldSelection = m_currentEventSelection;
     m_currentEventSelection = s;
 
 #ifdef RGKDE3
@@ -1346,10 +1340,12 @@ void NotationView::setCurrentSelection(EventSelection* s)
     stateChanged("have_rests_in_selection", KXMLGUIClient::StateReverse);
 #endif
 
+    if (oldSelection) {
+        oldSelection->removeSelectionFromSegment(m_properties.SELECTED);
+    }
+
     if (s) {
         s->recordSelectionOnSegment(m_properties.SELECTED);
-        getStaff(s->getSegment())->positionElements(s->getStartTime(),
-                                                    s->getEndTime());
 #ifdef RGKDE3
 	stateChanged("have_selection", KXMLGUIClient::StateNoReverse);
 	if (s->contains(Rosegarden::Note::EventType)) {
@@ -1362,6 +1358,57 @@ void NotationView::setCurrentSelection(EventSelection* s)
 	}
 #endif
     }
+
+    // positionElements is overkill here, but we hope it's not too
+    // much overkill (if that's not a contradiction)
+
+    timeT startA, endA, startB, endB;
+
+    if (oldSelection) {
+	startA = oldSelection->getStartTime();
+	endA   = oldSelection->getEndTime();
+	startB = s ? s->getStartTime() : startA;
+	endB   = s ? s->getEndTime()   : endA;
+    } else {
+	// we know they can't both be null -- first thing we tested above
+	startA = startB = s->getStartTime();
+	endA   = endB   = s->getEndTime();
+    }
+
+    // play previews if appropriate
+    if (s && preview) {
+
+	for (EventSelection::eventcontainer::iterator i =
+		 s->getSegmentEvents().begin();
+	     i != s->getSegmentEvents().end(); ++i) {
+	    
+	    if (oldSelection && oldSelection->getSegment() == s->getSegment()
+		&& oldSelection->contains(*i)) continue;
+		
+	    long pitch;
+	    if (!(*i)->get<Rosegarden::Int>(Rosegarden::BaseProperties::PITCH,
+					    pitch)) continue;
+
+	    playNote(s->getSegment(), pitch);
+	}
+    }
+
+    if ((endA >= startB && endB >= startA) &&
+	(!s || !oldSelection ||
+	 oldSelection->getSegment() == s->getSegment())) {
+
+	// the regions overlap, so use their union and just do one reposition
+	Segment &segment(s ? s->getSegment() : oldSelection->getSegment());
+	getStaff(segment)->positionElements(std::min(startA, startB),
+					    std::max(endA, endB));
+
+    } else {
+	// do two repositions, one for each -- here we know neither is null
+	getStaff(oldSelection->getSegment())->positionElements(startA, endA);
+	getStaff(s->getSegment())->positionElements(startB, endB);
+    }
+
+    delete oldSelection;
 
     if (usingProgressBar) {
 	m_progress->done();
@@ -1386,17 +1433,11 @@ void NotationView::setSingleSelectedEvent(Segment &segment, Event *event)
     setCurrentSelection(selection);
 }
 
-void NotationView::showPreviewNote(int staffNo, double layoutX,
-				   int pitch, int height,
-				   const Rosegarden::Note &note)
-{ 
-    m_staffs[staffNo]->showPreviewNote(layoutX, height, note);
-
+void NotationView::playNote(Rosegarden::Segment &s, int pitch)
+{
     Rosegarden::Composition &comp = m_document->getComposition();
     Rosegarden::Studio &studio = m_document->getStudio();
-
-    Rosegarden::Track *track = comp.getTrackByIndex
-	(m_staffs[staffNo]->getSegment().getTrack());
+    Rosegarden::Track *track = comp.getTrackByIndex(s.getTrack());
 
     Rosegarden::Instrument *ins =
         studio.getInstrumentById(track->getInstrument());
@@ -1417,6 +1458,14 @@ void NotationView::showPreviewNote(int staffNo, double layoutX,
                                     Rosegarden::RealTime(0, 0));
 
     emit notePlayed(mE);
+}
+
+void NotationView::showPreviewNote(int staffNo, double layoutX,
+				   int pitch, int height,
+				   const Rosegarden::Note &note)
+{ 
+    m_staffs[staffNo]->showPreviewNote(layoutX, height, note);
+    playNote(m_staffs[staffNo]->getSegment(), pitch);
 }
 
 void NotationView::clearPreviewNote()

@@ -1025,6 +1025,7 @@ bool NotationSelector::handleMouseMove(timeT, int,
     if (h > 0) ++h; else --h;
 
     m_selectionRect->setSize(w,h);
+    setViewCurrentSelection(true);
 
     m_nParentView->canvas()->update();
     return true;
@@ -1034,7 +1035,7 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
 {
     NOTATION_DEBUG << "NotationSelector::handleMouseRelease" << endl;
     m_updateRect = false;
-    setViewCurrentSelection();
+    setViewCurrentSelection(false);
     
     if (m_selectionRect->width()  > -3 &&
         m_selectionRect->width()  <  3 &&
@@ -1147,19 +1148,21 @@ EventSelection* NotationSelector::getSelection()
         if ((sprite = dynamic_cast<QCanvasNotationSprite*>(item))) {
 
             if (!rect.contains(int(item->x()), int(item->y()), true)) {
-
+/*
                 NOTATION_DEBUG << "NotationSelector::getSelection Skipping item not really in selection rect\n";
                 NOTATION_DEBUG << "NotationSelector::getSelection Rect: x,y: " << rect.x() << ","
                                      << rect.y() << "; w,h: " << rect.width()
                                      << "," << rect.height() << " / Item: x,y: "
                                      << item->x() << "," << item->y() << endl;
+*/
                 continue;
             } else {
-                
+/*                
                 NOTATION_DEBUG << "NotationSelector::getSelection Item in rect : Rect: x,y: " << rect.x() << ","
                                      << rect.y() << "; w,h: " << rect.width()
                                      << "," << rect.height() << " / Item: x,y: "
                                      << item->x() << "," << item->y() << endl;
+*/
             }
             
             NotationElement &el = sprite->getNotationElement();
@@ -1175,10 +1178,10 @@ EventSelection* NotationSelector::getSelection()
     return (selection->getAddedEvents() > 0) ? selection : 0;
 }
 
-void NotationSelector::setViewCurrentSelection()
+void NotationSelector::setViewCurrentSelection(bool preview)
 {
     EventSelection* selection = getSelection();
-    m_nParentView->setCurrentSelection(selection);
+    m_nParentView->setCurrentSelection(selection, preview);
 }
 
 //------------------------------

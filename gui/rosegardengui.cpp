@@ -1626,7 +1626,7 @@ void RosegardenGUIApp::importMIDIFile(const QString &file)
 
     RosegardenProgressDialog *progressDlg =
             new RosegardenProgressDialog(i18n("Importing MIDI file..."),
-                                         i18n("Cancel"),
+                                         0, //i18n("Cancel"),
                                          100,
                                          this);
 
@@ -1696,7 +1696,11 @@ void RosegardenGUIApp::slotImportRG21()
 
 void RosegardenGUIApp::importRG21File(const QString &file)
 {
-    SetWaitCursor waitCursor;
+    RosegardenProgressDialog *progressDlg =
+            new RosegardenProgressDialog(i18n("Importing Rosegarden 2.1 file..."),
+                                         0, //i18n("Cancel"),
+                                         100,
+                                         this);
 
     RG21Loader rg21Loader(file, &m_doc->getStudio());
 
@@ -1921,8 +1925,8 @@ void RosegardenGUIApp::slotExportMIDI()
 void RosegardenGUIApp::exportMIDIFile(const QString &file)
 {
     RosegardenProgressDialog *progressDlg =
-            new RosegardenProgressDialog(i18n("Importing MIDI file..."),
-                                         i18n("Cancel"),
+            new RosegardenProgressDialog(i18n("Exporting MIDI file..."),
+                                         0, //i18n("Cancel"),
                                          100,
                                          this);
 
@@ -1954,7 +1958,11 @@ void RosegardenGUIApp::slotExportCsound()
 
 void RosegardenGUIApp::exportCsoundFile(const QString &file)
 {
-    SetWaitCursor waitCursor;
+    RosegardenProgressDialog *progressDlg =
+            new RosegardenProgressDialog(i18n("Exporting Csound file..."),
+                                         0, //i18n("Cancel"),
+                                         100,
+                                         this);
 
     CsoundExporter e(&m_doc->getComposition(), qstrtostr(file));
     if (!e.write()) {
@@ -1974,7 +1982,11 @@ void RosegardenGUIApp::slotExportLilypond()
 
 void RosegardenGUIApp::exportLilypondFile(const QString &file)
 {
-    SetWaitCursor waitCursor;
+    RosegardenProgressDialog *progressDlg =
+            new RosegardenProgressDialog(i18n("Exporting Lilypond file..."),
+                                         0, //i18n("Cancel"),
+                                         100,
+                                         this);
 
     LilypondExporter e(&m_doc->getComposition(), qstrtostr(file));
     if (!e.write()) {

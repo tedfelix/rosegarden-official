@@ -124,7 +124,7 @@ public:
      * Set the current event selection
      * @see NotationSelector
      */
-    void setCurrentSelection(Rosegarden::EventSelection*);
+    void setCurrentSelection(Rosegarden::EventSelection*, bool preview = false);
 
     /**
      * Set the current event selection to a single event
@@ -145,6 +145,9 @@ public:
 
     /// Remove any visible preview note
     void clearPreviewNote();
+
+    /// Sound the given note
+    void playNote(Rosegarden::Segment &segment, int pitch);
 
     /// Switches between page- and linear- layout mode
     void setPageMode(bool pageMode);
