@@ -77,6 +77,9 @@ public:
      */
     RosegardenGUIDoc* getDocument() const;
 
+
+    TrackEditor* getTrackEditor() { return m_trackEditor; }
+
     /**
      * contains the implementation for printing functionality
      */
