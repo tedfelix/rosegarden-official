@@ -31,8 +31,7 @@
 #include "rosegardenguidoc.h"
 #include "rosegardengui.h"
 #include "rosegardenguiview.h"
-
-#include "Element2.h"
+#include "xmlstorableelement.h"
 
 QList<RosegardenGUIView> *RosegardenGUIDoc::pViewList = 0L;
 
@@ -158,6 +157,9 @@ bool RosegardenGUIDoc::newDocument()
 
 bool RosegardenGUIDoc::openDocument(const QString &filename, const char *format /*=0*/)
 {
+    if (!filename || filename.isEmpty())
+        return false;
+
     QFileInfo fileInfo(filename);
     title=fileInfo.fileName();
     absFilePath=fileInfo.absFilePath();	
@@ -223,113 +225,6 @@ void RosegardenGUIDoc::deleteContents()
 //          384 units =  96 clocks = 1 semibreve
 //          768 units = 192 clocks = 1 breve
 
-class XMLStorableElement : public Element2
-{
-public:
-    XMLStorableElement(const QDomNamedNodeMap &attributes,
-                       const QDomNodeList &children);
-protected:
-    duration noteName2Duration(const QString &noteName);
-    void initMap();
-
-    typedef hash_map<string, duration, hashstring, eqstring> namedurationmap;
-
-    static namedurationmap m_noteName2DurationMap;
-};
-
-XMLStorableElement::namedurationmap
-XMLStorableElement::m_noteName2DurationMap;
-
-Element2::duration
-XMLStorableElement::noteName2Duration(const QString &nn)
-{
-    if (m_noteName2DurationMap.empty())
-        initMap();
-
-    string noteName(nn.latin1());
-    
-    namedurationmap::iterator it(m_noteName2DurationMap.find(noteName));
-    
-    if (it == m_noteName2DurationMap.end()) {
-        // note name doesn't exist
-        kdDebug(KDEBUG_AREA) << "Bad note name : " << nn << endl;
-        return 0;
-    }
-    
-
-    return it->second;
-}
-
-void
-XMLStorableElement::initMap()
-{
-    if (! m_noteName2DurationMap.empty())
-        return;
-
-    m_noteName2DurationMap["64th"]               = 6;
-    m_noteName2DurationMap["hemidemisemiquaver"] = 6;
-
-    m_noteName2DurationMap["32nd"]           = 12;
-    m_noteName2DurationMap["demisemiquaver"] = 12;
-
-    m_noteName2DurationMap["16th"]       = 24;
-    m_noteName2DurationMap["semiquaver"] = 24;
-
-    m_noteName2DurationMap["8th"]    = 48;
-    m_noteName2DurationMap["quaver"] = 48;
-
-    m_noteName2DurationMap["quarter"]  = 96;
-    m_noteName2DurationMap["crotchet"] = 96;
-    
-    m_noteName2DurationMap["half"]  = 192;
-    m_noteName2DurationMap["minim"] = 192;
-
-    m_noteName2DurationMap["whole"]     = 384;
-    m_noteName2DurationMap["semibreve"] = 384;
-
-    // what is the american name ??
-    m_noteName2DurationMap["breve"] = 768;
-    
-}
-
-
-XMLStorableElement::XMLStorableElement(const QDomNamedNodeMap &attributes,
-                                       const QDomNodeList &children)
-{
-    for (unsigned int i = 0; i < attributes.length(); ++i) {
-	QDomAttr n(attributes.item(i).toAttr());
-
-        // special cases first : package, type, duration
-	if (n.name() == "package") {
-
-            setPackage(n.value().latin1());
-
-        } else if (n.name() == "type") {
-
-            setType(n.value().latin1());
-
-        } else if (n.name() == "duration") {
-
-            bool isNumeric = true;
-            Element2::duration d = n.value().toUInt(&isNumeric);
-            if (!isNumeric) {
-                // It may be one of the accepted strings : breve, semibreve...
-                // whole, half-note, ...
-                d = noteName2Duration(n.value());
-                if (!d)
-                    kdDebug(KDEBUG_AREA) << "Bad duration : " << n.value() << endl;
-            }
-
-            kdDebug(KDEBUG_AREA) << "Setting duration to : " << d << endl;
-            setDuration(d);
-
-        } else {
-            // set property
-        }
-        
-    }
-
-}
 
 
 bool
