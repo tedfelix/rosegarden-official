@@ -289,7 +289,7 @@ ControllerEventsRuler* EditView::makeControllerEventRuler(ControlParameter *cont
     
 
     ControllerEventsRuler* controlRuler = new ControllerEventsRuler
-	(*getCurrentSegment(), getHLayout(), this,
+	(getCurrentSegment(), getHLayout(), this,
 	 controlRulerCanvas, m_controlRulers, controller);
 
     return controlRuler;
@@ -1484,16 +1484,14 @@ void
 EditView::slotFlipForwards()
 {
     RG_DEBUG << "EditView::slotFlipForwards" << endl;
-    ControllerEventsRuler* ruler = dynamic_cast<ControllerEventsRuler*>(getCurrentControlRuler());
-    if (ruler) ruler->flipForwards();
+    getCurrentControlRuler()->flipForwards();
 }
 
 void
 EditView::slotFlipBackwards()
 {
     RG_DEBUG << "EditView::slotFlipBackwards" << endl;
-    ControllerEventsRuler* ruler = dynamic_cast<ControllerEventsRuler*>(getCurrentControlRuler());
-    if (ruler) ruler->flipBackwards();
+    getCurrentControlRuler()->flipBackwards();
 }
 
 

@@ -55,7 +55,7 @@ class ControlRuler : public RosegardenCanvasView
     friend class ControlItem;
 
 public:
-    ControlRuler(Rosegarden::Segment&,
+    ControlRuler(Rosegarden::Segment*,
                  Rosegarden::RulerScale*,
                  EditViewBase* parentView,
                  QCanvas*,
@@ -82,6 +82,14 @@ public:
     static const int MaxItemHeight;
     static const int ItemHeightRange;
 
+    // Allow something external to reset the selection of Events
+    // that this ruler is displaying
+    //
+    void setSegment(Rosegarden::Segment *);
+
+    void flipForwards();
+    void flipBackwards();
+
 signals:
     void stateChange(const QString&, bool);
 
@@ -101,6 +109,13 @@ protected:
 
     virtual void layoutItem(ControlItem*);
 
+    // Stacking of the SegmentItems on the canvas
+    //
+    std::pair<int, int> getZMinMax();
+
+    virtual void init() = 0;
+    virtual void drawBackground() = 0;
+
     int valueToHeight(long val);
     long heightToValue(int height);
     QColor valueToColour(int max, int val);
@@ -116,7 +131,7 @@ protected:
     EditViewBase*               m_parentEditView;
     Rosegarden::RulerScale*     m_rulerScale;
     Rosegarden::EventSelection* m_eventSelection;
-    Rosegarden::Segment& m_segment;
+    Rosegarden::Segment*        m_segment;
 
     ControlItem* m_currentItem;
     QCanvasItemList m_selectedItems;
@@ -180,8 +195,8 @@ protected:
                           int startValue,
                           int endValue);
 
-    void init();
-    void drawBackground();
+    virtual void init();
+    virtual void drawBackground();
     virtual void computeStaffOffset();
 
     //--------------- Data members ---------------------------------
@@ -203,7 +218,7 @@ protected:
 class ControllerEventsRuler : public ControlRuler, public Rosegarden::SegmentObserver
 {
 public:
-    ControllerEventsRuler(Rosegarden::Segment&,
+    ControllerEventsRuler(Rosegarden::Segment*,
                           Rosegarden::RulerScale*,
                           EditViewBase* parentView,
                           QCanvas*,
@@ -226,17 +241,13 @@ public:
     virtual void eraseControllerEvent();
     virtual void clearControllerEvents();
     virtual void startControlLine();
-    virtual void flipForwards();
-    virtual void flipBackwards();
 
     Rosegarden::ControlParameter* getControlParameter() { return m_controller; }
 
 protected:
 
-    std::pair<int, int> getZMinMax();
-
-    // draw some lines to help us draw events
-    void drawBackground();
+    virtual void init();
+    virtual void drawBackground();
 
     // Let's override these again here
     //

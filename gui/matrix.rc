@@ -186,6 +186,9 @@
    <Text>Property Ruler actions</Text>
    <Action name="draw_property_line"/>
    <Action name="select_all_properties"/>
+   <Separator/>
+   <Action name="flip_control_events_forward"/>
+   <Action name="flip_control_events_back"/>
 </Menu>
 
 

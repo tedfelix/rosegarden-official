@@ -658,7 +658,7 @@ const int ControlRuler::MinItemHeight = 5;
 const int ControlRuler::MaxItemHeight = 64 + 5;
 const int ControlRuler::ItemHeightRange = 64;
 
-ControlRuler::ControlRuler(Segment& segment,
+ControlRuler::ControlRuler(Segment *segment,
                            Rosegarden::RulerScale* rulerScale,
                            EditViewBase* parentView,
                            QCanvas* c, QWidget* parent,
@@ -666,7 +666,7 @@ ControlRuler::ControlRuler(Segment& segment,
     RosegardenCanvasView(c, parent, name, f),
     m_parentEditView(parentView),
     m_rulerScale(rulerScale),
-    m_eventSelection(new EventSelection(segment)),
+    m_eventSelection(new EventSelection(*segment)),
     m_segment(segment),
     m_currentItem(0),
     m_tool(0),
@@ -698,6 +698,15 @@ ControlRuler::ControlRuler(Segment& segment,
 ControlRuler::~ControlRuler()
 {
 }
+
+void 
+ControlRuler::setSegment(Rosegarden::Segment *segment)
+{
+    m_segment = segment;
+    drawBackground();
+    init();
+}
+
 
 void ControlRuler::slotUpdate()
 {
@@ -861,7 +870,7 @@ void ControlRuler::contentsMouseReleaseEvent(QMouseEvent* e)
 
         // Add command to history
         ControlChangeCommand* command = new ControlChangeCommand(m_selectedItems,
-                                                                 m_segment,
+                                                                 *m_segment,
                                                                  m_eventSelection->getStartTime(),
                                                                  m_eventSelection->getEndTime());
 
@@ -1000,7 +1009,7 @@ ControlRuler::clearSelectedItems()
     m_selectedItems.clear();
 
     delete m_eventSelection;
-    m_eventSelection = new EventSelection(m_segment);
+    m_eventSelection = new EventSelection(*m_segment);
 }
 
 void ControlRuler::clear()
@@ -1059,6 +1068,62 @@ int ControlRuler::applyTool(double x, int val)
     return val;
 }
 
+void ControlRuler::flipForwards()
+{
+    std::pair<int, int> minMax = getZMinMax();
+
+    QCanvasItemList l = canvas()->allItems();
+    for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
+
+        // skip all but rectangles
+        if ((*it)->rtti() != QCanvasItem::Rtti_Rectangle) continue;
+
+        // match min
+        if ((*it)->z() == minMax.second) (*it)->setZ(minMax.first);
+        else (*it)->setZ((*it)->z() + 1);
+    }
+
+    canvas()->update();
+}
+
+void ControlRuler::flipBackwards()
+{
+    std::pair<int, int> minMax = getZMinMax();
+
+    QCanvasItemList l = canvas()->allItems();
+    for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
+
+        // skip all but rectangles
+        if ((*it)->rtti() != QCanvasItem::Rtti_Rectangle) continue;
+
+        // match min
+        if ((*it)->z() == minMax.first) (*it)->setZ(minMax.second);
+        else (*it)->setZ((*it)->z() - 1);
+    }
+
+    canvas()->update();
+}
+
+std::pair<int, int> ControlRuler::getZMinMax()
+{
+    QCanvasItemList l = canvas()->allItems();
+    std::vector<int> zList;
+    for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
+
+        // skip all but rectangles
+        if ((*it)->rtti() != QCanvasItem::Rtti_Rectangle) continue;
+        zList.push_back(int((*it)->z()));
+    }
+
+    std::sort(zList.begin(), zList.end());
+
+    return std::pair<int, int>(zList[0], zList[zList.size() - 1]);
+
+
+}
+
+
+
 //----------------------------------------
 
 PropertyControlRuler::PropertyControlRuler(Rosegarden::PropertyName propertyName,
@@ -1067,7 +1132,8 @@ PropertyControlRuler::PropertyControlRuler(Rosegarden::PropertyName propertyName
                                            EditViewBase* parentView,
                                            QCanvas* c, QWidget* parent,
                                            const char* name, WFlags f) :
-    ControlRuler(staff->getSegment(), rulerScale, parentView, c, parent, name, f),
+    ControlRuler(&(staff->getSegment()), rulerScale, 
+            parentView, c, parent, name, f),
     m_propertyName(propertyName),
     m_staff(staff),
     m_propertyLine(new QCanvasLine(canvas())),
@@ -1122,7 +1188,6 @@ PropertyControlRuler::drawBackground()
     bottomLine->setZ(-10);
     bottomLine->show();
 }
-
 
 PropertyControlRuler::~PropertyControlRuler()
 {
@@ -1334,7 +1399,7 @@ PropertyControlRuler::drawPropertyLine(Rosegarden::timeT startTime,
 
     // Add the "true" to catch Events overlapping this line
     //
-    Rosegarden::EventSelection selection(m_segment, startTime, endTime, true);
+    Rosegarden::EventSelection selection(*m_segment, startTime, endTime, true);
     Rosegarden::PropertyPattern pattern = Rosegarden::DecrescendoPattern;
 
     SelectionPropertyCommand *command = 
@@ -1389,7 +1454,7 @@ PropertyControlRuler::selectAllProperties()
 }
 
 //----------------------------------------
-ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment& segment,
+ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment *segment,
                                              Rosegarden::RulerScale* rulerScale,
                                              EditViewBase* parentView,
                                              QCanvas* c,
@@ -1410,16 +1475,24 @@ ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment& segment,
         m_controller = new ControlParameter(*controller);
     else
         m_controller = 0;
+    
+    setMenuName("controller_events_ruler_menu");
+    drawBackground();
+    init();
+}
 
+void
+ControllerEventsRuler::init()
+{
     // Reset range information for this controller type (for the moment
     // this assumes min is always 0.
     //
     setMaxItemValue(m_controller->getMax());
 
-    m_segment.addObserver(this);
+    m_segment->addObserver(this);
 
-    for(Segment::iterator i = m_segment.begin();
-        i != m_segment.end(); ++i) {
+    for(Segment::iterator i = m_segment->begin();
+        i != m_segment->end(); ++i) {
 
         // skip if not the same type of event that we're expecting
         //
@@ -1448,16 +1521,12 @@ ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment& segment,
         //RG_DEBUG << "ControllerEventsRuler: adding element\n";
 
  	double x = m_rulerScale->getXForTime((*i)->getAbsoluteTime());
- 	new ControlItem(this, new ControllerEventAdapter(*i), int(x + m_staffOffset), width);
-
+ 	new ControlItem(this, new ControllerEventAdapter(*i), 
+                int(x + m_staffOffset), width);
     }
-    
-    setMenuName("controller_events_ruler_menu");
-
-    // Draw the background lines
-    //
-    drawBackground();
 }
+
+
 
 void
 ControllerEventsRuler::drawBackground()
@@ -1505,7 +1574,7 @@ ControllerEventsRuler::drawBackground()
 ControllerEventsRuler::~ControllerEventsRuler()
 {
     if (!m_segmentDeleted)
-        m_segment.removeObserver(this);
+        m_segment->removeObserver(this);
 }
 
 
@@ -1627,7 +1696,8 @@ void ControllerEventsRuler::insertControllerEvent()
     
     ControlRulerEventInsertCommand* command = 
         new ControlRulerEventInsertCommand(m_controller->getType(),
-                                           insertTime, number, initialValue, m_segment);
+                                           insertTime, number, 
+                                           initialValue, *m_segment);
 
     m_parentEditView->addCommandToHistory(command);
 }
@@ -1638,7 +1708,7 @@ void ControllerEventsRuler::eraseControllerEvent()
 
     ControllerEventEraseCommand* command = 
         new ControllerEventEraseCommand(m_selectedItems,
-                                        m_segment,
+                                        *m_segment,
                                         m_eventSelection->getStartTime(),
                                         m_eventSelection->getEndTime());
     m_parentEditView->addCommandToHistory(command);
@@ -1647,9 +1717,9 @@ void ControllerEventsRuler::eraseControllerEvent()
 
 void ControllerEventsRuler::clearControllerEvents()
 {
-    Rosegarden::EventSelection *es = new Rosegarden::EventSelection(m_segment);
+    Rosegarden::EventSelection *es = new Rosegarden::EventSelection(*m_segment);
 
-    for(Segment::iterator it = m_segment.begin(); it != m_segment.end(); ++it)
+    for(Segment::iterator it = m_segment->begin(); it != m_segment->end(); ++it)
     {
         if (!(*it)->isa(Rosegarden::Controller::EventType)) continue;
         {
@@ -1681,61 +1751,6 @@ void ControllerEventsRuler::startControlLine()
     m_controlLineShowing = true;
     this->setCursor(Qt::pointingHandCursor);
 }
-
-void ControllerEventsRuler::flipForwards()
-{
-    std::pair<int, int> minMax = getZMinMax();
-
-    QCanvasItemList l = canvas()->allItems();
-    for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
-
-        // skip all but rectangles
-        if ((*it)->rtti() != QCanvasItem::Rtti_Rectangle) continue;
-
-        // match min
-        if ((*it)->z() == minMax.second) (*it)->setZ(minMax.first);
-        else (*it)->setZ((*it)->z() + 1);
-    }
-
-    canvas()->update();
-}
-
-void ControllerEventsRuler::flipBackwards()
-{
-    std::pair<int, int> minMax = getZMinMax();
-
-    QCanvasItemList l = canvas()->allItems();
-    for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
-
-        // skip all but rectangles
-        if ((*it)->rtti() != QCanvasItem::Rtti_Rectangle) continue;
-
-        // match min
-        if ((*it)->z() == minMax.first) (*it)->setZ(minMax.second);
-        else (*it)->setZ((*it)->z() - 1);
-    }
-
-    canvas()->update();
-}
-
-std::pair<int, int> ControllerEventsRuler::getZMinMax()
-{
-    QCanvasItemList l = canvas()->allItems();
-    std::vector<int> zList;
-    for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
-
-        // skip all but rectangles
-        if ((*it)->rtti() != QCanvasItem::Rtti_Rectangle) continue;
-        zList.push_back(int((*it)->z()));
-    }
-
-    std::sort(zList.begin(), zList.end());
-
-    return std::pair<int, int>(zList[0], zList[zList.size() - 1]);
-
-
-}
-
 
 
 void ControllerEventsRuler::contentsMousePressEvent(QMouseEvent *e)
@@ -1889,7 +1904,7 @@ ControllerEventsRuler::drawControlLine(Rosegarden::timeT startTime,
 
         ControlRulerEventInsertCommand* command = 
             new ControlRulerEventInsertCommand(m_controller->getType(),
-                    time, m_controller->getControllerValue(), value, m_segment);
+                    time, m_controller->getControllerValue(), value, *m_segment);
 
         macro->addCommand(command);
 
