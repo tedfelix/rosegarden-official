@@ -43,7 +43,7 @@
 #include "rosegardenguidoc.h"
 #include "ktmpstatusmsg.h"
 #include "barbuttons.h"
-#include "staffruler.h" // for ActiveItem
+#include "loopruler.h"
 
 #include "rosedebug.h"
 
@@ -128,6 +128,14 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     BarButtons *topBarButtons = new BarButtons(m_hlayout, 25,
                                                false, m_centralFrame);
     setTopBarButtons(topBarButtons);
+
+    QObject::connect
+	(topBarButtons->getLoopRuler(),
+	 SIGNAL(setPointerPosition(Rosegarden::timeT)),
+	 this, SLOT(slotSetInsertCursorPosition(Rosegarden::timeT)));
+
+    topBarButtons->getLoopRuler()->setBackgroundColor
+	(RosegardenGUIColours::InsertCursorRuler);
 
     BarButtons *bottomBarButtons = new BarButtons(m_hlayout, 25,
                                                   true, m_centralFrame);
@@ -390,6 +398,16 @@ MatrixView::slotSetPointerPosition(timeT time)
         m_staffs[0]->setPointerPosition(*m_hlayout, time);
     }
 
+    update();
+}
+
+void
+MatrixView::slotSetInsertCursorPosition(timeT time)
+{
+    //!!! For now.  Probably unlike slotSetPointerPosition this one
+    // should snap to the nearest event.
+
+    m_staffs[0]->setInsertCursorPosition(*m_hlayout, time);
     update();
 }
 

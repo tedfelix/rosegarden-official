@@ -35,7 +35,6 @@
 #include "multiviewcommandhistory.h"
 #include "rosedebug.h"
 #include "ktmpstatusmsg.h"
-#include "staffruler.h"
 #include "barbuttons.h"
 
 //----------------------------------------------------------------------

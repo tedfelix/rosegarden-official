@@ -60,7 +60,6 @@
 #include "notationcommands.h"
 #include "segmentcommands.h"
 #include "dialogs.h"
-#include "staffruler.h" // for ActiveItem
 
 #include "chordnameruler.h"
 

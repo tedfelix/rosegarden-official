@@ -44,6 +44,19 @@ class QVBox;
 class QGridLayout;
 class QVBoxLayout;
 
+/**
+ * An interface for canvas items which are capable of handling
+ * mouse events
+ */
+class ActiveItem
+{
+public:
+    virtual void handleMousePress(QMouseEvent*) = 0;
+    virtual void handleMouseMove(QMouseEvent*) = 0;
+    virtual void handleMouseRelease(QMouseEvent*) = 0;
+};
+
+
 class EditView : public KMainWindow
 {
     static const unsigned int ID_STATUS_MSG;

@@ -142,6 +142,9 @@ public slots:
     /// Set the time pointer position during playback
     void slotSetPointerPosition(Rosegarden::timeT time);
 
+    /// Set the insertion pointer position (from the bottom LoopRuler)
+    void slotSetInsertCursorPosition(Rosegarden::timeT position);
+
 protected:
 
     /**

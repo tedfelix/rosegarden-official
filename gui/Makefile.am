@@ -55,7 +55,6 @@ rosegarden_SOURCES = \
         sequencemanager.cpp \
 	spline.cpp \
 	staffline.cpp \
-	staffruler.cpp \
 	textruler.cpp \
         trackbuttons.cpp \
 	trackeditor.cpp \
