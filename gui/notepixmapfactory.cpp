@@ -1443,8 +1443,9 @@ NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef)
 QCanvasPixmap*
 NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef)
 {
-    NotePixmapParameters params(Rosegarden::Note::Crotchet, 0);
     Rosegarden::Pitch pitch(p);
+    NotePixmapParameters params(Rosegarden::Note::Crotchet, 0,
+				pitch.getAccidental(true));
 
     QCanvasPixmap* clefPixmap = makeClefPixmap(clef);
 
