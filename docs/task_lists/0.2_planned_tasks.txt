@@ -77,6 +77,8 @@ New features suitable for 0.2
 12. Piano-roll view, but only if someone other than us steps up
     to implement it in parallel with the stuff we're doing?
 
+13. Event editor (possible hyper editor type i/f for velocities)
+
 
 Basis for later features
 ------------------------
@@ -89,3 +91,5 @@ Basis for later features
 
 4.  audio tracks support
 
+5.  instruments - assigning them on the GUI and how they map
+    through to aRts (basic Environment)
