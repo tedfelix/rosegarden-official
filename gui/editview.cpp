@@ -22,6 +22,7 @@
 #include <qlayout.h>
 #include <qtabwidget.h>
 #include <qpopupmenu.h>
+#include <qinputdialog.h>
 
 #include <kapp.h>
 #include <kconfig.h>
@@ -545,6 +546,36 @@ EditView::setupActions()
                 SLOT(slotAddTimeSignature()), actionCollection(),
                 "add_time_signature");
 
+    //
+    // Transforms
+    //
+    new KAction(TransposeCommand::getGlobalName(1), 0,
+		Key_Up, this,
+                SLOT(slotTransposeUp()), actionCollection(),
+                "transpose_up");
+
+    new KAction(TransposeCommand::getGlobalName(12), 0,
+		Key_Up + CTRL, this,
+                SLOT(slotTransposeUpOctave()), actionCollection(),
+                "transpose_up_octave");
+
+    new KAction(TransposeCommand::getGlobalName(-1), 0,
+		Key_Down, this,
+                SLOT(slotTransposeDown()), actionCollection(),
+                "transpose_down");
+
+    new KAction(TransposeCommand::getGlobalName(-12), 0,
+		Key_Down + CTRL, this,
+                SLOT(slotTransposeDownOctave()), actionCollection(),
+                "transpose_down_octave");
+
+    new KAction(TransposeCommand::getGlobalName(0), 0, this,
+                SLOT(slotTranspose()), actionCollection(),
+                "general_transpose");
+
+    //
+    // Control rulers
+    //
     new KAction(i18n("Show Velocity Control Ruler"), 0, this,
                 SLOT(slotShowVelocityControlRuler()), actionCollection(),
                 "show_velocity_control_ruler");
@@ -935,3 +966,50 @@ EditView::slotEraseControlRulerItem()
     if (ruler) ruler->eraseControllerEvent();
 }
 
+void EditView::slotTranspose()
+{
+    if (!m_currentEventSelection) return;
+
+    bool ok = false;
+    int semitones = QInputDialog::getInteger
+	(i18n("Transpose"),
+	 i18n("Enter the number of semitones to transpose by:"),
+	 0, -127, 127, 1, &ok, this);
+    if (!ok || semitones == 0) return;
+
+    KTmpStatusMsg msg(i18n("Transposing..."), this);
+    addCommandToHistory(new TransposeCommand
+                        (semitones, *m_currentEventSelection));
+}
+
+void EditView::slotTransposeUp()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Transposing up one semitone..."), this);
+
+    addCommandToHistory(new TransposeCommand(1, *m_currentEventSelection));
+}
+
+void EditView::slotTransposeUpOctave()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Transposing up one octave..."), this);
+
+    addCommandToHistory(new TransposeCommand(12, *m_currentEventSelection));
+}
+
+void EditView::slotTransposeDown()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Transposing down one semitone..."), this);
+
+    addCommandToHistory(new TransposeCommand(-1, *m_currentEventSelection));
+}
+
+void EditView::slotTransposeDownOctave()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Transposing down one octave..."), this);
+
+    addCommandToHistory(new TransposeCommand(-12, *m_currentEventSelection));
+}

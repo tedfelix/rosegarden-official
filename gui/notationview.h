@@ -439,11 +439,6 @@ public slots:
     void slotTransformsStemsUp();
     void slotTransformsStemsDown();
     void slotTransformsRestoreStems();
-    void slotTranspose();
-    void slotTransposeUp();
-    void slotTransposeUpOctave();
-    void slotTransposeDown();
-    void slotTransposeDownOctave();
     void slotTransformsQuantize();
     void slotTransformsFixQuantization();
     void slotTransformsInterpret();

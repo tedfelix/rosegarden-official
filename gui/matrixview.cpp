@@ -449,30 +449,6 @@ void MatrixView::setupActions()
                 SLOT(slotTransformsQuantize()), actionCollection(),
                 "quantize");
 
-    new KAction(TransposeCommand::getGlobalName(1), 0,
-		Key_Up, this,
-                SLOT(slotTransposeUp()), actionCollection(),
-                "transpose_up");
-
-    new KAction(TransposeCommand::getGlobalName(12), 0,
-		Key_Up + CTRL, this,
-                SLOT(slotTransposeUpOctave()), actionCollection(),
-                "transpose_up_octave");
-
-    new KAction(TransposeCommand::getGlobalName(-1), 0,
-		Key_Down, this,
-                SLOT(slotTransposeDown()), actionCollection(),
-                "transpose_down");
-
-    new KAction(TransposeCommand::getGlobalName(-12), 0,
-		Key_Down + CTRL, this,
-                SLOT(slotTransposeDownOctave()), actionCollection(),
-                "transpose_down_octave");
-
-    new KAction(TransposeCommand::getGlobalName(0), 0, this,
-                SLOT(slotTranspose()), actionCollection(),
-                "general_transpose");
-
     new KAction(ChangeVelocityCommand::getGlobalName(10), 0,
 		Key_Up + SHIFT, this,
                 SLOT(slotVelocityUp()), actionCollection(),
@@ -974,54 +950,6 @@ void MatrixView::slotTransformsQuantize()
 			    (*m_currentEventSelection,
 			     dialog->getQuantizer()));
     }
-}
-
-void MatrixView::slotTranspose()
-{
-    if (!m_currentEventSelection) return;
-
-    bool ok = false;
-    int semitones = QInputDialog::getInteger
-	(i18n("Transpose"),
-	 i18n("Enter the number of semitones to transpose by:"),
-	 0, -127, 127, 1, &ok, this);
-    if (!ok || semitones == 0) return;
-
-    KTmpStatusMsg msg(i18n("Transposing..."), this);
-    addCommandToHistory(new TransposeCommand
-                        (semitones, *m_currentEventSelection));
-}
-
-void MatrixView::slotTransposeUp()
-{
-    if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Transposing up one semitone..."), this);
-
-    addCommandToHistory(new TransposeCommand(1, *m_currentEventSelection));
-}
-
-void MatrixView::slotTransposeUpOctave()
-{
-    if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Transposing up one octave..."), this);
-
-    addCommandToHistory(new TransposeCommand(12, *m_currentEventSelection));
-}
-
-void MatrixView::slotTransposeDown()
-{
-    if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Transposing down one semitone..."), this);
-
-    addCommandToHistory(new TransposeCommand(-1, *m_currentEventSelection));
-}
-
-void MatrixView::slotTransposeDownOctave()
-{
-    if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Transposing down one octave..."), this);
-
-    addCommandToHistory(new TransposeCommand(-12, *m_currentEventSelection));
 }
 
 void MatrixView::slotMousePressed(Rosegarden::timeT time, int pitch,

@@ -167,6 +167,14 @@ public slots:
     virtual void slotShowControllerEventsRuler();
     virtual void slotShowPropertyControlRuler();
 
+    // transpose
+    void slotTranspose();
+    void slotTransposeUp();
+    void slotTransposeUpOctave();
+    void slotTransposeDown();
+    void slotTransposeDownOctave();
+
+
     /// Control ruler actions
     void slotInsertControlRulerItem();
     void slotEraseControlRulerItem();

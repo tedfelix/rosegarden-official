@@ -1539,30 +1539,6 @@ void NotationView::setupActions()
                 SLOT(slotTransformsRestoreStems()), actionCollection(),
                 "restore_stems");
 
-    new KAction(TransposeCommand::getGlobalName(1), 0,
-		Key_Up, this,
-                SLOT(slotTransposeUp()), actionCollection(),
-                "transpose_up");
-
-    new KAction(TransposeCommand::getGlobalName(12), 0,
-		Key_Up + CTRL, this,
-                SLOT(slotTransposeUpOctave()), actionCollection(),
-                "transpose_up_octave");
-
-    new KAction(TransposeCommand::getGlobalName(-1), 0,
-		Key_Down, this,
-                SLOT(slotTransposeDown()), actionCollection(),
-                "transpose_down");
-
-    new KAction(TransposeCommand::getGlobalName(-12), 0,
-		Key_Down + CTRL, this,
-                SLOT(slotTransposeDownOctave()), actionCollection(),
-                "transpose_down_octave");
-
-    new KAction(TransposeCommand::getGlobalName(0), 0, this,
-                SLOT(slotTranspose()), actionCollection(),
-                "general_transpose");
-
     new KAction(RespellCommand::getGlobalName
 		(RespellCommand::Set, Rosegarden::Accidentals::DoubleFlat),
 		0, this,

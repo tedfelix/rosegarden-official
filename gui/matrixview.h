@@ -259,11 +259,6 @@ public slots:
 
     /// transforms
     void slotTransformsQuantize();
-    void slotTranspose();
-    void slotTransposeUp();
-    void slotTransposeUpOctave();
-    void slotTransposeDown();
-    void slotTransposeDownOctave();
     void slotVelocityUp();
     void slotVelocityDown();
 
