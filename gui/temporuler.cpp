@@ -50,8 +50,8 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
     m_rulerScale(rulerScale),
     m_fontMetrics(m_boldFont)
 {
-    m_font.setPointSize(m_small ? 8 : 11);
-    m_boldFont.setPointSize(m_small ? 8 : 11);
+    m_font.setPointSize(m_small ? 9 : 11);
+    m_boldFont.setPointSize(m_small ? 9 : 11);
     m_boldFont.setBold(true);
     m_fontMetrics = QFontMetrics(m_boldFont);
 
