@@ -136,17 +136,6 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
 
     readOptions();
 
-//     ///////////////////////////////////////////////////////////////////
-//     // disable menu and toolbar items at startup
-//     disableCommand(ID_FILE_SAVE);
-//     disableCommand(ID_FILE_SAVE_AS);
-//     disableCommand(ID_FILE_PRINT);
- 
-//     disableCommand(ID_EDIT_CUT);
-//     disableCommand(ID_EDIT_COPY);
-//     disableCommand(ID_EDIT_PASTE);
-
-
     // Now autoload
     //
 #ifdef RGKDE3
