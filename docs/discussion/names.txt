@@ -35,7 +35,7 @@ Program breakdown
 
  : : Thing		RG2.1		RG3		Other ideas
  : : ===========================================================================
- -A- data store				Server		Database, Datastore
+ -A- data store				Server	      Database, Datastore, Core
  : : ---------------------------------------------------------------------------
  -B- GUI component			Client		View, Editor
  : : ---------------------------------------------------------------------------
