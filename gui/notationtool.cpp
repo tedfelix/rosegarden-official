@@ -41,6 +41,7 @@
 #include "notationcommands.h"
 
 #include "rosedebug.h"
+#include "colours.h"
 
 using Rosegarden::Accidental;
 using Rosegarden::Accidentals;
@@ -652,7 +653,7 @@ void NotationSelector::ready()
     m_selectionRect = new QCanvasRectangle(m_parentView->canvas());
     
     m_selectionRect->hide();
-    m_selectionRect->setPen(Qt::blue);
+    m_selectionRect->setPen(RosegardenGUIColours::SelectionRectangle);
 
     m_parentView->setCanvasCursor(Qt::arrowCursor);
     m_parentView->setPositionTracking(false);

@@ -670,6 +670,7 @@ NoteFont::recolour(QPixmap in, PixmapColour colour) const
     int hue = 0, s, v;
 
     switch (colour) {
+	//!!! Use colours.h stuff
     case Red:   hue = 0;   break;
     case Green: hue = 120; break;
     case Blue:  hue = 240; break;

@@ -62,11 +62,9 @@ StaffRuler::StaffRuler(int xPos, int yPos,
     m_whiteBackground->setX(0);
     m_whiteBackground->setY(m_yPos);
     m_whiteBackground->setSize(canvas()->width(), m_thickness + 15);
-
-    QColor bgColor(212, 212, 212); // light grey
     
-    m_greyBackground->setBrush(bgColor);
-    m_greyBackground->setPen(bgColor);
+    m_greyBackground->setBrush(RosegardenGUIColours::StaffRulerBackground);
+    m_greyBackground->setPen(RosegardenGUIColours::StaffRulerBackground);
     m_greyBackground->show();
 
     m_whiteBackground->setBrush(white);
@@ -225,9 +223,9 @@ PositionCursor::PositionCursor(int gripHeight, QCanvas* c, QObject* parent)
     m_grip->setX(-5);
     m_grip->setY(gripHeight);
     m_grip->setSize(11, 10);
-    m_grip->setBrush(magenta);
+    m_grip->setBrush(RosegardenGUIColours::PositionCursor);
     m_line->setPoints(0, 0, 0, canvas()->height());
-    m_line->setPen(magenta);
+    m_line->setPen(RosegardenGUIColours::PositionCursor);
 
     setActive(true);
 }

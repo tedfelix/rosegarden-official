@@ -29,6 +29,7 @@
 #include "Segment.h"
 
 #include "rosedebug.h"
+#include "colours.h"
 
 using Rosegarden::Segment;
 
@@ -121,8 +122,8 @@ SegmentCanvas::SegmentCanvas(int gridH, int gridV,
     m_toolType(Pencil),
     m_tool(new SegmentPencil(this)),
     m_grid(gridH, gridV),
-    m_brush(Qt::blue),
-    m_pen(Qt::black),
+    m_brush(RosegardenGUIColours::SegmentBlock),
+    m_pen(RosegardenGUIColours::SegmentBorder),
     m_editMenu(new QPopupMenu(this))
 {
     QWhatsThis::add(this, i18n("Segments Canvas - Create and manipulate your segments here"));

@@ -29,6 +29,7 @@
 #include "BaseProperties.h"
 
 #include "rosedebug.h"
+#include "colours.h"
 
 #include "Event.h"
 #include "Segment.h"
@@ -196,9 +197,8 @@ NotationStaff::resizeStaffLineRow(int row, double offset, double length)
         level = (9 - m_resolution) * 32;
         if (level > 200) level = 200;
     }
-    QColor lineColour(level, level, level);
 
-    QColor connectingLineColour(128, 128, 128);
+    QColor lineColour(level, level, level);
 
     int h, j;
     int staffLineThickness = m_npf->getStaffLineThickness();
@@ -221,7 +221,8 @@ NotationStaff::resizeStaffLineRow(int row, double offset, double length)
 	ly = (int)y() + getTopLineOffsetForRow(row);
 	line->setPoints(lx, ly, lx,
 			ly + getBarLineHeight() + m_connectingLineHeight);
-	line->setPen(QPen(connectingLineColour, 1));
+	line->setPen
+	    (QPen(RosegardenGUIColours::StaffConnectingTerminatingLine, 1));
 	line->setZ(-2);
 	line->show();
     }
@@ -450,7 +451,8 @@ void NotationStaff::insertBar(unsigned int barPos, bool correct)
 	    connectingLine->moveBy
 		(getRowLeftX(row) + getXForLayoutX(barPos) + x() + i, y());
 
-	    connectingLine->setPen(QPen(QColor(192, 192, 192), 1));
+	    connectingLine->setPen
+		(QPen(RosegardenGUIColours::StaffConnectingLine, 1));
 	    connectingLine->setZ(-3);
 	    connectingLine->show();
 

@@ -34,6 +34,7 @@
 
 namespace RosegardenGUIColours
 {
+    extern const QColor SegmentBorder;
     extern const QColor SegmentBlock;
 
     extern const QColor StaffConnectingLine;
@@ -42,7 +43,10 @@ namespace RosegardenGUIColours
     
     extern const QColor PositionCursor;
     extern const QColor SelectionRectangle;
-    extern const QColor SelectedElements;
+
+    extern const QColor NoteFontRed;
+    extern const QColor NoteFontGreen;
+    extern const QColor NoteFontBlue;
 }
 
 #endif
