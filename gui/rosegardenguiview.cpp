@@ -191,13 +191,24 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
 
     std::vector<Rosegarden::Segment *> segmentsToEdit;
 
+    // The logic here is: If we're calling for this operation to
+    // happen on a particular segment, then open that segment and if
+    // it's part of a selection open all other selected segments too.
+    // If we're not calling for any particular segment, then open all
+    // selected segments if there are any.
+
     if (m_trackEditor->getSegmentCanvas()->haveSelection()) {
 
 	Rosegarden::SegmentSelection selection =
 	    m_trackEditor->getSegmentCanvas()->getSelectedSegments();
-	for (Rosegarden::SegmentSelection::iterator i = selection.begin();
-	     i != selection.end(); ++i) {
-	    segmentsToEdit.push_back(*i);
+
+	if (!p || (selection.find(p) != selection.end())) {
+	    for (Rosegarden::SegmentSelection::iterator i = selection.begin();
+		 i != selection.end(); ++i) {
+		segmentsToEdit.push_back(*i);
+	    }
+	} else {
+	    segmentsToEdit.push_back(p);
 	}
 
     } else if (p) {

@@ -156,7 +156,7 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
 	
 	new QLabel(scopeText, groupBox);
 	m_asGivenButton = new QRadioButton
-	    (i18n("Start bar %1 here").arg(barNo + 1), groupBox);
+	    (i18n("Start bar %1 here").arg(m_barNo + 2), groupBox);
 
 	if (!m_atStartOfBar) {
 	    m_startOfBarButton = new QRadioButton
