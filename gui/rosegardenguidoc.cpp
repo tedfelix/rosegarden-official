@@ -875,11 +875,6 @@ void RosegardenGUIDoc::initialiseStudio()
 	 ports);
 
     Rosegarden::StudioControl::sendMappedEvent(mEports);
-
-    RG_DEBUG << "RosegardenGUIDoc::initialiseStudio - "
-             << "initialised studio including " << audioCount
-             << " audio faders" << endl;
-
 }
 
 
