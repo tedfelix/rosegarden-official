@@ -385,7 +385,7 @@ NotePixmapFactory::makeNotePixmap(Note::Type note,
     kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeNotePixmap: note is "
                          << note << ", dotted is " << dotted << endl;
 
-    if (stalkLength > 0) m_offsets.setStalkLength(stalkLength);
+    if (stalkLength >= 0) m_offsets.setStalkLength(stalkLength);
     else m_offsets.setStalkLength(getStalkLength());
 
     m_offsets.offsetsFor

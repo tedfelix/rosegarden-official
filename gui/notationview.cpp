@@ -262,37 +262,37 @@ NotationView::setupActions()
 {
     // setup Notes menu
     QIconSet icon(m_notePixmapFactory.makeNotePixmap
-                  (Note::WholeNote, false, NoAccidental, true, true, 0, true));
+                  (Note::WholeNote, false, NoAccidental, true, true, -1, true));
     new KAction(i18n("Whole"), icon, 0, this,
                 SLOT(slotWhole()), actionCollection(), "whole_note" );
 
     icon = QIconSet(m_notePixmapFactory.makeNotePixmap
-                    (Note::HalfNote, false, NoAccidental, true, true, 0, true));
+                    (Note::HalfNote, false, NoAccidental, true, true, -1, true));
     new KAction(i18n("Half"), icon, 0, this,
                 SLOT(slotHalf()), actionCollection(), "half" );
 
     icon = QIconSet(m_notePixmapFactory.makeNotePixmap
-                    (Note::QuarterNote, false, NoAccidental, true, true, 0, true));
+                    (Note::QuarterNote, false, NoAccidental, true, true, -1, true));
     new KAction(i18n("Quarter"), icon, 0, this,
                 SLOT(slotQuarter()), actionCollection(), "quarter" );
 
     icon = QIconSet(m_notePixmapFactory.makeNotePixmap
-                    (Note::EighthNote, false, NoAccidental, true, true, 0, true));
+                    (Note::EighthNote, false, NoAccidental, true, true, -1, true));
     new KAction(i18n("8th"), icon, 0, this,
                 SLOT(slot8th()), actionCollection(), "8th" );
 
     icon = QIconSet(m_notePixmapFactory.makeNotePixmap
-                    (Note::SixteenthNote, false, NoAccidental, true, true, 0, true));
+                    (Note::SixteenthNote, false, NoAccidental, true, true, -1, true));
     new KAction(i18n("16th"), icon, 0, this,
                 SLOT(slot16th()), actionCollection(), "16th" );
 
     icon = QIconSet(m_notePixmapFactory.makeNotePixmap
-                    (Note::ThirtySecondNote, false, NoAccidental, true, true, 0, true));
+                    (Note::ThirtySecondNote, false, NoAccidental, true, true, -1, true));
     new KAction(i18n("32nd"), icon, 0, this,
                 SLOT(slot32nd()), actionCollection(), "32nd" );
 
     icon = QIconSet(m_notePixmapFactory.makeNotePixmap
-                    (Note::SixtyFourthNote, false, NoAccidental, true, true, 0, true));
+                    (Note::SixtyFourthNote, false, NoAccidental, true, true, -1, true));
     new KAction(i18n("64th"), icon, 0, this,
                 SLOT(slot64th()), actionCollection(), "64th" );
     
@@ -395,26 +395,52 @@ NotationView::showElements(NotationElementList::iterator from,
 
 		kdDebug(KDEBUG_AREA) << "NotationView::showElements(): found a note of type " << note << " with accidental " << accident << endl;
                 
-                bool beam = false;
-                (void)((*it)->event()->get<Bool>(P_BEAM_NECESSARY, beam));
+                bool beamed = false;
+                (void)((*it)->event()->get<Bool>(P_BEAMED, beamed));
 
-                int stemLength = 0;
-                if (beam) {
-                    long myY = 0, nextY;
-                    (void)((*it)->event()->get<Int>(P_BEAM_MY_Y, myY));
-                    if ((*it)->event()->get<Int>(P_BEAM_NEXT_Y, nextY) &&
-                        nextY != myY) {
+		if (beamed) {
+
+		    int stemLength = 0;
+
+		    if ((*it)->event()->get<Bool>(P_BEAM_PRIMARY_NOTE)) {
+
+			int myY = (*it)->event()->get<Int>(P_BEAM_MY_Y);
+			int nextY = (*it)->event()->get<Int>(P_BEAM_NEXT_Y);
+			int dx = (*it)->event()->get<Int>(P_BEAM_SECTION_WIDTH);
+
                         kdDebug(KDEBUG_AREA) << "NotationView::showElements(): should be drawing a beam here... event is " << *(*it)->event() << endl;
-                    }
-                    stemLength = myY - (int)(*it)->getLayoutY();
-                    if (stemLength < 0) stemLength = -stemLength;
-                }
 
-                QCanvasPixmap notePixmap
-                    (npf.makeNotePixmap(note, dotted, accident, tail, up,
-                                        stemLength));
+			stemLength = myY - (int)(*it)->getLayoutY();
+			if (stemLength < 0) stemLength = -stemLength;
 
-                sprite = new QCanvasSimpleSprite(&notePixmap, canvas());
+			// just experimental
+			for (int h = 0; h < 3; ++h) {
+			    QCanvasLine *beam = new QCanvasLine(canvas());
+			    QPen pen(black, 1);
+			    beam->setPen(pen);
+			    int x = (*it)->getLayoutX();
+			    if ((*it)->event()->get<Bool>(P_STALK_UP)) {
+				x += npf.getNoteBodyWidth();
+			    }
+			    beam->setPoints(dxoffset + x, dyoffset + myY + h,
+					    dxoffset + x + dx, dyoffset + nextY + h);
+			    beam->show();
+			}
+		    }
+
+		    QCanvasPixmap notePixmap
+			(npf.makeNotePixmap(note, dotted, accident, tail, up,
+					    stemLength));
+
+		    sprite = new QCanvasSimpleSprite(&notePixmap, canvas());
+		
+		} else {
+
+		    QCanvasPixmap notePixmap
+			(npf.makeNotePixmap(note, dotted, accident, tail, up));
+
+		    sprite = new QCanvasSimpleSprite(&notePixmap, canvas());
+		}
 
             } else if ((*it)->isRest()) {
 
@@ -567,7 +593,7 @@ void
 NotationView::setCurrentSelectedNote(Note::Type n)
 {
     m_currentSelectedNote = n;
-    m_currentNotePixmap->setPixmap(m_notePixmapFactory.makeNotePixmap(n, false, NoAccidental, true, true, 0, true));
+    m_currentNotePixmap->setPixmap(m_notePixmapFactory.makeNotePixmap(n, false, NoAccidental, true, true, -1, true));
     emit changeCurrentNote(n);
 }
 

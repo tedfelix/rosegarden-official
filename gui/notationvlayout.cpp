@@ -71,57 +71,56 @@ NotationVLayout::layout(NotationElementList::iterator from,
             }
             int top = h.size()-1;
 
-            bool beam = false;
-            (void)el->event()->get<Bool>(P_BEAM_NECESSARY, beam);
+	    bool stalkUp = true;
+	    if (h[top] > 4) {
+		if (h[0] > 4) stalkUp = false;
+		else stalkUp = (h[top] - 4) < (5 - h[0]);
+	    }
 
-            if (beam) {
+	    for (unsigned int j = 0; j < chord.size(); ++j) {
+		el = *chord[j];
+		el->setLayoutY(m_staff.yCoordOfHeight(h[j]));
 
-                kdDebug(KDEBUG_AREA) << "NotationVLayout::layout: Have a beam" << endl;
+		if (!el->event()->has(P_STALK_UP))
+		    el->event()->setMaybe<Bool>(P_STALK_UP, stalkUp);
 
-                // P_STALK_UP and P_DRAW_TAIL have already been set.
-                // We just need to work out P_BEAM_MY_Y and P_BEAM_NEXT_Y
-                
-                int startHeight =
-                    el->event()->get<Int>(P_BEAM_START_HEIGHT);
-                double gradient =
-                    (double)el->event()->get<Int>(P_BEAM_GRADIENT) / 100.0;
-                int relativeX =
-                    el->event()->get<Int>(P_BEAM_RELATIVE_X);
+		if (!el->event()->has(P_DRAW_TAIL))
+		    el->event()->setMaybe<Bool>
+			(P_DRAW_TAIL,
+			 ((stalkUp && j == chord.size()-1) ||
+			  (!stalkUp && j == 0)));
 
-                int startY = m_staff.yCoordOfHeight(startHeight);
-                int myY = (int)(gradient * relativeX) + startY;
+		bool beamed = false;
+		(void)el->event()->get<Bool>(P_BEAMED, beamed);
 
-                kdDebug(KDEBUG_AREA) << "NotationVLayout::layout: myY is " << myY << endl;
+		if (beamed && el->event()->get<Bool>(P_BEAM_PRIMARY_NOTE)) {
 
-                for (unsigned int j = 0; j < chord.size(); ++j) {
-                    NotationElementList::iterator it0(chord[j]);
-                    (*it0)->setLayoutY(m_staff.yCoordOfHeight(h[j]));
-                    (*it0)->event()->setMaybe<Int>(P_BEAM_MY_Y, myY);
-                    kdDebug(KDEBUG_AREA) << "NotationVLayout::layout: Set myY on note " << j << " of chord" << endl;
-                    if (it0 != m_notationElements.begin()) {
-                        --it0;
-                        (*it0)->event()->setMaybe<Int>(P_BEAM_NEXT_Y, myY);
-                        kdDebug(KDEBUG_AREA) << "NotationVLayout::layout: Set nextY on previous item" << endl;
-                    }
-                }
+		    kdDebug(KDEBUG_AREA) << "NotationVLayout::layout: Note is a primary beamed note" << endl;
 
-            } else {
+		    double gradient =
+			(double)el->event()->get<Int>(P_BEAM_GRADIENT) / 100.0;
 
-                bool stalkUp = true;
-                if (h[top] > 4) {
-                    if (h[0] > 4) stalkUp = false;
-                    else stalkUp = (h[top] - 4) < (5 - h[0]);
-                }
+		    int myX = el->event()->get<Int>(P_BEAM_RELATIVE_X);
 
-                for (unsigned int j = 0; j < chord.size(); ++j) {
-                    el = *chord[j];
-                    el->setLayoutY(m_staff.yCoordOfHeight(h[j]));
-                    el->event()->setMaybe<Bool>(P_STALK_UP, stalkUp);
-                    el->event()->setMaybe<Bool>
-                        (P_DRAW_TAIL,
-                         ((stalkUp && j == chord.size()-1) ||
-                          (!stalkUp && j == 0)));
-                }
+		    long nextX;
+		    if (el->event()->get<Int>(P_BEAM_SECTION_WIDTH, nextX)) {
+			nextX += myX;
+		    } else {
+			el->event()->setMaybe<Int>(P_BEAM_SECTION_WIDTH, 0);
+			nextX = myX;
+		    }
+
+		    int startY = m_staff.yCoordOfHeight
+			(el->event()->get<Int>(P_BEAM_START_HEIGHT));
+
+		    int myY   = (int)(gradient *   myX) + startY;
+		    int nextY = (int)(gradient * nextX) + startY;
+
+		    kdDebug(KDEBUG_AREA) << "NotationVLayout::layout: myY is " << myY << ", nextY is " << nextY << endl;
+		    
+		    el->event()->setMaybe<Int>(P_BEAM_MY_Y, myY);
+		    el->event()->setMaybe<Int>(P_BEAM_NEXT_Y, nextY);
+		}
             }
 
             i = chord.getFinalElement();

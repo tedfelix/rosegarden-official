@@ -242,7 +242,7 @@ NotationGroup::sample(const NELIterator &i)
     // calculation and the group might have changed since.  Instead it
     // should test P_BEAM_NECESSARY, which may be false even if there
     // is a gradient present.
-    (*i)->event()->setMaybe<Bool>(P_BEAM_NECESSARY, false);
+    (*i)->event()->setMaybe<Bool>(P_BEAMED, false);
 
     int h = height(i);
     if (h > 4) m_weightAbove += h - 4;
@@ -262,8 +262,8 @@ NotationGroup::height(const NELIterator &i)
     return h;
 }
 
-void
-NotationGroup::applyBeam()
+NotationGroup::Beam
+NotationGroup::calculateBeam()
 {
     Beam beam;
     beam.aboveNotes = !(m_weightAbove > m_weightBelow);
@@ -276,14 +276,14 @@ NotationGroup::applyBeam()
 
     if (initialNote == getList().end() ||
         initialNote == finalNote) {
-        return; // no notes, no case to answer
+        return beam; // no notes, no case to answer
     }
 
     Chord initialChord(getList(), initialNote),
             finalChord(getList(),   finalNote);
 
     if (initialChord.getInitialElement() == finalChord.getInitialElement()) {
-        return;
+        return beam;
     }
 
     int initialHeight, finalHeight, extremeHeight;
@@ -321,7 +321,7 @@ NotationGroup::applyBeam()
     else if (diff > 0) beam.gradient = 10;
     else beam.gradient = 0;
 
-    if (initialHeight > finalHeight) beam.gradient = -beam.gradient;
+    if (initialHeight < finalHeight) beam.gradient = -beam.gradient;
 
     // Now, we need to judge the height of the beam such that the
     // nearest note of the whole group, the nearest note of the first
@@ -369,29 +369,89 @@ NotationGroup::applyBeam()
          (*initialNote)->event()->getDuration() < crotchet
         && (*finalNote)->event()->getDuration() < crotchet;
 
-    kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam: beam data:" << endl
+    kdDebug(KDEBUG_AREA) << "NotationGroup::calculateBeam: beam data:" << endl
                          << "gradient: " << beam.gradient << endl
                          << "start height: " << beam.startHeight << endl
                          << "aboveNotes: " << beam.aboveNotes << endl
                          << "necessary: " << beam.necessary << endl;
 
-    for (NELIterator i = initialNote; i != getList().end(); ++i) {
+    return beam;
+}
+
+
+void
+NotationGroup::applyBeam()
+{
+    Beam beam(calculateBeam());
+    if (!beam.necessary) return;
+
+    NELIterator initialNote(getInitialNote()),
+	          finalNote(  getFinalNote());
+    int initialX = (int)(*initialNote)->getLayoutX();
+
+    // For each chord in the group, we nominate the note head furthest
+    // from the beam as the one that "owns" the stalk and the section
+    // of beam up to the following chord.  For this note, we need to:
+    // 
+    // * Set the start height, start x-coord and gradient of the beam
+    //   (we can't set the stalk length for this note directly, because
+    //   we don't know its y-coordinate yet)
+    // 
+    // * Set width of this section of beam
+    // 
+    // * Set the number of tails required for the following note (one
+    //   slight complication here: a beamed group in which the very
+    //   first chord is shorter than the following one.  Here the first
+    //   chord needs to know it's the first, or else it can't draw the
+    //   part-beams immediately to its right correctly.  We won't deal
+    //   with this case just yet...)
+    //
+    // For the rest of the notes in the chord, we just need to
+    // indicate that they aren't part of the beam-drawing process and
+    // don't need to draw a stalk.
+
+    NELIterator prev = getList().end();
+
+    for (NELIterator i = getInitialNote(); i != getList().end(); ++i) {
 
         if ((*i)->isNote()) {
-            (*i)->event()->setMaybe<Bool>(P_BEAM_NECESSARY, beam.necessary);
 
-            if (beam.necessary) {
-                (*i)->event()->setMaybe<Bool>(P_STALK_UP, beam.aboveNotes);
-                (*i)->event()->setMaybe<Bool>(P_DRAW_TAIL, false);
-                (*i)->event()->setMaybe<Int>(P_BEAM_GRADIENT, beam.gradient);
-                (*i)->event()->setMaybe<Int>(P_BEAM_START_HEIGHT,
-                                             beam.startHeight);
-                (*i)->event()->setMaybe<Int>(P_BEAM_RELATIVE_X,
-                                             (int)(*i)->getLayoutX()-initialX);
-            }
+	    Chord chord(getList(), i);
+	    unsigned int j;
+
+	    for (j = 0; j < chord.size(); ++j) {
+		NotationElement *el = (*chord[j]);
+		el->event()->setMaybe<Bool>(P_STALK_UP, beam.aboveNotes);
+		el->event()->setMaybe<Bool>(P_DRAW_TAIL, false);
+		el->event()->setMaybe<Bool>(P_BEAMED, true);
+		el->event()->setMaybe<Bool>(P_BEAM_PRIMARY_NOTE, false);
+	    }
+
+	    if (beam.aboveNotes) j = 0;
+	    else j = chord.size() - 1;
+
+	    int x = (int)(*chord[j])->getLayoutX();
+	    NotationElement *el = (*chord[j]);
+
+	    if (prev != getList().end()) {
+		(*prev)->event()->setMaybe<Int>(P_BEAM_SECTION_WIDTH,
+						x - (*prev)->getLayoutX());
+		(*prev)->event()->setMaybe<Int>(P_BEAM_NEXT_TAIL_COUNT,
+						Note(el->event()->get<Int>
+						 (P_NOTE_TYPE)).getTailCount());
+	    }
+
+	    el->event()->setMaybe<Int>(P_BEAM_START_HEIGHT, beam.startHeight);
+	    el->event()->setMaybe<Int>(P_BEAM_RELATIVE_X, x - initialX);
+	    el->event()->setMaybe<Int>(P_BEAM_GRADIENT, beam.gradient);
+	    el->event()->setMaybe<Bool>(P_BEAM_PRIMARY_NOTE, true);
+
+	    prev = chord[j];
+	    i = chord.getFinalElement();
         }
 
         if (i == finalNote) break;
     }
 }
+
 

@@ -99,7 +99,7 @@ public:
     virtual PropertyType getType() const = 0;
     virtual std::string getTypeName() const = 0;
     virtual PropertyStoreBase *clone() = 0;
-    virtual std::string unparse() = 0;
+    virtual std::string unparse() const = 0;
 
     virtual bool isPersistent() const = 0;
     virtual void setPersistence(bool) = 0;
@@ -133,7 +133,7 @@ public:
 
     virtual PropertyStoreBase* clone();
     
-    virtual std::string unparse();
+    virtual std::string unparse() const;
 
     PropertyDefn<P>::basic_type getData() { return m_data; }
     void setData(PropertyDefn<P>::basic_type data) { m_data = data; }
@@ -185,7 +185,7 @@ PropertyStore<P>::clone()
 
 template <PropertyType P>
 std::string
-PropertyStore<P>::unparse()
+PropertyStore<P>::unparse() const
 {
     return PropertyDefn<P>::unparse(m_data);
 }
@@ -202,7 +202,7 @@ template <PropertyType P>
 void
 PropertyStore<P>::dump(std::ostream &out) const
 {
-    out << getTypeName() << " - " << m_data;
+    out << getTypeName() << " - " << unparse();
 }
 #endif
  

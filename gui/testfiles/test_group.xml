@@ -8,6 +8,10 @@
         </group>
         <group type="beamed">
         <event type="note" duration="quaver" pitch="64"/>
+        <event type="note" duration="quaver" pitch="80"/>
+        </group>
+        <group type="beamed">
+        <event type="note" duration="quaver" pitch="64"/>
         <event type="note" duration="semiquaver" pitch="64"/>
         <event type="note" duration="semiquaver" pitch="64"/>
         </group>

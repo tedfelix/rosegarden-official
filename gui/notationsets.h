@@ -171,6 +171,8 @@ private:
         bool necessary;
     };
 
+    Beam calculateBeam();
+
     int height(const NELIterator&);
     const Rosegarden::Clef &m_clef;
     const Rosegarden::Key &m_key;
