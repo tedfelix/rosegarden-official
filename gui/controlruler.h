@@ -172,6 +172,7 @@ public:
     virtual ~ControllerEventsRuler();
 
     virtual QString getName();
+    int getDefaultItemWidth() { return m_defaultItemWidth; }
 
     /// SegmentObserver interface
     virtual void eventAdded(const Rosegarden::Segment *, Rosegarden::Event *);
@@ -182,7 +183,7 @@ public:
 protected:
     //--------------- Data members ---------------------------------
     bool m_segmentDeleted;
-
+    int m_defaultItemWidth;
 };
 
 /**

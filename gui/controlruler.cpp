@@ -95,6 +95,7 @@ public:
 
     virtual bool getValue(long&) = 0;
     virtual void setValue(long)  = 0;
+    virtual Event* getEvent() = 0;
 };
 
 //////////////////////////////
@@ -107,6 +108,7 @@ public:
     virtual bool getValue(long&);
     virtual void setValue(long);
 
+    virtual Event* getEvent() { return m_viewElement->event(); }
     ViewElement* getViewElement() { return m_viewElement; }
 
 protected:
@@ -143,7 +145,7 @@ public:
     virtual bool getValue(long&);
     virtual void setValue(long);
 
-    Event* getEvent() { return m_event; }
+    virtual Event* getEvent() { return m_event; }
 
 protected:
 
@@ -481,8 +483,8 @@ void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
             m_selectedItems << item;
             item->setSelected(true);
             item->handleMouseButtonPress(e);
-            ViewElementAdapter* adapter = dynamic_cast<ViewElementAdapter*>(item->getElementAdapter());
-            m_eventSelection->addEvent(adapter->getViewElement()->event());
+            ElementAdapter* adapter = item->getElementAdapter();
+            m_eventSelection->addEvent(adapter->getEvent());
 
         }
     }
@@ -703,7 +705,8 @@ ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment& segment,
                                              QCanvas* c,
                                              QWidget* parent, const char* name, WFlags f)
     : ControlRuler(segment, rulerScale, hsb, parentView, c, parent, name, f),
-      m_segmentDeleted(false)
+      m_segmentDeleted(false),
+      m_defaultItemWidth(20)
 {
     m_segment.addObserver(this);
 
@@ -717,8 +720,7 @@ ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment& segment,
 
  	double x = m_rulerScale->getXForTime((*i)->getAbsoluteTime());
  	new ControlItem(this, new ControllerEventAdapter(*i), int(x),
-                        int(m_rulerScale->getXForTime((*i)->getAbsoluteTime() +
-                                                      (*i)->getDuration()) - x));
+                        getDefaultItemWidth());
 
     }
     
@@ -746,8 +748,7 @@ void ControllerEventsRuler::eventAdded(const Segment*, Event *e)
     double x = m_rulerScale->getXForTime(e->getAbsoluteTime());
 
     new ControlItem(this, new ControllerEventAdapter(e), int(x),
-                    int(m_rulerScale->getXForTime(e->getAbsoluteTime() +
-                                                  e->getDuration()) - x));
+                    getDefaultItemWidth());
 }
 
 void ControllerEventsRuler::eventRemoved(const Segment*, Event *e)
