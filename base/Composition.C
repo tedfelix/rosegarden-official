@@ -26,7 +26,8 @@ namespace Rosegarden
 
 Composition::Composition()
     : m_nbTicksPerBar(384),
-      m_tempo(0)
+      m_tempo(0),
+      m_position(0)
 {
 //     cerr << "Composition:(" << nbTracks << ") : this = "
 //          << this <<  " - size = "

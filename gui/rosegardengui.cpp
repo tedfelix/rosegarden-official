@@ -33,6 +33,7 @@
 #include <kmenubar.h>
 #include <klocale.h>
 #include <kconfig.h>
+#include <dcopclient.h>
 
 #include <kaction.h>
 #include <kstdaction.h>
@@ -51,7 +52,9 @@ RosegardenGUIApp::RosegardenGUIApp()
       m_fileRecent(0),
       m_view(0),
       m_doc(0),
-      m_selectDefaultTool(0)
+      m_selectDefaultTool(0),
+      m_transportStatus(STOPPED),
+      m_dcopClient(0)
 {
     ///////////////////////////////////////////////////////////////////
     // call inits to invoke all other construction parts
@@ -62,6 +65,8 @@ RosegardenGUIApp::RosegardenGUIApp()
     initView();
 	
     readOptions();
+
+    initSequencer();
 
     m_selectDefaultTool->activate();
     
@@ -156,6 +161,25 @@ void RosegardenGUIApp::setupActions()
                 0,
                 this, SLOT(slotChangeTimeResolution()),
                 actionCollection(), "change_time_res");
+
+    // Transport controls 
+    //
+    new KAction(i18n("Play"), 0, 0, this,
+                SLOT(play()), actionCollection(),
+                "play");
+
+    new KAction(i18n("Stop"), 0, 0, this,
+                SLOT(stop()), actionCollection(),
+                "stop");
+
+    new KAction(i18n("Fast Forward"), 0, 0, this,
+                SLOT(fastforward()), actionCollection(),
+                "fast_forward");
+
+    new KAction(i18n("Rewind"), 0, 0, this,
+                SLOT(rewind()), actionCollection(),
+                "rewind");
+
 
     createGUI("rosegardenui.rc");
 }
@@ -793,5 +817,104 @@ int RosegardenGUIApp::importRG21File(const QString &file)
 void
 RosegardenGUIApp::setPointerPosition(const int &position)
 {
+  // We do this the lazily dangerous way of setting Composition
+  // time and then gui time - we should probably make this
+  // an atomic operation with observers or something to make
+  // it nice and encapsulated but as long as we only use this
+  // modifier method for changing composition time we can probably
+  // get away with it.
+
+  // set the composition time
+  m_doc->getComposition().setPosition((timeT) position);
+
+  // and the gui time
   m_view->setPointerPosition(position);
+}
+
+void
+RosegardenGUIApp::play()
+{
+}
+
+// Send stop request to Sequencer if playing, else
+// return to start of track
+void
+RosegardenGUIApp::stop()
+{
+  if (m_transportStatus == STOPPED)
+  {
+    setPointerPosition(0);
+    return;
+  }
+
+}
+
+// Jump to previous bar
+//
+void
+RosegardenGUIApp::rewind()
+{
+  double barNumber = ((double) m_doc->getComposition().getPosition())/
+                     ((double) m_doc->getComposition().getNbTicksPerBar());
+  int newBarNumber = (int) barNumber;
+
+  if (barNumber < 1)
+    newBarNumber = 0;
+  else
+    if (barNumber == (double) newBarNumber)
+      newBarNumber--;
+
+  setPointerPosition(newBarNumber * m_doc->getComposition().getNbTicksPerBar());
+}
+
+
+// Jump to next bar
+//
+void
+RosegardenGUIApp::fastforward()
+{
+  double barNumber = ((double) m_doc->getComposition().getPosition())/
+                     ((double) m_doc->getComposition().getNbTicksPerBar());
+  int newBarNumber = (int) barNumber;
+
+  newBarNumber++;
+
+  setPointerPosition(newBarNumber * 
+                     m_doc->getComposition().getNbTicksPerBar());
+
+}
+
+// Use this method to try and locate the sequencer engine
+//
+void
+RosegardenGUIApp::initSequencer()
+{
+  // if we've already got the reference
+  if (m_dcopClient)
+    return;
+
+  m_dcopClient = kapp->dcopClient();
+
+  QCStringList dcopApps = m_dcopClient->registeredApplications();
+
+/*
+  // Number of matches of our GUI app
+  //
+  int guiAppInstances  = dcopApps.contains(QCString(ROSEGARDEN_GUI_APP));
+
+  if ( guiAppInstances == 0 )
+  {
+    cerr << "Rosegarden sequencer cannot start as \""
+         << ROSEGARDEN_GUI_APP << "\" is not running"  << endl;
+    return(1);
+  }
+
+  if ( guiAppInstances > 1 )
+  {
+    cerr << "Rosegarden sequencer cannot start as too many instances of \"" <<
+             ROSEGARDEN_GUI_APP << "\" are running." << endl;
+    return(1);
+  }
+*/
+
 }

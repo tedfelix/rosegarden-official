@@ -211,6 +211,8 @@ public slots:
     void hoveredOverNoteChanged(const QString&);
     void hoveredOverAbsoluteTimeChange(unsigned int);
 
+    void setPositionPointer(const int &position);
+
 signals:
     void changeCurrentNote(bool isRest, Rosegarden::Note::Type);
 
@@ -302,6 +304,8 @@ protected:
     NotationTool* m_tool;
 
     KAction* m_selectDefaultNote;
+
+    QCanvasLine *m_pointer;
 };
 
 //////////////////////////////////////////////////////////////////////

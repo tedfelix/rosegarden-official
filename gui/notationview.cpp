@@ -88,7 +88,8 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     m_hlayout(0),
     m_vlayout(0),
     m_tool(0),
-    m_selectDefaultNote(0)
+    m_selectDefaultNote(0),
+    m_pointer(0)
 {
 
     kdDebug(KDEBUG_AREA) << "NotationView ctor" << endl;
@@ -130,6 +131,14 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
 
     m_vlayout = new NotationVLayout(*m_mainStaff, *m_notationElements);
     m_hlayout = new NotationHLayout(*m_mainStaff, *m_notationElements);
+
+    // Position pointer
+    //
+    m_pointer = new QCanvasLine(canvas());
+    m_pointer->setPen(Qt::darkBlue);
+    m_pointer->setPoints(0, 0, 0, canvas()->height());
+    // m_pointer->show();
+
 
     if (applyLayout()) {
 
@@ -856,6 +865,17 @@ void NotationView::slotStatusHelpMsg(const QString &text)
     statusBar()->message(text, 2000);
 }
 
+
+// Code required to work out where to put the pointer
+// (i.e. where is the nearest note) and also if indeed
+// it should be currently shown at all for this view
+// (is it within scope)
+// 
+void
+NotationView::setPositionPointer(const int &position)
+{
+}
+
 //////////////////////////////////////////////////////////////////////
 
 //----------------------------------------
@@ -1321,8 +1341,7 @@ NoteInserter::handleClick(int height, const QPoint &eventPos,
     Note note(m_noteType, m_noteDots);
     TrackNotationHelper nt(m_parentView.getTrack());
 
-    doInsert(nt, (*closestNote)->getAbsoluteTime(), note, pitch,
-             m_accidental);
+    doInsert(nt, (*closestNote)->getAbsoluteTime(), note, pitch);
 
     // TODO: be less silly
     m_parentView.redoLayout(m_parentView.getNotationElements()->begin());

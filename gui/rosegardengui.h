@@ -82,6 +82,14 @@ class RosegardenGUIApp : public KMainWindow, virtual public RosegardenGUIIface
 	   OPEN_READONLY 	= 2,
 	   OPEN_INSERT 		= 4 };
 
+    enum TransportStatus {
+           STOPPED,
+           PLAYING,
+           RECORDING_MIDI,
+           RECORDING_AUDIO,
+           STOPPING,
+           STARTINGTOPLAY
+    };
 
     /** construtor of RosegardenGUIApp, calls all init functions to create the application.
      * @see initMenuBar initToolBar
@@ -274,7 +282,20 @@ class RosegardenGUIApp : public KMainWindow, virtual public RosegardenGUIIface
      */
     void changeTimeResolution();
 
+    // Set the song position pointer
+    //
     void setPointerPosition(const int &position);
+
+    // Transport controls
+    //
+    void play();
+    void stop();
+    void rewind();
+    void fastforward();
+
+    // Sequencer initialization
+    //
+    void initSequencer();
 
 private:
 
@@ -299,6 +320,14 @@ private:
      * The default tool selected on startup
      */
     KAction* m_selectDefaultTool;
+
+    // Transport (Playback and Recording) status
+    //
+    TransportStatus m_transportStatus;
+ 
+    // DCOP client reference - our comms handle
+    //
+    DCOPClient *m_dcopClient;
 
 };
  

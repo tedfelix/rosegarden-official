@@ -15,6 +15,13 @@
 	<Action name="resize"/>
 	<Action name="change_time_res"/>
   </Menu>
+  <Menu name="Transport">
+        <text>Transport</text>
+        <Action name="play"/> 
+        <Action name="stop"/> 
+        <Action name="fast_forward"/> 
+        <Action name="rewind"/> 
+  </Menu>
 </MenuBar>
 
 <ToolBar fullWidth="true" name="tracksToolBar" newline="true">
