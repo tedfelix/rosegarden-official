@@ -63,13 +63,10 @@ protected:
     void handleStartingEvents(eventstartlist &eventsToStart, std::ofstream &str);
     void handleEndingEvents(eventendlist &eventsInProgress, Rosegarden::Segment::iterator &j, Rosegarden::timeT tupletStartTime, std::ofstream &str);
 
-    // convert note event into Lilypond format note string using combination
-    // of pitch, flat/sharp key signature, number of accidentals in key
-    // signature, and any extra accidentals
-    std::string convertPitchToLilyNote(long pitch,
-                                       bool isFlatKeySignature,
-                                       int accidentalCount,
-                                       Rosegarden::Accidental accidental);
+    // convert note pitch into Lilypond format note string
+    std::string convertPitchToLilyNote(int pitch,
+                                       Rosegarden::Accidental accidental,
+				       Rosegarden::Key &key);
 
     // compose an appropriate Lilypond representation for various Marks
     std::string composeLilyMark(std::string eventMark, bool stemUp);
@@ -90,7 +87,6 @@ protected:
     void writePitch(Rosegarden::Event *note, Rosegarden::Key &key, std::ofstream &);
     void writeStyle(Rosegarden::Event *note, std::string &prevStyle, int col, std::ofstream &);
     void writeDuration(Rosegarden::timeT duration, std::ofstream &);
-    void writeMarks(Rosegarden::Event *note, std::ofstream &);
     void writeSlashes(Rosegarden::Event *note, std::ofstream &);
        
 private:

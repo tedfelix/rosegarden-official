@@ -492,7 +492,7 @@ public:
 	/* throw (BadIndicationName) */;
 
     Indication(const Indication &m) : m_indicationType(m.m_indicationType),
-			  m_duration(m.m_duration) { }
+				      m_duration(m.m_duration) { }
 
     Indication &operator=(const Indication &m);
 

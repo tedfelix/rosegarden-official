@@ -614,19 +614,14 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     layout->addWidget(m_lilyExportPointAndClick, 4, 0);
 
     m_lilyExportBarChecks = new QCheckBox(
-        i18n("Write bar checks at end of measure"), frame);
+        i18n("Write bar checks at end of measures"), frame);
     m_lilyExportBarChecks->setChecked(m_cfg->readBoolEntry("lilyexportbarchecks", false));
-    layout->addWidget(m_lilyExportBarChecks, 4, 1);
+    layout->addWidget(m_lilyExportBarChecks, 5, 0);
     
     m_lilyExportBeams = new QCheckBox(
         i18n("Export beamings"), frame);
     m_lilyExportBeams->setChecked(m_cfg->readBoolEntry("lilyexportbeamings", false));
-    layout->addWidget(m_lilyExportBeams, 5, 0);
-    
-    m_lilyExportStems = new QCheckBox(
-        i18n("Export explicit stem directions"), frame);
-    m_lilyExportStems->setChecked(m_cfg->readBoolEntry("lilyexportstems", true));
-    layout->addWidget(m_lilyExportStems, 5, 1);
+    layout->addWidget(m_lilyExportBeams, 4, 1);
     
     addTab(frame, i18n("Lilypond"));  
 }
@@ -719,7 +714,6 @@ NotationConfigurationPage::apply()
     m_cfg->writeEntry("lilyexportpointandclick", m_lilyExportPointAndClick->isChecked());
     m_cfg->writeEntry("lilyexportbarchecks", m_lilyExportBarChecks->isChecked());
     m_cfg->writeEntry("lilyexportbeamings", m_lilyExportBeams->isChecked());
-    m_cfg->writeEntry("lilyexportstems", m_lilyExportStems->isChecked());
 
     (void)m_quantizeFrame->getQuantizer(); // this also writes to the config
 }

@@ -920,19 +920,7 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
 
     if (elt->event()->get<Bool>(properties.CHORD_PRIMARY_NOTE, primary)
 	&& primary) {
-	long markCount = 0;
-	(void)(elt->event()->get<Int>(MARK_COUNT, markCount));
-	if (markCount == 0) {
-	} else {
-	    std::vector<Rosegarden::Mark> marks;
-	    for (int i = 0; i < markCount; ++i) {
-		Rosegarden::Mark mark;
-		if (elt->event()->get<String>(getMarkPropertyName(i), mark)) {
-		    marks.push_back(mark);
-		}
-	    }
-	    params.setMarks(marks);
-	}
+	params.setMarks(Rosegarden::Marks::getMarks(*elt->event()));
     }
 
     long tieLength = 0;

@@ -71,6 +71,7 @@ using Rosegarden::Accidental;
 using Rosegarden::Accidentals;
 using Rosegarden::Text;
 using Rosegarden::PropertyName;
+using Rosegarden::Mark;
 using Rosegarden::Marks;
 using Rosegarden::Configuration;
 
@@ -97,22 +98,22 @@ LilypondExporter::handleStartingEvents(eventstartlist &eventsToStart,
 
     while (m != eventsToStart.end()) {
 
-	std::string itype = "";
-	
-	if ((*m)->isa(Indication::EventType) &&
-	    (*m)->get<String>(Indication::IndicationTypePropertyName, itype)) {
+	try {
+	    Indication i(**m);
 
-            if (itype == Indication::Slur) {
-                str << "( ";
-            } else if (itype == Indication::Crescendo) {
-                str << "\\< ";
-            } else if (itype == Indication::Decrescendo) {
-                str << "\\> ";
-            }
+	    if (i.getIndicationType() == Indication::Slur) {
+		str << "( ";
+	    } else if (i.getIndicationType() == Indication::Crescendo) {
+		str << "\\< ";
+	    } else if (i.getIndicationType() == Indication::Decrescendo) {
+		str << "\\> ";
+	    }
 
-        } else {
+        } catch (Rosegarden::Event::BadType) {
             // Not an indication
-        }
+        } catch (Rosegarden::Event::NoData e) {
+	    std::cerr << "Bad indication: " << e.getMessage() << std::endl;
+	}
 
 	eventstartlist::iterator n(m);
 	++n;
@@ -131,48 +132,50 @@ LilypondExporter::handleEndingEvents(eventendlist &eventsInProgress,
 
     while (k != eventsInProgress.end()) {
 
+	eventendlist::iterator l(k);
+	++l;
+	
         // Handle and remove all the relevant events in progress
         // This assumes all deferred events are indications
 
-        long indicationDuration = 0;
-        (*k)->get<Int>(Indication::IndicationDurationPropertyName,
-		       indicationDuration);
+	try {
+	    Indication i(**k);
 
-	eventendlist::iterator l(k);
-	++l;
+	    if ((*k)->getNotationAbsoluteTime() + i.getIndicationDuration() <=
+		(*j)->getNotationAbsoluteTime() + (*j)->getNotationDuration()) {
 
-        if ((*k)->getNotationAbsoluteTime() + indicationDuration <=
-            (*j)->getNotationAbsoluteTime() + (*j)->getDuration()) {
+		// Lilypond doesn't seem to like slurs starting outside a tuplet
+		// group and ending inside it.  (It doesn't seem to mind the other
+		// way around.)  So if we're in a tuplet group, for the moment
+		// we ignore any indication that started before the group did.
+		// Then we'll close it when no longer in the group.
+		//!!! No, I think that was a misunderstanding of mine caused by
+		// an incorrect call to handleEndingEvents from the group close
+		// code.  Test without this.
+		/*!!!
+		  if (tupletStartTime >= 0) {
+		  if ((*k)->getNotationAbsoluteTime() < tupletStartTime) {
+		  continue;
+		  }
+		  }
+		*/
 
-	    // Lilypond doesn't seem to like slurs starting outside a tuplet
-	    // group and ending inside it.  (It doesn't seem to mind the other
-	    // way around.)  So if we're in a tuplet group, for the moment
-	    // we ignore any indication that started before the group did.
-	    // Then we'll close it when no longer in the group.
-	    if (tupletStartTime >= 0) {
-		if ((*k)->getNotationAbsoluteTime() < tupletStartTime) {
-		    continue;
-		}
-	    }
-
-	    std::string itype = "";
-            if ((*k)->isa(Indication::EventType) &&
-		(*k)->get<String>(Indication::IndicationTypePropertyName,
-				  itype)) {
-        
-                if (itype == Indication::Slur) {
+                if (i.getIndicationType() == Indication::Slur) {
                     str << ") ";
-                } else if (itype == Indication::Crescendo ||
-                           itype == Indication::Decrescendo) {
+                } else if (i.getIndicationType() == Indication::Crescendo ||
+                           i.getIndicationType() == Indication::Decrescendo) {
                     str << "\\! "; 
                 }
-
+		
                 eventsInProgress.erase(k);
+	    }
 
-            } else {
-                std::cerr << "\nLilypondExporter::handleEndingEvents - unhandled deferred ending event, type: " << (*k)->getType();
-            }
-        }
+        } catch (Rosegarden::Event::BadType) {
+	    // not an indication
+
+	} catch (Rosegarden::Event::NoData e) {
+	    std::cerr << "Bad indication: " << e.getMessage() << std::endl;
+	}
 
 	k = l;
     }
@@ -181,8 +184,12 @@ LilypondExporter::handleEndingEvents(eventendlist &eventsInProgress,
 // processes input to produce a Lilypond-format note written correctly for all
 // keys and out-of-key accidental combinations.
 std::string
-LilypondExporter::convertPitchToLilyNote (long pitch, bool isFlatKeySignature,
-                        int accidentalCount, Accidental accidental) {
+LilypondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
+					 Rosegarden::Key &key) 
+{
+    bool isFlatKeySignature = !key.isSharp();
+    int accidentalCount = key.getAccidentalCount();
+
     std::string lilyNote = "";
     int pitchNote, c;
     
@@ -333,6 +340,23 @@ LilypondExporter::convertPitchToLilyNote (long pitch, bool isFlatKeySignature,
                   << accidentalCount << "\textra accidental = \"" << accidental << "\""
                   << std::endl;
         
+    }
+
+    //!!! Alternative implementation in test:
+
+    Rosegarden::Pitch p(pitch, accidental);
+    std::string origLilyNote = lilyNote;
+    lilyNote = "";
+
+    lilyNote += (char)tolower(p.getNoteName(key));
+    Accidental acc = p.getAccidental(key.isSharp());
+    if      (acc == Accidentals::DoubleFlat)  lilyNote += "eses";
+    else if (acc == Accidentals::Flat)        lilyNote += "es";
+    else if (acc == Accidentals::Sharp)       lilyNote += "is";
+    else if (acc == Accidentals::DoubleSharp) lilyNote += "isis";
+    
+    if (lilyNote != origLilyNote) {
+	std::cerr << "WARNING: LilypondExporter::convertPitchToLilyNote: " << lilyNote << " != " << origLilyNote << std::endl;
     }
 
     return lilyNote;
@@ -678,7 +702,7 @@ LilypondExporter::write() {
 		// bar in the segment.  If the segment doesn't start on a bar
 		// line, an additional skip will be written (in the form of
 		// a series of rests) at the start of writeBar, below.
-		// This doesn't cope correctly yet with time signature changes
+		//!!! This doesn't cope correctly yet with time signature changes
 		// during this skipped section.
 		writeSkip(timeSignature, 0, m_composition->getBarStart(firstBar),
 			  false, str);
@@ -770,7 +794,6 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
     KConfig *cfg = kapp->config();
     cfg->setGroup(NotationView::ConfigGroup);
     bool exportBeams = cfg->readBoolEntry("lilyexportbeamings", false);
-    bool exportStems = cfg->readBoolEntry("lilyexportstems", true);
     int lastStem = 0; // 0 => unset, -1 => down, 1 => up
 
     timeT barStart = m_composition->getBarStart(barNo);
@@ -844,8 +867,10 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 		    
 		    if (groupId != -1) {
 			// and leaving an old one
-			if (groupType == GROUP_TYPE_TUPLED) str << "} ";
-			else if (groupType == GROUP_TYPE_BEAMED) {
+			if (groupType == GROUP_TYPE_TUPLED ||
+			    groupType == GROUP_TYPE_GRACE) {
+			    str << "} ";
+			} else if (groupType == GROUP_TYPE_BEAMED) {
 			    if (exportBeams) str << "] ";
 			}
 		    }
@@ -874,7 +899,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 			if (exportBeams) str << "[ ";
 
 		    } else if (groupType == GROUP_TYPE_GRACE) {
-			//??? what to do?
+			str << "\\grace { ";
 		    }
 		}
 		
@@ -882,8 +907,10 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 		
 		if (groupId != -1) {
 		    // leaving a beamed group
-		    if (groupType == GROUP_TYPE_TUPLED) str << "} ";
-		    else if (groupType == GROUP_TYPE_BEAMED) {
+		    if (groupType == GROUP_TYPE_TUPLED ||
+			groupType == GROUP_TYPE_GRACE) {
+			str << "} ";
+		    } else if (groupType == GROUP_TYPE_BEAMED) {
 			if (exportBeams) str << "] ";
 		    }
 		    groupId = -1;
@@ -916,24 +943,22 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 		if (toNext < duration) duration = toNext;
 	    }
 
-	    if (exportStems) {
-		if (e->has(STEM_UP) && e->isPersistent<Bool>(STEM_UP)) {
-		    if (e->get<Bool>(STEM_UP)) {
-			if (lastStem != 1) {
-			    str << "\\stemUp ";
-			    lastStem = 1;
-			}
-		    } else {
-			if (lastStem != -1) {
-			    str << "\\stemDown ";
-			    lastStem = -1;
-			}
+	    if (e->has(STEM_UP) && e->isPersistent<Bool>(STEM_UP)) {
+		if (e->get<Bool>(STEM_UP)) {
+		    if (lastStem != 1) {
+			str << "\\stemUp ";
+			lastStem = 1;
 		    }
 		} else {
-		    if (lastStem != 0) {
-			str << "\\stemBoth ";
-			lastStem = 0;
+		    if (lastStem != -1) {
+			str << "\\stemDown ";
+			lastStem = -1;
 		    }
+		}
+	    } else {
+		if (lastStem != 0) {
+		    str << "\\stemBoth ";
+		    lastStem = 0;
 		}
 	    }
 
@@ -955,7 +980,6 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 			prevDuration = duration;
 		    }
 		    writtenDuration += duration;
-		    writeMarks(*i, str);
 
 		    if (lilyText != "") {
 			str << lilyText;
@@ -977,6 +1001,15 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 		
 		if (i == chord.getFinalElement()) break;
 	    }
+
+	    std::vector<Mark> marks(chord.getMarksForChord());
+	    // problem here: this will never be set if the note has never been notated
+	    bool stemUp = true;
+	    e->get<Bool>(STEM_UP, stemUp);
+	    for (std::vector<Mark>::iterator j = marks.begin(); j != marks.end(); ++j) {
+		str << composeLilyMark(*j, stemUp);
+	    }
+	    if (marks.size() > 0) str << " ";
 
 	    handleStartingEvents(eventsToStart, str);
 	    if (chord.size() > 1) str << "> ";
@@ -1003,39 +1036,46 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 
 	} else if ((*i)->isa(Clef::EventType)) {
 	    
-	    // Incomplete: Set which note the clef should center on  (DMM - why?)
-	    str << "\\clef ";
+	    try {
+		// Incomplete: Set which note the clef should center on  (DMM - why?)
+		str << "\\clef ";
 
-	    //!!! handle exceptions from NotationTypes ctors here and elsewhere
+		Rosegarden::Clef clef(**i);
 	    
-	    Rosegarden::Clef clef(**i);
+		if (clef.getClefType() == Clef::Treble) {
+		    str << "treble";
+		} else if (clef.getClefType() == Clef::Tenor) {
+		    str << "tenor";
+		} else if (clef.getClefType() == Clef::Alto) {
+		    str << "alto";
+		} else if (clef.getClefType() == Clef::Bass) {
+		    str << "bass";
+		}
 	    
-	    if (clef.getClefType() == Clef::Treble) {
-		str << "treble";
-	    } else if (clef.getClefType() == Clef::Tenor) {
-		str << "tenor";
-	    } else if (clef.getClefType() == Clef::Alto) {
-		str << "alto";
-	    } else if (clef.getClefType() == Clef::Bass) {
-		str << "bass";
+		str << std::endl << indent(col);
+
+	    } catch (Rosegarden::Exception e) {
+		std::cerr << "Bad clef: " << e.getMessage() << std::endl;
 	    }
-	    
-	    str << std::endl << indent(col);
 
 	} else if ((*i)->isa(Rosegarden::Key::EventType)) {
 
-	    str << "\\key ";
-	    key = Rosegarden::Key(**i);
+	    try {
+		str << "\\key ";
+		key = Rosegarden::Key(**i);
 	    
-	    str << convertPitchToLilyNote(key.getTonicPitch(), !key.isSharp(),
-					  key.getAccidentalCount(), "");
+		str << convertPitchToLilyNote(key.getTonicPitch(), "", key);
 	    
-	    if (key.isMinor()) {
-		str << " \\minor";
-	    } else {
-		str << " \\major";
+		if (key.isMinor()) {
+		    str << " \\minor";
+		} else {
+		    str << " \\major";
+		}
+		str << std::endl << indent(col);
+
+	    } catch (Rosegarden::Exception e) {
+		std::cerr << "Bad key: " << e.getMessage() << std::endl;
 	    }
-	    str << std::endl << indent(col);
 
 	} else if ((*i)->isa(Text::EventType)) {
 	    
@@ -1050,16 +1090,16 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
     }
 
     if (groupId != -1) {
-	if (groupType == GROUP_TYPE_TUPLED) str << " } ";
-	else if (groupType == GROUP_TYPE_BEAMED) {
+	if (groupType == GROUP_TYPE_TUPLED ||
+	    groupType == GROUP_TYPE_GRACE) {
+	    str << " } ";
+	} else if (groupType == GROUP_TYPE_BEAMED) {
 	    if (exportBeams) str << "] ";
 	}
     }
 
-    if (exportStems) {
-	if (lastStem != 0) {
-	    str << "\\stemsBoth ";
-	}
+    if (lastStem != 0) {
+	str << "\\stemBoth ";
     }
 
     if (writtenDuration < barEnd - barStart) {
@@ -1121,52 +1161,56 @@ void
 LilypondExporter::handleText(Rosegarden::Event *textEvent,
 			     std::string &lilyText, std::string &lilyLyrics)
 {
-    Rosegarden::Text text(*textEvent);
-    std::string s = protectIllegalChars(text.getText());
-
-    if (text.getTextType() == Text::Tempo) {
-
-	// print above staff, bold, large
-	lilyText += "^#'((bold Large)\"" + s + "\")";
-
-    } else if (text.getTextType() == Text::LocalTempo) {
-
-	// print above staff, bold, small
-	lilyText += "^#'(bold \"" + s + "\")";
-
-    } else if (text.getTextType() == Text::Lyric) {
-
-	lilyLyrics += s + " ";
-
-    } else if (text.getTextType() == Text::Dynamic) {
-
-	// pass through only supported types
-	if (s == "ppp" || s == "pp"  || s == "p"  ||
-	    s == "mp"  || s == "mf"  || s == "f"  ||
-	    s == "ff"  || s == "fff" || s == "rfz" ||
-	    s == "sf") {
+    try {
+	Rosegarden::Text text(*textEvent);
+	std::string s = protectIllegalChars(text.getText());
+	
+	if (text.getTextType() == Text::Tempo) {
 	    
-	    lilyText = "-\\" + s;
+	    // print above staff, bold, large
+	    lilyText += "^#'((bold Large)\"" + s + "\")";
+
+	} else if (text.getTextType() == Text::LocalTempo) {
+
+	    // print above staff, bold, small
+	    lilyText += "^#'(bold \"" + s + "\")";
+
+	} else if (text.getTextType() == Text::Lyric) {
+
+	    lilyLyrics += s + " ";
+
+	} else if (text.getTextType() == Text::Dynamic) {
+
+	    // pass through only supported types
+	    if (s == "ppp" || s == "pp"  || s == "p"  ||
+		s == "mp"  || s == "mf"  || s == "f"  ||
+		s == "ff"  || s == "fff" || s == "rfz" ||
+		s == "sf") {
+	    
+		lilyText = "-\\" + s;
+
+	    } else {
+		std::cerr << "LilypondExporter::write() - illegal Lilypond dynamic: "
+			  << s << std::endl;
+	    }
+
+	} else if (text.getTextType() == Text::Direction) {
+
+	    lilyText = " \\mark \"" + s + "\"";
+
+	} else if (text.getTextType() == Text::LocalDirection) {
+
+	    // print below staff, bold italics, small
+	    lilyText = "_#'((bold italic) \"" + s + "\")";
 
 	} else {
-	    std::cerr << "LilypondExporter::write() - illegal Lilypond dynamic: "
+
+	    textEvent->get<String>(Text::TextTypePropertyName, s);
+	    std::cerr << "LilypondExporter::write() - unhandled text type: "
 		      << s << std::endl;
 	}
-
-    } else if (text.getTextType() == Text::Direction) {
-
-	lilyText = " \\mark \"" + s + "\"";
-
-    } else if (text.getTextType() == Text::LocalDirection) {
-
-	// print below staff, bold italics, small
-	lilyText = "_#'((bold italic) \"" + s + "\")";
-
-    } else {
-
-	textEvent->get<String>(Text::TextTypePropertyName, s);
-	std::cerr << "LilypondExporter::write() - unhandled text type: "
-		  << s << std::endl;
+    } catch (Rosegarden::Exception e) {
+	std::cerr << "Bad text: " << e.getMessage() << std::endl;
     }
 }
 
@@ -1192,8 +1236,7 @@ LilypondExporter::writePitch(Rosegarden::Event *note,
     // calculate note name and write note
     std::string lilyNote;
 
-    lilyNote = convertPitchToLilyNote(pitch, !key.isSharp(), key.getAccidentalCount(),
-				      accidental);
+    lilyNote = convertPitchToLilyNote(pitch, accidental, key);
     
     str << lilyNote;
     
@@ -1202,9 +1245,9 @@ LilypondExporter::writePitch(Rosegarden::Event *note,
     int octave = (int)(pitch / 12);
     
     // tweak the octave break for B# / Cb
-    if ((lilyNote == "bisis")||(lilyNote == "bis")) {
+    if ((lilyNote == "bisis") || (lilyNote == "bis")) {
 	octave--;
-    } else if ((lilyNote == "ceses")||(lilyNote == "ces")) {
+    } else if ((lilyNote == "ceses") || (lilyNote == "ces")) {
 	octave++;
     }
     
@@ -1238,6 +1281,8 @@ LilypondExporter::writeStyle(Rosegarden::Event *note, std::string &prevStyle,
     
     if (style != "" && style != prevStyle) {
 
+	prevStyle = style;
+
 	if (style == styleMensural) {
 	    style = "mensural";
 	} else if (style == styleTriangle) {
@@ -1251,8 +1296,6 @@ LilypondExporter::writeStyle(Rosegarden::Event *note, std::string &prevStyle,
 	str << std::endl << indent(col)
 	    << "\\property Voice.NoteHead \\set #'style = #'"
 	    << style << std::endl << indent(col);
-
-	prevStyle = style;
     }
 }    
 
@@ -1293,19 +1336,6 @@ LilypondExporter::writeDuration(Rosegarden::timeT duration,
 	str << ".";
     }
 }
-
-void
-LilypondExporter::writeMarks(Rosegarden::Event *note, std::ofstream &str)
-{
-    std::vector<Rosegarden::Mark> marks = Rosegarden::Marks::getMarks(*note);
-    bool stemUp = true;
-    note->get<Bool>(STEM_UP, stemUp);
-
-    for (unsigned int i = 0; i < marks.size(); ++i) {
-	std::string mark = composeLilyMark(marks[i], stemUp);
-	str << mark;
-    }
-} 
 
 void
 LilypondExporter::writeSlashes(Rosegarden::Event *note, std::ofstream &str)

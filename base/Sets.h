@@ -23,6 +23,7 @@
 #define _SETS_H_
 
 #include <vector>
+#include <algorithm>
 
 #include "Event.h"
 #include "Segment.h"
@@ -455,34 +456,21 @@ template <class Element, class Container>
 std::vector<Mark>
 GenericChord<Element, Container>::getMarksForChord() const
 {
-    std::vector<Mark> marks;
+    std::vector<Mark> cmarks;
 
     for (unsigned int i = 0; i < size(); ++i) {
 
-	long markCount = 0;
-	const Iterator &itr((*this)[i]);
-	get__Int(getAsEvent(itr), BaseProperties::MARK_COUNT, markCount);
+	Event *e = getAsEvent((*this)[i]);
+	std::vector<Mark> marks(Marks::getMarks(*e));
 
-	if (markCount == 0) continue;
-
-	for (long j = 0; j < markCount; ++j) {
-
-	    Mark mark(Marks::NoMark);
-	    (void)get__String(getAsEvent(itr),
-			      BaseProperties::getMarkPropertyName(j),
-			      mark);
-
-	    unsigned int k;
-	    for (k = 0; k < marks.size(); ++i) {
-		if (marks[k] == mark) break;
-	    }
-	    if (k == marks.size()) {
-		marks.push_back(mark);
+	for (std::vector<Mark>::iterator j = marks.begin(); j != marks.end(); ++j) {
+	    if (std::find(cmarks.begin(), cmarks.end(), *j) == cmarks.end()) {
+		cmarks.push_back(*j);
 	    }
 	}
     }
 
-    return marks;
+    return cmarks;
 }
 
 

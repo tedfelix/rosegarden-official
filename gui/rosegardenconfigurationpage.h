@@ -259,7 +259,6 @@ protected:
     QCheckBox *m_lilyExportPointAndClick;
     QCheckBox *m_lilyExportBarChecks;
     QCheckBox *m_lilyExportBeams;
-    QCheckBox *m_lilyExportStems;
 
     void populateSizeCombo(QComboBox *combo, std::string font, int dfltSize);
 };
