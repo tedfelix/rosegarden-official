@@ -36,7 +36,7 @@
 #include "notationelement.h"
 #include "notationproperties.h"
 
-#include "staff.h"
+#include "notationstaff.h"
 #include "notepixmapfactory.h"
 #include "qcanvaslinegroupable.h"
 #include "qcanvassimplesprite.h"
@@ -92,7 +92,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     m_selectDefaultNote(0),
     m_pointer(0)
 {
-
+    assert(tracks.size() > 0);
     kdDebug(KDEBUG_AREA) << "NotationView ctor" << endl;
 
     setupActions();
@@ -129,15 +129,18 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
 		   .arg(tracks.size()));
     }
 
+    NotePixmapFactory *npf;
+
     for (unsigned int i = 0; i < tracks.size(); ++i) {
-	m_staffs.push_back(new Staff(canvas(), tracks[i], resolution));
+	m_staffs.push_back(new NotationStaff(canvas(), tracks[i], resolution));
 	m_staffs[i]->move(20, m_staffs[i]->getStaffHeight() * i + 15);
 	m_staffs[i]->show();
+	npf = &m_staffs[i]->getNotePixmapFactory();
     }
     m_currentStaff = 0;
 
     m_vlayout = new NotationVLayout();
-    m_hlayout = new NotationHLayout();
+    m_hlayout = new NotationHLayout(*npf);
 
     // Position pointer
     //
@@ -452,11 +455,11 @@ void NotationView::initStatusBar()
 
 bool NotationView::showElements(int staffNo)
 {
-    NotationElementList *notes = m_staffs[staffNo]->getNotationElementList();
+    NotationElementList *notes = m_staffs[staffNo]->getViewElementList();
     return showElements(m_staffs[staffNo], notes->begin(), notes->end());
 }
 
-bool NotationView::showElements(Staff *staff,
+bool NotationView::showElements(NotationStaff *staff,
                                 NotationElementList::iterator from,
                                 NotationElementList::iterator to,
                                 bool positionOnly)
@@ -471,7 +474,7 @@ bool NotationView::showElements(Staff *staff,
     Clef currentClef; // default is okay to start with
 
     NotationElementList::iterator end =
-        staff->getNotationElementList()->end();
+        staff->getViewElementList()->end();
 
     for (NotationElementList::iterator it = from; it != end; ++it) {
 
@@ -662,7 +665,7 @@ QCanvasSimpleSprite *NotationView::makeNoteSprite(NotationElementList::iterator 
 
 bool NotationView::showBars(int staffNo)
 {
-    Staff &staff = *m_staffs[staffNo];
+    NotationStaff &staff = *m_staffs[staffNo];
     staff.deleteBars(0);
 
     for (unsigned int i = 0; i < m_hlayout->getBarLineCount(staff); ++i) {
@@ -1149,7 +1152,7 @@ NotationView::findClosestNote(double eventX, Event *&timeSignature,
     double minDist = 10e9,
         prevDist = 10e9;
 
-    NotationElementList *notes = m_staffs[staffNo]->getNotationElementList();
+    NotationElementList *notes = m_staffs[staffNo]->getViewElementList();
 
     NotationElementList::iterator it, res;
 
@@ -1194,9 +1197,6 @@ NotationView::findClosestNote(double eventX, Event *&timeSignature,
         prevDist = dist;
     }
 
-    kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote(" << eventX << ") : found "
-                         << *(*res) << endl;
-
     if (minDist > proximityThreshold) {
         kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : element is too far away : "
                              << minDist << endl;
@@ -1213,19 +1213,19 @@ void NotationView::redoLayout(int staffNo, timeT startTime, timeT endTime)
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
-        Track *track = m_staffs[i]->getTrack();
+        Track &track = m_staffs[i]->getTrack();
 
-	NotationElementList *notes = m_staffs[i]->getNotationElementList();
+	NotationElementList *notes = m_staffs[i]->getViewElementList();
         NotationElementList::iterator starti = notes->begin();
         NotationElementList::iterator endi = notes->end();
 
         if (startTime > 0) {
-            timeT barStartTime = track->findBarStartTime(startTime);
+            timeT barStartTime = track.findBarStartTime(startTime);
             starti = notes->findTime(barStartTime);
         }
 
         if (endTime >= 0) {
-            timeT barEndTime = track->findBarEndTime(endTime);
+            timeT barEndTime = track.findBarEndTime(endTime);
             endi = notes->findTime(barEndTime);
         }
 
@@ -1246,7 +1246,7 @@ void NotationView::readjustCanvasSize()
 
         double xleft = 0, xright = totalWidth;
 
-        Staff &staff = *m_staffs[i];
+        NotationStaff &staff = *m_staffs[i];
         int barCount = m_hlayout->getBarLineCount(staff);
         
         for (unsigned int j = 0; j < barCount; ++j) {
@@ -1327,7 +1327,7 @@ NoteInserter::handleClick(int height, const QPoint &eventPos,
     //!!! Could be nicer! Likewise the other inserters.
 
     if (closestNote ==
-	m_parentView.getStaff(staffNo)->getNotationElementList()->end()) {
+	m_parentView.getStaff(staffNo)->getViewElementList()->end()) {
         return;
     }
 
@@ -1346,7 +1346,7 @@ NoteInserter::handleClick(int height, const QPoint &eventPos,
 
     Note note(m_noteType, m_noteDots);
     TrackNotationHelper nt
-	(m_parentView.getStaff(staffNo)->getViewElementsManager()->getTrack());
+	(m_parentView.getStaff(staffNo)->getTrack());
 
     timeT time = (*closestNote)->getAbsoluteTime();
     timeT endTime = time + note.getDuration(); //???
@@ -1407,13 +1407,13 @@ void ClefInserter::handleClick(int /*height*/, const QPoint &eventPos,
 	(eventPos.x(), tsig, clef, key, staffNo, 100);
 
     if (closestNote ==
-	m_parentView.getStaff(staffNo)->getNotationElementList()->end()) {
+	m_parentView.getStaff(staffNo)->getViewElementList()->end()) {
         return;
     }
 
     timeT time = (*closestNote)->getAbsoluteTime();
     TrackNotationHelper nt
-	(m_parentView.getStaff(staffNo)->getViewElementsManager()->getTrack());
+	(m_parentView.getStaff(staffNo)->getTrack());
     nt.insertClef(time, m_clef);
 
     m_parentView.redoLayout(staffNo, time, time + 1);
@@ -1438,7 +1438,7 @@ void NotationEraser::handleClick(int, const QPoint&,
     for (int i = 0; i < m_parentView.getStaffCount(); ++i) {
 
 	NotationElementList *nel =
-	    m_parentView.getStaff(i)->getNotationElementList(); 
+	    m_parentView.getStaff(i)->getViewElementList(); 
 
 	if (nel->findSingle(element) != nel->end()) {
 	    staffNo = i;
@@ -1448,7 +1448,7 @@ void NotationEraser::handleClick(int, const QPoint&,
     if (staffNo == -1) return;
 
     TrackNotationHelper nt
-	(m_parentView.getStaff(staffNo)->getViewElementsManager()->getTrack());
+	(m_parentView.getStaff(staffNo)->getTrack());
 
     timeT absTime = 0;
 

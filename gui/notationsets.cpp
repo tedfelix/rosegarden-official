@@ -22,7 +22,7 @@
 #include "notationsets.h"
 #include "notationproperties.h"
 #include "rosedebug.h"
-#include "staff.h"
+#include "notationstaff.h"
 #include "Equation.h"
 #include "Track.h"
 #include "TrackNotationHelper.h"
@@ -369,7 +369,7 @@ NotationGroup::height(const NELIterator &i) const
 }
 
 NotationGroup::Beam
-NotationGroup::calculateBeam(Staff &staff)
+NotationGroup::calculateBeam(NotationStaff &staff)
 {
     Beam beam;
     beam.aboveNotes = !(m_weightAbove > m_weightBelow);
@@ -494,7 +494,7 @@ NotationGroup::calculateBeam(Staff &staff)
 
 
 void
-NotationGroup::applyBeam(Staff &staff)
+NotationGroup::applyBeam(NotationStaff &staff)
 {
     Beam beam(calculateBeam(staff));
     if (!beam.necessary) return;

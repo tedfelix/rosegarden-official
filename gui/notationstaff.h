@@ -26,8 +26,9 @@
 
 #include "qcanvasitemgroup.h"
 #include "notepixmapfactory.h"
-#include "viewelementsmanager.h"
 #include "notationelement.h"
+
+#include "Staff.h"
 
 class QCanvasLineGroupable;
 
@@ -35,25 +36,19 @@ class QCanvasLineGroupable;
  * The Staff is a repository for information about the notation
  * representation of a single Track.  This includes all of the
  * NotationElements representing the Events on that Track, the staff
- * lines, as well as basic positional and size data.
- *
- * Staff owns the ViewElementsManager and NotationElementList objects
- * it contains, but not the Track object it's constructed from.
- *
- * Despite appearances, there's very little in here that's notation-
- * specific.  Probably we should have a base class without the
- * notation stuff, because LayoutEngine refers to Staff and
- * LayoutEngine is supposed to be an abstract base independent of the
- * sort of layout you're doing.
+ * lines, as well as basic positional and size data.  This class
+ * used to be in gui/staff.h, but it's been moved and renamed
+ * following the introduction of the core Staff base class.
  */
 
-class Staff : public QCanvasItemGroup
+class NotationStaff : public Rosegarden::Staff<NotationElement>,
+		      public QCanvasItemGroup
 {
 public:
     typedef std::vector<QCanvasLineGroupable*> barlines;
     
-    Staff(QCanvas*, Rosegarden::Track*, int resolution);
-    ~Staff();
+    NotationStaff(QCanvas*, Rosegarden::Track*, int resolution);
+    ~NotationStaff();
 
     // bit dubious, really -- I'd rather have a NotePixmapFactory that
     // worked even through a const reference, but most of its drawing
@@ -61,27 +56,6 @@ public:
     // state internally
     NotePixmapFactory& getNotePixmapFactory() { return m_npf; }
 
-    const ViewElementsManager* getViewElementsManager() const {
-	return &m_manager;
-    }
-    ViewElementsManager* getViewElementsManager() {
-	return &m_manager;
-    }
-
-    const NotationElementList* getNotationElementList() const {
-	return m_notes;
-    }
-    NotationElementList* getNotationElementList() {
-	return m_notes;
-    }
-
-    const Rosegarden::Track* getTrack() const {
-        return &m_manager.getTrack();
-    }
-    Rosegarden::Track* getTrack() {
-        return &m_manager.getTrack();
-    }
-    
     /**
      * Return the Y coordinate of specified line
      *
@@ -89,7 +63,9 @@ public:
      */
     int yCoordOfHeight(int height) const;
 
-    /// Return the height of a bar line
+    /**
+     * Return the height of a bar line
+     */
     unsigned int getBarLineHeight() const { return m_barLineHeight; }
 
     /**
@@ -97,9 +73,11 @@ public:
      *
      * The bar line is in the middle of the margin
      */
-    unsigned int getBarMargin() const { return m_resolution * 2; }
+    unsigned int getBarMargin() const { return m_npf.getBarMargin(); }
 
-    /// Return the total height of a staff.
+    /**
+     * Return the total height of a staff
+     */
     unsigned int getStaffHeight() const {
 	return m_resolution * nbLines + linesOffset * 2 + 1;
     }
@@ -124,9 +102,8 @@ public:
     void deleteBars();
 
     /**
-     * Set the length of the staff lines
+     * Set the start and end x-coords of the staff lines
      */
-//    void setLinesLength(unsigned int);
     void setLines(double xfrom, double xto);
 
     static const int nbLines;        // number of main lines on the staff
@@ -143,8 +120,6 @@ protected:
     QCanvasLineGroupable *m_initialBarA, *m_initialBarB;
 
     NotePixmapFactory m_npf;
-    ViewElementsManager m_manager;
-    NotationElementList *m_notes;
 };
 
 #endif

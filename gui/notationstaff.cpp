@@ -21,7 +21,7 @@
 
 #include <algorithm>
 
-#include "staff.h"
+#include "notationstaff.h"
 #include "staffline.h"
 #include "qcanvasspritegroupable.h"
 
@@ -29,14 +29,13 @@
 
 using Rosegarden::Track;
 
-Staff::Staff(QCanvas *canvas, Track *track, int resolution) :
+NotationStaff::NotationStaff(QCanvas *canvas, Track *track, int resolution) :
+    Rosegarden::Staff<NotationElement>(*track),
     QCanvasItemGroup(canvas),
     m_barLineHeight(0),
     m_horizLineLength(0),
     m_resolution(resolution),
-    m_npf(resolution),
-    m_manager(*track),
-    m_notes(m_manager.getNotationElementList())
+    m_npf(resolution)
 {
     // horizontal lines
 
@@ -94,14 +93,14 @@ Staff::Staff(QCanvas *canvas, Track *track, int resolution) :
     setActive(false);  // don't react to mousePress events
 }
 
-Staff::~Staff()
+NotationStaff::~NotationStaff()
 {
     // TODO : this causes a crash on quit - don't know why
 //     for (barlines::iterator i = m_barLines.begin(); i != m_barLines.end(); ++i)
 //         delete (*i);
 }
 
-int Staff::yCoordOfHeight(int h) const
+int NotationStaff::yCoordOfHeight(int h) const
 {
     // 0 is bottom staff-line, 8 is top one
     int y = ((8 - h) * m_npf.getLineSpacing()) / 2 +
@@ -121,7 +120,7 @@ compareBarToPos(QCanvasLineGroupable *barLine1, unsigned int pos)
     return barLine1->x() < pos;
 }
 
-void Staff::insertBar(unsigned int barPos, bool correct)
+void NotationStaff::insertBar(unsigned int barPos, bool correct)
 {
 //    kdDebug(KDEBUG_AREA) << "Staff::insertBar(" << barPos << ")\n";
 
@@ -140,9 +139,9 @@ void Staff::insertBar(unsigned int barPos, bool correct)
     m_barLines.insert(insertPoint, barLine);
 }
 
-void Staff::deleteBars(unsigned int fromPos)
+void NotationStaff::deleteBars(unsigned int fromPos)
 {
-    kdDebug(KDEBUG_AREA) << "Staff::deleteBars from " << fromPos << endl;
+    kdDebug(KDEBUG_AREA) << "NotationStaff::deleteBars from " << fromPos << endl;
 
     barlines::iterator startDeletePoint =
         lower_bound(m_barLines.begin(), m_barLines.end(),
@@ -159,9 +158,9 @@ void Staff::deleteBars(unsigned int fromPos)
     m_barLines.erase(startDeletePoint, m_barLines.end());
 }
 
-void Staff::deleteBars()
+void NotationStaff::deleteBars()
 {
-    kdDebug(KDEBUG_AREA) << "Staff::deleteBars()\n";
+    kdDebug(KDEBUG_AREA) << "NotationStaff::deleteBars()\n";
     
     for (barlines::iterator i = m_barLines.begin(); i != m_barLines.end(); ++i)
         delete (*i);
@@ -169,7 +168,7 @@ void Staff::deleteBars()
     m_barLines.clear();
 }
 
-void Staff::setLines(double xfrom, double xto)
+void NotationStaff::setLines(double xfrom, double xto)
 {
     for (barlines::iterator i = m_staffLines.begin();
          i != m_staffLines.end(); ++i) {
@@ -185,6 +184,6 @@ void Staff::setLines(double xfrom, double xto)
     m_initialBarB->setPoints((int)xfrom, sp.y(), (int)xfrom, ep.y());
 }
 
-const int Staff::nbLines = 5;
-const int Staff::linesOffset = 40;
+const int NotationStaff::nbLines = 5;
+const int NotationStaff::linesOffset = 40;
 

@@ -19,8 +19,8 @@
     COPYING included with this distribution for more information.
 */
 
-#include "staff.h"
 #include "notationhlayout.h"
+#include "notationstaff.h"
 #include "rosedebug.h"
 #include "NotationTypes.h"
 #include "notepixmapfactory.h"
@@ -49,8 +49,9 @@ using Rosegarden::timeT;
 using Rosegarden::Quantizer;
 
 
-NotationHLayout::NotationHLayout() :
-    m_totalWidth(0.)
+NotationHLayout::NotationHLayout(NotePixmapFactory &npf) :
+    m_totalWidth(0.),
+    m_npf(npf)
 {
     kdDebug(KDEBUG_AREA) << "NotationHLayout::NotationHLayout()" << endl;
 }
@@ -62,7 +63,7 @@ NotationHLayout::~NotationHLayout()
 
 
 NotationHLayout::BarDataList &
-NotationHLayout::getBarData(Staff &staff)
+NotationHLayout::getBarData(StaffType &staff)
 {
     BarDataMap::iterator i = m_barData.find(&staff);
     if (i == m_barData.end()) {
@@ -74,7 +75,7 @@ NotationHLayout::getBarData(Staff &staff)
 
 
 const NotationHLayout::BarDataList &
-NotationHLayout::getBarData(Staff &staff) const
+NotationHLayout::getBarData(StaffType &staff) const
 {
     return ((NotationHLayout *)this)->getBarData(staff);
 }
@@ -112,10 +113,9 @@ NotationHLayout::getBarData(Staff &staff) const
 //!!! The algorithm below does not implement most of these rules; it
 // can probably be improved dramatically without too much work
 
-int NotationHLayout::getIdealBarWidth(Staff &staff,
+int NotationHLayout::getIdealBarWidth(StaffType &staff,
                                       int fixedWidth,
                                       NotationElementList::iterator shortest,
-                                      const NotePixmapFactory &npf,
                                       int shortCount,
                                       int totalCount,
                                       const TimeSignature &timeSignature) const
@@ -125,7 +125,7 @@ int NotationHLayout::getIdealBarWidth(Staff &staff,
                          << fixedWidth << ", barDuration is "
                          << timeSignature.getBarDuration() << endl;
 
-    if (shortest == staff.getNotationElementList()->end()) {
+    if (shortest == staff.getViewElementList()->end()) {
         kdDebug(KDEBUG_AREA) << "First trivial return" << endl;
         return fixedWidth;
     }
@@ -136,9 +136,9 @@ int NotationHLayout::getIdealBarWidth(Staff &staff,
         return fixedWidth;
     }
 
-    int smin = getMinWidth(npf, **shortest);
+    int smin = getMinWidth(**shortest);
     if (!(*shortest)->event()->get<Int>(Rosegarden::Note::NoteDots)) { //!!! double-dot?
-        smin += npf.getDotWidth()/2;
+        smin += m_npf.getDotWidth()/2;
     }
 
     /* if there aren't many of the shortest notes, we don't want to
@@ -146,7 +146,7 @@ int NotationHLayout::getIdealBarWidth(Staff &staff,
     if (shortCount < 3) smin -= 3 - shortCount;
 
     int gapPer = 
-        getComfortableGap(npf, (*shortest)->event()->get<Int>(Rosegarden::Note::NoteType)) +
+        getComfortableGap((*shortest)->event()->get<Int>(Rosegarden::Note::NoteType)) +
         smin;
 
     kdDebug(KDEBUG_AREA) << "d is " << d << ", gapPer is " << gapPer << endl;
@@ -160,11 +160,11 @@ int NotationHLayout::getIdealBarWidth(Staff &staff,
 
 
 void
-NotationHLayout::scanStaff(Staff &staff)
+NotationHLayout::scanStaff(StaffType &staff)
 {
     START_TIMING;
 
-    Track &t(staff.getViewElementsManager()->getTrack());
+    Track &t(staff.getTrack());
     const Track *timeRef = t.getReferenceTrack();
 
     if (timeRef == 0) {
@@ -172,15 +172,13 @@ NotationHLayout::scanStaff(Staff &staff)
 	return;
     }
 
-    NotationElementList *notes = staff.getNotationElementList();
+    NotationElementList *notes = staff.getViewElementList();
 
     BarDataList &barList(getBarData(staff));
 
     Key key;
     Clef clef;
     TimeSignature timeSignature;
-
-    const NotePixmapFactory &npf(staff.getNotePixmapFactory());
 
     barList.clear();
 
@@ -209,7 +207,7 @@ NotationHLayout::scanStaff(Staff &staff)
         NotationElementList::iterator shortest = notes->end();
         int shortCount = 0;
         int totalCount = 0;
-	int fixedWidth = staff.getBarMargin();
+	int fixedWidth = m_npf.getBarMargin();
 
         timeT apparentBarDuration = 0;
 
@@ -218,7 +216,7 @@ NotationHLayout::scanStaff(Staff &staff)
         for (NotationElementList::iterator it = from; it != to; ++it) {
         
             NotationElement *el = (*it);
-            int mw = getMinWidth(npf, *el);
+            int mw = getMinWidth(*el);
 
             if (el->event()->isa(Clef::EventType)) {
 
@@ -302,7 +300,7 @@ NotationHLayout::scanStaff(Staff &staff)
                     if (dacc != acc) {
                         // recalculate min width, as the accidental is
                         // not what we first thought
-                        mw = getMinWidth(npf, *el);
+                        mw = getMinWidth(*el);
                     }
 
                     Chord chord(*notes, it);
@@ -352,7 +350,7 @@ NotationHLayout::scanStaff(Staff &staff)
         }
         
         addNewBar(staff, barNo, to,
-                  getIdealBarWidth(staff, fixedWidth, shortest, npf,
+                  getIdealBarWidth(staff, fixedWidth, shortest, 
                                    shortCount, totalCount, timeSignature),
                   fixedWidth,
                   apparentBarDuration == timeSignature.getBarDuration());
@@ -365,7 +363,7 @@ NotationHLayout::scanStaff(Staff &staff)
 
 
 void
-NotationHLayout::addNewBar(Staff &staff,
+NotationHLayout::addNewBar(StaffType &staff,
 			   int barNo, NotationElementList::iterator i,
                            int width, int fwidth, bool correct)
 {
@@ -396,12 +394,12 @@ NotationHLayout::reconcileBars()
 
     for (i = m_barData.begin(); i != m_barData.end(); ++i) {
 
-        Staff *staff = i->first;
+        StaffType *staff = i->first;
         BarDataList &list = i->second;
 
         if (list.size() > 0 && list[0].barNo < 0) continue; // done it already
 
-        Track &track = staff->getViewElementsManager()->getTrack();
+        Track &track = staff->getTrack();
         const Track &refTrack = *(track.getReferenceTrack());
 
         for (Track::const_iterator j = refTrack.begin();
@@ -410,7 +408,7 @@ NotationHLayout::reconcileBars()
             if ((*j)->getAbsoluteTime() >= track.getStartIndex()) break;
             list.push_front
                 (BarData
-                 (-1, staff->getNotationElementList()->end(), -1, 0, 0, true));
+                 (-1, staff->getViewElementList()->end(), -1, 0, 0, true));
         }
     }
 
@@ -467,7 +465,7 @@ NotationHLayout::reconcileBars()
 
 #ifdef NOT_DEFINED
     
-    Track &refTrack = *(m_barData.begin()->first->getViewElementsManager()->getTrack().getReferenceTrack());
+    Track &refTrack = *(m_barData.begin()->first->getTrack().getReferenceTrack());
     kdDebug(KDEBUG_AREA)
         << "NotationHLayout::reconcileBars: Reference track has "
         << refTrack.size() << " items";
@@ -581,8 +579,8 @@ NotationHLayout::layout(BarDataMap::iterator i)
 {
     START_TIMING;
 
-    Staff &staff = *(i->first);
-    NotationElementList *notes = staff.getNotationElementList();
+    StaffType &staff = *(i->first);
+    NotationElementList *notes = staff.getViewElementList();
     BarDataList &barList(getBarData(staff));
 
     Key key;
@@ -590,7 +588,6 @@ NotationHLayout::layout(BarDataMap::iterator i)
     TimeSignature timeSignature;
 
     int x = 0, barX = 0;
-    const NotePixmapFactory &npf(staff.getNotePixmapFactory());
 
     for (BarDataList::iterator bdi = barList.begin();
          bdi != barList.end(); ++bdi) {
@@ -614,8 +611,8 @@ NotationHLayout::layout(BarDataMap::iterator i)
         }
 
 	x = barX;
-        bdi->x = x + staff.getBarMargin() / 2;
-        x += staff.getBarMargin();
+        bdi->x = x + m_npf.getBarMargin() / 2;
+        x += m_npf.getBarMargin();
 	barX += bdi->idealWidth;
 
         if (bdi->barNo < 0) { // fake bar
@@ -659,11 +656,11 @@ NotationHLayout::layout(BarDataMap::iterator i)
 
             } else if (el->isRest()) {
 
-                delta = positionRest(staff, npf, it, bdi, timeSignature);
+                delta = positionRest(staff, it, bdi, timeSignature);
 
             } else if (el->isNote()) {
 
-                delta = positionNote(staff, npf,
+                delta = positionNote(staff, 
                                      it, bdi, timeSignature, clef, key,
                                      haveAccidentalInThisChord);
             }
@@ -682,8 +679,7 @@ NotationHLayout::layout(BarDataMap::iterator i)
 
 
 long
-NotationHLayout::positionRest(Staff &,
-                              const NotePixmapFactory &npf,
+NotationHLayout::positionRest(StaffType &,
                               const NotationElementList::iterator &itr,
                               const BarDataList::iterator &bdi,
                               const TimeSignature &timeSignature)
@@ -703,7 +699,7 @@ NotationHLayout::positionRest(Staff &,
     // Situate the rest somewhat further into its allotted space.  Not
     // convinced this is the right thing to do
 
-    int noteBodyWidth = npf.getNoteBodyWidth();
+    int noteBodyWidth = m_npf.getNoteBodyWidth();
     if (delta > noteBodyWidth) {
         int shift = (delta - noteBodyWidth) / 4;
         shift = std::min(shift, (noteBodyWidth * 4));
@@ -715,8 +711,7 @@ NotationHLayout::positionRest(Staff &,
 
 
 long
-NotationHLayout::positionNote(Staff &staff,
-                              const NotePixmapFactory &npf,
+NotationHLayout::positionNote(StaffType &staff,
                               const NotationElementList::iterator &itr,
                               const BarDataList::iterator &bdi,
                               const TimeSignature &timeSignature,
@@ -738,7 +733,7 @@ NotationHLayout::positionNote(Staff &staff,
     // Situate the note somewhat further into its allotted space.  Not
     // convinced this is the right thing to do
 
-    int noteBodyWidth = npf.getNoteBodyWidth();
+    int noteBodyWidth = m_npf.getNoteBodyWidth();
     if (delta > noteBodyWidth) {
         int shift = (delta - noteBodyWidth) / 5;
         shift = std::min(shift, (noteBodyWidth * 3));
@@ -760,7 +755,7 @@ NotationHLayout::positionNote(Staff &staff,
     }
     if (acc != NoAccidental) haveAccidentalInThisChord = true;
                 
-    Chord chord(*staff.getNotationElementList(), itr);
+    Chord chord(*staff.getViewElementList(), itr);
     if (chord.size() < 2 || itr == chord.getFinalElement()) {
 
         // either we're not in a chord, or the chord is about to end:
@@ -770,7 +765,7 @@ NotationHLayout::positionNote(Staff &staff,
         if (haveAccidentalInThisChord) {
             for (int i = 0; i < (int)chord.size(); ++i) {
                 (*chord[i])->setLayoutX
-                    ((*chord[i])->getLayoutX() + npf.getAccidentalWidth());
+                    ((*chord[i])->getLayoutX() + m_npf.getAccidentalWidth());
             }
         }
 
@@ -795,54 +790,56 @@ NotationHLayout::positionNote(Staff &staff,
     NotationElementList::iterator it0(itr);
     ++it0;
 
-    if (it0 == staff.getNotationElementList()->end() ||
+    //!!! Not really very nice, what can we do about all this?
+    NotationStaff &notationStaff = dynamic_cast<NotationStaff &>(staff);
+
+    if (it0 == staff.getViewElementList()->end() ||
         (!(*it0)->event()->get<Int>
          (TrackNotationHelper::BeamedGroupIdPropertyName, nextGroupNo) ||
          nextGroupNo != groupNo)) {
 
-        NotationGroup group(*staff.getNotationElementList(), itr, clef, key);
-        group.applyBeam(staff);
+        NotationGroup group(*staff.getViewElementList(), itr, clef, key);
+        group.applyBeam(notationStaff);
     }
     
     return delta;
 }
 
 
-int NotationHLayout::getMinWidth(const NotePixmapFactory &npf,
-                                 const NotationElement &e) const
+int NotationHLayout::getMinWidth(const NotationElement &e) const
 {
     int w = 0;
 
     if (e.isNote() || e.isRest()) {
 
-        w += npf.getNoteBodyWidth();
+        w += m_npf.getNoteBodyWidth();
         long dots;
         if (e.event()->get<Int>(Rosegarden::Note::NoteDots, dots)) {
-            w += npf.getDotWidth() * dots;
+            w += m_npf.getDotWidth() * dots;
         }
         long accidental;
         if (e.event()->get<Int>(Properties::DISPLAY_ACCIDENTAL, accidental) &&
             ((Accidental)accidental != NoAccidental)) {
-            w += npf.getAccidentalWidth();
+            w += m_npf.getAccidentalWidth();
         }
         return w;
     }
 
     // rather misleadingly, noteMargin is now only used for non-note events
 
-    w = npf.getNoteBodyWidth() / 5;
+    w = m_npf.getNoteBodyWidth() / 5;
 
     if (e.event()->isa(Clef::EventType)) {
 
-        w += npf.getClefWidth();
+        w += m_npf.getClefWidth();
 
     } else if (e.event()->isa(Key::EventType)) {
 
-        w += npf.getKeyWidth(Key(*e.event()));
+        w += m_npf.getKeyWidth(Key(*e.event()));
 
     } else if (e.event()->isa(TimeSignature::EventType)) {
 
-        w += npf.getTimeSigWidth(TimeSignature(*e.event()));
+        w += m_npf.getTimeSigWidth(TimeSignature(*e.event()));
 
     } else {
         kdDebug(KDEBUG_AREA) << "NotationHLayout::getMinWidth(): no case for event type " << e.event()->getType() << endl;
@@ -852,10 +849,9 @@ int NotationHLayout::getMinWidth(const NotePixmapFactory &npf,
     return w;
 }
 
-int NotationHLayout::getComfortableGap(const NotePixmapFactory &npf,
-                                       Note::Type type) const
+int NotationHLayout::getComfortableGap(Note::Type type) const
 {
-    int bw = npf.getNoteBodyWidth();
+    int bw = m_npf.getNoteBodyWidth();
     if (type < Note::Quaver) return 1;
     else if (type == Note::Quaver) return (bw / 2);
     else if (type == Note::Crotchet) return (bw * 3) / 2;
@@ -873,33 +869,33 @@ NotationHLayout::reset()
 }
 
 void
-NotationHLayout::resetStaff(Staff &staff)
+NotationHLayout::resetStaff(StaffType &staff)
 {
     getBarData(staff).clear();
     m_totalWidth = 0;
 }
 
 unsigned int
-NotationHLayout::getBarLineCount(Staff &staff)
+NotationHLayout::getBarLineCount(StaffType &staff)
 {
     int c = getBarData(staff).size();
     return c;
 }
 
 double
-NotationHLayout::getBarLineX(Staff &staff, unsigned int i)
+NotationHLayout::getBarLineX(StaffType &staff, unsigned int i)
 {
     return getBarData(staff)[i].x;
 }
 
 int
-NotationHLayout::getBarLineDisplayNumber(Staff &staff, unsigned int i)
+NotationHLayout::getBarLineDisplayNumber(StaffType &staff, unsigned int i)
 {
     return getBarData(staff)[i].barNo;
 }
 
 bool
-NotationHLayout::isBarLineCorrect(Staff &staff, unsigned int i)
+NotationHLayout::isBarLineCorrect(StaffType &staff, unsigned int i)
 {
     return getBarData(staff)[i].correct;
 }

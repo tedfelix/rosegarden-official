@@ -115,6 +115,8 @@ NotationElement::reposition(double dxoffset, double dyoffset)
     m_canvasItem->move(m_x + dxoffset, m_y + dyoffset);
 }
 
+#ifdef NOT_DEFINED
+
 //////////////////////////////////////////////////////////////////////
 
 NotationElementList::~NotationElementList()
@@ -239,3 +241,4 @@ kdbgstream& operator<<(kdbgstream &dbg, NotationElementList &l)
 
 #endif
 
+#endif

@@ -27,7 +27,6 @@
 #include "NotationTypes.h"
 
 class QCanvasItem;
-class NotationElementList;
 
 /**
  * The Notation H and V layout is performed on a
@@ -36,6 +35,7 @@ class NotationElementList;
  *
  * @see NotationView#showElements()
  */
+
 class NotationElement : public Rosegarden::ViewElement
 {
 public:
@@ -122,6 +122,11 @@ protected:
 };
 
 
+typedef Rosegarden::ViewElementList<NotationElement> NotationElementList;
+
+
+#ifdef NOT_DEFINED
+
 #ifndef NDEBUG
 class kdbgstream;
 kdbgstream& operator<<(kdbgstream&, NotationElement&);
@@ -129,15 +134,6 @@ kdbgstream& operator<<(kdbgstream&, NotationElement&);
 class kndbgstream;
 inline kndbgstream& operator<<(kndbgstream &e, NotationElement&) { return e; }
 #endif
-
-class NotationElementCmp
-{
-public:
-    bool operator()(const NotationElement *e1, const NotationElement *e2) const
-    {
-        return  *e1 < *e2;
-    }
-};
 
 
 /**
@@ -179,5 +175,6 @@ kdbgstream& operator<<(kdbgstream&, NotationElementList&);
 inline kndbgstream& operator<<(kndbgstream &e, NotationElementList&) { return e; }
 #endif
 
+#endif // NOT_DEFINED
 
 #endif

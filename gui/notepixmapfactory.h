@@ -170,6 +170,7 @@ public:
     int getStalkLength()       const { return getNoteBodyHeight() * 11/4; }
     int getDotWidth()          const { return m_dot.width(); }
     int getClefWidth()         const;
+    int getBarMargin()	       const { return getNoteBodyWidth() * 2; }
 
     int getTimeSigWidth(const Rosegarden::TimeSignature &timesig) const;
 

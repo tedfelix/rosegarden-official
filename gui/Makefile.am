@@ -1,37 +1,36 @@
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
 bin_PROGRAMS = rosegarden
-rosegarden_SOURCES = trackscanvas.cpp \
-			trackseditor.cpp \
-			notationproperties.cpp \
-			rosedebug.cpp \
-			staffline.cpp \
-			notationcanvasview.cpp \
-			notationview.cpp \
-			viewelementsmanager.cpp \
-			notationelement.cpp \
-			notationsets.cpp \
-			rosexmlhandler.cpp \
-			xmlstorableevent.cpp \
-			notationvlayout.cpp \
-			notationhlayout.cpp \
-			layoutengine.cpp \
-			qcanvassimplesprite.cpp \
-			staff.cpp \
-			qcanvasspline.cpp \
-			qcanvasspritegroupable.cpp \
-			qcanvaslinegroupable.cpp \
-			qcanvasitemgroup.cpp \
-			qcanvasgroupableitem.cpp \
-			notepixmapfactory.cpp \
-			rosegardenguiview.cpp \
-			rosegardenguidoc.cpp \
-			rosegardengui.cpp \
-			main.cpp \
-                        rg21io.cpp \
-			ktmpstatusmsg.cpp \
-			rosegardenguiiface.skel \
-			trackseditoriface.skel
+rosegarden_SOURCES = \
+	ktmpstatusmsg.cpp \
+	main.cpp \
+	notationcanvasview.cpp \
+	notationelement.cpp \
+	notationhlayout.cpp \
+	notationproperties.cpp \
+	notationsets.cpp \
+	notationstaff.cpp \
+	notationview.cpp \
+	notationvlayout.cpp \
+	notepixmapfactory.cpp \
+	qcanvasgroupableitem.cpp \
+	qcanvasitemgroup.cpp \
+	qcanvaslinegroupable.cpp \
+	qcanvassimplesprite.cpp \
+	qcanvasspline.cpp \
+	qcanvasspritegroupable.cpp \
+	rg21io.cpp \
+	rosedebug.cpp \
+	rosegardengui.cpp \
+	rosegardenguidoc.cpp \
+	rosegardenguiiface.skel \
+	rosegardenguiview.cpp \
+	rosexmlhandler.cpp \
+	staffline.cpp \
+	trackscanvas.cpp \
+	trackseditor.cpp \
+	trackseditoriface.skel \
+	xmlstorableevent.cpp
 
 rosegarden_LDADD   = ../sound/libRosegardenSound.la ../core/libcore.la -lqt -lkfile -lkdeui -lkdecore -lXext -lX11 $(LIBSOCKET)
 

@@ -22,8 +22,8 @@
 #ifndef NOTATIONVLAYOUT_H
 #define NOTATIONVLAYOUT_H
 
-#include "layoutengine.h"
-#include "staff.h"
+#include "LayoutEngine.h"
+#include "Staff.h"
 #include "notationelement.h"
 
 /**
@@ -32,9 +32,11 @@
  * computes the Y coordinate of notation elements
  */
 
-class NotationVLayout : public VerticalLayoutEngine
+class NotationVLayout : public Rosegarden::VerticalLayoutEngine<NotationElement>
 {
 public:
+    typedef Rosegarden::Staff<NotationElement> StaffType;
+
     NotationVLayout();
     virtual ~NotationVLayout();
 
@@ -46,12 +48,12 @@ public:
     /**
      * Resets internal data stores for a specific staff
      */
-    virtual void resetStaff(Staff &) { }
+    virtual void resetStaff(StaffType &) { }
 
     /**
      * Lay out a single staff.
      */
-    virtual void scanStaff(Staff &staff);
+    virtual void scanStaff(StaffType &staff);
 
     /**
      * Do any layout dependent on more than one staff.  As it

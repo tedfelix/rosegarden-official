@@ -23,20 +23,23 @@
 #ifndef _VIEWELEMENT_H_
 #define _VIEWELEMENT_H_
 
+
 #include "Event.h"
-//#include "Track.h"
+
+#include <set>
+
 
 namespace Rosegarden 
 {
 
 /**
- * The base class which represents an Event as an on-screen
- * graphic item (a note, a rectangle on a piano roll)
+ * The abstract base for classes which represent an Event as an
+ * on-screen graphic item (a note, a rectangle on a piano roll).
  */
+
 class ViewElement
 {
 public:
-    ViewElement(Event*);
     virtual ~ViewElement();
 
     const Event* event() const { return m_event; }
@@ -53,10 +56,151 @@ public:
     friend bool operator<(const ViewElement&, const ViewElement&);
 
 protected:
+    ViewElement(Event *);
+
     Event *m_event;
 };
 
- 
+
+
+template <class T>
+class ViewElementComparator
+{
+public:
+    bool operator()(const T *e1, const T *e2) const {
+	const ViewElement &ve1 = *e1;
+	const ViewElement &ve2 = *e2;
+        return ve1 < ve2;
+    }
+};
+
+
+/**
+ * This class owns the objects its items are pointing at.
+ *
+ * The template argument T must be a subclass of ViewElement.
+ */
+
+template <class T>
+class ViewElementList : public std::multiset<T *, ViewElementComparator<T> >
+{
+    typedef std::multiset<T *, ViewElementComparator<T> > set_type;
+    typedef typename set_type::iterator iterator;
+
+public:
+    ViewElementList() : set_type() { }
+    virtual ~ViewElementList();
+
+    void erase(iterator i);
+    void erase(iterator from, iterator to);
+    void eraseSingle(T *);
+
+    iterator findPrevious(const std::string &type, iterator i);
+    iterator findNext(const std::string &type, iterator i);
+
+    /**
+     * Returns an iterator pointing to that specific element,
+     * end() otherwise
+     */
+    iterator findSingle(T *);
+
+    /**
+     * Returns first iterator pointing at or after the given time,
+     * end() if time is beyond the end of the list
+     */ 
+    iterator findTime(Rosegarden::timeT time) const;
+};
+
+
+template <class T>
+ViewElementList<T>::~ViewElementList()
+{
+    for (iterator i = begin(); i != end(); ++i) {
+        delete (*i);
+    }
+}
+
+template <class T>
+void
+ViewElementList<T>::erase(iterator pos)
+{
+    delete *pos;
+    set_type::erase(pos);
+}
+
+template <class T>
+void
+ViewElementList<T>::erase(iterator from, iterator to)
+{
+    for (iterator i = from; i != to; ++i) delete *i;
+    set_type::erase(from, to);
+}
+
+template <class T>
+void
+ViewElementList<T>::eraseSingle(T *el)
+{
+    iterator elPos = findSingle(el);
+    if (elPos != end()) erase(elPos);
+}
+
+template <class T>
+ViewElementList<T>::iterator
+ViewElementList<T>::findPrevious(const std::string &type, iterator i)
+
+{
+    // what to return on failure? I think probably
+    // end(), as begin() could be a success case
+    if (i == begin()) return end();
+    --i;
+    for (;;) {
+        if ((*i)->event()->isa(type)) return i;
+        if (i == begin()) return end();
+        --i;
+    }
+}
+
+template <class T>
+ViewElementList<T>::iterator
+ViewElementList<T>::findNext(const std::string &type, iterator i)
+{
+    if (i == end()) return i;
+    for (++i; i != end() && !(*i)->event()->isa(type); ++i);
+    return i;
+}
+
+template <class T>
+ViewElementList<T>::iterator
+ViewElementList<T>::findSingle(T *el)
+{
+    iterator res = end();
+
+    std::pair<iterator, iterator> interval = equal_range(el);
+    
+    for (iterator i = interval.first; i != interval.second; ++i) {
+        if (*i == el) {
+            res = i;
+            break;
+        }
+    }
+
+    return res;
+}
+
+template <class T>
+ViewElementList<T>::iterator
+ViewElementList<T>::findTime(timeT time) const
+{
+    Event e;
+    e.setAbsoluteTime(time);
+    e.setSubOrdering(Rosegarden::MIN_SUBORDERING);
+    T dummy(&e);
+    return lower_bound(&dummy);
+}
+
+
+
+
 }
 
 

@@ -22,10 +22,12 @@
 #ifndef NOTATIONHLAYOUT_H
 #define NOTATIONHLAYOUT_H
 
-#include "layoutengine.h"
 #include "notationelement.h"
-#include "staff.h"
+#include "notepixmapfactory.h"
+
+#include "Staff.h"
 #include "Track.h"
+#include "LayoutEngine.h"
 #include "FastVector.h"
 
 /**
@@ -34,10 +36,12 @@
  * computes the X coordinates of notation elements
  */
 
-class NotationHLayout : public HorizontalLayoutEngine
+class NotationHLayout : public Rosegarden::HorizontalLayoutEngine<NotationElement>
 {
 public:
-    NotationHLayout();
+    typedef Rosegarden::Staff<NotationElement> StaffType;
+    
+    NotationHLayout(NotePixmapFactory &npf);
     virtual ~NotationHLayout();
 
     /**
@@ -47,7 +51,7 @@ public:
      * The map should be cleared (by calling reset()) before a full
      * set of staffs is preparsed.
      */
-    virtual void scanStaff(Staff &staff);
+    virtual void scanStaff(StaffType &staff);
 
     /**
      * Resets internal data stores, notably the BarDataMap that is
@@ -59,7 +63,7 @@ public:
      * Resets internal data stores, notably the given staff's entry
      * in the BarDataMap used to retain the data computed by scanStaff().
      */
-    virtual void resetStaff(Staff &staff);
+    virtual void resetStaff(StaffType &staff);
 
     /**
      * Lays out all staffs that have been scanned
@@ -75,25 +79,25 @@ public:
     /**
      * Returns the total number of bar lines on the given staff
      */
-    virtual unsigned int getBarLineCount(Staff &staff);
+    virtual unsigned int getBarLineCount(StaffType &staff);
 
     /**
      * Returns the x-coordinate of the given bar number (zero-based)
      * on the given staff
      */
-    virtual double getBarLineX(Staff &staff, unsigned int barNo);
+    virtual double getBarLineX(StaffType &staff, unsigned int barNo);
 
     /**
      * Returns the number that should be displayed next to the
      * specified bar line, if we're showing numbers
      */
-    virtual int getBarLineDisplayNumber(Staff &staff, unsigned int barNo);
+    virtual int getBarLineDisplayNumber(StaffType &staff, unsigned int barNo);
 
     /**
      * Returns true if the specified bar line is in the right place,
      * i.e. if the bar preceding it has the correct length
      */
-    virtual bool isBarLineCorrect(Staff &staff, unsigned int barNo);
+    virtual bool isBarLineCorrect(StaffType &staff, unsigned int barNo);
 
 protected:
     /**
@@ -116,7 +120,7 @@ protected:
     };
 
     typedef FastVector<BarData> BarDataList;
-    typedef std::map<Staff *, BarDataList> BarDataMap;
+    typedef std::map<StaffType *, BarDataList> BarDataMap;
 
     BarDataMap m_barData;
 
@@ -124,8 +128,8 @@ protected:
      * Returns the bar positions for a given staff, provided that
      * staff has been preparsed since the last reset
      */
-    BarDataList& getBarData(Staff &staff);
-    const BarDataList& getBarData(Staff &staff) const;
+    BarDataList& getBarData(StaffType &staff);
+    const BarDataList& getBarData(StaffType &staff) const;
 
     /// Tries to harmonize the bar positions for all the staves
     void reconcileBars();
@@ -133,21 +137,21 @@ protected:
     void layout(BarDataMap::iterator);
 
     void addNewBar
-    (Staff &staff, int barNo, NotationElementList::iterator start,
+    (StaffType &staff, int barNo, NotationElementList::iterator start,
      int width, int fwidth, bool correct);
 
     int getIdealBarWidth
-    (Staff &staff, int fixedWidth, NotationElementList::iterator shortest,
-     const NotePixmapFactory &npf, int shortCount, int totalCount,
+    (StaffType &staff, int fixedWidth, NotationElementList::iterator shortest,
+     int shortCount, int totalCount,
      const Rosegarden::TimeSignature &timeSignature) const;
 
     long positionRest
-    (Staff &staff, const NotePixmapFactory &npf,
+    (StaffType &staff, 
      const NotationElementList::iterator &, const BarDataList::iterator &,
      const Rosegarden::TimeSignature &);
 
     long positionNote
-    (Staff &staff, const NotePixmapFactory &npf,
+    (StaffType &staff, 
      const NotationElementList::iterator &, const BarDataList::iterator &,
      const Rosegarden::TimeSignature &, const Rosegarden::Clef &clef,
      const Rosegarden::Key &key, bool &haveAccidentalInThisChord);
@@ -165,12 +169,11 @@ protected:
     };
 
 
-    int getMinWidth(const NotePixmapFactory &, const NotationElement &) const;
-
-    int getComfortableGap(const NotePixmapFactory &npf,
-                          Rosegarden::Note::Type type) const;
+    int getMinWidth(const NotationElement &) const;
+    int getComfortableGap(Rosegarden::Note::Type type) const;
 
     double m_totalWidth;
+    NotePixmapFactory &m_npf;
 };
 
 #endif

@@ -29,7 +29,7 @@
 #include "notationhlayout.h"
 #include "notationvlayout.h"
 #include "notationcanvasview.h"
-#include "staff.h"
+#include "notationstaff.h"
 #include "NotationTypes.h"
 
 class QCanvasItem;
@@ -70,7 +70,7 @@ public:
     virtual bool showElements(int staffNo);
 
     /// draw all elements in range at coordinates relative to staff
-    virtual bool showElements(Staff *staff,
+    virtual bool showElements(NotationStaff *staff,
                               NotationElementList::iterator from,
                               NotationElementList::iterator to,
                               bool positionOnly = false);
@@ -78,17 +78,11 @@ public:
     /// Calls all the relevant preparse and layout methods
     virtual bool applyLayout(int staffNo = -1);
 
-    void setHorizontalLayoutEngine(NotationHLayout* e) { m_hlayout = e; }
-    void setVerticalLayoutEngine  (NotationVLayout* e) { m_vlayout = e; }
-
-    LayoutEngine* getHorizontalLayoutEngine() { return m_hlayout; }
-    LayoutEngine* getVerticalLayoutEngine()   { return m_vlayout; }
-
     /// Return the number of staffs
     int getStaffCount() { return m_staffs.size(); }
 
     /// Return a pointer to the staff at the specified index
-    Staff* getStaff(int i) { return m_staffs[i]; }
+    NotationStaff* getStaff(int i) { return m_staffs[i]; }
 
     QCanvas* canvas() { return m_canvasView->canvas(); }
 
@@ -366,7 +360,7 @@ protected:
 
     int m_currentStaff;
 
-    std::vector<Staff *> m_staffs;
+    std::vector<NotationStaff *> m_staffs;
 
     NotePixmapFactory m_notePixmapFactory;
     NotePixmapFactory m_toolbarNotePixmapFactory;

@@ -27,7 +27,7 @@
 #include "notationproperties.h"
 #include "notepixmapfactory.h"
 
-class Staff;
+class NotationStaff;
 
 
 /**
@@ -173,7 +173,7 @@ public:
      * Writes beam data into each note in the group.  Notes'
      * layout x coordinates must already have been set.
      */
-    void applyBeam(Staff &);
+    void applyBeam(NotationStaff &);
 
 protected:
     virtual bool test(const NELIterator &i);
@@ -188,7 +188,7 @@ private:
         bool necessary;
     };
 
-    Beam calculateBeam(Staff &);
+    Beam calculateBeam(NotationStaff &);
 
     int height(const NELIterator&) const;
     const Rosegarden::Clef &m_clef;
