@@ -149,18 +149,10 @@ public:
      * Adjust an X coord by world matrix
      */
     double getXbyWorldMatrix(double value)
-#ifdef RGKDE3
     { return m_canvasView->worldMatrix().m11() * value; }
-#else
-    { return value; }
-#endif
         
     double getXbyInverseWorldMatrix(double value)
-#ifdef RGKDE3
     { return m_canvasView->inverseWorldMatrix().m11() * value; }
-#else
-    { return value; }
-#endif
 
     QPoint inverseMapPoint(const QPoint& p) { return m_canvasView->inverseMapPoint(p); }
 
