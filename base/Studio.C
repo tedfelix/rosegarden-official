@@ -252,7 +252,9 @@ Studio::getMetronome()
 // Scan all MIDI devices for available channels and map
 // them to a current program
 Instrument*
-Studio::assignMidiProgramToInstrument(MidiByte program, bool percussion)
+Studio::assignMidiProgramToInstrument(MidiByte program,
+				      int msb, int lsb,
+				      bool percussion)
 {
     // Also defined in Midi.h but we don't use that - not here
     // in the clean inner sanctum.
@@ -268,6 +270,12 @@ Studio::assignMidiProgramToInstrument(MidiByte program, bool percussion)
     //
     Rosegarden::Instrument *newInstrument = 0;
     Rosegarden::Instrument *firstInstrument = 0;
+
+    bool needBank = (msb >= 0 || lsb >= 0);
+    if (needBank) {
+	if (msb < 0) msb = 0;
+	if (lsb < 0) lsb = 0;
+    }
 
     // Pass one - search through all MIDI instruments looking for
     // a match that we can re-use.  i.e. if we have a matching 
@@ -291,6 +299,9 @@ Studio::assignMidiProgramToInstrument(MidiByte program, bool percussion)
                 //
                 if ((*iit)->sendsProgramChange() &&
                     (*iit)->getProgramChange() == program &&
+		    (!needBank || ((*iit)->sendsBankSelect() &&
+				   (*iit)->getMSB() == msb &&
+				   (*iit)->getLSB() == lsb)) &&
                     percussion == false)
                 {
                     return (*iit);
@@ -311,6 +322,7 @@ Studio::assignMidiProgramToInstrument(MidiByte program, bool percussion)
                     //
                     if (newInstrument == 0 &&
                         (*iit)->sendsProgramChange() == false &&
+			(*iit)->sendsBankSelect() == false &&
                         (*iit)->getMidiChannel() != MIDI_PERCUSSION_CHANNEL)
                         newInstrument = *iit;
                 }
@@ -326,6 +338,12 @@ Studio::assignMidiProgramToInstrument(MidiByte program, bool percussion)
     {
         newInstrument->setSendProgramChange(true);
         newInstrument->setProgramChange(program);
+
+	if (needBank) {
+	    newInstrument->setSendBankSelect(true);
+	    newInstrument->setMSB(msb);
+	    newInstrument->setLSB(lsb);
+	}
     }
     else // Otherwise we just reuse the first Instrument we found
         newInstrument = firstInstrument;

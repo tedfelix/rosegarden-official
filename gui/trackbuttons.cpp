@@ -1,4 +1,4 @@
-
+// -*- c-basic-offset: 4 -*-
 
 /*
     Rosegarden-4
@@ -619,6 +619,9 @@ TrackButtons::slotInstrumentSelection(int position)
             break;
     }
 
+    //!!!
+    populateInstrumentPopup();
+
     m_instrumentPopup->popup(menuPos);
 
     // Store the popup item position
@@ -644,7 +647,14 @@ TrackButtons::populateInstrumentPopup()
 
     for (it = list.begin(); it != list.end(); it++)
     {
-        m_instrumentPopup->insertItem(strtoqstr((*it)->getName()), i++);
+//!!! m_instrumentPopup->insertItem(strtoqstr((*it)->getName()), i++);
+	std::string iname((*it)->getName());
+	std::string pname((*it)->getProgramName());
+//	if ((*it)->getDevice()) {
+//	    iname = (*it)->getDevice()->getName();
+//	}
+	if (pname != "") iname += " (" + pname + ")";
+	m_instrumentPopup->insertItem(strtoqstr(iname), i++);
     }
 }
 

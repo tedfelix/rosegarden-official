@@ -230,6 +230,10 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotImportMIDI()), actionCollection(),
                 "file_import_midi");
 
+    new KAction(i18n("Merge &MIDI file..."), 0, 0, this,
+                SLOT(slotMergeMIDI()), actionCollection(),
+                "file_merge_midi");
+
     new KAction(i18n("Import &Rosegarden 2.1 file..."), 0, 0, this,
                 SLOT(slotImportRG21()), actionCollection(),
                 "file_import_rg21");
@@ -1791,7 +1795,30 @@ void RosegardenGUIApp::slotImportMIDI()
     KIO::NetAccess::removeTempFile( tmpfile );
 }
 
+void RosegardenGUIApp::slotMergeMIDI()
+{
+    KURL url = KFileDialog::getOpenURL(":MIDI", "*.mid", this,
+                                     i18n("Open MIDI File"));
+    if (url.isEmpty()) { return; }
+
+    QString tmpfile;
+    KIO::NetAccess::download(url, tmpfile);
+    importMIDIFile(tmpfile, true);
+
+    KIO::NetAccess::removeTempFile( tmpfile );
+}
+
 void RosegardenGUIApp::importMIDIFile(const QString &file)
+{
+    importMIDIFile(file, false);
+}
+
+void RosegardenGUIApp::mergeMIDIFile(const QString &file)
+{
+    importMIDIFile(file, true);
+}
+
+void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 {
     Rosegarden::MidiFile *midiFile;
 
@@ -1820,15 +1847,22 @@ void RosegardenGUIApp::importMIDIFile(const QString &file)
     if (m_seqManager->getTransportStatus() == PLAYING)
         slotStop();
 
-    m_doc->closeDocument();
+    if (!merge) {
 
-    m_doc->newDocument();
+	m_doc->closeDocument();
+	m_doc->newDocument();
 
-    Rosegarden::Composition *tmpComp = midiFile->convertToRosegarden();
+	Rosegarden::Composition *tmpComp = midiFile->convertToRosegarden();
 
-    m_doc->getComposition().swap(*tmpComp);
+	m_doc->getComposition().swap(*tmpComp);
 
-    delete tmpComp;
+	delete tmpComp;
+
+    } else {
+
+	Rosegarden::Composition *tmpComp = midiFile->convertToRosegarden
+	    (&m_doc->getComposition());
+    }
 
     // Set modification flag
     //
@@ -1838,8 +1872,11 @@ void RosegardenGUIApp::importMIDIFile(const QString &file)
     //
     m_doc->setTitle(file);
     m_fileRecent->addURL(file);
+
     // Reinitialise
     //
+//!!!    if (merge) update();
+//    else
     initView();
 }
 

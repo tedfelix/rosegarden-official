@@ -59,6 +59,7 @@ class ControlBox;
 
 class QMouseEvent;
 class QLabel;
+class QWidget;
 
 typedef std::vector<MatrixElement*> SelectedElements;
 
@@ -464,6 +465,8 @@ protected:
 
     std::vector<std::pair<ControlRuler*, ControlBox*> >  m_controlRulers;
 
+    QWidget *m_chordNameRuler;
+    QWidget *m_tempoRuler;
 };
 
 #endif

@@ -861,6 +861,7 @@ AudioInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument* instru
 
 MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget* parent)
     : InstrumentParameterPanel(parent),
+      m_deviceLabel(new QLabel(this)),
       m_bankValue(new RosegardenComboBox(false, false, this)),
       m_channelValue(new RosegardenComboBox(true, false, this)),
       m_programValue(new RosegardenComboBox(false, false, this)),
@@ -936,9 +937,16 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget* parent)
     gridLayout->addRowSpacing(0, 8);
     gridLayout->addRowSpacing(1, 30);
 
+    // Ensure a reasonable amount of space in the program dropdown even
+    // if no instrument initially selected
+    m_bankValue->setMinimumWidth(100);
+    m_programValue->setMinimumWidth(100);
+
     // MIDI widgets
     //
     gridLayout->addMultiCellWidget(m_instrumentLabel, 0, 0, 0, 2, AlignCenter);
+    gridLayout->addMultiCellWidget(m_deviceLabel, 1, 1, 0, 2, AlignCenter);
+
     gridLayout->addWidget(bankLabel,      2, 0, AlignLeft);
     gridLayout->addWidget(m_bankCheckBox, 2, 1);
     gridLayout->addWidget(m_bankValue,    2, 2, AlignRight);
@@ -976,7 +984,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget* parent)
 
     // Populate channel list
     for (int i = 0; i < 16; i++)
-        m_channelValue->insertItem(QString("%1").arg(i));
+        m_channelValue->insertItem(QString("%1").arg(i+1));
 
     // Disable these three by default - they are activate by their
     // checkboxes
@@ -1061,6 +1069,14 @@ MIDIInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument *instrum
     //
     m_instrumentLabel->setText(strtoqstr(instrument->getName()));
 
+    // Set Studio Device name
+    //
+    if (instrument->getDevice()) {
+	m_deviceLabel->setText(strtoqstr(instrument->getDevice()->getName()));
+    } else {
+	m_deviceLabel->setText("");
+    }
+
     // Enable all check boxes
     //
     m_programCheckBox->setDisabled(false);
@@ -1087,6 +1103,7 @@ MIDIInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument *instrum
     else
     {
         m_programValue->setDisabled(true);
+	m_programValue->clear();
         m_programValue->setCurrentItem(-1);
     }
 

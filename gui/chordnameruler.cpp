@@ -134,7 +134,10 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
     // if we have one or any old segment if we don't
 
     Segment *clefKeySegment = m_currentSegment;
-    if (!clefKeySegment) clefKeySegment = *m_composition->begin();
+    if (!clefKeySegment) {
+	if (m_composition->begin() == m_composition->end()) return;
+	clefKeySegment = *m_composition->begin();
+    }
     SegmentNotationHelper notationHelper(*clefKeySegment);
 
     Rosegarden::Key key;

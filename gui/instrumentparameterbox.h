@@ -191,8 +191,10 @@ protected:
 
     //--------------- Data members ---------------------------------
 
+    QLabel             *m_deviceLabel;
+
     RosegardenComboBox *m_bankValue;
-    RosegardenComboBox *m_channelValue;
+    RosegardenComboBox *m_channelValue; 
     RosegardenComboBox *m_programValue;
     RosegardenRotary   *m_panRotary;
     RosegardenRotary   *m_volumeRotary;

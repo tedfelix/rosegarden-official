@@ -294,16 +294,18 @@ MidiFile::open()
                 return(false);
             }
 
-            for (Rosegarden::TrackId i = 0; i < m_numberOfTracks; i++ )
+	    Rosegarden::TrackId i = 0;
+
+            for (int j = 0; j < m_numberOfTracks; ++j)
             {
 
 #ifdef MIDI_DEBUG
-                std::cout << "Parsing Track " << i << endl;
+                std::cout << "Parsing Track " << j << endl;
 #endif
 
                 if(!skipToNextTrack(midiFile))
                 {
-                    cerr << "Couldn't find Track " << i << endl;
+                    cerr << "Couldn't find Track " << j << endl;
                     m_format = MIDI_FILE_NOT_LOADED;
                     return(false);
                 }
@@ -312,11 +314,15 @@ MidiFile::open()
                 // representation.
                 if (!parseTrack(midiFile, i))
                 {
-                    std::cerr << "Track " << i << " parsing failed" << endl;
+                    std::cerr << "Track " << j << " parsing failed" << endl;
                     m_format = MIDI_FILE_NOT_LOADED;
                     return(false);
                 }
+
+		++i; // j is the source track number, i the destination
             }
+
+	    m_numberOfTracks = i;
         }
         else
         {
@@ -401,7 +407,7 @@ MidiFile::parseHeader(const string &midiHeader)
 //
 //
 bool
-MidiFile::parseTrack(ifstream* midiFile, Rosegarden::TrackId trackNum)
+MidiFile::parseTrack(ifstream* midiFile, Rosegarden::TrackId &trackNum)
 {
     MidiByte midiByte, metaEventCode, data1, data2;
     MidiByte eventCode = 0x80;
@@ -409,9 +415,21 @@ MidiFile::parseTrack(ifstream* midiFile, Rosegarden::TrackId trackNum)
     unsigned int messageLength;
     unsigned long deltaTime;
 
+    // The trackNum passed in to this method is the default track for
+    // all events provided they're all on the same channel.  If we find
+    // events on more than one channel, we increment trackNum and record
+    // the mapping from channel to trackNum in this channelTrackMap.
+    // We then return the new trackNum by reference so the calling
+    // method knows we've got more tracks than expected.
+
+    // This would be a vector<Rosegarden::TrackId> but TrackId is unsigned
+    // and we need -1 to indicate "not yet used"
+    std::vector<int> channelTrackMap(16, -1);
+    bool firstTrack = true;
+
     while (!midiFile->eof() && ( m_trackByteCount > 0 ) )
     {
-        assert(eventCode >= 0x80);
+        assert(eventCode >= 0x80); //!!! ugh!
 
         deltaTime = getNumberFromMidiBytes(midiFile);
 
@@ -441,11 +459,16 @@ MidiFile::parseTrack(ifstream* midiFile, Rosegarden::TrackId trackNum)
         }
         else // the rest
         {
-
-            // We must declare the MidiEvent here as a pointer and then new it
             // inside the switch to keep the compiler happy.
             //
             MidiEvent *midiEvent;
+
+	    int channel = (eventCode & MIDI_CHANNEL_NUM_MASK);
+	    if (channelTrackMap[channel] == -1) {
+		if (!firstTrack) ++trackNum;
+		else firstTrack = false;
+		channelTrackMap[channel] = trackNum;
+	    }
 
             switch (eventCode & MIDI_MESSAGE_TYPE_MASK)
             {
@@ -460,7 +483,8 @@ MidiFile::parseTrack(ifstream* midiFile, Rosegarden::TrackId trackNum)
 
                 // create and store our event
                 midiEvent = new MidiEvent(deltaTime, eventCode, data1, data2);
-                m_midiComposition[trackNum].push_back(midiEvent);
+                m_midiComposition[channelTrackMap[channel]].push_back
+		    (midiEvent);
                 break;
 
             case MIDI_PROG_CHANGE:
@@ -469,7 +493,8 @@ MidiFile::parseTrack(ifstream* midiFile, Rosegarden::TrackId trackNum)
 
                 // create and store our event
                 midiEvent = new MidiEvent(deltaTime, eventCode, data1);
-                m_midiComposition[trackNum].push_back(midiEvent);
+                m_midiComposition[channelTrackMap[channel]].push_back
+		    (midiEvent);
                 break;
 
             case MIDI_SYSTEM_EXCLUSIVE:
@@ -491,7 +516,8 @@ MidiFile::parseTrack(ifstream* midiFile, Rosegarden::TrackId trackNum)
                 midiEvent = new MidiEvent(deltaTime,
                                           MIDI_SYSTEM_EXCLUSIVE,
                                           metaMessage);
-                m_midiComposition[trackNum].push_back(midiEvent);
+                m_midiComposition[channelTrackMap[channel]].push_back
+		    (midiEvent);
                 break;
 
             case MIDI_END_OF_EXCLUSIVE:
@@ -517,12 +543,11 @@ MidiFile::parseTrack(ifstream* midiFile, Rosegarden::TrackId trackNum)
 // pure virtual.
 //
 Rosegarden::Composition*
-MidiFile::convertToRosegarden()
+MidiFile::convertToRosegarden(Rosegarden::Composition *composition)
 {
     MidiTrackIterator midiEvent;
     Rosegarden::Segment *rosegardenSegment;
     Rosegarden::Event *rosegardenEvent;
-    Rosegarden::TrackId compTrack = 0;
     string trackName;
 
     // Time conversions
@@ -545,11 +570,17 @@ MidiFile::convertToRosegarden()
     bool isMinor;
     bool isSharp;
 
-    Rosegarden::Composition *composition = new Composition;
-    Rosegarden::Track *track = 0;
+    bool preexisting = false;
+    if (!composition) composition = new Rosegarden::Composition;
+    else preexisting = true;
 
-    // preset default tempo
-    composition->setDefaultTempo(120.0);
+    Rosegarden::TrackId compTrack = 0;
+    for (Composition::iterator ci = composition->begin();
+	 ci != composition->end(); ++ci) {
+	if ((*ci)->getTrack() >= compTrack) compTrack = (*ci)->getTrack() + 1;
+    }
+
+    Rosegarden::Track *track = 0;
 
     // precalculate the timing factor
     //
@@ -563,11 +594,6 @@ MidiFile::convertToRosegarden()
     // Clear down the assigned Instruments we already have
     //
     m_studio->unassignAllInstruments();
-
-    // In case we have text events with no notes on the same track
-    //
-    Segment *textSegment = new Segment;
-    textSegment->setLabel("Text Events");
 
     for (Rosegarden::TrackId i = 0; i < m_numberOfTracks; i++ )
     {
@@ -600,23 +626,18 @@ MidiFile::convertToRosegarden()
         rosegardenSegment = new Segment;
         rosegardenSegment->setTrack(compTrack);
         rosegardenSegment->setStartTime(0);
-            
-        track = new Rosegarden::Track(compTrack,        // id
-                                      compInstrument,   // instrument
-                                      compTrack,        // position
-                                      trackName,        // name
-                                      false);           // muted
 
-        composition->addTrack(track);
-        // add the Segment to the Composition and increment the
-        // Rosegarden segment number
-        //
-        composition->addSegment(rosegardenSegment);
-        compTrack++;
+	track = new Rosegarden::Track(compTrack,        // id
+				      compInstrument,   // instrument
+				      compTrack,        // position
+				      trackName,        // name
+				      false);           // muted
 
         // rest creation token needs to be reset here
         //
         endOfLastNote = 0;
+
+	int msb = -1, lsb = -1; // for bank selects
 
         for (midiEvent = m_midiComposition[i].begin();
              midiEvent != m_midiComposition[i].end();
@@ -637,29 +658,41 @@ MidiFile::convertToRosegarden()
                         std::string text = (*midiEvent)->getMetaMessage();
                         rosegardenEvent =
                             Rosegarden::Text(text).getAsEvent(rosegardenTime);
-                        if (rosegardenSegment) {
-                            rosegardenSegment->insert(rosegardenEvent);
-                        } else {
-                            textSegment->insert(rosegardenEvent);
-                        }
+			rosegardenSegment->insert(rosegardenEvent);
+                    }
+                    break;
+
+                case MIDI_LYRIC:
+                    {
+                        std::string text = (*midiEvent)->getMetaMessage();
+                        rosegardenEvent =
+                            Rosegarden::Text(text, Rosegarden::Text::Lyric).
+			    getAsEvent(rosegardenTime);
+			rosegardenSegment->insert(rosegardenEvent);
                     }
                     break;
 
                 case MIDI_COPYRIGHT_NOTICE:
-                    composition->setCopyrightNote((*midiEvent)->
-                                                  getMetaMessage());
+		    if (!preexisting) {
+			composition->setCopyrightNote((*midiEvent)->
+						      getMetaMessage());
+		    }
                     break;
                     
                 case MIDI_TRACK_NAME:
-                    if (rosegardenSegment && track)
+                    if (track)
                         track->setLabel((*midiEvent)->getMetaMessage());
                     break;
 
                 case MIDI_END_OF_TRACK:
-                    if (rosegardenSegment) {
-                        if (endOfLastNote < rosegardenTime) {
-                            rosegardenSegment->fillWithRests(rosegardenTime);
-                        }
+		    if (endOfLastNote < rosegardenTime) {
+
+			// If there's nothing in the segment yet, then we
+			// shouldn't fill with rests because we don't want
+			// to cause the otherwise empty segment to be created
+			if (rosegardenSegment->size() > 0) {
+			    rosegardenSegment->fillWithRests(rosegardenTime);
+			}
                     }
                     break;
 
@@ -674,6 +707,7 @@ MidiFile::convertToRosegarden()
                         if (tempo != 0)
                         {
                             tempo = 60000000 / tempo;
+			    //!!! if preexisting, need to ask user about this
                             composition->addTempo(rosegardenTime, tempo);
                         }
                     }
@@ -686,9 +720,10 @@ MidiFile::convertToRosegarden()
 		    // NB. a MIDI time signature also has
 		    // metamessage[2] and [3], containing some timing data
 
-                    if (numerator == 0 ) numerator = 4;
-                    if (denominator == 0 ) denominator = 4;
+                    if (numerator == 0) numerator = 4;
+                    if (denominator == 0) denominator = 4;
 
+		    //!!! if preexisting, need to ask user about this
                     composition->addTimeSignature
                         (rosegardenTime,
                          Rosegarden::TimeSignature(numerator, denominator));
@@ -696,8 +731,6 @@ MidiFile::convertToRosegarden()
                     break;
 
                 case MIDI_KEY_SIGNATURE:
-                    if (!rosegardenSegment) break;
-
                     // get the details
                     accidentals = (int) (*midiEvent)->getMetaMessage()[0];
                     isMinor     = (int) (*midiEvent)->getMetaMessage()[1];
@@ -725,7 +758,6 @@ MidiFile::convertToRosegarden()
                 case MIDI_SEQUENCE_NUMBER:
                 case MIDI_CHANNEL_PREFIX_OR_PORT:
                 case MIDI_INSTRUMENT_NAME:
-                case MIDI_LYRIC:
                 case MIDI_TEXT_MARKER:
                 case MIDI_CUE_POINT:
                 case MIDI_CHANNEL_PREFIX:
@@ -741,7 +773,6 @@ MidiFile::convertToRosegarden()
             else switch((*midiEvent)->getMessageType())
             {
             case MIDI_NOTE_ON:
-                if (!rosegardenSegment) break;
 
                 // A zero velocity here is a virtual "NOTE OFF"
                 // so we ignore this event
@@ -774,12 +805,29 @@ MidiFile::convertToRosegarden()
                     // Attempt to turn the prog change we've found into an
                     // Instrument.  Send the program number and whether or
                     // not we're on the percussion channel.
+		    // 
+		    // Note that we make no attempt to do the right thing
+		    // with program changes during a track.
+		    // We just set this track's program to the one found
+		    // in the last program change on the track.
                     //
-                    Rosegarden::Instrument *instr = 
-                        m_studio->assignMidiProgramToInstrument(
-                                (*midiEvent)->getData1(), 
-                                (*midiEvent)->getChannelNumber() == 
-                                    MIDI_PERCUSSION_CHANNEL);
+                    Rosegarden::Instrument *instr = 0;
+
+		    if (msb >= 0 || lsb >= 0) {
+                        instr = m_studio->assignMidiProgramToInstrument
+			    ((*midiEvent)->getData1(),
+			     (msb >= 0 ? msb : 0),
+			     (lsb >= 0 ? lsb : 0),
+			     (*midiEvent)->getChannelNumber() == 
+			     MIDI_PERCUSSION_CHANNEL);
+			msb = -1;
+			lsb = -1;
+		    } else {
+                        instr = m_studio->assignMidiProgramToInstrument
+			    ((*midiEvent)->getData1(),
+			     (*midiEvent)->getChannelNumber() == 
+			     MIDI_PERCUSSION_CHANNEL);
+		    }			
 
                     // assign it here
                     if (instr != 0) {
@@ -789,16 +837,27 @@ MidiFile::convertToRosegarden()
 
                         // give the Segment a name based on the the Instrument
                         //
-                        if (rosegardenSegment != 0)
-                        {
-                            rosegardenSegment->setLabel
-                                (m_studio->getSegmentName(instr->getId()));
-                        }
+			rosegardenSegment->setLabel
+			    (m_studio->getSegmentName(instr->getId()));
                     }
                 }
                 break;
 
             case MIDI_CTRL_CHANGE:
+
+		// If it's a bank select, interpret it instead of just
+		// inserting it as a Rosegarden event
+
+		if ((*midiEvent)->getData1() == MIDI_CONTROLLER_BANK_MSB) {
+		    msb = (*midiEvent)->getData2();
+		    break;
+		}
+
+		if ((*midiEvent)->getData1() == MIDI_CONTROLLER_BANK_LSB) {
+		    lsb = (*midiEvent)->getData2();
+		    break;
+		}
+
                 rosegardenEvent =
                     new Event(Rosegarden::Controller::EventType,
                               rosegardenTime);
@@ -857,65 +916,46 @@ MidiFile::convertToRosegarden()
                 break;
             }
         }
+
+	if (rosegardenSegment->size() > 0) {
+
+	    // add the Segment to the Composition and increment the
+	    // Rosegarden segment number
+	    //
+	    composition->addTrack(track);
+	    composition->addSegment(rosegardenSegment);
+
+	    SegmentNotationHelper helper(*rosegardenSegment);
+
+	    rosegardenSegment->insert
+		(helper.guessClef(rosegardenSegment->begin(),
+				  rosegardenSegment->end()).getAsEvent(0));
+
+	    rosegardenSegment->normalizeRests
+		(rosegardenSegment->getStartTime(),
+		 rosegardenSegment->getEndTime());
+
+	    helper.autoBeam(rosegardenSegment->begin(),
+			    rosegardenSegment->end(),
+			    BaseProperties::GROUP_TYPE_BEAMED);
+
+	    compTrack++;
+
+	} else {
+	    delete rosegardenSegment;
+	    rosegardenSegment = 0;
+	    delete track;
+	    track = 0;
+	}
     }
 
-    // normalise and prettify everything [cc]
-
     // if we have no time signatures at all, try to guess one
-    if (!haveTimeSignatures)
+    if (!haveTimeSignatures && !preexisting)
     {
         Rosegarden::CompositionTimeSliceAdapter adapter(composition);
         Rosegarden::AnalysisHelper analysisHelper;
         TimeSignature timeSig = analysisHelper.guessTimeSignature(adapter);
         composition->addTimeSignature(0, timeSig);
-    }
-
-    // if we have a text segment, there must have been some text events
-    // on note-free segments -- insert the text segment (it has a pretty
-    // obvious name)
-//!!! Nah, do something more sensible with the text events -- it's not like we can really view them from here anyway
-    delete textSegment;
-/*!!!
-    if (!textSegment->empty()) {
-
-        textSegment->setTrack(compTrack);
-
-        track = new Rosegarden::Track(compTrack,        // id
-                                      compInstrument,   // instrument
-                                      compTrack,        // position
-                                      trackName,        // name
-                                      true);            // muted
-
-        composition->addTrack(track);
-        composition->addSegment(textSegment);
-    }
-*/
-
-    for (Composition::iterator i = composition->begin();
-         i != composition->end(); ++i)
-    {
-        rosegardenSegment = *i;
-        SegmentNotationHelper helper(*rosegardenSegment);
-
-        rosegardenSegment->insert
-            (helper.guessClef(rosegardenSegment->begin(),
-                              rosegardenSegment->end()).getAsEvent(0));
-/*!!! was useful for text segment only
-        if (composition->getBarNumber(rosegardenSegment->getEndTime()) ==
-            composition->getBarNumber(rosegardenSegment->getStartTime())) {
-            rosegardenSegment->fillWithRests
-                (composition->getBarEndForTime
-                 (rosegardenSegment->getEndTime() + 1));
-        }
-*/
-        rosegardenSegment->normalizeRests
-            (rosegardenSegment->getStartTime(),
-             rosegardenSegment->getEndTime());
- 
-
-        helper.autoBeam(rosegardenSegment->begin(),
-                        rosegardenSegment->end(),
-                        BaseProperties::GROUP_TYPE_BEAMED);
     }
 
     return composition;
@@ -1108,7 +1148,7 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
 
 	    if (msb != 0) {
 		midiEvent = new MidiEvent(0,
-					  MIDI_SELECT_CHNL_MODE | midiChannel,
+					  MIDI_CTRL_CHANGE | midiChannel,
 					  MIDI_CONTROLLER_BANK_MSB,
 					  msb);
 		m_midiComposition[trackNumber].push_back(midiEvent);
@@ -1116,7 +1156,7 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
 
 	    if (lsb != 0) {
 		midiEvent = new MidiEvent(0,
-					  MIDI_SELECT_CHNL_MODE | midiChannel,
+					  MIDI_CTRL_CHANGE | midiChannel,
 					  MIDI_CONTROLLER_BANK_LSB,
 					  lsb);
 		m_midiComposition[trackNumber].push_back(midiEvent);
@@ -1288,19 +1328,42 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
 
 		    m_midiComposition[trackNumber].push_back(midiEvent);
 		}
+		else if ((*el)->isa(Text::EventType))
+		{
+		    Text text(**el);
+		    std::string metaMessage = text.getText();
+
+		    MidiByte midiTextType = MIDI_TEXT_EVENT;
+
+		    if (text.getTextType() == Text::Lyric) {
+			midiTextType = MIDI_LYRIC;
+		    }
+
+		    if (text.getTextType() != Text::Annotation) {
+			// (we don't write annotations)
+
+			midiEvent =
+			    new MidiEvent(midiEventAbsoluteTime,
+					  MIDI_FILE_META_EVENT,
+					  midiTextType,
+					  metaMessage);
+			
+			m_midiComposition[trackNumber].push_back(midiEvent);
+		    }
+		}
 		else if ((*el)->isa(Note::EventRestType))
 		{
 		    // skip legitimately
 		}
 		else
 		{  
-		    /*
-		      std::cerr << "MidiFile::convertToMidi - "
-		      << "unsupported MidiType \""
-		      << (*el)->getType()
-		      << "\" at export"
-		      << std::endl;
-		    */
+/*
+		    cerr << "MidiFile::convertToMidi - "
+			 << "unsupported MidiType \""
+			 << (*el)->getType()
+			 << "\" at export"
+			 << std::endl;
+*/
 		}
 
 		midiEventAbsoluteTime +=

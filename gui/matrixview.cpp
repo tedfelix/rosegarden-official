@@ -1,4 +1,4 @@
-// -*- c-basic-offset: 4 -*-
+
 
 /*
     Rosegarden-4
@@ -58,6 +58,8 @@
 #include "ktmpstatusmsg.h"
 #include "barbuttons.h"
 #include "loopruler.h"
+#include "temporuler.h"
+#include "chordnameruler.h"
 #include "pianokeyboard.h"
 #include "editcommands.h"
 #include "qdeferscrollview.h"
@@ -278,6 +280,14 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     // Add a velocity ruler
     //
     addControlRuler(Rosegarden::BaseProperties::VELOCITY);
+
+    m_chordNameRuler = new ChordNameRuler
+	(&m_hlayout, &doc->getComposition(), 0, 20, getCentralFrame());
+    addRuler(m_chordNameRuler);
+
+    m_tempoRuler = new TempoRuler
+	(&m_hlayout, &doc->getComposition(), 0, 20, false, getCentralFrame());
+    addRuler(m_tempoRuler);
 
     // Scroll view to centre middle-C and warp to pointer position
     //
@@ -550,6 +560,28 @@ void MatrixView::setupActions()
     new KAction(i18n("Clear Selection"), Key_Escape, this,
 		SLOT(slotClearSelection()), actionCollection(),
 		"clear_selection");
+
+    //!!! should be using NotePixmapFactory::makeNoteMenuLabel for these
+    new KAction(i18n("Snap to 1/64"), Key_0, this,
+                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_64");
+    new KAction(i18n("Snap to 1/32"), Key_3, this,
+                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_32");
+    new KAction(i18n("Snap to 1/16"), Key_6, this,
+                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_16");
+    new KAction(i18n("Snap to 1/8"), Key_8, this,
+                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_8");
+    new KAction(i18n("Snap to 1/4"), Key_4, this,
+                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_4");
+    new KAction(i18n("Snap to 1/2"), Key_2, this,
+                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_2");
+    new KAction(i18n("Snap to &Unit"), 0, this,
+                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_unit");
+    new KAction(i18n("Snap to Bea&t"), Key_1, this,
+                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_beat");
+    new KAction(i18n("Snap to &Bar"), Key_5, this,
+                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_bar");
+    new KAction(i18n("&No Snap"), 0, this,
+                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_none");
 
     //!!! need slotInsertNoteFromAction() after notationviewslots.cpp
     createInsertPitchActionMenu();
@@ -1024,7 +1056,7 @@ void
 MatrixView::slotSetInsertCursorPosition(timeT time, bool scroll)
 {
     //!!! For now.  Probably unlike slotSetPointerPosition this one
-    // should snap to the nearest event.
+    // should snap to the nearest event or grid line.
 
     m_staffs[0]->setInsertCursorPosition(m_hlayout, time);
 
@@ -1390,6 +1422,16 @@ MatrixView::slotSetSnapFromAction()
 	    slotSetSnap
 		(Rosegarden::Note(Rosegarden::Note::Semibreve).getDuration() /
 		 snap);
+	} else if (name == "snap_none") {
+	    slotSetSnap(Rosegarden::SnapGrid::NoSnap);
+	} else if (name == "snap_beat") {
+	    slotSetSnap(Rosegarden::SnapGrid::SnapToBeat);
+	} else if (name == "snap_bar") {
+	    slotSetSnap(Rosegarden::SnapGrid::SnapToBar);
+	} else if (name == "snap_unit") {
+	    slotSetSnap(Rosegarden::SnapGrid::SnapToUnit);
+	} else {
+	    MATRIX_DEBUG << "Warning: MatrixView::slotSetSnapFromAction: unrecognised action " << name << endl;
 	}
     }
 }
@@ -1491,6 +1533,8 @@ MatrixView::initActionsToolbar()
     m_snapValues.push_back(crotchetDuration / 8);
     m_snapValues.push_back(crotchetDuration / 4);
     m_snapValues.push_back(crotchetDuration / 2);
+    m_snapValues.push_back(crotchetDuration);
+    m_snapValues.push_back(crotchetDuration * 2);
     m_snapValues.push_back(Rosegarden::SnapGrid::SnapToBeat);
     m_snapValues.push_back(Rosegarden::SnapGrid::SnapToBar);
 
@@ -1518,15 +1562,6 @@ MatrixView::initActionsToolbar()
 
     connect(m_snapGridCombo, SIGNAL(propagate(int)),
             this, SLOT(slotSetSnapFromIndex(int)));
-
-    new KAction(i18n("Snap to 1/64"), Key_0, this,
-                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_64");
-    new KAction(i18n("Snap to 1/32"), Key_3, this,
-                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_32");
-    new KAction(i18n("Snap to 1/16"), Key_6, this,
-                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_16");
-    new KAction(i18n("Snap to 1/8"), Key_8, this,
-                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_8");
 
     // Quantize combo
     //
@@ -1733,85 +1768,6 @@ MatrixView::getInsertionTime()
     return m_hlayout.getTimeForX(ix);
 }
 
-
-//!!! The move and extend-selection methods are almost exact
-// duplicates of those in NotationView.  We should probably
-// factor these out -- but where to?
-
-/*!!!
-
-void
-MatrixView::slotStepBackward()
-{
-    MatrixStaff *staff = m_staffs[0];
-    Segment &segment = staff->getSegment();
-    timeT time = getInsertionTime();
-    Segment::iterator i = segment.findTime(time);
-
-    while (i != segment.begin() &&
-	   (i == segment.end() || (*i)->getAbsoluteTime() == time)) --i;
-
-    if (i != segment.end()) slotSetInsertCursorPosition((*i)->getAbsoluteTime());
-}
-
-void
-MatrixView::slotStepForward()
-{
-    MatrixStaff *staff = m_staffs[0];
-    Segment &segment = staff->getSegment();
-    timeT time = getInsertionTime();
-    Segment::iterator i = segment.findTime(time);
-
-    while (segment.isBeforeEndMarker(i) &&
-	   (*i)->getAbsoluteTime() == time) ++i;
-
-    if (!segment.isBeforeEndMarker(i)) {
-	slotSetInsertCursorPosition(segment.getEndMarkerTime());
-    } else {
-	slotSetInsertCursorPosition((*i)->getAbsoluteTime());
-    }
-}
-
-void
-MatrixView::slotJumpBackward()
-{
-    MatrixStaff *staff = m_staffs[0];
-    Segment &segment = staff->getSegment();
-    timeT time = getInsertionTime();
-    time = segment.getBarStartForTime(time - 1);
-    slotSetInsertCursorPosition(time);
-}
-
-void
-MatrixView::slotJumpForward()
-{
-    MatrixStaff *staff = m_staffs[0];
-    Segment &segment = staff->getSegment();
-    timeT time = getInsertionTime();
-    time = segment.getBarEndForTime(time);
-    slotSetInsertCursorPosition(time);
-}
-
-void
-MatrixView::slotJumpToStart()
-{
-    MatrixStaff *staff = m_staffs[0];
-    Segment &segment = staff->getSegment();
-    timeT time = segment.getStartTime();
-    slotSetInsertCursorPosition(time);
-}    
-
-void
-MatrixView::slotJumpToEnd()
-{
-    MatrixStaff *staff = m_staffs[0];
-    Segment &segment = staff->getSegment();
-    timeT time = segment.getEndMarkerTime();
-    slotSetInsertCursorPosition(time);
-}    
-
-*/
-
 void
 MatrixView::slotJumpCursorToPlayback()
 {
@@ -1823,129 +1779,6 @@ MatrixView::slotJumpPlaybackToCursor()
 {
     emit jumpPlaybackTo(getInsertionTime());
 }
-
-/*!!!
-
-void MatrixView::slotExtendSelectionBackward()
-{
-    slotExtendSelectionBackward(false);
-}
-
-void MatrixView::slotExtendSelectionBackwardBar()
-{
-    slotExtendSelectionBackward(true);
-}
-
-void MatrixView::slotExtendSelectionBackward(bool bar)
-{
-    // If there is no current selection, or the selection is entirely
-    // to the right of the cursor, move the cursor left and add to the
-    // selection
-
-    timeT oldTime = getInsertionTime();
-    if (bar) slotJumpBackward();
-    else slotStepBackward();
-    timeT newTime = getInsertionTime();
-
-    Segment &segment = m_staffs[0]->getSegment();
-    EventSelection *es = new EventSelection(segment);
-    if (m_currentEventSelection) es->addFromSelection(m_currentEventSelection);
-
-    if (!m_currentEventSelection ||
-	&m_currentEventSelection->getSegment() != &segment ||
-	m_currentEventSelection->getSegmentEvents().size() == 0 ||
-	m_currentEventSelection->getStartTime() >= oldTime) {
-
-	Segment::iterator extendFrom = segment.findTime(oldTime);
-
-	while (extendFrom != segment.begin() &&
-	       (*--extendFrom)->getAbsoluteTime() >= newTime) {
-	    if ((*extendFrom)->isa(Rosegarden::Note::EventType)) {
-		es->addEvent(*extendFrom);
-	    }
-	}
-
-    } else { // remove an event
-
-	EventSelection::eventcontainer::iterator i =
-	    es->getSegmentEvents().end();
-
-	std::vector<Rosegarden::Event *> toErase;
-
-	while (i != es->getSegmentEvents().begin() &&
-	       (*--i)->getAbsoluteTime() >= newTime) {
-	    toErase.push_back(*i);
-	}
-
-	for (unsigned int j = 0; j < toErase.size(); ++j) {
-	    es->removeEvent(toErase[j]);
-	}
-    }
-    
-    setCurrentSelection(es);
-}
-
-void MatrixView::slotExtendSelectionForward()
-{
-    slotExtendSelectionForward(false);
-}
-
-void MatrixView::slotExtendSelectionForwardBar()
-{
-    slotExtendSelectionForward(true);
-}
-
-void MatrixView::slotExtendSelectionForward(bool bar)
-{
-    // If there is no current selection, or the selection is entirely
-    // to the left of the cursor, move the cursor right and add to the
-    // selection
-
-    timeT oldTime = getInsertionTime();
-    if (bar) slotJumpForward();
-    else slotStepForward();
-    timeT newTime = getInsertionTime();
-
-    Segment &segment = m_staffs[0]->getSegment();
-    EventSelection *es = new EventSelection(segment);
-    if (m_currentEventSelection) es->addFromSelection(m_currentEventSelection);
-
-    if (!m_currentEventSelection ||
-	&m_currentEventSelection->getSegment() != &segment ||
-	m_currentEventSelection->getSegmentEvents().size() == 0 ||
-	m_currentEventSelection->getEndTime() <= oldTime) {
-
-	Segment::iterator extendFrom = segment.findTime(oldTime);
-
-	while (extendFrom != segment.end() &&
-	       (*extendFrom)->getAbsoluteTime() < newTime) {
-	    if ((*extendFrom)->isa(Rosegarden::Note::EventType)) {
-		es->addEvent(*extendFrom);
-	    }
-	    ++extendFrom;
-	}
-
-    } else { // remove an event
-
-	EventSelection::eventcontainer::iterator i =
-	    es->getSegmentEvents().begin();
-
-	std::vector<Rosegarden::Event *> toErase;
-
-	while (i != es->getSegmentEvents().end() &&
-	       (*i)->getAbsoluteTime() < newTime) {
-	    toErase.push_back(*i);
-	    ++i;
-	}
-
-	for (unsigned int j = 0; j < toErase.size(); ++j) {
-	    es->removeEvent(toErase[j]);
-	}
-    }
-    
-    setCurrentSelection(es);
-}
-*/
 
 void
 MatrixView::slotSelectAll()

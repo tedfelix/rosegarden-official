@@ -9,6 +9,23 @@
   <Action name="clear_selection"/>
 </Menu>
 
+<Menu name="View">
+  <text>&amp;View</text>
+  <Menu name="Grid">
+    <text>&amp;Grid</text>
+    <Action name="snap_none"/>
+    <Action name="snap_unit"/>
+    <Action name="snap_64"/>
+    <Action name="snap_32"/>
+    <Action name="snap_16"/>
+    <Action name="snap_8"/>
+    <Action name="snap_4"/>
+    <Action name="snap_2"/>
+    <Action name="snap_beat"/>
+    <Action name="snap_bar"/>
+  </Menu>
+</Menu> 
+
 <Menu name="Transforms">
   <text>Trans&amp;forms</text>
   <Action name="quantize"/>

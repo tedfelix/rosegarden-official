@@ -501,11 +501,11 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
         {
             // Create MappedInstrument for export to GUI
             //
-            sprintf(number, " #%d", channel);
+            sprintf(number, " #%d", channel + 1);
             channelName = name + std::string(number);
 
             if (channel == 9)
-                channelName = name + std::string(" #9[D]");
+                channelName = name + std::string(" #10[D]");
             MappedInstrument *instr = new MappedInstrument(type,
                                                            channel,
                                                            m_midiRunningId++,

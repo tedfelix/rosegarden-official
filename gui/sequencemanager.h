@@ -164,6 +164,9 @@ public slots:
 signals:
     void setProgress(int);
     void incrementProgress(int);
+
+    void insertableNoteOnReceived(int pitch);
+    void insertableNoteOffReceived(int pitch);
     
 private:
     Rosegarden::MappedComposition m_mC;

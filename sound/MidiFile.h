@@ -102,7 +102,8 @@ public:
 
     // Conversion in and out of Rosegarden
     //
-    Rosegarden::Composition* convertToRosegarden();
+    Rosegarden::Composition* convertToRosegarden(Rosegarden::Composition *
+						 preexistingComposition = 0);
     void convertToMidi(Rosegarden::Composition &comp);
 
 signals:
@@ -131,7 +132,7 @@ private:
     // Split the tasks up with these top level private methods
     //
     bool parseHeader(const std::string& midiHeader);
-    bool parseTrack(std::ifstream* midiFile, unsigned int trackNum);
+    bool parseTrack(std::ifstream* midiFile, unsigned int &trackNum);
     bool writeHeader(std::ofstream* midiFile);
     bool writeTrack(std::ofstream* midiFile, unsigned int trackNum);
 

@@ -1149,7 +1149,24 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
 
                 continue;
-            }
+
+            } else {
+
+		// if we aren't recording, consider invoking any
+		// step-by-step clients
+
+		if (m_transportStatus == STOPPED ||
+		    m_transportStatus == RECORDING_ARMED) {
+
+		    if ((*i)->getType() == Rosegarden::MappedEvent::MidiNote) {
+			if ((*i)->getVelocity() == 0) {
+			    emit insertableNoteOffReceived((*i)->getPitch());
+			} else {
+			    emit insertableNoteOnReceived((*i)->getPitch());
+			}
+		    }
+		}
+	    }
 
 #ifdef HAVE_ALSA
             (*i)->setInstrument(id);

@@ -81,6 +81,14 @@ public:
     // channel) we're after.
     //
     Instrument* assignMidiProgramToInstrument(MidiByte program,
+                                              bool percussion) {
+	return assignMidiProgramToInstrument(program, -1, -1, percussion);
+    }
+
+    // Same again, but with bank select
+    // 
+    Instrument* assignMidiProgramToInstrument(MidiByte program,
+					      int msb, int lsb,
                                               bool percussion);
 
     // Get a suitable name for a Segment belonging to this instrument.

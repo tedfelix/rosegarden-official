@@ -133,6 +133,18 @@ public:
     virtual void importMIDIFile(const QString &url);
 
     /**
+     * merges a MIDI file
+     *
+     * @param url : a string containing a url (protocol://foo/bar/file.mid)
+     */
+    virtual void mergeMIDIFile(const QString &url);
+
+    /**
+     * merges or imports a MIDI file
+     */
+    void importMIDIFile(const QString &url, bool merge);
+
+    /**
      * export a MIDI file
      */
     void exportMIDIFile(const QString &url);
@@ -422,6 +434,11 @@ public slots:
      * Let the user select a MIDI file for import
      */
     void slotImportMIDI();
+
+    /**
+     * Let the user select a MIDI file for merge
+     */
+    void slotMergeMIDI();
 
     /**
      * Revert to last loaded file
