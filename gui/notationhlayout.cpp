@@ -590,6 +590,7 @@ NotationHLayout::layout(BarDataMap::iterator i)
     TimeSignature timeSignature;
 
     int x = 0, barX = 0;
+    TieMap tieMap;
 
     for (BarDataList::iterator bdi = barList.begin();
          bdi != barList.end(); ++bdi) {
@@ -664,9 +665,9 @@ NotationHLayout::layout(BarDataMap::iterator i)
 
                 kdDebug(KDEBUG_AREA) << "delta (before) is " << delta << endl;
 
-                delta = positionNote(staff, 
-                                     it, bdi, timeSignature, clef, key,
-                                     accidentalInThisChord);
+                delta = positionNote
+                    (staff, it, bdi, timeSignature, clef, key, tieMap,
+                     accidentalInThisChord);
 
                 kdDebug(KDEBUG_AREA) << "delta (after) is " << delta << endl;
             }
@@ -725,6 +726,7 @@ NotationHLayout::positionNote(StaffType &staff,
                               const BarDataList::iterator &bdi,
                               const TimeSignature &timeSignature,
                               const Clef &clef, const Key &key,
+                              TieMap &tieMap,
                               Accidental &accidentalInThisChord)
 {
     NotationElement *note = *itr;
@@ -759,7 +761,40 @@ NotationHLayout::positionNote(StaffType &staff,
         shift = std::min(shift, (m_npf.getNoteBodyWidth() * 3));
         note->setLayoutX(note->getLayoutX() + shift);
     }
-                
+
+    // Check for a tie going back, and if so work out how long it must
+    // have been and assign accordingly.
+
+    bool tiedForwards = false;
+    bool tiedBack = false;
+
+    note->event()->get<Bool>(Note::TiedForwardPropertyName,  tiedForwards);
+    note->event()->get<Bool>(Note::TiedBackwardPropertyName, tiedBack);
+
+    int pitch = note->event()->get<Int>("pitch");
+    if (tiedForwards) tieMap[pitch] = itr;
+
+    if (tiedBack) {
+        TieMap::iterator ti(tieMap.find(pitch));
+
+        if (ti != tieMap.end()) {
+            NotationElementList::iterator otherItr(ti->second);
+
+            if ((*otherItr)->getAbsoluteTime() + (*otherItr)->getDuration() ==
+                note->getAbsoluteTime()) {
+
+                (*otherItr)->event()->setMaybe<Int>
+                    (TIE_LENGTH,
+                     (int)(note->getLayoutX() - (*otherItr)->getLayoutX()));
+
+            } else {
+                tieMap.erase(pitch);
+            }
+        }
+    }
+               
+    note->event()->setMaybe<Int>(TIE_LENGTH, 0);
+
     // We'll need to shift the x-coord slightly if there's an accidental
     // because the notepixmapfactory quite reasonably places the hot
     // spot at the start of the note head, not at the start of the

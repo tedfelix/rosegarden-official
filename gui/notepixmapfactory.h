@@ -43,20 +43,23 @@ public:
     void setDots(int dots) { m_dots = dots; }
     void setAccidental(Rosegarden::Accidental acc) { m_accidental = acc; }
     
-    void setNoteHeadShifted(bool shifted) { m_shifted          = shifted;  }
-    void setDrawFlag(bool df)             { m_drawFlag         = df;       }
-    void setStemGoesUp(bool up)           { m_stemGoesUp       = up;       }
-    void setStemLength(int length)        { m_stemLength       = length;   }
-    void setLegerLines(int lines)         { m_legerLines       = lines;    }
-    void setSelected(bool selected)       { m_selected         = selected; }
-    void setIsOnLine(bool isOnLine)       { m_onLine           = isOnLine; }
+    void setNoteHeadShifted(bool shifted) { m_shifted          = shifted;   }
+    void setDrawFlag(bool df)             { m_drawFlag         = df;        }
+    void setStemGoesUp(bool up)           { m_stemGoesUp       = up;        }
+    void setStemLength(int length)        { m_stemLength       = length;    }
+    void setLegerLines(int lines)         { m_legerLines       = lines;     }
+    void setSelected(bool selected)       { m_selected         = selected;  }
+    void setIsOnLine(bool isOnLine)       { m_onLine           = isOnLine;  }
 
-    void setBeamed(bool beamed)           { m_beamed           = beamed;   }
-    void setNextBeamCount(int tc)         { m_nextBeamCount    = tc;       }
-    void setThisPartialBeams(bool pt)     { m_thisPartialBeams = pt;       }
-    void setNextPartialBeams(bool pt)     { m_nextPartialBeams = pt;       }
-    void setWidth(int width)              { m_width            = width;    }
-    void setGradient(double gradient)     { m_gradient         = gradient; }
+    void setBeamed(bool beamed)           { m_beamed           = beamed;    }
+    void setNextBeamCount(int tc)         { m_nextBeamCount    = tc;        }
+    void setThisPartialBeams(bool pt)     { m_thisPartialBeams = pt;        }
+    void setNextPartialBeams(bool pt)     { m_nextPartialBeams = pt;        }
+    void setWidth(int width)              { m_width            = width;     }
+    void setGradient(double gradient)     { m_gradient         = gradient;  }
+
+    void setTied(bool tied)               { m_tied             = tied;      }
+    void setTieLength(int tieLength)      { m_tieLength        = tieLength; }
 
 private:
     friend class NotePixmapFactory;
@@ -79,6 +82,9 @@ private:
     bool    m_nextPartialBeams;
     int     m_width;
     double  m_gradient;
+
+    bool    m_tied;
+    int     m_tieLength;
 };    
 
 
@@ -145,6 +151,7 @@ protected:
                    int beamCount);
     void drawShallowLine(int x0, int y0, int x1, int y1, int thickness,
                          bool smooth);
+    void drawTie(bool above, int length);
 
     void createPixmapAndMask(int width, int height);
 

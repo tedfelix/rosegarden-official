@@ -275,6 +275,11 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
         }
     }
 
+    if (params.m_tied) {
+        m_right = std::max(m_right, params.m_tieLength - m_noteBodyWidth/2);
+        //!!! need height above or below as well
+    }
+
     createPixmapAndMask(m_noteBodyWidth + m_left + m_right,
                         m_noteBodyHeight + m_above + m_below);
 
@@ -406,6 +411,10 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
                 }
             }                
         }
+    }
+
+    if (params.m_tied) {
+        drawTie(!params.m_stemGoesUp, params.m_tieLength);
     }
             
     QPoint hotspot(m_left, m_above + m_noteBodyHeight/2);
@@ -617,6 +626,68 @@ NotePixmapFactory::drawBeams(const QPoint &s1,
             drawShallowLine(startX, startY + y, startX + partWidth,
                             startY + (int)(partWidth*grad) + y,
                             thickness, smooth);
+        }
+    }
+}
+
+void
+NotePixmapFactory::drawTie(bool above, int length) 
+{
+    int tieThickness = getStaffLineThickness() * 2;
+    int tieCurve = m_font->getCurrentSize() / 2;
+    int height = tieCurve + tieThickness;
+    int x = m_left + m_noteBodyWidth / 2;
+    int y = (above ? m_left - tieCurve :
+                     m_above + m_noteBodyHeight + tieCurve);
+    int i;
+
+    if (length < tieCurve * 2) length = tieCurve * 2;
+
+    for (i = 0; i < tieThickness; ++i) {
+
+        if (above) {
+
+            m_p.drawArc
+                (x, y + i, x + tieCurve, y + tieCurve + i, 180*16, 270*16);
+            m_pm.drawArc
+                (x, y + i, x + tieCurve, y + tieCurve + i, 180*16, 270*16);
+
+            m_p.drawLine
+                (x + tieCurve, y + i, x + length - tieCurve - 1, y + i);
+            m_pm.drawLine
+                (x + tieCurve, y + i, x + length - tieCurve - 1, y + i);
+
+            m_p.drawArc
+                (x + length - tieCurve - 1, y + i,
+                 x + length - 1, y + tieCurve + i,
+                 270*16, 360*16);
+            m_pm.drawArc
+                (x + length - tieCurve - 1, y + i,
+                 x + length - 1, y + tieCurve + i,
+                 270*16, 360*16);
+
+        } else {
+
+            m_p.drawArc
+                (x, y + i, x + tieCurve, y + tieCurve + i, 90*16, 180*16);
+            m_pm.drawArc
+                (x, y + i, x + tieCurve, y + tieCurve + i, 90*16, 180*16);
+
+            m_p.drawLine
+                (x + tieCurve, y + height - i - 1,
+                 x + length - tieCurve - 1, y + height - i - 1);
+            m_pm.drawLine
+                (x + tieCurve, y + height - i - 1,
+                 x + length - tieCurve - 1, y + height - i - 1);
+
+            m_p.drawArc
+                (x + length - tieCurve - 1, y + i,
+                 x + length - 1, y + tieCurve + i,
+                 0, 90*16);
+            m_pm.drawArc
+                (x + length - tieCurve - 1, y + i,
+                 x + length - 1, y + tieCurve + i,
+                 0*16, 90*16);
         }
     }
 }

@@ -435,6 +435,51 @@ bool Track::noteIsInChord(Event *note) const
 }
 
 
+Track::iterator
+Track::getNoteTiedWith(Event *note, bool forwards) const
+{
+    bool tied = false;
+
+    if (!note->get<Bool>(forwards ?
+                         Note::TiedForwardPropertyName :
+                         Note::TiedBackwardPropertyName, tied) || !tied) {
+        return end();
+    }
+
+    timeT myTime = note->getAbsoluteTime();
+    timeT myDuration = note->getDuration();
+    int myPitch = note->get<Int>("pitch");
+
+    iterator i = findSingle(note);
+    if (i == end()) return end();
+
+    for (;;) {
+        i = forwards ? findContiguousNext(i) : findContiguousPrevious(i);
+
+        if (i == end()) return end();
+        if ((*i)->getAbsoluteTime() == myTime) continue;
+
+        if (forwards && ((*i)->getAbsoluteTime() != myTime + myDuration)) {
+            return end();
+        }
+        if (!forwards &&
+            (((*i)->getAbsoluteTime() + (*i)->getDuration()) != myTime)) {
+            return end();
+        }
+        
+        if (!(*i)->get<Bool>(forwards ?
+                             Note::TiedBackwardPropertyName :
+                             Note::TiedForwardPropertyName, tied) || !tied) {
+            continue;
+        }
+
+        int pitch;
+        if ((*i)->get<Int>("pitch") == pitch) return i;
+    }
+
+    return end();
+}
+
 void Track::notifyAdd(Event *e) const
 {
     for (ObserverSet::iterator i = m_observers.begin();

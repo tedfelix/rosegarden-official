@@ -248,6 +248,15 @@ public:
     bool noteIsInChord(Event *note) const;
 
     /**
+     * Returns an iterator pointing to the note that this one is tied
+     * with, in the forward direction if goForwards or back otherwise.
+     * Returns end() if none.
+     *
+     * Untested
+     */
+    iterator getNoteTiedWith(Event *note, bool goForwards) const;
+
+    /**
      * Fill up the track with rests, from the end of the last event
      * currently on the track to the endTime given.  Actually, this
      * does much the same as setDuration does when it extends a track.

@@ -173,11 +173,13 @@ protected:
      const NotationElementList::iterator &, const BarDataList::iterator &,
      const Rosegarden::TimeSignature &);
 
+    typedef std::map<int, NotationElementList::iterator> TieMap;
+
     long positionNote
     (StaffType &staff, 
      const NotationElementList::iterator &, const BarDataList::iterator &,
      const Rosegarden::TimeSignature &, const Rosegarden::Clef &clef,
-     const Rosegarden::Key &key,
+     const Rosegarden::Key &key, TieMap &,
      Rosegarden::Accidental &accidentalInThisChord);
 
     class AccidentalTable : public std::vector<Rosegarden::Accidental>
@@ -191,7 +193,6 @@ protected:
         Rosegarden::Key m_key;
         Rosegarden::Clef m_clef;
     };
-
 
     int getMinWidth(NotationElement &,
                     const Rosegarden::Quantizer * = 0) const;

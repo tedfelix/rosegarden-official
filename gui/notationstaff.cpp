@@ -417,6 +417,15 @@ QCanvasSimpleSprite *NotationStaff::makeNoteSprite(NotationElementList::iterator
     params.setBeamed(beamed);
     params.setIsOnLine(heightOnStaff % 2 == 0);
 
+    long tieLength;
+    (void)((*it)->event()->get<Int>(TIE_LENGTH, tieLength));
+    if (tieLength > 0) {
+        params.setTied(true);
+        params.setTieLength(tieLength);
+    } else {
+        params.setTied(false);
+    }
+
     if (beamed) {
 
         if ((*it)->event()->get<Bool>(BEAM_PRIMARY_NOTE)) {
