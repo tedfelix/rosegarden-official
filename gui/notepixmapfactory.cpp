@@ -398,9 +398,6 @@ NotePixmapFactory::makeNotePixmap(Note::Type note,
                                   bool stalkGoesUp,
                                   bool fixedHeight)
 {
-    kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeNotePixmap: note is "
-                         << note << ", dotted is " << dotted << endl;
-
     int stalkLength = getStalkLength();
 
     if (note < Note::QuarterNote) {
@@ -427,7 +424,7 @@ NotePixmapFactory::makeNotePixmap(Note::Type note,
         (note, dotted, accidental, drawTail, stalkGoesUp, fixedHeight);
 
     if (note > Note::Longest) {
-        kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeNotePixmap : note > LastNote ("
+        kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeNotePixmap : note > Note::Longest ("
                              << note << ")\n";
         throw -1;
     }
@@ -531,9 +528,6 @@ NotePixmapFactory::makeBeamedNotePixmap(Note::Type note,
 					int width,
 					double gradient)
 {
-    kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeBeamedNotePixmap: note is "
-                         << note << ", dotted is " << dotted << endl;
-
     m_offsets.setStalkLength(stalkLength);
 
     int beamSpacing = (int)(width * gradient);
@@ -550,7 +544,7 @@ NotePixmapFactory::makeBeamedNotePixmap(Note::Type note,
         (note, dotted, accidental, false, stalkGoesUp, false);
 
     if (note > Note::Longest) {
-        kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeNotePixmap : note > LastNote ("
+        kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeNotePixmap : note > Note::Longest ("
                              << note << ")\n";
         throw -1;
     }
@@ -606,8 +600,6 @@ NotePixmapFactory::makeBeamedNotePixmap(Note::Type note,
     int thickness = (getNoteBodyHeight() + 2) / 3;
     int gap = thickness - 1;
     if (gap < 1) gap = 1;
-
-    kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeBeamedNotePixmap: myTailCount = " << myTailCount << ", nextTailCount = " << nextTailCount << ", commonTailCount = " << commonTailCount << endl;
 
     for (int j = 0; j < commonTailCount; ++j) {
 	for (int i = 0; i < thickness; ++i) {
@@ -772,8 +764,6 @@ NotePixmapFactory::makeKeyPixmap(const Key &key, const Clef &clef)
 	// they have different "centres"
 	if (!key.isSharp()) y -= 2;
 
-	kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeKeyPixmap: Have height " << h << ", translates to y " << y << endl;
-
 	m_p.drawPixmap(x, y, accidentalPixmap);
 	m_pm.drawPixmap(x, y, *(accidentalPixmap.mask()));
 
@@ -834,45 +824,8 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
 
     return p;
 }
-/*
-QCanvasPixmap
-NotePixmapFactory::makeBeamSectionPixmap(int myTailCount, int nextTailCount,
-					 bool aboveNotes, int width,
-					 double gradient)
-{
-    int height;
-    QPoint origin;
-    origin.setX(0);
 
-    if (gradient <= 0) { // sloping up or not at all
-	origin.setY(-width * gradient);
-	height = origin.y() + 5 * max(myTailCount, nextTailCount);
-    } else {
-	origin.setY(0);
-	height = width * gradient + 5 * max(myTailCount, nextTailCount);
-    }
 
-    createPixmapAndMask(width, height);
-
-    m_p.setPen(Qt::black);
-
-    int i;
-    for (i = 0; i < 3; ++i) {
-	m_p.drawLine(origin.x(), origin.y() + i,
-		     origin.x() + width, origin.y() + i + width * gradient);
-    }
-
-    m_p.end();
-    QCanvasPixmap p(*m_generatedPixmap, origin);
-    QBitmap m(*m_generatedMask);
-    p.setMask(m);
-    
-    delete m_generatedPixmap;
-    delete m_generatedMask;
-
-    return p;
-}
-*/
 int NotePixmapFactory::getTimeSigWidth(const TimeSignature &sig) const
 {
     int numerator = sig.getNumerator(),
@@ -1017,9 +970,6 @@ NotePixmapFactory::drawDot()
     int x = m_offsets.getBodyOffset().x() + m_noteBodyFilled.size().width();
     int y = m_offsets.getBodyOffset().y();
 
-    kdDebug(KDEBUG_AREA) << "NotePixmapFactory::drawDot(): placing dot at "
-                         << x << "," << y << endl;
-
     m_p.drawPixmap(x, y, m_dot);
     m_pm.drawPixmap(x, y, *(m_dot.mask()));
 }
@@ -1073,183 +1023,3 @@ NotePixmapFactory::drawAccidental(Accidental accidental, bool /*stalkGoesUp*/)
 QPoint
 NotePixmapFactory::m_pointZero;
 
-
-#ifdef NOT_DEFINED
-
-//////////////////////////////////////////////////////////////////////
-
-
-ChordPixmapFactory::ChordPixmapFactory(const Staff &s)
-    : m_referenceStaff(s)
-{
-}
-
-
-QCanvasPixmap
-ChordPixmapFactory::makeChordPixmap(const ChordPitches &pitches,
-                                    const Accidentals &accidentals,
-                                    Note::Type note, bool dotted,
-                                    bool drawTail, bool stalkGoesUp)
-{
-    // The heights we calculate are in the default clef, but they're
-    // just used to calculate relative distances &c so that should be
-    // okay.  What _won't_ be okay is using the default key, because
-    // the relative height of an item can depend on the key (e.g. is
-    // this a C-sharp or a D-flat?)
-
-    int topHeight =
-        NotationDisplayPitch(pitches[pitches.size()-1],
-                             Clef::DefaultClef, Key::DefaultKey).getHeightOnStaff(); //!!! no -- default key may produce incorrect result
-    int topY = m_referenceStaff.yCoordOfHeight(topHeight);
-
-    int bottomHeight =
-        NotationDisplayPitch(pitches[0],
-                             Clef::DefaultClef, Key::DefaultKey).getHeightOnStaff();  //!!! no -- default key may produce incorrect result
-    int bottomY = m_referenceStaff.yCoordOfHeight(bottomHeight);
-
-    bool noteHasStalk = note < Note::WholeNote;
-
-    m_generatedPixmapHeight = topY - bottomY + m_noteBodyHeight;
-
-    if (noteHasStalk)
-        m_generatedPixmapHeight += Staff::stalkLen;
-
-    kdDebug(KDEBUG_AREA) << "m_generatedPixmapHeight : " << m_generatedPixmapHeight << endl
-                         << "topHeight : " << topHeight << " - bottomHeight : " << bottomHeight << endl;
-    
-
-    //readjustGeneratedPixmapHeight(note);
-
-    // X-offset at which the tail should be drawn
-    //unsigned int tailOffset = (note < Quarter && stalkGoesUp) ? m_tailWidth : 0;
-
-    createPixmapAndMask(/*tailOffset*/);
-
-    // paint note bodies
-
-    // set mask painter RasterOp to Or
-    m_pm.setRasterOp(Qt::OrROP);
-
-    QPixmap *body =
-        (note == Note::Breve) ? &m_breve :
-        (note >= Note::HalfNote) ? &m_noteBodyEmpty : &m_noteBodyFilled;
-
-    if (stalkGoesUp) {
-        int offset = m_generatedPixmap->height() - body->height() - topY;
-        
-        for (int i = pitches.size() - 1; i >= 0; --i) {
-            int y = m_referenceStaff.yCoordOfHeight
-                (NotationDisplayPitch(pitches[i], Clef::DefaultClef,
-                                      Key::DefaultKey).getHeightOnStaff());
-            m_p.drawPixmap (0, y + offset, *body);
-            m_pm.drawPixmap(0, y + offset, *(body->mask()));
-        }
-        
-    } else {
-        int offset = bottomY;
-        for (unsigned int i = 0; i < pitches.size(); ++i) {
-            int y = m_referenceStaff.yCoordOfHeight
-                (NotationDisplayPitch(pitches[i], Clef::DefaultClef,
-                                      Key::DefaultKey).getHeightOnStaff());
-            m_p.drawPixmap (0, y - offset, *body);
-            m_pm.drawPixmap(0, y - offset, *(body->mask()));
-        }
-    }
-
-    // restore mask painter RasterOp to Copy
-    m_pm.setRasterOp(Qt::CopyROP);
-
-    if (noteHasStalk)
-        drawStalk(note, drawTail, stalkGoesUp);
-
-    m_p.end();
-    m_pm.end();
-
-    QCanvasPixmap notePixmap(*m_generatedPixmap, m_pointZero);
-    QBitmap mask(*m_generatedMask);
-    notePixmap.setMask(mask);
-
-    delete m_generatedPixmap;
-    delete m_generatedMask;
-
-    return notePixmap;
-
-}
-
-
-/*!
-QCanvasPixmap
-ChordPixmapFactory::makeChordPixmap(const chordpitches &pitches,
-                                    Note::Type note, bool drawTail,
-                                    bool stalkGoesUp)
-{
-    //!!! oh jeez
-
-    int highestNote = m_referenceStaff.pitchYOffset(pitches[pitches.size() - 1]),
-        lowestNote = m_referenceStaff.pitchYOffset(pitches[0]);
-
-
-    bool noteHasStalk = note < Note::WholeNote;
-
-    m_generatedPixmapHeight = highestNote - lowestNote + m_noteBodyHeight;
-
-    if (noteHasStalk)
-        m_generatedPixmapHeight += Staff::stalkLen;
-
-    kdDebug(KDEBUG_AREA) << "m_generatedPixmapHeight : " << m_generatedPixmapHeight << endl
-                         << "highestNote : " << highestNote << " - lowestNote : " << lowestNote << endl;
-    
-
-    //readjustGeneratedPixmapHeight(note);
-
-    // X-offset at which the tail should be drawn
-    //unsigned int tailOffset = (note < Quarter && stalkGoesUp) ? m_tailWidth : 0;
-
-    createPixmapAndMask();
-
-    // paint note bodies
-
-    // set mask painter RasterOp to Or
-    m_pm.setRasterOp(Qt::OrROP);
-
-    QPixmap *body = (note >= Note::HalfNote) ? &m_noteBodyEmpty : &m_noteBodyFilled;
-
-    if (stalkGoesUp) {
-        int offset = m_generatedPixmap->height() - body->height() - highestNote;
-        
-        for (int i = pitches.size() - 1; i >= 0; --i) {
-            m_p.drawPixmap (0, m_referenceStaff.pitchYOffset(pitches[i]) + offset, *body);
-            m_pm.drawPixmap(0, m_referenceStaff.pitchYOffset(pitches[i]) + offset, *(body->mask()));
-        }
-        
-    } else {
-        int offset = lowestNote;
-        for (unsigned int i = 0; i < pitches.size(); ++i) {
-            m_p.drawPixmap (0, m_referenceStaff.pitchYOffset(pitches[i]) - offset, *body);
-            m_pm.drawPixmap(0, m_referenceStaff.pitchYOffset(pitches[i]) - offset, *(body->mask()));
-        }
-    }
-
-    // restore mask painter RasterOp to Copy
-    m_pm.setRasterOp(Qt::CopyROP);
-
-    if (noteHasStalk)
-        drawStalk(note, drawTail, stalkGoesUp);
-
-    m_p.end();
-    m_pm.end();
-
-    QCanvasPixmap notePixmap(*m_generatedPixmap, m_pointZero);
-    QBitmap mask(*m_generatedMask);
-    notePixmap.setMask(mask);
-
-    delete m_generatedPixmap;
-    delete m_generatedMask;
-
-    return notePixmap;
-
-}
-
-*/
-
-#endif

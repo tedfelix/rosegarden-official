@@ -95,8 +95,6 @@ NotationSet::sample(const NELIterator &i)
     if ((*i)->isNote()) {
         long p = (*i)->event()->get<Int>("pitch");
 
-	kdDebug(KDEBUG_AREA) << "NotationSet::sample: sampling pitch " << p << endl;
-
         if (m_highest == m_nel.end() ||
             p > (*m_highest)->event()->get<Int>("pitch")) {
             m_highest = i;
@@ -184,6 +182,7 @@ Chord::Chord(const NotationElementList &nel, NELIterator i, bool quantized) :
         std::stable_sort(begin(), end(), PitchGreater());
     }
 
+/*
     kdDebug(KDEBUG_AREA) << "Chord::Chord: pitches are:" << endl;
     for (unsigned int i = 0; i < size(); ++i) {
         try {
@@ -192,6 +191,7 @@ Chord::Chord(const NotationElementList &nel, NELIterator i, bool quantized) :
             kdDebug(KDEBUG_AREA) << i << ": no pitch property" << endl;
         }
     }
+*/
 }
 
 Chord::~Chord()
@@ -408,13 +408,13 @@ NotationGroup::calculateBeam(Staff &staff)
     beam.necessary =
          (*initialNote)->event()->getDuration() < crotchet
         && (*finalNote)->event()->getDuration() < crotchet;
-
+/*
     kdDebug(KDEBUG_AREA) << "NotationGroup::calculateBeam: beam data:" << endl
                          << "gradient: " << beam.gradient << endl
                          << "startY: " << beam.startY << endl
                          << "aboveNotes: " << beam.aboveNotes << endl
                          << "necessary: " << beam.necessary << endl;
-
+*/
     return beam;
 }
 

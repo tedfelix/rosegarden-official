@@ -1,7 +1,7 @@
 D * Take a careful look at the situations in which accidentals
     do and don't appear, and make sure they're correct.
 
-  * Handle the principle of hiding an accidental if it's already
+D * Handle the principle of hiding an accidental if it's already
     appeared once within the same bar.
 
   * Make it possible to insert dotted notes and notes with
@@ -26,11 +26,11 @@ D * Make beam code cope properly with partial beams
     enforce an order in storage and much simpler to choose
     the order when assigning x-coordinates).
 
-  * Sort out XML format so as to make bools unambiguous: the
+D * Sort out XML format so as to make bools unambiguous: the
     winning representation appears to be
 
       <event type="note" duration="minim">
-      <prop name="pitch" int="50"/>
-      <prop name="NoteStalkUp" bool="false"/>
+      <property name="pitch" int="50"/>
+      <property name="NoteStalkUp" bool="false"/>
       </event>
 

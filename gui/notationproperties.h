@@ -34,6 +34,7 @@
 #define  P_MIN_WIDTH             "MinWidth"
 
 #define  P_ACCIDENTAL            "NoteComputedAccidental"
+#define  P_DISPLAY_ACCIDENTAL    "NoteDisplayAccidental"
 #define  P_STALK_UP              "NoteStalkUp"
 #define  P_DRAW_TAIL             "NoteDrawTail"
 #define  P_NOTE_NAME             "NoteName"

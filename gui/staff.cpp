@@ -103,10 +103,6 @@ int Staff::yCoordOfHeight(int h) const
     // 0 is bottom staff-line, 8 is top one
     int y = ((8 - h) * m_npf.getLineSpacing()) / 2 +
         linesOffset + ((h % 2 == 1) ? 1 : 0);
-    kdDebug(KDEBUG_AREA) << "Staff::yCoordOfHeight: height is " << h
-                         << ", lineWidth is " << m_npf.getLineSpacing()
-                         << ", linesOffset is " << linesOffset
-                         << ", y is " << y << endl;
     return y;
 }
 

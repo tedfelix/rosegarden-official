@@ -35,6 +35,9 @@ using Rosegarden::Clef;
 using Rosegarden::Key;
 using Rosegarden::Accidental;
 using Rosegarden::NoAccidental;
+using Rosegarden::Sharp;
+using Rosegarden::Flat;
+using Rosegarden::Natural;
 using Rosegarden::Note;
 using Rosegarden::TimeSignature;
 
@@ -216,10 +219,11 @@ NotationHLayout::preparse(NotationElementList::iterator from,
                                          << endl;
                 }
 
-                // if we're in a chord, deal appropriately
-
                 Chord chord(m_notationElements, it);
                 if (chord.size() < 2 || it == chord.getFinalElement()) {
+
+		    // either we're not in a chord, or the chord is
+		    // about to end: update the time accordingly
 
                     int d = el->event()->get<Int>(P_QUANTIZED_DURATION); 
                     nbTimeUnitsInCurrentBar += d;
@@ -260,6 +264,68 @@ NotationHLayout::preparse(NotationElementList::iterator from,
 }
 
 
+NotationHLayout::AccidentalTable::AccidentalTable(Key key, Clef clef) :
+    m_key(key), m_clef(clef)
+{
+    vector<int> heights(key.getAccidentalHeights(clef));
+    unsigned int i;
+    for (i = 0; i < 7; ++i) push_back(NoAccidental);
+    for (i = 0; i < heights.size(); ++i) {
+	(*this)[Key::canonicalHeight(heights[i])] =
+	    (key.isSharp() ? Sharp : Flat);
+    }
+}
+
+Accidental
+NotationHLayout::AccidentalTable::getDisplayAccidental(Accidental accidental,
+						       int height) const
+{
+    height = Key::canonicalHeight(height);
+
+    if (accidental == NoAccidental) {
+	accidental = m_key.getAccidentalAtHeight(height, m_clef);
+    }
+
+    kdDebug(KDEBUG_AREA) << "accidental = " << accidental << ", stored accidental at height " << height << " is " << (*this)[height] << endl;
+
+    if ((*this)[height] != NoAccidental) {
+
+	if (accidental == NoAccidental || accidental == Natural) {
+	    return Natural;
+	} else if (accidental == (*this)[height]) {
+	    return NoAccidental;
+	} else {
+	    //!!! aargh.  What we really want to do now is have two
+	    //accidentals shown: first a natural, then the one
+	    //required for the note.  But there's no scope for that in
+	    //our accidental structure (RG2.1 is superior here)
+	    return accidental;
+	}
+    } else {
+	return accidental;
+    }
+}
+
+void
+NotationHLayout::AccidentalTable::update(Accidental accidental, int height)
+{
+    height = Key::canonicalHeight(height);
+
+    if (accidental == NoAccidental) {
+	accidental = m_key.getAccidentalAtHeight(height, m_clef);
+    }
+
+    kdDebug(KDEBUG_AREA) << "updating height" << height << " from " << (*this)[height] << " to " << accidental << endl;
+
+
+    //!!! again, we can't properly deal with the difficult case where
+    //we already have an accidental at height but it's not the same
+    //accidental
+
+    (*this)[height] = accidental;
+
+}
+
 void
 NotationHLayout::layout()
 {
@@ -268,6 +334,7 @@ NotationHLayout::layout()
     double x = 0;
     const NotePixmapFactory &npf(m_staff.getNotePixmapFactory());
     TimeSignature timeSignature;
+    AccidentalTable accTable(key, clef), newAccTable(accTable);
 
     int pGroupNo = -1;
     NotationElementList::iterator startOfGroup = m_notationElements.end();
@@ -328,6 +395,11 @@ NotationHLayout::layout()
 
                 clef = Clef(*el->event());
 
+		//!!! Probably not strictly the right thing to do
+		// here, but I hope it'll do well enough in practice
+		accTable = AccidentalTable(key, clef);
+		newAccTable = accTable;
+
             } else if (el->event()->isa(Key::EventType)) {
 
 		// nasty hack: if there's a time signature before
@@ -350,6 +422,8 @@ NotationHLayout::layout()
 		}
 */
                 key = Key(*el->event());
+		accTable = AccidentalTable(key, clef);
+		newAccTable = accTable;
 
             } else if (el->isRest()) {
 
@@ -367,6 +441,27 @@ NotationHLayout::layout()
 
             } else if (el->isNote()) {
                 
+		// deal with accidentals: update this note according
+		// to the accidentalTable (accidentals in force when
+		// the last chord ended) and update newAccidentalTable
+		// with accidentals from this note.  (We don't update
+		// accidentalTable because there may be other notes in
+		// this chord that need accidentalTable to be the same
+		// as it is for this one)
+
+		Accidental acc(el->event()->get<Int>(P_ACCIDENTAL));
+		int height(el->event()->get<Int>(P_HEIGHT_ON_STAFF));
+		
+		kdDebug(KDEBUG_AREA) << "accidental = " << acc <<
+		    ", height = " << height << endl;
+
+		Accidental dacc = accTable.getDisplayAccidental(acc, height);
+
+		kdDebug(KDEBUG_AREA) << "display accidental = " << dacc << endl;
+
+		el->event()->setMaybe<Int>(P_DISPLAY_ACCIDENTAL, dacc);
+		newAccTable.update(acc, height);
+
                 long groupNo = -1;
 
                 if (el->event()->get<Int>(P_GROUP_NO, groupNo) &&
@@ -394,7 +489,11 @@ NotationHLayout::layout()
                 Chord chord(m_notationElements, it);
                 if (chord.size() < 2 || it == chord.getFinalElement()) {
 
-		    kdDebug(KDEBUG_AREA) << "This is the final chord element (of " << chord.size() << ")" << endl;
+		    // either we're not in a chord, or the chord is
+		    // about to end: update the spacing and accidental
+		    // table accordingly
+
+//		    kdDebug(KDEBUG_AREA) << "This is the final chord element (of " << chord.size() << ")" << endl;
 
                     // To work out how much space to allot a note (or
                     // chord), start with the amount alloted to the
@@ -407,6 +506,9 @@ NotationHLayout::layout()
                              el->event()->getDuration()) /
                         //!!! not right for partial bar?
                         timeSignature.getBarDuration();
+
+		    accTable = newAccTable;
+
                 } else {
 		    kdDebug(KDEBUG_AREA) << "This is not the final chord element (of " << chord.size() << ")" << endl;
 		    delta = 0;

@@ -127,8 +127,16 @@ public:
         return m_keyDetailMap[m_name].m_rg2name;
     }
 
+    Accidental getAccidentalAtHeight(int height, const Clef &clef) const;
+
     // staff positions of accidentals
     std::vector<int> getAccidentalHeights(const Clef &clef) const;
+
+    // to permit comparison of one height with another irrespective of
+    // octave, for key/accidental calculations &c
+    static inline unsigned int canonicalHeight(int height) {
+	return (height > 0) ? (height % 7) : ((7 - (-height % 7)) % 7);
+    }
 
     Event getAsEvent() const {
         Event e(EventType);

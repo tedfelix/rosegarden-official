@@ -131,7 +131,7 @@ XmlStorableEvent::setProperty(const QXmlAttributes &attributes)
         }
     }
 
-    kdDebug(KDEBUG_AREA) << "XmlStorableEvent::setProperty: Warning: no property value found" << endl;
+    if (!have) kdDebug(KDEBUG_AREA) << "XmlStorableEvent::setProperty: Warning: no property value found for property " << name << endl;
 }
 
 

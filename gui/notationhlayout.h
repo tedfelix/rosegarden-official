@@ -68,6 +68,18 @@ public:
     void reset();
 
 protected:
+    class AccidentalTable : public std::vector<Rosegarden::Accidental>
+    {
+    public:
+	AccidentalTable(Rosegarden::Key, Rosegarden::Clef);
+	Rosegarden::Accidental getDisplayAccidental(Rosegarden::Accidental,
+						    int height) const;
+	void update(Rosegarden::Accidental, int height);
+    private:
+	Rosegarden::Key m_key;
+	Rosegarden::Clef m_clef;
+    };
+	    
     void addNewBar(NotationElementList::iterator start,
                    Rosegarden::Event::timeT time,
                    int x, int width, int fwidth,

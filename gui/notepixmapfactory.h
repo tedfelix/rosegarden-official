@@ -223,39 +223,4 @@ private:
 };
 
 
-#ifdef NOT_DEFINED
-
-/**
- * Generates QCanvasPixmaps for chords - currently broken
- *
- *@author Guillaume Laurent
- */
-class ChordPixmapFactory : public NotePixmapFactory
-{
-public:
-
-    ChordPixmapFactory(const Staff&);
-
-    /**
-     * Generate a pixmap for a chord
-     *
-     * @param pitches : a sorted vector of relative pitches
-     * @param duration : chord duration
-     * @param drawTail : if the pixmap should have a tail or not
-     *   (useful when the tail should be collapsed with the one of a neighboring chord)
-     * @param stalkGoesUp : if the note's stalk should go up or down
-     */
-    QCanvasPixmap makeChordPixmap(const ChordPitches &pitches,
-                                  const Accidentals &accidentals,
-                                  Rosegarden::Note::Type note,
-                                  bool dotted,
-                                  bool drawTail = false,
-                                  bool stalkGoesUp = true);
-
-protected:
-    const Staff &m_referenceStaff;
-};
-
-#endif    
-
 #endif

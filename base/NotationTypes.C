@@ -103,7 +103,21 @@ std::vector<Key> Key::getKeys(bool minor)
     return result;
 }
 
-vector<int> Key::getAccidentalHeights(const Clef &clef) const {
+Accidental Key::getAccidentalAtHeight(int height, const Clef &clef) const
+{
+    checkAccidentalHeights();
+    height = canonicalHeight(height);
+    for (unsigned int i = 0; i < m_accidentalHeights->size(); ++i) {
+	if (height == (int)canonicalHeight((*m_accidentalHeights)[i] +
+					   clef.getPitchOffset())) {
+	    return isSharp() ? Sharp : Flat;
+	}
+    }
+    return NoAccidental;
+}
+
+vector<int> Key::getAccidentalHeights(const Clef &clef) const
+    {
     // staff positions of accidentals
     checkAccidentalHeights();
     vector<int> v(*m_accidentalHeights);
@@ -219,11 +233,6 @@ NotationDisplayPitch::getAsString(const Clef &clef, const Key &key) const
 }
 
 
-static inline unsigned int absmod(int height, int mod)
-{
-    return (height > 0) ? (height % mod) : ((mod - (-height % mod)) % mod);
-}
-
 
 // Derived from RG2.1's MidiPitchToVoice in editor/src/Methods.c,
 // InitialiseAccidentalTable in Format.c, and PutItemListInClef in
@@ -274,7 +283,7 @@ NotationDisplayPitch::rawPitchToDisplayPitch(int pitch,
     vector<int> ah(key.getAccidentalHeights(clef));
     for (vector<int>::const_iterator i = ah.begin(); i != ah.end(); ++i) {
 
-        if (absmod(*i, 7) == absmod(height, 7)) {
+        if (Key::canonicalHeight(*i) == Key::canonicalHeight(height)) {
             // the key has an accidental at the same height as this note, so
             // undo the note's accidental if there is one, or make explicit
             // if there isn't
@@ -298,7 +307,7 @@ NotationDisplayPitch::displayPitchToRawPitch(int height,
 {
     int octave = 5;
 
-    // 1. Get canonical pitch and correct octave
+    // 1. Get pitch and correct octave
 
     while (height < 0) { octave -= 1; height += 7; }
     while (height > 7) { octave += 1; height -= 7; }
@@ -324,7 +333,7 @@ NotationDisplayPitch::displayPitchToRawPitch(int height,
     vector<int> ah(key.getAccidentalHeights(clef));
     for (vector<int>::const_iterator i = ah.begin(); i != ah.end(); ++i) {
 
-        if (absmod(*i, 7) == absmod(height, 7)) {
+        if (Key::canonicalHeight(*i) == Key::canonicalHeight(height)) {
             // the key has an accidental at the same height as this note
             if (accidental == Natural) accidental = NoAccidental;
             else if (accidental == NoAccidental) accidental = sharp ? Sharp : Flat;

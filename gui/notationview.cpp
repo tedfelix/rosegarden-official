@@ -489,11 +489,11 @@ NotationView::showElements(NotationElementList::iterator from,
                 Note::Type note = (*it)->event()->get<Int>(P_NOTE_TYPE);
                 bool dotted = (*it)->event()->get<Bool>(P_NOTE_DOTTED);
 
-                Accidental accident = NoAccidental;
+                Accidental accidental = NoAccidental;
 
                 long acc;
-                if ((*it)->event()->get<Int>(P_ACCIDENTAL, acc)) {
-                    accident = Accidental(acc);
+                if ((*it)->event()->get<Int>(P_DISPLAY_ACCIDENTAL, acc)) {
+                    accidental = Accidental(acc);
                 }
 
                 bool up = true;
@@ -502,7 +502,7 @@ NotationView::showElements(NotationElementList::iterator from,
                 bool tail = true;
                 (void)((*it)->event()->get<Bool>(P_DRAW_TAIL, tail));
 
-		kdDebug(KDEBUG_AREA) << "NotationView::showElements(): found a note of type " << note << " with accidental " << accident << endl;
+//		kdDebug(KDEBUG_AREA) << "NotationView::showElements(): found a note of type " << note << " with accidental " << accidental << endl;
                 
                 bool beamed = false;
                 (void)((*it)->event()->get<Bool>(P_BEAMED, beamed));
@@ -537,7 +537,7 @@ NotationView::showElements(NotationElementList::iterator from,
 
 			QCanvasPixmap notePixmap
 			    (npf.makeBeamedNotePixmap
-			     (note, dotted, accident, up, stemLength,
+			     (note, dotted, accidental, up, stemLength,
 			      nextTailCount, thisPartialTails, nextPartialTails,
                               width, (double)gradient / 100.0));
 			sprite = new QCanvasSimpleSprite(&notePixmap, canvas());
@@ -546,7 +546,7 @@ NotationView::showElements(NotationElementList::iterator from,
 
 			QCanvasPixmap notePixmap
 			    (npf.makeNotePixmap
-			     (note, dotted, accident, tail, up));
+			     (note, dotted, accidental, tail, up));
 			sprite = new QCanvasSimpleSprite(&notePixmap, canvas());
 		    }
 
@@ -554,7 +554,7 @@ NotationView::showElements(NotationElementList::iterator from,
 		} else {
 
 		    QCanvasPixmap notePixmap
-			(npf.makeNotePixmap(note, dotted, accident, tail, up));
+			(npf.makeNotePixmap(note, dotted, accidental, tail, up));
 
 		    sprite = new QCanvasSimpleSprite(&notePixmap, canvas());
 		}

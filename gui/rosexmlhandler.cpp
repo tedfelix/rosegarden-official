@@ -137,7 +137,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         m_groupNo++;
         m_groupType = atts.value("type");
 
-    } else if (lcName == "prop") {
+    } else if (lcName == "property") {
         
         if (!m_currentEvent) {
             kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: Warning: Found property outside of event at time " << m_currentTime << ", ignoring" << endl;
