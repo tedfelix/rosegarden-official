@@ -1260,7 +1260,7 @@ NotePixmapFactory::drawShallowLine(int x0, int y0, int x1, int y1,
     static std::vector<QColor> colours, selectedColours;
     if (colours.size() == 0) {
 	int h, s, v;
-	RosegardenGUIColours::SelectedElement.getHsv(&h, &s, &v);
+	RosegardenGUIColours::SelectedElement.hsv(&h, &s, &v);
 	for (int step = 0; step < 256; step += (step == 0 ? 63 : 64)) {
 	    colours.push_back(QColor(-1, 0, step, QColor::Hsv));
 	    selectedColours.push_back(QColor(h, 255-step, v, QColor::Hsv));
