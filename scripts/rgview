@@ -1,0 +1,19 @@
+#!/bin/bash
+#
+# rgview - handy dandy RG file viewer
+#
+# D. Michael McIntyre <dmmcintyr@users.sourceforge.net>
+#
+#
+
+if (file $1|grep gzip); then
+    echo Uncompressing $1 for viewing...
+    gunzip -c $1 > /tmp/$1.xml
+    /usr/bin/view /tmp/$1.xml
+    rm -f /tmp/$1.xml > /dev/null
+else
+    /usr/bin/less $1
+fi
+exit 0
+
+exit 0
