@@ -100,15 +100,15 @@ AudioPluginInstance::toXmlString()
            << "\" bypassed=\"";
 
     if (m_bypass)
-        plugin << "true ";
+        plugin << "true\" ";
     else
-        plugin << "false ";
+        plugin << "false\" ";
 
     if (m_program != "") {
 	plugin << "program=\"" << encode(m_program) << "\"";
     }
 
-    plugin << "\">" << std::endl;
+    plugin << ">" << std::endl;
 
     for (unsigned int i = 0; i < m_ports.size(); i++)
     {

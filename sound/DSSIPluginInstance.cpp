@@ -26,7 +26,7 @@
 
 #ifdef HAVE_DSSI
 
-#define DEBUG_DSSI 1
+//#define DEBUG_DSSI 1
 //#define DEBUG_DSSI_PROCESS 1
 
 namespace Rosegarden
@@ -72,7 +72,10 @@ DSSIPluginInstance::DSSIPluginInstance(PluginFactory *factory,
     m_ownBuffers = true;
 
     instantiate(sampleRate);
-    if (isOK()) connectPorts();
+    if (isOK()) {
+	connectPorts();
+	activate();
+    }
 }
 
 DSSIPluginInstance::DSSIPluginInstance(PluginFactory *factory,
@@ -105,7 +108,10 @@ DSSIPluginInstance::DSSIPluginInstance(PluginFactory *factory,
     init();
 
     instantiate(sampleRate);
-    if (isOK()) connectPorts();
+    if (isOK()) {
+	connectPorts();
+	activate();
+    }
 }
 
 
@@ -153,6 +159,15 @@ DSSIPluginInstance::init()
 }
 
 void
+DSSIPluginInstance::silence()
+{
+    if (m_instanceHandle != 0) {
+	deactivate();
+	activate();
+    }
+}
+
+void
 DSSIPluginInstance::setIdealChannelCount(size_t channels)
 {
 #ifdef DEBUG_DSSI
@@ -160,7 +175,15 @@ DSSIPluginInstance::setIdealChannelCount(size_t channels)
 	      << channels << " (was " << m_idealChannelCount << ")" << std::endl;
 #endif
 
-    if (channels == m_idealChannelCount) return;
+    if (channels == m_idealChannelCount) {
+	silence();
+	return;
+    }
+
+    if (m_instanceHandle != 0) {
+	deactivate();
+    }
+
     m_idealChannelCount = channels;
 
     if (channels > m_outputBufferCount) {
@@ -181,11 +204,19 @@ DSSIPluginInstance::setIdealChannelCount(size_t channels)
 
 	connectPorts();
     }
+
+    if (m_instanceHandle != 0) {
+	activate();
+    }
 }
 
 DSSIPluginInstance::~DSSIPluginInstance()
 {
     std::cerr << "DSSIPluginInstance::~DSSIPluginInstance" << std::endl;
+
+    if (m_instanceHandle != 0) {
+	deactivate();
+    }
 
     cleanup();
 

@@ -706,12 +706,7 @@ AudioInstrumentMixer::setPlugin(InstrumentId id, int position, QString identifie
 	m_plugins[id][position] = instance;
     }
 
-    if (instance) {
-	instance->activate();
-    }
-
     if (oldInstance) {
-	oldInstance->deactivate();
 	delete oldInstance;
     }
 
@@ -726,7 +721,6 @@ AudioInstrumentMixer::removePlugin(InstrumentId id, int position)
     if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
 
 	if (m_synths[id]) {
-	    m_synths[id]->deactivate();
 	    delete m_synths[id];
 	    m_synths[id] = 0;
 	}
@@ -739,7 +733,6 @@ AudioInstrumentMixer::removePlugin(InstrumentId id, int position)
 	    RunnablePluginInstance *instance = i->second;
 
 	    if (instance) {
-		instance->deactivate();
 		delete instance;
 	    }
 
@@ -760,7 +753,6 @@ AudioInstrumentMixer::removeAllPlugins()
     for (SynthPluginMap::iterator i = m_synths.begin();
 	 i != m_synths.end(); ++i) {
 	if (i->second) {
-	    i->second->deactivate();
 	    delete i->second;
 	}
     }
@@ -777,7 +769,6 @@ AudioInstrumentMixer::removeAllPlugins()
 	    RunnablePluginInstance *instance = i->second;
 
 	    if (instance) {
-		instance->deactivate();
 		delete instance;
 	    }
 
@@ -945,10 +936,8 @@ AudioInstrumentMixer::resetAllPlugins()
 	RunnablePluginInstance *instance = j->second;
 
 	if (instance) {
-	    instance->deactivate();
 	    std::cerr << "AudioInstrumentMixer::resetAllPlugins: setting " << channels << " channels on synth for instrument " << id << std::endl;
 	    instance->setIdealChannelCount(channels);
-	    instance->activate();
 	}
     }	
 
@@ -968,10 +957,8 @@ AudioInstrumentMixer::resetAllPlugins()
 	    RunnablePluginInstance *instance = i->second;
 
 	    if (instance) {
-		instance->deactivate();
 		std::cerr << "AudioInstrumentMixer::resetAllPlugins: setting " << channels << " channels on plugin for instrument " << id << std::endl;
 		instance->setIdealChannelCount(channels);
-		instance->activate();
 	    }
 	}
     }

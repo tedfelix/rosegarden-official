@@ -2299,7 +2299,10 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 void
 AlsaDriver::processSoftSynthEventOut(InstrumentId id, const snd_seq_event_t *ev, bool now)
 {
+#ifdef DEBUG_ALSA
     std::cerr << "AlsaDriver::processSoftSynthEventOut: instrument " << id << ", now " << now << std::endl;
+#endif
+
 #ifdef HAVE_LIBJACK
 
     if (!m_jackDriver) return;

@@ -64,12 +64,10 @@ public:
     virtual QString getCurrentProgram();
     virtual void selectProgram(QString program);
 
-    virtual void activate();
-    virtual void deactivate();
-
     virtual bool isBypassed() const { return m_bypassed; }
     virtual void setBypassed(bool bypassed) { m_bypassed = bypassed; }
 
+    virtual void silence();
     virtual void setIdealChannelCount(size_t channels); // may re-instantiate
 
 protected:
@@ -102,6 +100,8 @@ protected:
     void init();
     void instantiate(unsigned long sampleRate);
     void cleanup();
+    void activate();
+    void deactivate();
 
     // Connection of data (and behind the scenes control) ports
     //

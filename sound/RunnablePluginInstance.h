@@ -58,9 +58,6 @@ public:
 
     virtual QString getIdentifier() const = 0;
 
-    virtual void activate() = 0;
-    virtual void deactivate() = 0;
-
     /**
      * Run for one block, starting at the given time.  The start time
      * may be of interest to synths etc that may have queued events
@@ -88,7 +85,8 @@ public:
     virtual bool isBypassed() const = 0;
     virtual void setBypassed(bool value) = 0;
 
-    virtual void setIdealChannelCount(size_t channels) = 0; // may re-instantiate
+    virtual void silence() = 0;
+    virtual void setIdealChannelCount(size_t channels) = 0; // must also silence(); may also re-instantiate
 
     void setFactory(PluginFactory *f) { m_factory = f; } // ew
 

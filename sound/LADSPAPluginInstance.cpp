@@ -63,7 +63,10 @@ LADSPAPluginInstance::LADSPAPluginInstance(PluginFactory *factory,
     m_ownBuffers = true;
 
     instantiate(sampleRate);
-    if (isOK()) connectPorts();
+    if (isOK()) {
+	connectPorts();
+	activate();
+    }
 }
 
 LADSPAPluginInstance::LADSPAPluginInstance(PluginFactory *factory,
@@ -90,7 +93,10 @@ LADSPAPluginInstance::LADSPAPluginInstance(PluginFactory *factory,
     init();
 
     instantiate(sampleRate);
-    if (isOK()) connectPorts();
+    if (isOK()) {
+	connectPorts();
+	activate();
+    }
 }
 
 
@@ -139,23 +145,45 @@ LADSPAPluginInstance::init(int idealChannelCount)
 }
 
 void
+LADSPAPluginInstance::silence()
+{
+    if (isOK()) {
+	deactivate();
+	activate();
+    }
+}
+
+void
 LADSPAPluginInstance::setIdealChannelCount(size_t channels)
 {
-    if (m_audioPortsIn.size() != 1) return;
-    if (channels == m_instanceCount) return;
+    if (m_audioPortsIn.size() != 1 || channels == m_instanceCount) {
+	silence();
+	return;
+    }
+
+    if (isOK()) {
+	deactivate();
+    }
 
     //!!! don't we need to reallocate inputBuffers and outputBuffers?
 
     cleanup();
     m_instanceCount = channels;
     instantiate(m_sampleRate);
-    if (isOK()) connectPorts();
+    if (isOK()) {
+	connectPorts();
+	activate();
+    }
 }
 
 
 LADSPAPluginInstance::~LADSPAPluginInstance()
 {
     std::cerr << "LADSPAPluginInstance::~LADSPAPluginInstance" << std::endl;
+
+    if (m_instanceHandles.size() != 0) { // "isOK()"
+	deactivate();
+    }
 
     cleanup();
 
