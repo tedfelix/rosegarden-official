@@ -990,7 +990,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
             for (unsigned int i = 0; i < ports.size(); i++)
             {
                 QString label = strtoqstr((*it)->getName());
-                label += QString(" %1 - Port %2").arg((*it)->getId())
+                label += QString("%1 - Port %2").arg((*it)->getId())
                                                  .arg(ports[i]);
 
                 m_recordDevice->insertItem(label);

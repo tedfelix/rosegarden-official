@@ -12,15 +12,19 @@ o Audio
    - hardcoded format segment values
    - panning
    - plugin bypass
-   - busses and routing
    - BWF format writing/reading
    - multithreading
    - autosplitting
    - libsoundfile support (LSFSoundFile class?)
    - exceptions and return values
    - stereo vu meters (0dB level = 1.0f etc)
+   - jack process tidy up (Bob Ham inspired) [DONE]
+
+o Audio busses and routing
+   - n jack input routes
 
 o JACK autostart and process management
+
 o automatic Sequencer process management
 
 o Instrument/Device naming

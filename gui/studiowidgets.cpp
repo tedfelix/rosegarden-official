@@ -83,6 +83,11 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent, const char *name):
     m_stereoButton = new QPushButton(this);
     m_stereoButton->setPixmap(m_monoPixmap); // default is mono
 
+    // setup the rotary's values
+    m_pan->setMinValue(0.0);
+    m_pan->setMaxValue(100.0);
+    m_pan->setStep(1.0);
+
     grid->addMultiCellWidget(m_stereoButton,  2, 2, 0, 0, AlignCenter);
     grid->addMultiCellWidget(m_pan,           2, 2, 1, 1, AlignCenter);
 

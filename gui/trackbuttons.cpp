@@ -680,7 +680,7 @@ TrackButtons::populateInstrumentPopup()
 
                 // Add a number of groups
                 //
-                for (int j = 0; j < subOrderDepth + 1; ++j)
+                for (int j = 0; j < subOrderDepth; ++j)
                 {
                     QPopupMenu *subMenu = new QPopupMenu(this);
 
@@ -736,9 +736,6 @@ TrackButtons::populateInstrumentPopup()
         {
             int position =  (*it)->getDevice()->getPortNumberPosition(
                                      (*it)->getPort());
-
-            cout << "POSITION = " << position << endl;
-            cout << "GROUP = " << groupBase << endl;
 
             if (position == -1) position = 0;
 

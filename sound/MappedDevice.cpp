@@ -116,8 +116,7 @@ operator>>(QDataStream &dS, MappedDevice *mD)
     }
 
     QString name;
-    unsigned int id;
-    int dType;
+    unsigned int id, dType;
 
     dS >> id;
     dS >> dType;
@@ -151,9 +150,8 @@ operator>>(QDataStream &dS, MappedDevice &mD)
         instruments--;
     }
 
-    unsigned int id;
+    unsigned int id, dType;
     QString name;
-    int dType;
 
     dS >> id;
     dS >> dType;

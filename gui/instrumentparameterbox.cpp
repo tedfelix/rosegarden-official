@@ -877,11 +877,10 @@ AudioInstrumentParameterPanel::slotSetPan(float pan)
     RG_DEBUG << "AudioInstrumentParameterPanel::slotSetPan - "
              << "pan = " << pan << endl;
 
-    // convert the pan value to 0-127 for send to sequencer
     Rosegarden::StudioControl::setStudioObjectProperty
         (Rosegarden::MappedObjectId(m_selectedInstrument->getMappedId()),
          Rosegarden::MappedAudioFader::Pan,
-         Rosegarden::MappedObjectValue(pan * 127));
+         Rosegarden::MappedObjectValue(pan));
 }
 
 void
@@ -1181,7 +1180,7 @@ MIDIInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument *instrum
             QString label = 
                 strtoqstr(instrument->getDevice()->getName()) +
                 i18n(" / port ") +
-                QString("%1").arg(instrument->getPort());
+                QString("%1").arg(instrument->getPort() + 1);
             m_deviceLabel->setText(label);
         }
         else

@@ -2007,7 +2007,9 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
             Rosegarden::DeviceId recordDevice =
                (Rosegarden::DeviceId)((*i)->getData1());
 
-            setRecordDevice(recordDevice);
+            int recordPort = (int)((*i)->getData2());
+
+            setRecordDevice(recordDevice, recordPort);
         }
     }
 
@@ -3255,7 +3257,7 @@ AlsaDriver::setPluginInstanceBypass(InstrumentId id,
 // MIDI record device.
 //
 void
-AlsaDriver::setRecordDevice(Rosegarden::DeviceId id)
+AlsaDriver::setRecordDevice(Rosegarden::DeviceId id, int port)
 {
     Rosegarden::InstrumentId typicalId = 0;
 
@@ -3264,7 +3266,7 @@ AlsaDriver::setRecordDevice(Rosegarden::DeviceId id)
     std::vector<MappedInstrument*>::iterator mIt = m_instruments.begin();
     for (; mIt != m_instruments.end(); ++mIt)
     {
-        if ((*mIt)->getDevice() == id)
+        if ((*mIt)->getDevice() == id && (*mIt)->getPort() == port)
         {
             typicalId = (*mIt)->getId();
             break;
@@ -3298,7 +3300,7 @@ AlsaDriver::setRecordDevice(Rosegarden::DeviceId id)
     if ((*it)->m_direction == WriteOnly)
     {
         std::cerr << "AlsaDriver::setRecordDevice - "
-                  << "attempting to set non-duplex device (" << id 
+                  << "attempting to set non-read device (" << id 
                   << ") to record device" << std::endl;
         return;
     }

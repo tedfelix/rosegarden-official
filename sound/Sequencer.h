@@ -254,11 +254,6 @@ public:
        { m_soundDriver->setLoop(loopStart, loopEnd); }
 
 
-    // Set the record device
-    //
-    void setRecordDevice(Rosegarden::DeviceId id)
-        { m_soundDriver->setRecordDevice(id); }
-
     // Set and get MMC states - enabled and whether or not we're master
     // or slave.
     //

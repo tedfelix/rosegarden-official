@@ -354,7 +354,7 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
     {
         midiDevice = dynamic_cast<MidiDevice*>(*it);
 
-        if (midiDevice && !midiDevice->getDirection() == MidiDevice::WriteOnly)
+        if (midiDevice && midiDevice->getDirection() == MidiDevice::WriteOnly)
         {
             instList = (*it)->getPresentationInstruments();
 

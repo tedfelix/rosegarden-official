@@ -278,7 +278,7 @@ public:
 
     // Set the record device
     //
-    virtual void setRecordDevice(Rosegarden::DeviceId id) = 0;
+    virtual void setRecordDevice(Rosegarden::DeviceId id, int port) = 0;
 
     // Send the MIDI clock
     //

@@ -106,7 +106,7 @@ operator>>(QDataStream &dS, MappedInstrument *mI)
     dS >> audioChannels;
     dS >> direction;
 
-    mI->setId(Instrument::InstrumentType(type));
+    mI->setType(Instrument::InstrumentType(type));
     mI->setChannel(MidiByte(channel));
     mI->setId(InstrumentId(id));
     mI->setName(std::string(name.data()));
@@ -134,7 +134,7 @@ operator>>(QDataStream &dS, MappedInstrument &mI)
     dS >> audioChannels;
     dS >> direction;
 
-    mI.setId(Instrument::InstrumentType(type));
+    mI.setType(Instrument::InstrumentType(type));
     mI.setChannel(MidiByte(channel));
     mI.setId(InstrumentId(id));
     mI.setName(std::string(name.data()));

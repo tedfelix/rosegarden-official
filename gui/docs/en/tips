@@ -1,5 +1,12 @@
 <tip category="Rosegarden|General">
 <html>
+<p>To assign a track to a new instrument click and hold with the left
+mouse button on the track label.  You'll be presented with an instrument
+menu.
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
 <p>...that can select your autosave interval from Settings->Configure
 Rosegarden?
 </html>
