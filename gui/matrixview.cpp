@@ -966,7 +966,10 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview,
 		    long velocity = -1;
 		    (void)((*i)->get<Rosegarden::Int>
 			   (Rosegarden::BaseProperties::VELOCITY, velocity));
-		    playNote(s->getSegment(), pitch, velocity);
+		    if (!((*i)->has(Rosegarden::BaseProperties::TIED_BACKWARD)&&
+		          (*i)->get<Rosegarden::Bool>
+			           (Rosegarden::BaseProperties::TIED_BACKWARD)))
+		        playNote(s->getSegment(), pitch, velocity);
 		}
 	    }
 	}
