@@ -529,7 +529,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     delete progressDlg;
 
     // at this point we can return if operation was cancelled
-    if (!isOK()) return;
+    if (!isOK()) { setOutOfCtor(); return; }
+    
 
     // otherwise, carry on
     setupDefaultProgress();
@@ -613,6 +614,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_inhibitRefresh = false;
 
     setConfigDialogPageIndex(1);
+    setOutOfCtor();
     
     NOTATION_DEBUG << "NotationView ctor exiting\n";
 }
@@ -745,8 +747,12 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     
     delete progressDlg;
 
-    if (!isOK()) return; // In case more code is added there later
+    if (!isOK()) {
+        setOutOfCtor();
+        return; // In case more code is added there later
+    }
 
+    setOutOfCtor(); // keep this as last call in the ctor
 }
 
 

@@ -338,6 +338,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     setAutoSaveSettings("MatrixView", true);
 
     readOptions();
+    setOutOfCtor();
 }
 
 MatrixView::~MatrixView()

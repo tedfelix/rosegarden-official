@@ -71,8 +71,8 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
     m_accelerators(0),
     m_configDialogPageIndex(0),
     m_shiftDown(false),
-    m_controlDown(false)
-
+    m_controlDown(false),
+    m_inCtor(true)
 {
     initSegmentRefreshStatusIds();
 
@@ -290,6 +290,18 @@ void EditViewBase::paintEvent(QPaintEvent* e)
     // been modified (it's sometimes useful to know whether e.g.
     // any time signatures have changed)
     setCompositionModified(false);
+}
+
+void EditViewBase::closeEvent(QCloseEvent* e)
+{
+    RG_DEBUG << "EditViewBase::closeEvent()\n";
+
+    if (isInCtor()) {
+        RG_DEBUG << "EditViewBase::closeEvent() : is in ctor, ignoring close event\n";
+        e->ignore();
+    } else {
+        KMainWindow::closeEvent(e);
+    }
 }
 
 

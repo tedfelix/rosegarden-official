@@ -210,6 +210,21 @@ protected:
     virtual void paintEvent(QPaintEvent* e);
 
     /**
+     * @see #setInCtor
+     */
+    virtual void closeEvent(QCloseEvent* e);
+
+    /**
+     * ignore close events while we're in ctor
+     */
+    void setOutOfCtor() { m_inCtor = false; }
+
+    /**
+     * Check if we're still in ctor
+     */
+    bool isInCtor() { return m_inCtor; }
+    
+    /**
      * Set the current Notation tool (note inserter, rest inserter, eraser...)
      *
      * Called when the user selects a new item on one of the notation toolbars
@@ -307,6 +322,8 @@ protected:
 
     bool         m_shiftDown;
     bool         m_controlDown;
+
+    bool         m_inCtor;
 };
 
 #endif

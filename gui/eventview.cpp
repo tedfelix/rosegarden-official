@@ -234,6 +234,8 @@ EventView::EventView(RosegardenGUIDoc *doc,
     readOptions();
     setButtonsToFilter();
     applyLayout();
+
+    setOutOfCtor();
 }
 
 EventView::~EventView()
