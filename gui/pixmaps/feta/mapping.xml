@@ -37,6 +37,13 @@
         <symbol name="MUSICAL SYMBOL VOID NOTEHEAD" src="noteheads-1"/>
         <symbol name="MUSICAL SYMBOL NOTEHEAD BLACK" src="noteheads-2"/>
 
+	<symbol name="MUSICAL SYMBOL X NOTEHEAD" src="noteheads-2cross"/>
+	<symbol name="MUSICAL SYMBOL CIRCLE X NOTEHEAD" src="noteheads-2xcircle"/>
+	<symbol name="MUSICAL SYMBOL SEMIBREVIS WHITE" src="noteheads-1mensural"/>
+	<symbol name="MUSICAL SYMBOL SEMIBREVIS BLACK" src="noteheads-2mensural"/>
+	<symbol name="MUSICAL SYMBOL TRIANGLE NOTEHEAD UP WHITE" src="noteheads-1triangle"/>
+	<symbol name="MUSICAL SYMBOL TRIANGLE NOTEHEAD UP BLACK" src="noteheads-2triangle"/>
+
         <!-- There's only one Unicode point for each flag; I guess
              you're expected to invert them yourself -->
         <symbol name="MUSICAL SYMBOL COMBINING FLAG-1"

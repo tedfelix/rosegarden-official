@@ -347,6 +347,13 @@ extern const CharName WHOLE_NOTE;
 extern const CharName VOID_NOTEHEAD;
 extern const CharName NOTEHEAD_BLACK;
 
+extern const CharName X_NOTEHEAD;
+extern const CharName CIRCLE_X_NOTEHEAD;
+extern const CharName SEMIBREVIS_WHITE;
+extern const CharName SEMIBREVIS_BLACK;
+extern const CharName TRIANGLE_NOTEHEAD_UP_WHITE;
+extern const CharName TRIANGLE_NOTEHEAD_UP_BLACK;
+
 extern const CharName FLAG_1;
 extern const CharName FLAG_2;
 extern const CharName FLAG_3;
@@ -381,6 +388,13 @@ extern const CharName F_CLEF;
 extern const CharName UNKNOWN;
 }
 
+enum NoteHeadType {
+    ClassicalNoteHead,
+    XNoteHead,
+    TriangleNoteHead,
+    MensuralNoteHead
+};
+
 class NoteCharacterNameLookup
 {
 public:
@@ -389,7 +403,8 @@ public:
     static CharName getClefCharName(const Rosegarden::Clef &);
     static CharName getRestCharName(const Rosegarden::Note::Type &);
     static CharName getFlagCharName(int flagCount);
-    static CharName getNoteHeadCharName(const Rosegarden::Note::Type &);
+    static CharName getNoteHeadCharName(const Rosegarden::Note::Type &,
+					NoteHeadType = ClassicalNoteHead);
 };
 
 

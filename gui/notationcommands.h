@@ -366,6 +366,27 @@ private:
 };
 
 
+class TransformsMenuChangeNoteHeadsCommand : public BasicSelectionCommand
+{
+public:
+    TransformsMenuChangeNoteHeadsCommand(std::string headType,
+					 Rosegarden::EventSelection &selection) :
+	BasicSelectionCommand(getGlobalName(), selection, true),
+	m_selection(&selection), m_headType(headType) { }
+
+    static QString getGlobalName() {
+	return "Change Note &Head Type";
+    }
+
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    std::string m_headType;
+};
+
+
 class TransformsMenuTransposeCommand : public BasicSelectionCommand
 {
 public:

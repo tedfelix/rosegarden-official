@@ -46,6 +46,12 @@ public:
     static const Rosegarden::PropertyName STEM_UP;
     static const Rosegarden::PropertyName BEAMED;
 
+    static const Rosegarden::PropertyName NOTE_HEAD_TYPE;
+    static const std::string NOTE_HEAD_CLASSICAL;
+    static const std::string NOTE_HEAD_X;
+    static const std::string NOTE_HEAD_TRIANGLE;
+    static const std::string NOTE_HEAD_MENSURAL;
+
     // The rest are, or may be, view-local
 
     const Rosegarden::PropertyName SELECTED;

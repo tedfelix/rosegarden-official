@@ -1464,7 +1464,7 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc):
     m_tempoValue(0.0)
 {
     QVBox *vbox = makeVBoxMainWidget();
-    QGroupBox *groupBox = new QGroupBox(3, Horizontal, i18n("Tempo"), vbox);
+    QGroupBox *groupBox = new QGroupBox(1, Horizontal, i18n("Tempo"), vbox);
     //groupBox->setAlignment(AlignHCenter);
 
     // Set tempo
@@ -1479,43 +1479,35 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc):
     m_tempoValueSpinBox->setValidator(validator);
 
     // Scope Box
-    QGroupBox *scopeBox = new QGroupBox(2, Horizontal,
+    QGroupBox *scopeBox = new QGroupBox(1, Horizontal,
                                         i18n("Scope"), vbox);
-    //scopeBox->setAlignment(AlignHCenter);
-    new QLabel(i18n("This tempo change will take effect from "), scopeBox);
-    m_tempoTimeLabel = new QLabel(scopeBox);
+//    m_optionButtons->addSpace(10); // 10 pix space
 
-    // Option Box
-    /*
-    QGroupBox *optionBox = new QGroupBox(1, Horizontal,
-                                        i18n("Options"), vbox);
-    optionBox->setAlignment(AlignHCenter);
-    */
+    QHBox *currentBox = new QHBox(scopeBox);
+    new QLabel(i18n("The pointer is currently at "), currentBox);
+    m_tempoTimeLabel = new QLabel(currentBox);
+    QHBox *currentBarBox = new QHBox(scopeBox);
+    new QLabel(currentBarBox);
+    m_tempoBarLabel = new QLabel(currentBarBox);
 
-    /*
-    m_makeDefaultCheckBox =
-        new QCheckBox(i18n("Make this the default tempo"), optionBox);
+    m_optionButtons = new QVButtonGroup(scopeBox);
 
-    m_deleteOthersCheckBox =
-        new QCheckBox(i18n("Remove all other tempo changes"), optionBox);
-        */
-
-    m_optionButtons = new QVButtonGroup("How to apply this change", vbox);
-    m_optionButtons->addSpace(10); // 10 pix space
-    
     // id == 0
-    new QRadioButton("add a new tempo change at this time",
-                     m_optionButtons);
+    QRadioButton *tempoChangeHere = new QRadioButton
+	(i18n("This tempo applies from here onwards"),
+	 m_optionButtons);
+
     // id == 1
-    new QRadioButton("replace tempo change at or before this time",
-                     m_optionButtons);
+    m_tempoChangeBefore = new QRadioButton(m_optionButtons);
+    m_tempoChangeBeforeAt = new QLabel(m_optionButtons);
 
     // id == 2
-    new QRadioButton("make this a global tempo change", m_optionButtons);
+    m_tempoChangeGlobal = new QRadioButton(m_optionButtons);
 
     QHBox *optionHBox = new QHBox(m_optionButtons);
     new QLabel(optionHBox);
-    m_defaultBox = new QCheckBox("also set default tempo", optionHBox);
+    m_defaultBox = new QCheckBox
+	(i18n("Also make this the default for new segments"), optionHBox);
     new QLabel(optionHBox);
 
     // disable initially
@@ -1524,7 +1516,8 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc):
     connect(m_optionButtons, SIGNAL(pressed(int)),
             SLOT(slotRadioButtonPressed(int)));
 
-    m_optionButtons->setButton(0);
+//    m_optionButtons->setButton(0);
+    tempoChangeHere->setChecked(true);
 
     populateTempo();
 }
@@ -1560,8 +1553,52 @@ TempoDialog::populateTempo()
     Rosegarden::RealTime tempoTime= comp.getElapsedRealTime(m_tempoTime);
     QString milliSeconds;
     milliSeconds.sprintf("%03ld", tempoTime.usec / 1000);
-    m_tempoTimeLabel->setText(QString("%1.%2 s").arg(tempoTime.sec)
-                                           .arg(milliSeconds));
+    m_tempoTimeLabel->setText(i18n("%1.%2 s").arg(tempoTime.sec)
+			      .arg(milliSeconds));
+
+    int barNo = comp.getBarNumber(m_tempoTime) + 1;
+    if (comp.getBarStart(barNo) == m_tempoTime) {
+	m_tempoBarLabel->setText
+	    (i18n("(at the start of bar %1)").arg(barNo));
+    } else {
+	m_tempoBarLabel->setText(
+	    i18n("(in the middle of bar %1)").arg(barNo));
+    }
+
+    int tempoChangeNo = comp.getTempoChangeNumberAt(m_tempoTime);
+    if (tempoChangeNo >= 0) {
+
+	m_tempoChangeBefore->setText
+	    (i18n("This tempo replaces the last tempo change"));
+
+	timeT lastTempoTime = comp.getRawTempoChange(tempoChangeNo).first;
+	Rosegarden::RealTime lastRT = comp.getElapsedRealTime(lastTempoTime);
+	milliSeconds = "";
+	milliSeconds.sprintf("%03ld", lastRT.usec / 1000);
+	int lastBar = comp.getBarNumber(lastTempoTime) + 1;
+	m_tempoChangeBeforeAt->setText
+	    (i18n("    (at %1.%2 s, in bar %3)").arg(lastRT.usec)
+	     .arg(milliSeconds).arg(lastBar));
+
+	m_tempoChangeBefore->show();
+	m_tempoChangeBeforeAt->show();
+
+    } else {
+	m_tempoChangeBefore->hide();
+	m_tempoChangeBeforeAt->hide();
+    }
+
+    if (comp.getTempoChangeCount() > 0) {
+
+	m_tempoChangeGlobal->setText
+	    (i18n("This tempo applies to the whole segment"));
+	m_tempoChangeGlobal->show();
+	m_defaultBox->show();
+
+    } else {
+	m_tempoChangeGlobal->hide();
+	m_defaultBox->hide();
+    }
 }
 
 void
@@ -1755,13 +1792,17 @@ QuantizeDialog::QuantizeDialog(QWidget *parent,
 
     for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
 	std::string noteName = m_standardQuantizations[i].noteName;
-	QString qname = strtoqstr(m_standardQuantizations[i].name);
 	QPixmap pmap = noMap;
 	if (noteName != "") {
 	    noteName = "menu-" + noteName;
 	    pmap = npf.makeToolbarPixmap(strtoqstr(noteName));
 	}
+	QString qname = strtoqstr(m_standardQuantizations[i].description);
 	m_unitCombo->insertItem(pmap, qname);
+	if (m_standardQuantizations[i].unit ==
+	    Note(Note::Semiquaver).getDuration()) {
+		m_unitCombo->setCurrentItem(m_unitCombo->count() - 1);
+	}
     }
     
     m_noteQuantizeBox = new QGroupBox

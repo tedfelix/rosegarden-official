@@ -32,9 +32,13 @@ Tasks suggested by Chris (notation guy):
  already very familiar with Lilypond (or who really wants to learn all
  about it).
 
- -- We're lacking an event list window, and I'd also like to see a
- window for viewing and editing the properties of a single event,
- accessible from the notation view.
+ -- We're lacking an event list window, which would be very useful.
+ We do now have a window for viewing and editing the properties of a
+ single event, accessible from the notation view, but it's not
+ particularly well executed.
+
+ -- Anyone with a particular interest in any sort of notation work
+ is invited and encouraged to help write support for it into Rosegarden.
 
 
 Tasks suggested by Bownie (MIDI and audio guy):

@@ -768,6 +768,13 @@ const CharName WHOLE_NOTE = "MUSICAL SYMBOL WHOLE NOTE";
 const CharName VOID_NOTEHEAD = "MUSICAL SYMBOL VOID NOTEHEAD";
 const CharName NOTEHEAD_BLACK = "MUSICAL SYMBOL NOTEHEAD BLACK";
 
+const CharName X_NOTEHEAD = "MUSICAL SYMBOL X NOTEHEAD";
+const CharName CIRCLE_X_NOTEHEAD = "MUSICAL SYMBOL CIRCLE X NOTEHEAD";
+const CharName SEMIBREVIS_WHITE = "MUSICAL SYMBOL SEMIBREVIS WHITE";
+const CharName SEMIBREVIS_BLACK = "MUSICAL SYMBOL SEMIBREVIS BLACK";
+const CharName TRIANGLE_NOTEHEAD_UP_WHITE = "MUSICAL SYMBOL TRIANGLE NOTEHEAD UP WHITE";
+const CharName TRIANGLE_NOTEHEAD_UP_BLACK = "MUSICAL SYMBOL TRIANGLE NOTEHEAD UP BLACK";
+
 const CharName FLAG_1 = "MUSICAL SYMBOL COMBINING FLAG-1";
 const CharName FLAG_2 = "MUSICAL SYMBOL COMBINING FLAG-2";
 const CharName FLAG_3 = "MUSICAL SYMBOL COMBINING FLAG-3";
@@ -877,8 +884,30 @@ CharName NoteCharacterNameLookup::getFlagCharName(int flagCount)
     }
 }
 
-CharName NoteCharacterNameLookup::getNoteHeadCharName(const Note::Type &type)
+CharName NoteCharacterNameLookup::getNoteHeadCharName(const Note::Type &type,
+						      NoteHeadType head)
 {
+    if (head != ClassicalNoteHead) {
+
+	if (type < Note::Minim) {
+	    if (head == XNoteHead)
+		return NoteCharacterNames::X_NOTEHEAD;
+	    else if (head == TriangleNoteHead)
+		return NoteCharacterNames::TRIANGLE_NOTEHEAD_UP_BLACK;
+	    else if (head == MensuralNoteHead)
+		return NoteCharacterNames::SEMIBREVIS_BLACK;
+	    else assert(0);
+	} else {
+	    if (head == XNoteHead) 
+		return NoteCharacterNames::CIRCLE_X_NOTEHEAD;
+	    else if (head == TriangleNoteHead)
+		return NoteCharacterNames::TRIANGLE_NOTEHEAD_UP_WHITE;
+	    else if (head == MensuralNoteHead)
+		return NoteCharacterNames::SEMIBREVIS_WHITE;
+	    else assert(0);
+	}
+    }
+
     if (type == Note::Breve) return NoteCharacterNames::BREVE;
     else if (type == Note::Semibreve) return NoteCharacterNames::WHOLE_NOTE;
     else if (type >= Note::Minim) return NoteCharacterNames::VOID_NOTEHEAD;

@@ -357,7 +357,12 @@ protected:
     double              m_tempoValue;
 
     QLabel             *m_tempoTimeLabel;
+    QLabel             *m_tempoBarLabel;
     RosegardenSpinBox  *m_tempoValueSpinBox;
+    
+    QRadioButton       *m_tempoChangeBefore;
+    QLabel	       *m_tempoChangeBeforeAt;
+    QRadioButton       *m_tempoChangeGlobal;
 
     QVButtonGroup      *m_optionButtons;
     QCheckBox          *m_defaultBox;

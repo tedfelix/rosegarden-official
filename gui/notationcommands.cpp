@@ -513,7 +513,6 @@ TransformsMenuCollapseNotesCommand::modifySegment()
 void
 TransformsMenuChangeStemsCommand::modifySegment()
 {
-    SegmentNotationHelper helper(getSegment());
     EventSelection::eventcontainer::iterator i;
 
     for (i  = m_selection->getSegmentEvents().begin();
@@ -529,7 +528,6 @@ TransformsMenuChangeStemsCommand::modifySegment()
 void
 TransformsMenuRestoreStemsCommand::modifySegment()
 {
-    SegmentNotationHelper helper(getSegment());
     EventSelection::eventcontainer::iterator i;
 
     for (i  = m_selection->getSegmentEvents().begin();
@@ -541,10 +539,26 @@ TransformsMenuRestoreStemsCommand::modifySegment()
     }
 }
 
+
+void
+TransformsMenuChangeNoteHeadsCommand::modifySegment()
+{
+    EventSelection::eventcontainer::iterator i;
+
+    for (i  = m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+
+	if ((*i)->isa(Note::EventType)) {
+	    (*i)->set<Rosegarden::String>(NotationProperties::NOTE_HEAD_TYPE,
+					  m_headType);
+	}
+    }
+}
+
+
 void
 TransformsMenuTransposeCommand::modifySegment()
 {
-    SegmentNotationHelper helper(getSegment());
     EventSelection::eventcontainer::iterator i;
 
     for (i  = m_selection->getSegmentEvents().begin();
@@ -581,7 +595,6 @@ MarksMenuAddMarkCommand::getGlobalName(Rosegarden::Mark markType)
 void
 MarksMenuAddMarkCommand::modifySegment()
 {
-    SegmentNotationHelper helper(getSegment());
     EventSelection::eventcontainer::iterator i;
 
     for (i  = m_selection->getSegmentEvents().begin();
@@ -598,7 +611,6 @@ MarksMenuAddMarkCommand::modifySegment()
 void
 MarksMenuAddTextMarkCommand::modifySegment()
 {
-    SegmentNotationHelper helper(getSegment());
     EventSelection::eventcontainer::iterator i;
 
     for (i  = m_selection->getSegmentEvents().begin();
@@ -615,7 +627,6 @@ MarksMenuAddTextMarkCommand::modifySegment()
 void
 MarksMenuRemoveMarksCommand::modifySegment()
 {
-    SegmentNotationHelper helper(getSegment());
     EventSelection::eventcontainer::iterator i;
 
     for (i  = m_selection->getSegmentEvents().begin();

@@ -25,6 +25,12 @@ const Rosegarden::PropertyName NotationProperties::HEIGHT_ON_STAFF = "HeightOnSt
 const Rosegarden::PropertyName NotationProperties::STEM_UP	      = "NoteStemUp";
 const Rosegarden::PropertyName NotationProperties::BEAMED	      = "Beamed";
 
+const Rosegarden::PropertyName NotationProperties::NOTE_HEAD_TYPE     = "NoteHeadType";
+const std::string NotationProperties::NOTE_HEAD_CLASSICAL	      = "classical";
+const std::string NotationProperties::NOTE_HEAD_X		      = "x";
+const std::string NotationProperties::NOTE_HEAD_TRIANGLE	      = "triangle";
+const std::string NotationProperties::NOTE_HEAD_MENSURAL	      = "mensural";
+
 NotationProperties::NotationProperties(const std::string &prefix) :
 
     SELECTED			(prefix + "Selected"),

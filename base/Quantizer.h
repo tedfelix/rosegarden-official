@@ -361,14 +361,16 @@ struct StandardQuantization {
     timeT			unit;
     int				maxDots;
     std::string			name;
+    std::string			description;
     std::string			noteName;  // empty string if none
     
     StandardQuantization(Quantizer::QuantizationType _type,
 			 timeT _unit, int _maxDots,
 			 std::string _name,
+			 std::string _description,
 			 std::string _noteName) :
 	type(_type), unit(_unit), maxDots(_maxDots),
-	name(_name), noteName(_noteName) { }
+	name(_name), description(_description), noteName(_noteName) { }
 
     static std::vector<StandardQuantization> getStandardQuantizations();
 };

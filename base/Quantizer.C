@@ -647,11 +647,18 @@ StandardQuantization::getStandardQuantizations()
 	    int divisor = (1 << (Note::Semibreve - nt));
 	    if (i) divisor = divisor * 3 / 2;
 	    sprintf(buf, "1/%d", divisor);
+	    std::string name(buf);
+
+	    sprintf(buf, "%s %s",
+		    Note(nt).getEnglishName().c_str(),
+		    (i ? "triplet" : ""));
+	    std::string description(buf);
 
 	    timeT unit = Note(Note::Semibreve).getDuration() / divisor;
 	    
-	    v.push_back(StandardQuantization(Quantizer::PositionQuantize,
-					     unit, 2, buf, noteName));
+	    v.push_back(StandardQuantization
+			(Quantizer::PositionQuantize,
+			 unit, 2, name, description, noteName));
 	}
     }
 

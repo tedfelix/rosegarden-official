@@ -2046,6 +2046,7 @@ NotationView::slotSetPointerPosition(timeT time)
 	}
     }
 
+    slotScrollHoriz(m_hlayout.getXForTime(time));
     updateView();
 }
 

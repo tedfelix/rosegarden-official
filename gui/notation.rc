@@ -122,6 +122,14 @@ etc
     <Action name="restore_stems"/>
   </Menu>
   <Separator/>
+  <Menu name="Noteheads">
+    <text>Note &amp;heads</text>
+    <Action name="noteheads_classical"/>
+    <Action name="noteheads_x"/>
+    <Action name="noteheads_triangle"/>
+    <Action name="noteheads_mensural"/>
+  </Menu>
+  <Separator/>
   <Action name="tie"/>
   <Action name="slur"/>
   <Action name="crescendo"/>

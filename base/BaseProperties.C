@@ -50,8 +50,6 @@ const PropertyName ACCIDENTAL		= "accidental";
 const PropertyName NOTE_TYPE            = "NoteType";
 const PropertyName NOTE_DOTS            = "NoteDots";
 
-//const PropertyName SELECTED		= "selected";
-
 const PropertyName MARK_COUNT		= "marks";
 
 PropertyName getMarkPropertyName(int markNo)
