@@ -183,8 +183,6 @@
   <text>Zoom Toolbar</text>
 </ToolBar>
 
-<!--     RMB Menus           -->
-
 <Menu noMerge="1" name="segment_tool_menu">
    <Action name="edit_default"/>
    <Separator/>
@@ -212,8 +210,6 @@
    <Action name="split"/>
    <!-- <Action name="join"/> -->
 </Menu>
-
-<!--     Application States           -->
 
 <State name="new_file">
         <disable>
