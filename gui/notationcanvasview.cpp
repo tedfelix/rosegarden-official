@@ -177,7 +177,7 @@ NotationCanvasView::handleClick(const StaffLine *line,
 
     kdDebug(KDEBUG_AREA) << "NotationCanvasView::handleClick() at height " << h << endl;
 
-    emit noteClicked(h, pos, el);
+    emit itemClicked(h, pos, el);
 }
 
 bool

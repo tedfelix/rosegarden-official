@@ -60,7 +60,7 @@ public slots:
 //     void currentNoteChanged(Note::Type);
 
 signals:
-    void noteClicked(int pitch, const QPoint&, NotationElement*);
+    void itemClicked(int pitch, const QPoint&, NotationElement*);
 
     void hoveredOverNoteChange(const QString &noteName);
     void hoveredOverAbsoluteTimeChange(unsigned int);
