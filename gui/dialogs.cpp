@@ -128,10 +128,10 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
     BigArrowButton *numUp     = new BigArrowButton(numBox, Qt::RightArrow);
     BigArrowButton *denomUp   = new BigArrowButton(denomBox, Qt::RightArrow);
 
-    QObject::connect(numDown,   SIGNAL(pressed()), this, SLOT(slotNumDown()));
-    QObject::connect(numUp,     SIGNAL(pressed()), this, SLOT(slotNumUp()));
-    QObject::connect(denomDown, SIGNAL(pressed()), this, SLOT(slotDenomDown()));
-    QObject::connect(denomUp,   SIGNAL(pressed()), this, SLOT(slotDenomUp()));
+    QObject::connect(numDown,   SIGNAL(clicked()), this, SLOT(slotNumDown()));
+    QObject::connect(numUp,     SIGNAL(clicked()), this, SLOT(slotNumUp()));
+    QObject::connect(denomDown, SIGNAL(clicked()), this, SLOT(slotDenomDown()));
+    QObject::connect(denomUp,   SIGNAL(clicked()), this, SLOT(slotDenomUp()));
 
     groupBox = new QButtonGroup(1, Horizontal, i18n("Scope"), vbox);
 
@@ -368,8 +368,8 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
 	conversionFrame->hide();
     }
     
-    QObject::connect(keyUp, SIGNAL(pressed()), this, SLOT(slotKeyUp()));
-    QObject::connect(keyDown, SIGNAL(pressed()), this, SLOT(slotKeyDown()));
+    QObject::connect(keyUp, SIGNAL(clicked()), this, SLOT(slotKeyUp()));
+    QObject::connect(keyDown, SIGNAL(clicked()), this, SLOT(slotKeyDown()));
     QObject::connect(m_keyCombo, SIGNAL(activated(const QString &)),
 		     this, SLOT(slotKeyNameChanged(const QString &)));
     QObject::connect(m_keyCombo, SIGNAL(textChanged(const QString &)),
@@ -1648,8 +1648,8 @@ ClefDialog::ClefDialog(QWidget *parent,
 	conversionFrame->hide();
     }
     
-    QObject::connect(clefUp, SIGNAL(pressed()), this, SLOT(slotClefUp()));
-    QObject::connect(clefDown, SIGNAL(pressed()), this, SLOT(slotClefDown()));
+    QObject::connect(clefUp, SIGNAL(clicked()), this, SLOT(slotClefUp()));
+    QObject::connect(clefDown, SIGNAL(clicked()), this, SLOT(slotClefDown()));
 
     redrawClefPixmap();
 }

@@ -1156,14 +1156,13 @@ NotationView::getInsertionTime(Event *&clefEvt,
 {
     // This fuss is solely to recover the clef and key: we already
     // set m_insertionTime to the right value when we first placed
-    // the insert cursor
+    // the insert cursor.  We could get clef and key directly from
+    // the segment but the staff has a more efficient lookup
 
     NotationStaff *staff = m_staffs[m_currentStaff];
     double layoutX = staff->getLayoutXOfInsertCursor();
     if (layoutX < 0) layoutX = 0;
-
-    NotationElementList::iterator i = staff->getElementUnderLayoutX
-	(layoutX, clefEvt, keyEvt);
+    (void)staff->getElementUnderLayoutX(layoutX, clefEvt, keyEvt);
 
     return m_insertionTime;
 }
@@ -1927,7 +1926,8 @@ NotationView::slotSetInsertCursorPosition(timeT t)
     NotationElementList::iterator i = 
 	staff->getViewElementList()->findNearestTime(t);
 
-    if (i == staff->getViewElementList()->end()) {
+    if (i == staff->getViewElementList()->end() ||
+	t == staff->getSegment().getEndTime()) {
 	staff->setInsertCursorPosition(m_hlayout, t);
     } else {
 
@@ -1946,6 +1946,7 @@ NotationView::slotSetInsertCursorPosition(timeT t)
 
 	staff->setInsertCursorPosition
 	    ((*i)->getCanvasX() - 2, (*i)->getCanvasY());
+	slotScrollHoriz((*i)->getCanvasX() - 4);
     }
 
     updateView();

@@ -277,6 +277,10 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
         NotationElementList::iterator to =
 	    getStartOfQuantizedSlice(notes, barTimes.second);
 
+	if (barTimes.second >= segment.getEndTime()) {
+	    to = notes->end();
+	}
+
         // fixedWidth includes clefs, keys &c, but also accidentals
 	int fixedWidth = getBarMargin();
 

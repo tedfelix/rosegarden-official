@@ -212,6 +212,34 @@ void EditView::readjustViewSize(QSize requestedSize, bool exact)
     getCanvasView()->slotUpdate();
 }
 
+// This scrolling model pages the EditView's canvas across the screen
+//
+void EditView::slotScrollHoriz(int hpos)
+{
+    QScrollView* scrollView = getCanvasView();
+    QScrollBar* hbar = m_horizontalScrollBar;
+
+    if (hpos == 0) { // If returning to zero
+
+        hbar->setValue(0);
+
+    } else { // if moving off the right hand side of the view
+
+        if (hpos >  ( scrollView->contentsX() + 
+                      scrollView->visibleWidth() * 0.9 ) ) { 
+               
+            hbar->setValue(hbar->value() + int(scrollView->visibleWidth() * 0.8));
+
+        } else // if moving off the left hand side
+
+            if (hpos < ( scrollView->contentsX() +
+                         scrollView->visibleWidth() * 0.1 ) ) {
+
+                hbar->setValue(hbar->value() - int(scrollView->visibleWidth() * 0.8));
+            }
+    }
+}
+
 MultiViewCommandHistory *EditView::getCommandHistory()
 {
     return getDocument()->getCommandHistory();

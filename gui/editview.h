@@ -148,6 +148,8 @@ public slots:
      */
     virtual void slotCloseWindow();
 
+    virtual void slotScrollHoriz(int x);
+
     /**
      * put the indicationed text/object into the clipboard and remove * it
      * from the document
