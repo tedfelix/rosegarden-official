@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: it\n"
 "POT-Creation-Date: 2003-09-14 17:57+0200\n"
-"PO-Revision-Date: 2003-12-02 00:40+0100\n"
+"PO-Revision-Date: 2003-12-20 14:57+0100\n"
 "Last-Translator: Daniele Medri <madrid@linuxmeeting.net>\n"
 "Language-Team: italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -969,7 +969,7 @@ msgstr ""
 
 #: rosegardengui.cpp:336 notationview.cpp:1655
 msgid "Show T&ools Toolbar"
-msgstr ""
+msgstr "Mostra barra degli st&rumenti"
 
 #: rosegardengui.cpp:340
 msgid "Show Trac&ks Toolbar"
@@ -981,27 +981,27 @@ msgstr ""
 
 #: rosegardengui.cpp:348 notationview.cpp:1667
 msgid "Show Trans&port Toolbar"
-msgstr ""
+msgstr "Mostra barra degli strumenti di Tras&porto"
 
 #: rosegardengui.cpp:352
 msgid "Show &Zoom Toolbar"
-msgstr ""
+msgstr "Mostra barra degli strumenti per l'i&ngrandimento"
 
 #: rosegardengui.cpp:358
 msgid "Show Tra&nsport"
-msgstr ""
+msgstr "Mostra Tra&sporto"
 
 #: rosegardengui.cpp:363
 msgid "Show Track &Labels"
-msgstr ""
+msgstr "Mostra etichette de&lle tracce"
 
 #: rosegardengui.cpp:368
 msgid "Show &Segment Parameters"
-msgstr ""
+msgstr "Mostra parametri del &segmento"
 
 #: rosegardengui.cpp:373
 msgid "Show &Instrument Parameters"
-msgstr ""
+msgstr "Mostra parametr&i dello strumento"
 
 #: rosegardengui.cpp:378
 msgid "Show R&ulers"
@@ -1021,7 +1021,7 @@ msgstr ""
 
 #: rosegardengui.cpp:398
 msgid "Toggle &All of the Above"
-msgstr ""
+msgstr "Abilit&a tutte le voci sopra indicate"
 
 #: rosegardengui.cpp:406
 msgid "Show Tip of the &Day"
@@ -1070,27 +1070,27 @@ msgstr ""
 
 #: rosegardengui.cpp:515
 msgid "Edit Markers..."
-msgstr ""
+msgstr "Modifica marcatori..."
 
 #: rosegardengui.cpp:519
 msgid "Edit Document P&roperties..."
-msgstr ""
+msgstr "Modifica p&roprietà documento..."
 
 #: rosegardengui.cpp:527
 msgid "Open in &Default Editor"
-msgstr ""
+msgstr "Apri nell'editor pre&definito"
 
 #: rosegardengui.cpp:532
 msgid "Open in Matri&x Editor"
-msgstr ""
+msgstr "Apri nell'editor di matri&ce"
 
 #: rosegardengui.cpp:537
 msgid "Open in &Notation Editor"
-msgstr ""
+msgstr "Apri nell'editor di notazione"
 
 #: rosegardengui.cpp:542
 msgid "Open in &Event List Editor"
-msgstr ""
+msgstr "Apri nell'editor della lista degli &eventi"
 
 #: rosegardengui.cpp:551 editcommands.cpp:731 editcommands.cpp:895
 msgid "&Quantize..."
@@ -1106,7 +1106,7 @@ msgstr ""
 
 #: rosegardengui.cpp:581
 msgid "Manage A&udio Segments"
-msgstr ""
+msgstr "Gestione dei segmenti a&udio"
 
 #: rosegardengui.cpp:591
 msgid "&Add Tracks..."
@@ -1138,11 +1138,11 @@ msgstr ""
 
 #: rosegardengui.cpp:631
 msgid "Manage MIDI &Devices..."
-msgstr ""
+msgstr "Gestione dei &dispositivi MIDI..."
 
 #: rosegardengui.cpp:635
 msgid "Manage MIDI &Banks and Programs..."
-msgstr ""
+msgstr "Gestione dei programmi e delle &banche MIDI..."
 
 #: rosegardengui.cpp:639
 msgid "Modify MIDI &Filters..."
@@ -1150,7 +1150,7 @@ msgstr ""
 
 #: rosegardengui.cpp:643
 msgid "Manage Control Parameters..."
-msgstr ""
+msgstr "Gestione parametri di controllo..."
 
 #: rosegardengui.cpp:647
 msgid "&Save Current Document as Default Studio"
@@ -1194,7 +1194,7 @@ msgstr ""
 
 #: rosegardengui.cpp:767
 msgid "  Zoom:  "
-msgstr ""
+msgstr "  Ingrandimento:  "
 
 #: rosegardengui.cpp:1064
 msgid "The specified file does not exist"
@@ -1337,7 +1337,7 @@ msgstr ""
 
 #: rosegardengui.cpp:2018
 msgid "Toggle the Transport"
-msgstr ""
+msgstr "Abilita il Trasporto"
 
 #: rosegardengui.cpp:2118 editviewbase.cpp:354
 msgid "Toggle the statusbar..."
@@ -1858,7 +1858,7 @@ msgstr "Barra degli strumenti"
 
 #: rc.cpp:2 rc.cpp:15 rc.cpp:36 rc.cpp:57
 msgid "Transport Toolbar"
-msgstr ""
+msgstr "Barra degli strumenti per il Trasporto"
 
 #: rc.cpp:3 rc.cpp:16
 msgid "Actions Toolbar"
@@ -1866,7 +1866,7 @@ msgstr ""
 
 #: rc.cpp:4 rc.cpp:17 rc.cpp:58
 msgid "Zoom Toolbar"
-msgstr ""
+msgstr "Barra degli strumenti per l'ingrandimento"
 
 #: rc.cpp:6
 msgid "&Grid"
@@ -1886,7 +1886,7 @@ msgstr ""
 
 #: rc.cpp:11 rc.cpp:28 rc.cpp:52
 msgid "T&ransport"
-msgstr ""
+msgstr "T&rasporto"
 
 #: rc.cpp:19
 msgid "&Group"
@@ -1994,7 +1994,7 @@ msgstr ""
 
 #: rc.cpp:59 rosegardentransport.cpp:1719 rosegardentransportdialog.cpp:71
 msgid "Rosegarden Transport"
-msgstr ""
+msgstr "Trasporto di Rosegarden"
 
 #: rc.cpp:61 rosegardentransport.cpp:1721
 msgid "Show additional controls"
@@ -2138,11 +2138,11 @@ msgstr ""
 
 #: rc.cpp:109 rosegardentransport.cpp:1769
 msgid "IN"
-msgstr ""
+msgstr "Ingresso"
 
 #: rc.cpp:110 rosegardentransport.cpp:1770
 msgid "OUT"
-msgstr ""
+msgstr "Uscita"
 
 #: dialogs.cpp:104
 msgid "Time Signature"
@@ -2318,7 +2318,7 @@ msgstr ""
 
 #: dialogs.cpp:962
 msgid "Dynamic"
-msgstr ""
+msgstr "Dynamic"
 
 #: dialogs.cpp:965
 msgid "Direction"
@@ -2350,7 +2350,7 @@ msgstr "Esempio"
 
 #: dialogs.cpp:1111
 msgid "Advanced Event Edit"
-msgstr ""
+msgstr "Modifica evento avanzato"
 
 #: dialogs.cpp:1111
 msgid "Advanced Event Viewer"
@@ -2462,7 +2462,7 @@ msgstr "Durata:"
 
 #: dialogs.cpp:1605 widgets.cpp:1254 eventfilter.cpp:135
 msgid "Pitch:"
-msgstr ""
+msgstr "Pitch:"
 
 #: dialogs.cpp:1616 dialogs.cpp:1715
 msgid "Controller name:"
@@ -2743,7 +2743,7 @@ msgstr ""
 
 #: dialogs.cpp:3350
 msgid "Edit Lyrics"
-msgstr ""
+msgstr "Modifica liriche"
 
 #: dialogs.cpp:3356
 msgid "Lyrics for this segment"
@@ -2911,7 +2911,7 @@ msgstr "Percorso per la registrazione audio \""
 
 #: sequencemanager.cpp:575
 msgid "Edit your audio path properties (Edit->Edit Document Properties->Audio)"
-msgstr ""
+msgstr "Modifica le proprietà del tuo percorso audio (Modifica->Modifica proprietà del documento->Audio)"
 
 #: notationcommands.cpp:75 matrixcommands.cpp:38
 msgid "Insert Note"
@@ -3337,7 +3337,7 @@ msgstr "%1 (basso)"
 
 #: segmentcommands.cpp:2040
 msgid "Label Segments"
-msgstr "Etichetta segmenti"
+msgstr "Etichetta dei segmenti"
 
 #: segmentcommands.cpp:2078
 msgid "Change Segment Color"
@@ -3349,7 +3349,7 @@ msgstr "Cambia mappa colore del segmento"
 
 #: instrumentparameterbox.cpp:66
 msgid "Instrument Parameters"
-msgstr "Parametri strumento"
+msgstr "Parametri dello strumento"
 
 #: instrumentparameterbox.cpp:314
 msgid "Record level = "
@@ -3483,7 +3483,7 @@ msgstr "Generazione anteprima audio..."
 
 #: segmentparameterbox.cpp:47
 msgid "Segment Parameters"
-msgstr "Parametri segmento"
+msgstr "Parametri del segmento"
 
 #: segmentparameterbox.cpp:79
 msgid "Label"
@@ -4260,7 +4260,7 @@ msgstr "Apri nell'editor dell'evento"
 
 #: eventview.cpp:1114
 msgid "Open in Expert Event Editor"
-msgstr ""
+msgstr "Apri nell'editor esperto per gli eventi"
 
 #: notationstrings.cpp:42
 msgid "%1-dotted-%2"
