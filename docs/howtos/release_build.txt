@@ -24,8 +24,8 @@ Main steps
 
 
 
-0. Set the new version number in all the .rc files
--------------------------------------
+0. Set the new version number in all the .rc files and README/INSTALL
+---------------------------------------------------------------------
 
 All .rc files have a version="" attribute in the <kpartgui>
 element. This version number is checked when the file is read, so that
@@ -33,6 +33,8 @@ only the more recent version is taken into account. This is because it
 is possible for a user to have its own local version of any rc file,
 which normally overrides the installed version, except if the version
 number is lower.
+
+Also update the INSTALL and README to latest version number and information.
 
 1. Get a fresh set of course from CVS
 -------------------------------------
@@ -113,6 +115,13 @@ rosegarden/gui/rosegardenguiiface.kidl
 
 Also had no end of problems getting the po/ directory to build up
 in the "make dist".
+
+0.9.1 UPDATE - most of these issues are now fixed although there
+is still some weirdness with MCOPIDL during "make dist"  Well RWB
+is seeing this anyway.
+
+
+
 
 3. Verify the Tarball and get release notes from developers
 -----------------------------------------------------------
