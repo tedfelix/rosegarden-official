@@ -3444,7 +3444,7 @@ AlsaDriver::sendJACKTransportState()
         m_transportPosition = getJACKFrame(getSequencerTime());
     }
 
-    info.position = m_transportPosition;
+    //info.position = m_transportPosition;
 
     // Get the transport position directly from the ALSA Sequencer 
     // - hopefully this is the right one allowing for all those
@@ -3457,7 +3457,7 @@ AlsaDriver::sendJACKTransportState()
         if (m_looping)
         {
             //cout << "LOOPING (frame = " << info.position << ")" << endl;
-            info.state = JackTransportLooping;
+            //info.state = JackTransportLooping;
             info.loop_start = getJACKFrame(m_loopStartTime);
             info.loop_end = getJACKFrame(m_loopEndTime);
             info.valid = jack_transport_bits_t(JackTransportPosition |
@@ -3467,7 +3467,7 @@ AlsaDriver::sendJACKTransportState()
         else
         {
             //cout << "PLAYING (frame = " << info.position << ")" << endl;
-            info.state = JackTransportRolling;
+            //info.state = JackTransportRolling;
             info.valid = jack_transport_bits_t(JackTransportPosition |
                                                JackTransportState);
         }
@@ -3475,7 +3475,7 @@ AlsaDriver::sendJACKTransportState()
     else
     {
         //cout << "STOPPED (frame = " << info.position << ")" << endl;
-        info.state = JackTransportStopped;
+        //info.state = JackTransportStopped;
         info.valid = jack_transport_bits_t(JackTransportPosition |
                                            JackTransportState);
     }

@@ -1,0 +1,42 @@
+Re: [Jackit-devel] latest CVS commit
+From: Paul Davis <paul@linuxaudiosystems.com>
+To: Steve Harris <S.W.Harris@ecs.soton.ac.uk>
+Cc: jackit-devel@lists.sourceforge.net
+>On Fri, Mar 21, 2003 at 11:27:27AM -0500, Paul Davis wrote:
+>> i welcome comments and ideas on what should show up in this
+>> structure. right now, what's there works well for ardour, but it
+>> doesn't slave yet :)
+>
+>How much if that is the transport master supposed to provide? 
+
+it can provide as much or as little as it wants to. when its set the
+current time, it provides a bitfield indicating what is valid (its
+part of the struct).
+
+when you retrieve the information, you must check the bitfield to see
+what is valid.
+
+>What controls when the time structure is updated? Presumably the transport
+>master tells jackd and it stores the next process() blocks time information
+>before the next cycle starts? Otherwise the clients that run before the
+>master will be out of sync by one process() block.
+
+what happens is that the timebase client sets only the "pending time",
+and at the end of the entire process() cycle, the engine updates the
+"current time" with the pending time. thus, at the start of the next
+cycle, everyone is on the same page, so to speak. neat, eh?
+
+--p
+
+
+-------------------------------------------------------
+This SF.net email is sponsored by:Crypto Challenge is now open! 
+Get cracking and register here for some mind boggling fun and 
+the chance of winning an Apple iPod:
+http://ads.sourceforge.net/cgi-bin/redirect.pl?thaw0031en
+_______________________________________________
+Jackit-devel mailing list
+Jackit-devel@lists.sourceforge.net
+https://lists.sourceforge.net/lists/listinfo/jackit-devel
+
+
