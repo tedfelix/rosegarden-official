@@ -137,10 +137,6 @@ InstrumentParameterBox::~InstrumentParameterBox()
             break;
         }
     }
-
-    for (unsigned int i = 0; i < m_pluginButtons.size(); i++)
-        delete m_pluginButtons[i];
-    m_pluginButtons.erase(m_pluginButtons.begin(), m_pluginButtons.end());
 }
 
 void
