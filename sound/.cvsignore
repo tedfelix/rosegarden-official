@@ -9,8 +9,10 @@ audiotest
 miditest
 *.closure
 *.moc.cpp
+*.moc.cc
 *_skel.cpp
 *_meta_unload.cpp
+*_meta_unload.cc
 *.kidl
 MidiArts.h
 MidiArts.cc
