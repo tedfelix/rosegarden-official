@@ -201,6 +201,7 @@ void RosegardenGUIDoc::slotUpdateAllViews(RosegardenGUIView *sender)
 void RosegardenGUIDoc::setModified(bool m)
 {
     m_modified = m;
+    RG_DEBUG << "RosegardenGUIDoc::setModified(" << m << ")\n";
 };
 
 void RosegardenGUIDoc::slotDocumentModified()
@@ -232,7 +233,7 @@ void RosegardenGUIDoc::slotAutoSave()
 {
 //     RG_DEBUG << "RosegardenGUIDoc::slotAutoSave()\n" << endl;
 
-    if (isAutoSaved()) return;
+    if (isAutoSaved() || !isModified()) return;
       
     QString autoSaveFileName = getAutoSaveFileName();
 
