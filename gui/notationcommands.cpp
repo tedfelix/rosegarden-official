@@ -1470,16 +1470,21 @@ TransformsMenuInterpretCommand::articulate()
 	    if (e->get<Bool>(TIED_FORWARD, tiedForward) && tiedForward) {
 		durationChange = 0;
 	    }
+
+	    timeT newDuration = duration + duration * durationChange / 100;
 	    
-	    if (durationChange != 0) { 
+	    // this comparison instead of "durationChange != 0"
+	    // because we want to permit the possibility of resetting
+	    // the performance duration of a note (that's perhaps been
+	    // articulated wrongly) based on the notation duration:
+
+	    if (e->getDuration() != newDuration) {
 
 		if (toErase.find(e) == toErase.end()) {
 		
 		    //!!! deal with tuplets
 		    
-		    Event *newEvent = new Event
-			(*e, e->getAbsoluteTime(),
-			 duration + duration * durationChange / 100);
+		    Event *newEvent = new Event(*e, e->getAbsoluteTime(), newDuration);
 		    newEvent->setNotationDuration(duration);
 		    toInsert.insert(newEvent);
 		    toErase.insert(e);
