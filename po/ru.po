@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "POT-Creation-Date: 2003-09-14 17:57+0200\n"
-"PO-Revision-Date: 2003-11-24 21:25+0300\n"
+"PO-Revision-Date: 2003-11-26 21:01+0300\n"
 "Last-Translator: Alexandre Prokoudine <avp@altlinux.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1185,20 +1185,20 @@ msgstr "Показать совет &дня"
 
 #: rosegardengui.cpp:438 notationview.cpp:1316 matrixview.cpp:415
 msgid "&Select"
-msgstr "&Выделять"
+msgstr "&Выделить"
 
 #: rosegardengui.cpp:445 notationview.cpp:1310 editcommands.h:198
 #: matrixview.cpp:425
 msgid "&Erase"
-msgstr "&Стирать"
+msgstr "&Стереть"
 
 #: rosegardengui.cpp:451 matrixview.cpp:420
 msgid "&Draw"
-msgstr "&Рисовать"
+msgstr "&Нарисовать"
 
 #: rosegardengui.cpp:457 rc.cpp:10 rc.cpp:27 matrixview.cpp:430
 msgid "&Move"
-msgstr "&Перемещение"
+msgstr "&Перемеcтить"
 
 #: rosegardengui.cpp:464
 msgid "&Resize"
@@ -1210,7 +1210,7 @@ msgstr "&Разделить"
 
 #: rosegardengui.cpp:478 segmentcommands.h:365
 msgid "&Join"
-msgstr "&Объединить"
+msgstr "О&бъединить"
 
 #: rosegardengui.cpp:485
 msgid "&Harmonize"
@@ -2154,7 +2154,7 @@ msgstr "Указать инструмент"
 
 #: rc.cpp:51
 msgid "&Studio"
-msgstr "&Студия"
+msgstr "Ст&удия"
 
 #: rc.cpp:55
 msgid "Tracks Toolbar"
@@ -2848,7 +2848,7 @@ msgstr "Коэфф. перемасштабирования"
 
 #: dialogs.cpp:2872
 msgid " beats in time of "
-msgstr " ударов в "
+msgstr " ударов за время "
 
 #: dialogs.cpp:2884
 msgid "As percentage: "
