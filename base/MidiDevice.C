@@ -47,9 +47,6 @@ MidiDevice::MidiDevice():
     m_librarian(std::pair<std::string, std::string>("<none>", "<none>"))
 {
     generatePresentationList();
-
-    // default metronome
-    generateDefaultMetronome();
 }
 
 MidiDevice::MidiDevice(DeviceId id,
@@ -62,9 +59,26 @@ MidiDevice::MidiDevice(DeviceId id,
     m_librarian(std::pair<std::string, std::string>("<none>", "<none>"))
 {
     generatePresentationList();
+}
 
-    // default metronome
-    generateDefaultMetronome();
+MidiDevice::MidiDevice(DeviceId id,
+		       const MidiDevice &dev) :
+    Device(id, dev.getName(), Device::Midi),
+    m_programList(dev.m_programList),
+    m_bankList(dev.m_bankList),
+    m_controlList(dev.m_controlList),
+    m_metronome(0),
+    m_direction(dev.getDirection()),
+    m_variationType(dev.getVariationType()),
+    m_librarian(dev.getLibrarian())
+{
+    // Create and assign a metronome if required
+    //
+    if (dev.getMetronome()) {
+        m_metronome = new MidiMetronome(*dev.getMetronome());
+    }
+
+    generatePresentationList();
 }
 
 MidiDevice::MidiDevice(const MidiDevice &dev):
@@ -97,22 +111,6 @@ MidiDevice::MidiDevice(const MidiDevice &dev):
 
     // generate presentation instruments
     generatePresentationList();
-}
-
-void
-MidiDevice::generateDefaultMetronome()
-{
-    InstrumentList insList = getAllInstruments();
-    InstrumentList::const_iterator it = insList.begin();
-    for (; it != insList.end(); ++it)
-    {
-        /*
-        if ((*it)->getChannel() == 9)
-        {
-            ;
-        }
-        */
-    }
 }
 
 

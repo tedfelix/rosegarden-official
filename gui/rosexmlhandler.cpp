@@ -975,8 +975,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 		    if (nameStr && nameStr != "") {
 			m_device->setName(qstrtostr(nameStr));
 		    }
-		} else if (m_createDevices && nameStr && nameStr != "") {
-		    addMIDIDevice(nameStr); // also sets m_device
+		} else if (nameStr && nameStr != "") {
+		    addMIDIDevice(nameStr, m_createDevices); // also sets m_device
 		} else {
 		    m_device = 0;
 		}
@@ -1722,41 +1722,57 @@ RoseXmlHandler::setSubHandler(XmlSubHandler* sh)
 
 
 void
-RoseXmlHandler::addMIDIDevice(QString name)
+RoseXmlHandler::addMIDIDevice(QString name, bool createAtSequencer)
 {
-    QByteArray data;
-    QByteArray replyData;
-    QCString replyType;
-    QDataStream arg(data, IO_WriteOnly);
-
-    arg << (int)Device::Midi;
-    arg << (unsigned int)Rosegarden::MidiDevice::Play;
-
-    if (!rgapp->sequencerCall("addDevice(int, unsigned int)", replyType, replyData, data)) {
-        SEQMAN_DEBUG << "RoseXmlHandler::addMIDIDevice - "
-                     << "can't call sequencer addDevice" << endl;
-        return;
-    }
-
     unsigned int deviceId = 0;
 
-    if (replyType == "unsigned int") {
-        QDataStream reply(replyData, IO_ReadOnly);
-        reply >> deviceId;
-    } else {
-        SEQMAN_DEBUG << "RoseXmlHandler::addMIDIDevice - "
-                     << "got unknown returntype from addDevice()" << endl;
-        return;
-    }
+    if (createAtSequencer) {
 
-    if (deviceId == Device::NO_DEVICE) {
+	QByteArray data;
+	QByteArray replyData;
+	QCString replyType;
+	QDataStream arg(data, IO_WriteOnly);
+
+	arg << (int)Device::Midi;
+	arg << (unsigned int)Rosegarden::MidiDevice::Play;
+
+	if (!rgapp->sequencerCall("addDevice(int, unsigned int)", replyType, replyData, data)) {
+	    SEQMAN_DEBUG << "RoseXmlHandler::addMIDIDevice - "
+			 << "can't call sequencer addDevice" << endl;
+	    return;
+	}
+
+	if (replyType == "unsigned int") {
+	    QDataStream reply(replyData, IO_ReadOnly);
+	    reply >> deviceId;
+	} else {
+	    SEQMAN_DEBUG << "RoseXmlHandler::addMIDIDevice - "
+			 << "got unknown returntype from addDevice()" << endl;
+	    return;
+	}
+
+	if (deviceId == Device::NO_DEVICE) {
+	    SEQMAN_DEBUG << "RoseXmlHandler::addMIDIDevice - "
+			 << "sequencer addDevice failed" << endl;
+	    return;
+	}
+
 	SEQMAN_DEBUG << "RoseXmlHandler::addMIDIDevice - "
-		     << "sequencer addDevice failed" << endl;
-	return;
-    }
+		     << " added device " << deviceId << endl;
 
-    SEQMAN_DEBUG << "RoseXmlHandler::addMIDIDevice - "
-		 << " added device " << deviceId << endl;
+    } else {
+	// Generate a new device id at the base Studio side only.
+	// This may not correspond to any given device id at the
+	// sequencer side.  We should _never_ do this in a document
+	// that's actually intended to be retained for use, only
+	// in temporary documents for device import etc.
+	int tempId = -1;
+	for (Rosegarden::DeviceListIterator i = getStudio().getDevices()->begin();
+	     i != getStudio().getDevices()->end(); ++i) {
+	    if (int((*i)->getId()) > tempId) tempId = int((*i)->getId());
+	}
+	deviceId = tempId + 1;
+    }
 
     // add the device, so we can name it and set our pointer to it --
     // instruments will be sync'd later in the natural course of things

@@ -2039,15 +2039,6 @@ RosegardenGUIDoc::clearAllPlugins()
     }
 }
 
-
-// Deep-copy the studio from another source.
-//
-void
-RosegardenGUIDoc::copyStudio(const Rosegarden::Studio &studio)
-{
-    m_studio.copy(studio);
-}
-
 // Get the clipboard from the parent application
 //
 Rosegarden::Clipboard*

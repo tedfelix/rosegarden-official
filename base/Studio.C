@@ -568,46 +568,5 @@ Studio::haveMidiDevices() const
 }
     
 
-
-// Copy a studio from another example into this one - regenerating
-// copies of everything (deep copying) as we go.
-//
-void
-Studio::copy(const Studio &studio)
-{
-    clear();
-
-    m_midiThruFilter = studio.getMIDIThruFilter();
-    m_midiRecordFilter = studio.getMIDIRecordFilter();
-
-
-    DeviceListConstIterator it = studio.begin();
-    for (; it != studio.end(); it++)
-    {
-        switch ((*it)->getType())
-        {
-            case Device::Midi:
-                {
-                    MidiDevice *dev = dynamic_cast<MidiDevice*>(*it);
-                    m_devices.push_back(new MidiDevice(*dev));
-                }
-                break;
-            case Device::Audio:
-                {
-                    AudioDevice *dev = dynamic_cast<AudioDevice*>(*it);
-                    m_devices.push_back(new AudioDevice(*dev));
-                }
-                break;
-
-            default:
-                //do nothing
-                break;
-        }
-    }
 }
-
-
-
-}
-
 

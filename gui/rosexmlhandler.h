@@ -107,7 +107,7 @@ protected:
     void setSubHandler(XmlSubHandler* sh);
     XmlSubHandler* getSubHandler() { return m_subHandler; }
 
-    void addMIDIDevice(QString name);
+    void addMIDIDevice(QString name, bool createAtSequencer);
     void setMIDIDeviceConnection(QString connection);
     void setupDefaultControllers();
 

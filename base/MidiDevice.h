@@ -54,6 +54,9 @@ public:
     } VariationType;
 
     MidiDevice();
+    MidiDevice(const MidiDevice &);
+    MidiDevice(DeviceId id,
+	       const MidiDevice &);
     MidiDevice(DeviceId id,
                const std::string &name,
                DeviceDirection dir);
@@ -62,9 +65,6 @@ public:
 	       const std::string &label,
                DeviceDirection dir);
     virtual ~MidiDevice();
-
-    // Copy constructor
-    MidiDevice(const MidiDevice &);
 
     // Assignment
     MidiDevice &operator=(const MidiDevice &);
@@ -157,7 +157,6 @@ public:
 
 protected:
     void generatePresentationList();
-    void generateDefaultMetronome();
 
     ProgramList    m_programList;
     BankList       m_bankList;

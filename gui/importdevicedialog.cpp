@@ -264,12 +264,11 @@ ImportDeviceDialog::importFromRG(QString fileName)
     m_fileDoc = new RosegardenGUIDoc(this, 0, true); // skipAutoload
 
     // Add some dummy devices for bank population when we open the document.
-    // We guess that the file won't have more than 16 devices.
+    // We guess that the file won't have more than 32 devices.
     //
-    for (unsigned int i = 0; i < 16; i++) {
-//        QString label = QString("MIDI Device %1").arg(i + 1);
-        m_fileDoc->getStudio().addDevice("", i, Rosegarden::Device::Midi);
-    }
+//    for (unsigned int i = 0; i < 32; i++) {
+//        m_fileDoc->getStudio().addDevice("", i, Rosegarden::Device::Midi);
+//    }
 
     if (!m_fileDoc->openDocument(fileName, false)) {
 	return false;

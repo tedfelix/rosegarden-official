@@ -4649,148 +4649,90 @@ RosegardenGUIApp::slotImportStudio()
 
     QString target;
     if (KIO::NetAccess::download(url, target) == false) {
-        KMessageBox::error(this, QString(i18n("Cannot download file %1"))
+        KMessageBox::error(this, i18n("Cannot download file %1")
                            .arg(url.prettyURL()));
         return;
     }
 
     RosegardenGUIDoc *doc = new RosegardenGUIDoc(this, 0, true); // skipAutoload
 
-    // Add some dummy devices for bank population when we open the document.
-    // We guess that the file won't have more than 16 devices.
+    Rosegarden::Studio &oldStudio = m_doc->getStudio();
+    Rosegarden::Studio &newStudio =   doc->getStudio();
+
+    // Add some dummy devices for when we open the document.  We guess
+    // that the file won't have more than 32 devices.
     //
-    for (unsigned int i = 0; i < 16; i++)
-    {
-        QString label = QString("MIDI Device %1").arg(i + 1);
-        doc->getStudio().addDevice(qstrtostr(label),
-                                   i,
-                                   Rosegarden::Device::Midi);
-    }
+//    for (unsigned int i = 0; i < 32; i++) {
+//        newStudio.addDevice("", i, Rosegarden::Device::Midi);
+//    }
 
-    if (doc->openDocument(target, false))
-    {
-        Rosegarden::DeviceList *list = doc->getStudio().getDevices();
-//        Rosegarden::DeviceListIterator it = list->begin();
+    if (doc->openDocument(target, true)) { // true because we actually
+					   // do want to create devices
+	                                   // on the sequencer here
 
-        if (list->size() == 0)
-        {
-             KMessageBox::sorry(this, i18n("No Devices found in file"));
-             delete doc;
-             return;
-        }
-	else
-	{
+	KMacroCommand *command = new KMacroCommand(i18n("Import Studio"));
+	doc->syncDevices();
 
-/*            std::vector<QString> importList;
-            int count = 0;
-	    bool haveNames = false;
-            
-            for (; it != list->end(); ++it)
-            {
-                Rosegarden::MidiDevice *device = 
-                    dynamic_cast<Rosegarden::MidiDevice*>(*it);
+	// We actually only copy across MIDI play devices... for now
+	std::vector<Rosegarden::DeviceId> midiPlayDevices;
 
-                if (device)
-                {
-                    std::vector<Rosegarden::MidiBank> banks =
-                        device->getBanks();
+	for (Rosegarden::DeviceList::const_iterator i =
+		 oldStudio.begin(); i != oldStudio.end(); ++i) {
 
-                    // We've got a bank on a Device fom this file
-                    //
-                    if (banks.size())
-                    {
-                        if (device->getName() == "")
-                        {
-                            QString deviceNo =
-                                QString("Device %1").arg(count++);
-                            importList.push_back(deviceNo);
-                        }
-                        else
-                        {
-                            importList.push_back(strtoqstr(device->getName()));
-			    haveNames = true;
-                        }
-                    }
-                }
-            }
+	    Rosegarden::MidiDevice *md =
+		dynamic_cast<Rosegarden::MidiDevice *>(*i);
 
-
-            // If we have our devices then we offer the selection otherwise
-            // we just 
-            //
-            if (importList.size())
-            {
-		count = 0;
-		bool found = false;
-		std::vector<Rosegarden::MidiBank> banks;
-		std::vector<Rosegarden::MidiProgram> programs;
-		std::string librarianName, librarianEmail;
-
-		Rosegarden::MidiDevice *device = 0;
-
-		for (it = list->begin(); it != list->end(); ++it)
-		{
-		    device = dynamic_cast<Rosegarden::MidiDevice*>(*it);
-
-		    if (device)
-		    {
-			if (count == deviceIndex)
-			{
-			    banks = device->getBanks();
-			    programs = device->getPrograms();
-			    librarianName = device->getLibrarianName();
-			    librarianEmail = device->getLibrarianEmail();
-			    found = true;
-			    break;
-			}
-			else
-			    count++;
-		    }
-
-		}
-
-                    if (found)
-                    {
-                        MidiDeviceListViewItem* deviceItem =
-                            dynamic_cast<MidiDeviceListViewItem*>
-                                (m_listView->selectedItem());
-
-                        if (deviceItem)
-                        {
-			    if (!overwrite) {
-				// don't record the librarian when
-				// merging banks -- it's misleading
-				librarianName = "";
-				librarianEmail = "";
-			    }
-
-                            ModifyDeviceCommand *command =
-                                new ModifyDeviceCommand(
-                                        m_studio,
-                                        deviceItem->getDeviceId(),
-                                        qstrtostr(importList[deviceIndex]),
-                                        librarianName,
-                                        librarianEmail,
-                                        banks,
-                                        programs,
-                                        overwrite,
-					rename);
-                            addCommandToHistory(command);
-
-                            // No need to redraw the dialog, this is done by
-                            // slotUpdate, signalled by the MultiViewCommandHistory
-                            Rosegarden::MidiDevice *device = getMidiDevice(deviceItem);
-                            if (device)
-                                selectDeviceItem(device);
-                        }
-                    } 
-                } 
-            } */
+	    if (md && (md->getDirection() == Rosegarden::MidiDevice::Play)) {
+		midiPlayDevices.push_back((*i)->getId());
+	    }
 	}
+
+	std::vector<Rosegarden::DeviceId>::iterator di(midiPlayDevices.begin());
+
+	for (Rosegarden::DeviceList::const_iterator i =
+		 newStudio.begin(); i != newStudio.end(); ++i) {
+
+	    Rosegarden::MidiDevice *md =
+		dynamic_cast<Rosegarden::MidiDevice *>(*i);
+
+	    if (md && (md->getDirection() == Rosegarden::MidiDevice::Play)) {
+		if (di != midiPlayDevices.end()) {
+		    Rosegarden::MidiDevice::VariationType variation
+			(md->getVariationType());
+		    Rosegarden::BankList bl(md->getBanks());
+		    Rosegarden::ProgramList pl(md->getPrograms());
+		    Rosegarden::ControlList cl(md->getControlParameters());
+		    command->addCommand
+			(new ModifyDeviceCommand(&oldStudio,
+						 *di,
+						 md->getName(),
+						 md->getLibrarianName(),
+						 md->getLibrarianEmail(),
+						 &variation,
+						 &bl,
+						 &pl,
+						 &cl,
+						 true,
+						 md->getName() != ""));
+		    ++di;
+		}
+	    }
+	}
+	
+	while (di != midiPlayDevices.end()) {
+	    command->addCommand(new CreateOrDeleteDeviceCommand
+				(&oldStudio,
+				 *di));
+	}
+
+	oldStudio.setMIDIThruFilter(newStudio.getMIDIThruFilter());
+	oldStudio.setMIDIRecordFilter(newStudio.getMIDIRecordFilter());
+
+	m_doc->getCommandHistory()->addCommand(command);
+	m_doc->syncDevices();
     }
 
     delete doc;
-
 }
 
 void
