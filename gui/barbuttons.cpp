@@ -298,12 +298,15 @@ void BarButtonsWidget::paintEvent(QPaintEvent*)
             if ((*it)->getTime() >= comp.getBarStart(firstBar) &&
                 (*it)->getTime() < comp.getBarEnd(lastBar))
             {
-                //cout << "show marker at " << (*it)->getTime() << endl;
+                QRect bound = 
+                    painter.boundingRect(0, 0, 200, 100, AlignLeft, strtoqstr((*it)->getName()));
+
                 int x = m_rulerScale->getXForTime((*it)->getTime());
-                painter.fillRect(x, 0, x + 50, m_barHeight, QBrush(Qt::red));
+                painter.fillRect(x , 1, x + bound.width() + 5, m_barHeight - 2, 
+                                 QBrush(RosegardenGUIColours::MarkerBackground));
 
                 painter.setWorldXForm(false);
-                painter.drawText(x, m_barHeight, strtoqstr((*it)->getName()));
+                painter.drawText(x + 2, m_barHeight - 4, strtoqstr((*it)->getName()));
                 painter.setWorldXForm(true);
             }
         }

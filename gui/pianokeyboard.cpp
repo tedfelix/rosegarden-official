@@ -19,14 +19,15 @@
   COPYING included with this distribution for more information.
 */
 
-#include "pianokeyboard.h"
-#include "midipitchlabel.h"
-
 #include <qpainter.h>
 #include <qtooltip.h>
 
 #include <klocale.h>
 #include <iostream>
+
+#include "pianokeyboard.h"
+#include "midipitchlabel.h"
+#include "colours.h"
 
 const unsigned int _smallWhiteKeyHeight = 14;
 const unsigned int _whiteKeyHeight = 18;
@@ -40,7 +41,7 @@ PianoKeyboard::PianoKeyboard(QWidget *parent)
       m_hoverHighlight(new QWidget(this))
 {
     m_hoverHighlight->hide();
-    m_hoverHighlight->setPaletteBackgroundColor(QColor(224, 112, 8));
+    m_hoverHighlight->setPaletteBackgroundColor(RosegardenGUIColours::MatrixKeyboardFocus);
 
     computeKeyPos();
     setMouseTracking(true);

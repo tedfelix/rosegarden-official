@@ -111,6 +111,10 @@ namespace RosegardenGUIColours
 
     extern const QColor RotaryPlugin;
 
+    extern const QColor MatrixKeyboardFocus;
+
+    extern const QColor MarkerBackground;
+
     Rosegarden::Colour convertColour(const QColor &input);
     QColor convertColour(const Rosegarden::Colour &input);
 

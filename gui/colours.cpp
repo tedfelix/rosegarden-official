@@ -103,7 +103,11 @@ namespace RosegardenGUIColours
     const QColor RotaryPastelOrange = QColor(255, 233, 208);
     const QColor RotaryPastelYellow = QColor(249, 255, 208);
 
+    const QColor MatrixKeyboardFocus = QColor(224, 112, 8);
+
     const QColor RotaryPlugin = QColor(185, 255, 248);
+
+    const QColor MarkerBackground = QColor(185, 255, 248);
 
 Rosegarden::Colour
 convertColour (const QColor &input)
