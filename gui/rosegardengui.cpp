@@ -667,6 +667,17 @@ void RosegardenGUIApp::openURL(const KURL& url)
     setCaption(url.path());
     m_fileRecent->addURL(url);
 
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::openURL() : enabling 'move'\n";
+
+    // We have to do this to make sure that the 2nd call ("move")
+    // actually has any effect. Activating the same radio action
+    // doesn't work the 2nd time (like pressing down the same radio
+    // button twice - it doesn't have any effect), so if you load two
+    // files in a row, on the 2nd file a new SegmentCanvas will be
+    // created but its tool won't be set, so clicking on the canvas
+    // will crash.
+    //
+    actionCollection()->action("draw")->activate();
     actionCollection()->action("move")->activate();
 }
 
