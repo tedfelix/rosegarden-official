@@ -392,6 +392,44 @@ public:
     ~EventList();
 };
 
+
+/**
+ * A set of tracks.
+ * This class owns the event lists it is holding
+ * It will delete them on destruction.
+ */
+class Composition
+{
+    
+public:
+    typedef vector<EventList*> trackcontainer;
+
+    typedef trackcontainer::iterator iterator;
+    typedef trackcontainer::const_iterator const_iterator;
+
+    Composition(unsigned int nbTracks = 64);
+    ~Composition();
+
+    vector<EventList*>& tracks() { return m_tracks; }
+
+    bool addTrack(EventList *track = 0, int idx = -1);
+    void deleteTrack(int idx);
+
+    // Some vector<> API delegation
+    iterator       begin()       { return m_tracks.begin(); }
+    const_iterator begin() const { return m_tracks.begin(); }
+    iterator       end()         { return m_tracks.end(); }
+    const_iterator end() const   { return m_tracks.end(); }
+
+    EventList*       operator[](int i)       { return m_tracks[i]; }
+    const EventList* operator[](int i) const { return m_tracks[i]; }
+    void             clear()                 { m_tracks.clear(); }
+         
+protected:
+    trackcontainer m_tracks;
+};
+
+
 //////////////////////////////////////////////////////////////////////
 
 

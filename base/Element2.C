@@ -214,3 +214,50 @@ operator<(const ViewElement &a, const ViewElement &b)
 {
     return a.event()->absoluteTime() < b.event()->absoluteTime();
 }
+
+//////////////////////////////////////////////////////////////////////
+
+Composition::Composition(unsigned int nbTracks)
+    : m_tracks(nbTracks)
+{
+}
+
+Composition::~Composition()
+{
+    for(trackcontainer::iterator i = m_tracks.begin();
+        i != m_tracks.end(); ++i) {
+        delete *(i);
+    }
+}
+
+
+
+bool
+Composition::addTrack(EventList *track = 0, int idx = -1)
+{
+    if (idx > m_tracks.size()) {
+        return false; // throw ?
+    }
+    
+    if (!track) track = new EventList;
+    
+    if (idx < 0)
+        m_tracks.push_back(track);
+    else {
+        
+        if (m_tracks[idx]) return false; // there's already a track at
+        // that index
+        
+        m_tracks[idx] = track;
+    }
+}
+
+void
+Composition::deleteTrack(int idx)
+{
+    if (idx < m_tracks.size()) {
+        delete m_tracks[idx];
+        m_tracks[idx] = 0;
+    }
+}
+
