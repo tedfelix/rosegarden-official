@@ -100,6 +100,7 @@
 #include "studiocontrol.h"
 #include "bankeditor.h"
 #include "deviceeditor.h"
+#include "devicemanager.h"
 #include "midifilter.h"
 #include "controleditor.h"
 #include "markereditor.h"
@@ -136,7 +137,8 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
       m_useSequencer(useSequencer),
       m_autoSaveTimer(new QTimer(this)),
       m_clipboard(new Rosegarden::Clipboard),
-      m_controlEditor(0),
+      m_deviceManager(0),
+      m_bankEditor(0),
       m_markerEditor(0)
 {
     m_myself = this;
@@ -630,13 +632,9 @@ void RosegardenGUIApp::setupActions()
     //
     // Studio menu
     //
-    new KAction(i18n("Manage MIDI &Devices..."), 0, this,
-                SLOT(slotEditDevices()),
+    new KAction(i18n("Manage MIDI Devices..."), 0, this,
+                SLOT(slotManageMIDIDevices()),
                 actionCollection(), "manage_devices");
-
-    new KAction(i18n("Manage MIDI &Banks and Programs..."), 0, this,
-                SLOT(slotEditBanks()),
-                actionCollection(), "modify_banks");
 
     new KAction(i18n("Modify MIDI &Filters..."), 0, this,
                 SLOT(slotModifyMIDIFilters()),
@@ -645,10 +643,6 @@ void RosegardenGUIApp::setupActions()
     new KAction(i18n("Manage &Metronome..."), 0, this,
                 SLOT(slotManageMetronome()),
                 actionCollection(), "manage_metronome");
-
-    new KAction(i18n("Manage &Control Parameters..."), 0, this,
-                SLOT(slotEditControlParameters()),
-                actionCollection(), "manage_controls");
 
     new KAction(i18n("&Save Current Document as Default Studio"), 0, this,
                 SLOT(slotSaveDefaultStudio()),
@@ -1042,11 +1036,6 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
 
     if (m_seqManager)
         m_seqManager->preparePlayback(true);
-
-
-    // If the control editor is up then repopulate
-    //
-    if (m_controlEditor) m_controlEditor->setDocument(m_doc);
 
     // same for the Marker Editor
     //
@@ -4387,45 +4376,104 @@ RosegardenGUIApp::slotChangeCompositionLength()
 
  
 void
-RosegardenGUIApp::slotEditDevices()
+RosegardenGUIApp::slotManageMIDIDevices()
 {
-    DeviceEditorDialog dialog(this, m_doc);
-
-    if (dialog.exec() == QDialog::Accepted)
-    {
-        RG_DEBUG << "slotEditDevices - accepted\n";
+    if (m_deviceManager) {
+	m_deviceManager->raise();
+	return;
     }
 
-    // Crudely force update
-    //
-//    if (m_view)
-//       m_view->slotSelectTrackSegments(m_doc->getComposition().getSelectedTrack());
+    m_deviceManager = new DeviceManagerDialog(this, m_doc);
+    
+    connect(m_deviceManager, SIGNAL(closing()),
+            this, SLOT(slotDeviceManagerClosed()));
 
+    connect(this, SIGNAL(documentAboutToChange()),
+            m_deviceManager, SLOT(close()));
+
+    // Cheating way of updating the track/instrument list
+    //
+    connect(m_deviceManager, SIGNAL(deviceNamesChanged()),
+            m_view, SLOT(slotSynchroniseWithComposition()));
+
+    connect(m_deviceManager, SIGNAL(editBanks(Rosegarden::DeviceId)),
+	    this, SLOT(slotEditBanks(Rosegarden::DeviceId)));
+
+    connect(m_deviceManager, SIGNAL(editControllers(Rosegarden::DeviceId)),
+	    this, SLOT(slotEditControlParameters(Rosegarden::DeviceId)));
+ 
+    m_deviceManager->show();
+}
+
+void
+RosegardenGUIApp::slotEditControlParameters(Rosegarden::DeviceId device)
+{
+    for (std::set<ControlEditorDialog *>::iterator i = m_controlEditors.begin();
+	 i != m_controlEditors.end(); ++i) {
+	if ((*i)->getDevice() == device) {
+	    (*i)->raise();
+	    return;
+	}
+    }
+
+    ControlEditorDialog *controlEditor = new ControlEditorDialog(this, m_doc,
+								 device);
+    m_controlEditors.insert(controlEditor);
+
+    RG_DEBUG << "inserting control editor dialog, have " << m_controlEditors.size() << " now" << endl;
+
+    connect(controlEditor, SIGNAL(closing()),
+            SLOT(slotControlEditorClosed()));
+
+    connect(this, SIGNAL(documentAboutToChange()),
+            controlEditor, SLOT(close()));
+
+    connect(m_doc, SIGNAL(devicesResyncd()),
+	    controlEditor, SLOT(slotUpdate()));
+
+    controlEditor->show();
 }
 
 void
 RosegardenGUIApp::slotEditBanks()
 {
-    BankEditorDialog* bankEditor = new BankEditorDialog(this, m_doc);
+    slotEditBanks(Rosegarden::Device::NO_DEVICE);
+}
+
+void
+RosegardenGUIApp::slotEditBanks(Rosegarden::DeviceId device)
+{
+    if (m_bankEditor) {
+	if (device != Rosegarden::Device::NO_DEVICE)
+	    m_bankEditor->setCurrentDevice(device);
+	m_bankEditor->raise();
+	return;
+    }
+
+    m_bankEditor = new BankEditorDialog(this, m_doc, device);
     
-    connect(bankEditor, SIGNAL(closing()),
+    connect(m_bankEditor, SIGNAL(closing()),
             this, SLOT(slotBankEditorClosed()));
 
     connect(this, SIGNAL(documentAboutToChange()),
-            bankEditor, SLOT(slotFileClose()));
+            m_bankEditor, SLOT(slotFileClose()));
 
     // Cheating way of updating the track/instrument list
     //
-    connect(bankEditor, SIGNAL(deviceNamesChanged()),
+    connect(m_bankEditor, SIGNAL(deviceNamesChanged()),
             m_view, SLOT(slotSynchroniseWithComposition()));
  
-    stateChanged("bankeditor_shown");    
-    bankEditor->show();
+    m_bankEditor->show();
 }
 
 void
 RosegardenGUIApp::slotEditMarkers()
 {
+    if (m_markerEditor) {
+	m_markerEditor->raise();
+	return;
+    }
+
     m_markerEditor = new MarkerEditorDialog(this, m_doc);
 
     connect(m_markerEditor, SIGNAL(closing()),
@@ -4440,38 +4488,31 @@ RosegardenGUIApp::slotEditMarkers()
 }
 
 void
-RosegardenGUIApp::slotSetPointer(Rosegarden::timeT t)
-{
-    m_doc->setPointerPosition(t);
-}
-
-
-void
 RosegardenGUIApp::slotMarkerEditorClosed()
 {
     RG_DEBUG << "RosegardenGUIApp::slotMarkerEditorClosed" << endl;
+
     m_markerEditor = 0;
-}
-
-void
-RosegardenGUIApp::slotEditControlParameters()
-{
-    m_controlEditor = new ControlEditorDialog(this, m_doc);
-
-    connect(m_controlEditor, SIGNAL(closing()),
-            SLOT(slotControlEditorClosed()));
-
-    m_controlEditor->show();
 }
 
 void
 RosegardenGUIApp::slotControlEditorClosed()
 {
+    const QObject *s = sender();
+
     RG_DEBUG << "RosegardenGUIApp::slotControlEditorClosed" << endl;
-    m_controlEditor = 0;
+
+    for (std::set<ControlEditorDialog *>::iterator i = m_controlEditors.begin();
+	 i != m_controlEditors.end(); ++i) {
+	if (*i == s) {
+	    m_controlEditors.erase(i);
+	    RG_DEBUG << "removed control editor dialog, have " << m_controlEditors.size() << " left" << endl;
+	    return;
+	}
+    }
+
+    std::cerr << "WARNING: control editor " << s << " closed, but couldn't find it in our control editor list (we have " << m_controlEditors.size() << " editors)" << std::endl;
 }
-
-
 
 void
 RosegardenGUIApp::slotBankEditorClosed()
@@ -4483,7 +4524,20 @@ RosegardenGUIApp::slotBankEditorClosed()
             m_view->slotSelectTrackSegments(m_doc->getComposition().getSelectedTrack());
     }
     
-    stateChanged("bankeditor_shown", KXMLGUIClient::StateReverse);    
+    m_bankEditor = 0;
+}
+
+void
+RosegardenGUIApp::slotDeviceManagerClosed()
+{
+    RG_DEBUG << "RosegardenGUIApp::slotDeviceManagerClosed()\n";
+
+    if (m_doc->isModified()) {
+        if (m_view)
+            m_view->slotSelectTrackSegments(m_doc->getComposition().getSelectedTrack());
+    }
+    
+    m_deviceManager = 0;
 }
 
 void
@@ -4504,6 +4558,13 @@ RosegardenGUIApp::slotPanic()
 
     }
 }
+
+void
+RosegardenGUIApp::slotSetPointer(Rosegarden::timeT t)
+{
+    m_doc->setPointerPosition(t);
+}
+
 
 void
 RosegardenGUIApp::slotPopulateTrackInstrumentPopup()

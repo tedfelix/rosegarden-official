@@ -23,6 +23,7 @@
 #define _MIDIBANK_H_
 
 #include <string>
+#include <vector>
 
 namespace Rosegarden
 {
@@ -52,6 +53,8 @@ private:
     std::string m_name;
 };
 
+typedef std::vector<MidiBank> BankList;
+
 class MidiProgram
 {
 public:
@@ -72,6 +75,9 @@ private:
     MidiByte m_program;
     std::string m_name;
 };
+
+typedef std::vector<MidiProgram> ProgramList;
+
 
 // A mapped MIDI instrument - a drum track click for example
 //

@@ -296,6 +296,23 @@ RosegardenCanvasView* EditView::getCanvasView()
 }
 
 
+Rosegarden::Device *
+EditView::getCurrentDevice()
+{
+    Rosegarden::Segment *segment = getCurrentSegment();
+    if (!segment) return 0;
+
+    Rosegarden::Studio &studio = getDocument()->getStudio();
+    Rosegarden::Instrument *instrument =
+	studio.getInstrumentById
+	(segment->getComposition()->getTrackById(segment->getTrack())->
+	 getInstrument());
+    if (!instrument) return 0;
+    
+    return instrument->getDevice();
+}
+
+
 Rosegarden::timeT
 EditView::getInsertionTime(Rosegarden::Clef &clef,
 			   Rosegarden::Key &key)
@@ -645,14 +662,22 @@ EditView::setupAddControlRulerMenu()
         (factory()->container("add_control_ruler", this));
 
     if (addControlRulerMenu) {
-        Rosegarden::Studio &studio = getDocument()->getStudio();
-        Rosegarden::ControlList *list = studio.getControlParameters();
+
+	//!!! problem here with notation view -- current segment can
+	// change after construction, but this function isn't used again
+
+	Rosegarden::MidiDevice *md = dynamic_cast<Rosegarden::MidiDevice *>
+	    (getCurrentDevice());
+	if (!md) return;
+
+        const Rosegarden::ControlList &list = md->getControlParameters();
 
         int i = 0;
-        for (Rosegarden::ControlListConstIterator it = list->begin(); it != list->end(); ++it)
+        for (Rosegarden::ControlList::const_iterator it = list.begin();
+	     it != list.end(); ++it)
         {
-            QString itemStr = i18n("%1 ruler (%2)").arg(strtoqstr((*it)->getName()))
-                                                   .arg(int((*it)->getControllerValue()));
+            QString itemStr = i18n("%1 ruler (%2)").arg(strtoqstr(it->getName()))
+                                                   .arg(int(it->getControllerValue()));
             addControlRulerMenu->insertItem(itemStr, i++);
         }
 
@@ -671,14 +696,17 @@ EditView::setupControllerTabs()
 
     if (list.size())
     {
-        Rosegarden::Studio &studio = getDocument()->getStudio();
+	Rosegarden::MidiDevice *md = dynamic_cast<Rosegarden::MidiDevice *>
+	    (getCurrentDevice());
+	if (!md) return;
+
         Rosegarden::Segment::ControllerListConstIterator it;
 
         for (it = list.begin(); it != list.end(); ++it)
         {
             // Get ControlParameter object from controller value
             //
-            Rosegarden::ControlParameter *controlParameter = studio.getControlParameter(*it);
+            Rosegarden::ControlParameter *controlParameter = md->getControlParameter(*it);
 
             if (controlParameter)
             {
@@ -704,31 +732,32 @@ EditView::slotAddControlRuler(int controller)
     std::cout << "EditView::slotAddControlRuler - item = " 
               << controller << std::endl;
 
-    Rosegarden::Studio &studio = getDocument()->getStudio();
-    Rosegarden::ControlList *list = studio.getControlParameters();
-    Rosegarden::ControlParameter *control = (*list)[controller];
+    Rosegarden::MidiDevice *md = dynamic_cast<Rosegarden::MidiDevice *>
+	(getCurrentDevice());
+    if (!md) return;
 
-    if (control)
-    {
-        // create control ruler to a specific controller
-        ControllerEventsRuler* controlRuler = makeControllerEventRuler(control);
+    const Rosegarden::ControlList &list = md->getControlParameters();
+    Rosegarden::ControlParameter control = list[controller];
 
-        addControlRuler(controlRuler);
-        
-        if (!m_controlRulers->isVisible()) {
-            m_controlRulers->show();
-        }
+    // Create control ruler to a specific controller.  This duplicates
+    // the control parameter in the supplied pointer.
+    ControllerEventsRuler* controlRuler = makeControllerEventRuler(&control);
     
-        getBottomWidget()->layout()->invalidate();
-        getBottomWidget()->updateGeometry();
-        getCanvasView()->updateBottomWidgetGeometry();
-
-        // Add the controller to the segment so the views can
-        // remember what we've opened against it.
-        //
-        Rosegarden::Staff *staff = getCurrentStaff();
-        staff->getSegment().addController(control->getControllerValue());
+    addControlRuler(controlRuler);
+    
+    if (!m_controlRulers->isVisible()) {
+	m_controlRulers->show();
     }
+    
+    getBottomWidget()->layout()->invalidate();
+    getBottomWidget()->updateGeometry();
+    getCanvasView()->updateBottomWidgetGeometry();
+    
+    // Add the controller to the segment so the views can
+    // remember what we've opened against it.
+    //
+    Rosegarden::Staff *staff = getCurrentStaff();
+    staff->getSegment().addController(control.getControllerValue());
 }
 
 
@@ -1107,7 +1136,7 @@ void
 EditView::slotCloseControlRulerItem()
 {
     ControllerEventsRuler* ruler = dynamic_cast<ControllerEventsRuler*>(getCurrentControlRuler());
-    
+
     if (ruler)
     {
         Rosegarden::ControlParameter *controller = ruler->getControlParameter();

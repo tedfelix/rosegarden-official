@@ -186,6 +186,14 @@ public:
 		      bool autosave = false);
 
     /**
+     * exports all or part of the studio to a file.  If devices is
+     * empty, exports all devices.
+     */	
+    bool exportStudio(const QString &filename,
+		      std::vector<Rosegarden::DeviceId> devices =
+		      std::vector<Rosegarden::DeviceId>());
+
+    /**
      *   sets the path to the file connected with the document
      */
     void setAbsFilePath(const QString &filename);
@@ -432,6 +440,7 @@ signals:
     void playPositionChanged(Rosegarden::timeT);
     void loopChanged(Rosegarden::timeT, Rosegarden::timeT);
     void docColoursChanged();
+    void devicesResyncd();
 
 protected:
     /**

@@ -32,6 +32,7 @@
 #include <kcompletion.h>
 #include <kdialogbase.h>
 #include <kmainwindow.h>
+#include <kurl.h>
 
 #include "Device.h"
 #include "Instrument.h"
@@ -42,6 +43,7 @@ class KComboBox;
 class QButtonGroup;
 class QPushButton;
 class QFrame;
+class QLabel;
 class QSpinBox;
 class QCheckBox;
 class QRadioButton;
@@ -104,9 +106,6 @@ public:
                        QWidget *parent,
                        const char *name = 0);
 
-    typedef std::vector<Rosegarden::MidiProgram> MidiProgramContainer;
-    typedef std::vector<Rosegarden::MidiBank>    MidiBankContainer;
-    
     int ensureUniqueMSB(int msb, bool ascending);
     int ensureUniqueLSB(int lsb, bool ascending);
 
@@ -114,7 +113,7 @@ public:
     //
     bool banklistContains(const Rosegarden::MidiBank &);
 
-    MidiProgramContainer getBankSubset(const Rosegarden::MidiBank &);
+    Rosegarden::ProgramList getBankSubset(const Rosegarden::MidiBank &);
 
     Rosegarden::MidiBank* getCurrentBank();
 
@@ -165,8 +164,8 @@ protected:
     QLabel                   *m_librarianEmail;
 
     Rosegarden::MidiBank     *m_currentBank;
-    MidiBankContainer        &m_bankList;
-    MidiProgramContainer     &m_programList;
+    Rosegarden::BankList     &m_bankList;
+    Rosegarden::ProgramList  &m_programList;
 
     Rosegarden::MidiBank      m_oldBank;
 };
@@ -177,7 +176,9 @@ class BankEditorDialog : public KMainWindow
 
 public:
     BankEditorDialog(QWidget *parent,
-                     RosegardenGUIDoc *doc);
+                     RosegardenGUIDoc *doc,
+		     Rosegarden::DeviceId defaultDevice =
+		     Rosegarden::Device::NO_DEVICE);
 
     ~BankEditorDialog();
 
@@ -190,6 +191,8 @@ public:
     void addCommandToHistory(KCommand *command);
     MultiViewCommandHistory* getCommandHistory();
 
+    void setCurrentDevice(Rosegarden::DeviceId device);
+
     Rosegarden::MidiBank* getCurrentBank() { return m_programEditor->getCurrentBank(); }
 
     // Get a MidiDevice from an index number
@@ -197,8 +200,8 @@ public:
     Rosegarden::MidiDevice* getMidiDevice(Rosegarden::DeviceId);
     Rosegarden::MidiDevice* getMidiDevice(QListViewItem*);
     Rosegarden::MidiDevice* getCurrentMidiDevice();
-    MidiProgramsEditor::MidiBankContainer&      getBankList()     { return m_bankList; }
-    MidiProgramsEditor::MidiProgramContainer&   getProgramList()  { return m_programList; }
+    Rosegarden::BankList&   getBankList()     { return m_bankList; }
+    Rosegarden::ProgramList&getProgramList()  { return m_programList; }
 
     void setModified(bool value);
 
@@ -259,8 +262,6 @@ protected:
 
     void clearItemChildren(QListViewItem* deviceItem);
 
-    void importFromSF2(QString filename);
-
     MidiDeviceListViewItem* getParentDeviceItem(QListViewItem*);
     void keepBankListForNextPopulate() { m_keepBankList = true; }
 
@@ -296,9 +297,9 @@ protected:
     std::pair<Rosegarden::DeviceId, int> m_copyBank;
 
     std::map<Rosegarden::DeviceId, std::string>  m_deviceNameMap;
-    MidiProgramsEditor::MidiBankContainer        m_bankList;
-    MidiProgramsEditor::MidiProgramContainer     m_programList;
-    MidiProgramsEditor::MidiProgramContainer     m_oldProgramList;
+    Rosegarden::BankList                         m_bankList;
+    Rosegarden::ProgramList                      m_programList;
+    Rosegarden::ProgramList                      m_oldProgramList;
 
     bool                     m_modified;
     bool                     m_keepBankList;
@@ -347,37 +348,6 @@ protected:
 
     Rosegarden::DeviceList m_devices;
     Rosegarden::InstrumentList m_instruments;
-};
-
-// --------------------- ImportDeviceDialog --------------------------
-//
-//
-
-class ImportDeviceDialog : public KDialogBase
-{
-    Q_OBJECT
-public:
-    ImportDeviceDialog(QWidget *parent,
-                       std::vector<QString> devices,
-		       bool showRenameOption);
- 
-    int getDeviceIndex() const;
-    bool getOverwrite() const; 
-    bool getRename() const;
-
-public slots:
-    void slotOk();
-    void slotCancel();
-
-protected:
-    KComboBox          *m_deviceCombo;
-    QLabel             *m_label;
-
-    QButtonGroup       *m_buttonGroup;
-    QRadioButton       *m_mergeBanks;
-    QRadioButton       *m_overwriteBanks;
-    QCheckBox          *m_rename;
-
 };
 
 #endif // _BANKEDITOR_H_

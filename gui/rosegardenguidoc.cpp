@@ -679,7 +679,7 @@ void RosegardenGUIDoc::initialiseStudio()
 
 
 bool RosegardenGUIDoc::saveDocument(const QString& filename,
-                                    const char* format,
+                                    const char* /* format */,
 				    bool autosave)
 {
     Rosegarden::Profiler profiler("RosegardenGUIDoc::saveDocument");
@@ -694,25 +694,6 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     outStream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 	      << "<!DOCTYPE rosegarden-data>\n"
 	      << "<rosegarden-data version=\"" << VERSION << "\">\n";
-
-    static const QString deviceExport("deviceExport");
-
-    if (format && deviceExport == format)
-    {
-        // Send out the studio - a self contained command
-        //
-        outStream << strtoqstr(m_studio.toXmlString()) << endl << endl;
-    
-        // close the top-level XML tag
-        //
-        outStream << "</rosegarden-data>\n";
-
-        bool okay = writeToFile(filename, outText);
-        if (!okay) return false;
-    
-        RG_DEBUG << endl << "RosegardenGUIDoc::deviceExport() finished\n";
-        return true;
-    }
 
     RosegardenProgressDialog *progressDlg = 0;
     KProgress *progress = 0;
@@ -797,6 +778,37 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 
     setAutoSaved(true);
 
+    return true;
+}
+
+bool RosegardenGUIDoc::exportStudio(const QString& filename,
+				    std::vector<Rosegarden::DeviceId> devices)
+{
+    Rosegarden::Profiler profiler("RosegardenGUIDoc::exportStudio");
+    RG_DEBUG << "RosegardenGUIDoc::exportStudio("
+                         << filename << ")\n";
+
+    QString outText;
+    QTextStream outStream(&outText, IO_WriteOnly);
+
+    // output XML header
+    //
+    outStream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+	      << "<!DOCTYPE rosegarden-data>\n"
+	      << "<rosegarden-data version=\"" << VERSION << "\">\n";
+
+    // Send out the studio - a self contained command
+    //
+    outStream << strtoqstr(m_studio.toXmlString(devices)) << endl << endl;
+    
+    // close the top-level XML tag
+    //
+    outStream << "</rosegarden-data>\n";
+    
+    bool okay = writeToFile(filename, outText);
+    if (!okay) return false;
+    
+    RG_DEBUG << endl << "RosegardenGUIDoc::exportStudio() finished\n";
     return true;
 }
 
@@ -1410,6 +1422,8 @@ RosegardenGUIDoc::syncDevices()
         w->slotSelectTrackSegments(m_composition.getSelectedTrack());
         w->getTrackEditor()->getTrackButtons()->changeTrackInstrumentLabels(labels);
     }
+
+    emit devicesResyncd();
 }
 
 
@@ -1477,6 +1491,7 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
             RG_DEBUG  << "RosegardenGUIDoc::getMappedDevice - "
                           << "adding MIDI Device \""
                           << device->getName() << "\" id = " << id
+		          << " direction = " << mD->getDirection()
 			  << endl;
         }
         else if (mD->getType() == Rosegarden::Device::Audio)
@@ -1508,7 +1523,7 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
     }
 
     std::string connection(mD->getConnection());
-    RG_DEBUG << "RosegardenGUIDoc::getMappedDevice - got device on connection \"" << connection << "\"" << endl;
+    RG_DEBUG << "RosegardenGUIDoc::getMappedDevice - got device on connection \"" << connection << "\", direction " << mD->getDirection() << endl;
     device->setConnection(connection);
 
     Rosegarden::Instrument *instrument;

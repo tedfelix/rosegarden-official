@@ -38,25 +38,17 @@ namespace Rosegarden { class Studio; }
 class ModifyDeviceCommand : public KNamedCommand
 {
 public:
+    // Any of the arguments passed by pointer may be null (except for
+    // the Studio) -- in which case they will not be changed in the device.
     ModifyDeviceCommand(Rosegarden::Studio *studio,
                         Rosegarden::DeviceId device,
                         const std::string &name,
                         const std::string &librarianName,
                         const std::string &librarianEmail,
-			Rosegarden::MidiDevice::VariationType variationType,
-                        std::vector<Rosegarden::MidiBank> bankList,
-                        std::vector<Rosegarden::MidiProgram> programList,
-                        bool overwrite,
-			bool rename);
-    
-    // leave variation alone
-    ModifyDeviceCommand(Rosegarden::Studio *studio,
-                        Rosegarden::DeviceId device,
-                        const std::string &name,
-                        const std::string &librarianName,
-                        const std::string &librarianEmail,
-                        std::vector<Rosegarden::MidiBank> bankList,
-                        std::vector<Rosegarden::MidiProgram> programList,
+			Rosegarden::MidiDevice::VariationType *variationType,
+                        const Rosegarden::BankList *bankList,
+                        const Rosegarden::ProgramList *programList,
+			const Rosegarden::ControlList *controlList,
                         bool overwrite,
 			bool rename);
 
@@ -73,20 +65,24 @@ protected:
     std::string                            m_librarianName;
     std::string                            m_librarianEmail;
     Rosegarden::MidiDevice::VariationType  m_variationType;
-    std::vector<Rosegarden::MidiBank>      m_bankList;
-    std::vector<Rosegarden::MidiProgram>   m_programList;
+    Rosegarden::BankList                   m_bankList;
+    Rosegarden::ProgramList                m_programList;
+    Rosegarden::ControlList                m_controlList;
 
     std::string                            m_oldName;
-    std::vector<Rosegarden::MidiBank>      m_oldBankList;
-    std::vector<Rosegarden::MidiProgram>   m_oldProgramList;
     std::string                            m_oldLibrarianName;
     std::string                            m_oldLibrarianEmail;
     Rosegarden::MidiDevice::VariationType  m_oldVariationType;
+    Rosegarden::BankList                   m_oldBankList;
+    Rosegarden::ProgramList                m_oldProgramList;
+    Rosegarden::ControlList                m_oldControlList;
 
     bool                                   m_overwrite;
     bool                                   m_rename;
     bool                                   m_changeVariation;
-
+    bool                                   m_changeBanks;
+    bool                                   m_changePrograms;
+    bool                                   m_changeControls;
 };
 
 class ModifyDeviceMappingCommand : public KNamedCommand
@@ -226,9 +222,11 @@ class AddControlParameterCommand : public KNamedCommand
 {
 public:
     AddControlParameterCommand(Rosegarden::Studio *studio,
-                               Rosegarden::ControlParameter *control):
+			       Rosegarden::DeviceId device,
+                               Rosegarden::ControlParameter control):
         KNamedCommand(getGlobalName()),
         m_studio(studio),
+	m_device(device),
         m_control(control),
         m_id(0) { }
 
@@ -240,9 +238,9 @@ public:
     static QString getGlobalName() { return i18n("&Add Control Parameter"); }
 
 protected:
-    
     Rosegarden::Studio              *m_studio;
-    Rosegarden::ControlParameter    *m_control;
+    Rosegarden::DeviceId             m_device;
+    Rosegarden::ControlParameter     m_control;
     int                              m_id;
     
 };
@@ -252,11 +250,12 @@ class RemoveControlParameterCommand : public KNamedCommand
 {
 public:
     RemoveControlParameterCommand(Rosegarden::Studio *studio,
+				  Rosegarden::DeviceId device,
                                   int id):
         KNamedCommand(getGlobalName()),
         m_studio(studio),
-        m_id(id),
-        m_oldControl(0) { }
+	m_device(device),
+        m_id(id) { }
 
     ~RemoveControlParameterCommand();
 
@@ -266,10 +265,10 @@ public:
     static QString getGlobalName() { return i18n("&Remove Control Parameter"); }
 
 protected:
-
     Rosegarden::Studio              *m_studio;
+    Rosegarden::DeviceId             m_device;
     int                              m_id;
-    Rosegarden::ControlParameter    *m_oldControl;
+    Rosegarden::ControlParameter     m_oldControl;
 
 };
 
@@ -277,10 +276,12 @@ class ModifyControlParameterCommand : public KNamedCommand
 {
 public:
     ModifyControlParameterCommand(Rosegarden::Studio *studio,
-                                  Rosegarden::ControlParameter *control,
+				  Rosegarden::DeviceId device,
+                                  Rosegarden::ControlParameter control,
                                   int id):
         KNamedCommand(getGlobalName()),
         m_studio(studio),
+	m_device(device),
         m_control(control),
         m_id(id) { }
     ~ModifyControlParameterCommand();
@@ -291,10 +292,10 @@ public:
     static QString getGlobalName() { return i18n("&Modify Control Parameter"); }
 
 protected:
-
-        Rosegarden::Studio            *m_studio;
-        Rosegarden::ControlParameter  *m_control;
-        int                            m_id;
-        Rosegarden::ControlParameter  *m_originalControl;
+    Rosegarden::Studio            *m_studio;
+    Rosegarden::DeviceId           m_device;
+    Rosegarden::ControlParameter   m_control;
+    int                            m_id;
+    Rosegarden::ControlParameter   m_originalControl;
 
 };

@@ -328,6 +328,11 @@ protected:
      */
     virtual Rosegarden::Staff *getCurrentStaff() = 0;
 
+    /**
+     * Return the device of the current segment, if any
+     */
+    Rosegarden::Device *getCurrentDevice();
+
     virtual RosegardenCanvasView* getCanvasView();
     virtual void setCanvasView(RosegardenCanvasView *cv);
 

@@ -25,7 +25,6 @@
 #include "Instrument.h"
 #include "Device.h"
 #include "MidiProgram.h"
-#include "MidiTypes.h"
 #include "ControlParameter.h"
 
 // The Studio is where Midi and Audio devices live.  We can query
@@ -51,10 +50,6 @@ typedef std::vector<Instrument *> InstrumentList;
 typedef std::vector<Device*> DeviceList;
 typedef std::vector<Device*>::iterator DeviceListIterator;
 typedef std::vector<Device*>::const_iterator DeviceListConstIterator;
-
-typedef std::vector<ControlParameter*> ControlList;
-typedef std::vector<ControlParameter*>::iterator ControlListIterator;
-typedef std::vector<ControlParameter*>::const_iterator ControlListConstIterator;
 
 class MidiDevice;
 
@@ -131,7 +126,7 @@ public:
 
     // Get a MIDI metronome from a given device
     //
-    MidiMetronome* getMetronomeFromDevice(DeviceId id);
+    const MidiMetronome* getMetronomeFromDevice(DeviceId id);
 
     // Return the device list
     //
@@ -152,6 +147,11 @@ public:
     //
     virtual std::string toXmlString();
 
+    // Export a subset of devices as XML string.  If devices is empty,
+    // exports all devices just as the above method does.
+    //
+    virtual std::string toXmlString(const std::vector<DeviceId> &devices);
+
     // Get an audio preview Instrument
     //
     InstrumentId getAudioPreviewInstrument();
@@ -164,34 +164,6 @@ public:
     void setMIDIRecordFilter(MidiFilter filter) { m_midiRecordFilter = filter; }
     MidiFilter getMIDIRecordFilter() const { return m_midiRecordFilter; }
 
-    // Controllers - we store a central repository of these in the 
-    // Studio for mapping Controller names to values for use in the
-    // InstrumentParameterBoxes (IPBs) and Control rulers.
-    //
-    ControlListConstIterator beginControllers() const
-        { return m_controls.begin(); }
-    ControlListConstIterator endControllers() const
-        { return m_controls.end(); }
-
-    ControlList* getControlParameters() { return &m_controls; }
-
-    // Access ControlParameters
-    //
-    ControlParameter* getControlParameter(int id);
-    ControlParameter* getControlParameter(Rosegarden::MidiByte controllerNumber);
-
-    // Modify ControlParameters
-    //
-    void addControlParameter(ControlParameter *con);
-    void addControlParameter(ControlParameter *con, int id);
-    bool removeControlParameter(int id);
-    bool modifyControlParameter(ControlParameter *con, int id);
-
-    // Check to see if the passed ControlParameter is unique in
-    // our ControlParameter list.
-    //
-    bool isUniqueControlParameter(ControlParameter *con) const;
-
 private:
 
     DeviceList        m_devices;
@@ -199,7 +171,6 @@ private:
     MidiFilter        m_midiThruFilter;
     MidiFilter        m_midiRecordFilter;
 
-    ControlList       m_controls;
 };
 
 }

@@ -104,7 +104,7 @@ ControlParameter::toXmlString()
 { 
     std::stringstream control;
 
-    control << "    <control name=\"" << encode(m_name)
+    control << "            <control name=\"" << encode(m_name)
             << "\" type=\"" << encode(m_type)
             << "\" description=\"" << encode(m_description)
             << "\" min=\"" << m_min

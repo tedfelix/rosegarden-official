@@ -74,11 +74,8 @@
   <Menu name="Studio">
         <text>&amp;Studio</text>
         <Action name="manage_devices"/>
-        <Action name="modify_banks"/>
-        <Action name="modify_midi_filters"/>
-        <Separator/>
-        <Action name="manage_controls"/>
 	<Action name="manage_metronome"/>
+        <Action name="modify_midi_filters"/>
         <Separator/>
         <Action name="save_default_studio"/>
 	<Action name="load_studio"/>
@@ -296,13 +293,8 @@
 <State name="not_playing">
      <enable>
         <Action name="manage_devices"/>
+        <Action name="manage_devices_experimental"/>
      </enable>
-</State>
-
-<State name="bankeditor_shown">
-     <disable>
-        <Action name="modify_banks"/>
-     </disable>
 </State>
 
 </kpartgui>

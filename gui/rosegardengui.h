@@ -43,6 +43,7 @@
 #include "Sound.h"
 #include "MappedEvent.h"
 #include "MappedCommon.h"
+#include "Device.h"
 
 class KURL;
 class KRecentFilesAction;
@@ -51,6 +52,7 @@ class KProcess;
 
 // forward declaration of the RosegardenGUI classes
 class BankEditorDialog;
+class DeviceManagerDialog;
 class RosegardenGUIDoc;
 class RosegardenGUIView;
 template <class T> class ZoomSlider;
@@ -655,9 +657,9 @@ public slots:
     void slotEditDocumentProperties();
 
     /**
-     * Edit Devices
+     * Manage MIDI Devices
      */
-    void slotEditDevices();
+    void slotManageMIDIDevices();
 
     /**
      * Edit Banks/Programs
@@ -665,9 +667,14 @@ public slots:
     void slotEditBanks();
 
     /**
-     * Edit Control Parameters
+     * Edit Banks/Programs for a particular device
      */
-    void slotEditControlParameters();
+    void slotEditBanks(Rosegarden::DeviceId);
+
+    /**
+     * Edit Control Parameters for a particular device
+     */
+    void slotEditControlParameters(Rosegarden::DeviceId);
 
     /**
      * Edit Document Markers
@@ -1055,6 +1062,11 @@ public slots:
     void slotBankEditorClosed();
 
     /**
+     * called when the BankEditor is being closed
+     */
+    void slotDeviceManagerClosed();
+
+    /**
      * when ControlEditor is being closed
      */
     void slotControlEditorClosed();
@@ -1157,9 +1169,10 @@ private:
 
     Rosegarden::Clipboard *m_clipboard;
 
-    ControlEditorDialog   *m_controlEditor;
-
+    DeviceManagerDialog   *m_deviceManager;
+    BankEditorDialog      *m_bankEditor;
     MarkerEditorDialog    *m_markerEditor;
+    std::set<ControlEditorDialog *> m_controlEditors;
 
     static const char* const MainWindowConfigGroup;
 

@@ -37,6 +37,7 @@ class QSlider;
 class QPushButton;
 class QSignalMapper;
 class QLabel;
+class QVBoxLayout;
 class KComboBox;
 class RosegardenGUIDoc;
 class QWidgetStack;
@@ -52,8 +53,8 @@ namespace Rosegarden
 class AudioInstrumentParameterPanel;
 class MIDIInstrumentParameterPanel;
 
-typedef std::vector<std::pair<int, RosegardenRotary*> > RotaryMap;
-typedef std::vector<std::pair<int, RosegardenRotary*> >::iterator RotaryMapIterator;
+typedef std::pair<RosegardenRotary *, QLabel *> RotaryPair;
+typedef std::vector<std::pair<int, RotaryPair> > RotaryMap;
 
 /**
  * Display and allow modification of Instrument parameters
@@ -215,7 +216,7 @@ public:
 
     MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc, QWidget* parent);
 
-    void setupControllers(); // setup ControlParameters on box
+    void setupControllers(Rosegarden::MidiDevice *); // setup ControlParameters on box
 
     virtual void setupForInstrument(Rosegarden::Instrument*);
 
@@ -277,13 +278,15 @@ protected:
     QLabel             *m_bankLabel;
     QLabel             *m_variationLabel;
 
-    QGridLayout        *m_gridLayout;
+    QGridLayout        *m_mainGrid;
+    QFrame             *m_rotaryFrame;
+    QGridLayout        *m_rotaryGrid;
     RotaryMap           m_rotaries;
-    QSignalMapper      *m_rotaryMapper;                               
+    QSignalMapper      *m_rotaryMapper;
 
-    std::vector<Rosegarden::MidiBank>    m_banks;
-    std::vector<Rosegarden::MidiProgram> m_programs;
-    Rosegarden::MidiByteList             m_variations;
+    Rosegarden::BankList      m_banks;
+    Rosegarden::ProgramList   m_programs;
+    Rosegarden::MidiByteList  m_variations;
 };
 
 

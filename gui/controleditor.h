@@ -30,8 +30,10 @@
 #include <qpushbutton.h>
 #include <qstring.h>
 
-#include "Studio.h"
+#include "MidiDevice.h"
+#include "ControlParameter.h"
 
+namespace Rosegarden { class Studio; }
 class RosegardenGUIDoc;
 class KCommand;
 class MultiViewCommandHistory;
@@ -109,7 +111,8 @@ class ControlEditorDialog : public KMainWindow
 
 public:
     ControlEditorDialog(QWidget *parent,
-                        RosegardenGUIDoc *doc);
+                        RosegardenGUIDoc *doc,
+			Rosegarden::DeviceId device);
 
     ~ControlEditorDialog();
 
@@ -124,11 +127,15 @@ public:
     // reset the document
     void setDocument(RosegardenGUIDoc *doc);
 
+    Rosegarden::DeviceId getDevice() { return m_device; }
+
 public slots:
     void slotUpdate();
 
+/*
     void slotEditCopy();
     void slotEditPaste();
+*/
 
     void slotAdd();
     void slotDelete();
@@ -149,6 +156,7 @@ protected:
     //--------------- Data members ---------------------------------
     Rosegarden::Studio      *m_studio;
     RosegardenGUIDoc        *m_doc;
+    Rosegarden::DeviceId     m_device;
 
     QPushButton             *m_closeButton;
 

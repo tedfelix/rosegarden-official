@@ -17,6 +17,7 @@ rosegarden_SOURCES = \
         controlruler.cpp \
 	csoundio.cpp \
 	deviceeditor.cpp \
+	devicemanager.cpp \
 	dialogs.cpp \
         diskspace.cpp \
 	editcommands.cpp \
@@ -26,6 +27,7 @@ rosegarden_SOURCES = \
         eventcommands.cpp \
 	eventfilter.cpp \
         eventview.cpp \
+	importdevicedialog.cpp \
         instrumentparameterbox.cpp \
 	kstartuplogo.cpp \
 	ktmpstatusmsg.cpp \
@@ -232,6 +234,7 @@ rcdir = $(kde_datadir)/rosegarden
 rc_DATA = bankeditor.rc \
         controleditor.rc \
 	eventlist.rc \
+        devicemanager.rc \
 	matrix.rc \
 	notationeraser.rc \
 	notation.rc \

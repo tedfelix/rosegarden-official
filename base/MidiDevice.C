@@ -20,7 +20,9 @@
 */
 
 #include "MidiDevice.h"
+#include "MidiTypes.h"
 #include "Instrument.h"
+#include "ControlParameter.h"
 
 #include <cstdio>
 #include <iostream>
@@ -39,8 +41,6 @@ namespace Rosegarden
 
 MidiDevice::MidiDevice():
     Device(0, "Default Midi Device", Device::Midi),
-    m_programList(new ProgramList()),
-    m_bankList(new BankList()),
     m_metronome(0),
     m_direction(Play),
     m_variationType(NoVariations),
@@ -56,8 +56,6 @@ MidiDevice::MidiDevice(DeviceId id,
                        const std::string &name,
                        DeviceDirection dir):
     Device(id, name, Device::Midi),
-    m_programList(new ProgramList()),
-    m_bankList(new BankList()),
     m_metronome(0),
     m_direction(dir),
     m_variationType(NoVariations),
@@ -71,8 +69,9 @@ MidiDevice::MidiDevice(DeviceId id,
 
 MidiDevice::MidiDevice(const MidiDevice &dev):
     Device(dev.getId(), dev.getName(), dev.getType()),
-    m_programList(new ProgramList()),
-    m_bankList(new BankList()),
+    m_programList(dev.m_programList),
+    m_bankList(dev.m_bankList),
+    m_controlList(dev.m_controlList),
     m_metronome(0),
     m_direction(dev.getDirection()),
     m_variationType(dev.getVariationType()),
@@ -83,28 +82,6 @@ MidiDevice::MidiDevice(const MidiDevice &dev):
     if (dev.getMetronome())
     {
         m_metronome = new MidiMetronome(*dev.getMetronome());
-    }
-
-    std::vector<MidiProgram> programs = dev.getPrograms();
-    std::vector<MidiBank> banks = dev.getBanks();
-
-    // Construct a new program list
-    //
-    std::vector<MidiProgram>::iterator it = programs.begin();
-    for (; it != programs.end(); it++)
-    {
-        MidiProgram *prog = new MidiProgram(*it);
-        m_programList->push_back(prog);
-    }
-
-
-    // Construct a new bank list
-    //
-    std::vector<MidiBank>::iterator bIt = banks.begin();
-    for (; bIt != banks.end(); bIt++)
-    {
-        MidiBank *bank = new MidiBank(*bIt);
-        m_bankList->push_back(bank);
     }
 
     // Copy the instruments
@@ -149,8 +126,9 @@ MidiDevice::operator=(const MidiDevice &dev)
     m_type = dev.getType();
     m_librarian = dev.getLibrarian();
 
-    m_programList->clear();
-    m_bankList->clear();
+    m_programList = dev.getPrograms();
+    m_bankList = dev.getBanks();
+    m_controlList = dev.getControlParameters();
     m_direction = dev.getDirection();
     m_variationType = dev.getVariationType();
 
@@ -171,28 +149,6 @@ MidiDevice::operator=(const MidiDevice &dev)
 	m_metronome = 0;
     }
 
-    std::vector<MidiProgram> programs = dev.getPrograms();
-    std::vector<MidiBank> banks = dev.getBanks();
-
-    // Construct a new program list
-    //
-    std::vector<MidiProgram>::iterator it = programs.begin();
-    for (; it != programs.end(); it++)
-    {
-        MidiProgram *prog = new MidiProgram(*it);
-        m_programList->push_back(prog);
-    }
-
-
-    // Construct a new bank list
-    //
-    std::vector<MidiBank>::iterator bIt = banks.begin();
-    for (; bIt != banks.end(); bIt++)
-    {
-        MidiBank *bank = new MidiBank(*bIt);
-        m_bankList->push_back(bank);
-    }
-
     // Copy the instruments
     //
     InstrumentList insList = dev.getAllInstruments();
@@ -210,12 +166,8 @@ MidiDevice::operator=(const MidiDevice &dev)
     return (*this);
 }
 
-
-
 MidiDevice::~MidiDevice()
 {
-    delete m_programList;
-    delete m_bankList;
     delete m_metronome;
 }
 
@@ -236,28 +188,33 @@ MidiDevice::generatePresentationList()
 }
 
 void
-MidiDevice::clearProgramList()
+MidiDevice::clearBankList()
 {
-    std::vector<MidiProgram*>::iterator it;
-
-    for (it = m_programList->begin(); it != m_programList->end(); it++)
-        delete (*it);
-
-    m_programList->erase(m_programList->begin(), m_programList->end());
-
-
+    m_bankList.clear();
 }
 
 void
-MidiDevice::addProgram(MidiProgram *prog)
+MidiDevice::clearProgramList()
 {
-    m_programList->push_back(prog);
+    m_programList.clear();
+}
+
+void
+MidiDevice::clearControlList()
+{
+    m_controlList.clear();
+}
+
+void
+MidiDevice::addProgram(const MidiProgram &prog)
+{
+    m_programList.push_back(prog);
 }
 
 void 
-MidiDevice::addBank(MidiBank *bank)
+MidiDevice::addBank(const MidiBank &bank)
 {
-    m_bankList->push_back(bank);
+    m_bankList.push_back(bank);
 }
 
 void
@@ -274,42 +231,41 @@ MidiDevice::setMetronome(const MidiMetronome &metronome)
     m_metronome = new MidiMetronome(metronome);
 }
 
-
-const BankList
+BankList
 MidiDevice::getBanks(bool percussion) const
 {
     BankList banks;
 
-    for (BankList::const_iterator it = m_bankList->begin();
-	 it != m_bankList->end(); ++it) {
-	if ((*it)->isPercussion() == percussion) banks.push_back(*it);
+    for (BankList::const_iterator it = m_bankList.begin();
+	 it != m_bankList.end(); ++it) {
+	if (it->isPercussion() == percussion) banks.push_back(*it);
     }
 
     return banks;
 }
 
-const BankList
+BankList
 MidiDevice::getBanksByMSB(bool percussion, MidiByte msb) const
 {
     BankList banks;
 
-    for (BankList::const_iterator it = m_bankList->begin();
-	 it != m_bankList->end(); ++it) {
-	if ((*it)->isPercussion() == percussion && (*it)->getMSB() == msb)
+    for (BankList::const_iterator it = m_bankList.begin();
+	 it != m_bankList.end(); ++it) {
+	if (it->isPercussion() == percussion && it->getMSB() == msb)
 	    banks.push_back(*it);
     }
 
     return banks;
 }
 
-const BankList
+BankList
 MidiDevice::getBanksByLSB(bool percussion, MidiByte lsb) const
 {
     BankList banks;
 
-    for (BankList::const_iterator it = m_bankList->begin();
-	 it != m_bankList->end(); ++it) {
-	if ((*it)->isPercussion() == percussion && (*it)->getLSB() == lsb)
+    for (BankList::const_iterator it = m_bankList.begin();
+	 it != m_bankList.end(); ++it) {
+	if (it->isPercussion() == percussion && it->getLSB() == lsb)
 	    banks.push_back(*it);
     }
 
@@ -321,10 +277,10 @@ MidiDevice::getDistinctMSBs(bool percussion, int lsb) const
 {
     std::set<MidiByte> msbs;
 
-    for (BankList::const_iterator it = m_bankList->begin();
-	 it != m_bankList->end(); ++it) {
-	if ((*it)->isPercussion() == percussion &&
-	    (lsb == -1 || (*it)->getLSB() == lsb)) msbs.insert((*it)->getMSB());
+    for (BankList::const_iterator it = m_bankList.begin();
+	 it != m_bankList.end(); ++it) {
+	if (it->isPercussion() == percussion &&
+	    (lsb == -1 || it->getLSB() == lsb)) msbs.insert(it->getMSB());
     }
 
     MidiByteList v;
@@ -340,10 +296,10 @@ MidiDevice::getDistinctLSBs(bool percussion, int msb) const
 {
     std::set<MidiByte> lsbs;
 
-    for (BankList::const_iterator it = m_bankList->begin();
-	 it != m_bankList->end(); ++it) {
-	if ((*it)->isPercussion() == percussion &&
-	    (msb == -1 || (*it)->getMSB() == msb)) lsbs.insert((*it)->getLSB());
+    for (BankList::const_iterator it = m_bankList.begin();
+	 it != m_bankList.end(); ++it) {
+	if (it->isPercussion() == percussion &&
+	    (msb == -1 || it->getMSB() == msb)) lsbs.insert(it->getLSB());
     }
 
     MidiByteList v;
@@ -354,14 +310,14 @@ MidiDevice::getDistinctLSBs(bool percussion, int msb) const
     return v;
 }
 
-const ProgramList
+ProgramList
 MidiDevice::getPrograms(const MidiBank &bank) const
 {
     ProgramList programs;
 
-    for (ProgramList::const_iterator it = m_programList->begin();
-	 it != m_programList->end(); ++it) {
-	if ((*it)->getBank() == bank) programs.push_back(*it);
+    for (ProgramList::const_iterator it = m_programList.begin();
+	 it != m_programList.end(); ++it) {
+	if (it->getBank() == bank) programs.push_back(*it);
     }
 
     return programs;
@@ -370,9 +326,9 @@ MidiDevice::getPrograms(const MidiBank &bank) const
 std::string
 MidiDevice::getBankName(const MidiBank &bank) const
 {
-    for (BankList::const_iterator it = m_bankList->begin();
-	 it != m_bankList->end(); ++it) {
-	if (**it == bank) return (*it)->getName();
+    for (BankList::const_iterator it = m_bankList.begin();
+	 it != m_bankList.end(); ++it) {
+	if (*it == bank) return it->getName();
     }
     return "";
 }
@@ -415,35 +371,42 @@ MidiDevice::toXmlString()
 
     // and now bank information
     //
-    std::vector<MidiBank*>::iterator it;
+    BankList::iterator it;
     InstrumentList::iterator iit;
     ProgramList::iterator pt;
 
-    for (it = m_bankList->begin(); it != m_bankList->end(); it++)
+    for (it = m_bankList.begin(); it != m_bankList.end(); it++)
     {
         midiDevice << "        <bank "
-                   << "name=\"" << encode((*it)->getName()) << "\" "
-	           << "percussion=\"" << ((*it)->isPercussion() ? "true" : "false") << "\" "
-                   << "msb=\"" << (int)(*it)->getMSB() << "\" "
-                   << "lsb=\"" << (int)(*it)->getLSB() << "\">"
+                   << "name=\"" << encode(it->getName()) << "\" "
+	           << "percussion=\"" << (it->isPercussion() ? "true" : "false") << "\" "
+                   << "msb=\"" << (int)it->getMSB() << "\" "
+                   << "lsb=\"" << (int)it->getLSB() << "\">"
                    << std::endl;
 
-        // Slightly inefficient way of doing this until
-        // we've sorted out these program changes and
-        // bank relationships
+        // Not terribly efficient
         //
-        for (pt = m_programList->begin(); pt != m_programList->end(); pt++)
+        for (pt = m_programList.begin(); pt != m_programList.end(); pt++)
         {
-	    if ((*pt)->getBank() == **it)
+	    if (pt->getBank() == *it)
             {
                 midiDevice << "            <program "
-                           << "id=\"" << (int)(*pt)->getProgram() << "\" "
-                           << "name=\"" << encode((*pt)->getName()) << "\"/>" << std::endl;
+                           << "id=\"" << (int)pt->getProgram() << "\" "
+                           << "name=\"" << encode(pt->getName()) << "\"/>" << std::endl;
             }
         }
 
         midiDevice << "        </bank>" << std::endl << std::endl;
     }
+
+    // Now controllers (before Instruments, which can depend on 
+    // Controller colours)
+    //
+    midiDevice << "        <controls>" << std::endl;
+    ControlList::iterator cIt;
+    for (cIt = m_controlList.begin(); cIt != m_controlList.end() ; ++cIt)
+        midiDevice << cIt->toXmlString();
+    midiDevice << "        </controls>" << std::endl << std::endl;
 
     // Add instruments
     //
@@ -485,94 +448,43 @@ MidiDevice::addInstrument(Instrument *instrument)
 std::string
 MidiDevice::getProgramName(const MidiProgram &program) const
 {
-    ProgramList::iterator it;
+    ProgramList::const_iterator it;
 
-    for (it = m_programList->begin(); it != m_programList->end(); it++)
+    for (it = m_programList.begin(); it != m_programList.end(); it++)
     {
-	if (**it == program) return (*it)->getName();
+	if (*it == program) return it->getName();
     }
 
     return std::string("");
 }
 
-
-// Clear down banks
-//
 void
-MidiDevice::clearBankList()
+MidiDevice::replaceBankList(const BankList &bankList)
 {
-    std::vector<MidiBank*>::iterator it;
-
-    for (it = m_bankList->begin(); it != m_bankList->end(); it++)
-        delete(*it);
-
-    m_bankList->erase(m_bankList->begin(), m_bankList->end());
-}
-
-
-std::vector<MidiBank>
-MidiDevice::getBanks() const
-{
-    std::vector<MidiBank> bank;
-    std::vector<MidiBank*>::iterator it;
-
-    for (it = m_bankList->begin(); it != m_bankList->end(); it++)
-        bank.push_back(**it);
-
-    return bank;
-}
-
-std::vector<MidiProgram>
-MidiDevice::getPrograms() const
-{
-    std::vector<MidiProgram> program;
-    std::vector<MidiProgram*>::iterator it;
-
-    for (it = m_programList->begin(); it != m_programList->end(); it++)
-        program.push_back(**it);
-
-    return program;
+    m_bankList = bankList;
 }
 
 void
-MidiDevice::replaceBankList(const std::vector<Rosegarden::MidiBank> &bank)
+MidiDevice::replaceProgramList(const ProgramList &programList)
 {
-    clearBankList();
-
-    std::vector<Rosegarden::MidiBank>::const_iterator it = bank.begin();
-    for (; it != bank.end(); it++)
-    {
-        addBank(new MidiBank(*it));
-    }
-
+    m_programList = programList;
 }
 
-void
-MidiDevice::replaceProgramList(const std::vector<Rosegarden::MidiProgram> &program)
-{
-    clearProgramList();
-
-    std::vector<Rosegarden::MidiProgram>::const_iterator it = program.begin();
-    for (; it != program.end(); it++)
-    {
-        addProgram(new MidiProgram(*it));
-    }
-}
 
 // Merge the new bank list in without duplication
 //
 void
-MidiDevice::mergeBankList(const std::vector<Rosegarden::MidiBank> &bank)
+MidiDevice::mergeBankList(const BankList &bankList)
 {
-    std::vector<Rosegarden::MidiBank>::const_iterator it;
+    BankList::const_iterator it;
     BankList::iterator oIt;
     bool clash = false;
     
-    for (it = bank.begin(); it != bank.end(); it++)
+    for (it = bankList.begin(); it != bankList.end(); it++)
     {
-        for (oIt = m_bankList->begin(); oIt != m_bankList->end(); oIt++)
+        for (oIt = m_bankList.begin(); oIt != m_bankList.end(); oIt++)
         {
-	    if (*it == **oIt)
+	    if (*it == *oIt)
             {
                 clash = true;
                 break;
@@ -580,7 +492,7 @@ MidiDevice::mergeBankList(const std::vector<Rosegarden::MidiBank> &bank)
         }
 
         if (clash == false)
-            addBank(new MidiBank(*it));
+            addBank(*it);
         else
             clash = false;
     }
@@ -588,17 +500,17 @@ MidiDevice::mergeBankList(const std::vector<Rosegarden::MidiBank> &bank)
 }
 
 void
-MidiDevice::mergeProgramList(const std::vector<Rosegarden::MidiProgram> &program)
+MidiDevice::mergeProgramList(const ProgramList &programList)
 {
-    std::vector<Rosegarden::MidiProgram>::const_iterator it;
+    ProgramList::const_iterator it;
     ProgramList::iterator oIt;
     bool clash = false;
 
-    for (it = program.begin(); it != program.end(); it++)
+    for (it = programList.begin(); it != programList.end(); it++)
     {
-        for (oIt = m_programList->begin(); oIt != m_programList->end(); oIt++)
+        for (oIt = m_programList.begin(); oIt != m_programList.end(); oIt++)
         {
-	    if (*it == **oIt)
+	    if (*it == *oIt)
             {
                 clash = true;
                 break;
@@ -606,12 +518,125 @@ MidiDevice::mergeProgramList(const std::vector<Rosegarden::MidiProgram> &program
         }
 
         if (clash == false)
-            addProgram(new MidiProgram(*it));
+            addProgram(*it);
         else
             clash = false;
     }
 }
 
+void
+MidiDevice::addControlParameter(const ControlParameter &con)
+{
+    m_controlList.push_back(con);
+}
+
+void
+MidiDevice::addControlParameter(const ControlParameter &con, int index)
+{
+    ControlList controls;
+
+    // if we're out of range just add the control
+    if (index >= (int)m_controlList.size())
+    {
+        m_controlList.push_back(con);
+        return;
+    }
+
+    // add new controller in at a position
+    for (int i = 0; i < (int)m_controlList.size(); ++i)
+    {
+        if (index == i) controls.push_back(con);
+        controls.push_back(m_controlList[i]);
+    }
+
+    m_controlList = controls;
+}
+
+
+bool
+MidiDevice::removeControlParameter(int index)
+{
+    ControlList::iterator it = m_controlList.begin();
+    int i = 0;
+
+    for (; it != m_controlList.end(); ++it)
+    {
+        if (index == i)
+        {
+            m_controlList.erase(it);
+            return true;
+        }
+        i++;
+    }
+
+    return false;
+}
+
+bool
+MidiDevice::modifyControlParameter(const ControlParameter &con, int index)
+{
+    if (index < 0 || index > (int)m_controlList.size()) return false;
+    m_controlList[index] = con;
+    return true;
+}
+
+void
+MidiDevice::replaceControlParameters(const ControlList &con)
+{
+    m_controlList = con;
+}
+
+
+// Check to see if passed ControlParameter is unique.  Either the
+// type must be unique or in the case of Controller::EventType the
+// ControllerValue must be unique.
+//
+// Controllers (Control type)
+//
+//
+bool 
+MidiDevice::isUniqueControlParameter(const ControlParameter &con) const
+{
+    ControlList::const_iterator it = m_controlList.begin();
+
+    for (; it != m_controlList.end(); ++it)
+    {
+        if (it->getType() == con.getType())
+        {
+            if (it->getType() == Rosegarden::Controller::EventType &&
+                it->getControllerValue() != con.getControllerValue())
+                continue;
+
+            return false;
+        }
+
+    }
+
+    return true;
+}
+
+ControlParameter *
+MidiDevice::getControlParameter(int index)
+{
+    if (index >= 0 && ((unsigned int)index) < m_controlList.size())
+        return &m_controlList[index];
+
+    return 0;
+}
+
+ControlParameter *
+MidiDevice::getControlParameter(Rosegarden::MidiByte controllerValue)
+{
+    ControlList::iterator it = m_controlList.begin();
+
+    for (; it != m_controlList.end(); ++it)
+    {
+        if (it->getControllerValue() == controllerValue)
+            return &*it;
+    }
+
+    return 0;
+}
 
 }
 

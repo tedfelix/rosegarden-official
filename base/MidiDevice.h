@@ -25,7 +25,7 @@
 #include "Device.h"
 #include "Instrument.h"
 #include "MidiProgram.h"
-
+#include "ControlParameter.h"
 
 #ifndef _MIDIDEVICE_H_
 #define _MIDIDEVICE_H_
@@ -34,9 +34,8 @@ namespace Rosegarden
 {
 
 typedef std::vector<std::string> StringList;
-typedef std::vector<MidiProgram*> ProgramList;
-typedef std::vector<MidiBank*> BankList;
 typedef std::vector<MidiByte> MidiByteList;
+typedef std::vector<ControlParameter> ControlList;
 
 class MidiDevice : public Device
 {
@@ -70,44 +69,42 @@ public:
     // Assignment
     MidiDevice &operator=(const MidiDevice &);
 
+    // Instrument must be on heap; I take ownership of it
     virtual void addInstrument(Instrument*);
 
     void removeMetronome();
     void setMetronome(const MidiMetronome &);
-    MidiMetronome* getMetronome() const { return m_metronome; }
+    const MidiMetronome* getMetronome() const { return m_metronome; }
 
-    void addProgram(MidiProgram *program);
-    void addBank(MidiBank *bank);
+    void addProgram(const MidiProgram &program);
+    void addBank(const MidiBank &bank);
 
     void clearBankList();
     void clearProgramList();
+    void clearControlList();
 
-    const BankList getBanks(bool percussion) const;
-    const BankList getBanksByMSB(bool percussion, MidiByte msb) const; 
-    const BankList getBanksByLSB(bool percussion, MidiByte lsb) const;
+    const BankList &getBanks() const { return m_bankList; }
+    BankList getBanks(bool percussion) const;
+    BankList getBanksByMSB(bool percussion, MidiByte msb) const; 
+    BankList getBanksByLSB(bool percussion, MidiByte lsb) const;
+
     MidiByteList getDistinctMSBs(bool percussion, int lsb = -1) const;
     MidiByteList getDistinctLSBs(bool percussion, int msb = -1) const;
 
-    const ProgramList getPrograms(const MidiBank &bank) const;
+    const ProgramList &getPrograms() const { return m_programList; }
+    ProgramList getPrograms(const MidiBank &bank) const;
 
     std::string getBankName(const MidiBank &bank) const;
     std::string getProgramName(const MidiProgram &program) const;
 
-    virtual std::string toXmlString();
+    void replaceBankList(const BankList &bank);
+    void replaceProgramList(const ProgramList &program);
+
+    void mergeBankList(const BankList &bank);
+    void mergeProgramList(const ProgramList &program);
 
     virtual InstrumentList getAllInstruments() const;
     virtual InstrumentList getPresentationInstruments() const;
-
-    // Return a copy of banks and programs
-    //
-    std::vector<MidiBank> getBanks() const;
-    std::vector<MidiProgram> getPrograms() const;
-
-    void replaceBankList(const std::vector<Rosegarden::MidiBank> &bank);
-    void replaceProgramList(const std::vector<Rosegarden::MidiProgram> &program);
-
-    void mergeBankList(const std::vector<Rosegarden::MidiBank> &bank);
-    void mergeProgramList(const std::vector<Rosegarden::MidiProgram> &program);
 
     // Retrieve Librarian details
     //
@@ -127,12 +124,44 @@ public:
     VariationType getVariationType() const { return m_variationType; }
     void setVariationType(VariationType v) { m_variationType = v; }
 
+    // Controllers - for mapping Controller names to values for use in
+    // the InstrumentParameterBoxes (IPBs) and Control rulers.
+    //
+    ControlList::const_iterator beginControllers() const
+        { return m_controlList.begin(); }
+    ControlList::const_iterator endControllers() const
+        { return m_controlList.end(); }
+
+    const ControlList &getControlParameters() const { return m_controlList; }
+
+    // Access ControlParameters (read/write)
+    //
+    ControlParameter *getControlParameter(int index);
+    ControlParameter *getControlParameter(Rosegarden::MidiByte controllerNumber);
+
+    // Modify ControlParameters
+    //
+    void addControlParameter(const ControlParameter &con);
+    void addControlParameter(const ControlParameter &con, int index);
+    bool removeControlParameter(int index);
+    bool modifyControlParameter(const ControlParameter &con, int index);
+
+    void replaceControlParameters(const ControlList &);
+
+    // Check to see if the passed ControlParameter is unique in
+    // our ControlParameter list.
+    //
+    bool isUniqueControlParameter(const ControlParameter &con) const;
+
+    virtual std::string toXmlString();
+
 protected:
     void generatePresentationList();
     void generateDefaultMetronome();
 
-    ProgramList   *m_programList;
-    BankList      *m_bankList;
+    ProgramList    m_programList;
+    BankList       m_bankList;
+    ControlList    m_controlList;
     MidiMetronome *m_metronome;
 
     // used when we're presenting the instruments

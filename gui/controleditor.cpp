@@ -36,19 +36,36 @@
 #include "studiocommands.h"
 #include "widgets.h"
 
+#include "MidiTypes.h"
+
 const QString notShowing(i18n("<not showing>"));
 
 ControlEditorDialog::ControlEditorDialog(QWidget *parent,
-                                         RosegardenGUIDoc *doc):
+                                         RosegardenGUIDoc *doc,
+					 Rosegarden::DeviceId device):
     KMainWindow(parent, "controleditordialog"),
     m_studio(&doc->getStudio()),
     m_doc(doc),
+    m_device(device),
     m_modified(false)
 {
+    RG_DEBUG << "ControlEditorDialog::ControlEditorDialog: device is " << m_device << endl;
+
     QVBox* mainFrame = new QVBox(this);
     setCentralWidget(mainFrame);
 
     setCaption(i18n("Manage Control Parameters"));
+
+    QString deviceName(i18n("<no device>"));
+    Rosegarden::MidiDevice *md =
+	dynamic_cast<Rosegarden::MidiDevice *>(m_studio->getDevice(m_device));
+    if (md) deviceName = strtoqstr(md->getName());
+
+    // spacing hack!
+    new QLabel("", mainFrame);
+    new QLabel(i18n("  Control Parameters for %1 (device %2)").arg(deviceName).
+	       arg(device), mainFrame);
+    new QLabel("", mainFrame);
 
     m_listView = new KListView(mainFrame);
     m_listView->addColumn(i18n("Controller name  "));
@@ -61,8 +78,10 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
     m_listView->addColumn(i18n("Color  "));
     m_listView->addColumn(i18n("Position on instrument panel"));
 
-    // Align centrally
-    for (int i = 0; i < 9; ++i)
+    m_listView->setColumnAlignment(0, Qt::AlignLeft);
+
+    // Align remaining columns centrally
+    for (int i = 1; i < 9; ++i)
         m_listView->setColumnAlignment(i, Qt::AlignHCenter);
 
 
@@ -77,10 +96,10 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
     m_deleteButton = new QPushButton(i18n("Delete"), btnBox);
 
     m_closeButton = new QPushButton(i18n("Close"), btnBox);
-
+/*
     m_copyButton = new QPushButton(i18n("Copy"), btnBox);
     m_pasteButton = new QPushButton(i18n("Paste"), btnBox);
-
+*/
     QToolTip::add(m_addButton,
                   i18n("Add a Control Parameter to the Studio"));
 
@@ -89,22 +108,22 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
 
     QToolTip::add(m_closeButton,
                   i18n("Close the Control Parameter editor"));
-
+/*
     QToolTip::add(m_copyButton,
                   i18n("Copy a Control Parameter"));
 
     QToolTip::add(m_pasteButton,
                   i18n("Paste a Control Parameter"));
-
+*/
     layout->addStretch(10);
     layout->addWidget(m_addButton);
     layout->addWidget(m_deleteButton);
     layout->addSpacing(30);
-
+/*
     layout->addWidget(m_copyButton);
     layout->addWidget(m_pasteButton);
     layout->addSpacing(15);
-
+*/
     layout->addWidget(m_closeButton);
     layout->addSpacing(5);
 
@@ -114,6 +133,7 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
     connect(m_deleteButton, SIGNAL(released()),
             SLOT(slotDelete()));
 
+/*
     connect(m_closeButton, SIGNAL(released()),
             SLOT(slotClose()));
 
@@ -122,6 +142,8 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
 
     connect(m_pasteButton, SIGNAL(released()),
             SLOT(slotEditPaste()));
+*/
+
     setupActions();
 
     m_doc->getCommandHistory()->attachView(actionCollection());
@@ -166,44 +188,48 @@ ControlEditorDialog::slotUpdate()
 
     //QPtrList<QListViewItem> selection = m_listView->selectedItems();
 
-    Rosegarden::ControlListConstIterator it = m_studio->beginControllers();
+    Rosegarden::MidiDevice *md =
+	dynamic_cast<Rosegarden::MidiDevice *>(m_studio->getDevice(m_device));
+    if (!md) return;
+
+    Rosegarden::ControlList::const_iterator it = md->beginControllers();
     QListViewItem *item;
     int i = 0;
 
     m_listView->clear();
 
-    for (; it != m_studio->endControllers(); ++it)
+    for (; it != md->endControllers(); ++it)
     {
         Rosegarden::Composition &comp =  m_doc->getComposition();
 
         QString colour = 
-            strtoqstr(comp.getGeneralColourMap().getNameByIndex((*it)->getColourIndex()));
+            strtoqstr(comp.getGeneralColourMap().getNameByIndex(it->getColourIndex()));
 
         if (colour == "") colour = i18n("<default>");
 
-        QString position = QString("%1").arg((*it)->getIPBPosition());
+        QString position = QString("%1").arg(it->getIPBPosition());
         if (position.toInt() == -1) position = notShowing;
 
         QString value;
-        value.sprintf("%d (0x%x)", (*it)->getControllerValue(),
-                                 (*it)->getControllerValue());
+        value.sprintf("%d (0x%x)", it->getControllerValue(),
+                                 it->getControllerValue());
 
         item = new ControlParameterItem(i++,
                                         m_listView,
-                                        strtoqstr((*it)->getName()),
-                                        strtoqstr((*it)->getType()),
+                                        strtoqstr(it->getName()),
+                                        strtoqstr(it->getType()),
                                         value,
-                                        strtoqstr((*it)->getDescription()),
-                                        QString("%1").arg((*it)->getMin()),
-                                        QString("%1").arg((*it)->getMax()),
-                                        QString("%1").arg((*it)->getDefault()),
+                                        strtoqstr(it->getDescription()),
+                                        QString("%1").arg(it->getMin()),
+                                        QString("%1").arg(it->getMax()),
+                                        QString("%1").arg(it->getDefault()),
                                         colour,
                                         position);
 
         // create and set a colour pixmap
         //
         QPixmap colourPixmap(16, 16);
-        Rosegarden::Colour c = comp.getGeneralColourMap().getColourByIndex((*it)->getColourIndex());
+        Rosegarden::Colour c = comp.getGeneralColourMap().getColourByIndex(it->getColourIndex());
         colourPixmap.fill(QColor(c.getRed(), c.getGreen(), c.getBlue()));
         item->setPixmap(7, colourPixmap);
 
@@ -224,7 +250,7 @@ ControlEditorDialog::slotUpdate()
 
 
 }
-
+/*
 void 
 ControlEditorDialog::slotEditCopy()
 {
@@ -236,16 +262,15 @@ ControlEditorDialog::slotEditPaste()
 {
     RG_DEBUG << "ControlEditorDialog::slotEditPaste" << endl;
 }
-
+*/
 void
 ControlEditorDialog::slotAdd()
 {
-    RG_DEBUG << "ControlEditorDialog::slotAdd" << endl;
-
-    Rosegarden::ControlParameter *control = new Rosegarden::ControlParameter();
+    RG_DEBUG << "ControlEditorDialog::slotAdd to device " << m_device << endl;
 
     AddControlParameterCommand *command =
-        new AddControlParameterCommand(m_studio, control);
+        new AddControlParameterCommand(m_studio, m_device,
+				       Rosegarden::ControlParameter());
 
     addCommandToHistory(command);
 }
@@ -264,7 +289,7 @@ ControlEditorDialog::slotDelete()
     if (item)
     {
         RemoveControlParameterCommand *command =
-            new RemoveControlParameterCommand(m_studio, item->getId());
+            new RemoveControlParameterCommand(m_studio, m_device, item->getId());
 
         addCommandToHistory(command);
     }
@@ -291,9 +316,10 @@ ControlEditorDialog::setupActions()
     m_closeButton->setText(close->text());
     connect(m_closeButton, SIGNAL(released()), this, SLOT(slotClose()));
 
+/*
     KStdAction::copy   (this, SLOT(slotEditCopy()),     actionCollection());
     KStdAction::paste  (this, SLOT(slotEditPaste()),    actionCollection());
-
+*/
     // some adjustments
     new KToolBarPopupAction(i18n("Und&o"),
                             "undo",
@@ -361,18 +387,22 @@ ControlEditorDialog::slotEdit(QListViewItem *i)
     ControlParameterItem *item = 
         dynamic_cast<ControlParameterItem*>(i);
 
-    if (item)
+    Rosegarden::MidiDevice *md =
+	dynamic_cast<Rosegarden::MidiDevice *>(m_studio->getDevice(m_device));
+
+    if (item && md)
     {
         ControlParameterEditDialog *dialog = 
             new ControlParameterEditDialog::ControlParameterEditDialog(
-                    this, m_studio->getControlParameter(item->getId()), m_doc);
+                    this, md->getControlParameter(item->getId()), m_doc);
 
         if (dialog->exec() == QDialog::Accepted)
         {
             ModifyControlParameterCommand *command =
                 new ModifyControlParameterCommand(m_studio,
-                        new Rosegarden::ControlParameter(dialog->getControl()),
-                        item->getId());
+						  m_device,
+						  dialog->getControl(),
+						  item->getId());
 
             addCommandToHistory(command);
         }

@@ -36,9 +36,10 @@ ModifyDeviceCommand::ModifyDeviceCommand(
         const std::string &name,
         const std::string &librarianName,
         const std::string &librarianEmail,
-	Rosegarden::MidiDevice::VariationType variationType,
-        std::vector<Rosegarden::MidiBank> bankList,
-        std::vector<Rosegarden::MidiProgram> programList,
+	Rosegarden::MidiDevice::VariationType *variationType,
+        const Rosegarden::BankList *bankList,
+        const Rosegarden::ProgramList *programList,
+	const Rosegarden::ControlList *controlList,
         bool overwrite,
 	bool rename):
     KNamedCommand(getGlobalName()),
@@ -47,37 +48,29 @@ ModifyDeviceCommand::ModifyDeviceCommand(
     m_name(name),
     m_librarianName(librarianName),
     m_librarianEmail(librarianEmail),
-    m_variationType(variationType),
-    m_bankList(bankList),
-    m_programList(programList),
     m_overwrite(overwrite),
     m_rename(rename),
-    m_changeVariation(true)
+    m_changeVariation(false),
+    m_changeBanks(false),
+    m_changePrograms(false),
+    m_changeControls(false)
 {
-}
-
-ModifyDeviceCommand::ModifyDeviceCommand(
-        Rosegarden::Studio *studio,
-	Rosegarden::DeviceId device,
-        const std::string &name,
-        const std::string &librarianName,
-        const std::string &librarianEmail,
-        std::vector<Rosegarden::MidiBank> bankList,
-        std::vector<Rosegarden::MidiProgram> programList,
-        bool overwrite,
-	bool rename):
-    KNamedCommand(getGlobalName()),
-    m_studio(studio),
-    m_device(device),
-    m_name(name),
-    m_librarianName(librarianName),
-    m_librarianEmail(librarianEmail),
-    m_bankList(bankList),
-    m_programList(programList),
-    m_overwrite(overwrite),
-    m_rename(rename),
-    m_changeVariation(false)
-{
+    if (variationType) {
+	m_variationType = *variationType;
+	m_changeVariation = true;
+    }
+    if (bankList) {
+	m_bankList = *bankList;
+	m_changeBanks = true;
+    }
+    if (programList) {
+	m_programList = *programList;
+	m_changePrograms = true;
+    } 
+    if (controlList) {
+	m_controlList = *controlList;
+	m_changeControls = true;
+    }
 }
 
 void
@@ -103,6 +96,7 @@ ModifyDeviceCommand::execute()
     m_oldName = midiDevice->getName();
     m_oldBankList = midiDevice->getBanks();
     m_oldProgramList = midiDevice->getPrograms();
+    m_oldControlList = midiDevice->getControlParameters();
     m_oldLibrarianName = midiDevice->getLibrarianName();
     m_oldLibrarianEmail = midiDevice->getLibrarianEmail();
     m_oldVariationType = midiDevice->getVariationType();
@@ -111,15 +105,15 @@ ModifyDeviceCommand::execute()
 
     if (m_overwrite)
     {
-        midiDevice->replaceBankList(m_bankList);
-        midiDevice->replaceProgramList(m_programList);
+	if (m_changeBanks) midiDevice->replaceBankList(m_bankList);
+        if (m_changePrograms) midiDevice->replaceProgramList(m_programList);
         if (m_rename) midiDevice->setName(m_name);
         midiDevice->setLibrarian(m_librarianName, m_librarianEmail);
     }
     else
     {
-        midiDevice->mergeBankList(m_bankList);
-        midiDevice->mergeProgramList(m_programList);
+        if (m_changeBanks) midiDevice->mergeBankList(m_bankList);
+        if (m_changePrograms) midiDevice->mergeProgramList(m_programList);
 
 	if (m_rename) {
 	    std::string mergeName = midiDevice->getName() +
@@ -128,6 +122,8 @@ ModifyDeviceCommand::execute()
 	}
     }
 
+    //!!! merge option?
+    if (m_changeControls) midiDevice->replaceControlParameters(m_controlList);
 }
 
 void
@@ -153,6 +149,7 @@ ModifyDeviceCommand::unexecute()
     if (m_rename) midiDevice->setName(m_oldName);
     midiDevice->replaceBankList(m_oldBankList);
     midiDevice->replaceProgramList(m_oldProgramList);
+    midiDevice->replaceControlParameters(m_oldControlList);
     midiDevice->setLibrarian(m_oldLibrarianName, m_oldLibrarianEmail);
     if (m_changeVariation) midiDevice->setVariationType(m_oldVariationType);
 }
@@ -520,52 +517,106 @@ AddControlParameterCommand::~AddControlParameterCommand()
 void
 AddControlParameterCommand::execute()
 {
-    m_studio->addControlParameter(m_control);
+    Rosegarden::MidiDevice *md = dynamic_cast<Rosegarden::MidiDevice *>
+	(m_studio->getDevice(m_device));
+    if (!md) {
+	std::cerr << "WARNING: AddControlParameterCommand::execute: device "
+		  << m_device << " is not a MidiDevice in current studio"
+		  << std::endl;
+	return;
+    }
+
+    md->addControlParameter(m_control);
 
     // store id of the new control
-    m_id = m_studio->getControlParameters()->size() - 1;
+    m_id = md->getControlParameters().size() - 1;
 }
 
 void
 AddControlParameterCommand::unexecute()
 {
-    m_studio->removeControlParameter(m_id);
+    Rosegarden::MidiDevice *md = dynamic_cast<Rosegarden::MidiDevice *>
+	(m_studio->getDevice(m_device));
+    if (!md) {
+	std::cerr << "WARNING: AddControlParameterCommand::unexecute: device "
+		  << m_device << " is not a MidiDevice in current studio"
+		  << std::endl;
+	return;
+    }
+
+    md->removeControlParameter(m_id);
 }
 
 RemoveControlParameterCommand::~RemoveControlParameterCommand()
 {
-    //if (m_oldControl) delete m_oldControl;
 }
 
 void
 RemoveControlParameterCommand::execute()
 {
-    m_oldControl = (*(m_studio->getControlParameters()))[m_id];
-    m_studio->removeControlParameter(m_id);
+    Rosegarden::MidiDevice *md = dynamic_cast<Rosegarden::MidiDevice *>
+	(m_studio->getDevice(m_device));
+    if (!md) {
+	std::cerr << "WARNING: RemoveControlParameterCommand::execute: device "
+		  << m_device << " is not a MidiDevice in current studio"
+		  << std::endl;
+	return;
+    }
+
+    Rosegarden::ControlParameter *param = md->getControlParameter(m_id);
+    if (param) m_oldControl = *param;
+    md->removeControlParameter(m_id);
 }
 
 void
 RemoveControlParameterCommand::unexecute()
 {
-    m_studio->addControlParameter(m_oldControl, m_id);
+    Rosegarden::MidiDevice *md = dynamic_cast<Rosegarden::MidiDevice *>
+	(m_studio->getDevice(m_device));
+    if (!md) {
+	std::cerr << "WARNING: RemoveControlParameterCommand::execute: device "
+		  << m_device << " is not a MidiDevice in current studio"
+		  << std::endl;
+	return;
+    }
+
+    md->addControlParameter(m_oldControl, m_id);
 }
 
 ModifyControlParameterCommand::~ModifyControlParameterCommand()
 {
-    //if (m_originalControl) delete m_originalControl;
 }
 
 void
 ModifyControlParameterCommand::execute()
 {
-    m_originalControl = (*(m_studio->getControlParameters()))[m_id];
-    (*(m_studio->getControlParameters()))[m_id] = m_control;
+    Rosegarden::MidiDevice *md = dynamic_cast<Rosegarden::MidiDevice *>
+	(m_studio->getDevice(m_device));
+    if (!md) {
+	std::cerr << "WARNING: ModifyControlParameterCommand::execute: device "
+		  << m_device << " is not a MidiDevice in current studio"
+		  << std::endl;
+	return;
+    }
+
+    Rosegarden::ControlParameter *param = md->getControlParameter(m_id);
+    if (param) m_originalControl = *param;
+    md->modifyControlParameter(m_control, m_id);
 }
 
 void
 ModifyControlParameterCommand::unexecute()
 {
-    (*(m_studio->getControlParameters()))[m_id] = m_originalControl;
+    Rosegarden::MidiDevice *md = dynamic_cast<Rosegarden::MidiDevice *>
+	(m_studio->getDevice(m_device));
+    if (!md) {
+	std::cerr << "WARNING: ModifyControlParameterCommand::execute: device "
+		  << m_device << " is not a MidiDevice in current studio"
+		  << std::endl;
+	return;
+    }
+
+    md->modifyControlParameter(m_originalControl, m_id);
 }
 
 

@@ -877,15 +877,11 @@ AudioInstrumentParameterPanel::slotSelectAudioInput(int value)
 
 MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc, QWidget* parent):
     InstrumentParameterPanel(doc, parent),
+    m_rotaryFrame(0),
     m_rotaryMapper(new QSignalMapper(this))
 {
-    m_gridLayout = new QGridLayout(this, 11, 6, 8, 1);
+    m_mainGrid = new QGridLayout(this, 8, 3, 8, 1);
 
-//    QFrame *rotaryFrame = new QFrame(this);
-//    rotaryFrame->setFrameStyle(QFrame::NoFrame);
-//    comboLayout->addMultiCellWidget(rotaryFrame, 5, 5, 0, 2, AlignCenter);
-//    QGridLayout *rotaryLayout = new QGridLayout(rotaryFrame, 4, 4, 8, 1);
-        
     m_connectionLabel = new QLabel(this);
     m_bankValue = new KComboBox(this);
     m_channelValue = new KComboBox(this);
@@ -909,40 +905,26 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_bankValue->setMinimumWidth(width);
     m_programValue->setMinimumWidth(width);
 
-    int   allMinCol = 0,   allMaxCol = 5;
-    int comboMinCol = 2, comboMaxCol = 5;
+    m_mainGrid->addMultiCellWidget(m_instrumentLabel, 0, 0, 0, 2, AlignCenter);
+    m_mainGrid->addMultiCellWidget(m_connectionLabel, 1, 1, 0, 2, AlignCenter);
 
-    m_gridLayout->addMultiCellWidget
-	(m_instrumentLabel, 0, 0, allMinCol, allMaxCol, AlignCenter);
-    m_gridLayout->addMultiCellWidget
-	(m_connectionLabel, 1, 1, allMinCol, allMaxCol, AlignCenter);
+    m_mainGrid->addWidget(channelLabel, 2, 0, AlignLeft);
+    m_mainGrid->addWidget(m_channelValue, 2, 2, AlignRight);
 
-    m_gridLayout->addMultiCellWidget
-	(channelLabel, 2, 2, 0, 1, AlignLeft);
-    m_gridLayout->addMultiCellWidget
-	(m_channelValue, 2, 2, comboMinCol, comboMaxCol, AlignRight);
+    m_mainGrid->addWidget(percussionLabel, 3, 0, AlignLeft);
+    m_mainGrid->addWidget(m_percussionCheckBox, 3, 2, AlignRight);
 
-    m_gridLayout->addWidget(percussionLabel, 3, 0, AlignLeft);
-    m_gridLayout->addWidget(m_percussionCheckBox, 3, 5, AlignRight);
+    m_mainGrid->addWidget(m_bankLabel, 4, 0, AlignLeft);
+    m_mainGrid->addWidget(m_bankCheckBox, 4, 1);
+    m_mainGrid->addWidget(m_bankValue, 4, 2, AlignRight);
 
-    m_gridLayout->addWidget(m_bankLabel,      4, 0, AlignLeft);
-    m_gridLayout->addWidget(m_bankCheckBox, 4, 1);
-    m_gridLayout->addMultiCellWidget
-	(m_bankValue, 4, 4, comboMinCol, comboMaxCol, AlignRight);
+    m_mainGrid->addWidget(programLabel, 5, 0);
+    m_mainGrid->addWidget(m_programCheckBox, 5, 1);
+    m_mainGrid->addWidget(m_programValue, 5, 2, AlignRight);
 
-    m_gridLayout->addWidget(programLabel,      5, 0);
-    m_gridLayout->addWidget(m_programCheckBox, 5, 1);
-    m_gridLayout->addMultiCellWidget
-	(m_programValue, 5, 5, comboMinCol, comboMaxCol, AlignRight);
-
-    m_gridLayout->addWidget(m_variationLabel, 6, 0);
-    m_gridLayout->addWidget(m_variationCheckBox, 6, 1);
-    m_gridLayout->addMultiCellWidget
-	(m_variationValue, 6, 6, comboMinCol, comboMaxCol, AlignRight);
-
-    // Setup the ControlParameters
-    //
-    setupControllers();
+    m_mainGrid->addWidget(m_variationLabel, 6, 0);
+    m_mainGrid->addWidget(m_variationCheckBox, 6, 1);
+    m_mainGrid->addWidget(m_variationValue, 6, 2, AlignRight);
 
     // Populate channel list
     for (int i = 0; i < 16; i++)
@@ -1002,209 +984,6 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     connect(m_rotaryMapper, SIGNAL(mapped(int)),
             this, SLOT(slotControllerChanged(int)));
 }
-
-void
-MIDIInstrumentParameterPanel::setupControllers()
-{
-    int  leftMinCol = 0,  leftMaxCol = 2;
-    int rightMinCol = 3, rightMaxCol = 5;
-    int row = 7;
-
-    // Clear old HBox and rotaries structure
-    //
-    RotaryMapIterator rIt = m_rotaries.begin();
-    for (; rIt != m_rotaries.end(); ++rIt)
-    {
-        delete rIt->second;
-    }
-    m_rotaries.clear();
-
-    Rosegarden::Studio &studio = m_doc->getStudio();
-    Rosegarden::Composition &comp = m_doc->getComposition();
-    Rosegarden::ControlList *sList = studio.getControlParameters(), list;
-    Rosegarden::ControlListIterator it;
-
-    // create temporary local list so we can sort it
-    for (it = sList->begin(); it != sList->end(); ++it)
-        list.push_back(*it);
-
-    // sort by IPB position
-    //
-    std::sort(list.begin(), list.end(), Rosegarden::ControlParameter::ControlPositionCmp());
-
-    int count = 0;
-    for (it = list.begin(); it != list.end(); ++it)
-    {
-        if ((*it)->getIPBPosition() == -1) continue;
-
-        QHBox *hbox = new QHBox(this);
-        hbox->setSpacing(8);
-
-        RosegardenRotary *rotary = new RosegardenRotary(hbox,
-                                                       (*it)->getMin(),
-                                                       (*it)->getMax(),
-                                                       1.0, // hard coded step value
-                                                       5.0, // hard coded big step
-                                                       (*it)->getDefault(),
-                                                       20);
-
-        // Set the knob colour - only if the colour is non-default (>0)
-        //
-        if ((*it)->getColourIndex() > 0)
-        {
-            Rosegarden::Colour c = comp.getGeneralColourMap().getColourByIndex((*it)->getColourIndex());
-            QColor colour(c.getRed(), c.getGreen(), c.getBlue());
-            rotary->setKnobColour(colour);
-        }
-
-        // Add a label
-        new QLabel(strtoqstr((*it)->getName()), hbox);
-
-        // Work out column we insert this controller to
-        //
-        int leftLimit = rightMinCol;
-        int rightLimit = rightMaxCol;
-        if (int(float(count)/2.0) * 2 == count)
-        {
-            leftLimit = leftMinCol;
-            rightLimit = leftMaxCol;
-
-            if (count != 0) row++;
-        }
-
-        // Add the compound widget
-        //
-        m_gridLayout->addMultiCellWidget(hbox, row, row, leftLimit, rightLimit, AlignLeft);
-
-        // Add to list
-        //
-        m_rotaries.push_back(std::pair<int, RosegardenRotary*>((*it)->getControllerValue(), rotary));
-
-        // Add signal mapping
-        //
-        m_rotaryMapper->setMapping(rotary, int((*it)->getControllerValue()));
-
-        // Connect
-        //
-        connect(rotary, SIGNAL(valueChanged(float)),
-                m_rotaryMapper, SLOT(map()));
-
-        count++;
-    }
-
-    /*
-    m_panRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 64.0, 20);
-    new QLabel(i18n("Pan"), hbox);
-    gridLayout->addMultiCellWidget
-	(hbox, row, row, leftMinCol, leftMaxCol, AlignLeft);
-
-    hbox = new QHBox(this);
-    hbox->setSpacing(8);
-    m_chorusRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 0.0, 20);
-    new QLabel(i18n("Chorus"), hbox);
-    gridLayout->addMultiCellWidget
-	(hbox, row, row, rightMinCol, rightMaxCol, AlignLeft);
-
-    ++row;
-    hbox = new QHBox(this);
-    hbox->setSpacing(8);
-    m_volumeRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 64.0, 20);
-    new QLabel(i18n("Volume"), hbox);
-    gridLayout->addMultiCellWidget
-	(hbox, row, row, leftMinCol, leftMaxCol, AlignLeft);
-
-    hbox = new QHBox(this);
-    hbox->setSpacing(8);
-    m_reverbRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 0.0, 20);
-    new QLabel(i18n("Reverb"), hbox);
-    gridLayout->addMultiCellWidget
-	(hbox, row, row, rightMinCol, rightMaxCol, AlignLeft);
-
-    ++row;
-    hbox = new QHBox(this);
-    hbox->setSpacing(8);
-    m_attackRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 0.0, 20);
-    new QLabel(i18n("Attack"), hbox);
-    gridLayout->addMultiCellWidget
-	(hbox, row, row, leftMinCol, leftMaxCol, AlignLeft);
-
-    hbox = new QHBox(this);
-    hbox->setSpacing(8);
-    m_highPassRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 0.0, 20);
-    new QLabel(i18n("Filter"), hbox);
-    gridLayout->addMultiCellWidget
-	(hbox, row, row, rightMinCol, rightMaxCol, AlignLeft);
-
-    ++row;
-    hbox = new QHBox(this);
-    hbox->setSpacing(8);
-    m_releaseRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 0.0, 20);
-    new QLabel(i18n("Release"), hbox);
-    gridLayout->addMultiCellWidget
-	(hbox, row, row, leftMinCol, leftMaxCol, AlignLeft);
-
-    hbox = new QHBox(this);
-    hbox->setSpacing(8);
-    m_resonanceRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 0.0, 20);
-    new QLabel(i18n("Resonance"), hbox);
-    gridLayout->addMultiCellWidget
-	(hbox, row, row, rightMinCol, rightMaxCol, AlignLeft);
-
-    // Some top space
-    gridLayout->addRowSpacing(0, 8);
-    gridLayout->addRowSpacing(1, 8);
-//    gridLayout->addRowSpacing(1, 30);
-
-    // Set some nice pastel knob colours
-    //
-    // light blue
-    m_volumeRotary->setKnobColour(RosegardenGUIColours::RotaryPastelBlue);
-
-    // light red
-    m_panRotary->setKnobColour(RosegardenGUIColours::RotaryPastelRed);
-
-    // light green
-    m_chorusRotary->setKnobColour(RosegardenGUIColours::RotaryPastelGreen);
-    m_reverbRotary->setKnobColour(RosegardenGUIColours::RotaryPastelGreen);
-
-    // light orange
-    m_highPassRotary->setKnobColour(RosegardenGUIColours::RotaryPastelOrange);
-    m_resonanceRotary->setKnobColour(RosegardenGUIColours::RotaryPastelOrange);
-
-    // light yellow
-    m_attackRotary->setKnobColour(RosegardenGUIColours::RotaryPastelYellow);
-    m_releaseRotary->setKnobColour(RosegardenGUIColours::RotaryPastelYellow);
-    */
-
-
-    /*
-    connect(m_panRotary, SIGNAL(valueChanged(float)),
-            this, SLOT(slotSelectPan(float)));
-    
-    connect(m_volumeRotary, SIGNAL(valueChanged(float)),
-            this, SLOT(slotSelectVolume(float)));
-
-    // connect the advanced MIDI controls
-    connect(m_chorusRotary, SIGNAL(valueChanged(float)),
-            this, SLOT(slotSelectChorus(float)));
-
-    connect(m_reverbRotary, SIGNAL(valueChanged(float)),
-            this, SLOT(slotSelectReverb(float)));
-
-    connect(m_highPassRotary, SIGNAL(valueChanged(float)),
-            this, SLOT(slotSelectHighPass(float)));
-
-    connect(m_resonanceRotary, SIGNAL(valueChanged(float)),
-            this, SLOT(slotSelectResonance(float)));
-
-    connect(m_attackRotary, SIGNAL(valueChanged(float)),
-            this, SLOT(slotSelectAttack(float)));
-
-    connect(m_releaseRotary, SIGNAL(valueChanged(float)),
-            this, SLOT(slotSelectRelease(float)));
-            */
-}
-
 
 void
 MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
@@ -1274,9 +1053,13 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     populateProgramList();
     populateVariationList();
 
+    // Setup the ControlParameters
+    //
+    setupControllers(md);
+
     // Set all the positions by controller number
     //
-    for (RotaryMapIterator it = m_rotaries.begin() ; it != m_rotaries.end(); ++it)
+    for (RotaryMap::iterator it = m_rotaries.begin() ; it != m_rotaries.end(); ++it)
     {
         Rosegarden::MidiByte value;
         try
@@ -1310,8 +1093,141 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     m_releaseRotary->setPosition(float(instrument->getRelease()));
     */
 
-
 }
+
+void
+MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
+{
+    if (!m_rotaryFrame) {
+	m_rotaryFrame = new QFrame(this);
+	m_mainGrid->addMultiCellWidget(m_rotaryFrame, 7, 7, 0, 2, Qt::AlignHCenter);
+	m_rotaryGrid = new QGridLayout(m_rotaryFrame, 10, 3, 8, 1);
+	m_rotaryGrid->addItem(new QSpacerItem(10, 4), 0, 1);
+    }
+
+    // To cut down on flicker, we avoid destroying and recreating
+    // widgets as far as possible here.  If a label already exists,
+    // we just set its text; if a rotary exists, we only replace it
+    // if we actually need a different one.
+
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::ControlList list = md->getControlParameters();
+
+    // sort by IPB position
+    //
+    std::sort(list.begin(), list.end(),
+	      Rosegarden::ControlParameter::ControlPositionCmp());
+
+    int count = 0;
+    RotaryMap::iterator rmi = m_rotaries.begin();
+
+    for (Rosegarden::ControlList::iterator it = list.begin();
+	 it != list.end(); ++it)
+    {
+        if (it->getIPBPosition() == -1) continue;
+
+	// Get the knob colour - only if the colour is non-default (>0)
+	//
+	QColor knobColour = Qt::black; // special case for RosegardenRotary
+	if (it->getColourIndex() > 0) {
+	    Rosegarden::Colour c =
+		comp.getGeneralColourMap().getColourByIndex
+		(it->getColourIndex());
+	    knobColour = QColor(c.getRed(), c.getGreen(), c.getBlue());
+	}
+
+	RosegardenRotary *rotary = 0;
+
+	if (rmi != m_rotaries.end()) {
+
+	    rotary = rmi->second.first;
+	    bool redraw = 0; // 1 -> position, 2 -> all
+
+	    if (rotary->getMinValue() != it->getMin()) {
+		rotary->setMinValue(it->getMin());
+		redraw = 1;
+	    }
+	    if (rotary->getMaxValue() != it->getMax()) {
+		rotary->setMaxValue(it->getMax());
+		redraw = 1;
+	    }
+	    if (rotary->getKnobColour() != knobColour) {
+		rotary->setKnobColour(knobColour);
+		redraw = 2;
+	    }
+	    if (redraw == 1 || rotary->getPosition() != it->getDefault()) {
+		rotary->setPosition(it->getDefault());
+		if (redraw == 1) redraw = 0;
+	    }
+	    if (redraw == 2) {
+		rotary->repaint();
+	    }
+
+	    QLabel *label = rmi->second.second;
+	    label->setText(strtoqstr(it->getName()));
+
+	    ++rmi;
+
+	} else {
+
+	    QHBox *hbox = new QHBox(m_rotaryFrame);
+	    hbox->setSpacing(8);
+
+	    rotary = new RosegardenRotary
+		(hbox,
+		 it->getMin(),
+		 it->getMax(),
+		 1.0, // hard coded step value
+		 5.0, // hard coded big step
+		 it->getDefault(),
+		 20);
+
+	    rotary->setKnobColour(knobColour);
+
+	    // Add a label
+	    QLabel *label = new QLabel(strtoqstr(it->getName()), hbox);
+
+	    RG_DEBUG << "Adding new widget at " << (count/2) << "," << (count%2) << endl;
+
+	    // Add the compound widget
+	    //
+	    m_rotaryGrid->addWidget(hbox, count/2, (count%2) * 2, AlignLeft);
+	    hbox->show();
+
+	    // Add to list
+	    //
+	    m_rotaries.push_back(std::pair<int, RotaryPair>
+				 (it->getControllerValue(),
+				  RotaryPair(rotary, label)));
+
+	    // Connect
+	    //
+	    connect(rotary, SIGNAL(valueChanged(float)),
+		    m_rotaryMapper, SLOT(map()));
+
+	    rmi = m_rotaries.end();
+	}
+
+	// Add signal mapping
+	//
+	m_rotaryMapper->setMapping(rotary,
+				   int(it->getControllerValue()));
+
+        count++;
+    }
+
+    if (rmi != m_rotaries.end()) {
+	for (RotaryMap::iterator rmj = rmi; rmj != m_rotaries.end(); ++rmj) {
+	    delete rmj->second.first;
+	    delete rmj->second.second;
+	}
+	m_rotaries = std::vector<std::pair<int, RotaryPair> >
+	    (m_rotaries.begin(), rmi);
+    }
+
+    m_rotaryFrame->show();
+}
+
 
 void
 MIDIInstrumentParameterPanel::setRotaryToValue(int controller, int value)
@@ -1322,11 +1238,11 @@ MIDIInstrumentParameterPanel::setRotaryToValue(int controller, int value)
              << ", value = " << value << std::endl;
              */
 
-    for (RotaryMapIterator it = m_rotaries.begin() ; it != m_rotaries.end(); ++it)
+    for (RotaryMap::iterator it = m_rotaries.begin() ; it != m_rotaries.end(); ++it)
     {
         if (it->first == controller)
         {
-            it->second->setPosition(float(value));
+            it->second.first->setPosition(float(value));
             return;
         }
     }
@@ -1381,7 +1297,7 @@ MIDIInstrumentParameterPanel::populateBankList()
 	banks = md->getBanks(m_selectedInstrument->isPercussion());
 
 	for (unsigned int i = 0; i < banks.size(); ++i) {
-	    if (m_selectedInstrument->getProgram().getBank() == *banks[i]) {
+	    if (m_selectedInstrument->getProgram().getBank() == banks[i]) {
 		currentBank = i;
 	    }
 	}
@@ -1439,8 +1355,8 @@ MIDIInstrumentParameterPanel::populateBankList()
 
     for (Rosegarden::BankList::const_iterator i = banks.begin();
 	 i != banks.end(); ++i) {
-	m_banks.push_back(**i);
-	m_bankValue->insertItem(strtoqstr((*i)->getName()));
+	m_banks.push_back(*i);
+	m_bankValue->insertItem(strtoqstr(i->getName()));
     }
 	    
     m_bankValue->setCurrentItem(currentBank);
@@ -1476,15 +1392,15 @@ MIDIInstrumentParameterPanel::populateProgramList()
 
     Rosegarden::ProgramList programs = md->getPrograms(bank);
     for (unsigned int i = 0; i < programs.size(); ++i) {
-	std::string programName = programs[i]->getName();
+	std::string programName = programs[i].getName();
 	if (programName != "") {
 	    m_programValue->insertItem(QString("%1. %2")
-				       .arg(programs[i]->getProgram() + 1)
+				       .arg(programs[i].getProgram() + 1)
 				       .arg(strtoqstr(programName)));
-	    if (m_selectedInstrument->getProgram() == *programs[i]) {
+	    if (m_selectedInstrument->getProgram() == programs[i]) {
 		m_programValue->setCurrentItem(i);
 	    }
-	    m_programs.push_back(*programs[i]);
+	    m_programs.push_back(programs[i]);
 	}
     }
 
@@ -1850,9 +1766,12 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
     if (m_selectedInstrument == 0)
         return;
 
-    Rosegarden::Studio &studio = m_doc->getStudio();
+    MidiDevice *md = dynamic_cast<MidiDevice*>
+	(m_selectedInstrument->getDevice());
+    if (!md) return;
+
     Rosegarden::ControlParameter *controller = 
-        studio.getControlParameter(Rosegarden::MidiByte(controllerNumber));
+	md->getControlParameter(Rosegarden::MidiByte(controllerNumber));
 
     int value = getValueFromRotary(controllerNumber);
 
@@ -1904,10 +1823,10 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
 int
 MIDIInstrumentParameterPanel::getValueFromRotary(int rotary)
 {
-    for (RotaryMapIterator it = m_rotaries.begin(); it != m_rotaries.end(); ++it)
+    for (RotaryMap::iterator it = m_rotaries.begin(); it != m_rotaries.end(); ++it)
     {
         if (it->first == rotary)
-            return int(it->second->getPosition());
+            return int(it->second.first->getPosition());
     }
 
     return -1;

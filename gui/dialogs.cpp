@@ -4105,7 +4105,7 @@ ManageMetronomeDialog::populate(int deviceIndex)
     Rosegarden::InstrumentList list = dev->getPresentationInstruments();
     Rosegarden::InstrumentList::iterator iit;
 
-    Rosegarden::MidiMetronome *metronome = dev->getMetronome();
+    const Rosegarden::MidiMetronome *metronome = dev->getMetronome();
 
     // if we've got no metronome against this device then create one
     if (metronome == 0)
@@ -4266,8 +4266,8 @@ ManageMetronomeDialog::slotApply()
     Rosegarden::DeviceId deviceId = dev->getId();
     config.set<Int>("metronomedevice", deviceId);
 
-    Rosegarden::MidiMetronome *metronome = dev->getMetronome();
-    if (metronome == 0) return;
+    if (dev->getMetronome() == 0) return;
+    Rosegarden::MidiMetronome metronome(*dev->getMetronome());
 
     // get instrument
     Rosegarden::InstrumentList list = dev->getPresentationInstruments();
@@ -4277,23 +4277,25 @@ ManageMetronomeDialog::slotApply()
     
     if (inst)
     {
-	metronome->setInstrument(inst->getId());
+	metronome.setInstrument(inst->getId());
     }
 
-    metronome->setPitch(
+    metronome.setPitch(
             Rosegarden::MidiByte(m_metronomePitch->getPitch()));
 
-    metronome->setDepth(
+    metronome.setDepth(
 	    m_metronomeResolution->currentItem() + 1);
 
-    metronome->setBarVelocity(
+    metronome.setBarVelocity(
             Rosegarden::MidiByte(m_metronomeBarVely->value()));
 
-    metronome->setBeatVelocity(
+    metronome.setBeatVelocity(
             Rosegarden::MidiByte(m_metronomeBeatVely->value()));
 
-    metronome->setSubBeatVelocity(
+    metronome.setSubBeatVelocity(
             Rosegarden::MidiByte(m_metronomeSubBeatVely->value()));
+
+    dev->setMetronome(metronome);
 
     m_doc->getSequenceManager()->metronomeChanged(inst->getId(), true);
     m_doc->slotDocumentModified();
@@ -4323,7 +4325,7 @@ ManageMetronomeDialog::slotPreviewPitch(int pitch)
 
     if (!dev) return;
 
-    Rosegarden::MidiMetronome *metronome = dev->getMetronome();
+    const Rosegarden::MidiMetronome *metronome = dev->getMetronome();
     if (metronome == 0) return;
 
     Rosegarden::InstrumentList list = dev->getPresentationInstruments();

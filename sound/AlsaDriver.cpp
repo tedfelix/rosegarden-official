@@ -2636,6 +2636,8 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                 // will generate one inside the PlayableAudioFile.
                 //
                 RingBuffer *ringBuffer = 0;
+
+#ifdef HAVE_LIBJACK
                 for (unsigned int j = 0; _ringBuffer.size(); ++j)
                 {
                     if (_ringBuffer[j].first == false)
@@ -2645,6 +2647,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                         break;
                     }
                 }
+#endif
 
                 // Create this event in this thread and push it onto audio queue.
                 // All initialisation will occur in the disk thread.
@@ -2662,7 +2665,6 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                 // which is pushed onto the actual audio queue at pushPlayableAudioQueue()
                 //
                 queueAudio(audioFile);
-
             }
             else
             {

@@ -54,14 +54,6 @@ Studio::~Studio()
         delete(*dIt);
 
     m_devices.clear();
-
-    ControlListIterator it = m_controls.begin();
-
-    for (; it != m_controls.end(); ++it)
-        delete (*it);
-
-    m_controls.clear();
-
 }
 
 void
@@ -237,6 +229,12 @@ Studio::clear()
 std::string
 Studio::toXmlString()
 {
+    return toXmlString(std::vector<DeviceId>());
+}
+
+std::string
+Studio::toXmlString(const std::vector<DeviceId> &devices)
+{
     std::stringstream studio;
 
     studio << "<studio thrufilter=\"" << m_midiThruFilter
@@ -245,25 +243,26 @@ Studio::toXmlString()
 
     studio << endl;
 
-    // Controllers before Devices (as Instruments can depend on 
-    // Controller colours)
-    //
-    ControlListConstIterator cIt;
-    for (cIt = m_controls.begin(); cIt != m_controls.end() ; ++cIt)
-        studio << (*cIt)->toXmlString();
-
-    studio << endl << endl;
-
-    std::vector<Device*>::iterator it;
     InstrumentList list;
 
     // Get XML version of devices
     //
-    for (it = m_devices.begin(); it != m_devices.end(); it++)
-    {
-        // Sends Devices to XML
-        //
-        studio << (*it)->toXmlString() << endl << endl;
+    if (devices.empty()) { // export all devices
+	for (DeviceListIterator it = m_devices.begin();
+	     it != m_devices.end(); it++) {
+	    studio << (*it)->toXmlString() << endl << endl;
+	}
+    } else {
+	for (std::vector<DeviceId>::const_iterator di(devices.begin());
+	     di != devices.end(); ++di) {
+	    Device *d = getDevice(*di);
+	    if (!d) {
+		std::cerr << "WARNING: Unknown device id " << (*di)
+			  << " in Studio::toXmlString" << std::endl;
+	    } else {
+		studio << d->toXmlString() << endl << endl;
+	    }
+	}
     }
 
     studio << endl << endl;
@@ -280,7 +279,7 @@ Studio::toXmlString()
 // Run through the Devices checking for MidiDevices and
 // returning the first Metronome we come across
 //
-MidiMetronome*
+const MidiMetronome*
 Studio::getMetronomeFromDevice(DeviceId id)
 {
     std::vector<Device*>::iterator it;
@@ -605,121 +604,6 @@ Studio::copy(const Studio &studio)
                 break;
         }
     }
-}
-
-
-void
-Studio::addControlParameter(ControlParameter *con)
-{
-    m_controls.push_back(con);
-}
-
-void
-Studio::addControlParameter(ControlParameter *con, int id)
-{
-    ControlList controls;
-
-    // if we're out of range just add the control
-    if (((unsigned int)id) >= m_controls.size())
-    {
-        m_controls.push_back(con);
-        return;
-    }
-
-    // add new controller in at a position
-    for (unsigned int i = 0; i < m_controls.size(); ++i)
-    {
-        if (((unsigned int)id) == i) controls.push_back(con);
-        controls.push_back(m_controls[i]);
-    }
-
-    // clear and copy back
-    m_controls.clear();
-
-    for (unsigned int i = 0; i != controls.size(); ++i)
-        m_controls.push_back(controls[i]);
-}
-
-
-bool
-Studio::removeControlParameter(int id)
-{
-    ControlListIterator it = m_controls.begin();
-    int i = 0;
-
-    for (; it != m_controls.end(); ++it)
-    {
-        if (id == i)
-        {
-            m_controls.erase(it);
-            return true;
-        }
-        i++;
-    }
-
-    return false;
-}
-
-bool
-Studio::modifyControlParameter(ControlParameter *con, int id)
-{
-    if (id < 0 || ((unsigned int)id) > m_controls.size()) return false;
-
-    delete m_controls[id];
-    m_controls[id] = con;
-
-    return true;
-}
-
-// Check to see if passed ControlParameter is unique.  Either the
-// type must be unique or in the case of Controller::EventType the
-// ControllerValue must be unique.
-//
-// Controllers (Control type)
-//
-//
-bool 
-Studio::isUniqueControlParameter(ControlParameter *con) const
-{
-    ControlListConstIterator it = m_controls.begin();
-
-    for (; it != m_controls.end(); ++it)
-    {
-        if ((*it)->getType() == con->getType())
-        {
-            if ((*it)->getType() == Rosegarden::Controller::EventType &&
-                (*it)->getControllerValue() != con->getControllerValue())
-                continue;
-
-            return false;
-        }
-
-    }
-
-    return true;
-}
-
-ControlParameter*
-Studio::getControlParameter(int id)
-{
-    if (id >=0  && ((unsigned int)id) < m_controls.size())
-        return m_controls[id];
-
-    return 0;
-}
-
-ControlParameter*
-Studio::getControlParameter(Rosegarden::MidiByte controllerValue)
-{
-    ControlListConstIterator it = m_controls.begin();
-
-    for (; it != m_controls.end(); ++it)
-    {
-        if ((*it)->getControllerValue() == controllerValue)
-            return (*it);
-    }
-
-    return 0;
 }
 
 

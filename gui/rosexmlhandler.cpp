@@ -248,6 +248,7 @@ RoseXmlHandler::RoseXmlHandler(RosegardenGUIDoc *doc,
       m_subHandler(0),
       m_deprecation(false),
       m_createDevices(createNewDevicesWhenNeeded),
+      m_haveControls(false),
       m_cancelled(false)
 {
 }
@@ -389,7 +390,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         }
         
 	m_deprecation = true;
-	RG_DEBUG << "RoseXmlHandler::startElement: Warning: group element is deprecated, recommend re-saving file from this version of Rosegarden to assure your ability to re-load it in future versions" << endl;
+	std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"group\".  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
 
         m_inGroup = true;
         m_groupId = m_currentSegment->getNextId();
@@ -759,7 +760,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
     } else if (lcName == "resync") {
 
 	m_deprecation = true;
-	RG_DEBUG << "RoseXmlHandler::startElement: Warning: resync element is deprecated, recommend re-saving file from this version of Rosegarden to assure your ability to re-load it in future versions" << endl;
+	std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"resync\".  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
 	
 	QString time(atts.value("time"));
 	bool isNumeric;
@@ -929,6 +930,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             return false;
         }
 
+	m_haveControls = false;
+
         QString type = (atts.value("type")).lower();
         QString idString = atts.value("id");
         QString nameStr = atts.value("name");
@@ -1032,11 +1035,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             if (m_section == InStudio)
             {
                 // Create a new bank
-                Rosegarden::MidiBank *bank =
-		    new Rosegarden::MidiBank(m_percussion,
-					     m_msb,
-					     m_lsb,
-					     qstrtostr(nameStr));
+                Rosegarden::MidiBank bank(m_percussion,
+					  m_msb,
+					  m_lsb,
+					  qstrtostr(nameStr));
     
                 if (m_device->getType() == Rosegarden::Device::Midi)
                 {
@@ -1068,12 +1070,12 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 Rosegarden::MidiByte pc = atts.value("id").toInt();
 
                 // Create a new program
-                Rosegarden::MidiProgram *program =
-		    new Rosegarden::MidiProgram(Rosegarden::MidiBank(m_percussion,
-								     m_msb,
-								     m_lsb),
-						pc,
-						qstrtostr(nameStr));
+                Rosegarden::MidiProgram program
+		    (Rosegarden::MidiBank(m_percussion,
+					  m_msb,
+					  m_lsb),
+		     pc,
+		     qstrtostr(nameStr));
 
                 if (m_device->getType() == Rosegarden::Device::Midi)
                 {
@@ -1100,6 +1102,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             }
         }
 
+    } else if (lcName == "controls") {
+
+	m_haveControls = true;
+
     } else if (lcName == "control") {
 
         if (m_section != InStudio)
@@ -1108,29 +1114,40 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             return false;
         }
 
-        QString name = atts.value("name");
-        QString type = atts.value("type");
-        QString descr = atts.value("description");
-        QString min = atts.value("min");
-        QString max = atts.value("max");
-        QString def = atts.value("default");
-        QString conVal = atts.value("controllervalue");
-        QString colour = atts.value("colourindex");
-        QString ipbPosition = atts.value("ipbposition");
+	if (!m_device) {
+	    m_deprecation = true;
+	    std::cerr << "WARNING: This Rosegarden file uses a deprecated control parameter structure.  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
 
-        Rosegarden::ControlParameter *con = 
-            new Rosegarden::ControlParameter(
-                    qstrtostr(name),
-                    qstrtostr(type),
-                    qstrtostr(descr),
-                    min.toInt(),
-                    max.toInt(),
-                    def.toInt(),
-                    Rosegarden::MidiByte(conVal.toInt()),
-                    colour.toInt(),
-                    ipbPosition.toInt());
+	} else if (m_device->getType() == Rosegarden::Device::Midi) {
 
-        getStudio().addControlParameter(con);
+	    if (!m_haveControls) {
+		m_errorString = "Found ControlParameter outside Controls block";
+		return false;
+	    }
+
+	    QString name = atts.value("name");
+	    QString type = atts.value("type");
+	    QString descr = atts.value("description");
+	    QString min = atts.value("min");
+	    QString max = atts.value("max");
+	    QString def = atts.value("default");
+	    QString conVal = atts.value("controllervalue");
+	    QString colour = atts.value("colourindex");
+	    QString ipbPosition = atts.value("ipbposition");
+	    
+	    Rosegarden::ControlParameter con(qstrtostr(name),
+					     qstrtostr(type),
+					     qstrtostr(descr),
+					     min.toInt(),
+					     max.toInt(),
+					     def.toInt(),
+					     Rosegarden::MidiByte(conVal.toInt()),
+					     colour.toInt(),
+					     ipbPosition.toInt());
+
+            dynamic_cast<Rosegarden::MidiDevice*>(m_device)->
+		addControlParameter(con);
+	}
 
     } else if (lcName == "reverb") { // deprecated but we still read 'em
 
@@ -1630,7 +1647,11 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
 
     } else if (lcName == "device") {
 
+	if (!m_haveControls) {
+	    setupDefaultControllers();
+	}
         m_device = 0;
+
     } else if (lcName == "audiofiles") {
 
         m_section = NoSection;
@@ -1761,5 +1782,41 @@ RoseXmlHandler::setMIDIDeviceConnection(QString connection)
     rgapp->sequencerCall("setConnection(unsigned int, QString)",
                          replyType, replyData, data);
     // connection should be sync'd later in the natural course of things
+}
+
+
+void
+RoseXmlHandler::setupDefaultControllers()
+{
+    Rosegarden::MidiDevice *md = dynamic_cast<Rosegarden::MidiDevice *>(m_device);
+    if (!md) return;
+   
+    static QString controls[][9] = {
+	{ "Pan", "controller", "<none>", "0", "127", "64", "10", "2", "0" },
+	{ "Chorus", "controller", "<none>", "0", "127", "0", "93", "3", "1" },
+	{ "Volume", "controller", "<none>", "0", "127", "0", "7", "1", "2" },
+	{ "Reverb", "controller", "<none>", "0", "127", "0", "91", "3", "3" },
+	{ "Attack", "controller", "<none>", "0", "127", "0", "73", "5", "4" },
+	{ "Filter", "controller", "<none>", "0", "127", "0", "74", "4", "5" },
+	{ "Release", "controller", "<none>", "0", "127", "0", "72", "5", "6" },
+	{ "Resonance", "controller", "<none>", "0", "127", "0", "71", "4", "7" },
+	{ "Modulation", "controller", "<none>", "0", "127", "0", "1", "4", "-1" },
+	{ "Sustain", "controller", "<none>", "0", "127", "0", "64", "4", "-1" }
+    };    
+
+    for (unsigned int i = 0; i < sizeof(controls) / sizeof(controls[0]); ++i) {
+	
+	Rosegarden::ControlParameter con(qstrtostr(controls[i][0]),
+					 qstrtostr(controls[i][1]),
+					 qstrtostr(controls[i][2]),
+					 controls[i][3].toInt(),
+					 controls[i][4].toInt(),
+					 controls[i][5].toInt(),
+					 Rosegarden::MidiByte(controls[i][6].toInt()),
+					 controls[i][7].toInt(),
+					 controls[i][8].toInt());
+	
+	md->addControlParameter(con);
+    }
 }
 

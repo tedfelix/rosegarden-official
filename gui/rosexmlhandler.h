@@ -109,6 +109,7 @@ protected:
 
     void addMIDIDevice(QString name);
     void setMIDIDeviceConnection(QString connection);
+    void setupDefaultControllers();
 
     //--------------- Data members ---------------------------------
 
@@ -150,6 +151,7 @@ protected:
     XmlSubHandler                    *m_subHandler;
     bool		              m_deprecation;
     bool                              m_createDevices;
+    bool                              m_haveControls;
     bool                              m_cancelled;
 };
 
