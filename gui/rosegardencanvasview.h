@@ -52,6 +52,8 @@ protected:
     //--------------- Data members ---------------------------------
 
     QScrollBar* m_horizontalScrollBar;
+
+    int m_canvasCurrentWidth;
 };
 
 

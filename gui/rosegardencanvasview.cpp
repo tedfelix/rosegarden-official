@@ -27,7 +27,8 @@ RosegardenCanvasView::RosegardenCanvasView(QScrollBar* hsb, QCanvas* canvas,
                              QWidget* parent,
                              const char* name, WFlags f)
     : QCanvasView(canvas, parent, name, f),
-      m_horizontalScrollBar(hsb)
+      m_horizontalScrollBar(hsb),
+      m_canvasCurrentWidth(canvas->width())
 {
     setHScrollBarMode(AlwaysOff);
 }
@@ -46,22 +47,26 @@ void RosegardenCanvasView::slotUpdate()
 
     canvas()->update();
 
-    // for the moment remove the hack so we get clean playback
-    //
-    return;
+    if (canvas()->width() != m_canvasCurrentWidth) {
+        
+        // Ugly hack needed for Qt3 : otherwise we get dummy min/max
+        // values from horizontalScrollBar()
+        //
+        setHScrollBarMode(Auto);
+        updateScrollBars();
+        /// end of ugly hack
 
-    // Ugly hack needed for Qt3 : otherwise we get dummy min/max
-    // values from horizontalScrollBar()
-    //
-    setHScrollBarMode(Auto);
-    updateScrollBars();
-    m_horizontalScrollBar->setRange(horizontalScrollBar()->minValue(),
-                                    horizontalScrollBar()->maxValue());
+        m_horizontalScrollBar->setRange(horizontalScrollBar()->minValue(),
+                                        horizontalScrollBar()->maxValue());
 
-    m_horizontalScrollBar->setSteps(horizontalScrollBar()->lineStep(),
-                                    horizontalScrollBar()->pageStep());
+        m_horizontalScrollBar->setSteps(horizontalScrollBar()->lineStep(),
+                                        horizontalScrollBar()->pageStep());
 
-    setHScrollBarMode(AlwaysOff);
+        setHScrollBarMode(AlwaysOff);
+
+        m_canvasCurrentWidth = canvas()->width();
+    }
+    
 }
 
 void CanvasItemGC::mark(QCanvasItem* item)
