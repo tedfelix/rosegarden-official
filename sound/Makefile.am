@@ -25,7 +25,7 @@ libRosegardenSequencer_la_SOURCES = ArtsDriver.cpp \
                                     MidiRecord.cpp \
                                     Sequencer.cpp \
                                     SoundDriver.cpp
-#AlsaDriver.cpp \
+#AlsaDriver.cpp 
 
 # the library search path. 
 libRosegardenSequencer_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -module -no-undefined

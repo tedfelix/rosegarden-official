@@ -39,8 +39,7 @@ AlsaDriver::AlsaDriver():
     m_maxClients(-1),
     m_maxPorts(-1),
     m_maxQueues(-1),
-    m_midiInputPortConnected(false),
-    m_midiOutputPortConnected(false)
+    m_midiInputPortConnected(false)
 
 {
     std::cout << "Rosegarden AlsaDriver - " << m_name << std::endl;
@@ -136,15 +135,26 @@ AlsaDriver::generateInstruments()
 
     bool duplex = false;
 
+    int synthCount = 0;
+
+    // Use these to store ONE input (duplex) port
+    // which we push onto the Instrument list last
+    //
+    std::string inputName;
+    int inputClient = -1;
+    int inputPort = -1;
+
     // Get only the client ports we're interested in 
     //
-    while (snd_seq_query_next_client(m_midiHandle, cinfo) >= 0)
+    while (snd_seq_query_next_client(m_midiHandle, cinfo) >= 0
+            && synthCount < 2)
     {
         client = snd_seq_client_info_get_client(cinfo);
         snd_seq_port_info_alloca(&pinfo);
         snd_seq_port_info_set_client(pinfo, client);
         snd_seq_port_info_set_port(pinfo, -1);
-        while (snd_seq_query_next_port(m_midiHandle, pinfo) >= 0)
+        while (snd_seq_query_next_port(m_midiHandle, pinfo) >= 0
+                && synthCount < 2)
         {
             cap = (SND_SEQ_PORT_CAP_SUBS_WRITE|SND_SEQ_PORT_CAP_WRITE);
 
@@ -170,24 +180,40 @@ AlsaDriver::generateInstruments()
                     SND_SEQ_PORT_CAP_DUPLEX)
                 {
                     std::cout << "\t\t(DUPLEX)";
-                    duplex = true;
+                    inputName = std::string(snd_seq_port_info_get_name(pinfo));
+                    inputClient = snd_seq_port_info_get_client(pinfo);
+                    inputPort = snd_seq_port_info_get_port(pinfo);
+                    continue;
                 }
                 else
                 {
                     std::cout << "\t\t(WRITE ONLY)";
-                    duplex = false;
                 }
 
-                    addInstrumentsForPort(
+                // For the moment limit to two strictly synth devices
+                //
+                addInstrumentsForPort(
                             Instrument::Midi,
                             std::string(snd_seq_port_info_get_name(pinfo)),
                             snd_seq_port_info_get_client(pinfo),
                             snd_seq_port_info_get_port(pinfo),
-                            duplex);
+                            false);
+
+                synthCount++;
 
                 std::cout << std::endl;
             }
         }
+    }
+
+    if (inputPort != -1 && inputClient != -1)
+    {
+        addInstrumentsForPort(
+                    Instrument::Midi,
+                    inputName,
+                    inputClient,
+                    inputPort,
+                    true);
     }
 
     std::cout << std::endl;
@@ -226,7 +252,7 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
         {
             // Create MappedInstrument for export to GUI
             //
-            sprintf(number, " %d", channel);
+            sprintf(number, ", Channel %d", channel);
             channelName = name + std::string(number);
 
             MappedInstrument *instr = new MappedInstrument(type,
@@ -310,28 +336,31 @@ AlsaDriver::initialiseMidi()
     }
 
     ClientPortPair inputDevice = getFirstDestination(true); // duplex = true
-    ClientPortPair outputDevice = getFirstDestination(false);
 
     cout << "    INPUT PAIR  = " << inputDevice.first << ", "
                                 << inputDevice.second << endl;
 
+    /*
+    ClientPortPair outputDevice = getFirstDestination(false);
     cout << "    OUTPUT PAIR = " << outputDevice.first << ", "
                                  << outputDevice.second << endl;
+                                 */
+    std::vector<AlsaPort*>::iterator it;
 
-    // Connect to the output port
+    // Connect to all available output client/ports
     //
-    if (snd_seq_connect_to(m_midiHandle,
-                           m_midiPort,
-                           outputDevice.first,
-                           outputDevice.second) < 0)
+    for (it = m_alsaPorts.begin(); it != m_alsaPorts.end(); it++)
     {
-        std::cerr << "AlsaDriver::initialiseMidi() - "
-                  << "can't subscribe output client/port"
-                  << std::endl;
-        m_midiOutputPortConnected = false;
+        if (snd_seq_connect_to(m_midiHandle,
+                               m_midiPort,
+                               (*it)->m_midiClient,
+                               (*it)->m_midiPort) < 0)
+        {
+            std::cerr << "AlsaDriver::initialiseMidi() - "
+                      << "can't subscribe output client/port"
+                      << std::endl;
+        }
     }
-    else
-        m_midiOutputPortConnected = true;
 
     // Connect from the input port
     //
@@ -573,19 +602,23 @@ AlsaDriver::allNotesOff()
 {
     snd_seq_event_t *event = new snd_seq_event_t();
     Rosegarden::RealTime now = getSequencerTime() + RealTime(0, 100);
-
-    ClientPortPair outputDevice = getFirstDestination(false);
+    ClientPortPair outputDevice;
 
     // prepare the event
     snd_seq_ev_clear(event);
     snd_seq_ev_set_source(event, m_midiPort);
-    snd_seq_ev_set_dest(event,
-                        outputDevice.first,
-                        outputDevice.second);
 
     for (NoteOffQueue::iterator i = m_noteOffQueue.begin();
                                 i != m_noteOffQueue.end(); ++i)
     {
+        // Set destination according to instrument mapping to port
+        //
+        outputDevice = getPairForMappedInstrument((*i)->getInstrument());
+
+        snd_seq_ev_set_dest(event,
+                            outputDevice.first,
+                            outputDevice.second);
+
         snd_seq_real_time_t time = { now.sec,
                                      now.usec * 1000 };
 
@@ -615,20 +648,25 @@ AlsaDriver::processNotesOff(const RealTime &time)
 {
     snd_seq_event_t *event = new snd_seq_event_t();
 
-    ClientPortPair outputDevice = getFirstDestination(false);
+    ClientPortPair outputDevice;
 
     // prepare the event
     snd_seq_ev_clear(event);
     snd_seq_ev_set_source(event, m_midiPort);
-    snd_seq_ev_set_dest(event,
-                        outputDevice.first,
-                        outputDevice.second);
 
     for (NoteOffQueue::iterator i = m_noteOffQueue.begin();
                       i != m_noteOffQueue.end(); ++i)
     {
         if ((*i)->getRealTime() <= time)
         {
+            // Set destination according to instrument mapping to port
+            //
+            outputDevice = getPairForMappedInstrument((*i)->getInstrument());
+
+            snd_seq_ev_set_dest(event,
+                                outputDevice.first,
+                                outputDevice.second);
+
             snd_seq_real_time_t time = { (*i)->getRealTime().sec,
                                          (*i)->getRealTime().usec * 1000 };
 
@@ -833,18 +871,15 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
     Rosegarden::RealTime midiRelativeTime;
     Rosegarden::RealTime midiRelativeStopTime;
     Rosegarden::MappedInstrument *instrument;
+    ClientPortPair outputDevice;
     MidiByte channel;
     snd_seq_event_t *event = new snd_seq_event_t();
 
-    ClientPortPair outputDevice = getFirstDestination(false);
 
     // These won't change in this slice
     //
     snd_seq_ev_clear(event);
     snd_seq_ev_set_source(event, m_midiPort);
-    snd_seq_ev_set_dest(event,
-                        outputDevice.first,
-                        outputDevice.second);
 
     for (MappedComposition::iterator i = mC.begin(); i != mC.end(); ++i)
     {
@@ -859,6 +894,14 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
         //
         snd_seq_real_time_t time = { midiRelativeTime.sec,
                                      midiRelativeTime.usec * 1000 };
+
+        // Set destination according to Instrument mapping
+        //
+        outputDevice = getPairForMappedInstrument((*i)->getInstrument());
+
+        snd_seq_ev_set_dest(event,
+                            outputDevice.first,
+                            outputDevice.second);
 
         /*
         cout << "TIME = " << time.tv_sec << " : " << time.tv_nsec * 1000
@@ -939,7 +982,8 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
             NoteOffEvent *noteOffEvent =
                 new NoteOffEvent(midiRelativeStopTime, // already calculated
                                  (*i)->getPitch(),
-                                 channel);
+                                 channel,
+                                 (*i)->getInstrument());
             m_noteOffQueue.insert(noteOffEvent);
         }
 
@@ -969,10 +1013,6 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                              const Rosegarden::RealTime &playLatency,
                              bool now)
 {
-    // If our output port hasn't connected 
-    if (m_midiOutputPortConnected == false)
-        return;
-
     if (m_startPlayback)
     {
         m_startPlayback= false;
@@ -1045,6 +1085,30 @@ AlsaDriver::getFirstDestination(bool duplex)
     return destPair;
 }
 
+
+// Sort through the ALSA client/port pairs for the range that
+// matches the one we're querying.  If none matches then send
+// back -1 for each.
+//
+ClientPortPair
+AlsaDriver::getPairForMappedInstrument(InstrumentId id)
+{
+    ClientPortPair matchPair(-1, -1);
+
+    std::vector<AlsaPort*>::iterator it;
+
+    for (it = m_alsaPorts.begin(); it != m_alsaPorts.end(); it++)
+    {
+        if (id >= (*it)->m_startId && id <= (*it)->m_endId)
+        {
+            matchPair.first = (*it)->m_midiClient;
+            matchPair.second = (*it)->m_midiPort;
+            return matchPair;
+        }
+    }
+
+    return matchPair;
+}
 
 }
 

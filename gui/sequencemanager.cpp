@@ -29,7 +29,6 @@
 #include "rosegardentransportdialog.h"
 #include "sequencemanager.h"
 #include "SegmentPerformanceHelper.h"
-#include "MappedDevice.h"
 
 namespace Rosegarden
 {
@@ -39,14 +38,8 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
     m_doc(doc),
     m_transportStatus(STOPPED),
     m_soundSystemStatus(Rosegarden::NO_SEQUENCE_SUBSYS),
-    m_transport(transport),
-    m_startUpSync(true)
+    m_transport(transport)
 {
-    // Try to tell the sequencer that we're alive only if the
-    // sequencer hasn't already forced us to sync
-    //
-    if (m_startUpSync)
-        alive();
 }
 
 
@@ -1084,113 +1077,6 @@ SequenceManager::sendMappedEvent(Rosegarden::MappedEvent *mE)
     sendMappedComposition(mC);
 
 }
-
-
-void
-SequenceManager::alive()
-{
-    // Just a quick refreshing sleep here to ensure that we don't
-    // mask any call back to the sequencer by being to hasty.
-    //
-    // Probably unnecessary but better safe than sorry.
-    //
-    kapp->processEvents(5); // 10 ms is enough?
-
-
-    if (!kapp->dcopClient()->
-            isApplicationRegistered(QCString(ROSEGARDEN_SEQUENCER_APP_NAME)))
-    {
-        std::cout << "SequenceManager::alive() - "
-                  << "no Sequencer yet available, I'll wait for it to poll me"
-                  << std::endl;
-        return;
-    }
-
-    QByteArray data;
-    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "alive()",
-                                  data))
-    {
-        std::cerr << "SequenceManager::alive() - "
-                  << "can't call the Sequencer" << std::endl;
-        return;
-    }
-
-    QByteArray replyData;
-    QCString replyType;
-    QDataStream arg(data, IO_WriteOnly);
-
-    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "getMappedDevice()",
-                                  data, replyType, replyData, true))
-    {
-        std::cerr << "SequenceManager::alive() - "
-                  << "can't call Sequencer" << std::endl;
-        return;
-    }
-
-    Rosegarden::MappedDevice *mD = new Rosegarden::MappedDevice();
-    QDataStream reply(replyData, IO_ReadOnly);
-
-    if (replyType == "Rosegarden::MappedDevice")
-    {
-        std::cout << "SequenceManager::alive() - "
-                  << "got Rosegarden::MappedDevice" << std::endl;
-
-        // unfurl
-        reply >> mD;
-    }
-
-    std::cout << std::endl
-              << "SequenceManager::alive() - MappedDevices" << std::endl;
-
-    // Clear and recreate the studio from the initialisation data
-    // sent up from the SoundDriver.  If we've got Midi then we
-    // create a MidiDevice, if we've got Audio then an AudioDevice.
-    // Names are created and relationships between Devices/Instruments
-    // and Studio are created.
-    //
-/*
-    Studio &studio = m_doc->getStudio();
-    studio.clear();
-    */
-
-    Rosegarden::MappedDeviceIterator it;
-
-    for (it = mD->begin(); it != mD->end(); it++)
-    {
-        /*
-        if ((*it)->getType() == Rosegarden::Instrument::Midi)
-        {
-        }
-        else
-        if ((*it)->getType() == Rosegarden::Instrument::Audio)
-        {
-        }
-        else
-        {
-        }
-        */
-        std::cout << "    " << (*it)->getName() << std::endl;
-    }
-    std::cout << std::endl;
-
-    std::cout << "SequenceManager::alive() - "
-              << "Sequencer alive - Instruments synced"
-              << std::endl;
-
-    // Ok, we've sync'd - make sure that this app doesn't
-    // drive this sync again by switching our startUpSync
-    // flag off.
-    //
-    m_startUpSync = false;
-
-}
-
-
-
 
 
 }

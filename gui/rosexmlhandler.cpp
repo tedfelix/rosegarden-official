@@ -40,6 +40,9 @@ using Rosegarden::String;
 using Rosegarden::Segment;
 using Rosegarden::SegmentNotationHelper;
 using Rosegarden::timeT;
+using Rosegarden::Device;
+using Rosegarden::DeviceList;
+using Rosegarden::DeviceListIterator;
 
 using namespace Rosegarden::BaseProperties;
 
@@ -181,7 +184,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
         // Only clear the Studio if we're loading a new one
         //
-        m_studio.clear();
+        //m_studio.clear();
 
         m_section = InStudio;
 
@@ -524,14 +527,48 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
         if (type == "midi")
         {
+            /*
             m_device = new Rosegarden::MidiDevice(atts.value("name").data());
             m_studio.addDevice(m_device);
+            */
+
+            // Get the first MidiDevice
+            //
+            DeviceList *devices =  m_studio.getDevices();
+            DeviceListIterator it;
+
+            for (it = devices->begin(); it != devices->end(); it++)
+            {
+                if((*it)->getType() == Device::Midi)
+                {
+                    m_device = *it;
+                    break;
+                }
+            }
+
 
         }
         else if (type == "audio")
         {
+            /*
             m_device = new Rosegarden::AudioDevice(atts.value("name").data());
             m_studio.addDevice(m_device);
+            */
+
+
+            // Get the first AudioDevice
+            //
+            DeviceList *devices =  m_studio.getDevices();
+            DeviceListIterator it;
+
+            for (it = devices->begin(); it != devices->end(); it++)
+            {
+                if((*it)->getType() == Device::Audio)
+                {
+                    m_device = *it;
+                    break;
+                }
+            }
         }
         else
         {

@@ -49,7 +49,7 @@ SoundDriver::getMappedInstrument(InstrumentId id)
 
     for (it = m_instruments.begin(); it != m_instruments.end(); it++)
     {
-        if ((*it)->getID() == id)
+        if ((*it)->getId() == id)
             return (*it);
     }
 
@@ -70,7 +70,7 @@ SoundDriver::setMappedInstrument(MappedInstrument *mI)
     // If we match then change existing entry
     for (it = m_instruments.begin(); it != m_instruments.end(); it++)
     {
-        if ((*it)->getID() == mI->getID())
+        if ((*it)->getId() == mI->getId())
         {
             (*it)->setChannel(mI->getChannel());
             (*it)->setType(mI->getType());
@@ -84,7 +84,7 @@ SoundDriver::setMappedInstrument(MappedInstrument *mI)
     std::cout << "SoundDriver: setMappedInstrument() : "
               << "type = " << mI->getType() << " : "
               << "channel = " << (int)(mI->getChannel()) << " : "
-              << "id = " << mI->getID() << std::endl;
+              << "id = " << mI->getId() << std::endl;
 
 
 }

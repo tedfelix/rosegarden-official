@@ -137,10 +137,12 @@ public:
     NoteOffEvent() {;}
     NoteOffEvent(const Rosegarden::RealTime &realTime,
                  unsigned int pitch,
-                 Rosegarden::MidiByte channel):
+                 Rosegarden::MidiByte channel,
+                 Rosegarden::InstrumentId instrument):
         m_realTime(realTime),
         m_pitch(pitch),
-        m_channel(channel) {;}
+        m_channel(channel),
+        m_instrument(instrument) {;}
     ~NoteOffEvent() {;}
 
     struct NoteOffEventCmp
@@ -154,11 +156,13 @@ public:
     Rosegarden::RealTime getRealTime() const { return m_realTime; }
     Rosegarden::MidiByte getPitch() const { return m_pitch; }
     Rosegarden::MidiByte getChannel() const { return m_channel; }
+    Rosegarden::InstrumentId getInstrument() const { return m_instrument; }
 
 private:
-    Rosegarden::RealTime m_realTime;
-    Rosegarden::MidiByte m_pitch;
-    Rosegarden::MidiByte m_channel;
+    Rosegarden::RealTime     m_realTime;
+    Rosegarden::MidiByte     m_pitch;
+    Rosegarden::MidiByte     m_channel;
+    Rosegarden::InstrumentId m_instrument;
 
 };
 
@@ -267,8 +271,8 @@ protected:
     RecordStatus             m_recordStatus;
 
 
-    InstrumentId                m_midiRunningId;
-    InstrumentId                m_audioRunningId;
+    InstrumentId             m_midiRunningId;
+    InstrumentId             m_audioRunningId;
 
 };
 

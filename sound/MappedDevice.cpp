@@ -113,7 +113,7 @@ operator<<(QDataStream &dS, MappedDevice *mD)
     {
         dS << (unsigned int)(*it)->getType();
         dS << (unsigned int)(*it)->getChannel();
-        dS << (unsigned int)(*it)->getID();
+        dS << (unsigned int)(*it)->getId();
         dS << QString((*it)->getName().c_str());
     }
 
@@ -129,7 +129,7 @@ operator<<(QDataStream &dS, const MappedDevice &mD)
     {
         dS << (unsigned int)(*it)->getType();
         dS << (unsigned int)(*it)->getChannel();
-        dS << (unsigned int)(*it)->getID();
+        dS << (unsigned int)(*it)->getId();
         dS << QString((*it)->getName().c_str());
     }
 

@@ -99,9 +99,6 @@ public:
     void sendMappedComposition(const Rosegarden::MappedComposition &mC);
     void sendMappedEvent(Rosegarden::MappedEvent *mE);
 
-    // Send "alive" to sequencer and collect Instrument data
-    //
-    void alive();
 private:
 
     Rosegarden::MappedComposition m_mC;
@@ -113,11 +110,6 @@ private:
 
     // pointer to the transport dialog
     RosegardenTransportDialog *m_transport;
-
-    // do we need to send the start up sync? i.e. has the sequencer
-    // already requested a sync?
-    //
-    bool m_startUpSync;
 
 };
 

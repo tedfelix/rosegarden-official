@@ -54,6 +54,7 @@ AudioDevice::~AudioDevice()
 void
 AudioDevice::createInstruments()
 {
+    /*
     char instNum[100];
 
     // for the moment just create an arbitrary number of audio tracks
@@ -71,6 +72,7 @@ AudioDevice::createInstruments()
                                dynamic_cast<Device*>(this))); // parent device
     }
 
+    */
 }
 
 std::string

@@ -64,10 +64,23 @@ ArtsDriver::~ArtsDriver()
 void
 ArtsDriver::generateInstruments()
 {
-    std::string name("aRts MIDI");
+    std::string name("aRts Audio");
     std::string channelName;
     char number[100];
 
+    for (int channel = 0; channel < 16; channel++)
+    {
+        sprintf(number, " %d", channel);
+        channelName = name + std::string(number);
+
+        MappedInstrument *instr = new MappedInstrument(Instrument::Audio,
+                                                       channel,
+                                                       m_audioRunningId++,
+                                                       channelName);
+        m_instruments.push_back(instr);
+    }
+
+    name = "aRts MIDI";
     for (int channel = 0; channel < 16; channel++)
     {
         sprintf(number, " %d", channel);
@@ -80,6 +93,8 @@ ArtsDriver::generateInstruments()
         m_instruments.push_back(instr);
 
     }
+
+
 }
 
 void
@@ -635,7 +650,8 @@ ArtsDriver::processMidiOut(const MappedComposition &mC,
             NoteOffEvent *noteOffEvent =
                 new NoteOffEvent(midiRelativeStopTime,
                          (Rosegarden::MidiByte)event.command.data1,
-                         (Rosegarden::MidiByte)channel);
+                         (Rosegarden::MidiByte)channel,
+                         (*i)->getInstrument());
 
             m_noteOffQueue.insert(noteOffEvent);
         }

@@ -112,6 +112,8 @@ public:
 
 protected:
     ClientPortPair getFirstDestination(bool duplex);
+    ClientPortPair getPairForMappedInstrument(InstrumentId id);
+
 
     virtual void generateInstruments();
     virtual void processMidiOut(const MappedComposition &mC,
@@ -141,9 +143,10 @@ private:
 
     NoteOffQueue                 m_noteOffQueue;
 
-    // Because can fail even if the driver's up
+    // Because this can fail even if the driver's up (if
+    // another service is using the port say)
+    //
     bool                         m_midiInputPortConnected;
-    bool                         m_midiOutputPortConnected;
 
     //m_alsaRecordStartTime;
 

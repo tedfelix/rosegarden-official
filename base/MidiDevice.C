@@ -63,6 +63,7 @@ MidiDevice::~MidiDevice()
 void
 MidiDevice::createInstruments()
 {
+    /*
     char instNum[100];
 
     for (InstrumentId i = 0; i < 16; i++)
@@ -78,6 +79,7 @@ MidiDevice::createInstruments()
                            (MidiByte)i,                   // channel
                            dynamic_cast<Device*>(this))); // parent device 
     }
+    */
 
     m_instruments.push_back(
         new Instrument(SystemInstrumentBase + 1,      // Metronome ID
@@ -100,7 +102,7 @@ MidiDevice::generatePresentationList()
     InstrumentList::iterator it;
     for (it = m_instruments.begin(); it != m_instruments.end(); it++)
     {
-        if ((*it)->getID() >= AudioInstrumentBase)
+        if ((*it)->getID() >= MidiInstrumentBase)
             m_presentationInstrumentList.push_back(*it);
     }
 }

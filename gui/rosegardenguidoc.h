@@ -221,6 +221,11 @@ public:
      */
     void setLoop(Rosegarden::timeT, Rosegarden::timeT);
 
+    /*
+    * Send "alive" to sequencer and collect Instrument data
+    */
+    void alive();
+
 public slots:
     /**
      * calls repaint() on all views connected to the document object
@@ -322,6 +327,11 @@ private:
      *
      */
     Rosegarden::Configuration m_config;
+
+    // do we need to send the start up sync? i.e. has the sequencer
+    // already requested a sync?
+    //
+    bool m_startUpSync;
 };
 
 #endif // ROSEGARDENGUIDOC_H

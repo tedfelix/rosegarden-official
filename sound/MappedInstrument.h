@@ -53,7 +53,7 @@ public:
     ~MappedInstrument();
 
     void setId(InstrumentId id) { m_id = id; }
-    InstrumentId getID() const { return m_id; }
+    InstrumentId getId() const { return m_id; }
 
     void setChannel(MidiByte channel) { m_channel = channel; }
     MidiByte getChannel() const { return m_channel; }

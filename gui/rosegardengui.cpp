@@ -2095,7 +2095,7 @@ void RosegardenGUIApp::slotCommandExecuted(Command *command)
 //
 void RosegardenGUIApp::alive()
 {
-    m_seqManager->alive();
+    m_doc->alive();
 }
 
 

@@ -40,6 +40,9 @@ namespace Rosegarden
 {
 
 typedef std::vector<Instrument *> InstrumentList;
+typedef std::vector<Device*> DeviceList;
+typedef std::vector<Device*>::iterator DeviceListIterator;
+
 
 class Studio : public XmlExportable
 {
@@ -83,13 +86,17 @@ public:
     //
     MidiMetronome* getMetronome();
 
+    // Return the device list
+    //
+    DeviceList* getDevices() { return &m_devices; }
+
     // Export as XML string
     //
     virtual std::string toXmlString();
 
 private:
 
-    std::vector<Device*> m_devices;
+    DeviceList m_devices;
 
 };
 
