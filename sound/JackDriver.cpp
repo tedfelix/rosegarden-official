@@ -33,12 +33,13 @@
 #ifdef HAVE_LIBJACK
 
 //#define DEBUG_JACK_DRIVER 1
+#define DEBUG_JACK_TRANSPORT 1
 //#define DEBUG_JACK_PROCESS 1
 
 namespace Rosegarden
 {
 
-#if (defined(DEBUG_JACK_DRIVER) || defined(DEBUG_JACK_PROCESS))
+#if (defined(DEBUG_JACK_DRIVER) || defined(DEBUG_JACK_PROCESS) || defined(DEBUG_JACK_TRANSPORT))
 static unsigned long framesThisPlay = 0;
 static RealTime startTime;
 #endif
@@ -709,6 +710,9 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 		ExternalTransport *transport = 
 		    m_alsaDriver->getExternalTransportControl();
 		if (transport) {
+#ifdef DEBUG_JACK_TRANSPORT
+		    std::cerr << "JackDriver::jackProcess: JACK transport stopped externally at " << position.frame << std::endl;
+#endif
 		    m_waitingToken =
 			transport->transportJump
 			(ExternalTransport::TransportStopAtTime,
@@ -731,8 +735,8 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	    return jackProcessEmpty(nframes);
 	} else if (state == JackTransportRolling) {
 	    if (m_waiting) {
-#ifdef DEBUG_JACK_PROCESS
-		std::cerr << "JackDriver::jackProcess: telling ALSA driver to go!" << std::endl;
+#ifdef DEBUG_JACK_TRANSPORT
+		std::cerr << "JackDriver::jackProcess: transport rolling, telling ALSA driver to go!" << std::endl;
 #endif
 		m_alsaDriver->startClocksApproved();
 		m_waiting = false;
@@ -1009,7 +1013,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 
     m_framesProcessed += nframes;
 
-#if (defined(DEBUG_JACK_DRIVER) || defined(DEBUG_JACK_PROCESS))
+#if (defined(DEBUG_JACK_DRIVER) || defined(DEBUG_JACK_PROCESS) || defined(DEBUG_JACK_TRANSPORT))
     framesThisPlay += nframes; //!!!
 #endif
 #ifdef DEBUG_JACK_PROCESS
@@ -1058,7 +1062,7 @@ JackDriver::jackProcessEmpty(jack_nframes_t nframes)
 
     m_framesProcessed += nframes;
 
-#if (defined(DEBUG_JACK_DRIVER) || defined(DEBUG_JACK_PROCESS))
+#if (defined(DEBUG_JACK_DRIVER) || defined(DEBUG_JACK_PROCESS) || defined(DEBUG_JACK_TRANSPORT))
     framesThisPlay += nframes;
 #endif
 #ifdef DEBUG_JACK_PROCESS
@@ -1246,8 +1250,13 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
 	inst->m_alsaDriver->getExternalTransportControl();
     if (!transport) return true;
 
-#ifdef DEBUG_JACK_DRIVER
+#ifdef DEBUG_JACK_TRANSPORT
     std::cerr << "JackDriver::jackSyncCallback: state " << state << ", frame " << position->frame << ", m_waiting " << inst->m_waiting << ", playing " << inst->m_alsaDriver->isPlaying() << std::endl;
+
+    std::cerr << "JackDriver::jackSyncCallback: unique_1 " << position->unique_1 << ", unique_2 " << position->unique_2 << std::endl;
+    
+    std::cerr << "JackDriver::jackSyncCallback: rate " << position->frame_rate << ", bar " << position->bar << ", beat " << position->beat << ", tick " << position->tick << ", bpm " << position->beats_per_minute << std::endl;
+
 #endif
 
     ExternalTransport::TransportRequest request =
@@ -1278,37 +1287,37 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
 	    RealTime rt = RealTime::frame2RealTime(position->frame,
 						   position->frame_rate);
 
-#ifdef DEBUG_JACK_DRIVER
+#ifdef DEBUG_JACK_TRANSPORT
 	    std::cerr << "JackDriver::jackSyncCallback: Requesting jump to " << rt << std::endl;
 #endif
 	    
 	    inst->m_waitingToken = transport->transportJump(request, rt);
 
-#ifdef DEBUG_JACK_DRIVER
+#ifdef DEBUG_JACK_TRANSPORT
 	    std::cerr << "JackDriver::jackSyncCallback: My token is " << inst->m_waitingToken << std::endl;
 #endif
 
 	} else if (request == ExternalTransport::TransportStop) {
 
-#ifdef DEBUG_JACK_DRIVER
+#ifdef DEBUG_JACK_TRANSPORT
 	    std::cerr << "JackDriver::jackSyncCallback: Requesting state change to " << request << std::endl;
 #endif
 	    
 	    inst->m_waitingToken = transport->transportChange(request);
 
-#ifdef DEBUG_JACK_DRIVER
+#ifdef DEBUG_JACK_TRANSPORT
 	    std::cerr << "JackDriver::jackSyncCallback: My token is " << inst->m_waitingToken << std::endl;
 #endif
 
 	} else if (request == ExternalTransport::TransportNoChange) {
 
-#ifdef DEBUG_JACK_DRIVER
+#ifdef DEBUG_JACK_TRANSPORT
 	    std::cerr << "JackDriver::jackSyncCallback: Requesting no state change!" << std::endl;
 #endif
 
 	    inst->m_waitingToken = transport->transportChange(request);
 
-#ifdef DEBUG_JACK_DRIVER
+#ifdef DEBUG_JACK_TRANSPORT
 	    std::cerr << "JackDriver::jackSyncCallback: My token is " << inst->m_waitingToken << std::endl;
 #endif
 	}
@@ -1320,12 +1329,12 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
     } else {
 
 	if (transport->isTransportSyncComplete(inst->m_waitingToken)) {
-#ifdef DEBUG_JACK_DRIVER
+#ifdef DEBUG_JACK_TRANSPORT
 	    std::cerr << "JackDriver::jackSyncCallback: Sync complete" << std::endl;
 #endif
 	    return 1;
 	} else {
-#ifdef DEBUG_JACK_DRIVER
+#ifdef DEBUG_JACK_TRANSPORT
 	    std::cerr << "JackDriver::jackSyncCallback: Sync not complete" << std::endl;
 #endif
 	    return 0;
@@ -1365,7 +1374,7 @@ JackDriver::start()
 
 		// Nope, this came from Rosegarden
 
-#ifdef DEBUG_JACK_DRIVER
+#ifdef DEBUG_JACK_TRANSPORT
 		std::cerr << "JackDriver::start: asking JACK transport to start, setting wait state" << std::endl;
 #endif
 		m_waiting = true;
@@ -1376,7 +1385,7 @@ JackDriver::start()
 				       m_sampleRate));
 		jack_transport_start(m_client);
 	    } else {
-#ifdef DEBUG_JACK_DRIVER
+#ifdef DEBUG_JACK_TRANSPORT
 		std::cerr << "JackDriver::start: waiting already" << std::endl;
 #endif
 	    }
@@ -1384,13 +1393,13 @@ JackDriver::start()
 	return false;
     }
     
-#if (defined(DEBUG_JACK_DRIVER) || defined(DEBUG_JACK_PROCESS))
+#if (defined(DEBUG_JACK_DRIVER) || defined(DEBUG_JACK_PROCESS) || defined(DEBUG_JACK_TRANSPORT))
     framesThisPlay = 0; //!!!
     struct timeval tv;
     (void)gettimeofday(&tv, 0);
     startTime = RealTime(tv.tv_sec, tv.tv_usec * 1000); //!!!
 #endif
-#ifdef DEBUG_JACK_DRIVER
+#ifdef DEBUG_JACK_TRANSPORT
     std::cerr << "JackDriver::start: not on JACK transport, accepting right away" << std::endl;
 #endif
     return true;
@@ -1403,11 +1412,11 @@ JackDriver::stop()
 
     m_haveAsyncAudioEvent = false;
 
-#ifdef DEBUG_JACK_DRIVER
+#ifdef DEBUG_JACK_TRANSPORT
     struct timeval tv;
     (void)gettimeofday(&tv, 0);
     RealTime endTime = RealTime(tv.tv_sec, tv.tv_usec * 1000);//!!!
-    std::cerr << "JackDriver::stop: frames this play: " << framesThisPlay << ", elapsed " << (endTime - startTime) << std::endl;
+    std::cerr << "\nJackDriver::stop: frames this play: " << framesThisPlay << ", elapsed " << (endTime - startTime) << std::endl;
 #endif
 
 //!!!    flushAudio();
@@ -1427,7 +1436,7 @@ JackDriver::stop()
 		// must have genuinely been requested from within
 		// Rosegarden, so:
 
-#ifdef DEBUG_JACK_DRIVER
+#ifdef DEBUG_JACK_TRANSPORT
 		std::cerr << "JackDriver::stop: internal request, asking JACK transport to stop" << std::endl;
 #endif
 
@@ -1436,7 +1445,7 @@ JackDriver::stop()
 	    } else {
 		// Nothing to do
 
-#ifdef DEBUG_JACK_DRIVER
+#ifdef DEBUG_JACK_TRANSPORT
 		std::cerr << "JackDriver::stop: external request, JACK transport is already stopped" << std::endl;
 #endif
 	    }

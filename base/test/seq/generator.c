@@ -14,6 +14,8 @@ main(int argc, char **argv)
     int i;
     int rval;
     int target;
+    snd_seq_queue_timer_t *timer;
+    snd_timer_id_t *timerid;
 
     if (argc != 2) {
 	fprintf(stderr, "usage: generator <target-client-id>\n");
@@ -39,7 +41,18 @@ main(int argc, char **argv)
 	fprintf(stderr, "failed to create ALSA sequencer queue\n");
 	return 1;
     }
-
+/*
+    snd_seq_queue_timer_alloca(&timer);
+    snd_seq_get_queue_timer(handle, queue, timer);
+    snd_timer_id_alloca(&timerid);
+    snd_timer_id_set_class(timerid, SND_TIMER_CLASS_PCM);
+    snd_timer_id_set_sclass(timerid, SND_TIMER_SCLASS_NONE);
+    snd_timer_id_set_card(timerid, 0);
+    snd_timer_id_set_device(timerid, 0);
+    snd_timer_id_set_subdevice(timerid, 0);
+    snd_seq_queue_timer_set_id(timer, timerid);
+    snd_seq_set_queue_timer(handle, queue, timer);
+*/
     snd_seq_start_queue(handle, queue, 0);
 
     // stuff two minutes worth of events on the queue
