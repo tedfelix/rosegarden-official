@@ -627,7 +627,19 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
         {
             absTime = m_composition.
                           getElapsedTimeForRealTime((*i)->getEventTime());
+
+	    /* This is incorrect, unless the tempo at absTime happens to
+	       be the same as the tempo at zero and there are no tempo
+	       changes within the given duration after either zero or
+	       absTime
+
             duration = m_composition.getElapsedTimeForRealTime((*i)->getDuration());
+	    */
+	    duration = m_composition.
+		getElapsedTimeForRealTime((*i)->getEventTime() +
+					  (*i)->getDuration())
+		- absTime;
+
             rEvent = 0;
 
             /*
@@ -750,9 +762,15 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
 
             // And now fiddle with it
             //
+
+	    /*!!! cc-- I don't think this is a good idea any more anyway,
+	      and I've already removed similar code from MidiFile import,
+	      but also I think it's screwing things up for us
+
             SegmentNotationHelper helper(*m_recordSegment);
             if (!helper.isViable(rEvent))
                 helper.makeNoteViable(loc);
+	    */
 
             // Update our counter
             //
