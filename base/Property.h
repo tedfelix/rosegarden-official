@@ -196,13 +196,6 @@ PropertyStore<P>::unparse() const
     return PropertyDefn<P>::unparse(m_data);
 }
 
-template <>
-size_t
-PropertyStore<String>::getStorageSize() const
-{
-    return sizeof(*this) + m_data.size();
-}
-
 #ifndef NDEBUG
 template <PropertyType P>
 void

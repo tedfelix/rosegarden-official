@@ -109,19 +109,6 @@ PropertyStoreBase::~PropertyStoreBase()
 {
 }
 
-#ifdef NOT_DEFINED
-
-// SuSE 8.2's compiler (some weird gcc-3.3-prerelease) doesn't like
-// these being inlined in the header -- gets a multiple-definition error
-// at link stage.  Why?
-
-template <PropertyType P>
-size_t
-PropertyStore<P>::getStorageSize() const
-{
-    return sizeof(*this);
-}
-
 template <>
 size_t
 PropertyStore<String>::getStorageSize() const
@@ -129,7 +116,5 @@ PropertyStore<String>::getStorageSize() const
     return sizeof(*this) + m_data.size();
 }
  
-#endif
-
 }
 
