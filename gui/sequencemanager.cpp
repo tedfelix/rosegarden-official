@@ -70,6 +70,7 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
                                     const Rosegarden::RealTime &sliceEnd)
 {
     Composition &comp = m_doc->getComposition();
+    bool sendEvent = false;
   
     // Reset MappedComposition
     m_mC.clear();
@@ -97,6 +98,11 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
     {
         // Skip if track is muted
         if (comp.getTrackByIndex((*it)->getTrack())->isMuted())
+            continue;
+
+        // Skip the Segment if it starts too late to be of
+        // interest to our slice.
+        if ((*it)->getStartTime() > sliceEndElapsed)
             continue;
 
         if ((*it)->getType() == Rosegarden::Segment::Audio)
@@ -144,23 +150,35 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
                                                 track,
                                                 (*it)->getAudioFileID());
             m_mC.insert(me);
-
             continue; // next Segment
-        }
-        else
-        {
-            // Skip the Segment if it starts too late to be of
-            // interest to our slice.
-            if ((*it)->getStartTime() > sliceEndElapsed)
-                continue;
         }
 
         SegmentPerformanceHelper helper(**it);
 
-        for (Segment::iterator j = (*it)->findTime(sliceStartElapsed);
+        bool seekFlag = false;
+
+        // We must scan the whole Segment in case we're repeating it
+        for (Segment::iterator j = (*it)->begin();
                                j != (*it)->end();
                                j++)
         {
+            // If we're not repeating then seek through the Segment to
+            // make our Event search quicker.  If we _are_ repeating
+            // then we must examine all possible Events in the Segment
+            //
+            if (!(*it)->isRepeating() && !seekFlag)
+            {
+                j = (*it)->findTime(sliceStartElapsed);
+
+                if (j == (*it)->end())
+                    break;
+
+                seekFlag = true;
+            }
+
+            // reset the play flag
+            sendEvent = false;
+
             // Skip this event if it isn't a note
             //
             if (!(*j)->isa(Rosegarden::Note::EventType))
@@ -170,28 +188,52 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
             eventTime = comp.getElapsedRealTime((*j)->getAbsoluteTime());
 
             // Escape if we're outside the slice
-            if (eventTime > m_mC.getEndTime())
+            if (eventTime > m_mC.getEndTime() && !((*it)->isRepeating()))
                 break;
 
-            // Include Events within our range
+            // Check for actual Events within our range
             //
             if (eventTime >= m_mC.getStartTime() &&
-                eventTime < m_mC.getEndTime())
+                    eventTime < m_mC.getEndTime())
             {
-		// Find the performance duration, i.e. taking into account any
-		// ties etc that this note may have  --cc
-		// 
-		duration = helper.getRealSoundingDuration(j);
-		
-		// probably in a tied series, but not as first note
-		//
-		if (duration == Rosegarden::RealTime(0, 0))
-		    continue;
+                sendEvent = true;
+            }
+
+            // check for repeated Events
+            //
+            if (!sendEvent && (*it)->isRepeating())
+            {
+                while(eventTime <
+                      comp.getElapsedRealTime(comp.getBarEnd(comp.getNbBars())))
+                {
+                    eventTime = eventTime +
+                        comp.getElapsedRealTime((*it)->getDuration());
+
+                    if (eventTime >= m_mC.getStartTime() &&
+                        eventTime < m_mC.getEndTime())
+                    {
+                        sendEvent = true;
+                        break;
+                    }
+                }
+            }
+
+            if (sendEvent)
+            {
+                // Find the performance duration, i.e. taking into account
+                // any ties etc that this note may have  --cc
+                // 
+                duration = helper.getRealSoundingDuration(j);
+
+                // probably in a tied series, but not as first note
+                //
+                if (duration == Rosegarden::RealTime(0, 0))
+                    continue;
 
                 Rosegarden::TrackId track = (*it)->getTrack();
 
                 Rosegarden::InstrumentId instrument = comp.
-                             getTrackByIndex(track)->getInstrument();
+                         getTrackByIndex(track)->getInstrument();
                 // insert event
                 Rosegarden::MappedEvent *me =
                       new Rosegarden::MappedEvent(**j, eventTime, duration,
