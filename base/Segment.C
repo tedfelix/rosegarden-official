@@ -209,16 +209,20 @@ bool Track::expandIntoGroup(iterator from, iterator to,
     //
     if (checkExpansionValid(maxDuration, minDuration)) {
 
-//         long gid = 0;
-//         std::string groupType;
+        long gid = -1;
+        std::string groupType;
 
         // if the initial event has a group id, set the new event to it,
         // otherwise fetch the track's next group id
         //
-//         if (!(*from)->get<Int>("GroupNo", gid))
-//             gid = getNextGroupId();
-//         else
-//             groupType = (*from)->get<String>("GroupType");
+        if (!(*from)->get<Int>("GroupNo", gid)) {
+            cerr << "Track::expandIntoGroup() : creating new gid\n";
+            gid = getNextGroupId();
+            groupType = "beamed";
+        } else {
+            cerr << "Track::expandIntoGroup() : event already has a group\n";
+        }
+
             
         // Expand all the events in range [from, to[
         //
@@ -240,9 +244,12 @@ bool Track::expandIntoGroup(iterator from, iterator to,
             Event* ev = new Event(*(*i));
             ev->setDuration(maxDuration - minDuration);
             ev->setAbsoluteTime((*i)->getAbsoluteTime() + minDuration);       
-//             ev->set<Int>("GroupNo", gid);
-//             ev->set<String>("GroupType", groupType);
-
+            if (gid >= 0) {
+                cerr << "Track::expandIntoGroup() : Setting gid = " << gid << endl;
+                ev->set<Int>("GroupNo", gid);
+                ev->set<String>("GroupType", groupType);
+            }
+            
 //             long pitch = 0;
 //             if ((*i)->get<Int>("pitch", pitch))
 //                 ev->set<Int>("pitch", pitch);
