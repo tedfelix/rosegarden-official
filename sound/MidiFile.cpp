@@ -532,6 +532,16 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &trackNum)
             case MIDI_NOTE_OFF:
             case MIDI_POLY_AFTERTOUCH:
             case MIDI_CTRL_CHANGE:
+
+                data1 = (MidiByte) getMidiBytes(midiFile, 1)[0];
+                data2 = (MidiByte) getMidiBytes(midiFile, 1)[0];
+
+                // create and store our event
+                midiEvent = new MidiEvent(deltaTime, eventCode, data1, data2);
+                m_midiComposition[channelTrackMap[channel]].push_back
+		    (midiEvent);
+                break;
+
             case MIDI_PITCH_BEND:
 
                 data1 = (MidiByte) getMidiBytes(midiFile, 1)[0];

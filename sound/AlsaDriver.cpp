@@ -1845,8 +1845,8 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 
             case MappedEvent::MidiPitchBend:
                 {
-                    int value = ((*i)->getData1() << 7) |
-                                ((*i)->getData2() & 0x7F);
+                    int value = (((int)(*i)->getData1()) << 7) |
+                                (((int)(*i)->getData2()) & 0x7F);
 
                     // keep within -8192 to +8192
                     //

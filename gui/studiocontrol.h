@@ -74,6 +74,20 @@ public:
     // Send the Quarter Note Length has changed to the sequencer
     //
     static void sendQuarterNoteLength(const Rosegarden::RealTime &length);
+
+    // Convenience wrappers for RPNs and NRPNs
+    //
+    static void sendRPN(Rosegarden::InstrumentId instrumentId,
+                        Rosegarden::MidiByte paramMSB,
+                        Rosegarden::MidiByte paramLSB,
+                        Rosegarden::MidiByte controller,
+                        Rosegarden::MidiByte value);
+
+    static void sendNRPN(Rosegarden::InstrumentId instrumentId,
+                         Rosegarden::MidiByte paramMSB,
+                         Rosegarden::MidiByte paramLSB,
+                         Rosegarden::MidiByte controller,
+                         Rosegarden::MidiByte value);
 };
 
 }

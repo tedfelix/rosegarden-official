@@ -78,6 +78,7 @@
         <Action name="fast_forward"/> 
         <Action name="rewind"/> 
         <Action name="record"/>
+        <Action name="recordtoggle"/>
   </Menu>
   <Menu name="Tools">
 	<text>&amp;Tools</text>
@@ -241,6 +242,7 @@
        <Action name="fastforwardtoend" />
        <Action name="stop" />
        <Action name="record" />
+       <Action name="recordtoggle" />
      </enable>
 </State>
 

@@ -69,6 +69,8 @@ public:
 
     QSignalMapper             *m_signalMapper;
 
+    RosegardenComboBox        *m_audioInput; 
+
 signals:
     void audioChannelsChanged(int);
 

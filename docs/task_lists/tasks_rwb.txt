@@ -23,11 +23,8 @@ o Audio
 o Audio busses and routing
    - n jack input routes
 
-o JACK autostart and process management
-
-o automatic Sequencer process management
-
-o Instrument/Device naming
+o JACK autostart and process management  [SCRIPT?]
+o automatic Sequencer process management [SCRIPT?]
 
 o Toggle record mode for punch in/out [HALF COMPLETE]
 
@@ -39,9 +36,7 @@ o Multiple Document Interface - at least internally capable
   of handling multiple documents.   Two phases:
 
   - more complete "swap()" that works at Document level [DONE]
-  - full MDI interface internals
-
-o Track Deleting [almost working]
+  - full MDI interface internals [with GL/ almost DONE]
 
 Fixed for next release
 ----------------------
@@ -61,6 +56,10 @@ o Segment labelling [DONE]
 o File loading blank-out [DONE as part of file loading]
 
 o Track Moving [DONE]
+
+o Track Deleting [DONE - might be bugs outstanding]
+
+o Instrument/Device naming [CC - done]
 
 
 Smaller stuff

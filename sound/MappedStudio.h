@@ -323,19 +323,8 @@ public:
     MappedAudioFader(MappedObject *parent,
                      MappedObjectId id,
                      bool readOnly,
-                     MappedObjectValue channels):
-        MappedObject(parent,
-                     "MappedAudioFader",
-                     AudioFader,
-                     id,
-                     readOnly),
-                     m_level(80), // assume 100 is max for the moment
-                     m_channels(channels),
-                     m_instrumentId(0),
-                     m_bypassed(false),
-                     m_pan(0.0) {;}
-
-    ~MappedAudioFader() {;}
+                     MappedObjectValue channels);
+    ~MappedAudioFader();
 
     virtual MappedObjectPropertyList getPropertyList(
                         const MappedObjectProperty &property);

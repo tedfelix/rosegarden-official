@@ -708,7 +708,7 @@ LilypondExporter::write() {
                     // make this a toggle...
 /*                    if (prevTime == m_composition->getBarStartForTime(absoluteTime)) {
                         str << " | ";
-                    } /*
+                    }
 */
 
                     // end the line for the current measure

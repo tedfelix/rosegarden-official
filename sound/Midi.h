@@ -159,6 +159,14 @@ const MidiByte MIDI_CONTROLLER_ATTACK        = 0x49;
 const MidiByte MIDI_CONTROLLER_FILTER        = 0x4A;
 const MidiByte MIDI_CONTROLLER_REVERB        = 0x5B;
 const MidiByte MIDI_CONTROLLER_CHORUS        = 0x5D;
+
+// Registered and Non-Registered Parameter Controllers
+//
+const MidiByte MIDI_CONTROLLER_NRPN_1        = 0x62;
+const MidiByte MIDI_CONTROLLER_NRPN_2        = 0x63;
+const MidiByte MIDI_CONTROLLER_RPN_1         = 0x64;
+const MidiByte MIDI_CONTROLLER_RPN_2         = 0x65;
+
 const MidiByte MIDI_CONTROLLER_SOUNDS_OFF    = 0x78;
 const MidiByte MIDI_CONTROLLER_RESET         = 0x79; // reset all controllers
 const MidiByte MIDI_CONTROLLER_LOCAL         = 0x7A; // 0 = off, 127 = on
@@ -167,6 +175,7 @@ const MidiByte MIDI_CONTROLLER_ALL_NOTES_OFF = 0x7B;
 
 // MIDI percussion channel
 const MidiByte MIDI_PERCUSSION_CHANNEL     = 9;
+
 
 
 }

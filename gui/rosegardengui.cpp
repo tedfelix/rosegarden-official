@@ -598,8 +598,14 @@ void RosegardenGUIApp::setupActions()
     m_rewindTransport->setGroup("transportcontrols");
 
     icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/transport-record.xpm"));
-    m_recordTransport = new KAction(i18n("&Record"), icon, Key_Space, this,
+    m_recordTransport = new KAction(i18n("P&unch in Record"), icon, Key_Space, this,
                                     SLOT(slotToggleRecord()), actionCollection(),
+                                    "recordtoggle");
+    m_recordTransport->setGroup("transportcontrols");
+
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/transport-record.xpm"));
+    m_recordTransport = new KAction(i18n("&Record"), icon, 0, this,
+                                    SLOT(slotRecord()), actionCollection(),
                                     "record");
     m_recordTransport->setGroup("transportcontrols");
 

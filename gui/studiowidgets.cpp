@@ -22,6 +22,7 @@
 #include <kapp.h>
 #include <klocale.h>
 #include <kstddirs.h>
+#include <kconfig.h>
 
 #include <qlayout.h>
 #include <qvbox.h>
@@ -109,6 +110,9 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
     m_recordButton->setText("R");
     QToolTip::add(m_recordButton,
                   i18n("Arm recording for this audio Instrument"));
+
+    QLabel *inputLabel = new QLabel(i18n("Audio Input"), this);
+    m_audioInput = new RosegardenComboBox(this);
     
     // Sort out the layout accordingly
     //
@@ -120,33 +124,39 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
 
         grid->addMultiCellWidget(pluginVbox, 0, 0, 0, 1, AlignCenter);
 
-        grid->addMultiCellWidget(m_vuMeter, 1, 1, 0, 0, AlignCenter);
-        grid->addMultiCellWidget(m_fader,   1, 1, 1, 1, AlignCenter);
+        grid->addWidget(m_vuMeter,           1, 0, AlignCenter);
+        grid->addWidget(m_fader,             1, 1, AlignCenter);
 
-        grid->addMultiCellWidget(m_stereoButton,  2, 2, 0, 0, AlignCenter);
-        grid->addMultiCellWidget(m_pan,           2, 2, 1, 1, AlignCenter);
+        grid->addWidget(m_stereoButton,      2, 0, AlignCenter);
+        grid->addWidget(m_pan,               2, 1, AlignCenter);
 
-        grid->addMultiCellWidget(m_muteButton, 3, 3, 0, 0, AlignCenter);
-        grid->addMultiCellWidget(m_soloButton, 3, 3, 1, 1, AlignCenter);
+        grid->addWidget(m_muteButton,        3, 0, AlignCenter);
+        grid->addWidget(m_soloButton,        3, 1, AlignCenter);
 
-        grid->addMultiCellWidget(m_recordButton, 4, 4, 0, 0, AlignCenter);
+        grid->addWidget(m_recordButton,      4, 0, AlignCenter);
+
+        //grid->addWidget(inputLabel,          5, 0, AlignCenter);
+        grid->addWidget(m_audioInput,        4, 1, AlignCenter);
     }
     else
     {
         grid = new QGridLayout(this, 10, 5, 6, 10);
 
-        grid->addMultiCellWidget(pluginVbox, 0, 8, 0, 1, AlignCenter);
+        grid->addMultiCellWidget(pluginVbox,   0, 8, 0, 1, AlignCenter);
 
-        grid->addMultiCellWidget(m_vuMeter,  0, 8, 2, 2, AlignCenter);
-        grid->addMultiCellWidget(m_fader,    0, 8, 3, 3, AlignCenter);
+        grid->addMultiCellWidget(m_vuMeter,    0, 8, 2, 2, AlignCenter);
+        grid->addMultiCellWidget(m_fader,      0, 8, 3, 3, AlignCenter);
 
-        grid->addWidget(m_stereoButton,  2, 4, AlignCenter);
-        grid->addWidget(m_pan,           3, 4, AlignCenter);
+        grid->addWidget(m_pan,                 2, 4, AlignCenter);
 
-        grid->addWidget(m_muteButton,    4, 4, AlignCenter);
-        grid->addWidget(m_soloButton,    5, 4, AlignCenter);
+        grid->addWidget(m_muteButton,          3, 4, AlignCenter);
+        grid->addWidget(m_soloButton,          4, 4, AlignCenter);
 
-        grid->addWidget(m_recordButton,  6, 4, AlignCenter);
+        grid->addWidget(m_recordButton,        5, 4, AlignCenter);
+
+        grid->addWidget(inputLabel,            7, 0, AlignCenter);
+        grid->addWidget(m_stereoButton,        7, 1, AlignCenter);
+        grid->addMultiCellWidget(m_audioInput, 7, 7, 2, 4, AlignCenter);
     }
 
 }
@@ -172,6 +182,29 @@ AudioFaderWidget::setAudioChannels(int channels)
                       << ")" << endl;
     }
 
+    // Populate audio inputs accordingly
+    //
+    KConfig* config = kapp->config();
+    config->setGroup("Sequencer Options");
+
+    int jackAudioInputs = config->readNumEntry("jackaudioinputs", 2);
+    QString inputName;
+
+    // clear existing entries
+    m_audioInput->clear();
+
+    for (int i = 0; i < jackAudioInputs; i+= channels)
+    {
+        if (channels == 1)
+            inputName = QString("Input %1").arg(i + 1);
+        else
+        {
+            if ((i + 1) > jackAudioInputs) break;
+            inputName = QString("Input %1-%2").arg(i + 1).arg(i + 2);
+        }
+
+        m_audioInput->insertItem(inputName);
+    }
 }
 
 void

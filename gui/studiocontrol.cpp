@@ -23,6 +23,7 @@
 #include "studiocontrol.h"
 #include "rosedebug.h"
 #include "rosegardendcop.h"
+#include "Midi.h"
 
 namespace Rosegarden
 {
@@ -272,6 +273,95 @@ StudioControl::sendQuarterNoteLength(const Rosegarden::RealTime &length)
     }
 }
 
+
+void
+StudioControl::sendRPN(Rosegarden::InstrumentId instrumentId,
+                       Rosegarden::MidiByte paramMSB,
+                       Rosegarden::MidiByte paramLSB,
+                       Rosegarden::MidiByte controller,
+                       Rosegarden::MidiByte value)
+{
+    Rosegarden::MappedComposition mC;
+    Rosegarden::MappedEvent *mE =
+        new Rosegarden::MappedEvent(instrumentId,
+                                    Rosegarden::MappedEvent::MidiController,
+                                    Rosegarden::MIDI_CONTROLLER_RPN_2,
+                                    paramMSB);
+    mC.insert(mE);
+
+    mE = new Rosegarden::MappedEvent(instrumentId,
+                                     Rosegarden::MappedEvent::MidiController,
+                                     Rosegarden::MIDI_CONTROLLER_RPN_1,
+                                     paramLSB);
+    mC.insert(mE);
+
+    mE = new Rosegarden::MappedEvent(instrumentId,
+                                     Rosegarden::MappedEvent::MidiController,
+                                     6, // data value changed
+                                     value);
+    mC.insert(mE);
+
+
+    // Null the controller using - this is "best practice"
+    //
+    mE =  new Rosegarden::MappedEvent(instrumentId,
+                                    Rosegarden::MappedEvent::MidiController,
+                                    Rosegarden::MIDI_CONTROLLER_RPN_2,
+                                    Rosegarden::MidiMaxValue); // null
+    mC.insert(mE);
+
+    mE = new Rosegarden::MappedEvent(instrumentId,
+                                     Rosegarden::MappedEvent::MidiController,
+                                     Rosegarden::MIDI_CONTROLLER_RPN_1,
+                                     Rosegarden::MidiMaxValue); // null
+    mC.insert(mE);
+
+
+    StudioControl::sendMappedComposition(mC);
+}
+
+void
+StudioControl::sendNRPN(Rosegarden::InstrumentId instrumentId,
+                        Rosegarden::MidiByte paramMSB,
+                        Rosegarden::MidiByte paramLSB,
+                        Rosegarden::MidiByte controller,
+                        Rosegarden::MidiByte value)
+{
+    Rosegarden::MappedComposition mC;
+    Rosegarden::MappedEvent *mE =
+        new Rosegarden::MappedEvent(instrumentId,
+                                    Rosegarden::MappedEvent::MidiController,
+                                    Rosegarden::MIDI_CONTROLLER_NRPN_2,
+                                    paramMSB);
+    mC.insert(mE);
+
+    mE = new Rosegarden::MappedEvent(instrumentId,
+                                     Rosegarden::MappedEvent::MidiController,
+                                     Rosegarden::MIDI_CONTROLLER_NRPN_1,
+                                     paramLSB);
+    mC.insert(mE);
+
+    mE = new Rosegarden::MappedEvent(instrumentId,
+                                     Rosegarden::MappedEvent::MidiController,
+                                     6, // data value changed
+                                     value);
+    mC.insert(mE);
+
+
+    // Null the controller using - this is "best practice"
+    //
+    mE =  new Rosegarden::MappedEvent(instrumentId,
+                                    Rosegarden::MappedEvent::MidiController,
+                                    Rosegarden::MIDI_CONTROLLER_RPN_2,
+                                    Rosegarden::MidiMaxValue); // null
+    mC.insert(mE);
+
+    mE = new Rosegarden::MappedEvent(instrumentId,
+                                     Rosegarden::MappedEvent::MidiController,
+                                     Rosegarden::MIDI_CONTROLLER_RPN_1,
+                                     Rosegarden::MidiMaxValue); // null
+    mC.insert(mE);
+}
 
 
 };
