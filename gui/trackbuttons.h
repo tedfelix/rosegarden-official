@@ -74,6 +74,11 @@ public:
     //
     list<int> getHighLightedTracks();
 
+signals:
+    // to emit what Track has been selected
+    //
+    void trackSelected(int);
+
 public slots:
 
     // We use these to set the Track and Composition

@@ -84,7 +84,7 @@ RosegardenGUIApp::RosegardenGUIApp()
 	
     readOptions();
 
-    actionCollection()->action("draw")->activate();
+    actionCollection()->action("select")->activate();
 
 //     ///////////////////////////////////////////////////////////////////
 //     // disable menu and toolbar items at startup
@@ -163,7 +163,19 @@ void RosegardenGUIApp::setupActions()
 
     KRadioAction *action = 0;
     
+    // Wild and ineffective cheat to get the "pointer" icon working
+    // 
+    KIconLoader iconLoad;
+    iconLoad.addAppDir(QString("kiconedit"));
+
     // TODO : add some shortcuts here
+    action = new KRadioAction(i18n("&Select"), "pointer",
+                              0,
+                              this, SLOT(pointerSelect()),
+                              actionCollection(), "select");
+
+    action->setExclusiveGroup("segmenttools");
+                             
     action = new KRadioAction(i18n("&Erase"), "eraser",
                               0,
                               this, SLOT(eraseSelected()),
@@ -609,7 +621,7 @@ void RosegardenGUIApp::fileNew()
 
         QString caption=kapp->caption();	
         setCaption(caption+": "+m_doc->getTitle());
-        actionCollection()->action("draw")->activate();
+        actionCollection()->action("select")->activate();
     }
 }
 
@@ -844,6 +856,11 @@ void RosegardenGUIApp::statusHelpMsg(const QString &text)
     ///////////////////////////////////////////////////////////////////
     // change status message of whole statusbar temporary (text, msec)
     statusBar()->message(text, 2000);
+}
+
+void RosegardenGUIApp::pointerSelect()
+{
+    m_view->pointerSelect();
 }
 
 void RosegardenGUIApp::eraseSelected()

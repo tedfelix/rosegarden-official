@@ -119,8 +119,8 @@ SegmentCanvas::SegmentCanvas(int gridH, int gridV,
                            QCanvas& c, QWidget* parent,
                            const char* name, WFlags f) :
     QCanvasView(&c,parent,name,f),
-    m_toolType(Pencil),
-    m_tool(new SegmentPencil(this)),
+    m_toolType(Selector),
+    m_tool(0),
     m_grid(gridH, gridV),
     m_brush(RosegardenGUIColours::SegmentBlock),
     m_pen(RosegardenGUIColours::SegmentBorder),
@@ -131,10 +131,10 @@ SegmentCanvas::SegmentCanvas(int gridH, int gridV,
     SegmentItem::setWidthToDurationRatio(m_grid.hstep());
     SegmentItem::setItemHeight(m_grid.vstep());
 
-    m_editMenu->insertItem(i18n("Edit as Score"),
+    m_editMenu->insertItem(i18n("Edit as Notation"),
                            this, SLOT(onEditNotation()));
 
-    m_editMenu->insertItem(i18n("Edit as Piano Roll"),
+    m_editMenu->insertItem(i18n("Edit as Matrix"),
                            this, SLOT(onEditMatrix()));
 }
 
@@ -151,9 +151,11 @@ SegmentCanvas::update()
 void
 SegmentCanvas::setTool(ToolType t)
 {
-    if (t == m_toolType) return;
+    if (t == m_toolType && m_tool != 0) return;
 
-    delete m_tool;
+    if (m_tool)
+      delete m_tool;
+
     m_tool = 0;
     m_toolType = t;
 
@@ -169,6 +171,9 @@ SegmentCanvas::setTool(ToolType t)
         break;
     case Resizer:
         m_tool = new SegmentResizer(this);
+        break;
+    case Selector:
+        m_tool = new SegmentSelector(this);
         break;
     default:
         KMessageBox::error(0, QString("SegmentCanvas::setTool() : unknown tool id %1").arg(t));
@@ -535,3 +540,32 @@ bool SegmentResizer::cursorIsCloseEnoughToEdge(SegmentItem* p, QMouseEvent* e)
 {
     return ( abs(p->rect().x() + p->rect().width() - e->x()) < int(m_edgeThreshold));
 }
+
+SegmentSelector::SegmentSelector(SegmentCanvas *c)
+    : SegmentTool(c)
+{
+    kdDebug(KDEBUG_AREA) << "SegmentSelector()\n";
+}
+
+void
+SegmentSelector::handleMouseButtonPress(QMouseEvent*)
+{
+    kdDebug(KDEBUG_AREA) << "SegmentSelector::handleMouseButtonPress()\n";
+}
+
+
+void
+SegmentSelector::handleMouseButtonRelease(QMouseEvent*)
+{
+    kdDebug(KDEBUG_AREA) << "SegmentSelector::handleMouseButtonRelease()\n";
+}
+
+
+void
+SegmentSelector::handleMouseMove(QMouseEvent*)
+{
+    kdDebug(KDEBUG_AREA) << "SegmentSelector::handleMouseMove()\n";
+}
+
+
+

@@ -120,7 +120,7 @@ class SegmentCanvas : public QCanvasView
 
 public:
     /// Available tools
-    enum ToolType { Pencil, Eraser, Mover, Resizer };
+    enum ToolType { Pencil, Eraser, Mover, Resizer, Selector };
     
     SegmentCanvas(int gridH, int gridV,
                  QCanvas&,
@@ -346,6 +346,20 @@ protected:
     //--------------- Data members ---------------------------------
 
     unsigned int m_edgeThreshold;
+};
+
+class SegmentSelector : public SegmentTool
+{
+    Q_OBJECT
+public:
+    SegmentSelector(SegmentCanvas*);
+
+    virtual void handleMouseButtonPress(QMouseEvent*);
+    virtual void handleMouseButtonRelease(QMouseEvent*);
+    virtual void handleMouseMove(QMouseEvent*);
+
+signals:
+
 };
 
 #endif

@@ -87,6 +87,11 @@ public:
     // RosegardenGUIApp
 
     /**
+     * segment selector mode
+     */
+    void pointerSelect();
+    
+    /**
      * segment eraser tool is selected
      */
     void eraseSelected();
@@ -129,6 +134,11 @@ public slots:
      * @see TrackEditor#scrollHorizTo(int)
      */
     void scrollTrackEditorHoriz(int hpos);
+
+    // Called by signal from Track selection routine to highlight
+    // all available Segments on a Track
+    //
+    void selectTrackSegments(int);
 
 signals:
     void setTool(SegmentCanvas::ToolType);

@@ -318,6 +318,10 @@ TrackButtons::labelSelected(int id)
         }
     }
 
+    // Propagate this message upstairs
+    //
+    emit(trackSelected(id));
+
 }
 
 // Return a list of highlighted tracks by querying the TrackLabels

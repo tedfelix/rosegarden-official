@@ -363,6 +363,11 @@ public slots:
     void statusHelpMsg(const QString &text);
 
     /**
+     * segment select tool
+     */
+    void pointerSelect();
+
+    /**
      * segment eraser tool is selected
      */
     void eraseSelected();

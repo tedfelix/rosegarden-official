@@ -78,6 +78,9 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
                                                tracksEditor->getHHeader());
     buttonsView->addChild(trackButtons);
 
+    connect((QObject *)trackButtons, SIGNAL(trackSelected(int)),
+                                     SLOT(selectTrackSegments(int)));
+
     // turn off the scrollbars on the track buttons
     //
     buttonsView->setHScrollBarMode(QScrollView::AlwaysOff);
@@ -158,6 +161,12 @@ void RosegardenGUIView::print(QPrinter *pPrinter)
 
     printpainter.end();
 }
+
+void RosegardenGUIView::pointerSelect()
+{
+    emit setTool(SegmentCanvas::Selector);
+}
+
 
 void RosegardenGUIView::drawSelected()
 {
@@ -249,4 +258,12 @@ void RosegardenGUIView::setPointerPosition(const int &position)
 //    kdDebug(KDEBUG_AREA) << "RosegardenGUIView::setPointerPosition" << endl;
 
     emit setPositionPointer(position);
+}
+
+// Highlight all the Segments on a Track because the Track has been selected
+//
+//
+void RosegardenGUIView::selectTrackSegments(int trackId)
+{
+    std::cout << "HIGHLIGHT TRACK SEGMENTS on TRACK " << trackId << endl;
 }
