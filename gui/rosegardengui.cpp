@@ -534,7 +534,7 @@ void RosegardenGUIApp::initView()
     m_view->selectTrack(comp.getSelectedTrack());
 
     // set zoom slider to default value
-    m_zoomSlider->setSize(1.0);
+    m_zoomSlider->setToDefault();
 
     // We only check for the SequenceManager to make sure
     // we're not on the first pass though - we don't want

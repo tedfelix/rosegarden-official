@@ -45,12 +45,13 @@ public:
      * work well for some internal reason but that should appear
      * to the user as a nice continuous range.
      */
-    ZoomSlider(const std::vector<T> &sizes, T initialValue,
+    ZoomSlider(const std::vector<T> &sizes, T defaultValue,
 	       Orientation, QWidget * parent, const char * name=0);
 
     virtual ~ZoomSlider();
     
-    void reinitialise(const std::vector<T> &sizes, T initialValue);
+    void reinitialise(const std::vector<T> &sizes, T defaultValue);
+    void setToDefault(); // restore the initial value
 
     void setSize(T size);
 
@@ -59,6 +60,7 @@ public:
 protected:
     static int getIndex(const std::vector<T> &, T size);
     std::vector<T> m_sizes;
+    T m_defaultValue;
 };
 
 
@@ -68,7 +70,8 @@ ZoomSlider<T>::ZoomSlider(const std::vector<T> &sizes,
 			  QWidget *parent, const char *name) :
     QSlider(0, sizes.size()-1, 1,
             getIndex(sizes, initialSize), o, parent, name),
-    m_sizes(sizes)
+    m_sizes(sizes),
+    m_defaultValue(initialSize)
 {
     setTracking(false);
     setFixedWidth(150);
@@ -100,6 +103,13 @@ ZoomSlider<T>::reinitialise(const std::vector<T> &sizes, T size)
     setValue(getIndex(sizes, size));
     setLineStep(1);
     setTickmarks(Below);
+}
+
+template<class T>
+void
+ZoomSlider<T>::setToDefault()
+{
+    setValue(getIndex(sizes, m_defaultValue));
 }
 
 template <class T>
