@@ -1864,12 +1864,21 @@ void RosegardenGUIApp::slotImportRG21()
 
 void RosegardenGUIApp::importRG21File(const QString &file)
 {
-    RosegardenProgressDialog *progressDlg =
-            new RosegardenProgressDialog(i18n("Importing Rosegarden 2.1 file..."),
+    RosegardenProgressDialog progressDlg(i18n("Importing Rosegarden 2.1 file..."),
                                          100,
                                          this);
 
     RG21Loader rg21Loader(file, &m_doc->getStudio());
+
+    // TODO: makde RG21Loader to actually emit these signals
+    //
+    connect(&rg21Loader, SIGNAL(setProgress(int)),
+            progressDlg.progressBar(), SLOT(setValue(int)));
+
+    connect(&rg21Loader, SIGNAL(incrementProgress(int)),
+            progressDlg.progressBar(), SLOT(advance(int)));
+
+    rg21Loader.parse();
 
     m_doc->closeDocument();
     m_doc->newDocument();
@@ -1878,7 +1887,6 @@ void RosegardenGUIApp::importRG21File(const QString &file)
     m_doc->getComposition().swap(*tmpComp);
 
     delete tmpComp;
-    delete progressDlg;
 
     // Set modification flag
     //
@@ -2125,8 +2133,7 @@ void RosegardenGUIApp::slotExportCsound()
 
 void RosegardenGUIApp::exportCsoundFile(const QString &file)
 {
-    RosegardenProgressDialog *progressDlg =
-            new RosegardenProgressDialog(i18n("Exporting Csound file..."),
+    RosegardenProgressDialog progressDlg(i18n("Exporting Csound file..."),
                                          100,
                                          this);
 
@@ -2134,8 +2141,6 @@ void RosegardenGUIApp::exportCsoundFile(const QString &file)
     if (!e.write()) {
 	KMessageBox::sorry(this, i18n("The Csound file has not been exported."));
     }
-
-    delete progressDlg;
 }
 
 void RosegardenGUIApp::slotExportLilypond()
@@ -2150,8 +2155,7 @@ void RosegardenGUIApp::slotExportLilypond()
 
 void RosegardenGUIApp::exportLilypondFile(const QString &file)
 {
-    RosegardenProgressDialog *progressDlg =
-            new RosegardenProgressDialog(i18n("Exporting Lilypond file..."),
+    RosegardenProgressDialog progressDlg(i18n("Exporting Lilypond file..."),
                                          100,
                                          this);
 
@@ -2159,8 +2163,6 @@ void RosegardenGUIApp::exportLilypondFile(const QString &file)
     if (!e.write()) {
 	KMessageBox::sorry(this, i18n("The Lilypond file has not been exported."));
     }
-
-    delete progressDlg;
 }
 
 void RosegardenGUIApp::slotExportMusicXml()
@@ -2175,8 +2177,7 @@ void RosegardenGUIApp::slotExportMusicXml()
 
 void RosegardenGUIApp::exportMusicXmlFile(const QString &file)
 {
-    RosegardenProgressDialog *progressDlg =
-            new RosegardenProgressDialog(i18n("Exporting MusicXml file..."),
+    RosegardenProgressDialog progressDlg(i18n("Exporting MusicXml file..."),
                                          100,
                                          this);
 
@@ -2184,8 +2185,6 @@ void RosegardenGUIApp::exportMusicXmlFile(const QString &file)
     if (!e.write()) {
 	KMessageBox::sorry(this, i18n("The MusicXml file has not been exported."));
     }
-
-    delete progressDlg;
 }
 
 // Uncheck the transport window check box
