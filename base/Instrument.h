@@ -201,8 +201,8 @@ public:
     int getMappedId() const { return m_mappedId; }
     void setMappedId(int id) { m_mappedId = id; }
 
-    int getSubOrder() const { return m_subOrder; }
-    void setSubOrder(int subOrder) { m_subOrder = subOrder; }
+    int getSubOrdering() const { return m_subOrdering; }
+    void setSubOrdering(int subOrdering) { m_subOrdering = subOrdering; }
 
 private:
     InstrumentId    m_id;
@@ -250,7 +250,7 @@ private:
     // Sub ordering (i.e. ports in ALSA) allows us to group
     // instruments sub-Devices.
     //
-    int              m_subOrder;
+    int              m_subOrdering;
 
 };
 

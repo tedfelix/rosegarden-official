@@ -1009,10 +1009,17 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget* parent)
     gridLayout->addRowSpacing(0, 8);
     gridLayout->addRowSpacing(1, 30);
 
-    // Ensure a reasonable amount of space in the program dropdown even
+    // Ensure a reasonable amount of space in the program dropdowns even
     // if no instrument initially selected
+    QFontMetrics metrics(m_programValue->font());
+    int width = metrics.width("Acoustic Grand Piano 123");
+    m_bankValue->setMinimumWidth(width);
+    m_programValue->setMinimumWidth(width);
+
+/*!!!
     m_bankValue->setMinimumWidth(100);
     m_programValue->setMinimumWidth(100);
+*/
 
     // MIDI widgets
     //

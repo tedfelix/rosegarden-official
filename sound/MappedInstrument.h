@@ -52,7 +52,7 @@ public:
     MappedInstrument(Instrument::InstrumentType type,
                      MidiByte channel,
                      InstrumentId id,
-                     MappedInstrumentSubOrdering subOrder,
+                     MappedInstrumentSubOrdering subOrdering,
                      const std::string &name,
                      DeviceId device);
 
@@ -81,8 +81,8 @@ public:
     void setDevice(DeviceId device) { m_device = device; }
     DeviceId getDevice() const { return m_device; }
 
-    void setSubOrder(MappedInstrumentSubOrdering order) { m_subOrder = order; }
-    MappedInstrumentSubOrdering getSubOrder() const { return m_subOrder; }
+    void setSubOrdering(MappedInstrumentSubOrdering order) { m_subOrdering = order; }
+    MappedInstrumentSubOrdering getSubOrdering() const { return m_subOrdering; }
 
 private:
 
@@ -92,7 +92,7 @@ private:
     std::string                 m_name;
     DeviceId                    m_device;
 
-    MappedInstrumentSubOrdering m_subOrder;
+    MappedInstrumentSubOrdering m_subOrdering;
 
 };
 

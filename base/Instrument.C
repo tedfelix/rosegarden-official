@@ -59,7 +59,7 @@ Instrument::Instrument(InstrumentId id, InstrumentType it,
     m_sendPan(false),
     m_sendVelocity(false),
     m_mappedId(0),
-    m_subOrder(0)
+    m_subOrdering(0)
 
 {
     if (it == Audio)
@@ -100,7 +100,7 @@ Instrument::Instrument(InstrumentId id,
     m_sendPan(false),
     m_sendVelocity(false),
     m_mappedId(0),
-    m_subOrder(0)
+    m_subOrdering(0)
 
 {
     // Add a number of plugin place holders (unassigned)
@@ -139,7 +139,7 @@ Instrument::Instrument(const Instrument &ins):
     m_sendPan(ins.sendsPan()),
     m_sendVelocity(ins.sendsVelocity()),
     m_mappedId(ins.getMappedId()),
-    m_subOrder(ins.getSubOrder())
+    m_subOrdering(ins.getSubOrdering())
 
 {
 }
@@ -169,7 +169,7 @@ Instrument::operator=(const Instrument &ins)
     m_sendPan = ins.sendsPan();
     m_sendVelocity = ins.sendsVelocity();
     m_mappedId = ins.getMappedId();
-    m_subOrder = ins.getSubOrder();
+    m_subOrdering = ins.getSubOrdering();
 
     return *this;
 }

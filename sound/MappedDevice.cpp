@@ -218,7 +218,7 @@ operator<<(QDataStream &dS, MappedDevice *mD)
         dS << (unsigned int)(*it)->getType();
         dS << (unsigned int)(*it)->getChannel();
         dS << (unsigned int)(*it)->getId();
-        dS << (int)(*it)->getSubOrder();
+        dS << (int)(*it)->getSubOrdering();
         dS << QString((*it)->getName().c_str());
         dS << (unsigned int)(*it)->getDevice();
     }
@@ -243,7 +243,7 @@ operator<<(QDataStream &dS, const MappedDevice &mD)
         dS << (unsigned int)(*it)->getType();
         dS << (unsigned int)(*it)->getChannel();
         dS << (unsigned int)(*it)->getId();
-        dS << (int)(*it)->getSubOrder();
+        dS << (int)(*it)->getSubOrdering();
         dS << QString((*it)->getName().c_str());
         dS << (unsigned int)(*it)->getDevice();
     }
