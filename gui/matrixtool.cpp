@@ -454,7 +454,7 @@ void MatrixSelector::handleLeftButtonPress(Rosegarden::timeT time,
     //
     delete m_selectionToMerge; // you can safely delete 0, you know?
     const Rosegarden::EventSelection *selectionToMerge = 0;
-    if (e->state() && m_mParentView->isShiftDown())
+    if (e->state() & Qt::ShiftButton)
         selectionToMerge = m_mParentView->getCurrentSelection();
 
     m_selectionToMerge =
@@ -667,12 +667,17 @@ void MatrixSelector::setViewCurrentSelection()
     EventSelection* selection = getSelection();
 
     if (m_selectionToMerge && selection &&
-        m_selectionToMerge->getSegment() == selection->getSegment())
-    {
-        selection->addFromSelection(m_selectionToMerge);
-    }
+        m_selectionToMerge->getSegment() == selection->getSegment()) {
 
-    m_mParentView->setCurrentSelection(selection, true, true);
+        selection->addFromSelection(m_selectionToMerge);
+        m_mParentView->setCurrentSelection(selection, true, true);
+
+    } else if (!m_selectionToMerge) {
+
+        m_mParentView->setCurrentSelection(selection, true, true);
+
+    }
+    
 }
 
 EventSelection* MatrixSelector::getSelection()
@@ -755,7 +760,7 @@ void MatrixMover::handleEventRemoved(Rosegarden::Event *event)
 void MatrixMover::handleLeftButtonPress(Rosegarden::timeT,
                                         int,
                                         int staffNo,
-                                        QMouseEvent*,
+                                        QMouseEvent* e,
                                         Rosegarden::ViewElement* el)
 {
     MATRIX_DEBUG << "MatrixMover::handleLeftButtonPress() : el = "
@@ -783,7 +788,7 @@ void MatrixMover::handleLeftButtonPress(Rosegarden::timeT,
         {
             EventSelection *newSelection;
            
-            if (m_mParentView->isShiftDown() ||
+            if ((e->state() & Qt::ShiftButton) ||
                 selection->contains(m_currentElement->event()))
                 newSelection = new EventSelection(*selection);
             else
@@ -1035,7 +1040,7 @@ void MatrixResizer::handleEventRemoved(Rosegarden::Event *event)
 void MatrixResizer::handleLeftButtonPress(Rosegarden::timeT,
                                           int,
                                           int staffNo,
-                                          QMouseEvent*,
+                                          QMouseEvent* e,
                                           Rosegarden::ViewElement* el)
 {
     MATRIX_DEBUG << "MatrixResizer::handleLeftButtonPress() : el = "
@@ -1056,7 +1061,7 @@ void MatrixResizer::handleLeftButtonPress(Rosegarden::timeT,
         {
             EventSelection *newSelection;
            
-            if (m_mParentView->isShiftDown() ||
+            if ((e->state() & Qt::ShiftButton) ||
                 selection->contains(m_currentElement->event()))
                 newSelection = new EventSelection(*selection);
             else
