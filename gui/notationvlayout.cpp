@@ -33,7 +33,7 @@ NotationVLayout::layout(NotationElement *el)
         // all rest pixmaps are sized so that they will be correctly
         // displayed when placed at that pitch height
 
-    } else {
+    } else if (el->isNote()) {
 
         try {
             int pitch = el->event()->get<Int>("pitch");
@@ -55,5 +55,8 @@ NotationVLayout::layout(NotationElement *el)
             el->setY(0);
         }
         
+    } else {
+        el->setY(0);
     }
+        
 }
