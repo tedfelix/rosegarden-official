@@ -654,10 +654,8 @@ NotationDisplayPitch::getPerformancePitchFromRG21Pitch(const Clef &clef,
 
 
 /**
- * Derived from RG2.1's MidiPitchToVoice in editor/src/Methods.c,
- * InitialiseAccidentalTable in Format.c, and PutItemListInClef in
- * MidiIn.c.  Converts performance pitch to height on staff + correct
- * accidentals for current key.
+ * Converts performance pitch to height on staff + correct accidentals
+ * for current key.
  *
  * This method takes a Clef, Key, Accidental and raw performance pitch, then
  * applies this information to return a height on staff value and an
@@ -665,6 +663,12 @@ NotationDisplayPitch::getPerformancePitchFromRG21Pitch(const Clef &clef,
  * need to use the Key and user-specified Accidental to make an accurate
  * decision just where to put it on the staff, and what accidental it should
  * display for (or against) the key.
+ *
+ * This function originally written by Chris Cannam for Rosegarden 2.1
+ * Entirely rewritten by Chris Cannam for Rosegarden 4
+ * Entirely rewritten by Hans Kieserman
+ * Entirely rewritten by Michael McIntyre
+ * This version by Michael McIntyre <dmmcintyr@users.sourceforge.net>
  */
 void
 NotationDisplayPitch::rawPitchToDisplayPitch(int pitch,

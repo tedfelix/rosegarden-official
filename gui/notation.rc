@@ -311,6 +311,7 @@
   <Action name="dotted_8th" />
   <Action name="dotted_16th" />
   <Action name="dotted_32nd" />
+  <Separator/>
 
   <Action name="chord_mode"/>
   <Action name="triplet_mode" />
@@ -334,6 +335,7 @@
   <Action name="dotted_8th_rest" />
   <Action name="dotted_16th_rest" />
   <Action name="dotted_32nd_rest" />
+  <Separator/>
 
 </ToolBar>
 

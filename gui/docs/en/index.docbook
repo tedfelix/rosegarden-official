@@ -690,7 +690,7 @@
       <!-- Quantization, smoothing, and display of quantized notes -->
 
       <sect2 id="nv-quantization">
-	<title>Quantization and Smoothing</title>
+	<title>Notation from Performance Data</title>
 
 	<para>
 	  &rosegarden; is a multi-purpose program: it is a notation
@@ -701,22 +701,28 @@
         </para>
 
         <para>
-          This means that &rosegarden; often has to do a lot of rounding
-          of the basic note times and durations when attempting to
-          make meaningful notes to show in the notation editor.  This
-          is a type of quantization, but we refer to this quantization
-          that's carried out solely for the purposes of notation
-          display as <quote>smoothing</quote>.  Smoothing doesn't affect the notes
-          that play, or that you edit in other views such as the
-          matrix.  The smoothing algorithm is also rather specialised
-          (and some might say relatively ineffectual) because it tries
-          to avoid doing any real damage: for example, a note that is
-          apparently a little <quote>too short</quote>, followed by a short rest,
-          will often be rounded up to fill the rest, but the same
-          note followed by a short note instead will be left as it is.
+          This means that it's often desirable for &rosegarden; to do
+          a lot of tidying of the basic note times and durations when
+          attempting to make meaningful notes to show in the notation
+          editor.  This is a kind of quantization, but a kind that
+          requires a surprising amount of guesswork to do well.
+          &rosegarden; includes a quantizer designed to do a slightly
+          better job of this than the plain grid quantizer.
+	</para>
+
+	<para>Applying
+          quantization strictly for notation is (rather obviously)
+          referred to as <quote>notation quantization</quote>: it only
+          applies to the notes you see and edit in notation, and
+          doesn't affect the notes that play, or that you edit in
+          other views such as the matrix.  This quantization is
+          automatically applied to music imported or recorded from
+          MIDI, although not all of its possible capabilities are
+          enabled by default.
 	</para>
 
 	<para>
+	  <!-- continue editing from here (not currently correct hereon) -->
 	  You can see which notes have required smoothing (either of
 	  start time or duration) because they are shown in green on
 	  the score, unless you have switched this behaviour off in

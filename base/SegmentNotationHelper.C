@@ -76,7 +76,11 @@ SegmentNotationHelper::getNotationAbsoluteTime(Event *e)
 	return e->getAbsoluteTime(); // Quantization fails for tuplets
     } else {
 */
-	return notationQuantizer().getQuantizedAbsoluteTime(e);
+
+
+//!!!	return notationQuantizer().getQuantizedAbsoluteTime(e);
+    return e->getNotationAbsoluteTime(); //!!! woo
+
 //!!!    }
 }	
 
@@ -90,7 +94,8 @@ SegmentNotationHelper::getNotationDuration(Event *e, bool tupletCompensation)
 	if (tupletCompensation) {
 	    return e->get<Int>(TUPLET_NOMINAL_DURATION);
 	} else {
-	    return notationQuantizer().getQuantizedDuration(e);
+//!!!	    return notationQuantizer().getQuantizedDuration(e);
+	    return e->getNotationDuration(); //!!! woo
 	}
 //	return quantizer.quantizeDuration
 //	    (e->get<Int>(TUPLET_NOMINAL_DURATION));
@@ -108,7 +113,8 @@ SegmentNotationHelper::getNotationDuration(Event *e, bool tupletCompensation)
 	int ucount = e->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT);
 	assert(tcount != 0);
 //!!!???
-	timeT duration = notationQuantizer().getQuantizedDuration(e);
+//!!!   timeT duration = notationQuantizer().getQuantizedDuration(e);
+	timeT duration = e->getNotationDuration(); //!!! woo
 
 //	timeT nominalDuration = (e->getDuration() / tcount) * ucount;
 	timeT nominalDuration = (duration / tcount) * ucount;
@@ -122,7 +128,8 @@ SegmentNotationHelper::getNotationDuration(Event *e, bool tupletCompensation)
 	}
 
     } else {
-	return notationQuantizer().getQuantizedDuration(e);
+//!!!	return notationQuantizer().getQuantizedDuration(e);
+	return e->getNotationDuration(); //!!! woo
     }
 }
 
@@ -469,6 +476,11 @@ SegmentNotationHelper::splitIntoTie(iterator &from, iterator to,
             continue;
         }
 
+	std::pair<Event *, Event *> split =
+	    splitPreservingPerformanceTimes(*i, baseDuration);
+
+	/*!!!
+
 	// set the initial event's duration to base
 	Event *eva = new Event(*(*i), (*i)->getAbsoluteTime(),
 				   baseDuration);
@@ -476,6 +488,10 @@ SegmentNotationHelper::splitIntoTie(iterator &from, iterator to,
 	// Add 2nd event
 	Event* evb = new Event(*(*i), (*i)->getAbsoluteTime() + baseDuration,
 			       eventDuration - baseDuration);
+	*/
+
+	Event *eva = split.first;
+	Event *evb = split.second;
 
 	// we only want to tie Note events:
 
@@ -551,8 +567,9 @@ SegmentNotationHelper::isViable(timeT duration, int dots)
 */
     
     //!!! what to do about this?
-    viable =
-	(Note::getNearestNote(duration, dots).getDuration() == duration);
+    timeT nearestDuration = Note::getNearestNote(duration, dots).getDuration();
+    std::cerr << "SegmentNotationHelper::isViable: nearestDuration is " << nearestDuration << ", duration is " << duration << std::endl;
+    viable = (nearestDuration == duration);
 
     return viable;
 }
@@ -772,8 +789,6 @@ SegmentNotationHelper::insertSomething(iterator i, int duration,
     // not reasonable to split.  We can't always give users the Right
     // Thing here, so to hell with them.
 
-    //!!! use isBeforeEndMarker?
-
     while (i != end() && (*i)->getDuration() == 0) ++i;
 
     if (i == end()) {
@@ -785,17 +800,12 @@ SegmentNotationHelper::insertSomething(iterator i, int duration,
     // duration of the new note.
     i = collapseRestsForInsert(i, duration);
 
-//!!!    timeT existingDuration = (*i)->getDuration();
     timeT existingDuration = getNotationDuration(*i);
 
     cerr << "SegmentNotationHelper::insertSomething: asked to insert duration " << duration
-	 << " over this event:" << endl;
+	 << " over event of duration " << existingDuration << ":" << endl;
     (*i)->dump(cerr);
 
-/*!!!
-    if (basicQuantizer().quantizeDuration(duration) ==
-	basicQuantizer().quantizeDuration(existingDuration)) {
-*/
     if (duration == existingDuration) {
 
         // 1. If the new note or rest is the same length as an
@@ -813,14 +823,13 @@ SegmentNotationHelper::insertSomething(iterator i, int duration,
 
 	if ((*i)->isa(Note::EventType)) {
 
-	    if (!isSplitValid(/*!!!getNotationDuration(*i)*/existingDuration,
-			      duration)) {
+	    if (!isSplitValid(duration, existingDuration - duration)) {
 
 		cerr << "Bad split, coercing new note" << endl;
 
 		// not reasonable to split existing note, so force new one
 		// to same duration instead
-		duration = (*i)->getDuration();
+		duration = (*i)->getNotationDuration();
 
 	    } else {
 		cerr << "Good split, splitting old event" << endl;
@@ -877,8 +886,12 @@ SegmentNotationHelper::insertSomething(iterator i, int duration,
 
 	    if (modelEvent->isa(Note::EventType))
 		(*i)->set<Bool>(TIED_FORWARD, true);
-
-            i = segment().findTime((*i)->getAbsoluteTime() + existingDuration);
+	    
+	    timeT insertedTime = (*i)->getAbsoluteTime();
+	    while (i != end() &&
+		   (getNotationAbsoluteTime(*i) <
+		    (insertedTime + existingDuration))) ++i;
+//!!!            i = segment().findTime((*i)->getAbsoluteTime() + existingDuration);
 
 	    return insertSomething
 		(i, duration - existingDuration, modelEvent, true);
@@ -897,8 +910,6 @@ SegmentNotationHelper::insertSingleSomething(iterator i, int duration,
     timeT time;
     bool eraseI = false;
     timeT effectiveDuration(duration);
-
-    //!!! use isBeforeEndMarker?
 
     if (i == end()) {
 	time = segment().getEndTime();
@@ -1813,7 +1824,7 @@ SegmentNotationHelper::deCounterpoint(timeT startTime, timeT endTime)
     // duration, we should split the longer of n and m at the shorter
     // one's duration.
 
-    Segment::iterator to = segment().findTime(endTime);
+//!!!    Segment::iterator to = segment().findTime(endTime);
 
     for (Segment::iterator i = segment().findTime(startTime);
 	 segment().isBeforeEndMarker(i); ) {

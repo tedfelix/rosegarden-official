@@ -436,6 +436,8 @@ GenericChord<Element, Container>::sample(const Iterator &i)
     // the same group, or have stems pointing in different directions
     // by design, count as separate chords
 
+    //!!! should include "... or have different notation durations"?
+
     if (m_baseIterator != getContainer().end()) {
 
 	Event *e0 = getAsEvent(m_baseIterator);

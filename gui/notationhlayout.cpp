@@ -1626,12 +1626,16 @@ NotationHLayout::positionChord(StaffType &staff,
 		if ((*otherItr)->getViewAbsoluteTime() +
 		    (*otherItr)->getViewDuration() ==
 		    note->getViewAbsoluteTime()) {
+
+		    NOTATION_DEBUG << "Second note in tie at " << note->getViewAbsoluteTime() << ": found first note, it matches" << endl;
 		    
 		    (*otherItr)->event()->setMaybe<Int>
 			(m_properties.TIE_LENGTH,
 			 (int)(baseX - (*otherItr)->getLayoutX()));
 		    
 		} else {
+		    NOTATION_DEBUG << "Second note in tie at " << note->getViewAbsoluteTime() << ": found first note but it ends at " << ((*otherItr)->getViewAbsoluteTime() + (*otherItr)->getViewDuration()) << endl;
+		    
 		    tieMap.erase(pitch);
 		}
 	    }		

@@ -62,6 +62,8 @@ NotationStrings::addDots(int dots, QString s, bool hyphenate)
     }
     if (hyphenate) {
         dotStr.append("-");
+    } else {
+	dotStr.append(" ");
     }
     dotStr.append(s);
     return dotStr;
