@@ -192,6 +192,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
         stateChanged("got_midi_devices");
 
     // All toolbars should be created before this is called
+    m_config->setGroup("General Options");
     setAutoSaveSettings("MainView", true);
 
     emit startupStatusMessage(i18n("Starting..."));
@@ -1120,10 +1121,6 @@ void RosegardenGUIApp::readOptions()
     m_viewPreviews->setChecked(opt);
     slotTogglePreviews();
 
-    m_config->setGroup("TipOfDay");
-    opt = m_config->readBoolEntry("RunOnStart", true);
-    m_viewTipsOnStartup->setChecked(opt);
-
     // initialise the recent file list
     //
     m_fileRecent->loadEntries(m_config);
@@ -1133,6 +1130,10 @@ void RosegardenGUIApp::readOptions()
     if(!size.isEmpty()) {
         resize(size);
     }
+
+    m_config->setGroup("TipOfDay");
+    opt = m_config->readBoolEntry("RunOnStart", true);
+    m_viewTipsOnStartup->setChecked(opt);
 }
 
 void RosegardenGUIApp::saveProperties(KConfig *cfg)
