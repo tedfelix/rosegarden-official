@@ -23,6 +23,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+
 #include "Midi.h"
 #include "MidiFile.h"
 #include "Segment.h"
@@ -34,6 +35,7 @@
 #include "AnalysisTypes.h"
 #include "Track.h"
 #include "Instrument.h"
+#include "Studio.h"
 
 #if (__GNUC__ < 3)
 #include <strstream>
@@ -55,21 +57,25 @@ using std::endl;
 using std::ends;
 using std::ios;
 
-MidiFile::MidiFile():SoundFile(std::string("unnamed.mid")),
+MidiFile::MidiFile(Rosegarden::Studio *studio):
+                     SoundFile(std::string("unnamed.mid")),
                      m_timingDivision(0),
                      m_format(MIDI_FILE_NOT_LOADED),
                      m_numberOfTracks(0),
                      m_trackByteCount(0),
-                     m_decrementCount(false)
+                     m_decrementCount(false),
+                     m_studio(studio)
 {
 }
 
-MidiFile::MidiFile(const std::string &fn):SoundFile(fn),
-                                   m_timingDivision(0),
-                                   m_format(MIDI_FILE_NOT_LOADED),
-                                   m_numberOfTracks(0),
-                                   m_trackByteCount(0),
-                                   m_decrementCount(false)
+MidiFile::MidiFile(const std::string &fn, Rosegarden::Studio *studio):
+                     SoundFile(fn),
+                     m_timingDivision(0),
+                     m_format(MIDI_FILE_NOT_LOADED),
+                     m_numberOfTracks(0),
+                     m_trackByteCount(0),
+                     m_decrementCount(false),
+                     m_studio(studio)
 {
 }
 
@@ -735,6 +741,21 @@ MidiFile::convertToRosegarden()
                 break;
 
             case MIDI_PROG_CHANGE:
+                {
+                    // Attempt to turn the prog change we've found into an
+                    // Instrument.  Send the program number and if we're on
+                    // the percussion channel.
+                    //
+                    Rosegarden::Instrument *instr = 
+                        m_studio->assignMidiProgramToInstrument(
+                                (*midiEvent)->getData1(), 
+                                false);
+                                //(*midiEvent)->getChannelNumber() && 9);
+
+                    // assign it here
+                    if (instr != 0)
+                        track->setInstrument(instr->getID());   
+                }
                 break;
 
             case MIDI_CHNL_AFTERTOUCH:

@@ -188,6 +188,76 @@ Studio::getMetronome()
     return 0;
 }
 
+// Scan all MIDI devices for available channels and map
+// them to a current program
+Instrument*
+Studio::assignMidiProgramToInstrument(MidiByte program, bool percussion)
+{
+    const MidiByte MIDI_PERCUSSION_CHANNEL = 9;
+
+    std::vector<Device*>::iterator it;
+    Rosegarden::InstrumentList::iterator iit;
+    Rosegarden::InstrumentList instList;
+
+    MidiDevice *midiDevice;
+    Rosegarden::Instrument *newInstrument = 0;
+
+    // Pass one - search through all MIDI instruments looking for
+    // a match that we can re-use.  i.e. if we have a matching 
+    // Program Change then we can use this Instrument.
+    //
+    //
+    for (it = m_devices.begin(); it != m_devices.end(); it++)
+    {
+        midiDevice = dynamic_cast<MidiDevice*>(*it);
+
+        if (midiDevice)
+        {
+            instList = (*it)->getInstruments();
+
+            for (iit = instList.begin(); iit != instList.end(); iit++)
+            {
+                // If we find an Instrument sending the right program already.
+                //
+                if ((*iit)->sendsProgramChange() &&
+                    (*iit)->getProgramChange() == program &&
+                    percussion == false)
+                {
+                    return (*iit);
+                }
+                else
+                {
+                    // Ignore the program change and use the percussion
+                    // flag.
+                    //
+                    if ((*iit)->getMidiChannel() == MIDI_PERCUSSION_CHANNEL
+                            && percussion)
+                    {
+                        return (*iit);
+                    }
+
+                    // Otherwise store the first Instrument for
+                    // possible use later.
+                    //
+                    if (newInstrument == 0 && !(*iit)->sendsProgramChange())
+                        newInstrument = *iit;
+                }
+            }
+        }
+    }
+
+    
+    // Okay, if we've got this far we need to map the first unused Instrument
+    // we came across and return that one
+    //
+    newInstrument->setSendProgramChange(true);
+    newInstrument->setProgramChange(program);
+
+    return newInstrument;
+}
+
+
+
 
 
 }

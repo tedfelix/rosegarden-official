@@ -1179,7 +1179,7 @@ void RosegardenGUIApp::importMIDIFile(const QString &file)
 {
     Rosegarden::MidiFile *midiFile;
 
-    midiFile = new Rosegarden::MidiFile(file.data());
+    midiFile = new Rosegarden::MidiFile(file.data(), &m_doc->getStudio());
 
     if (!midiFile->open())
     {
@@ -1463,7 +1463,7 @@ void RosegardenGUIApp::slotExportMIDI()
 
 void RosegardenGUIApp::exportMIDIFile(const QString &file)
 {
-    Rosegarden::MidiFile midiFile(file.data());
+    Rosegarden::MidiFile midiFile(file.data(), &m_doc->getStudio());
 
     midiFile.convertToMidi(m_doc->getComposition());
 

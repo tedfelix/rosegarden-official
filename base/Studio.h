@@ -59,6 +59,15 @@ public:
     Instrument* getInstrumentById(InstrumentId id);
     Instrument* getInstrumentFromList(int index);
 
+    // A clever method to best guess MIDI file program mappings
+    // to available MIDI channels across all MidiDevices.
+    //
+    // Set the percussion flag if it's a percussion channel (mapped
+    // channel) we're after.
+    //
+    Instrument* assignMidiProgramToInstrument(MidiByte program,
+                                              bool percussion);
+
     // Clear down
     void clear();
 

@@ -60,6 +60,8 @@ namespace Rosegarden
 typedef std::map<unsigned int, std::vector<MidiEvent*> > MidiComposition;
 typedef std::vector<MidiEvent*>::iterator MidiTrackIterator;
 
+class Studio;
+
 class MidiFile : public SoundFile
 {
 public:
@@ -73,8 +75,8 @@ public:
 	MIDI_FILE_NOT_LOADED            = 0xFF
     } MIDIFileFormatType;
 
-    MidiFile();
-    MidiFile (const std::string &fn);
+    MidiFile(Rosegarden::Studio *studio);
+    MidiFile (const std::string &fn, Rosegarden::Studio *studio);
     ~MidiFile();
 
     MidiFile& operator=(const MidiFile& mF)
@@ -139,6 +141,10 @@ private:
     void intToMidiBytes(std::ofstream* midiFile, int number);
     void longToMidiBytes(std::ofstream* midiFile, const unsigned long &number);
     void longToVarBuffer(std::string &buffer, const unsigned long &number);
+
+    // The pointer to the Studio for Instrument stuff
+    //
+    Rosegarden::Studio *m_studio;
 
 
 };
