@@ -319,6 +319,9 @@ void MatrixView::slotEraseSelected()
 
 void MatrixView::slotSelectSelected()
 {
+    EditTool* selector = m_toolBox->getTool(MatrixSelector::ToolName);
+
+    setTool(selector);
 }
 
 void MatrixView::mousePressed(Rosegarden::timeT time, int pitch,
