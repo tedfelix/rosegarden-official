@@ -151,12 +151,14 @@ public:
 			 QString _actionName,
 			 QString _pixmapName,
 			 int _keycode,
+			 bool _notationOnly,
 			 Note::Type _noteType);
 
     QString title;
     QString actionName;
     QString pixmapName;
     int keycode;
+    bool notationOnly;
     Note::Type noteType;
 };
 
@@ -165,6 +167,7 @@ NoteChangeActionData::NoteChangeActionData()
       actionName(0),
       pixmapName(0),
       keycode(0),
+      notationOnly(false),
       noteType(0)
 {
 }
@@ -173,11 +176,13 @@ NoteChangeActionData::NoteChangeActionData(const QString& _title,
 					   QString _actionName,
 					   QString _pixmapName,
 					   int _keycode,
+					   bool _notationOnly,
 					   Note::Type _noteType)
     : title(_title),
       actionName(_actionName),
       pixmapName(_pixmapName),
       keycode(_keycode),
+      notationOnly(_notationOnly),
       noteType(_noteType)
 {
 }
@@ -2057,6 +2062,10 @@ void NotationView::setupActions()
 		SLOT(slotAddDot()), actionCollection(),
 		"add_dot");
 
+    new KAction(i18n("Add Dot"), Key_Period + CTRL + ALT, this,
+		SLOT(slotAddDotNotationOnly()), actionCollection(),
+		"add_notation_dot");
+
     createGUI(getRCFileName(), false);
 }
 
@@ -3396,7 +3405,7 @@ void NotationView::slotNoteChangeAction()
 	m_noteChangeActionDataMap->find(sigSender->name());
     
     if (noteAct != m_noteChangeActionDataMap->end()) {
-	slotSetNoteDurations((*noteAct).noteType);
+	slotSetNoteDurations((*noteAct).noteType, (*noteAct).notationOnly);
     } else {
         std::cerr << "NotationView::slotNoteChangeAction() : couldn't find NoteChangeAction named '"
                              << sigSender->name() << "'\n";
@@ -3451,26 +3460,31 @@ void NotationView::initActionDataMaps()
 
     m_noteChangeActionDataMap = new NoteChangeActionDataMap;
 
-    for (int type = Note::Longest; type >= Note::Shortest; --type) {
+    for (int notationOnly = 0; notationOnly <= 1; ++notationOnly) {
+	for (int type = Note::Longest; type >= Note::Shortest; --type) {
 
-	QString refName
-	    (NotationStrings::getReferenceName(Note(type, 0), false));
+	    QString refName
+		(NotationStrings::getReferenceName(Note(type, 0), false));
 	
-	QString shortName(QString("change_%1").arg(refName));
-	shortName.replace(QRegExp("-"), "_");
+	    QString shortName(QString("change_%1%2")
+			      .arg(notationOnly ? "notation_" : "").arg(refName));
+	    shortName.replace(QRegExp("-"), "_");
 
-	QString titleName
-	    (NotationStrings::getNoteName(Note(type, 0)));
+	    QString titleName
+		(NotationStrings::getNoteName(Note(type, 0)));
 
-	titleName = titleName.left(1).upper() +
-	    titleName.right(titleName.length()-1);
+	    titleName = titleName.left(1).upper() +
+		titleName.right(titleName.length()-1);
 
-	int keycode = keys[type - Note::Shortest];
-	keycode += CTRL;
+	    int keycode = keys[type - Note::Shortest];
+	    keycode += CTRL;
+	    if (notationOnly) keycode += ALT;
 	
-	m_noteChangeActionDataMap->insert
-	    (shortName, NoteChangeActionData
-	     (titleName, shortName, refName, keycode, type));
+	    m_noteChangeActionDataMap->insert
+		(shortName, NoteChangeActionData
+		 (titleName, shortName, refName, keycode,
+		  notationOnly ? true : false, type));
+	}
     }
 
     m_markActionDataMap = new MarkActionDataMap;

@@ -668,10 +668,12 @@ class SetNoteTypeCommand : public BasicSelectionCommand
 {
 public:
     SetNoteTypeCommand(Rosegarden::EventSelection &selection,
-		       Rosegarden::Note::Type type) :
+		       Rosegarden::Note::Type type,
+		       bool notationOnly) :
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection),
-	m_type(type)
+	m_type(type),
+	m_notationOnly(notationOnly)
     { }
 
     static QString getGlobalName() {
@@ -684,15 +686,17 @@ protected:
 private:
     Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     Rosegarden::Note::Type m_type;
+    bool m_notationOnly;
 };
 
 
 class AddDotCommand : public BasicSelectionCommand
 {
 public:
-    AddDotCommand(Rosegarden::EventSelection &selection) :
+    AddDotCommand(Rosegarden::EventSelection &selection, bool notationOnly) :
 	BasicSelectionCommand(getGlobalName(), selection, true),
-	m_selection(&selection)
+	m_selection(&selection),
+	m_notationOnly(notationOnly)
     { }
 
     static QString getGlobalName() {
@@ -704,6 +708,7 @@ protected:
 
 private:
     Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    bool m_notationOnly;
 };
 
 

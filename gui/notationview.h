@@ -483,8 +483,9 @@ public slots:
     void slotRemoveOrnament();
 
     void slotNoteChangeAction();
-    void slotSetNoteDurations(Rosegarden::Note::Type);
+    void slotSetNoteDurations(Rosegarden::Note::Type, bool notationOnly);
     void slotAddDot();
+    void slotAddDotNotationOnly();
 
     void slotAddSlashes();
 

@@ -1436,18 +1436,25 @@ void NotationView::slotTransformsInterpret()
     }
 }
     
-void NotationView::slotSetNoteDurations(Rosegarden::Note::Type type)
+void NotationView::slotSetNoteDurations(Rosegarden::Note::Type type, bool notationOnly)
 {
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Setting note durations..."), this);
-    addCommandToHistory(new SetNoteTypeCommand(*m_currentEventSelection, type));
+    addCommandToHistory(new SetNoteTypeCommand(*m_currentEventSelection, type, notationOnly));
 }
 
 void NotationView::slotAddDot()
 {
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Adding dot..."), this);
-    addCommandToHistory(new AddDotCommand(*m_currentEventSelection));
+    addCommandToHistory(new AddDotCommand(*m_currentEventSelection, false));
+}
+
+void NotationView::slotAddDotNotationOnly()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Adding dot..."), this);
+    addCommandToHistory(new AddDotCommand(*m_currentEventSelection, true));
 }
 
 void NotationView::slotAddSlashes()

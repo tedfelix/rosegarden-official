@@ -1799,13 +1799,23 @@ SetNoteTypeCommand::modifySegment()
 
 	if ((*i)->isa(Rosegarden::Note::EventType)) {
 	    toErase.push_back(*i);
-
-	    Event *e = new Event(**i,
-				 (*i)->getNotationAbsoluteTime(),
-				 Rosegarden::Note(m_type).getDuration());
-
-	    if (e->getAbsoluteTime() + e->getDuration() > endTime) {
-		endTime = e->getAbsoluteTime() + e->getDuration();
+	    
+	    Event *e;
+	    if (m_notationOnly) {
+		e = new Event(**i,
+			      (*i)->getAbsoluteTime(),
+			      (*i)->getDuration(),
+			      (*i)->getSubOrdering(),
+			      (*i)->getNotationAbsoluteTime(),
+			      Rosegarden::Note(m_type).getDuration());
+	    } else {
+		e = new Event(**i,
+			      (*i)->getNotationAbsoluteTime(),
+			      Rosegarden::Note(m_type).getDuration());
+	    }
+		
+	    if (e->getNotationAbsoluteTime() + e->getNotationDuration() > endTime) {
+		endTime = e->getNotationAbsoluteTime() + e->getNotationDuration();
 	    }
 
 	    toInsert.push_back(e);
@@ -1845,13 +1855,26 @@ AddDotCommand::modifySegment()
 
 	    toErase.push_back(*i);
 
-	    Event *e = new Event(**i,
-				 (*i)->getNotationAbsoluteTime(),
-				 Rosegarden::Note(note.getNoteType(),
-						  dots).getDuration());
+	    Event *e;
 
-	    if (e->getAbsoluteTime() + e->getDuration() > endTime) {
-		endTime = e->getAbsoluteTime() + e->getDuration();
+	    if (m_notationOnly) {
+		e = new Event(**i,
+			      (*i)->getAbsoluteTime(),
+			      (*i)->getDuration(),
+			      (*i)->getSubOrdering(),
+			      (*i)->getNotationAbsoluteTime(),
+			      Rosegarden::Note(note.getNoteType(),
+					       dots).getDuration());
+
+	    } else {
+		e = new Event(**i,
+			      (*i)->getNotationAbsoluteTime(),
+			      Rosegarden::Note(note.getNoteType(),
+					       dots).getDuration());
+	    }
+
+	    if (e->getNotationAbsoluteTime() + e->getNotationDuration() > endTime) {
+		endTime = e->getNotationAbsoluteTime() + e->getNotationDuration();
 	    }
 
 	    toInsert.push_back(e);
