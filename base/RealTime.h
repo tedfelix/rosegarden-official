@@ -76,6 +76,17 @@ struct RealTime
         if (sec == r.sec) return usec <= r.usec;
         else return sec <= r.sec;
     }
+
+    // Find the fractional difference between times
+    //
+    double operator/(const RealTime &r) const {
+        double lTotal = double(sec) * 1000000.0 + double(usec);
+        double rTotal = double(r.sec) * 1000000.0 + double(r.usec);
+
+        if (rTotal == 0) return 0.0;
+        else return lTotal/rTotal;
+    }
+
 };
 
 std::ostream &operator<<(std::ostream &out, const RealTime &rt);

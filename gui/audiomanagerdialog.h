@@ -89,6 +89,8 @@ protected:
 
     AudioFileManager *m_audioFileManager;
 
+    RealTime          m_maxLength;
+
 };
 
 }

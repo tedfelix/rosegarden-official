@@ -735,7 +735,7 @@ PeakFile::getPreview(const RealTime &startIndex,
                     getIntegerFromLittleEndian(peakData.substr(0, m_format));
 
                 if (inValue > intDivisor)
-                    inValue -= intDivisor;
+                    inValue = intDivisor - inValue;
 
                 hiValue += float(inValue);
 
@@ -746,7 +746,7 @@ PeakFile::getPreview(const RealTime &startIndex,
                                 peakData.substr(m_format, m_format));
 
                     if (inValue > intDivisor)
-                        inValue -= intDivisor;
+                        inValue = intDivisor - inValue;
 
                     loValue += float(inValue);
                 }
@@ -828,12 +828,15 @@ PeakFile::drawPixmap(const RealTime &startTime,
 
         case 2:
             divisor = SAMPLE_MAX_16BIT;
+            break;
 
         default:
             std::cerr << "PeakFile::getPreview - unsupported peak length format"
                       << std::endl;
             return;
     }
+
+    double value;
 
     for (int i = 0; i < pixmap->width(); i++)
     {
@@ -860,22 +863,47 @@ PeakFile::drawPixmap(const RealTime &startTime,
 
             if (peakData.length() == m_format * m_pointsPerValue)
             {
-                hiValue += getIntegerFromLittleEndian(
-                               peakData.substr(0, m_format));
+                int intDivisor = divisor;
+                int inValue =
+                    getIntegerFromLittleEndian(peakData.substr(0, m_format));
+
+                if (inValue > intDivisor)
+                    inValue = intDivisor - inValue;
+
+                hiValue += float(inValue);
 
                 if (m_pointsPerValue == 2)
                 {
-                    loValue += getIntegerFromLittleEndian(
-                               peakData.substr(m_format, m_format));
+                    inValue = 
+                        getIntegerFromLittleEndian(
+                                peakData.substr(m_format, m_format));
+
+                    if (inValue > intDivisor)
+                        inValue = intDivisor - inValue;
+
+                    loValue += float(inValue);
                 }
+            }
+            else
+            {
+                // We didn't get the whole peak block - return what
+                // we've got so far
+                //
+                std::cerr << "PeakFile::getPreview - "
+                          << "failed to get complete peak block"
+                          << std::endl;
             }
         }
 
         hiValue /= (divisor * (float)m_channels);
         loValue /= (divisor * (float)m_channels);
 
-        painter.drawLine(i, yStep,
-                         i, yStep - hiValue * yStep);
+        value = fabs(hiValue);
+
+        // Draw the line
+        //
+        painter.drawLine(i, yStep + value * yStep,
+                         i, yStep - value * yStep);
 
     }
 }

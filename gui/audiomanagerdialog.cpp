@@ -38,8 +38,8 @@ using std::endl;
 namespace Rosegarden
 {
 
-static const int previewWidth = 100;
-static const int previewHeight = 20;
+static const int maxPreviewWidth = 100;
+static const int previewHeight = 40;
 
 AudioManagerDialog::AudioManagerDialog(QWidget *parent,
                                        AudioFileManager *aFM):
@@ -88,7 +88,7 @@ AudioManagerDialog::populateFileList()
     QListBoxPixmap *listBoxPixmap;
 
     // create pixmap of given size
-    QPixmap *audioPixmap = new QPixmap(previewWidth, previewHeight);
+    QPixmap *audioPixmap = new QPixmap(maxPreviewWidth, previewHeight);
 
     // clear file list and disable associated action buttons
     m_fileList->clear();
@@ -304,6 +304,26 @@ AudioManagerDialog::generateEnvelopePixmap(QPixmap *pixmap, AudioFile *aF)
             dynamic_cast<Rosegarden::WAVAudioFile*>(aF)->getLength(),
             previewWidth);
             */
+
+    // Find the max length of all the sample files 
+    //
+    if (m_maxLength == RealTime(0, 0))
+    {
+        std::vector<AudioFile*>::const_iterator it;
+        for (it = m_audioFileManager->begin();
+             it != m_audioFileManager->end();
+             it++)
+        {
+            if ((*it)->getLength() > m_maxLength)
+                m_maxLength = (*it)->getLength();
+        }
+    }
+
+    // Resize the pixmap according
+    //
+    pixmap->resize(int(double(maxPreviewWidth) *
+                       (aF->getLength() / m_maxLength)),
+                   pixmap->height());
 
     m_audioFileManager->
         drawPreview(dynamic_cast<Rosegarden::WAVAudioFile*>(aF)->getId(),
