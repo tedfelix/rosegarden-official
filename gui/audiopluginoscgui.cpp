@@ -259,6 +259,9 @@ AudioPluginOSCGUIManager::postMessage(OSCMessage *message)
 void
 AudioPluginOSCGUIManager::updateProgram(InstrumentId instrument, int position)
 {
+    RG_DEBUG << "AudioPluginOSCGUIManager::updateProgram(" << instrument << ","
+	     << position << ")" << endl;
+
     if (m_guis.find(instrument) == m_guis.end() ||
 	m_guis[instrument].find(position) == m_guis[instrument].end()) return;
 
@@ -274,6 +277,9 @@ AudioPluginOSCGUIManager::updateProgram(InstrumentId instrument, int position)
     int bank = rv >> 16;
     int program = rv - (bank << 16);
 
+    RG_DEBUG << "AudioPluginOSCGUIManager::updateProgram(" << instrument << ","
+	     << position << "): rv " << rv << ", bank " << bank << ", program " << program << endl;
+
     m_guis[instrument][position]->sendProgram(bank, program);
 }
 
@@ -281,6 +287,9 @@ void
 AudioPluginOSCGUIManager::updatePort(InstrumentId instrument, int position,
 				     int port)
 {
+    RG_DEBUG << "AudioPluginOSCGUIManager::updatePort(" << instrument << ","
+	     << position <<  "," << port << ")" << endl;
+
     if (m_guis.find(instrument) == m_guis.end() ||
 	m_guis[instrument].find(position) == m_guis[instrument].end()) return;
 
@@ -292,6 +301,9 @@ AudioPluginOSCGUIManager::updatePort(InstrumentId instrument, int position,
 
     Rosegarden::PluginPortInstance *porti = pluginInstance->getPort(port);
     if (!porti) return;
+
+    RG_DEBUG << "AudioPluginOSCGUIManager::updatePort(" << instrument << ","
+	     << position <<  "," << port << "): value " << porti->value << endl;
 
     m_guis[instrument][position]->sendPortValue(port, porti->value);
 }
@@ -538,11 +550,26 @@ AudioPluginOSCGUIManager::dispatch()
 	    }
 
 	    gui->setGUIUrl(url);
-	    //!!! and update
+
+	    for (AudioPluginInstance::ConfigMap::const_iterator i =
+		     pluginInstance->getConfiguration().begin();
+		 i != pluginInstance->getConfiguration().end(); ++i) {
+		gui->sendConfiguration(strtoqstr(i->first), strtoqstr(i->second));
+	    }
+		
+	    unsigned long rv = Rosegarden::StudioControl::getPluginProgram
+		(pluginInstance->getMappedId(), strtoqstr(pluginInstance->getProgram()));
+
+	    int bank = rv >> 16;
+	    int program = rv - (bank << 16);
+	    gui->sendProgram(bank, program);
+
+	    for (Rosegarden::PortInstanceIterator i = pluginInstance->begin();
+		 i != pluginInstance->end(); ++i) {
+		gui->sendPortValue((*i)->number, (*i)->value);
+	    }
 	    
-	    OSCMessage *showMessage = new OSCMessage;
-	    showMessage->setMethod("show");
-	    gui->send(showMessage);
+	    gui->show();
 
 	} else if (method == "configure") {
 
@@ -663,9 +690,7 @@ AudioPluginOSCGUI::AudioPluginOSCGUI(Rosegarden::AudioPluginInstance *instance,
 
 AudioPluginOSCGUI::~AudioPluginOSCGUI()
 {
-    OSCMessage *showMessage = new OSCMessage;
-    showMessage->setMethod("quit");
-    send(showMessage);
+    quit();
 }
 
 QString
@@ -730,78 +755,43 @@ AudioPluginOSCGUI::setGUIUrl(QString url)
 void
 AudioPluginOSCGUI::show()
 {
-    OSCMessage *m = new OSCMessage;
-    m->setMethod("show");
-    send(m);
+    QString path = m_basePath + "/show";
+    lo_send(m_address, path, "");
 }
 
 void
 AudioPluginOSCGUI::hide()
 {
-    OSCMessage *m = new OSCMessage;
-    m->setMethod("hide");
-    send(m);
+    QString path = m_basePath + "/hide";
+    lo_send(m_address, path, "");
 }
 
 void
 AudioPluginOSCGUI::quit()
 {
-    OSCMessage *m = new OSCMessage;
-    m->setMethod("quit");
-    send(m);
+    QString path = m_basePath + "/quit";
+    lo_send(m_address, path, "");
 }
 
 void
 AudioPluginOSCGUI::sendProgram(int bank, int program)
 {
-    OSCMessage *m = new OSCMessage;
-    lo_arg arg;
-
-    m->setMethod("program");
-
-    arg.i = bank;
-    m->addArg('i', &arg);
-
-    arg.i = program;
-    m->addArg('i', &arg);
-
-    send(m);
+    QString path = m_basePath + "/program";
+    lo_send(m_address, path, "ii", bank, program);
 }
 
 void
 AudioPluginOSCGUI::sendPortValue(int port, float value)
 {
-    OSCMessage *m = new OSCMessage;
-    lo_arg arg;
-
-    m->setMethod("control");
-
-    arg.i = port;
-    m->addArg('i', &arg);
-
-    arg.f = value;
-    m->addArg('f', &arg);
-
-    send(m);
+    QString path = m_basePath + "/control";
+    lo_send(m_address, path, "if", port, value);
 }
     
 void
 AudioPluginOSCGUI::sendConfiguration(QString key, QString value)
 {
-    OSCMessage *m = new OSCMessage;
-    lo_arg *arg;
-
-    arg = (lo_arg *)malloc(std::max(std::max(sizeof(lo_arg),
-					     key.length()),
-				    value.length()));
-    
-    strcpy(&arg->s, key.data());
-    m->addArg('s', arg);
-
-    strcpy(&arg->s, value.data());
-    m->addArg('s', arg);
-
-    send(m);
+    QString path = m_basePath + "/configure";
+    lo_send(m_address, path, "ss", key.data(), value.data());
 }
 
 void
@@ -834,6 +824,8 @@ AudioPluginOSCGUI::send(OSCMessage *message)
 
     QString path = m_basePath + "/" + strtoqstr(message->getMethod());
 
+    RG_DEBUG << "method is " << message->getMethod() << ", argCount is " << count << ", argSpec is " << argSpec << endl;
+
     switch (count) {
 
     case 0:
@@ -845,7 +837,8 @@ AudioPluginOSCGUI::send(OSCMessage *message)
 	break;
 
     case 2:
-	lo_send(m_address, path, argSpec, arg[0], arg[1]);
+        lo_send_internal(m_address, __FILE__, __LINE__, path, argSpec, arg[0], arg[1], LO_MARKER_A, LO_MARKER_B);
+//	lo_send(m_address, path, argSpec, arg[0], arg[1]);
 	break;
 
     case 3:

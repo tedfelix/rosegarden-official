@@ -597,7 +597,7 @@ AudioPluginDialog::slotPaste()
             count++;
         }
 
-        if (count >= m_pluginsInList.size()) return;
+        if (count >= int(m_pluginsInList.size())) return;
 
         // now select the plugin
         //

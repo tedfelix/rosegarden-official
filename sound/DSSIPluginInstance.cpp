@@ -335,7 +335,7 @@ DSSIPluginInstance::getProgram(QString name)
 	QString programName = QString("%1. %2").arg(index).arg(programDescriptor.Name);
 	if (programName == name) {
 	    free(programDescriptor.Name);
-	    return programDescriptor.Bank << 16 + programDescriptor.Program;
+	    return (programDescriptor.Bank << 16) + programDescriptor.Program;
 	}
 	free(programDescriptor.Name);
     }
