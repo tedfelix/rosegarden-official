@@ -562,6 +562,10 @@ void RosegardenGUIApp::initView()
         }
 
     }
+
+    // make sure we show
+    //
+    m_view->show();
 }
 
 bool RosegardenGUIApp::openDocumentFile(const char* _cmdl)
