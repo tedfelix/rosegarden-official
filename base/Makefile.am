@@ -12,6 +12,8 @@ libbase_la_SOURCES = AnalysisTypes.C \
                      AudioPluginInstance.C \
 	             BaseProperties.C \
 		     Clipboard.C \
+			 Colour.C \
+			 ColourMap.C \
 		     Composition.C \
 		     CompositionTimeSliceAdapter.C \
                      Configuration.C \

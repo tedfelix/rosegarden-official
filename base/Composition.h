@@ -32,6 +32,7 @@
 #include "Track.h"
 #include "Configuration.h"
 #include "XmlExportable.h"
+#include "ColourMap.h"
 
 namespace Rosegarden 
 {
@@ -718,6 +719,8 @@ protected:
 
     TrackId                           m_highestTrackId;
 
+public:
+    RColourMap                        m_segmentColourMap;
 };
 
 }

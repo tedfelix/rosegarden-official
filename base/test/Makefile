@@ -9,7 +9,7 @@ INCPATH  = -I..
 
 SRCS	:= test.C thread.C pitch.C
 
-default: test thread pitch
+default: test thread pitch colour
 
 clean:
 	rm -f test test.o thread thread.o pitch pitch.o
@@ -25,6 +25,9 @@ pitch: pitch.o
 
 thread: thread.o
 	$(CC) $< $(LIBBASE) -o $@ -lpthread
+
+colour: colour.o
+	$(CC) $< $(LIBBASE) -o $@
 
 depend:
 	makedepend $(INCPATH) -- $(CPPFLAGS) -- $(SRCS)

@@ -129,6 +129,10 @@ public:
     void setLabel(const std::string &label);
     std::string getLabel() const { return m_label; }
 
+    // Colour information
+    void setColourIndex(const unsigned int input);
+    unsigned int getColourIndex() const { return m_colourIndex; }
+
     /**
      * Returns a numeric id of some sort
      * The id is guaranteed to be unique within the segment, but not to
@@ -500,6 +504,8 @@ private:
     TrackId m_track;
     SegmentType m_type;         // identifies Segment type
     std::string m_label;        // segment label
+
+    unsigned int m_colourIndex; // identifies Colour Index (default == 0)
 
     mutable int m_id; // not id of Segment, but a value for return by getNextId
 
