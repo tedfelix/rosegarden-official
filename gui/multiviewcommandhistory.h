@@ -96,6 +96,15 @@ signals:
     void commandExecuted(Command *);
 
     /**
+     * This is emitted every time a command is executed
+     * (whether by addCommand, undo or redo).
+     *
+     * It should be connected to the update() slot of widgets
+     * which need to repaint after a command
+     */
+    void update();
+
+    /**
      * This is emitted every time we reach the index where you
      * saved the document for the last time. See @ref documentSaved
      */
