@@ -172,7 +172,7 @@ operator<<(QDataStream &dS, MappedEvent *mE)
 }
 
 QDataStream&
-operator<<(QDataStream &dS, MappedEvent &mE)
+operator<<(QDataStream &dS, const MappedEvent &mE)
 {
     dS << (unsigned int)mE.getInstrument();
     dS << (unsigned int)mE.getType();
