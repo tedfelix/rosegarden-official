@@ -120,7 +120,7 @@ If a note is already present where you want to add one, three cases
 	inserted notes). [[ For the moment, do same as previous case ]]
 
 If the note you want to insert is longer than the rest it should
-replace, it is constrained down to that rest's duration.
+replace, it is constrained down to that rest's duration. [[ DONE ]]
 
 Regarding selection and moving stuff around, the notation behaves
 quite like a drawing program too. You can select a bunch of notes
