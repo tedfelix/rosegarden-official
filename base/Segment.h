@@ -35,7 +35,7 @@ class TimeSignature;
 class Track : public std::multiset<Event*, Event::EventCmp>
 {
 public:
-    Track(unsigned int nbTimeSteps = 384, unsigned int startIdx = 0,
+    Track(unsigned int nbTimeSteps = 0, unsigned int startIdx = 0,
           unsigned int stepsPerBar = 384);
     ~Track();
 
