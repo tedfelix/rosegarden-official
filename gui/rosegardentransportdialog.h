@@ -40,7 +40,7 @@ public:
                               const char *name=0);
     ~RosegardenTransportDialog();
 
-    void displayTime(Rosegarden::RealTime microSeconds);
+    void displayTime(const Rosegarden::RealTime &rt);
 
     void setTempo(const double &tempo);
 
@@ -69,6 +69,7 @@ private:
     //--------------- Data members ---------------------------------
 
     std::map<int, QPixmap> m_lcdList;
+    QPixmap m_lcdNegative;
 
     int m_lastTenHours;
     int m_lastUnitHours;

@@ -1118,9 +1118,6 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
         for ( Rosegarden::Segment::iterator j = (*i)->findTime(sliceStartElapsed);
                                           j != (*i)->end(); ++j )
         {
-            // for the moment ensure we're all positive
-            assert((*j)->getAbsoluteTime() >= 0 );
-
             // Skip this event if it isn't a note
             //
             if (!(*j)->isa(Rosegarden::Note::EventType))
@@ -1718,6 +1715,8 @@ RosegardenGUIApp::closeTransport()
 void
 RosegardenGUIApp::record()
 {
+    Rosegarden::Composition &comp = m_doc->getComposition();
+
     // if already recording then stop
     //
     if (m_transportStatus == RECORDING_MIDI ||
@@ -1739,6 +1738,17 @@ RosegardenGUIApp::record()
     if(!getSoundSystemStatus())
         return;
 
+    // Adjust backwards by the bar count in
+    //
+    cout << "BEFORE PP = " << comp.getPosition() << endl;
+    int startBar = comp.getBarNumber(comp.getPosition(), false);
+    startBar -= comp.getCountInBars();
+    setPointerPosition(comp.getBarRange(startBar, false).first);
+
+    cout << "AFTER PP = " << comp.getPosition() << endl;
+    cout << "START BAR = " << startBar<< endl;
+
+
     // Some locals
     //
     TransportStatus recordType;
@@ -1747,9 +1757,9 @@ RosegardenGUIApp::record()
     QByteArray replyData;
 
     // get the record track and check its type
-    int rID = m_doc->getComposition().getRecordTrack();
+    int rID = comp.getRecordTrack();
 
-    switch (m_doc->getComposition().getTrackByIndex(rID)->getType())
+    switch (comp.getTrackByIndex(rID)->getType())
     {
         case Rosegarden::Track::Midi:
             recordType = STARTING_TO_RECORD_MIDI;
@@ -1779,12 +1789,12 @@ RosegardenGUIApp::record()
     //
     QDataStream streamOut(data, IO_WriteOnly);
 
-    if (m_doc->getComposition().getTempo() == 0)
+    if (comp.getTempo() == 0)
     {
         cout <<
          "RosegardenGUIApp::play() - setting Tempo to Default value of 120.000"
           << endl;
-        m_doc->getComposition().setDefaultTempo(120.0);
+        comp.setDefaultTempo(120.0);
     }
     else
     {
@@ -1793,14 +1803,13 @@ RosegardenGUIApp::record()
 
     // set the tempo in the transport
     //
-    m_transport->setTempo(m_doc->getComposition().getTempo());
+    m_transport->setTempo(comp.getTempo());
 
     // The arguments for the Sequencer  - record is similar to playback,
     // we must being playing to record
     //
 
-    Rosegarden::RealTime startPos = m_doc->getComposition().
-                getElapsedRealTime(m_doc->getComposition().getPosition());
+    Rosegarden::RealTime startPos =comp.getElapsedRealTime(comp.getPosition());
 
     // playback start position
     streamOut << startPos.sec;

@@ -68,6 +68,10 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     TenMinutesPixmap->setBackgroundColor(Qt::black);
     UnitHoursPixmap->setBackgroundColor(Qt::black);
     TenHoursPixmap->setBackgroundColor(Qt::black);
+    NegativePixmap->setBackgroundColor(Qt::black);
+ 
+    // unset the negative sign to begin with
+    NegativePixmap->clear();
 
     // Set our toggle buttons
     //
@@ -121,9 +125,15 @@ RosegardenTransportDialog::loadPixmaps()
       if (!m_lcdList[i].load(fileName))
       {
         std::cerr << "RosegardenTransportDialog - failed to load pixmap \""
-		  << fileName << "\""<< std::endl;
+                  << fileName << "\""<< std::endl;
       }
     }
+
+    // Load the "negative" sign pixmap
+    //
+    fileName = QString("%1/transport/led--.xpm").arg(pixmapDir);
+    m_lcdNegative.load(fileName);
+
 }
 
 // Display a time from a pointer position - calculates all
@@ -131,21 +141,35 @@ RosegardenTransportDialog::loadPixmaps()
 //
 //
 void
-RosegardenTransportDialog::displayTime(Rosegarden::RealTime rt)
+RosegardenTransportDialog::displayTime(const Rosegarden::RealTime &rt)
 {
-    m_tenThousandths = ( rt.usec / 100 ) % 10;
-    m_thousandths = ( rt.usec / 1000 ) % 10;
-    m_hundreths = ( rt.usec / 10000 ) % 10;
-    m_tenths = ( rt.usec / 100000 ) % 10;
+    Rosegarden::RealTime st = rt;
 
-    m_unitSeconds = ( rt.sec ) % 10;
-    m_tenSeconds = ( rt.sec / 10 ) % 6;
+    // If time is negative then reverse the time and set the minus flag
+    //
+    if (st < Rosegarden::RealTime(0,0))
+    {
+        st = Rosegarden::RealTime(0,0) - st;
+        NegativePixmap->setPixmap(m_lcdNegative);
+    }
+    else // don't show the flag
+    {
+        NegativePixmap->clear();
+    }
+         
+    m_tenThousandths = ( st.usec / 100 ) % 10;
+    m_thousandths = ( st.usec / 1000 ) % 10;
+    m_hundreths = ( st.usec / 10000 ) % 10;
+    m_tenths = ( st.usec / 100000 ) % 10;
 
-    m_unitMinutes = ( rt.sec / 60) % 10;
-    m_tenMinutes = ( rt.sec / 600) % 6;
+    m_unitSeconds = ( st.sec ) % 10;
+    m_tenSeconds = ( st.sec / 10 ) % 6;
+
+    m_unitMinutes = ( st.sec / 60) % 10;
+    m_tenMinutes = ( st.sec / 600) % 6;
     
-    m_unitHours = ( rt.sec / 3600) % 10;
-    m_tenHours = (rt.sec / 36000) % 24;
+    m_unitHours = ( st.sec / 3600) % 10;
+    m_tenHours = (st.sec / 36000) % 24;
 
     if (m_tenThousandths != m_lastTenThousandths)
     {
