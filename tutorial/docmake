@@ -14,7 +14,7 @@ startdir=$PWD
 
 Usage(){
 cat << EOF
-usage: ./docmake [target]
+usage: ./docmake [target] "[comment]"
 
 if you don't know what [target] is, then read the case statement in this
 script ($0)...
@@ -109,7 +109,7 @@ case $1 in
 	        Put using-rosegarden/en/using-rosegarden.pdf
 #		Put using-rosegarden/de/arbeiten-mit-rosegarden.pdf
 		echo Attempting an automatic CVS commit...
-	        cvs -f commit -m "* automatic commit by $*" '.' 
+	        cvs -f commit -m "* automatic commit by $0 - \" $2 \"" '.' 
 	;;
     *) Usage
     	;;
