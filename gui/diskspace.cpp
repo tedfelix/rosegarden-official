@@ -35,7 +35,11 @@ DiskSpace::DiskSpace(const QString &path):
 {
     // Check for path existence
     QDir dir(path);
-    if (!dir.exists()) throw i18n("Directory doesn't exist.");
+    if (!dir.exists())
+    {
+        QString eS = i18n("Error checking for diskspace - directory \"%1\" doesn't exist").arg(path);
+        throw eS;
+    }
 
     m_proc = new KProcess;
 
