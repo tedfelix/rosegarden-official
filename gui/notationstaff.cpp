@@ -391,8 +391,8 @@ bool NotationStaff::showElements(NotationElementList::iterator from,
             QCanvasPixmap *pixmap = 0;
             QCanvasSimpleSprite *sprite = 0;
 
-	    kdDebug(KDEBUG_AREA) << "\nNotationStaff::showElements: Event is:" << endl;
-	    (*it)->event()->dump(std::cerr);
+//	    kdDebug(KDEBUG_AREA) << "\nNotationStaff::showElements: Event is:" << endl;
+//	    (*it)->event()->dump(std::cerr);
 
             if ((*it)->isNote()) {
 
