@@ -275,7 +275,7 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
 	m_canvas->setSnapGrain(true);
 
 	int newX = e->x() - m_clickPoint.x() + m_currentItemStartX;
-        if (newX < 0) newX = 0;
+        //if (newX < 0) newX = 0;
         int newY = e->y();
         if (newY < 0) newY = 0;
 
