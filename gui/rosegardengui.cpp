@@ -1307,14 +1307,37 @@ void RosegardenGUIApp::setPointerPosition(const long &posSec,
     // and the gui time
     m_view->setPointerPosition(elapsedTime);
 
-    // and the time
-    //
-    m_transport->displayTime(rT);
-
     // and the tempo
     m_transport->setTempo(comp.getTempoAt(elapsedTime));
 
-    //cout << "POSITION = " << elapsedTime << " : " << rT << endl;
+    // and the time...
+    //
+    if (m_transport->isShowingBarTime()) {
+
+	int barNo = comp.getBarNumber(elapsedTime);
+	timeT barStart = comp.getBarStart(barNo);
+	Rosegarden::TimeSignature timeSig =
+	    comp.getTimeSignatureAt(elapsedTime);
+	timeT beatDuration = timeSig.getBeatDuration();
+	int beatNo = (elapsedTime - barStart) / beatDuration;
+	int unitNo = (elapsedTime - barStart) - (beatNo * beatDuration);
+
+	if (m_transport->isShowingTimeToEnd()) {
+	    barNo = barNo + 1 - comp.getNbBars();
+	    beatNo = timeSig.getBeatsPerBar() - 1 - beatNo;
+	    unitNo = timeSig.getBeatDuration() - 1 - unitNo;
+	}
+
+	m_transport->displayBarTime(barNo, beatNo, unitNo);
+
+    } else {
+
+	if (m_transport->isShowingTimeToEnd()) {
+	    rT = rT - comp.getElapsedRealTime(comp.getDuration());
+	}
+
+	m_transport->displayTime(rT);
+    }
 }
 
 void RosegardenGUIApp::setPointerPosition(timeT t)

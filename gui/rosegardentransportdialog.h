@@ -41,6 +41,10 @@ public:
     ~RosegardenTransportDialog();
 
     void displayTime(const Rosegarden::RealTime &rt);
+    void displayBarTime(int bar, int beat, int unit);
+
+    bool isShowingTimeToEnd();
+    bool isShowingBarTime();
 
     void setTempo(const double &tempo);
 
@@ -84,6 +88,9 @@ private:
     int m_lastThousandths;
     int m_lastTenThousandths;
 
+    bool m_lastNegative;
+    bool m_lastBarTime;
+
     int m_tenHours;
     int m_unitHours;
     int m_tenMinutes;
@@ -95,11 +102,12 @@ private:
     int m_thousandths;
     int m_tenThousandths;
 
-
     double m_tempo;
 
     QTimer *m_midiInTimer;
     QTimer *m_midiOutTimer;
+
+    void updateTimeDisplay();
 };
 
 }

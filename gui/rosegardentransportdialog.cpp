@@ -49,6 +49,8 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     m_lastHundreths(0),
     m_lastThousandths(0),
     m_lastTenThousandths(0),
+    m_lastNegative(false),
+    m_lastBarTime(false),
     m_tempo(0)
 {
     resetFonts();
@@ -160,25 +162,44 @@ RosegardenTransportDialog::resetFont(QWidget *w)
     w->setFont(font);
 }
 
-// Display a time from a pointer position - calculates all
-// the pixmap values and only updates if necessary
-//
-//
+bool
+RosegardenTransportDialog::isShowingBarTime()
+{
+    return TimeDisplayButton->isOn();
+}
+
+bool
+RosegardenTransportDialog::isShowingTimeToEnd()
+{
+    return ToEndButton->isOn();
+}
+
 void
 RosegardenTransportDialog::displayTime(const Rosegarden::RealTime &rt)
 {
     Rosegarden::RealTime st = rt;
+
+    if (m_lastBarTime) {
+	HourColonPixmap->show();
+	m_lastBarTime = false;
+    }
 
     // If time is negative then reverse the time and set the minus flag
     //
     if (st < Rosegarden::RealTime(0,0))
     {
         st = Rosegarden::RealTime(0,0) - st;
-        NegativePixmap->setPixmap(m_lcdNegative);
+        if (!m_lastNegative) {
+	    NegativePixmap->setPixmap(m_lcdNegative);
+	    m_lastNegative = true;
+	}
     }
     else // don't show the flag
     {
-        NegativePixmap->clear();
+	if (m_lastNegative) {
+	    NegativePixmap->clear();
+	    m_lastNegative = false;
+	}
     }
          
     m_tenThousandths = ( st.usec / 100 ) % 10;
@@ -189,72 +210,152 @@ RosegardenTransportDialog::displayTime(const Rosegarden::RealTime &rt)
     m_unitSeconds = ( st.sec ) % 10;
     m_tenSeconds = ( st.sec / 10 ) % 6;
 
-    m_unitMinutes = ( st.sec / 60) % 10;
-    m_tenMinutes = ( st.sec / 600) % 6;
+    m_unitMinutes = ( st.sec / 60 ) % 10;
+    m_tenMinutes = ( st.sec / 600 ) % 6;
     
-    m_unitHours = ( st.sec / 3600) % 10;
-    m_tenHours = (st.sec / 36000) % 24;
+    m_unitHours = ( st.sec / 3600 ) % 10;
+    m_tenHours = (st.sec / 36000 ) % 24;
+    
+    updateTimeDisplay();
+}
 
+void
+RosegardenTransportDialog::displayBarTime(int bar, int beat, int unit)
+{
+    if (!m_lastBarTime) {
+	HourColonPixmap->hide();
+	m_lastBarTime = true;
+    }
+
+    // If time is negative then reverse the time and set the minus flag
+    //
+    if (bar < 0)
+    {
+        bar = -bar;
+        if (!m_lastNegative) {
+	    NegativePixmap->setPixmap(m_lcdNegative);
+	    m_lastNegative = true;
+	}
+    }
+    else // don't show the flag
+    {
+	if (m_lastNegative) {
+	    NegativePixmap->clear();
+	    m_lastNegative = false;
+	}
+    }
+
+    m_tenThousandths = ( unit ) % 10;
+    m_thousandths = ( unit / 10 ) % 10;
+    m_hundreths = ( unit / 100 ) % 10;
+    m_tenths = ( unit / 1000 ) % 10;
+
+    if (m_tenths == 0) {
+	m_tenths = -1;
+	if (m_hundreths == 0) {
+	    m_hundreths = -1;
+	    if (m_thousandths == 0) {
+		m_thousandths = -1;
+	    }
+	}
+    }
+
+    m_unitSeconds = ( beat ) % 10;
+    m_tenSeconds = ( beat / 10 ) % 6;
+
+    if (m_tenSeconds == 0) {
+	m_tenSeconds = -1;
+    }
+
+    m_unitMinutes = ( bar ) % 10;
+    m_tenMinutes = ( bar / 10 ) % 10;
+    
+    if (m_tenMinutes == 0) {
+	m_tenMinutes = -1;
+    }
+
+    m_unitHours = ( bar / 100 ) % 10;
+    m_tenHours = ( bar / 1000 ) % 10;
+    
+    if (m_tenHours == 0) {
+	m_tenHours = -1;
+    }
+
+    updateTimeDisplay();
+}
+
+void
+RosegardenTransportDialog::updateTimeDisplay()
+{
     if (m_tenThousandths != m_lastTenThousandths)
     {
-        TenThousandthsPixmap->setPixmap(m_lcdList[m_tenThousandths]);
+	if (m_tenThousandths < 0) TenThousandthsPixmap->clear();
+        else TenThousandthsPixmap->setPixmap(m_lcdList[m_tenThousandths]);
         m_lastTenThousandths = m_tenThousandths;
     }
 
     if (m_thousandths != m_lastThousandths)
     {
-        ThousandthsPixmap->setPixmap(m_lcdList[m_thousandths]);
+	if (m_thousandths < 0) ThousandthsPixmap->clear();
+	else ThousandthsPixmap->setPixmap(m_lcdList[m_thousandths]);
         m_lastThousandths = m_thousandths;
     }
 
     if (m_hundreths != m_lastHundreths)
     {
-        HundredthsPixmap->setPixmap(m_lcdList[m_hundreths]);
+	if (m_hundreths < 0) HundredthsPixmap->clear();
+        else HundredthsPixmap->setPixmap(m_lcdList[m_hundreths]);
         m_lastHundreths = m_hundreths;
     }
 
     if (m_tenths != m_lastTenths)
     {
-        TenthsPixmap->setPixmap(m_lcdList[m_tenths]);
+	if (m_tenths < 0) TenthsPixmap->clear();
+        else TenthsPixmap->setPixmap(m_lcdList[m_tenths]);
         m_lastTenths = m_tenths;
     }
 
     if (m_unitSeconds != m_lastUnitSeconds)
     {
-        UnitSecondsPixmap->setPixmap(m_lcdList[m_unitSeconds]);
+	if (m_unitSeconds < 0) UnitSecondsPixmap->clear();
+        else UnitSecondsPixmap->setPixmap(m_lcdList[m_unitSeconds]);
         m_lastUnitSeconds = m_unitSeconds;
     }
  
     if (m_tenSeconds != m_lastTenSeconds)
     {
-        TenSecondsPixmap->setPixmap(m_lcdList[m_tenSeconds]);
+	if (m_tenSeconds < 0) TenSecondsPixmap->clear();
+        else TenSecondsPixmap->setPixmap(m_lcdList[m_tenSeconds]);
         m_lastTenSeconds = m_tenSeconds;
     }
 
     if (m_unitMinutes != m_lastUnitMinutes)
     {
-        UnitMinutesPixmap->setPixmap(m_lcdList[m_unitMinutes]);
+        if (m_unitMinutes < 0) UnitMinutesPixmap->clear();
+        else UnitMinutesPixmap->setPixmap(m_lcdList[m_unitMinutes]);
         m_lastUnitMinutes = m_unitMinutes;
     }
 
     if (m_tenMinutes != m_lastTenMinutes)
     {
-        TenMinutesPixmap->setPixmap(m_lcdList[m_tenMinutes]);
+        if (m_tenMinutes < 0) TenMinutesPixmap->clear();
+        else TenMinutesPixmap->setPixmap(m_lcdList[m_tenMinutes]);
         m_lastTenMinutes = m_tenMinutes;
     }
 
     if (m_unitHours != m_lastUnitHours)
     {
-        UnitHoursPixmap->setPixmap(m_lcdList[m_unitHours]);
+        if (m_unitHours < 0) UnitHoursPixmap->clear();
+        else UnitHoursPixmap->setPixmap(m_lcdList[m_unitHours]);
         m_lastUnitHours = m_unitHours;
     }
 
     if (m_tenHours != m_lastTenHours)
     {
-        TenHoursPixmap->setPixmap(m_lcdList[m_tenHours]);
+        if (m_tenHours < 0) TenHoursPixmap->clear();
+        else TenHoursPixmap->setPixmap(m_lcdList[m_tenHours]);
         m_lastTenHours = m_tenHours;
     }
-
 }
 
 void
