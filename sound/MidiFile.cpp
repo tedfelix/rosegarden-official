@@ -453,6 +453,7 @@ MidiFile::parseTrack(ifstream* midiFile, const Rosegarden::TrackId &trackNum)
                 std::cerr << "MidiFile::parseTrack() - "
                           << "malformed or unsupported SysEx type"
                           << std::endl;
+                continue;
             }
 
             // chop off the EOX
@@ -1135,7 +1136,7 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
                 Rosegarden::Key key = Rosegarden::Key(**el);
 
                 int accidentals = key.getAccidentalCount();
-                if (key.isSharp()) accidentals = -accidentals;
+                if (!key.isSharp()) accidentals = -accidentals;
 
                 // stack out onto the meta string
                 //
@@ -1157,31 +1158,75 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
             {
                 midiEvent =
                     new MidiEvent(midiEventAbsoluteTime,
-                                  MIDI_PITCH_BEND | midiChannel,
-                                  (*el)->get<Int>(Controller::VALUE),
-                                  (*el)->get<Int>(Controller::NUMBER));
+                                  MIDI_CTRL_CHANGE | midiChannel,
+                                  (*el)->get<Int>(Controller::NUMBER),
+                                  (*el)->get<Int>(Controller::VALUE));
 
                 m_midiComposition[trackNumber].push_back(midiEvent);
             }
             else if ((*el)->isa(ProgramChange::EventType))
             {
+                midiEvent =
+                    new MidiEvent(midiEventAbsoluteTime,
+                                  MIDI_PROG_CHANGE | midiChannel,
+                                  (*el)->get<Int>(ProgramChange::PROGRAM));
+
+                m_midiComposition[trackNumber].push_back(midiEvent);
             }
             else if ((*el)->isa(SystemExclusive::EventType))
             {
+                std::string data = 
+                    (*el)->get<String>(SystemExclusive::DATABLOCK);
+
+
+                // check for closing EOX and add one if none found
+                //
+                if (MidiByte(data[data.length() - 1]) != MIDI_END_OF_EXCLUSIVE)
+                {
+                    char out[2];
+                    sprintf(out, "%c", MIDI_END_OF_EXCLUSIVE);
+                    data += out;
+                }
+
+                midiEvent =
+                    new MidiEvent(midiEventAbsoluteTime,
+                                  MIDI_SYSTEM_EXCLUSIVE,
+                                  0, // redundant meta event code
+                                  data);
+
+                m_midiComposition[trackNumber].push_back(midiEvent);
+
             }
             else if ((*el)->isa(ChannelPressure::EventType))
             {
+                midiEvent =
+                    new MidiEvent(midiEventAbsoluteTime,
+                                  MIDI_CHNL_AFTERTOUCH | midiChannel,
+                                  (*el)->get<Int>(ChannelPressure::PRESSURE));
+
+                m_midiComposition[trackNumber].push_back(midiEvent);
             }
             else if ((*el)->isa(KeyPressure::EventType))
             {
+                midiEvent =
+                    new MidiEvent(midiEventAbsoluteTime,
+                                  MIDI_POLY_AFTERTOUCH | midiChannel,
+                                  (*el)->get<Int>(KeyPressure::PITCH),
+                                  (*el)->get<Int>(KeyPressure::PRESSURE));
+
+                m_midiComposition[trackNumber].push_back(midiEvent);
             }
             else if ((*el)->isa(Note::EventRestType))
             {
-                // skip
+                // skip legitiamtely
             }
             else
             {  
-                // skip
+                std::cerr << "MidiFile::convertToMidi - "
+                          << "unsupported MidiType \""
+                          << (*el)->getType()
+                          << "\" at export"
+                          << std::endl;
             }
 
         }
@@ -1414,6 +1459,10 @@ MidiFile::writeTrack(std::ofstream* midiFile,
             case MIDI_PITCH_BEND:
                 trackBuffer += (*midiEvent)->getData1();
                 trackBuffer += (*midiEvent)->getData2();
+                break;
+
+            case MIDI_SYSTEM_EXCLUSIVE:
+                trackBuffer += (*midiEvent)->getMetaMessage();
                 break;
 
             default:

@@ -1543,13 +1543,23 @@ SequenceManager::sendAudioLevel(Rosegarden::MappedEvent *mE)
 void
 SequenceManager::resetControllers()
 {
-    std::cout << "SequencerManager::resetControllers - resetting" << std::endl;
-    Rosegarden::MappedEvent *mE =
-        new Rosegarden::MappedEvent(Rosegarden::MidiInstrumentBase,
-                                    Rosegarden::MappedEvent::MidiController,
-                                    MIDI_CONTROLLER_RESET,
-                                    0);
-    sendMappedEvent(mE);
+    std::cout << "SequenceManager::resetControllers - resetting" << std::endl;
+    Rosegarden::MappedComposition mC;
+
+    // Should do all Midi Instrument - not just guess like this is doing
+    // currently.
+
+    for (unsigned int i = 0; i < 16; i++)
+    {
+        Rosegarden::MappedEvent *mE =
+            new Rosegarden::MappedEvent(Rosegarden::MidiInstrumentBase + i,
+                                        Rosegarden::MappedEvent::MidiController,
+                                        MIDI_CONTROLLER_RESET,
+                                        0);
+
+        mC.insert(mE);
+    }
+    sendMappedComposition(mC);
 }
 
 }
