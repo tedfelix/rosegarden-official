@@ -63,6 +63,9 @@ checkAutomakeAclocal ()
     elif test -x "`$WHICH automake-1.6`" ; then
       AUTOMAKE="`$WHICH automake-1.6`"
       ACLOCAL="`$WHICH aclocal-1.6`"
+    elif test -x "`$WHICH automake-1.7`" ; then
+      AUTOMAKE="`$WHICH automake-1.7`"
+      ACLOCAL="`$WHICH aclocal-1.7`"
     fi
   else
      AUTOMAKE="$UNSERMAKE"
