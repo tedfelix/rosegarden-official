@@ -103,6 +103,14 @@ public:
     bool createRecordFile(const std::string &fileName);
     bool closeRecordFile(AudioFileId &returnedId);
 
+    // Set or change the number of audio inputs and outputs.
+    // The first of these is slightly misnamed -- the submasters
+    // argument controls the number of busses, not ports (which
+    // may or may not exist depending on the setAudioPorts call).
+    //
+    void setAudioPortCounts(int inputs, int submasters);
+    void setAudioPorts(bool faderOuts, bool submasterOuts);
+
     // Locks used by the disk thread and mix thread.  The AlsaDriver
     // should hold these locks whenever it wants to modify its audio
     // play queue -- at least when adding or removing files or
@@ -155,13 +163,18 @@ protected:
 
     void initialise();
 
+    void createMainOutputs();
+    void createFaderOutputs(int pairs);
+    void createSubmasterOutputs(int pairs);
+    void createRecordInputs(int pairs);
+
     // Create a set of JACK input ports (and for the moment)
     // we do default connections to JACK terminal ports.
     //
     // If the deactivate flag is set then we deactivate and reactivate
     // the client when modifying the number of input ports.
     //
-    void createInputPorts(unsigned int ports, bool deactivate);
+//!!!    void createInputPorts(unsigned int ports, bool deactivate);
 
     // data members:
 

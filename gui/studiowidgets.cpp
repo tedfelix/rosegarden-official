@@ -833,7 +833,7 @@ AudioFaderWidget::setAudioChannels(int channels)
     KConfig* config = kapp->config();
     config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
 
-    int jackAudioInputs = config->readNumEntry("jackaudioinputs", 2);
+    int jackAudioInputs = config->readNumEntry("audioinputs", 2);
     QString inputName;
 
     // clear existing entries

@@ -1253,15 +1253,34 @@ SequenceManager::reinitialiseSequencerStudio()
         }
     }
 
-    // Setup JACK audio inputs
+    // Setup JACK audio inputs and outputs
     //
-    int jackAudioInputs = config->readNumEntry("jackaudioinputs", 2);
+    int jackAudioInputs = config->readNumEntry("audioinputs", 2);
+    int audioSubmasters = config->readNumEntry("audiosubmasters", 4);
+    bool submasterOuts = config->readBoolEntry("audiosubmasterouts", false);
+    bool faderOuts = config->readBoolEntry("audiofaderouts", false);
 
-    Rosegarden::MappedEvent mE(Rosegarden::MidiInstrumentBase, // InstrumentId
-                               Rosegarden::MappedEvent::SystemAudioInputs,
-                               Rosegarden::MidiByte(jackAudioInputs));
+    Rosegarden::MappedEvent mEportCounts
+	(Rosegarden::MidiInstrumentBase, // InstrumentId
+	 Rosegarden::MappedEvent::SystemAudioPortCounts,
+	 Rosegarden::MidiByte(jackAudioInputs),
+	 Rosegarden::MidiByte(audioSubmasters));
 
-    Rosegarden::StudioControl::sendMappedEvent(mE);
+    Rosegarden::StudioControl::sendMappedEvent(mEportCounts);
+
+    Rosegarden::MidiByte ports = 0;
+    if (faderOuts) {
+	ports |= Rosegarden::MappedEvent::FaderOuts;
+    }
+    if (submasterOuts) {
+	ports |= Rosegarden::MappedEvent::SubmasterOuts;
+    }
+    Rosegarden::MappedEvent mEports
+	(Rosegarden::MidiInstrumentBase,
+	 Rosegarden::MappedEvent::SystemAudioPorts,
+	 ports);
+
+    Rosegarden::StudioControl::sendMappedEvent(mEports);
 
 
     // Set the studio from the current document

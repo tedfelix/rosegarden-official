@@ -1251,6 +1251,9 @@ AlsaDriver::initialiseAudio()
 	m_driverStatus |= AUDIO_OK;
 	m_audioPlayLatency = m_jackDriver->getAudioPlayLatency();
 	m_audioRecordLatency = m_jackDriver->getAudioRecordLatency();
+    } else {
+	delete m_jackDriver;
+	m_jackDriver = 0;
     }
 #endif
 }
@@ -1348,7 +1351,7 @@ AlsaDriver::stopPlayback()
     if (m_recordStatus == RECORD_AUDIO)
     {
 	AudioFileId id;
-	if (m_jackDriver->closeRecordFile(id)) {
+	if (m_jackDriver && m_jackDriver->closeRecordFile(id)) {
 
 	    // Create event to return to gui to say that we've completed
 	    // an audio file and we can generate a preview for it now.
@@ -1376,13 +1379,16 @@ AlsaDriver::stopPlayback()
         m_recordStatus = ASYNCHRONOUS_MIDI;
 
 #ifdef HAVE_LIBJACK
-    m_jackDriver->stop();
-
-    m_jackDriver->getAudioQueueLocks();
+    if (m_jackDriver) {
+	m_jackDriver->stop();
+	m_jackDriver->getAudioQueueLocks();
+    }
 #endif
     clearAudioPlayQueue();
 #ifdef HAVE_LIBJACK
-    m_jackDriver->releaseAudioQueueLocks();
+    if (m_jackDriver) {
+	m_jackDriver->releaseAudioQueueLocks();
+    }
 #endif
 }
 
@@ -1435,14 +1441,14 @@ AlsaDriver::resetPlayback(const RealTime &position)
     }
 
 #ifdef HAVE_LIBJACK
-    m_jackDriver->getAudioQueueLocks();
+    if (m_jackDriver) m_jackDriver->getAudioQueueLocks();
 #endif
 
     // clear out defunct
     clearDefunctFromAudioPlayQueue();
 
 #ifdef HAVE_LIBJACK
-    m_jackDriver->releaseAudioQueueLocks();
+    if (m_jackDriver) m_jackDriver->releaseAudioQueueLocks();
 #endif
 }
 
@@ -2147,7 +2153,8 @@ AlsaDriver::startClocks()
     // Don't need any locks on this, except for those that the
     // driver methods take and hold for themselves
 
-    if (!m_jackDriver->start()) { // need to wait for transport sync
+    if (m_jackDriver && !m_jackDriver->start()) {
+	// need to wait for transport sync
 	return;
     }
 #endif
@@ -2219,7 +2226,7 @@ AlsaDriver::stopClocks()
     m_queueRunning = false;
 
 #ifdef HAVE_LIBJACK
-    m_jackDriver->stop();
+    if (m_jackDriver) m_jackDriver->stop();
 #endif
     
     snd_seq_event_t event;
@@ -2268,6 +2275,8 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
         //
         if ((*i)->getType() == MappedEvent::Audio)
         {
+	    if (!m_jackDriver) continue;
+
             // Check for existence of file - if the sequencer has died
             // and been restarted then we're not always loaded up with
             // the audio file references we should have.  In the future
@@ -2295,11 +2304,6 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                 if (adjustedEventTime <= RealTime(-120, 0))
                 {
 		    adjustedEventTime = getSequencerTime();
-//!!!er...
-//		    adjustedEventTime = getAlsaTime() + RealTime(0, 500000000);
-			//!!! need to cause a fillBuffers call to happen on the mixer
-//!!!                    else
-//!!!                        adjustedEventTime = RealTime::zeroTime;
                 }
 
                 // Create this event in this thread and push it onto audio queue.
@@ -2438,8 +2442,10 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                     break;
             }
 
-	    m_jackDriver->setTransportEnabled(enabled);
-	    m_jackDriver->setTransportMaster(master);
+	    if (m_jackDriver) {
+		m_jackDriver->setTransportEnabled(enabled);
+		m_jackDriver->setTransportMaster(master);
+	    }
         }
 #endif // HAVE_LIBJACK
 
@@ -2530,12 +2536,34 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
             }
         }
 
-        if ((*i)->getType() == MappedEvent::SystemAudioInputs)
+        if ((*i)->getType() == MappedEvent::SystemAudioPortCounts)
         {
-#ifndef HAVE_LIBJACK
+#ifdef HAVE_LIBJACK
+	    if (m_jackDriver) {
+		m_jackDriver->setAudioPortCounts((*i)->getData1(),
+						 (*i)->getData2());
+	    }
+#else
 #ifdef DEBUG_ALSA
             std::cerr << "AlsaDriver::processEventsOut - "
-                      << "MappedEvent::SystemAudioInputs - no audio subsystem"
+                      << "MappedEvent::SystemAudioPortCounts - no audio subsystem"
+                      << std::endl;
+#endif
+#endif
+        }
+
+        if ((*i)->getType() == MappedEvent::SystemAudioPorts)
+        {
+#ifdef HAVE_LIBJACK
+	    if (m_jackDriver) {
+		int data = (*i)->getData1();
+		m_jackDriver->setAudioPorts(data & MappedEvent::FaderOuts,
+					    data & MappedEvent::SubmasterOuts);
+	    }
+#else
+#ifdef DEBUG_ALSA
+            std::cerr << "AlsaDriver::processEventsOut - "
+                      << "MappedEvent::SystemAudioPorts - no audio subsystem"
                       << std::endl;
 #endif
 #endif
@@ -2547,15 +2575,17 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
     processMidiOut(mC, now);
 
 #ifdef HAVE_LIBJACK
-    if (haveNewAudio) {
-	if (now) {
-	    m_jackDriver->prebufferAudio();
+    if (m_jackDriver) {
+	if (haveNewAudio) {
+	    if (now) {
+		m_jackDriver->prebufferAudio();
+	    }
+	    if (m_queueRunning) {
+		m_jackDriver->kickAudio();
+	    }
 	}
-	if (m_queueRunning) {
-	    m_jackDriver->kickAudio();
-	}
+	m_jackDriver->updateAudioLevels();
     }
-    m_jackDriver->updateAudioLevels();
 #endif
 }
 
@@ -2566,13 +2596,13 @@ AlsaDriver::record(RecordStatus recordStatus)
     {
         // start recording
         m_recordStatus = RECORD_MIDI;
-//!!!        m_alsaRecordStartTime = getAlsaTime();
 	m_alsaRecordStartTime = RealTime::zeroTime;
     }
     else if (recordStatus == RECORD_AUDIO)
     {
 #ifdef HAVE_LIBJACK
-        if (m_jackDriver->createRecordFile(m_recordingFilename))
+	if (m_jackDriver &&
+	    m_jackDriver->createRecordFile(m_recordingFilename))
         {
             m_recordStatus = RECORD_AUDIO;
         }

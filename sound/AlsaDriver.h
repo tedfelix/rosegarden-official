@@ -80,7 +80,8 @@ public:
     //
     virtual unsigned int getSampleRate() const {
 #ifdef HAVE_LIBJACK
-	return m_jackDriver->getSampleRate();
+	if (m_jackDriver) return m_jackDriver->getSampleRate();
+	else return 0;
 #else
 	return 0;
 #endif
@@ -112,13 +113,13 @@ public:
                                    unsigned long pluginId,
                                    int position) {
 #ifdef HAVE_LIBJACK
-	m_jackDriver->setPluginInstance(id, pluginId, position);
+	if (m_jackDriver) m_jackDriver->setPluginInstance(id, pluginId, position);
 #endif
     }
 
     virtual void removePluginInstance(InstrumentId id, int position) {
 #ifdef HAVE_LIBJACK
-	m_jackDriver->removePluginInstance(id, position);
+	if (m_jackDriver) m_jackDriver->removePluginInstance(id, position);
 #endif
     }
 
@@ -126,7 +127,7 @@ public:
     //
     virtual void removePluginInstances() {
 #ifdef HAVE_LIBJACK
-	m_jackDriver->removePluginInstances();
+	if (m_jackDriver) m_jackDriver->removePluginInstances();
 #endif
     }
 
@@ -135,7 +136,7 @@ public:
                                             unsigned long portNumber,
                                             float value) {
 #ifdef HAVE_LIBJACK
-	m_jackDriver->setPluginInstancePortValue(id, position, portNumber, value);
+	if (m_jackDriver) m_jackDriver->setPluginInstancePortValue(id, position, portNumber, value);
 #endif
     }
 
@@ -143,7 +144,7 @@ public:
                                          int position,
                                          bool value) {
 #ifdef HAVE_LIBJACK
-	m_jackDriver->setPluginInstanceBypass(id, position, value);
+	if (m_jackDriver) m_jackDriver->setPluginInstanceBypass(id, position, value);
 #endif
     }
 

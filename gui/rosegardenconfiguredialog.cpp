@@ -1114,20 +1114,20 @@ SequencerConfigurationPage::SequencerConfigurationPage(
 
 #ifdef HAVE_LIBJACK
 
-    label = new QLabel(i18n("Number of audio inputs:"), frame);
+    label = new QLabel(i18n("Number of stereo audio inputs:"), frame);
     m_jackInputs = new QSpinBox(frame);
 
     layout->addWidget(label,        0, 0);
     layout->addWidget(m_jackInputs, 0, 1);
     ++increment;
 
-    int jackAudioInputs = m_cfg->readNumEntry("jackaudioinputs", 2);
+    int jackAudioInputs = m_cfg->readNumEntry("audioinputs", 2);
 
     m_jackInputs->setValue(jackAudioInputs);
     m_jackInputs->setMinValue(2);
     m_jackInputs->setMaxValue(64); // completely arbitrary of course!
 
-    label = new QLabel(i18n("Number of audio submasters:"), frame);
+    label = new QLabel(i18n("Number of stereo audio submasters:"), frame);
     m_submasters = new QSpinBox(frame);
 
     layout->addWidget(label,        1, 0);
@@ -1139,7 +1139,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     m_submasters->setMinValue(0);
     m_submasters->setMaxValue(8);
 
-    label = new QLabel(i18n("Create JACK outputs for instrument faders"), frame);
+    label = new QLabel(i18n("Create post-fader outputs for audio instruments"), frame);
     m_createFaderOuts = new QCheckBox(frame);
     m_createFaderOuts->setChecked(m_cfg->readBoolEntry("audiofaderouts", false));
 
@@ -1147,7 +1147,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     layout->addWidget(m_createFaderOuts, 2, 1);
     ++increment;
 
-    label = new QLabel(i18n("Create JACK outputs for submasters"), frame);
+    label = new QLabel(i18n("Create post-fader outputs for submasters"), frame);
     m_createSubmasterOuts = new QCheckBox(frame);
     m_createSubmasterOuts->setChecked(m_cfg->readBoolEntry("audiosubmasterouts",
 							   false));
@@ -1354,7 +1354,7 @@ SequencerConfigurationPage::apply()
 
     // Jack audio inputs
     //
-    m_cfg->writeEntry("jackaudioinputs", m_jackInputs->value());
+    m_cfg->writeEntry("audioinputs", m_jackInputs->value());
 
     m_cfg->writeEntry("audiosubmasters", m_submasters->value());
     m_cfg->writeEntry("audiofaderouts", m_createFaderOuts->isChecked());
@@ -1364,13 +1364,27 @@ SequencerConfigurationPage::apply()
     //
     m_cfg->writeEntry("audiorecordminutes", m_audioRecordMinutes->value());
 
-    Rosegarden::MappedEvent mEjackInputs(Rosegarden::MidiInstrumentBase, // InstrumentId
-                                         Rosegarden::MappedEvent::SystemAudioInputs,
-                                         Rosegarden::MidiByte(m_jackInputs->value()));
+    Rosegarden::MappedEvent mEportCounts
+	(Rosegarden::MidiInstrumentBase, // InstrumentId
+	 Rosegarden::MappedEvent::SystemAudioPortCounts,
+	 Rosegarden::MidiByte(m_jackInputs->value()),
+	 Rosegarden::MidiByte(m_submasters->value()));
 
-    Rosegarden::StudioControl::sendMappedEvent(mEjackInputs);
+    Rosegarden::StudioControl::sendMappedEvent(mEportCounts);
 
-    
+    Rosegarden::MidiByte ports = 0;
+    if (m_createFaderOuts->isChecked()) {
+	ports |= Rosegarden::MappedEvent::FaderOuts;
+    }
+    if (m_createSubmasterOuts->isChecked()) {
+	ports |= Rosegarden::MappedEvent::SubmasterOuts;
+    }
+    Rosegarden::MappedEvent mEports
+	(Rosegarden::MidiInstrumentBase,
+	 Rosegarden::MappedEvent::SystemAudioPorts,
+	 ports);
+
+    Rosegarden::StudioControl::sendMappedEvent(mEports);
 
     m_cfg->writeEntry("timer", m_timer->currentText());
     m_doc->setCurrentTimer(m_timer->currentText());

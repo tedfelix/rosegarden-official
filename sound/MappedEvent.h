@@ -138,15 +138,27 @@ public:
         SystemRecordDevice       = 1 << 17,
         // Set Metronome device
         SystemMetronomeDevice    = 1 << 18,
-        // Set number Audio inputs/JACK input ports
-        SystemAudioInputs        = 1 << 19,
+        // Set Audio inputs/outputs: data1 num inputs, data2 num submasters
+        SystemAudioPortCounts    = 1 << 19,
+	// Set whether we create various Audio ports (data1 is an AudioOutMask)
+	SystemAudioPorts         = 1 << 20,
 
         // Time sig. event (from time sig. composition reference segment)
-        TimeSignature            = 1 << 20,
+        TimeSignature            = 1 << 21,
         // Tempo event (from tempo composition reference segment)
-        Tempo                    = 1 << 21
+        Tempo                    = 1 << 22
 
     } MappedEventType;
+
+    typedef enum
+    {
+	// These values are OR'd to produce the data2 field in a
+	// SystemAudioPorts event.
+	FaderOuts                = 1 << 0,
+	SubmasterOuts            = 1 << 1
+
+    } MappedEventAudioOutMask;
+	
 
     MappedEvent(): m_trackId(0),
                    m_instrument(0),
