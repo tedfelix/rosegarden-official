@@ -345,6 +345,7 @@ Studio::unassignAllInstruments()
     std::vector<Device*>::iterator it;
     Rosegarden::InstrumentList::iterator iit;
     Rosegarden::InstrumentList instList;
+    int channel = 0;
 
     for (it = m_devices.begin(); it != m_devices.end(); it++)
     {
@@ -359,7 +360,17 @@ Studio::unassignAllInstruments()
                 // Only for true MIDI Instruments - not System ones
                 //
                 if ((*iit)->getId() >= MidiInstrumentBase)
+                {
+                    (*iit)->setSendBankSelect(false);
                     (*iit)->setSendProgramChange(false);
+                    (*iit)->setMidiChannel(channel);
+                    channel = ( channel + 1 ) % 16;
+
+                    (*iit)->setSendPan(false);
+                    (*iit)->setSendVelocity(false);
+                    (*iit)->setPan(MidiMidValue);
+                    (*iit)->setVelocity(MidiMaxValue);
+                }
             }
         }
     }
