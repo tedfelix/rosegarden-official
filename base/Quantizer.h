@@ -51,17 +51,26 @@ public:
      *
      * \arg source, target : Description of where to find the
      * times to be quantized, and where to put the quantized results.
+     * 
      * These may be strings, specifying a prefix for the names
      * of properties to contain the timings, or may be the special
      * value RawEventData in which case the event's absolute time
-     * and duration will be used instead of properties.  If source
-     * specifies a property prefix for properties that are found
-     * not to exist, they will be pre-filled from the original
-     * timings in the target values before being quantized and
-     * then set back into the target.  (This permits a quantizer
-     * to write directly into the Event's absolute time and
-     * duration without losing the original values, because they
-     * are backed up automatically into the source properties.)
+     * and duration will be used instead of properties.
+     * 
+     * If source specifies a property prefix for properties that are
+     * found not to exist, they will be pre-filled from the original
+     * timings in the target values before being quantized and then
+     * set back into the target.  (This permits a quantizer to write
+     * directly into the Event's absolute time and duration without
+     * losing the original values, because they are backed up
+     * automatically into the source properties.)
+     * 
+     * Note that because it's impossible to modify the duration or
+     * absolute time of an event after construction, if target is
+     * RawEventData the quantizer must re-construct each event in
+     * order to adjust its timings.  This operation (deliberately)
+     * loses any non-persistent properties in the events.  This
+     * does not happen if target is a property prefix.
      *
      *   Examples:
      *
@@ -147,15 +156,17 @@ public:
 	      std::string source = RawEventData,
 	      std::string target = DefaultTarget);
 
+    Quantizer(const Quantizer &);
+
     /**
      * Construct a quantizer by copying from another quantizer,
-     * but with a different source and/or target
+     * but with a different source and/or target (not defaulted
+     * to avoid collision with the plain copy constructor, whose
+     * source and target values have to come from the quantizer
+     * being copied from)
      */
-    Quantizer(const Quantizer &,
-	      std::string source = RawEventData,
-	      std::string target = DefaultTarget);
+    Quantizer(const Quantizer &, std::string source, std::string target);
 
-    Quantizer(const Quantizer &);
     Quantizer &operator=(const Quantizer &);
     bool operator==(const Quantizer &) const;
     

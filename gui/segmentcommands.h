@@ -110,7 +110,7 @@ public:
     void execute();
     void unexecute();
 
-    void getSegments(SegmentSet &);
+    virtual void getSegments(SegmentSet &);
 
 private:
     struct SegmentRec {
@@ -141,6 +141,35 @@ private:
     Rosegarden::Segment *m_segment;
     Rosegarden::Segment *m_newSegment;
     Rosegarden::timeT m_splitTime;
+};
+
+
+class SegmentChangeQuantizationCommand : public SegmentCommand
+{
+public:
+    /// Set quantization on segments.  If sq is null, switch quantization off.
+    SegmentChangeQuantizationCommand(Rosegarden::StandardQuantization *sq);
+    virtual ~SegmentChangeQuantizationCommand();
+
+    void addSegment(Rosegarden::Segment *s);
+
+    virtual void execute();
+    virtual void unexecute();
+
+    virtual void getSegments(SegmentSet &);
+
+    static QString name(Rosegarden::StandardQuantization *sq);
+
+private:
+    struct SegmentRec {
+	Rosegarden::Segment *segment;
+	Rosegarden::Quantizer *oldQuantizer;
+	bool wasQuantized;
+    };
+    typedef std::vector<SegmentRec> SegmentRecSet;
+    SegmentRecSet m_records;
+
+    Rosegarden::StandardQuantization *m_quantization;
 };
 
 

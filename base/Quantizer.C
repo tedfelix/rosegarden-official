@@ -254,8 +254,8 @@ Quantizer::getQuantizedDuration(Event *e) const
     if (m_target == RawEventData) {
 	return e->getDuration();
     } else {
-	if (e->has(m_target + "Duration")) {
-	    return e->get<Int>(m_target + "Duration");
+	if (e->has(m_targetProperties[DurationValue])) {
+	    return e->get<Int>(m_targetProperties[DurationValue]);
 	} else {
 	    return quantizeDuration(e->getDuration());
 	}
@@ -269,8 +269,8 @@ Quantizer::getQuantizedAbsoluteTime(Event *e) const
     if (m_target == RawEventData) {
 	return e->getAbsoluteTime();
     } else {
-	if (e->has(m_target + "AbsoluteTime")) {
-	    return e->get<Int>(m_target + "AbsoluteTime");
+	if (e->has(m_targetProperties[AbsoluteTimeValue])) {
+	    return e->get<Int>(m_targetProperties[AbsoluteTimeValue]);
 	} else {
 	    return quantizeAbsoluteTime(e->getAbsoluteTime());
 	}
@@ -474,10 +474,8 @@ Quantizer::getFromTarget(Event *e, ValueType v) const
 
     } else {
 
-	std::string tag(v == AbsoluteTimeValue ? "AbsoluteTime" : "Duration");
-
 	timeT value = 0;
-	e->get<Int>(m_target + tag, value);
+	e->get<Int>(m_targetProperties[v], value);
 	return value;
     }
 }
@@ -490,19 +488,25 @@ Quantizer::setToTarget(Segment *s, Segment::iterator i,
 
     if (m_target == RawEventData) {
 
-	//!!! Need to make sure we don't lose source properties
-	// (Also need to document the fact that this is kind-of
-	// destructive in that it loses all other non-persistent
-	// properties if target == RawEventData)
+	timeT st = 0, sd = 0;
+	bool haveSt = false, haveSd = false;
+	if (m_source != RawEventData) {
+	    haveSt = (*i)->get<Int>(m_sourceProperties[AbsoluteTimeValue], st);
+	    haveSd = (*i)->get<Int>(m_sourceProperties[DurationValue],	   sd);
+	}
 
 	Event *e = new Event(**i, absTime, duration);
+
+	if (haveSt) e->setMaybe<Int>(m_sourceProperties[AbsoluteTimeValue],st);
+	if (haveSd) e->setMaybe<Int>(m_sourceProperties[DurationValue],    sd);
+
 	s->erase(i);
 	m_toInsert.push_back(e);
 
     } else {
 
-	(*i)->setMaybe<Int>(m_target + "AbsoluteTime", absTime);
-	(*i)->setMaybe<Int>(m_target + "Duration", duration);
+	(*i)->setMaybe<Int>(m_targetProperties[AbsoluteTimeValue], absTime);
+	(*i)->setMaybe<Int>(m_targetProperties[DurationValue], duration);
     }
 }
 

@@ -42,8 +42,8 @@
 /**
  * SegmentCommand is a base for commands that affect the "envelope"
  * of one or more entire segments, and that may or may not also
- * affect their contents -- for example, resizing or splitting
- * segments.
+ * affect their contents -- for example, resizing, splitting, or
+ * quantizing segments.
  */
 
 class SegmentCommand : public KCommand
@@ -100,9 +100,20 @@ protected:
 /**
  * Somewhat like a KMacroCommand, but commands can only be added by a
  * subclass (i.e. it's not intended for user-created macros) and it
- * has accessors for the contained commands.
+ * has accessors for the contained commands.  See MacroCommand below
+ * for the user-created macro version.
  * 
  * Not derived from KMacroCommand for implementation reasons.
+ *
+ * It's not always a good idea to use CompoundCommand or MacroCommand:
+ * the main problem is that it may be too difficult for any extant
+ * views to work out how to refresh their contents efficiently
+ * because the basic CompoundCommand and MacroCommand offer no
+ * helpful information about the changes that have happened except
+ * as a set of discrete contained commands.  This means views may well
+ * respond to commands by refreshing multiple times.  In general
+ * therefore it's likely to be more efficient (if less convenient)
+ * to create your own class which does all of the operations at once.
  */
 
 class CompoundCommand : public KCommand
@@ -145,7 +156,7 @@ private:
 
 
 /**
- * The true macro version.
+ * The true macro version.  See CompoundCommand.
  */
 
 class MacroCommand : public CompoundCommand

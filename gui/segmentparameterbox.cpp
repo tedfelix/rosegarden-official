@@ -30,12 +30,14 @@
 #include "NotationTypes.h"
 
 #include "notepixmapfactory.h"
+#include "segmentcommands.h"
 
 SegmentParameterBox::SegmentParameterBox(QWidget *parent,
                                          const char *name,
                                          WFlags f) :
     QFrame(parent, name, f),
-    m_standardQuantizations(Rosegarden::StandardQuantization::getStandardQuantizations())
+    m_standardQuantizations
+	(Rosegarden::StandardQuantization::getStandardQuantizations())
 {
     setFixedSize(136, 120);
     initBox();
@@ -434,12 +436,22 @@ SegmentParameterBox::slotRepeatPressed()
 void
 SegmentParameterBox::slotQuantizeSelected(int qLevel)
 {
+    bool off = (qLevel == m_quantizeValue->count() - 1);
+
+    SegmentChangeQuantizationCommand *command =
+	new SegmentChangeQuantizationCommand
+	(off ? 0 : &m_standardQuantizations[qLevel]);
+
     std::vector<Rosegarden::Segment*>::iterator it;
     for (it = m_segments.begin(); it != m_segments.end(); it++)
     {
-        (*it)->setQuantization(true);
-        (*it)->setQuantizeLevel(m_standardQuantizations[qLevel]);
+	command->addSegment(*it);
     }
+
+    //!!! okay, what to do with the command -- got to get the 
+    // command history from the document -- do it here or emit
+    // signal & do it elsewhere?
+    
 }
 
 

@@ -69,7 +69,8 @@
     group of four "tied" notes right at the end of the test program
 
 19. Quantizer: deal with these dynamically-generated PropertyNames;
-    they really slow things down
+    they really slow things down [DONE]
+
 
 Post-0.1.3 task list (superseding older ones)
 ====================

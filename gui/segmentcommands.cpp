@@ -373,6 +373,96 @@ SegmentSplitCommand::unexecute()
 }
 
 
+
+
+SegmentChangeQuantizationCommand::SegmentChangeQuantizationCommand(Rosegarden::StandardQuantization *sq) :
+    SegmentCommand(name(sq)),
+    m_quantization(sq)
+{
+    // nothing
+}
+
+SegmentChangeQuantizationCommand::~SegmentChangeQuantizationCommand()
+{
+    // nothing
+}
+
+void
+SegmentChangeQuantizationCommand::execute()
+{
+    for (unsigned int i = 0; i < m_records.size(); ++i) {
+
+	SegmentRec &rec = m_records[i];
+
+	if (m_quantization) {
+
+	    rec.oldQuantizer =
+		new Rosegarden::Quantizer(rec.segment->getQuantizer());
+	    rec.segment->setQuantizeLevel(*m_quantization);
+
+	    rec.wasQuantized = rec.segment->hasQuantization();
+	    rec.segment->setQuantization(true);
+
+	} else {
+
+	    rec.wasQuantized = rec.segment->hasQuantization();
+	    rec.segment->setQuantization(false);
+	}
+    }
+}
+
+void
+SegmentChangeQuantizationCommand::unexecute()
+{
+    for (unsigned int i = 0; i < m_records.size(); ++i) {
+
+	SegmentRec &rec = m_records[i];
+
+	if (m_quantization) {
+
+	    if (!rec.wasQuantized) rec.segment->setQuantization(false);
+
+	    rec.segment->setQuantizeLevel(*rec.oldQuantizer);
+	    delete rec.oldQuantizer;
+	    rec.oldQuantizer = 0;
+
+	} else {
+
+	    if (rec.wasQuantized) rec.segment->setQuantization(true);
+	}
+    }
+}
+
+void
+SegmentChangeQuantizationCommand::addSegment(Rosegarden::Segment *s)
+{
+    SegmentRec rec;
+    rec.segment = s;
+    rec.oldQuantizer = 0;
+    rec.wasQuantized = false; // shouldn't matter what we initialise this to
+    m_records.push_back(rec);
+}
+    
+void
+SegmentChangeQuantizationCommand::getSegments(SegmentSet &segments)
+{
+    for (unsigned int i = 0; i < m_records.size(); ++i) {
+	segments.insert(m_records[i].segment);
+    }
+}
+
+QString
+SegmentChangeQuantizationCommand::name(Rosegarden::StandardQuantization *sq)
+{
+    if (!sq) {
+	return "Unquantize";
+    } else {
+	return QString("Quantize to ") + sq->name.c_str();
+    }
+}
+
+
+
 // --------- Add Time Signature --------
 // 
 void
