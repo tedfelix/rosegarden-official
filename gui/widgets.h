@@ -269,28 +269,6 @@ signals:
 protected:
 };
 
-// Like a QPushButton in a QButtonGroup but just supplying
-// an index number.
-//
-class PluginButton : public QPushButton
-{
-    Q_OBJECT
-public:
-    PluginButton(QWidget *parent, int index);
-
-    void setIndex(int index) { m_index = index; }
-    int getIndex() const { return m_index; }
-
-signals:
-    void released(int); // with an index number
-
-protected:
-    void mouseReleaseEvent(QMouseEvent *e);
-
-    int m_index;
-};
-
-
 class RosegardenRotary : public QWidget
 {
     Q_OBJECT
