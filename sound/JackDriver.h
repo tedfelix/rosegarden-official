@@ -163,10 +163,10 @@ protected:
 
     void initialise();
 
-    void createMainOutputs();
-    void createFaderOutputs(int pairs);
-    void createSubmasterOutputs(int pairs);
-    void createRecordInputs(int pairs);
+    bool createMainOutputs();
+    bool createFaderOutputs(int pairs);
+    bool createSubmasterOutputs(int pairs);
+    bool createRecordInputs(int pairs);
 
     // data members:
 

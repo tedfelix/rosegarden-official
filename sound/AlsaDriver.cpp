@@ -1,21 +1,22 @@
 // -*- c-indentation-style:"stroustrup" c-basic-offset: 4 -*-
+
 /*
-  Rosegarden-4
-  A sequencer and musical notation editor.
+    Rosegarden-4
+    A sequencer and musical notation editor.
 
-  This program is Copyright 2000-2003
-  Guillaume Laurent   <glaurent@telegraph-road.org>,
-  Chris Cannam        <cannam@all-day-breakfast.com>,
-  Richard Bown        <bownie@bownie.com>
+    This program is Copyright 2000-2003
+        Guillaume Laurent   <glaurent@telegraph-road.org>,
+        Chris Cannam        <cannam@all-day-breakfast.com>,
+        Richard Bown        <bownie@bownie.com>
 
-  The moral right of the authors to claim authorship of this work
-  has been asserted.
+    The moral right of the authors to claim authorship of this work
+    has been asserted.
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.  See the file
-  COPYING included with this distribution for more information.
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
 */
 
 #include "config.h"
@@ -39,6 +40,7 @@
 #include "MappedStudio.h"
 #include "rosestrings.h"
 #include "MappedCommon.h"
+#include "Audit.h"
 
 #include <qregexp.h>
 
@@ -49,37 +51,6 @@
 
 using std::cerr;
 using std::endl;
-
-
-static std::string _audit;
-
-// I was going to prevent output to std::cout if NDEBUG was set, but actually
-// it's probably a good idea to continue to send to std::cout as well -- it
-// shouldn't even get noticed unless someone's actually trying to debug,
-// and it's necessary if the sequencer crashes altogether (because the
-// status button in the GUI won't work if the sequencer's crashed).
-
-#define AUDIT_STREAM _auditStream
-#if (__GNUC__ < 3)
-#include <strstream>
-#define AUDIT_START std::strstream _auditStream
-#ifdef NOT_DEFINED_NDEBUG
-#define AUDIT_UPDATE _auditStream << std::ends; _audit += _auditStream.str();
-#else
-#define AUDIT_UPDATE _auditStream << std::ends; \
-                     std::string _auditChunk = _auditStream.str(); \
-                     _audit += _auditChunk; std::cerr << _auditChunk;
-#endif
-#else
-#include <sstream>
-#define AUDIT_START std::stringstream _auditStream
-#ifdef NOT_DEFINED_NDEBUG
-#define AUDIT_UPDATE _audit += _auditStream.str();
-#else
-#define AUDIT_UPDATE std::string _auditChunk = _auditStream.str(); \
-                     _audit += _auditChunk; std::cerr << _auditChunk;
-#endif
-#endif
 
 
 namespace Rosegarden
@@ -107,11 +78,9 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
     ,m_queueRunning(false)
 
 {
-    AUDIT_START;
-    AUDIT_STREAM << "Rosegarden " << VERSION << " - AlsaDriver - " 
+    Audit audit;
+    audit << "Rosegarden " << VERSION << " - AlsaDriver - " 
                  << m_name << std::endl;
-
-    AUDIT_UPDATE;
 }
 
 AlsaDriver::~AlsaDriver()
@@ -315,7 +284,7 @@ AlsaDriver::generateTimerList()
 void
 AlsaDriver::generatePortList(AlsaPortList *newPorts)
 {
-    AUDIT_START;
+    Audit audit;
     AlsaPortList alsaPorts;
 
     snd_seq_client_info_t *cinfo;
@@ -327,7 +296,7 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
     snd_seq_client_info_alloca(&cinfo);
     snd_seq_client_info_set_client(cinfo, -1);
 
-    AUDIT_STREAM << std::endl << "  ALSA Client information:"
+    audit << std::endl << "  ALSA Client information:"
 		 << std::endl << std::endl;
 
     // Get only the client ports we're interested in and store them
@@ -355,7 +324,7 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
             if (((capability & writeCap) == writeCap) ||
                 ((capability &  readCap) ==  readCap))
             {
-                AUDIT_STREAM << "    "
+                audit << "    "
 			     << client << ","
 			     << port << " - ("
 			     << snd_seq_client_info_get_name(cinfo) << ", "
@@ -366,20 +335,20 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
                 if (capability & SND_SEQ_PORT_CAP_DUPLEX)
                 {
                     direction = Duplex;
-                    AUDIT_STREAM << "\t\t\t(DUPLEX)";
+                    audit << "\t\t\t(DUPLEX)";
                 }
                 else if (capability & SND_SEQ_PORT_CAP_WRITE)
                 {
                     direction = WriteOnly;
-                    AUDIT_STREAM << "\t\t(WRITE ONLY)";
+                    audit << "\t\t(WRITE ONLY)";
                 }
                 else
                 {
                     direction = ReadOnly;
-                    AUDIT_STREAM << "\t\t(READ ONLY)";
+                    audit << "\t\t(READ ONLY)";
                 }
 
-		AUDIT_STREAM << " [ctype " << clientType << ", ptype " << portType << ", cap " << capability << "]";
+		audit << " [ctype " << clientType << ", ptype " << portType << ", cap " << capability << "]";
 
                 // Generate a unique name using the client id
                 //
@@ -443,19 +412,17 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
 
                 alsaPorts.push_back(portDescription);
 
-                AUDIT_STREAM << std::endl;
+                audit << std::endl;
             }
         }
     }
 
-    AUDIT_STREAM << std::endl;
+    audit << std::endl;
 
     // Ok now sort by duplexicity
     //
     std::sort(alsaPorts.begin(), alsaPorts.end(), AlsaPortCmp());
     m_alsaPorts = alsaPorts;
-
-    AUDIT_UPDATE;
 }
 
 
@@ -571,7 +538,7 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port,
 {
     char deviceName[100];
     std::string connectionName("");
-    AUDIT_START;
+    Audit audit;
 
     static int unknownCounter;
 
@@ -667,7 +634,7 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port,
 
 	connectionName = port->m_name;
 
-	AUDIT_STREAM << "Creating device " << deviceId << " in "
+	audit << "Creating device " << deviceId << " in "
 		     << (reqDirection == MidiDevice::Play ? "Play" : "Record")
 		     << " mode for connection " << connectionName
 		     << "\nDefault device name for this device is "
@@ -677,7 +644,7 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port,
 
 	sprintf(deviceName, "Anonymous MIDI device %d", ++unknownCounter);
 
-	AUDIT_STREAM << "Creating device " << deviceId << " in "
+	audit << "Creating device " << deviceId << " in "
 		     << (reqDirection == MidiDevice::Play ? "Play" : "Record")
 		     << " mode -- no connection available "
 		     << "\nDefault device name for this device is "
@@ -689,7 +656,6 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port,
 					    deviceName,
 					    connectionName);
     device->setDirection(reqDirection);
-    AUDIT_UPDATE;
     return device;
 }
 
@@ -864,7 +830,7 @@ AlsaDriver::getConnection(Device::DeviceType type,
 void
 AlsaDriver::setConnection(DeviceId id, QString connection)
 {
-    AUDIT_START;
+    Audit audit;
     ClientPortPair port(getPortByName(connection.data()));
 
     if (port.first != -1 && port.second != -1) {
@@ -885,17 +851,15 @@ AlsaDriver::setConnection(DeviceId id, QString connection)
 	    }
 	}
     }
-
-    AUDIT_UPDATE;
 }
 
 void
 AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
 {
-    AUDIT_START;
+    Audit audit;
     ClientPortPair port(getPortByName(idealConnection.data()));
 
-    AUDIT_STREAM << "AlsaDriver::setPlausibleConnection: connection like "
+    audit << "AlsaDriver::setPlausibleConnection: connection like "
 		 << idealConnection << " requested for device " << id << std::endl;
 
     if (port.first != -1 && port.second != -1) {
@@ -910,9 +874,8 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
 	    }
 	}
 
-	AUDIT_STREAM << "AlsaDriver::setPlausibleConnection: exact match available"
+	audit << "AlsaDriver::setPlausibleConnection: exact match available"
 		     << std::endl;
-	AUDIT_UPDATE;
 	return;
     }
 
@@ -965,7 +928,7 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
 
 	    // OK, this one will do
 
-	    AUDIT_STREAM << "AlsaDriver::setPlausibleConnection: fuzzy match "
+	    audit << "AlsaDriver::setPlausibleConnection: fuzzy match "
 			 << port->m_name << " available" << std::endl;
 
 	    m_devicePortMap[id] = ClientPortPair(port->m_client, port->m_port);
@@ -980,16 +943,14 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
 		    // file load when the GUI is well aware that the
 		    // whole situation is in upheaval anyway
 		    
-		    AUDIT_UPDATE;
 		    return;
 		}
 	    }
 	}
     }
 
-    AUDIT_STREAM << "AlsaDriver::setPlausibleConnection: nothing suitable available"
+    audit << "AlsaDriver::setPlausibleConnection: nothing suitable available"
 		 << std::endl;
-    AUDIT_UPDATE;
 }
 
 unsigned int
@@ -1013,7 +974,7 @@ AlsaDriver::getCurrentTimer()
 void
 AlsaDriver::setCurrentTimer(QString timer)
 {
-    AUDIT_START;
+    Audit audit;
 
     std::string name(timer.data());
 
@@ -1038,7 +999,7 @@ AlsaDriver::setCurrentTimer(QString timer)
 	    snd_seq_queue_timer_set_id(timer, timerid);
 	    snd_seq_set_queue_timer(m_midiHandle, m_queue, timer);
 
-	    AUDIT_STREAM << "    Current timer set to \"" << name << "\""
+	    audit << "    Current timer set to \"" << name << "\""
 			 << std::endl;
 
 	    break;
@@ -1046,8 +1007,6 @@ AlsaDriver::setCurrentTimer(QString timer)
     }
 
     startClocks();
-
-    AUDIT_UPDATE;
 }
 
 void
@@ -1064,7 +1023,7 @@ AlsaDriver::initialise()
 void
 AlsaDriver::initialiseMidi()
 { 
-    AUDIT_START;
+    Audit audit;
 
     // Create a non-blocking handle.
     // ("hw" will possibly give in to other handles in future?)
@@ -1074,7 +1033,7 @@ AlsaDriver::initialiseMidi()
                      SND_SEQ_OPEN_DUPLEX,
                      SND_SEQ_NONBLOCK) < 0)
     {
-        AUDIT_STREAM << "AlsaDriver::initialiseMidi - "
+        audit << "AlsaDriver::initialiseMidi - "
                   << "couldn't open sequencer - " << snd_strerror(errno)
                   << std::endl;
         return;
@@ -1129,7 +1088,7 @@ AlsaDriver::initialiseMidi()
 
     ClientPortPair inputDevice = getFirstDestination(true); // duplex = true
 
-    AUDIT_STREAM << "    Record port set to (" << inputDevice.first
+    audit << "    Record port set to (" << inputDevice.first
               << ", "
               << inputDevice.second
               << ")" << std::endl << std::endl;
@@ -1240,9 +1199,8 @@ AlsaDriver::initialiseMidi()
     // process anything pending
     snd_seq_drain_output(m_midiHandle);
 
-    AUDIT_STREAM << "AlsaDriver::initialiseMidi -  initialised MIDI subsystem"
+    audit << "AlsaDriver::initialiseMidi -  initialised MIDI subsystem"
               << std::endl << std::endl;
-    AUDIT_UPDATE;
 }
 
 // We don't even attempt to use ALSA audio.  We just use JACK instead.
@@ -2766,7 +2724,7 @@ AlsaDriver::insertMappedEventForReturn(MappedEvent *mE)
 bool
 AlsaDriver::checkForNewClients()
 {
-    AUDIT_START;
+    Audit audit;
     snd_seq_client_info_t *cinfo;
     snd_seq_port_info_t *pinfo;
     int  client;
@@ -2804,7 +2762,7 @@ AlsaDriver::checkForNewClients()
 
     if (oldPortCount == currentPortCount) return false;
 
-    AUDIT_STREAM << "AlsaDriver: number of ports changed ("
+    audit << "AlsaDriver: number of ports changed ("
 	      << currentPortCount << " now, " << oldPortCount << " before)"
 	      << std::endl;
     
@@ -2844,12 +2802,12 @@ AlsaDriver::checkForNewClients()
     
     if (newPorts.size() > 0) {
 
-	AUDIT_STREAM << "New ports:" << std::endl;
+	audit << "New ports:" << std::endl;
 
 	for (AlsaPortList::iterator i = newPorts.begin();
 	     i != newPorts.end(); ++i) {
 
-	    AUDIT_STREAM << (*i)->m_name << std::endl;
+	    audit << (*i)->m_name << std::endl;
 	    std::string portName = (*i)->m_name;
 	    ClientPortPair portPair = ClientPortPair((*i)->m_client,
 						     (*i)->m_port);
@@ -2858,7 +2816,7 @@ AlsaDriver::checkForNewClients()
 
 		DeviceId id = m_suspendedPortMap[portPair];
 
-		AUDIT_STREAM << "(Reusing suspended device " << id << ")" << std::endl;
+		audit << "(Reusing suspended device " << id << ")" << std::endl;
 
 		for (MappedDeviceList::iterator j = m_devices.begin();
 		     j != m_devices.end(); ++j) {
@@ -2878,7 +2836,7 @@ AlsaDriver::checkForNewClients()
 		    if ((*j)->getType() == Device::Midi &&
 			(*j)->getConnection() == "" &&
 			(*j)->getDirection() == MidiDevice::Record) {
-			AUDIT_STREAM << "(Reusing record device " << (*j)->getId()
+			audit << "(Reusing record device " << (*j)->getId()
 				  << ")" << std::endl;
 			m_devicePortMap[(*j)->getId()] = portPair;
 			(*j)->setConnection(portName);
@@ -2896,7 +2854,7 @@ AlsaDriver::checkForNewClients()
 		    if ((*j)->getType() == Device::Midi &&
 			(*j)->getConnection() == "" &&
 			(*j)->getDirection() == MidiDevice::Play) {
-			AUDIT_STREAM << "(Reusing play device " << (*j)->getId()
+			audit << "(Reusing play device " << (*j)->getId()
 				  << ")" << std::endl;
 			m_devicePortMap[(*j)->getId()] = portPair;
 			(*j)->setConnection(portName);
@@ -2917,7 +2875,7 @@ AlsaDriver::checkForNewClients()
                     ;
 #endif
 		} else {
-		    AUDIT_STREAM << "(Created new record device " << device->getId() << ")" << std::endl;
+		    audit << "(Created new record device " << device->getId() << ")" << std::endl;
 		    addInstrumentsForDevice(device);
 		    m_devices.push_back(device);
 		}
@@ -2932,7 +2890,7 @@ AlsaDriver::checkForNewClients()
                     ;
 #endif
 		} else {
-		    AUDIT_STREAM << "(Created new play device " << device->getId() << ")" << std::endl;
+		    audit << "(Created new play device " << device->getId() << ")" << std::endl;
 		    addInstrumentsForDevice(device);
 		    m_devices.push_back(device);
 		}
@@ -2946,7 +2904,6 @@ AlsaDriver::checkForNewClients()
     // send completion event
     insertMappedEventForReturn(mE);
 
-    AUDIT_UPDATE;
     return true;
 }
 
@@ -2957,12 +2914,12 @@ AlsaDriver::checkForNewClients()
 void
 AlsaDriver::setRecordDevice(DeviceId id)
 {
-    AUDIT_START;
+    Audit audit;
 
     // Locate a suitable port
     //
     if (m_devicePortMap.find(id) == m_devicePortMap.end()) {
-        AUDIT_STREAM << "AlsaDriver::setRecordDevice - "
+        audit << "AlsaDriver::setRecordDevice - "
 		     << "couldn't match device id (" << id << ") to ALSA port"
 		     << std::endl;
         return;
@@ -2978,7 +2935,7 @@ AlsaDriver::setRecordDevice(DeviceId id)
 	 i != m_devices.end(); ++i) {
 	if ((*i)->getId() == id) {
 	    if ((*i)->getDirection() != MidiDevice::Record) {
-		AUDIT_STREAM << "AlsaDriver::setRecordDevice - "
+		audit << "AlsaDriver::setRecordDevice - "
 			     << "attempting to set play device (" << id 
 			     << ") to record device" << std::endl;
 		return;
@@ -3009,7 +2966,7 @@ AlsaDriver::setRecordDevice(DeviceId id)
 
     if (snd_seq_subscribe_port(m_midiHandle, subs) < 0)
     {
-        AUDIT_STREAM << "AlsaDriver::setRecordDevice - "
+        audit << "AlsaDriver::setRecordDevice - "
 		     << "can't subscribe input client:port"
 		     << int(sender.client) << ":" << int(sender.port)
 		     << std::endl;
@@ -3018,14 +2975,14 @@ AlsaDriver::setRecordDevice(DeviceId id)
         // have to flag it internally.
         //
         m_midiInputPortConnected = false;
-        AUDIT_STREAM << "AlsaDriver::setRecordDevice - "
+        audit << "AlsaDriver::setRecordDevice - "
 		     << "failed to subscribe device " 
 		     << id << " as record port" << std::endl;
     }
     else
     {
         m_midiInputPortConnected = true;
-        AUDIT_STREAM << "AlsaDriver::setRecordDevice - "
+        audit << "AlsaDriver::setRecordDevice - "
 		     << "successfully subscribed device "
 		     << id << " as record port" << std::endl;
     }
@@ -3395,7 +3352,7 @@ AlsaDriver::sendMidiClock()
 QString
 AlsaDriver::getStatusLog()
 {
-    return QString::fromUtf8(_audit.c_str());
+    return QString::fromUtf8(Audit::getAudit().c_str());
 }
 
 

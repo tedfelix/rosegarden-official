@@ -20,6 +20,7 @@ noinst_LTLIBRARIES = libRosegardenSound.la
 libRosegardenSound_la_SOURCES = AudioFile.cpp \
                                 AudioFileManager.cpp \
 				AudioProcess.cpp \
+				Audit.cpp \
                                 BWFAudioFile.cpp \
 				ControlBlock.cpp \
                                 MappedComposition.cpp \

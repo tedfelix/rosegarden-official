@@ -26,43 +26,12 @@
 #include "AudioProcess.h"
 #include "Profiler.h"
 #include "AudioLevel.h"
+#include "Audit.h"
 
 #ifdef HAVE_ALSA
 #ifdef HAVE_LIBJACK
 
 #define DEBUG_ALSA 1
-
-//!!! need to get this merged with alsa driver's audit trail
-
-static std::string _audit;
-
-// I was going to prevent output to std::cout if NDEBUG was set, but actually
-// it's probably a good idea to continue to send to std::cout as well -- it
-// shouldn't even get noticed unless someone's actually trying to debug,
-// and it's necessary if the sequencer crashes altogether (because the
-// status button in the GUI won't work if the sequencer's crashed).
-
-#define AUDIT_STREAM _auditStream
-#if (__GNUC__ < 3)
-#include <strstream>
-#define AUDIT_START std::strstream _auditStream
-#ifdef NOT_DEFINED_NDEBUG
-#define AUDIT_UPDATE _auditStream << std::ends; _audit += _auditStream.str();
-#else
-#define AUDIT_UPDATE _auditStream << std::ends; \
-                     std::string _auditChunk = _auditStream.str(); \
-                     _audit += _auditChunk; std::cerr << _auditChunk;
-#endif
-#else
-#include <sstream>
-#define AUDIT_START std::stringstream _auditStream
-#ifdef NOT_DEFINED_NDEBUG
-#define AUDIT_UPDATE _audit += _auditStream.str();
-#else
-#define AUDIT_UPDATE std::string _auditChunk = _auditStream.str(); \
-                     _audit += _auditChunk; std::cerr << _auditChunk;
-#endif
-#endif
 
 namespace Rosegarden
 {
@@ -199,8 +168,8 @@ JackDriver::~JackDriver()
 void
 JackDriver::initialise()
 {
-    AUDIT_START;
-    AUDIT_STREAM << std::endl;
+    Audit audit;
+    audit << std::endl;
 
     std::string jackClientName = "rosegarden";
 
@@ -208,11 +177,10 @@ JackDriver::initialise()
     //
     if ((m_client = jack_client_new(jackClientName.c_str())) == 0)
     {
-        AUDIT_STREAM << "JackDriver::initialiseAudio - "
+        audit << "JackDriver::initialiseAudio - "
                      << "JACK server not running"
                      << std::endl;
-	AUDIT_UPDATE;
-        return;
+	return;
     }
 
     // set callbacks
@@ -230,9 +198,9 @@ JackDriver::initialise()
     m_sampleRate = jack_get_sample_rate(m_client);
     m_bufferSize = jack_get_buffer_size(m_client);
 
-    AUDIT_STREAM << "JackDriver::initialiseAudio - JACK sample rate = "
-                 << m_sampleRate << "Hz, buffer size = " << m_bufferSize
-		 << std::endl;
+    audit << "JackDriver::initialiseAudio - JACK sample rate = "
+	  << m_sampleRate << "Hz, buffer size = " << m_bufferSize
+	  << std::endl;
 
     // Get the initial buffer size before we activate the client
     //
@@ -241,8 +209,8 @@ JackDriver::initialise()
     //
     m_tempOutBuffer = new sample_t[m_bufferSize];
 
-    AUDIT_STREAM << "JackDriver::initialiseAudio - "
-                 << "creating disk thread" << std::endl;
+    audit << "JackDriver::initialiseAudio - "
+	  << "creating disk thread" << std::endl;
 
     m_fileReader = new AudioFileReader(m_alsaDriver, m_sampleRate);
     m_fileWriter = new AudioFileWriter(m_alsaDriver, m_sampleRate);
@@ -266,14 +234,22 @@ JackDriver::initialise()
     // start by creating one pair of record ins and no fader or submaster
     // outs.
     //
-    createMainOutputs(); // one stereo pair master, one pair monitor
-    createRecordInputs(1);
+    if (!createMainOutputs()) { // one stereo pair master, one pair monitor
+        audit << "JackDriver::initialise - "
+	      << "failed to create main outputs!" << std::endl;
+	return;
+    }
+	
+    if (!createRecordInputs(1)) {
+        audit << "JackDriver::initialise - "
+	      << "failed to create record inputs!" << std::endl;
+	return;
+    }
 
     if (jack_activate(m_client))
     {
-        AUDIT_STREAM << "JackDriver::createJackInputPorts - "
-                     << "client activation failed" << std::endl;
-	AUDIT_UPDATE;
+        audit << "JackDriver::initialise - "
+	      << "client activation failed" << std::endl;
 	return;
     }
 
@@ -293,65 +269,63 @@ JackDriver::initialise()
 	// count ports
 	unsigned int i = 0;
 	for (i = 0; ports[i]; i++);
-	AUDIT_STREAM << "JackDriver::initialiseAudio - "
-		     << "found " << i << " JACK physical outputs"
-		     << std::endl;
+	audit << "JackDriver::initialiseAudio - "
+	      << "found " << i << " JACK physical outputs"
+	      << std::endl;
     }
     else
-	AUDIT_STREAM << "JackDriver::createJackInputPorts - "
-		     << "no JACK physical outputs found"
-		     << std::endl;
+	audit << "JackDriver::createJackInputPorts - "
+	      << "no JACK physical outputs found"
+	      << std::endl;
     free(ports);
     
     if (playback_1 != "")
     {
-        AUDIT_STREAM << "JackDriver::initialiseAudio - "
-                     << "connecting from "
-                     << "\"" << jack_port_name(m_outputMasters[0])
-                     << "\" to \"" << playback_1.c_str() << "\""
-                     << std::endl;
+        audit << "JackDriver::initialiseAudio - "
+	      << "connecting from "
+	      << "\"" << jack_port_name(m_outputMasters[0])
+	      << "\" to \"" << playback_1.c_str() << "\""
+	      << std::endl;
 
         // connect our client up to the ALSA ports - first left output
         //
         if (jack_connect(m_client, jack_port_name(m_outputMasters[0]),
                          playback_1.c_str()))
         {
-            AUDIT_STREAM << "JackDriver::initialiseAudio - "
-                         << "cannot connect to JACK output port" << std::endl;
-	    AUDIT_UPDATE;
-            return;
+            audit << "JackDriver::initialiseAudio - "
+		  << "cannot connect to JACK output port" << std::endl;
+	                return;
         }
 
         if (jack_connect(m_client, jack_port_name(m_outputMonitors[0]),
                          playback_1.c_str()))
         {
-            AUDIT_STREAM << "JackDriver::initialiseAudio - "
-                         << "cannot connect to JACK output port" << std::endl;
-	    AUDIT_UPDATE;
-            return;
+            audit << "JackDriver::initialiseAudio - "
+		  << "cannot connect to JACK output port" << std::endl;
+	    return;
         }
     }
 
     if (playback_2 != "")
     {
-        AUDIT_STREAM << "JackDriver::initialiseAudio - "
-                     << "connecting from "
-                     << "\"" << jack_port_name(m_outputMasters[1])
-                     << "\" to \"" << playback_2.c_str() << "\""
-                     << std::endl;
+        audit << "JackDriver::initialiseAudio - "
+	      << "connecting from "
+	      << "\"" << jack_port_name(m_outputMasters[1])
+	      << "\" to \"" << playback_2.c_str() << "\""
+	      << std::endl;
 
         if (jack_connect(m_client, jack_port_name(m_outputMasters[1]),
                          playback_2.c_str()))
         {
-            AUDIT_STREAM << "JackDriver::initialiseAudio - "
-                         << "cannot connect to JACK output port" << std::endl;
+            audit << "JackDriver::initialiseAudio - "
+		  << "cannot connect to JACK output port" << std::endl;
         }
 
         if (jack_connect(m_client, jack_port_name(m_outputMonitors[1]),
                          playback_2.c_str()))
         {
-            AUDIT_STREAM << "JackDriver::initialiseAudio - "
-                         << "cannot connect to JACK output port" << std::endl;
+            audit << "JackDriver::initialiseAudio - "
+		  << "cannot connect to JACK output port" << std::endl;
         }
     }
 
@@ -375,67 +349,78 @@ JackDriver::initialise()
     m_audioRecordLatency = RealTime(int(latency),
 				    int((latency - int(latency)) * 1e9));
 
-    AUDIT_STREAM << "JackDriver::initialiseAudio - "
-                 << "JACK playback latency " << m_audioPlayLatency << std::endl;
+    audit << "JackDriver::initialiseAudio - "
+	  << "JACK playback latency " << m_audioPlayLatency << std::endl;
+    
+    audit << "JackDriver::initialiseAudio - "
+	  << "JACK record latency " << m_audioRecordLatency << std::endl;
 
-    AUDIT_STREAM << "JackDriver::initialiseAudio - "
-                 << "JACK record latency " << m_audioRecordLatency << std::endl;
-
-    AUDIT_STREAM << "JackDriver::initialiseAudio - "
-                 << "initialised JACK audio subsystem"
-                 << std::endl;
+    audit << "JackDriver::initialiseAudio - "
+	  << "initialised JACK audio subsystem"
+	  << std::endl;
 
     m_ok = true;
-
-    AUDIT_UPDATE;
 }
 
-void
+bool
 JackDriver::createMainOutputs()
 {
     jack_port_t *port =  jack_port_register
 	(m_client, "master out L",
 	 JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
+    if (!port) return false;
     m_outputMasters.push_back(port);
 
     port = jack_port_register
 	(m_client, "master out R",
 	 JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
+    if (!port) return false;
     m_outputMasters.push_back(port);
 
     port = jack_port_register
 	(m_client, "record monitor out L",
 	 JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
+    if (!port) return false;
     m_outputMonitors.push_back(port);
 
     port = jack_port_register
 	(m_client, "record monitor out R",
 	 JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
+    if (!port) return false;
     m_outputMonitors.push_back(port);
+
+    return true;
 }
 
-void
+bool
 JackDriver::createFaderOutputs(int pairs)
 {
     int pairsNow = m_outputInstruments.size() / 2;
-    if (pairs == pairsNow) return;
+    if (pairs == pairsNow) return true;
 
     for (int i = pairsNow; i < pairs; ++i) {
 
 	char namebuffer[22];
+	jack_port_t *port;
 
 	snprintf(namebuffer, 21, "fader %d out L", i+1);
-	m_outputInstruments.push_back(jack_port_register(m_client,
-							 namebuffer,
-							 JACK_DEFAULT_AUDIO_TYPE,
-							 JackPortIsOutput,
-							 0));
+
+	port = jack_port_register(m_client,
+				  namebuffer,
+				  JACK_DEFAULT_AUDIO_TYPE,
+				  JackPortIsOutput,
+				  0);
+	if (!port) return false;
+	m_outputInstruments.push_back(port);
+
 	snprintf(namebuffer, 21, "fader %d out R", i+1);
-	m_outputInstruments.push_back(jack_port_register(m_client,
-							 namebuffer,
-							 JACK_DEFAULT_AUDIO_TYPE,
-							 JackPortIsOutput,
-							 0));
+	port = jack_port_register(m_client,
+				  namebuffer,
+				  JACK_DEFAULT_AUDIO_TYPE,
+				  JackPortIsOutput,
+				  0);
+	if (!port) return false;
+	m_outputInstruments.push_back(port);
     }
 
     while ((int)m_outputInstruments.size() > pairs * 2) {
@@ -444,30 +429,38 @@ JackDriver::createFaderOutputs(int pairs)
 	jack_port_unregister(m_client, *itr);
 	m_outputInstruments.erase(itr);
     }
+
+    return true;
 }
   
-void
+bool
 JackDriver::createSubmasterOutputs(int pairs)
 {
     int pairsNow = m_outputSubmasters.size() / 2;
-    if (pairs == pairsNow) return;
+    if (pairs == pairsNow) return true;
 
     for (int i = pairsNow; i < pairs; ++i) {
 
 	char namebuffer[22];
+	jack_port_t *port;
 
 	snprintf(namebuffer, 21, "submaster %d out L", i+1);
-	m_outputSubmasters.push_back(jack_port_register(m_client,
-							 namebuffer,
-							 JACK_DEFAULT_AUDIO_TYPE,
-							 JackPortIsOutput,
-							 0));
+	port = jack_port_register(m_client,
+				  namebuffer,
+				  JACK_DEFAULT_AUDIO_TYPE,
+				  JackPortIsOutput,
+				  0);
+	if (!port) return false;
+	m_outputSubmasters.push_back(port);
+
 	snprintf(namebuffer, 21, "submaster %d out R", i+1);
-	m_outputSubmasters.push_back(jack_port_register(m_client,
-							 namebuffer,
-							 JACK_DEFAULT_AUDIO_TYPE,
-							 JackPortIsOutput,
-							 0));
+	port = jack_port_register(m_client,
+				  namebuffer,
+				  JACK_DEFAULT_AUDIO_TYPE,
+				  JackPortIsOutput,
+				  0);
+	if (!port) return false;
+	m_outputSubmasters.push_back(port);
     }
 
     while ((int)m_outputSubmasters.size() > pairs * 2) {
@@ -476,32 +469,38 @@ JackDriver::createSubmasterOutputs(int pairs)
 	jack_port_unregister(m_client, *itr);
 	m_outputSubmasters.erase(itr);
     }
+
+    return true;
 }
 
-void
+bool
 JackDriver::createRecordInputs(int pairs)
 {
     int pairsNow = m_inputPorts.size() / 2;
-    if (pairs == pairsNow) return;
+    if (pairs == pairsNow) return true;
 
-//!!! need to check return values from jack_port_register in this
-// and preceding two functions
     for (int i = pairsNow; i < pairs; ++i) {
 
 	char namebuffer[22];
+	jack_port_t *port;
 
 	snprintf(namebuffer, 21, "record in %d", i * 2);
-	m_inputPorts.push_back(jack_port_register(m_client,
-						  namebuffer,
-						  JACK_DEFAULT_AUDIO_TYPE,
-						  JackPortIsInput,
-						  0));
+	port = jack_port_register(m_client,
+				  namebuffer,
+				  JACK_DEFAULT_AUDIO_TYPE,
+				  JackPortIsInput,
+				  0);
+	if (!port) return false;
+	m_inputPorts.push_back(port);
+
 	snprintf(namebuffer, 21, "record in %d", i * 2 + 1);
-	m_inputPorts.push_back(jack_port_register(m_client,
-						  namebuffer,
-						  JACK_DEFAULT_AUDIO_TYPE,
-						  JackPortIsInput,
-						  0));
+	port = jack_port_register(m_client,
+				  namebuffer,
+				  JACK_DEFAULT_AUDIO_TYPE,
+				  JackPortIsInput,
+				  0);
+	if (!port) return false;
+	m_inputPorts.push_back(port);
     }
 
     while ((int)m_outputSubmasters.size() > pairs * 2) {
@@ -510,6 +509,8 @@ JackDriver::createRecordInputs(int pairs)
 	jack_port_unregister(m_client, *itr);
 	m_outputSubmasters.erase(itr);
     }
+    
+    return true;
 }
     
 
@@ -523,13 +524,18 @@ JackDriver::setAudioPortCounts(int inputs, int submasters)
 void
 JackDriver::setAudioPorts(bool faderOuts, bool submasterOuts)
 {
+    Audit audit;
     std::cerr << "JackDriver::setAudioPorts(" << faderOuts << "," << submasterOuts << ")" << std::endl;
 
     if (faderOuts) {
 	InstrumentId instrumentBase;
 	int instruments;
 	m_alsaDriver->getAudioInstrumentNumbers(instrumentBase, instruments);
-	createFaderOutputs(instruments);
+	if (!createFaderOutputs(instruments)) {
+	    m_ok = false;
+	    audit << "Failed to create fader outs!" << std::endl;
+	    return;
+	}
     } else {
 	createFaderOutputs(0);
     }
@@ -537,9 +543,13 @@ JackDriver::setAudioPorts(bool faderOuts, bool submasterOuts)
     if (submasterOuts) {
 	
 	// one fewer than returned here, because the master has a buss object too
-	createSubmasterOutputs
+	if (!createSubmasterOutputs
 	    (m_alsaDriver->getMappedStudio()->getObjectCount
-	     (MappedObject::AudioBuss) - 1);
+	     (MappedObject::AudioBuss) - 1)) {
+	    m_ok = false;
+	    audit << "Failed to create submaster outs!" << std::endl;
+	    return;
+	}
 
     } else {
 	createSubmasterOutputs(0);
