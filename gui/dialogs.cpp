@@ -481,6 +481,7 @@ KeySignatureDialog::slotKeyUp()
 {
     bool sharp = m_key.isSharp();
     int ac = m_key.getAccidentalCount();
+    if (ac == 0) sharp = true;
     if (sharp) {
 	if (++ac > 7) ac = 7;
     } else {
@@ -507,6 +508,7 @@ KeySignatureDialog::slotKeyDown()
 {
     bool sharp = m_key.isSharp();
     int ac = m_key.getAccidentalCount();
+    if (ac == 0) sharp = false;
     if (sharp) {
 	if (--ac < 0) {
 	    ac = 1;
