@@ -1776,11 +1776,6 @@ void NotationView::slotTransformsQuantize()
     if (dialog->exec() == QDialog::Accepted) {
 	KTmpStatusMsg msg(i18n("Quantizing..."), statusBar());
 	addCommandToHistory(new EventQuantizeCommand
-/*!!!
-			    (m_staffs[m_currentStaff]->getSegment(),
-			     m_currentEventSelection->getBeginTime(),
-			     m_currentEventSelection->getEndTime(),
-*/
 			    (*m_currentEventSelection,
 			     dialog->getQuantizer()));
     }

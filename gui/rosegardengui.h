@@ -442,6 +442,11 @@ public slots:
     void slotDeleteSelectedSegments();
 
     /**
+     * Quantize the selected segments (after asking the user how)
+     */
+    void slotQuantizeSelection();
+
+    /**
      * open a matrix view for each of the currently-selected segments
      */
     void slotEditInMatrix();

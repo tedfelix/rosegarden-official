@@ -19,29 +19,23 @@
 	<Separator/>
       	<Action name="select_all"/>
 	<Separator/>
-      	<Action name="edit_matrix"/>
-      	<Action name="edit_notation"/>
-	<Separator/>
       	<Action name="add_tempo"/>
       	<Action name="add_time_signature"/>
 	<Separator/>
       	<Action name="edit_doc_properties"/>
   </Menu>
+  <Menu name="Segments">
+	<text>Seg&amp;ments</text>
+      	<Action name="edit_matrix"/>
+      	<Action name="edit_notation"/>
+	<Separator/>
+	<Action name="quantize_selection"/>
+  </Menu>
   <Menu name="Tracks">
-	<text>&amp;Tracks</text>
+	<text>Trac&amp;ks</text>
 	<Action name="add_tracks"/>
         <Action name="select_next_track"/>
         <Action name="select_previous_track"/>
-  </Menu>
-  <Menu name="Segments">
-	<text>&amp;Segments</text>
-        <Action name="select"/>
-	<Action name="move"/>
-	<Action name="draw"/>
-	<Action name="erase"/>
-	<Action name="resize"/>
-        <Action name="split"/>
-        <Action name="join"/>
   </Menu>
   <Menu name="Transport">
         <text>T&amp;ransport</text>
@@ -50,6 +44,16 @@
         <Action name="stop"/> 
         <Action name="fast_forward"/> 
         <Action name="rewind"/> 
+  </Menu>
+  <Menu name="Tools">
+	<text>&amp;Tools</text>
+        <Action name="select"/>
+	<Action name="move"/>
+	<Action name="draw"/>
+	<Action name="erase"/>
+	<Action name="resize"/>
+        <Action name="split"/>
+        <Action name="join"/>
   </Menu>
   <Menu  name="settings"><text>&amp;Settings</text>
          <Action name="show_tracks_toolbar"        append="show_merge" />

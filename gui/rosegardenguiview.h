@@ -143,6 +143,9 @@ public:
      */
     void setZoomSize(double size);
     
+    bool haveSelection();
+    Rosegarden::SegmentSelection getSelection();
+
 public slots:
     void slotEditSegmentNotation(Rosegarden::Segment*);
     void slotEditSegmentMatrix(Rosegarden::Segment*);

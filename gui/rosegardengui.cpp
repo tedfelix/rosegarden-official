@@ -330,6 +330,10 @@ void RosegardenGUIApp::setupActions()
 		SLOT(slotDeleteSelectedSegments()), actionCollection(),
 		"delete");
 
+    new KAction(i18n("&Quantize..."), 0, this,
+		SLOT(slotQuantizeSelection()), actionCollection(),
+		"quantize_selection");
+
     new KAction(i18n("Open in Matri&x Editor"), 0, this,
 		SLOT(slotEditInMatrix()), actionCollection(),
 		"edit_matrix");
@@ -1044,26 +1048,20 @@ void RosegardenGUIApp::slotQuit()
 
 void RosegardenGUIApp::slotEditCut()
 {
-    //!!! a little baroque
-
-    SegmentCanvas *canvas = m_view->getTrackEditor()->getSegmentCanvas();
-    if (!canvas->haveSelection()) return;
+    if (!m_view->haveSelection()) return;
     KTmpStatusMsg msg(i18n("Cutting selection..."), statusBar());
 
-    Rosegarden::SegmentSelection selection(canvas->getSelectedSegments());
+    Rosegarden::SegmentSelection selection(m_view->getSelection());
     m_doc->getCommandHistory()->addCommand
 	(new CutCommand(selection, m_doc->getClipboard()));
 }
 
 void RosegardenGUIApp::slotEditCopy()
 {
-    //!!! a little baroque
-
-    SegmentCanvas *canvas = m_view->getTrackEditor()->getSegmentCanvas();
-    if (!canvas->haveSelection()) return;
+    if (!m_view->haveSelection()) return;
     KTmpStatusMsg msg(i18n("Copying selection to clipboard..."), statusBar());
 
-    Rosegarden::SegmentSelection selection(canvas->getSelectedSegments());
+    Rosegarden::SegmentSelection selection(m_view->getSelection());
     m_doc->getCommandHistory()->addCommand
 	(new CopyCommand(selection, m_doc->getClipboard()));
 }
@@ -1095,6 +1093,34 @@ void RosegardenGUIApp::slotDeleteSelectedSegments()
     m_view->getTrackEditor()->slotDeleteSelectedSegments();
 }
 
+void RosegardenGUIApp::slotQuantizeSelection()
+{
+    if (!m_view->haveSelection()) return;
+
+    //!!! this should all be in rosegardenguiview
+
+    QuantizeDialog *dialog = new QuantizeDialog
+	(m_view,
+	 Rosegarden::Quantizer::RawEventData,
+	 Rosegarden::Quantizer::RawEventData);
+    if (dialog->exec() != QDialog::Accepted) return;
+
+    Rosegarden::SegmentSelection selection = m_view->getSelection();
+    
+    KMacroCommand *command = new KMacroCommand
+	(EventQuantizeCommand::getGlobalName());
+
+    for (Rosegarden::SegmentSelection::iterator i = selection.begin();
+	 i != selection.end(); ++i) {
+	command->addCommand(new EventQuantizeCommand
+			    (**i, (*i)->getStartTime(), (*i)->getEndTime(),
+			     dialog->getQuantizer()));
+    }
+
+    m_view->slotAddCommandToHistory(command);
+}
+
+
 void RosegardenGUIApp::slotEditAsNotation()
 {
     m_view->slotEditSegmentNotation(0);
@@ -1102,8 +1128,7 @@ void RosegardenGUIApp::slotEditAsNotation()
 
 void RosegardenGUIApp::slotEditInMatrix()
 {
-    Rosegarden::SegmentSelection selection =
-	m_view->getTrackEditor()->getSegmentCanvas()->getSelectedSegments();
+    Rosegarden::SegmentSelection selection = m_view->getSelection();
     for (Rosegarden::SegmentSelection::iterator i = selection.begin();
 	 i != selection.end(); ++i) {
 	m_view->slotEditSegmentMatrix(*i);

@@ -35,76 +35,6 @@ etc
   <Action name="add_key_signature"/>
 </Menu>
 
-<Menu name="Tools">
-  <text>&amp;Tools</text>
-
-<Action name="select"/>
-<Action name="erase"/>
-
-<Separator/>
-
-<Menu noMerge="1" name="Notes">
-  <text>&amp;Notes</text>
-  <Action name="double_whole" />
-  <Action name="whole" />
-  <Action name="half" />
-  <Action name="quarter" />
-  <Action name="8th" />
-  <Action name="16th" />
-  <Action name="32nd" />
-  <Action name="64th" />
-  <Separator/>
-  <Action name="dotted_whole" />
-  <Action name="dotted_half" />
-  <Action name="dotted_quarter" />
-  <Action name="dotted_8th" />
-  <Action name="dotted_16th" />
-  <Action name="dotted_32nd" />
-</Menu>
-
-<Menu noMerge="1" name="Rests">
-  <text>&amp;Rests</text>
-  <Action name="double_whole_rest" />
-  <Action name="whole_rest" />
-  <Action name="half_rest" />
-  <Action name="quarter_rest" />
-  <Action name="8th_rest" />
-  <Action name="16th_rest" />
-  <Action name="32nd_rest" />
-  <Action name="64th_rest" />
-  <Separator/>
-  <Action name="dotted_whole_rest" />
-  <Action name="dotted_half_rest" />
-  <Action name="dotted_quarter_rest" />
-  <Action name="dotted_8th_rest" />
-  <Action name="dotted_16th_rest" />
-  <Action name="dotted_32nd_rest" />
-</Menu>
-
-<Menu noMerge="1" name="Accidentals">
-  <text>&amp;Accidentals</text>
-  <Action name="no_accidental" />
-  <Action name="sharp_accidental" />
-  <Action name="flat_accidental" />
-  <Action name="natural_accidental" />
-  <Action name="double_sharp_accidental" />
-  <Action name="double_flat_accidental" />
-</Menu>
-
-<Separator/>
-
-  <Action name="text" />
-
-<Menu noMerge="1" name="Clefs">
-  <text>&amp;Clefs</text>
-  <Action name="treble_clef" />
-  <Action name="tenor_clef" />
-  <Action name="alto_clef" />
-  <Action name="bass_clef" />
-</Menu>
-
-</Menu>
-
 <Menu name="Group">
   <text>&amp;Group</text>
   <Action name="beam"/>
@@ -186,6 +116,77 @@ etc
   <Separator/>
   <Action name="invert"/>
   <Action name="retrograde"/>
+</Menu>
+
+
+<Menu name="Tools">
+  <text>&amp;Tools</text>
+
+<Action name="select"/>
+<Action name="erase"/>
+
+<Separator/>
+
+<Menu noMerge="1" name="Notes">
+  <text>&amp;Notes</text>
+  <Action name="double_whole" />
+  <Action name="whole" />
+  <Action name="half" />
+  <Action name="quarter" />
+  <Action name="8th" />
+  <Action name="16th" />
+  <Action name="32nd" />
+  <Action name="64th" />
+  <Separator/>
+  <Action name="dotted_whole" />
+  <Action name="dotted_half" />
+  <Action name="dotted_quarter" />
+  <Action name="dotted_8th" />
+  <Action name="dotted_16th" />
+  <Action name="dotted_32nd" />
+</Menu>
+
+<Menu noMerge="1" name="Rests">
+  <text>&amp;Rests</text>
+  <Action name="double_whole_rest" />
+  <Action name="whole_rest" />
+  <Action name="half_rest" />
+  <Action name="quarter_rest" />
+  <Action name="8th_rest" />
+  <Action name="16th_rest" />
+  <Action name="32nd_rest" />
+  <Action name="64th_rest" />
+  <Separator/>
+  <Action name="dotted_whole_rest" />
+  <Action name="dotted_half_rest" />
+  <Action name="dotted_quarter_rest" />
+  <Action name="dotted_8th_rest" />
+  <Action name="dotted_16th_rest" />
+  <Action name="dotted_32nd_rest" />
+</Menu>
+
+<Menu noMerge="1" name="Accidentals">
+  <text>&amp;Accidentals</text>
+  <Action name="no_accidental" />
+  <Action name="sharp_accidental" />
+  <Action name="flat_accidental" />
+  <Action name="natural_accidental" />
+  <Action name="double_sharp_accidental" />
+  <Action name="double_flat_accidental" />
+</Menu>
+
+<Separator/>
+
+  <Action name="text" />
+
+<Menu noMerge="1" name="Clefs">
+  <text>&amp;Clefs</text>
+  <Action name="treble_clef" />
+  <Action name="tenor_clef" />
+  <Action name="alto_clef" />
+  <Action name="bass_clef" />
+</Menu>
+
 </Menu>
 
 <Menu  name="settings"><text>&amp;Settings</text>

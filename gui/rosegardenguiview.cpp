@@ -185,6 +185,18 @@ void RosegardenGUIView::selectTool(SegmentCanvas::ToolType tool)
     m_trackEditor->getSegmentCanvas()->slotSetTool(tool);
 }
 
+bool
+RosegardenGUIView::haveSelection()
+{
+    return m_trackEditor->getSegmentCanvas()->haveSelection();
+}
+
+Rosegarden::SegmentSelection
+RosegardenGUIView::getSelection()
+{
+    return m_trackEditor->getSegmentCanvas()->getSelectedSegments();
+}
+
 
 void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
 {
@@ -198,10 +210,9 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
     // If we're not calling for any particular segment, then open all
     // selected segments if there are any.
 
-    if (m_trackEditor->getSegmentCanvas()->haveSelection()) {
+    if (haveSelection()) {
 
-	Rosegarden::SegmentSelection selection =
-	    m_trackEditor->getSegmentCanvas()->getSelectedSegments();
+	Rosegarden::SegmentSelection selection = getSelection(); 
 
 	if (!p || (selection.find(p) != selection.end())) {
 	    for (Rosegarden::SegmentSelection::iterator i = selection.begin();
