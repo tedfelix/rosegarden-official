@@ -904,8 +904,6 @@ AnalysisHelper::guessTimeSignature(CompositionTimeSliceAdapter &c)
         }
     }
 
-    std::cerr << "AnalysisHelper::guessTimeSignature: beatDuration = " << beatDuration << std::endl;
-
     // 2. Guess whether the measure has two, three or four beats. The right
     //    measure length should make notes rarely cross barlines and have a
     //    high average length for notes at the start of bars.
@@ -959,8 +957,6 @@ AnalysisHelper::guessTimeSignature(CompositionTimeSliceAdapter &c)
         }
     }
 
-    std::cerr << "AnalysisHelper::guessTimeSignature: measureLength = " << measureLength << std::endl;
-
     //
     // 3. Put the result in a TimeSignature object.
     //
@@ -986,9 +982,6 @@ AnalysisHelper::guessTimeSignature(CompositionTimeSliceAdapter &c)
         denominator = (96 * 4) / beatDuration;
 
     }
-
-       std::cerr << "AnalysisHelper::guessTimeSignature: numerator = " << numerator << ", denominator = "
-         << denominator  << std::endl;
 
     TimeSignature ts(numerator, denominator);
 
@@ -1088,8 +1081,6 @@ AnalysisHelper::guessKey(CompositionTimeSliceAdapter &c)
             lowestCost = cost;
         }
     }
-
-	// std::cerr << "AnalysisHelper::guessKey: bestTonic = " << bestTonic << ", bestKeyIsMinor = " << bestKeyIsMinor << std::endl;
 
     return Key(bestTonic, bestKeyIsMinor);
 

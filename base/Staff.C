@@ -126,11 +126,8 @@ Staff::eventRemoved(const Segment *t, Event *e)
 
     // If we have it, lose it
 
-//    std::cerr << "Staff::eventRemoved for " << e << std::endl;
-
     ViewElementList::iterator i = findEvent(e);
     if (i != m_viewElementList->end()) {
-//	std::cerr << "Found" << std::endl;
         notifyRemove(*i);
         m_viewElementList->erase(i);
         return;

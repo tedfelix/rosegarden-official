@@ -333,11 +333,13 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
 {
     if (!m_composition) return;
 
-    std::cerr << "*** Chord Name Ruler: paintEvent" << std::endl;
+    NOTATION_DEBUG << "*** Chord Name Ruler: paintEvent" << endl;
+
+    Rosegarden::Profiler profiler1("ChordNameRuler::paintEvent (whole)", true);
 
     recalculate();
 
-    Rosegarden::Profiler profiler("ChordNameRuler::paintEvent (body)", true);
+    Rosegarden::Profiler profiler2("ChordNameRuler::paintEvent (body)", true);
 
     if (!m_chordSegment) return;
 
@@ -362,13 +364,13 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
     timeT keyAt = from - 1;
     std::string keyText;
 
-    std::cerr << "*** Chord Name Ruler: paint " << from << " -> " << to << std::endl;
+    NOTATION_DEBUG << "*** Chord Name Ruler: paint " << from << " -> " << to << endl;
 
     for (Segment::iterator i = m_chordSegment->findTime(from);
 	 i != m_chordSegment->findTime(to); ++i) {
 	
-	std::cerr << "type " << (*i)->getType() << " at " << (*i)->getAbsoluteTime()
-		  << std::endl;
+	NOTATION_DEBUG << "type " << (*i)->getType() << " at " << (*i)->getAbsoluteTime()
+		  << endl;
 
 	if (!(*i)->isa(Text::EventType)) continue;
 

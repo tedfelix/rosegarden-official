@@ -524,7 +524,7 @@ SegmentNotationHelper::splitIntoTie(iterator &from, iterator to,
         }
 
         if (baseDuration >= eventDuration) {
-            cerr << "SegmentNotationHelper::splitIntoTie() : baseDuration >= eventDuration, ignoring event\n";
+//            cerr << "SegmentNotationHelper::splitIntoTie() : baseDuration >= eventDuration, ignoring event\n";
             continue;
         }
 
@@ -617,7 +617,7 @@ SegmentNotationHelper::isViable(timeT duration, int dots)
     timeT nearestDuration =
 	Note::getNearestNote(duration, dots >= 0 ? dots : 2).getDuration();
 
-    std::cerr << "SegmentNotationHelper::isViable: nearestDuration is " << nearestDuration << ", duration is " << duration << std::endl;
+//    std::cerr << "SegmentNotationHelper::isViable: nearestDuration is " << nearestDuration << ", duration is " << duration << std::endl;
     viable = (nearestDuration == duration);
 
     return viable;
@@ -857,8 +857,8 @@ SegmentNotationHelper::insertSomething(iterator i, int duration,
 
     timeT existingDuration = (*i)->getNotationDuration();
 
-    cerr << "SegmentNotationHelper::insertSomething: asked to insert duration " << duration
-	 << " over event of duration " << existingDuration << ":" << endl;
+//    cerr << "SegmentNotationHelper::insertSomething: asked to insert duration " << duration
+//	 << " over event of duration " << existingDuration << ":" << endl;
     (*i)->dump(cerr);
 
     if (duration == existingDuration) {
@@ -867,7 +867,7 @@ SegmentNotationHelper::insertSomething(iterator i, int duration,
         // existing note or rest at that position, chord the existing
         // note or delete the existing rest and insert.
 
-	cerr << "Durations match; doing simple insert" << endl;
+//	cerr << "Durations match; doing simple insert" << endl;
 
 	return insertSingleSomething(i, duration, modelEvent, tiedBack);
 
@@ -880,18 +880,18 @@ SegmentNotationHelper::insertSomething(iterator i, int duration,
 
 	    if (!isSplitValid(duration, existingDuration - duration)) {
 
-		cerr << "Bad split, coercing new note" << endl;
+//		cerr << "Bad split, coercing new note" << endl;
 
 		// not reasonable to split existing note, so force new one
 		// to same duration instead
 		duration = (*i)->getNotationDuration();
 
 	    } else {
-		cerr << "Good split, splitting old event" << endl;
+//		cerr << "Good split, splitting old event" << endl;
 		splitIntoTie(i, duration);
 	    }
 	} else {
-	    cerr << "Found rest, splitting" << endl;
+//	    cerr << "Found rest, splitting" << endl;
 	    iterator last = splitIntoTie(i, duration);
 
             // Recover viability for the second half of any split rest
@@ -934,7 +934,7 @@ SegmentNotationHelper::insertSomething(iterator i, int duration,
 	    //is-note/is-rest decisions here to make it possibly worth
 	    //splitting this method into note and rest versions again
 
-	    cerr << "Need to split new note" << endl;
+//	    cerr << "Need to split new note" << endl;
 
 	    i = insertSingleSomething
 		(i, existingDuration, modelEvent, tiedBack);
@@ -951,7 +951,7 @@ SegmentNotationHelper::insertSomething(iterator i, int duration,
 		(i, duration - existingDuration, modelEvent, true);
 
 	} else {
-	    cerr << "No need to split new note" << endl;
+//	    cerr << "No need to split new note" << endl;
 	    return insertSingleSomething(i, duration, modelEvent, tiedBack);
 	}
     }
@@ -1213,7 +1213,7 @@ SegmentNotationHelper::makeTupletGroup(timeT t, int untupled, int tupled,
 {
     int groupId = segment().getNextId();
 
-    cerr << "SegmentNotationHelper::makeTupletGroup: time " << t << ", unit "<< unit << ", params " << untupled << "/" << tupled << ", id " << groupId << endl;
+//    cerr << "SegmentNotationHelper::makeTupletGroup: time " << t << ", unit "<< unit << ", params " << untupled << "/" << tupled << ", id " << groupId << endl;
 
     list<Event *> toInsert;
     list<iterator> toErase;
@@ -1578,8 +1578,8 @@ SegmentNotationHelper::removeRests(timeT time, timeT &duration, bool testOnly)
 {
     Event dummy("dummy", time, 0, MIN_SUBORDERING);
     
-    cerr << "SegmentNotationHelper::removeRests(" << time
-         << ", " << duration << ")\n";
+//    cerr << "SegmentNotationHelper::removeRests(" << time
+//         << ", " << duration << ")\n";
 
     iterator from = segment().lower_bound(&dummy);
 
@@ -1590,9 +1590,6 @@ SegmentNotationHelper::removeRests(timeT time, timeT &duration, bool testOnly)
     if (from == segment().end()) return false;
     
     iterator to = from;
-
-    cerr << "SegmentNotationHelper::removeRests : start at "
-         << (*to)->getAbsoluteTime() << endl;
 
     timeT eventTime = time;
     timeT finalTime = time + duration;
@@ -1605,21 +1602,13 @@ SegmentNotationHelper::removeRests(timeT time, timeT &duration, bool testOnly)
     //
     while ((eventTime < finalTime) && (to != end())) {
 
-        cerr << "SegmentNotationHelper::removeRests : eventTime : "
-             << eventTime << " finalTime : " << finalTime << endl;
-        
         if (!(*to)->isa(Note::EventRestType)) {
             // a non-rest was found
-            cerr << "SegmentNotationHelper::removeRests : an event of type "
-                 << (*to)->getType() << " was found - abort\n";
 	    duration = (*to)->getAbsoluteTime() - time;
             return false;
         }
 
         timeT nextEventDuration = (*to)->getDuration();
-
-        cerr << "SegmentNotationHelper::removeRests : nextEventDuration : "
-             << nextEventDuration << endl;
 
         if ((eventTime + nextEventDuration) <= finalTime) {
             eventTime += nextEventDuration;
@@ -1637,15 +1626,9 @@ SegmentNotationHelper::removeRests(timeT time, timeT &duration, bool testOnly)
 
 
         if (lastEvent == end()) {
-            cerr << "SegmentNotationHelper::removeRests : not enough rest space\n";
 	    duration = segment().getEndTime() - time;
             return false;
         }
-
-        cerr << "SegmentNotationHelper::removeRests : shorten last event duration from "
-             << (*lastEvent)->getDuration() << " to "
-             << (*lastEvent)->getDuration() - (finalTime - eventTime)
-             << endl;
 
 	if (!testOnly) {
 	    // can't safely change the absolute time of an event in a segment
@@ -1657,7 +1640,6 @@ SegmentNotationHelper::removeRests(timeT time, timeT &duration, bool testOnly)
 	    segment().erase(lastEvent);
 	    to = lastEvent = segment().insert(newEvent);
 	    if (same) from = to;
-	    cerr<<"SegmentNotationHelper::removeRests: inserted shorter rest, event is " << *to << " and from is " << *from << endl;
 	    checkLastRest = true;
 	}
     }
@@ -1696,19 +1678,10 @@ SegmentNotationHelper::reorganizeRests(timeT startTime, timeT endTime,
     std::vector<iterator> erasable;
     std::vector<Event *> insertable;
 
-    cerr << "SegmentNotationHelper::reorganizeRests (" << startTime << ","
-	 << endTime << ")" << endl;
-
-    cerr << "ia is at " << (*ia)->getAbsoluteTime() << endl;
-    if (ib == end()) cerr << "ib is end()" << endl;
-    else cerr << "ib is at " << (*ib)->getAbsoluteTime() << endl;
-    
+//    cerr << "SegmentNotationHelper::reorganizeRests (" << startTime << ","
+//	 << endTime << ")" << endl;
 
     for (iterator i = ia; i != ib; ++i) {
-
-	cerr << "SegmentNotationHelper::reorganizeRests: looking at i, it's at "
-	     << (*i)->getAbsoluteTime() << " and has type " << (*i)->getType()
-	     << endl;
 
 	if ((*i)->isa(Note::EventRestType)) {
 
@@ -1717,10 +1690,6 @@ SegmentNotationHelper::reorganizeRests(timeT startTime, timeT endTime,
 	    iterator j = i;
 
 	    for ( ; j != ib; ++j) {
-
-		cerr << "SegmentNotationHelper::reorganizeRests: looking at j, it's at "
-		     << (*j)->getAbsoluteTime() << " and has type " << (*j)->getType()
-		     << endl;
 
 		if ((*j)->isa(Note::EventRestType)) {
 		    duration += (*j)->getDuration();
@@ -1751,9 +1720,9 @@ SegmentNotationHelper::normalizeContiguousRests(timeT startTime,
     timeT sigTime =
 	segment().getComposition()->getTimeSignatureAt(startTime, ts);
 
-    cerr << "SegmentNotationHelper::normalizeContiguousRests:"
-	 << " startTime = " << startTime << ", duration = "
-	 << duration << endl;
+//    cerr << "SegmentNotationHelper::normalizeContiguousRests:"
+//	 << " startTime = " << startTime << ", duration = "
+//	 << duration << endl;
 
     DurationList dl;
     ts.getDurationListForInterval(dl, duration, startTime - sigTime);
@@ -1824,7 +1793,7 @@ SegmentNotationHelper::splitPreservingPerformanceTimes(Event *e, timeT q1)
     timeT u1 = (qt + q1) - ut;
     timeT u2 = (ut + ud) - (qt + q1);
 
-    std::cerr << "splitPreservingPerformanceTimes: (ut,ud) (" << ut << "," << ud << "), (qt,qd) (" << qt << "," << qd << ") q1 " << q1 << ", u1 " << u1 << ", u2 " << u2 << std::endl;
+//    std::cerr << "splitPreservingPerformanceTimes: (ut,ud) (" << ut << "," << ud << "), (qt,qd) (" << qt << "," << qd << ") q1 " << q1 << ", u1 " << u1 << ", u2 " << u2 << std::endl;
 
     if (u1 <= 0 || u2 <= 0) { // can't do a meaningful split
 	return std::pair<Event *, Event *>(0, 0);

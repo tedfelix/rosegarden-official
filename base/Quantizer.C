@@ -116,6 +116,7 @@ Quantizer::quantize(EventSelection *selection)
     EventSelection::RangeList::iterator r = ranges.end();
     while (r-- != ranges.begin()) {
 
+/*
 	cerr << "Quantizer: quantizing range ";
 	if (r->first == segment.end()) {
 	    cerr << "end";
@@ -129,6 +130,7 @@ Quantizer::quantize(EventSelection *selection)
 	    cerr << (*r->second)->getAbsoluteTime();
 	}
 	cerr << endl;
+*/
 
         quantizeRange(&segment, r->first, r->second);
     }

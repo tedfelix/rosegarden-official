@@ -425,7 +425,7 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
 	}
     }
 
-    PRINT_ELAPSED("RawNoteRuler::paintEvent: drawing bar lines and divisions");
+//    PRINT_ELAPSED("RawNoteRuler::paintEvent: drawing bar lines and divisions");
 
 #ifdef DEBUG_RAW_NOTE_RULER
     NOTATION_DEBUG << "RawNoteRuler: from is " << from << ", to is " << to << endl;
@@ -438,11 +438,11 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
     Segment::iterator j = m_segment->findTime(to);
     buildForest(m_segment, i, j);
 
-    PRINT_ELAPSED("RawNoteRuler::paintEvent: buildForest");
+//    PRINT_ELAPSED("RawNoteRuler::paintEvent: buildForest");
 
     dumpForest(&m_forest);
 
-    PRINT_ELAPSED("RawNoteRuler::paintEvent: dumpForest");
+//    PRINT_ELAPSED("RawNoteRuler::paintEvent: dumpForest");
 
     for (EventTreeNode::NodeList::iterator fi = m_forest.begin();
 	 fi != m_forest.end(); ++fi) {

@@ -46,7 +46,6 @@ MidiDevice::MidiDevice():
     m_variationType(NoVariations),
     m_librarian(std::pair<std::string, std::string>("<none>", "<none>"))
 {
-    std::cerr<< "MidiDevice ctor without data for device " << getId() << std::endl;
     generatePresentationList();
 }
 
@@ -61,8 +60,6 @@ MidiDevice::MidiDevice(DeviceId id,
     m_variationType(NoVariations),
     m_librarian(std::pair<std::string, std::string>("<none>", "<none>"))
 {
-    std::cerr<< "MidiDevice ctor with data for device " << getId() << std::endl;
-
     generatePresentationList();
 }
 
@@ -75,8 +72,6 @@ MidiDevice::MidiDevice(const MidiDevice &dev):
     m_variationType(dev.getVariationType()),
     m_librarian(dev.getLibrarian())
 {
-    std::cerr<< "MidiDevice copy ctor for device " << getId() << std::endl;
-
     // Create and assign a metronome if required
     //
     if (dev.getMetronome())
@@ -125,8 +120,6 @@ MidiDevice &
 MidiDevice::operator=(const MidiDevice &dev)
 {
     if (&dev == this) return *this;
-
-    std::cerr<< "MidiDevice assignment operator for device " << getId() << " from " << dev.getId() << std::endl;
 
     m_id = dev.getId();
     m_name = dev.getName();
@@ -198,8 +191,6 @@ MidiDevice::operator=(const MidiDevice &dev)
 
 MidiDevice::~MidiDevice()
 {
-    std::cerr<< "MidiDevice dtor for device " << getId() << std::endl;
-
     delete m_programList;
     delete m_bankList;
     if (m_metronome) delete m_metronome;

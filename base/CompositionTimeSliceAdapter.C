@@ -173,8 +173,6 @@ CompositionTimeSliceAdapter::iterator::operator++()
     Event *e = 0;
     unsigned int pos = 0;
 
-    //std::cerr << "CompositionTimeSliceAdapter::operator++(" << this << ")" << std::endl;
-
     for (unsigned int i = 0; i < m_a->m_segmentList.size(); ++i) {
 
 	if (!m_a->m_segmentList[i]->isBeforeEndMarker(m_segmentItrList[i])) continue;
@@ -183,7 +181,6 @@ CompositionTimeSliceAdapter::iterator::operator++()
             e = *m_segmentItrList[i];
 	    m_curTrack = m_a->m_segmentList[i]->getTrack();
             pos = i;
-	    //std::cerr << "CompositionTimeSliceAdapter::operator++(" << this << "): we like " << e->getAbsoluteTime() << " on " << pos << std::endl;
         }
     }
 
@@ -200,7 +197,6 @@ CompositionTimeSliceAdapter::iterator::operator++()
 
     // m_segmentItrList[pos] is a segment::iterator that points to e
     ++m_segmentItrList[pos];
-    //std::cerr << "CompositionTimeSliceAdapter::operator++(" << this << "): incremented " << pos << " (now points to event " << *m_segmentItrList[pos] << ")" << std::endl;
 
     return *this;
 }
@@ -218,8 +214,6 @@ CompositionTimeSliceAdapter::iterator::operator--()
 
     Event *e = 0;
     int pos = -1;
-    //std::cerr << "CompositionTimeSliceAdapter::operator--(" << this << ")" << std::endl;
-
 
     // Decrement is more subtle than increment.  We have to scan the
     // iterators available, and decrement the one that points to
@@ -235,18 +229,15 @@ CompositionTimeSliceAdapter::iterator::operator--()
 
 	if (*si == m_curEvent) {
 	    pos = i;
-	    //std::cerr << "CompositionTimeSliceAdapter::operator--(" << this << "): found m_curEvent on " << pos << std::endl;
 	} else if (!e || !strictLessThan(*si, e)) {
 	    e = *si;
 	    m_curTrack = m_a->m_segmentList[i]->getTrack();
-	    //std::cerr << "CompositionTimeSliceAdapter::operator--(" << this << "): we like " << e->getAbsoluteTime() << " on " << i << std::endl;
 	}
     }
 
     if (e) m_curEvent = e;
     if (pos >= 0) {
 	--m_segmentItrList[pos];
-	//std::cerr << "CompositionTimeSliceAdapter::operator--(" << this << "): decremented " << pos << std::endl;
     }
 
     return *this;

@@ -244,18 +244,10 @@ Composition::addSegment(Segment *segment)
 Composition::iterator
 Composition::weakAddSegment(Segment *segment)
 {
-    cerr << "Composition::addSegment: segment is " << segment
-	      << ", with track " << segment->getTrack() << " and start index "
-	      << segment->getStartTime() << "; currently have " << m_segments.size() << " segments"
-	      << endl;
-
     if (!segment) return end();
     
     iterator res = m_segments.insert(segment);
     segment->setComposition(this);
-
-    cerr << "Composition::addSegment: added segment, now have "
-	      << m_segments.size() << " segments" << endl;
 
     return res;
 }
@@ -564,8 +556,6 @@ Composition::addTimeSignature(timeT t, TimeSignature timeSig)
 	m_timeSigSegment.insert(timeSig.getAsEvent(t));
     m_barPositionsNeedCalculating = true;
 
-    cerr << "Composition::addTimeSignature() - updateRefreshStatuses()\n";
-
     updateRefreshStatuses();
 
     return std::distance(m_timeSigSegment.begin(), i);
@@ -656,7 +646,6 @@ Composition::removeTimeSignature(int n)
 {
     m_timeSigSegment.erase(m_timeSigSegment[n]);
     m_barPositionsNeedCalculating = true;
-    cerr << "Composition::removeTimeSignature() - updateRefreshStatuses()\n";
     updateRefreshStatuses();
 }
 
@@ -700,7 +689,6 @@ Composition::addTempo(timeT time, double tempo)
     ReferenceSegment::iterator i = m_tempoSegment.insert(tempoEvent);
 
     m_tempoTimestampsNeedCalculating = true;
-    cerr << "Composition::addTempo() - updateRefreshStatuses()\n";
     updateRefreshStatuses();
 
 #ifdef DEBUG_TEMPO_STUFF
@@ -718,7 +706,6 @@ Composition::addRawTempo(timeT time, int tempo)
 
     ReferenceSegment::iterator i = m_tempoSegment.insert(tempoEvent);
 
-    cerr << "Composition::addRawTempo() - updateRefreshStatuses()\n";
     updateRefreshStatuses();
     m_tempoTimestampsNeedCalculating = true;
 
@@ -756,7 +743,6 @@ Composition::removeTempoChange(int n)
 {
     m_tempoSegment.erase(m_tempoSegment[n]);
     m_tempoTimestampsNeedCalculating = true;
-    cerr << "Composition::removeTempoChange() - updateRefreshStatuses()\n";
     updateRefreshStatuses();
 }
 
@@ -1013,10 +999,10 @@ void Composition::addTrack(Track *track)
         updateRefreshStatuses();
 
     } else {
-        std:: cerr << "Composition::addTrack("
-                   << track << "), id = " << track->getId()
-                   << " - WARNING - track id already present "
-                   << __FILE__ << ":" << __LINE__ << std::endl;
+        std::cerr << "Composition::addTrack("
+                  << track << "), id = " << track->getId()
+                  << " - WARNING - track id already present "
+                  << __FILE__ << ":" << __LINE__ << std::endl;
         // throw Exception("track id already present");
     }
 }

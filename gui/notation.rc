@@ -55,7 +55,7 @@
   <Action name="break_tuplets"/>
   <Separator/>
   <Action name="grace"/>
-  <Action name="ungrace"/>
+<!--  <Action name="ungrace"/> -->
   <Separator/>
   <Action name="slur"/>
   <Action name="crescendo"/>
@@ -501,7 +501,7 @@
     <Action name="break_group"/>
     <Action name="break_tuplets"/>
     <Action name="grace"/>
-    <Action name="ungrace"/>
+<!--    <Action name="ungrace"/> -->
     <Action name="slur"/>
     <Action name="crescendo"/>
     <Action name="decrescendo"/>
