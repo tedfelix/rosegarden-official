@@ -966,14 +966,14 @@ AlsaDriver::processNotesOff(const RealTime &time)
 }
 
 void
-AlsaDriver::processAudioQueue(const RealTime &playLatency)
+AlsaDriver::processAudioQueue(const RealTime &playLatency, bool now)
 {
     std::vector<PlayableAudioFile*>::iterator it;
     RealTime currentTime = getSequencerTime() - playLatency;
 
     for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); ++it)
     {
-        if (currentTime >= (*it)->getStartTime() &&
+        if ((currentTime >= (*it)->getStartTime() || now) &&
             (*it)->getStatus() == PlayableAudioFile::IDLE)
         {
             (*it)->setStatus(PlayableAudioFile::PLAYING);
@@ -1438,12 +1438,10 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
         }
     }
 
-    // No audio for the moment, just the Midi events
+    // Process Midi and Audio
     //
     processMidiOut(mC, playLatency, now);
-
-    // do any audio events
-    processAudioQueue(playLatency);
+    processAudioQueue(playLatency, now);
 
 }
 
@@ -1580,6 +1578,12 @@ AlsaDriver::processPending(const RealTime &playLatency)
 {
     if (m_playing)
         processNotesOff(getAlsaTime());
+    else
+    {
+        // Process audio
+        //
+        processAudioQueue(playLatency, true);
+    }
 }
 
 float
@@ -1653,6 +1657,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
             inst->appendToAudioFile(buffer);
         }
 
+        /*
         // Return if we're not playing yet
         //
         if (!inst->isPlaying())
@@ -1671,6 +1676,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
             }
             return 0;
         }
+        */
 
         // Ok, we're playing - so clear the temporary buffers ready
         // for writing, get the audio queue, grab the queue vector
@@ -1708,21 +1714,29 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
         double dInSamplesInc = 0.0;
         jack_nframes_t samplesOut = 0;
 
+        // If we're on the final slice we process as many samples as
+        // we can up to the end of the file.
+        //
+        bool finalFrame = false;
+
         for (it = audioQueue.begin(); it != audioQueue.end(); it++)
         {
             // Another thread could've cleared down all the
             // PlayableAudioFiles already.  As we've already
             // noted we must be careful.
             //
-            if (inst->isPlaying() &&
+            if ( /*inst->isPlaying() &&*/
                 (*it)->getStatus() == PlayableAudioFile::PLAYING)
             {
 
                 // make sure we haven't stopped playing because if we
                 // have the iterator is invalid
                 //
+
+                /*
                 if (!inst->isPlaying())
                     continue;
+                    */
 
                 int channels = (*it)->getChannels();
                 int bytes = (*it)->getBitsPerSample() / 8;
@@ -1743,9 +1757,9 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
                 if (sampleRate != _jackSampleRate)
                 {
-                    fetchFrames = (jack_nframes_t)(nframes *
-                                                   (((double)sampleRate)/
-                                                   ((double)_jackSampleRate)));
+                    fetchFrames = (jack_nframes_t)((double)(nframes) *
+                                                 (((double)(sampleRate))/
+                                                  ((double)(_jackSampleRate))));
 
                     /*
                     std::cout << "RATE MISMATCH : will fetch "
@@ -1762,8 +1776,11 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 }
                 catch(std::string es)
                 {
-                    // we've run out of samples in the file
-                    continue;
+                    // We've run out of samples in the PlayableAudioFile
+                    // - throw it away
+                    //
+                    (*it)->setStatus(PlayableAudioFile::DEFUNCT);
+                    finalFrame = true;
                 }
 
 
@@ -1860,6 +1877,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                         //
                         samplePtr += bytes * channels *
                                      (samplesIn - oldSamplesIn);
+
                     }
 
                     // store value for next time around
@@ -1867,6 +1885,17 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
                     // Point to next output sample
                     samplesOut++;
+
+                    // Ensure we don't overrun the end byte on the
+                    // the final frame.  Hmm, still not working.
+                    //
+                    if (finalFrame &&
+                        (samplesOut * bytes * channels
+                             > samples.length()))
+                    {
+                        break;
+                    }
+
                 }
             }
             layerCount++;
@@ -1886,8 +1915,10 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
         // clear down the audio queue if we're not playing
         //
+        /*
         if (inst->isPlaying() == false)
             inst->clearAudioPlayQueue();
+            */
 
         _usingAudioQueueVector = false;
     }

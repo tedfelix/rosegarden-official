@@ -95,7 +95,8 @@ public:
 
 protected:
     virtual void generateInstruments();
-    virtual void processAudioQueue(const RealTime &playLatency);
+    virtual void processAudioQueue(const RealTime &playLatency,
+                                   bool now);
     virtual void processMidiOut(const MappedComposition &mC,
                                 const RealTime &playLatency,
                                 bool now);

@@ -73,7 +73,8 @@ protected:
     virtual void processMidiOut(const MappedComposition & /*mC*/,
                                 const RealTime & /*playLatency*/,
                                 bool /*now*/) {;}
-    virtual void processAudioQueue(const RealTime & /*playLatency*/) {;}
+    virtual void processAudioQueue(const RealTime & /*playLatency*/,
+                                   bool /*now*/) {;}
     virtual void generateInstruments()  {;}
 
 };

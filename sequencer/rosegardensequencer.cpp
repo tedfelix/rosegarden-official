@@ -500,7 +500,8 @@ RosegardenSequencerApp::processAsynchronousEvents()
         m_transportStatus = STOPPING;
     }
 
-    // Process any pending events (Note Offs) as part of same procedure
+    // Process any pending events (Note Offs or Audio) as part of
+    // same procedure.
     //
     m_sequencer->processPending(m_playLatency);
 }

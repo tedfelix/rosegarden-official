@@ -409,7 +409,7 @@ ArtsDriver::processNotesOff(const RealTime &time)
 }
 
 void
-ArtsDriver::processAudioQueue(const RealTime &playLatency)
+ArtsDriver::processAudioQueue(const RealTime &playLatency, bool /*now*/)
 {
     // Now check queue for events that need playing
     std::vector<PlayableAudioFile*>::iterator it;
@@ -934,7 +934,7 @@ ArtsDriver::processEventsOut(const MappedComposition &mC,
     processMidiOut(mC, playLatency, now);
 
     // do any audio events
-    processAudioQueue(playLatency);
+    processAudioQueue(playLatency, now);
 }
 
 void

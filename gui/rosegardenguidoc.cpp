@@ -235,6 +235,9 @@ bool RosegardenGUIDoc::newDocument()
 
     m_commandHistory->clear();
 
+    // synchronise sequencer
+    prepareAudio();
+
     return true;
 }
 

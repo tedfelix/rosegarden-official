@@ -59,55 +59,6 @@ RIFFAudioFile::~RIFFAudioFile()
 }
 
 
-/*
-bool
-RIFFAudioFile::open()
-{
-    m_inFile = new std::ifstream(m_fileName.c_str(),
-                                 std::ios::in | std::ios::binary);
-
-    // get the actual file size
-    //
-    m_inFile->seekg(0, std::ios::end);
-    m_fileSize = m_inFile->tellg();
-    m_inFile->seekg(0, std::ios::beg);
-
-    // now parse the file
-    try
-    {
-        if (*m_inFile)
-        {
-            try
-            {
-                parseHeader(getBytes(m_inFile, 36));
-            }
-            catch(std::string s)
-            {
-                cerr << "EXCEPTION : " << s << endl;
-            }
-        }
-        else
-        {
-            m_type = UNKNOWN;
-            return (false);
-        }
-    }
-    catch(std::string s)
-    {  
-        cout << "EXCEPTION : " << s << endl;
-        return false;
-    }
-
-    m_type = WAV;
-
-    // Reset to front of "data" block
-    //
-    scanTo(m_inFile, RealTime(0, 0));
-
-    return true;
-}
-*/
-
 // Show some stats on this file
 //
 void
@@ -120,34 +71,6 @@ RIFFAudioFile::printStats()
          << "channels        : " << m_channels << endl
          << endl;
 }
-
-// For an RIFFAudioFile we write a header (if we can) and leave
-// the file descriptor open for subsequent appends.
-//
-/*
-bool
-RIFFAudioFile::write()
-{
-    // for the moment we only support WAVs
-    //
-    if (m_type != WAV)
-        return false;
-
-    // close if we're open
-    if (m_outFile)
-    {
-        m_outFile->close();
-        delete m_outFile;
-    }
-
-    // open for writing
-    m_outFile = new std::ofstream(m_fileName.c_str(),
-                                  std::ios::out | std::ios::binary);
-
-
-    return true;
-}
-*/
 
 bool
 RIFFAudioFile::appendSamples(const std::string &buffer)
@@ -162,13 +85,6 @@ RIFFAudioFile::appendSamples(const std::string &buffer)
 
     return true;
 }
-
-/*
-void
-RIFFAudioFile::writeHeader()
-{
-}
-*/
 
 // scan on from a descriptor position
 bool
@@ -216,9 +132,11 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
     if (file == 0) return false;
 
     // seek past header - don't hardcode this - use the file format
-    // spec to get header length
+    // spec to get header length and then scoot to that.
     //
-    file->seekg(36, std::ios::beg);
+    file->seekg(16, std::ios::beg);
+    unsigned int lengthOfFormat = getIntegerFromLittleEndian(getBytes(file, 4));
+    file->seekg(lengthOfFormat, std::ios::cur);
 
     try
     {
@@ -303,130 +221,6 @@ RIFFAudioFile::getSampleFrameSlice(std::ifstream *file, const RealTime &time)
     return getBytes(file, totalBytes);
 }
 
-// Close the file and calculate the sizes
-//
-/*
-void
-RIFFAudioFile::close()
-{
-    if (m_outFile == 0)
-        return;
-
-    m_outFile->seekp(0, std::ios::end);
-    unsigned int totalSize = m_outFile->tellp();
-
-    // seek to first length position
-    m_outFile->seekp(4, std::ios::beg);
-
-    // write complete file size minus 8 bytes to here
-    putBytes(m_outFile, getLittleEndianFromInteger(totalSize - 8, 4));
-
-    // reseek from start forward 40
-    m_outFile->seekp(40, std::ios::beg);
-
-    // write the data chunk size to end
-    putBytes(m_outFile, getLittleEndianFromInteger(totalSize - 44, 4));
-
-    m_outFile->close();
-
-    delete m_outFile;
-    m_outFile = 0;
-
-}
-*/
-
-// Get a normalised (-1.0 to +1.0 float) preview of the audio file
-// at a certain resolution - don't use a small resolution on a large
-// file or you could be waiting for a while - until this has been
-// optimised.  Don't use to high a resolution or your data will
-// be meaningless of course.
-//
-/*
-std::vector<float>
-RIFFAudioFile::getPreview(const RealTime &resolution)
-{
-    std::vector<float> preview;
-
-    if (m_inFile == 0)
-        return preview;
-    //std::ifstream *previewFile = new std::ifstream(m_fileName.c_str(),
-                                                   //std::ios::in |
-                                                   //std::ios::binary);
-    try
-    {
-
-    // move past header to beginning of the data
-    scanTo(m_inFile, RealTime(0, 0));
-
-    unsigned int totalSample, totalBytes;
-    std::string samples;
-    char *samplePtr;
-    float meanValue;
-
-    // Read sample data at given resolution and push the results
-    // onto the result vector.
-  
-    // We need sinc interpolation:
-    //
-    //   sinc(x)
-    //      returns sin(pi*x)/(pi*x) at all points of array x.
-
-    do
-    {
-        meanValue = 0.0f; // reset
-
-        samples = getBytes(m_bytesPerSample); // buffered read
-        samplePtr = (char *)samples.c_str();
-
-        for (unsigned int i = 0; i < m_channels; i++)
-        {
-
-            // get the whole frame
-            switch(m_bitsPerSample)
-            {
-                case 8: // 8 bit
-                    meanValue += (*((unsigned char *)samplePtr))
-                                 / SAMPLE_MAX_8BIT;
-                    samplePtr++;
-                    break;
-
-                case 16: // 16 bit
-                    meanValue += (*((short*)samplePtr)) / SAMPLE_MAX_16BIT;
-                    samplePtr += 2;
-                    break;
-
-                case 24: // 24 bit
-                default:
-                    std::cerr << "RIFFAudioFile::getPreview - "
-                              << "unsupported bit depth of "
-                              << m_bitsPerSample
-                              << std::endl;
-                    break;
-            }
-        }
-
-        meanValue /= ((float)m_channels);
-
-        // store - only one value per whole sample frame
-        //preview.push_back(sinc(meanValue));
-        preview.push_back(meanValue);
-    }
-    while(scanForward(m_inFile, resolution));
-
-    // clear up
-    //previewFile->close();
-    //delete previewFile;
-    
-    }
-    catch(std::string s)
-    {
-        std::cerr << "RIFFAudioFile::getPreview - EXCEPTION - \"" 
-                  << s << "\"" << std::endl;
-    }
-
-    return preview;
-}
-*/
 
 RealTime
 RIFFAudioFile::getLength()
@@ -444,15 +238,6 @@ RIFFAudioFile::getLength()
 
     return RealTime(secs, usecs);
 }
-
-/*
-// Nothing going on in here for the moment
-//
-void
-RIFFAudioFile::parseBody()
-{
-}
-*/
 
 
 // The RIFF file format chunk defines our internal meta data.
