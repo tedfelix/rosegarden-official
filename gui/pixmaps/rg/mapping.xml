@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rosegarden-font-encoding>
+
+<rosegarden-font-encoding name="rg">
+
+<font-information
+        origin="Rosegarden 2.1"
+        copyright="Copyright (c) 1994--2001 Chris Cannam"
+        mapped-by="Chris Cannam"/>
+
+<font-sizes>
+        <font-size note-height="4" staff-line-thickness="1" stem-thickness="1"/>
+        <font-size note-height="8" staff-line-thickness="1" stem-thickness="1"/>
+</font-sizes>
+
+<font-symbol-map>
+        <!-- Symbol names are from the Unicode code charts: see
+             http://www.unicode.org/charts/PDF/U2600.pdf
+             http://www.unicode.org/charts/PDF/U1D100.pdf -->
+
+        <symbol name="MUSIC SHARP SIGN" src="notemod-sharp"/>
+        <symbol name="MUSIC NATURAL SIGN" src="notemod-natural"/>
+        <symbol name="MUSIC FLAT SIGN" src="notemod-flat"/>
+        <symbol name="MUSICAL SYMBOL DOUBLE SHARP" src="notemod-doublesharp"/>
+        <symbol name="MUSICAL SYMBOL DOUBLE FLAT" src="notemod-doubleflat"/>
+
+        <symbol name="MUSICAL SYMBOL BREVE" src="note-breve"/>
+        <symbol name="MUSICAL SYMBOL WHOLE NOTE" src="note-bodyempty"/>
+        <symbol name="MUSICAL SYMBOL VOID NOTEHEAD" src="note-bodyempty"/>
+        <symbol name="MUSICAL SYMBOL NOTEHEAD BLACK" src="note-bodyfilled"/>
+
+        <!-- There's only one Unicode point for each flag; I guess
+             you're expected to invert them yourself -->
+        <symbol name="MUSICAL SYMBOL COMBINING FLAG-1"
+                src="tail-down-1" inversion-src="tail-up-1"/>
+        <symbol name="MUSICAL SYMBOL COMBINING FLAG-2"
+                src="tail-down-2" inversion-src="tail-up-2"/>
+        <symbol name="MUSICAL SYMBOL COMBINING FLAG-3" 
+                src="tail-down-3" inversion-src="tail-up-3"/>
+        <symbol name="MUSICAL SYMBOL COMBINING FLAG-4" 
+                src="tail-down-4" inversion-src="tail-up-4"/>
+
+        <symbol name="MUSICAL SYMBOL MULTI REST" src="rest-breve"/>
+        <symbol name="MUSICAL SYMBOL WHOLE REST" src="rest-semibreve"/>
+        <symbol name="MUSICAL SYMBOL HALF REST" src="rest-minim"/>
+        <symbol name="MUSICAL SYMBOL QUARTER REST" src="rest-crotchet"/>
+        <symbol name="MUSICAL SYMBOL EIGHTH REST" src="rest-quaver"/>
+        <symbol name="MUSICAL SYMBOL SIXTEENTH REST" src="rest-semiquaver"/>
+        <symbol name="MUSICAL SYMBOL THIRTY-SECOND REST" src="rest-demisemi"/>
+        <symbol name="MUSICAL SYMBOL SIXTY-FOURTH REST" src="rest-hemidemisemi"/>
+
+        <symbol name="MUSICAL SYMBOL COMBINING AUGMENTATION DOT" src="dot"/>
+
+        <!-- Unicode (and Lilypond) just have a single C clef, they
+             don't distinguish between alto and tenor.  We'd have to
+             use the same clef with an offset. -->
+        <symbol name="MUSICAL SYMBOL C CLEF" src="clef-alto"/>
+        <symbol name="MUSICAL SYMBOL G CLEF" src="clef-treble"/>
+        <symbol name="MUSICAL SYMBOL F CLEF" src="clef-bass"/>
+</font-symbol-map>
+
+<font-hotspots>
+        <hotspot name="MUSIC FLAT SIGN">
+                <when note-height="4" x="2" y="4"/>
+                <when note-height="8" x="3" y="9"/>
+        </hotspot>
+</font-hotspots>
+
+</rosegarden-font-encoding>

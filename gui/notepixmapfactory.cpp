@@ -33,6 +33,8 @@
 #include "notepixmapfactory.h"
 #include "NotationTypes.h"
 
+#include "notefont.h"
+
 using Rosegarden::Note;
 using Rosegarden::Clef;
 using Rosegarden::Key;
@@ -350,6 +352,16 @@ NotePixmapFactory::NotePixmapFactory(int resolution) :
     m_dot(m_pixmapDirectory + "/dot.xpm"),
     m_clefWidth(-1)
 {
+
+    //!!! Testing...
+    try {
+        NoteFont font("feta", resolution - 1);
+    } catch (NoteFont::BadFont f) {
+        kdDebug(KDEBUG_AREA) << "Caught BadFont: " << f.reason << endl;
+    } catch (NoteFontMap::MappingFileReadFailed f) {
+        kdDebug(KDEBUG_AREA) << "Caught MappingFileReadFailed: " << f.reason << endl;
+    }
+
     // 9 => 20, 5 => 10
     m_timeSigFont.setPixelSize((resolution - 1) * 5 / 2);
     m_timeSigFontMetrics = QFontMetrics(m_timeSigFont);

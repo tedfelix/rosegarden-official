@@ -12,6 +12,7 @@ rosegarden_SOURCES = \
 	notationstaff.cpp \
 	notationview.cpp \
 	notationvlayout.cpp \
+	notefont.cpp \
 	notepixmapfactory.cpp \
 	qcanvasgroupableitem.cpp \
 	qcanvasitemgroup.cpp \
