@@ -63,8 +63,6 @@ public:
                  const char* name = 0,
                  WFlags f=0);
 
-    ~TrackButtons();
-
     // Return the track selected for recording
     //
     int selectedRecordTrack();
@@ -89,7 +87,7 @@ public slots:
 
     void slotSetRecordTrack(int id);
     void slotToggleMutedTrack(int mutedTrack);
-    void slotAddTracks(unsigned int nbTracks);
+    void slotUpdateTracks();
     void slotLabelSelected(int id);
     void slotRenameTrack(QString newName, int trackNumber);
     void slotSetTrackMeter(double value, int position);

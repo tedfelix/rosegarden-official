@@ -386,36 +386,31 @@ void TrackEditor::slotCommandExecuted(Command *command)
     AddTempoChangeCommand *tempoCommand =
                  dynamic_cast<AddTempoChangeCommand *>(command);
 
-    if (tempoCommand)
-    {
+    if (tempoCommand) {
         return;
     }
 
+    AddTracksCommand *tracksCommand = dynamic_cast<AddTracksCommand *>(command);
+
+    if (tracksCommand) {
+        m_trackButtons->slotUpdateTracks();
+
+        m_segmentCanvas->canvas()->resize(m_canvasWidth,
+                                          getTrackCellHeight() * m_document->getComposition().getNbTracks());
+
+    }
+
+
     kdDebug(KDEBUG_AREA) << "TrackEditor::commandExecuted: not a presently-supported command type" << endl;
-    return;
 }
 
 void TrackEditor::slotAddTracks(unsigned int nbNewTracks)
 {
-    using Rosegarden::Track;
+    Composition &comp = m_document->getComposition();
 
-    Composition &composition = m_document->getComposition();
+    AddTracksCommand* command = new AddTracksCommand(&comp, nbNewTracks);
 
-    unsigned int currentNbTracks = composition.getNbTracks();
-
-    for (unsigned int i = 0; i < nbNewTracks; ++i) {
-        Track* track = new Rosegarden::Track;
-        track->setID(i + currentNbTracks);
-        track->setPosition(i + currentNbTracks);
-
-        composition.addTrack(track);
-    }
-
-    m_trackButtons->slotAddTracks(nbNewTracks);
-
-    m_segmentCanvas->canvas()->resize(m_canvasWidth,
-                                      getTrackCellHeight() * composition.getNbTracks());
-
+    addCommandToHistory(command);
 }
 
 void TrackEditor::addSegment(int track, int start, unsigned int duration)

@@ -102,39 +102,6 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
 
 }
 
-TrackButtons::~TrackButtons()
-{
-    // Just doing most of these because they're there - not because
-    // they necessarily need to be explicitly free'd
-
-    delete m_instrumentPopup;
-
-    for (std::vector<TrackLabel *>::iterator it = m_trackLabels.begin();
-         it != m_trackLabels.end(); it++)
-        delete (*it);
-
-    m_trackLabels.erase(m_trackLabels.begin(), m_trackLabels.end());
-
-    for (std::vector<TrackVUMeter *>::iterator it = m_trackMeters.begin();
-         it != m_trackMeters.end(); it++)
-        delete (*it);
-
-    m_trackMeters.erase(m_trackMeters.begin(), m_trackMeters.end());
-
-    for (std::vector<InstrumentLabel *>::iterator it = 
-         m_instrumentLabels.begin(); it != m_instrumentLabels.end(); it++)
-        delete (*it);
-
-    m_instrumentLabels.erase(m_instrumentLabels.begin(),
-                             m_instrumentLabels.end());
-
-    delete m_recordButtonGroup;
-    delete m_muteButtonGroup;
-    delete m_layout;
-
-}
-
-
 // Draw the mute and record buttons, track labels and VU meters
 //
 void
@@ -369,15 +336,29 @@ TrackButtons::slotToggleMutedTrack(int mutedTrack)
 }
 
 void
-TrackButtons::slotAddTracks(unsigned int nbTracks)
+TrackButtons::slotUpdateTracks()
 {
-    for(unsigned int i = 0; i < nbTracks; ++i) {
-        QFrame *trackHBox = makeButton(m_tracks + i);
-        trackHBox->show();
-        m_layout->insertWidget(m_tracks + i, trackHBox);
-    }
+    int newNbTracks = m_doc->getComposition().getNbTracks();
 
-    m_tracks += nbTracks;
+    if (newNbTracks == m_tracks) return; // nothing to do
+
+    if (newNbTracks > m_tracks) {
+        
+        for(unsigned int i = m_tracks; i < newNbTracks; ++i) {
+            QFrame *trackHBox = makeButton(i);
+            trackHBox->show();
+            m_layout->insertWidget(i, trackHBox);
+        }
+
+    } else {
+
+        for(unsigned int i = m_tracks; i >= newNbTracks; --i) {
+            // delete widget
+        }
+
+    }    
+    
+    m_tracks = newNbTracks;
 }
 
 // Set a newly selected record button to a shocking palette and
