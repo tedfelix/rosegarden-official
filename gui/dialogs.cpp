@@ -1407,8 +1407,16 @@ EventEditDialog::addPersistentProperty(const Rosegarden::PropertyName &name)
 	
     case Int:
     {
+	int min = INT_MIN, max = INT_MAX;
+	// DMM - constrain program changes to a useful range of values
+	// Might other types have a similar need for such limits?
+	if (m_originalEvent.isa(Rosegarden::ProgramChange::EventType))
+	{
+	    min = 0;
+	    max = 127;
+	}    
 	QSpinBox *spinBox = new QSpinBox
-	    (INT_MIN, INT_MAX, 1, m_persistentGrid, strtoqstr(name));
+	    (min, max, 1, m_persistentGrid, strtoqstr(name));
 	spinBox->setValue(m_originalEvent.get<Int>(name));
 	QObject::connect(spinBox, SIGNAL(valueChanged(int)),
 			 this, SLOT(slotIntPropertyChanged(int)));
