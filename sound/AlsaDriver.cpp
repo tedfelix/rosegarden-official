@@ -387,7 +387,7 @@ AlsaDriver::generateInstruments()
                         "%d ",
                         snd_seq_port_info_get_client(pinfo));
 #else
-		char clientId[20];
+		char clientId[60];
 		sprintf(clientId, "MIDI Device at %d:%d ",
 			snd_seq_port_info_get_client(pinfo),
 			snd_seq_port_info_get_port(pinfo));
@@ -2037,7 +2037,9 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
             if (recordDevice == 255 && recordPort == 255)
             {
                 /* set all record devices */
-                std::cout << "SET ALL RECORD DEVICES" << std::endl;
+                std::cout << "AlsaDriver::processEventsOut - "
+                          << "set all record devices - not implemented"
+                          << std::endl;
 
                 /*
                 std::vector<MappedDevice*>::iterator it = m_devices.begin();
