@@ -57,11 +57,15 @@ protected:
 
 class ConfigureDialog : public ConfigureDialogBase
 {
+    Q_OBJECT
 public:
     ConfigureDialog(RosegardenGUIDoc *doc,
                     KConfig* cfg,
                     QWidget *parent=0,
                     const char *name=0);
+signals:
+    void updateAutoSaveInterval(unsigned int);
+
 protected:
     RosegardenGUIDoc *m_doc;
 };

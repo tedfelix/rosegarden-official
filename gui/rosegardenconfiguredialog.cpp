@@ -253,8 +253,8 @@ void GeneralConfigurationPage::apply()
     m_cfg->writeEntry("selectorgreedymode", m_selectorGreedyMode->isChecked());
 
     unsigned int autosaveInterval = m_autosaveInterval->value();
-    m_cfg->writeEntry("autosaveInterval", autosaveInterval);
-    m_doc->setAutoSavePeriod(autosaveInterval);
+    m_cfg->writeEntry("autosaveinterval", autosaveInterval);
+    emit updateAutoSaveInterval(autosaveInterval);
 
     QString externalAudioEditor = getExternalAudioEditor();
 
@@ -1210,6 +1210,9 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
     vlay->addWidget(page);
     page->setPageIndex(pageIndex(pageWidget));
     m_configurationPages.push_back(page);
+
+    connect(page, SIGNAL(updateAutoSaveInterval(unsigned int)),
+            this, SIGNAL(updateAutoSaveInterval(unsigned int)));
 
     // Notation Page
     pageWidget = addPage(NotationConfigurationPage::iconLabel(),

@@ -258,6 +258,7 @@ Composition::Composition(const Composition &comp):
     m_loopEnd(comp.getLoopEnd()),
     m_barPositionsNeedCalculating(true),
     m_tempoTimestampsNeedCalculating(true),
+    m_metadata(comp.getMetadata()),
     m_playMetronome(comp.usePlayMetronome()),
     m_recordMetronome(comp.useRecordMetronome()),
     m_needsRefresh(true)

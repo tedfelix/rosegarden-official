@@ -113,7 +113,8 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
       m_originatingJump(false),
       m_storedLoopStart(0),
       m_storedLoopEnd(0),
-      m_useSequencer(useSequencer)
+      m_useSequencer(useSequencer),
+      m_autoSaveTimer(new QTimer(this))
 {
     if (startupStatusMessageReceiver) {
 	QObject::connect(this, SIGNAL(startupStatusMessage(const QString &)),
@@ -199,6 +200,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 
     emit startupStatusMessage(i18n("Starting..."));
     readOptions();
+
 }
 
 RosegardenGUIApp::~RosegardenGUIApp()
@@ -655,6 +657,10 @@ void RosegardenGUIApp::initDocument()
 	    SLOT(update()));
     connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
 	    SLOT(slotTestClipboard()));
+
+    // connect and start the autosave timer
+    connect(m_autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
+    m_autoSaveTimer->start(m_doc->getAutoSavePeriod() * 1000);
 }
 
 void RosegardenGUIApp::initView()
@@ -2963,6 +2969,9 @@ void RosegardenGUIApp::slotConfigure()
     Rosegarden::ConfigureDialog *configDlg = 
         new Rosegarden::ConfigureDialog(m_doc, m_config, this);
 
+    connect(configDlg, SIGNAL(updateAutoSaveInterval(unsigned int)),
+            this, SLOT(slotUpdateAutoSaveInterval(unsigned int)));
+
     configDlg->show();
 }
 
@@ -3665,5 +3674,28 @@ RosegardenGUIApp::slotModifyMIDIFilters()
         RG_DEBUG << "slotModifyMIDIFilters - accepted" << endl;
     }
 }
+
+void 
+RosegardenGUIApp::slotAutoSave()
+{
+    if (!m_seqManager ||
+        m_seqManager->getTransportStatus() == PLAYING ||
+        m_seqManager->getTransportStatus() == RECORDING_MIDI ||
+        m_seqManager->getTransportStatus() == RECORDING_AUDIO)
+        return;
+
+    RG_DEBUG << "RosegardenGUIApp::slotAutoSave" << endl;
+    m_doc->slotAutoSave();
+}
+
+
+void
+RosegardenGUIApp::slotUpdateAutoSaveInterval(unsigned int interval)
+{
+    RG_DEBUG << "RosegardenGUIApp::slotUpdateAutoSaveInterval - "
+             << "changed interval to " << interval << endl;
+    m_autoSaveTimer->changeInterval(int(interval) * 1000);
+}
+
 
 const void* RosegardenGUIApp::SequencerExternal = (void*)-1;

@@ -101,9 +101,7 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
       m_commandHistory(new MultiViewCommandHistory()),
       m_clipboard(new Rosegarden::Clipboard),
       m_startUpSync(true),
-      m_pluginManager(pluginManager),
-      m_autoSaveTimer(new QTimer(this))
-
+      m_pluginManager(pluginManager)
 {
     // Try to tell the sequencer that we're alive only if the
     // sequencer hasn't already forced us to sync
@@ -122,16 +120,14 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
 
     connect(m_commandHistory, SIGNAL(documentRestored()),
 	    this, SLOT(slotDocumentRestored()));
+}
 
-    // Start autosave timer
-    connect(m_autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
-
+unsigned int
+RosegardenGUIDoc::getAutoSavePeriod() const
+{
     KConfig* config = kapp->config();
     config->setGroup("General Options");
-    unsigned int autosaveSeconds =
-	config->readUnsignedNumEntry("autosaveinterval", 60);
-
-    setAutoSavePeriod(autosaveSeconds);
+    return config->readUnsignedNumEntry("autosaveinterval", 60);
 }
 
 RosegardenGUIDoc::RosegardenGUIDoc(RosegardenGUIDoc *doc)
@@ -143,8 +139,7 @@ RosegardenGUIDoc::RosegardenGUIDoc(RosegardenGUIDoc *doc)
       m_commandHistory(new MultiViewCommandHistory()), // lose command history
       m_clipboard(new Rosegarden::Clipboard),          // lose clipboard
       m_startUpSync(true),
-      m_pluginManager(doc->getPluginManager()),
-      m_autoSaveTimer(new QTimer(this))
+      m_pluginManager(doc->getPluginManager())
 {
     m_title = doc->getTitle();
     m_absFilePath = doc->getAbsFilePath();
@@ -170,7 +165,6 @@ RosegardenGUIDoc::operator=(const RosegardenGUIDoc &doc)
     m_commandHistory = new MultiViewCommandHistory();
     m_clipboard = new Rosegarden::Clipboard();
     m_startUpSync = true;
-    m_autoSaveTimer = new QTimer(this);
 
     m_audioFileManager = doc.getAudioFileManager();
     m_studio = doc.getStudio();
@@ -272,14 +266,6 @@ void RosegardenGUIDoc::slotAutoSave()
              << autoSaveFileName << endl;
 
     saveDocument(autoSaveFileName, 0, true);
-}
-
-void RosegardenGUIDoc::setAutoSavePeriod(unsigned int seconds)
-{
-    m_autoSaveTimer->stop();
-
-    if (seconds > 0)
-        m_autoSaveTimer->start(seconds * 1000);
 }
 
 

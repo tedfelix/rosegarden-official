@@ -166,6 +166,9 @@ public:
     QString getExternalAudioEditor() { return m_externalAudioEditorPath->text(); }
     int getNoteNameStyle() { return m_nameStyle->currentItem(); }
 
+signals:
+    void updateAutoSaveInterval(unsigned int);
+
 protected slots:
     void slotFileDialog();
 

@@ -122,9 +122,9 @@ public:
     bool saveIfModified();	
 
     /**
-     * sets the autosave interval in seconds
+     * get the autosave interval in seconds
      */
-    void setAutoSavePeriod(unsigned int seconds);
+    unsigned int getAutoSavePeriod() const;
 
     /**
      * deletes the document's contents
@@ -485,7 +485,10 @@ private:
     //
     Rosegarden::AudioPluginManager *m_pluginManager;
 
-    QTimer* m_autoSaveTimer;
+    // Autosave period for this document in seconds
+    //
+    int m_autoSavePeriod;
+
 };
 
 #endif // ROSEGARDENGUIDOC_H

@@ -922,6 +922,14 @@ public slots:
     //
     void slotPanic();
 
+    // Auto-save
+    //
+    void slotAutoSave();
+
+    // Auto-save update interval changes
+    //
+    void slotUpdateAutoSaveInterval(unsigned int interval);
+
 private:
 
     //--------------- Data members ---------------------------------
@@ -1005,6 +1013,8 @@ private:
     bool m_useSequencer;
 
     Rosegarden::AudioPluginManager *m_pluginManager;
+
+    QTimer* m_autoSaveTimer;
 
 };
 
