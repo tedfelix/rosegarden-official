@@ -213,13 +213,15 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
                 notationpreviewdata::iterator npi = cachedNPData->lower_bound(rect),
                     npEnd = cachedNPData->end();
 
-                int xLim = rect.x() + rect.width();
+                int xLim = rect.topRight().x();
                 for(; npi->x() <= xLim && npi != npEnd; ++npi) {
                     RG_DEBUG << "CompositionModelImpl::getRectanglesIn : xLim = " << xLim
                              << " - npi = " << (*npi) << endl;
                     QRect tr = *npi;
                     // put preview rectangle inside the corresponding segment's CompositionRect
                     tr.moveBy(sr.x(), sr.y());
+                    RG_DEBUG << "CompositionModelImpl::getRectanglesIn : inserting preview rect "
+                             << tr << endl;
                     npData->insert(tr);
                 }
                 
@@ -317,14 +319,10 @@ void CompositionModelImpl::updatePreviewCacheForNotationSegment(const Segment* s
 	    eventEnd = segment->getEndMarkerTime();
 	}
 
-        // FIX for 904300 - store the time rather than the position
-        // and then scale with rulerScale.  Inefficient I'd imagine
-        // but at least it works.
-        //
-        double x0 = eventStart, x1 = eventEnd;
+        int x = int(nearbyint(m_grid.getRulerScale()->getXForTime(eventStart)));
+        int width = int(nearbyint(m_grid.getRulerScale()->getWidthForDuration(eventStart,
+                                                                              eventEnd - eventStart)));
 
-        int width = (int)(x1 - x0) - 2;
-	if (width < 1) width = 1;
 
         double y0 = 0;
         double y1 = m_grid.getYSnap();
@@ -332,9 +330,10 @@ void CompositionModelImpl::updatePreviewCacheForNotationSegment(const Segment* s
         if (y < y0) y = y0;
         if (y > y1-1) y = y1-1;
 
-        QRect r((int)x0, (int)y, width, 2);
-        RG_DEBUG << "CompositionModelImpl::updatePreviewCacheForNotationSegment() : preview rect = "
-                 << r << endl;
+        QRect r(x, (int)y, width, 2);
+//         RG_DEBUG << "CompositionModelImpl::updatePreviewCacheForNotationSegment() : npData = "
+//                  << npData << ", preview rect = "
+//                  << r << endl;
         npData->insert(r);
     }
 
@@ -347,7 +346,11 @@ void CompositionModelImpl::updatePreviewCacheForAudioSegment(const Segment* segm
 
 CompositionModel::notationpreviewdata* CompositionModelImpl::getNotationPreviewData(const Rosegarden::Segment* s)
 {
-    return m_notationPreviewDataCache[const_cast<Rosegarden::Segment*>(s)];
+    notationpreviewdata* npData = m_notationPreviewDataCache[const_cast<Rosegarden::Segment*>(s)];
+    
+    RG_DEBUG << "CompositionModelImpl::getNotationPreviewData() : get npData "
+             << npData << " for segment " << s << endl;
+    return npData;
 }
 
 CompositionModel::audiopreviewdata* CompositionModelImpl::getAudioPreviewData(const Rosegarden::Segment* s)
@@ -364,6 +367,8 @@ void CompositionModelImpl::segmentAdded(const Composition *, Segment *s)
     } else {
         notationpreviewdata* npData = new notationpreviewdata();
         updatePreviewCacheForNotationSegment(s, npData);
+        RG_DEBUG << "CompositionModelImpl::segmentAdded() : insert npData "
+                 << npData << " for segment " << s << endl;
         m_notationPreviewDataCache.insert(s, npData);
     }
 }
@@ -934,6 +939,8 @@ void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw,
 
     QRect clipRect(clipx, clipy, clipw, cliph);
 
+    RG_DEBUG << "CompositionView::drawContents() clipRect = " << clipRect << endl;
+
     CompositionModel::audiopreviewdata*    audioPreviewData = 0;
     CompositionModel::notationpreviewdata* notationPreviewData = 0;
 
@@ -959,6 +966,7 @@ void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw,
             m_2ndLevelUpdate = false;
         }
         
+        RG_DEBUG << "CompositionView::drawContents : draw comp rect " << *i << endl;
         drawCompRect(*i, p, clipRect);
     }
     
@@ -981,6 +989,7 @@ void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw,
         CompositionModel::notationpreviewdata::const_iterator npEnd = m_notationPreviewData.end();
         
         for(; npi != npEnd; ++npi) {
+            RG_DEBUG << "CompositionView::drawContents : draw preview rect " << *npi << endl;
             p->drawRect(*npi);
         }
         
