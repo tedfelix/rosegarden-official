@@ -327,7 +327,7 @@ private:
 class NoteFont
 {
 public:
-    typedef Rosegarden::Exception BadFont;
+    typedef Rosegarden::Exception BadNoteFont;
     ~NoteFont();
 
     std::string getName() const { return m_fontMap.getName(); }

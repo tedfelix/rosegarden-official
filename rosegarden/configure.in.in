@@ -15,6 +15,21 @@ AC_CHECK_HEADERS(fcntl.h sys/time.h unistd.h stdlib.h paths.h)
 AC_CHECK_FUNCS(usleep)
 AC_CHECK_LIB(z, gzgets,, AC_MSG_ERROR("gzgets not found in zlib - need zlib-1.0.9 or newer"))
 
+export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
+
+dnl check for Xft and fontconfig
+AC_ARG_WITH(xft, [  --with-xft             enable Xft support (enabled by default when installed)],
+  [ if test "$withval" = "yes"; then with_xft=yes; else with_xft=no; fi ],
+  with_xft=yes)
+
+if test "$with_xft" = "yes"; then
+   PKG_CHECK_MODULES(XFT,xft >= 2.1.0,,[with_xft="no"])
+fi
+
+if test "$with_jack" = "yes"; then
+    AC_DEFINE(HAVE_XFT, 1, [Define if you have Xft support])
+fi
+
 dnl test for sound support at all
 AC_ARG_ENABLE(sound,[  --disable-sound         disable sound support (default is enabled for ALSA)],
 [
@@ -71,7 +86,6 @@ else
   ], with_jack=yes)
 
   if test "$with_jack" = "yes"; then
-     export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH
      PKG_CHECK_MODULES(JACK,jack >= 0.77.0,,[with_jack="no"])
   fi
 
@@ -214,6 +228,8 @@ else
     else
         echo "aRTS MIDI and audio       : yes"
     fi
+
+    echo "Xft notation font support : ${with_xft}"
 fi
 echo
 echo

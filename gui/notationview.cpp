@@ -2666,7 +2666,7 @@ void NotationView::print(bool previewOnly)
 
         printpainter.translate(-pageWidth, 0);
 
-	if (pli != pages.end()) printer.newPage();
+	if (pli != pages.end() && *pli - 1 < maxPageCount) printer.newPage();
 	
 	for (size_t i = 0; i < m_staffs.size(); ++i) {
 	    m_staffs[i]->markChanged(); // recover any memory used for this page

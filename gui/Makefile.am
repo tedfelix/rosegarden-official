@@ -218,7 +218,8 @@ uninstall-local:
 # kde_wallpaperdir  Where general wallpapers should go to.
 
 # set the include path for X, qt and KDE
-INCLUDES= $(all_includes) -I$(top_srcdir)/base -I$(top_srcdir)/sound $(KDE_CXXFLAGS)
+INCLUDES= $(all_includes) -I$(top_srcdir)/base -I$(top_srcdir)/sound $(KDE_CXXFLAGS) @XFT_CFLAGS@
+
 # claim, which subdirectories you want to install
 # you can add here more. This one gets installed 
 

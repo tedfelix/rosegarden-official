@@ -46,6 +46,13 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
+#define HAVE_XFT 1
+
+#ifdef HAVE_XFT
+#include <X11/Xft/Xft.h>
+#endif
+
+
 NoteFontMap::NoteFontMap(string name) :
     m_name(name),
     m_autocrop(false),
@@ -903,12 +910,12 @@ NoteFont::NoteFont(string fontName, int size) :
     if (sizes.size() > 0) {
         m_size = *sizes.begin();
     } else {
-        throw BadFont(std::string("No sizes listed for font ") + fontName);
+        throw BadNoteFont(std::string("No sizes listed for font ") + fontName);
     }
 
     if (size > 0) {
         if (sizes.find(size) == sizes.end()) {
-            throw BadFont(qstrtostr(QString("Font \"%1\" not available in size %2").arg(strtoqstr(fontName)).arg(size)));
+            throw BadNoteFont(qstrtostr(QString("Font \"%1\" not available in size %2").arg(strtoqstr(fontName)).arg(size)));
         } else {
             m_size = size;
         }
@@ -1401,6 +1408,7 @@ class SystemFontQt : public SystemFont
 public:
     SystemFontQt(QFont &font) : m_font(font) { }
     virtual ~SystemFontQt() { }
+
     virtual QPixmap renderChar(unsigned int code, bool autocrop);
 
 private:
@@ -1443,6 +1451,60 @@ SystemFontQt::renderChar(unsigned int code, bool autocrop)
 }
 
 
+#ifdef HAVE_XFT
+
+class SystemFontXft : public SystemFont
+{
+public:
+    SystemFontXft(Display *dpy, XftFont *font) : m_dpy(dpy), m_font(font) { }
+    virtual ~SystemFontXft() { if (m_font) XftFontClose(m_dpy, m_font); }
+    
+    virtual QPixmap renderChar(unsigned int code, bool autocrop);
+
+private:
+    Display *m_dpy;
+    XftFont *m_font;
+};
+
+QPixmap
+SystemFontXft::renderChar(unsigned int code, bool)
+{
+    XGlyphInfo extents;
+    FcChar32 char32(code);
+    XftTextExtents32(m_dpy, m_font, &char32, 1, &extents);
+
+    QPixmap map(extents.width, extents.height);
+    map.fill();
+
+    Drawable drawable = (Drawable)map.handle();
+    if (!drawable) {
+	std::cerr << "ERROR: SystemFontXft::renderChar: No drawable in QPixmap!" << std::endl;
+	return map;
+    }
+
+    XftDraw *draw = XftDrawCreate(m_dpy,
+				  drawable,
+				  (Visual *)map.x11Visual(),
+				  map.x11Colormap());
+
+    QColor pen(Qt::black);
+    XftColor col;
+    col.color.red = pen.red () | pen.red() << 8;
+    col.color.green = pen.green () | pen.green() << 8;
+    col.color.blue = pen.blue () | pen.blue() << 8;
+    col.color.alpha = 0xffff;
+    col.pixel = pen.pixel();
+    
+    XftDrawString32(draw, &col, m_font, extents.x, extents.y, &char32, 1);
+    XftDrawDestroy(draw);
+
+    map.setMask(PixmapFunctions::generateMask(map, Qt::white.rgb()));
+    return map;
+}
+
+#endif /* HAVE_XFT */
+
+
 SystemFont *
 SystemFont::loadSystemFont(const SystemFontSpec &spec)
 {
@@ -1457,12 +1519,70 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
 	return new SystemFontQt(font);
     }
 
-    QFont font(name, size, QFont::Normal);
-    font.setPixelSize(size);
+#ifdef HAVE_XFT
 
-    QFontInfo info(font);
+    FcPattern *pattern, *match;
+    FcResult result;
+    FcChar8 *matchFamily;
+    XftFont *xfont = 0;
 
-    NOTATION_DEBUG << "NoteFontMap::checkFont: have family " << info.family() << ", size " << info.pixelSize() << " (exactMatch " << info.exactMatch() << ")" << endl;
+    Display *dpy = QPaintDevice::x11AppDisplay();
+
+    if (!dpy) {
+	std::cerr << "SystemFont::loadSystemFont[Xft]: Xft support requested but no X11 display available!" << std::endl;
+	goto qfont;
+    }
+
+    pattern = FcPatternCreate();
+    FcPatternAddString(pattern, FC_FAMILY, (FcChar8 *)name.latin1());
+    FcPatternAddInteger(pattern, FC_PIXEL_SIZE, size);
+    FcConfigSubstitute(FcConfigGetCurrent(), pattern, FcMatchPattern);
+
+    result = FcResultMatch;
+    match = FcFontMatch(FcConfigGetCurrent(), pattern, &result);
+    FcPatternDestroy(pattern);
+
+    FcPatternGetString(match, FC_FAMILY, 0, &matchFamily);
+    NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: match family is "
+		   << (char *)matchFamily << endl;
+    
+    if (!match || result != FcResultMatch) {
+	NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: No match for font "
+		       << name << " (result is " << result
+		       << "), falling back on QFont" << endl;
+	if (match) FcPatternDestroy(match);
+	goto qfont;
+    }
+
+    if (QString((char *)matchFamily).lower() != name.lower()) {
+	NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: Wrong family returned, falling back on QFont" << endl;
+	FcPatternDestroy(match);
+	goto qfont;
+    }
+
+    xfont = XftFontOpenPattern(dpy, match);
+    if (!xfont) {
+	FcPatternDestroy(match);
+	NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: Unable to load font "
+		       << name << " via Xft, falling back on QFont" << endl;
+	goto qfont;
+    } 
+
+    NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: successfully loaded font "
+		   << name << " through Xft" << endl;
+    
+    return new SystemFontXft(dpy, xfont);
+
+#endif
+
+ qfont:
+    
+    QFont qfont(name, size, QFont::Normal);
+    qfont.setPixelSize(size);
+
+    QFontInfo info(qfont);
+
+    NOTATION_DEBUG << "SystemFont::loadSystemFont[Qt]: have family " << info.family() << " (exactMatch " << info.exactMatch() << ")" << endl;
 
 //    return info.exactMatch();
 
@@ -1481,12 +1601,15 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
 
     QString family = info.family().lower();
 
-    if (family == name.lower()) return new SystemFontQt(font);
+    if (family == name.lower()) return new SystemFontQt(qfont);
     else {
 	int bracket = family.find(" [");
 	if (bracket > 1) family = family.left(bracket);
-	if (family == name.lower()) return new SystemFontQt(font);
+	if (family == name.lower()) return new SystemFontQt(qfont);
     }
 
+    NOTATION_DEBUG << "SystemFont::loadSystemFont[Qt]: Wrong family returned, failing" << endl;
     return 0;
 }
+
+
