@@ -741,8 +741,12 @@ SegmentCanvas::SegmentCanvas(RosegardenGUIDoc *doc,
     m_fineGrain(false),
     m_showPreviews(true),
     m_doc(doc),
+    m_toolBox(0),
     m_selectionRect(0)
 {
+
+    m_toolBox = new SegmentToolBox(this, m_doc);
+
     QWhatsThis::add(this, i18n("Segments Canvas - Create and manipulate your segments here"));
 
     // prepare selection rectangle
@@ -766,43 +770,50 @@ SegmentCanvas::getSelectionRectangle()
     return m_selectionRect;
 }
 
+// void SegmentCanvas::slotSetTool(QString toolname)
 
-void SegmentCanvas::slotSetTool(ToolType t)
+void SegmentCanvas::slotSetTool(ToolType t) // TODO: get rid of the ToolType
 {
     RG_DEBUG << "SegmentCanvas::slotSetTool(" << t << ")"
                          << this << "\n";
 
-    if (m_tool)
-      delete m_tool;
+    if (m_tool) m_tool->stow();
 
-    m_tool = 0;
+    SegmentTool *tool;
 
     switch(t) {
     case Pencil:
-        m_tool = new SegmentPencil(this, m_doc);
+        tool = m_toolBox->getTool("segmentpencil");
         break;
     case Eraser:
-        m_tool = new SegmentEraser(this, m_doc);
+        tool = m_toolBox->getTool("segmenteraser");
         break;
     case Mover:
-        m_tool = new SegmentMover(this, m_doc);
+        tool = m_toolBox->getTool("segmentmover");
         break;
     case Resizer:
-        m_tool = new SegmentResizer(this, m_doc);
+        tool = m_toolBox->getTool("segmentresizer");
         break;
     case Selector:
-        m_tool = new SegmentSelector(this, m_doc);
+        tool = m_toolBox->getTool("segmentselector");
         break;
     case Splitter:
-        m_tool = new SegmentSplitter(this, m_doc);
+        tool = m_toolBox->getTool("segmentsplitter");
         break;
     case Joiner:
-        m_tool = new SegmentJoiner(this, m_doc);
+        tool = m_toolBox->getTool("segmentjoiner");
         break;
 
     default:
         KMessageBox::error(0, QString("SegmentCanvas::slotSetTool() : unknown tool id %1").arg(t));
     }
+
+    m_tool = dynamic_cast<SegmentTool*>(tool);
+
+    // m_tool = m_toolBox->getTool(toolname);
+
+
+    if (m_tool) m_tool->ready();
 }
 
 void SegmentCanvas::updateAllSegmentItems()

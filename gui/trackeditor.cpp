@@ -418,6 +418,8 @@ void TrackEditor::paintEvent(QPaintEvent* e)
 {
     if (isCompositionModified()) {
 
+        RG_DEBUG << "TrackEditor::paintEvent: composition is modified, update everything\n";
+
         m_segmentCanvas->updateAllSegmentItems();
         m_trackButtons->slotUpdateTracks();
 

@@ -30,32 +30,92 @@
 
 #include "Event.h"
 
-class EditTool;
+class BaseTool;
 class EditView;
 class QPopupMenu;
 
 namespace Rosegarden { class ViewElement; }
 
 /**
- * NotationToolBox : maintains a single instance of each registered tool
+ * BaseToolBox : maintains a single instance of each registered tool
  *
  * Tools are fetched from a name
  */
-class EditToolBox : public QObject
+class BaseToolBox : public QObject
 {
 public:
-    EditToolBox(EditView* parent);
+    BaseToolBox(QWidget* parent);
 
-    virtual EditTool* getTool(const QString& toolName);
+    virtual BaseTool* getTool(const QString& toolName);
 
 protected:
-    virtual EditTool* createTool(const QString& toolName) = 0;
+    virtual BaseTool* createTool(const QString& toolName) = 0;
+
+    QDict<BaseTool> m_tools;
+};
+
+/**
+ * BaseTool : base tool class, just handles RMB menu creation and
+ * handling by a BaseToolBox
+ * 
+ */
+class BaseTool : public QObject, public KXMLGUIClient
+{
+    friend class BaseToolBox;
+
+public:
+
+    /**
+     * handleMouseMove() will return a OR-ed combination of these
+     */
+    enum {
+        NoFollow = 0x0,
+        FollowHorizontal = 0x1,
+        FollowVertical = 0x2
+    };
+
+    virtual ~BaseTool();
+
+    /**
+     * Is called by the parent View (EditView or SegmentCanvas) when
+     * the tool is set as current.
+     * Add any setup here
+     */
+    virtual void ready();
+
+    /**
+     * Is called by the parent View (EditView or SegmentCanvas) after
+     * the tool is put away.
+     * Add any cleanup here
+     */
+    virtual void stow();
+
+    /**
+     * Show the menu if there is one
+     */
+    virtual void showMenu();
+
+    virtual void setRCFileName(QString rcfilename) { m_rcFileName = rcfilename; }
+
+protected:
+    /**
+     * Create a new BaseTool
+     *
+     * \a menuName : the name of the menu defined in the XML rc file
+     */
+    BaseTool(const QString& menuName, KXMLGUIFactory*, QObject* parent);
+
+    virtual void createMenu();
+    virtual void createMenu(QString rcFileName);
 
     //--------------- Data members ---------------------------------
 
-    EditView* m_parentView;
+    QString m_menuName;
+    QString m_rcFileName;
 
-    QDict<EditTool> m_tools;
+    QPopupMenu* m_menu;
+
+    KXMLGUIFactory* m_parentFactory;
 };
 
 
@@ -81,34 +141,11 @@ protected:
  * @see EditView#setTool()
  * @see EditToolBox
  */
-class EditTool : public QObject, public KXMLGUIClient
+class EditTool : public BaseTool
 {
     friend class EditToolBox;
 
 public:
-
-    /**
-     * handleMouseMove() will return a OR-ed combination of these
-     */
-    enum {
-        NoFollow = 0x0,
-        FollowHorizontal = 0x1,
-        FollowVertical = 0x2
-    };
-
-    virtual ~EditTool();
-
-    /**
-     * Is called by EditView when the tool is set as current
-     * Add any setup here
-     */
-    virtual void ready();
-
-    /**
-     * Is called by EditView after the tool is not used
-     * Add any cleanup here
-     */
-    virtual void stow();
 
     /**
      * Dispatch the event to Left/Middle/Right MousePress
@@ -172,13 +209,6 @@ public:
                                     int height,
                                     QMouseEvent*);
 
-    /**
-     * Show the menu if there is one
-     */
-    virtual void showMenu();
-
-    void setParentView(EditView*);
-
 protected:
     /**
      * Create a new EditTool
@@ -187,16 +217,29 @@ protected:
      */
     EditTool(const QString& menuName, EditView*);
 
-    void createMenu(const QString& rcFileName);
-
     //--------------- Data members ---------------------------------
-
-    const QString m_menuName;
 
     EditView* m_parentView;
 
-    QPopupMenu* m_menu;
 };
 
+/**
+ * EditToolBox : specialized toolbox for EditViews (notation, matrix...)
+ *
+ */
+class EditToolBox : public BaseToolBox
+{
+public:
+    EditToolBox(EditView* parent);
+
+    virtual EditTool* getTool(const QString& toolName);
+
+protected:
+    virtual EditTool* createTool(const QString& toolName);
+
+    //--------------- Data members ---------------------------------
+
+    EditView* m_parentView;
+};
 
 #endif

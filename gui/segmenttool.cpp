@@ -22,6 +22,8 @@
 #include <qpopupmenu.h>
 #include <qcursor.h>
 
+#include <kmessagebox.h>
+
 #include "segmenttool.h"
 
 #include "SnapGrid.h"
@@ -44,17 +46,80 @@ using Rosegarden::SegmentSelection;
 //                 Segment Tools
 //////////////////////////////////////////////////////////////////////
 
-SegmentTool::SegmentTool(SegmentCanvas* canvas, RosegardenGUIDoc *doc)
-    : m_canvas(canvas),
-      m_currentItem(0),
-      m_doc(doc),
-      m_menu(0)
+SegmentToolBox::SegmentToolBox(SegmentCanvas* parent, RosegardenGUIDoc* doc)
+    : BaseToolBox(parent),
+      m_canvas(parent),
+      m_doc(doc)
 {
-    m_canvas->setCursor(Qt::arrowCursor);
+}
+
+SegmentTool* SegmentToolBox::createTool(const QString& toolName)
+{
+    SegmentTool* tool = 0;
+
+    QString toolNamelc = toolName.lower();
+    
+    if (toolNamelc == SegmentPencil::ToolName)
+
+        tool = new SegmentPencil(m_canvas, m_doc);
+
+    else if (toolNamelc == SegmentEraser::ToolName)
+
+        tool = new SegmentEraser(m_canvas, m_doc);
+
+    else if (toolNamelc == SegmentMover::ToolName)
+
+        tool = new SegmentMover(m_canvas, m_doc);
+
+    else if (toolNamelc == SegmentResizer::ToolName)
+
+        tool = new SegmentResizer(m_canvas, m_doc);
+
+    else if (toolNamelc == SegmentSelector::ToolName)
+
+        tool = new SegmentSelector(m_canvas, m_doc);
+
+    else if (toolNamelc == SegmentSplitter::ToolName)
+
+        tool = new SegmentSplitter(m_canvas, m_doc);
+
+    else if (toolNamelc == SegmentJoiner::ToolName)
+
+        tool = new SegmentJoiner(m_canvas, m_doc);
+
+    else {
+        KMessageBox::error(0, QString("SegmentToolBox::createTool : unrecognised toolname %1 (%2)")
+                           .arg(toolName).arg(toolNamelc));
+        return 0;
+    }
+
+    m_tools.insert(toolName, tool);
+
+    return tool;
+}
+
+SegmentTool* SegmentToolBox::getTool(const QString& toolName)
+{
+    return dynamic_cast<SegmentTool*>(BaseToolBox::getTool(toolName));
+}
+
+
+// TODO : relying on doc->parent being a KMainWindow sucks
+SegmentTool::SegmentTool(SegmentCanvas* canvas, RosegardenGUIDoc *doc)
+    : BaseTool("segment_tool_menu", dynamic_cast<KMainWindow*>(doc->parent())->factory(), canvas),
+      m_canvas(canvas),
+      m_currentItem(0),
+      m_doc(doc)
+{
 }
 
 SegmentTool::~SegmentTool()
 {}
+
+void SegmentTool::ready()
+{
+    m_canvas->setCursor(Qt::arrowCursor);
+}
 
 void 
 SegmentTool::handleRightButtonPress(QMouseEvent *e)
@@ -64,19 +129,22 @@ SegmentTool::handleRightButtonPress(QMouseEvent *e)
     if (item) 
         m_currentItem = item;
 
-    createMenu();
     showMenu();
 }
 
 void
 SegmentTool::createMenu()
 {
+    RG_DEBUG << "SegmentTool::createMenu()\n";
+
     RosegardenGUIApp *app =
         dynamic_cast<RosegardenGUIApp*>(m_doc->parent());
 
     if (app) {
         m_menu = static_cast<QPopupMenu*>
-            (app->factory()->container("segment_tool_menu", app));
+            //(app->factory()->container("segment_tool_menu", app));
+            (m_parentFactory->container("segment_tool_menu", app));
+
         if (!m_menu) {
             RG_DEBUG << "SegmentTool::createMenu() failed\n";
         }
@@ -85,14 +153,19 @@ SegmentTool::createMenu()
     }
 }
 
-void
-SegmentTool::showMenu()
-{
-    if (m_menu)
-        m_menu->exec(QCursor::pos());
-    else
-        RG_DEBUG << "SegmentTool::showMenu() : no menu to show\n";
-}
+// //     setXMLFile(rcFileName);
+// //     m_parentView->factory()->addClient(this);
+
+// //     QWidget* tmp =  m_parentView->factory()->container(m_menuName, this);
+
+// //     if (!tmp)
+// //         RG_DEBUG << "EditTool::createMenu(" << rcFileName
+// //                  << ") : menu creation failed (name : "
+// //                  << m_menuName << ")\n";
+
+// //     m_menu = dynamic_cast<QPopupMenu*>(tmp);
+
+// }
 
 void
 SegmentTool::addCommandToHistory(KCommand *command)
@@ -112,8 +185,12 @@ SegmentPencil::SegmentPencil(SegmentCanvas *c, RosegardenGUIDoc *d)
       m_startTime(0),
       m_endTime(0)
 {
-    m_canvas->setCursor(Qt::ibeamCursor);
     RG_DEBUG << "SegmentPencil()\n";
+}
+
+void SegmentPencil::ready()
+{
+    m_canvas->setCursor(Qt::ibeamCursor);
 }
 
 void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
@@ -215,9 +292,12 @@ int SegmentPencil::handleMouseMove(QMouseEvent *e)
 SegmentEraser::SegmentEraser(SegmentCanvas *c, RosegardenGUIDoc *d)
     : SegmentTool(c, d)
 {
-    m_canvas->setCursor(Qt::pointingHandCursor);
-
     RG_DEBUG << "SegmentEraser()\n";
+}
+
+void SegmentEraser::ready()
+{
+    m_canvas->setCursor(Qt::pointingHandCursor);
 }
 
 void SegmentEraser::handleMouseButtonPress(QMouseEvent *e)
@@ -252,8 +332,6 @@ SegmentMover::SegmentMover(SegmentCanvas *c, RosegardenGUIDoc *d)
     m_foreGuide(new QCanvasRectangle(m_canvas->canvas())),
     m_topGuide(new QCanvasRectangle(m_canvas->canvas()))
 {
-    m_canvas->setCursor(Qt::sizeAllCursor);
-
     m_foreGuide->setPen(RosegardenGUIColours::MovementGuide);
     m_foreGuide->setBrush(RosegardenGUIColours::MovementGuide);
     m_foreGuide->hide();
@@ -263,6 +341,11 @@ SegmentMover::SegmentMover(SegmentCanvas *c, RosegardenGUIDoc *d)
     m_topGuide->hide();
 
     RG_DEBUG << "SegmentMover()\n";
+}
+
+void SegmentMover::ready()
+{
+    m_canvas->setCursor(Qt::sizeAllCursor);
 }
 
 void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
@@ -373,9 +456,12 @@ SegmentResizer::SegmentResizer(SegmentCanvas *c, RosegardenGUIDoc *d,
     : SegmentTool(c, d),
       m_edgeThreshold(edgeThreshold)
 {
-    m_canvas->setCursor(Qt::sizeHorCursor);
-
     RG_DEBUG << "SegmentResizer()\n";
+}
+
+void SegmentResizer::ready()
+{
+    m_canvas->setCursor(Qt::sizeHorCursor);
 }
 
 void SegmentResizer::handleMouseButtonPress(QMouseEvent *e)
@@ -476,8 +562,12 @@ SegmentSelector::SegmentSelector(SegmentCanvas *c, RosegardenGUIDoc *d)
 
 SegmentSelector::~SegmentSelector()
 {
-    clearSelected();
     delete m_dispatchTool;
+}
+
+void SegmentSelector::stow()
+{
+    clearSelected();
 }
 
 void
@@ -575,7 +665,11 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 
 	if (!m_segmentAddMode &&
 	    SegmentResizer::cursorIsCloseEnoughToEdge(item, e, threshold)) {
-	    m_dispatchTool = new SegmentResizer(m_canvas, m_doc, threshold);
+            SegmentResizer* resizer = m_canvas->getToolBox()->getTool(SegmentResizer::ToolName);
+            resizer->setEdgeThreshold(threshold);
+
+	    m_dispatchTool = resizer;
+            
 	    m_dispatchTool->handleMouseButtonPress(e);
 	    return;
 	}
@@ -613,7 +707,7 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
         // Add on middle button - bounding box on rest
         //
 	if (e->button() == MidButton) {
-	    m_dispatchTool = new SegmentPencil(m_canvas, m_doc);
+	    m_dispatchTool =  m_canvas->getToolBox()->getTool(SegmentPencil::ToolName);
 	    m_dispatchTool->handleMouseButtonPress(e);
 	    return;
 	}
@@ -967,11 +1061,15 @@ SegmentSplitter::SegmentSplitter(SegmentCanvas *c, RosegardenGUIDoc *d)
     : SegmentTool(c, d)
 {
     RG_DEBUG << "SegmentSplitter()\n";
-    m_canvas->setCursor(Qt::splitHCursor);
 }
 
 SegmentSplitter::~SegmentSplitter()
 {
+}
+
+void SegmentSplitter::ready()
+{
+    m_canvas->setCursor(Qt::splitHCursor);
 }
 
 void
@@ -1107,3 +1205,13 @@ void
 SegmentJoiner::contentsMouseDoubleClickEvent(QMouseEvent*)
 {
 }
+
+//------------------------------
+
+const QString SegmentPencil::ToolName   = "segmentpencil";
+const QString SegmentEraser::ToolName   = "segmenteraser";
+const QString SegmentMover::ToolName    = "segmentmover";
+const QString SegmentResizer::ToolName  = "segmentresizer";
+const QString SegmentSelector::ToolName = "segmentselector";
+const QString SegmentSplitter::ToolName = "segmentsplitter";
+const QString SegmentJoiner::ToolName   = "segmentjoiner";

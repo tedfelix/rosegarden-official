@@ -34,14 +34,14 @@
 
 #include "rosegardencanvasview.h"
 
-class RosegardenGUIDoc;
 class QFont;
 class QFontMetrics;
-class QCanvasRepeatRectangle;
-
-class SegmentItemPreview;
 class QScrollBar;
 class QPopupMenu;
+class QCanvasRepeatRectangle;
+
+class RosegardenGUIDoc;
+class SegmentItemPreview;
 
 /**
  * The graphical item (rectangle) which represents a Segment
@@ -185,6 +185,7 @@ private:
 
 
 class SegmentTool;
+class SegmentToolBox;
 
 /**
  * A class to visualize and edit segment items
@@ -269,6 +270,8 @@ public:
      */
     QBrush getSegmentBrush() const { return m_brush; }
 
+    SegmentToolBox* getToolBox() { return m_toolBox; }
+    
     /**
      * Set the snap resolution of the grid to something suitable.
      * 
@@ -365,7 +368,7 @@ signals:
 
     void selectedSegments(const Rosegarden::SegmentSelection &);
 
-private:
+protected:
 
     SegmentItem *findSegmentItem(Rosegarden::Segment *segment); // slow
 
@@ -387,7 +390,9 @@ private:
     bool m_fineGrain;
     bool m_showPreviews;
     RosegardenGUIDoc *m_doc;
-    
+
+    SegmentToolBox *m_toolBox;
+
     // selection bounding box for sweep selections
     //
     QCanvasRectangle* m_selectionRect;
