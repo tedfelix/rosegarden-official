@@ -124,6 +124,24 @@ NotationElementList::erase(NotationElementList::iterator pos)
     multiset<NotationElement*, NotationElementCmp>::erase(pos);
 }
 
+void
+NotationElementList::erase(NotationElementList::iterator from,
+                           NotationElementList::iterator to)
+{
+    for (NotationElementList::iterator i = from;
+         i != to; ++i)
+        delete *i;
+
+    multiset<NotationElement*, NotationElementCmp>::erase(from, to);
+}
+
+void
+NotationElementList::erase(NotationElement* el)
+{
+    delete el;
+    multiset<NotationElement*, NotationElementCmp>::erase(el);
+}
+
 NotationElementList::iterator
 NotationElementList::findPrevious(const std::string &type, iterator i)
 
