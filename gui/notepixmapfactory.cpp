@@ -985,8 +985,8 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
     for (int i = 0; i < thickness; ++i) {
 
 	a.setPoint(0, 0, hotspotY);
-	a.setPoint(1, length/5, hotspotY + maximum);
-	a.setPoint(2, length - length/5 - 1, hotspotY + maximum);
+	a.setPoint(1, length/4, hotspotY + maximum);
+	a.setPoint(2, length - length/4 - 1, hotspotY + maximum);
 	a.setPoint(3, length-1, hotspotY + dy);
 
 	Q3PointArray polyPoints(a.cubicBezier());
