@@ -67,36 +67,34 @@ public:
 
     ~MidiEvent();
 
+    // View our event as text
+    //
     void print();
 
-    Rosegarden::timeT getTime() const { return m_deltaTime; }
-    Rosegarden::timeT addTime(const Rosegarden::timeT &time);
-    void setTime(const Rosegarden::timeT &time) { m_deltaTime = time; }
 
-    inline const MidiByte getMessageType()
+    void setTime(const Rosegarden::timeT &time) { m_deltaTime = time; }
+    void setDuration(const Rosegarden::timeT& duration) {m_duration = duration;}
+    Rosegarden::timeT addTime(const Rosegarden::timeT &time);
+
+    MidiByte getMessageType() const
         { return ( m_eventCode & MIDI_MESSAGE_TYPE_MASK ); }
 
-    inline const MidiByte getChannelNumber()
+    MidiByte getChannelNumber() const
         { return ( m_eventCode & MIDI_CHANNEL_NUM_MASK ); }
 
-    inline const MidiByte getEventCode() { return m_eventCode; }
-
-    inline const MidiByte getPitch() { return m_data1; }
-    inline const MidiByte getVelocity() { return m_data2; }
-
-    // Just so we don't have to call them note and vely
-    // for things that aren't.
-    //
-    inline const MidiByte getData1() { return m_data1; }
-    inline const MidiByte getData2() { return m_data2; }
-
-    inline const bool isMeta() { return(m_eventCode == MIDI_FILE_META_EVENT); }
-
-    inline std::string getMetaMessage() const { return m_metaMessage; }
-    inline const MidiByte getMetaEventCode() { return m_metaEventCode; }
-
+    Rosegarden::timeT getTime() const { return m_deltaTime; }
     Rosegarden::timeT getDuration() const { return m_duration; }
-    void setDuration(const Rosegarden::timeT& duration) {m_duration = duration;}
+
+    MidiByte getPitch() const { return m_data1; }
+    MidiByte getVelocity() const { return m_data2; }
+    MidiByte getData1() const { return m_data1; }
+    MidiByte getData2() const { return m_data2; }
+    MidiByte getEventCode() const { return m_eventCode; }
+
+    bool isMeta() const { return(m_eventCode == MIDI_FILE_META_EVENT); }
+
+    MidiByte getMetaEventCode() const { return m_metaEventCode; }
+    std::string getMetaMessage() const { return m_metaMessage; }
 
     friend bool operator<(const MidiEvent &a, const MidiEvent &b);
 

@@ -57,8 +57,8 @@ namespace Rosegarden
 // (necessary when converting Composition absolute times to
 // MIDI delta times).
 //
-typedef std::map<unsigned int, std::list<MidiEvent> > MidiComposition;
-typedef std::list<MidiEvent>::iterator MidiTrackIterator;
+typedef std::map<unsigned int, std::list<MidiEvent*> > MidiComposition;
+typedef std::list<MidiEvent*>::iterator MidiTrackIterator;
 
 class MidiFile : public SoundFile
 {
@@ -98,7 +98,7 @@ public:
     // Conversion in and out of Rosegarden
     //
     Rosegarden::Composition* convertToRosegarden();
-    void convertToMidi(Rosegarden::Composition &comp); // urch, no const
+    void convertToMidi(Rosegarden::Composition &comp);
 
 private:
 
@@ -111,9 +111,13 @@ private:
     unsigned long         m_trackByteCount;
     bool                  m_decrementCount;
 
-    // Internal representation
+    // Internal MidiComposition
     //
     MidiComposition       m_midiComposition;
+
+    // Clear the m_midiComposition
+    //
+    void clearMidiComposition();
 
     // Split the tasks up with these top level private methods
     //
