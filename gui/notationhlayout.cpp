@@ -1174,12 +1174,15 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 	    if (it != to && (*it)->event()->has(BEAMED_GROUP_ID)) {
 
 		long groupId = (*it)->event()->get<Int>(BEAMED_GROUP_ID);
+		kdDebug(KDEBUG_AREA) << "group id: " << groupId << endl;
 		if (m_groupsExtant.find(groupId) == m_groupsExtant.end()) {
+		    kdDebug(KDEBUG_AREA) << "(new group)" << endl;
 		    m_groupsExtant[groupId] =
-			new NotationGroup(*staff.getViewElementList(), it,
-					  m_legatoQuantizer, m_properties,
-					  clef, key);
+			new NotationGroup(*staff.getViewElementList(),
+					  m_legatoQuantizer,
+					  m_properties, clef, key);
 		}
+		m_groupsExtant[groupId]->sample(it);
 
 /*!!!
 
@@ -1286,6 +1289,22 @@ NotationHLayout::getSpacingDuration(StaffType &staff,
     else return (*j)->getAbsoluteTime() - (*i)->getAbsoluteTime();
 }
 
+timeT
+NotationHLayout::getSpacingDuration(StaffType &staff,
+				    const Chord &chord)
+{
+    SegmentNotationHelper helper(staff.getSegment());
+
+    NotationElementList::iterator i = chord.getShortestElement();
+    timeT t(helper.getNotationAbsoluteTime((*i)->event()));
+    timeT d(helper.getNotationDuration((*i)->event()));
+
+    NotationElementList::iterator j(i), e(staff.getViewElementList()->end());
+    while (j != e && chord.contains(j)) ++j;
+    if (j == e) return d;
+    else return (*j)->getAbsoluteTime() - (*i)->getAbsoluteTime();
+}
+
 
 long
 NotationHLayout::positionChord(StaffType &staff,
@@ -1316,7 +1335,7 @@ NotationHLayout::positionChord(StaffType &staff,
 
     long delta = (((int)bdi->second.sizeData.idealWidth -
 		        bdi->second.sizeData.fixedWidth) *
-		  getSpacingDuration(staff, itr)) /
+		  getSpacingDuration(staff, chord)) /
 	barDuration;
 
     int noteWidth = m_npf->getNoteBodyWidth();

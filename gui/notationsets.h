@@ -108,7 +108,6 @@ protected:
 
     const NotationProperties &m_properties;
 
-private:
     const NotationElementList &m_nel;
     NELIterator m_initial, m_final, m_shortest, m_longest, m_highest, m_lowest;
     NELIterator m_baseIterator;
@@ -179,17 +178,15 @@ class NotationGroup : public NotationSet
 public:
     enum Type { Beamed, Tupled, Grace };
 
-    /**
-     * If the iterator passed in to the constructor points at an
-     * element with a GroupNo property, the resulting Group will
-     * contain iterators pointing to it and all surrounding elements
-     * that have the same GroupNo, sorted in ascending order of
-     * absolute time.  If no other surrounding elements have the same
-     * GroupNo as this one, we will have size 1; if this iterator
-     * doesn't point to an element with a GroupNo at all, we will have
-     * size 0.
-     */
+    /// Group contents will be sampled from elements surrounding elementInGroup
     NotationGroup(const NotationElementList &nel, NELIterator elementInGroup,
+		  const Rosegarden::Quantizer *,
+		  std::pair<Rosegarden::timeT, Rosegarden::timeT> barRange,
+		  const NotationProperties &properties,
+                  const Rosegarden::Clef &clef, const Rosegarden::Key &key);
+
+    /// Caller intends to call sample() for each item in the group, _in order_
+    NotationGroup(const NotationElementList &nel,
 		  const Rosegarden::Quantizer *,
 		  const NotationProperties &properties,
                   const Rosegarden::Clef &clef, const Rosegarden::Key &key);
@@ -213,9 +210,10 @@ public:
 
     virtual bool contains(const NELIterator &) const;
 
+    virtual bool sample(const NELIterator &i);
+
 protected:
     virtual bool test(const NELIterator &i);
-    virtual bool sample(const NELIterator &i);
 
 private:
     struct Beam
@@ -232,9 +230,11 @@ private:
 
     //--------------- Data members ---------------------------------
 
+    std::pair<Rosegarden::timeT, Rosegarden::timeT> m_barRange;
     const Rosegarden::Clef &m_clef;
     const Rosegarden::Key &m_key;
     int m_weightAbove, m_weightBelow;
+    bool m_userSamples;
     long m_groupNo;
     Type m_type;
 };

@@ -34,6 +34,7 @@
 
 class NotationProperties;
 class NotationGroup;
+class Chord;
 
 /**
  * Horizontal notation layout
@@ -329,6 +330,10 @@ protected:
     /// Difference between absolute time of next event and of this
     Rosegarden::timeT getSpacingDuration
     (StaffType &staff, const NotationElementList::iterator &);
+
+    /// Difference between absolute time of chord and of first event not in it
+    Rosegarden::timeT getSpacingDuration
+    (StaffType &staff, const Chord &);
 
     int getMinWidth(NotationElement &) const;
     int getComfortableGap(Rosegarden::Note::Type type) const;

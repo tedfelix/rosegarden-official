@@ -225,6 +225,43 @@ Chord::test(const NELIterator &i)
 bool
 Chord::sample(const NELIterator &i)
 {
+    // two notes that would otherwise be in a chord but are not in
+    // the same group, or have stems pointing in different directions
+    // by design, count as separate chords
+
+    if (m_baseIterator != getList().end()) {
+
+	Rosegarden::Event *e0 = (*m_baseIterator)->event();
+	Rosegarden::Event *e1 = (*i)->event();
+
+	if (e0->has(BEAMED_GROUP_ID)) {
+	    if (e1->has(BEAMED_GROUP_ID)) {
+		if (e1->get<Int>(BEAMED_GROUP_ID) !=
+		    e0->get<Int>(BEAMED_GROUP_ID)) {
+		    return false;
+		}
+	    } else {
+		return false;
+	    }
+	} else {
+	    if (e1->has(BEAMED_GROUP_ID)) {
+		return false;
+	    }
+	}
+
+	if (e0->has(NotationProperties::STEM_UP) &&
+	    e0->isPersistent<Bool>(NotationProperties::STEM_UP) &&
+
+	    e1->has(NotationProperties::STEM_UP) &&
+	    e1->isPersistent<Bool>(NotationProperties::STEM_UP) &&
+
+	    e0->get<Bool>(NotationProperties::STEM_UP) !=
+	    e1->get<Bool>(NotationProperties::STEM_UP)) {
+
+	    return false;
+	}
+    }
+
     NotationSet::sample(i);
     push_back(i);
     return true;
@@ -371,21 +408,24 @@ std::vector<Mark> Chord::getMarksForChord() const
 
 NotationGroup::NotationGroup(const NotationElementList &nel,
                              NELIterator i, const Quantizer *q,
+			     std::pair<timeT, timeT> barRange,
 			     const NotationProperties &p,
 			     const Clef &clef, const Key &key) :
     NotationSet(nel, i, q, p),
+    m_barRange(barRange),
     //!!! What if the clef and/or key change in the course of the group?
     m_clef(clef),
     m_key(key),
     m_weightAbove(0),
     m_weightBelow(0),
+    m_userSamples(false),
     m_type(Beamed)
 {
     if (!(*i)->event()->get<Rosegarden::Int>
         (BEAMED_GROUP_ID, m_groupNo)) m_groupNo = -1;
 
     initialise();
-    
+    /*!!!
     if ((i = getInitialElement()) != getList().end()) {
 
 	kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: examining group type" << endl;
@@ -408,7 +448,7 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
             kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: Warning: No GroupType in grouped element, defaulting to Beamed" << endl;
         }
     }
-
+    */
     kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: id is " << m_groupNo << endl;
     i = getInitialElement(); 
     while (i != getList().end()) {
@@ -422,20 +462,92 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
 
 }
 
+NotationGroup::NotationGroup(const NotationElementList &nel,
+			     const Quantizer *q,
+			     const NotationProperties &p,
+			     const Clef &clef, const Key &key) :
+    NotationSet(nel, nel.end(), q, p),
+    m_barRange(0, 0),
+    //!!! What if the clef and/or key change in the course of the group?
+    m_clef(clef),
+    m_key(key),
+    m_weightAbove(0),
+    m_weightBelow(0),
+    m_userSamples(true),
+    m_groupNo(-1),
+    m_type(Beamed)
+{
+    //...
+}
+
 NotationGroup::~NotationGroup()
 {
 }
 
 bool NotationGroup::test(const NELIterator &i)
 {
+    // An event is a candidate for being within the bounds of the
+    // set if it's simply within the same bar as the original event.
+    // (Groups may contain other groups, so our bounds may enclose
+    // events that aren't members of the group: we reject those in
+    // sample rather than test, so as to avoid erroneously ending
+    // the group too soon.)
+    
+    return ((*i)->getAbsoluteTime() >= m_barRange.first &&
+	    (*i)->getAbsoluteTime() <  m_barRange.second);
+
+/*!!!
     long n;
     return ((*i)->event()->get<Rosegarden::Int>
             (BEAMED_GROUP_ID, n) && n == m_groupNo);
+*/
 }
 
 bool
 NotationGroup::sample(const NELIterator &i)
 {
+    if (m_baseIterator == getList().end()) {
+	m_baseIterator = i;
+	if (m_userSamples) m_initial = i;
+    }
+    if (m_userSamples) m_final = i;
+
+    kdDebug(KDEBUG_AREA) << "NotationGroup::sample: element at " << (*i)->getAbsoluteTime() << endl;
+
+//!!!    if ((i = getInitialElement()) != getList().end()) {
+
+//!!!	kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: examining group type" << endl;
+
+        try {
+            std::string t = (*i)->event()->get<String>(BEAMED_GROUP_TYPE);
+
+//	    kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: type is \"" << t << "\"" << endl;
+
+            if (t == GROUP_TYPE_BEAMED) {
+                m_type = Beamed;
+            } else if (t == GROUP_TYPE_TUPLED) {
+                m_type = Tupled;
+            } else if (t == GROUP_TYPE_GRACE) {
+                m_type = Grace;
+            } else {
+                kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: Warning: Unknown GroupType \"" << t << "\", defaulting to Beamed" << endl;
+            }
+        } catch (Rosegarden::Event::NoData) {
+            kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: Warning: No GroupType in grouped element, defaulting to Beamed" << endl;
+        }
+//    }
+
+    long n;
+    if (!(*i)->event()->get<Rosegarden::Int>(BEAMED_GROUP_ID, n)) return false;
+    if (m_groupNo == -1) {
+	m_groupNo = n;
+    } else if (n != m_groupNo) {
+	kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: Warning: Rejecting sample() for event with group id " << n << " (mine is " << m_groupNo << ")" << endl;
+	return false;
+    }
+
+    kdDebug(KDEBUG_AREA) << "NotationGroup::sample: group id is " << m_groupNo << endl;
+
     NotationSet::sample(i);
 
     // If the sum of the distances from the middle line to the notes
@@ -443,7 +555,7 @@ NotationGroup::sample(const NELIterator &i)
     // middle line to the notes below, then the beam goes below.  We
     // can calculate the weightings here, as we construct the group.
 
-    if (!(*i)->isNote()) return;
+    if (!(*i)->isNote()) return true;
 
     // The code that uses the Group should not rely on the presence of
     // e.g. BEAM_GRADIENT to indicate that a beam should be drawn;
@@ -647,6 +759,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
     NELIterator initialNote(getInitialNote()),
 	          finalNote(  getFinalNote());
     int initialX = (int)(*initialNote)->getLayoutX();
+    timeT finalTime = (*finalNote)->getAbsoluteTime();
 
     // For each chord in the group, we nominate the note head furthest
     // from the beam as the primary note, the one that "owns" the stem
@@ -672,16 +785,20 @@ NotationGroup::applyBeam(NotationStaff &staff)
     NELIterator prev = getList().end(), prevprev = getList().end();
     double gradient = (double)beam.gradient / 100.0;
 
+    kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam starting for group "<< this << endl;
+
     for (NELIterator i = getInitialNote(); i != getList().end(); ++i) {
 
         if ((*i)->isNote() &&
-	    (*i)->event()->get<Int>(m_properties.NOTE_TYPE) < Note::Crotchet) {
+	    (*i)->event()->get<Int>(m_properties.NOTE_TYPE) < Note::Crotchet &&
+	    (*i)->event()->has(BEAMED_GROUP_ID) &&
+	    (*i)->event()->get<Int>(BEAMED_GROUP_ID) == m_groupNo) {
 
 	    Chord chord(getList(), i, &getQuantizer(), 
 			m_properties, m_clef, m_key);
 	    unsigned int j;
 
-//            kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam: Found chord" << endl;
+            kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam: Found chord" << endl;
 
 	    for (j = 0; j < chord.size(); ++j) {
 		NotationElement *el = (*chord[j]);
@@ -798,14 +915,15 @@ NotationGroup::applyBeam(NotationStaff &staff)
 	    }
 	}
 
-        if (i == finalNote) break;
-
+        if (i == finalNote || (*i)->getAbsoluteTime() > finalTime) break;
+/*!!!
         // We could miss the final note, if it was actually in the
         // middle of a chord (slightly pathological, but it happens
         // easily enough).  So let's check the group id too:
         long gid = -1;
         if (!(*i)->event()->get<Int>(BEAMED_GROUP_ID, gid)
             || gid != m_groupNo) break;
+*/
 
     }
 }
