@@ -166,6 +166,7 @@ NotationHLayout::scanStaff(Staff &staff)
 
     Track &t(staff.getViewElementsManager()->getTrack());
     const Track *timeRef = t.getReferenceTrack();
+
     if (timeRef == 0) {
 	kdDebug(KDEBUG_AREA) << "ERROR: NotationHLayout::scanStaff: reference track required (at least until code\nis written to render a track without bar lines)" << endl;
 	return;
@@ -187,6 +188,8 @@ NotationHLayout::scanStaff(Staff &staff)
     Track::iterator refEnd = timeRef->findTime(t.getEndIndex() + 1); //!!!
 
     int barNo = 0;
+    addNewBar(staff, barNo, notes->begin(), 0, 0, true); 
+    ++barNo;
 
     for (Track::iterator refi = refStart; refi != refEnd; ++refi) {
 
@@ -197,7 +200,6 @@ NotationHLayout::scanStaff(Staff &staff)
 	if (++refi0 != refEnd) {
 	    barEndTime = (*refi0)->getAbsoluteTime();
 	} else {
-//	    break; //!!!
 	    barEndTime = t.getEndIndex();
 	}
 
@@ -208,6 +210,8 @@ NotationHLayout::scanStaff(Staff &staff)
         int shortCount = 0;
         int totalCount = 0;
 	int fixedWidth = staff.getBarMargin();
+
+        timeT apparentBarDuration = 0;
 
 	AccidentalTable accTable(key, clef), newAccTable(accTable);
 
@@ -315,8 +319,6 @@ NotationHLayout::scanStaff(Staff &staff)
                     // either we're not in a chord or the chord is about
                     // to end: update shortest data accordingly
 
-                    ++totalCount;
-                    
                     int d = 0;
                     try {
                         d = el->event()->get<Int>
@@ -324,6 +326,9 @@ NotationHLayout::scanStaff(Staff &staff)
                     } catch (Event::NoData e) {
                         kdDebug(KDEBUG_AREA) << "No quantized duration in note/rest! event is " << *(el->event()) << endl;
                     }
+
+                    ++totalCount;
+                    apparentBarDuration += d;
 
                     int sd = 0;
                     try {
@@ -346,14 +351,11 @@ NotationHLayout::scanStaff(Staff &staff)
             el->event()->setMaybe<Int>(Properties::MIN_WIDTH, mw);
         }
         
-	timeT actualStart =
-	    (from == notes->end() ? t.getEndIndex() :
-	                            (*from)->getAbsoluteTime());
-
-        addNewBar(staff, barNo, from,
+        addNewBar(staff, barNo, to,
                   getIdealBarWidth(staff, fixedWidth, shortest, npf,
                                    shortCount, totalCount, timeSignature),
-                  fixedWidth, actualStart == barStartTime);
+                  fixedWidth,
+                  apparentBarDuration == timeSignature.getBarDuration());
 
 	++barNo;
     }
@@ -364,78 +366,22 @@ NotationHLayout::scanStaff(Staff &staff)
 
 void
 NotationHLayout::addNewBar(Staff &staff,
-			   int barNo,  NotationElementList::iterator start,
+			   int barNo, NotationElementList::iterator i,
                            int width, int fwidth, bool correct)
 {
-   m_barData[&staff].push_back
-       (BarData(barNo, start, -1, width, fwidth, correct));
-}
+    BarDataList &bdl(m_barData[&staff]);
+//   m_barData[&staff].push_back
+//       (BarData(barNo, start, -1, width, fwidth, correct));
 
-
-
-// and for once I swear things will still be good tomorrow
-
-NotationHLayout::AccidentalTable::AccidentalTable(Key key, Clef clef) :
-    m_key(key), m_clef(clef)
-{
-    std::vector<int> heights(key.getAccidentalHeights(clef));
-    unsigned int i;
-    for (i = 0; i < 7; ++i) push_back(NoAccidental);
-    for (i = 0; i < heights.size(); ++i) {
-        (*this)[Key::canonicalHeight(heights[i])] =
-            (key.isSharp() ? Sharp : Flat);
-    }
-}
-
-Accidental
-NotationHLayout::AccidentalTable::getDisplayAccidental(Accidental accidental,
-                                                       int height) const
-{
-    height = Key::canonicalHeight(height);
-
-    if (accidental == NoAccidental) {
-        accidental = m_key.getAccidentalAtHeight(height, m_clef);
+    int s = bdl.size() - 1;
+    if (s >= 0) {
+        bdl[s].idealWidth = width;
+        bdl[s].fixedWidth = fwidth;
     }
 
-//    kdDebug(KDEBUG_AREA) << "accidental = " << accidental << ", stored accidental at height " << height << " is " << (*this)[height] << endl;
-
-    if ((*this)[height] != NoAccidental) {
-
-        if (accidental == (*this)[height]) {
-            return NoAccidental;
-        } else if (accidental == NoAccidental || accidental == Natural) {
-            return Natural;
-        } else {
-            //!!! aargh.  What we really want to do now is have two
-            //accidentals shown: first a natural, then the one
-            //required for the note.  But there's no scope for that in
-            //our accidental structure (RG2.1 is superior here)
-            return accidental;
-        }
-    } else {
-        return accidental;
-    }
+    bdl.push_back(BarData(barNo, i, -1, 0, 0, correct));
 }
 
-void
-NotationHLayout::AccidentalTable::update(Accidental accidental, int height)
-{
-    height = Key::canonicalHeight(height);
-
-    if (accidental == NoAccidental) {
-        accidental = m_key.getAccidentalAtHeight(height, m_clef);
-    }
-
-//    kdDebug(KDEBUG_AREA) << "updating height" << height << " from " << (*this)[height] << " to " << accidental << endl;
-
-
-    //!!! again, we can't properly deal with the difficult case where
-    //we already have an accidental at height but it's not the same
-    //accidental
-
-    (*this)[height] = accidental;
-
-}
 
 void
 NotationHLayout::reconcileBars()
@@ -512,7 +458,7 @@ NotationHLayout::reconcileBars()
                     aWidthChanged = true;
 		}
 
-                bd.needsLayout = aWidthChanged;
+                if (aWidthChanged) bd.needsLayout = true;
 	    }
 	}
 
@@ -521,6 +467,71 @@ NotationHLayout::reconcileBars()
 
     PRINT_ELAPSED("NotationHLayout::reconcileBars");
 }	
+
+
+// and for once I swear things will still be good tomorrow
+
+NotationHLayout::AccidentalTable::AccidentalTable(Key key, Clef clef) :
+    m_key(key), m_clef(clef)
+{
+    std::vector<int> heights(key.getAccidentalHeights(clef));
+    unsigned int i;
+    for (i = 0; i < 7; ++i) push_back(NoAccidental);
+    for (i = 0; i < heights.size(); ++i) {
+        (*this)[Key::canonicalHeight(heights[i])] =
+            (key.isSharp() ? Sharp : Flat);
+    }
+}
+
+Accidental
+NotationHLayout::AccidentalTable::getDisplayAccidental(Accidental accidental,
+                                                       int height) const
+{
+    height = Key::canonicalHeight(height);
+
+    if (accidental == NoAccidental) {
+        accidental = m_key.getAccidentalAtHeight(height, m_clef);
+    }
+
+//    kdDebug(KDEBUG_AREA) << "accidental = " << accidental << ", stored accidental at height " << height << " is " << (*this)[height] << endl;
+
+    if ((*this)[height] != NoAccidental) {
+
+        if (accidental == (*this)[height]) {
+            return NoAccidental;
+        } else if (accidental == NoAccidental || accidental == Natural) {
+            return Natural;
+        } else {
+            //!!! aargh.  What we really want to do now is have two
+            //accidentals shown: first a natural, then the one
+            //required for the note.  But there's no scope for that in
+            //our accidental structure (RG2.1 is superior here)
+            return accidental;
+        }
+    } else {
+        return accidental;
+    }
+}
+
+void
+NotationHLayout::AccidentalTable::update(Accidental accidental, int height)
+{
+    height = Key::canonicalHeight(height);
+
+    if (accidental == NoAccidental) {
+        accidental = m_key.getAccidentalAtHeight(height, m_clef);
+    }
+
+//    kdDebug(KDEBUG_AREA) << "updating height" << height << " from " << (*this)[height] << " to " << accidental << endl;
+
+
+    //!!! again, we can't properly deal with the difficult case where
+    //we already have an accidental at height but it's not the same
+    //accidental
+
+    (*this)[height] = accidental;
+
+}
 
 void
 NotationHLayout::finishLayout()
@@ -573,8 +584,16 @@ NotationHLayout::layout(BarDataMap::iterator i)
         x += staff.getBarMargin();
 	barX += bdi->idealWidth;
 
-        if (bdi->barNo < 0) continue; // fake bar
-        if (!bdi->needsLayout) continue;
+        if (bdi->barNo < 0) { // fake bar
+            kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): fake bar " << bdi->barNo << endl;
+            continue;
+        }
+        if (!bdi->needsLayout) {
+            kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): bar " << bdi->barNo << " has needsLayout false" << endl;
+            continue;
+        }
+
+        kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): about to enter loop" << endl;
 
         bool haveAccidentalInThisChord = false;
 
@@ -829,7 +848,8 @@ NotationHLayout::resetStaff(Staff &staff)
 unsigned int
 NotationHLayout::getBarLineCount(Staff &staff)
 {
-    return getBarData(staff).size();
+    int c = getBarData(staff).size();
+    return (c == 0 ? c : c - 1);
 }
 
 double
