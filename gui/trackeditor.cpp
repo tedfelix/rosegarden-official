@@ -109,6 +109,26 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
 	 comp.getBarNumber(comp.getEndMarker()));
 }
 
+TrackEditor::~TrackEditor()
+{
+    // disconnect
+    //
+    disconnect(m_segmentCanvas->verticalScrollBar(),
+               SIGNAL(valueChanged(int)),
+               this,
+               SLOT(slotVerticalScrollTrackButtons(int)));
+
+    disconnect(m_segmentCanvas->verticalScrollBar(),
+               SIGNAL(sliderMoved(int)),
+               this,
+               SLOT(slotVerticalScrollTrackButtons(int)));
+
+    disconnect(m_trackButtonScroll,
+               SIGNAL(contentsMoving(int, int)),
+               this,
+               SLOT(slotVerticalScrollSegmentCanvas(int, int)));
+}
+
 
 void
 TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)

@@ -184,9 +184,14 @@ public slots:
     //
     void slotKeyPressed(unsigned int y);
 
-    // handle scrolling between view and Pianoa
+    // Handle scrolling between view and PianoKeyboard
+    //
     void slotVerticalScrollMatrixCanvas(int x, int y);
     void slotVerticalScrollPianoKeyboard(int y);
+
+    // close
+    //
+    void closeWindow();
 
 protected:
 

@@ -190,6 +190,26 @@ MatrixView::~MatrixView()
     QCanvasItemList::Iterator it;
 
     for (it = allItems.begin(); it != allItems.end(); ++it) delete *it;
+
+
+    // We must disconnect these before we close so that MatrixCanvasView 
+    // doesn't barf.
+    //
+    disconnect(m_canvasView->verticalScrollBar(),
+               SIGNAL(valueChanged(int)),
+               this,
+               SLOT(slotVerticalScrollPianoKeyboard(int)));
+
+    disconnect(m_canvasView->verticalScrollBar(),
+               SIGNAL(sliderMoved(int)),
+               this,
+               SLOT(slotVerticalScrollPianoKeyboard(int)));
+
+    disconnect(m_pianoView,
+               SIGNAL(contentsMoving(int, int)),
+               this,
+               SLOT(slotVerticalScrollMatrixCanvas(int, int)));
+
 }
 
 void MatrixView::saveOptions()
@@ -575,10 +595,12 @@ void MatrixView::slotVerticalScrollMatrixCanvas(int x, int y)
                this,
                SLOT(slotVerticalScrollPianoKeyboard(int)));
 
+    /*
     disconnect(m_pianoView,
                SIGNAL(contentsMoving(int, int)),
                this,
                SLOT(slotVerticalScrollMatrixCanvas(int, int)));
+               */
 
     m_canvasView->setContentsPos(x, y);
 
@@ -594,16 +616,19 @@ void MatrixView::slotVerticalScrollMatrixCanvas(int x, int y)
             this,
             SLOT(slotVerticalScrollPianoKeyboard(int)));
 
+    /*
     connect(m_pianoView,
             SIGNAL(contentsMoving(int, int)),
             this,
             SLOT(slotVerticalScrollMatrixCanvas(int, int)));
+            */
 }
 
 void MatrixView::slotVerticalScrollPianoKeyboard(int y)
 {
     // disconnect
     //
+    /*
     disconnect(m_canvasView->verticalScrollBar(),
                SIGNAL(valueChanged(int)),
                this,
@@ -613,6 +638,7 @@ void MatrixView::slotVerticalScrollPianoKeyboard(int y)
                SIGNAL(sliderMoved(int)),
                this,
                SLOT(slotVerticalScrollPianoKeyboard(int)));
+               */
 
     disconnect(m_pianoView,
                SIGNAL(contentsMoving(int, int)),
@@ -625,6 +651,7 @@ void MatrixView::slotVerticalScrollPianoKeyboard(int y)
 
     // reconnect
     //
+    /*
     connect(m_canvasView->verticalScrollBar(),
             SIGNAL(valueChanged(int)),
             this,
@@ -634,11 +661,18 @@ void MatrixView::slotVerticalScrollPianoKeyboard(int y)
             SIGNAL(sliderMoved(int)),
             this,
             SLOT(slotVerticalScrollPianoKeyboard(int)));
+            */
 
     connect(m_pianoView,
             SIGNAL(contentsMoving(int, int)),
             this,
             SLOT(slotVerticalScrollMatrixCanvas(int, int)));
 }
+
+void MatrixView::closeWindow()
+{
+    delete this;
+}
+
 
 

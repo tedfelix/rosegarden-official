@@ -95,6 +95,12 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 	timeT segmentDuration  = (*it)->getDuration();
 
         track = comp.getTrackByIndex((*it)->getTrack());
+
+        // check to see if track actually exists
+        //
+        if (track == 0)
+            continue;
+
         instrument = studio.getInstrumentById(track->getInstrument());
 
         // Skip if track is muted
