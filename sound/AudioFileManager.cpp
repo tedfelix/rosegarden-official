@@ -502,8 +502,8 @@ AudioFileManager::toXmlString()
         // have the audio path in it but has our home directory in it
         // then swap this out for a tilde '~'
         //
-        cout << "DIR = " << getDirectory(fileName) << " : "
-                " PATH = " << m_audioPath << endl;
+        std::cout << "DIR = " << getDirectory(fileName) << " : "
+                " PATH = " << m_audioPath << std::endl;
         if (getDirectory(fileName) == m_audioPath)
             fileName = getShortFilename(fileName);
         else

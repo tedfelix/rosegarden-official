@@ -37,15 +37,6 @@
 #include "rosegardenguidoc.h"
 #include "progressreporter.h"
 
-namespace Rosegarden {
-    class Event;
-    class Segment;
-    class TimeSignature;
-}
-using Rosegarden::Event;
-using Rosegarden::Segment;
-using Rosegarden::TimeSignature;
-
 /**
  * MusicXml scorefile export
  */
@@ -53,8 +44,8 @@ using Rosegarden::TimeSignature;
 class MusicXmlExporter : public ProgressReporter
 {
 public:
-    typedef std::multiset<Event*, Event::EventCmp> eventstartlist;
-    typedef std::multiset<Event*, Event::EventEndCmp> eventendlist;
+    typedef std::multiset<Rosegarden::Event*, Rosegarden::Event::EventCmp> eventstartlist;
+    typedef std::multiset<Rosegarden::Event*, Rosegarden::Event::EventEndCmp> eventendlist;
 public:
     MusicXmlExporter(QObject *parent, RosegardenGUIDoc *, std::string fileName);
     ~MusicXmlExporter();
@@ -64,10 +55,10 @@ public:
 protected:
     RosegardenGUIDoc *m_doc;
     std::string m_fileName;
-    void writeClef(Event *event, std::ofstream &str);
-    void writeKey(Event *event, std::ofstream &str);
-    void writeTime(TimeSignature timeSignature, std::ofstream &str);
-    void writeNote(Event *e, bool isFlatKeySignature, std::ofstream &str);
+    void writeClef(Rosegarden::Event *event, std::ofstream &str);
+    void writeKey(Rosegarden::Event *event, std::ofstream &str);
+    void writeTime(Rosegarden::TimeSignature timeSignature, std::ofstream &str);
+    void writeNote(Rosegarden::Event *e, bool isFlatKeySignature, std::ofstream &str);
 
     char convertPitchToName(int pitch, bool isFlatKeySignature);
     bool needsAccidental(int pitch);

@@ -34,12 +34,6 @@
 namespace Rosegarden
 {
 
-using std::list;
-using std::string;
-using std::vector;
-using std::multimap;
-using std::set;
-
 class Segment;
 class Event;
 class CompositionTimeSliceAdapter;
@@ -217,7 +211,7 @@ protected:
         // double commonness...
         bool operator<(const ChordProgression& other) const;
         };
-    typedef set<ChordProgression> ProgressionMap;
+    typedef std::set<ChordProgression> ProgressionMap;
     static ProgressionMap m_progressionMap;
 
     /// For use by guessHarmonies (refineHarmonyGuessList)

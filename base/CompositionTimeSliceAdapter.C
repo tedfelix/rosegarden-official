@@ -133,6 +133,7 @@ CompositionTimeSliceAdapter::iterator::operator++() {
     if (m_positionList.empty()) {
         // We're done.
         m_curEvent = 0;
+	m_curTrack = -1;
         return *this;
     }
 
@@ -145,6 +146,7 @@ CompositionTimeSliceAdapter::iterator::operator++() {
 
         if (nextEvent == 0 || **i->second < *nextEvent) {
             nextEvent = *i->second;
+	    m_curTrack = i->first->getTrack();
             nextPosition = i;
         }
 
@@ -153,6 +155,7 @@ CompositionTimeSliceAdapter::iterator::operator++() {
     // Check whether we're past the end time, if there is one
     if (nextEvent->getAbsoluteTime() > m_end) {
         m_curEvent = 0;
+	m_curTrack = -1;
         return *this;
     }
 
@@ -163,7 +166,7 @@ CompositionTimeSliceAdapter::iterator::operator++() {
     // nextPosition->second is a segment::iterator that points to nextEvent
     ++(nextPosition->second);
 
-    if (nextPosition->second == nextPosition->first->end()) {
+    if (!nextPosition->first->isBeforeEndMarker(nextPosition->second)) {
         m_positionList.erase(nextPosition);
     }
 
@@ -185,5 +188,9 @@ CompositionTimeSliceAdapter::iterator::operator->() {
     return m_curEvent;
 }
 
+int
+CompositionTimeSliceAdapter::iterator::getTrack() {
+    return m_curTrack;
+}
 
 }

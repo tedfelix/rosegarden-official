@@ -31,9 +31,6 @@
 
 namespace Rosegarden {
 
-using std::list;
-using std::pair;
-
 class Event;
 class Composition;
 class SegmentSelection;
@@ -96,11 +93,13 @@ public:
 	bool operator!=(const iterator& other);
 	Event* operator*();
 	Event* operator->();
+	int getTrack();
     private:
 	typedef std::pair<Segment*, Segment::iterator> position;
 	typedef std::list<position> positionlist;
 	positionlist m_positionList;
 	Event*	m_curEvent;
+	int     m_curTrack;
 	timeT 	m_end;
     };
 

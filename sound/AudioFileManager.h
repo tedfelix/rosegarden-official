@@ -43,13 +43,8 @@
 //
 //
 
-using std::cout;
-using std::cerr;
-using std::endl;
-
 namespace Rosegarden
 {
-
 
 typedef std::vector<AudioFile*>::const_iterator AudioFileManagerIterator;
 

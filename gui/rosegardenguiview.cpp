@@ -311,7 +311,7 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
     SetWaitCursor waitCursor;
     std::vector<Rosegarden::Segment *> segmentsToEdit;
 
-    cerr << "\n\n\n\nRosegardenGUIView::slotEditSegmentNotation: p is " << p << endl;
+    std::cerr << "\n\n\n\nRosegardenGUIView::slotEditSegmentNotation: p is " << p << std::endl;
 
     // The logic here is: If we're calling for this operation to
     // happen on a particular segment, then open that segment and if
@@ -571,7 +571,7 @@ void RosegardenGUIView::slotSegmentAutoSplit(Rosegarden::Segment *segment)
 void RosegardenGUIView::slotEditSegmentAudio(Rosegarden::Segment *segment)
 {
     std::cout << "RosegardenGUIView::slotEditSegmentAudio() - "
-              << "starting external audio editor" << endl;
+              << "starting external audio editor" << std::endl;
 
     KConfig* config = kapp->config();
     config->setGroup(Rosegarden::GeneralOptionsConfigGroup);

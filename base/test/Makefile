@@ -4,16 +4,15 @@ CC	 = g++
 CPPFLAGS = -g 
 
 LIBBASE  = ../.libs/libbase.a
-###LIBBASE  = ../Property.o ../Event.o ../NotationTypes.o ../Track.o ../Quantizer.o
 
 INCPATH  = -I..
 
-SRCS	:= test.C
+SRCS	:= test.C thread.C pitch.C
 
-default: test thread
+default: test thread pitch
 
 clean:
-	rm -f test test.o
+	rm -f test test.o thread thread.o pitch pitch.o
 
 %.o: %.C
 	$(CC) $(CPPFLAGS) -c $< $(INCPATH) -o $@
@@ -21,14 +20,14 @@ clean:
 test: test.o
 	$(CC) $< $(LIBBASE) -o $@
 
+pitch: pitch.o
+	$(CC) $< $(LIBBASE) -o $@
+
 thread: thread.o
 	$(CC) $< $(LIBBASE) -o $@ -lpthread
-
-###test: test.o ../Property.o ../Event.o ../NotationTypes.o ../Track.o ../Quantizer.o
-###	$(CC) $< $(LIBBASE) -o $@
 
 depend:
 	makedepend $(INCPATH) -- $(CPPFLAGS) -- $(SRCS)
 
 # DO NOT DELETE
-test.o: ../Event.h ../Property.h ../Segment.h ../NotationTypes.h
+

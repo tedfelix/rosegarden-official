@@ -271,7 +271,7 @@ ChordLabel::checkMap()
 
             m_chordMap.insert
             (
-                pair<int, ChordData>
+                std::pair<int, ChordData>
                 (
                     (basicChordMasks[i] << j | basicChordMasks[i] >> (12-j))
                     & ((1<<12) - 1),
@@ -403,7 +403,7 @@ AnalysisHelper::makeHarmonyGuessList(CompositionTimeSliceAdapter &c,
         // 3. Save a short list of the nearest chords in the
         // HarmonyGuessList passed in from guessHarmonies()
 
-        l.push_back(pair<timeT, HarmonyGuess>(time, HarmonyGuess()));
+        l.push_back(std::pair<timeT, HarmonyGuess>(time, HarmonyGuess()));
 
         HarmonyGuess& smallerGuess = l.back().second;
 
@@ -637,7 +637,7 @@ AnalysisHelper::checkHarmonyTable()
 
             ChordLabel c(basicChordTypes[i], j);
 
-            m_harmonyTable.push_back(pair<PitchProfile, ChordLabel>(np, c));
+            m_harmonyTable.push_back(std::pair<PitchProfile, ChordLabel>(np, c));
         }
     }
 

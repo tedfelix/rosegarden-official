@@ -580,6 +580,24 @@ public:
 			    bool inclOctave = true,
 			    int octaveBase = -2) const;
 
+    /**
+     * Return the stored pitch as a description of a note in a
+     * scale.  Return values are:
+     * 
+     * -- placeInScale: a number from 0-6 where 0 is C and 6 is B
+     * 
+     * -- accidentals: a number from -2 to 2 where -2 is double flat,
+     *     -1 is flat, 0 is nothing, 1 is sharp, 2 is double sharp
+     * 
+     * -- octave: MIDI octave in range -2 to 8, where pitch 0 is in
+     *     octave -2 and thus middle-C is in octave 3
+     * 
+     * This function is guaranteed never to return values out of
+     * the above ranges.
+     */
+    void getInScale(const Clef &clef, const Key &key,
+		    int &placeInScale, int &accidentals, int &octave) const;
+    
 private:
     int m_heightOnStaff;
     Accidental m_accidental;
@@ -588,6 +606,101 @@ private:
                                 int &, Accidental &) const;
     void displayPitchToRawPitch(int, Accidental, const Clef &, const Key &,
 				int &, bool ignoreOffset = false) const;
+};
+
+
+class Pitch
+{
+public:
+    /**
+     * Construct a Pitch object based on the given Event, which must have
+     * a BaseProperties::PITCH property.  If the property is absent, NoData
+     * is thrown.  The BaseProperties::ACCIDENTAL property will also be
+     * used if present.
+     */
+    Pitch(const Event &e)
+	/* throw Event::NoData */;
+
+    /**
+     * Construct a Pitch object based on the given performance (MIDI) pitch.
+     */
+    Pitch(int performancePitch, 
+	  const Accidental &explicitAccidental = Accidentals::NoAccidental);
+    
+    /**
+     * Construct a Pitch for a particular staff line or space.
+     */
+    Pitch(int heightOnStaff, const Clef &clef, const Key &key,
+	  const Accidental &explicitAccidental = Accidentals::NoAccidental);
+
+    /**
+     * Construct a Pitch based on scale position.
+     */
+    Pitch(int noteInScale, int octave,
+	  const Accidental &explicitAccidental = Accidentals::NoAccidental);
+
+    /**
+     * Return the MIDI pitch for this Pitch object.
+     */
+    int getPerformancePitch() const;
+
+    /**
+     * Return the accidental for this pitch.  The key is only used here
+     * to determine whether to prefer sharps and flats if there is any
+     * doubt.
+     */
+    Accidental getAccidental(const Key &key = Key::DefaultKey) const;
+
+    /**
+     * Return the accidental that should be used to display this pitch
+     * in a given key.  For example, if the pitch is F-sharp in a key
+     * in which F has a sharp, NoAccidental will be returned.  (This
+     * is in contrast to getAccidental, which would return Sharp.)
+     */
+    Accidental getDisplayAccidental(const Key &key = Key::DefaultKey) const;
+
+    /**
+     * Return the position in the scale for this pitch.  That is, return
+     * a number in the range 0 to 6 where 0 is C and 6 is the next B.
+     */
+    int getNoteInScale(const Key &key = Key::DefaultKey) const;
+
+    /**
+     * Return the reference name of the note for this pitch.  The name
+     * is returned as a single character in the range A to G.
+     */
+    char getNoteName(const Key &key = Key::DefaultKey) const;
+
+    /**
+     * Return the height at which this pitch should display on a
+     * conventional 5-line staff.  0 is the bottom line, 1 the first
+     * space, etc.
+     */
+    int getHeightOnStaff(const Clef &clef, const Key &key = Key::DefaultKey) const;
+
+    /**
+     * Return the octave containing this pitch.  The octaveBase argument
+     * specifies the octave containing MIDI pitch 0; middle-C is in octave
+     * octaveBase + 5.
+     */
+    int getOctave(int octaveBase = -2) const;
+
+    /**
+     * Return the pitch within the octave, in the range 0 to 11.
+     */
+    int getPitchInOctave() const;
+    
+    /**
+     * Return a reference name for this pitch. (C4, Bb2, etc...)
+     * according to http://www.harmony-central.com/MIDI/Doc/table2.html
+     * If inclOctave is false, this will return C, Bb, etc.
+     */
+    std::string getAsString(const Key &key,
+			    bool inclOctave = true, int octaveBase = -2) const;
+
+private:
+    int m_pitch;
+    Accidental m_accidental;
 };
 
 

@@ -131,7 +131,7 @@ public:
     bool isSolo() const { return m_solo; }
     void setSolo(bool value) { m_solo = value; }
 
-    int getNbTracks() const {
+    unsigned int getNbTracks() const {
 	return m_tracks.size();
     }
 

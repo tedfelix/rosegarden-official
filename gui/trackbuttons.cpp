@@ -547,7 +547,7 @@ TrackButtons::slotUpdateTracks()
             }
             else
                 std::cerr << "TrackButtons::slotUpdateTracks - "
-                          << "can't find TrackId for position " << i << endl;
+                          << "can't find TrackId for position " << i << std::endl;
         }
     }
 
@@ -1004,10 +1004,10 @@ TrackButtons::slotInstrumentPopupActivated(int item)
 
         }
         else
-            cerr << "slotInstrumentPopupActivated() - can't find item!" << endl;
+            std::cerr << "slotInstrumentPopupActivated() - can't find item!" << std::endl;
     }
     else
-        cerr << "slotInstrumentPopupActivated() - can't find item!" << endl;
+        std::cerr << "slotInstrumentPopupActivated() - can't find item!" << std::endl;
 
 }
 

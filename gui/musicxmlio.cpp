@@ -46,6 +46,7 @@ using Rosegarden::Instrument;
 using Rosegarden::Int;
 using Rosegarden::Key;
 using Rosegarden::Note;
+using Rosegarden::Event;
 using Rosegarden::Segment;
 using Rosegarden::SegmentNotationHelper;
 using Rosegarden::String;

@@ -1052,8 +1052,40 @@ NotationDisplayPitch::getAsString(const Clef &clef, const Key &key,
                 octave + octaveBase);
     
     return string(tmp);
-    
+}
 
+void
+NotationDisplayPitch::getInScale(const Clef &clef, const Key &key,
+				 int &placeInScale, int &accidentals, int &octave) const
+{
+    //!!! Maybe we should bring the logic from rawPitchToDisplayPitch down
+    // into this method, and make rawPitchToDisplayPitch wrap this
+
+    static int pitches[2][12] = {
+	{ 0, 0, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6 },
+	{ 0, 1, 1, 2, 2, 3, 4, 4, 5, 5, 6, 6 },
+    };
+    static int accidentalsForPitches[2][12] = {
+	{ 0,  1, 0,  1, 0, 0,  1, 0,  1, 0,  1, 0 },
+	{ 0, -1, 0, -1, 0, 0, -1, 0, -1, 0, -1, 0 },
+    };
+    
+    int performancePitch = getPerformancePitch(clef, key);
+
+    // highly unlikely, but fatal if it happened:
+    if (performancePitch < 0) performancePitch = 0;
+    if (performancePitch > 127) performancePitch = 127;
+
+    int pitch  = performancePitch % 12;
+    octave = performancePitch / 12 - 2;
+
+    if (key.isSharp()) { //!!! need to [optionally?] handle minor keys (similarly in getAsString?)
+	placeInScale = pitches[0][pitch];
+	accidentals = accidentalsForPitches[0][pitch];
+    } else {
+	placeInScale = pitches[1][pitch];
+	accidentals = accidentalsForPitches[1][pitch];
+    }
 }
 
 

@@ -35,10 +35,6 @@
 #include "Segment.h"
 #include "progressreporter.h"
 
-namespace Rosegarden { class Composition; class Event; class Segment; }
-using Rosegarden::Event;
-using Rosegarden::Segment;
-
 /**
  * Lilypond scorefile export
  */
@@ -46,8 +42,8 @@ using Rosegarden::Segment;
 class LilypondExporter : public ProgressReporter
 {
 public:
-    typedef std::multiset<Event*, Event::EventCmp> eventstartlist;
-    typedef std::multiset<Event*, Event::EventEndCmp> eventendlist;
+    typedef std::multiset<Rosegarden::Event*, Rosegarden::Event::EventCmp> eventstartlist;
+    typedef std::multiset<Rosegarden::Event*, Rosegarden::Event::EventEndCmp> eventendlist;
 public:
     LilypondExporter(QObject *parent, Rosegarden::Composition *,
                      std::string fileName);
@@ -59,7 +55,7 @@ protected:
     Rosegarden::Composition *m_composition;
     std::string m_fileName;
     void handleStartingEvents(eventstartlist &eventsToStart, std::ofstream &str);
-    void handleEndingEvents(eventendlist &eventsInProgress, Segment::iterator &j, std::ofstream &str);
+    void handleEndingEvents(eventendlist &eventsInProgress, Rosegarden::Segment::iterator &j, std::ofstream &str);
 
     // convert note event into Lilypond format note string using combination
     // of pitch, flat/sharp key signature, number of accidentals in key

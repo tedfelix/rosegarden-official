@@ -902,7 +902,7 @@ void NotationView::setupActions()
     noteAction->setExclusiveGroup("notes");
 
     icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("step_by_step")));
-    new KToggleAction(i18n("S&tep-by-Step Editing"), icon, 0, this,
+    new KToggleAction(i18n("Record Pitches from &MIDI In"), icon, 0, this,
                 SLOT(slotToggleStepByStep()), actionCollection(),
                 "toggle_step_by_step");
 
@@ -2119,7 +2119,7 @@ void NotationView::refreshSegment(Segment *segment,
 
     removeProgressEventFilter();
 
-    Event::dumpStats(cerr);
+    Event::dumpStats(std::cerr);
     doDeferredCursorMove();
     slotSetPointerPosition(getDocument()->getComposition().getPosition(), false);
 

@@ -60,6 +60,7 @@
 #include "rosegardentransportdialog.h"
 #include "MidiFile.h"
 #include "rg21io.h"
+#include "mupio.h"
 #include "csoundio.h"
 #include "lilypondio.h"
 #include "musicxmlio.h"
@@ -257,6 +258,10 @@ void RosegardenGUIApp::setupActions()
     new KAction(i18n("Export &Csound score file..."), 0, 0, this,
                 SLOT(slotExportCsound()), actionCollection(),
                 "file_export_csound");
+
+    new KAction(i18n("Export M&up file..."), 0, 0, this,
+                SLOT(slotExportMup()), actionCollection(),
+                "file_export_mup");
 
     KStdAction::quit  (this, SLOT(slotQuit()),              actionCollection());
 
@@ -1685,7 +1690,7 @@ void RosegardenGUIApp::slotHarmonizeSelection()
                                                     &selection);
 
     Rosegarden::AnalysisHelper helper;
-    Rosegarden::Segment *segment = new Segment;
+    Rosegarden::Segment *segment = new Rosegarden::Segment;
     helper.guessHarmonies(adapter, *segment);
 
     //!!! do nothing with the results yet
@@ -2400,7 +2405,7 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
         Rosegarden::Segment &segment = **i;
         Rosegarden::timeT firstKeyTime = segment.getEndMarkerTime();
 
-        for (Segment::iterator si = segment.begin();
+        for (Rosegarden::Segment::iterator si = segment.begin();
              segment.isBeforeEndMarker(si); ++si) {
             if ((*si)->isa(Rosegarden::Key::EventType)) {
                 firstKeyTime = (*si)->getAbsoluteTime();
@@ -2823,9 +2828,10 @@ void RosegardenGUIApp::exportMIDIFile(const QString &file)
     midiFile.convertToMidi(m_doc->getComposition());
 
     if (!midiFile.write())
-        {
-            KMessageBox::sorry(this, i18n("Export failed.  The file could not be opened for writing."));
-        }
+    {
+	CurrentProgressDialog::freeze();
+	KMessageBox::sorry(this, i18n("Export failed.  The file could not be opened for writing."));
+    }
 }
 
 void RosegardenGUIApp::slotExportCsound()
@@ -2854,6 +2860,39 @@ void RosegardenGUIApp::exportCsoundFile(const QString &file)
             progressDlg.progressBar(), SLOT(advance(int)));
 
     if (!e.write()) {
+	CurrentProgressDialog::freeze();
+        KMessageBox::sorry(this, i18n("Export failed.  The file could not be opened for writing."));
+    }
+}
+
+void RosegardenGUIApp::slotExportMup()
+{
+    KTmpStatusMsg msg(i18n("Exporting Mup file..."), this);
+
+    QString fileName = getValidWriteFile
+        ("*.mup|" + i18n("Mup files\n") + "\n*|" + i18n("All files"),
+         i18n("Export as..."));
+    if (fileName.isEmpty()) return;
+
+    exportMupFile(fileName);
+}
+
+void RosegardenGUIApp::exportMupFile(const QString &file)
+{
+    RosegardenProgressDialog progressDlg(i18n("Exporting Mup file..."),
+                                         100,
+                                         this);
+
+    MupExporter e(this, &m_doc->getComposition(), std::string(QFile::encodeName(file)));
+
+    connect(&e, SIGNAL(setProgress(int)),
+            progressDlg.progressBar(), SLOT(setValue(int)));
+
+    connect(&e, SIGNAL(incrementProgress(int)),
+            progressDlg.progressBar(), SLOT(advance(int)));
+
+    if (!e.write()) {
+	CurrentProgressDialog::freeze();
         KMessageBox::sorry(this, i18n("Export failed.  The file could not be opened for writing."));
     }
 }
@@ -2887,6 +2926,7 @@ void RosegardenGUIApp::exportLilypondFile(const QString &file)
             progressDlg.progressBar(), SLOT(advance(int)));
 
     if (!e.write()) {
+	CurrentProgressDialog::freeze();
         KMessageBox::sorry(this, i18n("Export failed.  The file could not be opened for writing."));
     }
 }
@@ -2919,6 +2959,7 @@ void RosegardenGUIApp::exportMusicXmlFile(const QString &file)
             progressDlg.progressBar(), SLOT(advance(int)));
 
     if (!e.write()) {
+	CurrentProgressDialog::freeze();
         KMessageBox::sorry(this, i18n("Export failed.  The file could not be opened for writing."));
     }
 }
@@ -3904,7 +3945,7 @@ RosegardenGUIApp::slotAddAudioFile(unsigned int id)
         {
             std::cerr << "RosegardenGUIApp::slotAddAudioFile - "
                       << "failed to add file \""
-                      << aF->getFilename() << "\"" << endl;
+                      << aF->getFilename() << "\"" << std::endl;
         }
     }
 }
@@ -3946,7 +3987,7 @@ RosegardenGUIApp::slotDeleteAudioFile(unsigned int id)
         {
             std::cerr << "RosegardenGUIApp::slotDeleteAudioFile - "
                       << "failed to remove file id "
-                      << id << endl;
+                      << id << std::endl;
         }
     }
 
@@ -4035,7 +4076,7 @@ RosegardenGUIApp::slotDeleteAllAudioFiles()
 void
 RosegardenGUIApp::skippedSlices(unsigned int /*slices*/)
 {
-    //std::cout << "SEQUENCER HAS SKIPPED " << slices << " SLICES" << endl;
+    //std::cout << "SEQUENCER HAS SKIPPED " << slices << " SLICES" << std::endl;
 }
 
 void

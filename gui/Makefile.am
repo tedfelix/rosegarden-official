@@ -11,16 +11,16 @@ rosegarden_SOURCES = \
 	basiccommand.cpp \
 	chordnameruler.cpp \
 	colours.cpp \
-        controlruler.cpp \
         constants.cpp \
+        controlruler.cpp \
 	csoundio.cpp \
 	deviceeditor.cpp \
 	dialogs.cpp \
         diskspace.cpp \
 	editcommands.cpp \
 	edittool.cpp \
-	editviewbase.cpp \
 	editview.cpp \
+	editviewbase.cpp \
         eventview.cpp \
         instrumentlabel.cpp \
         instrumentparameterbox.cpp \
@@ -41,6 +41,7 @@ rosegarden_SOURCES = \
         midifilter.cpp \
         midipitchlabel.cpp \
 	multiviewcommandhistory.cpp \
+	mupio.cpp \
         musicxmlio.cpp \
 	notationcanvasview.cpp \
 	notationcommands.cpp \
@@ -65,12 +66,12 @@ rosegarden_SOURCES = \
 	rawnoteruler.cpp \
 	rg21io.cpp \
 	rosedebug.cpp \
-        rosegardenconfiguredialog.cpp \
 	rosegardencanvasview.cpp \
+        rosegardenconfiguredialog.cpp \
 	rosegardengui.cpp \
 	rosegardenguidoc.cpp \
-	rosegardenguiiface.skel \
 	rosegardenguiiface.cpp \
+	rosegardenguiiface.skel \
 	rosegardenguiview.cpp \
         rosegardentransport.ui \
         rosegardentransportdialog.cpp \

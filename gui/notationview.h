@@ -56,9 +56,6 @@ class NotationHLayout;
 class NotationVLayout;
 class NotationStaff;
 
-namespace Rosegarden { class Progress; class Segment; class MappedEvent; }
-using Rosegarden::timeT;
-
 /**
  * NotationView is a view for one or more Staff objects, each of
  * which contains the notation data associated with a Segment.
@@ -214,7 +211,7 @@ public:
     int getPageWidth();
 
     /// Scrolls the view such that the given time is centered
-    void scrollToTime(timeT t);
+    void scrollToTime(Rosegarden::timeT t);
 
     NotePixmapFactory *getNotePixmapFactory() const {
         return m_notePixmapFactory;

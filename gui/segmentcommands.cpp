@@ -848,8 +848,8 @@ AudioSegmentAutoSplitCommand::execute()
 	m_composition->addSegment(newSegment);
         newSegment->setStartTime(absStartTime);
         newSegment->setEndTime(absEndTime);
-        cout << "CREATING FROM " << newSegment->getAudioStartTime() << " TO "
-                                 << newSegment->getAudioEndTime() << endl;
+        std::cout << "CREATING FROM " << newSegment->getAudioStartTime() << " TO "
+                                 << newSegment->getAudioEndTime() << std::endl;
 
 	m_newSegments.push_back(newSegment);
     }
@@ -1473,7 +1473,7 @@ void AddTracksCommand::unexecute()
         }
         else
             std::cerr<< "AddTracksCommand::unexecute - "
-                     << "can't deatch track at position " << i << endl;
+                     << "can't deatch track at position " << i << std::endl;
     }
 
     m_detached = true;
@@ -1526,10 +1526,10 @@ void DeleteTracksCommand::execute()
     /*
     for (tit = tracks.begin(); tit != tracks.end(); ++tit)
     {
-        cout << "TRACK " << (*tit).first << " - "
+    std::cout << "TRACK " << (*tit).first << " - "
              << (*tit).second->getId()
              << " - POSITION = " << (*tit).second->getPosition()
-             << endl;
+             << std::endl;
     }
     */
 
@@ -1579,10 +1579,10 @@ void DeleteTracksCommand::execute()
     /*
     for (tit = tracks->begin(); tit != tracks->end(); ++tit)
     {
-        cout << "TRACK " << (*tit).first << " - "
+    std::cout << "TRACK " << (*tit).first << " - "
              << (*tit).second->getId()
              << " - POSITION = " << (*tit).second->getPosition()
-             << endl;
+             << std::endl;
     }
     */
 

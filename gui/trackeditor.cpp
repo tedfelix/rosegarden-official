@@ -196,7 +196,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
     grid->addWidget(m_trackButtonScroll, 3, 0);
 
     int canvasHeight = getTrackCellHeight() *
-	std::max(40, m_doc->getComposition().getNbTracks());
+	std::max(40u, m_doc->getComposition().getNbTracks());
 
     m_trackButtons = new TrackButtons(m_doc,
                                       getTrackCellHeight(),
@@ -315,7 +315,7 @@ void TrackEditor::slotReadjustCanvasSize()
     RG_DEBUG << "TrackEditor::slotReadjustCanvasSize() : nbTracks = "
              << comp.getNbTracks() << endl;
 
-    int canvasHeight = getTrackCellHeight() * std::max(40, comp.getNbTracks());
+    int canvasHeight = getTrackCellHeight() * std::max(40u, comp.getNbTracks());
 
     m_segmentCanvas->canvas()->resize(m_canvasWidth, canvasHeight);
 

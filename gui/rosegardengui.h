@@ -159,6 +159,11 @@ public:
     void exportCsoundFile(const QString &url);
 
     /**
+     * export a Mup file
+     */
+    void exportMupFile(const QString &url);
+
+    /**
      * export a Lilypond file
      */
     void exportLilypondFile(const QString &url);
@@ -506,12 +511,17 @@ public slots:
     void slotExportCsound();
 
     /**
-     * Let the user enter a Lilypond scorefile to export to
+     * Let the user enter a Mup file to export to
+     */
+    void slotExportMup();
+
+    /**
+     * Let the user enter a Lilypond file to export to
      */
     void slotExportLilypond();
 
     /**
-     * Let the user enter a MusicXml scorefile to export to
+     * Let the user enter a MusicXml file to export to
      */
     void slotExportMusicXml();
 

@@ -1152,8 +1152,8 @@ void NotationView::slotDebugDump()
         for (EventSelection::eventcontainer::iterator i =
                  ec.begin();
              i != ec.end(); ++i) {
-            cerr << "\n" << n++ << " [" << (*i) << "]" << endl;
-            (*i)->dump(cerr);
+            std::cerr << "\n" << n++ << " [" << (*i) << "]" << std::endl;
+            (*i)->dump(std::cerr);
         }
     }
 }
@@ -1684,10 +1684,10 @@ NotationView::slotToggleStepByStep()
 	NOTATION_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
 	return;
     }
-    if (action->isChecked()) {
-	emit stepByStepTargetRequested(0);
-    } else {
+    if (action->isChecked()) { // after toggling, that is
 	emit stepByStepTargetRequested(this);
+    } else {
+	emit stepByStepTargetRequested(0);
     }
 }
 

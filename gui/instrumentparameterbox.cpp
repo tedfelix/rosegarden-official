@@ -701,8 +701,8 @@ AudioInstrumentParameterPanel::slotPluginSelected(int index, int plugin)
             if (inst->isAssigned())
             {
                 // unassign, destory and recreate
-                cout << "MAPPED ID = " << inst->getMappedId() 
-                     << " for Instrument " << inst->getId() << endl;
+                std::cout << "MAPPED ID = " << inst->getMappedId() 
+			  << " for Instrument " << inst->getId() << std::endl;
 
                 RG_DEBUG << "InstrumentParameterBox::slotPluginSelected - "
                          << "MappedObjectId = "
