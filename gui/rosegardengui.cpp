@@ -253,9 +253,9 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     vboxLayout->addStretch();
 
     connect(m_instrumentParameterBox,
-	    SIGNAL(selectPlugin(Rosegarden::InstrumentId id, int index)),
+	    SIGNAL(selectPlugin(Rosegarden::InstrumentId, int)),
 	    this,
-	    SLOT(slotShowPluginDialog(id, index)));
+	    SLOT(slotShowPluginDialog(Rosegarden::InstrumentId, int)));
 
     // Load the initial document (this includes doc's own autoload)
     //
@@ -4677,8 +4677,8 @@ RosegardenGUIApp::slotOpenMixer()
     connect(m_mixer, SIGNAL(closing()),
             this, SLOT(slotMixerClosed()));
 
-    connect(m_mixer, SIGNAL(selectPlugin(Rosegarden::InstrumentId id, int index)),
-	    this, SLOT(slotShowPluginDialog(id, index)));
+    connect(m_mixer, SIGNAL(selectPlugin(Rosegarden::InstrumentId, int)),
+	    this, SLOT(slotShowPluginDialog(Rosegarden::InstrumentId, int)));
 
     connect(this, SIGNAL(documentAboutToChange()),
             m_mixer, SLOT(close()));
