@@ -88,11 +88,11 @@ MappedStudio::createObject(MappedObjectType type, MappedObjectId id)
 
     if (type == MappedObject::AudioPluginManager)
     {
-        mO = new MappedAudioPluginManager(m_runningObjectId);
+        mO = new MappedAudioPluginManager(id);
     }
     else if (type == MappedObject::AudioFader)
     {
-        mO = new MappedAudioFader(m_runningObjectId,
+        mO = new MappedAudioFader(id,
                                   2); // channels
     }
 
