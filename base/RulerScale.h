@@ -146,8 +146,8 @@ public:
     void   setUnitsPerPixel(double ratio) { m_ratio = ratio; }
 
     virtual double getBarPosition(int n);
-//!!!    virtual double getBarWidth(int n);
-//!!!    virtual double getBeatWidth(int n);
+    virtual double getBarWidth(int n);
+    virtual double getBeatWidth(int n);
     virtual int getBarForX(double x);
     virtual timeT getTimeForX(double x);
     virtual double getXForTime(timeT time);

@@ -169,7 +169,7 @@ SimpleRulerScale::getBarPosition(int n)
     timeT barStart = m_composition->getBarRange(n).first;
     return getXForTime(barStart);
 }
-/*!!!
+
 double
 SimpleRulerScale::getBarWidth(int n)
 {
@@ -184,7 +184,7 @@ SimpleRulerScale::getBeatWidth(int n)
     TimeSignature timeSig(m_composition->getTimeSignatureInBar(n, isNew));
     return (double)(timeSig.getBeatDuration()) / m_ratio;
 }
-*/
+
 int
 SimpleRulerScale::getBarForX(double x)
 {
