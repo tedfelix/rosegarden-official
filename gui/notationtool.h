@@ -55,7 +55,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-
+    NotationView* m_nParentView;
 };
 
 
@@ -100,7 +100,7 @@ protected:
      *
      * \a menuName : the name of the menu defined in the XML rc file
      */
-    NotationTool(const QString& menuName, EditView*);
+    NotationTool(const QString& menuName, NotationView*);
 
     //--------------- Data members ---------------------------------
 
@@ -146,10 +146,10 @@ public slots:
     void setAccidentalSync(Rosegarden::Accidental);
 
 protected:
-    NoteInserter(EditView*);
+    NoteInserter(NotationView*);
 
     /// this ctor is used by RestInserter
-    NoteInserter(const QString& menuName, EditView*);
+    NoteInserter(const QString& menuName, NotationView*);
 
     virtual Rosegarden::Event *doAddCommand(Rosegarden::Segment &,
 					    Rosegarden::timeT time,
@@ -193,7 +193,7 @@ public:
     static const QString ToolName;
 
 protected:
-    RestInserter(EditView*);
+    RestInserter(NotationView*);
 
     virtual Rosegarden::Event *doAddCommand(Rosegarden::Segment &,
 					    Rosegarden::timeT time,
@@ -221,7 +221,7 @@ public:
     static const QString ToolName;
 
 protected:
-    ClefInserter(EditView*);
+    ClefInserter(NotationView*);
     
     //--------------- Data members ---------------------------------
 
@@ -251,7 +251,7 @@ public slots:
     void toggleRestCollapse();
     
 protected:
-    NotationEraser(EditView*);
+    NotationEraser(NotationView*);
 
     //--------------- Data members ---------------------------------
 
@@ -314,7 +314,7 @@ public slots:
     void hideSelection();
     
 protected:
-    NotationSelector(EditView*);
+    NotationSelector(NotationView*);
 
     /**
      * Set the current selection on the parent NotationView

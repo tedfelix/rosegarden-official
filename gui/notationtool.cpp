@@ -59,7 +59,8 @@ using Rosegarden::ViewElement;
 //////////////////////////////////////////////////////////////////////
 
 NotationToolBox::NotationToolBox(NotationView *parent)
-    : EditToolBox(parent)
+    : EditToolBox(parent),
+      m_nParentView(parent)
 {
     //m_tools.setAutoDelete(true);
 }
@@ -83,23 +84,23 @@ EditTool* NotationToolBox::createTool(const QString& toolName)
     
     if (toolNamelc == NoteInserter::ToolName)
 
-        tool = new NoteInserter(m_parentView);
+        tool = new NoteInserter(m_nParentView);
 
     else if (toolNamelc == RestInserter::ToolName)
 
-        tool = new RestInserter(m_parentView);
+        tool = new RestInserter(m_nParentView);
 
     else if (toolNamelc == ClefInserter::ToolName)
 
-        tool = new ClefInserter(m_parentView);
+        tool = new ClefInserter(m_nParentView);
 
     else if (toolNamelc == NotationEraser::ToolName)
 
-        tool = new NotationEraser(m_parentView);
+        tool = new NotationEraser(m_nParentView);
 
     else if (toolNamelc == NotationSelector::ToolName)
 
-        tool = new NotationSelector(m_parentView);
+        tool = new NotationSelector(m_nParentView);
 
     else {
         KMessageBox::error(0, QString("NotationToolBox::createTool : unrecognised toolname %1 (%2)")
@@ -117,9 +118,9 @@ EditTool* NotationToolBox::createTool(const QString& toolName)
 //               Notation Tool
 //////////////////////////////////////////////////////////////////////
 
-NotationTool::NotationTool(const QString& menuName, EditView* view)
+NotationTool::NotationTool(const QString& menuName, NotationView* view)
     : EditTool(menuName, view),
-      m_nParentView(dynamic_cast<NotationView*>(view))
+      m_nParentView(view)
 {
 }
 
@@ -141,7 +142,7 @@ void NotationTool::ready()
 //------------------------------
 
 
-NoteInserter::NoteInserter(EditView* view)
+NoteInserter::NoteInserter(NotationView* view)
     : NotationTool("NoteInserter", view),
       m_noteType(Rosegarden::Note::Quaver),
       m_noteDots(0),
@@ -182,7 +183,7 @@ NoteInserter::NoteInserter(EditView* view)
     createMenu("noteinserter.rc");
 }
 
-NoteInserter::NoteInserter(const QString& menuName, EditView* view)
+NoteInserter::NoteInserter(const QString& menuName, NotationView* view)
     : NotationTool(menuName, view),
       m_noteType(Rosegarden::Note::Quaver),
       m_noteDots(0),
@@ -363,7 +364,7 @@ const char* NoteInserter::m_actionsAccidental[][5] =
 
 //------------------------------
 
-RestInserter::RestInserter(EditView* view)
+RestInserter::RestInserter(NotationView* view)
     : NoteInserter("RestInserter", view)
 {
 }
@@ -381,7 +382,7 @@ RestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 
 //------------------------------
 
-ClefInserter::ClefInserter(EditView* view)
+ClefInserter::ClefInserter(NotationView* view)
     : NotationTool("ClefInserter", view),
       m_clef(Rosegarden::Clef::Treble)
 {
@@ -430,7 +431,7 @@ void ClefInserter::handleLeftButtonPress(int, int staffNo,
 
 //------------------------------
 
-NotationEraser::NotationEraser(EditView* view)
+NotationEraser::NotationEraser(NotationView* view)
     : NotationTool("NotationEraser", view),
       m_collapseRest(false)
 {
@@ -469,7 +470,7 @@ void NotationEraser::toggleRestCollapse()
 
 //------------------------------
 
-NotationSelector::NotationSelector(EditView* view)
+NotationSelector::NotationSelector(NotationView* view)
     : NotationTool("NotationSelector", view),
       m_selectionRect(0),
       m_updateRect(false),
