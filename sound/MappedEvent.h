@@ -102,49 +102,49 @@ public:
     {
         // INVALID
         //
-        InvalidMappedEvent       = 0x00000,
+        InvalidMappedEvent       = 0,
 
         // Keep the MidiNotes bit flaggable so that filtering works
         //
-        MidiNote                 = 0x000001,
-        MidiNoteOneShot          = 0x000002,  // doesn't need NOTE OFFs
-        MidiProgramChange        = 0x000004,
-        MidiKeyPressure          = 0x000008,
-        MidiChannelPressure      = 0x000010, // 16
-        MidiPitchBend            = 0x000020, // 32
-        MidiController           = 0x000040, // 64
-        MidiSystemExclusive      = 0x000080, // 128
+        MidiNote                 = 1 << 0,
+        MidiNoteOneShot          = 1 << 1,  // doesn't need NOTE OFFs
+        MidiProgramChange        = 1 << 2,
+        MidiKeyPressure          = 1 << 3,
+        MidiChannelPressure      = 1 << 4,
+        MidiPitchBend            = 1 << 5,
+        MidiController           = 1 << 6,
+        MidiSystemExclusive      = 1 << 7,
 
         // Sent from the gui to play an audio file
-        Audio                    = 0x000100,
+        Audio                    = 1 << 8,
         // Sent from gui to cancel playing an audio file
-        AudioCancel              = 0x000200,
+        AudioCancel              = 1 << 9,
         // Sent to the gui with audio level on Instrument
-        AudioLevel               = 0x000800,
+        AudioLevel               = 1 << 10,
         // Sent to the gui to inform an audio file stopped
-        AudioStopped             = 0x001000,
+        AudioStopped             = 1 << 11,
         // The gui is clear to generate a preview for a new audio file
-        AudioGeneratePreview     = 0x002000,
+        AudioGeneratePreview     = 1 << 12,
 
         // Update Instruments - new ALSA client detected
-        SystemUpdateInstruments  = 0x004000,
+        SystemUpdateInstruments  = 1 << 13,
         // Set RG as JACK master/slave
-        SystemJackTransport      = 0x008000,
+        SystemJackTransport      = 1 << 14,
         // Set RG as MMC master/slave
-        SystemMMCTransport       = 0x010000,
+        SystemMMCTransport       = 1 << 15,
         // Set System Messages and MIDI Clock
-        SystemMIDIClock          = 0x020000,
+        SystemMIDIClock          = 1 << 16,
         // Set Record device
-        SystemRecordDevice       = 0x040000,
+        SystemRecordDevice       = 1 << 17,
         // Set Metronome device
-        SystemMetronomeDevice    = 0x080000,
+        SystemMetronomeDevice    = 1 << 18,
         // Set number Audio inputs/JACK input ports
-        SystemAudioInputs        = 0x100000,
+        SystemAudioInputs        = 1 << 19,
 
         // Time sig. event (from time sig. composition reference segment)
-        TimeSignature            = 0x200000,
+        TimeSignature            = 1 << 20,
         // Tempo event (from tempo composition reference segment)
-        Tempo                    = 0x200001
+        Tempo                    = 1 << 21
 
     } MappedEventType;
 

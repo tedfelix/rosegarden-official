@@ -284,24 +284,6 @@ RosegardenSequencerApp::notifyVisuals(Rosegarden::MappedComposition *mC)
 	--i;
 	m_sequencerMapper.updateVisual(*i);
     }
-
-/*!!!
-    // Tell the gui that we're processing these events next
-    //
-    QByteArray data;
-    QDataStream arg(data, IO_WriteOnly);
-    arg << *mC;
-
-    if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
-                                  ROSEGARDEN_GUI_IFACE_NAME,
-                                 "showVisuals(Rosegarden::MappedComposition)",
-                                  data))
-    {
-        SEQUENCER_DEBUG << "RosegardenSequencer::showVisuals()"
-                        << " - can't call RosegardenGUI client"
-                        << endl;
-    }
-*/
 }
 
 bool
@@ -402,24 +384,6 @@ RosegardenSequencerApp::updateClocks()
     // Remap the position pointer
     //
     m_sequencerMapper.updatePositionPointer(newPosition);
-/*
-    arg << newPosition.sec;
-    arg << newPosition.usec;
-
-//    std::cerr << "Calling setPointerPosition(" << newPosition.sec << "," << newPosition.usec << "," << long(clearToSend) << ")" << std::endl;
-    
-    if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
-                      ROSEGARDEN_GUI_IFACE_NAME,
-                      "setPointerPosition(long int, long int)",
-                      data))
-    {
-        SEQUENCER_DEBUG << "RosegardenSequencer::updateClocks() - can't send to RosegardenGUI client\n";
-
-        // Stop the sequencer so we can see if we can try again later
-        //
-        stop();
-    }
-*/
 }
 
 void
@@ -471,13 +435,30 @@ RosegardenSequencerApp::jumpTo(long posSec, long posUsec)
 void
 RosegardenSequencerApp::processRecordedMidi()
 {
+    Rosegarden::MappedComposition *mC =
+	m_sequencer->getMappedComposition(m_playLatency);
 
-    QByteArray data; //, replyData;
-    //QCString replyType;
+    if (mC->empty() || !m_controlBlockMmapper) return;
+
+    applyFiltering(mC, m_controlBlockMmapper->getRecordFilter());
+    int instrumentId = m_controlBlockMmapper->getInstrumentForTrack
+	(m_controlBlockMmapper->getSelectedTrack());
+    for (Rosegarden::MappedComposition::iterator i = mC->begin();
+	 i != mC->end(); ++i) {
+	(*i)->setInstrument(instrumentId);
+    }
+
+    // Stream the composition to the DCOP arg but don't send it yet,
+    // because playing MIDI thru is quicker and more urgent than
+    // updating the GUI
+    QByteArray data;
     QDataStream arg(data, IO_WriteOnly);
+    arg << mC;
 
-    arg << m_sequencer->getMappedComposition(m_playLatency);
-
+    // Now it's safely streamed, we can filter for MIDI thru and 
+    // play it immediately
+    applyFiltering(mC, m_controlBlockMmapper->getThruFilter());
+    m_sequencer->processEventsOut(*mC, Rosegarden::RealTime::zeroTime, true);
 
     if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                                   ROSEGARDEN_GUI_IFACE_NAME,
@@ -534,10 +515,42 @@ RosegardenSequencerApp::processRecordedAudio()
 void
 RosegardenSequencerApp::processAsynchronousEvents()
 {
+    Rosegarden::MappedComposition *mC =
+	m_sequencer->getMappedComposition(m_playLatency);
+
+    if (mC->empty()) {
+	return;
+    }
+
+    if (!m_controlBlockMmapper) {
+	try {
+	    m_controlBlockMmapper = new ControlBlockMmapper(KGlobal::dirs()->resourceDirs("tmp").first() + "/rosegarden_control_block");
+	} catch (Rosegarden::Exception e) {
+	    // Assume that the control block simply hasn't been
+	    // created yet because the GUI's still starting up.
+	    // If there's a real problem with the mmapper, it
+	    // will show up in play() instead.
+	    return;
+	}
+    }
+
+    SEQUENCER_DEBUG << "processAsynchronousEvents: have " << mC->size() << " events" << endl;
+
+    int instrumentId = m_controlBlockMmapper->getInstrumentForTrack
+	(m_controlBlockMmapper->getSelectedTrack());
+    for (Rosegarden::MappedComposition::iterator i = mC->begin();
+	 i != mC->end(); ++i) {
+	(*i)->setInstrument(instrumentId);
+    }
+
     QByteArray data;
     QDataStream arg(data, IO_WriteOnly);
+    arg << mC;
 
-    arg << m_sequencer->getMappedComposition(m_playLatency);
+    applyFiltering(mC, m_controlBlockMmapper->getThruFilter());
+    m_sequencer->processEventsOut(*mC, Rosegarden::RealTime::zeroTime, true);
+
+    SEQUENCER_DEBUG << "processAsynchronousEvents: sent " << mC->size() << " events" << endl;
 
     if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                                  ROSEGARDEN_GUI_IFACE_NAME,
@@ -557,6 +570,19 @@ RosegardenSequencerApp::processAsynchronousEvents()
     m_sequencer->processPending(m_playLatency);
 }
 
+
+void
+RosegardenSequencerApp::applyFiltering(Rosegarden::MappedComposition *mC,
+				       Rosegarden::MidiFilter filter)
+{
+    for (Rosegarden::MappedComposition::iterator i = mC->begin();
+	 i != mC->end(); ) { // increment in loop
+	Rosegarden::MappedComposition::iterator j = i;
+	++j;
+	if ((*i)->getType() & filter) mC->erase(i);
+	i = j;
+    }
+}    
 
 
 int
@@ -765,9 +791,11 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
     else 
         SEQUENCER_DEBUG << "RosegardenSequencerApp::play() - no time sig segment found\n";
 
-    // Map control block
+    // Map control block if necessary
     //
-    m_controlBlockMmapper = new ControlBlockMmapper(KGlobal::dirs()->resourceDirs("tmp").first() + "/rosegarden_control_block");
+    if (!m_controlBlockMmapper) {
+	m_controlBlockMmapper = new ControlBlockMmapper(KGlobal::dirs()->resourceDirs("tmp").first() + "/rosegarden_control_block");
+    }
 
     initMetaIterator();
 
@@ -821,8 +849,8 @@ void RosegardenSequencerApp::cleanupMmapData()
     delete m_metaIterator;
     m_metaIterator = 0;
 
-    delete m_controlBlockMmapper;
-    m_controlBlockMmapper = 0;
+//!!!    delete m_controlBlockMmapper;
+//!!!    m_controlBlockMmapper = 0;
 }
 
 void RosegardenSequencerApp::remapSegment(const QString& filename)
@@ -881,11 +909,13 @@ void RosegardenSequencerApp::closeAllSegments()
 
 void RosegardenSequencerApp::remapControlBlock()
 {
-    if (m_transportStatus != PLAYING) return;
+//!!!    if (m_transportStatus != PLAYING) return;
 
-    SEQUENCER_DEBUG << "MmappedSegment::remapControlBlock()\n";
+    SEQUENCER_DEBUG << "RosegardenSequencerApp::remapControlBlock()\n";
 
-    m_controlBlockMmapper->refresh();
+    if (m_controlBlockMmapper) {
+	m_controlBlockMmapper->refresh();
+    }
 }
 
 // DCOP Wrapper for play(Rosegarden::RealTime,

@@ -42,7 +42,13 @@
 
 class RosegardenGUIDoc;
 
-namespace Rosegarden { class Track; class Segment; class MappedEvent; class MidiMetronome; class ControlBlock; }
+namespace Rosegarden {
+    class Track;
+    class Segment;
+    class MappedEvent; 
+    class MidiMetronome;
+    class ControlBlock;
+}
 
 class ControlBlockMmapper
 {
@@ -57,6 +63,8 @@ public:
     void updateMetronomeForPlayback();
     void updateMetronomeForRecord();
     void updateSoloData(bool solo, Rosegarden::TrackId selectedTrack);
+    void updateMidiFilters(Rosegarden::MidiFilter thruFilter,
+			   Rosegarden::MidiFilter recordFilter);
     void setDocument(RosegardenGUIDoc*);
 
 protected:

@@ -31,6 +31,8 @@ namespace Rosegarden
 ControlBlock::ControlBlock(unsigned int nbTracks)
     : m_nbTracks(nbTracks),
       m_solo(false),
+      m_thruFilter(0),
+      m_recordFilter(0),
       m_selectedTrack(0)
 {
     m_metronomeInfo.muted = true;

@@ -64,6 +64,12 @@ public:
     Rosegarden::TrackId getSelectedTrack()
         { return m_controlBlock->getSelectedTrack(); }
 
+    Rosegarden::MidiFilter getThruFilter()
+        { return m_controlBlock->getThruFilter(); }
+
+    Rosegarden::MidiFilter getRecordFilter()
+        { return m_controlBlock->getRecordFilter(); }
+
 protected:
 
     //--------------- Data members ---------------------------------

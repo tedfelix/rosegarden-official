@@ -25,6 +25,7 @@
 
 #include "rosegardenguidoc.h"
 #include "midifilter.h"
+#include "sequencemanager.h"
 #include "MappedEvent.h"
 
 
@@ -172,9 +173,12 @@ MidiFilterDialog::slotApply()
 
     //if (m_thruBox->
 
-
     m_doc->getStudio().setMIDIThruFilter(thruFilter);
     m_doc->getStudio().setMIDIRecordFilter(recordFilter);
+
+    if (m_doc->getSequenceManager()) {
+        m_doc->getSequenceManager()->filtersChanged(thruFilter, recordFilter);
+    }
 
     setModified(false);
 }

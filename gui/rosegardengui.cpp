@@ -2906,6 +2906,10 @@ RosegardenGUIApp::slotUpdatePlaybackPosition()
     m_doc->setPointerPosition(elapsedTime);
     m_originatingJump = false;
 
+    if (m_seqManager->getTransportStatus() == RECORDING_MIDI) {
+	m_doc->updateRecordingSegment();
+    }
+
     if (elapsedTime >= comp.getEndMarker())
         slotStop();
 }
@@ -3696,7 +3700,11 @@ RosegardenGUIApp::slotRecord()
 
     // Start the playback timer - this fetches the current sequencer position every 20ms
     //
-    m_playTimer->start(20); // 20ms update
+    m_playTimer->start(19); // 20ms update (...ish.  Actually we want
+			    // to avoid precise multiples just so as
+			    // to avoid always having the same digit
+			    // in one place on the transport.  How
+			    // shallow.)
 }
 
 // Toggling record whilst stopped prepares us for record next time we

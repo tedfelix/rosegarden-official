@@ -127,6 +127,14 @@ void ControlBlockMmapper::updateTrackData(Track *t)
     m_needsRefresh = true;
 }
 
+void ControlBlockMmapper::updateMidiFilters(Rosegarden::MidiFilter thruFilter,
+					    Rosegarden::MidiFilter recordFilter)
+{
+    m_controlBlock->setThruFilter(thruFilter);
+    m_controlBlock->setRecordFilter(recordFilter);
+    m_needsRefresh = true;
+}
+
 void ControlBlockMmapper::updateMetronomeData(Rosegarden::InstrumentId instId)
 {
     m_controlBlock->setInstrumentForMetronome(instId);
@@ -184,6 +192,9 @@ void ControlBlockMmapper::initControlBlock()
     }
 
     m_controlBlock->setMetronomeMuted(!comp.usePlayMetronome());
+
+    m_controlBlock->setThruFilter(m_doc->getStudio().getMIDIThruFilter());
+    m_controlBlock->setRecordFilter(m_doc->getStudio().getMIDIRecordFilter());
 
     refresh();
 }

@@ -119,7 +119,7 @@ public:
     /// Select this SegmentItem
     void setSelected(bool select, const QBrush &highlightBrush);
 
-    /// show or hide the repeat rect
+    /// show or hide the repeat rect.  also suspends preview if hidden
     void showRepeatRect(bool);
 
     virtual void drawShape(QPainter&);
@@ -153,10 +153,12 @@ private:
     SegmentRepeatRectangle *m_repeatRectangle;
     QString m_label;
 
-    QColor m_colour; // overridden by m_segment's colour, if any
+    QColor m_colour;
+    bool m_overrideColour;
 
     SegmentItemPreview* m_preview;
     bool m_showPreview;
+    bool m_suspendPreview;
 
     static QFont *m_font;
     static QFontMetrics *m_fontMetrics;
@@ -280,8 +282,10 @@ public:
     /**
      * Show a preview of the Segment we're recording
      */
-    void showRecordingSegmentItem(Rosegarden::TrackId track,
-				  Rosegarden::timeT startTime,
+//!!!    void showRecordingSegmentItem(Rosegarden::TrackId track,
+//				  Rosegarden::timeT startTime,
+//				  Rosegarden::timeT endTime);
+    void showRecordingSegmentItem(Rosegarden::Segment *segment,
 				  Rosegarden::timeT endTime);
     void deleteRecordingSegmentItem();
 

@@ -959,6 +959,7 @@ void Composition::resetTrackIdAndPosition(TrackId oldId, TrackId newId,
 
         checkSelectedAndRecordTracks();
         updateRefreshStatuses();
+	notifyTrackChanged(getTrackById(newId));
     }
     else
         std::cerr << "Composition::resetTrackIdAndPosition - "
@@ -989,6 +990,7 @@ void Composition::addTrack(Track *track)
         m_tracks[track->getId()] = track;
         track->setOwningComposition(this);
         updateRefreshStatuses();
+	notifyTrackChanged(track);
 
     } else {
         std::cerr << "Composition::addTrack("
@@ -1052,6 +1054,7 @@ void Composition::checkSelectedAndRecordTracks()
     if (m_tracks.find(m_selectedTrack) == m_tracks.end()) {
 
         m_selectedTrack = getClosestValidTrackId(m_selectedTrack);
+	notifySoloChanged();
         
     }
 

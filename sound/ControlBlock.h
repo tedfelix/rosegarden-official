@@ -73,11 +73,19 @@ public:
     TrackId getSelectedTrack()           { return m_selectedTrack; }
     void setSelectedTrack(TrackId track) { m_selectedTrack = track; }
 
+    void setThruFilter(MidiFilter filter) { m_thruFilter = filter; }
+    MidiFilter getThruFilter() { return m_thruFilter; }
+
+    void setRecordFilter(MidiFilter filter) { m_recordFilter = filter; }
+    MidiFilter getRecordFilter() { return m_recordFilter; }
+
 protected:
     //--------------- Data members ---------------------------------
     // PUT ONLY PLAIN DATA HERE - NO POINTERS EVER
     int m_nbTracks;
     bool m_solo;
+    MidiFilter m_thruFilter;
+    MidiFilter m_recordFilter;
     TrackId m_selectedTrack;
     TrackInfo m_metronomeInfo;
     TrackInfo m_trackInfo[CONTROLBLOCK_MAX_NB_TRACKS]; // should be high enough for the moment

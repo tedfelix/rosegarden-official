@@ -289,6 +289,12 @@ public:
     void stopRecordingAudio();
 
     /**
+     * Update the recording progress -- called regularly from
+     * RosegardenGUIApp::slotUpdatePlaybackPosition() while recording
+     */
+    void updateRecordingSegment();
+
+    /**
      * Register audio samples at the sequencer
      */
     void prepareAudio();
@@ -377,6 +383,8 @@ public:
     Rosegarden::SequenceManager* getSequenceManager() 
         { return (dynamic_cast<RosegardenGUIApp*>(parent()))
                                          ->getSequenceManager(); }
+
+    Rosegarden::Segment *getRecordSegment() { return m_recordSegment; }
 
     /**
      * return the list of the views currently connected to the document

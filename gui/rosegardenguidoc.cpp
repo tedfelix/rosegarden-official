@@ -1079,6 +1079,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
     // freed.
     //
     if (m_recordSegment == 0 && status == RECORDING_MIDI) {
+
         m_recordSegment = new Segment();
         m_recordSegment->setTrack(m_composition.getRecordTrack());
         m_recordSegment->setStartTime(m_composition.getPosition());
@@ -1293,6 +1294,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
     // Only update gui if we're still recording - otherwise we
     // can get a recording SegmentItem hanging around.
     //
+/*!!!
     if (status == RECORDING_MIDI)
     {
         // update this segment on the GUI
@@ -1301,6 +1303,44 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
         {
             w->showRecordingSegmentItem(m_recordSegment);
         }
+    }
+*/
+}
+
+void
+RosegardenGUIDoc::updateRecordingSegment()
+{
+    // We assume the transport status is RECORDING_MIDI or else we
+    // wouldn't be here
+
+    if (!m_recordSegment) {
+	// make this call once to create one
+	insertRecordedMidi(Rosegarden::MappedComposition(), RECORDING_MIDI);
+    }
+
+    NoteOnMap tweakedNoteOnEvents;
+    
+    for (NoteOnMap::iterator mi = m_noteOnEvents.begin();
+	 mi != m_noteOnEvents.end(); ++mi) {
+
+	// anything in the note-on map should be tweaked so as to end
+	// at the recording pointer
+
+	Rosegarden::Event *ev = *mi->second;
+	Rosegarden::Event *newEv = new Rosegarden::Event
+	    (*ev, ev->getAbsoluteTime(),
+	     m_composition.getPosition() - ev->getAbsoluteTime());
+
+	m_recordSegment->erase(mi->second);
+	tweakedNoteOnEvents[mi->first] = m_recordSegment->insert(newEv);
+    }
+
+    m_noteOnEvents = tweakedNoteOnEvents;
+
+    // update this segment on the GUI
+    RosegardenGUIView *v;
+    for (v = m_viewList.first(); v != 0; v = m_viewList.next()) {
+	v->showRecordingSegmentItem(m_recordSegment);
     }
 }
 
@@ -1318,7 +1358,7 @@ RosegardenGUIDoc::stopRecordingMidi()
     // otherwise do something with it
     //
     RosegardenGUIView *w;
-    for(w=m_viewList.first(); w!=0; w=m_viewList.next()) {
+    for (w = m_viewList.first(); w != 0; w = m_viewList.next()) {
         w->deleteRecordingSegmentItem();
     }
 

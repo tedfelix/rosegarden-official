@@ -453,6 +453,7 @@ SegmentItem::SegmentItem(TrackId trackPosition, timeT startTime, timeT endTime,
     m_repeatRectangle(0),
     m_colour(RosegardenGUIColours::convertColour
 	     (doc->getComposition().getSegmentColourMap().getColourByIndex(0))),
+    m_overrideColour(false),
     m_preview(0),
     m_showPreview(showPreview)
 {
@@ -476,8 +477,10 @@ SegmentItem::SegmentItem(Segment *segment,
     m_repeatRectangle(0),
     m_colour(RosegardenGUIColours::convertColour
 	     (doc->getComposition().getSegmentColourMap().getColourByIndex(0))),
+    m_overrideColour(false),
     m_preview(0),
-    m_showPreview(showPreview)
+    m_showPreview(showPreview),
+    m_suspendPreview(false)
 {
     if (!m_font) makeFont();
 
@@ -519,6 +522,7 @@ void SegmentItem::setPreview()
 void SegmentItem::setColour(QColor c)
 {
     m_colour = c;
+    m_overrideColour = true;
 }
 
 void SegmentItem::makeFont()
@@ -572,8 +576,22 @@ void SegmentItem::drawShape(QPainter& painter)
 
     painter.restore();
 
-        
-    if (m_preview && m_showPreview) m_preview->drawShape(painter);
+    if (m_preview && m_showPreview) {
+/*!!!
+	Rosegarden::Colour col;
+
+	if (m_segment && !m_overrideColour) {
+	    col = (m_doc->getComposition().getSegmentColourMap().getColourByIndex
+		   (m_segment->getColourIndex()));
+	} else {
+	    col = RosegardenGUIColours::convertColour(m_colour);
+	}
+
+	painter.setPen(RosegardenGUIColours::convertColour
+		       (col.getContrastingColour()));
+*/
+	m_preview->drawShape(painter);
+    }
 
     // draw label
     if (m_segment) 
@@ -620,7 +638,7 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
 
     // Get our segment colour
     QColor brush;
-    if (m_segment) {
+    if (m_segment && !m_overrideColour) {
         brush = RosegardenGUIColours::convertColour
 	    (m_doc->getComposition().getSegmentColourMap().getColourByIndex
 	     (m_segment->getColourIndex()));
@@ -766,12 +784,27 @@ void SegmentItem::setSelected(bool select, const QBrush &brush)
 
 void SegmentItem::showRepeatRect(bool s)
 {
-    if (!m_repeatRectangle) return;
+    //!!! This doesn't really work terribly well... need a better fix
+    // for the remaining preview trails when you move a segment
+    m_suspendPreview = !s;
+    if (m_showPreview) {
+	if (m_suspendPreview) {
+	    delete m_preview;
+	    m_preview = 0;
+	} else {
+	    setPreview();
+	}
+    }
+
+    if (m_repeatRectangle) {
     
-    if (s)
-        m_repeatRectangle->show();
-    else
-        m_repeatRectangle->hide();
+	if (s)
+	    m_repeatRectangle->show();
+	else
+	    m_repeatRectangle->hide();
+    }
+
+    update();
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -882,11 +915,9 @@ void SegmentCanvas::updateAllSegmentItems()
     for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
         SegmentItem *item = dynamic_cast<SegmentItem*>(*it);
         if (item) {
+	    if (item == m_recordingSegment) continue;
             Segment* segment = item->getSegment();
 
-            // Sometimes we have SegmentItems without Segments - while
-            // recording for example.
-            //
             if (segment) {
                 if (!segment->getComposition()) {
                     // this segment has been deleted
@@ -1133,21 +1164,32 @@ SegmentCanvas::addSegmentItem(Segment *segment)
     return newItem;
 }
 
-void SegmentCanvas::showRecordingSegmentItem(TrackId track,
-                                             timeT startTime, timeT endTime)
+void SegmentCanvas::showRecordingSegmentItem(Segment *segment, timeT endTime)
+//!!!TrackId track,
+    //                                        timeT startTime, timeT endTime)
 {
 //    RG_DEBUG << "SegmentCanvas::showRecordingSegmentItem(" << track << ", "
 //	     << startTime << ", " << endTime << ") (seg now is " << m_recordingSegment << ")" << endl;
 
     if (m_recordingSegment) {
 
-	m_recordingSegment->setStartTime(startTime);
+//	m_recordingSegment->setStartTime(startTime);
+//	m_recordingSegment->setEndTime(endTime);
+//	m_recordingSegment->setTrackPosition(track);
+
+	m_recordingSegment->setStartTime(segment->getStartTime());
 	m_recordingSegment->setEndTime(endTime);
-	m_recordingSegment->setTrackPosition(track);
+
+	int trackPosition = m_doc->getComposition().
+            getTrackById(segment->getTrack())->getPosition();
+
+	m_recordingSegment->setTrackPosition(trackPosition);
 
     } else {
 	
-	m_recordingSegment = addSegmentItem(track, startTime, endTime);
+//!!!	m_recordingSegment = addSegmentItem(track, startTime, endTime);
+	m_recordingSegment = addSegmentItem(segment);
+	m_recordingSegment->setEndTime(endTime);
 	m_recordingSegment->setPen(RosegardenGUIColours::RecordingSegmentBorder);
         m_recordingSegment->setColour(RosegardenGUIColours::RecordingSegmentBlock);
 	m_recordingSegment->setZ(2);

@@ -114,6 +114,13 @@ private:
     MidiByte        m_subBeatVelocity;
 };
 
+
+// MidiFilter is a bitmask of Rosegarden::MappedEvent::MappedEventType.
+// Look in sound/MappedEvent.h
+//
+typedef unsigned int MidiFilter;
+
+
 }
 
 #endif

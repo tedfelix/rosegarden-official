@@ -45,7 +45,9 @@ SequencerMmapper::SequencerMmapper():
     m_fileName(createFileName()),
     m_fd(-1),
     m_mmappedBuffer(0),
-    m_mmappedSize(sizeof(Rosegarden::RealTime) + sizeof(bool) +
+    m_mmappedSize(sizeof(Rosegarden::RealTime) +
+		  sizeof(unsigned long) +
+		  sizeof(bool) +
 		  sizeof(Rosegarden::MappedEvent))
 {
     // just in case
@@ -100,8 +102,13 @@ SequencerMmapper::updatePositionPointer(Rosegarden::RealTime time)
 void
 SequencerMmapper::updateVisual(Rosegarden::MappedEvent *ev)
 {
+    static unsigned long eventIndex = 0;
+
     char *buf = (char *)m_mmappedBuffer;
     buf += sizeof(Rosegarden::RealTime);
+
+    unsigned long *eventIndexPtr = (unsigned long *)buf;
+    buf += sizeof(unsigned long);
 
     bool *haveEventPtr = (bool *)buf;
     buf += sizeof(bool);
@@ -111,7 +118,9 @@ SequencerMmapper::updateVisual(Rosegarden::MappedEvent *ev)
     *haveEventPtr = false; // until written
 
     if (ev) {
+	++eventIndex;
 	*eventPtr = *ev;
+	*eventIndexPtr = eventIndex;
 	*haveEventPtr = true;
     }
 }

@@ -534,8 +534,9 @@ TrackEditor::slotUpdateRecordingSegmentItem(Rosegarden::Segment *segment)
     //
     timeT endTime = comp.getPosition();
 
-    m_segmentCanvas->showRecordingSegmentItem(segment->getTrack(),
-                                              startTime, endTime);
+    m_segmentCanvas->showRecordingSegmentItem(segment, endTime);
+//!!!    segment->getTrack(),
+//                                              startTime, endTime);
 
     emit needUpdate();
 }

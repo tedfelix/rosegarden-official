@@ -297,6 +297,9 @@ public:
     //
     void processAsynchronousEvents();
 
+    void applyFiltering(Rosegarden::MappedComposition *mC,
+			Rosegarden::MidiFilter filter);
+
     // Are we looping?
     //
     bool isLooping() const { return !(m_loopStart == m_loopEnd); }

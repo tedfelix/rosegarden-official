@@ -41,11 +41,6 @@
 namespace Rosegarden
 {
 
-// We populate MidiFilter with an OR'd Rosegarden::MappedEvent::MappedEventType.
-// Look in sound/MappedEvent.h
-//
-typedef int MidiFilter;
-
 typedef std::vector<Instrument *> InstrumentList;
 typedef std::vector<Device*> DeviceList;
 typedef std::vector<Device*>::iterator DeviceListIterator;

@@ -801,9 +801,12 @@ SequenceManager::processRecordedMidi(const MappedComposition &mC)
     //
     //
     m_doc->insertRecordedMidi(
+	mC,
+/*!!!
             applyFiltering(mC,
                            Rosegarden::MappedEvent::MappedEventType(
                                m_doc->getStudio().getMIDIRecordFilter())),
+*/
             m_transportStatus);
 
 }
@@ -828,15 +831,19 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
     Rosegarden::Track *track =
 	comp.getTrackById(comp.getSelectedTrack());
 #ifdef HAVE_ALSA
-    Rosegarden::InstrumentId id = track->getInstrument();
+//!!!    Rosegarden::InstrumentId id = track->getInstrument();
 #endif
-    
+
+    // Thru filtering is done at the sequencer for the actual sound
+    // output, but here we need both filtered (for OUT display) and
+    // unfiltered (for insertable note callbacks) compositions, so
+    // we've received the unfiltered copy and will filter here
     Rosegarden::MappedComposition tempMC =
 	applyFiltering(mC,
 		       Rosegarden::MappedEvent::MappedEventType(
 			   m_doc->getStudio().getMIDIThruFilter()));
     
-    Rosegarden::MappedComposition retMC;
+//!!!    Rosegarden::MappedComposition retMC;
     
     // send all events to the MIDI in label
     //
@@ -891,9 +898,9 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 	}
 	
 #ifdef HAVE_ALSA
-	(*i)->setInstrument(id);
+//!!!	(*i)->setInstrument(id);
 #endif
-	retMC.insert(new Rosegarden::MappedEvent(*i));
+//!!!	retMC.insert(new Rosegarden::MappedEvent(*i));
     }
     
 #ifdef HAVE_ALSA
@@ -901,11 +908,11 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
     // the moment.  aRts automatically does MIDI through,
     // this does it to the currently selected instrument.
     //
-    showVisuals(retMC);
+//!!!    showVisuals(retMC);
     
     // Filter
     //
-    Rosegarden::StudioControl::sendMappedComposition(retMC);
+//!!!    Rosegarden::StudioControl::sendMappedComposition(retMC);
     
 #endif 
     
@@ -1658,6 +1665,12 @@ void SequenceManager::metronomeChanged(const Composition *)
     } else {
 	m_controlBlockMmapper->updateMetronomeForRecord();
     }
+}
+
+void SequenceManager::filtersChanged(Rosegarden::MidiFilter thruFilter,
+				     Rosegarden::MidiFilter recordFilter)
+{
+    m_controlBlockMmapper->updateMidiFilters(thruFilter, recordFilter);
 }
 
 void SequenceManager::soloChanged(const Composition *, bool solo, TrackId selectedTrack)

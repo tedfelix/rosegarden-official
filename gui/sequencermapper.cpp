@@ -70,7 +70,9 @@ SequencerMapper::map()
     }
 
     m_mmappedSize =
-	sizeof(Rosegarden::RealTime) + sizeof(bool) +
+	sizeof(Rosegarden::RealTime) +
+	sizeof(unsigned long) +
+	sizeof(bool) +
 	sizeof(Rosegarden::MappedEvent);
 
     m_mmappedBuffer = (long*)::mmap(0, m_mmappedSize, PROT_READ, MAP_SHARED, m_fd, 0);
@@ -104,13 +106,25 @@ SequencerMapper::getPositionPointer() const
 bool
 SequencerMapper::getVisual(Rosegarden::MappedEvent &ev) const
 {
+    static unsigned long eventIndex = 0;
+
     char *buf = (char *)m_mmappedBuffer;
     buf += sizeof(Rosegarden::RealTime);
+
+    unsigned long *eventIndexPtr = (unsigned long *)buf;
+    buf += sizeof(unsigned long);
 
     bool haveEvent = *(bool *)buf;
     buf += sizeof(bool);
 
-    if (haveEvent) ev = *(Rosegarden::MappedEvent *)buf;
-    return haveEvent;
+    if (!haveEvent) {
+	return false;
+    } else {
+	unsigned long thisEventIndex = *eventIndexPtr;
+	if (thisEventIndex == eventIndex) return false;
+	ev = *(Rosegarden::MappedEvent *)buf;
+	eventIndex = thisEventIndex;
+	return true;
+    }
 }
 

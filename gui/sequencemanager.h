@@ -214,6 +214,10 @@ public:
     /// for the gui to call to indicate that the metronome needs to be remapped
     void metronomeChanged(Rosegarden::InstrumentId id, bool regenerateTicks);
 
+    /// for the gui to call to indicate that a MIDI filter needs to be remapped
+    void filtersChanged(Rosegarden::MidiFilter thruFilter,
+			Rosegarden::MidiFilter recordFilter);
+
     /// Return the current sequencer memory mapped file
     SequencerMapper* getSequencerMapper() { return m_sequencerMapper; }
 
