@@ -457,7 +457,7 @@ public slots:
     /**
      * change the resolution of the segment display
      */
-    void slotChangeTimeResolution();
+    //void slotChangeTimeResolution();
 
     /**
      * edit all tracks at once
@@ -523,6 +523,11 @@ public slots:
      * to Transport status
      */
     void slotToggleMetronome();
+
+    /*
+     * Toggle the solo mode
+     */
+    void slotToggleSolo();
 
 
     /**

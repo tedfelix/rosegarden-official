@@ -1,19 +1,13 @@
 0.2 TO-DO for rwb
 -----------------
-updated 21.03.2001
+updated 25.03.2001
 
 Currently looking at:
 
 
-o Saving Studio
-
 o Looping marker set from file load/top level - Looping
   set from Clients - Looping BUG crashing sequencer
   Looping memory
-
-o Metronome Channel
-
-o Solo
 
 o Sharing keyboard accelerators cleanly across all child windows
 
@@ -29,11 +23,6 @@ o Latency dialog
 
 o Segment paramters and modifiers - looping of Segments, quantisation
   [GETTING THERE]
-
-o Instrument display - aRTS environment, MIDI/Audio assignable
-  parameters [GETTING THERE]
-
-o File writing - lots need writing out, Device, Studio etc.
 
 
 Lower priority pending
@@ -58,9 +47,22 @@ o Audio noise eliminator - recording
 
 o Audio output VU meters
 
+Completed POST 0.1.4
+====================
+- Saving the Studio to XML [DONE]
+
+- Solo [DONE]
+
+- Metronome Channel/Instrument [DONE]
+
+
+--
 
 Completed for 0.1.4
 ===================
+
+- Instrument display - aRTS environment, MIDI/Audio assignable
+  parameters [DONE]
 
 - autoload file, first pass [DONE]
 

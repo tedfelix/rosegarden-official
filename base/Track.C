@@ -44,7 +44,7 @@ Track::Track():
 
 Track::Track(TrackId id,
              InstrumentId instrument,
-             unsigned int position,
+             TrackId position,
              const std::string &label,
              bool muted):
    m_id(id),

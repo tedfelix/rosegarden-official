@@ -254,10 +254,12 @@ void RosegardenGUIApp::setupActions()
                               actionCollection(), "join");
     action->setExclusiveGroup("segmenttools");
 
+    /*
     new KAction(i18n("Change &Time Resolution..."), 
                 0,
                 this, SLOT(slotChangeTimeResolution()),
                 actionCollection(), "change_time_res");
+                */
 
     new KAction(i18n("&Score Editor"),
                 0,
@@ -380,6 +382,10 @@ void RosegardenGUIApp::setupActions()
     connect((QObject *)m_transport->MetronomeButton,
             SIGNAL(released()),
             SLOT(slotToggleMetronome()));
+            
+    connect((QObject *)m_transport->SoloButton,
+            SIGNAL(released()),
+            SLOT(slotToggleSolo()));
             
     connect((QObject *) m_transport->TimeDisplayButton,
              SIGNAL(released()),
@@ -1143,6 +1149,7 @@ void GetTimeResDialog::setInitialTimeRes(unsigned int v)
 
 
 
+/*
 void RosegardenGUIApp::slotChangeTimeResolution()
 {
     GetTimeResDialog *dialog = new GetTimeResDialog(this);
@@ -1156,6 +1163,7 @@ void RosegardenGUIApp::slotChangeTimeResolution()
     }
     
 }
+*/
 
 
 void RosegardenGUIApp::slotImportMIDI()
@@ -1840,5 +1848,14 @@ bool RosegardenGUIApp::performAutoload()
 }
 
 
+
+// Just set the solo value in the Composition equal to the state
+// of the button
+//
+void RosegardenGUIApp::slotToggleSolo()
+{
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotToggleSolo" << std::endl;
+    m_doc->getComposition().setSolo(m_transport->SoloButton->isOn());
+}
 
 

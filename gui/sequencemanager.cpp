@@ -108,6 +108,10 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
         if (track->isMuted())
             continue;
 
+        // If soloing then skip until we get the solo track
+        if (comp.isSolo() && track->getID() != comp.getSoloTrack())
+            continue;
+
         // Skip the Segment if it starts too late to be of
         // interest to our slice.
         if (segmentStartTime > sliceEndElapsed)

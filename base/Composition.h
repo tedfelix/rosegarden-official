@@ -51,7 +51,7 @@ public:
     typedef segmentcontainer::iterator iterator;
     typedef segmentcontainer::const_iterator const_iterator;
 
-    typedef std::map<unsigned int, Track*> trackcontainer;
+    typedef std::map<TrackId, Track*> trackcontainer;
     typedef trackcontainer::iterator trackiterator;
 
     Composition();
@@ -103,22 +103,35 @@ public:
     //
     //  INSTRUMENT & TRACK
 
-    Track* getTrackByIndex(const unsigned int &track) {
+    Track* getTrackByIndex(TrackId track) {
 	return m_tracks[track];
     }
 
-    Track* getTrackByPosition(int position);
+    Track* getTrackByPosition(TrackId position);
  
     trackcontainer* getTracks() {
 	return &m_tracks;
     }
 
-    int getRecordTrack() const {
+    TrackId getRecordTrack() const {
 	return m_recordTrack;
     }
-    void setRecordTrack(const int &recordTrack) {
+    void setRecordTrack(TrackId recordTrack) {
 	m_recordTrack = recordTrack;
     }
+
+    // Get and set Solo Track
+    //
+    TrackId getSoloTrack() const {
+        return m_soloTrack;
+    }
+
+    void setSoloTrack(TrackId track) { m_soloTrack = track; }
+
+    // Are we soloing a Track?
+    //
+    bool isSolo() const { return m_solo; }
+    void setSolo(bool value) { m_solo = value; }
 
     int getNbTracks() const {
 	return m_tracks.size();
@@ -563,7 +576,15 @@ protected:
 
     trackcontainer m_tracks;
     segmentcontainer m_segments;
-    int m_recordTrack;
+
+    // The track we can record on
+    //
+    Rosegarden::TrackId m_recordTrack;
+
+    // Are we soloing and if so which Track?
+    //
+    bool                m_solo;
+    Rosegarden::TrackId m_soloTrack;
 
     /// Contains time signature events
     mutable ReferenceSegment m_timeSigSegment;

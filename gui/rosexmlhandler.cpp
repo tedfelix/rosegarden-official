@@ -239,7 +239,6 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         // set Segment
         m_section = InComposition;
 
-        int track = -1, startTime = 0;
         // Get and set the record track
         //
         int recordTrack = -1;
@@ -264,7 +263,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
         // Get and (eventually) set the tempo
         //
-        double tempo;
+        double tempo = 120.0;
         QString tempoStr = atts.value("defaultTempo");
         if (tempoStr) {
             tempo = tempoStr.toDouble();
@@ -290,6 +289,15 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             m_composition.setLoopEnd(loopEnd);
         }
 
+        QString soloTrackStr = atts.value("solo");
+        if (soloTrackStr)
+        {
+            Rosegarden::TrackId soloTrack =
+                (Rosegarden::TrackId)soloTrackStr.toInt();
+
+            m_composition.setSoloTrack(soloTrack);
+        }
+
     } else if (lcName == "track") {
 
         if (m_inComposition == false)
@@ -302,7 +310,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         int position = -1;
         int instrument = -1;
         std::string label;
-        bool muted;
+        bool muted = false;
 
         QString trackNbStr = atts.value("id");
         if (trackNbStr) {

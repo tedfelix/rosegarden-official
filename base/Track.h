@@ -38,15 +38,15 @@ namespace Rosegarden
 typedef unsigned int TrackId;
 
 /**
- * A Track contains information pertaining to a graphical
- * track on the sequencer.  This class is basically an
- * abstract concept (not an abstract class) which has no
- * dependency upon a specific system or sound hardware.
- * A Track is owned by a Composition and enhances its
- * relationships with Segments.   A Segment can only
- * exist on a Track.
+ * A Track represents a line on the SegmentCanvas on the
+ * Rosegarden GUI.  A Track is owned by a Composition and
+ * has reference to an Instrument from which the playback
+ * characteristics of the Track can be derived.  A Track
+ * has no type itself - the type comes only from the
+ * Instrument relationship.
  *
  */
+
 class Track : public XmlExportable
 {
 
@@ -54,23 +54,26 @@ public:
     Track();
     Track(TrackId id,
           InstrumentId instrument, 
-          unsigned int position,
+          TrackId position,
           const std::string &label,
           bool muted);
 
     ~Track();
 
+    void setID(TrackId id) { m_id = id; }
     TrackId getID() const { return m_id; }
+
+    void setMuted(bool muted) { m_muted = muted; }
     bool isMuted() { return m_muted; }
-    int getPosition() { return m_position; }
-    InstrumentId getInstrument() { return m_instrument; }
+
+    void setPosition(TrackId position) { m_position = position; }
+    TrackId getPosition() { return m_position; }
+
+    void setLabel(const std::string &label) { m_label = label; }
     std::string const getLabel() { return m_label; }
 
-    void setID(const int &id) { m_id = id; }
-    void setMuted(const bool& muted) { m_muted = muted; }
-    void setPosition(const int &position) { m_position = position; }
-    void setLabel(const std::string &label) { m_label = label; }
-    void setInstrument(const int &instrument) { m_instrument = instrument; }
+    void setInstrument(InstrumentId instrument) { m_instrument = instrument; }
+    InstrumentId getInstrument() { return m_instrument; }
 
     // Implementation of virtual
     //
@@ -81,7 +84,7 @@ private:
     TrackId        m_id;
     bool           m_muted;
     std::string    m_label;
-    int            m_position;
+    TrackId        m_position;  // we can use TrackId for position
     InstrumentId   m_instrument;
 
 };

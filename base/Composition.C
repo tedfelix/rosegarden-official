@@ -197,6 +197,8 @@ Composition::ReferenceSegment::findNearestRealTime(RealTime t)
 
 Composition::Composition() :
     m_recordTrack(0),
+    m_solo(false),   // default is not soloing
+    m_soloTrack(0),
     m_timeSigSegment(TimeSignature::EventType),
     m_tempoSegment(TempoEventType),
     m_basicQuantizer(Quantizer::RawEventData, "BasicQ"),
@@ -850,6 +852,11 @@ std::string Composition::toXmlString()
         composition << "\" loopend=\"" << m_loopEnd;
     }
 
+    // Add the Solo if set
+    //
+    if (m_solo)
+        composition << "\" solo=\"" << m_soloTrack;
+
     composition << "\">" << endl << endl;
 
     composition << endl;
@@ -917,7 +924,7 @@ Composition::clearTracks()
 }
 
 Track*
-Composition::getTrackByPosition(int position)
+Composition::getTrackByPosition(TrackId position)
 {
     trackiterator it = m_tracks.begin();
 

@@ -258,6 +258,10 @@ void RosegardenGUIView::slotSelectTrackSegments(int trackId)
                 comp.getTrackByIndex(trackId)->getInstrument());
 
     m_instrumentParameterBox->useInstrument(instrument);
+
+    // Store the selected Track in the Composition in case
+    // we need to Solo with it
+    comp.setSoloTrack(trackId);
 }
 
 // Show a segment as it records

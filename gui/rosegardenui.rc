@@ -33,7 +33,6 @@
         <Action name="stop"/> 
         <Action name="fast_forward"/> 
         <Action name="rewind"/> 
-	<Action name="change_time_res"/>
   </Menu>
   <Menu  name="settings"><text>&amp;Settings</text>
          <Action name="show_tracks_toolbar"        append="show_merge" />
