@@ -28,8 +28,10 @@
 class ViewElementsManager
 {
 public: 
-    ViewElementsManager(EventList&);
+    ViewElementsManager(Composition&);
     ~ViewElementsManager();
+
+    bool setCurrentTrack(unsigned int trackNb);
 
     NotationElementList* notationElementList(EventList::iterator from,
                                              EventList::iterator to);
@@ -40,7 +42,8 @@ public:
 
 protected:
 
-    EventList           &m_eventList;
+    Composition         &m_composition;
+    EventList           *m_currentTrack;
     NotationElementList *m_notationElements;
     
 };

@@ -104,7 +104,9 @@ Event::timeT
 RestSplitter::m_baseRestDuration = 384; // whole note rest
 
 
-NotationView::NotationView(RosegardenGUIDoc* doc, QWidget *parent)
+NotationView::NotationView(RosegardenGUIDoc* doc,
+                           unsigned int trackNb,
+                           QWidget *parent)
     : KMainWindow(parent),
       m_config(kapp->config()),
       m_document(doc),
@@ -133,42 +135,55 @@ NotationView::NotationView(RosegardenGUIDoc* doc, QWidget *parent)
 
     readOptions();
 
-    if (doc) {
-
-        setCaption(doc->getTitle());
-
-        EventList &allEvents(doc->getEvents());
-
-        m_viewElementsManager = doc->getViewElementsManager();
-
-        m_notationElements = m_viewElementsManager->notationElementList(allEvents.begin(),
-                                                                        allEvents.end());
-
-        m_mainStaff->move(20, 15);
-        m_mainStaff->show();
-
-        m_vlayout = new NotationVLayout(*m_mainStaff);
-        m_hlayout = new NotationHLayout(*m_notationElements,
-                                        (Staff::noteWidth + 2) * 4, // this shouldn't be constant
-                                        4, // 4 beats per bar
-                                        40);
-
-        if (applyLayout()) {
-
-            // Show all elements in the staff
-//             kdDebug(KDEBUG_AREA) << "Elements after layout : "
-//                                  << *m_notationElements << endl;
-            showElements(m_notationElements->begin(), m_notationElements->end(), m_mainStaff);
-            showBars(m_notationElements->begin(), m_notationElements->end());
-
-        } else {
-            KMessageBox::sorry(0, "Couldn't apply layout");
-        }
-
-    } else {
+    if (!doc) {
         kdDebug(KDEBUG_AREA) << "NotationView ctor : getDocument() returned 0" << endl;
         KMessageBox::sorry(0, "No document");
+        throw -1;
     }
+
+    setCaption(QString("%1 - Track #%2")
+               .arg(trackNb)
+               .arg(doc->getTitle()));
+
+    EventList* t = doc->getTrack(trackNb);
+
+    if (!t) {
+        kdDebug(KDEBUG_AREA) << "NotationView ctor : getTrack("
+                             << trackNb
+                             << ") returned 0" << endl;
+        KMessageBox::sorry(0, QString("No track %1").arg(trackNb));
+            
+        throw -1;
+    }
+        
+    EventList &allEvents = *t;
+
+    m_viewElementsManager = doc->getViewElementsManager();
+
+    m_notationElements = m_viewElementsManager->notationElementList(allEvents.begin(),
+                                                                    allEvents.end());
+
+    m_mainStaff->move(20, 15);
+    m_mainStaff->show();
+
+    m_vlayout = new NotationVLayout(*m_mainStaff);
+    m_hlayout = new NotationHLayout(*m_notationElements,
+                                    (Staff::noteWidth + 2) * 4, // this shouldn't be constant
+                                    4, // 4 beats per bar
+                                    40);
+
+    if (applyLayout()) {
+
+        // Show all elements in the staff
+        //             kdDebug(KDEBUG_AREA) << "Elements after layout : "
+        //                                  << *m_notationElements << endl;
+        showElements(m_notationElements->begin(), m_notationElements->end(), m_mainStaff);
+        showBars(m_notationElements->begin(), m_notationElements->end());
+
+    } else {
+        KMessageBox::sorry(0, "Couldn't apply layout");
+    }
+
 }
 
 NotationView::~NotationView()

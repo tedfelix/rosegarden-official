@@ -100,8 +100,12 @@ public:
     /** deletes the document views */
     void deleteViews();
 
-    EventList&       getEvents()       { return m_events; }
-    const EventList& getEvents() const { return m_events; }
+    Composition&       getComposition()       { return m_composition; }
+    const Composition& getComposition() const { return m_composition; }
+
+    EventList*         getTrack(int trackNb)        { return m_composition[trackNb]; }
+    const EventList*   getTrack(int trackNb) const  { return m_composition[trackNb]; }
+        
 
     ViewElementsManager*       getViewElementsManager()       { return m_viewElementsManager; }
     const ViewElementsManager* getViewElementsManager() const { return m_viewElementsManager; }
@@ -136,7 +140,7 @@ private:
     /** the document's data : the events (or elements) constituting
      * the document
      */
-    EventList m_events;
+    Composition m_composition;
 
     ViewElementsManager *m_viewElementsManager;
 

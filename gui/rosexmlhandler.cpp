@@ -19,8 +19,9 @@
 #include "rosexmlhandler.h"
 #include "xmlstorableevent.h"
 
-RoseXmlHandler::RoseXmlHandler(EventList &events)
-    : m_events(events),
+RoseXmlHandler::RoseXmlHandler(Composition &composition)
+    : m_composition(composition),
+      m_currentTrack(0),
       m_currentTime(0),
       m_groupDuration(0),
       m_inGroup(false)
@@ -47,6 +48,13 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
     if (lcName == "rosegarden-data") {
         // set to some state which says it's ok to parse the rest
+
+    } else if (lcName == "track") {
+        if (m_currentTrack)
+            m_composition.addTrack(m_currentTrack);
+    
+        m_currentTrack = new EventList;
+
     } else if (lcName == "event") {
 
         XMLStorableEvent *newEvent = new XMLStorableEvent(atts);
@@ -66,10 +74,8 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             m_groupDuration = newEvent->duration();
         }
         
-        m_events.insert(newEvent);
+        m_currentTrack->insert(newEvent);
 
-    } else if (lcName == "track") {
-        // TODO
     } else if (lcName == "group") {
 
         m_inGroup = true;

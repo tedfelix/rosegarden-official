@@ -48,7 +48,7 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent, const char *name)
 
     pViewList->setAutoDelete(true);
 
-    m_viewElementsManager = new ViewElementsManager(m_events);
+    m_viewElementsManager = new ViewElementsManager(m_composition);
 }
 
 RosegardenGUIDoc::~RosegardenGUIDoc()
@@ -196,7 +196,7 @@ bool RosegardenGUIDoc::openDocument(const QString &filename,
         return false;
     }
 
-    m_viewElementsManager = new ViewElementsManager(m_events);
+    m_viewElementsManager = new ViewElementsManager(m_composition);
 
     return true;
 }
@@ -220,37 +220,47 @@ bool RosegardenGUIDoc::saveDocument(const QString &filename,
 
     // output all elements
     //
-    //bool inGroup = false;
-    
-    for(EventList::iterator i = m_events.begin();
-        i != m_events.end(); ++i) {
+    // Iterate on tracks
+    for(Composition::iterator trks = m_composition.begin();
+        trks != m_composition.end(); ++trks) {
 
-        EventList::iterator nextEl = i;
-        ++nextEl;
+        fileStream << "<Track>" << endl; //--------------------------
 
-        if (nextEl != m_events.end()) {
+        for(EventList::iterator i = (*trks)->begin();
+            i != (*trks)->end(); ++i) {
 
-            Event::timeT absTime = (*i)->absoluteTime();
+            EventList::iterator nextEl = i;
+            ++nextEl;
+
+            if (nextEl != (*trks)->end()) {
+
+                Event::timeT absTime = (*i)->absoluteTime();
             
-            if ((*nextEl)->absoluteTime() == absTime) {
-                // group elements
-                //
-                fileStream << "<Group>" << endl;
-                while ((*i)->absoluteTime() == absTime) {
-                    fileStream << '\t'
-                               << XMLStorableEvent::toXMLString(*(*i))
-                               << endl;
-                    ++i;
+                if ((*nextEl)->absoluteTime() == absTime) {
+                    // group elements
+                    //
+                    fileStream << "<Group>" << endl; //------
+
+                    while ((*i)->absoluteTime() == absTime) {
+                        fileStream << '\t'
+                                   << XMLStorableEvent::toXMLString(*(*i))
+                                   << endl;
+                        ++i;
+                    }
+
+                    fileStream << "</Group>" << endl; //-----
+
+                    if (i == (*trks)->end()) break;
                 }
-                fileStream << "</Group>" << endl;
-
-                if (i == m_events.end()) break;
             }
-        }
         
-        fileStream << XMLStorableEvent::toXMLString(*(*i)) << endl;
-    }
+            fileStream << XMLStorableEvent::toXMLString(*(*i)) << endl;
+        }
 
+        fileStream << "</Track>" << endl; //-------------------------
+
+    }
+    
     // close the top-level XML tag
     //
     fileStream << "</rosegarden-data>\n";
@@ -268,12 +278,20 @@ void RosegardenGUIDoc::deleteContents()
 
     deleteViews();
 
-    for(EventList::iterator i = m_events.begin();
-        i != m_events.end(); ++i) {
-        delete *i;
-    }
+    for(Composition::iterator trks = m_composition.begin();
+        trks != m_composition.end(); ++trks) {
 
-    m_events.clear();
+        for(EventList::iterator i = (*trks)->begin();
+            i != (*trks)->end(); ++i) {
+            delete *i;
+        }
+
+        (*trks)->clear();
+
+    }
+    
+    m_composition.clear();
+
     delete m_viewElementsManager;
     m_viewElementsManager = 0;
 }
@@ -301,7 +319,7 @@ bool
 RosegardenGUIDoc::xmlParse(QFile &file)
 {
     // parse xml file
-    RoseXmlHandler handler(m_events);
+    RoseXmlHandler handler(m_composition);
 
     QXmlInputSource source(file);
     QXmlSimpleReader reader;

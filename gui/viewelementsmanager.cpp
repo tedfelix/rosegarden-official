@@ -22,15 +22,24 @@
 #include "viewelementsmanager.h"
 #include "notationelement.h"
 
-ViewElementsManager::ViewElementsManager(EventList &l)
-    : m_eventList(l),
+ViewElementsManager::ViewElementsManager(Composition &c)
+    : m_composition(c),
+      m_currentTrack(0),
       m_notationElements(0)
 {
+    setCurrentTrack(0);
 }
 
 ViewElementsManager::~ViewElementsManager()
 {
 }
+
+bool
+ViewElementsManager::setCurrentTrack(unsigned int trackNb)
+{
+    return (m_currentTrack = m_composition[trackNb]) != 0;
+}
+
 
 NotationElementList*
 ViewElementsManager::notationElementList(EventList::iterator from,
@@ -52,14 +61,14 @@ void
 ViewElementsManager::insert(NotationElement *e)
 {
     m_notationElements->insert(e);
-    m_eventList.insert(e->event());
+    m_currentTrack->insert(e->event());
 }
 
 void
 ViewElementsManager::erase(NotationElementList::iterator it)
 {
     pair<EventList::iterator, EventList::iterator> interval
-        = m_eventList.equal_range((*it)->event());
+        = m_currentTrack->equal_range((*it)->event());
 
     bool foundEvent = false;
 
@@ -72,7 +81,7 @@ ViewElementsManager::erase(NotationElementList::iterator it)
                                  << *(*it) << endl;
 
             delete *eIter;
-            m_eventList.erase(eIter);
+            m_currentTrack->erase(eIter);
             foundEvent = true;
             break;
         }

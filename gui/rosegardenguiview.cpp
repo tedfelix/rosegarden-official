@@ -25,21 +25,23 @@
 #include "rosegardenguiview.h"
 #include "rosegardenguidoc.h"
 #include "rosegardengui.h"
-
+#include "trackseditor.h"
 #include "notationview.h"
 
-RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
+RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     : QVBox(parent),
       m_notationView(0)
 {
-    new QLabel("environment view here", this);
-
-    if (getDocument()) {
+    QScrollView *scrollView = new QScrollView(this);
+    
+    scrollView->addChild(new TracksEditor(12, 50, this));
+    
+//     if (getDocument()) {
         
-        m_notationView = new NotationView(getDocument(), this);
+//         m_notationView = new NotationView(getDocument(), this);
 
-        m_notationView->show();
-    }
+//         m_notationView->show();
+//     }
 }
 
 

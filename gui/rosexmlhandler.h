@@ -22,13 +22,13 @@
 #include "Element2.h"
 
 /**Handler for the Rosegarden XML format
-
-  *@author Guillaume Laurent, Chris Cannam, Rich Bown
-  */
+ *
+ *@author Guillaume Laurent, Chris Cannam, Rich Bown
+ */
 
 class RoseXmlHandler : public QXmlDefaultHandler  {
 public:
-    RoseXmlHandler(EventList &events);
+    RoseXmlHandler(Composition &composition);
     virtual ~RoseXmlHandler();
 
     // return the error protocol if parsing failed
@@ -52,7 +52,8 @@ public:
     bool fatalError(const QXmlParseException& exception);
 
 protected:
-    EventList &m_events;
+    Composition &m_composition;
+    EventList *m_currentTrack;
 
     Event::timeT m_currentTime;
 
