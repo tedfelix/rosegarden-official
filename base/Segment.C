@@ -124,8 +124,6 @@ Segment::getEndMarkerTime() const
     }
 
     return endTime;
-
-    //!!! consider renaming Composition::getEndMarker to getEndMarkerTime
 }
 
 timeT
@@ -339,8 +337,6 @@ Segment::erase(iterator from, iterator to)
     // Not very efficient, but without an observer event for
     // multiple erase we can't do any better.
 
-    cerr << "Segment::erase(from, to)" << endl;
-
     for (Segment::iterator i = from; i != to; ) {
 
 	Segment::iterator j(i);
@@ -349,50 +345,12 @@ Segment::erase(iterator from, iterator to)
 	Event *e = *i;
 	assert(e);
 
-	cerr << "Erasing event " << e << endl;
-
 	std::multiset<Event*, Event::EventCmp>::erase(i);
-	cerr << "Notifying for event " << e << endl;
 	notifyRemove(e);
-	cerr << "Deleting event " << e << endl;
 	delete e;
 
 	i = j;
     }
-
-/*!!!
-
-    // We can't do this :
-    //
-    // for (Segment::iterator i = from; i != to; ++i) { ... erase(i); }
-    //
-    // because erasing an iterator invalidates it.
-
-    // So, gather the events which we'll have to delete
-    // call notifyRemove() for each of them,
-    // and finally call std::multiset<>::erase(from, to)
-
-    std::vector<Event *> toErase;
-
-    for (Segment::iterator i = from; i != to; ++i) {
-	cerr << "Erasing event " << *i << endl;
-
-	toErase.push_back(*i);
-    }
-
-    std::multiset<Event*, Event::EventCmp>::erase(from, to);
-
-    // notifyRemove is supposed to be called after the 
-    // event has been erased but before it's destroyed
-
-    for (std::vector<Event *>::iterator i = toErase.begin();
-	 i != toErase.end(); ++i) {
-	cerr << "Notifying for event " << *i << endl;
-	notifyRemove(*i);
-	cerr << "Deleting event " << *i << endl;
-	delete *i;
-    }
-*/
 
     if (startTime == m_startTime && begin() != end()) {
 	m_startTime = (*begin())->getAbsoluteTime();
@@ -469,8 +427,7 @@ Segment::getBarStartForTime(timeT t) const
 timeT
 Segment::getBarEndForTime(timeT t) const
 {
-    //!!! should use end marker time?
-    if (t > getEndTime()) t = getEndTime();
+    if (t > getEndMarkerTime()) t = getEndMarkerTime();
     return getComposition()->getBarEndForTime(t);
 }
 

@@ -278,13 +278,17 @@ NoteStyle::getNoteHeadCharName(Note::Type type)
 
     } else if (desc.shape == LevelOval) {
 
-	name = desc.filled ? NoteCharacterNames::UNKNOWN //!!!
-	                   : NoteCharacterNames::WHOLE_NOTE;
+	if (desc.filled) {
+	    kdDebug(KDEBUG_AREA) << "WARNING: NoteStyle::getNoteHeadCharName: No filled level oval head";
+	}
+	name = NoteCharacterNames::WHOLE_NOTE;
 	
     } else if (desc.shape == Breve) {
 
-	name = desc.filled ? NoteCharacterNames::UNKNOWN //!!!
-	                   : NoteCharacterNames::BREVE;
+	if (desc.filled) {
+	    kdDebug(KDEBUG_AREA) << "WARNING: NoteStyle::getNoteHeadCharName: No filled breve head";
+	}
+	name = NoteCharacterNames::BREVE;
 	
     } else if (desc.shape == Cross) {
 

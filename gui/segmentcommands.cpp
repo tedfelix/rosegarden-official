@@ -592,7 +592,7 @@ SegmentSplitCommand::execute()
 	Event *clefEvent = 0;
 	Event *keyEvent = 0;
 
-	// Copy the last occurence of clef and key
+	// Copy the last occurrence of clef and key
 	// from the left hand side of the split (nb. timesig events
 	// don't appear in segments, only in composition)
 	//
@@ -665,18 +665,6 @@ SegmentSplitCommand::execute()
 void
 SegmentSplitCommand::unexecute()
 {
-/*!!!
-    if (m_segment->getEndTime() < m_newSegment->getStartTime()) {
-	m_segment->fillWithRests(m_newSegment->getStartTime());
-    }
-
-    for (Segment::iterator it = m_newSegment->begin();
-	 it != m_newSegment->end(); ++it) {
-	m_segment->insert(new Event(**it));
-    }
-
-    m_segment->clearEndMarker();
-*/
     if (m_previousEndMarkerTime) {
 	m_segment->setEndMarkerTime(*m_previousEndMarkerTime);
 	delete m_previousEndMarkerTime;

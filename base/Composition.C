@@ -756,7 +756,6 @@ Composition::getElapsedTimeForRealTime(RealTime t) const
 		      (double)((*i)->get<Int>(TempoProperty)) / 60.0);
 
 #ifdef DEBUG_TEMPO_STUFF
-    //!!! temporary calculations of error
     static int doError = true;
     if (doError) {
 	doError = false;

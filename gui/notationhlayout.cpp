@@ -1148,9 +1148,6 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 	    kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): there's a time sig in this bar" << endl;
 	}
 
-//!!!	bool justSeenGraceNote = false;
-//	timeT graceNoteStart = 0;
-
         for (NotationElementList::iterator it = from; it != to; ++it) {
             
             NotationElement *el = (*it);
@@ -1170,26 +1167,9 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
 	    if (el->isNote()) {
 
-/*!!!		timeT graceNoteOffset = 0;
-
-		if ((*it)->isGrace()) {
-
-		    if (!justSeenGraceNote) {
-			graceNoteStart = (*it)->getAbsoluteTime();
-			justSeenGraceNote = true;
-		    }
-
-		} else if (justSeenGraceNote) {
-
-		    graceNoteOffset =
-			(*it)->getAbsoluteTime() - graceNoteStart;
-		    justSeenGraceNote = false;
-		}
-*/
 		// This modifies "it" and "tieMap"
 		delta = positionChord
-		    (staff, it, bdi, timeSignature, clef, key, tieMap,
-		     /*!!!	     graceNoteOffset */0, to);
+		    (staff, it, bdi, timeSignature, clef, key, tieMap, to);
 
 	    } else if (el->isRest()) {
 
@@ -1342,7 +1322,7 @@ NotationHLayout::positionChord(StaffType &staff,
 			       const BarDataList::iterator &bdi,
 			       const TimeSignature &timeSignature,
 			       const Clef &clef, const Key &key,
-			       TieMap &tieMap, timeT graceNoteOffset,
+			       TieMap &tieMap, 
 			       NotationElementList::iterator &to)
 {
     Chord chord(*staff.getViewElementList(), itr, m_legatoQuantizer,
@@ -1404,12 +1384,6 @@ NotationHLayout::positionChord(StaffType &staff,
 
 	NotationElement *note = *(chord[i]);
 	if (!note->isNote()) continue;
-	if (!note->isGrace() && graceNoteOffset > 0) {
-	    note->event()->setMaybe<Int>(m_properties.GRACE_NOTE_OFFSET,
-					 graceNoteOffset);
-	} else {
-	    note->event()->unset(m_properties.GRACE_NOTE_OFFSET);
-	}
 
 	Accidental acc = NoAccidental;
 	if (note->event()->get<String>(m_properties.DISPLAY_ACCIDENTAL, acc) &&

@@ -417,7 +417,6 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
         {
             outStream << "\">\n";
 
-//!!!            long currentGroup = -1;
 	    bool inChord = false;
 	    timeT chordStart = 0, chordDuration = 0;
 	    timeT expectedTime = segment->getStartTime();
@@ -425,51 +424,6 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
             for (Segment::iterator i = segment->begin();
                  i != segment->end(); ++i) {
 
-		//!!! sigh... the notation engine can now cope (sometimes)
-		// with overlapping and nested groups, so we're gonna have
-		// to lose this and save the raw beamed-group properties
-		// instead.
-/*!!!
-                long group;
-                if ((*i)->get<Int>(BEAMED_GROUP_ID, group)) {
-
-		    // We can't start a group in the middle of a
-		    // chord, as that would make for ill-formed XML if
-		    // the group ended outside the chord, which it
-		    // almost certainly would.  Besides, it'd be
-		    // meaningless musically.
-
-                    if (group != currentGroup && !inChord) {
-		    
-                        if (currentGroup != -1) outStream << "</group>" << endl;
-                        std::string type = (*i)->get<String>(BEAMED_GROUP_TYPE);
-                        outStream << "<group type=\"" << strtoqstr(type) << "\"";
-		        if (type == GROUP_TYPE_TUPLED) {
-			    outStream
-			        << " base=\""
-			        << (*i)->get<Int>(BEAMED_GROUP_TUPLET_BASE)
-			        << "\" untupled=\""
-			        << (*i)->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT)
-			        << "\" tupled=\""
-			        << (*i)->get<Int>(BEAMED_GROUP_TUPLED_COUNT)
-			        << "\"";
-		        }
-			        
-		        outStream << ">\n";
-                        currentGroup = group;
-                    }
-                } else if (currentGroup != -1) {
-
-		    // we hope this won't happen, but:
-		    if (inChord) {
-			outStream << "</chord><!-- ERROR -->\n";
-			inChord = false;
-		    }
-
-                    outStream << "</group>\n";
-                    currentGroup = -1;
-                }
-*/
 	        timeT absTime = (*i)->getAbsoluteTime();
 
                 Segment::iterator nextEl = i;
@@ -520,11 +474,6 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 	    if (inChord) {
 	        outStream << "</chord>\n";
 	    }
-/*!!!
-            if (currentGroup != -1) {
-                outStream << "</group>\n";
-            }
-*/
         }
 
         outStream << "</segment>\n"; //-------------------------

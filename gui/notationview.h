@@ -122,11 +122,6 @@ public:
     void setCurrentSelection(Rosegarden::EventSelection*);
 
     /**
-     * Test that the current selection is still valid, and cancel it if not
-     */
-//!!!    void checkCurrentSelection();
-
-    /**
      * Set the current event selection to a single event
      */
     void setSingleSelectedEvent(int staffNo,

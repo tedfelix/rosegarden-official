@@ -380,7 +380,7 @@ signals:
 
 private:
 
-    SegmentItem *findSegmentItem(Rosegarden::Segment *segment);
+    SegmentItem *findSegmentItem(Rosegarden::Segment *segment); // slow
 
     //--------------- Data members ---------------------------------
 

@@ -146,7 +146,6 @@ Quantizer::NoteQuantizer::quantize(int unit, int maxDots,
 
     //!!! We probably shouldn't quantize tuplets
 
-//!!!???    duration = UnitQuantizer().quantize(unit, maxDots, duration, 0, false);
     Note shortNote = Note::getNearestNote(duration, maxDots);
 
     timeT shortTime = shortNote.getDuration();
@@ -258,7 +257,7 @@ void
 Quantizer::fixQuantizedValues(Segment *s, Segment::iterator from,
 			      Segment::iterator to) const
 {
-    //!!! Twice as slow as it needs to be.
+    // Twice as slow as it needs to be.
 
     quantize(s, from, to);
 

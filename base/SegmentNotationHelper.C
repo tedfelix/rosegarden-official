@@ -677,7 +677,7 @@ SegmentNotationHelper::insertSomething(iterator i, int duration, int pitch,
     // inserting what the user asked for.
     // 
     // 3. If there are notes in the way of an inserted note, however,
-    // we split whenever "reasonable" and truncate our user's not if
+    // we split whenever "reasonable" and truncate our user's note if
     // not reasonable to split.  We can't always give users the Right
     // Thing here, so to hell with them.
 
@@ -1022,6 +1022,14 @@ SegmentNotationHelper::makeBeamedGroupAux(iterator from, iterator to,
     int groupId = segment().getNextId();
     
     for (iterator i = from; i != to; ++i) {
+
+	// don't permit ourselves to change the type of an
+	// already-grouped event here
+	if ((*i)->has(BEAMED_GROUP_TYPE) &&
+	    (*i)->get<String>(BEAMED_GROUP_TYPE) != GROUP_TYPE_BEAMED) {
+	    continue;
+	}
+
         (*i)->set<Int>(BEAMED_GROUP_ID, groupId);
         (*i)->set<String>(BEAMED_GROUP_TYPE, type);
     }

@@ -62,7 +62,6 @@ public:
     const Rosegarden::PropertyName SLUR_ABOVE;
     const Rosegarden::PropertyName SLUR_Y_DELTA;
     const Rosegarden::PropertyName SLUR_LENGTH;
-    const Rosegarden::PropertyName GRACE_NOTE_OFFSET;
     const Rosegarden::PropertyName NOTE_TYPE;
     const Rosegarden::PropertyName NOTE_DOTS;
 

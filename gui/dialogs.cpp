@@ -2046,19 +2046,19 @@ QuantizeDialog::slotTypeChanged(int index)
 void
 QuantizeDialog::slotUnitChanged(int)
 {
-    //...
+    // not used
 }
 
 void
 QuantizeDialog::slotDotsChanged(int)
 {
-    //...
+    // not used
 }
 
 void
 QuantizeDialog::slotLegatoChanged()
 {
-    //...
+    // not used
 }
 
 

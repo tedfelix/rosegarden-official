@@ -916,7 +916,8 @@ SegmentCanvas::addToSelection(Segment *segment)
 SegmentItem*
 SegmentCanvas::findSegmentItem(Rosegarden::Segment *segment)
 {
-    //!!! slow.
+    // slow
+
     QCanvasItemList l = canvas()->allItems();
     
     if (l.count()) {

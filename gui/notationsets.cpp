@@ -81,7 +81,6 @@ NotationSet::initialise()
     for (i = j = m_baseIterator; i != m_nel.begin() && test(--j); i = j) {
         if (sample(j)) m_initial = j;
     }
-//!!!    m_initial = i;
 
     j = m_baseIterator;
 
@@ -91,7 +90,6 @@ NotationSet::initialise()
     for (i = j = m_baseIterator; ++j != m_nel.end() && test(j); i = j) {
         if (sample(j)) m_final = j;
     }
-//!!!    m_final = i;
 }
 
 bool
@@ -425,30 +423,8 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
         (BEAMED_GROUP_ID, m_groupNo)) m_groupNo = -1;
 
     initialise();
-    /*!!!
-    if ((i = getInitialElement()) != getList().end()) {
 
-	kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: examining group type" << endl;
-
-        try {
-            std::string t = (*i)->event()->get<String>(BEAMED_GROUP_TYPE);
-
-	    kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: type is \"" << t << "\"" << endl;
-
-            if (t == GROUP_TYPE_BEAMED) {
-                m_type = Beamed;
-            } else if (t == GROUP_TYPE_TUPLED) {
-                m_type = Tupled;
-            } else if (t == GROUP_TYPE_GRACE) {
-                m_type = Grace;
-            } else {
-                kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: Warning: Unknown GroupType \"" << t << "\", defaulting to Beamed" << endl;
-            }
-        } catch (Rosegarden::Event::NoData) {
-            kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: Warning: No GroupType in grouped element, defaulting to Beamed" << endl;
-        }
-    }
-    */
+    /*
     kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: id is " << m_groupNo << endl;
     i = getInitialElement(); 
     while (i != getList().end()) {
@@ -459,7 +435,7 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
         if (i == getFinalElement()) break;
         ++i;
     }
-
+    */
 }
 
 NotationGroup::NotationGroup(const NotationElementList &nel,
@@ -495,12 +471,6 @@ bool NotationGroup::test(const NELIterator &i)
     
     return ((*i)->getAbsoluteTime() >= m_barRange.first &&
 	    (*i)->getAbsoluteTime() <  m_barRange.second);
-
-/*!!!
-    long n;
-    return ((*i)->event()->get<Rosegarden::Int>
-            (BEAMED_GROUP_ID, n) && n == m_groupNo);
-*/
 }
 
 bool
@@ -512,30 +482,23 @@ NotationGroup::sample(const NELIterator &i)
     }
     if (m_userSamples) m_final = i;
 
-    kdDebug(KDEBUG_AREA) << "NotationGroup::sample: element at " << (*i)->getAbsoluteTime() << endl;
+//    kdDebug(KDEBUG_AREA) << "NotationGroup::sample: element at " << (*i)->getAbsoluteTime() << endl;
 
-//!!!    if ((i = getInitialElement()) != getList().end()) {
+    try {
+	std::string t = (*i)->event()->get<String>(BEAMED_GROUP_TYPE);
 
-//!!!	kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: examining group type" << endl;
-
-        try {
-            std::string t = (*i)->event()->get<String>(BEAMED_GROUP_TYPE);
-
-//	    kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: type is \"" << t << "\"" << endl;
-
-            if (t == GROUP_TYPE_BEAMED) {
-                m_type = Beamed;
-            } else if (t == GROUP_TYPE_TUPLED) {
-                m_type = Tupled;
-            } else if (t == GROUP_TYPE_GRACE) {
-                m_type = Grace;
-            } else {
-                kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: Warning: Unknown GroupType \"" << t << "\", defaulting to Beamed" << endl;
-            }
-        } catch (Rosegarden::Event::NoData) {
-            kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: Warning: No GroupType in grouped element, defaulting to Beamed" << endl;
-        }
-//    }
+	if (t == GROUP_TYPE_BEAMED) {
+	    m_type = Beamed;
+	} else if (t == GROUP_TYPE_TUPLED) {
+	    m_type = Tupled;
+	} else if (t == GROUP_TYPE_GRACE) {
+	    m_type = Grace;
+	} else {
+	    kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: Warning: Unknown GroupType \"" << t << "\", defaulting to Beamed" << endl;
+	}
+    } catch (Rosegarden::Event::NoData) {
+	kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: Warning: No GroupType in grouped element, defaulting to Beamed" << endl;
+    }
 
     long n;
     if (!(*i)->event()->get<Rosegarden::Int>(BEAMED_GROUP_ID, n)) return false;
@@ -916,15 +879,6 @@ NotationGroup::applyBeam(NotationStaff &staff)
 	}
 
         if (i == finalNote || (*i)->getAbsoluteTime() > finalTime) break;
-/*!!!
-        // We could miss the final note, if it was actually in the
-        // middle of a chord (slightly pathological, but it happens
-        // easily enough).  So let's check the group id too:
-        long gid = -1;
-        if (!(*i)->event()->get<Int>(BEAMED_GROUP_ID, gid)
-            || gid != m_groupNo) break;
-*/
-
     }
 }
 
