@@ -147,7 +147,7 @@ void SegmentItem::makeFont()
 
 void SegmentItem::drawShape(QPainter& painter)
 {
-    QRect previewRect = painter.clipRegion().boundingRect();
+    QRect previewRect = painter.clipRegion(QPainter::CoordPainter).boundingRect();
     QCanvasRectangle::drawShape(painter);
     Rosegarden::RulerScale *rulerScale = m_snapGrid->getRulerScale();
 
@@ -212,6 +212,8 @@ void SegmentItem::drawShape(QPainter& painter)
 	    Segment::iterator end = m_segment->findTime(endTime);
 	    if (start == m_segment->end()) start = m_segment->begin();
 
+	    if (!painter.hasClipping())
+		kdDebug(KDEBUG_AREA) << "SegmentCanvas::drawShape: clipping is off " << endl;
 	    kdDebug(KDEBUG_AREA) << "SegmentCanvas::drawShape: rect is "
 				 << previewRect.width() << "x"
 				 << previewRect.height() << " at "
