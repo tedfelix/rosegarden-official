@@ -37,26 +37,26 @@ EXTRA_libRosegardenSequencer_la_SOURCES = MidiArts.cc \
 # Conditional compile for the different types of sound support.
 #
 #
-if NO_SOUND
+
 # No sound support (use DummyDriver)
-libRosegardenSequencer_la_SOURCES = SoundDriver.cpp \
+dummy_sound_libraries = SoundDriver.cpp \
                                     Sequencer.cpp
-else
+
 
 if HAVE_ALSA
-# ALSA 
-libRosegardenSequencer_la_SOURCES = AlsaDriver.cpp \
-                                    SoundDriver.cpp \
-                                    Sequencer.cpp
+alsa_sound_libraries = AlsaDriver.cpp
+arts_sound_libraries = 
+
 else
-# aRts, the default case
-libRosegardenSequencer_la_SOURCES = MidiArts.cc \
-                                    ArtsDriver.cpp \
-                                    MidiRecord.cpp \
-                                    SoundDriver.cpp \
-                                    Sequencer.cpp
+
+## aRts, the default case
+
+alsa_sound_libraries =
+arts_sound_libraries += MidiArts.cc ArtsDriver.cpp MidiRecord.cpp
+
 endif
-endif
+
+libRosegardenSequencer_la_SOURCES = $(dummy_sound_libraries) $(alsa_sound_libraries) $(arts_sound_libraries)
 
 libRosegardenSequencer_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -module -no-undefined
 libRosegardenSequencer_la_LIBADD   = -lartsmidi $(LIB_QT) -lsoundserver_idl libRosegardenSound.la ../base/libbase.la -lartsflow -lartsmodules @LIBASOUND@ @JACKLIB@
