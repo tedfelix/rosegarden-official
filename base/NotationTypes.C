@@ -744,8 +744,20 @@ void TimeSignature::getDurationListForInterval(DurationList &dlist,
     for (DurationList::iterator di = dlist.begin(); di != dlist.end(); ++di) {
 	d += *di;
     }
+
+    /*!!! Got this error just now:
+ERROR: TimeSignature::getDurationListForInterval: returned duration list sums to incorrect total:
+Desired duration is 96 with startOffset 96, returned duration list is: 
+-=> 96
+-=> 0
+-=> 96
+-=> 96
+-=> 0
+(end)
+*/
+
     if (d != duration) {
-	cerr << "ERROR: TimeSignature::getDurationListForInterval: returned duration list sums to incorrect total:" << endl << "Desired duration is " << duration << ", returned duration list is: " << endl;
+	cerr << "\n\nERROR: TimeSignature::getDurationListForInterval: returned duration list sums to incorrect total:" << endl << "Desired duration is " << duration << " with startOffset " << startOffset << ", returned duration list is: " << endl;
 	for (DurationList::iterator di = dlist.begin(); di != dlist.end(); ++di) {
 	    cerr << "-=> " << *di << endl;
 	}

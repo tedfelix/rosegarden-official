@@ -233,22 +233,25 @@ public:
      *
      */
     bool expandIntoTie(iterator from, iterator to,
-                       timeT baseDuration, iterator& lastInsertedEvent);
+                       timeT baseDuration, iterator& lastInsertedEvent,
+		       bool force = false);
+
 
     /**
-     * Expands (splits) the event pointed by i into an event of duration
-     * baseDuration + an event of duration R, with R being equal to the
-     * event's initial duration minus baseDuration
+     * Expands (splits) events in the same timeslice as that pointed
+     * to by i into tied events of duration baseDuration + events of
+     * duration R, with R being equal to the events' initial duration
+     * minus baseDuration
      *
      * This can work only if, given D = max(i->duration, baseDuration)
      * and d = min(i->duration, baseDuration)
      * one of the following is true :
      * D = 2*d
      * D = 4*d
-     * D = 4*d/3
+     * D = 4*d/3 
      */
     bool expandIntoTie(iterator i, timeT baseDuration,
-                       iterator& lastInsertedEvent);
+                       iterator& lastInsertedEvent, bool force = false);
 
     /**
      * Same as expandIntoTie(), but for an Event which hasn't
@@ -260,8 +263,13 @@ public:
      * Note that even if the expansion is not possible, the
      * Event will still be inserted.
      */
+
+    /*!!! Currently unused.
+
     bool expandAndInsertEvent(Event*, timeT baseDuration,
                               iterator& lastInsertedEvent);
+
+    */
 
     /**
      * Returns the range [start, end[ of events which are at absoluteTime
@@ -282,9 +290,10 @@ public:
 
     /**
      * Inserts a note, doing all the clever split/merge stuff as
-     * appropriate.  Requires up-to-date bar position list.  */
-
-    void insertNote(iterator position, Note note, int pitch);
+     * appropriate.  Requires up-to-date bar position list.
+     */
+//    void insertNote(iterator position, Note note, int pitch);
+    void insertNote(timeT absoluteTime, Note note, int pitch);
 
     /**
      * The compare class used by Composition
@@ -304,6 +313,23 @@ public:
     void removeObserver(TrackObserver *obs) { m_observers.erase (obs); }
 
 protected:
+
+    /**
+     * Collapse multiple consecutive rests into one, in preparation
+     * for insertion of a note (whose duration may exceed that of the
+     * first rest) at the given position.  The resulting rest event
+     * may have a duration that is not expressible as a single note
+     * type, and may therefore require splitting again after the
+     * insertion.
+     *
+     * Returns position at which the collapse ended (i.e. the first
+     * uncollapsed event)
+     */
+    iterator collapseRestsForInsert(iterator firstRest, timeT desiredDuration);
+    void insertNoteAux(iterator position, int duration, int pitch,
+		       bool tiedBack);
+    iterator insertSingleNote(iterator position, int duration, int pitch,
+			      bool tiedBack);
 
     static bool checkExpansionValid(timeT maxDuration, timeT minDuration);
 

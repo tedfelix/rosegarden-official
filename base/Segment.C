@@ -510,19 +510,27 @@ int Track::getNextGroupId() const
 
 bool Track::expandIntoTie(iterator i,
                           timeT baseDuration,
-                          iterator& lastInsertedEvent)
+                          iterator& lastInsertedEvent,
+			  bool force)
 {
     if (i == end()) return false;
 
+    iterator i2;
+    getTimeSlice((*i)->getAbsoluteTime(), i, i2);
+    return expandIntoTie(i, i2, baseDuration, lastInsertedEvent, force);
+
+/*
     iterator i2 = i;
     ++i2;
     
     return expandIntoTie(i, i2, baseDuration, lastInsertedEvent);
+*/
 }
 
 bool Track::expandIntoTie(iterator from, iterator to,
                           timeT baseDuration,
-                          iterator& lastInsertedEvent)
+                          iterator& lastInsertedEvent,
+			  bool force)
 {
     cerr << "Track::expandIntoTie(" << baseDuration << ")\n";
 
@@ -552,7 +560,7 @@ bool Track::expandIntoTie(iterator from, iterator to,
 
     // Check if we can perform the operation
     //
-    if (checkExpansionValid(maxDuration, minDuration)) {
+    if (force || checkExpansionValid(maxDuration, minDuration)) {
   
         long firstGroupId = -1;
         (void)(*from)->get<Int>(BeamedGroupIdPropertyName, firstGroupId);
@@ -578,6 +586,7 @@ bool Track::expandIntoTie(iterator from, iterator to,
 
             // set the initial event's duration to base
             (*i)->setDuration(minDuration);
+	    m_quantizer->quantizeByNote((*i));
             
             // Add 2nd event
             Event* ev = new Event(*(*i));
@@ -629,6 +638,8 @@ bool Track::expandIntoTie(iterator from, iterator to,
 
 
 }
+
+/*!!! Commented out while I establish whether we need something like this
 
 bool Track::expandAndInsertEvent(Event *baseEvent, timeT baseDuration,
                                  iterator& lastInsertedEvent)
@@ -696,6 +707,8 @@ bool Track::expandAndInsertEvent(Event *baseEvent, timeT baseDuration,
     
 }
 
+*/
+
 
 void Track::fillWithRests(timeT endTime)
 {
@@ -718,10 +731,45 @@ void Track::fillWithRests(timeT endTime)
 }
 
 
-void Track::insertNote(iterator position, Note note, int pitch)
+Track::iterator Track::collapseRestsForInsert(iterator i,
+					      timeT desiredDuration)
 {
-    int barNo = getBarNumber(position);
+    // collapse at most once, then recurse
 
+    if (i == end() || !(*i)->isa(Note::EventRestType)) return i;
+
+    timeT d = (*i)->getDuration();
+    iterator j = findContiguousNext(i);
+    if (d >= desiredDuration || j == end()) return ++i;
+
+    (*i)->setDuration(d + (*j)->getDuration());
+    m_quantizer->quantizeByNote(*i);
+    erase(j);
+
+    return collapseRestsForInsert(i, desiredDuration);
+}
+
+
+void Track::insertNote(timeT absoluteTime, Note note, int pitch)
+{
+
+    // Rules:
+    // 
+    // 1. If we hit a bar line in the course of the intended inserted
+    // note, we should split the note rather than make the bar the
+    // wrong length.  (Not implemented yet)
+    //
+    // 2. If there's nothing at the insertion point but rests (and
+    // enough of them to cover the entire duration of the new note),
+    // then we should insert the new note literally and remove rests
+    // as appropriate.  Rests should never prevent us from inserting
+    // what the user asked for.
+    // 
+    // 3. If there are notes in the way, however, we split whenever
+    // "reasonable" and truncate our user's not if not reasonable to
+    // split.  We can't always give users the Right Thing here, so
+    // to hell with them.
+    
     // Procedure:
     // 
     // First, if there is a rest at the insertion position, merge it
@@ -740,12 +788,98 @@ void Track::insertNote(iterator position, Note note, int pitch)
     // and recurse (to step 1) with both the first and the second part
     // in turn.
 
+    //!!! ... 4. Then we somehow need to recover correctness for the
+    // second half of any split note or rest...
+
     //... 
+
+    iterator i, j;
+    getTimeSlice(absoluteTime, i, j);
+
+    int barNo = getBarNumber(i);
+
+    iterator uncollapsed = collapseRestsForInsert(i, note.getDuration());
+
+    insertNoteAux(i, note.getDuration(), pitch, false);
+
 }
 
 
-    
-    
+void Track::insertNoteAux(iterator i, int duration, int pitch, bool tiedBack)
+{
+    timeT existingDuration;
+    while (i != end() && (existingDuration = (*i)->getDuration()) == 0) ++i;
+
+    if (i == end()) {
+	insertSingleNote(i, duration, pitch, tiedBack);
+	return;
+    }
+
+    cerr << "Track::insertNoteAux: asked to insert duration " << duration
+	 << " over this event:" << endl << (*i) << endl;
+
+    if (duration == existingDuration) {
+
+	insertSingleNote(i, duration, pitch, tiedBack);
+
+    } else if (duration < existingDuration) {
+
+	iterator dummy;
+	if (!expandIntoTie(i, duration, dummy,
+			   (*i)->isa(Note::EventRestType))) {
+	    // not reasonable to split existing note, to force new one
+	    // to same duration instead
+	    duration = (*i)->getDuration();
+	}
+	insertSingleNote(i, duration, pitch, tiedBack);
+
+    } else { // duration > existingDuration
+
+	bool needToSplit = true;
+
+	// special case: existing event is a rest, and it's at the end
+	// of the track
+	if ((*i)->isa(Note::EventRestType)) {
+	    iterator j;
+	    for (j = i; j != end(); ++j) {
+		if ((*j)->isa(Note::EventType)) break;
+	    }
+	    if (j == end()) needToSplit = false;
+	}
+	
+	if (needToSplit) {
+
+	    i = insertSingleNote(i, existingDuration, pitch, tiedBack);
+	    (*i)->set<Bool>(Note::TiedForwardPropertyName, true);
+
+	    iterator dummy;
+	    getTimeSlice((*i)->getAbsoluteTime() + existingDuration, i, dummy);
+
+	    insertNoteAux(i, duration - existingDuration, pitch, true);
+
+	} else {
+	    i = insertSingleNote(i, duration, pitch, tiedBack);
+	}
+    }
+}
+
+Track::iterator Track::insertSingleNote(iterator i, int duration, int pitch,
+					bool tiedBack)
+{
+    timeT time;
+    if (i == end()) {
+	time = getDuration();
+    } else {
+	time = (*i)->getAbsoluteTime();
+	if ((*i)->isa(Note::EventRestType)) erase(i);
+    }
+    Event *e = new Event(Note::EventType);
+    e->setAbsoluteTime(time);
+    e->setDuration(duration);
+    e->set<Int>("pitch", pitch);
+    if (tiedBack) e->set<Bool>(Note::TiedBackwardPropertyName, true);
+    return insert(e);
+}
 
 
 void Track::getTimeSlice(timeT absoluteTime, iterator &start, iterator &end)
