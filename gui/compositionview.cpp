@@ -702,6 +702,7 @@ void CompositionView::slotSelectSegments(const SegmentSelection &segments)
     for(SegmentSelection::iterator i = segments.begin(); i != segments.end(); ++i) {
         m_model->setSelected(CompositionItem(new CompositionItemImpl(**i, dummy)));
     }
+    updateContents();
 }
 
 SegmentSelector*
