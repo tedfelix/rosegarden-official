@@ -28,13 +28,13 @@ Post-0.1.3 task list (superseding older ones)
     until the Segment's moveable start/end markers are implemented.  Look
     into this.
 
- 8. Bring LoopRuler into NotationView
+ 8. Bring LoopRuler into NotationView [DONE apart from some work from G]
 
 8a. Rework SegmentItem so as to make its bar units align with LoopRuler [DONE]
 
-8b. Make signals work from LoopRuler in NotationView
+8b. Make signals work from LoopRuler in NotationView [DONE]
 
-8c. Ditch StaffRuler
+8c. Ditch StaffRuler [DONE]
 
  9. Extend Chord (in notationsets) so as to handle case where some notes
     at a given time have stem up and some have stem down (explicitly set

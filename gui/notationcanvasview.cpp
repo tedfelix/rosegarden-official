@@ -42,6 +42,15 @@ NotationCanvasView::NotationCanvasView(const LinedStaffManager<NotationElement> 
     m_legerLineOffset(false),
     m_positionTracking(false)
 {
+// -- switching mandolin-sonatina first staff to page mode:
+// default params (I think 16,100): render 1000ms position 1070ms
+// 64,100: 1000ms 980ms
+// 8, 100: 1140ms 1140ms
+// 128, 100: 1060ms 980ms
+// 256, 100: 1060ms 980ms / 930ms 920ms
+
+//    canvas()->retune(256, 100);
+
     viewport()->setMouseTracking(true);
 
     m_positionMarker = new QCanvasItemGroup(viewing);

@@ -621,12 +621,8 @@ NotationHLayout::reconcileBarsLinear()
 
 	StaffType *widest = getStaffWithWidestBar(barNo);
 
-	kdDebug(KDEBUG_AREA) << "NotationHLayout::reconcileBarsLinear: barNo " << barNo << ": widest staff is " << widest << std::endl;
-
 	if (!widest) break; // reached end of piece
 	double maxWidth = m_barData[widest][barNo].idealWidth;
-
-	kdDebug(KDEBUG_AREA) << "... and its width is " << maxWidth << endl;
 
 	// Now apply width to this bar on all staffs
 

@@ -203,20 +203,21 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     m_topBarButtons = new BarButtons
 	(m_hlayout, 25, false, m_topBarButtonsView);
-    m_topBarButtons->connectRulerToDocPointer(doc);
+
+    QObject::connect
+	(m_topBarButtons->getLoopRuler(),
+	 SIGNAL(setPointerPosition(Rosegarden::timeT)),
+	 this, SLOT(slotSetInsertCursorPosition(Rosegarden::timeT)));
+
+    m_topBarButtons->getLoopRuler()->setBackgroundColor
+	(RosegardenGUIColours::InsertCursorRuler);
+
     m_topBarButtons->setMinimumWidth(canvas()->width());
     m_topBarButtonsView->addChild(m_topBarButtons);
 
     m_bottomBarButtons = new BarButtons
 	(m_hlayout, 25, true, m_bottomBarButtonsView);
-
-    QObject::connect
-	(m_bottomBarButtons->getLoopRuler(),
-	 SIGNAL(setPointerPosition(Rosegarden::timeT)),
-	 this, SLOT(slotSetInsertCursorPosition(Rosegarden::timeT)));
-
-    m_bottomBarButtons->getLoopRuler()->setBackgroundColor
-	(RosegardenGUIColours::InsertCursorRuler);
+    m_bottomBarButtons->connectRulerToDocPointer(doc);
     m_bottomBarButtons->setMinimumWidth(canvas()->width());
     m_bottomBarButtonsView->addChild(m_bottomBarButtons);
 

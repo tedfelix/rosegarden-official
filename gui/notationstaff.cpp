@@ -286,6 +286,8 @@ NotationStaff::positionElements(timeT from, timeT to)
     kdDebug(KDEBUG_AREA) << "NotationStaff " << this << "::positionElements()" << endl;
 
     START_TIMING;
+
+    int elementsPositioned = 0, elementsRendered = 0; // diagnostic
     
     std::cerr << "positionElements: " << from << " -> " << to << std::endl;
 
@@ -395,6 +397,7 @@ NotationStaff::positionElements(timeT from, timeT to)
 //			     << " (selected = " << selected << ", canvas item selected = " << (*it)->isSelected() << ")" << endl;
 
 	    renderSingleElement(*it, currentClef, selected);
+	    ++elementsRendered;
 	} else {
 	    //kdDebug(KDEBUG_AREA) << "Positioning at " << (*it)->getAbsoluteTime()
 	    //<< " (selected = " << selected << ", canvas item selected = " << (*it)->isSelected() << ")" << endl;
@@ -402,8 +405,14 @@ NotationStaff::positionElements(timeT from, timeT to)
 	    LinedStaffCoords coords = getCanvasOffsetsForLayoutCoords
 		((*it)->getLayoutX(), (int)(*it)->getLayoutY());
 	    (*it)->reposition(coords.first, (double)coords.second);
+	    ++elementsPositioned;
 	}
     }
+
+    kdDebug(KDEBUG_AREA) << "NotationStaff::positionElements: "
+			 << elementsPositioned << " elements positioned, "
+			 << elementsRendered << " elements re-rendered"
+			 << endl;
 
     PRINT_ELAPSED("NotationStaff::positionElements");
 }
@@ -422,15 +431,15 @@ NotationStaff::elementNotMoved(NotationElement *elt)
 	(int)(elt->getCanvasY()) == (int)(coords.second);
 
 
-    if (!ok) {
-	kdDebug(KDEBUG_AREA)
-	    << "elementNotMoved: elt at " << elt->getAbsoluteTime() <<
-	    ", ok is " << ok << endl;
-	std::cerr << "(cf " << (int)(elt->getCanvasX()) << " vs "
-		  << (int)(coords.first) << ", "
-		  << (int)(elt->getCanvasY()) << " vs "
-		  << (int)(coords.second) << ")" << std::endl;
-    }
+//    if (!ok) {
+//	kdDebug(KDEBUG_AREA)
+//	    << "elementNotMoved: elt at " << elt->getAbsoluteTime() <<
+//	    ", ok is " << ok << endl;
+//	std::cerr << "(cf " << (int)(elt->getCanvasX()) << " vs "
+//		  << (int)(coords.first) << ", "
+//		  << (int)(elt->getCanvasY()) << " vs "
+//		  << (int)(coords.second) << ")" << std::endl;
+//    }
     return ok;
 }
 
@@ -444,13 +453,13 @@ NotationStaff::elementNotMovedInY(NotationElement *elt)
 
     bool ok = (int)(elt->getCanvasY()) == (int)(coords.second);
 
-    if (!ok) {
-	kdDebug(KDEBUG_AREA)
-	    << "elementNotMovedInY: elt at " << elt->getAbsoluteTime() <<
-	    ", ok is " << ok << endl;
-	std::cerr << "(cf " << (int)(elt->getCanvasY()) << " vs "
-		  << (int)(coords.second) << ")" << std::endl;
-    }
+//     if (!ok) {
+// 	kdDebug(KDEBUG_AREA)
+// 	    << "elementNotMovedInY: elt at " << elt->getAbsoluteTime() <<
+// 	    ", ok is " << ok << endl;
+// 	std::cerr << "(cf " << (int)(elt->getCanvasY()) << " vs "
+// 		  << (int)(coords.second) << ")" << std::endl;
+//     }
     return ok;
 }
 
