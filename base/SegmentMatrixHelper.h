@@ -37,6 +37,8 @@ public:
 
     iterator insertNote(Event*);
 
+    using SegmentNotationHelper::deleteNote;
+
 protected:
     iterator insertSingleSomething(iterator i, Event* e);
 
