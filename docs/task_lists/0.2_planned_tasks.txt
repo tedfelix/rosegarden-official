@@ -60,7 +60,7 @@ Work required to fix existing stuff
     insert/delete/resize tools
 
 11. Composition to become container for multiset of Segments
-    instead of just set?
+    instead of just set? - DONE
 
 
 
