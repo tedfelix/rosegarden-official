@@ -2,7 +2,7 @@ var zone;
 var zones = [
 { "v":"4", "name":"project home", "label":"project home",  "url":"http://www.all-day-breakfast.com/rosegarden/" },
 { "v":"4", "name":"tutorial home", "label":"tutorial home",  "url":"index.html" },
-{ "v":"4", "name":"using Rosegarden", "label":"using Rosegarden","url":"using-rosegarden/using-rosegarden.html" }
+{ "v":"4", "name":"using Rosegarden", "label":"Using Rosegarden","url":"using-rosegarden/toc.html" }
 ];
 function makeNav() {
   var url = document.location.toString();
