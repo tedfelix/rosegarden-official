@@ -101,7 +101,13 @@ public slots:
 
 private:
 
-    void drawButtons();
+    /**
+     *  buttons, starting at the specified index
+     */
+    void makeButtons();
+
+    QFrame* makeButton(unsigned int trackId);
+    
 
     //--------------- Data members ---------------------------------
 
@@ -128,6 +134,11 @@ private:
     // The height of the cells
     //
     int m_cellSize;
+
+    // gaps between elements
+    //
+    int m_borderGap;
+
     int m_lastID;
     int m_trackLabelWidth;
     int m_popupItem;
