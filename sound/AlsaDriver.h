@@ -87,6 +87,10 @@ public:
 #endif
     }
 
+    // Define here to catch this being reset
+    //
+    virtual void setMIDIClockInterval(RealTime interval);
+
     // initialise subsystems
     //
     void initialiseMidi();

@@ -1403,7 +1403,43 @@ AlsaDriver::resetPlayback(const RealTime &position)
 #ifdef HAVE_LIBJACK
     if (m_jackDriver) m_jackDriver->releaseAudioQueueLocks();
 #endif
+
+    
+    // Ensure we clear down output queue on reset - in the case of
+    // MIDI clock where we might have a long queue of events already
+    // posted.
+    //
+    snd_seq_remove_events_t *info;
+    snd_seq_remove_events_alloca(&info);
+    //snd_seq_remove_events_set_event_type(info, 
+    snd_seq_remove_events_set_condition(info, SND_SEQ_REMOVE_OUTPUT);
+    snd_seq_remove_events(m_midiHandle, info);
+
 }
+
+void 
+AlsaDriver::setMIDIClockInterval(RealTime interval)
+{
+    // Reset the value
+    //
+    SoundDriver::setMIDIClockInterval(interval);
+
+    // Remove all queued events (although we should filter this
+    // down to just the clock events.
+    //
+    snd_seq_remove_events_t *info;
+    snd_seq_remove_events_alloca(&info);
+    //snd_seq_remove_events_set_event_type(info, 
+    snd_seq_remove_events_set_condition(info, SND_SEQ_REMOVE_OUTPUT);
+    snd_seq_remove_events(m_midiHandle, info);
+
+    // Resend clocks at new interval
+    //
+    m_midiClockSendTime = RealTime::zeroTime;
+    sendMidiClock();
+}
+
+
 
 
 void

@@ -362,9 +362,11 @@ public:
     int getMMCId() const { return ((int)(m_mmcId)); }
     void setMMCId(int id) { m_mmcId = (MidiByte)(id); }
 
-    // Set MIDI clock interval
+    // Set MIDI clock interval - allow redefinition above to ensure
+    // we handle this reset correctly.
     //
-    void setMIDIClockInterval(RealTime interval) { m_midiClockInterval = interval; }
+    virtual void setMIDIClockInterval(RealTime interval) 
+        { m_midiClockInterval = interval; }
 
     // Get and set the mapper which may optionally be used to
     // store recording levels etc for communication back to the GUI.
