@@ -857,6 +857,8 @@ void RosegardenGUIApp::initView()
 
 void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
 {
+    emit documentAboutToChange();
+
     // Take care of all subparts which depend on the document
 
     // Caption
@@ -4116,6 +4118,9 @@ RosegardenGUIApp::slotEditBanks()
 
     connect(bankEditor, SIGNAL(saveAsDefaultStudio()),
             this, SLOT(slotSaveDefaultStudio()));
+
+    connect(this, SIGNAL(documentAboutToChange()),
+            bankEditor, SLOT(slotFileCloseAndDiscard()));
 
     stateChanged("bankeditor_shown");    
     bankEditor->show();

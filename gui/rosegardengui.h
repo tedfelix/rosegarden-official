@@ -408,6 +408,9 @@ protected:
 signals:
     void startupStatusMessage(const QString &message);
 
+    /// emitted just before the document is changed
+    void documentAboutToChange();
+
     /// emitted when the current document changes
     void documentChanged(RosegardenGUIDoc*);
 
