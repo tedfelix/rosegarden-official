@@ -51,7 +51,8 @@ MatrixCanvasView::MatrixCanvasView(MatrixStaff& staff,
       m_staff(staff),
       m_previousEvTime(0),
       m_previousEvPitch(0),
-      m_mouseWasPressed(false)
+      m_mouseWasPressed(false),
+      m_ignoreClick(false)
 {
     viewport()->setMouseTracking(true);
 }
@@ -62,12 +63,17 @@ MatrixCanvasView::~MatrixCanvasView()
 
 void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 {
+    if (!m_staff.containsCanvasY(e->y())) {
+        m_ignoreClick = true;
+        return;
+    }
+
     timeT evTime = m_staff.getTimeForCanvasX(e->x());
     int evPitch = m_staff.getHeightAtCanvasY(e->y());
 
     
-    kdDebug(KDEBUG_AREA) << "MatrixCanvasView::contentsMousePressEvent() at pitch "
-                         << evPitch << ", time " << evTime << endl;
+//     kdDebug(KDEBUG_AREA) << "MatrixCanvasView::contentsMousePressEvent() at pitch "
+//                          << evPitch << ", time " << evTime << endl;
 
     QCanvasItemList itemList = canvas()->collisions(e->pos());
     QCanvasItemList::Iterator it;
@@ -90,6 +96,8 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 
 void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
 {
+    if (m_ignoreClick) return;
+
     timeT evTime = m_staff.getTimeForCanvasX(e->x());
     int evPitch = m_staff.getHeightAtCanvasY(e->y());
 
@@ -106,15 +114,26 @@ void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
         m_previousEvPitch = evPitch;
     }
 
-    if (m_mouseWasPressed) {
-        kdDebug(KDEBUG_AREA) << "MatrixCanvasView::contentsMouseMoveEvent() emitting mouseMoved\n";
-        emit mouseMoved(evTime, e);
-    }
+    if (m_mouseWasPressed) emit mouseMoved(evTime, e);
     
+}
+
+void MatrixCanvasView::contentsMouseDoubleClickEvent (QMouseEvent* e)
+{
+    if (!m_staff.containsCanvasY(e->y())) {
+        m_ignoreClick = true;
+        return;
+    }
+
 }
 
 void MatrixCanvasView::contentsMouseReleaseEvent(QMouseEvent* e)
 {
+    if (m_ignoreClick) {
+        m_ignoreClick = false;
+        return;
+    }
+
     timeT evTime = m_staff.getTimeForCanvasX(e->x());
 
     emit mouseReleased(evTime, e);

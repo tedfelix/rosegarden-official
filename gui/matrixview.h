@@ -171,6 +171,14 @@ protected:
      */
     virtual void contentsMouseReleaseEvent(QMouseEvent*);
 
+    /**
+     * Callback for a mouse double-click event in the canvas
+     *
+     * NOTE: a double click event is always preceded by a mouse press
+     * event
+     */
+    virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
+
     //--------------- Data members ---------------------------------
 
     MatrixStaff& m_staff;
@@ -179,6 +187,7 @@ protected:
     int m_previousEvPitch;
 
     bool m_mouseWasPressed;
+    bool m_ignoreClick;
 };
 
 //------------------------------------------------------------
