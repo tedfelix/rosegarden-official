@@ -456,11 +456,22 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool firstFetch,
 
                     evt->setAudioStartMarker(startTime);
                     m_playingAudioSegments.push_back(evt->getRuntimeSegmentId());
+
+                    /*
+                    std::cout << "SETTING RUNTIME SEGMENT ID = " << evt->getRuntimeSegmentId()
+                              << std::endl;
+                              */
                 }
 
                 if (evt->getType() == MappedEvent::Audio) 
                 {
                     m_playingAudioSegments.push_back(evt->getRuntimeSegmentId());
+
+                    /*
+                    std::cout << "SETTING RUNTIME SEGMENT ID = " << evt->getRuntimeSegmentId()
+                              << std::endl;
+                              */
+
                 }
 
                 if (evt->getType() == MappedEvent::TimeSignature) {

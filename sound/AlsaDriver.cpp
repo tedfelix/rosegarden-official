@@ -4917,10 +4917,13 @@ AlsaDriver::getPlayingAudioFiles()
 #ifdef HAVE_LIBJACK
     if (pthread_mutex_trylock(&_diskThreadLock) != EBUSY)
     {
-        return m_playingAudioSegments;
+        std::vector<int> tempVector = m_playingAudioSegments;
         pthread_mutex_unlock(&_diskThreadLock);
+        return tempVector;
     }
+
     return std::vector<int>();
+
 #else
     return m_playingAudioSegments;
 #endif

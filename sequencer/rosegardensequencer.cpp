@@ -1455,8 +1455,6 @@ void RosegardenSequencerApp::dumpFirstSegment()
 
 void RosegardenSequencerApp::rationalisePlayingAudio(const std::vector<int> &segmentAudio)
 {
-    return;
-
     std::vector<int> driverAudio = m_sequencer->getPlayingAudioFiles();
 
     //std::cout << "DRIVER FILES  = " << driverAudio.size() << std::endl;
@@ -1503,7 +1501,6 @@ void RosegardenSequencerApp::rationalisePlayingAudio(const std::vector<int> &seg
         }
 
     }
-
 }
 
 

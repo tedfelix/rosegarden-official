@@ -157,7 +157,8 @@ public:
                    m_duration(0, 0),
                    m_audioStartMarker(0, 0),
                    m_dataBlockId(0),
-                   m_isPersistent(false) {}
+                   m_isPersistent(false),
+                   m_runtimeSegmentId(-1) {}
 
     // Construct from Events to Internal (MIDI) type MappedEvent
     //
@@ -186,7 +187,8 @@ public:
         m_duration(duration),
         m_audioStartMarker(RealTime(0,0)),
         m_dataBlockId(0),
-        m_isPersistent(false) {}
+        m_isPersistent(false),
+        m_runtimeSegmentId(-1) {}
 
     // A general MappedEvent constructor for any MappedEvent type
     //
@@ -206,7 +208,8 @@ public:
         m_duration(duration),
         m_audioStartMarker(audioStartMarker),
         m_dataBlockId(0),
-        m_isPersistent(false) {}
+        m_isPersistent(false),
+        m_runtimeSegmentId(-1) {}
 
     // Audio MappedEvent shortcut constructor
     //
@@ -224,7 +227,8 @@ public:
          m_duration(duration),
          m_audioStartMarker(audioStartMarker),
          m_dataBlockId(0),
-         m_isPersistent(false) {}
+         m_isPersistent(false),
+         m_runtimeSegmentId(-1) {}
 
     // More generalised MIDI event containers for
     // large and small events (one param, two param)
@@ -242,7 +246,8 @@ public:
          m_duration(RealTime(0, 0)),
          m_audioStartMarker(RealTime(0, 0)),
          m_dataBlockId(0),
-         m_isPersistent(false) {}
+         m_isPersistent(false),
+         m_runtimeSegmentId(-1) {}
 
     MappedEvent(InstrumentId id,
                 MappedEventType type,
@@ -256,7 +261,8 @@ public:
         m_duration(RealTime(0, 0)),
         m_audioStartMarker(RealTime(0, 0)),
         m_dataBlockId(0),
-        m_isPersistent(false) {}
+        m_isPersistent(false),
+        m_runtimeSegmentId(-1) {}
 
 
     // Construct SysExs say
@@ -272,7 +278,8 @@ public:
         m_duration(RealTime(0, 0)),
         m_audioStartMarker(RealTime(0, 0)),
         m_dataBlockId(0),
-        m_isPersistent(false) {}
+        m_isPersistent(false),
+        m_runtimeSegmentId(-1) {}
 
     // Copy constructor
     //
@@ -287,7 +294,8 @@ public:
         m_duration(mE.getDuration()),
         m_audioStartMarker(mE.getAudioStartMarker()),
         m_dataBlockId(mE.getDataBlockId()),
-        m_isPersistent(false){}
+        m_isPersistent(false),
+        m_runtimeSegmentId(mE.getRuntimeSegmentId()) {}
 
     // Copy from pointer
     // Fix for 674731 by Pedro Lopez-Cabanillas (20030531)
@@ -301,7 +309,8 @@ public:
         m_duration(mE->getDuration()),
         m_audioStartMarker(mE->getAudioStartMarker()),
         m_dataBlockId(mE->getDataBlockId()),
-        m_isPersistent(false) {}
+        m_isPersistent(false),
+        m_runtimeSegmentId(mE->getRuntimeSegmentId()) {}
 
     // Event time
     //
