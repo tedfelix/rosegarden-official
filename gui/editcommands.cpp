@@ -131,11 +131,8 @@ CutAndCloseCommand::CloseCommand::unexecute()
     std::vector<Event *> events;
     timeT timeDifference = m_fromTime - m_toTime;
 
-    timeT segmentEndTime = m_segment->getEndTime();
-    timeT copyFromEndTime = segmentEndTime - timeDifference;
-
     for (Segment::iterator i = m_segment->findTime(m_toTime);
-	 i != m_segment->findNearestTime(copyFromEndTime); ++i) {
+	 i != m_segment->end(); ++i) {
 	events.push_back(new Event
 			 (**i, (*i)->getAbsoluteTime() + timeDifference));
     }
