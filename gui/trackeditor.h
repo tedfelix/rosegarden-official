@@ -67,6 +67,9 @@ public:
     SegmentCanvas*       getSegmentCanvas()       { return m_segmentCanvas; }
     const SegmentCanvas* getSegmentCanvas() const { return m_segmentCanvas; }
 
+    BarButtons*       getBarButtons()       { return m_barButtons; }
+    const BarButtons* getBarButtons() const { return m_barButtons; }
+
     int getTrackCellHeight() const;
 
     /**
