@@ -1746,6 +1746,268 @@
 
       </sect2>
 
+
+    <!-- Levi Burton additions 2003.03.05 -->
+    <sect2>
+    <title>The Edit Menu</title>
+    <para>
+      <variablelist>
+
+    <varlistentry id="commands-main-edit-undo">
+	 <term>
+      <menuchoice>
+	   <shortcut>
+	    <keycombo>
+         <keycap>Ctrl</keycap>
+          <keycap>z</keycap>
+        </keycombo>
+       </shortcut>
+	   <guimenu>Edit</guimenu>
+	   <guimenuitem>Undo</guimenuitem>
+      </menuchoice>
+     </term>
+	 <listitem>
+      <para>
+       <action>
+           Reverses the last command performed.
+       </action>
+      </para>
+     </listitem>
+	</varlistentry>  
+
+    <varlistentry id="commands-main-edit-redo">
+	 <term>
+      <menuchoice>
+	   <shortcut>
+	    <keycombo>
+         <keycap>Ctrl</keycap>
+         <keycap>Shift</keycap>
+         <keycap>z</keycap>
+        </keycombo>
+       </shortcut>
+	   <guimenu>Edit</guimenu>
+	   <guimenuitem>Redo</guimenuitem>
+      </menuchoice>
+     </term>
+	 <listitem>
+      <para>
+       <action>
+           Repeats the last command performed, following an undo.
+       </action>
+      </para>
+     </listitem>
+	</varlistentry>  
+
+    <varlistentry id="commands-main-edit-cut">
+	 <term>
+      <menuchoice>
+	   <shortcut>
+	    <keycombo>
+         <keycap>Ctrl</keycap>
+          <keycap>x</keycap>
+        </keycombo>
+       </shortcut>
+	   <guimenu>Edit</guimenu>
+	   <guimenuitem>Cut</guimenuitem>
+      </menuchoice>
+     </term>
+	 <listitem>
+      <para>
+       <action>
+            Removes the currently selected segment from the
+            composition view and adds it to the clipboard.  Note that
+            when you have selected a track, all segments in that track
+            are selected.  
+       </action>
+      </para>
+     </listitem>
+	</varlistentry>  
+
+    <varlistentry id="commands-main-edit-copy">
+	 <term>
+      <menuchoice>
+	   <shortcut>
+	    <keycombo>
+         <keycap>Ctrl</keycap>
+          <keycap>c</keycap>
+        </keycombo>
+       </shortcut>
+	   <guimenu>Edit</guimenu>
+	   <guimenuitem>Copy</guimenuitem>
+      </menuchoice>
+     </term>
+	 <listitem>
+      <para>
+       <action>
+            Removes the selected segments from the composition and
+            places them in the clipboard to replace any contents the
+            clipboard previously had.
+       </action> 
+            Note that when you have selected a track, all segments in that track
+            are selected.
+      </para>
+     </listitem>
+	</varlistentry>  
+
+
+    <varlistentry id="commands-main-edit-paste">
+	 <term>
+      <menuchoice>
+	   <shortcut>
+	    <keycombo>
+         <keycap>Ctrl</keycap>
+          <keycap>v</keycap>
+        </keycombo>
+       </shortcut>
+	   <guimenu>Edit</guimenu>
+	   <guimenuitem>Paste</guimenuitem>
+      </menuchoice>
+     </term>
+	 <listitem>
+      <para>
+       <action>
+         Inserts the contents of the clipboard into the composition.
+         Verbage hear stating where the contents are inserted
+         (current track, offset within that track etc).
+       </action>
+      </para>
+     </listitem>
+	</varlistentry>  
+
+    <varlistentry id="commands-main-edit-delete">
+	 <term>
+      <menuchoice>
+	   <shortcut>
+	    <keycombo>
+         <keycap>Delete</keycap>
+        </keycombo>
+       </shortcut>
+	   <guimenu>Edit</guimenu>
+	   <guimenuitem>Delete</guimenuitem>
+      </menuchoice>
+     </term>
+	 <listitem>
+      <para>
+       <action>
+         Removes the selected segments from the composition and throws them away.
+       </action>
+      </para>
+     </listitem>
+	</varlistentry>  
+
+
+    <varlistentry id="commands-main-edit-select-all">
+	 <term>
+      <menuchoice>
+	   <guimenu>Edit</guimenu>
+	   <guimenuitem>Select All Segments</guimenuitem>
+      </menuchoice>
+     </term>
+	 <listitem>
+      <para>
+       <action>
+         Selects all segments within the composition.
+       </action>
+      </para>
+     </listitem>
+	</varlistentry>  
+
+    <varlistentry id="commands-main-edit-add-tempo-change">
+	 <term>
+      <menuchoice>
+	   <guimenu>Edit</guimenu>
+	   <guimenuitem>Add Tempo Change...</guimenuitem>
+      </menuchoice>
+     </term>
+	 <listitem>
+      <para>
+       <action>
+         Invokes a tempo change dialog.
+       </action>
+            This offers a
+		    selection of ways to change the tempo of the
+		    composition, including changing the tempo from the
+		    insert cursor position onwards, from the last
+		    tempo change onwards, or for the entire
+		    composition.  See <!-- !!!link linkend="segment-tempo-changes" -->Changing the Tempo<!-- /link --> for more information.
+
+      </para>
+     </listitem>
+	</varlistentry>  
+
+    <varlistentry id="commands-main-edit-add-time-signature">
+	 <term>
+      <menuchoice>
+	   <guimenu>Edit</guimenu>
+	   <guimenuitem>Add Time Signature Change...</guimenuitem>
+      </menuchoice>
+     </term>
+	 <listitem>
+      <para>
+       <action>
+         Invokes a time-signature change dialog.
+       </action>
+
+		  This offers a
+		  selection of ways to change the tempo of the
+		  composition, including changing the time signature
+		  from the insert cursor position onwards or from the
+		  start of the current bar.  See 
+		  <!-- !!!link linkend="segment-tempo-changes" -->Changing the Time Signature<!-- /link --> 
+		  for more information.
+
+      </para>
+     </listitem>
+	</varlistentry>  
+
+
+    <varlistentry id="commands-main-edit-change-composition-duration">
+	 <term>
+      <menuchoice>
+	   <guimenu>Edit</guimenu>
+	   <guimenuitem>Change Composition Duration...</guimenuitem>
+      </menuchoice>
+     </term>
+	 <listitem>
+      <para>
+       <action>
+         Invokes a composition duration change dialog.
+       </action>
+
+		  This offers a way of changing the start and end bars of the composition.
+
+      </para>
+     </listitem>
+	</varlistentry>  
+
+
+    <varlistentry id="commands-main-edit-document-properties">
+	 <term>
+      <menuchoice>
+	   <guimenu>Edit</guimenu>
+	   <guimenuitem>Edit Document Properties...</guimenuitem>
+      </menuchoice>
+     </term>
+	 <listitem>
+      <para>
+       <action>
+         Invokes a document properties dialog.
+       </action>
+
+         The document properties dialog allows you to review and/or modify the current document properties. Note - explain what are properties. Note to developers - It seems kinda weird to have icons on the left for selecting, and tabs in each one.  Why not just tabs or just the things on the left?
+
+      </para>
+     </listitem>
+	</varlistentry>  
+
+
+      </variablelist>
+     </para>
+    </sect2>
+    <!-- Levi Burton additions 2003.03.05 -->
+
+
+
     </sect1>
     
     <sect1 id="commands-nv">
@@ -2066,7 +2328,7 @@
 		  </action>
 
 		  This offers a
-		  selection of ways to change the tempo of the
+		  selection of ways to change the tempo ofthe
 		  composition, including changing the time signature
 		  from the insert cursor position onwards or from the
 		  start of the current bar.  See 
