@@ -1,13 +1,5 @@
-kde_includes=/opt/arts-0.5.4/include
-
-# we define it here but make sometimes ignores it
-LIBTOOL=libtool
-MCOPIDL=mcopidl
-
-# set the include path for X, qt and KDE
+# ensure our path is correct
 INCLUDES= $(all_includes) -I$(kde_includes)/arts -I../core
-#INCLUDES= $(all_includes) -I/usr/include/arts
-
 
 ####### This part is very Rosegarden specific
 # you can add here more. This one gets installed 
@@ -46,7 +38,7 @@ MidiRecord.cpp: MidiArts.h
 bin_PROGRAMS = sound
 sound_METASOURCES = AUTO
 sound_SOURCES = MidiFile.cpp MidiEvent.cpp Sequencer.cpp sound.cpp
-sound_LDFLAGS =
-sound_LDADD = libMidiArts.la -lsoundserver_idl ../core/libcore.a
+sound_LDFLAGS = -L../core
+sound_LDADD = libMidiArts.la -lsoundserver_idl -lcore
 
 DISTCLEANFILES = $(sound_METASOURCES) MidiArts.h MidiArts.cc
