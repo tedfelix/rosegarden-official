@@ -625,8 +625,15 @@ TrackButtons::slotInstrumentPopupActivated(int item)
         if (track != 0)
         {
             track->setInstrument(inst->getID());
+
+            // select instrument
+            emit instrumentSelected((int)inst->getID());
+
             m_instrumentLabels[m_popupItem]->
                     setText(QString(inst->getName().c_str()));
+
+            // reset the alternative label
+            m_instrumentLabels[m_popupItem]->clearAlternativeLabel();
 
             // Now see if the program is being shown for this instrument
             // and if so reset the label
@@ -634,9 +641,6 @@ TrackButtons::slotInstrumentPopupActivated(int item)
             if (inst->sendsProgramChange())
                 m_instrumentLabels[m_popupItem]->slotSetAlternativeLabel(
                              QString(inst->getProgramName().c_str()));
-
-            // select instrument
-            emit instrumentSelected((int)inst->getID());
 
         }
         else

@@ -51,6 +51,7 @@ public slots:
     // Set an alternative label
     //
     void slotSetAlternativeLabel(const QString &label);
+    void clearAlternativeLabel() { m_alternativeLabel = ""; }
 
 protected:
     virtual void mousePressEvent(QMouseEvent *e);

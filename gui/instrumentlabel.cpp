@@ -103,7 +103,8 @@ InstrumentLabel::slotSetAlternativeLabel(const QString &label)
     if (label == "" && m_alternativeLabel == "")
         return;
 
-    // Store the current (first) label
+    // Store the current (first) label 
+    //
     if(m_alternativeLabel == "")
         m_alternativeLabel = text();
 
