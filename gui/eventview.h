@@ -39,6 +39,7 @@ class RosegardenGUIDoc;
 class KListView;
 class QListViewItem;
 class QPushButton;
+class QLabel;
 class QCheckBox;
 class QButtonGroup;
 class RosegardenPitchChooser;
@@ -139,7 +140,10 @@ signals:
 
 protected slots:
     virtual void slotSaveOptions();
-    void slotTriggerPitchChanged(int);
+
+    void slotEditTriggerName();
+    void slotEditTriggerPitch();
+    void slotEditTriggerVelocity();
 
 protected:
 
@@ -153,7 +157,9 @@ protected:
     //--------------- Data members ---------------------------------
 
     bool         m_isTriggerSegment;
-    RosegardenPitchChooser *m_triggerBasePitch;
+    QLabel      *m_triggerName;
+    QLabel      *m_triggerPitch;
+    QLabel      *m_triggerVelocity;
 
     KListView   *m_eventList;
     int          m_eventFilter;

@@ -31,6 +31,7 @@
 #include <kstdaction.h> 
 #include <kaction.h>
 #include <kglobal.h>
+#include <klineeditdlg.h>
 #include <kstddirs.h>
 
 #include <qvbox.h>
@@ -41,6 +42,7 @@
 #include <qbuttongroup.h>
 #include <qpopupmenu.h>
 #include <qiconset.h>
+#include <qspinbox.h>
 
 #include <klistview.h>
 
@@ -180,7 +182,7 @@ EventView::EventView(RosegardenGUIDoc *doc,
     m_menu(0)
 {
     m_isTriggerSegment = false;
-    m_triggerBasePitch = 0;
+    m_triggerName = m_triggerPitch = m_triggerVelocity = 0;
 
     if (!segments.empty()) {
 	Rosegarden::Segment *s = *segments.begin();
@@ -229,12 +231,37 @@ EventView::EventView(RosegardenGUIDoc *doc,
 	int id = segments[0]->getComposition()->getTriggerSegmentId(segments[0]);
 	Rosegarden::TriggerSegmentRec *rec =
 	    segments[0]->getComposition()->getTriggerSegmentRec(id);
+
+	QGroupBox *groupBox = new QGroupBox
+	    (1, Horizontal, i18n("Triggered Segment Properties"), getCentralWidget());
 	
-	m_triggerBasePitch = new RosegardenPitchChooser
-	    (i18n("Base Pitch"), getCentralWidget(), rec->getBasePitch());
-	connect(m_triggerBasePitch, SIGNAL(pitchChanged(int)),
-		this, SLOT(slotTriggerPitchChanged(int)));
-	m_grid->addWidget(m_triggerBasePitch, 2, 2);
+	QFrame *frame = new QFrame(groupBox);
+	QGridLayout *layout = new QGridLayout(frame, 3, 3, 5, 5);
+
+	layout->addWidget(new QLabel(i18n("Label:  "), frame), 0, 0);
+	QString label = strtoqstr(segments[0]->getLabel());
+	if (label == "") label = i18n("<no label>");
+	m_triggerName = new QLabel(label, frame);
+	layout->addWidget(m_triggerName, 0, 1);
+	QPushButton *editButton = new QPushButton(i18n("..."), frame);
+	layout->addWidget(editButton, 0, 2);
+	connect(editButton, SIGNAL(clicked()), this, SLOT(slotEditTriggerName()));
+
+	layout->addWidget(new QLabel(i18n("Base pitch:  "), frame), 1, 0);
+	m_triggerPitch = new QLabel(QString("%1").arg(rec->getBasePitch()), frame);
+	layout->addWidget(m_triggerPitch, 1, 1);
+	editButton = new QPushButton(i18n("..."), frame);
+	layout->addWidget(editButton, 1, 2);
+	connect(editButton, SIGNAL(clicked()), this, SLOT(slotEditTriggerPitch()));
+
+	layout->addWidget(new QLabel(i18n("Base velocity:  "), frame), 2, 0);
+	m_triggerVelocity = new QLabel(QString("%1").arg(rec->getBaseVelocity()), frame);
+	layout->addWidget(m_triggerVelocity, 2, 1);
+	editButton = new QPushButton(i18n("..."), frame);
+	layout->addWidget(editButton, 2, 2);
+	connect(editButton, SIGNAL(clicked()), this, SLOT(slotEditTriggerVelocity()));
+
+	m_grid->addWidget(groupBox, 2, 2);
 	
 	setCaption(QString("%1 - Triggered Segment: %2")
 		   .arg(doc->getTitle())
@@ -662,11 +689,73 @@ EventView::updateView()
 }
 
 void
-EventView::slotTriggerPitchChanged(int pitch)
+EventView::slotEditTriggerName()
+{
+    bool ok = false;
+    QString newLabel = KLineEditDlg::getText(i18n("Segment label"), i18n("Label:"),
+					     strtoqstr(m_segments[0]->getLabel()),
+					     &ok, this);
+
+    if (ok) {
+	Rosegarden::SegmentSelection selection;
+	selection.insert(m_segments[0]);
+	SegmentLabelCommand *cmd = new SegmentLabelCommand(selection, newLabel);
+	addCommandToHistory(cmd);
+	m_triggerName->setText(newLabel);
+    }
+}
+
+void
+EventView::slotEditTriggerPitch()
 {
     int id = m_segments[0]->getComposition()->getTriggerSegmentId(m_segments[0]);
-    addCommandToHistory(new SetTriggerSegmentBasePitchCommand
-			(&getDocument()->getComposition(), id, pitch));
+
+    Rosegarden::TriggerSegmentRec *rec =
+	m_segments[0]->getComposition()->getTriggerSegmentRec(id);
+
+    PitchDialog *dlg = new PitchDialog(this, i18n("Base pitch"), rec->getBasePitch());
+
+    if (dlg->exec() == QDialog::Accepted) {
+	addCommandToHistory(new SetTriggerSegmentBasePitchCommand
+			    (&getDocument()->getComposition(), id, dlg->getPitch()));
+	m_triggerPitch->setText(QString("%1").arg(dlg->getPitch()));
+    }
+}
+
+class TrivialVelocityDialog : public KDialogBase
+{
+public:
+    TrivialVelocityDialog(QWidget *parent, QString label, int deft) :
+	KDialogBase(parent, 0, true, label, Ok | Cancel)
+    {
+	QHBox *hbox = makeHBoxMainWidget();
+	new QLabel(label, hbox);
+	m_spin = new QSpinBox(0, 127, 1, hbox);
+	m_spin->setValue(deft);
+    }
+
+    int getVelocity() { return m_spin->value(); }
+
+protected:
+    QSpinBox *m_spin;
+};
+
+void
+EventView::slotEditTriggerVelocity()
+{
+    int id = m_segments[0]->getComposition()->getTriggerSegmentId(m_segments[0]);
+
+    Rosegarden::TriggerSegmentRec *rec =
+	m_segments[0]->getComposition()->getTriggerSegmentRec(id);
+
+    TrivialVelocityDialog *dlg = new TrivialVelocityDialog
+	(this, i18n("Base velocity"), rec->getBaseVelocity());
+
+    if (dlg->exec() == QDialog::Accepted) {
+	addCommandToHistory(new SetTriggerSegmentBaseVelocityCommand
+			    (&getDocument()->getComposition(), id, dlg->getVelocity()));
+	m_triggerVelocity->setText(QString("%1").arg(dlg->getVelocity()));
+    }
 }
 
 void
