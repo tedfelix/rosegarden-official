@@ -39,18 +39,50 @@ struct StandardQuantization;
 class Quantizer
 {
 public:
-    static const std::string DefaultPropertyNamePrefix;
+    static const std::string RawEventData;
+    static const std::string DefaultTarget;
+
     enum QuantizationType { UnitQuantize, NoteQuantize, LegatoQuantize };
 
     /**
      * Construct a quantizer programmed to do a single sort of
      * quantization.
      *
-     * \arg propertyNamePrefix : common prefix for the property
-     * names used to store quantized values in events; permits
-     * use of more than one quantizer on a given event at a time.
-     * Quantization is not destructive of the event's intrinsic
-     * absolute time and duration.
+     * \arg source, target : Description of where to find the
+     * times to be quantized, and where to put the quantized results.
+     * These may be strings, specifying a prefix for the names
+     * of properties to contain the timings, or may be the special
+     * value RawEventData in which case the event's absolute time
+     * and duration will be used instead of properties.  If source
+     * specifies a property prefix for properties that are found
+     * not to exist, they will be pre-filled from the original
+     * timings in the target values before being quantized and
+     * then set back into the target.  (This permits a quantizer
+     * to write directly into the Event's absolute time and
+     * duration without losing the original values, because they
+     * are backed up automatically into the source properties.)
+     *
+     *   Examples:
+     *
+     *   -- if source == RawEventData and target == "MyPrefix",
+     *   values will be read from the event's absolute time and
+     *   duration, quantized, and written into MyPrefixAbsoluteTime
+     *   and MyPrefixDuration properties on the event.  A call to
+     *   unquantize will simply delete these properties.
+     *
+     *   -- if source == "MyPrefix" and target == RawEventData,
+     *   the MyPrefixAbsoluteTime and MyPrefixDuration will be
+     *   populated if necessary from the event's absolute time and
+     *   duration, and then quantized and written back into the
+     *   event's values.  A call to unquantize will write the
+     *   MyPrefix-property timings back into the event's values,
+     *   and delete the MyPrefix properties.
+     *
+     *   -- if source == "YourPrefix" and target == "MyPrefix",
+     *   values will be read from YourPrefixAbsoluteTime and
+     *   YourPrefixDuration, quantized, and written into the
+     *   MyPrefix-properties.  This may be useful for piggybacking
+     *   onto another quantizer's output.
      *
      * \arg type : Type of quantization to carry out, as follows:
      *
@@ -101,7 +133,8 @@ public:
      * construction.  Instead, construct a new one and assign it
      * if necessary.  (Construction and assignment are cheap.)
      */
-    Quantizer(std::string propertyNamePrefix = DefaultPropertyNamePrefix,
+    Quantizer(std::string source = RawEventData,
+	      std::string target = DefaultTarget,
 	      QuantizationType type = UnitQuantize,
 	      timeT unit = -1, int maxDots = 2);
 
@@ -110,40 +143,22 @@ public:
      * setup.
      */
     Quantizer(const StandardQuantization &,
-	      std::string propertyNamePrefix = DefaultPropertyNamePrefix);
+	      std::string source = RawEventData,
+	      std::string target = DefaultTarget);
 
     /**
      * Construct a quantizer by copying from another quantizer,
-     * but with a different propertyNamePrefix
+     * but with a different source and/or target
      */
     Quantizer(const Quantizer &,
-	      std::string propertyNamePrefix = DefaultPropertyNamePrefix);
+	      std::string source = RawEventData,
+	      std::string target = DefaultTarget);
 
     Quantizer(const Quantizer &);
     Quantizer &operator=(const Quantizer &);
     bool operator==(const Quantizer &) const;
     
     ~Quantizer();
-
-    /**
-     * Get the name of the property this Quantizer places the
-     * quantized absolute time in on each event it quantizes.
-     * This name will depend on the propertyNamePrefix passed
-     * to the Quantizer's constructor.
-     */
-    PropertyName getAbsoluteTimeProperty() const {
-	return m_absoluteTimeProperty;
-    }
-
-    /**
-     * Get the name of the property this Quantizer places the
-     * quantized duration in on each event it quantizes.
-     * This name will depend on the propertyNamePrefix passed
-     * to the Quantizer's constructor.
-     */
-    PropertyName getDurationProperty() const {
-	return m_durationProperty;
-    }
 
     /**
      * Get the type of quantization this Quantizer performs.
@@ -236,7 +251,7 @@ protected:
     class SingleQuantizer {
     public:
 	virtual ~SingleQuantizer();
-	virtual timeT getDuration(Event *event) const;
+//!!!	virtual timeT getDuration(Event *event) const;
 	virtual timeT quantize(int unit, int maxDots, timeT duration,
 			       timeT followingRestDuration) const = 0;
     };
@@ -251,7 +266,7 @@ protected:
     class NoteQuantizer : public SingleQuantizer {
     public:
 	virtual ~NoteQuantizer();
-	virtual timeT getDuration(Event *event) const;
+//!!!	virtual timeT getDuration(Event *event) const;
 	virtual timeT quantize(int unit, int maxDots, timeT duration,
 			       timeT followingRestDuration) const;
     };
@@ -274,8 +289,17 @@ protected:
     timeT m_unit;
     int m_maxDots;
 
-    PropertyName m_absoluteTimeProperty;
-    PropertyName m_durationProperty;
+    enum ValueType { AbsoluteTimeValue, DurationValue };
+
+    timeT getFromSource(Event *, ValueType) const;
+    timeT getFromTarget(Event *, ValueType) const;
+    void setToSource(Event *, ValueType, timeT) const;
+    void setToTarget(Event *, ValueType, timeT) const;
+    void removeProperties(Event *) const;
+    void removeTargetProperties(Event *) const;
+
+    std::string m_source;
+    std::string m_target;
 };
 
 struct StandardQuantization {

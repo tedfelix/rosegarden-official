@@ -83,7 +83,7 @@ SegmentPerformanceHelper::getTiedNotes(iterator i)
 timeT
 SegmentPerformanceHelper::getSoundingAbsoluteTime(iterator i)
 {
-    return segment().getAbsoluteTimeOf(*i);
+    return (*i)->getAbsoluteTime();
 }
 
 
@@ -91,14 +91,14 @@ timeT
 SegmentPerformanceHelper::getSoundingDuration(iterator i)
 {
     if (!(*i)->has(TIED_FORWARD) && !(*i)->has(TIED_BACKWARD)) {
-	return segment().getDurationOf(*i);
+	return (*i)->getDuration();
     }
 
     iteratorcontainer c(getTiedNotes(i));
     timeT d = 0;
 
     for (iteratorcontainer::iterator ci = c.begin(); ci != c.end(); ++ci) {
-	d += segment().getDurationOf(**ci);
+	d += (**ci)->getDuration();
     }
 
     return d;

@@ -316,7 +316,8 @@ SegmentNotationHelper::isViable(timeT duration, int dots)
     duration = basicQuantizer().quantizeDuration(duration);
 
     if (dots >= 0) {
-        viable = (duration == Quantizer(Quantizer::DefaultPropertyNamePrefix,
+        viable = (duration == Quantizer(Quantizer::RawEventData,
+					Quantizer::DefaultTarget,
 					Quantizer::NoteQuantize, 1, dots).
 		  quantizeDuration(duration));
     } else {
@@ -1198,8 +1199,7 @@ SegmentNotationHelper::quantize()
 
 	if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType)) {
 
-	    timeT duration =
-		(*i)->get<Int>(legatoQuantizer().getDurationProperty());
+	    timeT duration = legatoQuantizer().getQuantizedDuration(*i);
 
 	    Note n(Note::getNearestNote(duration));
 	    (*i)->setMaybe<Int>(NOTE_TYPE, n.getNoteType());

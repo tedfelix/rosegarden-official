@@ -127,20 +127,6 @@ public:
     timeT getEndTime() const { return m_startIdx + getDuration(); }
 
     /**
-     * Get the absolute time of an event, taking into account any
-     * quantization that may be in force.  Editing and performance
-     * code should use this in preference to e->getAbsoluteTime().
-     */
-    timeT getAbsoluteTimeOf(Event *e);
-
-    /**
-     * Get the duration of an event, taking into account any
-     * quantization that may be in force.  Editing and performance
-     * code should use this in preference to e->getDuration().
-     */
-    timeT getDurationOf(Event *);
-
-    /**
      * Switch quantization on or off.
      */
     void setQuantization(bool quantize);
@@ -441,7 +427,6 @@ private:
 
     void notifyAdd(Event *) const;
     void notifyRemove(Event *) const;
-    void notifyQuantizationChanged(Event *) const;
 
 private:
     Segment(const Segment &);
@@ -472,9 +457,6 @@ public:
     // called after the event has been removed from the segment,
     // and just before it is deleted:
     virtual void eventRemoved(const Segment *, Event *) = 0;
-
-    // called after an event's quantized start time and/or duration change:
-    virtual void eventQuantizationChanged(const Segment *, Event *) = 0;
 };
 
 

@@ -26,9 +26,7 @@ namespace Rosegarden
 {
 
 ViewElement::ViewElement(Event *e) :
-    m_event(e),
-    m_absoluteTime(e->getAbsoluteTime()),
-    m_duration(e->getDuration())
+    m_event(e)
 {
     if (m_event)
         m_event->viewElementRef();
@@ -46,11 +44,7 @@ ViewElement::~ViewElement()
 bool
 operator<(const ViewElement &a, const ViewElement &b)
 {
-    timeT at = a.getAbsoluteTime();
-    timeT bt = b.getAbsoluteTime();
-    if (at != bt) return at < bt;
-    else return a.event()->getSubOrdering() < b.event()->getSubOrdering();
-//    return *(a.event()) < *(b.event());
+    return *(a.event()) < *(b.event());
 }
 
 //////////////////////////////////////////////////////////////////////

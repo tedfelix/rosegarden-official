@@ -80,12 +80,6 @@ public:
      */
     virtual void eventRemoved(const Segment *, Event *);
 
-    /**
-     * SegmentObserver method - called after an event's start time
-     * and/or duration change
-     */
-    virtual void eventQuantizationChanged(const Segment *, Event *);
-
 protected:
     Staff(Segment &);
 
@@ -138,8 +132,6 @@ Staff<T>::getViewElementList(Segment::iterator from,
             if (!wrapEvent(*i)) continue;
 
             T *el = new T(*i);
-	    el->setAbsoluteTime(m_segment.getAbsoluteTimeOf(*i));
-	    el->setDuration(m_segment.getDurationOf(*i));
             m_viewElementList->insert(el);
         }
 
@@ -185,8 +177,6 @@ Staff<T>::eventAdded(const Segment *t, Event *e)
 
     if (wrapEvent(e)) {
         T *el = new T(e);
-	el->setAbsoluteTime(m_segment.getAbsoluteTimeOf(e));
-	el->setDuration(m_segment.getDurationOf(e));
         m_viewElementList->insert(el);
     }
 }
@@ -203,22 +193,6 @@ Staff<T>::eventRemoved(const Segment *t, Event *e)
     if (i != m_viewElementList->end()) {
         m_viewElementList->erase(i);
         return;
-    }
-}
-
-template <class T>
-void
-Staff<T>::eventQuantizationChanged(const Segment *t, Event *e)
-{
-    assert(t == &m_segment);
-
-    ViewElementList<T>::iterator i = findEvent(e);
-    if (i != m_viewElementList->end()) {
-	m_viewElementList->erase(i);
-	T *el = new T(e);
-	el->setAbsoluteTime(m_segment.getAbsoluteTimeOf(e));
-	el->setDuration(m_segment.getDurationOf(e));
-	m_viewElementList->insert(el);
     }
 }
 

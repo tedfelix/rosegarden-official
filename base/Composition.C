@@ -203,9 +203,9 @@ Composition::Composition() :
     m_recordTrack(0),
     m_timeSigSegment(TimeSignature::EventType),
     m_tempoSegment(TempoEventType),
-    m_basicQuantizer("BasicQ"),
-    m_noteQuantizer("NoteQ", Quantizer::NoteQuantize),
-    m_legatoQuantizer("LegatoQ", Quantizer::LegatoQuantize),
+    m_basicQuantizer(Quantizer::RawEventData, "BasicQ"),
+    m_noteQuantizer(Quantizer::RawEventData, "NoteQ", Quantizer::NoteQuantize),
+    m_legatoQuantizer(Quantizer::RawEventData, "LegatoQ", Quantizer::LegatoQuantize),
     m_position(0),
     m_defaultTempo(120.0),
     m_startMarker(0),
@@ -269,7 +269,8 @@ void Composition::swap(Composition& c)
 void
 Composition::setLegatoQuantizerDuration(timeT duration)
 {
-    Quantizer q("LegatoQ", Quantizer::LegatoQuantize, duration);
+    Quantizer q(Quantizer::RawEventData, "LegatoQ",
+		Quantizer::LegatoQuantize, duration);
     m_legatoQuantizer = q;
 }
     

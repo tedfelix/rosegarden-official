@@ -24,7 +24,6 @@
 #include "Quantizer.h"
 #include "BaseProperties.h"
 #include "Composition.h"
-#include "Quantizer.h"
 
 #include <iostream>
 #include <algorithm>
@@ -49,7 +48,7 @@ Segment::Segment(SegmentType segmentType, timeT startIdx) :
     m_audioStartIdx(0),
     m_audioEndIdx(0),
     m_repeating(false),
-    m_quantizer(new Quantizer("SegmentQ")),
+    m_quantizer(new Quantizer("SegmentQ", Quantizer::RawEventData)),
     m_quantize(false),
     m_transpose(0),
     m_delay(0)
@@ -464,33 +463,15 @@ Segment::getNoteTiedWith(Event *note, bool forwards) const
     return end();
 }
 
-timeT
-Segment::getAbsoluteTimeOf(Event *e)
-{
-    if (m_quantize) {
-	return m_quantizer->getQuantizedAbsoluteTime(e);
-    } else {
-	return e->getAbsoluteTime();
-    }
-}
-
-timeT
-Segment::getDurationOf(Event *e)
-{
-    if (m_quantize) {
-	return m_quantizer->getQuantizedDuration(e);
-    } else {
-	return e->getDuration();
-    }
-}
-
 void
 Segment::setQuantization(bool quantize)
 {
     if (m_quantize != quantize) {
 	m_quantize = quantize;
-	for (iterator i = begin(); i != end(); ++i) {
-	    notifyQuantizationChanged(*i);
+	if (m_quantize) {
+	    m_quantizer->quantize(begin(), end());
+	} else {
+	    m_quantizer->unquantize(begin(), end());
 	}
     }
 }
@@ -504,32 +485,22 @@ Segment::hasQuantization() const
 void
 Segment::setQuantizeLevel(const StandardQuantization &q)
 {
-    Quantizer newQ(q, "SegmentQ");
+    Quantizer newQ(q, "SegmentQ", Quantizer::RawEventData);
 
     if (newQ != *m_quantizer) {
-
 	*m_quantizer = newQ;
-	m_quantizer->quantize(begin(), end());
-
-	for (iterator i = begin(); i != end(); ++i) {
-	    notifyQuantizationChanged(*i);
-	}
+	if (m_quantize) m_quantizer->quantize(begin(), end());
     }
 }
 
 void
 Segment::setQuantizeLevel(const Quantizer &q)
 {
-    Quantizer newQ(q, "SegmentQ");
+    Quantizer newQ(q, "SegmentQ", Quantizer::RawEventData);
 
     if (newQ != *m_quantizer) {
-
 	*m_quantizer = newQ;
-	m_quantizer->quantize(begin(), end());
-
-	for (iterator i = begin(); i != end(); ++i) {
-	    notifyQuantizationChanged(*i);
-	}
+	if (m_quantize) m_quantizer->quantize(begin(), end());
     }
 }
 
@@ -554,15 +525,6 @@ void Segment::notifyRemove(Event *e) const
     for (ObserverSet::iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
 	(*i)->eventRemoved(this, e);
-    }
-}
-
- 
-void Segment::notifyQuantizationChanged(Event *e) const
-{
-    for (ObserverSet::iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->eventQuantizationChanged(this, e);
     }
 }
 
