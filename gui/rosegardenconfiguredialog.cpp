@@ -1799,7 +1799,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
 	CompositionMetadataKeys::getFixedKeys();
 
     // do these in reverse order, as the list appears to insert at the start
-    for (unsigned int i = fixedKeys.size(); i > 0; ++i) {
+    for (unsigned int i = fixedKeys.size(); i > 0; --i) {
 	Rosegarden::PropertyName pn = fixedKeys[i-1];
 	QString trName;
 	if (pn == CompositionMetadataKeys::Copyright) {
