@@ -90,7 +90,7 @@ public:
     class iterator {
 	friend class CompositionTimeSliceAdapter;
     public:
-	iterator() : m_curEvent(0) { };
+	iterator() : m_curEvent(0), m_end(0) { };
 	~iterator() { };
 	iterator& operator++();
 	bool operator!=(const iterator& other);
