@@ -79,14 +79,17 @@ WAVAudioFile::WAVAudioFile(const std::string &fileName,
 
 AudioFile* WAVAudioFile::clone()
 {
-    std::cout << "WAVAudioFile::clone() " << getName() << std::endl;
-
-    WAVAudioFile* cloneFile = new WAVAudioFile(getName(),
+    WAVAudioFile* cloneFile = new WAVAudioFile(getFilename(),
                                                getChannels(),
                                                getSampleRate(),
                                                getBytesPerSecond(),
                                                getBytesPerFrame(),
                                                getBitsPerSample());
+
+    cloneFile->setName(getName());
+
+    std::cout << "WAVAudioFile::clone() " << getFilename()
+              << " - cloning " << this << " to " << cloneFile << std::endl;
 
     cloneFile->setId(getId());
 
@@ -100,6 +103,8 @@ WAVAudioFile::~WAVAudioFile()
 bool
 WAVAudioFile::open()
 {
+    std::cout << "WAVAudioFile::open() " << getFilename() << endl;
+
     // if already open
     if (m_inFile && (*m_inFile))
         return true;
@@ -126,6 +131,7 @@ WAVAudioFile::open()
     catch(std::string s)
     {
         //throw(s);
+        std::cout << "WAVAudioFile::open() parseHeader threw " << s << endl;
         return false;
     }
 

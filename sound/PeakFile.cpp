@@ -51,6 +51,8 @@ PeakFile::PeakFile(AudioFile *audioFile):
     m_modificationTime(QDate(1970, 1, 1), QTime(0, 0, 0)),
     m_chunkStartPosition(0)
 {
+    std::cerr << "PeakFile(audioFile " << audioFile << ") : "
+              << getFilename() << "\n";
 }
 
 PeakFile::~PeakFile()
@@ -71,6 +73,8 @@ PeakFile::PeakFile(const PeakFile &peak):
     m_modificationTime(peak.getModificationTime()),
     m_chunkStartPosition(peak.getChunkStartPosition())
 {
+    std::cerr << "PeakFile copy ctor (" << &peak << ") - audioFile : "
+              << peak.m_audioFile << " cloned to " << m_audioFile << std::endl;
 }
 
 
@@ -688,10 +692,8 @@ PeakFile::getPreview(const RealTime &startTime,
                 // Problem with the get - probably an EOF
                 // return the results so far.
                 //
-                /*
                 cout << "PeakFile::getPreview - \"" << e << "\"\n"
                           << endl;
-                */
                 return ret;
             }
 

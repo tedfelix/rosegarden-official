@@ -60,14 +60,24 @@ SoundFile::~SoundFile()
 std::string
 SoundFile::getBytes(std::ifstream *file, unsigned int numberOfBytes)
 {
+    std::cerr << "SoundFile::getBytes() -  " << this
+              << " reading " << numberOfBytes
+              << " bytes from stream " << file << std::endl;
+
     if (file->eof())
     {
         // Reset the input stream so it's operational again
         //
         file->clear();
 
+        std::cerr << "SoundFile::getBytes() -  EOF encountered";
         throw(std::string("SoundFile::getBytes() - EOF encountered"));
     }
+
+    if (!(*file)) {
+        std::cerr << "SoundFile::getBytes() -  stream is not well";
+    }
+    
 
     std::string rS;
     char *fileBytes = new char[numberOfBytes];
@@ -181,7 +191,7 @@ SoundFile::getBytes(unsigned int numberOfBytes)
     // complain but return
     //
     if (rS.length() < numberOfBytes)
-        std::cerr << "SoundFile::getBytes() - couldn't get all bytes ("
+        std::cerr << "SoundFile::getBytes() buffered - couldn't get all bytes ("
                   << rS.length() << " from " << numberOfBytes << ")"
                   << std::endl;
 
