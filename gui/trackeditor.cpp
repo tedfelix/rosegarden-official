@@ -139,9 +139,6 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
                                         m_horizontalScrollBar,
                                         getTrackCellHeight(),
                                         canvas, this);
-    // We need our own scrollbar so that it is displayed below the
-    // bottom bar buttons
-    m_segmentCanvas->setHScrollBarMode(QScrollView::AlwaysOff);
 
     grid->addWidget(m_segmentCanvas, 1, 1);
 

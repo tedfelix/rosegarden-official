@@ -27,6 +27,7 @@ RosegardenCanvasView::RosegardenCanvasView(QScrollBar* hsb, QCanvas* canvas,
     : QCanvasView(canvas, parent, name, f),
       m_horizontalScrollBar(hsb)
 {
+    setHScrollBarMode(AlwaysOff);
 }
 
 
