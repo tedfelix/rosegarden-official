@@ -354,11 +354,6 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 		}
 	    }
 
-            // Skip this event if it's a rest
-            //
-            if ((*j)->isa(Rosegarden::Note::EventRestType))
-                continue;
-
             // Get the performance time, adjusted for repeats
 	    // 
 	    timeT playTime =
@@ -381,6 +376,12 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 	    // 
             if (playTime >= sliceEndElapsed)
                 break;
+
+            // Skip this event if it's a rest
+            //
+            if ((*j)->isa(Rosegarden::Note::EventRestType))
+                continue;
+
 
 	    // Find the performance duration, i.e. taking into account
 	    // any ties etc that this note may have

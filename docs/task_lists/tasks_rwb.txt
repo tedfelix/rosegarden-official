@@ -20,8 +20,6 @@ o BUG - Matrix pointer width
 
 o BUG - velocity dialog to be set to average velocity of selection
 
-o BUG - empty repeating segment hang
-
 o BUG - recorded audio file inserting to AudioManagerDialog before it's ready
   [DONE]
 
@@ -93,6 +91,8 @@ o selection of ALSA recording device
 
 Completed for 0.3(?)
 ====================
+
+o BUG - empty repeating segment hang [DONE]
 
 o FEATURE - segment guides for placement [DONE]
 
