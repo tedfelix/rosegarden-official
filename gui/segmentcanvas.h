@@ -215,8 +215,11 @@ public:
     void setText(int x, int y, const QString &text);
     void hideText();
 
+    virtual void drawShape(QPainter & p);
+
 protected:
-    QCanvasText *m_text;
+    //QCanvasText *m_text;
+    QString m_text;
 };
 
 

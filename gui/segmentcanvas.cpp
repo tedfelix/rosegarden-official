@@ -230,10 +230,10 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
 
     // The visible width of the rectangle
     //
-    QWMatrix matrix = painter.worldMatrix();
+    //QWMatrix matrix = painter.worldMatrix();
     QRect tRect = painter.worldMatrix().map(rect());
     double sampleScaleFactor = samplePoints / double(tRect.width());
-    double drawScaleFactor = double(rect().width())/double(tRect.width());
+    //double drawScaleFactor = double(rect().width())/double(tRect.width());
 
     bool state = painter.hasWorldXForm();
     painter.setWorldXForm(false);
@@ -975,8 +975,10 @@ void SegmentSplitLine::hideLine()
 //
 //////////////////////////////////////////////////////////////////////
 SegmentCanvasTextFloat::SegmentCanvasTextFloat(QCanvas *canvas):
-    QCanvasRectangle(canvas),
+    QCanvasRectangle(canvas)
+    /*,
     m_text(new QCanvasText(canvas))
+    */
 
 {
     setBrush(RosegardenGUIColours::RotaryFloatBackground);
@@ -984,9 +986,11 @@ SegmentCanvasTextFloat::SegmentCanvasTextFloat(QCanvas *canvas):
     setZ(10000);
     hide();
 
+    /*
     m_text->setColor(RosegardenGUIColours::RotaryFloatForeground);
     m_text->setZ(10001);
     m_text->hide();
+    */
 }
 
 void
@@ -994,23 +998,52 @@ SegmentCanvasTextFloat::setText(int x, int y, const QString &text)
 {
     setX(x);
     setY(y);
+    m_text = text;
 
+    /*
     m_text->setX(x + 2);
     m_text->setY(y + 2);
     m_text->setText(text);
     QRect bound = m_text->boundingRect();
     setSize(bound.width() + 4, bound.height() + 4);
+    */
 
     show();
-    m_text->show();
+    //m_text->show();
 }
 
 void
 SegmentCanvasTextFloat::hideText()
 {
     hide();
-    m_text->hide();
+    //m_text->hide();
 }
+
+void 
+SegmentCanvasTextFloat::drawShape(QPainter & p)
+{
+    QRect bound = p.boundingRect(0, 0, 300, 40, AlignAuto, m_text);
+    bound.setLeft(bound.left() - 2);
+    bound.setRight(bound.right() + 2);
+    bound.setTop(bound.top() - 2);
+    bound.setBottom(bound.bottom() + 2);
+
+    QRect mappedBound = p.worldMatrix().invert().mapRect(bound);
+    setSize(mappedBound.width(), mappedBound.height());
+
+    QCanvasRectangle::drawShape(p);
+
+    bool state = p.hasWorldXForm();
+    p.setWorldXForm(false);
+
+    QPoint mapPos = p.worldMatrix().map(QPoint(int(x()), int(y())));
+
+    p.setPen(RosegardenGUIColours::RotaryFloatForeground);
+    p.drawText(mapPos.x() + 2, mapPos.y() + 14, m_text);
+
+    p.setWorldXForm(state);
+}
+
 
 
 //////////////////////////////////////////////////////////////////////

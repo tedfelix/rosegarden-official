@@ -599,7 +599,7 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
         comp.getMusicalTimeForAbsoluteTime(
                 m_currentItem->getStartTime(), bar, beat, fraction, remainder);
 
-        QString posString = QString("%1.%2s ( %3, %4, %5 )")
+        QString posString = QString("%1.%2s (%3, %4, %5)")
             .arg(time.sec).arg(ms)
             .arg(bar).arg(beat).arg(fraction);
 
@@ -1399,7 +1399,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
         comp.getMusicalTimeForAbsoluteTime(
                 m_currentItem->getStartTime(), bar, beat, fraction, remainder);
 
-        QString posString = QString("%1.%2s ( %3, %4, %5 )")
+        QString posString = QString("%1.%2s (%3, %4, %5)")
             .arg(time.sec).arg(ms)
             .arg(bar).arg(beat).arg(fraction);
 
