@@ -919,6 +919,9 @@ void MatrixPainter::handleMouseMove(Rosegarden::timeT newTime,
                                     int,
                                     QMouseEvent*)
 {
+    // sanity check
+    if (!m_currentElement) return;
+
     newTime = (newTime / m_basicDuration) * m_basicDuration;
 
     if (newTime == m_currentElement->getAbsoluteTime()) return;
@@ -948,6 +951,10 @@ void MatrixPainter::handleMouseRelease(Rosegarden::timeT,
                                        int,
                                        QMouseEvent*)
 {
+    // This can happen in case of screen/window capture - we only get a mouse release,
+    // the window snapshot tool got the mouse down
+    if (!m_currentElement) return;
+
     // Insert element if it has a non null duration,
     // discard it otherwise
     //
