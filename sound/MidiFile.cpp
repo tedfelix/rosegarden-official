@@ -844,13 +844,18 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                     break;
 
                 case MIDI_END_OF_TRACK:
-		    if (endOfLastNote < rosegardenTime) {
-
-			// If there's nothing in the segment yet, then we
-			// shouldn't fill with rests because we don't want
-			// to cause the otherwise empty segment to be created
-			if (rosegardenSegment->size() > 0) {
-			    rosegardenSegment->fillWithRests(rosegardenTime);
+                    {
+			timeT trackEndTime = rosegardenTime;
+			if (trackEndTime <= 0) {
+			    trackEndTime = crotchetTime*4*numerator/denominator;	
+			}
+			if (endOfLastNote < trackEndTime) {
+			    //If there's nothing in the segment yet, then we
+			    //shouldn't fill with rests because we don't want
+			    //to cause the otherwise empty segment to be created
+			    if (rosegardenSegment->size() > 0) {
+				rosegardenSegment->fillWithRests(trackEndTime);
+			    }
 			}
                     }
                     break;
