@@ -608,6 +608,9 @@ protected:
 
     Rosegarden::Quantizer *m_legatoQuantizer;
 
+    /// Displayed in the status bar, shows number of events selected
+    QLabel *m_selectionCounter;
+
     /// Displayed in the status bar, shows progress of current operation
     RosegardenProgressBar *m_progressBar;
 

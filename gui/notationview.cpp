@@ -159,6 +159,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_legatoQuantizer(new Quantizer(Quantizer::RawEventData,
 				    getViewLocalPropertyPrefix() + "Q",
 				    Quantizer::LegatoQuantize)),
+    m_selectionCounter(0),
     m_currentNotePixmap(0),
     m_hoveredOverNoteName(0),
     m_hoveredOverAbsoluteTime(0),
@@ -374,6 +375,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     slotSetInsertCursorPosition(0);
     slotSetPointerPosition(doc->getComposition().getPosition());
+    setCurrentSelection(0, false);
     m_chordNameRuler->repaint();
     m_inhibitRefresh = false;
 
@@ -1158,6 +1160,9 @@ void NotationView::initStatusBar()
     sb->setItemAlignment(KTmpStatusMsg::getDefaultId(), 
                          AlignLeft | AlignVCenter);
 
+    m_selectionCounter = new QLabel(sb);
+    sb->addWidget(m_selectionCounter);
+
     m_progressBar = new RosegardenProgressBar(100, true, sb);
     sb->addWidget(m_progressBar);
 }
@@ -1422,6 +1427,16 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview)
 	    m_staffs[i]->setProgressReporter(0);
 	}
     }
+
+    int eventsSelected = 0;
+    if (s) eventsSelected = s->getSegmentEvents().size();
+    if (s) {
+	m_selectionCounter->setText
+	    (i18n("  %1 events selected ").arg(eventsSelected));
+    } else {
+	m_selectionCounter->setText(i18n("  No selection "));
+    }
+    m_selectionCounter->update();
 
     //!!! dup with refreshSegment, move to other fn somewhere
 

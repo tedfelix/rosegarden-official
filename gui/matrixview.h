@@ -284,6 +284,7 @@ protected:
     // Status bar elements
     QLabel* m_hoveredOverAbsoluteTime;
     QLabel* m_hoveredOverNoteName;
+    QLabel *m_selectionCounter;
 
     /**
      * used in slotHoveredOverKeyChanged to track moves over the piano

@@ -78,7 +78,10 @@ PluginManager::~PluginManager()
 void
 PluginManager::getenvLADSPAPath()
 {
-    m_path = std::string(getenv("LADSPA_PATH"));
+    char *path = getenv("LADSPA_PATH");
+
+    if (!path) m_path = "";
+    else m_path = std::string(path);
 
     // try a default value
     if (m_path == "")

@@ -74,6 +74,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
       m_snapGrid(&m_hlayout),
       m_hoveredOverAbsoluteTime(0),
       m_hoveredOverNoteName(0),
+      m_selectionCounter(0),
       m_previousEvPitch(0),
       m_canvasView(0),
       m_pianoView(0),
@@ -242,6 +243,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     slotTestClipboard();
 #endif
 
+    setCurrentSelection(0);
 
     // Change this when the matrix view will have its own page
     // in the config dialog.
@@ -390,6 +392,8 @@ void MatrixView::initStatusBar()
     sb->setItemAlignment(KTmpStatusMsg::getDefaultId(), 
                          AlignLeft | AlignVCenter);
 
+    m_selectionCounter = new QLabel(sb);
+    sb->addWidget(m_selectionCounter);
 }
 
 
@@ -475,6 +479,16 @@ void MatrixView::setCurrentSelection(EventSelection* s)
 
     delete m_currentEventSelection;
     m_currentEventSelection = s;
+
+    int eventsSelected = 0;
+    if (s) eventsSelected = s->getSegmentEvents().size();
+    if (s) {
+	m_selectionCounter->setText
+	    (i18n("  %1 events selected ").arg(eventsSelected));
+    } else {
+	m_selectionCounter->setText(i18n("  No selection "));
+    }
+    m_selectionCounter->update();
 
     if (s) {
         getStaff(0)->positionElements(s->getStartTime(),
