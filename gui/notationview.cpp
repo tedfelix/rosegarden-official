@@ -728,7 +728,9 @@ NotationView::insertNote(int pitch, const QPoint &eventPos)
         // if closest note has the same pitch as the one we're
         // inserting, bail out
         if ( (*closestNote)->event()->get<Int>("pitch") == pitch ) {
-            delete insertedEvent; // this will also delete the NotationElement
+            kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : note is of same pitch - no insert\n";
+            delete insertedEvent;
+            delete newNotationElement;
             return;
         }
 
