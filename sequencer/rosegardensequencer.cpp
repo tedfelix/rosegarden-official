@@ -529,6 +529,37 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
     {
         std::cout << "RosegardenSequencerApp::record()"
                   << " - starting to record Audio" << endl;
+
+        QByteArray data, replyData;
+        QCString replyType;
+        QDataStream arg(data, IO_WriteOnly);
+
+        if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
+                                      ROSEGARDEN_GUI_IFACE_NAME,
+                                      "createNewAudioFile()",
+                                      data, replyType, replyData, true))
+        {
+            std::cerr << "RosegardenSequencer::record()"
+                      << " - can't call RosegardenGUI client"
+                      << std::endl;
+        }
+
+        QDataStream reply(replyData, IO_ReadOnly);
+        QString audioFileName;
+        if (replyType == "QString")
+        {
+            reply >> audioFileName;
+        }
+        else
+        {
+            std::cerr << "RosegardenSequencer::record() - "
+                      << "unrecognised type returned" << std::endl;
+        }
+
+        // set recording filename
+        m_sequencer->setRecordingFilename(std::string(audioFileName.data()));
+
+        // set recording
         m_sequencer->record(Rosegarden::RECORD_AUDIO);
     }
     else

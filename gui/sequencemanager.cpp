@@ -1191,7 +1191,7 @@ void
 SequenceManager::processRecordedAudio(const Rosegarden::RealTime &time,
                                       float audioLevel)
 {
-    std::cout << "PROCESS RECORDED AUDIO" << std::endl;
+    m_doc->insertRecordedAudio(time, audioLevel, m_transportStatus);
 }
 
 

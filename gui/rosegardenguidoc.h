@@ -199,6 +199,13 @@ public:
     void insertRecordedMidi(const Rosegarden::MappedComposition &mc,
                             TransportStatus status);
 
+    /*
+     *  insert a recording SegmentItem for Audio with a given audio level
+     */
+    void insertRecordedAudio(const Rosegarden::RealTime &time,
+                             float audioLevel,
+                             TransportStatus status);
+
     /**
      * Tidy up the recording Segment
      */
@@ -237,6 +244,12 @@ public:
      * results to our Studio
      */
     void getMappedDevice(Rosegarden::DeviceId id);
+
+    /*
+     * Create a new audio file and return the path to it so that
+     * the sequencer can use it to write to.
+     */
+    std::string createNewAudioFile();
 
 public slots:
     /**

@@ -186,6 +186,12 @@ public:
     {
         return m_soundDriver->getLastRecordedAudioLevel();
     }
+
+    // set the file we're using for audio recording - we only currently
+    // support recording of a single track at a time
+    //
+    void setRecordingFilename(const std::string &file)
+        { m_soundDriver->setRecordingFilename(file); }
     
 private:
 

@@ -326,6 +326,12 @@ protected:
      */
     void plugAccelerators(QWidget *widget, QAccel *accel);
 
+    /*
+     * Create a new audio file for the sequencer and return the
+     * path to it as a QString.
+     */
+    QString createNewAudioFile();
+ 
 public slots:
     /**
      * open a new application window by creating a new instance of

@@ -22,6 +22,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <dirent.h> // for new recording file
+#include <cstdio>   // sprintf
 
 #include "AudioFile.h"
 #include "AudioFileManager.h"
@@ -30,7 +32,8 @@
 namespace Rosegarden
 {
 
-AudioFileManager::AudioFileManager()
+AudioFileManager::AudioFileManager():
+    m_audioRecordPath("./") // current directory default
 {
 }
 
@@ -40,7 +43,7 @@ AudioFileManager::~AudioFileManager()
 
 // Create a new AudioFile with unique ID and label
 //
-int
+unsigned int
 AudioFileManager::insertFile(const std::string &name,
                              const std::string &fileName)
 {
@@ -56,15 +59,17 @@ AudioFileManager::insertFile(const std::string &name,
 
     // if we don't recognise the file then don't insert it
     //
+    /*
     if (aF->open() == false)
     {
         delete aF;
         return -1;
     }
+    */
 
     m_audioFiles.push_back(aF);
 
-    return (int)id;
+    return (unsigned int)id;
 }
 
 
@@ -234,6 +239,74 @@ AudioFileManager::clear()
 
     m_audioFiles.erase(m_audioFiles.begin(), m_audioFiles.end());
 }
+
+std::string
+AudioFileManager::createRecordingAudioFile()
+{
+    unsigned int newId = getFirstUnusedID();
+    int audioFileNumber = 0;
+
+    // search for used RG-AUDIO files in the record directory
+    DIR *dir = opendir(m_audioRecordPath.c_str());
+    std::string prefix = "RG-AUDIO-";
+    std::string file;
+
+    if (dir)
+    {
+        dirent *entry;
+
+        while ((entry = readdir(dir)) != NULL)
+        {
+            file = entry->d_name;
+
+            // hmm, why aren't file types working?
+            // we should be able to filter by d_type but
+            // it's currently returning NULL
+
+#if (__GNUC__ < 3)
+            if (file.compare(prefix, 0, 9) == 0)
+#else
+            if (file.compare(0, 9, prefix) == 0)
+#endif
+            {
+                // get the number
+                file.erase(0, 9);
+
+                // match and remove post dot
+                int pos = file.find(".");
+                file.erase(pos, file.length());
+
+                // store
+                if (atoi(file.c_str()) > audioFileNumber)
+                    audioFileNumber = atoi(file.c_str());
+            }
+        }
+
+    }
+    else
+    {
+        std::cerr << "AudioFileManager::createRecordingAudioFile - "
+                  << "can't access recording directory \'"
+                  << m_audioRecordPath << "\'" << std::endl;
+    }
+
+    // start from 1, not 0 if we've not found anything
+    if (audioFileNumber == 0)
+        audioFileNumber = 1;
+    else
+        audioFileNumber++;
+
+    // composite with number and return
+    char number[100];
+    sprintf(number, "%.4d", audioFileNumber);
+    file = prefix + number + ".wav";
+
+    // insert file into vector
+    AudioFile *aF = new AudioFile(newId, file, m_audioRecordPath + file);
+    m_audioFiles.push_back(aF);
+
+    return file;
+} 
 
 
 

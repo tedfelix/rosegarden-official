@@ -100,6 +100,12 @@ k_dcop:
     //
     virtual void alive() = 0;
 
+    // The sequencer requests that a new audio file is created - the
+    // gui does so and returns the path of the new file so that the
+    // sequencer can use it.
+    //
+    virtual QString createNewAudioFile() = 0;
+
     // Actions proxy
     //
     DCOPRef action( const QCString &name );

@@ -1012,4 +1012,41 @@ RosegardenGUIDoc::convertToSinglePoint(Rosegarden::Segment *segment)
 
 }
 
+std::string
+RosegardenGUIDoc::createNewAudioFile()
+{
+    return m_audioFileManager.createRecordingAudioFile();
+}
+
+
+void
+RosegardenGUIDoc::insertRecordedAudio(const Rosegarden::RealTime &time,
+                                      float audioLevel,
+                                     TransportStatus status)
+{
+    // Just create a new record Segment if we don't have one already.
+    // Make sure we don't recreate the m_recordSegment if it's already
+    // freed.
+    //
+    if (m_recordSegment == 0 && status == RECORDING_AUDIO)
+    {
+        m_recordSegment = new Segment();
+        m_recordSegment->setTrack(m_composition.getRecordTrack());
+        m_recordSegment->setStartTime(m_composition.getPosition());
+    }
+    cout << "TIME = " << time << endl;
+
+    if (status == RECORDING_AUDIO)
+    {
+        // update this segment on the GUI
+        RosegardenGUIView *w;
+        if(pViewList)
+        {
+            for(w=pViewList->first(); w!=0; w=pViewList->next())
+            {
+                w->showRecordingSegmentItem(m_recordSegment);
+            }
+        }
+    }
+}
 

@@ -2356,5 +2356,13 @@ RosegardenGUIApp::plugAccelerators(QWidget *widget, QAccel *acc)
     }
 }
 
+// Return the path to a new audio file as a QString (DCOP friendly)
+//
+QString
+RosegardenGUIApp::createNewAudioFile()
+{
+    return QString(m_doc->createNewAudioFile().c_str());
+}
+
 
 

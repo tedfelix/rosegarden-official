@@ -101,6 +101,7 @@ public:
     unsigned int getBitsPerSample();
     unsigned int getSampleRate();
 
+
 private:
     RealTime              m_startTime;
     RealTime              m_startIndex;
@@ -284,6 +285,9 @@ public:
     //
     void pushPlayableAudioQueue();
 
+    // recording filename
+    void setRecordingFilename(const std::string &file)
+        {  m_recordingFilename = file; }
 
 protected:
     // Helper functions to be implemented by subclasses
@@ -337,6 +341,9 @@ protected:
     //
     std::vector<PlayableAudioFile*>             m_audioPlayThreadQueue;
     std::vector<AudioFile*>                     m_audioFiles;
+
+    // filename we should record to
+    std::string           m_recordingFilename;
 
 };
 

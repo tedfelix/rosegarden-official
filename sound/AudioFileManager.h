@@ -55,7 +55,8 @@ public:
     // first allocated id for it.
     // 
     //
-    int insertFile(const std::string &name, const std::string &fileName);
+    unsigned int insertFile(const std::string &name,
+                            const std::string &fileName);
 
     // And insert an AudioFile and specify an id
     //
@@ -82,7 +83,19 @@ public:
     std::vector<AudioFile*>::const_iterator end()
         { return m_audioFiles.end(); }
 
+    // Clear down all audio file references
+    //
     void clear();
+
+    // Get and set the record path
+    //
+    std::string getAudioRecordPath() { return m_audioRecordPath; }
+    void setAudioRecordPath(const std::string &path)
+        { m_audioRecordPath = path; }
+
+    // Get a new audio filename at the audio record path
+    //
+    std::string createRecordingAudioFile();
 
 private:
     std::string getFileInPath(const std::string &file);
@@ -91,6 +104,8 @@ private:
 
     std::vector<AudioFile*> m_audioFiles;
     std::vector<std::string> m_audioSearchPath;
+
+    std::string m_audioRecordPath;
 
 };
 
