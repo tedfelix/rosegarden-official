@@ -64,8 +64,9 @@ VUMeter::setLevel(const double &level)
     // 
     m_level = m_peakLevel;
 
+    // Only start the timer when we need it
     if(m_fallTimer.isActive() == false)
-        m_fallTimer.start(20);
+        m_fallTimer.start(40);
 
     QPainter paint(this);
     drawMeterLevel(&paint);
@@ -119,6 +120,8 @@ VUMeter::reduceLevel()
     if (m_level <= 0)
     {
         m_level = 0;
+
+        // Always stop the timer when we don't need it
         m_fallTimer.stop();
     }
 
