@@ -191,6 +191,8 @@ public:
         applyFiltering(const Rosegarden::MappedComposition &mC,
                        Rosegarden::MappedEvent::MappedEventType filter);
 
+    CountdownDialog* getCountdownDialog() { return m_countdownDialog; }
+
 public slots:
     // Empty the m_clearToSend flag
     //

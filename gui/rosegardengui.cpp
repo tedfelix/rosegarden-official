@@ -1364,7 +1364,7 @@ RosegardenGUIApp::getValidWriteFile(const QString &descriptiveExtension,
         QString saveFileName=m_doc->getAbsFilePath();
         // Show filename without the old extension
         int dotLoc=saveFileName.findRev('.');
-        if (dotLoc > saveFileName.length()-4) {
+        if (dotLoc > int(saveFileName.length() - 4)) {
             saveFileName=saveFileName.left(dotLoc);
         }
         saveFileDialog.setSelection(saveFileName);
@@ -3198,6 +3198,10 @@ RosegardenGUIApp::slotRecord()
         m_transport->PlayButton()->setOn(false);
 
     }
+
+    // plugin the keyboard accelerators for focus on this dialog
+    plugAccelerators(m_seqManager->getCountdownDialog(),
+                     m_seqManager->getCountdownDialog()->getAccelerators());
 }
 
 // Toggling record whilst stopped prepares us for record next time we

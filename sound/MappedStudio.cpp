@@ -694,7 +694,7 @@ MappedAudioFader::MappedAudioFader(MappedObject *parent,
                       m_level(80), // assume 100 is max for the moment
                       m_instrumentId(0),
                       m_bypassed(false),
-                      m_pan(Rosegarden::MidiMidValue)
+                      m_pan(0)
 {
     // Set default connections
     //

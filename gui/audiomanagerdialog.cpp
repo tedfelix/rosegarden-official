@@ -172,7 +172,30 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     m_exportButton    = new QPushButton(i18n("Export Audio File"), v);
     m_fileList        = new AudioListView(h);
 
-    QToolTip::add(m_fileList, i18n("Drag'n Drop .wav files here"));
+    QToolTip::add(m_addButton,
+            i18n("Add an audio file to this manager dialog."));
+
+    QToolTip::add(m_deleteButton,
+            i18n("Remove and audio file from this manager dialog."));
+
+    QToolTip::add(m_playButton,
+            i18n("Hear a preview of the currently selected audio file."));
+
+    QToolTip::add(m_renameButton,
+            i18n("Rename the currently selected audio file."));
+
+    QToolTip::add(m_insertButton,
+            i18n("Insert the current audio file at the bottom of your composition in a new audio track."));
+
+    QToolTip::add(m_deleteAllButton,
+            i18n("Remove all audio files (and any representations of them) from this dialog and the composition."));
+
+    QToolTip::add(m_exportButton,
+            i18n("Export this audio file."));
+
+    QToolTip::add(m_fileList,
+            i18n("You can drag and drop .wav files here to insert them from Konqueror or other KDE file browsers."));
+
 
     // Set the column names
     //

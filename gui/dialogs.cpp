@@ -58,6 +58,7 @@
 #include <qstringlist.h>
 #include <qtextedit.h>
 #include <dcopclient.h>
+#include <qaccel.h>
 
 #include <kapp.h>
 #include <klocale.h>
@@ -2890,6 +2891,8 @@ CountdownDialog::CountdownDialog(QWidget *parent, int seconds):
     // Set the total time to show the bar in initial position
     //
     setElapsedTime(0);
+
+    m_accelerators = new QAccel(this);
 
 }
 

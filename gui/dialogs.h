@@ -47,6 +47,7 @@ class QGrid;
 class RosegardenGUIDoc;
 class RosegardenSpinBox;
 class QTextEdit;
+class QAccel;
 class RosegardenQuantizeParameters;
 
 
@@ -688,6 +689,8 @@ public:
     int getTotalTime() const { return m_totalTime; }
     void setTotalTime(int seconds);
 
+    QAccel* getAccelerators() { return m_accelerators; }
+
 signals:
     void completed(); // m_totalTime has elapsed
     void stopped();   // someone pushed the stop button
@@ -703,6 +706,8 @@ protected:
 
     int           m_progressBarWidth;
     int           m_progressBarHeight;
+
+    QAccel       *m_accelerators;
 };
 
 #endif

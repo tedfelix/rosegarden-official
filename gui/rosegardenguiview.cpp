@@ -989,6 +989,9 @@ RosegardenGUIView::slotAddAudioSegmentAndTrack(
                                                     startTime,
                                                     endTime));
     slotAddCommandToHistory(macro);
+
+    // fix the canvas size
+    m_trackEditor->slotReadjustCanvasSize();
 }
 
 void
