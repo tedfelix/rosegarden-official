@@ -99,7 +99,6 @@ XMLStorableEvent::XMLStorableEvent(const QXmlAttributes &attributes)
                     kdDebug(KDEBUG_AREA) << "Bad duration : " << attrVal << endl;
             }
 
-            kdDebug(KDEBUG_AREA) << "Setting duration to : " << d << endl;
             setDuration(d);
 
         } else {
