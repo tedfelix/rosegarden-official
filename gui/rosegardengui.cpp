@@ -107,10 +107,6 @@ void RosegardenGUIApp::setupActions()
     KStdAction::keyBindings      (this, SLOT(editKeys()),     actionCollection());
     KStdAction::configureToolbars(this, SLOT(editToolbars()), actionCollection());
 
-    // setup Notes menu
-    new KAction(i18n("Whole"), 0, this,
-                SLOT(slotWhole()), actionCollection(), "whole_note" );
-
     createGUI("rosegardenui.rc");
     // createGUI(); // we don't have non-standard actions for the moment
     
@@ -141,7 +137,7 @@ void RosegardenGUIApp::initView()
 
     m_view = new RosegardenGUIView(this);
     m_doc->addView(m_view);
-    setCentralWidget(m_view);	
+    setCentralWidget(m_view);
     setCaption(m_doc->getTitle());
 
 }
@@ -586,9 +582,4 @@ void RosegardenGUIApp::slotStatusHelpMsg(const QString &text)
     ///////////////////////////////////////////////////////////////////
     // change status message of whole statusbar temporary (text, msec)
     statusBar()->message(text, 2000);
-}
-
-void RosegardenGUIApp::slotWhole()
-{
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotWhole()\n";
 }

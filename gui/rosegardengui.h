@@ -229,9 +229,6 @@ class RosegardenGUIApp : public KMainWindow
      */
     void slotStatusHelpMsg(const QString &text);
 
-    void slotWhole();
-
-
 private:
 
     /** contains the recently used filenames */
