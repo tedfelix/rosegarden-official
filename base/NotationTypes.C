@@ -1827,22 +1827,6 @@ AccidentalTable::AccidentalTable(const Key &key, const Clef &clef,
     m_octaves(octaves), m_barReset(barReset)
 {
     // nothing else
-/*
-    std::vector<int> heights(key.getAccidentalHeights(clef));
-    unsigned int i;
-
-    for (i = 0; i < 7; ++i) {
-	m_accidentals.push_back(NoAccidental);
-	m_newAccidentals.push_back(NoAccidental);
-    }
-
-    for (i = 0; i < heights.size(); ++i) {
-	int height = Key::canonicalHeight(heights[i]);
-	Accidental acc = key.isSharp() ? Sharp : Flat;
-        m_accidentals[height] = acc;
-	m_newAccidentals[height] = acc;
-    }
-*/
 }
 
 AccidentalTable::AccidentalTable(const AccidentalTable &t) :
@@ -1902,6 +1886,8 @@ AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height,
 	}
     }
 
+//    std::cerr << "AccidentalTable::processDisplayAccidental: acc " << acc0 << ", h " << height << ", caut " << cautionary << ", ch " << canonicalHeight << ", keyacc " << keyAcc << " canacc " << canonicalAcc << " noracc " << normalAcc << " oct " << m_octaves << std::endl;
+
     if (acc == NoAccidental) acc = keyAcc;
 
     if (m_octaves == OctavesIndependent ||
@@ -1955,39 +1941,6 @@ AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height,
 		}
 	    }
 	}
-		    
-/*
-	if (normalAcc == NoAccidental) {
-	    normalAcc = keyAcc;
-	}
-
-	if (canonicalAcc == NoAccidental) {
-	    canonicalAcc = keyAcc;
-	}
-
-	if (acc == normalAcc) {
-	    if (acc == NoAccidental && acc != canonicalAcc) {
-		acc = Natural;
-		cautionary = true;
-	    } else {
-		if (!cautionary) {
-		    // can't actually handle this right (can we?)
-		    // without knowing whether the canonical acc
-		    // occurred before or after the last normal acc
-		    acc = NoAccidental;
-		}
-	    }
-	} else if (acc == canonicalAcc) {
-	    if (acc != NoAccidental) {
-//		cautionary = true;
-	    } else {
-		acc = Natural;
-		cautionary = true;
-	    }
-	} else if (acc == NoAccidental) {
-	    acc = Natural;
-	}
-*/
     }
 
     if (acc != NoAccidental) {
