@@ -231,6 +231,9 @@ public:
     size_t computeMmappedSize();
 
 protected:
+    /// put all data to be dumped in internal byte array
+    void prepareDump();
+
     /// set the size of the mmapped filed
     void setFileSize(size_t);
 
@@ -247,10 +250,11 @@ protected:
     RosegardenGUIDoc* m_doc;
     Segment* m_segment;
     QString m_fileName;
-    
+
     int m_fd;
     size_t m_mmappedSize;
     char* m_mmappedBuffer;
+    QByteArray m_byteArray;
 };
 
 //----------------------------------------
@@ -2063,7 +2067,7 @@ void SegmentMmapper::doMmap()
     
 }
 
-void SegmentMmapper::dump()
+void SegmentMmapper::prepareDump()
 {
     // temporary byte array on which we dump the events
     QByteArray byteArray;
@@ -2132,15 +2136,30 @@ void SegmentMmapper::dump()
         }
     }
 
-    if (byteArray.size() > 0) {
+    m_byteArray = byteArray;
+}
+
+void SegmentMmapper::dump()
+{
+    prepareDump();
+
+    if (m_byteArray.size() > 0) {
+
+        if (m_byteArray.size() > m_mmappedSize) {
+            SEQMAN_DEBUG << QString("SegmentMmapper::dump : internal byte array has grown larger (%1) than mmapped buffer (%2), enlarging buffer\n")
+                .arg(m_byteArray.size()).arg(m_mmappedSize);
+            setFileSize(m_byteArray.size());
+            remap(m_byteArray.size());
+        }
+        
         // copy byte array on mmapped zone
         //
-        SEQMAN_DEBUG << QString("SegmentMmapper::dump : memcpy from %1 to %2 of size %3 (actual size)\n")
-            .arg((unsigned int)byteArray.data(), 0, 16)
+        SEQMAN_DEBUG << QString("SegmentMmapper::dump : memcpy from %1 to %2 of size %3 (actual size) - mmapped size is %4\n")
+            .arg((unsigned int)m_byteArray.data(), 0, 16)
             .arg((unsigned int)m_mmappedBuffer, 0, 16)
-            .arg(byteArray.size());
+            .arg(m_byteArray.size()).arg(m_mmappedSize);
 
-        memcpy(m_mmappedBuffer, byteArray.data(), byteArray.size());
+        memcpy(m_mmappedBuffer, m_byteArray.data(), m_byteArray.size());
         ::msync(m_mmappedBuffer, m_mmappedSize, MS_ASYNC);
     }
     
