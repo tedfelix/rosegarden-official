@@ -7,8 +7,6 @@ Features for 1.0 - updated 20030627
 
 - ALSA ports [cc]
 
-- general file merging [cc]
-
 - multiple document interface (switcheable buffers, loading while playing) [rwb]
 
 - playlists (essential for demos!) [rwb]
@@ -40,10 +38,6 @@ Features for 1.0 - updated 20030627
   eventually wean it off of the junky code it currently uses. [dmm]
 
 - fix lilypond lyric duration bug [dmm]
-
-- look at ways to avoid having multi-voice music completely fuck up the
-  lilypond export (Chord class, plus possible measure by measure voice
-  resolution/separation algorithm I've been thinking about in spare moments) [dmm]
 
 - named controllers for studio with associated bankeditor-like dialog [rwb/dmm]
   [ALMOST DONE - needs linking up to colours and implementing in IPBs
@@ -78,20 +72,31 @@ Features for 1.0 - updated 20030627
   
   I'll have a look at this soonish [rwb]
 
+- Tempo ruler in main window: need control-ruler-like interface,
+  ideally from control-ruler code.  This one is a lot more important
+  than we've given it credit for so far, I think.
+
 - native printing 
-  o printing resolution
   o adding fluff and nicities to printed staves
-  o create mapping files for commerical available fonts (so one can
-    use them in RG)
+  o getting mapping working for feta TT
 
 - notation
   o staff connections above/below (bracketing)
   o bar styles: double, repeat -- integration with repeating segments how?
   o at least be able to draw segno, 1/2-repeats etc
 
+- menus throughout
+  o check that the accelerators don't clash
+  o where necessary, reorganise and rename to make sure like functions
+    are together and clearly described -- for example, the notation
+    Transforms menu is not at all ideal
+  o relatedly: make sure translators have time/awareness of changes!
+
 
 Completed
 ---------
+
+- general file merging [cc]
 
 - adding instrument selection menu to tracks menu [rwb/gl] [DONE]
 
@@ -101,6 +106,21 @@ Completed
 
 - request: triplets of more than three (erm, quintuplets?)
     [ALREADY DONE - DOCUMENT?]
+
+- native printing 
+  o printing resolution
+  o create mapping files for commerical available fonts (so one can
+    use them in RG)
+
+- look at ways to avoid having multi-voice music completely fuck up the
+  lilypond export (Chord class, plus possible measure by measure voice
+  resolution/separation algorithm I've been thinking about in spare moments) [dmm]
+  [This is not exactly completed.  Certainly no "voice separation
+  algorithm", which would be interesting in itself regardless of
+  applications for Lilypond.  But I think it's about as far as we'll
+  get for the moment.  It's now pretty good with scores that actually
+  display well in Rosegarden.]
+
 
 To be ignored
 -------------

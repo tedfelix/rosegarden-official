@@ -237,6 +237,7 @@ bool
 RosegardenProgressDialog::eventFilter(QObject *watched, QEvent *e)
 {
     if (e->type() == QEvent::MouseButtonPress    ||
+	e->type() == QEvent::MouseMove           ||
         e->type() == QEvent::MouseButtonRelease  ||
         e->type() == QEvent::MouseButtonDblClick ||
         e->type() == QEvent::KeyPress            ||
@@ -345,6 +346,7 @@ bool
 RosegardenProgressBar::eventFilter(QObject *watched, QEvent *e)
 {
     if (e->type() == QEvent::MouseButtonPress    ||
+	e->type() == QEvent::MouseMove           ||
         e->type() == QEvent::MouseButtonRelease  ||
         e->type() == QEvent::MouseButtonDblClick ||
         e->type() == QEvent::KeyPress            ||

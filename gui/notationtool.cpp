@@ -1110,6 +1110,7 @@ int NotationSelector::handleMouseMove(timeT, int,
     if (m_clickedElement) {
 
 	if (m_nParentView->drag(m_selectedStaff, m_clickedElement, e->x(), e->y())) {
+	    //!!! hmm, m_clickedElement might have been deleted and recreated by the drag operation's command
 	    m_selectionRect->setX(e->x());
 	    m_selectionRect->setY(e->y());
 	    m_selectionRect->setSize(0, 0);
@@ -1179,6 +1180,7 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
 	setViewCurrentSelection(false);
     }
 
+    m_clickedElement = 0;
     m_selectionRect->hide();
     m_nParentView->canvas()->update();
 }

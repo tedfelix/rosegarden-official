@@ -1063,6 +1063,76 @@ TransposeCommand::modifySegment()
     }
 }
 
+
+MoveCommand::MoveCommand(Segment &s, timeT newTime, bool useNotationTimings,
+			 EventSelection &sel) :
+    BasicCommand(getGlobalName(), s,
+		 std::min(sel.getStartTime(), newTime),
+		 std::max(sel.getEndTime(), newTime + sel.getTotalDuration())),
+    m_selection(&sel),
+    m_newStartTime(newTime),
+    m_useNotationTimings(useNotationTimings)
+{
+    // nothing else
+}
+
+QString
+MoveCommand::getGlobalName(Rosegarden::timeT delta)
+{
+    if (delta == 0) {
+	return "&Move Events";
+    } else if (delta < 0) {
+	return "&Move Events Back";
+    } else {
+	return "&Move Events Forward";
+    }
+}
+
+void
+MoveCommand::modifySegment()
+{
+    std::vector<Event *> toErase;
+    std::vector<Event *> toInsert;
+
+    timeT a0 = m_selection->getStartTime();
+    timeT a1 = m_selection->getEndTime();
+    timeT b0 = m_newStartTime;
+    timeT b1 = b0 + (a1 - a0);
+
+    EventSelection::eventcontainer::iterator i;
+
+    for (i  = m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+
+	if (!(*i)->isa(Note::EventRestType)) {
+
+	    toErase.push_back(*i);
+
+	    timeT newTime =
+		(m_useNotationTimings ?
+		 (*i)->getNotationAbsoluteTime() : (*i)->getAbsoluteTime()) +
+		(b0 - a0);
+
+	    toInsert.push_back(new Event(**i, newTime));
+	}
+    }
+
+    Segment &segment(m_selection->getSegment());
+
+    for (unsigned int j = 0; j < toErase.size(); ++j) {
+	Segment::iterator jtr(segment.findSingle(toErase[j]));
+	if (jtr != segment.end()) segment.erase(jtr);
+    }
+
+    for (unsigned int j = 0; j < toInsert.size(); ++j) {
+	segment.insert(toInsert[j]);
+    }
+
+    segment.normalizeRests(a0, a1);
+    segment.normalizeRests(b0, b1);
+
+    //!!! should select all moved notes
+}
    
 void
 ChangeVelocityCommand::modifySegment()

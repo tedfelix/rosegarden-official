@@ -2400,7 +2400,7 @@ bool NotationView::drag(NotationStaff *staff, NotationElement *element, int x, i
 
     // Calculate time and height
     
-    timeT clickedTime = element->event()->getAbsoluteTime();
+    timeT clickedTime = element->event()->getNotationAbsoluteTime();
 
     Rosegarden::Accidental clickedAccidental = Rosegarden::Accidentals::NoAccidental;
     (void)element->event()->get<Rosegarden::String>
@@ -2413,13 +2413,13 @@ bool NotationView::drag(NotationStaff *staff, NotationElement *element, int x, i
     Event *clefEvt = 0, *keyEvt = 0;
     Rosegarden::Clef clef;
     Rosegarden::Key key;
-    timeT time = clickedTime;
+    timeT dragTime = clickedTime;
 
     NotationElementList::iterator itr =
 	staff->getElementUnderCanvasCoords(x, y, clefEvt, keyEvt);
 
     if (itr != staff->getViewElementList()->end()) {
-	time = (*itr)->event()->getAbsoluteTime(); // not getViewAbsoluteTime()
+	dragTime = (*itr)->event()->getNotationAbsoluteTime();
     }
 
     if (clefEvt) clef = Rosegarden::Clef(*clefEvt);
@@ -2429,6 +2429,14 @@ bool NotationView::drag(NotationStaff *staff, NotationElement *element, int x, i
     Rosegarden::Pitch p(height, clef, key, clickedAccidental);
     int pitch = p.getPerformancePitch();
 
+    if (pitch != clickedPitch) {
+	//!!! we need some limit to this
+
+	addCommandToHistory(new TransposeCommand(pitch - clickedPitch,
+						 *m_currentEventSelection));
+	return true;
+    }
+
     //!!! move the selection left or right if (a) there is an event at the
     // time dragged to (and the time is not the absolute or notation time
     // of the original event) or (b) the original event has notation
@@ -2436,11 +2444,10 @@ bool NotationView::drag(NotationStaff *staff, NotationElement *element, int x, i
     // duration into its bar.  Need to maintain selectedness on the events
     // though
 
-    if (pitch != clickedPitch) {
-	//!!! we need some limit to this
-
-	addCommandToHistory(new TransposeCommand(pitch - clickedPitch,
-						 *m_currentEventSelection));
+    if (dragTime != clickedTime) {
+	// this is only option (a) from the above selection
+	addCommandToHistory(new MoveCommand(staff->getSegment(), dragTime,
+					    true, *m_currentEventSelection));
 	return true;
     }
 

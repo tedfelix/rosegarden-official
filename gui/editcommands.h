@@ -369,6 +369,26 @@ private:
 };
 
 
+class MoveCommand : public BasicCommand
+{
+public:
+    MoveCommand(Rosegarden::Segment &segment,
+		Rosegarden::timeT newStartTime,
+		bool useNotationTimings,
+		Rosegarden::EventSelection &selection);
+    
+    static QString getGlobalName(Rosegarden::timeT delta = 0);
+
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    Rosegarden::timeT m_newStartTime;
+    bool m_useNotationTimings;
+};
+
+
 /** Add or subtract a constant from all event velocities.
     Use SelectionPropertyCommand if you want to do something more
     creative. */
