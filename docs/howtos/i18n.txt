@@ -1,0 +1,70 @@
+ToDo/Unclear points:
+CVS instructions for translators
+Special handling of British/American note naming (does this happen in any other language?)
+
+FOR USERS
+------------------------
+A list of supported languages is available at our website.  This list is currently empty, but at least French and Russian are in progress.  Please make your wishes known on the mailing list if you can translate musical or technical terminology, or need a translated version of RG.
+
+After you confirm that we support your language, the following three steps will get you started with Rosegarden4 in your native language:
+1) Install Rosegarden4.  If you have KDE running in your language already, that's all you need.  Otherwise, you also need to make sure kdebase, kde-i18n-<languageCode>, locales, and locales-<languageCode> are installed.
+2) Set your locale to the language you require.
+- For Mandrake/KDE users, this is accomplished with KDE menu/Control Center/Personalization/Country&Language.
+- This can be done manually in your favorite shell by setting the environment variable KDE_LANG to your language/locale code of choice.  Example: In the Bash shell, type "export KDE_LANG=fr" (no quotes) to use RG in the French language.
+3) Start Rosegarden4.
+
+It's that easy!
+Problems with the translations or contributions should be sent to rosegarden-devel@lists.sourceforge.net .
+
+FOR TRANSLATORS
+------------------------
+Open your language file and start translating!  The KDE project has a tool called KBabel which helps manage translated strings, but any text editor is fine.
+When you are ready to submit your translations, send new files or CVS diffs to the mailing list.  We encourage you to release early and often!
+
+If no translation yet exists for your language, make a copy of the file po/rosegarden.pot.  Name the copied file languageCode.po, where languageCode is the ISO locale code for your language.
+For example, the code for Russian is "ru" (no quotes), so the Russian translation should be found in ru.po.  A locale-specific example is en_GB.po, which is British English.
+The rosegarden.pot file is available from CVS, or on the web at
+http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/rosegarden/po/ .
+
+Discussion regarding translations is handled for the moment on rosegarden-devel@lists.sourceforge.net, although a translation-only list may be opened if there is enough traffic.
+
+FOR DEVELOPERS
+------------------------
+A few quick notes:
+Please note that the base/ directory does not use QString, and so cannot be translated with the KDE tools.  If you think a string needs to be there that absolutely must be translated, the mailing list is the best place to work this out.
+
+Unfortunately, someone has made the decision that American English be the default language for KDE apps, so all internal strings should originate in American English.  (I believe setting one's environment to en_US is a no-op? Please correct me if I'm wrong- it may just be the case that my default environment of en_US doesn't allow any en_US po translations.)
+
+Finally, after adding a new language, don't forget to re-run configure to let the Makefiles know about it.
+
+Writing code
+--------------
+The only thing you really need to know is to wrap all strings that need to be translated with the i18n() function, for example, i18n("Open File"). 
+However, please read the following- it will save work in the long run.
+- There is a version of the i18n method with two arguments.  The first arg is an explanation of exactly what the second arg is used for, which helps translators understand ambiguous cases.  (Only the second arg is translated.) For example, "View" in English may be used as a verb or noun, which are translated differently in different languages.
+- All languages do not have the same rules about word order.  Using the Qstring::arg() method allows easy re-ordering for translation purposes.
+BAD: msg = i18n("Loading file ") + filename
+GOOD: msg = i18n("Loading file %1").arg(filename)
+PROBABLY WON'T WORK AT ALL: msg = i18n("Loading " + filename + " for import")
+- arg() should also be used for non-translated strings (proper names, etc) or frequently-changing strings such as version numbers.
+
+More tricks available at
+- http://developer.kde.org/documentation/library/kdeqt/kde3arch/kde-i18n-howto.html
+- http://i18n.kde.org
+- http://i18n.kde.org/translation-howto/dictionaries.php
+
+Maintaining the translation files
+------------------------
+Every once in a while, the main rosegarden.pot file should be updated from the latest source files with the commands
+make -f admin/Makefile.common package-messages
+make
+Similarly, language files can be "merged" to include new diffs using
+make -f admin/Makefile.common package-merge
+If the changes are large or it has been a long time since the last update, announce on the mailing list to get the legions involved in updating all translated files.
+Note: The above "make" commands require the file kde.pot to be in $KDEDIR/include/kde.pot, so if you get an error use "locate kde.pot" to find it and then set KDEDIR appropriately.
+
+Overview of KDE translation system
+------------------------
+The above "make" commands find all of the i18n strings in the codebase and put them in the reference file po/rosegarden.pot.  One .pot file is created per executable, so there's also one for the sequencer, which is not used at the moment- if we ever decide to translate that as well, we'll need to manage the po/ directory a bit differently because the language files will crash into each other.
+This file should be checked in occasionally, along with the merged translated language files.
+At runtime, the system looks in the $KDEDIR/share/locale/$KDE_LANG/LC_MESSAGES/rosegarden.mo file for strings that match the arguments to i18n and replaces them with the translated versions if available.  See the developer.kde.org link above for repercussions with respect to translating #defines, etc.
