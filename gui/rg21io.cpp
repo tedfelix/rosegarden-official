@@ -90,8 +90,8 @@ bool RG21Loader::parseKey()
     
     m_currentTrack->insert(keyEvent);
 
-    kdDebug(KDEBUG_AREA) << "RG21Loader::parseKey() insert key event '"
-                         << keyName << "' at " << m_currentTrackTime << endl;
+//     kdDebug(KDEBUG_AREA) << "RG21Loader::parseKey() insert key event '"
+//                          << keyName << "' at " << m_currentTrackTime << endl;
 
     return true;
 }
