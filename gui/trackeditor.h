@@ -67,8 +67,11 @@ public:
     SegmentCanvas*       getSegmentCanvas()       { return m_segmentCanvas; }
     const SegmentCanvas* getSegmentCanvas() const { return m_segmentCanvas; }
 
-    BarButtons*       getBarButtons()       { return m_barButtons; }
-    const BarButtons* getBarButtons() const { return m_barButtons; }
+    BarButtons*       getTopBarButtons()       { return m_topBarButtons; }
+    const BarButtons* getTopBarButtons() const { return m_topBarButtons; }
+
+    BarButtons*       getBottomBarButtons()       { return m_bottomBarButtons; }
+    const BarButtons* getBottomBarButtons() const { return m_bottomBarButtons; }
 
     TrackButtons*       getTrackButtons()       { return m_trackButtons; }
     const TrackButtons* getTrackButtons() const { return m_trackButtons; }
@@ -178,8 +181,10 @@ protected:
 
     RosegardenGUIDoc        *m_document;
     Rosegarden::RulerScale  *m_rulerScale;
-    BarButtons              *m_barButtons;
+    BarButtons              *m_topBarButtons;
+    BarButtons              *m_bottomBarButtons;
     TrackButtons            *m_trackButtons;
+    QScrollBar              *m_horizontalScrollBar;
     SegmentCanvas           *m_segmentCanvas;
     QCanvasLine             *m_pointer;
 

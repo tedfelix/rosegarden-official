@@ -187,34 +187,66 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
 
     // Re-emit signals from the loop ruler
     //
-    connect(m_trackEditor->getBarButtons()->getLoopRuler(),
+    connect(m_trackEditor->getTopBarButtons()->getLoopRuler(),
             SIGNAL(setPointerPosition(Rosegarden::timeT)),
             this,
             SIGNAL(setGUIPositionPointer(Rosegarden::timeT)));
 
-    connect(m_trackEditor->getBarButtons()->getLoopRuler(),
+    connect(m_trackEditor->getTopBarButtons()->getLoopRuler(),
             SIGNAL(setPlayPosition(Rosegarden::timeT)),
             this,
             SIGNAL(setGUIPlayPosition(Rosegarden::timeT)));
 
-    connect(m_trackEditor->getBarButtons()->getLoopRuler(),
+    connect(m_trackEditor->getTopBarButtons()->getLoopRuler(),
+            SIGNAL(setLoop(Rosegarden::timeT, Rosegarden::timeT)),
+            this,
+            SIGNAL(setGUILoop(Rosegarden::timeT, Rosegarden::timeT)));
+
+    // Re-emit signals from the loop ruler
+    //
+    connect(m_trackEditor->getBottomBarButtons()->getLoopRuler(),
+            SIGNAL(setPointerPosition(Rosegarden::timeT)),
+            this,
+            SIGNAL(setGUIPositionPointer(Rosegarden::timeT)));
+
+    connect(m_trackEditor->getBottomBarButtons()->getLoopRuler(),
+            SIGNAL(setPlayPosition(Rosegarden::timeT)),
+            this,
+            SIGNAL(setGUIPlayPosition(Rosegarden::timeT)));
+
+    connect(m_trackEditor->getBottomBarButtons()->getLoopRuler(),
             SIGNAL(setLoop(Rosegarden::timeT, Rosegarden::timeT)),
             this,
             SIGNAL(setGUILoop(Rosegarden::timeT, Rosegarden::timeT)));
 
     // ... and also use these signals for ourselves
     //
-    connect(m_trackEditor->getBarButtons()->getLoopRuler(),
+    connect(m_trackEditor->getTopBarButtons()->getLoopRuler(),
             SIGNAL(setPointerPosition(Rosegarden::timeT)),
             parent,
             SLOT(setPointerPosition(Rosegarden::timeT)));
 
-    connect(m_trackEditor->getBarButtons()->getLoopRuler(),
+    connect(m_trackEditor->getTopBarButtons()->getLoopRuler(),
             SIGNAL(setPlayPosition(Rosegarden::timeT)),
             parent,
             SLOT(setPlayPosition(Rosegarden::timeT)));
 
-    connect(m_trackEditor->getBarButtons()->getLoopRuler(),
+    connect(m_trackEditor->getTopBarButtons()->getLoopRuler(),
+            SIGNAL(setLoop(Rosegarden::timeT, Rosegarden::timeT)),
+            parent,
+            SLOT(setLoop(Rosegarden::timeT, Rosegarden::timeT)));
+
+    connect(m_trackEditor->getBottomBarButtons()->getLoopRuler(),
+            SIGNAL(setPointerPosition(Rosegarden::timeT)),
+            parent,
+            SLOT(setPointerPosition(Rosegarden::timeT)));
+
+    connect(m_trackEditor->getBottomBarButtons()->getLoopRuler(),
+            SIGNAL(setPlayPosition(Rosegarden::timeT)),
+            parent,
+            SLOT(setPlayPosition(Rosegarden::timeT)));
+
+    connect(m_trackEditor->getBottomBarButtons()->getLoopRuler(),
             SIGNAL(setLoop(Rosegarden::timeT, Rosegarden::timeT)),
             parent,
             SLOT(setLoop(Rosegarden::timeT, Rosegarden::timeT)));
@@ -401,8 +433,8 @@ void RosegardenGUIView::deleteRecordingSegmentItem()
 void RosegardenGUIView::setLoopMarker(Rosegarden::timeT startLoop,
                                       Rosegarden::timeT endLoop)
 {
-    m_trackEditor->getBarButtons()->getLoopRuler()->setLoopMarker(startLoop,
-                                                                  endLoop);
+    m_trackEditor->getTopBarButtons()->getLoopRuler()->setLoopMarker(startLoop,
+                                                                     endLoop);
 }
 
 
@@ -425,7 +457,7 @@ void
 RosegardenGUIView::setShift(const bool &value)
 {
     m_trackEditor->setSelectAdd(value);
-    m_trackEditor->getBarButtons()->getLoopRuler()->setLoopingMode(value);
+    m_trackEditor->getTopBarButtons()->getLoopRuler()->setLoopingMode(value);
     m_trackEditor->setFineGrain(value);
 } 
 
