@@ -991,7 +991,7 @@ bool Composition::detachTrack(Rosegarden::Track *track)
             break;
     }
 
-    if (it == end()) return false;
+    if (it == m_tracks.end()) return false;
 
     m_tracks.erase(it);
     updateRefreshStatuses();
