@@ -35,6 +35,7 @@
 #include "lilypondio.h"
 #include "config.h"
 #include "rosestrings.h" // strtoqstr
+#include "notationproperties.h"
 
 #include "Composition.h"
 #include "BaseProperties.h"
@@ -916,7 +917,7 @@ LilypondExporter::write() {
                 // write slashes after text
                 // / = 8 // = 16 /// = 32, etc.
                 long slashes = 0;
-                (*j)->get<Int>(BaseProperties::SLASHES, slashes);
+                (*j)->get<Int>(NotationProperties::SLASHES, slashes);
                 if (slashes > 0) {
                     str << ":";
                     int length = 4;

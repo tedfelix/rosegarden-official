@@ -86,7 +86,6 @@ const PropertyName STEM_UP		= "NoteStemUp";
 const PropertyName HEIGHT_ON_STAFF      = "HeightOnStaff";
 const PropertyName NOTE_STYLE		= "NoteStyle";
 const PropertyName BEAMED		= "Beamed";
-const PropertyName SLASHES		= "Slashes";
 
 const PropertyName BEAMED_GROUP_ID               = "groupid";
 const PropertyName BEAMED_GROUP_TYPE		 = "grouptype";

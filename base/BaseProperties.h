@@ -44,9 +44,6 @@ extern const PropertyName TIED_FORWARD;
 // local to a single specific notation view.
 extern const PropertyName STEM_UP;
 
-// DMM - Lilypond needs to grab these...
-extern const PropertyName SLASHES;
-
 extern const PropertyName BEAMED_GROUP_ID;
 extern const PropertyName BEAMED_GROUP_TYPE;
 
