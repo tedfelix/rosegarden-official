@@ -26,6 +26,8 @@
 #include <kmessagebox.h>
 #include <kglobal.h>
 #include <kstddirs.h>
+#include <klocale.h>
+
 #include "rosedebug.h"
 #include "rosegardenguiview.h"
 #include "notepixmapfactory.h"
@@ -391,6 +393,11 @@ NotePixmapFactory::NotePixmapFactory(int resolution) :
 QString NotePixmapFactory::getPixmapDirectory(int resolution)
 {
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+
+    if (!pixmapDir) {
+        KMessageBox::error(0, i18n("Couldn't find pixmaps directory"));
+        throw -1;
+    }
     
     QString res = QString("%1/%2").arg(pixmapDir).arg(resolution);
     kdDebug(KDEBUG_AREA) << "NotePixmapFactory::getPixmapDirectory() : "
