@@ -661,15 +661,26 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             
         std::string name = std::string(atts.value("name").data());
 
-        // Create the instrument
-        Rosegarden::Instrument *inst =
-            new Rosegarden::Instrument(id,
-                                       type,
-                                       name,
-                                       m_device);
+        // This code should only try to match the Instrument and
+        // import relevant settings if a match is made.  If not
+        // we ignore the Instrument in the file.
+        //
+        //
+        if (m_device) // only if we have a device
+        {
+            // Create the instrument
+            /*
+            Rosegarden::Instrument *inst =
+                new Rosegarden::Instrument(id,
+                                           type,
+                                           name,
+                                           m_device);
 
-        // and insert into the current device
-        m_device->addInstrument(inst);
+            // and insert into the current device
+            m_device->addInstrument(inst);
+            */
+
+        }
 
     } else {
         kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : Don't know how to parse this : " << qName << endl;
