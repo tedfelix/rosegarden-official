@@ -23,12 +23,31 @@
 #include <qhbox.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
+#include <assert.h>
+
+TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
+                           QWidget* parent,
+                           Rosegarden::TrackHeader *vHeader,
+                           QHeader *hHeader,
+                           const char* name,
+                           WFlags):
+   QVBox(parent, name), m_doc(doc)
+{
+    assert(vHeader != 0);
+    assert(hHeader != 0);
+
+    m_tracks = vHeader->count();
+    //m_offset = vHeader->offset();
+    m_offset = 19;
+    m_cellSize = vHeader->sectionSize(0);
+    drawButtons();
+}
 
 TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
                            QWidget* parent,
                            const char* name,
                            WFlags):
-   QVBox(parent, name), m_doc(doc)
+   QVBox(parent, name), m_doc(doc), m_tracks(0), m_offset(0), m_cellSize(0)
 {
     drawButtons();
 }
@@ -36,7 +55,7 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
 TrackButtons::TrackButtons(QWidget* parent,
                            const char* name,
                            WFlags):
-   QVBox(parent, name)
+   QVBox(parent, name), m_doc(0), m_tracks(0), m_offset(0), m_cellSize(0)
 {
 }
 
@@ -51,14 +70,15 @@ TrackButtons::~TrackButtons()
 void
 TrackButtons::drawButtons()
 {
-    setSpacing(1);
+    int gap = 8;
+    setSpacing(gap);
 
     // Create a gap at the top of the layout widget
     //
     QLabel *label = new QLabel(this);
     label->setText(QString(""));
-    label->setMinimumHeight(10);
-    label->setMaximumHeight(10);
+    label->setMinimumHeight(m_offset);
+    label->setMaximumHeight(m_offset);
 
     // Create a horizontal box for each track
     // plus the two buttons
@@ -67,31 +87,76 @@ TrackButtons::drawButtons()
     QPushButton *mute;
     QPushButton *record;
 
+
+    m_recordButtonGroup = new QButtonGroup();
+    m_recordButtonGroup->setExclusive(true);
+
+    m_muteButtonGroup = new QButtonGroup();
+    m_muteButtonGroup->setExclusive(false);
+
     // Populate the widget to our current
     // hardcoded number of tracks
     //
-    for (int i = 0; i < 63; i++)
+    for (int i = 0; i < m_tracks; i++)
     {
         track = new QHBox(this);
-        track->setMinimumWidth(40);
+        track->setMinimumWidth(42);
         mute = new QPushButton(track);
         record = new QPushButton(track);
+
+        // insert the button into the group
+        //
+        m_recordButtonGroup->insert(record, i);
+        m_muteButtonGroup->insert(mute, i);
+
+        mute->setToggleButton(true);
+        //record->setToggleButton(true);
+
         mute->setText("M");
         record->setText("R"); 
 
-        mute->setMinimumWidth(15);
-        mute->setMaximumWidth(15);
+        mute->setMinimumWidth(m_cellSize - gap);
+        mute->setMaximumWidth(m_cellSize - gap);
 
-        record->setMinimumWidth(15);
-        record->setMaximumWidth(15);
+        record->setMinimumWidth(m_cellSize - gap);
+        record->setMaximumWidth(m_cellSize - gap);
 
-        mute->setMinimumHeight(15);
-        mute->setMaximumHeight(15);
+        mute->setMinimumHeight(m_cellSize - gap);
+        mute->setMaximumHeight(m_cellSize - gap);
 
-        record->setMinimumHeight(15);
-        record->setMaximumHeight(15);
+        record->setMinimumHeight(m_cellSize - gap);
+        record->setMaximumHeight(m_cellSize - gap);
     }
 }
 
+
+int
+TrackButtons::selectedRecordTrack()
+{
+   QButton *retButton = m_recordButtonGroup->selected();
+
+   // if none selected
+   if (!retButton)
+     return -1;
+
+   return m_recordButtonGroup->id(retButton);
+}
+
+
+// Create and return a list of all muted tracks
+//
+list<int>
+TrackButtons::mutedTracks()
+{
+  list<int> mutedTracks;
+
+  for (int i = 0; i < m_tracks; i++)
+  {
+    if (m_muteButtonGroup->find(i)->isDown())
+      mutedTracks.push_back(i);
+  }
+
+  return mutedTracks;
+}
 
 

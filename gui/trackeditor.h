@@ -93,6 +93,12 @@ public:
      */
     virtual void addSegment(int instrument, int start, unsigned int nbTimeSteps);
 
+    /**
+     *  Return the track header pointer for scrutiny
+     */
+    Rosegarden::TrackHeader* getVHeader() { return m_vHeader; }
+    QHeader *getHHeader() { return m_hHeader; }
+
 
 public slots:
     /**

@@ -46,6 +46,22 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
 {
     RosegardenGUIDoc* doc = getDocument();
 
+    // Construct the tracksEditor first so we can then
+    // query it for placement information
+    //
+    TrackEditor *tracksEditor = 0;
+    
+    if (doc) {
+
+        kdDebug(KDEBUG_AREA) << "RosegardenGUIView() : doc != 0\n";
+        tracksEditor = new TrackEditor(doc, this);
+
+    } else {
+
+        kdDebug(KDEBUG_AREA) << "RosegardenGUIView() : no doc\n";
+        tracksEditor = new TrackEditor(12, 50, this);
+    }
+    
     // Construct the top level horizontal box and drop the
     // button box (TrackButtons) and the main ScrollView
     // straight into it.  We use this arrangement until we
@@ -55,7 +71,10 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     QHBox *topBox = new QHBox(this);
 
     QScrollView *buttonsView = new QScrollView(topBox);
-    TrackButtons *trackButtons = new TrackButtons(doc, buttonsView);
+    TrackButtons *trackButtons = new TrackButtons(doc,
+                                               buttonsView,
+                                               tracksEditor->getVHeader(),
+                                               tracksEditor->getHHeader());
     buttonsView->addChild(trackButtons);
 
     // turn off the scrollbars on the track buttons
@@ -68,22 +87,8 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     // Now link up the vertical scrollbar to the track buttons
     //
     connect(scrollView, SIGNAL(contentsMoving(int, int)),
-            buttonsView, SLOT(scrollBy(int, int)));
+            buttonsView, SLOT(setContentsPos(int, int)));
 
-    TrackEditor *tracksEditor = 0;
-    
-    if (doc) {
-
-        kdDebug(KDEBUG_AREA) << "RosegardenGUIView() : doc != 0\n";
-        tracksEditor = new TrackEditor(doc, this);
-
-    } else {
-
-        kdDebug(KDEBUG_AREA) << "RosegardenGUIView() : no doc\n";
-        tracksEditor = new TrackEditor(12, 50, this);
-
-    }
-    
     scrollView->addChild(tracksEditor);
 
     connect(tracksEditor->canvas(), SIGNAL(editSegmentNotation(Rosegarden::Segment*)),
