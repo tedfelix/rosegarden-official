@@ -118,12 +118,12 @@ data_dirname = rosegarden
 install-data-local:
 	$(mkinstalldirs) $(kde_appsdir)/Applications/
 	$(INSTALL_DATA) $(srcdir)/rosegarden.desktop $(kde_appsdir)/Applications/rosegarden.desktop
-	$(mkinstalldirs) $(kde_icondir)/medium/locolor/apps/
-	$(mkinstalldirs) $(kde_icondir)/medium/hicolor/apps/
+	$(mkinstalldirs) $(kde_icondir)/locolor/32x32/apps/
+	$(mkinstalldirs) $(kde_icondir)/hicolor/32x32/apps/
 	- $(INSTALL_DATA) $(srcdir)/rosegarden.xpm $(kde_icondir)/locolor/32x32/apps/rosegarden.xpm
 	- $(INSTALL_DATA) $(srcdir)/rosegarden.xpm $(kde_icondir)/hicolor/32x32/apps/rosegarden.xpm
-	$(mkinstalldirs) $(kde_icondir)/small/locolor/apps/
-	$(mkinstalldirs) $(kde_icondir)/small/hicolor/apps/
+	$(mkinstalldirs) $(kde_icondir)/locolor/16x16/apps/
+	$(mkinstalldirs) $(kde_icondir)/hicolor/16x16/apps/
 	- $(INSTALL_DATA) $(srcdir)/mini-rosegarden.xpm $(kde_icondir)/locolor/16x16/apps/rosegarden.xpm
 	- $(INSTALL_DATA) $(srcdir)/mini-rosegarden.xpm $(kde_icondir)/hicolor/16x16/apps/rosegarden.xpm
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/styles
