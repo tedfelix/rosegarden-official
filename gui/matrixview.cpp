@@ -209,9 +209,14 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
         setCaption(QString("%1 - %2-Segment Partial View")
                    .arg(doc->getTitle())
                    .arg(segments.size()));
-
     }
 
+    // Scroll view to half way so we get a better chance of seeing something 
+    //
+    /* - can't use for the moment until the scroll/closing crash is sorted
+    m_canvasView->setContentsPos(0, m_canvasView->contentsHeight()/2 -
+                                     m_canvasView->visibleHeight()/2);
+    */
 
 
 }
