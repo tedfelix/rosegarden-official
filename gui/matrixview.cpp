@@ -154,8 +154,9 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     else {
         kdDebug(KDEBUG_AREA) << "MatrixView : rendering elements\n";
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+
 	    m_staffs[i]->positionAllElements();
-            m_staffs[i]->getSegment().refreshStatus(m_segmentsRefreshStatusIds[i]).setNeedsRefresh(false);
+            m_staffs[i]->getSegment().getRefreshStatus(m_segmentsRefreshStatusIds[i]).setNeedsRefresh(false);
 
         }
     }

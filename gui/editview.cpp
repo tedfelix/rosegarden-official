@@ -58,7 +58,8 @@ EditView::EditView(RosegardenGUIDoc *doc,
       m_rulerBox(new QVBoxLayout), // added to grid later on
       m_topBarButtons(0),
       m_bottomBarButtons(0),
-      m_mainCol(hasTwoCols ? 1 : 0)
+      m_mainCol(hasTwoCols ? 1 : 0),
+      m_compositionRefreshStatusId(doc->getComposition().getNewRefreshStatusId())
 {
     initSegmentRefreshStatusIds();
 
@@ -70,7 +71,7 @@ EditView::EditView(RosegardenGUIDoc *doc,
     getCommandHistory()->attachView(actionCollection());
     
     QObject::connect
-        (getCommandHistory(), SIGNAL(update()),
+        (getCommandHistory(), SIGNAL(commandExecuted()),
          this,                  SLOT(update()));
 
     m_grid->addWidget(m_horizontalScrollBar, 4, m_mainCol);
@@ -104,6 +105,25 @@ void EditView::setCanvasView(QCanvasView *canvasView)
 
 void EditView::paintEvent(QPaintEvent* e)
 {
+    if (isCompositionModified()) {
+      
+        // Check if one of the segments we display has been removed
+        // from the composition.
+        //
+	// For the moment we'll have to close the view if any of the
+	// segments we handle has been deleted.
+
+	for (unsigned int i = 0; i < m_segments.size(); ++i) {
+
+	    if (!m_segments[i]->getComposition()) {
+		// oops, I think we've been deleted
+		close();
+		return;
+	    }
+	}
+    }
+
+
     bool needUpdate = false;
     
     // Scan all segments and check if they've been modified
@@ -112,9 +132,12 @@ void EditView::paintEvent(QPaintEvent* e)
 
         Rosegarden::Segment* segment = m_segments[i];
         unsigned int refreshStatusId = m_segmentsRefreshStatusIds[i];
-        Rosegarden::SegmentRefreshStatus &refreshStatus = segment->refreshStatus(refreshStatusId);
+        Rosegarden::SegmentRefreshStatus &refreshStatus = segment->getRefreshStatus(refreshStatusId);
         
+
         if (refreshStatus.needsRefresh()) {
+
+            // TODO : if composition is also modified, relayout everything
 
             Rosegarden::timeT startTime = refreshStatus.from(),
                 endTime = refreshStatus.to();
@@ -377,7 +400,13 @@ void EditView::slotActiveItemPressed(QMouseEvent* e,
 void EditView::initSegmentRefreshStatusIds()
 {
     for(unsigned int i = 0; i < m_segments.size(); ++i) {
-        m_segmentsRefreshStatusIds.push_back(m_segments[i]->getNewRefreshStatusId());
+
+        unsigned int rid = m_segments[i]->getNewRefreshStatusId();
+        m_segmentsRefreshStatusIds.push_back(rid);
     }
 }
 
+bool EditView::isCompositionModified()
+{
+    return m_document->getComposition().getRefreshStatus(m_compositionRefreshStatusId).needsRefresh();
+}

@@ -263,6 +263,8 @@ protected:
 
     void initSegmentRefreshStatusIds();
 
+    bool isCompositionModified();
+
     //--------------- Data members ---------------------------------
 
     KConfig* m_config;
@@ -286,6 +288,7 @@ protected:
     QWidget     *m_bottomBarButtons;
 
     unsigned int m_mainCol;
+    unsigned int m_compositionRefreshStatusId;
 };
 
 #endif

@@ -202,7 +202,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
             
             m_staffs[i]->renderAllElements();
             m_staffs[i]->positionAllElements();
-            m_staffs[i]->getSegment().refreshStatus(m_segmentsRefreshStatusIds[i]).setNeedsRefresh(false);
+            m_staffs[i]->getSegment().getRefreshStatus(m_segmentsRefreshStatusIds[i]).setNeedsRefresh(false);
 	    canvas()->update();
 
         }
