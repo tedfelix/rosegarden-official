@@ -1434,6 +1434,7 @@ NoteFontFactory::isAvailableInSize(std::string fontName, int size)
     for (unsigned int i = 0; i < sizes.size(); ++i) {
 	if (sizes[i] == size) return true;
     }
+    return false;
 }
     
 
