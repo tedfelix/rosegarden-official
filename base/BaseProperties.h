@@ -28,11 +28,6 @@ namespace Rosegarden
 namespace BaseProperties
 {
 
-//!!! oh no. these two are going to have to be view-local, or to have
-// view-local alternatives, because they depend on the legato level
-//extern const PropertyName NOTE_TYPE;
-//extern const PropertyName NOTE_DOTS;
-
 extern const PropertyName PITCH;
 extern const PropertyName VELOCITY;
 extern const PropertyName ACCIDENTAL;
@@ -52,7 +47,6 @@ extern const PropertyName BEAMED_GROUP_TUPLET_BASE;
 extern const PropertyName BEAMED_GROUP_TUPLED_COUNT;
 extern const PropertyName BEAMED_GROUP_UNTUPLED_COUNT;
 
-//!!! should become view-local
 extern const PropertyName TUPLET_NOMINAL_DURATION;
 
 extern const std::string GROUP_TYPE_BEAMED;

@@ -214,6 +214,13 @@ void SegmentItem::drawShape(QPainter& painter)
 	    Segment::iterator end = m_segment->findTime(endTime);
 	    if (start == m_segment->end()) start = m_segment->begin();
 
+
+#define PREVIEW_WITH_RECTANGLES
+
+
+#ifdef PREVIEW_WITH_RECTANGLES
+	    double prevX0 = 0.0, prevX1 = 0.0;
+#endif
 	    for (Segment::iterator i = start; i != end; ++i) {
 
 		long pitch = 0;
@@ -226,6 +233,28 @@ void SegmentItem::drawShape(QPainter& painter)
 		double x0 = rulerScale->getXForTime((*i)->getAbsoluteTime());
 		double x1 = rulerScale->getXForTime((*i)->getAbsoluteTime() +
 						    (*i)->getDuration());
+
+#ifdef PREVIEW_WITH_RECTANGLES
+
+		if (x0 >= 0.0 && x1 >= x0) {
+		    if (x0 > (prevX1 + 10.0)) {
+			if ((int)prevX1 > (int)prevX0) {
+			    int width = (int)(prevX1 - prevX0);
+			    if (width > 2) --width;
+			    painter.drawRect
+				((int)prevX0,
+				 rect().y() + rect().height()/4,
+				 width, rect().height()/2);
+			}
+			prevX0 = x0;
+			prevX1 = x1;
+		    } else if (x1 > prevX1) {
+			if (x0 == 0.0) x0 = prevX0;
+			prevX1 = x1;
+		    }
+		}
+
+#else
 		int width = (int)(x1 - x0);
 		if (width > 0) --width;
 		if (width > 0) --width;
@@ -238,6 +267,7 @@ void SegmentItem::drawShape(QPainter& painter)
 		
 		painter.drawLine((int)x0, (int)y, (int)x0 + width, (int)y);
 		painter.drawLine((int)x0, (int)y+1, (int)x0 + width, (int)y+1);
+#endif
 	    }
 	}
 

@@ -96,7 +96,7 @@ public:
      * sets the modified flag for the document after a modifying
      * action on the view connected to the document.
      */
-    void setModified(bool _m=true){ m_modified=_m; };
+    void setModified(bool _m=true);
 
     /**
      * returns if the document is modified or not. Use this to

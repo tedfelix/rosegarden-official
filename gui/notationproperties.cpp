@@ -41,10 +41,6 @@ NotationProperties::NotationProperties(const std::string &prefix) :
     SLUR_Y_DELTA		(prefix + "SlurYDelta"),
     SLUR_LENGTH			(prefix + "SlurLength"),
 
-    // non-persistent, calculated from the performance data + counts,
-    // with some rounding -- unless otherwise specified
-    TUPLET_NOMINAL_DURATION	(prefix + "TupletNominalDuration"),
-
     NOTE_TYPE			(prefix + "NoteType"),
     NOTE_DOTS			(prefix + "NoteDots"),
 

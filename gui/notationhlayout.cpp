@@ -238,7 +238,7 @@ NotationHLayout::legatoQuantize(Segment &segment)
 	    assert(tcount != 0);
 	    timeT nominalDuration = ((*i)->getDuration() / tcount) * ucount;
 	    duration = m_legatoQuantizer->quantizeDuration(nominalDuration);
-	    (*i)->setMaybe<Int>(m_properties.TUPLET_NOMINAL_DURATION, duration);
+	    (*i)->setMaybe<Int>(TUPLET_NOMINAL_DURATION, duration);
 	}
 
 	if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType)) {
