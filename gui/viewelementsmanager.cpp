@@ -165,3 +165,35 @@ void ViewElementsManager::eraseSingle(NotationElement* el)
     m_track.eraseSingle(ev);
 }
 
+void ViewElementsManager::tryCollapse(NotationElement* el)
+{
+    bool collapseForward;
+
+    NotationElementList::iterator elPos = m_notationElements->findSingle(el);
+    Rosegarden::Event* deletedEvent = 0;
+    
+    if (m_track.collapse(el->event(), collapseForward, deletedEvent)) {
+
+        if (collapseForward) {
+            
+            // dumb implementation
+            for (NotationElementList::iterator i = elPos; i != m_notationElements->end(); ++i) {
+                if ((*i)->event() == deletedEvent) {
+                    kdDebug(KDEBUG_AREA) << "ViewElementsManager::tryCollapse() : found notation element to delete\n";
+                    m_notationElements->erase(i);
+                    break;
+                }
+            }
+
+        } else {
+
+            if ((*elPos)->event() != deletedEvent)
+                kdDebug(KDEBUG_AREA) << "ViewElementsManager::tryCollapse() : Ooops, events don't match\n";
+            else
+                m_notationElements->erase(elPos);
+        }
+
+    }
+
+}
+

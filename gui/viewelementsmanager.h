@@ -35,6 +35,8 @@ public:
     ViewElementsManager(Rosegarden::Track&);
     ~ViewElementsManager();
 
+
+
     /**
      * Create a new NotationElementList wrapping Events in the
      * [from, to[ interval or return the previously created one
@@ -77,15 +79,22 @@ public:
 
     /**
      * Erase the element pointed to by iterator
-     * Also erase it from the wrapped Track
+     * Also erase the corresponding Event from the wrapped Track
      */
     void erase(NotationElementList::iterator);
 
     /**
      * Erase the element
-     * Also erase it from the wrapped Track
+     * Also erase the corresponding Event from the wrapped Track
      */
     void eraseSingle(NotationElement*);
+
+    /**
+     * Try to collapse the element (note or rest)
+     * with the next or previous one if this is possible
+     * without breaking the bar count
+     */
+    void tryCollapse(NotationElement*);
 
     Rosegarden::Track& getTrack() { return m_track; }
 
@@ -97,3 +106,5 @@ protected:
 };
 
 #endif
+
+

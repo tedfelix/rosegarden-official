@@ -480,8 +480,8 @@ bool NotationView::showElements(NotationElementList::iterator from,
 
             if ((*it)->isNote()) {
 
-                Note::Type note = (*it)->event()->get<Int>(P_NOTE_TYPE);
-                int dots = (*it)->event()->get<Int>(P_NOTE_DOTS);
+                Note::Type note = (*it)->event()->get<Int>(Rosegarden::Note::NoteType);
+                int dots = (*it)->event()->get<Int>(Rosegarden::Note::NoteDots);
 
                 Accidental accidental = NoAccidental;
 
@@ -511,10 +511,10 @@ bool NotationView::showElements(NotationElementList::iterator from,
 		    if ((*it)->event()->get<Bool>(P_BEAM_PRIMARY_NOTE)) {
 
 			int myY = (*it)->event()->get<Int>(P_BEAM_MY_Y);
-                        //			int nextY = (*it)->event()->get<Int>(P_BEAM_NEXT_Y);
-                        //			int dx = (*it)->event()->get<Int>(P_BEAM_SECTION_WIDTH);
+//			int nextY = (*it)->event()->get<Int>(P_BEAM_NEXT_Y);
+//			int dx = (*it)->event()->get<Int>(P_BEAM_SECTION_WIDTH);
 
-                        //                        kdDebug(KDEBUG_AREA) << "NotationView::showElements(): should be drawing a beam here... event is " << *(*it)->event() << endl;
+//                        kdDebug(KDEBUG_AREA) << "NotationView::showElements(): should be drawing a beam here... event is " << *(*it)->event() << endl;
 
 			stemLength = myY - (int)(*it)->getLayoutY();
 			if (stemLength < 0) stemLength = -stemLength;
@@ -559,8 +559,8 @@ bool NotationView::showElements(NotationElementList::iterator from,
 
             } else if ((*it)->isRest()) {
 
-                Note::Type note = (*it)->event()->get<Int>(P_NOTE_TYPE);
-                int dots = (*it)->event()->get<Int>(P_NOTE_DOTS);
+                Note::Type note = (*it)->event()->get<Int>(Rosegarden::Note::NoteType);
+                int dots = (*it)->event()->get<Int>(Rosegarden::Note::NoteDots);
 
                 QCanvasPixmap notePixmap(npf.makeRestPixmap(note, dots));
                 sprite = new QCanvasNotationSprite(*(*it), &notePixmap, canvas());
@@ -977,7 +977,9 @@ void NotationView::deleteNote(NotationElement* element)
     
     } else if (element->isRest()) {
 
-        KMessageBox::sorry(0, "Rest deletion not Implemented Yet");
+        m_viewElementsManager->tryCollapse(element);
+
+        //KMessageBox::sorry(0, "Rest deletion not Implemented Yet");
 
     } else {
         // we don't know what it is
@@ -1283,10 +1285,8 @@ bool NotationView::replaceRestWithNote(NotationElementList::iterator rest,
             newRest->setDuration(bit);
             newRest->setAbsoluteTime(restAbsoluteTime);
             newRest->setMaybe<String>("Name", "INSERTED_REST");
-//             NotationElement *newNotationRest = new NotationElement(newRest);
             restAbsoluteTime += bit;
 
-//             m_viewElementsManager->insert(newNotationRest, true);
             m_viewElementsManager->wrapAndInsert(newRest, true);
         }
     }
