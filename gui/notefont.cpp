@@ -252,7 +252,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 	//notehead is noticeably smaller than the notehead should be,
 	//and reject if so?
 	
-	for (int sz = 1; sz <= 30; sz += (sz < 8 ? 1 : 2)) {
+	for (int sz = 1; sz <= 30; sz += (sz == 1 ? 1 : 2)) {
 
 	    SizeData &sizeData = m_sizes[sz];
 	    unsigned int temp, temp1;

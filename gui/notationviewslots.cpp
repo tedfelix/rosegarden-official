@@ -289,6 +289,19 @@ NotationView::slotChangeFont(std::string newName, int newSize)
 
     NOTATION_DEBUG << "about to change font" << endl;
 
+    if (m_pageMode == LinedStaff::MultiPageMode) {
+
+	int pageWidth = getPageWidth();
+	int pageHeight = getPageHeight();
+
+	m_hlayout->setPageWidth(pageWidth);
+
+	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+	    m_staffs[i]->setPageWidth(pageWidth);
+	    m_staffs[i]->setPageHeight(pageHeight);
+	}
+    }
+
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         m_staffs[i]->changeFont(m_fontName, m_fontSize);
     }
@@ -306,6 +319,7 @@ NotationView::slotChangeFont(std::string newName, int newSize)
         }
     }
 
+    positionPages();
     updateView();
 }
 

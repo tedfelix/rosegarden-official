@@ -257,6 +257,14 @@ public:
     virtual int getTotalHeight() const;
 
     /**
+     * Returns the total number of pages used by the staff.
+     */
+    int getPageCount() const {
+	if (m_pageMode != MultiPageMode) return 1;
+	else return 1 + (getRowForLayoutX(m_endLayoutX) / getRowsPerPage());
+    }
+
+    /**
      * Returns the difference between the y coordinates of
      * neighbouring visible staff lines.  Deliberately non-virtual
      */
@@ -539,8 +547,12 @@ protected:
     }
 
     int getRowsPerPage() const {
-	if (m_pageMode != MultiPageMode) return 0;
-	else return m_pageHeight / m_rowSpacing;
+	int rows = 0;
+	if (m_pageMode == MultiPageMode) {
+	    rows = m_pageHeight / m_rowSpacing;
+	    if (rows < 1) rows = 1;
+	}
+	return rows;
     }
 
 protected:

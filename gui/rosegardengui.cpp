@@ -771,6 +771,7 @@ void RosegardenGUIApp::initStatusBar()
                                   AlignLeft | AlignVCenter);
 
     m_progressBar = new RosegardenProgressBar(100, true, statusBar());
+    m_progressBar->setMinimumWidth(100);
     statusBar()->addWidget(m_progressBar);
 }
 

@@ -25,8 +25,6 @@
 #include <qpaintdevicemetrics.h>
 #include <qpixmap.h>
 
-#include <qtimer.h> // delete me
-
 #include <kmessagebox.h>
 #include <kstatusbar.h>
 #include <klocale.h>
@@ -420,7 +418,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     }
     
 
-
+/*!!!
     m_config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     if (m_config->readBoolEntry("backgroundtextures", false)) {
 	QPixmap background;
@@ -432,7 +430,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	}
     }
     m_config->setGroup(NotationView::ConfigGroup);
-
+*/
 
     setCanvasView(new NotationCanvasView(*this, m_horizontalScrollBar,
                                          tCanvas, getCentralFrame()));
@@ -515,7 +513,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 //!!!    m_chordNameRuler->setComposition(&getDocument()->getComposition());
     m_chordNameRuler->setStudio(&getDocument()->getStudio());
 
-    positionStaffs();
     m_currentStaff = 0;
     m_staffs[0]->setCurrent(true);
 
@@ -528,7 +525,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	if (layoutMode == 1) mode = LinedStaff::ContinuousPageMode;
 	else if (layoutMode == 2) mode = LinedStaff::MultiPageMode;
 
-        setPageMode(mode); // also renders the staffs!
+        setPageMode(mode); // also positions and renders the staffs!
 
 	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 	    m_staffs[i]->getSegment().getRefreshStatus
@@ -710,7 +707,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                                              m_fontName, m_fontSize));
     }
 
-    positionStaffs();
     m_currentStaff = 0;
     m_staffs[0]->setCurrent(true);
 
@@ -734,7 +730,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     try {
 
-        setPageMode(LinedStaff::ContinuousPageMode); //!!! worry about this
+        setPageMode(LinedStaff::ContinuousPageMode); // also positions and renders the staffs!
 
 	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 	    m_staffs[i]->getSegment().getRefreshStatus
@@ -846,6 +842,11 @@ void NotationView::positionStaffs()
 	}
     }
 
+    int pageWidth = getPageWidth();
+    int pageHeight = getPageHeight();
+    if (pageWidth  < 100) pageWidth  = 100;
+    if (pageHeight < 100) pageHeight = 100;
+
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 	Rosegarden::TrackId track = m_staffs[i]->getSegment().getTrack();
         m_staffs[i]->setRowSpacing(accumulatedHeight + trackHeights[track] / 7);
@@ -853,10 +854,69 @@ void NotationView::positionStaffs()
             m_staffs[i]->setConnectingLineLength(trackHeights[track]);
         }
         
-        m_staffs[i]->setX(20);
-	m_staffs[i]->setY(trackCoords[track]);
+	if (m_pageMode == LinedStaff::MultiPageMode) {
+	    m_staffs[i]->setY(trackCoords[track] + 20);
+	} else {
+	    m_staffs[i]->setY(trackCoords[track]);
+	}	    
+	m_staffs[i]->setX(20);
+	m_staffs[i]->setPageWidth(pageWidth);
+	m_staffs[i]->setPageHeight(pageHeight);
+        m_staffs[i]->setPageMode(m_pageMode);
     }
 }    
+
+void NotationView::positionPages()
+{
+    if (m_printMode) return;
+
+    QPixmap background;
+    bool haveBackground = false;
+    
+    m_config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
+    if (m_config->readBoolEntry("backgroundtextures", false)) {
+	QString pixmapDir =
+	    KGlobal::dirs()->findResource("appdata", "pixmaps/");
+	if (background.load(QString("%1/misc/bg-paper-white.xpm").
+			    arg(pixmapDir))) {
+	    haveBackground = true;
+	}
+    }
+
+    int pageWidth = getPageWidth();
+    int pageHeight = getPageHeight();
+    int maxPageCount = 1;
+
+    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+	int pageCount = m_staffs[i]->getPageCount();
+	if (pageCount > maxPageCount) maxPageCount = pageCount;
+    }
+    
+    for (unsigned int i = 0; i < m_pages.size(); ++i) {
+	m_pages[i]->hide();
+	delete m_pages[i];
+    }
+    
+    if (m_pageMode != LinedStaff::MultiPageMode) {
+	if (haveBackground) canvas()->setBackgroundPixmap(background);
+    } else {
+	canvas()->setBackgroundPixmap(QPixmap());
+	for (int page = 0; page < maxPageCount; ++page) {
+	    QCanvasRectangle *rect = new QCanvasRectangle
+		//!!! arbitrary figures -- sort out page positioning
+		(25 + (pageWidth - 40) * page, 10, 
+		 pageWidth - 40, pageHeight - 40,
+		 canvas());
+	    if (haveBackground) rect->setBrush(QBrush(Qt::white, background));
+	    rect->setPen(Qt::black);
+	    rect->setZ(-1000);
+	    rect->show();
+	}
+    }
+
+    m_config->setGroup(NotationView::ConfigGroup);
+}
+
 
 void NotationView::slotSaveOptions()
 {
@@ -1656,7 +1716,9 @@ NotationView::setupFontSizeMenu(std::string oldFontName)
 
 	KToggleAction *sizeAction = 
 	    new KToggleAction
-	    (i18n("%1 pixels").arg(sizes[i]), 0, this,
+	    (sizes[i] == 1 ? i18n("%1 pixel").arg(sizes[i]) :
+	                     i18n("%1 pixels").arg(sizes[i]),
+	     0, this,
 	     SLOT(slotChangeFontSizeFromAction()),
 	     actionCollection(), QString("note_font_size_%1").arg(sizes[i]));
 
@@ -1766,6 +1828,7 @@ void NotationView::initStatusBar()
     sb->addWidget(m_selectionCounter);
 
     m_progressBar = new RosegardenProgressBar(100, true, sb);
+    m_progressBar->setMinimumWidth(100);
     sb->addWidget(m_progressBar);
 }
 
@@ -1794,9 +1857,12 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
     } else {
 	if (m_topBarButtons) m_topBarButtons->show();
 	if (m_bottomBarButtons) m_bottomBarButtons->show();
-	if (m_chordNameRuler && getToggleAction("show_chords_ruler")->isChecked()) m_chordNameRuler->show();
-	if (m_rawNoteRuler && getToggleAction("show_raw_note_ruler")->isChecked()) m_rawNoteRuler->show();
-	if (m_tempoRuler && getToggleAction("show_tempo_ruler")->isChecked()) m_tempoRuler->show();
+	if (m_chordNameRuler && getToggleAction("show_chords_ruler")->isChecked())
+	    m_chordNameRuler->show();
+	if (m_rawNoteRuler && getToggleAction("show_raw_note_ruler")->isChecked())
+	    m_rawNoteRuler->show();
+	if (m_tempoRuler && getToggleAction("show_tempo_ruler")->isChecked())
+	    m_tempoRuler->show();
     }
 
     int pageWidth = getPageWidth();
@@ -1806,12 +1872,8 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
     m_hlayout->setPageWidth(pageWidth);
 
     RG_DEBUG << "Page mode " << pageMode << ": page width = " << pageWidth << endl;
-    
-    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-        m_staffs[i]->setPageMode(pageMode);
-        m_staffs[i]->setPageWidth(pageWidth);
-	m_staffs[i]->setPageHeight(pageHeight);
-    }
+
+    positionStaffs();
 
     bool layoutApplied = applyLayout();
     if (!layoutApplied) KMessageBox::sorry(0, "Couldn't apply layout");
@@ -1821,7 +1883,9 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
         }
     }
 
+    positionPages();
     updateView();
+
     Rosegarden::Profiles::getInstance()->dump();
 }   
 
@@ -1836,7 +1900,13 @@ NotationView::getPageWidth()
 	return width() - 50;
 
     } else {
-	return width() - 50; //!!!
+
+	//!!! For the moment we use A4 for this calculation
+	
+	unsigned int printSizePt = m_config->readUnsignedNumEntry("printingnotesize", 6); 
+	double printSizeMm = 25.4 * ((double)printSizePt / 72.0);
+	double mmPerPixel = printSizeMm / (double)m_notePixmapFactory->getSize();
+	return (int)(210.0 / mmPerPixel);
     }
 }
 
@@ -1846,7 +1916,13 @@ NotationView::getPageHeight()
     if (m_pageMode != LinedStaff::MultiPageMode) {
 	return 0;
     } else {
-	return 2000; //!!!
+
+	//!!! For the moment we use A4 for this calculation
+	
+	unsigned int printSizePt = m_config->readUnsignedNumEntry("printingnotesize", 8); 
+	double printSizeMm = 25.4 * ((double)printSizePt / 72.0);
+	double mmPerPixel = printSizeMm / (double)m_notePixmapFactory->getSize();
+	return (int)(297.0 / mmPerPixel);
     }
 }
 
@@ -1887,7 +1963,8 @@ NotationView::paintEvent(QPaintEvent *e)
     if (m_hlayout->isPageMode()) {
 	int diff = int(getPageWidth() - m_hlayout->getPageWidth());
 	if (diff > -10 && diff < 10) {
-	    m_hlayout->setPageWidth(getPageWidth());
+	    setPageMode(m_pageMode); //!!!
+//!!!	    m_hlayout->setPageWidth(getPageWidth());
 	    refreshSegment(0, 0, 0);
 	}
     }

@@ -153,6 +153,7 @@ LinedStaff::setPageMode(PageMode pageMode)
 void
 LinedStaff::setPageWidth(double pageWidth)
 {
+//!!! need pageMargin
     m_pageWidth = pageWidth;
 }
 

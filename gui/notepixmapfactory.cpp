@@ -900,7 +900,7 @@ NotePixmapFactory::drawShallowLine(int x0, int y0, int x1, int y1,
             g += dg2;
         }
 
-        int quartile = (dg2 - g) / segment;
+        int quartile = segment ? ((dg2 - g) / segment) : 0;
         if (quartile < 0) quartile = 0;
         if (quartile > 3) quartile = 3;
         if (inc > 0) quartile = 4 - quartile;

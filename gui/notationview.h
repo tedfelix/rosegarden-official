@@ -651,9 +651,15 @@ protected:
     virtual void initStatusBar();
 
     /**
-     * Place the staffs at the correct x & y coordinates
+     * Place the staffs at the correct x & y coordinates (before layout)
      */
     void positionStaffs();
+
+    /**
+     * Place the page pixmaps (if any) at the correct x & y
+     * coordinates (after layout)
+     */
+    void positionPages();
 
     /**
      * setup the layout/font toolbar
@@ -760,6 +766,8 @@ protected:
     std::vector<NotationStaff*> m_staffs;
     int m_currentStaff;
     int m_lastFinishingStaff;
+
+    std::vector<QCanvasItem *> m_pages;
 
     Rosegarden::timeT m_insertionTime;
     enum {
