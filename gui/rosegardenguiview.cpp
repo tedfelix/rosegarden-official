@@ -769,7 +769,7 @@ void RosegardenGUIView::setZoomSize(double size)
 
     QWMatrix zoomMatrix;
     double xScale = duration44/(size * barWidth44);
-    //RG_DEBUG << "RosegardenGUIView::setZoomSize - xScale =  " << xScale << endl;
+    RG_DEBUG << "RosegardenGUIView::setZoomSize - xScale =  " << xScale << endl;
 
     zoomMatrix.scale(xScale, 1.0);
     m_trackEditor->getSegmentCanvas()->setWorldMatrix(zoomMatrix);
@@ -1189,23 +1189,7 @@ void RosegardenGUIView::slotShowPreviews(bool v)
 void RosegardenGUIView::slotUpdateAudioPreviews(Rosegarden::InstrumentId id)
 {
     if (!m_trackEditor->getSegmentCanvas()->isShowingPreviews()) return;
-
-    RosegardenGUIDoc *doc = getDocument();
-    Rosegarden::Instrument *instrument = doc->getStudio().getInstrumentById(id);
-
-    if (instrument && instrument->getType() == Rosegarden::Instrument::Audio) {
-
-	for (Rosegarden::Composition::iterator i = doc->getComposition().begin();
-	     i != doc->getComposition().end(); ++i) {
-
-	    Rosegarden::Track *track = doc->getComposition().getTrackById
-		((*i)->getTrack());
-
-	    if (track && track->getInstrument() == id) {
-		m_trackEditor->getSegmentCanvas()->updateSegmentItem(*i);
-	    }
-	}
-    }
+    m_trackEditor->update();
 }
 	
 void RosegardenGUIView::slotAddTracks(unsigned int nbTracks,

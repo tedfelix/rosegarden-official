@@ -35,6 +35,7 @@ using std::cerr;
 using std::endl;
 
 //#define DEBUG_PEAKFILE 1
+#define DEBUG_PEAKFILE_CACHE 1
 
 namespace Rosegarden
 {
@@ -644,6 +645,10 @@ PeakFile::getPreview(const RealTime &startTime,
     //
     if (!m_peakCache.length())
     {
+#ifdef DEBUG_PEAKFILE_CACHE
+                std::cerr << "PeakFile::getPreview - no peak cache" << std::endl;
+#endif
+
         if (getSize() < (256 *1024)) // if less than 256K PeakFile
         {
             // Scan to start of peak data
@@ -654,7 +659,7 @@ PeakFile::getPreview(const RealTime &startTime,
             }
             catch(std::string e)
             {
-//#define DEBUG_PEAKFILE_CACHE
+
 #ifdef DEBUG_PEAKFILE_CACHE
                 std::cerr << "PeakFile::getPreview - generating peak cache - "
                           << e << std::endl;
@@ -662,10 +667,15 @@ PeakFile::getPreview(const RealTime &startTime,
             }
 
 #ifdef DEBUG_PEAKFILE_CACHE
-        std::cout << "PeakFile::getPreview - generating peak cache - " 
-                  << "size = " << m_peakCache.length() << std::endl;
+	    std::cout << "PeakFile::getPreview - generated peak cache - " 
+		      << "size = " << m_peakCache.length() << std::endl;
 #endif
-        }
+        } else {
+#ifdef DEBUG_PEAKFILE_CACHE
+	    std::cout << "PeakFile::getPreview - file size = " << getSize()
+		      << ", not generating cache" << std::endl;
+#endif
+	}
     }
 
     // Check to see if we hit the "lastPreview" cache by comparing the last 
@@ -675,9 +685,14 @@ PeakFile::getPreview(const RealTime &startTime,
         && width == m_lastPreviewWidth && showMinima == m_lastPreviewShowMinima)
     {
 #ifdef DEBUG_PEAKFILE_CACHE
-        std::cout << "PeakFile::getPreview - hit preview cache" << std::endl;
+        std::cout << "PeakFile::getPreview - hit last preview cache" << std::endl;
 #endif
         return m_lastPreviewCache;
+    } else {
+#ifdef DEBUG_PEAKFILE_CACHE
+	std::cout << "PeakFile::getPreview - last preview " << m_lastPreviewStartTime
+		  << " -> " << m_lastPreviewEndTime << ", w " << m_lastPreviewWidth << "; this " << startTime << " -> " << endTime << ", w " << width << std::endl;
+#endif
     }
 
     // Clear the cache - we need to regenerate it
@@ -778,7 +793,7 @@ PeakFile::getPreview(const RealTime &startTime,
 			delete loValues;
 			return m_lastPreviewCache;
 		    }
-#ifdef DEBUG_PEAKFILE_CACHE
+#ifdef DEBUG_PEAKFILE
 		    std::cout << "PeakFile::getPreview - "
 			      << "read from file" << std::endl;
 #endif
@@ -795,7 +810,7 @@ PeakFile::getPreview(const RealTime &startTime,
 		    if (charNum + charLength <= m_peakCache.length())
 		    {
 			peakData = m_peakCache.substr(charNum, charLength);
-#ifdef DEBUG_PEAKFILE_CACHE
+#ifdef DEBUG_PEAKFILE
 			std::cout << "PeakFile::getPreview - "
 				  << "hit peakCache" << std::endl;
 #endif
