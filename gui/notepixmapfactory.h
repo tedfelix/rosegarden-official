@@ -51,6 +51,7 @@ public:
     void setStemGoesUp(bool up)           { m_stemGoesUp       = up;        }
     void setStemLength(int length)        { m_stemLength       = length;    }
     void setLegerLines(int lines)         { m_legerLines       = lines;     }
+    void setSlashes(int slashes)          { m_slashes          = slashes;   }
     void setSelected(bool selected)       { m_selected         = selected;  }
     void setHighlighted(bool highlighted) { m_highlighted      = highlighted;}
     void setIsOnLine(bool isOnLine)       { m_onLine           = isOnLine;  }
@@ -92,6 +93,7 @@ private:
     bool    m_stemGoesUp;
     int     m_stemLength;
     int     m_legerLines;
+    int     m_slashes;
     bool    m_selected;
     bool    m_highlighted;
     bool    m_onLine;

@@ -451,6 +451,22 @@ private:
 };
 
 
+class NotesMenuAddSlashesCommand : public BasicSelectionCommand
+{
+public:
+    NotesMenuAddSlashesCommand(int number,
+			       Rosegarden::EventSelection &selection) :
+	BasicSelectionCommand("Slashes", selection, true),
+	m_selection(&selection), m_number(number) { }
+
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    int m_number;
+};    
+
 class MarksMenuAddMarkCommand : public BasicSelectionCommand
 {
 public:

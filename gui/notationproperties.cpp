@@ -25,6 +25,7 @@ const Rosegarden::PropertyName NotationProperties::NOTE_STYLE         = "NoteSty
 const Rosegarden::PropertyName NotationProperties::HEIGHT_ON_STAFF = "HeightOnStaff";
 const Rosegarden::PropertyName NotationProperties::STEM_UP	      = "NoteStemUp";
 const Rosegarden::PropertyName NotationProperties::BEAMED	      = "Beamed";
+const Rosegarden::PropertyName NotationProperties::SLASHES	      = "Slashes";
 
 NotationProperties::NotationProperties(const std::string &prefix) :
 

@@ -45,6 +45,7 @@ public:
     static const Rosegarden::PropertyName HEIGHT_ON_STAFF;
     static const Rosegarden::PropertyName STEM_UP;
     static const Rosegarden::PropertyName BEAMED;
+    static const Rosegarden::PropertyName SLASHES;
 
     // The rest are, or may be, view-local
 

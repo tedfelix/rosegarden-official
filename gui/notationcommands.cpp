@@ -652,6 +652,23 @@ TransformsMenuTransposeCommand::modifySegment()
 }
 
 
+void
+NotesMenuAddSlashesCommand::modifySegment()
+{
+    EventSelection::eventcontainer::iterator i;
+
+    for (i  = m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+
+	if (m_number < 1) {
+	    (*i)->unset(NotationProperties::SLASHES);
+	} else {
+	    (*i)->set<Int>(NotationProperties::SLASHES, m_number);
+	}
+    }
+}
+
+
 QString
 MarksMenuAddMarkCommand::getGlobalName(Rosegarden::Mark markType)
 {

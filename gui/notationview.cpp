@@ -807,6 +807,15 @@ void NotationView::setupActions()
                 SLOT(slotMarksRemoveMarks()), actionCollection(),
                 "remove_marks");
 
+    static const char *slashTitles[] = {
+	"&None", "&1", "&2", "&3", "&4", "&5"
+    };
+    for (int i = 0; i <= 5; ++i) {
+	new KAction(slashTitles[i], 0, this,
+		    SLOT(slotAddSlashes()), actionCollection(),
+		    QString("slashes_%1").arg(i));
+    }
+
     new KAction(ClefInsertionCommand::getGlobalName(), 0, this,
                 SLOT(slotEditAddClef()), actionCollection(),
                 "add_clef");
@@ -1921,6 +1930,19 @@ void NotationView::slotTransformsQuantize()
 			     dialog->getQuantizer()));
     }
 }
+
+void NotationView::slotAddSlashes()
+{
+    const QObject *s = sender();
+    if (!m_currentEventSelection) return;
+
+    QString name = s->name();
+    int slashes = name.right(1).toInt();
+
+    addCommandToHistory(new NotesMenuAddSlashesCommand
+			(slashes, *m_currentEventSelection));
+}
+    
 
 void NotationView::slotAddMark()
 {

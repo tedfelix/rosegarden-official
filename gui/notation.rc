@@ -67,6 +67,15 @@ etc
     <Action name="stems_down"/>
     <Action name="restore_stems"/>
   </Menu>
+  <Menu name="Slashes">
+    <text>S&amp;lashes</text>
+    <Action name="slashes_0"/>
+    <Action name="slashes_1"/>
+    <Action name="slashes_2"/>
+    <Action name="slashes_3"/>
+    <Action name="slashes_4"/>
+    <Action name="slashes_5"/>
+  </Menu>
 </Menu>
 
   <Menu name="Marks">
