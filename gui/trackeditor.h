@@ -63,17 +63,11 @@ public:
     /// Clear the SegmentCanvas
     void clear();
 
-    SegmentCanvas*       getSegmentCanvas()       { return m_segmentCanvas; }
-    const SegmentCanvas* getSegmentCanvas() const { return m_segmentCanvas; }
-
-    BarButtons*       getTopBarButtons()       { return m_topBarButtons; }
-    const BarButtons* getTopBarButtons() const { return m_topBarButtons; }
-
-    BarButtons*       getBottomBarButtons()       { return m_bottomBarButtons; }
-    const BarButtons* getBottomBarButtons() const { return m_bottomBarButtons; }
-
-    TrackButtons*       getTrackButtons()       { return m_trackButtons; }
-    const TrackButtons* getTrackButtons() const { return m_trackButtons; }
+    SegmentCanvas* getSegmentCanvas()       { return m_segmentCanvas; }
+    BarButtons*    getTopBarButtons()       { return m_topBarButtons; }
+    BarButtons*    getBottomBarButtons()    { return m_bottomBarButtons; }
+    TrackButtons*  getTrackButtons()        { return m_trackButtons; }
+    QScrollBar*    getHorizontalScrollBar() { return m_horizontalScrollBar; }
 
     int getTrackCellHeight() const;
 
@@ -137,6 +131,8 @@ public slots:
     void slotSetSelectCopy(bool value);
     void slotSetFineGrain(bool value);
 
+
+    void slotScrollHoriz(int hpos);
 
 protected slots:
     void slotSegmentOrderChanged(int section, int fromIdx, int toIdx);

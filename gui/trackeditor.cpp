@@ -443,7 +443,7 @@ TrackEditor::slotSetPointerPosition(Rosegarden::timeT position)
     if (distance >= 1.0) {
 
 	m_pointer->setX(canvasPosition);
-        emit scrollHorizTo((int)canvasPosition);
+        slotScrollHoriz((int)canvasPosition);
 	emit needUpdate();
     }
 }
@@ -470,6 +470,36 @@ void
 TrackEditor::slotSetFineGrain(bool value)
 {
      m_segmentCanvas->slotSetFineGrain(value);
+}
+
+
+// This scrolling model pages the SegmentCanvas across the screen
+//
+//
+void TrackEditor::slotScrollHoriz(int hpos)
+{
+    QScrollView* scrollView = getSegmentCanvas();
+    QScrollBar* hbar = getHorizontalScrollBar();
+
+    if (hpos == 0) { // If returning to zero
+
+        hbar->setValue(0);
+
+    } else { // if moving off the right hand side of the view
+
+        if (hpos >  ( scrollView->contentsX() + 
+                      scrollView->visibleWidth() * 0.9 ) ) { 
+               
+            hbar->setValue(hbar->value() + int(scrollView->visibleWidth() * 0.8));
+
+        } else // if moving off the left hand side
+
+            if (hpos < ( scrollView->contentsX() +
+                         scrollView->visibleWidth() * 0.1 ) ) {
+
+                hbar->setValue(hbar->value() - int(scrollView->visibleWidth() * 0.8));
+            }
+    }
 }
 
 
