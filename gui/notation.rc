@@ -4,9 +4,11 @@
 
 <MenuBar>
 
-<!-- I like this better than putting them in Settings, but...
 <Menu name="View">
   <text>&amp;View</text>
+  <Action name="linear_mode"/>
+  <Action name="page_mode"/>
+<!-- I like this better than putting them in Settings, but...
   <Menu name="Toolbars">
   <text>&amp;Toolbars</text>
   <Action name="show_notes_toolbar"        />
@@ -16,8 +18,8 @@
   <Action name="show_accidentals_toolbar"  />
   <Action name="show_clefs_toolbar"        />
   </Menu>
-</Menu>
 -->
+</Menu>
 
 <Menu name="Tools">
   <text>&amp;Tools</text>

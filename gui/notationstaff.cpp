@@ -194,11 +194,6 @@ NotationStaff::resizeStaffLineRow(int row, double offset, double length)
     }
     QColor lineColour(level, level, level);
 
-    //!!!
-    if (row % 2 == 1) {
-	lineColour = Qt::red;
-    }
-
     int h, j;
     int staffLineThickness = m_npf->getStaffLineThickness();
 
@@ -221,7 +216,8 @@ NotationStaff::resizeStaffLineRow(int row, double offset, double length)
 	    }
 
 	    double lx = (int)x() + getRowLeftX(row) + offset;
-	    int ly = (int)y() + yCoordOfHeight(2 * h) + j; //!!!
+	    int ly = (int)y() + getTopOfStaffForRow(row) +
+		yCoordOfHeight(2 * h) + j; //!!!
 
 	    kdDebug(KDEBUG_AREA) << "My coords: " << x() << "," << y()
 				 << "; setting line points to ("
@@ -357,9 +353,14 @@ void NotationStaff::insertBar(unsigned int barPos, bool correct)
         QCanvasLineGroupable* barLine =
             new QCanvasLineGroupable(canvas(), this);
 
-        barLine->setPoints(0, getTopLineOffset(),
-                           0, getBarLineHeight() + getTopLineOffset());
-        barLine->moveBy(barPos + x() + i, y());
+	int row = getRowForLayoutX(barPos);
+
+        barLine->setPoints(0, getTopLineOffsetForRow(row),
+                           0, getBarLineHeight() + getTopLineOffsetForRow(row));
+
+        barLine->moveBy(getRowLeftX(row) + getXForLayoutX(barPos) + x() + i,
+			y());
+
         if (!correct) barLine->setPen(QPen(red, 1));
         barLine->show();
 
@@ -441,13 +442,27 @@ void NotationStaff::deleteTimeSignatures()
     m_timeSigs.clear();
 }
 
-void NotationStaff::setLines(double xfrom, double xto)
+void NotationStaff::setLines(double xfrom, double xto, bool sizeCanvas)
 {
     START_TIMING;
 
     m_horizLineStart = (int)xfrom;
     m_horizLineEnd = (int)xto;
     resizeStaffLines();
+
+    if (sizeCanvas) {
+
+	double canvasWidth =
+	    (x() * 2) + getRowRightX(getRowForLayoutX(m_horizLineEnd));
+
+	double canvasHeight =
+	    (y() * 2) + getTopOfStaffForRow(getRowForLayoutX(m_horizLineEnd)) +
+	    getStaffHeight();
+
+	canvas()->resize(canvasWidth, canvasHeight);
+    }
+
+    
 
 /*!!!   needs to be cleverer
     for (LineList::iterator i = m_staffLines.begin();

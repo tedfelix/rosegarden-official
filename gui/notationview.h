@@ -125,6 +125,9 @@ public:
     /// Changes the font and font size of the staffs on the view
     void changeFont(std::string newFont, int newSize);
     
+    /// Switches between page- and linear- layout mode
+    void setPageMode(bool pageMode);
+
     /**
      * find the Staff whose Y coord range includes y, and return the
      * index of that Staff in m_staffs.  If no Staff is suitable,
@@ -321,6 +324,10 @@ public slots:
     /// edition tools
     void slotEraseSelected();
     void slotSelectSelected();
+
+    /// view menu
+    void slotLinearMode();
+    void slotPageMode();
 
     /// group slots
     void slotGroupBeam();

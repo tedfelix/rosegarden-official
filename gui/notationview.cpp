@@ -166,14 +166,23 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
                    .arg(segments.size()));
     }
 
+    vector<int> staffHeights;
+    int totalHeight = 0;
+
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new NotationStaff(canvas(), segments[i], i,
-					     false,
-					     width() - 50,
-					     300, //!!!
+					     false, width() - 50, 100,
                                              m_fontName, m_fontSize));
-        m_staffs[i]->move(20, m_staffs[i]->getStaffHeight() * i + 45);
+	staffHeights.push_back(m_staffs[i]->getStaffHeight());
+	totalHeight += staffHeights[i];
+    }
+
+    int h = 0;
+    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+	m_staffs[i]->setLineBreakGap(totalHeight);
+        m_staffs[i]->move(20, h + 45);
         m_staffs[i]->show();
+	h += staffHeights[i];
     }
     m_currentStaff = 0;
 
@@ -439,6 +448,17 @@ void NotationView::setupActions()
 
     // File menu
     KStdAction::close (this, SLOT(closeWindow()),          actionCollection());
+
+    // View menu
+    KRadioAction *linearModeAction = new KRadioAction
+	(i18n("Linear View"), 0, this, SLOT(slotLinearMode()),
+	 actionCollection(), "linear_mode");
+    linearModeAction->setExclusiveGroup("layoutMode");
+
+    KRadioAction *pageModeAction = new KRadioAction
+	(i18n("Page View"), 0, this, SLOT(slotPageMode()),
+	 actionCollection(), "page_mode");
+    pageModeAction->setExclusiveGroup("layoutMode");
 
     // setup edit menu
     getCommandHistory()->attachView(actionCollection());
@@ -840,9 +860,11 @@ NotationView::changeFont(string newName, int newSize)
     m_hlayout->setSpacing(spacing);
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-        m_staffs[i]->move(0, 0);
+//!!! update to use correct location code (see ctor) and to set
+// lineBreakGap correctly
+//!!!        m_staffs[i]->move(0, 0);
         m_staffs[i]->changeFont(m_fontName, m_fontSize);
-        m_staffs[i]->move(20, m_staffs[i]->getStaffHeight() * i + 45);
+//!!!        m_staffs[i]->move(20, m_staffs[i]->getStaffHeight() * i + 45);
     }
 
     bool layoutApplied = applyLayout();
@@ -857,6 +879,30 @@ NotationView::changeFont(string newName, int newSize)
 
     canvas()->update();
 }
+
+
+void
+NotationView::setPageMode(bool pageMode)
+{
+    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+//        m_staffs[i]->move(0, 0);
+        m_staffs[i]->setPageWidth(width() - 50);
+        m_staffs[i]->setPageMode(pageMode);
+//        m_staffs[i]->move(20, m_staffs[i]->getStaffHeight() * i + 45);
+    }
+
+    bool layoutApplied = applyLayout();
+    if (!layoutApplied) KMessageBox::sorry(0, "Couldn't apply layout");
+    else {
+        for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+            m_staffs[i]->renderElements();
+            m_staffs[i]->positionElements();
+            showBars(i);
+        }
+    }
+
+    canvas()->update();
+}   
 
 
 bool NotationView::applyLayout(int staffNo)
@@ -891,7 +937,7 @@ bool NotationView::applyLayout(int staffNo)
 	}
     }
 
-    readjustCanvasSize();
+    readjustCanvasSize(); //!!! now misnamed
 
     PRINT_ELAPSED("NotationView::applyLayout");
     return true;
@@ -1665,6 +1711,20 @@ void NotationView::slotSelectSelected()
     setTool(m_toolBox->getTool(NotationSelector::ToolName));
 }
 
+
+
+
+void NotationView::slotLinearMode()
+{
+    setPageMode(false);
+}
+
+void NotationView::slotPageMode()
+{
+    setPageMode(true);
+}
+
+
 //----------------------------------------------------------------------
 
 void NotationView::itemPressed(int height, int staffNo,
@@ -1925,11 +1985,11 @@ void NotationView::readjustCanvasSize()
 
         kdDebug(KDEBUG_AREA) << "Setting staff lines to " << xleft <<
             " -> " << xright << endl;
-        staff.setLines(xleft, xright);
+        staff.setLines(xleft, xright, (i == m_staffs.size() - 1));
 
         totalHeight += staff.getStaffHeight() + 15;
     }
-
+#ifdef NOT_DEFINED //!!!
     // We want to avoid resizing the canvas too often, so let's make
     // sure it's always an integer multiple of the view's dimensions
     
@@ -1951,6 +2011,7 @@ void NotationView::readjustCanvasSize()
 //        canvas()->resize(int(totalWidth) + 50, int(totalHeight) + 50);
         m_ruler->resize();
     }
+#endif
 
     PRINT_ELAPSED("NotationView::readjustCanvasWidth total");
 }

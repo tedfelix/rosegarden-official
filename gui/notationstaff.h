@@ -76,6 +76,10 @@ public:
 
     void setLegatoDuration(Rosegarden::timeT duration);
 
+    void setPageMode(bool pageMode) { m_pageMode = pageMode; }
+    void setPageWidth(double pageWidth) { m_pageWidth = pageWidth; }
+    void setLineBreakGap(int lineBreakGap) { m_lineBreakGap = lineBreakGap; }
+
     /**
      * Gets a read-only reference to the pixmap factory used by the
      * staff.  (For use by NotationHLayout, principally.)  This
@@ -241,9 +245,10 @@ public:
     void deleteTimeSignatures();
 
     /**
-     * Set the start and end x-coords of the staff lines
+     * Set the start and end x-coords of the staff lines, and update
+     * the canvas size if so requested
      */
-    void setLines(double xfrom, double xto);
+    void setLines(double xfrom, double xto, bool resizeCanvas = false);
 
     void getClefAndKeyAtX(int x, Rosegarden::Clef &clef, Rosegarden::Key &key)
 	const;
