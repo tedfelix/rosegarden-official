@@ -33,6 +33,7 @@ public:
     static const unsigned int lineWidth;
     static const unsigned int stalkLen;
     static const unsigned int nbLines;
+    static const unsigned int linesOffset;
 };
 
 #endif

@@ -44,7 +44,7 @@ Staff::Staff(QCanvas *canvas)
             int y = l * lineWidth;
 
             staffLine->setPoints(0,y, len,y);
-            staffLine->moveBy(0,14);
+            staffLine->moveBy(0,linesOffset);
         }
 
     // bass
@@ -66,7 +66,7 @@ Staff::Staff(QCanvas *canvas)
             int y = l * lineWidth;
 
             staffLine->setPoints(0,y, len,y);
-            staffLine->moveBy(0,14 + (6 * lineWidth));
+            staffLine->moveBy(0,linesOffset + (6 * lineWidth));
         }
 
 
@@ -76,15 +76,15 @@ Staff::Staff(QCanvas *canvas)
 
     int vertLineHeight = 11 * lineWidth - lineWidth / 2 - 4;
 
-    staffVertLine->setPoints(0,14,
-                             0, vertLineHeight + 14);
+    staffVertLine->setPoints(0,linesOffset,
+                             0,vertLineHeight + linesOffset);
 
-    QPen pen(black, 3); // QCanvasLine says this is not supported yet (kde-qt-addon v1.90)
+    QPen pen(black, 3); // QCanvasLine says this is not supported yet (Qt 2.2beta)
     staffVertLine->setPen(pen);
 
 //     staffVertLine = new QCanvasLineGroupable(canvas(), staff);
-//     staffVertLine->setPoints(5,14,
-//                              5, vertLineHeight + 14);
+//     staffVertLine->setPoints(5,linesOffset,
+//                              5, vertLineHeight + linesOffset);
 
 
     //setActive(false); // don't react to mousePress events
@@ -98,4 +98,5 @@ const unsigned int Staff::lineWidth = noteHeight + 1;
 const unsigned int Staff::noteWidth = 9;
 const unsigned int Staff::stalkLen = noteHeight * 7/2 - 6;
 const unsigned int Staff::nbLines = 5;
+const unsigned int Staff::linesOffset = 14;
 
