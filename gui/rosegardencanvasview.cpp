@@ -34,8 +34,6 @@ RosegardenCanvasView::RosegardenCanvasView(QCanvas* canvas,
       m_currentBottomWidgetHeight(-1),
       m_smoothScroll(true)
 {
-    m_hScrollTimer.start();
-    m_vScrollTimer.start();
 }
 
 void RosegardenCanvasView::fitWidthToContents()
@@ -114,14 +112,6 @@ void RosegardenCanvasView::slotScrollHoriz(int hpos)
 
 void RosegardenCanvasView::slotScrollHorizSmallSteps(int hpos)
 {
-    if (m_smoothScroll) {
-	// #988164: Matrix: Auto-scrolling so fast you can't see sweep
-	// distance -- restrict number of scrolls
-        int t = m_hScrollTimer.restart();
-        if (t < 50)
-            return;
-    }
-    
     QScrollBar* hbar = getMainHorizontalScrollBar();
 
     int diff = 0;
@@ -146,14 +136,23 @@ void RosegardenCanvasView::slotScrollHorizSmallSteps(int hpos)
     }
 }
 
-void RosegardenCanvasView::slotScrollVertSmallSteps(int vpos)
+bool RosegardenCanvasView::isTimeForSmoothScroll()
 {
     if (m_smoothScroll) {
-        int t = m_vScrollTimer.restart();
+        int t = m_scrollTimer.elapsed();
         if (t < 50)
-            return;
+            return false;
+        else {
+            m_scrollTimer.restart();
+            return true;
+        }
+        
     }
+}
 
+
+void RosegardenCanvasView::slotScrollVertSmallSteps(int vpos)
+{
     QScrollBar* vbar = verticalScrollBar();
 
 //    RG_DEBUG << "RosegardenCanvasView::slotScrollVertSmallSteps: vpos is " << vpos << ", contentsY is " << contentsY() << ", visibleHeight is " << visibleHeight() << endl;

@@ -1443,7 +1443,7 @@ void SegmentCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 
     int follow = m_tool->handleMouseMove(e);
     
-    if (follow != SegmentTool::NoFollow) {
+    if (follow != SegmentTool::NoFollow && isTimeForSmoothScroll()) {
 
         if (follow & EditTool::FollowHorizontal) {
             slotScrollHorizSmallSteps(e->pos().x());

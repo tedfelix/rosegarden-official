@@ -2543,12 +2543,16 @@ void NotationView::slotMouseMoved(QMouseEvent *e)
         int follow = m_tool->handleMouseMove(0, 0, // unknown time and height
                                              e);
 
-        if (follow & EditTool::FollowHorizontal) {
-            getCanvasView()->slotScrollHorizSmallSteps(e->pos().x());
-        }
+        if(getCanvasView()->isTimeForSmoothScroll()) {
+            
+            if (follow & EditTool::FollowHorizontal) {
+                getCanvasView()->slotScrollHorizSmallSteps(e->pos().x());
+            }
 
-        if (follow & EditTool::FollowVertical) {
-            getCanvasView()->slotScrollVertSmallSteps(e->pos().y());
+            if (follow & EditTool::FollowVertical) {
+                getCanvasView()->slotScrollVertSmallSteps(e->pos().y());
+            }
+
         }
     }
 }

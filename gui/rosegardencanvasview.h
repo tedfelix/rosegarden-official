@@ -64,6 +64,8 @@ public:
 
     void setSmoothScroll(bool s) { m_smoothScroll = s; }
 
+    bool isTimeForSmoothScroll();
+
 public slots:
     /// Update the RosegardenCanvasView after a change of content
     virtual void slotUpdate();
@@ -116,8 +118,7 @@ protected:
     int m_currentBottomWidgetHeight;
 
     bool m_smoothScroll;
-    QTime m_hScrollTimer;
-    QTime m_vScrollTimer;
+    QTime m_scrollTimer;
 };
 
 
