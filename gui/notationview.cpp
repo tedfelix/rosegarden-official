@@ -264,6 +264,16 @@ StaffRuler::StaffRuler(int xPos, int yPos, QCanvas* c)
       m_subStepLineHeight(5),
       m_mainLine(new QCanvasLine(m_canvas))
 {
+    QCanvasRectangle *rulerBackground = new QCanvasRectangle(0, 0,
+                                                             m_canvas->width(), m_yPos, 
+                                                             m_canvas);
+    QColor bgColor(105, 170, 228);
+    
+    rulerBackground->setBrush(bgColor);
+    rulerBackground->setPen(bgColor);
+    rulerBackground->setZ(-1);
+    rulerBackground->show();
+
     m_mainLine->setPoints(0, m_yPos, m_canvas->width(), m_yPos);
     
     m_mainLine->show();
@@ -433,7 +443,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     for (unsigned int i = 0; i < tracks.size(); ++i) {
         m_staffs.push_back(new NotationStaff(canvas(), tracks[i], i,
                                              m_fontName, m_fontSize));
-        m_staffs[i]->move(20, m_staffs[i]->getStaffHeight() * i + 15);
+        m_staffs[i]->move(20, m_staffs[i]->getStaffHeight() * i + 40);
         m_staffs[i]->show();
     }
     m_currentStaff = 0;
