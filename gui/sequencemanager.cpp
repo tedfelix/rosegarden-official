@@ -1693,6 +1693,32 @@ SequenceManager::reinitialiseSequencerStudio()
 
     SEQMAN_DEBUG << "initialised " << count << " audio faders" << endl;
 
+    // Send the MIDI recording device to the sequencer
+    //
+    KConfig* config = kapp->config();
+    config->setGroup("Sequencer Options");
+
+    QString recordDeviceStr = config->readEntry("midirecorddevice");
+
+    if (recordDeviceStr)
+    {
+        int recordDevice = recordDeviceStr.toInt();
+
+        if (recordDevice >= 0)
+        {
+            Rosegarden::MappedEvent *mE =
+                new Rosegarden::MappedEvent(
+                    Rosegarden::MidiInstrumentBase, // InstrumentId
+                    Rosegarden::MappedEvent::SystemRecordDevice,
+                    Rosegarden::MidiByte(recordDevice));
+
+            Rosegarden::StudioControl::sendMappedEvent(mE);
+            SEQMAN_DEBUG << "set MIDI record device to "
+                         << recordDevice << endl;
+        }
+    }
+
+
 }
 
 // Clear down all playing notes and reset controllers

@@ -61,6 +61,7 @@
 #include "editcommands.h"
 #include "studiocontrol.h"
 #include "widgets.h"
+#include "MidiDevice.h"
 
 namespace Rosegarden
 {
@@ -845,17 +846,23 @@ void LatencyConfigurationPage::slotPlaybackChanged(int value)
 //
 
 SequencerConfigurationPage::SequencerConfigurationPage(
-                                                   RosegardenGUIDoc * /*doc*/,
+                                                   RosegardenGUIDoc *doc,
                                                    KConfig *cfg,
                                                    QWidget *parent,
                                                    const char *name):
     TabbedConfigurationPage(cfg, parent, name)
 {
+    // set the document in the super class
+    m_doc = doc;
+
     m_cfg->setGroup("Sequencer Options");
+
+    // ---------------- General tab ------------------
+    //
     QFrame *frame = new QFrame(m_tabWidget);
     QGridLayout *layout = new QGridLayout(frame, 4, 2, 10, 5);
 
-    // ---------------  Send Controllers ----------------
+    // Send Controllers
     //
     QLabel *label = new QLabel("Send MIDI Controllers at start of playback\n(will incur noticeable initial delay)", frame);
 
@@ -871,7 +878,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     m_sendControllersAtPlay->setChecked(sendControllers);
 
 
-    // ---------------- Command-line --------------------
+    // Command-line
     //
     layout->addMultiCellWidget(new QLabel(i18n("Sequencer command line options\n(any change made here will come into effect the next time you start Rosegarden)"), frame),
                                1, 1,
@@ -888,12 +895,55 @@ SequencerConfigurationPage::SequencerConfigurationPage(
 
     addTab(frame, i18n("General"));
 
+    // ------------------ Record tab ---------------------
+    //
+    frame = new QFrame(m_tabWidget);
+    layout = new QGridLayout(frame, 4, 2, 10, 5);
+
+    label = new QLabel("MIDI Record Device", frame);
+    m_recordDevice = new QComboBox(frame);
+
+    layout->addWidget(label, 0, 0);
+    layout->addWidget(m_recordDevice, 0, 1);
+
+    Rosegarden::DeviceList *devices = m_doc->getStudio().getDevices();
+    Rosegarden::DeviceListIterator it;
+
+    QString recordDeviceStr = m_cfg->readEntry("midirecorddevice");
+    for (it = devices->begin(); it != devices->end(); it++)
+    {
+        Rosegarden::MidiDevice *dev =
+            dynamic_cast<Rosegarden::MidiDevice*>(*it);
+
+        if (dev && dev->isDuplex())
+        {
+            // Label and DeviceId
+            //
+            QString label = strtoqstr((*it)->getName());
+            label += QString(" (%1)").arg((*it)->getId());
+
+            m_recordDevice->insertItem(label);
+
+            if (recordDeviceStr)
+            {
+                unsigned int recordDevice = recordDeviceStr.toUInt();
+
+                if (recordDevice == (*it)->getId())
+                    m_recordDevice->setCurrentItem(recordDevice);
+            }
+        }
+    }
+
+
+    addTab(frame, i18n("Recording"));
+
     //  -------------- Synchronisation tab -----------------
     //
     frame = new QFrame(m_tabWidget);
     layout = new QGridLayout(frame, 4, 2, 10, 5);
 
-    // --------------- MIDI Clock --------------------
+    // MIDI Clock
+    //
     label = new QLabel("Send MIDI Clock and System messages", frame);
     layout->addWidget(label, 0, 0);
     m_midiClockEnabled = new QCheckBox(frame);
@@ -902,7 +952,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     bool midiClock = m_cfg->readBoolEntry("midiclock", false);
     m_midiClockEnabled->setChecked(midiClock);
 
-    // --------------- JACK Transport ---------------
+    // JACK Transport
     //
     label = new QLabel("JACK transport mode", frame);
     layout->addWidget(label, 1, 0);
@@ -927,7 +977,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
             m_jackTransport->setCurrentItem(0);
     }
 
-    // ---------------  MMC Transport -----------------
+    // MMC Transport
     //
     label = new QLabel("MMC transport mode", frame);
     layout->addWidget(label, 2, 0);
@@ -960,9 +1010,51 @@ void
 SequencerConfigurationPage::apply()
 {
     m_cfg->setGroup("Sequencer Options");
+
+    // ---------- General -----------
+    //
     m_cfg->writeEntry("commandlineoptions", m_sequencerArguments->text());
     m_cfg->writeEntry("alwayssendcontrollers",
                        m_sendControllersAtPlay->isChecked());
+
+    // -------- Record device ---------
+    //
+
+    // Match the device number in the list and write out the matching
+    // DeviceId.
+    //
+    int count = 0;
+    int deviceId = 0;
+    Rosegarden::DeviceList *devices = m_doc->getStudio().getDevices();
+    Rosegarden::DeviceListIterator it;
+
+    for (it = devices->begin(); it != devices->end(); it++)
+    {
+        Rosegarden::MidiDevice *dev =
+            dynamic_cast<Rosegarden::MidiDevice*>(*it);
+
+        if (dev && dev->isDuplex())
+        {
+            if (m_recordDevice->currentItem() == count)
+            {
+                deviceId = dev->getId();
+                break;
+            }
+            count++;
+        }
+    }
+    m_cfg->writeEntry("midirecorddevice", deviceId);
+
+    // send the selected device to the sequencer
+    Rosegarden::MappedEvent *mE =
+        new Rosegarden::MappedEvent(
+                Rosegarden::MidiInstrumentBase, // InstrumentId
+                Rosegarden::MappedEvent::SystemRecordDevice,
+                Rosegarden::MidiByte(deviceId));
+
+    Rosegarden::StudioControl::sendMappedEvent(mE);
+
+
 
     // Write the JACK entry
     //
@@ -997,12 +1089,11 @@ SequencerConfigurationPage::apply()
 
     // Now send it
     //
-    Rosegarden::MappedEvent *mE =
-        new Rosegarden::MappedEvent(
-            Rosegarden::MidiInstrumentBase, // InstrumentId
-            Rosegarden::MappedEvent::SystemJackTransport,
-            Rosegarden::MidiByte(jackValue));
-
+    mE = new Rosegarden::MappedEvent(
+             Rosegarden::MidiInstrumentBase, // InstrumentId
+             Rosegarden::MappedEvent::SystemJackTransport,
+             Rosegarden::MidiByte(jackValue));
+ 
     Rosegarden::StudioControl::sendMappedEvent(mE);
 
     // Now write the MMC entry
@@ -1060,6 +1151,7 @@ SequencerConfigurationPage::apply()
                 Rosegarden::MidiByte(midiClock));
 
     Rosegarden::StudioControl::sendMappedEvent(mE);
+
 
 }
 

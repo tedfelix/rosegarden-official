@@ -7,11 +7,12 @@ o MTC/MMC - transport awareness
   - MTC will be in addition to basic real-time clock
   - MMC control can't yet be tested at my end
 
-o Audio - stereo, panning, bypass
-
-o Tidy up AudioFiles:
+o Audio
    - hardcoded format segment values
+   - panning
    - recording stereo WAVs
+   - plugin bypass
+   - busses and routing
    - BWF format writing/reading
    - multithreading
    - autosplitting

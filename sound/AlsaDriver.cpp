@@ -743,7 +743,10 @@ AlsaDriver::initialiseAudio()
     // set callbacks
     //
     jack_set_process_callback(m_audioClient, jackProcess, this);
-    jack_set_buffer_size_callback(m_audioClient, jackBufferSize, this);
+
+    // deprecated
+    //jack_set_buffer_size_callback(m_audioClient, jackBufferSize, this);
+
     jack_set_sample_rate_callback(m_audioClient, jackSampleRate, this);
     jack_on_shutdown(m_audioClient, jackShutdown, this);
     jack_set_graph_order_callback(m_audioClient, jackGraphOrder, this);
@@ -1963,6 +1966,13 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
             }
         }
 
+        if ((*i)->getType() == MappedEvent::SystemRecordDevice)
+        {
+            Rosegarden::DeviceId recordDevice =
+               (Rosegarden::DeviceId)((*i)->getData1());
+
+            setRecordDevice(recordDevice);
+        }
     }
 
     // Process Midi and Audio
@@ -3230,38 +3240,55 @@ AlsaDriver::setPluginInstanceBypass(InstrumentId id,
 }
 
 
+// From a DeviceId get a client/port pair for connecting as the
+// MIDI record device.
+//
 void
 AlsaDriver::setRecordDevice(Rosegarden::DeviceId id)
 {
-    Rosegarden::DeviceId countId = 0;
+    Rosegarden::InstrumentId typicalId = 0;
 
-    if (id >= m_alsaPorts.size())
-    { 
-        cout << "NO RECORD DEVICE FOUND" << endl;
-        return;
+    // Find a typical InstrumentId for this device
+    //
+    std::vector<MappedInstrument*>::iterator mIt = m_instruments.begin();
+    for (; mIt != m_instruments.end(); ++mIt)
+    {
+        if ((*mIt)->getDevice() == id)
+        {
+            typicalId = (*mIt)->getId();
+            break;
+        }
     }
 
+    // Locate a suitable port
+    //
     snd_seq_addr_t sender, dest;
-
     dest.client = m_client;
     dest.port = m_port;
 
     std::vector<AlsaPort*>::iterator it = m_alsaPorts.begin();
     for (; it != m_alsaPorts.end(); ++it)
     {
-        sender.port = (*it)->m_client;
+        sender.client = (*it)->m_client;
         sender.port = (*it)->m_port;
 
-        if (countId == id) break;
+        if (typicalId >= (*it)->m_startId &&
+            typicalId <= (*it)->m_endId) break;
+    }
 
-        // Increment on new client/device - not on a new port
-        //
-        if ((*it)->m_port == 0) countId++;
+    if (it == m_alsaPorts.end())
+    {
+        std::cerr << "AlsaDriver::setRecordDevice - "
+                  << "couldn't match device id (" << id << ") to ALSA port"
+                  << std::endl;
+        return;
     }
 
     if ((*it)->m_duplex != true)
     {
-        cout << "ATTEMPTING TO SET RECORD DEVICE TO NON-DUPLEX DEVICE" << endl;
+        std::cerr << "AlsaDriver::setRecordDevice - "
+                  << "attempting to set non-duplex device (" << id 
+                  << ") to record device" << std::endl;
         return;
     }
 
@@ -3285,6 +3312,46 @@ AlsaDriver::setRecordDevice(Rosegarden::DeviceId id)
     //
     snd_seq_port_subscribe_set_time_real(subs, 1);
 
+    snd_seq_query_subscribe_t *qSubs;
+    snd_seq_addr_t tmp_addr;
+    snd_seq_query_subscribe_alloca(&qSubs);
+
+    tmp_addr.client = m_client;
+    tmp_addr.port = m_port;
+
+    // Unsubsribe any existing connections
+    //
+    snd_seq_query_subscribe_set_type(qSubs, SND_SEQ_QUERY_SUBS_WRITE);
+    snd_seq_query_subscribe_set_index(qSubs, 0);
+    snd_seq_query_subscribe_set_root(qSubs, &tmp_addr);
+
+    while (snd_seq_query_port_subscribers(m_midiHandle, qSubs) >= 0)
+    {
+        tmp_addr = *snd_seq_query_subscribe_get_addr(qSubs);
+
+        snd_seq_port_subscribe_t *dSubs;
+        snd_seq_port_subscribe_alloca(&dSubs);
+
+        snd_seq_addr_t dSender;
+        dSender.client = tmp_addr.client;
+        dSender.port = tmp_addr.port;
+
+        snd_seq_port_subscribe_set_sender(dSubs, &dSender);
+        snd_seq_port_subscribe_set_dest(dSubs, &dest);
+
+        int error = snd_seq_unsubscribe_port(m_midiHandle, dSubs);
+
+        if (error < 0)
+        {
+            std::cerr << "AlsaDriver::setRecordDevice - "
+                      << "can't unsubscribe record port" << std::endl;
+
+        }
+
+        snd_seq_query_subscribe_set_index(qSubs,
+                snd_seq_query_subscribe_get_index(qSubs) + 1);
+    }
+
     if (snd_seq_subscribe_port(m_midiHandle, subs) < 0)
     {
         std::cerr << "AlsaDriver::initialiseMidi - "
@@ -3294,9 +3361,18 @@ AlsaDriver::setRecordDevice(Rosegarden::DeviceId id)
         // have to flag it internally.
         //
         m_midiInputPortConnected = false;
+        std::cerr << "AlsaDriver::setRecordDevice - "
+                  << "failed to subscribe device " 
+                  << id << " as record port" << std::endl;
     }
     else
+    {
         m_midiInputPortConnected = true;
+        std::cerr << "AlsaDriver::setRecordDevice - "
+                  << "successfully subscribed device "
+                  << id << " as record port" << std::endl;
+    }
+
 }
 
 // We send 

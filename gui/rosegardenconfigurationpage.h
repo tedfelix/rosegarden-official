@@ -381,13 +381,17 @@ protected slots:
 
 protected:
 
+    // General
     QLineEdit *m_sequencerArguments;
     QCheckBox *m_sendControllersAtPlay;
 
+    // Latency
     QCheckBox *m_midiClockEnabled;
-
     QComboBox *m_jackTransport;
     QComboBox *m_mmcTransport;
+
+    // Recording
+    QComboBox *m_recordDevice;
 
 };
  
