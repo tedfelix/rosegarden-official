@@ -219,8 +219,8 @@ public:
     /**
      * From LinedStaffManager
      */
-//     virtual NotationStaff* getStaffForCanvasY(int y) const;
-    virtual LinedStaff<NotationElement>* getStaffForCanvasY(int y) const;
+    virtual LinedStaff<NotationElement>* getStaffForCanvasCoords
+    (int x, int y) const;
 
 
     /**

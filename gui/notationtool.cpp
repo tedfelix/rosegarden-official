@@ -355,7 +355,7 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
     int y = (int)e->y();
 
     NotationStaff *staff = dynamic_cast<NotationStaff *>
-	(m_nParentView->getStaffForCanvasY(y));
+	(m_nParentView->getStaffForCanvasCoords(e->x(), y));
     if (!staff) {
 	clearPreview();
 	return false;
@@ -958,7 +958,7 @@ void NotationSelector::handleLeftButtonPress(Rosegarden::timeT t,
                                              QMouseEvent* e,
                                              ViewElement *element)
 {
-    NOTATION_DEBUG << "NotationSelector::handleMousePress" << endl;
+    NOTATION_DEBUG << "NotationSelector::handleMousePress: time is " << t << ", staffNo is " << staffNo << ", e and element are " << e << " and " << element << endl;
 
     if (m_justSelectedBar) {
 	handleMouseTripleClick(t, height, staffNo, e, element);
@@ -1200,7 +1200,10 @@ EventSelection* NotationSelector::getSelection()
         m_selectionRect->height() <  3) return 0;
 
     double middleY = m_selectionRect->y() + m_selectionRect->height()/2;
-    NotationStaff *staff = dynamic_cast<NotationStaff*>(m_nParentView->getStaffForCanvasY(int(middleY)));
+
+    NotationStaff *staff = dynamic_cast<NotationStaff*>
+	(m_nParentView->getStaffForCanvasCoords(int(m_selectionRect->x()),
+						int(middleY)));
 
     if (!staff) return 0;
     Segment& originalSegment = staff->getSegment();
@@ -1219,11 +1222,11 @@ EventSelection* NotationSelector::getSelection()
         
         if ((sprite = dynamic_cast<QCanvasNotationSprite*>(item))) {
 
-            // If selector is not greedy, check if the element's rect
+            // check if the element's rect
             // is actually included in the selection rect.
             //
-            if (/* so damn stupid it's stupid   !isGreedy() && */
-                !rect.contains(int(item->x()), int(item->y()), true)) continue;
+            if (!rect.contains(int(item->x()), int(item->y()), true)) 
+		continue;
             
             NotationElement &el = sprite->getNotationElement();
 

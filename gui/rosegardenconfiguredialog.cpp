@@ -343,8 +343,8 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 
     m_layoutMode = new QComboBox(frame);
     m_layoutMode->setEditable(false);
-    m_layoutMode->insertItem(i18n("Linear Layout"));
-    m_layoutMode->insertItem(i18n("Page Layout"));
+    m_layoutMode->insertItem(i18n("Linear layout"));
+    m_layoutMode->insertItem(i18n("Page layout"));
     int defaultLayoutMode = m_cfg->readNumEntry("layoutmode", 0);
     if (defaultLayoutMode >= 0 && defaultLayoutMode <= 1) {
 	m_layoutMode->setCurrentItem(defaultLayoutMode);

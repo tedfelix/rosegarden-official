@@ -96,7 +96,7 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
     int prevHeight = m_currentHeight;
     
     m_currentStaff = dynamic_cast<NotationStaff *>
-	(m_linedStaffManager.getStaffForCanvasY(e->y()));
+	(m_linedStaffManager.getStaffForCanvasCoords(e->x(), e->y()));
 
     if (!m_currentStaff) {
 
@@ -154,7 +154,7 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
     // happened to be called
 
     NotationStaff *staff = dynamic_cast<NotationStaff *>
-	(m_linedStaffManager.getStaffForCanvasY(e->y()));
+	(m_linedStaffManager.getStaffForCanvasCoords(e->x(), e->y()));
 
     if (!staff) {
 
@@ -297,7 +297,7 @@ void
 NotationCanvasView::setHeightMarkerHeight(QMouseEvent *e)
 {
     NotationStaff *staff = dynamic_cast<NotationStaff *>
-	(m_linedStaffManager.getStaffForCanvasY(e->y()));
+	(m_linedStaffManager.getStaffForCanvasCoords(e->x(), e->y()));
 
     int height = staff->getHeightAtCanvasY(e->y());
     int lineY = staff->getCanvasYForHeight(height, e->y());

@@ -50,7 +50,8 @@ template <class T>
 class LinedStaffManager
 {
 public:
-    virtual LinedStaff<T> *getStaffForCanvasY(int y) const = 0;
+    virtual LinedStaff<T> *getStaffForCanvasCoords(int x, 
+						   int y) const = 0;
 };
 
 

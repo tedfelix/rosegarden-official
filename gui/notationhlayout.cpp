@@ -748,9 +748,10 @@ NotationHLayout::reconcileBarsLinear()
 
 	if (!widest) {
 	    // have we reached the end of the piece?
-	    if (barNo >= getLastVisibleBar()) break; // yes
-	    else {
-		m_totalWidth += 30;
+	    if (barNo >= getLastVisibleBar()) { // yes
+		break;
+	    } else {
+		m_totalWidth += m_spacing / 3;
 		NOTATION_DEBUG << "Setting bar position for degenerate bar "
 			       << barNo << " to " << m_totalWidth << endl;
 
@@ -838,17 +839,15 @@ NotationHLayout::reconcileBarsPage()
     for (;;) {
 	
 	StaffType *widest = getStaffWithWidestBar(barNo);
+	double maxWidth = m_spacing / 3;
 
 	if (!widest) {
 	    // have we reached the end of the piece?
 	    if (barNo >= getLastVisibleBar()) break; // yes
-	    else {
-		++barNo;
-		continue;
-	    }
+	} else {
+	    maxWidth =
+		m_barData[widest].find(barNo)->second.sizeData.idealWidth;
 	}
-
-	double maxWidth = m_barData[widest].find(barNo)->second.sizeData.idealWidth;
 
 	// Work on the assumption that this bar is the last in the
 	// row.  How would that make things look?
@@ -931,19 +930,19 @@ NotationHLayout::reconcileBarsPage()
 	    bool finalRow = (row == rowData.size()-1);
 
 	    StaffType *widest = getStaffWithWidestBar(barNo);
+	    if (finalRow && (stretchFactor > 1.0)) stretchFactor = 1.0;
+	    double maxWidth = 0.0;
 
 	    if (!widest) {
 		// have we reached the end of the piece? (shouldn't happen)
 		if (barNo >= getLastVisibleBar()) break; // yes
-		else {
-		    ++barNo;
-		    continue;
-		}
+		else maxWidth = stretchFactor * (m_spacing / 3);
+	    } else {
+		maxWidth =
+		    (stretchFactor *
+		     m_barData[widest].find(barNo)->
+		     second.sizeData.idealWidth);
 	    }
-
-	    if (finalRow && (stretchFactor > 1.0)) stretchFactor = 1.0;
-	    double maxWidth = 
-		(stretchFactor * m_barData[widest].find(barNo)->second.sizeData.idealWidth);
 
 	    if (barNoThisRow == finalBarThisRow) {
 		if (!finalRow ||

@@ -316,8 +316,11 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_config->setGroup("Notation Options");
     int layoutMode = m_config->readNumEntry("layoutmode", 0);
 
+/*!!!
     m_hlayout->setPageMode(layoutMode == 1);
     m_hlayout->setPageWidth(getPageWidth());
+*/
+    setPageMode(layoutMode == 1);
 
     try {
 	bool layoutApplied = applyLayout();
@@ -1020,12 +1023,13 @@ void NotationView::setupActions()
         (i18n("&Linear Layout"), 0, this, SLOT(slotLinearMode()),
          actionCollection(), "linear_mode");
     linearModeAction->setExclusiveGroup("layoutMode");
-    linearModeAction->setChecked(true);
+    if (!m_hlayout->isPageMode()) linearModeAction->setChecked(true);
 
     KRadioAction *pageModeAction = new KRadioAction
         (i18n("&Page Layout"), 0, this, SLOT(slotPageMode()),
          actionCollection(), "page_mode");
     pageModeAction->setExclusiveGroup("layoutMode");
+    if (m_hlayout->isPageMode()) pageModeAction->setChecked(true);
 
     (new KToggleAction
      (i18n("Show Ch&ord Name Ruler"), 0, this, SLOT(slotLabelChords()),
@@ -1931,11 +1935,25 @@ NotationView::getInsertionTime(Rosegarden::Clef &clef,
 
 
 LinedStaff<NotationElement>*
-NotationView::getStaffForCanvasY(int y) const
+NotationView::getStaffForCanvasCoords(int x, int y) const
 {
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-        if (m_staffs[i]->containsCanvasY(y)) return m_staffs[i];
+
+	NotationStaff *s = m_staffs[i];
+
+        if (s->containsCanvasY(y)) {
+	    
+	    NotationStaff::LinedStaffCoords coords = 
+		s->getLayoutCoordsForCanvasCoords(x, y);
+
+	    int barNo = m_hlayout->getBarForX(coords.first);
+	    if (barNo >= m_hlayout->getFirstVisibleBarOnStaff(*s) &&
+		barNo <= m_hlayout->getLastVisibleBarOnStaff(*s)) {
+		return m_staffs[i];
+	    }
+	}
     }
+
     return 0;
 }
 
