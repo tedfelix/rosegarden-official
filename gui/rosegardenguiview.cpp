@@ -39,6 +39,7 @@
 #include "RulerScale.h"
 #include "Instrument.h"
 #include "Selection.h"
+#include "AudioLevel.h"
 
 #include "constants.h"
 #include "rosestrings.h"
@@ -899,7 +900,12 @@ void RosegardenGUIView::showVisuals(const Rosegarden::MappedEvent *mE)
 	    mE->getInstrument() ==
 	        m_instrumentParameterBox->getSelectedInstrument()->getId())
         {
-            m_instrumentParameterBox->setAudioMeter(valueLeft, valueRight);
+	    float dBleft = Rosegarden::AudioLevel::fader_to_dB
+		(mE->getData1(), 127, Rosegarden::AudioLevel::LongFader);
+	    float dBright = Rosegarden::AudioLevel::fader_to_dB
+		(mE->getData2(), 127, Rosegarden::AudioLevel::LongFader);
+
+            m_instrumentParameterBox->setAudioMeter(dBleft, dBright);
         }
 
         // Don't always send all audio levels so we don't
@@ -943,9 +949,12 @@ RosegardenGUIView::updateMeters(SequencerMapper *mapper)
 		instrument->getId() ==
 		m_instrumentParameterBox->getSelectedInstrument()->getId()) {
 
-		double left = info.level / 127.0;
-		double right = info.levelRight / 127.0;
-		m_instrumentParameterBox->setAudioMeter(left, right);
+		float dBleft = Rosegarden::AudioLevel::fader_to_dB
+		    (info.level, 127, Rosegarden::AudioLevel::LongFader);
+		float dBright = Rosegarden::AudioLevel::fader_to_dB
+		    (info.levelRight, 127, Rosegarden::AudioLevel::LongFader);
+
+		m_instrumentParameterBox->setAudioMeter(dBleft, dBright);
 	    }
 
 	    if (instrument->getAudioChannels() > 1) {

@@ -146,7 +146,7 @@ InstrumentParameterBox::~InstrumentParameterBox()
 }
 
 void
-InstrumentParameterBox::setAudioMeter(double ch1, double ch2)
+InstrumentParameterBox::setAudioMeter(float ch1, float ch2)
 {
     m_audioInstrumentParameters->setAudioMeter(ch1, ch2);
 }
@@ -800,14 +800,23 @@ AudioInstrumentParameterPanel::slotSetPan(float pan)
 }
 
 void
-AudioInstrumentParameterPanel::setAudioMeter(double ch1, double ch2)
+AudioInstrumentParameterPanel::setAudioMeter(float dBleft, float dBright)
 {
+    std::cerr << "AudioInstrumentParameterPanel::setAudioMeter: (" << dBleft
+	      << "," << dBright << ")" << std::endl;
+    
+    double ch1 = (double)Rosegarden::AudioLevel::dB_to_fader
+	(dBleft, 127, Rosegarden::AudioLevel::ShortFader);
+
     if (m_selectedInstrument)
     {
-        if (m_selectedInstrument->getAudioChannels() == 1)
-            m_audioFader->m_vuMeter->setLevel(ch1);
-        else
-            m_audioFader->m_vuMeter->setLevel(ch1, ch2);
+        if (m_selectedInstrument->getAudioChannels() == 1) {
+            m_audioFader->m_vuMeter->setLevel(ch1 / 127.0);
+	} else {
+	    double ch2 = (double)Rosegarden::AudioLevel::dB_to_fader
+		(dBright, 127, Rosegarden::AudioLevel::ShortFader);
+            m_audioFader->m_vuMeter->setLevel(ch1 / 127.0, ch2 / 127.0);
+	}
     }
 }
 

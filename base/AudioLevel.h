@@ -50,22 +50,6 @@ public:
     static int   multiplier_to_fader(float multiplier, int maxFaderLevel,
 				     FaderType type);
 
-    /**
-     * The Instrument stores "volume" as a single byte integer, so we
-     * treat it as a long-fader position with max level 255.
-     */
-
-    static float volume_to_dB(int v)
-    { return fader_to_dB(v, 255, LongFader); }
-
-    static float volume_to_multiplier(int v)
-    { return fader_to_multiplier(v, 255, LongFader); }
-
-    static int dB_to_volume(float dB)
-    { return dB_to_fader(dB, 255, LongFader); }
-
-    static int multiplier_to_volume(float m)
-    { return multiplier_to_fader(m, 255, LongFader); }
 };
 
 }

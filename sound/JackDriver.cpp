@@ -25,6 +25,7 @@
 #include "MappedStudio.h"
 #include "AudioProcess.h"
 #include "Profiler.h"
+#include "AudioLevel.h"
 
 #ifdef HAVE_ALSA
 #ifdef HAVE_LIBJACK
@@ -638,10 +639,27 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 				inputBufferLeft, 1, nframes);
 	}
 
-	// for now just:
-	memcpy(leftBuffer, inputBufferLeft, nframes * sizeof(sample_t));
+	sample_t totalLeft = 0.0, totalRight = 0.0;
+
+	for (size_t i = 0; i < nframes; ++i) {
+	    leftBuffer[i] = inputBufferLeft[i];
+	    totalLeft += leftBuffer[i];
+	}
+
 	if (channels == 2) {
-	    memcpy(rightBuffer, inputBufferRight, nframes * sizeof(sample_t));
+	    for (size_t i = 0; i < nframes; ++i) {
+		rightBuffer[i] = inputBufferRight[i];
+		totalRight += rightBuffer[i];
+	    }
+	}
+
+	if (sdb) {
+	    Rosegarden::TrackLevelInfo info;
+	    info.level = AudioLevel::multiplier_to_fader
+		(totalLeft / nframes, 127, AudioLevel::LongFader);
+	    info.levelRight = AudioLevel::multiplier_to_fader
+		(totalRight / nframes, 127, AudioLevel::LongFader);
+	    sdb->setRecordLevel(info);
 	}
     }
 
@@ -697,8 +715,10 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 
 	if (sdb) {
 	    Rosegarden::TrackLevelInfo info;
-	    info.level = (int)(peakLeft * 127.0);
-	    info.levelRight = (int)(peakRight * 127.0);
+	    info.level = AudioLevel::multiplier_to_fader
+		(peakLeft, 127, AudioLevel::LongFader);
+	    info.levelRight = AudioLevel::multiplier_to_fader
+		(peakRight, 127, AudioLevel::LongFader);
 	    sdb->setTrackLevelsForInstrument(id, info);
 	}
     }

@@ -73,7 +73,7 @@ public:
     Rosegarden::Instrument* getSelectedInstrument()
         { return m_selectedInstrument; }
 
-    void setAudioMeter(double ch1, double ch2);
+    void setAudioMeter(float dBleft, float dBright);
 
     // If currently showing this track's instrument then toggle
     // the mute button on the display
@@ -158,7 +158,7 @@ public:
     // Set the audio meter to a given level for a maximum of
     // two channels.
     //
-    void setAudioMeter(double ch1, double ch2);
+    void setAudioMeter(float dBleft, float dBright);
 
     // Set the button colour
     //
