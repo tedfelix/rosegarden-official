@@ -1,20 +1,21 @@
 # translation of de.po to Deutsch
 # This file is distributed under the same license as the PACKAGE package.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# Jörg Schumann <jrschumann@gmx.de>, 2003
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
+# Jörg Schumann <jrschumann@gmx.de>, 2003.
+# Eckhard Jokisch <e.jokisch@u-code.de>, 2005.
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "POT-Creation-Date: 2004-12-05 13:31+0100\n"
-"PO-Revision-Date: 2003-07-16 22:16+0200\n"
-"Last-Translator: Jörg Schumann <jrschumann@gmx.de>\n"
+"PO-Revision-Date: 2005-02-13 14:00+0000\n"
+"Last-Translator: Eckhard Jokisch <e.jokisch@u-code.de>\n"
 "Language-Team: Deutsch <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Report-Msgid-Bugs-To: \n"
-"X-Generator: KBabel 1.0.1\n"
+"X-Generator: KBabel 1.9.1\n"
 
 #: audiocommands.h:57
 msgid "Distribute Audio Segments over MIDI"
@@ -116,8 +117,7 @@ msgstr "Audiodatei wird exportiert..."
 msgid ""
 "This will unload audio file \"%1\" and remove all associated segments.  Are "
 "you sure?"
-msgstr ""
-"Wirklich die Audiodatei \"%1\" und alle zugehörigen Audiosegmente löschen?"
+msgstr "Wirklich die Audiodatei \"%1\" und alle zugehörigen Audiosegmente löschen?"
 
 #: audiomanagerdialog.cpp:753
 #, fuzzy
@@ -191,7 +191,7 @@ msgstr "Plugin"
 
 #: audioplugindialog.cpp:100
 msgid "Category:"
-msgstr ""
+msgstr "Kategorie:"
 
 #: audioplugindialog.cpp:105
 #, fuzzy
@@ -447,8 +447,7 @@ msgid "Export..."
 msgstr "Exportieren als..."
 
 #: bankeditor.cpp:763
-msgid ""
-"Import Bank and Program data from a Rosegarden file to the current Device"
+msgid "Import Bank and Program data from a Rosegarden file to the current Device"
 msgstr ""
 "Bank- und Programmdaten aus einer Rosegarden-Datei in das aktuelle Gerät "
 "importieren"
@@ -487,7 +486,7 @@ msgstr "&Wiederholen"
 
 #: bankeditor.cpp:1486
 msgid "<new bank>"
-msgstr ""
+msgstr "<Neue Bank>"
 
 #: bankeditor.cpp:1520
 msgid "Really delete this bank?"
@@ -503,7 +502,7 @@ msgstr "Bänke von einem Gerät in eine Datei importieren "
 
 #: bankeditor.cpp:1984 devicemanager.cpp:756
 msgid "Export Device as..."
-msgstr "Geräte exportieren als..."
+msgstr "Gerät exportieren als..."
 
 #: bankeditor.cpp:2003 devicemanager.cpp:775 rosegardengui.cpp:2116
 msgid "You have specified a directory"
@@ -519,6 +518,8 @@ msgid ""
 "Do you want to apply the changes before exiting the Bank Editor or discard "
 "the changes ?"
 msgstr ""
+"Ungesicherte Änderungen:\n"
+"Vor Verlassen des Bank-Editors Änderungen speichern oder verwerfen"
 
 #: bankeditor.cpp:2059
 #, fuzzy
@@ -965,7 +966,7 @@ msgstr "Als gemeinsame Taktart zeigen"
 
 #: dialogs.cpp:248
 msgid "Correct the durations of following measures"
-msgstr ""
+msgstr "Dauer nachfolgender Takte korrigieren"
 
 #: dialogs.cpp:337
 msgid "Display as common time"
@@ -1049,7 +1050,7 @@ msgstr "in der Zeit von  "
 
 #: dialogs.cpp:789
 msgid "Timing is already correct: update display only"
-msgstr ""
+msgstr "Timing ist bereits korrigiert: aktualisiere Anzeige"
 
 #: dialogs.cpp:799
 msgid "Timing calculations"
@@ -1160,7 +1161,7 @@ msgstr "Dauer: "
 
 #: dialogs.cpp:1333
 msgid "Sub-ordering: "
-msgstr ""
+msgstr "Unter - Ordnung"
 
 #: dialogs.cpp:1344
 msgid "Persistent properties"
@@ -1274,7 +1275,7 @@ msgstr "Meta string"
 
 #: dialogs.cpp:1841
 msgid "Load data"
-msgstr ""
+msgstr "Lade Daten"
 
 #: dialogs.cpp:1843
 #, fuzzy
@@ -2139,8 +2140,7 @@ msgstr "Noten überlagern und an bestehende Noten binden [\"Noten-Überlagern\"]
 
 #: editcommands.cpp:419
 msgid "Overlay notes, ignoring present notes [\"matrix-overlay\"]"
-msgstr ""
-"Noten überlagern und bestehenden Noten ignorieren [\"Matrix-Überlagern\"]"
+msgstr "Noten überlagern und bestehenden Noten ignorieren [\"Matrix-Überlagern\"]"
 
 #: editcommands.cpp:859
 msgid "Heuristic Notation &Quantize"
@@ -3784,7 +3784,7 @@ msgstr ""
 
 #: mixer.cpp:334 mixer.cpp:475 mixer.cpp:529
 msgid "Mute"
-msgstr ""
+msgstr "Stummschalten"
 
 #: mixer.cpp:342 rc.cpp:162
 msgid "Solo"
@@ -5154,8 +5154,7 @@ msgid "global element must precede note elements"
 msgstr "Globale Elemente müssen vor Notenelementen kommen"
 
 #: notestyle.cpp:628
-msgid ""
-"global and note elements may have shape or charname attribute, but not both"
+msgid "global and note elements may have shape or charname attribute, but not both"
 msgstr ""
 "global- und note-Elemente dürfen entweder das Attribut shape oder das "
 "Attribut charname haben"
@@ -5192,7 +5191,7 @@ msgstr "Eine oder mehrere Audiodateien auswählen"
 
 #: rgapplication.cpp:84
 msgid "Failed to load soundfont %1"
-msgstr ""
+msgstr "Laden von Soundfont nicht gelungen"
 
 #: rosegardenconfigurationpage.h:184 rosegardenconfiguredialog.cpp:829
 #: rosegardenconfiguredialog.cpp:1065
@@ -5275,7 +5274,7 @@ msgstr "Anzahl vorzuzählender Takte bei Aufnahmen"
 
 #: rosegardenconfiguredialog.cpp:203
 msgid "Always use default studio when loading files"
-msgstr ""
+msgstr "Beim laden von Dateien immer \"default\"-Studio benutzen"
 
 #: rosegardenconfiguredialog.cpp:209
 msgid "Event List"
@@ -5391,7 +5390,7 @@ msgstr "Notations-quantisierte Events in einer anderen Farbe anzeigen"
 
 #: rosegardenconfiguredialog.cpp:544
 msgid "Show \"invisible\" events in grey"
-msgstr ""
+msgstr "\"unsichtbare\" Events in grau anzeigen"
 
 #: rosegardenconfiguredialog.cpp:549
 msgid "Layout"
@@ -5407,8 +5406,7 @@ msgstr "Beim Einfügen neuer Noten..."
 
 #: rosegardenconfiguredialog.cpp:589
 msgid "Split notes into ties to make durations match"
-msgstr ""
-"Noten in verbundene aufbrechen, um Längen in Übereinstimmung zu bringen"
+msgstr "Noten in \"verbundene\" aufbrechen, um Längen in Übereinstimmung zu bringen"
 
 #: rosegardenconfiguredialog.cpp:590
 msgid "Ignore existing durations"
@@ -5433,7 +5431,7 @@ msgstr "Eine Oktave nach oben transponieren..."
 
 #: rosegardenconfiguredialog.cpp:639
 msgid "Affect only that octave"
-msgstr ""
+msgstr "Betrifft nur diese Oktave"
 
 #: rosegardenconfiguredialog.cpp:640
 #, fuzzy
@@ -5442,7 +5440,7 @@ msgstr "Es gibt keine anderen Tempoveränderungen."
 
 #: rosegardenconfiguredialog.cpp:641
 msgid "Affect all subsequent octaves"
-msgstr ""
+msgstr "Betrifft alle folgenden Oktaven"
 
 #: rosegardenconfiguredialog.cpp:648
 #, fuzzy
@@ -5451,7 +5449,7 @@ msgstr "Vorzeichen-Werkzeugleiste"
 
 #: rosegardenconfiguredialog.cpp:650
 msgid "Affect only that bar"
-msgstr ""
+msgstr "Betrifft nur diesen Takt"
 
 #: rosegardenconfiguredialog.cpp:651
 msgid "Require cautionary resets in following bar"
@@ -5999,7 +5997,7 @@ msgstr "Sequencer wird gestartet..."
 
 #: rosegardengui.cpp:315
 #, fuzzy
-msgid "Initializing plugin manager..."
+msgid "Initialising plugin manager..."
 msgstr "Plugin Manager wird initialisiert..."
 
 #: rosegardengui.cpp:318
@@ -6008,7 +6006,7 @@ msgstr "Plugins werden ermittelt..."
 
 #: rosegardengui.cpp:323
 #, fuzzy
-msgid "Initializing view..."
+msgid "Initialising view..."
 msgstr "Ansicht wird initialisiert..."
 
 #: rosegardengui.cpp:339
@@ -6659,8 +6657,7 @@ msgstr ""
 
 #: rosegardengui.cpp:6356
 msgid "Are you sure you want to save this as your default studio?"
-msgstr ""
-"Sind Sie sicher, dass Sie dies als Ihr Standardstudio speicerhn wollen?"
+msgstr "Sind Sie sicher, dass Sie dies als Ihr Standardstudio speichern wollen?"
 
 #: rosegardengui.cpp:6360
 msgid "Saving current document as default studio..."
@@ -6668,10 +6665,8 @@ msgstr "Aktuelles Dokument wird als Standartstudio gespeichert..."
 
 #: rosegardengui.cpp:6385
 #, fuzzy
-msgid ""
-"Are you sure you want to import your default studio and lose the current one?"
-msgstr ""
-"Sind Sie sicher, dass Sie dies als Ihr Standardstudio speicerhn wollen?"
+msgid "Are you sure you want to import your default studio and lose the current one?"
+msgstr "Sind Sie sicher, dass Sie dies als Ihr Standardstudio speichern wollen?"
 
 #: rosegardengui.cpp:6420
 #, fuzzy
@@ -7063,8 +7058,7 @@ msgid ""
 msgstr ""
 
 #: sequencemanager.cpp:1033
-msgid ""
-"Run out of processor power for real-time audio processing.  Cannot continue."
+msgid "Run out of processor power for real-time audio processing.  Cannot continue."
 msgstr ""
 
 #: sequencemanager.cpp:1061
@@ -7073,8 +7067,7 @@ msgid "JACK Audio subsystem is losing sample frames."
 msgstr "Das Audio-Subsystem ist nicht verfügbar - keine Aufnahme möglich"
 
 #: sequencemanager.cpp:1079
-msgid ""
-"Failed to read audio data from disc in time to service the audio subsystem."
+msgid "Failed to read audio data from disc in time to service the audio subsystem."
 msgstr ""
 
 #: sequencemanager.cpp:1083
@@ -7395,8 +7388,7 @@ msgid ""
 msgstr ""
 
 #: tracklabel.cpp:54
-msgid ""
-"Click and hold with left mouse button to assign this Track to an Instrument."
+msgid "Click and hold with left mouse button to assign this Track to an Instrument."
 msgstr ""
 
 #: triggermanager.cpp:141
@@ -8044,8 +8036,7 @@ msgstr "Loop-Markierungen an- oder ausschalten (wenn gesetzt)"
 
 #: rc.cpp:170
 msgid "Shows MIDI activity in and out of Rosegarden"
-msgstr ""
-"Zeigt MIDI-Aktivitäten aus Rosegarden heraus und nach Rosegarden hinein"
+msgstr "Zeigt MIDI-Aktivitäten aus Rosegarden heraus und nach Rosegarden hinein"
 
 #: rc.cpp:171 rc.cpp:174
 msgid "NO EVENTS"
