@@ -128,6 +128,17 @@
 
 #define ID_STATUS_MSG 1
 
+static void _settingLog(QString msg)
+{
+    RG_DEBUG << msg << endl;
+
+    QFile log("/tmp/setting_log.txt");
+    log.open(IO_WriteOnly | IO_Append);
+    QTextStream out(&log);
+    out << QDateTime::currentDateTime().toString() << " : " << msg << endl;
+}
+
+
 RosegardenGUIApp *RosegardenGUIApp::m_myself = 0;
 
 using Rosegarden::timeT;
@@ -1404,7 +1415,7 @@ RosegardenGUIDoc *RosegardenGUIApp::getDocument() const
 void RosegardenGUIApp::slotSaveOptions()
 {
     RG_DEBUG << "RosegardenGUIApp::slotSaveOptions()\n";
-    RG_DEBUG << "SETTING 2 : transport flap extended = " << m_transport->isExpanded() << endl;
+    _settingLog(QString("SETTING 2 : transport flap extended = %1").arg(m_transport->isExpanded()));
 
     kapp->config()->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     kapp->config()->writeEntry("Show Transport",               m_viewTransport->isChecked());
@@ -1443,7 +1454,8 @@ void RosegardenGUIApp::readOptions()
     slotToggleTransport();
 
     opt = kapp->config()->readBoolEntry("Expanded Transport", false);
-    RG_DEBUG << "SETTING 3 : transport flap extended = " << opt << endl;
+    _settingLog(QString("SETTING 3 : transport flap extended = %1").arg(opt));
+
     if(opt)
         m_transport->slotPanelOpenButtonClicked();
     else
@@ -1534,7 +1546,7 @@ void RosegardenGUIApp::showEvent(QShowEvent* e)
 
 bool RosegardenGUIApp::queryClose()
 {
-    RG_DEBUG << "SETTING 1 : transport flap extended = " << m_transport->isExpanded() << endl;
+    _settingLog(QString("SETTING 1 : transport flap extended = %1").arg(m_transport->isExpanded()));
 
     bool canClose = m_doc->saveIfModified();
 
