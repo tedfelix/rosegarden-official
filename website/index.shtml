@@ -34,10 +34,10 @@
       <p><a href="tour/">Take our tour</a> &ndash; and see what Rosegarden can
       do for you!</p>
 
-      <div align="center" style="margin:1em" valign="center">
-      <a href="/tour/">
-      <img src="/images/rg4-0.9.5-thumb.png" border="0" vspace="20"
-      alt="Rosegarden screenshot" width="307" height="230"/>
+      <div align="center" valign="center">
+      <a href="/images/rg4-0.9.9.png">
+      <img src="/images/rg4-0.9.9-thumb.png" border="0" vspace="20"
+      alt="Rosegarden screenshot"/>
       </a>
       </div>
 
