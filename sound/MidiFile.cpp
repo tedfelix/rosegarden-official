@@ -588,7 +588,7 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
                 }
 
                 // chop off the EOX
-                metaMessage = metaMessage.substr(0, metaMessage.length()-2);
+                metaMessage = metaMessage.substr(0, metaMessage.length()-1);
 
                 midiEvent = new MidiEvent(deltaTime,
                                           MIDI_SYSTEM_EXCLUSIVE,
