@@ -748,6 +748,9 @@ DSSIPluginInstance::deactivate()
 #endif
     if (!m_descriptor || !m_descriptor->LADSPA_Plugin->deactivate) return;
     m_descriptor->LADSPA_Plugin->deactivate(m_instanceHandle);
+#ifdef DEBUG_DSSI
+    std::cerr << "DSSIPluginInstance::deactivate " << m_identifier << " done" << std::endl;
+#endif
 }
 
 void

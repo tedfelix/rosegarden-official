@@ -37,7 +37,7 @@
 
 #include <cmath>
 
-//#define DEBUG_THREAD_CREATE_DESTROY 1
+#define DEBUG_THREAD_CREATE_DESTROY 1
 //#define DEBUG_BUSS_MIXER 1
 //#define DEBUG_MIXER 1
 //#define DEBUG_MIXER_LIGHTWEIGHT 1
@@ -304,6 +304,7 @@ AudioBussMixer::generateBuffers()
     RealTime bufferLength = m_driver->getAudioMixBufferLength();
     int bufferSamples = RealTime::realTime2Frame(bufferLength, m_sampleRate);
     bufferSamples = ((bufferSamples / m_blockSize) + 1) * m_blockSize;
+//!!!    int bufferSamples = 1024;
 
     for (int i = 0; i < m_bussCount; ++i) {
 	
@@ -333,6 +334,8 @@ AudioBussMixer::generateBuffers()
 	    setBussLevels(i + 1, level, pan);
 	}
     }
+
+    updateInstrumentConnections();
 
     if (m_processBuffers.size() == 0) {
 	m_processBuffers.push_back(new sample_t[m_blockSize]);
@@ -411,6 +414,55 @@ AudioBussMixer::setBussLevels(int bussId, float dB, float pan)
 }
 
 void
+AudioBussMixer::updateInstrumentConnections()
+{
+    InstrumentId audioInstrumentBase;
+    int audioInstruments;
+    m_driver->getAudioInstrumentNumbers(audioInstrumentBase, audioInstruments);
+
+    InstrumentId synthInstrumentBase;
+    int synthInstruments;
+    m_driver->getSoftSynthInstrumentNumbers(synthInstrumentBase, synthInstruments);
+
+    for (int buss = 0; buss < m_bussCount; ++buss) {
+
+	MappedAudioBuss *mbuss =
+	    m_driver->getMappedStudio()->getAudioBuss(buss + 1); // master is 0
+
+	if (!mbuss) {
+#ifdef DEBUG_BUSS_MIXER
+	    std::cerr << "AudioBussMixer::updateInstrumentConnections: buss " << buss << " not found" << std::endl;
+#endif
+	    continue;
+	}
+
+	BufferRec &rec = m_bufferMap[buss];
+
+	while (int(rec.instruments.size()) < audioInstruments + synthInstruments) {
+	    rec.instruments.push_back(false);
+	}
+	
+	std::vector<InstrumentId> instruments = mbuss->getInstruments();
+
+	for (int i = 0; i < audioInstruments + synthInstruments; ++i) {
+	    
+	    InstrumentId id;
+	    if (i < audioInstruments) id = audioInstrumentBase + i;
+	    else id = synthInstrumentBase + (i - audioInstruments);
+
+	    size_t j = 0;
+	    for (j = 0; j < instruments.size(); ++j) {
+		if (instruments[j] == id) {
+		    rec.instruments[i] = true;
+		    break;
+		}
+	    }
+	    if (j == instruments.size()) rec.instruments[i] = false;
+	}
+    }
+}
+
+void
 AudioBussMixer::processBlocks()
 {
     if (m_bussCount == 0) return;
@@ -420,34 +472,34 @@ AudioBussMixer::processBlocks()
 	std::cerr << "AudioBussMixer::processBlocks" << std::endl;
 #endif
 
-    std::set<InstrumentId> processedInstruments;
+    static std::vector<bool> processedInstruments;
+
+    InstrumentId audioInstrumentBase;
+    int audioInstruments;
+    m_driver->getAudioInstrumentNumbers(audioInstrumentBase, audioInstruments);
+
+    InstrumentId synthInstrumentBase;
+    int synthInstruments;
+    m_driver->getSoftSynthInstrumentNumbers(synthInstrumentBase, synthInstruments);
+
+    while (int(processedInstruments.size()) < audioInstruments + synthInstruments) {
+	processedInstruments.push_back(false);
+    }
+
+    for (int i = 0; i < audioInstruments + synthInstruments; ++i) {
+	processedInstruments[i] = false;
+    }
 
     int minBlocks = 0;
     bool haveMinBlocks = false;
 
     for (int buss = 0; buss < m_bussCount; ++buss) {
 
-	MappedAudioBuss *mbuss =
-	    m_driver->getMappedStudio()->getAudioBuss(buss + 1); // master is 0
-
-	if (!mbuss) {
-#ifdef DEBUG_BUSS_MIXER
-	    std::cerr << "AudioBussMixer::processBlocks: buss " << buss << " not found" << std::endl;
-#endif
-	    continue;
-	}
-
 	BufferRec &rec = m_bufferMap[buss];
 	
 	float gain[2];
 	gain[0] = rec.gainLeft;
 	gain[1] = rec.gainRight;
-
-	std::vector<InstrumentId> instruments = mbuss->getInstruments();
-
-#ifdef DEBUG_BUSS_MIXER
-	std::cerr << "AudioBussMixer::processBlocks: buss " << buss << ": " << instruments.size() << " instruments" << std::endl;
-#endif
 
 	// The dormant calculation here depends on the buffer length
 	// for this mixer being the same as that for the instrument mixer
@@ -464,24 +516,31 @@ AudioBussMixer::processBlocks()
 #endif
 
 	    if (minSpace == 0) break;
-	    
-	    for (std::vector<InstrumentId>::iterator ii = instruments.begin();
-		 ii != instruments.end(); ++ii) {
 
-		if (m_instrumentMixer->isInstrumentEmpty(*ii)) continue;
+	    for (int i = 0; i < audioInstruments + synthInstruments; ++i) {
+
+		// is this instrument on this buss?
+		if (int(rec.instruments.size()) <= i ||
+		    !rec.instruments[i]) continue;
+	    
+		InstrumentId id;
+		if (i < audioInstruments) id = audioInstrumentBase + i;
+		else id = synthInstrumentBase + (i - audioInstruments);
+
+		if (m_instrumentMixer->isInstrumentEmpty(id)) continue;
 
 		RingBuffer<sample_t, 2> *rb =
-		    m_instrumentMixer->getRingBuffer(*ii, ch);
+		    m_instrumentMixer->getRingBuffer(id, ch);
 		if (rb) {
 		    size_t r = rb->getReadSpace(1);
 		    if (r < minSpace) minSpace = r;
 
 #ifdef DEBUG_BUSS_MIXER
-		    if (*ii == 1000) {
+		    if (id == 1000) {
 			std::cerr << "AudioBussMixer::processBlocks: buss " << buss << ": read space " << r << " on instrument " << *ii << ", channel " << ch << std::endl;
 		    }
 #endif
-
+		    
 		    if (minSpace == 0) break;
 		}
 	    }
@@ -507,25 +566,31 @@ AudioBussMixer::processBlocks()
 
 	    bool dormant = true;
 
-	    for (std::vector<InstrumentId>::iterator ii = instruments.begin();
-		 ii != instruments.end(); ++ii) {
+	    for (int i = 0; i < audioInstruments + synthInstruments; ++i) {
 
-		if (processedInstruments.find(*ii) !=
-		    processedInstruments.end()) {
+		// is this instrument on this buss?
+		if (int(rec.instruments.size()) <= i ||
+		    !rec.instruments[i]) continue;
+
+		if (processedInstruments[i]) {
 		    // we aren't set up to process any instrument to
 		    // more than one buss
 		    continue;
 		} else {
-		    processedInstruments.insert(*ii);
+		    processedInstruments[i] = true;
 		}
+	    
+		InstrumentId id;
+		if (i < audioInstruments) id = audioInstrumentBase + i;
+		else id = synthInstrumentBase + (i - audioInstruments);
 
-		if (m_instrumentMixer->isInstrumentEmpty(*ii)) continue;
+		if (m_instrumentMixer->isInstrumentEmpty(id)) continue;
 
-		if (m_instrumentMixer->isInstrumentDormant(*ii)) {
+		if (m_instrumentMixer->isInstrumentDormant(id)) {
 
 		    for (int ch = 0; ch < 2; ++ch) {
 			RingBuffer<sample_t, 2> *rb =
-			    m_instrumentMixer->getRingBuffer(*ii, ch);
+			    m_instrumentMixer->getRingBuffer(id, ch);
 
 			if (rb) rb->skip(m_blockSize,
 					 1);
@@ -535,7 +600,7 @@ AudioBussMixer::processBlocks()
 
 		    for (int ch = 0; ch < 2; ++ch) {
 			RingBuffer<sample_t, 2> *rb =
-			    m_instrumentMixer->getRingBuffer(*ii, ch);
+			    m_instrumentMixer->getRingBuffer(id, ch);
 
 			if (rb) rb->readAdding(m_processBuffers[ch],
 					       m_blockSize,
@@ -548,8 +613,8 @@ AudioBussMixer::processBlocks()
 		if (dormant) {
 		    rec.buffers[ch]->zero(m_blockSize);
 		} else {
-		    for (size_t i = 0; i < m_blockSize; ++i) {
-			m_processBuffers[ch][i] *= gain[ch];
+		    for (size_t j = 0; j < m_blockSize; ++j) {
+			m_processBuffers[ch][j] *= gain[ch];
 		    }
 		    rec.buffers[ch]->write(m_processBuffers[ch], m_blockSize);
 		}
@@ -566,33 +631,22 @@ AudioBussMixer::processBlocks()
 
     // any unprocessed instruments need to be skipped, or they'll block
 
-    InstrumentId audioInstrumentBase;
-    int audioInstruments;
-    m_driver->getAudioInstrumentNumbers(audioInstrumentBase, audioInstruments);
+    for (int i = 0; i < audioInstruments + synthInstruments; ++i) {
 
-    InstrumentId synthInstrumentBase;
-    int synthInstruments;
-    m_driver->getSoftSynthInstrumentNumbers(synthInstrumentBase, synthInstruments);
+	if (processedInstruments[i]) continue;
 
-    if (int(processedInstruments.size()) != audioInstruments + synthInstruments) {
+	InstrumentId id;
+	if (i < audioInstruments) id = audioInstrumentBase + i;
+	else id = synthInstrumentBase + (i - audioInstruments);
+	
+	if (m_instrumentMixer->isInstrumentEmpty(id)) continue;
 
-	for (int i = 0; i < audioInstruments + synthInstruments; ++i) {
-
-	    InstrumentId id;
-	    if (i < audioInstruments) id = audioInstrumentBase + i;
-	    else id = synthInstrumentBase + (i - audioInstruments);
-
-	    if (m_instrumentMixer->isInstrumentEmpty(id)) continue;
-
-	    if (processedInstruments.find(id) == processedInstruments.end()) {
-		for (int ch = 0; ch < 2; ++ch) {
-		    RingBuffer<sample_t, 2> *rb =
-			m_instrumentMixer->getRingBuffer(id, ch);
-
-		    if (rb) rb->skip(m_blockSize * minBlocks,
-				     1);
-		}
-	    }
+	for (int ch = 0; ch < 2; ++ch) {
+	    RingBuffer<sample_t, 2> *rb =
+		m_instrumentMixer->getRingBuffer(id, ch);
+	    
+	    if (rb) rb->skip(m_blockSize * minBlocks,
+			     1);
 	}
     }
     
@@ -946,6 +1000,7 @@ AudioInstrumentMixer::generateBuffers()
     RealTime bufferLength = m_driver->getAudioMixBufferLength();
     int bufferSamples = RealTime::realTime2Frame(bufferLength, m_sampleRate);
     bufferSamples = ((bufferSamples / m_blockSize) + 1) * m_blockSize;
+//!!!    int bufferSamples = 1024;
 
 #ifdef DEBUG_MIXER
     std::cerr << "AudioInstrumentMixer::generateBuffers: Buffer length is " << bufferLength << "; buffer samples " << bufferSamples << " (sample rate " << m_sampleRate << ")" << std::endl;
@@ -1114,6 +1169,8 @@ AudioInstrumentMixer::processBlocks(bool &readSomething)
 	std::cerr << "AudioInstrumentMixer::processBlocks" << std::endl;
 #endif
 
+//    Rosegarden::Profiler profiler("processBlocks", true);
+
     const AudioPlayQueue *queue = m_driver->getAudioQueue();
 
     for (BufferMap::iterator i = m_bufferMap.begin();
@@ -1140,9 +1197,10 @@ AudioInstrumentMixer::processBlocks(bool &readSomething)
     }
 
     bool more = true;
-    
-    AudioPlayQueue::FileSet playing;
 
+    static const int MAX_FILES_PER_INSTRUMENT = 500;
+    static PlayableAudioFile *playing[MAX_FILES_PER_INSTRUMENT];
+    
     RealTime blockDuration = RealTime::frame2RealTime(m_blockSize, m_sampleRate);
 
     while (more) {
@@ -1160,11 +1218,13 @@ AudioInstrumentMixer::processBlocks(bool &readSomething)
 		continue;
 	    }
 
+	    size_t playCount = MAX_FILES_PER_INSTRUMENT;
+
 	    queue->getPlayingFilesForInstrument(rec.filledTo,
-						blockDuration,
-						id, playing);
-	    
-	    if (processBlock(id, playing, readSomething)) {
+						blockDuration, id,
+						playing, playCount);
+
+	    if (processBlock(id, playing, playCount, readSomething)) {
 		more = true;
 	    }
 	}
@@ -1181,6 +1241,8 @@ AudioInstrumentMixer::processEmptyBlocks(InstrumentId id)
     }
 #endif
   
+//    Rosegarden::Profiler profiler("processEmptyBlocks", true);
+
     BufferRec &rec = m_bufferMap[id];
     unsigned int channels = rec.buffers.size();
     if (channels > m_processBuffers.size()) channels = m_processBuffers.size();
@@ -1227,9 +1289,12 @@ AudioInstrumentMixer::processEmptyBlocks(InstrumentId id)
 
 bool
 AudioInstrumentMixer::processBlock(InstrumentId id,
-				   AudioPlayQueue::FileSet &audioQueue,
+				   PlayableAudioFile **playing,
+				   size_t playCount,
 				   bool &readSomething)
 {
+//    Rosegarden::Profiler profiler("processBlock", true);
+
     BufferRec &rec = m_bufferMap[id];
     RealTime bufferTime = rec.filledTo;
 
@@ -1279,20 +1344,19 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
 #endif
 
 #ifdef DEBUG_MIXER
-    if ((id % 100) == 0 && audioQueue.size() > 0) std::cerr << "AudioInstrumentMixer::processBlock(" << id <<"): " << audioQueue.size() << " audio file(s) to consider" << std::endl;
+    if ((id % 100) == 0 && playCount > 0) std::cerr << "AudioInstrumentMixer::processBlock(" << id <<"): " << playCount << " audio file(s) to consider" << std::endl;
 #endif
 
     bool haveBlock = true;
     bool haveMore = false;
 
-    for (AudioPlayQueue::FileSet::iterator it = audioQueue.begin();
-	 it != audioQueue.end(); ++it) {
+    for (size_t fileNo = 0; fileNo < playCount; ++fileNo) {
 
 	bool acceptable = false;
+	PlayableAudioFile *file = playing[fileNo];
 
-	size_t frames = (*it)->getSampleFramesAvailable();
-	acceptable =
-	    ((frames >= m_blockSize) || (*it)->isFullyBuffered());
+	size_t frames = file->getSampleFramesAvailable();
+	acceptable = ((frames >= m_blockSize) || file->isFullyBuffered());
 	
 	if (acceptable &&
 	    (minWriteSpace >= m_blockSize * 2) &&
@@ -1317,8 +1381,8 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
     if (!haveBlock) {
 	//!!! Is this actually a problem? It should mean we just block
 	// on this one instrument and return to it a little later.
-//	std::cerr << "WARNING: buffer underrun in file ringbuffer for instrument " << id << std::endl;
-//	m_driver->reportFailure(MappedEvent::FailureDiscUnderrun);
+	std::cerr << "WARNING: buffer underrun in file ringbuffer for instrument " << id << std::endl;
+	m_driver->reportFailure(MappedEvent::FailureDiscUnderrun);
 	return false; // blocked
     }
 
@@ -1353,16 +1417,17 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
     if (haveBlock) {
 	    
 	// Mix in a block from each playing file on this instrument.
-	    
-	for (AudioPlayQueue::FileSet::iterator it = audioQueue.begin();
-	     it != audioQueue.end(); ++it) {
+
+	for (size_t fileNo = 0; fileNo < playCount; ++fileNo) {
+
+	    PlayableAudioFile *file = playing[fileNo];
 
 	    size_t offset = 0;
 	    size_t blockSize = m_blockSize;
 
-	    if ((*it)->getStartTime() > bufferTime) {
+	    if (file->getStartTime() > bufferTime) {
 		offset = RealTime::realTime2Frame
-		    ((*it)->getStartTime() - bufferTime, m_sampleRate);
+		    (file->getStartTime() - bufferTime, m_sampleRate);
 		if (offset < blockSize) blockSize -= offset;
 		else blockSize = 0;
 #ifdef DEBUG_MIXER
@@ -1381,7 +1446,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
 	    // pooled buffers.
 
 	    if (blockSize > 0) {
-		(*it)->addSamples(m_processBuffers, channels, blockSize, offset);
+		file->addSamples(m_processBuffers, channels, blockSize, offset);
 		readSomething = true;
 	    }
 	}

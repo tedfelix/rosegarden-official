@@ -677,8 +677,8 @@ PlayableAudioFile::updateBuffers()
     if (nframes == 0) {
 #ifdef DEBUG_PLAYABLE
 	std::cerr << "PlayableAudioFile::updateBuffers: frames == 0, ignoring" << std::endl;
-	return false;
 #endif
+	return false;
     }
 
 #ifdef DEBUG_PLAYABLE

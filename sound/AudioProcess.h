@@ -132,6 +132,9 @@ public:
     /// For call from MappedStudio.  Pan is in range -100.0 -> 100.0
     void setBussLevels(int buss, float dB, float pan);
 
+    /// For call regularly from anywhere in a non-RT thread
+    void updateInstrumentConnections();
+
 protected:
     virtual void threadRun();
 
@@ -152,6 +155,7 @@ protected:
 	bool dormant;
 
 	std::vector<RingBuffer<sample_t> *> buffers;
+	std::vector<bool> instruments; // index is instrument id minus base
 
 	float gainLeft;
 	float gainRight;
@@ -250,7 +254,7 @@ protected:
 
     void processBlocks(bool &readSomething);
     void processEmptyBlocks(InstrumentId id);
-    bool processBlock(InstrumentId id, AudioPlayQueue::FileSet&, bool &readSomething);
+    bool processBlock(InstrumentId id, PlayableAudioFile **, size_t, bool &readSomething);
     void generateBuffers();
 
     AudioFileReader  *m_fileReader;

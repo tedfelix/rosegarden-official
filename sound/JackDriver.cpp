@@ -239,20 +239,21 @@ JackDriver::initialise()
     m_fileReader = new AudioFileReader(m_alsaDriver, m_sampleRate);
     m_fileWriter = new AudioFileWriter(m_alsaDriver, m_sampleRate);
     m_instrumentMixer = new AudioInstrumentMixer
-	(m_alsaDriver, m_fileReader, m_sampleRate,
-	 m_bufferSize < 1024 ? 1024 : m_bufferSize);
+	(m_alsaDriver, m_fileReader, m_sampleRate, m_bufferSize);
+//!!!	 m_bufferSize < 1024 ? 1024 : m_bufferSize);
     m_bussMixer = new AudioBussMixer
-	(m_alsaDriver, m_instrumentMixer, m_sampleRate,
-	 m_bufferSize < 1024 ? 1024 : m_bufferSize);
+	(m_alsaDriver, m_instrumentMixer, m_sampleRate, m_bufferSize);
+//!!!	 m_bufferSize < 1024 ? 1024 : m_bufferSize);
     m_instrumentMixer->setBussMixer(m_bussMixer);
 
     m_fileReader->run();
     m_fileWriter->run();
-    m_instrumentMixer->run();
+//    m_instrumentMixer->run();
 
     //!!! experimentally avoid running buss mixer at all if not wanted
     if (m_bussMixer->getBussCount() > 0) {
 	m_bussMixer->run();
+	m_instrumentMixer->run();//!!!
     }
 
     // Create and connect the default numbers of ports.  We always create
@@ -658,6 +659,35 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	return jackProcessEmpty(nframes);
     }
 
+#ifdef DEBUG_JACK_PROCESS
+    Rosegarden::Profiler profiler("jackProcess", true);
+#endif
+
+    if (m_lowLatencyMode) {
+	if (m_instrumentMixer->tryLock() == 0) {
+	    m_instrumentMixer->kick(false); //!!!
+	    m_instrumentMixer->releaseLock();
+#ifdef DEBUG_JACK_PROCESS
+	} else {
+	    std::cerr << "JackDriver::jackProcess: no instrument mixer lock available" << std::endl;
+#endif
+	}
+	if (m_bussMixer->getBussCount() > 0) {
+	    if (m_bussMixer->tryLock() == 0) {
+		m_bussMixer->kick(false); //!!!
+		m_bussMixer->releaseLock();
+#ifdef DEBUG_JACK_PROCESS
+	    } else {
+		std::cerr << "JackDriver::jackProcess: no buss mixer lock available" << std::endl;
+#endif
+	    }
+	}
+    }
+
+#ifdef DEBUG_JACK_PROCESS
+    Rosegarden::Profiler profiler2("jackProcess post mix", true);
+#endif
+
     SequencerDataBlock *sdb = m_alsaDriver->getSequencerDataBlock();
     
     jack_position_t position;
@@ -686,9 +716,9 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	    return jackProcessEmpty(nframes);
 	} else if (state == JackTransportRolling) {
 	    if (m_waiting) {
-#ifdef DEBUG_JACK_PROCESS
+//#ifdef DEBUG_JACK_PROCESS
 		std::cerr << "JackDriver::jackProcess: telling ALSA driver to go!" << std::endl;
-#endif
+//#endif
 		m_alsaDriver->startClocksApproved();
 		m_waiting = false;
 	    }
@@ -924,11 +954,13 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     }
 
     if (m_alsaDriver->isPlaying()) {
-	//!!! experimental -- if no busses, don't care about buss mixer
-	if (m_bussMixer->getBussCount() == 0) {
-	    m_instrumentMixer->signal();
-	} else {
-	    m_bussMixer->signal();
+	if (!m_lowLatencyMode) {
+	    //!!! experimental -- if no busses, don't care about buss mixer
+	    if (m_bussMixer->getBussCount() == 0) {
+		m_instrumentMixer->signal();
+	    } else {
+		m_bussMixer->signal();
+	    }
 	}
     }
 
@@ -1477,6 +1509,7 @@ JackDriver::prebufferAudio()
 
     m_fileReader->fillBuffers(sliceStart);
 
+    //!!! tidy
     if (m_bussMixer->getBussCount() > 0) {
 	m_instrumentMixer->fillBuffers(sliceStart);
 	m_bussMixer->fillBuffers(sliceStart);
@@ -1629,13 +1662,34 @@ JackDriver::updateAudioData()
     createRecordInputs(inputs);
 
     //!!! experimental -- start or stop buss mixer as needed
+
+//    m_lowLatencyMode = true;//!!!
+    m_lowLatencyMode = false;
+
     if (m_bussMixer->getBussCount() == 0) {
 	if (m_bussMixer->running()) {
 	    m_bussMixer->terminate();
 	}
     } else {
-	if (!m_bussMixer->running()) {
-	    m_bussMixer->run();
+	if (m_lowLatencyMode) {
+	    if (m_bussMixer->running()) {
+		m_bussMixer->terminate();
+	    }
+	} else {
+	    m_bussMixer->updateInstrumentConnections();
+	    if (!m_bussMixer->running()) {
+		m_bussMixer->run();
+	    }
+	}
+    }
+
+    if (m_lowLatencyMode) {
+	if (m_instrumentMixer->running()) {
+	    m_instrumentMixer->terminate(); //!!!
+	}
+    } else {
+	if (!m_instrumentMixer->running()) {
+	    m_instrumentMixer->run();
 	}
     }
 }

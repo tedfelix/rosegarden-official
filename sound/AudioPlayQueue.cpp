@@ -199,7 +199,7 @@ AudioPlayQueue::getPlayingFiles(const RealTime &sliceStart,
 				const RealTime &sliceDuration,
 				FileSet &playing) const
 {
-    Profiler profiler("AudioPlayQueue::getPlayingFiles");
+//    Profiler profiler("AudioPlayQueue::getPlayingFiles");
 
     // This one needs to be quick.
 
@@ -250,20 +250,24 @@ void
 AudioPlayQueue::getPlayingFilesForInstrument(const RealTime &sliceStart,
 					     const RealTime &sliceDuration,
 					     InstrumentId instrumentId,
-					     FileSet &playing) const
+					     PlayableAudioFile **playing,
+					     size_t &size) const
 {
 #ifdef FINE_DEBUG_AUDIO_PLAY_QUEUE
     bool printed = false;
 #endif
 
-    Profiler profiler("AudioPlayQueue::getPlayingFilesForInstrument");
+//    Profiler profiler("AudioPlayQueue::getPlayingFilesForInstrument");
 
     // This one needs to be quick.
 
-    playing.clear();
+    size_t written = 0;
 
     unsigned int index = instrumentId2Index(instrumentId);
-    if (index >= m_instrumentIndex.size()) return; // nothing here
+    if (index >= m_instrumentIndex.size()) {
+	size = 0;
+	return; // nothing here
+    }
 
     RealTime sliceEnd = sliceStart + sliceDuration;
 
@@ -312,8 +316,21 @@ AudioPlayQueue::getPlayingFilesForInstrument(const RealTime &sliceStart,
 		      << f->getStartTime() << " -> " << f->getEndTime()
 		      << ")" << std::endl;
 #endif
+
+	    size_t j = 0;
+	    for (size_t j = 0; j < written; ++j) {
+		if (playing[j] == f) break;
+	    }
+	    if (j < written) break; // already have it
 	    
-	    playing.insert(f);
+	    if (written >= size) {
+#ifdef FINE_DEBUG_AUDIO_PLAY_QUEUE
+		std::cerr << "No room to write it!" << std::endl;
+#endif
+		break;
+	    }
+
+	    playing[written++] = f;
 	}
     }
 
@@ -323,16 +340,19 @@ AudioPlayQueue::getPlayingFilesForInstrument(const RealTime &sliceStart,
 	if (file->getInstrument() == instrumentId &&
 	    file->getStartTime() <= sliceEnd &&
 	    file->getStartTime() + file->getDuration() > sliceStart) {
-	    playing.insert(file);
+	    if (written >= size) break;
+	    playing[written++] = file;
 	}
     }
 
 #ifdef FINE_DEBUG_AUDIO_PLAY_QUEUE
-    if (playing.size() > 0) {
+    if (written > 0) {
 	std::cerr << "AudioPlayQueue::getPlayingFilesForInstrument: total "
-		  << playing.size() << " files" << std::endl;
+		  << written << " files" << std::endl;
     }
 #endif
+
+    size = written;
 }
 
 bool

@@ -95,14 +95,16 @@ public:
 
     /**
      * Look up the files playing during a given slice on a given
-     * instrument and return them in the passed FileSet.  The pointers
-     * returned are still owned by me and the caller should not delete
-     * them.
+     * instrument and return them in the passed array.  The size arg
+     * gives the available size of the array and is used to return the
+     * number of file pointers written.  The pointers returned are
+     * still owned by me and the caller should not delete them.
      */
     void getPlayingFilesForInstrument(const RealTime &sliceStart,
 				      const RealTime &sliceDuration,
 				      InstrumentId instrumentId,
-				      FileSet &) const;
+				      PlayableAudioFile **files,
+				      size_t &size) const;
 
     /**
      * Return true if at least one scheduled or unscheduled file is
