@@ -542,6 +542,11 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
 
                 // create and store our event
                 midiEvent = new MidiEvent(deltaTime, eventCode, data1, data2);
+
+		std::cout << "MIDI event for channel " << channel << " (track "
+			  << trackNum << ")" << std::endl;
+		midiEvent->print();
+
                 m_midiComposition[trackNum].push_back(midiEvent);
                 break;
 
@@ -1836,17 +1841,20 @@ MidiFile::consolidateNoteOffEvents(TrackId track)
 void
 MidiFile::clearMidiComposition()
 {
-    for (unsigned int i = 0; i < m_numberOfTracks; i++)
-    {
-        MidiTrackIterator it = m_midiComposition[i].begin();
+    for (MidiComposition::iterator ci = m_midiComposition.begin();
+	 ci != m_midiComposition.end(); ++ci) {
+	
+	std::cerr << "MidiFile::clearMidiComposition: track " << ci->first << std::endl;
 
-        for(; it != m_midiComposition[i].end(); it++)
-            delete *it;
+	for (MidiTrackIterator ti = ci->second.begin();
+	     ti != ci->second.end(); ++ti) {
+	    delete *ti;
+	}
 
-        m_midiComposition[i].erase(m_midiComposition[i].begin(),
-                                   m_midiComposition[i].end());
+	ci->second.clear();
     }
 
+    m_midiComposition.clear();
 }
 
 // Doesn't do anything yet - doesn't need to.  We need to satisfy
