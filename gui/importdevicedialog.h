@@ -43,6 +43,8 @@ public:
     ImportDeviceDialog(QWidget *parent, KURL url);
     virtual ~ImportDeviceDialog();
 
+    bool doImport();
+
     bool shouldImportBanks() const;
     bool shouldImportControllers() const;
     bool shouldOverwriteBanks() const; 
@@ -63,6 +65,8 @@ public slots:
 protected:
     bool importFromRG(QString fileName);
     bool importFromSF2(QString fileName);
+
+    KURL               m_url;
 
     KComboBox          *m_deviceCombo;
     QLabel             *m_deviceLabel;

@@ -699,7 +699,7 @@ DeviceManagerDialog::slotImport()
     if (url.isEmpty()) return;
 
     ImportDeviceDialog *dialog = new ImportDeviceDialog(this, url);
-    if (dialog->exec() == QDialog::Accepted) {
+    if (dialog->doImport() && dialog->exec() == QDialog::Accepted) {
 
 	ModifyDeviceCommand *command = 0;
 

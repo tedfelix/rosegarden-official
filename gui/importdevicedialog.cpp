@@ -52,20 +52,35 @@ ImportDeviceDialog::ImportDeviceDialog(QWidget *parent, KURL url) :
     KDialogBase(parent, "importdevicedialog", true,
                 i18n("Import from Device..."),
                 Ok | Cancel, Ok),
+    m_url(url),
     m_fileDoc(0),
     m_device(0)
 {
+}
+
+ImportDeviceDialog::~ImportDeviceDialog()
+{
+    if (m_fileDoc) {
+	delete m_fileDoc;
+    } else {
+	delete m_device;
+    }
+}
+
+bool
+ImportDeviceDialog::doImport()
+{
     QVBox *mainFrame = makeVBoxMainWidget();
 
-    if (url.isEmpty()) {
+    if (m_url.isEmpty()) {
 	reject();
-	return;
+	return false;
     }
 
     QString target;
-    if (KIO::NetAccess::download(url, target) == false) {
-        KMessageBox::error(this, i18n("Cannot download file %1").arg(url.prettyURL()));
-        return;
+    if (KIO::NetAccess::download(m_url, target) == false) {
+        KMessageBox::error(this, i18n("Cannot download file %1").arg(m_url.prettyURL()));
+        return false;
     }
 
     bool fileRead = false;
@@ -76,17 +91,17 @@ ImportDeviceDialog::ImportDeviceDialog(QWidget *parent, KURL url) :
     }
     if (!fileRead) {
 	KMessageBox::error
-	    (this, i18n("Cannot open file %1").arg(url.prettyURL()));
+	    (this, i18n("Cannot open file %1").arg(m_url.prettyURL()));
 	reject();
 	close();
-	return;
+	return false;
     }
     if (m_devices.size() == 0) {
 	KMessageBox::sorry
-	    (this, i18n("No devices found in file %1").arg(url.prettyURL()));
+	    (this, i18n("No devices found in file %1").arg(m_url.prettyURL()));
 	reject();
 	close();
-	return;
+	return false;
     }
 
     QGroupBox *groupBox = new QGroupBox(2, Qt::Horizontal,
@@ -159,16 +174,10 @@ ImportDeviceDialog::ImportDeviceDialog(QWidget *parent, KURL url) :
     bool overwrite = config->readBoolEntry("importbanksoverwrite", true);
     if (overwrite) m_buttonGroup->setButton(1);
     else m_buttonGroup->setButton(0);
+
+    return true;
 }
 
-ImportDeviceDialog::~ImportDeviceDialog()
-{
-    if (m_fileDoc) {
-	delete m_fileDoc;
-    } else {
-	delete m_device;
-    }
-}
 
 void
 ImportDeviceDialog::slotOk()
