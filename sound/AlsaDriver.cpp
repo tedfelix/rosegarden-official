@@ -2397,8 +2397,8 @@ AlsaDriver::processSoftSynthEventOut(InstrumentId id, const snd_seq_event_t *ev,
 
 	RealTime t(ev->time.time.tv_sec, ev->time.time.tv_nsec);
 
-//	if (now) t = RealTime::zeroTime;//!!! getSequencerTime();
-	if (now) t = getSequencerTime();
+	if (now) t = RealTime::zeroTime;//!!! getSequencerTime();
+//	if (now) t = getSequencerTime();
 	else t = t + m_playStartPosition - m_alsaPlayStartTime;
 
 #ifdef DEBUG_ALSA
@@ -2406,6 +2406,8 @@ AlsaDriver::processSoftSynthEventOut(InstrumentId id, const snd_seq_event_t *ev,
 #endif
 
 	synthPlugin->sendEvent(t, ev);
+
+	if (now) m_jackDriver->setHaveSoftSynthAsyncEvent();
     }
 #endif
 }

@@ -166,6 +166,14 @@ public:
     // 
     void setAudioInstrumentLevels(InstrumentId instrument, float dB, float pan);
 
+    // Called from AlsaDriver to indicate that an async MIDI event is
+    // being sent to a soft synth.  JackDriver uses this to suggest
+    // that it needs to start processing soft synths, if it wasn't
+    // already.  It will switch this off again itself when things
+    // fall silent.
+    // 
+    void setHaveSoftSynthAsyncEvent() { m_haveSoftSynthAsyncEvent = true; }
+
     RealTime getNextSliceStart(const RealTime &now) const;
 
     // For audit purposes only.
@@ -239,6 +247,7 @@ protected:
     float                        m_masterLevel;
     unsigned long                m_directMasterAudioInstruments; // bitmap
     unsigned long                m_directMasterSynthInstruments;
+    bool                         m_haveSoftSynthAsyncEvent;
 
     int                          m_recordInput;
     int                          m_recordInputChannel; // -1 -> stereo

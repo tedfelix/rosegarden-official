@@ -27,6 +27,6 @@ CXXFLAGS="-Wall -O0" ./configure --enable-debug=full
 #CXXFLAGS="-gstabs+3 -Wall -O2 -fno-gcse" ./configure --enable-debug=full
 
 # optimisation on athlon:
-#CXXFLAGS="-Wall -O3 -falign-functions=4 -fomit-frame-pointer -mfancy-math-387 -mcpu=athlon-xp" ./configure --disable-debug
+#CXXFLAGS="-Wall -O3 -falign-functions=4 -fomit-frame-pointer -march=athlon-xp" ./configure --disable-debug
 
 

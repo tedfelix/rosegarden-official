@@ -61,6 +61,7 @@ JackDriver::JackDriver(AlsaDriver *alsaDriver) :
     m_masterLevel(1.0),
     m_directMasterAudioInstruments(0L),
     m_directMasterSynthInstruments(0L),
+    m_haveSoftSynthAsyncEvent(false),
     m_recordInput(1000),
     m_recordInputChannel(-1),
     m_recordLevel(0.0),
@@ -240,14 +241,12 @@ JackDriver::initialise()
     m_fileWriter = new AudioFileWriter(m_alsaDriver, m_sampleRate);
     m_instrumentMixer = new AudioInstrumentMixer
 	(m_alsaDriver, m_fileReader, m_sampleRate, m_bufferSize);
-//!!!	 m_bufferSize < 1024 ? 1024 : m_bufferSize);
     m_bussMixer = new AudioBussMixer
 	(m_alsaDriver, m_instrumentMixer, m_sampleRate, m_bufferSize);
-//!!!	 m_bufferSize < 1024 ? 1024 : m_bufferSize);
     m_instrumentMixer->setBussMixer(m_bussMixer);
 
     m_fileReader->run();
-    m_fileWriter->run();
+//!!!    m_fileWriter->run();
 //    m_instrumentMixer->run();
 
     //!!! experimentally avoid running buss mixer at all if not wanted
@@ -664,22 +663,29 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 #endif
 
     if (m_alsaDriver->getLowLatencyMode()) {
-	if (m_instrumentMixer->tryLock() == 0) {
-	    m_instrumentMixer->kick(false);
-	    m_instrumentMixer->releaseLock();
+
+	if (m_alsaDriver->areClocksRunning()) {
+
+	    if (m_alsaDriver->isPlaying() || m_haveSoftSynthAsyncEvent) {
+
+		if (m_instrumentMixer->tryLock() == 0) {
+		    m_instrumentMixer->kick(false);
+		    m_instrumentMixer->releaseLock();
 #ifdef DEBUG_JACK_PROCESS
-	} else {
-	    std::cerr << "JackDriver::jackProcess: no instrument mixer lock available" << std::endl;
+		} else {
+		    std::cerr << "JackDriver::jackProcess: no instrument mixer lock available" << std::endl;
 #endif
-	}
-	if (m_bussMixer->getBussCount() > 0) {
-	    if (m_bussMixer->tryLock() == 0) {
-		m_bussMixer->kick(false);
-		m_bussMixer->releaseLock();
+		}
+		if (m_bussMixer->getBussCount() > 0) {
+		    if (m_bussMixer->tryLock() == 0) {
+			m_bussMixer->kick(false);
+			m_bussMixer->releaseLock();
 #ifdef DEBUG_JACK_PROCESS
-	    } else {
-		std::cerr << "JackDriver::jackProcess: no buss mixer lock available" << std::endl;
+		    } else {
+			std::cerr << "JackDriver::jackProcess: no buss mixer lock available" << std::endl;
 #endif
+		    }
+		}
 	    }
 	}
     }
@@ -732,17 +738,23 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	    std::cerr << "JackDriver::jackProcess: clocks stopped" << std::endl;
 #endif
 	    return jackProcessEmpty(nframes);
+
 	} else if (!m_alsaDriver->isPlaying()) {
 #ifdef DEBUG_JACK_PROCESS
 	    std::cerr << "JackDriver::jackProcess: not playing" << std::endl;
 #endif
 	    jackProcessRecord(nframes, 0, 0); // for monitoring
 
-	    //!!! We don't actually want to be doing the instrument
-	    // mix malarkey when stopped, unless there is some work to
-	    // do -- perhaps the instrument mixer could report whether
-	    // it's had any async events lately?
-//!!!	    return jackProcessEmpty(nframes);
+	    if (!m_haveSoftSynthAsyncEvent) {
+#ifdef DEBUG_JACK_PROCESS
+	    std::cerr << "JackDriver::jackProcess: no interesting async events" << std::endl;
+#endif
+		//!!! We don't actually want to be doing the instrument
+		// mix malarkey when stopped, unless there is some work to
+		// do -- perhaps the instrument mixer could report whether
+		// it's had any async events lately?
+		return jackProcessEmpty(nframes);
+	    }
 	}
     }
 
@@ -831,6 +843,8 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     std::cerr << "JackDriver::jackProcess: have " << audioInstruments << " audio and " << synthInstruments << " synth instruments" << std::endl;
 #endif
 
+    bool allSynthsDormant = true;
+
     for (int i = 0; i < audioInstruments + synthInstruments; ++i) {
 	
 	InstrumentId id;
@@ -890,7 +904,11 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 		if (rb) rb->skip(nframes);
 		if (instrument[ch])
 		    memset(instrument[ch], 0, nframes * sizeof(sample_t));
+
 	    } else {
+
+		if (id >= SoftSynthInstrumentBase) allSynthsDormant = false;
+
 		size_t actual = rb->read(instrument[ch], nframes);
 
 #ifdef DEBUG_JACK_PROCESS
@@ -929,6 +947,8 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	    sdb->setInstrumentLevel(id, info);
 	}
     }
+
+//!!!    if (allSynthsDormant) m_haveSoftSynthAsyncEvent = false;
 
     // Get master fader levels.  There's no pan on the master.
     float gain = AudioLevel::dB_to_multiplier(m_masterLevel);
@@ -1361,6 +1381,8 @@ void
 JackDriver::stop()
 {
     if (!m_client) return;
+
+    m_haveSoftSynthAsyncEvent = false;
 
 #ifdef DEBUG_JACK_DRIVER
     struct timeval tv;
@@ -1918,6 +1940,9 @@ bool
 JackDriver::createRecordFile(const std::string &filename)
 {
     if (m_fileWriter) {
+	if (!m_fileWriter->running()) {
+	    m_fileWriter->run();
+	}
 	return m_fileWriter->createRecordFile(m_alsaDriver->getAudioMonitoringInstrument(), filename);
     } else {
 	std::cerr << "JackDriver::createRecordFile: No file writer available!" << std::endl;
@@ -1930,6 +1955,9 @@ JackDriver::closeRecordFile(AudioFileId &returnedId)
 {
     if (m_fileWriter) {
 	return m_fileWriter->closeRecordFile(m_alsaDriver->getAudioMonitoringInstrument(), returnedId);
+	if (m_fileWriter->running()) {
+	    m_fileWriter->terminate();
+	}
     } else return false;
 }
 
