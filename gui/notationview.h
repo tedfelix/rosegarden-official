@@ -209,6 +209,7 @@ protected:
     Staff* m_mainStaff;
     Staff* m_currentStaff;
     NotePixmapFactory &m_notePixmapFactory;
+    NotePixmapFactory m_toolbarNotePixmapFactory;
 
     ViewElementsManager* m_viewElementsManager;
     NotationElementList* m_notationElements;

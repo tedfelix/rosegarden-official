@@ -75,12 +75,13 @@ NotePixmapOffsets::offsetsFor(Note::Type note,
     if (fixedHeight) {
         //ew
         int d = m_pixmapSize.height();
-        m_pixmapSize.setHeight(m_bodySize.height() / 2 +
+        m_pixmapSize.setHeight(m_bodySize.height() * 6);/* +
                                m_stalkLength +
-                               m_accidentalStalkSize.height());
-        m_pixmapSize.rheight() += /* 14 + */ 2 +
-            (m_accidentalHeight - m_noteBodyEmptySize.height()) / 2;
+                               m_accidentalStalkSize.height()*/
+//        m_pixmapSize.rheight() += /* 14 + */ 2 +
+//            (m_accidentalHeight - m_noteBodyEmptySize.height()) / 2;
         d = m_pixmapSize.height() - d;
+	d = d / 2;
         m_stalkPoints.first.ry() += d;
         m_stalkPoints.second.ry() += d;
         m_bodyOffset.ry() += d;
@@ -393,8 +394,8 @@ NotePixmapFactory::makeNotePixmap(Note::Type note,
     }
 
     m_offsets.setStalkLength(stalkLength);
-    m_offsets.setExtraBeamSpacing(0);
 
+    m_offsets.setExtraBeamSpacing(0);
     m_offsets.offsetsFor
         (note, dotted, accidental, drawTail, stalkGoesUp, fixedHeight);
 

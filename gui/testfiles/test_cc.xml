@@ -2,9 +2,9 @@
 <!DOCTYPE rosegarden-data>
 <rosegarden-data>
 <track nb="1" start="0">
-        <event type="clefchange" clef="treble"/>
         <event type="timesignature" numerator="9" denominator="16"/>
         <event type="keychange" key="C# major"/>
+        <event type="clefchange" clef="treble"/>
         <event type="note" duration="crotchet" pitch="64"/>
         <event type="note" duration="crotchet" pitch="65"/>
         <event type="rest" duration="crotchet"/>
@@ -23,8 +23,8 @@
         </group>
         <event type="note" duration="crotchet" pitch="44"/>
         <event type="note" duration="crotchet" pitch="45"/>
-        <event type="keychange" key="C# major"/>
         <event type="timesignature" numerator="12" denominator="8"/>
+        <event type="keychange" key="C# major"/>
         <event type="rest" duration="crotchet"/>
         <event type="note" duration="crotchet" pitch="44"/>
         <event type="note" duration="crotchet" pitch="45"/>

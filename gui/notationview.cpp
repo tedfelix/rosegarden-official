@@ -136,6 +136,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     m_mainStaff(new Staff(canvas(), resolution)),
     m_currentStaff(m_mainStaff),
     m_notePixmapFactory(m_currentStaff->getNotePixmapFactory()),
+    m_toolbarNotePixmapFactory(9),
     m_viewElementsManager(0),
     m_notationElements(0),
     m_hlayout(0),
@@ -265,7 +266,7 @@ NotationView::setupActions()
     // setup Notes menu & toolbar
 
     // Whole
-    QIconSet icon(m_notePixmapFactory.makeNotePixmap
+    QIconSet icon(m_toolbarNotePixmapFactory.makeNotePixmap
                   (Note::WholeNote, false, NoAccidental, true, true, true));
     noteAction = new KRadioAction(i18n("Whole"), icon, 0, this,
                                   SLOT(slotWhole()),
@@ -273,7 +274,7 @@ NotationView::setupActions()
     noteAction->setExclusiveGroup("notes");
     
     // Half
-    icon = QIconSet(m_notePixmapFactory.makeNotePixmap
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap
                     (Note::HalfNote, false, NoAccidental, true, true, true));
     noteAction = new KRadioAction(i18n("Half"), icon, 0, this,
                                   SLOT(slotHalf()),
@@ -281,7 +282,7 @@ NotationView::setupActions()
     noteAction->setExclusiveGroup("notes");
 
     // Quarter
-    icon = QIconSet(m_notePixmapFactory.makeNotePixmap
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap
                     (Note::QuarterNote, false, NoAccidental,
                      true, true, true));
     noteAction = new KRadioAction(i18n("Quarter"), icon, 0, this,
@@ -290,7 +291,7 @@ NotationView::setupActions()
     noteAction->setExclusiveGroup("notes");
 
     // 8th
-    icon = QIconSet(m_notePixmapFactory.makeNotePixmap
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap
                     (Note::EighthNote, false, NoAccidental,
                      true, true, true));
     noteAction = new KRadioAction(i18n("8th"), icon, 0, this,
@@ -299,7 +300,7 @@ NotationView::setupActions()
     noteAction->setExclusiveGroup("notes");
 
     // 16th
-    icon = QIconSet(m_notePixmapFactory.makeNotePixmap
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap
                     (Note::SixteenthNote, false, NoAccidental,
                      true, true, true));
     noteAction = new KRadioAction(i18n("16th"), icon, 0, this,
@@ -308,7 +309,7 @@ NotationView::setupActions()
     noteAction->setExclusiveGroup("notes");
 
     // 32nd
-    icon = QIconSet(m_notePixmapFactory.makeNotePixmap
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap
                     (Note::ThirtySecondNote, false, NoAccidental,
                      true, true, true));
     noteAction = new KRadioAction(i18n("32nd"), icon, 0, this,
@@ -317,7 +318,7 @@ NotationView::setupActions()
     noteAction->setExclusiveGroup("notes");
 
     // 64th
-    icon = QIconSet(m_notePixmapFactory.makeNotePixmap
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap
                     (Note::SixtyFourthNote, false, NoAccidental,
                      true, true, true));
 
@@ -631,7 +632,7 @@ void
 NotationView::setCurrentSelectedNote(Note::Type n)
 {
     m_currentSelectedNote = n;
-    m_currentNotePixmap->setPixmap(m_notePixmapFactory.makeNotePixmap(n, false, NoAccidental, true, true, true));
+    m_currentNotePixmap->setPixmap(m_toolbarNotePixmapFactory.makeNotePixmap(n, false, NoAccidental, true, true, true));
     emit changeCurrentNote(n);
 }
 

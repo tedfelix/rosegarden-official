@@ -168,6 +168,7 @@ NotationHLayout::preparse(NotationElementList::iterator from,
             if (nbTimeUnitsInCurrentBar > 0) {
                 // need to insert the bar line before this event...
                 nbTimeUnitsInCurrentBar = 0;
+		int savedWidth = 0;
 
                 // ...and also before any preceding clef or key events
                 NotationElementList::iterator it0(it), it1(it);
@@ -175,6 +176,7 @@ NotationHLayout::preparse(NotationElementList::iterator from,
                        (*it0)->event()->isa(Clef::EventType) ||
                        (*it0)->event()->isa(Key::EventType)) {
                     it1 = it0;
+		    if (it0 != it) savedWidth += getMinWidth(npf, *(*it0));
                     // this shouldn't happen, as we've checked there
                     // are already some time units in the bar, but
                     // it's better to be safe than sorry:
@@ -182,11 +184,12 @@ NotationHLayout::preparse(NotationElementList::iterator from,
                     --it0;
                 }
 
+		fixedWidth -= savedWidth;
                 addNewBar(it1, absoluteTime, -1,
                           getIdealBarWidth(fixedWidth, shortest, npf,
                                            shortCount, timeSignature),
                           fixedWidth, true, true);
-                fixedWidth = m_barMargin + mw;
+                fixedWidth = m_barMargin + mw + savedWidth;
                 shortest = m_notationElements.end();
                 shortCount = 1;
             }
@@ -293,8 +296,7 @@ NotationHLayout::layout()
             el->setLayoutX(x);
             kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): setting element's x to " << x << endl;
 
-            long delta = 0;
-            (void)el->event()->get<Int>(P_MIN_WIDTH, delta);
+            long delta = el->event()->get<Int>(P_MIN_WIDTH);
 
             if (el->event()->isa(TimeSignature::EventType)) {
 
@@ -302,10 +304,51 @@ NotationHLayout::layout()
 
             } else if (el->event()->isa(Clef::EventType)) {
 
+		// nasty hack: if there's a time signature or key
+		// before this, swap places with it...
+
+/*!! no, this really isn't the right thing
+		if (it != m_notationElements.begin()) {
+		    NotationElementList::iterator it0(it);
+		    for (;;) {
+			--it0;
+			int x0;
+			if (((*it0)->event()->isa(TimeSignature::EventType) ||
+			     (*it0)->event()->isa(Key::EventType)) &&
+			    (x0 = (*it0)->getLayoutX()) < x) {
+			    el->setLayoutX(x0);
+			    (*it0)->setLayoutX
+				((x + delta) -
+				 (*it0)->event()->get<Int>(P_MIN_WIDTH));
+			} else break;
+			if (it0 == m_notationElements.begin()) break;
+		    }
+		}
+*/
+
                 clef = Clef(*el->event());
 
             } else if (el->event()->isa(Key::EventType)) {
 
+		// nasty hack: if there's a time signature before
+		// this, move it to after...
+/*!! no, not right
+		if (it != m_notationElements.begin()) {
+		    NotationElementList::iterator it0(it);
+		    for (;;) {
+			--it0;
+			int x0;
+			if ((*it0)->event()->isa(TimeSignature::EventType) &&
+			    (x0 = (*it0)->getLayoutX()) < x) {
+			    el->setLayoutX(x0);
+			    (*it0)->setLayoutX
+				((x + delta) -
+				 (*it0)->event()->get<Int>(P_MIN_WIDTH));
+			} else break;
+			if (it0 == m_notationElements.begin()) break;
+		    }
+		}
+*/
                 key = Key(*el->event());
 
             } else if (el->isRest()) {
