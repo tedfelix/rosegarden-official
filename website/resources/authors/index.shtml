@@ -6,8 +6,6 @@
     <!--#include virtual="/title.html" -->
     <!--#include virtual="/nav.html" -->
     <!--#include virtual="/resources/subnav.html" -->
-    <!--#include virtual="/subleft.html" -->
-    <!--#include virtual="/subright.html" -->
 
     <div id="maincontainer">
     <div id="main">

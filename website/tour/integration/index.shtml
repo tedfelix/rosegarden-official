@@ -14,8 +14,19 @@
 	<br>
 	<h2>Tour 6: Integration</h2>
 
-	<p>(JACK etc)</p>
-	
+	<p>One exciting thing about Linux audio applications is the way they work together.</p>
+
+	<p>Because of the spirit of openness and cooperation with which applications such as Rosegarden are developed, there's an incentive for people working on quite different applications in quite different places to make them work together on common standards so as to strengthen all of the applications.  This is quite unlike the situation on other platforms where individual companies promote competing so-called "de-facto" standards and then refuse to support any they don't have a proprietary interest in.</p>
+
+    <br>
+    <div align="center"><img style="max-width: 100%" src="jackctl.png"/></div>
+    <br>
+
+	<p>The most prominent example of a successful audio standard on Linux is the <a href="http://jackit.sf.net/">JACK</a> audio connection framework, which provides a low-latency audio server that you can use to route audio from any application to any other, any way you like &ndash; and synchronise their transports as well if you want.</p>
+
+	  <p>Connect your Rosegarden tracks to soft-synths, connect those to <a href="http://arb.bash.sh/~rah/software/jack-rack/">a standalone effects rack</a> or back into Rosegarden, connect Rosegarden's mixer output into <a href="http://jamin.sf.net/">a mastering application</a> or a variety of <a href="http://www.plugin.org.uk/meterbridge/">meters</a>, or route all the individual audio outs into a separate <a href="http://www.ardour.org/">hard disc recorder</a>.  Nearly all serious Linux audio software supports JACK, which makes it a far more universal and effective standard than you will find on other platforms.</p>
+
+	<br>
 	    <p><b>Next: <a href="/tour/">Back to the start</a></b></p>
 
       </div>

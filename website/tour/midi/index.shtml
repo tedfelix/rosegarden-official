@@ -20,14 +20,13 @@
 	<br>
 <p>Setting up your Studio is easy: configurations for a number of well-known MIDI synths are included, or you can enter the details of your own MIDI devices and export the results into a Rosegarden device file to share with other users.</p>
 
-	<img src="ipb.png" style="float:right;max-width:50%">
-	<p>Set up your studio once, and then you can refer to your MIDI devices and programs by name, with different colours for the different controllers.</p>
-
-	<br clear="right">
-	<p>Right-click on a track label to assign a track to a MIDI instrument by name.</p>
+	<p>Set up your Studio once, and then you can refer to your MIDI devices and their properties by name.  For example, right-click on a track label to assign a track to a MIDI device... </p>
 	<br>
 	<div align="center"><img src="menu.png" style="max-width:100%"></div>
+
 	<br>
+	<img src="ipb.png" hspace=5 style="float:right;max-width:50%">
+	<p>... then you can set programs and control changes on that device using the right names and with different colours for the various controllers.</p>
 
 	<br clear="right">
 	<p>And Rosegarden's Matrix editor also includes rulers for graphically editing control changes, as well as for velocity and pitch bend.</p>
