@@ -365,6 +365,10 @@ public:
 
     static const unsigned int MinNbOfTracks; // 64
 
+    // Turn on and off audio monitoring for a particular instrument
+    //
+    void setAudioMonitoringState(bool value, Rosegarden::InstrumentId id);
+
 public slots:
     /**
      * calls repaint() on all views connected to the document object

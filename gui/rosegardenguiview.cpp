@@ -1091,6 +1091,15 @@ RosegardenGUIView::slotSetRecord(Rosegarden::InstrumentId id, bool value)
             slotUpdateInstrumentParameterBox((*it).second->getInstrument());
         }
     }
+
+    Rosegarden::Studio &studio = getDocument()->getStudio();
+    Rosegarden::Instrument *instr = studio.getInstrumentById(id);
+
+    if (instr)
+    {
+        getDocument()->setAudioMonitoringState(
+                (instr->getType() == Rosegarden::Instrument::Audio), id);
+    }
 }
 
 void
