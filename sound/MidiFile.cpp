@@ -1140,9 +1140,16 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
                 // stack out onto the meta string
                 //
                 char out[2];
-                sprintf(out, "%c", accidentals);
+                sprintf(out, "%c", MidiByte(accidentals));
+                cout << out << endl;
                 std::string metaMessage = out;
-                sprintf(out, "%c", key.isMinor());
+                sprintf(out, "%c", MidiByte(key.isMinor()));
+                cout << out << endl;
+                metaMessage += out;
+
+                cout << "LENGTH = " << metaMessage.length() << endl;
+                cout << "ACC = " << accidentals << endl;
+                cout << "MINOR = " << key.isMinor() << endl;
 
                 midiEvent =
                     new MidiEvent(midiEventAbsoluteTime,
@@ -1193,7 +1200,7 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
                                   0, // redundant meta event code
                                   data);
 
-                m_midiComposition[trackNumber].push_back(midiEvent);
+                //m_midiComposition[trackNumber].push_back(midiEvent);
 
             }
             else if ((*el)->isa(ChannelPressure::EventType))

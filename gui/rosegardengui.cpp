@@ -2292,7 +2292,6 @@ RosegardenGUIApp::slotToggleRecord()
 void
 RosegardenGUIApp::slotSetLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
 {
-    cout << "HERE" << endl;
     try
     {
         m_doc->setModified();

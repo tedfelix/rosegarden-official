@@ -823,8 +823,6 @@ void
 AlsaDriver::stopPlayback()
 {
     allNotesOff();
-    snd_seq_drop_output_buffer(m_midiHandle);
-    snd_seq_drop_output(m_midiHandle);
     m_playing = false;
 
     // send sounds-off to all client port pairs
@@ -880,6 +878,7 @@ AlsaDriver::stopPlayback()
     clearAudioPlayQueue();
 #endif
 
+
 }
 
 
@@ -924,10 +923,14 @@ AlsaDriver::allNotesOff()
     ClientPortPair outputDevice;
     RealTime offTime;
 
-        offTime = getAlsaTime();
+    // drop any pending notes
+    snd_seq_drop_output_buffer(m_midiHandle);
+    snd_seq_drop_output(m_midiHandle);
+
     // prepare the event
     snd_seq_ev_clear(event);
     snd_seq_ev_set_source(event, m_port);
+    offTime = getAlsaTime();
 
     for (NoteOffQueue::iterator it = m_noteOffQueue.begin();
                                 it != m_noteOffQueue.end(); it++)
@@ -952,9 +955,15 @@ AlsaDriver::allNotesOff()
         //snd_seq_event_output(m_midiHandle, event);
         snd_seq_event_output_direct(m_midiHandle, event);
         delete(*it);
-        m_noteOffQueue.erase(it);
     }
     
+    m_noteOffQueue.erase(m_noteOffQueue.begin(), m_noteOffQueue.end());
+
+    /*
+    std::cout << "AlsaDriver::allNotesOff - "
+              << " queue size = " << m_noteOffQueue.size() << std::endl;
+              */
+
     // flush
     snd_seq_drain_output(m_midiHandle);
     delete event;
@@ -968,12 +977,14 @@ AlsaDriver::processNotesOff(const RealTime &time)
     ClientPortPair outputDevice;
     RealTime offTime;
 
+    std::vector<NoteOffQueue::iterator> toDelete;
+
     // prepare the event
     snd_seq_ev_clear(event);
     snd_seq_ev_set_source(event, m_port);
 
-    for (NoteOffQueue::iterator it = m_noteOffQueue.begin();
-         it != m_noteOffQueue.end(); it++)
+    NoteOffQueue::iterator it = m_noteOffQueue.begin();
+    for (; it != m_noteOffQueue.end(); it++)
     {
         if ((*it)->getRealTime() <= time)
         {
@@ -996,13 +1007,34 @@ AlsaDriver::processNotesOff(const RealTime &time)
                                    127);
             // send note off
             snd_seq_event_output(m_midiHandle, event);
-            delete(*it);
-            m_noteOffQueue.erase(it);
+            toDelete.push_back(it);
         }
     }
 
     // and flush them
     snd_seq_drain_output(m_midiHandle);
+
+    // Now delete from queue
+    //
+    std::vector<NoteOffQueue::iterator>::iterator dIt = toDelete.begin();
+    for (; dIt != toDelete.end(); dIt++)
+    {
+        NoteOffQueue::iterator it = m_noteOffQueue.begin();
+        for (; it != m_noteOffQueue.end(); it++)
+        {
+            if (*dIt == it)
+            {
+                delete (*it);
+                m_noteOffQueue.erase(it);
+                break;
+            }
+        }
+    }
+
+    /*
+    std::cout << "AlsaDriver::processNotesOff - "
+              << " queue size = " << m_noteOffQueue.size() << std::endl;
+              */
 
     // and clear up
     delete event;
