@@ -354,6 +354,7 @@ void TrackEraser::handleMouseButtonPress(QMouseEvent *e)
 void TrackEraser::handleMouseButtonRelase(QMouseEvent*)
 {
     if (m_currentItem) emit deleteTrack(m_currentItem->getTrack());
+    delete m_currentItem;
     m_canvas->canvas()->update();
     
     m_currentItem = 0;

@@ -188,25 +188,14 @@ TracksEditor::addTrack(TrackItem *p)
 void
 TracksEditor::deleteTrack(Rosegarden::Track *p)
 {
-    kdDebug(KDEBUG_AREA) << "TracksEditor::moveTrack() : not implemented\n";
+    Composition& composition = m_document->getComposition();
 
-//     std::list<TrackPart*>::iterator iter = std::find(m_trackParts.begin(),
-//                                                      m_trackParts.end(),
-//                                                      p);
-
-//     if (iter != m_trackParts.end()) {
-//         kdDebug(KDEBUG_AREA) << "TracksEditor::deleteTrackPart() : part "
-//                              << p << " deleted" << endl;
-//         TrackPart *p = *iter;
-//         m_trackParts.erase(iter);
-//         delete p;
-
-//     } else {
-//         KMessageBox::error(0, QString("TracksEditor::deleteTrackPart() : part %1 not found").arg(long(p), 0, 16));
+    if (!composition.deleteTrack(p)) {
+        KMessageBox::error(0, QString("TracksEditor::deleteTrack() : part %1 not found").arg(long(p), 0, 16));
         
-//         kdDebug(KDEBUG_AREA) << "TracksEditor::deleteTrackPart() : part "
-//                              << p << " not found" << endl;
-//     }
+        kdDebug(KDEBUG_AREA) << "TracksEditor::deleteTrack() : track "
+                             << p << " not found" << endl;
+    }
 }
 
 // TODO : get rid of this
