@@ -1344,7 +1344,6 @@ bool SequenceManager::event(QEvent *e)
 	    SEQMAN_DEBUG << "SequenceManager::event(): update requested\n";
 	    checkRefreshStatus();
             m_controlBlockMmapper->refresh();
-            m_metronomeMmapper->refresh();
 	    m_updateRequested = false;
 	}
 	return true;
@@ -1513,7 +1512,7 @@ void SequenceManager::metronomeChanged(Rosegarden::InstrumentId id,
                  << ", recordMetronome = " 
                  << recordMetronome 
                  << ", instrument = "
-                 << m_metronomeMmapper->getMetronomeInstrument()
+                 << id
                  << endl;
 
     m_controlBlockMmapper->updateMetronomeData(id, playMetronome, recordMetronome);
@@ -1547,6 +1546,10 @@ void SequenceManager::tempoChanged(const Composition *)
 	 i != m_segments.end(); ++i) {
         segmentModified(i->first);
     }
+
+    // and metronome
+    //
+    m_metronomeMmapper->refresh();
 }
 
 void
