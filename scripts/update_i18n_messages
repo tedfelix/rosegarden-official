@@ -1,4 +1,4 @@
-#!/bin/sh -x
+#!/bin/sh
 
 # check that we're started from a Rosegarden dir
 
