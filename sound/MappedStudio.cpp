@@ -156,7 +156,7 @@ MappedObject::destroy()
         (*it)->destroy();
     }
 
-    cout << "DESTROYING ID = " << m_id << endl;
+    std::cout << "DESTROYING ID = " << m_id << endl;
     (void)studio->clearObject(m_id);
     delete this;
 }
