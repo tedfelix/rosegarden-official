@@ -222,7 +222,7 @@ MmappedSegment::iterator& MmappedSegment::iterator::operator++()
 
         do
             ++m_currentEvent;
-        while ((m_currentEvent->getType() == 0) && !atEnd());
+        while (!atEnd() && (m_currentEvent->getType() == 0));
         // skip null events - there can be some if the file has been
         // zeroed out after events have been deleted
 
@@ -243,7 +243,7 @@ MmappedSegment::iterator MmappedSegment::iterator::operator++(int)
     if (!atEnd()) {
         do
             ++m_currentEvent;
-        while (m_currentEvent->getType() == 0 && !atEnd());
+        while (!atEnd() && m_currentEvent->getType() == 0);
 
     }
 
@@ -525,7 +525,7 @@ bool MmappedSegmentsMetaIterator::jumpToTime(const Rosegarden::RealTime& startTi
 bool MmappedSegmentsMetaIterator::moveIteratorToTime(MmappedSegment::iterator& iter,
                                                      const Rosegarden::RealTime& startTime)
 {
-    while ((iter.peek()->getEventTime() < startTime) && (!iter.atEnd())) {
+    while ((!iter.atEnd()) && (iter.peek()->getEventTime() < startTime)) {
         ++iter;
     }
     bool res = !iter.atEnd();
