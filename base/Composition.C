@@ -294,96 +294,21 @@ static Track::iterator findTimeSig(Track *t, timeT time)
 }
 
 
-// If a time signature is added to one track, add it to all other
-// tracks as well.  Suppress observer semantics for each track as we
-// add it, to avoid evil recursion.  We don't have to suppress
-// observer for m_timeReference, as we aren't an observer for it
-// anyway
-
-//!!! Aaargh! Of course, if a track is moved (i.e. its start time
-// changes, and therefore all the times of the events including the
-// time signature event) then we're well fucked.  Better not to allow
-// someone to insert time signature events into a track other than the
-// reference track at all
-
 void Composition::eventAdded(const Track *t, Event *e)
 {
-    // in theory this should only be true if we insert a time
-    // signature or something after the former end of the composition
+    // in theory this should only be true if we insert something after
+    // the former end of the composition -- or add a time sig to the
+    // reference track
     m_barPositionsNeedCalculating = true;
-/*!!!
-    if (e->isa(TimeSignature::EventType)) {
-
-	timeT sigTime = e->getAbsoluteTime();
-
-	std::cerr << "Composition: noting addition of time signature at "
-                  << sigTime << std::endl;
-
-
-	Track::iterator found = findTimeSig(&m_timeReference, sigTime);
-	if (found != m_timeReference.end()) m_timeReference.erase(found);
-	m_timeReference.insert(new Event(*e));
-
-        //!!! Modify so as only to insert if the time sig falls within
-        //the range of the track; if it's before the track starts, we
-        //need to stick it at the start unless another time sig
-        //appears later.  Complicated.  Maybe we should just allow
-        //time sigs within a track before the nominal start time --
-        //why not?
-
-	for (iterator i = begin(); i != end(); ++i) {
-	    std::cerr << "Composition: comparing with a track" << std::endl;
-	    if (*i != t) {
-		(*i)->removeObserver(this);
-		found = findTimeSig(*i, sigTime);
-		if (found != (*i)->end()) (*i)->erase(found);
-		(*i)->insert(new Event(*e));
-		(*i)->addObserver(this);
-	    } else std::cerr << "Composition: skipping" << std::endl;
-	}
-    }
-*/
 }
 
 
-// If a time signature is removed from one track, remove it from all
-// other tracks as well.  Suppress observer semantics for each track
-// as we remove, to avoid evil recursion.  We don't have to suppress
-// observer for m_timeReference, as we aren't an observer for it
-// anyway
-
 void Composition::eventRemoved(const Track *t, Event *e)
 {
-    // in theory this should only be true if we insert a time
-    // signature or something after the former end of the composition
+    // in theory this should only be true if we remove something at
+    // the very end of the composition -- or remove a time sig from
+    // the reference track
     m_barPositionsNeedCalculating = true;
-
-/*!!!
-    if (e->isa(TimeSignature::EventType)) {
-
-	timeT sigTime = e->getAbsoluteTime();
-
-	std::cerr << "Composition: noting removal of time signature at "
-	     << sigTime << std::endl;
-
-	Track::iterator found = findTimeSig(&m_timeReference, sigTime);
-	if (found != m_timeReference.end()) m_timeReference.erase(found);
-
-        //!!! What do we do if the time sig is before the start of a
-        //track, if we've modified eventAdded so as not always to add
-        //them in this case?
-
-	for (iterator i = begin(); i != end(); ++i) {
-	    std::cerr << "Composition: comparing with a track" << std::endl;
-	    if (*i != t) {
-		(*i)->removeObserver(this);
-		found = findTimeSig(*i, sigTime);
-		if (found != (*i)->end()) (*i)->erase(found);
-		(*i)->addObserver(this);
-	    } else std::cerr << "Composition: skipping" << std::endl;
-	}
-    }
-*/
 }
 
 
