@@ -43,18 +43,24 @@ const QColor CompositionRect::DefaultBrushColor = Qt::white;
 
 timeT CompositionItemHelper::getStartTime(const CompositionItem& item, const Rosegarden::SnapGrid& grid)
 {
-    if (item)
-        return std::max(grid.snapX(item->rect().x()) - 1, 0L);
+    timeT t = 0;
 
-    return 0;
+    if (item) {
+	t = std::max(grid.snapX(item->rect().x()) - 1, 0L);
+    }
+
+    return t;
 }
 
 timeT CompositionItemHelper::getEndTime(const CompositionItem& item, const Rosegarden::SnapGrid& grid)
 {
-    if (item)
-        return std::max(grid.snapX(item->rect().x() + item->rect().width()) - 1, 0L);
+    timeT t = 0;
 
-    return 0;
+    if (item) {
+        t = std::max(grid.snapX(item->rect().x() + item->rect().width()) - 1, 0L);
+    }
+
+    return t;
 }
 
 void CompositionItemHelper::setStartTime(CompositionItem& item, timeT time,
@@ -119,7 +125,7 @@ bool CompositionItemHelper::itemHasChanged(const CompositionItem& item, const Ro
     timeT itemStartTime = getStartTime(item, grid);
     timeT itemEndTime   = getEndTime(item, grid);
 
-    RG_DEBUG << "CompositionHelper::itermHasChanged : moving segment - itemStartTime = "
+    RG_DEBUG << "CompositionHelper::itemHasChanged : moving segment - itemStartTime = "
              << itemStartTime << " - segmentStartTime = " << segment->getStartTime()
              << " - itemEndTime = " << itemEndTime << " - segmentEndTime = " << segment->getRepeatEndTime()
              << " - itemTrackId = " << itemTrackId << " - segmentTrackId = " << segment->getTrack()
@@ -163,6 +169,9 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
                                                                              audiopreviewdata* apData)
 {
     m_res.clear();
+
+    RG_DEBUG << "CompositionModelImpl::getRectanglesIn: ruler scale is "
+	     << (dynamic_cast<Rosegarden::SimpleRulerScale *>(m_grid.getRulerScale()))->getUnitsPerPixel() << endl;
 
     const Rosegarden::Composition::segmentcontainer& segments = m_composition.getSegments();
     Rosegarden::Composition::segmentcontainer::iterator segEnd = segments.end();
@@ -505,7 +514,6 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
       m_showPreviews(false),
       m_fineGrain(false),
       m_minWidth(m_model->getLength()),
-      m_zoomEnabled(true),
       m_stepSize(0),
       m_rectFill(0xF0, 0xF0, 0xF0),
       m_selectedRectFill(0x00, 0x00, 0xF0),
@@ -614,15 +622,6 @@ void CompositionView::updateSelectionContents()
     
     QRect selectionRect = m_model->getSelectionContentsRect();
     updateContents(selectionRect);
-}
-
-void CompositionView::slotSetHZoomFactor(double zf)
-{
-    m_zoom.reset();
-    m_izoom.reset();
-    m_zoom.scale(zf, 1.0);
-    m_izoom.scale(1/zf, 1.0);
-    updateContents();
 }
 
 void CompositionView::slotContentsMoving(int x, int y)
@@ -752,7 +751,6 @@ void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw,
     QScrollView::drawContents(p, clipx, clipy, clipw, cliph);
 
     QRect clipRect(clipx, clipy, clipw, cliph);
-    QRect zoomedClipRect = m_izoom.mapRect(clipRect);
 
     CompositionModel::audiopreviewdata*    audioPreviewData = 0;
     CompositionModel::notationpreviewdata* notationPreviewData = 0;
@@ -764,7 +762,7 @@ void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw,
         m_audioPreviewData.clear();
     }
 
-    const CompositionModel::rectcontainer& rects = m_model->getRectanglesIn(zoomedClipRect,
+    const CompositionModel::rectcontainer& rects = m_model->getRectanglesIn(clipRect,
                                                                             notationPreviewData, audioPreviewData);
     CompositionModel::rectcontainer::const_iterator i = rects.begin();
     CompositionModel::rectcontainer::const_iterator end = rects.end();
@@ -808,7 +806,7 @@ void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw,
 
     drawPointer(p, clipRect);
 
-    if (m_tmpRect.isValid() && m_tmpRect.intersects(zoomedClipRect)) {
+    if (m_tmpRect.isValid() && m_tmpRect.intersects(clipRect)) {
         p->setBrush(GUIPalette::getColour(GUIPalette::SegmentCanvas));
         p->setPen(GUIPalette::getColour(GUIPalette::SegmentBorder));
         drawRect(m_tmpRect, p, clipRect);
@@ -824,7 +822,7 @@ void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw,
     if (m_drawTextFloat)
         drawTextFloat(p, clipRect);
 
-    if (m_splitLinePos.x() >= 0 && zoomedClipRect.contains(m_splitLinePos)) {
+    if (m_splitLinePos.x() >= 0 && clipRect.contains(m_splitLinePos)) {
         p->save();
         p->setPen(m_guideColor);
         p->drawLine(m_splitLinePos.x(), m_splitLinePos.y(),
@@ -838,8 +836,6 @@ void CompositionView::drawGuides(QPainter * p, const QRect& /*clipRect*/)
 {
     // no need to check for clipping, these guides are meant to follow the mouse cursor
     QPoint guideOrig(m_topGuidePos, m_foreGuidePos);
-    if (!m_zoom.isIdentity())
-        guideOrig = m_zoom.map(guideOrig);
 
     p->save();
     p->setPen(m_guideColor);
@@ -882,11 +878,6 @@ void CompositionView::drawCompRect(const CompositionRect& r, QPainter *p, const 
         QRect rect = r;
         QPoint repeatPoint(repeatLength, r.y());
 
-        if (!m_zoom.isIdentity() && m_zoomEnabled) {
-            repeatPoint = m_zoom.map(repeatPoint);
-            repeatLength = repeatPoint.x();
-            rect = m_zoom.mapRect(rect);
-        }
         p->setPen(GUIPalette::getColour(GUIPalette::RepeatSegmentBorder));
         int pos = rect.x() + repeatLength;
         int width = r.width();
@@ -914,8 +905,6 @@ void CompositionView::drawRect(const QRect& r, QPainter *p, const QRect& clipRec
     p->save();
     
     QRect rect = r;
-    if (!m_zoom.isIdentity() && m_zoomEnabled)
-        rect = m_zoom.mapRect(rect);
 
     if (fill) {
         if (isSelected) {
@@ -1078,22 +1067,18 @@ void CompositionView::drawTextFloat(QPainter *p, const QRect& clipRect)
 
     if (!bound.intersects(clipRect)) return;
 
-    QPoint mapPos = m_zoom.map(m_textFloatPos);
-
     p->save();
 
     bound.setLeft(bound.left() - 2);
     bound.setRight(bound.right() + 2);
     bound.setTop(bound.top() - 2);
     bound.setBottom(bound.bottom() + 2);
-    bound.moveTopLeft(mapPos);
+    bound.moveTopLeft(m_textFloatPos);
 
-    setZoomEnabled(false);
     drawRect(bound, p, clipRect, false, 0, false);
-    setZoomEnabled(true);
 
     p->setPen(GUIPalette::getColour(GUIPalette::RotaryFloatForeground));
-    p->drawText(mapPos.x() + 2, mapPos.y() + 14, m_textFloatText);
+    p->drawText(m_textFloatPos.x() + 2, m_textFloatPos.y() + 14, m_textFloatText);
 
     p->restore();
 }
@@ -1135,9 +1120,7 @@ void CompositionView::contentsMouseReleaseEvent(QMouseEvent* e)
 
 void CompositionView::contentsMouseDoubleClickEvent(QMouseEvent* e)
 {
-    QPoint tPos = inverseMapPoint(e->pos());
-
-    m_currentItem = getFirstItemAt(tPos);
+    m_currentItem = getFirstItemAt(e->pos());
 
     if (!m_currentItem) {
         RG_DEBUG << "CompositionView::contentsMouseDoubleClickEvent - no currentItem\n";
@@ -1149,7 +1132,7 @@ void CompositionView::contentsMouseDoubleClickEvent(QMouseEvent* e)
     CompositionItemImpl* itemImpl = dynamic_cast<CompositionItemImpl*>((_CompositionItem*)m_currentItem);
         
     if (m_currentItem->isRepeating()) {
-        Rosegarden::timeT time = m_model->getRepeatTimeAt(tPos, m_currentItem);
+        Rosegarden::timeT time = m_model->getRepeatTimeAt(e->pos(), m_currentItem);
 
         RG_DEBUG << "editRepeat at time " << time << endl;
 

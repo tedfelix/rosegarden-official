@@ -281,18 +281,12 @@ public:
     void setTextFloat(int x, int y, const QString &text);
     void hideTextFloat() { m_drawTextFloat = false; }
 
-    const QWMatrix& zoomMatrix() const        { return m_zoom; }
-    const QWMatrix& inverseZoomMatrix() const { return m_izoom; }
-    /// Map a point with the inverse world matrix
-    QPoint inverseMapPoint(const QPoint& p) { return inverseZoomMatrix().map(p); }
-
     void updateSize(bool shrinkWidth=false);
 
 public slots:
     void scrollRight();
     void scrollLeft();
     void slotContentsMoving(int x, int y);
-    void slotSetHZoomFactor(double);
 
     /// Set the current segment editing tool
     void slotSetTool(const QString& toolName);
@@ -356,8 +350,6 @@ protected:
     void initStepSize();
     void releaseCurrentItem();
 
-    void setZoomEnabled(bool e) { m_zoomEnabled = e; }
-
     static QColor mixBrushes(QBrush a, QBrush b);
 
     SegmentSelector* getSegmentSelectorTool();
@@ -375,9 +367,6 @@ protected:
     bool         m_fineGrain;
 
     int          m_minWidth;
-    QWMatrix     m_zoom;
-    QWMatrix     m_izoom;
-    bool         m_zoomEnabled;
 
     int          m_stepSize;
     QColor       m_rectFill;

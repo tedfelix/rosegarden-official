@@ -780,10 +780,10 @@ void RosegardenGUIView::setZoomSize(double size)
     double xScale = duration44/(size * barWidth44);
     RG_DEBUG << "RosegardenGUIView::setZoomSize - xScale =  " << xScale << endl;
 
-    m_trackEditor->getSegmentCanvas()->slotSetHZoomFactor(xScale);
-
     m_trackEditor->slotSetPointerPosition
 	(getDocument()->getComposition().getPosition());
+
+    m_trackEditor->getSegmentCanvas()->updateContents();
 
     if (m_trackEditor->getTempoRuler()) {
 	m_trackEditor->getTempoRuler()->repaint();

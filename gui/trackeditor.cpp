@@ -140,11 +140,8 @@ TrackEditor::init(QWidget* rosegardenguiview)
     //
     // Segment Canvas
     //
-
-    Rosegarden::SimpleRulerScale* rulerScale = new Rosegarden::SimpleRulerScale(*(dynamic_cast<Rosegarden::SimpleRulerScale*>(m_rulerScale)));
- 
     m_compositionModel = new CompositionModelImpl(m_doc->getComposition(),
-                                                  rulerScale, getTrackCellHeight());
+                                                  m_rulerScale, getTrackCellHeight());
     
     m_segmentCanvas = new CompositionView(m_doc, m_compositionModel, this);
 
@@ -619,9 +616,9 @@ void TrackEditor::dropEvent(QDropEvent* event)
         heightAdjust += m_chordNameRuler->height();
 
     QPoint posInSegmentCanvas = 
-        m_segmentCanvas->inverseZoomMatrix().map(
-            (m_segmentCanvas->viewportToContents(m_segmentCanvas->
-                viewport()->mapFrom(this, event->pos()))));
+	m_segmentCanvas->viewportToContents
+	(m_segmentCanvas->
+	 viewport()->mapFrom(this, event->pos()));
 
     int trackPos = m_segmentCanvas->grid().getYBin(posInSegmentCanvas.y());
 
