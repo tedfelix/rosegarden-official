@@ -31,6 +31,8 @@
 
 #include "SoundDriver.h"
 
+#include "config.h"
+
 #include <qspinbox.h>
 #include <qslider.h>
 #include <qcombobox.h>
@@ -70,6 +72,7 @@
 #include "notefont.h"
 #include "rosegardenguidoc.h"
 #include "rosedebug.h"
+#include "notefontviewer.h"
 #include "sequencemanager.h"
 #include "notefont.h"
 #include "matrixtool.h"
@@ -373,7 +376,22 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
                                1, 1,
                                0, 1);
 
+    m_viewButton = 0;
+
+#ifdef HAVE_XFT
+    QHBox *fontBox = new QHBox(frame);
+    m_font = new KComboBox(fontBox);
+    m_viewButton = new QPushButton(i18n("View"), fontBox);
+    fontBox->setStretchFactor(m_font, 2);
+    fontBox->setStretchFactor(m_viewButton, 1);
+    layout->addWidget(fontBox, 0, 1);
+    QObject::connect(m_viewButton, SIGNAL(clicked()),
+		     this, SLOT(slotViewButtonPressed()));
+#else
     m_font = new KComboBox(frame);
+    layout->addWidget(m_font, 0, 1);
+#endif
+
     m_font->setEditable(false);
 
     QString defaultFont = m_cfg->readEntry
@@ -398,7 +416,6 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     }
     QObject::connect(m_font, SIGNAL(activated(const QString &)),
                      this, SLOT(slotFontComboChanged(const QString &)));
-    layout->addWidget(m_font, 0, 1);
 
     m_singleStaffSize = new KComboBox(frame);
     m_singleStaffSize->setEditable(false);
@@ -587,6 +604,31 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 }
 
 void
+NotationConfigurationPage::slotViewButtonPressed()
+{
+#ifdef HAVE_XFT
+    std::string fontName = qstrtostr(m_font->currentText());
+
+    try {
+	NoteFont *noteFont = NoteFontFactory::getFont
+	    (fontName, NoteFontFactory::getDefaultSize(fontName));
+        const NoteFontMap &map(noteFont->getNoteFontMap());
+	QStringList systemFontNames(map.getSystemFontNames());
+	if (systemFontNames.count() == 0) {
+	    m_viewButton->setEnabled(false); // oops
+	} else {
+	    NoteFontViewer *viewer =
+		new NoteFontViewer(0, m_font->currentText(),
+				   systemFontNames, 24);
+	    (void)viewer->exec(); // no return value
+	}
+    } catch (Rosegarden::Exception f) {
+        KMessageBox::error(0, i18n(strtoqstr(f.getMessage())));
+    }
+#endif
+}
+
+void
 NotationConfigurationPage::slotFontComboChanged(const QString &font)
 {
     std::string fontStr = qstrtostr(font);
@@ -620,6 +662,9 @@ NotationConfigurationPage::slotFontComboChanged(const QString &font)
         } else {
             m_fontTypeLabel->setText(strtoqstr(map.getType() + " (jaggy)"));
         }
+	if (m_viewButton) {
+	    m_viewButton->setEnabled(map.getSystemFontNames().count() > 0);
+	}
     } catch (Rosegarden::Exception f) {
         KMessageBox::error(0, i18n(strtoqstr(f.getMessage())));
     }

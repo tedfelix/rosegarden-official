@@ -943,6 +943,17 @@ NoteFontMap::HotspotData::getHotspot(int size, int width, int height,
     return true;
 }
 
+QStringList
+NoteFontMap::getSystemFontNames() const
+{
+    QStringList names;
+    for (SystemFontNameMap::const_iterator i = m_systemFontNames.begin();
+	 i != m_systemFontNames.end(); ++i) {
+	names.append(i->second);
+    }
+    return names;
+}
+
 void
 NoteFontMap::dump() const
 {

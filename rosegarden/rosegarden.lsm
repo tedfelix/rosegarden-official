@@ -1,16 +1,14 @@
 Begin3
 Title:          Rosegarden-4
-Version:        0.1
+Version:        0.9.5
 Entered-date:   
-Description:    Sequencer and musical notation editor
-Keywords:       KDE2 Qt
+Description:    MIDI and audio sequencer and musical notation editor
+Keywords:       KDE Qt
 Author:         Guillaume Laurent <glaurent@telegraph-road.org>, Chris Cannam <cannam@all-day-breakfast.com>, Richard Bown <bownie@bownie.com>
 Maintained-by:  Guillaume Laurent <glaurent@telegraph-road.org>, Chris Cannam <cannam@all-day-breakfast.com>, Richard Bown <bownie@bownie.com>
-Home-page:      http://rosegarden.sourceforge.net
+Home-page:      http://www.all-day-breakfast.com/rosegarden/
 Alternate-site: 
-Primary-site:   ftp://
-                xxxxxx  rosegarden4-0.1.tar.gz
-                xxx     rosegarden4-0.1.lsm
-Platform:       Linux. Needs KDE 2.x
+Primary-site:   
+Platform:       Linux
 Copying-policy: GPL
 End

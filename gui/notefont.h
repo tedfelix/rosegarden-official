@@ -18,7 +18,7 @@
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
-
+ 
 #ifndef _NOTE_FONT_H_
 #define _NOTE_FONT_H_
 
@@ -27,6 +27,7 @@
 #include <map>
 
 #include <qstring.h>
+#include <qstringlist.h>
 #include <qpixmap.h>
 #include <qcanvas.h>
 #include <qxml.h>
@@ -115,6 +116,9 @@ public:
     bool fatalError(const QXmlParseException& exception);
 
     void dump() const;
+
+    // Not for general use, but very handy for diagnostic display
+    QStringList getSystemFontNames() const;
 
     // want this to be private, but need access from HotspotData
     static int toSize(int baseSize, double factor, bool limitAtOne);

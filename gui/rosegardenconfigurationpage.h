@@ -225,6 +225,7 @@ public:
 
 protected slots:
     void slotFontComboChanged(const QString &);
+    void slotViewButtonPressed();
 
 protected:
 
@@ -234,6 +235,7 @@ protected:
     QComboBox *m_singleStaffSize;
     QComboBox *m_multiStaffSize;
     QComboBox *m_printingSize;
+    QPushButton *m_viewButton;
     QLabel *m_fontOriginLabel;
     QLabel *m_fontCopyrightLabel;
     QLabel *m_fontMappedByLabel;

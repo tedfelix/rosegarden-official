@@ -65,6 +65,7 @@ rosegarden_SOURCES = \
 	notationvlayout.cpp \
 	notecharname.cpp \
 	notefont.cpp \
+	notefontviewer.cpp \
 	notepixmapfactory.cpp \
 	notestyle.cpp \
 	pianokeyboard.cpp \
