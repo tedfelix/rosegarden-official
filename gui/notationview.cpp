@@ -626,8 +626,9 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_rawNoteRuler->repaint();
     m_inhibitRefresh = false;
 
-    slotCheckRendered(0, getCanvasView()->visibleWidth());
-    getCanvasView()->repaintContents();
+//    slotCheckRendered(0, getCanvasView()->visibleWidth());
+//    getCanvasView()->repaintContents();
+    updateView();
 
     QObject::connect
 	(this,            SIGNAL(renderComplete()),
@@ -2570,6 +2571,9 @@ NotationView::getStaffForCanvasCoords(int x, int y) const
 
 void NotationView::updateView()
 {
+    slotCheckRendered
+	(getCanvasView()->contentsX(),
+	 getCanvasView()->contentsX() + getCanvasView()->visibleWidth());
     canvas()->update();
 }
 

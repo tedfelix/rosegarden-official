@@ -172,7 +172,6 @@ protected:
 
     bool m_heightTracking;
 
-    QPainter *m_renderPainter;
     QRect m_lastRender;
 };
 
