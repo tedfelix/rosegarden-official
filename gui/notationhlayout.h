@@ -41,7 +41,7 @@
 class NotationHLayout : public Rosegarden::HorizontalLayoutEngine<NotationElement>
 {
 public:
-    typedef Rosegarden::Staff<NotationElement> StaffType;
+//     typedef Rosegarden::Staff<NotationElement> StaffType;
     
     NotationHLayout(NotePixmapFactory &npf);
     virtual ~NotationHLayout();

@@ -41,6 +41,21 @@ MatrixCanvasView::~MatrixCanvasView()
 
 //----------------------------------------------------------------------
 
+MatrixElement::MatrixElement(QCanvas *canvas)
+    : QCanvasRectangle(canvas)
+{
+    setBrush(blue);
+}
+
+MatrixElement::MatrixElement(const QRect& r, QCanvas* canvas)
+    : QCanvasRectangle(r, canvas)
+{
+    setBrush(blue);
+}
+
+
+//----------------------------------------------------------------------
+
 MatrixView::MatrixView(RosegardenGUIDoc *doc,
                        std::vector<Rosegarden::Segment *> segments,
                        QWidget *parent)
@@ -50,6 +65,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
                                         this))
 {
     setCentralWidget(m_canvasView);
+
+    applyLayout();
 }
 
 MatrixView::~MatrixView()
@@ -94,6 +111,11 @@ void MatrixView::setupActions()
 }
 
 void MatrixView::initStatusBar()
+{
+}
+
+
+bool MatrixView::applyLayout()
 {
 }
 

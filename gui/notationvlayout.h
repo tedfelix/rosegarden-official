@@ -38,7 +38,7 @@ class NotationStaff;
 class NotationVLayout : public Rosegarden::VerticalLayoutEngine<NotationElement>
 {
 public:
-    typedef Rosegarden::Staff<NotationElement> StaffType;
+//     typedef Rosegarden::Staff<NotationElement> StaffType;
 
     NotationVLayout();
     virtual ~NotationVLayout();

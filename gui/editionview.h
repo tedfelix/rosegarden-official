@@ -45,6 +45,8 @@ public:
     const RosegardenGUIDoc *getDocument() const { return m_document; }
     RosegardenGUIDoc *getDocument() { return m_document; }
 
+    virtual bool applyLayout() = 0;
+
 public slots:
     /**
      * close window

@@ -27,11 +27,22 @@
 #include <qcanvas.h>
 #include <kmainwindow.h>
 
+#include "Staff.h"
+#include "LayoutEngine.h"
+
 #include "editionview.h"
 
 namespace Rosegarden { class Segment; }
 
 class RosegardenGUIDoc;
+
+class MatrixElement : public QCanvasRectangle
+{
+public:
+    MatrixElement(QCanvas *canvas);
+    MatrixElement(const QRect&, QCanvas* canvas);
+};
+
 
 class MatrixCanvasView : public QCanvasView
 {
@@ -43,14 +54,63 @@ public:
 
 };
 
+//------------------------------------------------------------
+
+class MatrixVLayout : public Rosegarden::VerticalLayoutEngine<MatrixElement>
+{
+public:
+    MatrixVLayout();
+    virtual ~MatrixVLayout();
+
+    /**
+     * Perform the layout
+     */
+    void layout(StaffType&);
+};
+
+class MatrixHLayout : public Rosegarden::HorizontalLayoutEngine<MatrixElement>
+{
+public:
+    MatrixHLayout();
+    virtual ~MatrixHLayout();
+
+    /**
+     * Returns the total length of all elements once layout is done.
+     * This is the x-coord of the end of the last element on the
+     * longest staff
+     */
+    virtual double getTotalWidth();
+
+    /**
+     * Returns the total number of bar lines on the given staff
+     */
+    virtual unsigned int getBarLineCount(StaffType &staff) ;
+
+    /**
+     * Returns the x-coordinate of the given bar number (zero-based)
+     * on the given staff
+     */
+    virtual double getBarLineX(StaffType &staff, unsigned int barNo);
+
+    /**
+     * Perform the layout
+     */
+    void layout(StaffType&);
+};
+
+//------------------------------------------------------------
+
 class MatrixView : public EditionView
 {
     Q_OBJECT
 public:
     MatrixView(RosegardenGUIDoc *doc,
-                std::vector<Rosegarden::Segment *> segments,
-                QWidget *parent);
-    ~MatrixView();
+               std::vector<Rosegarden::Segment *> segments,
+               QWidget *parent);
+
+    virtual ~MatrixView();
+
+    virtual bool applyLayout();
 
     QCanvas* canvas() { return m_canvasView->canvas(); }
 
