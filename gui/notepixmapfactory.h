@@ -66,7 +66,7 @@ public:
      * @param stalkGoesUp : if the note's stalk should go up or down
      */
     QCanvasPixmap makeNotePixmap(Note note,
-                                 bool drawTail,
+                                 bool drawTail = true,
                                  bool stalkGoesUp = true);
 
 
