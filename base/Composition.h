@@ -410,27 +410,8 @@ public:
     static RealTime getTempoTimestamp(const Event *e);
     static void setTempoTimestamp(Event *e, RealTime r);
 
-
-protected:
-
     class ReferenceSegment;
 
-    static const std::string BarEventType;
-    static const PropertyName BarNumberProperty;
-    static const PropertyName BarHasTimeSigProperty;
-
-    static const std::string TempoEventType; 
-    static const PropertyName TempoProperty; // stored in beats per hour
-    static const PropertyName TempoTimestampSecProperty;
-    static const PropertyName TempoTimestampUsecProperty;
-
-
-    struct ReferenceSegmentEventCmp
-    {
-	bool operator()(const Event &e1, const Event &e2) const;
-	bool operator()(const Event *e1, const Event *e2) const;
-    };
-    
     /**
      * This is a bit like a segment, but can only contain one sort of
      * event, and can only have one event at each absolute time
@@ -473,6 +454,25 @@ protected:
 	std::string m_eventType;
     };
 
+protected:
+
+
+    static const std::string BarEventType;
+    static const PropertyName BarNumberProperty;
+    static const PropertyName BarHasTimeSigProperty;
+
+    static const std::string TempoEventType; 
+    static const PropertyName TempoProperty; // stored in beats per hour
+    static const PropertyName TempoTimestampSecProperty;
+    static const PropertyName TempoTimestampUsecProperty;
+
+
+    struct ReferenceSegmentEventCmp
+    {
+	bool operator()(const Event &e1, const Event &e2) const;
+	bool operator()(const Event *e1, const Event *e2) const;
+    };
+    
 
     trackcontainer m_tracks;
     segmentcontainer m_segments;

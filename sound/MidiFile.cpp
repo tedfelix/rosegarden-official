@@ -30,6 +30,8 @@
 #include "BaseProperties.h"
 #include "SegmentNotationHelper.h"
 #include "SegmentPerformanceHelper.h"
+#include "Track.h"
+#include "Instrument.h"
 
 #if (__GNUC__ < 3)
 #include <strstream>
@@ -493,6 +495,7 @@ MidiFile::convertToRosegarden()
     bool isSharp;
 
     Rosegarden::Composition *composition = new Composition;
+    Rosegarden::Track *track;
 
     // preset default tempo
     composition->setDefaultTempo(120.0);
@@ -773,7 +776,28 @@ MidiFile::convertToRosegarden()
 			    rosegardenSegment->end(),
 			    BaseProperties::GROUP_TYPE_BEAMED);
 	}
+
+
+        // Create and insert a new Track object
+        //
+        track = new Rosegarden::Track((int) i,
+                                      false,
+                                      Rosegarden::Track::Midi,
+                                      string("Imported MIDI"),
+                                      (int) i,
+                                      0);
+
+        composition->addTrack(*track);
+
     }
+
+    Rosegarden::Instrument *instrument =
+                new Rosegarden::Instrument(0,
+                                           Rosegarden::Instrument::Midi,
+                                           string("MIDI Instrument 1"));
+
+    composition->addInstrument(*instrument);
+
 
     // set a tempo based on timing division or default
     //
@@ -781,6 +805,8 @@ MidiFile::convertToRosegarden()
 //    composition->setDefaultTempo((120 * crotchetTime) / divisor);
 
     return composition;
+
+
 }
 
 // Takes a Composition and turns it into internal MIDI representation
