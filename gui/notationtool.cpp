@@ -182,6 +182,13 @@ NoteInserter::NoteInserter(NotationView* view)
                 SLOT(slotEraseSelected()), actionCollection(),
                 "erase");
 
+    icon = QIconSet
+	(m_nParentView->getToolbarNotePixmapFactory()->
+	 makeToolbarPixmap("rest-crotchet"));
+    new KAction(i18n("Switch to Inserting Rests"), icon, 0, this,
+                SLOT(slotRestsSelected()), actionCollection(),
+                "rests");
+
     createMenu("noteinserter.rc");
 
     connect(m_parentView, SIGNAL(changeAccidental(Rosegarden::Accidental)),
@@ -413,6 +420,11 @@ void NoteInserter::slotSelectSelected()
     m_parentView->actionCollection()->action("select")->activate();
 }
 
+void NoteInserter::slotRestsSelected()
+{
+    //!!! Implement!
+}
+
 const char* NoteInserter::m_actionsAccidental[][5] = 
     {
         { "No accidental",  "1slotNoAccidental()",  "no_accidental",
@@ -434,6 +446,33 @@ const char* NoteInserter::m_actionsAccidental[][5] =
 RestInserter::RestInserter(NotationView* view)
     : NoteInserter("RestInserter", view)
 {
+    QIconSet icon;
+
+    icon = QIconSet
+	(m_nParentView->getToolbarNotePixmapFactory()->
+	 makeToolbarPixmap("dotted-rest-crotchet"));
+    new KToggleAction(i18n("Dotted rest"), icon, 0, this,
+                      SLOT(slotToggleDot()), actionCollection(),
+                      "toggle_dot");
+
+    icon = QIconSet(m_nParentView->getToolbarNotePixmapFactory()->
+		    makeToolbarPixmap("select"));
+    new KAction(i18n("Switch to Select Tool"), icon, 0, this,
+                SLOT(slotSelectSelected()), actionCollection(),
+                "select");
+
+    new KAction(i18n("Switch to Erase Tool"), "eraser", 0, this,
+                SLOT(slotEraseSelected()), actionCollection(),
+                "erase");
+
+    icon = QIconSet
+	(m_nParentView->getToolbarNotePixmapFactory()->
+	 makeToolbarPixmap("crotchet"));
+    new KAction(i18n("Switch to Inserting Notes"), icon, 0, this,
+                SLOT(slotNotesSelected()), actionCollection(),
+                "notes");
+
+    createMenu("restinserter.rc");
 }
 
 Event *
@@ -445,6 +484,11 @@ RestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
     m_nParentView->addCommandToHistory(command);
     return command->getLastInsertedEvent();
 } 
+
+void RestInserter::slotNotesSelected()
+{
+    //!!! Implement!
+}
 
 
 //------------------------------

@@ -176,6 +176,7 @@ protected slots:
 
     void slotEraseSelected();
     void slotSelectSelected();
+    void slotRestsSelected();
 
 protected:
     //--------------- Data members ---------------------------------
@@ -193,6 +194,8 @@ protected:
  */
 class RestInserter : public NoteInserter
 {
+    Q_OBJECT
+    
     friend class NotationToolBox;
 
 public:
@@ -208,6 +211,8 @@ protected:
 					    const Rosegarden::Note &,
 					    int pitch, Rosegarden::Accidental);
 
+protected slots:
+    void slotNotesSelected();
 };
 
 /**

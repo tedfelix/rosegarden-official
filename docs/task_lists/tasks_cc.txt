@@ -16,8 +16,9 @@
     the NotePixmapFactory::getXXXWidth methods)
 
  7. Compound commands such as move-many-segments, insert-key-everywhere
-    [basic compound commands DONE, need to implement those specific ones,
-    refresh is likely to be dreadfully slow for now]
+    [basic compound commands DONE, insert-key-everywhere DONE, need to
+    deal with signal flow from segmentcanvas to trackeditor for
+    move-many-segments; refresh is likely to be dreadfully slow for now]
  
  7a. Refresh for segment commands in edit views [DONEish]
 
