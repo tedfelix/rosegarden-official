@@ -512,11 +512,8 @@ class AddTracksCommand : public KNamedCommand
 public:
     AddTracksCommand(Rosegarden::Composition *composition,
                      unsigned int nbTracks,
-                     Rosegarden::InstrumentId id): 
-        KNamedCommand(getGlobalName()),
-        m_composition(composition),
-        m_nbNewTracks(nbTracks),
-        m_instrumentId(id) {}
+                     Rosegarden::InstrumentId id);
+    virtual ~AddTracksCommand();
 
     static QString getGlobalName() { return i18n("Add Tracks..."); }
 
@@ -524,9 +521,13 @@ public:
     virtual void unexecute();
 
 protected:
-    Rosegarden::Composition   *m_composition;
-    unsigned int               m_nbNewTracks;
-    Rosegarden::InstrumentId   m_instrumentId;
+    Rosegarden::Composition           *m_composition;
+    unsigned int                       m_nbNewTracks;
+    Rosegarden::InstrumentId           m_instrumentId;
+
+    std::vector<Rosegarden::Track*>    m_newTracks;
+
+    bool                               m_detached;
 };
 
 class DeleteTracksCommand : public KNamedCommand

@@ -1402,12 +1402,42 @@ ModifyDefaultTempoCommand::unexecute()
 
 // --------- Add Tracks --------
 //
+AddTracksCommand::AddTracksCommand(Rosegarden::Composition *composition,
+                                   unsigned int nbTracks,
+                                   Rosegarden::InstrumentId id):
+        KNamedCommand(getGlobalName()),
+        m_composition(composition),
+        m_nbNewTracks(nbTracks),
+        m_instrumentId(id),
+        m_detached(false)
+
+{
+
+}
+
+AddTracksCommand::~AddTracksCommand()
+{
+    if (m_detached)
+    {
+        for (unsigned int i = 0; i < m_newTracks.size(); ++i)
+            delete m_newTracks[i];
+
+        m_newTracks.clear();
+    }
+}
+
+
 void AddTracksCommand::execute()
 {
-    using Rosegarden::Track;
+    // Re-attach tracks
+    //
+    if (m_detached)
+    {
+        for (unsigned int i = 0; i < m_newTracks.size(); i++)
+            m_composition->addTrack(m_newTracks[i]);
 
-    Rosegarden::TrackId trackId;
-    unsigned int currentNbTracks = m_composition->getNbTracks();
+        return;
+    }
 
     int highPosition = 0;
     Rosegarden::Composition::trackiterator it =
@@ -1419,11 +1449,12 @@ void AddTracksCommand::execute()
             highPosition = (*it).second->getPosition();
     }
 
-    for (unsigned int i = 0; i < m_nbNewTracks; ++i) {
+    for (unsigned int i = 0; i < m_nbNewTracks; ++i)
+    {
+        Rosegarden::TrackId trackId = m_composition->getNewTrackId();
+        Rosegarden::Track *track = new Rosegarden::Track(trackId);
 
-        trackId = m_composition->getNewTrackId();
-        Track* track = new Rosegarden::Track(trackId);
-        track->setPosition(highPosition + currentNbTracks);
+        track->setPosition(highPosition + 1 + i);
         track->setInstrument(m_instrumentId);
 
         m_composition->addTrack(track);
@@ -1432,10 +1463,24 @@ void AddTracksCommand::execute()
 
 void AddTracksCommand::unexecute()
 {
-    for (unsigned int i = 0; i < m_nbNewTracks; ++i) {
+    unsigned int startTrack = m_composition->getNbTracks();
+    unsigned int endTrack = startTrack - m_nbNewTracks;
 
-        m_composition->deleteTrack(m_composition->getNbTracks() - 1);
+    for (unsigned int i = startTrack; i > endTrack; --i) 
+    {
+        Rosegarden::Track *track = m_composition->getTrackByPosition(i - 1);
+
+        if (track)
+        {
+            if (m_detached == false) m_newTracks.push_back(track);
+            m_composition->detachTrack(track);
+        }
+        else
+            std::cerr<< "AddTracksCommand::unexecute - "
+                     << "can't deatch track at position " << i << endl;
     }
+
+    m_detached = true;
 }
 
 // ------------ Delete Tracks -------------

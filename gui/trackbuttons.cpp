@@ -437,7 +437,9 @@ TrackButtons::slotToggleMutedTrack(int mutedTrack)
 void
 TrackButtons::removeButtons(unsigned int position)
 {
-    //cout << "DELETING TRACK BOX " << position << endl;
+    std::cerr << "TrackButtons::removeButtons - "
+              << "deleting track button at position "
+              << position << std::endl;
 
     unsigned int i = 0;
     std::vector<QFrame*>::iterator it;
@@ -526,90 +528,30 @@ TrackButtons::slotUpdateTracks()
     }
     else if (newNbTracks < m_tracks)
     {
-        for (unsigned int i = newNbTracks; i < m_tracks; ++i)
-            removeButtons(i);
+        for (unsigned int i = m_tracks; i > newNbTracks; --i)
+            removeButtons(i - 1);
     }
     else // newNbTracks > m_tracks
     {
         for (unsigned int i = m_tracks; i < newNbTracks; ++i)
         {
-
             track = m_doc->getComposition().getTrackByPosition(i);
-            QFrame *trackHBox = makeButton(track->getId());
-
-            if (trackHBox)
+            if (track)
             {
-                //std::cout << "MAKE ID = " << i << std::endl;
-                trackHBox->show();
-                m_layout->insertWidget(i, trackHBox);
-                m_trackHBoxes.push_back(trackHBox);
-            }
-        }
-    }
-
-    /*
-    // Delete any extra tracks based on position calculations -
-    // move around TrackIds if we find a mismatch.  The important
-    // thing is making sure we have valid and contiguous positions
-    // and then juggle TrackIds accordingly.
-    //
-    for (unsigned int i = 0; i < m_trackLabels.size(); ++i)
-    {
-        match = false;
-        for (it = tracks.begin(); it != tracks.end(); ++it)
-        {
-            // Map track positions to ids
-            //
-            if (i == ((unsigned int)(*it).second->getPosition()))
-            {
-                m_trackLabels[i]->setId((*it).second->getId());
-                match = true;
-                break;
-            }
-        }
-
-        if (!match)
-        {
-            removeButtons(i);
-        }
-    }
-
-    // Check for adding tracks
-    //
-    if (m_trackHBoxes.size() != newNbTracks)
-    {
-        for (it = tracks.begin(); it != tracks.end(); ++it)
-        {
-            match = false;
-            int j = 0;
-            for (unsigned int i = 0; i < m_trackLabels.size(); ++i)
-            {
-                if (m_trackLabels[i]->getId() == (*it).second->getId() &&
-                    i == ((unsigned int)(*it).second->getPosition()))
-                {
-                    match = true;
-                    break;
-                }
-            }
-
-            if (!match)
-            {
-                QFrame *trackHBox = makeButton((*it).second->getId());
+                QFrame *trackHBox = makeButton(track->getId());
 
                 if (trackHBox)
                 {
-                    cout << "MAKE ID = " << (*it).second->getId()
-                         << " @ j = " << j << endl;
                     trackHBox->show();
-                    m_layout->insertWidget((*it).second->getPosition(),
-                                           trackHBox);
+                    m_layout->insertWidget(i, trackHBox);
                     m_trackHBoxes.push_back(trackHBox);
                 }
             }
-            j++;
+            else
+                std::cerr << "TrackButtons::slotUpdateTracks - "
+                          << "can't find TrackId for position " << i << endl;
         }
     }
-    */
 
     // Renumber all the labels
     //
