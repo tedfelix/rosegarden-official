@@ -1361,9 +1361,10 @@ void NotationSelector::drag(int x, int y, bool final)
     if (!m_clickedElement || !m_selectedStaff) return;
 
     EventSelection *selection = m_nParentView->getCurrentSelection();
-    if (!selection) selection = new EventSelection(m_selectedStaff->getSegment());
-    if (!selection->contains(m_clickedElement->event()))
-	 selection->addEvent(m_clickedElement->event());
+    if (!selection || !selection->contains(m_clickedElement->event())) {
+	selection = new EventSelection(m_selectedStaff->getSegment());
+	selection->addEvent(m_clickedElement->event());
+    }
     m_nParentView->setCurrentSelection(selection);
 
     NotationStaff *targetStaff = dynamic_cast<NotationStaff *>
