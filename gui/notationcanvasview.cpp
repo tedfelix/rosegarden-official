@@ -103,25 +103,27 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 {
     kdDebug(KDEBUG_AREA) << "NotationCanvasView::contentsMousePressEvent()\n";
 
+    QCanvasItemList itemList = canvas()->collisions(e->pos());
+
     if (!m_currentHighlightedLine &&
         !(m_currentHighlightedLine = findClosestLineWithinThreshold(e))) {
 
-        handleMousePress(0, -1, e->pos());
+        if (itemList.count() != 0) // the mouse press occurred on at least one
+                                   // item - check if some are active
+            processActiveItems(e, itemList);
+        else 
+            handleMousePress(0, -1, e); // it didn't occur anywhere special
+
         return;
 
     }
     
-    kdDebug(KDEBUG_AREA) << "mousepress : m_currentHighlightedLine != 0 - inserting note\n";
-
-    // Check if we haven't actually clicked on a sprite
-    //
-    QCanvasItemList itemList = canvas()->collisions(e->pos());
-
     QCanvasItemList::Iterator it;
     QCanvasNotationSprite* sprite = 0;
-    QCanvasItem* pressedItem = 0;
+    QCanvasItem* activeItem = 0;
 
-    // Get the pitch were the click occurred
+    // Get the actual pitch were the click occurred
+    //
     Rosegarden::Key key;
     Rosegarden::Clef clef;
 
@@ -132,11 +134,11 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 
         QCanvasItem *item = *it;
 
-        if (item->active() && !pressedItem) {
-            kdDebug(KDEBUG_AREA) << "mousepress : got active item\n";
-            pressedItem = item;
+        if (item->active()) {
+            activeItem = item;
+            break;
         }
-        
+
         if ((sprite = dynamic_cast<QCanvasNotationSprite*>(item))) {
             NotationElement &el = sprite->getNotationElement();
 
@@ -156,6 +158,11 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
         
     }
 
+    if (activeItem) { // active item takes precedence over notation elements
+        emit activeItemPressed(e, activeItem);
+        return;
+    }
+
     int staffNo = -1;
 
     // Find staff on which the click occurred
@@ -170,11 +177,9 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 
     if (sprite)
         handleMousePress(m_currentHighlightedLine, staffNo,
-                         e->pos(), pressedItem,
-                         &(sprite->getNotationElement()));
+                         e, &(sprite->getNotationElement()));
     else
-        handleMousePress(m_currentHighlightedLine, staffNo, e->pos(),
-                         pressedItem);
+        handleMousePress(m_currentHighlightedLine, staffNo, e);
 }
 
 
@@ -193,19 +198,38 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 //     m_currentNotePixmap = new QCanvasSimpleSprite(&note, canvas());
 // }
 
+void
+NotationCanvasView::processActiveItems(QMouseEvent* e,
+                                       QCanvasItemList itemList)
+{
+    QCanvasItem* pressedItem = 0;
+    QCanvasItemList::Iterator it;
+
+    for (it = itemList.begin(); it != itemList.end(); ++it) {
+
+        QCanvasItem *item = *it;
+        if (item->active() && !pressedItem) {
+            kdDebug(KDEBUG_AREA) << "mousepress : got active item\n";
+            pressedItem = item;
+        }
+    }
+
+    if (pressedItem)
+        emit activeItemPressed(e, pressedItem);
+    
+}
 
 void
 NotationCanvasView::handleMousePress(const StaffLine *line,
                                      int staffNo,
-                                     const QPoint &pos,
-                                     QCanvasItem* item,
+                                     QMouseEvent *e,
                                      NotationElement *el)
 {
     int h = line ? line->getHeight() : StaffLine::NoHeight;
 
     kdDebug(KDEBUG_AREA) << "NotationCanvasView::handleMousePress() at height " << h << endl;
 
-    emit itemPressed(h, staffNo, pos, item, el);
+    emit itemPressed(h, staffNo, e, el);
 }
 
 bool

@@ -83,9 +83,16 @@ signals:
      * \a el points to the NotationElement which was clicked on, if any
      */
     void itemPressed(int pitch, int staffNo,
-                     const QPoint& point,
-                     QCanvasItem* item,
+                     QMouseEvent*,
                      NotationElement* el);
+
+    /**
+     * Emitted when the user clicks on a QCanvasItem which is active
+     *
+     * @see QCanvas#setActive
+     */
+    void activeItemPressed(QMouseEvent*,
+                           QCanvasItem* item);
 
     /**
      * Emitted when the mouse cursor moves to a different height
@@ -115,9 +122,10 @@ signals:
     void mouseRelease(QMouseEvent*);
     
 protected:
+    void processActiveItems(QMouseEvent*, QCanvasItemList);
 
     void handleMousePress(const StaffLine*, int staffNo,
-                          const QPoint&, QCanvasItem* pressedItem = 0,
+                          QMouseEvent*,
                           NotationElement* pressedNotationElement = 0);
 
     bool posIsTooFarFromStaff(const QPoint &pos);

@@ -203,7 +203,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
                                                     height() * 2),
                                         this)),
     m_ruler(new StaffRuler(20, 10, canvas())),
-    m_movingCursor(false),
+    m_activeItem(0),
     m_hlayout(0),
     m_vlayout(0),
     m_tool(0),
@@ -227,8 +227,12 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     setCentralWidget(m_canvasView);
 
     QObject::connect
-        (m_canvasView, SIGNAL(itemPressed(int, int, const QPoint&, QCanvasItem*, NotationElement*)),
-         this,         SLOT  (itemPressed(int, int, const QPoint&, QCanvasItem*, NotationElement*)));
+        (m_canvasView, SIGNAL(itemPressed(int, int, QMouseEvent*, NotationElement*)),
+         this,         SLOT  (itemPressed(int, int, QMouseEvent*, NotationElement*)));
+
+    QObject::connect
+        (m_canvasView, SIGNAL(activeItemPressed(QMouseEvent*, QCanvasItem*)),
+         this,         SLOT  (activeItemPressed(QMouseEvent*, QCanvasItem*)));
 
     QObject::connect
         (m_canvasView, SIGNAL(mouseMove(QMouseEvent*)),
@@ -1439,36 +1443,44 @@ void NotationView::slotSelectSelected()
 //----------------------------------------------------------------------
 
 void NotationView::itemPressed(int height, int staffNo,
-                               const QPoint &eventPos,
-                               QCanvasItem* item,
+                               QMouseEvent* e,
                                NotationElement* el)
 {
-    kdDebug(KDEBUG_AREA) << "NotationView::itemPressed : item = " << item
-                         << endl;
+    QPoint eventPos = e->pos();
 
-    if (item) {
+    setActiveItem(0);
+    m_tool->handleMousePress(height, staffNo, eventPos, el);
 
-        // Check if it's the cursor
-        QCanvasGroupableItem *gitem = dynamic_cast<QCanvasGroupableItem*>(item);
-        
-        if (gitem && dynamic_cast<PositionCursor*>(gitem->group()) == m_ruler->getCursor()) {
+}
 
-            setMovingCursor(true);
-            getCursor()->handleMousePress();
-        }
+void NotationView::activeItemPressed(QMouseEvent* e,
+                                     QCanvasItem* item)
+{
+    if (!item) return;
+
+    // Check if it's a groupable item, if so get its group
+    //
+    QCanvasGroupableItem *gitem = dynamic_cast<QCanvasGroupableItem*>(item);
+    if (gitem) item = gitem->group();
         
-    } else {
+    // Check if it's an active item
+    //
+    ActiveItem *activeItem = dynamic_cast<ActiveItem*>(item);
         
-        setMovingCursor(false);
-        m_tool->handleMousePress(height, staffNo, eventPos, item, el);
+    if (activeItem) {
+
+        setActiveItem(activeItem);
+        activeItem->handleMousePress(e);
+        canvas()->update();
 
     }
+
 }
 
 void NotationView::mouseMove(QMouseEvent *e)
 {
-    if (movingCursor()) {
-        getCursor()->handleMouseMove(e);
+    if (activeItem()) {
+        activeItem()->handleMouseMove(e);
         canvas()->update();
     }
     else
@@ -1477,9 +1489,10 @@ void NotationView::mouseMove(QMouseEvent *e)
 
 void NotationView::mouseRelease(QMouseEvent *e)
 {
-    if (movingCursor()) {
-        getCursor()->handleMouseRelease(e);
-        setMovingCursor(false);
+    if (activeItem()) {
+        activeItem()->handleMouseRelease(e);
+        setActiveItem(0);
+        canvas()->update();
     }
     else
         m_tool->handleMouseRelease(e);
@@ -1707,7 +1720,6 @@ NoteInserter::~NoteInserter()
 void    
 NoteInserter::handleMousePress(int height, int staffNo,
                                const QPoint &eventPos,
-                               QCanvasItem*,
                                NotationElement*)
 {
     if (height == StaffLine::NoHeight || staffNo < 0) return;
@@ -1788,7 +1800,6 @@ ClefInserter::ClefInserter(std::string clefType, NotationView& view)
     
 void ClefInserter::handleMousePress(int, int staffNo,
                                     const QPoint &eventPos,
-                                    QCanvasItem*,
                                     NotationElement*)
 {
     Event *tsig = 0, *clef = 0, *key = 0;
@@ -1825,7 +1836,6 @@ NotationEraser::NotationEraser(NotationView& view)
 
 void NotationEraser::handleMousePress(int, int staffNo,
                                       const QPoint&,
-                                      QCanvasItem*,
                                       NotationElement* element)
 {
     bool needLayout = false;
@@ -1885,7 +1895,6 @@ NotationSelector::~NotationSelector()
 
 void NotationSelector::handleMousePress(int, int,
                                         const QPoint& p,
-                                        QCanvasItem*,
                                         NotationElement*)
 {
     m_selectionRect->setX(p.x());
@@ -2028,7 +2037,6 @@ NotationSelectionPaster::~NotationSelectionPaster()
 
 void NotationSelectionPaster::handleMousePress(int, int staffNo,
                                                const QPoint &eventPos,
-                                               QCanvasItem*,
                                                NotationElement*)
 {
     kdDebug(KDEBUG_AREA) << "NotationSelectionPaster::handleMousePress : staffNo = "

@@ -7,6 +7,12 @@
 #include "qcanvaslinegroupable.h"
 #include "qcanvasrectanglegroupable.h"
 
+// ActiveItem::ActiveItem(QCanvasItem* item)
+// {
+//     item->setActive(true);
+// }
+
+//////////////////////////////////////////////////////////////////////
 
 StaffRuler::StepElement::StepElement(QCanvasLine* l, QCanvasText* t)
     : stepLine(l), label(t)
@@ -36,28 +42,32 @@ void StaffRuler::StepElement::addSubStep(QCanvasLine* l)
 
 
 StaffRuler::StaffRuler(int xPos, int yPos, QCanvas* c)
-    : m_canvas(c),
+    : QCanvasItemGroup(c),
       m_xPos(xPos),
       m_yPos(yPos),
       m_stepLineHeight(10),
       m_subStepLineHeight(5),
-      m_mainLine(new QCanvasLine(m_canvas)),
-      m_background(new QCanvasRectangle(0, 0,
-                                        m_canvas->width(), m_yPos, 
-                                        m_canvas)),
-      m_cursor(new PositionCursor(m_canvas, m_canvas))
+      m_mainLine(new QCanvasLineGroupable(c, this)),
+      m_background(new QCanvasRectangleGroupable(c, this)),
+      m_cursor(new PositionCursor(canvas(), canvas()))
 {
+
+    m_background->setX(0);
+    m_background->setY(0);
+    m_background->setSize(canvas()->width(), m_yPos);
+
     QColor bgColor(105, 170, 228);
     
     m_background->setBrush(bgColor);
     m_background->setPen(bgColor);
-    m_background->setZ(-1);
     m_background->show();
 
-    m_mainLine->setPoints(0, m_yPos, m_canvas->width(), m_yPos);
+    m_mainLine->setPoints(0, m_yPos, canvas()->width(), m_yPos);
     
     m_mainLine->show();
     m_cursor->show();
+
+    setActive(true);
 }
 
 void StaffRuler::clearSteps()
@@ -98,6 +108,7 @@ void StaffRuler::update()
 // 	(m_xPos, m_yPos,
 // 	 m_xPos + int(m_steps[m_steps.size() - 1].first) + 10, m_yPos);
 
+    setActive(true); // set steps active
 }
 
 void StaffRuler::makeStep(int stepValue,
@@ -106,11 +117,10 @@ void StaffRuler::makeStep(int stepValue,
 {
     // Make step line
     //
-    QCanvasLine* stepLine = new QCanvasLine(m_canvas);
+    QCanvasLineGroupable* stepLine = new QCanvasLineGroupable(canvas(), this);
     
     stepLine->setPoints(int(stepPos) + m_xPos, m_yPos,
                         int(stepPos) + m_xPos, m_yPos - m_stepLineHeight);
-    
     stepLine->show();
 
     // Make label
@@ -118,7 +128,7 @@ void StaffRuler::makeStep(int stepValue,
     QString labelText;
     labelText.setNum(stepValue);
 
-    QCanvasText* label = new QCanvasText(labelText, m_canvas);
+    QCanvasText* label = new QCanvasText(labelText, canvas());
     label->setX(stepPos + m_xPos);
     label->setY(m_yPos + 4);
     label->setTextFlags(Qt::AlignHCenter);
@@ -135,7 +145,7 @@ void StaffRuler::makeStep(int stepValue,
          subStepPos <= (nextStepPos - incr);
          subStepPos += incr) {
 
-        QCanvasLine* subStep = new QCanvasLine(m_canvas);
+        QCanvasLineGroupable* subStep = new QCanvasLineGroupable(canvas(), this);
     
         subStep->setPoints(int(subStepPos) + m_xPos, m_yPos,
                            int(subStepPos) + m_xPos, m_yPos - m_subStepLineHeight);
@@ -151,9 +161,25 @@ void StaffRuler::makeStep(int stepValue,
 
 void StaffRuler::resize()
 {
-    m_background->setSize(m_canvas->width(), m_background->height());
-    m_mainLine->setPoints(0, m_yPos, m_canvas->width(), m_yPos);
+    m_background->setSize(canvas()->width(), m_background->height());
+    m_mainLine->setPoints(0, m_yPos, canvas()->width(), m_yPos);
 }
+
+void StaffRuler::handleMousePress(QMouseEvent* e)
+{
+    setCursorPosition(e->x());
+}
+
+void StaffRuler::handleMouseMove(QMouseEvent* e)
+{
+    setCursorPosition(e->x());
+}
+
+void StaffRuler::handleMouseRelease(QMouseEvent* e)
+{
+    setCursorPosition(e->x());
+}
+
 
 
 //////////////////////////////////////////////////////////////////////
@@ -180,7 +206,7 @@ void PositionCursor::setPosition(int pos)
     setX((pos > getMinPosition()) ? pos : getMinPosition());
 }
 
-void PositionCursor::handleMousePress()
+void PositionCursor::handleMousePress(QMouseEvent*)
 {
 }
 

@@ -30,21 +30,35 @@
 class QCanvasRectangleGroupable;
 class QCanvasLineGroupable;
 
-class PositionCursor : public QObject, public QCanvasItemGroup
+/**
+ * An interface for canvas items which are capable of handling
+ * mouse events
+ */
+class ActiveItem
+{
+public:
+    virtual void handleMousePress(QMouseEvent*) = 0;
+    virtual void handleMouseMove(QMouseEvent*) = 0;
+    virtual void handleMouseRelease(QMouseEvent*) = 0;
+};
+
+
+class PositionCursor : public QObject, public QCanvasItemGroup, public ActiveItem
 {
     Q_OBJECT
 
 public:
     PositionCursor(QCanvas*, QObject* parent = 0);
 
-    void handleMousePress();
-    void handleMouseMove(QMouseEvent*);
-    void handleMouseRelease(QMouseEvent*);
-
     int getPosition() const { return int(x()); }
 
     int getMinPosition() const { return m_minPos; }
     void setMinPosition(int p);
+
+    // ActiveItem interface
+    virtual void handleMousePress(QMouseEvent*);
+    virtual void handleMouseMove(QMouseEvent*);
+    virtual void handleMouseRelease(QMouseEvent*);
 
 public slots:
     void setPosition(int pos);
@@ -67,7 +81,7 @@ protected:
  *
  * It also deals with the position cursor
  */
-class StaffRuler
+class StaffRuler : public QCanvasItemGroup, public ActiveItem
 {
 public:
     typedef std::pair<double, unsigned short> StepDef;
@@ -89,6 +103,11 @@ public:
     /// reset ruler width to canvas width
     void resize();
 
+    // ActiveItem interface
+    virtual void handleMousePress(QMouseEvent*);
+    virtual void handleMouseMove(QMouseEvent*);
+    virtual void handleMouseRelease(QMouseEvent*);
+
 protected:
     struct StepElement
     {
@@ -107,16 +126,14 @@ protected:
                   double pos, double nextStepPos,
                   unsigned short nbSubsteps);
 
-    QCanvas* m_canvas;
-
     int m_xPos; // mainLine X pos
     int m_yPos; // mainLine Y pos
 
     int m_stepLineHeight,
         m_subStepLineHeight;
 
-    QCanvasLine* m_mainLine;
-    QCanvasRectangle* m_background;
+    QCanvasLineGroupable* m_mainLine;
+    QCanvasRectangleGroupable* m_background;
 
     PositionCursor* m_cursor;
 

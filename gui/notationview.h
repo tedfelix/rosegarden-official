@@ -39,6 +39,7 @@ class RosegardenGUIDoc;
 class NotationTool;
 class StaffRuler;
 class PositionCursor;
+class ActiveItem;
 
 /**
  * This class holds a selection of Events, used for cut'n paste
@@ -316,8 +317,21 @@ public slots:
     void slotSelectSelected();
 
     /// Canvas actions slots
-    void itemPressed(int height, int staffNo, const QPoint&,
-                     QCanvasItem*, NotationElement*);
+
+    /**
+     * Called when a mouse press occurred on a notation element
+     * or somewhere on a staff
+     */
+    void itemPressed(int height, int staffNo, QMouseEvent*, NotationElement*);
+
+    /**
+     * Called when a mouse press occurred on an active canvas item
+     *
+     * @see ActiveItem
+     * @see QCanvasItem#setActive
+     */
+    void activeItemPressed(QMouseEvent*, QCanvasItem*);
+
     void mouseMove(QMouseEvent*);
     void mouseRelease(QMouseEvent*);
 
@@ -487,14 +501,14 @@ protected:
     PositionCursor* getCursor();
 
     /**
-     * Set if we're moving the cursor
+     * Set the active item
      */
-    void setMovingCursor(bool b) { m_movingCursor = b; }
+    void setActiveItem(ActiveItem* i) { m_activeItem = i; }
 
     /**
-     * Return if we're moving the cursor
+     * Return the active item
      */
-    bool movingCursor() { return m_movingCursor; }
+    ActiveItem* activeItem() { return m_activeItem; }
 
 
     //--------------- Data members ---------------------------------
@@ -522,7 +536,7 @@ protected:
     std::vector<NotationStaff*> m_staffs;
 
     StaffRuler* m_ruler;
-    bool m_movingCursor;
+    ActiveItem* m_activeItem;
 
     std::string m_fontName;
     int m_fontSize;
@@ -587,7 +601,6 @@ public:
 
     virtual void handleMousePress(int height, int staffNo,
                                   const QPoint &eventPos,
-                                  QCanvasItem* pressedItem,
                                   NotationElement*) = 0;
 
     /// does nothing by default
@@ -613,7 +626,6 @@ public:
     
     virtual void handleMousePress(int height, int staffNo,
                                   const QPoint &eventPos,
-                                  QCanvasItem* pressedItem,
                                   NotationElement* el);
 
     /// Set the accidental for the notes which will be inserted
@@ -656,7 +668,6 @@ public:
     
     virtual void handleMousePress(int height, int staffNo,
                                   const QPoint &eventPos,
-                                  QCanvasItem* pressedItem,
                                   NotationElement* el);
 protected:
     Rosegarden::Clef m_clef;
@@ -673,7 +684,6 @@ public:
 
     virtual void handleMousePress(int height, int staffNo,
                                   const QPoint &eventPos,
-                                  QCanvasItem* pressedItem,
                                   NotationElement* el);
 };
 
@@ -690,7 +700,6 @@ public:
     
     virtual void handleMousePress(int height, int staffNo,
                                   const QPoint &eventPos,
-                                  QCanvasItem* pressedItem,
                                   NotationElement* el);
 
     virtual void handleMouseMove(QMouseEvent*);
@@ -735,7 +744,6 @@ public:
     
     virtual void handleMousePress(int height, int staffNo,
                                   const QPoint &eventPos,
-                                  QCanvasItem* pressedItem,
                                   NotationElement* el);
 
 protected:
