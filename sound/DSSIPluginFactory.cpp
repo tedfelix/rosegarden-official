@@ -315,40 +315,50 @@ DSSIPluginFactory::discoverPlugins(QString soName)
 	char *def_uri = 0;
 	lrdf_defaults *defs = 0;
 		
-	if (!m_taxonomy.empty()) {
+	QString category = m_taxonomy[ladspaDescriptor->UniqueID];
 
-	    QString category = m_taxonomy[ladspaDescriptor->UniqueID];
-
-	    std::cerr << "Plugin id is " << ladspaDescriptor->UniqueID
-		      << ", category is \"" << (category ? category : QString("(none)"))
-		      << "\", name is " << ladspaDescriptor->Name
-		      << ", label is " << ladspaDescriptor->Label
-		      << std::endl;
-
-	    def_uri = lrdf_get_default_uri(ladspaDescriptor->UniqueID);
-	    if (def_uri) {
-		defs = lrdf_get_setting_values(def_uri);
+	if (category == "" && ladspaDescriptor->Name != 0) {
+	    std::string name = ladspaDescriptor->Name;
+	    if (name.length() > 4 &&
+		name.substr(name.length() - 4) == " VST") {
+		if (descriptor->run_synth || descriptor->run_multiple_synths) {
+		    category = "VST instruments";
+		} else {
+		    category = "VST effects";
+		}
+		m_taxonomy[ladspaDescriptor->UniqueID] = category;
 	    }
-
-	    int controlPortNumber = 1;
+	}
+	
+	std::cerr << "Plugin id is " << ladspaDescriptor->UniqueID
+		  << ", category is \"" << (category ? category : QString("(none)"))
+		  << "\", name is " << ladspaDescriptor->Name
+		  << ", label is " << ladspaDescriptor->Label
+		  << std::endl;
+	
+	def_uri = lrdf_get_default_uri(ladspaDescriptor->UniqueID);
+	if (def_uri) {
+	    defs = lrdf_get_setting_values(def_uri);
+	}
+	
+	int controlPortNumber = 1;
+	
+	for (unsigned long i = 0; i < ladspaDescriptor->PortCount; i++) {
+	    
+	    if (LADSPA_IS_PORT_CONTROL(ladspaDescriptor->PortDescriptors[i])) {
 		
-	    for (unsigned long i = 0; i < ladspaDescriptor->PortCount; i++) {
-
-		if (LADSPA_IS_PORT_CONTROL(ladspaDescriptor->PortDescriptors[i])) {
-
-		    if (def_uri) {
-
-			for (int j = 0; j < defs->count; j++) {
-			    if (defs->items[j].pid == controlPortNumber) {
-				    std::cerr << "Default for this port (" << defs->items[j].pid << ", " << defs->items[j].label << ") is " << defs->items[j].value << "; applying this to port number " << i << " with name " << ladspaDescriptor->PortNames[i] << std::endl;
-				m_portDefaults[ladspaDescriptor->UniqueID][i] =
-				    defs->items[j].value;
-			    }
+		if (def_uri && defs) {
+		    
+		    for (int j = 0; j < defs->count; j++) {
+			if (defs->items[j].pid == controlPortNumber) {
+			    std::cerr << "Default for this port (" << defs->items[j].pid << ", " << defs->items[j].label << ") is " << defs->items[j].value << "; applying this to port number " << i << " with name " << ladspaDescriptor->PortNames[i] << std::endl;
+			    m_portDefaults[ladspaDescriptor->UniqueID][i] =
+				defs->items[j].value;
 			}
 		    }
-
-		    ++controlPortNumber;
 		}
+		
+		++controlPortNumber;
 	    }
 	}
 #endif // HAVE_LIBLRDF

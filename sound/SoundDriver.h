@@ -310,6 +310,11 @@ public:
     //
     virtual void claimUnwantedPlugin(void *plugin) = 0;
 
+    // This causes all scavenged plugins to be destroyed.  It
+    // should only be called in non-RT contexts.
+    //
+    virtual void scavengePlugins() = 0;
+
     // Handle audio file references
     //
     void clearAudioFiles();

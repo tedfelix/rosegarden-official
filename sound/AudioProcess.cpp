@@ -1001,6 +1001,43 @@ AudioInstrumentMixer::resetAllPlugins()
 }
 
 void
+AudioInstrumentMixer::destroyAllPlugins()
+{
+    getLock();
+
+    // Delete immediately, as we're probably exiting here -- don't use
+    // the scavenger.
+
+    std::cerr << "AudioInstrumentMixer::destroyAllPlugins" << std::endl;
+
+    for (SynthPluginMap::iterator j = m_synths.begin();
+	 j != m_synths.end(); ++j) {
+	RunnablePluginInstance *instance = j->second;
+	j->second = 0;
+	delete instance;
+    }	
+
+    for (PluginMap::iterator j = m_plugins.begin();
+	 j != m_plugins.end(); ++j) {
+
+	InstrumentId id = j->first;
+
+	for (PluginList::iterator i = m_plugins[id].begin();
+	     i != m_plugins[id].end(); ++i) {
+
+	    RunnablePluginInstance *instance = *i;
+	    *i = 0;
+	    delete instance;
+	}
+    }
+
+    // and tell the driver to get rid of anything already scavenged.
+    m_driver->scavengePlugins();
+
+    releaseLock();
+}
+
+void
 AudioInstrumentMixer::generateBuffers()
 {
     InstrumentId audioInstrumentBase;

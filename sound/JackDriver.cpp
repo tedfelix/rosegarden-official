@@ -91,7 +91,10 @@ JackDriver::~JackDriver()
 #endif
     AudioInstrumentMixer *instrumentMixer = m_instrumentMixer;
     m_instrumentMixer = 0;
-    if (instrumentMixer) instrumentMixer->terminate();
+    if (instrumentMixer) {
+	instrumentMixer->terminate();
+	instrumentMixer->destroyAllPlugins();
+    }
 
 #ifdef DEBUG_JACK_DRIVER
     std::cerr << "JackDriver::~JackDriver: terminating file reader" << std::endl;

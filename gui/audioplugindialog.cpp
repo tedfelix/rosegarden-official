@@ -179,9 +179,11 @@ AudioPluginDialog::populatePluginCategoryList()
     std::set<QString> categories;
     for (PluginIterator i = m_pluginManager->begin();
 	 i != m_pluginManager->end(); ++i) {
-	if ((*i)->getCategory() != "") categories.insert((*i)->getCategory());
+	if ((*i)->isSynth() == isSynth()) {
+	    if ((*i)->getCategory() != "") categories.insert((*i)->getCategory());
+	}
     }
-    if (isSynth() || categories.empty()) {
+    if (/*!!! isSynth() || */ categories.empty()) {
 	m_pluginCategoryBox->hide();
 	m_pluginLabel->hide();
     }
@@ -333,23 +335,6 @@ AudioPluginDialog::slotPluginSelected(int i)
     AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
     if (!inst) return;
 
-    QLabel *programLabel = 0;
-
-    if (plugin && plugin->isSynth()) {
-
-	m_programLabel = new QLabel(i18n("Program:  "), m_pluginParamsBox);
-	m_programCombo = new KComboBox(m_pluginParamsBox);
-	m_programCombo->setSizeLimit(30);
-	m_programCombo->insertItem(i18n("<none selected>"));
-	m_gridLayout->addMultiCellWidget(m_programLabel,
-					 0, 0, 0, 0, Qt::AlignRight);
-	m_gridLayout->addMultiCellWidget(m_programCombo,
-					 0, 0, 1, m_gridLayout->numCols()-1,
-					 Qt::AlignLeft);
-	connect(m_programCombo, SIGNAL(activated(const QString &)),
-		this, SLOT(slotPluginProgramChanged(const QString &)));
-    }
-
     if (plugin)
     {
 	setCaption(caption + plugin->getName());
@@ -387,21 +372,6 @@ AudioPluginDialog::slotPluginSelected(int i)
 		    std::cerr << "Plugin port name " << (*it)->getName() << ", default: " << (*it)->getDefaultValue() << std::endl;
 		}
 
-                PluginControl *control =
-                    new PluginControl(m_pluginParamsBox,
-				      m_gridLayout,
-                                      PluginControl::Rotary,
-                                      *it,
-                                      m_pluginManager,
-                                      count,
-                                      inst->getPort(count)->value,
-				      showBounds);
-
-                connect(control, SIGNAL(valueChanged(float)),
-                        this, SLOT(slotPluginPortChanged(float)));
-
-                m_pluginWidgets.push_back(control);
-
             } else if ((*it)->getType() & PluginPort::Audio) {
 		if ((*it)->getType() & PluginPort::Input) ++ins;
 		else if ((*it)->getType() & PluginPort::Output) ++outs;
@@ -420,11 +390,6 @@ AudioPluginDialog::slotPluginSelected(int i)
 	    shortName = shortName.left(parenIdx);
 	    if (shortName == "Null") shortName = "Plugin";
 	}
-	//m_pluginParamsBox->setTitle(i18n("Parameters for %1").arg(shortName));
-	m_pluginParamsBox->show();
-
-    } else {
-	//m_pluginParamsBox->hide();
     }
 
     adjustSize();
@@ -433,21 +398,64 @@ AudioPluginDialog::slotPluginSelected(int i)
     // tell the sequencer
     emit pluginSelected(m_instrument->getId(), m_index, number - 1);
 
-    if (plugin && plugin->isSynth()) {
+    if (plugin) {
 
 	int current = -1;
 	QStringList programs = getProgramsForInstance(inst, current);
-    
+
 	if (programs.count() > 0) {
+
+	    m_programLabel = new QLabel(i18n("Program:  "), m_pluginParamsBox);
+
+	    m_programCombo = new KComboBox(m_pluginParamsBox);
+	    m_programCombo->setSizeLimit(30);
+	    m_programCombo->insertItem(i18n("<none selected>"));
+	    m_gridLayout->addMultiCellWidget(m_programLabel,
+					     0, 0, 0, 0, Qt::AlignRight);
+	    m_gridLayout->addMultiCellWidget(m_programCombo,
+					     0, 0, 1, m_gridLayout->numCols()-1,
+					     Qt::AlignLeft);
+	    connect(m_programCombo, SIGNAL(activated(const QString &)),
+		    this, SLOT(slotPluginProgramChanged(const QString &)));
+
 	    m_programCombo->clear();
 	    m_programCombo->insertItem(i18n("<none selected>"));
 	    m_programCombo->insertStringList(programs);
 	    m_programCombo->setCurrentItem(current + 1);
 	    m_programCombo->adjustSize();
-	} else {
-	    m_programLabel->hide();
-	    m_programCombo->hide();
+
+	    m_programLabel->show();
+	    m_programCombo->show();
 	}
+
+        PortIterator it = plugin->begin();
+        int count = 0;
+
+        for (; it != plugin->end(); ++it)
+        {
+            if (((*it)->getType() & PluginPort::Control) &&
+		((*it)->getType() & PluginPort::Input))
+            {
+                PluginControl *control =
+                    new PluginControl(m_pluginParamsBox,
+				      m_gridLayout,
+                                      PluginControl::Rotary,
+                                      *it,
+                                      m_pluginManager,
+                                      count,
+                                      inst->getPort(count)->value,
+				      showBounds);
+
+                connect(control, SIGNAL(valueChanged(float)),
+                        this, SLOT(slotPluginPortChanged(float)));
+
+                m_pluginWidgets.push_back(control);
+	    }
+
+	    ++count;
+	}
+
+	m_pluginParamsBox->show();
     }
 
     if (guiWasShown) {
@@ -854,7 +862,9 @@ PluginControl::PluginControl(QWidget *parent,
 	    item = new QWidgetItem(low);
 	    item->setAlignment(Qt::AlignRight | Qt::AlignBottom);
 	    m_layout->addItem(item);
-	}   
+	} else {
+	    low->hide();
+	}
 	
 	item = new QWidgetItem(m_dial);
 	item->setAlignment(Qt::AlignCenter);
@@ -865,6 +875,8 @@ PluginControl::PluginControl(QWidget *parent,
 	    item = new QWidgetItem(upp);
 	    item->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
 	    m_layout->addItem(item);
+	} else {
+	    upp->hide();
 	}
 
         RG_DEBUG << "setting port value = " << initialValue << endl;

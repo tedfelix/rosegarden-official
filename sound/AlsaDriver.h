@@ -236,6 +236,7 @@ public:
     }
 
     virtual void claimUnwantedPlugin(void *plugin);
+    virtual void scavengePlugins();
 
     virtual bool checkForNewClients();
 

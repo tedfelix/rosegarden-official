@@ -134,6 +134,9 @@ public:
 	ssInstrumentCount = 0;
     }
 
+    virtual void claimUnwantedPlugin(void *plugin) { }
+    virtual void scavengePlugins() { }
+
     virtual std::vector<PlayableAudioFile*> getPlayingAudioFiles() 
         { return std::vector<PlayableAudioFile*>(); }
 

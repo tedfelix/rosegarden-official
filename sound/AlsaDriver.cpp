@@ -3104,7 +3104,7 @@ AlsaDriver::processPending()
 	checkAlsaError(snd_seq_drain_output(m_midiHandle), "processPending(): draining");
     }
 
-    m_pluginScavenger.scavenge();
+    scavengePlugins();
     m_audioQueueScavenger.scavenge();
 }
 
@@ -3764,6 +3764,13 @@ void
 AlsaDriver::claimUnwantedPlugin(void *plugin)
 {
     m_pluginScavenger.claim((RunnablePluginInstance *)plugin);
+}
+
+
+void
+AlsaDriver::scavengePlugins()
+{
+    m_pluginScavenger.scavenge();
 }
 
 

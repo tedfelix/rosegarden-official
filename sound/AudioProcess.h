@@ -199,6 +199,7 @@ public:
     void setPluginProgram(InstrumentId, int, QString);
     QString configurePlugin(InstrumentId, int, QString, QString);
     void resetAllPlugins();
+    void destroyAllPlugins();
 
     RunnablePluginInstance *getSynthPlugin(InstrumentId id) { return m_synths[id]; }
 
