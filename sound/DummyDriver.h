@@ -35,8 +35,8 @@ class DummyDriver : public SoundDriver
 public:
     DummyDriver(MappedStudio *studio):
         SoundDriver(studio, std::string("DummyDriver - no sound")) {;}
-    DummyDriver(const std::string & name):
-        SoundDriver(std::string("DummyDriver: " + name)) {;}
+    DummyDriver(MappedStudio *studio, const std::string & name):
+        SoundDriver(studio, std::string("DummyDriver: " + name)) {;}
     virtual ~DummyDriver() {;}
 
     virtual void initialiseMidi()  { m_recordComposition.clear();}

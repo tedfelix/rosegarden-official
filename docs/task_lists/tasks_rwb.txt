@@ -69,6 +69,12 @@ o selection of ALSA recording device
 o MIDI reverb and chorus on Instrument parameters [NON-STANDARD so
   save these for the Studio information]
 
+Completed for 0.21
+==================
+
+o Sysexs MIDI file in/out
+
+
 
 Completed for 0.2
 =================

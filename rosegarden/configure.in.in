@@ -80,7 +80,7 @@ fi
 
 dnl automake conditionals
 dnl
-dnl AM_CONDITIONAL(NO_SOUND, test "$with_sound" = "no")
+AM_CONDITIONAL(NO_SOUND, test "$with_sound" = "no")
 AM_CONDITIONAL(HAVE_ALSA, test "$with_alsa" = "yes")
 
 
