@@ -2571,6 +2571,9 @@ void RosegardenGUIApp::setPointerPosition(long posSec,
     Rosegarden::Composition &comp = m_doc->getComposition();
     timeT elapsedTime = comp.getElapsedTimeForRealTime(rT);
 
+//    RG_DEBUG << "RosegardenGUIApp::setPointerPosition(" << posSec << ","
+//	     << posUsec << "," << clearToSend << "): elapsedTime " << elapsedTime << endl;
+
     // Indicate to slotSetPointerPosition that we shouldn't propagate
     // the jump back to the sequencer, because it originated from the
     // sequencer in the first place.  This is not exactly elegant

@@ -120,32 +120,6 @@ Composition::ReferenceSegment::getDuration() const
     return (*i)->getAbsoluteTime() + (*i)->getDuration();
 }
 
-#ifdef NOT_DEFINED
-void
-Composition::ReferenceSegment::swap(Composition::ReferenceSegment &r)
-{
-    Impl temp;
-
-    // inefficient palaver.  must reorganise usage of Composition
-    // so as not to require swap()
-
-    for (iterator i = begin(); i != end(); ++i) {
-	temp.push_back(*i);
-    }
-    Impl::erase(begin(), end());
-
-    for (iterator i = r.begin(); i != r.end(); ++i) {
-	push_back(new Event(**i));
-    }
-    r.clear();
-
-    for (iterator i = temp.begin(); i != temp.end(); ++i) {
-	r.push_back(*i);
-    }
-    temp.erase(temp.begin(), temp.end());
-}
-#endif
-
 Composition::ReferenceSegment::iterator
 Composition::ReferenceSegment::find(Event *e)
 {
@@ -844,20 +818,39 @@ Composition::calculateTempoTimestamps() const
 }	
 
 RealTime
-Composition::time2RealTime(timeT t, double tempo) const
+Composition::time2RealTime(timeT tsec, double tempo) const
 {
     double factor = Note(Note::Crotchet).getDuration() * tempo;
-    long sec = (long)((60.0 * (double)t) / factor);
-    t -= realTime2Time(RealTime(sec, 0), tempo);
-    return RealTime(sec, (long)((6e7L * (double)t) / factor));
+    long sec = (long)((60.0 * (double)tsec) / factor);
+    timeT tusec = tsec - realTime2Time(RealTime(sec, 0), tempo);
+    long usec = (long)((6e7L * (double)tusec) / factor);
+
+    RealTime rt(sec, usec);
+
+#ifdef DEBUG_TEMPO_STUFF
+    cerr << "Composition::time2RealTime: sec " << sec << ", usec "
+	 << usec << ", tempo " << tempo
+	 << ", factor " << factor << ", tsec " << tsec << ", tusec " << tusec << ", rt " << rt << endl;
+#endif
+
+    return rt;
 }
 
 timeT
 Composition::realTime2Time(RealTime rt, double tempo) const
 {
     double factor = Note(Note::Crotchet).getDuration() * tempo;
-    double t = ((double)rt.sec * factor) / 60.0;
-    t += ((double)rt.usec * factor) / 6e7L;
+    double tsec = ((double)rt.sec * factor) / 60.0;
+    double tusec = ((double)rt.usec * factor);
+
+    double t = tsec + (tusec / 6e7L);
+
+#ifdef DEBUG_TEMPO_STUFF
+    cerr << "Composition::realTime2Time: rt.sec " << rt.sec << ", rt.usec "
+	 << rt.usec << ", tempo " << tempo
+	 << ", factor " << factor << ", tsec " << tsec << ", tusec " << tusec << ", t " << t << endl;
+#endif
+
     return (timeT)t;
 }
 
