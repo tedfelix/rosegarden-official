@@ -387,10 +387,14 @@ SegmentMover::SegmentMover(SegmentCanvas *c, RosegardenGUIDoc *d)
 {
     m_foreGuide->setPen(RosegardenGUIColours::MovementGuide);
     m_foreGuide->setBrush(RosegardenGUIColours::MovementGuide);
+    m_foreGuide->setSize(1, m_canvas->canvas()->height());
+    m_foreGuide->setZ(10);
     m_foreGuide->hide();
 
     m_topGuide->setPen(RosegardenGUIColours::MovementGuide);
     m_topGuide->setBrush(RosegardenGUIColours::MovementGuide);
+    m_topGuide->setSize(m_canvas->canvas()->width(), 1);
+    m_topGuide->setZ(10);
     m_topGuide->hide();
 
     RG_DEBUG << "SegmentMover()\n";
@@ -417,18 +421,13 @@ void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
 	m_clickPoint = tPos;
 
         m_foreGuide->setX(int(m_canvas->grid().getRulerScale()->
-                          getXForTime(item->getSegment()->getStartTime())) - 2);
+                          getXForTime(item->getSegment()->getStartTime())));
         m_foreGuide->setY(0);
-        m_foreGuide->setZ(10);
-        m_foreGuide->setSize(2, m_canvas->canvas()->height());
+        m_foreGuide->show();
 
-        m_topGuide->setSize(m_canvas->canvas()->width(), 2);
         m_topGuide->setX(0);
         m_topGuide->setY(int(m_canvas->grid().getYBinCoordinate(
                               item->getSegment()->getTrack())));
-        m_topGuide->setZ(10);
-
-        m_foreGuide->show();
         m_topGuide->show();
 
         if (selector)
@@ -587,6 +586,8 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
     */
 
     m_canvas->setSnapGrain(true);
+    QWMatrix matrix = m_canvas->worldMatrix().invert();
+    QPoint tPos = matrix.map(e->pos());
 
     if (m_currentItem && m_currentItem->isSelected())
     {
@@ -609,8 +610,8 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
 	{
             it->second->showRepeatRect(false);
 
-	    int x = e->pos().x() - m_clickPoint.x(),
-		y = e->pos().y() - m_clickPoint.y();
+	    int x = tPos.x() - m_clickPoint.x(),
+		y = tPos.y() - m_clickPoint.y();
 
 	    const int inertiaDistance = m_canvas->grid().getYSnap() / 3;
 	    if (!m_passedInertiaEdge &&
@@ -674,8 +675,8 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
         guideX = int(m_currentItem->x());
         guideY = int(m_currentItem->y());
 
-        m_foreGuide->setX(guideX - 2);
-        m_topGuide->setY(guideY - 2);
+        m_foreGuide->setX(guideX);
+        m_topGuide->setY(guideY);
 	m_canvas->canvas()->update();
 
 	return FollowHorizontal | FollowVertical;
@@ -716,6 +717,7 @@ void SegmentResizer::handleMouseButtonPress(QMouseEvent *e)
     if (item) {
         RG_DEBUG << "SegmentResizer::handleMouseButtonPress - got item" << endl;
         m_currentItem = item;
+
         if (selector) selector->slotSelectSegmentItem(item);
     }
 }
@@ -751,6 +753,16 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
 int SegmentResizer::handleMouseMove(QMouseEvent *e)
 {
     if (!m_currentItem) return NoFollow;
+
+    // Don't allow Audio segments to resize yet
+    //
+    if (m_currentItem->getSegment()->getType() == Rosegarden::Segment::Audio)
+    {
+        m_currentItem = 0;
+        KMessageBox::information(m_canvas,
+                i18n("You can't yet resize an audio segment!"));
+        return NoFollow;
+    }
 
     m_canvas->setSnapGrain(true);
 
@@ -805,10 +817,14 @@ SegmentSelector::SegmentSelector(SegmentCanvas *c, RosegardenGUIDoc *d)
 
     m_foreGuide->setPen(RosegardenGUIColours::MovementGuide);
     m_foreGuide->setBrush(RosegardenGUIColours::MovementGuide);
+    m_foreGuide->setSize(1, m_canvas->canvas()->height());
+    m_foreGuide->setZ(10);
     m_foreGuide->hide();
 
     m_topGuide->setPen(RosegardenGUIColours::MovementGuide);
     m_topGuide->setBrush(RosegardenGUIColours::MovementGuide);
+    m_topGuide->setSize(m_canvas->canvas()->width(), 1);
+    m_topGuide->setZ(10);
     m_topGuide->hide();
 }
 
@@ -962,16 +978,12 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 
             m_foreGuide->setX(int(m_canvas->grid().getRulerScale()->
                                   getXForTime(item->getSegment()->
-                                      getStartTime())) -2);
+                                      getStartTime())));
             m_foreGuide->setY(0);
-            m_foreGuide->setZ(10);
-            m_foreGuide->setSize(2, m_canvas->canvas()->height());
 
             m_topGuide->setX(0);
             m_topGuide->setY(int(m_canvas->grid().getYBinCoordinate(
                             item->getSegment()->getTrack())));
-            m_topGuide->setZ(10);
-            m_topGuide->setSize(m_canvas->canvas()->width(), 2);
 
             m_foreGuide->show();
             m_topGuide->show();
@@ -1413,8 +1425,8 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
         guideX = int(m_currentItem->x());
         guideY = int(m_currentItem->y());
 
-        m_foreGuide->setX(guideX - 2);
-        m_topGuide->setY(guideY - 2);
+        m_foreGuide->setX(guideX);
+        m_topGuide->setY(guideY);
 
 	m_canvas->canvas()->update();
     }

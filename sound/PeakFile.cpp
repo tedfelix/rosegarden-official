@@ -652,7 +652,7 @@ PeakFile::getPreview(const RealTime &startTime,
             }
             catch(std::string e)
             {
-#define DEBUG_PEAKFILE_CACHE
+//#define DEBUG_PEAKFILE_CACHE
 #ifdef DEBUG_PEAKFILE_CACHE
                 std::cerr << "PeakFile::getPreview - generating peak cache - "
                           << e << std::endl;
@@ -770,16 +770,21 @@ PeakFile::getPreview(const RealTime &startTime,
             }
             else
             {
-                // Get peak value from the cached string
-                //
-                peakData = m_peakCache.substr(peakNumber * m_format *
-                                              m_channels * m_pointsPerValue,
-                                              m_format * m_pointsPerValue);
+                int charNum = peakNumber * m_format * 
+                              m_channels * m_pointsPerValue;
+                int charLength = m_format * m_pointsPerValue;
 
+                // Get peak value from the cached string if 
+                // the value is valid.
+                //
+                if (charNum + charLength <= m_peakCache.length())
+                {
+                    peakData = m_peakCache.substr(charNum, charLength);
 #ifdef DEBUG_PEAKFILE_CACHE
-                std::cout << "PeakFile::getPreview - "
-                          << "hit peakCache" << std::endl;
+                    std::cout << "PeakFile::getPreview - "
+                              << "hit peakCache" << std::endl;
 #endif
+                }
             }
 
 

@@ -170,7 +170,7 @@ public:
 
 protected:
 
-    virtual void updatePreview();
+    virtual void updatePreview(const QWMatrix &matrix);
 
     //--------------- Data members ---------------------------------
 
@@ -191,7 +191,7 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
 {
     // Fetch new set of values
     //
-    updatePreview();
+    updatePreview(painter.worldMatrix());
 
     // If there's nothing to draw then don't draw it
     //
@@ -199,11 +199,7 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
         return;
 
     painter.save();
-
-    painter.translate(rect().x(), rect().y());
-
-        
-    std::vector<float>::iterator it;
+    //painter.translate(rect().x(), rect().y());
 
     // perhaps antialias this somehow at some point
     int height = rect().height()/2 - 3;
@@ -215,54 +211,80 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
     if (m_channels == 0)
     {
         std::cerr << "SegmentAudioPreview::drawShape - m_channels == 0 "
-                 << "problem with audio file" <<std::endl;
-	painter.restore();
+                  << "problem with audio file" <<std::endl;
+	//painter.restore();
         return;
     }
 
-    int width = m_values.size() / (m_channels * (m_showMinima ? 2 : 1));
-    it = m_values.begin();
+    int samplePoints = m_values.size() / (m_channels * (m_showMinima ? 2 : 1));
     float h1, h2, l1 = 0, l2 = 0;
 
-    for (int i = 0; i < width; i++)
+    /*
+    RG_DEBUG << "SegmentAudioPreview::drawShape - "
+             << "samplePoints = " << samplePoints << endl;
+             */
+
+    // The visible width of the rectangle
+    //
+    QWMatrix matrix = painter.worldMatrix();
+    QRect tRect = painter.worldMatrix().map(rect());
+    double sampleScaleFactor = samplePoints / double(tRect.width());
+    double drawScaleFactor = double(rect().width())/double(tRect.width());
+
+    bool state = painter.hasWorldXForm();
+    painter.setWorldXForm(false);
+
+    for (int i = 0; i < tRect.width(); ++i)
     {
+        // For each i work get the sample starting point
+        //
+        int position = int(m_channels * i * sampleScaleFactor);
 
-            if (m_channels == 1) {
-                h1 = *(it++);
-                h2 = h1;
+        if (m_channels == 1) {
 
-                if (m_showMinima)
-                {
-                    l1 = *(it++);
-                    l2 = l1;
-                }
+            h1 = m_values[position++];
+            h2 = h1;
+
+            if (m_showMinima)
+            {
+                l1 = m_values[position++];
+                l2 = l1;
             }
-            else {
+        }
+        else {
 
-                h1 = *(it++);
-                if (m_showMinima) l1 = *(it++);
+            h1 = m_values[position++];
+            if (m_showMinima) l1 = m_values[position++];
 
-                h2 = *(it++);
-                if (m_showMinima) l2 = *(it++);
-                
-            }
+            h2 = m_values[position++];
+            if (m_showMinima) l2 = m_values[position++];
+            
+        }
 
-            painter.setPen(RosegardenGUIColours::SegmentAudioPreview);
-            painter.drawLine(i,
-                             static_cast<int>(halfRectHeight + h1 * height),
-                             i,
-                             static_cast<int>(halfRectHeight - h2 * height));
+        /*
+        std::cout << "PAINT at x = " << tRect.x() + i 
+                  << ", y = " << rect().y() << std::endl;
+                  */
 
-            // For the moment draw it the same colour - the resolution on the
-            // segmentcanvas doens't allow us to tell the difference between
-            // minima and maxima anyway so we might as well ignore it.  Just
-            // don't ask for minima yet.
-            // 
-            //painter.setPen(Qt::white);
-            painter.drawLine(i,
-                             static_cast<int>(halfRectHeight + l1 * height),
-                             i,
-                             static_cast<int>(halfRectHeight - l2 * height));
+        painter.setPen(RosegardenGUIColours::SegmentAudioPreview);
+        painter.drawLine(tRect.x() + i,
+                         tRect.y() + int(halfRectHeight - h1 * height),
+                         tRect.x() + i,
+                         tRect.y() + int(halfRectHeight + h2 * height));
+
+        // For the moment draw it the same colour - the resolution on the
+        // segmentcanvas doens't allow us to tell the difference between
+        // minima and maxima anyway so we might as well ignore it.  Just
+        // don't ask for minima yet.
+        // 
+        //painter.setPen(Qt::white);
+
+        /*
+        painter.drawLine(i,
+                         static_cast<int>(halfRectHeight + l1 * height),
+                         i,
+                         static_cast<int>(halfRectHeight - l2 * height));
+                         */
     }
 
     // perhaps draw an XOR'd label at some point
@@ -274,10 +296,11 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
       painter.drawText(labelRect, Qt::AlignLeft|Qt::AlignVCenter, m_label);
     */
 
+    painter.setWorldXForm(state);
     painter.restore();
 }
 
-void SegmentAudioPreview::updatePreview()
+void SegmentAudioPreview::updatePreview(const QWMatrix &matrix)
 {
     if (isPreviewCurrent()) return;
 
@@ -300,24 +323,20 @@ void SegmentAudioPreview::updatePreview()
         RG_DEBUG << "SegmentAudioPreview::updatePreview() - for file id "
                  << m_segment->getAudioFileId() << " fetching values" <<endl;
 
-        /*
-        SegmentCanvas *segmentCanvas = 
-            dynamic_cast<SegmentCanvas*>(m_parent.parent());
+        QRect tRect = matrix.map(rect());
+        QRect uRect = matrix.map(rect());
 
-        QRect tRect = segmentCanvas->worldMatrix().map(rect());
-        QRect uRect = segmentCanvas->inverseWorldMatrix().map(rect());
         RG_DEBUG << "SegmentAudioPreview::updatePreview "
                  << "rect().width() = " << rect().width()
                  << ", mapped width = " << tRect.width()
                  << ", inverse mapped width = " <<  uRect.width()
                  << endl;
-        */
 
         m_values =
             aFM.getPreview(m_segment->getAudioFileId(),
                            audioStartTime,
                            audioEndTime,
-                           rect().width(),
+                           tRect.width(),
                            m_showMinima); // do we get and show the minima too?
     }
     catch (std::string e)
@@ -356,7 +375,7 @@ public:
     virtual void drawShape(QPainter&);
 
 protected:
-    virtual void updatePreview();
+    virtual void updatePreview(const QWMatrix &matrix);
 
     struct RectCompare {
 	bool operator()(const QRect &r1, const QRect &r2) const {
@@ -383,7 +402,7 @@ SegmentNotationPreview::SegmentNotationPreview(SegmentItem& parent,
 
 void SegmentNotationPreview::drawShape(QPainter& painter)
 {
-    updatePreview();
+    updatePreview(painter.worldMatrix());
     painter.save();
 
     painter.translate(rect().x(), rect().y());
@@ -433,7 +452,7 @@ void SegmentNotationPreview::drawShape(QPainter& painter)
     painter.restore();
 }
 
-void SegmentNotationPreview::updatePreview()
+void SegmentNotationPreview::updatePreview(const QWMatrix & /*matrix*/)
 {
     if (isPreviewCurrent()) return;
 

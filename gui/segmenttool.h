@@ -389,7 +389,7 @@ public:
     QRect rect();
     
 protected:
-    virtual void updatePreview() = 0;
+    virtual void updatePreview(const QWMatrix &matrix) = 0;
 
     //--------------- Data members ---------------------------------
 
