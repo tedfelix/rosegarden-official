@@ -65,7 +65,7 @@ public:
 
     // stop the sequencer
     //
-    virtual void stop() = 0;
+    virtual ASYNC stop() = 0;
 
     // Set the sequencer to a given time
     //
