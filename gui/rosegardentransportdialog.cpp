@@ -41,10 +41,12 @@
 namespace Rosegarden
 {
 
+    // Always make the parent NULL in order to allow the widget to 
+    // "float free" i.e. not share the parent's focus or taskbar entry
 RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
                                                      const char *name,
                                                      WFlags flags):
-    KDialog(parent, name, flags),
+    KDialog(0, name, flags),
     m_transport(0),
     m_lastTenHours(0),
     m_lastUnitHours(0),
