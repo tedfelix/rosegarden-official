@@ -193,14 +193,20 @@ Studio::getMetronome()
 Instrument*
 Studio::assignMidiProgramToInstrument(MidiByte program, bool percussion)
 {
+    // Also defined in Midi.h but we don't use that - not here
+    // in the clean inner sanctum.
+    //
     const MidiByte MIDI_PERCUSSION_CHANNEL = 9;
 
+    MidiDevice *midiDevice;
     std::vector<Device*>::iterator it;
     Rosegarden::InstrumentList::iterator iit;
     Rosegarden::InstrumentList instList;
 
-    MidiDevice *midiDevice;
+    // Instruments that we may return
+    //
     Rosegarden::Instrument *newInstrument = 0;
+    Rosegarden::Instrument *firstInstrument = 0;
 
     // Pass one - search through all MIDI instruments looking for
     // a match that we can re-use.  i.e. if we have a matching 
@@ -217,6 +223,9 @@ Studio::assignMidiProgramToInstrument(MidiByte program, bool percussion)
 
             for (iit = instList.begin(); iit != instList.end(); iit++)
             {
+                if (firstInstrument == 0)
+                    firstInstrument = *iit;
+
                 // If we find an Instrument sending the right program already.
                 //
                 if ((*iit)->sendsProgramChange() &&
@@ -239,7 +248,8 @@ Studio::assignMidiProgramToInstrument(MidiByte program, bool percussion)
                     // Otherwise store the first Instrument for
                     // possible use later.
                     //
-                    if (newInstrument == 0 && !(*iit)->sendsProgramChange())
+                    if (newInstrument == 0
+                            && (*iit)->sendsProgramChange() == false)
                         newInstrument = *iit;
                 }
             }
@@ -247,14 +257,56 @@ Studio::assignMidiProgramToInstrument(MidiByte program, bool percussion)
     }
 
     
-    // Okay, if we've got this far we need to map the first unused Instrument
-    // we came across and return that one
+    // Okay, if we've got this far and we have a newInstrument to use
+    // then use it.
     //
-    newInstrument->setSendProgramChange(true);
-    newInstrument->setProgramChange(program);
+    if (newInstrument != 0)
+    {
+        newInstrument->setSendProgramChange(true);
+        newInstrument->setProgramChange(program);
+    }
+    else // Otherwise we just reuse the first Instrument we found
+        newInstrument = firstInstrument;
+
 
     return newInstrument;
 }
+
+// Just make all of these Instruments available for automatic
+// assignment in the assignMidiProgramToInstrument() method
+// by invalidating the ProgramChange flag.
+//
+// This method sounds much more dramatic than it actually is - 
+// it could probably do with a rename.
+//
+//
+void
+Studio::unassignAllInstruments()
+{
+    MidiDevice *midiDevice;
+    std::vector<Device*>::iterator it;
+    Rosegarden::InstrumentList::iterator iit;
+    Rosegarden::InstrumentList instList;
+
+    for (it = m_devices.begin(); it != m_devices.end(); it++)
+    {
+        midiDevice = dynamic_cast<MidiDevice*>(*it);
+
+        if (midiDevice)
+        {
+            instList = (*it)->getInstruments();
+
+            for (iit = instList.begin(); iit != instList.end(); iit++)
+            {
+                // Only for true MIDI Instruments - not System ones
+                //
+                if ((*iit)->getID() >= MidiInstrumentBase)
+                    (*iit)->setSendProgramChange(false);
+            }
+        }
+    }
+}
+
 
 
 

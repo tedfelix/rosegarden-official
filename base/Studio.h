@@ -68,6 +68,10 @@ public:
     Instrument* assignMidiProgramToInstrument(MidiByte program,
                                               bool percussion);
 
+    // Clear down all the ProgramChange flags in all MIDI Instruments
+    //
+    void unassignAllInstruments();
+
     // Clear down
     void clear();
 

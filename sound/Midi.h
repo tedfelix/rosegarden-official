@@ -113,6 +113,10 @@ const MidiByte MIDI_CONTROLLER_MODULATION  = 0x01;
 const MidiByte MIDI_CONTROLLER_PAN         = 0x0A;
 
 
+// MIDI percussion channel
+const MidiByte MIDI_PERCUSSION_CHANNEL     = 9;
+
+
 }
 
 

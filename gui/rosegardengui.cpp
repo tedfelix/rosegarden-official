@@ -1820,19 +1820,23 @@ RosegardenGUIApp::performAutoload()
     QString autoloadFile =
         KGlobal::dirs()->findResource("appdata", "autoload.rg");
 
-    cout << "AUTOLOAD = " << autoloadFile << endl;
-
     QFileInfo autoloadFileInfo(autoloadFile);
 
     if (!autoloadFileInfo.isReadable())
     {
-        std::cerr << "Can't find autoload file - no default Studio loaded"
-                  << endl;
+        kdDebug(KDEBUG_AREA)
+            << "RosegardenGUIApp::performAutoload() - "
+            << "Can't find autoload file - no default Studio loaded"
+            << endl;
+
         return;
     }
 
     // Else we try to open it
     //
+    kdDebug(KDEBUG_AREA)
+        << "RosegardenGUIApp::performAutoload() - autoloading" << endl;
+
     openDocumentFile(autoloadFile.data());
 
 

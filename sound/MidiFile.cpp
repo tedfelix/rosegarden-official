@@ -512,6 +512,10 @@ MidiFile::convertToRosegarden()
 
     Rosegarden::InstrumentId compInstrument = Rosegarden::MidiInstrumentBase;
 
+    // Clear down the assigned Instruments we already have
+    //
+    m_studio->unassignAllInstruments();
+
     for (Rosegarden::TrackId i = 0; i < m_numberOfTracks; i++ )
     {
         segmentTime = 0;
