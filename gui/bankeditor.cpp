@@ -104,6 +104,30 @@ void MidiBankListViewItem::setLSB(int lsb)
     setText(2, QString().setNum(lsb));
 }
 
+int MidiBankListViewItem::compare(QListViewItem *i, int col, bool ascending) const
+{
+    MidiBankListViewItem* bankItem = dynamic_cast<MidiBankListViewItem*>(i);
+    if (!bankItem || (col != 1 && col != 2)) return MidiDeviceListViewItem::compare(i, col, ascending);
+
+    int thisVal = text(col).toInt(),
+        otherVal = bankItem->text(col).toInt();
+
+    RG_DEBUG << "MidiBankListViewItem::compare - col = " << col
+             << " - thisVal = " << thisVal
+             << " - otherVal = " << otherVal << endl;
+    
+    if (thisVal == otherVal) {
+        if (col == 1) // if sorting on MSB, suborder with LSB
+            return compare(i, 2, ascending);
+        else
+            return 0;
+    }
+
+    // 'ascending' should be ignored according to Qt docs
+    //
+    return (thisVal > otherVal) ? 1 : -1;
+    
+}
 
 //--------------------------------------------------
 
@@ -935,6 +959,8 @@ BankEditorDialog::updateDialog()
     }
 
     for(unsigned int i = 0; i < itemsToDelete.size(); ++i) delete itemsToDelete[i];
+
+    m_listView->sort();
 }
 
 void

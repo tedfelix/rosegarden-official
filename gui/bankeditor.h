@@ -82,6 +82,8 @@ public:
 
     void setMSB(int msb);
     void setLSB(int msb);
+
+    virtual int compare(QListViewItem *i, int col, bool ascending) const;
     
 protected:
 
