@@ -1488,12 +1488,19 @@ void NotationView::slotDebugDump()
 
 
 void
+NotationView::slotSetPointerPosition(timeT time)
+{
+    slotSetPointerPosition(time, m_playTracking);
+}
+
+
+void
 NotationView::slotSetPointerPosition(timeT time, bool scroll)
 {
     Rosegarden::Composition &comp = getDocument()->getComposition();
     int barNo = comp.getBarNumber(time);
 
-    double layoutX = m_hlayout->getXForTime(time);
+    double layoutX = m_hlayout->getXForTimeByEvent(time);
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         if (barNo < m_hlayout->getFirstVisibleBarOnStaff(*m_staffs[i]) ||
@@ -1803,6 +1810,12 @@ void
 NotationView::slotJumpPlaybackToCursor()
 {
     emit jumpPlaybackTo(getInsertionTime());
+}
+
+void
+NotationView::slotToggleTracking()
+{
+    m_playTracking = !m_playTracking;
 }
 
 //----------------------------------------

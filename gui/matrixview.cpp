@@ -108,7 +108,10 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
       m_canvasView(0),
       m_pianoView(0),
       m_lastNote(0),
-      m_quantizations(Rosegarden::BasicQuantizer::getStandardQuantizations())
+      m_quantizations(Rosegarden::BasicQuantizer::getStandardQuantizations()),
+      m_chordNameRuler(0),
+      m_tempoRuler(0),
+      m_playTracking(true)
 {
     MATRIX_DEBUG << "MatrixView ctor\n";
 
@@ -625,6 +628,12 @@ void MatrixView::setupActions()
     new KToggleAction(i18n("&Solo"), icon, 0, this,
                 SLOT(slotToggleSolo()), actionCollection(),
                 "toggle_solo");
+
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+                                                 ("transport-tracking")));
+    (new KToggleAction(i18n("Scro&ll to Follow Playback"), icon, 0, this,
+		       SLOT(slotToggleTracking()), actionCollection(),
+		       "toggle_tracking"))->setChecked(m_playTracking);
 
     new KAction(i18n("Set Loop to Selection"), Key_Semicolon + CTRL, this,
 		SLOT(slotPreviewSelection()), actionCollection(),
@@ -1226,6 +1235,12 @@ MatrixView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
     QString message = i18n("Time: %1 (%2.%3s)").arg(t).arg(rt.sec).arg(msString.rightJustify(3,'0'));
 
     m_hoveredOverAbsoluteTime->setText(message);
+}
+
+void
+MatrixView::slotSetPointerPosition(timeT time)
+{
+    slotSetPointerPosition(time, m_playTracking);
 }
 
 void
@@ -2044,6 +2059,12 @@ void
 MatrixView::slotJumpPlaybackToCursor()
 {
     emit jumpPlaybackTo(getInsertionTime());
+}
+
+void
+MatrixView::slotToggleTracking()
+{
+    m_playTracking = !m_playTracking;
 }
 
 void

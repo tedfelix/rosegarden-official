@@ -211,6 +211,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_fontSizeActionMenu(0),
     m_pannerDialog(new ScrollBoxDialog(this, ScrollBox::FixHeight)),
     m_renderTimer(0),
+    m_playTracking(true),
     m_progressDisplayer(PROGRESS_NONE),
     m_inhibitRefresh(true),
     m_ok(false),
@@ -707,6 +708,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_fontSizeActionMenu(0),
     m_pannerDialog(0),
     m_renderTimer(0),
+    m_playTracking(false),
     m_progressDisplayer(PROGRESS_NONE),
     m_inhibitRefresh(true),
     m_ok(false),
@@ -1897,6 +1899,12 @@ void NotationView::setupActions()
     new KToggleAction(i18n("&Solo"), icon, 0, this,
                 SLOT(slotToggleSolo()), actionCollection(),
                 "toggle_solo");
+
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+                                                 ("transport-tracking")));
+    (new KToggleAction(i18n("Scro&ll to Follow Playback"), icon, 0, this,
+		       SLOT(slotToggleTracking()), actionCollection(),
+		       "toggle_tracking"))->setChecked(m_playTracking);
 
     new KAction(i18n("Set Loop to Selection"), Key_Semicolon + CTRL, this,
 		SLOT(slotPreviewSelection()), actionCollection(),

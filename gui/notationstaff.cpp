@@ -1096,12 +1096,18 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
     params.setBeamed(false);
     params.setIsOnLine(heightOnStaff % 2 == 0);
     params.removeMarks();
+    params.setSafeVertDistance(0);
 
     bool primary = false;
+    int safeVertDistance = 0;
 
     if (elt->event()->get<Bool>(properties.CHORD_PRIMARY_NOTE, primary)
 	&& primary) {
 	params.setMarks(Rosegarden::Marks::getMarks(*elt->event()));
+	if (up && note < Note::Semibreve) {
+	    safeVertDistance = m_notePixmapFactory->getStemLength();
+	    safeVertDistance = std::max(safeVertDistance, int(stemLength));
+	}
     }
 
     long tieLength = 0;
@@ -1150,14 +1156,21 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
             params.setNextPartialBeams(nextPartialBeams);
             params.setWidth(width);
             params.setGradient((double)gradient / 100.0);
+	    if (up) safeVertDistance = stemLength;
 
         } else {
             params.setBeamed(false);
             params.setDrawStem(false);
         }
     }
-    
+
+    if (heightOnStaff < 7) {
+	int gap = (((7 - heightOnStaff) * m_notePixmapFactory->getLineSpacing()) / 2);
+	if (safeVertDistance < gap) safeVertDistance = gap;
+    }
+
     params.setStemLength(stemLength);
+    params.setSafeVertDistance(safeVertDistance);
     setTuplingParameters(elt, params);
 
     QCanvasNotationSprite *item = 0;

@@ -580,6 +580,7 @@ void SegmentItem::setShowPreview(bool preview)
 void SegmentItem::setPreview()
 {
     delete m_preview;
+    m_preview = 0;
     if (!m_segment) return;
 
     if (m_segment->getType() == Rosegarden::Segment::Audio)
@@ -651,6 +652,8 @@ void SegmentItem::drawShape(QPainter& painter)
 
         painter.drawRect(intersection);
     }
+
+    RG_DEBUG << "SegmentItem::drawShape: preview is " << m_preview << " and m_showPreview " << m_showPreview << endl;
 
     if (m_preview && m_showPreview) {
 /*!!!
@@ -884,6 +887,7 @@ void SegmentItem::showRepeatRect(bool s)
 {
     //!!! This doesn't really work terribly well... need a better fix
     // for the remaining preview trails when you move a segment
+/*!!!
     m_suspendPreview = !s;
     if (m_showPreview) {
 	if (m_suspendPreview) {
@@ -893,7 +897,7 @@ void SegmentItem::showRepeatRect(bool s)
 	    setPreview();
 	}
     }
-
+*/
     if (m_repeatRectangle) {
     
 	if (s)

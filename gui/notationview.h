@@ -504,7 +504,14 @@ public slots:
      * doesn't affect playback).  This is also at liberty to highlight
      * some notes, if it so desires...
      */
-    void slotSetPointerPosition(Rosegarden::timeT position, bool scroll = true);
+    void slotSetPointerPosition(Rosegarden::timeT position);
+
+    /**
+     * As above, but with the ability to specify whether to scroll or
+     * not to follow the pointer (above method uses the play tracking
+     * setting to determine that)
+     */
+    void slotSetPointerPosition(Rosegarden::timeT position, bool scroll);
 
     /**
      * Update the recording segment if it's one of the ones in the
@@ -560,6 +567,9 @@ public slots:
 
     /// Set playback pointer to insert cursor position (affects playback)
     void slotJumpPlaybackToCursor();
+
+    /// Toggle tracking with the position pointer during playback
+    void slotToggleTracking();
 
     /// Change the current staff to the one preceding the current one
     void slotCurrentStaffUp();
@@ -880,6 +890,8 @@ protected:
     KActionMenu     *m_fontSizeActionMenu;
     ScrollBoxDialog *m_pannerDialog;
     QTimer *m_renderTimer;
+
+    bool m_playTracking;
 
     std::vector<std::pair<int, int> > m_pendingInsertableNotes;
 

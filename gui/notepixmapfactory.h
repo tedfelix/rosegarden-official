@@ -52,16 +52,19 @@ public:
     void setNoteDotShifted(bool shifted)  { m_dotShifted       = shifted;   }
     void setAccidentalShift(int shift)    { m_accidentalShift  = shift;     }
     void setAccExtraShift(bool extra)     { m_accidentalExtra  = extra;     }
+
     void setDrawFlag(bool df)             { m_drawFlag         = df;        }
     void setDrawStem(bool ds)             { m_drawStem         = ds;        }
     void setStemGoesUp(bool up)           { m_stemGoesUp       = up;        }
     void setStemLength(int length)        { m_stemLength       = length;    }
     void setLegerLines(int lines)         { m_legerLines       = lines;     }
     void setSlashes(int slashes)          { m_slashes          = slashes;   }
+
     void setSelected(bool selected)       { m_selected         = selected;  }
     void setHighlighted(bool highlighted) { m_highlighted      = highlighted;}
     void setQuantized(bool quantized)     { m_quantized        = quantized; }
     void setIsOnLine(bool isOnLine)       { m_onLine           = isOnLine;  }
+    void setSafeVertDistance(int safe)    { m_safeVertDistance = safe;      }
 
     void setBeamed(bool beamed)           { m_beamed           = beamed;    }
     void setNextBeamCount(int tc)         { m_nextBeamCount    = tc;        }
@@ -110,6 +113,7 @@ private:
     bool    m_highlighted;
     bool    m_quantized;
     bool    m_onLine;
+    int     m_safeVertDistance;
 
     bool    m_beamed;
     int     m_nextBeamCount;
@@ -253,8 +257,8 @@ protected:
     void makeRoomForAccidental(Rosegarden::Accidental, bool cautionary, int shift, bool extra);
     void drawAccidental(Rosegarden::Accidental, bool cautionary);
 
-    void makeRoomForMarks(bool isStemmed, const NotePixmapParameters &params);
-    void drawMarks(bool isStemmed, const NotePixmapParameters &params);
+    void makeRoomForMarks(bool isStemmed, const NotePixmapParameters &params, int stemLength);
+    void drawMarks(bool isStemmed, const NotePixmapParameters &params, int stemLength);
 
     void makeRoomForLegerLines(const NotePixmapParameters &params);
     void drawLegerLines(const NotePixmapParameters &params);

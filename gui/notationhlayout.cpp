@@ -1681,12 +1681,17 @@ bool NotationHLayout::getTimeSignaturePosition(Staff &staff,
 Rosegarden::timeT
 NotationHLayout::getTimeForX(double x)
 {
-//!!!???
     return RulerScale::getTimeForX(x);
 }
 
 double
-NotationHLayout::getXForTime(Rosegarden::timeT time)
+NotationHLayout::getXForTime(Rosegarden::timeT t)
+{
+    return RulerScale::getXForTime(t);
+}
+
+double
+NotationHLayout::getXForTimeByEvent(Rosegarden::timeT time)
 {
 //    NOTATION_DEBUG << "NotationHLayout::getXForTime(" << time << ")" << endl;
 

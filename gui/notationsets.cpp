@@ -653,13 +653,13 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     }
 
     // some magic numbers
-/*    if (diff > 4) beam.gradient = 25;
-      else*/ if (diff > 3) beam.gradient = 18;
+/*!!! see below
+    if (diff > 3) beam.gradient = 18;
     else if (diff > 1) beam.gradient = 10;
     else beam.gradient = 0;
 
     if (initialHeight < finalHeight) beam.gradient = -beam.gradient;
-
+*/
     // Now, we need to judge the height of the beam such that the
     // nearest note of the whole group, the nearest note of the first
     // chord and the nearest note of the final chord are all at least
@@ -676,6 +676,17 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     int  initialX = (int)(*initialNote)->getLayoutX();
     int   finalDX = (int)  (*finalNote)->getLayoutX() - initialX;
     int extremeDX = (int)(*extremeNote)->getLayoutX() - initialX;
+
+    int spacing = staff.getNotePixmapFactory(m_type == Grace).getLineSpacing();
+
+    if (finalDX > 0) {
+	if (diff > 3) diff = 3;
+	else if (diff > 0) --diff;
+	beam.gradient = (diff * spacing * 100) / (finalDX * 2);
+    } else {
+	beam.gradient = 0;
+    }
+    if (initialHeight < finalHeight) beam.gradient = -beam.gradient;
 
     int   finalY  = staff.getLayoutYForHeight(finalHeight);
     int extremeY  = staff.getLayoutYForHeight(extremeHeight);
@@ -696,16 +707,13 @@ NotationGroup::calculateBeam(NotationStaff &staff)
 	(*getShortestElement())->event()->dump(std::cerr);
     }
 
-    int lt = staff.getNotePixmapFactory(m_type == Grace).getNoteBodyHeight() +
- 	     staff.getNotePixmapFactory(m_type == Grace).getStaffLineThickness();
-
     // minimal stem lengths at start, middle-extreme and end of beam
     int sl = staff.getNotePixmapFactory(m_type == Grace).getStemLength();
-    int ml = lt * 2;
+    int ml = spacing * 2;
     int el = sl;
 
     if (shortestNoteType < Note::Semiquaver) {
-	int off = lt * (Note::Semiquaver - shortestNoteType);
+	int off = spacing * (Note::Semiquaver - shortestNoteType);
 	sl += off;
 	ml += off;
 	el += off;

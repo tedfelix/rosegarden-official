@@ -213,6 +213,7 @@ NotePixmapParameters::NotePixmapParameters(Note::Type noteType,
     m_highlighted(false),
     m_quantized(false),
     m_onLine(false),
+    m_safeVertDistance(0),
     m_beamed(false),
     m_nextBeamCount(0),
     m_thisPartialBeams(false),
@@ -543,7 +544,7 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
     int stemLength = getStemLength(params);
 
     if (params.m_marks.size() > 0) {
-	makeRoomForMarks(isStemmed, params);
+	makeRoomForMarks(isStemmed, params, stemLength);
     }
 
     if (params.m_legerLines != 0) {
@@ -698,7 +699,7 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
     }
 
     if (params.m_marks.size() > 0) {
-	drawMarks(isStemmed, params);
+	drawMarks(isStemmed, params, stemLength);
     }
 
     if (params.m_legerLines != 0) {
@@ -850,36 +851,62 @@ NotePixmapFactory::drawAccidental(Accidental a, bool cautionary)
 
 void
 NotePixmapFactory::makeRoomForMarks(bool isStemmed,
-				    const NotePixmapParameters &params)
+				    const NotePixmapParameters &params,
+				    int stemLength)
 {
     int height = 0, width = 0;
     int gap = m_noteBodyHeight / 5 + 1;
 
-    for (unsigned int i = 0; i < params.m_marks.size(); ++i) {
+    std::vector<Rosegarden::Mark> normalMarks = params.getNormalMarks();
+    std::vector<Rosegarden::Mark> aboveMarks = params.getAboveMarks();
 
-	if (!Rosegarden::Marks::isTextMark(params.m_marks[i])) {
+    for (std::vector<Rosegarden::Mark>::iterator i = normalMarks.begin();
+	 i != normalMarks.end(); ++i) {
 
-	    NoteCharacter character
-		(m_font->getCharacter
-		 (m_style->getMarkCharName(params.m_marks[i])));
+	if (!Rosegarden::Marks::isTextMark(*i)) {
+
+	    NoteCharacter character(m_font->getCharacter(m_style->getMarkCharName(*i)));
 	    height += character.getHeight() + gap;
 	    if (character.getWidth() > width) width = character.getWidth();
 
 	} else {
 	    // Inefficient to do this here _and_ in drawMarks, but
 	    // text marks are not all that common
-	    QString text = strtoqstr(Rosegarden::Marks::getTextFromMark
-				     (params.m_marks[i]));
+	    QString text = strtoqstr(Rosegarden::Marks::getTextFromMark(*i));
 	    QRect bounds = m_textMarkFontMetrics.boundingRect(text);
 	    height += bounds.height() + gap;
 	    if (bounds.width() > width) width = bounds.width();
 	}
     }
 
-    if (isStemmed && params.m_stemGoesUp) {
-	m_below += height + 1;
-    } else {
-	m_above += height + 1;
+    if (height > 0) {
+	if (isStemmed && params.m_stemGoesUp) {
+	    m_below += height + 1;
+	} else {
+	    m_above += height + 1;
+	}
+    }
+
+    height = 0;
+
+    if (params.m_safeVertDistance > 0 && !aboveMarks.empty()) {
+	m_above = std::max(m_above, params.m_safeVertDistance);
+    }
+
+    for (std::vector<Rosegarden::Mark>::iterator i = aboveMarks.begin();
+	 i != aboveMarks.end(); ++i) {
+
+	NoteCharacter character(m_font->getCharacter(m_style->getMarkCharName(*i)));
+	height += character.getHeight() + gap;
+	if (character.getWidth() > width) width = character.getWidth();
+    }
+
+    if (height > 0) {
+	if (isStemmed && params.m_stemGoesUp && params.m_safeVertDistance == 0) {
+	    m_above += stemLength + height + 1;
+	} else {
+	    m_above += height + 1;
+	}
     }
 
     m_left = std::max(m_left, width/2 - m_noteBodyWidth/2);
@@ -888,47 +915,74 @@ NotePixmapFactory::makeRoomForMarks(bool isStemmed,
 
 void
 NotePixmapFactory::drawMarks(bool isStemmed,
-			     const NotePixmapParameters &params)
+			     const NotePixmapParameters &params,
+			     int stemLength)
 {
     int gap = m_noteBodyHeight / 5 + 1;
     int dy = gap;
 
-    for (unsigned int i = 0; i < params.m_marks.size(); ++i) {
+    std::vector<Rosegarden::Mark> normalMarks = params.getNormalMarks();
+    std::vector<Rosegarden::Mark> aboveMarks = params.getAboveMarks();
 
-	bool markAbove = !(isStemmed && params.m_stemGoesUp);
+    bool normalMarksAreAbove = !(isStemmed && params.m_stemGoesUp);
 
-	if (!Rosegarden::Marks::isTextMark(params.m_marks[i])) {
+    for (std::vector<Rosegarden::Mark>::iterator i = normalMarks.begin();
+	 i != normalMarks.end(); ++i) {
+
+	if (!Rosegarden::Marks::isTextMark(*i)) {
 
 	    NoteCharacter character
-		(m_font->getCharacter
-		 (m_style->getMarkCharName(params.m_marks[i]),
+		(m_font->getCharacter(m_style->getMarkCharName(*i),
 		  m_inPrinterMethod ? NoteFont::Printer : NoteFont::Screen,
-		  !markAbove));
+		  !normalMarksAreAbove));
 
 	    int x = m_left + m_noteBodyWidth/2 - character.getWidth()/2;
-	    int y = (markAbove ? (m_above - dy - character.getHeight() - 1) :
-			         (m_above + m_noteBodyHeight + m_borderY*2 + dy));
+	    int y = (normalMarksAreAbove ?
+		     (m_above - dy - character.getHeight() - 1) :
+		     (m_above + m_noteBodyHeight + m_borderY*2 + dy));
 
 	    m_p->drawNoteCharacter(x, y, character);
 	    dy += character.getHeight() + gap;
 
 	} else {
 
-	    QString text = strtoqstr(Rosegarden::Marks::getTextFromMark
-				     (params.m_marks[i]));
+	    QString text = strtoqstr(Rosegarden::Marks::getTextFromMark(*i));
 	    QRect bounds = m_textMarkFontMetrics.boundingRect(text);
 	    
 	    m_p->painter().setFont(m_textMarkFont);
 	    if (!m_inPrinterMethod) m_p->maskPainter().setFont(m_textMarkFont);
 
 	    int x = m_left + m_noteBodyWidth/2 - bounds.width()/2;
-	    int y = (markAbove ? (m_above - dy - 3) :
-				 (m_above + m_noteBodyHeight + m_borderY*2 +
-				  dy + bounds.height() + 1));
+	    int y = (normalMarksAreAbove ?
+		     (m_above - dy - 3) :
+		     (m_above + m_noteBodyHeight + m_borderY*2 + dy + bounds.height() + 1));
 
 	    m_p->drawText(x, y, text);
 	    dy += bounds.height() + gap;
 	}
+    }
+
+    if (!normalMarksAreAbove) dy = gap;
+    if (params.m_safeVertDistance > 0) {
+	dy += params.m_safeVertDistance;
+    } else if (isStemmed && params.m_stemGoesUp) {
+	dy += stemLength;
+    }
+
+    for (std::vector<Rosegarden::Mark>::iterator i = aboveMarks.begin();
+	 i != aboveMarks.end(); ++i) {
+
+	NoteCharacter character
+	    (m_font->getCharacter
+	     (m_style->getMarkCharName(*i),
+	      m_inPrinterMethod ? NoteFont::Printer : NoteFont::Screen,
+	      false));
+
+	int x = m_left + m_noteBodyWidth/2 - character.getWidth()/2;
+	int y = m_above - dy - character.getHeight() - 1;
+	
+	m_p->drawNoteCharacter(x, y, character);
+	dy += character.getHeight() + gap;
     }
 }
 
@@ -1101,7 +1155,7 @@ NotePixmapFactory::makeRoomForStemAndFlags(int flagCount, int stemLength,
     }	    
 
     if (params.m_stemGoesUp) {
-	s1.setY(s0.y() - stemLength);
+	s1.setY(s0.y() - stemLength + getStaffLineThickness());
     } else {
 	s1.setY(s0.y() + stemLength);
     }
@@ -1198,7 +1252,7 @@ NotePixmapFactory::drawStem(const NotePixmapParameters &,
 			    const QPoint &s0, const QPoint &s1)
 {
     for (int i = 0; i < getStemThickness(); ++i) {
-	m_p->drawLine (m_left + s0.x() + i, m_above + s0.y(),
+	m_p->drawLine(m_left + s0.x() + i, m_above + s0.y(),
 		      m_left + s1.x() + i, m_above + s1.y());
     }
 }
@@ -1363,11 +1417,8 @@ NotePixmapFactory::drawBeams(const QPoint &s1,
                 
     int width = params.m_width;
     double grad = params.m_gradient;
-
     bool smooth = m_font->isSmooth();
-
-    int gap = thickness - 1;
-    if (gap < 1) gap = 1;
+    int spacing = getLineSpacing();
 
     int sign = (params.m_stemGoesUp ? 1 : -1);
 
@@ -1376,8 +1427,12 @@ NotePixmapFactory::drawBeams(const QPoint &s1,
     if (!smooth) startY -= sign;
     else if (grad > -0.01 && grad < 0.01) startY -= sign;
 
+    if (m_inPrinterMethod) {
+	startX += getStemThickness() / 2;
+    }
+
     for (int j = 0; j < commonBeamCount; ++j) {
-        int y = sign * j * (thickness + gap);
+        int y = sign * j * spacing;
         drawShallowLine(startX, startY + y, startX + width,
                         startY + (int)(width*grad) + y,
                         thickness, smooth);
@@ -1390,7 +1445,7 @@ NotePixmapFactory::drawBeams(const QPoint &s1,
     
     if (params.m_thisPartialBeams) {
         for (int j = commonBeamCount; j < beamCount; ++j) {
-            int y = sign * j * (thickness + gap);
+	    int y = sign * j * spacing;
             drawShallowLine(startX, startY + y, startX + partWidth,
                             startY + (int)(partWidth*grad) + y,
                             thickness, smooth);
@@ -1403,7 +1458,7 @@ NotePixmapFactory::drawBeams(const QPoint &s1,
         startY += (int)((width - partWidth) * grad);
         
         for (int j = commonBeamCount; j < params.m_nextBeamCount; ++j) {
-            int y = sign * j * (thickness + gap);
+	    int y = sign * j * spacing;
             drawShallowLine(startX, startY + y, startX + partWidth,
                             startY + (int)(partWidth*grad) + y,
                             thickness, smooth);

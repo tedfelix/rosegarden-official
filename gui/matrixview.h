@@ -283,6 +283,7 @@ public slots:
     /// cursor moves
     void slotJumpCursorToPlayback();
     void slotJumpPlaybackToCursor();
+    void slotToggleTracking();
 
     /// Canvas actions slots
 
@@ -323,8 +324,13 @@ public slots:
     /**
      * Set the time pointer position during playback
      */
+    void slotSetPointerPosition(Rosegarden::timeT time);
+
+    /**
+     * Set the time pointer position during playback
+     */
     void slotSetPointerPosition(Rosegarden::timeT time,
-				bool scroll = true);
+				bool scroll);
 
     /**
      * Set the insertion pointer position (from the bottom LoopRuler)
@@ -545,7 +551,6 @@ protected:
     ZoomSlider<double> *m_vZoomSlider;
     QLabel             *m_zoomLabel;
  
-
     // Hold our matrix quantization values and snap values
     //
     std::vector<Rosegarden::timeT> m_quantizations;
@@ -557,6 +562,8 @@ protected:
     QWidget        *m_tempoRuler;
 
     std::vector<std::pair<int, int> > m_pendingInsertableNotes;
+
+    bool m_playTracking;
 };
 
 // Commented this out - was a MatrixView inner class, but we get a warning

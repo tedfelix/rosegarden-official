@@ -191,8 +191,18 @@ public:
 
     /**
      * Returns the X coord corresponding to the given time value.
+     * This RulerScale method works by interpolating between bar lines
+     * (the inverse of the way getTimeForX works), and should be used
+     * for any rulers associated with the layout.
      */
     virtual double getXForTime(Rosegarden::timeT time);
+
+    /**
+     * Returns the X coord corresponding to the given time value.
+     * This method works by interpolating between event positions, and
+     * should be used for position pointer tracking during playback.
+     */
+    virtual double getXForTimeByEvent(Rosegarden::timeT time);
 
     /**
      * Returns true if the specified bar has the correct length

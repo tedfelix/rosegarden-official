@@ -806,6 +806,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     fileCompressedDevice->setOrigFileName("audio/x-rosegarden");
     fileCompressedDevice->open(IO_WriteOnly);
     QTextStream outStream(fileCompressedDevice);
+    outStream.setEncoding(QTextStream::UnicodeUTF8);
 
     // output XML header
     //
@@ -881,10 +882,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     outStream << "</rosegarden-data>\n";
 
     delete fileCompressedDevice; // DO NOT USE outStream AFTER THIS POINT
-
-//     bool okay = writeToFile(filename, outText);
-//     if (!okay) return false;
-
+    
     RG_DEBUG << endl << "RosegardenGUIDoc::saveDocument() finished\n";
 
     if (!autosave) {
@@ -913,6 +911,7 @@ bool RosegardenGUIDoc::exportStudio(const QString& filename,
     fileCompressedDevice->setOrigFileName("audio/x-rosegarden-device");
     fileCompressedDevice->open(IO_WriteOnly);
     QTextStream outStream(fileCompressedDevice);
+    outStream.setEncoding(QTextStream::UnicodeUTF8);
 
     // output XML header
     //
@@ -929,9 +928,6 @@ bool RosegardenGUIDoc::exportStudio(const QString& filename,
     outStream << "</rosegarden-data>\n";
 
     delete fileCompressedDevice;
-    
-//     bool okay = writeToFile(filename, outText);
-//     if (!okay) return false;
     
     RG_DEBUG << endl << "RosegardenGUIDoc::exportStudio() finished\n";
     return true;

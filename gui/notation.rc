@@ -200,6 +200,7 @@
   <Action name="playback_pointer_to_cursor" />
   <Action name="cursor_to_playback_pointer" />
   <Action name="toggle_solo"/>
+  <Action name="toggle_tracking"/>
   </Menu>
 
 <Menu name="Tools">
@@ -334,6 +335,7 @@
   <Action name="playback_pointer_to_cursor" />
   <Action name="cursor_to_playback_pointer" />
   <Action name="toggle_solo"/>
+  <Action name="toggle_tracking"/>
 </ToolBar>
 
 <ToolBar name="Notes Toolbar" newline="true">
