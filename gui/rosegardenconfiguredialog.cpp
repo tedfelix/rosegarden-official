@@ -430,10 +430,8 @@ LatencyConfigurationPage::LatencyConfigurationPage(KConfig *cfg,
     m_jackPlayback->setMinValue(0);
     layout->addWidget(new QLabel("0", frame), 2, 1);
 
-    m_jackPlayback->setMaxValue(2000);
-    layout->addWidget(new QLabel("2000", frame), 2, 3);
-
-    m_jackPlayback->setTickInterval(25);
+    m_jackPlayback->setMaxValue(1000);
+    layout->addWidget(new QLabel("1000", frame), 2, 3);
 
     int jackRecordValue = (m_cfg->readLongNumEntry(
                               "jackrecordlatencyusec", 0)/1000) +
@@ -454,10 +452,8 @@ LatencyConfigurationPage::LatencyConfigurationPage(KConfig *cfg,
     m_jackRecord->setMinValue(0);
     layout->addWidget(new QLabel("0", frame), 4, 1);
 
-    m_jackRecord->setMaxValue(2000);
+    m_jackRecord->setMaxValue(1000);
     layout->addWidget(new QLabel("2000", frame), 4, 3);
-
-    m_jackRecord->setTickInterval(25);
 
     addTab(frame, i18n("JACK Latency"));
 #endif  // HAVE_JACK

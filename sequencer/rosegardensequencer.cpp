@@ -51,8 +51,7 @@ RosegardenSequencerApp::RosegardenSequencerApp():
     m_loopStart(0, 0),
     m_loopEnd(0, 0),
     m_sendAlive(true),
-    m_guiCount(0),       // how many GUIs have we known?
-    m_suspended(false)
+    m_guiCount(0)       // how many GUIs have we known?
 {
     // Without DCOP we are nothing
     QCString realAppId = kapp->dcopClient()->registerAs(kapp->name(), false);
@@ -184,11 +183,6 @@ RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
     arg << (unsigned char)firstFetch;
 
     Rosegarden::MappedComposition *mC = new Rosegarden::MappedComposition();
-
-    // Don't do the call() if we're suspended
-    //
-    if (m_suspended)
-        return mC;
 
     // Loop timing
     //
@@ -432,6 +426,7 @@ RosegardenSequencerApp::jumpTo(long posSec, long posUsec)
 void
 RosegardenSequencerApp::processRecordedMidi()
 {
+
     QByteArray data; //, replyData;
     //QCString replyType;
     QDataStream arg(data, IO_WriteOnly);
@@ -526,11 +521,6 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
                                const Rosegarden::RealTime &readAhead,
                                int recordMode)
 {
-    // Don't do the call() if we're suspended
-    //
-    if (m_suspended)
-        return 1;
-
     TransportStatus localRecordMode = (TransportStatus) recordMode;
 
     if (localRecordMode == STARTING_TO_RECORD_MIDI)
@@ -874,23 +864,6 @@ RosegardenSequencerApp::sequencerAlive()
 
     std::cout << "RosegardenSequencerApp::sequencerAlive() - "
               << "trying to tell GUI that we're alive" << std::endl;
-}
-
-void
-RosegardenSequencerApp::suspend(bool value)
-{
-    m_suspended = value;
-
-    if (m_suspended)
-    {
-        std::cout << "RosegardenSequencerApp::suspend() - sequencer suspended"
-                  << std::endl;
-    }
-    else
-    {
-        std::cout << "RosegardenSequencerApp::suspend() - sequencer continuing"
-                  << std::endl;
-    }
 }
 
 void

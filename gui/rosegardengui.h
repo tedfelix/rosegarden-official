@@ -200,6 +200,12 @@ public:
     virtual void setPointerPosition(const long &posSec, const long &posUSec);
 
     /**
+     * If we've called stopping() at the SequenceManager then we'll
+     * have set a flag that we must check for using this method.
+     */
+    void checkForStop();
+
+    /**
      * Start the sequencer auxiliary process
      * (built in the 'sequencer' directory)
      *

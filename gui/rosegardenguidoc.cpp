@@ -32,6 +32,7 @@
 #include <dcopclient.h>
 #include <kmessagebox.h>
 #include <kapp.h>
+#include <kconfig.h>
 
 #include <string>
 #include <vector>
@@ -1221,6 +1222,29 @@ RosegardenGUIDoc::stopRecordingAudio()
     // now add the Segment
     std::cout << "RosegardenGUIDoc::stopRecordingAudio - "
               << "got recorded segment" << std::endl;
+
+    // now move the segment back by the jack record latency
+    //
+    KConfig* config = kapp->config();
+
+    int recordSec = config->readLongNumEntry("jackrecordlatencysec", 0);
+    int recordUSec = config->readLongNumEntry("jackrecordlatencyusec", 0);
+
+    Rosegarden::RealTime jackLatency(recordSec, recordUSec);
+    Rosegarden::RealTime adjustedStartTime =
+        m_composition.getElapsedRealTime(m_recordSegment->getStartTime()) -
+        jackLatency;
+
+    Rosegarden::timeT shiftedStartTime =
+        m_composition.getElapsedTimeForRealTime(adjustedStartTime);
+
+    std::cout << "RosegardenGUIDoc::stopRecordingAudio - "
+              << "shifted recorded audio segment by "
+              <<  m_recordSegment->getStartTime() - shiftedStartTime
+              << " clicks" << std::endl;
+
+    m_recordSegment->setStartTime(shiftedStartTime);
+
     // something in the record segment (that's why it was added
     // to the composition)
     m_commandHistory->addCommand (new SegmentRecordCommand(m_recordSegment));

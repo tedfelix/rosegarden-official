@@ -181,10 +181,6 @@ public:
     //
     virtual void alive();
 
-    // Suspend - don't forget to continue
-    //
-    virtual void suspend(bool value);
-
     // Set both the audio latencies
     //
     virtual void setAudioLatencies(long playTimeSec,
@@ -308,10 +304,6 @@ private:
     //
     bool m_sendAlive;
     int  m_guiCount;
-
-    // Are we currently suspended?
-    //
-    bool m_suspended;
 
 };
  

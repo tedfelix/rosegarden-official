@@ -130,19 +130,9 @@ int main(int argc, char *argv[])
         //
         app.processEvents(5);
 
-        // Update internal clock and send pointer position
-        // change event to GUI - this is the heartbeat of
-        // the Sequencer - it doesn't tick over without
-        // this call.
-        //
-        //
-        if (roseSeq->getStatus() == PLAYING ||
-            roseSeq->getStatus() == RECORDING_MIDI ||
-            roseSeq->getStatus() == RECORDING_AUDIO)
-        {
-            roseSeq->updateClocks();
-        }
 
+        // Do the main conditional loop
+        //
         if(roseSeq)
         {
             switch(roseSeq->getStatus())
@@ -243,6 +233,26 @@ int main(int argc, char *argv[])
             roseSeq->notifySequencerStatus();
 
         lastSeqStatus = roseSeq->getStatus();
+
+        // Update internal clock and send pointer position
+        // change event to GUI - this is the heartbeat of
+        // the Sequencer - it doesn't tick over without
+        // this call.
+        //
+        // At the updateClocks() point any pending stop() from
+        // the gui is processed.  The updateClocks() will 
+        // make the gui check for a stop request and if so
+        // immediately call this process back - we position
+        // this call just before the sleep period deliberately
+        // to catch this process. [rwb 7/02]
+        //
+        //
+        if (roseSeq->getStatus() == PLAYING ||
+            roseSeq->getStatus() == RECORDING_MIDI ||
+            roseSeq->getStatus() == RECORDING_AUDIO)
+        {
+            roseSeq->updateClocks();
+        }
 
         // Pause for breath while we're gnashing this loop (5 milliseconds)
         //

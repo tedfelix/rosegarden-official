@@ -459,6 +459,15 @@ SegmentSplitCommand::execute()
     }
 
     m_detached = false;
+
+    // Some special things for audio segments
+    //
+    if (m_segment->getType() == Rosegarden::Segment::Audio)
+    {
+        m_newSegment->setAudioFileID(m_segment->getAudioFileID());
+        //m_newSegment->setAudioStartTime
+    }
+
 }
 
 void

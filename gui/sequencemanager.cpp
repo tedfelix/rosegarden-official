@@ -23,6 +23,7 @@
 #include <dcopclient.h>
 #include <qpushbutton.h>
 #include <qcursor.h>
+#include <qtimer.h>
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -43,7 +44,17 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
     m_transportStatus(STOPPED),
     m_soundSystemStatus(Rosegarden::NO_SEQUENCE_SUBSYS),
     m_transport(transport)
+    /*
+    m_clearToSend(false),
+    m_clearToSendInterval(15),
+    m_sendStop(false)
+    */
 {
+    /*
+    m_clearToSendTimer = new QTimer(this);
+    connect(m_clearToSendTimer, SIGNAL(timeout()),
+            this, SLOT(slotClearToSendElapsed()));
+            */
 }
 
 
@@ -67,6 +78,19 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
                                    const Rosegarden::RealTime &sliceEnd,
                                    bool firstFetch)
 {
+    // If we're clear to send at this end then don't service
+    // any sequencer request.
+    //
+    /*
+    if (m_clearToSend)
+    {
+        cout << "SEQUENCER SNUNK THROUGH" << endl;
+
+        m_mC.clear();
+        return &m_mC;
+    }
+    */
+
     Composition &comp = m_doc->getComposition();
     Studio &studio = m_doc->getStudio();
   
@@ -355,6 +379,18 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
         }
     }
 
+    // Set clearToSend time
+    //
+    /*
+    if(m_clearToSendTimer->isActive())
+        m_clearToSendTimer->stop();
+
+    // Set timer and set the flag for the duration of this timer
+    //
+    m_clearToSendTimer->start(m_clearToSendInterval, true);
+    m_clearToSend = true;
+    */
+
     return &m_mC;
 }
 
@@ -374,7 +410,7 @@ SequenceManager::play()
         m_transportStatus == RECORDING_MIDI ||
         m_transportStatus == RECORDING_AUDIO )
     {
-        stop();
+        stopping();
         return;
     }
 
@@ -472,8 +508,38 @@ SequenceManager::play()
 }
 
 void
+SequenceManager::stopping()
+{
+    // Do this here rather than in stop() to avoid any potential
+    // race condition (we use setPointerPosition() during stop()).
+    //
+    if (m_transportStatus == STOPPED)
+    {
+        m_doc->setPointerPosition(0);
+        return;
+    }
+
+    m_sendStop = true;
+}
+
+// We did try to make the sequencer "suspend" while we performed
+// the stop() call on it but it even got wise to this.  Now we
+// set a flag here in stopping() and wait until it's clear to
+// proceed (just after a getSequencerSlice() has completed).
+//
+// Appears to work until the next time.  Overall the DCOP contention
+// mechanism appears to be non-existent.  I'm sure there's probably
+// a proper way of handling this situation but I've not come across
+// it yet.
+//
+//
+void
 SequenceManager::stop()
 {
+    // If the sendStop flag isn't set we can't stop yet
+    //
+    if (m_sendStop == false) return;
+
     // Toggle off the buttons - first record
     //
     if ((m_transportStatus == RECORDING_MIDI ||
@@ -487,18 +553,8 @@ SequenceManager::stop()
     if (m_transport->MetronomeButton->state() == QButton::On)
         m_transport->MetronomeButton->setOn(false);
 
-    if (m_transportStatus == STOPPED)
-    {
-        m_doc->setPointerPosition(0);
-        return;
-    }
-
     // Now playback
     m_transport->PlayButton->setOn(false);
-
-    // Suspend the sequencer so we can call() it in safety
-    //
-    suspendSequencer(true);
 
     // "call" the sequencer with a stop so we get a synchronous
     // response - then we can fiddle about with the audio file
@@ -514,21 +570,17 @@ SequenceManager::stop()
     //
     QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
 
-    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
+    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
                                   ROSEGARDEN_SEQUENCER_IFACE_NAME,
                                   "stop()",
-                                  data/*, replyType, replyData, true*/))
+                                  data, replyType, replyData, true))
     {
         // failed - pop up and disable sequencer options
         throw(i18n("Failed to contact Rosegarden sequencer"));
     }
+
+    // restore
     QApplication::restoreOverrideCursor();
-
-    // Unsuspend the sequencer
-    //
-    suspendSequencer(false);
-
-    // "call" the sequencer with a stop so we get a synchronous
 
     // if we're recording MIDI or Audio then tidy up the recording Segment
     if (m_transportStatus == RECORDING_MIDI)
@@ -553,6 +605,7 @@ SequenceManager::stop()
     // ok, we're stopped
     //
     m_transportStatus = STOPPED;
+    m_sendStop = false;
 }
 
 // Jump to previous bar
@@ -607,6 +660,7 @@ SequenceManager::notifySequencerStatus(TransportStatus status)
 {
     // for the moment we don't do anything fancy
     m_transportStatus = status;
+
 }
 
 
@@ -653,7 +707,7 @@ SequenceManager::record()
     if (m_transportStatus == RECORDING_MIDI ||
         m_transportStatus == RECORDING_AUDIO)
     {
-        stop();
+        stopping();
         return;
     }
 
@@ -919,7 +973,7 @@ SequenceManager::setPlayStartTime(const timeT &time)
         m_transportStatus == RECORDING_MIDI ||
         m_transportStatus == RECORDING_AUDIO )
     {
-        stop();
+        stopping();
         return;
     }
     
@@ -1173,6 +1227,10 @@ SequenceManager::preparePlayback()
 
     // Send the MappedComposition if it's got anything in it
     sendMappedComposition(mC);
+
+    // set the timer gap for
+    //m_clearToSendInterval = 15;
+
 }
 
 void
@@ -1258,26 +1316,6 @@ SequenceManager::processRecordedAudio(const Rosegarden::RealTime &time,
 }
 
 
-// Suspend the call() processing of the sequencer so that we
-// can talk to it properly.  Don't forget to reastablish the
-// normal processing after you've completed your chat.
-//
-void
-SequenceManager::suspendSequencer(bool value)
-{
-    QByteArray data;
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    streamOut << value;
-
-    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "suspend(bool)", data))
-    {
-      throw(i18n("Failed to contact Rosegarden sequencer to attempt suspend"));
-    }
-}
-
 void
 SequenceManager::sendAudioLatencies()
 {
@@ -1299,6 +1337,15 @@ SequenceManager::sendAudioLatencies()
       throw(i18n("Failed to contact Rosegarden sequencer to send audio latenices"));
     }
 }
+
+/*
+void
+SequenceManager::slotClearToSendElapsed()
+{
+    //m_clearToSend = false;
+}
+*/
+
 
 }
 

@@ -1570,6 +1570,9 @@ void RosegardenGUIApp::setPointerPosition(const long &posSec,
     if (elapsedTime >= comp.getEndMarker())
         slotStop();
 
+    // Check for a pending stop every time the clock is updated.
+    //
+    checkForStop();
     return;
 }
 
@@ -2200,18 +2203,12 @@ void RosegardenGUIApp::slotPlay()
 
 }
 
-// Send stop request to Sequencer if playing, else
-// return to start of segment
+// Send stop request to Sequencer.  This'll set the flag 
+// to attempt a stop next time a good window appears.
+//
 void RosegardenGUIApp::slotStop()
 {
-    try
-    {
-        m_seqManager->stop();
-    }
-    catch(QString s)
-    {
-        KMessageBox::error(this, s);
-    }
+    m_seqManager->stopping();
 }
 
 // Jump to previous bar
@@ -2823,6 +2820,21 @@ RosegardenGUIApp::slotDeleteAudioFile(unsigned int id)
         }
     }
 
+}
+
+void
+RosegardenGUIApp::checkForStop()
+{
+    if (m_seqManager == 0) return;
+
+    try
+    {
+        m_seqManager->stop();
+    }
+    catch(QString s)
+    {
+        KMessageBox::error(this, s);
+    }
 }
 
 

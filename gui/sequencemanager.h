@@ -42,6 +42,7 @@
 //
 
 class RosegardenGUIDoc;
+class QTimer;
 
 namespace Rosegarden
 {
@@ -65,7 +66,13 @@ public:
 
     // Transport controls
     void play();
+
+    // We don't call stop() directly - using stopping() and then
+    // call stop().
+    //
     void stop();
+
+    void stopping();
     void rewind();
     void fastforward();
     void record();
@@ -118,8 +125,12 @@ public:
     //
     void sendAudioLatencies();
 
-private:
+public slots:
+    // Empty the m_clearToSend flag
+    //
+    //void slotClearToSendElapsed();
 
+private:
     Rosegarden::MappedComposition m_mC;
     RosegardenGUIDoc *m_doc;
 
@@ -129,6 +140,22 @@ private:
 
     // pointer to the transport dialog
     RosegardenTransportDialog *m_transport;
+
+    // A two part stop mechanism:
+    //
+    // o user activates stop button and sets this bool to true
+    // o next time the sequencer calls setPointerPosition() we
+    //   check for this flag and immediately call the stop() on
+    //   the sequencer.  We don't have to wait long and this 
+    //   means we don't get twisted up with the getSequencerSlice
+    //   blocking call from the sequencer.
+    //
+    // Note the positioning of relative elements in the sequencer
+    // are deliberate to give us a good chance to get the stop()
+    // call in before another fetch.
+    //
+    //
+    bool    m_sendStop;
 
 };
 
