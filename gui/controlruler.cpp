@@ -298,6 +298,7 @@ ControlItem::ControlItem(ControlRuler* ruler, ElementAdapter* elementAdapter,
     setX(xx);
     setY(canvas()->height());
     updateFromValue();
+    setEnabled(false);
     //RG_DEBUG << "ControlItem x = " << x() << " - y = " << y() << " - width = " << width << endl;
     show();
 }
@@ -332,7 +333,7 @@ void ControlItem::draw(QPainter &painter)
 {
     if (!isEnabled())
         updateFromValue();
-    
+
     setBrush(m_controlRuler->valueToColour(m_controlRuler->getMaxItemValue(), m_value));
 
     QCanvasRectangle::draw(painter);
@@ -340,18 +341,20 @@ void ControlItem::draw(QPainter &painter)
 
 void ControlItem::handleMouseButtonPress(QMouseEvent*)
 {
-//     RG_DEBUG << "ControlItem::handleMouseButtonPress()\n";
+//     RG_DEBUG << "ControlItem::handleMouseButtonPress()" << this << endl;
     setEnabled(true);
 }
 
 void ControlItem::handleMouseButtonRelease(QMouseEvent*)
 {
-//     RG_DEBUG << "ControlItem::handleMouseButtonRelease()\n";
+//     RG_DEBUG << "ControlItem::handleMouseButtonRelease()"  << this << endl;
     setEnabled(false);
 }
 
 void ControlItem::handleMouseMove(QMouseEvent*, int /*deltaX*/, int deltaY)
 {
+//     RG_DEBUG << "ControlItem::handleMouseMove()" << this << endl;
+
     // height is always negative
     //
 
@@ -367,7 +370,6 @@ void ControlItem::handleMouseMove(QMouseEvent*, int /*deltaX*/, int deltaY)
     
     setHeight(-absNewHeight);
     setValue(m_controlRuler->heightToValue(getHeight()));
-    canvas()->update();
 }
 
 void ControlItem::handleMouseWheel(QWheelEvent *)
@@ -715,10 +717,20 @@ void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
     for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
 
         if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
-            if (item->isSelected()) {
+
+            if (item->isSelected()) { // if the item which was clicked
+                                      // on is part of a selection,
+                                      // propagate mousepress on all
+                                      // selected items
 
                 item->handleMouseButtonPress(e);
-
+                
+                for (QCanvasItemList::Iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
+                    if (ControlItem *selectedItem = dynamic_cast<ControlItem*>(*it)) {
+                        selectedItem->handleMouseButtonPress(e);
+                    }
+                }
+                
 
             } else { // select it
             
@@ -812,8 +824,7 @@ void ControlRuler::contentsMouseMoveEvent(QMouseEvent* e)
     int value = 0;
 
     for (QCanvasItemList::Iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
-        if (ControlItem *item = dynamic_cast<ControlItem*>(*it))
-        {
+        if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
             item->handleMouseMove(e, deltaX, deltaY);
 //            ElementAdapter* adapter = item->getElementAdapter();
 
@@ -825,6 +836,7 @@ void ControlRuler::contentsMouseMoveEvent(QMouseEvent* e)
             }
         }
     }
+    canvas()->update();
 
     m_numberFloat->show();
 
