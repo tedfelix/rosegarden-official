@@ -17,8 +17,15 @@ ensure that artsd is running, can find the relevant Rosegarden
 server stubs and that you've mapped the sequencer output to a relevant
 port.
 
-So far the playback has only been tested under KDE2.1 (Mandrake 8.0)
-with an SBLive and arts-0.6.0.   Results are patchy to say the least!
+
+  Update 19.9.2001
+
+  This far results are patchy.  Testing on my machine gives random
+  results - sometimes playback is acceptable, sometimes it is lagged
+  and choppy.  Guillaume's testing so far has been successful - playback
+  seeming to be solid enough.  This could still be a system issue or an
+  artsd issue or a Rosegarden issue though.
+
 
 
 Building aRts

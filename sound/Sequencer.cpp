@@ -347,9 +347,11 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mappedComp,
     if (usecFromStart < 0)
     {
       secFromStart--;
-      secFromStart += 1000000;
+      usecFromStart += 1000000;
     }
-    cout << "TIME " << secFromStart << " : " << usecFromStart << endl;
+
+    cout << "Event sent to aRts at " << secFromStart << "s & "
+         << usecFromStart << "ms" << endl;
 
     // and log it on the Note OFF stack
     NoteOffEvent *noteOffEvent =
