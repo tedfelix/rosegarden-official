@@ -603,7 +603,7 @@ MmappedSegmentsMetaIterator::getPlayingAudioFiles(const Rosegarden::RealTime &so
             // then flag as such.
             // 
             if (evt.getType() == MappedEvent::Audio && 
-                songPosition > evt.getEventTime() &&
+                songPosition > evt.getEventTime() - Rosegarden::RealTime(1, 0) &&
                 songPosition < evt.getEventTime() + evt.getDuration())
             {
 

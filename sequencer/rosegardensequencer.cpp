@@ -1165,13 +1165,13 @@ RosegardenSequencerApp::setAudioMonitoringInstrument(unsigned int id)
 Rosegarden::MappedRealTime
 RosegardenSequencerApp::getAudioPlayLatency()
 {
-    return Rosegarden::MappedRealTime(m_sequencer->getAudioPlayLateny());
+    return Rosegarden::MappedRealTime(m_sequencer->getAudioPlayLatency());
 }
 
 Rosegarden::MappedRealTime
 RosegardenSequencerApp::getAudioRecordLatency()
 {
-    return Rosegarden::MappedRealTime(m_sequencer->getAudioRecordLateny());
+    return Rosegarden::MappedRealTime(m_sequencer->getAudioRecordLatency());
 }
 
 // Initialise the virtual studio with a few audio faders and
@@ -1484,13 +1484,18 @@ void RosegardenSequencerApp::rationalisePlayingAudio(const std::vector<MappedEve
             if ((*it)->getRuntimeSegmentId() == (*sIt)->getRuntimeSegmentId() &&
                 (*it)->getInstrument() ==  (*sIt)->getInstrument() &&
                 //(*it)->getStartTime() == (*sIt)->getEventTime() &&
-                (*it)->getEndTime() == (*sIt)->getEventTime() + (*sIt)->getDuration())
+                (*it)->getEndTime() + m_playLatency == (*sIt)->getEventTime() + (*sIt)->getDuration())
                 //(*it)->getStartIndex() == (*sIt)->getAudioStartMarker())
             {
                 //std::cout << "MATCHED SEGMENT AND DRIVER" << std::endl;
                 segment = true;
                 break;
             }
+
+            //std::cout << "DRIVER END TIME  = " << (*it)->getEndTime() << std::endl;
+            //std::cout << "SEGMENT END TIME = " << (*sIt)->getEventTime() + (*sIt)->getDuration() 
+                      //<< std::endl;
+            //std::cout << "LATENCY = " << m_sequencer->getAudioPlayLatency() << std::endl;
         }
 
         if (segment == false)
@@ -1510,11 +1515,15 @@ void RosegardenSequencerApp::rationalisePlayingAudio(const std::vector<MappedEve
         }
     }
 
-    // Check for audio that should be that isn't
+    // Check for audio that should be that isn't - remember that the segment slice we
+    // get from the mmappedsegmentiterator it advanced anyway so ensure that the the
+    // segment slice we have is actually in the playing region.
     //
     for (std::vector<MappedEvent*>::const_iterator sIt = segmentAudio.begin();
          sIt != segmentAudio.end(); ++sIt)
     {
+        if (m_songPosition < (*sIt)->getEventTime()) continue;
+
         bool driver = false;
         for (std::vector<PlayableAudioFile*>::const_iterator it = driverAudio.begin();
              it != driverAudio.end(); ++it)
@@ -1522,7 +1531,7 @@ void RosegardenSequencerApp::rationalisePlayingAudio(const std::vector<MappedEve
             if ((*it)->getRuntimeSegmentId() == (*sIt)->getRuntimeSegmentId() &&
                 (*it)->getInstrument() ==  (*sIt)->getInstrument() &&
                 //(*it)->getStartTime() == (*sIt)->getEventTime() &&
-                (*it)->getEndTime() == (*sIt)->getEventTime() + (*sIt)->getDuration())
+                (*it)->getEndTime() + m_playLatency == (*sIt)->getEventTime() + (*sIt)->getDuration())
                 //(*it)->getStartIndex() == (*sIt)->getAudioStartMarker())
             {
                 driver = true;
@@ -1537,12 +1546,13 @@ void RosegardenSequencerApp::rationalisePlayingAudio(const std::vector<MappedEve
             //
             MappedEvent audioSegment(m_metaIterator->getAudioSegment((*sIt)->getRuntimeSegmentId()));
 
-            audioSegment.setAudioStartMarker(audioSegment.getAudioStartMarker() + m_songPosition);
+            audioSegment.setAudioStartMarker(audioSegment.getAudioStartMarker() + m_songPosition 
+                                             - m_playLatency);
 
             // Reset duration firstly
             //
             audioSegment.setDuration(audioSegment.getDuration() - 
-                            (m_songPosition - audioSegment.getEventTime()));
+                            (m_songPosition - audioSegment.getEventTime()) - m_playLatency);
 
             // Set start time to now
             //

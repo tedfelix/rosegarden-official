@@ -246,10 +246,10 @@ public:
 
     // Audio latenices from audio driver
     //
-    RealTime getAudioPlayLateny()
+    RealTime getAudioPlayLatency()
         { return m_soundDriver->getAudioPlayLatency(); }
 
-    RealTime getAudioRecordLateny()
+    RealTime getAudioRecordLatency()
         { return m_soundDriver->getAudioRecordLatency(); }
 
     // Sample rate
