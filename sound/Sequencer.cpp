@@ -34,11 +34,13 @@ Sequencer::Sequencer():
                        _playing(false),
                        _recordStatus(ASYNCHRONOUS_MIDI),
                        _ppq(960),
-                       _recordTrack(0)
+                       _recordTrack(0),
+                       _songPosition(0),
+                       _songPlayPosition(0),
+                       _songRecordPosition(0),
+                       _playStartTime(0, 0),
+                       _recordStartTime(0, 0)
 {
-  _songTime.usec = 0;
-  _songTime.sec = 0;
-
   initializeMidi();
 }
 
@@ -109,6 +111,7 @@ Sequencer::initializeMidi()
 
 }
 
+/*
 // Increment the song position in microseconds
 // and increment the seconds value as required.
 //
@@ -119,6 +122,7 @@ Sequencer::incrementSongPosition(long inc)
   _songTime.sec += _songTime.usec / 1000000;
   _songTime.usec %= 1000000;
 }
+*/
 
 void
 Sequencer::record(const RecordStatus& recordStatus)
@@ -136,13 +140,12 @@ Sequencer::record(const RecordStatus& recordStatus)
     if ( !_playing )
     {
       _playing = true;
-      _songTime.sec -= 2;  // arbitrary for the moment
+      //_songTime.sec -= 2;  // arbitrary for the moment
     }
 
     // set status and the record start position
     _recordStatus = RECORD_MIDI;
-    _recordStartTime = _midiRecordPort.time();
-    _songTime = _recordStartTime;
+    _playStartTime = _recordStartTime = _midiRecordPort.time();
 
     cout << "Recording Started at : " << _recordStartTime.sec << " : "
                                       << _recordStartTime.usec << endl;
@@ -166,11 +169,17 @@ Sequencer::play()
    {
      _playing = true;
      _playStartTime = _midiRecordPort.time();
+
+     // record where we started playing from
+     _songPlayPosition = _songPosition;
    }
    else
    {
-     // jump back to last start position and carry on playing
-     _songTime = _playStartTime; 
+     // jump back to last start position in MIDI clocks
+     _songPosition = _songPlayPosition;
+
+     // reset the playStartTime to now  like this
+     _playStartTime = deltaTime(_midiPlayPort.time(), _playStartTime);
    }
 }
 
@@ -187,16 +196,15 @@ Sequencer::stop()
   else
   {
     // if already stopped then return to zero
-    _songTime.usec = 0;
-    _songTime.sec = 0;
+    _songPosition = 0;
   }
 }
 
 Arts::TimeStamp
-Sequencer::recordTime(Arts::TimeStamp ts)
+Sequencer::deltaTime(const Arts::TimeStamp &ts1, const Arts::TimeStamp &ts2)
 {
-  long usec = ts.usec - _recordStartTime.usec;
-  long sec = ts.sec - _recordStartTime.sec;
+  long usec = ts1.usec - ts2.usec;
+  long sec = ts1.sec - ts2.sec;
 
   if ( usec < 0 )
   {
@@ -204,25 +212,14 @@ Sequencer::recordTime(Arts::TimeStamp ts)
     usec += 1000000;
   }
 
-  // Also should check to see if the clock has
-  // cycled into negative or back to zero.
-  // We just flag this for the moment rather than
-  // doing anything about it.
-  // 
-  if ( sec < 0 )
-  {
-    cerr << "NEGATIVE TimeStamp returned - clock cycled around or other problem"
-         << endl;
-    exit(1);
-  }
+  assert( sec >= 0 );
 
   return (Arts::TimeStamp(sec, usec));
 }
 
-
 void
-Sequencer::processMidi(const Arts::MidiCommand &midiCommand,
-                       const Arts::TimeStamp &timeStamp)
+Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
+                         const Arts::TimeStamp &timeStamp)
 {
   Rosegarden::MidiByte channel;
   Rosegarden::MidiByte message;
@@ -303,6 +300,26 @@ Sequencer::processMidi(const Arts::MidiCommand &midiCommand,
       cout << "OTHER EVENT" << endl;
       break;
   }
+}
+
+void
+Sequencer::updateSongPosition()
+{
+  unsigned int newSongPosition = convertToAbsoluteTime(
+                                    deltaTime(_midiPlayPort.time(),
+                                              _playStartTime));
+  assert(newSongPosition >= _songPosition);
+
+  _songPosition = newSongPosition;
+}
+
+void
+Sequencer::processMidiOut(const Rosegarden::Composition &composition)
+{
+
+  // send the event out
+  // _midiPlayPort.processEvent(midiEvent)
+
 }
 
 }

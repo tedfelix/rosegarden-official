@@ -30,6 +30,7 @@
 #include <map>
 #include <arts/artsmidi.h>
 #include <arts/soundserver.h>
+#include "Composition.h"
 #include "Midi.h"
 #include "MidiRecord.h"
 #include "MidiEvent.h"
@@ -66,39 +67,43 @@ namespace Rosegarden
     //
     void record(const RecordStatus& recordStatus);
 
+    // get a vector of recorded events from aRTS
     inline vector<Arts::MidiEvent>* getMidiQueue()
       { return _midiRecordPort.getQueue(); }
-
-    inline void sendMidiEvent(const Arts::MidiEvent &midiEvent)
-      { _midiPlayPort.processEvent(midiEvent); }
-    
-    void incrementSongPosition(long inc);
-    long songPositionSeconds() { return _songTime.sec; }
-    long songPositionMicroSeconds() { return _songTime.usec; }
 
     // Our current recording status.  Asynchronous record states
     // mean that we're just accepting asynchronous events but not
     // recording them - they are forwarded onto the GUI for level/
-    // activity purposes.
+    // activity display purposes.
     //
     RecordStatus recordStatus() { return _recordStatus; }
-
+    
     inline bool isPlaying() { return _playing; }
 
+    // set and get tempo
     const unsigned int tempo() const { return _tempo; }
-    const unsigned int resolution() const { return _ppq; }
-
     void tempo(const unsigned int &tempo) { _tempo = tempo; }
 
-    // get the TimeStamp from the beginning of recording
-    Arts::TimeStamp recordTime(Arts::TimeStamp ts);
+    // resolution - required?
+    const unsigned int resolution() const { return _ppq; }
 
-    // process a raw Arts MIDI event into internal representation
-    void processMidi(const Arts::MidiCommand &midiCommand,
-                     const Arts::TimeStamp &timeStamp);
+    // update the song position to the current time according
+    // to the MIDI Timers
+    void updateSongPosition();
+
+    const unsigned int songPosition() const { return _songPosition; }
+
+    // get the difference in TimeStamps
+    Arts::TimeStamp deltaTime(const Arts::TimeStamp &ts1,
+                              const Arts::TimeStamp &ts2);
+
+    // get the TimeStamp from the beginning of recording
+    inline Arts::TimeStamp recordTime(Arts::TimeStamp const &ts)
+      { return (deltaTime(ts, _recordStartTime)); }
 
     // Perform conversion from seconds and microseconds (TimeStamp)
-    // to our internal clock representation.
+    // to our internal MIDI clock representation.  Make sure you do
+    // this from the normalised time (i.e. working from zero).
     //
     inline unsigned int convertToAbsoluteTime(const Arts::TimeStamp &timeStamp)
     {
@@ -106,6 +111,14 @@ namespace Rosegarden
                               ( ( (double) timeStamp.usec ) / 1000000.0 ) ) *
                                   (double) _tempo / 60.0 );
     }
+
+    // process a raw aRTS MIDI event into internal representation
+    void processMidiIn(const Arts::MidiCommand &midiCommand,
+                      const Arts::TimeStamp &timeStamp);
+
+    // Process a chunk of Rosegarden Composition into MIDI events and send
+    // them to aRTS.
+    void processMidiOut(const Rosegarden::Composition &composition);
 
   private:
 
@@ -120,9 +133,15 @@ namespace Rosegarden
     RosegardenMidiRecord _midiRecordPort;
     Arts::MidiPort _midiPlayPort;
 
-    // some positions in time
+    // A distinction - songPositions are in MIDI clocks
+    // from the beginning of the composition..
     //
-    Arts::TimeStamp _songTime;
+    unsigned int _songPosition;
+    unsigned int _songPlayPosition;
+    unsigned int _songRecordPosition;
+
+    // TimeStamps mark the actual times of the commencement
+    // of play or record.  These are for internal use only.
     Arts::TimeStamp _playStartTime;
     Arts::TimeStamp _recordStartTime;
 

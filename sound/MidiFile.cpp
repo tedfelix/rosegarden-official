@@ -385,7 +385,7 @@ MidiFile::parseTrack(ifstream* midiFile, const unsigned int &trackNum)
 const Rosegarden::Composition
 MidiFile::convertToRosegarden()
 {
-  MidiTrackIterator midiTrack, noteOffSearch;
+  MidiTrackIterator midiEvent, noteOffSearch;
   Rosegarden::Track *rosegardenTrack;
   Rosegarden::Event *rosegardenEvent;
   unsigned long trackTime;
@@ -394,6 +394,9 @@ MidiFile::convertToRosegarden()
   bool notesOnTrack;
 
   Rosegarden::Composition composition(_numberOfTracks);
+
+  // preset tempo
+  composition.setTempo(0);
 
   for ( unsigned int i = 0; i < _numberOfTracks; i++ )
   {
@@ -405,37 +408,37 @@ MidiFile::convertToRosegarden()
     // returns the sum of the current Midi Event delta
     // time plus the argument.
     //
-    for ( midiTrack = (_midiComposition[i].begin());
-          midiTrack != (_midiComposition[i].end());
-          ++midiTrack )
+    for ( midiEvent = (_midiComposition[i].begin());
+          midiEvent != (_midiComposition[i].end());
+          ++midiEvent )
     {
-      trackTime = midiTrack->addTime(trackTime);
+      trackTime = midiEvent->addTime(trackTime);
     }
 
     // Consolidate NOTE ON and NOTE OFF events into a
     // NOTE ON with a duration and delete the NOTE OFFs.
     //
-    for ( midiTrack = (_midiComposition[i].begin());
-          midiTrack != (_midiComposition[i].end());
-          midiTrack++ )
+    for ( midiEvent = (_midiComposition[i].begin());
+          midiEvent != (_midiComposition[i].end());
+          midiEvent++ )
     {
-      if (midiTrack->messageType() == MIDI_NOTE_ON)
+      if (midiEvent->messageType() == MIDI_NOTE_ON)
       {
         // flag that we've found notes on this track
         if (!notesOnTrack) notesOnTrack = true;
 
         noteOffFound = false;
 
-        for ( noteOffSearch = midiTrack; 
+        for ( noteOffSearch = midiEvent; 
               noteOffSearch != (_midiComposition[i].end());
               noteOffSearch++ )
         {
-          if ( ( midiTrack->channelNumber() == noteOffSearch->channelNumber() )
+          if ( ( midiEvent->channelNumber() == noteOffSearch->channelNumber() )
                 && ( ( noteOffSearch->messageType() == MIDI_NOTE_OFF ) ||
                    ( ( noteOffSearch->messageType() == MIDI_NOTE_ON ) &&
                      ( noteOffSearch->velocity() == 0x00 ) ) ) )
           {
-            midiTrack->duration(noteOffSearch->time() - midiTrack->time());
+            midiEvent->duration(noteOffSearch->time() - midiEvent->time());
             _midiComposition[i].erase(noteOffSearch);
             noteOffFound = true;
             break;
@@ -444,7 +447,7 @@ MidiFile::convertToRosegarden()
           // set duration to the length of the track if not found
           if (noteOffFound == false)
           {
-            midiTrack->duration(noteOffSearch->time() - midiTrack->time());
+            midiEvent->duration(noteOffSearch->time() - midiEvent->time());
           }
         }
       }
@@ -457,23 +460,117 @@ MidiFile::convertToRosegarden()
       rosegardenTrack->setInstrument(compositionTrack);
       rosegardenTrack->setStartIndex(0);
 
-      for ( midiTrack = (_midiComposition[i].begin());
-            midiTrack != (_midiComposition[i].end());
-            midiTrack++ )
+      for ( midiEvent = (_midiComposition[i].begin());
+            midiEvent != (_midiComposition[i].end());
+            midiEvent++ )
       {
-        switch(midiTrack->messageType())
+
+        if (midiEvent->isMeta())
+        {
+          switch(midiEvent->metaMessageType())
+          {
+            case MIDI_SEQUENCE_NUMBER:
+              //cout << "SEQ" << endl;
+              break;
+
+            case MIDI_TEXT_EVENT:
+              //cout << "TEXT" << endl;
+              break;
+
+            case MIDI_COPYRIGHT_NOTICE:
+              //cout << "COPYRIGHT" << endl;
+              break;
+
+            case MIDI_TRACK_NAME:
+              //cout << "TRACK" << endl;
+              break;
+
+            case MIDI_INSTRUMENT_NAME:
+              //cout << "INSTRUMENT" << endl;
+              break;
+
+            case MIDI_LYRIC:
+              //cout << "LYRIC" << endl;
+              break;
+
+            case MIDI_TEXT_MARKER:
+              //cout << "TEXT" << endl;
+              break;
+
+            case MIDI_CUE_POINT:
+              //cout << "CUE" << endl;
+              break;
+
+            case MIDI_CHANNEL_PREFIX:
+              //cout << "CNAHH" << endl;
+              break;
+
+            case MIDI_CHANNEL_PREFIX_OR_PORT:
+              //cout << "CHANN" << endl;
+              break;
+
+            case MIDI_END_OF_TRACK:
+              //cout << "EOT" << endl;
+              break;
+
+            case MIDI_SET_TEMPO:
+              //cout << "TEMPO" << endl;
+              break;
+
+            case MIDI_SMPTE_OFFSET:
+              //cout << "SMPTE" << endl;
+              break;
+
+            case MIDI_TIME_SIGNATURE:
+              //cout << "TIME SIG" << endl;
+              break;
+
+            case MIDI_KEY_SIGNATURE:
+              //cout << "KEY SIG" << endl;
+              break;
+
+            case MIDI_SEQUENCER_SPECIFIC:
+              //cout << "SEQ SPEC" << endl;
+              break;
+
+            default:
+              cout << "UNKNOWN" << endl;
+              break;
+          } 
+
+        }
+
+        switch(midiEvent->messageType())
         {
           case MIDI_NOTE_ON:
             // create and populate event
             rosegardenEvent = new Event;
-            rosegardenEvent->setAbsoluteTime(midiTrack->time());
+            rosegardenEvent->setAbsoluteTime(midiEvent->time());
             rosegardenEvent->setType(Note::EventType);
-            rosegardenEvent->set<Int>("pitch", midiTrack->note());
-            rosegardenEvent->setDuration(midiTrack->duration());
+            rosegardenEvent->set<Int>("pitch", midiEvent->note());
+            rosegardenEvent->setDuration(midiEvent->duration());
 
             // insert into Track
             rosegardenTrack->insert(rosegardenEvent);
 
+            break;
+
+          case MIDI_NOTE_OFF:
+            cout << "MIDI OFF SHOULD NOT EXIST" << endl;
+
+          case MIDI_POLY_AFTERTOUCH:
+            break;
+
+          case MIDI_CTRL_CHANGE:
+            break;
+
+          case MIDI_PROG_CHANGE:
+            break;
+
+          case MIDI_CHNL_AFTERTOUCH:
+            break;
+
+          case MIDI_PITCH_BEND:
             break;
 
           default:
@@ -489,6 +586,12 @@ MidiFile::convertToRosegarden()
         compositionTrack++;
       }
     }
+  }
+
+  // set a default tempo
+  if (composition.getTempo() == 0)
+  {
+    composition.setTempo(120);
   }
 
   return(composition);
