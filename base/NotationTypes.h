@@ -50,12 +50,14 @@ public:
     static const std::string Alto;
     static const std::string Bass;
 
-    Clef();
+    Clef() : m_clef(DefaultClef.m_clef) { }
+
     Clef(const Event &e)
         /* throw (Event::NoData, Event::BadType, BadClefName) */;
     Clef(const std::string &s)
         /* throw (BadClefName) */;
-    Clef(const Clef &c);
+
+    Clef(const Clef &c) : m_clef(c.m_clef) { }
 
     Clef &operator=(const Clef &c);
 
@@ -236,6 +238,13 @@ public:
     };
 
     struct TooManyDots { };
+    
+    struct MalformedNoteName {
+        std::string name;
+        std::string reason;
+        MalformedNoteName(std::string n, std::string r) :
+            name(n), reason(r) { }
+    };
 
 
     // define both sorts of names; some people prefer the American
@@ -265,11 +274,33 @@ public:
         Longest             = 7;
 
 
-    Note(Type type, int dots = 0)
-        /* throw (BadType, TooManyDots) */;
+    Note(Type type, int dots = 0) /* throw (BadType, TooManyDots) */ :
+    m_type(type), m_dots(dots) {
+        
+        // I'm not sure how this'll interact with compiler
+        // optimisation -- I'm hoping throw() is implemented as a
+        // single out-of-line function call, in which case it'll be
+        // fine to inline this constructor in code like
+        // "Note(Note::Crotchet, false).getDuration()"
+
+        if (m_type < Shortest || m_type > Longest) throw BadType();
+    
+        // We don't permit dotted hemis, double-dotted demis etc
+        // because we can't represent notes short enough to make up
+        // the rest of the beat (as we have no notes shorter than a
+        // hemi).  And if we got to double-dotted hemis, triple-dotted
+        // demis etc, we couldn't even represent their durations in
+        // our duration units.  Still, throwing this exception is
+        // probably going to cause mayhem -- might be happier just
+        // setting m_dots back to m_type if it's found to be larger
+
+        if (m_dots > m_type) throw TooManyDots();
+    }
+
     Note(const std::string &s)
-        /* throw (BadType) */;
-    Note(const Note &);
+        /* throw (BadType, MalformedNoteName) */;
+    Note(const Note &n) : m_type(n.m_type), m_dots(n.m_dots) { }
+
     virtual ~Note();
 
     Note &operator=(const Note &n);
@@ -283,7 +314,9 @@ public:
 	return (m_type >= Crotchet) ? 0 : (Crotchet - m_type);
     }
 
-    int  getDuration()  const;
+    int  getDuration()  const {
+        return m_dots ? getDurationAux() : (m_shortestTime * (1 << m_type));
+    }
 
     // these default to whatever I am:
     std::string getEnglishName (Type type = -1, int dots = 0) const;
@@ -295,6 +328,8 @@ public:
 private:
     Type m_type;
     int m_dots;
+
+    int  getDurationAux()  const;
 
     // a time & effort saving device; if changing this, change
     // TimeSignature::m_crotchetTime etc too
@@ -311,7 +346,9 @@ public:
     static const TimeSignature DefaultTimeSignature;
     struct BadTimeSignature { };
 
-    TimeSignature();
+    TimeSignature() :
+        m_numerator(DefaultTimeSignature.m_numerator),
+        m_denominator(DefaultTimeSignature.m_denominator) { }
 
     TimeSignature(int numerator, int denominator)
         /* throw (BadTimeSignature) */;
@@ -319,7 +356,9 @@ public:
     TimeSignature(const Event &e)
         /* throw (Event::NoData, Event::BadType, BadTimeSignature) */;
     
-    TimeSignature(const TimeSignature &ts);
+    TimeSignature(const TimeSignature &ts) :
+        m_numerator(ts.m_numerator),
+        m_denominator(ts.m_denominator) { }
 
     virtual ~TimeSignature();
 

@@ -75,15 +75,17 @@ static bool isTimeSig(const Event* e)
 }
 
 
-TimeSignature Track::getTimeSigAtEnd() const
+TimeSignature Track::getTimeSigAtEnd(timeT &absTimeOfSig) const
 {
     static TimeSignature defaultSig44(4,4);
 
     const_reverse_iterator sig = std::find_if(rbegin(), rend(), isTimeSig);
 
     if (sig != rend() ||
-        ((*sig) && (*sig)->isa(TimeSignature::EventType)))
+        ((*sig) && (*sig)->isa(TimeSignature::EventType))) {
+        absTimeOfSig = (*sig)->getAbsoluteTime();
         return TimeSignature(*(*sig));
+    }
 
     return defaultSig44;
 }
@@ -110,28 +112,29 @@ void Track::setNbTimeSteps(unsigned int nbTimeSteps)
     
     if (nbTimeSteps > currentNbTimeSteps) { // fill up with rests
 
-        TimeSignature signatureAtEnd = getTimeSigAtEnd();
+        timeT absTimeOfSig = 0;
+        TimeSignature signatureAtEnd = getTimeSigAtEnd(absTimeOfSig);
 
         cerr << "Found time sig at end : " << signatureAtEnd.getNumerator()
              << "/" << signatureAtEnd.getDenominator() << endl;
         
         iterator lastEl = end();
         --lastEl;
-        unsigned int newElTime = (*lastEl)->getAbsoluteTime() + (*lastEl)->getDuration();
+        unsigned int newElTime =
+            (*lastEl)->getAbsoluteTime() + (*lastEl)->getDuration();
 
-        //!!! This is still not correct.  Although the "startOffset"
-        // argument to TimeSignature::getDurationListForInterval() may
-        // be an offset from the start of the whole piece (i.e. it's
-        // allowed to be arbitrarily large), it will only be
-        // meaningful if there are no time signature changes duration
-        // the period of the offset, which in this case means no time
-        // signature changes in the whole piece so far...  We should
-        // be using the elapsed time since the start of the last bar,
-        // instead of using newElTime here.
+        // The startOffset argument to getDurationListForInterval is
+        // supposed to be the elapsed time since the start of any
+        // arbitrary previous bar, provided that the time signature
+        // has not changed during that elapsed time.  Since a time
+        // signature event always starts a new bar, the elapsed time
+        // since the previous time signature event should be fine.
 
         DurationList dlist;
         signatureAtEnd.getDurationListForInterval
-            (dlist, nbTimeSteps - currentNbTimeSteps, newElTime);
+            (dlist,
+             nbTimeSteps - currentNbTimeSteps,  // interval duration
+             newElTime - absTimeOfSig);         // start offset
 
         timeT acc = newElTime;
         for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {

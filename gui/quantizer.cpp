@@ -70,7 +70,7 @@ Quantizer::quantize(Event *el)
         qd = high;
     }
 
-    Note note = Note::getNearestNote(qd);
+    Note note = Note::getNearestNote(qd, 4);
 
     el->setMaybe<Int>(Rosegarden::Note::NoteType, note.getNoteType());
     el->setMaybe<Int>(Rosegarden::Note::NoteDots, note.getDots());
@@ -84,16 +84,24 @@ Quantizer::quantize(Event *el)
 void
 Quantizer::quantize(timeT drt, int &high, int &low)
 {
-    //!!! no dottedness -- NotationTypes stuff can help more here
+    //!!! This method is rather misnamed.  It doesn't really quantize
+    //in the usual sequencer sense, which means to take each note and
+    //round it to the nearest multiple of some base duration
+    //(e.g. make an exact number of semiquavers).  Instead it finds
+    //the nearest notation-type note for each note event, up to a
+    //certain number of dots.  It would be better to do both --
+    //quantize to the nearest hemidemisemi first, then to the most
+    //appropriate note.
 
     int d, ld = Note(Note::Shortest).getDuration();
 
-    Note lowNote(Note::getNearestNote(drt));
+    Note lowNote(Note::getNearestNote(drt, 4)); // four dots! woo!
     low = lowNote.getDuration();
     high = 1000000; //!!!
 
     try {
-	if (lowNote.getDots() > 0) {
+	if (lowNote.getDots() > 0 ||
+            lowNote.getNoteType() == Note::Shortest) { // can't dot that
 	    Note highNote(lowNote.getNoteType() + 1, 0);
 	    if (highNote.getDuration() > drt) high = highNote.getDuration();
 	} else {

@@ -21,6 +21,15 @@
 #include <cstdio> // needed for sprintf()
 #include "NotationTypes.h"
 #include <iostream>
+#include <cstring> // for atoi
+
+// couldn't get g++-v3 stringstreams to work (probably I'm just
+// stupid) so I'm reverting to strstream...
+#if (__GNUC__ < 3)
+#include <strstream>
+#else
+#include <sstream>
+#endif
 
 namespace Rosegarden 
 {
@@ -42,11 +51,6 @@ const string Clef::Bass = "bass";
 
 const Clef Clef::DefaultClef = Clef("treble");
 
-Clef::Clef()
-    : m_clef(DefaultClef.m_clef)
-{
-}
-
 Clef::Clef(const Event &e)
     // throw (Event::NoData, Event::BadType, BadClefName)
 {
@@ -67,11 +71,6 @@ Clef::Clef(const std::string &s)
         throw BadClefName();
     }
     m_clef = s;
-}
-
-Clef::Clef(const Clef &c)
-    : m_clef(c.m_clef)
-{
 }
 
 Clef& Clef::operator=(const Clef &c)
@@ -481,33 +480,48 @@ const string Note::TiedForwardPropertyName  = "TiedForward";
 const int Note::m_shortestTime       = 6;
 //const int Note::m_dottedShortestTime = 9;
 
-Note::Note(Type type, int dots)
-    // throw (BadType, TooManyDots)
-    : m_type(type), m_dots(dots)
-{
-    //!!! having exceptions here may really bugger up compiler
-    // optimisations for simple uses of Note (e.g. "int d =
-    // Note(Crotchet, true).getDuration()"):
-    if (m_type < Shortest || m_type > Longest) throw BadType();
+// Note::Note(Type type, int dots)
+//     // throw (BadType, TooManyDots)
+//     : m_type(type), m_dots(dots)
+// {
+//     //!!! having exceptions here may really bugger up compiler
+//     // optimisations for simple uses of Note (e.g. "int d =
+//     // Note(Crotchet, true).getDuration()"):
+//     if (m_type < Shortest || m_type > Longest) throw BadType();
     
-    // We don't permit dotted hemis, double-dotted demis etc
-    // because we can't represent notes short enough to make up
-    // the rest of the beat (as we have no notes shorter than a
-    // hemi).  And if we got to double-dotted hemis, triple-dotted
-    // demis etc, we couldn't even represent their durations in
-    // our duration units
-    //!!!    if (m_dots > m_type) throw TooManyDots();
-}
+//     // We don't permit dotted hemis, double-dotted demis etc
+//     // because we can't represent notes short enough to make up
+//     // the rest of the beat (as we have no notes shorter than a
+//     // hemi).  And if we got to double-dotted hemis, triple-dotted
+//     // demis etc, we couldn't even represent their durations in
+//     // our duration units
+//     //!!!    if (m_dots > m_type) throw TooManyDots();
+// }
 
 Note::Note(const string &n)
-    // throw (BadType)
+    // throw (BadType, MalformedNoteName)
     : m_type(-1), m_dots(0)
 {
     string name(n);
-    if (name.length() > 7 && name.substr(0, 7) == "dotted ") {
-        m_dots = 1;
-        name = name.substr(7);
+
+    unsigned int pos = name.find('-');
+    int dots = 1;
+
+    if (pos > 0 && pos < name.length() - 1) {
+        dots = atoi(name.substr(0, pos).c_str());
+        name = name.substr(pos + 1);
+        if (dots < 2)
+            throw MalformedNoteName(n, "Non-numeric or invalid dot count");
     }
+
+    if (name.length() > 7 && name.substr(0, 7) == "dotted ") {
+        m_dots = dots;
+        name = name.substr(7);
+    } else {
+        if (dots > 1)
+            throw MalformedNoteName(n, "Dot count without dotted tag");
+    }
+
     Type t;
     for (t = Shortest; t <= Longest; ++t) {
         if (name == getEnglishName(t) ||
@@ -518,11 +532,6 @@ Note::Note(const string &n)
         }
     }
     if (m_type == -1) throw BadType(name);
-}
-
-Note::Note(const Note &n)
-    : m_type(n.m_type), m_dots(n.m_dots)
-{
 }
 
 Note::~Note()
@@ -537,7 +546,7 @@ Note& Note::operator=(const Note &n)
     return *this;
 }
 
-int Note::getDuration() const
+int Note::getDurationAux() const
 {
     //!!! may be able to tighten this up a bit so it can remain inline
     int duration = m_shortestTime * (1 << m_type);
@@ -550,14 +559,29 @@ int Note::getDuration() const
 }
 
 
+static string addDots(int dots, string s)
+{
+#if (__GNUC__ < 3)
+    std::ostrstream os;
+#else
+    std::ostringstream os;
+#endif
+
+    if (dots > 1) {
+        os << dots << "-";
+    }
+    os << "dotted " << s;
+    return os.str();
+}
+
 string Note::getEnglishName(Type type, int dots) const {
     static const string names[] = {
         "hemidemisemiquaver", "demisemiquaver", "semiquaver",
         "quaver", "crotchet", "minim", "semibreve", "breve"
     };
     if (type < 0) { type = m_type; dots = m_dots; }
-    //!!! double-dots etc
-    return dots ? ("dotted " + names[type]) : names[type];
+    if (dots) return addDots(dots, names[type]);
+    else return names[type];
 }
 
 string Note::getAmericanName(Type type, int dots) const {
@@ -567,8 +591,8 @@ string Note::getAmericanName(Type type, int dots) const {
         "double whole note"
     };
     if (type < 0) { type = m_type; dots = m_dots; }
-    //!!! double-dots etc
-    return dots ? ("dotted " + names[type]) : names[type];
+    if (dots) return addDots(dots, names[type]);
+    else return names[type];
 }
 
 string Note::getShortName(Type type, int dots) const {
@@ -577,8 +601,8 @@ string Note::getShortName(Type type, int dots) const {
         "double whole"
     };
     if (type < 0) { type = m_type; dots = m_dots; }
-    //!!! double-dots etc
-    return dots ? ("dotted " + names[type]) : names[type];
+    if (dots) return addDots(dots, names[type]);
+    else return names[type];
 }
 
 
@@ -589,14 +613,15 @@ Note Note::getNearestNote(int duration, int maxDots)
     while (d > 0) { ++tag; d /= 2; }
 
     cout << "Note::getNearestNote: duration " << duration <<
-	" leading to tag " << tag  << endl;
+	" leading to tag " << tag << endl;
     if (tag < Shortest) return Note(Shortest);
 
     int prospective = Note(tag, 0).getDuration();
     int dots = 0;
     int extra = prospective / 2;
 
-    while (dots < maxDots) {
+    while (dots < maxDots &&
+           dots <= tag) { // avoid TooManyDots exception from Note ctor
 	prospective += extra;
 	if (prospective > duration) return Note(tag, dots);
 	extra /= 2;
@@ -604,20 +629,16 @@ Note Note::getNearestNote(int duration, int maxDots)
 	cout << "added another dot okay" << endl;
     }
 
-    return Note(tag, maxDots); //???
-}
+    cout << "doh! ran out of dots" << endl;
+    if (tag < Longest) return Note(tag + 1, 0);
+    else return Note(tag, std::max(maxDots, tag));
+} 
 
 
 const string TimeSignature::EventType = "timesignature";
 const string TimeSignature::NumeratorPropertyName = "numerator";
 const string TimeSignature::DenominatorPropertyName = "denominator";
 const TimeSignature TimeSignature::DefaultTimeSignature = TimeSignature(4, 4);
-
-TimeSignature::TimeSignature()
-    : m_numerator(DefaultTimeSignature.m_numerator),
-      m_denominator(DefaultTimeSignature.m_denominator)
-{
-}
 
 TimeSignature::TimeSignature(int numerator, int denominator)
     // throw (BadTimeSignature)
@@ -635,12 +656,6 @@ TimeSignature::TimeSignature(const Event &e)
     m_numerator = e.get<Int>(NumeratorPropertyName);
     m_denominator = e.get<Int>(DenominatorPropertyName);
     if (m_numerator < 1 || m_denominator < 1) throw BadTimeSignature();
-}
-
-TimeSignature::TimeSignature(const TimeSignature &ts)
-    : m_numerator(ts.m_numerator),
-      m_denominator(ts.m_denominator)
-{
 }
 
 TimeSignature::~TimeSignature()
@@ -815,38 +830,6 @@ void TimeSignature::getDurationListAux(DurationList &dlist, int t) const
     dlist.push_back(current);
     getDurationListAux(dlist, t - current);
 }
-
-
-#ifdef NOT_DEFINED
-
-TimeSignature::EventsSet*
-TimeSignature::getTimeIntervalAsRests(int startTime,
-                                      int duration) const
-{
-    EventsSet *events = new EventsSet;
-    
-    int time = startTime,
-        unitDuration = getUnitDuration();
-
-    for (int len = 0; len < duration;
-         len += unitDuration, time += unitDuration) {
-        Event *e = new Event;
-        e->setType("rest");
-        e->setDuration(unitDuration);
-        e->setAbsoluteTime(time);
-        events->push_back(e);
-    }
-
-    return events;
-}
-
-TimeSignature::EventsSet*
-TimeSignature::getBarAsRests(int startTime) const
-{
-    return getTimeIntervalAsRests(startTime, getBarDuration());
-}
-
-#endif
 
 const int TimeSignature::m_crotchetTime       = 96;
 const int TimeSignature::m_dottedCrotchetTime = 144;

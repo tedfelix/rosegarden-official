@@ -54,7 +54,7 @@ public:
     unsigned int getInstrument() const         { return m_instrument; }
     void         setInstrument(unsigned int i) { m_instrument = i; }
 
-    TimeSignature getTimeSigAtEnd() const;
+    TimeSignature getTimeSigAtEnd(timeT &absTimeOfSig) const;
 
     unsigned int getNbTimeSteps() const;
     void         setNbTimeSteps(unsigned int);

@@ -636,12 +636,6 @@ NotePixmapFactory::makeBeamedNotePixmap(Note::Type note,
 	}
     }
 
-    //!!! What we really want to do here is draw extra beams only
-    //where they're required for the following note but not for the
-    //one after that... and to deal with the case where the opening
-    //note of a group has more beams than the following note.  Should
-    //be fixable in notationsets
-
     int partWidth = width / 3;
     if (partWidth < 2) partWidth = 2;
     else if (partWidth > getNoteBodyWidth()) partWidth = getNoteBodyWidth();
