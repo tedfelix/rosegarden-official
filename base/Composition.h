@@ -57,7 +57,7 @@ class Composition : public SegmentObserver,
 {
     
 public:
-    typedef std::set<Segment*, Segment::SegmentCmp> segmentcontainer;
+    typedef std::multiset<Segment*, Segment::SegmentCmp> segmentcontainer;
 
     typedef segmentcontainer::iterator iterator;
     typedef segmentcontainer::const_iterator const_iterator;
