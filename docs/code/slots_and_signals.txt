@@ -1,0 +1,71 @@
+A few tips on the right use of signals.
+
+Qt's slot and signals are very flexible, much more than regular C++
+methods. Very little type enforcement is done at compile
+time. QObject::connect() takes one or two QObjects for the source and
+target, and two char*. The SLOT() and SIGNAL() macro actually put
+their arguments in between quotes.
+
+So no verification of wether a signal or a slot are actually defined
+by the respective arguments is done at compile time. This
+
+  QObject *source, *target;
+  connect(source, SIGNAL(idontexist()), target, SLOT(meneither());
+
+will compile without a single warning (it will, of course, give one at
+runtime when the connect is actually attempted).
+
+Also, a signal can be connected to another signal.
+
+The most important consequence of this is that you do not need to know
+the actual types of the sources and targets, just that they are
+QObjects.
+
+For instance, suppose you have
+
+class TopLevelWidget : public QWidget
+{
+public slots:
+  void topLevelSlot();
+}
+
+class ChildWidget : public QWidget
+{
+ ChildWidget(QWidget *parent);
+}
+
+class GrandChildWidget : public QWidget
+{
+signals:
+  void grandChildSignal();
+}
+
+And you want to connect TopLevelWidget::topLevelSlot() with
+GrandChildWidget::grandChildSignal(). Supposing ChildWidget is a created by TopLevelWidget like this :
+
+TopLevelWidget::TopLevelWidget::()
+{
+  ...
+  new ChildWidget(this);
+  ...
+}
+
+then in ChildWidget ctor you can :
+
+ChildWidget::ChildWidget(QWidget *parent)
+{
+  grandChildWidget = new GrandChildWidget(this);
+  ...
+  connect(grandChildWidget, SIGNAL(grandChildSignal()),
+          parent, SLOT(topLevelSlot()));
+}
+
+even though in the ctor the TopLevelWidget is seen as a simple
+QWidget, and there is no knowledge of topLevelSlot(). It will work
+nonetheless.
+
+
+An extension of this is that writing a slot just to forward a signal
+is almost always useless. There's most certainly a simpler way
+(connecting to another signal, or making the connection by a 3rd tier
+as shown in the example above).
