@@ -28,17 +28,18 @@ NotationCanvasView::NotationCanvasView(QCanvas *viewing, QWidget *parent,
                                        const char *name, WFlags f)
     : QCanvasView(viewing, parent, name, f),
       m_currentHighlightedLine(0),
-      m_currentNotePixmap(0),
+      m_dualArrow(new QCanvasSimpleSprite("pixmaps/dual-arrow.xpm", canvas())),
       m_lastYPosNearStaff(0)
 {
-    setCurrentNotePixmap(m_notePixmapFactory.makeNotePixmap(Note::WholeNote));
+//     setCurrentNotePixmap(m_notePixmapFactory.makeNotePixmap(Note::WholeNote));
 
     viewport()->setMouseTracking(true);
 }
 
 NotationCanvasView::~NotationCanvasView()
 {
-    delete m_currentNotePixmap;
+    m_dualArrow->hide();
+    delete m_dualArrow;
 }
 
 
@@ -61,7 +62,7 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
     if(itemList.isEmpty() && posIsTooFarFromStaff(e->pos())) {
 
         m_currentHighlightedLine = 0;
-        m_currentNotePixmap->hide();
+        m_dualArrow->hide();
 
         needUpdate = true;
 
@@ -78,17 +79,17 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
             if ((staffLine = dynamic_cast<StaffLine*>(item))) {
                 m_currentHighlightedLine = staffLine;
 
-                // the -10 needed or else the pixmap is hidden by the
-                // mouse pointer
-                m_currentNotePixmap->setX(e->x() - 10);
+                // the offset is needed to avoid that the pixmap is
+                // hidden by the mouse pointer
+                m_dualArrow->setX(e->x() + 10);
 
                 QPoint point = m_currentHighlightedLine->startPoint();
 
                 // TODO : change this when Chris finishes pitch<->y stuff
                 //
-                m_currentNotePixmap->setY(point.y() + m_currentHighlightedLine->y());
+                m_dualArrow->setY(point.y() + m_currentHighlightedLine->y());
 
-                m_currentNotePixmap->show();
+                m_dualArrow->show();
                 m_lastYPosNearStaff = e->y();
 
                 needUpdate = true;
@@ -106,7 +107,7 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 {
     kdDebug(KDEBUG_AREA) << "mousepress" << endl;
 
-    if (m_currentHighlightedLine && m_currentNotePixmap->visible()) {
+    if (m_currentHighlightedLine && m_dualArrow->visible()) {
         kdDebug(KDEBUG_AREA) << "mousepress : m_currentHighlightedLine != 0 - inserting note - staff pitch : "
                              << "(no longer relevant)" << endl;
 //!!!                             << m_currentHighlightedLine->associatedPitch() << endl;
@@ -147,19 +148,19 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 }
 
 
-void
-NotationCanvasView::currentNoteChanged(Note::Type note)
-{
-    QCanvasPixmap notePixmap = m_notePixmapFactory.makeNotePixmap(note);
-    setCurrentNotePixmap(notePixmap);
-}
+// void
+// NotationCanvasView::currentNoteChanged(Note::Type note)
+// {
+//     QCanvasPixmap notePixmap = m_notePixmapFactory.makeNotePixmap(note);
+//     setCurrentNotePixmap(notePixmap);
+// }
 
-void
-NotationCanvasView::setCurrentNotePixmap(QCanvasPixmap note)
-{
-    delete m_currentNotePixmap;
-    m_currentNotePixmap = new QCanvasSimpleSprite(&note, canvas());
-}
+// void
+// NotationCanvasView::setCurrentNotePixmap(QCanvasPixmap note)
+// {
+//     delete m_currentNotePixmap;
+//     m_currentNotePixmap = new QCanvasSimpleSprite(&note, canvas());
+// }
 
 
 void

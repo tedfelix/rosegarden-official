@@ -103,6 +103,7 @@ RestSplitter::nextBit()
 Event::timeT
 RestSplitter::m_baseRestDuration = 384; // whole note rest
 
+//////////////////////////////////////////////////////////////////////
 
 NotationView::NotationView(RosegardenGUIDoc* doc,
                            unsigned int trackNb,
@@ -133,8 +134,8 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     QObject::connect(m_canvasView, SIGNAL(noteInserted(int, const QPoint&)),
                      this,         SLOT  (insertNote  (int, const QPoint&)));
 
-    QObject::connect(this,         SIGNAL(changeCurrentNote(Note::Type)),
-                     m_canvasView, SLOT(currentNoteChanged(Note::Type)));
+//     QObject::connect(this,         SIGNAL(changeCurrentNote(Note::Type)),
+//                      m_canvasView, SLOT(currentNoteChanged(Note::Type)));
 
     readOptions();
 

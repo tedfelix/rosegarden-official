@@ -20,9 +20,10 @@
 
 #include <qcanvas.h>
 
-#include "notepixmapfactory.h"
+// #include "notepixmapfactory.h"
 
 class StaffLine;
+class QCanvasSimpleSprite;
 
 /**
   *@author Guillaume Laurent, Chris Cannam, Rich Bown
@@ -45,11 +46,11 @@ public:
     /** Callback for a mouse move event in the canvas */
     virtual void contentsMouseMoveEvent(QMouseEvent *e);
 
-    void setCurrentNotePixmap(QCanvasPixmap note);
+//     void setCurrentNotePixmap(QCanvasPixmap note);
 
 public slots:
 
-    void currentNoteChanged(Note::Type);
+//     void currentNoteChanged(Note::Type);
 
 signals:
     void noteInserted(int pitch, const QPoint&);
@@ -59,12 +60,15 @@ protected:
     void insertNote(const StaffLine*, const QPoint&);
 
     bool posIsTooFarFromStaff(const QPoint &pos);
-    
+
+    /// the staff line over which the mouse cursor is
     StaffLine* m_currentHighlightedLine;
 
-    QCanvasSprite *m_currentNotePixmap;
+    QCanvasSimpleSprite* m_dualArrow;
 
-    NotePixmapFactory m_notePixmapFactory;
+    // Used for a note-shaped cursor - leaving around just in case
+//     QCanvasSprite *m_currentNotePixmap;
+//     NotePixmapFactory m_notePixmapFactory;
 
     int m_lastYPosNearStaff;
 };
