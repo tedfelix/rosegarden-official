@@ -250,6 +250,11 @@ public:
     static QPixmap toQPixmap(QCanvasPixmap*);
     static void dumpStats(std::ostream &);
 
+
+    static const char* const defaultSerifFont;
+    static const char* const defaultTimeSigFont;
+    
+
 protected:
     void init(std::string fontName, int size);
     void initMaybe() { if (!m_font) init("", -1); }

@@ -787,7 +787,7 @@ void NotationView::positionStaffs()
 	const Rosegarden::Configuration &metadata =
 	    getDocument()->getComposition().getMetadata();
 
-	QFont font("times");
+	QFont font(NotePixmapFactory::defaultSerifFont);
 	font.setPixelSize(m_fontSize * 5);
 	QFontMetrics metrics(font);
 
