@@ -285,8 +285,6 @@ protected:
     const Rosegarden::Event &m_originalEvent;
     Rosegarden::Event m_event;
 
-    QLabel *m_absoluteTimeDisplay;
-    QLabel *m_absoluteTimeDisplayAux;
     QLabel *m_durationDisplay;
     QLabel *m_durationDisplayAux;
 

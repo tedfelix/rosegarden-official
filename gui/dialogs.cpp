@@ -1092,9 +1092,8 @@ EventEditDialog::EventEditDialog(QWidget *parent,
     lineEdit->setText(event.getType().c_str());
 
     new QLabel(i18n("Absolute time: "), intrinsicGrid);
-    m_absoluteTimeDisplay = new QLabel("(note)", intrinsicGrid);
-    m_absoluteTimeDisplayAux = new QLabel("(note)", intrinsicGrid);
-
+    new QLabel("", intrinsicGrid);
+    new QLabel("", intrinsicGrid);
     QSpinBox *absoluteTime = new QSpinBox
 	(INT_MIN, INT_MAX, Note(Note::Shortest).getDuration(), intrinsicGrid);
     absoluteTime->setValue(event.getAbsoluteTime());
@@ -1246,24 +1245,6 @@ void
 EventEditDialog::slotAbsoluteTimeChanged(int value)
 {
     m_absoluteTime = value;
-
-    Note nearestNote = Note::getNearestNote(timeT(value), 1);
-    std::string noteName = nearestNote.getReferenceName();
-    noteName = "menu-" + noteName;
-    QPixmap map = m_notePixmapFactory->makeToolbarPixmap(noteName.c_str());
-
-    m_absoluteTimeDisplay->setPixmap(map);
-
-    timeT nearestDuration = nearestNote.getDuration();
-    if (timeT(value) >= nearestDuration * 2) {
-	m_absoluteTimeDisplayAux->setText("++");
-    } else if (timeT(value) > nearestDuration) {
-	m_absoluteTimeDisplayAux->setText("+");
-    } else if (timeT(value) < nearestDuration) {
-	m_absoluteTimeDisplayAux->setText("-");
-    } else {
-	m_absoluteTimeDisplayAux->setText("");
-    }
 }
 
 void
@@ -1280,13 +1261,13 @@ EventEditDialog::slotDurationChanged(int value)
 
     timeT nearestDuration = nearestNote.getDuration();
     if (timeT(value) >= nearestDuration * 2) {
-	m_durationDisplayAux->setText("++");
+	m_durationDisplayAux->setText("++ ");
     } else if (timeT(value) > nearestDuration) {
-	m_durationDisplayAux->setText("+");
+	m_durationDisplayAux->setText("+ ");
     } else if (timeT(value) < nearestDuration) {
-	m_durationDisplayAux->setText("-");
+	m_durationDisplayAux->setText("- ");
     } else {
-	m_durationDisplayAux->setText("");
+	m_durationDisplayAux->setText(" ");
     }
 }
 
