@@ -198,7 +198,11 @@ public:
     // Create a set of JACK input ports (and for the moment)
     // we do default connections to JACK terminal ports.
     //
-    void createJackInputPorts(unsigned int ports);
+    // If the deactivate flag is set then we deactivate and reactivate
+    // the client when modifying the number of input ports.
+    //
+    //
+    void createJackInputPorts(unsigned int ports, bool deactivate);
 
     // Modify input ports
     //

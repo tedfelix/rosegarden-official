@@ -234,18 +234,34 @@ AlsaDriver::~AlsaDriver()
         std::cout << "AlsaDriver::~AlsaDriver - closing JACK client"
                   << std::endl;
 
-        for (unsigned int i = 0; i < m_jackInputPorts.size(); ++i)
-            jack_port_unregister(m_audioClient, m_jackInputPorts[i]);
-
-        jack_port_unregister(m_audioClient, m_jackOutputPortLeft);
-        jack_port_unregister(m_audioClient, m_jackOutputPortRight);
-
         if (jack_deactivate(m_audioClient))
         {
             std::cerr << "AlsaDriver::~AlsaDriver - deactivation failed"
                       << std::endl;
         }
 
+        for (unsigned int i = 0; i < m_jackInputPorts.size(); ++i)
+        {
+            if (jack_port_unregister(m_audioClient, m_jackInputPorts[i]))
+            {
+                std::cerr << "AlsaDriver::~AlsaDriver - "
+                          << "can't unregister input port " << i + 1
+                          << std::endl;
+            }
+        }
+
+        if (jack_port_unregister(m_audioClient, m_jackOutputPortLeft))
+        {
+            std::cerr << "AlsaDriver::~AlsaDriver - "
+                      << "can't unregister output port left" << std::endl;
+        }
+
+        if (jack_port_unregister(m_audioClient, m_jackOutputPortRight))
+        {
+            std::cerr << "AlsaDriver::~AlsaDriver - "
+                      << "can't unregister output port right" << std::endl;
+        }
+                
         jack_client_close(m_audioClient);
         m_audioClient = 0;
     }
@@ -400,6 +416,8 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
                 }
 
 		AUDIT_STREAM << " [type " << type << ", cap " << capability << "]";
+
+		std::cout << " [type " << type << ", cap " << capability << "]";
 
                 // Generate a unique name using the client id
                 //
@@ -1055,9 +1073,29 @@ AlsaDriver::initialiseMidi()
 
 #ifdef HAVE_LIBJACK
 void
-AlsaDriver::createJackInputPorts(unsigned int totalPorts)
+AlsaDriver::createJackInputPorts(unsigned int totalPorts, bool deactivate)
 {
     if (!m_audioClient) return;
+
+    // Out port connetions if we need them
+    //
+    const char **outLeftPort = 0, **outRightPort = 0;
+
+    // deactivate client
+    //
+    if (deactivate)
+    {
+        // store output connections for reconnect after port mods
+        //
+        outLeftPort = jack_port_get_connections(m_jackOutputPortLeft);
+        outRightPort = jack_port_get_connections(m_jackOutputPortRight);
+
+        if (jack_deactivate(m_audioClient))
+        {
+            std::cerr << "AlsaDriver::createJackInputPorts - "
+                      << "client deactivation failed" << std::endl;
+        }
+    }
 
     // Unregister any we already have connected
     //
@@ -1079,7 +1117,15 @@ AlsaDriver::createJackInputPorts(unsigned int totalPorts)
 
 
          std::cout << "AlsaDriver::createJackInputPorts - "
-                   << "adding port " << i + 1 << std::endl;
+                   << "adding input port " << i + 1 << std::endl;
+    }
+    
+    // reactivate client
+    //
+    if (jack_activate(m_audioClient))
+    {
+        std::cerr << "AlsaDriver::createJackInputPorts - "
+                  << "client deactivation failed" << std::endl;
     }
 
     std::string capture_1, capture_2;
@@ -1093,6 +1139,8 @@ AlsaDriver::createJackInputPorts(unsigned int totalPorts)
     }
     else // match from JACK
     {
+        std::cout << "AlsaDriver::createJackInputPorts - "
+                  << "getting ports" << std::endl;
         const char **ports =
             jack_get_ports(m_audioClient, NULL, NULL,
                            JackPortIsPhysical|JackPortIsOutput);
@@ -1102,6 +1150,10 @@ AlsaDriver::createJackInputPorts(unsigned int totalPorts)
         free(ports);
     }
 
+    std::cout << "AlsaDriver::initialiseAudio - attempting connect from "
+              << "\"" << capture_1.c_str() << "\" to \""
+              << jack_port_name(m_jackInputPorts[0]) << "\"" << endl;
+
     // now input
     if (jack_connect(m_audioClient, capture_1.c_str(),
                      jack_port_name(m_jackInputPorts[0])))
@@ -1110,12 +1162,45 @@ AlsaDriver::createJackInputPorts(unsigned int totalPorts)
                   << "cannot connect to JACK input port" << std::endl;
     }
 
+    std::cout << "AlsaDriver::initialiseAudio - attempting connect from "
+              << "\"" << capture_2.c_str() << "\" to \""
+              << jack_port_name(m_jackInputPorts[1]) << "\"" << endl;
+
     if (jack_connect(m_audioClient, capture_2.c_str(),
                      jack_port_name(m_jackInputPorts[1])))
     {
         std::cerr << "AlsaDriver::initialiseAudio - "
                   << "cannot connect to JACK input port" << std::endl;
     }
+
+    // Reconnect out ports
+    if (deactivate)
+    {
+        if (outLeftPort && outLeftPort[0])
+        {
+            if (jack_connect(m_audioClient,
+                             jack_port_name(m_jackOutputPortLeft),
+                             outLeftPort[0]))
+            {
+                std::cerr << "AlsaDriver::initialiseAudio - "
+                          << "cannot reconnect JACK output port (left)"
+                          << std::endl;
+            }
+        }
+
+        if (outRightPort && outRightPort[0])
+        {
+            if (jack_connect(m_audioClient, 
+                             jack_port_name(m_jackOutputPortRight),
+                             outRightPort[0]))
+            {
+                std::cerr << "AlsaDriver::initialiseAudio - "
+                          << "cannot reconnect JACK output port (right)"
+                          << std::endl;
+            }
+        }
+    }
+
 }
 
 #endif
@@ -1164,18 +1249,6 @@ AlsaDriver::initialiseAudio()
               << _jackSampleRate << std::endl;
 
 
-    // Activate the client
-    //
-    if (jack_activate(m_audioClient))
-    {
-        std::cerr << "AlsaDriver::initialiseAudio - "
-                  << "cannot activate JACK client" << std::endl;
-        return;
-    }
-
-    std::cout << "AlsaDriver::initialiseAudio - "
-              << "initialised JACK audio subsystem"
-              << std::endl;
 
     // set some latencies - these don't appear to do anything yet
     //
@@ -1198,11 +1271,7 @@ AlsaDriver::initialiseAudio()
     _pluginBufferOut1 = new sample_t[_jackBufferSize];
     _pluginBufferOut2 = new sample_t[_jackBufferSize];
 
-    // Create and connect (default) two audio inputs
-    //
-    createJackInputPorts(2);
-
-    // Create and connect output ports
+    // Create output ports
     //
     m_jackOutputPortLeft = jack_port_register(m_audioClient,
                                               "out_1",
@@ -1210,12 +1279,21 @@ AlsaDriver::initialiseAudio()
                                               JackPortIsOutput,
                                               0);
 
+    std::cout << "AlsaDriver::initialiseAudio - "
+              << "added output port 1 (left)" << std::endl;
+
     m_jackOutputPortRight = jack_port_register(m_audioClient,
                                                "out_2",
                                                JACK_DEFAULT_AUDIO_TYPE,
                                                JackPortIsOutput,
                                                0);
+    // Create and connect (default) two audio inputs - activating as
+    // we go
+    //
+    createJackInputPorts(2, false);
 
+    std::cout << "AlsaDriver::initialiseAudio - "
+              << "added output port 2 (right)" << std::endl;
 
     std::string playback_1, playback_2;
 
@@ -1282,6 +1360,10 @@ AlsaDriver::initialiseAudio()
     // ok with audio driver
     //
     m_driverStatus |= AUDIO_OK;
+
+    std::cout << "AlsaDriver::initialiseAudio - "
+              << "initialised JACK audio subsystem"
+              << std::endl;
 
 #endif
 }
@@ -2393,7 +2475,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
         if ((*i)->getType() == MappedEvent::SystemAudioInputs)
         {
 #ifdef HAVE_LIBJACK
-            createJackInputPorts((unsigned int)(*i)->getData1());
+            createJackInputPorts((unsigned int)(*i)->getData1(), true);
 #else
             std::cerr << "AlsaDriver::processEventsOut - "
                       << "MappedEvent::SystemAudioInputs - no audio subsystem"
