@@ -117,7 +117,8 @@ public:
      * the Sequencer accesses this method via DCOP
      */
     const Rosegarden::MappedComposition&
-            getSequencerSlice(const int &sliceStart, const int &sliceEnd);
+            getSequencerSlice(const Rosegarden::timeT &sliceStart,
+                              const Rosegarden::timeT &sliceEnd);
 
 protected:
 

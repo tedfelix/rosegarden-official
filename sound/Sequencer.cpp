@@ -320,6 +320,23 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mappedComp,
     event.command.data1 = (*i)->getPitch();   // pitch
     event.command.data2 = 127;  // hardcode velocity
 
+    // Test our timing
+    Arts::TimeStamp now = _midiPlayPort.time();
+    int secAhead = event.time.sec - now.sec;
+    int mSecAhead = event.time.usec - now.usec;
+
+    if (mSecAhead < 0) 
+    {
+      secAhead--;
+      mSecAhead += 1000000;
+    }
+
+    if (secAhead < 0)
+    {
+      std::cerr << "Failed to process NOTE events in time - lagging by "
+                << secAhead << "s and " << mSecAhead << "ms" << endl;
+    }
+
     // if a NOTE ON
     // send the event out
     _midiPlayPort.processEvent(event);
@@ -341,7 +358,7 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mappedComp,
     Arts::TimeStamp now = _midiPlayPort.time();
     int sec = now.sec - _playStartTime.sec;
     int usec = now.usec - _playStartTime.usec;
-
+ 
     if (usec < 0)
     {
       sec--;

@@ -20,6 +20,7 @@
 #include <klocale.h>
 #include <dcopclient.h>
 #include <iostream>
+#include <qdatetime.h>
 
 #include "rosegardensequencer.h"
 #include "rosegardendcop.h"
@@ -38,7 +39,8 @@ RosegardenSequencerApp::RosegardenSequencerApp():
     m_songPosition(0),
     m_lastFetchSongPosition(0),
     m_fetchLatency(20),
-    m_playLatency(50)
+    m_playLatency(20),
+    m_readAhead(100)
 {
   // Without DCOP we are nothing
   QCString realAppId = kapp->dcopClient()->registerAs(kapp->name(), false);
@@ -147,10 +149,13 @@ RosegardenSequencerApp::fetchEvents(const Rosegarden::timeT &start,
   arg << start;
   arg << end;
 
+  QTime t;
+  t.start();
+
   if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
-                                ROSEGARDEN_GUI_IFACE_NAME,
-                                "getSequencerSlice(int, int)",
-                                data, replyType, replyData))
+                      ROSEGARDEN_GUI_IFACE_NAME,
+                      "getSequencerSlice(Rosegarden::timeT, Rosegarden::timeT)",
+                      data, replyType, replyData, true))
   {
     cerr <<
      "RosegardenSequencer::fetchEvents() - can't call RosegardenGUI client"
@@ -163,6 +168,7 @@ RosegardenSequencerApp::fetchEvents(const Rosegarden::timeT &start,
   }
   else
   {
+    cerr << "getSequencerSlice TIME = " << t.elapsed() << " ms " << endl;
     QDataStream reply(replyData, IO_ReadOnly);
     if (replyType == "Rosegarden::MappedComposition")
     {
@@ -190,7 +196,7 @@ RosegardenSequencerApp::startPlaying()
 {
   // Fetch up to m_playLatency ahead
   //
-  m_lastFetchSongPosition = m_songPosition + m_playLatency;
+  m_lastFetchSongPosition = m_songPosition + m_readAhead;
 
   // This will reset the Sequencer's internal clock
   // ready for new playback
@@ -198,7 +204,7 @@ RosegardenSequencerApp::startPlaying()
 
   // Send the first events (starting the clock)
   m_sequencer->processMidiOut( *fetchEvents(m_songPosition,
-                               m_songPosition + m_playLatency),
+                               m_songPosition + m_readAhead),
                                m_playLatency );
 
   return true;
@@ -225,10 +231,13 @@ RosegardenSequencerApp::keepPlaying()
         mappedComp->erase(i);
 */
   
-    m_sequencer->processMidiOut( *fetchEvents(++m_lastFetchSongPosition,
-                                 m_lastFetchSongPosition + m_playLatency),
+    // increment past last song fetch position by one
+    m_lastFetchSongPosition++;
+
+    m_sequencer->processMidiOut( *fetchEvents(m_lastFetchSongPosition,
+                                 m_lastFetchSongPosition + m_readAhead),
                                  m_playLatency);
-    m_lastFetchSongPosition = m_lastFetchSongPosition + m_playLatency;
+    m_lastFetchSongPosition = m_lastFetchSongPosition + m_readAhead;
   }
 
   return true;
@@ -265,7 +274,8 @@ RosegardenSequencerApp::updateClocks()
 
     arg << newPosition;
 
-    cout << "updateClocks() - m_songPosition = " << m_songPosition << endl;
+    //cout << "updateClocks() - m_songPosition = " << m_songPosition << endl;
+
     if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                                   ROSEGARDEN_GUI_IFACE_NAME,
                                   "setPointerPosition(int)",

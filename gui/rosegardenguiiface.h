@@ -41,7 +41,8 @@ k_dcop:
 
     // Sequener gets slice of Events in a MappedComposition
     virtual const Rosegarden::MappedComposition&
-            getSequencerSlice(const int &sliceStart, const int &sliceEnd) = 0;
+            getSequencerSlice(const Rosegarden::timeT &sliceStart,
+                              const Rosegarden::timeT &sliceEnd) = 0;
 
     // Sequencer updates GUI pointer position
     virtual void setPointerPosition(const int &position) = 0;

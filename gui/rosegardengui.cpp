@@ -47,12 +47,15 @@
 #include "rg21io.h"
 #include "rosegardendcop.h"
 #include "ktmpstatusmsg.h"
+#include "TrackPerformanceHelper.h"
 
 #define ID_STATUS_MSG 1
 
 using std::cerr;
 using std::endl;
 using std::cout;
+
+static Rosegarden::MappedComposition mappComp;
 
 RosegardenGUIApp::RosegardenGUIApp()
     : KMainWindow(0), DCOPObject("RosegardenGUIIface"),
@@ -747,14 +750,76 @@ void RosegardenGUIApp::changeTimeResolution()
 }
 
 const Rosegarden::MappedComposition&
-RosegardenGUIApp::getSequencerSlice(const int &sliceStart, const int &sliceEnd)
+RosegardenGUIApp::getSequencerSlice(const Rosegarden::timeT &sliceStart,
+                                    const Rosegarden::timeT &sliceEnd)
 {
-  Rosegarden::MappedComposition *retComp ;
-
-  retComp = new Rosegarden::MappedComposition(m_doc->getComposition(),
+  //cerr << "getSequencerSlice : " << sliceStart << " : " << sliceEnd << endl;
+/*
+  mappComp = new Rosegarden::MappedComposition(m_doc->getComposition(),
                                               sliceStart, sliceEnd);
+*/
 
-  return *retComp;
+  // EXPERIMENT!
+  //
+  // [rwb] - moved this code in here from MappedComposition
+  //         to reduce playback latency
+  //
+
+  mappComp.clear();
+  mappComp.startTime(sliceStart);
+  mappComp.endTime(sliceEnd);
+
+  Rosegarden::timeT eventTime;
+
+  for (Rosegarden::Composition::iterator i = m_doc->getComposition().begin();
+                             i != m_doc->getComposition().end(); i++ )
+  {
+    // Skip the Track if it starts too late to be of
+    // interest to our slice.
+    if ( (*i)->getStartIndex() > sliceEnd )
+      continue;
+
+    Rosegarden::TrackPerformanceHelper helper(**i);
+
+    for ( Rosegarden::Track::iterator j = (*i)->begin(); j != (*i)->end(); j++ )
+    {
+      // for the moment ensure we're all positive
+      assert((*j)->getAbsoluteTime() >= 0 );
+
+      // Skip this event if it isn't a note
+      //
+      if (!(*j)->isa(Rosegarden::Note::EventType))
+        continue;
+
+      // Find the performance duration, i.e. taking into account any
+      // ties etc that this note may have  --cc
+      // 
+      timeT duration = helper.getSoundingDuration(j);
+
+      if (duration == 0) // probably in a tied series, but not as first note
+        continue;
+
+      // get the eventTime
+      eventTime = (unsigned int) (*j)->getAbsoluteTime();
+
+      // As events are stored chronologically we can escape if
+      // we're already beyond our event horizon for this slice.
+      //
+      if ( eventTime > sliceEnd )
+        break;
+
+      // Eliminate events before our required time
+      if ( eventTime >= sliceStart && eventTime <= sliceEnd)
+      {
+        // insert event
+        Rosegarden::MappedEvent *me = new Rosegarden::MappedEvent(**j, duration);
+        me->setInstrument((*i)->getInstrument());
+        mappComp.insert(me);
+      }
+    }
+  }
+
+  return mappComp;
 }
 
 
@@ -861,8 +926,8 @@ RosegardenGUIApp::play()
   QDataStream streamOut(data, IO_WriteOnly);
   streamOut << m_doc->getComposition().getPosition();
 
-  streamOut << 100; // playback latency
-  streamOut << 20;  // fetch latency
+  streamOut << 20;  // playback latency
+  streamOut << 10;  // fetch latency
 
   cout << "RosegardenGUIApp::play() - playing at tempo " << 
                 m_doc->getComposition().getTempo() << endl;

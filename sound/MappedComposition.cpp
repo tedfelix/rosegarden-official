@@ -52,14 +52,14 @@ velocityT                 velocity;
 // stage.  [rwb]
 //
 MappedComposition::MappedComposition(Rosegarden::Composition &comp,
-                                     const unsigned int &sT,
-                                     const unsigned int &eT):
+                                     const Rosegarden::timeT &sT,
+                                     const Rosegarden::timeT &eT):
   _startTime(sT),
   _endTime(eT)
 {
   assert(_endTime >= _startTime);
     
-  unsigned int eventTime;
+  Rosegarden::timeT eventTime;
 
   for (Composition::iterator i = comp.begin(); i != comp.end(); i++ )
   {
@@ -91,13 +91,11 @@ MappedComposition::MappedComposition(Rosegarden::Composition &comp,
       // get the eventTime
       eventTime = (unsigned int) (*j)->getAbsoluteTime();
 
-/*
       // As events are stored chronologically we can escape if
       // we're already beyond our event horizon for this slice.
       //
       if ( eventTime > _endTime )
         break;
-*/
 
       // Eliminate events before our required time
       if ( eventTime >= _startTime && eventTime <= _endTime)

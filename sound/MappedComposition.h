@@ -44,14 +44,18 @@ public:
   MappedComposition():_startTime(0), _endTime(0) {;}
 
   MappedComposition(Rosegarden::Composition &comp,
-                    const unsigned int &sT, const unsigned int &eT);
+                    const Rosegarden::timeT &sT,
+                    const Rosegarden::timeT &eT);
 
-  MappedComposition(const unsigned int &sT, const unsigned int &eT):
+  MappedComposition(const Rosegarden::timeT &sT, const Rosegarden::timeT &eT):
              _startTime(sT), _endTime(eT) {;}
   ~MappedComposition() {;}
 
-  const unsigned int beginTime() const { return _startTime; }
-  const unsigned int endTime() const { return _endTime; }
+  const Rosegarden::timeT startTime() const { return _startTime; }
+  const Rosegarden::timeT endTime() const { return _endTime; }
+  void startTime(const Rosegarden::timeT &sT) { _startTime = sT; }
+  void endTime(const Rosegarden::timeT &eT) { _endTime = eT; }
+
 
   // This section is used for serialising this class over DCOP
   //
@@ -60,8 +64,8 @@ public:
   friend QDataStream& operator>>(QDataStream &dS, MappedComposition &mC);
 
 private:
-  unsigned int _startTime;
-  unsigned int _endTime;
+  Rosegarden::timeT _startTime;
+  Rosegarden::timeT _endTime;
 
 };
 

@@ -119,6 +119,7 @@ private:
   //
   Rosegarden::timeT m_fetchLatency;
   Rosegarden::timeT m_playLatency;
+  Rosegarden::timeT m_readAhead;
 
 };
  
