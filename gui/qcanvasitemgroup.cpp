@@ -16,13 +16,18 @@
  ***************************************************************************/
 
 #include "qcanvasitemgroup.h"
+#include "rosedebug.h"
 
 QCanvasItemGroup::QCanvasItemGroup(QCanvas *c)
     : QCanvasItem(c)
-{}
+{
+    kdDebug(KDEBUG_AREA) << "QCanvasItemGroup() - this : " << this << endl;
+}
 
 QCanvasItemGroup::~QCanvasItemGroup()
-{}
+{
+    kdDebug(KDEBUG_AREA) << "~QCanvasItemGroup() - this : " << this << endl;
+}
 
 void
 QCanvasItemGroup::moveBy(double dx, double dy)
@@ -165,5 +170,8 @@ QCanvasItemGroup::addItemWithRelativeCoords(QCanvasItem *i)
 void
 QCanvasItemGroup::removeItem(QCanvasItem *i)
 {
+    kdDebug(KDEBUG_AREA) << "QCanvasItemGroup::removeItem() - this : "
+                         << this << " - item : " << i << endl;
+
     m_items.remove(i);
 }

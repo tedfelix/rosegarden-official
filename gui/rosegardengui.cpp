@@ -244,17 +244,17 @@ void RosegardenGUIApp::disableCommand(int id_)
 void RosegardenGUIApp::addRecentFile(const QString &file)
 {
     if(recentFiles.find(file) == -1) {
-            if( recentFiles.count() < 5) {
-                recentFiles.insert(0, file);
-            } else {
-                recentFiles.remove(4);
-                recentFiles.insert(0, file);
-            }
-            recentFilesMenu->clear();
-            for ( int i=0 ; i < (int) recentFiles.count(); i++) {
-                recentFilesMenu->insertItem(recentFiles.at(i));
-            }
+        if( recentFiles.count() < 5) {
+            recentFiles.insert(0, file);
+        } else {
+            recentFiles.remove(4);
+            recentFiles.insert(0, file);
         }
+        recentFilesMenu->clear();
+        for ( int i=0 ; i < (int) recentFiles.count(); i++) {
+            recentFilesMenu->insertItem(recentFiles.at(i));
+        }
+    }
 }
 
 void RosegardenGUIApp::openDocumentFile(const char* _cmdl)
@@ -296,7 +296,7 @@ void RosegardenGUIApp::readOptions()
     if(!bViewToolbar) {
         KMessageBox::sorry(0, "Need to re-implement toolbar hide");
         // enableToolBar(KToolBar::Hide);
-        }
+    }
 	
     bool bViewStatusbar = config->readBoolEntry("Show Statusbar", true);
     viewMenu->setItemChecked(ID_VIEW_STATUSBAR, bViewStatusbar);
@@ -490,8 +490,8 @@ void RosegardenGUIApp::slotFilePrint()
     QPrinter printer;
 
     if (printer.setup(this)) {
-            view->print(&printer);
-        }
+        view->print(&printer);
+    }
 
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 }
@@ -542,12 +542,12 @@ void RosegardenGUIApp::slotViewToolBar()
     ///////////////////////////////////////////////////////////////////
     // turn Toolbar on or off
     if( viewMenu->isItemChecked(ID_VIEW_TOOLBAR)) {
-            viewMenu->setItemChecked(ID_VIEW_TOOLBAR, false);
-            // enableToolBar(KToolBar::Hide);
-        } else {
-            viewMenu->setItemChecked(ID_VIEW_TOOLBAR, true);
-            // enableToolBar(KToolBar::Show);
-        }		
+        viewMenu->setItemChecked(ID_VIEW_TOOLBAR, false);
+        // enableToolBar(KToolBar::Hide);
+    } else {
+        viewMenu->setItemChecked(ID_VIEW_TOOLBAR, true);
+        // enableToolBar(KToolBar::Show);
+    }		
 
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 }
@@ -558,14 +558,14 @@ void RosegardenGUIApp::slotViewStatusBar()
     ///////////////////////////////////////////////////////////////////
     //turn Statusbar on or off
     if( viewMenu->isItemChecked(ID_VIEW_STATUSBAR)) {
-            viewMenu->setItemChecked(ID_VIEW_STATUSBAR, false);
-            KMessageBox::sorry(0, "Need to re-implement this");
-            // enableStatusBar(KStatusBar::Hide);
-        } else {
-            viewMenu->setItemChecked(ID_VIEW_STATUSBAR, true);
-            KMessageBox::sorry(0, "Need to re-implement this");
-            // enableStatusBar(KStatusBar::Show);
-        }
+        viewMenu->setItemChecked(ID_VIEW_STATUSBAR, false);
+        KMessageBox::sorry(0, "Need to re-implement this");
+        // enableStatusBar(KStatusBar::Hide);
+    } else {
+        viewMenu->setItemChecked(ID_VIEW_STATUSBAR, true);
+        KMessageBox::sorry(0, "Need to re-implement this");
+        // enableStatusBar(KStatusBar::Show);
+    }
 
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 }

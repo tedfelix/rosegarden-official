@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include "qcanvasgroupableitem.h"
+#include "rosedebug.h"
 
 QCanvasGroupableItem::QCanvasGroupableItem(QCanvasItem *i,
                                            QCanvasItemGroup *g,
@@ -23,6 +24,10 @@ QCanvasGroupableItem::QCanvasGroupableItem(QCanvasItem *i,
     : m_group(g),
       m_item(i)
 {
+    kdDebug(KDEBUG_AREA) << "QCanvasGroupableItem() - this : " << this
+                         << " - group : " << g
+                         << " - item : " << i << endl;
+
     if (withRelativeCoords)
         group()->addItemWithRelativeCoords(item());
     else
@@ -31,6 +36,10 @@ QCanvasGroupableItem::QCanvasGroupableItem(QCanvasItem *i,
 
 QCanvasGroupableItem::~QCanvasGroupableItem()
 {
+    kdDebug(KDEBUG_AREA) << "~QCanvasGroupableItem() - this : " << this
+                         << " - group : " << group()
+                         << " - item : " << item() << endl;
+
     group()->removeItem(item());
 }
 

@@ -37,10 +37,9 @@ QList<RosegardenGUIView> *RosegardenGUIDoc::pViewList = 0L;
 
 RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent, const char *name) : QObject(parent, name)
 {
-    if(!pViewList)
-        {
-            pViewList = new QList<RosegardenGUIView>();
-        }
+    if(!pViewList) {
+        pViewList = new QList<RosegardenGUIView>();
+    }
 
     pViewList->setAutoDelete(true);
 }
@@ -165,15 +164,15 @@ bool RosegardenGUIDoc::openDocument(const QString &filename, const char *format 
     file.close();
 
     // Check if file readable with fileInfo ?
-//     if ( !file.open( IO_ReadOnly ) ) {
-//         QString msg(i18n("Can't open file '"));
-//         msg += filename;
-//         msg += "'";
+    //     if ( !file.open( IO_ReadOnly ) ) {
+    //         QString msg(i18n("Can't open file '"));
+    //         msg += filename;
+    //         msg += "'";
         
-//         KMessageBox::sorry(0, msg);
+    //         KMessageBox::sorry(0, msg);
 
-//         return false;
-//     }
+    //         return false;
+    //     }
     
     return rc;
 }
