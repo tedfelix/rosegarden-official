@@ -144,8 +144,8 @@
    <Separator/>
    <Action name="delete"/>
    <Separator/>
-   <Action name="relabel_segment"/>
    <Action name="quantize_selection"/>
+   <Action name="relabel_segment"/>
    <Separator/>
    <Action name="select"/>
    <Action name="move"/>
