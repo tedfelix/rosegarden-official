@@ -67,7 +67,6 @@ operator<<(QDataStream &dS, MappedComposition *mC)
 	dS << (*it)->getAudioStartMarker().usec;
 	dS << (*it)->getVelocity();
 	dS << (*it)->getInstrument();
-        //dS << (*it)->getTrack();
         dS << (*it)->getType();
     }
 
@@ -91,7 +90,6 @@ operator<<(QDataStream &dS, const MappedComposition &mC)
 	dS << (*it)->getAudioStartMarker().usec;
 	dS << (*it)->getVelocity();
 	dS << (*it)->getInstrument();
-        //dS << (*it)->getTrack();
         dS << (*it)->getType();
     }
 

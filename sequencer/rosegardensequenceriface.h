@@ -24,6 +24,7 @@
 #include <dcopobject.h>
 #include "rosegardendcop.h"
 #include "Event.h"
+#include "MappedComposition.h"
 
 class RosegardenSequencerIface : virtual public DCOPObject
 {
@@ -89,6 +90,11 @@ public:
     virtual void setMappedInstrument(int type,
                                      unsigned char channel,
                                      unsigned int id) = 0;
+
+    // The GUI can use this method to process an immediate selection
+    // of MappedEvents (Program Changes, SysExs, async Events etc).
+    //
+    virtual void processSequencerSlice(Rosegarden::MappedComposition mC) = 0;
 
 
 };

@@ -54,7 +54,12 @@ class MappedEvent
 public:
     typedef enum
     {
-        Internal,
+        MidiNote,
+        MidiProgramChange,
+        MidiKeyPressure,
+        MidiChannelPressure,
+        MidiPitchWheel,
+        MidiController,
         Audio
     } MappedEventType;
 
@@ -63,7 +68,7 @@ public:
                    m_duration(0, 0),
                    m_audioStartMarker(0, 0),
                    m_velocity(0),
-                   m_type(Internal) {;}
+                   m_type(MidiNote) {;}
 
     // Construct from Events to Internal (MIDI) type MappedEvent
     //
@@ -88,7 +93,7 @@ public:
         m_duration(duration),
         m_audioStartMarker(Rosegarden::RealTime(0,0)),
         m_velocity(velocity),
-        m_type(Internal),
+        m_type(MidiNote),
         m_instrument(instrument) {;}
 
     // A general MappedEvent constructor for any MappedEvent type
@@ -122,7 +127,34 @@ public:
          m_type(Audio),
          m_instrument(instrument) {;}
 
-    // Copy
+    // More generalised MIDI event containers for
+    // large and small events (one param, two param)
+    //
+    MappedEvent(InstrumentId instrument,
+                MappedEventType type,
+                MidiByte data1,
+                MidiByte data2):
+         m_pitch(data1),
+         m_eventTime(Rosegarden::RealTime(0, 0)),
+         m_duration(Rosegarden::RealTime(0, 0)),
+         m_audioStartMarker(Rosegarden::RealTime(0, 0)),
+         m_velocity(data2),
+         m_type(type),
+         m_instrument(instrument) {;}
+
+    MappedEvent(InstrumentId instrument,
+                MappedEventType type,
+                MidiByte data1):
+        m_pitch(data1),
+        m_eventTime(Rosegarden::RealTime(0, 0)),
+        m_duration(Rosegarden::RealTime(0, 0)),
+        m_audioStartMarker(Rosegarden::RealTime(0, 0)),
+        m_velocity(0),
+        m_type(type),
+        m_instrument(instrument) {;}
+                
+
+    // Copy constructor
     //
     MappedEvent(const MappedEvent &mE):
         m_pitch(mE.getPitch()),

@@ -520,12 +520,10 @@ Sequencer::processMidiOut(const Rosegarden::MappedComposition &mC,
     //   mcsChannelPressure
     //   mcsPitchWheel
 
-    // for the moment hardcode the channel
-    MidiByte channel = 0;
-
     Rosegarden::RealTime midiRelativeTime;
     Rosegarden::RealTime midiRelativeStopTime;
-
+    Rosegarden::MappedInstrument *instrument;
+    MidiByte channel;
 
     for (MappedComposition::iterator i = mC.begin(); i != mC.end(); ++i)
     {
@@ -534,8 +532,10 @@ Sequencer::processMidiOut(const Rosegarden::MappedComposition &mC,
 
         // Check that we're processing the right type
         //
+        /*
         if ((*i)->getType() != MappedEvent::Internal)
             continue;
+            */
 
         // Relative to start of the piece including play latency
         //
@@ -551,12 +551,53 @@ Sequencer::processMidiOut(const Rosegarden::MappedComposition &mC,
         //
         midiRelativeStopTime = midiRelativeTime + (*i)->getDuration();
     
+        // Get instrument channel
+        //
+        instrument = getMappedInstrument((*i)->getInstrument());
+
+        if (instrument != 0)
+            channel = instrument->getChannel();
+        else
+            channel = 0;
+
         // Load the command structure
         //
-        event.command.status = Arts::mcsNoteOn | channel;
-        event.command.data1 = (*i)->getPitch();     // pitch
-        event.command.data2 = (*i)->getVelocity();  // velocity
+        switch((*i)->getType())
+        {
+            case MappedEvent::MidiNote:
+                event.command.status = Arts::mcsNoteOn | channel;
+                event.command.data1 = (*i)->getPitch();
+                event.command.data2 = (*i)->getVelocity();
+                break;
 
+            case MappedEvent::MidiProgramChange:
+                event.command.status = Arts::mcsProgram | channel;
+                event.command.data1 = (*i)->getPitch();
+                break;
+
+            case MappedEvent::MidiKeyPressure:
+                event.command.status = Arts::mcsKeyPressure | channel;
+                break;
+
+            case MappedEvent::MidiChannelPressure:
+                event.command.status = Arts::mcsChannelPressure | channel;
+                break;
+
+            case MappedEvent::MidiPitchWheel:
+                event.command.status = Arts::mcsPitchWheel | channel;
+                break;
+
+            case MappedEvent::MidiController:
+                event.command.status = Arts::mcsParameter | channel;
+                event.command.data1 = (*i)->getPitch();
+                event.command.data2 = (*i)->getVelocity();
+                break;
+
+            default:
+                 std::cerr << "processMidiOut() - got unrecognized event"
+                            << endl;
+                 break;
+        }
         // Here's a little check to test out timing - I don't think it reports
         // correctly at the moment
         //
@@ -577,12 +618,10 @@ Sequencer::processMidiOut(const Rosegarden::MappedComposition &mC,
         {
             std::cerr <<"Sequencer::processMidiOut: MIDI processing lagging by " << -secAhead << "s and " << uSecAhead << "us" << endl;
         }
-        else
-        {
-            // Send the event out to the MIDI port
-            //
-            m_midiPlayPort.processEvent(event);
-        }
+
+        // Send the event out to the MIDI port
+        //
+        m_midiPlayPort.processEvent(event);
 
 #if 0
         int secFromStart = event.time.sec - m_artsPlayStartTime.sec;
@@ -642,8 +681,8 @@ void
 Sequencer::processNotesOff(const Rosegarden::RealTime &midiTime)
 {
     Arts::MidiEvent event;
-    MidiByte channel = 0;
     Rosegarden::RealTime noteOff;
+    MidiByte channel;
 
     for (NoteOffQueue::iterator i = m_noteOffQueue.begin();
           i != m_noteOffQueue.end(); ++i)
@@ -658,6 +697,10 @@ Sequencer::processNotesOff(const Rosegarden::RealTime &midiTime)
             noteOff = (*i)->getRealTime();
             event.time = aggregateTime(m_artsPlayStartTime,
                            Arts::TimeStamp(noteOff.sec, noteOff.usec));
+
+            // Get the channel from the status byte
+            //
+            channel = (*i)->getStatusByte() & ~Arts::mcsNoteOn;
 
             event.command.data1 = (*i)->getPitch();
             event.command.data2 = 127;
@@ -683,7 +726,7 @@ void
 Sequencer::allNotesOff()
 {
     Arts::MidiEvent event;
-    MidiByte channel = 0;
+    MidiByte channel;
     Rosegarden::RealTime noteOff;
 
     for (NoteOffQueue::iterator i = m_noteOffQueue.begin();
@@ -694,6 +737,10 @@ Sequencer::allNotesOff()
         noteOff = (*i)->getRealTime();
         event.time = aggregateTime(m_artsPlayStartTime,
                        Arts::TimeStamp(noteOff.sec, noteOff.usec));
+
+        // Get the channel from the status byte
+        //
+        channel = (*i)->getStatusByte() & ~Arts::mcsNoteOn;
 
         event.command.data1 = (*i)->getPitch();
         event.command.data2 = 127;
@@ -916,6 +963,22 @@ Sequencer::setMappedInstrument(MappedInstrument *mI)
               << "channel = " << (int)(mI->getChannel()) << " : "
               << "id = " << mI->getID() << endl;
 
+}
+
+
+
+MappedInstrument*
+Sequencer::getMappedInstrument(InstrumentId id)
+{
+    std::vector<Rosegarden::MappedInstrument*>::iterator it;
+
+    for (it = m_instruments.begin(); it != m_instruments.end(); it++)
+    {
+        if ((*it)->getID() == id)
+            return (*it);
+    }
+
+    return 0;
 }
 
 

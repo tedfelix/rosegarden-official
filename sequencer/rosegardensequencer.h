@@ -149,6 +149,10 @@ public slots:
     virtual void setMappedInstrument(int type, unsigned char channel,
                                      unsigned int id);
 
+    // The sequencer will process the MappedComposition as soon as it
+    // gets the chance.
+    //
+    virtual void processSequencerSlice(Rosegarden::MappedComposition mC);
 
 public:
 

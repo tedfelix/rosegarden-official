@@ -637,7 +637,15 @@ RosegardenSequencerApp::setMappedInstrument(int type, unsigned char channel,
 
 }
 
-
-
+// Process a MappedComposition sent from Sequencer with
+// immediate effect
+//
+void
+RosegardenSequencerApp::processSequencerSlice(Rosegarden::MappedComposition mC)
+{
+    std::cout << "processSequencerSlice() - processing slice immediately"
+              << std:: endl;
+    m_sequencer->processEventsOut(mC, Rosegarden::RealTime(0, 0));
+}
 
 

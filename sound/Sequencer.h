@@ -71,8 +71,8 @@ class NoteOffEvent
 public:
     NoteOffEvent() {;}
     NoteOffEvent(const Rosegarden::RealTime &realTime,
-                 const unsigned int &pitch,
-                 const Rosegarden::MidiByte &status):
+                 unsigned int pitch,
+                 Rosegarden::MidiByte status):
         m_realTime(realTime),
         m_pitch(pitch),
         m_status(status) {;}
@@ -86,8 +86,9 @@ public:
         }
     };
     
-    Rosegarden::RealTime getRealTime() { return m_realTime; }
-    Rosegarden::MidiByte getPitch() { return m_pitch; }
+    Rosegarden::RealTime getRealTime() const { return m_realTime; }
+    Rosegarden::MidiByte getPitch() const { return m_pitch; }
+    Rosegarden::MidiByte getStatusByte() const { return m_status; }
 
 private: 
     Rosegarden::RealTime m_realTime;
@@ -290,6 +291,10 @@ public:
     // Set a MappedInstrument at the Sequencer level
     //
     void setMappedInstrument(MappedInstrument *mI);
+
+    // Get a MappedInstrument pointer
+    //
+    MappedInstrument* getMappedInstrument(InstrumentId id);
 
 protected:
     std::vector<AudioFile*>::iterator getAudioFile(const unsigned int &id);

@@ -34,7 +34,7 @@ MappedEvent::MappedEvent(const Event &e,
        m_duration(duration),
        m_audioStartMarker(0, 0),
        m_velocity(127),
-       m_type(Internal),
+       m_type(MidiNote),
        m_instrument(instrument)
 {
     if (e.has(BaseProperties::VELOCITY)) {

@@ -69,7 +69,7 @@ SequenceManager::setTransportStatus(const TransportStatus &status)
 //
 MappedComposition*
 SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
-                                    const Rosegarden::RealTime &sliceEnd)
+                                   const Rosegarden::RealTime &sliceEnd)
 {
     Composition &comp = m_doc->getComposition();
   
@@ -942,6 +942,8 @@ SequenceManager::preparePlayback()
 {
     Rosegarden::Studio &studio = m_doc->getStudio();
     Rosegarden::InstrumentList list = studio.getInstruments();
+    Rosegarden::MappedComposition mC;
+    Rosegarden::MappedEvent *mE;
 
     // Send the MappedInstruments (minimal Instrument information
     // required for Performance) to the Sequencer
@@ -969,8 +971,54 @@ SequenceManager::preparePlayback()
         {
             if ((*it)->getMidiChannel() == 9) // drum channel
             {
+                // Bank select
+
+                /*
+                //if ((*it)->sendsBankSelect())
+                mE = new MappedEvent((*it)->getID(),
+                                     Rosegarden::MappedEvent::MidiController,
+                                     0,    // MSB controller
+                                     127); // bank
+                mC.insert(mE);
+
+                mE = new MappedEvent((*it)->getID(),
+                                     Rosegarden::MappedEvent::MidiController,
+                                     32,    // LSB controller
+                                     0);    // bank
+
+                mC.insert(mE);
+
+                // Program change
+                mE = new MappedEvent((*it)->getID(),
+                                     Rosegarden::MappedEvent::MidiProgramChange,
+                                     (*it)->getProgramChange());
+                mC.insert(mE);
+                */
+
+                // Program change
+                mE = new MappedEvent((*it)->getID(),
+                                     Rosegarden::MappedEvent::MidiProgramChange,
+                                     10);
+                mC.insert(mE);
             }
         }
+    }
+
+    // Send the MappedComposition if it's got anything in it
+    if (mC.size() > 0)
+    {
+        QByteArray data;
+        QDataStream streamOut(data, IO_WriteOnly);
+
+        streamOut << mC;
+
+        if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                      ROSEGARDEN_SEQUENCER_IFACE_NAME,
+          "processSequencerSlice(Rosegarden::MappedComposition)", data))
+        {
+            throw(i18n("Failed to contact Rosegarden sequencer"));
+        }
+
     }
 
 }
