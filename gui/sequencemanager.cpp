@@ -431,8 +431,9 @@ SequenceManager::play()
     streamOut << config->readLongNumEntry("playbacklatencyusec", 100000);
 
     // fetch latency
-    streamOut << docConfig.getFetchLatency().sec;
-    streamOut << docConfig.getFetchLatency().usec;
+    RealTime fetchLatency = docConfig.get<RealTimeT>("fetchlatency");
+    streamOut << fetchLatency.sec;
+    streamOut << fetchLatency.usec;
 
     // read ahead slice
     streamOut << config->readLongNumEntry("readaheadsec", 0);
@@ -733,8 +734,9 @@ SequenceManager::record()
     streamOut << config->readLongNumEntry("playbacklatencyusec", 100000);
 
     // fetch latency
-    streamOut << docConfig.getFetchLatency().sec;
-    streamOut << docConfig.getFetchLatency().usec;
+    RealTime fetchLatency = docConfig.get<RealTimeT>("fetchlatency");
+    streamOut << fetchLatency.sec;
+    streamOut << fetchLatency.usec;
 
     // read ahead slice
     streamOut << config->readLongNumEntry("readaheadsec", 0);
@@ -999,7 +1001,7 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
     if(metronome == 0)
     {
         metronome = new MidiMetronome();
-        metronome->pitch = config.getMetronomePitch();
+        metronome->pitch = config.get<Int>("metronomepitch");
 
         // Default instrument is the first possible instrument
         //
@@ -1031,9 +1033,9 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
         MappedEvent *me =
             new MappedEvent(metronome->instrument,
                             metronome->pitch,
-                            config.getMetronomeBarVelocity(),
+                            config.get<Int>("metronomebarvelocity"),
                             comp.getElapsedRealTime(barStart.first),
-                            config.getMetronomeDuration());
+                            config.get<RealTimeT>("metronomeduration"));
         m_mC.insert(me);
     }
     else if (barEnd.first >= sliceStart && barEnd.first <= sliceEnd)
@@ -1041,9 +1043,9 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
         MappedEvent *me =
             new MappedEvent(metronome->instrument,
                             metronome->pitch,
-                            config.getMetronomeBarVelocity(),
+                            config.get<Int>("metronomebarvelocity"),
                             comp.getElapsedRealTime(barEnd.first),
-                            config.getMetronomeDuration());
+                            config.get<RealTimeT>("metronomeduration"));
         m_mC.insert(me);
     }
 
@@ -1061,9 +1063,9 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
         {
             MappedEvent *me =new MappedEvent(metronome->instrument,
                                              metronome->pitch,
-                                             config.getMetronomeBeatVelocity(),
+                                             config.get<Int>("metronomebeatvelocity"),
                                              comp.getElapsedRealTime(i),
-                                             config.getMetronomeDuration());
+                                             config.get<RealTimeT>("metronomeduration"));
             m_mC.insert(me);
         }
     }
