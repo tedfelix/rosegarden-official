@@ -631,9 +631,7 @@ Composition::addTimeSignature(timeT t, TimeSignature timeSig)
 	m_timeSigSegment.insert(timeSig.getAsEvent(t));
     m_barPositionsNeedCalculating = true;
 
-    ReferenceSegment::difference_type d = 0;
-    std::distance(m_timeSigSegment.begin(), i, d);
-    return d;
+    return std::distance(m_timeSigSegment.begin(), i);
 }
 
 TimeSignature
