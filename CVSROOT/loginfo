@@ -27,5 +27,6 @@
 
 #ALL (echo ""; echo %{sVv}; date; cat) | mail -s "[CVS COMMIT]" rosegarden-bugs@lists.sourceforge.net
 commit_dummy (ls && pwd) | mail glaurent@telegraph-road.org
+commit_dummy bash $CVSROOT/CVSROOT/logmailer %{sVv}
 
 
