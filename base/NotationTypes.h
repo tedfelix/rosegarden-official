@@ -369,8 +369,6 @@ private:
     static const int m_dottedCrotchetTime;
 };
 
-/*
-*/
 
 class TimeSignature
 {

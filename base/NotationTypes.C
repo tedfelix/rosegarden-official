@@ -243,21 +243,28 @@ string Note::getShortName(Type type, bool dotted) const {
 Note Note::getNearestNote(int duration)
 {
     int d = m_shortestTime;
+    Note n(Longest, true);
+
     //!!! too short -- reconsider?
-    if (d < duration) return Note(m_shortestTime);
+    if (duration < d) return Note(Shortest);
 
     for (int tag = Shortest + 1; tag <= Longest; ++tag) {
         if (d + d/2 > duration) {
-            return Note(tag-1);
+	    n = Note(tag-1); break;
         }
         if (d*2 > duration) {
-            return Note(tag-1, true);
+	    n = Note(tag-1, true); break;
         }
-        d = d*2;
+        d *= 2;
     }
 
     //!!! too long -- should subdivide
-    return Note(Longest, true);
+//    n = Note(Longest, true);
+
+    cout << "Note::getNearestNote(): duration was " << duration
+	 << ", returning note (" << n.getType() << ", " << n.isDotted()
+	 << ")" << endl;
+    return n;
 }
 
 
