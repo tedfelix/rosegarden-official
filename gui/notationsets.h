@@ -155,7 +155,6 @@ public:
 
 protected:
     virtual bool test(const NELIterator &i);
-
     virtual void sample(const NELIterator &i);
 
 private:

@@ -81,7 +81,15 @@ NotationVLayout::layout(NotationElementList::iterator from,
 		el = *chord[j];
 		el->setLayoutY(m_staff.yCoordOfHeight(h[j]));
 
-		if (!el->event()->has(P_STALK_UP))
+		// we can't only set this if it hasn't already been
+		// set, because we may have inserted more notes on the
+		// chord since it was last set.  we have to make sure
+		// the bit that sets this for beamed groups is called
+		// after this bit (i.e. that notationview calls
+		// notationhlayout after notationvlayout)... or else
+		// introduce two separate properties (beamed stalk up
+		// and non-beamed stalk up)
+//		if (!el->event()->has(P_STALK_UP))
 		    el->event()->setMaybe<Bool>(P_STALK_UP, stalkUp);
 
 		if (!el->event()->has(P_DRAW_TAIL))
