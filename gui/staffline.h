@@ -27,7 +27,7 @@
 /**
  * A staff line
  *
- * It's simply a groupable line which can be "highlighted"
+ * A groupable line which can be "highlighted"
  * (drawn with a different color)
  */
 class StaffLine : public QCanvasLineGroupable
@@ -47,7 +47,6 @@ public:
 
 protected:
     int m_height;
-    int m_y;
 
     QPen m_normalPen;
 };
