@@ -41,13 +41,21 @@
 namespace Rosegarden
 {
 
+// Keep these in lower case
+const char* const Configuration::MetronomePitch        = "metronomepitch";
+const char* const Configuration::MetronomeBarVelocity  = "metronomebarvelocity";
+const char* const Configuration::MetronomeBeatVelocity = "metronomebeatvelocity";
+const char* const Configuration::FetchLatency          = "fetchlatency";
+const char* const Configuration::MetronomeDuration     = "metronomeduration";
+
+
 Configuration::Configuration()
 {
-    set<Int>("metronomepitch", 37);
-    set<Int>("metronomebarvelocity", 120);
-    set<Int>("metronomebeatvelocity", 80);
-    set<RealTimeT>("fetchlatency",      RealTime(0, 50000));    
-    set<RealTimeT>("metronomeduration", RealTime(0, 10000));    
+    set<Int>(MetronomePitch, 37);
+    set<Int>(MetronomeBarVelocity, 120);
+    set<Int>(MetronomeBeatVelocity, 80);
+    set<RealTimeT>(FetchLatency,      RealTime(0, 50000));    
+    set<RealTimeT>(MetronomeDuration, RealTime(0, 10000));    
 }
 
 Configuration::~Configuration()
@@ -67,17 +75,17 @@ Configuration::toXmlString()
     config << endl
            << "<configuration>" << endl
     
-           << "<metronomepitch>"        << get<Int>("metronomepitch") << "</metronomepitch>" << endl
-           << "<metronomebarvelocity>"  << get<Int>("metronomebarvelocity") << "</metronomebarvelocity>" << endl
-           << "<metronomebeatvelocity>" << get<Int>("metronomebeatvelocity") << "</metronomebeatvelocity>" << endl;
+           << "<" << MetronomePitch        << "type=\"Int\">" << get<Int>(MetronomePitch)        << "</" << MetronomePitch        << ">\n"
+           << "<" << MetronomeBarVelocity  << "type=\"Int\">" << get<Int>(MetronomeBarVelocity)  << "</" << MetronomeBarVelocity  << ">\n"
+           << "<" << MetronomeBeatVelocity << "type=\"Int\">" << get<Int>(MetronomeBeatVelocity) << "</" << MetronomeBeatVelocity << ">\n";
 
-    RealTime r = get<RealTimeT>("fetchlatency");
+    RealTime r = get<RealTimeT>(FetchLatency);
     
-    config << "<fetchlatency>" << r.sec << "," << r.usec << "</fetchlatency>" << endl;
+    config << "<" << FetchLatency << "type=\"RealTime\">" << r.sec << "," << r.usec << "</" << FetchLatency << ">" << endl;
 
-    r =  get<RealTimeT>("metronomeduration");
+    r =  get<RealTimeT>(MetronomeDuration);
 
-    config << "<metronomeduration>" << r.sec << "," << r.usec << "</metronomeduration>" << endl;
+    config << "<" << MetronomeDuration << "type=\"RealTime\">" << r.sec << "," << r.usec << "</" << MetronomeDuration << ">" << endl;
 
     config << "</configuration>" << endl << std::ends;
 

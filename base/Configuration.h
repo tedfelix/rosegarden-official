@@ -69,6 +69,13 @@ public:
     //
     virtual std::string toXmlString();
 
+    // Property names
+    static const char* const MetronomePitch;
+    static const char* const MetronomeBarVelocity;
+    static const char* const MetronomeBeatVelocity;
+    static const char* const FetchLatency;
+    static const char* const MetronomeDuration;
+    
 private:
 
 };
