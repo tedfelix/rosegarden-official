@@ -59,6 +59,7 @@ class AudioPluginManager;
 class RosegardenTransportDialog;
 class SegmentMmapper;
 class CompositionMmapper;
+class ControlBlockMmapper;
 
 class SequenceManager : public QObject
 {
@@ -220,8 +221,9 @@ protected slots:
 
 protected:
     Rosegarden::MappedComposition m_mC;
-    RosegardenGUIDoc *m_doc;
-    CompositionMmapper *m_mmapper;
+    RosegardenGUIDoc    *m_doc;
+    CompositionMmapper  *m_compositionMmapper;
+    ControlBlockMmapper *m_controlBlockMmapper;
 
     // statuses
     TransportStatus            m_transportStatus;

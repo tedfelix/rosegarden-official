@@ -46,6 +46,7 @@
 #include "rosegardentransportdialog.h"
 #include "rosegardenguiview.h"
 #include "sequencemanager.h"
+#include "ControlBlock.h"
 #include "SegmentPerformanceHelper.h"
 #include "SoundDriver.h"
 #include "MappedRealTime.h"
@@ -66,6 +67,148 @@ using std::endl;
 
 namespace Rosegarden
 {
+
+class ControlBlockMmapper
+{
+public:
+    ControlBlockMmapper(RosegardenGUIDoc*);
+    ~ControlBlockMmapper();
+    
+    QString getFileName() { return m_fileName; }
+    void refresh();
+
+    // delegate ControlBlock's interface
+    void setInstrumentForTrack(unsigned int trackNb, InstrumentId);
+    InstrumentId getInstrumentForTrack(unsigned int trackNb);
+
+protected:
+    void initControlBlock();
+    void setFileSize(size_t);
+    QString createFileName();
+
+    //--------------- Data members ---------------------------------
+    RosegardenGUIDoc* m_doc;
+    QString m_fileName;
+    int m_fd;
+    void* m_mmappedBuffer;
+    size_t m_mmappedSize;
+    ControlBlock* m_controlBlock;
+};
+
+ControlBlockMmapper::ControlBlockMmapper(RosegardenGUIDoc* doc)
+    : m_doc(doc),
+      m_fileName(createFileName()),
+      m_fd(-1),
+      m_mmappedBuffer(0),
+      m_mmappedSize(ControlBlock::getSize()),
+      m_controlBlock(0)
+{
+    // just in case
+    QFile::remove(m_fileName);
+
+    m_fd = ::open(m_fileName.latin1(), O_RDWR|O_CREAT|O_TRUNC,
+                  S_IRUSR|S_IWUSR);
+    if (m_fd < 0) {
+        SEQMAN_DEBUG << "ControlBlockMmapper : Couldn't open " << m_fileName
+                     << endl;
+        throw Rosegarden::Exception("Couldn't open " + qstrtostr(m_fileName));
+    }
+
+    setFileSize(m_mmappedSize);
+
+    //
+    // mmap() file for writing
+    //
+    m_mmappedBuffer = ::mmap(0, m_mmappedSize,
+                             PROT_READ|PROT_WRITE,
+                             MAP_SHARED, m_fd, 0);
+
+    if (m_mmappedBuffer == (void*)-1) {
+        SEQMAN_DEBUG << QString("mmap failed : (%1) %2\n").arg(errno).arg(strerror(errno));
+        throw Rosegarden::Exception("mmap failed");
+    }
+
+    SEQMAN_DEBUG << "ControlBlockMmapper : mmap size : " << m_mmappedSize
+                 << " at " << (void*)m_mmappedBuffer << endl;
+
+    // Create new control block on file
+    m_controlBlock = new (m_mmappedBuffer) ControlBlock(doc->getComposition().getNbTracks());
+
+    initControlBlock();
+}
+
+ControlBlockMmapper::~ControlBlockMmapper()
+{
+    ::munmap(m_mmappedBuffer, m_mmappedSize);
+    ::close(m_fd);
+}
+
+
+QString ControlBlockMmapper::createFileName()
+{
+    return KGlobal::dirs()->resourceDirs("tmp").first() + "/control_block";
+}
+
+void ControlBlockMmapper::refresh()
+{
+    ::msync(m_mmappedBuffer, m_mmappedSize, MS_ASYNC);
+}
+
+void ControlBlockMmapper::initControlBlock()
+{
+    Composition& comp = m_doc->getComposition();
+    
+    for(Composition::trackiterator i = comp.getTracks().begin(); i != comp.getTracks().end(); ++i) {
+        Track* track = i->second;
+        if (track == 0) continue;
+        
+        m_controlBlock->setInstrumentForTrack(i->first, track->getInstrument());
+    }
+    
+    refresh();
+}
+
+
+void ControlBlockMmapper::setFileSize(size_t size)
+{
+    SEQMAN_DEBUG << "SegmentMmapper : setting size of "
+                 << m_fileName << " to " << size << endl;
+    // rewind
+    ::lseek(m_fd, 0, SEEK_SET);
+
+    //
+    // enlarge the file
+    // (seek() to wanted size, then write a byte)
+    //
+    if (::lseek(m_fd, size - 1, SEEK_SET) == -1) {
+        SEQMAN_DEBUG << "SegmentMmapper : Couldn't lseek in " << m_fileName
+                     << " to " << size << endl;
+        throw Rosegarden::Exception("lseek failed");
+    }
+    
+    if (::write(m_fd, "\0", 1) != 1) {
+        SEQMAN_DEBUG << "SegmentMmapper : Couldn't write byte in  "
+                     << m_fileName << endl;
+        throw Rosegarden::Exception("write failed");
+    }
+    
+}
+
+void ControlBlockMmapper::setInstrumentForTrack(unsigned int trackNb, InstrumentId id)
+{
+    m_controlBlock->setInstrumentForTrack(trackNb, id);
+    refresh();
+}
+
+InstrumentId ControlBlockMmapper::getInstrumentForTrack(unsigned int trackNb)
+{
+    return m_controlBlock->getInstrumentForTrack(trackNb);
+}
+
+
+
+//----------------------------------------
+
 
 class SegmentMmapper
 {
@@ -144,7 +287,8 @@ protected:
 SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
                                  RosegardenTransportDialog *transport):
     m_doc(doc),
-    m_mmapper(new CompositionMmapper(m_doc)),
+    m_compositionMmapper(new CompositionMmapper(m_doc)),
+    m_controlBlockMmapper(new ControlBlockMmapper(m_doc)),
     m_transportStatus(STOPPED),
     m_soundDriverStatus(NO_DRIVER),
     m_transport(transport),
@@ -156,7 +300,7 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
     m_compositionRefreshStatusId(m_doc->getComposition().getNewRefreshStatusId()),
     m_updateRequested(true)
 {
-    m_mmapper->cleanup();
+    m_compositionMmapper->cleanup();
 
     m_countdownDialog = new CountdownDialog(dynamic_cast<QWidget*>
                                 (m_doc->parent())->parentWidget());
@@ -173,7 +317,8 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
 SequenceManager::~SequenceManager()
 {
     SEQMAN_DEBUG << "SequenceManager::~SequenceManager()\n";   
-    delete m_mmapper;
+    delete m_compositionMmapper;
+    delete m_controlBlockMmapper;
 }
 
 void SequenceManager::setDocument(RosegardenGUIDoc* doc)
@@ -1737,8 +1882,8 @@ void SequenceManager::dumpCompositionToFileSet(const QString& path)
 
 void SequenceManager::resetCompositionMmapper()
 {
-    delete m_mmapper;
-    m_mmapper = new CompositionMmapper(m_doc);
+    delete m_compositionMmapper;
+    m_compositionMmapper = new CompositionMmapper(m_doc);
 }
 
 //----------------------------------------
@@ -2026,7 +2171,7 @@ void SegmentMmapper::doMmap()
         throw Rosegarden::Exception("mmap failed");
     }
 
-    SEQMAN_DEBUG << "mmap size : " << m_mmappedSize
+    SEQMAN_DEBUG << "SegmentMmapper::doMmap() - mmap size : " << m_mmappedSize
                  << " at " << (void*)m_mmappedBuffer << endl;
     
 }
@@ -2081,7 +2226,7 @@ void SegmentMmapper::dump()
 	    
             try {
                 // Create mapped event
-                MappedEvent mE(track->getInstrument(),
+                MappedEvent mE(track->getId(),
                                **j,
                                eventTime,
                                duration);
@@ -2223,14 +2368,14 @@ void SequenceManager::segmentModified(Segment* s)
 {
     SEQMAN_DEBUG << "SequenceManager::segmentModified(" << s << ")\n";
 
-    bool sizeChanged = m_mmapper->segmentModified(s);
+    bool sizeChanged = m_compositionMmapper->segmentModified(s);
 
     if ((m_transportStatus == PLAYING) && sizeChanged) {
 
         QByteArray data;
         QDataStream streamOut(data, IO_WriteOnly);
 
-        streamOut << m_mmapper->getSegmentFileName(s);
+        streamOut << m_compositionMmapper->getSegmentFileName(s);
         
         if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
                                       ROSEGARDEN_SEQUENCER_IFACE_NAME,
@@ -2248,14 +2393,14 @@ void SequenceManager::segmentAdded(const Composition *c, Segment* s)
 {
     if (!m_doc || &m_doc->getComposition() != c) return;
 
-    m_mmapper->segmentAdded(s);
+    m_compositionMmapper->segmentAdded(s);
 
     if (m_transportStatus == PLAYING) {
 
         QByteArray data;
         QDataStream streamOut(data, IO_WriteOnly);
 
-        streamOut << m_mmapper->getSegmentFileName(s);
+        streamOut << m_compositionMmapper->getSegmentFileName(s);
         
         if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
                                       ROSEGARDEN_SEQUENCER_IFACE_NAME,
@@ -2272,8 +2417,8 @@ void SequenceManager::segmentRemoved(const Composition *c, Segment* s)
 {
     if (!m_doc || &m_doc->getComposition() != c) return;
 
-    QString filename = m_mmapper->getSegmentFileName(s);
-    m_mmapper->segmentDeleted(s);
+    QString filename = m_compositionMmapper->getSegmentFileName(s);
+    m_compositionMmapper->segmentDeleted(s);
 
     if (m_transportStatus == PLAYING) {
 

@@ -39,6 +39,7 @@
 #include "rosedebug.h"
 #include "rosegardensequencer.h"
 #include "rosegardendcop.h"
+#include "ControlBlock.h"
 #include "Sequencer.h"
 #include "MappedInstrument.h"
 
@@ -134,7 +135,7 @@ void MmappedSegment::map()
 
     m_fd = ::open(m_filename.latin1(), O_RDWR);
 
-    m_mmappedBuffer = (char*)mmap(0, m_mmappedSize, PROT_READ, MAP_SHARED, m_fd, 0);
+    m_mmappedBuffer = (char*)::mmap(0, m_mmappedSize, PROT_READ, MAP_SHARED, m_fd, 0);
 
     if (m_mmappedBuffer == (void*)-1) {
         SEQUENCER_DEBUG << QString("mmap failed : (%1) %2\n").arg(errno).arg(strerror(errno));
@@ -178,7 +179,7 @@ bool MmappedSegment::remap()
     m_byteArray.resetRawData(m_mmappedBuffer, m_mmappedSize);
 
 #ifdef linux
-    m_mmappedBuffer = (char*)mremap(m_mmappedBuffer, m_mmappedSize, newSize, MREMAP_MAYMOVE);
+    m_mmappedBuffer = (char*)::mremap(m_mmappedBuffer, m_mmappedSize, newSize, MREMAP_MAYMOVE);
 #else
     ::munmap(m_mmappedBuffer, m_mmappedSize);
     m_mmappedBuffer = (char *)::mmap(0, newSize, PROT_READ, MAP_SHARED, m_fd, 0);
@@ -351,10 +352,94 @@ operator<<(kdbgstream &dbg, const Rosegarden::RealTime &t)
 
 //--------------------------------------------------
 
+using Rosegarden::InstrumentId;
+using Rosegarden::ControlBlock;
+
+class ControlBlockMmapper
+{
+public:
+    ControlBlockMmapper(QString fileName);
+    ~ControlBlockMmapper();
+    
+    QString getFileName() { return m_fileName; }
+    void refresh();
+
+    // delegate ControlBlock's interface
+    void setInstrumentForTrack(unsigned int trackNb, InstrumentId);
+    InstrumentId getInstrumentForTrack(unsigned int trackNb);
+
+protected:
+
+    //--------------- Data members ---------------------------------
+    QString m_fileName;
+    int m_fd;
+    void* m_mmappedBuffer;
+    size_t m_mmappedSize;
+    ControlBlock* m_controlBlock;
+};
+
+ControlBlockMmapper::ControlBlockMmapper(QString fileName)
+    : m_fileName(fileName),
+      m_fd(-1),
+      m_mmappedBuffer(0),
+      m_mmappedSize(ControlBlock::getSize()),
+      m_controlBlock(0)
+{
+    m_fd = ::open(m_fileName.latin1(), O_RDWR);
+
+    if (m_fd < 0) {
+        SEQMAN_DEBUG << "ControlBlockMmapper : Couldn't open " << m_fileName
+                     << endl;
+        throw Rosegarden::Exception(std::string("Couldn't open ") + m_fileName.latin1());
+    }
+
+    //
+    // mmap() file for reading
+    //
+    m_mmappedBuffer = (char*)::mmap(0, m_mmappedSize, PROT_READ, MAP_SHARED, m_fd, 0);
+
+    if (m_mmappedBuffer == (void*)-1) {
+        SEQUENCER_DEBUG << QString("mmap failed : (%1) %2\n").arg(errno).arg(strerror(errno));
+        throw Rosegarden::Exception("mmap failed");
+    }
+
+    SEQMAN_DEBUG << "ControlBlockMmapper : mmap size : " << m_mmappedSize
+                 << " at " << (void*)m_mmappedBuffer << endl;
+
+    // Create new control block on file
+    m_controlBlock = new (m_mmappedBuffer) ControlBlock;
+}
+
+ControlBlockMmapper::~ControlBlockMmapper()
+{
+    ::munmap(m_mmappedBuffer, m_mmappedSize);
+    ::close(m_fd);
+}
+
+
+void ControlBlockMmapper::refresh()
+{
+    ::msync(m_mmappedBuffer, m_mmappedSize, MS_ASYNC);
+}
+
+void ControlBlockMmapper::setInstrumentForTrack(unsigned int trackNb, InstrumentId id)
+{
+    m_controlBlock->setInstrumentForTrack(trackNb, id);
+    refresh();
+}
+
+InstrumentId ControlBlockMmapper::getInstrumentForTrack(unsigned int trackNb)
+{
+    return m_controlBlock->getInstrumentForTrack(trackNb);
+}
+
+//----------------------------------------
+
+
 class MmappedSegmentsMetaIterator
 {
 public:
-    MmappedSegmentsMetaIterator(RosegardenSequencerApp::mmappedsegments&);
+    MmappedSegmentsMetaIterator(RosegardenSequencerApp::mmappedsegments&, ControlBlockMmapper*);
     ~MmappedSegmentsMetaIterator();
 
     /// reset all iterators to beginning
@@ -374,6 +459,8 @@ protected:
 
     //--------------- Data members ---------------------------------
 
+    ControlBlockMmapper* m_controlBlockMmapper;
+
     Rosegarden::RealTime m_currentTime;
     RosegardenSequencerApp::mmappedsegments& m_segments;
 
@@ -381,8 +468,10 @@ protected:
     segmentiterators m_iterators;
 };
 
-MmappedSegmentsMetaIterator::MmappedSegmentsMetaIterator(RosegardenSequencerApp::mmappedsegments& segments)
-    : m_segments(segments)
+MmappedSegmentsMetaIterator::MmappedSegmentsMetaIterator(RosegardenSequencerApp::mmappedsegments& segments,
+                                                         ControlBlockMmapper* controlBlockMmapper)
+    : m_controlBlockMmapper(controlBlockMmapper),
+      m_segments(segments)
 {
     for(RosegardenSequencerApp::mmappedsegments::iterator i = m_segments.begin();
         i != m_segments.end(); ++i)
@@ -509,6 +598,7 @@ bool MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(Rosegarden::Map
             Rosegarden::MappedEvent *evt = new Rosegarden::MappedEvent(*(*iter));
 
             if (evt->getEventTime() < endTime) {
+                evt->setInstrument(m_controlBlockMmapper->getInstrumentForTrack(evt->getInstrument()));
 
                 SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : " << endTime
                                 << " inserting evt from segment #"
@@ -559,7 +649,6 @@ void MmappedSegmentsMetaIterator::resetIteratorForSegment(const QString& filenam
 
 //----------------------------------------
 
-
 // The default latency and read-ahead values are actually sent
 // down from the GUI every time playback or recording starts
 // so the local values are kind of meaningless.
@@ -582,7 +671,8 @@ RosegardenSequencerApp::RosegardenSequencerApp(
     m_studio(new Rosegarden::MappedStudio()),
     m_oldSliceSize(0, 0),
     m_segmentFilesPath(KGlobal::dirs()->resourceDirs("tmp").first()),
-    m_metaIterator(0)
+    m_metaIterator(0),
+    m_controlBlockMmapper(0)
 {
     SEQUENCER_DEBUG << "Registering with DCOP server" << endl;
 
@@ -634,14 +724,10 @@ RosegardenSequencerApp::RosegardenSequencerApp(
 
 RosegardenSequencerApp::~RosegardenSequencerApp()
 {
-    if (m_sequencer)
-    {
-        SEQUENCER_DEBUG << "RosegardenSequencer - shutting down" << endl;
-        delete m_sequencer;
-    }
-
-    if (m_studio)
-        delete m_studio;
+    SEQUENCER_DEBUG << "RosegardenSequencer - shutting down" << endl;
+    delete m_sequencer;
+    delete m_studio;
+    delete m_controlBlockMmapper;
 }
 
 void
@@ -1245,6 +1331,8 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
         mmapSegment(m_segmentFilesPath + "/" + segmentsDir[i]);
     }
 
+    m_controlBlockMmapper = new ControlBlockMmapper(KGlobal::dirs()->resourceDirs("tmp").first() + "/control_block");
+
     initMetaIterator();
 
     // report
@@ -1274,7 +1362,7 @@ MmappedSegment* RosegardenSequencerApp::mmapSegment(const QString& file)
 void RosegardenSequencerApp::initMetaIterator()
 {
     delete m_metaIterator;
-    m_metaIterator = new MmappedSegmentsMetaIterator(m_mmappedSegments);
+    m_metaIterator = new MmappedSegmentsMetaIterator(m_mmappedSegments, m_controlBlockMmapper);
 }
 
 void RosegardenSequencerApp::cleanupMmapData()
@@ -1286,6 +1374,9 @@ void RosegardenSequencerApp::cleanupMmapData()
 
     delete m_metaIterator;
     m_metaIterator = 0;
+
+    delete m_controlBlockMmapper;
+    m_controlBlockMmapper = 0;
 }
 
 void RosegardenSequencerApp::remapSegment(const QString& filename)
@@ -1446,7 +1537,7 @@ void
 RosegardenSequencerApp::setMappedInstrument(int type, unsigned char channel,
                                             unsigned int id)
 {
-    Rosegarden::InstrumentId mID = (Rosegarden::InstrumentId)id;
+    InstrumentId mID = (InstrumentId)id;
     Rosegarden::Instrument::InstrumentType mType = 
         (Rosegarden::Instrument::InstrumentType)type;
     Rosegarden::MidiByte mChannel = (Rosegarden::MidiByte)channel;
@@ -1481,7 +1572,7 @@ RosegardenSequencerApp::processMappedEvent(unsigned int id,
 {
     Rosegarden::MappedEvent *mE =
         new Rosegarden::MappedEvent(
-            (Rosegarden::InstrumentId)id,
+            (InstrumentId)id,
             (Rosegarden::MappedEvent::MappedEventType)type,
             (Rosegarden::MidiByte)pitch,
             (Rosegarden::MidiByte)velocity,

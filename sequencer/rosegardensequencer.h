@@ -61,6 +61,7 @@ class RosegardenGUIDoc;
 class RosegardenGUIView;
 class MmappedSegment;
 class MmappedSegmentsMetaIterator;
+class ControlBlockMmapper;
 
 namespace Rosegarden { class MappedInstrument; }
 
@@ -333,6 +334,8 @@ public:
     //
     void initialiseStudio();
 
+    typedef std::map<QString, MmappedSegment*> mmappedsegments;
+
 public slots:
 
     // Check for new clients - on timeout
@@ -342,8 +345,6 @@ public slots:
     // Reset slice size (dynamic slice sizing) - timeout
     //
 //    void slotRevertSliceSize();
-
-    typedef std::map<QString, MmappedSegment*> mmappedsegments;
 
 protected:
 
@@ -434,6 +435,7 @@ protected:
     Rosegarden::RealTime            m_lastStartTime;
 
     Rosegarden::MappedComposition   m_mC;
+    ControlBlockMmapper*            m_controlBlockMmapper;
 };
  
 #endif // _ROSEGARDEN_SEQUENCER_APP_H_
