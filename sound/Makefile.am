@@ -39,7 +39,7 @@ libRosegardenSequencer_la_LIBADD   = -lartsmidi $(LIB_QT) -lsoundserver_idl libR
 #	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot $(kless_SOURCES) && mv messages.po ../po/kless.pot
 
 MidiArts.h: $(srcdir)/MidiArts.idl
-	$(MCOPIDL) -I$(kde_includes) -t $(srcdir)/MidiArts.idl
+	$(MCOPIDL) -I$(kde_includes) -I$(kde_includes)/arts -t $(srcdir)/MidiArts.idl
 
 MidiArts.cc: MidiArts.h
 MidiArts.mcopclass: MidiArts.h

@@ -49,7 +49,8 @@ public:
     void setMidiThru(Arts::MidiPort port) { m_midiThru = port; }
   
     virtual Arts::TimeStamp time();
-#if (ARTS_MINOR_VERSION >= 9) && (ARTS_MICRO_VERSION >= 9)
+#if (ARTS_MAJOR_VERSION >= 1) || ((ARTS_MINOR_VERSION >= 9) && \
+                                  (ARTS_MICRO_VERSION >= 9))
     virtual Arts::TimeStamp playTime();
 #endif
     std::vector<Arts::MidiEvent> *getQueue();
