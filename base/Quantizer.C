@@ -366,7 +366,7 @@ Quantizer::setToTarget(Segment *s, Segment::iterator i,
 
     timeT st = 0, sd = 0;
     bool haveSt = false, haveSd = false;
-    if (m_source != RawEventData) {
+    if (m_source != RawEventData && m_target == RawEventData) {
 	haveSt = (*i)->get<Int>(m_sourceProperties[AbsoluteTimeValue], st);
 	haveSd = (*i)->get<Int>(m_sourceProperties[DurationValue],     sd);
     }
@@ -375,7 +375,17 @@ Quantizer::setToTarget(Segment *s, Segment::iterator i,
     if (m_target == RawEventData) {
 	e = new Event(**i, absTime, duration);
     } else {
-	e = new Event(**i);
+//	e = new Event(**i);
+	e = *i;
+	if (m_target == NotationPrefix) {
+	    if (m_normalizeRegion.first == m_normalizeRegion.second) {
+		m_normalizeRegion = std::pair<timeT, timeT>
+		    (absTime, absTime + duration + 1);
+	    } else {
+		m_normalizeRegion = std::pair<timeT, timeT>
+		    (absTime, absTime + duration + 1);
+	    }
+	}
     }
     
     if (haveSt) e->setMaybe<Int>(m_sourceProperties[AbsoluteTimeValue],st);
@@ -395,10 +405,10 @@ Quantizer::setToTarget(Segment *s, Segment::iterator i,
 	    e->setMaybe<Int>(m_targetProperties[AbsoluteTimeValue], absTime);
 	    e->setMaybe<Int>(m_targetProperties[DurationValue], duration);
 	}
+    } else {
+	s->erase(i);
+	m_toInsert.push_back(e);
     }
-
-    s->erase(i);
-    m_toInsert.push_back(e);
 
 #ifdef DEBUG_NOTATION_QUANTIZER
     cerr << "m_toInsert.size() is now " << m_toInsert.size() << endl;
@@ -455,7 +465,8 @@ Quantizer::insertNewEvents(Segment *s) const
 {
     unsigned int sz = m_toInsert.size();
 
-    timeT minTime = 0, maxTime = 0;
+    timeT minTime = m_normalizeRegion.first,
+	  maxTime = m_normalizeRegion.second;
 
     for (unsigned int i = 0; i < sz; ++i) {
 
@@ -473,14 +484,22 @@ Quantizer::insertNewEvents(Segment *s) const
 	      << endl;
               */
 
-    if (sz > 0 && (m_target == NotationPrefix ||
-		   m_target == RawEventData)) {
+    if (m_target == NotationPrefix || m_target == RawEventData) {
+
+	if (m_normalizeRegion.first == m_normalizeRegion.second) {
+	    if (sz > 0) {
+		s->normalizeRests(minTime, maxTime);
+	    }
+	} else {
+	    s->normalizeRests(minTime, maxTime);
+	    m_normalizeRegion = std::pair<timeT, timeT>(0, 0);
+	}
+    }
+		
 /*
 	cerr << "Quantizer: calling normalizeRests("
 		  << minTime << ", " << maxTime << ")" << endl;
 */
-	s->normalizeRests(minTime, maxTime);
-    }
 
     m_toInsert.clear();
 }

@@ -216,6 +216,7 @@ protected:
 
     std::string m_source;
     std::string m_target;
+    mutable std::pair<timeT, timeT> m_normalizeRegion;
 
     enum ValueType { AbsoluteTimeValue = 0, DurationValue = 1 };
 

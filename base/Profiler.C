@@ -76,7 +76,7 @@ void Profiles::dump()
 
         cerr << "-> " << *i << ": " 
 	     << m_profiles[*i].first << " calls, "
-	     << ((m_profiles[*i].second * 1000) / CLOCKS_PER_SEC) << "ms, "
+	     << int((m_profiles[*i].second * 1000.0) / CLOCKS_PER_SEC) << "ms, "
 	     << (((double)m_profiles[*i].second * 1000000.0 /
 		  (double)m_profiles[*i].first) / CLOCKS_PER_SEC) << "us/call"
 	     << endl;
