@@ -22,12 +22,14 @@
 
 #include "qcanvasitemgroup.h"
 
-/**A Staff (treble and bass clef + lines) as displayed on screen.
+/**
+ * A Staff (treble and bass clef + lines) as displayed on screen.
+ *
+ *@author Guillaume Laurent
+ */
 
-  *@author Guillaume Laurent
-  */
-
-class Staff : public QCanvasItemGroup  {
+class Staff : public QCanvasItemGroup
+{
 public:
     enum Clef { Treble, Bass, Alto, Tenor };
     
@@ -48,6 +50,7 @@ public:
     static const unsigned int stalkLen;
     static const unsigned int nbLines;
     static const unsigned int linesOffset;
+
 protected:
 
     void makeInvisibleLine(int y);
