@@ -22,6 +22,7 @@
 #include "Composition.h"
 #include "Segment.h"
 #include "FastVector.h"
+#include "BaseProperties.h"
 #include "Quantizer.h"
 
 #include <iostream>
@@ -313,22 +314,20 @@ void Composition::setSegmentStartTime(Segment *segment, timeT startTime)
     m_segments.insert(segment);    
 }
 
-Composition::TriggerSegmentId
-Composition::addTriggerSegment(Segment *s, int pitch)
+TriggerSegmentId
+Composition::addTriggerSegment(Segment *s, int pitch, int velocity)
 {
     TriggerSegmentId id = m_nextTriggerSegmentId;
-    addTriggerSegment(s, pitch, id);
+    addTriggerSegment(s, id, pitch, velocity);
     return id;
 }
 
 void
-Composition::addTriggerSegment(Segment *s, int pitch, TriggerSegmentId id)
+Composition::addTriggerSegment(Segment *s, TriggerSegmentId id, int pitch, int velocity)
 {
-    if (m_triggerSegments.find(id) != m_triggerSegments.end()) return;
-    TriggerSegmentRec rec;
-    rec.pitch = pitch;
-    rec.segment = s;
-    m_triggerSegments[id] = rec;
+    TriggerSegmentRec *rec = getTriggerSegmentRec(id);
+    if (rec) return;
+    m_triggerSegments.insert(new TriggerSegmentRec(id, s, pitch, velocity));
     s->setComposition(this);
     if (m_nextTriggerSegmentId <= id) m_nextTriggerSegmentId = id + 1;
 }
@@ -336,25 +335,34 @@ Composition::addTriggerSegment(Segment *s, int pitch, TriggerSegmentId id)
 void
 Composition::deleteTriggerSegment(TriggerSegmentId id)
 {
-    if (m_triggerSegments.find(id) == m_triggerSegments.end()) return;
-    m_triggerSegments[id].segment->setComposition(0);
-    delete m_triggerSegments[id].segment;
-    m_triggerSegments.erase(id);
+    TriggerSegmentRec dummyRec(id, 0);
+    triggersegmentcontaineriterator i = m_triggerSegments.find(&dummyRec);
+    if (i == m_triggerSegments.end()) return;
+    (*i)->getSegment()->setComposition(0);
+    delete (*i)->getSegment();
+    delete *i;
+    m_triggerSegments.erase(i);
 }
 
 void
 Composition::detachTriggerSegment(TriggerSegmentId id)
 {
-    if (m_triggerSegments.find(id) == m_triggerSegments.end()) return;
-    m_triggerSegments[id].segment->setComposition(0);
-    m_triggerSegments.erase(id);
+    TriggerSegmentRec dummyRec(id, 0);
+    triggersegmentcontaineriterator i = m_triggerSegments.find(&dummyRec);
+    if (i == m_triggerSegments.end()) return;
+    (*i)->getSegment()->setComposition(0);
+    delete *i;
+    m_triggerSegments.erase(i);
 }
 
 void
 Composition::clearTriggerSegments()
 {
     for (triggersegmentcontaineriterator i = m_triggerSegments.begin();
-	 i != m_triggerSegments.end(); ++i) delete i->second.segment;
+	 i != m_triggerSegments.end(); ++i) {
+	delete (*i)->getSegment();
+	delete *i;
+    }
     m_triggerSegments.clear();
 }
 
@@ -363,7 +371,7 @@ Composition::getTriggerSegmentId(Segment *s)
 {
     for (triggersegmentcontaineriterator i = m_triggerSegments.begin();
 	 i != m_triggerSegments.end(); ++i) {
-	if (i->second.segment == s) return i->first;
+	if ((*i)->getSegment() == s) return (*i)->getId();
     }
     return -1;
 }
@@ -371,37 +379,21 @@ Composition::getTriggerSegmentId(Segment *s)
 Segment *
 Composition::getTriggerSegment(TriggerSegmentId id)
 {
-    if (m_triggerSegments.find(id) == m_triggerSegments.end()) return 0;
-    return m_triggerSegments[id].segment;
+    TriggerSegmentRec *rec = getTriggerSegmentRec(id);
+    if (!rec) return 0;
+    return rec->getSegment();
 }    
 
-int
-Composition::getTriggerSegmentBasePitch(TriggerSegmentId id)
-{
-    if (m_triggerSegments.find(id) == m_triggerSegments.end()) return 0;
-    return m_triggerSegments[id].pitch;
-}    
-
-void
-Composition::setTriggerSegmentBasePitch(TriggerSegmentId id, int basePitch)
-{
-    if (m_triggerSegments.find(id) == m_triggerSegments.end()) return;
-    m_triggerSegments[id].pitch = basePitch;
-}    
-
-Composition::TriggerSegmentRec
+TriggerSegmentRec *
 Composition::getTriggerSegmentRec(TriggerSegmentId id)
 {
-    if (m_triggerSegments.find(id) == m_triggerSegments.end()) {
-	TriggerSegmentRec rec;
-	rec.pitch = 0;
-	rec.segment = 0;
-	return rec;
-    }
-    return m_triggerSegments[id];
+    TriggerSegmentRec dummyRec(id, 0);
+    triggersegmentcontaineriterator i = m_triggerSegments.find(&dummyRec);
+    if (i == m_triggerSegments.end()) return 0;
+    return *i;
 }    
 
-Composition::TriggerSegmentId
+TriggerSegmentId
 Composition::getNextTriggerSegmentId() const
 {
     return m_nextTriggerSegmentId;
@@ -412,6 +404,30 @@ Composition::setNextTriggerSegmentId(TriggerSegmentId id)
 {
     m_nextTriggerSegmentId = id;
 }
+
+void
+Composition::updateTriggerSegmentReferences()
+{
+    std::map<TriggerSegmentId, TriggerSegmentRec::SegmentRuntimeIdSet> refs;
+
+    for (iterator i = begin(); i != end(); ++i) {
+	for (Segment::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
+	    if ((*j)->has(BaseProperties::TRIGGER_SEGMENT_ID)) {
+		TriggerSegmentId id =
+		    (*j)->get<Int>(BaseProperties::TRIGGER_SEGMENT_ID);
+		refs[id].insert((*i)->getRuntimeId());
+	    }
+	}
+    }
+    
+    for (std::map<TriggerSegmentId,
+	          TriggerSegmentRec::SegmentRuntimeIdSet>::iterator i = refs.begin();
+	 i != refs.end(); ++i) {
+	TriggerSegmentRec *rec = getTriggerSegmentRec(i->first);
+	if (rec) rec->setReferences(i->second);
+    }
+}
+
 
 timeT
 Composition::getDuration() const

@@ -2297,11 +2297,13 @@ SegmentColourMapCommand::unexecute()
 
 AddTriggerSegmentCommand::AddTriggerSegmentCommand(RosegardenGUIDoc *doc,
 						   Rosegarden::timeT duration,
-						   int basePitch) :
+						   int basePitch,
+						   int baseVelocity) :
     KNamedCommand(i18n("Add Triggered Segment")),
     m_composition(&doc->getComposition()),
     m_duration(duration),
     m_basePitch(basePitch),
+    m_baseVelocity(baseVelocity),
     m_id(0),
     m_segment(0),
     m_detached(false)
@@ -2314,7 +2316,7 @@ AddTriggerSegmentCommand::~AddTriggerSegmentCommand()
     if (m_detached) delete m_segment;
 }
 
-Rosegarden::Composition::TriggerSegmentId
+Rosegarden::TriggerSegmentId
 AddTriggerSegmentCommand::getId() const
 {
     return m_id;
@@ -2324,11 +2326,11 @@ void
 AddTriggerSegmentCommand::execute()
 {
     if (m_segment) {
-	m_composition->addTriggerSegment(m_segment, m_basePitch, m_id);
+	m_composition->addTriggerSegment(m_segment, m_id, m_basePitch, m_baseVelocity);
     } else {
 	m_segment = new Rosegarden::Segment();
 	m_segment->setEndMarkerTime(m_duration);
-	m_id = m_composition->addTriggerSegment(m_segment, m_basePitch);
+	m_id = m_composition->addTriggerSegment(m_segment, m_basePitch, m_baseVelocity);
     }
     m_detached = false;
 }
@@ -2342,11 +2344,13 @@ AddTriggerSegmentCommand::unexecute()
 
 
 DeleteTriggerSegmentCommand::DeleteTriggerSegmentCommand(RosegardenGUIDoc *doc,
-							 Rosegarden::Composition::TriggerSegmentId id) :
+							 Rosegarden::TriggerSegmentId id) :
     KNamedCommand(i18n("Delete Triggered Segment")),
     m_composition(&doc->getComposition()),
     m_id(id),
     m_segment(0),
+    m_basePitch(-1),
+    m_baseVelocity(-1),
     m_detached(true)
 {
     // nothing else
@@ -2360,7 +2364,11 @@ DeleteTriggerSegmentCommand::~DeleteTriggerSegmentCommand()
 void
 DeleteTriggerSegmentCommand::execute()
 {
-    m_segment = m_composition->getTriggerSegment(m_id);
+    Rosegarden::TriggerSegmentRec *rec = m_composition->getTriggerSegmentRec(m_id);
+    if (!rec) return;
+    m_segment = rec->getSegment();
+    m_basePitch = rec->getBasePitch();
+    m_baseVelocity = rec->getBaseVelocity();
     m_composition->detachTriggerSegment(m_id);
     m_detached = true;
 }
@@ -2368,7 +2376,8 @@ DeleteTriggerSegmentCommand::execute()
 void
 DeleteTriggerSegmentCommand::unexecute()
 {
-    if (m_segment) m_composition->addTriggerSegment(m_segment, m_id);
+    if (m_segment)
+	m_composition->addTriggerSegment(m_segment, m_id, m_basePitch, m_baseVelocity);
     m_detached = false;
 }
 
@@ -2376,12 +2385,14 @@ DeleteTriggerSegmentCommand::unexecute()
 PasteToTriggerSegmentCommand::PasteToTriggerSegmentCommand(Rosegarden::Composition *composition,
 							   Rosegarden::Clipboard *clipboard,
 							   QString label,
-							   int basePitch) :
+							   int basePitch,
+							   int baseVelocity) :
     KNamedCommand(i18n("Paste as New Triggered Segment")),
     m_composition(composition),
     m_clipboard(clipboard),
     m_label(label),
     m_basePitch(basePitch),
+    m_baseVelocity(baseVelocity),
     m_segment(0),
     m_detached(false)
 {
@@ -2398,7 +2409,7 @@ PasteToTriggerSegmentCommand::execute()
 {
     if (m_segment) {
 
-	m_composition->addTriggerSegment(m_segment, m_basePitch, m_id);
+	m_composition->addTriggerSegment(m_segment, m_id, m_basePitch, m_baseVelocity);
 
     } else {
 	
@@ -2427,11 +2438,6 @@ PasteToTriggerSegmentCommand::execute()
 	    for (Rosegarden::Segment::iterator si = (*i)->begin();
 		 (*i)->isBeforeEndMarker(si); ++si) {
 		if (!(*si)->isa(Rosegarden::Note::EventRestType)) {
-		    if (m_basePitch == -1 &&
-			(*si)->has(Rosegarden::BaseProperties::PITCH)) {
-			m_basePitch = (*si)->get<Rosegarden::Int>
-			    (Rosegarden::BaseProperties::PITCH);
-		    }
 		    m_segment->insert
 			(new Event(**si, 
 				   (*si)->getAbsoluteTime() - earliestStartTime));
@@ -2441,7 +2447,7 @@ PasteToTriggerSegmentCommand::execute()
 	
 	m_segment->setLabel(qstrtostr(m_label));
 
-	m_id = m_composition->addTriggerSegment(m_segment, m_basePitch);
+	m_id = m_composition->addTriggerSegment(m_segment, m_basePitch, m_baseVelocity);
     }
     
     m_detached = false;
@@ -2456,7 +2462,7 @@ PasteToTriggerSegmentCommand::unexecute()
     
 
 SetTriggerSegmentBasePitchCommand::SetTriggerSegmentBasePitchCommand(Rosegarden::Composition *composition,
-								     Rosegarden::Composition::TriggerSegmentId id,
+								     Rosegarden::TriggerSegmentId id,
 								     int newPitch) :
     KNamedCommand(i18n("Set Base Pitch")),
     m_composition(composition),
@@ -2475,14 +2481,56 @@ SetTriggerSegmentBasePitchCommand::~SetTriggerSegmentBasePitchCommand()
 void
 SetTriggerSegmentBasePitchCommand::execute()
 {
-    if (m_oldPitch == -1)
-	m_oldPitch = m_composition->getTriggerSegmentBasePitch(m_id);
-    m_composition->setTriggerSegmentBasePitch(m_id, m_newPitch);
+    Rosegarden::TriggerSegmentRec *rec = m_composition->getTriggerSegmentRec(m_id);
+    if (!rec) return;
+    if (m_oldPitch == -1) {
+	m_oldPitch = rec->getBasePitch();
+    }
+    rec->setBasePitch(m_newPitch);
 }
 
 void
 SetTriggerSegmentBasePitchCommand::unexecute()
 {
-    m_composition->setTriggerSegmentBasePitch(m_id, m_oldPitch);
+    Rosegarden::TriggerSegmentRec *rec = m_composition->getTriggerSegmentRec(m_id);
+    if (!rec) return;
+    rec->setBasePitch(m_oldPitch);
+}
+
+
+SetTriggerSegmentBaseVelocityCommand::SetTriggerSegmentBaseVelocityCommand(Rosegarden::Composition *composition,
+								     Rosegarden::TriggerSegmentId id,
+								     int newVelocity) :
+    KNamedCommand(i18n("Set Base Velocity")),
+    m_composition(composition),
+    m_id(id),
+    m_newVelocity(newVelocity),
+    m_oldVelocity(-1)
+{
+    // nothing
+}
+
+SetTriggerSegmentBaseVelocityCommand::~SetTriggerSegmentBaseVelocityCommand()
+{
+    // nothing
+}
+
+void
+SetTriggerSegmentBaseVelocityCommand::execute()
+{
+    Rosegarden::TriggerSegmentRec *rec = m_composition->getTriggerSegmentRec(m_id);
+    if (!rec) return;
+    if (m_oldVelocity == -1) {
+	m_oldVelocity = rec->getBaseVelocity();
+    }
+    rec->setBaseVelocity(m_newVelocity);
+}
+
+void
+SetTriggerSegmentBaseVelocityCommand::unexecute()
+{
+    Rosegarden::TriggerSegmentRec *rec = m_composition->getTriggerSegmentRec(m_id);
+    if (!rec) return;
+    rec->setBaseVelocity(m_oldVelocity);
 }
 

@@ -129,7 +129,7 @@ protected:
     void mergeTriggerSegment(Rosegarden::Segment **target,
 			     Rosegarden::Event *trigger,
 			     Rosegarden::timeT performanceDuration,
-			     Rosegarden::Composition::TriggerSegmentRec &rec);
+			     Rosegarden::TriggerSegmentRec *rec);
 
     //--------------- Data members ---------------------------------
     RosegardenGUIDoc* m_doc;

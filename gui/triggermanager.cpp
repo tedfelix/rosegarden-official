@@ -47,11 +47,13 @@
 #include "CompositionTimeSliceAdapter.h"
 #include "BaseProperties.h"
 #include "Clipboard.h"
+#include "TriggerSegment.h"
 
 #include <set>
 
 using Rosegarden::Composition;
 using Rosegarden::CompositionTimeSliceAdapter;
+using Rosegarden::TriggerSegmentId;
 using Rosegarden::BaseProperties;
 using Rosegarden::timeT;
 using Rosegarden::Int;
@@ -76,8 +78,8 @@ public:
     void setRawDuration(timeT raw) { m_rawDuration = raw; }
     timeT getRawDuration() const { return m_rawDuration; }
 
-    void setId(Composition::TriggerSegmentId id) { m_id = id; }
-    Composition::TriggerSegmentId getId() const { return m_id; }
+    void setId(TriggerSegmentId id) { m_id = id; }
+    TriggerSegmentId getId() const { return m_id; }
 
     void setUsage(int usage) { m_usage = usage; }
     int getUsage() const { return m_usage; }
@@ -87,7 +89,7 @@ public:
 
 protected:
     timeT m_rawDuration;
-    Composition::TriggerSegmentId m_id;
+    TriggerSegmentId m_id;
     int m_usage;
     int m_pitch;
 };
@@ -103,19 +105,20 @@ TriggerManagerItem::compare(QListViewItem * i, int col, bool ascending) const
     // col 0 -> index -- numeric compare
     // col 1 -> ID -- numeric compare
     // col 2 -> label -- default string compare
-    // col 3 -> base pitch -- pitch compare
-    // col 4 -> duration -- raw duration compare
-    // col 5 -> usage count -- numeric compare
+    // col 3 -> duration -- raw duration compare
+    // col 4 -> base pitch -- pitch compare
+    // col 5 -> base velocity -- numeric compare
+    // col 6 -> usage count -- numeric compare
     //
     if (col == 2) {  
         return QListViewItem::compare(i, col, ascending);
     } else if (col == 3) {
-        if (m_pitch < ei->getPitch()) return -1;
-        else if (ei->getPitch() < m_pitch) return 1;
-        else return 0;
-    } else if (col == 4) {
         if (m_rawDuration < ei->getRawDuration()) return -1;
         else if (ei->getRawDuration() < m_rawDuration) return 1;
+        else return 0;
+    } else if (col == 4) {
+        if (m_pitch < ei->getPitch()) return -1;
+        else if (ei->getPitch() < m_pitch) return 1;
         else return 0;
     } else {
         return key(col, ascending).toInt() - i->key(col, ascending).toInt();
@@ -142,8 +145,9 @@ TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
     m_listView->addColumn("Index");
     m_listView->addColumn(i18n("ID"));
     m_listView->addColumn(i18n("Label"));
-    m_listView->addColumn(i18n("Base pitch"));
     m_listView->addColumn(i18n("Duration"));
+    m_listView->addColumn(i18n("Base pitch"));
+    m_listView->addColumn(i18n("Base velocity"));
     m_listView->addColumn(i18n("Triggers"));
 
     // Align centrally
@@ -271,7 +275,7 @@ TriggerSegmentManager::slotUpdate()
 	for (CompositionTimeSliceAdapter::iterator ci = tsa.begin();
 	     ci != tsa.end(); ++ci) {
 	    if ((*ci)->has(BaseProperties::TRIGGER_SEGMENT_ID) &&
-		(*ci)->get<Int>(BaseProperties::TRIGGER_SEGMENT_ID) == (long)it->first) {
+		(*ci)->get<Int>(BaseProperties::TRIGGER_SEGMENT_ID) == (long)(*it)->getId()) {
 		++uses;
 		if (tracks.empty()) {
 		    first = (*ci)->getAbsoluteTime();
@@ -281,13 +285,13 @@ TriggerSegmentManager::slotUpdate()
 	}
 
 	timeT duration =
-	    it->second.segment->getEndMarkerTime() -
-	    it->second.segment->getStartTime();
+	    (*it)->getSegment()->getEndMarkerTime() -
+	    (*it)->getSegment()->getStartTime();
 
         QString timeString = makeDurationString
 	    (first, duration, timeMode);
 
-	QString label = strtoqstr(it->second.segment->getLabel());
+	QString label = strtoqstr((*it)->getSegment()->getLabel());
 	if (label == "") label = i18n("<no label>");
 
 	QString used;
@@ -297,17 +301,19 @@ TriggerSegmentManager::slotUpdate()
 	    used = i18n("%1 on %2 tracks").arg(uses).arg(tracks.size());
 
 	QString pitch = QString("%1 (%2)")
-	    .arg(Rosegarden::MidiPitchLabel(it->second.pitch).getQString())
-	    .arg(it->second.pitch);
+	    .arg(Rosegarden::MidiPitchLabel((*it)->getBasePitch()).getQString())
+	    .arg((*it)->getBasePitch());
+
+	QString velocity = QString("%1").arg((*it)->getBaseVelocity());
 
         item = new TriggerManagerItem
-	    (m_listView, QString("%1").arg(i+1), QString("%1").arg(it->first),
-	     label, pitch, timeString, used);
+	    (m_listView, QString("%1").arg(i+1), QString("%1").arg((*it)->getId()),
+	     label, timeString, pitch, velocity, used);
 
         item->setRawDuration(duration);
-	item->setId(it->first);
+	item->setId((*it)->getId());
 	item->setUsage(uses);
-	item->setPitch(it->second.pitch);
+	item->setPitch((*it)->getBasePitch());
 
         m_listView->insertItem(item);
 	++i;
@@ -517,7 +523,7 @@ TriggerSegmentManager::slotEdit(QListViewItem *i)
 
     if (!item) return;
 
-    Composition::TriggerSegmentId id = item->getId();
+    TriggerSegmentId id = item->getId();
 
     RG_DEBUG << "id is " << id << endl;
 

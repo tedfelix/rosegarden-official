@@ -227,10 +227,11 @@ EventView::EventView(RosegardenGUIDoc *doc,
     if (m_isTriggerSegment) {
 
 	int id = segments[0]->getComposition()->getTriggerSegmentId(segments[0]);
-	int basePitch = segments[0]->getComposition()->getTriggerSegmentBasePitch(id);
+	Rosegarden::TriggerSegmentRec *rec =
+	    segments[0]->getComposition()->getTriggerSegmentRec(id);
 	
 	m_triggerBasePitch = new RosegardenPitchChooser
-	    (i18n("Base Pitch"), getCentralWidget(), basePitch);
+	    (i18n("Base Pitch"), getCentralWidget(), rec->getBasePitch());
 	connect(m_triggerBasePitch, SIGNAL(pitchChanged(int)),
 		this, SLOT(slotTriggerPitchChanged(int)));
 	m_grid->addWidget(m_triggerBasePitch, 2, 2);

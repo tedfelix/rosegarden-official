@@ -485,16 +485,16 @@ void SegmentMmapper::dump()
 
 		if (triggerId >= 0) {
 
-		    Rosegarden::Composition::TriggerSegmentRec rec =
+		    Rosegarden::TriggerSegmentRec *rec =
 			comp.getTriggerSegmentRec(triggerId);
 
-		    if (rec.segment) {
+		    if (rec && rec->getSegment()) {
 			Rosegarden::timeT performanceDuration =
 			    helper.getSoundingDuration(j);
 			if (performanceDuration > 0) {
 			    mergeTriggerSegment(&triggered, *j,
 						performanceDuration, rec);
-			    size_t sz = addMmappedSize(rec.segment);
+			    size_t sz = addMmappedSize(rec->getSegment());
 			    size_t offset = bufPos - m_mmappedEventBuffer;
 			    setFileSize(sz);
 			    remap(sz);
@@ -616,14 +616,14 @@ void
 SegmentMmapper::mergeTriggerSegment(Rosegarden::Segment **target,
 				    Rosegarden::Event *trigger,
 				    Rosegarden::timeT evDuration,
-				    Rosegarden::Composition::TriggerSegmentRec &rec)
+				    Rosegarden::TriggerSegmentRec *rec)
 {
-    if (!rec.segment || rec.segment->empty()) return;
+    if (!rec || !rec->getSegment() || rec->getSegment()->empty()) return;
     if (!*target) *target = new Rosegarden::Segment;
 
     Rosegarden::timeT evTime = trigger->getAbsoluteTime();
-    Rosegarden::timeT trStart = rec.segment->getStartTime();
-    Rosegarden::timeT trEnd = rec.segment->getEndMarkerTime();
+    Rosegarden::timeT trStart = rec->getSegment()->getStartTime();
+    Rosegarden::timeT trEnd = rec->getSegment()->getEndMarkerTime();
     Rosegarden::timeT trDuration = trEnd - trStart;
     if (trDuration == 0) return;
 
@@ -636,18 +636,16 @@ SegmentMmapper::mergeTriggerSegment(Rosegarden::Segment **target,
     trigger->get<Bool>
 	(BaseProperties::TRIGGER_SEGMENT_ADJUST_DURATION, adjustDuration);
 
-    long evPitch = rec.pitch;
+    long evPitch = rec->getBasePitch();
     (void)trigger->get<Int>(BaseProperties::PITCH, evPitch);
-    int pitchDiff = evPitch - rec.pitch;
+    int pitchDiff = evPitch - rec->getBasePitch();
 
-    // Velocity: if the trigger event has velocity 100, the triggered
-    // segment will be reproduced with its original velocity.
-    // Otherwise it will be adjusted accordingly
-    long evVelocity = 100;
+    long evVelocity = rec->getBaseVelocity();
     (void)trigger->get<Int>(BaseProperties::VELOCITY, evVelocity);
-    int veloDiff = evVelocity - 100;
+    int velocityDiff = evVelocity - rec->getBaseVelocity();
 
-    for (Segment::iterator i = rec.segment->begin(); i != rec.segment->end(); ++i) {
+    for (Segment::iterator i = rec->getSegment()->begin();
+	 rec->getSegment()->isBeforeEndMarker(i); ++i) {
 	
 	Rosegarden::timeT t = (*i)->getAbsoluteTime() - trStart;
 	Rosegarden::timeT d = (*i)->getDuration();
@@ -674,7 +672,7 @@ SegmentMmapper::mergeTriggerSegment(Rosegarden::Segment **target,
 	}
 
 	if (newEvent->has(BaseProperties::VELOCITY)) {
-	    int velocity = newEvent->get<Int>(BaseProperties::VELOCITY) + veloDiff;
+	    int velocity = newEvent->get<Int>(BaseProperties::VELOCITY) + velocityDiff;
 	    if (velocity > 127) velocity = 127;
 	    if (velocity < 0) velocity = 0;
 	    newEvent->set<Int>(BaseProperties::VELOCITY, velocity);

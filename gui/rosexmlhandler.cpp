@@ -801,13 +801,16 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
 	QString triggerIdStr = atts.value("triggerid");
 	QString triggerPitchStr = atts.value("triggerbasepitch");
+	QString triggerVelocityStr = atts.value("triggerbasevelocity");
 
 	if (triggerIdStr) {
-	    int pitch = 64;
+	    int pitch = -1;
 	    if (triggerPitchStr) pitch = triggerPitchStr.toInt();
+	    int velocity = -1;
+	    if (triggerVelocityStr) velocity = triggerVelocityStr.toInt();
 	    getComposition().addTriggerSegment(m_currentSegment,
-					       pitch,
-					       triggerIdStr.toInt());
+					       triggerIdStr.toInt(),
+					       pitch, velocity);
 	    m_currentSegment->setStartTimeDataMember(startTime);
 	} else {
 	    getComposition().addSegment(m_currentSegment);
@@ -1851,7 +1854,11 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
 
     QString lcName = qName.lower();
 
-    if (lcName == "event") {
+    if (lcName == "rosegarden-data") {
+
+	getComposition().updateTriggerSegmentReferences();
+
+    } else if (lcName == "event") {
 
         if (m_currentSegment && m_currentEvent) {
             m_currentSegment->insert(m_currentEvent);

@@ -33,6 +33,7 @@
 #include "Configuration.h"
 #include "XmlExportable.h"
 #include "ColourMap.h"
+#include "TriggerSegment.h"
 
 #include "Marker.h"
 
@@ -72,9 +73,7 @@ public:
     typedef markercontainer::iterator markeriterator;
     typedef markercontainer::const_iterator markerconstiterator;
 
-    typedef unsigned int TriggerSegmentId;
-    struct TriggerSegmentRec { int pitch; Segment *segment; };
-    typedef std::map<TriggerSegmentId, TriggerSegmentRec> triggersegmentcontainer;
+    typedef std::set<TriggerSegmentRec *, TriggerSegmentCmp> triggersegmentcontainer;
     typedef triggersegmentcontainer::iterator triggersegmentcontaineriterator;
     typedef triggersegmentcontainer::const_iterator triggersegmentcontainerconstiterator;
 
@@ -289,10 +288,11 @@ public:
     const triggersegmentcontainer &getTriggerSegments() const { return m_triggerSegments; }
 
     /**
-     * Add a new trigger Segment with a given base pitch, and return
-     * its ID.
+     * Add a new trigger Segment with a given base pitch and base
+     * velocity, and return its ID.  If pitch or velocity is -1, it will
+     * be taken from the first note event in the segment
      */
-    TriggerSegmentId addTriggerSegment(Segment *, int pitch);
+    TriggerSegmentId addTriggerSegment(Segment *, int pitch = -1, int velocity = -1);
 
     /**
      * Delete a trigger Segment.
@@ -321,26 +321,18 @@ public:
     Segment *getTriggerSegment(TriggerSegmentId);
 
     /**
-     * Return the base pitch for a given TriggerSegmentId
+     * Return the TriggerSegmentRec (with Segment, base pitch, base velocity,
+     * references etc) for a given TriggerSegmentId
      */
-    int getTriggerSegmentBasePitch(TriggerSegmentId);
+    TriggerSegmentRec *getTriggerSegmentRec(TriggerSegmentId);
 
     /**
-     * Set the base pitch for a given TriggerSegmentId
+     * Add a new trigger Segment with a given ID and base pitch and
+     * velocity.  Fails silently if the ID is already in use.  This is
+     * intended for use from file load or from undo/redo.
      */
-    void setTriggerSegmentBasePitch(TriggerSegmentId, int basePitch);
-
-    /**
-     * Return the Segment and base pitch for a given TriggerSegmentId
-     */
-    TriggerSegmentRec getTriggerSegmentRec(TriggerSegmentId);
-
-    /**
-     * Add a new trigger Segment with a given base pitch and ID.
-     * Fails silently if the ID is already in use.  This is intended
-     * for use from file load or from undo/redo.
-     */
-    void addTriggerSegment(Segment *, int pitch, TriggerSegmentId);
+    void addTriggerSegment(Segment *, TriggerSegmentId,
+			   int basePitch = -1, int baseVelocity = -1);
 
     /**
      * Get the ID of the next trigger segment that will be inserted.
@@ -353,6 +345,12 @@ public:
      * doing.
      */
     void setNextTriggerSegmentId(TriggerSegmentId);
+
+    /**
+     * Update the trigger segment references for all trigger segments.
+     * To be called after file load.
+     */
+    void updateTriggerSegmentReferences();
 
 
     //////

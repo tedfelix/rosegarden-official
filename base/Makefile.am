@@ -48,6 +48,7 @@ libbase_la_SOURCES = AnalysisTypes.C \
 		     StringHash.C \
                      Studio.C \
                      Track.C \
+		     TriggerSegment.C \
 		     ViewElement.C \
 		     XmlExportable.C
 

@@ -45,6 +45,7 @@
 #include "SegmentNotationHelper.h"
 #include "NotationTypes.h"
 #include "MidiTypes.h"
+#include "TriggerSegment.h"
 #include "XmlExportable.h"
 #include "segmentcommands.h"
 #include "trackbuttons.h"
@@ -868,7 +869,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     for (Composition::triggersegmentcontaineriterator ci =
 	     m_composition.getTriggerSegments().begin();
          ci != m_composition.getTriggerSegments().end(); ++ci) {
-	totalEvents += ci->second.segment->size();
+	totalEvents += (*ci)->getSegment()->size();
     }
 
     // output all elements
@@ -892,10 +893,11 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 	     m_composition.getTriggerSegments().begin();
          ci != m_composition.getTriggerSegments().end(); ++ci) {
 
-	QString triggerAtts = QString("triggerid=\"%1\" triggerbasepitch=\"%2\"")
-	    .arg(ci->first).arg(ci->second.pitch);
+	QString triggerAtts = QString
+	    ("triggerid=\"%1\" triggerbasepitch=\"%2\" triggerbasevelocity=\"%3\"")
+	    .arg((*ci)->getId()).arg((*ci)->getBasePitch()).arg((*ci)->getBaseVelocity());
 
-	Segment *segment = ci->second.segment;
+	Segment *segment = (*ci)->getSegment();
         saveSegment(outStream, segment, progress, totalEvents, triggerAtts);
     }
 

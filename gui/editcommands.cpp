@@ -1596,6 +1596,8 @@ SetTriggerCommand::modifySegment()
 	    (*i)->set<Rosegarden::Bool>(TRIGGER_SEGMENT_ADJUST_DURATION, m_adjustDuration);
 	}
     }
+
+    //!!! update trigger references
 }
 
 void
@@ -1610,6 +1612,8 @@ ClearTriggersCommand::modifySegment()
 	(*i)->unset(TRIGGER_SEGMENT_RETUNE);
 	(*i)->unset(TRIGGER_SEGMENT_ADJUST_DURATION);
     }
+
+    //!!! update trigger references
 }
 
 
@@ -1619,7 +1623,7 @@ InsertTriggerNoteCommand::InsertTriggerNoteCommand(Rosegarden::Segment &segment,
 						   int pitch,
 						   int velocity,
 						   NoteStyleName noteStyle,
-						   Rosegarden::Composition::TriggerSegmentId id,
+						   Rosegarden::TriggerSegmentId id,
 						   bool retune,
 						   bool adjustDuration) :
     BasicCommand(i18n("Insert Trigger Note"), segment,
@@ -1661,5 +1665,7 @@ InsertTriggerNoteCommand::modifySegment()
     e->set<Rosegarden::Bool>(TRIGGER_SEGMENT_ADJUST_DURATION, m_adjustDuration);
 
     (void)Rosegarden::SegmentMatrixHelper(getSegment()).insertNote(e);
+
+    //!!! update trigger references
 }
 

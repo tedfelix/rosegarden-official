@@ -27,12 +27,14 @@
 #include <kcommand.h>
 
 #include "Segment.h"
-#include "Composition.h"
 #include "NotationTypes.h"
 #include "rosegardenguidoc.h"
 #include "AudioFileManager.h"
 #include "Selection.h"
+#include "TriggerSegment.h"
 #include "basiccommand.h"
+
+namespace Rosegarden { class Composition; }
 
 /**
  * Base class for commands from the SegmentParameterBox
@@ -779,10 +781,11 @@ class AddTriggerSegmentCommand : public KNamedCommand
 public:
     AddTriggerSegmentCommand(RosegardenGUIDoc *doc,
 			     Rosegarden::timeT duration, // start time always 0
-			     int basePitch);
+			     int basePitch = -1,
+			     int baseVelocity = -1);
     virtual ~AddTriggerSegmentCommand();
 
-    Rosegarden::Composition::TriggerSegmentId getId() const; // after invocation
+    Rosegarden::TriggerSegmentId getId() const; // after invocation
 
     virtual void execute();
     virtual void unexecute();
@@ -791,7 +794,8 @@ private:
     Rosegarden::Composition *m_composition;
     Rosegarden::timeT m_duration;
     int m_basePitch;
-    Rosegarden::Composition::TriggerSegmentId m_id;
+    int m_baseVelocity;
+    Rosegarden::TriggerSegmentId m_id;
     Rosegarden::Segment *m_segment;
     bool m_detached;
 };
@@ -801,7 +805,7 @@ class DeleteTriggerSegmentCommand : public KNamedCommand
 {
 public:
     DeleteTriggerSegmentCommand(RosegardenGUIDoc *doc,
-				Rosegarden::Composition::TriggerSegmentId);
+				Rosegarden::TriggerSegmentId);
     virtual ~DeleteTriggerSegmentCommand();
 
     virtual void execute();
@@ -809,8 +813,10 @@ public:
 
 private:
     Rosegarden::Composition *m_composition;
-    Rosegarden::Composition::TriggerSegmentId m_id;
+    Rosegarden::TriggerSegmentId m_id;
     Rosegarden::Segment *m_segment;
+    int m_basePitch;
+    int m_baseVelocity;
     bool m_detached;
 };
 
@@ -822,7 +828,8 @@ public:
     PasteToTriggerSegmentCommand(Rosegarden::Composition *composition,
 				 Rosegarden::Clipboard *clipboard,
 				 QString label,
-				 int basePitch);
+				 int basePitch = -1,
+				 int baseVelocity = -1);
     virtual ~PasteToTriggerSegmentCommand();
 
     virtual void execute();
@@ -833,8 +840,9 @@ protected:
     Rosegarden::Clipboard *m_clipboard;
     QString m_label;
     int m_basePitch;
+    int m_baseVelocity;
     Rosegarden::Segment *m_segment;
-    Rosegarden::Composition::TriggerSegmentId m_id;
+    Rosegarden::TriggerSegmentId m_id;
     bool m_detached;
 };
 
@@ -843,7 +851,7 @@ class SetTriggerSegmentBasePitchCommand : public KNamedCommand
 {
 public:
     SetTriggerSegmentBasePitchCommand(Rosegarden::Composition *composition,
-				      Rosegarden::Composition::TriggerSegmentId id,
+				      Rosegarden::TriggerSegmentId id,
 				      int newPitch);
     virtual ~SetTriggerSegmentBasePitchCommand();
     
@@ -852,9 +860,28 @@ public:
 
 protected:
     Rosegarden::Composition *m_composition;
-    Rosegarden::Composition::TriggerSegmentId m_id;
+    Rosegarden::TriggerSegmentId m_id;
     int m_newPitch;
     int m_oldPitch;
+};
+
+
+class SetTriggerSegmentBaseVelocityCommand : public KNamedCommand
+{
+public:
+    SetTriggerSegmentBaseVelocityCommand(Rosegarden::Composition *composition,
+				      Rosegarden::TriggerSegmentId id,
+				      int newVelocity);
+    virtual ~SetTriggerSegmentBaseVelocityCommand();
+    
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    Rosegarden::Composition *m_composition;
+    Rosegarden::TriggerSegmentId m_id;
+    int m_newVelocity;
+    int m_oldVelocity;
 };
 
 

@@ -27,11 +27,12 @@
 #include "notestyle.h"
 
 #include "Quantizer.h"
-#include "Composition.h"
+#include "TriggerSegment.h"
 #include <klocale.h>
 
 namespace Rosegarden {
     class Clipboard;
+    class Composition;
     class EventSelection;
     class SegmentSelection;
     class Marker;
@@ -561,7 +562,7 @@ class SetTriggerCommand : public BasicSelectionCommand
 {
 public:
     SetTriggerCommand(Rosegarden::EventSelection &selection,
-		      Rosegarden::Composition::TriggerSegmentId triggerSegmentId,
+		      Rosegarden::TriggerSegmentId triggerSegmentId,
 		      bool notesOnly,
 		      bool retune,
 		      bool adjustDuration,
@@ -583,7 +584,7 @@ protected:
 
 private:
     Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
-    Rosegarden::Composition::TriggerSegmentId m_triggerSegmentId;
+    Rosegarden::TriggerSegmentId m_triggerSegmentId;
     bool m_notesOnly;
     bool m_retune;
     bool m_adjustDuration;
@@ -620,7 +621,7 @@ public:
 			     int pitch,
 			     int velocity,
 			     NoteStyleName noteStyle,
-			     Rosegarden::Composition::TriggerSegmentId id,
+			     Rosegarden::TriggerSegmentId id,
 			     bool retune,
 			     bool adjustDuration);
     virtual ~InsertTriggerNoteCommand();
@@ -633,7 +634,7 @@ protected:
     int m_pitch;
     int m_velocity;
     NoteStyleName m_noteStyle;
-    Rosegarden::Composition::TriggerSegmentId m_id;
+    Rosegarden::TriggerSegmentId m_id;
     bool m_retune;
     bool m_adjustDuration;
 };

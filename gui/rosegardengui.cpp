@@ -1134,6 +1134,9 @@ void RosegardenGUIApp::initView()
     delete m_markerEditor;
     m_markerEditor = 0;
 
+    delete m_triggerSegmentManager;
+    m_triggerSegmentManager = 0;
+
     delete oldView;
 
     // set the highlighted track
