@@ -419,6 +419,11 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
             for (Segment::iterator i = segment->begin();
                  i != segment->end(); ++i) {
 
+		//!!! sigh... the notation engine can now cope (sometimes)
+		// with overlapping and nested groups, so we're gonna have
+		// to lose this and save the raw beamed-group properties
+		// instead.
+
                 long group;
                 if ((*i)->get<Int>(BEAMED_GROUP_ID, group)) {
 
@@ -451,7 +456,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 
 		    // we hope this won't happen, but:
 		    if (inChord) {
-			outStream << "</chord></group><!-- ERROR -->\n";
+			outStream << "</chord><!-- ERROR -->\n";
 			inChord = false;
 		    }
 

@@ -819,6 +819,15 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
     Note::Type note = elt->event()->get<Int>(m_properties.NOTE_TYPE);
     int dots = elt->event()->get<Int>(m_properties.NOTE_DOTS);
 
+    if (elt->event()->has(m_properties.GRACE_NOTE_OFFSET)) {
+	timeT durationBefore = Note(note, dots).getDuration();
+	timeT durationAfter = durationBefore +
+	    elt->event()->get<Int>(m_properties.GRACE_NOTE_OFFSET);
+	Note newNote = Note::getNearestNote(durationAfter);
+	note = newNote.getNoteType();
+	dots = newNote.getDots();
+    }
+
     Accidental accidental = NoAccidental;
     (void)elt->event()->get<String>(m_properties.DISPLAY_ACCIDENTAL, accidental);
 

@@ -189,12 +189,14 @@ class GroupMenuBeamCommand : public BasicSelectionCommand
 {
 public:
     GroupMenuBeamCommand(Rosegarden::EventSelection &selection) :
-	BasicSelectionCommand(getGlobalName(), selection) { }
+	BasicSelectionCommand(getGlobalName(), selection, true),
+	m_selection(&selection) { }
 
     static QString getGlobalName() { return "&Beam Group"; }
 
 protected:
     virtual void modifySegment();
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
 };
 
 

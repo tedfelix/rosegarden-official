@@ -1124,6 +1124,8 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 	    kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): there's a time sig in this bar" << endl;
 	}
 
+	bool justSeenGraceNote = false;
+	timeT graceNoteStart = 0;
 
         for (NotationElementList::iterator it = from; it != to; ++it) {
             
@@ -1144,9 +1146,20 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
 	    if (el->isNote()) {
 
+		timeT graceNoteOffset = 0;
+		if (justSeenGraceNote) {
+		    graceNoteOffset = (*it)->getAbsoluteTime() - graceNoteStart;
+		    justSeenGraceNote = false;
+		}
+		if ((*it)->isGrace()) {
+		    graceNoteStart = (*it)->getAbsoluteTime();
+		    justSeenGraceNote = true;
+		}
+
 		// This modifies "it" and "tieMap"
 		delta = positionChord
-		    (staff, it, bdi, timeSignature, clef, key, tieMap, to);
+		    (staff, it, bdi, timeSignature, clef, key, tieMap,
+		     graceNoteOffset, to);
 
 	    } else if (el->isRest()) {
 
@@ -1173,6 +1186,17 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
 	    if (it != to && (*it)->event()->has(BEAMED_GROUP_ID)) {
 
+		//!!! Gosh.  We need some clever logic to establish
+		// whether one group is happening while another has
+		// not yet ended -- perhaps we decide one has ended
+		// if we see another, and then re-open the case of
+		// the first if we meet another note that claims to
+		// be in it.  Then we need to hint to both of the
+		// groups that they should choose appropriate stem
+		// directions -- we could just use HEIGHT_ON_STAFF
+		// of their first notes to determine this, as if that
+		// doesn't work, nothing will
+
 		long groupId = (*it)->event()->get<Int>(BEAMED_GROUP_ID);
 		kdDebug(KDEBUG_AREA) << "group id: " << groupId << endl;
 		if (m_groupsExtant.find(groupId) == m_groupsExtant.end()) {
@@ -1183,30 +1207,6 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 					  m_properties, clef, key);
 		}
 		m_groupsExtant[groupId]->sample(it);
-
-/*!!!
-
-		NotationElementList::iterator scooter(it);
-		++scooter;
-
-		long groupId = (*it)->event()->get<Int>(BEAMED_GROUP_ID);
-		long nextGroupId = groupId;
-
-		if (scooter == to ||
-		    !(*scooter)->event()->get<Int>(BEAMED_GROUP_ID, nextGroupId) ||
-		    (groupId != nextGroupId)) {
-
-		    kdDebug(KDEBUG_AREA) << "Moving from group " << groupId << " to group " << nextGroupId << " after event at " << (*it)->getAbsoluteTime() << endl;
-		    
-		    NotationStaff &notationStaff =
-			dynamic_cast<NotationStaff &>(staff);
-		    NotationGroup group(*staff.getViewElementList(), it,
-					m_legatoQuantizer, m_properties,
-					clef, key);
-		    group.applyBeam(notationStaff);
-		    group.applyTuplingLine(notationStaff);
-		}
-*/
 	    }
 
             x += delta;
@@ -1312,7 +1312,7 @@ NotationHLayout::positionChord(StaffType &staff,
 			       const BarDataList::iterator &bdi,
 			       const TimeSignature &timeSignature,
 			       const Clef &clef, const Key &key,
-			       TieMap &tieMap,
+			       TieMap &tieMap, timeT graceNoteOffset,
 			       NotationElementList::iterator &to)
 {
     Chord chord(*staff.getViewElementList(), itr, m_legatoQuantizer,
@@ -1375,6 +1375,12 @@ NotationHLayout::positionChord(StaffType &staff,
 
 	NotationElement *note = *(chord[i]);
 	if (!note->isNote()) continue;
+	if (!note->isGrace() && graceNoteOffset > 0) {
+	    note->event()->setMaybe<Int>(m_properties.GRACE_NOTE_OFFSET,
+					 graceNoteOffset);
+	} else {
+	    note->event()->unset(m_properties.GRACE_NOTE_OFFSET);
+	}
 
 	Accidental acc = NoAccidental;
 	if (note->event()->get<String>(m_properties.DISPLAY_ACCIDENTAL, acc) &&
@@ -1388,6 +1394,12 @@ NotationHLayout::positionChord(StaffType &staff,
 		(groupId == -1 || myGroupId == groupId)) {
 		groupId = myGroupId;
 	    } else {
+
+		// With a bit of luck, this should never happen any more
+		// (as Chord has been reworked so as to only accept note
+		// heads that are in the same group -- this situation
+		// should now result in more than one Chord)
+
 		groupId = -2; // not all note-heads think they're in the group
 	    }
 	}

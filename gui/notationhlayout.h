@@ -320,7 +320,8 @@ protected:
     (StaffType &staff, 
      NotationElementList::iterator &, const BarDataList::iterator &,
      const Rosegarden::TimeSignature &, const Rosegarden::Clef &clef,
-     const Rosegarden::Key &key, TieMap &, NotationElementList::iterator &to);
+     const Rosegarden::Key &key, TieMap &, Rosegarden::timeT graceNoteOffset,
+     NotationElementList::iterator &to);
 
     long positionRest
     (StaffType &staff, 

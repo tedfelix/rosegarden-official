@@ -391,10 +391,22 @@ EraseEventCommand::modifySegment()
 void
 GroupMenuBeamCommand::modifySegment()
 {
-    SegmentNotationHelper helper(getSegment());
+    int id = getSegment().getNextId();
 
-    helper.makeBeamedGroup(getStartTime(), getEndTime(),
-                           GROUP_TYPE_BEAMED);
+    for (EventSelection::eventcontainer::iterator i =
+	     m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+
+	if ((*i)->isa(Note::EventType)) {
+	    (*i)->set<Int>(BEAMED_GROUP_ID, id);
+	    (*i)->set<String>(BEAMED_GROUP_TYPE, GROUP_TYPE_BEAMED);
+	}
+    }
+
+//!!!    SegmentNotationHelper helper(getSegment());
+
+//    helper.makeBeamedGroup(getStartTime(), getEndTime(),
+//                           GROUP_TYPE_BEAMED);
 }
 
 void
