@@ -81,7 +81,23 @@ LADSPAPluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
 	list.push_back(descriptor->Maker);
 	list.push_back(descriptor->Copyright);
 	list.push_back("false"); // is synth
-	list.push_back(m_taxonomy[descriptor->UniqueID]);
+	
+	if (m_taxonomy.find(descriptor->UniqueID) != m_taxonomy.end() &&
+	    m_taxonomy[descriptor->UniqueID] != "") {
+		std::cerr << "LADSPAPluginFactory: cat for " << *i<< " found in taxonomy as " << m_taxonomy[descriptor->UniqueID] << std::endl;
+	    list.push_back(m_taxonomy[descriptor->UniqueID]);
+
+	} else if (m_fallbackCategories.find(*i) !=
+		   m_fallbackCategories.end()) {
+	    list.push_back(m_fallbackCategories[*i]);
+		std::cerr << "LADSPAPluginFactory: cat for " << *i  <<" found in fallbacks as " << m_fallbackCategories[*i] << std::endl;
+
+	} else {
+	    list.push_back("");
+		std::cerr << "LADSPAPluginFactory: cat for " << *i << " not found (despite having " << m_fallbackCategories.size() << " fallbacks)" << std::endl;
+	    
+	}
+
 	list.push_back(QString("%1").arg(descriptor->PortCount));
 
 	for (unsigned long p = 0; p < descriptor->PortCount; ++p) {
@@ -124,7 +140,24 @@ LADSPAPluginFactory::populatePluginSlot(QString identifier, MappedPluginSlot &sl
 	slot.setProperty(MappedPluginSlot::Author, descriptor->Maker);
 	slot.setProperty(MappedPluginSlot::Copyright, descriptor->Copyright);
 	slot.setProperty(MappedPluginSlot::PortCount, descriptor->PortCount);
-	slot.setProperty(MappedPluginSlot::Category, m_taxonomy[descriptor->UniqueID]);
+
+	if (m_taxonomy.find(descriptor->UniqueID) != m_taxonomy.end() &&
+	    m_taxonomy[descriptor->UniqueID] != "") {
+		std::cerr << "LADSPAPluginFactory: cat for " << identifier<< " found in taxonomy as " << m_taxonomy[descriptor->UniqueID] << std::endl;
+	    slot.setProperty(MappedPluginSlot::Category,
+			     m_taxonomy[descriptor->UniqueID]);
+
+	} else if (m_fallbackCategories.find(identifier) !=
+		   m_fallbackCategories.end()) {
+		std::cerr << "LADSPAPluginFactory: cat for " << identifier  <<" found in fallbacks as " << m_fallbackCategories[identifier] << std::endl;
+	    slot.setProperty(MappedPluginSlot::Category,
+			     m_fallbackCategories[identifier]);
+
+	} else {
+		std::cerr << "LADSPAPluginFactory: cat for " << identifier << " not found (despite having " << m_fallbackCategories.size() << " fallbacks)" << std::endl;
+	    slot.setProperty(MappedPluginSlot::Category, "");
+	}
+
 	slot.destroyChildren();
 	
 	for (unsigned long i = 0; i < descriptor->PortCount; i++) {
@@ -550,6 +583,8 @@ LADSPAPluginFactory::discoverPlugins()
     }
 #endif // HAVE_LIBLRDF
 
+    generateFallbackCategories();
+
     for (std::vector<QString>::iterator i = pathList.begin();
 	 i != pathList.end(); ++i) {
 
@@ -651,6 +686,52 @@ LADSPAPluginFactory::discoverPlugins(QString soName)
         return;
     }
 }
+
+void
+LADSPAPluginFactory::generateFallbackCategories()
+{
+    std::vector<QString> pluginPath = getPluginPath();
+    std::vector<QString> path;
+
+    for (size_t i = 0; i < pluginPath.size(); ++i) {
+	if (pluginPath[i].contains("/lib/")) {
+	    QString p(pluginPath[i]);
+	    p.replace("/lib/", "/share/");
+	    path.push_back(p);
+	    std::cerr << "LADSPAPluginFactory::generateFallbackCategories: path element " << p << std::endl;
+	}
+	path.push_back(pluginPath[i]);
+	std::cerr << "LADSPAPluginFactory::generateFallbackCategories: path element " << pluginPath[i] << std::endl;
+    }
+
+    for (size_t i = 0; i < path.size(); ++i) {
+
+	QDir dir(path[i], "*.cat");
+
+	std::cerr << "LADSPAPluginFactory::generateFallbackCategories: directory " << path[i] << " has " << dir.count() << " .cat files" << std::endl;
+	for (unsigned int j = 0; j < dir.count(); ++j) {
+
+	    QFile file(path[i] + "/" + dir[j]);
+
+	    std::cerr << "LADSPAPluginFactory::generateFallbackCategories: about to open " << (path[i] + "/" + dir[j]) << std::endl;
+
+	    if (file.open(IO_ReadOnly)) {
+		    std::cerr << "...opened" << std::endl;
+		QTextStream stream(&file);
+		QString line;
+
+		while (!stream.eof()) {
+		    line = stream.readLine();
+		    std::cerr << "line is: \"" << line << "\"" << std::endl;
+		    QString id = line.section("::", 0, 0);
+		    QString cat = line.section("::", 1, 1);
+		    m_fallbackCategories[id] = cat;
+		    std::cerr << "set id \"" << id << "\" to cat \"" << cat << "\"" << std::endl;
+		}
+	    }
+	}
+    }
+}    
 
 void
 LADSPAPluginFactory::generateTaxonomy(QString uri, QString base)

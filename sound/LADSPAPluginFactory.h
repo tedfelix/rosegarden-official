@@ -71,6 +71,7 @@ protected:
 
     virtual void discoverPlugins(QString soName);
     virtual void generateTaxonomy(QString uri, QString base);
+    virtual void generateFallbackCategories();
 
     virtual void releasePlugin(RunnablePluginInstance *, QString);
 
@@ -88,6 +89,7 @@ protected:
     std::vector<QString> m_identifiers;
 
     std::map<unsigned long, QString> m_taxonomy;
+    std::map<QString, QString> m_fallbackCategories;
     std::map<unsigned long, std::map<int, float> > m_portDefaults;
 
     std::set<RunnablePluginInstance *> m_instances;
