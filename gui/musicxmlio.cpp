@@ -230,7 +230,6 @@ MusicXmlExporter::write()
     Composition::trackcontainer * tracks = composition->getTracks();
     for (Composition::trackiterator i = tracks->begin();
 	 i != tracks->end(); ++i) {
-        // Incomplete: Do I need to convert MidiBytes or will they output correctly?
         // Incomplete: What about all the other Midi stuff?
         // Incomplete: (Future) GUI to set labels if they're not already
         Instrument * trackInstrument = (&m_doc->getStudio())->getInstrumentById((*i).second->getInstrument());
@@ -241,8 +240,8 @@ MusicXmlExporter::write()
             str << "\t\t\t\t<instrument-name>" << trackInstrument->getType() << "</instrument-name>" << std::endl;
             str << "\t\t\t</score-instrument>" << std::endl;
             str << "\t\t\t<midi-instrument id=\"" << trackInstrument->getName() << "\">" << std::endl;
-            str << "\t\t\t\t<midi-channel>" << trackInstrument->getMidiChannel() << "</midi-channel>" << std::endl;
-            str << "\t\t\t\t<midi-program>" << trackInstrument->getProgramChange() << "</midi-program>" << std::endl;
+            str << "\t\t\t\t<midi-channel>" << ((unsigned int)trackInstrument->getMidiChannel()) << "</midi-channel>" << std::endl;
+            str << "\t\t\t\t<midi-program>" << ((unsigned int)trackInstrument->getProgramChange()) << "</midi-program>" << std::endl;
             str << "\t\t\t</midi-instrument>" << std::endl;
         }
         str << "\t\t</score-part>" << std::endl;
@@ -257,7 +256,6 @@ MusicXmlExporter::write()
 	 j != tracks->end(); ++j) {
         // Code courtesy docs/code/iterators.txt
         Rosegarden::CompositionTimeSliceAdapter::TrackSet trackSet;
-        // Ugh- what does this comment mean?
         // Incomplete: get the track info for each track (i.e. this should
         // be in an iterator loop) into the track set
         trackSet.insert((*j).first);
