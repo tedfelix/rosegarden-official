@@ -88,6 +88,8 @@ AudioFile* BWFAudioFile::clone()
                                                getBytesPerFrame(),
                                                getBitsPerSample());
 
+    cloneFile->setId(getId());
+
     return cloneFile;
 }
 

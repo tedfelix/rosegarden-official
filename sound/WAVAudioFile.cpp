@@ -79,12 +79,16 @@ WAVAudioFile::WAVAudioFile(const std::string &fileName,
 
 AudioFile* WAVAudioFile::clone()
 {
+    std::cout << "WAVAudioFile::clone() " << getName() << std::endl;
+
     WAVAudioFile* cloneFile = new WAVAudioFile(getName(),
                                                getChannels(),
                                                getSampleRate(),
                                                getBytesPerSecond(),
                                                getBytesPerFrame(),
                                                getBitsPerSample());
+
+    cloneFile->setId(getId());
 
     return cloneFile;
 }
@@ -110,7 +114,7 @@ WAVAudioFile::open()
     }
 
     // Get the file size and store it for comparison later
-    //
+    // TODO : you can get this much faster through the m_fileInfo
     m_inFile->seekg(0, std::ios::end);
     m_fileSize = m_inFile->tellg();
     m_inFile->seekg(0, std::ios::beg);
