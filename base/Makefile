@@ -28,5 +28,4 @@ Event.o: Event.h Property.h
 ViewElement.o: ViewElement.h Event.h Property.h
 Track.o: Track.h Event.h Property.h
 Composition.o: Composition.h Track.h Event.h Property.h
-NotationTypes.o: NotationTypes.h Event.h Property.h
 Equation.o: Equation.h
