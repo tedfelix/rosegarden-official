@@ -1468,6 +1468,12 @@ void RosegardenSequencerApp::rationalisePlayingAudio(const std::vector<MappedEve
     for (std::vector<PlayableAudioFile*>::const_iterator it = driverAudio.begin();
          it != driverAudio.end(); ++it)
     {
+        /*
+        std::cout << "DRIVER START TIME = " << (*it)->getStartTime()  << std::endl;
+        std::cout << "DRIVER AUDIO LAT  = " << m_sequencer->getAudioPlayLateny() << std::endl;
+        std::cout << "CURRENT TIME = " << m_songPosition << std::endl;
+        */
+
         bool segment = false;
         for (std::vector<MappedEvent*>::const_iterator sIt = segmentAudio.begin();
              sIt != segmentAudio.end(); ++sIt)
@@ -1481,6 +1487,7 @@ void RosegardenSequencerApp::rationalisePlayingAudio(const std::vector<MappedEve
                 (*it)->getEndTime() == (*sIt)->getEventTime() + (*sIt)->getDuration())
                 //(*it)->getStartIndex() == (*sIt)->getAudioStartMarker())
             {
+                //std::cout << "MATCHED SEGMENT AND DRIVER" << std::endl;
                 segment = true;
                 break;
             }
