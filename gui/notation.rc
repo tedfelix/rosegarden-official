@@ -315,6 +315,8 @@ etc
 </ToolBar>
 
 <ToolBar name="fontToolBar">
+  <Action name="note_font_actionmenu" />
+  <Action name="note_font_size_actionmenu" />
 </ToolBar>
 
 <State name="have_selection">

@@ -27,6 +27,7 @@
 #include "Selection.h"
 
 #include "notepixmapfactory.h"
+#include "notestyle.h"
 #include "notationtool.h"
 #include "barbuttons.h"
 #include "loopruler.h"
@@ -539,6 +540,28 @@ void NotationView::setupActions()
     setupFontSizeMenu();
 
     actionCollection()->insert(m_fontSizeActionMenu);
+
+
+    KActionMenu *styleActionMenu =
+	new KActionMenu(i18n("Note &Style"), this, "note_style_actionmenu");
+
+    std::vector<NoteStyleName> styles
+	    (NoteStyleFactory::getAvailableStyleNames());
+    
+    for (std::vector<NoteStyleName>::iterator i = styles.begin();
+	 i != styles.end(); ++i) {
+
+	QString styleQName(strtoqstr(*i));
+
+	KAction *styleAction = 
+	    new KAction
+	    (styleQName, 0, this, SLOT(slotSetStyleFromAction()),
+	     actionCollection(), "style_" + styleQName);
+
+	styleActionMenu->insert(styleAction);
+    }
+
+    actionCollection()->insert(styleActionMenu);
 
 
     // setup Notes menu & toolbar

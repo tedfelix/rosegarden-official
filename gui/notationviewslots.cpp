@@ -195,6 +195,7 @@ NotationView::slotChangeFont(std::string newName, int newSize)
 
     bool changedFont = (newName != m_fontName);
 
+    std::string oldName = m_fontName;
     m_fontName = newName;
     m_fontSize = newSize;
     setNotePixmapFactory(npf);
@@ -202,6 +203,7 @@ NotationView::slotChangeFont(std::string newName, int newSize)
     if (changedFont) {
         std::vector<int> sizes = NotePixmapFactory::getAvailableSizes(m_fontName);
         m_fontSizeSlider->reinitialise(sizes, m_fontSize);
+	setupFontSizeMenu(oldName);
     }
 
     m_hlayout.setNotePixmapFactory(m_notePixmapFactory);
