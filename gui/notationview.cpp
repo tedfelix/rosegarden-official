@@ -197,7 +197,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     // m_pointer->show();
 
     bool layoutApplied = applyLayout();
-    if (!layoutApplied) KMessageBox::sorry(0, "Couldn't apply layout");
+    if (!layoutApplied) KMessageBox::sorry(0, i18n("Couldn't apply score layout"));
     else {
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
             m_staffs[i]->renderElements();
