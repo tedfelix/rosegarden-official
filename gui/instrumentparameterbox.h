@@ -86,9 +86,15 @@ public:
 
 public slots:
 
-    // To update all InstrumentParameterBoxen for an Instrument.
+    // To update all InstrumentParameterBoxen for an Instrument.  Called
+    // from one of the parameter panels when something changes.
     //
     void slotUpdateAllBoxes();
+
+    // Update InstrumentParameterBoxes that are showing a given instrument.
+    // Called from the Outside.
+    //
+    void slotInstrumentParametersChanged(Rosegarden::InstrumentId id);
 
     // From Plugin dialog
     //
@@ -97,10 +103,6 @@ public slots:
 
 signals:
 
-    // Emit a MIDI controller for immediate processing.
-    // This is necessary for controlling MIDI devices in
-    // real time during playback.
-    //
     void changeInstrumentLabel(Rosegarden::InstrumentId id, QString label);
 
     void selectPlugin(QWidget*, Rosegarden::InstrumentId id, int index);
@@ -229,11 +231,6 @@ public:
     virtual void setupForInstrument(Rosegarden::Instrument*);
 
 signals:
-
-    // Emit a MIDI controller for immediate processing.
-    // This is necessary for controlling MIDI devices in
-    // real time during playback.
-    //
     void changeInstrumentLabel(Rosegarden::InstrumentId id, QString label);
 
 public slots:

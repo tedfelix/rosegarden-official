@@ -194,7 +194,7 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
     // ok
     m_selectedInstrument = instrument;
 
-    // Hide or Show according to Instrumen type
+    // Hide or Show according to Instrument type
     //
     if (instrument->getType() == Instrument::Audio)
     {
@@ -419,6 +419,27 @@ InstrumentParameterBox::slotUpdateAllBoxes()
             (*it)->useInstrument(m_selectedInstrument);
     }
 
+}
+
+void
+InstrumentParameterBox::slotInstrumentParametersChanged(Rosegarden::InstrumentId id)
+{
+    std::vector<InstrumentParameterBox*>::iterator it =
+        instrumentParamBoxes.begin();
+
+    RG_DEBUG << "InstrumentParameterBox::slotInstrumentParametersChanged (" << id << ")" << endl;
+
+    for (; it != instrumentParamBoxes.end(); it++)
+    {
+	if ((*it)->getSelectedInstrument()) {
+	    RG_DEBUG << "Have a box, it's looking at instrument " << (*it)->getSelectedInstrument()->getId() << endl;
+	    if ((*it)->getSelectedInstrument()->getId() == id) {
+		(*it)->useInstrument((*it)->getSelectedInstrument()); // refresh
+	    }
+	} else {
+	    RG_DEBUG << "Have a box, it's got no instrument" << endl;
+	}	    
+    }
 }
 
 void
@@ -651,12 +672,8 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
 
     m_instrumentLabel->setText(strtoqstr(instrument->getName()));
 
-    /*
-    if (m_audioFader->m_recordButton->isOn())
-        m_audioFader->m_fader->setFader(instrument->getRecordLevel());
-    else
-        m_audioFader->m_fader->setFader(instrument->getVolume());
-        */
+    m_audioFader->m_recordFader->setFader(instrument->getRecordLevel());
+    m_audioFader->m_fader->setFader(instrument->getLevel());
 
     m_audioFader->slotSetInstrument(&m_doc->getStudio(), instrument);
 

@@ -358,6 +358,14 @@ MixerWindow::slotClose()
     close();
 }    
 
+void
+MixerWindow::slotUpdateInstrument(Rosegarden::InstrumentId id)
+{
+    updateFader(id);
+    updateStereoButton(id);
+    updateRouteButtons(id);
+    //!!! update plugin buttons
+}
 
 void
 MixerWindow::updateFader(int id)
@@ -477,14 +485,20 @@ MixerWindow::slotFaderLevelChanged(float dB)
 	 i != m_faders.end(); ++i) {
 	
 	if (i->second.m_fader == s) {
+
 	    Rosegarden::Instrument *instrument =
 		m_studio->getInstrumentById(i->first);
-	    Rosegarden::StudioControl::setStudioObjectProperty
-		(Rosegarden::MappedObjectId
-		 (instrument->getMappedId()),
-		 Rosegarden::MappedAudioFader::FaderLevel,
-		 Rosegarden::MappedObjectValue(dB));
-	    instrument->setLevel(dB);
+
+	    if (instrument) {
+		Rosegarden::StudioControl::setStudioObjectProperty
+		    (Rosegarden::MappedObjectId
+		     (instrument->getMappedId()),
+		     Rosegarden::MappedAudioFader::FaderLevel,
+		     Rosegarden::MappedObjectValue(dB));
+		instrument->setLevel(dB);
+	    }
+
+	    emit instrumentParametersChanged(i->first);
 	}
     }	    
 }
@@ -519,13 +533,19 @@ MixerWindow::slotPanChanged(float pan)
 	 i != m_faders.end(); ++i) {
 	
 	if (i->second.m_pan == s) {
+
 	    Rosegarden::Instrument *instrument =
 		m_studio->getInstrumentById(i->first);
-	    Rosegarden::StudioControl::setStudioObjectProperty
-		(instrument->getMappedId(),
-		 Rosegarden::MappedAudioFader::Pan,
-		 Rosegarden::MappedObjectValue(pan));
-	    instrument->setPan(Rosegarden::MidiByte(pan + 100.0));
+	    
+	    if (instrument) {
+		Rosegarden::StudioControl::setStudioObjectProperty
+		    (instrument->getMappedId(),
+		     Rosegarden::MappedAudioFader::Pan,
+		     Rosegarden::MappedObjectValue(pan));
+		instrument->setPan(Rosegarden::MidiByte(pan + 100.0));
+	    }
+
+	    emit instrumentParametersChanged(i->first);
 	}
     }
 }
@@ -552,6 +572,8 @@ MixerWindow::slotChannelsChanged()
 		updateRouteButtons(instrument->getId());
 		return;
 	    }
+
+	    emit instrumentParametersChanged(i->first);
 	}
     }
 }

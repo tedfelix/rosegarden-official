@@ -51,6 +51,9 @@ signals:
     void fastForwardPlaybackToEnd();
     void rewindPlaybackToBeginning();
 
+    // to be redirected to the instrument parameter box if necessary
+    void instrumentParametersChanged(Rosegarden::InstrumentId);
+
 protected slots:
     void slotFaderLevelChanged(float level);
     void slotPanChanged(float value);
@@ -61,6 +64,9 @@ protected slots:
     void slotSelectPlugin();
     void slotClose();
     
+    // to be called if something changes in an instrument parameter box
+    void slotUpdateInstrument(Rosegarden::InstrumentId);
+
 protected:
     virtual void closeEvent(QCloseEvent *);
 
