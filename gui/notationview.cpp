@@ -553,8 +553,11 @@ void NotationView::setupActions()
     new KAction(GroupMenuBreakCommand::name(), 0, this,
                 SLOT(slotGroupBreak()), actionCollection(), "break_group");
 
-    new KAction(GroupMenuTupletCommand::name(), 0, this,
+    new KAction(GroupMenuTupletCommand::name(true), 0, this,
 		SLOT(slotGroupSimpleTuplet()), actionCollection(), "simple_tuplet");
+
+    new KAction(GroupMenuTupletCommand::name(false), 0, this,
+		SLOT(slotGroupGeneralTuplet()), actionCollection(), "tuplet");
 
     new KAction(GroupMenuAddIndicationCommand::name
                 (Rosegarden::Indication::Slur), 0, this,
@@ -1334,6 +1337,16 @@ void NotationView::slotGroupAutoBeam()
 
 void NotationView::slotGroupSimpleTuplet()
 {
+    slotGroupTuplet(true);
+}
+
+void NotationView::slotGroupGeneralTuplet()
+{
+    slotGroupTuplet(false);
+}
+
+void NotationView::slotGroupTuplet(bool simple)
+{
     timeT t = 0;
     timeT unit = 0;
     int tupled = 2;
@@ -1343,12 +1356,23 @@ void NotationView::slotGroupSimpleTuplet()
     NotationSelector *selector = dynamic_cast<NotationSelector *>
 	(m_toolBox->getTool(NotationSelector::ToolName));
 
-    if (m_currentEventSelection && selector && selector->isRectangleVisible()) {
+    if (m_currentEventSelection &&
+	selector && selector->isRectangleVisible()) {
 
 	t = m_currentEventSelection->getBeginTime();
 
 	timeT duration = m_currentEventSelection->getTotalDuration();
-	unit = Note::getNearestNote(duration / 3).getDuration();
+	Note::Type unitType =
+	    Note::getNearestNote(duration / 3, 0).getNoteType();
+	unit = Note(unitType).getDuration();
+
+	if (!simple) {
+	    TupletDialog *dialog = new TupletDialog(this, unitType, duration);
+	    if (dialog->exec() != QDialog::Accepted) return;
+	    unit = Note(dialog->getUnitType()).getDuration();
+	    tupled = dialog->getTupledCount();
+	    untupled = dialog->getUntupledCount();
+	}
 
 	kdDebug(KDEBUG_AREA) << "Got time and unit from selection; they're " << t << " and " << unit << " respectively"<< endl;
 
@@ -1362,14 +1386,24 @@ void NotationView::slotGroupSimpleTuplet()
 	NoteInserter *currentInserter = dynamic_cast<NoteInserter *>
 	    (m_toolBox->getTool(NoteInserter::ToolName));
 
+	Note::Type unitType;
+
 	if (currentInserter) {
-	    unit = currentInserter->getCurrentNote().getDuration();
-	    kdDebug(KDEBUG_AREA) << "Got unit from inserter; it's " << unit
-				 << endl;
+	    unitType = currentInserter->getCurrentNote().getNoteType();
 	} else {
-	    unit = Note(Note::Quaver).getDuration();
-	    kdDebug(KDEBUG_AREA) << "Got default unit; it's " << unit
-				 << endl;
+	    unitType = Note::Quaver;
+	}
+
+	unit = Note(unitType).getDuration();
+	kdDebug(KDEBUG_AREA) << "Got unit; it's " << unit
+			     << endl;
+
+	if (!simple) {
+	    TupletDialog *dialog = new TupletDialog(this, unitType);
+	    if (dialog->exec() != QDialog::Accepted) return;
+	    unit = Note(dialog->getUnitType()).getDuration();
+	    tupled = dialog->getTupledCount();
+	    untupled = dialog->getUntupledCount();
 	}
 
 	segment = &m_staffs[m_currentStaff]->getSegment();

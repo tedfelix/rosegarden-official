@@ -181,7 +181,47 @@ protected:
 public slots:
     void slotPasteTypeChanged();
 };
-    
+
+
+class TupletDialog : public KDialogBase
+{
+    Q_OBJECT
+
+public:
+    TupletDialog(QWidget *parent,
+		 Rosegarden::Note::Type defaultUnitType,
+		 Rosegarden::timeT maxDuration = 0);
+
+    Rosegarden::Note::Type getUnitType() const;
+    int getUntupledCount() const;
+    int getTupledCount() const;
+
+protected:
+    QComboBox *m_unitCombo;
+    QComboBox *m_untupledCombo;
+    QComboBox *m_tupledCombo;
+
+    QLabel *m_selectionDurationDisplay;
+    QLabel *m_untupledDurationCalculationDisplay;
+    QLabel *m_untupledDurationDisplay;
+    QLabel *m_tupledDurationCalculationDisplay;
+    QLabel *m_tupledDurationDisplay;
+    QLabel *m_newGapDurationCalculationDisplay;
+    QLabel *m_newGapDurationDisplay;
+    QLabel *m_unchangedDurationCalculationDisplay;
+    QLabel *m_unchangedDurationDisplay;
+
+    void updateUntupledCombo();
+    void updateTupledCombo();
+    void updateTimingDisplays();
+
+    Rosegarden::timeT m_maxDuration;
+
+public slots:
+    void slotUnitChanged(const QString &);
+    void slotUntupledChanged(const QString &);
+    void slotTupledChanged(const QString &);
+};
 
 
 #endif

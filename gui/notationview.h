@@ -275,6 +275,8 @@ public slots:
     void slotGroupBeam();
     void slotGroupAutoBeam();
     void slotGroupSimpleTuplet();
+    void slotGroupGeneralTuplet();
+    void slotGroupTuplet(bool simple);
     void slotGroupBreak();
     void slotGroupSlur();
     void slotGroupCrescendo();

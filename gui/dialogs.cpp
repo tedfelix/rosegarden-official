@@ -38,6 +38,8 @@
 #include <karrowbutton.h>
 
 using Rosegarden::TimeSignature;
+using Rosegarden::Note;
+using Rosegarden::timeT;
 
 
 SimpleTextDialog::SimpleTextDialog(QWidget *parent, int maxLength) :
@@ -636,5 +638,273 @@ void
 PasteNotationDialog::slotPasteTypeChanged()
 {
     m_setAsDefaultButton->setChecked(m_defaultType == getPasteType());
+}
+
+
+
+TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
+			   timeT maxDuration) :
+    KDialogBase(parent, 0, true, i18n("Tuplet"), Ok | Cancel),
+    m_maxDuration(maxDuration)
+{
+    QVBox *vbox = makeVBoxMainWidget();
+
+    QGroupBox *timingBox = new QGroupBox
+	(1, Horizontal, i18n("New timing for tuplet group"), vbox);
+
+    if (m_maxDuration > 0) {
+
+	// bit of a sanity check
+	if (maxDuration < Note(Note::Semiquaver).getDuration()) {
+	    maxDuration = Note(Note::Semiquaver).getDuration();
+	}
+
+	Note::Type maxUnitType =
+	    Note::getNearestNote(maxDuration/2, 0).getNoteType();
+	if (defaultUnitType > maxUnitType) defaultUnitType = maxUnitType;
+    }
+
+    QGrid *timingGrid = new QGrid(3, QGrid::Horizontal, timingBox);
+
+    new QLabel(i18n("Play "), timingGrid);
+    m_untupledCombo = new QComboBox(true, timingGrid);
+
+    m_unitCombo = new QComboBox(false, timingGrid);
+    NotePixmapFactory npf;
+
+    for (Note::Type t = Note::Shortest; t <= Note::Longest; ++t) {
+	Note note(t);
+	if (maxDuration > 0 && (2 * note.getDuration() > maxDuration)) break;
+	QPixmap pmap = npf.makeToolbarPixmap
+	    ((std::string("menu-") + note.getReferenceName()).c_str());
+	m_unitCombo->insertItem(pmap, (note.getEnglishName() + "s").c_str());
+	if (defaultUnitType == t) {
+	    m_unitCombo->setCurrentItem(m_unitCombo->count() - 1);
+	}
+    }
+    
+    updateUntupledCombo();
+
+    new QLabel(i18n("In the time of  "), timingGrid);
+    m_tupledCombo = new QComboBox(true, timingGrid);
+    updateTupledCombo();
+
+    QGroupBox *timingDisplayBox = new QGroupBox
+	(1, Horizontal, i18n("Timing calculations"), vbox);
+
+    QGrid *timingDisplayGrid = new QGrid(3, QGrid::Horizontal, timingDisplayBox);
+
+    if (maxDuration > 0) {
+
+	new QLabel(i18n("Selected region:"), timingDisplayGrid);
+	new QLabel("", timingDisplayGrid);
+	m_selectionDurationDisplay = new QLabel("x", timingDisplayGrid);
+	m_selectionDurationDisplay->setAlignment(int(QLabel::AlignVCenter |
+						     QLabel::AlignRight));
+    } else {
+	m_selectionDurationDisplay = 0;
+    }
+    
+    new QLabel(i18n("Group with current timing:"), timingDisplayGrid);
+    m_untupledDurationCalculationDisplay = new QLabel("x", timingDisplayGrid);
+    m_untupledDurationDisplay = new QLabel("x", timingDisplayGrid);
+    m_untupledDurationDisplay->setAlignment(int(QLabel::AlignVCenter |
+						QLabel::AlignRight));
+
+    new QLabel(i18n("Group with new timing:"), timingDisplayGrid);
+    m_tupledDurationCalculationDisplay = new QLabel("x", timingDisplayGrid);
+    m_tupledDurationDisplay = new QLabel("x", timingDisplayGrid);
+    m_tupledDurationDisplay->setAlignment(int(QLabel::AlignVCenter |
+					      QLabel::AlignRight));
+
+    new QLabel(i18n("Gap created by timing change:"), timingDisplayGrid);
+    m_newGapDurationCalculationDisplay = new QLabel("x", timingDisplayGrid);
+    m_newGapDurationDisplay = new QLabel("x", timingDisplayGrid);
+    m_newGapDurationDisplay->setAlignment(int(QLabel::AlignVCenter |
+					      QLabel::AlignRight));
+
+    if (maxDuration > 0) {
+
+	new QLabel(i18n("Unchanged at end of selection:"), timingDisplayGrid);
+	m_unchangedDurationCalculationDisplay = new QLabel
+	    ("x", timingDisplayGrid);
+	m_unchangedDurationDisplay = new QLabel("x", timingDisplayGrid);
+	m_unchangedDurationDisplay->setAlignment(int(QLabel::AlignVCenter |
+						     QLabel::AlignRight));
+
+    } else {
+	m_unchangedDurationDisplay = 0;
+    }
+
+    updateTimingDisplays();
+
+    QObject::connect(m_unitCombo, SIGNAL(activated(const QString &)),
+		     this, SLOT(slotUnitChanged(const QString &)));
+
+    QObject::connect(m_untupledCombo, SIGNAL(activated(const QString &)),
+		     this, SLOT(slotUntupledChanged(const QString &)));
+    QObject::connect(m_untupledCombo, SIGNAL(textChanged(const QString &)),
+		     this, SLOT(slotUntupledChanged(const QString &)));
+
+    QObject::connect(m_tupledCombo, SIGNAL(activated(const QString &)),
+		     this, SLOT(slotTupledChanged(const QString &)));
+    QObject::connect(m_tupledCombo, SIGNAL(textChanged(const QString &)),
+		     this, SLOT(slotTupledChanged(const QString &)));
+}
+
+Note::Type
+TupletDialog::getUnitType() const
+{
+    return Note::Shortest + m_unitCombo->currentItem();
+}
+
+int
+TupletDialog::getUntupledCount() const
+{
+    bool isNumeric = true;
+    int count = m_untupledCombo->currentText().toInt(&isNumeric);
+    if (count == 0 || !isNumeric) return 1;
+    else return count;
+}
+
+int
+TupletDialog::getTupledCount() const
+{
+    bool isNumeric = true;
+    int count = m_tupledCombo->currentText().toInt(&isNumeric);
+    if (count == 0 || !isNumeric) return 1;
+    else return count;
+}
+
+
+
+void
+TupletDialog::updateUntupledCombo()
+{
+    // Untupled combo can contain numbers up to the maximum
+    // duration divided by the unit duration.  If there's no
+    // maximum, we'll have to put in some likely values and
+    // allow the user to edit it.  Both the numerical combos
+    // should possibly be spinboxes, except I think I like
+    // being able to "suggest" a few values
+
+    int maxValue = 12;
+
+    if (m_maxDuration) {
+	maxValue = m_maxDuration / Note(getUnitType()).getDuration();
+    }
+
+    QString previousText = m_untupledCombo->currentText();
+    if (previousText.toInt() == 0) {
+	if (maxValue < 3) previousText = QString("%1").arg(maxValue);
+	else previousText = "3";
+    }
+
+    m_untupledCombo->clear();
+    bool setText = false;
+
+    for (int i = 1; i <= maxValue; ++i) {
+	QString text = QString("%1").arg(i);
+	m_untupledCombo->insertItem(text);
+	if (text == previousText) {
+	    m_untupledCombo->setCurrentItem(m_untupledCombo->count() - 1);
+	    setText = true;
+	}
+    }
+
+    if (!setText) {
+	m_untupledCombo->setEditText(previousText);
+    }
+}
+
+void
+TupletDialog::updateTupledCombo()
+{
+    // should contain all positive integers less than the
+    // largest value in the untupled combo.  In principle
+    // we can support values larger, but we can't quite
+    // do the tupleting transformation yet
+
+    int untupled = getUntupledCount();
+
+    QString previousText = m_tupledCombo->currentText();
+    if (previousText.toInt() == 0 ||
+	previousText.toInt() > untupled) {
+	if (untupled < 2) previousText = QString("%1").arg(untupled);
+	else previousText = "2";
+    }
+
+    m_tupledCombo->clear();
+
+    for (int i = 1; i < untupled; ++i) {
+	QString text = QString("%1").arg(i);
+	m_tupledCombo->insertItem(text);
+	if (text == previousText) {
+	    m_tupledCombo->setCurrentItem(m_tupledCombo->count() - 1);
+	}
+    }
+}
+
+void
+TupletDialog::updateTimingDisplays()
+{
+    timeT unitDuration = Note(getUnitType()).getDuration();
+
+    int untupledCount = getUntupledCount();
+    int tupledCount = getTupledCount();
+
+    timeT untupledDuration = unitDuration * untupledCount;
+    timeT tupledDuration = unitDuration * tupledCount;
+
+    if (m_selectionDurationDisplay) {
+	m_selectionDurationDisplay->setText(QString("%1").arg(m_maxDuration));
+    }
+
+    m_untupledDurationCalculationDisplay->setText
+	(QString("  %1 x %2 = ").arg(untupledCount).arg(unitDuration));
+    m_untupledDurationDisplay->setText
+	(QString("%1").arg(untupledDuration));
+
+    m_tupledDurationCalculationDisplay->setText
+	(QString("  %1 x %2 = ").arg(tupledCount).arg(unitDuration));
+    m_tupledDurationDisplay->setText
+	(QString("%1").arg(tupledDuration));
+
+    m_newGapDurationCalculationDisplay->setText
+	(QString("  %1 - %2 = ").arg(untupledDuration).arg(tupledDuration));
+    m_newGapDurationDisplay->setText
+	(QString("%1").arg(untupledDuration - tupledDuration));
+
+    if (m_selectionDurationDisplay && m_unchangedDurationDisplay) {
+	if (m_maxDuration != untupledDuration) {
+	    m_unchangedDurationCalculationDisplay->setText
+		(QString("  %1 - %2 = ").arg(m_maxDuration).arg(untupledDuration));
+	} else {
+	    m_unchangedDurationCalculationDisplay->setText("");
+	}
+	m_unchangedDurationDisplay->setText
+	    (QString("%1").arg(m_maxDuration - untupledDuration));
+    }
+}
+
+void
+TupletDialog::slotUnitChanged(const QString &)
+{
+    updateUntupledCombo();
+    updateTupledCombo();
+    updateTimingDisplays();
+}
+
+void
+TupletDialog::slotUntupledChanged(const QString &)
+{
+    updateTupledCombo();
+    updateTimingDisplays();
+}
+
+void
+TupletDialog::slotTupledChanged(const QString &)
+{
+    updateTimingDisplays();
 }
 

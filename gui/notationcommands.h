@@ -194,7 +194,7 @@ public:
 
     static QString name(bool simple = true) {
 	if (simple) return "&Simple Tuplet";
-	else return "Tu&plet";
+	else return "Tu&plet...";
     }
 
 protected:
