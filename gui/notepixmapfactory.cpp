@@ -313,6 +313,10 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
         case 4: stemLength += nbh * 2 - nbh / 4; break;
         default: break;
         }
+
+	if (slashCount > 3 && flagCount < 3) {
+	    stemLength += (slashCount - 3) * (nbh / 2);
+	}
     }
 
     if (params.m_marks.size() > 0) {
@@ -350,6 +354,11 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
             }
         }
     }            
+
+    if (slashCount > 0) {
+	m_left = std::max(m_left, m_noteBodyWidth / 2);
+	m_right = std::max(m_right, m_noteBodyWidth / 2);
+    }
 
     if (params.m_tupletCount > 0) {
 	makeRoomForTuplingLine(params);
@@ -911,9 +920,14 @@ NotePixmapFactory::drawSlashes(const QPoint &s0,
 
     bool smooth = m_font->getNoteFontMap().isSmooth();
 
-    int width = m_noteBodyWidth;
+    int width = m_noteBodyWidth * 4 / 5;
     int sign = (params.m_stemGoesUp ? -1 : 1);
-    int y = s0.y() + sign * (m_noteBodyHeight*3/2 + thickness/2);
+
+    int offset = 
+	(slashCount == 1 ? m_noteBodyHeight * 2 :
+	 slashCount == 2 ? m_noteBodyHeight * 3/2 :
+	 m_noteBodyHeight);
+    int y = s0.y() + sign * (offset + thickness/2);
 
     for (int i = 0; i < slashCount; ++i) {
 	int yoff = width / 2;

@@ -208,10 +208,8 @@ To load soundfonts use the "sfxload" utility.  For example the Creative
 SBLive! soundcard comes with a set of standard soundfonts (2gmgsmt.sf2,
 4gmgsmt.sf2, 8mbgmsfx.sf2) and you can load the 8MB soundfont as follows:
 
-  % sfxload 8mbgmsfx.sf2
+  $ sfxload 8mbgmsfx.sf2
 
 For more fun with soundfonts including how to create them for yourself
-have a look at the Smurf/Swami project:
-
-  http://smurf.sourceforge.net/
+have a look at the Smurf/Swami project: <URL:http://smurf.sourceforge.net/>.
 
