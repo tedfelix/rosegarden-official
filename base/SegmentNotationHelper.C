@@ -1014,17 +1014,14 @@ SegmentNotationHelper::setInsertedNoteGroup(Event *e, iterator i)
     // Formerly this was posited on the note being inserted between
     // two notes in the same group, but that's quite wrong-headed: we
     // want to place it in the same group as any existing note at the
-    // same time, or else the nearest note thereafter if there are no
-    // rests, or "subsequent" notes, in between.  The exception is for
-    // tupled groups, where we don't care whether an event is a note
-    // or not
-
-    timeT myEndTime = e->getAbsoluteTime() + e->getDuration();
+    // same time, and otherwise leave it alone.
 
     e->unset(BEAMED_GROUP_ID);
     e->unset(BEAMED_GROUP_TYPE);
 
-    while (isBeforeEndMarker(i)) {
+    while (isBeforeEndMarker(i) &&
+	   !((*i)->isa(Note::EventRestType)) &&
+	   (*i)->getNotationAbsoluteTime() == e->getAbsoluteTime()) {
 
 	if ((*i)->has(BEAMED_GROUP_ID)) {
 
@@ -1051,9 +1048,7 @@ SegmentNotationHelper::setInsertedNoteGroup(Event *e, iterator i)
 	    }
 
 	    return;
-
-	} else if ((*i)->isa(Note::EventRestType) ||
-		   (*i)->getAbsoluteTime() >= myEndTime) return;
+	}
 
 	++i;
     }
@@ -1219,7 +1214,8 @@ SegmentNotationHelper::makeBeamedGroupAux(iterator from, iterator to,
 					  string type)
 {
     int groupId = segment().getNextId();
-    
+    bool beamedSomething = false;
+
     for (iterator i = from; i != to; ++i) {
 
 	// don't permit ourselves to change the type of an
@@ -1227,6 +1223,26 @@ SegmentNotationHelper::makeBeamedGroupAux(iterator from, iterator to,
 	if ((*i)->has(BEAMED_GROUP_TYPE) &&
 	    (*i)->get<String>(BEAMED_GROUP_TYPE) != GROUP_TYPE_BEAMED) {
 	    continue;
+	}
+
+	// don't beam anything longer than a quaver unless it's
+	// between beamed quavers -- in which case marking it as
+	// beamed will ensure that it gets re-stemmed appropriately
+
+	if ((*i)->isa(Note::EventType) &&
+	    (*i)->getNotationDuration() >= Note(Note::Crotchet).getDuration()) {
+	    if (!beamedSomething) continue;
+	    iterator j = i;
+	    bool somethingLeft = false;
+	    while (++j != to) {
+		if ((*j)->getType() == Note::EventType &&
+		    (*j)->getNotationAbsoluteTime() > (*i)->getNotationAbsoluteTime() &&
+		    (*j)->getNotationDuration() < Note(Note::Crotchet).getDuration()) {
+		    somethingLeft = true;
+		    break;
+		}
+	    }
+	    if (!somethingLeft) continue;
 	}
 
         (*i)->set<Int>(BEAMED_GROUP_ID, groupId);
