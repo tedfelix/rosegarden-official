@@ -74,11 +74,6 @@ PropertyName getMarkPropertyName(int markNo)
 const PropertyName TIED_BACKWARD	= "TiedBackward";
 const PropertyName TIED_FORWARD		= "TiedForward";
 
-// Note that these should be non-persistent properties, because
-// they're the same for each event in a group and so the code that
-// writes out XML converts them to group properties instead of
-// writing them as explicit properties of the events:
-
 const PropertyName BEAMED_GROUP_ID               = "BGroupId";
 const PropertyName BEAMED_GROUP_TYPE		 = "BGroupType";
 const PropertyName BEAMED_GROUP_TUPLED_LENGTH	 = "BGroupTupledLength";

@@ -290,7 +290,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
         //--------------------------
         outStream << QString("<segment track=\"%1\" start=\"%2\">")
             .arg(segment->getTrack())
-            .arg(segment->getStartTime()) << endl;
+             .arg(segment->getStartTime()) << endl;
 
         long currentGroup = -1;
 	bool inChord = false;
@@ -343,6 +343,11 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 	    if (inChord && (*i)->getDuration() > 0)
 		if (chordDuration == 0 || (*i)->getDuration() < chordDuration)
 		    chordDuration = (*i)->getDuration();
+
+	    //!!! The SegmentQ-properties need to be backed up despite
+	    //being non-persistent (they're non-persistent because we
+	    //want to lose them when copying the events, not when
+	    //saving them).  What's the best way to do that?
 
 	    outStream << '\t'
 		<< XmlStorableEvent(**i).toXmlString(expectedTime) << endl;

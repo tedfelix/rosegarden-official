@@ -249,7 +249,7 @@ PasteCommand::modifySegment()
 
     for (Segment::iterator i = source->begin(); i != source->end(); ++i) {
 	Event *e = new Event
-	    (**i, e->getAbsoluteTime() - origin + pasteTime);
+	    (**i, (*i)->getAbsoluteTime() - origin + pasteTime);
 	destination->insert(e);
 
 	if (e->isa(Note::EventType)) {

@@ -59,11 +59,6 @@ SegmentParameterBox::initBox()
     int comboWidth = 64;
     int comboHeight = 20;
 
-    // font
-//    QFont font ("lucidasanstypewriter", 8);
-//    font.setPixelSize(10);
-
-    // bit experimental --cc
     QFont plainFont;
     plainFont.setPointSize(10);
 
@@ -80,7 +75,7 @@ SegmentParameterBox::initBox()
 
     m_repeatValue = new RosegardenTristateCheckBox(this);
     m_repeatValue->setFont(plainFont);
-    m_repeatValue->setFixedHeight(comboHeight);
+//!!!    m_repeatValue->setFixedHeight(comboHeight);
 
     // handle state changes
     connect(m_repeatValue, SIGNAL(pressed()), SLOT(slotRepeatPressed()));
@@ -88,7 +83,7 @@ SegmentParameterBox::initBox()
     // non-reversing motif style read-only combo
     m_quantizeValue = new RosegardenComboBox(false, false, this);
     m_quantizeValue->setFont(plainFont);
-    m_quantizeValue->setFixedSize(comboWidth, comboHeight);
+//!!!    m_quantizeValue->setFixedSize(comboWidth, comboHeight);
 
     // handle quantize changes from drop down
     connect(m_quantizeValue, SIGNAL(activated(int)),
@@ -101,7 +96,7 @@ SegmentParameterBox::initBox()
     // reversing motif style read-write combo
     m_transposeValue = new RosegardenComboBox(true, true, this);
     m_transposeValue->setFont(plainFont);
-    m_transposeValue->setFixedSize(comboWidth, comboHeight);
+//!!!    m_transposeValue->setFixedSize(comboWidth, comboHeight);
 
     // handle transpose combo changes
     connect(m_transposeValue, SIGNAL(activated(int)),
@@ -114,7 +109,7 @@ SegmentParameterBox::initBox()
     // reversing motif style read-write combo
     m_delayValue = new RosegardenComboBox(true, true, this);
     m_delayValue->setFont(plainFont);
-    m_delayValue->setFixedSize(comboWidth, comboHeight);
+//!!!    m_delayValue->setFixedSize(comboWidth, comboHeight);
 
     // handle delay combo changes
     connect(m_delayValue, SIGNAL(activated(int)),
@@ -131,7 +126,7 @@ SegmentParameterBox::initBox()
 
     QLabel *title = new QLabel(i18n("Segment Parameters"), this);
     title->setFont(boldFont);
-    title->setFixedHeight(comboHeight);
+//!!!    title->setFixedHeight(comboHeight);
 
     gridLayout->addMultiCellWidget(title, 0, 0, 0, 1, AlignLeft);
 

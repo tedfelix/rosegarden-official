@@ -189,12 +189,12 @@ void RG21Loader::setGroupProperties(Event *e)
 {
     if (m_inGroup) {
 
-	e->setMaybe<Int>(BEAMED_GROUP_ID, m_groupId);
-	e->setMaybe<String>(BEAMED_GROUP_TYPE, m_groupType);
+	e->set<Int>(BEAMED_GROUP_ID, m_groupId);
+	e->set<String>(BEAMED_GROUP_TYPE, m_groupType);
 
 	if (m_groupType == GROUP_TYPE_TUPLED) {
-	    e->setMaybe<Int>(BEAMED_GROUP_TUPLED_LENGTH, m_groupTupledLength);
-	    e->setMaybe<Int>(BEAMED_GROUP_TUPLED_COUNT, m_groupTupledCount);
+	    e->set<Int>(BEAMED_GROUP_TUPLED_LENGTH, m_groupTupledLength);
+	    e->set<Int>(BEAMED_GROUP_TUPLED_COUNT, m_groupTupledCount);
 	}
 
 	m_groupUntupledLength += e->getDuration();

@@ -645,8 +645,8 @@ SegmentNotationHelper::setInsertedNoteGroup(Event *e, iterator i)
     while (i != end()) {
 	if ((*i)->isa(Note::EventType)) {
 	    if ((*i)->has(BEAMED_GROUP_ID)) {
-		e->setMaybe<Int>(BEAMED_GROUP_ID,
-				 (*i)->get<Int>(BEAMED_GROUP_ID));
+		e->set<Int>(BEAMED_GROUP_ID,
+			       (*i)->get<Int>(BEAMED_GROUP_ID));
 		e->set<String>(BEAMED_GROUP_TYPE,
 			       (*i)->get<String>(BEAMED_GROUP_TYPE));
 	    }
@@ -764,8 +764,8 @@ SegmentNotationHelper::makeBeamedGroupAux(iterator from, iterator to,
     int groupId = segment().getNextId();
     
     for (iterator i = from; i != to; ++i) {
-        (*i)->setMaybe<Int>(BEAMED_GROUP_ID, groupId);
-        (*i)->setMaybe<String>(BEAMED_GROUP_TYPE, type);
+        (*i)->set<Int>(BEAMED_GROUP_ID, groupId);
+        (*i)->set<String>(BEAMED_GROUP_TYPE, type);
     }
 }
 
@@ -1157,9 +1157,9 @@ SegmentNotationHelper::removeRests(timeT time, timeT &duration, bool testOnly)
 	    Event *newEvent = new Event(**lastEvent, finalTime,
 					(*lastEvent)->getDuration() -
 					(finalTime - eventTime));
-	    segment().erase(lastEvent);
-	    segment().insert(newEvent);
 	    duration = finalTime + (*lastEvent)->getDuration() - time;
+	    segment().erase(lastEvent);
+	    lastEvent = segment().insert(newEvent);
 	    checkLastRest = true;
 	}
     }

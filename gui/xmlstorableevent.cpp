@@ -22,6 +22,7 @@
 #include "xmlstorableevent.h"
 #include "NotationTypes.h"
 #include "SegmentNotationHelper.h"
+#include "BaseProperties.h"
 
 #include "rosedebug.h"
 
@@ -204,6 +205,13 @@ XmlStorableEvent::toXmlString(timeT expectedTime) const
     PropertyNames propertyNames(getPersistentPropertyNames());
     for (PropertyNames::const_iterator i = propertyNames.begin();
          i != propertyNames.end(); ++i) {
+
+	// Special cases for various properties.  The BEAMED_GROUP_ID
+	// and BEAMED_GROUP_TYPE are converted into attributes of the
+	// group element by RosegardenGUIDoc::saveDocument.
+
+	if (*i == Rosegarden::BaseProperties::BEAMED_GROUP_ID ||
+	    *i == Rosegarden::BaseProperties::BEAMED_GROUP_TYPE) continue;
 
 	res += QString("<property name=\"%1\" %2=\"%3\"/>")
 	    .arg((*i).c_str())

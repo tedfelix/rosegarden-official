@@ -112,7 +112,7 @@ Quantizer::UnitQuantizer::quantize(int unit, int, timeT duration, timeT) const
     if (duration != 0) {
 	timeT low = (duration / unit) * unit;
 	timeT high = low + unit;
-	if (high - duration > duration - low) duration = low;
+	if (low > 0 && (high - duration > duration - low)) duration = low;
 	else duration = high;
     }
 
@@ -344,7 +344,7 @@ Quantizer::quantize(Segment *s, Segment::iterator from, Segment::iterator to,
     for (Segment::iterator nextFrom = from ; from != to; from = nextFrom) {
 
 	++nextFrom;
-	cerr << "From is at " << std::distance(s->begin(), from) << " from start, nextFrom is at " << std::distance(s->begin(), nextFrom) << "; from's time is " << (*from)->getAbsoluteTime() << ", nextFrom's is " << (nextFrom == s->end() ? -1 : (*nextFrom)->getAbsoluteTime()) << endl;
+//	cerr << "From is at " << std::distance(s->begin(), from) << " from start, nextFrom is at " << std::distance(s->begin(), nextFrom) << "; from's time is " << (*from)->getAbsoluteTime() << ", nextFrom's is " << (nextFrom == s->end() ? -1 : (*nextFrom)->getAbsoluteTime()) << endl;
 
 	timeT absoluteTime   = getFromSource(*from, AbsoluteTimeValue);
 	timeT duration       = getFromSource(*from, DurationValue);
@@ -436,7 +436,7 @@ Quantizer::unquantize(Segment *s,
 timeT
 Quantizer::getFromSource(Event *e, ValueType v) const
 {
-    cerr << "Quantizer::getFromSource: source is \"" << m_source << "\"" << endl;
+//    cerr << "Quantizer::getFromSource: source is \"" << m_source << "\"" << endl;
 
     if (m_source == RawEventData) {
 
@@ -484,7 +484,7 @@ void
 Quantizer::setToTarget(Segment *s, Segment::iterator i,
 		       timeT absTime, timeT duration) const
 {
-    cerr << "Quantizer::setToTarget: target is \"" << m_target << "\", absTime is " << absTime << ", duration is " << duration << " (unit is " << m_unit << ", original values are absTime " << (*i)->getAbsoluteTime() << ", duration " << (*i)->getDuration() << ")" << endl;
+//    cerr << "Quantizer::setToTarget: target is \"" << m_target << "\", absTime is " << absTime << ", duration is " << duration << " (unit is " << m_unit << ", original values are absTime " << (*i)->getAbsoluteTime() << ", duration " << (*i)->getDuration() << ")" << endl;
 
     if (m_target == RawEventData) {
 

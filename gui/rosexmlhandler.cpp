@@ -107,8 +107,8 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         m_currentEvent = new XmlStorableEvent(atts, m_currentTime);
 
         if (m_inGroup) {
-            m_currentEvent->setMaybe<Int>(BEAMED_GROUP_ID, m_groupId);
-            m_currentEvent->setMaybe<String>(BEAMED_GROUP_TYPE, m_groupType);
+            m_currentEvent->set<Int>(BEAMED_GROUP_ID, m_groupId);
+            m_currentEvent->set<String>(BEAMED_GROUP_TYPE, m_groupType);
 	    if (m_groupType == GROUP_TYPE_TUPLED) {
 		m_currentEvent->set<Int>
 		    (BEAMED_GROUP_TUPLED_LENGTH, m_groupTupledLength);
