@@ -20,6 +20,7 @@ libbase_la_SOURCES = AnalysisTypes.C \
                      MidiDevice.C \
                      MidiTypes.C \
 		     NotationTypes.C \
+		     Profiler.C \
                      Property.C \
 		     PropertyMap.C \
 		     PropertyName.C \
