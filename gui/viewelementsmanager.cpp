@@ -32,13 +32,9 @@ ViewElementsManager::notationElementList(EventList::iterator from,
 {
     NotationElementList *res = new NotationElementList;
 
-    double fakeX = 0; // this is needed to order the list
-    
     for (EventList::iterator i = from; i != to; ++i) {
         NotationElement *el = new NotationElement(*i);
-        el->setX(fakeX);
         res->insert(el);
-        ++fakeX;
     }
 
     return res;
