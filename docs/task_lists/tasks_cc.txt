@@ -67,7 +67,7 @@ Post-0.1.1 task list
     ints in notationhlayout x-coord calculations
 
 17. Fix storage for bars, time sigs, tempo events in Composition
-    (new Segment-a-like as per email)
+    (new Segment-a-like as per email) [DONE]
 
 18. Real-time timestamps only in mapped classes
 

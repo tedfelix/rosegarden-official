@@ -222,6 +222,10 @@ protected:
      const NotationElementList::iterator &, const BarDataList::iterator &,
      const Rosegarden::TimeSignature &);
 
+    /// Difference between absolute time of next event and of this
+    Rosegarden::timeT getSpacingDuration
+    (StaffType &staff, const NotationElementList::iterator &);
+
     class AccidentalTable : public std::vector<Rosegarden::Accidental>
     {
     public:

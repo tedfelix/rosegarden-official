@@ -59,9 +59,9 @@ public:
      * Changes the resolution of the note pixmap factory and the
      * staff lines, etc
      */
-    void changeFont(std::string fontName, int resolution);
+    virtual void changeFont(std::string fontName, int resolution);
 
-    void setLegatoDuration(Rosegarden::timeT duration);
+    virtual void setLegatoDuration(Rosegarden::timeT duration);
 
     LinedStaff<NotationElement>::setPageMode;
     LinedStaff<NotationElement>::setPageWidth;
@@ -75,7 +75,7 @@ public:
      * too much state for its methods to be const, but you should
      * treat the returned reference as if it were const anyway.
      */
-    NotePixmapFactory& getNotePixmapFactory() { return *m_npf; }
+    virtual NotePixmapFactory& getNotePixmapFactory() { return *m_npf; }
 
     /**
      * Generate or re-generate sprites for all the elements between
@@ -147,17 +147,18 @@ public:
      * Return the clef and key in force at the given canvas
      * coordinates
      */
-    void getClefAndKeyAtCanvasCoords(double x, int y,
-				     Rosegarden::Clef &clef,
-				     Rosegarden::Key &key) const;
+    virtual void getClefAndKeyAtCanvasCoords(double x, int y,
+					     Rosegarden::Clef &clef,
+					     Rosegarden::Key &key) const;
 
     /**
      * Return the note name (C4, Bb3, whatever) corresponding to the
      * given canvas coordinates
      */
-    std::string getNoteNameAtCanvasCoords(double x, int y,
-					  Rosegarden::Accidental accidental =
-					  Rosegarden::Accidentals::NoAccidental) const;
+    virtual std::string getNoteNameAtCanvasCoords
+    (double x, int y,
+     Rosegarden::Accidental accidental =
+     Rosegarden::Accidentals::NoAccidental) const;
 
 protected:
 
@@ -172,19 +173,20 @@ protected:
      * needed in case it's a key event, in which case we need to judge
      * the correct pitch for the key)
      */
-    void renderSingleElement(NotationElement *, const Rosegarden::Clef &,
-			     bool selected);
+    virtual void renderSingleElement(NotationElement *, 
+				     const Rosegarden::Clef &,
+				     bool selected);
 
     /**
      * Return a QCanvasSimpleSprite representing the given note event
      */
-    QCanvasSimpleSprite *makeNoteSprite(NotationElement *);
+    virtual QCanvasSimpleSprite *makeNoteSprite(NotationElement *);
 
     /**
      * Return true if the element has a canvas item that is already
      * at the correct layout coordinates
      */
-    bool elementNotMoved(NotationElement *);
+    virtual bool elementNotMoved(NotationElement *);
 
     typedef std::set<QCanvasSimpleSprite *> SpriteSet;
     SpriteSet m_timeSigs;

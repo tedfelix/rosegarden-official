@@ -875,7 +875,7 @@ NotationHLayout::layout(BarDataMap::iterator i)
 
 
 long
-NotationHLayout::positionRest(StaffType &,
+NotationHLayout::positionRest(StaffType &staff,
                               const NotationElementList::iterator &itr,
                               const BarDataList::iterator &bdi,
                               const TimeSignature &timeSignature)
@@ -888,7 +888,8 @@ NotationHLayout::positionRest(StaffType &,
     // the remainder as our duration is of the whole bar's duration.
 
     long delta = (((int)bdi->idealWidth - bdi->fixedWidth) *
-                  rest->event()->getDuration()) /
+//!!!                  rest->event()->getDuration()) /
+		  getSpacingDuration(staff, itr)) /
         //!!! not right for partial bar?
         timeSignature.getBarDuration();
 
@@ -909,6 +910,20 @@ NotationHLayout::positionRest(StaffType &,
 }
 
 
+timeT
+NotationHLayout::getSpacingDuration(StaffType &staff,
+				    const NotationElementList::iterator &i)
+{
+    timeT t((*i)->getAbsoluteTime());
+    timeT d((*i)->getDuration());
+
+    NotationElementList::iterator j(i), e(staff.getViewElementList()->end());
+    while (j != e && (*j)->getAbsoluteTime() == t) ++j;
+    if (j == e) return d;
+    else return (*j)->getAbsoluteTime() - t;
+}
+
+
 long
 NotationHLayout::positionChord(StaffType &staff,
                                NotationElementList::iterator &itr,
@@ -924,10 +939,16 @@ NotationHLayout::positionChord(StaffType &staff,
     // with the amount alloted to the whole bar, subtract that
     // reserved for fixed-width items, and take the same proportion of
     // the remainder as our duration is of the whole bar's duration.
-    // We use the shortest note in the chord, should the durations vary
-                    
+
+    //!!! In case this chord has various durations in it, we choose an
+    // effective duration based on the absolute time of the first
+    // following event that is not in the chord
+
+    //!!! We use the shortest note in the chord, should the durations vary
+
     long delta = (((int)bdi->idealWidth - bdi->fixedWidth) *
-                  (*chord.getShortestElement())->event()->getDuration()) /
+//!!!                  (*chord.getShortestElement())->event()->getDuration()) /
+		  getSpacingDuration(staff, itr)) /
         //!!! not right for partial bar?
         timeSignature.getBarDuration();
 
