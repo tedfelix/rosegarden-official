@@ -90,7 +90,12 @@ protected:
 class SegmentEraseCommand : public KNamedCommand
 {
 public:
+    /// for removing segment normally
     SegmentEraseCommand(Rosegarden::Segment *segment);
+
+    /// for removing audio segment when removing an audio file
+    SegmentEraseCommand(Rosegarden::Segment *segment,
+			Rosegarden::AudioFileManager *mgr);
     virtual ~SegmentEraseCommand();
 
     virtual void execute();
@@ -99,6 +104,8 @@ public:
 private:
     Rosegarden::Composition *m_composition;
     Rosegarden::Segment *m_segment;
+    Rosegarden::AudioFileManager *m_mgr;
+    std::string m_audioFileName;
     bool m_detached;
 };
 

@@ -148,18 +148,38 @@ SegmentEraseCommand::SegmentEraseCommand(Segment *segment) :
     KNamedCommand(i18n("Erase Segment")),
     m_composition(segment->getComposition()),
     m_segment(segment),
+    m_mgr(0),
+    m_audioFileName(""),
     m_detached(false)
 {
     // nothing else
 }
 
+SegmentEraseCommand::SegmentEraseCommand(Segment *segment,
+					 AudioFileManager *mgr) :
+    KNamedCommand(i18n("Erase Segment")),
+    m_composition(segment->getComposition()),
+    m_segment(segment),
+    m_mgr(mgr),
+    m_detached(false)
+{
+    // If this is an audio segment, we want to make a note of
+    // its associated file name in case we need to undo and restore
+    // the file.
+    if (m_segment->getType() == Rosegarden::Segment::Audio) {
+	unsigned int id = m_segment->getAudioFileId();
+	Rosegarden::AudioFile *file = mgr->getAudioFile(id);
+	if (file) m_audioFileName = file->getFilename();
+    }
+}
+
 SegmentEraseCommand::~SegmentEraseCommand()
 {
-    // This is the only place the Segment can safely be deleted, and
-    // then only if it is not in the Composition (i.e. if we executed
-    // more recently than we unexecuted).  Can't safely call through
-    // the m_segment pointer here; someone else might have got to it
-    // first
+    // This is the only place in this command that the Segment can
+    // safely be deleted, and then only if it is not in the
+    // Composition (i.e. if we executed more recently than we
+    // unexecuted).  Can't safely call through the m_segment pointer
+    // here; someone else might have got to it first
 
     if (m_detached) {
 	delete m_segment;
@@ -178,6 +198,17 @@ SegmentEraseCommand::unexecute()
 {
     m_composition->addSegment(m_segment);
     m_detached = false;
+
+    if (m_segment->getType() == Rosegarden::Segment::Audio &&
+	m_audioFileName != "" &&
+	m_mgr) {
+	int id = m_mgr->fileExists(m_audioFileName);
+
+	RG_DEBUG << "SegmentEraseCommand::unexecute: file is " << m_audioFileName << endl;
+
+	if (id == -1) id = (int)m_mgr->addFile(m_audioFileName);
+	m_segment->setAudioFileId(id);
+    }
 }
 
 // --------- Copy Segment ---------

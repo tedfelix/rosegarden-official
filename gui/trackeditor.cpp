@@ -633,7 +633,8 @@ TrackEditor::slotDeleteSelectedSegments()
     //
     for (it = segments.begin(); it != segments.end(); it++)
     {
-        macro->addCommand(new SegmentEraseCommand(*it));
+        macro->addCommand(new SegmentEraseCommand(*it,
+						  &m_doc->getAudioFileManager()));
     }
 
     addCommandToHistory(macro);

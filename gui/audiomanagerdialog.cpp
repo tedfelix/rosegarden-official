@@ -648,8 +648,6 @@ AudioManagerDialog::slotDelete()
     // remove segments along with audio file
     //
     Rosegarden::AudioFileId id = audioFile->getId();
-    m_doc->getAudioFileManager().removeFile(id);
-
     Rosegarden::SegmentSelection selection;
     Composition &comp = m_doc->getComposition();
 
@@ -659,8 +657,9 @@ AudioManagerDialog::slotDelete()
             (*it)->getAudioFileId() == id)
             selection.insert(*it);
     }
-    // delete segments
     emit deleteSegments(selection);
+
+    m_doc->getAudioFileManager().removeFile(id);
 
     // tell the sequencer
     emit deleteAudioFile(id);
@@ -1042,8 +1041,8 @@ AudioManagerDialog::addFile(const KURL& kurl)
     {
         CurrentProgressDialog::freeze();
 
-        QString errorString =
-            i18n("Can't add File.  ") + strtoqstr(e);
+        QString errorString = i18n("Cannot add file %1: %2")
+	    .arg(kurl.prettyURL()).arg(strtoqstr(e));
         KMessageBox::sorry(this, errorString);
         return false;
     }
@@ -1051,7 +1050,9 @@ AudioManagerDialog::addFile(const KURL& kurl)
     {
         CurrentProgressDialog::freeze();
 
-        KMessageBox::sorry(this, e);
+        QString errorString = i18n("Cannot add file %1: %2")
+	    .arg(kurl.prettyURL()).arg(e);
+        KMessageBox::sorry(this, errorString);
         return false;
     }
 
