@@ -1653,6 +1653,14 @@ RosegardenGUIDoc::slotNewRecordButton()
                              << endl;
             }
         }
+
+        // Update the instrument parameter box
+        //
+        RosegardenGUIView *w;
+        for(w=m_viewList.first(); w!=0; w=m_viewList.next())
+        {
+            w->slotSetRecord(recordInstr->getId(), true);
+        }
     }
 
 }

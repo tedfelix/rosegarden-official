@@ -81,12 +81,6 @@ public slots:
     //
     void slotUpdateAllBoxes();
 
-    // Update in other views
-    //
-    void slotUpdateSoloButtons(bool);
-    void slotUpdateMuteButtons(bool);
-    void slotUpdateRecordButtons(bool);
-
 signals:
 
     // Emit a MIDI controller for immediate processing.
@@ -166,10 +160,16 @@ public slots:
     void slotSelectPlugin(int index);
     void slotSelectAudioLevel(int index);
     void slotAudioChannels(int channels);
+
+    // From the parameter box clicks
     void slotMute();
     void slotSolo();
+    void slotRecord();
+
     void slotSetPan(float pan);
 
+    // External things set our button states here
+    //
     void slotSetMute(bool value);
     void slotSetSolo(bool value);
     void slotSetRecord(bool value);
@@ -182,9 +182,9 @@ public slots:
     void slotPluginDialogDestroyed(int index);
 
 signals:
-    void muteButton(bool state);
-    void soloButton(bool state);
-    void recordButton(bool state);
+    void muteButton(Rosegarden::InstrumentId, bool state);
+    void soloButton(Rosegarden::InstrumentId, bool state);
+    void recordButton(Rosegarden::InstrumentId, bool state);
 
 protected:
     //--------------- Data members ---------------------------------

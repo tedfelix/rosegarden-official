@@ -776,6 +776,12 @@ void RosegardenGUIView::slotUpdateInstrumentParameterBox(int id)
 
     Rosegarden::Track *track = comp.getTrackById(comp.getSelectedTrack());
 
+    // Reset the instrument
+    //
+    m_instrumentParameterBox->useInstrument(instrument);
+
+    // Then do this instrument/track fiddling
+    //
     if (track)
     {
         // Set the mute status
@@ -790,7 +796,6 @@ void RosegardenGUIView::slotUpdateInstrumentParameterBox(int id)
                 comp.isSolo() && track->getId() == comp.getSelectedTrack());
     }
 
-    m_instrumentParameterBox->useInstrument(instrument);
 }
 
 
@@ -1064,6 +1069,23 @@ RosegardenGUIView::slotSetRecord(Rosegarden::InstrumentId id, bool value)
     RG_DEBUG << "RosegardenGUIView::slotSetRecord - "
              << "id = " << id
              << ",value = " << value << endl;
+
+    // IPB
+    //
+    m_instrumentParameterBox->setRecord(value);
+
+    Rosegarden::Composition &comp = getDocument()->getComposition();
+    Rosegarden::Composition::trackcontainer &tracks = comp.getTracks();
+    Rosegarden::Composition::trackiterator it;
+
+    for (it = tracks.begin(); it != tracks.end(); ++it)
+    {
+        if (comp.getRecordTrack() == id)
+        {
+            m_trackEditor->getTrackButtons()->
+                setRecordTrack((*it).second->getPosition());
+        }
+    }
 }
 
 void

@@ -96,6 +96,11 @@ public:
      */
     void setMuteButton(Rosegarden::TrackId track, bool value);
 
+    /*
+     * Make this available so that others can set record buttons down
+     */
+    void setRecordTrack(int position);
+
 signals:
     // to emit what Track has been selected
     //
@@ -159,8 +164,6 @@ protected:
      * Set record button down - graphically only
      */
     void setRecordButtonDown(int position);
-
-    void setRecordTrack(int position);
 
     /**
      *  buttons, starting at the specified index

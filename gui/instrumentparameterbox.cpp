@@ -93,14 +93,20 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
     connect(m_audioInstrumentParameters, SIGNAL(updateAllBoxes()),
             this, SLOT(slotUpdateAllBoxes()));
 
-    connect(m_audioInstrumentParameters, SIGNAL(muteButton(bool)),
-            this, SLOT(slotUpdateMuteButtons(bool)));
+    connect(m_audioInstrumentParameters,
+            SIGNAL(muteButton(Rosegarden::InstrumentId, bool)),
+            this, 
+            SIGNAL(setMute(Rosegarden::InstrumentId, bool)));
     
-    connect(m_audioInstrumentParameters, SIGNAL(soloButton(bool)),
-            this, SLOT(slotUpdateSoloButtons(bool)));
+    connect(m_audioInstrumentParameters,
+            SIGNAL(soloButton(Rosegarden::InstrumentId, bool)),
+            this,
+            SIGNAL(setSolo(Rosegarden::InstrumentId, bool)));
     
-    connect(m_audioInstrumentParameters, SIGNAL(recordButton(bool)),
-            this, SLOT(slotUpdateRecordButtons(bool)));
+    connect(m_audioInstrumentParameters,
+            SIGNAL(recordButton(Rosegarden::InstrumentId, bool)),
+            this,
+            SIGNAL(setRecord(Rosegarden::InstrumentId, bool)));
     
     connect(m_midiInstrumentParameters, SIGNAL(updateAllBoxes()),
             this, SLOT(slotUpdateAllBoxes()));
@@ -190,29 +196,6 @@ InstrumentParameterBox::setSolo(bool value)
     {
         m_audioInstrumentParameters->slotSetSolo(value);
     }
-}
-
-
-
-void
-InstrumentParameterBox::slotUpdateMuteButtons(bool value)
-{
-    RG_DEBUG << "slotUpdateMuteButtons " << value << endl;
-    emit setMute(m_selectedInstrument->getId(), value);
-}
-
-void
-InstrumentParameterBox::slotUpdateSoloButtons(bool value)
-{
-    RG_DEBUG << "slotUpdateSoloButtons " << value << endl;
-    emit setSolo(m_selectedInstrument->getId(), value);
-}
-
-void
-InstrumentParameterBox::slotUpdateRecordButtons(bool value)
-{
-    RG_DEBUG << "slotUpdateRecordButtons " << value << endl;
-    emit setRecord(m_selectedInstrument->getId(), value);
 }
 
 
@@ -342,7 +325,14 @@ MIDIInstrumentParameterPanel::slotSelectPan(float value)
     if (m_selectedInstrument == 0)
         return;
 
-    m_selectedInstrument->setPan(Rosegarden::MidiByte(value));
+    // For audio instruments we pan from -100 to +100 but storage
+    // within an unsigned char is 0 - 200 - so we adjust by 100
+    //
+    float adjValue = value;
+    if (m_selectedInstrument->getType() == Rosegarden::Instrument::Audio)
+        value += 100;
+
+    m_selectedInstrument->setPan(Rosegarden::MidiByte(adjValue));
 
     Rosegarden::MappedEvent *mE = 
      new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
@@ -399,19 +389,34 @@ AudioInstrumentParameterPanel::slotSelectAudioLevel(int value)
 void 
 AudioInstrumentParameterPanel::slotSetMute(bool value)
 {
-    m_audioFader->m_muteButton->setDown(value);
+    RG_DEBUG << "AudioInstrumentParameterPanel::slotSetMute - "
+             << "value = " << value << endl;
+    m_audioFader->m_muteButton->setOn(value);
 }
 
 void
 AudioInstrumentParameterPanel::slotSetSolo(bool value)
 {
-    m_audioFader->m_soloButton->setDown(value);
+    RG_DEBUG << "AudioInstrumentParameterPanel::slotSetSolo - "
+             << "value = " << value << endl;
+    m_audioFader->m_soloButton->setOn(value);
 }
 
 void 
 AudioInstrumentParameterPanel::slotSetRecord(bool value)
 {
-    m_audioFader->m_recordButton->setDown(value);
+    RG_DEBUG << "AudioInstrumentParameterPanel::slotSetRecord - "
+             << "value = " << value << endl;
+
+    // Set the background colour for the button
+    //
+    if (value)
+        m_audioFader->m_recordButton->
+            setPalette(QPalette(RosegardenGUIColours::ActiveRecordTrack));
+    else
+        m_audioFader->m_recordButton->unsetPalette();
+
+    m_audioFader->m_recordButton->setOn(value);
 }
 
 
@@ -948,6 +953,9 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* d
     connect(m_audioFader->m_soloButton, SIGNAL(clicked()),
             this, SLOT(slotSolo()));
 
+    connect(m_audioFader->m_recordButton, SIGNAL(clicked()),
+            this, SLOT(slotRecord()));
+
     connect(m_audioFader->m_pan, SIGNAL(valueChanged(float)),
             this, SLOT(slotSetPan(float)));
 
@@ -957,14 +965,25 @@ void
 AudioInstrumentParameterPanel::slotMute()
 {
     RG_DEBUG << "AudioInstrumentParameterPanel::slotMute" << endl;
-    emit muteButton(m_audioFader->m_muteButton->isOn());
+    emit muteButton(m_selectedInstrument->getId(),
+                    m_audioFader->m_muteButton->isOn());
 }
 
 void
 AudioInstrumentParameterPanel::slotSolo()
 {
     RG_DEBUG << "AudioInstrumentParameterPanel::slotSolo" << endl;
-    emit soloButton(m_audioFader->m_soloButton->isDown());
+    emit soloButton(m_selectedInstrument->getId(),
+                    m_audioFader->m_soloButton->isOn());
+}
+
+void
+AudioInstrumentParameterPanel::slotRecord()
+{
+    RG_DEBUG << "AudioInstrumentParameterPanel::slotRecord - " 
+             << " isOn = " <<  m_audioFader->m_soloButton->isOn() << endl;
+    emit recordButton(m_selectedInstrument->getId(),
+                      m_audioFader->m_soloButton->isOn());
 }
 
 void
@@ -1031,9 +1050,9 @@ AudioInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument* instru
     //
     m_audioFader->setAudioChannels(instrument->getAudioChannels());
 
-    // Pan
+    // Pan - adjusted backwards
     //
-    m_audioFader->m_pan->setPosition(instrument->getPan());
+    m_audioFader->m_pan->setPosition(instrument->getPan() - 100);
 }
 
 void

@@ -1116,7 +1116,8 @@ TrackButtons::setMuteButton(TrackId track, bool value)
     Rosegarden::Track *trackObj = m_doc->getComposition().getTrackById(track);
     if (trackObj == 0) return;
 
-    m_muteButtonGroup->find(trackObj->getPosition())->setDown(value);
+    dynamic_cast<QPushButton*>(m_muteButtonGroup->find(trackObj->getPosition()))
+        ->setOn(value);
 }
 
 

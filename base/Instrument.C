@@ -73,6 +73,10 @@ Instrument::Instrument(InstrumentId id, InstrumentType it,
         // not the MIDI channel number.  Default is 1 (mono).
         //
         m_channel = 1;
+
+        m_pan = 100; // audio pan ranges from -100 to 100 but
+                     // we store within an unsigned char as 
+                     // 0 to 200. 
     }
 
 }
@@ -120,6 +124,9 @@ Instrument::Instrument(InstrumentId id,
         // not the MIDI channel number.  Default is 1 (mono).
         //
         m_channel = 1;
+
+        m_pan = 100; // audio pan ranges from -100 to 100 but
+                     // we store within an unsigned char as 
     }
 }
 
