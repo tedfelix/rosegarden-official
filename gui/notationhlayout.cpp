@@ -504,7 +504,8 @@ NotationHLayout::layout(BarDataMap::iterator i)
             to = nbdi->start;
         }
 
-        kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): starting a bar, initial x is " << x << " and barWidth is " << bdi->idealWidth << endl;
+        kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): starting a bar, initial x is "
+                             << x << " and barWidth is " << bdi->idealWidth << endl;
 
 
 	x = barX;

@@ -51,33 +51,66 @@ public:
     // worked even through a const reference, but most of its drawing
     // methods are necessarily non-const because it stores so much
     // state internally
-    NotePixmapFactory &getNotePixmapFactory() { return m_npf; }
+    NotePixmapFactory& getNotePixmapFactory() { return m_npf; }
 
-    const ViewElementsManager *getViewElementsManager() const {
+    const ViewElementsManager* getViewElementsManager() const {
 	return &m_manager;
     }
-    ViewElementsManager *getViewElementsManager() {
+    ViewElementsManager* getViewElementsManager() {
 	return &m_manager;
     }
 
-    const NotationElementList *getNotationElementList() const {
+    const NotationElementList* getNotationElementList() const {
 	return m_notes;
     }
-    NotationElementList *getNotationElementList() {
+    NotationElementList* getNotationElementList() {
 	return m_notes;
     }
     
+    /**
+     * Return the Y coordinate of specified line
+     *
+     * 0 is bottom staff-line, 8 is top one.
+     */
     int yCoordOfHeight(int height) const;
+
+    /// Return the height of a bar line
     unsigned int getBarLineHeight() const { return m_barLineHeight; }
+
+    /**
+     * Return the margin surrounding a bar line
+     *
+     * The bar line is in the middle of the margin
+     */
     unsigned int getBarMargin() const { return m_resolution * 2; }
+
+    /// Return the total height of a staff
     unsigned int getStaffHeight() const {
 	return m_resolution * nbLines + linesOffset * 2 + 1;
     }
 
+    /**
+     * Insert a bar line at X position \a barPos.
+     *
+     * If \a correct is true, the bar line ends a correct (timewise)
+     * bar. If false, the bar line ends a uncorrect bar (for instance,
+     * 5 quarters in 4:4 time), and will be drawn as red
+     */
     void insertBar(unsigned int barPos, bool correct);
+
+    /**
+     * Delete all bars which are after X position \a fromPos
+     */
     void deleteBars(unsigned int fromPos);
+
+    /**
+     * Delete all bars
+     */
     void deleteBars();
 
+    /**
+     * Set the length of the staff lines
+     */
     void setLinesLength(unsigned int);
 
     static const int nbLines;        // number of main lines on the staff

@@ -21,12 +21,13 @@
 #ifndef STAFFLINE_H
 #define STAFFLINE_H
 
-#include <qcanvaslinegroupable.h>
+#include "qcanvaslinegroupable.h"
 
 /**
- * A staff line as a canvas item
+ * A staff line
  *
- *@author Guillaume Laurent, Chris Cannam, Richard Bown
+ * It's simply a groupable line which can be "highlighted"
+ * (drawn with a different color)
  */
 class StaffLine : public QCanvasLineGroupable
 {

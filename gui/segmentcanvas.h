@@ -30,26 +30,60 @@ using Rosegarden::timeT;
 namespace Rosegarden { class Track; }
 
 
+/**
+ * The graphical item (rectangle) which represents a Track
+ * on the TracksCanvas.
+ */
 class TrackItem : public QCanvasRectangle
 {
 public:
+    /**
+     * Create a new track item
+     *
+     * The item will be at coordinates \a x, \a y, representing a time
+     * segment of \a nbSteps time steps.
+     */
     TrackItem(int x, int y, int nbSteps, QCanvas* canvas);
 
+    /// Return the nb of time steps the item represents
     unsigned int getItemNbTimeSteps() const;
+
+    /// Return the time index at which the item's track starts
     timeT getStartIndex() const;
 
+    /// Return the instrument for the item's track
     int  getInstrument() const;
+
+    /// Set the instrument for the item's track
     void setInstrument(int i);
 
+    /// Set the track this TrackItem will represent
     void setTrack(Rosegarden::Track *p)  { m_track = p; }
+
+    /// Return the item's associated track 
     Rosegarden::Track* getTrack() const  { return m_track; }
 
+    /// Set the width to duration ratio for all TrackItem objects
     static void setWidthToDurationRatio(unsigned int);
+
+    /// Set the resolution in timesteps for all new TrackItem objects
     static void setTimeStepsResolution(unsigned int);
+
+    /// Return the timestep resolution used by all TrackItem objects
     static unsigned int getTimeStepsResolution();
+
+    /// Set the height of all new TrackItem objects
     static void setItemHeight(unsigned int);
 
+    /**
+     * Helper function to convert a number of time steps to a width in
+     * pixels
+     */
     static unsigned int nbStepsToWidth(unsigned int);
+    /**
+     * Helper function to convert a width in pixels to a number of
+     * time steps
+     */
     static unsigned int widthToNbSteps(unsigned int);
     
 protected:
@@ -68,14 +102,18 @@ class TrackTool;
 /**
  * A class to visualize and edit track parts
  *
- * @author Guillaume Laurent, Chris Cannam, Richard Bown
+ * It uses a coordinate grid to align TrackItem objects, which can be
+ * manipulated with a set of tools : pencil, eraser, mover, resizer.
+ *
+ * There are no restrictions as to when a track part starts and how
+ * long it lasts. Several parts can overlap partially or completely.
  */
-
 class TracksCanvas : public QCanvasView
 {
     Q_OBJECT
 
 public:
+    /// Available tools
     enum ToolType { Pencil, Eraser, Mover, Resizer };
     
     TracksCanvas(int gridH, int gridV,
@@ -83,9 +121,15 @@ public:
                  QWidget* parent=0, const char* name=0, WFlags f=0);
     ~TracksCanvas();
 
+    /// Remove all items
     void clear();
+
+    /// Return the horizontal step of the coordinate grid
     unsigned int gridHStep() const { return m_grid.hstep(); }
 
+    /**
+     * The coordinate grid used to align TrackItem objects
+     */
     class SnapGrid
     {
     public:
@@ -105,14 +149,30 @@ public:
     };
 
     const SnapGrid& grid() const { return m_grid; }
+
+    /// Return the brush used by all TrackItem objects (normally, solid blue)
     const QBrush& brush()  const { return m_brush; }
+
+    /// Return the pen used by all TrackItem objects
     const QPen& pen()      const { return m_pen; }
 
-    TrackItem* addPartItem(int x, int y, unsigned int nbBars);
+    /**
+     * Add a part item at the specified coordinates, lasting \a nbSteps
+     */
+    TrackItem* addPartItem(int x, int y, unsigned int nbSteps);
+
+    /**
+     * Find which TrackItem is under the specified point
+     *
+     * Note : this doesn't handle overlapping TrackItems yet
+     */
     TrackItem* findPartClickedOn(QPoint);
 
 public slots:
+    /// Set the current track edition tool
     void setTool(TracksCanvas::ToolType);
+
+    /// Update the TracksCanvas after a change of content
     virtual void update();
 
 protected:
@@ -123,18 +183,46 @@ protected:
     virtual void wheelEvent(QWheelEvent*);
 
 protected slots:
-/**
- * connected to the 'Edit' item of the popup menu - re-emits
- * editTrackPart(TrackPart*)
- */
+    /**
+     * connected to the 'Edit' item of the RMB popup menu - re-emits
+     * editTrack(Track*)
+     */
     void onEdit();
+
+    /**
+     * connected to the 'Edit Small' item of the RMB popup menu - re-emits
+     * editTrackSmall(Track*)
+     */
     void onEditSmall();
 
 signals:
+    /**
+     * Emitted when a new Track is created, the argument is the
+     * corresponding TrackItem
+     */
     void addTrack(TrackItem*);
+
+    /**
+     * Emitted when a Track is deleted, the argument is a pointer to
+     * the Track being deleted
+     */
     void deleteTrack(Rosegarden::Track*);
+
+    /**
+     * Emitted when a Track is moved to a different start time
+     * (horizontally) or instrument (vertically)
+     */
     void updateTrackInstrumentAndStartIndex(TrackItem*);
+
+    /**
+     * Emitted when the user requests the edition of a Track in notation form
+     */
     void editTrack(Rosegarden::Track*);
+
+    /**
+     * Emitted when the user requests the edition of a Track in
+     * notation form, using small pixmaps
+     */
     void editTrackSmall(Rosegarden::Track*);
 
 private:
