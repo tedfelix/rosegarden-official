@@ -63,51 +63,51 @@ MappedComposition::MappedComposition(Rosegarden::Composition &comp,
     Rosegarden::timeT eventTime;
 
     for (Composition::iterator i = comp.begin(); i != comp.end(); i++ )
-        {
-            // Skip the Track if it starts too late to be of
-            // interest to our slice.
-            if ( (*i)->getStartIndex() > int(m_endTime) )
-                continue;
+    {
+	// Skip the Track if it starts too late to be of
+	// interest to our slice.
+	if ( (*i)->getStartIndex() > int(m_endTime) )
+	    continue;
 
-            TrackPerformanceHelper helper(**i);
+	TrackPerformanceHelper helper(**i);
 
-            for ( Track::iterator j = (*i)->begin(); j != (*i)->end(); j++ )
-                {
-                    // for the moment ensure we're all positive
-                    assert((*j)->getAbsoluteTime() >= 0 );
+	for ( Track::iterator j = (*i)->begin(); j != (*i)->end(); j++ )
+	{
+	    // for the moment ensure we're all positive
+	    assert((*j)->getAbsoluteTime() >= 0 );
 
-                    // Skip this event if it isn't a note
-                    //
-                    if (!(*j)->isa(Note::EventType))
-                        continue;
+	    // Skip this event if it isn't a note
+	    //
+	    if (!(*j)->isa(Note::EventType))
+		continue;
 
-                    // Find the performance duration, i.e. taking into account any
-                    // ties etc that this note may have  --cc
-                    // 
-                    timeT duration = helper.getSoundingDuration(j);
+	    // Find the performance duration, i.e. taking into account any
+	    // ties etc that this note may have  --cc
+	    // 
+	    timeT duration = helper.getSoundingDuration(j);
 
-                    if (duration == 0) // probably in a tied series, but not as first note
-                        continue;
+	    if (duration == 0) // probably in a tied series, but not as first note
+		continue;
 
-                    // get the eventTime
-                    eventTime = (unsigned int) (*j)->getAbsoluteTime();
+	    // get the eventTime
+	    eventTime = (unsigned int) (*j)->getAbsoluteTime();
 
-                    // As events are stored chronologically we can escape if
-                    // we're already beyond our event horizon for this slice.
-                    //
-                    if ( eventTime > m_endTime )
-                        break;
+	    // As events are stored chronologically we can escape if
+	    // we're already beyond our event horizon for this slice.
+	    //
+	    if ( eventTime > m_endTime )
+		break;
 
-                    // Eliminate events before our required time
-                    if ( eventTime >= m_startTime && eventTime <= m_endTime)
-                        {
-                            // insert event
-                            MappedEvent *me = new MappedEvent(**j, duration);
-                            me->setInstrument((*i)->getInstrument());
-                            this->insert(me);
-                        }
-                }
-        }
+	    // Eliminate events before our required time
+	    if ( eventTime >= m_startTime && eventTime <= m_endTime)
+	    {
+		// insert event
+		MappedEvent *me = new MappedEvent(**j, duration);
+		me->setInstrument((*i)->getInstrument());
+		this->insert(me);
+	    }
+	}
+    }
 }
 
 
@@ -121,13 +121,13 @@ operator<<(QDataStream &dS, const MappedComposition &mC)
     dS << mC.size();
 
     for ( it = mC.begin(); it != mC.end(); ++it )
-        {
-            dS << (*it)->getPitch();
-            dS << (*it)->getAbsoluteTime();
-            dS << (*it)->getDuration();
-            dS << (*it)->getVelocity();
-            dS << (*it)->getInstrument();
-        }
+    {
+	dS << (*it)->getPitch();
+	dS << (*it)->getAbsoluteTime();
+	dS << (*it)->getDuration();
+	dS << (*it)->getVelocity();
+	dS << (*it)->getInstrument();
+    }
 
     return dS;
 }
@@ -141,25 +141,25 @@ operator>>(QDataStream &dS, MappedComposition &mC)
     dS >> sliceSize;
 
     while (!dS.atEnd() && sliceSize)
-        {
-            dS >> pitch;
-            dS >> absTime;
-            dS >> duration;
-            dS >> velocity;
-            dS >> instrument;
+    {
+	dS >> pitch;
+	dS >> absTime;
+	dS >> duration;
+	dS >> velocity;
+	dS >> instrument;
 
-            insertEvent = new MappedEvent(pitch, absTime, duration,
-                                          velocity, instrument);
-            mC.insert(insertEvent);
+	insertEvent = new MappedEvent(pitch, absTime, duration,
+				      velocity, instrument);
+	mC.insert(insertEvent);
 
-            sliceSize--;
+	sliceSize--;
 
-        }
+    }
 
     if (sliceSize)
-        {
-            cerr << "operator>> - wrong number of events received" << endl;
-        }
+    {
+	cerr << "operator>> - wrong number of events received" << endl;
+    }
     
 
     return dS;

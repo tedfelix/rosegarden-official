@@ -94,12 +94,12 @@ class Sequencer
 public:
 
     typedef enum
-        {
-            ASYNCHRONOUS_MIDI,
-            ASYNCHRONOUS_AUDIO,
-            RECORD_MIDI,
-            RECORD_AUDIO
-        } RecordStatus;
+    {
+	ASYNCHRONOUS_MIDI,
+	ASYNCHRONOUS_AUDIO,
+	RECORD_MIDI,
+	RECORD_AUDIO
+    } RecordStatus;
 
     Sequencer();
     ~Sequencer();

@@ -58,13 +58,13 @@ class MidiFile
 public:
 
     typedef enum
-        {
-            MIDI_SINGLE_TRACK_FILE          = 0x00,
-            MIDI_SIMULTANEOUS_TRACK_FILE    = 0x01,
-            MIDI_SEQUENTIAL_TRACK_FILE      = 0x02,
-            MIDI_CONVERTED_TO_APPLICATION   = 0xFE,
-            MIDI_FILE_NOT_LOADED            = 0xFF
-        } MIDIFileFormatType;
+    {
+	MIDI_SINGLE_TRACK_FILE          = 0x00,
+	MIDI_SIMULTANEOUS_TRACK_FILE    = 0x01,
+	MIDI_SEQUENTIAL_TRACK_FILE      = 0x02,
+	MIDI_CONVERTED_TO_APPLICATION   = 0xFE,
+	MIDI_FILE_NOT_LOADED            = 0xFF
+    } MIDIFileFormatType;
 
     MidiFile();
     MidiFile (const char *fn);
@@ -72,11 +72,11 @@ public:
 
     MidiFile& operator=(const MidiFile& mF)
     {
-        m_filename = mF.m_filename;
-        m_timingDivision = mF.m_timingDivision;
-        m_numberOfTracks = mF.m_numberOfTracks;
-        m_format = mF.m_format;
-        return *this;
+	m_filename = mF.m_filename;
+	m_timingDivision = mF.m_timingDivision;
+	m_numberOfTracks = mF.m_numberOfTracks;
+	m_format = mF.m_format;
+	return *this;
     }
 
     // open a file of the given filename

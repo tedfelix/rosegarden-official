@@ -1,4 +1,4 @@
-# Generated automatically from Makefile.in by config.pl.
+# Generated automatically from Makefile.in by configure.
 # KDE tags expanded automatically by am_edit - $Revision$ 
 # Makefile.in generated automatically by automake 1.4 from Makefile.am
 
@@ -21,7 +21,6 @@ SHELL = /bin/sh
 
 srcdir = .
 top_srcdir = ..
-VPATH = .
 prefix = /opt/kde2
 exec_prefix = ${prefix}
 #>- 
@@ -44,9 +43,9 @@ oldincludedir = /usr/include
 
 DESTDIR =
 
-pkgdatadir = $(datadir)/rosegardengui
-pkglibdir = $(libdir)/rosegardengui
-pkgincludedir = $(includedir)/rosegardengui
+pkgdatadir = $(datadir)/rosegarden
+pkglibdir = $(libdir)/rosegarden
+pkgincludedir = $(includedir)/rosegarden
 
 top_builddir = ..
 
@@ -146,11 +145,11 @@ MICO_INCLUDES = @MICO_INCLUDES@
 MICO_LDFLAGS = @MICO_LDFLAGS@
 MOC = /opt/kde2/qt-2.3.0/bin/moc
 MSGFMT = /usr/bin/msgfmt
-NOOPT_CXXFLAGS =  -g -ansi -D_XOPEN_SOURCE -D_BSD_SOURCE -Wbad-function-cast -Wcast-align -Wundef -Wconversion -fno-exceptions -fno-check-new -Wall -pedantic -W -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long -Wnon-virtual-dtor -fno-builtin -g -Wall -fexceptions
+NOOPT_CXXFLAGS =  -g -ansi -D_XOPEN_SOURCE -D_BSD_SOURCE -Wbad-function-cast -Wcast-align -Wundef -Wconversion -fno-exceptions -fno-check-new -Wall -pedantic -W -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long -Wnon-virtual-dtor -fno-builtin
 NOREPO = -fno-repo
 OBJDUMP = @OBJDUMP@
 OBJEXT = o
-PACKAGE = rosegardengui
+PACKAGE = rosegarden
 PAMINC = @PAMINC@
 PAMLIBPATHS = @PAMLIBPATHS@
 PAMLIBS = @PAMLIBS@

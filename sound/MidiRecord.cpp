@@ -58,9 +58,9 @@ void
 RosegardenMidiRecord_impl::addToList(const Arts::MidiEvent &midiEvent)
 {
     if (m_record == true)
-        {
-            m_midiEventQueue->push_back(midiEvent);
-        }
+    {
+	m_midiEventQueue->push_back(midiEvent);
+    }
 }
 
 vector<Arts::MidiEvent> *

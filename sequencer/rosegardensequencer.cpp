@@ -47,10 +47,10 @@ RosegardenSequencerApp::RosegardenSequencerApp():
     QCString realAppId = kapp->dcopClient()->registerAs(kapp->name(), false);
 
     if (realAppId.isNull())
-        {
-            cerr << "RosegardenSequencer cannot register with DCOP server" << endl;
-            close();
-        }
+    {
+	cerr << "RosegardenSequencer cannot register with DCOP server" << endl;
+	close();
+    }
 
     // creating this object also initializes the Rosegarden
     // aRTS interface for both playback and recording.  We
@@ -60,10 +60,10 @@ RosegardenSequencerApp::RosegardenSequencerApp():
     m_sequencer = new Rosegarden::Sequencer();
 
     if (!m_sequencer)
-        {
-            cerr << "RosegardenSequencer object could not be allocated";
-            close();
-        }
+    {
+	cerr << "RosegardenSequencer object could not be allocated";
+	close();
+    }
 
     if (mappedComp == 0)
         mappedComp = new Rosegarden::MappedComposition();
@@ -162,32 +162,32 @@ RosegardenSequencerApp::fetchEvents(const Rosegarden::timeT &start,
                                   ROSEGARDEN_GUI_IFACE_NAME,
                                   "getSequencerSlice(Rosegarden::timeT, Rosegarden::timeT)",
                                   data, replyType, replyData, true))
-        {
-            cerr <<
-                "RosegardenSequencer::fetchEvents() - can't call RosegardenGUI client"
-                 << endl;
+    {
+	cerr <<
+	    "RosegardenSequencer::fetchEvents() - can't call RosegardenGUI client"
+	     << endl;
 
-            // Stop the sequencer so we can see if we can try again later
-            //
-            m_transportStatus = STOPPING;
+	// Stop the sequencer so we can see if we can try again later
+	//
+	m_transportStatus = STOPPING;
 
-        }
+    }
     else
-        {
-            //cerr << "getSequencerSlice TIME = " << t.elapsed() << " ms " << endl;
+    {
+	//cerr << "getSequencerSlice TIME = " << t.elapsed() << " ms " << endl;
 
-            QDataStream reply(replyData, IO_ReadOnly);
-            if (replyType == "Rosegarden::MappedComposition")
-                {
-                    mappedComp->clear();
-                    reply >> *mappedComp;
-                }
-            else
-                {
-                    cerr << "RosegardenSequencer::fetchEvents() - unrecognised type returned"
-                         << endl;
-                }
-        }
+	QDataStream reply(replyData, IO_ReadOnly);
+	if (replyType == "Rosegarden::MappedComposition")
+	{
+	    mappedComp->clear();
+	    reply >> *mappedComp;
+	}
+	else
+	{
+	    cerr << "RosegardenSequencer::fetchEvents() - unrecognised type returned"
+		 << endl;
+	}
+    }
 
     return mappedComp;
 }
@@ -229,23 +229,23 @@ RosegardenSequencerApp::keepPlaying()
 {
 
     if (m_songPosition > ( m_lastFetchSongPosition - m_fetchLatency ) )
-        {
+    {
     
-            /*
-              for ( Rosegarden::MappedComposition::iterator i = mappedComp->begin();
-              i != mappedComp->end(); ++i )
-              if ( (*i)->getAbsoluteTime() < m_songPosition )
-              mappedComp->erase(i);
-            */
+	/*
+	  for ( Rosegarden::MappedComposition::iterator i = mappedComp->begin();
+	  i != mappedComp->end(); ++i )
+	  if ( (*i)->getAbsoluteTime() < m_songPosition )
+	  mappedComp->erase(i);
+	*/
   
-            // increment past last song fetch position by one
-            m_lastFetchSongPosition++;
+	// increment past last song fetch position by one
+	m_lastFetchSongPosition++;
 
-            m_sequencer->processMidiOut( *fetchEvents(m_lastFetchSongPosition,
-                                                      m_lastFetchSongPosition + m_readAhead),
-                                         m_playLatency);
-            m_lastFetchSongPosition = m_lastFetchSongPosition + m_readAhead;
-        }
+	m_sequencer->processMidiOut( *fetchEvents(m_lastFetchSongPosition,
+						  m_lastFetchSongPosition + m_readAhead),
+				     m_playLatency);
+	m_lastFetchSongPosition = m_lastFetchSongPosition + m_readAhead;
+    }
 
     return true;
 }
@@ -268,36 +268,36 @@ RosegardenSequencerApp::updateClocks()
     // loop.
     //
     if (newPosition != m_songPosition)
-        {
-            m_songPosition = newPosition;
+    {
+	m_songPosition = newPosition;
 
-            // Now use newPosition to work out if we need to move the
-            // GUI pointer.
-            //
-            if (m_songPosition > m_sequencer->getStartPosition() + m_playLatency)
-                newPosition -= m_playLatency;
-            else
-                newPosition = m_sequencer->getStartPosition();
+	// Now use newPosition to work out if we need to move the
+	// GUI pointer.
+	//
+	if (m_songPosition > m_sequencer->getStartPosition() + m_playLatency)
+	    newPosition -= m_playLatency;
+	else
+	    newPosition = m_sequencer->getStartPosition();
 
-            arg << newPosition;
+	arg << newPosition;
 
-            //cout << "updateClocks() - m_songPosition = " << m_songPosition << endl;
+	//cout << "updateClocks() - m_songPosition = " << m_songPosition << endl;
 
-            if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
-                                          ROSEGARDEN_GUI_IFACE_NAME,
-                                          "setPointerPosition(int)",
-                                          data))
-                {
-                    cerr <<
-                        "RosegardenSequencer::updateClocks() - can't send to RosegardenGUI client"
-                         << endl;
+	if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+				      ROSEGARDEN_GUI_IFACE_NAME,
+				      "setPointerPosition(int)",
+				      data))
+	{
+	    cerr <<
+		"RosegardenSequencer::updateClocks() - can't send to RosegardenGUI client"
+		 << endl;
 
-                    // Stop the sequencer so we can see if we can try again later
-                    //
-                    m_transportStatus = STOPPING;
+	    // Stop the sequencer so we can see if we can try again later
+	    //
+	    m_transportStatus = STOPPING;
 
-                }
-        }
+	}
+    }
 }
 
 void
@@ -313,16 +313,16 @@ RosegardenSequencerApp::notifySequencerStatus()
                                   ROSEGARDEN_GUI_IFACE_NAME,
                                   "notifySequencerStatus(int)",
                                   data)) 
-        {
-            cerr <<
-                "RosegardenSequencer::notifySequencerStatus() - can't send to RosegardenGUI client"
-                 << endl;
+    {
+	cerr <<
+	    "RosegardenSequencer::notifySequencerStatus() - can't send to RosegardenGUI client"
+	     << endl;
 
-            // Stop the sequencer so we can see if we can try again later
-            //
-            m_transportStatus = STOPPING;
+	// Stop the sequencer so we can see if we can try again later
+	//
+	m_transportStatus = STOPPING;
 
-        }
+    }
 }
 
 // Simple conglomeration of already exposed functions for

@@ -67,8 +67,8 @@ public:
 
 protected:
 
-        public slots:
-        virtual void quit();
+public slots:
+    virtual void quit();
 
     // DCOP doesn't currently like to stream bools so we have to
     // use ints for the return types of these slots.  This is

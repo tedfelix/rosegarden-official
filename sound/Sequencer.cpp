@@ -59,52 +59,52 @@ Sequencer::initializeMidi()
 {
     m_midiManager = Arts::Reference("global:Arts_MidiManager");
     if (m_midiManager.isNull())
-        {
-            cerr << "RosegardenSequencer - Can't get aRTS MidiManager" << endl;
-            exit(1);
-        }
+    {
+	cerr << "RosegardenSequencer - Can't get aRTS MidiManager" << endl;
+	exit(1);
+    }
 
     m_soundServer = Arts::Reference("global:Arts_SoundServer");
     if (m_soundServer.isNull())
-        {
-            cerr << "RosegardenSequencer - Can't get aRTS SoundServer" << endl;
-            exit(1);
-        }
+    {
+	cerr << "RosegardenSequencer - Can't get aRTS SoundServer" << endl;
+	exit(1);
+    }
 
     m_midiRecordPort = Arts::DynamicCast(m_soundServer.createObject("RosegardenMidiRecord"));
 
 
     if (m_midiRecordPort.isNull())
-        {
-            cerr << "RosegardenSequencer - Can't create aRTS MidiRecorder" << endl;
-            exit(1);
-        }
+    {
+	cerr << "RosegardenSequencer - Can't create aRTS MidiRecorder" << endl;
+	exit(1);
+    }
 
     m_midiPlayClient = m_midiManager.addClient(Arts::mcdPlay,
                                                Arts::mctApplication,
                                                "Rosegarden (play)","rosegarden");
     if (m_midiPlayClient.isNull())
-        {
-            cerr << "RosegardenSequencer - Can't create aRTS MidiClient" << endl;
-            exit(1);
-        }
+    {
+	cerr << "RosegardenSequencer - Can't create aRTS MidiClient" << endl;
+	exit(1);
+    }
 
     m_midiPlayPort = m_midiPlayClient.addOutputPort();
     if (m_midiPlayPort.isNull())
-        {
-            cerr << "RosegardenSequencer - Can't create aRTS Midi Output Port" << endl;
-            exit(1);
-        }
+    {
+	cerr << "RosegardenSequencer - Can't create aRTS Midi Output Port" << endl;
+	exit(1);
+    }
 
     m_midiRecordClient = m_midiManager.addClient(Arts::mcdRecord,
                                                  Arts::mctApplication,
                                                  "Rosegarden (record)",
                                                  "rosegarden");
     if (m_midiRecordClient.isNull())
-        {
-            cerr << "RosegardenSequencer - Can't create aRTS MidiRecordClient" << endl;
-            exit(1);
-        }
+    {
+	cerr << "RosegardenSequencer - Can't create aRTS MidiRecordClient" << endl;
+	exit(1);
+    }
 
     // Create our recording midi port
     //
@@ -121,35 +121,35 @@ Sequencer::record(const RecordStatus& recordStatus)
 {
 
     if ( recordStatus == RECORD_MIDI )
-        {
-            cout << "Recording MIDI" << endl;
+    {
+	cout << "Recording MIDI" << endl;
 
-            // turn MIDI event recording on 
-            m_midiRecordPort.record(true);
+	// turn MIDI event recording on 
+	m_midiRecordPort.record(true);
 
-            // if we're already playing then just toggle recording
-            // at this point, if not we jump back by the count in
-            /*
-              if ( !m_playing )
-              play();
-            */
+	// if we're already playing then just toggle recording
+	// at this point, if not we jump back by the count in
+	/*
+	  if ( !m_playing )
+	  play();
+	*/
 
-            // set status and the record start position
-            m_recordStatus = RECORD_MIDI;
-            m_recordStartTime = m_midiRecordPort.time();
+	// set status and the record start position
+	m_recordStatus = RECORD_MIDI;
+	m_recordStartTime = m_midiRecordPort.time();
 
-            cout << "Recording Started at : " << m_recordStartTime.sec << " : "
-                 << m_recordStartTime.usec << endl;
+	cout << "Recording Started at : " << m_recordStartTime.sec << " : "
+	     << m_recordStartTime.usec << endl;
                                      
-            m_recordTrack = new Track;
-            m_recordTrack->setInstrument(1);
-            m_recordTrack->setStartIndex(0);
+	m_recordTrack = new Track;
+	m_recordTrack->setInstrument(1);
+	m_recordTrack->setStartIndex(0);
 
-        }
+    }
     else
-        {
-            cout << "Currently unsupported recording mode." << endl;
-        }
+    {
+	cout << "Currently unsupported recording mode." << endl;
+    }
   
 }
 
@@ -160,10 +160,10 @@ Sequencer::deltaTime(const Arts::TimeStamp &ts1, const Arts::TimeStamp &ts2)
     int sec = ts1.sec - ts2.sec;
 
     if ( usec < 0 )
-        {
-            sec--;
-            usec += 1000000;
-        }
+    {
+	sec--;
+	usec += 1000000;
+    }
 
     assert( sec >= 0 );
 
@@ -189,19 +189,19 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
     //Rosegarden::Event *event;
 
     if (m_recordTrack == 0)
-        {
-            cerr << "RosegardenSequencer - no Track created to processMidi on to - is recording enabled?" << endl;
-            exit(1);
-        }
+    {
+	cerr << "RosegardenSequencer - no Track created to processMidi on to - is recording enabled?" << endl;
+	exit(1);
+    }
 
     channel = midiCommand.status & MIDI_CHANNEL_NUM_MASK;
     message = midiCommand.status & MIDI_MESSAGE_TYPE_MASK;
 
     // Check for a hidden NOTE OFF (NOTE ON with zero velocity)
     if ( message == MIDI_NOTE_ON && midiCommand.data2 == 0 )
-        {
-            message = MIDI_NOTE_OFF;
-        }
+    {
+	message = MIDI_NOTE_OFF;
+    }
 
     // we use a map of Notes and this is the key
     unsigned int chanNoteKey = ( channel << 8 ) + midiCommand.data1;
@@ -210,63 +210,63 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
 
     // scan for our event
     switch(message)
-        {
-        case MIDI_NOTE_ON:
-            if ( m_noteOnMap[chanNoteKey] == 0 )
-                {
-                    m_noteOnMap[chanNoteKey] = new Event;
+    {
+    case MIDI_NOTE_ON:
+	if ( m_noteOnMap[chanNoteKey] == 0 )
+	{
+	    m_noteOnMap[chanNoteKey] = new Event;
 
-                    // set time since recording started in Absolute internal time
-                    /*
-                      m_noteOnMap[chanNoteKey]->
-                      setAbsoluteTime(convertToMidiTime(timeStamp));
-                    */
+	    // set time since recording started in Absolute internal time
+	    /*
+	      m_noteOnMap[chanNoteKey]->
+	      setAbsoluteTime(convertToMidiTime(timeStamp));
+	    */
 
-                    // set note type and pitch
-                    m_noteOnMap[chanNoteKey]->setType(Note::EventType);
-                    m_noteOnMap[chanNoteKey]->set<Int>("pitch", midiCommand.data1);
-                }
-            break;
+	    // set note type and pitch
+	    m_noteOnMap[chanNoteKey]->setType(Note::EventType);
+	    m_noteOnMap[chanNoteKey]->set<Int>("pitch", midiCommand.data1);
+	}
+	break;
 
-        case MIDI_NOTE_OFF:
-            // if we match an open NOTE_ON
-            //
-            if ( m_noteOnMap[chanNoteKey] != 0 )
-                {
-                    /*
-                      duration = convertToMidiTime(timeStamp) -
-                      m_noteOnMap[chanNoteKey]->getAbsoluteTime();
-                    */
+    case MIDI_NOTE_OFF:
+	// if we match an open NOTE_ON
+	//
+	if ( m_noteOnMap[chanNoteKey] != 0 )
+	{
+	    /*
+	      duration = convertToMidiTime(timeStamp) -
+	      m_noteOnMap[chanNoteKey]->getAbsoluteTime();
+	    */
 
-                    // for the moment, ensure we're positive like this
-                    //
-                    assert(duration >= 0);
+	    // for the moment, ensure we're positive like this
+	    //
+	    assert(duration >= 0);
 
-                    // set the duration
-                    m_noteOnMap[chanNoteKey]->setDuration(duration);
+	    // set the duration
+	    m_noteOnMap[chanNoteKey]->setDuration(duration);
 
-                    // insert the record
-                    //
-                    m_recordTrack->insert(m_noteOnMap[chanNoteKey]);
+	    // insert the record
+	    //
+	    m_recordTrack->insert(m_noteOnMap[chanNoteKey]);
 
-                    // tell us about it
-                    cout << "INSERTED NOTE at time " 
-                         << m_noteOnMap[chanNoteKey]->getAbsoluteTime()
-                         << " of duration "
-                         << m_noteOnMap[chanNoteKey]->getDuration() << endl;
+	    // tell us about it
+	    cout << "INSERTED NOTE at time " 
+		 << m_noteOnMap[chanNoteKey]->getAbsoluteTime()
+		 << " of duration "
+		 << m_noteOnMap[chanNoteKey]->getDuration() << endl;
 
-                    // reset the reference
-                    m_noteOnMap[chanNoteKey] = 0;
+	    // reset the reference
+	    m_noteOnMap[chanNoteKey] = 0;
 
-                }
-            else
-                cout << "MIDI_NOTE_OFF with no matching MIDI_NOTE_ON" << endl;
-            break;
+	}
+	else
+	    cout << "MIDI_NOTE_OFF with no matching MIDI_NOTE_ON" << endl;
+	break;
 
-        default:
-            cout << "OTHER EVENT" << endl;
-            break;
-        }
+    default:
+	cout << "OTHER EVENT" << endl;
+	break;
+    }
 }
 
 
@@ -295,100 +295,100 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mappedComp,
 
     // get current port time at start of playback
     if (m_startPlayback)
-        {
-            m_playStartTime = m_midiPlayPort.time();
-            m_startPlayback = false;
-            m_playing = true;
-        }
+    {
+	m_playStartTime = m_midiPlayPort.time();
+	m_startPlayback = false;
+	m_playing = true;
+    }
 
 
     for ( MappedComposition::iterator i = mappedComp.begin();
           i != mappedComp.end(); ++i )
-        {
-            // sort out the correct TimeStamp for playback
-            assert((*i)->getAbsoluteTime() >= m_playStartPosition);
+    {
+	// sort out the correct TimeStamp for playback
+	assert((*i)->getAbsoluteTime() >= m_playStartPosition);
 
-            // add the fiddle factor for timeT to MIDI conversion in here
-            midiRelativeTime = (*i)->getAbsoluteTime() - m_playStartPosition +
-                playLatency;
+	// add the fiddle factor for timeT to MIDI conversion in here
+	midiRelativeTime = (*i)->getAbsoluteTime() - m_playStartPosition +
+	    playLatency;
 
 
-            event.time = aggregateTime(m_playStartTime,
-                                       convertToArtsTimeStamp(midiRelativeTime));
+	event.time = aggregateTime(m_playStartTime,
+				   convertToArtsTimeStamp(midiRelativeTime));
 
-            midiRelativeStopTime = midiRelativeTime +
-                (*i)->getDuration();
+	midiRelativeStopTime = midiRelativeTime +
+	    (*i)->getDuration();
     
-            // load the command structure
-            event.command.status = Arts::mcsNoteOn | channel;
-            event.command.data1 = (*i)->getPitch();   // pitch
-            event.command.data2 = 127;  // hardcode velocity
+	// load the command structure
+	event.command.status = Arts::mcsNoteOn | channel;
+	event.command.data1 = (*i)->getPitch();   // pitch
+	event.command.data2 = 127;  // hardcode velocity
 
-            // Test our timing
-            Arts::TimeStamp now = m_midiPlayPort.time();
-            int secAhead = event.time.sec - now.sec;
-            int uSecAhead = event.time.usec - now.sec;
+	// Test our timing
+	Arts::TimeStamp now = m_midiPlayPort.time();
+	int secAhead = event.time.sec - now.sec;
+	int uSecAhead = event.time.usec - now.sec;
 
-            if (uSecAhead < 0) 
-                {
-                    uSecAhead += 1000000;
+	if (uSecAhead < 0) 
+	{
+	    uSecAhead += 1000000;
 
-                    // add a second of lag if they're different
-                    if ( event.time.sec > now.sec )
-                        secAhead++;
-                }
+	    // add a second of lag if they're different
+	    if ( event.time.sec > now.sec )
+		secAhead++;
+	}
 
-            if (secAhead < 0)
-                {
-                    std::cerr << "Failed to process NOTE events in time - lagging by "
-                              << secAhead << "s and " << uSecAhead << "ms" << endl;
-                }
+	if (secAhead < 0)
+	{
+	    std::cerr << "Failed to process NOTE events in time - lagging by "
+		      << secAhead << "s and " << uSecAhead << "ms" << endl;
+	}
 
-            // if a NOTE ON
-            // send the event out
-            m_midiPlayPort.processEvent(event);
+	// if a NOTE ON
+	// send the event out
+	m_midiPlayPort.processEvent(event);
 
-            int secFromStart = event.time.sec - m_playStartTime.sec;
-            int usecFromStart = event.time.usec - m_playStartTime.usec;
+	int secFromStart = event.time.sec - m_playStartTime.sec;
+	int usecFromStart = event.time.usec - m_playStartTime.usec;
 
-            if (usecFromStart < 0)
-                {
-                    secFromStart--;
-                    usecFromStart += 1000000;
-                }
+	if (usecFromStart < 0)
+	{
+	    secFromStart--;
+	    usecFromStart += 1000000;
+	}
 
-            cout << "Event sent to aRts at " << secFromStart << "s & "
-                 << usecFromStart << "ms" << endl;
+	cout << "Event sent to aRts at " << secFromStart << "s & "
+	     << usecFromStart << "ms" << endl;
 
-            // and log it on the Note OFF stack
-            NoteOffEvent *noteOffEvent =
-                new NoteOffEvent(midiRelativeStopTime,
-                                 (Rosegarden::MidiByte)event.command.data1,
-                                 (Rosegarden::MidiByte)event.command.status);
+	// and log it on the Note OFF stack
+	NoteOffEvent *noteOffEvent =
+	    new NoteOffEvent(midiRelativeStopTime,
+			     (Rosegarden::MidiByte)event.command.data1,
+			     (Rosegarden::MidiByte)event.command.status);
 
-            m_noteOffQueue.insert(noteOffEvent);
+	m_noteOffQueue.insert(noteOffEvent);
 
-        }
+    }
 
     // If there's no midiRelativeTime set then set one - occurs if we're
     // not processing any NOTE ONs.
     //
     //
     if (midiRelativeTime == 0)
-        {
-            Arts::TimeStamp now = m_midiPlayPort.time();
-            int sec = now.sec - m_playStartTime.sec;
-            int usec = now.usec - m_playStartTime.usec;
+    {
+	Arts::TimeStamp now = m_midiPlayPort.time();
+	int sec = now.sec - m_playStartTime.sec;
+	int usec = now.usec - m_playStartTime.usec;
  
-            if (usec < 0)
-                {
-                    sec--;
-                    usec += 1000000;
-                }
+	if (usec < 0)
+	{
+	    sec--;
+	    usec += 1000000;
+	}
 
-            Arts::TimeStamp relativeNow(sec, usec);
-            midiRelativeTime = convertToInternalTime(relativeNow);
-        }
+	Arts::TimeStamp relativeNow(sec, usec);
+	midiRelativeTime = convertToInternalTime(relativeNow);
+    }
 
     // Process NOTE OFFs for current time
     processNotesOff(midiRelativeTime);
@@ -405,23 +405,23 @@ Sequencer::processNotesOff(unsigned int midiTime)
     for ( NoteOffQueue::iterator i = m_noteOffQueue.begin();
           i != m_noteOffQueue.end(); ++i )
 
-        {
-            // If there's a pregnant NOTE OFF around then send it
-            if ((*i)->getMidiTime() <= midiTime)
-                {
-                    //event.time = m_midiPlayPort.time();
-                    event.time = aggregateTime(m_playStartTime,
-                                               convertToArtsTimeStamp((*i)->getMidiTime()));
-                    event.command.data1 = (*i)->getPitch();
-                    event.command.data2 = 127;
-                    event.command.status = Arts::mcsNoteOff | channel;
-                    m_midiPlayPort.processEvent(event);
+    {
+	// If there's a pregnant NOTE OFF around then send it
+	if ((*i)->getMidiTime() <= midiTime)
+	{
+	    //event.time = m_midiPlayPort.time();
+	    event.time = aggregateTime(m_playStartTime,
+				       convertToArtsTimeStamp((*i)->getMidiTime()));
+	    event.command.data1 = (*i)->getPitch();
+	    event.command.data2 = 127;
+	    event.command.status = Arts::mcsNoteOff | channel;
+	    m_midiPlayPort.processEvent(event);
 
-                    // Remove the note from the queue
-                    //
-                    m_noteOffQueue.erase(i);
-                }
-        }
+	    // Remove the note from the queue
+	    //
+	    m_noteOffQueue.erase(i);
+	}
+    }
 }
 
 // Force all pending note offs to stop immediately.
@@ -438,18 +438,18 @@ Sequencer::allNotesOff()
 
     for ( NoteOffQueue::iterator i = m_noteOffQueue.begin();
           i != m_noteOffQueue.end(); ++i )
-        {
-            event.time = aggregateTime(m_playStartTime,
-                                       convertToArtsTimeStamp((*i)->getMidiTime()));
-            event.command.data1 = (*i)->getPitch();
-            event.command.data2 = 127;
-            event.command.status = Arts::mcsNoteOff | channel;
-            m_midiPlayPort.processEvent(event);
+    {
+	event.time = aggregateTime(m_playStartTime,
+				   convertToArtsTimeStamp((*i)->getMidiTime()));
+	event.command.data1 = (*i)->getPitch();
+	event.command.data2 = 127;
+	event.command.status = Arts::mcsNoteOff | channel;
+	m_midiPlayPort.processEvent(event);
 
-            // Erase the event
-            //
-            m_noteOffQueue.erase(i);
-        }
+	// Erase the event
+	//
+	m_noteOffQueue.erase(i);
+    }
 }
 
 void 
@@ -472,12 +472,12 @@ Rosegarden::timeT
 Sequencer::getSequencerTime()
 {
     if (m_playing)
-        {
-            Arts::TimeStamp artsTimeNow = m_midiPlayPort.time();
-            unsigned int internalRelativeTime = convertToInternalTime(artsTimeNow) -
-                convertToInternalTime(m_playStartTime);
-            return (m_playStartPosition + internalRelativeTime);
-        }
+    {
+	Arts::TimeStamp artsTimeNow = m_midiPlayPort.time();
+	unsigned int internalRelativeTime = convertToInternalTime(artsTimeNow) -
+	    convertToInternalTime(m_playStartTime);
+	return (m_playStartPosition + internalRelativeTime);
+    }
 
     return (0);
 }
