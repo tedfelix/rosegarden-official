@@ -953,19 +953,15 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 		    indicationType == Indication::Decrescendo) {
 
 		    if (m_printPainter) {
-			double w = -1, inc = 0;
-			while (w != 0) {
-			    w = setPainterWindow(m_printPainter, elt->getLayoutX(),
-						 inc, length);
-			    coords = getCanvasCoordsForLayoutCoords
-				(elt->getLayoutX() + inc, int(elt->getLayoutY()));
-			    coords.first -= inc;
-			    NOTATION_DEBUG << "canvas coords: " << coords.first << "," << coords.second << endl;
+			for (double w = -1, inc = 0; w != 0; inc += w) {
+			    w = setPainterClipping(m_printPainter,
+						   elt->getLayoutX(),
+						   int(elt->getLayoutY()),
+						   int(inc), length, coords);
 			    m_notePixmapFactory->drawHairpin
 				(length, indicationType == Indication::Crescendo,
 				 *m_printPainter, int(coords.first), coords.second);
 			    m_printPainter->restore();
-			    inc += w;
 			}
 		    } else {
 			pixmap = m_notePixmapFactory->makeHairpinPixmap
@@ -983,9 +979,16 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 		    elt->event()->get<Int>(properties.SLUR_LENGTH, length);
 		    
 		    if (m_printPainter) {
-			m_notePixmapFactory->drawSlur
-			    (length, dy, above,
-			     *m_printPainter, int(coords.first), coords.second);
+			for (double w = -1, inc = 0; w != 0; inc += w) {
+			    w = setPainterClipping(m_printPainter,
+						   elt->getLayoutX(),
+						   int(elt->getLayoutY()),
+						   int(inc), length, coords);
+			    m_notePixmapFactory->drawSlur
+				(length, dy, above,
+				 *m_printPainter, int(coords.first), coords.second);
+			    m_printPainter->restore();
+			}
 		    } else {
 			pixmap = m_notePixmapFactory->makeSlurPixmap(length, dy, above);
 		    }
@@ -996,9 +999,16 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 
 		    if (octaves != 0) {
 			if (m_printPainter) {
-			    m_notePixmapFactory->drawOttava
-				(length, octaves,
-				 *m_printPainter, int(coords.first), coords.second);
+			    for (double w = -1, inc = 0; w != 0; inc += w) {
+				w = setPainterClipping(m_printPainter,
+						       elt->getLayoutX(),
+						       int(elt->getLayoutY()),
+						       int(inc), length, coords);
+				m_notePixmapFactory->drawOttava
+				    (length, octaves,
+				     *m_printPainter, int(coords.first), coords.second);
+				m_printPainter->restore();
+			    }
 			} else {
 			    pixmap = m_notePixmapFactory->makeOttavaPixmap
 				(length, octaves);
@@ -1034,6 +1044,7 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 	    // This branch should only be used for note sprites,
 	    // so we can safely assume they won't need to be split
 	    // across a row boundary (as may happen in setPixmap).
+	    //!!! Not true -- note sprites might contain ties!
 
 	    canvasItem->setZ(z);
 
@@ -1062,32 +1073,28 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 }
 
 double
-NotationStaff::setPainterWindow(QPainter *painter, double lx, double dx, double w)
+NotationStaff::setPainterClipping(QPainter *painter, double lx, int ly,
+				  double dx, double w, LinedStaffCoords &coords)
 {
     painter->save();
 
     NOTATION_DEBUG << "NotationStaff::setPainterWindow: lx " << lx << ", dx " << dx << ", w " << w << endl;
 
-    LinedStaffCoords coords = getCanvasCoordsForLayoutCoords(lx + dx, 0);
+    coords = getCanvasCoordsForLayoutCoords(lx + dx, ly);
     int row = getRowForLayoutX(lx + dx);
     double rightMargin = getCanvasXForRightOfRow(row);
     double available = rightMargin - coords.first;
 
     NOTATION_DEBUG << "NotationStaff::setPainterWindow: row " << row << ", rightMargin " << rightMargin << ", available " << available << endl;
 
-    if (dx > 0) {
-	LinedStaffCoords origCoords = getCanvasCoordsForLayoutCoords(lx, 0);
-	double x1 = coords.first - origCoords.first;
-	int y1 = coords.second - origCoords.second;
-//	painter->translate(x1, y1);
-//    NOTATION_DEBUG << "NotationStaff::setPainterWindow: translated by " << x1 << "," << y1 << endl;
+    QRect clip(coords.first, coords.second - getRowSpacing()/2,
+	       int(available), getRowSpacing());
+    painter->setClipRect(clip, QPainter::CoordPainter);
 
-    }
+    NOTATION_DEBUG << "NotationStaff::setPainterWindow: set clip rect to " << clip.x() << "," << clip.y() << " " << clip.width() << "x" << clip.height() << endl;
 
-    painter->setClipRect(int(dx), 0, int(available), getRowSpacing(),
-			 QPainter::CoordPainter);
-
-    NOTATION_DEBUG << "NotationStaff::setPainterWindow: set window to " << dx << "," << 0 << ", " << available << "x" << getRowSpacing() << endl;
+    coords.first -= dx;
+    NOTATION_DEBUG << "canvas coords: " << coords.first << "," << coords.second << endl;
 
     if (w - dx < available + m_notePixmapFactory->getNoteBodyWidth()) {
 	return 0.0;

@@ -383,16 +383,18 @@ protected:
     /**
      * Prepare a painter to draw an object of logical width w at
      * layout-x coord x, starting at offset dx into the object, by
-     * setting the painter's window so as to crop the object at the
+     * setting the painter's clipping so as to crop the object at the
      * right edge of the row if it would otherwise overrun.  The
      * return value is the amount of the object visible on this row
      * (i.e. the increment in offset for the next call to this method)
-     * or zero if no crop was necessary.
+     * or zero if no crop was necessary.  The canvas coords at which
+     * the object should subsequently be drawn are returned in coords.
      *
      * This function calls painter.save(), and the caller must call
      * painter.restore() after use.
      */
-    virtual double setPainterWindow(QPainter *, double x, double dx, double w);
+    virtual double setPainterClipping(QPainter *, double layoutX, int layoutY,
+				      double dx, double w, LinedStaffCoords &coords);
 
     /**
      * Set a single pixmap to a notation element, or split it into
