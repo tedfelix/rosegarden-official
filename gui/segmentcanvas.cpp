@@ -34,6 +34,7 @@
 #include "Segment.h"
 #include "Composition.h"
 #include "NotationTypes.h"
+#include "BaseProperties.h"
 
 #include "rosedebug.h"
 #include "colours.h"
@@ -144,6 +145,9 @@ void SegmentItem::makeFont()
 void SegmentItem::drawShape(QPainter& painter)
 {
     QCanvasRectangle::drawShape(painter);
+    Rosegarden::RulerScale *rulerScale = m_snapGrid->getRulerScale();
+
+    //!!! we should probably have an "if we're doing previews" here...
 
     if (m_segment && m_segment->getType() == Rosegarden::Segment::Audio)
     {
@@ -153,7 +157,7 @@ void SegmentItem::drawShape(QPainter& painter)
         //
 
         // Set up pen and get rectangle
-        painter.setPen(Qt::black);
+        painter.setPen(RosegardenGUIColours::SegmentAudioPreview);
         QRect previewRect = rect();
         
         // Fetch vector of floats adjusted to our resolution
@@ -186,6 +190,7 @@ void SegmentItem::drawShape(QPainter& painter)
 
         // perhaps draw an XOR'd label at some point
         /*
+	painter.setPen(RosegardenGUIColours::SegmentLabel);
         painter.setFont(*m_font);
         QRect labelRect = rect();
         labelRect.setX(labelRect.x() + 3);
@@ -194,7 +199,47 @@ void SegmentItem::drawShape(QPainter& painter)
     }
     else
     {
+	if (m_segment) {
+
+	    painter.setPen(RosegardenGUIColours::SegmentInternalPreview);
+
+	    timeT startTime = rulerScale->getTimeForX(rect().x());
+	    timeT   endTime = rulerScale->getTimeForX(rect().x() +
+						      rect().width());
+
+	    Segment::iterator start = m_segment->findNearestTime(startTime);
+	    Segment::iterator end = m_segment->findTime(endTime);
+	    if (start == m_segment->end()) start = m_segment->begin();
+
+	    for (Segment::iterator i = start; i != end; ++i) {
+
+		long pitch = 0;
+		if (!(*i)->isa(Rosegarden::Note::EventType) ||
+		    !(*i)->get<Rosegarden::Int>
+		    (Rosegarden::BaseProperties::PITCH, pitch)) {
+		    continue;
+		}
+
+		double x0 = rulerScale->getXForTime((*i)->getAbsoluteTime());
+		double x1 = rulerScale->getXForTime((*i)->getAbsoluteTime() +
+						    (*i)->getDuration());
+		int width = (int)(x1 - x0);
+		if (width > 0) --width;
+		if (width > 0) --width;
+
+		double y0 = rect().y();
+		double y1 = rect().y() + rect().height();
+		double y = y1 + ((y0 - y1) * (pitch-16)) / 96;
+		if (y < y0) y = y0;
+		if (y > y1-1) y = y1-1;
+		
+		painter.drawLine((int)x0, (int)y, (int)x0 + width, (int)y);
+		painter.drawLine((int)x0, (int)y+1, (int)x0 + width, (int)y+1);
+	    }
+	}
+
         // draw label
+	painter.setPen(RosegardenGUIColours::SegmentLabel);
         painter.setFont(*m_font);
         QRect labelRect = rect();
         labelRect.setX(labelRect.x() + 3);
@@ -342,8 +387,8 @@ SegmentSplitLine::SegmentSplitLine(int x, int y, int height,
                                    m_rulerScale(rulerScale),
                                    m_height(height)
 {
-    setPen(Qt::black);
-    setBrush(Qt::black);
+    setPen(RosegardenGUIColours::SegmentSplitLine);
+    setBrush(RosegardenGUIColours::SegmentSplitLine);
     setZ(3);
     moveLine(x, y);
 }

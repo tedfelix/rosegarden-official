@@ -84,6 +84,31 @@ Post-0.1.5-and-a-bit task list
 
 22. Event dialog really needs to be scrollable or something
 
+23. View-local event properties:
+
+    a. Add view-local prefix generation to EditView [DONE]
+    b. Make NotationProperties a class stored in NotationView rather
+       than a namespace [DONE]
+    c. Update references to now-view-local properties in gui/ [DONE]
+    d. Put a LegatoQuantizer in NotationView and pass it around instead
+       of getting it from the Composition (so as to make it use
+       view-local property prefixes) [DONE]
+    e. Remove SegmentNotationHelper::quantize, move functionality
+       to NotationHLayout using view-local properties [DONE]
+    f. Modify SegmentNotationHelper so as not to use its own legato
+       quantizer:
+       i. Most of the uses should really be using the segment's quantizer
+       ii. Other uses could... I dunno... have a quantizer passed in?
+           (check where they're called from)
+    g. Remove NOTE_TYPE/DOTS & TUPLET_NOMINAL_DURATION from BaseProperties
+    h. Make currently-static properties in NotationProperties also
+       be view-local, and update culprits (mostly NotationSets) to
+       use the view-local versions
+
+24. Oops.. since I "fixed" the ChordNameRuler so it's not all squashed
+    up, I've lost the other rulers in the notation view completely.
+    Revert and fix correctly.
+
 
 Post-0.1.4 task list
 ====================

@@ -80,7 +80,7 @@ SegmentNotationHelper::getNotationDuration(Event *e)
 
     } else if (e->has(BEAMED_GROUP_TUPLET_BASE)) {
 
-	// Code duplicated with SegmentNotationHelper::quantize().
+	// Code duplicated with quantize code in gui/notationhlayout.cpp.
 	// This is intended to deal with the case where two edits
 	// happen in a row and some events inserted by the first
 	// have not been quantized before the second.  We'd be
@@ -1457,33 +1457,6 @@ SegmentNotationHelper::removeRests(timeT time, timeT &duration, bool testOnly)
     if (checkLastRest) makeRestViable(lastEvent);
 
     return true;
-}
-
-void
-SegmentNotationHelper::quantize()
-{
-    legatoQuantizer().quantize(&segment(), begin(), end());
-
-    for (iterator i = begin(); i != end(); ++i) {
-
-	timeT duration = legatoQuantizer().getQuantizedDuration(*i);
-
-	if ((*i)->has(BEAMED_GROUP_TUPLET_BASE)) {
-	    int tcount = (*i)->get<Int>(BEAMED_GROUP_TUPLED_COUNT);
-	    int ucount = (*i)->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT);
-	    assert(tcount != 0);
-	    timeT nominalDuration = ((*i)->getDuration() / tcount) * ucount;
-	    duration = legatoQuantizer().quantizeDuration(nominalDuration);
-	    (*i)->setMaybe<Int>(TUPLET_NOMINAL_DURATION, duration);
-	}
-
-	if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType)) {
-
-	    Note n(Note::getNearestNote(duration));
-	    (*i)->setMaybe<Int>(NOTE_TYPE, n.getNoteType());
-	    (*i)->setMaybe<Int>(NOTE_DOTS, n.getDots());
-	}
-    }
 }
 
 

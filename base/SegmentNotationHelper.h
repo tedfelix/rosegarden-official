@@ -458,13 +458,6 @@ public:
      */
     bool collapseNoteAggressively(Event *, timeT rangeEnd);
 
-
-    /**
-     * Note-quantize the Segment and set the NoteType and NoteDots
-     * properties on note and rest events.
-     */
-    void quantize();
-
     
 protected:
     const Quantizer &basicQuantizer();
