@@ -24,11 +24,13 @@
 
 #include "matrixhlayout.h"
 #include "matrixstaff.h"
+#include "rosedebug.h"
 
 using Rosegarden::timeT;
+using Rosegarden::Staff;
 
 MatrixHLayout::MatrixHLayout(Rosegarden::Composition *c) :
-    Rosegarden::HorizontalLayoutEngine<MatrixElement>(c),
+    Rosegarden::HorizontalLayoutEngine(c),
     m_totalWidth(0.0),
     m_firstBar(0)
 {
@@ -42,11 +44,11 @@ void MatrixHLayout::reset()
 {
 }
 
-void MatrixHLayout::resetStaff(StaffType&, timeT, timeT)
+void MatrixHLayout::resetStaff(Staff&, timeT, timeT)
 {
 }
 
-void MatrixHLayout::scanStaff(MatrixHLayout::StaffType &staffBase,
+void MatrixHLayout::scanStaff(Staff &staffBase,
 			      timeT startTime, timeT endTime)
 {
     Rosegarden::Profiler profiler("MatrixHLayout::scanStaff", true);
@@ -59,7 +61,7 @@ void MatrixHLayout::scanStaff(MatrixHLayout::StaffType &staffBase,
     // the total width and bar list can't just be calculated from the
     // last staff scanned as they are now).
 
-    MatrixStaff &staff = dynamic_cast<MatrixStaff &>(staffBase);
+    MatrixStaff &staff = static_cast<MatrixStaff &>(staffBase);
     bool isFullScan = (startTime == endTime);
 
     MatrixElementList *notes = staff.getViewElementList();
@@ -145,7 +147,7 @@ void MatrixHLayout::scanStaff(MatrixHLayout::StaffType &staffBase,
                           * staff.getTimeScaleFactor());
 
 	double width = (*i)->getViewDuration() * staff.getTimeScaleFactor();
-	(*i)->setWidth((int)width + 2); // fiddle factor
+	static_cast<MatrixElement*>((*i))->setWidth((int)width + 2); // fiddle factor
 	
 	if (isFullScan) {
 	    m_totalWidth = (*i)->getLayoutX() + width;
@@ -187,7 +189,7 @@ double MatrixHLayout::getBarPosition(int barNo)
     return m_barData[barNo - m_firstBar].first;
 }
 
-Rosegarden::Event *MatrixHLayout::getTimeSignaturePosition(StaffType &,
+Rosegarden::Event *MatrixHLayout::getTimeSignaturePosition(Staff &,
 							   int barNo,
 							   double &timeSigX)
 {

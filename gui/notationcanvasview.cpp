@@ -31,7 +31,7 @@
 #include "rosedebug.h"
 
 
-NotationCanvasView::NotationCanvasView(const LinedStaffManager<NotationElement> &staffmgr,
+NotationCanvasView::NotationCanvasView(const LinedStaffManager &staffmgr,
                                        QScrollBar *horizBar,
 				       QCanvas *viewing, QWidget *parent,
                                        const char *name, WFlags f) :

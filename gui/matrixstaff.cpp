@@ -42,7 +42,7 @@ MatrixStaff::MatrixStaff(QCanvas *canvas,
 			 int id,
                          int vResolution,
                          MatrixView *view) :
-    LinedStaff<MatrixElement>(canvas, segment, snapGrid, id, vResolution, 1),
+    LinedStaff(canvas, segment, snapGrid, id, vResolution, 1),
     m_scaleFactor(2.0/
             Rosegarden::Note(Rosegarden::Note::Shortest).getDuration()),
     m_elementColour(new DefaultVelocityColour()),
@@ -70,7 +70,7 @@ bool MatrixStaff::wrapEvent(Rosegarden::Event* e)
     // segments, they're only in the composition's ref segment
 
     return e->isa(Rosegarden::Note::EventType) &&
-	Rosegarden::Staff<MatrixElement>::wrapEvent(e);
+	Rosegarden::Staff::wrapEvent(e);
 }
 
 void
@@ -88,8 +88,10 @@ MatrixStaff::positionElements(timeT from, timeT to)
     }
 }
 
-void MatrixStaff::positionElement(MatrixElement* el)
+void MatrixStaff::positionElement(Rosegarden::ViewElement* vel)
 {
+    MatrixElement* el = dynamic_cast<MatrixElement*>(vel);
+
     LinedStaffCoords coords = getCanvasCoordsForLayoutCoords
 	(el->getLayoutX(), int(el->getLayoutY()));
 
@@ -127,7 +129,13 @@ void
 MatrixStaff::eventRemoved(const Rosegarden::Segment *segment,
 			  Rosegarden::Event *event)
 {
-    LinedStaff<MatrixElement>::eventRemoved(segment, event);
+    LinedStaff::eventRemoved(segment, event);
     m_view->handleEventRemoved(event);
+}
+
+Rosegarden::ViewElement*
+MatrixStaff::makeViewElement(Rosegarden::Event* e)
+{
+    return new MatrixElement(e);
 }
 

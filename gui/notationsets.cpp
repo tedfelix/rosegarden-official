@@ -295,7 +295,7 @@ NotationGroup::sample(const NELIterator &i)
     // middle line to the notes below, then the beam goes below.  We
     // can calculate the weightings here, as we construct the group.
 
-    if (!(*i)->isNote()) return true;
+    if (!static_cast<NotationElement*>(*i)->isNote()) return true;
     if (m_userSamples) {
 	if (m_initialNote == getContainer().end()) m_initialNote = i;
 	m_finalNote = i;
@@ -563,11 +563,12 @@ NotationGroup::applyBeam(NotationStaff &staff)
 //    NOTATION_DEBUG << "NotationGroup::applyBeam starting for group "<< this << endl;
 
     for (NELIterator i = getInitialNote(); i != getContainer().end(); ++i) {
-
-        if ((*i)->isNote() &&
-	    (*i)->event()->get<Int>(m_properties.NOTE_TYPE) < Note::Crotchet &&
-	    (*i)->event()->has(BEAMED_GROUP_ID) &&
-	    (*i)->event()->get<Int>(BEAMED_GROUP_ID) == m_groupNo) {
+        NotationElement* el = static_cast<NotationElement*>(*i);
+        
+        if (el->isNote() &&
+	    el->event()->get<Int>(m_properties.NOTE_TYPE) < Note::Crotchet &&
+	    el->event()->has(BEAMED_GROUP_ID) &&
+	    el->event()->get<Int>(BEAMED_GROUP_ID) == m_groupNo) {
 
 	    NotationChord chord(getContainer(), i, &getQuantizer(), 
 				m_properties, m_clef, m_key);
@@ -576,7 +577,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
 //            NOTATION_DEBUG << "NotationGroup::applyBeam: Found chord" << endl;
 
 	    for (j = 0; j < chord.size(); ++j) {
-		NotationElement *el = (*chord[j]);
+		NotationElement *el = static_cast<NotationElement*>(*chord[j]);
 
 		el->event()->setMaybe<Bool>
 		    (STEM_UP, beam.aboveNotes);
@@ -594,7 +595,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
 	    if (beam.aboveNotes) j = 0;
 	    else j = chord.size() - 1;
 
-	    NotationElement *el = (*chord[j]);
+	    NotationElement *el = static_cast<NotationElement*>(*chord[j]);
 	    el->event()->setMaybe<Bool>(NotationProperties::BEAMED, false); // set later
 	    el->event()->setMaybe<Bool>(m_properties.DRAW_FLAG, true); // set later
 	    
@@ -627,7 +628,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
 
 	    if (prev != getContainer().end()) {
 
-                NotationElement *prevEl = (*prev);
+                NotationElement *prevEl = static_cast<NotationElement*>(*prev);
 		int secWidth = x - (int)prevEl->getLayoutX();
 
 //		prevEl->event()->setMaybe<Int>(BEAM_NEXT_Y, myY);
@@ -681,7 +682,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
 	    prev = chord[j];
 	    i = chord.getFinalElement();
 
-        } else if ((*i)->isNote()) {
+        } else if (el->isNote()) {
 	    
 	    if (i == initialNote || i == finalNote) {
 		(*i)->event()->setMaybe<Bool>(STEM_UP, beam.aboveNotes);
@@ -690,7 +691,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
 	    }
 	}
 
-        if (i == finalNote || (*i)->getViewAbsoluteTime() > finalTime) break;
+        if (i == finalNote || el->getViewAbsoluteTime() > finalTime) break;
     }
 }
 
@@ -712,15 +713,23 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
 	       finalElement(  getFinalElement());
 
     NELIterator initialNoteOrRest(initialElement);
+    NotationElement* initialNoteOrRestEl = static_cast<NotationElement*>(*initialNoteOrRest);
+
     while (initialNoteOrRest != finalElement &&
-	   !((*initialNoteOrRest)->isNote() || 
-	     (*initialNoteOrRest)->isRest())) {
+	   !(initialNoteOrRestEl->isNote() || 
+	     initialNoteOrRestEl->isRest())) {
 	++initialNoteOrRest;
+        initialNoteOrRestEl = static_cast<NotationElement*>(*initialNoteOrRest);
     }
-    if (!(*initialNoteOrRest)->isRest()) initialNoteOrRest = initialNote;
+
+    if (!initialNoteOrRestEl->isRest()) {
+        initialNoteOrRest = initialNote;
+        initialNoteOrRestEl = static_cast<NotationElement*>(*initialNoteOrRest);
+    }
+    
     if (initialNoteOrRest == staff.getViewElementList()->end()) return;
 
-    NOTATION_DEBUG << "NotationGroup::applyTuplingLine: first element is " << ((*initialNoteOrRest)->isNote() ? "Note" : "Non-Note") << ", last is " << ((*finalElement)->isNote() ? "Note" : "Non-Note") << endl;
+    NOTATION_DEBUG << "NotationGroup::applyTuplingLine: first element is " << (initialNoteOrRestEl->isNote() ? "Note" : "Non-Note") << ", last is " << (static_cast<NotationElement*>(*finalElement)->isNote() ? "Note" : "Non-Note") << endl;
 
     int initialX = (int)(*initialNoteOrRest)->getLayoutX();
     int   finalX = (int)(*finalElement)->getLayoutX();

@@ -61,6 +61,7 @@ using Rosegarden::Accidental;
 using Rosegarden::Accidentals::NoAccidental;
 using Rosegarden::TimeSignature;
 using Rosegarden::PropertyName;
+using Rosegarden::ViewElement;
 
 using namespace Rosegarden::BaseProperties;
 
@@ -73,11 +74,11 @@ NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
 			     bool pageMode, double pageWidth,
                              string fontName, int resolution) :
     ProgressReporter(0),
-    LinedStaff<NotationElement>(canvas, segment, snapGrid, id, resolution,
-				resolution / 16 + 1, // line thickness
-				pageMode, pageWidth,
-				0 // row spacing
-	                        ),
+    LinedStaff(canvas, segment, snapGrid, id, resolution,
+               resolution / 16 + 1, // line thickness
+               pageMode, pageWidth,
+               0 // row spacing
+               ),
     m_notePixmapFactory(0),
     m_graceNotePixmapFactory(0),
     m_previewSprite(0),
@@ -219,10 +220,11 @@ NotationStaff::getClosestElementToLayoutX(double x,
     // TODO: this is grossly inefficient
 
     for (it = notes->begin(); it != notes->end(); ++it) {
+        NotationElement *el = static_cast<NotationElement*>(*it);
 
 	bool before = ((*it)->getLayoutX() < x);
 	
-	if (!(*it)->isNote() && !(*it)->isRest()) {
+	if (!el->isNote() && !el->isRest()) {
 	    if (before) {
 		if ((*it)->event()->isa(Clef::EventType)) {
 		    clef = (*it)->event();
@@ -280,10 +282,11 @@ NotationStaff::getElementUnderLayoutX(double x,
     // TODO: this is grossly inefficient
 
     for (it = notes->begin(); it != notes->end(); ++it) {
+        NotationElement* el = static_cast<NotationElement*>(*it);
 
 	bool before = ((*it)->getLayoutX() <= x);
 	
-	if (!(*it)->isNote() && !(*it)->isRest()) {
+	if (!el->isNote() && !el->isRest()) {
 	    if (before) {
 		if ((*it)->event()->isa(Clef::EventType)) {
 		    clef = (*it)->event();
@@ -294,7 +297,7 @@ NotationStaff::getElementUnderLayoutX(double x,
 	}
 
 	double airX, airWidth;
-	(*it)->getLayoutAirspace(airX, airWidth);
+	el->getLayoutAirspace(airX, airWidth);
 	if (x >= airX && x < airX + airWidth) {
 	    return it;
 	} else if (!before) {
@@ -408,6 +411,8 @@ NotationStaff::positionElements(timeT from, timeT to)
     for (NotationElementList::iterator it = beginAt, nextIt = beginAt;
 	 it != endAt; it = nextIt) {
 
+        NotationElement* el = static_cast<NotationElement*>(*it);
+
 	++nextIt;
 
 	if ((*it)->event()->isa(Clef::EventType)) {
@@ -431,13 +436,13 @@ NotationStaff::positionElements(timeT from, timeT to)
 	}
 
 	bool selected = isSelected(it); 
-	bool needNewSprite = (selected != (*it)->isSelected());
+	bool needNewSprite = (selected != el->isSelected());
 
-	if (!(*it)->getCanvasItem()) {
+	if (!el->getCanvasItem()) {
 
 	    needNewSprite = true;
 
-	} else if ((*it)->isNote() && !(*it)->isRecentlyRegenerated()) {
+	} else if (el->isNote() && !el->isRecentlyRegenerated()) {
 
 	    // If the note's y-coordinate has changed, we should
 	    // redraw it -- its stem direction may have changed, or it
@@ -445,7 +450,7 @@ NotationStaff::positionElements(timeT from, timeT to)
 	    // user inserts a new clef; unfortunately this means
 	    // inserting clefs is rather slow.
 	    
-	    needNewSprite = needNewSprite || !elementNotMovedInY(*it);
+	    needNewSprite = needNewSprite || !elementNotMovedInY(static_cast<NotationElement*>(*it));
 	    
 	    if (!needNewSprite) {
 
@@ -469,7 +474,7 @@ NotationStaff::positionElements(timeT from, timeT to)
 	    }
 
 	} else if ((*it)->event()->isa(Indication::EventType) &&
-		   !(*it)->isRecentlyRegenerated()) {
+		   !el->isRecentlyRegenerated()) {
 	    needNewSprite = true;
 	}
 
@@ -480,9 +485,9 @@ NotationStaff::positionElements(timeT from, timeT to)
 	}
 
 	LinedStaffCoords coords = getCanvasOffsetsForLayoutCoords
-	    ((*it)->getLayoutX(), (int)(*it)->getLayoutY());
-	(*it)->reposition(coords.first, (double)coords.second);
-	(*it)->setSelected(selected);
+	    (el->getLayoutX(), (int)el->getLayoutY());
+	el->reposition(coords.first, (double)coords.second);
+	el->setSelected(selected);
 
 	if ((to > from) &&
 	    (++elementsPositioned % 200 == 0)) {
@@ -535,7 +540,7 @@ NotationStaff::findUnchangedBarStart(timeT from)
 	from = getSegment().getComposition()->getBarStartForTime(from - 1);
 	beginAt = nel->findTime(from);
     } while (beginAt != nel->begin() &&
-	     (beginAt == nel->end() || !elementNotMoved(*beginAt)));
+	     (beginAt == nel->end() || !elementNotMoved(static_cast<NotationElement*>(*beginAt))));
 
     return beginAt;
 }
@@ -568,7 +573,7 @@ NotationStaff::findUnchangedBarEnd(timeT to, timeT &nextBarTime)
 	}
 	++changedBarCount;
     } while (changedBarCount < 4 &&
-	     candidate != nel->end() && !elementNotMoved(*candidate));
+	     candidate != nel->end() && !elementNotMoved(static_cast<NotationElement*>(*candidate)));
 
     if (changedBarCount < 4) return candidate;
     else return endAt;
@@ -633,7 +638,7 @@ NotationStaff::elementShiftedOnly(NotationElementList::iterator i)
     for (NotationElementList::iterator j = i;
 	 j != getViewElementList()->end(); ++j) {
 
-	NotationElement *elt = *j;
+	NotationElement *elt = static_cast<NotationElement*>(*j);
 	if (!elt->getCanvasItem()) break;
 
 	LinedStaffCoords coords = getCanvasCoordsForLayoutCoords
@@ -664,14 +669,16 @@ NotationStaff::elementShiftedOnly(NotationElementList::iterator i)
 
 
 void
-NotationStaff::renderSingleElement(NotationElement *elt,
-				   NotationElement *nextElt,
+NotationStaff::renderSingleElement(ViewElement *velt,
+				   ViewElement *vnextElt,
 				   const Rosegarden::Clef &currentClef,
 				   bool selected)
 {
     const NotationProperties &properties(m_notationView->getProperties());
     static NotePixmapParameters restParams(Note::Crotchet, 0);
 
+    NotationElement* elt = static_cast<NotationElement*>(velt);
+    
     try {
 	m_notePixmapFactory->setNoteStyle
 	    (NoteStyleFactory::getStyleForEvent(elt->event()));
@@ -1082,7 +1089,7 @@ NotationStaff::wrapEvent(Rosegarden::Event *e)
 	}
     }
 
-    if (wrap) wrap = Rosegarden::Staff<NotationElement>::wrapEvent(e);
+    if (wrap) wrap = Rosegarden::Staff::wrapEvent(e);
 
     return wrap;
 }
@@ -1092,7 +1099,11 @@ void
 NotationStaff::eventRemoved(const Rosegarden::Segment *segment,
 			    Rosegarden::Event *event)
 {
-    LinedStaff<NotationElement>::eventRemoved(segment, event);
+    LinedStaff::eventRemoved(segment, event);
     m_notationView->handleEventRemoved(event);
 }
 
+Rosegarden::ViewElement* NotationStaff::makeViewElement(Rosegarden::Event* e)
+{
+    return new NotationElement(e);
+}

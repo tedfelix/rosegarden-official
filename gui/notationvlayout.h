@@ -39,7 +39,7 @@ class NotationProperties;
  */
 
 class NotationVLayout : public ProgressReporter,
-                        public Rosegarden::VerticalLayoutEngine<NotationElement>
+                        public Rosegarden::VerticalLayoutEngine
 {
 public:
     NotationVLayout(Rosegarden::Composition *c,
@@ -56,14 +56,14 @@ public:
     /**
      * Resets internal data stores for a specific staff
      */
-    virtual void resetStaff(StaffType &,
+    virtual void resetStaff(Rosegarden::Staff &,
 			    Rosegarden::timeT = 0,
 			    Rosegarden::timeT = 0);
 
     /**
      * Lay out a single staff.
      */
-    virtual void scanStaff(StaffType &,
+    virtual void scanStaff(Rosegarden::Staff &,
 			   Rosegarden::timeT = 0,
 			   Rosegarden::timeT = 0);
 
@@ -81,12 +81,12 @@ private:
     void positionSlur(NotationStaff &staff, NotationElementList::iterator i);
 
     typedef FastVector<NotationElementList::iterator> SlurList;
-    typedef std::map<StaffType *, SlurList> SlurListMap;
+    typedef std::map<Rosegarden::Staff *, SlurList> SlurListMap;
 
     //--------------- Data members ---------------------------------
 
     SlurListMap m_slurs;
-    SlurList &getSlurList(StaffType &);
+    SlurList &getSlurList(Rosegarden::Staff &);
 
     Rosegarden::Composition *m_composition;
     const Rosegarden::Quantizer *m_notationQuantizer;

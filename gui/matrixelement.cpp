@@ -26,9 +26,7 @@
 
 MatrixElement::MatrixElement(Rosegarden::Event *event) :
     Rosegarden::ViewElement(event),
-    m_canvasRect(new QCanvasMatrixRectangle(*this, 0)),
-    m_layoutX(0.0),
-    m_layoutY(0.0)
+    m_canvasRect(new QCanvasMatrixRectangle(*this, 0))
 {
 //     MATRIX_DEBUG << "new MatrixElement "
 //                          << this << " wrapping " << event << endl;

@@ -518,6 +518,7 @@ protected:
 
     QWidget *m_chordNameRuler;
     QWidget *m_tempoRuler;
+    ControlRuler *m_controlRuler;
 
 };
 

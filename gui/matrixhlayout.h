@@ -27,7 +27,7 @@
 
 #include "FastVector.h"
 
-class MatrixHLayout : public Rosegarden::HorizontalLayoutEngine<MatrixElement>
+class MatrixHLayout : public Rosegarden::HorizontalLayoutEngine
 {
 public:
     MatrixHLayout(Rosegarden::Composition *c);
@@ -41,7 +41,7 @@ public:
     /**
      * Resets internal data stores for a specific staff
      */
-    virtual void resetStaff(StaffType &staff,
+    virtual void resetStaff(Rosegarden::Staff &staff,
 			    Rosegarden::timeT = 0,
 			    Rosegarden::timeT = 0);
 
@@ -73,7 +73,7 @@ public:
      * any layout-related properties in the events on the staff's
      * segment.
      */
-    virtual void scanStaff(StaffType&,
+    virtual void scanStaff(Rosegarden::Staff&,
 			   Rosegarden::timeT = 0,
 			   Rosegarden::timeT = 0);
 
@@ -90,8 +90,8 @@ public:
      * Returns a pointer to a time signature event if there is one
      * visible in this bar, and if so also sets timeSigX to its x-coord
      */
-    virtual Rosegarden::Event *getTimeSignaturePosition
-    (StaffType &staff, int barNo, double &timeSigX);
+    virtual Rosegarden::Event *getTimeSignaturePosition(Rosegarden::Staff &staff,
+                                                        int barNo, double &timeSigX);
 
 protected:
 

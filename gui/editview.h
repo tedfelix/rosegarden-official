@@ -33,7 +33,7 @@
 #include "Event.h"
 #include "Selection.h"
 
-namespace Rosegarden { class Segment; }
+namespace Rosegarden { class Segment; class ViewElementList; class RulerScale; }
 
 class QCanvasItem;
 class QScrollView;
@@ -52,6 +52,7 @@ class BasicCommand;
 class ActiveItem;
 class BarButtons;
 class RosegardenCanvasView;
+class ControlRuler;
 
 /**
  * An interface for canvas items which are capable of handling
@@ -187,7 +188,13 @@ protected:
     /**
      * Add a ruler control box
      */
-    void addControl(QWidget*);
+    void addPropertyBox(QWidget*);
+
+    /**
+     * Add control ruler
+     */
+    ControlRuler* makeControlRuler(Rosegarden::ViewElementList* viewElementList,
+                                   Rosegarden::RulerScale* rulerScale);
 
     /**
      * Set up those actions common to any EditView (e.g. note insertion,
@@ -259,7 +266,8 @@ protected:
     QVBoxLayout *m_bottomBox;
     BarButtons  *m_topBarButtons;
     BarButtons  *m_bottomBarButtons;
-
+    ControlRuler *m_controlRuler;
+    
     static const unsigned int RULERS_ROW;
     static const unsigned int CONTROLS_ROW;
     static const unsigned int TOPBARBUTTONS_ROW;

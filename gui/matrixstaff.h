@@ -28,7 +28,7 @@
 class VelocityColour;
 class MatrixView;
 
-class MatrixStaff : public LinedStaff<MatrixElement>
+class MatrixStaff : public LinedStaff
 {
 public:
     MatrixStaff(QCanvas *canvas,
@@ -59,8 +59,10 @@ protected:
      */
     virtual void eventRemoved(const Rosegarden::Segment *, Rosegarden::Event *);
 
+    virtual Rosegarden::ViewElement* makeViewElement(Rosegarden::Event*);
+
 public:
-    LinedStaff<MatrixElement>::setResolution;
+    LinedStaff::setResolution;
 
     double getTimeScaleFactor() const { return m_scaleFactor; }
     void setTimeScaleFactor(double f) { m_scaleFactor = f; }
@@ -70,7 +72,7 @@ public:
     virtual void positionElements(Rosegarden::timeT from,
 				  Rosegarden::timeT to);
 
-    virtual void positionElement(MatrixElement*);
+    virtual void positionElement(Rosegarden::ViewElement*);
 
     // Return this so that the tools can use it for recolouring
     // unselected elements.

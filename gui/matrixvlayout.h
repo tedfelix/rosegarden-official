@@ -25,7 +25,7 @@
 #include "LayoutEngine.h"
 #include "matrixelement.h"
 
-class MatrixVLayout : public Rosegarden::VerticalLayoutEngine<MatrixElement>
+class MatrixVLayout : public Rosegarden::VerticalLayoutEngine
 {
 public:
     MatrixVLayout();
@@ -40,7 +40,7 @@ public:
     /**
      * Resets internal data stores for a specific staff
      */
-    virtual void resetStaff(StaffType &staff,
+    virtual void resetStaff(Rosegarden::Staff &staff,
 			    Rosegarden::timeT = 0,
 			    Rosegarden::timeT = 0);
 
@@ -50,7 +50,7 @@ public:
      * any layout-related properties in the events on the staff's
      * segment.
      */
-    virtual void scanStaff(StaffType &staff,
+    virtual void scanStaff(Rosegarden::Staff &staff,
 			   Rosegarden::timeT = 0,
 			   Rosegarden::timeT = 0);
 

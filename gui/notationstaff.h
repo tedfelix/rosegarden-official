@@ -47,7 +47,7 @@ class NotationView;
  * base class.
  */
 
-class NotationStaff : public ProgressReporter, public LinedStaff<NotationElement>
+class NotationStaff : public ProgressReporter, public LinedStaff
 {
 public:
 
@@ -66,10 +66,10 @@ public:
      */
     virtual void changeFont(std::string fontName, int resolution);
 
-    LinedStaff<NotationElement>::setPageMode;
-    LinedStaff<NotationElement>::setPageWidth;
-    LinedStaff<NotationElement>::setRowSpacing;
-    LinedStaff<NotationElement>::setConnectingLineLength;
+    LinedStaff::setPageMode;
+    LinedStaff::setPageWidth;
+    LinedStaff::setRowSpacing;
+    LinedStaff::setConnectingLineLength;
 
     /**
      * Gets a read-only reference to the pixmap factory used by the
@@ -246,6 +246,8 @@ public:
 
 protected:
 
+    virtual Rosegarden::ViewElement* makeViewElement(Rosegarden::Event*);
+
     // definition of staff
     virtual int getLineCount() const         { return 5; }
     virtual int getLegerLineCount() const    { return 8; }
@@ -257,8 +259,8 @@ protected:
      * needed in case it's a key event, in which case we need to judge
      * the correct pitch for the key)
      */
-    virtual void renderSingleElement(NotationElement *elt, 
-				     NotationElement *nextElt,
+    virtual void renderSingleElement(Rosegarden::ViewElement *elt, 
+				     Rosegarden::ViewElement *nextElt,
 				     const Rosegarden::Clef &,
 				     bool selected);
 

@@ -12,8 +12,8 @@ libbase_la_SOURCES = AnalysisTypes.C \
                      AudioPluginInstance.C \
 	             BaseProperties.C \
 		     Clipboard.C \
-			 Colour.C \
-			 ColourMap.C \
+	             Colour.C \
+	             ColourMap.C \
 		     Composition.C \
 		     CompositionTimeSliceAdapter.C \
                      Configuration.C \
@@ -22,6 +22,7 @@ libbase_la_SOURCES = AnalysisTypes.C \
 		     Event.C \
 		     Exception.C \
                      Instrument.C \
+                     LayoutEngine.C \
                      Lock.C \
                      MidiDevice.C \
                      MidiTypes.C \
@@ -40,6 +41,7 @@ libbase_la_SOURCES = AnalysisTypes.C \
 		     Selection.C \
 		     Sets.C \
 		     SnapGrid.C \
+		     Staff.C \
 		     StringHash.C \
                      Studio.C \
                      Track.C \

@@ -29,7 +29,7 @@
 class NotationElement;
 class QCanvasItemGroup;
 class QCanvasLineGroupable;
-template <class T> class LinedStaffManager;
+class LinedStaffManager;
 class NotationStaff;
 
 /**
@@ -49,7 +49,7 @@ class NotationCanvasView : public RosegardenCanvasView
     Q_OBJECT
 
 public:
-    NotationCanvasView(const LinedStaffManager<NotationElement> &staffmgr,
+    NotationCanvasView(const LinedStaffManager &staffmgr,
                        QScrollBar *horizBar,
 		       QCanvas *viewing, QWidget *parent=0,
                        const char *name=0, WFlags f=0);
@@ -108,7 +108,7 @@ signals:
     
 protected:
 
-    const LinedStaffManager<NotationElement> &m_linedStaffManager;
+    const LinedStaffManager &m_linedStaffManager;
 
     /**
      * Callback for a mouse button press event in the canvas

@@ -389,9 +389,10 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
     if (clefEvt) clef = Rosegarden::Clef(*clefEvt);
     if (keyEvt) key = Rosegarden::Key(*keyEvt);
 
-    if ((*itr)->isRest() && (*itr)->getCanvasItem()) {
+    NotationElement* el = static_cast<NotationElement*>(*itr);
+    if (el->isRest() && el->getCanvasItem()) {
 	time += getOffsetWithinRest(staffNo, itr, x);
-	m_clickInsertX += (x - (*itr)->getCanvasX());
+	m_clickInsertX += (x - el->getCanvasX());
     }
 
     Rosegarden::NotationDisplayPitch ndp(height, m_accidental);
@@ -456,12 +457,13 @@ NoteInserter::getOffsetWithinRest(int staffNo,
     if (m_nParentView->isInTripletMode()) return 0;
 
     NotationStaff *staff = m_nParentView->getStaff(staffNo);
-    double offset = canvasX - (*i)->getCanvasX();
+    NotationElement* el = static_cast<NotationElement*>(*i);
+    double offset = canvasX - el->getCanvasX();
 
     if (offset < 0) return 0;
 
     double airX, airWidth;
-    (*i)->getLayoutAirspace(airX, airWidth);
+    el->getLayoutAirspace(airX, airWidth);
     double origin = ((*i)->getLayoutX() - airX) / 2;
     double width = airWidth - origin;
 
@@ -484,7 +486,7 @@ NoteInserter::getOffsetWithinRest(int staffNo,
 	    visibleWidth = (*j)->getLayoutX() - (*i)->getLayoutX();
 	}
 	offset = (visibleWidth * result) / unitCount;
-	canvasX = (*i)->getCanvasX() + offset;
+	canvasX = el->getCanvasX() + offset;
 	
 	result *= unit;
 	return result;

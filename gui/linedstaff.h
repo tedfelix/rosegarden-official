@@ -44,14 +44,12 @@ namespace Rosegarden { class SnapGrid; }
  * LinedStaffManager is not used by LinedStaff.
  */
 
-template <class T> class LinedStaff;
+class LinedStaff;
 
-template <class T>
 class LinedStaffManager
 {
 public:
-    virtual LinedStaff<T> *getStaffForCanvasCoords(int x, 
-						   int y) const = 0;
+    virtual LinedStaff *getStaffForCanvasCoords(int x, int y) const = 0;
 };
 
 
@@ -66,8 +64,7 @@ public:
  * staff lines be a precise integral distance apart.
  */
 
-template <class T>
-class LinedStaff : public Rosegarden::Staff<T>
+class LinedStaff : public Rosegarden::Staff
 {
 public:
     typedef std::pair<double, int> LinedStaffCoords;
@@ -312,7 +309,7 @@ public:
      * corresponding to the given time, and show it.
      */
     virtual void setPointerPosition
-    (Rosegarden::HorizontalLayoutEngine<T> &, Rosegarden::timeT);
+    (Rosegarden::HorizontalLayoutEngine&, Rosegarden::timeT);
 
     /**
      * Move the playback pointer to the layout-X coordinate
@@ -336,7 +333,7 @@ public:
      * corresponding to the given time, and show it.
      */
     virtual void setInsertCursorPosition
-    (Rosegarden::HorizontalLayoutEngine<T> &, Rosegarden::timeT);
+    (Rosegarden::HorizontalLayoutEngine&, Rosegarden::timeT);
 
     /**
      * Move the insertion cursor to the layout-X coordinate
@@ -367,7 +364,7 @@ public:
      * No bars or staff lines will appear unless this method has
      * been called.
      */
-    virtual void sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout);
+    virtual void sizeStaff(Rosegarden::HorizontalLayoutEngine& layout);
 
     /**
      * Generate or re-generate sprites for all the elements between
@@ -379,8 +376,8 @@ public:
      * elements is slow, however, it makes sense to do it here
      * because this method may be called less often.
      */
-    virtual void renderElements(typename Rosegarden::ViewElementList<T>::iterator from,
-				typename Rosegarden::ViewElementList<T>::iterator to);
+    virtual void renderElements(Rosegarden::ViewElementList::iterator from,
+				Rosegarden::ViewElementList::iterator to);
 
     /**
      * Call renderElements(from, to) on the whole staff.
@@ -574,7 +571,5 @@ protected:
     QCanvasLine *m_pointer;
     QCanvasLine *m_insertCursor;
 };
-
-#include "linedstaff.cpp"
 
 #endif

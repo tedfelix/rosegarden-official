@@ -27,6 +27,7 @@ rosegarden_SOURCES = \
 	kstartuplogo.cpp \
 	ktmpstatusmsg.cpp \
         lilypondio.cpp \
+        linedstaff.cpp \
         loopruler.cpp \
 	main.cpp \
 	matrixcanvasview.cpp \

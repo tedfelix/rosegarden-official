@@ -313,6 +313,11 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 	(&m_hlayout, &doc->getComposition(), 0, 20, false, getCentralFrame());
     addRuler(m_tempoRuler);
 
+    // Same, but editable
+    //
+    makeControlRuler(m_staffs[0]->getViewElementList(), &m_hlayout);
+    slotShowControlRuler(true);
+
     // Scroll view to centre middle-C and warp to pointer position
     //
     m_canvasView->scrollBy(0, m_staffs[0]->getCanvasYForHeight(60) / 2);
@@ -719,6 +724,7 @@ void MatrixView::refreshSegment(Segment *segment,
     }
 
     m_staffs[0]->positionElements(startTime, endTime);
+    m_controlRuler->update();
     repaintRulers();
 }
 
@@ -1893,7 +1899,7 @@ MatrixView::addPropertyViewRuler(const Rosegarden::PropertyName &property)
                                               height,
                                               getCentralFrame());
 
-    addControl(newControl);
+    addPropertyBox(newControl);
 
     m_propertyViewRulers.push_back(
             std::pair<PropertyViewRuler*, PropertyBox*>(newRuler, newControl));

@@ -40,8 +40,6 @@ namespace Rosegarden
  *
  * Staff was formerly known as ViewElementsManager.
  */
-
-template <class T>
 class Staff : public SegmentObserver
 {
 public: 
@@ -51,14 +49,14 @@ public:
      * Create a new ViewElementList wrapping all Events in the
      * segment, or return the previously created one
      */
-    ViewElementList<T> *getViewElementList();
+    ViewElementList *getViewElementList();
 
     /**
      * Create a new ViewElementList wrapping Events in the
      * [from, to[ interval, or return the previously created one
      * (even if passed new arguments)
      */
-    ViewElementList<T> *getViewElementList(Segment::iterator from,
+    ViewElementList *getViewElementList(Segment::iterator from,
 					   Segment::iterator to);
 
     /**
@@ -91,7 +89,8 @@ public:
 
 protected:
     Staff(Segment &);
-
+    virtual ViewElement* makeViewElement(Event*) = 0;
+    
     /**
      * Return true if the event should be wrapped
      * Useful for piano roll where we only want to wrap notes
@@ -100,154 +99,14 @@ protected:
     virtual bool wrapEvent(Event *);
 
     Segment &m_segment;
-    ViewElementList<T> *m_viewElementList;
-    typename ViewElementList<T>::iterator findEvent(Rosegarden::Event *);
+    ViewElementList *m_viewElementList;
+    ViewElementList::iterator findEvent(Rosegarden::Event *);
 
 private: // not provided
     Staff(const Staff &);
     Staff &operator=(const Staff &);
 };
 
-
-
-template <class T>
-Staff<T>::Staff(Segment &t) :
-    m_segment(t),
-    m_viewElementList(0)
-{
-    // empty
-}
-
-template <class T>
-Staff<T>::~Staff()
-{
-    if (m_viewElementList) m_segment.removeObserver(this);
-}
-
-template <class T>
-ViewElementList<T> *
-Staff<T>::getViewElementList()
-{
-    return getViewElementList(m_segment.begin(), m_segment.end());
-}
-
-template <class T>
-ViewElementList<T> *
-Staff<T>::getViewElementList(Segment::iterator from,
-			     Segment::iterator to)
-{
-    if (!m_viewElementList) {
-
-        m_viewElementList = new ViewElementList<T>;
-
-        for (Segment::iterator i = from; i != to; ++i) {
-
-            if (!wrapEvent(*i)) continue;
-
-            T *el = new T(*i);
-            m_viewElementList->insert(el);
-        }
-
-        m_segment.addObserver(this);
-
-    }
-    
-    return m_viewElementList;
-}
-
-template <class T>
-bool
-Staff<T>::wrapEvent(Event *e)
-{
-    timeT emt = m_segment.getEndMarkerTime();
-    return
-	(e->getAbsoluteTime() <  emt) ||
-	(e->getAbsoluteTime() == emt && e->getDuration() == 0);
-}
-
-template <class T>
-typename ViewElementList<T>::iterator
-Staff<T>::findEvent(Event *e)
-{
-    T dummy(e);
-
-    std::pair<typename ViewElementList<T>::iterator,
-	      typename ViewElementList<T>::iterator>
-        r = m_viewElementList->equal_range(&dummy);
-
-    for (typename ViewElementList<T>::iterator i = r.first; i != r.second; ++i) {
-        if ((*i)->event() == e) {
-            return i;
-        }
-    }
-
-    return m_viewElementList->end();
-}
-
-
-template <class T>
-void
-Staff<T>::eventAdded(const Segment *t, Event *e)
-{
-    assert(t == &m_segment);
-
-    if (wrapEvent(e)) {
-        T *el = new T(e);
-        m_viewElementList->insert(el);
-    }
-}
-
-template <class T>
-void
-Staff<T>::eventRemoved(const Segment *t, Event *e)
-{
-    assert(t == &m_segment);
-
-    // If we have it, lose it
-
-//    std::cerr << "Staff<T>::eventRemoved for " << e << std::endl;
-
-    typename ViewElementList<T>::iterator i = findEvent(e);
-    if (i != m_viewElementList->end()) {
-//	std::cerr << "Found" << std::endl;
-        m_viewElementList->erase(i);
-        return;
-    }
-
-    std::cerr << "Event at " << e->getAbsoluteTime() << ", type " << e->getType()
-	      << " not found in Staff" << std::endl;
-}
-
-template <class T>
-void
-Staff<T>::endMarkerTimeChanged(const Segment *s, bool shorten)
-{
-    assert(s == &m_segment);
-
-    if (shorten) {
-
-	m_viewElementList->erase
-	    (m_viewElementList->findTime(s->getEndMarkerTime()),
-	     m_viewElementList->end());
-
-    } else {
-
-	timeT myLastEltTime = s->getStartTime();
-	if (m_viewElementList->end() != m_viewElementList->begin()) {
-	    typename ViewElementList<T>::iterator i = m_viewElementList->end();
-	    myLastEltTime = (*--i)->event()->getAbsoluteTime();
-	}
-	
-	for (Segment::iterator j = s->findTime(myLastEltTime);
-	     s->isBeforeEndMarker(j); ++j) {
-	    
-	    typename ViewElementList<T>::iterator newi = findEvent(*j);
-	    if (newi == m_viewElementList->end()) {
-		m_viewElementList->insert(new T(*j));
-	    }
-	}
-    }
-}
 
 }
 

@@ -27,6 +27,7 @@
 #include <qhbox.h>
 #include <qframe.h>
 
+#include "BaseProperties.h"
 #include "controlruler.h"
 #include "colours.h"
 #include "rosestrings.h"
@@ -39,6 +40,7 @@ using Rosegarden::RulerScale;
 using Rosegarden::Segment;
 using Rosegarden::timeT;
 using Rosegarden::PropertyName;
+using Rosegarden::ViewElement;
 
 /**
  * Control Tool
@@ -69,12 +71,16 @@ int TestTool::operator()(double x, int val)
 //
 // ------------------
 //
+
 class ControlItem : public QCanvasRectangle
 {
 public:
-    ControlItem(ControlRuler* controlRuler);
+    ControlItem(ControlRuler* controlRuler,
+                ViewElement* el, ViewElement* nextEl = 0);
 
-    virtual void setValue(int);
+    ViewElement* getViewElement() { return m_viewElement; }
+
+    virtual void setValue(long);
 
     void setWidth(int w)  { setSize(w, height()); }
     void setHeight(int h) { setSize(width(), h); }
@@ -89,47 +95,62 @@ public:
 
     virtual void setSelected(bool yes);
 
+    /// recompute height according to represented value prior to a canvas repaint
+    virtual void updateFromValue();
+
+    /// update value according to height after a user edit
+    virtual void updateValue();
+
 protected:
 
-    virtual int valueToHeight(int);
-    virtual int heightToValue(int);
+    virtual int valueToHeight(long);
+    virtual long heightToValue(int);
     virtual QColor valueToColor(int);
 
     //--------------- Data members ---------------------------------
 
-    int m_value;
+    long m_value;
 
     ControlRuler* m_controlRuler;
-    
-    static const unsigned int borderThickness;
+    ViewElement* m_viewElement;
+
+    static const unsigned int BorderThickness;
+    static const unsigned int DefaultWidth;
 };
 
-const unsigned int ControlItem::borderThickness = 2;
+const unsigned int ControlItem::BorderThickness = 2;
+const unsigned int ControlItem::DefaultWidth    = 20;
 
-ControlItem::ControlItem(ControlRuler* ruler)
+ControlItem::ControlItem(ControlRuler* ruler, ViewElement *el,
+                         ViewElement *nextEl)
     : QCanvasRectangle(ruler->canvas()),
-      m_controlRuler(ruler)
+      m_controlRuler(ruler),
+      m_viewElement(el)
 {
-    setWidth(20);
-    setPen(QPen(Qt::black, borderThickness));
+    setWidth(nextEl ? int(nextEl->getLayoutX() - el->getLayoutX()) : DefaultWidth);
+    setPen(QPen(Qt::black, BorderThickness));
     setBrush(Qt::blue);
 
-    setX(0); setY(canvas()->height() - 10);
+    setX(el->getLayoutX());
+    setY(canvas()->height() - 10);
+    updateFromValue();
+    RG_DEBUG << "ControlItem x = " << x() << " - y = " << y() << endl;
+    show();
 }
 
-void ControlItem::setValue(int v)
+void ControlItem::setValue(long v)
 {
 //     std::cerr << "ControlItem::setValue(" << v << ") x = " << x() << std::endl;
 
     m_value = v;
 }
 
-int ControlItem::valueToHeight(int val)
+int ControlItem::valueToHeight(long val)
 {
     return -val;
 }
 
-int ControlItem::heightToValue(int h)
+long ControlItem::heightToValue(int h)
 {
     return -h;
 }
@@ -140,9 +161,20 @@ QColor ControlItem::valueToColor(int val)
     return b.light(100 + val);
 }
 
+void ControlItem::updateValue()
+{
+    m_viewElement->event()->set<Rosegarden::Int>(Rosegarden::BaseProperties::VELOCITY, m_value);
+}
+
+void ControlItem::updateFromValue()
+{
+    if (m_viewElement->event()->get<Rosegarden::Int>(Rosegarden::BaseProperties::VELOCITY, m_value)) {
+        setHeight(valueToHeight(m_value));
+    }
+}
+
 void ControlItem::draw(QPainter &painter)
 {
-    setHeight(valueToHeight(m_value));
     setBrush(valueToColor(m_value));
 
     QCanvasRectangle::draw(painter);
@@ -163,8 +195,8 @@ void ControlItem::handleMouseMove(QMouseEvent *e, int deltaX, int deltaY)
     m_controlRuler->applyTool(x(), deltaY);
 
     setHeight(getHeight() + deltaY);
-
     setValue(heightToValue(getHeight()));
+    updateValue();
     canvas()->update();
 }
 
@@ -176,14 +208,21 @@ void ControlItem::setSelected(bool s)
 {
     QCanvasItem::setSelected(s);
 
-    if (s) setPen(QPen(Qt::red, borderThickness));
-    else setPen(QPen(Qt::black, borderThickness));
+    if (s) setPen(QPen(Qt::red, BorderThickness));
+    else setPen(QPen(Qt::black, BorderThickness));
 
     canvas()->update();
 }
 
 
 //////////////////////////////////////////////////////////////////////
+
+/**
+ * Selector tool for the ControlRuler
+ *
+ * Allow the user to select several ControlItems so he can change them
+ * all at the same time
+ */
 class ControlSelector : public QObject
 {
 public:
@@ -206,7 +245,6 @@ ControlSelector::ControlSelector(ControlRuler* parent)
       m_ruler(parent)
 {
 }
-
 
 void ControlSelector::handleMouseButtonPress(QMouseEvent *e)
 {
@@ -241,9 +279,15 @@ void ControlSelector::handleMouseMove(QMouseEvent *e, int deltaX, int deltaY)
 
 //////////////////////////////////////////////////////////////////////
 
-ControlRuler::ControlRuler(QCanvas* c, QWidget* parent,
+using Rosegarden::ViewElementList;
+
+ControlRuler::ControlRuler(Rosegarden::ViewElementList* viewElementList,
+                           Rosegarden::RulerScale* rulerScale,
+                           QCanvas* c, QWidget* parent,
                            const char* name, WFlags f) :
     QCanvasView(c,parent,name,f),
+    m_viewElementList(viewElementList),
+    m_rulerScale(rulerScale),
     m_currentItem(0),
     m_tool(0),
     m_currentX(0.0),
@@ -251,18 +295,67 @@ ControlRuler::ControlRuler(QCanvas* c, QWidget* parent,
     m_selector(new ControlSelector(this)),
     m_selectionRect(new QCanvasRectangle(canvas()))
 {
+    m_viewElementList->addObserver(this);
     setControlTool(new TestTool);
     m_selectionRect->setPen(Qt::red);
+
+    init();
 }
 
 
 ControlRuler::~ControlRuler()
 {
+    m_viewElementList->removeObserver(this);
 }
+
+void ControlRuler::init()
+{
+    ViewElementList::iterator j;
+
+    for(ViewElementList::iterator i = m_viewElementList->begin();
+        i != m_viewElementList->end(); ++i) {
+
+        j = i; ++j;
+        // also pass next element if there's one
+        //
+        ControlItem* controlItem = new ControlItem(this,
+                                                   *i, j != m_viewElementList->end() ? *j : 0);
+    }
+}
+
+void ControlRuler::elementAdded(ViewElement *el)
+{
+    RG_DEBUG << "ControlRuler::elementAdded()\n";
+    new ControlItem(this, el);
+}
+
+void ControlRuler::elementRemoved(ViewElement *el)
+{
+    RG_DEBUG << "ControlRuler::elementRemoved(\n";
+
+    QCanvasItemList allItems = canvas()->allItems();
+
+    for (QCanvasItemList::Iterator it=allItems.begin(); it!=allItems.end(); ++it) {
+        if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
+            if (item->getViewElement() == el) {
+                delete item;
+                break;
+            }
+        }
+    }
+}
+
 
 void
 ControlRuler::update()
 {
+//     for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
+
+//         if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
+//             item->updateFromValue();
+//         }
+//     }
+    
     canvas()->update();
 }
 
@@ -370,13 +463,6 @@ ControlRuler::clearSelectedItems()
     m_selectedItems.clear();
 }
 
-double ControlRuler::getNextX()
-{
-    m_currentX += 30.0;
-
-    return m_currentX;
-}
-
 void ControlRuler::clear()
 {
     QCanvasItemList list = canvas()->allItems();
@@ -396,13 +482,13 @@ int ControlRuler::applyTool(double x, int val)
 //----------------------------------------
 
 PropertyViewRuler::PropertyViewRuler(RulerScale *rulerScale,
-                           Segment *segment,
-                           const PropertyName &property,
-                           VelocityColour *velocityColour,
-                           double xorigin,
-                           int height,
-                           QWidget *parent,
-                           const char *name) :
+                                     Segment *segment,
+                                     const PropertyName &property,
+                                     VelocityColour *velocityColour,
+                                     double xorigin,
+                                     int height,
+                                     QWidget *parent,
+                                     const char *name) :
     QWidget(parent, name),
     m_propertyName(property),
     m_xorigin(xorigin),
@@ -482,29 +568,29 @@ PropertyViewRuler::paintEvent(QPaintEvent* e)
     Segment::iterator it = m_segment->findNearestTime(from);
     //Segment::iterator it = m_segment->begin();
 
-    for (; m_segment->isBeforeEndMarker(it); it++)
-    {
-        if ((*it)->has(m_propertyName))
-        {
-            int x = int(m_rulerScale->getXForTime((*it)->getAbsoluteTime()))
-                    + m_currentXOffset + int(m_xorigin);
+    for (; m_segment->isBeforeEndMarker(it); it++) {
+        long value = 0;
+        
+        if (!(*it)->get<Rosegarden::Int>(m_propertyName, value))
+            continue;
+        
+        int x = int(m_rulerScale->getXForTime((*it)->getAbsoluteTime()))
+            + m_currentXOffset + int(m_xorigin);
 
-            if ((x * getHScaleFactor()) > (clipRect.x() + clipRect.width())) break;
+        if ((x * getHScaleFactor()) > (clipRect.x() + clipRect.width())) break;
 
-            // include fiddle factor (+2)
-            int width = 
-                int(m_rulerScale->getXForTime((*it)->getAbsoluteTime() +
-                                              (*it)->getDuration()) + 2)
-                    + m_currentXOffset + int(m_xorigin) - x;
+        // include fiddle factor (+2)
+        int width = 
+            int(m_rulerScale->getXForTime((*it)->getAbsoluteTime() +
+                                          (*it)->getDuration()) + 2)
+            + m_currentXOffset + int(m_xorigin) - x;
 
-            int value = (*it)->get<Rosegarden::Int>(m_propertyName);
-            int blockHeight = int(double(height()) * (value/127.0));
+        int blockHeight = int(double(height()) * (value/127.0));
 
-            if (m_velocityColour)
-                paint.setBrush(m_velocityColour->getColour(value));
+        if (m_velocityColour)
+            paint.setBrush(m_velocityColour->getColour(value));
             
-            paint.drawRect(x, height() - blockHeight, width, blockHeight);
-        }
+        paint.drawRect(x, height() - blockHeight, width, blockHeight);
     }
 }
 

@@ -42,8 +42,6 @@ using Rosegarden::timeT;
 
 NotationElement::NotationElement(Event *event)
     : ViewElement(event),
-      m_x(0),
-      m_y(0),
       m_recentlyRegenerated(false),
       m_canvasItem(0)
 {
@@ -128,7 +126,7 @@ NotationElement::setCanvasItem(QCanvasItem *e, double dxoffset, double dyoffset)
     m_recentlyRegenerated = true;
     delete m_canvasItem;
     m_canvasItem = e;
-    e->move(m_x + dxoffset, m_y + dyoffset);
+    e->move(getLayoutX() + dxoffset, getLayoutY() + dyoffset);
 }
 
 void
@@ -144,7 +142,7 @@ NotationElement::reposition(double dxoffset, double dyoffset)
 {
     m_recentlyRegenerated = false;
     if (!m_canvasItem) return;
-    m_canvasItem->move(m_x + dxoffset, m_y + dyoffset);
+    m_canvasItem->move(getLayoutX() + dxoffset, getLayoutY() + dyoffset);
 }
 
 bool

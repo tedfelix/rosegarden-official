@@ -49,24 +49,6 @@ public:
     virtual Rosegarden::timeT getViewAbsoluteTime() const;
     virtual Rosegarden::timeT getViewDuration() const;
 
-    /**
-     * Returns the X coordinate of the element, as computed by the
-     * layout. This is not the coordinate of the associated canvas
-     * item.
-     *
-     * @see getCanvasX()
-     */
-    double getLayoutX() { return m_x; }
-
-    /**
-     * Returns the Y coordinate of the element, as computed by the
-     * layout. This is not the coordinate of the associated canvas
-     * item.
-     *
-     * @see getCanvasY()
-     */
-    double getLayoutY() { return m_y; }
-
     void getLayoutAirspace(double &x, double &width) {
 	x = m_airX;
 	width = m_airWidth;
@@ -77,18 +59,6 @@ public:
 
     /// returns the y pos of the associated canvas item
     double getCanvasY();
-
-    /**
-     * Sets the X coordinate which was computed by the layout engine
-     * @see getLayoutX()
-     */
-    void setLayoutX(double x) { m_x = x; }
-
-    /**
-     * Sets the Y coordinate which was computed by the layout engine
-     * @see getLayoutY()
-     */
-    void setLayoutY(double y) { m_y = y; }
 
     /**
      * Sets the X coordinate and width of the space "underneath"
@@ -149,8 +119,6 @@ public:
 protected:
     //--------------- Data members ---------------------------------
 
-    double m_x;
-    double m_y;
     double m_airX;
     double m_airWidth;
     bool m_recentlyRegenerated;
@@ -158,28 +126,7 @@ protected:
     QCanvasItem *m_canvasItem;
 };
 
-
-// Specialisation of the comparator so as to sort notes by pitch as well
-// as everything else
-
-namespace Rosegarden {
-
-template <>
-class ViewElementComparator<NotationElement>
-{
-public:
-    bool operator()(const NotationElement *e1,
-		    const NotationElement *e2) const {
-
-	const ViewElement &ve1 = *e1;
-	const ViewElement &ve2 = *e2;
-	return (ve1 < ve2);
-    }
-};
-
-}
-
-typedef Rosegarden::ViewElementList<NotationElement> NotationElementList;
+typedef Rosegarden::ViewElementList NotationElementList;
 
 
 #endif

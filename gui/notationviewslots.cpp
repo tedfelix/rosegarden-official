@@ -1316,7 +1316,7 @@ NotationView::doDeferredCursorMove()
         staff->getViewElementList()->findNearestTime(t);
 
     while (i != staff->getViewElementList()->end() &&
-           !(*i)->getCanvasItem()) ++i;
+           !static_cast<NotationElement*>(*i)->getCanvasItem()) ++i;
 
     if (i == staff->getViewElementList()->end()) {
         //!!! ???
@@ -1325,7 +1325,7 @@ NotationView::doDeferredCursorMove()
         }
         m_insertionTime = staff->getSegment().getStartTime();
     } else {
-        m_insertionTime = (*i)->getViewAbsoluteTime();
+        m_insertionTime = static_cast<NotationElement*>(*i)->getViewAbsoluteTime();
     }
 
     if (i == staff->getViewElementList()->end() ||
@@ -1342,12 +1342,12 @@ NotationView::doDeferredCursorMove()
     } else {
 
         // prefer a note or rest, if there is one, to a non-spacing event
-        if (!(*i)->isNote() && !(*i)->isRest()) {
+        if (!static_cast<NotationElement*>(*i)->isNote() && !static_cast<NotationElement*>(*i)->isRest()) {
             NotationElementList::iterator j = i;
             while (j != staff->getViewElementList()->end()) {
-                if ((*j)->getViewAbsoluteTime() !=
-                    (*i)->getViewAbsoluteTime()) break;
-                if ((*j)->isNote() || (*j)->isRest()) {
+                if (static_cast<NotationElement*>(*j)->getViewAbsoluteTime() !=
+                    static_cast<NotationElement*>(*i)->getViewAbsoluteTime()) break;
+                if (static_cast<NotationElement*>(*j)->isNote() || static_cast<NotationElement*>(*j)->isRest()) {
                     i = j;
                     break;
                 }
@@ -1356,10 +1356,10 @@ NotationView::doDeferredCursorMove()
         }
 
         staff->setInsertCursorPosition
-            ((*i)->getCanvasX() - 2, int((*i)->getCanvasY()));
+            (static_cast<NotationElement*>(*i)->getCanvasX() - 2, int(static_cast<NotationElement*>(*i)->getCanvasY()));
 
         if (m_deferredCursorMove == CursorMoveAndMakeVisible) {
-            getCanvasView()->slotScrollHoriz(int((*i)->getCanvasX()) - 4);
+            getCanvasView()->slotScrollHoriz(int(static_cast<NotationElement*>(*i)->getCanvasX()) - 4);
         }
     }
 
@@ -1377,11 +1377,11 @@ NotationView::doDeferredCursorMove()
             if (i == staff->getViewElementList()->begin()) return;
             double lx, lwidth;
             --i;
-            ccx = (*i)->getCanvasX();
-            (*i)->getLayoutAirspace(lx, lwidth);
+            ccx = static_cast<NotationElement*>(*i)->getCanvasX();
+            static_cast<NotationElement*>(*i)->getLayoutAirspace(lx, lwidth);
             ccx += lwidth;
         } else {
-            ccx = (*i)->getCanvasX();
+            ccx = static_cast<NotationElement*>(*i)->getCanvasX();
         }
         
         QScrollBar* hbar = m_horizontalScrollBar;

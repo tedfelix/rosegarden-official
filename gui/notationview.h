@@ -67,7 +67,7 @@ class NotationStaff;
  */
 
 class NotationView : public EditView,
-                     public LinedStaffManager<NotationElement>
+                     public LinedStaffManager
 {
     friend class NoteInserter;
     friend class ClefInserter;
@@ -232,8 +232,7 @@ public:
     /**
      * From LinedStaffManager
      */
-    virtual LinedStaff<NotationElement>* getStaffForCanvasCoords
-    (int x, int y) const;
+    virtual LinedStaff* getStaffForCanvasCoords(int x, int y) const;
 
 
     /**

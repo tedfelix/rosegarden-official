@@ -57,32 +57,6 @@ public:
     void setCanvas(QCanvas* c);
 
     /**
-     * Returns the layout x coordinate of the element (not the same
-     * as the canvas x coordinate, which is assigned by the staff
-     * depending on its own location)
-     */
-    double getLayoutX() const { return m_layoutX; }
-
-    /**
-     * Returns the layout y coordinate of the element (not the same
-     * as the canvas y coordinate, which is assigned by the staff
-     * depending on its own location)
-     */
-    double getLayoutY() const { return m_layoutY; }
-
-    /**
-     * Sets the layout x coordinate of the element (to be translated
-     * to canvas coordinate according to the staff's location)
-     */
-    void setLayoutX(double x) { m_layoutX = x; }
-
-    /**
-     * Sets the layout y coordinate of the element (to be translated
-     * to canvas coordinate according to the staff's location)
-     */
-    void setLayoutY(double y) { m_layoutY = y; }
-
-    /**
      * Returns the actual x coordinate of the element on the canvas
      */
     double getCanvasX() const { return m_canvasRect->x(); }
@@ -128,12 +102,9 @@ protected:
     //--------------- Data members ---------------------------------
 
     QCanvasMatrixRectangle* m_canvasRect;
-
-    double m_layoutX;
-    double m_layoutY;
 };
 
 
-typedef Rosegarden::ViewElementList<MatrixElement> MatrixElementList;
+typedef Rosegarden::ViewElementList MatrixElementList;
 
 #endif

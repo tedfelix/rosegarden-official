@@ -32,11 +32,11 @@
 //
 const int pointerWidth = 3;
 
-template <class T>
-LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
+
+LinedStaff::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
                           Rosegarden::SnapGrid *snapGrid, int id,
                           int resolution, int lineThickness) :
-    Rosegarden::Staff<T>(*segment),
+    Rosegarden::Staff(*segment),
     m_canvas(canvas),
     m_snapGrid(snapGrid),
     m_id(id),
@@ -58,12 +58,11 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     initCursors();
 }
 
-template <class T>
-LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
+LinedStaff::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
                           Rosegarden::SnapGrid *snapGrid,
                           int id, int resolution, int lineThickness,
                           double pageWidth, int rowSpacing) :
-    Rosegarden::Staff<T>(*segment),
+    Rosegarden::Staff(*segment),
     m_canvas(canvas),
     m_snapGrid(snapGrid),
     m_id(id),
@@ -85,12 +84,11 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     initCursors();
 }
 
-template <class T>
-LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
+LinedStaff::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
                           Rosegarden::SnapGrid *snapGrid,
                           int id, int resolution, int lineThickness,
                           bool pageMode, double pageWidth, int rowSpacing) :
-    Rosegarden::Staff<T>(*segment),
+    Rosegarden::Staff(*segment),
     m_canvas(canvas),
     m_snapGrid(snapGrid),
     m_id(id),
@@ -112,16 +110,14 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     initCursors();
 }
 
-template <class T>
-LinedStaff<T>::~LinedStaff()
+LinedStaff::~LinedStaff()
 {
     deleteBars();
     for (int i = 0; i < (int)m_staffLines.size(); ++i) clearStaffLineRow(i);
 }
 
-template <class T>
 void
-LinedStaff<T>::initCursors()
+LinedStaff::initCursors()
 {
     QPen pen(RosegardenGUIColours::Pointer);
     pen.setWidth(pointerWidth);
@@ -135,87 +131,74 @@ LinedStaff<T>::initCursors()
     m_insertCursor->setBrush(RosegardenGUIColours::InsertCursor);
 }
 
-
-template <class T>
 void
-LinedStaff<T>::setResolution(int resolution)
+LinedStaff::setResolution(int resolution)
 {
     m_resolution = resolution;
 }
 
-template <class T>
 void
-LinedStaff<T>::setLineThickness(int lineThickness)
+LinedStaff::setLineThickness(int lineThickness)
 {
     m_lineThickness = lineThickness;
 }
 
-template <class T>
 void
-LinedStaff<T>::setPageMode(bool pageMode)
+LinedStaff::setPageMode(bool pageMode)
 {
     m_pageMode = pageMode;
 }
 
-template <class T>
 void
-LinedStaff<T>::setPageWidth(double pageWidth)
+LinedStaff::setPageWidth(double pageWidth)
 {
     m_pageWidth = pageWidth;
 }
 
-template <class T>
 void
-LinedStaff<T>::setRowSpacing(int rowSpacing)
+LinedStaff::setRowSpacing(int rowSpacing)
 {
     m_rowSpacing = rowSpacing;
 }
 
-template <class T>
 void
-LinedStaff<T>::setConnectingLineLength(int connectingLineLength)
+LinedStaff::setConnectingLineLength(int connectingLineLength)
 {
     m_connectingLineLength = connectingLineLength;
 }
 
-template <class T>
 int
-LinedStaff<T>::getId() const
+LinedStaff::getId() const
 {
     return m_id;
 }
 
-template <class T>
 void
-LinedStaff<T>::setX(double x)
+LinedStaff::setX(double x)
 {
     m_x = x;
 }
 
-template <class T>
 double
-LinedStaff<T>::getX() const
+LinedStaff::getX() const
 {
     return m_x;
 }
 
-template <class T>
 void
-LinedStaff<T>::setY(int y)
+LinedStaff::setY(int y)
 {
     m_y = y;
 }
 
-template <class T>
 int 
-LinedStaff<T>::getY() const
+LinedStaff::getY() const
 {
     return m_y;
 }
 
-template <class T>
 double
-LinedStaff<T>::getTotalWidth() const
+LinedStaff::getTotalWidth() const
 {
     if (m_pageMode) {
         return getCanvasXForRightOfRow(getRowForLayoutX(m_endLayoutX)) - m_x;
@@ -224,25 +207,22 @@ LinedStaff<T>::getTotalWidth() const
     }
 }
 
-template <class T>
 int
-LinedStaff<T>::getTotalHeight() const
+LinedStaff::getTotalHeight() const
 {
     return getCanvasYForTopOfStaff(getRowForLayoutX(m_endLayoutX)) +
         getHeightOfRow() - m_y;
 }
 
-template <class T>
 int 
-LinedStaff<T>::getHeightOfRow() const
+LinedStaff::getHeightOfRow() const
 {
     return getTopLineOffset() + getLegerLineCount() * getLineSpacing()
 	+ getBarLineHeight() + m_lineThickness;
 }
 
-template <class T>
 bool
-LinedStaff<T>::containsCanvasY(int y) const
+LinedStaff::containsCanvasY(int y) const
 {
     if (m_pageMode) {
 
@@ -265,9 +245,8 @@ LinedStaff<T>::containsCanvasY(int y) const
     }
 }
 
-template <class T>
 int
-LinedStaff<T>::getCanvasYForHeight(int h, int baseY) const
+LinedStaff::getCanvasYForHeight(int h, int baseY) const
 {
     int y;
     if (baseY >= 0) {
@@ -281,9 +260,8 @@ LinedStaff<T>::getCanvasYForHeight(int h, int baseY) const
     return y;
 }
 
-template <class T>
 int
-LinedStaff<T>::getLayoutYForHeight(int h) const
+LinedStaff::getLayoutYForHeight(int h) const
 {
     int y = ((getTopLineHeight() - h) * getLineSpacing()) / getHeightPerLine();
     if (h < getTopLineHeight() && (h % getHeightPerLine() != 0)) ++y;
@@ -291,9 +269,8 @@ LinedStaff<T>::getLayoutYForHeight(int h) const
     return y;
 }
 
-template <class T>
 int
-LinedStaff<T>::getHeightAtCanvasY(int y) const
+LinedStaff::getHeightAtCanvasY(int y) const
 {
     //!!! the lazy route: approximate, then get the right value
     // by calling getCanvasYForHeight a few times... ugh
@@ -338,9 +315,8 @@ LinedStaff<T>::getHeightAtCanvasY(int y) const
     }
 }
 
-template <class T>
 QRect
-LinedStaff<T>::getBarExtents(double x, int y) const
+LinedStaff::getBarExtents(double x, int y) const
 {
     int row = getRowForCanvasCoords(x, y);
 
@@ -364,9 +340,8 @@ LinedStaff<T>::getBarExtents(double x, int y) const
     return QRect(int(m_x), getCanvasYForTopOfStaff(), 4, getHeightOfRow());
 }
 
-template <class T>
 void
-LinedStaff<T>::sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout)
+LinedStaff::sizeStaff(Rosegarden::HorizontalLayoutEngine &layout)
 {
     Rosegarden::Profiler profiler("LinedStaff::sizeStaff", true);
 
@@ -419,9 +394,8 @@ LinedStaff<T>::sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout)
     resizeStaffLines();
 }
 
-template <class T>
 void
-LinedStaff<T>::deleteBars()
+LinedStaff::deleteBars()
 {
     for (BarLineList::iterator i = m_barLines.begin();
          i != m_barLines.end(); ++i) {
@@ -443,9 +417,8 @@ LinedStaff<T>::deleteBars()
     m_barConnectingLines.clear();
 }
 
-template <class T>
 void
-LinedStaff<T>::insertBar(double layoutX, double width, bool isCorrect,
+LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 			 const Rosegarden::TimeSignature &timeSig)
 {
 //    RG_DEBUG << "insertBar: " << layoutX << ", " << width
@@ -559,44 +532,38 @@ LinedStaff<T>::insertBar(double layoutX, double width, bool isCorrect,
     }
 }
 
-template <class T>
 bool
-LinedStaff<T>::compareBars(const BarLine &barLine1, const BarLine &barLine2)
+LinedStaff::compareBars(const BarLine &barLine1, const BarLine &barLine2)
 {
     return (barLine1.first < barLine2.first);
 }
 
-template <class T>
 bool
-LinedStaff<T>::compareBarToLayoutX(const BarLine &barLine1, int x)
+LinedStaff::compareBarToLayoutX(const BarLine &barLine1, int x)
 {
     return (barLine1.first < x);
 }
 
-template <class T>
 void
-LinedStaff<T>::deleteTimeSignatures()
+LinedStaff::deleteTimeSignatures()
 {
     // default implementation is empty
 }
 
-template <class T>
 void
-LinedStaff<T>::insertTimeSignature(double, const Rosegarden::TimeSignature &)
+LinedStaff::insertTimeSignature(double, const Rosegarden::TimeSignature &)
 {
     // default implementation is empty
 }
 
-template <class T>
 void
-LinedStaff<T>::drawStaffName()
+LinedStaff::drawStaffName()
 {
     // default implementation is empty
 }
 
-template <class T>
 void
-LinedStaff<T>::resizeStaffLines()
+LinedStaff::resizeStaffLines()
 {
     int firstRow = getRowForLayoutX(m_startLayoutX);
     int  lastRow = getRowForLayoutX(m_endLayoutX);
@@ -650,9 +617,8 @@ LinedStaff<T>::resizeStaffLines()
 
 // m_staffLines[row] must already exist (although it may be empty)
 
-template <class T>
 void
-LinedStaff<T>::clearStaffLineRow(int row)
+LinedStaff::clearStaffLineRow(int row)
 {
     for (int h = 0; h < (int)m_staffLines[row].size(); ++h) {
         delete m_staffLines[row][h];
@@ -666,9 +632,8 @@ LinedStaff<T>::clearStaffLineRow(int row)
 
 // m_staffLines[row] must already exist (although it may be empty)
 
-template <class T>
 void
-LinedStaff<T>::resizeStaffLineRow(int row, double x, double length)
+LinedStaff::resizeStaffLineRow(int row, double x, double length)
 {
 //    RG_DEBUG << "LinedStaff::resizeStaffLineRow: row "
 //                         << row << ", offset " << offset << ", length " 
@@ -769,9 +734,8 @@ LinedStaff<T>::resizeStaffLineRow(int row, double x, double length)
     }
 }    
 
-template <class T>
 void
-LinedStaff<T>::setCurrent(bool current, int canvasY)
+LinedStaff::setCurrent(bool current, int canvasY)
 {
     m_current = current;
     if (m_current) {
@@ -785,18 +749,16 @@ LinedStaff<T>::setCurrent(bool current, int canvasY)
     }
 }
 
-template <class T>
 double
-LinedStaff<T>::getLayoutXOfPointer() const
+LinedStaff::getLayoutXOfPointer() const
 {
     double x = m_pointer->x();
     int row = getRowForCanvasCoords(x, int(m_pointer->y()));
     return getLayoutCoordsForCanvasCoords(x, getCanvasYForTopLine(row)).first;
 }
 
-template <class T>
 double
-LinedStaff<T>::getLayoutXOfInsertCursor() const
+LinedStaff::getLayoutXOfInsertCursor() const
 {
     if (!m_current) return -1;
     double x = m_insertCursor->x();
@@ -804,9 +766,8 @@ LinedStaff<T>::getLayoutXOfInsertCursor() const
     return getLayoutCoordsForCanvasCoords(x, getCanvasYForTopLine(row)).first;
 }
 
-template <class T>
 void
-LinedStaff<T>::setPointerPosition(double canvasX, int canvasY)
+LinedStaff::setPointerPosition(double canvasX, int canvasY)
 {
     int row = getRowForCanvasCoords(canvasX, canvasY);
     canvasY = getCanvasYForTopOfStaff(row);
@@ -817,9 +778,8 @@ LinedStaff<T>::setPointerPosition(double canvasX, int canvasY)
     m_pointer->show();
 }
 
-template <class T>
 void
-LinedStaff<T>::setPointerPosition(Rosegarden::HorizontalLayoutEngine<T> &layout,
+LinedStaff::setPointerPosition(Rosegarden::HorizontalLayoutEngine &layout,
 				  Rosegarden::timeT time)
 {
     double x = layout.getXForTime(time);
@@ -827,16 +787,14 @@ LinedStaff<T>::setPointerPosition(Rosegarden::HorizontalLayoutEngine<T> &layout,
     setPointerPosition(coords.first, coords.second);
 }
 
-template <class T>
 void
-LinedStaff<T>::hidePointer()
+LinedStaff::hidePointer()
 {
     m_pointer->hide();
 }
 
-template <class T>
 void
-LinedStaff<T>::setInsertCursorPosition(double canvasX, int canvasY)
+LinedStaff::setInsertCursorPosition(double canvasX, int canvasY)
 {
     if (!m_current) return;
     
@@ -854,9 +812,8 @@ LinedStaff<T>::setInsertCursorPosition(double canvasX, int canvasY)
     m_insertCursor->show();
 }
 
-template <class T>
 void
-LinedStaff<T>::setInsertCursorPosition(Rosegarden::HorizontalLayoutEngine<T> &layout,
+LinedStaff::setInsertCursorPosition(Rosegarden::HorizontalLayoutEngine &layout,
 				       Rosegarden::timeT time)
 {
     double x = layout.getXForTime(time);
@@ -864,33 +821,29 @@ LinedStaff<T>::setInsertCursorPosition(Rosegarden::HorizontalLayoutEngine<T> &la
     setInsertCursorPosition(coords.first, coords.second);
 }
 
-template <class T>
 void
-LinedStaff<T>::hideInsertCursor()
+LinedStaff::hideInsertCursor()
 {
     m_insertCursor->hide();
 }
 
-template <class T>
 void
-LinedStaff<T>::renderElements(typename Rosegarden::ViewElementList<T>::iterator,
-                              typename Rosegarden::ViewElementList<T>::iterator)
+LinedStaff::renderElements(Rosegarden::ViewElementList::iterator,
+                           Rosegarden::ViewElementList::iterator)
 {
     // nothing -- we assume rendering will be done by the implementation
     // of positionElements
 }
 
-template <class T>
 void
-LinedStaff<T>::renderAllElements()
+LinedStaff::renderAllElements()
 {
     renderElements(getViewElementList()->begin(),
                    getViewElementList()->end());
 }
 
-template <class T>
 void
-LinedStaff<T>::positionAllElements()
+LinedStaff::positionAllElements()
 {
     positionElements(getSegment().getStartTime(),
 		     getSegment().getEndTime());

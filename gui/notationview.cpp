@@ -49,6 +49,7 @@
 
 #include "notationview.h"
 #include "constants.h"
+#include "colours.h"
 #include "notationstrings.h"
 #include "notepixmapfactory.h"
 #include "notestyle.h"
@@ -1972,7 +1973,7 @@ NotationView::getInsertionTime(Rosegarden::Clef &clef,
 
 
 
-LinedStaff<NotationElement>*
+LinedStaff*
 NotationView::getStaffForCanvasCoords(int x, int y) const
 {
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {

@@ -26,6 +26,8 @@
 
 #include "SnapGrid.h"
 
+#include "rosedebug.h"
+
 using Rosegarden::timeT;
 using Rosegarden::SnapGrid;
 

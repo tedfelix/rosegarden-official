@@ -26,6 +26,8 @@
 #include <qstring.h>
 #include <qcanvas.h>
 
+#include "ViewElement.h"
+
 #include "PropertyName.h"
 
 #include "widgets.h"
@@ -48,12 +50,14 @@ class ControlSelector;
 /**
  * Property Control Ruler : edit range of event properties
  */
-class ControlRuler : public QCanvasView
+class ControlRuler : public QCanvasView, public Rosegarden::ViewElementListObserver
 {
     Q_OBJECT
 
 public:
-    ControlRuler(QCanvas*,
+    ControlRuler(Rosegarden::ViewElementList*,
+                 Rosegarden::RulerScale*,
+                 QCanvas*,
                  QWidget* parent=0, const char* name=0, WFlags f=0);
     ~ControlRuler();
 
@@ -65,6 +69,10 @@ public:
 
     QCanvasRectangle* getSelectionRectangle() { return m_selectionRect; }
 
+    // ViewElementListObserver interface
+    virtual void elementAdded(Rosegarden::ViewElement *);
+    virtual void elementRemoved(Rosegarden::ViewElement *);
+
 public slots:
     virtual void update();
     
@@ -74,11 +82,14 @@ protected:
     virtual void contentsMouseMoveEvent(QMouseEvent*);
     virtual void contentsWheelEvent(QWheelEvent*);
 
-    double getNextX();
+    void init();
     void clearSelectedItems();
     void updateSelection();
 
 private:
+    Rosegarden::ViewElementList* m_viewElementList;
+    Rosegarden::RulerScale*      m_rulerScale;
+
     ControlItem* m_currentItem;
     QCanvasItemList m_selectedItems;
 
@@ -104,13 +115,13 @@ class PropertyViewRuler : public QWidget, public HZoomable
 
 public:
     PropertyViewRuler(Rosegarden::RulerScale *rulerScale,
-	         Rosegarden::Segment *segment,
-                 const Rosegarden::PropertyName &property,
-                 VelocityColour *velocityColour,
-	         double xorigin = 0.0,
-	         int height = 0,
-	         QWidget* parent = 0,
-	         const char *name = 0);
+                      Rosegarden::Segment *segment,
+                      const Rosegarden::PropertyName &property,
+                      VelocityColour *velocityColour,
+                      double xorigin = 0.0,
+                      int height = 0,
+                      QWidget* parent = 0,
+                      const char *name = 0);
 
     ~PropertyViewRuler();
 

@@ -44,6 +44,7 @@
 #include "ktmpstatusmsg.h"
 #include "barbuttons.h"
 #include "segmentcommands.h"
+#include "controlruler.h"
 
 #include "rosedebug.h"
 
@@ -68,18 +69,15 @@ EditView::EditView(RosegardenGUIDoc *doc,
     m_controlBox(new QVBoxLayout), // top control ruler box - added to grid later on
     m_bottomBox(new QVBoxLayout), // bottom box - added to grid later on
     m_topBarButtons(0),
-    m_bottomBarButtons(0)
+    m_bottomBarButtons(0),
+    m_controlRuler(0)
 {
     m_grid->addWidget(m_horizontalScrollBar, HSCROLLBAR_ROW,       m_mainCol);
     m_grid->addLayout(m_bottomBox,           BOTTOMBARBUTTONS_ROW, m_mainCol);
 
-    QLabel* controlRuler = new QLabel("CONTROL RULER", getCentralFrame()); // TEST ONLY - REMOVE THIS
-    m_bottomBox->addWidget(controlRuler);
-
     m_grid->addLayout(m_rulerBox, RULERS_ROW, m_mainCol);
     m_grid->addMultiCellLayout(m_controlBox, CONTROLS_ROW, CONTROLS_ROW, 0, 1);
     m_controlBox->setAlignment(AlignRight);
-    
 }
 
 EditView::~EditView()
@@ -149,9 +147,22 @@ void EditView::addRuler(QWidget* w)
 }
 
 
-void EditView::addControl(QWidget *w)
+void EditView::addPropertyBox(QWidget *w)
 {
     m_controlBox->addWidget(w);
+}
+
+ControlRuler* EditView::makeControlRuler(Rosegarden::ViewElementList* viewElementList,
+                                         Rosegarden::RulerScale* rulerScale)
+{
+    if (m_controlRuler) return m_controlRuler;
+
+    QCanvas* controlRulerCanvas = new QCanvas(this);
+    QSize viewSize = getViewSize();
+    controlRulerCanvas->resize(viewSize.width(), 50); // TODO - keep it in sync with main canvas size
+    m_controlRuler = new ControlRuler(viewElementList, rulerScale,
+                                      controlRulerCanvas, getCentralFrame());
+    m_bottomBox->addWidget(m_controlRuler);
 }
 
 void EditView::readjustViewSize(QSize requestedSize, bool exact)
@@ -702,5 +713,6 @@ void EditView::slotAddTimeSignature()
 
 void EditView::slotShowControlRuler(bool show)
 {
-    
+    if (m_controlRuler)
+        m_controlRuler->setShown(show);
 }

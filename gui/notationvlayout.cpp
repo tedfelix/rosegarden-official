@@ -57,6 +57,7 @@ using Rosegarden::Text;
 using Rosegarden::Indication;
 using Rosegarden::Quantizer;
 using Rosegarden::timeT;
+using Rosegarden::Staff;
 
 using namespace Rosegarden::BaseProperties;
 
@@ -78,7 +79,7 @@ NotationVLayout::~NotationVLayout()
 }
 
 NotationVLayout::SlurList &
-NotationVLayout::getSlurList(StaffType &staff)
+NotationVLayout::getSlurList(Staff &staff)
 {
     SlurListMap::iterator i = m_slurs.find(&staff);
     if (i == m_slurs.end()) {
@@ -95,13 +96,13 @@ NotationVLayout::reset()
 }
 
 void
-NotationVLayout::resetStaff(StaffType &staff, timeT, timeT)
+NotationVLayout::resetStaff(Staff &staff, timeT, timeT)
 {
     getSlurList(staff).clear();
 }
 
 void
-NotationVLayout::scanStaff(StaffType &staffBase, timeT, timeT)
+NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
 {
     START_TIMING;
 
@@ -114,7 +115,7 @@ NotationVLayout::scanStaff(StaffType &staffBase, timeT, timeT)
 
     for (i = from; i != to; ++i) {
 
-        NotationElement *el = (*i);
+        NotationElement *el = static_cast<NotationElement*>(*i);
         el->setLayoutY(0);
 
         if (el->isRest()) {
@@ -153,7 +154,7 @@ NotationVLayout::scanStaff(StaffType &staffBase, timeT, timeT)
             unsigned int flaggedNote = (stemUp ? chord.size() - 1 : 0);
 
 	    for (unsigned int j = 0; j < chord.size(); ++j) {
-		el = *chord[j];
+		el = static_cast<NotationElement*>(*chord[j]);
 		el->setLayoutY(staff.getLayoutYForHeight(h[j]));
 
 		// we can't only set this if it hasn't already been
@@ -309,7 +310,7 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 
 	if ((*scooter)->getViewAbsoluteTime() >= endTime) break;
 
-	if ((*scooter)->isNote()) {
+	if (static_cast<NotationElement*>(*scooter)->isNote()) {
 
 	    long h = 0;
 	    if (!(*scooter)->event()->get<Int>(m_properties.HEIGHT_ON_STAFF, h)) {

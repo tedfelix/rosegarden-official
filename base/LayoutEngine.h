@@ -26,7 +26,6 @@
 
 namespace Rosegarden {
 
-template <class T>
 class Staff;
 
 
@@ -36,13 +35,9 @@ class Staff;
  * implemented by simply plugging different implementations
  * of Staff and LayoutEngine into a single view class.
  */
-
-template <class T>
 class LayoutEngine
 {
 public: 
-    typedef Staff<T> StaffType;
-
     LayoutEngine();
     virtual ~LayoutEngine();
 
@@ -57,7 +52,7 @@ public:
      * If startTime == endTime, act on the whole staff; otherwise only
      * the given section.
      */
-    virtual void resetStaff(StaffType &staff,
+    virtual void resetStaff(Staff &staff,
 			    timeT startTime = 0,
 			    timeT endTime = 0) = 0;
 
@@ -70,7 +65,7 @@ public:
      * If startTime == endTime, act on the whole staff; otherwise only
      * the given section.
      */
-    virtual void scanStaff(StaffType &staff,
+    virtual void scanStaff(Staff &staff,
 			   timeT startTime = 0,
 			   timeT endTime = 0) = 0;
 
@@ -93,15 +88,12 @@ protected:
 };
 
 
-template <class T>
-class HorizontalLayoutEngine : public LayoutEngine<T>,
+class HorizontalLayoutEngine : public LayoutEngine,
 			       public RulerScale
 {
 public:
     HorizontalLayoutEngine(Composition *c);
     virtual ~HorizontalLayoutEngine();
-
-    typedef Staff<T> StaffType;
 
     /**
      * Sets a page width for the layout.
@@ -121,7 +113,7 @@ public:
      * Returns the number of the first visible bar line on the given
      * staff
      */
-    virtual int getFirstVisibleBarOnStaff(StaffType &) {
+    virtual int getFirstVisibleBarOnStaff(Staff &) {
 	return  getFirstVisibleBar();
     }
 
@@ -129,14 +121,14 @@ public:
      * Returns the number of the last visible bar line on the given
      * staff
      */
-    virtual int getLastVisibleBarOnStaff(StaffType &) {
+    virtual int getLastVisibleBarOnStaff(Staff &) {
 	return  getLastVisibleBar();
     }
 
     /**
      * Returns true if the specified bar has the correct length
      */
-    virtual bool isBarCorrectOnStaff(StaffType &, int/* barNo */) {
+    virtual bool isBarCorrectOnStaff(Staff &, int/* barNo */) {
         return true;
     }
 
@@ -145,15 +137,14 @@ public:
      * this bar, and if so also sets timeSigX to its x-coord
      */
     virtual Event *getTimeSignaturePosition
-    (StaffType &, int /* barNo */, double &/* timeSigX */) {
+    (Staff &, int /* barNo */, double &/* timeSigX */) {
 	return 0;
     }
 };
 
 
 
-template <class T>
-class VerticalLayoutEngine : public LayoutEngine<T>
+class VerticalLayoutEngine : public LayoutEngine
 {
 public:
     VerticalLayoutEngine();
@@ -161,50 +152,6 @@ public:
 
     // I don't think we need to add anything here for now
 };
-
-
-template <class T>
-LayoutEngine<T>::LayoutEngine() :
-    m_status(0)
-{
-    // empty
-}
-
-template <class T>
-LayoutEngine<T>::~LayoutEngine()
-{
-    // empty
-}
-
-
-template <class T>
-HorizontalLayoutEngine<T>::HorizontalLayoutEngine(Composition *c) :
-    LayoutEngine<T>(),
-    RulerScale(c)
-{
-    // empty
-}
-
-template <class T>
-HorizontalLayoutEngine<T>::~HorizontalLayoutEngine()
-{
-    // empty
-}
-
-
-template <class T>
-VerticalLayoutEngine<T>::VerticalLayoutEngine() :
-    LayoutEngine<T>()
-{
-    // empty
-}
-
-template <class T>
-VerticalLayoutEngine<T>::~VerticalLayoutEngine()
-{
-    // empty
-}
-
 
 }
 

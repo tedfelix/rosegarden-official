@@ -45,7 +45,7 @@ namespace Rosegarden { class Progress; }
  */
 
 class NotationHLayout : public ProgressReporter,
-                        public Rosegarden::HorizontalLayoutEngine<NotationElement>
+                        public Rosegarden::HorizontalLayoutEngine
 {
 public:
     NotationHLayout(Rosegarden::Composition *c, NotePixmapFactory *npf,
@@ -65,7 +65,7 @@ public:
      * The map should be cleared (by calling reset()) before a full
      * set of staffs is preparsed.
      */
-    virtual void scanStaff(StaffType &staff,
+    virtual void scanStaff(Rosegarden::Staff &staff,
 			   Rosegarden::timeT startTime = 0,
 			   Rosegarden::timeT endTime = 0);
 
@@ -79,7 +79,7 @@ public:
      * Resets internal data stores, notably the given staff's entry
      * in the BarDataMap used to retain the data computed by scanStaff().
      */
-    virtual void resetStaff(StaffType &staff,
+    virtual void resetStaff(Rosegarden::Staff &staff,
 			    Rosegarden::timeT startTime = 0,
 			    Rosegarden::timeT endTime = 0);
 
@@ -138,7 +138,7 @@ public:
      * Returns the number of the first visible bar line on the given
      * staff
      */
-    virtual int getFirstVisibleBarOnStaff(StaffType &staff);
+    virtual int getFirstVisibleBarOnStaff(Rosegarden::Staff &staff);
 
     /**
      * Returns the number of the first visible bar line on any
@@ -150,7 +150,7 @@ public:
      * Returns the number of the last visible bar line on the given
      * staff
      */
-    virtual int getLastVisibleBarOnStaff(StaffType &staff);
+    virtual int getLastVisibleBarOnStaff(Rosegarden::Staff &staff);
 
     /**
      * Returns the number of the first visible bar line on any
@@ -166,14 +166,14 @@ public:
     /**
      * Returns true if the specified bar has the correct length
      */
-    virtual bool isBarCorrectOnStaff(StaffType &staff, int barNo);
+    virtual bool isBarCorrectOnStaff(Rosegarden::Staff &staff, int barNo);
 
     /**
      * Returns a pointer to a time signature event if there is one
      * visible in this bar, and if so also sets timeSigX to its x-coord
      */
     virtual Rosegarden::Event *getTimeSignaturePosition
-    (StaffType &staff, int barNo, double &timeSigX);
+    (Rosegarden::Staff &staff, int barNo, double &timeSigX);
 
     /// purely optional, used only for progress reporting
     void setStaffCount(int staffCount) {
@@ -250,12 +250,12 @@ protected:
 
     typedef std::map<int, BarData> BarDataList;
     typedef BarDataList::value_type BarDataPair;
-    typedef std::map<StaffType *, BarDataList> BarDataMap;
+    typedef std::map<Rosegarden::Staff *, BarDataList> BarDataMap;
     typedef std::map<int, double> BarPositionList;
-    typedef std::map<StaffType *, int> StaffIntMap;
+    typedef std::map<Rosegarden::Staff *, int> StaffIntMap;
     typedef std::map<long, NotationGroup *> NotationGroupMap;
 
-    void clearBarList(StaffType &);
+    void clearBarList(Rosegarden::Staff &);
 
 
     /**
@@ -263,7 +263,7 @@ protected:
      * beyond the end of the existing bar data list, create new
      * records and/or fill with empty ones as appropriate.
      */
-    void setBarBasicData(StaffType &staff, int barNo,
+    void setBarBasicData(Rosegarden::Staff &staff, int barNo,
 			 NotationElementList::iterator start,
 			 bool correct, Rosegarden::Event *timeSig);
 
@@ -272,7 +272,7 @@ protected:
      * beyond the end of the existing bar data list, create new
      * records and/or fill with empty ones as appropriate.
      */
-    void setBarSizeData(StaffType &staff, int barNo,
+    void setBarSizeData(Rosegarden::Staff &staff, int barNo,
 			double width, int fixedWidth, int baseWidth,
 			Rosegarden::timeT actualDuration);
 
@@ -280,11 +280,11 @@ protected:
      * Returns the bar positions for a given staff, provided that
      * staff has been preparsed since the last reset
      */
-    BarDataList& getBarData(StaffType &staff);
-    const BarDataList& getBarData(StaffType &staff) const;
+    BarDataList& getBarData(Rosegarden::Staff &staff);
+    const BarDataList& getBarData(Rosegarden::Staff &staff) const;
 
     /// Find the staff in which bar "barNo" is widest
-    StaffType *getStaffWithWidestBar(int barNo);
+    Rosegarden::Staff *getStaffWithWidestBar(int barNo);
 
     /// Tries to harmonize the bar positions for all the staves (linear mode)
     void reconcileBarsLinear();
@@ -297,7 +297,7 @@ protected:
 		Rosegarden::timeT endTime);
     
     double getIdealBarWidth
-    (StaffType &staff, int fixedWidth, int baseWidth,
+    (Rosegarden::Staff &staff, int fixedWidth, int baseWidth,
      NotationElementList::iterator shortest,
      int shortCount, int totalCount,
      const Rosegarden::TimeSignature &timeSignature) const;
@@ -325,25 +325,25 @@ protected:
     // and may modify the to-iterator if it turns out to point at a
     // note within the chord
     long positionChord
-    (StaffType &staff, 
+    (Rosegarden::Staff &staff, 
      NotationElementList::iterator &, const BarDataList::iterator &,
      const Rosegarden::TimeSignature &, const Rosegarden::Clef &clef,
      const Rosegarden::Key &key, TieMap &, NotationElementList::iterator &to);
 
     long positionRest
-    (StaffType &staff, 
+    (Rosegarden::Staff &staff, 
      const NotationElementList::iterator &, const BarDataList::iterator &,
      const Rosegarden::TimeSignature &);
 
     /// Difference between absolute time of next event and of this
     Rosegarden::timeT getSpacingDuration
-    (StaffType &staff, const NotationElementList::iterator &);
+    (Rosegarden::Staff &staff, const NotationElementList::iterator &);
 
     /// Difference between absolute time of chord and of first event not in it
     Rosegarden::timeT getSpacingDuration
-    (StaffType &staff, const NotationChord &);
+    (Rosegarden::Staff &staff, const NotationChord &);
 
-    int getMinWidth(NotationElement &) const;
+    int getMinWidth(Rosegarden::ViewElement &) const;
     int getComfortableGap(Rosegarden::Note::Type type) const;
     int getBarMargin() const;
     int getPreBarMargin() const;
