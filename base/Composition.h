@@ -78,12 +78,6 @@ protected:
     unsigned int m_tempo;
 };
 
-class MIDIComposition
-{
-    
-};
-
-
 }
 
 
