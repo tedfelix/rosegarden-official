@@ -20,13 +20,15 @@
 
 // Layout stuff
 #include <algorithm>
-#include <Element2.h>
+
+#include "Element2.h"
+#include "notationelement.h"
 
 /**
   *@author Guillaume Laurent, Chris Cannam, Rich Bown
   */
 
-class LayoutEngine : public unary_function<Event, void>
+class LayoutEngine
 {
 public: 
     LayoutEngine();
@@ -34,12 +36,18 @@ public:
 
     unsigned int status() const { return m_status; }
 
-    void operator() (Event *el) { layout(el); }
+protected:
+    unsigned int m_status;
+};
+
+class NotationLayout : public LayoutEngine, public unary_function<NotationElement*, void>
+{
+public:
+
+    void operator() (NotationElement *el) { layout(el); }
 
 protected:
-    virtual void layout(Event*) = 0;
-
-    unsigned int m_status;
+    virtual void layout(NotationElement*) = 0;
 };
 
 #endif
