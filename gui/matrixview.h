@@ -242,6 +242,11 @@ public slots:
     void slotClearLoop();
     void slotClearSelection();
 
+    /**
+     * Filter selection by event type
+     */
+    void slotFilterSelection(); // dummy - not actually functional yet
+
     /// edition tools
     void slotPaintSelected();
     void slotEraseSelected();

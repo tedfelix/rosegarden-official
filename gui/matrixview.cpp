@@ -79,6 +79,7 @@
 #include "studiocontrol.h"
 #include "sequencemanager.h"
 #include "Clipboard.h"
+#include "eventfilter.h"
 
 #include "rosedebug.h"
 
@@ -607,6 +608,11 @@ void MatrixView::setupActions()
 		SLOT(slotClearSelection()), actionCollection(),
 		"clear_selection");
 
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/eventfilter.xpm"));
+    new KAction(i18n("&Filter Selection"), icon, 0, this,
+	    	SLOT(slotFilterSelection()), actionCollection(),
+		"filter_selection");
+    
     //!!! should be using NotationStrings::makeNoteMenuLabel for these
     new KAction(i18n("Snap to 1/64"), Key_0, this,
                 SLOT(slotSetSnapFromAction()), actionCollection(), "snap_64");
@@ -2012,6 +2018,19 @@ void MatrixView::slotClearSelection()
 	slotSelectSelected();
     } else {
 	setCurrentSelection(0);
+    }
+}
+
+void MatrixView::slotFilterSelection()
+{
+    RG_DEBUG << "MatrixView::slotFilterSelection" << endl;
+
+    EventFilterDialog dialog(this);
+
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        RG_DEBUG << "slotFilterSelection- accepted" << endl;
+	KMessageBox::sorry(0, i18n("We're sorry.  This feature is under development.  Coming soon!"));
     }
 }
 
