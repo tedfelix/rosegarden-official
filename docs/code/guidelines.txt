@@ -1,34 +1,57 @@
-Rosegarden4 Coding Guidelines
+
+Rosegarden 4 Coding Guidelines
+==============================
+
+Rosegarden 4 is written in C++, and makes fairly full use of recent
+language features and the standard library.  We definitely aim to
+write C++ rather than C-with-classes or a-better-C.
+
+Code should be readable and well-presented.  We have guidelines for
+coding style, but we don't always follow them; Richard's code in
+sound/, for example, is quite different from Chris's in core/.  But
+it's still clear and readable, so it's fine.  If in doubt though,
+follow the guidelines:
+
 
 Style and naming conventions
+----------------------------
 
-- indent 4 spaces
-- data member names begin with 'm_'.
-- names are capitalized (HereIsAnExample)
-- class names begin with an upper case (class MyClass)
-- method and variable names names begin with a lower case (int myMethod())
+ * indent 4 spaces at a time
+
+ * data member names begin with 'm_'.
+
+ * names use internal capitalization (HereIsAnExample)
+
+ * class names begin with an upper case (class MyClass)
+
+ * method and variable names names begin with a lower case (int myMethod())
+
 
 Language issues
+---------------
 
-- malloc()/free() and C-style arrays (that includes char*) are
-explicitely forbidden except when there are no alternatives (some
-external API requires it).
+ * malloc()/free() and C-style arrays (that includes char*) are
+   explicitely forbidden except when there are no alternatives
+   (e.g. some external API requires it).
 
-- C-style casts are forbidden. The only near-exception is to shut up
-signed/unsigned or int/double conversion warnings, which should be
-treated like this : type(value) (e.g. int(foo), unsigned(bar)...)
+ * avoid C-style casts.  The only time they're okay is to shut up
+   signed/unsigned or int/double conversion warnings
 
-- When given the choice, prefer STL containers to Qt ones.
+ * when given the choice, prefer STL containers to Qt ones.
 
-- Use std::string whenever possible (e.g. in core), QString only when
-you need to deal with Qt widgets, or need some of its features (like
-regexps).
+ * use std::string whenever possible (e.g. in core), QString
+   only when you need to deal with Qt widgets, or need some of
+   its features (like regexps).
 
-- public data members are forbidden except in very trivial
-classes. Provide accessors.
+ * public data members are forbidden except in very trivial
+   classes. Provide accessors, and name them getXXX/setXXX.
 
-- use 'protected' instead of 'private'.
+ * use javadoc-style comments to document the purpose of a
+   method within the class declaration.
 
+ * use 'protected' instead of 'private'.
 
-
+ * and rather obviously, stick with the layout existing in a file
+   when you edit it (e.g. for brace indentation) and maintain the
+   style already present in a library when adding files to it.
 
