@@ -1,0 +1,33 @@
+Possible features and work for release 0.2
+==========================================
+
+Three categories: Work required to finish basic features that are
+already started; new features that are suitable for the 0.2 timeframe;
+basis work for features that won't appear until later.
+
+
+Work required to fix existing stuff
+-----------------------------------
+
+1.  updating one edit window when something is edited in another
+    (however crudely we do it at first).  -- at the moment if you
+    delete a note in one window then insert in another, it crashes
+    [carried over from 0.1]
+
+2.  better time signature support.  The way things are at the
+    moment, if you insert a time sig into a track it gets copied
+    into all other tracks (correctly) but if you then move one of
+    the tracks they become out of sync again.  Better to store
+    time sigs in the Composition's reference track only, and save
+    them to file from there.  Probably a good case for having
+    notation elements without corresponding events (because the
+    time sig event will never be copied to individual tracks)
+
+
+New features suitable for 0.2
+-----------------------------
+
+1.  selection
+
+2.  undo
+
