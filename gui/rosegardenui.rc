@@ -23,46 +23,46 @@
     </Menu>
   </Menu>
   <Menu name="edit">
-      	<Action name="delete"/>
-	<Separator/>
-      	<Action name="select_all"/>
-	<Separator/>
-      	<Action name="add_tempo"/>
-      	<Action name="add_time_signature"/>
+        <Action name="delete"/>
+        <Separator/>
+        <Action name="select_all"/>
+        <Separator/>
+        <Action name="add_tempo"/>
+        <Action name="add_time_signature"/>
         <Action name="change_composition_length"/>
-	<Separator/>
-      	<Action name="edit_doc_properties"/>
+        <Separator/>
+        <Action name="edit_doc_properties"/>
   </Menu>
   <Menu name="Segments">
-	<text>Seg&amp;ments</text>
-      	<Action name="edit_default"/>
-	<Separator/>
-      	<Action name="edit_matrix"/>
-      	<Action name="edit_notation"/>
-      	<Action name="edit_event_list"/>
-	<Separator/>
+        <text>Seg&amp;ments</text>
+        <Action name="edit_default"/>
+        <Separator/>
+        <Action name="edit_matrix"/>
+        <Action name="edit_notation"/>
+        <Action name="edit_event_list"/>
+        <Separator/>
         <Action name="relabel_segment"/>
-	<Action name="quantize_selection"/>
-	<Action name="rescale"/>
-<!-- 	<Action name="harmonize_selection"/> -->
-	<Separator/>
-	<Action name="auto_split"/>
-	<Action name="split_by_pitch"/>
-	<Action name="collapse"/>
+        <Action name="quantize_selection"/>
+        <Action name="rescale"/>
+<!--    <Action name="harmonize_selection"/> -->
+        <Separator/>
+        <Action name="auto_split"/>
+        <Action name="split_by_pitch"/>
+        <Action name="collapse"/>
         <Action name="repeats_to_real_copies"/>
-	<Separator/>
+        <Separator/>
         <Action name="set_tempo_to_segment_length"/>
       <Action name="audio_manager"/>
   </Menu>
   <Menu name="Tracks">
-	<text>Trac&amp;ks</text>
-	<Action name="add_tracks"/>
-	<Action name="delete_track"/>
+        <text>Trac&amp;ks</text>
+        <Action name="add_tracks"/>
+        <Action name="delete_track"/>
         <Action name="move_track_down"/>
         <Action name="move_track_up"/>
         <Action name="select_next_track"/>
         <Action name="select_previous_track"/>
-	<Separator/>
+        <Separator/>
         <Action name="remap_instruments"/>
   </Menu>
   <Menu name="Studio">
@@ -81,12 +81,12 @@
         <Action name="recordtoggle"/>
   </Menu>
   <Menu name="Tools">
-	<text>&amp;Tools</text>
+        <text>&amp;Tools</text>
         <Action name="select"/>
-	<Action name="move"/>
-	<Action name="draw"/>
-	<Action name="erase"/>
-	<Action name="resize"/>
+        <Action name="move"/>
+        <Action name="draw"/>
+        <Action name="erase"/>
+        <Action name="resize"/>
         <Action name="split"/>
         <Action name="join"/>
   </Menu>
@@ -109,20 +109,20 @@
 
 </MenuBar>
 
-<ToolBar name="Tools Toolbar">
+<ToolBar name="Tracks Toolbar">
         <Action name="select"/>
-	<Action name="move"/>
-	<Action name="resize"/>
-	<Action name="draw"/>
-	<Action name="erase"/>
+        <Action name="move"/>
+        <Action name="resize"/>
+        <Action name="draw"/>
+        <Action name="erase"/>
         <Action name="split"/>
         <Action name="join"/>
 </ToolBar>
 
 <ToolBar name="Editors Toolbar">
-	<Action name="edit_matrix"/>
-	<Action name="edit_notation"/>
-	<Action name="edit_event_list"/>
+        <Action name="edit_matrix"/>
+        <Action name="edit_notation"/>
+        <Action name="edit_event_list"/>
 </ToolBar>
 
 <ToolBar name="Transport Toolbar">
@@ -170,50 +170,50 @@
 <!--     Application States           -->
 
 <State name="new_file">
-	<disable>
+        <disable>
                 <Action name="file_revert"/>
-		<Action name="file_save"/>
-	</disable>
-	<enable>
-		<Action name="file_close"/>
-		<Action name="file_print"/>
-	</enable>
+                <Action name="file_save"/>
+        </disable>
+        <enable>
+                <Action name="file_close"/>
+                <Action name="file_print"/>
+        </enable>
 </State>
 
 <State name="file_modified">
-	<enable>
+        <enable>
                 <Action name="file_revert"/>
-		<Action name="file_save"/>
-	</enable>
+                <Action name="file_save"/>
+        </enable>
 </State>
 
 <State name="have_segments">
-	<enable>
-		<Action name="move"/>
-		<Action name="erase"/>
-		<Action name="resize"/>
-		<Action name="split"/>
-		<Action name="join"/>
-		<Action name="file_print"/>
-		<Action name="file_print_preview"/>
-	</enable>
+        <enable>
+                <Action name="move"/>
+                <Action name="erase"/>
+                <Action name="resize"/>
+                <Action name="split"/>
+                <Action name="join"/>
+                <Action name="file_print"/>
+                <Action name="file_print_preview"/>
+        </enable>
 </State>
 
 <State name="have_selection">
      <enable>
-      	<Action name="edit_cut"/>
-      	<Action name="edit_copy"/>
-      	<Action name="delete"/>
-      	<Action name="edit_default"/>
-      	<Action name="edit_matrix"/>
-      	<Action name="edit_notation"/>
-      	<Action name="edit_event_list"/>
-	<Action name="quantize_selection"/>
-<!-- 	<Action name="harmonize_selection"/> -->
-	<Action name="rescale"/>
-	<Action name="auto_split"/>
-	<Action name="split_by_pitch"/>
-	<Action name="collapse"/>
+        <Action name="edit_cut"/>
+        <Action name="edit_copy"/>
+        <Action name="delete"/>
+        <Action name="edit_default"/>
+        <Action name="edit_matrix"/>
+        <Action name="edit_notation"/>
+        <Action name="edit_event_list"/>
+        <Action name="quantize_selection"/>
+<!--    <Action name="harmonize_selection"/> -->
+        <Action name="rescale"/>
+        <Action name="auto_split"/>
+        <Action name="split_by_pitch"/>
+        <Action name="collapse"/>
         <Action name="set_tempo_to_segment_length"/>
         <Action name="repeats_to_real_copies"/>
         <Action name="relabel_segment"/>

@@ -103,7 +103,7 @@ using Rosegarden::timeT;
 
 
 RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
-				   QObject *startupStatusMessageReceiver)
+                                   QObject *startupStatusMessageReceiver)
     : KMainWindow(0), RosegardenIface(this), DCOPObject("RosegardenIface"),
       m_config(kapp->config()),
       m_actionsSetup(false),
@@ -123,17 +123,17 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
       m_clipboard(new Rosegarden::Clipboard)
 {
     if (startupStatusMessageReceiver) {
-	QObject::connect(this, SIGNAL(startupStatusMessage(const QString &)),
-			 startupStatusMessageReceiver,
-			 SLOT(slotShowStatusMessage(const QString &)));
+        QObject::connect(this, SIGNAL(startupStatusMessage(const QString &)),
+                         startupStatusMessageReceiver,
+                         SLOT(slotShowStatusMessage(const QString &)));
     }
 
     // Try to start the sequencer
     //
     if (m_useSequencer) {
         RG_DEBUG << "RosegardenGUIApp : starting sequencer\n";
-	emit startupStatusMessage(i18n("Starting sequencer..."));
-	launchSequencer();
+        emit startupStatusMessage(i18n("Starting sequencer..."));
+        launchSequencer();
     } else RG_DEBUG << "RosegardenGUIApp : don't use sequencer\n";
 
     // Plugin manager
@@ -298,7 +298,7 @@ void RosegardenGUIApp::setupActions()
     //
     m_viewToolBar = KStdAction::showToolbar  (this, SLOT(slotToggleToolBar()),   actionCollection());
 
-    m_viewTracksToolBar = new KToggleAction(i18n("Show T&ools Toolbar"), 0, this,
+    m_viewTracksToolBar = new KToggleAction(i18n("Show T&racks Toolbar"), 0, this,
                                             SLOT(slotToggleTracksToolBar()), actionCollection(),
                                             "show_tracks_toolbar");
 
@@ -347,14 +347,14 @@ void RosegardenGUIApp::setupActions()
                                      "show_tempo_ruler");
 
     m_viewChordNameRuler = new KToggleAction(i18n("Show Cho&rd Name Ruler"), 0, this,
-					     SLOT(slotToggleChordNameRuler()),
-					     actionCollection(),
-					     "show_chord_name_ruler");
+                                             SLOT(slotToggleChordNameRuler()),
+                                             actionCollection(),
+                                             "show_chord_name_ruler");
 
     m_viewPreviews = new KToggleAction(i18n("Show Segment Pre&views"), 0, this,
-				       SLOT(slotTogglePreviews()),
-				       actionCollection(),
-				       "show_previews");
+                                       SLOT(slotTogglePreviews()),
+                                       actionCollection(),
+                                       "show_previews");
 
     // Standard Actions 
     //
@@ -450,7 +450,7 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotAudioManager()),
                 actionCollection(), "audio_manager");
 
-    new KAction(i18n("&Add Tracks..."), 
+    new KAction(i18n("&Add Tracks..."),  
                 0,
                 this, SLOT(slotAddTracks()),
                 actionCollection(), "add_tracks");
@@ -481,55 +481,55 @@ void RosegardenGUIApp::setupActions()
                 actionCollection(), "select_previous_track");
 
     new KAction(i18n("Select &All Segments"), 0, this,
-		SLOT(slotSelectAll()), actionCollection(),
-		"select_all");
+                SLOT(slotSelectAll()), actionCollection(),
+                "select_all");
 
     new KAction(i18n("De&lete"), Key_Delete, this,
-		SLOT(slotDeleteSelectedSegments()), actionCollection(),
-		"delete");
+                SLOT(slotDeleteSelectedSegments()), actionCollection(),
+                "delete");
 
     new KAction(i18n("&Quantize..."), 0, this,
-		SLOT(slotQuantizeSelection()), actionCollection(),
-		"quantize_selection");
+                SLOT(slotQuantizeSelection()), actionCollection(),
+                "quantize_selection");
 
     new KAction(i18n("&Harmonize"), 0, this,
-		SLOT(slotHarmonizeSelection()), actionCollection(),
-		"harmonize_selection");
+                SLOT(slotHarmonizeSelection()), actionCollection(),
+                "harmonize_selection");
 
     new KAction(i18n("Set &Tempo to Audio Segment Duration"), 0, this,
-		SLOT(slotTempoToSegmentLength()), actionCollection(),
-		"set_tempo_to_segment_length");
+                SLOT(slotTempoToSegmentLength()), actionCollection(),
+                "set_tempo_to_segment_length");
 
     new KAction(i18n(SegmentRescaleCommand::getGlobalName()), 0, this,
-		SLOT(slotRescaleSelection()), actionCollection(),
-		"rescale");
+                SLOT(slotRescaleSelection()), actionCollection(),
+                "rescale");
 
     new KAction(i18n(SegmentAutoSplitCommand::getGlobalName()), 0, this,
-		SLOT(slotAutoSplitSelection()), actionCollection(),
-		"auto_split");
+                SLOT(slotAutoSplitSelection()), actionCollection(),
+                "auto_split");
 
     new KAction(i18n(SegmentSplitByPitchCommand::getGlobalName()), 0, this,
-		SLOT(slotSplitSelectionByPitch()), actionCollection(),
-		"split_by_pitch");
+                SLOT(slotSplitSelectionByPitch()), actionCollection(),
+                "split_by_pitch");
 
     new KAction(i18n("Open in &Default Editor"), Key_Return, this,
-		SLOT(slotEdit()), actionCollection(),
-		"edit_default");
+                SLOT(slotEdit()), actionCollection(),
+                "edit_default");
 
     icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/matrix.xpm"));
     new KAction(i18n("Open in Matri&x Editor"), icon, 0, this,
-		SLOT(slotEditInMatrix()), actionCollection(),
-		"edit_matrix");
+                SLOT(slotEditInMatrix()), actionCollection(),
+                "edit_matrix");
 
     icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/notation.xpm"));
     new KAction(i18n("Open in &Notation Editor"), icon, 0, this,
-		SLOT(slotEditAsNotation()), actionCollection(),
-		"edit_notation");
+                SLOT(slotEditAsNotation()), actionCollection(),
+                "edit_notation");
 
     icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/eventlist.xpm"));
     new KAction(i18n("Open in &Event List Editor"), icon, 0, this,
-		SLOT(slotEditInEventList()), actionCollection(),
-		"edit_event_list");
+                SLOT(slotEditInEventList()), actionCollection(),
+                "edit_event_list");
 
     new KAction(i18n(AddTempoChangeCommand::getGlobalName()),
                 0,
@@ -537,9 +537,9 @@ void RosegardenGUIApp::setupActions()
                 actionCollection(), "add_tempo");
 
     new KAction(i18n(AddTimeSignatureCommand::getGlobalName()),
-		0,
-		this, SLOT(slotEditTimeSignature()),
-		actionCollection(), "add_time_signature");
+                0,
+                this, SLOT(slotEditTimeSignature()),
+                actionCollection(), "add_time_signature");
 
     new KAction(i18n(ChangeCompositionLengthCommand::getGlobalName()),
                 0,
@@ -662,9 +662,9 @@ void RosegardenGUIApp::initZoomToolbar()
 {
     KToolBar *zoomToolbar = toolBar("Zoom Toolbar");
     if (!zoomToolbar) {
-	RG_DEBUG << "RosegardenGUIApp::initZoomToolbar() : "
-			     << "zoom toolbar not found" << endl;
-	return;
+        RG_DEBUG << "RosegardenGUIApp::initZoomToolbar() : "
+                             << "zoom toolbar not found" << endl;
+        return;
     }
 
     zoomToolbar->setBarPos(KToolBar::Right);
@@ -677,7 +677,7 @@ void RosegardenGUIApp::initZoomToolbar()
     static double factors[] = { 0.025, 0.05, 0.1, 0.2, 0.5,
                                 1.0, 1.5, 2.5, 5.0, 10.0, 20.0 };
     for (unsigned int i = 0; i < sizeof(factors)/sizeof(factors[0]); ++i) {
-	zoomSizes.push_back(duration44 / (defaultBarWidth44 * factors[i]));
+        zoomSizes.push_back(duration44 / (defaultBarWidth44 * factors[i]));
     }
 
     // zoom labels
@@ -685,14 +685,14 @@ void RosegardenGUIApp::initZoomToolbar()
     QString maxZoom = QString("%1%").arg(factors[(sizeof(factors)/sizeof(factors[0])) - 1] * 100.0);
 
     m_zoomSlider = new ZoomSlider<double>
-	(zoomSizes, -1, QSlider::Horizontal, zoomToolbar);
+        (zoomSizes, -1, QSlider::Horizontal, zoomToolbar);
     m_zoomSlider->setTracking(true);
     m_zoomSlider->setFocusPolicy(QWidget::NoFocus);
     m_zoomLabel = new QLabel(minZoom, zoomToolbar);
     m_zoomLabel->setIndent(10);
 
     connect(m_zoomSlider, SIGNAL(valueChanged(int)),
-	    this, SLOT(slotChangeZoom(int)));
+            this, SLOT(slotChangeZoom(int)));
 
     // set initial zoom - we might want to make this a config option
     //    m_zoomSlider->setToDefault();
@@ -703,9 +703,9 @@ void RosegardenGUIApp::initZoomToolbar()
 void RosegardenGUIApp::initStatusBar()
 {
     statusBar()->insertItem(KTmpStatusMsg::getDefaultMsg(),
-			    KTmpStatusMsg::getDefaultId(), 1);
+                            KTmpStatusMsg::getDefaultId(), 1);
     statusBar()->setItemAlignment(KTmpStatusMsg::getDefaultId(), 
-				  AlignLeft | AlignVCenter);
+                                  AlignLeft | AlignVCenter);
 
     m_progressBar = new RosegardenProgressBar(100, true, statusBar());
     statusBar()->addWidget(m_progressBar);
@@ -749,7 +749,7 @@ void RosegardenGUIApp::initView()
     // set the pointer position
     //
     slotSetPointerPosition
-	(comp.getElapsedRealTime(m_doc->getComposition().getPosition()));
+        (comp.getElapsedRealTime(m_doc->getComposition().getPosition()));
 
 
     // We have to do this to make sure that the 2nd call ("select")
@@ -845,7 +845,7 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
 
     // Caption
     //
-    QString caption= kapp->caption();	
+    QString caption= kapp->caption();   
     setCaption(caption + ": " + newDocument->getTitle());
 
     // reset AudioManagerDialog
@@ -869,9 +869,9 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     //
     m_doc->getCommandHistory()->attachView(actionCollection());
     connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
-	    SLOT(update()));
+            SLOT(update()));
     connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
-	    SLOT(slotTestClipboard()));
+            SLOT(slotTestClipboard()));
 
     // connect and start the autosave timer
     connect(m_autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
@@ -909,14 +909,14 @@ void RosegardenGUIApp::openFile(const QString& filePath)
     QFileInfo info(filePath);
 
     if (!info.exists()) {
-	// can happen with command-line arg, so...
-	KStartupLogo::hideIfStillThere();
+        // can happen with command-line arg, so...
+        KStartupLogo::hideIfStillThere();
         KMessageBox::sorry(this, i18n("The specified file does not exist"));
         return;
     }
 
     if (info.isDir()) {
-	KStartupLogo::hideIfStillThere();
+        KStartupLogo::hideIfStillThere();
         KMessageBox::sorry(this, i18n("You have specified a directory"));
         return;
     }
@@ -924,7 +924,7 @@ void RosegardenGUIApp::openFile(const QString& filePath)
     QFile file(filePath);
 
     if (!file.open(IO_ReadOnly)) {
-	KStartupLogo::hideIfStillThere();
+        KStartupLogo::hideIfStillThere();
         KMessageBox::sorry(this, i18n("You do not have read permission to this file."));
         return;
     }
@@ -942,7 +942,7 @@ void RosegardenGUIApp::openFile(const QString& filePath)
     QString effectiveFilePath = filePath;
     bool canRecover = false;
     QString autoSaveFileName = kapp->checkRecoverFile(filePath, canRecover);
-  	
+        
     if (canRecover) {
         // First check if the auto-save file is more recent than the doc
         QFileInfo docFileInfo(filePath), autoSaveFileInfo(autoSaveFileName);
@@ -1110,10 +1110,10 @@ void RosegardenGUIApp::saveProperties(KConfig *cfg)
     if (m_doc->getTitle()!=i18n("Untitled") && !m_doc->isModified()) {
         // saving to tempfile not necessary
     } else {
-        QString filename=m_doc->getAbsFilePath();	
+        QString filename=m_doc->getAbsFilePath();       
         cfg->writeEntry("filename", filename);
         cfg->writeEntry("modified", m_doc->isModified());
-		
+                
         QString tempname = kapp->tempSaveName(filename);
         m_doc->saveDocument(tempname);
     }
@@ -1128,7 +1128,7 @@ void RosegardenGUIApp::readProperties(KConfig* _cfg)
     if (modified) {
             bool canRecover;
             QString tempname = kapp->checkRecoverFile(filename, canRecover);
-  	
+        
             if (canRecover) {
                 slotEnableTransport(false);
                 m_doc->openDocument(tempname);
@@ -1148,7 +1148,7 @@ void RosegardenGUIApp::readProperties(KConfig* _cfg)
 
     QString caption=kapp->caption();
     setCaption(caption+": "+m_doc->getTitle());
-}		
+}               
 
 void RosegardenGUIApp::showEvent(QShowEvent* e)
 {
@@ -1180,7 +1180,7 @@ bool RosegardenGUIApp::queryExit()
 void RosegardenGUIApp::slotFileNewWindow()
 {
     KTmpStatusMsg msg(i18n("Opening a new application window..."), this);
-	
+        
     RosegardenGUIApp *new_window= new RosegardenGUIApp();
     new_window->show();
 }
@@ -1297,11 +1297,11 @@ void RosegardenGUIApp::slotFileSave()
     //
     if (!m_doc->isRegularDotRGFile()) {
 
-	slotFileSaveAs();
+        slotFileSaveAs();
 
     } else {
 
-	SetWaitCursor waitCursor;
+        SetWaitCursor waitCursor;
         m_doc->saveDocument(m_doc->getAbsFilePath());
 
     }
@@ -1309,14 +1309,14 @@ void RosegardenGUIApp::slotFileSave()
 
 QString
 RosegardenGUIApp::getValidWriteFile(const QString &descriptiveExtension,
-				    const QString &label)
+                                    const QString &label)
 {
     // extract ".rg" from "*.rg|Rosegarden files"
     //
     QString extension = descriptiveExtension.left(descriptiveExtension.find('|')).mid(1);
 
     QString name = KFileDialog::getSaveFileName
-	(":ROSEGARDEN", descriptiveExtension, this, label);
+        (":ROSEGARDEN", descriptiveExtension, this, label);
 
 //     RG_DEBUG << "RosegardenGUIApp::getValidWriteFile() : KFileDialog::getSaveFileName returned "
 //              << name << endl;
@@ -1327,10 +1327,10 @@ RosegardenGUIApp::getValidWriteFile(const QString &descriptiveExtension,
     // Append extension if we don't have one
     //
     if (!extension.isEmpty()) {
-	static QRegExp rgFile("\\..{1,4}$");
-	if (rgFile.match(name) == -1) {
-	    name += extension;
-	}
+        static QRegExp rgFile("\\..{1,4}$");
+        if (rgFile.match(name) == -1) {
+            name += extension;
+        }
     }
 
     KURL *u = new KURL(name);
@@ -1348,15 +1348,15 @@ RosegardenGUIApp::getValidWriteFile(const QString &descriptiveExtension,
     QFileInfo info(name);
 
     if (info.isDir()) {
-	KMessageBox::sorry(this, i18n("You have specified a directory"));
-	return "";
+        KMessageBox::sorry(this, i18n("You have specified a directory"));
+        return "";
     }
 
     if (info.exists()) {
-	int overwrite = KMessageBox::questionYesNo
-	    (this, i18n("The specified file exists.  Overwrite?"));
-	
-	if (overwrite != KMessageBox::Yes) return "";
+        int overwrite = KMessageBox::questionYesNo
+            (this, i18n("The specified file exists.  Overwrite?"));
+        
+        if (overwrite != KMessageBox::Yes) return "";
     }
 
     return name;
@@ -1381,7 +1381,7 @@ void RosegardenGUIApp::slotFileSaveAs()
     m_doc->saveDocument(newName);
     m_fileRecent->addURL(newName);
     
-    QString caption = kapp->caption();	
+    QString caption = kapp->caption();  
     setCaption(caption + ": " + m_doc->getTitle());
 }
 
@@ -1434,7 +1434,7 @@ void RosegardenGUIApp::slotQuit()
             if (!w->close())
                 break;
         }
-    }	
+    }   
 }
 
 void RosegardenGUIApp::slotEditCut()
@@ -1444,7 +1444,7 @@ void RosegardenGUIApp::slotEditCut()
 
     Rosegarden::SegmentSelection selection(m_view->getSelection());
     m_doc->getCommandHistory()->addCommand
-	(new CutCommand(selection, m_clipboard));
+        (new CutCommand(selection, m_clipboard));
 }
 
 void RosegardenGUIApp::slotEditCopy()
@@ -1454,14 +1454,14 @@ void RosegardenGUIApp::slotEditCopy()
 
     Rosegarden::SegmentSelection selection(m_view->getSelection());
     m_doc->getCommandHistory()->addCommand
-	(new CopyCommand(selection, m_clipboard));
+        (new CopyCommand(selection, m_clipboard));
 }
 
 void RosegardenGUIApp::slotEditPaste()
 {
     if (m_clipboard->isEmpty()) {
-	KTmpStatusMsg msg(i18n("Clipboard is empty"), this);
-	return;
+        KTmpStatusMsg msg(i18n("Clipboard is empty"), this);
+        return;
     }
     KTmpStatusMsg msg(i18n("Inserting clipboard contents..."), this);
 
@@ -1469,8 +1469,8 @@ void RosegardenGUIApp::slotEditPaste()
     // segment and then do ghosting drag or something
     timeT insertionTime = m_doc->getComposition().getPosition();
     m_doc->getCommandHistory()->addCommand
-	(new PasteSegmentsCommand(&m_doc->getComposition(),
-				  m_clipboard, insertionTime));
+        (new PasteSegmentsCommand(&m_doc->getComposition(),
+                                  m_clipboard, insertionTime));
 }
 
 void RosegardenGUIApp::slotSelectAll()
@@ -1495,13 +1495,13 @@ void RosegardenGUIApp::slotQuantizeSelection()
     Rosegarden::SegmentSelection selection = m_view->getSelection();
     
     KMacroCommand *command = new KMacroCommand
-	(EventQuantizeCommand::getGlobalName());
+        (EventQuantizeCommand::getGlobalName());
 
     for (Rosegarden::SegmentSelection::iterator i = selection.begin();
-	 i != selection.end(); ++i) {
-	command->addCommand(new EventQuantizeCommand
-			    (**i, (*i)->getStartTime(), (*i)->getEndTime(),
-			     dialog->getQuantizer()));
+         i != selection.end(); ++i) {
+        command->addCommand(new EventQuantizeCommand
+                            (**i, (*i)->getStartTime(), (*i)->getEndTime(),
+                             dialog->getQuantizer()));
     }
 
     m_view->slotAddCommandToHistory(command);
@@ -1518,11 +1518,11 @@ void RosegardenGUIApp::slotMergeSegments()
     if (selection.size() == 0) return;
 
     for (Rosegarden::SegmentSelection::iterator i = selection.begin();
-	 i != selection.end(); ++i) {
-	if ((*i)->getType() != Rosegarden::Segment::Internal) {
-	    KMessageBox::sorry(this, i18n("Can't join Audio segments"));
-	    return;
-	}
+         i != selection.end(); ++i) {
+        if ((*i)->getType() != Rosegarden::Segment::Internal) {
+            KMessageBox::sorry(this, i18n("Can't join Audio segments"));
+            return;
+        }
     }
 
     m_view->slotAddCommandToHistory(new SegmentMergeCommand(selection));
@@ -1541,13 +1541,13 @@ void RosegardenGUIApp::slotRescaleSelection()
     Rosegarden::SegmentSelection selection = m_view->getSelection();
 
     KMacroCommand *command = new KMacroCommand
-	(SegmentRescaleCommand::getGlobalName());
+        (SegmentRescaleCommand::getGlobalName());
 
     for (Rosegarden::SegmentSelection::iterator i = selection.begin();
-	 i != selection.end(); ++i) {
-	command->addCommand(new SegmentRescaleCommand(*i,
-						      dialog->getMultiplier(),
-						      dialog->getDivisor()));
+         i != selection.end(); ++i) {
+        command->addCommand(new SegmentRescaleCommand(*i,
+                                                      dialog->getMultiplier(),
+                                                      dialog->getDivisor()));
     }
 
     m_view->slotAddCommandToHistory(command);
@@ -1563,10 +1563,10 @@ void RosegardenGUIApp::slotAutoSplitSelection()
     Rosegarden::SegmentSelection selection = m_view->getSelection();
     
     KMacroCommand *command = new KMacroCommand
-	(SegmentAutoSplitCommand::getGlobalName());
+        (SegmentAutoSplitCommand::getGlobalName());
 
     for (Rosegarden::SegmentSelection::iterator i = selection.begin();
-	 i != selection.end(); ++i) {
+         i != selection.end(); ++i) {
 
         if ((*i)->getType() == Rosegarden::Segment::Audio)
         {
@@ -1576,14 +1576,14 @@ void RosegardenGUIApp::slotAutoSplitSelection()
             {
                 // split to threshold
                 //
-	        command->addCommand(
+                command->addCommand(
                         new AudioSegmentAutoSplitCommand(m_doc,
                                                          *i,
                                                          aSD.getThreshold()));
             }
         } else {
-	    command->addCommand(new SegmentAutoSplitCommand(*i));
-	}
+            command->addCommand(new SegmentAutoSplitCommand(*i));
+        }
     }
 
     m_view->slotAddCommandToHistory(command);
@@ -1599,26 +1599,26 @@ void RosegardenGUIApp::slotSplitSelectionByPitch()
     Rosegarden::SegmentSelection selection = m_view->getSelection();
 
     KMacroCommand *command = new KMacroCommand
-	(SegmentSplitByPitchCommand::getGlobalName());
+        (SegmentSplitByPitchCommand::getGlobalName());
 
     bool haveSomething = false;
 
     for (Rosegarden::SegmentSelection::iterator i = selection.begin();
-	 i != selection.end(); ++i) {
+         i != selection.end(); ++i) {
 
         if ((*i)->getType() == Rosegarden::Segment::Audio) {
-	    // nothing
+            // nothing
         } else {
-	    command->addCommand
-		(new SegmentSplitByPitchCommand
-		 (*i,
-		  dialog->getPitch(),
-		  dialog->getShouldRange(),
-		  dialog->getShouldDuplicateNonNoteEvents(),
-		  (SegmentSplitByPitchCommand::ClefHandling)
-		  dialog->getClefHandling()));
-	    haveSomething = true;
-	}
+            command->addCommand
+                (new SegmentSplitByPitchCommand
+                 (*i,
+                  dialog->getPitch(),
+                  dialog->getShouldRange(),
+                  dialog->getShouldDuplicateNonNoteEvents(),
+                  (SegmentSplitByPitchCommand::ClefHandling)
+                  dialog->getClefHandling()));
+            haveSomething = true;
+        }
     }
 
     if (haveSomething) m_view->slotAddCommandToHistory(command);
@@ -1634,7 +1634,7 @@ void RosegardenGUIApp::slotHarmonizeSelection()
     //!!! This should be somewhere else too
 
     Rosegarden::CompositionTimeSliceAdapter adapter(&m_doc->getComposition(),
-						    &selection);
+                                                    &selection);
 
     Rosegarden::AnalysisHelper helper;
     Rosegarden::Segment *segment = new Segment;
@@ -1736,9 +1736,9 @@ void RosegardenGUIApp::slotToggleTracksToolBar()
     KTmpStatusMsg msg(i18n("Toggle the tracks toolbar..."), this);
 
     if (m_viewTracksToolBar->isChecked())
-        toolBar("Tools Toolbar")->show();
+        toolBar("Tracks Toolbar")->show();
     else
-        toolBar("Tools Toolbar")->hide();
+        toolBar("Tracks Toolbar")->hide();
 }
 
 void RosegardenGUIApp::slotToggleEditorsToolBar()
@@ -2114,7 +2114,7 @@ void RosegardenGUIApp::slotRevertToSaved()
 
     if(m_doc->isModified())
     {
-	int revert =
+        int revert =
             KMessageBox::questionYesNo(this,
                    i18n("Revert modified document to previous saved version?"));
 
@@ -2127,9 +2127,9 @@ void RosegardenGUIApp::slotRevertToSaved()
 void RosegardenGUIApp::slotImportMIDI()
 {
     KURL url = KFileDialog::getOpenURL
-	(":MIDI",
-	 i18n("*.mid *.midi|Standard MIDI files\n*|All files"), this,
-	 i18n("Open MIDI File"));
+        (":MIDI",
+         i18n("*.mid *.midi|Standard MIDI files\n*|All files"), this,
+         i18n("Open MIDI File"));
     if (url.isEmpty()) { return; }
 
     QString tmpfile;
@@ -2142,9 +2142,9 @@ void RosegardenGUIApp::slotImportMIDI()
 void RosegardenGUIApp::slotMergeMIDI()
 {
     KURL url = KFileDialog::getOpenURL
-	(":MIDI",
-	 i18n("*.mid *.midi|Standard MIDI files\n*|All files"), this,
-	 i18n("Merge MIDI File"));
+        (":MIDI",
+         i18n("*.mid *.midi|Standard MIDI files\n*|All files"), this,
+         i18n("Merge MIDI File"));
     if (url.isEmpty()) { return; }
 
     QString tmpfile;
@@ -2211,37 +2211,37 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 
     } else {
 
-	bool append = false;
+        bool append = false;
 
-	if (midiFile->hasTimeChanges() &&
-	    newDoc->getComposition().getDuration() > 0) {
+        if (midiFile->hasTimeChanges() &&
+            newDoc->getComposition().getDuration() > 0) {
 
-	    //!!! This isn't adequate.  We really need to know whether
-	    // the tempo/timesig stuff is _different_ from that in the
-	    // existing composition.
+            //!!! This isn't adequate.  We really need to know whether
+            // the tempo/timesig stuff is _different_ from that in the
+            // existing composition.
 
-	    CurrentProgressDialog::freeze();
-	    int mergeType =
-		KMessageBox::warningYesNoCancel
-		(this,
-		 i18n("This file contains tempo and/or time signature data.\n\n"
-		      "If you wish, I can append it to the composition instead\n"
-		      "of merging it from the start, so as to avoid changing\n"
-		      "the existing timing information in the composition."),
-		 i18n("MIDI Merge"),
-		 i18n("Yes, append"),
-		 i18n("No, merge as normal"));
-	    CurrentProgressDialog::thaw();
+            CurrentProgressDialog::freeze();
+            int mergeType =
+                KMessageBox::warningYesNoCancel
+                (this,
+                 i18n("This file contains tempo and/or time signature data.\n\n"
+                      "If you wish, I can append it to the composition instead\n"
+                      "of merging it from the start, so as to avoid changing\n"
+                      "the existing timing information in the composition."),
+                 i18n("MIDI Merge"),
+                 i18n("Yes, append"),
+                 i18n("No, merge as normal"));
+            CurrentProgressDialog::thaw();
 
-	    if (mergeType == KMessageBox::Cancel) {
-		delete midiFile;
-		return;
-	    } else if (mergeType == KMessageBox::Yes) {
-		append = true;
-	    }
-	}
-	    
-	/*Rosegarden::Composition *tmpComp =*/
+            if (mergeType == KMessageBox::Cancel) {
+                delete midiFile;
+                return;
+            } else if (mergeType == KMessageBox::Yes) {
+                append = true;
+            }
+        }
+            
+        /*Rosegarden::Composition *tmpComp =*/
             midiFile->convertToRosegarden(&newDoc->getComposition(), append);
     }
 
@@ -2278,41 +2278,41 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
         progressPer = (int)(100.0 / (double(comp->getNbSegments() * 3)));
 
     for (Rosegarden::Composition::iterator i = comp->begin();
-	 i != comp->end(); ++i) {
+         i != comp->end(); ++i) {
 
-	Rosegarden::Segment &segment = **i;
-	Rosegarden::SegmentNotationHelper helper(segment);
-	segment.insert(helper.guessClef(segment.begin(),
-					segment.getEndMarker()).getAsEvent
-		       (segment.getStartTime()));
+        Rosegarden::Segment &segment = **i;
+        Rosegarden::SegmentNotationHelper helper(segment);
+        segment.insert(helper.guessClef(segment.begin(),
+                                        segment.getEndMarker()).getAsEvent
+                       (segment.getStartTime()));
 
         progressDlg.progressBar()->advance(progressPer);
     }
 
     for (Rosegarden::Composition::iterator i = comp->begin();
-	 i != comp->end(); ++i) {
+         i != comp->end(); ++i) {
 
-	// find first key event in each segment (we'd have done the
-	// same for clefs, except there is no MIDI clef event)
+        // find first key event in each segment (we'd have done the
+        // same for clefs, except there is no MIDI clef event)
 
-	Rosegarden::Segment &segment = **i;
-	Rosegarden::timeT firstKeyTime = segment.getEndMarkerTime();
+        Rosegarden::Segment &segment = **i;
+        Rosegarden::timeT firstKeyTime = segment.getEndMarkerTime();
 
-	for (Segment::iterator si = segment.begin();
-	     segment.isBeforeEndMarker(si); ++si) {
-	    if ((*si)->isa(Rosegarden::Key::EventType)) {
-		firstKeyTime = (*si)->getAbsoluteTime();
-		break;
-	    }
-	}
+        for (Segment::iterator si = segment.begin();
+             segment.isBeforeEndMarker(si); ++si) {
+            if ((*si)->isa(Rosegarden::Key::EventType)) {
+                firstKeyTime = (*si)->getAbsoluteTime();
+                break;
+            }
+        }
 
-	if (firstKeyTime > segment.getStartTime()) {
-	    Rosegarden::CompositionTimeSliceAdapter adapter
-		(comp, Rosegarden::timeT(0), firstKeyTime);
-	    Rosegarden::AnalysisHelper helper;
-	    segment.insert(helper.guessKey(adapter).getAsEvent
-			   (segment.getStartTime()));
-	}
+        if (firstKeyTime > segment.getStartTime()) {
+            Rosegarden::CompositionTimeSliceAdapter adapter
+                (comp, Rosegarden::timeT(0), firstKeyTime);
+            Rosegarden::AnalysisHelper helper;
+            segment.insert(helper.guessKey(adapter).getAsEvent
+                           (segment.getStartTime()));
+        }
 
         progressDlg.progressBar()->advance(progressPer);
     }
@@ -2321,17 +2321,17 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
     int count = 0;
 
     for (Rosegarden::Composition::iterator i = comp->begin();
-	 i != comp->end(); ++i) {
+         i != comp->end(); ++i) {
 
-	Rosegarden::Segment &segment = **i;
-	Rosegarden::timeT startTime(segment.getStartTime());
-	Rosegarden::timeT endTime(segment.getEndMarkerTime());
+        Rosegarden::Segment &segment = **i;
+        Rosegarden::timeT startTime(segment.getStartTime());
+        Rosegarden::timeT endTime(segment.getEndMarkerTime());
 
-	RG_DEBUG << "segment " << count++ << ": start time " << segment.getStartTime() << ", end time " << segment.getEndTime() << ", end marker time " << segment.getEndMarkerTime() << ", events " << segment.size() << endl;
+        RG_DEBUG << "segment " << count++ << ": start time " << segment.getStartTime() << ", end time " << segment.getEndTime() << ", end marker time " << segment.getEndMarkerTime() << ", events " << segment.size() << endl;
 
-	command->addCommand(new EventQuantizeCommand
-			    (segment, startTime, endTime, "Notation Options",
-			     Rosegarden::Quantizer::NotationPrefix, true));
+        command->addCommand(new EventQuantizeCommand
+                            (segment, startTime, endTime, "Notation Options",
+                             Rosegarden::Quantizer::NotationPrefix, true));
         progressDlg.progressBar()->advance(progressPer);
     }
 
@@ -2341,7 +2341,7 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
         Rosegarden::CompositionTimeSliceAdapter adapter(comp);
         Rosegarden::AnalysisHelper analysisHelper;
         Rosegarden::TimeSignature timeSig =
-	    analysisHelper.guessTimeSignature(adapter);
+            analysisHelper.guessTimeSignature(adapter);
         comp->addTimeSignature(0, timeSig);
     }
 }
@@ -2351,9 +2351,9 @@ void RosegardenGUIApp::slotImportRG21()
     if (!m_doc->saveIfModified()) return;
 
     KURL url = KFileDialog::getOpenURL
-	(":ROSEGARDEN21",
-	 i18n("*.rose|Rosegarden-2 files\n*|All files"), this,
-	 i18n("Open Rosegarden 2.1 File"));
+        (":ROSEGARDEN21",
+         i18n("*.rose|Rosegarden-2 files\n*|All files"), this,
+         i18n("Open Rosegarden 2.1 File"));
     if (url.isEmpty()) { return; }
 
     QString tmpfile;
@@ -2475,15 +2475,15 @@ void RosegardenGUIApp::slotSetPointerPosition(timeT t)
         {
             slotStop();
             t = comp.getEndMarker();
-	    m_doc->setPointerPosition(t); //causes this method to be re-invoked
-	    return;
+            m_doc->setPointerPosition(t); //causes this method to be re-invoked
+            return;
         }
 
         try
         {
             if (!m_originatingJump) {
-		m_seqManager->sendSequencerJump(comp.getElapsedRealTime(t));
-	    }
+                m_seqManager->sendSequencerJump(comp.getElapsedRealTime(t));
+            }
         }
         catch(QString s)
         {
@@ -2493,7 +2493,7 @@ void RosegardenGUIApp::slotSetPointerPosition(timeT t)
 
     if (t != comp.getStartMarker() && t > comp.getEndMarker()) {
         m_doc->setPointerPosition(comp.getStartMarker());
-	return;
+        return;
     }
 
     // and the time sig
@@ -2505,25 +2505,25 @@ void RosegardenGUIApp::slotSetPointerPosition(timeT t)
     // and the time
     //
     if (m_transport->getCurrentMode() ==
-	Rosegarden::RosegardenTransportDialog::BarMode) {
+        Rosegarden::RosegardenTransportDialog::BarMode) {
 
-	slotDisplayBarTime(t);
+        slotDisplayBarTime(t);
 
     } else {
-	Rosegarden::RealTime rT(comp.getElapsedRealTime(t));
+        Rosegarden::RealTime rT(comp.getElapsedRealTime(t));
 
-	if (m_transport->isShowingTimeToEnd()) {
-	    rT = rT - comp.getElapsedRealTime(comp.getDuration());
-	}
+        if (m_transport->isShowingTimeToEnd()) {
+            rT = rT - comp.getElapsedRealTime(comp.getDuration());
+        }
 
-	if (m_transport->getCurrentMode() ==
-	    Rosegarden::RosegardenTransportDialog::RealMode) {
+        if (m_transport->getCurrentMode() ==
+            Rosegarden::RosegardenTransportDialog::RealMode) {
 
-	    m_transport->displayRealTime(rT);
+            m_transport->displayRealTime(rT);
 
-	} else {
-	    m_transport->displaySMPTETime(rT);
-	}
+        } else {
+            m_transport->displaySMPTETime(rT);
+        }
     }
 }
 
@@ -2541,13 +2541,13 @@ void RosegardenGUIApp::slotDisplayBarTime(timeT t)
     int unitNo = (t - barStart) - (beatNo * beatDuration);
     
     if (m_transport->isShowingTimeToEnd()) {
-	barNo = barNo + 1 - comp.getNbBars();
-	beatNo = timeSig.getBeatsPerBar() - 1 - beatNo;
-	unitNo = timeSig.getBeatDuration() - 1 - unitNo;
+        barNo = barNo + 1 - comp.getNbBars();
+        beatNo = timeSig.getBeatsPerBar() - 1 - beatNo;
+        unitNo = timeSig.getBeatDuration() - 1 - unitNo;
     } else {
-	// convert to 1-based display bar numbers
-	barNo += 1;
-	beatNo += 1;
+        // convert to 1-based display bar numbers
+        barNo += 1;
+        beatNo += 1;
     }
     
     m_transport->displayBarTime(barNo, beatNo, unitNo);
@@ -2623,7 +2623,7 @@ bool RosegardenGUIApp::launchSequencer()
         RG_DEBUG << "Couldn't start the sequencer\n";
         m_sequencerProcess = 0;
         // If starting it didn't even work, fall back to no sequencer mode
-	m_useSequencer = false;
+        m_useSequencer = false;
     }
     else {
         // connect processExited only after start, otherwise
@@ -2697,7 +2697,7 @@ void RosegardenGUIApp::slotExportMIDI()
     KTmpStatusMsg msg(i18n("Exporting MIDI file..."), this);
 
     QString fileName = getValidWriteFile
-	("*.mid *.midi|" + i18n("Standard MIDI files\n") +
+        ("*.mid *.midi|" + i18n("Standard MIDI files\n") +
          "\n*|" + i18n("All files"),
          i18n("Export as..."));
 
@@ -2764,7 +2764,7 @@ void RosegardenGUIApp::slotExportLilypond()
     KTmpStatusMsg msg(i18n("Exporting Lilypond file..."), this);
 
     QString fileName = getValidWriteFile
-	(QString("*.ly|") + i18n("Lilypond files") +
+        (QString("*.ly|") + i18n("Lilypond files") +
          "\n*|" + i18n("All files"),
          i18n("Export as..."));
 
@@ -2797,7 +2797,7 @@ void RosegardenGUIApp::slotExportMusicXml()
     KTmpStatusMsg msg(i18n("Exporting MusicXML file..."), this);
 
     QString fileName = getValidWriteFile
-	(QString("*.xml|") + i18n("XML files") +
+        (QString("*.xml|") + i18n("XML files") +
          "\n*|" + i18n("All files"), i18n("Export as..."));
 
     if (fileName.isEmpty()) return;
@@ -3413,24 +3413,24 @@ void RosegardenGUIApp::slotEditTimeSignature(QWidget *parent)
     Rosegarden::TimeSignature sig = composition.getTimeSignatureAt(time);
 
     TimeSignatureDialog *dialog = new TimeSignatureDialog
-	(parent, sig, barNo, atStartOfBar);
+        (parent, sig, barNo, atStartOfBar);
 
     if (dialog->exec() == QDialog::Accepted) {
 
-	TimeSignatureDialog::Location location = dialog->getLocation();
-	if (location == TimeSignatureDialog::StartOfBar) {
-	    time = composition.getBarStartForTime(time);
-	}
+        TimeSignatureDialog::Location location = dialog->getLocation();
+        if (location == TimeSignatureDialog::StartOfBar) {
+            time = composition.getBarStartForTime(time);
+        }
 
-	if (dialog->shouldNormalizeRests()) {
-	    m_doc->getCommandHistory()->addCommand
-		(new AddTimeSignatureAndNormalizeCommand
-		 (&composition, time, dialog->getTimeSignature()));
-	} else { 
-	    m_doc->getCommandHistory()->addCommand
-		(new AddTimeSignatureCommand
-		 (&composition, time, dialog->getTimeSignature()));
-	}
+        if (dialog->shouldNormalizeRests()) {
+            m_doc->getCommandHistory()->addCommand
+                (new AddTimeSignatureAndNormalizeCommand
+                 (&composition, time, dialog->getTimeSignature()));
+        } else { 
+            m_doc->getCommandHistory()->addCommand
+                (new AddTimeSignatureCommand
+                 (&composition, time, dialog->getTimeSignature()));
+        }
     }
 
     delete dialog;
@@ -3469,8 +3469,8 @@ RosegardenGUIApp::slotChangeTempo(Rosegarden::timeT time,
     }
     else if (action == TempoDialog::ReplaceTempo)
     {
-	//!!! I'm sure this should be unnecessary, as tempo changes
-	// should replace if you just insert at the same time anyway
+        //!!! I'm sure this should be unnecessary, as tempo changes
+        // should replace if you just insert at the same time anyway
 
         int index = comp.getTempoChangeNumberAt(time);
 
@@ -3499,7 +3499,7 @@ RosegardenGUIApp::slotChangeTempo(Rosegarden::timeT time,
     {
         m_doc->getCommandHistory()->addCommand(new
                 AddTempoChangeCommand(&comp, comp.getBarStartForTime(time),
-				      value));
+                                      value));
     }
     else if (action == TempoDialog::GlobalTempo ||
              action == TempoDialog::GlobalTempoWithDefault)
@@ -3566,15 +3566,15 @@ void
 RosegardenGUIApp::slotTestClipboard()
 {
     if (m_clipboard->isEmpty()) {
-	stateChanged("have_clipboard", KXMLGUIClient::StateReverse);
-	stateChanged("have_clipboard_single_segment",
-		     KXMLGUIClient::StateReverse);
+        stateChanged("have_clipboard", KXMLGUIClient::StateReverse);
+        stateChanged("have_clipboard_single_segment",
+                     KXMLGUIClient::StateReverse);
     } else {
-	stateChanged("have_clipboard", KXMLGUIClient::StateNoReverse);
-	stateChanged("have_clipboard_single_segment",
-		     (m_clipboard->isSingleSegment() ?
-		      KXMLGUIClient::StateNoReverse :
-		      KXMLGUIClient::StateReverse));
+        stateChanged("have_clipboard", KXMLGUIClient::StateNoReverse);
+        stateChanged("have_clipboard_single_segment",
+                     (m_clipboard->isSingleSegment() ?
+                      KXMLGUIClient::StateNoReverse :
+                      KXMLGUIClient::StateReverse));
     }
 }
 
@@ -3950,7 +3950,7 @@ RosegardenGUIApp::slotRelabelSegments()
     QString label = strtoqstr((*selection.begin())->getLabel());
 
     for (Rosegarden::SegmentSelection::iterator i = selection.begin();
-	 i != selection.end(); ++i)
+         i != selection.end(); ++i)
     {
         if (strtoqstr((*i)->getLabel()) != label) label = "";
     }
@@ -3968,7 +3968,7 @@ RosegardenGUIApp::slotRelabelSegments()
     if (ok)
     {
         m_doc->getCommandHistory()->addCommand
-	    (new SegmentLabelCommand(selection, newLabel));
+            (new SegmentLabelCommand(selection, newLabel));
     }
 }
 
