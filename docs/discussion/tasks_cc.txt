@@ -28,7 +28,13 @@ References in round brackets are to 0.1_planned_features.txt.
  6. Beaming selected area (dependent on Guillaume's doing selection)
 
  7. Various subtle improvements to notation layout, for example moving
- long notes to the right to be more central in their space (A9)
+ long notes to the right to be more central in their space (A9) [some DONE]
+
+ 8. Improvements to insert/split code in TrackNotationHelper --
+ avoiding splitting rests when they're inserted over shorter notes,
+ improving duration-list code to place the rests it suggests in a
+ better order (e.g. after a quaver note, use quaver + crotchet rather
+ than crotchet + quaver), avoid using dotted rests in most cases
  
  Throughout: Code documentation
 

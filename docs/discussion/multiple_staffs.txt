@@ -1,0 +1,85 @@
+
+Showing multiple staffs in one notation view
+============================================
+
+A random assortment of problems and thoughts
+--------------------------------------------
+
+1. It's easiest to assume one staff per track, but like the track
+editor window we probably want to place tracks on the same staff where
+they have the same instrument, so long as they don't overlap.  Perhaps
+we need a mechanism for working out which tracks can safely be placed
+on the same staff or row, and to use this mechanism in both track
+editor and notation view.
+
+2. Tracks can start and end at any moment, and we currently assume
+that the bars in a track are counted from the start of a track.  So
+(even disregarding changes of time signature) there's no reason why
+bar lines on different tracks should occur at the same time.  This
+makes things very tough for display, as bars can vary in width.
+
+We have two possible solutions:
+
+a. Make barlines more global to the Composition, so that they occur at
+the same times on each track.  This has potential problems with bar
+lines getting reorganised when you move a track on the track editor,
+for example if that makes notes appear to shift from one bar to
+another (although lines wouldn't need to be recalculated, as they're
+referenced by time rather than iterator).  Also, this solution would
+forever prevent us from having different timesigs on different staffs.
+
+b. Make the display code able to cope with non-aligning bars.  This is
+difficult because of the problem of working out how wide a bar should
+be in order to accommodate some notes in part of a different-width bar
+on a different track.  We can _probably_ get some adequate heuristics,
+provided we can use one track as a reference for measuring other
+tracks against -- the problem with that is that of course we have no
+guarantee that any one track will continue for the entire duration of
+a section of score, so we'd have to be able to shift our frame of
+reference part-way through layout.
+
+3. Allowing different time signatures on different tracks complicates
+things again.  In fact Rosegarden 2.1 gets this wrong: it allows
+different time signatures to coexist, but it places the barlines at
+the same position in each track without altering the MIDI playback
+tempo so that what you see in the score is what you hear in playback.
+For example if one track stays in 4/4 and the other has a short
+section of 3/4, the score is rendered as if the 3/4 section was slower
+in order to make a 3/4 bar the same duration as the 4/4 bars at the
+same time are (which is probably what the composer intends), but the
+MIDI output keeps both at the same tempo so that the 3/4 bar only has
+three-quarters of the duration of the 4/4 bar.
+
+A vague implementation strategy
+-------------------------------
+
+Assuming we choose the more general 2b option over the more
+restrictive 2a, we could proceed like this:
+
+1. Make NotationView contain a set of tracks, set of notation element
+lists, set of staffs, etc.
+
+2. Make NotationHLayout::preparse() take a track data reference and
+add the calculated bar data to an internal set that is cleared by a
+reset call.  NotationView then calls preparse for each track in turn.
+
+3. After the preparses have all been run, call a NotationHLayout
+reconcileBars method that trogs through the bar data for a particular
+reference track (changing to another reference track if the chosen one
+ends), for each bar modifying the best width according to the
+proportions of bars in other tracks that fall between the start and
+end times of that bar, and modifying those bars so that they take up
+the same width without losing their ratio to one another... pretty
+complex, I'm not sure how well we can do this.
+
+4. Then do NotationHLayout::layout as normal on each track in turn.
+
+The fact that this is so damn complicated suggests we may be better
+off with option 2a, forcing bar lines to appear at the same points in
+all tracks and therefore losing the ability to change time signature
+in one track without changing it in the others.  There may be
+advantages to that for the user as well, I suppose.  That would mean
+we'd need to rethink how time signatures are stored, or else scan all
+tracks at once for time signatures when building up the bar position
+list in the composition.
+
