@@ -20,6 +20,7 @@
 */
 
 #include <kmessagebox.h>
+#include <klocale.h>
 
 #include "BaseProperties.h"
 #include "SegmentMatrixHelper.h"
@@ -118,7 +119,7 @@ MatrixInsertionCommand::MatrixInsertionCommand(Rosegarden::Segment &segment,
                                                timeT endTime,
                                                MatrixStaff* staff,
                                                Event *event) :
-    BasicCommand("Insert Note", segment, time, endTime),
+    BasicCommand(i18n("Insert Note"), segment, time, endTime),
     m_staff(staff),
     m_event(event),
     m_firstModify(true)
@@ -180,7 +181,7 @@ protected:
 MatrixEraseCommand::MatrixEraseCommand(Rosegarden::Segment &segment,
                                        MatrixStaff* staff,
                                        Event *event) :
-    BasicCommand("Erase Note",
+    BasicCommand(i18n("Erase Note"),
                  segment,
 		 event->getAbsoluteTime(),
 		 event->getAbsoluteTime() + event->getDuration(),
@@ -208,11 +209,68 @@ MatrixEraseCommand::modifySegment()
     if (eventType == Note::EventType) {
 
 	helper.deleteNote(m_event, false);
-	return;
 
     }
 }
 
+class MatrixMoveCommand : public BasicCommand
+{
+public:
+    MatrixMoveCommand(Rosegarden::Segment &segment,
+                      timeT newTime,
+                      int newPitch,
+                      MatrixStaff*,
+                      Rosegarden::Event *event);
+
+protected:
+    virtual void modifySegment();
+
+
+    timeT m_newTime;
+    timeT m_oldTime;
+    int m_newPitch;
+
+    MatrixStaff* m_staff;
+    Rosegarden::Event* m_event;
+};
+
+MatrixMoveCommand::MatrixMoveCommand(Rosegarden::Segment &segment,
+                                     timeT newTime,
+                                     int newPitch,
+                                     MatrixStaff* staff,
+                                     Rosegarden::Event *event)
+    : BasicCommand(i18n("Move Note"),
+                   segment,
+                   QMIN(newTime, event->getAbsoluteTime()), 
+                   QMAX(newTime, event->getAbsoluteTime())),
+    m_newTime(newTime),
+    m_oldTime(event->getAbsoluteTime()),
+    m_newPitch(newPitch),
+    m_staff(staff),
+    m_event(event)
+{
+}
+
+void
+MatrixMoveCommand::modifySegment()
+{
+    Rosegarden::SegmentMatrixHelper helper(getSegment());
+
+    std::string eventType = m_event->getType();
+
+    if (eventType == Note::EventType) {
+
+        // Create new event
+        Rosegarden::Event *newEvent = new Rosegarden::Event(*m_event, m_newTime);
+        newEvent->set<Rosegarden::Int>(Rosegarden::BaseProperties::PITCH, m_newPitch);
+
+        // Delete old one
+	helper.deleteNote(m_event, false);
+
+        // Insert new one
+        helper.insertNote(newEvent);
+    }
+}
 
 //------------------------------
 
@@ -634,22 +692,31 @@ void MatrixMover::handleMouseMove(Rosegarden::timeT newTime,
 }
 
 void MatrixMover::handleMouseRelease(Rosegarden::timeT newTime,
-                                     int height,
+                                     int newHeight,
                                      QMouseEvent*)
 {
     kdDebug(KDEBUG_AREA) << "MatrixMover::handleMouseRelease()\n";
 
     if (!m_currentElement || !m_currentStaff) return;
 
-    int y = m_currentStaff->getLayoutYForHeight(height) - m_currentStaff->getElementHeight() / 2;
+    int y = m_currentStaff->getLayoutYForHeight(newHeight) - m_currentStaff->getElementHeight() / 2;
 
     kdDebug(KDEBUG_AREA) << "MatrixMover::handleMouseRelease() y = " << y << endl;
 
     m_currentElement->setLayoutY(y);
     m_currentElement->setLayoutX(newTime * m_currentStaff->getTimeScaleFactor());
 
-    m_currentStaff->positionElement(m_currentElement);
-    m_mParentView->canvas()->update();
+//     m_currentStaff->positionElement(m_currentElement);
+//     m_mParentView->canvas()->update();
+
+    MatrixMoveCommand* command = new MatrixMoveCommand(m_currentStaff->getSegment(),
+                                                       newTime, newHeight,
+                                                       m_currentStaff,
+                                                       m_currentElement->event());
+
+
+    m_mParentView->addCommandToHistory(command);
+    m_mParentView->update();
 }
 
 //------------------------------
