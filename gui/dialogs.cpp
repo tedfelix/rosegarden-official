@@ -4184,7 +4184,6 @@ ManageMetronomeDialog::slotApply()
     }
 
     Rosegarden::DeviceId deviceId = dev->getId();
-    bool deviceChanged = config.get<Int>("metronomedevice", 0) != deviceId;
     config.set<Int>("metronomedevice", deviceId);
 
     Rosegarden::MidiMetronome *metronome = dev->getMetronome();
@@ -4204,8 +4203,6 @@ ManageMetronomeDialog::slotApply()
     metronome->setPitch(
             Rosegarden::MidiByte(m_metronomePitch->getPitch()));
 
-    bool depthChanged = (metronome->getDepth() - 1 !=
-			 m_metronomeResolution->currentItem());
     metronome->setDepth(
 	    m_metronomeResolution->currentItem() + 1);
 
@@ -4218,9 +4215,7 @@ ManageMetronomeDialog::slotApply()
     metronome->setSubBeatVelocity(
             Rosegarden::MidiByte(m_metronomeSubBeatVely->value()));
 
-    m_doc->getSequenceManager()->metronomeChanged
-	(metronome->getInstrument(), depthChanged || deviceChanged);
-
+    m_doc->getSequenceManager()->metronomeChanged(inst->getId(), true);
     m_doc->slotDocumentModified();
     setModified(false);
 }

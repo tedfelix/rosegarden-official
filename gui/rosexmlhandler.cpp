@@ -1326,11 +1326,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 	    if (atts.value("depth"))
 		metronome.setPitch(atts.value("depth").toInt());
 	    if (atts.value("barvelocity"))
-		metronome.setPitch(atts.value("barvelocity").toInt());
+		metronome.setBarVelocity(atts.value("barvelocity").toInt());
 	    if (atts.value("beatvelocity"))
-		metronome.setPitch(atts.value("beatvelocity").toInt());
+		metronome.setBeatVelocity(atts.value("beatvelocity").toInt());
 	    if (atts.value("subbeatvelocity"))
-		metronome.setPitch(atts.value("subbeatvelocity").toInt());
+		metronome.setSubBeatVelocity(atts.value("subbeatvelocity").toInt());
 
 	    dynamic_cast<Rosegarden::MidiDevice*>(m_device)->
 		setMetronome(metronome);
