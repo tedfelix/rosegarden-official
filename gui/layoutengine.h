@@ -102,7 +102,7 @@ public:
      * Returns the number that should be displayed next to the
      * specified bar line, if we're showing numbers
      */
-    virtual int getBarLineDisplayNumber(Staff &staff, unsigned int barNo) {
+    virtual int getBarLineDisplayNumber(Staff &, unsigned int barNo) {
         return (int)barNo;
     }
 
@@ -117,7 +117,7 @@ public:
      * Returns true if the specified bar line is in the right place,
      * i.e. if the bar preceding it has the correct length
      */
-    virtual bool isBarLineCorrect(Staff &staff, unsigned int barNo) {
+    virtual bool isBarLineCorrect(Staff &, unsigned int) {
         return true;
     }
 };

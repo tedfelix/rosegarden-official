@@ -474,6 +474,7 @@ bool NotationView::showElements(NotationElementList::iterator from,
     kdDebug(KDEBUG_AREA) << "NotationView::showElements()" << endl;
 
     if (from == to) return true;
+    START_TIMING;
 
     NotePixmapFactory &npf(m_notePixmapFactory);
     Clef currentClef; // default is okay to start with
@@ -481,8 +482,25 @@ bool NotationView::showElements(NotationElementList::iterator from,
     for (NotationElementList::iterator it = from; it != to; ++it) {
 
         if (positionOnly) {
-            (*it)->reposition(dxoffset, dyoffset);
-            continue;
+
+            // We can't only reposition if the event is a beamed note,
+            // because changing the position normally requires
+            // changing the beam's length and/or angle as well
+
+            if ((*it)->isNote()) {
+                
+                bool beamed = false;
+                (void)((*it)->event()->get<Bool>(Properties::BEAMED, beamed));
+                if (!beamed) {
+                    (*it)->reposition(dxoffset, dyoffset);
+                    continue;
+                }
+            } else {
+                (*it)->reposition(dxoffset, dyoffset);
+                continue;
+            }
+
+            // beamed note -- fall through
         }
 
         //
@@ -498,17 +516,22 @@ bool NotationView::showElements(NotationElementList::iterator from,
 
             } else if ((*it)->isRest()) {
 
-                Note::Type note = (*it)->event()->get<Int>(Rosegarden::Note::NoteType);
-                int dots = (*it)->event()->get<Int>(Rosegarden::Note::NoteDots);
+                Note::Type note =
+                    (*it)->event()->get<Int>(Rosegarden::Note::NoteType);
+                int dots =
+                    (*it)->event()->get<Int>(Rosegarden::Note::NoteDots);
 
-                QCanvasPixmap notePixmap(npf.makeRestPixmap(Note(note, dots)));
-                sprite = new QCanvasNotationSprite(*(*it), &notePixmap, canvas());
+                QCanvasPixmap notePixmap
+                    (npf.makeRestPixmap(Note(note, dots)));
+                sprite = new
+                    QCanvasNotationSprite(*(*it), &notePixmap, canvas());
 
             } else if ((*it)->event()->isa(Clef::EventType)) {
 
 		currentClef = Clef(*(*it)->event());
                 QCanvasPixmap clefPixmap(npf.makeClefPixmap(currentClef));
-                sprite = new QCanvasNotationSprite(*(*it), &clefPixmap, canvas());
+                sprite = new
+                    QCanvasNotationSprite(*(*it), &clefPixmap, canvas());
 
             } else if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
 
@@ -517,31 +540,31 @@ bool NotationView::showElements(NotationElementList::iterator from,
                      (Rosegarden::Key((*it)->event()->get<String>
                                       (Rosegarden::Key::KeyPropertyName)),
                       currentClef));
-                sprite = new QCanvasNotationSprite(*(*it), &keyPixmap, canvas());
+                sprite = new
+                    QCanvasNotationSprite(*(*it), &keyPixmap, canvas());
 
             } else if ((*it)->event()->isa(TimeSignature::EventType)) {
 
                 QCanvasPixmap timeSigPixmap
                     (npf.makeTimeSigPixmap(TimeSignature(*(*it)->event())));
-                sprite = new QCanvasNotationSprite(*(*it), &timeSigPixmap, canvas());
+                sprite = new
+                    QCanvasNotationSprite(*(*it), &timeSigPixmap, canvas());
 
             } else {
                     
-                kdDebug(KDEBUG_AREA) << "NotationElement of unrecognised type "
-                                     << (*it)->event()->getType()
-                                     << endl;
+                kdDebug(KDEBUG_AREA)
+                    << "NotationElement of unrecognised type "
+                    << (*it)->event()->getType() << endl;
                 QCanvasPixmap unknownPixmap(npf.makeUnknownPixmap());
-                sprite = new QCanvasNotationSprite(*(*it), &unknownPixmap, canvas());
+                sprite = new
+                    QCanvasNotationSprite(*(*it), &unknownPixmap, canvas());
             }
 
-            //
             // Show the sprite
             //
             if (sprite) {
-
                 (*it)->setCanvasItem(sprite, dxoffset, dyoffset);
                 sprite->show();
-
             }
             
         } catch (...) {
@@ -553,6 +576,7 @@ bool NotationView::showElements(NotationElementList::iterator from,
 
     kdDebug(KDEBUG_AREA) << "NotationView::showElements() exiting" << endl;
 
+    PRINT_ELAPSED("NotationView::showElements");
     return true;
 }
 
@@ -642,16 +666,6 @@ QCanvasSimpleSprite *NotationView::makeNoteSprite(NotationElementList::iterator 
 
 bool NotationView::showBars(int staffNo)
 {
-    NotationElementList *notes = m_staffs[staffNo]->getNotationElementList();
-    return showBars(staffNo, notes->begin(), notes->end());
-}
-
-bool NotationView::showBars(int staffNo,
-			    NotationElementList::iterator from,
-                            NotationElementList::iterator to)
-{
-    if (from == to) return true;
-
     Staff &staff = *m_staffs[staffNo];
     staff.deleteBars(0);
 
@@ -1191,20 +1205,23 @@ NotationView::findClosestNote(double eventX, Event *&timeSignature,
 }
 
 
-void NotationView::redoLayout(int staffNo)
+void NotationView::redoLayout(int staffNo, timeT startTime)
 {
-    applyLayout(staffNo); // TODO : be more subtle than this
-
-    //!!! sadly we can't just redo from a given position, because
-    //things like beamed notes earlier in the same group may need to
-    //be redrawn with different beam angles.  We may be able to get
-    //away with redrawing from the start of the group or bar, some day
+    applyLayout(staffNo);
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+
+        Track *track = m_staffs[i]->getTrack();
+        timeT barStartTime = track->findBarStartTime(startTime);
+
 	NotationElementList *notes = m_staffs[i]->getNotationElementList();
-	showElements(notes->begin(), notes->end(), m_staffs[i],
+
+        NotationElementList::iterator starti = 
+            notes->findTime(barStartTime);
+
+	showElements(starti, notes->end(), m_staffs[i],
                      (staffNo >= 0 && (int)i != staffNo));
-	showBars(i, notes->begin(), notes->end());
+	showBars(i);
     }
 }
 
@@ -1301,9 +1318,10 @@ NoteInserter::handleClick(int height, const QPoint &eventPos,
     TrackNotationHelper nt
 	(m_parentView.getStaff(staffNo)->getViewElementsManager()->getTrack());
 
-    doInsert(nt, (*closestNote)->getAbsoluteTime(), note, pitch, m_accidental);
+    timeT time = (*closestNote)->getAbsoluteTime();
+    doInsert(nt, time, note, pitch, m_accidental);
 
-    m_parentView.redoLayout(staffNo);
+    m_parentView.redoLayout(staffNo, time);
 }
 
 void NoteInserter::doInsert(TrackNotationHelper& nt,
@@ -1367,7 +1385,7 @@ void ClefInserter::handleClick(int /*height*/, const QPoint &eventPos,
 	(m_parentView.getStaff(staffNo)->getViewElementsManager()->getTrack());
     nt.insertClef(absTime, m_clef);
 
-    m_parentView.redoLayout(staffNo);
+    m_parentView.redoLayout(staffNo, absTime);
 }
 
 
@@ -1401,13 +1419,17 @@ void NotationEraser::handleClick(int, const QPoint&,
     TrackNotationHelper nt
 	(m_parentView.getStaff(staffNo)->getViewElementsManager()->getTrack());
 
+    timeT absTime = 0;
+
     if (element->isNote()) {
-        
+
+        absTime = element->getAbsoluteTime();
 	nt.deleteNote(element->event());
 	needLayout = true;
 
     } else if (element->isRest()) {
 
+        absTime = element->getAbsoluteTime();
 	nt.deleteRest(element->event());
 	needLayout = true;
 
@@ -1417,6 +1439,6 @@ void NotationEraser::handleClick(int, const QPoint&,
 
     }
     
-    if (needLayout) // TODO : be more subtle
-        m_parentView.redoLayout(staffNo);
+    if (needLayout)
+        m_parentView.redoLayout(staffNo, absTime);
 }

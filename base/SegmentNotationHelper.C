@@ -99,12 +99,12 @@ Track::iterator TrackNotationHelper::expandIntoTie(iterator from, iterator to, t
     timeT baseTime = (*from)->getAbsoluteTime();
 
     long firstGroupId = -1;
-    (void)(*from)->get<Int>(BeamedGroupIdPropertyName, firstGroupId);
+    (*from)->get<Int>(BeamedGroupIdPropertyName, firstGroupId);
 
     long nextGroupId = -1;
     iterator ni(to);
     if (ni != end() && ++ni != end()) {
-	(void)(*ni)->get<Int>(BeamedGroupIdPropertyName, nextGroupId);
+	(*ni)->get<Int>(BeamedGroupIdPropertyName, nextGroupId);
     }
 
     iterator last = end();
@@ -264,7 +264,7 @@ void TrackNotationHelper::makeNoteViable(iterator i)
     quantizer().unquantize(e);
 
     bool lastTiedForward;
-    (void)e->get<Bool>(Note::TiedForwardPropertyName, lastTiedForward);
+    e->get<Bool>(Note::TiedForwardPropertyName, lastTiedForward);
 
     e->set<Bool>(Note::TiedForwardPropertyName, true);
     erase(i);
@@ -408,7 +408,7 @@ void TrackNotationHelper::insertSomething(iterator i, int duration, int pitch,
 
 	    } else {
 		cerr << "Good split, splitting old event" << endl;
-		(void)expandIntoTie(i, duration);
+		expandIntoTie(i, duration);
 	    }
 	} else {
 	    cerr << "Found rest, splitting" << endl;
@@ -625,9 +625,9 @@ void TrackNotationHelper::autoBeam(iterator from, iterator to, string type)
 	TimeSignature timeSig;
 	track().findTimeSignatureAt(t, timeSig);
 
-	cerr << "TrackNotationHelper::autoBeam: t is " << t << "; from time " <<
-	    (*barStart)->getAbsoluteTime() << " to time " <<
-	    (barEnd == end() ? -1 : (*barEnd)->getAbsoluteTime()) << endl;
+//	cerr << "TrackNotationHelper::autoBeam: t is " << t << "; from time " <<
+//	    (*barStart)->getAbsoluteTime() << " to time " <<
+//	    (barEnd == end() ? -1 : (*barEnd)->getAbsoluteTime()) << endl;
  
 	autoBeamBar(barStart, barEnd, timeSig, type);
 	

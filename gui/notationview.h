@@ -301,7 +301,7 @@ protected:
     /**
      * redo the layout after insertion.  default is all staffs
      */
-    void redoLayout(int staffNo = -1);
+    void redoLayout(int staffNo = -1, Rosegarden::timeT startTime = 0);
 
     /**
      * readjust the width of the canvas after a layout
@@ -317,13 +317,6 @@ protected:
      */
     bool showBars(int staffNo);
     
-    /**
-     * show bar lines
-     */
-    bool showBars(int staffNo,
-		  NotationElementList::iterator from,
-                  NotationElementList::iterator to);
-
     /**
      * find the Staff whose Y coord range includes y, and return the
      * index of that Staff in m_staffs.  If no Staff is suitable,

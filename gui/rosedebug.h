@@ -53,6 +53,29 @@ operator<<(kndbgstream &s, const Rosegarden::Track&) { return s; }
 
 #endif
 
+#ifndef NO_TIMING
+
+#include <iostream>
+#include <sys/times.h>
+
+#define START_TIMING \
+  struct tms dbgSpare; clock_t dbgStart = times(&dbgSpare);
+#define ELAPSED_TIME \
+  ((times(&dbgSpare) - dbgStart) * 1000 / CLK_TCK)
+#define PRINT_ELAPSED(n) \
+  std::cout << n << ": " << ELAPSED_TIME << "ms elapsed" << std::endl;
+
+#else
+
+#define START_TIMING
+#define ELAPSED_TIME  0
+#define PRINT_ELAPSED(n)
+
+#endif
+
+
+
+
 // This doesn't work - keeping it just in case I somehow get it
 // working someday
 

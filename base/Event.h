@@ -197,7 +197,7 @@ Event::get(const PropertyName &name, PropertyDefn<P>::basic_type &val) const
 
         PropertyStoreBase *sb = i->second;
         if (sb->getType() == P) {
-            val = ((PropertyStore<P> *)sb)->getData();
+            val = (static_cast<PropertyStore<P> *>(sb))->getData();
             return true;
         }
         else {
@@ -236,7 +236,8 @@ Event::get(const PropertyName &name) const
     if (i != m_properties.end()) { 
 
         PropertyStoreBase *sb = i->second;
-        if (sb->getType() == P) return ((PropertyStore<P> *)sb)->getData();
+        if (sb->getType() == P)
+            return (static_cast<PropertyStore<P> *>(sb))->getData();
         else {
 #ifndef NDEBUG
             std::cerr << "Event::get() Error: Attempt to get property \"" << name
@@ -301,7 +302,7 @@ Event::set(const PropertyName &name, PropertyDefn<P>::basic_type value,
 
         PropertyStoreBase *sb = i->second;
         if (sb->getType() == P) {
-            ((PropertyStore<P> *)sb)->setData(value);
+            (static_cast<PropertyStore<P> *>(sb))->setData(value);
             sb->setPersistence(persistent);
         } else {
 #ifndef NDEBUG

@@ -294,7 +294,7 @@ public:
 	return m_items[externalToInternal(index)];
     }
     const T& at(size_type index) const {
-	return ((FastVector<T> *)this)->at(index);
+	return (const_cast<FastVector<T> *>(this))->at(index);
     }
  
     T &operator[](size_type index) {
@@ -397,7 +397,7 @@ template <class T>
 FastVector<T>::~FastVector()
 {
     clear();
-    free((void *)m_items);
+    free(static_cast<void *>(m_items));
 }
 
 template <class T>
@@ -442,9 +442,9 @@ void FastVector<T>::resize(size_type needed)
     size_type newSize = bestNewCount(needed, sizeof(T));
 
     if (m_items) {
-	m_items = (T *)realloc(m_items, newSize * sizeof(T));
+	m_items = static_cast<T *>(realloc(m_items, newSize * sizeof(T)));
     } else {
-	m_items = (T *)malloc(newSize * sizeof(T));
+	m_items = static_cast<T *>(malloc(newSize * sizeof(T)));
     }
 
     m_size = newSize;
@@ -496,7 +496,7 @@ void FastVector<T>::insert(size_type index, const T&t)
 	    resize(m_size + 1);
 	}
 
-	(void) new (this, &m_items[externalToInternal(index)]) T(t);
+	new (this, &m_items[externalToInternal(index)]) T(t);
 
     } else if (m_gapStart < 0) {
 
@@ -522,7 +522,7 @@ void FastVector<T>::insert(size_type index, const T&t)
 		    (m_count - index) * sizeof(T));
 	}
 
-	(void) new (this, &m_items[index]) T(t);
+	new (this, &m_items[index]) T(t);
 
     } else {
 	
@@ -530,7 +530,7 @@ void FastVector<T>::insert(size_type index, const T&t)
 	// no need to resize)
 
 	if (index != m_gapStart) moveGapTo(index);
-	(void) new (this, &m_items[m_gapStart]) T(t);
+	new (this, &m_items[m_gapStart]) T(t);
 	if (--m_gapLength == 0) m_gapStart = -1;
 	else ++m_gapStart;
     }

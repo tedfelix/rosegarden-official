@@ -135,7 +135,7 @@ struct PropertyNamesEqual
 struct PropertyNameHash
 {
     size_t operator() (const PropertyName &s) const {
-        return (size_t)s.getValue();
+        return static_cast<size_t>(s.getValue());
     }
 };
 

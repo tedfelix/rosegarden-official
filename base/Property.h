@@ -33,7 +33,7 @@ class PropertyDefn
 {
 public:
     struct PropertyDefnNotDefined {
-	PropertyDefnNotDefined() { assert(0); }
+	PropertyDefnNotDefined() { throw(0); }
     };
     typedef PropertyDefnNotDefined basic_type;
 
@@ -46,14 +46,14 @@ template <PropertyType P>
 PropertyDefn<P>::basic_type
 PropertyDefn<P>::parse(std::string)
 {
-    assert(0);
+    throw(0);
 }
 
 template <PropertyType P>
 std::string 
 PropertyDefn<P>::unparse(PropertyDefn<P>::basic_type)
 {
-    assert(0);
+    throw(0);
 }
 
 

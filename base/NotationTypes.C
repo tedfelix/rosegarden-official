@@ -204,8 +204,9 @@ Accidental Key::getAccidentalAtHeight(int height, const Clef &clef) const
     checkAccidentalHeights();
     height = canonicalHeight(height);
     for (unsigned int i = 0; i < m_accidentalHeights->size(); ++i) {
-	if (height == (int)canonicalHeight((*m_accidentalHeights)[i] +
-					   clef.getPitchOffset())) {
+	if (height ==
+            static_cast<int>(canonicalHeight((*m_accidentalHeights)[i] +
+                                             clef.getPitchOffset()))) {
 	    return isSharp() ? Sharp : Flat;
 	}
     }
@@ -829,7 +830,7 @@ void TimeSignature::getDurationListForBar(DurationList &dlist) const
     // mostly just a bunch of special-cases, for now
 
     if (m_numerator < 3) {
-        cerr << "TimeSignature::getDurationListForBar: adding 2/* whole bar " << getBarDuration() << endl;
+//        cerr << "TimeSignature::getDurationListForBar: adding 2/* whole bar " << getBarDuration() << endl;
         // A single long rest should be okay for all the common 2/x
         // timesigs, probably even tolerable for freaks like 2/1
         dlist.push_back(getBarDuration());
@@ -837,7 +838,7 @@ void TimeSignature::getDurationListForBar(DurationList &dlist) const
     }
 
     if (m_numerator == 4 && m_denominator > 2) {
-        cerr << "TimeSignature::getDurationListForBar: adding whole-bar " << getBarDuration() << endl;
+//        cerr << "TimeSignature::getDurationListForBar: adding whole-bar " << getBarDuration() << endl;
         //        dlist.push_back(getBarDuration() / 2);
         //        dlist.push_back(getBarDuration() / 2);
         dlist.push_back(getBarDuration());
@@ -845,7 +846,7 @@ void TimeSignature::getDurationListForBar(DurationList &dlist) const
     }
 
     for (int i = 0; i < getBeatsPerBar(); ++i) {
-        cerr << "TimeSignature::getDurationListForBar: adding beat " << getBeatDuration() << endl;
+//        cerr << "TimeSignature::getDurationListForBar: adding beat " << getBeatDuration() << endl;
         dlist.push_back(getBeatDuration());
     }
 }
@@ -918,9 +919,9 @@ void TimeSignature::getDurationListForShortInterval(DurationList &dlist,
 
     toNextBeat = beatDuration - (startOffset % beatDuration);
 
-    cerr << "TimeSignature::getDurationListForShortInterval: duration is "
-         << duration << ", toNextBeat " << toNextBeat << ", startOffset "
-         << startOffset << ", beatDuration " << beatDuration << endl;
+//    cerr << "TimeSignature::getDurationListForShortInterval: duration is "
+//         << duration << ", toNextBeat " << toNextBeat << ", startOffset "
+//         << startOffset << ", beatDuration " << beatDuration << endl;
                
     if (toNextBeat == duration) {
         getDurationListAux(dlist, duration, true);
@@ -943,11 +944,10 @@ void TimeSignature::getDurationListAux(DurationList &dlist, int t,
                                        bool isLeadIn = false) const
     // (we append to dlist, it's expected to have stuff in it already)
 {
-    cerr << "TimeSignature::getDurationListAux: duration is " << t
-         << ", isLeadIn is " << isLeadIn << endl;
+//    cerr << "TimeSignature::getDurationListAux: duration is " << t
+//         << ", isLeadIn is " << isLeadIn << endl;
     
-    if (t == 0) return;
-    assert(t > 0);
+    if (t <= 0) return;
 
     // We behave differently if we're trying to fill the space leading
     // up to the first beat boundary of an interval.  In this case, we
@@ -964,7 +964,7 @@ void TimeSignature::getDurationListAux(DurationList &dlist, int t,
     int shortestTime = Note(Note::Shortest).getDuration();
 
     if (t < shortestTime) {
-        cerr << "pushing [1] " << t << endl;
+//        cerr << "pushing [1] " << t << endl;
 	// we want to divide the time exactly, even if it means we
 	// can't represent everything quite right in note durations
 	if (isLeadIn) dlist.push_front(t);
@@ -974,7 +974,7 @@ void TimeSignature::getDurationListAux(DurationList &dlist, int t,
     int current;
 
     if ((current = (isDotted() ? m_dottedCrotchetTime : m_crotchetTime)) <= t) {
-        cerr << "pushing [2] " << current << endl;
+//        cerr << "pushing [2] " << current << endl;
         if (isLeadIn) dlist.push_front(current);
         else dlist.push_back(current);
         getDurationListAux(dlist, t - current, isLeadIn);
@@ -985,7 +985,7 @@ void TimeSignature::getDurationListAux(DurationList &dlist, int t,
     for (int tag = Note::Shortest + 1; tag <= Note::Crotchet; ++tag) {
         int next = Note(tag).getDuration();
         if (next > t) {
-            cerr << "pushing [3] " << current << endl;
+//            cerr << "pushing [3] " << current << endl;
             if (isLeadIn) dlist.push_front(current);
             else dlist.push_back(current);
             getDurationListAux(dlist, t - current, isLeadIn);
@@ -998,7 +998,7 @@ void TimeSignature::getDurationListAux(DurationList &dlist, int t,
     // crotchet and dotted crotchet:
 
     current = m_crotchetTime;
-    cerr << "pushing [4] " << current << endl;
+//    cerr << "pushing [4] " << current << endl;
     if (isLeadIn) dlist.push_front(current);
     else dlist.push_back(current);
     getDurationListAux(dlist, t - current, isLeadIn);

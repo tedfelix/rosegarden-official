@@ -153,7 +153,7 @@ Composition::clear()
 Track::iterator
 Composition::addNewBar(timeT time)
 {
-    std::cerr << "Composition::addNewBar" << std::endl;
+//    std::cerr << "Composition::addNewBar" << std::endl;
     Event *e = new Event(BarEventType);
     e->setAbsoluteTime(time);
     return m_timeReference.insert(e);
@@ -162,7 +162,7 @@ Composition::addNewBar(timeT time)
 void
 Composition::calculateBarPositions()
 {
-    std::cerr << "Composition::calculateBarPositions" << std::endl;
+//    std::cerr << "Composition::calculateBarPositions" << std::endl;
 
     if (!m_barPositionsNeedCalculating) return;
 
@@ -197,7 +197,7 @@ Composition::calculateBarPositions()
 
 	if (s > 0 || segment0isTimeSig) start += segmentTimes[s];
 
-	std::cerr << "segment " << s << ": start " << start << ", finish " << finish << std::endl;
+//	std::cerr << "segment " << s << ": start " << start << ", finish " << finish << std::endl;
 
 	for (time = start; time < finish; time += segmentTimes[s]) {
 	    addNewBar(time);
@@ -207,7 +207,7 @@ Composition::calculateBarPositions()
     }
 
     m_barPositionsNeedCalculating = false;
-    std::cerr << "Composition::calculateBarPositions ending" << std::endl;
+//    std::cerr << "Composition::calculateBarPositions ending" << std::endl;
 }
 
 int

@@ -161,6 +161,8 @@ int NotationHLayout::getIdealBarWidth(Staff &staff,
 void
 NotationHLayout::scanStaff(Staff &staff)
 {
+    START_TIMING;
+
     Track &t(staff.getViewElementsManager()->getTrack());
     const Track *timeRef = t.getReferenceTrack();
     if (timeRef == 0) {
@@ -354,6 +356,8 @@ NotationHLayout::scanStaff(Staff &staff)
 
 	++barNo;
     }
+
+    PRINT_ELAPSED("NotationHLayout::scanStaff");
 }
 
 
@@ -435,6 +439,8 @@ NotationHLayout::AccidentalTable::update(Accidental accidental, int height)
 void
 NotationHLayout::reconcileBars()
 {
+    START_TIMING;
+
     // Scoot through the staffs, prepending fake bars to the start of
     // the bar list for any staff that doesn't begin right at the
     // start of the composition
@@ -511,6 +517,8 @@ NotationHLayout::reconcileBars()
 
 	++barNo;
     }
+
+    PRINT_ELAPSED("NotationHLayout::reconcileBars");
 }	
 
 void
@@ -525,6 +533,8 @@ NotationHLayout::finishLayout()
 void
 NotationHLayout::layout(BarDataMap::iterator i)
 {
+    START_TIMING;
+
     Staff &staff = *(i->first);
     NotationElementList *notes = staff.getNotationElementList();
     BarDataList &barList(getBarData(staff));
@@ -612,6 +622,8 @@ NotationHLayout::layout(BarDataMap::iterator i)
     }
 
     if (x > m_totalWidth) m_totalWidth = x;
+
+    PRINT_ELAPSED("NotationHLayout::layout");
 }
 
 
