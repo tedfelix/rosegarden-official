@@ -156,6 +156,12 @@ public:
 	if (m_useMask) m_maskPainter.drawArc(x, y, w, h, a, alen);
     }
 
+    void drawPolygon(const QPointArray &a, bool winding = false,
+		     int index = 0, int n = -1) {
+	m_painter->drawPolygon(a, winding, index, n);
+	if (m_useMask) m_maskPainter.drawPolygon(a, winding, index, n);
+    }
+
     void drawPolyline(const QPointArray &a, int index = 0, int n = -1) {
 	m_painter->drawPolyline(a, index, n);
 	if (m_useMask) m_maskPainter.drawPolyline(a, index, n);
@@ -236,6 +242,7 @@ NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
     m_generatedMask(0),
     m_generatedWidth(-1),
     m_generatedHeight(-1),
+    m_inDrawMethod(false),
     m_p(new NotePixmapPainter()),
     m_dottedRestCache(new NotePixmapCache)
 {
@@ -256,6 +263,7 @@ NotePixmapFactory::NotePixmapFactory(const NotePixmapFactory &npf) :
     m_generatedMask(0),
     m_generatedWidth(-1),
     m_generatedHeight(-1),
+    m_inDrawMethod(false),
     m_p(new NotePixmapPainter()),
     m_dottedRestCache(new NotePixmapCache)
 {
@@ -416,7 +424,9 @@ void
 NotePixmapFactory::drawNote(const NotePixmapParameters &params,
 			    QPainter &painter, int x, int y)
 {
+    m_inDrawMethod = true;
     drawNoteAux(params, &painter, x, y);
+    m_inDrawMethod = false;
 }
 
 void
@@ -531,9 +541,10 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
     }
 */
     if (painter) {
+	painter->save();
 	m_p->beginExternal(painter);
-	NOTATION_DEBUG << "Translate: (" << x << "," << y << ")" << endl;
-	painter->translate(x, y);
+//	NOTATION_DEBUG << "Translate: (" << x << "," << y << ")" << endl;
+	painter->translate(x - m_left, y - m_above - m_noteBodyHeight/2);
     } else {
 	createPixmapAndMask(m_noteBodyWidth + m_left + m_right,
 			    m_noteBodyHeight + m_above + m_below);
@@ -630,7 +641,8 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
     }
     
     if (painter) {
-	painter->translate(-x, -y);
+	painter->restore();
+//	painter->translate(-(x - m_left), -(y - m_above));
     }
 }
 
@@ -1091,10 +1103,21 @@ void
 NotePixmapFactory::drawShallowLine(int x0, int y0, int x1, int y1,
                                    int thickness, bool smooth)
 {
-    if (!smooth || (y0 == y1)) {
-        for (int i = 0; i < thickness; ++i) {
-            m_p->drawLine(x0, y0 + i, x1, y1 + i);
-        }
+    if (!smooth || m_inDrawMethod || (y0 == y1)) {
+
+	if (thickness < 4) {
+	    for (int i = 0; i < thickness; ++i) {
+		m_p->drawLine(x0, y0 + i, x1, y1 + i);
+	    }
+	} else {
+	    QPointArray qp(4);
+	    qp.setPoint(0, x0, y0);
+	    qp.setPoint(1, x0, y0 + thickness);
+	    qp.setPoint(2, x1, y1 + thickness);
+	    qp.setPoint(3, x1, y1);
+	    m_p->drawPolygon(qp);
+	}
+
         return;
     }
   
@@ -1775,6 +1798,23 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
 QCanvasPixmap*
 NotePixmapFactory::makeHairpinPixmap(int length, bool isCrescendo)
 {
+    drawHairpinAux(length, isCrescendo, 0, 0, 0);
+    return makeCanvasPixmap(QPoint(0, m_generatedHeight/2));
+}
+
+void
+NotePixmapFactory::drawHairpin(int length, bool isCrescendo,
+			       QPainter &painter, int x, int y)
+{
+    m_inDrawMethod = true;
+    drawHairpinAux(length, isCrescendo, &painter, x, y);
+    m_inDrawMethod = false;
+}
+
+void
+NotePixmapFactory::drawHairpinAux(int length, bool isCrescendo,
+				  QPainter *painter, int x, int y)
+{
     int nbh = getNoteBodyHeight();
     int nbw = getNoteBodyWidth();
 
@@ -1788,7 +1828,13 @@ NotePixmapFactory::makeHairpinPixmap(int length, bool isCrescendo)
 
     height += thickness - 1;
 
-    createPixmapAndMask(length, height);
+    if (painter) {
+	painter->save();
+	m_p->beginExternal(painter);
+	painter->translate(x, y);
+    } else {
+	createPixmapAndMask(length, height);
+    }
 
     int left = 1, right = length - 2*nbw/3 + 1;
 
@@ -1804,11 +1850,63 @@ NotePixmapFactory::makeHairpinPixmap(int length, bool isCrescendo)
 			right, height/2-1, thickness, smooth);
     }
 
-    return makeCanvasPixmap(QPoint(0, height/2));
+    if (painter) {
+	painter->restore();
+    }
 }
 
 QCanvasPixmap*
 NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
+{
+    //!!! could remove "height > 5" requirement if we did a better job of
+    // sizing so that any horizontal part was rescaled down to exactly
+    // 1 pixel wide instead of blurring
+    bool smooth = m_font->isSmooth() && getNoteBodyHeight() > 5;
+
+    QPoint hotspot;
+    drawSlurAux(length, dy, above, smooth, hotspot, 0, 0, 0);
+
+    m_p->end();
+
+    if (smooth) {
+
+	QImage i = m_generatedPixmap->convertToImage();
+	if (i.depth() == 1) i = i.convertDepth(32);
+	i = i.smoothScale(i.width()/2, i.height()/2);
+
+	delete m_generatedPixmap;
+	delete m_generatedMask;
+	QPixmap newPixmap(i);
+	QCanvasPixmap *p = new QCanvasPixmap(newPixmap, hotspot);
+	p->setMask(PixmapFunctions::generateMask(newPixmap,
+						 Qt::white.rgb()));
+	return p;
+
+    } else {
+
+	QCanvasPixmap *p = new QCanvasPixmap(*m_generatedPixmap, hotspot);
+	p->setMask(PixmapFunctions::generateMask(*m_generatedPixmap, 
+						 Qt::white.rgb()));
+	delete m_generatedPixmap;
+	delete m_generatedMask;
+	return p;
+    }
+}
+
+void
+NotePixmapFactory::drawSlur(int length, int dy, bool above,
+			    QPainter &painter, int x, int y)
+{
+    QPoint hotspot;
+    m_inDrawMethod = true;
+    drawSlurAux(length, dy, above, false, hotspot, &painter, x, y);
+    m_inDrawMethod = false;
+}
+
+void
+NotePixmapFactory::drawSlurAux(int length, int dy, bool above, bool smooth,
+			       QPoint &hotspot,
+			       QPainter *painter, int x, int y)
 {
     Rosegarden::Profiler profiler("NotePixmapFactory::makeSlurPixmap");
 
@@ -1874,12 +1972,7 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
 //    NOTATION_DEBUG << "Pixmap dimensions: " << length << "x" << height << endl;
 
     bool havePixmap = false;
-    QPoint topLeft, bottomRight, hotspot;
-
-    //!!! could remove "nbh > 5" requirement if we did a better job of
-    // sizing so that any horizontal part was rescaled down to exactly
-    // 1 pixel wide instead of blurring
-    bool smooth = m_font->isSmooth() && nbh > 5;
+    QPoint topLeft, bottomRight;
 
     if (smooth) thickness += 2;
 
@@ -1895,12 +1988,20 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
 	if (!havePixmap) {
 	    int width  = bottomRight.x() - topLeft.x();
 	    int height = bottomRight.y() - topLeft.y() + thickness - 1;
-	    createPixmapAndMask(smooth ? width*2+1  : width,
-				smooth ? height*2+thickness*2 : height + thickness,
-				width, height);
-				
 	    hotspot = QPoint(-topLeft.x(), -topLeft.y());
-	    if (m_selected) m_p->painter().setPen(RosegardenGUIColours::SelectedElement);
+
+	    if (painter) {
+		painter->save();
+		m_p->beginExternal(painter);
+		painter->translate(x - hotspot.x(), y - hotspot.y());
+	    } else {
+		createPixmapAndMask(smooth ? width*2+1  : width,
+				    smooth ? height*2+thickness*2 : height + thickness,
+				    width, height);
+	    }
+
+	    if (m_selected)
+		m_p->painter().setPen(RosegardenGUIColours::SelectedElement);
 	    havePixmap = true;
 	}
 
@@ -1940,29 +2041,8 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
         m_p->painter().setPen(Qt::black);
     }
 
-    m_p->end();
-
-    if (smooth) {
-
-	QImage i = m_generatedPixmap->convertToImage();
-	if (i.depth() == 1) i = i.convertDepth(32);
-	i = i.smoothScale(i.width()/2, i.height()/2);
-
-	delete m_generatedPixmap;
-	delete m_generatedMask;
-	QPixmap newPixmap(i);
-	QCanvasPixmap *p = new QCanvasPixmap(newPixmap, hotspot);
-	p->setMask(PixmapFunctions::generateMask(newPixmap,
-						 Qt::white.rgb()));
-	return p;
-
-    } else {
-	QCanvasPixmap *p = new QCanvasPixmap(*m_generatedPixmap, hotspot);
-	p->setMask(PixmapFunctions::generateMask(*m_generatedPixmap, 
-						 Qt::white.rgb()));
-	delete m_generatedPixmap;
-	delete m_generatedMask;
-	return p;
+    if (painter) {
+	painter->restore();
     }
 }
 

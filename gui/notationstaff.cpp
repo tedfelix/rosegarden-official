@@ -366,7 +366,9 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 	
 	++nextIt;
 	
-	if (m_printPainter && (*it)->event()->isa(Rosegarden::Note::EventType)) {
+	if (m_printPainter &&
+	    ((*it)->event()->isa(Rosegarden::Note::EventType) ||
+	     (*it)->event()->isa(Rosegarden::Indication::EventType))) {
 	    // notes are renderable direct to the printer, so don't render
 	    // them to the canvas here
 	    continue;
@@ -417,7 +419,9 @@ NotationStaff::renderPrintable(timeT from, timeT to)
     Rosegarden::Key currentKey;
 
     NotationElementList::iterator beginAt = getViewElementList()->findTime(from);
-    NotationElementList::iterator endAt = getViewElementList()->findTime(to);
+    NotationElementList::iterator endAt = getViewElementList()->findTime(to + 1);
+
+//!!! hmm -- last chord is getting chopped
 
     int elementCount = 0;
 
@@ -426,7 +430,8 @@ NotationStaff::renderPrintable(timeT from, timeT to)
 	
 	++nextIt;
 
-	if (!(*it)->event()->isa(Rosegarden::Note::EventType)) {
+	if (!(*it)->event()->isa(Rosegarden::Note::EventType) &&
+	    !(*it)->event()->isa(Rosegarden::Indication::EventType)) {
 	    continue;
 	}
 

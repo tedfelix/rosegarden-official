@@ -126,7 +126,7 @@ private:
 class NotePixmapPainter;
 
 /**
- * Generates QCanvasPixmaps for various notation items
+ * Generates QCanvasPixmaps for various notation items.
  */
 
 class NotePixmapFactory 
@@ -146,6 +146,8 @@ public:
     void setNoteStyle(NoteStyle *style) { m_style = style; }
     const NoteStyle *getNoteStyle() const { return m_style; } 
 
+    // Display methods -- create canvas pixmaps:
+
     QCanvasPixmap* makeNotePixmap(const NotePixmapParameters &parameters);
     QCanvasPixmap* makeRestPixmap(const NotePixmapParameters &parameters);
     QCanvasPixmap* makeClefPixmap(const Rosegarden::Clef &clef);
@@ -158,9 +160,18 @@ public:
     QCanvasPixmap* makeUnknownPixmap();
     QCanvasPixmap* makeTextPixmap(const Rosegarden::Text &text);
 
-    // for printing -- draw note direct to a paint device
+    // Printing methods -- draw direct to a paint device:
+
     void drawNote(const NotePixmapParameters &parameters,
 		  QPainter &painter, int x, int y);
+//!!! omitted for now because of some subtleties    void drawRest(const NotePixmapParameters &parameters,
+//		  QPainter &painter, int x, int y);
+    void drawHairpin(int length, bool isCrescendo,
+		     QPainter &painter, int x, int y);
+    void drawSlur(int length, int dy, bool above,
+		  QPainter &painter, int x, int y);
+
+    // Other support methods for producing pixmaps for other contexts:
 
     static QCanvasPixmap* makeToolbarPixmap(const char *name);
     static QCanvasPixmap* makeNoteMenuPixmap(Rosegarden::timeT duration,
@@ -172,6 +183,8 @@ public:
     QCanvasPixmap* makeClefDisplayPixmap(const Rosegarden::Clef &clef);
     QCanvasPixmap* makeKeyDisplayPixmap(const Rosegarden::Key &key,
 				       const Rosegarden::Clef &clef);
+
+    // Bounding box and other geometry methods:
 
     int getNoteBodyWidth (Rosegarden::Note::Type =
                           Rosegarden::Note::Crotchet) const;
@@ -213,6 +226,12 @@ protected:
     void initMaybe() { if (!m_font) init("", -1); }
 
     void drawNoteAux(const NotePixmapParameters &parameters,
+		     QPainter *painter, int x, int y);
+//    void drawRestAux(const NotePixmapParameters &parameters,
+//		     QPainter *painter, int x, int y);
+    void drawHairpinAux(int length, bool isCrescendo,
+			QPainter *painter, int x, int y);
+    void drawSlurAux(int length, int dy, bool above, bool smooth, QPoint &hotspot,
 		     QPainter *painter, int x, int y);
 
     int getStemLength(const NotePixmapParameters &) const;
@@ -284,6 +303,7 @@ protected:
 
     int m_generatedWidth;
     int m_generatedHeight;
+    bool m_inDrawMethod;
     
     NotePixmapPainter *m_p;
 
