@@ -920,48 +920,43 @@ void
 AlsaDriver::allNotesOff()
 {
     snd_seq_event_t *event = new snd_seq_event_t();
-    Rosegarden::RealTime now = getAlsaTime();
     ClientPortPair outputDevice;
+    RealTime offTime;
 
+        offTime = getAlsaTime();
     // prepare the event
     snd_seq_ev_clear(event);
     snd_seq_ev_set_source(event, m_port);
 
-    for (NoteOffQueue::iterator i = m_noteOffQueue.begin();
-                                i != m_noteOffQueue.end(); i++)
+    for (NoteOffQueue::iterator it = m_noteOffQueue.begin();
+                                it != m_noteOffQueue.end(); it++)
     {
         // Set destination according to instrument mapping to port
         //
-        outputDevice = getPairForMappedInstrument((*i)->getInstrument());
+        outputDevice = getPairForMappedInstrument((*it)->getInstrument());
 
         snd_seq_ev_set_dest(event,
                             outputDevice.first,
                             outputDevice.second);
 
-        snd_seq_real_time_t time = { now.sec,
-                                     now.usec * 1000 };
 
-        snd_seq_ev_schedule_real(event, m_queue, 0, &time);
+        snd_seq_real_time_t alsaOffTime = { offTime.sec,
+                                            offTime.usec * 1000 };
+
+        snd_seq_ev_schedule_real(event, m_queue, 0, &alsaOffTime);
         snd_seq_ev_set_noteoff(event,
-                               (*i)->getChannel(),
-                               (*i)->getPitch(),
+                               (*it)->getChannel(),
+                               (*it)->getPitch(),
                                127);
-        // send note off directly
+        //snd_seq_event_output(m_midiHandle, event);
         snd_seq_event_output_direct(m_midiHandle, event);
-
-        delete(*i);
+        delete(*it);
+        m_noteOffQueue.erase(it);
     }
     
-    // erase iterators
-    m_noteOffQueue.erase(m_noteOffQueue.begin(), m_noteOffQueue.end());
-
-    // drop - does this work?
-    //
-    snd_seq_drop_output(m_midiHandle);
-    snd_seq_drop_output_buffer(m_midiHandle);
-
-    // and flush them
+    // flush
     snd_seq_drain_output(m_midiHandle);
+    delete event;
 }
 
 void
