@@ -24,7 +24,6 @@
 
 #include <string>
 #include <kmainwindow.h>
-#include <qslider.h>
 
 #include "editview.h"
 #include "notationelement.h"
@@ -32,6 +31,7 @@
 #include "notationvlayout.h"
 #include "notationcanvasview.h"
 #include "notationstaff.h"
+#include "zoomslider.h"
 #include "NotationTypes.h"
 
 class QCanvasItem;
@@ -486,21 +486,6 @@ protected:
     bool m_chordNamesVisible;
 
     bool m_tupletMode;
-
-    template <class T>
-    class ZoomSlider : public QSlider
-    {
-    public:
-        ZoomSlider(const std::vector<T> &sizes, T initialValue,
-                   Orientation, QWidget * parent, const char * name=0);
-        virtual ~ZoomSlider();
-        
-        void reinitialise(const std::vector<T> &sizes, T initialValue);
-        
-    protected:
-        static int getIndex(const std::vector<T> &, T size);
-        std::vector<T> m_sizes;
-    };
     
     ZoomSlider<int> *m_fontSizeSlider;
 

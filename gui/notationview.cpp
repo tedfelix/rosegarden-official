@@ -641,46 +641,6 @@ void NotationView::setupActions()
     createGUI("notation.rc");
 }
 
-template<class T>
-NotationView::ZoomSlider<T>::ZoomSlider(const vector<T> &sizes,
-                                        T initialSize, Orientation o,
-                                        QWidget *parent, const char *name) :
-    QSlider(0, sizes.size()-1, 1,
-            getIndex(sizes, initialSize), o, parent, name),
-    m_sizes(sizes)
-{
-    setTracking(false);
-    setFixedWidth(150);
-    setFixedHeight(15);
-    setLineStep(1);
-    setTickmarks(Below);
-}
-
-template<class T>
-NotationView::ZoomSlider<T>::~ZoomSlider() { }
-
-template<class T>
-int
-NotationView::ZoomSlider<T>::getIndex(const vector<T> &sizes, T size)
-{
-    for (unsigned int i = 0; i < sizes.size(); ++i) {
-        if (sizes[i] == size) return i;
-    }
-    return sizes.size()/2;
-}
-
-template<class T>
-void
-NotationView::ZoomSlider<T>::reinitialise(const vector<T> &sizes, T size)
-{ 
-    m_sizes = sizes;
-    setMinValue(0);
-    setMaxValue(sizes.size()-1);
-    setValue(getIndex(sizes, size));
-    setLineStep(1);
-    setTickmarks(Below);
-}
-
 NotationStaff *
 NotationView::getStaff(const Segment &segment)
 {
