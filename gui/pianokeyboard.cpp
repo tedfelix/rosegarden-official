@@ -53,19 +53,19 @@ void PianoKeyboard::computeKeyPos()
     unsigned const int smallWhiteKeyHeight = 14,
         whiteKeyHeight = 18;
     
-    int y = -5;
+    int y = -9;
 
     unsigned int posInOctave = 0,
         keyHeight = smallWhiteKeyHeight;
 
     for(unsigned int i = 0; i < m_nbKeys; ++i) {
-        posInOctave = (i + 3) % 7;
+        posInOctave = (i+5) % 7;
 
         if (y >= 0)
             m_whiteKeyPos.push_back(y);
 
-        if (posInOctave == 0)
-            m_labelKeyPos.push_back(y + (keyHeight * 3 / 4));
+        if (posInOctave == 2)
+            m_labelKeyPos.push_back(y + (keyHeight * 3/4) - 2);
 
         if (posInOctave == 0 ||
             posInOctave == 2 ||
@@ -80,9 +80,7 @@ void PianoKeyboard::computeKeyPos()
             
         } else {
 
-            keyHeight = whiteKeyHeight;
-
-        }
+            keyHeight = whiteKeyHeight;        }
 
         if (posInOctave != 2 && posInOctave != 6) { // draw black key
 
