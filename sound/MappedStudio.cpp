@@ -1465,7 +1465,7 @@ MappedLADSPAPort::getPropertyList(const MappedObjectProperty &property)
         if (property == MappedLADSPAPort::Value)
         {
             std::cout << "MappedLADSPAPort::MappedLADSPAPort - "
-                      << "value = " << m_value << endl;
+                      << "value = " << m_value << std::endl;
             list.push_back(MappedObjectProperty("%1").arg(m_value));
         }
 
