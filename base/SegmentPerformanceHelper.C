@@ -92,13 +92,9 @@ SegmentPerformanceHelper::getSoundingDuration(iterator i)
 {
     timeT d = 0;
 
-    if ((*i)->has(TIED_BACKWARD)) {
-	
-	return 0;
+    if (!(*i)->has(TIED_BACKWARD)) {
 
-    } else {
-
-	if (!(*i)->has(TIED_FORWARD)) {
+	if (!(*i)->has(TIED_FORWARD) || !(*i)->isa(Note::EventType)) {
 
 	    d = (*i)->getDuration();
 
@@ -107,7 +103,7 @@ SegmentPerformanceHelper::getSoundingDuration(iterator i)
 	    // tied forward but not back
 
 	    iteratorcontainer c(getTiedNotes(i));
-
+	    
 	    for (iteratorcontainer::iterator ci = c.begin();
 		 ci != c.end(); ++ci) {
 		d += (**ci)->getDuration();

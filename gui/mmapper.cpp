@@ -438,17 +438,25 @@ void SegmentMmapper::dump()
                 helper.getSoundingAbsoluteTime(j) + repeatNo * segmentDuration;
             if (playTime >= repeatEndTime) break;
 
-            eventTime = comp.getElapsedRealTime(playTime);
-
-            duration = helper.getRealSoundingDuration(j);
+	    timeT playDuration = helper.getSoundingDuration(j);
 
             // No duration and we're a note?  Probably in a tied
             // series, but not as first note
             //
-            if (duration == Rosegarden::RealTime(0, 0) &&
-                (*j)->isa(Rosegarden::Note::EventType))
+            if (playDuration == 0 && (*j)->isa(Rosegarden::Note::EventType))
                 continue;
                 
+	    if (playTime + playDuration > repeatEndTime)
+		playDuration = repeatEndTime - playTime;
+
+            eventTime = comp.getElapsedRealTime(playTime);
+
+	    // slightly quicker than calling helper.getRealSoundingDuration()
+	    duration =
+		comp.getElapsedRealTime(playTime + playDuration) - eventTime;
+
+//            duration = helper.getRealSoundingDuration(j);
+
             try {
                 // Create mapped event in mmapped buffer
                 MappedEvent *mE = new (bufPos) MappedEvent(0, // the instrument will be extracted from the ControlBlock by the sequencer
