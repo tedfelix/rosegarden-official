@@ -222,7 +222,7 @@ RosegardenProgressDialog::slotTimerElapsed()
     // because we probably won't have to show at all.  (we
     // still show if the second timeout has expired though.)
 
-    if (!m_firstTimeout || ((m_value * 4) > (m_max * 3))) slotShowMyself();
+    if (!m_firstTimeout || ((m_value * 4) < (m_max * 3))) slotShowMyself();
     else {
 	m_firstTimeout = false;
 	QTimer::singleShot(500, this, SLOT(slotTimerElapsed()));
