@@ -100,9 +100,22 @@ NoteFontMap::startElement(const QString &, const QString &,
         
     } else if (lcName == "font-information") { 
 
-        m_origin = attributes.value("origin").latin1();
-        m_copyright = attributes.value("copyright").latin1();
-        m_mappedBy = attributes.value("mapped-by").latin1();
+        const char *s;
+
+        s = attributes.value("origin").latin1();
+        if (s) m_origin = s;
+
+        s = attributes.value("copyright").latin1();
+        if (s) m_copyright = s;
+
+        s = attributes.value("mapped-by").latin1();
+        if (s) m_mappedBy = s;
+
+        s = attributes.value("type").latin1();
+        if (s) m_type = s;
+
+        s = attributes.value("smooth").latin1();
+        if (s) m_smooth = (QString(s).lower() == "true");
 
     } else if (lcName == "font-sizes") {
 

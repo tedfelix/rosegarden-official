@@ -509,9 +509,10 @@ void NotationView::setupActions()
     createGUI("notation.rc");
 }
 
-NotationView::ZoomSlider::ZoomSlider(const vector<int> &sizes,
-                                     int initialSize, Orientation o,
-                                     QWidget *parent, const char *name) :
+template<class T>
+NotationView::ZoomSlider<T>::ZoomSlider(const vector<T> &sizes,
+                                        T initialSize, Orientation o,
+                                        QWidget *parent, const char *name) :
     QSlider(0, sizes.size()-1, 1,
             getIndex(sizes, initialSize), o, parent, name),
     m_sizes(sizes)
@@ -523,23 +524,29 @@ NotationView::ZoomSlider::ZoomSlider(const vector<int> &sizes,
     setTickmarks(Below);
 }
 
-NotationView::ZoomSlider::~ZoomSlider() { }
+template<class T>
+NotationView::ZoomSlider<T>::~ZoomSlider() { }
 
-int NotationView::ZoomSlider::getIndex(const vector<int> &sizes, int size)
+template<class T>
+int
+NotationView::ZoomSlider<T>::getIndex(const vector<T> &sizes, T size)
 {
     for (unsigned int i = 0; i < sizes.size(); ++i) {
         if (sizes[i] == size) return i;
     }
-    return sizes[sizes.size()/2];
+    return sizes.size()/2;
 }
 
-void NotationView::ZoomSlider::reinitialise(const vector<int> &sizes,
-                                            int size)
+template<class T>
+void
+NotationView::ZoomSlider<T>::reinitialise(const vector<T> &sizes, T size)
 { 
     m_sizes = sizes;
     setMinValue(0);
     setMaxValue(sizes.size()-1);
     setValue(getIndex(sizes, size));
+    setLineStep(1);
+    setTickmarks(Below);
 }
 
 void NotationView::initFontToolbar()
@@ -574,20 +581,18 @@ void NotationView::initFontToolbar()
     new QLabel("  Size:  ", fontToolbar);
 
     vector<int> sizes = NotePixmapFactory::getAvailableSizes(m_fontName);
-    m_fontSizeSlider = new ZoomSlider(sizes, m_fontSize,
-                                      QSlider::Horizontal, fontToolbar);
+    m_fontSizeSlider = new ZoomSlider<int>
+        (sizes, m_fontSize, QSlider::Horizontal, fontToolbar);
     connect(m_fontSizeSlider, SIGNAL(valueChanged(int)),
-            this,               SLOT(changeFontSizeFromIndex(int)));
+            this, SLOT(changeFontSizeFromIndex(int)));
 
-    new QLabel("  Stretch:  ", fontToolbar);
+    new QLabel("  Spacing:  ", fontToolbar);
 
-    vector<int> stretches;
-    for (int s = 1; s < 10; ++s) stretches.push_back(s);
-    QSlider *stretchSlider = new ZoomSlider(stretches, 5,
-                                            QSlider::Horizontal, fontToolbar);
-//    stretchSlider->setTracking(true);
+    vector<double> spacings = NotationHLayout::getAvailableSpacings();
+    QSlider *stretchSlider = new ZoomSlider<double>
+        (spacings, 1.0, QSlider::Horizontal, fontToolbar);
     connect(stretchSlider, SIGNAL(valueChanged(int)),
-            this,            SLOT(changeStretch(int)));
+            this, SLOT(changeStretch(int)));
 }
 
 void NotationView::initStatusBar()
@@ -627,10 +632,11 @@ bool NotationView::showBars(int staffNo)
 
 
 void
-NotationView::changeStretch(int newStretch)
+NotationView::changeStretch(int n)
 {
-    kdDebug(KDEBUG_AREA) << "changeStretch: " << newStretch << endl;
-    m_hlayout->setStretchFactor(newStretch + 1);
+    vector<double> spacings = m_hlayout->getAvailableSpacings();
+    if (n >= (int)spacings.size()) n = spacings.size() - 1;
+    m_hlayout->setSpacing(spacings[n]);
 
     applyLayout();
 
@@ -703,7 +709,9 @@ NotationView::changeFont(string newName, int newSize)
         m_fontSizeSlider->reinitialise(sizes, m_fontSize);
     }
 
+    double spacing = m_hlayout->getSpacing();
     setHLayout(new NotationHLayout(*m_notePixmapFactory));
+    m_hlayout->setSpacing(spacing);
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         m_staffs[i]->move(0, 0);
@@ -1600,7 +1608,7 @@ NotationSelector::NotationSelector(NotationView& view)
       m_updateRect(false)
 {
     m_selectionRect->hide();
-    m_selectionRect->setPen(Qt::red);
+    m_selectionRect->setPen(Qt::blue);
 }
 
 NotationSelector::~NotationSelector()
@@ -1664,7 +1672,7 @@ EventSelection* NotationSelector::getSelection()
             selection->push_back(el.event());
 
             kdDebug(KDEBUG_AREA) << "Selected event : \n";
-            el.event()->dump(cerr);
+            el.event()->dump(std::cerr);
         }
         
     }

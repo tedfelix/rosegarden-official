@@ -297,6 +297,7 @@ bool NotationStaff::showElements(NotationElementList::iterator from,
         //
         try {
 
+            QCanvasPixmap *pixmap;
             QCanvasSimpleSprite *sprite = 0;
 
             if ((*it)->isNote()) {
@@ -309,44 +310,39 @@ bool NotationStaff::showElements(NotationElementList::iterator from,
                     (*it)->event()->get<Int>(Rosegarden::Note::NoteType);
                 int dots =
                     (*it)->event()->get<Int>(Rosegarden::Note::NoteDots);
-
-                QCanvasPixmap notePixmap
+                pixmap = new QCanvasPixmap
                     (m_npf->makeRestPixmap(Note(note, dots)));
-                sprite = new
-                    QCanvasNotationSprite(*(*it), &notePixmap, canvas());
 
             } else if ((*it)->event()->isa(Clef::EventType)) {
 
 		currentClef = Clef(*(*it)->event());
-                QCanvasPixmap clefPixmap(m_npf->makeClefPixmap(currentClef));
-                sprite = new
-                    QCanvasNotationSprite(*(*it), &clefPixmap, canvas());
+                pixmap = new QCanvasPixmap
+                    (m_npf->makeClefPixmap(currentClef));
 
             } else if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
 
-                QCanvasPixmap keyPixmap
+                pixmap = new QCanvasPixmap
                     (m_npf->makeKeyPixmap
                      (Rosegarden::Key((*it)->event()->get<String>
                                       (Rosegarden::Key::KeyPropertyName)),
                       currentClef));
-                sprite = new
-                    QCanvasNotationSprite(*(*it), &keyPixmap, canvas());
 
             } else if ((*it)->event()->isa(TimeSignature::EventType)) {
 
-                QCanvasPixmap timeSigPixmap
-                    (m_npf->makeTimeSigPixmap(TimeSignature(*(*it)->event())));
-                sprite = new
-                    QCanvasNotationSprite(*(*it), &timeSigPixmap, canvas());
+                pixmap = new QCanvasPixmap
+                    (m_npf->makeTimeSigPixmap
+                     (TimeSignature(*(*it)->event())));
 
             } else {
                     
                 kdDebug(KDEBUG_AREA)
                     << "NotationElement of unrecognised type "
                     << (*it)->event()->getType() << endl;
-                QCanvasPixmap unknownPixmap(m_npf->makeUnknownPixmap());
-                sprite = new
-                    QCanvasNotationSprite(*(*it), &unknownPixmap, canvas());
+                pixmap = new QCanvasPixmap(m_npf->makeUnknownPixmap());
+            }
+
+            if (!sprite) {
+                sprite = new QCanvasNotationSprite(*(*it), pixmap, canvas());
             }
 
             // Show the sprite
@@ -448,6 +444,7 @@ QCanvasSimpleSprite *NotationStaff::makeNoteSprite(NotationElementList::iterator
 
     params.setStemLength(stemLength);
     QCanvasPixmap notePixmap(m_npf->makeNotePixmap(params));
-    return new QCanvasNotationSprite(*(*it), &notePixmap, canvas());
+    return new QCanvasNotationSprite(*(*it),
+                                     new QCanvasPixmap(notePixmap), canvas());
 }
 

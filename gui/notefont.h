@@ -62,6 +62,8 @@ public:
     std::string getOrigin() const { return m_origin; }
     std::string getCopyright() const { return m_copyright; }
     std::string getMappedBy() const { return m_mappedBy; }
+    std::string getType() const { return m_type; }
+    bool isSmooth() const { return m_smooth; }
 
     std::set<int> getSizes() const;
     std::set<CharName> getCharNames() const;
@@ -197,6 +199,8 @@ private:
     std::string m_origin;
     std::string m_copyright;
     std::string m_mappedBy;
+    std::string m_type;
+    bool m_smooth;
 
     typedef std::hash_map<CharName, SymbolData,
                           CharNameHash, CharNamesEqual> SymbolDataMap;

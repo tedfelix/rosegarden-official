@@ -33,6 +33,7 @@
 
 class QCanvasLineGroupable;
 class QCanvasSimpleSprite;
+class EventSelection;
 
 /**
  * The Staff is a repository for information about the notation
@@ -102,7 +103,7 @@ public:
 		      NotationElementList::iterator to,
 		      bool positionOnly = false);
 
-
+    bool showSelection(const EventSelection *selection);
 
 
     /**

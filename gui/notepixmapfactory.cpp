@@ -86,6 +86,7 @@ NotePixmapParameters::~NotePixmapParameters()
 
 
 NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
+    m_selected(false),
     m_timeSigFont("new century schoolbook", 8, QFont::Bold),
     m_timeSigFontMetrics(m_timeSigFont)
 {
@@ -314,9 +315,8 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     }
 
     QPixmap body;
-    if (!params.m_selected) {
-        body = m_font->getPixmap
-            (getNoteHeadCharName(params.m_noteType));
+    if (!m_selected && !params.m_selected) {
+        body = m_font->getPixmap(getNoteHeadCharName(params.m_noteType));
     } else {
         body = m_font->getColouredPixmap
             (getNoteHeadCharName(params.m_noteType), NoteFont::Blue);
@@ -384,6 +384,10 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
             } else if (first) {
                 s0.ry() += offset/2;
                 s1.ry() += offset/2;
+                if (legerLines < 0) {
+                    --s0.ry();
+                    --s1.ry();
+                }
             }                
         }
     }
@@ -562,14 +566,19 @@ NotePixmapFactory::drawBeams(const QPoint &s1,
     if (grad < 0.01) ++gap;
 
     bool smooth = true;
-    if (thickness < 2) smooth = false;
+    if (thickness < 2 || !m_font->getNoteFontMap().isSmooth()) smooth = false;
+
+    if (!params.m_stemGoesUp) {
+        startY -= thickness;
+        if (!smooth) startY += 1;
+    } else {
+        if  (smooth) startY -= 1;
+    }
+
+    int sign = (params.m_stemGoesUp ? 1 : -1);
 
     for (int j = 0; j < commonBeamCount; ++j) {
-        int y = j * (thickness + gap);
-        if (!params.m_stemGoesUp) {
-            if (smooth) y = -y - thickness ;
-            else y = -y - 1;
-        } else if (smooth) y = y - 1;
+        int y = sign * j * (thickness + gap);
         drawShallowLine(startX, startY + y, startX + width,
                         startY + (int)(width*grad) + y,
                         thickness, smooth);
@@ -581,11 +590,7 @@ NotePixmapFactory::drawBeams(const QPoint &s1,
     
     if (params.m_thisPartialBeams) {
         for (int j = commonBeamCount; j < beamCount; ++j) {
-            int y = j * (thickness + gap);
-            if (!params.m_stemGoesUp) {
-                if (smooth) y = -y - thickness ;
-                else y = -y - 1;
-	    } else if (smooth) y = y - 1;
+            int y = sign * j * (thickness + gap);
             drawShallowLine(startX, startY + y, startX + partWidth,
                             startY + (int)(partWidth*grad) + y,
                             thickness, smooth);
@@ -597,11 +602,7 @@ NotePixmapFactory::drawBeams(const QPoint &s1,
         startY += (int)((width - partWidth) * grad);
         
         for (int j = commonBeamCount; j < params.m_nextBeamCount; ++j) {
-            int y = j * (thickness + gap);
-            if (!params.m_stemGoesUp) {
-                if (smooth) y = -y - thickness ;
-                else y = -y - 1;
-	    } else if (smooth) y = y - 1;
+            int y = sign * j * (thickness + gap);
             drawShallowLine(startX, startY + y, startX + partWidth,
                             startY + (int)(partWidth*grad) + y,
                             thickness, smooth);
@@ -613,10 +614,18 @@ QCanvasPixmap
 NotePixmapFactory::makeRestPixmap(const Note &restType) 
 {
     CharName charName(getRestCharName(restType.getNoteType()));
-    if (restType.getDots() == 0) return m_font->getCanvasPixmap(charName);
+    if (restType.getDots() == 0 && !m_selected) {
+        return m_font->getCanvasPixmap(charName);
+    }
 
-    QPixmap pixmap(m_font->getPixmap(charName));
-    QPixmap dot(m_font->getPixmap(NoteCharacterNames::DOT));
+    QPixmap pixmap;
+
+    if (!m_selected) {
+        pixmap = m_font->getPixmap(charName);
+    } else {
+        pixmap = m_font->getColouredPixmap(charName, NoteFont::Blue);
+    }
+    QPixmap dot = m_font->getPixmap(NoteCharacterNames::DOT);
 
     createPixmapAndMask(pixmap.width() + dot.width() * restType.getDots(),
                         pixmap.height());
@@ -650,13 +659,23 @@ NotePixmapFactory::makeRestPixmap(const Note &restType)
 QCanvasPixmap
 NotePixmapFactory::makeClefPixmap(const Clef &clef) const
 {
-    return m_font->getCanvasPixmap(getClefCharName(clef));
+    if (m_selected) {
+        return m_font->getColouredCanvasPixmap(getClefCharName(clef),
+                                               NoteFont::Blue);
+    } else {
+        return m_font->getCanvasPixmap(getClefCharName(clef));
+    }
 }
 
 QCanvasPixmap
 NotePixmapFactory::makeUnknownPixmap()
 {
-    return m_font->getCanvasPixmap(NoteCharacterNames::UNKNOWN);
+    if (m_selected) {
+        return m_font->getColouredCanvasPixmap(NoteCharacterNames::UNKNOWN,
+                                               NoteFont::Blue);
+    } else {
+        return m_font->getCanvasPixmap(NoteCharacterNames::UNKNOWN);
+    }
 }
 
 QCanvasPixmap
@@ -675,7 +694,12 @@ NotePixmapFactory::makeKeyPixmap(const Key &key, const Clef &clef)
                          NoteCharacterNames::SHARP :
                          NoteCharacterNames::FLAT);
 
-    QPixmap accidentalPixmap(m_font->getPixmap(charName));
+    QPixmap accidentalPixmap;
+    if (m_selected) {
+        accidentalPixmap = m_font->getColouredPixmap(charName,NoteFont::Blue);
+    } else {
+        accidentalPixmap = m_font->getPixmap(charName);
+    }
     QPoint hotspot(m_font->getHotspot(charName));
 
     int x = 0;
@@ -736,6 +760,10 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
     m_p.setFont(m_timeSigFont);
     m_pm.setFont(m_timeSigFont);
 
+    if (m_selected) {
+        m_p.setPen(Qt::blue);
+    }
+
     x = (width - numR.width()) / 2 - 1;
     m_p.drawText(x, denomR.height(), numS);
     m_pm.drawText(x, denomR.height(), numS);
@@ -743,6 +771,8 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
     x = (width - denomR.width()) / 2 - 1;
     m_p.drawText(x, denomR.height() * 2 + (getNoteBodyHeight()/2) - 1, denomS);
     m_pm.drawText(x, denomR.height() * 2 + (getNoteBodyHeight()/2) - 1, denomS);
+
+    m_p.setPen(Qt::black);
 
     m_p.end();
     m_pm.end();

@@ -6,7 +6,9 @@
 <font-information
         origin="Rosegarden 2.1"
         copyright="Copyright (c) 1994--2001 Chris Cannam"
-        mapped-by="Chris Cannam"/>
+        mapped-by="Chris Cannam"
+        type="pixmap"
+        smooth="false"/>
 
 <font-sizes>
         <font-size note-height="4" staff-line-thickness="1" stem-thickness="1"/>

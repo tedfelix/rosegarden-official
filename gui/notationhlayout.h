@@ -29,6 +29,9 @@
 #include "LayoutEngine.h"
 #include "FastVector.h"
 
+#include <vector>
+
+
 /**
  * Horizontal notation layout
  *
@@ -44,9 +47,6 @@ public:
     
     NotationHLayout(NotePixmapFactory &npf);
     virtual ~NotationHLayout();
-
-    int getStretchFactor() const { return m_stretchFactor; }
-    void setStretchFactor(int factor) { m_stretchFactor = factor; }
 
     /**
      * Precomputes layout data for a single staff.  The resulting data
@@ -73,6 +73,24 @@ public:
      * Lays out all staffs that have been scanned
      */
     virtual void finishLayout();
+
+    /**
+     * Gets the current spacing factor (1.0 == "normal" spacing)
+     */
+    double getSpacing() const { return m_spacing; }
+
+    /**
+     * Sets the current spacing factor (1.0 == "normal" spacing)
+     */
+    void setSpacing(double spacing) { m_spacing = spacing; }
+
+    /**
+     * Gets the range of "standard" spacing factors (you can
+     * setSpacing() to anything you want, but it makes sense to
+     * have a standard list for GUI use).  The only guaranteed
+     * property of the returned list is that 1.0 will be in it.
+     */
+    static std::vector<double> getAvailableSpacings();
 
     /**
      * Returns the total length of all elements once layout is done
@@ -178,10 +196,13 @@ protected:
     int getMinWidth(NotationElement &,
                     const Rosegarden::Quantizer * = 0) const;
     int getComfortableGap(Rosegarden::Note::Type type) const;
+    int getBarMargin() const;
 
     double m_totalWidth;
-    int m_stretchFactor;
+    double m_spacing;
     NotePixmapFactory &m_npf;
+
+    static std::vector<double> m_availableSpacings;
 };
 
 #endif

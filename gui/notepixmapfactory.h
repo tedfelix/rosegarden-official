@@ -94,6 +94,9 @@ public:
     std::string getFontName() const;
     int getSize() const;
 
+    void setSelected(bool selected) { m_selected = selected; }
+    bool isSelected() const { return m_selected; }
+
     QCanvasPixmap makeNotePixmap(const NotePixmapParameters &parameters);
     QCanvasPixmap makeRestPixmap(const Rosegarden::Note &restType);
     QCanvasPixmap makeClefPixmap(const Rosegarden::Clef &clef) const;
@@ -125,6 +128,7 @@ public:
 
 protected:
     NoteFont *m_font;
+    bool m_selected;
 
     int m_noteBodyWidth, m_noteBodyHeight;
     int m_left, m_right, m_above, m_below;

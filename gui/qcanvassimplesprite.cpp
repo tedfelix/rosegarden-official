@@ -50,10 +50,11 @@ QCanvasSimpleSprite::makePixmapArray(QCanvasSimpleSprite *self,
                                      QPixmap *pixmap)
 {
     QList<QPixmap> pixlist;
+    pixlist.setAutoDelete(TRUE);
     pixlist.append(pixmap);
 
     QList<QPoint> spotlist;
-    spotlist.setAutoDelete(true);
+    spotlist.setAutoDelete(TRUE);
     spotlist.append(new QPoint(0,0));
 
     self->m_pixmapArray = new QCanvasPixmapArray(pixlist, spotlist);
@@ -66,10 +67,11 @@ QCanvasSimpleSprite::makePixmapArray(QCanvasSimpleSprite *self,
                                      QCanvasPixmap *pixmap)
 {
     QList<QPixmap> pixlist;
+    pixlist.setAutoDelete(TRUE);
     pixlist.append(pixmap);
 
     QList<QPoint> spotlist;
-    spotlist.setAutoDelete(true);
+    spotlist.setAutoDelete(TRUE);
     spotlist.append(new QPoint(pixmap->offsetX(),pixmap->offsetY()));
 
     self->m_pixmapArray = new QCanvasPixmapArray(pixlist, spotlist);

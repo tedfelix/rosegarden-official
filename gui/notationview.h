@@ -456,21 +456,22 @@ protected:
 
     NotationTool* m_tool;
 
+    template <class T>
     class ZoomSlider : public QSlider
     {
     public:
-        ZoomSlider(const std::vector<int> &sizes, int initialValue,
+        ZoomSlider(const std::vector<T> &sizes, T initialValue,
                    Orientation, QWidget * parent, const char * name=0);
         virtual ~ZoomSlider();
         
-        void reinitialise(const std::vector<int> &sizes, int initialValue);
+        void reinitialise(const std::vector<T> &sizes, T initialValue);
         
     protected:
-        static int getIndex(const std::vector<int> &, int size);
-        std::vector<int> m_sizes;
+        static int getIndex(const std::vector<T> &, T size);
+        std::vector<T> m_sizes;
     };
     
-    ZoomSlider *m_fontSizeSlider;
+    ZoomSlider<int> *m_fontSizeSlider;
     
     KAction* m_selectDefaultNote;
 
