@@ -100,6 +100,9 @@ namespace RosegardenGUIColours
 
     extern const QColor AudioCountdownBackground;
     extern const QColor AudioCountdownForeground;
+
+    extern const QColor RotaryFloatBackground;
+    extern const QColor RotaryFloatForeground;
 }
 
 #endif

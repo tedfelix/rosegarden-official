@@ -90,7 +90,6 @@ protected:
     ControlType          m_type;
     PluginPort          *m_port;
 
-    float                m_multiplier;
     RosegardenRotary    *m_dial;
     AudioPluginManager  *m_pluginManager;
 

@@ -308,16 +308,13 @@ class RosegardenRotary : public QWidget
 {
     Q_OBJECT
 public:
-    RosegardenRotary(QWidget *parent);
-
     RosegardenRotary(QWidget *parent,
-                     float minValue,
-                     float maxValue,
-                     float step,
-                     float pageStep,
-                     float initialPosition,
-                     int size,
-                     float multipler = 1.0);
+                     float minValue = 0.0,
+                     float maxValue = 100.0,
+                     float step = 1.0,
+                     float pageStep = 10.0,
+                     float initialPosition = 50.0,
+                     int size = 20.0);
 
     void setMinValue(float min) { m_minValue = min; }
     float getMinValue() const { return m_minValue; }
@@ -370,8 +367,6 @@ protected:
     QColor               m_knobColour;
 
     RosegardenTextFloat *m_float;
-
-    float                m_multiplier;
 };
 
 namespace Rosegarden { class Quantizer; }

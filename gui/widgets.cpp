@@ -42,6 +42,7 @@
 #include "rosestrings.h"
 #include "notationstrings.h"
 #include "notepixmapfactory.h"
+#include "colours.h"
 
 #include "Quantizer.h"
 
@@ -476,38 +477,13 @@ RosegardenFader::setFader(int value)
 // ------------------ RosegardenRotary -----------------
 //
 //
-
-RosegardenRotary::RosegardenRotary(QWidget *parent):
-    QWidget(parent),
-    m_minValue(0),
-    m_maxValue(100),
-    m_step(1),
-    m_pageStep(10),
-    m_size(20),
-    m_lastPosition(50),
-    m_position(50),
-    m_buttonPressed(false),
-    m_lastY(0),
-    m_lastX(0),
-    m_knobColour(0, 0, 0)
-{
-    QToolTip::add(this, 
-                 "Click and drag up and down or left and right to modify");
-    setFixedSize(m_size, m_size);
-
-    m_float = new RosegardenTextFloat(this);
-    m_float->hide();
-}
-
-
 RosegardenRotary::RosegardenRotary(QWidget *parent,
                                    float minValue,
                                    float maxValue,
                                    float step,
                                    float pageStep,
                                    float initialPosition,
-                                   int size,
-                                   float multiplier):
+                                   int size):
     QWidget(parent),
     m_minValue(minValue),
     m_maxValue(maxValue),
@@ -519,8 +495,7 @@ RosegardenRotary::RosegardenRotary(QWidget *parent,
     m_buttonPressed(false),
     m_lastY(0),
     m_lastX(0),
-    m_knobColour(0, 0, 0),
-    m_multiplier(multiplier)
+    m_knobColour(0, 0, 0)
 {
     QToolTip::add(this,
                  "Click and drag up and down or left and right to modify");
@@ -528,6 +503,9 @@ RosegardenRotary::RosegardenRotary(QWidget *parent,
 
     m_float = new RosegardenTextFloat(this);
     m_float->hide();
+
+    // set the initial position
+    drawPosition();
 }
 
 
@@ -568,6 +546,10 @@ RosegardenRotary::mousePressEvent(QMouseEvent *e)
         m_buttonPressed = true;
         m_lastY = e->y();
         m_lastX = e->x();
+
+        // draw on the float text
+        m_float->setText(QString("%1").arg(m_position));
+        m_float->show();
     }
     else if (e->button() == RightButton) // reset to centre position
     {
@@ -587,16 +569,9 @@ RosegardenRotary::mouseReleaseEvent(QMouseEvent *e)
         m_lastY = 0;
         m_lastX = 0;
 
-        // Kill the float text if it's around
+        // Hide the float text
         //
-        if (m_float)
-        {
-            /*
-            delete m_float;
-            m_float = 0;
-            */
-            m_float->hide();
-        }
+        if (m_float) m_float->hide();
 
     }
 }
@@ -631,7 +606,6 @@ RosegardenRotary::mouseMoveEvent(QMouseEvent *e)
 
         // draw on the float text
         m_float->setText(QString("%1").arg(m_position));
-        //m_float->show();
     }
 }
 
@@ -1024,8 +998,8 @@ RosegardenTextFloat::paintEvent(QPaintEvent *e)
 
     paint.setPen(kapp->palette().color(QPalette::Active, QColorGroup::Dark));
 
-    paint.setPen(Qt::black);
-    paint.setBrush(Qt::red);
+    paint.setPen(RosegardenGUIColours::RotaryFloatForeground);
+    paint.setBrush(RosegardenGUIColours::RotaryFloatBackground);
 
     // get some text sizes
     QRect textBound =  paint.boundingRect(0, 0, 100, 100, AlignCenter, m_text);

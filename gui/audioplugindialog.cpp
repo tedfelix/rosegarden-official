@@ -44,6 +44,10 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
                                      Instrument *instrument,
                                      int index):
     //!!! should be an ok/cancel dialog, but that's trickier to do
+    //    
+    // .. well just make sure that we still send realtime parameters
+    // when changing rotaries etc.
+    //
     KDialogBase(parent, "", false, i18n("Audio Plugin"), Close),
     m_pluginManager(aPM),
     m_instrument(instrument),
@@ -130,6 +134,10 @@ AudioPluginDialog::makePluginParamsBox(QWidget *parent)
 void
 AudioPluginDialog::slotPluginSelected(int number)
 {
+
+    RG_DEBUG << "AudioPluginDialog::::slotPluginSelected - "
+             << "setting up plugin in slot " << number << endl;
+
     QString caption =
 	strtoqstr(m_instrument->getName()) +
 	QString(" [ %1 ] - ").arg(m_index + 1);
@@ -217,7 +225,6 @@ AudioPluginDialog::slotPluginSelected(int number)
                                       count,
                                       inst->getPort(count)->value);
 
-
                 connect(control, SIGNAL(valueChanged(float)),
                         this, SLOT(slotPluginPortChanged(float)));
 
@@ -302,12 +309,11 @@ PluginControl::PluginControl(QWidget *parent,
                              PluginPort *port,
                              AudioPluginManager *aPM,
                              int index,
-                             float /*initialValue*/):
+                             float initialValue):
     QObject(parent),
     m_layout(layout),
     m_type(type),
     m_port(port),
-    m_multiplier(1.0),
     m_pluginManager(aPM),
     m_index(index)
 {
@@ -317,11 +323,9 @@ PluginControl::PluginControl(QWidget *parent,
 
     QLabel *controlTitle = new QLabel(port->getName(), parent);
     controlTitle->setFont(plainFont);
-    //setStretchFactor(title, 20);
 
     QLabel *controlValue = new QLabel(parent);
     controlValue->setFont(plainFont);
-    //setStretchFactor(value, 1);
 
     if (type == Rotary)
     {
@@ -352,48 +356,19 @@ PluginControl::PluginControl(QWidget *parent,
         QLabel *low = new QLabel(QString("%1").arg(lowerBound), parent);
         low->setIndent(10);
         low->setAlignment(AlignRight|AlignBottom);
-        //setStretchFactor(low, 1);
 
-        m_multiplier = 200.0 / (upperBound - lowerBound);
-        float step = 1.0f;
-
-        //cout << "MULT = " << m_multiplier << endl;
-        //cout << "STEP = " << step << endl;
-
-        // Ensure that we always have at least fifty steps
-        //
-        while ((fabs(upperBound - lowerBound)) * m_multiplier < 50.0)
-            m_multiplier *= 10.0;
+        float step = (upperBound - lowerBound) / 100.0;
 
         m_dial = new RosegardenRotary(parent,
-                                      lowerBound * m_multiplier, // min
-                                      upperBound * m_multiplier, // max
-                                      step,                      // step
+                                      lowerBound,   // min
+                                      upperBound,   // max
+                                      step,         // step
                                       step * 10.0,
-                                      lowerBound * m_multiplier, // initial
-                                      30,                        // size
-                                      m_multiplier);
-        //setStretchFactor(m_dial, 8);
+                                      initialValue, // initial
+                                      30);          // size
 
-
-        //cout << "LOWER = " << lowerBound * m_multiplier << endl;
-        //cout << "UPPER = " << upperBound * m_multiplier << endl;
-
-        //m_dial->setMinValue(int(lowerBound * m_multiplier));
-        //m_dial->setMaxValue(int(upperBound * m_multiplier));
-
-        // Set the initial value
-        //
-        float value = defaultValue * m_multiplier;
-        if (value < lowerBound * m_multiplier)
-            value = lowerBound * m_multiplier;
-        else if (value > upperBound * m_multiplier)
-            value = upperBound * m_multiplier;
-
-        m_dial->setPosition(value);
-        emit valueChanged(value/m_multiplier);
-
-        //cout << "INITIAL VALUE = " << value << endl;
+        //m_dial->setPosition(defaultValue);
+        //emit valueChanged(defaultValue);
 
         connect(m_dial, SIGNAL(valueChanged(float)),
                 this, SLOT(slotValueChanged(float)));
@@ -402,7 +377,6 @@ PluginControl::PluginControl(QWidget *parent,
         upp->setIndent(10);
         upp->setAlignment(AlignLeft|AlignBottom);
         upp->setFont(plainFont);
-        //setStretchFactor(upp, 1);
 
         controlTitle->show();
         controlValue->show();
@@ -415,20 +389,21 @@ PluginControl::PluginControl(QWidget *parent,
         m_layout->addItem(new QWidgetItem(low));
         m_layout->addItem(new QWidgetItem(m_dial));
         m_layout->addItem(new QWidgetItem(upp));
+
+        RG_DEBUG << "setting port value = " << initialValue << endl;
     }
 }
 
 void
 PluginControl::setValue(float value)
 {
-    m_dial->setPosition(int(value * m_multiplier));
-    // set the label too..
+    m_dial->setPosition(value);
 }
 
 void
 PluginControl::slotValueChanged(float value)
 {
-    emit valueChanged(value/m_multiplier);
+    emit valueChanged(value);
 }
 
 }
