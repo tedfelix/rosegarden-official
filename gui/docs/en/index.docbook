@@ -80,7 +80,11 @@
     abstract. -->
 
     <para>
-      The complete user manual to <application>Rosegarden</application>, version 0.1
+
+      <application>Rosegarden</application> is a MIDI and audio
+      sequencer and musical notation editor.  This Handbook describes
+      how to use it.
+
     </para>
 
     <!-- Note that the revhistory tags apply to the documentation
@@ -88,7 +92,7 @@
     ItemizedList here. -->
 
     <sect1 id="rosegarden-revhistory">
-      <title>Rosegarden Revision History</title>
+      <title>Rosegarden Handbook Revision History</title>
       <para>
 	<itemizedlist>
 	  <listitem><para>
@@ -99,6 +103,8 @@
     </sect1>
   </chapter>
 
+  <!-- cc: I think we should omit the Installation chapter -->
+
   <chapter id="installation">
     <title>Installation</title>
 
@@ -106,11 +112,8 @@
       <title>How to obtain Rosegarden</title>
 
       <para>
-	<application>Rosegarden</application> is part of the KDE project
-	<ulink url="http://www.kde.org">http://www.kde.org</ulink>.
-	<application>Rosegarden</application> can be found on
-	<ulink url="ftp://ftp.kde.org/pub/kde/">ftp://ftp.kde.org/pub/kde/</ulink>, the
-	main ftp site of the KDE project. </para>
+	To obtain the latest version of <application>Rosegarden</application>, visit <ulink url="http://www.all-day-breakfast.com/rosegarden/">the Rosegarden website</ulink>.
+      </para>
     </sect1>
 
     <sect1 id="requirements">
@@ -176,6 +179,9 @@
 
   </chapter>
 
+
+
+
   <chapter id="using-rosegarden">
     <title>Using Rosegarden</title>
 
@@ -183,10 +189,11 @@
     should use as many sections (Chapter, Sect1, Sect3, etc...) as is
     necessary to fully document your application. -->
 
-    <para>
+    <!-- Note that all graphics should be in .png format. Use no
+    gifs because of patent issues. -->
 
-      <!-- Note that all graphics should be in .png format. Use no
-      gifs because of patent issues. -->
+    <!--
+    <para>
 
       <screenshot>
 	<mediaobject>
@@ -201,7 +208,6 @@
 
     </para>
 
-
     <sect1 id="rosegarden-features-overview">
       <title>Features overview</title>
 
@@ -212,21 +218,109 @@
       </para>
 
     </sect1>
+    -->
 
     <sect1 id="basics">
       <title>How Rosegarden stores a composition</title>
       <para></para>
     </sect1>
 
-    <sect1 id="segment-editor">
+    <sect1 id="segment-view">
       <title>The Segment editor</title>
       <para></para>
     </sect1>
 
-    <sect1 id="notation-editor">
+    <sect1 id="notation-view">
       <title>The Notation editor</title>
 
-      <sect2 id="note-styles">
+      <sect2 id="nv-paste-types">
+	<title>Paste types</title>
+
+	<para>
+	  The meaning of "cut and paste" is less obvious for a music
+	  editing program than it is for something like a word
+	  processor in which the letters and words go in a simple
+	  linear order.  Accordingly, Rosegarden's notation editor
+	  offers several different types of Paste operation, as well
+	  as separate <link
+	  linkend="commands-nv-menu-edit-cut">Cut</link> and <link
+	  linkend="commands-nv-menu-edit-cut-and-close">Cut and
+	  Close</link> functions.
+	</para>
+
+	<para>The types of Paste operation are:</para>
+
+	<variablelist>
+
+	  <varlistentry>
+	    <term>Restricted</term>
+	    <listitem>
+	      <para>Requires an existing gap (containing nothing but
+		rests) of enough duration to completely contain the
+		clipboard's contents.  The contents are pasted into
+		the gap.  If there is no gap long enough, the paste
+		is not carried out.
+	      </para>
+	      <para>
+		This is the default paste type.
+	      </para>
+	    </listitem>
+	  </varlistentry>
+
+	  <varlistentry>
+	    <term>Simple</term>
+	    <listitem>
+	      <para>Erases enough events to make a gap long enough to
+		paste into, and then pastes into that.  The pasted events therefore completely replace any existing ones in the time covered by the paste.
+	      </para>
+	    </listitem>
+	  </varlistentry>
+
+	  <varlistentry>
+	    <term>Open and Paste</term>
+	    <listitem>
+	      <para>The opposite of <link
+	  linkend="commands-nv-menu-edit-cut-and-close">Cut and
+	  Close</link>.  Makes room for the paste by moving all of
+		subsequent events further towards the end of the
+		composition.
+	      </para>
+	    </listitem>
+	  </varlistentry>
+
+	  <varlistentry>
+	    <term>Note Overlay</term>
+	    <listitem>
+	      <para>Carries out a paste in the way that it would
+	      happen if you entered each of the notes in the clipboard
+	      yourself using the notation editor: if there are other
+	      notes overlapping with them, the new or existing notes
+	      will be split into ties appropriately.
+	      </para>
+	    </listitem>
+	  </varlistentry>
+
+	  <varlistentry>
+	    <term>Matrix Overlay</term>
+	    <listitem>
+	      <para>Carries out a paste in the way that it would
+	      happen if you entered each of the notes in the clipboard
+	      yourself using the matrix editor: the notes presently
+		in the way of the paste will be ignored, allowing the new notes to overlap arbitrarily with them.
+	      </para>
+	    </listitem>
+	  </varlistentry>
+
+	</variablelist>
+
+	<para>All of these take effect at the current position of the insert cursor on the current staff.  To choose between the various paste types, use the <link
+	  linkend="commands-nv-menu-edit-paste-dot-dot-dot">Paste...</link> menu option (with dots) on the <link
+	  linkend="commands-nv-menu-edit">Edit</link> menu.
+	  </para>
+
+      </sect2>
+
+      <sect2 id="nv-note-styles">
 	<title>Note Styles</title>
 
 	<para>
@@ -267,6 +361,9 @@
 
   </chapter>
 
+
+
+
   <chapter id="commands">
     <title>Command Reference</title>
 
@@ -279,9 +376,10 @@
 
     <para></para>
 
-    <sect1 id="rosegarden-mainwindow">
+    <sect1 id="commands-main">
       <title>The main Rosegarden window</title>
       <para></para>
+
 
       <sect2>
 	<title>The File Menu</title>
@@ -321,8 +419,208 @@
 	</para>
 
       </sect2>
+
+    </sect1>
+    
+    <sect1 id="commands-nv">
+      <title>The Notation View</title>
+      <para></para>
+
+      <sect2 id="commands-nv-menu-file">
+	<title>The File Menu</title>
+	<para>
+	  <variablelist>
+
+	    <varlistentry id="commands-nv-menu-file-close">
+	      <term><menuchoice>
+		  <shortcut>
+		    <keycombo><keycap>Ctrl</keycap><keycap>n</keycap></keycombo>
+		  </shortcut>
+		  <guimenu>File</guimenu>
+		  <guimenuitem>Close</guimenuitem>
+		</menuchoice></term>
+	      <listitem><para><action>Closes the window</action></para></listitem>
+	    </varlistentry>
+
+	  </variablelist>
+	</para>
+
+      </sect2>
+
+      <sect2 id="commands-nv-menu-edit">
+	<title>The Edit Menu</title>
+	<para>
+	  <variablelist>
+
+	    <varlistentry id="commands-nv-menu-edit-undo">
+	      <term><menuchoice>
+		  <shortcut>
+		    <keycombo><keycap>Ctrl</keycap><keycap>z</keycap></keycombo>
+		  </shortcut>
+		  <guimenu>Edit</guimenu>
+		  <guimenuitem>Undo</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+
+		    Reverses the last edit.
+
+		  </action> Edits are shared across
+		    all views, so if the last edit was not made in
+		    this view, undoing it might not appear to change
+		    this view either.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry id="commands-nv-menu-edit-redo">
+	      <term><menuchoice>
+		  <shortcut>
+		    <keycombo><keycap>Ctrl</keycap><keycap>Shift</keycap><keycap>z</keycap></keycombo>
+		  </shortcut>
+		  <guimenu>Edit</guimenu>
+		  <guimenuitem>Redo</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+
+		    Repeats the last edit, following an undo.
+
+		  </action>
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry id="commands-nv-menu-edit-cut">
+	      <term><menuchoice>
+		  <shortcut>
+		    <keycombo><keycap>Ctrl</keycap><keycap>x</keycap></keycombo>
+		  </shortcut>
+		  <guimenu>Edit</guimenu>
+		  <guimenuitem>Cut</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+
+		    Removes the selected events from the composition
+		    and places them in the clipboard, replacing any
+		    contents the clipboard previously had.
+
+		  </action>
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry id="commands-nv-menu-edit-copy">
+	      <term><menuchoice>
+		  <shortcut>
+		    <keycombo><keycap>Ctrl</keycap><keycap>c</keycap></keycombo>
+		  </shortcut>
+		  <guimenu>Edit</guimenu>
+		  <guimenuitem>Copy</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+		    
+		    Copies the selected events to the clipboard,
+		    replacing any contents the clipboard previously had.
+
+		  </action>
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry id="commands-nv-menu-edit-paste">
+	      <term><menuchoice>
+		  <shortcut>
+		    <keycombo><keycap>Ctrl</keycap><keycap>v</keycap></keycombo>
+		  </shortcut>
+		  <guimenu>Edit</guimenu>
+		  <guimenuitem>Paste</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+		    
+		    Copies the contents of the clipboard to the
+		    location of the insert cursor in the current
+		    composition.
+
+		  </action>
+
+		  The clipboard must not contain
+		    multiple segments, and there must be enough
+		    space (occupied only by rests) starting at
+		    the insert cursor position to accommodate the
+		    clipboard's contents.
+
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry id="commands-nv-menu-edit-cut-and-close">
+	      <term><menuchoice>
+		  <shortcut>
+		    <keycombo><keycap>Ctrl</keycap><keycap>Shift</keycap><keycap>x</keycap></keycombo>
+		  </shortcut>
+		  <guimenu>Edit</guimenu>
+		  <guimenuitem>Cut and Close</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+		    
+		    Removes the selected events from the composition
+		    and places them in the clipboard, replacing any
+		    contents the clipboard previously had, and closes
+		    the gap left behind by moving all subsequent
+		    events towards the beginning of the composition.
+
+		  </action>
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry id="commands-nv-menu-edit-paste-dot-dot-dot">
+	      <term><menuchoice>
+		  <shortcut>
+		    <keycombo><keycap>Ctrl</keycap><keycap>Shift</keycap><keycap>v</keycap></keycombo>
+		  </shortcut>
+		  <guimenu>Edit</guimenu>
+		  <guimenuitem>Paste...</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+		    
+		    Provides a choice of paste mechanisms with the
+		    ability to set one as the default for use in the
+		    Paste menu function.
+
+		  </action>
+
+		   See the section on <link linkend="nv-paste-types">Paste types</link> for more information.
+
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	  </variablelist>
+	</para>
+
+      </sect2>
+
+
     </sect1>
   </chapter>
+
+
+
+
 
   <chapter id="developers">
     <title>Developer's Guide to Rosegarden</title>
@@ -465,6 +763,10 @@
 
   </chapter>
 
+
+
+  <!-- cc: I also think we should omit this chapter, but link to the online FAQ from the handbook's introduction -->
+
   <chapter id="faq">
     <title>Questions and Answers</title>
 
@@ -501,6 +803,9 @@
       </qandaentry>
     </qandaset>
   </chapter>
+
+
+
 
   <chapter id="credits">
 
@@ -550,6 +855,7 @@
       <ulink url="common/gpl-license.html">GNU GPL</ulink>.
     </para>
   </chapter>
+
 
 
   &documentation.index; 
