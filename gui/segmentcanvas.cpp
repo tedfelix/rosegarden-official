@@ -271,6 +271,8 @@ TrackPencil::TrackPencil(TracksCanvas *c)
 {
     connect(this, SIGNAL(addTrackPart(TrackPart*)),
             c,    SIGNAL(addTrackPart(TrackPart*)));
+    connect(this, SIGNAL(deleteTrackPart(TrackPart*)),
+            c,    SIGNAL(deleteTrackPart(TrackPart*)));
 
     kdDebug(KDEBUG_AREA) << "TrackPencil()\n";
 }
@@ -317,7 +319,7 @@ void TrackPencil::handleMouseButtonRelase(QMouseEvent*)
     if (m_currentItem->width() == 0) {
         kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMouseReleaseEvent() : rect deleted"
                              << endl;
-        // delete m_currentItem; - TODO emit signal
+        emit deleteTrackPart(m_currentItem->part());
     }
 
     if (m_newRect) {
@@ -331,10 +333,8 @@ void TrackPencil::handleMouseButtonRelase(QMouseEvent*)
         kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMouseReleaseEvent() : shorten m_currentItem = "
                              << m_currentItem << endl;
         // readjust size of corresponding track
-        TrackPart *part = m_currentItem->part();
-        part->updateLength();
+        m_currentItem->part()->updateLength();
     }
-
 
     m_currentItem = 0;
 }
@@ -356,15 +356,21 @@ void TrackPencil::handleMouseMove(QMouseEvent *e)
 TrackEraser::TrackEraser(TracksCanvas *c)
     : TrackTool(c)
 {
+    connect(this, SIGNAL(deleteTrackPart(TrackPart*)),
+            c,    SIGNAL(deleteTrackPart(TrackPart*)));
+
     kdDebug(KDEBUG_AREA) << "TrackEraser()\n";
 }
 
-void TrackEraser::handleMouseButtonPress(QMouseEvent*)
+void TrackEraser::handleMouseButtonPress(QMouseEvent *e)
 {
+    m_currentItem = m_canvas->findPartClickedOn(e->pos());
 }
 
 void TrackEraser::handleMouseButtonRelase(QMouseEvent*)
 {
+    if (m_currentItem) emit deleteTrackPart(m_currentItem->part());
+    m_currentItem = 0;
 }
 
 void TrackEraser::handleMouseMove(QMouseEvent*)

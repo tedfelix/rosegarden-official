@@ -193,6 +193,7 @@ public:
 
 signals:
     void addTrackPart(TrackPart*);
+    void deleteTrackPart(TrackPart*);
 
 protected:
     bool m_newRect;
@@ -209,7 +210,7 @@ public:
     virtual void handleMouseMove(QMouseEvent*);
 
 signals:
-    void eraseTrackPart(TrackPart*);
+    void deleteTrackPart(TrackPart*);
 };
 
 class TrackMover : public TrackTool
