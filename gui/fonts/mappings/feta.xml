@@ -127,8 +127,7 @@
 
 <font-hotspots>
         <hotspot name="MUSICAL SYMBOL VOID NOTEHEAD">
-		<fixed x="1"/>
-                <scaled y="0.5"/>
+		<scaled x="0.1" y="0.5"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL NOTEHEAD BLACK">
 		<fixed x="1"/>

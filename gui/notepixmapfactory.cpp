@@ -572,6 +572,8 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
     if (!m_font->getHotspot(m_style->getNoteHeadCharName(params.m_noteType).first,
 			    m_borderX, temp)) m_borderX = 0;
 
+    if (params.m_noteType == Note::Minim && params.m_stemGoesUp)
+	m_borderX++;
     int actualNoteBodyHeight =
 	m_font->getHeight(m_style->getNoteHeadCharName(params.m_noteType).first);
     
@@ -1302,7 +1304,7 @@ NotePixmapFactory::makeRoomForStemAndFlags(int flagCount, int stemLength,
 	if (params.m_stemGoesUp) {
 	    s0.setY(m_noteBodyHeight * 3 / 8);
 	} else {
-	    s0.setY(m_noteBodyHeight * 5 / 8);
+	    s0.setY(m_noteBodyHeight * 6 / 8);
 	}
 	stemLength -= m_noteBodyHeight / 8;
 	break;
