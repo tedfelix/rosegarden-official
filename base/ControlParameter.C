@@ -98,6 +98,13 @@ ControlParameter::operator=(const ControlParameter &control)
     return *this;
 }
 
+bool ControlParameter::operator==(const ControlParameter &control)
+{
+    return m_type == control.getType() &&
+        m_controllerValue == control.getControllerValue() &&
+        m_min == control.getMin() &&
+        m_max == control.getMax();
+}
 
 std::string
 ControlParameter::toXmlString()

@@ -63,6 +63,7 @@
 #include "rosedebug.h"
 
 using Rosegarden::PropertyName;
+using Rosegarden::ControlParameter;
 
 //----------------------------------------------------------------------
 const unsigned int EditView::CONTROLS_ROW         = 0;
@@ -266,7 +267,7 @@ PropertyControlRuler* EditView::makePropertyControlRuler(PropertyName propertyNa
     return controlRuler;
 }
 
-ControllerEventsRuler* EditView::makeControllerEventRuler(Rosegarden::ControlParameter *controller)
+ControllerEventsRuler* EditView::makeControllerEventRuler(ControlParameter *controller)
 {
     QCanvas* controlRulerCanvas = new QCanvas(this);
     QSize viewSize = getViewSize();
@@ -762,7 +763,7 @@ EditView::setupControllerTabs()
         {
             // Get ControlParameter object from controller value
             //
-            Rosegarden::ControlParameter *controlParameter = md->getControlParameter(*it);
+            ControlParameter *controlParameter = md->getControlParameter(*it);
 
             if (controlParameter)
             {
@@ -791,13 +792,24 @@ EditView::slotAddControlRuler(int controller)
     if (!md) return;
 
     const Rosegarden::ControlList &list = md->getControlParameters();
-    Rosegarden::ControlParameter control = list[controller];
+    ControlParameter control = list[controller];
 
-    // Create control ruler to a specific controller.  This duplicates
-    // the control parameter in the supplied pointer.
-    ControllerEventsRuler* controlRuler = makeControllerEventRuler(&control);
+    int index = 0;
     
-    addControlRuler(controlRuler);
+    ControlRuler* existingRuler = findRuler(control, index);
+
+    if (existingRuler) {
+
+        m_controlRulers->setCurrentPage(index);
+
+    } else {
+
+        // Create control ruler to a specific controller.  This duplicates
+        // the control parameter in the supplied pointer.
+        ControllerEventsRuler* controlRuler = makeControllerEventRuler(&control);
+    
+        addControlRuler(controlRuler);
+    }
     
     if (!m_controlRulers->isVisible()) {
 	m_controlRulers->show();
@@ -817,7 +829,7 @@ void EditView::slotRemoveControlRuler(QWidget* w)
     ControllerEventsRuler* ruler = dynamic_cast<ControllerEventsRuler*>(w);
 
     if (ruler) {
-        Rosegarden::ControlParameter *controller = ruler->getControlParameter();
+        ControlParameter *controller = ruler->getControlParameter();
 
         // remove the control parameter from the "showing controllers" list on the segment
         //
@@ -1094,7 +1106,7 @@ void EditView::slotAddTimeSignature()
     delete dialog;
 }                       
 
-PropertyControlRuler* EditView::findRuler(PropertyName propertyName, int &index)
+ControlRuler* EditView::findRuler(PropertyName propertyName, int &index)
 {
     for(index = 0; index < m_controlRulers->count(); ++index) {
         PropertyControlRuler* ruler = dynamic_cast<PropertyControlRuler*>(m_controlRulers->page(index));
@@ -1104,11 +1116,21 @@ PropertyControlRuler* EditView::findRuler(PropertyName propertyName, int &index)
     return 0;
 }
 
+ControlRuler* EditView::findRuler(const ControlParameter& controller, int &index)
+{
+    for(index = 0; index < m_controlRulers->count(); ++index) {
+        ControllerEventsRuler* ruler = dynamic_cast<ControllerEventsRuler*>(m_controlRulers->page(index));
+        if (ruler && *(ruler->getControlParameter()) == controller) return ruler;
+    }
+
+    return 0;
+}
+
 void EditView::showPropertyControlRuler(PropertyName propertyName)
 {
     int index = 0;
     
-    PropertyControlRuler* existingRuler = findRuler(propertyName, index);
+    ControlRuler* existingRuler = findRuler(propertyName, index);
 
     if (existingRuler) {
 
@@ -1144,14 +1166,26 @@ void EditView::slotShowVelocityControlRuler()
  */
 void EditView::slotShowControllerEventsRuler()
 {
-    ControllerEventsRuler* controlRuler = makeControllerEventRuler();
-    addControlRuler(controlRuler);
-    
-    if (!m_controlRulers->isVisible()) {
-        m_controlRulers->show();
-    }
 
-    updateBottomWidgetGeometry();
+//     int index = 0;
+    
+//     ControlRuler* existingRuler = findRuler(propertyName, index);
+
+//     if (existingRuler) {
+
+//         m_controlRulers->setCurrentPage(index);
+
+//     } else {
+
+//         ControllerEventsRuler* controlRuler = makeControllerEventRuler();
+//         addControlRuler(controlRuler);
+//     }
+    
+//     if (!m_controlRulers->isVisible()) {
+//         m_controlRulers->show();
+//     }
+
+//     updateBottomWidgetGeometry();
 }
 
 class QListBoxRGProperty : public QListBoxText
@@ -1222,43 +1256,6 @@ EditView::slotClearControlRulerItem()
     ControllerEventsRuler* ruler = dynamic_cast<ControllerEventsRuler*>(getCurrentControlRuler());
     if (ruler) ruler->clearControllerEvents();
 }
-
-// void
-// EditView::slotCloseControlRulerItem()
-// {
-//     ControllerEventsRuler* ruler = dynamic_cast<ControllerEventsRuler*>(getCurrentControlRuler());
-
-//     if (ruler)
-//     {
-//         Rosegarden::ControlParameter *controller = ruler->getControlParameter();
-
-//         // remove the control parameter from the "showing controllers" list on the segment
-//         //
-//         if (controller) 
-//         {
-//             Rosegarden::Staff *staff = getCurrentStaff();
-//             bool value = staff->getSegment().deleteController(controller->getControllerValue());
-
-//             if (value) 
-//                 RG_DEBUG << "slotClearControlRulerItem - removed controller from segment" << endl;
-//             else
-//                 RG_DEBUG << "slotClearControlRulerItem - couldn't remove controller from segment - " 
-//                          << int(controller->getControllerValue())
-//                          << endl;
-
-//         }
-
-//         m_controlRulers->removePage(ruler);
-//         ruler->close();
-
-//         // if we now have no rulers then reverse this state
-//         if (m_controlRulers->count() == 0) {
-//             m_controlRulers->hide();
-//             updateBottomWidgetGeometry();
-//         }
-        
-//     }
-// }
 
 void EditView::slotTranspose()
 {

@@ -23,7 +23,6 @@
 #define EDITVIEW_H
 
 #include <vector>
-#include <set>
 
 #include <qaccel.h>
 
@@ -259,7 +258,13 @@ protected:
      * Find the control ruler for the given property name
      * if it's already been created, return 0 otherwise
      */
-    PropertyControlRuler* findRuler(Rosegarden::PropertyName propertyName, int &index);
+    ControlRuler* findRuler(Rosegarden::PropertyName propertyName, int &index);
+
+    /**
+     * Find the control ruler for the given controller
+     * if it's already been created, return 0 otherwise
+     */
+    ControlRuler* findRuler(const Rosegarden::ControlParameter& controller, int &index);
 
     /**
      * Show a control ruler for the given property

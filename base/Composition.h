@@ -228,13 +228,7 @@ public:
      * Return an iterator pointing at the given Segment, or end()
      * if it does not exist in this Composition.
      */
-    const_iterator findSegment(const Segment *);
-
-    /**
-     * Return an iterator pointing at the given Segment, or end()
-     * if it does not exist in this Composition.
-     */
-    iterator findSegment(Segment *);
+    iterator findSegment(const Segment *);
 
     /**
      * Remove the Segment if it is part of the Composition,

@@ -245,7 +245,7 @@ Composition::deleteSegment(Composition::iterator i)
 bool
 Composition::deleteSegment(Segment *segment)
 {
-    iterator i = find(begin(), end(), segment);
+    iterator i = findSegment(segment);
     if (i == end()) return false;
 
     deleteSegment(i);
@@ -268,7 +268,7 @@ Composition::detachSegment(Segment *segment)
 bool
 Composition::weakDetachSegment(Segment *segment)
 {
-    iterator i = find(begin(), end(), segment);
+    iterator i = findSegment(segment);
     if (i == end()) return false;
     
     segment->setComposition(0);
@@ -280,26 +280,20 @@ Composition::weakDetachSegment(Segment *segment)
 bool
 Composition::contains(const Segment *s)
 {
-    iterator i = find(begin(), end(), s);
+    iterator i = findSegment(s);
     return (i != end());
 }
 
 Composition::iterator
-Composition::findSegment(Segment *s)
-{
-    return find(begin(), end(), s);
-}
-
-Composition::const_iterator
 Composition::findSegment(const Segment *s)
 {
-    return find(begin(), end(), s);
+    return m_segments.lower_bound(const_cast<Segment*>(s));
 }
 
 void Composition::setSegmentStartTime(Segment *segment, timeT startTime)
 {
     // remove the segment from the multiset
-    iterator i = find(begin(), end(), segment);
+    iterator i = findSegment(segment);
     if (i == end()) return;
     
     m_segments.erase(i);

@@ -46,6 +46,7 @@ public:
 
     ControlParameter(const ControlParameter &control);
     ControlParameter& operator=(const ControlParameter &control);
+    bool operator==(const ControlParameter &control);
 
     // ControlParameter comparison on IPB position
     //
