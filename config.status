@@ -181,7 +181,7 @@ s%@LIB_KWRITE@%-lkwrite%g
 s%@LIB_KFM@%%g
 s%@LIBTIFF@%-ltiff -ljpeg -lz%g
 s%@LIB_KIMGIO@%-lkimgio%g
-s%@TOPSUBDIRS@% po sound%g
+s%@TOPSUBDIRS@% po%g
 
 CEOF
 

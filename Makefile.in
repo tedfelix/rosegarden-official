@@ -208,7 +208,7 @@ EXTRA_DIST = rosegardengui.kdevprj AUTHORS COPYING ChangeLog INSTALL README TODO
 # This Makefile.am initially comes from kapptemplate but kdevelop has added
 # its own stuff in it, hence the inconsistencies. - GL.
 
-COMPILE_FIRST = core
+COMPILE_FIRST = core sound
 COMPILE_LAST = gui
 SUBDIRS = $(COMPILE_FIRST) $(TOPSUBDIRS) $(COMPILE_LAST)
 
