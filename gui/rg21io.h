@@ -48,11 +48,14 @@ protected:
 
     bool parse();
     bool parseClef();
+    bool parseKey();
     bool parseChordItem();
     bool parseRest();
     bool parseGroupStart();
+    bool parseMarkStart();
 
     void closeGroup();
+    void closeMark();
     void closeTrackOrComposition();
 
     long convertRG21Pitch(long rg21pitch, int nodeModifier);

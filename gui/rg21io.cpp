@@ -66,11 +66,32 @@ bool RG21Loader::parseClef()
     std::string clefName = m_tokens[2].lower().data();
 
     Event *clefEvent = new Event(Rosegarden::Clef::EventType);
-    clefEvent->setAbsoluteTime(0);
+    clefEvent->setAbsoluteTime(m_currentTrackTime);
     clefEvent->set<String>(Rosegarden::Clef::ClefPropertyName,
                            clefName);
     
     m_currentTrack->insert(clefEvent);
+
+    return true;
+}
+
+bool RG21Loader::parseKey()
+{
+    if (m_tokens.count() < 3 || !m_currentTrack) return false;
+    
+    QString keyName = QString("%1 %2or")
+        .arg(m_tokens[2].upper())
+        .arg(m_tokens[3].lower());
+
+    Event *keyEvent = new Event(Rosegarden::Key::EventType);
+    keyEvent->setAbsoluteTime(m_currentTrackTime);
+    keyEvent->set<String>(Rosegarden::Key::KeyPropertyName,
+                          std::string(keyName.data()));
+    
+    m_currentTrack->insert(keyEvent);
+
+    kdDebug(KDEBUG_AREA) << "RG21Loader::parseKey() insert key event '"
+                         << keyName << "' at " << m_currentTrackTime << endl;
 
     return true;
 }
@@ -99,8 +120,8 @@ bool RG21Loader::parseChordItem()
         noteEvent->setAbsoluteTime(m_currentTrackTime);
         noteEvent->set<Int>("pitch", pitch);
 
-        kdDebug(KDEBUG_AREA) << "RG21Loader::parseChordItem() : insert note pitch " << pitch
-                             << " at time " << m_currentTrackTime << endl;
+//         kdDebug(KDEBUG_AREA) << "RG21Loader::parseChordItem() : insert note pitch " << pitch
+//                              << " at time " << m_currentTrackTime << endl;
 
         if (m_inGroup) {
             noteEvent->setMaybe<Int>
@@ -151,6 +172,15 @@ bool RG21Loader::parseGroupStart()
     return true;
 }
 
+bool RG21Loader::parseMarkStart()
+{
+    // not handled yet
+    return true;
+}
+
+void RG21Loader::closeMark()
+{
+}
 
 void RG21Loader::closeGroup()
 {
@@ -286,6 +316,10 @@ bool RG21Loader::parse()
 
             parseClef();
 
+        } else if (firstToken == "Key") {
+
+            parseKey();
+
         } else if (firstToken == ":") { // chord
 
             m_tokens.remove(m_tokens.begin()); // get rid of 1st token ':'
@@ -302,7 +336,14 @@ bool RG21Loader::parse()
             if (!readNextLine()) break;
 
             parseGroupStart();
-            
+
+        } else if (firstToken == "Mark") {
+
+            if (m_tokens[1] == "start") 
+                parseMarkStart();
+            else if (m_tokens[1] == "end") 
+                closeMark();
+
         } else if (firstToken == "End") {
 
             if (m_inGroup)
