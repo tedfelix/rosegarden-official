@@ -298,7 +298,7 @@ void RosegardenGUIApp::setupActions()
     //
     m_viewToolBar = KStdAction::showToolbar  (this, SLOT(slotToggleToolBar()),   actionCollection());
 
-    m_viewTracksToolBar = new KToggleAction(i18n("Show T&racks Toolbar"), 0, this,
+    m_viewTracksToolBar = new KToggleAction(i18n("Show T&ools Toolbar"), 0, this,
                                             SLOT(slotToggleTracksToolBar()), actionCollection(),
                                             "show_tracks_toolbar");
 
@@ -1736,9 +1736,9 @@ void RosegardenGUIApp::slotToggleTracksToolBar()
     KTmpStatusMsg msg(i18n("Toggle the tracks toolbar..."), this);
 
     if (m_viewTracksToolBar->isChecked())
-        toolBar("Tracks Toolbar")->show();
+        toolBar("Tools Toolbar")->show();
     else
-        toolBar("Tracks Toolbar")->hide();
+        toolBar("Tools Toolbar")->hide();
 }
 
 void RosegardenGUIApp::slotToggleEditorsToolBar()

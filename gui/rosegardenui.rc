@@ -109,7 +109,7 @@
 
 </MenuBar>
 
-<ToolBar name="Tracks Toolbar">
+<ToolBar name="Tools Toolbar">
         <Action name="select"/>
         <Action name="move"/>
         <Action name="resize"/>
