@@ -154,7 +154,7 @@ public:
      * Get the plugins that are available at the sequencer and put
      * them in the local pluginmanager
      */
-    void getSequencerPlugins(Rosegarden::AudioPluginManager *);
+    static void getSequencerPlugins(Rosegarden::AudioPluginManager *);
 
 
     /// Reinitialise the studio

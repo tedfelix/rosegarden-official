@@ -246,10 +246,32 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 
     } else RG_DEBUG << "RosegardenGUIApp : don't use sequencer\n";
 
+    // #1036216: "Synth Plugins in default studio file"
+    // Get the plugins available at the sequencer before we create
+    // the autoload document, because the autoload may use plugins.
+    // This means we need SequenceManager::getSequencerPlugins to
+    // be static so we can use it before creating a sequence manager
+    // (which requires an existing document); it also means we need
+    // to wait for the sequencer to start here (formerly we only did
+    // this from the document ctor) so we know we'll actually have
+    // the plugins.
+    // We also choose to do this before "Initializing view" to avoid
+    // introducing any more status states for 18n.
+    //
+    while (isSequencerRunning() && !rgapp->isSequencerRegistered()) {
+        RG_DEBUG << "RosegardenGUIApp::RosegardenGUIApp - "
+                 << "waiting for Sequencer to come up" << endl;
+	RosegardenProgressDialog::processEvents();
+        sleep(1); // 1s
+    }
+
     // Plugin manager
     //
     emit startupStatusMessage(i18n("Initializing plugin manager..."));
     m_pluginManager = new Rosegarden::AudioPluginManager();
+
+    emit startupStatusMessage(i18n("Enumerating plugins..."));
+    Rosegarden::SequenceManager::getSequencerPlugins(m_pluginManager);
 
     // call inits to invoke all other construction parts
     //
@@ -355,11 +377,6 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     // Send the transport control statuses for MMC and JACK
     //
     m_seqManager->sendTransportControlStatuses();
-
-    // Get the plugins available at the sequencer
-    //
-    emit startupStatusMessage(i18n("Enumerating plugins..."));
-    m_seqManager->getSequencerPlugins(m_pluginManager);
 
     // Now autoload
     //

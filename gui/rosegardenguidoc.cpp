@@ -749,8 +749,6 @@ void RosegardenGUIDoc::initialiseStudio()
             audioCount++;
 
             // Initialise all the plugins for this Instrument
-            //
-            //Rosegarden::AudioPluginInstance *plugin;
 
 	    for (Rosegarden::PluginInstanceIterator pli = (*it)->beginPlugins();
 		 pli != (*it)->endPlugins(); ++pli) {
