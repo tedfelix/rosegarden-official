@@ -489,7 +489,11 @@ public slots:
     //
     void activateTool(SegmentCanvas::ToolType tt);
 
-
+    /**
+     * Toggles either the play or record metronome according
+     * to Transport status
+     */
+    void toggleMetronome();
 
 private:
 

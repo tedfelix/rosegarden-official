@@ -221,7 +221,7 @@ Composition::Composition() :
     m_tempoTimestampsNeedCalculating(true),
     m_copyright(""),
     m_countInBars(DefaultCountInBars),
-    m_playMetronome(true),
+    m_playMetronome(false),
     m_recordMetronome(true)
 {
     // nothing else

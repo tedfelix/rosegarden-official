@@ -324,6 +324,10 @@ void RosegardenGUIApp::setupActions()
              SIGNAL(released()),
              SLOT(fastForwardToEnd()));
 
+    connect((QObject *)m_transport->MetronomeButton,
+            SIGNAL(released()),
+            SLOT(toggleMetronome()));
+
     createGUI("rosegardenui.rc");
 
     // Ensure that the checkbox is unchecked if the dialog
@@ -392,16 +396,19 @@ void RosegardenGUIApp::initView()
 
     // set the pointer position
     //
-    setPointerPosition(m_doc->getComposition().getElapsedRealTime(
+    setPointerPosition(comp.getElapsedRealTime(
                         m_doc->getComposition().getPosition()));
 
     // set the tempo in the transport
     //
-    m_transport->setTempo(m_doc->getComposition().getTempo());
+    m_transport->setTempo(comp.getTempo());
 
     // bring the transport to the front 
     //
     m_transport->raise();
+
+    // set the play metronome button
+    m_transport->MetronomeButton->setOn(comp.usePlayMetronome());
 
 }
 
@@ -1031,10 +1038,15 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
     // Place metronome clicks in the global MappedCompisition
     // if they're enabled for our current mode
     //
-    if (((m_transportStatus == PLAYING && comp.usePlayMetronome()) ||
-         (m_transportStatus == RECORDING_MIDI && comp.useRecordMetronome())) ||
-         (m_transportStatus == RECORDING_AUDIO && comp.useRecordMetronome()))
-            insertMetronomeClicks(sliceStartElapsed, sliceEndElapsed);
+    if ( ( ( m_transportStatus == PLAYING ||
+             m_transportStatus == STARTING_TO_PLAY )
+                && comp.usePlayMetronome() ) ||
+         ( ( m_transportStatus == RECORDING_MIDI ||
+             m_transportStatus == RECORDING_AUDIO ||
+             m_transportStatus == STARTING_TO_RECORD_MIDI ||
+             m_transportStatus == STARTING_TO_RECORD_AUDIO )
+                && comp.useRecordMetronome() ) )
+        insertMetronomeClicks(sliceStartElapsed, sliceEndElapsed);
 
     Rosegarden::RealTime eventTime;
     Rosegarden::RealTime duration;
@@ -1455,6 +1467,10 @@ void RosegardenGUIApp::stop()
         return;
     }
 
+    // set the play metronome on
+    //
+    m_transport->MetronomeButton->setOn(m_doc->getComposition().usePlayMetronome());
+
 
     // If we're recording MIDI then tidy up the recording Segment
     //
@@ -1462,7 +1478,6 @@ void RosegardenGUIApp::stop()
     {
         m_doc->stopRecordingMidi();
     } 
-
 
 
     QByteArray data;
@@ -1727,6 +1742,10 @@ RosegardenGUIApp::record()
     //
     if(!getSoundSystemStatus())
         return;
+
+    // toggle the Metronome button if it's in use
+    //
+    m_transport->MetronomeButton->setOn(comp.useRecordMetronome());
 
     // Adjust backwards by the bar count in
     //
@@ -2134,47 +2153,107 @@ RosegardenGUIApp::getSoundSystemStatus()
 
 
 // Insert metronome clicks into the global MappedComposition that
-// is returned as part of the fetch from the Sequencer
+// will be returned as part of the slice fetch from the Sequencer.
 //
 //
 void
 RosegardenGUIApp::insertMetronomeClicks(timeT sliceStart, timeT sliceEnd)
 {
-
-    // for the moment do nothing
-    return;
+    // move these outside at some point
+    //
+    int metronomePitch = 70;
+    int metronomeInstrument = 0;
+    int metronomeTrack = 0;
+    int metronomeBarVely = 110;  // louder on bar start
+    int metronomeBeatVely = 80;
 
     Rosegarden::Composition &comp = m_doc->getComposition();
+    std::pair<timeT, timeT> barStart = comp.getBarRange(comp.getBarNumber(sliceStart, false), false);
+    std::pair<timeT, timeT> barEnd = comp.getBarRange(comp.getBarNumber(sliceEnd, false), false);
 
-    std::pair<timeT, timeT> bMSt = comp.getBarRange(comp.getBarNumber(sliceStart, false), false);
-    std::pair<timeT, timeT> bMEnd = comp.getBarRange(comp.getBarNumber(sliceStart, false), false);
-
-    if (bMSt.first >= sliceStart && bMSt.first <= sliceEnd)
+    // The slice can straddle a bar boundary so check
+    // in both bars for the marker
+    //
+    if (barStart.first >= sliceStart && barStart.first <= sliceEnd)
     {
         Rosegarden::MappedEvent *me =
-            new Rosegarden::MappedEvent(70, //pitch
-                                        comp.getElapsedRealTime(bMSt.first), //t 
-                                        Rosegarden::RealTime(0, 100000),   // d
-                                        110, // velocity
-                                        0,   // instrument
-                                        0);  // track
+            new Rosegarden::MappedEvent(metronomePitch,
+                                        comp.getElapsedRealTime(barStart.first),
+                                        Rosegarden::RealTime(0, 100000),
+                                        metronomeBarVely,
+                                        metronomeInstrument,
+                                        metronomeTrack);
 
 
         mappComp.insert(me);
     }
-    else if (bMEnd.first >= sliceStart && bMEnd.first <= sliceEnd)
+    else if (barEnd.first >= sliceStart && barEnd.first <= sliceEnd)
     {
         Rosegarden::MappedEvent *me =
-            new Rosegarden::MappedEvent(70, //pitch
-                                        comp.getElapsedRealTime(bMEnd.first), //t 
-                                        Rosegarden::RealTime(0, 100000),   // d
-                                        110, // velocity
-                                        0,   // instrument
-                                        0);  // track
+            new Rosegarden::MappedEvent(metronomePitch,
+                                        comp.getElapsedRealTime(barEnd.first),
+                                        Rosegarden::RealTime(0, 100000),
+                                        metronomeBarVely,
+                                        metronomeInstrument,
+                                        metronomeTrack);
 
 
         mappComp.insert(me);
+    }
+
+    // Is this solution for the beats bulletproof?  I'm not so sure.
+    //
+    //
+    bool isNew;
+    Rosegarden::TimeSignature timeSig = comp.getTimeSignatureInBar(comp.getBarNumber(sliceStart, false), isNew);
+    for (int i = barStart.first + timeSig.getBeatDuration();
+             i < barStart.second;
+             i += timeSig.getBeatDuration())
+    {
+        if (i >= sliceStart && i <= sliceEnd)
+        {
+            Rosegarden::MappedEvent *me =
+                new Rosegarden::MappedEvent(metronomePitch,
+                                            comp.getElapsedRealTime(i),
+                                            Rosegarden::RealTime(0, 100000),
+                                            metronomeBeatVely,
+                                            metronomeInstrument,
+                                            metronomeTrack);
+
+
+            mappComp.insert(me);
+        }
     }
 }
 
+// Sets the play or record Metronome status according to
+// the current transport status
+//
+void
+RosegardenGUIApp::toggleMetronome()
+{
+    Rosegarden::Composition &comp = m_doc->getComposition();
+
+    if (m_transportStatus == STARTING_TO_RECORD_MIDI ||
+        m_transportStatus == STARTING_TO_RECORD_AUDIO ||
+        m_transportStatus == RECORDING_MIDI ||
+        m_transportStatus == RECORDING_AUDIO)
+    {
+        if (comp.useRecordMetronome())
+            comp.setRecordMetronome(false);
+        else
+            comp.setRecordMetronome(true);
+
+        m_transport->MetronomeButton->setOn(comp.useRecordMetronome());
+    }
+    else
+    {
+        if (comp.usePlayMetronome())
+            comp.setPlayMetronome(false);
+        else
+            comp.setPlayMetronome(true);
+
+        m_transport->MetronomeButton->setOn(comp.usePlayMetronome());
+    }
+}
 
