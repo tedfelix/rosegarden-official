@@ -40,7 +40,7 @@ RosegardenSequencerApp::RosegardenSequencerApp():
     m_lastFetchSongPosition(0),
     m_fetchLatency(20),
     m_playLatency(20),
-    m_readAhead(100)
+    m_readAhead(40)
 {
   // Without DCOP we are nothing
   QCString realAppId = kapp->dcopClient()->registerAs(kapp->name(), false);

@@ -134,20 +134,23 @@ namespace Rosegarden
       { return (deltaTime(ts, _recordStartTime)); }
 
     // Perform conversion from seconds and microseconds (TimeStamp)
-    // to our internal MIDI clock representation.  Make sure you do
-    // this from the normalised time (i.e. working from zero).
+    // to our internal representation.  Make sure you do this from
+    // a normalised time (i.e. working from zero)
     //
-    inline unsigned int convertToMidiTime(const Arts::TimeStamp &timeStamp)
+    //
+    inline unsigned int convertToInternalTime(const Arts::TimeStamp &timeStamp)
     {
       return (unsigned int) ( (double)_ppq * 4.0 * ( (double) timeStamp.sec +
                               ( ( (double) timeStamp.usec ) / 1000000.0 ) ) *
                                   (double) _tempo / 60.0 );
     }
 
+/*
     inline unsigned int convertToMidiTime(const Rosegarden::timeT &position)
     {
       return ((unsigned int) position * 6);
     }
+*/
 
     // We're leaving the calculations expanded for the moment
     // to ease understanding of what we're doing with the maths.

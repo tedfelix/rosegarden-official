@@ -216,8 +216,10 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
         _noteOnMap[chanNoteKey] = new Event;
 
         // set time since recording started in Absolute internal time
+/*
         _noteOnMap[chanNoteKey]->
             setAbsoluteTime(convertToMidiTime(timeStamp));
+*/
 
         // set note type and pitch
         _noteOnMap[chanNoteKey]->setType(Note::EventType);
@@ -230,8 +232,10 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
       //
       if ( _noteOnMap[chanNoteKey] != 0 )
       {
+/*
         duration = convertToMidiTime(timeStamp) -
                    _noteOnMap[chanNoteKey]->getAbsoluteTime();
+*/
 
         // for the moment, ensure we're positive like this
         //
@@ -304,16 +308,15 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mappedComp,
     assert((*i)->getAbsoluteTime() >= _playStartPosition);
 
     // add the fiddle factor for timeT to MIDI conversion in here
-    midiRelativeTime = convertToMidiTime((*i)->getAbsoluteTime() -
-                                               _playStartPosition +
-                                               playLatency);
+    midiRelativeTime = (*i)->getAbsoluteTime() - _playStartPosition +
+                                               playLatency;
 
 
     event.time = aggregateTime(_playStartTime,
                                convertToArtsTimeStamp(midiRelativeTime));
 
     midiRelativeStopTime = midiRelativeTime +
-                           convertToMidiTime((*i)->getDuration());
+                           (*i)->getDuration();
     
     // load the command structure
     event.command.status = Arts::mcsNoteOn | channel;
@@ -363,7 +366,9 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mappedComp,
 
   }
 
-  // If there's no midiRelativeTime set then set one
+  // If there's no midiRelativeTime set then set one - occurs if we're
+  // not processing any NOTE ONs.
+  //
   //
   if (midiRelativeTime == 0)
   {
@@ -378,7 +383,7 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mappedComp,
     }
 
     Arts::TimeStamp relativeNow(sec, usec);
-    midiRelativeTime = convertToMidiTime(relativeNow);
+    midiRelativeTime = convertToInternalTime(relativeNow);
   }
 
   // Process NOTE OFFs for current time
@@ -411,7 +416,11 @@ Sequencer::processNotesOff(unsigned int midiTime)
   }
 }
 
-// Force all pending note offs to stop immediately
+// Force all pending note offs to stop immediately.
+// (Actually aRts can't do this yet, so all we can do is
+// send the note off events and wait for them to clear.
+// We shouldn't send NOTE OFFs with an immediate timestamp
+// as some of these notes might not yet have been played.)
 //
 void
 Sequencer::allNotesOff()
@@ -422,11 +431,12 @@ Sequencer::allNotesOff()
   for ( NoteOffQueue::iterator i = _noteOffQueue.begin();
                                i != _noteOffQueue.end(); ++i )
   {
-      event.time = _midiPlayPort.time();
-      event.command.data1 = (*i)->getPitch();
-      event.command.data2 = 127;
-      event.command.status = Arts::mcsNoteOff | channel;
-      _midiPlayPort.processEvent(event);
+    event.time = aggregateTime(_playStartTime,
+                            convertToArtsTimeStamp((*i)->getMidiTime()));
+    event.command.data1 = (*i)->getPitch();
+    event.command.data2 = 127;
+    event.command.status = Arts::mcsNoteOff | channel;
+    _midiPlayPort.processEvent(event);
   }
 }
 
@@ -452,9 +462,9 @@ Sequencer::getSequencerTime()
   if (_playing)
   {
     Arts::TimeStamp artsTimeNow = _midiPlayPort.time();
-    unsigned int midiTimeRelative = convertToMidiTime(artsTimeNow) -
-                                    convertToMidiTime(_playStartTime);
-    return (_playStartPosition + convertToGuiTime(midiTimeRelative));
+    unsigned int internalRelativeTime = convertToInternalTime(artsTimeNow) -
+                                        convertToInternalTime(_playStartTime);
+    return (_playStartPosition + internalRelativeTime);
   }
 
   return (0);
