@@ -156,13 +156,20 @@ void SegmentItem::makeFont()
 
 void SegmentItem::drawShape(QPainter& painter)
 {
+/*!!!
+    No, this won't do.  QPainter::CoordPainter is Qt3 only, and I'm 
+    not going to leave in a Qt3-specific bit of code that leaves it
+    absolutely unusably slow with Qt2; I'd rather have it unusably
+    slow on both so as to remind me to do it correctly.
+
     QRect previewRect =
 	painter.hasClipping() ?
 	painter.clipRegion(QPainter::CoordPainter).boundingRect() :
 	painter.viewport();
+*/
 
     //!!! very slow
-    if (!painter.hasClipping()) previewRect = rect();
+    QRect previewRect = rect();
 
     QCanvasRectangle::drawShape(painter);
     Rosegarden::RulerScale *rulerScale = m_snapGrid->getRulerScale();

@@ -471,24 +471,30 @@ void TrackEditor::slotScrollHoriz(int hpos)
     QScrollView* scrollView = getSegmentCanvas();
     QScrollBar* hbar = getHorizontalScrollBar();
 
-    if (hpos == 0) { // If returning to zero
-
+    if (hpos == 0) {
+	
+	// returning to zero
         hbar->setValue(0);
 
-    } else { // if moving off the right hand side of the view
+    } else if (hpos > (scrollView->contentsX() +
+		       scrollView->visibleWidth() * 1.6) ||
+	       hpos < (scrollView->contentsX() -
+		       scrollView->visibleWidth() * 0.7)) {
+	
+	// miles off one side or the other
+	hbar->setValue(hpos - int(scrollView->visibleWidth() * 0.4));
 
-        if (hpos >  ( scrollView->contentsX() + 
-                      scrollView->visibleWidth() * 0.9 ) ) { 
-               
-            hbar->setValue(hbar->value() + int(scrollView->visibleWidth() * 0.8));
+    } else if (hpos > (scrollView->contentsX() + 
+		       scrollView->visibleWidth() * 0.9)) {
 
-        } else // if moving off the left hand side
+	// moving off the right hand side of the view   
+	hbar->setValue(hbar->value() + int(scrollView->visibleWidth() * 0.8));
 
-            if (hpos < ( scrollView->contentsX() +
-                         scrollView->visibleWidth() * 0.1 ) ) {
+    } else if (hpos < (scrollView->contentsX() +
+		       scrollView->visibleWidth() * 0.1)) {
 
-                hbar->setValue(hbar->value() - int(scrollView->visibleWidth() * 0.8));
-            }
+	// moving off the left
+	hbar->setValue(hbar->value() - int(scrollView->visibleWidth() * 0.8));
     }
 }
 
