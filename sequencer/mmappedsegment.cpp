@@ -460,9 +460,10 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool firstFetch,
                     /*
                     std::cout << "SETTING RUNTIME SEGMENT ID = " << evt->getRuntimeSegmentId()
                               << std::endl;
+                    std::cout << "AUDIO INSTRUMENT = " << evt->getInstrument() << std::endl;
                               */
                 }
-
+                else
                 if (evt->getType() == MappedEvent::Audio) 
                 {
                     m_playingAudioSegments.push_back(new MappedEvent(*evt));
@@ -470,6 +471,7 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool firstFetch,
                     /*
                     std::cout << "SETTING RUNTIME SEGMENT ID = " << evt->getRuntimeSegmentId()
                               << std::endl;
+                    std::cout << "STRAIGHT AUDIO INSTRUMENT = " << evt->getInstrument() << std::endl;
                               */
 
                 }
@@ -569,15 +571,18 @@ MmappedSegmentsMetaIterator::getPlayingAudioFiles(const Rosegarden::RealTime &so
                 songPosition > evt.getEventTime() &&
                 songPosition < evt.getEventTime() + evt.getDuration())
             {
-                // Check for this track being muted
+                // Check for this track being muted or soloed
                 //
-                if (m_controlBlockMmapper->isTrackMuted(evt.getTrackId()) == false)
-                   /* &&
-                    if (m_controlBlockMmapper->isSolo() == false ||
-                            return (evt->getTrackId() == m_controlBlockMmapper->getSelectedTrack());
-
-                            */
+                if ((m_controlBlockMmapper->isTrackMuted(evt.getTrackId()) == false)
+                     || (m_controlBlockMmapper->isSolo() == true && 
+                         (evt.getTrackId() == m_controlBlockMmapper->getSelectedTrack())))
                 {
+
+#ifdef PLAYING_AUDIO_FILES_DEBUG
+                    std::cout << "MmappedSegmentsMetaIterator::getPlayingAudioFiles - "
+                              << "instrument id = " << evt.getInstrument() << std::endl;
+#endif // PLAYING_AUDIO_FILES_DEBUG
+
                     m_playingAudioSegments.push_back(new MappedEvent(evt));
                 }
             }

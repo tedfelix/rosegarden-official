@@ -577,7 +577,7 @@ void AudioSegmentMmapper::dump()
         Rosegarden::RealTime audioStart    = m_segment->getAudioStartTime();
         Rosegarden::RealTime audioDuration = m_segment->getAudioEndTime() - audioStart;
         Rosegarden::MappedEvent *mE =
-            new (bufPos) Rosegarden::MappedEvent(0, // track->getInstrument() - the instrument will be extracted from the ControlBlock by the sequencer
+            new (bufPos) Rosegarden::MappedEvent(track->getInstrument(), // send instrument for audio
                                                  m_segment->getAudioFileId(),
                                                  eventTime,
                                                  audioDuration,

@@ -1472,7 +1472,11 @@ void RosegardenSequencerApp::rationalisePlayingAudio(const std::vector<MappedEve
         for (std::vector<MappedEvent*>::const_iterator sIt = segmentAudio.begin();
              sIt != segmentAudio.end(); ++sIt)
         {
-            if ((*it)->getRuntimeSegmentId() == (*sIt)->getRuntimeSegmentId())
+            // Check for correct instrument and segment id - we should also check
+            // if playback in the file is at the correct place really too.
+            //
+            if ((*it)->getRuntimeSegmentId() == (*sIt)->getRuntimeSegmentId() &&
+                (*it)->getInstrument() ==  (*sIt)->getInstrument())
             {
                 segment = true;
                 break;
@@ -1487,6 +1491,11 @@ void RosegardenSequencerApp::rationalisePlayingAudio(const std::vector<MappedEve
             MappedEvent mE;
             mE.setType(Rosegarden::MappedEvent::AudioCancel);
             mE.setRuntimeSegmentId((*it)->getRuntimeSegmentId());
+
+            std::cout << "RosegardenSequencerApp::rationalisePlayingAudio - " 
+                      << "stopping audio segment = " << (*it)->getRuntimeSegmentId() 
+                      << std::endl;
+
             processMappedEvent(mE);
         }
     }
@@ -1500,7 +1509,8 @@ void RosegardenSequencerApp::rationalisePlayingAudio(const std::vector<MappedEve
         for (std::vector<PlayableAudioFile*>::const_iterator it = driverAudio.begin();
              it != driverAudio.end(); ++it)
         {
-            if ((*it)->getRuntimeSegmentId() == (*sIt)->getRuntimeSegmentId())
+            if ((*it)->getRuntimeSegmentId() == (*sIt)->getRuntimeSegmentId() &&
+                (*it)->getInstrument() ==  (*sIt)->getInstrument())
             {
                 driver = true;
                 break;
@@ -1528,7 +1538,13 @@ void RosegardenSequencerApp::rationalisePlayingAudio(const std::vector<MappedEve
                 // Set start time to now
                 //
                 audioSegment->setEventTime(m_songPosition);
+
+                std::cout << "RosegardenSequencerApp::rationalisePlayingAudio - " 
+                          << " starting audio segment = " << audioSegment->getInstrument()
+                          << std::endl;
+
                 processMappedEvent(*audioSegment);
+
                 delete audioSegment;
             }
         }
