@@ -18,6 +18,10 @@
     COPYING included with this distribution for more information.
 */
 
+
+#ifndef _BANKEDITOR_H_
+#define _BANKEDITOR_H_
+
 #include <vector>
 
 #include <kdialogbase.h>
@@ -36,10 +40,6 @@ class MultiViewCommandHistory;
 class KCommand;
 
 namespace Rosegarden { class Studio; class MidiDevice; }
-
-#ifndef _BANKEDITOR_H_
-#define _BANKEDITOR_H_
-
 
 class ProgramLine : public QLineEdit
 {
@@ -70,7 +70,10 @@ public:
     BankEditorDialog(QWidget *parent,
                      RosegardenGUIDoc *doc);
 
-    std::vector<Rosegarden::MidiProgram>
+    typedef std::vector<Rosegarden::MidiProgram> MidiProgramContainer;
+    typedef std::vector<Rosegarden::MidiBank>    MidiBankContainer;
+    
+    MidiProgramContainer
         getBankSubset(Rosegarden::MidiByte msb, Rosegarden::MidiByte lsb);
 
     std::pair<int, int> getFirstFreeBank(int device);
@@ -142,8 +145,8 @@ protected:
     QFrame                  *m_mainFrame;
 
     std::vector<std::string>                 m_deviceList;
-    std::vector<Rosegarden::MidiBank>        m_bankList;
-    std::vector<Rosegarden::MidiProgram>     m_programList;
+    MidiBankContainer        m_bankList;
+    MidiProgramContainer     m_programList;
 
     bool                     m_modified;
 

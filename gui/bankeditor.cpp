@@ -314,14 +314,14 @@ BankEditorDialog::slotPopulateDeviceBank(int deviceNo, int bank)
             m_deleteAllBanks->setDisabled(true);
         }
 
+        m_lastMSB = m_bankList[bank].msb;
+        m_lastLSB = m_bankList[bank].lsb;
     }
 
     _newBank = false;
 
     // remember last device
     m_lastDevice = deviceNo;
-    m_lastMSB = m_bankList[bank].msb;
-    m_lastLSB = m_bankList[bank].lsb;
 }
 
 void
@@ -392,10 +392,10 @@ BankEditorDialog::slotPopulateBank(int bank)
         // set the bank values
         m_msb->setValue(m_bankList[bank].msb);
         m_lsb->setValue(m_bankList[bank].lsb);
-        std::vector<Rosegarden::MidiProgram> programSubset 
+        MidiProgramContainer programSubset 
             = getBankSubset(m_bankList[bank].msb,
                             m_bankList[bank].lsb);
-        std::vector<Rosegarden::MidiProgram>::iterator it;
+        MidiProgramContainer::iterator it;
 
         for (unsigned int i = 0; i < 128; i++)
         {
@@ -420,12 +420,12 @@ BankEditorDialog::slotPopulateBank(int bank)
 
 }
 
-std::vector<Rosegarden::MidiProgram>
+BankEditorDialog::MidiProgramContainer
 BankEditorDialog::getBankSubset(Rosegarden::MidiByte msb,
                                 Rosegarden::MidiByte lsb)
 {
-    std::vector<Rosegarden::MidiProgram> program;
-    std::vector<Rosegarden::MidiProgram>::iterator it;
+    MidiProgramContainer program;
+    MidiProgramContainer::iterator it;
 
     for (it = m_programList.begin(); it != m_programList.end(); it++)
     {
@@ -518,15 +518,17 @@ BankEditorDialog::slotDeleteBank()
 
         // Copy across all programs that aren't in the doomed bank
         //
-        std::vector<Rosegarden::MidiProgram>::iterator it;
-        std::vector<Rosegarden::MidiProgram> tempList;
+        MidiProgramContainer::iterator it;
+        MidiProgramContainer tempList;
         for (it = m_programList.begin(); it != m_programList.end(); it++)
             if (it->msb != msb || it->lsb != lsb)
                 tempList.push_back(*it);
 
         // Erase the bank and repopulate
         //
-        m_bankList.erase(&(m_bankList[m_bankCombo->currentItem()]));
+        MidiBankContainer::iterator er = m_bankList.begin();
+        er += m_bankCombo->currentItem();
+        m_bankList.erase(er);
         m_programList = tempList;
 
         slotPopulateDeviceBank(m_deviceCombo->currentItem(), newBank);
@@ -719,12 +721,12 @@ BankEditorDialog::slotProgramChanged(const QString &programName, int id)
 Rosegarden::MidiProgram*
 BankEditorDialog::getProgram(int msb, int lsb, int program)
 {
-    std::vector<Rosegarden::MidiProgram>::iterator it = m_programList.begin();
+    MidiProgramContainer::iterator it = m_programList.begin();
 
     for (; it != m_programList.end(); it++)
     {
         if (it->msb == msb && it->lsb == lsb && it->program == program)
-            return it;
+            return &(*it);
     }
 
     return 0;
@@ -838,7 +840,7 @@ BankEditorDialog::ensureUniqueLSB(int lsb, bool ascending)
 bool
 BankEditorDialog::banklistContains(int msb, int lsb)
 {
-    std::vector<Rosegarden::MidiBank>::iterator it;
+    MidiBankContainer::iterator it;
 
     for (it = m_bankList.begin(); it != m_bankList.end(); it++)
         if (it->msb == msb && it->lsb == lsb)
@@ -865,7 +867,7 @@ void
 BankEditorDialog::modifyCurrentPrograms(int oldMSB, int oldLSB,
                                         int msb, int lsb)
 {
-    std::vector<Rosegarden::MidiProgram>::iterator it;
+    MidiProgramContainer::iterator it;
 
     for (it = m_programList.begin(); it != m_programList.end(); it++)
     {
