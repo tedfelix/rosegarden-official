@@ -86,17 +86,17 @@ public:
 
 
     /**
-     * Checks whether it's reasonable to expand (split) a single event
+     * Checks whether it's reasonable to split a single event
      * of duration a+b into two events of durations a and b, for some
      * working definition of "reasonable".
      *
      * You should pass note-quantized durations into this method
      */
-    bool isExpandValid(timeT a, timeT b);
+    bool isSplitValid(timeT a, timeT b);
 
 
     /**
-     * Expands (splits) events in the [from, to[ interval into 
+     * Splits events in the [from, to[ interval into 
      * tied events of duration baseDuration + events of duration R,
      * with R being equal to the events' initial duration minus baseDuration
      *
@@ -110,11 +110,11 @@ public:
      * modifies from to point at the first split event (the original
      * iterator would have been invalidated).
      */
-    iterator expandIntoTie(iterator &from, iterator to, timeT baseDuration);
+    iterator splitIntoTie(iterator &from, iterator to, timeT baseDuration);
 
 
     /**
-     * Expands (splits) events in the same timeslice as that pointed
+     * Splits (splits) events in the same timeslice as that pointed
      * to by i into tied events of duration baseDuration + events of
      * duration R, with R being equal to the events' initial duration
      * minus baseDuration
@@ -127,7 +127,7 @@ public:
      * modifies i to point at the first split event (the original
      * iterator would have been invalidated).
      */
-    iterator expandIntoTie(iterator &i, timeT baseDuration);
+    iterator splitIntoTie(iterator &i, timeT baseDuration);
 
 
     /**
@@ -254,7 +254,7 @@ public:
      * tied notes of viable lengths (longest possible viable duration
      * first, then longest possible viable component of remainder &c).
      *
-     * Only splits a single note; unlike expandIntoTie, this does
+     * Only splits a single note; unlike splitIntoTie, this does
      * not by default split all notes at a given timeslice.
      */
     void makeNoteViable(iterator i);

@@ -215,22 +215,22 @@ SegmentNotationHelper::isCollapseValid(timeT a, timeT b)
 
 
 bool
-SegmentNotationHelper::isExpandValid(timeT a, timeT b)
+SegmentNotationHelper::isSplitValid(timeT a, timeT b)
 {
     return (isViable(a) && isViable(b));
 }
 
 Segment::iterator
-SegmentNotationHelper::expandIntoTie(iterator &i, timeT baseDuration)
+SegmentNotationHelper::splitIntoTie(iterator &i, timeT baseDuration)
 {
     if (i == end()) return end();
     iterator i2;
     segment().getTimeSlice((*i)->getAbsoluteTime(), i, i2);
-    return expandIntoTie(i, i2, baseDuration);
+    return splitIntoTie(i, i2, baseDuration);
 }
 
 Segment::iterator
-SegmentNotationHelper::expandIntoTie(iterator &from, iterator to,
+SegmentNotationHelper::splitIntoTie(iterator &from, iterator to,
 				     timeT baseDuration)
 {
     // so long as we do the quantization checks for validity before
@@ -254,26 +254,26 @@ SegmentNotationHelper::expandIntoTie(iterator &from, iterator to,
     list<Event *> toInsert;
     list<Event *> toErase;
           
-    // Expand all the events in range [from, to[
+    // Split all the events in range [from, to[
     //
     for (iterator i = from; i != to; ++i) {
 
 	if ((*i)->getAbsoluteTime() != baseTime) {
 	    // no way to really cope with an error, because at this
-	    // point we may already have expanded some events. Best to
+	    // point we may already have splut some events. Best to
 	    // skip this event
-	    cerr << "WARNING: SegmentNotationHelper::expandIntoTie(): (*i)->getAbsoluteTime() != baseTime (" << (*i)->getAbsoluteTime() << " vs " << baseTime << "), ignoring this event\n";
+	    cerr << "WARNING: SegmentNotationHelper::splitIntoTie(): (*i)->getAbsoluteTime() != baseTime (" << (*i)->getAbsoluteTime() << " vs " << baseTime << "), ignoring this event\n";
 	    continue;
 	}
 
         if ((*i)->getDuration() != eventDuration) {
 	    if ((*i)->getDuration() == 0) continue;
-	    cerr << "WARNING: SegmentNotationHelper::expandIntoTie(): (*i)->getDuration() != eventDuration (" << (*i)->getDuration() << " vs " << eventDuration << "), changing eventDuration to match\n";
+	    cerr << "WARNING: SegmentNotationHelper::splitIntoTie(): (*i)->getDuration() != eventDuration (" << (*i)->getDuration() << " vs " << eventDuration << "), changing eventDuration to match\n";
             eventDuration = (*i)->getDuration();
         }
 
         if (baseDuration >= eventDuration) {
-            cerr << "SegmentNotationHelper::expandIntoTie() : baseDuration >= eventDuration, ignoring event\n";
+            cerr << "SegmentNotationHelper::splitIntoTie() : baseDuration >= eventDuration, ignoring event\n";
             continue;
         }
 
@@ -433,13 +433,13 @@ SegmentNotationHelper::insertNote(timeT absoluteTime, Note note, int pitch,
     iterator i = segment().findNearestTime(absoluteTime);
 
     // If our insertion time doesn't match up precisely with any
-    // existing event, and if we're inserting over a rest, expand the
+    // existing event, and if we're inserting over a rest, split the
     // rest at the insertion time first.
     if (i != end() &&
 	(*i)->getAbsoluteTime() < absoluteTime &&
 	(*i)->getAbsoluteTime() + (*i)->getDuration() > absoluteTime &&
 	(*i)->isa(Note::EventRestType)) {
-	i = expandIntoTie(i, absoluteTime - (*i)->getAbsoluteTime());
+	i = splitIntoTie(i, absoluteTime - (*i)->getAbsoluteTime());
     }
 
     //!!! Deal with end-of-bar issues!
@@ -550,7 +550,7 @@ SegmentNotationHelper::insertSomething(iterator i, int duration, int pitch,
 
 	if ((*i)->isa(Note::EventType)) {
 
-	    if (!isExpandValid(getNotationDuration(i), duration)) {
+	    if (!isSplitValid(getNotationDuration(i), duration)) {
 
 		cerr << "Bad split, coercing new note" << endl;
 
@@ -560,11 +560,11 @@ SegmentNotationHelper::insertSomething(iterator i, int duration, int pitch,
 
 	    } else {
 		cerr << "Good split, splitting old event" << endl;
-		expandIntoTie(i, duration);
+		splitIntoTie(i, duration);
 	    }
 	} else {
 	    cerr << "Found rest, splitting" << endl;
-	    iterator last = expandIntoTie(i, duration);
+	    iterator last = splitIntoTie(i, duration);
 
             // Recover viability for the second half of any split rest
 
@@ -861,7 +861,7 @@ SegmentNotationHelper::autoBeam(timeT from, timeT to, string type)
 void
 SegmentNotationHelper::autoBeam(iterator from, iterator to, string type)
 {
-    // This can only manage whole bars at a time, and it will expand
+    // This can only manage whole bars at a time, and it will split
     // the from-to range out to encompass the whole bars in which they
     // each occur
 
