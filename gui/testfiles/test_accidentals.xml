@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rosegarden-data>
+<rosegarden-data>
+<track nb="1" start="0">
+	<event type="clefchange" clef="treble"/>
+	<group type="beamed">
+        <event type="note" duration="quaver" pitch="60"/>
+        <event type="note" duration="quaver" pitch="61"/>
+        <event type="note" duration="quaver" pitch="62"/>
+        <event type="note" duration="quaver" pitch="63"/>
+        <event type="note" duration="quaver" pitch="64"/>
+        <event type="note" duration="quaver" pitch="65"/>
+        <event type="note" duration="quaver" pitch="66"/>
+        <event type="note" duration="quaver" pitch="67"/>
+        <event type="note" duration="quaver" pitch="68"/>
+        <event type="note" duration="quaver" pitch="69"/>
+        <event type="note" duration="quaver" pitch="70"/>
+        <event type="note" duration="quaver" pitch="71"/>
+        <event type="note" duration="quaver" pitch="72"/>
+	</group>
+	<event type="keychange" key="C# major"/>
+	<group type="beamed">
+        <event type="note" duration="quaver" pitch="60"/>
+        <event type="note" duration="quaver" pitch="61"/>
+        <event type="note" duration="quaver" pitch="62"/>
+        <event type="note" duration="quaver" pitch="63"/>
+        <event type="note" duration="quaver" pitch="64"/>
+        <event type="note" duration="quaver" pitch="65"/>
+        <event type="note" duration="quaver" pitch="66"/>
+        <event type="note" duration="quaver" pitch="67"/>
+        <event type="note" duration="quaver" pitch="68"/>
+        <event type="note" duration="quaver" pitch="69"/>
+        <event type="note" duration="quaver" pitch="70"/>
+        <event type="note" duration="quaver" pitch="71"/>
+        <event type="note" duration="quaver" pitch="72"/>
+	</group>
+	<event type="keychange" key="Cb major"/>
+	<group type="beamed">
+        <event type="note" duration="quaver" pitch="60"/>
+        <event type="note" duration="quaver" pitch="61"/>
+        <event type="note" duration="quaver" pitch="62"/>
+        <event type="note" duration="quaver" pitch="63"/>
+        <event type="note" duration="quaver" pitch="64"/>
+        <event type="note" duration="quaver" pitch="65"/>
+        <event type="note" duration="quaver" pitch="66"/>
+        <event type="note" duration="quaver" pitch="67"/>
+        <event type="note" duration="quaver" pitch="68"/>
+        <event type="note" duration="quaver" pitch="69"/>
+        <event type="note" duration="quaver" pitch="70"/>
+        <event type="note" duration="quaver" pitch="71"/>
+        <event type="note" duration="quaver" pitch="72"/>
+	</group>
+	<event type="clefchange" clef="bass"/>
+	<event type="keychange" key="E major"/>
+	<group type="beamed">
+        <event type="note" duration="quaver" pitch="48"/>
+        <event type="note" duration="quaver" pitch="49"/>
+        <event type="note" duration="quaver" pitch="50"/>
+        <event type="note" duration="quaver" pitch="51"/>
+        <event type="note" duration="quaver" pitch="52"/>
+        <event type="note" duration="quaver" pitch="53"/>
+        <event type="note" duration="quaver" pitch="54"/>
+        <event type="note" duration="quaver" pitch="55"/>
+        <event type="note" duration="quaver" pitch="56"/>
+        <event type="note" duration="quaver" pitch="57"/>
+        <event type="note" duration="quaver" pitch="58"/>
+        <event type="note" duration="quaver" pitch="59"/>
+        <event type="note" duration="quaver" pitch="60"/>
+	</group>
+</track>
+</rosegarden-data>

@@ -24,9 +24,9 @@
   <Action name="16th" />
   <Action name="32nd" />
   <Action name="64th" />
-</ToolBar>
+<!-- </ToolBar>
 
-<ToolBar fullWidth="true" name="restsToolBar" newline="true">
+<ToolBar fullWidth="true" name="restsToolBar" newline="true"> -->
   <Action name="breve_rest" />
   <Action name="whole_note_rest" />
   <Action name="half_rest" />

@@ -1,6 +1,7 @@
-  * Take a careful look at the situations in which accidentals
-    do and don't appear, and make sure they're correct.  Handle
-    the principle of hiding an accidental if it's already
+D * Take a careful look at the situations in which accidentals
+    do and don't appear, and make sure they're correct.
+
+  * Handle the principle of hiding an accidental if it's already
     appeared once within the same bar.
 
   * Make it possible to insert dotted notes and notes with

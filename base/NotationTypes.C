@@ -265,9 +265,16 @@ NotationDisplayPitch::rawPitchToDisplayPitch(int pitch,
     accidental = modified ? (sharp ? Sharp : Flat) : NoAccidental;
     if (modified && !sharp) ++height; // because the modifier has become a flat
 
+    int absheight = height;
+    while (absheight < 0) absheight += 7;
+
     vector<int> ah(key.getAccidentalHeights(clef));
     for (vector<int>::const_iterator i = ah.begin(); i != ah.end(); ++i) {
-        if (*i == (height % 7)) {
+
+	int iheight = *i;
+	while (iheight < 0) iheight += 7;
+	
+        if ((iheight % 7) == (absheight % 7)) {
             // the key has an accidental at the same height as this note, so
             // undo the note's accidental if there is one, or make explicit
             // if there isn't
@@ -314,9 +321,16 @@ NotationDisplayPitch::displayPitchToRawPitch(int height,
 
     bool sharp = key.isSharp();
 
+    int absheight = height;
+    while (absheight < 0) absheight += 7;
+
     vector<int> ah(key.getAccidentalHeights(clef));
     for (vector<int>::const_iterator i = ah.begin(); i != ah.end(); ++i) {
-        if (*i == (height % 7)) {
+
+	int iheight = *i;
+	while (iheight < 0) iheight += 7;
+	
+        if ((iheight % 7) == (absheight % 7)) {
             // the key has an accidental at the same height as this note
             if (accidental == Natural) accidental = NoAccidental;
             else if (accidental == NoAccidental) accidental = sharp ? Sharp : Flat;

@@ -363,6 +363,11 @@ NotationGroup::calculateBeam(Staff &staff)
     // away from it.  This is a straight-line equation y = mx + c,
     // where we have m and two x,y pairs and need to find c.
     
+    //!!! If we find that making one extreme a sensible distance from
+    //the note head makes the other extreme way too far away from it
+    //in the direction of the gradient, then we should flatten the
+    //gradient.  There may be a better heuristic for this.
+
     int  initialX = (int)(*initialNote)->getLayoutX();
     int   finalDX = (int)  (*finalNote)->getLayoutX() - initialX;
     int extremeDX = (int)(*extremeNote)->getLayoutX() - initialX;
