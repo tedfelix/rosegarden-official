@@ -110,20 +110,20 @@ class PropertyStoreBase {
 public:
     virtual ~PropertyStoreBase();
 
-    virtual PropertyType getType() = 0;
-    virtual string getTypeName() = 0;
+    virtual PropertyType getType() const = 0;
+    virtual string getTypeName() const = 0;
     virtual PropertyStoreBase *clone() = 0;
     virtual string unparse() = 0;
 
 #ifndef NDEBUG
-    virtual void dump(ostream&) = 0;
+    virtual void dump(ostream&) const = 0;
 #else
-    void dump(ostream&) {}
+    void dump(ostream&) const {}
 #endif
 };
 
 #ifndef NDEBUG
-ostream& operator<<(ostream &out, PropertyStoreBase &e) { e.dump(out); }
+inline ostream& operator<<(ostream &out, PropertyStoreBase &e) { e.dump(out); return out; }
 #endif
 
 template <PropertyType P>
@@ -134,8 +134,8 @@ public:
     PropertyStore(const PropertyStore<P> &p) : PropertyStoreBase(p), m_data(p.m_data) { }
     PropertyStore &operator=(const PropertyStore<P> &p);
 
-    virtual PropertyType getType();
-    virtual string getTypeName();
+    virtual PropertyType getType() const;
+    virtual string getTypeName() const;
 
     virtual PropertyStoreBase* clone();
     
@@ -147,7 +147,7 @@ public:
     void setData(PropertyDefn<P>::basic_type data) { m_data = data; }
 
 #ifndef NDEBUG
-    void dump(ostream&);
+    void dump(ostream&) const;
 #endif
 
 private:
@@ -163,14 +163,14 @@ PropertyStore<P>::operator=(const PropertyStore<P> &p) {
 
 template <PropertyType P>
 PropertyType
-PropertyStore<P>::getType()
+PropertyStore<P>::getType() const
 {
     return P;
 }
 
 template <PropertyType P>
 string
-PropertyStore<P>::getTypeName()
+PropertyStore<P>::getTypeName() const
 {
     return PropertyDefn<P>::name();
 }
@@ -192,7 +192,7 @@ PropertyStore<P>::unparse()
 #ifndef NDEBUG
 template <PropertyType P>
 void
-PropertyStore<P>::dump(ostream &out)
+PropertyStore<P>::dump(ostream &out) const
 {
     out << getTypeName() << " - " << m_data;
 }
@@ -281,9 +281,9 @@ public:
 	throw (BadType);
 
 #ifndef NDEBUG
-    void dump(ostream&);
+    void dump(ostream&) const;
 #else
-    void dump(ostream&) {}
+    void dump(ostream&) const {}
 #endif
 
 private:
@@ -379,6 +379,8 @@ public:
 
     const Event* event() const { return m_event; }
     Event*       event()       { return m_event; }
+
+    void  dump(ostream&) const;
 
 protected:
     Event *m_event;

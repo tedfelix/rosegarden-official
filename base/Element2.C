@@ -163,7 +163,7 @@ Element2::setViewElements(ViewElements *ve)
 }
 
 void
-Element2::dump(ostream& out)
+Element2::dump(ostream& out) const
 {
 #ifndef NDEBUG
     out << "Event type : " << m_type;
@@ -173,10 +173,8 @@ Element2::dump(ostream& out)
 
     for (PropertyMap::const_iterator i = m_properties.begin();
          i != m_properties.end(); ++i) {
-        out << "\t\t" << (*i).first << '\t';
-//         (*i).second->dump(out);
-        out << *((*i).second);
-        out << endl;
+        out << "\t\t" << (*i).first << '\t'
+            << *((*i).second) << endl;
     }
 #endif
 }
