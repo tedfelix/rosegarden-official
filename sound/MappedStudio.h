@@ -133,12 +133,18 @@ public:
     //
     void clear();
 
+    // Return the object vector
+    //
+    //std::vector<MappedObject*>* getObjects() const { return &m_objects; }
+
     // DCOP streaming
     //
+    /* dunno if we need this
     friend QDataStream& operator>>(QDataStream &dS, MappedStudio *mS);
     friend QDataStream& operator<<(QDataStream &dS, MappedStudio *mS);
     friend QDataStream& operator>>(QDataStream &dS, MappedStudio &mS);
     friend QDataStream& operator<<(QDataStream &dS, const MappedStudio &mS);
+    */
 
 protected:
 

@@ -28,6 +28,8 @@
 #include <qfont.h>
 #include <qprogressdialog.h>
 #include <qprogressbar.h>
+#include <qslider.h>
+#include <qvbox.h>
 
 #include "Progress.h"
 
@@ -236,6 +238,31 @@ public:
 
 protected:    
     double m_hScaleFactor;
+};
+
+// We need one of these because the QSlider is stupid and won't
+// let us have the maximum value of the slider at the top.  Or
+// just I can't find a way of doing it.  Anyway, this is a 
+// vertically aligned volume/MIDI fader.
+//
+class RosegardenFader : public QSlider
+{
+    Q_OBJECT
+public:
+    RosegardenFader(QWidget *parent);
+
+public slots:
+    void slotValueChanged(int);
+
+    // Use this in preference to setValue - horrible hack but it's
+    // quicker than fiddling about with the insides of QSlider.
+    //
+    virtual void setFader(int);
+
+signals:
+    void faderChanged(int);
+
+protected:
 };
 
 

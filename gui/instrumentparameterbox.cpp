@@ -28,6 +28,7 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
+#include <qslider.h>
 
 #include "Midi.h"
 #include "Instrument.h"
@@ -55,6 +56,8 @@ InstrumentParameterBox::InstrumentParameterBox(QWidget *parent)
       m_programCheckBox(new QCheckBox(this)),
       m_panCheckBox(new QCheckBox(this)),
       m_velocityCheckBox(new QCheckBox(this)),
+      m_volumeFader(new RosegardenFader(this)),
+      m_volumeValue(new QLabel(this)),
       m_selectedInstrument(0)
 {
     initBox();
@@ -107,6 +110,12 @@ InstrumentParameterBox::initBox()
     m_panValue->setFont(getFont());
     m_velocityValue->setFont(getFont());
 
+    m_volumeFader->setLineStep(1);
+    //m_volumeFader->setPageStep(1);
+    m_volumeFader->setMaxValue(127);
+    m_volumeFader->setMinValue(0);
+    m_volumeValue->setFont(getFont());
+
     gridLayout->addRowSpacing(0, 8);
 
     gridLayout->addRowSpacing(1, 30);
@@ -131,6 +140,9 @@ InstrumentParameterBox::initBox()
     gridLayout->addWidget(m_velocityLabel,    6, 0, AlignLeft);
     gridLayout->addWidget(m_velocityCheckBox, 6, 1);
     gridLayout->addWidget(m_velocityValue,    6, 2, AlignRight);
+
+    gridLayout->addMultiCellWidget(m_volumeFader, 7, 9, 0, 0,  AlignCenter);
+    gridLayout->addWidget(m_volumeValue, 10, 0, AlignCenter);
 
     // Populate channel list
     for (int i = 0; i < 16; i++)
@@ -198,6 +210,9 @@ InstrumentParameterBox::initBox()
     connect(m_channelValue, SIGNAL(activated(int)),
             this, SLOT(slotSelectChannel(int)));
 
+    connect(m_volumeFader, SIGNAL(faderChanged(int)),
+            this, SLOT(slotSelectVelocity(int)));
+
     // connect up mouse wheel movement
     //
     connect(m_bankValue, SIGNAL(propagate(int)),
@@ -254,11 +269,15 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
         m_programCheckBox->hide();
         m_panCheckBox->hide();
         m_velocityCheckBox->hide();
+        m_velocityValue->hide();
+        m_velocityLabel->hide();
 
-        m_velocityValue->show();
-        m_velocityLabel->show();
-        m_velocityValue->setDisabled(false);
-        m_velocityValue->setCurrentItem(instrument->getVelocity());
+        //m_velocityValue->setDisabled(false);
+        //m_velocityValue->setCurrentItem(instrument->getVelocity());
+
+        m_volumeFader->show();
+        m_volumeValue->show();
+        m_volumeFader->setFader(instrument->getVelocity());
 
         return; // for the moment
     }
@@ -279,6 +298,9 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
         m_programCheckBox->show();
         m_panCheckBox->show();
         m_velocityCheckBox->show();
+
+        m_volumeFader->hide();
+        m_volumeValue->hide();
     }
 
     // Set instrument name
@@ -521,6 +543,10 @@ InstrumentParameterBox::slotSelectVelocity(int index)
 
     if (m_selectedInstrument->getType() == Rosegarden::Instrument::Audio)
     {
+        // stupid QSliders mean we have to invert this value so that
+        // the top of the slider is max, the bottom min.
+        //
+        m_volumeValue->setNum(index);
         emit setMappedProperty(m_selectedInstrument->getId(),
                                QString("value"),
                                index);

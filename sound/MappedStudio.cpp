@@ -175,10 +175,13 @@ MappedAudioFader::setLevel(MappedObjectValue param)
     m_level = param;
 }
 
+/*
 QDataStream&
 operator>>(QDataStream &dS, MappedStudio *mS)
 {
     // not implemented
+    mS->clear();
+
     return dS;
 }
 
@@ -186,14 +189,27 @@ operator>>(QDataStream &dS, MappedStudio *mS)
 QDataStream&
 operator<<(QDataStream &dS, MappedStudio *mS)
 {
-    // not implemented
+    dS << mS->getObjects()->size();
+
+    for (unsigned int i = 0; i < mS->getObjects()->size(); i++)
+    {
+        //dS << m_objects[i]->getId();
+        //dS << m_objects[i]->getType();
+    }
+
     return dS;
 }
 
 QDataStream&
 operator>>(QDataStream &dS, MappedStudio &mS)
 {
-    // not implemented
+    mS.clear();
+
+    unsigned int size = 0;
+    dS >> size;
+    
+    //for (unsigned int i = 0; i < size; i++)
+
     return dS;
 }
 
@@ -201,9 +217,17 @@ operator>>(QDataStream &dS, MappedStudio &mS)
 QDataStream&
 operator<<(QDataStream &dS, const MappedStudio &mS)
 {
-    // not implemented
+    dS << mS.getObjects()->size();
+
+    for (unsigned int i = 0; i < mS.getObjects()->size(); i++)
+    {
+        //dS << m_objects[i].getId();
+        //dS << m_objects[i].getType();
+    }
+
     return dS;
 }
+*/
 
 
 MappedAudioPluginManager::MappedAudioPluginManager(MappedObjectId id)

@@ -344,3 +344,38 @@ RosegardenProgressBar::eventFilter(QObject *watched, QEvent *e)
 
         return QProgressBar::eventFilter(watched, e);
 }
+
+RosegardenFader::RosegardenFader(QWidget *parent):
+    QSlider(Qt::Vertical, parent)
+{
+    connect(this, SIGNAL(valueChanged(int)),
+            this, SLOT(slotValueChanged(int)));
+
+}
+
+// We invert the value - so that it appear the top of the fader
+// is our maximum and vice versa.  For the moment we only catch
+// and re-emit this signal - so beware.
+//
+void
+RosegardenFader::slotValueChanged(int value)
+{
+    int adjValue = maxValue() - value;
+    if (adjValue < 0) adjValue = 0;
+
+    emit faderChanged(adjValue);
+}
+
+void 
+RosegardenFader::setFader(int value)
+{
+    emit faderChanged(value);
+
+    value = maxValue() - value;
+
+    if (value > maxValue()) value = maxValue();
+    if (value < minValue()) value = minValue();
+
+    setValue(value);
+}
+

@@ -36,6 +36,7 @@
 
 class RosegardenComboBox;
 class QCheckBox;
+class QSlider;
 
 class InstrumentParameterBox : public RosegardenParameterBox
 {
@@ -104,6 +105,8 @@ protected:
     QCheckBox          *m_programCheckBox;
     QCheckBox          *m_panCheckBox;
     QCheckBox          *m_velocityCheckBox;
+    RosegardenFader    *m_volumeFader;
+    QLabel             *m_volumeValue;
 
     Rosegarden::Instrument *m_selectedInstrument;
 
