@@ -3,16 +3,18 @@ INCLUDES= $(all_includes) -I$(kde_includes)/arts -I../core
 
 ####### This part is very Rosegarden specific
 # you can add here more. This one gets installed 
-lib_LTLIBRARIES = libMidiArts.la
+lib_LTLIBRARIES = libRosegardenSequencer.la
+noinst_LTLIBRARIES = libRosegardenSound.la
 
-libMidiArts_la_SOURCES = MidiRecord.cpp MidiArts.cc
+libRosegardenSequencer_la_SOURCES = MidiRecord.cpp MidiArts.cc MidiEvent.cpp
+libRosegardenSound_la_SOURCES = MidiFile.cpp
 
 # the library search path. 
-libMidiArts_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -module -no-undefined
+libRosegardenSequencer_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -module -no-undefined
 
 # the libraries to link against. Be aware of the order. First the libraries,
 # that depend on the following ones.
-libMidiArts_la_LIBADD   = -lartsmidi
+libRosegardenSequencer_la_LIBADD   = -lartsmidi
 
 # make messages.po. Move this one to ../po/ and "make merge" in po
 # the -x is for skipping messages already translated in kdelibs
@@ -37,8 +39,8 @@ MidiRecord.cpp: MidiArts.h
 
 bin_PROGRAMS = sound
 sound_METASOURCES = AUTO
-sound_SOURCES = MidiFile.cpp MidiEvent.cpp Sequencer.cpp sound.cpp
-sound_LDFLAGS = -L../core
-sound_LDADD = libMidiArts.la -lsoundserver_idl -lcore
+sound_SOURCES = Sequencer.cpp sound.cpp
+sound_LDFLAGS = $(all_libraries) -L../core
+sound_LDADD = -lRosegardenSequencer -lRosegardenSound -lsoundserver_idl -lcore -lqt
 
 DISTCLEANFILES = $(sound_METASOURCES) MidiArts.h MidiArts.cc
