@@ -302,11 +302,11 @@ void MatrixPainter::handleLeftButtonPress(Rosegarden::timeT time,
     // Don't create an overlapping event on the same note on the same channel
     if (dynamic_cast<MatrixElement*>(element))
     {
-        //cout << "OVERLAP" << endl;
+//        cout << "OVERLAP" << endl;
         return;
     }
 
-    // Round event time to a multiple of resolution
+    // This is needed for the event duration rounding
     SnapGrid grid(m_mParentView->getSnapGrid());
 
     m_currentStaff = m_mParentView->getStaff(staffNo);
@@ -1053,7 +1053,7 @@ void MatrixResizer::handleMouseRelease(Rosegarden::timeT newTime,
 
             // ensure the duration is always (arbitrary) positive
             if (eventDuration <= 0)
-                eventDuration = 50;
+                eventDuration = 60;
                 //m_mParentView->getSnapGrid().getSnapTime(e->x());
             
             Rosegarden::Event *newEvent =

@@ -521,12 +521,10 @@ MatrixCanvasView* MatrixView::getCanvasView()
 
 void MatrixView::setCurrentSelection(EventSelection* s, bool preview)
 {
-/*!!! No, if (!m_currentEventSelection && !s) we need to update quantize combo from the segment and then return...
-    if (!s) {
-	m_quantizeCombo->setCurrentItem(m_quantizeCombo->count() - 1); // "Off"
+    if (!m_currentEventSelection && !s)	{
+	updateQuantizeCombo();
+	return;
     }
-*/
-    if (!m_currentEventSelection && !s)	return;
 
     if (m_currentEventSelection) {
         getStaff(0)->positionElements(m_currentEventSelection->getStartTime(),
@@ -579,29 +577,6 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview)
                 oldSelection->getSegmentEvents().size() ==
                 s->getSegmentEvents().size()) updateRequired = false;
         }
-    }
-
-    Rosegarden::StandardQuantization *quantization = 0;
-    if (s) {
-	quantization =
-	    Rosegarden::StandardQuantization::getStandardQuantization(s);
-    } else {
-	quantization =
-	    Rosegarden::StandardQuantization::getStandardQuantization
-	    (&oldSelection->getSegment());
-    }
-
-    timeT quantizeUnit = 0;
-    if (quantization) quantizeUnit = quantization->unit;
-    
-    for (unsigned int i = 0; i < m_quantizations.size(); ++i) {
-	if (quantizeUnit == m_quantizations[i].unit) {
-	    m_quantizeCombo->setCurrentItem(i);
-	    break;
-	}
-	if (i == m_quantizations.size() - 1) {
-	    m_quantizeCombo->setCurrentItem(i+1); // "Off"
-	}
     }
 
     if (updateRequired) {
@@ -657,9 +632,37 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview)
     }
 #endif
 
+    updateQuantizeCombo();
     updateView();
 }
 
+
+void MatrixView::updateQuantizeCombo()
+{
+    Rosegarden::StandardQuantization *quantization = 0;
+
+    if (m_currentEventSelection) {
+	quantization =
+	    Rosegarden::StandardQuantization::getStandardQuantization
+	    (m_currentEventSelection);
+    } else {
+	quantization =
+	    Rosegarden::StandardQuantization::getStandardQuantization
+	    (&(m_staffs[0]->getSegment()));
+    }
+
+    timeT quantizeUnit = 0;
+    if (quantization) quantizeUnit = quantization->unit;
+    
+    for (unsigned int i = 0; i < m_quantizations.size(); ++i) {
+	if (quantizeUnit == m_quantizations[i].unit) {
+	    m_quantizeCombo->setCurrentItem(i);
+	    return;
+	}
+    }
+
+    m_quantizeCombo->setCurrentItem(m_quantizeCombo->count() - 1); // "Off"
+}
 
 void MatrixView::slotPaintSelected()
 {
@@ -1164,9 +1167,6 @@ MatrixView::slotSetSnap(timeT t)
 void
 MatrixView::slotQuantizeSelection(int q)
 {
-    if (!m_currentEventSelection) return;
-    if (m_currentEventSelection->getAddedEvents() == 0) return;
-
     MATRIX_DEBUG << "MatrixView::slotQuantizeSelection\n";
 
     using Rosegarden::Quantizer;
@@ -1181,17 +1181,31 @@ MatrixView::slotQuantizeSelection(int q)
     if (quant.getUnit() != 0)
     {
         KTmpStatusMsg msg(i18n("Quantizing..."), this);
-        addCommandToHistory(
-                new EventQuantizeCommand(*m_currentEventSelection, quant));
+	if (m_currentEventSelection &&
+	    m_currentEventSelection->getAddedEvents()) {
+	    addCommandToHistory(new EventQuantizeCommand
+				(*m_currentEventSelection, quant));
+	} else {
+	    Segment &s = m_staffs[0]->getSegment();
+	    addCommandToHistory(new EventQuantizeCommand
+				(s, s.getStartTime(), s.getEndMarkerTime(),
+				 quant));
+	}
     }
     else
     {
         KTmpStatusMsg msg(i18n("Unquantizing..."), this);
-        addCommandToHistory(
-                new EventUnquantizeCommand(*m_currentEventSelection, quant));
+	if (m_currentEventSelection &&
+	    m_currentEventSelection->getAddedEvents()) {
+	    addCommandToHistory(new EventUnquantizeCommand
+				(*m_currentEventSelection, quant));
+	} else {
+	    Segment &s = m_staffs[0]->getSegment();
+	    addCommandToHistory(new EventUnquantizeCommand
+				(s, s.getStartTime(), s.getEndMarkerTime(),
+				 quant));
+	}
     }
-
-    //setCurrentSelection(oldSelection, false);
 }
 
 

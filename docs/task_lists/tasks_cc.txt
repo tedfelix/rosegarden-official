@@ -71,7 +71,7 @@
 28. Problem with moving cursor up/down on staff -- ctrl-click does it but
     no visible feedback? or what?
 
-29. Make status bar show chord/tuplet mode status
+29. Make status bar show chord/tuplet mode status [DONE]
 
 30. Thoroughly scan all following task lists to find more stuff to do...
 

@@ -95,6 +95,7 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 
         if ((mRect = dynamic_cast<QCanvasMatrixRectangle*>(item))) {
             mel = &(mRect->getMatrixElement());
+	    MATRIX_DEBUG << "MatrixCanvasView::contentsMousePressEvent: collision with an existing matrix element" << endl;
             break;
         }    
     }

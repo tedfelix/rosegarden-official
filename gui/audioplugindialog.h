@@ -40,6 +40,9 @@
 
 class RosegardenRotary;
 class RosegardenComboBox;
+class QGroupBox;
+class QCheckBox;
+class QLabel;
 
 namespace Rosegarden
 {
@@ -105,7 +108,7 @@ public:
 public slots:
     void slotPluginSelected(int index);
     void slotPluginPortChanged(int pluginIndex, float value);
-    void slotBypassed(bool);
+    void slotBypassChanged();
 
 signals:
     void pluginSelected(int pluginIndex, int plugin);
@@ -119,9 +122,10 @@ protected:
     AudioPluginManager  *m_pluginManager;
     Instrument          *m_instrument;
 
+    QGroupBox		*m_pluginParamsBox;
     RosegardenComboBox  *m_pluginList;
     QLabel              *m_pluginId;
-    QPushButton         *m_bypassButton;
+    QCheckBox		*m_bypass;
 
     std::vector<PluginControl*> m_pluginWidgets;
     std::vector<QHBox*>         m_controlLines;

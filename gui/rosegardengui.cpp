@@ -367,7 +367,7 @@ void RosegardenGUIApp::setupActions()
                               actionCollection(), "join");
     action->setExclusiveGroup("segmenttools");
 
-    new KAction(i18n("&Audio File Manager"),
+    new KAction(i18n("Manage A&udio Segments"),
                 0, 
                 this, SLOT(slotAudioManager()),
                 actionCollection(), "audio_manager");

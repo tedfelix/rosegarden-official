@@ -1281,7 +1281,7 @@ EventEditDialog::addPersistentProperty(const Rosegarden::PropertyName &name)
 	QCheckBox *checkBox = new QCheckBox
 	    ("", m_persistentGrid, strtoqstr(name));
 	checkBox->setChecked(m_originalEvent.get<Bool>(name));
-	QObject::connect(checkBox, SIGNAL(clicked()),
+	QObject::connect(checkBox, SIGNAL(activated()),
 			 this, SLOT(slotBoolPropertyChanged()));
 	checkBox->show();
 	break;

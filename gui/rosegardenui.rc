@@ -25,9 +25,6 @@
 	<Separator/>
       	<Action name="edit_doc_properties"/>
   </Menu>
-  <Menu name="view">
-      <Action name="audio_manager"/>
-  </Menu>
   <Menu name="Segments">
 	<text>Seg&amp;ments</text>
       	<Action name="edit_default"/>
@@ -42,6 +39,8 @@
 	<Action name="collapse"/>
 <!-- 	<Action name="harmonize_selection"/> -->
         <Action name="set_tempo_to_segment_length"/>
+	<Separator/>
+      <Action name="audio_manager"/>
   </Menu>
   <Menu name="Tracks">
 	<text>Trac&amp;ks</text>

@@ -25,6 +25,8 @@
 #include <qdial.h>
 #include <qfont.h>
 #include <qpushbutton.h>
+#include <qgroupbox.h>
+#include <qcheckbox.h>
 
 #include "audioplugindialog.h"
 #include "audiopluginmanager.h"
@@ -38,43 +40,38 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
                                      AudioPluginManager *aPM,
                                      Instrument *instrument,
                                      int index):
-    KDialogBase(parent, "", false, i18n("Rosegarden Audio Plugin"), Close),
+    //!!! should be an ok/cancel dialog, but that's trickier to do
+    KDialogBase(parent, "", false, i18n("Audio Plugin"), Close),
     m_pluginManager(aPM),
     m_instrument(instrument),
     m_index(index),
     m_generating(true)
 {
-    QVBox *v = makeVBoxMainWidget();
+    QVBox *vbox = makeVBoxMainWidget();
 
-    // Copied the fonts
-    QFont plainFont;
-    plainFont.setPointSize(plainFont.pointSize() * 9 / 10);
+    QGroupBox *pluginSelectionBox = new QGroupBox
+	(1, Horizontal, i18n("Plugin"), vbox);
 
-    QFont boldFont;
-    boldFont.setPointSize(int(boldFont.pointSize() * 9.5 / 10.0 + 0.5));
-    boldFont.setBold(true);
+    m_pluginParamsBox = new QGroupBox
+	(1, Horizontal, i18n("Plugin Parameters"), vbox);
+    m_pluginParamsBox->hide();
+    
+    m_pluginList = new RosegardenComboBox(true, pluginSelectionBox);
+    m_pluginList->insertItem(i18n("(none)"));
 
-// uh?    setFont(boldFont);
-
-    QHBox *h = new QHBox(v);
+    QHBox *h = new QHBox(pluginSelectionBox);
 
     // top line
-    m_bypassButton = new QPushButton(i18n("Bypass"), h);
-    m_bypassButton->setToggleButton(true);
+    m_bypass = new QCheckBox(i18n("Bypass"), h);
+
+    connect(m_bypass, SIGNAL(activated()),
+            this, SLOT(slotBypassChanged()));
 
     // spacing
     /*QLabel *idLabel =*/ new QLabel("", h);
 
     m_pluginId = new QLabel(i18n("<no id>"), h);
-    m_pluginId->setFont(plainFont);
     m_pluginId->setAlignment(AlignRight);
-
-    //new QLabel(i18n("Audio Plugin"), v);
-    m_pluginList = new RosegardenComboBox(true, v);
-    m_pluginList->insertItem(i18n("<no plugin>"));
-
-    connect(m_bypassButton, SIGNAL(toggled(bool)),
-            this, SLOT(slotBypassed(bool)));
 
     // Store the height so we can resize the whole dialog later
     // if required
@@ -101,8 +98,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     {
         if (inst->isAssigned())
         {
-            if (inst->isBypassed())
-                m_bypassButton->setDown(true);
+	    m_bypass->setChecked(inst->isBypassed());
 
             // Get the position from the unique id (add one for the first
             // null entry).
@@ -157,7 +153,7 @@ AudioPluginDialog::slotPluginSelected(int number)
     if (plugin)
     {
         setCaption(caption + plugin->getName());
-        m_pluginId->setText(QString("%1").arg(plugin->getUniqueId()));
+        m_pluginId->setText(QString("Id: %1").arg(plugin->getUniqueId()));
 
         // Set the unique id on our own instance - clear the ports down
         //
@@ -185,7 +181,7 @@ AudioPluginDialog::slotPluginSelected(int number)
         {
             if (((float(count))/2.0) == (float(count/2)))
             {
-                controlLine = new QHBox(mainWidget());
+		controlLine = new QHBox(m_pluginParamsBox);
                 controlLine->show();
 
                 // store so we can remove it later
@@ -232,6 +228,18 @@ AudioPluginDialog::slotPluginSelected(int number)
             }
             count++;
         }
+
+	QString shortName(plugin->getName());
+	int parenIdx = shortName.find(" (");
+	if (parenIdx > 0) {
+	    shortName = shortName.left(parenIdx);
+	    if (shortName == "Null") shortName = "Plugin";
+	}
+	m_pluginParamsBox->setTitle(i18n("Parameters for %1").arg(shortName));
+	m_pluginParamsBox->show();
+
+    } else {
+	m_pluginParamsBox->hide();
     }
 
     // rather severe for the moment
@@ -250,8 +258,9 @@ AudioPluginDialog::slotPluginPortChanged(int portIndex, float value)
 }
 
 void
-AudioPluginDialog::slotBypassed(bool bp)
+AudioPluginDialog::slotBypassChanged()
 {
+    bool bp = m_bypass->isChecked();
     AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
 
     if (inst)

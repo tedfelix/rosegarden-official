@@ -351,6 +351,11 @@ protected:
     virtual void initStatusBar();
 
     /**
+     * update the current quantize level from selection or entire segment
+     */
+    virtual void updateQuantizeCombo();
+
+    /**
      * Return the size of the MatrixCanvasView
      */
     virtual QSize getViewSize();
