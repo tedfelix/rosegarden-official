@@ -187,9 +187,17 @@ public slots:
      */
     virtual void slotTestClipboard();
 
+signals:
+    void windowRaised();
+    
 protected:
 
     virtual void paintEvent(QPaintEvent* e);
+
+    /**
+     * Raise the transport
+     */
+    virtual void showEvent(QShowEvent* e);
     
     /**
      * Set the current Notation tool (note inserter, rest inserter, eraser...)

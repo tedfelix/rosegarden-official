@@ -2430,6 +2430,14 @@ RosegardenGUIApp::slotCloseTransport()
     m_viewTransport->setChecked(false);
 }
 
+void
+RosegardenGUIApp::slotRaiseTransport()
+{
+    RG_DEBUG << "EditViewBase::showEvent()\n";
+    if (m_viewTransport->isChecked()) {
+        m_transport->raise();
+    }
+}
 
 
 // We use this slot to active a tool mode on the GUI

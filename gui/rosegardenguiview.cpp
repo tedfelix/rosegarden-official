@@ -353,6 +353,8 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
 	    par, SLOT(slotChangeTempo(Rosegarden::timeT, double,
 				      TempoDialog::TempoDialogAction)));
 
+    connect(notationView, SIGNAL(windowRaised()),
+	    par, SLOT(slotRaiseTransport()));
     connect(notationView, SIGNAL(play()),
 	    par, SLOT(slotPlay()));
     connect(notationView, SIGNAL(stop()),
