@@ -395,13 +395,16 @@ MidiProgramsEditor::resetMSBLSB()
     m_msb->setValue(m_oldMSB);
     m_lsb->setValue(m_oldLSB);
 
-    modifyCurrentPrograms(getCurrentBank()->msb,
-                          getCurrentBank()->lsb,
-                          m_oldMSB,
-                          m_oldLSB);
+    if (m_currentBank)
+    {
+        modifyCurrentPrograms(m_currentBank->msb,
+                              m_currentBank->lsb,
+                              m_oldMSB,
+                              m_oldLSB);
 
-    getCurrentBank()->msb = m_oldMSB;
-    getCurrentBank()->lsb = m_oldLSB;
+        m_currentBank->msb = m_oldMSB;
+        m_currentBank->lsb = m_oldLSB;
+    }
 
     m_msb->blockSignals(false);
     m_lsb->blockSignals(false);
@@ -656,7 +659,8 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_deleteAll(false),
     m_lastDevice(Rosegarden::Device::NO_DEVICE),
     m_lastMSB(0),
-    m_lastLSB(0)
+    m_lastLSB(0),
+    m_updateDeviceList(false)
 {
     QVBox* mainFrame = new QVBox(this);
     setCentralWidget(mainFrame);
@@ -900,6 +904,7 @@ BankEditorDialog::updateDialog()
     //
     Rosegarden::DeviceList *devices = m_studio->getDevices();
     Rosegarden::DeviceListIterator it;
+    bool deviceLabelUpdate = false;
 
     for (it = devices->begin(); it != devices->end(); ++it) {
 
@@ -928,16 +933,24 @@ BankEditorDialog::updateDialog()
                 if (deviceItem &&
                     deviceItem->getDevice() == midiDevice->getId())
                 {
-                    deviceItem->setText(0, strtoqstr(midiDevice->getName()));
-                    m_deviceNameMap[midiDevice->getId()] = 
-                        midiDevice->getName();
+                    if (deviceItem->text(0) != strtoqstr(midiDevice->getName()))
+                    {
+                        deviceItem->setText(0, 
+                                strtoqstr(midiDevice->getName()));
+                        m_deviceNameMap[midiDevice->getId()] = 
+                                midiDevice->getName();
+
+                        /*
+                       cout << "NEW TEXT FOR DEVICE " << midiDevice->getId()
+                            << " IS " << midiDevice->getName() << endl;
+                       cout << "LIST ITEM ID = "
+                            << deviceItem->getDevice() << endl;
+                            */
+
+                        deviceLabelUpdate = true;
+                    }
                 }
 
-                /*
-                cout << "NEW TEXT FOR DEVICE " << midiDevice->getId()
-                     << " IS " << midiDevice->getName() << endl;
-                cout << "LIST ITEM ID = " << deviceItem->getDevice() << endl;
-                */
             }
 
             continue;
@@ -978,6 +991,8 @@ BankEditorDialog::updateDialog()
     for(unsigned int i = 0; i < itemsToDelete.size(); ++i) delete itemsToDelete[i];
 
     m_listView->sort();
+
+    if (deviceLabelUpdate) emit deviceNamesChanged();
 }
 
 void
@@ -1258,6 +1273,14 @@ BankEditorDialog::slotApply()
     }
     addCommandToHistory(command);
 
+    // Our freaky fudge to update instrument/device names externally
+    //
+    if (m_updateDeviceList)
+    {
+        emit deviceNamesChanged();
+        m_updateDeviceList = false;
+    }
+
     setModified(false);
 }
 
@@ -1267,6 +1290,8 @@ BankEditorDialog::slotReset()
     resetProgramList();
     m_programEditor->resetMSBLSB();
     m_programEditor->populateBank(m_listView->currentItem());
+    updateDialog();
+
     setModified(false);
 }
 
@@ -1504,7 +1529,7 @@ BankEditorDialog::getFirstFreeBank(QListViewItem* item)
 void
 BankEditorDialog::slotModifyDeviceOrBankName(QListViewItem* item, const QString &label, int)
 {
-    RG_DEBUG << "MidiProgramsEditor::slotModifyDeviceorBankName" << endl;
+    RG_DEBUG << "BankEditorDialog::slotModifyDeviceOrBankName" << endl;
 
     MidiDeviceListViewItem* deviceItem =
         dynamic_cast<MidiDeviceListViewItem*>(item);
@@ -1514,8 +1539,8 @@ BankEditorDialog::slotModifyDeviceOrBankName(QListViewItem* item, const QString 
 
         // renaming a bank item
 
-        RG_DEBUG << "MidiProgramsEditor::slotModifyDeviceorBankName : modify bank name to "
-                 << label << endl;
+        RG_DEBUG << "BankEditorDialog::slotModifyDeviceOrBankName - "
+                 << "modify bank name to " << label << endl;
 
         if (m_bankList[bankItem->getBank()].name != qstrtostr(label)) {
             m_bankList[bankItem->getBank()].name = qstrtostr(label);
@@ -1526,12 +1551,14 @@ BankEditorDialog::slotModifyDeviceOrBankName(QListViewItem* item, const QString 
 
         // renaming a device item
 
-        RG_DEBUG << "MidiProgramsEditor::slotModifyDeviceorBankName : modify device name to "
-                 << label << endl;
+        RG_DEBUG << "BankEditorDialog::slotModifyDeviceOrBankName - "
+                 << "modify device name to " << label << endl;
 
         if (m_deviceNameMap[deviceItem->getDevice()] != qstrtostr(label)) {
             m_deviceNameMap[deviceItem->getDevice()] = qstrtostr(label);
             setModified(true);
+
+            m_updateDeviceList = true;
         }
     }
     

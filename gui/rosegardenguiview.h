@@ -223,6 +223,12 @@ public slots:
     void slotSetRecord(Rosegarden::InstrumentId, bool);
     void slotSetSolo(Rosegarden::InstrumentId, bool);
 
+    /*
+     * A manual fudgy way of creating a view update for certain
+     * semi-static data (devices/instrument labels mainly)
+     */
+    void slotSynchroniseWithComposition();
+
 signals:
     void activateTool(const QString& toolName);
 

@@ -2420,7 +2420,7 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
     }
 
     KMacroCommand *command = new KMacroCommand(i18n("Guess Notation"));
-    int count = 0;
+    //int count = 0;
 
     for (Rosegarden::Composition::iterator i = comp->begin();
          i != comp->end(); ++i) {
@@ -4132,6 +4132,11 @@ RosegardenGUIApp::slotEditBanks()
     connect(this, SIGNAL(documentAboutToChange()),
             bankEditor, SLOT(slotFileClose()));
 
+    // Cheating way of updating the track/instrument list
+    //
+    connect(bankEditor, SIGNAL(deviceNamesChanged()),
+            m_view, SLOT(slotSynchroniseWithComposition()));
+ 
     stateChanged("bankeditor_shown");    
     bankEditor->show();
 }

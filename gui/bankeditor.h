@@ -232,6 +232,7 @@ public slots:
 
 signals:
     void closing();
+    void deviceNamesChanged();
 
 protected:
     virtual void closeEvent(QCloseEvent*);
@@ -296,6 +297,8 @@ protected:
     int                      m_lastLSB;
 
     static const char* const BankEditorConfigGroup;
+
+    bool                     m_updateDeviceList;
 };
 
 // ----------------------- RemapInstrumentDialog ------------------------

@@ -1116,3 +1116,21 @@ RosegardenGUIView::slotSetSolo(Rosegarden::InstrumentId id, bool value)
     emit toggleSolo(value);
 }
 
+void 
+RosegardenGUIView::slotSynchroniseWithComposition()
+{
+    // Track buttons
+    //
+    m_trackEditor->getTrackButtons()->slotSynchroniseWithComposition();
+
+    // Update all IPBs
+    //
+    Composition &comp = getDocument()->getComposition();
+    Rosegarden::Track *track = comp.getTrackById(comp.getSelectedTrack());
+    slotUpdateInstrumentParameterBox(track->getInstrument());
+
+    m_instrumentParameterBox->slotUpdateAllBoxes();
+}
+
+
+
