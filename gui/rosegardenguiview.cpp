@@ -866,6 +866,7 @@ void RosegardenGUIView::slotUpdateInstrumentParameterBox(int id)
                 comp.isSolo() && (track->getId() == comp.getSelectedTrack()));
     }
 
+    emit checkTrackAssignments();
 }
 
 

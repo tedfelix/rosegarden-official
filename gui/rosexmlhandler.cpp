@@ -452,6 +452,13 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 	    }
 	}
 
+	QString mixerStr = atts.value("mixerdisplayoptions");
+	
+	if (mixerStr) {
+	    unsigned int mixer = mixerStr.toUInt();
+	    getStudio().setMixerDisplayOptions(mixer);
+	}
+
     } else if (lcName == "timesignature") {
 
         if (m_inComposition == false)

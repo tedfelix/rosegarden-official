@@ -21,6 +21,10 @@
   <Action name="show_audio_submasters" append="show_merge" />
   <Action name="show_plugin_buttons" append="show_merge" />
 
+  <Separator append="show_merge"/>
+
+  <Action name="show_unassigned_faders" append="show_merge" />
+
   <Menu name="Inputs">
     <text>Number of Stereo &amp;Inputs</text>
     <Action name="inputs_1"/>

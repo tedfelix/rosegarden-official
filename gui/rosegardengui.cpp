@@ -4701,6 +4701,9 @@ RosegardenGUIApp::slotOpenMixer()
     connect(this, SIGNAL(documentAboutToChange()),
             m_mixer, SLOT(slotFileClose()));
 
+    connect(m_view, SIGNAL(checkTrackAssignments()),
+	    m_mixer, SLOT(slotTrackAssignmentsChanged()));
+
     connect(m_mixer, SIGNAL(play()),
 	    this, SLOT(slotPlay()));
     connect(m_mixer, SIGNAL(stop()),

@@ -280,6 +280,8 @@ signals:
      */
     void addAudioFile(Rosegarden::AudioFileId);
 
+    void checkTrackAssignments();
+
 protected:
 
     NotationView *createNotationView(std::vector<Rosegarden::Segment *>);

@@ -132,11 +132,14 @@ public:
 signals:
     // to emit what Track has been selected
     //
-    void widthChanged();
-    // to tell the notation canvas when the name changes
-    void nameChanged();
     void trackSelected(int);
     void instrumentSelected(int);
+
+    void widthChanged();
+
+    // to tell the notation canvas &c when a name changes
+    //
+    void nameChanged();
 
     // document modified (mute button)
     //

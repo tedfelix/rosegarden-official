@@ -168,6 +168,9 @@ public:
     void setMIDIRecordFilter(MidiFilter filter) { m_midiRecordFilter = filter; }
     MidiFilter getMIDIRecordFilter() const { return m_midiRecordFilter; }
 
+    void setMixerDisplayOptions(unsigned int options) { m_mixerDisplayOptions = options; }
+    unsigned int getMixerDisplayOptions() const { return m_mixerDisplayOptions; }
+
 private:
 
     DeviceList        m_devices;
@@ -180,6 +183,7 @@ private:
     MidiFilter        m_midiThruFilter;
     MidiFilter        m_midiRecordFilter;
 
+    unsigned int      m_mixerDisplayOptions;
 };
 
 }

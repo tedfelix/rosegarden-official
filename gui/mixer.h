@@ -69,6 +69,8 @@ protected slots:
     // to be called if something changes in an instrument parameter box
     void slotUpdateInstrument(Rosegarden::InstrumentId);
 
+    void slotTrackAssignmentsChanged();
+
     // from Plugin dialog
     void slotPluginSelected(Rosegarden::InstrumentId id, int index, int plugin);
     void slotPluginBypassed(Rosegarden::InstrumentId id, int pluginIndex, bool bp);
@@ -79,6 +81,7 @@ protected slots:
     void slotShowFaders();
     void slotShowSubmasters();
     void slotShowPluginButtons();
+    void slotShowUnassignedFaders();
 
 protected:
     virtual void closeEvent(QCloseEvent *);
@@ -94,10 +97,13 @@ private:
     struct FaderRec {
 
 	FaderRec() :
+	    m_populated(false),
 	    m_input(0), m_output(0), m_pan(0), m_fader(0), m_meter(0),
 	    m_muteButton(0), m_soloButton(0), m_recordButton(0),
 	    m_stereoButton(0), m_stereoness(false), m_pluginBox(0)
 	{ }
+
+	bool m_populated;
 
 	AudioRouteMenu *m_input;
 	AudioRouteMenu *m_output;
@@ -129,6 +135,8 @@ private:
 
     void depopulate();
     void populate();
+
+    bool isInstrumentAssigned(Rosegarden::InstrumentId id);
 
     void updateFader(int id); // instrument id if large enough, monitor if -1, master/sub otherwise
     void updateRouteButtons(int id);
