@@ -265,6 +265,16 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     connect(m_deleteAllBanks, SIGNAL(released()),
             this, SLOT(slotDeleteAllBanks()));
+
+    // Check for no MIDI devices and disable everything
+    //
+    if (m_studio->getMidiDevice(0) == 0)
+    {
+        deviceBox->setDisabled(true);
+        bankBox->setDisabled(true);
+        groupBox->setDisabled(true);
+    }
+
 };
 
 void
@@ -907,13 +917,14 @@ RemapInstrumentDialog::RemapInstrumentDialog(QWidget *parent,
 {
     QVBox *vBox = makeVBoxMainWidget();
 
-    QButtonGroup *buttonGroup = new QButtonGroup(i18n("Remap"), vBox);
+    QFrame *frame = new QFrame(vBox);
+    //QButtonGroup *buttonGroup = new QButtonGroup(i18n("Remap"), vBox);
 
-    m_deviceButton = new QRadioButton(i18n("Devices"), vBox);
-    m_instrumentButton = new QRadioButton(i18n("Instruments"), vBox);
+    m_deviceButton = new QRadioButton(i18n("Devices"), frame);
+    m_instrumentButton = new QRadioButton(i18n("Instruments"), frame);
 
-    buttonGroup->insert(m_deviceButton);
-    buttonGroup->insert(m_instrumentButton);
+    //buttonGroup->insert(m_deviceButton);
+    //buttonGroup->insert(m_instrumentButton);
 
 }
 

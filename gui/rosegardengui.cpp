@@ -182,6 +182,11 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     stateChanged("have_segments",    KXMLGUIClient::StateReverse);
     stateChanged("segment_selected", KXMLGUIClient::StateReverse);
     slotTestClipboard();
+
+    // Check for lack of MIDI devices and disable Studio options accordingly
+    //
+    if (m_doc->getStudio().getMidiDevice(0) == 0)
+        stateChanged("got_midi_devices");
 #endif
 
     // All toolbars should be created before this is called
