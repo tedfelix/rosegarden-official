@@ -384,23 +384,6 @@ TrackEditor::updateRecordingSegmentItem(Rosegarden::Segment *segment)
     Composition &comp = m_document->getComposition();
     int y = m_vHeader->sectionPos(segment->getTrack());
 
-    //!!! None of this next block is used for anything, it's just
-    // here to test getBarRange
-    {
-	
-	int startBar = comp.getBarNumber(segment->getStartTime());
-	std::pair<timeT, timeT> bar = comp.getBarRange(startBar);
-     
-	std::cerr << "bar " << startBar << ": " << bar.first << " -> " << bar.second << " (start)" << std::endl;
-
-	int endBar = comp.getBarNumber(comp.getPosition());
-	bar = comp.getBarRange(endBar);
-	
-	std::cerr << "bar " << endBar << ": " << bar.first << " -> " << bar.second << " (end)" << std::endl;
-	std::cerr << "(composition's duration is " << comp.getDuration() << ")" << std::endl;
-
-    }
-
     timeT startTime = segment->getStartTime();
 
     // Show recording SegmentItem from recording start point to
