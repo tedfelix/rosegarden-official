@@ -691,7 +691,7 @@ void RosegardenGUIView::slotSelectAllSegments()
     if (haveInstrument && !multipleInstruments) {
 	slotUpdateInstrumentParameterBox(instrument);
     } else {
-	//!!! rwb, how do we tell the instrument parameter box not to bother?
+	m_instrumentParameterBox->useInstrument(0);
     }
 
     //!!! similarly, how to set no selected track?

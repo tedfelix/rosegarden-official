@@ -79,7 +79,7 @@ Segment::Segment(const Segment &segment):
     m_transpose(segment.getTranspose()),
     m_delay(segment.getDelay())
 {
-    for (iterator it = segment.begin(); it != segment.end(); ++it)
+    for (iterator it = segment.begin(); segment.isBeforeEndMarker(it); ++it)
         insert(new Event(**it));
 }
 

@@ -569,15 +569,25 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
 
     Rosegarden::StringList::iterator it;
 
-    for (it = list.begin(); it != list.end(); it++)
+    for (it = list.begin(); it != list.end(); it++) {
+
         m_bankValue->insertItem(strtoqstr(*it));
 
-    // Select 
-    if (instrument->sendsBankSelect())
-    {
-        //m_bankValue
+	// Select 
+	if (instrument->sendsBankSelect())
+	{
+	    Rosegarden::MidiBank *bank = 
+		dynamic_cast<Rosegarden::MidiDevice*>(instrument->getDevice())
+		->getBankByIndex(m_bankValue->count() - 1);
+
+	    if (instrument->getMSB() == bank->msb &&
+		instrument->getLSB() == bank->lsb) {
+		m_bankValue->setCurrentItem(m_bankValue->count() - 1);
+	    }
+	}
     }
-    else
+
+    if (!instrument->sendsBankSelect())
     {
         m_bankValue->setDisabled(true);
         m_bankValue->setCurrentItem(-1);
@@ -833,11 +843,22 @@ InstrumentParameterBox::populateProgramList()
 
     Rosegarden::StringList::iterator it;
 
-    for (it = list.begin(); it != list.end(); it++)
+    for (it = list.begin(); it != list.end(); it++) {
+
         m_programValue->insertItem(strtoqstr(*it));
 
-    m_programValue->setCurrentItem(
-            (int)m_selectedInstrument->getProgramChange());
+	Rosegarden::MidiProgram *program = 
+	    dynamic_cast<Rosegarden::MidiDevice*>
+	    (m_selectedInstrument->getDevice())->
+	    getProgramByIndex(m_programValue->count() - 1);
+
+	if (m_selectedInstrument->getProgramChange() == program->program) {
+	    m_programValue->setCurrentItem(m_programValue->count() - 1);
+	}
+    }
+
+//    m_programValue->setCurrentItem(
+//            (int)m_selectedInstrument->getProgramChange());
 }
 
 void

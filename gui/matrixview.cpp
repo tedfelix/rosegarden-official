@@ -405,11 +405,11 @@ void MatrixView::setupActions()
                 SLOT(slotTransformsQuantize()), actionCollection(),
                 "quantize");
 
-    new KAction(i18n("Set Event Velocities..."), 0, this,
+    new KAction(i18n("Set Event &Velocities..."), 0, this,
                 SLOT(slotSetVelocities()), actionCollection(),
                 "set_velocities");
 
-    new KAction(i18n("Select All"), 0, this,
+    new KAction(i18n("Select &All"), 0, this,
                 SLOT(slotSelectAll()), actionCollection(),
                 "select_all");
 

@@ -1037,11 +1037,19 @@ SegmentMergeCommand::execute()
 	m_newSegment = new Segment(*m_oldSegments[0]);
 	composition = m_oldSegments[0]->getComposition();
 
-	for (unsigned int i = 0; i < m_oldSegments.size(); ++i) {
+	// that duplicated segment 0; now do the rest
+
+	for (unsigned int i = 1; i < m_oldSegments.size(); ++i) {
 
 	    for (Segment::iterator si = m_oldSegments[i]->begin();
 		 m_oldSegments[i]->isBeforeEndMarker(si); ++si) {
 		m_newSegment->insert(new Event(**si));
+	    }
+
+	    if (m_oldSegments[i]->getEndMarkerTime() >
+		m_newSegment->getEndMarkerTime()) {
+		m_newSegment->setEndMarkerTime
+		    (m_oldSegments[i]->getEndMarkerTime());
 	    }
 	}
 	
