@@ -123,14 +123,11 @@ public:
                                  bool drawTail = false,
                                  bool stalkGoesUp = true);
 
-    /**
-     * Generate a pixmap for a rest
-     *
-     * @param note : note type
-     */
     QCanvasPixmap makeRestPixmap(Note::Type note, bool dotted);
 
-    QCanvasPixmap makeAccidentalPixmap(Accidental accidental);
+    QCanvasPixmap makeClefPixmap(string type);
+
+    QCanvasPixmap makeKeyPixmap(string type, string cleftype);
 
 protected:
     const QPixmap* tailUp(Note::Type note) const;
@@ -140,7 +137,7 @@ protected:
     void drawAccidental(Accidental, bool stalkGoesUp);
     void drawDot();
 
-    void createPixmapAndMask();
+    void createPixmapAndMask(int width = -1, int height = -1);
 
     NotePixmapOffsets m_offsets;
 
@@ -201,17 +198,6 @@ public:
 protected:
     const Staff &m_referenceStaff;
 };
-
-
-class ClefPixmapFactory
-{
-public:
-    ClefPixmapFactory() { }
-    ~ClefPixmapFactory() { }
-
-    QCanvasPixmap makeClefPixmap(string type);
-};
-
     
 
 #endif

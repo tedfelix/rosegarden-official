@@ -430,50 +430,78 @@ NotePixmapFactory::makeRestPixmap(Note::Type note, bool dotted)
 }
 
 QCanvasPixmap
-NotePixmapFactory::makeAccidentalPixmap(Accidental accidental)
+NotePixmapFactory::makeClefPixmap(string type)
 {
-    //!!! unify with drawAccidental
+    static string defaultClefFile = "pixmaps/clef-treble.xpm";
 
-    const QPixmap *accidentalPixmap = 0;
-
-    switch (accidental) {
-
-    case NoAccidental:
-        kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeAccidentalPixmap() called with NoAccidental"
-                             << endl;
-        KMessageBox::error(0, "NotePixmapFactory::makeAccidentalPixmap() called with NoAccidental");
-        return QCanvasPixmap("");//!!! throw
-        break;
-        
-    case Sharp:
-        accidentalPixmap = &m_accidentalSharp;
-        break;
-
-    case Flat:
-        accidentalPixmap = &m_accidentalFlat;
-        break;
-
-    case Natural:
-        accidentalPixmap = &m_accidentalNatural;
-        break;
- 
-        //!!! double sharp, double flat
+    try {
+	Clef clef(type);
+	string filename = "pixmaps/clef-" + clef.getName() + ".xpm";
+	return QCanvasPixmap(filename.c_str());
+    } catch (Clef::BadClefName) {
+	kdDebug(KDEBUG_AREA) << "Bad clef name \"" << type << "\"" << endl;
+	return QCanvasPixmap(defaultClefFile.c_str());
     }
+}
 
-    return QCanvasPixmap(*accidentalPixmap, m_pointZero);
+QCanvasPixmap
+NotePixmapFactory::makeKeyPixmap(string type, string cleftype)
+{
+    try {
+        // Key is a Qt type as well, so we have to specify ::Key
+
+        ::Key key(type);
+        Clef clef(cleftype);
+        vector<int> ah = key.getAccidentalHeights(clef);
+
+        QPixmap &accidentalPixmap
+            (key.isSharp() ? m_accidentalSharp : m_accidentalFlat);
+
+        createPixmapAndMask((Staff::accidentWidth - 1) * ah.size(),
+                            Staff::lineWidth * 6 + 1);
+
+        int x = 0;
+
+        for (unsigned int i = 0; i < ah.size(); ++i) {
+
+            int h = ah[i];
+            int y = ((8 - h) * Staff::lineWidth) / 2 + ((h % 2 == 1) ? 1 : 0);
+
+            m_p.drawPixmap(x, y, accidentalPixmap);
+            m_pm.drawPixmap(x, y, *(accidentalPixmap.mask()));
+
+            x += Staff::accidentWidth - 1;
+        }
+
+        m_p.end();
+        m_pm.end();
+
+        QCanvasPixmap p(*m_generatedPixmap, m_pointZero);
+        QBitmap m(*m_generatedMask);
+        p.setMask(m);
+
+        delete m_generatedPixmap;
+        delete m_generatedMask;
+
+        return p;
+
+    } catch (Key::BadKeyName) {
+        return QCanvasPixmap("pixmaps/dot.xpm"); // why not?
+    } catch (Clef::BadClefName) {
+        return QCanvasPixmap("pixmaps/dot.xpm"); // why not?
+    }
 }
         
 
 void
-NotePixmapFactory::createPixmapAndMask()
+NotePixmapFactory::createPixmapAndMask(int width, int height)
 {
-    // create pixmap and mask
-    //
-    m_generatedPixmap = new QPixmap(m_offsets.getPixmapSize().width(),
-                                    m_offsets.getPixmapSize().height());
- 
-    m_generatedMask = new QBitmap(m_generatedPixmap->width(),
-                                  m_generatedPixmap->height());
+    if (width < 0)  width  = m_offsets.getPixmapSize().width();
+    if (height < 0) height = m_offsets.getPixmapSize().height();
+
+    m_generatedPixmap = new QPixmap(width, height);
+    m_generatedMask =
+        new QBitmap(m_generatedPixmap->width(), m_generatedPixmap->height());
 
     // clear up pixmap and mask
     m_generatedPixmap->fill();
@@ -818,16 +846,3 @@ ChordPixmapFactory::makeChordPixmap(const chordpitches &pitches,
 
 */
 
-QCanvasPixmap ClefPixmapFactory::makeClefPixmap(string type)
-{
-    static string defaultClefFile = "pixmaps/clef-treble.xpm";
-
-    try {
-	Clef clef(type);
-	string filename = "pixmaps/clef-" + clef.getName() + ".xpm";
-	return QCanvasPixmap(filename.c_str());
-    } catch (Clef::BadClefName) {
-	kdDebug(KDEBUG_AREA) << "Bad clef name \"" << type << "\"" << endl;
-	return QCanvasPixmap(defaultClefFile.c_str());
-    }
-}

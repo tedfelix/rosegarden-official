@@ -2,8 +2,8 @@
 <!DOCTYPE rosegarden-data>
 <rosegarden-data>
 <track nb="1" start="0">
-        <event type="clefchange" clef="tenor"/>
-        <event type="keychange" key="Cb major"/>
+        <event type="clefchange" clef="treble"/>
+        <event type="keychange" key="C# major"/>
         <event type="timesignature" numerator="6" denominator="8"/>
         <event type="note" duration="crotchet" pitch="64"/>
         <event type="note" duration="crotchet" pitch="65"/>

@@ -243,51 +243,64 @@ void
 NotationView::setupActions()
 {
     // setup Notes menu
-    QIconSet icon(m_notePixmapFactory.makeNotePixmap(Note::WholeNote, false));
+    QIconSet icon(m_notePixmapFactory.makeNotePixmap
+                  (Note::WholeNote, false));
     new KAction(i18n("Whole"), icon, 0, this,
                 SLOT(slotWhole()), actionCollection(), "whole_note" );
 
-    icon = QIconSet(m_notePixmapFactory.makeNotePixmap(Note::HalfNote, false));
+    icon = QIconSet(m_notePixmapFactory.makeNotePixmap
+                    (Note::HalfNote, false));
     new KAction(i18n("Half"), icon, 0, this,
                 SLOT(slotHalf()), actionCollection(), "half" );
 
-    icon = QIconSet(m_notePixmapFactory.makeNotePixmap(Note::QuarterNote, false));
+    icon = QIconSet(m_notePixmapFactory.makeNotePixmap
+                    (Note::QuarterNote, false));
     new KAction(i18n("Quarter"), icon, 0, this,
                 SLOT(slotQuarter()), actionCollection(), "quarter" );
 
-    icon = QIconSet(m_notePixmapFactory.makeNotePixmap(Note::EighthNote, false));
+    icon = QIconSet(m_notePixmapFactory.makeNotePixmap
+                    (Note::EighthNote, false));
     new KAction(i18n("8th"), icon, 0, this,
                 SLOT(slot8th()), actionCollection(), "8th" );
 
-    icon = QIconSet(m_notePixmapFactory.makeNotePixmap(Note::SixteenthNote, false));
+    icon = QIconSet(m_notePixmapFactory.makeNotePixmap
+                    (Note::SixteenthNote, false));
     new KAction(i18n("16th"), icon, 0, this,
                 SLOT(slot16th()), actionCollection(), "16th" );
 
-    icon = QIconSet(m_notePixmapFactory.makeNotePixmap(Note::ThirtySecondNote, false));
+    icon = QIconSet(m_notePixmapFactory.makeNotePixmap
+                    (Note::ThirtySecondNote, false));
     new KAction(i18n("32nd"), icon, 0, this,
                 SLOT(slot32nd()), actionCollection(), "32nd" );
 
-    icon = QIconSet(m_notePixmapFactory.makeNotePixmap(Note::SixtyFourthNote, false));
+    icon = QIconSet(m_notePixmapFactory.makeNotePixmap
+                    (Note::SixtyFourthNote, false));
     new KAction(i18n("64th"), icon, 0, this,
                 SLOT(slot64th()), actionCollection(), "64th" );
     
 
     // setup edit menu
-    KStdAction::undo     (this, SLOT(slotEditUndo()),       actionCollection());
-    KStdAction::redo     (this, SLOT(slotEditRedo()),       actionCollection());
-    KStdAction::cut      (this, SLOT(slotEditCut()),        actionCollection());
-    KStdAction::copy     (this, SLOT(slotEditCopy()),       actionCollection());
-    KStdAction::paste    (this, SLOT(slotEditPaste()),      actionCollection());
+    KStdAction::undo    (this, SLOT(slotEditUndo()),       actionCollection());
+    KStdAction::redo    (this, SLOT(slotEditRedo()),       actionCollection());
+    KStdAction::cut     (this, SLOT(slotEditCut()),        actionCollection());
+    KStdAction::copy    (this, SLOT(slotEditCopy()),       actionCollection());
+    KStdAction::paste   (this, SLOT(slotEditPaste()),      actionCollection());
 
     // setup Settings menu
-    KStdAction::showToolbar  (this, SLOT(slotToggleToolBar()),   actionCollection());
-    KStdAction::showStatusbar(this, SLOT(slotToggleStatusBar()), actionCollection());
+    KStdAction::showToolbar
+        (this, SLOT(slotToggleToolBar()), actionCollection());
+    KStdAction::showStatusbar
+        (this, SLOT(slotToggleStatusBar()), actionCollection());
 
-    KStdAction::saveOptions(this, SLOT(save_options()), actionCollection());
-    KStdAction::preferences(this, SLOT(customize()),    actionCollection());
+    KStdAction::saveOptions
+        (this, SLOT(save_options()), actionCollection());
+    KStdAction::preferences
+        (this, SLOT(customize()), actionCollection());
 
-    KStdAction::keyBindings      (this, SLOT(editKeys()),     actionCollection());
-    KStdAction::configureToolbars(this, SLOT(editToolbars()), actionCollection());
+    KStdAction::keyBindings 
+        (this, SLOT(editKeys()), actionCollection());
+    KStdAction::configureToolbars
+        (this, SLOT(editToolbars()), actionCollection());
 
     createGUI("notation.rc");
 }
@@ -328,22 +341,26 @@ NotationView::showElements(NotationElementList::iterator from,
 
     if (from == to) return true;
 
-    static ChordPixmapFactory npf(*m_mainStaff);
-    static ClefPixmapFactory cpf;
+//    static ChordPixmapFactory npf(*m_mainStaff);
+    // let's revert to this for now
+    static NotePixmapFactory npf;
+    string currentClef = Clef::DefaultClef.getName();
 
-    for(NotationElementList::iterator it = from; it != to; ++it) {
+    for (NotationElementList::iterator it = from; it != to; ++it) {
 
         //
         // process event
         //
         try {
 
-            QCanvasSimpleSprite *noteSprite = 0;
+            QCanvasSimpleSprite *sprite = 0;
 
             if ((*it)->isNote()) {
 
-                Note::Type note = (*it)->event()->get<Int>("Notation::NoteType");
-                bool dotted = (*it)->event()->get<Bool>("Notation::NoteDotted");
+                Note::Type note =
+                    (*it)->event()->get<Int>("Notation::NoteType");
+                bool dotted =
+                    (*it)->event()->get<Bool>("Notation::NoteDotted");
 
                 Accidental accident = NoAccidental;
 
@@ -357,56 +374,50 @@ NotationView::showElements(NotationElementList::iterator from,
                 QCanvasPixmap notePixmap(npf.makeNotePixmap(note, dotted,
                                                             accident,
                                                             true, false));
-                noteSprite = new QCanvasSimpleSprite(&notePixmap, canvas());
+                sprite = new QCanvasSimpleSprite(&notePixmap, canvas());
 
             } else if ((*it)->isRest()) {
 
-                Note::Type note = (*it)->event()->get<Int>("Notation::NoteType");
-                bool dotted = (*it)->event()->get<Bool>("Notation::NoteDotted");
+                Note::Type note =
+                    (*it)->event()->get<Int>("Notation::NoteType");
+                bool dotted =
+                    (*it)->event()->get<Bool>("Notation::NoteDotted");
+
                 QCanvasPixmap notePixmap(npf.makeRestPixmap(note, dotted));
-                noteSprite = new QCanvasSimpleSprite(&notePixmap, canvas());
+                sprite = new QCanvasSimpleSprite(&notePixmap, canvas());
 
-            } else if ((*it)->event()->isa(Clef::EventPackage, Clef::EventType)) {
+            } else if ((*it)->event()->isa
+                       (Clef::EventPackage, Clef::EventType)) {
 
-                QCanvasPixmap clefPixmap(cpf.makeClefPixmap((*it)->event()->get<String>(Clef::ClefPropertyName)));
-                noteSprite = new QCanvasSimpleSprite(&clefPixmap, canvas());
+                currentClef =
+                    (*it)->event()->get<String>(Clef::ClefPropertyName);
+                QCanvasPixmap clefPixmap(npf.makeClefPixmap(currentClef));
+                sprite = new QCanvasSimpleSprite(&clefPixmap, canvas());
 
-            } else if ((*it)->event()->isa(::Key::EventPackage, ::Key::EventType)) {
+            } else if ((*it)->event()->isa
+                       (::Key::EventPackage, ::Key::EventType)) {
 
-                //!!! probably want to be doing this with a single
-                //canvas item actually, this is just an experiment
-
-                string keyType = (*it)->event()->get<String>(::Key::KeyPropertyName);
-                ::Key key(keyType);
-                vector<int> ah = key.getAccidentalHeights();
-                int x = dxoffset + (*it)->x();
-                for (int i = 0; i < ah.size(); ++i) {
-                    QCanvasPixmap keyPixmap(npf.makeAccidentalPixmap(key.isSharp() ? Sharp : Flat));
-                    QCanvasSimpleSprite *s = new QCanvasSimpleSprite(&keyPixmap, canvas());
-                    s->move(x, dyoffset + (*it)->y() +
-                            m_mainStaff->yCoordOfHeight(ah[i]));//???
-                    s->show();
-                    x += m_mainStaff->accidentWidth;
-                }
-                
-//                QCanvasPixmap keyPixmap(cpf.makeKeyPixmap());
-//                noteSprite = new QCanvasSimpleSprite(&keyPixmap, canvas());
+                // Key is a Qt type as well, so we have to specify ::Key
+                QCanvasPixmap keyPixmap
+                    (npf.makeKeyPixmap
+                     ((*it)->event()->get<String>(::Key::KeyPropertyName),
+                      currentClef));
+                sprite = new QCanvasSimpleSprite(&keyPixmap, canvas());
 
             } else {
                     
-                kdDebug(KDEBUG_AREA) << "NotationElement type is neither a note nor a rest - type is "
+                kdDebug(KDEBUG_AREA) << "NotationElement of unrecognised type "
                                      << (*it)->event()->type()
                                      << endl;
                 continue;
             }
                 
-            if (noteSprite) {
+            if (sprite) {
                 
-                noteSprite->move(dxoffset + (*it)->x(),
-                                 dyoffset + (*it)->y());
-                noteSprite->show();
+                sprite->move(dxoffset + (*it)->x(), dyoffset + (*it)->y());
+                sprite->show();
 
-                (*it)->setCanvasItem(noteSprite);
+                (*it)->setCanvasItem(sprite);
             }
             
         } catch (...) {
@@ -490,9 +501,6 @@ NotationView::applyVerticalLayout()
         return false;
     }
 
-/*!    for (NotationElementList::iterator i = m_notationElements->begin();
-         i != m_notationElements->end(); ++i)
-         (*m_vlayout)(*i); */
     m_vlayout->reset();
     m_vlayout->layout(m_notationElements->begin(), m_notationElements->end());
     

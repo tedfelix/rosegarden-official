@@ -45,13 +45,13 @@ public:
     void deleteBars(unsigned int fromPos);
     void deleteBars();
 
-    static const int noteHeight;
-    static const int noteWidth;
-    static const int lineWidth;
-    static const int accidentWidth;
-    static const int stalkLen;
-    static const int nbLines;
-    static const int linesOffset;
+    static const int noteHeight;     // height of a note body
+    static const int noteWidth;      // width of a note body
+    static const int lineWidth;      // delta-y from one staff line to next
+    static const int accidentWidth;  // width of an accidental
+    static const int stalkLen;       // length of the stalk of a note (bad!)
+    static const int nbLines;        // number of main lines on the staff
+    static const int linesOffset;    // from top of canvas to top line (bad!)
 
 protected:
     int m_barLineHeight;
