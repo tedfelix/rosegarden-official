@@ -18,9 +18,12 @@
 */
 
 #include "ViewElement.h"
+#include <iostream>
 
 namespace Rosegarden 
 {
+using std::cerr;
+using std::endl;
 
 ViewElement::ViewElement(Event *e)
     : m_event(e)

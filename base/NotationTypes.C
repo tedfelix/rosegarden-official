@@ -20,10 +20,14 @@
 
 #include <cstdio> // needed for sprintf()
 #include "NotationTypes.h"
+#include <iostream>
 
 namespace Rosegarden 
 {
 using std::string;
+using std::vector;
+using std::cout;
+using std::endl;
     
 const string Clef::EventType = "clefchange";
 const string Clef::ClefPropertyName = "clef";

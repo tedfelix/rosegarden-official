@@ -49,7 +49,7 @@ public:
     Event::timeT getAbsoluteTime() const { return event()->getAbsoluteTime(); }
     void setAbsoluteTime(Event::timeT d) { event()->setAbsoluteTime(d); }
 
-    void dump(ostream&) const;
+    void dump(std::ostream&) const;
 
     friend bool operator<(const ViewElement&, const ViewElement&);
 

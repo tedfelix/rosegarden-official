@@ -23,7 +23,12 @@
 
 #include "Property.h"
 
+#if (__GNUC__ < 3)
 #include <hash_map>
+#else
+#include <ext/hash_map>
+#endif
+
 #include <string>
 
 struct eqstring
@@ -35,13 +40,13 @@ struct eqstring
 
 struct hashstring
 {
-    static hash<const char*> _H;
+    static std::hash<const char*> _H;
     size_t operator()(const std::string &s) const {
         return _H(s.c_str());
     }
 };
 
-hash<const char*> hashstring::_H;
+std::hash<const char*> hashstring::_H;
 
 namespace Rosegarden 
 {
@@ -49,7 +54,7 @@ namespace Rosegarden
 class Event
 {
 private:
-
+    
 public:
     typedef int timeT;
 
@@ -120,9 +125,9 @@ public:
     PropertyNames getNonPersistentPropertyNames() const;
 
 #ifndef NDEBUG
-    void dump(ostream&) const;
+    void dump(std::ostream&) const;
 #else
-    void dump(ostream&) const {}
+    void dump(std::ostream&) const {}
 #endif
 
 private:
@@ -156,7 +161,7 @@ Event::get(const std::string &name, PropertyDefn<P>::basic_type &val) const
 #ifndef NDEBUG
             cerr << "Event::get() Error: Attempt to get property \"" << name
                  << "\" as " << PropertyDefn<P>::name() <<", actual type is "
-                 << sb->getTypeName() << endl;
+                 << sb->getTypeName() << std::endl;
 #endif
             return false;
         }
@@ -164,7 +169,7 @@ Event::get(const std::string &name, PropertyDefn<P>::basic_type &val) const
     } else {
 #ifndef NDEBUG
         cerr << "Event::get() Error: Attempt to get property \"" << name
-             << "\" which doesn't exist for this element" << endl;
+             << "\" which doesn't exist for this element" << std::endl;
 #endif
         return false;
     }
@@ -183,17 +188,17 @@ Event::get(const std::string &name) const
         if (sb->getType() == P) return ((PropertyStore<P> *)sb)->getData();
         else {
 #ifndef NDEBUG
-            cerr << "Event::get() Error: Attempt to get property \"" << name
+            std::cerr << "Event::get() Error: Attempt to get property \"" << name
                  << "\" as " << PropertyDefn<P>::name() <<", actual type is "
-                 << sb->getTypeName() << endl;
+                 << sb->getTypeName() << std::endl;
 #endif
             throw BadType();
         }
 	    
     } else {
 #ifndef NDEBUG
-        cerr << "Event::get() Error: Attempt to get property \"" << name
-             << "\" which doesn't exist for this element" << endl;
+        std::cerr << "Event::get() Error: Attempt to get property \"" << name
+             << "\" which doesn't exist for this element" << std::endl;
 #endif
         throw NoData();
     }
@@ -209,8 +214,8 @@ Event::isPersistent(const std::string &name) const
     if (i != m_properties.end()) return i->second->isPersistent();
     else {
 #ifndef NDEBUG
-        cerr << "Event::get() Error: Attempt to get persistence of property \""
-             << name << "\" which doesn't exist for this element" << endl;
+        std::cerr << "Event::get() Error: Attempt to get persistence of property \""
+             << name << "\" which doesn't exist for this element" << std::endl;
 #endif
         throw NoData();
     }
@@ -226,8 +231,8 @@ Event::setPersistence(const std::string &name, bool persistent)
     if (i != m_properties.end()) i->second->setPersistence(persistent);
     else {
 #ifndef NDEBUG
-        cerr << "Event::get() Error: Attempt to set persistence of property \""
-             << name << "\" which doesn't exist for this element" << endl;
+        std::cerr << "Event::get() Error: Attempt to set persistence of property \""
+             << name << "\" which doesn't exist for this element" << std::endl;
 #endif
         throw NoData();
     }
@@ -248,9 +253,9 @@ Event::set(const std::string &name, PropertyDefn<P>::basic_type value,
             ((PropertyStore<P> *)sb)->setData(value);
             sb->setPersistence(persistent);
         } else {
-            cerr << "Error: Element: Attempt to set property \"" << name
+            std::cerr << "Error: Element: Attempt to set property \"" << name
                  << "\" as " << PropertyDefn<P>::name() <<", actual type is "
-                 << sb->getTypeName() << endl;
+                 << sb->getTypeName() << std::endl;
             throw BadType();
         }
 	    

@@ -18,11 +18,13 @@
 */
 
 #include <cstdio>
+#include <iostream>
 #include "Event.h"
 
 namespace Rosegarden 
 {
 using std::string;
+using std::ostream;
 
 Event::Event(const Event &e) :
     m_type(e.getType()),
