@@ -316,7 +316,10 @@ bool MmappedSegmentsMetaIterator::jumpToTime(const Rosegarden::RealTime& startTi
 bool MmappedSegmentsMetaIterator::moveIteratorToTime(MmappedSegment::iterator& iter,
                                                      const Rosegarden::RealTime& startTime)
 {
-    while ((!iter.atEnd()) && (iter.peek()->getEventTime() < startTime)) {
+    while ((!iter.atEnd()) &&
+           (iter.peek()->getEventTime() < startTime) &&
+           ((iter.peek()->getEventTime() + iter.peek()->getDuration()) < startTime)
+           ) {
         ++iter;
     }
     bool res = !iter.atEnd();
@@ -427,6 +430,7 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool firstFetch,
                                 << " - data1: " << (unsigned int)evt->getData1()
                                 << " - data2: " << (unsigned int)evt->getData2()
                                 << " - metronome event: " << evtIsFromMetronome
+                                << " - firstFetch : " << firstFetch
                                 << endl;
 #endif
 
@@ -438,6 +442,8 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool firstFetch,
                     evt->getType() == MappedEvent::Audio &&
                     evt->getEventTime() < startTime) {
 
+                    SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : adjusting event audio start marker to "
+                                    << startTime << endl;
                     evt->setAudioStartMarker(startTime);
                 }
 
