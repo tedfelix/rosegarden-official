@@ -60,12 +60,12 @@ const MidiByte MIDI_PITCH_BEND             = 0xE0;
 const MidiByte MIDI_SELECT_CHNL_MODE       = 0xB0;
 
 // system messages
-const MidiByte MIDI_SYSTEM_MSG             = 0xF0;
 const MidiByte MIDI_SYSTEM_EXCLUSIVE       = 0xF0;
+const MidiByte MIDI_TC_QUARTER_FRAME       = 0xF1;
 const MidiByte MIDI_SONG_POSITION_PTR      = 0xF2;
 const MidiByte MIDI_SONG_SELECT            = 0xF3;
 const MidiByte MIDI_TUNE_REQUEST           = 0xF6;
-const MidiByte MIDI_EOX                    = 0xF7;
+const MidiByte MIDI_END_OF_EXCLUSIVE       = 0xF7;
 
 const MidiByte MIDI_TIMING_CLOCK           = 0xF8;
 const MidiByte MIDI_START                  = 0xFA;

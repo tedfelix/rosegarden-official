@@ -38,43 +38,54 @@ MidiEvent::MidiEvent()
 {
 }
 
-MidiEvent::MidiEvent(const Rosegarden::timeT &deltaTime,
-                     const MidiByte &eventCode,
-                     const MidiByte &data1):
+MidiEvent::MidiEvent(Rosegarden::timeT deltaTime,
+                     MidiByte eventCode,
+                     MidiByte data1):
     m_deltaTime(deltaTime),
     m_eventCode(eventCode),
     m_data1(data1),
-    m_data2(0x00),
-    m_metaEventCode(0x00),
+    m_data2(0),
+    m_metaEventCode(0),
     m_metaMessage("")
 {
 }
 
-MidiEvent::MidiEvent(const Rosegarden::timeT &deltaTime,
-                     const MidiByte &eventCode,
-                     const MidiByte &data1,
-                     const MidiByte &data2):
+MidiEvent::MidiEvent(Rosegarden::timeT deltaTime,
+                     MidiByte eventCode,
+                     MidiByte data1,
+                     MidiByte data2):
     m_deltaTime(deltaTime),
     m_eventCode(eventCode),
     m_data1(data1),
     m_data2(data2),
-    m_metaEventCode(0x00),
+    m_metaEventCode(0),
     m_metaMessage("")
 
 {
 }
 
-MidiEvent::MidiEvent(const Rosegarden::timeT &deltaTime,
-                     const MidiByte &eventCode,
-                     const MidiByte &metaEventCode,
+MidiEvent::MidiEvent(Rosegarden::timeT deltaTime,
+                     MidiByte eventCode,
+                     MidiByte metaEventCode,
                      const string &metaMessage):
     m_deltaTime(deltaTime),
     m_eventCode(eventCode),
-    m_data1(0x00),
-    m_data2(0x00),
+    m_data1(0),
+    m_data2(0),
     m_metaEventCode(metaEventCode),
     m_metaMessage(metaMessage)
+{
+}
 
+MidiEvent::MidiEvent(Rosegarden::timeT deltaTime,
+                     MidiByte eventCode,
+                     const string &sysEx):
+    m_deltaTime(deltaTime),
+    m_eventCode(eventCode),
+    m_data1(0),
+    m_data2(0),
+    m_metaEventCode(0),
+    m_metaMessage(sysEx)
 {
 }
 

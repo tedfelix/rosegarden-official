@@ -47,23 +47,30 @@ public:
 
     // single data byte case
     //
-    MidiEvent(const Rosegarden::timeT &deltaTime,
-              const MidiByte &eventCode,
-              const MidiByte &data1);
+    MidiEvent(Rosegarden::timeT deltaTime,
+              MidiByte eventCode,
+              MidiByte data1);
 
     // double data byte
     //
-    MidiEvent(const Rosegarden::timeT &deltaTime,
-              const MidiByte &eventCode,
-              const MidiByte &data1,
-              const MidiByte &data2);
+    MidiEvent(Rosegarden::timeT deltaTime,
+              MidiByte eventCode,
+              MidiByte data1,
+              MidiByte data2);
 
-    // meta event
+    // Meta event
     //
-    MidiEvent(const Rosegarden::timeT &deltaTime,
-              const MidiByte &eventCode,
-              const MidiByte &metaEventCode,
+    MidiEvent(Rosegarden::timeT deltaTime,
+              MidiByte eventCode,
+              MidiByte metaEventCode,
               const std::string &metaMessage);
+
+    // Sysex style constructor
+    //
+    MidiEvent(Rosegarden::timeT deltaTime,
+              MidiByte eventCode,
+              const std::string &sysEx);
+
 
     ~MidiEvent();
 

@@ -37,6 +37,7 @@
 #include "Instrument.h"
 #include "Studio.h"
 #include "Progress.h"
+#include "MidiTypes.h"
 
 #if (__GNUC__ < 3)
 #include <strstream>
@@ -407,7 +408,6 @@ MidiFile::parseTrack(ifstream* midiFile, const Rosegarden::TrackId &trackNum)
     MidiByte eventCode = 0x80;
     unsigned int messageLength;
     unsigned long deltaTime;
-    string metaMessage;
 
     while (!midiFile->eof() && ( m_trackByteCount > 0 ) )
     {
@@ -426,11 +426,11 @@ MidiFile::parseTrack(ifstream* midiFile, const Rosegarden::TrackId &trackNum)
         else
             eventCode = midiByte;
 
-        if (eventCode == MIDI_FILE_META_EVENT)
+        if (eventCode == MIDI_FILE_META_EVENT) // meta events
         { 
             metaEventCode = getMidiBytes(midiFile,1)[0];
             messageLength = getNumberFromMidiBytes(midiFile);
-            metaMessage = getMidiBytes(midiFile, messageLength);
+            std::string metaMessage = getMidiBytes(midiFile, messageLength);
 
             MidiEvent *e = new MidiEvent(deltaTime,
                                          MIDI_FILE_META_EVENT,
@@ -439,7 +439,38 @@ MidiFile::parseTrack(ifstream* midiFile, const Rosegarden::TrackId &trackNum)
 
             m_midiComposition[trackNum].push_back(e);
         }
-        else
+        else if (eventCode == MIDI_SYSTEM_EXCLUSIVE) // system messages
+        {
+            // Read in the whole message from here and form it up
+            //
+            messageLength = getNumberFromMidiBytes(midiFile);
+            std::string sysexMessage= getMidiBytes(midiFile, messageLength);
+
+            if (MidiByte(sysexMessage[sysexMessage.length() - 1]) !=
+                    MIDI_END_OF_EXCLUSIVE)
+            {
+                std::cerr << "MidiFile::parseTrack() - "
+                          << "malformed or unsupported SysEx type"
+                          << std::endl;
+            }
+
+            // chop off the EOX
+            sysexMessage = sysexMessage.substr(0, sysexMessage.length() - 2);
+
+            MidiEvent *e = new MidiEvent(deltaTime,
+                                         MIDI_SYSTEM_EXCLUSIVE,
+                                         sysexMessage);
+
+            m_midiComposition[trackNum].push_back(e);
+        }
+        /*
+        else if (eventCode == MIDI_END_OF_EXCLUSIVE)
+        {
+            std::cout << "MidiFile::parseTrack() - "
+                      << "SysEx END" << std::endl;
+        }
+        */
+        else // the rest
         {
 
             // We must declare the MidiEvent here as a pointer and then new it
@@ -475,7 +506,7 @@ MidiFile::parseTrack(ifstream* midiFile, const Rosegarden::TrackId &trackNum)
             default:
                 std::cerr << "MidiFile::parseTrack()" 
                           << " - Unsupported MIDI Event Code:  "
-                          << (eventCode & MIDI_MESSAGE_TYPE_MASK) << endl;
+                          << (int)eventCode << endl;
                 break;
             } 
         }
@@ -564,30 +595,28 @@ MidiFile::convertToRosegarden()
         //
         if (consolidateNoteOffEvents(i)) // returns true if some notes exist
         {
-            rosegardenSegment = new Segment;
-            rosegardenSegment->setTrack(compTrack);
-            rosegardenSegment->setStartTime(0);
-            
-            track = new Rosegarden::Track(compTrack,        // id
-                                          compInstrument,   // instrument
-                                          compTrack,        // position
-                                          trackName,        // name
-                                          false);           // muted
-
-            composition->addTrack(track);
-            // add the Segment to the Composition and increment the
-            // Rosegarden segment number
-            //
-            composition->addSegment(rosegardenSegment);
-            compTrack++;
-
-            // Rotate Instrument assignment
-            //
+            // If we're true then rotate the instrument number
             compInstrument = Rosegarden::MidiInstrumentBase + (compTrack % 16);
-
-        } else {
-            rosegardenSegment = 0;
         }
+        else
+            compInstrument = Rosegarden::MidiInstrumentBase;
+
+        rosegardenSegment = new Segment;
+        rosegardenSegment->setTrack(compTrack);
+        rosegardenSegment->setStartTime(0);
+            
+        track = new Rosegarden::Track(compTrack,        // id
+                                      compInstrument,   // instrument
+                                      compTrack,        // position
+                                      trackName,        // name
+                                      false);           // muted
+
+        composition->addTrack(track);
+        // add the Segment to the Composition and increment the
+        // Rosegarden segment number
+        //
+        composition->addSegment(rosegardenSegment);
+        compTrack++;
 
         // rest creation token needs to be reset here
         //
@@ -607,49 +636,27 @@ MidiFile::convertToRosegarden()
             {
                 switch((*midiEvent)->getMetaEventCode())
                 {
-                case MIDI_SEQUENCE_NUMBER:
-                    break;
-
                 case MIDI_TEXT_EVENT:
-		    {
-			std::string text = (*midiEvent)->getMetaMessage();
-			rosegardenEvent =
-			    Rosegarden::Text(text).getAsEvent(rosegardenTime);
-			if (rosegardenSegment) {
-			    rosegardenSegment->insert(rosegardenEvent);
-			} else {
-			    textSegment->insert(rosegardenEvent);
-			}
-		    }
-			
+                    {
+                        std::string text = (*midiEvent)->getMetaMessage();
+                        rosegardenEvent =
+                            Rosegarden::Text(text).getAsEvent(rosegardenTime);
+                        if (rosegardenSegment) {
+                            rosegardenSegment->insert(rosegardenEvent);
+                        } else {
+                            textSegment->insert(rosegardenEvent);
+                        }
+                    }
                     break;
 
                 case MIDI_COPYRIGHT_NOTICE:
                     composition->setCopyrightNote((*midiEvent)->
-						  getMetaMessage());
+                                                  getMetaMessage());
                     break;
                     
                 case MIDI_TRACK_NAME:
                     if (rosegardenSegment && track)
                         track->setLabel((*midiEvent)->getMetaMessage());
-                    break;
-
-                case MIDI_INSTRUMENT_NAME:
-                    break;
-
-                case MIDI_LYRIC:
-                    break;
-
-                case MIDI_TEXT_MARKER:
-                    break;
-
-                case MIDI_CUE_POINT:
-                    break;
-
-                case MIDI_CHANNEL_PREFIX:
-                    break;
-
-                case MIDI_CHANNEL_PREFIX_OR_PORT:
                     break;
 
                 case MIDI_END_OF_TRACK:
@@ -658,7 +665,6 @@ MidiFile::convertToRosegarden()
                             rosegardenSegment->fillWithRests(rosegardenTime);
                         }
                     }
-
                     break;
 
                 case MIDI_SET_TEMPO:
@@ -675,10 +681,6 @@ MidiFile::convertToRosegarden()
                             composition->addTempo(rosegardenTime, tempo);
                         }
                     }
-
-                    break;
-
-                case MIDI_SMPTE_OFFSET:
                     break;
 
                 case MIDI_TIME_SIGNATURE:
@@ -691,8 +693,7 @@ MidiFile::convertToRosegarden()
                     composition->addTimeSignature
                         (rosegardenTime,
                          Rosegarden::TimeSignature(numerator, denominator));
-		    haveTimeSignatures = true;
-
+                    haveTimeSignatures = true;
                     break;
 
                 case MIDI_KEY_SIGNATURE:
@@ -710,20 +711,25 @@ MidiFile::convertToRosegarden()
                     rosegardenEvent = Rosegarden::Key
                         (accidentals, isSharp, isMinor).getAsEvent(rosegardenTime);
                     rosegardenSegment->insert(rosegardenEvent);
-
                     break;
 
+                case MIDI_SEQUENCE_NUMBER:
+                case MIDI_CHANNEL_PREFIX_OR_PORT:
+                case MIDI_INSTRUMENT_NAME:
+                case MIDI_LYRIC:
+                case MIDI_TEXT_MARKER:
+                case MIDI_CUE_POINT:
+                case MIDI_CHANNEL_PREFIX:
                 case MIDI_SEQUENCER_SPECIFIC:
-                    break;
-
+                case MIDI_SMPTE_OFFSET:
                 default:
+                    std::cout << "MidiFile::convertToRosegarden - "
+                              << "unsupported META event" << endl;
                     break;
                 } 
 
             }
-
-
-            switch((*midiEvent)->getMessageType())
+            else switch((*midiEvent)->getMessageType())
             {
             case MIDI_NOTE_ON:
                 if (!rosegardenSegment) break;
@@ -738,25 +744,20 @@ MidiFile::convertToRosegarden()
 
                 // create and populate event
                 rosegardenEvent = new Event(Rosegarden::Note::EventType,
-					    rosegardenTime,
-					    rosegardenDuration);
+                                            rosegardenTime,
+                                            rosegardenDuration);
                 rosegardenEvent->set<Int>(BaseProperties::PITCH,
                                           (*midiEvent)->getPitch());
                 rosegardenEvent->set<Int>(BaseProperties::VELOCITY,
                                           (*midiEvent)->getVelocity());
-		rosegardenSegment->insert(rosegardenEvent);
+                rosegardenSegment->insert(rosegardenEvent);
                 break;
 
                 // We ignore any NOTE OFFs here as we've already
                 // converted NOTE ONs to have duration
                 //
             case MIDI_NOTE_OFF:
-                break;
-
-            case MIDI_POLY_AFTERTOUCH:
-                break;
-
-            case MIDI_CTRL_CHANGE:
+                continue;
                 break;
 
             case MIDI_PROG_CHANGE:
@@ -773,32 +774,77 @@ MidiFile::convertToRosegarden()
 
                     // assign it here
                     if (instr != 0) {
-			
+                        
                         if (track)
                             track->setInstrument(instr->getId());
 
-			// give the Segment a name based on the the Instrument
-			//
-			if (rosegardenSegment != 0)
-			{
-			    rosegardenSegment->setLabel
-				(m_studio->getSegmentName(instr->getId()));
-			}
-		    }
+                        // give the Segment a name based on the the Instrument
+                        //
+                        if (rosegardenSegment != 0)
+                        {
+                            rosegardenSegment->setLabel
+                                (m_studio->getSegmentName(instr->getId()));
+                        }
+                    }
                 }
                 break;
 
-            case MIDI_CHNL_AFTERTOUCH:
+            case MIDI_CTRL_CHANGE:
+                rosegardenEvent =
+                    new Event(Rosegarden::Controller::EventType,
+                              rosegardenTime);
+                rosegardenEvent->set<Int>(Controller::DATA1,
+                                          (*midiEvent)->getData1());
+                rosegardenEvent->set<Int>(Controller::DATA2,
+                                          (*midiEvent)->getData2());
+                rosegardenSegment->insert(rosegardenEvent);
                 break;
 
             case MIDI_PITCH_BEND:
+                rosegardenEvent =
+                    new Event(Rosegarden::PitchBend::EventType,
+                              rosegardenTime);
+                rosegardenEvent->set<Int>(PitchBend::MSB,
+                                          (*midiEvent)->getData1());
+                rosegardenEvent->set<Int>(PitchBend::LSB,
+                                          (*midiEvent)->getData2());
+                rosegardenSegment->insert(rosegardenEvent);
+                break;
+
+            case MIDI_SYSTEM_EXCLUSIVE:
+                rosegardenEvent = 
+                    new Event(Rosegarden::SystemExclusive::EventType,
+                              rosegardenTime);
+                rosegardenEvent->
+                    set<String>(SystemExclusive::DATABLOCK,
+                                (*midiEvent)->getMetaMessage());
+                rosegardenSegment->insert(rosegardenEvent);
+                break;
+
+            case MIDI_POLY_AFTERTOUCH:
+                rosegardenEvent =
+                    new Event(Rosegarden::KeyPressure::EventType,
+                              rosegardenTime);
+                rosegardenEvent->set<Int>(KeyPressure::PITCH,
+                                          (*midiEvent)->getData1());
+                rosegardenEvent->set<Int>(KeyPressure::PRESSURE,
+                                          (*midiEvent)->getData2());
+                rosegardenSegment->insert(rosegardenEvent);
+                break;
+
+            case MIDI_CHNL_AFTERTOUCH:
+                rosegardenEvent =
+                    new Event(Rosegarden::ChannelPressure::EventType,
+                              rosegardenTime);
+                rosegardenEvent->set<Int>(ChannelPressure::PRESSURE,
+                                          (*midiEvent)->getData1());
+                rosegardenSegment->insert(rosegardenEvent);
                 break;
 
             default:
-                // Check for META events
-                //
-                cerr << "Can't create Rosegarden event for unknown MIDI event "
-                     << (int)(*midiEvent)->getMessageType() << endl;
+                std::cerr << "MidiFile::convertToRosegarden - "
+                          << "Unsupported event code = " 
+                          << (int)(*midiEvent)->getMessageType() << std::endl;
                 break;
             }
         }
@@ -809,10 +855,10 @@ MidiFile::convertToRosegarden()
     // if we have no time signatures at all, try to guess one
     if (!haveTimeSignatures)
     {
-	Rosegarden::CompositionTimeSliceAdapter adapter(composition);
-	Rosegarden::AnalysisHelper analysisHelper;
-	TimeSignature timeSig = analysisHelper.guessTimeSignature(adapter);
-	composition->addTimeSignature(0, timeSig);
+        Rosegarden::CompositionTimeSliceAdapter adapter(composition);
+        Rosegarden::AnalysisHelper analysisHelper;
+        TimeSignature timeSig = analysisHelper.guessTimeSignature(adapter);
+        composition->addTimeSignature(0, timeSig);
     }
 
     // if we have a text segment, there must have been some text events
@@ -823,43 +869,45 @@ MidiFile::convertToRosegarden()
 /*!!!
     if (!textSegment->empty()) {
 
-	textSegment->setTrack(compTrack);
+        textSegment->setTrack(compTrack);
 
-	track = new Rosegarden::Track(compTrack,        // id
-				      compInstrument,   // instrument
-				      compTrack,        // position
-				      trackName,        // name
-				      true);            // muted
+        track = new Rosegarden::Track(compTrack,        // id
+                                      compInstrument,   // instrument
+                                      compTrack,        // position
+                                      trackName,        // name
+                                      true);            // muted
 
-	composition->addTrack(track);
-	composition->addSegment(textSegment);
+        composition->addTrack(track);
+        composition->addSegment(textSegment);
     }
 */
 
     for (Composition::iterator i = composition->begin();
-	 i != composition->end(); ++i)
+         i != composition->end(); ++i)
     {
-	rosegardenSegment = *i;
+        rosegardenSegment = *i;
         SegmentNotationHelper helper(*rosegardenSegment);
 
-	rosegardenSegment->insert
-	    (helper.guessClef(rosegardenSegment->begin(),
-			      rosegardenSegment->end()).getAsEvent(0));
+        rosegardenSegment->insert
+            (helper.guessClef(rosegardenSegment->begin(),
+                              rosegardenSegment->end()).getAsEvent(0));
 /*!!! was useful for text segment only
-	if (composition->getBarNumber(rosegardenSegment->getEndTime()) ==
-	    composition->getBarNumber(rosegardenSegment->getStartTime())) {
-	    rosegardenSegment->fillWithRests
-		(composition->getBarEndForTime
-		 (rosegardenSegment->getEndTime() + 1));
-	}
+        if (composition->getBarNumber(rosegardenSegment->getEndTime()) ==
+            composition->getBarNumber(rosegardenSegment->getStartTime())) {
+            rosegardenSegment->fillWithRests
+                (composition->getBarEndForTime
+                 (rosegardenSegment->getEndTime() + 1));
+        }
 */
-	rosegardenSegment->normalizeRests
-	    (rosegardenSegment->getStartTime(),
-	     rosegardenSegment->getEndTime());
-
-	helper.autoBeam(rosegardenSegment->begin(),
-			rosegardenSegment->end(),
-			BaseProperties::GROUP_TYPE_BEAMED);
+        rosegardenSegment->normalizeRests
+            (rosegardenSegment->getStartTime(),
+             rosegardenSegment->getEndTime());
+ 
+        /*
+        helper.autoBeam(rosegardenSegment->begin(),
+                        rosegardenSegment->end(),
+                        BaseProperties::GROUP_TYPE_BEAMED);
+                        */
     }
 
     return composition;

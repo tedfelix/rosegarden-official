@@ -1412,9 +1412,21 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 
             case MappedEvent::MidiSystemExclusive:
                 {
-                    std::cout << "AlsaDriver::processMidiOut - "
-                              << "ignoring SystemExclusive message"
-                              << std::endl;
+                    // pack data between start and end blocks
+                    //
+
+                    char out[2];
+                    sprintf(out, "%c", MIDI_SYSTEM_EXCLUSIVE);
+                    std::string data = out;
+
+                    data += (*i)->getDataBlock();
+
+                    sprintf(out, "%c", MIDI_END_OF_EXCLUSIVE);
+                    data += out;
+
+                    snd_seq_ev_set_sysex(event,
+                                         data.length(),
+                                         (char*)(data.c_str()));
                 }
                 break;
 
