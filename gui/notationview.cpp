@@ -567,13 +567,6 @@ NotationView::~NotationView()
 	delete m_staffs[i]; // this will erase all "notes" canvas items
     }
 
-    // Delete remaining canvas items.
-    QCanvasItemList allItems = canvas()->allItems();
-    QCanvasItemList::Iterator it;
-
-    for (it = allItems.begin(); it != allItems.end(); ++it) delete *it;
-    // delete canvas();
-
     Rosegarden::Profiles::getInstance()->dump();
 
     NOTATION_DEBUG << "<- ~NotationView()\n";

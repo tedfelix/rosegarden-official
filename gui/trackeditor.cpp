@@ -123,17 +123,8 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
 
 TrackEditor::~TrackEditor()
 {
-    // delete all remaining canvas items
-    //
-    QCanvasItemList list = m_segmentCanvas->canvas()->allItems();
-    for (QCanvasItemList::Iterator it = list.begin(); it != list.end(); ++it)
-        delete *it;
-
-    // now flush gc (e.g. forget what's in there). The reason is, if
-    // any SegmentItem had a repeat rectangle, that item marked it for
-    // GC when it was deleted. But the repeat rect was also deleted,
-    // because we iterated over all canvas items. Therefore the GC can
-    // only contain already deleted items.
+    // flush gc (i.e. forget what's in there).
+    // All remaining items will be deleted by the canvas anyway.
     //
     CanvasItemGC::flush();
 }

@@ -346,12 +346,6 @@ MatrixView::~MatrixView()
     //
     m_pianoView = 0;
 
-    // Delete remaining canvas items.
-    QCanvasItemList allItems = canvas()->allItems();
-    QCanvasItemList::Iterator it;
-
-    for (it = allItems.begin(); it != allItems.end(); ++it) delete *it;
-
     delete m_snapGrid;
 }
 
