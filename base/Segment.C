@@ -23,7 +23,7 @@ namespace Rosegarden
 {
     
 Track::Track(unsigned int nbBars, unsigned int startIdx)
-    : std::multiset<Event*, EventCmp>(),
+    : std::multiset<Event*, Event::EventCmp>(),
     m_startIdx(startIdx),
     m_nbBars(nbBars),
     m_instrument(0)
@@ -49,8 +49,7 @@ Track::~Track()
         delete (*it);
 }
 
-unsigned int
-Track::getNbBars() const
+unsigned int Track::getNbBars() const
 {
     //!!! No, not really!
 
@@ -62,8 +61,58 @@ Track::getNbBars() const
     return nbBars;
 }
 
-void
-Track::setStartIndex(unsigned int idx)
+
+void Track::setNbBars(unsigned int nbBars)
+{
+    unsigned int currentNbBars = getNbBars();
+
+    cerr << "Track::setNbBars() : current = " << currentNbBars
+         << " - new : " << nbBars << endl;
+
+    if (nbBars == currentNbBars) return; // nothing to do
+    
+    if (nbBars > currentNbBars) { // fill up with rests
+        
+        iterator lastEl = end();
+        --lastEl;
+        unsigned int newElTime = (*lastEl)->getAbsoluteTime() + (*lastEl)->getDuration();
+
+        for (; currentNbBars < nbBars;
+             ++currentNbBars, newElTime+= 384) {
+
+            Event *e = new Event;
+            e->setType("rest");
+            e->setDuration(384); // TODO : get rid of this magic number
+            e->setAbsoluteTime(newElTime);
+            insert(e);
+            
+        }
+        
+    } else { // shrink
+
+        if (nbBars == 0) { // no fuss
+            erase(begin(), end());
+            return;
+        }
+
+        unsigned int cutTime = ((nbBars-1) * 384) + getStartIndex();
+
+        iterator lastElToKeep = std::upper_bound(begin(), end(),
+                                                 cutTime,
+                                                 Event::compareTime2Event);
+        if (lastElToKeep == end()) {
+            cerr << "Track::setNbBars() : upper_bound returned end\n";
+            return;
+        }
+
+        erase(lastElToKeep, end());
+    }
+    
+}
+
+
+
+void Track::setStartIndex(unsigned int idx)
 {
     int idxDiff = idx - m_startIdx;
 

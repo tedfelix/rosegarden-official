@@ -21,7 +21,7 @@
 #ifndef _TRACK_H_
 #define _TRACK_H_
 
-#include <multiset.h>
+#include <set>
 #include "Event.h"
 
 namespace Rosegarden 
@@ -30,7 +30,7 @@ namespace Rosegarden
 /**
  * This class owns the Events its items are pointing at
  */
-class Track : public std::multiset<Event*, EventCmp>
+class Track : public std::multiset<Event*, Event::EventCmp>
 {
 public:
     Track(unsigned int nbBars = 0, unsigned int startIdx = 0);
@@ -43,7 +43,8 @@ public:
     void         setInstrument(unsigned int i) { m_instrument = i; }
 
     unsigned int getNbBars() const;
-    
+    void setNbBars(unsigned int);
+
 protected:
     unsigned int m_startIdx;
     unsigned int m_nbBars;

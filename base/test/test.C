@@ -1,8 +1,9 @@
 // -*- c-file-style:  "bsd" -*-
 
-// This does some rather shoddy tests on the Event class.
+// This does some rather shoddy tests on the Event and Track class.
 
 #include "Event.h"
+#include "Track.h"
 
 #include <cstdio>
 
@@ -78,7 +79,7 @@ int main(int argc, char **argv)
         else
                 cerr << "ERROR AT " << __LINE__ << endl;
 
-
+#if 0
         cout << "Testing speed of Event..." << endl;
         int i;
         long j;
@@ -143,5 +144,29 @@ int main(int argc, char **argv)
              << (et-st)*10 << "ms\n";
 
         return 0;
+#endif
+        cout << "Testing track shrinking\n";
+        
+        Track track(5, 0);
+        unsigned int nbBars = track.getNbBars();
+
+        cout << "Track nbBars : " << nbBars << endl;
+        if (nbBars != 5) {
+                cerr << "%%%ERROR : track nbBars should be 5\n";
+        }
+
+        Track::iterator iter = track.end();
+        --iter;
+        cout << "Last track el. time : " << (*iter)->getAbsoluteTime() << endl;
+
+        cout << "Shrinking track to 3 bars : \n";
+        track.setNbBars(3);
+        nbBars = track.getNbBars();
+
+        cout << "Track new nbBars : " << nbBars << endl;
+        if (nbBars != 3) {
+                cerr << "%%%ERROR : track new nbBars should be 3\n";
+        }
+
 };
 
