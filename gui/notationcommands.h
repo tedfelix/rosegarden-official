@@ -116,6 +116,25 @@ protected:
     bool m_transpose;
 };
 
+class MultiKeyInsertionCommand : public CompoundCommand
+{
+public:
+    MultiKeyInsertionCommand(Rosegarden::Composition &composition,
+			     Rosegarden::timeT time,
+			     Rosegarden::Key key,
+			     bool shouldConvert,
+			     bool shouldTranspose);
+    virtual ~MultiKeyInsertionCommand();
+
+    static QString name(Rosegarden::Key *key = 0) {
+	if (key) {
+	    return QString("Change all to &Key ") + key->getName().c_str() + "...";
+	} else {
+	    return "Add &Key Change...";
+	}
+    }
+};
+
 
 class EraseEventCommand : public BasicCommand
 {

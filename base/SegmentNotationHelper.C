@@ -1199,7 +1199,6 @@ SegmentNotationHelper::normalizeRests(timeT startTime, timeT endTime)
 
     iterator ia = segment().findTime(startTime);
     iterator ib = segment().findTime(endTime);
-    timeT segmentEndTime = segment().getEndTime();
 
     // If there's a rest preceding the start time, with no notes
     // between us and it, and if it doesn't have precisely the

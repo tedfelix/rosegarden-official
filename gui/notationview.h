@@ -173,6 +173,11 @@ public slots:
     void slotEditPaste();
 
     /**
+     * paste the clipboard into the document, offering a choice for how
+     */
+    void slotEditGeneralPaste();
+
+    /**
      * toggles the notes toolbar
      */
     void slotToggleNotesToolBar();

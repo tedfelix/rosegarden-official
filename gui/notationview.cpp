@@ -504,6 +504,14 @@ void NotationView::setupActions()
 		SLOT(slotEditSelectWholeStaff()), actionCollection(),
 		"select_whole_staff");
 
+    new KAction(i18n("P&aste..."), 0, this,
+		SLOT(slotEditGeneralPaste()), actionCollection(),
+		"general_paste");
+
+    KStdAction::cut     (this, SLOT(slotEditCut()),        actionCollection());
+    KStdAction::copy    (this, SLOT(slotEditCopy()),       actionCollection());
+    KStdAction::paste   (this, SLOT(slotEditPaste()),      actionCollection());
+
     // View menu
     KRadioAction *linearModeAction = new KRadioAction
         (i18n("&Linear Layout"), 0, this, SLOT(slotLinearMode()),
@@ -519,10 +527,6 @@ void NotationView::setupActions()
     new KToggleAction
 	(i18n("Label &Chords"), 0, this, SLOT(slotLabelChords()),
 	 actionCollection(), "label_chords");
-
-    KStdAction::cut     (this, SLOT(slotEditCut()),        actionCollection());
-    KStdAction::copy    (this, SLOT(slotEditCopy()),       actionCollection());
-    KStdAction::paste   (this, SLOT(slotEditPaste()),      actionCollection());
 
     // setup Group menu
     new KAction(GroupMenuBeamCommand::name(), 0, this,
@@ -1162,6 +1166,12 @@ void NotationView::slotEditPaste()
     }
 }
 
+void NotationView::slotEditGeneralPaste()
+{
+    //!!!
+    //...
+}
+
 void NotationView::slotEditSelectFromStart()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
@@ -1601,12 +1611,23 @@ void NotationView::slotTransformsAddKeySignature()
 	    KeySignatureDialog::ConversionType conversion =
 		dialog->getConversionType();
 
-	    addCommandToHistory
-		(new KeyInsertionCommand
-		 (m_staffs[m_currentStaff]->getSegment(),
-		  insertionTime, dialog->getKey(),
-		  conversion == KeySignatureDialog::Convert,
-		  conversion == KeySignatureDialog::Transpose));
+	    bool applyToAll = dialog->shouldApplyToAll();
+
+	    if (applyToAll) {
+		addCommandToHistory
+		    (new MultiKeyInsertionCommand
+		     (m_document->getComposition(),
+		      insertionTime, dialog->getKey(),
+		      conversion == KeySignatureDialog::Convert,
+		      conversion == KeySignatureDialog::Transpose));
+	    } else {
+		addCommandToHistory
+		    (new KeyInsertionCommand
+		     (m_staffs[m_currentStaff]->getSegment(),
+		      insertionTime, dialog->getKey(),
+		      conversion == KeySignatureDialog::Convert,
+		      conversion == KeySignatureDialog::Transpose));
+	    }
 	}
 
 	delete dialog;

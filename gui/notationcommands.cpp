@@ -198,6 +198,22 @@ KeyInsertionCommand::modifySegment()
     }
 }
 
+MultiKeyInsertionCommand::MultiKeyInsertionCommand(Rosegarden::Composition &c,
+						   timeT time,
+						   Rosegarden::Key key,
+						   bool convert,
+						   bool transpose) :
+    CompoundCommand(name(&key))
+{
+    for (Rosegarden::Composition::iterator i = c.begin(); i != c.end(); ++i) {
+       addCommand(new KeyInsertionCommand(**i, time, key, convert, transpose));
+    }
+}
+
+MultiKeyInsertionCommand::~MultiKeyInsertionCommand()
+{
+    // nothing
+}
 
 EraseEventCommand::EraseEventCommand(Segment &segment,
 				     Event *event,

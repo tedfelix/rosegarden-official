@@ -32,6 +32,8 @@ etc
 </Menu>
 
 <Menu name="edit">
+  <Action name="general_paste"/>
+  <Separator/>
   <Action name="select_from_start"/>
   <Action name="select_to_end"/>
   <Action name="select_whole_staff"/>
@@ -150,9 +152,10 @@ etc
 
 <Menu name="Transforms">
   <text>Trans&amp;forms</text>
-  <Action name="collapse_notes"/>
-  <Action name="collapse_rests_aggressively"/>
   <Action name="normalize_rests"/>
+  <Action name="collapse_rests_aggressively"/>
+  <Separator/>
+  <Action name="collapse_notes"/>
   <Separator/>
   <Menu name="Transpose">
   <text>Trans&amp;pose</text>
