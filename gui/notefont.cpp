@@ -257,7 +257,7 @@ bool
 NoteFontMap::checkFile(int size, string &src) const
 {
     QString pixmapFileName = QString("%1/%2/%3/%4.xpm")
-        .arg(strtoqstr(m_fontDirectory))
+        .arg(m_fontDirectory)
         .arg(strtoqstr(m_name))
         .arg(size)
         .arg(strtoqstr(src));
