@@ -37,7 +37,7 @@ rosegarden_LDADD   = ../sound/libRosegardenSound.la ../core/libcore.la -lqt -lkf
 
 SUBDIRS = docs
 
-EXTRA_DIST = main.cpp notationproperties.cpp rosegardengui.cpp rosegardengui.h rosegardenguidoc.cpp rosegardenguidoc.h rosegardenguiview.cpp rosegardenguiview.h resource.h rosegardengui.desktop rosegardengui.xpm mini-rosegardengui.xpm notepixmapfactory.cpp notepixmapfactory.h qcanvasgroupableitem.cpp qcanvasgroupableitem.h qcanvasitemgroup.cpp qcanvasitemgroup.h qcanvaslinegroupable.cpp qcanvaslinegroupable.h qcanvasspritegroupable.cpp qcanvasspritegroupable.h staff.cpp staff.h qcanvassimplesprite.cpp qcanvassimplesprite.h layoutengine.cpp layoutengine.h notationhlayout.cpp notationhlayout.h notationvlayout.cpp notationvlayout.h xmlstorableevent.cpp xmlstorableevent.h rosexmlhandler.cpp rosexmlhandler.h rosedebug.h notationelement.cpp notationelement.h notationsets.cpp notationsets.h viewelementsmanager.cpp viewelementsmanager.h notationview.cpp notationview.h notationcanvasview.cpp notationcanvasview.h staffline.cpp staffline.h rosedebug.cpp trackseditor.cpp trackseditor.h trackscanvas.cpp trackscanvas.h rosegardenguiiface.h rosegardenguiiface.cpp trackseditoriface.cpp qcanvasspline.cpp qcanvasspline.h
+EXTRA_DIST = rosegardenguiiface.kidl trackseditoriface.kidl
 
 # Where pixmaps for notes, clefs, etc... will be installed
 data_dirname = rosegarden
