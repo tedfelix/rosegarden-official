@@ -5,7 +5,7 @@
 	<TITLE></TITLE>
 	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.2  (Linux)">
 	<META NAME="CREATED" CONTENT="20040613;312000">
-	<META NAME="CHANGED" CONTENT="20040824;11393700">
+	<META NAME="CHANGED" CONTENT="20040919;14561100">
 	<STYLE>
 	<!--
 		@page { size: 8.5in 11in }
@@ -15,29 +15,42 @@
 		H3.western { font-family: "Albany", sans-serif }
 		H3.cjk { font-family: "HG Mincho Light J" }
 		H3.ctl { font-family: "Arial Unicode MS" }
+		H4.western { font-family: "Albany", sans-serif; font-size: 11pt; font-style: italic }
+		H4.cjk { font-family: "HG Mincho Light J"; font-size: 11pt; font-style: italic }
+		H4.ctl { font-family: "Arial Unicode MS"; font-size: 11pt; font-style: italic }
+		H5.western { font-family: "Albany", sans-serif; font-size: 11pt }
+		H5.cjk { font-family: "HG Mincho Light J"; font-size: 11pt }
+		H5.ctl { font-family: "Arial Unicode MS"; font-size: 11pt }
 	-->
 	</STYLE>
 </HEAD>
 <BODY LANG="en-US" DIR="LTR">
-<H1>Notation (under heavy construction)</H1>
+<H1>Notation (progressing...)</H1>
+<P STYLE="margin-bottom: 0.2in; font-style: normal"><FONT FACE="Arial">I
+have mentioned elsewhere that Rosegarden is not purely a MIDI
+sequencer, and that it is not possible to create or manage raw MIDI
+events directly.  Neither is it purely a notation editor. 
+Applications dedicated to notation typically work with notation
+internally, and any MIDI performance capability they have is the
+result of interpreting that notation and translating it into MIDI. 
+These applications typically do a rudimentary job at best, and the
+results almost always sound very artificial and mechanical.  At the
+other extreme, applications dedicated entirely to MIDI sequencing
+tend to have rudimentary notation capabilities, and it is often all
+but impossible to produce legible notation with these unless the MIDI
+data itself has been beaten into a state of mechanical purity that
+causes the results to sound just as artificial as that produced by
+dedicated notation packages.</FONT></P>
 <P STYLE="margin-bottom: 0.2in; font-style: normal"><FONT FACE="Arial">Rosegarden
-has what might well be the most capable notation editor ever found in
-a MIDI sequencer. Typically, applications which do the best job of
-notation are dedicated entirely to that pursuit, and they have very
-limited, rudimentary MIDI capabilities. On the other side of that
-coin, applications which do the best job as MIDI sequencers often
-have extremely poor notation editors. Rosegarden straddles these two
-extremes very well, and its notation editor packs quite a surprising
-amount of punch.</FONT></P>
-<P STYLE="margin-bottom: 0.2in; font-style: normal"><FONT FACE="Arial">One
-of the most striking features is the fact that Rosegarden maintains
-both a display duration and a performance duration for every note.
-Users typically have to make a hard choice between a human
-performance and legible notation. I myself am certainly no stranger
-to the practice of maintaining both a quantized and an un-quantized
-version of a piece in separate tracks or separate files. Rosegarden
-allows you to have the best of both worlds, maintaining legible
-notation and human performance within the very same set of events.</FONT></P>
+sits squarely in the middle between these two extremes, possessing
+most of the features of both, with few compromises.  In order to
+allow the richness of a human performance to coexist with legible
+notation, every note event, whether recorded, imported, or entered by
+hand,  contains not one, but two different duration properties.  One
+duration is used to determine how long the note will sound for MIDI
+performance, while the other is used for displaying clean, legible
+notation.  This exciting feature makes Rosegarden the only
+application I know that allows you to have your cake and eat it too.</FONT></P>
 <H2 CLASS="western">Notation Editor Overview</H2>
 <P>In order to open the notation editor, you must have at least one
 segment available. You can open any number of segments on any number
@@ -51,11 +64,19 @@ clicking on a segment. (You can configure this behavior from <B>Settings
 -&gt; Configure Rosegarden</B>.)</P>
 <P ALIGN=CENTER><IMG SRC="../pixmaps/notation-default-editor.png" NAME="Graphic2" ALIGN=BOTTOM WIDTH=456 HEIGHT=72 BORDER=0></P>
 <P>After you have opened it, you will see something a bit like this.
-Your screen will probably vary somewhat, because this particular
-example is in multi-page layout mode.</P>
+Your screen will probably look somewhat different, because this
+particular example is in multiple page layout mode, which is not the
+default.</P>
 <P ALIGN=CENTER><IMG SRC="../pixmaps/notation-overview.png" NAME="Graphic3" ALIGN=BOTTOM WIDTH=532 HEIGHT=351 BORDER=0></P>
+<P ALIGN=LEFT><I>(I should have done this initial screenshot in the
+default, linear layout mode, but I chose this mode instead so I could
+showcase my favorite piece.  This obscure, rarely-performed concerto
+has gotten me through some trying times, and I love it like no
+other.)</I></P>
 <H3 CLASS="western">Notation Toolbars</H3>
-<P>The notation editor is just bristling with toolbars big and small.</P>
+<P>The notation editor is just bristling with toolbars big and small.
+ I will defer many of them until time to describe their function in
+more detail.</P>
 <P>The standard toolbar includes print and save icons, as well as the
 usual cut/copy/paste tools.</P>
 <P><IMG SRC="../pixmaps/notation-toolbar.png" NAME="Graphic4" ALIGN=BOTTOM WIDTH=299 HEIGHT=28 BORDER=0></P>
@@ -67,40 +88,410 @@ the matrix.</P>
 <P ALIGN=RIGHT><IMG SRC="../pixmaps/notation-transport-toolbar.png" NAME="Graphic6" ALIGN=BOTTOM WIDTH=294 HEIGHT=33 BORDER=0></P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">The
 layout toolbar allows you to change the way notation is displayed in
-various ways.  You can switch between linear layout mode, continuous
-page mode, and multiple page mode.  The linear mode scrolls
+various ways. You can switch between linear layout mode, continuous
+page mode, and multiple page mode. The linear mode scrolls
 continuously off to the right, and it is the only mode that has
-rulers.  The continuous page mode displays notation formatted as
+rulers. The continuous page mode displays notation formatted as
 though it were a printed page, but it scrolls continuously toward the
-bottom.  Multiple page mode breaks the notation into discrete pages,
+bottom. Multiple page mode breaks the notation into discrete pages,
 and provides a pager to allow you to get access to the portion of the
 wish to view or edit.</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">You can
+use the <B>Font:</B> combo box to choose among the standard Feta
+(courtesy of the Lilypond project), a bitmap version of Feta called
+&quot;Feta Pixmaps,&quot; and the bitmap font used by a previous
+incarnation of Rosegarden, called &quot;RG21.&quot;  The <B>Size:</B><SPAN STYLE="font-weight: medium">
+box functions somewhat like the zoom slider in the other views,
+allowing you to magnify or reduce your view (but not your printouts
+or exports.)  The </SPAN><B>Spacing:</B><SPAN STYLE="font-weight: medium">
+box allows you tweak how much space Rosegarden uses when laying out
+the notation horizontally.</SPAN></P>
 <P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
 <IMG SRC="../pixmaps/notation-layout-toolbar.png" NAME="Graphic7" ALIGN=BOTTOM WIDTH=544 HEIGHT=30 BORDER=0></P>
 <P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-The meta toolbar toggles the other toolbars.</P>
+<I>TIP:  It is also possible to use fonts from packages like Finale
+if you prefer.   See the &quot;Note Fonts&quot;
+(help:/rosegarden/nv-note-fonts.html) and &quot;Customizing
+Rosegarden&quot; (help:/rosegarden/developers.html) topics in the
+Rosegarden Handbook for more details.</I></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+The meta toolbar (not enabled by default) toggles the other toolbars.</P>
 <P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
 <IMG SRC="../pixmaps/notation-meta-toolbar.png" NAME="Graphic19" ALIGN=BOTTOM WIDTH=172 HEIGHT=54 BORDER=0></P>
 <P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
 The remaining toolbars need more than casual treatment, and will be
 mentioned in due course.</P>
-<H2 CLASS="western"><BR><BR>
-</H2>
-<H2 CLASS="western"><IMG SRC="../pixmaps/notation-accidentals-toolbar.png" NAME="Graphic8" ALIGN=BOTTOM WIDTH=172 HEIGHT=54 BORDER=0></H2>
-<P><IMG SRC="../pixmaps/notation-clefs-toolbar.png" NAME="Graphic9" ALIGN=BOTTOM WIDTH=116 HEIGHT=54 BORDER=0></P>
-<P><IMG SRC="../pixmaps/I-IV-V.png" NAME="Graphic10" ALIGN=BOTTOM WIDTH=480 HEIGHT=160 BORDER=0></P>
-<P><IMG SRC="../pixmaps/notation-empty-segments.png" NAME="Graphic11" ALIGN=BOTTOM WIDTH=623 HEIGHT=97 BORDER=0></P>
-<P><IMG SRC="../pixmaps/notation-pointer-to-cursor.png" NAME="Graphic12" ALIGN=BOTTOM WIDTH=31 HEIGHT=29 BORDER=0></P>
-<P><IMG SRC="../pixmaps/notation-group-toolbar.png" NAME="Graphic13" ALIGN=BOTTOM WIDTH=358 HEIGHT=54 BORDER=0></P>
-<P><IMG SRC="../pixmaps/notation-layout-toolbar.png" NAME="Graphic14" ALIGN=BOTTOM WIDTH=544 HEIGHT=30 BORDER=0></P>
-<P><IMG SRC="../pixmaps/notation-marks-toolbar.png" NAME="Graphic15" ALIGN=BOTTOM WIDTH=508 HEIGHT=54 BORDER=0></P>
-<P><IMG SRC="../pixmaps/notation-notes-toolbar.png" NAME="Graphic16" ALIGN=BOTTOM WIDTH=464 HEIGHT=54 BORDER=0></P>
-<P><IMG SRC="../pixmaps/notation-rests-toolbar.png" NAME="Graphic17" ALIGN=BOTTOM WIDTH=402 HEIGHT=54 BORDER=0></P>
-<P><BR><BR>
+<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<BR><BR>
 </P>
-<H2 CLASS="western">Entering Notes</H2>
-<P ALIGN=CENTER><IMG SRC="../pixmaps/notation-empty-segments-editing.png" NAME="Graphic18" ALIGN=BOTTOM WIDTH=532 HEIGHT=351 BORDER=0></P>
-<P><BR><BR>
+<H2 CLASS="western">Opening Multiple Staffs</H2>
+<P>Many posters on the rosegarden-user mailing list use Rosegarden to
+work with piano notation, so I have chosen a simple flute with piano
+accompaniment arrangement as the place in which to demonstrate
+various entry and editing features.</P>
+<P>I mentioned in the introduction to this chapter that Rosegarden
+has made few compromises in order to be able to do a bang up job as
+both a notation editor and a MIDI sequencer.  This example also
+serves to highlight one of those compromises.  It is not possible to
+display an entire piano part on one grand staff.  Neither is it
+possible to do a good, clear job of writing multiple parts or voices
+on the same staff.  Due to both of these limitations, you will
+probably want to write the bass and treble parts in different
+segments, and thus on separate staffs.  These segments can be in the
+same track, but if they are exactly the same length, and they overlap
+each other exactly, it will be impossible to select whichever segment
+lies on the bottom.  For this reason, I recommend putting the right
+and left hand parts on different tracks as well.</P>
+<P>For this example, I have created three segments on three tracks. 
+I've labeled the top one &quot;flute&quot; and have assigned it to a
+device and instrument that will play a flute program on channel 1. 
+The remaining two tracks are labeled by right or left hand, and they
+are both assigned to the same piano instrument, which will play using
+a piano program on channel 2.  I have selected all three of these
+segments in order to open them in a combined notation view:</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/notation-segments.png" NAME="Graphic20" ALIGN=BOTTOM WIDTH=456 HEIGHT=119 BORDER=0></P>
+<P ALIGN=CENTER><BR><BR>
 </P>
+<H3 CLASS="western">Notation Basics</H3>
+<P>Unless you have changed the default notation display mode, the
+notation view should open in its default linear layout mode, like
+this:</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/notation-empty-segments-editing.png" NAME="Graphic18" WIDTH=532 HEIGHT=351 BORDER=0></P>
+<H4 CLASS="western">Notation Rulers</H4>
+<P>Just like the matrix view, there are two distinct sets of rulers
+here.  At the top of the window you will find a tempo ruler, a
+special raw note ruler, which I will describe later on, and an an
+insertion ruler for manipulating the insertion cursor.  The insertion
+cursor determines the point at which notation elements are inserted.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/notation-rules.png" NAME="Graphic11" ALIGN=BOTTOM WIDTH=228 HEIGHT=224 BORDER=0></P>
+<P ALIGN=LEFT>In a multiple staff situation such as this, you will
+notice that the insertion cursor only spans a single staff.  This
+lets you know which staff is the active target for various
+operations.</P>
+<P ALIGN=LEFT><I>NOTE:  The tempo ruler here in the notation view is
+provide for reference only.  Tempo must be edited from the main
+window.</I></P>
+<H4 CLASS="western">Clefs</H4>
+<P>There are at least two ways to enter a clef.  Regardless of which
+you use, you first need to position the insertion cursor at the
+correct insertion point, if it isn't there already.  Select the
+target staff by double clicking on it.     Then you can use <B>Segment
+-&gt; Add Clef Change</B><SPAN STYLE="font-weight: medium"> from the
+menu.  A clef chooser dialog will appear, allowing you to choose from
+a variety of different clefs in different <I>8va</I> configurations
+by clicking on the various arrows.  The up/down arrows change between
+<I>8</I> and <I>16va</I> up or down, respectively, and the left/right
+arrows cycle through the various available clefs.  The dialog will
+remember the clef you used last time, making it more convenient to
+insert multiple clefs.  (There is no option to insert a clef in more
+than one place at once, so you will have to add a clef to each staff
+manually.)</SPAN></P>
+<P STYLE="font-weight: medium">The <B>Existing notes following clef
+change</B><SPAN STYLE="font-weight: medium"> portion of this dialog
+is particularly useful in a situation where you began entering
+notation before choosing a clef.  Rosegarden thinks in treble, and
+treble is the default if no clef is present.  If </SPAN><B>[x]
+Transpose into appropriate octave</B><SPAN STYLE="font-weight: medium">
+is selected, Rosegarden will attempt to find the best transposition
+of any existing notation relative to the new clef.  (If this has
+undesired consequences, as it sometimes does, then you can transpose
+again by hand, as I will discuss in due course.)</SPAN></P>
+<P ALIGN=CENTER STYLE="font-weight: medium"><IMG SRC="../pixmaps/notation-clef-dialog.png" NAME="Graphic22" ALIGN=BOTTOM WIDTH=228 HEIGHT=255 BORDER=0></P>
+<P STYLE="font-weight: medium">If you prefer, you can use the Clefs
+toolbar.  (The Clefs toolbar is not toggled on by default.)</P>
+<P STYLE="font-weight: medium"><IMG SRC="../pixmaps/notation-clefs-toolbar.png" NAME="Graphic9" WIDTH=116 HEIGHT=54 BORDER=0></P>
+<P STYLE="font-weight: medium">To use the toolbar, first switch to
+the  
+<IMG SRC="../pixmaps/matrix-arrow-cursor.png" NAME="Graphic21" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0>
+cursor, then select one of the clefs from the Clefs toolbar.  Click
+in one of the staffs, and the selected clef should be inserted.  If
+you find a dead zone near the time signature, you may need to click
+around a bit until you find the magic spot.</P>
+<H4 CLASS="western">Key Signatures</H4>
+<P>Key signatures are added in a similar fashion to clefs.  Position
+the insertion cursor as appropriate, select the target staff, and
+then use <B>Segment -&gt; Add Key Change</B><SPAN STYLE="font-weight: medium">
+from the menu.  You will be presented with a dialog that allows you
+to choose from all major and minor keys up through seven accidentals.</SPAN></P>
+<P ALIGN=CENTER STYLE="font-weight: medium"><IMG SRC="../pixmaps/notation-key-signature-dialog.png" NAME="Graphic23" ALIGN=BOTTOM WIDTH=203 HEIGHT=304 BORDER=0></P>
+<P STYLE="font-weight: medium">In addition to changing the key
+signature itself, you can use the <B>Scope</B> controls to change
+whether Rosegarden will insert the new key signature only in the
+target staff, or in all staffs (segments) at this point in time.  You
+may also decide whether Rosegarden should favor the existing pitches,
+possibly creating new accidentals in the new key, or favor the
+current accidentals, which might change the pitches in the new key. 
+Rosegarden can also attempt to transpose the notation into the new
+key.</P>
+<P STYLE="font-weight: medium"><BR><BR>
+</P>
+<H4 CLASS="western">Entering Notes and Rests</H4>
+<P>Rosegarden provides a variety of ways to enter notes, providing
+tools for both mouse- and keyboard-oriented composers.  Perhaps the
+quickest way to get started is to use the several associated toolbars
+and point and click a few notes into existence.  (I will cover the
+other methods a bit later on.)</P>
+<H5 CLASS="western">Notes</H5>
+<P>Switch to the 
+<IMG SRC="../pixmaps/matrix-arrow-cursor.png" NAME="Graphic24" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0>
+tool, which puts the editor into insert mode.  To enter a note,
+choose either a standard or a dotted duration from the Notes toolbar.
+ Then click in one of the staffs to insert a note at that location.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/notation-notes-toolbar.png" NAME="Graphic16" ALIGN=BOTTOM WIDTH=464 HEIGHT=54 BORDER=0></P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/notation-enter-first-note.png" NAME="Graphic25" ALIGN=BOTTOM WIDTH=266 HEIGHT=106 BORDER=0></P>
+<H5 CLASS="western">Rests</H5>
+<P>Rests are treated as negative space, and Rosegarden attempts to
+pad out the measure with rests automatically.  However, it is often
+useful, even necessary, to enter them manually.  For example, switch
+to the 8<SUP>th</SUP> note duration and then try to enter an 8<SUP>th</SUP>
+note on the far side of that quarter rest, leaving an 8<SUP>th</SUP>
+rest in between.  It's impossible.  You'll wind up with a result like
+this every time:</P>
+<P><IMG SRC="../pixmaps/notation-enter-first-note1.png" NAME="Graphic26" ALIGN=BOTTOM WIDTH=276 HEIGHT=98 BORDER=0></P>
+<P>The trick to this is to manually insert a rest, which causes
+Rosegarden to subdivide the beat; giving you a place to insert your
+new note.  To change this note into a rest, select an appropriate
+duration from the Rests toolbar, then click on the note head to
+replace it with a rest.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/notation-rests-toolbar.png" NAME="Graphic17" ALIGN=BOTTOM WIDTH=402 HEIGHT=54 BORDER=0></P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/notation-enter-first-note2.png" NAME="Graphic27" ALIGN=BOTTOM WIDTH=277 HEIGHT=92 BORDER=0></P>
+<P ALIGN=LEFT>Now you can change to an 8<SUP>th</SUP> note on the
+Notes toolbar and enter the remaining note in the correct location.</P>
+<P ALIGN=RIGHT><IMG SRC="../pixmaps/notation-enter-first-note3.png" NAME="Graphic28" ALIGN=BOTTOM WIDTH=291 HEIGHT=104 BORDER=0></P>
+<P ALIGN=LEFT>Notice as you do this that the insertion cursor
+advances to the next beat division.  Remember that you can reposition
+it using the insertion ruler.  What you cannot do, however, is move
+it to an arbitrary point in time.  It always snaps along beat
+divisions, depending on how the measure is divided, and it can
+sometimes be a bit fiddling getting a not just where you want it. 
+Particularly if you're adding a new note to existing notation, as
+when turning a single note into a chord, for example.</P>
+<H5 CLASS="western">Chords</H5>
+<P>When using the toolbars and other graphical tools to insert notes,
+creating chords is as simple as clicking in a new note above or below
+an existing one.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/notation-enter-first-note4.png" NAME="Graphic14" ALIGN=BOTTOM WIDTH=296 HEIGHT=119 BORDER=0></P>
+<P ALIGN=LEFT>You can also select a series of notes spaced out over
+time,</P>
+<P ALIGN=LEFT STYLE="margin-left: 3.94in">  
+<IMG SRC="../pixmaps/notation-chords.png" NAME="Graphic53" ALIGN=BOTTOM WIDTH=91 HEIGHT=76 BORDER=0>
+</P>
+<P ALIGN=LEFT> then use the 
+<IMG SRC="../pixmaps/icon-make-chord.png" NAME="Graphic52" ALIGN=BOTTOM WIDTH=16 HEIGHT=19 BORDER=0>
+icon...                                                              
+           
+</P>
+<P ALIGN=CENTER>to pull them into a chord.    
+<IMG SRC="../pixmaps/notation-chords1.png" NAME="Graphic54" ALIGN=BOTTOM WIDTH=83 HEIGHT=86 BORDER=0></P>
+<P ALIGN=CENTER><BR><BR>
+</P>
+<H5 CLASS="western">Nudging an Incorrect Pitch</H5>
+<P>In the preceding example, I entered what was trying to be an F
+major chord in the key of E<SUB>b</SUB>.  The easiest way to fix the
+errant A<SUB>b</SUB> from here is to nudge it with the arrow keys on
+the keyboard.  First select the note in question, then raise it a
+halfstep by hitting the up arrow key once.  (I could also have
+avoided writing the note incorrectly in the first place, as I will
+explain later on.)</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/notation-enter-first-note5.png" NAME="Graphic29" ALIGN=BOTTOM WIDTH=293 HEIGHT=104 BORDER=0></P>
+<P ALIGN=LEFT>You can transpose individual notes or entire selections
+in this fashion, one semitone at a time.  The accidentals along the
+way will be based on the key signature.  Flats in a flat key, sharps
+in a sharp key.  If you want to write a sharp in a flat key, you'll
+have to change it manually, as I will explain further on.</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<H5 CLASS="western">Erasing Notes</H5>
+<P>In order to pave the way for the next example, this is a good time
+to introduce the 
+<IMG SRC="../pixmaps/notation-erase-cursor.png" NAME="Graphic30" ALIGN=BOTTOM WIDTH=30 HEIGHT=26 BORDER=0>
+cursor.  Select it and then click on individual notes to erase them. 
+To follow along at home, remove the F major chord and step back to a
+time when there was just an A<SUB>b</SUB> here.</P>
+<H5 CLASS="western">Avoiding Multiple Voices</H5>
+<P>Rosegarden cannot handle situations involving multiple musical
+lines written on the same staff very well at all.  From a MIDI
+performance perspective, there is no reason why you cannot have an
+entire violin concerto in a single segment, and you can manipulate
+this data to your heart's content with the other editors, but the
+notation editor will never produce  good results attempting to
+interpret data like this into legible notation.  It attempts to
+display the notation as a single line, and this can lead to a great
+deal of awkwardness.  For example,  select a dotted 8<SUP>th</SUP>
+note duration from the Notes toolbar and then add a note above the
+first quarter note.  Rosegarden splits and ties the quarter note and
+displays the whole mess as a chord.</P>
+<P><IMG SRC="../pixmaps/notation-counterpoint.png" NAME="Graphic31" ALIGN=BOTTOM WIDTH=318 HEIGHT=120 BORDER=0></P>
+<P>You can undo this if you do so immediately, but if you wish to go
+back later on and erase the top note, the bottom note will remain a
+split-and-tied pair permanently, because it has become two separate
+events.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/notation-counterpoint1.png" NAME="Graphic32" ALIGN=BOTTOM WIDTH=295 HEIGHT=93 BORDER=0></P>
+<P ALIGN=LEFT>If you erase both of these notes, you wind up with some
+unwieldy looking rests.</P>
+<P ALIGN=RIGHT><IMG SRC="../pixmaps/notation-counterpoint2.png" NAME="Graphic33" ALIGN=BOTTOM WIDTH=308 HEIGHT=80 BORDER=0></P>
+<P>All of these problems can be solved, and no permanent harm has
+been done, but the fact remains that Rosegarden simply is not able to
+cope with this kind of situation elegantly.</P>
+<P><I>NOTE:  Part writing is one of the most often-requested
+features, and is almost certain to be implemented in some fashion at
+some point in the future.</I></P>
+<H5 CLASS="western">Making Selections</H5>
+<P>Just like in the other views, you can select groups of notes to
+isolate them from the rest of a staff.  Each note will sound as you
+select it.</P>
+<P>Switch back to the 
+<IMG SRC="../pixmaps/matrix-arrow-cursor.png" NAME="Graphic34" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0>
+tool.  You can select individual notes by shift clicking them, or you
+can make a sweep selection by clicking and dragging the blue
+selection box until it includes the notes you want.</P>
+<P>You can select an entire measure at once by double clicking it, or
+you can select an entire staff by triple clicking.</P>
+<H5 CLASS="western">Collapsing Rests</H5>
+<P>If you find yourself in an ugly situation such as the preceding
+example, you can instruct Rosegarden to recalculate and collapse the
+rests.  First you will need to make a selection, then use <B>Adjust
+-&gt; Rests...</B><SPAN STYLE="font-weight: medium"> to tidy things
+up.</SPAN></P>
+<P STYLE="font-weight: medium">If you choose<B> Normalize Rests</B>,
+Rosegarden will attempt to reduce the rests along beat divisions.</P>
+<P ALIGN=CENTER STYLE="font-weight: medium"><IMG SRC="../pixmaps/notation-normalize-rests.png" NAME="Graphic35" ALIGN=BOTTOM WIDTH=285 HEIGHT=78 BORDER=0></P>
+<P STYLE="font-weight: medium">If you choose <B>Collapse Rests</B>,
+Rosegarden will squeeze them down into the smallest possible space,
+irrespective of beat divisions.</P>
+<P ALIGN=CENTER STYLE="font-weight: medium"><IMG SRC="../pixmaps/notation-collapse-rests.png" NAME="Graphic36" ALIGN=BOTTOM WIDTH=271 HEIGHT=85 BORDER=0></P>
+<H5 CLASS="western">Accidentals</H5>
+<P>I already mentioned that you can nudge an errant note into place
+with the arrow keys, but what if you need to enter an accidental
+intentionally?  The Accidentals toolbar allows you to control the
+accidental state of entered notes.  The default &quot;No Accidental&quot;
+mode will enter notation that follows the key signature.  You can
+override this with any of the other choices.</P>
+<P ALIGN=CENTER STYLE="margin-bottom: 0in"><IMG SRC="../pixmaps/notation-accidentals-toolbar.png" NAME="Graphic8" WIDTH=172 HEIGHT=54 BORDER=0></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0in">To enter this phrase from J.
+S. Bach's Concerto in D<SUB>m</SUB>, first enter a half rest to
+divide the measure in half.  Switch to the 16<SUP>th</SUP> note
+duration to enter the E.  Select the sharp from the Accidentals
+toolbar to enter the F<SUP>#</SUP> and G<SUP>#</SUP>, then switch
+back to the &quot;No Accidental&quot; state to enter the A.  Choose
+the natural to enter the B natural, then switch back to &quot;No
+Accidental&quot; once more to enter the C.  Finally, switch to the
+8<SUP>th</SUP> note duration to enter the D.</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0in"><BR>
+</P>
+<P ALIGN=CENTER STYLE="margin-bottom: 0in"><IMG SRC="../pixmaps/notation-accidentals.png" NAME="Graphic37" ALIGN=BOTTOM WIDTH=385 HEIGHT=89 BORDER=0></P>
+<P ALIGN=CENTER STYLE="margin-bottom: 0in"><BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0in"><SPAN STYLE="font-style: normal">If
+this seems unnecessarily tedious, fear not, I will explain a more
+efficient way of switching accidentals around a bit later on.</SPAN></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0in; font-style: normal"><BR>
+</P>
+<H4 CLASS="western">Ties, Slurs, and Other Groups</H4>
+<P>Ties, slurs, other groupings, and a few miscellaneous actions are
+accomplished using the Group toolbar.  As these actions are designed
+to affect groups of notes, most of them will be disabled until you
+have made a selection.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/notation-group-toolbar.png" NAME="Graphic13" ALIGN=BOTTOM WIDTH=358 HEIGHT=54 BORDER=0></P>
+<H5 CLASS="western">Slurs</H5>
+<P>To slur a pair or a group of notes...</P>
+<P>Select the notes to be slurred...   
+<IMG SRC="../pixmaps/notation-select-for-slur.png" NAME="Graphic38" ALIGN=BOTTOM WIDTH=209 HEIGHT=118 BORDER=0></P>
+<P ALIGN=CENTER>Then click on the<IMG SRC="../pixmaps/notation-icon-slur.png" NAME="Graphic40" ALIGN=BOTTOM WIDTH=22 HEIGHT=24 BORDER=0>
+icon to slur them...   
+<IMG SRC="../pixmaps/notation-select-for-slur1.png" NAME="Graphic39" ALIGN=BOTTOM WIDTH=197 HEIGHT=89 BORDER=0></P>
+<H5 CLASS="western">Micro-Positioning of Notation Elements</H5>
+<P>I had planned to introduce this feature later on, but the example
+I just showed is screaming to be twiddled.  That slur is very badly
+positioned, and it looks terrible.  Rosegarden's layout algorithm
+doesn't always get things quite right.  Fortunately, you can
+re-position virtually anything to take matters into your own hands
+and give things a nudge when required.  Simply select the element or
+elements you wish to reposition, hold down the shift key, then drag
+them wherever you want.  Their new positions will be remembered,
+stored with the composition, and printed, although this
+micro-positioning is not exportable to external notation formats like
+Lilypond.</P>
+<P>You can take this to ridiculous extremes if you wish.  You can
+even create notes that sound as one pitch, yet which are displayed on
+a different line, or even a different staff.  I'll show you one
+example of a way to work around one of Rosegarden's limitations by
+taking advantage of the no-holds-barred nature of this feature later
+on, but it is not usually terribly useful to abuse your power to this
+degree:</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/notation-select-for-slur2.png" NAME="Graphic41" ALIGN=BOTTOM WIDTH=456 HEIGHT=136 BORDER=0></P>
+<P ALIGN=LEFT>However, when used in a reasonable fashion, this gives
+Rosegarden the ability to produce quite satisfying results, even when
+the layout algorithm might have done a better job.  (Although, no,
+you cannot, for example, alter the shape of this slur.  You can only
+change where it is positioned on the page.)</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/notation-select-for-slur3.png" NAME="Graphic42" ALIGN=BOTTOM WIDTH=201 HEIGHT=94 BORDER=0></P>
+<P ALIGN=LEFT>If you find you've made a complete mess of things, you
+can use <B>Adjust -&gt; Fine Positioning -&gt; Restore Computed
+Positions</B><SPAN STYLE="font-weight: medium"> to revert the
+position of the selected element, or elements to normal.</SPAN></P>
+<H5 CLASS="western">Ties</H5>
+<P>Ties are accomplished using the  icon.</P>
+<P>They work just like slurs, except that they must occur between two
+notes of the same pitch.  If you attempt to tie two notes at
+different pitches, this will fail silently.  No tie will appear,
+although the first note will actually have a &quot;tied forward&quot;
+property, and if you subsequently drag it in line with another note,
+the invisible tie will spring to life.  This can be a source of
+confusion if you forget what you did.</P>
+<P>Select two notes...        
+<IMG SRC="../pixmaps/notation-tie-demo.png" NAME="Graphic43" ALIGN=BOTTOM WIDTH=125 HEIGHT=75 BORDER=0></P>
+<P ALIGN=CENTER>Use the  
+<IMG SRC="../pixmaps/notation-icon-tie.png" NAME="Graphic45" ALIGN=BOTTOM WIDTH=21 HEIGHT=20 BORDER=0>
+ icon to tie them....           
+<IMG SRC="../pixmaps/notation-tie-demo1.png" NAME="Graphic44" ALIGN=BOTTOM WIDTH=130 HEIGHT=65 BORDER=0></P>
+<H5 CLASS="western">Stem Direction</H5>
+<P>If you need to change the computed stem direction, use
+Ctrl+PageUp/PageDown or <B>Adjust -&gt; Stem Direction -&gt; Stems
+Up/Stems Down</B><SPAN STYLE="font-weight: medium">.</SPAN></P>
+<P ALIGN=CENTER STYLE="font-weight: medium"><IMG SRC="../pixmaps/notation-stems-up.png" NAME="Graphic46" ALIGN=BOTTOM WIDTH=149 HEIGHT=74 BORDER=0></P>
+<P ALIGN=LEFT STYLE="font-weight: medium">If you wish to restore the
+computed direction, use <B>Adjust -&gt; Stem Direction -&gt; Restore
+Computed Stems.</B></P>
+<H5 CLASS="western">Beaming</H5>
+<P>You can beam or un-beam notes as required.  F<SPAN STYLE="font-weight: medium">or
+example, to break up the beams that were automatically applied,
+select two notes, and then use either the beam or</SPAN></P>
+<P STYLE="font-weight: medium">un-beam icons 
+<IMG SRC="../pixmaps/notation-icon.beam.png" NAME="Graphic47" ALIGN=BOTTOM WIDTH=18 HEIGHT=44 BORDER=0>
+to adjust the notes as desired                
+<IMG SRC="../pixmaps/notation-beam.png" NAME="Graphic48" ALIGN=BOTTOM WIDTH=188 HEIGHT=72 BORDER=0></P>
+<P ALIGN=LEFT STYLE="font-weight: medium">As you can see from this
+rather poorly-chosen example...  
+<IMG SRC="../pixmaps/notation-beam1.png" NAME="Graphic49" ALIGN=BOTTOM WIDTH=192 HEIGHT=103 BORDER=0></P>
+<P ALIGN=LEFT STYLE="font-weight: medium">It is sometimes be a bit
+fiddly to achieve the desired results.  I had to go back and un-beam
+the entire group of 16<SUP>th</SUP> notes and then re-beam them into
+two pairs in order to get where I wanted to be.</P>
+<P ALIGN=CENTER STYLE="font-weight: medium"><IMG SRC="../pixmaps/notation-beam2.png" NAME="Graphic50" ALIGN=BOTTOM WIDTH=186 HEIGHT=81 BORDER=0></P>
+<P ALIGN=LEFT STYLE="font-weight: medium"><I>NOTE:  Changing the
+beaming of slurred notes causes the slur to be re-computed.  If you
+have micro-positioned the slur, your manual adjustment will be
+destroyed, and you will have to reposition the new slur.  It would
+probably be best to get the beaming straight before adding slurs.</I></P>
+<H4 CLASS="western">Marks</H4>
+<P>The Marks toolbar contains too many icons for me to possibly
+describe each in detail.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/notation-marks-toolbar.png" NAME="Graphic15" ALIGN=BOTTOM WIDTH=508 HEIGHT=54 BORDER=0></P>
+<P ALIGN=LEFT>Rosegarden does not try to be your mother, and it will
+let you add an absolutely insane number of marks in ridiculous
+combinations to a note.</P>
+<P ALIGN=LEFT><IMG SRC="../pixmaps/notation-marks.png" NAME="Graphic51" ALIGN=BOTTOM WIDTH=167 HEIGHT=215 BORDER=0></P>
+<H4 CLASS="western">Text Events</H4>
+<H5 CLASS="western">I ii iii IV</H5>
+<P>Someone asked me how he could use Rosegarden to notate Roman
+numerals to indicate intervals or chord progressions.  While there is
+no facility specifically for this purpose, chord names work perfectly
+well.  Here I have marked of the I IV V of a typical rock chord
+progression.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/I-IV-V.png" NAME="Graphic10" ALIGN=BOTTOM WIDTH=480 HEIGHT=160 BORDER=0></P>
+<P ALIGN=CENTER>insertion cursor transport stuff in here somewhere...
+ 
+<IMG SRC="../pixmaps/notation-pointer-to-cursor.png" NAME="Graphic12" ALIGN=BOTTOM WIDTH=31 HEIGHT=29 BORDER=0></P>
 </BODY>
 </HTML>
