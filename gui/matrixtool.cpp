@@ -592,6 +592,8 @@ bool MatrixSelector::handleMouseMove(timeT time, int height,
     m_selectionRect->setSize(w,h);
     m_mParentView->canvas()->update();
 
+    QRect normalizedSelectionRect = m_selectionRect->rect().normalize();
+
     // get the selections
     //
     QCanvasItemList l = m_selectionRect->collisions(true);
@@ -609,6 +611,9 @@ bool MatrixSelector::handleMouseMove(timeT time, int height,
 
             if ((matrixRect = dynamic_cast<QCanvasMatrixRectangle*>(item)))
             {
+
+                if (!normalizedSelectionRect.contains(matrixRect->rect())) continue;
+
                 MatrixElement *mE = &matrixRect->getMatrixElement();
 
                 m_mParentView->canvas()->update();
