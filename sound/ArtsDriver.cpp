@@ -79,8 +79,9 @@ ArtsDriver::generateInstruments()
                                                        channelName,
                                                        m_deviceRunningId);
         m_instruments.push_back(instr);
-        m_deviceRunningId++;
     }
+
+    m_deviceRunningId++;
 
     name = "aRts MIDI";
     for (int channel = 0; channel < 16; channel++)
@@ -94,9 +95,7 @@ ArtsDriver::generateInstruments()
                                                        channelName,
                                                        m_deviceRunningId);
         m_instruments.push_back(instr);
-        m_deviceRunningId++;
     }
-
 
 }
 

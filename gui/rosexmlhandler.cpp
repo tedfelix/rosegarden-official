@@ -524,7 +524,14 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         }
 
         QString type = (atts.value("type")).lower();
-        int id = (atts.value("id")).toInt();
+        QString idString = atts.value("id");
+            
+        if (idString == "")
+        {
+            m_errorString = i18n("No ID on Device tag");
+            return false;
+        }
+        int id = idString.toInt();
 
         if (type == "midi" || type == "audio")
         {
@@ -554,9 +561,12 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         bank->lsb = m_lsb;
         bank->name = std::string(nameStr.data());
 
-        // Insert the bank
-        //
-        dynamic_cast<Rosegarden::MidiDevice*>(m_device)->addBank(bank);
+        if (m_device->getType() == Rosegarden::Device::Midi)
+        {
+            // Insert the bank
+            //
+            dynamic_cast<Rosegarden::MidiDevice*>(m_device)->addBank(bank);
+        }
 
     } else if (lcName == "program") {
 
@@ -572,9 +582,13 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             program->msb = m_msb;
             program->lsb = m_lsb;
 
-            // Insert the program
-            //
-            dynamic_cast<Rosegarden::MidiDevice*>(m_device)->addProgram(program);
+            if (m_device->getType() == Rosegarden::Device::Midi)
+            {
+                // Insert the program
+                //
+                dynamic_cast<Rosegarden::MidiDevice*>(m_device)->
+                     addProgram(program);
+            }
 
         }
         else if (m_section == InInstrument)
@@ -607,9 +621,13 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         int pitch = atts.value("pitch").toInt();
         Rosegarden::InstrumentId instrument = atts.value("instrument").toInt();
 
-        dynamic_cast<Rosegarden::MidiDevice*>(m_device)->
-          setMetronome(instrument, msb, lsb, program, pitch,
+        if (m_device->getType() == Rosegarden::Device::Midi)
+        {
+            // Modify metronome
+            dynamic_cast<Rosegarden::MidiDevice*>(m_device)->
+                    setMetronome(instrument, msb, lsb, program, pitch,
                        std::string("MIDI Metronome"));
+        }
 
     } else if (lcName == "instrument") {
 

@@ -11,12 +11,14 @@ o ALSA:
   - latencies
   - hanging notes on stop [DONE - VOICES_OFF type controller call and
                                   processPending()]
-  - configure
-  - start-up bug
+  - configure [DONE with GL]
+  - start-up bug [FIXED?]
   - metronome broken with ALSA?
 
 o MappedDevice transmission is breaking occasionally [HOPEFULLY FIXED
   in MappedDevice itself]
+
+o Multiple devices with multiple bank/programs [DONE]
 
 o Recording Segment doesn't appear anymore
 

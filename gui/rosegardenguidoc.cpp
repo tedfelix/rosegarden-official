@@ -843,10 +843,13 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
         // unfurl
         reply >> mD;
     }
-
-    kdDebug(KDEBUG_AREA) << std::endl
-                         << "RosegardenGUIDoc::getMappedDevice - MappedDevices"
-                         << std::endl;
+    else
+    {
+        kdDebug(KDEBUG_AREA)  << "RosegardenGUIDoc::getMappedDevice() - "
+                              << "didn't get MappedDevice " 
+                              << id << std::endl;
+        return;
+    }
 
     // See if we've got this device already
     //
