@@ -595,6 +595,9 @@ AudioFileManager::getPreview(AudioFileId id,
     if (audioFile == 0)
         return std::vector<float>();
 
+    if (!m_peakManager.hasValidPeaks(audioFile))
+        throw std::string("<no peakfile>");
+
     return m_peakManager.getPreview(audioFile,
                                     startTime,
                                     endTime,
@@ -609,6 +612,9 @@ AudioFileManager::drawPreview(AudioFileId id,
                               QPixmap *pixmap)
 {
     AudioFile *audioFile = getAudioFile(id);
+
+    if (!m_peakManager.hasValidPeaks(audioFile))
+        throw std::string("<no peakfile>");
 
     std::vector<float> values = m_peakManager.getPreview
                                         (audioFile,
@@ -674,6 +680,9 @@ AudioFileManager::drawHighlightedPreview(AudioFileId id,
                                          QPixmap *pixmap)
 {
     AudioFile *audioFile = getAudioFile(id);
+
+    if (!m_peakManager.hasValidPeaks(audioFile))
+        throw std::string("<no peakfile>");
 
     std::vector<float> values = m_peakManager.getPreview
                                         (audioFile,

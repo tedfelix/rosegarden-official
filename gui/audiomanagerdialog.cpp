@@ -176,7 +176,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     m_playButton      = new QPushButton(i18n("Play Preview"), v);
     m_renameButton    = new QPushButton(i18n("Rename File"), v);
     m_insertButton    = new QPushButton(i18n("Insert into Composition"), v);
-    m_deleteAllButton = new QPushButton(i18n("Delete All Audio Files"), v);
+    m_deleteAllButton = new QPushButton(i18n("Remove All Audio Files"), v);
     m_fileList        = new AudioListView(h);
 
     QToolTip::add(m_fileList, i18n("Drag'n Drop .wav files here"));
@@ -327,12 +327,21 @@ AudioManagerDialog::slotPopulateFileList()
              it != m_doc->getAudioFileManager().end();
              it++)
     {
-        m_doc->getAudioFileManager().
-                drawPreview((*it)->getId(),
-                            RealTime(0, 0),
-                            (*it)->getLength(),
-                            audioPixmap);
-
+        try
+        {
+            m_doc->getAudioFileManager().
+                    drawPreview((*it)->getId(),
+                                RealTime(0, 0),
+                                (*it)->getLength(),
+                                audioPixmap);
+        }
+        catch(std::string e)
+        {
+            audioPixmap->fill(); // white
+            QPainter p(audioPixmap);
+            p.setPen(Qt::black);
+            p.drawText(10, m_previewHeight / 2, QString("<no preview>"));
+        }
 
         QString label = QString((*it)->getShortFilename().c_str());
              
@@ -406,13 +415,20 @@ AudioManagerDialog::slotPopulateFileList()
                                           .arg(segmentDuration.sec)
                                           .arg(msecs));
 
-                m_doc->getAudioFileManager().
-                    drawHighlightedPreview((*it)->getId(),
-                                           RealTime(0, 0),
-                                           (*it)->getLength(),
-                                           (*iit)->getAudioStartTime(),
-                                           (*iit)->getAudioEndTime(),
-                                           audioPixmap);
+                try
+                {
+                    m_doc->getAudioFileManager().
+                        drawHighlightedPreview((*it)->getId(),
+                                               RealTime(0, 0),
+                                               (*it)->getLength(),
+                                               (*iit)->getAudioStartTime(),
+                                               (*iit)->getAudioEndTime(),
+                                               audioPixmap);
+                }
+                catch(std::string e)
+                {
+                    // should already be set to "no file"
+                }
 
                 // set pixmap
                 //
@@ -585,9 +601,10 @@ AudioManagerDialog::slotPlayPreview()
 void
 AudioManagerDialog::slotAdd()
 {
-    KURL::List kurlList = KFileDialog::getOpenURLs(":WAVS",
-                                                   QString(i18n("*.wav|WAV files (*.wav)")),
-                                                   this, i18n("Select one or more Audio Files"));
+    KURL::List kurlList =
+        KFileDialog::getOpenURLs(":WAVS",
+                                 QString(i18n("*.wav|WAV files (*.wav)")),
+                                 this, i18n("Select one or more Audio Files"));
 
 #ifdef RGKDE3
     KURL::List::iterator it;
@@ -674,7 +691,7 @@ void
 AudioManagerDialog::slotDeleteAll()
 {
     QString question =
-        i18n("Really delete all audio files and associated segments?");
+        i18n("Really remove all audio files and associated segments?");
 
     int reply = KMessageBox::questionYesNo(this, question);
 
@@ -966,10 +983,12 @@ AudioManagerDialog::addFile(const KURL& kurl)
     }
     catch(std::string e)
     {
-        delete progressDlg;
-        progressDlg = 0;
-        KMessageBox::error(this, strtoqstr(e));
-        return false;
+        //delete progressDlg;
+        //progressDlg = 0;
+        QString message = strtoqstr(e) + "\n\n" +
+                          i18n("Try copying this file to a directory where you have write permission and re-add it");
+        KMessageBox::information(this, message);
+        //return false;
     }
 
     if (progressDlg) delete progressDlg;

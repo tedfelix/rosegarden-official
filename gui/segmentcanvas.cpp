@@ -277,12 +277,21 @@ void SegmentAudioPreview::updatePreview()
         comp.getElapsedRealTime(m_parent.getEndTime()) -
         comp.getElapsedRealTime(m_parent.getStartTime()) ;
 
-    m_values =
-        aFM.getPreview(m_segment->getAudioFileId(),
-                       audioStartTime,
-                       audioEndTime,
-                       rect().width(),
-                       false); // get minima
+    try
+    {
+        m_values =
+            aFM.getPreview(m_segment->getAudioFileId(),
+                           audioStartTime,
+                           audioEndTime,
+                           rect().width(),
+                           false); // get minima
+    }
+    catch (std::string e)
+    {
+        // empty all values out
+        m_values.clear();
+    }
+
 
     // If we haven't inserted the audio file yet we're probably
     // just still recording it.

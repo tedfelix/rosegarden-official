@@ -2303,12 +2303,29 @@ AudioSplitDialog::drawPreview()
     Rosegarden::AudioFileManager &aFM = m_doc->getAudioFileManager();
     int channels = aFM.getAudioFile(m_segment->getAudioFileId())->getChannels();
 
-    std::vector<float> values =
-        aFM.getPreview(m_segment->getAudioFileId(),
-                       m_segment->getAudioStartTime(),
-                       m_segment->getAudioEndTime(),
-                       m_previewWidth,
-                       false);
+    std::vector<float> values;
+   
+    try
+    {
+        values = aFM.getPreview(m_segment->getAudioFileId(),
+                                m_segment->getAudioStartTime(),
+                                m_segment->getAudioEndTime(),
+                                m_previewWidth,
+                                false);
+    }
+    catch(std::string e)
+    {
+        QCanvasText *text = new QCanvasText(m_canvas);
+        text->setColor(kapp->palette().
+                color(QPalette::Active, QColorGroup::Shadow));
+        text->setText(i18n("<no preview generated for this audio file>"));
+        text->setX(30);
+        text->setY(30);
+        text->setZ(4);
+        text->setVisible(true);
+        m_canvas->update();
+        return;
+    }
 
     int startX = (m_canvasWidth - m_previewWidth) / 2;
     int halfHeight = m_canvasHeight / 2;

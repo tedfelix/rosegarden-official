@@ -331,8 +331,6 @@ AudioSegmentInsertCommand::execute()
         else
             label = std::string("unknown audio file");
 
-        cout << "LABEL = " << label << endl;
-
         m_segment->setLabel(label);
 
     }
