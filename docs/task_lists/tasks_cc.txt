@@ -219,6 +219,8 @@ Post-0.1.5-and-a-bit task list
 
     f. Insert notes notation-style (with ties) or matrix-style?
 
+37. Add Show/Hide Annotations; make it easier to edit an annotation
+
 
 Post-0.1.4 task list
 ====================
