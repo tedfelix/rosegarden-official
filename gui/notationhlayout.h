@@ -168,26 +168,29 @@ protected:
      */
     struct BarData
     {
+	// slots filled at construction time:
         int barNo;            // of corresponding BarPosition in Segment
         NotationElementList::iterator start; // i.e. event following barline
-        double x;             // coordinate for display of barline
+	bool correct;         // bar preceding barline has correct duration
+
+	// slots that won't be known until the following bar has been scanned:
         double idealWidth;    // theoretical width of bar following barline
         int fixedWidth;       // width of non-note items in bar
 	int baseWidth;        // minimum width of note items in bar
-	bool correct;         // bar preceding barline has correct duration
-        bool needsLayout;
 	Rosegarden::Event *timeSignature; // or zero if no new one in this bar
-	int timeSigX;
 	Rosegarden::timeT actualDuration; // may exceed nominal duration
+
+	// slots either assumed, or only known at layout time:
+        bool needsLayout;
+        double x;             // coordinate for display of barline
+	int timeSigX;
         
-        BarData(int ibarno, NotationElementList::iterator istart,
-                double ix, double iwidth, int fwidth, int bwidth,
-		bool icorrect, Rosegarden::Event *timesig,
-		Rosegarden::timeT actual) :
-            barNo(ibarno), start(istart), x(ix), idealWidth(iwidth),
-            fixedWidth(fwidth), baseWidth(bwidth), 
-	    correct(icorrect), needsLayout(true),
-	    timeSignature(timesig), timeSigX(0), actualDuration(actual) { }
+        BarData(int n, NotationElementList::iterator i, bool c = true) : 
+            barNo(n), start(i), correct(c),
+	    idealWidth(0), fixedWidth(0), baseWidth(0),
+	    timeSignature(0), actualDuration(0),
+	    needsLayout(true), x(-1), timeSigX(-1)
+	    { }
     };
 
     typedef FastVector<BarData> BarDataList;

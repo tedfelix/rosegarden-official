@@ -526,8 +526,14 @@ NotationDisplayPitch::rawPitchToDisplayPitch(int pitch,
             // the key has an accidental at the same height as this note, so
             // undo the note's accidental if there is one, or make explicit
             // if there isn't
-            if (modified) accidental = NoAccidental;
-            else accidental = Natural;
+
+	    //!!! Key's accidental may be different from note's!
+
+            if (modified && (sharp == key.isSharp())) {
+		accidental = NoAccidental;
+	    } else if (!modified) {
+		accidental = Natural;
+	    }
             break;
         }
     }

@@ -482,8 +482,7 @@ NotationHLayout::addNewBar(StaffType &staff,
 //    if (timeSig) kdDebug(KDEBUG_AREA) << "Adding bar with timesig" << endl;
 //    else kdDebug(KDEBUG_AREA) << "Adding bar without timesig" << endl;
 
-    //!!! make more minimal bardata constructor
-    bdl.push_back(BarData(barNo, i, -1, 0, 0, 0, correct, 0, 0));
+    bdl.push_back(BarData(barNo, i, correct));
 }
 
 
@@ -512,9 +511,7 @@ NotationHLayout::fillFakeBars()
 	    if (segment.getComposition()->getBarRange(b, true).first
 		>= segment.getStartIndex()) break;
 
-            list.push_front
-                (BarData
-                 (-1, staff->getViewElementList()->end(), -1, 0, 0, 0, true, 0, 0));
+            list.push_front(BarData(-1, staff->getViewElementList()->end()));
         }
     }
     
