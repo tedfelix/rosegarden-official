@@ -105,7 +105,10 @@ NoteFontMap::NoteFontMap(string name) :
 
 NoteFontMap::~NoteFontMap()
 {
-    // empty
+    for (SystemFontMap::iterator i = m_systemFontCache.begin();
+	 i != m_systemFontCache.end(); ++i) {
+	freeSystemFont(i->second);
+    }
 }
 
 bool
@@ -495,9 +498,10 @@ NoteFontMap::startElement(const QString &, const QString &,
 		return false;
 	    }
 
-	    QFont font;
-	    if (checkFont(name, 12, font)) {
-		m_fonts[n] = font;
+	    SystemFont font = loadSystemFont(SystemFontSpec(name, 12));
+	    if (font) {
+		m_systemFontNames[n] = name;
+		freeSystemFont(font);
 	    } else {
 		cerr << QString("Warning: Unable to load font \"%1\"").arg(name) << endl;
 		m_ok = false;
@@ -508,9 +512,9 @@ NoteFontMap::startElement(const QString &, const QString &,
 	    bool have = false;
 	    QStringList list = QStringList::split(",", names, false);
 	    for (QStringList::Iterator i = list.begin(); i != list.end(); ++i) {
-		QFont font;
-		if (checkFont(*i, 12, font)) {
-		    m_fonts[n] = font;
+		SystemFont font = loadSystemFont(SystemFontSpec(*i, 12));
+		if (font) {
+		    m_systemFontNames[n] = *i;
 		    have = true;
 		    break;
 		}
@@ -580,21 +584,24 @@ NoteFontMap::getCharNames() const
     return names;
 }
 
-bool
-NoteFontMap::checkFont(QString name, int size, QFont &font) const
+NoteFontMap::SystemFont
+NoteFontMap::loadSystemFont(const SystemFontSpec &spec) const
 {
+    QString name = spec.first;
+    int size = spec.second;
+
     NOTATION_DEBUG << "NoteFontMap::checkFont: name is " << name << ", size " << size << endl;
 
     if (name == "DEFAULT") {
-	font = QFont();
-	font.setPixelSize(size);
-	return true;
+	QFont *font = new QFont();
+	font->setPixelSize(size);
+	return font;
     }
 
-    font = QFont(name, size, QFont::Normal);
-    font.setPixelSize(size);
+    QFont *font = new QFont(name, size, QFont::Normal);
+    font->setPixelSize(size);
 
-    QFontInfo info(font);
+    QFontInfo info(*font);
 
     NOTATION_DEBUG << "NoteFontMap::checkFont: have family " << info.family() << ", size " << info.pixelSize() << " (exactMatch " << info.exactMatch() << ")" << endl;
 
@@ -611,60 +618,25 @@ NoteFontMap::checkFont(QString name, int size, QFont &font) const
     //
     // UPDATE: in newer versions of Qt, I specify "fughetta", I get
     // "Fughetta [macromedia]", and exactMatch returns false.  Just as
-    // useless, but in a different way.  WHY OH WHY IS FONT MANAGEMENT
-    // UNDER X STILL SO SHIT AFTER ALL THESE YEARS???  WHY???  It's
-    // like people are trying to fix the old deficiencies by inventing
-    // new incompatible ways of doing things and then deploying
-    // several different fixes at once so that none of them actually
-    // works.  At least in the past I used to be able to see the
-    // definitive list of fonts with xlsfonts and know exactly what I
-    // had to work with; now there are fonts that Qt knows about but
-    // xlsfonts doesn't even list, and my Qt applications no longer
-    // seem to be able to load _any_ of the fonts xlsfonts _does_ know
-    // about.  I can't even set misc-fixed in konsole!  Is it me?  Is
-    // it the distro I'm using?  Are SuSE just morons?  This stuff has
-    // worked fine under Windows for nearly TEN YEARS now, and X just
-    // can't do it.  The situation is totally fucked and getting
-    // worse.
+    // useless, but in a different way.
 
     QString family = info.family().lower();
 
-    if (family == name.lower()) return true;
+    if (family == name.lower()) return font;
     else {
 	int bracket = family.find(" [");
 	if (bracket > 1) family = family.left(bracket);
-	if (family == name.lower()) return true;
+	if (family == name.lower()) return font;
     }
 
-//    static bool printed = false;
-    static bool printed = true;
-    if (!printed) {
-	std::cerr << "WARNING: couldn't load requested font " << name << std::endl;
-	std::cerr << "Fonts in database are as follows (* = couldn't load)" << std::endl;
-	QFontDatabase db;
-	QStringList families(db.families());
-	for (QStringList::iterator i = families.begin(); i != families.end(); ++i) {
-	    std::cerr << *i << " { ";
-	    QStringList styles = db.styles(*i);
-	    for (QStringList::iterator j = styles.begin(); j != styles.end(); ++j) {
-		std::cerr << *j << " ( ";
+    delete font;
+    return 0;
+}
 
-		QValueList<int> sizes = db.smoothSizes(*i, *j);
-		for (QValueList<int>::iterator k = sizes.begin(); k != sizes.end(); ++k) {
-		    std::cerr << *k;
-		    QFont font(*i, *k);
-		    QFontInfo info(font);
-		    if (!info.family().startsWith(*i)) std::cerr << "*";
-		    std::cerr << " ";
-		}
-		std::cerr << ") ";
-	    }
-	    std::cerr << "}" << std::endl;
-	}
-	printed = true;
-    }
-
-    return false;
+void
+NoteFontMap::freeSystemFont(SystemFont &font) const
+{
+    delete ((QFont *)font);
 }
 
 bool
@@ -739,7 +711,8 @@ NoteFontMap::getInversionSrc(int size, CharName charName, string &src) const
 }
 
 bool
-NoteFontMap::getFont(int size, CharName charName, QFont &font, int &charBase)
+NoteFontMap::getSystemFont(int size, CharName charName,
+			   SystemFont &font, int &charBase)
     const
 {
     SymbolDataMap::const_iterator i = m_data.find(charName);
@@ -754,22 +727,27 @@ NoteFontMap::getFont(int size, CharName charName, QFont &font, int &charBase)
     }
 
     int fontId = i->second.getFontId();
-    SystemFontMap::const_iterator fi = m_fonts.find(fontId);
-
-    if (fontId < 0 || fi == m_fonts.end()) return false;
-
-    font = fi->second;
-    font.setPixelSize(fontHeight);
-
-    QFontInfo info(font);
-
-    NOTATION_DEBUG << "NoteFontMap::getFont: loaded font at pixel size "
-		   << fontHeight << ", returned font has pixel size "
-		   << info.pixelSize() << endl;
+    SystemFontNameMap::const_iterator fni = m_systemFontNames.find(fontId);
+    if (fontId < 0 || fni == m_systemFontNames.end()) return false;
+    QString fontName = fni->second;
 
     CharBaseMap::const_iterator bi = m_bases.find(fontId);
     if (bi == m_bases.end()) charBase = 0;
     else charBase = bi->second;
+    
+    SystemFontSpec spec(fontName, fontHeight);
+    SystemFontMap::const_iterator fi = m_systemFontCache.find(spec);
+    if (fi != m_systemFontCache.end()) {
+	font = fi->second;
+	return true;
+    }
+
+    font = loadSystemFont(spec);
+    if (!font) return false;
+    m_systemFontCache[spec] = font;
+
+    NOTATION_DEBUG << "NoteFontMap::getFont: loaded font " << fontName
+		   << " at pixel size " << fontHeight << endl;
 
     return true;
 }
@@ -904,7 +882,6 @@ NoteFontMap::dump() const
 
         unsigned int t = 0;
 	unsigned int bx = 0, by = 0;
-	QFont f;
 
         if (getStaffLineThickness(*sizei, t)) {
             cout << "Staff line thickness: " << t << endl;
@@ -1166,7 +1143,6 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
     } else {
 
 	int code = -1;
-	QFont font;
 	int charBase = 0;
 	if (!inverted) ok = m_fontMap.getCode(m_size, charName, code);
 	else  ok = m_fontMap.getInversionCode(m_size, charName, code);
@@ -1180,9 +1156,10 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
 	    return false;
 	}
 
-	ok = m_fontMap.getFont(m_size, charName, font, charBase);
+	NoteFontMap::SystemFont systemFont;
+	ok = m_fontMap.getSystemFont(m_size, charName, systemFont, charBase);
 
-	if (!ok) {
+	if (!ok || !systemFont) {
 	    if (!inverted && m_fontMap.hasInversion(m_size, charName)) {
 		if (!getPixmap(charName, pixmap, !inverted)) return false;
 		found = new QPixmap(PixmapFunctions::flipVertical(pixmap));
@@ -1198,8 +1175,13 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
 	    pixmap = *m_blankPixmap;
 	    return false;
 	}
-
-	QFontMetrics metrics(font);
+	
+	QFont *font = (QFont *)systemFont;
+	if (!font) {
+	    cerr << "NoteFont::getPixmap: dynamic_cast to QFont* failed!" << endl;
+	    return false;
+	}
+	QFontMetrics metrics(*font);
 	QChar qc(code + charBase);
 	QRect bounding = metrics.boundingRect(qc);
 
@@ -1212,7 +1194,7 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
 	found->fill();
 	QPainter painter;
 	painter.begin(found);
-	painter.setFont(font);
+	painter.setFont(*font);
 	painter.setPen(Qt::black);
 
 	NOTATION_DEBUG << "NoteFont::getPixmap: Drawing character code "

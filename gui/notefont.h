@@ -41,6 +41,7 @@
 class NoteFontMap : public QXmlDefaultHandler
 {
 public:
+    typedef void *SystemFont; // the .cpp file will know what this is
     typedef Rosegarden::Exception MappingFileReadFailed;
 
     NoteFontMap(std::string name); // load and parse the XML mapping file
@@ -77,7 +78,7 @@ public:
     bool getSrc(int size, CharName charName, std::string &src) const;
     bool getInversionSrc(int size, CharName charName, std::string &src) const;
 
-    bool getFont(int size, CharName charName, QFont &font, int &charBase) const;
+    bool getSystemFont(int size, CharName charName, SystemFont &font, int &charBase) const;
     bool getCode(int size, CharName charName, int &code) const;
     bool getInversionCode(int size, CharName charName, int &code) const;
 
@@ -281,21 +282,22 @@ private:
     bool m_autocrop;
     bool m_smooth;
 
-    typedef __HASH_NS::hash_map<CharName, SymbolData,
-                          CharNameHash, CharNamesEqual> SymbolDataMap;
+    typedef std::map<CharName, SymbolData> SymbolDataMap;
     SymbolDataMap m_data;
 
-    typedef __HASH_NS::hash_map<CharName, HotspotData,
-                          CharNameHash, CharNamesEqual> HotspotDataMap;
+    typedef std::map<CharName, HotspotData> HotspotDataMap;
     HotspotDataMap m_hotspots;
 
-    typedef __HASH_NS::hash_map<int, SizeData> SizeDataMap;
+    typedef std::map<int, SizeData> SizeDataMap;
     SizeDataMap m_sizes;
 
-    typedef __HASH_NS::hash_map<int, QFont> SystemFontMap;
-    SystemFontMap m_fonts;
+    typedef std::pair<QString, int> SystemFontSpec;
+    typedef std::map<int, QString> SystemFontNameMap;
+    typedef std::map<SystemFontSpec, SystemFont> SystemFontMap;
+    SystemFontNameMap m_systemFontNames;
+    mutable SystemFontMap m_systemFontCache;
 
-    typedef __HASH_NS::hash_map<int, int> CharBaseMap;
+    typedef std::map<int, int> CharBaseMap;
     CharBaseMap m_bases;
 
     // For use when reading the XML file:
@@ -304,7 +306,9 @@ private:
     std::string m_hotspotCharName;
     QString m_errorString;
 
-    bool checkFont(QString name, int size, QFont &font) const;
+    SystemFont loadSystemFont(const SystemFontSpec &spec) const;
+    void freeSystemFont(SystemFont &font) const;
+
     bool checkFile(int size, std::string &src) const;
     QString m_fontDirectory;
 
@@ -407,14 +411,9 @@ private:
     CharName getNameWithColour(CharName origName, int hue) const;
     QPixmap *recolour(QPixmap in, int hue, int minValue) const;
 
-    typedef std::pair<QPixmap *, QPixmap *>
-            PixmapPair;
-
-    typedef __HASH_NS::hash_map<CharName, PixmapPair, CharNameHash, CharNamesEqual>
-            PixmapMap;
-
-    typedef std::map<std::string, PixmapMap *>
-            FontPixmapMap;
+    typedef std::pair<QPixmap *, QPixmap *>    PixmapPair;
+    typedef std::map<CharName, PixmapPair>     PixmapMap;
+    typedef std::map<std::string, PixmapMap *> FontPixmapMap;
 
     //--------------- Data members ---------------------------------
 
