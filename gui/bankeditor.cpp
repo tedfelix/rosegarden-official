@@ -586,7 +586,11 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     QSplitter* splitter = new QSplitter(mainFrame);
 
     QFrame* btnBox = new QFrame(mainFrame);
+
+#if QT_VERSION >= 0x030100
     btnBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+#endif
+
     QHBoxLayout* layout = new QHBoxLayout(btnBox, 4, 10);
 
     m_closeButton = new QPushButton(btnBox);
