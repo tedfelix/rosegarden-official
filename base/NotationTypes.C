@@ -1884,7 +1884,7 @@ AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height,
 	    }
 	} else if (acc == canonicalAcc) {
 	    if (acc != NoAccidental) {
-		cautionary = true;
+//		cautionary = true;
 	    } else {
 		acc = Natural;
 	    }
