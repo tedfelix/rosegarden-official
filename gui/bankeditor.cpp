@@ -117,7 +117,9 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
       m_msb(new QSpinBox(m_mainFrame)),
       m_lsb(new QSpinBox(m_mainFrame)),
       m_bankList(bankEditor->getBankList()),
-      m_programList(bankEditor->getProgramList())
+      m_programList(bankEditor->getProgramList()),
+      m_oldMSB(0),
+      m_oldLSB(0)
 {
 
     QGridLayout *gridLayout = new QGridLayout(m_mainFrame,
@@ -332,6 +334,9 @@ MidiProgramsEditor::populateBank(QListViewItem* item)
     m_msb->setValue(m_currentBank->msb);
     m_lsb->setValue(m_currentBank->lsb);
 
+    m_oldMSB = m_currentBank->msb;
+    m_oldLSB = m_currentBank->lsb;
+
     // Librarian details
     //
     m_librarian->setText(strtoqstr(device->getLibrarianName()));
@@ -361,8 +366,32 @@ MidiProgramsEditor::populateBank(QListViewItem* item)
 }
 
 void
+MidiProgramsEditor::resetMSBLSB()
+{
+    m_msb->blockSignals(true);
+    m_lsb->blockSignals(true);
+
+    m_msb->setValue(m_oldMSB);
+    m_lsb->setValue(m_oldLSB);
+
+    modifyCurrentPrograms(getCurrentBank()->msb,
+                          getCurrentBank()->lsb,
+                          m_oldMSB,
+                          m_oldLSB);
+
+    getCurrentBank()->msb = m_oldMSB;
+    getCurrentBank()->lsb = m_oldLSB;
+
+    m_msb->blockSignals(false);
+    m_lsb->blockSignals(false);
+}
+
+
+void
 MidiProgramsEditor::slotNewMSB(int value)
 {
+    RG_DEBUG << "MidiProgramsEditor::slotNewMSB(" << value << ")\n";
+
     m_msb->blockSignals(true);
 
     int msb;
@@ -392,6 +421,8 @@ MidiProgramsEditor::slotNewMSB(int value)
 void
 MidiProgramsEditor::slotNewLSB(int value)
 {
+    RG_DEBUG << "MidiProgramsEditor::slotNewLSB(" << value << ")\n";
+
     m_lsb->blockSignals(true);
 
     int lsb;
@@ -1164,6 +1195,7 @@ void
 BankEditorDialog::slotReset()
 {
     resetProgramList();
+    m_programEditor->resetMSBLSB();
     m_programEditor->populateBank(m_listView->currentItem());
     setModified(false);
 }

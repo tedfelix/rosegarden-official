@@ -126,6 +126,8 @@ public:
 
     void populateBank(QListViewItem*);
 
+    void resetMSBLSB();
+
 public slots:
 
     // Check that any new MSB/LSB combination is unique for this device
@@ -157,6 +159,9 @@ protected:
     Rosegarden::MidiBank     *m_currentBank;
     MidiBankContainer        &m_bankList;
     MidiProgramContainer     &m_programList;
+
+    int                      m_oldMSB;
+    int                      m_oldLSB;
 };
 
 class BankEditorDialog : public KMainWindow
