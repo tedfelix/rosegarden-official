@@ -274,7 +274,8 @@ AudioPluginDialog::slotPluginSelected(int i)
             // Weed out non-control ports and those which have erroneous
             // looking bounds - uninitialised values?
             //
-            if ((*it)->getType() & PluginPort::Control)
+            if (((*it)->getType() & PluginPort::Control) &&
+		((*it)->getType() & PluginPort::Input))
             {
                 // Check for port existence and create with default value
                 // if it doesn't exist.  Modification occurs through the
