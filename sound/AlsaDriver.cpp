@@ -184,7 +184,8 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
 
 {
     AUDIT_START;
-    AUDIT_STREAM << "Rosegarden AlsaDriver - " << m_name << std::endl;
+    AUDIT_STREAM << "Rosegarden " << VERSION << " - AlsaDriver - " 
+                 << m_name << std::endl;
 
 #ifdef HAVE_LIBJACK
     _jackBufferSize = 0;
@@ -1185,7 +1186,7 @@ AlsaDriver::createJackInputPorts(unsigned int totalPorts, bool deactivate)
         free(ports);
     }
 
-    std::cout << "AlsaDriver::initialiseAudio - attempting connect from "
+    std::cout << "AlsaDriver::createJackInputPorts - attempting connect from "
               << "\"" << capture_1.c_str() << "\" to \""
               << jack_port_name(m_jackInputPorts[0]) << "\"" << endl;
 
@@ -1193,18 +1194,18 @@ AlsaDriver::createJackInputPorts(unsigned int totalPorts, bool deactivate)
     if (jack_connect(m_audioClient, capture_1.c_str(),
                      jack_port_name(m_jackInputPorts[0])))
     {
-        std::cerr << "AlsaDriver::initialiseAudio - "
+        std::cerr << "AlsaDriver::createJackInputPorts - "
                   << "cannot connect to JACK input port" << std::endl;
     }
 
-    std::cout << "AlsaDriver::initialiseAudio - attempting connect from "
+    std::cout << "AlsaDriver::createJackInputPorts - attempting connect from "
               << "\"" << capture_2.c_str() << "\" to \""
               << jack_port_name(m_jackInputPorts[1]) << "\"" << endl;
 
     if (jack_connect(m_audioClient, capture_2.c_str(),
                      jack_port_name(m_jackInputPorts[1])))
     {
-        std::cerr << "AlsaDriver::initialiseAudio - "
+        std::cerr << "AlsaDriver::createJackInputPorts - "
                   << "cannot connect to JACK input port" << std::endl;
     }
 
@@ -1217,7 +1218,7 @@ AlsaDriver::createJackInputPorts(unsigned int totalPorts, bool deactivate)
                              jack_port_name(m_jackOutputPortLeft),
                              outLeftPort[0]))
             {
-                std::cerr << "AlsaDriver::initialiseAudio - "
+                std::cerr << "AlsaDriver::createJackInputPorts - "
                           << "cannot reconnect JACK output port (left)"
                           << std::endl;
             }
@@ -1229,7 +1230,7 @@ AlsaDriver::createJackInputPorts(unsigned int totalPorts, bool deactivate)
                              jack_port_name(m_jackOutputPortRight),
                              outRightPort[0]))
             {
-                std::cerr << "AlsaDriver::initialiseAudio - "
+                std::cerr << "AlsaDriver::createJackInputPorts - "
                           << "cannot reconnect JACK output port (right)"
                           << std::endl;
             }
@@ -1249,6 +1250,9 @@ void
 AlsaDriver::initialiseAudio()
 {
 #ifdef HAVE_LIBJACK
+    AUDIT_START;
+    AUDIT_STREAM << std::endl;
+
     // Using JACK instead
     //
 
@@ -1258,9 +1262,9 @@ AlsaDriver::initialiseAudio()
     //
     if ((m_audioClient = jack_client_new(jackClientName.c_str())) == 0)
     {
-        std::cerr << "AlsaDriver::initialiseAudio - "
-                  << "JACK server not running"
-                  << std::endl;
+        AUDIT_STREAM << "AlsaDriver::initialiseAudio - "
+                     << "JACK server not running"
+                     << std::endl;
         return;
     }
 
@@ -1280,8 +1284,8 @@ AlsaDriver::initialiseAudio()
     //
     _jackSampleRate = jack_get_sample_rate(m_audioClient);
 
-    std::cout << "AlsaDriver::initialiseAudio - JACK sample rate = "
-              << _jackSampleRate << std::endl;
+    AUDIT_STREAM << "AlsaDriver::initialiseAudio - JACK sample rate = "
+                 << _jackSampleRate << "Hz" << std::endl;
 
 
 
@@ -1314,8 +1318,8 @@ AlsaDriver::initialiseAudio()
                                               JackPortIsOutput,
                                               0);
 
-    std::cout << "AlsaDriver::initialiseAudio - "
-              << "added output port 1 (left)" << std::endl;
+    AUDIT_STREAM << "AlsaDriver::initialiseAudio - "
+                 << "added output port 1 (left)" << std::endl;
 
     m_jackOutputPortRight = jack_port_register(m_audioClient,
                                                "out_2",
@@ -1327,8 +1331,8 @@ AlsaDriver::initialiseAudio()
     //
     createJackInputPorts(2, false);
 
-    std::cout << "AlsaDriver::initialiseAudio - "
-              << "added output port 2 (right)" << std::endl;
+    AUDIT_STREAM << "AlsaDriver::initialiseAudio - "
+                 << "added output port 2 (right)" << std::endl;
 
     std::string playback_1, playback_2;
 
@@ -1355,16 +1359,16 @@ AlsaDriver::initialiseAudio()
     if (jack_connect(m_audioClient, jack_port_name(m_jackOutputPortLeft),
                      playback_1.c_str()))
     {
-        std::cerr << "AlsaDriver::initialiseAudio - "
-                  << "cannot connect to JACK output port" << std::endl;
+        AUDIT_STREAM << "AlsaDriver::initialiseAudio - "
+                     << "cannot connect to JACK output port" << std::endl;
         return;
     }
 
     if (jack_connect(m_audioClient, jack_port_name(m_jackOutputPortRight),
                      playback_2.c_str()))
     {
-        std::cerr << "AlsaDriver::initialiseAudio - "
-                  << "cannot connect to JACK output port" << std::endl;
+        AUDIT_STREAM << "AlsaDriver::initialiseAudio - "
+                     << "cannot connect to JACK output port" << std::endl;
         return;
     }
 
@@ -1386,20 +1390,21 @@ AlsaDriver::initialiseAudio()
 
     m_audioRecordLatency = RealTime(int(latency), int(latency * 1000000.0));
 
-    std::cout << "AlsaDriver::initialiseAudio - "
-              << "JACK playback latency " << m_audioPlayLatency << std::endl;
+    AUDIT_STREAM << "AlsaDriver::initialiseAudio - "
+                 << "JACK playback latency " << m_audioPlayLatency << std::endl;
 
-    std::cout << "AlsaDriver::initialiseAudio - "
-              << "JACK record latency " << m_audioRecordLatency << std::endl;
+    AUDIT_STREAM << "AlsaDriver::initialiseAudio - "
+                 << "JACK record latency " << m_audioRecordLatency << std::endl;
 
     // ok with audio driver
     //
     m_driverStatus |= AUDIO_OK;
 
-    std::cout << "AlsaDriver::initialiseAudio - "
-              << "initialised JACK audio subsystem"
-              << std::endl;
+    AUDIT_STREAM << "AlsaDriver::initialiseAudio - "
+                 << "initialised JACK audio subsystem"
+                 << std::endl;
 
+    AUDIT_UPDATE;
 #endif
 }
 

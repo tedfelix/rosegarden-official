@@ -70,6 +70,10 @@ o Instrument/Device naming [CC - done]
 
 o TextFloats for Rotaries [DONE]
 
+o Finite audio recording time - check for available disk space [DONE]
+
+o BUG - changing audio file path doesn't work [FIXED]
+
 
 Smaller stuff
 =============
@@ -83,10 +87,6 @@ o Matrix tools - cut and join
 o FEATURE - double/half speed event selection in Matrix
 
 o BUG - Plugin calls() during playback causing usual problem
-
-o BUG - changing audio file path doesn't work
-
-o Finite audio recording time - check for available disk space
 
 o Matrix Hypereditor [PENDING]
 
