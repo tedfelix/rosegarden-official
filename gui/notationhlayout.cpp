@@ -143,6 +143,12 @@ NotationHLayout::layoutGroup(NotationElementList::iterator from, NotationElement
         m_quantizer.quantize(el->event());
         el->setX(m_currentPos);
     }
+
+    NotationElement *firstNoteOfGroup = (*from);
+
+    Note note = Note(firstNoteOfGroup->event()->get<Int>("Notation::NoteType"));
+    m_currentPos += m_noteWidthTable[note] + Staff::noteWidth + m_noteMargin;
+
 }
 
 
