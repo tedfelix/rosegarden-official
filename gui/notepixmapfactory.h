@@ -114,7 +114,6 @@ protected:
  * Generates QCanvasPixmaps for single notes and chords
  * (chords unused)
  *
- *@author Guillaume Laurent
  */
 class NotePixmapFactory
 {

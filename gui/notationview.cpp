@@ -82,7 +82,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     m_mainStaff(new Staff(canvas(), resolution)),
     m_currentStaff(m_mainStaff),
     m_notePixmapFactory(m_currentStaff->getNotePixmapFactory()),
-    m_toolbarNotePixmapFactory(9),
+    m_toolbarNotePixmapFactory(5),
     m_viewElementsManager(0),
     m_notationElements(0),
     m_hlayout(0),
@@ -647,6 +647,7 @@ void NotationView::setCurrentSelectedNote(bool rest, Note::Type n, int dots)
 {
     m_currentSelectedNoteIsRest = rest;
     m_currentSelectedNoteType = n;
+    m_currentSelectedNoteDots = dots;
 
     if (!rest) {
         m_currentNotePixmap->setPixmap
