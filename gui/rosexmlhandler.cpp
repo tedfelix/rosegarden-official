@@ -1202,7 +1202,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 		if (vstr == "lsb") {
 		    variation = Rosegarden::MidiDevice::VariationFromLSB;
 		} else if (vstr == "msb") {
-		    variation = Rosegarden::MidiDevice::VariationFromLSB;
+		    variation = Rosegarden::MidiDevice::VariationFromMSB;
 		} else if (vstr == "") {
 		    variation = Rosegarden::MidiDevice::NoVariations;
 		}
