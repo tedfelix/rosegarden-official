@@ -12,6 +12,7 @@
 <Menu name="edit">
     <Action name="remove_audio"/>
     <Action name="remove_all_audio"/>
+    <Action name="remove_all_unused_audio"/>
     <Separator/>
     <Action name="rename_audio"/>
 </Menu>
@@ -37,6 +38,7 @@
 <State name="have_audio_files">
   <enable>
     <Action name="remove_all_audio"/>
+    <Action name="remove_all_unused_audio"/>
   </enable>
 </State>
 

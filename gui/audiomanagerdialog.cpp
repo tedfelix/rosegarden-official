@@ -192,7 +192,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 		SLOT(slotAdd()), actionCollection(), "add_audio");
 
     new KAction(i18n("&Unload Audio File"), "editdelete", 0, this,
-		SLOT(slotDelete()), 
+		SLOT(slotRemove()), 
 		actionCollection(), "remove_audio");
 
     icon = QIconSet(QPixmap(pixmapDir + "/toolbar/transport-play.xpm"));
@@ -210,8 +210,12 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 		actionCollection(), "insert_audio");
 
     new KAction(i18n("Unload &all Audio Files"), 0, 0, this,
-		SLOT(slotDeleteAll()), 
+		SLOT(slotRemoveAll()), 
 		actionCollection(), "remove_all_audio");
+
+    new KAction(i18n("Unload &all Unused Audio Files"), 0, 0, this,
+		SLOT(slotRemoveAllUnused()), 
+		actionCollection(), "remove_all_unused_audio");
 
     new KAction(i18n("&Export Audio File"), "fileexport", 0, this,
 		SLOT(slotExportAudio()), 
@@ -265,7 +269,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     //
     m_accelerators->connectItem(m_accelerators->insertItem(Key_Delete),
                                 this,
-                                SLOT(slotDelete()));
+                                SLOT(slotRemove()));
 
     slotPopulateFileList();
 
@@ -584,7 +588,7 @@ AudioManagerDialog::slotExportAudio()
 }
 
 void
-AudioManagerDialog::slotDelete()
+AudioManagerDialog::slotRemove()
 {
     AudioFile *audioFile = getCurrentSelection();
     AudioListItem *item =
@@ -793,7 +797,7 @@ AudioManagerDialog::slotInsert()
 }
 
 void
-AudioManagerDialog::slotDeleteAll()
+AudioManagerDialog::slotRemoveAll()
 {
     QString question =
         i18n("This will unload all audio files and remove their associated segments.  Are you sure?");
@@ -821,6 +825,50 @@ AudioManagerDialog::slotDeleteAll()
     m_fileList->clear();
     slotPopulateFileList();
 }
+
+void
+AudioManagerDialog::slotRemoveAllUnused()
+{
+    QString question =
+        i18n("This will unload all audio files that have no segments used in this composition.  Are you sure?");
+
+    int reply = KMessageBox::warningContinueCancel(this, question);
+
+    if (reply != KMessageBox::Continue)
+        return;
+
+    std::set<Rosegarden::AudioFileId> audioFiles;
+    Composition &comp = m_doc->getComposition();
+
+    for (Composition::iterator it = comp.begin(); it != comp.end(); ++it)
+    {
+        if ((*it)->getType() == Rosegarden::Segment::Audio)
+            audioFiles.insert((*it)->getAudioFileId());
+    }
+
+    std::vector<Rosegarden::AudioFileId> toDelete;
+    for (std::vector<AudioFile*>::const_iterator
+         aIt = m_doc->getAudioFileManager().begin();
+         aIt != m_doc->getAudioFileManager().end(); ++aIt)
+    {
+        if (audioFiles.find((*aIt)->getId()) == audioFiles.end())
+            toDelete.push_back((*aIt)->getId());
+    }
+
+    // Delete the audio files from the AFM
+    //
+    for (std::vector<Rosegarden::AudioFileId>::iterator dIt = toDelete.begin();
+            dIt != toDelete.end(); ++dIt)
+    {
+        m_doc->getAudioFileManager().removeFile(*dIt);
+        emit deleteAudioFile(*dIt);
+    }
+
+    // clear the file list
+    m_fileList->clear();
+    slotPopulateFileList();
+}
+
 
 void
 AudioManagerDialog::slotRename()

@@ -99,11 +99,12 @@ public:
 public slots:
     void slotAdd();
     void slotAddCancel();
-    void slotDelete();
     void slotPlayPreview();
     void slotRename();
     void slotInsert();
-    void slotDeleteAll();
+    void slotRemove();
+    void slotRemoveAll();
+    void slotRemoveAllUnused();
     void slotExportAudio();
 
     // get selection
