@@ -93,6 +93,8 @@ Instrument::toXmlString()
 
     // only export if there's anything worth sending
     //
+    //
+    /*
     if (!m_sendBankSelect &&
         !m_sendProgramChange &&
         !m_sendPan &&
@@ -101,9 +103,11 @@ Instrument::toXmlString()
         instrument << std::ends;
         return instrument.str();
     }
+    */
 
-    instrument << "<instrument id=\"";
-    instrument << m_id << "\" type=\"";
+    instrument << "    <instrument id=\"" << m_id;
+    instrument << "\" channel=\"" << (int)m_channel;
+    instrument << "\" type=\"";
 
     switch(m_type)
     {
@@ -144,7 +148,7 @@ Instrument::toXmlString()
         instrument << "    <velocity value=\"" << (int)m_velocity << "\"/>" << std::endl;
     }
 
-    instrument << "</instrument>" << std::endl << std::endl << std::ends;
+    instrument << "    </instrument>" << std::endl << std::endl << std::ends;
 
     return instrument.str();
 
