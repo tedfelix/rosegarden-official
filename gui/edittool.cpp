@@ -97,6 +97,8 @@ void BaseTool::stow()
 
 void BaseTool::showMenu()
 {
+    if (!hasMenu()) return;
+
     if (!m_menu) createMenu();
 
     if (m_menu)
@@ -204,4 +206,9 @@ void EditTool::createMenu()
                  << m_menuName << ")\n";
 
     m_menu = dynamic_cast<QPopupMenu*>(tmp);
+}
+
+bool EditTool::hasMenu()
+{
+    return !m_rcFileName.isEmpty();
 }

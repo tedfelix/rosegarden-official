@@ -104,6 +104,7 @@ protected:
     BaseTool(const QString& menuName, KXMLGUIFactory*, QObject* parent);
 
     virtual void createMenu() = 0;
+    virtual bool hasMenu() { return false; }
 
     //--------------- Data members ---------------------------------
 
@@ -223,6 +224,7 @@ protected:
 
     virtual void createMenu();
     virtual void createMenu(QString rcFileName);
+    virtual bool hasMenu();
 
     //--------------- Data members ---------------------------------
     QString m_rcFileName;

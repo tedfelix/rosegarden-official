@@ -74,6 +74,8 @@ protected:
     SegmentTool(SegmentCanvas*, RosegardenGUIDoc *doc);
 
     virtual void createMenu();
+    virtual bool hasMenu() { return true; }
+
     SegmentToolBox* getToolBox();
 
     //--------------- Data members ---------------------------------
