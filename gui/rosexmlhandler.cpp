@@ -1673,7 +1673,16 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 		    return false;
 		}
             }
-        }
+        } else { // no instrument
+
+	    if (lcName == "synth") {
+		QString identifier = atts.value("identifier");
+		if (identifier) {
+		    RG_DEBUG << "WARNING: RoseXmlHandler: no instrument for plugin " << identifier << endl;
+		    m_pluginsNotFound.insert(identifier);
+		}
+	    }
+	}
 
         m_section = InPlugin;
 
