@@ -238,8 +238,8 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
     Clef clef;
     TimeSignature timeSignature;
 
-//!!!   bool isFullScan = (startTime == endTime);
-    bool isFullScan = true;
+    bool isFullScan = (startTime == endTime);
+    //!!!   bool isFullScan = true;
 
     bool allDone = false; // used in partial scans
 
@@ -719,7 +719,7 @@ NotationHLayout::fillFakeBars()
             list.push_front(BarData(-1, staff->getViewElementList()->end()));
         }
 
-	m_fakeBarCountMap[staff] = b;
+//!!!	m_fakeBarCountMap[staff] = b;
     }
     
     PRINT_ELAPSED("NotationHLayout::fillFakeBars");
@@ -1057,8 +1057,8 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
     Clef clef;
     TimeSignature timeSignature;
 
-//!!!    bool isFullLayout = (startTime == endTime);
-    bool isFullLayout = true;
+    bool isFullLayout = (startTime == endTime);
+//!!!    bool isFullLayout = true;
 
     // these two are for partial layouts:
     bool haveSimpleOffset = false;
@@ -1085,13 +1085,13 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
         }
 
         if (from == notes->end()) {
-//            kdDebug(KDEBUG_AREA) << "Start is end" << endl;
+            kdDebug(KDEBUG_AREA) << "Start is end" << endl;
         }
         if (from == to) {
-//            kdDebug(KDEBUG_AREA) << "Start is to" << endl;
+            kdDebug(KDEBUG_AREA) << "Start is to" << endl;
         }
 
-        if ((!isFullLayout) &&
+        if ((!isFullLayout) && !bdi->basicData.fake &&
 	    (from == notes->end() ||
 	     (*from)->event()->getAbsoluteTime() > endTime)) {
 
@@ -1133,20 +1133,24 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 	    timeSigToPlace = true;
 	}
 
+	//!!! Need to make sure we cope if every staff has lots of
+	// fake bars (i.e. we're not displaying any segments that
+	// are anywhere near the start of the composition)
+
         if (bdi->basicData.fake) {
-//            kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): fake bar " << bdi->barNo << endl;
+            kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): fake bar " << endl;
             continue;
         }
         if (!bdi->layoutData.needsLayout) {
             //!!! clef and key may not be right
             // need a better way to find them than keeping track through the
             // whole staff
-//            kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): bar " << bdi->barNo << " has needsLayout false" << endl;
+            kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): bar " << " has needsLayout false" << endl;
             continue;
         }
 
         if (timeSigToPlace) {
-//	    kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): there's a time sig in this bar" << endl;
+	    kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): there's a time sig in this bar" << endl;
 	}
 
 

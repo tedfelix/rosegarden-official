@@ -240,7 +240,7 @@ protected:
 
     typedef FastVector<BarData> BarDataList;
     typedef std::map<StaffType *, BarDataList> BarDataMap;
-    typedef std::map<StaffType *, int> FakeBarCountMap;
+//!!!    typedef std::map<StaffType *, int> FakeBarCountMap;
 
     /**
      * Set the basic data for the given barNo.  If barNo is
@@ -354,7 +354,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     BarDataMap m_barData;
-    FakeBarCountMap m_fakeBarCountMap;
+//!!!    FakeBarCountMap m_fakeBarCountMap;
 
     double m_totalWidth;
     bool m_pageMode;
