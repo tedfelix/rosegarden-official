@@ -409,13 +409,7 @@ bool NotationStaff::showElements(NotationElementList::iterator from,
                      (Rosegarden::Key((*it)->event()->get<String>
                                       (Rosegarden::Key::KeyPropertyName)),
                       currentClef));
-/*!!!
-            } else if ((*it)->event()->isa(TimeSignature::EventType)) {
 
-                pixmap = new QCanvasPixmap
-                    (m_npf->makeTimeSigPixmap
-                     (TimeSignature(*(*it)->event())));
-*/
             } else {
                     
                 kdDebug(KDEBUG_AREA)

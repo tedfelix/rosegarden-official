@@ -208,6 +208,9 @@ protected:
     int getMinWidth(NotationElement &) const;
     int getComfortableGap(Rosegarden::Note::Type type) const;
     int getBarMargin() const;
+    int getFixedItemSpacing() const {
+	return (int)((m_npf.getNoteBodyWidth() / 5) * m_spacing);
+    }
 
     const Rosegarden::Quantizer &getQuantizer(const StaffType &staff) const;
 

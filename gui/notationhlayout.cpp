@@ -215,11 +215,8 @@ NotationHLayout::scanStaff(StaffType &staff)
 
     getQuantizer(staff).quantizeByNote(t.begin(), t.end());
 
-//!!!	if (barNo == 0) {
-	    addNewBar(staff, barNo, notes->begin(), 0, 0, true, 0); 
-//	    timeSigEvent = 0;
-	    ++barNo;
-//	}
+    addNewBar(staff, barNo, notes->begin(), 0, 0, true, 0); 
+    ++barNo;
 
     for (Track::iterator refi = refStart; refi != refEnd; ++refi) {
 
@@ -256,15 +253,10 @@ NotationHLayout::scanStaff(StaffType &staff)
 	    kdDebug(KDEBUG_AREA) << "Found timesig" << endl;
 	    timeSigEvent = *refi;
 	    timeSignature = TimeSignature(*timeSigEvent);
-	    fixedWidth += m_npf.getTimeSigWidth(timeSignature);
+	    fixedWidth += getFixedItemSpacing() +
+		m_npf.getTimeSigWidth(timeSignature);
 	}
-/*!!!
-	if (barNo == 0) {
-	    addNewBar(staff, barNo, notes->begin(), 0, 0, true, timeSigEvent); 
-	    timeSigEvent = 0;
-	    ++barNo;
-	}
-*/
+
         for (NotationElementList::iterator it = from; it != to; ++it) {
         
             NotationElement *el = (*it);
@@ -433,7 +425,7 @@ NotationHLayout::addNewBar(StaffType &staff,
     if (timeSig) kdDebug(KDEBUG_AREA) << "Adding bar with timesig" << endl;
     else kdDebug(KDEBUG_AREA) << "Adding bar without timesig" << endl;
 
-    bdl.push_back(BarData(barNo, i, -1, 0, 0, correct, 0));//!!! timeSig));
+    bdl.push_back(BarData(barNo, i, -1, 0, 0, correct, 0));
 }
 
 
@@ -667,14 +659,7 @@ NotationHLayout::layout(BarDataMap::iterator i)
             kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): setting element's x to " << x << endl;
 
             long delta = el->event()->get<Int>(MIN_WIDTH);
-/*!!!
-            if (el->event()->isa(TimeSignature::EventType)) {
 
-		kdDebug(KDEBUG_AREA) << "Found timesig" << endl;
-
-                timeSignature = TimeSignature(*el->event());
-
-		} else */
 	    if (el->event()->isa(Clef::EventType)) {
 
 		kdDebug(KDEBUG_AREA) << "Found clef" << endl;
@@ -686,7 +671,8 @@ NotationHLayout::layout(BarDataMap::iterator i)
 		if (timeSigToPlace) {
 		    kdDebug(KDEBUG_AREA) << "Placing timesig at " << x << endl;
 		    bdi->timeSigX = x;
-		    x += m_npf.getTimeSigWidth(timeSignature);
+		    x += getFixedItemSpacing() +
+			m_npf.getTimeSigWidth(timeSignature);
 		    kdDebug(KDEBUG_AREA) << "and moving next elt to " << x << endl;
 		    el->setLayoutX(x);
 		    timeSigToPlace = false;
@@ -932,7 +918,7 @@ int NotationHLayout::getMinWidth(NotationElement &e) const
         return w;
     }
 
-    w = (int)((m_npf.getNoteBodyWidth() / 5) * m_spacing);
+    w = getFixedItemSpacing();
 
     if (e.event()->isa(Clef::EventType)) {
 
