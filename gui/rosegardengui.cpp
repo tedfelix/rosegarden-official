@@ -49,7 +49,8 @@ RosegardenGUIApp::RosegardenGUIApp()
       m_config(kapp->config()),
       m_fileRecent(0),
       m_view(0),
-      m_doc(0)
+      m_doc(0),
+      m_selectDefaultTool(0)
 {
     ///////////////////////////////////////////////////////////////////
     // call inits to invoke all other construction parts
@@ -61,6 +62,8 @@ RosegardenGUIApp::RosegardenGUIApp()
 	
     readOptions();
 
+    m_selectDefaultTool->activate();
+    
 //     ///////////////////////////////////////////////////////////////////
 //     // disable menu and toolbar items at startup
 //     disableCommand(ID_FILE_SAVE);
@@ -124,6 +127,8 @@ void RosegardenGUIApp::setupActions()
                               this, SLOT(slotDrawSelected()),
                               actionCollection(), "draw");
     action->setExclusiveGroup("tracktools");
+
+    m_selectDefaultTool = action;
 
     action = new KRadioAction(i18n("Move"), "move",
                               0,

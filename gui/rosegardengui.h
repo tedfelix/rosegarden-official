@@ -259,16 +259,10 @@ class RosegardenGUIApp : public KMainWindow
 
 private:
 
-    /** contains the recently used filenames */
-//     QStrList recentFiles;
-
     /** the configuration object of the application */
     KConfig* m_config;
-    /** the key accelerator container */
-//     KAccel *keyAccel;
 
     KRecentFilesAction* m_fileRecent;
-
 
     /** view is the main widget which represents your working area. The View
      * class should handle all events of the view widget.  It is kept empty so
@@ -281,6 +275,11 @@ private:
      * information such as filename and does the serialization of your files.
      */
     RosegardenGUIDoc* m_doc;
+
+    /**
+     * The default tool selected on startup
+     */
+    KAction* m_selectDefaultTool;
 
 };
  
