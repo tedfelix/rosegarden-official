@@ -133,7 +133,7 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
 
     NotationElement *elt = getElementAtXCoord(e);
     if (elt) {
-	emit hoveredOverAbsoluteTimeChanged(elt->getAbsoluteTime());
+	emit hoveredOverAbsoluteTimeChanged(elt->getViewAbsoluteTime());
     }
 
     // if(tracking) ??

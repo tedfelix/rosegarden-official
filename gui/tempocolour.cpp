@@ -19,36 +19,23 @@
     COPYING included with this distribution for more information.
 */
 
-#include "ViewElement.h"
-#include <iostream>
+#include "tempocolour.h"
+#include "colours.h"
+#include "rosedebug.h"
 
-namespace Rosegarden 
+QColor
+TempoColour::getColour(double tempo)
 {
+    int h, s, v;
+    RosegardenGUIColours::SegmentBlock.hsv(&h, &s, &v);
+    v += 20;
+    if (v > 255) v = 255;
 
-ViewElement::ViewElement(Event *e) :
-    m_event(e)
-{
-    // nothing
-}
+    h = 220 - int(tempo);
 
-ViewElement::~ViewElement()
-{
-    // nothing
-}
+    while (h < 0) h += 360;
+    while (h >= 360) h -= 360;
 
-//////////////////////////////////////////////////////////////////////
-
-bool
-operator<(const ViewElement &a, const ViewElement &b)
-{
-    timeT at = a.getViewAbsoluteTime(), bt = b.getViewAbsoluteTime();
-    if (at == bt) return *(a.event()) < *(b.event());
-    else return (at < bt);
-}
-
-//////////////////////////////////////////////////////////////////////
-
-
- 
+    return QColor(h, s, v, QColor::Hsv);
 }
 

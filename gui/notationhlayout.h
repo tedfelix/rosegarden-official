@@ -49,7 +49,6 @@ class NotationHLayout : public ProgressReporter,
 {
 public:
     NotationHLayout(Rosegarden::Composition *c, NotePixmapFactory *npf,
-		    Rosegarden::Quantizer *legatoQuantizer,
 		    const NotationProperties &properties,
                     QObject* parent, const char* name = 0);
 
@@ -259,6 +258,7 @@ protected:
 
     void clearBarList(StaffType &);
 
+
     /**
      * Set the basic data for the given barNo.  If barNo is
      * beyond the end of the existing bar data list, create new
@@ -302,8 +302,6 @@ protected:
      NotationElementList::iterator shortest,
      int shortCount, int totalCount,
      const Rosegarden::TimeSignature &timeSignature) const;
-
-    void legatoQuantize(Rosegarden::Segment &segment);
 
     /// Find earliest element with quantized time of t or greater
     NotationElementList::iterator getStartOfQuantizedSlice 
@@ -355,6 +353,8 @@ protected:
 	return (int)((m_npf->getNoteBodyWidth() / 5) * m_spacing / 100.0);
     }
 
+    void setNotationData(Rosegarden::Segment &segment);
+
     //--------------- Data members ---------------------------------
 
     BarDataMap m_barData;
@@ -370,7 +370,7 @@ protected:
 
     static std::vector<int> m_availableSpacings;
 
-    Rosegarden::Quantizer *m_legatoQuantizer;
+    const Rosegarden::Quantizer *m_notationQuantizer;
     const NotationProperties &m_properties;
 
     int m_timePerProgressIncrement;

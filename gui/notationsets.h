@@ -67,8 +67,8 @@ private:
 
 /// Several sorts of "Beamed Group"
 
-class NotationGroup : public Rosegarden::GenericSet<NotationElement,
-		                                    NotationElementList>
+class NotationGroup : public Rosegarden::AbstractSet<NotationElement,
+		                                     NotationElementList>
 {
 public:
     typedef NotationElementList::iterator NELIterator;

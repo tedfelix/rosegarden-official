@@ -20,17 +20,29 @@
 */
 
 #include <cstdio>
+#include <cctype>
 #include <iostream>
 #include "Event.h"
+#include "XmlExportable.h"
+
+#if (__GNUC__ < 3)
+#include <strstream>
+#define stringstream strstream
+#else
+#include <sstream>
+#endif
 
 namespace Rosegarden 
 {
 using std::string;
 using std::ostream;
 
+PropertyName Event::EventData::NotationTime = "!notationtime";
+PropertyName Event::EventData::NotationDuration = "!notationduration";
+
 
 Event::EventData::EventData(const std::string &type, timeT absoluteTime,
-			    timeT duration, int subOrdering) :
+			    timeT duration, short subOrdering) :
     m_refCount(1),
     m_type(type),
     m_absoluteTime(absoluteTime),
@@ -40,18 +52,25 @@ Event::EventData::EventData(const std::string &type, timeT absoluteTime,
     // empty
 }
 
+Event::EventData::EventData(const std::string &type, timeT absoluteTime,
+			    timeT duration, short subOrdering,
+			    const PropertyMap &properties) :
+    m_refCount(1),
+    m_type(type),
+    m_absoluteTime(absoluteTime),
+    m_duration(duration),
+    m_subOrdering(subOrdering),
+    m_properties(properties)
+{
+    // empty
+}
+
 Event::EventData *Event::EventData::unshare()
 {
     --m_refCount;
 
     EventData *newData = new EventData
-	(m_type, m_absoluteTime, m_duration, m_subOrdering); 
-
-    for (PropertyMap::const_iterator i = m_properties.begin();
-         i != m_properties.end(); ++i) {
-        newData->m_properties.insert
-	    (PropertyPair(i->first, i->second->clone()));
-    }
+	(m_type, m_absoluteTime, m_duration, m_subOrdering, m_properties);
 
     return newData;
 }
@@ -59,6 +78,39 @@ Event::EventData *Event::EventData::unshare()
 Event::EventData::~EventData()
 {
     // nothing -- the PropertyStore objects are deleted in the PropertyMap dtor
+}
+
+timeT
+Event::EventData::getNotationTime() const
+{
+    PropertyMap::const_iterator i = m_properties.find(NotationTime);
+    if (i == m_properties.end()) return m_absoluteTime;
+    else return static_cast<PropertyStore<Int> *>(i->second)->getData();
+}
+
+timeT
+Event::EventData::getNotationDuration() const
+{
+    PropertyMap::const_iterator i = m_properties.find(NotationDuration);
+    if (i == m_properties.end()) return m_duration;
+    else return static_cast<PropertyStore<Int> *>(i->second)->getData();
+}
+
+void
+Event::EventData::setTime(const PropertyName &name, timeT t, timeT deft)
+{
+    PropertyMap::iterator i = m_properties.find(name);
+
+    if (t != deft) {
+	if (i == m_properties.end()) {
+	    m_properties.insert(PropertyPair(name, new PropertyStore<Int>(t)));
+	} else {
+	    static_cast<PropertyStore<Int> *>(i->second)->setData(t);
+	}
+    } else if (i != m_properties.end()) {
+	delete i->second;
+	m_properties.erase(i);
+    }
 }
 
 PropertyMap *
@@ -149,6 +201,93 @@ Event::getAsString(const PropertyName &name) const
         throw NoData(name.getName(), __FILE__, __LINE__);
     }
 }
+
+// We could derive from XmlExportable and make this a virtual method
+// overriding XmlExportable's pure virtual.  We don't, because this
+// class has no other virtual methods and for such a core class we
+// could do without the overhead (given that it wouldn't really gain
+// us anything anyway).
+
+string
+Event::toXmlString()
+{
+    return toXmlString(0);
+}
+
+string
+Event::toXmlString(timeT expectedTime)
+{
+    std::stringstream out;
+
+    out << "<event";
+    
+    if (getType().length() != 0) {
+	out << " type=\"" << getType() << "\"";
+    }
+
+    if (getDuration() != 0) {
+	out << " duration=\"" << getDuration() << "\"";
+    }
+
+    if (getSubOrdering() != 0) {
+	out << " subordering=\"" << getSubOrdering() << "\"";
+    }
+
+    if (expectedTime == 0) {
+	out << " absoluteTime=\"" << getAbsoluteTime() << "\"";
+    } else if (getAbsoluteTime() != expectedTime) {
+	out << " timeOffset=\"" << (getAbsoluteTime() - expectedTime) << "\"";
+    }
+
+    out << ">";
+
+    // Save all persistent properties as <property> elements
+
+    PropertyNames propertyNames(getPersistentPropertyNames());
+    for (PropertyNames::const_iterator i = propertyNames.begin();
+         i != propertyNames.end(); ++i) {
+
+	out << "<property name=\""
+	    << XmlExportable::encode(i->getName()) << "\" ";
+	string type = getPropertyTypeAsString(*i);
+	for (unsigned int j = 0; j < type.size(); ++j) {
+	    type[j] = (isupper(type[j]) ? tolower(type[j]) : type[j]);
+	}
+	out << type << "=\""
+	    << XmlExportable::encode(getAsString(*i)) << "\"/>";
+    }
+
+    // Save non-persistent properties (the persistence applies to
+    // copying events, not load/save) as <nproperty> elements
+    // unless they're view-local.  View-local properties are
+    // assumed to have "::" in their name somewhere.
+
+    propertyNames = getNonPersistentPropertyNames();
+    for (PropertyNames::const_iterator i = propertyNames.begin();
+         i != propertyNames.end(); ++i) {
+
+	std::string s(i->getName());
+	if (s.find("::") != std::string::npos) continue;
+
+	out << "<nproperty name=\""
+	    << XmlExportable::encode(s) << "\" ";
+	string type = getPropertyTypeAsString(*i);
+	for (unsigned int j = 0; j < type.size(); ++j) {
+	    type[j] = (isupper(type[j]) ? tolower(type[j]) : type[j]);
+	}
+	out << type << "=\""
+	    << XmlExportable::encode(getAsString(*i)) << "\"/>";
+    }
+  
+    out << "</event>";
+
+#if (__GNUC__ < 3)
+    out << std::ends;
+#endif
+
+    return out.str();
+}
+
 
 #ifndef NDEBUG
 void
@@ -258,7 +397,7 @@ Event::getNonPersistentPropertyNames() const
 size_t
 Event::getStorageSize() const
 {
-    size_t s = sizeof(*this) + m_data->m_type.size();
+    size_t s = sizeof(Event) + sizeof(EventData) + m_data->m_type.size();
     for (PropertyMap::const_iterator i = m_data->m_properties.begin();
          i != m_data->m_properties.end(); ++i) {
         s += sizeof(i->first);

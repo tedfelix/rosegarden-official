@@ -27,6 +27,7 @@
 #include "NotationTypes.h"
 #include "Selection.h"
 #include "Sets.h"
+#include "Quantizer.h"
 #include "SegmentNotationHelper.h"
 #include "SegmentMatrixHelper.h"
 #include "BaseProperties.h"
@@ -443,9 +444,7 @@ void
 GroupMenuAutoBeamCommand::modifySegment()
 {
     SegmentNotationHelper helper(getSegment());
-
-    helper.autoBeam(getStartTime(), getEndTime(),
-                    GROUP_TYPE_BEAMED, m_quantizer);
+    helper.autoBeam(getStartTime(), getEndTime(), GROUP_TYPE_BEAMED);
 }
 
 void
@@ -812,6 +811,22 @@ TransformsMenuMakeNotesViableCommand::modifySegment()
     Segment &segment(getSegment());
     SegmentNotationHelper helper(segment);
 
+    if (m_selection) {
+	EventSelection::RangeTimeList ranges(m_selection->getRangeTimes());
+	for (EventSelection::RangeTimeList::iterator i = ranges.begin();
+	     i != ranges.end(); ++i) {
+	    helper.makeNotesViable(i->first, i->second, true);
+	    segment.normalizeRests(i->first, i->second);
+	}
+    } else {
+	helper.makeNotesViable(getStartTime(), getEndTime());
+	segment.normalizeRests(getStartTime(), getEndTime());
+    }
+
+/*!!!
+    Segment &segment(getSegment());
+    SegmentNotationHelper helper(segment);
+
     for (EventSelection::eventcontainer::iterator i =
 	     m_selection->getSegmentEvents().begin();
 	 i != m_selection->getSegmentEvents().end(); ) {
@@ -825,29 +840,32 @@ TransformsMenuMakeNotesViableCommand::modifySegment()
 	++j;
 
 	Segment::iterator si = segment.findSingle(*i);
-	if (si != segment.end()) helper.makeNoteViable(si);
+	if (si != segment.end()) helper.makeNoteViable(si, true);
 
 	i = j;
     }
+*/
 }
 
 void
 TransformsMenuDeCounterpointCommand::modifySegment()
 {
-    // How this should work: scan through the selection and, for each
-    // note "n" found, if the next following note "m" not at the same
-    // absolute time as n starts before n ends, then split n at m-n.
-
-    // also, if m starts at the same time as n but has a different
-    // duration, we should split the longer of n and m at the shorter
-    // one's duration.
-    
-    // Is it reasonable to impose that m should also be in the
-    // selection?  Probably.
-
     Segment &segment(getSegment());
     SegmentNotationHelper helper(segment);
 
+    if (m_selection) {
+	EventSelection::RangeTimeList ranges(m_selection->getRangeTimes());
+	for (EventSelection::RangeTimeList::iterator i = ranges.begin();
+	     i != ranges.end(); ++i) {
+	    helper.deCounterpoint(i->first, i->second);
+	    segment.normalizeRests(i->first, i->second);
+	}
+    } else {
+	helper.deCounterpoint(getStartTime(), getEndTime());
+	segment.normalizeRests(getStartTime(), getEndTime());
+    }
+
+/*!!!
     //!!! move to SegmentNotationHelper?
 
     for (EventSelection::eventcontainer::iterator i =
@@ -869,24 +887,24 @@ TransformsMenuDeCounterpointCommand::modifySegment()
 	    i = j;
 	    continue;
 	}
-	timeT ti = (*si)->getAbsoluteTime();
-	timeT di = (*si)->getDuration();
+	timeT ti = helper.getNotationAbsoluteTime(*si);
+	timeT di = helper.getNotationDuration(*si);
 
 	// find next event that's also in selection but is either at
 	// a different time or (if a note) has a different duration
 	Segment::iterator sj = si;
 	while (sj != segment.end()) {
 	    if (m_selection->contains(*sj)) {
-		if ((*sj)->getAbsoluteTime() > ti) break;
+		if (helper.getNotationAbsoluteTime(*sj) > ti) break;
 		if ((*sj)->isa(Note::EventType) &&
-		    (*sj)->getDuration() != di) break;
+		    helper.getNotationDuration(*sj) != di) break;
 	    }
 	    ++sj;
 	}
 
 	if (sj == segment.end()) break; // no split, no more notes
-	timeT tj = (*sj)->getAbsoluteTime();
-	timeT dj = (*sj)->getDuration();
+	timeT tj = helper.getNotationAbsoluteTime(*sj);
+	timeT dj = helper.getNotationDuration(*sj);
 
 	Event *e1 = 0, *e2 = 0;
 	Segment::iterator toGo = segment.end();
@@ -921,6 +939,7 @@ TransformsMenuDeCounterpointCommand::modifySegment()
 
 	i = j;
     }
+*/
 }
 
 
@@ -1064,7 +1083,7 @@ MarksMenuRemoveMarksCommand::modifySegment()
     }
 }
 
-
+/*!!!
 void
 TransformsMenuFixSmoothingCommand::modifySegment()
 {
@@ -1078,7 +1097,7 @@ TransformsMenuFixSmoothingCommand::modifySegment()
 	 segment->findTime(m_selection->getStartTime()),
 	 segment->findTime(m_selection->getEndTime()));
 }
-
+*/
 
 
 const int TransformsMenuInterpretCommand::NoInterpretation      = 0;
@@ -1142,7 +1161,7 @@ TransformsMenuInterpretCommand::modifySegment()
     if (m_interpretations & ApplyTextDynamics) applyTextDynamics();
     if (m_interpretations & ApplyHairpins) applyHairpins();
     if (m_interpretations & StressBeats) stressBeats();
-    if (m_interpretations & Articulate) articulate(false); //!!!
+    if (m_interpretations & Articulate) articulate();
 
     //!!! Finally, in future we should extend this to allow
     // indications on one segment (e.g. top line of piano staff) to
@@ -1359,7 +1378,7 @@ TransformsMenuInterpretCommand::stressBeats()
 }
 
 void
-TransformsMenuInterpretCommand::articulate(bool changeRealDurations)
+TransformsMenuInterpretCommand::articulate()
 {
     // Basic articulations:
     //
@@ -1492,7 +1511,7 @@ TransformsMenuInterpretCommand::articulate(bool changeRealDurations)
 	    if (velocity < 10) velocity = 10;
 	    if (velocity > 127) velocity = 127;
 	    e->set<Int>(VELOCITY, velocity);
-	    
+
 	    timeT duration = m_quantizer->getQuantizedDuration(e);
 	    
 	    // don't mess with the duration of a tied note
@@ -1505,21 +1524,19 @@ TransformsMenuInterpretCommand::articulate(bool changeRealDurations)
 		
 		//!!! deal with tuplets
 		
-		timeT truncation = duration * (-durationChange) / 100;
-
-		if (changeRealDurations) {
-		
-		    Event *newEvent = new Event
-			(*e, e->getAbsoluteTime(), duration);
-		    toInsert.push_back(newEvent);
-		    toErase.push_back(e);
-
-		} else {
-
-		    e->setMaybe<Int>(PERFORMANCE_TRUNCATION, truncation);
-		}
+		Event *newEvent = new Event
+		    (*e, e->getAbsoluteTime(),
+		     duration + duration * durationChange / 100);
+		//!!! pretend quantizer's been here -- fix
+		newEvent->setMaybe<Int>("NotationDurationTarget", duration);
+		toInsert.push_back(newEvent);
+		toErase.push_back(e);
 	    }
 	}
+
+	//!!! things can get inserted twice into toErase because this
+	// assignment doesn't work -- itr is not what we're iterating
+	// with -- hence crash
 
 	itr = chord.getFinalElement();
     }

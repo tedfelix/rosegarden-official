@@ -26,6 +26,7 @@
 #include "NotationTypes.h"
 #include "Composition.h"
 #include "BaseProperties.h"
+#include "Quantizer.h"
 #include "notepixmapfactory.h"
 #include "notationproperties.h"
 #include "notationsets.h"
@@ -61,12 +62,11 @@ using namespace Rosegarden::BaseProperties;
 
 
 NotationVLayout::NotationVLayout(Rosegarden::Composition *c,
-				 Rosegarden::Quantizer *legatoQuantizer,
 				 const NotationProperties &properties,
                                  QObject* parent, const char* name) :
     ProgressReporter(parent, name),
     m_composition(c),
-    m_legatoQuantizer(legatoQuantizer),
+    m_notationQuantizer(c->getNotationQuantizer()),
     m_properties(properties)
 {
     // empty
@@ -132,7 +132,7 @@ NotationVLayout::scanStaff(StaffType &staffBase, timeT, timeT)
 
         } else if (el->isNote()) {
 
-            NotationChord chord(*notes, i, m_legatoQuantizer, m_properties);
+            NotationChord chord(*notes, i, m_notationQuantizer, m_properties);
             if (chord.size() == 0) continue;
 
             std::vector<int> h;
@@ -141,7 +141,7 @@ NotationVLayout::scanStaff(StaffType &staffBase, timeT, timeT)
 		if (!(*chord[j])->event()->get<Int>
 		    (m_properties.HEIGHT_ON_STAFF, height)) {
 		    KMessageBox::sorry
-			((QWidget *)parent(), QString(i18n("Event in chord at %1 has no HEIGHT_ON_STAFF property!\nThis is a bug (the program would previously have crashed by now)").arg((*chord[j])->getAbsoluteTime())));
+			((QWidget *)parent(), QString(i18n("Event in chord at %1 has no HEIGHT_ON_STAFF property!\nThis is a bug (the program would previously have crashed by now)").arg((*chord[j])->getViewAbsoluteTime())));
 		    (*chord[j])->event()->dump(std::cerr);
 		}
 		h.push_back(height);
@@ -189,7 +189,17 @@ NotationVLayout::scanStaff(StaffType &staffBase, timeT, timeT)
                     if (stemLength < 0) stemLength = -stemLength;
 //                    NOTATION_DEBUG << "Setting stem length to "
 //                                         << stemLength << endl;
-                }
+                } else {
+		    if (h[j] < -2 && stemUp) {
+			//!!! needs tuning, & applying for stems too
+			stemLength = staff.getLayoutYForHeight(h[j]) -
+			    staff.getLayoutYForHeight(4);
+		    } else if (h[j] > 10 && !stemUp) {
+			stemLength = staff.getLayoutYForHeight(4) -
+			    staff.getLayoutYForHeight(h[j]);
+		    }
+		}
+
                 el->event()->setMaybe<Int>
 		    (m_properties.UNBEAMED_STEM_LENGTH, stemLength);
             }
@@ -276,7 +286,7 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 
     timeT slurDuration =
 	(*i)->event()->get<Int>(Indication::IndicationDurationPropertyName);
-    timeT endTime = (*i)->getAbsoluteTime() + slurDuration;
+    timeT endTime = (*i)->getViewAbsoluteTime() + slurDuration;
 
     bool haveStart = false;
 
@@ -297,14 +307,14 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 
     while (scooter != staff.getViewElementList()->end()) {
 
-	if ((*scooter)->getAbsoluteTime() >= endTime) break;
+	if ((*scooter)->getViewAbsoluteTime() >= endTime) break;
 
 	if ((*scooter)->isNote()) {
 
 	    long h = 0;
 	    if (!(*scooter)->event()->get<Int>(m_properties.HEIGHT_ON_STAFF, h)) {
 		KMessageBox::sorry
-		    ((QWidget *)parent(), QString(i18n("Spanned note at %1 has no HEIGHT_ON_STAFF property!\nThis is a bug (the program would previously have crashed by now)").arg((*scooter)->getAbsoluteTime())));
+		    ((QWidget *)parent(), QString(i18n("Spanned note at %1 has no HEIGHT_ON_STAFF property!\nThis is a bug (the program would previously have crashed by now)").arg((*scooter)->getViewAbsoluteTime())));
 		(*scooter)->event()->dump(std::cerr);
 	    }
 
@@ -320,7 +330,7 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 		(m_properties.CHORD_PRIMARY_NOTE, primary) && primary) {
 
 		NotationChord chord(*(staff.getViewElementList()), scooter,
-				    m_legatoQuantizer, m_properties);
+				    m_notationQuantizer, m_properties);
 
 		if (beamed) {
 		    if (stemUp) beamAbove = true;

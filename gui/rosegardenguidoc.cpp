@@ -70,6 +70,7 @@
 #include "widgets.h"
 #include "trackeditor.h"
 #include "studiocontrol.h"
+#include "sequencemanager.h"
 #include "AudioPluginInstance.h"
 
 
@@ -282,6 +283,25 @@ void RosegardenGUIDoc::slotAutoSave()
         return;
     }
 
+/*!!!
+    if (((RosegardenGUIApp *)parent())->
+ 	getSequenceManager()->getTransportStatus() != STOPPED) {
+
+ 	// Avoid auto-saving during playback.
+ 	// What we really want to do is wait until the transport is
+ 	// stopped, and then immediately return to this method.  But
+ 	// it's simpler to just set a one-shot timer for a relatively
+ 	// short period -- say 10 seconds
+
+	//!!! Aargh, no -- this will fail if the document is destroyed
+	// between now and then -- need to call back on parent to ask
+	// it to set a timer again
+
+ 	QTimer::singleShot(10000, this, SLOT(slotAutoSave()));
+ 	return;
+    }
+*/
+      
     QString autoSaveFileName = getAutoSaveFileName();
 
     RG_DEBUG << "RosegardenGUIDoc::slotAutoSave() - doc modified - saving '"
@@ -484,6 +504,24 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
         return true;
     }
 
+    RosegardenProgressDialog *progressDlg = 0;
+    KProgress *progress = 0;
+
+    if (!autosave) {
+
+	progressDlg = new RosegardenProgressDialog(i18n("Saving file..."),
+						   100,
+						   (QWidget*)parent());
+	progress = progressDlg->progressBar();
+
+	progressDlg->setMinimumDuration(500);
+	progressDlg->setAutoReset(true);
+
+    } else {
+
+	progress = ((RosegardenGUIApp *)parent())->getProgressBar();
+    }
+
     // Send out Composition (this includes Tracks, Instruments, Tempo
     // and Time Signature changes and any other sub-objects)
     //
@@ -501,6 +539,12 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     outStream << "</configuration>" << endl;
 
     QString time;
+
+    long totalEvents = 0, count = 0;
+    for (Composition::iterator segitr = m_composition.begin();
+         segitr != m_composition.end(); ++segitr) {
+	totalEvents += (*segitr)->size();
+    }
 
     // output all elements
     //
@@ -592,24 +636,9 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 	        if (inChord && (*i)->getDuration() > 0)
 		    if (chordDuration == 0 || (*i)->getDuration() < chordDuration)
 		        chordDuration = (*i)->getDuration();
-
-	        //!!! The SegmentQ-properties need to be backed up despite
-	        //being non-persistent (they're non-persistent because we
-	        //want to lose them when copying the events, not when
-	        //saving them).  What's the best way to do that?  We want
-	        //to do it here, not in XmlStorableEvent, because the
-	        //XmlStorableEvent _is_ the class of Event that's placed
-	        //into the segment when reading, so it doesn't want to be
-	        //burdened with a separate record of the unquantized 
-	        //values or knowledge about the quantizer.  We probably
-	        //just want to make versions of the getFromSource/setToXX
-	        //methods public in the Quantizer
-
-		//!!! we have the same problem with performance delay/duration
-		// need a general solution for this, I guess
     
 	        outStream << '\t'
-		    << XmlStorableEvent(**i).toXmlString(expectedTime) << endl;
+			  << strtoqstr((*i)->toXmlString(expectedTime)) << endl;
 
 	        if (nextEl != segment->end() &&
 		    (*nextEl)->getAbsoluteTime() != absTime &&
@@ -622,6 +651,10 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 	        } else {
 		    expectedTime = absTime + (*i)->getDuration();
 	        }
+
+		if (++count % 500 == 0) {
+		    progress->setValue(count * 100 / totalEvents);
+		}
             }
 
 	    if (inChord) {
@@ -654,6 +687,9 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
         emit documentModified(false);
 	setModified(false);
 	m_commandHistory->documentSaved();
+	delete progressDlg;
+    } else {
+	progress->setProgress(0);
     }
 
     setAutoSaved(true);
@@ -706,13 +742,15 @@ RosegardenGUIDoc::xmlParse(QString &fileContents, QString &errMsg,
     }
 
     RoseXmlHandler handler(this, elementCount);
-    connect(&handler, SIGNAL(setProgress(int)),
-            progress->progressBar(), SLOT(setValue(int)));
-    connect(&handler, SIGNAL(incrementProgress(int)),
-            progress->progressBar(), SLOT(advance(int)));
-    connect(progress, SIGNAL(cancelClicked()),
-            &handler, SLOT(slotCancel()));
 
+    if (progress) {
+	connect(&handler, SIGNAL(setProgress(int)),
+		progress->progressBar(), SLOT(setValue(int)));
+	connect(&handler, SIGNAL(incrementProgress(int)),
+		progress->progressBar(), SLOT(advance(int)));
+	connect(progress, SIGNAL(cancelClicked()),
+		&handler, SLOT(slotCancel()));
+    }
     
     QXmlInputSource source;
     source.setData(fileContents);
@@ -737,7 +775,7 @@ RosegardenGUIDoc::xmlParse(QString &fileContents, QString &errMsg,
     } else if (handler.isDeprecated()) {
 
         // hide the progress dialog
-        progress->hide();
+        if (progress) progress->hide();
 
         QString msg(i18n("This file contains one or more old element types that are now deprecated.\nSupport for these elements may disappear in future versions of Rosegarden.\nWe recommend you re-save this file from this version of Rosegarden,\nto ensure that it can still be re-loaded in future versions."));
         

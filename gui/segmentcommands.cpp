@@ -24,9 +24,12 @@
 #include "rosedebug.h"
 #include "notationcommands.h"
 #include "NotationTypes.h"
+#include "SegmentNotationHelper.h"
 #include "Property.h"
+#include "BaseProperties.h"
 #include "Composition.h"
 #include "PeakFile.h"
+#include "Sets.h"
 
 using Rosegarden::Composition;
 using Rosegarden::Segment;
@@ -430,7 +433,8 @@ SegmentRecordCommand::SegmentRecordCommand(Segment *s) :
     KNamedCommand("Record"),
     m_composition(s->getComposition()),
     m_segment(s),
-    m_detached(false)
+    m_detached(false),
+    m_firstTime(true)
 {
 }
 
@@ -445,7 +449,23 @@ void
 SegmentRecordCommand::execute()
 {
     if (!m_segment->getComposition()) {
+
 	m_composition->addSegment(m_segment);
+
+	if (m_firstTime) {
+	    // Apply a quantization for notation only (does not affect
+	    // any other editing or performance facility).  This
+	    // normalizes the rests for us too.
+	    m_composition->getNotationQuantizer()->quantize(m_segment);
+	    Rosegarden::SegmentNotationHelper helper(*m_segment);
+	    m_segment->insert
+		(helper.guessClef(m_segment->begin(),
+				  m_segment->end()).getAsEvent(0));
+	    helper.autoBeam(m_segment->begin(),
+			    m_segment->end(),
+			    Rosegarden::BaseProperties::GROUP_TYPE_BEAMED);
+	}
+
         m_segment->setLabel(std::string("recorded audio"));
     }
     m_detached = false;
@@ -1150,9 +1170,9 @@ SegmentRescaleCommand::unexecute()
 }
 
 
-SegmentChangeQuantizationCommand::SegmentChangeQuantizationCommand(Rosegarden::StandardQuantization *sq) :
-    KNamedCommand(getGlobalName(sq)),
-    m_quantization(sq)
+SegmentChangeQuantizationCommand::SegmentChangeQuantizationCommand(Rosegarden::timeT unit) :
+    KNamedCommand(getGlobalName(unit)),
+    m_unit(unit)
 {
     // nothing
 }
@@ -1169,11 +1189,10 @@ SegmentChangeQuantizationCommand::execute()
 
 	SegmentRec &rec = m_records[i];
 
-	if (m_quantization) {
+	if (m_unit) {
 
-	    rec.oldQuantizer =
-		new Rosegarden::Quantizer(rec.segment->getQuantizer());
-	    rec.segment->setQuantizeLevel(*m_quantization);
+	    rec.oldUnit = rec.segment->getQuantizer()->getUnit();
+	    rec.segment->setQuantizeLevel(m_unit);
 
 	    rec.wasQuantized = rec.segment->hasQuantization();
 	    rec.segment->setQuantization(true);
@@ -1193,13 +1212,10 @@ SegmentChangeQuantizationCommand::unexecute()
 
 	SegmentRec &rec = m_records[i];
 
-	if (m_quantization) {
+	if (m_unit) {
 
 	    if (!rec.wasQuantized) rec.segment->setQuantization(false);
-
-	    rec.segment->setQuantizeLevel(*rec.oldQuantizer);
-	    delete rec.oldQuantizer;
-	    rec.oldQuantizer = 0;
+	    rec.segment->setQuantizeLevel(rec.oldUnit);
 
 	} else {
 
@@ -1213,18 +1229,21 @@ SegmentChangeQuantizationCommand::addSegment(Rosegarden::Segment *s)
 {
     SegmentRec rec;
     rec.segment = s;
-    rec.oldQuantizer = 0;
+    rec.oldUnit = 0; // shouldn't matter what we initialise this to
     rec.wasQuantized = false; // shouldn't matter what we initialise this to
     m_records.push_back(rec);
 }
     
 QString
-SegmentChangeQuantizationCommand::getGlobalName(Rosegarden::StandardQuantization *sq)
+SegmentChangeQuantizationCommand::getGlobalName(Rosegarden::timeT unit)
 {
-    if (!sq) {
+    if (!unit) {
 	return "Unquantize";
     } else {
-	return QString("Quantize to ") + strtoqstr(sq->name);
+	Rosegarden::timeT error = 0;
+	QString label = NotePixmapFactory().makeNoteMenuLabel
+	    (unit, true, error);
+	return QString("Quantize to %1").arg(label);
     }
 }
 
@@ -1440,4 +1459,211 @@ ChangeCompositionLengthCommand::unexecute()
     m_composition->setEndMarker(m_oldEndTime);
 }
 
+
+SegmentSplitByPitchCommand::SegmentSplitByPitchCommand(Segment *segment,
+						       int p, bool r, bool d,
+						       ClefHandling c) :
+    KNamedCommand("Split by Pitch"),
+    m_segment(segment),
+    m_newSegmentA(0),
+    m_newSegmentB(0),
+    m_splitPitch(p),
+    m_ranging(r),
+    m_dupNonNoteEvents(d),
+    m_clefHandling(c),
+    m_executed(false)
+{
+}
+
+SegmentSplitByPitchCommand::~SegmentSplitByPitchCommand()
+{
+    if (m_executed) {
+	delete m_segment;
+    } else { 
+	delete m_newSegmentA;
+	delete m_newSegmentB;
+    }
+}
+
+void
+SegmentSplitByPitchCommand::execute()
+{
+    m_newSegmentA = new Segment;
+    m_newSegmentB = new Segment;
+
+    m_newSegmentA->setTrack(m_segment->getTrack());
+    m_newSegmentA->setStartTime(m_segment->getStartTime());
+    m_segment->getComposition()->addSegment(m_newSegmentA);
+
+    m_newSegmentB->setTrack(m_segment->getTrack());
+    m_newSegmentB->setStartTime(m_segment->getStartTime());
+    m_segment->getComposition()->addSegment(m_newSegmentB);
+    
+    int splitPitch(m_splitPitch);
+    
+    for (Segment::iterator i = m_segment->begin();
+	 m_segment->isBeforeEndMarker(i); ++i) {
+	
+	if ((*i)->isa(Rosegarden::Note::EventRestType)) continue;
+	if ((*i)->isa(Rosegarden::Clef::EventType) &&
+	    m_clefHandling != LeaveClefs) continue;
+
+	if ((*i)->isa(Rosegarden::Note::EventType)) {
+	    
+	    if (m_ranging) {
+		splitPitch = getSplitPitchAt(i, splitPitch);
+	    }
+	    
+	    if ((*i)->has(Rosegarden::BaseProperties::PITCH) &&
+		(*i)->get<Rosegarden::Int>(Rosegarden::BaseProperties::PITCH) <
+		splitPitch) {
+
+		m_newSegmentB->insert(new Event(**i));
+	    } else {
+		m_newSegmentA->insert(new Event(**i));
+	    }
+	    
+	} else {
+
+	    m_newSegmentA->insert(new Event(**i));
+
+	    if (m_dupNonNoteEvents) {
+		m_newSegmentB->insert(new Event(**i));
+	    }
+	}
+    }
+    
+    Rosegarden::SegmentNotationHelper helperA(*m_newSegmentA);
+    Rosegarden::SegmentNotationHelper helperB(*m_newSegmentB);
+
+    if (m_clefHandling == RecalculateClefs) {
+
+	m_newSegmentA->insert
+	    (helperA.guessClef(m_newSegmentA->begin(),
+			       m_newSegmentA->end()).getAsEvent
+	     (m_newSegmentA->getStartTime()));
+
+	m_newSegmentB->insert
+	    (helperB.guessClef(m_newSegmentB->begin(),
+			       m_newSegmentB->end()).getAsEvent
+	     (m_newSegmentB->getStartTime()));
+
+    } else if (m_clefHandling == UseTrebleAndBassClefs) {
+
+	m_newSegmentA->insert
+	    (Rosegarden::Clef(Rosegarden::Clef::Treble).getAsEvent
+	     (m_newSegmentA->getStartTime()));
+
+	m_newSegmentB->insert
+	    (Rosegarden::Clef(Rosegarden::Clef::Bass).getAsEvent
+	     (m_newSegmentB->getStartTime()));
+    }
+    
+    m_segment->getComposition()->getNotationQuantizer()->quantize(m_newSegmentA);
+    m_segment->getComposition()->getNotationQuantizer()->quantize(m_newSegmentB);
+    helperA.autoBeam(m_newSegmentA->begin(), m_newSegmentA->end(),
+		     Rosegarden::BaseProperties::GROUP_TYPE_BEAMED);
+    helperB.autoBeam(m_newSegmentB->begin(), m_newSegmentB->end(),
+		     Rosegarden::BaseProperties::GROUP_TYPE_BEAMED);
+
+    std::string label = m_segment->getLabel();
+    m_newSegmentA->setLabel(label + std::string(" (upper)"));
+    m_newSegmentB->setLabel(label + std::string(" (lower)"));
+
+    m_segment->getComposition()->detachSegment(m_segment);
+    m_executed = true;
+}
+    
+void
+SegmentSplitByPitchCommand::unexecute()
+{
+    m_newSegmentA->getComposition()->addSegment(m_segment);
+    delete m_newSegmentA;
+    delete m_newSegmentB;
+    m_newSegmentA = 0;
+    m_newSegmentB = 0;
+    m_executed = false;
+}
+
+int
+SegmentSplitByPitchCommand::getSplitPitchAt(Segment::iterator i,
+					    int lastSplitPitch)
+{
+    typedef std::set<int>::iterator PitchItr;
+    std::set<int> pitches;
+
+    // when this algorithm appears to be working ok, we should be
+    // able to make it much quicker
+
+    const Rosegarden::Quantizer *quantizer
+	(m_segment->getComposition()->getNotationQuantizer());
+
+    int myHighest, myLowest;
+    int prevHighest = 0, prevLowest = 0;
+    bool havePrev = false;
+
+    Rosegarden::Chord c0(*m_segment, i, quantizer);
+    std::vector<int> c0p(c0.getPitches());
+    pitches.insert<std::vector<int>::iterator>(c0p.begin(), c0p.end());
+
+    myLowest = c0p[0];
+    myHighest = c0p[c0p.size()-1];
+    
+    Segment::iterator j(c0.getPreviousNote());
+    if (j != m_segment->end()) {
+
+	havePrev = true;
+
+	Rosegarden::Chord c1(*m_segment, j, quantizer);
+	std::vector<int> c1p(c1.getPitches());
+	pitches.insert<std::vector<int>::iterator>(c1p.begin(), c1p.end());
+
+	prevLowest = c1p[0];
+	prevHighest = c1p[c1p.size()-1];
+    }
+
+    if (pitches.size() < 2) return lastSplitPitch;
+
+    PitchItr pi = pitches.begin();
+    int lowest(*pi);
+
+    pi = pitches.end(); --pi;
+    int highest(*pi);
+
+    if ((pitches.size() == 2 || highest - lowest <= 18) &&
+	  myHighest > lastSplitPitch &&
+ 	   myLowest < lastSplitPitch &&
+	prevHighest > lastSplitPitch &&
+	 prevLowest < lastSplitPitch) {
+
+	if (havePrev) {
+	    if ((myLowest > prevLowest && myHighest > prevHighest) ||
+		(myLowest < prevLowest && myHighest < prevHighest)) {
+		int avgDiff = ((myLowest - prevLowest) +
+			       (myHighest - prevHighest)) / 2;
+		if (avgDiff < -5) avgDiff = -5;
+		if (avgDiff >  5) avgDiff =  5;
+		return lastSplitPitch + avgDiff;
+	    }
+	}
+
+	return lastSplitPitch;
+    }
+
+    int middle = (highest - lowest) / 2 + lowest;
+
+    while (lastSplitPitch > middle && lastSplitPitch > m_splitPitch - 12) {
+	if (lastSplitPitch - lowest < 12) return lastSplitPitch;
+	if (lastSplitPitch <= m_splitPitch - 12) return lastSplitPitch;
+	--lastSplitPitch;
+    }
+
+    while (lastSplitPitch < middle && lastSplitPitch < m_splitPitch + 12) {
+	if (highest - lastSplitPitch < 12) return lastSplitPitch;
+	if (lastSplitPitch >= m_splitPitch + 12) return lastSplitPitch;
+	++lastSplitPitch;
+    }
+
+    return lastSplitPitch;
+}
 

@@ -45,6 +45,7 @@
 #include "dialogs.h"
 #include "chordnameruler.h"
 #include "temporuler.h"
+#include "rawnoteruler.h"
 #include "notationhlayout.h"
 
 #include "ktmpstatusmsg.h"
@@ -155,59 +156,6 @@ NotationView::slotChangeSpacing(int spacing)
     updateView();
 }
 
-void NotationView::slotChangeLegatoFromIndex(int n)
-{
-    if (n >= (int)m_legatoDurations.size())
-        n = m_legatoDurations.size() - 1;
-    slotChangeLegato(m_legatoDurations[n]);
-}
-
-void
-NotationView::slotChangeLegatoFromAction()
-{
-    const QObject *s = sender();
-    QString name = s->name();
-
-    if (name.left(10) == "smoothing_") {
-	int smoothing = name.right(name.length() - 10).toInt();
-	if (smoothing > 0) slotChangeLegato(smoothing);
-    } else {
-	KMessageBox::sorry
-	    (this, QString(i18n("Unknown smoothing action %1").arg(name)));
-    }
-}
-
-void NotationView::slotChangeLegato(timeT duration)
-{
-    if (m_legatoQuantizer->getUnit() == duration) return;
-
-    Rosegarden::Quantizer q(Rosegarden::Quantizer::RawEventData,
-			    getViewLocalPropertyPrefix() + "Q",
-			    Rosegarden::Quantizer::LegatoQuantize,
-			    duration);
-    *m_legatoQuantizer = q;
-    
-    m_smoothingSlider->setSize(duration);
-
-    KToggleAction *action = dynamic_cast<KToggleAction *>
-	(actionCollection()->action(QString("smoothing_%1").arg(duration)));
-    if (action) action->setChecked(true);
-    else {
-	NOTATION_DEBUG
-	    << "WARNING: Expected action \"smoothing_" << duration
-	    << "\" to be a KToggleAction, but it isn't (or doesn't exist)"
-	    << endl;
-    }
-    
-    applyLayout();
-
-    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-        m_staffs[i]->renderAllElements();
-        m_staffs[i]->positionAllElements();
-    }
-
-    updateView();
-}
 
 
 void
@@ -290,7 +238,7 @@ NotationView::slotChangeFont(std::string newName, int newSize)
         return;
     }
 
-//!!! not used?    bool changedFont = (newName != m_fontName);
+    bool changedFont = (newName != m_fontName);
 
     std::string oldName = m_fontName;
     m_fontName = newName;
@@ -325,6 +273,8 @@ NotationView::slotChangeFont(std::string newName, int newSize)
     setupFontSizeMenu(oldName);
 
     m_hlayout->setNotePixmapFactory(m_notePixmapFactory);
+
+    if (!changedFont) return; // might have been called to initialise menus etc
 
     NOTATION_DEBUG << "about to change font" << endl;
 
@@ -632,7 +582,7 @@ void NotationView::slotGroupAutoBeam()
     KTmpStatusMsg msg(i18n("Auto-beaming selection..."), this);
 
     addCommandToHistory(new GroupMenuAutoBeamCommand
-                        (*m_currentEventSelection, m_legatoQuantizer));
+                        (*m_currentEventSelection));
 }
 
 void NotationView::slotGroupBreak()
@@ -1054,10 +1004,7 @@ void NotationView::slotTransformsQuantize()
 {
     if (!m_currentEventSelection) return;
 
-    QuantizeDialog *dialog = new QuantizeDialog
-	(this,
-         Rosegarden::Quantizer::GlobalSource,
-	 Rosegarden::Quantizer::RawEventData);
+    QuantizeDialog *dialog = new QuantizeDialog(this, true);
 
     if (dialog->exec() == QDialog::Accepted) {
 	KTmpStatusMsg msg(i18n("Quantizing..."), this);
@@ -1067,16 +1014,6 @@ void NotationView::slotTransformsQuantize()
     }
 }
 
-void NotationView::slotTransformsFixSmoothing()
-{
-    //!!! actually, this is a pretty useless function
-
-    if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Fixing smoothed values..."), this);
-    addCommandToHistory(new TransformsMenuFixSmoothingCommand
-			(*m_currentEventSelection, m_legatoQuantizer));
-}
-
 void NotationView::slotTransformsInterpret()
 {
     //!!! dialog
@@ -1084,7 +1021,8 @@ void NotationView::slotTransformsInterpret()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Interpreting selection..."), this);
     addCommandToHistory(new TransformsMenuInterpretCommand
-			(*m_currentEventSelection, m_legatoQuantizer,
+			(*m_currentEventSelection,
+			 m_document->getComposition().getNotationQuantizer(),
 			 TransformsMenuInterpretCommand::AllInterpretations));
 }
     
@@ -1321,6 +1259,9 @@ NotationView::slotSetCurrentStaff(int y)
 	}
 	m_chordNameRuler->setCurrentSegment
 	    (&m_staffs[m_currentStaff]->getSegment());
+	m_rawNoteRuler->setCurrentSegment
+	    (&m_staffs[m_currentStaff]->getSegment());
+	m_rawNoteRuler->repaint();
     }
     
     updateView();
@@ -1361,7 +1302,7 @@ NotationView::slotSetInsertCursorPosition(double x, int y, bool scroll,
 	slotSetInsertCursorPosition(staff->getSegment().getEndTime(), scroll,
 				    updateNow);
     } else {
-	slotSetInsertCursorPosition((*i)->getAbsoluteTime(), scroll,
+	slotSetInsertCursorPosition((*i)->getViewAbsoluteTime(), scroll,
 				    updateNow);
     }
 }    
@@ -1432,7 +1373,7 @@ NotationView::doDeferredCursorMove()
 	}
 	m_insertionTime = staff->getSegment().getStartTime();
     } else {
-	m_insertionTime = (*i)->getAbsoluteTime();
+	m_insertionTime = (*i)->getViewAbsoluteTime();
     }
 
     if (i == staff->getViewElementList()->end() ||
@@ -1452,7 +1393,8 @@ NotationView::doDeferredCursorMove()
 	if (!(*i)->isNote() && !(*i)->isRest()) {
 	    NotationElementList::iterator j = i;
 	    while (j != staff->getViewElementList()->end()) {
-		if ((*j)->getAbsoluteTime() != (*i)->getAbsoluteTime()) break;
+		if ((*j)->getViewAbsoluteTime() !=
+		    (*i)->getViewAbsoluteTime()) break;
 		if ((*j)->isNote() || (*j)->isRest()) {
 		    i = j;
 		    break;
@@ -1639,6 +1581,12 @@ void NotationView::slotToggleChordsRuler()
 {
     if (m_hlayout->isPageMode()) return;
     toggleWidget(m_chordNameRuler, "show_chords_ruler");
+}
+
+void NotationView::slotToggleRawNoteRuler()
+{
+    if (m_hlayout->isPageMode()) return;
+    toggleWidget(m_rawNoteRuler, "show_raw_note_ruler");
 }
 
 void NotationView::slotToggleTempoRuler()

@@ -43,7 +43,8 @@ namespace Rosegarden
 {
 
 Configuration::Configuration(const Configuration &conf) :
-    PropertyMap()
+    PropertyMap(),
+    XmlExportable()
 {
     clear();
 

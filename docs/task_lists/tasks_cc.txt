@@ -1,4 +1,61 @@
 
+20030129 task list for new_notation_quantization branch
+=======================================================
+
+ 1. Sort out question of how to store notation timings.
+    Alternatives are:
+
+    c. Data members in Event that are preserved in plain copy
+       but lost when absolute time / duration change.
+
+    Decided on this option, but storing the "data members" as
+    properties, just providing simpler accessors for them and
+    some logic to remove them when the times change.  That way
+    there's little overhead for events that don't have them.
+    [DONE]
+
+    Rejected alternative:
+
+    a. Non-persistent properties.
+       i.  Option to recalculate after each edit [that didn't
+           originate in notation view]
+       ii. Frequent use of clone() method to preserve values
+           for undo etc
+    b. Persistent properties as offsets from original times.
+       i.  When to get rid of them?
+    d. Non-persistent properties, but modify Event so that non-
+       persistent properties are only lost when absolute time /
+       duration change (as the data members in c).  Bad plan,
+       because many non-persistent properties need to be lost
+       when e.g. copying events from one segment to another.
+
+ 2. Improve ranging split-by-pitch (when top and bottom note
+    go up and down, if split pitch is between them, move split
+    pitch) [DONE well enough for now]
+
+ 3. Fix normalizeRests which is currently doing some things
+    wrong -- "restaurant" test file from Wily Yuen's sister.
+    Needs to work bar-by-bar.
+
+ 4. Restore old note-quantizer as another quantizer type.
+
+ 5. Parameterise out notation quantizer options and settings.
+
+ 6. Add configuration page for notation quantizing: when to do
+    it automatically, what to do (quantizer options, collapse
+    tied notes beforehand, split into ties across barlines &c
+    afterwards, de-counterpoint, re-beam).
+
+ 7. More fixes to actual quantization
+
+ 8. Merge back to HEAD
+
+ 9. When inserting a note, use the Interpret code to calculate
+    a velocity for it
+
+10. Dragging notes &c
+
+
 20020729 task list
 ==================
 

@@ -101,6 +101,9 @@ public:
     unsigned int numberOfTracks() { return m_numberOfTracks; }
     bool hasTimeChanges() { return m_containsTimeChanges; }
 
+    // If a file open or save failed
+    std::string getError() { return m_error; }
+
     // Conversion in and out of Rosegarden
     //
     Rosegarden::Composition* convertToRosegarden(Rosegarden::Composition *
@@ -157,6 +160,7 @@ private:
     //
     Studio   *m_studio;
 
+    std::string m_error;
 };
 
 }

@@ -474,8 +474,8 @@ protected:
 
     // Hold our matrix quantization values and snap values
     //
-    std::vector<Rosegarden::StandardQuantization>        m_quantizations;
-    std::vector<Rosegarden::timeT>                       m_snapValues;
+    std::vector<Rosegarden::timeT> m_quantizations;
+    std::vector<Rosegarden::timeT> m_snapValues;
 
     std::vector<std::pair<ControlRuler*, ControlBox*> >  m_controlRulers;
 

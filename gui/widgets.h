@@ -34,6 +34,8 @@
 #include <qcolor.h>
 #include <qdatetime.h>
 
+#include "Event.h" // for timeT
+
 #define private protected // ugly hack but we want to access KProgressDialog::mShowTimer
 #include <kprogress.h>
 #undef private
@@ -80,10 +82,10 @@ public:
 
 protected:
     virtual void wheelEvent(QWheelEvent *e);
-
+/*!!!
 signals:
     void propagate(int); // update the Segment with new value
-
+*/
 private:
     bool m_reverse;
 
@@ -348,5 +350,52 @@ protected:
     QColor m_knobColour;
 };
 
+namespace Rosegarden { class Quantizer; }
+
+class RosegardenQuantizeParameters : public QFrame
+{
+    Q_OBJECT
+public:
+    RosegardenQuantizeParameters(QWidget *parent,
+				 bool showNotationOption,
+				 QString configCategory,
+				 QString preamble = 0);
+    
+    /**
+     * Returned quantizer object is on heap -- caller must delete.
+     * Also writes values to KConfig if so requested in constructor.
+     */
+    Rosegarden::Quantizer *getQuantizer() const;
+
+    bool shouldRebeam() const { return m_rebeam; }
+    bool shouldDeCounterpoint() const { return m_deCounterpoint; }
+    bool shouldMakeViable() const { return m_makeViable; }
+
+public slots:
+    void slotTypeChanged(int);
+
+protected:
+    QString m_configCategory;
+
+    std::vector<Rosegarden::timeT> m_standardQuantizations;
+
+    RosegardenComboBox *m_typeCombo;
+
+    QGroupBox *m_gridBox;
+    QCheckBox *m_durationCheckBox;
+    RosegardenComboBox *m_gridUnitCombo;
+
+    QGroupBox *m_notationBox;
+    QCheckBox *m_notationTarget;
+    RosegardenComboBox *m_notationUnitCombo;
+    RosegardenComboBox *m_simplicityCombo;
+    RosegardenComboBox *m_maxTuplet;
+    QCheckBox *m_articulate;
+
+    QCheckBox *m_makeViable;
+    QCheckBox *m_deCounterpoint;
+    QCheckBox *m_rebeam;
+};
+    
 
 #endif // _WIDGETS_H_

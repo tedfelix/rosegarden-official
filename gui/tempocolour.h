@@ -45,26 +45,5 @@ private:
 
 };
 
-QColor
-TempoColour::getColour(double tempo)
-{
-    // Get hue value
-    //
-    int h, s, v;
-    RosegardenGUIColours::TextRulerBackground.hsv(&h, &s, &v);
-
-    // Adjusted about default tempo of 120bpm - we can play around
-    // with this algorithm
-    //
-    double adjusted = (tempo - 120.0);
-    h = h + int(adjusted);
-
-    if (h > 255) h = 255;
-
-    return QColor(h, s, v, QColor::Hsv);
-}
-
-
-
 #endif // _TEMPOCOLOUR_H_
 

@@ -59,6 +59,7 @@ rosegarden_SOURCES = \
 	qcanvasgroupableitem.cpp \
 	qcanvassimplesprite.cpp \
 	qdeferscrollview.cpp \
+	rawnoteruler.cpp \
 	rg21io.cpp \
 	rosedebug.cpp \
         rosegardenconfiguredialog.cpp \
@@ -81,6 +82,7 @@ rosegarden_SOURCES = \
 	staffline.cpp \
         studiocommands.cpp \
         studiocontrol.cpp \
+	tempocolour.cpp \
 	temporuler.cpp \
 	textruler.cpp \
         trackbuttons.cpp \

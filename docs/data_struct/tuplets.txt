@@ -25,7 +25,8 @@ store a starting time) it makes more sense to ensure that the starting
 times of the tuplets and of the first event after the tupled group are
 consistent with the stored durations.  For this reason, Rosegarden 4
 stores the effective duration of each tuplet, and records the nominal
-duration separately in an event property.
+duration (or rather, data necessary to calculate it) separately in
+event properties.
 
 The complete set of properties associated with a tupled note or rest:
 
@@ -50,9 +51,8 @@ The complete set of properties associated with a tupled note or rest:
     The "display" duration of the event, for example the duration
     of a quaver if the group is made up of quaver triplets.
 
-    This could be calculated from the duration of the event and
-    the tuplet counts of the group -- although there may be some
-    rounding error.
+    This is a non-persistent property, calculated at rendering time
+    from the duration of the event and the tuplet counts of the group.
 
  -- BaseProperties::BEAMED_GROUP_UNTUPLED_COUNT
     Number to be drawn on the tupling line.  For a tuplet group

@@ -85,10 +85,7 @@ SegmentPerformanceHelper::getTiedNotes(iterator i)
 timeT
 SegmentPerformanceHelper::getSoundingAbsoluteTime(iterator i)
 {
-    timeT absTime = (*i)->getAbsoluteTime();
-    timeT delay = 0;
-    (*i)->get<Int>(PERFORMANCE_DELAY, delay);
-    return absTime + delay;
+    return (*i)->getAbsoluteTime();
 }
 
 timeT
@@ -117,11 +114,6 @@ SegmentPerformanceHelper::getSoundingDuration(iterator i)
 		d += (**ci)->getDuration();
 	    }
 	}
-
-	timeT performanceTruncation = 0;
-	(*i)->get<Int>(PERFORMANCE_TRUNCATION, performanceTruncation);
-	d -= performanceTruncation;
-	if (d < 0) d = 0;
     }
 
     return d;

@@ -46,6 +46,9 @@ public:
 
     ~NotationElement();
 
+    virtual Rosegarden::timeT getViewAbsoluteTime() const;
+    virtual Rosegarden::timeT getViewDuration() const;
+
     /**
      * Returns the X coordinate of the element, as computed by the
      * layout. This is not the coordinate of the associated canvas

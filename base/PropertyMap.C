@@ -23,10 +23,27 @@
 #include <iostream>
 #include <string>
 #include "PropertyMap.h"
+#include "XmlExportable.h"
 
 namespace Rosegarden 
 {
 using std::string;
+
+PropertyMap::PropertyMap(const PropertyMap &pm)
+{
+    clear();
+    
+    for (const_iterator i = pm.begin(); i != pm.end(); ++i) {
+	insert(PropertyPair(i->first, i->second->clone()));
+    }
+}
+
+
+// We could derive from XmlExportable and make this a virtual method
+// overriding XmlExportable's pure virtual.  We don't, because this
+// class has no other virtual methods and for such a core class we
+// could do without the overhead (given that it wouldn't really gain
+// us anything anyway).
 
 string
 PropertyMap::toXmlString()
@@ -36,9 +53,9 @@ PropertyMap::toXmlString()
     for (const_iterator i = begin(); i != end(); ++i) {
 	
 	xml +=
-	    "<property name=\"" + encode(i->first.getName()) +
+	    "<property name=\"" + XmlExportable::encode(i->first.getName()) +
 	    "\" " + i->second->getTypeName() +
-	    "=\"" + encode(i->second->unparse()) +
+	    "=\"" + XmlExportable::encode(i->second->unparse()) +
 	    "\"/>";
 
     }

@@ -79,7 +79,7 @@ public:
     };
 
     Event(const std::string &type,
-	  timeT absoluteTime, timeT duration = 0, int subOrdering = 0) :
+	  timeT absoluteTime, timeT duration = 0, short subOrdering = 0) :
 	m_data(new EventData(type, absoluteTime, duration, subOrdering)),
 	m_nonPersistentProperties(0) { }
 
@@ -93,6 +93,8 @@ public:
 	share(e);
 	unshare();
 	m_data->m_absoluteTime = absoluteTime;
+	setNotationAbsoluteTime(absoluteTime);
+	setNotationDuration(m_data->m_duration);
     }
 
     Event(const Event &e, timeT absoluteTime, timeT duration) :
@@ -101,15 +103,19 @@ public:
 	unshare();
 	m_data->m_absoluteTime = absoluteTime;
 	m_data->m_duration = duration;
+	setNotationAbsoluteTime(absoluteTime);
+	setNotationDuration(duration);
     }
 
-    Event(const Event &e, timeT absoluteTime, timeT duration, int subOrdering):
+    Event(const Event &e, timeT absoluteTime, timeT duration, short subOrdering):
 	m_nonPersistentProperties(0) {
 	share(e);
 	unshare();
 	m_data->m_absoluteTime = absoluteTime;
 	m_data->m_duration = duration;
 	m_data->m_subOrdering = subOrdering;
+	setNotationAbsoluteTime(absoluteTime);
+	setNotationDuration(duration);
     }
 
     ~Event() { lose(); }
@@ -126,7 +132,7 @@ public:
     bool  isa(const std::string &t) const { return (m_data->m_type == t); }
     timeT getAbsoluteTime() const    { return m_data->m_absoluteTime; }
     timeT getDuration()     const    { return m_data->m_duration; }
-    int   getSubOrdering()  const    { return m_data->m_subOrdering; }
+    short getSubOrdering()  const    { return m_data->m_subOrdering; }
 
     bool  has(const PropertyName &name) const;
 
@@ -171,6 +177,11 @@ public:
     // throw (BadType);
 
     void unset(const PropertyName &name);
+
+    timeT getNotationAbsoluteTime() const { return m_data->getNotationTime(); }
+    timeT getNotationDuration() const { return m_data->getNotationDuration(); }
+    void setNotationAbsoluteTime(timeT t) { unshare(); m_data->setNotationTime(t); }
+    void setNotationDuration(timeT d) { unshare(); m_data->setNotationDuration(d); }
     
     typedef std::vector<PropertyName> PropertyNames;
     PropertyNames getPropertyNames() const;
@@ -210,6 +221,19 @@ public:
     // approximate, for debugging and inspection purposes
     size_t getStorageSize() const;
 
+    /**
+     * Get the XML string representing the object.
+     */
+    std::string toXmlString();
+
+    /**
+     * Get the XML string representing the object.  If the absolute
+     * time of the event differs from the given absolute time, include
+     * the difference between the two as a timeOffset attribute.
+     * If expectedTime == 0, include an absoluteTime attribute instead.
+     */
+    std::string toXmlString(timeT expectedTime);
+
 #ifndef NDEBUG
     void dump(std::ostream&) const;
 #else
@@ -227,13 +251,16 @@ protected:
     void setType(const std::string &t) { unshare(); m_data->m_type = t; }
     void setAbsoluteTime(timeT t)      { unshare(); m_data->m_absoluteTime = t; }
     void setDuration(timeT d)	       { unshare(); m_data->m_duration = d; }
-    void setSubOrdering(int o)	       { unshare(); m_data->m_subOrdering = o; }
+    void setSubOrdering(short o)       { unshare(); m_data->m_subOrdering = o; }
 
 private:
     struct EventData // Data that are shared between shallow-copied instances
     {
 	EventData(const std::string &type,
-		  timeT absoluteTime, timeT duration, int subOrdering);
+		  timeT absoluteTime, timeT duration, short subOrdering);
+	EventData(const std::string &type,
+		  timeT absoluteTime, timeT duration, short subOrdering,
+		  const PropertyMap &properties);
 	EventData *unshare();
 	~EventData();
 	unsigned int m_refCount;
@@ -241,13 +268,28 @@ private:
 	std::string m_type;
 	timeT m_absoluteTime;
 	timeT m_duration;
-	int m_subOrdering;
+	short m_subOrdering;
 
 	PropertyMap m_properties;
+
+	// These are properties because we don't care so much about
+	// raw speed in get/set, but we do care about storage size for
+	// events that don't have them or that have zero values:
+	timeT getNotationTime() const;
+	timeT getNotationDuration() const;
+	void setNotationTime(timeT t) {
+	    setTime(NotationTime, t, m_absoluteTime);
+	}
+	void setNotationDuration(timeT d) {
+	    setTime(NotationDuration, d, m_duration);
+	}
 
     private:
 	EventData(const EventData &);
 	EventData &operator=(const EventData &);
+	static PropertyName NotationTime;
+	static PropertyName NotationDuration;
+	void setTime(const PropertyName &name, timeT value, timeT deft);
     };	
 
     EventData *m_data;

@@ -21,9 +21,9 @@
 
 #include "Segment.h"
 #include "NotationTypes.h"
-#include "Quantizer.h"
 #include "BaseProperties.h"
 #include "Composition.h"
+#include "Quantizer.h"
 
 #include <iostream>
 #include <algorithm>
@@ -51,8 +51,7 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
     m_audioStartTime(0, 0),
     m_audioEndTime(0, 0),
     m_repeating(false),
-    m_quantizer(new Quantizer(Quantizer::GlobalSource,
-                              Quantizer::RawEventData)),
+    m_quantizer(new BasicQuantizer()),
     m_quantize(false),
     m_transpose(0),
     m_delay(0),
@@ -75,14 +74,17 @@ Segment::Segment(const Segment &segment):
     m_audioStartTime(segment.getAudioStartTime()),
     m_audioEndTime(segment.getAudioEndTime()),
     m_repeating(segment.isRepeating()),
-    m_quantizer(new Quantizer(segment.getQuantizer())),
+    m_quantizer(new BasicQuantizer(segment.m_quantizer->getUnit(),
+				   segment.m_quantizer->getDoDurations())),
     m_quantize(segment.hasQuantization()),
     m_transpose(segment.getTranspose()),
     m_delay(segment.getDelay()),
     m_realTimeDelay(segment.getRealTimeDelay())
 {
-    for (iterator it = segment.begin(); segment.isBeforeEndMarker(it); ++it)
+    for (iterator it = segment.begin();
+	 segment.isBeforeEndMarker(it); ++it) {
         insert(new Event(**it));
+    }
 }
 
 
@@ -93,11 +95,12 @@ Segment::~Segment()
 	     << " observers still extant" << endl;
     }
 
+    if (m_composition) m_composition->detachSegment(this);
+
     // delete content
     for (iterator it = begin(); it != end(); ++it) delete (*it);
 
     delete m_endMarkerTime;
-    delete m_quantizer;
 }
 
 
@@ -452,14 +455,13 @@ int Segment::getNextId() const
 
 
 void
-Segment::fillWithRests(timeT endTime, bool permitQuantize)
+Segment::fillWithRests(timeT endTime)
 {
-    fillWithRests(getEndTime(), endTime, permitQuantize);
+    fillWithRests(getEndTime(), endTime);
 }
 
 void
-Segment::fillWithRests(timeT startTime,
-		       timeT endTime, bool permitQuantize)
+Segment::fillWithRests(timeT startTime, timeT endTime)
 {
     if (startTime < m_startTime) {
 	Composition *c = m_composition;
@@ -477,9 +479,6 @@ Segment::fillWithRests(timeT startTime,
 
     timeT restDuration = endTime - startTime;
 
-    if (permitQuantize) {
-	restDuration = Quantizer().quantizeDuration(restDuration);
-    }
 /*
     cerr << "Segment(" << this << ")::fillWithRests: endTime "
 	 << endTime << ", startTime " << startTime << ", composition "
@@ -499,7 +498,7 @@ Segment::fillWithRests(timeT startTime,
 }
 
 void
-Segment::normalizeRests(timeT startTime, timeT endTime, bool permitQuantize)
+Segment::normalizeRests(timeT startTime, timeT endTime)
 {
     if (startTime < m_startTime) {
 	Composition *c = m_composition;
@@ -507,6 +506,15 @@ Segment::normalizeRests(timeT startTime, timeT endTime, bool permitQuantize)
 	m_startTime = startTime;
 	if (c) c->addSegment(this);
     }
+
+    //!!! Need to remove the rests then relocate the start time
+    // and get the notation end time for the nearest note before that
+    // (?)
+
+    //!!! We need to insert rests at fictitious unquantized times that
+    //are broadly correct, so as to maintain ordering of notes and
+    //rests in the unquantized segment.  The quantized times should go
+    //in notation-prefix properties.
 
     // Preliminary: If there are any time signature changes between
     // the start and end times, consider separately each of the sections
@@ -526,7 +534,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime, bool permitQuantize)
 	}
     }
 
-    // First stage: erase all existing rests in this range.
+    // First stage: erase all existing non-tupleted rests in this range.
 
 //    cerr << "Segment::normalizeRests " << startTime << " -> "
 //	 << endTime << endl;
@@ -546,6 +554,9 @@ Segment::normalizeRests(timeT startTime, timeT endTime, bool permitQuantize)
     // If there's a rest preceding the start time, with no notes
     // between us and it, and if it doesn't have precisely the
     // right duration, then we need to normalize it too
+
+    //!!! needs modification for new scheme
+
     iterator scooter = ia;
     while (scooter-- != begin()) {
 //	if ((*scooter)->isa(Note::EventRestType)) { //!!! experimental
@@ -566,7 +577,10 @@ Segment::normalizeRests(timeT startTime, timeT endTime, bool permitQuantize)
 
     for (iterator i = ia, j = i; i != ib && i != end(); i = j) {
 	++j;
-	if ((*i)->isa(Note::EventRestType)) erase(i);
+	if ((*i)->isa(Note::EventRestType) &&
+	    !(*i)->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
+	    erase(i);
+	}
     }
 
     // It's possible we've just removed all the events between here
@@ -581,26 +595,53 @@ Segment::normalizeRests(timeT startTime, timeT endTime, bool permitQuantize)
     // notes end at different times -- we're only interested in
     // the one ending sooner.  Each time an event ends, we start
     // a candidate gap.
+
+    std::vector<std::pair<timeT, timeT> > gaps;
+
+    const Quantizer *q(getComposition()->getNotationQuantizer());
+    timeT lastNoteStarts = startTime;
+    timeT lastNoteEnds = startTime;
     
     // Re-find this, as it might have been erased
     ia = findTime(startTime);
-    if (ib != end()) ++ib;
-    
-    std::vector<std::pair<timeT, timeT> > gaps;
-    timeT lastNoteStarts = startTime;
-    timeT lastNoteEnds = startTime;
+
+    if (ia != end()) {
+	lastNoteStarts = q->getQuantizedAbsoluteTime(*ia);
+	lastNoteEnds = lastNoteStarts;
+    }
+
+    if (ib != end()) {
+	//!!! This and related code really need to get a quantized
+	// absolute time of a note event that has the same unquantized
+	// time as ib, not necessarily of ib itself... or else the
+	// quantizer needs to set the quantized times of all non-note
+	// events that happen at the same unquantized time as a note
+	// event to the same as that of the note event... yeah, that's
+	// probably the right thing
+	endTime = q->getQuantizedAbsoluteTime(*ib);
+
+	// was this just a nasty hack?
+	++ib;
+    }
+
     iterator i = ia;
 
     for (; i != ib && i != end(); ++i) {
 
-	if (!(*i)->isa(Note::EventType)) continue;
+	// if we have any rests remaining in this area, treat them
+	// as "hard" rests (they had tuplet data, so we don't want to
+	// disturb them)
+	if (!((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType))) {
+	    continue;
+	}
 
-	timeT thisNoteStarts = (*i)->getAbsoluteTime();
+	timeT thisNoteStarts = q->getQuantizedAbsoluteTime(*i);
 
 	//!!! This may be problematic.  We could end up adding a rest
 	// in the middle of what turns out to be a chord once the
 	// smoothing/quantization has happened.  That might mess
 	// things up pretty badly, I think.
+	//!!! is that still the case?
 
 	if (thisNoteStarts < lastNoteEnds &&
 	    thisNoteStarts > lastNoteStarts) { //!!! experimental
@@ -616,7 +657,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime, bool permitQuantize)
 	}
 
 	lastNoteStarts = thisNoteStarts;
-	lastNoteEnds = thisNoteStarts + (*i)->getDuration();
+	lastNoteEnds = thisNoteStarts + q->getQuantizedDuration(*i);
     }
 
     if (endTime > lastNoteEnds) {
@@ -631,7 +672,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime, bool permitQuantize)
         startTime = gaps[gi].first;
 	duration = gaps[gi].second;
 
-	fillWithRests(startTime, startTime + duration, permitQuantize);
+	fillWithRests(startTime, startTime + duration);
     }
 }
 
@@ -680,31 +721,18 @@ Segment::hasQuantization() const
 }
 
 void
-Segment::setQuantizeLevel(const StandardQuantization &q)
+Segment::setQuantizeLevel(timeT unit)
 {
-    Quantizer newQ(q, Quantizer::GlobalSource, Quantizer::RawEventData);
+    if (m_quantizer->getUnit() == unit) return;
 
-    if (newQ != *m_quantizer) {
-	*m_quantizer = newQ;
-	if (m_quantize) m_quantizer->quantize(this, begin(), end());
-    }
+    m_quantizer->setUnit(unit);
+    if (m_quantize) m_quantizer->quantize(this, begin(), end());
 }
 
-void
-Segment::setQuantizeLevel(const Quantizer &q)
-{
-    Quantizer newQ(q, Quantizer::GlobalSource, Quantizer::RawEventData);
-
-    if (newQ != *m_quantizer) {
-	*m_quantizer = newQ;
-	if (m_quantize) m_quantizer->quantize(this, begin(), end());
-    }
-}
-
-const Quantizer &
+const BasicQuantizer *const
 Segment::getQuantizer() const
 {
-    return *m_quantizer;
+    return m_quantizer;
 }
 
 

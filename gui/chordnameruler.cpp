@@ -62,14 +62,14 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
     m_rulerScale(rulerScale),
     m_composition(composition),
     m_currentSegment(0),
-//!!!    m_font("helvetica", 12),
-//!!!    m_boldFont("helvetica", 12, QFont::Bold),
     m_fontMetrics(m_boldFont),
     TEXT_FORMAL_X("TextFormalX"),
     TEXT_ACTUAL_X("TextActualX")
 {
-    m_font.setPointSize(12);
-    m_boldFont.setPointSize(12);
+    m_font.setPointSize(11);
+    m_font.setPixelSize(12);
+    m_boldFont.setPointSize(11);
+    m_boldFont.setPixelSize(12);
     m_boldFont.setBold(true);
     m_fontMetrics = QFontMetrics(m_boldFont);
     setBackgroundColor(RosegardenGUIColours::ChordNameRulerBackground);

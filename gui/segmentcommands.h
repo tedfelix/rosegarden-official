@@ -208,6 +208,7 @@ private:
     Rosegarden::Composition *m_composition;
     Rosegarden::Segment *m_segment;
     bool m_detached;
+    bool m_firstTime;
 };
 
 
@@ -368,8 +369,8 @@ private:
 class SegmentChangeQuantizationCommand : public KNamedCommand
 {
 public:
-    /// Set quantization on segments.  If sq is null, switch quantization off.
-    SegmentChangeQuantizationCommand(Rosegarden::StandardQuantization *sq);
+    /// Set quantization on segments.  If unit is zero, switch quantization off
+    SegmentChangeQuantizationCommand(Rosegarden::timeT);
     virtual ~SegmentChangeQuantizationCommand();
 
     void addSegment(Rosegarden::Segment *s);
@@ -377,18 +378,18 @@ public:
     virtual void execute();
     virtual void unexecute();
 
-    static QString getGlobalName(Rosegarden::StandardQuantization *sq);
+    static QString getGlobalName(Rosegarden::timeT);
 
 private:
     struct SegmentRec {
         Rosegarden::Segment *segment;
-        Rosegarden::Quantizer *oldQuantizer;
+        Rosegarden::timeT oldUnit;
         bool wasQuantized;
     };
     typedef std::vector<SegmentRec> SegmentRecSet;
     SegmentRecSet m_records;
 
-    Rosegarden::StandardQuantization *m_quantization;
+    Rosegarden::timeT m_unit;
 };
 
 
@@ -550,5 +551,42 @@ protected:
     Rosegarden::timeT        m_oldEndTime;
 
 };
+
+class SegmentSplitByPitchCommand : public KNamedCommand
+{
+public:
+    enum ClefHandling {
+	LeaveClefs,
+	RecalculateClefs,
+	UseTrebleAndBassClefs
+    };
+    
+    SegmentSplitByPitchCommand(Rosegarden::Segment *segment,
+			       int splitPitch,
+			       bool ranging,
+			       bool duplicateNonNoteEvents,
+			       ClefHandling clefHandling);
+    virtual ~SegmentSplitByPitchCommand();
+
+    static QString getGlobalName()
+        { return i18n("Split by &Pitch..."); }
+
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+    int getSplitPitchAt(Rosegarden::Segment::iterator i, int lastSplitPitch);
+
+    Rosegarden::Segment *m_segment;
+    Rosegarden::Segment *m_newSegmentA;
+    Rosegarden::Segment *m_newSegmentB;
+    int m_splitPitch;
+    bool m_ranging;
+    bool m_dupNonNoteEvents;
+    ClefHandling m_clefHandling;
+    bool m_executed;
+};
+
+
 
 #endif  // _SEGMENTCOMMANDS_H_

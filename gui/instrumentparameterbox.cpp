@@ -1097,6 +1097,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget* parent)
 
     // connect up mouse wheel movement
     //
+/*!!!
     connect(m_bankValue, SIGNAL(propagate(int)),
             this, SLOT(slotSelectBank(int)));
 
@@ -1105,6 +1106,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget* parent)
 
     connect(m_channelValue, SIGNAL(propagate(int)),
             this, SLOT(slotSelectChannel(int)));
+*/
 
     // connect the advanced MIDI controls
     connect(m_chorusRotary, SIGNAL(valueChanged(float)),

@@ -29,7 +29,6 @@
 
 #include "RealTime.h"
 #include "Segment.h"
-#include "Quantizer.h"
 #include "Track.h"
 #include "Configuration.h"
 #include "XmlExportable.h"
@@ -37,6 +36,10 @@
 namespace Rosegarden 
 {
 
+class Quantizer;
+class BasicQuantizer;
+class NotationQuantizer;
+ 
 /**
  * Composition contains a complete representation of a piece of music.
  * It is a container for multiple Segments, as well as any associated
@@ -530,28 +533,17 @@ public:
      * units (i.e. a unit quantizer whose unit is our shortest
      * note duration).
      */
-    const Quantizer *getBasicQuantizer() const {
-	return &m_basicQuantizer;
+    const BasicQuantizer *getBasicQuantizer() const {
+	return m_basicQuantizer;
     }
 
     /**
-     * Return a quantizer that does note-quantization with the
-     * default number of dots.
+     * Return a quantizer that does quantization for notation
+     * only.
      */
-    const Quantizer *getNoteQuantizer() const {
-	return &m_noteQuantizer;
+    const NotationQuantizer *getNotationQuantizer() const {
+	return m_notationQuantizer;
     }
-
-    /**
-     * Return a quantizer that does legato-quantization with the
-     * default number of dots.
-     */
-    const Quantizer *getLegatoQuantizer() const {
-	return &m_legatoQuantizer;
-    }
-
-    void setLegatoQuantizerDuration(timeT duration);
-
 
 
     //////
@@ -665,9 +657,8 @@ protected:
     /// Contains tempo events
     mutable ReferenceSegment m_tempoSegment;
 
-    Quantizer m_basicQuantizer;
-    Quantizer m_noteQuantizer;
-    Quantizer m_legatoQuantizer;
+    BasicQuantizer *m_basicQuantizer;
+    NotationQuantizer *m_notationQuantizer;
 
     timeT m_position;
     double m_defaultTempo;

@@ -64,7 +64,6 @@ std::vector<int> NotationHLayout::m_availableSpacings;
 
 
 NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
-				 Quantizer *legatoQuantizer,
 				 const NotationProperties &properties,
                                  QObject* parent, const char* name) :
     ProgressReporter(parent, name),
@@ -74,7 +73,7 @@ NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
     m_pageWidth(0.),
     m_spacing(100),
     m_npf(npf),
-    m_legatoQuantizer(legatoQuantizer),
+    m_notationQuantizer(c->getNotationQuantizer()),
     m_properties(properties),
     m_timePerProgressIncrement(0),
     m_staffCount(0),
@@ -219,24 +218,28 @@ NotationHLayout::getStartOfQuantizedSlice(const NotationElementList *notes,
     while (true) {
 	if (i == notes->begin()) return i;
 	--j;
-
+/*!!!
 	timeT absTime;
 	if ((*j)->isTuplet()) {
 	    absTime = (*j)->getAbsoluteTime();
 	} else {
-	    absTime = m_legatoQuantizer->getQuantizedAbsoluteTime((*j)->event());
+	    absTime = m_notationQuantizer->getQuantizedAbsoluteTime((*j)->event());
 	}
-
-	if (absTime < t) return i;
+*/
+	if ((*j)->getViewAbsoluteTime() < t) return i;
 	i = j;
     }
 }
 
-
 void
-NotationHLayout::legatoQuantize(Segment &segment)
+NotationHLayout::setNotationData(Segment &segment)
 {
-    m_legatoQuantizer->quantize(&segment, segment.begin(), segment.end());
+//!!! This should either be in a specialised NotationQuantizer class
+// or should be in SegmentNotationHelper::getNotationDuration which
+// should probably be used in this class in preference to the quantizer's
+// getQuantizedDuration
+
+//!!!    m_notationQuantizer->quantize(&segment, segment.begin(), segment.end());
 
     bool justSeenGraceNote = false;
     timeT graceNoteStart = 0;
@@ -244,7 +247,7 @@ NotationHLayout::legatoQuantize(Segment &segment)
     for (Segment::iterator i = segment.begin();
 	 segment.isBeforeEndMarker(i); ++i) {
 
-	timeT duration = m_legatoQuantizer->getQuantizedDuration(*i);
+	timeT duration = m_notationQuantizer->getQuantizedDuration(*i);
 
 	if ((*i)->has(BEAMED_GROUP_TUPLET_BASE)) {
 	    int tcount = (*i)->get<Int>(BEAMED_GROUP_TUPLED_COUNT);
@@ -252,13 +255,24 @@ NotationHLayout::legatoQuantize(Segment &segment)
 	    assert(tcount != 0);
 
 	    // nominal duration is longer than actual (sounding) duration
-	    timeT nominalDuration = ((*i)->getDuration() / tcount) * ucount;
 
-	    duration = m_legatoQuantizer->quantizeDuration(nominalDuration);
+	    //!!! no longer right -- fix in quantizer
+//!!!	    timeT nominalDuration = ((*i)->getViewDuration() / tcount) * ucount;
+//!!!	    duration = m_notationQuantizer->quantizeDuration(nominalDuration);
+
+	    duration = (duration / tcount) * ucount;
+
+//	    NOTATION_DEBUG << "NotationHLayout::setNotationData: nominalDuration (" << duration << ") is duration / " << tcount << ") * " << ucount << endl;
+
 	    (*i)->setMaybe<Int>(TUPLET_NOMINAL_DURATION, duration);
 	}
 
 	if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType)) {
+
+	    //!!! this should all happen in the quantizer itself, I guess?
+	    // or no, this stuff may not have been quantized
+	    
+//!!!	    timeT duration = m_notationQuantizer->getQuantizedDuration(*i);
 
 	    if ((*i)->isa(Note::EventType)) {
 		
@@ -266,16 +280,13 @@ NotationHLayout::legatoQuantize(Segment &segment)
 		    (*i)->get<Bool>(IS_GRACE_NOTE)) {
 
 		    if (!justSeenGraceNote) {
-			graceNoteStart =
-			    m_legatoQuantizer->getQuantizedAbsoluteTime(*i);
+			graceNoteStart = m_notationQuantizer->getQuantizedAbsoluteTime(*i);
 			justSeenGraceNote = true;
 		    }
 
 		} else if (justSeenGraceNote) {
 
-		    duration +=
-			m_legatoQuantizer->getQuantizedAbsoluteTime(*i) -
-			graceNoteStart;
+		    duration += m_notationQuantizer->getQuantizedAbsoluteTime(*i) - graceNoteStart;
 		    justSeenGraceNote = false;
 		}
 	    }
@@ -287,7 +298,6 @@ NotationHLayout::legatoQuantize(Segment &segment)
 	}
     }
 }
-
 
 void
 NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
@@ -339,7 +349,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 
     NOTATION_DEBUG << "NotationHLayout::scanStaff: full scan " << isFullScan << ", times " << startTime << "->" << endTime << ", bars " << barNo << "->" << endBarNo << ", staff name \"" << segment.getLabel() << "\", width " << m_staffNameWidths[&staff] << endl;
 
-    legatoQuantize(segment);
+    setNotationData(segment);
 
     PRINT_ELAPSED("NotationHLayout::scanStaff: after quantize");
 
@@ -387,7 +397,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 	    continue;
 	}
 
-	NOTATION_DEBUG << "NotationHLayout::scanStaff: bar " << barNo << ", from " << barTimes.first << ", to " << barTimes.second << " (end " << segment.getEndMarkerTime() << "); from is at " << (from == notes->end() ? -1 : (*from)->getAbsoluteTime()) << ", to is at " << (to == notes->end() ? -1 : (*to)->getAbsoluteTime()) << endl;
+	NOTATION_DEBUG << "NotationHLayout::scanStaff: bar " << barNo << ", from " << barTimes.first << ", to " << barTimes.second << " (end " << segment.getEndMarkerTime() << "); from is at " << (from == notes->end() ? -1 : (*from)->getViewAbsoluteTime()) << ", to is at " << (to == notes->end() ? -1 : (*to)->getViewAbsoluteTime()) << endl;
 
         NotationElementList::iterator shortest = notes->end();
         int shortCount = 0;
@@ -484,7 +494,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 		fixedWidth += mw;
 	    }
 
-	    actualBarEnd = el->getAbsoluteTime() + el->getDuration();
+	    actualBarEnd = el->getViewAbsoluteTime() + el->getViewDuration();
             el->event()->setMaybe<Int>(m_properties.MIN_WIDTH, mw);
 	}
 
@@ -501,7 +511,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 			   actualBarEnd - barTimes.first);
 	}
 
-	if (endTime > startTime) {
+	if ((endTime > startTime) && (barNo % 5 == 0)) {
 	    emit setProgress((barTimes.second - startTime) * 95 /
 			     (endTime - startTime));
 	    kapp->processEvents(50);
@@ -591,14 +601,27 @@ NotationHLayout::scanChord(NotationElementList *notes,
 			   int &shortCount,
 			   NotationElementList::iterator &to)
 {
-    NotationChord chord(*notes, itr, m_legatoQuantizer, m_properties);
+    NotationChord chord(*notes, itr, m_notationQuantizer, m_properties);
     AccidentalTable newAccTable(accTable);
     Accidental someAccidental = NoAccidental;
     bool barEndsInChord = false;
     bool grace = false;
+/*!!!
+    NOTATION_DEBUG << "NotationHLayout::scanChord: "
+		   << chord.size() << "-voice chord at "
+		   << (*itr)->event()->getAbsoluteTime()
+		   << " unquantized, "
+		   << (*itr)->getViewAbsoluteTime()
+		   << " quantized" << endl;
 
-//!!!    for (unsigned int i = 0; i < chord.size(); ++i) {
-
+    NOTATION_DEBUG << "Contents:" << endl;
+    
+    for (NotationElementList::iterator i = chord.getInitialElement();
+	 i != notes->end(); ++i) {
+	(*i)->event()->dump(std::cerr);
+	if (i == chord.getFinalElement()) break;
+    }
+*/
     // We don't need to get the chord's notes in pitch order here,
     // but we do need to ensure we see any random non-note events
     // that may crop up in the middle of it.
@@ -606,7 +629,7 @@ NotationHLayout::scanChord(NotationElementList *notes,
     for (NotationElementList::iterator i = chord.getInitialElement();
 	 i != notes->end(); ++i) {
 	
-	NotationElement *el = *i; //!!! *chord[i];
+	NotationElement *el = *i;
 	if (el->isRest()) {
 	    el->event()->setMaybe<Bool>(m_properties.REST_TOO_SHORT, true);
 	    if (i == chord.getFinalElement()) break;
@@ -644,7 +667,7 @@ NotationHLayout::scanChord(NotationElementList *notes,
 	if (someAccidental == NoAccidental) someAccidental = dacc;
 
 	newAccTable.update(acc, h);
-	if (i /*!!! chord[i] */ == to) barEndsInChord = true;
+	if (i == to) barEndsInChord = true;
 
 	if (i == chord.getFinalElement()) break;
     }
@@ -665,13 +688,16 @@ NotationHLayout::scanChord(NotationElementList *notes,
     }
 
     NotationElementList::iterator myShortest = chord.getShortestElement();
+    if (myShortest == notes->end()) {
+	NOTATION_DEBUG << "WARNING: NotationHLayout::scanChord: No shortest element in chord!" << endl;
+    }
 
-    timeT d = m_legatoQuantizer->getQuantizedDuration((*myShortest)->event());
+    timeT d = (*myShortest)->getViewDuration();
     baseWidth += getMinWidth(**myShortest);
 
     timeT sd = 0;
     if (shortest != notes->end()) {
-	sd = m_legatoQuantizer->getQuantizedDuration((*shortest)->event());
+	sd = (*shortest)->getViewDuration();
     }
 
     if (d > 0 && (sd == 0 || d <= sd)) {
@@ -695,7 +721,7 @@ NotationHLayout::scanRest
  int &, int &baseWidth,
  NotationElementList::iterator &shortest, int &shortCount)
 { 
-    timeT d = m_legatoQuantizer->getQuantizedDuration((*itr)->event());
+    timeT d = (*itr)->getViewDuration();
 
     // find any cases where rests are too short to appear:
     // we ignore any rest which has a quantized duration of
@@ -706,8 +732,7 @@ NotationHLayout::scanRest
     if (!tooShort) {
 	NotationElementList::iterator ni(itr);
 	if (++ni != notes->end()) {
-	    if (m_legatoQuantizer->getQuantizedAbsoluteTime((*ni)->event()) -
-		m_legatoQuantizer->getQuantizedAbsoluteTime((*itr)->event())
+	    if ((*ni)->getViewAbsoluteTime() - (*itr)->getViewAbsoluteTime()
 		< Note(Note::Shortest).getDuration()) {
 		tooShort = true;
 	    }
@@ -720,7 +745,7 @@ NotationHLayout::scanRest
 
     timeT sd = 0;
     if (shortest != notes->end()) {
-	sd = m_legatoQuantizer->getQuantizedDuration((*shortest)->event());
+	sd = (*shortest)->getViewDuration();
     }
 
     if (d > 0 && (sd == 0 || d <= sd)) {
@@ -1135,8 +1160,8 @@ NotationHLayout::finishLayout(timeT startTime, timeT endTime)
             if (notes->begin() != notes->end()) {
                 NotationElementList::iterator j(notes->end());
                 timeCovered =
-                    (*--j)->getAbsoluteTime() -
-                    (*notes->begin())->getAbsoluteTime();
+                    (*--j)->getViewAbsoluteTime() -
+                    (*notes->begin())->getViewAbsoluteTime();
             }
         }
 
@@ -1174,7 +1199,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
     timeT lastIncrement =
 	(isFullLayout && (notes->begin() != notes->end())) ?
-	(*notes->begin())->getAbsoluteTime() : startTime; // progress reporting
+	(*notes->begin())->getViewAbsoluteTime() : startTime; // progress reporting
 
     for (BarPositionList::iterator bpi = m_barPositions.begin();
 	 bpi != m_barPositions.end(); ++bpi) {
@@ -1190,7 +1215,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
         NotationElementList::iterator from = bdi->second.basicData.start;
         NotationElementList::iterator to;
 
-        NOTATION_DEBUG << "NotationHLayout::layout(): starting bar " << barNo << ", x = " << barX << ", width = " << bdi->second.sizeData.idealWidth << ", time = " << (from == notes->end() ? -1 : (*from)->getAbsoluteTime()) << endl;
+        NOTATION_DEBUG << "NotationHLayout::layout(): starting bar " << barNo << ", x = " << barX << ", width = " << bdi->second.sizeData.idealWidth << ", time = " << (from == notes->end() ? -1 : (*from)->getViewAbsoluteTime()) << endl;
 
         BarDataList::iterator nbdi(bdi);
         if (++nbdi == barList.end()) {
@@ -1208,7 +1233,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
         if (!isFullLayout &&
 	    (from == notes->end() ||
-	     (*from)->event()->getAbsoluteTime() > endTime)) {
+	     (*from)->getViewAbsoluteTime() > endTime)) {
 
 	    //!!! don't seem to be getting here when we should
 	    NOTATION_DEBUG << "Shifting elements only" << endl;
@@ -1261,6 +1286,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 	}
 
 	long lyricWidth = 0;
+	int count = 0;
 
         for (NotationElementList::iterator it = from; it != to; ++it) {
 
@@ -1343,7 +1369,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 //		    NOTATION_DEBUG << "(new group)" << endl;
 		    m_groupsExtant[groupId] =
 			new NotationGroup(*staff.getViewElementList(),
-					  m_legatoQuantizer,
+					  m_notationQuantizer,
 					  m_properties, clef, key);
 		}
 		m_groupsExtant[groupId]->sample(it);
@@ -1351,8 +1377,9 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
             x += delta;
 	    
-	    if (m_timePerProgressIncrement > 0) {
-		timeT sinceIncrement = el->getAbsoluteTime() - lastIncrement;
+	    if (m_timePerProgressIncrement > 0 && (++count == 100)) {
+		count = 0;
+		timeT sinceIncrement = el->getViewAbsoluteTime() - lastIncrement;
 		if (sinceIncrement > m_timePerProgressIncrement) {
 		    emit incrementProgress
 			(sinceIncrement / m_timePerProgressIncrement);
@@ -1431,16 +1458,19 @@ NotationHLayout::getSpacingDuration(StaffType &staff,
 				    const NotationElementList::iterator &i)
 {
     SegmentNotationHelper helper(staff.getSegment());
-    timeT t(helper.getNotationAbsoluteTime((*i)->event()));
-    timeT d(helper.getNotationDuration((*i)->event()));
+//!!!    timeT t(helper.getNotationAbsoluteTime((*i)->event()));
+//    timeT d(helper.getNotationDuration((*i)->event()));
+    timeT t((*i)->getViewAbsoluteTime());
+    timeT d((*i)->getViewDuration());
 
     NotationElementList::iterator j(i), e(staff.getViewElementList()->end());
     while (j != e &&
-	   helper.getNotationAbsoluteTime((*j)->event()) == t) {
+//!!!	   helper.getNotationAbsoluteTime((*j)->event()) == t) {
+	   (*j)->getViewAbsoluteTime() == t) {
 	++j;
     }
     if (j == e) return d;
-    else return (*j)->getAbsoluteTime() - (*i)->getAbsoluteTime();
+    else return (*j)->getViewAbsoluteTime() - (*i)->getViewAbsoluteTime();
 }
 
 timeT
@@ -1451,12 +1481,13 @@ NotationHLayout::getSpacingDuration(StaffType &staff,
 
     NotationElementList::iterator i = chord.getShortestElement();
 //    timeT t(helper.getNotationAbsoluteTime((*i)->event()));
-    timeT d(helper.getNotationDuration((*i)->event()));
+    timeT d((*i)->getViewDuration());
 
     NotationElementList::iterator j(i), e(staff.getViewElementList()->end());
-    while (j != e && chord.contains(j)) ++j;
+//!!!??? check duration>0 to ensure not e.g. controller in middle of chord
+    while (j != e && (chord.contains(j) || (*j)->getViewDuration() == 0)) ++j;
     if (j == e) return d;
-    else return (*j)->getAbsoluteTime() - (*i)->getAbsoluteTime();
+    else return (*j)->getViewAbsoluteTime() - (*i)->getViewAbsoluteTime();
 }
 
 
@@ -1469,7 +1500,7 @@ NotationHLayout::positionChord(StaffType &staff,
 			       TieMap &tieMap, 
 			       NotationElementList::iterator &to)
 {
-    NotationChord chord(*staff.getViewElementList(), itr, m_legatoQuantizer,
+    NotationChord chord(*staff.getViewElementList(), itr, m_notationQuantizer,
 			m_properties, clef, key);
     double baseX = (*itr)->getLayoutX();
 
@@ -1585,9 +1616,9 @@ NotationHLayout::positionChord(StaffType &staff,
 	    if (ti != tieMap.end()) {
 		NotationElementList::iterator otherItr(ti->second);
 		
-		if ((*otherItr)->getAbsoluteTime() +
-		    (*otherItr)->getDuration() ==
-		    note->getAbsoluteTime()) {
+		if ((*otherItr)->getViewAbsoluteTime() +
+		    (*otherItr)->getViewDuration() ==
+		    note->getViewAbsoluteTime()) {
 		    
 		    (*otherItr)->event()->setMaybe<Int>
 			(m_properties.TIE_LENGTH,

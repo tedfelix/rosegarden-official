@@ -22,6 +22,7 @@
 #include "Composition.h"
 #include "Segment.h"
 #include "FastVector.h"
+#include "Quantizer.h"
 
 #include <iostream>
 #include <iomanip>
@@ -227,9 +228,8 @@ Composition::Composition() :
     m_selectedTrack(0),
     m_timeSigSegment(TimeSignature::EventType),
     m_tempoSegment(TempoEventType),
-    m_basicQuantizer(Quantizer::RawEventData, "BasicQ"),
-    m_noteQuantizer(Quantizer::RawEventData, "NoteQ", Quantizer::NoteQuantize),
-    m_legatoQuantizer(Quantizer::RawEventData, "LegatoQ", Quantizer::LegatoQuantize),
+    m_basicQuantizer(new BasicQuantizer()),
+    m_notationQuantizer(new NotationQuantizer()),
     m_position(0),
     m_defaultTempo(120.0),
     m_startMarker(0),
@@ -249,6 +249,8 @@ Composition::Composition() :
 Composition::~Composition()
 {
     clear();
+    delete m_basicQuantizer;
+    delete m_notationQuantizer;
 }
 
 Composition::Composition(const Composition &comp):
@@ -258,9 +260,8 @@ Composition::Composition(const Composition &comp):
     m_selectedTrack(comp.getSelectedTrack()),
     m_timeSigSegment(comp.getTimeSigSegment()),
     m_tempoSegment(comp.getTempoSegment()),
-    m_basicQuantizer(*comp.getBasicQuantizer()),
-    m_noteQuantizer(*comp.getNoteQuantizer()),
-    m_legatoQuantizer(*comp.getLegatoQuantizer()),
+    m_basicQuantizer(new BasicQuantizer(*comp.m_basicQuantizer)),
+    m_notationQuantizer(new NotationQuantizer(*comp.m_notationQuantizer)),
     m_position(comp.getPosition()),
     m_defaultTempo(comp.getDefaultTempo()),
     m_startMarker(comp.getStartMarker()),
@@ -288,6 +289,7 @@ Composition::Composition(const Composition &comp):
 Composition&
 Composition::operator=(const Composition &comp)
 {
+    if (&comp == this) return *this;
 
     m_tracks.clear();
     m_segments.clear();
@@ -317,9 +319,12 @@ Composition::operator=(const Composition &comp)
     m_timeSigSegment = comp.getTimeSigSegment();
     m_tempoSegment = comp.getTempoSegment();
 
+    //!!! no assignment operators for these
+/*!!!
     m_basicQuantizer = *comp.getBasicQuantizer();
-    m_noteQuantizer = *comp.getNoteQuantizer();
-    m_legatoQuantizer = *comp.getLegatoQuantizer();
+    m_notationQuantizer = *comp.getNotationQuantizer();
+*/
+
     m_position = comp.getPosition();
     m_defaultTempo = comp.getDefaultTempo();
     m_startMarker = comp.getStartMarker();
@@ -440,15 +445,6 @@ Composition::mergeFrom(Composition &c, MergeType type)
 
 #endif
 
-
-void
-Composition::setLegatoQuantizerDuration(timeT duration)
-{
-    Quantizer q(Quantizer::RawEventData, "LegatoQ",
-		Quantizer::LegatoQuantize, duration);
-    m_legatoQuantizer = q;
-}
-    
 
 Composition::iterator
 Composition::addSegment(Segment *segment)

@@ -48,367 +48,12 @@ using Rosegarden::timeT;
 
 using namespace Rosegarden::BaseProperties;
 
-#ifdef OLD_STYLE_NOTATION_SETS
-
-NotationSet::NotationSet(const NotationElementList &nel, NELIterator i,
-			 const Quantizer *q, const NotationProperties &p) :
-    m_properties(p),
-    m_nel(nel),
-    m_initial(nel.end()),
-    m_final(nel.end()),
-    m_shortest(nel.end()),
-    m_longest(nel.end()),
-    m_highest(nel.end()),
-    m_lowest(nel.end()),
-    m_baseIterator(i),
-    m_quantizer(q)
-{
-    // ...
-}
-
-void
-NotationSet::initialise()
-{
-    if (m_baseIterator == m_nel.end() || !test(m_baseIterator)) return;
-    m_initial = m_baseIterator;
-    m_final = m_baseIterator;
-    sample(m_baseIterator);
-
-    NELIterator i, j;
-
-    // first scan back to find an element not in the desired set,
-    // sampling everything as far back as the one after it
-
-    for (i = j = m_baseIterator; i != m_nel.begin() && test(--j); i = j) {
-        if (sample(j)) m_initial = j;
-    }
-
-    j = m_baseIterator;
-
-    // then scan forwards to find an element not in the desired set,
-    // sampling everything as far forward as the one before it
-
-    for (i = j = m_baseIterator; ++j != m_nel.end() && test(j); i = j) {
-        if (sample(j)) m_final = j;
-    }
-}
-
-bool
-NotationSet::sample(const NELIterator &i)
-{
-    const Quantizer &q(getQuantizer());
-    timeT d(q.getQuantizedDuration((*i)->event()));
-
-    if (d > 0) {
-        if (m_longest == m_nel.end() ||
-            d > q.getQuantizedDuration((*m_longest)->event())) {
-            m_longest = i;
-        }
-        if (m_shortest == m_nel.end() ||
-            d < q.getQuantizedDuration((*m_shortest)->event())) {
-            m_shortest = i;
-        }
-    }
-
-    if ((*i)->isNote()) {
-        long p = (*i)->event()->get<Int>(PITCH);
-
-        if (m_highest == m_nel.end() ||
-            p > (*m_highest)->event()->get<Int>(PITCH)) {
-            m_highest = i;
-        }
-        if (m_lowest == m_nel.end() ||
-            p < (*m_lowest)->event()->get<Int>(PITCH)) {
-            m_lowest = i;
-        }
-    }
-
-    return true;
-}
-
-NotationSet::NELIterator
-NotationSet::getInitialNote() const
-{
-    NELIterator i(getInitialElement());
-    if ((*i)->isNote()) return i;
-
-    NELIterator j(getFinalElement());
-    ++j;
-    while (i != j) {
-        if ((*i)->isNote()) return i;
-        ++i;
-    }
-
-    return getContainer().end();
-}
-
-NotationSet::NELIterator
-NotationSet::getFinalNote() const
-{
-    NELIterator i(getFinalElement());
-    if ((*i)->isNote()) return i;
-
-    NELIterator j(getInitialElement());
-    --j;
-    while (i != j) {
-        if ((*i)->isNote()) return i;
-        --i;
-    }
-
-    return getContainer().end();
-}
-
-
-class PitchGreater {
-public:
-    bool operator()(const NotationElementList::iterator &a,
-                    const NotationElementList::iterator &b) {
-        try {
-            return ((*a)->event()->get<Int>(PITCH) <
-                    (*b)->event()->get<Int>(PITCH));
-        } catch (Event::NoData) {
-            NOTATION_DEBUG << "Bad karma: PitchGreater failed to find one or both pitches" << endl;
-            return false;
-        }
-    }
-};
-
-//////////////////////////////////////////////////////////////////////
-
-Chord::Chord(const NotationElementList &nel, NELIterator i,
-	     const Quantizer *q, const NotationProperties &p,
-	     const Clef &clef, const Key &key) :
-    NotationSet(nel, i, q, p),
-    m_clef(clef),
-    m_key(key),
-    m_time(q->getQuantizedAbsoluteTime((*i)->event())),
-    m_subordering((*i)->event()->getSubOrdering())
-{
-    initialise();
-
-    if (size() > 1) {
-        std::stable_sort(begin(), end(), PitchGreater());
-    }
-
-/*!!! this should all be removed ultimately
-//    NOTATION_DEBUG << "Chord::Chord: pitches are:" << endl;
-    int prevPitch = -999;
-    for (unsigned int i = 0; i < size(); ++i) {
-        try {
-	    int pitch = (*(*this)[i])->event()->get<Int>(PITCH);
-//            NOTATION_DEBUG << i << ": " << pitch << endl;
-	    if (pitch < prevPitch) {
-		cerr << "ERROR: Pitch less than previous pitch (" << pitch
-		     << " < " << prevPitch << ")" << endl;
-		throw(1);
-	    }
-	} catch (Event::NoData) {
-            NOTATION_DEBUG << i << ": no pitch property" << endl;
-        }
-    }
-*/
-}
-
-Chord::~Chord()
-{
-}
-
-bool
-Chord::test(const NELIterator &i)
-{
-    return ((*i)->isNote() &&
-	    getQuantizer().getQuantizedAbsoluteTime((*i)->event()) == m_time &&
-	    (*i)->event()->getSubOrdering() == m_subordering);
-}
-
-bool
-Chord::sample(const NELIterator &i)
-{
-    // two notes that would otherwise be in a chord but are not in
-    // the same group, or have stems pointing in different directions
-    // by design, count as separate chords
-
-    if (m_baseIterator != getContainer().end()) {
-
-	Rosegarden::Event *e0 = (*m_baseIterator)->event();
-	Rosegarden::Event *e1 = (*i)->event();
-
-	if (e0->has(BEAMED_GROUP_ID)) {
-	    if (e1->has(BEAMED_GROUP_ID)) {
-		if (e1->get<Int>(BEAMED_GROUP_ID) !=
-		    e0->get<Int>(BEAMED_GROUP_ID)) {
-		    return false;
-		}
-	    } else {
-		return false;
-	    }
-	} else {
-	    if (e1->has(BEAMED_GROUP_ID)) {
-		return false;
-	    }
-	}
-
-	if (e0->has(STEM_UP) &&
-	    e0->isPersistent<Bool>(STEM_UP) &&
-
-	    e1->has(STEM_UP) &&
-	    e1->isPersistent<Bool>(STEM_UP) &&
-
-	    e0->get<Bool>(STEM_UP) !=
-	    e1->get<Bool>(STEM_UP)) {
-
-	    return false;
-	}
-    }
-
-    NotationSet::sample(i);
-    push_back(i);
-    return true;
-}
-
-int
-Chord::height(const NELIterator &i) const
-{
-    //!!! We use HEIGHT_ON_STAFF in preference to the passed clef/key,
-    //but what if the clef/key changed since HEIGHT_ON_STAFF was
-    //written?  Who updates the properties then?  Check this.
-
-    long h;
-    if ((*i)->event()->get<Int>(NotationProperties::HEIGHT_ON_STAFF, h)) {
-	return h;
-    }
-
-    int pitch = (*i)->event()->get<Int>(PITCH);
-    Rosegarden::NotationDisplayPitch p(pitch, m_clef, m_key);
-    h = p.getHeightOnStaff();
-    // set non-persistent, not setMaybe, as we know the property is absent:
-    (*i)->event()->set<Int>(NotationProperties::HEIGHT_ON_STAFF, h, false);
-    return h;
-}
-
-bool Chord::hasStem() const
-{
-    // true if any of the notes is stemmed
-
-    NELIterator i(getInitialNote());
-    for (;;) {
-	Note::Type note = (*i)->event()->get<Int>(m_properties.NOTE_TYPE);
-	if (NoteStyleFactory::getStyleForEvent((*i)->event())->hasStem(note))
-	    return true;
-	if (i == getFinalNote()) return false;
-	++i;
-    }
-    return false;
-}
-
-bool Chord::hasStemUp() const
-{
-    NELIterator initialNote(getInitialNote());
-
-    // believe whatever's recorded in the first note, if it's
-    // persistent or if it was apparently set by the beaming algorithm
-
-    if ((*initialNote)->event()->has(STEM_UP) &&
-	((*initialNote)->event()->isPersistent<Bool>(STEM_UP) ||
-	 ((*initialNote)->event()->has(NotationProperties::BEAMED) &&
-	  ((*initialNote)->event()->get<Bool>(NotationProperties::BEAMED))))) {
-	return (*initialNote)->event()->get<Bool>(STEM_UP);
-    }
-
-    int high = height(getHighestNote()), low = height(getLowestNote());
-
-    if (high > 4) {
-        if (low > 4) return false;
-        else return ((high - 4) < (5 - low));
-    } else return true;
-}
-
-bool Chord::contains(const NELIterator &itr) const
-{
-    for (const_iterator i = begin(); i != end(); ++i) {
-        if (*i == itr) return true;
-    }
-    return false;
-}
-
-bool Chord::hasNoteHeadShifted() const
-{
-    int ph = 10000;
-
-    for (unsigned int i = 0; i < size(); ++i) {
-        int h = height((*this)[i]);
-        if (h == ph + 1) return true;
-        ph = h;
-    }
-
-    return false;
-}
-
-bool Chord::isNoteHeadShifted(const NELIterator &itr) const
-{
-    unsigned int i;
-    for (i = 0; i < size(); ++i) {
-        if ((*this)[i] == itr) break;
-    }
-
-    if (i == size()) {
-        NOTATION_DEBUG << "Chord::isNoteHeadShifted: Warning: Unable to find note head " << (*itr) << endl;
-        return false;
-    }
-
-    int h = height((*this)[i]);
-
-    if (hasStemUp()) {
-        if ((i > 0) && (h == height((*this)[i-1]) + 1)) {
-            return (!isNoteHeadShifted((*this)[i-1]));
-        }
-    } else {
-        if ((i < size()-1) && (h == height((*this)[i+1]) - 1)) {
-            return (!isNoteHeadShifted((*this)[i+1]));
-        }
-    }
-
-    return false;
-}
-
-std::vector<Mark> Chord::getMarksForChord() const
-{
-    std::vector<Mark> marks;
-
-    for (unsigned int i = 0; i < size(); ++i) {
-
-	long markCount = 0;
-	const NELIterator &itr((*this)[i]);
-	(*itr)->event()->get<Int>(MARK_COUNT, markCount);
-
-	if (markCount == 0) continue;
-
-	for (long j = 0; j < markCount; ++j) {
-
-	    Mark mark(Marks::NoMark);
-	    (void)(*itr)->event()->get<String>(getMarkPropertyName(j), mark);
-
-	    unsigned int k;
-	    for (k = 0; k < marks.size(); ++i) {
-		if (marks[k] == mark) break;
-	    }
-	    if (k == marks.size()) {
-		marks.push_back(mark);
-	    }
-	}
-    }
-
-    return marks;
-}
-		    
-#endif
-
 
 namespace Rosegarden {
 
 template <>
 Event *
-GenericSet<NotationElement, NotationElementList>::getAsEvent(const NotationElementList::iterator &i)
+AbstractSet<NotationElement, NotationElementList>::getAsEvent(const NotationElementList::iterator &i)
 {
     return (*i)->event();
 }
@@ -541,7 +186,7 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
 			     std::pair<timeT, timeT> barRange,
 			     const NotationProperties &p,
 			     const Clef &clef, const Key &key) :
-    Rosegarden::GenericSet<NotationElement, NotationElementList>(nel, i, q),
+    Rosegarden::AbstractSet<NotationElement, NotationElementList>(nel, i, q),
     m_barRange(barRange),
     //!!! What if the clef and/or key change in the course of the group?
     m_clef(clef),
@@ -575,7 +220,7 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
 			     const Quantizer *q,
 			     const NotationProperties &p,
 			     const Clef &clef, const Key &key) :
-    Rosegarden::GenericSet<NotationElement, NotationElementList>(nel, nel.end(), q),
+    Rosegarden::AbstractSet<NotationElement, NotationElementList>(nel, nel.end(), q),
     m_barRange(0, 0),
     //!!! What if the clef and/or key change in the course of the group?
     m_clef(clef),
@@ -603,8 +248,8 @@ bool NotationGroup::test(const NELIterator &i)
     // sample rather than test, so as to avoid erroneously ending
     // the group too soon.)
     
-    return ((*i)->getAbsoluteTime() >= m_barRange.first &&
-	    (*i)->getAbsoluteTime() <  m_barRange.second);
+    return ((*i)->getViewAbsoluteTime() >= m_barRange.first &&
+	    (*i)->getViewAbsoluteTime() <  m_barRange.second);
 }
 
 bool
@@ -615,8 +260,6 @@ NotationGroup::sample(const NELIterator &i)
 	if (m_userSamples) m_initial = i;
     }
     if (m_userSamples) m_final = i;
-
-//    NOTATION_DEBUG << "NotationGroup::sample: element at " << (*i)->getAbsoluteTime() << endl;
 
     try {
 	std::string t = (*i)->event()->get<String>(BEAMED_GROUP_TYPE);
@@ -645,7 +288,7 @@ NotationGroup::sample(const NELIterator &i)
 
 //    NOTATION_DEBUG << "NotationGroup::sample: group id is " << m_groupNo << endl;
 
-    Rosegarden::GenericSet<NotationElement, NotationElementList>::sample(i);
+    Rosegarden::AbstractSet<NotationElement, NotationElementList>::sample(i);
 
     // If the sum of the distances from the middle line to the notes
     // above the middle line exceeds the sum of the distances from the
@@ -653,6 +296,10 @@ NotationGroup::sample(const NELIterator &i)
     // can calculate the weightings here, as we construct the group.
 
     if (!(*i)->isNote()) return true;
+    if (m_userSamples) {
+	if (m_initialNote == getContainer().end()) m_initialNote = i;
+	m_finalNote = i;
+    }
 
     // The code that uses the Group should not rely on the presence of
     // e.g. BEAM_GRADIENT to indicate that a beam should be drawn;
@@ -721,10 +368,14 @@ NotationGroup::calculateBeam(NotationStaff &staff)
 
     timeT crotchet = Note(Note::Crotchet).getDuration();
     beam.necessary =
-         (*initialNote)->event()->getDuration() < crotchet
-        && (*finalNote)->event()->getDuration() < crotchet
+         (*initialNote)->getViewDuration() < crotchet
+        && (*finalNote)->getViewDuration() < crotchet
+	&& (*finalNote)->getViewAbsoluteTime() >
+	 (*initialNote)->getViewAbsoluteTime();
+/*!!!
         && getQuantizer().getQuantizedAbsoluteTime(  (*finalNote)->event()) >
 	   getQuantizer().getQuantizedAbsoluteTime((*initialNote)->event());
+*/
 
     // We continue even if the beam is not necessary, because the
     // same data is used to generate the tupling line in tupled
@@ -745,6 +396,7 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     NELIterator extremeNote;
 
     if (beam.aboveNotes) {
+
         initialHeight = height(initialChord.getHighestNote());
           finalHeight = height(  finalChord.getHighestNote());
         extremeHeight = height(             getHighestNote());
@@ -841,6 +493,32 @@ void
 NotationGroup::applyBeam(NotationStaff &staff)
 {
 //    NOTATION_DEBUG << "NotationGroup::applyBeam, group no is " << m_groupNo << endl;
+/*!!!
+    NOTATION_DEBUG << "\nNotationGroup::applyBeam" << endl;
+    NOTATION_DEBUG << "Group id: " << m_groupNo << ", type " << m_type << endl;
+    NOTATION_DEBUG << "Coverage:" << endl;
+    int i = 0;
+    for (NELIterator i = getInitialElement(); i != getContainer().end(); ++i) {
+	(*i)->event()->dump(std::cerr);
+	if (i == getFinalElement()) break;
+    }
+    {
+	NELIterator i(getInitialNote());
+	NOTATION_DEBUG << "Initial note: " << (i == getContainer().end() ? -1 : (*i)->event()->getAbsoluteTime()) << endl;
+    }
+    {
+	NELIterator i(getFinalNote());
+	NOTATION_DEBUG << "Final note: " << (i == getContainer().end() ? -1 : (*i)->event()->getAbsoluteTime()) << endl;
+    }
+    {
+	NELIterator i(getHighestNote());
+	NOTATION_DEBUG << "Highest note: " << (i == getContainer().end() ? -1 : (*i)->event()->getAbsoluteTime()) << endl;
+    }
+    {
+	NELIterator i(getLowestNote());
+	NOTATION_DEBUG << "Lowest note: " << (i == getContainer().end() ? -1 : (*i)->event()->getAbsoluteTime()) << endl;
+    }
+*/
 
     Beam beam(calculateBeam(staff));
     if (!beam.necessary) {
@@ -856,7 +534,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
     NELIterator initialNote(getInitialNote()),
 	          finalNote(  getFinalNote());
     int initialX = (int)(*initialNote)->getLayoutX();
-    timeT finalTime = (*finalNote)->getAbsoluteTime();
+    timeT finalTime = (*finalNote)->getViewAbsoluteTime();
 
     // For each chord in the group, we nominate the note head furthest
     // from the beam as the primary note, the one that "owns" the stem
@@ -1012,7 +690,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
 	    }
 	}
 
-        if (i == finalNote || (*i)->getAbsoluteTime() > finalTime) break;
+        if (i == finalNote || (*i)->getViewAbsoluteTime() > finalTime) break;
     }
 }
 

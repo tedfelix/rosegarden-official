@@ -35,6 +35,8 @@
 #include <iostream>
 
 #include <qregexp.h>
+#include <kconfig.h>
+#include <kapp.h>
 
 using Rosegarden::Segment;
 using Rosegarden::SegmentNotationHelper;
@@ -634,8 +636,8 @@ SelectionPropertyCommand::modifySegment()
 EventQuantizeCommand::EventQuantizeCommand(Rosegarden::Segment &segment,
 					   Rosegarden::timeT startTime,
 					   Rosegarden::timeT endTime,
-					   Rosegarden::Quantizer quantizer) :
-    BasicCommand(getGlobalName(&quantizer), segment, startTime, endTime,
+					   Rosegarden::Quantizer *quantizer):
+    BasicCommand(getGlobalName(quantizer), segment, startTime, endTime,
 		 true), // bruteForceRedo
     m_quantizer(quantizer),
     m_selection(0)
@@ -644,8 +646,8 @@ EventQuantizeCommand::EventQuantizeCommand(Rosegarden::Segment &segment,
 }
 
 EventQuantizeCommand::EventQuantizeCommand(Rosegarden::EventSelection &selection,
-					   Rosegarden::Quantizer quantizer) :
-    BasicCommand(getGlobalName(&quantizer),
+					   Rosegarden::Quantizer *quantizer):
+    BasicCommand(getGlobalName(quantizer),
 		 selection.getSegment(),
 		 selection.getStartTime(),
 		 selection.getEndTime(),
@@ -656,47 +658,168 @@ EventQuantizeCommand::EventQuantizeCommand(Rosegarden::EventSelection &selection
     // nothing else
 }
 
+EventQuantizeCommand::EventQuantizeCommand(Rosegarden::Segment &segment,
+					   Rosegarden::timeT startTime,
+					   Rosegarden::timeT endTime,
+					   QString configGroup,
+					   std::string target,
+					   bool notation):
+    BasicCommand(getGlobalName(makeQuantizer(configGroup, target, notation)),
+		 segment, startTime, endTime,
+		 true), // bruteForceRedo
+    m_selection(0),
+    m_configGroup(configGroup)
+{
+    // nothing else -- m_quantizer set by makeQuantizer
+}
+
+EventQuantizeCommand::EventQuantizeCommand(Rosegarden::EventSelection &selection,
+					   QString configGroup,
+					   std::string target,
+					   bool notation):
+    BasicCommand(getGlobalName(makeQuantizer(configGroup, target, notation)),
+		 selection.getSegment(),
+		 selection.getStartTime(),
+		 selection.getEndTime(),
+		 true), // bruteForceRedo
+    m_selection(&selection),
+    m_configGroup(configGroup)
+{
+    // nothing else -- m_quantizer set by makeQuantizer
+}
+
+EventQuantizeCommand::~EventQuantizeCommand()
+{
+    delete m_quantizer;
+}
+
 QString
 EventQuantizeCommand::getGlobalName(Rosegarden::Quantizer *quantizer)
 {
     if (quantizer) {
-	switch (quantizer->getType()) {
-	case Rosegarden::Quantizer::PositionQuantize:
-	    return "Position &Quantize";
-	case Rosegarden::Quantizer::UnitQuantize:
-	    return "Unit &Quantize";
-	case Rosegarden::Quantizer::NoteQuantize:
-	    return "Note &Quantize";
-	case Rosegarden::Quantizer::LegatoQuantize:
-	    return "Smoothing &Quantize";
+	if (dynamic_cast<Rosegarden::NotationQuantizer *>(quantizer)) {
+	    return i18n("Heuristic Notation &Quantize");
+	} else {
+	    return i18n("Grid &Quantize");
 	}
     }
 
-    return "&Quantize...";
+    return i18n("&Quantize...");
 }
 
 void
 EventQuantizeCommand::modifySegment()
 {
     Segment &segment = getSegment();
+    SegmentNotationHelper helper(segment);
 
     if (m_selection) {
 
-        m_quantizer.quantize(m_selection);
+        m_quantizer->quantize(m_selection);
 
     } else {
-	m_quantizer.quantize(&segment,
-			     segment.findTime(getStartTime()),
-			     segment.findTime(getEndTime()));
+	m_quantizer->quantize(&segment,
+			      segment.findTime(getStartTime()),
+			      segment.findTime(getEndTime()));
     }
+
+    if (m_configGroup) {
+
+	KConfig *config = kapp->config();
+	config->setGroup(m_configGroup);
+
+	bool rebeam = config->readBoolEntry("quantizerebeam", true);
+	bool makeviable = config->readBoolEntry("quantizemakeviable", false);
+	bool decounterpoint = config->readBoolEntry("quantizedecounterpoint", false);
+
+	if (m_selection) {
+	    EventSelection::RangeTimeList ranges(m_selection->getRangeTimes());
+	    for (EventSelection::RangeTimeList::iterator i = ranges.begin();
+		 i != ranges.end(); ++i) {
+		if (makeviable) {
+		    helper.makeNotesViable(i->first, i->second, true);
+		}
+		if (decounterpoint) {
+		    helper.deCounterpoint(i->first, i->second);
+		}
+		if (rebeam) {
+		    helper.autoBeam(i->first, i->second, GROUP_TYPE_BEAMED);
+		}
+	    }
+	} else {
+	    if (makeviable) {
+		helper.makeNotesViable(getStartTime(), getEndTime());
+	    }
+	    if (decounterpoint) {
+		helper.deCounterpoint(getStartTime(), getEndTime());
+	    }
+	    if (rebeam) {
+		helper.autoBeam(getStartTime(), getEndTime(), GROUP_TYPE_BEAMED);
+	    }
+	}
+    } //!!! need way to decide whether to do these even if no config group (i.e. through args to the command)
+	
 }
+
+Rosegarden::Quantizer *
+EventQuantizeCommand::makeQuantizer(QString configGroup, std::string target,
+				    bool notation)
+{
+    //!!! Excessive duplication with
+    // RosegardenQuantizeParameters::getQuantizer in widgets.cpp
+
+    KConfig *config = kapp->config();
+    config->setGroup(configGroup);
+
+    Rosegarden::timeT defaultUnit = 
+	Rosegarden::Note(Rosegarden::Note::Semiquaver).getDuration();
+    
+    int type = config->readNumEntry("quantizetype", notation ? 2 : 0);
+    Rosegarden::timeT unit = config->readNumEntry("quantizeunit",defaultUnit);
+    bool notateOnly = config->readBoolEntry("quantizenotationonly", notation);
+    bool durations = config->readBoolEntry("quantizedurations", false);
+    int simplicity = config->readNumEntry("quantizesimplicity", 13);
+    int maxTuplet = config->readNumEntry("quantizemaxtuplet", 3);
+    bool articulate = config->readBoolEntry("quantizearticulate", true);
+    
+    m_quantizer = 0;
+
+    if (type == 0) {
+	if (notateOnly) {
+	    m_quantizer = new Rosegarden::BasicQuantizer
+		(Rosegarden::Quantizer::NotationPrefix, unit, durations);
+	} else {
+	    m_quantizer = new Rosegarden::BasicQuantizer (unit, durations);
+	}
+    } else {
+	
+	Rosegarden::NotationQuantizer *nq;
+
+	if (notateOnly) {
+	    nq = new Rosegarden::NotationQuantizer();
+	} else {
+	    nq = new Rosegarden::NotationQuantizer
+		(Rosegarden::Quantizer::RawEventData);
+	}
+
+	nq->setUnit(unit);
+	nq->setSimplicityFactor(simplicity);
+	nq->setMaxTuplet(maxTuplet);
+	nq->setArticulate(articulate);
+
+	m_quantizer = nq;
+    }
+
+    return m_quantizer;
+}
+    
 
 
 // ---------------- Unquantize -----------
 EventUnquantizeCommand::EventUnquantizeCommand(Rosegarden::Segment &segment,
 					       Rosegarden::timeT startTime,
 					       Rosegarden::timeT endTime,
-					       Rosegarden::Quantizer quantizer) :
+					       Rosegarden::Quantizer *quantizer) :
     BasicCommand(i18n("Unquantize Events"), segment, startTime, endTime,
 		 true), // bruteForceRedo
     m_quantizer(quantizer),
@@ -707,7 +830,7 @@ EventUnquantizeCommand::EventUnquantizeCommand(Rosegarden::Segment &segment,
 
 EventUnquantizeCommand::EventUnquantizeCommand(
         Rosegarden::EventSelection &selection,
-        Rosegarden::Quantizer quantizer) :
+        Rosegarden::Quantizer *quantizer) :
     BasicCommand(i18n("Unquantize Events"),
 		 selection.getSegment(),
 		 selection.getStartTime(),
@@ -719,9 +842,15 @@ EventUnquantizeCommand::EventUnquantizeCommand(
     // nothing else
 }
 
+EventUnquantizeCommand::~EventUnquantizeCommand()
+{
+    delete m_quantizer;
+}
+
 QString
 EventUnquantizeCommand::getGlobalName(Rosegarden::Quantizer *quantizer)
 {
+/*!!!
     if (quantizer) {
 	switch (quantizer->getType()) {
 	case Rosegarden::Quantizer::PositionQuantize:
@@ -734,7 +863,7 @@ EventUnquantizeCommand::getGlobalName(Rosegarden::Quantizer *quantizer)
 	    return "Smoothing &Quantize";
 	}
     }
-
+*/
     return "&Quantize...";
 }
 
@@ -745,12 +874,12 @@ EventUnquantizeCommand::modifySegment()
 
     if (m_selection) {
 
-        m_quantizer.unquantize(m_selection);
+        m_quantizer->unquantize(m_selection);
 
     } else {
-	m_quantizer.unquantize(&segment,
-			       segment.findTime(getStartTime()),
-			       segment.findTime(getEndTime()));
+	m_quantizer->unquantize(&segment,
+				segment.findTime(getStartTime()),
+				segment.findTime(getEndTime()));
     }
 }
 

@@ -69,12 +69,12 @@ class Quantizer;
  */
 
 template <class Element, class Container>
-class GenericSet // abstract base
+class AbstractSet // abstract base
 {
 public:
     typedef typename Container::iterator Iterator;
 
-    virtual ~GenericSet() { }
+    virtual ~AbstractSet() { }
 
     /**
      * getInitialElement() returns end() if there are no elements in
@@ -85,8 +85,8 @@ public:
     Iterator getFinalElement() const    { return m_final;    }
 
     /// only return note elements; will return end() if there are none
-    Iterator getInitialNote() const;
-    Iterator getFinalNote() const;
+    Iterator getInitialNote() const     { return m_initialNote; }
+    Iterator getFinalNote() const       { return m_finalNote;   }
 
     /**
      * only elements with duration > 0 are candidates for shortest and
@@ -105,7 +105,7 @@ public:
     static Event *getAsEvent(const Iterator &i);
 
 protected:
-    GenericSet(const Container &c, Iterator elementInSet, const Quantizer *);
+    AbstractSet(const Container &c, Iterator elementInSet, const Quantizer *);
     void initialise();
 
     /// Return true if this element is not definitely beyond bounds of set
@@ -120,7 +120,8 @@ protected:
     // Data members:
 
     const Container &m_container;
-    Iterator m_initial, m_final, m_shortest, m_longest, m_highest, m_lowest;
+    Iterator m_initial, m_final, m_initialNote, m_finalNote;
+    Iterator m_shortest, m_longest, m_highest, m_lowest;
     Iterator m_baseIterator;
     const Quantizer *m_quantizer;
 };
@@ -129,10 +130,18 @@ protected:
 /**
  * Chord is subclassed from a vector of iterators; this vector
  * contains iterators pointing at all the notes in the chord, in
- * ascending order of pitch.  (You can also track through all the
- * notes in the chord by iterating from getInitialElement() to
+ * ascending order of pitch.  You can also track through all the
+ * events in the chord by iterating from getInitialElement() to
  * getFinalElement(), but this will only get them in the order in
- * which they appear in the original container.)
+ * which they appear in the original container.
+ *
+ * However, the notes in a chord might not be contiguous events in the
+ * container, as there could be other zero-duration events such as
+ * controllers (or even conceivably some short rests) between notes in
+ * the same chord, depending on the quantization settings.  The Chord
+ * itself only contains iterators pointing at the notes, so if you
+ * want to iterate through all events spanned by the Chord, iterate
+ * from getInitialElement() to getFinalElement() instead.
  *
  * This class can tell you various things about the chord it
  * describes, but not everything.  It can't tell you whether the
@@ -142,7 +151,7 @@ protected:
  */
 
 template <class Element, class Container>
-class GenericChord : public GenericSet<Element, Container>,
+class GenericChord : public AbstractSet<Element, Container>,
 		     public std::vector<typename Container::iterator>
 {
 public:
@@ -161,7 +170,23 @@ public:
     virtual ~GenericChord();
 
     virtual std::vector<Rosegarden::Mark> getMarksForChord() const;
+    virtual std::vector<int> getPitches() const;
     virtual bool contains(const Iterator &) const;
+
+    /**
+     * Return an iterator pointing to the previous note before this
+     * chord, or container's end() if there is no previous note.
+     */
+    virtual Iterator getPreviousNote();
+
+    /**
+     * Return an iterator pointing to the next note after this chord,
+     * or container's end() if there is no next note.  Remember this
+     * class can't know about Segment end marker times, so if your
+     * container is a Segment, check the returned note is actually
+     * before the end marker.
+     */
+    virtual Iterator getNextNote();
 
 protected:
     virtual bool test(const Iterator&);
@@ -206,11 +231,13 @@ isPersistent__Bool(Event *e, const PropertyName &name);
 
 
 template <class Element, class Container>
-GenericSet<Element, Container>::GenericSet(const Container &c,
+AbstractSet<Element, Container>::AbstractSet(const Container &c,
 					   Iterator i, const Quantizer *q):
     m_container(c),
     m_initial(c.end()),
     m_final(c.end()),
+    m_initialNote(c.end()),
+    m_finalNote(c.end()),
     m_shortest(c.end()),
     m_longest(c.end()),
     m_highest(c.end()),
@@ -223,20 +250,29 @@ GenericSet<Element, Container>::GenericSet(const Container &c,
 
 template <class Element, class Container>
 void
-GenericSet<Element, Container>::initialise()
+AbstractSet<Element, Container>::initialise()
 {
-    if (m_baseIterator == m_container.end() || !test(m_baseIterator)) return;
+    if (m_baseIterator == getContainer().end() || !test(m_baseIterator)) return;
+
     m_initial = m_baseIterator;
     m_final = m_baseIterator;
     sample(m_baseIterator);
+
+    if (getAsEvent(m_baseIterator)->isa(Note::EventType)) {
+	m_initialNote = m_baseIterator;
+	m_finalNote = m_baseIterator;
+    }
 
     Iterator i, j;
 
     // first scan back to find an element not in the desired set,
     // sampling everything as far back as the one after it
 
-    for (i = j = m_baseIterator; i != m_container.begin() && test(--j); i = j){
-        if (sample(j)) m_initial = j;
+    for (i = j = m_baseIterator; i != getContainer().begin() && test(--j); i = j){
+        if (sample(j)) {
+	    m_initial = j;
+	    if (getAsEvent(j)->isa(Note::EventType)) m_initialNote = j;
+	}
     }
 
     j = m_baseIterator;
@@ -244,41 +280,46 @@ GenericSet<Element, Container>::initialise()
     // then scan forwards to find an element not in the desired set,
     // sampling everything as far forward as the one before it
 
-    for (i = j = m_baseIterator; ++j != m_container.end() && test(j); i = j) {
-        if (sample(j)) m_final = j;
+    for (i = j = m_baseIterator; ++j != getContainer().end() && test(j); i = j) {
+        if (sample(j)) {
+	    m_final = j;
+	    if (getAsEvent(j)->isa(Note::EventType)) m_finalNote = j;
+	}
     }
 }
 
 template <class Element, class Container>
 bool
-GenericSet<Element, Container>::sample(const Iterator &i)
+AbstractSet<Element, Container>::sample(const Iterator &i)
 {
     const Quantizer &q(getQuantizer());
-    timeT d(q.getQuantizedDuration(getAsEvent(i)));
+    Event *e = getAsEvent(i);
+    timeT d(q.getQuantizedDuration(e));
     
     if (d > 0) {
-        if (m_longest == m_container.end() ||
+        if (m_longest == getContainer().end() ||
             d > q.getQuantizedDuration(getAsEvent(m_longest))) {
+//!!!	    std::cerr << "New longest in set at duration " << d << " and time " << e->getAbsoluteTime() << std::endl;
             m_longest = i;
         }
-        if (m_shortest == m_container.end() ||
+        if (m_shortest == getContainer().end() ||
             d < q.getQuantizedDuration(getAsEvent(m_shortest))) {
+//!!!	    std::cerr << "New shortest in set at duration " << d << " and time " << e->getAbsoluteTime() << std::endl;
             m_shortest = i;
         }
     }
 
-    Event *e = getAsEvent(i);
-    
     if (e->isa(Note::EventType)) {
-//        long p = e->get<Int>(BaseProperties::PITCH);
         long p = get__Int(e, BaseProperties::PITCH);
 
-        if (m_highest == m_container.end() ||
+        if (m_highest == getContainer().end() ||
             p > get__Int(getAsEvent(m_highest), BaseProperties::PITCH)) {
+//!!!	    std::cerr << "New highest in set at pitch " << p << " and time " << e->getAbsoluteTime() << std::endl;
             m_highest = i;
         }
-        if (m_lowest == m_container.end() ||
+        if (m_lowest == getContainer().end() ||
             p < get__Int(getAsEvent(m_lowest), BaseProperties::PITCH)) {
+//!!!	    std::cerr << "New lowest in set at pitch " << p << " and time " << e->getAbsoluteTime() << std::endl;
             m_lowest = i;
         }
     }
@@ -286,9 +327,10 @@ GenericSet<Element, Container>::sample(const Iterator &i)
     return true;
 }
 
+/*!!!
 template <class Element, class Container>
-typename GenericSet<Element, Container>::Iterator
-GenericSet<Element, Container>::getInitialNote() const
+typename AbstractSet<Element, Container>::Iterator
+AbstractSet<Element, Container>::getInitialNote() const
 {
     Iterator i(getInitialElement());
     if (getAsEvent(i)->isa(Note::EventType)) return i;
@@ -304,8 +346,8 @@ GenericSet<Element, Container>::getInitialNote() const
 }
 
 template <class Element, class Container>
-typename GenericSet<Element, Container>::Iterator
-GenericSet<Element, Container>::getFinalNote() const
+typename AbstractSet<Element, Container>::Iterator
+AbstractSet<Element, Container>::getFinalNote() const
 {
     Iterator i(getFinalElement());
     if (getAsEvent(i)->isa(Note::EventType)) return i;
@@ -319,6 +361,7 @@ GenericSet<Element, Container>::getFinalNote() const
 
     return getContainer().end();
 }
+*/
 
 //////////////////////////////////////////////////////////////////////
  
@@ -327,7 +370,7 @@ GenericChord<Element, Container>::GenericChord(const Container &c, Iterator i,
 					       const Quantizer *q,
 					       const Clef &clef,
 					       const Key &key) :
-    GenericSet<Element, Container>(c, i, q),
+    AbstractSet<Element, Container>(c, i, q),
     m_clef(clef),
     m_key(key),
     m_time(q->getQuantizedAbsoluteTime(getAsEvent(i))),
@@ -378,7 +421,7 @@ GenericChord<Element, Container>::test(const Iterator &i)
 
     return ((getAsEvent(i)->isa(Note::EventType) ||
 	     getAsEvent(i)->isa(Note::EventRestType)) &&
-	    getQuantizer().getQuantizedAbsoluteTime(getAsEvent(i)) == m_time &&
+	    getQuantizer().getQuantizedAbsoluteTime(getAsEvent(i)) == m_time&&
 	    getAsEvent(i)->getSubOrdering() == m_subordering);
 }
 
@@ -425,7 +468,7 @@ GenericChord<Element, Container>::sample(const Iterator &i)
 	}
     }
 
-    GenericSet<Element, Container>::sample(i);
+    AbstractSet<Element, Container>::sample(i);
     push_back(i);
     return true;
 }
@@ -441,14 +484,16 @@ GenericChord<Element, Container>::getMarksForChord() const
 
 	long markCount = 0;
 	const Iterator &itr((*this)[i]);
-	get__Int(getAsEvent(itr), MARK_COUNT, markCount);
+	get__Int(getAsEvent(itr), BaseProperties::MARK_COUNT, markCount);
 
 	if (markCount == 0) continue;
 
 	for (long j = 0; j < markCount; ++j) {
 
 	    Mark mark(Marks::NoMark);
-	    (void)get__String(getAsEvent(itr), getMarkPropertyName(j), mark);
+	    (void)get__String(getAsEvent(itr),
+			      BaseProperties::getMarkPropertyName(j),
+			      mark);
 
 	    unsigned int k;
 	    for (k = 0; k < marks.size(); ++i) {
@@ -465,6 +510,27 @@ GenericChord<Element, Container>::getMarksForChord() const
 
 
 template <class Element, class Container>
+std::vector<int>
+GenericChord<Element, Container>::getPitches() const
+{
+    std::vector<int> pitches;
+
+    for (typename std::vector<typename Container::iterator>::const_iterator
+	     i = begin(); i != end(); ++i) {
+	if (getAsEvent(*i)->has(BaseProperties::PITCH)) {
+	    int pitch = get__Int
+		(getAsEvent(*i), Rosegarden::BaseProperties::PITCH);
+	    if (pitches.size() > 0 && pitches[pitches.size()-1] == pitch) 
+		continue;
+	    pitches.push_back(pitch);
+	}
+    }
+
+    return pitches;
+}
+
+
+template <class Element, class Container>
 bool
 GenericChord<Element, Container>::contains(const Iterator &itr) const
 {
@@ -475,6 +541,37 @@ GenericChord<Element, Container>::contains(const Iterator &itr) const
     }
     return false;
 }
+
+
+template <class Element, class Container>
+typename GenericChord<Element, Container>::Iterator
+GenericChord<Element, Container>::getPreviousNote()
+{
+    Iterator i(getInitialElement());
+    while (1) {
+	if (i == getContainer().begin()) return getContainer().end();
+	--i;
+	if (getAsEvent(i)->isa(Note::EventType)) {
+	    return i;
+	}
+    }
+}
+
+
+template <class Element, class Container>
+typename GenericChord<Element, Container>::Iterator
+GenericChord<Element, Container>::getNextNote()
+{
+    Iterator i(getFinalElement());
+    while (  i != getContainer().end() &&
+	   ++i != getContainer().end()) {
+	if (getAsEvent(i)->isa(Note::EventType)) {
+	    return i;
+	}
+    }
+    return getContainer().end();
+}
+
 	
 template <class Element, class Container>	
 bool

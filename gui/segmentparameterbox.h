@@ -94,7 +94,7 @@ private:
     RosegardenComboBox         *m_delayValue;
 
     std::vector<Rosegarden::Segment*> m_segments;
-    std::vector<Rosegarden::StandardQuantization> m_standardQuantizations;
+    std::vector<Rosegarden::timeT> m_standardQuantizations;
     std::vector<Rosegarden::timeT> m_delays;
     std::vector<int> m_realTimeDelays;
 

@@ -339,9 +339,9 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 
     int elementCount = 0;
     timeT endTime =
-	(to != getViewElementList()->end() ? (*to)->getAbsoluteTime() :
+	(to != getViewElementList()->end() ? (*to)->getViewAbsoluteTime() :
 	 getSegment().getEndMarkerTime());
-    timeT startTime = (from != to ? (*from)->getAbsoluteTime() : endTime);
+    timeT startTime = (from != to ? (*from)->getViewAbsoluteTime() : endTime);
 
     for (NotationElementList::iterator it = from, nextIt = from;
 	 it != to; it = nextIt) {
@@ -360,9 +360,9 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 			    currentClef, selected);
 
 	if ((endTime > startTime) &&
-	    (++elementCount % 20 == 0)) {
+	    (++elementCount % 100 == 0)) {
 
-	    timeT myTime = (*it)->getAbsoluteTime();
+	    timeT myTime = (*it)->getViewAbsoluteTime();
 	    emit setProgress((myTime - startTime) * 100 / (endTime - startTime));
 	    kapp->processEvents();
 	    throwIfCancelled();//!!!
@@ -423,7 +423,7 @@ NotationStaff::positionElements(timeT from, timeT to)
 		Rosegarden::SegmentNotationHelper helper(getSegment());
 		Rosegarden::Key someKey;
 		helper.getClefAndKeyAt
-		    ((*it)->getAbsoluteTime(), currentClef, someKey);
+		    ((*it)->event()->getAbsoluteTime(), currentClef, someKey);
 		haveCurrentClef = true;
 	    }
 	}
@@ -461,7 +461,7 @@ NotationStaff::positionElements(timeT from, timeT to)
 	    
 		if (spanning) {
 		    needNewSprite =
-			((*it)->getAbsoluteTime() < nextBarTime ||
+			((*it)->getViewAbsoluteTime() < nextBarTime ||
 			 !elementShiftedOnly(it));
 		}
 	    }
@@ -483,8 +483,8 @@ NotationStaff::positionElements(timeT from, timeT to)
 	(*it)->setSelected(selected);
 
 	if ((to > from) &&
-	    (++elementsPositioned % 20 == 0)) {
-	    timeT myTime = (*it)->getAbsoluteTime();
+	    (++elementsPositioned % 200 == 0)) {
+	    timeT myTime = (*it)->getViewAbsoluteTime();
 	    emit setProgress((myTime - from) * 100 / (to - from));
 	    kapp->processEvents();
 	    throwIfCancelled();//!!!
@@ -530,7 +530,7 @@ NotationStaff::findUnchangedBarStart(timeT from)
 
     NotationElementList::iterator beginAt = nel->begin();
     do {
-	from = getSegment().getBarStartForTime(from - 1);
+	from = getSegment().getComposition()->getBarStartForTime(from - 1);
 	beginAt = nel->findTime(from);
     } while (beginAt != nel->begin() &&
 	     (beginAt == nel->end() || !elementNotMoved(*beginAt)));
@@ -559,7 +559,7 @@ NotationStaff::findUnchangedBarEnd(timeT to, timeT &nextBarTime)
     do {
 	candidate = nel->findTime(getSegment().getBarEndForTime(to));
 	if (candidate != nel->end()) {
-	    to = (*candidate)->getAbsoluteTime();
+	    to = (*candidate)->getViewAbsoluteTime();
 	    if (nextBarTime < 0) nextBarTime = to;
 	} else {
 	    nextBarTime = getSegment().getEndTime();
@@ -586,15 +586,19 @@ NotationStaff::elementNotMoved(NotationElement *elt)
 	(int)(elt->getCanvasY()) == (int)(coords.second);
 
 
-//    if (!ok) {
-//	NOTATION_DEBUG
-//	    << "elementNotMoved: elt at " << elt->getAbsoluteTime() <<
-//	    ", ok is " << ok << endl;
-//	std::cerr << "(cf " << (int)(elt->getCanvasX()) << " vs "
-//		  << (int)(coords.first) << ", "
-//		  << (int)(elt->getCanvasY()) << " vs "
-//		  << (int)(coords.second) << ")" << std::endl;
-//    }
+    if (!ok) {
+	NOTATION_DEBUG
+	    << "elementNotMoved: elt at " << elt->getViewAbsoluteTime() <<
+	    ", ok is " << ok << endl;
+	std::cerr << "(cf " << (int)(elt->getCanvasX()) << " vs "
+		  << (int)(coords.first) << ", "
+		  << (int)(elt->getCanvasY()) << " vs "
+		  << (int)(coords.second) << ")" << std::endl;
+    } else {
+	NOTATION_DEBUG << "elementNotMoved: elt at " << elt->getViewAbsoluteTime()
+		       << " is ok" << endl;
+    }
+
     return ok;
 }
 
@@ -640,7 +644,7 @@ NotationStaff::elementShiftedOnly(NotationElementList::iterator i)
 	if (j == i) shift = myShift;
 	else if (myShift != shift) break;
 	
-	if (elt->getAbsoluteTime() > (*i)->getAbsoluteTime()) {
+	if (elt->getViewAbsoluteTime() > (*i)->getViewAbsoluteTime()) {
 	    // all events up to and including this one have passed
 	    ok = true;
 	    break;
@@ -649,7 +653,7 @@ NotationStaff::elementShiftedOnly(NotationElementList::iterator i)
 
     if (!ok) {
 	NOTATION_DEBUG 
-	    << "elementShiftedOnly: elt at " << (*i)->getAbsoluteTime()
+	    << "elementShiftedOnly: elt at " << (*i)->getViewAbsoluteTime()
 	    << ", ok is " << ok << endl;
     }
 
@@ -696,16 +700,18 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 
 	} else if (elt->isRest()) {
 
+//!!! need better way to get these properties out
+	    /*!!!	    
 	    timeT absTime = 
-		m_notationView->getLegatoQuantizer()->getQuantizedAbsoluteTime
-		(elt->event());
+		getSegment().getComposition()->getNotationQuantizer()->
+		getQuantizedAbsoluteTime(elt->event());
 	    timeT duration =
-		m_notationView->getLegatoQuantizer()->getQuantizedDuration
-		(elt->event());
+		getSegment().getComposition()->getNotationQuantizer()->
+		getQuantizedDuration(elt->event());
 
 	    bool ignoreRest = false;
 	    elt->event()->get<Bool>(properties.REST_TOO_SHORT, ignoreRest);
-	    /*!!!	    
+
 	    bool ignoreRest = (duration == 0);
 	    if (!ignoreRest) {
 		if (nextElt) {
@@ -718,25 +724,25 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 		    }
 		}
 	    }
-	    */
-	    if (!ignoreRest) {
 
+	    if (!ignoreRest) {
+*/
 		Note::Type note =
 		    elt->event()->get<Int>(properties.NOTE_TYPE);
 		int dots = elt->event()->get<Int>(properties.NOTE_DOTS);
 		restParams.setNoteType(note);
 		restParams.setDots(dots);
 		setTuplingParameters(elt, restParams);
-		bool quantized = (absTime != elt->getAbsoluteTime() ||
-				  duration != elt->getDuration());
-		restParams.setQuantized(quantized);
-		if (quantized) z = 2;
+//!!!		bool quantized = (absTime != elt->getAbsoluteTime() ||
+//				  duration != elt->getDuration());
+		restParams.setQuantized(false);
+//!!!		if (quantized) z = 2;
 		pixmap = m_notePixmapFactory->makeRestPixmap(restParams);
-
+/*!!!
 	    } else {
 		NOTATION_DEBUG << "Omitting too-short rest" << endl;
 	    }
-
+*/
 	} else if (elt->event()->isa(Clef::EventType)) {
 
 	    pixmap = m_notePixmapFactory->makeClefPixmap
@@ -770,7 +776,7 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 		elt->event()->get<Int>
 		(Indication::IndicationDurationPropertyName);
 	    NotationElementList::iterator indicationEnd =
-		getViewElementList()->findTime(elt->getAbsoluteTime() +
+		getViewElementList()->findTime(elt->getViewAbsoluteTime() +
 					       indicationDuration);
 
 	    string indicationType = 
@@ -831,10 +837,7 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 	    }
 
 	} else {
-                    
-	    NOTATION_DEBUG
-		<< "NotationElement of unrecognised type "
-		<< elt->event()->getType() << endl;
+
 	    if (m_showUnknowns) {
 		pixmap = m_notePixmapFactory->makeUnknownPixmap();
 	    }
@@ -908,13 +911,20 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
 
     bool quantized = false;
     if (m_colourQuantize && !elt->isTuplet()) {
-	timeT absTime = m_notationView->getLegatoQuantizer()->
-	    getQuantizedAbsoluteTime(elt->event());
-	timeT duration = m_notationView->getLegatoQuantizer()->
-	    getQuantizedDuration(elt->event());
 
-	quantized = (absTime != elt->getAbsoluteTime() ||
-		     duration != elt->getDuration());
+	//!!! as above, need better way
+/*!!!
+	    timeT absTime = 
+		getSegment().getComposition()->getNotationQuantizer()->
+		getQuantizedAbsoluteTime(elt->event());
+	    timeT duration =
+		getSegment().getComposition()->getNotationQuantizer()->
+		getQuantizedDuration(elt->event());
+*/
+
+	quantized =
+	    (elt->getViewAbsoluteTime() != elt->event()->getAbsoluteTime() ||
+	     elt->getViewDuration()     != elt->event()->getDuration());
     }
     params.setQuantized(quantized);
 

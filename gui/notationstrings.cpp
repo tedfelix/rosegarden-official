@@ -93,11 +93,11 @@ NotationStrings::getNoteName(Note &note, bool plural, bool triplet)
         i18n("whole notes"), i18n("double whole notes")
     };
     if (plural && triplet) {        
-        return i18n("%s triplets").arg(names[type]);
+        return i18n("%1 triplets").arg(names[type]);
     } else if (plural) {
         return pluralnames[type];
     } else if (triplet) {
-        return i18n("%s triplet").arg(names[type]);
+        return i18n("%1 triplet").arg(names[type]);
     }
     return names[type];
 }

@@ -317,6 +317,8 @@ void
 NoteInserter::insertNote(Segment &segment, timeT insertionTime,
 			 int pitch, Rosegarden::Accidental accidental)
 {
+    //!!! bring up-to-date
+
     Note note(m_noteType, m_noteDots);
     timeT endTime = insertionTime + note.getDuration();
 
@@ -381,7 +383,7 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
 	return false;
     }
 
-    timeT time = (*itr)->getAbsoluteTime();
+    timeT time = (*itr)->getViewAbsoluteTime();
     m_clickInsertX = (*itr)->getLayoutX();
     if (clefEvt) clef = Rosegarden::Clef(*clefEvt);
     if (keyEvt) key = Rosegarden::Key(*keyEvt);
@@ -454,11 +456,11 @@ NoteInserter::getOffsetWithinRest(int staffNo,
     double origin = ((*i)->getLayoutX() - airX) / 2;
     double width = airWidth - origin;
 
-    timeT duration = (*i)->getDuration();
+    timeT duration = (*i)->getViewDuration();
 
     Rosegarden::TimeSignature timeSig =
 	staff->getSegment().getComposition()->getTimeSignatureAt
-	((*i)->getAbsoluteTime());
+	((*i)->event()->getAbsoluteTime());
     timeT unit = timeSig.getUnitDuration();
 
     int unitCount = duration / unit;
@@ -763,7 +765,7 @@ void ClefInserter::handleLeftButtonPress(Rosegarden::timeT,
 
     if (closestElement == staff->getViewElementList()->end()) return;
 
-    timeT time = (*closestElement)->getAbsoluteTime();
+    timeT time = (*closestElement)->getViewAbsoluteTime();
 
     ClefInsertionCommand *command = 
 	new ClefInsertionCommand(staff->getSegment(), time, m_clef);
@@ -807,7 +809,7 @@ void TextInserter::handleLeftButtonPress(Rosegarden::timeT,
 	// edit an existing text, if that's what we clicked on
 
 	defaultText = Rosegarden::Text(*element->event());
-	insertionTime = element->getAbsoluteTime();
+	insertionTime = element->getViewAbsoluteTime();
 	eraseEvent = element->event();
 
     } else {
@@ -820,7 +822,7 @@ void TextInserter::handleLeftButtonPress(Rosegarden::timeT,
 
 	if (closestElement == staff->getViewElementList()->end()) return;
 	
-	insertionTime = (*closestElement)->getAbsoluteTime();
+	insertionTime = (*closestElement)->getViewAbsoluteTime();
     }
 
     TextEventDialog *dialog = new TextEventDialog
@@ -1338,7 +1340,7 @@ void NotationSelectionPaster::handleLeftButtonPress(Rosegarden::timeT,
 
     if (closestElement == staff->getViewElementList()->end()) return;
 
-    timeT time = (*closestElement)->getAbsoluteTime();
+    timeT time = (*closestElement)->getViewAbsoluteTime();
 
     Segment& segment = staff->getSegment();
     PasteEventsCommand *command = new PasteEventsCommand

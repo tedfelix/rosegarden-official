@@ -40,7 +40,7 @@ using Rosegarden::Note;
 SegmentParameterBox::SegmentParameterBox(RosegardenGUIView *view,
                                          QWidget *parent)
     : RosegardenParameterBox(i18n("Segment Parameters"), parent),
-      m_standardQuantizations(Rosegarden::StandardQuantization::getStandardQuantizations()),
+      m_standardQuantizations(Rosegarden::BasicQuantizer::getStandardQuantizations()),
       m_view(view),
       m_tranposeRange(24)
 
@@ -93,8 +93,10 @@ SegmentParameterBox::initBox()
             SLOT(slotQuantizeSelected(int)));
 
     // handle quantize changes from mouse wheel
+/*!!!
     connect(m_quantizeValue, SIGNAL(propagate(int)),
             SLOT(slotQuantizeSelected(int)));
+*/
 
     // reversing motif style read-write combo
     m_transposeValue = new RosegardenComboBox(true, true, this);
@@ -106,8 +108,10 @@ SegmentParameterBox::initBox()
             SLOT(slotTransposeSelected(int)));
 
     // handle transpose combo changes
+/*!!!
     connect(m_transposeValue, SIGNAL(propagate(int)),
             SLOT(slotTransposeSelected(int)));
+*/
 
     // and text changes
     connect(m_transposeValue, SIGNAL(textChanged(const QString&)),
@@ -152,7 +156,7 @@ SegmentParameterBox::initBox()
 
     for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
 
-	Rosegarden::timeT time = m_standardQuantizations[i].unit;
+	Rosegarden::timeT time = m_standardQuantizations[i];
 	Rosegarden::timeT error = 0;
 	QString label = npf.makeNoteMenuLabel(time, true, error);
 	QPixmap pmap = NotePixmapFactory::toQPixmap(npf.makeNoteMenuPixmap(time, error));
@@ -246,7 +250,7 @@ SegmentParameterBox::populateBoxFromSegments()
     Tristate transposed = None;
     Tristate delayed = None;
 
-    Rosegarden::Quantizer qntzLevel;
+    Rosegarden::timeT qntzLevel = 0;
     // At the moment we have no negative delay, so we use negative
     // values to represent real-time delay in ms
     Rosegarden::timeT delayLevel = 0;
@@ -278,15 +282,15 @@ SegmentParameterBox::populateBoxFromSegments()
             if (it == m_segments.begin())
             {
                 quantized = All;
-                qntzLevel = (*it)->getQuantizer();
+                qntzLevel = (*it)->getQuantizer()->getUnit();
             }
             else
             {
                 // If quantize levels don't match
                 if (quantized == None ||
                         (quantized == All &&
-                            qntzLevel.getUnit() !=
-                            (*it)->getQuantizer().getUnit()))
+                            qntzLevel !=
+                            (*it)->getQuantizer()->getUnit()))
                     quantized = Some;
             }
         }
@@ -374,7 +378,7 @@ SegmentParameterBox::populateBoxFromSegments()
                 for (unsigned int i = 0;
                      i < m_standardQuantizations.size(); ++i)
                 {
-                    if (m_standardQuantizations[i].unit == qntzLevel.getUnit())
+                    if (m_standardQuantizations[i] == qntzLevel)
                     {
                         m_quantizeValue->setCurrentItem(i);
                         break;
@@ -487,7 +491,7 @@ SegmentParameterBox::slotQuantizeSelected(int qLevel)
 
     SegmentChangeQuantizationCommand *command =
 	new SegmentChangeQuantizationCommand
-	(off ? 0 : &m_standardQuantizations[qLevel]);
+	(off ? 0 : m_standardQuantizations[qLevel]);
 
     std::vector<Rosegarden::Segment*>::iterator it;
     for (it = m_segments.begin(); it != m_segments.end(); it++)

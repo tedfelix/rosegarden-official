@@ -25,6 +25,7 @@
 
 #include <kapp.h>
 #include <klocale.h>
+#include <kconfig.h>
 
 #include <qfontdatabase.h>
 #include <qtimer.h>
@@ -32,10 +33,16 @@
 #include <qcursor.h>
 #include <qpainter.h>
 #include <qtooltip.h>
+#include <qlayout.h>
+#include <qtextedit.h>
+#include <qlineedit.h>
 
 #include "widgets.h"
 #include "rosedebug.h"
 #include "rosestrings.h"
+#include "notepixmapfactory.h"
+
+#include "Quantizer.h"
 
 void
 RosegardenComboBox::wheelEvent(QWheelEvent *e)
@@ -52,7 +59,8 @@ RosegardenComboBox::wheelEvent(QWheelEvent *e)
         if (currentItem() < count() - 1)
         {
             setCurrentItem(currentItem() + 1);
-            emit propagate(currentItem());
+//!!!            emit propagate(currentItem());
+	    emit activated(currentItem());
         }
     }
     else
@@ -60,7 +68,8 @@ RosegardenComboBox::wheelEvent(QWheelEvent *e)
         if (currentItem() > 0)
         {
             setCurrentItem(currentItem() - 1);
-            emit propagate(currentItem());
+//!!!            emit propagate(currentItem());
+	    emit activated(currentItem());
         }
     }
 }
@@ -624,3 +633,269 @@ RosegardenRotary::setPosition(float position)
 }
 
 
+RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
+							   bool showNotationOption,
+							   QString configCategory,
+							   QString preamble) :
+    QFrame(parent),
+    m_configCategory(configCategory),
+    m_standardQuantizations
+        (Rosegarden::BasicQuantizer::getStandardQuantizations())
+{
+    QGridLayout *mainLayout = new QGridLayout(this, preamble ? 4 : 3, 1, 10, 5);
+
+    if (preamble) {
+	QLabel *label = new QLabel(preamble, this);
+	label->setAlignment(Qt::WordBreak);
+	mainLayout->addWidget(label, 0, 0);
+    }
+
+    QGroupBox *quantizerBox = new QGroupBox
+	(1, Horizontal, i18n("Quantizer"), this);
+    mainLayout->addWidget(quantizerBox, preamble ? 1 : 0, 0);
+    QFrame *typeFrame = new QFrame(quantizerBox);
+
+    QGridLayout *layout = new QGridLayout(typeFrame, 1, 2, 5, 3);
+
+    layout->addWidget(new QLabel(i18n("Quantizer type:"), typeFrame), 0, 0);
+    m_typeCombo = new RosegardenComboBox(false, typeFrame);
+    m_typeCombo->insertItem(i18n("Grid quantizer"));
+    m_typeCombo->insertItem(i18n("Heuristic notation quantizer"));
+    layout->addWidget(m_typeCombo, 0, 1);
+
+    m_notationTarget = new QCheckBox
+	(i18n("Quantize for notation only (leave performance unchanged)"),
+	 quantizerBox);
+    if (!showNotationOption) m_notationTarget->hide();
+
+    QHBox *parameterBox = new QHBox(this);
+    mainLayout->addWidget(parameterBox, preamble ? 2 : 1, 0);
+
+    m_gridBox = new QGroupBox
+	(1, Horizontal, i18n("Grid parameters"), parameterBox);
+    QFrame *gridFrame = new QFrame(m_gridBox);
+
+    layout = new QGridLayout(gridFrame, 2, 2, 5, 3);
+
+    layout->addWidget(new QLabel(i18n("Base grid unit:"), gridFrame), 0, 0);
+    m_gridUnitCombo = new RosegardenComboBox(false, gridFrame);
+    layout->addWidget(m_gridUnitCombo, 0, 1);
+
+    m_durationCheckBox = new QCheckBox
+	(i18n("Quantize durations as well as start times"), gridFrame);
+    layout->addMultiCellWidget(m_durationCheckBox, 1, 1, 0, 1);
+
+    m_notationBox = new QGroupBox
+	(1, Horizontal, i18n("Notation parameters"), parameterBox);
+    QFrame *notationFrame = new QFrame(m_notationBox);
+
+    layout = new QGridLayout(notationFrame, 2, 4, 5, 3);
+
+    layout->addWidget(new QLabel(i18n("Base grid unit:"), notationFrame),
+		      0, 0);
+    m_notationUnitCombo = new RosegardenComboBox(false, notationFrame);
+    layout->addWidget(m_notationUnitCombo, 0, 1);
+
+    layout->addWidget(new QLabel(i18n("General complexity:"),
+				 notationFrame), 1, 0);
+
+    m_simplicityCombo = new RosegardenComboBox(false, notationFrame);
+    m_simplicityCombo->insertItem(i18n("Very high"));
+    m_simplicityCombo->insertItem(i18n("High"));
+    m_simplicityCombo->insertItem(i18n("Normal"));
+    m_simplicityCombo->insertItem(i18n("Low"));
+    m_simplicityCombo->insertItem(i18n("Absurdly facile"));
+    layout->addWidget(m_simplicityCombo, 1, 1);
+
+    layout->addWidget(new QLabel(i18n("Tuplet level:"),
+				 notationFrame), 1, 2);
+    m_maxTuplet = new RosegardenComboBox(false, notationFrame);
+    m_maxTuplet->insertItem(i18n("None"));
+    m_maxTuplet->insertItem(i18n("2-in-the-time-of-3"));
+    m_maxTuplet->insertItem(i18n("Triplet"));
+    m_maxTuplet->insertItem(i18n("4-Tuplet"));
+    m_maxTuplet->insertItem(i18n("5-Tuplet"));
+    m_maxTuplet->insertItem(i18n("6-Tuplet"));
+    m_maxTuplet->insertItem(i18n("7-Tuplet"));
+    m_maxTuplet->insertItem(i18n("8-Tuplet"));
+    m_maxTuplet->insertItem(i18n("Any"));
+    layout->addWidget(m_maxTuplet, 1, 3);
+
+    QGroupBox *postProcessingBox = new QGroupBox
+	(1, Horizontal, i18n("After quantization"), this);
+    mainLayout->addWidget(postProcessingBox, preamble ? 3 : 2, 0);
+    QFrame *postFrame = new QFrame(postProcessingBox);
+
+    layout = new QGridLayout(postFrame, 2, 2, 5, 3);
+    m_makeViable = new QCheckBox(i18n("Tie notes at barlines etc"), postFrame);
+    m_deCounterpoint = new QCheckBox(i18n("Split-and-tie overlapping chords"), postFrame);
+    m_rebeam = new QCheckBox(i18n("Re-beam"), postFrame);
+    m_articulate = new QCheckBox
+	(i18n("Add articulations (staccato, tenuto, slurs)"), postFrame);
+
+    layout->addWidget(m_makeViable, 0, 1);
+    layout->addWidget(m_deCounterpoint, 1, 1);
+    layout->addWidget(m_rebeam, 1, 0);
+    layout->addWidget(m_articulate, 0, 0);
+    
+
+    NotePixmapFactory npf;
+    QPixmap noMap =
+	NotePixmapFactory::toQPixmap(npf.makeToolbarPixmap("menu-no-note"));
+
+    int defaultType = 0;
+    Rosegarden::timeT defaultUnit = 
+	Rosegarden::Note(Rosegarden::Note::Semiquaver).getDuration();
+
+    if (m_configCategory) {
+	KConfig *config = kapp->config();
+	config->setGroup(m_configCategory);
+	defaultType =
+	    config->readNumEntry("quantizetype", showNotationOption ? 2 : 0);
+	defaultUnit =
+	    config->readNumEntry("quantizeunit", defaultUnit);
+	m_notationTarget->setChecked
+	    (config->readBoolEntry("quantizenotationonly", showNotationOption));
+	m_durationCheckBox->setChecked
+	    (config->readBoolEntry("quantizedurations", false));
+	m_simplicityCombo->setCurrentItem
+	    (config->readNumEntry("quantizesimplicity", 13) - 11);
+	m_maxTuplet->setCurrentItem
+	    (config->readNumEntry("quantizemaxtuplet", 3) - 1);
+	m_articulate->setChecked
+	    (config->readBoolEntry("quantizearticulate", true));
+    } else {
+	defaultType = showNotationOption ? 2 : 0;
+	m_notationTarget->setChecked(showNotationOption);
+	m_durationCheckBox->setChecked(false);
+	m_simplicityCombo->setCurrentItem(2);
+	m_maxTuplet->setCurrentItem(2);
+	m_articulate->setChecked(true);
+    }
+
+    for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
+
+	Rosegarden::timeT time = m_standardQuantizations[i];
+	Rosegarden::timeT error = 0;
+
+	QPixmap pmap =
+	    NotePixmapFactory::toQPixmap(npf.makeNoteMenuPixmap(time, error));
+	QString label = npf.makeNoteMenuLabel(time, false, error);
+
+	if (error == 0) {
+	    m_gridUnitCombo->insertItem(pmap, label);
+	    m_notationUnitCombo->insertItem(pmap, label);
+	} else {
+	    m_gridUnitCombo->insertItem(noMap, QString("%1").arg(time));
+	    m_notationUnitCombo->insertItem(noMap, QString("%1").arg(time));
+	}
+
+	if (m_standardQuantizations[i] == defaultUnit) {
+	    m_gridUnitCombo->setCurrentItem(m_gridUnitCombo->count() - 1);
+	    m_notationUnitCombo->setCurrentItem
+		(m_notationUnitCombo->count() - 1);
+	}
+    }
+
+    switch (defaultType) {
+    case 0:
+	m_gridBox->show();
+	m_notationBox->hide();
+	m_typeCombo->setCurrentItem(0);
+	break;
+    case 1:
+	// note quantizer, fall through for now
+    case 2:
+	m_gridBox->hide();
+	m_notationBox->show();
+	m_typeCombo->setCurrentItem(1);
+	break;
+    }	
+
+    connect(m_typeCombo, SIGNAL(activated(int)), SLOT(slotTypeChanged(int)));
+}
+
+
+Rosegarden::Quantizer *
+RosegardenQuantizeParameters::getQuantizer() const
+{
+    //!!! Excessive duplication with
+    // EventQuantizeCommand::makeQuantizer in editcommands.cpp
+
+    int type = m_typeCombo->currentItem();
+    Rosegarden::timeT unit = 0;
+
+    if (type == 0) {
+	unit = m_standardQuantizations[m_gridUnitCombo->currentItem()];
+    } else {
+	unit = m_standardQuantizations[m_notationUnitCombo->currentItem()];
+    }
+
+    Rosegarden::Quantizer *quantizer = 0;
+
+    if (type == 0) {
+	if (m_notationTarget->isChecked()) {
+	    quantizer = new Rosegarden::BasicQuantizer
+		(Rosegarden::Quantizer::NotationPrefix,
+		 unit, m_durationCheckBox->isChecked());
+	} else {
+	    quantizer = new Rosegarden::BasicQuantizer
+		(unit, m_durationCheckBox->isChecked());
+	}
+    } else {
+	
+	Rosegarden::NotationQuantizer *nq;
+
+	if (m_notationTarget->isChecked()) {
+	    nq = new Rosegarden::NotationQuantizer();
+	} else {
+	    nq = new Rosegarden::NotationQuantizer
+		(Rosegarden::Quantizer::RawEventData);
+	}
+
+	nq->setUnit(unit);
+	nq->setSimplicityFactor(m_simplicityCombo->currentItem() + 11);
+	nq->setMaxTuplet(m_maxTuplet->currentItem() + 1);
+	nq->setArticulate(m_articulate->isChecked());
+
+	quantizer = nq;
+    }
+
+    if (m_configCategory) {
+	KConfig *config = kapp->config();
+	config->setGroup(m_configCategory);
+	config->writeEntry("quantizetype", type);
+	config->writeEntry("quantizeunit", unit);
+	config->writeEntry("quantizenotationonly",
+			   m_notationTarget->isChecked());
+	if (type == 0) {
+	    config->writeEntry("quantizedurations",
+			       m_durationCheckBox->isChecked());
+	} else {
+	    config->writeEntry("quantizesimplicity",
+			       m_simplicityCombo->currentItem() + 11);
+	    config->writeEntry("quantizemaxtuplet",
+			       m_maxTuplet->currentItem() + 1);
+	    config->writeEntry("quantizearticulate",
+			       m_articulate->isChecked());
+	}
+	config->writeEntry("quantizerebeam", m_rebeam->isChecked());
+	config->writeEntry("quantizemakeviable", m_makeViable->isChecked());
+	config->writeEntry("quantizedecounterpoint", m_deCounterpoint->isChecked());
+    }
+
+    return quantizer;
+}
+	
+
+void
+RosegardenQuantizeParameters::slotTypeChanged(int index)
+{
+    if (index == 0) {
+	m_gridBox->show();
+	m_notationBox->hide();
+    } else {
+	m_gridBox->hide();
+	m_notationBox->show();
+    }
+}

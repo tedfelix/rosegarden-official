@@ -143,7 +143,8 @@ XmlStorableEvent::XmlStorableEvent(Event &e) :
 
 
 void
-XmlStorableEvent::setPropertiesFromAttributes(const QXmlAttributes &attributes)
+XmlStorableEvent::setPropertyFromAttributes(const QXmlAttributes &attributes,
+					    bool persistent)
 {
     bool have = false;
     QString name = attributes.value("name");
@@ -162,13 +163,14 @@ XmlStorableEvent::setPropertiesFromAttributes(const QXmlAttributes &attributes)
             RG_DEBUG << "XmlStorableEvent::setProperty: multiple values found, ignoring all but the first" << endl;
             continue;
         } else if (attrName == "bool") {
-            set<Bool>(qstrtostr(name), attrVal.lower() == "true");
+            set<Bool>(qstrtostr(name), attrVal.lower() == "true",
+		      persistent);
             have = true;
         } else if (attrName == "int") {
-            set<Int>(qstrtostr(name), attrVal.toInt());
+            set<Int>(qstrtostr(name), attrVal.toInt(), persistent);
             have = true;
         } else if (attrName == "string") {
-            set<String>(qstrtostr(name), qstrtostr(attrVal));
+            set<String>(qstrtostr(name), qstrtostr(attrVal), persistent);
             have = true;
         } else {
             RG_DEBUG << "XmlStorableEvent::setProperty: unknown attribute name \"" << name << "\", ignoring" << endl;
@@ -179,6 +181,7 @@ XmlStorableEvent::setPropertiesFromAttributes(const QXmlAttributes &attributes)
 }
 
 
+/*!!!
 
 QString
 XmlStorableEvent::toXmlString(timeT expectedTime) const
@@ -205,6 +208,8 @@ XmlStorableEvent::toXmlString(timeT expectedTime) const
 
     res += ">";
 
+    // Save all persistent properties as <property> elements
+
     PropertyNames propertyNames(getPersistentPropertyNames());
     for (PropertyNames::const_iterator i = propertyNames.begin();
          i != propertyNames.end(); ++i) {
@@ -214,8 +219,27 @@ XmlStorableEvent::toXmlString(timeT expectedTime) const
 	    .arg(strtoqstr(getPropertyTypeAsString(*i)).lower())
 	    .arg(strtoqstr(Rosegarden::XmlExportable::encode(getAsString(*i))));
     }
+
+    // Save non-persistent properties (the persistence applies to
+    // copying events, not load/save) as <nproperty> elements
+    // unless they're view-local.  View-local properties are
+    // assumed to have "::" in their name somewhere.
+
+    propertyNames = getNonPersistentPropertyNames();
+    for (PropertyNames::const_iterator i = propertyNames.begin();
+         i != propertyNames.end(); ++i) {
+
+	std::string s(i->getName());
+	if (s.find("::") != std::string::npos) continue;
+
+	res += QString("<nproperty name=\"%1\" %2=\"%3\"/>")
+	    .arg(strtoqstr(Rosegarden::XmlExportable::encode(i->getName())))
+	    .arg(strtoqstr(getPropertyTypeAsString(*i)).lower())
+	    .arg(strtoqstr(Rosegarden::XmlExportable::encode(getAsString(*i))));
+    }
   
     res += "</event>";
     return res;
 }
+*/
 

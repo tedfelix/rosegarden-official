@@ -13,7 +13,9 @@
   <Action name="note_font_actionmenu"/>
   <Action name="note_font_size_actionmenu"/>
   <Action name="stretch_actionmenu"/>
+<!--
   <Action name="smoothing_actionmenu"/>
+-->
 <Separator/>
   <Action name="linear_mode"/>
   <Action name="page_mode"/>
@@ -110,7 +112,8 @@
   <Action name="de_counterpoint"/>
   <Separator/>
   <Action name="quantize"/>
-  <Action name="fix_smoothing"/>
+<!--  <Action name="fix_smoothing"/>
+-->
   <Separator/>
   <Action name="interpret"/>
   <Separator/>
@@ -263,6 +266,7 @@
   <Action name="show_font_toolbar"         append="show_merge" />
   <Separator                               append="show_merge" />
   <Action name="show_chords_ruler"         append="show_merge" />
+  <Action name="show_raw_note_ruler"         append="show_merge" />
   <Action name="show_tempo_ruler"          append="show_merge" />
   <Action name="show_annotations"          append="show_merge" />
 </Menu> 
@@ -378,6 +382,7 @@
     <Action name="cut_and_close"/>
     <Action name="debug_dump"/>
     <Action name="preview_selection"/>
+    <Action name="normalize_rests"/>
     <Action name="clear_selection"/>
   </enable>
 </State>
@@ -388,7 +393,7 @@
     <Action name="remove_marks"/>
     <Action name="add_pause"/>
     <Action name="add_text_mark"/>
-    <Action name="normalize_rests"/>
+<!--    <Action name="normalize_rests"/> -->
     <Action name="collapse_rests_aggressively"/>
   </enable>
 </State>
@@ -435,7 +440,8 @@
     <Action name="make_notes_viable"/>
     <Action name="de_counterpoint"/>
     <Action name="quantize"/>
-    <Action name="fix_smoothing"/>
+<!--    <Action name="fix_smoothing"/>
+-->
     <Action name="transpose_up"/>
     <Action name="transpose_down"/>
     <Action name="transpose_up_octave"/>

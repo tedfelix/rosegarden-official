@@ -49,8 +49,7 @@ using Rosegarden::Note;
 MatrixParameterBox::MatrixParameterBox(QWidget *parent,
                                        RosegardenGUIDoc *doc):
     QVBox(parent),
-    m_quantizations(
-            Rosegarden::StandardQuantization::getStandardQuantizations()),
+    m_quantizations(Rosegarden::BasicQuantizer::getStandardQuantizations()),
     m_doc(doc)
 {
     setFrameStyle(NoFrame);

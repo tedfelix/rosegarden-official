@@ -45,8 +45,9 @@ public:
     const Event* event() const { return m_event; }
     Event*       event()       { return m_event; }
 
-    timeT getAbsoluteTime() const  { return event()->getAbsoluteTime(); }
-    timeT getDuration() const      { return event()->getDuration();     }
+    //!!! not especially keen on virtual!
+    virtual timeT getViewAbsoluteTime() const  { return event()->getAbsoluteTime(); }
+    virtual timeT getViewDuration() const      { return event()->getDuration();     }
 
     void dump(std::ostream&) const;
 
@@ -204,7 +205,7 @@ typename ViewElementList<T>::iterator
 ViewElementList<T>::findNearestTime(timeT t) const
 {
     iterator i = findTime(t);
-    if (i == end() || (*i)->getAbsoluteTime() > t) {
+    if (i == end() || (*i)->getViewAbsoluteTime() > t) {
 	if (i == begin()) return end();
 	else --i;
     }

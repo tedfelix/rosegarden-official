@@ -817,6 +817,16 @@ public:
      */
     int getEmphasisForTime(timeT offset);
 
+    /**
+     * Return a list of divisions, subdivisions, subsubdivisions
+     * etc of a bar in this time, up to the given depth.  For example,
+     * if the time signature is 6/8 and the depth is 3, return a list
+     * containing 2, 3, and 2 (there are 2 beats to the bar, each of
+     * which is best subdivided into 3 subdivisions, each of which
+     * divides most neatly into 2).
+     */
+    std::vector<int> getDivisions(int depth) const;
+
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsEvent(timeT absoluteTime) const;
 

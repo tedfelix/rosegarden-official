@@ -945,7 +945,7 @@ Note Note::getNearestNote(timeT duration, int maxDots)
 //	cout << "added another dot okay" << endl;
     }
 
-    cout << "doh! ran out of dots" << endl;
+//!!!    cout << "doh! ran out of dots" << endl;
     if (tag < Longest) return Note(tag + 1, 0);
     else return Note(tag, std::max(maxDots, tag));
 } 
@@ -1223,6 +1223,41 @@ int TimeSignature::getEmphasisForTime(timeT offset)
 	return 1;
     else
 	return 0;
+}
+
+
+std::vector<int>
+TimeSignature::getDivisions(int depth) const
+{
+    std::vector<int> divisions;
+
+    if (depth <= 0) return divisions;
+    timeT base = getBarDuration(); // calls setInternalDurations
+
+    if (m_numerator == 4 && m_denominator == 4) {
+	divisions.push_back(2);
+	base /= 2;
+	--depth;
+    }
+
+    if (depth <= 0) return divisions;
+
+    divisions.push_back(base / m_beatDuration);
+    base = m_beatDuration;
+    --depth;
+
+    if (depth <= 0) return divisions;
+
+    if (m_dotted) divisions.push_back(3);
+    else divisions.push_back(2);
+    --depth;
+
+    while (depth > 0) {
+	divisions.push_back(2);
+	--depth;
+    }
+
+    return divisions;
 }
 
           

@@ -46,6 +46,7 @@ class ActiveItem;
 class NoteActionData;
 class MarkActionData;
 class ChordNameRuler;
+class RawNoteRuler;
 class RosegardenProgressBar;
 class RosegardenProgressDialog;
 class KProgress;
@@ -84,10 +85,14 @@ public:
                  QWidget *parent,
 		 bool showProgressive = true); // update during initial render?
 
-    /// Constructor for printing only
+    /**
+     * Constructor for printing only.  If parent is provided, a
+     * progress dialog will be shown -- otherwise not.
+     */
     NotationView(RosegardenGUIDoc *doc,
                  std::vector<Rosegarden::Segment *> segments,
-                 KPrinter*);
+                 KPrinter*,
+		 QWidget *parent);
 
     ~NotationView();
 
@@ -100,11 +105,6 @@ public:
      * Return the view-local PropertyName definitions for this view
      */
     const NotationProperties &getProperties() const;
-
-    /**
-     * Return a legato quantizer with the curent smoothing settings
-     */
-    Rosegarden::Quantizer *getLegatoQuantizer() { return m_legatoQuantizer; }
 
     /// Return the number of staffs
     int getStaffCount() { return m_staffs.size(); }
@@ -339,6 +339,7 @@ public slots:
     void slotLinearMode();
     void slotPageMode();
     void slotToggleChordsRuler();
+    void slotToggleRawNoteRuler();
     void slotToggleTempoRuler();
     void slotToggleAnnotations();
     void slotEditLyrics();
@@ -374,7 +375,7 @@ public slots:
     void slotTransposeDown();
     void slotTransposeDownOctave();
     void slotTransformsQuantize();
-    void slotTransformsFixSmoothing();
+//!!!    void slotTransformsFixSmoothing();
     void slotTransformsInterpret();
 
     void slotSetStyleFromAction();
@@ -506,15 +507,6 @@ public slots:
 
     /// Changes the hlayout spacing of the staffs on the view
     void slotChangeSpacingFromAction();
-
-    /// Changes the display quantization of the staffs on the view
-    void slotChangeLegato(Rosegarden::timeT newLegatoDuration);
-
-    /// Changes the display quantization of the staffs on the view
-    void slotChangeLegatoFromIndex(int newLegatoIndex);
-
-    /// Changes the display quantization of the staffs on the view
-    void slotChangeLegatoFromAction();
 
     /// The document has been destroyed, and we're about to go with it
     void slotDocumentDestroyed();
@@ -683,8 +675,6 @@ protected:
 
     NotationProperties m_properties;
 
-    Rosegarden::Quantizer *m_legatoQuantizer;
-
     /// Displayed in the status bar, shows number of events selected
     QLabel *m_selectionCounter;
 
@@ -732,10 +722,9 @@ protected:
 
     ChordNameRuler *m_chordNameRuler;
     QWidget *m_tempoRuler;
+    RawNoteRuler *m_rawNoteRuler;
     bool m_annotationsVisible;
     
-    std::vector<int> m_legatoDurations;
-
     KAction* m_selectDefaultNote;
 
     typedef QMap<QString, NoteActionData> NoteActionDataMap;
@@ -747,7 +736,6 @@ protected:
     QComboBox *m_fontCombo;
     ZoomSlider<int> *m_fontSizeSlider;
     ZoomSlider<int> *m_spacingSlider;
-    ZoomSlider<int> *m_smoothingSlider;
     KActionMenu *m_fontSizeActionMenu;
 
     enum { PROGRESS_NONE,

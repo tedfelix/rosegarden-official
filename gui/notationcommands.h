@@ -209,16 +209,16 @@ protected:
 class GroupMenuAutoBeamCommand : public BasicSelectionCommand
 {
 public:
-    GroupMenuAutoBeamCommand(Rosegarden::EventSelection &selection,
-			     Rosegarden::Quantizer *quantizer) :
-	BasicSelectionCommand(getGlobalName(), selection),
-	m_quantizer(quantizer) { }
+    GroupMenuAutoBeamCommand(Rosegarden::EventSelection &selection) :
+	BasicSelectionCommand(getGlobalName(), selection) { }
+
+    GroupMenuAutoBeamCommand(Rosegarden::Segment &segment) :
+	BasicSelectionCommand(getGlobalName(), segment) { }
 
     static QString getGlobalName() { return "&Auto-Beam"; }
 
 protected:
     virtual void modifySegment();
-    Rosegarden::Quantizer *m_quantizer;
 };
 
 
@@ -424,6 +424,10 @@ public:
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection) { }
 
+    TransformsMenuMakeNotesViableCommand(Rosegarden::Segment &segment) :
+	BasicSelectionCommand(getGlobalName(), segment, true),
+	m_selection(0) { }
+
     static QString getGlobalName() { return "Make Notes &Viable"; }
 
 protected:
@@ -440,6 +444,10 @@ public:
     TransformsMenuDeCounterpointCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection) { }
+
+    TransformsMenuDeCounterpointCommand(Rosegarden::Segment &segment) :
+	BasicSelectionCommand(getGlobalName(), segment, true),
+	m_selection(0) { }
 
     static QString getGlobalName() { return "De-&Counterpoint"; }
 
@@ -581,7 +589,7 @@ private:
     Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
 };
 
-
+/*!!!
 class TransformsMenuFixSmoothingCommand : public BasicSelectionCommand
 {
 public:
@@ -600,7 +608,7 @@ private:
     Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     Rosegarden::Quantizer *m_quantizer;
 };
-
+*/
 
 class TransformsMenuInterpretCommand : public BasicSelectionCommand
 {
@@ -615,7 +623,7 @@ public:
     static const int AllInterpretations; // all of the above
 
     TransformsMenuInterpretCommand(Rosegarden::EventSelection &selection,
-				   Rosegarden::Quantizer *quantizer,
+				   const Rosegarden::Quantizer *quantizer,
 				   int interpretations) :
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection),
@@ -633,7 +641,7 @@ protected:
 
 private:
     Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
-    Rosegarden::Quantizer *m_quantizer;
+    const Rosegarden::Quantizer *m_quantizer;
     int m_interpretations;
 
     typedef std::map<Rosegarden::timeT,
@@ -644,7 +652,7 @@ private:
     void applyTextDynamics();
     void applyHairpins();
     void stressBeats();
-    void articulate(bool changeRealDurations); // must be applied last
+    void articulate(); // must be applied last
 
     // test if the event is within an indication of the given type, return
     // an iterator pointing to that indication if so

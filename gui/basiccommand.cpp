@@ -147,6 +147,18 @@ BasicSelectionCommand::BasicSelectionCommand(const QString &name,
     // nothing
 }
 
+BasicSelectionCommand::BasicSelectionCommand(const QString &name,
+					     Segment &segment,
+					     bool bruteForceRedo) :
+    BasicCommand(name,
+		 segment,
+		 segment.getStartTime(),
+		 segment.getEndMarkerTime(),
+		 bruteForceRedo)
+{
+    // nothing
+}
+
 BasicSelectionCommand::~BasicSelectionCommand()
 {
     // nothing

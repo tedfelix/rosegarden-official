@@ -20,6 +20,7 @@
 */
 
 #include <qcolor.h>
+#include "colours.h"
 
 #ifndef _VELOCITYCOLOUR_H_
 #define _VELOCITYCOLOUR_H_
@@ -80,6 +81,21 @@ private:
 
     int m_multiplyFactor;
 };
+
+class DefaultVelocityColour : public VelocityColour
+{
+public:
+    DefaultVelocityColour() :
+	VelocityColour(RosegardenGUIColours::LevelMeterRed,
+		       RosegardenGUIColours::LevelMeterOrange,
+		       RosegardenGUIColours::LevelMeterGreen,
+		       127, // max knee
+		       115, // red knee
+		       75,  // orange knee
+		       25)  // green knee
+    { }
+};
+
 
 #endif // _VELOCITYCOLOUR_H_
 

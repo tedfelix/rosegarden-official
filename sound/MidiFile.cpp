@@ -36,6 +36,7 @@
 #include "AnalysisTypes.h"
 #include "Track.h"
 #include "Instrument.h"
+#include "Quantizer.h"
 #include "Studio.h"
 #include "MidiTypes.h"
 
@@ -151,6 +152,10 @@ MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
              << m_trackByteCount
              << " )" << endl;
 
+	//!!! Investigate -- I'm seeing this on new-notation-quantization
+	// branch: load glazunov.rg, run Interpret on first segment, export
+	// and attempt to import again
+	
         throw(Exception("Attempt to get more bytes than allowed on Track"));
     }
 
@@ -283,6 +288,7 @@ bool
 MidiFile::open()
 {
     bool retOK = true;
+    m_error = "";
 
     // Open the file
     ifstream *midiFile = new ifstream(m_fileName.c_str(), ios::in | ios::binary);
@@ -302,6 +308,7 @@ MidiFile::open()
             if (!parseHeader(getMidiBytes(midiFile, 14)))
             {
                 m_format = MIDI_FILE_NOT_LOADED;
+		m_error = "Not a MIDI file.";
                 return(false);
             }
 
@@ -319,6 +326,7 @@ MidiFile::open()
                 if(!skipToNextTrack(midiFile))
                 {
                     cerr << "Couldn't find Track " << j << endl;
+		    m_error = "File corrupted or in non-standard format?";
                     m_format = MIDI_FILE_NOT_LOADED;
                     return(false);
                 }
@@ -328,6 +336,7 @@ MidiFile::open()
                 if (!parseTrack(midiFile, i))
                 {
                     std::cerr << "Track " << j << " parsing failed" << endl;
+		    m_error = "File corrupted or in non-standard format?";
                     m_format = MIDI_FILE_NOT_LOADED;
                     return(false);
                 }
@@ -339,7 +348,7 @@ MidiFile::open()
         }
         else
         {
-	    std::cerr << "File open failed for " << m_fileName << endl;
+	    m_error = "File not found or not readable.";
             m_format = MIDI_FILE_NOT_LOADED;
             return(false);
         }
@@ -351,6 +360,7 @@ MidiFile::open()
     {
         cout << "MidiFile::open() - caught exception - "
 	     << e.getMessage() << endl;
+	m_error = e.getMessage();
         retOK = false;
     }
 
@@ -1000,20 +1010,24 @@ MidiFile::convertToRosegarden(Composition *composition,
 	    //
 	    composition->addTrack(track);
 	    composition->addSegment(rosegardenSegment);
-
+/*!!!
+	    // Apply a quantization for notation only (does not affect
+	    // any other editing or performance facility).  It's a good
+	    // idea to do this before the auto-beam.  This normalizes
+	    // the rests for us too.
+	    composition->getNotationQuantizer()->quantize(rosegardenSegment);
+*/
 	    SegmentNotationHelper helper(*rosegardenSegment);
 
 	    rosegardenSegment->insert
 		(helper.guessClef(rosegardenSegment->begin(),
-				  rosegardenSegment->end()).getAsEvent(0));
-
-	    rosegardenSegment->normalizeRests
-		(rosegardenSegment->getStartTime(),
-		 rosegardenSegment->getEndTime());
-
+				  rosegardenSegment->end()).getAsEvent
+		 (rosegardenSegment->getStartTime()));
+/*!!!
 	    helper.autoBeam(rosegardenSegment->begin(),
 			    rosegardenSegment->end(),
 			    BaseProperties::GROUP_TYPE_BEAMED);
+*/
 
 	    compTrack++;
 
@@ -1026,6 +1040,7 @@ MidiFile::convertToRosegarden(Composition *composition,
     }
 
     // if we have no time signatures at all, try to guess one
+    //!!! should also be in rosegardengui.cpp
     if (!haveTimeSignatures && !preexisting)
     {
         CompositionTimeSliceAdapter adapter(composition);
@@ -1246,7 +1261,7 @@ MidiFile::convertToMidi(Composition &comp)
         m_midiComposition[trackNumber].push_back(midiEvent);
 
         for (Segment::iterator el = (*segment)->begin();
-             el != (*segment)->end(); ++el)
+             (*segment)->isBeforeEndMarker(el); ++el)
         {
             midiEventAbsoluteTime =
 		(*el)->getAbsoluteTime() + (*segment)->getDelay();

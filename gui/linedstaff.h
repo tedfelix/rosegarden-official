@@ -405,12 +405,53 @@ public:
     virtual void positionAllElements();
     
 
-//!!! CHANGE THIS BACK TO PROTECTED.  THESE SHOULD EMPHATICALLY NOT BE PUBLIC.
-// FIND ANOTHER WAY TO SOLVE YOUR PROBLEM.  Better for the subclass to
-// duplicate or explicitly expose parts of the API than to make all this
-// stuff public -- much of this stuff is equivalent to data members, except
-// dependent on the parameters with which the staff was constructed.
 public:
+    // This should not really be public -- it should be one of the
+    // protected methods below -- but we have some code that needs
+    // it and hasn't been supplied with a proper way to do without.
+    // Please try to avoid calling this method.
+    //!!! fix NotationView::doDeferredCursorMove
+    double getCanvasXForLayoutX(double x) const {
+	if (m_pageMode) {
+	    return m_x + x - (m_pageWidth * getRowForLayoutX(x));
+	} else {
+	    return m_x + x;
+	}
+    }
+
+    // This should not really be public -- it should be one of the
+    // protected methods below -- but we have some code that needs
+    // it and hasn't been supplied with a proper way to do without.
+    // Please try to avoid calling this method.
+    //!!! fix NotationView::getStaffForCanvasCoords
+    LinedStaffCoords
+    getLayoutCoordsForCanvasCoords(double x, int y) const {
+	int row = getRowForCanvasCoords(x, y);
+	return LinedStaffCoords
+	    ((row * m_pageWidth) + x - getCanvasXForLeftOfRow(row),
+	     y - getCanvasYForTopOfStaff(row));
+    }
+
+    // This should not really be public -- it should be one of the
+    // protected methods below -- but we have some code that needs
+    // it and hasn't been supplied with a proper way to do without.
+    // Please try to avoid calling this method.
+    //!!! fix NotationView::doDeferredCursorMove
+    LinedStaffCoords
+    getCanvasCoordsForLayoutCoords(double x, int y) const {
+	int row = getRowForLayoutX(x);
+	return LinedStaffCoords
+	    (getCanvasXForLayoutX(x), getCanvasYForTopLine(row) + y);
+    }
+
+    // This should not really be public -- it should be one of the
+    // protected methods below -- but we have some code that needs
+    // it and hasn't been supplied with a proper way to do without.
+    // Please try to avoid calling this method.
+    //!!! fix NotationView::print
+    int getRowSpacing() { return m_rowSpacing; }
+
+protected:
 
     // Methods that the subclass may (indeed, should) use to convert
     // between the layout coordinates of elements and their canvas
@@ -440,16 +481,6 @@ public:
 	else return ((y - m_y) / m_rowSpacing);
     }
 
-    double getCanvasXForLayoutX(double x) const {
-	if (m_pageMode) {
-	    return m_x + x - (m_pageWidth * getRowForLayoutX(x));
-	} else {
-	    return m_x + x;
-	}
-    }
-
-    int getRowSpacing() { return m_rowSpacing; }
-
     int getCanvasYForTopOfStaff(int row = -1) const {
 	if (!m_pageMode || row <= 0) return m_y;
 	else return m_y + (row * m_rowSpacing);
@@ -469,24 +500,9 @@ public:
     }
 
     LinedStaffCoords
-    getCanvasCoordsForLayoutCoords(double x, int y) const {
-	int row = getRowForLayoutX(x);
-	return LinedStaffCoords
-	    (getCanvasXForLayoutX(x), getCanvasYForTopLine(row) + y);
-    }
-
-    LinedStaffCoords
     getCanvasOffsetsForLayoutCoords(double x, int y) const {
 	LinedStaffCoords cc = getCanvasCoordsForLayoutCoords(x, y);
 	return LinedStaffCoords(cc.first - x, cc.second - y);
-    }
-
-    LinedStaffCoords
-    getLayoutCoordsForCanvasCoords(double x, int y) const {
-	int row = getRowForCanvasCoords(x, y);
-	return LinedStaffCoords
-	    ((row * m_pageWidth) + x - getCanvasXForLeftOfRow(row),
-	     y - getCanvasYForTopOfStaff(row));
     }
 
 protected:

@@ -62,6 +62,8 @@ namespace Rosegarden
     class SequenceManager;
 }
 
+class RosegardenProgressBar;
+
 /**
   * The base class for RosegardenGUI application windows. It sets up the main
   * window and reads the config file as well as providing a menubar, toolbar
@@ -173,10 +175,15 @@ public:
                               long sliceEndSec, long sliceEndUSec,
                               long firstFetch);
 
-    /*
+    /**
      * Get the sequence manager object
      */
     Rosegarden::SequenceManager* getSequenceManager() { return m_seqManager; }
+
+    /**
+     * Get a progress bar
+     */
+    RosegardenProgressBar *getProgressBar() { return m_progressBar; }
 
     /**
      * The Sequencer sends back a MappedComposition full of
@@ -549,6 +556,11 @@ public slots:
      * Split the selected segments on silences (or new timesig, etc)
      */
     void slotAutoSplitSelection();
+
+    /**
+     * Split the selected segments by pitch
+     */
+    void slotSplitSelectionByPitch();
 
     /**
      * Produce a harmony segment from the selected segments
@@ -993,6 +1005,8 @@ private:
 
     ZoomSlider<double> *m_zoomSlider;
     QLabel             *m_zoomLabel;
+
+    RosegardenProgressBar *m_progressBar;
 
     // SequenceManager
     //

@@ -198,7 +198,7 @@ void RosegardenGUIView::print(KPrinter *printer, Composition* p)
 
     NotationView *notationView = new NotationView(getDocument(),
                                                   segmentsToEdit,
-                                                  printer);
+                                                  printer, this);
 
     if (!notationView->isOK()) {
 	RG_DEBUG << "RosegardenGUIView::print : operation cancelled\n";

@@ -76,10 +76,10 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
 
     connect(m_pluginList, SIGNAL(activated(int)),
             this, SLOT(slotPluginSelected(int)));
-
+/*!!!
     connect(m_pluginList, SIGNAL(propagate(int)),
             this, SLOT(slotPluginSelected(int)));
-
+*/
     std::vector<QString> names = m_pluginManager->getPluginNames();
     std::vector<QString>::iterator it = names.begin();
 

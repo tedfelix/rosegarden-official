@@ -232,13 +232,31 @@ private:
 class EventQuantizeCommand : public BasicCommand
 {
 public:
+    /// Quantizer must be on heap (EventQuantizeCommand dtor will delete)
     EventQuantizeCommand(Rosegarden::Segment &segment,
 			 Rosegarden::timeT startTime,
 			 Rosegarden::timeT endTime,
-			 Rosegarden::Quantizer);
+			 Rosegarden::Quantizer *);
     
+    /// Quantizer must be on heap (EventQuantizeCommand dtor will delete)
     EventQuantizeCommand(Rosegarden::EventSelection &selection,
-			 Rosegarden::Quantizer);
+			 Rosegarden::Quantizer *);
+
+    /// Constructs own quantizer based on KConfig data in given group
+    EventQuantizeCommand(Rosegarden::Segment &segment,
+			 Rosegarden::timeT startTime,
+			 Rosegarden::timeT endTime,
+			 QString configGroup,
+			 std::string target,
+			 bool notationDefault);
+    
+    /// Constructs own quantizer based on KConfig data in given group
+    EventQuantizeCommand(Rosegarden::EventSelection &selection,
+			 QString configGroup,
+			 std::string target,
+			 bool notationDefault);
+
+    ~EventQuantizeCommand();
     
     static QString getGlobalName(Rosegarden::Quantizer *quantizer = 0);
     
@@ -246,8 +264,12 @@ protected:
     virtual void modifySegment();
 
 private:
-    Rosegarden::Quantizer m_quantizer;
+    Rosegarden::Quantizer *m_quantizer; // I own this
     Rosegarden::EventSelection *m_selection;
+    QString m_configGroup;
+
+    /// Sets to m_quantizer as well as returning value
+    Rosegarden::Quantizer *makeQuantizer(QString, std::string, bool);
 };
 
 // Set the (numerical) property of a selection according given pattern.
@@ -278,13 +300,17 @@ private:
 class EventUnquantizeCommand : public BasicCommand
 {
 public:
+    /// Quantizer must be on heap (EventUnquantizeCommand dtor will delete)
     EventUnquantizeCommand(Rosegarden::Segment &segment,
 			   Rosegarden::timeT startTime,
 			   Rosegarden::timeT endTime,
-			   Rosegarden::Quantizer);
+			   Rosegarden::Quantizer *);
     
+    /// Quantizer must be on heap (EventUnquantizeCommand dtor will delete)
     EventUnquantizeCommand(Rosegarden::EventSelection &selection,
-			   Rosegarden::Quantizer);
+			   Rosegarden::Quantizer *);
+
+    ~EventUnquantizeCommand();
     
     static QString getGlobalName(Rosegarden::Quantizer *quantizer = 0);
     
@@ -292,7 +318,7 @@ protected:
     virtual void modifySegment();
 
 private:
-    Rosegarden::Quantizer m_quantizer;
+    Rosegarden::Quantizer *m_quantizer;
     Rosegarden::EventSelection *m_selection;
 };
 

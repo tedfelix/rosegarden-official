@@ -111,8 +111,14 @@ public:
     virtual ~BasicSelectionCommand();
 
 protected:
+    /// selection from segment
     BasicSelectionCommand(const QString &name,
 			  Rosegarden::EventSelection &selection,
+			  bool bruteForceRedoRequired = false);
+
+    /// entire segment
+    BasicSelectionCommand(const QString &name,
+			  Rosegarden::Segment &segment,
 			  bool bruteForceRedoRequired = false);
 };
 

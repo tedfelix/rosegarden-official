@@ -46,6 +46,8 @@ class QGrid;
 class RosegardenGUIDoc;
 class RosegardenSpinBox;
 class QTextEdit;
+class RosegardenQuantizeParameters;
+
 
 // Definitions of various simple dialogs that may be used in multiple
 // different editing views.
@@ -445,35 +447,13 @@ class QuantizeDialog : public KDialogBase
     Q_OBJECT
 
 public:
-    QuantizeDialog(QWidget *parent,
-		   std::string quantizeSource,
-		   std::string quantizeTarget);
+    QuantizeDialog(QWidget *parent, bool inNotation = false);
     
-    Rosegarden::Quantizer getQuantizer() const;
+    /// Returned quantizer object is on heap -- caller must delete
+    Rosegarden::Quantizer *getQuantizer() const;
     
-public slots:
-    void slotTypeChanged(int);
-    void slotUnitChanged(int);
-    void slotDotsChanged(int);
-    void slotLegatoChanged();
-
 protected:
-
-    //--------------- Data members ---------------------------------
-    std::string m_source;
-    std::string m_target;
-
-    std::vector<Rosegarden::StandardQuantization>
-    m_standardQuantizations;
-
-    RosegardenComboBox *m_typeCombo;
-    RosegardenComboBox *m_unitCombo;
-    QGroupBox *m_noteQuantizeBox;
-    RosegardenComboBox *m_dotsCombo;
-    QCheckBox *m_legatoButton;
-    QCheckBox *m_makeViableButton;
-    QCheckBox *m_rebeamButton;
-
+    RosegardenQuantizeParameters *m_quantizeFrame;
 };
 
 
@@ -637,6 +617,30 @@ protected:
     QSpinBox                *m_startMarkerSpinBox;
     QSpinBox                *m_endMarkerSpinBox;
     Rosegarden::Composition *m_composition;
+};
+
+
+class SplitByPitchDialog : public KDialogBase
+{
+    Q_OBJECT
+public:
+    SplitByPitchDialog(QWidget *parent);
+
+    int getPitch();
+
+    bool getShouldRange();
+    bool getShouldDuplicateNonNoteEvents();
+    int getClefHandling(); // actually SegmentSplitByPitchCommand::ClefHandling
+
+protected slots:
+    void slotPitchChanged(int);
+
+private:
+    QSpinBox *m_pitch;
+    QCheckBox *m_range;
+    QCheckBox *m_duplicate;
+    RosegardenComboBox *m_clefs;
+    QLabel *m_pitchLabel;
 };
 
 

@@ -182,15 +182,17 @@ EventView::EventView(RosegardenGUIDoc *doc,
     m_eventList->setItemsRenameable(true);
     m_grid->addWidget(m_eventList, 2, 1);
 
-    if (segments.size() == 1)
-    {
-        setCaption(QString(i18n("%1  - Event List for Segment Track #%2"))
+    if (segments.size() == 1) {
+
+        setCaption(QString("%1 - Segment Track #%2 - Event List")
                    .arg(doc->getTitle())
                    .arg(segments[0]->getTrack()));
-    }
-    else
-    {
-        setCaption(i18n("Event List"));
+
+    } else {
+
+        setCaption(QString("%1 - %2 Segments - Event List")
+                   .arg(doc->getTitle())
+                   .arg(segments.size()));
     }
 
     // Connect double clicker
@@ -338,7 +340,11 @@ EventView::applyLayout(int /*staffNo*/)
 	    } else if ((*it)->has(Rosegarden::PitchBend::MSB)) {
                 data1Str = QString("%1  ").
                     arg((*it)->get<Int>(Rosegarden::PitchBend::MSB));
-            }
+            } else if ((*it)->has(BaseProperties::BEAMED_GROUP_TYPE)) {
+		data1Str = QString("%1  ").
+		    arg(strtoqstr((*it)->get<String>
+				  (BaseProperties::BEAMED_GROUP_TYPE)));
+	    }
 
             if ((*it)->has(Rosegarden::Controller::VALUE)) {
                 data2Str = QString("%1  ").
@@ -355,7 +361,10 @@ EventView::applyLayout(int /*staffNo*/)
 	    } else if ((*it)->has(Rosegarden::PitchBend::LSB)) {
                 data2Str = QString("%1  ").
                     arg((*it)->get<Int>(Rosegarden::PitchBend::LSB));
-            }
+            } else if ((*it)->has(BaseProperties::BEAMED_GROUP_ID)) {
+		data2Str = QString("%1  ").
+		    arg((*it)->get<Int>(BaseProperties::BEAMED_GROUP_ID));
+	    }
 
 	    if ((*it)->getDuration() > 0 ||
 		(*it)->isa(Rosegarden::Note::EventType) ||
@@ -366,8 +375,8 @@ EventView::applyLayout(int /*staffNo*/)
             new EventViewItem(m_segments[i],
 			      *it,
                               m_eventList,
-                              QString("%1").arg(eventTime),
-                              QString("%1").arg((*it)->getDuration()),
+                              QString("%1  ").arg(eventTime),
+			      durationStr,
                               strtoqstr((*it)->getType()),
                               pitchStr,
                               velyStr,

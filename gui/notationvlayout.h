@@ -43,7 +43,6 @@ class NotationVLayout : public ProgressReporter,
 {
 public:
     NotationVLayout(Rosegarden::Composition *c,
-		    Rosegarden::Quantizer *legatoQuantizer,
 		    const NotationProperties &properties,
                     QObject* parent, const char* name = 0);
 
@@ -90,7 +89,7 @@ private:
     SlurList &getSlurList(StaffType &);
 
     Rosegarden::Composition *m_composition;
-    Rosegarden::Quantizer *m_legatoQuantizer;
+    const Rosegarden::Quantizer *m_notationQuantizer;
     const NotationProperties &m_properties;
 };
 

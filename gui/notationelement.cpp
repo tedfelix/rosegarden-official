@@ -39,7 +39,6 @@ using Rosegarden::Note;
 using Rosegarden::Int;
 using Rosegarden::Bool;
 using Rosegarden::timeT;
-using Rosegarden::Quantizer;
 
 NotationElement::NotationElement(Event *event)
     : ViewElement(event),
@@ -58,6 +57,24 @@ NotationElement::~NotationElement()
 //                          << event() << endl;
 
     delete m_canvasItem;
+}
+
+Rosegarden::timeT
+NotationElement::getViewAbsoluteTime() const
+{
+    //!!! nasty, this is for test purposes only
+    static Rosegarden::NotationQuantizer *q = 0;
+    if (!q) q = new Rosegarden::NotationQuantizer();
+    return q->getQuantizedAbsoluteTime(event());
+}
+
+Rosegarden::timeT
+NotationElement::getViewDuration() const
+{
+    //!!! nasty, this is for test purposes only
+    static Rosegarden::NotationQuantizer *q = 0;
+    if (!q) q = new Rosegarden::NotationQuantizer();
+    return q->getQuantizedDuration(event());
 }
 
 double

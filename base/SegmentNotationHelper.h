@@ -47,10 +47,18 @@ public:
 
     /**
      * Return the duration of an event "as displayed".  This is
-     * the legato-quantized duration, with compensation for tuplets.
-     * If a quantizer is supplied, use it.
+     * the legato-quantized duration, with optional compensation for
+     * tuplets (i.e. if tupletCompensation is true, a triplet quaver
+     * will be considered a quaver; otherwise, a note of 2/3 of a
+     * quaver).
      */
-    timeT getNotationDuration(Event *e, const Quantizer *q = 0);
+    timeT getNotationDuration(Event *e, bool tupletCompensation = true);
+
+    
+    /**
+     * Return the notation absolute time plus the notation duration.
+     */
+    timeT getNotationEndTime(Event *e);
 
     
     /**
@@ -348,6 +356,12 @@ public:
      */
     iterator makeNoteViable(iterator i, bool splitAtBars = true);
 
+    /**
+     * Make each note viable within the given range.
+     */
+    void makeNotesViable(timeT startTime, timeT endTime,
+			 bool splitAtBars = true);
+
 
     /**
      * Give all events between the start of the timeslice containing
@@ -394,10 +408,8 @@ public:
      * from and the end of the bar containing to up into sensible
      * beamed groups and give each group the right group properties
      * using makeBeamedGroup.  Requires segment to be in a composition.
-     * If quantizer is present, use it to establish the note values.
      */
-    void autoBeam(timeT from, timeT to, std::string type,
-		  const Quantizer *q = 0);
+    void autoBeam(timeT from, timeT to, std::string type);
 
     /**
      * Divide the notes between the start of the bar containing
@@ -405,8 +417,7 @@ public:
      * beamed groups and give each group the right group properties
      * using makeBeamedGroup.  Requires segment to be in a composition.
      */
-    void autoBeam(iterator from, iterator to, std::string type,
-		  const Quantizer *q = 0);
+    void autoBeam(iterator from, iterator to, std::string type);
 
 
     /**
@@ -482,11 +493,21 @@ public:
      */
     iterator collapseNoteAggressively(Event *, timeT rangeEnd);
 
+
+    
+    std::pair<Event *, Event *> splitPreservingPerformanceTimes(Event *e,
+								timeT q1);
+
+    /**
+     * Look for examples of overlapping notes within the given range,
+     * and split each into chords with some tied notes.
+     */
+    void deCounterpoint(timeT startTime, timeT endTime);
+
     
 protected:
     const Quantizer &basicQuantizer();
-    const Quantizer &noteQuantizer();
-    const Quantizer &legatoQuantizer();
+    const Quantizer &notationQuantizer();
 
     /**
      * Collapse multiple consecutive rests into one, in preparation
@@ -522,11 +543,10 @@ protected:
     /// for use by autoBeam
 
     void autoBeamBar(iterator from, iterator to, TimeSignature timesig,
-                     std::string type, const Quantizer *quantizer);
+                     std::string type);
 
     void autoBeamBar(iterator from, iterator to, timeT average,
-                     timeT minimum, timeT maximum, std::string type,
-		     const Quantizer *quantizer);
+                     timeT minimum, timeT maximum, std::string type);
 
     /// used by autoBeamAux (duplicate of private method in Segment)
     bool hasEffectiveDuration(iterator i);

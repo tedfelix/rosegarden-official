@@ -52,17 +52,10 @@ public:
     XmlStorableEvent(Rosegarden::Event&);
 
     /**
-     * Set the Element properties from the XML attributes \a atts
+     * Set a property from the XML attributes \a atts
      */
-    void setPropertiesFromAttributes(const QXmlAttributes& atts);
-
-    /**
-     * Get the XML string representing the object.  If the absolute
-     * time of the event differs from the given absolute time, include
-     * the difference between the two as a timeOffset attribute.
-     * If expectedTime == 0, include an absoluteTime attribute instead.
-     */
-    QString toXmlString(Rosegarden::timeT expectedTime = 0) const;
+    void setPropertyFromAttributes(const QXmlAttributes& atts,
+				   bool persistent);
 };
 
 #endif

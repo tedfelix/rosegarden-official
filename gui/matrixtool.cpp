@@ -145,12 +145,12 @@ void MatrixPainter::handleLeftButtonPress(Rosegarden::timeT time,
 
     m_currentStaff = m_mParentView->getStaff(staffNo);
  
-    Event *el = new Event(Note::EventType, time,
+    Event *ev = new Event(Note::EventType, time,
 			  grid.getSnapTime(double(p.x())));
-    el->set<Rosegarden::Int>(Rosegarden::BaseProperties::PITCH, pitch);
-    el->set<Rosegarden::Int>(Rosegarden::BaseProperties::VELOCITY, 100);
+    ev->set<Rosegarden::Int>(Rosegarden::BaseProperties::PITCH, pitch);
+    ev->set<Rosegarden::Int>(Rosegarden::BaseProperties::VELOCITY, 100);
 
-    m_currentElement = new MatrixElement(el);
+    m_currentElement = new MatrixElement(ev);
 
     int y = m_currentStaff->getLayoutYForHeight(pitch) -
             m_currentStaff->getElementHeight() / 2;
@@ -159,14 +159,14 @@ void MatrixPainter::handleLeftButtonPress(Rosegarden::timeT time,
     m_currentElement->setLayoutX(grid.getRulerScale()->getXForTime(time));
     m_currentElement->setHeight(m_currentStaff->getElementHeight());
 
-    double width = el->getDuration() * m_currentStaff->getTimeScaleFactor();
+    double width = ev->getDuration() * m_currentStaff->getTimeScaleFactor();
     m_currentElement->setWidth(int(width) + 2); // fiddle factor
 
     m_currentStaff->positionElement(m_currentElement);
     m_mParentView->update();
 
     // preview
-    m_mParentView->playNote(el);
+    m_mParentView->playNote(ev);
 }
 
 int MatrixPainter::handleMouseMove(Rosegarden::timeT time,
@@ -183,7 +183,7 @@ int MatrixPainter::handleMouseMove(Rosegarden::timeT time,
 
     int initialWidth = m_currentElement->getWidth();
 
-    double width = (time - m_currentElement->event()->getAbsoluteTime())
+    double width = (time - m_currentElement->getViewAbsoluteTime())
 	* m_currentStaff->getTimeScaleFactor();
 
     // ensure we don't have a zero width preview
@@ -219,8 +219,8 @@ void MatrixPainter::handleMouseRelease(Rosegarden::timeT endTime,
     // Insert element if it has a non null duration,
     // discard it otherwise
     //
-    timeT time = m_currentElement->getAbsoluteTime();
-    if (endTime == time) endTime = time + m_currentElement->getDuration();
+    timeT time = m_currentElement->getViewAbsoluteTime();
+    if (endTime == time) endTime = time + m_currentElement->getViewDuration();
 
     Rosegarden::SegmentMatrixHelper helper(m_currentStaff->getSegment());
     MATRIX_DEBUG << "MatrixPainter::handleMouseRelease() : helper.insertNote()\n";
@@ -751,7 +751,7 @@ void MatrixMover::handleMouseRelease(Rosegarden::timeT newTime,
 
 
     using Rosegarden::BaseProperties::PITCH;
-    timeT diffTime = newTime - m_currentElement->event()->getAbsoluteTime();
+    timeT diffTime = newTime - m_currentElement->getViewAbsoluteTime();
     int diffPitch = newPitch -
         m_currentElement->event()->get<Rosegarden::Int>(PITCH);
 
@@ -863,7 +863,7 @@ int MatrixResizer::handleMouseMove(Rosegarden::timeT newTime,
                                    QMouseEvent *)
 {
     if (!m_currentElement || !m_currentStaff) return NoFollow;
-    timeT newDuration = newTime - m_currentElement->getAbsoluteTime();
+    timeT newDuration = newTime - m_currentElement->getViewAbsoluteTime();
 
     int initialWidth = m_currentElement->getWidth();
     double width = newDuration * m_currentStaff->getTimeScaleFactor();
@@ -899,8 +899,8 @@ void MatrixResizer::handleMouseRelease(Rosegarden::timeT newTime,
 {
     if (!m_currentElement || !m_currentStaff) return;
 
-    timeT oldTime = m_currentElement->getAbsoluteTime();
-    timeT oldDuration = m_currentElement->getDuration();
+    timeT oldTime = m_currentElement->getViewAbsoluteTime();
+    timeT oldDuration = m_currentElement->getViewDuration();
     timeT newDuration = newTime - oldTime;
     timeT diffDuration = newDuration - oldDuration;
 

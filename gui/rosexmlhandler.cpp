@@ -349,7 +349,15 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         if (!m_currentEvent) {
             RG_DEBUG << "RoseXmlHandler::startElement: Warning: Found property outside of event at time " << m_currentTime << ", ignoring" << endl;
         } else {
-            m_currentEvent->setPropertiesFromAttributes(atts);
+            m_currentEvent->setPropertyFromAttributes(atts, true);
+        }
+
+    } else if (lcName == "nproperty") {
+        
+        if (!m_currentEvent) {
+            RG_DEBUG << "RoseXmlHandler::startElement: Warning: Found nproperty outside of event at time " << m_currentTime << ", ignoring" << endl;
+        } else {
+            m_currentEvent->setPropertyFromAttributes(atts, false);
         }
 
     } else if (lcName == "chord") {

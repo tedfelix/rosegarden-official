@@ -176,6 +176,7 @@ Staff<T>::findEvent(Event *e)
         }
     }
 
+    std::cerr << "event not found in ViewElementList" << std::endl;
     return m_viewElementList->end();
 }
 
@@ -228,7 +229,7 @@ Staff<T>::endMarkerTimeChanged(const Segment *s, bool shorten)
 	timeT myLastEltTime = s->getStartTime();
 	if (m_viewElementList->end() != m_viewElementList->begin()) {
 	    typename ViewElementList<T>::iterator i = m_viewElementList->end();
-	    myLastEltTime = (*--i)->getAbsoluteTime();
+	    myLastEltTime = (*--i)->event()->getAbsoluteTime();
 	}
 	
 	for (Segment::iterator j = s->findTime(myLastEltTime);

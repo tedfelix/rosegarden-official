@@ -29,13 +29,13 @@ namespace Rosegarden {
 
 template <>
 Event *
-GenericSet<Event, Segment>::getAsEvent(const Segment::iterator &i)
+AbstractSet<Event, Segment>::getAsEvent(const Segment::iterator &i)
 {
     return *i;
 }
 
 /*
- * This ridiculous shit appears to be necessary to please gcc-2.95.2.
+ * This ridiculous shit appears to be necessary to please gcc.
  * Compiler bug?  My own misunderstanding of some huge crock of crap
  * in the C++ standard?  No idea.  If you know, tell me.  Anyway, as
  * it stands I can't get any calls to get<> or set<> from the Set or

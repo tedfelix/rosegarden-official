@@ -47,15 +47,13 @@ public:
     iteratorcontainer getTiedNotes(iterator i);
 
     /**
-     * Returns the absolute time of the note event pointed to by i,
-     * taking into account any performance quantization specified in
-     * the Segment.
+     * Returns the absolute time of the note event pointed to by i.
      */
     timeT getSoundingAbsoluteTime(iterator i);
 
     /**
      * Returns the duration of the note event pointed to by i, taking
-     * into account any ties the note may have, grace note status etc.
+     * into account any ties the note may have etc.
      * 
      * If the note is the first of two or more tied notes, this will
      * return the accumulated duration of the whole series of notes

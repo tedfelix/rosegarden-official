@@ -71,9 +71,9 @@ protected:
  */
 
 class SegmentObserver;
-class Composition;
 class Quantizer;
-struct StandardQuantization;
+class BasicQuantizer;
+class Composition;
 
 class Segment : public std::multiset<Event*, Event::EventCmp>
 {
@@ -257,25 +257,17 @@ public:
     bool hasQuantization() const;
 
     /**
-     * Set the quantization level to one of a set of standard levels.
+     * Set the quantization level.
      * (This does not switch quantization on, if it's currently off,
      * it only changes the level that will be used when it's next
      * switched on.)
      */
-    void setQuantizeLevel(const StandardQuantization &);
-
-    /**
-     * Set the quantization level by copying from another Quantizer.
-     * (This does not switch quantization on, if it's currently off,
-     * it only changes the level that will be used when it's next
-     * switched on.)
-     */
-    void setQuantizeLevel(const Quantizer &);
+    void setQuantizeLevel(timeT unit);
 
     /**
      * Get the quantizer currently in (or not in) use.
      */
-    const Quantizer &getQuantizer() const;
+    const BasicQuantizer *const getQuantizer() const;
 
 
 
@@ -361,14 +353,8 @@ public:
      * does much the same as setDuration does when it extends a segment,
      * although the endTime is absolute whereas the argument to
      * setDuration is relative to the start of the segment.
-     *
-     * If permitQuantize is true, the rest duration may be rounded
-     * before filling -- this could significantly simplify the
-     * resulting score when (for example) interpreting a MIDI file.
-     * permitQuantize should not be used if the precise duration of
-     * the track will subsequently be of interest.
      */
-    void fillWithRests(timeT endTime, bool permitQuantize = false);
+    void fillWithRests(timeT endTime);
 
     /**
      * Fill up a section within a segment with rests, from the
@@ -377,24 +363,19 @@ public:
      * not rests, but it is is likely to be dangerous unless you're
      * quite careful about making sure the given range doesn't overlap
      * any notes.
-     *
-     * If permitQuantize is true, the rest duration may be rounded
-     * before filling -- this could significantly simplify the
-     * resulting score when (for example) interpreting a MIDI file.
-     * permitQuantize should not be used if the precise duration of
-     * the track will subsequently be of interest.
      */
-    void fillWithRests(timeT startTime, timeT endTime,
-		       bool permitQuantize = false);
+    void fillWithRests(timeT startTime, timeT endTime);
 
     /**
      * For each series of contiguous rests found between the start and
      * end time, replace the series of rests with another series of
      * the same duration but composed of the theoretically "correct"
      * rest durations to fill the gap, in the current time signature.
+     * The start and end time should be the raw absolute times of the
+     * events, not the notation-quantized versions, although the code
+     * will use the notation quantizations if it finds them.
      */
-    void normalizeRests(timeT startTime, timeT endTime,
-			bool permitQuantize = false);
+    void normalizeRests(timeT startTime, timeT endTime);
 
 
     //////
@@ -521,7 +502,7 @@ private:
 
     bool m_repeating;           // is this segment repeating?
 
-    Quantizer *m_quantizer;
+    BasicQuantizer *const m_quantizer;
     bool m_quantize;
 
     int m_transpose;            // all Events tranpose

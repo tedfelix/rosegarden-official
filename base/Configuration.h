@@ -33,6 +33,7 @@
 #include "RealTime.h"
 #include "PropertyMap.h"
 #include "Exception.h"
+#include "XmlExportable.h"
 
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
@@ -40,7 +41,7 @@
 namespace Rosegarden
 {
 
-class Configuration : public PropertyMap
+class Configuration : public PropertyMap, public XmlExportable
 {
 public:
     class NoData : public Exception {

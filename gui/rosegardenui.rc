@@ -44,6 +44,7 @@
 	<Action name="quantize_selection"/>
 	<Action name="rescale"/>
 	<Action name="auto_split"/>
+	<Action name="split_by_pitch"/>
 	<Action name="collapse"/>
 <!-- 	<Action name="harmonize_selection"/> -->
         <Action name="set_tempo_to_segment_length"/>

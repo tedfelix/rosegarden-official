@@ -101,8 +101,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
       m_canvasView(0),
       m_pianoView(0),
       m_lastNote(0),
-      m_quantizations(
-	  Rosegarden::StandardQuantization::getStandardQuantizations()),
+      m_quantizations(Rosegarden::BasicQuantizer::getStandardQuantizations()),
       m_documentDestroyed(false)
 {
     MATRIX_DEBUG << "MatrixView ctor\n";
@@ -286,18 +285,18 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     //
     if (segments.size() == 1) {
 
-        setCaption(QString("%1 - Segment Track #%2")
+        setCaption(QString("%1 - Segment Track #%2 - Matrix")
                    .arg(doc->getTitle())
                    .arg(segments[0]->getTrack()));
 
     } else if (segments.size() == comp.getNbSegments()) {
 
-        setCaption(QString("%1 - All Segments")
+        setCaption(QString("%1 - All Segments - Matrix")
                    .arg(doc->getTitle()));
 
     } else {
 
-        setCaption(QString("%1 - %2-Segment Partial View")
+        setCaption(QString("%1 - %2 Segments - Matrix ")
                    .arg(doc->getTitle())
                    .arg(segments.size()));
     }
@@ -343,6 +342,11 @@ MatrixView::~MatrixView()
     // Give the sequencer something to suck on while we close
     //
     if (!m_documentDestroyed) {
+	//!!! The intention here is to avoid sending the slice when the
+	// program is closed -- unfortunately we also need to do it when
+	// closing the window because we're loading a new file, but that
+	// doesn't actually destroy the doc at present.  We're planning
+	// to rework it so that it does, though
 	m_document->getSequenceManager()->
 	    setTemporarySequencerSliceSize(Rosegarden::RealTime(2, 0));
     }
@@ -874,23 +878,20 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview)
 
 void MatrixView::updateQuantizeCombo()
 {
-    Rosegarden::StandardQuantization *quantization = 0;
+    Rosegarden::timeT unit = 0;
 
     if (m_currentEventSelection) {
-	quantization =
-	    Rosegarden::StandardQuantization::getStandardQuantization
+	unit =
+	    Rosegarden::BasicQuantizer::getStandardQuantization
 	    (m_currentEventSelection);
     } else {
-	quantization =
-	    Rosegarden::StandardQuantization::getStandardQuantization
+	unit =
+	    Rosegarden::BasicQuantizer::getStandardQuantization
 	    (&(m_staffs[0]->getSegment()));
     }
 
-    timeT quantizeUnit = 0;
-    if (quantization) quantizeUnit = quantization->unit;
-    
     for (unsigned int i = 0; i < m_quantizations.size(); ++i) {
-	if (quantizeUnit == m_quantizations[i].unit) {
+	if (unit == m_quantizations[i]) {
 	    m_quantizeCombo->setCurrentItem(i);
 	    return;
 	}
@@ -942,9 +943,7 @@ void MatrixView::slotTransformsQuantize()
 
     if (!m_currentEventSelection) return;
 
-    QuantizeDialog *dialog = new QuantizeDialog(this,
-                                                Quantizer::GlobalSource,
-						Quantizer::RawEventData);
+    QuantizeDialog *dialog = new QuantizeDialog(this);
 
     if (dialog->exec() == QDialog::Accepted) {
 	KTmpStatusMsg msg(i18n("Quantizing..."), this);
@@ -1597,15 +1596,15 @@ MatrixView::slotQuantizeSelection(int q)
     MATRIX_DEBUG << "MatrixView::slotQuantizeSelection\n";
 
     using Rosegarden::Quantizer;
-    Rosegarden::timeT unit = m_quantizations[q].unit;
+    Rosegarden::timeT unit =
+	(q < m_quantizations.size() ? m_quantizations[q] : 0);
 
-    Rosegarden::Quantizer quant(Quantizer::GlobalSource,
-                                Quantizer::RawEventData,
-                                Quantizer::PositionQuantize,
-                                unit,
-                                m_quantizations[q].maxDots);
+    Rosegarden::Quantizer *quant =
+	new Rosegarden::BasicQuantizer
+	(unit ? unit :
+	 Rosegarden::Note(Rosegarden::Note::Shortest).getDuration(), false);
 
-    if (quant.getUnit() != 0)
+    if (unit)
     {
         KTmpStatusMsg msg(i18n("Quantizing..."), this);
 	if (m_currentEventSelection &&
@@ -1694,10 +1693,10 @@ MatrixView::initActionsToolbar()
 
     connect(m_snapGridCombo, SIGNAL(activated(int)),
             this, SLOT(slotSetSnapFromIndex(int)));
-
+/*!!!
     connect(m_snapGridCombo, SIGNAL(propagate(int)),
             this, SLOT(slotSetSnapFromIndex(int)));
-
+*/
     // Quantize combo
     //
     QLabel *qLabel = new QLabel(i18n("Quantize"), actionsToolbar);
@@ -1707,7 +1706,7 @@ MatrixView::initActionsToolbar()
 
     for (unsigned int i = 0; i < m_quantizations.size(); ++i) {
 
-	Rosegarden::timeT time = m_quantizations[i].unit;
+	Rosegarden::timeT time = m_quantizations[i];
 	Rosegarden::timeT error = 0;
 	QString label = npf.makeNoteMenuLabel(time, true, error);
 	QPixmap pmap = NotePixmapFactory::toQPixmap(npf.makeNoteMenuPixmap(time, error));
@@ -1720,8 +1719,10 @@ MatrixView::initActionsToolbar()
             this, SLOT(slotQuantizeSelection(int)));
 
     // mouse wheel
+/*!!!
     connect(m_quantizeCombo, SIGNAL(propagate(int)),
             this, SLOT(slotQuantizeSelection(int)));
+*/
 
 }
 
@@ -1976,8 +1977,14 @@ MatrixView::readjustCanvasSize()
 
     }
 
-    int endX = int(m_hlayout.getXForTime(m_segments[0]->getEndMarkerTime()));
-    int startX = int(m_hlayout.getXForTime(m_segments[0]->getStartTime()));
+    Segment *segment = m_segments[0];
+    Rosegarden::Composition *composition = segment->getComposition();
+    int   endX = int(m_hlayout.getXForTime
+		     (composition->getBarEndForTime
+		      (segment->getEndMarkerTime())));
+    int startX = int(m_hlayout.getXForTime
+		     (composition->getBarStartForTime
+		      (segment->getStartTime())));
 
     int newWidth = int(getXbyWorldMatrix(endX - startX));
 

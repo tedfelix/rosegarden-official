@@ -60,6 +60,7 @@
 #include "segmenttool.h"
 #include "editcommands.h"
 #include "studiocontrol.h"
+#include "widgets.h"
 
 namespace Rosegarden
 {
@@ -80,15 +81,6 @@ TabbedConfigurationPage::TabbedConfigurationPage(KConfig *cfg,
     init();
 }
 
-TabbedConfigurationPage::TabbedConfigurationPage(KConfig *cfg,
-                                                 RosegardenGUIDoc *doc,
-                                                 QWidget *parent,
-                                                 const char *name)
-  : ConfigurationPage(cfg, doc, parent, name)
-{
-    init();
-}
-
 void TabbedConfigurationPage::init()
 {
     QVBoxLayout *vlay = new QVBoxLayout(this, 0, KDialog::spacingHint());
@@ -104,9 +96,9 @@ void TabbedConfigurationPage::addTab(QWidget *tab, const QString &title)
 
 //------------------------------------------------------------
 
-GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg, RosegardenGUIDoc *doc,
+GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
                                                    QWidget *parent, const char *name)
-    : TabbedConfigurationPage(cfg, doc, parent, name),
+    : TabbedConfigurationPage(cfg, parent, name),
       m_client(0),
       m_countIn(0),
       m_midiPitchOctave(0),
@@ -386,7 +378,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     addTab(frame, i18n("Font"));
 
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame, 5, 2, 10, 5);
+    layout = new QGridLayout(frame, 4, 2, 10, 5);
 
     layout->addWidget(new QLabel(i18n("Default layout mode"), frame), 0, 0);
 
@@ -442,17 +434,11 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 
     layout->addWidget(m_smoothing, 2, 1);
     
-    m_colourQuantize = new QCheckBox
-	(i18n("Show smoothed notes in a different colour"), frame);
-    bool defaultColourQuantize = m_cfg->readBoolEntry("colourquantize", true);
-    m_colourQuantize->setChecked(defaultColourQuantize);
-    layout->addWidget(m_colourQuantize, 3, 1);
-    
     m_showUnknowns = new QCheckBox
 	(i18n("Show non-notation events as question marks"), frame);
     bool defaultShowUnknowns = m_cfg->readBoolEntry("showunknowns", true);
     m_showUnknowns->setChecked(defaultShowUnknowns);
-    layout->addWidget(m_showUnknowns, 4, 1);
+    layout->addWidget(m_showUnknowns, 3, 1);
     
     addTab(frame, i18n("Layout"));
 
@@ -531,8 +517,29 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     m_pasteType->setCurrentItem(defaultPasteType);
     layout->addWidget(m_pasteType, 4, 1);
 
-
     addTab(frame, i18n("Editing"));
+
+    QString preamble =
+	(i18n("Rosegarden can apply automatic quantization to recorded "
+	      "or imported MIDI data for notation purposes only. "
+	      "This does not affect playback, or "
+	      "editing in any of the views except notation."));
+
+    m_cfg->writeEntry("quantizetype", 2);
+    m_cfg->writeEntry("quantizenotationonly", true);
+
+    m_quantizeFrame = new RosegardenQuantizeParameters
+	(m_tabWidget, false, "Notation Options", preamble);
+
+/*!!!    
+    m_colourQuantize = new QCheckBox
+	(i18n("Show smoothed notes in a different colour"), frame);
+    bool defaultColourQuantize = m_cfg->readBoolEntry("colourquantize", true);
+    m_colourQuantize->setChecked(defaultColourQuantize);
+    layout->addWidget(m_colourQuantize, 3, 1);
+*/
+
+    addTab(m_quantizeFrame, i18n("Quantize"));
 }
 
 void
@@ -596,7 +603,7 @@ NotationConfigurationPage::apply()
     m_cfg->writeEntry("layoutmode", m_layoutMode->currentItem());
     m_cfg->writeEntry("smoothing",
 		      m_smoothing->currentItem() + Note::Shortest);
-    m_cfg->writeEntry("colourquantize", m_colourQuantize->isChecked());
+//!!!    m_cfg->writeEntry("colourquantize", m_colourQuantize->isChecked());
     m_cfg->writeEntry("showunknowns", m_showUnknowns->isChecked());
     m_cfg->writeEntry("style", m_noteStyle->currentText());
     m_cfg->writeEntry("inserttype", m_insertType->currentItem());
@@ -633,9 +640,10 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
                                                    KConfig *cfg,
                                                    QWidget *parent,
                                                    const char *name)
-    : TabbedConfigurationPage(cfg, doc, parent, name),
+    : TabbedConfigurationPage(cfg, parent, name),
       m_readAhead(0),
-      m_playback(0)
+      m_playback(0),
+      m_doc(doc)
 {
 //     Rosegarden::Configuration &config = doc->getConfiguration();
     m_cfg->setGroup("Latency Options");
@@ -1293,7 +1301,7 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
                          GeneralConfigurationPage::title(),
                          loadIcon(GeneralConfigurationPage::iconName()));
     vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
-    page = new GeneralConfigurationPage(cfg, doc, pageWidget);
+    page = new GeneralConfigurationPage(cfg, pageWidget);
     vlay->addWidget(page);
     page->setPageIndex(pageIndex(pageWidget));
     m_configurationPages.push_back(page);

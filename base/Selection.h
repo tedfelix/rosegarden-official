@@ -1,3 +1,5 @@
+// -*- c-basic-offset: 4 -*-
+
 /*
     Rosegarden-4
     A sequencer and musical notation editor.
@@ -103,6 +105,21 @@ public:
      * Return the total duration spanned by the selection.
      */
     timeT getTotalDuration() const;
+
+    typedef std::vector<std::pair<Segment::iterator,
+                                  Segment::iterator> > RangeList;
+    /**
+     * Return a set of ranges spanned by the selection, such that
+     * each range covers only events within the selection.
+     */
+    RangeList getRanges() const;
+
+    typedef std::vector<std::pair<timeT, timeT> > RangeTimeList;
+    /**
+     * Return a set of times spanned by the selection, such that
+     * each time range covers only events within the selection.
+     */
+    RangeTimeList getRangeTimes() const;
 
     /**
      * Return the number of events added to this selection.

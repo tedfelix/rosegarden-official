@@ -24,7 +24,9 @@
 #include "rosestrings.h"
 #include "rosedebug.h"
 #include "rosegardenguidoc.h"
+#include "segmentcommands.h"
 #include "widgets.h"
+#include "midipitchlabel.h"
 
 #include "RealTime.h"
 
@@ -1942,136 +1944,20 @@ ClefDialog::redrawClefPixmap()
 }
 
 
-QuantizeDialog::QuantizeDialog(QWidget *parent,
-			       std::string source,
-			       std::string target) :
-    KDialogBase(parent, "", true, i18n("Quantize"), Ok | Cancel),
-    m_source(source),
-    m_target(target),
-    m_standardQuantizations
-        (Rosegarden::StandardQuantization::getStandardQuantizations())
+QuantizeDialog::QuantizeDialog(QWidget *parent, bool inNotation) :
+    KDialogBase(parent, "", true, i18n("Quantize"), Ok | Cancel)
 {
     QVBox *vbox = makeVBoxMainWidget();
 
-    QGroupBox *quantizeBox = new QGroupBox
-	(1, Horizontal, i18n("Basic quantization"), vbox);
-
-    QHBox *typeBox = new QHBox(quantizeBox);
-    new QLabel(i18n("Quantize:"), typeBox);
-    m_typeCombo = new RosegardenComboBox(false, typeBox);
-    m_typeCombo->insertItem(i18n("Event positions only"));
-    m_typeCombo->insertItem(i18n("Event positions and durations"));
-    m_typeCombo->insertItem(i18n("Event positions, and round durations to exact notes"));
-
-    QHBox *unitBox = new QHBox(quantizeBox);
-    new QLabel(i18n("Base duration unit:"), unitBox);
-    m_unitCombo = new RosegardenComboBox(false, unitBox);
-
-    NotePixmapFactory npf;
-    QPixmap noMap = NotePixmapFactory::toQPixmap(npf.makeToolbarPixmap("menu-no-note"));
-
-    for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
-
-	Rosegarden::timeT time = m_standardQuantizations[i].unit;
-	Rosegarden::timeT error = 0;
-
-	QPixmap pmap = NotePixmapFactory::toQPixmap(npf.makeNoteMenuPixmap(time, error));
-	QString label = npf.makeNoteMenuLabel(time, false, error);
-
-	if (error == 0) m_unitCombo->insertItem(pmap, label);
-	else m_unitCombo->insertItem(noMap, QString("%1").arg(time));
-
-	if (m_standardQuantizations[i].unit ==
-	    Note(Note::Semiquaver).getDuration()) {
-		m_unitCombo->setCurrentItem(m_unitCombo->count() - 1);
-	}
-    }
-    
-    m_noteQuantizeBox = new QGroupBox
-	(1, Horizontal, i18n("Note rounding"), vbox);
-
-    QHBox *dotsBox = new QHBox(m_noteQuantizeBox);
-    new QLabel(i18n("Maximum number of dots:"), dotsBox);
-    m_dotsCombo = new RosegardenComboBox(false, dotsBox);
-    m_dotsCombo->insertItem("0");
-    m_dotsCombo->insertItem("1");
-    m_dotsCombo->insertItem("2");
-    m_dotsCombo->insertItem("3");
-    m_dotsCombo->setCurrentItem(2);
-
-    m_legatoButton = new QCheckBox
-	(i18n("Only round durations up if following rests permit"),
-	 m_noteQuantizeBox);
-
-/*
-    
-    m_makeViableButton = new QCheckBox
-	(i18n("Split long notes into ties"), m_noteQuantizeBox);
-    
-    m_rebeamButton = new QCheckBox
-	(i18n("Re-beam after quantize"), m_noteQuantizeBox);
-*/
-    
-    m_noteQuantizeBox->setEnabled(false);
-//    m_makeViableButton->setEnabled(false);
-//    m_rebeamButton->setEnabled(false);
-
-    connect(m_typeCombo, SIGNAL(activated(int)), SLOT(slotTypeChanged(int)));
-    connect(m_unitCombo, SIGNAL(activated(int)), SLOT(slotUnitChanged(int)));
-    connect(m_dotsCombo, SIGNAL(activated(int)), SLOT(slotDotsChanged(int)));
-    connect(m_legatoButton, SIGNAL(activated()), SLOT(slotLegatoChanged()));
+    m_quantizeFrame =
+	new RosegardenQuantizeParameters(vbox, inNotation, 0);
 }
 
-Quantizer
+Quantizer *
 QuantizeDialog::getQuantizer() const
 {
-    Quantizer::QuantizationType type;
-    switch (m_typeCombo->currentItem()) {
-    case 0: type = Quantizer::PositionQuantize; break;
-    case 1: type = Quantizer::UnitQuantize; break;
-    case 2: type = Quantizer::NoteQuantize; break;
-    default: assert(0);
-    }
-    
-    if (type == Quantizer::NoteQuantize) {
-	if (m_legatoButton->isChecked()) {
-	    type = Quantizer::LegatoQuantize;
-	}
-    }	
-
-    int dots = m_dotsCombo->currentItem();
-
-    Rosegarden::StandardQuantization quantization =
-	m_standardQuantizations[m_unitCombo->currentItem()];
-
-    return Quantizer(m_source, m_target, type, quantization.unit, dots);
+    return m_quantizeFrame->getQuantizer();
 }
-	
-
-void
-QuantizeDialog::slotTypeChanged(int index)
-{
-    m_noteQuantizeBox->setEnabled(index == 2);
-}
-
-void
-QuantizeDialog::slotUnitChanged(int)
-{
-    // not used
-}
-
-void
-QuantizeDialog::slotDotsChanged(int)
-{
-    // not used
-}
-
-void
-QuantizeDialog::slotLegatoChanged()
-{
-    // not used
-}
-
 
 RescaleDialog::RescaleDialog(QWidget *parent) :
     KDialogBase(parent, "", true, i18n("Rescale"), Ok | Cancel)
@@ -2669,10 +2555,10 @@ EventParameterDialog::EventParameterDialog(
 
     connect(m_patternCombo, SIGNAL(activated(int)),
             this, SLOT(slotPatternSelected(int)));
-
+/*!!!
     connect(m_patternCombo, SIGNAL(propagate(int)),
             this, SLOT(slotPatternSelected(int)));
-
+*/
     QHBox *value1Box = new QHBox(vBox);
     m_value1Label = new QLabel(i18n("Value"), value1Box);
     m_value1Combo = new RosegardenComboBox(true, value1Box);
@@ -2817,5 +2703,82 @@ CompositionLengthDialog::getEndMarker()
 }
 
 
+SplitByPitchDialog::SplitByPitchDialog(QWidget *parent) :
+    KDialogBase(parent, "", true, i18n("Split by Pitch"))
+{
+    QVBox *vBox = makeVBoxMainWidget();
 
+    QFrame *frame = new QFrame(vBox);
+
+    QGridLayout *layout = new QGridLayout(frame, 4, 3, 10, 5);
+
+    layout->addWidget(new QLabel(i18n("Starting split pitch:  "), frame), 0, 0);
+
+    m_pitch = new QSpinBox(frame);
+    m_pitch->setMinValue(1);
+    m_pitch->setMaxValue(127);
+    m_pitch->setValue(60);
+    connect(m_pitch, SIGNAL(valueChanged(int)), SLOT(slotPitchChanged(int)));
+    layout->addWidget(m_pitch, 0, 1);
+
+    Rosegarden::MidiPitchLabel pl(60);
+    m_pitchLabel = new QLabel(pl.getQString(), frame);
+    layout->addWidget(m_pitchLabel, 0, 2);
+
+    m_range = new QCheckBox(i18n("Range up and down to follow music"), frame);
+    layout->addMultiCellWidget(m_range,
+			       1, 1, // fromRow, toRow
+			       0, 2  // fromCol, toCol
+	);
+
+    m_duplicate = new QCheckBox(i18n("Duplicate non-note events"), frame);
+    layout->addMultiCellWidget(m_duplicate, 2, 2, 0, 2);
+
+    layout->addWidget(new QLabel(i18n("Clef handling:"), frame), 3, 0);
+
+    m_clefs = new RosegardenComboBox(frame);
+    m_clefs->insertItem(i18n("Leave clefs alone"));
+    m_clefs->insertItem(i18n("Guess new clefs"));
+    m_clefs->insertItem(i18n("Use treble and bass clefs"));
+    layout->addMultiCellWidget(m_clefs, 3, 3, 1, 2);
+
+    m_range->setChecked(true);
+    m_duplicate->setChecked(true);
+    m_clefs->setCurrentItem(2);
+}
+
+void
+SplitByPitchDialog::slotPitchChanged(int pitch)
+{
+    Rosegarden::MidiPitchLabel pl(pitch);
+    m_pitchLabel->setText("  " + pl.getQString());
+}
+
+int
+SplitByPitchDialog::getPitch()
+{
+    return m_pitch->value();
+}
+
+bool
+SplitByPitchDialog::getShouldRange()
+{
+    return m_range->isChecked();
+}
+
+bool
+SplitByPitchDialog::getShouldDuplicateNonNoteEvents()
+{
+    return m_duplicate->isChecked();
+}
+
+int
+SplitByPitchDialog::getClefHandling()
+{
+    switch (m_clefs->currentItem()) {
+    case 0:  return (int)SegmentSplitByPitchCommand::LeaveClefs;
+    case 1:  return (int)SegmentSplitByPitchCommand::RecalculateClefs;
+    default: return (int)SegmentSplitByPitchCommand::UseTrebleAndBassClefs;
+    }
+}
 

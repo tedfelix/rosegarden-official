@@ -39,6 +39,7 @@ class QRadioButton;
 class QLabel;
 class QCheckBox;
 class KListView;
+class RosegardenQuantizeParameters;
 
 namespace Rosegarden
 {
@@ -59,10 +60,6 @@ public:
     ConfigurationPage(KConfig *cfg,
                       QWidget *parent=0, const char *name=0)
         : QWidget(parent, name), m_doc(0), m_cfg(cfg), m_pageIndex(0) {}
-
-    ConfigurationPage(KConfig *cfg, RosegardenGUIDoc *doc,
-                      QWidget *parent=0, const char *name=0)
-        : QWidget(parent, name), m_doc(doc), m_cfg(cfg), m_pageIndex(0) {}
 
     virtual ~ConfigurationPage() {};
 
@@ -115,9 +112,6 @@ public:
     TabbedConfigurationPage(KConfig *cfg,
                             QWidget *parent=0, const char *name=0);
 
-    TabbedConfigurationPage(KConfig *cfg, RosegardenGUIDoc *doc,
-                            QWidget *parent=0, const char *name=0);
-
     static QString iconName() { return "misc"; }
     
 protected:
@@ -154,7 +148,7 @@ public:
 	Local
     };
 
-    GeneralConfigurationPage(KConfig *cfg, RosegardenGUIDoc *doc,
+    GeneralConfigurationPage(KConfig *cfg,
                              QWidget *parent=0, const char *name=0);
 
     virtual void apply();
@@ -228,6 +222,7 @@ protected:
     QCheckBox *m_autoBeam;
     QCheckBox *m_collapseRests;
     QComboBox *m_pasteType;
+    RosegardenQuantizeParameters *m_quantizeFrame;
 
     void populateSizeCombo(QComboBox *combo, std::string font, int dfltSize);
 };
@@ -305,6 +300,7 @@ protected:
 
     QPushButton* m_fetchLatencyValues;
 
+    RosegardenGUIDoc *m_doc;
 };
 
 

@@ -35,6 +35,8 @@
 #include <kglobal.h>
 #include <kaction.h>
 #include <kstdaction.h>
+#include <kstddirs.h>
+#include <kglobal.h>
 #include <kapp.h>
 #include <kprinter.h>
 
@@ -60,6 +62,7 @@
 #include "widgets.h"
 #include "chordnameruler.h"
 #include "temporuler.h"
+#include "rawnoteruler.h"
 #include "studiocontrol.h"
 #include "notationhlayout.h"
 #include "notationvlayout.h"
@@ -166,9 +169,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 			   bool showProgressive) :
     EditView(doc, segments, 1, parent, "notationview"),
     m_properties(getViewLocalPropertyPrefix()),
-    m_legatoQuantizer(new Quantizer(Quantizer::RawEventData,
-				    getViewLocalPropertyPrefix() + "Q",
-				    Quantizer::LegatoQuantize)),
     m_selectionCounter(0),
     m_currentNotePixmap(0),
     m_hoveredOverNoteName(0),
@@ -179,17 +179,17 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_fontSize(NotePixmapFactory::getDefaultSize(m_fontName)),
     m_notePixmapFactory(new NotePixmapFactory(m_fontName, m_fontSize)),
     m_hlayout(new NotationHLayout(&doc->getComposition(), m_notePixmapFactory,
-                                  m_legatoQuantizer, m_properties, this)),
+                                  m_properties, this)),
     m_vlayout(new NotationVLayout(&doc->getComposition(),
-                                  m_legatoQuantizer, m_properties, this)),
+                                  m_properties, this)),
     m_chordNameRuler(0),
     m_tempoRuler(0),
+    m_rawNoteRuler(0),
     m_annotationsVisible(false),
     m_selectDefaultNote(0),
     m_fontCombo(0),
     m_fontSizeSlider(0),
     m_spacingSlider(0),
-    m_smoothingSlider(0),
     m_fontSizeActionMenu(0),
     m_progressDisplayer(PROGRESS_NONE),
     m_progressEventFilterInstalled(false),
@@ -222,19 +222,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     int defaultSpacing = m_config->readNumEntry("spacing", 100);
     m_hlayout->setSpacing(defaultSpacing);
 
-    Note::Type defaultSmoothingType = 
-	m_config->readNumEntry("smoothing", Note::Shortest);
-    timeT defaultSmoothing = Note(defaultSmoothingType).getDuration();
-    for (int type = Note::Shortest; type <= Note::Longest; ++type) {
-	m_legatoDurations.push_back((int)(Note(type).getDuration()));
-    }
-    Rosegarden::Quantizer q(Rosegarden::Quantizer::RawEventData,
-			    getViewLocalPropertyPrefix() + "Q",
-			    Rosegarden::Quantizer::LegatoQuantize,
-			    defaultSmoothing);
-    *m_legatoQuantizer = q;
-    
-
     setupActions();
     initFontToolbar();
     initStatusBar();
@@ -261,14 +248,14 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                                          tCanvas, getCentralFrame()));
 
     if (segments.size() == 1) {
-        setCaption(QString("%1 - Segment Track #%2")
+        setCaption(QString("%1 - Segment Track #%2 - Notation")
                    .arg(doc->getTitle())
                    .arg(segments[0]->getTrack()));
     } else if (segments.size() == doc->getComposition().getNbSegments()) {
-        setCaption(QString("%1 - All Segments")
+        setCaption(QString("%1 - All Segments - Notation")
                    .arg(doc->getTitle()));
     } else {
-        setCaption(QString("%1 - %2-Segment Partial View")
+        setCaption(QString("%1 - %2 Segments - Notation")
                    .arg(doc->getTitle())
                    .arg(segments.size()));
     }
@@ -290,8 +277,14 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     addRuler(m_tempoRuler);
     m_tempoRuler->hide();
 
+    m_rawNoteRuler = new RawNoteRuler
+	(m_hlayout, segments[0], 20.0, 20, getCentralFrame());
+    addRuler(m_rawNoteRuler);
+    m_rawNoteRuler->show();
+
     // All toolbars should be created before this is called
     setAutoSaveSettings("NotationView", true);
+
     // All rulers must have been created before this is called,
     // or the program will crash
     readOptions();
@@ -336,14 +329,11 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_config->setGroup("Notation Options");
     int layoutMode = m_config->readNumEntry("layoutmode", 0);
 
-/*!!!
-    m_hlayout->setPageMode(layoutMode == 1);
-    m_hlayout->setPageWidth(getPageWidth());
-*/
     try {
 
-        setPageMode(layoutMode == 1);
+        setPageMode(layoutMode == 1); // also renders the staffs!
 
+/*!!!
         bool layoutApplied = applyLayout();
         if (!layoutApplied) {
             KMessageBox::sorry(0, i18n("Couldn't apply score layout"));
@@ -360,6 +350,13 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
             }
         }
 
+	refreshSegment(0, 0, 0);
+*/
+	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+	    m_staffs[i]->getSegment().getRefreshStatus
+		(m_segmentsRefreshStatusIds[i]).setNeedsRefresh(false);
+	}
+
         m_ok = true;
 
     } catch (ProgressReporter::Cancelled c) {
@@ -369,10 +366,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     
     NOTATION_DEBUG << "NotationView ctor : m_ok = " << m_ok << endl;
     
-
-    //
-    // Setup default progress (the progress bar in the status bar)
-    //
     delete progressDlg;
 
     // at this point we can return if operation was cancelled
@@ -447,13 +440,14 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     setCurrentSelection(0, false);
     slotUpdateInsertModeStatus();
     m_chordNameRuler->repaint();
+    m_rawNoteRuler->repaint();
     m_inhibitRefresh = false;
 
     setConfigDialogPageIndex(1);
 
     if (m_annotationsVisible) {
 	// oops
-	refreshSegment(0, 0, 0);
+//!!!	refreshSegment(0, 0, 0);
     }
 
     NOTATION_DEBUG << "NotationView ctor exiting\n";
@@ -464,12 +458,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 //
 NotationView::NotationView(RosegardenGUIDoc *doc,
                            std::vector<Segment *> segments,
-                           KPrinter *printer)
+                           KPrinter *printer,
+			   QWidget *parent)
     : EditView(doc, segments, 1, 0, "printview"),
     m_properties(getViewLocalPropertyPrefix()),
-    m_legatoQuantizer(new Quantizer(Quantizer::RawEventData,
-				    getViewLocalPropertyPrefix() + "Q",
-				    Quantizer::LegatoQuantize)),
     m_selectionCounter(0),
     m_currentNotePixmap(0),
     m_hoveredOverNoteName(0),
@@ -480,17 +472,17 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_fontSize(NotePixmapFactory::getDefaultSize(m_fontName)),
     m_notePixmapFactory(new NotePixmapFactory(m_fontName, m_fontSize)),
     m_hlayout(new NotationHLayout(&doc->getComposition(), m_notePixmapFactory,
-                                  m_legatoQuantizer, m_properties, this)),
+				  m_properties, this)),
     m_vlayout(new NotationVLayout(&doc->getComposition(),
-                                  m_legatoQuantizer, m_properties, this)),
+                                  m_properties, this)),
     m_chordNameRuler(0),
     m_tempoRuler(0),
+    m_rawNoteRuler(0),
     m_annotationsVisible(false),
     m_selectDefaultNote(0),
     m_fontCombo(0),
     m_fontSizeSlider(0),
     m_spacingSlider(0),
-    m_smoothingSlider(0),
     m_fontSizeActionMenu(0),
     m_progressDisplayer(PROGRESS_NONE),
     m_progressEventFilterInstalled(false),
@@ -517,13 +509,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     std::vector<int> sizes = NotePixmapFactory::getAvailableSizes(m_fontName);
     m_fontSize = sizes[sizes.size()-1];
 
-    int defaultSpacing = m_config->readNumEntry("spacing", 100);
-    m_hlayout->setSpacing(defaultSpacing);
-
-    for (int type = Note::Shortest; type <= Note::Longest; ++type) {
-	m_legatoDurations.push_back((int)(Note(type).getDuration()));
-    }
-
     setBackgroundMode(PaletteBase);
 
     QPaintDeviceMetrics pdm(printer);
@@ -534,7 +519,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
              << pdm.width() << ", " << pdm.height()
              << " - printer resolution : " << printer->resolution() << "\n";
 
-    unsigned int scaleFactor = 5;
+    unsigned int scaleFactor = 3;//!!! need to know
     tCanvas->resize(pdm.width() / scaleFactor, pdm.height() / scaleFactor);
     
     setCanvasView(new NotationCanvasView(*this, m_horizontalScrollBar,
@@ -550,10 +535,34 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_currentStaff = 0;
     m_staffs[0]->setCurrent(true);
 
+    RosegardenProgressDialog* progressDlg = 0;
+
+    if (parent) {
+
+        kapp->processEvents();
+
+        RG_DEBUG << "NotationView : setting up progress dialog\n";
+
+        progressDlg = new RosegardenProgressDialog(i18n("Printing..."),
+                                                   100, parent);
+	progressDlg->setAutoClose(false);
+        progressDlg->setAutoReset(true);
+        progressDlg->setMinimumDuration(1000);
+        setupProgress(progressDlg);
+
+        m_progressDisplayer = PROGRESS_DIALOG;
+    }
+
     try {
 
         setPageMode(true);
 
+	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+	    m_staffs[i]->getSegment().getRefreshStatus
+		(m_segmentsRefreshStatusIds[i]).setNeedsRefresh(false);
+	}
+
+/*!!!
 	bool layoutApplied = applyLayout();
 	if (!layoutApplied) {
 	    KMessageBox::sorry(0, i18n("Couldn't apply score layout"));
@@ -568,12 +577,20 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 		canvas()->update();
 	    }
 	}
+*/
+
 	m_ok = true;
+
     } catch (ProgressReporter::Cancelled c) {
 	// when cancelled, m_ok is false -- checked by calling method
+        NOTATION_DEBUG << "NotationView ctor : layout Cancelled\n";
     }
 
-    if (!isOK()) return; // In case more core is added there later
+    NOTATION_DEBUG << "NotationView ctor : m_ok = " << m_ok << endl;
+    
+    delete progressDlg;
+
+    if (!isOK()) return; // In case more code is added there later
 
 }
 
@@ -589,7 +606,7 @@ NotationView::~NotationView()
 	    setTemporarySequencerSliceSize(Rosegarden::RealTime(2, 0));
     }
 
-    slotSaveOptions();
+    if (!m_printMode) slotSaveOptions();
 
     if (m_documentDestroyed) return;
 
@@ -736,6 +753,7 @@ void NotationView::slotSaveOptions()
     m_config->setGroup("Notation Options");
 
     m_config->writeEntry("Show Chord Name Ruler", getToggleAction("show_chords_ruler")->isChecked());
+    m_config->writeEntry("Show Raw Note Ruler", getToggleAction("show_raw_note_ruler")->isChecked());
     m_config->writeEntry("Show Tempo Ruler",      getToggleAction("show_tempo_ruler")->isChecked());
     m_config->writeEntry("Show Annotations", m_annotationsVisible);
 
@@ -760,6 +778,10 @@ void NotationView::readOptions()
     opt = m_config->readBoolEntry("Show Chord Name Ruler", true);
     getToggleAction("show_chords_ruler")->setChecked(opt);
     slotToggleChordsRuler();
+
+    opt = m_config->readBoolEntry("Show Raw Note Ruler", true);
+    getToggleAction("show_raw_note_ruler")->setChecked(opt);
+    slotToggleRawNoteRuler();
 
     opt = m_config->readBoolEntry("Show Tempo Ruler", false);
     getToggleAction("show_tempo_ruler")->setChecked(opt);
@@ -830,44 +852,6 @@ void NotationView::setupActions()
     }
 
     actionCollection()->insert(spacingActionMenu);
-
-    
-    KActionMenu *smoothingActionMenu =
-	new KActionMenu(i18n("S&moothing"), this, "smoothing_actionmenu");
-
-    timeT defaultSmoothing = m_legatoQuantizer->getUnit();
-    NotePixmapFactory npf;
-
-    for (std::vector<int>::iterator i = m_legatoDurations.begin();
-	 i != m_legatoDurations.end(); ++i) {
-
-	QPixmap pmap;
-	QString label;
-
-	Note nearestNote = Note::getNearestNote(*i);
-	if (nearestNote.getDuration() == *i) {
-	    std::string noteName = nearestNote.getReferenceName(); 
-	    noteName = "menu-" + noteName;
-	    pmap = NotePixmapFactory::toQPixmap(npf.makeToolbarPixmap(strtoqstr(noteName)));
-	    label = NotationStrings::getNoteName(nearestNote.getNoteType());
-	} else {
-	    label = QString("%1").arg(*i);
-	}
-	
-	KToggleAction *smoothingAction =
-	    new KToggleAction
-	    (label, QIconSet(pmap), 0, this,
-	     SLOT(slotChangeLegatoFromAction()),
-	     actionCollection(), QString("smoothing_%1").arg(*i));
-
-	smoothingAction->setExclusiveGroup("smoothing");
-	smoothingAction->setChecked(*i == defaultSmoothing);
-	smoothingActionMenu->insert(smoothingAction);
-    }
-
-    actionCollection()->insert(smoothingActionMenu);
-
-
 
     KActionMenu *styleActionMenu =
 	new KActionMenu(i18n("Note &Style"), this, "note_style_actionmenu");
@@ -1067,6 +1051,10 @@ void NotationView::setupActions()
                       SLOT(slotToggleChordsRuler()),
                       actionCollection(), "show_chords_ruler");
 
+    new KToggleAction(i18n("Show Ra&w Note Ruler"), 0, this,
+                      SLOT(slotToggleRawNoteRuler()),
+                      actionCollection(), "show_raw_note_ruler");
+
     new KToggleAction(i18n("Show &Tempo Ruler"), 0, this,
                       SLOT(slotToggleTempoRuler()),
                       actionCollection(), "show_tempo_ruler");
@@ -1199,11 +1187,11 @@ void NotationView::setupActions()
     new KAction(i18n(EventQuantizeCommand::getGlobalName()), 0, this,
                 SLOT(slotTransformsQuantize()), actionCollection(),
                 "quantize");
-
+/*!!!
     new KAction(i18n(TransformsMenuFixSmoothingCommand::getGlobalName()), 0,
 		this, SLOT(slotTransformsFixSmoothing()), actionCollection(),
                 "fix_smoothing");
-
+*/
     new KAction(i18n(TransformsMenuInterpretCommand::getGlobalName()), 0,
 		this, SLOT(slotTransformsInterpret()), actionCollection(),
 		"interpret");
@@ -1512,15 +1500,6 @@ void NotationView::initFontToolbar()
         (spacings, defaultSpacing, QSlider::Horizontal, fontToolbar);
     connect(m_spacingSlider, SIGNAL(valueChanged(int)),
             this, SLOT(slotChangeSpacingFromIndex(int)));
-
-    new QLabel(i18n("  Smoothing:  "), fontToolbar);
-
-    timeT defaultSmoothing = m_legatoQuantizer->getUnit();
-    m_smoothingSlider = new ZoomSlider<int>
-        (m_legatoDurations, defaultSmoothing,
-	 QSlider::Horizontal, fontToolbar);
-    connect(m_smoothingSlider, SIGNAL(valueChanged(int)),
-            this, SLOT(slotChangeLegatoFromIndex(int)));
 }
 
 void NotationView::initStatusBar()
@@ -1573,11 +1552,13 @@ NotationView::setPageMode(bool pageMode)
 	if (m_topBarButtons) m_topBarButtons->hide();
 	if (m_bottomBarButtons) m_bottomBarButtons->hide();
 	if (m_chordNameRuler) m_chordNameRuler->hide();
+	if (m_rawNoteRuler) m_rawNoteRuler->hide();
 	if (m_tempoRuler) m_tempoRuler->hide();
     } else {
 	if (m_topBarButtons) m_topBarButtons->show();
 	if (m_bottomBarButtons) m_bottomBarButtons->show();
 	if (m_chordNameRuler && getToggleAction("show_chords_ruler")->isChecked()) m_chordNameRuler->show();
+	if (m_rawNoteRuler && getToggleAction("show_raw_note_ruler")->isChecked()) m_rawNoteRuler->show();
 	if (m_tempoRuler && getToggleAction("show_tempo_ruler")->isChecked()) m_tempoRuler->show();
     }
 
@@ -1597,7 +1578,6 @@ NotationView::setPageMode(bool pageMode)
     if (!layoutApplied) KMessageBox::sorry(0, "Couldn't apply layout");
     else {
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-//            m_staffs[i]->renderAllElements();
             m_staffs[i]->positionAllElements();
         }
     }
@@ -2006,8 +1986,9 @@ void NotationView::print(KPrinter* printer)
         KMessageBox::error(0, "Nothing to print");
         return;
     }
-    
-    unsigned int scaleFactor = 5;
+
+    //!!! need to know the printer resolution, I guess?
+    unsigned int scaleFactor = 3;
 
     QPaintDeviceMetrics pdm(printer);
 
@@ -2023,6 +2004,9 @@ void NotationView::print(KPrinter* printer)
 
     unsigned int nbStaffRowsPerPage = pageHeight / staffRowSpacing;
     int printSliceHeight = staffRowSpacing * nbStaffRowsPerPage / scaleFactor;
+
+    //!!! this isn't necessarily the last staff; staffs are in
+    //arbitrary order
 
     NotationStaff* lastStaff = m_staffs[getStaffCount() - 1];
 
@@ -2064,9 +2048,13 @@ void NotationView::print(KPrinter* printer)
 
         QRect printRect(0, printY,
                         canvasWidth, printSliceHeight);
-        
+
+	// supplying doublebuffer==true to this method appears to
+        // slow down printing considerably but without it we get
+	// all sorts of horrible artifacts (possibly related to
+	// mishandling of pixmap masks?)
         getCanvasView()->canvas()->drawArea(printRect,
-                                            &printpainter);
+                                            &printpainter, true);
 
         printpainter.translate(0, -printSliceHeight);
 

@@ -72,6 +72,7 @@
 #include "trackeditor.h"
 #include "dialogs.h"
 #include "editcommands.h"
+#include "notationcommands.h"
 #include "multiviewcommandhistory.h"
 #include "segmentcommands.h"
 #include "zoomslider.h"
@@ -462,6 +463,10 @@ void RosegardenGUIApp::setupActions()
 		SLOT(slotAutoSplitSelection()), actionCollection(),
 		"auto_split");
 
+    new KAction(i18n(SegmentSplitByPitchCommand::getGlobalName()), 0, this,
+		SLOT(slotSplitSelectionByPitch()), actionCollection(),
+		"split_by_pitch");
+
     new KAction(i18n("Open in &Default Editor"), Key_Return, this,
 		SLOT(slotEdit()), actionCollection(),
 		"edit_default");
@@ -646,6 +651,9 @@ void RosegardenGUIApp::initStatusBar()
 			    KTmpStatusMsg::getDefaultId(), 1);
     statusBar()->setItemAlignment(KTmpStatusMsg::getDefaultId(), 
 				  AlignLeft | AlignVCenter);
+
+    m_progressBar = new RosegardenProgressBar(100, true, statusBar());
+    statusBar()->addWidget(m_progressBar);
 }
 
 void RosegardenGUIApp::initDocument()
@@ -1413,10 +1421,7 @@ void RosegardenGUIApp::slotQuantizeSelection()
 
     //!!! this should all be in rosegardenguiview
 
-    QuantizeDialog *dialog = new QuantizeDialog
-	(m_view,
-         Rosegarden::Quantizer::GlobalSource,
-	 Rosegarden::Quantizer::RawEventData);
+    QuantizeDialog *dialog = new QuantizeDialog(m_view);
     if (dialog->exec() != QDialog::Accepted) return;
 
     Rosegarden::SegmentSelection selection = m_view->getSelection();
@@ -1517,6 +1522,43 @@ void RosegardenGUIApp::slotAutoSplitSelection()
 
     m_view->slotAddCommandToHistory(command);
 }
+
+void RosegardenGUIApp::slotSplitSelectionByPitch()
+{
+    if (!m_view->haveSelection()) return;
+
+    SplitByPitchDialog *dialog = new SplitByPitchDialog(m_view);
+    if (dialog->exec() != QDialog::Accepted) return;
+
+    Rosegarden::SegmentSelection selection = m_view->getSelection();
+
+    KMacroCommand *command = new KMacroCommand
+	(SegmentSplitByPitchCommand::getGlobalName());
+
+    bool haveSomething = false;
+
+    for (Rosegarden::SegmentSelection::iterator i = selection.begin();
+	 i != selection.end(); ++i) {
+
+        if ((*i)->getType() == Rosegarden::Segment::Audio) {
+	    // nothing
+        } else {
+	    command->addCommand
+		(new SegmentSplitByPitchCommand
+		 (*i,
+		  dialog->getPitch(),
+		  dialog->getShouldRange(),
+		  dialog->getShouldDuplicateNonNoteEvents(),
+		  (SegmentSplitByPitchCommand::ClefHandling)
+		  dialog->getClefHandling()));
+	    haveSomething = true;
+	}
+    }
+
+    if (haveSomething) m_view->slotAddCommandToHistory(command);
+    //!!! else complain
+}
+
 
 void RosegardenGUIApp::slotHarmonizeSelection()
 {
@@ -1944,7 +1986,7 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 
     KStartupLogo::hideIfStillThere();
     RosegardenProgressDialog progressDlg(i18n("Importing MIDI file..."),
-                                         100,
+                                         200,
                                          this);
 
     connect(midiFile, SIGNAL(setProgress(int)),
@@ -1956,8 +1998,7 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
     if (!midiFile->open())
     {
         CurrentProgressDialog::freeze();
-        KMessageBox::error(this,
-          i18n("Couldn't understand MIDI file.\nIt might be corrupted."));
+        KMessageBox::error(this, strtoqstr(midiFile->getError())); //!!! i18n
         return;
     }
 
@@ -2022,13 +2063,62 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 
     // Set the caption
     //
-    if (!merge) m_doc->setTitle(file);
+    if (!merge) m_doc->setTitle(QFileInfo(file).fileName());
 
     m_fileRecent->addURL(file);
 
-    // Reinitialise
+    // Reinitialise 
     //
     initView();
+
+    // Clean up for notation purposes (after reinitialise, because that
+    // sets the composition's end marker time which is needed here)
+
+    if (merge) return; // need to work out how to only clean merged segments
+
+    KMacroCommand *command = new KMacroCommand(i18n("Guess Notation"));
+    Rosegarden::Composition *comp = &m_doc->getComposition();
+    int progressPer = 200;
+    if (comp->getNbSegments() > 0) progressPer = 100 / (comp->getNbSegments() * 4); //!!! 4 only if all transforms done
+    int count = 0;
+
+    for (Rosegarden::Composition::iterator i  = comp->begin();
+	 i != comp->end(); ++i) {
+
+	Rosegarden::Segment &segment = **i;
+	Rosegarden::timeT startTime(segment.getStartTime());
+	Rosegarden::timeT endTime(segment.getEndMarkerTime());
+
+	RG_DEBUG << "segment " << count++ << ": start time " << segment.getStartTime() << ", end time " << segment.getEndTime() << ", end marker time " << segment.getEndMarkerTime() << ", events " << segment.size() << endl;
+
+	command->addCommand(new EventQuantizeCommand
+			    (segment, startTime, endTime, "Notation Options",
+			     Rosegarden::Quantizer::NotationPrefix, true));
+	progressDlg.progressBar()->advance(progressPer);
+	
+/*!!!
+	//!!! um. the progress things are useless here, as all the
+	//real work is done in the single
+	//getCommandHistory()->addCommand below
+
+	//!!! if ...
+	command->addCommand(new TransformsMenuMakeNotesViableCommand
+			    (segment));
+	progressDlg.progressBar()->advance(progressPer);
+
+	//!!! if ...
+	command->addCommand(new TransformsMenuDeCounterpointCommand
+			    (segment));
+	progressDlg.progressBar()->advance(progressPer);
+
+	//!!! if ...
+	command->addCommand(new GroupMenuAutoBeamCommand
+			    (segment));
+	progressDlg.progressBar()->advance(progressPer);
+*/
+    }
+
+    m_doc->getCommandHistory()->addCommand(command);
 }
 
 void RosegardenGUIApp::slotImportRG21()

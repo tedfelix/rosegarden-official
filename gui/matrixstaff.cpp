@@ -45,22 +45,9 @@ MatrixStaff::MatrixStaff(QCanvas *canvas,
     LinedStaff<MatrixElement>(canvas, segment, snapGrid, id, vResolution, 1),
     m_scaleFactor(2.0/
             Rosegarden::Note(Rosegarden::Note::Shortest).getDuration()),
-    m_elementColour(0),
+    m_elementColour(new DefaultVelocityColour()),
     m_view(view)
 {
-
-    // Create a velocity colouring object
-    //
-    m_elementColour = new VelocityColour(
-                            RosegardenGUIColours::LevelMeterRed,
-                            RosegardenGUIColours::LevelMeterOrange,
-                            RosegardenGUIColours::LevelMeterGreen,
-                            127, // max knee
-                            115, // red knee
-                            75,  // orange knee
-                            25); // green knee
-
- 
 }
 
 MatrixStaff::~MatrixStaff()

@@ -605,9 +605,10 @@ RosegardenTransportDialog::setMidiInLabel(const Rosegarden::MappedEvent *mE)
                 //
                 if (mE->getVelocity() == 0) return;
 
-                MidiPitchLabel *mPL = new MidiPitchLabel(mE->getPitch());
-                m_transport->InDisplay->setText(mPL->getQString() +
-                                                QString("  %1").arg(mE->getVelocity()));
+                MidiPitchLabel mPL(mE->getPitch());
+                m_transport->InDisplay->setText
+		    (mPL.getQString() +
+		     QString("  %1").arg(mE->getVelocity()));
             }
             break;
 
@@ -678,9 +679,10 @@ RosegardenTransportDialog::setMidiOutLabel(const Rosegarden::MappedEvent *mE)
         case MappedEvent::MidiNote:
         case MappedEvent::MidiNoteOneShot:
             {
-                MidiPitchLabel *mPL = new MidiPitchLabel(mE->getPitch());
-                m_transport->OutDisplay->setText(mPL->getQString() +
-                                                 QString("  %1").arg(mE->getVelocity()));
+                MidiPitchLabel mPL(mE->getPitch());
+                m_transport->OutDisplay->setText
+		    (mPL.getQString() +
+		     QString("  %1").arg(mE->getVelocity()));
             }
             break;
 

@@ -1,3 +1,5 @@
+// -*- c-basic-offset: 4 -*-
+
 /*
     Rosegarden-4
     A sequencer and musical notation editor.
@@ -133,6 +135,51 @@ bool EventSelection::contains(const std::string &type) const
 timeT EventSelection::getTotalDuration() const
 {
     return getEndTime() - getStartTime();
+}
+
+EventSelection::RangeList
+EventSelection::getRanges() const
+{
+    RangeList ranges;
+
+    Segment::iterator i = m_originalSegment.findTime(getStartTime());
+    Segment::iterator j = i;
+    Segment::iterator k = m_originalSegment.findTime(getEndTime());
+
+    while (j != k) {
+
+        for (j = i; j != k && contains(*j); ++j);
+
+        if (j != i) {
+            ranges.push_back(RangeList::value_type(i, j));
+	}
+
+	for (i = j; i != k && !contains(*i); ++i);
+	j = i;
+    }
+
+    return ranges;
+}
+
+EventSelection::RangeTimeList
+EventSelection::getRangeTimes() const
+{
+    RangeList ranges(getRanges());
+    RangeTimeList rangeTimes;
+
+    for (RangeList::iterator i = ranges.begin(); i != ranges.end(); ++i) {
+	timeT startTime = m_originalSegment.getEndTime();
+	timeT   endTime = m_originalSegment.getEndTime();
+	if (i->first != m_originalSegment.end()) {
+	    startTime = (*i->first)->getAbsoluteTime();
+	}
+	if (i->second != m_originalSegment.end()) {
+	    endTime = (*i->second)->getAbsoluteTime();
+	}
+	rangeTimes.push_back(RangeTimeList::value_type(startTime, endTime));
+    }
+
+    return rangeTimes;
 }
 
 void

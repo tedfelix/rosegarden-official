@@ -30,7 +30,6 @@
 
 namespace Rosegarden {
 
-struct StandardQuantization;
 class EventSelection;
 
 /**
@@ -38,38 +37,98 @@ class EventSelection;
    and rest events according to one of a set of possible criteria.
 */
 
-
 class Quantizer
 {
-public:
-    static const std::string RawEventData;
-    static const std::string RawEventKeepTiming;
-    static const std::string DefaultTarget;
-    static const std::string GlobalSource;
+    // define the Quantizer API
 
-    enum QuantizationType {
-	PositionQuantize,// Snap absolute times to unit boundaries
-	UnitQuantize,    // Snap absolute times and durations to unit boundaries
-	NoteQuantize,    // Snap times to units, durations to note durations
-	LegatoQuantize   // Note quantize that rounds up notes into following rests
-    };
+public:
+    virtual ~Quantizer();
 
     /**
-     * Construct a quantizer programmed to do a single sort of
-     * quantization.
-     *
+     * Quantize a Segment.
+     */
+    void quantize(Segment *) const;
+
+    /**
+     * Quantize a section of a Segment.
+     */
+    void quantize(Segment *,
+		  Segment::iterator from,
+		  Segment::iterator to) const;
+
+    /**
+     * Quantize an EventSelection.
+     */
+    void quantize(EventSelection *);
+
+    /**
+     * Quantize a section of a Segment, and force the quantized
+     * results into the formal absolute time and duration of
+     * the events.  This is a destructive operation that should
+     * not be carried out except on a user's explicit request.
+     * (If target is RawEventData, this will do nothing besides
+     * quantize.  In this case, but no other, unquantize will
+     * still work afterwards.)
+     */
+    void fixQuantizedValues(Segment *,
+			    Segment::iterator from,
+			    Segment::iterator to) const;
+
+    /**
+     * Return the quantized duration of the event if it has been
+     * quantized -- otherwise just return the unquantized duration.
+     * Do not modify the event.
+     */
+    timeT getQuantizedDuration(const Event *e) const;
+
+    /**
+     * Return the quantized absolute time of the event if it has been
+     * quantized -- otherwise just return the unquantized time.  Do
+     * not modify the event.
+     */
+    timeT getQuantizedAbsoluteTime(const Event *e) const;
+
+    /**
+     * Return the unquantized absolute time of the event --
+     * the absolute time that would be restored by a call to
+     * unquantize.
+     */
+    timeT getUnquantizedAbsoluteTime(Event *e) const;
+
+    /**
+     * Return the unquantized absolute time of the event --
+     * the absolute time that would be restored by a call to
+     * unquantize.
+     */
+    timeT getUnquantizedDuration(Event *e) const;
+
+    /**
+     * Unquantize all events in the given range, for this
+     * quantizer.  Properties set by other quantizers with
+     * different propertyNamePrefix values will remain.
+     */
+    void unquantize(Segment *,
+		    Segment::iterator from, Segment::iterator to) const;
+
+    /**
+     * Unquantize a selection of Events
+     */
+    void unquantize(EventSelection *) const;
+
+    static const std::string RawEventData;
+    static const std::string DefaultTarget;
+    static const std::string GlobalSource;
+    static const std::string NotationPrefix;
+
+protected:
+    /**
      * \arg source, target : Description of where to find the
      * times to be quantized, and where to put the quantized results.
      * 
      * These may be strings, specifying a prefix for the names
      * of properties to contain the timings, or may be the special
      * value RawEventData in which case the event's absolute time
-     * and duration will be used instead of properties, or
-     * RawEventKeepTiming in which case the event's absolute time
-     * and duration will be used but (paradoxically but usefully)
-     * the original timing of the event will be retained through
-     * the PERFORMANCE_DELAY and PERFORMANCE_TRUNCATION properties,
-     * at least until the event is next edited.
+     * and duration will be used instead of properties.
      * 
      * If source specifies a property prefix for properties that are
      * found not to exist, they will be pre-filled from the original
@@ -85,8 +144,6 @@ public:
      * order to adjust its timings.  This operation (deliberately)
      * loses any non-persistent properties in the events.  This
      * does not happen if target is a property prefix.
-     *
-     * RawEventKeepTiming cannot be used as the source.
      *
      *   Examples:
      *
@@ -113,330 +170,184 @@ public:
      *   -- if source == RawEventData and target == RawEventData,
      *   values will be read from the event's absolute time and
      *   duration, quantized, and written back to these values.
-     *
-     * \arg type : Type of quantization to carry out, as follows:
-     *
-     *   "PositionQuantize": For note events, starting time is rounded
-     *   to the nearest multiple of a given unit duration (by default,
-     *   the duration of the shortest available note).  Rests are
-     *   quantized in the same way, except where preceded by a note
-     *   that has been relocated by quantization, in which case the
-     *   rest is adjusted correspondingly before rounding.   This is
-     *   the simplest sort of quantization.
-     *
-     *   "UnitQuantize": For note events, starting time and duration
-     *   are rounded to the nearest multiple of a given unit duration
-     *   (by default, the duration of the shortest available note).
-     *   Rests are quantized in the same way, except where preceded by
-     *   a note that has been lengthened by quantization, in which
-     *   case the rest is shortened correspondingly before rounding.
+     */
+    Quantizer(std::string source, std::string target);
+
+    /**
+     * If only target is supplied, source is deduced appropriately
+     * as GlobalSource if target == RawEventData and RawEventData
+     * otherwise.
+     */
+    Quantizer(std::string target);
+
+    /**
+     * To implement a subclass of Quantizer, you should
+     * override either quantizeSingle (if your quantizer is simple
+     * enough only to have to look at a single event at a time) or
+     * quantizeRange.  The default implementation of quantizeRange
+     * simply calls quantizeSingle on each non-rest event in turn.
+     * The default implementation of quantizeSingle, as you see,
+     * does nothing.
      * 
-     *   "Note": Starting time is quantized as in unit quantization,
-     *   but duration is first quantized by unit and then rounded to
-     *   the nearest available note duration with a maximum of a given
-     *   number of dots.
-     * 
-     *   "Legato": As for note quantization, except that the given
-     *   unit (for the initial unit-quantization step) is only taken
-     *   into account if examining a note event whose duration will be
-     *   caused to increase and that is followed by enough rest space
-     *   to permit that increase.  Otherwise, the minimum unit is
-     *   used.  It is therefore normal to perform legato quantization
-     *   with larger units than the other kinds.
+     * Note that implementations of these methods should call
+     * getFromSource and setToTarget to get and set the unquantized
+     * and quantized data; they should not query the event properties
+     * or timings directly.
      *
-     *   [For example, say you have an event with duration 178.  A
-     *   unit quantizer with a demisemi unit (duration 12) will
-     *   quantize this to duration 180 (the nearest value divisible by
-     *   12).  But 180 is not a good note duration: a note quantizer
-     *   would instead quantize to 192 (the nearest note duration: a
-     *   minim).]
-     *
-     * \arg unit : Quantization unit.  Default is the shortest note
-     * duration.
-     *
-     * \arg maxDots : how many dots to allow on a note before
-     * declaring it not a valid note type.  Only of interest for
-     * note or legato quantization.
-     *
-     * Note that although the quantizer may give rest events a
-     * duration of zero, it will never do so to note events -- you
-     * can't make a note disappear completely by quantizing it.
-     *
-     * For best results, always quantize a whole segment or section
-     * of segment at once.  The quantizer can only do the right thing
-     * for rest events if given a whole section to consider at once.
-     *
-     * The configuration of a Quantizer can't be changed after
-     * construction.  Instead, construct a new one and assign it
-     * if necessary.  (Construction and assignment are cheap.)
+     * NOTE: It is vital that ordering is maintained after
+     * quantization.  That is, an event whose absolute time quantizes
+     * to a time t must appear in the original segment before all
+     * events whose times quantize to greater than t.  This means you
+     * must quantize the absolute times of non-note events as well as
+     * notes.  You don't need to worry about quantizing rests,
+     * however; they're only used for notation and will be
+     * automatically recalculated if the notation quantization values
+     * are seen to change.
      */
-    Quantizer(std::string source = RawEventData,
-	      std::string target = DefaultTarget,
-	      QuantizationType type = UnitQuantize,
-	      timeT unit = -1, int maxDots = 2);
+    virtual void quantizeSingle(Segment *,
+				Segment::iterator) const { }
 
     /**
-     * Construct a quantizer based on a standard quantization
-     * setup.
+     * See note for quantizeSingle.
      */
-    Quantizer(const StandardQuantization &,
-	      std::string source = RawEventData,
-	      std::string target = DefaultTarget);
-
-    Quantizer(const Quantizer &);
-
-    /**
-     * Construct a quantizer by copying from another quantizer,
-     * but with a different source and/or target (not defaulted
-     * to avoid collision with the plain copy constructor, whose
-     * source and target values have to come from the quantizer
-     * being copied from)
-     */
-    Quantizer(const Quantizer &, std::string source, std::string target);
-
-    Quantizer &operator=(const Quantizer &);
-    bool operator==(const Quantizer &) const;
-    bool operator!=(const Quantizer & c) const { return !(*this == c); }
-    
-    ~Quantizer();
-
-    /**
-     * Get the type of quantization this Quantizer performs.
-     */
-    QuantizationType getType() const { return m_type; }
-
-    /**
-     * Get the unit of the Quantizer.
-     */
-    timeT getUnit() const { return m_unit; }
-
-    /**
-     * If this is a Note or Legato Quantizer, get the maximum
-     * number of dots permissible on a note before the quantizer
-     * decides it's not a legal note.
-     */
-    int getMaxDots() const { return m_maxDots; }
-
-    /**
-     * Quantize a section of a Segment.  This is the recommended
-     * method for general quantization.
-     */
-    void quantize(Segment *,
-		  Segment::iterator from, Segment::iterator to) const;
-
-    /**
-     * Quantize an EventSelection
-     *
-     */
-    void quantize(EventSelection *);
-
-    /**
-     * Quantize a section of a Segment, and force the quantized
-     * results into the formal absolute time and duration of
-     * the events.  This is a destructive operation that should
-     * not be carried out except on a user's explicit request.
-     */
-    void fixQuantizedValues(Segment *,
-			    Segment::iterator from, Segment::iterator to)
-	const;
-
-    /**
-     * Return the quantized duration of the event, by retrieving
-     * it from the target if possible and otherwise by quantizing
-     * the source duration.  In no case does this ever write the
-     * quantized values into the event, so this is not a good
-     * substitute for actually quantizing something.
-     *
-     * (If the target is RawEventData or RawEventKeepTiming, this will
-     * always return the raw duration regardless of whether the event
-     * appears to have actually been quantized.  This method is thus
-     * only useful if target is not RawEventData or RawEventKeepTiming.)
-     */
-    timeT getQuantizedDuration(Event *el) const;
-
-    /**
-     * Return the quantized absolute time of the event, by
-     * retrieving it from the target if possible and otherwise by
-     * quantizing the source time.  In no case does this ever
-     * write the quantized values into the event, so this is not
-     * a good substitute for actually quantizing something.
-     *
-     * (If the target is RawEventData or RawEventKeepTiming, this will
-     * always return the raw time regardless of whether the event
-     * appears to have actually been quantized.  This method is thus
-     * only useful if target is not RawEventData or RawEventKeepTiming.)
-     */
-    timeT getQuantizedAbsoluteTime(Event *el) const;
-
-    /**
-     * Return the unquantized absolute time of the event --
-     * the absolute time that would be restored by a call to
-     * unquantize.
-     */
-    timeT getUnquantizedAbsoluteTime(Event *el) const;
-
-    /**
-     * Return the unquantized absolute time of the event --
-     * the absolute time that would be restored by a call to
-     * unquantize.
-     */
-    timeT getUnquantizedDuration(Event *el) const;
-
-    /**
-     * Treat the given time as if it were the absolute time of
-     * an Event, and return a quantized value.  (This may be
-     * necessary for Note and Legato quantizers, to avoid rounding
-     * absolute times to note-duration lengths.)
-     */
-    timeT quantizeAbsoluteTime(timeT absoluteTime) const;
-
-    /**
-     * Treat the given time as if it were the duration of
-     * an Event, and return a quantized value.
-     */
-    timeT quantizeDuration(timeT duration) const;
-
-    /**
-     * Unquantize all events in the given range, for this
-     * quantizer.  Properties set by other quantizers with
-     * different propertyNamePrefix values will remain.
-     */
-    void unquantize(Segment *,
-		    Segment::iterator from, Segment::iterator to) const;
-
-    /**
-     * Unquantize a selection of Events
-     */
-    void unquantize(EventSelection *) const;
-
-protected:
-
-    // Arguments to the SingleQuantizers' quantize() methods:
-    // -- unit: quantization unit
-    // -- maxDots: if rounding to a note duration, max dots to permit on note
-    // -- t: time argument to be quantized
-    // -- priorAdjustment: amount by which the absolute time has already been
-    //    shifted, for duration quantizers.  This should just be added to t
-    //    before action, for any quantizer except the IdentityQuantizer:
-    //    bit icky, that
-    // -- followingRestDuration: duration of continuous series of rests after
-    //    this note, into which it may be seen as safe to expand the note
-    // -- isAbsoluteTime: whether this quantization is of absolute time (rather
-    //    than duration)
-
-    class SingleQuantizer {
-    public:
-	virtual ~SingleQuantizer();
-	virtual timeT quantize(int unit, int maxDots, timeT t,
-			       timeT priorAdjustment,
-			       timeT followingRestDuration,
-			       bool isAbsoluteTime) const = 0;
-    };
-
-    class IdentityQuantizer : public SingleQuantizer { // doesn't quantize
-    public:
-	virtual ~IdentityQuantizer();
-	virtual timeT quantize(int unit, int maxDots, timeT t,
-			       timeT priorAdjustment,
-			       timeT followingRestDuration,
-			       bool isAbsoluteTime) const;
-    };
-
-    class UnitQuantizer : public SingleQuantizer {
-    public:
-	virtual ~UnitQuantizer();
-	virtual timeT quantize(int unit, int maxDots, timeT t,
-			       timeT priorAdjustment,
-			       timeT followingRestDuration,
-			       bool isAbsoluteTime) const;
-    };
-
-    class NoteQuantizer : public SingleQuantizer {
-    public:
-	virtual ~NoteQuantizer();
-	virtual timeT quantize(int unit, int maxDots, timeT t,
-			       timeT priorAdjustment,
-			       timeT followingRestDuration,
-			       bool isAbsoluteTime) const;
-    };
-
-    class LegatoQuantizer : public NoteQuantizer {
-    public:
-	virtual ~LegatoQuantizer();
-	virtual timeT quantize(int unit, int maxDots, timeT t,
-			       timeT priorAdjustment,
-			       timeT followingRestDuration,
-			       bool isAbsoluteTime) const;
-    };
-
-    void quantize(Segment *s, Segment::iterator from, Segment::iterator to,
-		  const SingleQuantizer &absq, const SingleQuantizer &dq)
-	const;
-
-    SingleQuantizer &getDefaultAbsTimeQuantizer() const;
-    SingleQuantizer &getDefaultDurationQuantizer() const;
-
-    timeT findFollowingRestDuration(Segment::iterator from,
-				    Segment::iterator to) const;
-
-    QuantizationType m_type;
-    timeT m_unit;
-    int m_maxDots;
+    virtual void quantizeRange(Segment *,
+			       Segment::iterator,
+			       Segment::iterator) const;
 
     std::string m_source;
     std::string m_target;
+
     enum ValueType { AbsoluteTimeValue = 0, DurationValue = 1 };
+
     PropertyName m_sourceProperties[2];
     PropertyName m_targetProperties[2];
 
+public: // should be protected, but gcc-2.95 doesn't like allowing NotationQuantizer::m_impl to access them
     timeT getFromSource(Event *, ValueType) const;
     timeT getFromTarget(Event *, ValueType) const;
     void setToTarget(Segment *, Segment::iterator, timeT t, timeT d) const;
+    mutable FastVector<Event *> m_toInsert;
+
+protected:
     void removeProperties(Event *) const;
     void removeTargetProperties(Event *) const;
     void makePropertyNames();
 
-    mutable FastVector<Event *> m_toInsert;
     void insertNewEvents(Segment *) const;
+
+private: // not provided
+    Quantizer(const Quantizer &);
+    Quantizer &operator=(const Quantizer &);
+    bool operator==(const Quantizer &) const;
+    bool operator!=(const Quantizer & c) const;
 };
 
-struct StandardQuantization {
-    Quantizer::QuantizationType type;
-    timeT			unit;
-    int				maxDots;
-    std::string			name;
-    std::string			description;
-    std::string			noteName;  // empty string if none
-    
-    StandardQuantization(Quantizer::QuantizationType _type,
-			 timeT _unit, int _maxDots,
-			 std::string _name,
-			 std::string _description,
-			 std::string _noteName) :
-	type(_type), unit(_unit), maxDots(_maxDots),
-	name(_name), description(_description), noteName(_noteName) { }
 
-    // Return the standard quantizations in descending order of unit duration
-    static std::vector<StandardQuantization> getStandardQuantizations();
+class BasicQuantizer : public Quantizer
+{
+public:
+    BasicQuantizer(timeT unit = -1, bool doDurations = false);
+    BasicQuantizer(std::string target,
+		   timeT unit = -1, bool doDurations = false);
+    BasicQuantizer(const BasicQuantizer &);
+    virtual ~BasicQuantizer();
 
-    // Study the given segment; if all the events in it have times that
-    // match one or more of the standard quantizations, return the longest
-    // standard quantization to match.  Otherwise return 0.  Return value
-    // is shared -- do not free.
-    static StandardQuantization *getStandardQuantization(Segment *);
+    void setUnit(timeT unit) { m_unit = unit; }
+    timeT getUnit() const { return m_unit; }
 
-    // Study the given selection; if all the events in it have times that
-    // match one or more of the standard quantizations, return the longest
-    // standard quantization to match.  Otherwise return 0.  Return value
-    // is shared -- do not free.
-    static StandardQuantization *getStandardQuantization(EventSelection *);
+    void setDoDurations(bool doDurations) { m_durations = doDurations; }
+    bool getDoDurations() const { return m_durations; }
+
+    /**
+     * Return the standard quantization units in descending order of
+     * unit duration
+     */
+    static std::vector<timeT> getStandardQuantizations();
+
+    /**
+     * Study the given segment; if all the events in it have times
+     * that match one or more of the standard quantizations, return
+     * the longest standard quantization unit to match.  Otherwise
+     * return 0.
+     */
+    static timeT getStandardQuantization(Segment *);
+
+    /**
+     * Study the given selection; if all the events in it have times
+     * that match one or more of the standard quantizations, return
+     * the longest standard quantization unit to match.  Otherwise
+     * return 0.
+     */
+    static timeT getStandardQuantization(EventSelection *);
+
+protected:
+    virtual void quantizeSingle(Segment *,
+				Segment::iterator) const;
 
 private:
-    static std::vector<StandardQuantization> m_standardQuantizations;
+    BasicQuantizer &operator=(const BasicQuantizer &); // not provided
 
+    timeT m_unit;
+    bool m_durations;
+
+    static std::vector<timeT> m_standardQuantizations;
     static void checkStandardQuantizations();
     static timeT getUnitFor(Event *);
-    static StandardQuantization *getStandardQuantizationFor(timeT unit);
+};
+
+
+class NotationQuantizer : public Quantizer
+{
+public:
+    NotationQuantizer();
+    NotationQuantizer(std::string target);
+    NotationQuantizer(const NotationQuantizer &);
+    ~NotationQuantizer();
+
+    /**
+     * Set the absolute time minimum unit.  Default is demisemiquaver.
+     */
+    void  setUnit(timeT);
+    timeT getUnit() const;
+
+    /**
+     * Set the simplicity factor.  This controls the relative "pull"
+     * towards larger units and more obvious beats in placing notes.
+     * The value 10 means no pull to larger units, lower values mean
+     * an active pull away from them.  Default is 13.
+     */
+    void setSimplicityFactor(int);
+    int  getSimplicityFactor() const;
+
+    /**
+     * Set the maximum size of tuplet group.  2 = two-in-the-time-of-three
+     * groupings, 3 = triplets, etc.  Default is 3.  Set <2 to switch off
+     * tuplets altogether.
+     */
+    void setMaxTuplet(int);
+    int  getMaxTuplet() const;
+
+    /**
+     * Set whether to add articulations (staccato, tenuto, slurs).
+     * Default is true.  Doesn't affect quantization, only the marks
+     * that are added to quantized notes.
+     */
+    void setArticulate(bool);
+    bool getArticulate() const;
+
+protected:
+    virtual void quantizeRange(Segment *,
+			       Segment::iterator,
+			       Segment::iterator) const;
+
+protected:
+    // avoid having to rebuild absolutely everything each time we
+    // tweak the implementation
+    class Impl;
+    Impl *m_impl;
+
+private:
+    NotationQuantizer &operator=(const NotationQuantizer &); // not provided
 };
 
 }
