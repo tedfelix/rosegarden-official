@@ -191,6 +191,8 @@ public slots:
     void slotEraseControlRulerItem();
     void slotClearControlRulerItem();
     void slotStartControlLineItem();
+    void slotFlipForwards();
+    void slotFlipBackwards();
 
     // Property ruler actions
     //

@@ -286,6 +286,7 @@ protected:
 
 const unsigned int ControlItem::BorderThickness = 1;
 const unsigned int ControlItem::DefaultWidth    = 20;
+static int _canvasItemZ = 30;
 
 ControlItem::ControlItem(ControlRuler* ruler, ElementAdapter* elementAdapter,
                          int xx, int width)
@@ -300,6 +301,8 @@ ControlItem::ControlItem(ControlRuler* ruler, ElementAdapter* elementAdapter,
 
     setX(xx);
     setY(canvas()->height());
+    setZ(_canvasItemZ++); // we should make this work against controlruler
+
     updateFromValue();
     setEnabled(false);
     //RG_DEBUG << "ControlItem x = " << x() << " - y = " << y() << " - width = " << width << endl;
@@ -767,9 +770,18 @@ void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
         return;
     }
 
+    // clear selection unless control was pressed, in which case 
+    // add the event to the current selection
+    if (!(e->state() && QMouseEvent::ControlButton)) { 
+        clearSelectedItems(); 
+    }
+
+    ControlItem *topItem = 0;
     for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
 
         if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
+
+            if (topItem == 0) topItem = item;
 
             if (item->isSelected()) { // if the item which was clicked
                                       // on is part of a selection,
@@ -778,8 +790,10 @@ void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
 
                 item->handleMouseButtonPress(e);
                 
-                for (QCanvasItemList::Iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
-                    if (ControlItem *selectedItem = dynamic_cast<ControlItem*>(*it)) {
+                for (QCanvasItemList::Iterator it=m_selectedItems.begin(); 
+                        it!=m_selectedItems.end(); ++it) {
+                    if (ControlItem *selectedItem = 
+                            dynamic_cast<ControlItem*>(*it)) {
                         selectedItem->handleMouseButtonPress(e);
                     }
                 }
@@ -787,16 +801,26 @@ void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
 
             } else { // select it
             
-                // clear selection unless control was pressed, in which case add the event
-                // to the current selection
-                if (!(e->state() && QMouseEvent::ControlButton)) { clearSelectedItems(); }
-                m_selectedItems << item;
-                item->setSelected(true);
-                item->handleMouseButtonPress(e);
-                ElementAdapter* adapter = item->getElementAdapter();
-                m_eventSelection->addEvent(adapter->getEvent());
+                if (!(e->state() && QMouseEvent::ControlButton)) { 
+                    if (item->z() > topItem->z()) topItem = item;
+
+                } else {
+                    m_selectedItems << item;
+                    item->setSelected(true);
+                    item->handleMouseButtonPress(e);
+                    ElementAdapter* adapter = item->getElementAdapter();
+                    m_eventSelection->addEvent(adapter->getEvent());
+                }
             }
         }
+    }
+
+    if (topItem) { // select the top item
+        m_selectedItems << topItem;
+        topItem->setSelected(true);
+        topItem->handleMouseButtonPress(e);
+        ElementAdapter* adapter = topItem->getElementAdapter();
+        m_eventSelection->addEvent(adapter->getEvent());
     }
 
     m_itemMoved = false;
@@ -1658,6 +1682,62 @@ void ControllerEventsRuler::startControlLine()
     this->setCursor(Qt::pointingHandCursor);
 }
 
+void ControllerEventsRuler::flipForwards()
+{
+    std::pair<int, int> minMax = getZMinMax();
+
+    QCanvasItemList l = canvas()->allItems();
+    for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
+
+        // skip all but rectangles
+        if ((*it)->rtti() != QCanvasItem::Rtti_Rectangle) continue;
+
+        // match min
+        if ((*it)->z() == minMax.second) (*it)->setZ(minMax.first);
+        else (*it)->setZ((*it)->z() + 1);
+    }
+
+    canvas()->update();
+}
+
+void ControllerEventsRuler::flipBackwards()
+{
+    std::pair<int, int> minMax = getZMinMax();
+
+    QCanvasItemList l = canvas()->allItems();
+    for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
+
+        // skip all but rectangles
+        if ((*it)->rtti() != QCanvasItem::Rtti_Rectangle) continue;
+
+        // match min
+        if ((*it)->z() == minMax.first) (*it)->setZ(minMax.second);
+        else (*it)->setZ((*it)->z() - 1);
+    }
+
+    canvas()->update();
+}
+
+std::pair<int, int> ControllerEventsRuler::getZMinMax()
+{
+    QCanvasItemList l = canvas()->allItems();
+    std::vector<int> zList;
+    for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
+
+        // skip all but rectangles
+        if ((*it)->rtti() != QCanvasItem::Rtti_Rectangle) continue;
+        zList.push_back(int((*it)->z()));
+    }
+
+    std::sort(zList.begin(), zList.end());
+
+    return std::pair<int, int>(zList[0], zList[zList.size() - 1]);
+
+
+}
+
+
+
 void ControllerEventsRuler::contentsMousePressEvent(QMouseEvent *e)
 {
     if (!m_controlLineShowing)
@@ -1778,7 +1858,11 @@ ControllerEventsRuler::drawControlLine(Rosegarden::timeT startTime,
                                        int endValue)
 {
     if (m_controller == 0) return;
-    if (startTime > endTime) std::swap(startTime, endTime);
+    if (startTime > endTime) 
+    {
+        std::swap(startTime, endTime);
+        std::swap(startValue, endValue);
+    }
 
     Rosegarden::timeT quantDur = Rosegarden::Note(Rosegarden::Note::Quaver).getDuration();
 

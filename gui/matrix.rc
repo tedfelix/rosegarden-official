@@ -177,6 +177,9 @@
    <Action name="clear_control_ruler_item"/>
    <Separator/>
    <Action name="start_control_line_item"/>
+   <Separator/>
+   <Action name="flip_control_events_forward"/>
+   <Action name="flip_control_events_back"/>
 </Menu>
 
 <Menu noMerge="1" name="property_ruler_menu">

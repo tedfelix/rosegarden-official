@@ -734,6 +734,14 @@ EditView::setupActions()
 		SLOT(slotStartControlLineItem()), actionCollection(),
 		"start_control_line_item");
 
+    new KAction(i18n("Flip forward"), Key_BracketRight, this,
+		SLOT(slotFlipForwards()), actionCollection(),
+		"flip_control_events_forward");
+
+    new KAction(i18n("Flip backwards"), Key_BracketLeft, this,
+		SLOT(slotFlipBackwards()), actionCollection(),
+		"flip_control_events_back");
+
     new KAction(i18n("Draw property line"), 0, this,
                 SLOT(slotDrawPropertyLine()), actionCollection(),
                 "draw_property_line");
@@ -1467,6 +1475,22 @@ EditView::keyReleaseEvent(QKeyEvent *event)
 
     if (m_bottomBarButtons)
         m_bottomBarButtons->getLoopRuler()->slotSetLoopingMode(m_shiftDown);
+}
+
+void
+EditView::slotFlipForwards()
+{
+    RG_DEBUG << "EditView::slotFlipForwards" << endl;
+    ControllerEventsRuler* ruler = dynamic_cast<ControllerEventsRuler*>(getCurrentControlRuler());
+    if (ruler) ruler->flipForwards();
+}
+
+void
+EditView::slotFlipBackwards()
+{
+    RG_DEBUG << "EditView::slotFlipBackwards" << endl;
+    ControllerEventsRuler* ruler = dynamic_cast<ControllerEventsRuler*>(getCurrentControlRuler());
+    if (ruler) ruler->flipBackwards();
 }
 
 

@@ -226,10 +226,14 @@ public:
     virtual void eraseControllerEvent();
     virtual void clearControllerEvents();
     virtual void startControlLine();
+    virtual void flipForwards();
+    virtual void flipBackwards();
 
     Rosegarden::ControlParameter* getControlParameter() { return m_controller; }
 
 protected:
+
+    std::pair<int, int> getZMinMax();
 
     // draw some lines to help us draw events
     void drawBackground();

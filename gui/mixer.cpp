@@ -660,7 +660,8 @@ AudioMixerWindow::updateFader(int id)
 	    Rosegarden::InstrumentId instrumentId = recordTrack->getInstrument();
 	    Rosegarden::Instrument *instrument = m_studio->getInstrumentById
 		(instrumentId);
-	    m_monitor.m_fader->setFader(instrument->getRecordLevel());
+
+            if (instrument) m_monitor.m_fader->setFader(instrument->getRecordLevel());
 	}
 	
     } else if (id >= (int)Rosegarden::AudioInstrumentBase) {
