@@ -22,9 +22,9 @@
 #ifndef _LAYOUT_ENGINE_H_
 #define _LAYOUT_ENGINE_H_
 
-namespace Rosegarden {
+#include "RulerScale.h"
 
-class Event;
+namespace Rosegarden {
 
 template <class T>
 class Staff;
@@ -80,10 +80,11 @@ protected:
 
 
 template <class T>
-class HorizontalLayoutEngine : public LayoutEngine<T>
+class HorizontalLayoutEngine : public LayoutEngine<T>,
+			       public RulerScale
 {
 public:
-    HorizontalLayoutEngine();
+    HorizontalLayoutEngine(Composition *c);
     virtual ~HorizontalLayoutEngine();
 
     typedef Staff<T> StaffType;
@@ -102,44 +103,36 @@ public:
      */
     virtual void setPageWidth(double) { /* default: ignore it */ }
 
-    /**
-     * Returns the total length of all elements once layout is done.
-     * This is the x-coord of the end of the last element on the
-     * longest staff
-     */
-    virtual double getTotalWidth() = 0;
+    //!!! bad idea to have both methods with the same name:
 
     /**
-     * Returns the total number of bar lines on the given staff
+     * Returns the number of the first visible bar line on the given
+     * staff
      */
-    virtual unsigned int getBarLineCount(StaffType &staff) = 0;
+    virtual int getFirstVisibleBar(StaffType &) {
+	return  getFirstVisibleBar();
+    }
 
-    /**
-     * Returns the x-coordinate of the given bar number (zero-based)
-     * on the given staff
-     */
-    virtual double getBarLineX(StaffType &staff, unsigned int barNo) = 0;
-
-    /**
-     * Returns the number that should be displayed next to the
-     * specified bar line, if we're showing numbers
-     */
-    virtual int getBarLineDisplayNumber(StaffType &, unsigned int barNo) {
-        return (int)barNo;
+    virtual int getFirstVisibleBar() {
+	return RulerScale::getFirstVisibleBar();
     }
 
     /**
-     * Returns true if the specified bar line should be drawn
+     * Returns the number of the last visible bar line on the given
+     * staff
      */
-    virtual bool isBarLineVisible(StaffType &staff, unsigned int barNo) {
-        return getBarLineDisplayNumber(staff, barNo) >= 0;
+    virtual int getLastVisibleBar(StaffType &) {
+	return  getLastVisibleBar();
+    }
+
+    virtual int getLastVisibleBar() {
+	return RulerScale::getFirstVisibleBar();
     }
 
     /**
-     * Returns true if the specified bar line is in the right place,
-     * i.e. if the bar preceding it has the correct length
+     * Returns true if the specified bar has the correct length
      */
-    virtual bool isBarLineCorrect(StaffType &, unsigned int) {
+    virtual bool isBarCorrect(StaffType &, int/* barNo */) {
         return true;
     }
 
@@ -148,7 +141,7 @@ public:
      * this bar, and if so also sets timeSigX to its x-coord
      */
     virtual Event *getTimeSignatureInBar
-    (StaffType &, unsigned int /* barNo */, double &/* timeSigX */) {
+    (StaffType &, int /* barNo */, double &/* timeSigX */) {
 	return 0;
     }
 };
@@ -181,8 +174,9 @@ LayoutEngine<T>::~LayoutEngine()
 
 
 template <class T>
-HorizontalLayoutEngine<T>::HorizontalLayoutEngine() :
-    LayoutEngine<T>()
+HorizontalLayoutEngine<T>::HorizontalLayoutEngine(Composition *c) :
+    LayoutEngine<T>(),
+    RulerScale(c)
 {
     // empty
 }

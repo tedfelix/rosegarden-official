@@ -1398,9 +1398,11 @@ NotationHLayout::isBarCorrect(StaffType &staff, int i)
 Event *NotationHLayout::getTimeSignatureInBar(StaffType &staff,
 					      int i, double &timeSigX)
 {
-    BarData &bd(getBarData(staff)[i]);
-    timeSigX = (double)bd.timeSigX;
-    return bd.timeSignature;
+    BarDataList &bdl(getBarData(staff));
+    if (i < 0) i = 0;
+    if (i >= bdl.size()) i = bdl.size() - 1;
+    timeSigX = (double)(bdl[i]).timeSigX;
+    return (bdl[i]).timeSignature;
 }
 
 /*!!!
