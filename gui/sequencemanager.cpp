@@ -1517,8 +1517,7 @@ void SequenceManager::metronomeChanged(Rosegarden::InstrumentId id,
                  << endl;
 
     m_controlBlockMmapper->updateMetronomeData(id, playMetronome, recordMetronome);
-//!!!    m_metronomeMmapper->refresh();
-    resetMetronomeMmapper();
+    m_metronomeMmapper->refresh();
 }
 
 void SequenceManager::metronomeChanged(const Composition *, bool playMetronome, bool recordMetronome)
@@ -1532,8 +1531,7 @@ void SequenceManager::metronomeChanged(const Composition *, bool playMetronome, 
                  << endl;
 
     m_controlBlockMmapper->updateMetronomeData(m_metronomeMmapper->getMetronomeInstrument(), playMetronome, recordMetronome);
-//!!!    m_metronomeMmapper->refresh();
-    resetMetronomeMmapper();
+    m_metronomeMmapper->refresh();
 }
 
 void SequenceManager::soloChanged(const Composition *, bool solo, TrackId selectedTrack)

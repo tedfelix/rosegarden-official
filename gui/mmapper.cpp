@@ -686,10 +686,15 @@ MetronomeMmapper::MetronomeMmapper(RosegardenGUIDoc* doc)
     Rosegarden::MidiMetronome *metronome = 
         m_doc->getStudio().getMetronomeFromDevice(device);
 
-    if (metronome) m_metronome = new Rosegarden::MidiMetronome(*metronome);
-    else {
+    if (metronome) {
+
+	SEQMAN_DEBUG << "MetronomeMmapper: have metronome, it's on instrument " << metronome->getInstrument() << endl;
+
+	m_metronome = new Rosegarden::MidiMetronome(*metronome);
+    } else {
         m_metronome = new Rosegarden::MidiMetronome
 	    (Rosegarden::SystemInstrumentBase);
+	SEQMAN_DEBUG << "MetronomeMmapper: no metronome for device " << device << endl;
     }
 
     Composition& c = m_doc->getComposition();
@@ -762,7 +767,7 @@ void MetronomeMmapper::dump()
     Rosegarden::RealTime eventTime;
     Composition& comp = m_doc->getComposition();
 
-    RG_DEBUG << "MetronomeMmapper::dump: instrument is " << m_metronome->getInstrument() << endl;
+    SEQMAN_DEBUG << "MetronomeMmapper::dump: instrument is " << m_metronome->getInstrument() << endl;
 
     MappedEvent* bufPos = m_mmappedBuffer;
     for (TickContainer::iterator i = m_ticks.begin(); i != m_ticks.end(); ++i) {

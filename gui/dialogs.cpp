@@ -3965,6 +3965,8 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     Rosegarden::DeviceList *devices = doc->getStudio().getDevices();
     Rosegarden::DeviceListConstIterator it;
 
+    Rosegarden::DeviceId deviceId = config.get<Int>("metronomedevice", 0);
+
     for (it = devices->begin(); it != devices->end(); it++)
     {
         Rosegarden::MidiDevice *dev =
@@ -3978,10 +3980,11 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
 	    if (connection == "") label += i18n("No connection");
 	    else label += connection;
 	    m_metronomeDevice->insertItem(label);
+	    if (dev->getId() == deviceId) {
+		m_metronomeDevice->setCurrentItem(m_metronomeDevice->count() - 1);
+	    }
         }
     }
-
-    m_metronomeDevice->setCurrentItem(config.get<Int>("metronomedevice", 0));
 
     layout->addWidget(new QLabel(i18n("Instrument"), frame), 1, 0);
     m_metronomeInstrument = new RosegardenComboBox(frame);
@@ -4049,7 +4052,7 @@ ManageMetronomeDialog::slotResolutionChanged(int depth)
 }
 
 void
-ManageMetronomeDialog::populate(int device)
+ManageMetronomeDialog::populate(int deviceIndex)
 {
     m_metronomeInstrument->clear();
 
@@ -4064,7 +4067,7 @@ ManageMetronomeDialog::populate(int device)
 
         if (dev && dev->getDirection() == Rosegarden::MidiDevice::Play)
         {
-            if (count == device)
+            if (count == deviceIndex)
                 break;
 
             count++;
@@ -4175,9 +4178,14 @@ ManageMetronomeDialog::slotApply()
         }
     }
 
-    if (!dev) return;
+    if (!dev) {
+	std::cerr << "Warning: ManageMetronomeDialog::slotApply: no " << m_metronomeDevice->currentItem() << "th device" << std::endl;
+	return;
+    }
 
-    config.set<Int>("metronomedevice", m_metronomeDevice->currentItem());
+    Rosegarden::DeviceId deviceId = dev->getId();
+    bool deviceChanged = config.get<Int>("metronomedevice", 0) != deviceId;
+    config.set<Int>("metronomedevice", deviceId);
 
     Rosegarden::MidiMetronome *metronome = dev->getMetronome();
     if (metronome == 0) return;
@@ -4211,13 +4219,12 @@ ManageMetronomeDialog::slotApply()
             Rosegarden::MidiByte(m_metronomeSubBeatVely->value()));
 
     // using frigged method for the moment
-    if (depthChanged) {
-	RG_DEBUG << "ManageMetronomeDialog::slotApply: depth changed" << endl;
+    if (depthChanged || deviceChanged) {
+	RG_DEBUG << "ManageMetronomeDialog::slotApply: depth or device changed" << endl;
 	m_doc->getSequenceManager()->timeSignatureChanged(0);
-    } else {
-	m_doc->getSequenceManager()->
-	    metronomeChanged(metronome->getInstrument(), true, true);
     }
+    m_doc->getSequenceManager()->
+	metronomeChanged(metronome->getInstrument(), true, true);
 
     m_doc->slotDocumentModified();
     setModified(false);

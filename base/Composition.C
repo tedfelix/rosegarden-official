@@ -461,6 +461,12 @@ Composition::getBarNumber(timeT t) const
     if (i == m_timeSigSegment.end()) { // precedes any time signatures
 	
 	timeT bd = TimeSignature().getBarDuration();
+	if (t < 0) { // see comment in getTimeSignatureAtAux
+	    i = m_timeSigSegment.begin();
+	    if (i != m_timeSigSegment.end() && (*i)->getAbsoluteTime() <= 0) {
+		bd = TimeSignature(**i).getBarDuration();
+	    }
+	}
 
 	n = t / bd;
 	if (t < 0) {
@@ -515,6 +521,13 @@ Composition::getBarRange(int n) const
     if (i == m_timeSigSegment.end()) { // precedes any time sig changes
 
 	timeT barDuration = TimeSignature().getBarDuration();
+	if (n < 0) { // see comment in getTimeSignatureAtAux
+	    i = m_timeSigSegment.begin();
+	    if (i != m_timeSigSegment.end() && (*i)->getAbsoluteTime() <= 0) {
+		barDuration = TimeSignature(**i).getBarDuration();
+	    }
+	}
+
 	start = n * barDuration;
 	finish = start + barDuration;
 
@@ -611,7 +624,7 @@ Composition::getTimeSignatureAtAux(timeT t) const
     // bar zero.
 
     if (t < 0 && i == m_timeSigSegment.end()) {
-	i = m_timeSigSegment.findTime(t);
+	i = m_timeSigSegment.begin();
 	if (i != m_timeSigSegment.end() && (*i)->getAbsoluteTime() > 0) {
 	    i  = m_timeSigSegment.end();
 	}

@@ -407,7 +407,7 @@ MidiDevice::toXmlString()
                    << "pitch=\"" << (int)m_metronome->getPitch() << "\" "
                    << "depth=\"" << (int)m_metronome->getDepth() << "\" "
                    << "barvelocity=\"" << (int)m_metronome->getBarVelocity() << "\" "
-                   << "beatvelocity=\"" << (int)m_metronome->getBeatVelocity() 
+                   << "beatvelocity=\"" << (int)m_metronome->getBeatVelocity() << "\" "
                    << "subbeatvelocity=\"" << (int)m_metronome->getSubBeatVelocity() 
                    << "\"/>"
                    << std::endl << std::endl;
