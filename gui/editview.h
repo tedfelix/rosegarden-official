@@ -173,9 +173,11 @@ protected:
     /**
      * Get a note pitch from an action name (where the action is one of
      * those created by createInsertPitchActionMenu).  Can throw an
-     * Exception to mean that the action is not an insert one
+     * Exception to mean that the action is not an insert one.  Also
+     * returns any specified accidental through the reference arg.
      */
-    int getPitchFromNoteInsertAction(QString actionName);
+    int getPitchFromNoteInsertAction(QString actionName,
+				     Rosegarden::Accidental &acc);
 
     /**
      * Abstract method to get the view size

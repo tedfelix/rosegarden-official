@@ -925,10 +925,12 @@ void NotationView::slotInsertNoteFromAction()
     }
 
     int pitch = 0;
+    Rosegarden::Accidental accidental =
+	Rosegarden::Accidentals::NoAccidental;
 
     try {
 
-	pitch = getPitchFromNoteInsertAction(name);
+	pitch = getPitchFromNoteInsertAction(name, accidental);
 
     } catch (...) {
 	
@@ -942,7 +944,7 @@ void NotationView::slotInsertNoteFromAction()
     NOTATION_DEBUG << "Inserting note at pitch " << pitch << endl;
     
     noteInserter->insertNote(segment, getInsertionTime(), pitch,
-			     Rosegarden::Accidentals::NoAccidental);
+			     accidental);
 }
 
 void NotationView::slotInsertRest()

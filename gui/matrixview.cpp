@@ -1298,10 +1298,12 @@ void MatrixView::slotInsertNoteFromAction()
 
     Segment &segment = *getCurrentSegment();
     int pitch = 0;
+    Rosegarden::Accidental accidental = 
+	Rosegarden::Accidentals::NoAccidental;
 
     try {
 
-	pitch = getPitchFromNoteInsertAction(name);
+	pitch = getPitchFromNoteInsertAction(name, accidental);
 
     } catch (...) {
 	
@@ -1316,6 +1318,7 @@ void MatrixView::slotInsertNoteFromAction()
 
     Rosegarden::Event modelEvent(Rosegarden::Note::EventType, 0, 1);
     modelEvent.set<Rosegarden::Int>(Rosegarden::BaseProperties::PITCH, pitch);
+    modelEvent.set<Rosegarden::String>(Rosegarden::BaseProperties::ACCIDENTAL, accidental);
     Rosegarden::timeT time(getInsertionTime());
     Rosegarden::timeT endTime(time + m_snapGrid->getSnapTime(time));
 

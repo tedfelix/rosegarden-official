@@ -529,8 +529,11 @@ EditView::createInsertPitchActionMenu()
 }
 
 int
-EditView::getPitchFromNoteInsertAction(QString name)
+EditView::getPitchFromNoteInsertAction(QString name,
+				       Rosegarden::Accidental &accidental)
 {
+    accidental = Rosegarden::Accidentals::NoAccidental;
+
     if (name.left(7) == "insert_") {
 
 	name = name.right(name.length()-7);
@@ -552,11 +555,13 @@ EditView::getPitchFromNoteInsertAction(QString name)
 	if (name.right(6) == "_sharp") {
 
 	    modify = 1;
+	    accidental = Rosegarden::Accidentals::Sharp;
 	    name = name.left(name.length()-6);
 
 	} else if (name.right(5) == "_flat") {
 
 	    modify = -1;
+	    accidental = Rosegarden::Accidentals::Flat;
 	    name = name.left(name.length()-5);
 	}
 
