@@ -125,6 +125,9 @@ void Segment::setDuration(timeT d)
 void Segment::erase(iterator pos)
 {
     Event *e = *pos;
+
+    assert(e);
+
     std::multiset<Event*, Event::EventCmp>::erase(pos);
     notifyRemove(e);
     delete e;
@@ -133,6 +136,8 @@ void Segment::erase(iterator pos)
 
 Segment::iterator Segment::insert(Event *e)
 {
+    assert(e);
+
     iterator i = std::multiset<Event*, Event::EventCmp>::insert(e);
     notifyAdd(e);
     return i;
