@@ -732,7 +732,7 @@ void RosegardenGUIApp::slotSaveOptions()
     m_config->writeEntry("TracksToolBarPos", (int) toolBar("tracksToolBar")->barPos());
     m_config->writeEntry("ZoomToolBarPos", (int) toolBar("zoomToolBar")->barPos());
 
-    m_fileRecent->saveEntries(m_config, "Recent Files");
+    m_fileRecent->saveEntries(m_config);
 }
 
 
