@@ -55,6 +55,7 @@
   <Menu name="Studio">
         <text>&amp;Studio</text>
         <Action name="modify_banks"/>
+        <Action name="modify_midi_filters"/>
   </Menu>
   <Menu name="Transport">
         <text>T&amp;ransport</text>

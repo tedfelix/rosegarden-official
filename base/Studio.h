@@ -39,6 +39,11 @@
 namespace Rosegarden
 {
 
+// We populate MidiFilter with an OR'd Rosegarden::MappedEvent::MappedEventType.
+// Look in sound/MappedEvent.h
+//
+typedef int MidiFilter;
+
 typedef std::vector<Instrument *> InstrumentList;
 typedef std::vector<Device*> DeviceList;
 typedef std::vector<Device*>::iterator DeviceListIterator;
@@ -123,9 +128,20 @@ public:
     //
     InstrumentId getAudioPreviewInstrument();
 
+    // MIDI filtering into and thru Rosegarden
+    //
+    void setMIDIThruFilter(MidiFilter filter) { m_midiThruFilter = filter; }
+    MidiFilter getMIDIThruFilter() const { return m_midiThruFilter; }
+
+    void setMIDIRecordFilter(MidiFilter filter) { m_midiRecordFilter = filter; }
+    MidiFilter getMIDIRecordFilter() const { return m_midiRecordFilter; }
+
 private:
 
     DeviceList m_devices;
+
+    MidiFilter        m_midiThruFilter;
+    MidiFilter        m_midiRecordFilter;
 
 };
 

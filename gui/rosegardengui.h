@@ -572,6 +572,11 @@ public slots:
     void slotRemapInstruments();
 
     /**
+     * Modify MIDI filters
+     */
+    void slotModifyMIDIFilters();
+
+    /**
      * toggles the toolbar
      */
     void slotToggleToolBar();

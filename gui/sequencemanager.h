@@ -151,6 +151,12 @@ public:
     //
     void showVisuals(const Rosegarden::MappedComposition &mC);
 
+    // Apply in-situ filtering to a MappedComposition
+    //
+    Rosegarden::MappedComposition
+        applyFiltering(const Rosegarden::MappedComposition &mC,
+                       Rosegarden::MappedEvent::MappedEventType filter);
+
 public slots:
     // Empty the m_clearToSend flag
     //

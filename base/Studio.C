@@ -37,7 +37,9 @@
 namespace Rosegarden
 {
 
-Studio::Studio()
+Studio::Studio():
+    m_midiThruFilter(0),
+    m_midiRecordFilter(0)
 {
 }
 
@@ -200,7 +202,9 @@ Studio::toXmlString()
 {
     std::stringstream studio;
 
-    studio << "<studio>" << std::endl << std::endl;
+    studio << "<studio thrufilter=\"" << m_midiThruFilter
+           << "\" recordfilter=\"" << m_midiRecordFilter
+           << "\">" << std::endl << std::endl;
 
     std::vector<Device*>::iterator it;
     InstrumentList list;

@@ -85,6 +85,7 @@
 #include "audiopluginmanager.h"
 #include "studiocontrol.h"
 #include "bankeditor.h"
+#include "midifilter.h"
 
 //!!! ditch these when harmonize() moves out
 #include "CompositionTimeSliceAdapter.h"
@@ -477,6 +478,10 @@ void RosegardenGUIApp::setupActions()
     new KAction(i18n("Manage &Banks and Programs..."), 0, this,
                 SLOT(slotEditBanks()),
                 actionCollection(), "modify_banks");
+
+    new KAction(i18n("Modify &MIDI filters..."), 0, this,
+                SLOT(slotModifyMIDIFilters()),
+                actionCollection(), "modify_midi_filters");
 
     new KAction(i18n("&Remap Instruments..."), 0, this,
                 SLOT(slotRemapInstruments()),
@@ -3372,6 +3377,21 @@ RosegardenGUIApp::slotRemapInstruments()
         RG_DEBUG << "slotRemapInstruments - accepted" << endl;
     }
 
+}
+
+
+void
+RosegardenGUIApp::slotModifyMIDIFilters()
+{
+    RG_DEBUG << "RosegardenGUIApp::slotModifyMIDIFilters" << endl;
+
+    MidiFilterDialog *dialog =
+        new MidiFilterDialog(this, m_doc);
+
+    if (dialog->exec() == QDialog::Accepted)
+    {
+        RG_DEBUG << "slotModifyMIDIFilters - accepted" << endl;
+    }
 }
 
 

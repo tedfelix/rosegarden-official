@@ -1058,6 +1058,7 @@ SequenceManager::processRecordedMidi(const MappedComposition &mC)
 {
     processAsynchronousMidi(mC, 0);
 
+
     // Send any recorded Events to a Segment for storage and display.
     // We have to send the transport status because this method is
     // called asynchronously from the sequencer and the calls below
@@ -1065,8 +1066,14 @@ SequenceManager::processRecordedMidi(const MappedComposition &mC)
     // don't check that recording is coming to a close (or has already
     // been stopped).
     //
+    //  Filter on the way out.
     //
-    m_doc->insertRecordedMidi(mC, m_transportStatus);
+    //
+    m_doc->insertRecordedMidi(
+            applyFiltering(mC,
+                           Rosegarden::MappedEvent::MappedEventType(
+                               m_doc->getStudio().getMIDIRecordFilter())),
+            m_transportStatus);
 
 }
 
@@ -1088,15 +1095,21 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
     if (mC.size())
     {
         Rosegarden::MappedComposition::iterator i;
-        Rosegarden::MappedComposition retMC;
         Rosegarden::Composition &comp = m_doc->getComposition();
         Rosegarden::Track *track =
                   comp.getTrackByIndex(comp.getSelectedTrack());
         Rosegarden::InstrumentId id = track->getInstrument();
 
+        Rosegarden::MappedComposition tempMC =
+                applyFiltering(mC,
+                               Rosegarden::MappedEvent::MappedEventType(
+                                   m_doc->getStudio().getMIDIThruFilter()));
+
+        Rosegarden::MappedComposition retMC;
+
         // send all events to the MIDI in label
         //
-        for (i = mC.begin(); i != mC.end(); ++i )
+        for (i = tempMC.begin(); i != tempMC.end(); ++i )
         {
             m_transport->setMidiInLabel(*i);
 
@@ -1155,7 +1168,11 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
         // this does it to the currently selected instrument.
         //
         showVisuals(retMC);
+
+        // Filter
+        //
         Rosegarden::StudioControl::sendMappedComposition(retMC);
+
 #endif 
     }
 }
@@ -1739,6 +1756,26 @@ SequenceManager::showVisuals(const Rosegarden::MappedComposition &mC)
         }
     }
 }
+
+
+// Filter a MappedComposition by Type.
+//
+Rosegarden::MappedComposition
+SequenceManager::applyFiltering(const Rosegarden::MappedComposition &mC,
+                                Rosegarden::MappedEvent::MappedEventType filter)
+{
+    Rosegarden::MappedComposition retMc;
+    Rosegarden::MappedComposition::iterator it = mC.begin();
+
+    for (; it != mC.end(); it++)
+    {
+        if (!((*it)->getType() & filter))
+            retMc.insert(new MappedEvent(*it));
+    }
+
+    return retMc;
+}
+
 
 }
 

@@ -365,6 +365,18 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         getStudio().clearMidiBanksAndPrograms();
         m_section = InStudio; // set top level section
 
+        // Get and set MIDI filters
+        //
+        QString thruStr = atts.value("thrufilter");
+
+        if (thruStr)
+            getStudio().setMIDIThruFilter(thruStr.toInt());
+
+        QString recordStr = atts.value("recordfilter");
+
+        if (recordStr)
+            getStudio().setMIDIRecordFilter(recordStr.toInt());
+
     } else if (lcName == "timesignature") {
 
         if (m_inComposition == false)
