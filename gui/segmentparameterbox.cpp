@@ -26,6 +26,7 @@
 #include <klocale.h>
 #include <kcommand.h>
 #include <kcombobox.h>
+#include <kcolordialog.h>
 
 #include "Segment.h"
 #include "Quantizer.h"
@@ -287,6 +288,9 @@ SegmentParameterBox::slotDocColoursChanged()
         m_colourList[it->first] = i;
         ++i;
     }
+
+    m_addColourPos = i;
+    m_colourValue->insertItem(i18n("Add New Color"), m_addColourPos);
 
     m_colourValue->setCurrentItem(0);
 }
@@ -716,26 +720,55 @@ SegmentParameterBox::slotDelaySelected(int value)
 void
 SegmentParameterBox::slotColourSelected(int value)
 {
-    unsigned int temp;
-
-    RosegardenColourTable::ColourList::const_iterator pos = m_colourList.find(value);
-
-    if (pos != m_colourList.end())
-        temp = pos->first;
-    else // Somehow we are trying to set a colour which doesn't exist
-        temp = 0;
-
-    Rosegarden::SegmentSelection segments;
-    std::vector<Rosegarden::Segment*>::iterator it;
-
-    for (it = m_segments.begin(); it != m_segments.end(); ++it)
+    if (value != m_addColourPos)
     {
-       segments.insert(*it);
+        unsigned int temp;
+
+        RosegardenColourTable::ColourList::const_iterator pos = m_colourList.find(value);
+
+        if (pos != m_colourList.end())
+            temp = pos->first;
+        else // Somehow we are trying to set a colour which doesn't exist
+            temp = 0;
+
+        Rosegarden::SegmentSelection segments;
+        std::vector<Rosegarden::Segment*>::iterator it;
+
+        for (it = m_segments.begin(); it != m_segments.end(); ++it)
+        {
+           segments.insert(*it);
+        }
+
+        SegmentColourCommand *command = new SegmentColourCommand(segments, temp);
+
+        addCommandToHistory(command);
+    }
+    else
+    {
+        Rosegarden::ColourMap newMap = m_view->getDocument()->getComposition().getSegmentColourMap();
+        QColor newColour;
+        bool ok = false;
+        QString newName = QInputDialog::getText(i18n("New Color Name"), i18n("Enter new name"),
+                                                QLineEdit::Normal, i18n("New"), &ok);
+        if ((ok == true) && (!newName.isEmpty()))
+        {
+            KColorDialog box(this, "", true);
+
+            int result = box.getColor(newColour);
+
+            if (result == KColorDialog::Accepted)
+            {
+                Rosegarden::Colour newRColour = RosegardenGUIColours::convertColour(newColour);
+                newMap.addItem(newRColour, qstrtostr(newName));
+                SegmentColourMapCommand *command = new SegmentColourMapCommand(m_view->getDocument(), newMap);
+                addCommandToHistory(command);
+                slotDocColoursChanged();
+            }
+        }
+        // Else we don't do anything as they either didn't give a name·
+        //  or didn't give a colour
     }
 
-    SegmentColourCommand *command = new SegmentColourCommand(segments, temp);
-
-    addCommandToHistory(command);
 
 }
 

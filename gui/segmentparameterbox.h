@@ -109,6 +109,8 @@ protected:
     RosegardenComboBox         *m_delayValue;
     KComboBox                  *m_colourValue;
 
+    int                        m_addColourPos;
+
     std::vector<Rosegarden::Segment*> m_segments;
     std::vector<Rosegarden::timeT> m_standardQuantizations;
     std::vector<Rosegarden::timeT> m_delays;
