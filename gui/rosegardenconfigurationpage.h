@@ -401,7 +401,9 @@ public:
     static QString iconLabel() { return i18n("Sequencer"); }
     static QString title()     { return i18n("Sequencer Settings"); }
 
+#ifdef HAVE_LIBJACK
     QString getJackPath() { return m_jackPath->text(); }
+#endif // HAVE_LIBJACK
 
 protected slots:
 

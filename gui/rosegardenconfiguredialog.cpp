@@ -1180,10 +1180,12 @@ SequencerConfigurationPage::slotShowStatus()
 void
 SequencerConfigurationPage::slotJackToggled()
 {
+#ifdef HAVE_LIBJACK
     if (m_startJack->isChecked())
         m_jackPath->setDisabled(false);
     else
         m_jackPath->setDisabled(true);
+#endif // HAVE_LIBJACK
 }
 
 

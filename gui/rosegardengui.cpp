@@ -138,12 +138,14 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     //
     if (m_useSequencer) {
 
+#ifdef HAVE_LIBJACK
         // Try to launch JACK - if the configuration wants us to.
         //
         if (!launchJack())
         {
             KMessageBox::error(this, i18n("Attempted to launch JACK audio daemon failed.  Audio will be disabled.\nPlease check configuration (Settings->Configure Rosegarden->Sequencer->JACK control)\n and restart."));
         }
+#endif // HAVE_LIBJACK
 
         emit startupStatusMessage(i18n("Starting sequencer..."));
         launchSequencer();
@@ -2795,6 +2797,7 @@ bool RosegardenGUIApp::launchSequencer()
     return res;
 }
 
+#ifdef HAVE_LIBJACK
 bool RosegardenGUIApp::launchJack()
 {
     KConfig* config = kapp->config();
@@ -2807,6 +2810,7 @@ bool RosegardenGUIApp::launchJack()
 
     return true;
 }
+#endif //HAVE_LIBJACK
 
 void RosegardenGUIApp::slotSequencerExited(KProcess*)
 {
