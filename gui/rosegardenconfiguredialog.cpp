@@ -1485,9 +1485,6 @@ SequencerConfigurationPage::apply()
 
     // Jack audio inputs
     //
-    m_cfg->writeEntry("audioinputs", m_jackInputs->value());
-
-    m_cfg->writeEntry("audiosubmasters", m_submasters->value());
     m_cfg->writeEntry("audiofaderouts", m_createFaderOuts->isChecked());
     m_cfg->writeEntry("audiosubmasterouts", m_createSubmasterOuts->isChecked());
 
@@ -1495,13 +1492,14 @@ SequencerConfigurationPage::apply()
     //
     m_cfg->writeEntry("audiorecordminutes", m_audioRecordMinutes->value());
 
-    Rosegarden::MappedEvent mEportCounts
-	(Rosegarden::MidiInstrumentBase, // InstrumentId
-	 Rosegarden::MappedEvent::SystemAudioPortCounts,
-	 Rosegarden::MidiByte(m_jackInputs->value()),
-	 Rosegarden::MidiByte(m_submasters->value()));
+    // What to do here ??
+//     Rosegarden::MappedEvent mEportCounts
+// 	(Rosegarden::MidiInstrumentBase, // InstrumentId
+// 	 Rosegarden::MappedEvent::SystemAudioPortCounts,
+// 	 Rosegarden::MidiByte(m_jackInputs->value()),
+// 	 Rosegarden::MidiByte(m_submasters->value()));
 
-    Rosegarden::StudioControl::sendMappedEvent(mEportCounts);
+//     Rosegarden::StudioControl::sendMappedEvent(mEportCounts);
 
     Rosegarden::MidiByte ports = 0;
     if (m_createFaderOuts->isChecked()) {
