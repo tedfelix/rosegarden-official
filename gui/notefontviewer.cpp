@@ -325,3 +325,4 @@ NoteFontViewer::NoteFontViewer(QWidget *parent, QString noteFontName,
     slotFontChanged(m_font->currentText());
 }
 
+#include "notefontviewer.moc"

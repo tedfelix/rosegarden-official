@@ -216,3 +216,4 @@ MidiFilterDialog::setModified(bool value)
     m_modified = value;
 
 }
+#include "midifilter.moc"

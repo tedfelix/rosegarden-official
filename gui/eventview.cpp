@@ -1683,3 +1683,4 @@ EventView::updateViewCaption()
 
 
 const char* const EventView::ConfigGroup = "EventList Options";
+#include "eventview.moc"

@@ -213,3 +213,4 @@ void KTabWidget::closeRequest( int index )
 }
 
 // #include "ktabwidget.moc"
+#include "kde32_ktabwidget.moc"

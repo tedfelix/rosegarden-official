@@ -1084,3 +1084,4 @@ TrackButtons::setMuteButton(TrackId track, bool value)
 
 
 
+#include "trackbuttons.moc"

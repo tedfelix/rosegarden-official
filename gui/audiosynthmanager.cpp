@@ -336,3 +336,4 @@ SynthPluginManagerDialog::slotPluginChanged(int index)
 			m_synthPlugins[index]);
 }
 
+#include "audiosynthmanager.moc"

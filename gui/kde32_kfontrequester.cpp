@@ -129,3 +129,4 @@ void KFontRequester::setToolTip()
 
 /* vim: et sw=2 ts=2
 */
+#include "kde32_kfontrequester.moc"

@@ -742,3 +742,4 @@ void TrackEditor::dropEvent(QDropEvent* event)
     }
 }
 
+#include "trackeditor.moc"

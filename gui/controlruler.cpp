@@ -2284,3 +2284,4 @@ PropertyBox::paintEvent(QPaintEvent *e)
 // }
 
 // ControlRulerCanvasRepository* ControlRulerCanvasRepository::m_instance = 0;
+#include "controlruler.moc"

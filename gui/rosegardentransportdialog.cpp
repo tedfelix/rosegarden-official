@@ -986,3 +986,4 @@ const char* const RosegardenTransportDialog::ConfigGroup = "Transport Controls";
 }
 
 
+#include "rosegardentransportdialog.moc"

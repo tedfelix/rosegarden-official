@@ -481,3 +481,4 @@ void CanvasItemGC::flush()
 
 std::vector<QCanvasItem*> CanvasItemGC::m_garbage;
 
+#include "rosegardencanvasview.moc"

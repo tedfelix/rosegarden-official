@@ -1557,3 +1557,4 @@ RosegardenPitchChooser::slotResetToDefault()
 {
     slotSetPitch(m_defaultPitch);
 }
+#include "widgets.moc"

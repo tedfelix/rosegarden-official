@@ -146,3 +146,4 @@ TextRuler::paintEvent(QPaintEvent* e)
     }
 }
 
+#include "textruler.moc"

@@ -647,3 +647,4 @@ MarkerEditorDialog::slotRawTime()
 
 
 const char* const MarkerEditorDialog::MarkerEditorConfigGroup = "Marker Editor";
+#include "markereditor.moc"

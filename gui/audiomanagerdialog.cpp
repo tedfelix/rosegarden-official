@@ -1287,3 +1287,4 @@ const char* const AudioManagerDialog::AudioManagerDialogConfigGroup = "AudioMana
  
 }
 
+#include "audiomanagerdialog.moc"

@@ -6704,3 +6704,4 @@ RosegardenGUIApp::slotShowTip()
 
 const void* RosegardenGUIApp::SequencerExternal = (void*)-1;
 const char* const RosegardenGUIApp::MainWindowConfigGroup = "MainView";
+#include "rosegardengui.moc"

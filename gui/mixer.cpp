@@ -2015,3 +2015,4 @@ MidiMixerVUMeter::meterStop()
 
 
 
+#include "mixer.moc"

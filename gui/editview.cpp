@@ -1521,3 +1521,4 @@ EditView::slotFlipBackwards()
 
 
 
+#include "editview.moc"

@@ -713,3 +713,4 @@ EditViewBase::handleEventRemoved(Rosegarden::Event *event)
     if (m_tool) m_tool->handleEventRemoved(event);
 }
 
+#include "editviewbase.moc"

@@ -356,3 +356,4 @@ MultiViewCommandHistory::updateMenu(bool undo,
     }
 }
 
+#include "multiviewcommandhistory.moc"

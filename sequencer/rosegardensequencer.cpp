@@ -1782,4 +1782,4 @@ RosegardenSequencerApp::incrementTransportToken()
     std::cout << "RosegardenSequencerApp::incrementTransportToken: incrementing to " << m_transportToken << std::endl;
 }
 
-// #include "rosegardensequencer.moc"
+#include "rosegardensequencer.moc"

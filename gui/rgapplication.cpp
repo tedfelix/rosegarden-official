@@ -104,3 +104,4 @@ RosegardenApplication* RosegardenApplication::rgApp()
 
 QByteArray RosegardenApplication::Empty;
 
+#include "rgapplication.moc"

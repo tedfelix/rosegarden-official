@@ -1887,3 +1887,4 @@ void NotationSelectionPaster::handleLeftButtonPress(Rosegarden::timeT,
     }
 }
 
+#include "notationtool.moc"

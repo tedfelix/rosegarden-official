@@ -145,3 +145,4 @@ RosegardenColourTableItem::paint(QPainter *p, const QColorGroup &cg, const QRect
     selected = false;
     QTableItem::paint(p, g, cr, selected);
 }
+#include "colourwidgets.moc"

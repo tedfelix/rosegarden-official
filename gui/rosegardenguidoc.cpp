@@ -2583,3 +2583,4 @@ void RosegardenGUIDoc::slotDocColoursChanged()
 }
 
 const unsigned int RosegardenGUIDoc::MinNbOfTracks = 64;
+#include "rosegardenguidoc.moc"

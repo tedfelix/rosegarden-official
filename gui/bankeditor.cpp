@@ -2214,3 +2214,4 @@ RemapInstrumentDialog::getCommandHistory()
     return m_doc->getCommandHistory();
 }
 
+#include "bankeditor.moc"

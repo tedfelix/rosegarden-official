@@ -5279,3 +5279,4 @@ BeatsBarsDialog::BeatsBarsDialog(QWidget* parent) :
     m_comboBox->setCurrentItem(0);
     layout->addWidget(m_comboBox, 0, 1); 
 }
+#include "dialogs.moc"

@@ -2663,3 +2663,4 @@ MatrixView::slotCanvasBottomWidgetHeightChanged(int newHeight)
 
 const char* const MatrixView::ConfigGroup = "Matrix Options";
 
+#include "matrixview.moc"

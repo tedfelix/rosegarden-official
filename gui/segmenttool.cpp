@@ -1364,3 +1364,4 @@ const QString SegmentResizer::ToolName  = "segmentresizer";
 const QString SegmentSelector::ToolName = "segmentselector";
 const QString SegmentSplitter::ToolName = "segmentsplitter";
 const QString SegmentJoiner::ToolName   = "segmentjoiner";
+#include "segmenttool.moc"

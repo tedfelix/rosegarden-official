@@ -101,3 +101,4 @@ MatrixParameterBox::useInstrument(Rosegarden::Instrument *instrument)
 }
 
 
+#include "matrixparameterbox.moc"

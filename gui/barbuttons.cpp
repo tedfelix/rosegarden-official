@@ -334,3 +334,4 @@ void BarButtonsWidget::paintEvent(QPaintEvent*)
         }
     }
 }
+#include "barbuttons.moc"

@@ -58,3 +58,4 @@ RosegardenFloatEdit::getValue() const
 }
 
 
+#include "commondialogs.moc"

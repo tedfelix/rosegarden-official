@@ -283,3 +283,4 @@ void PianoKeyboard::mouseReleaseEvent(QMouseEvent *e)
     }
 }
 
+#include "pianokeyboard.moc"

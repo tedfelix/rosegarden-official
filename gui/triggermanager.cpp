@@ -622,3 +622,4 @@ TriggerSegmentManager::slotRawTime()
 
 
 const char* const TriggerSegmentManager::TriggerManagerConfigGroup = "Trigger Editor";
+#include "triggermanager.moc"

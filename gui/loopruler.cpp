@@ -282,3 +282,4 @@ void LoopRuler::slotSetLoopMarker(Rosegarden::timeT startLoop,
     update();
 }
 
+#include "loopruler.moc"

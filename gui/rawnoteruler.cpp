@@ -492,3 +492,4 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
 //    PRINT_ELAPSED("RawNoteRuler::paintEvent: complete");
 }
 
+#include "rawnoteruler.moc"

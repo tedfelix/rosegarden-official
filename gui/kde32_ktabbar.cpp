@@ -409,3 +409,4 @@ void KTabBar::onLayoutChange()
 }
 
 // #include "ktabbar.moc"
+#include "kde32_ktabbar.moc"

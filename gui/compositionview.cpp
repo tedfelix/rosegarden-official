@@ -1199,3 +1199,4 @@ CompositionView::slotTextFloatTimeout()
 { 
     hideTextFloat();
 }
+#include "compositionview.moc"

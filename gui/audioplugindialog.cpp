@@ -1017,3 +1017,4 @@ PluginControl::slotValueChanged(float value)
 }
 
 }
+#include "audioplugindialog.moc"

@@ -452,3 +452,4 @@ NotationCanvasView::slotRenderComplete()
     QPaintEvent ev(m_lastRender);
     QCanvasView::viewportPaintEvent(&ev);
 }
+#include "notationcanvasview.moc"

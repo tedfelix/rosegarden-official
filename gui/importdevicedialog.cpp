@@ -358,3 +358,4 @@ ImportDeviceDialog::importFromSF2(QString filename)
     return true;
 }
 
+#include "importdevicedialog.moc"

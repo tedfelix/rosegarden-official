@@ -282,3 +282,4 @@ TempoRuler::paintEvent(QPaintEvent* e)
     }
 }
 
+#include "temporuler.moc"

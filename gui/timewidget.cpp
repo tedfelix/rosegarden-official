@@ -595,3 +595,4 @@ RosegardenTimeWidget::slotSecOrMSecChanged(int)
     slotSetRealTime(Rosegarden::RealTime(sec, msec * 1000000));
 }
 
+#include "timewidget.moc"

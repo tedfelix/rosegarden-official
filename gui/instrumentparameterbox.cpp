@@ -1705,3 +1705,4 @@ MIDIInstrumentParameterPanel::getValueFromRotary(int rotary)
     return -1;
 }
 
+#include "instrumentparameterbox.moc"

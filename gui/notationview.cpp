@@ -3630,3 +3630,4 @@ NotationView::MarkActionDataMap* NotationView::m_markActionDataMap = 0;
 const char* const NotationView::ConfigGroup = "Notation Options";
 
 
+#include "notationview.moc"

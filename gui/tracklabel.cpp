@@ -193,3 +193,4 @@ QLabel* TrackLabel::getVisibleLabel()
 {
     return dynamic_cast<QLabel*>(visibleWidget());
 }
+#include "tracklabel.moc"

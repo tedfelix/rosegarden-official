@@ -1934,3 +1934,4 @@ AddDotCommand::modifySegment()
     m_selection->getSegment().normalizeRests(getStartTime(), endTime);
 }
 
+#include "editcommands.moc"

@@ -2624,3 +2624,5 @@ DocumentConfigureDialog::selectMetadata(QString name)
 
 }
 
+#include "rosegardenconfiguredialog.moc"
+#include "rosegardenconfigurationpage.moc"

@@ -418,3 +418,4 @@ void RosegardenScrollView::updateBottomWidgetGeometry()
     }
     
 }
+#include "rosegardenscrollview.moc"

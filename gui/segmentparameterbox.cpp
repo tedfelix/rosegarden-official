@@ -1014,3 +1014,4 @@ SegmentParameterBox::slotFadeOutChanged(int value)
     emit documentModified();
 }
 
+#include "segmentparameterbox.moc"

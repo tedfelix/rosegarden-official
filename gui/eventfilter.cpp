@@ -823,3 +823,4 @@ PitchPickerDialog::~PitchPickerDialog()
 {
     // Nothing here...
 }
+#include "eventfilter.moc"

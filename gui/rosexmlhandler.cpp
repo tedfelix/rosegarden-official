@@ -2250,3 +2250,4 @@ RoseXmlHandler::setMIDIDeviceConnection(QString connection)
 }
 
 
+#include "progressreporter.moc"

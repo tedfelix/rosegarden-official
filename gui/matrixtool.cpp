@@ -1496,3 +1496,4 @@ const QString MatrixSelector::ToolName  = "selector";
 const QString MatrixMover::ToolName     = "mover";
 const QString MatrixResizer::ToolName   = "resizer";
 
+#include "matrixtool.moc"

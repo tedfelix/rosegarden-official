@@ -1189,3 +1189,4 @@ AudioFaderBox::slotChannelStateChanged()
 }
 
 
+#include "studiowidgets.moc"

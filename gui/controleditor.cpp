@@ -701,3 +701,4 @@ ControlParameterEditDialog::slotIPBPositionChanged(int value)
 
 
 
+#include "controleditor.moc"

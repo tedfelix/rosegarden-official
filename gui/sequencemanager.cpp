@@ -2098,3 +2098,4 @@ SequenceManager::slotFoundMountPoint(const QString&,
 
 
 }
+#include "sequencemanager.moc"

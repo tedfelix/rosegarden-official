@@ -39,3 +39,4 @@ void QDeferScrollView::contentsWheelEvent(QWheelEvent* e)
 {
     emit gotWheelEvent(e);
 }
+#include "qdeferscrollview.moc"

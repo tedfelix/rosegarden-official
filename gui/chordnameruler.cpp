@@ -489,3 +489,4 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
     }
 }
 
+#include "chordnameruler.moc"

@@ -926,3 +926,4 @@ TimerCallbackAssistant::slotCallback()
 }
 
 
+#include "audiopluginoscgui.moc"

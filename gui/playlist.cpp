@@ -354,3 +354,4 @@ void PlayListDialog::slotClose()
     emit closing();
     KDialogBase::slotClose();
 }
+#include "playlist.moc"

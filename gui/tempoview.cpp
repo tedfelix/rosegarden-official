@@ -860,3 +860,4 @@ TempoView::updateViewCaption()
 const char* const TempoView::LayoutConfigGroupName = "TempoView Layout";
 const char* const TempoView::ConfigGroup = "TempoView Options";
 
+#include "tempoview.moc"

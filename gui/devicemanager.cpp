@@ -816,3 +816,4 @@ DeviceManagerDialog::slotSetControllers()
     emit editControllers(id);
 }
 
+#include "devicemanager.moc"
