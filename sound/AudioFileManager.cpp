@@ -242,6 +242,7 @@ AudioFileManager::removeFile(AudioFileId id)
     {
         if ((*it)->getId() == id)
         {
+	    m_peakManager.removeAudioFile(*it);
             delete(*it);
             m_audioFiles.erase(it);
             return true;

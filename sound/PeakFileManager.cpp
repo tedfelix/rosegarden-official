@@ -89,6 +89,8 @@ PeakFileManager::removeAudioFile(AudioFile *audioFile)
     {
         if ((*it)->getAudioFile()->getId() == audioFile->getId())
         {
+	    if (m_currentPeakFile == *it) m_currentPeakFile = 0;
+	    delete *it;
             m_peakFiles.erase(it);
             return true;
         }
@@ -284,6 +286,8 @@ PeakFileManager::clear()
         delete (*it);
 
     m_peakFiles.erase(m_peakFiles.begin(), m_peakFiles.end());
+
+    m_currentPeakFile = 0;
 }
 
 
@@ -327,7 +331,7 @@ PeakFileManager::stopPreview()
         }
 #endif
         //delete m_currentPeakFile;
-        //m_currentPeakFile = 0;
+        m_currentPeakFile = 0;
     }
 }
 

@@ -85,6 +85,10 @@ public:
                                   const RealTime &endTime,
                                   int   width,
                                   bool  showMinima);
+    
+    // Remove cache for a single audio file (if audio file to be deleted etc)
+    // 
+    bool removeAudioFile(AudioFile *audioFile);
 
     // Clear down
     //
@@ -117,7 +121,6 @@ protected:
     // Add and remove from our PeakFile cache
     //
     bool insertAudioFile(AudioFile *audioFile);
-    bool removeAudioFile(AudioFile *audioFile);
     PeakFile* getPeakFile(AudioFile *audioFile);
 
     std::vector<PeakFile*> m_peakFiles;
