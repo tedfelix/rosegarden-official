@@ -136,6 +136,7 @@ const PropertyName DocumentConfiguration::MetronomeBeatVelocity = "metronomebeat
 const PropertyName DocumentConfiguration::FetchLatency          = "fetchlatency";
 const PropertyName DocumentConfiguration::MetronomeDuration     = "metronomeduration";
 const PropertyName DocumentConfiguration::SequencerOptions      = "sequenceroptions";
+const PropertyName DocumentConfiguration::ZoomLevel             = "zoomlevel";
 
 
 DocumentConfiguration::DocumentConfiguration()
@@ -145,6 +146,7 @@ DocumentConfiguration::DocumentConfiguration()
     set<Int>(MetronomeBeatVelocity, 80);
     set<RealTimeT>(FetchLatency,      RealTime(0, 50000));    
     set<RealTimeT>(MetronomeDuration, RealTime(0, 10000));    
+    set<Int>(ZoomLevel, 0);
 }
     
 DocumentConfiguration::DocumentConfiguration(const DocumentConfiguration &conf):
@@ -181,18 +183,23 @@ DocumentConfiguration::toXmlString()
 
     std::stringstream config;
 
-    config << endl
-           << "<" << MetronomePitch        << " type=\"Int\">" << get<Int>(MetronomePitch)        << "</" << MetronomePitch        << ">\n"
-           << "<" << MetronomeBarVelocity  << " type=\"Int\">" << get<Int>(MetronomeBarVelocity)  << "</" << MetronomeBarVelocity  << ">\n"
-           << "<" << MetronomeBeatVelocity << " type=\"Int\">" << get<Int>(MetronomeBeatVelocity) << "</" << MetronomeBeatVelocity << ">\n";
+    config << endl << "<configuration>" << endl
+           << "    <" << MetronomePitch        << " type=\"Int\">" << get<Int>(MetronomePitch)        << "</" << MetronomePitch        << ">\n"
+           << "    <" << MetronomeBarVelocity  << " type=\"Int\">" << get<Int>(MetronomeBarVelocity)  << "</" << MetronomeBarVelocity  << ">\n"
+           << "    <" << MetronomeBeatVelocity << " type=\"Int\">" << get<Int>(MetronomeBeatVelocity) << "</" << MetronomeBeatVelocity << ">\n";
 
     RealTime r = get<RealTimeT>(FetchLatency);
     
-    config << "<" << FetchLatency << " type=\"RealTime\">" << r.sec << "," << r.usec << "</" << FetchLatency << ">" << endl;
+    config << "    <" << FetchLatency << " type=\"RealTime\">" << r.sec << "," << r.usec << "</" << FetchLatency << ">" << endl;
 
     r =  get<RealTimeT>(MetronomeDuration);
 
-    config << "<" << MetronomeDuration << " type=\"RealTime\">" << r.sec << "," << r.usec << "</" << MetronomeDuration << ">" << endl;
+    config << "    <" << MetronomeDuration << " type=\"RealTime\">" << r.sec << "," << r.usec << "</" << MetronomeDuration << ">" << endl;
+
+    config << "    <" << ZoomLevel << " type=\"Int\">" << get<Int>(ZoomLevel)
+           << "</" << ZoomLevel << ">\n";
+
+    config << "</configuration>" << endl;
 
 #if (__GNUC__ < 3)
     config << endl << std::ends;

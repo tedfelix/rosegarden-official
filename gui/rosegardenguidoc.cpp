@@ -684,12 +684,8 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     outStream << QString(strtoqstr(getAudioFileManager().toXmlString()))
               << endl << endl;
 
-    outStream << "<configuration>" << endl;
-
     outStream << QString(strtoqstr(getConfiguration().toXmlString()))
               << endl << endl;
-
-    outStream << "</configuration>" << endl;
 
     QString time;
 

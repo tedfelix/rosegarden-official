@@ -93,6 +93,7 @@
 #include "midifilter.h"
 #include "SegmentNotationHelper.h"
 #include "Clipboard.h"
+#include "Configuration.h"
 
 //!!! ditch these when harmonize() moves out
 #include "CompositionTimeSliceAdapter.h"
@@ -849,7 +850,14 @@ void RosegardenGUIApp::initView()
     //
     m_view->show();
 
-    slotChangeZoom(int(m_zoomSlider->getCurrentSize()));
+    int zoomLevel = m_doc->getConfiguration().
+        get<Rosegarden::Int>
+            (Rosegarden::DocumentConfiguration::ZoomLevel);
+
+    m_zoomSlider->setSize(double(zoomLevel)/1000.0);
+    slotChangeZoom(zoomLevel);
+
+    //slotChangeZoom(int(m_zoomSlider->getCurrentSize()));
 
     stateChanged("new_file");
 
@@ -3596,6 +3604,12 @@ void RosegardenGUIApp::slotChangeZoom(int)
     //
     if (m_view)
         m_view->setZoomSize(m_zoomSlider->getCurrentSize());
+
+    m_doc->getConfiguration().set<Rosegarden::Int>
+                 (Rosegarden::DocumentConfiguration::ZoomLevel,
+                  int(m_zoomSlider->getCurrentSize() * 1000.0));
+
+    m_doc->slotDocumentModified();
 }
 
 

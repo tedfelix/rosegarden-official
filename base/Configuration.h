@@ -130,6 +130,8 @@ public:
 
     static const PropertyName PluginTaxonomyFile;
     static const PropertyName PluginDescriptionsFile;
+
+    static const PropertyName ZoomLevel;
 };
 
 
