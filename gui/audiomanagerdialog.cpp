@@ -37,14 +37,15 @@
 #include <klistview.h>
 #include <kio/netaccess.h>
 
-#include "WAVAudioFile.h"
 #include "audiomanagerdialog.h"
-#include "widgets.h"
 #include "dialogs.h"
-#include "rosestrings.h"
+#include "widgets.h"
 #include "multiviewcommandhistory.h"
-
+#include "rosegardenguiview.h"
+#include "rosestrings.h"
 #include "rosedebug.h"
+
+#include "WAVAudioFile.h"
 
 using std::endl;
 
@@ -183,6 +184,9 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     m_insertButton    = new QPushButton(i18n("Insert into Selected Audio Track"), v);
     m_deleteAllButton = new QPushButton(i18n("Remove All Audio Files"), v);
     m_exportButton    = new QPushButton(i18n("Export Audio File"), v);
+    m_distributeMidiButton = new 
+        QPushButton(i18n("Distribute Audio on MIDI"), v);
+
     m_fileList        = new AudioListView(h);
 
     QToolTip::add(m_addButton,
@@ -209,6 +213,8 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     QToolTip::add(m_fileList,
             i18n("You can drag and drop .wav files here to insert them from Konqueror or other KDE file browsers."));
 
+    QToolTip::add(m_distributeMidiButton,
+            i18n("Turn a MIDI Segment into a set of audio Segments triggered by the MIDI events"));
 
     // Set the column names
     //
@@ -245,6 +251,8 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     connect(m_insertButton, SIGNAL(clicked()), SLOT(slotInsert()));
     connect(m_deleteAllButton, SIGNAL(clicked()), SLOT(slotDeleteAll()));
     connect(m_exportButton, SIGNAL(clicked()), SLOT(slotExportAudio()));
+    connect(m_distributeMidiButton, SIGNAL(clicked()), 
+            SLOT(slotDistributeOnMidiSegment()));
 
     // connect selection mechanism
     connect(m_fileList, SIGNAL(selectionChanged(QListViewItem*)),
@@ -1149,6 +1157,49 @@ AudioManagerDialog::isSelectedTrackAudio()
     return false;
     
 }
+
+void
+AudioManagerDialog::slotDistributeOnMidiSegment()
+{
+    RG_DEBUG << "AudioManagerDialog::slotDistributeOnMidiSegment" << endl;
+
+    Rosegarden::Composition &comp = m_doc->getComposition();
+
+    QList<RosegardenGUIView>& viewList = m_doc->getViewList();
+    RosegardenGUIView *w = 0;
+    Rosegarden::SegmentSelection selection;
+
+    for(w = viewList.first(); w != 0; w = viewList.next())
+    {
+        selection = w->getSelection();
+    }
+
+    // Store the insert times in a local vector
+    //
+    std::vector<Rosegarden::timeT> insertTimes;
+
+    for (Rosegarden::SegmentSelection::iterator i = selection.begin();
+         i != selection.end(); ++i)
+    {
+        // For MIDI (Internal) Segments only of course
+        //
+        if ((*i)->getType() == Rosegarden::Segment::Internal)
+        {
+            for (Segment::iterator it = (*i)->begin(); it != (*i)->end(); ++it)
+            {
+                insertTimes.push_back((*it)->getAbsoluteTime());
+            }
+        }
+    }
+
+    for (unsigned int i = 0; i < insertTimes.size(); ++i)
+    {
+        RG_DEBUG << "AudioManagerDialog::slotDistributeOnMidiSegment - "
+                 << "insert audio segment at " << insertTimes[i]
+                 << endl;
+    }
+}
+
 
 const char* const AudioManagerDialog::AudioManagerDialogConfigGroup = "AudioManagerDialog";
  

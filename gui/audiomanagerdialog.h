@@ -136,6 +136,12 @@ public slots:
 
     void slotClose();
 
+    /**
+     * Turn a MIDI segment into a set of audio segments triggered
+     * by the MIDI Note Ons
+     */
+    void slotDistributeOnMidiSegment();
+
 signals:
 
     // Control signals so we can tell the sequencer about our changes
@@ -180,6 +186,7 @@ protected:
     QPushButton      *m_insertButton;
     QPushButton      *m_deleteAllButton;
     QPushButton      *m_exportButton;
+    QPushButton      *m_distributeMidiButton;
 
     RosegardenGUIDoc *m_doc;
 
