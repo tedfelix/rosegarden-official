@@ -160,9 +160,10 @@ protected:
     //--------------- Data members ---------------------------------
 
     QComboBox* m_client;
-    QSpinBox* m_countIn;
-    QSpinBox* m_midiPitchOffset;
+    QSpinBox*  m_countIn;
+    QSpinBox*  m_midiPitchOffset;
     QLineEdit* m_externalAudioEditorPath;
+    QCheckBox* m_selectorGreedyMode;
 };
 
 /**
@@ -227,8 +228,6 @@ protected slots:
 protected:
 
     //--------------- Data members ---------------------------------
-
-    QCheckBox *m_selectorGreedyMode;
 };
 
 /**

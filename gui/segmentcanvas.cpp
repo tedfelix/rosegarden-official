@@ -787,7 +787,6 @@ SegmentCanvas::SegmentCanvas(RosegardenGUIDoc *doc,
     m_fineGrain(false),
     m_showPreviews(true),
     m_doc(doc),
-    m_config(kapp->config()),
     m_selectionRect(0)
 {
     QWhatsThis::add(this, i18n("Segments Canvas - Create and manipulate your segments here"));
@@ -1050,7 +1049,7 @@ void SegmentCanvas::contentsMouseDoubleClickEvent(QMouseEvent* e)
             emit editSegmentAudio(m_currentItem->getSegment());
         else
         {
-            if (m_config->readUnsignedNumEntry("doubleclickclient",
+            if (kapp->config()->readUnsignedNumEntry("doubleclickclient",
                                                Rosegarden::GeneralConfigurationPage::NotationView) == 
                     Rosegarden::GeneralConfigurationPage::NotationView)
                 emit editSegmentNotation(m_currentItem->getSegment());

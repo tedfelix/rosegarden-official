@@ -428,8 +428,6 @@ private:
     bool m_showPreviews;
     RosegardenGUIDoc *m_doc;
     
-    KConfig* m_config;
-
     // selection bounding box for sweep selections
     //
     QCanvasRectangle* m_selectionRect;

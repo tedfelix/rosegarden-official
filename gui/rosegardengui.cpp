@@ -78,6 +78,8 @@
 #include "widgets.h"
 #include "temporuler.h"
 #include "SoundDriver.h"
+#include "matrixtool.h"
+#include "notationtool.h"
 
 //!!! ditch these when harmonize() moves out
 #include "CompositionTimeSliceAdapter.h"
@@ -753,6 +755,11 @@ void RosegardenGUIApp::readOptions()
     bool opt;
 
     m_config->setGroup("General Options");
+
+    opt = m_config->readBoolEntry("selectorgreedymode", true);
+    MatrixSelector::setGreedyMode(opt);
+    NotationSelector::setGreedyMode(opt);
+    SegmentSelector::setGreedyMode(opt);
 
     // status bar settings
     opt = m_config->readBoolEntry("Show Statusbar", true);

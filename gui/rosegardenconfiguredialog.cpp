@@ -52,6 +52,8 @@
 #include "rosedebug.h"
 #include "notepixmapfactory.h"
 #include "matrixtool.h"
+#include "notationtool.h"
+#include "segmentcanvas.h"
 
 namespace Rosegarden
 {
@@ -91,15 +93,22 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
                                                    QWidget *parent, const char *name)
     : TabbedConfigurationPage(cfg, parent, name),
       m_client(0),
-      m_countIn(0)
+      m_countIn(0),
+      m_midiPitchOffset(0),
+      m_externalAudioEditorPath(0),
+      m_selectorGreedyMode(0)
+
 {
 //     Rosegarden::Composition &comp = doc->getComposition();
 //     Rosegarden::Configuration &config = doc->getConfiguration();
     m_cfg->setGroup("General Options");
 
+    //
+    // "General" tab
+    //
     QFrame *frame = new QFrame(m_tabWidget);
     QGridLayout *layout = new QGridLayout(frame,
-                                          2, 2, // nbrow, nbcol
+                                          4, 2, // nbrow, nbcol
                                           10, 5);
 
     layout->addWidget(new QLabel(i18n("Double click on segment opens..."),
@@ -108,6 +117,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
                                  frame), 1, 0);
     layout->addWidget(new QLabel(i18n("MIDI pitch to string offset"),
                                  frame), 2, 0);
+    layout->addWidget(new QLabel(i18n("Selector greedy mode"),
+                                 frame), 3, 0);
 
 
     m_client = new QComboBox(frame);
@@ -131,8 +142,17 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
 
     layout->addWidget(m_midiPitchOffset, 2, 1);
 
+    m_selectorGreedyMode = new QCheckBox(frame);
+    layout->addWidget(m_selectorGreedyMode, 3, 1);
+
+    m_selectorGreedyMode->setChecked(m_cfg->readBoolEntry("selectorgreedymode",
+                                                          true));
+
     addTab(frame, i18n("General"));
 
+    //
+    // External editor tab
+    //
     frame = new QFrame(m_tabWidget);
     layout = new QGridLayout(frame,
                              1, 3, // nbrow, nbcol
@@ -195,6 +215,12 @@ void GeneralConfigurationPage::apply()
 
     int offset = getMIDIPitch2StringOffset();
     m_cfg->writeEntry("midipitchoffset", offset);
+
+    bool greedyMode = m_selectorGreedyMode->isChecked();
+    MatrixSelector::setGreedyMode(greedyMode);
+    NotationSelector::setGreedyMode(greedyMode);
+    SegmentSelector::setGreedyMode(greedyMode);
+    m_cfg->writeEntry("selectorgreedymode", m_selectorGreedyMode->isChecked());
 
     QString externalAudioEditor = getExternalAudioEditor();
 
@@ -486,8 +512,7 @@ NotationConfigurationPage::apply()
 MatrixConfigurationPage::MatrixConfigurationPage(KConfig *cfg,
                                                  QWidget *parent,
                                                  const char *name) :
-    TabbedConfigurationPage(cfg, parent, name),
-    m_selectorGreedyMode(0)
+    TabbedConfigurationPage(cfg, parent, name)
 {
     m_cfg->setGroup("Matrix Options");
 
@@ -496,22 +521,14 @@ MatrixConfigurationPage::MatrixConfigurationPage(KConfig *cfg,
                                           4, 2, // nbrow, nbcol
                                           10, 5);
 
-    m_selectorGreedyMode = new QCheckBox(i18n("Selector greedy mode"), frame);
-    layout->addWidget(m_selectorGreedyMode, 0, 0);
-
-    m_selectorGreedyMode->setChecked(m_cfg->readBoolEntry("selectorgreedymode",
-                                                          true));
+    layout->addWidget(new QLabel("Nothing here yet", frame), 0, 0);
 
     addTab(frame, i18n("General"));
-    
 }
 
 void MatrixConfigurationPage::apply()
 {
-    MatrixSelector::setGreedyMode(m_selectorGreedyMode->isChecked());
-
     m_cfg->setGroup("Matrix Options");
-    m_cfg->writeEntry("selectorgreedymode", m_selectorGreedyMode->isChecked());
 }
 
 
