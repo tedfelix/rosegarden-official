@@ -1239,11 +1239,6 @@ void NotationView::setupActions()
             (i18n(actionsToolbars[i][0]), icon, 0,
              this, actionsToolbars[i][1],
              actionCollection(), actionsToolbars[i][2]);
-
-        if (i == 3)
-            toolbarAction->setChecked(false);
-        else
-            toolbarAction->setChecked(true);
     }
 
     new KAction(i18n("Cursor &Back"), 0, Key_Left, this,
@@ -1359,10 +1354,6 @@ void NotationView::setupActions()
 		"clear_selection");
 
     createGUI(getRCFileName());
-
-    // transport toolbar is hidden by default
-    //
-    toolBar("transportToolBar")->hide();
 }
 
 bool
