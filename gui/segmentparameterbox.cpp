@@ -26,6 +26,8 @@
 #include "Segment.h"
 #include "Quantizer.h"
 
+#include "notepixmapfactory.h"
+
 SegmentParameterBox::SegmentParameterBox(QWidget *parent,
                                          const char *name,
                                          WFlags f) :
@@ -73,7 +75,7 @@ SegmentParameterBox::initBox()
     m_quantizeValue = new RosegardenComboBox(false, this);
 
     m_quantizeValue->setFont(font);
-    m_quantizeValue->setFixedSize(comboWidth, comboHeight);
+    m_quantizeValue->setFixedSize(comboWidth + 24, 28);
 
     // motif style read-only combo
     m_transposeValue = new RosegardenComboBox(true, this);
@@ -110,21 +112,21 @@ SegmentParameterBox::initBox()
 
     // populate the quantize combo
     //
+    NotePixmapFactory npf;
+    QPixmap noMap = npf.makeToolbarPixmap("no-note");
 
     for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
-	m_quantizeValue->insertItem(m_standardQuantizations[i].name.c_str());
+	std::string noteName = m_standardQuantizations[i].noteName;
+	QString qname = m_standardQuantizations[i].name.c_str();
+	QPixmap pmap = noMap;
+	if (noteName != "") {
+	    if (noteName == "hemidemisemiquaver") noteName = "hemidemisemi";
+	    else if (noteName == "demisemiquaver") noteName = "demisemi";
+	    pmap = npf.makeToolbarPixmap(noteName.c_str());
+	}
+	m_quantizeValue->insertItem(pmap, qname);
     }
-    m_quantizeValue->insertItem("Off");
-
-/*
-    QuantizeValues qVal;
-    QuantizeListIterator it;
-
-    for (it = qVal.begin(); it != qVal.end(); it++)
-    {
-        m_quantizeValue->insertItem(QString(((*it).second).c_str()));
-    }
-*/
+    m_quantizeValue->insertItem(noMap, "Off");
 
     // default to last item
     m_quantizeValue->setCurrentItem(m_quantizeValue->count() - 1);

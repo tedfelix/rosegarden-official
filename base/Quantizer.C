@@ -393,6 +393,28 @@ Quantizer::getStandardQuantizations()
     std::vector<StandardQuantization> v;
     char buf[100];
 
+    for (int i = 1; i <= 64; i *= 2) {
+
+	int j1 = (i > 8 ? 1 : 0);
+	for (int j = 0; j <= j1; ++j) {
+
+	    int divisor = i;
+	    if (j == 1) divisor = divisor * 3 / 2;
+	    
+	    timeT unit = Note(Note::Semibreve).getDuration() / divisor;
+	    Note note(Note::getNearestNote(unit));
+
+	    sprintf(buf, "1/%d", divisor);
+
+	    v.push_back
+		(StandardQuantization
+		 (Quantizer::UnitQuantize, unit, 2, buf,
+		  (note.getDuration() == unit ? note.getEnglishName() : "")));
+	}
+    }
+	    
+
+/*!!!
     for (Note::Type nt = Note::Breve; nt >= Note::Hemidemisemiquaver; --nt) {
 
 	Note note(nt);
@@ -424,6 +446,7 @@ Quantizer::getStandardQuantizations()
 	(StandardQuantization(Quantizer::UnitQuantize,
 			      Note(Note::Semibreve).getDuration() / 96,
 			      2, "1/96", ""));
+*/
 
     return v;
 }
