@@ -221,8 +221,9 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
         return;
     }
 
+    QRect clipRect = painter.clipRegion().boundingRect();
+
     painter.save();
-    //painter.translate(rect().x(), rect().y());
 
     // perhaps antialias this somehow at some point
     int height = rect().height()/2 - 2;
@@ -253,7 +254,7 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
     {
         std::cerr << "SegmentAudioPreview::drawShape - m_channels == 0 "
                   << "problem with audio file" <<std::endl;
-	//painter.restore();
+	painter.restore();
         return;
     }
 
@@ -267,19 +268,25 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
 
     // The visible width of the rectangle
     //
-    //QWMatrix matrix = painter.worldMatrix();
     QRect tRect = painter.worldMatrix().map(rect());
     double sampleScaleFactor = samplePoints / double(tRect.width());
-    //double drawScaleFactor = double(rect().width())/double(tRect.width());
 
     bool state = painter.hasWorldXForm();
     painter.setWorldXForm(false);
 
-    for (int i = 0; i < tRect.width(); ++i)
+    int i0 = clipRect.x() - tRect.x();
+    i0 = std::max(i0, 0);
+
+    int i1 = i0 + clipRect.width();
+    i1 = std::min(i1, tRect.width());
+    
+    for (int i = i0; i < i1; ++i)
     {
         // For each i work get the sample starting point
         //
         int position = int(m_channels * i * sampleScaleFactor);
+	if (position < 0) continue;
+	if (position >= m_values.size() - m_channels) break;
 
         if (m_channels == 1) {
 
@@ -396,7 +403,7 @@ void SegmentAudioPreview::updatePreview(const QWMatrix &matrix)
 {
     if (getPreviewState() != PreviewChanged) return;
 
-    Rosegarden::Profiler profiler("SegmentAudioPreview::updatePreview", true);
+//    Rosegarden::Profiler profiler("SegmentAudioPreview::updatePreview", true);
 
     m_values.clear();
 
@@ -412,8 +419,8 @@ void SegmentAudioPreview::updatePreview(const QWMatrix &matrix)
     QRect tRect = matrix.map(rect());
     QRect uRect = matrix.map(rect());
 
-    RG_DEBUG << "SegmentAudioPreview::updatePreview() - for file id "
-	     << m_segment->getAudioFileId() << " requesting values" <<endl;
+//    RG_DEBUG << "SegmentAudioPreview::updatePreview() - for file id "
+//	     << m_segment->getAudioFileId() << " requesting values" <<endl;
 
     AudioPreviewThread &thread = m_parent.getDocument()->getAudioPreviewThread();
     AudioPreviewThread::Request request;
