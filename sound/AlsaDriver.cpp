@@ -1328,36 +1328,6 @@ AlsaDriver::initialisePlayback(const RealTime &position)
     m_playStartPosition = position;
 
     m_startPlayback = true;
-
-    // Get time from current alsa time to start of alsa timing -
-    // add the initial starting point and divide by the total
-    // single clock length.  Divide this result by 6 for the SPP
-    // position.
-    //
-    long spp =
-      long(((getAlsaTime() - m_alsaPlayStartTime + m_playStartPosition) /
-                     m_midiClockInterval) / 6.0);
-
-    // Only send if it's changed
-    //
-    /*
-    if (m_midiSongPositionPointer != spp)
-    {
-        m_midiSongPositionPointer = spp;
-        */
-        MidiByte lsb = spp & 0x7f;
-        MidiByte msb = (spp << 8) & 0x7f;
-        std::string args;
-        args += lsb;
-        args += msb;
-
-        sendSystemDirect(SND_SEQ_EVENT_SONGPOS, args);
-    //}
-
-        std::cout << "AlsaDriver::initialisePlayback - "
-                  << " sending song position pointer = " 
-                  << getAlsaTime() - m_alsaPlayStartTime + m_playStartPosition
-                  << std::endl;
 }
 
 
@@ -1503,6 +1473,8 @@ AlsaDriver::resetPlayback(const RealTime &oldPosition, const RealTime &position)
     //snd_seq_remove_events_set_event_type(info, 
     snd_seq_remove_events_set_condition(info, SND_SEQ_REMOVE_OUTPUT);
     snd_seq_remove_events(m_midiHandle, info);
+
+
 }
 
 void 
@@ -2330,13 +2302,63 @@ AlsaDriver::startClocks()
     //
     if (m_midiClockEnabled)
     {
+        // Send the Song Position Pointer for MIDI CLOCK positioning
+        //
+        // Deconstruct the spp into two midi bytes which we still
+        // reconstruct this side of ALSA - yes, I know it's a bit
+        // of a waste of time but with no or little ALSA seq documentation
+        // and this being the manner of constructing the SPP MIDI
+        // message it _feels_ right.  The sendSystemDirect reconstruction
+        // was worked out by guesswork.
+        //
+
+        /*
+        if (m_midiSongPositionPointer != spp)
+        {
+            m_midiSongPositionPointer = spp;
+            */
+
+        // Get time from current alsa time to start of alsa timing -
+        // add the initial starting point and divide by the total
+        // single clock length.  Divide this result by 6 for the SPP
+        // position.
+        //
+        long spp =
+          long(((getAlsaTime() - m_alsaPlayStartTime + m_playStartPosition) /
+                     m_midiClockInterval) / 6.0);
+
+        MidiByte lsb = spp & 0x7f;
+        MidiByte msb = (spp >> 7) & 0x7f;
+        std::string args;
+        args += lsb;
+        args += msb;
+
+        // Ok now we have the new SPP - stop the transport and restart with the
+        // new value.
+        //
+        sendSystemDirect(SND_SEQ_EVENT_STOP, "");
+
+        sendSystemDirect(SND_SEQ_EVENT_SONGPOS, args);
+
+        /*
+        std::cout << "AlsaDriver::startClocks - "
+                  << " sending song position pointer = " 
+                  << getAlsaTime() - m_alsaPlayStartTime + m_playStartPosition
+                  << "s, spp  = "
+                  << spp 
+                  << ", msb = " << int(msb)
+                  << ", lsb = " << int(lsb)
+                  << std::endl;
+        */
+
+        // Now send the START/CONTINUE
+        //
         if (m_playStartPosition == RealTime::zeroTime)
             sendSystemQueued(SND_SEQ_EVENT_START, "",
                              m_alsaPlayStartTime);
         else
             sendSystemQueued(SND_SEQ_EVENT_CONTINUE, "",
                              m_alsaPlayStartTime);
-
     }
 
     if (isMMCMaster())
@@ -3380,17 +3402,22 @@ AlsaDriver::sendSystemDirect(MidiByte command, const std::string &args)
             // set args if we have them
             switch(args.length())
             {
+                case 0:
+                    break;
+
                 case 1:
-                    event.data.control.value = args[0];
+                    //event.data.control.param = args[0];
                     event.data.control.value = args[0];
                     break;
 
                 case 2:
-                    event.data.control.param = args[0];
-                    event.data.control.value = args[0];
+                    //event.data.control.param = args[1];
+                    event.data.control.value = int(args[0]) | (int(args[1]) << 7);
                     break;
 
                 default: // do nothing
+                    std::cerr << "AlsaDriver::sendSystemDirect - "
+                              << "too many argument bytes" << std::endl;
                     break;
             }
 
@@ -3452,13 +3479,13 @@ AlsaDriver::sendSystemQueued(MidiByte command,
             switch(args.length())
             {
                 case 1:
-                    event.data.control.value = args[0];
+                    event.data.control.param = args[0];
                     event.data.control.value = args[0];
                     break;
 
                 case 2:
                     event.data.control.param = args[0];
-                    event.data.control.value = args[0];
+                    event.data.control.value = int(args[0]) | (int(args[1]) << 7);
                     break;
 
                 default: // do nothing
