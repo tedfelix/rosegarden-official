@@ -31,6 +31,8 @@
 
 #include <string>
 
+#include "Device.h"
+
 class RosegardenGUIDoc;
 class QTabWidget;
 class QLineEdit;
@@ -400,6 +402,8 @@ protected:
 
     // Recording
     QComboBox *m_recordDevice;
+
+    std::vector<std::pair<Rosegarden::DeviceId, int> > m_devPorts;
 
 };
  

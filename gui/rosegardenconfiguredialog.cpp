@@ -965,31 +965,59 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     Rosegarden::DeviceList *devices = m_doc->getStudio().getDevices();
     Rosegarden::DeviceListIterator it;
 
+    m_devPorts.clear();
+
     QString recordDeviceStr = m_cfg->readEntry("midirecorddevice");
+    QString recordPortStr = m_cfg->readEntry("midirecordport");
+
+    Rosegarden::DeviceId recordDevice = 0;
+    if (recordDeviceStr) recordDevice = recordDeviceStr.toUInt();
+
+    int recordPort = -1;
+    if (recordPortStr) recordPort = recordPortStr.toInt();
+
     for (it = devices->begin(); it != devices->end(); it++)
     {
         Rosegarden::MidiDevice *dev =
             dynamic_cast<Rosegarden::MidiDevice*>(*it);
 
-        if (dev && dev->getDirection() == MidiDevice::Duplex)
+        // Choose ReadOnly and Duplex devices here
+        //
+        if (dev && dev->getDirection() != MidiDevice::WriteOnly)
         {
-            // Label and DeviceId
-            //
-            QString label = strtoqstr((*it)->getName());
-            label += QString(" (%1)").arg((*it)->getId());
+            std::vector<int> ports = dev->getPortNumbers();
 
-            m_recordDevice->insertItem(label);
-
-            if (recordDeviceStr)
+            for (unsigned int i = 0; i < ports.size(); i++)
             {
-                unsigned int recordDevice = recordDeviceStr.toUInt();
+                QString label = strtoqstr((*it)->getName());
+                label += QString(" %1 - Port %2").arg((*it)->getId())
+                                                 .arg(ports[i]);
 
-                if (recordDevice == (*it)->getId())
-                    m_recordDevice->setCurrentItem(recordDevice);
+                m_recordDevice->insertItem(label);
+
+                m_devPorts.push_back(
+                    std::pair<Rosegarden::DeviceId, int>((*it)->getId(), i));
             }
+
         }
     }
 
+    // Set the active position
+    //
+    for (unsigned int i = 0; i < m_devPorts.size(); i++)
+    {
+        if (m_devPorts[i].first == recordDevice &&
+            m_devPorts[i].second == recordPort)
+        {
+            m_recordDevice->setCurrentItem(i);
+        }
+    }
+
+    if (m_devPorts.size() == 0)
+    {
+        m_recordDevice->insertItem(i18n("<no record devices>"));
+        m_recordDevice->setEnabled(false);
+    }
 
     addTab(frame, i18n("Recording"));
 
@@ -1076,6 +1104,7 @@ SequencerConfigurationPage::apply()
     // -------- Record device ---------
     //
 
+    /*
     // Match the device number in the list and write out the matching
     // DeviceId.
     //
@@ -1099,18 +1128,29 @@ SequencerConfigurationPage::apply()
             count++;
         }
     }
-    m_cfg->writeEntry("midirecorddevice", deviceId);
+    */
 
-    // send the selected device to the sequencer
-    Rosegarden::MappedEvent *mE =
-        new Rosegarden::MappedEvent(
-                Rosegarden::MidiInstrumentBase, // InstrumentId
-                Rosegarden::MappedEvent::SystemRecordDevice,
-                Rosegarden::MidiByte(deviceId));
+    Rosegarden::MappedEvent *mE;
+    unsigned int device = 0;
+    int port = 0;
 
-    Rosegarden::StudioControl::sendMappedEvent(mE);
+    if (m_devPorts.size())
+    {
+        device = m_devPorts[m_recordDevice->currentItem()].first;
+        port = m_devPorts[m_recordDevice->currentItem()].second;
 
+        // send the selected device to the sequencer
+        mE= new Rosegarden::MappedEvent(
+                    Rosegarden::MidiInstrumentBase, // InstrumentId
+                    Rosegarden::MappedEvent::SystemRecordDevice,
+                    Rosegarden::MidiByte(device),
+                    Rosegarden::MidiByte(port));
 
+        Rosegarden::StudioControl::sendMappedEvent(mE);
+    }
+
+    m_cfg->writeEntry("midirecorddevice", device);
+    m_cfg->writeEntry("midirecordport", port);
 
     // Write the JACK entry
     //

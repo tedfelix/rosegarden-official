@@ -531,6 +531,9 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
                                              port,
                                              channelName,
                                              m_deviceRunningId);
+
+                instr->setDirection(direction);
+
                 m_instruments.push_back(instr);
             }
             m_addedMetronome = true;
@@ -563,6 +566,8 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
                                                            port,
                                                            channelName,
                                                            m_deviceRunningId);
+            instr->setDirection(direction);
+
             m_instruments.push_back(instr);
         }
 
