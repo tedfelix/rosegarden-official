@@ -28,17 +28,17 @@
 #include "Event.h"
 #include "Instrument.h"
 
-/*
- *
- * Internal representation of some very MIDI specific event types
- * that fall clearly outside of NotationTypes but will of course
- * still be represented in some way.
- *
- */
+// Internal representation of some very MIDI specific event types
+// that fall clearly outside of NotationTypes and still require
+// representation.
+//
+
 
 namespace Rosegarden 
 {
 
+// Rosegarden's internal represetation of MIDI PitchBend
+//
 class PitchBend
 {
 public:
@@ -58,6 +58,10 @@ private:
     Rosegarden::MidiByte m_msb;
     Rosegarden::MidiByte m_lsb;
 };
+
+
+// Controller
+//
 
 class Controller
 {
@@ -87,6 +91,92 @@ private:
     Rosegarden::MidiByte m_data2;
 
 };
+
+
+// Key pressure
+//
+
+class KeyPressure
+{
+public:
+    static const std::string EventType;
+    static const int EventSubOrdering;
+
+    static const PropertyName PITCH;
+    static const PropertyName PRESSURE;
+
+    /// Returned event is on heap; caller takes responsibility for ownership
+    Event *getAsEvent(timeT absoluteTime) const;
+
+    KeyPressure(Rosegarden::MidiByte pitch, Rosegarden::MidiByte pressure);
+    ~KeyPressure();
+
+private:
+    Rosegarden::MidiByte m_pitch;
+    Rosegarden::MidiByte m_pressure;
+};
+
+
+// Channel pressure
+//
+
+class ChannelPressure
+{
+public:
+    static const std::string EventType;
+    static const int EventSubOrdering;
+
+    static const PropertyName PRESSURE;
+
+    Event *getAsEvent(timeT absoluteTime) const;
+
+    ChannelPressure(Rosegarden::MidiByte pressure);
+    ~ChannelPressure();
+
+private:
+    Rosegarden::MidiByte m_pressure;
+};
+
+
+// Program Change
+//
+
+class ProgramChange
+{
+public:
+    static const std::string EventType;
+    static const int EventSubOrdering;
+
+    static const PropertyName PROGRAM;
+
+    Event *getAsEvent(timeT absoluteTime) const;
+
+    ProgramChange(Rosegarden::MidiByte program);
+    ~ProgramChange();
+
+private:
+    Rosegarden::MidiByte m_program;
+};
+
+
+// System exclusive
+//
+
+class SystemExclusive
+{
+public:
+    static const std::string EventType;
+    static const int EventSubOrdering;
+
+    SystemExclusive();
+    ~SystemExclusive();
+
+    Event *getAsEvent(timeT absoluteTime) const;
+
+private:
+
+};
+
 
 
 }

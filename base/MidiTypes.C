@@ -91,5 +91,108 @@ Controller::getAsEvent(timeT absoluteTime) const
     return e;
 }
 
+//////////////////////////////////////////////////////////////////////
+// Key Pressure
+//////////////////////////////////////////////////////////////////////
+const std::string KeyPressure::EventType = "keypressue";
+const int KeyPressure::EventSubOrdering = -70;
+
+const PropertyName KeyPressure::PITCH = "pitch";
+const PropertyName KeyPressure::PRESSURE = "pressure";
+
+KeyPressure::KeyPressure(Rosegarden::MidiByte pitch,
+                         Rosegarden::MidiByte pressure):
+  m_pitch(pitch),
+  m_pressure(pressure)
+{
+}
+
+KeyPressure::~KeyPressure()
+{
+}
+
+Event*
+KeyPressure::getAsEvent(timeT absoluteTime) const
+{
+    Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
+    e->set<Int>(PITCH, (int)m_pitch);
+    e->set<Int>(PRESSURE, (int)m_pressure);
+    return e;
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// Channel Pressure
+//////////////////////////////////////////////////////////////////////
+const std::string ChannelPressure::EventType = "channelpressue";
+const int ChannelPressure::EventSubOrdering = -70;
+
+const PropertyName ChannelPressure::PRESSURE = "pressure";
+
+ChannelPressure::ChannelPressure(Rosegarden::MidiByte pressure):
+  m_pressure(pressure)
+{
+}
+
+ChannelPressure::~ChannelPressure()
+{
+}
+
+Event*
+ChannelPressure::getAsEvent(timeT absoluteTime) const
+{
+    Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
+    e->set<Int>(PRESSURE, (int)m_pressure);
+    return e;
+}
+
+//////////////////////////////////////////////////////////////////////
+// ProgramChange
+//////////////////////////////////////////////////////////////////////
+const std::string ProgramChange::EventType = "programchange";
+const int ProgramChange::EventSubOrdering = -70;
+
+const PropertyName ProgramChange::PROGRAM = "program";
+
+ProgramChange::ProgramChange(Rosegarden::MidiByte program):
+  m_program(program)
+{
+}
+
+ProgramChange::~ProgramChange()
+{
+}
+
+Event*
+ProgramChange::getAsEvent(timeT absoluteTime) const
+{
+    Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
+    e->set<Int>(PROGRAM, (int)m_program);
+    return e;
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// SystemExclusive
+//////////////////////////////////////////////////////////////////////
+const std::string SystemExclusive::EventType = "systemexclusive";
+const int SystemExclusive::EventSubOrdering = -70;
+
+SystemExclusive::SystemExclusive()
+{
+}
+
+SystemExclusive::~SystemExclusive()
+{
+}
+
+Event*
+SystemExclusive::getAsEvent(timeT absoluteTime) const
+{
+    Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
+    return e;
+}
+
+
 }
 

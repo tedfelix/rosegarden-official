@@ -86,6 +86,42 @@ MappedEvent::MappedEvent(InstrumentId id,
 
         m_type = MidiController;
     }
+    else if (e.isa(Rosegarden::ProgramChange::EventType))
+    {
+        if (e.has(Rosegarden::ProgramChange::PROGRAM))
+            m_data1 = e.get<Int>(Rosegarden::ProgramChange::PROGRAM);
+        else
+            m_data1 = 0;
+
+        m_type = MidiProgramChange;
+    }
+    else if (e.isa(Rosegarden::KeyPressure::EventType))
+    {
+        if (e.has(Rosegarden::KeyPressure::PITCH))
+            m_data1 = e.get<Int>(Rosegarden::KeyPressure::PITCH);
+        else
+            m_data1 = 0;
+
+        if (e.has(Rosegarden::KeyPressure::PRESSURE))
+            m_data2 = e.get<Int>(Rosegarden::KeyPressure::PRESSURE);
+        else
+            m_data2 = 0;
+
+        m_type = MidiKeyPressure;
+    }
+    else if (e.isa(Rosegarden::ChannelPressure::EventType))
+    {
+        if (e.has(Rosegarden::ChannelPressure::PRESSURE))
+            m_data1 = e.get<Int>(Rosegarden::ChannelPressure::PRESSURE);
+        else
+            m_data1 = 0;
+
+        m_type = MidiChannelPressure;
+    }
+    else if (e.isa(Rosegarden::SystemExclusive::EventType))
+    {
+        m_type = MidiSystemExclusive;
+    }
     else
     {
         std::cerr << "MappedEvent::MappedEvent - "
