@@ -78,10 +78,33 @@ NotationHLayout::getPreviousNote(NotationElementList::iterator pos)
 // bar's shortest notes that will fit in the duration of the bar and
 // the comfortable gap for each.
 
+// Some ground rules for "ideal" layout:
+// 
+// -- The shortest notes in the bar need to have a certain amount of
+//    space, but if they're _very_ short compared to the total bar
+//    duration then we can probably afford to squash them somewhat
+// 
+// -- If there are lots of the shortest note duration, then we
+//    should try not to squash them quite so much
+// 
+// -- If there are not very many notes in the bar altogether, we can
+//    squash things up a bit more perhaps
+// 
+// -- Similarly if they're dotted, we need space for the dots; we
+//    can't risk making the dots invisible
+// 
+// -- In theory we don't necessarily want the whole bar width to be
+//    the product of the shortest-note width and the number of shortest
+//    notes in the bar.  But it's difficult to plan the spacing
+//    otherwise.  One possibility is to augment the fixedWidth with a
+//    certain proportion of the width of each note, and make that a
+//    higher proportion for very short notes than for long notes.
+
 int NotationHLayout::getIdealBarWidth(int fixedWidth,
                                       NotationElementList::iterator shortest,
                                       const NotePixmapFactory &npf,
                                       int shortCount,
+                                      int totalCount,
                                       const TimeSignature &timeSignature) const
 {
     kdDebug(KDEBUG_AREA) << "NotationHLayout::getIdealBarWidth: shortCount is "
@@ -144,6 +167,7 @@ NotationHLayout::preparse(const Track::BarPositionList &barPositions,
 
 	NotationElementList::iterator shortest = m_notationElements.end();
 	int shortCount = 0;
+        int totalCount = 0;
 
 	NotationElementList::iterator from =
 	    m_notationElements.findTime(barPositions[barNo].start);
@@ -241,6 +265,8 @@ NotationHLayout::preparse(const Track::BarPositionList &barPositions,
 		
 		    // either we're not in a chord or the chord is about
 		    // to end: update shortest data accordingly
+
+                    ++totalCount;
 		    
 		    int d = 0;
 		    try {
@@ -273,7 +299,7 @@ NotationHLayout::preparse(const Track::BarPositionList &barPositions,
 	
         addNewBar(barNo, from,
                   getIdealBarWidth(fixedWidth, shortest, npf,
-                                   shortCount, timeSignature),
+                                   shortCount, totalCount, timeSignature),
                   fixedWidth);
     }
 }
@@ -350,8 +376,9 @@ NotationHLayout::layout()
     Clef clef;
     TimeSignature timeSignature;
 
-    double x = 0;
+    int x = 0;
     const NotePixmapFactory &npf(m_staff.getNotePixmapFactory());
+    int noteBodyWidth = npf.getNoteBodyWidth();
 
     int pGroupNo = -1;
     NotationElementList::iterator startOfGroup = m_notationElements.end();
@@ -371,7 +398,7 @@ NotationHLayout::layout()
         kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): starting a bar, initial x is " << x << " and barWidth is " << bdi->idealWidth << endl;
 
 
-        bdi->x = (int)(x + m_barMargin / 2);
+        bdi->x = x + m_barMargin / 2;
         x += m_barMargin;
 
 	bool haveAccidentalInThisChord = false;
@@ -390,51 +417,10 @@ NotationHLayout::layout()
 
             } else if (el->event()->isa(Clef::EventType)) {
 
-		// nasty hack: if there's a time signature or key
-		// before this, swap places with it...
-
-                /*!! no, this really isn't the right thing
-                  if (it != m_notationElements.begin()) {
-                  NotationElementList::iterator it0(it);
-                  for (;;) {
-                  --it0;
-                  int x0;
-                  if (((*it0)->event()->isa(TimeSignature::EventType) ||
-                  (*it0)->event()->isa(Key::EventType)) &&
-                  (x0 = (*it0)->getLayoutX()) < x) {
-                  el->setLayoutX(x0);
-                  (*it0)->setLayoutX
-                  ((x + delta) -
-                  (*it0)->event()->get<Int>(Properties::MIN_WIDTH));
-                  } else break;
-                  if (it0 == m_notationElements.begin()) break;
-                  }
-                  }
-                */
-
                 clef = Clef(*el->event());
 
             } else if (el->event()->isa(Key::EventType)) {
 
-		// nasty hack: if there's a time signature before
-		// this, move it to after...
-                /*!! no, not right
-                  if (it != m_notationElements.begin()) {
-                  NotationElementList::iterator it0(it);
-                  for (;;) {
-                  --it0;
-                  int x0;
-                  if ((*it0)->event()->isa(TimeSignature::EventType) &&
-                  (x0 = (*it0)->getLayoutX()) < x) {
-                  el->setLayoutX(x0);
-                  (*it0)->setLayoutX
-                  ((x + delta) -
-                  (*it0)->event()->get<Int>(Properties::MIN_WIDTH));
-                  } else break;
-                  if (it0 == m_notationElements.begin()) break;
-                  }
-                  }
-                */
                 key = Key(*el->event());
 
             } else if (el->isRest()) {
@@ -451,6 +437,15 @@ NotationHLayout::layout()
                     //!!! not right for partial bar?
                     timeSignature.getBarDuration();
 
+                // Situate the rest somewhat further into its allotted
+                // space.
+
+                if (delta > noteBodyWidth) {
+                    int shift = (delta - noteBodyWidth) / 4;
+                    shift = std::min(shift, (noteBodyWidth * 4));
+                    el->setLayoutX(el->getLayoutX() + shift);
+                }
+                
                  kdDebug(KDEBUG_AREA) << "Rest idealWidth : "
                                       << bdi->idealWidth
                                       << " - fixedWidth : "
@@ -458,6 +453,27 @@ NotationHLayout::layout()
 
 
             } else if (el->isNote()) {
+
+
+                // To work out how much space to allot a note (or
+                // chord), start with the amount alloted to the whole
+                // bar, subtract that reserved for fixed-width items,
+                // and take the same proportion of the remainder as
+                // our duration is of the whole bar's duration.
+                    
+                delta = ((bdi->idealWidth - bdi->fixedWidth) *
+                         el->event()->getDuration()) /
+                    //!!! not right for partial bar?
+                    timeSignature.getBarDuration();
+
+                // Situate the note somewhat further into its allotted
+                // space.
+
+                if (delta > noteBodyWidth) {
+                    int shift = (delta - noteBodyWidth) / 5;
+                    shift = std::min(shift, (noteBodyWidth * 3));
+                    el->setLayoutX(el->getLayoutX() + shift);
+                }
                 
 		// Retrieve the record the presence of any display
 		// accidental.  We'll need to shift the x-coord
@@ -494,18 +510,6 @@ NotationHLayout::layout()
 		    }
 
                     //		    kdDebug(KDEBUG_AREA) << "This is the final chord element (of " << chord.size() << ")" << endl;
-
-                    // To work out how much space to allot a note (or
-                    // chord), start with the amount alloted to the
-                    // whole bar, subtract that reserved for
-                    // fixed-width items, and take the same proportion
-                    // of the remainder as our duration is of the
-                    // whole bar's duration.
-                    
-                    delta = ((bdi->idealWidth - bdi->fixedWidth) *
-                             el->event()->getDuration()) /
-                        //!!! not right for partial bar?
-                        timeSignature.getBarDuration();
 
 //                     kdDebug(KDEBUG_AREA) << "Note idealWidth : "
 //                                          << bdi->idealWidth
@@ -574,7 +578,7 @@ NotationHLayout::addNewBar(int barNo,  NotationElementList::iterator start,
 int NotationHLayout::getMinWidth(const NotePixmapFactory &npf,
                                  const NotationElement &e) const
 {
-    int w = m_noteMargin;
+    int w = 0;
 
     if (e.isNote() || e.isRest()) {
 
@@ -588,8 +592,14 @@ int NotationHLayout::getMinWidth(const NotePixmapFactory &npf,
             ((Accidental)accidental != NoAccidental)) {
             w += npf.getAccidentalWidth();
         }
+        return w;
+    }
 
-    } else if (e.event()->isa(Clef::EventType)) {
+    // rather misleadingly, noteMargin is now only used for non-note events
+
+    w = m_noteMargin;
+
+    if (e.event()->isa(Clef::EventType)) {
 
         w += npf.getClefWidth();
 

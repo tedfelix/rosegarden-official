@@ -96,6 +96,7 @@ protected:
     int getIdealBarWidth(int fixedWidth,
                          NotationElementList::iterator shortest,
                          const NotePixmapFactory &npf, int shortCount,
+                         int totalCount,
                          const Rosegarden::TimeSignature &timeSignature) const;
 
     BarDataList m_barData;

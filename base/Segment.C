@@ -138,6 +138,7 @@ void Track::calculateBarPositions()
     TimeSignature timeSignature;
 
     m_barPositions.clear();
+    addNewBar(0, false, 0, timeSignature);
 
     timeT absoluteTime = 0;
     timeT barStartTime = 0;
@@ -150,8 +151,7 @@ void Track::calculateBarPositions()
         Event *e = *i;
         absoluteTime = m_quantizer->quantizeByUnit(e->getAbsoluteTime());
 
-        if (m_barPositions.size() == 0 ||
-            absoluteTime - barStartTime >= barDuration) {
+        if (absoluteTime - barStartTime >= barDuration) {
             addNewBar(absoluteTime, false, barStartTime, timeSignature);
             barStartTime += barDuration;  //= absoluteTime;
         }
@@ -171,7 +171,7 @@ void Track::calculateBarPositions()
         absoluteTime += m_quantizer->getNoteQuantizedDuration(e);
     }
 
-    if (m_barPositions.size() == 0 || absoluteTime > barStartTime) {
+    if (absoluteTime > barStartTime) {
         addNewBar(absoluteTime, false, barStartTime, timeSignature);
     }
 }
