@@ -21,24 +21,50 @@ A { text-decoration: none }
 <A HREF="chapter-7.html">Previous</A>
 <A HREF="chapter-9.html">Next</A>
 <HR>
-<H1><A NAME="9">9 Mastering (under construction)</A></H1>
-<P>This chapter will eventually deal with the vagaries of putting audio
- and MIDI streams together and mixing them down into a finished .wav
- file.</P>
-<P>I don't expect to get to this until last. In the meantime, I offer
- the following quick and dirty information:</P>
-<P>You can master in one of two ways. One is to set up a dedicated
- mastering track and play everything while having Rosegarden record
- itself. You can use Rosegarden's internal MIDI and audio mixers to help
- make this job easier.</P>
-<P>The more flexible way is to route Rosegarden's JACK outputs into
- something else, like JAMin or Ardour. JAMin looks like a promising tool
- here, but I haven't really explored it.</P>
+<H1><A NAME="8">8 Notation (under heavy construction)</A></H1>
+<P STYLE="margin-bottom: 0.2in; font-style: normal"><FONT FACE="arial">
+Rosegarden has what might well be the most capable notation editor ever
+ found in a MIDI sequencer. Typically, applications which do the best
+ job of notation are dedicated entirely to that pursuit, and they have
+ very limited, rudimentary MIDI capabilities. On the other side of that
+ coin, applications which do the best job as MIDI sequencers often have
+ extremely poor notation editors. Rosegarden straddles these two
+ extremes very well, and its notation editor packs quite a surprising
+ amount of punch.</FONT></P>
+<P STYLE="margin-bottom: 0.2in; font-style: normal"><FONT FACE="arial">
+One of the most striking features is the fact that Rosegarden maintains
+ both a display duration and a performance duration for every note.
+ Users typically have to make a hard choice between a human performance
+ and legible notation. I myself am certainly no stranger to the practice
+ of maintaining both a quantized and an un-quantized version of a piece
+ in separate tracks or separate files. Rosegarden allows you to have the
+ best of both worlds, maintaining legible notation and human performance
+ within the very same set of events.</FONT></P>
+<H2 CLASS="western"><A NAME="8_1">8.1 Notation Editor Overview</A></H2>
+<P>In order to open the notation editor, you must have at least one
+ segment available. You can open any number of segments on any number of
+ tracks simultaneously by selecting the segment or segments you wish to
+ edit, and then right clicking on one of them and choosing &quot;Open in
+ Notation Editor&quot; from the context menu.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic1"
+SRC="../pixmaps/notation-open-in-notation-editor.png" ></P>
+<P>Additionally, the notation editor is the normal default, so you can
+ also open it either by pressing<B> Enter</B>, or by double clicking on
+ a segment. (You can configure this behavior from<B> Settings -&gt;
+ Configure Rosegarden</B>.)</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic2"
+SRC="../pixmaps/notation-default-editor.png" ></P>
+<P>After you have opened it, you will see something a bit like this.
+ Your screen will probably vary somewhat, because this particular
+ example is in multi-page layout mode.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic3"
+SRC="../pixmaps/notation-overview.png" ></P>
+<H3 CLASS="western"><A NAME="8_1_1">8.1.1 Notation Toolbars</A></H3>
+<P>The notation editor is just bristling with toolbars.</P>
 <P>
 <BR>
 <BR></P>
-<P>Anyway, all in due time I'm afraid.</P>
-<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
 <BR>
 <BR></P>
 <HR>
