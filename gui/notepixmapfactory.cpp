@@ -1018,7 +1018,11 @@ NotePixmapFactory::drawMarks(bool isStemmed,
 
     if (!normalMarksAreAbove) dy = gap;
     if (params.m_safeVertDistance > 0) {
-	dy += params.m_safeVertDistance;
+	if (normalMarksAreAbove) {
+	    dy = std::max(dy, params.m_safeVertDistance);
+	} else {
+	    dy = params.m_safeVertDistance;
+	}
     } else if (isStemmed && params.m_stemGoesUp) {
 	dy += stemLength;
     }
