@@ -505,6 +505,57 @@ void LatencyConfigurationPage::apply()
 }
 
 
+DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *doc,
+							     QWidget *parent,
+							     const char *name) :
+    TabbedConfigurationPage(doc, parent, name),
+    m_copyright(0)
+{
+    QFrame *frame = new QFrame(m_tabWidget);
+    QGridLayout *layout = new QGridLayout(frame, 4, 2,
+                                          10, 5);
+
+    layout->addWidget(new QLabel(i18n("Filename:"), frame), 0, 0);
+    layout->addWidget(new QLabel(doc->getTitle(), frame), 0, 1);
+
+    layout->addWidget(new QLabel(i18n("Duration:"), frame), 1, 0);
+    Rosegarden::timeT d = doc->getComposition().getDuration();
+    Rosegarden::RealTime rtd = doc->getComposition().getElapsedRealTime(d);
+    layout->addWidget
+	(new QLabel(i18n("%1 minutes %2.%3%4 seconds (%5 units, %6 bars)")
+		    .arg(rtd.sec / 60).arg(rtd.sec % 60)
+		    .arg(rtd.usec / 100000).arg((rtd.usec / 10000) % 10)
+		    .arg(d).arg(doc->getComposition().getBarNumber(d) + 1),
+		    frame), 1, 1);
+
+    layout->addWidget(new QLabel(i18n("Segments:"), frame), 2, 0);
+    layout->addWidget(new QLabel(QString("%1 on %2 tracks")
+				 .arg(doc->getComposition().getNbSegments())
+				 .arg(doc->getComposition().getNbTracks()),
+				 frame), 2, 1);
+
+    layout->addWidget(new QLabel(i18n("Copyright:"), frame), 3, 0);
+    m_copyright = new QLineEdit
+	(strtoqstr(doc->getComposition().getCopyrightNote()), frame);
+    m_copyright->setMinimumWidth(300);
+    layout->addWidget(m_copyright, 3, 1);
+    
+    addTab(frame, i18n("About"));
+}
+
+
+void
+DocumentMetaConfigurationPage::apply()
+{
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    QString copyright = m_copyright->text();
+    
+    if (!copyright.isNull()) {
+        comp.setCopyrightNote(qstrtostr(copyright));
+    }
+}
+
+
 AudioConfigurationPage::AudioConfigurationPage(RosegardenGUIDoc *doc,
                                                QWidget *parent,
                                                const char *name)
@@ -564,7 +615,7 @@ AudioConfigurationPage::apply()
     
     if (!newDir.isNull())
     {
-        afm.setAudioPath(std::string(newDir.latin1()));
+        afm.setAudioPath(qstrtostr(newDir));
     }
 }
 
@@ -668,6 +719,17 @@ DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
     QWidget *pageWidget = 0;
     QVBoxLayout *vlay = 0;
     ConfigurationPage* page = 0;
+
+    // Document Meta Page
+    //
+    pageWidget = addPage(DocumentMetaConfigurationPage::iconLabel(),
+                         DocumentMetaConfigurationPage::title(),
+                         loadIcon(DocumentMetaConfigurationPage::iconName()));
+    vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
+    page = new DocumentMetaConfigurationPage(doc, pageWidget);
+    vlay->addWidget(page);
+    page->setPageIndex(pageIndex(pageWidget));
+    m_configurationPages.push_back(page);
 
     // Audio Page
     //

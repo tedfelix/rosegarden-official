@@ -343,11 +343,18 @@ protected:
      */
     void plugAccelerators(QWidget *widget, QAccel *accel);
 
-    /*
+    /**
      * Create a new audio file for the sequencer and return the
      * path to it as a QString.
      */
     QString createNewAudioFile();
+
+    /**
+     * Ask the user for a file to save to, and check that it's
+     * good and that (if it exists) the user agrees to overwrite.
+     * Return a null string if the write should not go ahead.
+     */
+    QString getValidWriteFile(const QString &extension, const QString &label);
  
 public slots:
     /**

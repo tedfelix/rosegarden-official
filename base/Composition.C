@@ -890,6 +890,7 @@ std::string Composition::toXmlString()
         composition << "\" solo=\"" << m_solo;
 
     composition << "\" selected=\"" << m_selectedTrack;
+    composition << "\" copyright=\"" << encode(m_copyright);
 
     composition << "\">" << endl << endl;
 

@@ -131,7 +131,13 @@ Segment::getEndMarkerTime() const
 timeT
 Segment::getEndTime() const
 {
-    return m_endTime;
+    if (m_type == Audio) {
+	RealTime startRT = m_composition->getElapsedRealTime(m_startTime);
+	RealTime endRT = startRT - m_audioStartTime + m_audioEndTime;
+	return m_composition->getElapsedTimeForRealTime(endRT);
+    } else {
+	return m_endTime;
+    }
 }
 
 void
@@ -169,9 +175,7 @@ Segment::setStartTime(timeT t)
 void
 Segment::setEndMarkerTime(timeT t)
 {
-    timeT endTime = getEndTime();
     if (t < m_startTime) t = m_startTime;
-    bool shorten = (t < getEndMarkerTime());
 
     if (m_type == Audio) {
 	if (m_composition) {
@@ -179,6 +183,10 @@ Segment::setEndMarkerTime(timeT t)
 		m_composition->getRealTimeDifference(m_startTime, t);
 	}
     } else {
+
+	timeT endTime = getEndTime();
+	bool shorten = (t < getEndMarkerTime());
+
 	if (t > endTime) {
 	    fillWithRests(endTime, t);
 	} else {
@@ -186,11 +194,11 @@ Segment::setEndMarkerTime(timeT t)
 	    // deleting any actual events
 	    updateRefreshStatuses(t, endTime);
 	}
-    }
 
-    if (m_endMarkerTime) *m_endMarkerTime = t;
-    else m_endMarkerTime = new timeT(t);
-    if (m_type != Audio) notifyEndMarkerChange(shorten);
+	if (m_endMarkerTime) *m_endMarkerTime = t;
+	else m_endMarkerTime = new timeT(t);
+	if (m_type != Audio) notifyEndMarkerChange(shorten);
+    }
 }
 
 void

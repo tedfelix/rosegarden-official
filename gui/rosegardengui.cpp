@@ -1016,13 +1016,63 @@ void RosegardenGUIApp::slotFileSave()
 
     KTmpStatusMsg msg(i18n("Saving file..."), statusBar());
 
-    if (!m_doc->getAbsFilePath())
-       slotFileSaveAs();
-    else {
+    if (!m_doc->getAbsFilePath()) {
+	slotFileSaveAs();
+    } else {
 	SetWaitCursor waitCursor;
         m_doc->saveDocument(m_doc->getAbsFilePath());
     }
 }
+
+QString
+RosegardenGUIApp::getValidWriteFile(const QString &extension,
+				    const QString &label)
+{
+    QString name = KFileDialog::getSaveFileName
+	(QDir::currentDirPath(),
+	 (extension.isEmpty() ? QString("*") : ("*." + extension)), this,
+	 i18n(label));
+
+    if (name.isEmpty()) return name;
+
+    // Append extension if we don't have one
+    //
+    if (!extension.isEmpty()) {
+	QRegExp rgFile("\\." + extension + "$");
+	if (rgFile.match(name) == -1) {
+	    name += "." + extension;
+	}
+    }
+
+    KURL *u = new KURL(name);
+
+    if (u->isMalformed()) {
+        KMessageBox::sorry(this, i18n("This is not a valid filename.\n"));
+        return "";
+    }
+
+    if (!u->isLocalFile()) {
+        KMessageBox::sorry(this, i18n("This is not a local file.\n"));
+        return "";
+    }
+
+    QFileInfo info(name);
+
+    if (info.isDir()) {
+	KMessageBox::sorry(this, i18n("You have specified a directory"));
+	return "";
+    }
+
+    if (info.exists()) {
+	int overwrite = KMessageBox::questionYesNo
+	    (this, i18n("The specified file exists.  Overwrite?"));
+	
+	if (overwrite != KMessageBox::Yes) return "";
+    }
+
+    return name;
+}
+    
 
 void RosegardenGUIApp::slotFileSaveAs()
 {
@@ -1030,27 +1080,18 @@ void RosegardenGUIApp::slotFileSaveAs()
 
     KTmpStatusMsg msg(i18n("Saving file with a new filename..."), statusBar());
 
-    QString newName=KFileDialog::getSaveFileName(QDir::currentDirPath(),
-                                                 i18n("*.rg"), this, i18n("Save as..."));
-    if (!newName.isEmpty()) {
+    QString newName = getValidWriteFile("rg", "Save as...");
+    if (newName.isEmpty()) return;
 
-        // Append .rg extension if we don't have one
-        //
-        QRegExp rgFile("\\.rg$");
-        if (rgFile.match(newName) == -1) {
-            newName += ".rg";
-        }
-
-	SetWaitCursor waitCursor;
-        QFileInfo saveAsInfo(newName);
-        m_doc->setTitle(saveAsInfo.fileName());
-        m_doc->setAbsFilePath(saveAsInfo.absFilePath());
-        m_doc->saveDocument(newName);
-        m_fileRecent->addURL(newName);
-
-        QString caption=kapp->caption();	
-        setCaption(caption + ": " + m_doc->getTitle());
-    }
+    SetWaitCursor waitCursor;
+    QFileInfo saveAsInfo(newName);
+    m_doc->setTitle(saveAsInfo.fileName());
+    m_doc->setAbsFilePath(saveAsInfo.absFilePath());
+    m_doc->saveDocument(newName);
+    m_fileRecent->addURL(newName);
+    
+    QString caption = kapp->caption();	
+    setCaption(caption + ": " + m_doc->getTitle());
 }
 
 void RosegardenGUIApp::slotFileClose()
@@ -1062,9 +1103,7 @@ void RosegardenGUIApp::slotFileClose()
     KTmpStatusMsg msg(i18n("Closing file..."), statusBar());
 	
     m_doc->saveIfModified();
-
     m_doc->closeDocument();
-
     m_doc->newDocument();
 
     initView();
@@ -1743,51 +1782,10 @@ void RosegardenGUIApp::slotExportMIDI()
 {
     KTmpStatusMsg msg(i18n("Exporting to MIDI file..."), statusBar());
 
-    QString fileName=KFileDialog::getSaveFileName(QDir::currentDirPath(),
-                                                  i18n("*.mid"), this, i18n("Export as..."));
+    QString fileName = getValidWriteFile("mid", "Export as...");
+    if (fileName.isEmpty()) return;
 
-    if (fileName.isEmpty())
-      return;
-
-    // Add a .mid extension if we don't already have one
-    if (fileName.find(".mid", -4) == -1)
-      fileName += ".mid";
-
-    KURL *u = new KURL(fileName);
-
-    if (u->isMalformed())
-    {
-        KMessageBox::sorry(this, i18n("This is not a valid filename.\n"));
-        return;
-    }
-
-    if (!u->isLocalFile())
-    {
-        KMessageBox::sorry(this, i18n("This is not a local file.\n"));
-        return;
-    }
-
-    QFileInfo info(fileName);
-
-    if (info.isDir())
-    {
-        KMessageBox::sorry(this, i18n("You have specified a directory"));
-        return;
-    }
-
-    if (info.exists())
-    {
-        int overwrite = KMessageBox::questionYesNo(this,
-                               i18n("The specified file exists.  Overwrite?"));
-
-        if (overwrite != KMessageBox::Yes)
-         return;
-    }
-
-    // Go ahead and export the file
-    //
     exportMIDIFile(fileName);
-
 }
 
 void RosegardenGUIApp::exportMIDIFile(const QString &file)
@@ -1818,45 +1816,9 @@ void RosegardenGUIApp::slotExportCsound()
 {
     KTmpStatusMsg msg(i18n("Exporting to Csound scorefile..."), statusBar());
 
-    QString fileName=KFileDialog::getSaveFileName(QDir::currentDirPath(),
-                                                  i18n("*"), this, i18n("Export as..."));
+    QString fileName = getValidWriteFile("", "Export as...");
+    if (fileName.isEmpty()) return;
 
-    if (fileName.isEmpty())
-      return;
-
-    KURL *u = new KURL(fileName);
-
-    if (u->isMalformed())
-    {
-        KMessageBox::sorry(this, i18n("This is not a valid filename.\n"));
-        return;
-    }
-
-    if (!u->isLocalFile())
-    {
-        KMessageBox::sorry(this, i18n("This is not a local file.\n"));
-        return;
-    }
-
-    QFileInfo info(fileName);
-
-    if (info.isDir())
-    {
-        KMessageBox::sorry(this, i18n("You have specified a directory"));
-        return;
-    }
-
-    if (info.exists())
-    {
-        int overwrite = KMessageBox::questionYesNo(this,
-                               i18n("The specified file exists.  Overwrite?"));
-
-        if (overwrite != KMessageBox::Yes)
-         return;
-    }
-
-    // Go ahead and export the file
-    //
     exportCsoundFile(fileName);
 }
 
@@ -1874,45 +1836,9 @@ void RosegardenGUIApp::slotExportLilypond()
 {
     KTmpStatusMsg msg(i18n("Exporting to Lilypond file..."), statusBar());
 
-    QString fileName=KFileDialog::getSaveFileName(QDir::currentDirPath(),
-                                                  i18n("*.ly"), this, i18n("Export as..."));
+    QString fileName = getValidWriteFile("ly", "Export as...");
+    if (fileName.isEmpty()) return;
 
-    if (fileName.isEmpty())
-      return;
-
-    KURL *u = new KURL(fileName);
-
-    if (u->isMalformed())
-    {
-        KMessageBox::sorry(this, i18n("This is not a valid filename.\n"));
-        return;
-    }
-
-    if (!u->isLocalFile())
-    {
-        KMessageBox::sorry(this, i18n("This is not a local file.\n"));
-        return;
-    }
-
-    QFileInfo info(fileName);
-
-    if (info.isDir())
-    {
-        KMessageBox::sorry(this, i18n("You have specified a directory"));
-        return;
-    }
-
-    if (info.exists())
-    {
-        int overwrite = KMessageBox::questionYesNo(this,
-                               i18n("The specified file exists.  Overwrite?"));
-
-        if (overwrite != KMessageBox::Yes)
-         return;
-    }
-
-    // Go ahead and export the file
-    //
     exportLilypondFile(fileName);
 }
 

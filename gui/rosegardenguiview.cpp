@@ -163,7 +163,14 @@ void RosegardenGUIView::print(KPrinter *pPrinter, Composition* p)
     std::vector<Rosegarden::Segment *> segmentsToEdit;
 
     for (Composition::iterator i = p->begin(); i != p->end(); ++i) {
-        segmentsToEdit.push_back(*i);
+	if ((*i)->getType() != Rosegarden::Segment::Audio) {
+	    segmentsToEdit.push_back(*i);
+	}
+    }
+
+    if (segmentsToEdit.empty()) {
+	KMessageBox::sorry(this, i18n("No non-audio segments in composition"));
+	return;
     }
 
     NotationView *notationView =
@@ -211,15 +218,26 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
 	if (!p || (selection.find(p) != selection.end())) {
 	    for (Rosegarden::SegmentSelection::iterator i = selection.begin();
 		 i != selection.end(); ++i) {
-		segmentsToEdit.push_back(*i);
+		if ((*i)->getType() != Rosegarden::Segment::Audio) {
+		    segmentsToEdit.push_back(*i);
+		}
 	    }
 	} else {
-	    segmentsToEdit.push_back(p);
+	    if (p->getType() != Rosegarden::Segment::Audio) {
+		segmentsToEdit.push_back(p);
+	    }
 	}
 
     } else if (p) {
-	segmentsToEdit.push_back(p);
+	if (p->getType() != Rosegarden::Segment::Audio) {
+	    segmentsToEdit.push_back(p);
+	}
     } else {
+	return;
+    }
+
+    if (segmentsToEdit.empty()) {
+	KMessageBox::sorry(this, i18n("No non-audio segments selected"));
 	return;
     }
 

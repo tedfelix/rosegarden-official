@@ -224,6 +224,29 @@ protected:
 
 
 /**
+ * Document Meta-information page
+ *
+ * (document-wide settings)
+ */
+class DocumentMetaConfigurationPage : public TabbedConfigurationPage
+{
+    Q_OBJECT
+public:
+    DocumentMetaConfigurationPage(RosegardenGUIDoc *doc,
+				  QWidget *parent = 0, const char *name = 0);
+    virtual void apply();
+
+    static QString iconLabel() { return i18n("About"); }
+    static QString title() { return i18n("About"); }
+
+public slots:
+    
+protected:
+    QLineEdit *m_copyright;
+};
+
+
+/**
  * Audio Configuration page
  *
  * (document-wide settings)

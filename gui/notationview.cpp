@@ -1011,15 +1011,11 @@ void NotationView::initFontToolbar(int legatoUnit, bool multiStaff)
 	    foundFont = true;
         }
 
-#ifdef RGKDE3
+	//!!! is there a leak here if m_fontActions is a KList?
+	// need some setAutoDelete thing?
 	KAction *action = new KAction
 	    (fontQName, 0, this, SLOT(slotChangeFontFromAction()),
 	     actionCollection(), "note_font_" + fontQName);
-#else 
-	KAction action
-	    (fontQName, 0, this, SLOT(slotChangeFontFromAction()),
-	     actionCollection(), "note_font_" + fontQName);
-#endif
 	m_fontActions.append(action);
     }
 
@@ -1424,7 +1420,6 @@ void NotationView::refreshSegment(Segment *segment,
 	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 	    m_staffs[i]->setProgressDialog(m_progressDlg);
 	}
-	m_progressDlg->hide();
 	ownProgressDlg = true;
     }
 

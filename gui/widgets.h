@@ -147,14 +147,14 @@ class RosegardenProgressDialog : public QProgressDialog,
 public:
     RosegardenProgressDialog(QWidget * creator = 0,
                              const char * name = 0,
-                             bool modal = TRUE, // default TRUE
+                             bool modal = TRUE,
                              WFlags f = 0);
 
     RosegardenProgressDialog(const QString &labelText,
                              const QString &cancelButtonText,
                              int totalSteps,
                              QWidget *creator = 0,
-                             const char *name = 0, // default TRUE
+                             const char *name = 0,
                              bool modal = TRUE,
                              WFlags f = 0);
 

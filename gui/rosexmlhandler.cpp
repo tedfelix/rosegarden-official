@@ -319,6 +319,12 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
                 m_composition.setSolo(false);
         }
 
+	QString copyrightStr = atts.value("copyright");
+	if (copyrightStr)
+	{
+	    m_composition.setCopyrightNote(qstrtostr(copyrightStr));
+	}
+
     } else if (lcName == "track") {
 
         if (m_inComposition == false)

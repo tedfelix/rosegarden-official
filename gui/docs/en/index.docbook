@@ -141,7 +141,7 @@
 
 	All required libraries as well as
 	<application>Rosegarden</application> itself can be found on
-	<ulink url="ftp://ftp.kapp.org"> The
+	<ulink url="http://www.all-day-breakfast.com/rosegarden/"> The
 	<application>Rosegarden</application> home page</ulink>.
 
       </para>
@@ -176,7 +176,7 @@
 
   </chapter>
 
-  <chapter id="using-kapp">
+  <chapter id="using-rosegarden">
     <title>Using Rosegarden</title>
 
     <!-- This chapter should tell the user how to use your app. You
@@ -202,8 +202,8 @@
     </para>
 
 
-    <sect1 id="kapp-features">
-      <title>More Rosegarden features</title>
+    <sect1 id="rosegarden-features-overview">
+      <title>Features overview</title>
 
       <para>It slices! It dices! and it comes with a free toaster!</para>
       <para>
@@ -212,6 +212,59 @@
       </para>
 
     </sect1>
+
+    <sect1 id="basics">
+      <title>How Rosegarden stores a composition</title>
+      <para></para>
+    </sect1>
+
+    <sect1 id="segment-editor">
+      <title>The Segment editor</title>
+      <para></para>
+    </sect1>
+
+    <sect1 id="notation-editor">
+      <title>The Notation editor</title>
+
+      <sect2 id="note-styles">
+	<title>Note Styles</title>
+
+	<para>
+	  Rosegarden also allows you to change various aspects of the
+	  way the various types of notes are drawn, such as the choice
+	  of note heads, the number of tails, whether notes are filled
+	  or unfilled and so on.
+	</para>
+
+	<para>
+	  A set of standard styles (Classical, Cross, Triangle and
+	  Mensural) is provided, and you can change the style used for
+	  individual notes using the <!-- link
+	  linkend="commands-nv-menu-notes-notestyle" -->Note Style<!-- /link -->
+	  menu options.  Each note remembers which style has been
+	  chosen for it, and this information is saved as part of the
+	  composition.
+	</para>
+
+	<para>
+	  It is also possible to create your own note styles by
+	  describing them in XML files.  (Even the standard styles are
+	  defined this way: the only reason the editor knows that a
+	  Classical semiquaver has a tilted oval filled head, a stem,
+	  two flags, etc., is that the description in Classical.xml
+	  says so.)  See the <!-- link
+	  linkend="developers-note-styles" -->Developers Guide<!-- /link --> for
+	  more information.
+	</para>
+      </sect2>
+    </sect1>
+
+    <sect1 id="matrix-editor">
+      <title>The Matrix editor</title>
+      <para></para>
+    </sect1>
+
+
   </chapter>
 
   <chapter id="commands">
@@ -226,7 +279,7 @@
 
     <para></para>
 
-    <sect1 id="kapp-mainwindow">
+    <sect1 id="rosegarden-mainwindow">
       <title>The main Rosegarden window</title>
       <para></para>
 

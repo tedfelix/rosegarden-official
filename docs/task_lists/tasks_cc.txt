@@ -86,6 +86,9 @@ Post-0.1.5-and-a-bit task list
     as well as text (e.g. <crotchet> = 120) so it can convert qpms
     to bpms in non-4/4 timesigs
 
+17a. Add tempo ruler to main view -- should be easy, but a pain in
+    the arse to follow through all the widget/signal crap
+
 18. Move some of the esoteric vaguely notation-related methods from
     Segment to SegmentNotationHelper [DONE]
 
