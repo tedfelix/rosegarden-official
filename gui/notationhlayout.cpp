@@ -213,7 +213,12 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 	std::pair<timeT, timeT> barTimes =
 	    getComposition()->getBarRange(barNo);
 
-	if (barTimes.first >= segment.getEndMarkerTime()) break;
+	if (barTimes.first >= segment.getEndMarkerTime()) {
+	    // clear data if we have any old stuff
+	    BarDataList::iterator i(barList.find(barNo));
+	    if (i != barList.end()) { barList.erase(i); }
+	    continue; // so as to erase any further bars next time around
+	}
 
         NotationElementList::iterator from = 
 	    getStartOfQuantizedSlice(notes, barTimes.first);
