@@ -118,7 +118,7 @@ cvs tag <RELEASE_NAME> .
 
 Note that release names can't contain dots. For instance :
 
-cvs tag RELEASE_4_8_0 .
+cvs tag RELEASE_V4_R0_8 .
 
 
 6. Announce the release once the Tarball has become available

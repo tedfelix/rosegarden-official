@@ -44,6 +44,7 @@
       <li class="close">MIDI file I/O, <a href="http://www.lilypond.org/">Lilypond</a> and <a href="http://www.csounds.com/">Csound</a> export</li>
       <li class="close">Playback and recording using <a href="http://www.alsa-project.org/">ALSA</a> or <a href="http://www.arts-project.org/">aRts</a></li>
       <li class="close">Audio support using <a href="http://jackit.sourceforge.net/">JACK</a></li>
+      <li class="close">Audio plugin support using <a href="http:://www.ladspa.org"/>LADSPA</a></li>
       </ul>
       
       <p>Rosegarden-4 is free software for Unix and X.  It's a KDE
@@ -62,49 +63,39 @@
       for a free ticket</a> and come and say hello!</p>
 
       <h3 style="clear:all">Current Release</h3>
-      <p>The latest release of Rosegarden-4 is the rather
-      confusingly-numbered 0.2.0, released on 9 August 2002.
+      <p>The latest release of Rosegarden is Version 4, Release 0.8,
+      released on 4th October 2002.
     
-      <p>Changes since 0.1.6 include:</p>
+      <p>Changes since 0. include:</p>
 <ul>
-<li class="close">Multiple mono audio tracks supported through JACK with audio VU meters</li>
-<li class="close">Some significant improvements to notation layout of simple
-  contrapuntal staffs</li>
-<li class="close">WAV file loading/saving including BWF format peak files</li>
-<li class="close">Audio Manager dialog: sortable list of audio files in projects including
-  child segments</li>
-<li class="close">Configuration pane for notation editor</li>
-<li class="close">Audio VU meters including live preview of audio levels</li>
-<li class="close">"smooth-move" modifier (Shift) for matrix tools</li>
-<li class="close">Event list view with event type filtering and event editing</li>
-<li class="close">Support for PitchBends, Controller events, also better but not yet complete
-  support for System Exclusives, Pressure events.</li>
-<li class="close">Various new notation commands (Cut and Close, Untie Notes)</li>
-<li class="close">Sweep selection of Segments on main canvas</li>
-<li class="close">Sweep selection and multiple event movement on matrix view</li>
-<li class="close">Progress dialogs</li>
-<li class="close">Semi-automatic syncing of audio and MIDI using JACK latency sliders</li>
-<li class="close">Audio segment splitting, including auto splitting to a threshold</li>
-<li class="close">Event playback on selection movement in Notation and Matrix view</li>
-<li class="close">Track addition/deletion</li>
-<li class="close">Added tempo ruler to main window as well as notation window</li>
-<li class="close">Non-destructive Segment resize (through Segment end markers)</li>
-<li class="close">Rescale Segment command</li>
-<li class="close">Initial support for user-configurable notation styles, such
-  as different note head shapes and tail count.  Provided
-  a selection of default styles that can be applied in the
-  notation editor.  (No style editor yet, edit the XML files.)</li>
-<li class="close">Rather flaky support for grace notes</li>
-<li class="close">Text annotations in cute yellow boxes in notation</li>
-<li class="close">Slashes now available on note stems</li>
-<li class="close">Notation can now show notes that needed smoothing quantize
-  in another colour (namely, green)</li>
-<li class="close">FAQ and the beginnings of the first Help documentation</li>
-<li class="close">Set tempo event to length of segment</li>
-<li class="close">Audio visual preview - waveform shown on Segments </li>
-<li class="close">Incomplete support for BWF files</li>
-<li class="close">Build admin/ directories tidied.</li>
-<li class="close">Repeating Segments improved</li>
+<li class="close">Improved Notation Printing (draft quality)</li>
+<li class="close">realtime LADSPA plugin support (chainable plugins for each Instrument)</li>
+<li class="close">Note entry using the PC keyboard in notation view</li>
+<li class="close">Major Matrix view improvements (zooming, snapgrid size, quantizing)</li>
+<li class="close">Major Performance improvements in sequencer</li>
+<li class="close">"Stuck notes" problem fixed</li>
+<li class="close">Matrix velocity setting dialog</li>
+<li class="close">Segment positioning guides</li>
+<li class="close">Turn repeating Segments to real copies</li>
+<li class="close">Matrix view auto scrolling</li>
+<li class="close">Rudimentary lyric editor</li>
+<li class="close">Chorus, Reverb, Resonance, Filter, Attack, Release MIDI controls</li>
+<li class="close">Specialised Rotary Control widget</li>
+<li class="close">Repeating Segments work to end of Composition marker</li>
+<li class="close">Composition Start and End Markers can be changed</li>
+<li class="close">Splitting Segments fixed</li>
+<li class="close">Audio volume faders</li>
+<li class="close">EventList editor extended</li>
+<li class="close">Better Audio Waveform Previews</li>
+<li class="close">SysEx, Program Changes, Controller Changes, PitchBend all supported</li>
+<li class="close">and editeable at Composition level</li>
+<li class="close">Toolbars & Settings saving fixed</li>
+<li class="close">Some new useful keyboard shortcuts</li>
+<li class="close">Optional Transport toolbars</li>
+<li class="close">More preference settings</li>
+<li class="close">A couple of new note transformation functions</li>
+<li class="close">Some fixes to progress reporting</li>
+<li class="close">More help text for Notation</li>
 </ul>
 
       <p>Have a look
