@@ -48,6 +48,9 @@ Kevin Donnelly
 Didier Burli
     * French translation
 
+Daniele Medri
+    * Italian translation
+
 
 ##
 ## Names in there should also be credited in gui/main.cpp, with aboutData.addCredit()
