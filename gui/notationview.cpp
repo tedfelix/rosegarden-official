@@ -343,11 +343,11 @@ NotationView::showElements(NotationElementList::iterator from,
 
                 Note::Type note = (*it)->event()->get<Int>("Notation::NoteType");
                 bool dotted = (*it)->event()->get<Bool>("Notation::NoteDotted");
+
                 Accidental accident = NoAccidental;
 
                 long acc;
-                //!!! hmm
-                if ((*it)->event()->get<Int>("Notation::Accident", acc)) {
+                if ((*it)->event()->get<Int>("Notation::Accidental", acc)) {
                     accident = Accidental(acc);
                 }
 
@@ -442,8 +442,8 @@ NotationView::showBars(NotationElementList::iterator from,
 bool
 NotationView::applyLayout()
 {
-    bool rch = applyHorizontalLayout();
     bool rcv = applyVerticalLayout();
+    bool rch = applyHorizontalLayout();
 
     kdDebug(KDEBUG_AREA) << "NotationView::applyLayout() : done" << endl;
 
@@ -708,8 +708,8 @@ NotationView::insertNote(int pitch, const QPoint &eventPos)
 //                          << endl << *m_notationElements << endl;
 
 //!!!    (*m_vlayout)(newNotationElement);
-    applyHorizontalLayout(); // TODO : be more subtle than this
     applyVerticalLayout(); // TODO : be more subtle than this
+    applyHorizontalLayout(); // TODO : be more subtle than this
 
 //     kdDebug(KDEBUG_AREA) << "NotationView::insertNote() : Elements after relayout : "
 //                          << endl << *m_notationElements << endl;
