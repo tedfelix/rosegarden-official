@@ -57,6 +57,11 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
     //#define TEST_CANVAS
 #ifndef TEST_CANVAS
 
+    EventList &allEvents(getDocument()->getEvents());
+
+    m_notationElements = ViewElementsManager::notationElementList(allEvents.begin(),
+                                                                  allEvents.end());
+
     m_mainStaff->move(20, 15);
 
     m_vlayout = new NotationVLayout(*m_mainStaff);
@@ -67,9 +72,7 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
     if (!applyLayout()) {
 
         // Show all elements in the staff
-        EventList& elements(getDocument()->getElements());
-
-        showElements(elements.begin(), elements.end(), m_mainStaff);
+        showElements(m_notationElements->begin(), m_notationElements->end(), m_mainStaff);
 
     } else {
         KMessageBox::sorry(0, "Couldn't apply layout");
@@ -265,36 +268,36 @@ RosegardenGUIView::test()
 }
 
 bool
-RosegardenGUIView::showElements(EventList::iterator from,
-                                EventList::iterator to)
+RosegardenGUIView::showElements(NotationElementList::iterator from,
+                                NotationElementList::iterator to)
 {
     return showElements(from, to, 0, 0);
 }
 
 bool
-RosegardenGUIView::showElements(EventList::iterator from,
-                                EventList::iterator to,
+RosegardenGUIView::showElements(NotationElementList::iterator from,
+                                NotationElementList::iterator to,
                                 QCanvasItem *item)
 {
     return showElements(from, to, item->x(), item->y());
 }
 
 bool
-RosegardenGUIView::showElements(EventList::iterator from,
-                                EventList::iterator to,
+RosegardenGUIView::showElements(NotationElementList::iterator from,
+                                NotationElementList::iterator to,
                                 double dxoffset, double dyoffset)
 {
     static NotePixmapFactory npf(*m_mainStaff);
 
-    for(EventList::iterator it = from; it != to; ++it) {
+    for(NotationElementList::iterator it = from; it != to; ++it) {
         
-        Note note = Note((*it)->get<Int>("Notation::NoteType"));
+        Note note = Note((*it)->event()->get<Int>("Notation::NoteType"));
         
         QCanvasPixmap notePixmap(npf.makeNotePixmap(note, true, true));
         QCanvasSimpleSprite *noteSprite = new QCanvasSimpleSprite(&notePixmap,
                                                                   canvas());
-        noteSprite->move(dxoffset + (*it)->get<Int>("Notation::X"),
-                         dyoffset + (*it)->get<Int>("Notation::Y"));
+        noteSprite->move(dxoffset + (*it)->x(),
+                         dyoffset + (*it)->y());
         
     }
 
@@ -320,9 +323,7 @@ RosegardenGUIView::applyHorizontalLayout()
         return false;
     }
 
-    EventList& elements(getDocument()->getElements());
-    
-    for_each(elements.begin(), elements.end(), *m_hlayout);
+    for_each(m_notationElements->begin(), m_notationElements->end(), *m_hlayout);
     
     return m_hlayout->status();
 }
@@ -336,9 +337,7 @@ RosegardenGUIView::applyVerticalLayout()
         return false;
     }
 
-    EventList& elements(getDocument()->getElements());
-    
-    for_each(elements.begin(), elements.end(), *m_vlayout);
+    for_each(m_notationElements->begin(), m_notationElements->end(), *m_vlayout);
     
     return m_vlayout->status();
 }

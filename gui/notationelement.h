@@ -1,7 +1,7 @@
 /***************************************************************************
-                          notationvlayout.h  -  description
+                          notationelement.h  -  description
                              -------------------
-    begin                : Thu Aug 3 2000
+    begin                : Sun Sep 10 2000
     copyright            : (C) 2000 by Guillaume Laurent, Chris Cannam, Rich Bown
     email                : glaurent@telegraph-road.org, cannam@all-day-breakfast.com, bownie@bownie.com
  ***************************************************************************/
@@ -15,26 +15,31 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef NOTATIONVLAYOUT_H
-#define NOTATIONVLAYOUT_H
+#ifndef NOTATIONELEMENT_H
+#define NOTATIONELEMENT_H
 
-#include "layoutengine.h"
-#include "staff.h"
-#include "notationelement.h"
+#include "Element2.h"
 
 /**
   *@author Guillaume Laurent, Chris Cannam, Rich Bown
   */
 
-class NotationVLayout : public NotationLayout
+class NotationElement : public ViewElement
 {
-public:
-    NotationVLayout(Staff&);
+public: 
+    NotationElement(Event *event);
+
+    ~NotationElement();
+
+    double x() { return m_x; }
+    double y() { return m_y; }
+
+    void setX(double x) { m_x = x; }
+    void setY(double y) { m_y = y; }
 
 protected:
-    virtual void layout(NotationElement*);
-
-    Staff &m_staff;
+    double m_x;
+    double m_y;
 };
 
 #endif

@@ -1,7 +1,7 @@
 /***************************************************************************
-                          notationvlayout.h  -  description
+                          viewelementsmanager.h  -  description
                              -------------------
-    begin                : Thu Aug 3 2000
+    begin                : Sun Sep 10 2000
     copyright            : (C) 2000 by Guillaume Laurent, Chris Cannam, Rich Bown
     email                : glaurent@telegraph-road.org, cannam@all-day-breakfast.com, bownie@bownie.com
  ***************************************************************************/
@@ -15,26 +15,28 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef NOTATIONVLAYOUT_H
-#define NOTATIONVLAYOUT_H
+#ifndef VIEWELEMENTSMANAGER_H
+#define VIEWELEMENTSMANAGER_H
 
-#include "layoutengine.h"
-#include "staff.h"
-#include "notationelement.h"
+#include "Element2.h"
+
+class NotationElement;
+
+typedef list<NotationElement*> NotationElementList;
 
 /**
   *@author Guillaume Laurent, Chris Cannam, Rich Bown
   */
 
-class NotationVLayout : public NotationLayout
+class ViewElementsManager
 {
-public:
-    NotationVLayout(Staff&);
+public: 
+    ViewElementsManager();
+    ~ViewElementsManager();
 
-protected:
-    virtual void layout(NotationElement*);
-
-    Staff &m_staff;
+    static NotationElementList* notationElementList(EventList::iterator from,
+                                                    EventList::iterator to);
+    
 };
 
 #endif

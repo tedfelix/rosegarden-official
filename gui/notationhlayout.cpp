@@ -38,19 +38,19 @@ NotationHLayout::NotationHLayout(unsigned int barWidth,
 }
 
 void
-NotationHLayout::layout(Event *el)
+NotationHLayout::layout(NotationElement *el)
 {
     // if (el) is time sig change, reflect that
 
     // kdDebug(KDEBUG_AREA) << "Layout" << endl;
 
-    m_quantizer.quantize( el );
+    m_quantizer.quantize(el->event());
 
     // kdDebug(KDEBUG_AREA) << "Quantized" << endl;
 
     // Add note to current bar
     m_previousNbTimeUnitsInCurrentBar = m_nbTimeUnitsInCurrentBar;
-    m_nbTimeUnitsInCurrentBar += el->get<Int>("QuantizedDuration");
+    m_nbTimeUnitsInCurrentBar += el->event()->get<Int>("QuantizedDuration");
 
     // kdDebug(KDEBUG_AREA) << "m_nbTimeUnitsInCurrentBar : " << m_nbTimeUnitsInCurrentBar << endl;
 
@@ -64,9 +64,9 @@ NotationHLayout::layout(Event *el)
     }    
 
     kdDebug(KDEBUG_AREA) << "set to m_currentPos = " << m_currentPos << endl;
-    el->set<Int>("Notation::X", m_currentPos);
+    el->setX(m_currentPos);
 
-    Note note = Note(el->get<Int>("Notation::NoteType")); // check the property is here ?
+    Note note = Note(el->event()->get<Int>("Notation::NoteType")); // check the property is here ?
 
     // Move current pos to next note
     m_currentPos += m_noteWidthMap[note] + Staff::noteWidth + m_noteMargin;
@@ -95,47 +95,31 @@ NotationHLayout::initNoteWidthTable(void)
 
 }
 
-const vector<unsigned int>&
-NotationHLayout::splitNote(unsigned int noteLen)
-{
-    static vector<unsigned int> notes;
+// const vector<unsigned int>&
+// NotationHLayout::splitNote(unsigned int noteLen)
+// {
+//     static vector<unsigned int> notes;
 
-    notes.clear();
+//     notes.clear();
 
-    unsigned int timeUnitsLeftInThisBar = m_timeUnitsPerBar - m_previousNbTimeUnitsInCurrentBar,
-        timeUnitsLeftInNote = m_nbTimeUnitsInCurrentBar - m_timeUnitsPerBar;
+//     unsigned int timeUnitsLeftInThisBar = m_timeUnitsPerBar - m_previousNbTimeUnitsInCurrentBar,
+//         timeUnitsLeftInNote = m_nbTimeUnitsInCurrentBar - m_timeUnitsPerBar;
 
-    unsigned int nbWholeNotes = timeUnitsLeftInNote / m_quantizer.wholeNoteDuration();
+//     unsigned int nbWholeNotes = timeUnitsLeftInNote / m_quantizer.wholeNoteDuration();
     
-    // beginning of the note - what fills up the bar
-    notes.push_back(timeUnitsLeftInThisBar);
+//     // beginning of the note - what fills up the bar
+//     notes.push_back(timeUnitsLeftInThisBar);
 
-    // the whole notes (if any)
-    for (unsigned int i = 0; i < nbWholeNotes; ++i) {
-        notes.push_back(Whole);
-        timeUnitsLeftInNote -= m_timeUnitsPerBar;
-    }
-    
-    notes.push_back(timeUnitsLeftInNote);
-
-    m_nbTimeUnitsInCurrentBar = timeUnitsLeftInNote;
-
-    return notes;
-    
-//     $nbBeatsInThisBar = $nbBeatsPerBar - $previousNbBeats;
-//     $beatsLeftInNote =  $nbBeats - $nbBeatsPerBar;
-
-//     print "$nbBeatsInThisBar | ";
-
-//     $nbWholeNotes = $beatsLeftInNote / $nbBeatsPerBar;
-//     # print "\n nbWholeNotes : $nbWholeNotes\n";
-
-//     for ($i = 0; $i < $nbWholeNotes; ++$i) {
-//       print "$nbBeatsPerBar | ";
-//       $beatsLeftInNote -= $nbBeatsPerBar;
+//     // the whole notes (if any)
+//     for (unsigned int i = 0; i < nbWholeNotes; ++i) {
+//         notes.push_back(Whole);
+//         timeUnitsLeftInNote -= m_timeUnitsPerBar;
 //     }
-
-//     print "$beatsLeftInNote ";
-//     $nbBeats = $beatsLeftInNote;
     
-}
+//     notes.push_back(timeUnitsLeftInNote);
+
+//     m_nbTimeUnitsInCurrentBar = timeUnitsLeftInNote;
+
+//     return notes;
+    
+// }

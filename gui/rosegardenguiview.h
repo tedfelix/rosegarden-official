@@ -25,6 +25,7 @@
 // include files for Qt
 #include <qcanvas.h>
 
+#include "viewelementsmanager.h"
 #include "notationhlayout.h"
 #include "notationvlayout.h"
 #include "rosedebug.h"
@@ -63,17 +64,17 @@ class RosegardenGUIView : public QCanvasView
     void print(QPrinter *pPrinter);
 
     /// draw all elements
-    virtual bool showElements(EventList::iterator from,
-                              EventList::iterator to);
+    virtual bool showElements(NotationElementList::iterator from,
+                              NotationElementList::iterator to);
 
     /// same, with dx,dy offset
-    virtual bool showElements(EventList::iterator from,
-                              EventList::iterator to,
+    virtual bool showElements(NotationElementList::iterator from,
+                              NotationElementList::iterator to,
                               double dxoffset, double dyoffset);
 
     /// same, relative to the specified item
-    virtual bool showElements(EventList::iterator from,
-                              EventList::iterator to,
+    virtual bool showElements(NotationElementList::iterator from,
+                              NotationElementList::iterator to,
                               QCanvasItem*);
 
     /// Normally calls applyHorizontalLayout() then applyVerticalLayout()
@@ -104,6 +105,8 @@ protected:
     void test();
 
     Staff *m_mainStaff;
+
+    NotationElementList *m_notationElements;
     
     QCanvasItem *m_movingItem;
     bool m_draggingItem;

@@ -20,12 +20,14 @@
 
 #include "layoutengine.h"
 #include "quantizer.h"
+#include "notationelement.h"
 
 /**
   *@author Guillaume Laurent, Chris Cannam, Rich Bown
   */
 
-class NotationHLayout : public LayoutEngine  {
+class NotationHLayout : public NotationLayout
+{
 public:
     /**
      * Create a new NotationHLayout object.
@@ -41,9 +43,9 @@ protected:
     /**
      * Breaks down a note which doesn't fit in a bar into shorter notes
      */
-    const vector<unsigned int>& splitNote(unsigned int noteLen);
+    //     const vector<unsigned int>& splitNote(unsigned int noteLen);
 
-    virtual void layout(Event*);
+    virtual void layout(NotationElement*);
 
     void initNoteWidthTable();
 
