@@ -101,7 +101,6 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
     
     kdDebug(KDEBUG_AREA) << "mousepress : m_currentHighlightedLine != 0 - inserting note - staff pitch : "
                          << "(no longer relevant)" << endl;
-    //!!!                             << m_currentHighlightedLine->associatedPitch() << endl;
 
     // Check if we haven't actually clicked on a sprite
     //
@@ -191,19 +190,6 @@ NotationCanvasView::posIsTooFarFromStaff(const QPoint &pos)
         (m_lastYPosNearStaff - pos.y()) > 10;
     
 }
-/*!
-int
-NotationCanvasView::getPitchForLine(const StaffLine *line)
-{
-    int h = line->getHeight();
-
-    //!!! TODO -- take clef & key into account, and then accidental
-    int pitch = NotationDisplayPitch(h, NoAccidental).
-        getPerformancePitch(Clef::DefaultClef, ::Key::DefaultKey);
-
-    return pitch;
-}
-*/
 
 //??? ew... can't be doing this here can we? don't have the right info
 //using Rosegarden;

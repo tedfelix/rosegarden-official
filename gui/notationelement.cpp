@@ -160,7 +160,7 @@ NotationElementList::iterator
 NotationElementList::findPrevious(const std::string &type, iterator i)
 
 {
-    //!!! what to return on failure? I think probably
+    // what to return on failure? I think probably
     // end(), as begin() could be a success case
     if (i == begin()) return end();
     --i;

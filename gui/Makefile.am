@@ -30,7 +30,7 @@ rosegardengui_SOURCES = trackscanvas.cpp \
 			rosegardenguiiface.skel \
 			trackseditoriface.skel
 
-rosegardengui_LDADD   = -lcore -lqt -lkfile -lkdeui -lkdecore -lXext -lX11 $(LIBSOCKET) -lRosegardenSound
+rosegardengui_LDADD   = -lRosegardenSound -lcore -lqt -lkfile -lkdeui -lkdecore -lXext -lX11 $(LIBSOCKET)
 
 SUBDIRS = docs
 

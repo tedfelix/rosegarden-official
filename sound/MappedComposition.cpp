@@ -21,6 +21,7 @@
 #include <qdatastream.h>
 #include "MappedComposition.h"
 #include "MappedEvent.h"
+#include "TrackPerformanceHelper.h"
 #include <iostream>
 
 namespace Rosegarden
@@ -60,6 +61,8 @@ MappedComposition::MappedComposition(Rosegarden::Composition &comp,
     if ( (*i)->getStartIndex() >= int(_endTime) )
       continue;
 
+    TrackPerformanceHelper helper(**i);
+
     for ( Track::iterator j = (*i)->begin(); j != (*i)->end(); j++ )
     {
       // for the moment ensure we're all positive
@@ -71,6 +74,14 @@ MappedComposition::MappedComposition(Rosegarden::Composition &comp,
       if (!(*j)->has("pitch"))
         continue;
 
+      // Find the performance duration, i.e. taking into account any
+      // ties etc that this note may have  --cc
+      // 
+      timeT duration = helper.getSoundingDuration(j);
+
+      if (duration == 0) // probably in a tied series, but not as first note
+        continue;
+
       // get the eventTime
       eventTime = (unsigned int) (*j)->getAbsoluteTime();
 
@@ -78,7 +89,7 @@ MappedComposition::MappedComposition(Rosegarden::Composition &comp,
       if ( eventTime >= _startTime && eventTime <= _endTime )
       {
         // insert event
-        MappedEvent *me = new MappedEvent(**j);
+        MappedEvent *me = new MappedEvent(**j, duration);
         me->setInstrument((*i)->getInstrument());
         this->insert(me);
       }

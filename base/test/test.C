@@ -10,6 +10,8 @@
 
 #ifdef TEST_NOTATION_TYPES
 #include "NotationTypes.h"
+#include "TrackNotationHelper.h"
+#include "TrackPerformanceHelper.h"
 #endif
 
 #include <cstdio>
@@ -208,7 +210,6 @@ int main(int argc, char **argv)
         cout << "Event: 100 copy ctors of " << e1.getStorageSize() << "-byte element: "
              << (et-st)*10 << "ms\n";
 
-        return 0;
 #else
         cout << "Skipping test speed of Event\n";
 #endif // TEST_SPEED
@@ -324,13 +325,16 @@ int main(int argc, char **argv)
         cout << "Testing Track::expandIntoTie() - expanding 384 -> 2*192\n";
 
         Track t;
+        TrackNotationHelper nh(t);
+        TrackPerformanceHelper ph(t);
 
         Event *ev = new Event("note");
         ev->setAbsoluteTime(0);
         ev->setDuration(384);
+        ev->set<Int>("pitch", 60);
         t.insert(ev);
 
-        t.expandIntoTie(t.begin(), 384/2);
+        nh.expandIntoTie(t.begin(), 384/2);
 
         for(Track::iterator i = t.begin(); i != t.end(); ++i) {
                 cout << "Event at " << (*i)->getAbsoluteTime()
@@ -342,7 +346,7 @@ int main(int argc, char **argv)
         
         cout << "Expanding 192 -> (48 + 144) : \n";
 
-        t.expandIntoTie(t.begin(), 48);
+        nh.expandIntoTie(t.begin(), 48);
 
         for(Track::iterator i = t.begin(); i != t.end(); ++i) {
                 cout << "Event at " << (*i)->getAbsoluteTime()
@@ -352,13 +356,16 @@ int main(int argc, char **argv)
         
         cout << "Expanding 192 -> (144 + 48) : \n";
 
-        t.expandIntoTie(half2, 144);
+        nh.expandIntoTie(half2, 144);
+
 
         for(Track::iterator i = t.begin(); i != t.end(); ++i) {
                 cout << "Event at " << (*i)->getAbsoluteTime()
                      << " - duration : " << (*i)->getDuration()
-                     << endl;
+                     << " - performance duration : " <<
+                    ph.getSoundingDuration(i) << endl;
         }
+
 #endif // TEST_NOTATION_TYPES
 };
 

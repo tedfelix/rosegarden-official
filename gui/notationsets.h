@@ -142,7 +142,7 @@ private:
 
 
 
-// Several sorts of "Beamed Group"
+/// Several sorts of "Beamed Group"
 
 class NotationGroup : public NotationSet
 {

@@ -46,6 +46,12 @@ public:
 
   // Our main constructor used to convert from the Track Events
   //
+  MappedEvent(const Event &e, timeT duration):
+                               _pitch(e.get<Int>("pitch")),
+                               _absoluteTime(e.getAbsoluteTime()),
+                               _duration(duration),
+                               _velocity(127) {;}
+
   MappedEvent(const Event &e): _pitch(e.get<Int>("pitch")),
                                _absoluteTime(e.getAbsoluteTime()),
                                _duration(e.getDuration()),

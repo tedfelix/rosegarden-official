@@ -47,6 +47,10 @@ public:
      * 
      * If the note is not tied, or if i does not point to a note
      * event, this will just return the duration of the event at i.
+     *
+     * This method may return an incorrect duration for any note
+     * event that is tied but lacks a pitch property.  This is
+     * expected behaviour; don't create tied notes without pitches.
      */
 
     //!!! Not tested yet

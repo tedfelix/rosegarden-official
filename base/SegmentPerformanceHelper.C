@@ -26,6 +26,7 @@ timeT TrackPerformanceHelper::getSoundingDuration(iterator i)
     else if (!tiedForward) return d;
 
     timeT t = e->getAbsoluteTime();
+    if (!e->has("pitch")) return d;
     int pitch = e->get<Int>("pitch");
 
     for (;;) {
@@ -35,13 +36,14 @@ timeT TrackPerformanceHelper::getSoundingDuration(iterator i)
         timeT t2 = e->getAbsoluteTime();
         
         if (t2 > t + d) break;
-        else if (t2 < t + d || e->get<Int>("pitch") != pitch) continue;
+        else if (t2 < t + d || !e->has("pitch") ||
+                 e->get<Int>("pitch") != pitch) continue;
 
         if (!e->get<Bool>(Note::TiedBackwardPropertyName, tiedBack) ||
             !tiedBack) break;
 
         d += e->getDuration();
-        if (!e->get<Bool>(Note:: TiedForwardPropertyName, tiedForward) ||
+        if (!e->get<Bool>(Note::TiedForwardPropertyName, tiedForward) ||
             !tiedForward) return d;
     }
 

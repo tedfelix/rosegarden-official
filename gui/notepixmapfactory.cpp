@@ -61,7 +61,7 @@ NotePixmapOffsets::offsetsFor(Note::Type note,
     m_drawTail = drawTail;
     m_stalkGoesUp = stalkGoesUp;
     m_dots = dots;
-    m_noteHasStalk = note < Note::WholeNote; //!!!
+    m_noteHasStalk = Note(note).isStalked();
 
     m_bodyOffset.setX(0);     m_bodyOffset.setY(0);
     m_hotSpot.setX(0);        m_hotSpot.setY(0);
@@ -415,19 +415,19 @@ NotePixmapFactory::makeNotePixmap(Note::Type note,
 
         if (note < Note::QuarterNote) {
 
-            //!!! highly dubious, and incorrect for different resolutions
+            int nbh = getNoteBodyHeight();
 	
             // readjust pixmap height according to its duration - the stalk
             // is longer for 8th, 16th, etc.. because the tail is higher
             //
             if (note == Note::EighthNote)
-                stalkLength += 1;
+                stalkLength += nbh / 8;
             else if (note == Note::SixteenthNote)
-                stalkLength += 4;
+                stalkLength += nbh / 2;
             else if (note == Note::ThirtySecondNote)
-                stalkLength += 9;
+                stalkLength += nbh + nbh / 8;
             else if (note == Note::SixtyFourthNote)
-                stalkLength += 14;
+                stalkLength += nbh * 2 - nbh / 4;
         }
     }
 

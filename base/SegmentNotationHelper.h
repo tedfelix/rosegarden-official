@@ -47,12 +47,6 @@ public:
      * of duration a+b into two events of durations a and b, for some
      * working definition of "reasonable".
      *
-     * Currently "reasonable" is: given D = max(a, b) and d = min(b, a)
-     * one of the following is true :
-     * D = 2*d
-     * D = 4*d
-     * D = 4*d/3 
-     *
      * You should pass note-quantized durations into this method
      */
     bool isExpandValid(timeT a, timeT b);
@@ -247,6 +241,9 @@ private:
     iterator insertSingleSomething(iterator position, int duration, int pitch,
 				   bool isRest, bool tiedBack, Accidental);
 
+    /// for use by insertSingleSomething
+    void setInsertedNoteGroup(Event *e, iterator i);
+
     /// for use by autoBeam
 
     void autoBeamBar(iterator from, iterator to, TimeSignature timesig,
@@ -254,10 +251,6 @@ private:
 
     void autoBeamBar(iterator from, iterator to, timeT average,
                      timeT minimum, timeT maximum, std::string type);
-
-    void autoBeamAuxOld(iterator from, iterator to, timeT average,
-                     timeT minimum, timeT maximum, TimeSignature timesig,
-                     std::string type);
 
     /// used by autoBeamAux (duplicate of private method in Track)
     bool hasEffectiveDuration(iterator i);

@@ -39,16 +39,7 @@ bool TrackNotationHelper::collapse(Event* e, bool& collapseForward)
         // collapse with next event
         e->setDuration(e->getDuration() + (*nextEvent)->getDuration());
 
-
-	//!!! no, absolutely not -- we should re-quantize
-/*
-        Note n = Note::getNearestNote(e->getDuration());
-        
-        e->set<Int>(Note::NoteType, n.getNoteType());
-        e->set<Int>(Note::NoteDots, n.getDots());
-*/
         quantizer().unquantize(e);
-
 
         success = true;
         collapseForward = true;
@@ -64,17 +55,7 @@ bool TrackNotationHelper::collapse(Event* e, bool& collapseForward)
         (*previousEvent)->setDuration(e->getDuration() +
                                       (*previousEvent)->getDuration());
 
-
-
-	//!!! no, absolutely not -- we should re-quantize
-/*
-        Note n = Note::getNearestNote((*previousEvent)->getDuration());
-        
-        (*previousEvent)->set<Int>(Note::NoteType, n.getNoteType());
-        (*previousEvent)->set<Int>(Note::NoteDots, n.getDots());
-*/
         quantizer().unquantize(*previousEvent);
-
 
         success = true;
         collapseForward = false;
@@ -85,46 +66,16 @@ bool TrackNotationHelper::collapse(Event* e, bool& collapseForward)
     return success;
 }
 
-//!!! I don't quite understand the logic here.  we can't for example
-//collapse a dotted crotchet rest with a dotted minim rest (total
-//duration: two minims and one quaver), but this method thinks we can.
-//better to add the quantized durations and see if the closest
-//possible note has the same duration as we have
 
 bool TrackNotationHelper::isCollapseValid(timeT a, timeT b)
 {
-    // experimental:
     return (isViable(a + b));
-
-/*
-    timeT durationMax = std::max(a, b);
-    timeT durationMin = std::min(a, b);
-
-    return ((durationMax == durationMin) ||
-            (durationMax == (2 * durationMin)));
-*/
-    // TODO : and some test on not fucking up bar count
 }
 
 
-//!!! Not sufficient -- doesn't work for dotted notes (where splitting
-//e.g. a dotted crotchet into a crotchet and a quaver is fine) --
-//should just check that both durations correspond to decent note
-//lengths?  This needs to be relatively permissive, as it's making
-//decisions about what notes to allow the user to enter
-
 bool TrackNotationHelper::isExpandValid(timeT a, timeT b)
 {
-    // experimental:
     return (isViable(a) && isViable(b));
-
-/*
-    timeT maxDuration = std::max(a, b);
-    timeT minDuration = std::min(a, b);
-    return ((maxDuration == (2 * minDuration)) ||
-            (maxDuration == (4 * minDuration)) ||
-            (maxDuration == (4 * minDuration / 3)));
-*/
 }
 
 
@@ -138,17 +89,11 @@ Track::iterator TrackNotationHelper::expandIntoTie(iterator i, timeT baseDuratio
 
 Track::iterator TrackNotationHelper::expandIntoTie(iterator from, iterator to, timeT baseDuration)
 {
-    cerr << "TrackNotationHelper::expandIntoTie(" << baseDuration << ")\n";
-
-
-    //!!! not getDuration, and where does baseDuration come from --
-    //same quantization problem?
-
-    // actually no, this could be okay -- so long as we do the
-    // quantization checks for validity before calling this method, we
-    // should be fine splitting precise times in this method. only
-    // problem is deciding not to split something if its duration is
-    // very close to requested duration
+    // so long as we do the quantization checks for validity before
+    // calling this method, we should be fine splitting precise times
+    // in this method. only problem is deciding not to split something
+    // if its duration is very close to requested duration, but that's
+    // probably not a task for this function
 
     timeT eventDuration = (*from)->getDuration();
     timeT baseTime = (*from)->getAbsoluteTime();
@@ -246,28 +191,8 @@ Track::iterator TrackNotationHelper::expandIntoTie(iterator from, iterator to, t
     return last;
 }
 
-Track::iterator TrackNotationHelper::collapseRestsForInsert(iterator i,
-					      timeT desiredDuration)
-{
-    // collapse at most once, then recurse
-
-    if (i == end() || !(*i)->isa(Note::EventRestType)) return i;
-
-    timeT d = (*i)->getDuration();
-    iterator j = track().findContiguousNext(i);
-    if (d >= desiredDuration || j == end()) return ++i;
-
-    (*i)->setDuration(d + (*j)->getDuration());
-    quantizer().unquantize(*i);
-    erase(j);
-
-    return collapseRestsForInsert(i, desiredDuration);
-}
-
-
 bool TrackNotationHelper::isViable(timeT duration, int dots)
 {
-    cerr << "TrackNotationHelper::isViable: timeT " << duration << ", dots " << dots << endl;
     bool viable;
     duration = quantizer().quantizeByUnit(duration);
 
@@ -277,7 +202,6 @@ bool TrackNotationHelper::isViable(timeT duration, int dots)
         viable = (duration == quantizer().quantizeByNote(duration));
     }
 
-    cerr << "TrackNotationHelper::isViable: returning " << viable << endl;
     return viable;
 }
 
@@ -371,59 +295,17 @@ void TrackNotationHelper::insertNote(timeT absoluteTime, Note note, int pitch,
                                      Accidental explicitAccidental)
 {
 
-    // Rules:
-    // 
-    // 1. If we hit a bar line in the course of the intended inserted
-    // note, we should split the note rather than make the bar the
-    // wrong length.  (Not implemented yet)
-    //
-    // 2. If there's nothing at the insertion point but rests (and
-    // enough of them to cover the entire duration of the new note),
-    // then we should insert the new note literally and remove rests
-    // as appropriate.  Rests should never prevent us from inserting
-    // what the user asked for.
-    // 
-    // 3. If there are notes in the way, however, we split whenever
-    // "reasonable" and truncate our user's not if not reasonable to
-    // split.  We can't always give users the Right Thing here, so
-    // to hell with them.
-    
-    // Procedure:
-    // 
-    // First, if there is a rest at the insertion position, merge it
-    // with any following rests, if available, until we have at least
-    // the duration of the new note.  Then:
-    // 
-    // 1. If the new note is the same length as an existing note or
-    // rest at that position, chord the existing note or delete the
-    // existing rest and insert.
-    // 
-    // 2. If the new note is shorter than an existing note or rest,
-    // split the existing one and chord or replace the first part.
-    // 
-    // 3. If the new note is longer, split the new note so that the
-    // first part is the same duration as the existing note or rest,
-    // and recurse (to step 1) with both the first and the second part
-    // in turn.
-
-    // 4. Then we somehow need to recover correctness for the
-    // second half of any split note or rest...
-
     //!!! Handle grouping!  (Inserting into the middle of an existing
     // group -- take a cue from NotationView::setupGroup)
 
-    //!!! Put these comments in the right bit of the code!
-    
-    //!!! Deal with end-of-bar issues!
 
     //... 
 
     iterator i, j;
     track().getTimeSlice(absoluteTime, i, j);
 
-    int barNo = track().getBarNumber(i);
-
-//    iterator uncollapsed = collapseRestsForInsert(i, note.getDuration());
+    //!!! Deal with end-of-bar issues!
+//    int barNo = track().getBarNumber(i);
 
     insertSomething(i, note.getDuration(), pitch, false, false,
                     explicitAccidental);
@@ -452,11 +334,29 @@ void TrackNotationHelper::insertRest(timeT absoluteTime, Note note)
     iterator i, j;
     track().getTimeSlice(absoluteTime, i, j);
 
-    int barNo = track().getBarNumber(i);
-
-//    iterator uncollapsed = collapseRestsForInsert(i, note.getDuration());
+    //!!! Deal with end-of-bar issues!
+//    int barNo = track().getBarNumber(i);
 
     insertSomething(i, note.getDuration(), 0, true, false, NoAccidental);
+}
+
+
+Track::iterator TrackNotationHelper::collapseRestsForInsert(iterator i,
+					      timeT desiredDuration)
+{
+    // collapse at most once, then recurse
+
+    if (i == end() || !(*i)->isa(Note::EventRestType)) return i;
+
+    timeT d = (*i)->getDuration();
+    iterator j = track().findContiguousNext(i);
+    if (d >= desiredDuration || j == end()) return ++i;
+
+    (*i)->setDuration(d + (*j)->getDuration());
+    quantizer().unquantize(*i);
+    erase(j);
+
+    return collapseRestsForInsert(i, desiredDuration);
 }
 
 
@@ -464,6 +364,23 @@ void TrackNotationHelper::insertSomething(iterator i, int duration, int pitch,
                                           bool isRest, bool tiedBack,
                                           Accidental acc)
 {
+    // Rules:
+    // 
+    // 1. If we hit a bar line in the course of the intended inserted
+    // note, we should split the note rather than make the bar the
+    // wrong length.  (Not implemented yet)
+    //
+    // 2. If there's nothing at the insertion point but rests (and
+    // enough of them to cover the entire duration of the new note),
+    // then we should insert the new note/rest literally and remove
+    // rests as appropriate.  Rests should never prevent us from
+    // inserting what the user asked for.
+    // 
+    // 3. If there are notes in the way of an inserted note, however,
+    // we split whenever "reasonable" and truncate our user's not if
+    // not reasonable to split.  We can't always give users the Right
+    // Thing here, so to hell with them.
+
     while (i != end() && (*i)->getDuration() == 0) ++i;
 
     if (i == end()) {
@@ -471,7 +388,11 @@ void TrackNotationHelper::insertSomething(iterator i, int duration, int pitch,
 	return;
     }
 
+    // If there's a rest at the insertion position, merge it with any
+    // following rests, if available, until we have at least the
+    // duration of the new note.
     collapseRestsForInsert(i, duration);
+
     timeT existingDuration = (*i)->getDuration();
 
     cerr << "TrackNotationHelper::insertSomething: asked to insert duration " << duration
@@ -480,17 +401,23 @@ void TrackNotationHelper::insertSomething(iterator i, int duration, int pitch,
 
     if (duration == existingDuration) {
 
+        // 1. If the new note or rest is the same length as an
+        // existing note or rest at that position, chord the existing
+        // note or delete the existing rest and insert.
+
 	cerr << "Durations match; doing simple insert" << endl;
 
 	insertSingleSomething(i, duration, pitch, isRest, tiedBack, acc);
 
     } else if (duration < existingDuration) {
 
+        // 2. If the new note or rest is shorter than an existing one,
+        // split the existing one and chord or replace the first part.
+
 	if ((*i)->isa(Note::EventType)) {
 
-            //!!! should be quantized durations
-
-	    if (!isExpandValid((*i)->getDuration(), duration)) {
+	    if (!isExpandValid(quantizer().getNoteQuantizedDuration(*i),
+                               duration)) {
 
 		cerr << "Bad split, coercing new note" << endl;
 
@@ -506,6 +433,8 @@ void TrackNotationHelper::insertSomething(iterator i, int duration, int pitch,
 	    cerr << "Found rest, splitting" << endl;
 	    iterator last = expandIntoTie(i, duration);
 
+            // Recover viability for the second half of any split rest
+
             if (last != end() && !isViable(*last, 1)) {
                 makeRestViable(last);
             }
@@ -515,6 +444,11 @@ void TrackNotationHelper::insertSomething(iterator i, int duration, int pitch,
                               acc);
 
     } else { // duration > existingDuration
+
+        // 3. If the new note is longer, split the new note so that
+        // the first part is the same duration as the existing note or
+        // rest, and recurse to step 1 with both the first and the
+        // second part in turn.
 
 	bool needToSplit = true;
 
@@ -532,10 +466,12 @@ void TrackNotationHelper::insertSomething(iterator i, int duration, int pitch,
 	if (needToSplit) {
 
 	    //!!! This is not quite right for rests.  Because they
-	    // replace (rather than chording with) any events already
-	    // present, they don't need to be split in the case where
-	    // their duration spans several note-events.  Worry about
-	    // that later, I guess.
+	    //replace (rather than chording with) any events already
+	    //present, they don't need to be split in the case where
+	    //their duration spans several note-events.  Worry about
+	    //that later, I guess.  We're actually getting enough
+	    //is-note/is-rest decisions here to make it possibly worth
+	    //splitting this method into note and rest versions again
 
 	    cerr << "Need to split new note" << endl;
 
@@ -584,11 +520,34 @@ TrackNotationHelper::insertSingleSomething(iterator i, int duration,
             e->set<String>("accidental",
                            NotationDisplayPitch::getAccidentalName(acc));
         }
+        setInsertedNoteGroup(e, i);
     }
 
-    if (tiedBack && !isRest) e->set<Bool>(Note::TiedBackwardPropertyName, true);
+    if (tiedBack && !isRest) {
+        e->set<Bool>(Note::TiedBackwardPropertyName, true);
+    }
 
     return insert(e);
+}
+
+void
+TrackNotationHelper::setInsertedNoteGroup(Event *e, iterator i)
+{
+    if (i == begin() || i == end() || !((*i)->isa(Note::EventType))) return;
+
+    iterator j = track().findContiguousPrevious(i);
+    if (j == end()) return;
+
+    if ((*i)->has(BeamedGroupIdPropertyName) &&
+        (*j)->has(BeamedGroupIdPropertyName) &&
+        (*i)->get<Int>(BeamedGroupIdPropertyName) ==
+        (*j)->get<Int>(BeamedGroupIdPropertyName)) {
+
+        e->set<Int>(BeamedGroupIdPropertyName,
+                    (*i)->get<Int>(BeamedGroupIdPropertyName));
+        e->set<String>(BeamedGroupTypePropertyName,
+                       (*i)->get<String>(BeamedGroupTypePropertyName));
+    }
 }
 
 
@@ -866,145 +825,6 @@ void TrackNotationHelper::autoBeamBar(iterator from, iterator to,
 	} else {
 
 	    accumulator += idur;
-	}
-    }
-}
-
-
-
-
-void TrackNotationHelper::autoBeamAuxOld(iterator from, iterator to,
-                        timeT average, timeT minimum, timeT maximum,
-                        TimeSignature tsig, string type)
-{
-    //!!! This won't (currently) work right if the time signature
-    //changes during the auto-beamed section, and it won't work right
-    //if started on an off-beat.  Ideally "from" should be the start
-    //of a bar.
-
-    //!!! should reimplement to use existing bar positions, then it'd
-    //recover much better from getting out of phase because of bizarre
-    //note-lengths and incorrect-duration bars
-
-    timeT accumulator = 0;
-    timeT crotchet = Note(Note::Crotchet).getDuration();
-    timeT semiquaver = Note(Note::Semiquaver).getDuration();
-
-    for (iterator i = from; i != to; ++i) {
-
-	if ((*i)->getDuration() == 0) continue; // not a note or rest
-
-	// start of new bar -- reset accumulator
-	if (accumulator % tsig.getBarDuration() == 0) accumulator = 0;
-
-	if (accumulator % average == 0 &&  // "beamable duration" threshold
-	    quantizer().getNoteQuantizedDuration(*i) < crotchet) {
-
-	    // This could be the start of a beamed group.  We maintain
-	    // two sorts of state as we scan along here: data about
-	    // the best group we've found so far (beamDuration,
-	    // prospective, k etc), and data about the items we're
-	    // looking at (count, beamable, longerThanDemi etc) just
-	    // in case we find a better candidate group before the
-	    // eight-line conditional further down makes us give up
-	    // the search, beam our best shot, and start again.
-
-	    // I hope this is clear.
-
-	    iterator k = end(); // best-so-far last item in group;
-				// end() indicates that we've found nothing
-
-	    timeT tmin         = minimum;
-	    timeT count        = 0;
-	    timeT prospective  = 0;
-	    timeT beamDuration = 0;
-
-	    int beamable       = 0;
-	    int longerThanDemi = 0;
-
-	    for (iterator j = i; j != to; ++j) {
-
-		if (!hasEffectiveDuration(j)) continue;
-		timeT current = quantizer().getNoteQuantizedDuration(*j);
-
-		if ((*i)->isa(Note::EventType)) {
-		    if (current < crotchet) ++beamable;
-		    if (current >= semiquaver) ++longerThanDemi;
-		}
-
-		count += current;
-
-		if (count % tmin == 0) {
-
-		    k = j;
-		    beamDuration = count;
-
-		    // increment prospective accumulator.  and then --
-		    // will this group have crossed a barline?  if so,
-		    // wrap around the prospective accumulator from
-		    // the bar mark
-
-		    prospective = (accumulator + count) % tsig.getBarDuration();
-
-		    // found a group; now accept only double this
-		    // group's length for a better one
-		    tmin *= 2;
-		}
-
-		// Stop scanning and make the group if our scan has
-		// reached the maximum length of beamed group, we have
-		// more than 4 semis or quavers, we're at the end of
-		// our run or of a bar, if the next chord is longer
-		// than the current one, or if there's a rest ahead.
-
-		iterator jnext(j);
-
-		if ((count > maximum)
-		    || (longerThanDemi > 4)
-		    || (++jnext == to)     
-		    || (prospective == 0 && k != end())
-		    || ((*j    )->isa(Note::EventType) &&
-			(*jnext)->isa(Note::EventType) &&
-			quantizer().getNoteQuantizedDuration(*jnext) > current)
-		    || ((*jnext)->isa(Note::EventRestType))) {
-
-		    if (k != end() && beamable >= 2) {
-
-			iterator knext(k);
-			++knext;
-
-			makeBeamedGroup(i, knext, type);
-		    }
-
-		    // If this group is at least as long as the check
-		    // threshold ("average"), its length must be a
-		    // multiple of the threshold and hence we can
-		    // continue scanning from the end of the group
-		    // without losing the modulo properties of the
-		    // accumulator.
-
-		    if (k != end() && beamDuration >= average) {
-
-			i = k;
-			accumulator = prospective;
-
-		    } else {
-
-			// Otherwise, we continue from where we were.
-			// (This must be safe because we can't get
-			// another group starting half-way through, as
-			// we know the last group is shorter than the
-			// check threshold.)
-
-			accumulator += quantizer().getNoteQuantizedDuration(*i);
-		    }
-
-		    break;
-		}
-	    }
-	} else {
-
-	    accumulator += quantizer().getNoteQuantizedDuration(*i);
 	}
     }
 }
