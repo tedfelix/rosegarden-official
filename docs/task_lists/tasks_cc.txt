@@ -11,6 +11,9 @@ Post-0.1.5-and-a-bit task list
  4. Try actually editing some notation!  Devise a basic set of transforms
     (split/join notes etc)
 
+    a. Tie Equal-Pitch Notes
+    b. Make Notes Viable
+
  5. Mess around with tuplets, locate and fix the many bugs there
 
  5a. Decide how we want to manage quantization of segments containing
@@ -145,7 +148,12 @@ Post-0.1.5-and-a-bit task list
     a timesig from the transport or undoing a time sig change doesn't
     update notation windows
 
-29. Add "Lengthen notes" and "shorten notes" transforms to notation view
+29. Add "Lengthen notes" and "shorten notes" transforms to notation view.
+    No!  Make note tools _change the length of a note_ if clicked directly
+    onto it.  What excitement.
+
+30. More code documentation, including documenting the iterator-
+    invalidation semantics of Segment and SegmentNotationHelper methods
 
 
 Post-0.1.4 task list

@@ -83,8 +83,23 @@ NoteInsertionCommand::modifySegment()
     Segment &segment(getSegment());
     SegmentNotationHelper helper(segment);
 
-    Segment::iterator i =
-        helper.insertNote(m_insertionTime, m_note, m_pitch, m_accidental);
+    // If we're attempting to insert at the same time and pitch as an
+    // existing note, then we remove the existing note first (so as to
+    // change its duration, if the durations differ)
+    Segment::iterator i, j;
+    segment.getTimeSlice(m_insertionTime, i, j);
+    while (i != j) {
+	if ((*i)->isa(Note::EventType)) {
+	    long pitch;
+	    if ((*i)->get<Int>(PITCH, pitch) && pitch == m_pitch) {
+		helper.deleteNote(*i);
+		break;
+	    }
+	}
+	++i;
+    }
+
+    i = helper.insertNote(m_insertionTime, m_note, m_pitch, m_accidental);
     if (i != segment.end()) m_lastInsertedEvent = *i;
 
     if (m_autoBeam) {
