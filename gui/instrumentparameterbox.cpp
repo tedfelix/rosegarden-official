@@ -184,7 +184,11 @@ InstrumentParameterBox::setMute(bool value)
 void
 InstrumentParameterBox::setRecord(bool value)
 {
-    m_audioInstrumentParameters->slotSetRecord(value);
+    if (m_selectedInstrument &&
+            m_selectedInstrument->getType() == Rosegarden::Instrument::Audio)
+    {
+        m_audioInstrumentParameters->slotSetRecord(value);
+    }
 }
 
 void
@@ -373,7 +377,7 @@ AudioInstrumentParameterPanel::slotSelectAudioLevel(int value)
         //
         if (m_audioFader->m_recordButton->isOn())
         {
-            cout << "SETTING RECORD LEVEL = " << value << endl;
+            //cout << "SETTING STORED RECORD LEVEL = " << value << endl;
             m_selectedInstrument->setRecordLevel(Rosegarden::MidiByte(value));
 
             Rosegarden::StudioControl::setStudioObjectProperty
@@ -383,6 +387,7 @@ AudioInstrumentParameterPanel::slotSelectAudioLevel(int value)
         }
         else
         {
+            //cout << "SETTING STORED LEVEL = " << value << endl;
             m_selectedInstrument->setVelocity(Rosegarden::MidiByte(value));
 
             Rosegarden::StudioControl::setStudioObjectProperty
@@ -417,6 +422,9 @@ AudioInstrumentParameterPanel::slotSetRecord(bool value)
     RG_DEBUG << "AudioInstrumentParameterPanel::slotSetRecord - "
              << "value = " << value << endl;
 
+    if (m_selectedInstrument)
+        cout << "INSTRUMENT NAME = " << m_selectedInstrument->getName() << endl;
+
     // Set the background colour for the button
     //
     if (value)
@@ -424,22 +432,42 @@ AudioInstrumentParameterPanel::slotSetRecord(bool value)
         m_audioFader->m_recordButton->
             setPalette(QPalette(RosegardenGUIColours::ActiveRecordTrack));
 
-        if (m_selectedInstrument)
+        if (m_selectedInstrument &&
+            (m_selectedInstrument->getType() == Rosegarden::Instrument::Audio))
         {
             // set the fader value to the record value
+
+            disconnect(m_audioFader->m_fader, SIGNAL(faderChanged(int)),
+                       this, SLOT(slotSelectAudioLevel(int)));
+
             m_audioFader->m_fader->
                 setFader(m_selectedInstrument->getRecordLevel());
+            //cout << "SETTING VISIBLE FADER RECORD LEVEL = " << 
+                    //int(m_selectedInstrument->getRecordLevel()) << endl;
+
+            connect(m_audioFader->m_fader, SIGNAL(faderChanged(int)),
+                    this, SLOT(slotSelectAudioLevel(int)));
         }
     }
     else
     {
         m_audioFader->m_recordButton->unsetPalette();
 
-        if (m_selectedInstrument)
+        if (m_selectedInstrument &&
+            (m_selectedInstrument->getType() == Rosegarden::Instrument::Audio))
         {
+            disconnect(m_audioFader->m_fader, SIGNAL(faderChanged(int)),
+                       this, SLOT(slotSelectAudioLevel(int)));
+
             // set the fader value to the playback value
             m_audioFader->m_fader->
                 setFader(m_selectedInstrument->getVelocity());
+
+            //cout << "SETTING VISIBLE FADER LEVEL = " << 
+                    //int(m_selectedInstrument->getVelocity()) << endl;
+
+            connect(m_audioFader->m_fader, SIGNAL(faderChanged(int)),
+                    this, SLOT(slotSelectAudioLevel(int)));
         }
     }
 
@@ -1008,7 +1036,7 @@ void
 AudioInstrumentParameterPanel::slotRecord()
 {
     RG_DEBUG << "AudioInstrumentParameterPanel::slotRecord - " 
-             << " isOn = " <<  m_audioFader->m_soloButton->isOn() << endl;
+             << " isOn = " <<  m_audioFader->m_recordButton->isOn() << endl;
 
     // At the moment we can't turn a recording button off
     //
@@ -1018,6 +1046,8 @@ AudioInstrumentParameterPanel::slotRecord()
 
         if (m_selectedInstrument)
         {
+            cout << "SETTING FADER RECORD LEVEL = " 
+                 << int(m_selectedInstrument->getRecordLevel()) << endl;
             // set the fader value to the record value
             m_audioFader->m_fader->
                 setFader(m_selectedInstrument->getRecordLevel());
@@ -1030,6 +1060,9 @@ AudioInstrumentParameterPanel::slotRecord()
             // set the fader value to the record value
             m_audioFader->m_fader->
                 setFader(m_selectedInstrument->getVelocity());
+
+            cout << "SETTING FADER LEVEL = " 
+                 << int(m_selectedInstrument->getVelocity()) << endl;
         }
 
         emit recordButton(m_selectedInstrument->getId(),
