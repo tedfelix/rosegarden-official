@@ -25,6 +25,8 @@
 #include <qfile.h>
 #include <qtextstream.h>
 
+#include "NotationTypes.h"
+
 class Rosegarden::Composition;
 class Rosegarden::Track;
 
@@ -43,8 +45,6 @@ protected:
            ModFlat    = (1<<1),
            ModNatural = (1<<2)
     };
-
-    enum { TrebleClef, TenorClef, AltoClef, BassClef, InvalidClef };
 
     bool parse();
     bool parseClef();
@@ -70,7 +70,9 @@ protected:
     Rosegarden::Track* m_currentTrack;
     unsigned int m_currentTrackTime;
     unsigned int m_currentTrackNb;
-    unsigned int m_currentClef;
+    Rosegarden::Clef m_currentClef;
+    Rosegarden::Key m_currentKey;
+
     bool m_inGroup;
     unsigned int m_groupId;
     std::string m_groupType;

@@ -32,6 +32,7 @@ using Rosegarden::Event;
 using Rosegarden::Track;
 using Rosegarden::Int;
 using Rosegarden::String;
+using Rosegarden::Clef;
 
 RG21Loader::RG21Loader(const QString& fileName)
     : m_file(fileName),
@@ -40,7 +41,7 @@ RG21Loader::RG21Loader(const QString& fileName)
       m_currentTrack(0),
       m_currentTrackTime(0),
       m_currentTrackNb(0),
-      m_currentClef(TrebleClef),
+      m_currentClef(Clef::Treble),
       m_inGroup(false),
       m_nbStaves(0)
 {
@@ -73,13 +74,13 @@ bool RG21Loader::parseClef()
     m_currentTrack->insert(clefEvent);
 
     if (clefName == "trebble")
-        m_currentClef = TrebleClef;
+        m_currentClef = Clef(Clef::Treble);
     else if (clefName == "tenor")
-        m_currentClef = TenorClef;
+        m_currentClef = Clef(Clef::Tenor);
     else if (clefName == "alto")
-        m_currentClef = AltoClef;
+        m_currentClef = Clef(Clef::Alto);
     else if (clefName == "bass")
-        m_currentClef = BassClef;
+        m_currentClef = Clef(Clef::Bass);
 
     return true;
 }
@@ -98,6 +99,8 @@ bool RG21Loader::parseKey()
                           std::string(keyName.data()));
     
     m_currentTrack->insert(keyEvent);
+
+    m_currentKey = Rosegarden::Key(*keyEvent);
 
 //     kdDebug(KDEBUG_AREA) << "RG21Loader::parseKey() insert key event '"
 //                          << keyName << "' at " << m_currentTrackTime << endl;
@@ -230,7 +233,7 @@ void RG21Loader::closeTrackOrComposition()
         m_composition->addTrack(m_currentTrack);
         m_currentTrack = 0;
         m_currentTrackTime = 0;
-        m_currentClef = TrebleClef;
+        m_currentClef = Clef(Clef::Treble);
     } else {
         // ??
     }
@@ -239,41 +242,48 @@ void RG21Loader::closeTrackOrComposition()
 /// snarfed from RG21 sources
 long RG21Loader::convertRG21Pitch(long pitch, int noteModifier)
 {
-  long rtn = 0;
-  int octave = 5;
+    Rosegarden::NotationDisplayPitch displayPitch(pitch,
+                                                  m_currentClef,
+                                                  m_currentKey);
 
-  while (pitch < 0) { octave -= 1; pitch += 7; }
-  while (pitch > 7) { octave += 1; pitch -= 7; }
+    long rtn = displayPitch.getPerformancePitch(m_currentClef,
+                                                m_currentKey);
 
-  if (pitch > 4) ++octave;
+//     long rtn = 0;
+//     int octave = 5;
 
-  switch(pitch) {
+//     while (pitch < 0) { octave -= 1; pitch += 7; }
+//     while (pitch > 7) { octave += 1; pitch -= 7; }
 
-  case 0: rtn =  4; break;	/* bottom line, treble clef: E */
-  case 1: rtn =  5; break;	/* F */
-  case 2: rtn =  7; break;	/* G */
-  case 3: rtn =  9; break;	/* A, in next octave */
-  case 4: rtn = 11; break;	/* B, likewise*/
-  case 5: rtn =  0; break;	/* C, moved up an octave (see above) */
-  case 6: rtn =  2; break;	/* D, likewise */
-  case 7: rtn =  4; break;	/* E, likewise */
-  }
+//     if (pitch > 4) ++octave;
 
-  if (noteModifier & ModSharp) ++ rtn;
-  if (noteModifier & ModFlat)  -- rtn;
+//     switch(pitch) {
 
-  switch(m_currentClef) {
+//     case 0: rtn =  4; break;	/* bottom line, treble clef: E */
+//     case 1: rtn =  5; break;	/* F */
+//     case 2: rtn =  7; break;	/* G */
+//     case 3: rtn =  9; break;	/* A, in next octave */
+//     case 4: rtn = 11; break;	/* B, likewise*/
+//     case 5: rtn =  0; break;	/* C, moved up an octave (see above) */
+//     case 6: rtn =  2; break;	/* D, likewise */
+//     case 7: rtn =  4; break;	/* E, likewise */
+//     }
 
-  case  TrebleClef: break;
-  case   TenorClef: octave -= 1; break;
-  case    AltoClef: octave -= 1; break;
-  case    BassClef: octave -= 2; break;
-  case InvalidClef: break;
-  }
+//     if (noteModifier & ModSharp) ++ rtn;
+//     if (noteModifier & ModFlat)  -- rtn;
 
-  rtn += 12 * octave;
+//     switch(m_currentClef) {
 
-  return rtn;
+//     case  TrebleClef: break;
+//     case   TenorClef: octave -= 1; break;
+//     case    AltoClef: octave -= 1; break;
+//     case    BassClef: octave -= 2; break;
+//     case InvalidClef: break;
+//     }
+
+//     rtn += 12 * octave;
+
+    return rtn;
 }
 
 bool RG21Loader::readNextLine()
