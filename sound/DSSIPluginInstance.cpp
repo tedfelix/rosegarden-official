@@ -485,15 +485,20 @@ DSSIPluginInstance::selectProgramAux(QString program, bool backupPortValues)
 	// that this only happens if backupPortValues is true means
 	// that we won't cause trouble when called from activate() etc.
 
-	int i = 0, maxi = 15;
+	// Some plugins may take an additional run cycle to update
+	// their port values correctly, so we'll actually wait for two.
+
+	int i = 0, maxi = 10;
 	RealTime lrt = m_lastRunTime;
 
-	while (i < maxi && m_lastRunTime == lrt) {
-	    struct timespec ts;
-	    ts.tv_sec = 0;
-	    ts.tv_nsec = 20000000; // 20 ms
-	    nanosleep(&ts, 0);
-	    ++i;
+	for (int j = 0; j < 2; ++j) {
+	    while (i < maxi && m_lastRunTime == lrt) {
+		struct timespec ts;
+		ts.tv_sec = 0;
+		ts.tv_nsec = 20000000; // 20 ms
+		nanosleep(&ts, 0);
+		++i;
+	    }
 	}
 	
 	if (i == maxi && m_lastRunTime == lrt) {
@@ -720,8 +725,13 @@ DSSIPluginInstance::run(const RealTime &blockTime)
     }
 
     if (!m_descriptor || !m_descriptor->run_synth) {
-	for (size_t ch = 0; ch < m_audioPortsOut.size(); ++ch) {
-	    memset(m_outputBuffers[ch], 0, m_blockSize * sizeof(sample_t));
+	m_eventBuffer.skip(m_eventBuffer.getReadSpace());
+	if (m_descriptor->LADSPA_Plugin->run) {
+	    m_descriptor->LADSPA_Plugin->run(m_instanceHandle, m_blockSize);
+	} else {
+	    for (size_t ch = 0; ch < m_audioPortsOut.size(); ++ch) {
+		memset(m_outputBuffers[ch], 0, m_blockSize * sizeof(sample_t));
+	    }
 	}
 	return;
     }

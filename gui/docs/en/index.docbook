@@ -1447,11 +1447,11 @@
 	    </mediaobject>
           </screenshot>
         </para>
-	<para>(These buttons are also available in the <link
-	linkend="studio-audio-mixer">audio mixer</link>.)
+	<para>(These buttons are also optionally available in the <link
+	linkend="studio-audio-mixer">audio mixer</link> window.)
 	</para>
-	<para>This will
-	pop up the plugin dialog.  This dialog shows you
+	<para>Clicking a plugin button will
+	pop up the plugin dialog.  This shows you
 	the available categories of effects in the first menu; select
 	one, and you can then choose your plugin in the second menu.
 	</para>
@@ -1473,20 +1473,20 @@
 	modifiable parameters for the plugin you have selected.  To
 	change a value, just click a rotary and drag up and down or
 	left and right.  (Up or right to raise the value, down or left
-	to lower it.)  You can also use the mouse wheel to change the
-	value, and click with the middle mouse button to reset it to
+	to lower it.)  You can also roll the mouse wheel to change the
+	value, or click with the middle mouse button to reset it to
 	its initial default.</para>
 
 	<para>It is also possible to copy one plugin with its current
 	configuration into another slot, so as to use the same plugin
-	settings with more than one instrument.  Just click the Copy
-	button when you have the plugin set up the way you want it,
-	and then open another plugin slot's plugin dialog and click
-	Paste.</para>
+	settings with more than one instrument, or to base one plugin
+	configuration on another.  Just click the Copy button when you
+	have the plugin set up the way you want it, and then open
+	another plugin slot's plugin dialog and click Paste.</para>
 
-	<para>Finally, you can use the Bypass button to remove a
+	<para>Finally, you can use the Bypass toggle to remove a
 	plugin temporarily from processing while retaining its
-	configuration in case you want to re-enable it later.
+	configuration.
 	</para>
       </sect2>
       <sect2 id="studio-plugins-synths">
@@ -1531,10 +1531,10 @@
 	of effects.  Once again, you will be shown the particular set
 	of rotary parameters for the synth you have selected.  Synth
 	plugins may also have "programs", selectable from a menu --
-	this menu will only appear if you choose a synth that supports
+	this menu will only appear if you have chosen a synth that supports
 	them.  When you have selected and configured a synth plugin
 	for an instrument, any MIDI data on tracks assigned to that
-	instrument should play through that synth, as should any
+	instrument should play through that synth, as should
 	incoming MIDI data during recording or monitoring.
 	</para>
       </sect2>
@@ -1596,7 +1596,8 @@
 	</textobject>
       </mediaobject>
       </screenshot>
-
+      </para>
+      <para>
 	To configure the metronomes, use
 	<menuchoice>
 	  <guimenu lang="en">Composition</guimenu>
@@ -2371,6 +2372,8 @@
 	</textobject>
       </mediaobject>
       </screenshot>
+	</para>
+      <para>
 	&rosegarden; aims to present scores with the best possible
 	layout compatible with its primary focus as a sequencer
 	application.  This means that although the editor supports
@@ -2513,6 +2516,7 @@
 	</textobject>
       </mediaobject>
       </screenshot>
+	</para><para>
         Most, but not all, of the display and editing functions
 	work in the page layout modes as well as in linear layout.
       </para>
@@ -3534,6 +3538,7 @@
 	</textobject>
       </mediaobject>
       </screenshot>
+	</para><para>
 	If the quantization &rosegarden; has used is not suitable,
 	either for the entire score or for a selection of notes, you
 	can choose to use a different level of quantization or none

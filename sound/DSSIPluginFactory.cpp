@@ -54,13 +54,11 @@ DSSIPluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
     for (std::vector<QString>::iterator i = m_identifiers.begin();
 	 i != m_identifiers.end(); ++i) {
 
-	const LADSPA_Descriptor *descriptor = getLADSPADescriptor(*i);
-	if (!descriptor) continue;
+	const DSSI_Descriptor *ddesc = getDSSIDescriptor(*i);
+	if (!ddesc) continue;
 
-	if (!descriptor) {
-	    std::cerr << "WARNING: DSSIPluginFactory::enumeratePlugins: couldn't get descriptor for identifier " << *i << std::endl;
-	    continue;
-	}
+	const LADSPA_Descriptor *descriptor = ddesc->LADSPA_Plugin;
+	if (!descriptor) continue;
 	
 	list.push_back(*i);
 	list.push_back(descriptor->Name);
@@ -68,7 +66,7 @@ DSSIPluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
 	list.push_back(descriptor->Label);
 	list.push_back(descriptor->Maker);
 	list.push_back(descriptor->Copyright);
-	list.push_back("true"); // is synth
+	list.push_back((ddesc->run_synth || ddesc->run_multiple_synths) ? "true" : "false");
 	list.push_back(m_taxonomy[descriptor->UniqueID]);
 	list.push_back(QString("%1").arg(descriptor->PortCount));
 

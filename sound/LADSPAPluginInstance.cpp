@@ -103,25 +103,43 @@ LADSPAPluginInstance::LADSPAPluginInstance(PluginFactory *factory,
 void
 LADSPAPluginInstance::init(int idealChannelCount)
 {
+#ifdef DEBUG_LADSPA
+    std::cerr << "LADSPAPluginInstance::init(" << idealChannelCount << "): plugin has "
+	      << m_descriptor->PortCount << " ports" << std::endl;
+#endif
+
     // Discover ports numbers and identities
     //
     for (unsigned long i = 0; i < m_descriptor->PortCount; ++i)
     {
         if (LADSPA_IS_PORT_AUDIO(m_descriptor->PortDescriptors[i]))
         {
-            if (LADSPA_IS_PORT_INPUT(m_descriptor->PortDescriptors[i]))
+            if (LADSPA_IS_PORT_INPUT(m_descriptor->PortDescriptors[i])) {
+#ifdef DEBUG_LADSPA
+		std::cerr << "LADSPAPluginInstance::init: port " << i << " is audio in" << std::endl;
+#endif
                 m_audioPortsIn.push_back(i);
-            else
+	    } else {
+#ifdef DEBUG_LADSPA
+		std::cerr << "LADSPAPluginInstance::init: port " << i << " is audio out" << std::endl;
+#endif
                 m_audioPortsOut.push_back(i);
+	    }
         }
         else
         if (LADSPA_IS_PORT_CONTROL(m_descriptor->PortDescriptors[i]))
         {
 	    if (LADSPA_IS_PORT_INPUT(m_descriptor->PortDescriptors[i])) {
+#ifdef DEBUG_LADSPA
+		std::cerr << "LADSPAPluginInstance::init: port " << i << " is control in" << std::endl;
+#endif
 		LADSPA_Data *data = new LADSPA_Data(0.0);
 		m_controlPortsIn.push_back(
                     std::pair<unsigned long, LADSPA_Data*>(i, data));
 	    } else {
+#ifdef DEBUG_LADSPA
+		std::cerr << "LADSPAPluginInstance::init: port " << i << " is control out" << std::endl;
+#endif
 		LADSPA_Data *data = new LADSPA_Data(0.0);
 		m_controlPortsOut.push_back(
                     std::pair<unsigned long, LADSPA_Data*>(i, data));
@@ -129,7 +147,7 @@ LADSPAPluginInstance::init(int idealChannelCount)
         }
 #ifdef DEBUG_LADSPA
         else
-            std::cerr << "LADSPAPluginInstance::LADSPAPluginInstance - "
+            std::cerr << "LADSPAPluginInstance::init - "
                       << "unrecognised port type" << std::endl;
 #endif
     }

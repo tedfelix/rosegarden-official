@@ -748,19 +748,23 @@ AudioPluginOSCGUI::getGUIFilePath(QString identifier)
     const char *suffixes[] = { "_rg", "_kde", "_qt", "_gtk2", "_gtk", "_x11", "_gui" };
     int nsuffixes = sizeof(suffixes)/sizeof(suffixes[0]);
 
-    for (int k = 0; k <= nsuffixes; ++k) {
+    for (int fuzzy = 0; fuzzy <= 1; ++fuzzy) {
 
-	QFileInfoListIterator i(*list);
-	QFileInfo *info;
+	for (int k = 0; k <= nsuffixes; ++k) {
 
-	while ((info = i.current()) != 0  ) {
+	    QFileInfoListIterator i(*list);
+	    QFileInfo *info;
 
-	    ++i;
+	    while ((info = i.current()) != 0) {
 
-	    if (info->isFile() && info->isExecutable() &&
-		info->fileName().left(label.length()) == label &&
-		(k == nsuffixes || info->fileName().lower().endsWith(suffixes[k]))) {
-		return info->filePath();
+		++i;
+
+		if ((info->isFile() || info->isSymLink()) &&
+		    info->isExecutable() &&
+		    (fuzzy || info->fileName().left(label.length()) == label) &&
+		    (k == nsuffixes || info->fileName().lower().endsWith(suffixes[k]))) {
+		    return info->filePath();
+		}
 	    }
 	}
     }
