@@ -223,6 +223,10 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
 MatrixView::~MatrixView()
 {
+    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+        delete m_staffs[i]; // this will erase all "notes" canvas items
+    }
+
     // This looks silly but the reason is that on destruction of the
     // MatrixCanvasView, setCanvas() is called (this is in
     // ~QCanvasView so we can't do anything about it). This calls
