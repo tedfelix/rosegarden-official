@@ -585,6 +585,10 @@ protected:
     Segment::iterator begin() { return segment().begin(); }
     Segment::iterator end()   { return segment().end();   }
 
+    bool isBeforeEndMarker(Segment::iterator i) {
+	return segment().isBeforeEndMarker(i);
+    }
+
     Segment::iterator insert(Event *e) { return segment().insert(e); }
     void erase(Segment::iterator i)    { segment().erase(i); }
 
