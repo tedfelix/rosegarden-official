@@ -25,17 +25,18 @@
 // the notation module, but that need not necessarily be saved with
 // the file
 
-#define P_QUANTIZED_DURATION "QuantizedDuration"
+#define  P_QUANTIZED_DURATION    "QuantizedDuration"
 
-#define P_NOTE_TYPE "NoteType"
-#define P_NOTE_DOTTED "NoteDotted"
+#define  P_NOTE_TYPE             "NoteType"
+#define  P_NOTE_DOTTED           "NoteDotted"
 
-#define P_HEIGHT_ON_STAFF "HeightOnStaff"
-#define P_MIN_WIDTH "MinWidth"
+#define  P_HEIGHT_ON_STAFF       "HeightOnStaff"
+#define  P_MIN_WIDTH             "MinWidth"
 
-#define P_ACCIDENTAL "NoteComputedAccidental"
-#define P_STALK_UP "NoteStalkUp"
-#define P_DRAW_TAIL "NoteDrawTail"
-#define P_NOTE_NAME "NoteName"
+#define  P_ACCIDENTAL            "NoteComputedAccidental"
+#define  P_STALK_UP              "NoteStalkUp"
+#define  P_DRAW_TAIL             "NoteDrawTail"
+#define  P_NOTE_NAME             "NoteName"
 
 #endif
+
