@@ -198,11 +198,33 @@ void RosegardenGUIView::editSegmentMatrix(Rosegarden::Segment* p)
     m_matrixView->show();
 }
 
+// This scrolling model pages the SegmentCanvas across the screen
+//
+//
 void RosegardenGUIView::scrollTrackEditorHoriz(int hpos)
 {
-    m_trackEditorScrollView->ensureVisible(hpos,
-                                           m_trackEditorScrollView->contentsY() +
-                                           m_trackEditorScrollView->visibleHeight() / 2);
+    if (hpos == 0) // If returning to zero
+    {
+        m_trackEditorScrollView->ensureVisible(0, m_trackEditorScrollView->contentsY() + m_trackEditorScrollView->visibleHeight()/2);
+    }
+    else // if moving off the right hand side of the view
+    if (hpos >  ( m_trackEditorScrollView->contentsX() + 
+                  m_trackEditorScrollView->visibleWidth() * 0.9 ) )
+    { 
+               
+        m_trackEditorScrollView->scrollBy(
+                (int)(m_trackEditorScrollView->visibleWidth() * 0.8),
+                0);
+    }
+    else // if moving off the left hand side
+    if (hpos < ( m_trackEditorScrollView->contentsX() +
+                  m_trackEditorScrollView->visibleWidth() * 0.1 ) )
+    {
+        m_trackEditorScrollView->scrollBy(
+                (int)(-m_trackEditorScrollView->visibleWidth() * 0.8),
+                0);
+    }
+    
 }
 
 void RosegardenGUIView::editAllTracks(Rosegarden::Composition* p)

@@ -80,13 +80,13 @@ New features suitable for 0.2
 7.  MIDI recording - also requires basic track selection and Record/Mute
     track buttons.
 
-8.  Transport GUI - play, rwd buttons etc - timer.
+8.  Transport GUI - play, rwd buttons etc - timer. [DONE]
 
 9.  Looping.
 
 10. Position pointers in notation client.
 
-11. Track canvas and client that follow playback (playback follow mode).
+11. Track canvas and client that follow playback (playback follow mode). [DONE]
 
 12. Piano-roll view, but only if someone other than us steps up
     to implement it in parallel with the stuff we're doing?
