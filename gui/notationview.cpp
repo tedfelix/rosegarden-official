@@ -1092,6 +1092,10 @@ void NotationView::slotEditPaste()
         slotStatusHelpMsg(i18n("Clipboard is empty"));
         return;
     }
+    if (!m_document->getClipboard()->isSingleSegment()) {
+        slotStatusHelpMsg(i18n("Can't paste multiple Segments into one"));
+        return;
+    }
 
     slotStatusHelpMsg(i18n("Inserting clipboard contents..."));
 
