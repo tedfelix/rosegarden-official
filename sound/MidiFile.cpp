@@ -862,10 +862,9 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
     // Insert tempo events
     //
     //
-    std::pair<timeT, long> tempo;
     for (int i = 0; i < comp.getTempoChangeCount(); i++)
     {
-        tempo = comp.getRawTempoChange(i);
+        std::pair<timeT, long> tempo = comp.getRawTempoChange(i);
 
         midiEventAbsoluteTime = tempo.first * m_timingDivision
                                  / crotchetDuration;
@@ -882,6 +881,32 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
                                   MIDI_FILE_META_EVENT,
                                   MIDI_SET_TEMPO,
                                   tempoString);
+        m_midiComposition[trackNumber].push_back(*midiEvent);
+    }
+
+    // Insert time signatures - not really tested! 
+    //
+    //
+    for (int i = 0; i < comp.getTimeSignatureCount(); i++)
+    {
+        std::pair<timeT, TimeSignature> timeSig =
+                comp.getTimeSignatureChange(i);
+        
+        string timeSigString;
+        timeSigString += (MidiByte) (timeSig.second.getNumerator());
+        int denominator = timeSig.second.getDenominator();
+        int denPowerOf2;
+
+        while (denominator >>= 1)
+            denPowerOf2++;
+
+        timeSigString += (MidiByte) denPowerOf2;
+
+        midiEvent = new MidiEvent(midiEventAbsoluteTime,
+                                  MIDI_FILE_META_EVENT,
+                                  MIDI_SET_TEMPO,
+                                  timeSigString);
+
         m_midiComposition[trackNumber].push_back(*midiEvent);
     }
 
@@ -1070,10 +1095,6 @@ MidiFile::longToVarBuffer(std::string &buffer, const unsigned long &number)
 {
     long inNumber = number;
     long outNumber;
-
-#ifdef MIDI_DEBUG
-    cout << "WRITING TIME = " << number << endl;
-#endif
 
     // get the lowest 7 bits of the number
     outNumber = number & 0x7f;
