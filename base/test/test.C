@@ -6,6 +6,7 @@
 #include "Event.h"
 #include "Segment.h"
 #include "Composition.h"
+//#include "Sets.h"
 
 #define TEST_NOTATION_TYPES 1
 #define TEST_SPEED 1
@@ -31,8 +32,82 @@ static const PropertyName SOME_STRING_PROPERTY = "someStringProp";
 static const PropertyName NONEXISTENT_PROPERTY = "nonexistentprop";
 static const PropertyName ANNOTATION_PROPERTY = "annotation";
 
+#if 0
+// Some attempts at reproducing the func-template-within-template problem
+// 
+enum FooType {A, B, C};
+
+class Foo
+{
+public:
+    template<FooType T> void func();
+};
+
+template<class T>
+void Foo::func()
+{
+    // dummy code
+    T j = 0;
+    for(T i = 0; i < 100; ++i) j += i;
+}
+
+//template void Foo::func<int>();
+
+template <class R>
+class FooR
+{
+public:
+    void rfunc();
+};
+
+template<class R>
+void FooR<R>::rfunc()
+{
+    // this won't compile
+    Foo* foo;
+    foo->func<A>();
+}
+
+void templateTest()
+{
+    Foo foo;
+    foo.func<A>();
+
+//     FooR<float> foor;
+//     foor.rfunc();
+}
+
+
+template <class Element, class Container>
+class GenericSet // abstract base
+{
+public:
+    typedef typename Container::iterator Iterator;
+
+    /// Return true if this element, known to test() true, is a set member
+    virtual bool sample(const Iterator &i);
+};
+
+
+template <class Element, class Container>
+bool
+GenericSet<Element, Container>::sample(const Iterator &i)
+{
+    Event *e;
+    long p = e->get<Int>("blah");
+}
+
+#endif
+
 int main(int argc, char **argv)
 {
+    typedef std::vector<int> intvect;
+    
+//     intvect foo;
+
+//     GenericSet<int, intvect> genset;
+//     genset.sample(foo.begin());
+
         clock_t st, et;
         struct tms spare;
 
