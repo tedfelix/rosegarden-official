@@ -21,6 +21,7 @@
 
 #include <algorithm>
 
+#include <qvalidator.h>
 #include <qcursor.h>
 #include <qpainter.h>
 #include <qtooltip.h>
@@ -30,6 +31,7 @@
 #include <qpopupmenu.h>
 
 #include <klocale.h>
+#include <klineeditdlg.h>
 
 #include "MidiTypes.h"
 #include "Selection.h"
@@ -384,9 +386,9 @@ public:
                          Segment &segment,
                          Rosegarden::timeT start, Rosegarden::timeT end);
 
+
     virtual void modifySegment();
 
-    static QString getGlobalName() { return i18n("&Control Change"); }
 protected:
 
     QCanvasItemList m_selectedItems;
@@ -395,7 +397,7 @@ protected:
 ControlChangeCommand::ControlChangeCommand(QCanvasItemList selectedItems,
                                            Segment &segment,
                                            Rosegarden::timeT start, Rosegarden::timeT end)
-    : BasicCommand(getGlobalName(), segment, start, end, true),
+    : BasicCommand(i18n("Control Change"), segment, start, end, true),
       m_selectedItems(selectedItems)
 {
     RG_DEBUG << "ControlChangeCommand : from " << start << " to " << end << endl;
@@ -407,6 +409,79 @@ void ControlChangeCommand::modifySegment()
     for (QCanvasItemList::Iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
         if (ControlItem *item = dynamic_cast<ControlItem*>(*it))
             item->updateValue();
+    }
+}
+
+/**
+ * Command for inserting a new controller event
+ */
+class ControllerEventInsertCommand : public BasicCommand
+{
+public:
+    ControllerEventInsertCommand(timeT insertTime, long number, long initialValue, Segment &segment);
+
+    virtual void modifySegment();
+
+protected:
+    long m_number;
+    long m_initialValue;
+};
+
+ControllerEventInsertCommand::ControllerEventInsertCommand(timeT insertTime,
+                                                           long number, long initialValue,
+                                                           Segment &segment)
+    : BasicCommand(i18n("Insert Controller Event"), segment, insertTime, insertTime),
+      m_number(number),
+      m_initialValue(initialValue)
+{
+}
+
+void ControllerEventInsertCommand::modifySegment()
+{
+    Event* controllerEvent = new Event(Rosegarden::Controller::EventType,
+                                       getStartTime());
+
+    controllerEvent->set<Rosegarden::Int>(Rosegarden::Controller::VALUE, m_initialValue);
+    controllerEvent->set<Rosegarden::Int>(Rosegarden::Controller::NUMBER, m_number);
+    
+    getSegment().insert(controllerEvent);
+}
+
+
+/**
+ * Command erasing selected controller events
+ */
+class ControllerEventEraseCommand : public BasicCommand
+{
+public:
+
+    ControllerEventEraseCommand(QCanvasItemList selectedItems,
+                         Segment &segment,
+                         Rosegarden::timeT start, Rosegarden::timeT end);
+
+
+    virtual void modifySegment();
+
+protected:
+
+    QCanvasItemList m_selectedItems;
+};
+
+ControllerEventEraseCommand::ControllerEventEraseCommand(QCanvasItemList selectedItems,
+                                                         Segment &segment,
+                                                         Rosegarden::timeT start, Rosegarden::timeT end)
+    : BasicCommand(i18n("Erase Controller Event(s)"), segment, start, end, true),
+      m_selectedItems(selectedItems)
+{
+    RG_DEBUG << "ControllerEventEraseCommand : from " << start << " to " << end << endl;
+}
+
+
+void ControllerEventEraseCommand::modifySegment()
+{
+    for (QCanvasItemList::Iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
+        if (ControlItem *item = dynamic_cast<ControlItem*>(*it))
+            getSegment().eraseSingle(item->getElementAdapter()->getEvent());
     }
 }
 
@@ -445,6 +520,12 @@ ControlRuler::ControlRuler(Segment& segment,
     m_selectionRect->setPen(Qt::red);
 
     setFixedHeight(sizeHint().height());
+
+    connect(this, SIGNAL(stateChange(const QString&, bool)),
+            m_parentEditView, SLOT(slotStateChanged(const QString&, bool)));
+
+    emit stateChange("have_controller_item_selected", false);
+
 }
 
 ControlRuler::~ControlRuler()
@@ -466,6 +547,10 @@ void ControlRuler::setControlTool(ControlTool* tool)
 
 void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
 {
+    if (e->button() == Qt::RightButton) return;
+
+    RG_DEBUG << "ControlRuler::contentsMousePressEvent()\n";
+
     QCanvasItemList l=canvas()->collisions(e->pos());
 
     if (l.count() == 0) { // de-select current item
@@ -558,6 +643,8 @@ void ControlRuler::updateSelection()
 {
     clearSelectedItems();
 
+    bool haveSelectedItems = false;
+
     QCanvasItemList l=getSelectionRectangle()->collisions(true);
 
     for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
@@ -565,8 +652,11 @@ void ControlRuler::updateSelection()
         if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
             item->setSelected(true);
             m_selectedItems << item;
+            haveSelectedItems = true;
         }
     }
+
+    emit stateChange("have_controller_item_selected", haveSelectedItems);
 }
 
 void ControlRuler::contentsContextMenuEvent(QContextMenuEvent* e)
@@ -602,20 +692,6 @@ void ControlRuler::createMenu()
 void
 ControlRuler::clearSelectedItems()
 {
-    // debug
-    RG_DEBUG << "ControlRuler::clearSelectedItems() : m_selectedItems : \n";
-    for (QCanvasItemList::Iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
-        RG_DEBUG << (*it) << endl;
-    }
-
-    RG_DEBUG << "ControlRuler::clearSelectedItems() : all canvas items : \n";
-    QCanvasItemList list = canvas()->allItems();
-    for (QCanvasItemList::Iterator it=list.begin(); it!=list.end(); ++it) {
-        RG_DEBUG << (*it) << endl;
-    }
-    // debug
-
-    
     for (QCanvasItemList::Iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
         (*it)->setSelected(false);
     }
@@ -833,18 +909,42 @@ void ControllerEventsRuler::segmentDeleted(const Segment*)
     m_segmentDeleted = false;
 }
 
-void ControllerEventsRuler::addControllerEvent()
+void ControllerEventsRuler::insertControllerEvent()
 {
-    RG_DEBUG << "ControllerEventsRuler::addControllerEvent() : inserting event at "
-             << m_rulerScale->getTimeForX(m_lastEventPos.x())
+    timeT insertTime = m_rulerScale->getTimeForX(m_lastEventPos.x());
+
+
+    // compute initial value from cursor height
+    //
+    long initialValue = heightToValue(m_lastEventPos.y() - canvas()->height());
+
+    RG_DEBUG << "ControllerEventsRuler::insertControllerEvent() : inserting event at "
+             << insertTime
+             << " - initial value = " << initialValue
              << endl;
+
+    // ask controller number to user
+    long number = 0; bool ok = false;
+    QIntValidator intValidator(0, 128, this);
+    
+    QString res = KLineEditDlg::getText(i18n("Controller Event Number"), "0", &ok, this, &intValidator);
+    if (ok) number = res.toULong();
+    
+    ControllerEventInsertCommand* command = new ControllerEventInsertCommand(insertTime, number, initialValue, m_segment);
+
+    m_parentEditView->addCommandToHistory(command);
 }
 
-void ControllerEventsRuler::deleteControllerEvent()
+void ControllerEventsRuler::eraseControllerEvent()
 {
-    RG_DEBUG << "ControllerEventsRuler::addControllerEvent() : deleting event at "
-             << m_rulerScale->getTimeForX(m_lastEventPos.x())
-             << endl;
+    RG_DEBUG << "ControllerEventsRuler::eraseControllerEvent() : deleting selected events\n";
+
+    ControllerEventEraseCommand* command = new ControllerEventEraseCommand(m_selectedItems,
+                                                                           m_segment,
+                                                                           m_eventSelection->getStartTime(),
+                                                                           m_eventSelection->getEndTime());
+    m_parentEditView->addCommandToHistory(command);
+    clearSelectedItems();
 }
 
 //----------------------------------------

@@ -540,6 +540,18 @@ EditView::setupActions()
     new KAction(i18n("Add Control Ruler..."), 0, this,
                 SLOT(slotShowPropertyControlRuler()), actionCollection(),
                 "add_control_ruler");
+
+    //
+    // Control Ruler context menu
+    //
+    new KAction(i18n("Insert item"), 0, this,
+		SLOT(slotInsertControlRulerItem()), actionCollection(),
+		"insert_control_ruler_item");
+    new KAction(i18n("Erase selected item(s)"), 0, this,
+		SLOT(slotEraseControlRulerItem()), actionCollection(),
+		"erase_control_ruler_item");
+
+
 }
 
 void
@@ -871,3 +883,18 @@ void EditView::slotShowPropertyControlRuler()
     }
 */
 }
+
+void
+EditView::slotInsertControlRulerItem()
+{
+    ControllerEventsRuler* ruler = dynamic_cast<ControllerEventsRuler*>(getCurrentControlRuler());
+    if (ruler) ruler->insertControllerEvent();
+}
+
+void
+EditView::slotEraseControlRulerItem()
+{
+    ControllerEventsRuler* ruler = dynamic_cast<ControllerEventsRuler*>(getCurrentControlRuler());
+    if (ruler) ruler->eraseControllerEvent();
+}
+

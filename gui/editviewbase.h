@@ -203,6 +203,8 @@ public slots:
 
     virtual void slotToggleSolo();
 
+    void slotStateChanged(const QString&, bool noReverse);
+
 protected:
 
     virtual void paintEvent(QPaintEvent* e);

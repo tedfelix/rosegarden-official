@@ -167,6 +167,10 @@ public slots:
     virtual void slotShowControllerEventsRuler();
     virtual void slotShowPropertyControlRuler();
 
+    /// Control ruler actions
+    void slotInsertControlRulerItem();
+    void slotEraseControlRulerItem();
+
 protected:
     virtual Rosegarden::RulerScale* getHLayout() = 0;
     virtual Rosegarden::Staff* getFirstStaff() = 0;

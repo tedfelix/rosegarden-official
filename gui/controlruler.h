@@ -80,6 +80,9 @@ public:
     static const int MaxItemHeight;
     static const int ItemHeightRange;
 
+signals:
+    void stateChange(const QString&, bool);
+
 public slots:
     /// override RosegardenCanvasView - we don't want to change the main hscrollbar
     virtual void slotUpdate();
@@ -188,8 +191,8 @@ public:
     virtual void endMarkerTimeChanged(const Rosegarden::Segment *, bool shorten);
     virtual void segmentDeleted(const Rosegarden::Segment *);
 
-    virtual void addControllerEvent();
-    virtual void deleteControllerEvent();
+    virtual void insertControllerEvent();
+    virtual void eraseControllerEvent();
 
 protected:
     //--------------- Data members ---------------------------------

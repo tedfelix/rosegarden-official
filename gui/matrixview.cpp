@@ -636,18 +636,6 @@ void MatrixView::setupActions()
                       SLOT(slotToggleTempoRuler()),
                       actionCollection(), "show_tempo_ruler");
 
-
-    //
-    // Control Ruler context menu
-    //
-    new KAction(i18n("Add item"), 0, this,
-		SLOT(slotAddControlRulerItem()), actionCollection(),
-		"add_control_ruler_item");
-    new KAction(i18n("Delete item"), 0, this,
-		SLOT(slotDeleteControlRulerItem()), actionCollection(),
-		"delete_control_ruler_item");
-
-
     createGUI(getRCFileName());
 
     if (getSegmentsOnlyRests())
@@ -2167,23 +2155,6 @@ MatrixView::slotToggleTempoRuler()
 {
     toggleWidget(m_tempoRuler, "show_tempo_ruler");
 }
-
-void
-MatrixView::slotAddControlRulerItem()
-{
-    MATRIX_DEBUG << "slotAddControlRulerItem()\n";
-    ControllerEventsRuler* ruler = dynamic_cast<ControllerEventsRuler*>(getCurrentControlRuler());
-    if (ruler) ruler->addControllerEvent();
-}
-
-void
-MatrixView::slotDeleteControlRulerItem()
-{
-    MATRIX_DEBUG << "slotDeleteControlRulerItem()\n";
-    ControllerEventsRuler* ruler = dynamic_cast<ControllerEventsRuler*>(getCurrentControlRuler());
-    if (ruler) ruler->deleteControllerEvent();
-}
-
 
 void
 MatrixView::slotInsertableNoteEventReceived(int pitch, bool noteOn)

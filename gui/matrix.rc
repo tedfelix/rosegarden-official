@@ -150,8 +150,8 @@
 <!--     RMB Menus           -->
 
 <Menu noMerge="1" name="controller_events_ruler_menu">
-   <Action name="add_control_ruler_item"/>
-   <Action name="delete_control_ruler_item"/>
+   <Action name="insert_control_ruler_item"/>
+   <Action name="erase_control_ruler_item"/>
 </Menu>
 
 <!--     Application States           -->
@@ -186,6 +186,16 @@
     <Action name="show_control_rulers"/>
   </enable>
 </State>
+
+<State name="have_controller_item_selected">
+  <enable>
+    <Action name="erase_control_ruler_item"/>
+  </enable>
+  <disable>
+   <Action name="insert_control_ruler_item"/>
+  </disable>
+</State>
+
 
 </kpartgui>
  

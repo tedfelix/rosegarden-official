@@ -275,10 +275,6 @@ public slots:
     void slotJumpCursorToPlayback();
     void slotJumpPlaybackToCursor();
 
-    /// Control ruler actions
-    void slotAddControlRulerItem();
-    void slotDeleteControlRulerItem();
-
     /// Canvas actions slots
 
     /**

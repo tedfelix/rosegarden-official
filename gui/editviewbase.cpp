@@ -473,6 +473,14 @@ EditViewBase::slotToggleSolo()
     
 }
 
+void
+EditViewBase::slotStateChanged(const QString& s,
+                               bool noReverse)
+{
+    stateChanged(s, noReverse ? KXMLGUIClient::StateNoReverse : KXMLGUIClient::StateReverse);
+}
+
+
 /*
  * Let tools know if their current element has gone
  */
