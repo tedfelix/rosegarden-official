@@ -657,7 +657,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
              this, SLOT(slotUpdateStaffName()));
     }
 
-    setConfigDialogPageIndex(1);
+    setConfigDialogPageIndex(2);
     setOutOfCtor();
 
     // Property and Control Rulers
@@ -1688,12 +1688,12 @@ void NotationView::setupActions()
     new KAction(MakeAccidentalsCautionaryCommand::getGlobalName(true),
 		0, this,
 		SLOT(slotShowCautionary()), actionCollection(),
-		"show_cautionary_accidental");
+		"show_cautionary");
 
     new KAction(MakeAccidentalsCautionaryCommand::getGlobalName(false),
 		0, this,
 		SLOT(slotCancelCautionary()), actionCollection(),
-		"cancel_cautionary_accidental");
+		"cancel_cautionary");
 
     icon = QIconSet
         (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap

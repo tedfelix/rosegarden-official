@@ -72,7 +72,7 @@ NoteInsertionCommand::NoteInsertionCommand(Segment &segment, timeT time,
 					   bool matrixType,
 					   NoteStyleName noteStyle) :
     BasicCommand(i18n("Insert Note"), segment,
-		 (autoBeam ? segment.getBarStartForTime(time) : time),
+		 getModificationStartTime(segment, time),
 		 (autoBeam ? segment.getBarEndForTime(endTime) : endTime)),
     m_insertionTime(time),
     m_note(note),
@@ -89,6 +89,27 @@ NoteInsertionCommand::NoteInsertionCommand(Segment &segment, timeT time,
 NoteInsertionCommand::~NoteInsertionCommand()
 {
     // nothing
+}
+
+Rosegarden::timeT
+NoteInsertionCommand::getModificationStartTime(Segment &segment,
+					       Rosegarden::timeT time)
+{
+    // We may be splitting a rest to insert this note, so we'll have
+    // to record the change from the start of that rest rather than
+    // just the start of the note
+
+    Rosegarden::timeT barTime = segment.getBarStartForTime(time);
+    Segment::iterator i = segment.findNearestTime(time);
+
+    if (i != segment.end() &&
+	(*i)->getAbsoluteTime() < time &&
+	(*i)->getAbsoluteTime() + (*i)->getDuration() > time &&
+	(*i)->isa(Note::EventRestType)) {
+	return std::min(barTime, (*i)->getAbsoluteTime());
+    }
+
+    return barTime;
 }
 
 void
@@ -1569,7 +1590,7 @@ RespellCommand::getGlobalName(Type type, Accidental accidental)
 	return i18n("Respell Accidentals &Downward");
 
     case Restore:
-	return i18n("Restore &Computed Accidentals");
+	return i18n("&Restore Computed Accidentals");
     }
 
     return i18n("Respell Accidentals");
@@ -1626,7 +1647,7 @@ RespellCommand::modifySegment()
 QString
 MakeAccidentalsCautionaryCommand::getGlobalName(bool cautionary)
 {
-    if (cautionary) return i18n("Show &Cautionary Accidentals");
+    if (cautionary) return i18n("Use &Cautionary Accidentals");
     else return i18n("Cancel C&autionary Accidentals");
 }
 

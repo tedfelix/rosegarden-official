@@ -89,7 +89,7 @@
     <Action name="slashes_5"/>
   </Menu>
   <Menu name="Respell">
-    <text>&amp;Respell Accidentals</text>
+    <text>&amp;Accidentals</text>
     <Action name="respell_doubleflat"/>
     <Action name="respell_flat"/>
     <Action name="respell_natural"/>
@@ -97,9 +97,10 @@
     <Action name="respell_doublesharp"/>
     <Separator/>
     <Action name="respell_restore"/>
+    <Separator/>
+    <Action name="show_cautionary"/>
+    <Action name="cancel_cautionary"/>
   </Menu>
-  <Action name="show_cautionary_accidental"/>
-  <Action name="cancel_cautionary_accidental"/>
 </Menu>
 
   <Menu name="Marks">

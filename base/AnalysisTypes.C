@@ -1003,9 +1003,10 @@ AnalysisHelper::guessTimeSignature(CompositionTimeSliceAdapter &c)
 Key
 AnalysisHelper::guessKey(CompositionTimeSliceAdapter &c)
 {
+    if (c.begin() == c.end()) return Key();
 
     // 1. Figure out the distribution of emphasis over the twelve
-    //    pitch clases in the first few bears. Pitches that occur
+    //    pitch clases in the first few bars. Pitches that occur
     //    more often have greater emphasis, and pitches that occur
     //    at stronger points in the bar have greater emphasis.
 

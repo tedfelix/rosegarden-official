@@ -50,6 +50,9 @@ public:
 protected:
     virtual void modifySegment();
 
+    Rosegarden::timeT getModificationStartTime(Rosegarden::Segment &,
+					       Rosegarden::timeT);
+
     Rosegarden::timeT m_insertionTime;
     Rosegarden::Note m_note;
     int m_pitch;
