@@ -224,7 +224,7 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
                                VUMeter::PeakHold,
                                vuWidth,
                                buttonGap,
-                               track->getId());
+                               track->getPosition());
 
     m_trackMeters.push_back(vuMeter);
 
