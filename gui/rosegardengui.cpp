@@ -656,44 +656,43 @@ void RosegardenGUIApp::setupActions()
     QIconSet icon = QIconSet(pixmap);
 
     // TODO : add some shortcuts here
-    action = new KRadioAction(i18n("&Select"), icon, Key_F1,
+    action = new KRadioAction(i18n("&Select"), icon, Key_F2,
                               this, SLOT(slotPointerSelected()),
                               actionCollection(), "select");
+    action->setExclusiveGroup("segmenttools");
 
+    action = new KRadioAction(i18n("&Draw"), "pencil", Key_F3,
+                              this, SLOT(slotDrawSelected()),
+                              actionCollection(), "draw");
     action->setExclusiveGroup("segmenttools");
                              
-    action = new KRadioAction(i18n("&Erase"), "eraser", Key_F3,
+    action = new KRadioAction(i18n("&Erase"), "eraser", Key_F4,
                               this, SLOT(slotEraseSelected()),
                               actionCollection(), "erase");
     action->setExclusiveGroup("segmenttools");
 
-    action = new KRadioAction(i18n("&Draw"), "pencil", Key_F2,
-                              this, SLOT(slotDrawSelected()),
-                              actionCollection(), "draw");
-    action->setExclusiveGroup("segmenttools");
-
-    action = new KRadioAction(i18n("&Move"), "move", Key_F4,
+    action = new KRadioAction(i18n("&Move"), "move", Key_F5,
                               this, SLOT(slotMoveSelected()),
                               actionCollection(), "move");
     action->setExclusiveGroup("segmenttools");
 
     pixmap.load(pixmapDir + "/toolbar/resize.xpm");
     icon = QIconSet(pixmap);
-    action = new KRadioAction(i18n("&Resize"), icon, Key_F5,
+    action = new KRadioAction(i18n("&Resize"), icon, Key_F6,
                               this, SLOT(slotResizeSelected()),
                               actionCollection(), "resize");
     action->setExclusiveGroup("segmenttools");
 
     pixmap.load(pixmapDir + "/toolbar/split.xpm");
     icon = QIconSet(pixmap);
-    action = new KRadioAction(i18n("&Split"), icon, Key_F6,
+    action = new KRadioAction(i18n("&Split"), icon, Key_F7,
                               this, SLOT(slotSplitSelected()),
                               actionCollection(), "split");
     action->setExclusiveGroup("segmenttools");
 
     pixmap.load(pixmapDir + "/toolbar/join.xpm");
     icon = QIconSet(pixmap);
-    action = new KRadioAction(i18n("&Join"), icon, 0/* Key_F7 */,
+    action = new KRadioAction(i18n("&Join"), icon, 0,
                               this, SLOT(slotJoinSelected()),
                               actionCollection(), "join");
     action->setExclusiveGroup("segmenttools");

@@ -1508,7 +1508,7 @@ ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment *segment,
                                              EditViewBase* parentView,
                                              QCanvas* c,
                                              QWidget* parent,
-                                             ControlParameter *controller,
+                                             const ControlParameter *controller,
                                              const char* name, WFlags f)
     : ControlRuler(segment, rulerScale, parentView, c, parent, name, f),
       m_segmentDeleted(false),

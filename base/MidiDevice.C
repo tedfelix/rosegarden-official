@@ -90,8 +90,9 @@ MidiDevice::MidiDevice(DeviceId id,
     generateDefaultControllers();
 }
 
-MidiDevice::MidiDevice(const MidiDevice &dev):
+MidiDevice::MidiDevice(const MidiDevice &dev) :
     Device(dev.getId(), dev.getName(), dev.getType()),
+    Controllable(),
     m_programList(dev.m_programList),
     m_bankList(dev.m_bankList),
     m_controlList(dev.m_controlList),
@@ -204,8 +205,8 @@ MidiDevice::generateDefaultControllers()
         { "Chorus", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "93", "3", "1" },
         { "Volume", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "7", "1", "2" },
         { "Reverb", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "91", "3", "3" },
-        { "Sustain", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "64", "4", "4" },
-        { "Expression", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "11", "2", "5" },
+        { "Sustain", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "64", "4", "-1" },
+        { "Expression", Rosegarden::Controller::EventType, "<none>", "0", "127", "100", "11", "2", "-1" },
         { "Modulation", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "1", "4", "-1" },
         { "PitchBend", Rosegarden::PitchBend::EventType, "<none>", "0", "16383", "8192", "1", "4", "-1" }
     };
@@ -694,6 +695,12 @@ MidiDevice::getControlParameter(int index)
     return 0;
 }
 
+const ControlParameter *
+MidiDevice::getControlParameter(int index) const
+{
+    return ((MidiDevice *)this)->getControlParameter(index);
+}
+
 ControlParameter *
 MidiDevice::getControlParameter(const std::string &type, Rosegarden::MidiByte controllerValue)
 {
@@ -716,6 +723,12 @@ MidiDevice::getControlParameter(const std::string &type, Rosegarden::MidiByte co
     }
 
     return 0;
+}
+
+const ControlParameter *
+MidiDevice::getControlParameter(const std::string &type, Rosegarden::MidiByte controllerValue) const
+{
+    return ((MidiDevice *)this)->getControlParameter(type, controllerValue);
 }
 
 }

@@ -250,7 +250,7 @@ protected:
     /**
      * Make a ruler for controller events
      */
-    ControllerEventsRuler* makeControllerEventRuler(Rosegarden::ControlParameter *controller = 0);
+    ControllerEventsRuler* makeControllerEventRuler(const Rosegarden::ControlParameter *controller = 0);
 
     /**
      * Add control ruler

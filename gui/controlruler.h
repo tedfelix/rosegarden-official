@@ -231,7 +231,7 @@ public:
                           EditViewBase* parentView,
                           QCanvas*,
                           QWidget* parent=0,
-                          Rosegarden::ControlParameter *controller = 0,
+                          const Rosegarden::ControlParameter *controller = 0,
                           const char* name=0, WFlags f=0);
 
     virtual ~ControllerEventsRuler();

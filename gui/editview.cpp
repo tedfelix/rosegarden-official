@@ -46,6 +46,7 @@
 #include "AnalysisTypes.h"
 #include "CompositionTimeSliceAdapter.h"
 #include "MidiTypes.h"
+#include "SoftSynthDevice.h"
 
 #include "editview.h"
 #include "rosestrings.h"
@@ -314,7 +315,7 @@ PropertyControlRuler* EditView::makePropertyControlRuler(PropertyName propertyNa
     return controlRuler;
 }
 
-ControllerEventsRuler* EditView::makeControllerEventRuler(ControlParameter *controller)
+ControllerEventsRuler* EditView::makeControllerEventRuler(const ControlParameter *controller)
 {
     QCanvas* controlRulerCanvas = new QCanvas(this);
     QSize viewSize = getViewSize();
@@ -801,11 +802,14 @@ EditView::setupAddControlRulerMenu()
 	//!!! problem here with notation view -- current segment can
 	// change after construction, but this function isn't used again
 
-	Rosegarden::MidiDevice *md = dynamic_cast<Rosegarden::MidiDevice *>
-	    (getCurrentDevice());
-	if (!md) return;
+	Rosegarden::Controllable *c = 
+	    dynamic_cast<Rosegarden::MidiDevice *>(getCurrentDevice());
+	if (!c) {
+	    c = dynamic_cast<Rosegarden::SoftSynthDevice *>(getCurrentDevice());
+	    if (!c) return;
+	}
 
-        const Rosegarden::ControlList &list = md->getControlParameters();
+        const Rosegarden::ControlList &list = c->getControlParameters();
 
         int i = 0;
         QString itemStr;
@@ -848,9 +852,12 @@ EditView::setupControllerTabs()
 
     if (list.size())
     {
-	Rosegarden::MidiDevice *md = dynamic_cast<Rosegarden::MidiDevice *>
-	    (getCurrentDevice());
-	if (!md) return;
+	Rosegarden::Controllable *c = 
+	    dynamic_cast<Rosegarden::MidiDevice *>(getCurrentDevice());
+	if (!c) {
+	    c = dynamic_cast<Rosegarden::SoftSynthDevice *>(getCurrentDevice());
+	    if (!c) return;
+	}
 
         Rosegarden::Segment::EventRulerListIterator it;
 
@@ -858,8 +865,9 @@ EditView::setupControllerTabs()
         {
             // Get ControlParameter object from controller value
             //
-            ControlParameter *controlParameter = 
-                md->getControlParameter((*it)->m_type, Rosegarden::MidiByte((*it)->m_controllerValue));
+            const ControlParameter *controlParameter = 
+		c->getControlParameter((*it)->m_type,
+				       Rosegarden::MidiByte((*it)->m_controllerValue));
 
             RG_DEBUG << "EditView::setupControllerTabs - " 
                      << "Control Parameter type = " << (*it)->m_type << endl;
@@ -887,11 +895,14 @@ EditView::slotAddControlRuler(int controller)
     RG_DEBUG << "EditView::slotAddControlRuler - item = " 
              << controller << endl;
 
-    Rosegarden::MidiDevice *md = dynamic_cast<Rosegarden::MidiDevice *>
-	(getCurrentDevice());
-    if (!md) return;
-
-    const Rosegarden::ControlList &list = md->getControlParameters();
+    Rosegarden::Controllable *c = 
+	dynamic_cast<Rosegarden::MidiDevice *>(getCurrentDevice());
+    if (!c) {
+	c = dynamic_cast<Rosegarden::SoftSynthDevice *>(getCurrentDevice());
+	if (!c) return;
+    }
+    
+    const Rosegarden::ControlList &list = c->getControlParameters();
     ControlParameter control = list[controller];
 
     int index = 0;

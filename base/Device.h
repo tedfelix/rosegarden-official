@@ -19,13 +19,13 @@
     COPYING included with this distribution for more information.
 */
 
+#ifndef _DEVICE_H_
+#define _DEVICE_H_
+
 #include "XmlExportable.h"
 #include "Instrument.h"
 #include <string>
 #include <vector>
-
-#ifndef _DEVICE_H_
-#define _DEVICE_H_
 
 // A Device can query underlying hardware/sound APIs to
 // generate a list of Instruments.

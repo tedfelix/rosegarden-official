@@ -19,6 +19,9 @@
     COPYING included with this distribution for more information.
 */
 
+#ifndef _MIDIDEVICE_H_
+#define _MIDIDEVICE_H_
+
 #include <string>
 #include <vector>
 
@@ -26,18 +29,15 @@
 #include "Instrument.h"
 #include "MidiProgram.h"
 #include "ControlParameter.h"
-
-#ifndef _MIDIDEVICE_H_
-#define _MIDIDEVICE_H_
+#include "Controllable.h"
 
 namespace Rosegarden
 {
 
 typedef std::vector<std::string> StringList;
 typedef std::vector<MidiByte> MidiByteList;
-typedef std::vector<ControlParameter> ControlList;
 
-class MidiDevice : public Device
+class MidiDevice : public Device, public Controllable
 {
 public:
     typedef enum
@@ -132,7 +132,9 @@ public:
     ControlList::const_iterator endControllers() const
         { return m_controlList.end(); }
 
-    const ControlList &getControlParameters() const { return m_controlList; }
+    // implemented from Controllable interface
+    //
+    virtual const ControlList &getControlParameters() const { return m_controlList; }
 
     // Only those on the IPB list
     //
@@ -140,8 +142,10 @@ public:
 
     // Access ControlParameters (read/write)
     //
-    ControlParameter *getControlParameter(int index);
-    ControlParameter *getControlParameter(const std::string &type, Rosegarden::MidiByte controllerNumber);
+    virtual ControlParameter *getControlParameter(int index);
+    virtual const ControlParameter *getControlParameter(int index) const;
+    virtual ControlParameter *getControlParameter(const std::string &type, Rosegarden::MidiByte controllerNumber);
+    virtual const ControlParameter *getControlParameter(const std::string &type, Rosegarden::MidiByte controllerNumber) const;
 
     // Modify ControlParameters
     //

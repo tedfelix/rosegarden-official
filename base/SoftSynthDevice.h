@@ -19,18 +19,19 @@
     COPYING included with this distribution for more information.
 */
 
+#ifndef _SOFT_SYNTH_DEVICE_H_
+#define _SOFT_SYNTH_DEVICE_H_
+
 #include <string>
 
 #include "Device.h"
 #include "Instrument.h"
-
-#ifndef _SOFT_SYNTH_DEVICE_H_
-#define _SOFT_SYNTH_DEVICE_H_
+#include "Controllable.h"
 
 namespace Rosegarden
 {
 
-class SoftSynthDevice : public Device
+class SoftSynthDevice : public Device, public Controllable
 {
 
 public:
@@ -52,8 +53,16 @@ public:
     virtual InstrumentList getPresentationInstruments() const
         { return m_instruments; }
 
-private:
+    // implemented from Controllable interface
+    //
+    virtual const ControlList &getControlParameters() const { return m_controlList; }
+    virtual const ControlParameter *getControlParameter(int index) const;
+    virtual const ControlParameter *getControlParameter(const std::string &type,
+							Rosegarden::MidiByte controllerNumber) const;
 
+private:
+    static ControlList m_controlList;
+    static void checkControlList();
 };
 
 }

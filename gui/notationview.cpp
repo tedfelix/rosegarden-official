@@ -1394,7 +1394,7 @@ void NotationView::setupActions()
 
 
     icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("text")));
-    noteAction = new KRadioAction(i18n("&Text"), icon, Key_F7, this,
+    noteAction = new KRadioAction(i18n("&Text"), icon, Key_F8, this,
                                   SLOT(slotText()),
                                   actionCollection(), "text");
     noteAction->setExclusiveGroup("notes");
@@ -1403,13 +1403,13 @@ void NotationView::setupActions()
     //
     // Edition tools (eraser, selector...)
     //
-    noteAction = new KRadioAction(i18n("&Erase"), "eraser", Key_F3,
+    noteAction = new KRadioAction(i18n("&Erase"), "eraser", Key_F4,
                                   this, SLOT(slotEraseSelected()),
                                   actionCollection(), "erase");
     noteAction->setExclusiveGroup("notes");
 
     icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("select")));
-    noteAction = new KRadioAction(i18n("&Select"), icon, Key_F1,
+    noteAction = new KRadioAction(i18n("&Select"), icon, Key_F2,
                                   this, SLOT(slotSelectSelected()),
                                   actionCollection(), "select");
     noteAction->setExclusiveGroup("notes");
