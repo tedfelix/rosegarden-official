@@ -90,6 +90,14 @@ SegmentItem::SegmentItem(Segment *segment,
 SegmentItem::~SegmentItem()
 {
     kdDebug(KDEBUG_AREA) << "SegmentItem::~SegmentItem" << endl;
+
+    //!!! oh arse.  I was thinking we didn't need to delete the
+    // other rectangle and label here 'cos the canvas would,
+    // but of course if we're deleted for some other reason
+    // like the segment has gone, then of course we want to
+    // be rid of them.  perhaps this means the ownership
+    // chain is just not very sensible -- we shouldn't really
+    // have one canvas item owning another
 }
 
 void

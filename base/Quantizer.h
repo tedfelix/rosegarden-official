@@ -276,28 +276,32 @@ protected:
     public:
 	virtual ~SingleQuantizer();
 	virtual timeT quantize(int unit, int maxDots, timeT duration,
-			       timeT followingRestDuration) const = 0;
+			       timeT followingRestDuration,
+			       bool zeroAcceptable) const = 0;
     };
 
     class UnitQuantizer : public SingleQuantizer {
     public:
 	virtual ~UnitQuantizer();
 	virtual timeT quantize(int unit, int maxDots, timeT duration,
-			       timeT followingRestDuration) const;
+			       timeT followingRestDuration,
+			       bool zeroAcceptable) const;
     };
 
     class NoteQuantizer : public SingleQuantizer {
     public:
 	virtual ~NoteQuantizer();
 	virtual timeT quantize(int unit, int maxDots, timeT duration,
-			       timeT followingRestDuration) const;
+			       timeT followingRestDuration,
+			       bool zeroAcceptable) const;
     };
 
     class LegatoQuantizer : public NoteQuantizer {
     public:
 	virtual ~LegatoQuantizer();
 	virtual timeT quantize(int unit, int maxDots, timeT duration,
-			       timeT followingRestDuration) const;
+			       timeT followingRestDuration,
+			       bool zeroAcceptable) const;
     };
 
     void quantize(Segment *s, Segment::iterator from, Segment::iterator to,
