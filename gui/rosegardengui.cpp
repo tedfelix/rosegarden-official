@@ -2348,7 +2348,7 @@ void RosegardenGUIApp::slotSequencerExited(KProcess*)
 
 void RosegardenGUIApp::slotExportMIDI()
 {
-    KTmpStatusMsg msg(i18n("Exporting to MIDI file..."), this);
+    KTmpStatusMsg msg(i18n("Exporting MIDI file..."), this);
 
     QString fileName = getValidWriteFile("mid", "Export as...");
     if (fileName.isEmpty()) return;
@@ -2375,13 +2375,13 @@ void RosegardenGUIApp::exportMIDIFile(const QString &file)
 
     if (!midiFile.write())
     {
-        KMessageBox::sorry(this, i18n("The MIDI File has not been exported."));
+        KMessageBox::sorry(this, i18n("Export failed.  The file could not be opened for writing."));
     }
 }
 
 void RosegardenGUIApp::slotExportCsound()
 {
-    KTmpStatusMsg msg(i18n("Exporting to Csound scorefile..."), this);
+    KTmpStatusMsg msg(i18n("Exporting Csound score file..."), this);
 
     QString fileName = getValidWriteFile("", "Export as...");
     if (fileName.isEmpty()) return;
@@ -2391,19 +2391,19 @@ void RosegardenGUIApp::slotExportCsound()
 
 void RosegardenGUIApp::exportCsoundFile(const QString &file)
 {
-    RosegardenProgressDialog progressDlg(i18n("Exporting Csound file..."),
+    RosegardenProgressDialog progressDlg(i18n("Exporting Csound score file..."),
                                          100,
                                          this);
 
     CsoundExporter e(&m_doc->getComposition(), qstrtostr(file));
     if (!e.write()) {
-	KMessageBox::sorry(this, i18n("The Csound file has not been exported."));
+        KMessageBox::sorry(this, i18n("Export failed.  The file could not be opened for writing."));
     }
 }
 
 void RosegardenGUIApp::slotExportLilypond()
 {
-    KTmpStatusMsg msg(i18n("Exporting to Lilypond file..."), this);
+    KTmpStatusMsg msg(i18n("Exporting Lilypond file..."), this);
 
     QString fileName = getValidWriteFile("ly", "Export as...");
     if (fileName.isEmpty()) return;
@@ -2419,13 +2419,13 @@ void RosegardenGUIApp::exportLilypondFile(const QString &file)
 
     LilypondExporter e(&m_doc->getComposition(), qstrtostr(file));
     if (!e.write()) {
-	KMessageBox::sorry(this, i18n("The Lilypond file has not been exported."));
+        KMessageBox::sorry(this, i18n("Export failed.  The file could not be opened for writing."));
     }
 }
 
 void RosegardenGUIApp::slotExportMusicXml()
 {
-    KTmpStatusMsg msg(i18n("Exporting to MusicXml file..."), this);
+    KTmpStatusMsg msg(i18n("Exporting MusicXML file..."), this);
 
     QString fileName = getValidWriteFile("xml", "Export as...");
     if (fileName.isEmpty()) return;
@@ -2435,13 +2435,13 @@ void RosegardenGUIApp::slotExportMusicXml()
 
 void RosegardenGUIApp::exportMusicXmlFile(const QString &file)
 {
-    RosegardenProgressDialog progressDlg(i18n("Exporting MusicXml file..."),
+    RosegardenProgressDialog progressDlg(i18n("Exporting MusicXML file..."),
                                          100,
                                          this);
 
     MusicXmlExporter e(m_doc, qstrtostr(file));
     if (!e.write()) {
-	KMessageBox::sorry(this, i18n("The MusicXml file has not been exported."));
+        KMessageBox::sorry(this, i18n("Export failed.  The file could not be opened for writing."));
     }
 }
 
