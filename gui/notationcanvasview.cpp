@@ -415,6 +415,7 @@ NotationCanvasView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 void
 NotationCanvasView::slotRenderComplete()
 {
+    if (!m_renderPainter) return;
     QCanvasView::drawContents(m_renderPainter,
 			      m_lastRender.x(),
 			      m_lastRender.y(),
