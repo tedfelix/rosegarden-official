@@ -54,6 +54,7 @@
 #include "rosegardenguiview.h"
 #include "rosegardenguidoc.h"
 #include "rosegardenconfiguredialog.h"
+#include "rosegardentransportdialog.h"
 #include "MidiFile.h"
 #include "rg21io.h"
 #include "csoundio.h"
@@ -71,6 +72,7 @@
 #include "multiviewcommandhistory.h"
 #include "segmentcommands.h"
 #include "zoomslider.h"
+#include "audiomanagerdialog.h"
 
 #define ID_STATUS_MSG 1
 
@@ -87,6 +89,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
       m_zoomSlider(0),
       m_seqManager(0),
       m_transport(0),
+      m_audioManagerDialog(0),
       m_originatingJump(false),
       m_storedLoopStart(0),
       m_storedLoopEnd(0),
@@ -306,6 +309,11 @@ void RosegardenGUIApp::setupActions()
                               this, SLOT(slotJoinSelected()),
                               actionCollection(), "join");
     action->setExclusiveGroup("segmenttools");
+
+    new KAction(i18n("&Audio Manager"),
+                0, 
+                this, SLOT(slotAudioManager()),
+                actionCollection(), "audio_manager");
 
     new KAction(i18n("&Add Tracks..."), 
                 0,
@@ -2513,5 +2521,25 @@ RosegardenGUIApp::createNewAudioFile()
     return QString(m_doc->createNewAudioFile().c_str());
 }
 
+
+void
+RosegardenGUIApp::slotAudioManager()
+{
+    if (m_audioManagerDialog == 0)
+    {
+        m_audioManagerDialog = new Rosegarden::AudioManagerDialog(this);
+
+        connect(m_audioManagerDialog, SIGNAL(destroyed()),
+                SLOT(slotAudioManagerClosed()));
+        m_audioManagerDialog->show();
+    }
+}
+
+void
+RosegardenGUIApp::slotAudioManagerClosed()
+{
+    cout << "slotAudioManagerClosed::HERE" << endl;
+    m_audioManagerDialog = 0;
+}
 
 

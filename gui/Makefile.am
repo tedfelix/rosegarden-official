@@ -3,6 +3,7 @@ KDE_CXXFLAGS = $(USE_EXCEPTIONS) @KDE_CXXFLAGS@
 bin_PROGRAMS = rosegarden
 
 rosegarden_SOURCES = \
+        audiomanagerdialog.cpp \
         barbuttons.cpp \
 	basiccommand.cpp \
 	chordnameruler.cpp \

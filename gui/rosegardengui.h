@@ -38,7 +38,6 @@
 
 #include "rosegardendcop.h"
 #include "rosegardenguiiface.h"
-#include "rosegardentransportdialog.h"
 #include "segmentcanvas.h"
 #include "dialogs.h"
 
@@ -57,7 +56,12 @@ class RosegardenGUIDoc;
 class RosegardenGUIView;
 template <class T> class ZoomSlider;
 
-namespace Rosegarden { class SequenceManager; }
+namespace Rosegarden
+{
+    class SequenceManager;
+    class AudioManagerDialog;
+    class RosegardenTransportDialog;
+}
 
 /**
   * The base class for RosegardenGUI application windows. It sets up the main
@@ -709,6 +713,12 @@ public slots:
      */
     void slotDocumentModified();
 
+    /**
+     * View the audio file manager
+     */
+    void slotAudioManager();
+    void slotAudioManagerClosed();
+
 private:
 
     //--------------- Data members ---------------------------------
@@ -770,8 +780,11 @@ private:
     //
     Rosegarden::RosegardenTransportDialog *m_transport;
 
-    bool m_originatingJump;
+    // Audio file manager
+    //
+    Rosegarden::AudioManagerDialog *m_audioManagerDialog;
 
+    bool m_originatingJump;
 
     // Use these in conjucntion with the loop button to
     // remember where a loop was if we've ever set one.

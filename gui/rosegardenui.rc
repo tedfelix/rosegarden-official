@@ -24,6 +24,9 @@
 	<Separator/>
       	<Action name="edit_doc_properties"/>
   </Menu>
+  <Menu name="view">
+      <Action name="audio_manager"/>
+  </Menu>
   <Menu name="Segments">
 	<text>Seg&amp;ments</text>
       	<Action name="edit_matrix"/>

@@ -1,20 +1,21 @@
-0.2 tasks for completion by 28.05.02
-====================================
+0.2 tasks
+=========
 
-o basic JACK audio
-  - click on sample start (resampling probably required) [DONE]
-  - multiple sample (Segments problem?) [FIXED]
-  - audio recording [DONE]
-  - saving RG files with audio [HALF COMPLETE - absolute paths need sorting]
-  - partial/overlapping audio files playback/start index movement [DONE]
-  - audio file selection dialog
-  - audio preview on Segments
-  - audio Segment splitting
-  - "split silence" function to automatically split up an audio segment
-     into a number of segments when the amplitude falls below a given
-     threshold.
-  - set tempo event to length of audio sample
-  - audio VU meters
+o Saving RG files with audio [HALF COMPLETE - absolute paths need sorting]
+
+o Audio file selection dialog
+
+o Audio preview on Segments [HALF COMPLETE]
+
+o Audio Segment splitting and joining
+
+o "Split silence" function to automatically split up an audio segment
+   into a number of segments when the amplitude falls below a given
+   threshold.
+
+o Set tempo event to length of audio sample
+
+o Audio VU meters
 
 o Fix latency dialog with audio allowances
 
@@ -77,7 +78,13 @@ For later releases
 o Audio noise eliminator - recording
 
 Completed for 0.1.6
--------------------
+===================
+
+o JACK experimental driver
+  - click on sample start (resampling probably required) [DONE]
+  - multiple sample (Segments problem?) [FIXED]
+  - audio recording [DONE]
+  - partial/overlapping audio files playback/start index movement [DONE]
 
 o Playing Audio files broken - get seeking working [DONE]
 
