@@ -1179,9 +1179,9 @@ RosegardenSequencerApp::destroyMappedObject(int id)
 
 
 void
-RosegardenSequencerApp::reinitialiseStudio()
+RosegardenSequencerApp::clearStudio()
 {
-    SEQUENCER_DEBUG << "reinitialiseStudio()" << endl;
+    SEQUENCER_DEBUG << "clearStudio()" << endl;
     m_studio->clearTemporaries();
 } 
 

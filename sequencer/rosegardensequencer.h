@@ -236,9 +236,9 @@ public:
     //
     virtual unsigned int getSampleRate() const;
 
-    // Reinitialise the studio
+    // Clear the studio
     //
-    virtual void reinitialiseStudio();
+    virtual void clearStudio();
 
     // Sequencer Slice Size
     //

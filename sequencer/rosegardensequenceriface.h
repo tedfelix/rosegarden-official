@@ -240,7 +240,7 @@ public:
     // Initialise/Reinitialise the studio back down to read only objects
     // and set to defaults.
     //
-    virtual void reinitialiseStudio() = 0;
+    virtual void clearStudio() = 0;
 
     // Set sequencer slice size
     //

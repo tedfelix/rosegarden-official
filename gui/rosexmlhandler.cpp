@@ -1186,15 +1186,19 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_plugin->setAssigned(true);
             m_plugin->setBypass(bypassed);
 
+            /*
             // Creating the Plugin creates the ports too
             //
             Rosegarden::MappedObjectId mappedId =
                 Rosegarden::StudioControl::createStudioObject(
                         Rosegarden::MappedObject::LADSPAPlugin);
-
             m_plugin->setMappedId(mappedId);
+            */
+
             m_plugin->setId(id);
 
+
+            /*
             Rosegarden::StudioControl::setStudioObjectProperty
                 (mappedId,
                  Rosegarden::MappedObject::Instrument,
@@ -1212,6 +1216,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 (mappedId,
                  Rosegarden::MappedLADSPAPlugin::UniqueId,
                  Rosegarden::MappedObjectValue(id));
+                 */
 
             m_section = InPlugin;
         }
@@ -1237,10 +1242,12 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         {
             // Set the port at the sequencer and in the AudioPluginInstance
             //
+            /*
             Rosegarden::StudioControl::setStudioPluginPort
                 (m_plugin->getMappedId(),
                  portId,
                  value);
+                 */
 
             m_plugin->addPort(portId, value);
         }

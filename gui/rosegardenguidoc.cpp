@@ -449,13 +449,155 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 
     if (isSequencerRunning())
     {
-        // Initialise MIDI controllers
+        // Initialise the whole studio - faders, plugins etc.
+        //
+        initialiseStudio();
+
+        // Initialise the MIDI controllers (reaches through to MIDI devices
+        // to set them up)
         //
         initialiseControllers();
     }
 
     return true;
 }
+
+void RosegardenGUIDoc::clearStudio()
+{
+    QByteArray data;
+    QDataStream streamOut(data, IO_WriteOnly);
+
+    if (!kapp->dcopClient()->
+            send(ROSEGARDEN_SEQUENCER_APP_NAME,
+                 ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                 "clearStudio()",
+                 data))
+    {
+        RG_DEBUG << "failed to clear studio" << endl;
+        return;
+    }
+
+    RG_DEBUG << "cleared studio\n";
+}
+
+void RosegardenGUIDoc::initialiseStudio()
+{
+    clearStudio();
+
+    Rosegarden::InstrumentList list = m_studio.getAllInstruments();
+    Rosegarden::InstrumentList::iterator it = list.begin();
+    int count = 0;
+
+    for (; it != list.end(); it++)
+    {
+        if ((*it)->getType() == Rosegarden::Instrument::Audio)
+        {
+            Rosegarden::MappedObjectId mappedId =
+                Rosegarden::StudioControl::createStudioObject(
+                        Rosegarden::MappedObject::AudioFader);
+
+            // Set the object id against the instrument
+            //
+            (*it)->setMappedId(mappedId);
+
+
+            // Set the instrument id against this object
+            //
+            Rosegarden::StudioControl::setStudioObjectProperty(mappedId,
+                Rosegarden::MappedObject::Instrument,
+                Rosegarden::MappedObjectValue((*it)->getId()));
+
+            // Set the level
+            //
+            Rosegarden::StudioControl::setStudioObjectProperty(mappedId,
+                Rosegarden::MappedAudioFader::FaderLevel,
+                Rosegarden::MappedObjectValue((*it)->getVelocity()));
+
+            // Set the record level
+            //
+            Rosegarden::StudioControl::setStudioObjectProperty(mappedId,
+                Rosegarden::MappedAudioFader::FaderRecordLevel,
+                Rosegarden::MappedObjectValue((*it)->getRecordLevel()));
+
+            // Set the number of channels
+            //
+            Rosegarden::StudioControl::setStudioObjectProperty(mappedId,
+                Rosegarden::MappedAudioObject::Channels,
+                Rosegarden::MappedObjectValue((*it)->getAudioChannels()));
+
+            // Set the pan - 0 based
+            //
+            Rosegarden::StudioControl::setStudioObjectProperty(mappedId,
+                Rosegarden::MappedAudioFader::Pan,
+                Rosegarden::MappedObjectValue(float((*it)->getPan())) - 100.0);
+
+            count++;
+
+            // Initialise all the plugins for this Instrument
+            //
+            Rosegarden::AudioPluginInstance *plugin;
+            int pluginNo = 0;
+
+            while ((plugin = (*it)->getPlugin(pluginNo++)))
+            {
+                if (plugin->isAssigned())
+                {
+                    // Create the plugin at the sequencer Studio
+                    //
+                    Rosegarden::MappedObjectId mappedId =
+                        Rosegarden::StudioControl::createStudioObject(
+                                Rosegarden::MappedObject::LADSPAPlugin);
+
+                    // Create the back linkage from the instance to the
+                    // studio id
+                    //
+                    (*it)->setMappedId(mappedId);
+
+                    // Set the id of this instrument on the plugin
+                    //
+                    Rosegarden::StudioControl::setStudioObjectProperty
+                        (mappedId,
+                         Rosegarden::MappedObject::Instrument,
+                         (*it)->getId());
+
+                    // Set the position
+                    Rosegarden::StudioControl::setStudioObjectProperty
+                        (mappedId,
+                         Rosegarden::MappedObject::Position,
+                         Rosegarden::MappedObjectValue(plugin->getPosition()));
+
+                    // Set the bypass
+                    Rosegarden::StudioControl::setStudioObjectProperty
+                        (mappedId,
+                         Rosegarden::MappedLADSPAPlugin::Bypassed,
+                         Rosegarden::MappedObjectValue(plugin->isBypassed()));
+
+                    // Set the plugin type id - this will set it up ready
+                    // for port settings
+                    Rosegarden::StudioControl::setStudioObjectProperty
+                        (mappedId,
+                         Rosegarden::MappedLADSPAPlugin::UniqueId,
+                         Rosegarden::MappedObjectValue(plugin->getId()));
+
+                    unsigned int portNo = 0;
+                    Rosegarden::PluginPortInstance *port;
+
+                    while((port = plugin->getPort(portNo++)))
+                    {
+                        Rosegarden::StudioControl::setStudioPluginPort
+                            (plugin->getMappedId(),
+                             port->id,
+                             port->value);
+                    }
+                }
+            }
+        }
+    }
+
+    RG_DEBUG << "initialised " << count << " audio faders" << endl;
+
+}
+
 
 bool RosegardenGUIDoc::saveDocument(const QString& filename,
                                     const char* format,

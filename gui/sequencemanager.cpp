@@ -1732,20 +1732,8 @@ SequenceManager::getSequencerPlugins(Rosegarden::AudioPluginManager *aPM)
 void
 SequenceManager::reinitialiseSequencerStudio()
 {
-    QByteArray data;
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    if (!kapp->dcopClient()->
-            send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                 ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                 "reinitialiseStudio()",
-                 data))
-    {
-        SEQMAN_DEBUG << "failed to reinitialise studio" << endl;
-        return;
-    }
-
-    SEQMAN_DEBUG << "reinitialised studio\n";
+    /*
+    m_doc->clearStudio();
 
     // Now set up the audio faders for each audio instrument
     //
@@ -1793,6 +1781,7 @@ SequenceManager::reinitialiseSequencerStudio()
     }
 
     SEQMAN_DEBUG << "initialised " << count << " audio faders" << endl;
+    */
 
     // Send the MIDI recording device to the sequencer
     //
@@ -1830,6 +1819,12 @@ SequenceManager::reinitialiseSequencerStudio()
             Rosegarden::MidiByte(jackAudioInputs));
 
     Rosegarden::StudioControl::sendMappedEvent(mE);
+
+
+    // Set the studio from the current document
+    //
+    m_doc->initialiseStudio();
+
 
 }
 

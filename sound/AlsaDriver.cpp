@@ -3266,9 +3266,9 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                     result = fader->getPropertyList(MappedAudioFader::Pan);
                     float fpan = result[0].toFloat();
                     if (fpan < 0.0)
-                        pan2 = fpan / 100.0;
+                        pan2 = (fpan + 100.0) / 100.0;
                     else
-                        pan1 = -fpan / 100.0;
+                        pan1 = 1.0 - (fpan / 100.0);
                 }
 
                 while (samplesOut < nframes)

@@ -405,6 +405,8 @@ MappedStudio::clear()
 
     m_objects.erase(m_objects.begin(), m_objects.end());
 
+    // reset running object id
+    m_runningObjectId = 1;
 }
 
 bool

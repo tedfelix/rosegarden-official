@@ -350,6 +350,14 @@ public:
     //
     void initialiseControllers();
 
+    // Clear the studio at the sequencer
+    //
+    void clearStudio();
+
+    // Initialise the Studio with a new document's settings
+    //
+    void initialiseStudio();
+
     // Get the sequence manager from the app
     //
     Rosegarden::SequenceManager* getSequenceManager() 
