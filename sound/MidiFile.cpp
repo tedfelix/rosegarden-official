@@ -28,8 +28,8 @@
 #include "MidiFile.h"
 #include "Segment.h"
 #include "NotationTypes.h"
-#include "TrackNotationHelper.h"
-#include "TrackPerformanceHelper.h"
+#include "SegmentNotationHelper.h"
+#include "SegmentPerformanceHelper.h"
 
 
 namespace Rosegarden

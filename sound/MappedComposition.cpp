@@ -22,7 +22,7 @@
 #include <qdatastream.h>
 #include "MappedComposition.h"
 #include "MappedEvent.h"
-#include "TrackPerformanceHelper.h"
+#include "SegmentPerformanceHelper.h"
 #include <iostream>
 
 namespace Rosegarden
