@@ -428,6 +428,10 @@ protected:
 		  const Rosegarden::RealTime &end,
 		  bool firstFetch);
 
+    // adjust event times according to relative instrument latencies
+    //
+    void applyLatencyCompensation(Rosegarden::MappedComposition &);
+
     // mmap-related stuff
     MmappedSegment* mmapSegment(const QString&);
     void cleanupMmapData();

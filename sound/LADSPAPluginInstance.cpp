@@ -47,6 +47,8 @@ LADSPAPluginInstance::LADSPAPluginInstance(PluginFactory *factory,
     m_descriptor(descriptor),
     m_blockSize(blockSize),
     m_sampleRate(sampleRate),
+    m_latencyPort(0),
+    m_run(false),
     m_bypassed(false)
 {
     init(idealChannelCount);
@@ -89,6 +91,8 @@ LADSPAPluginInstance::LADSPAPluginInstance(PluginFactory *factory,
     m_outputBuffers(outputBuffers),
     m_ownBuffers(false),
     m_sampleRate(sampleRate),
+    m_latencyPort(0),
+    m_run(false),
     m_bypassed(false)
 {
     init();
@@ -144,6 +148,13 @@ LADSPAPluginInstance::init(int idealChannelCount)
 		LADSPA_Data *data = new LADSPA_Data(0.0);
 		m_controlPortsOut.push_back(
                     std::pair<unsigned long, LADSPA_Data*>(i, data));
+		if (!strcmp(m_descriptor->PortNames[i], "latency") ||
+		    !strcmp(m_descriptor->PortNames[i], "_latency")) {
+#ifdef DEBUG_LADSPA
+		    std::cerr << "Wooo! We have a latency port!" << std::endl;
+#endif
+		    m_latencyPort = data;
+		}
 	    }
         }
 #ifdef DEBUG_LADSPA
@@ -161,6 +172,16 @@ LADSPAPluginInstance::init(int idealChannelCount)
 	    m_instanceCount = idealChannelCount;
 	}
     }
+}
+
+size_t
+LADSPAPluginInstance::getLatency()
+{
+    if (m_latencyPort) {
+	if (!m_run) run(RealTime::zeroTime);
+	return *m_latencyPort;
+    }
+    return 0;
 }
 
 void
@@ -356,6 +377,8 @@ LADSPAPluginInstance::run(const RealTime &)
 	 hi != m_instanceHandles.end(); ++hi) {
         m_descriptor->run(*hi, m_blockSize);
     }
+
+    m_run = true;
 }
 
 void

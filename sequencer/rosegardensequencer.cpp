@@ -227,6 +227,7 @@ RosegardenSequencerApp::fetchEvents(Rosegarden::MappedComposition &composition,
     else
 */
     getSlice(composition, start, end, firstFetch);
+    applyLatencyCompensation(composition);
 }
 
 
@@ -252,6 +253,24 @@ RosegardenSequencerApp::getSlice(Rosegarden::MappedComposition &composition,
     m_lastStartTime = start;
 }
 
+
+void
+RosegardenSequencerApp::applyLatencyCompensation(Rosegarden::MappedComposition &composition)
+{
+    Rosegarden::RealTime maxLatency = m_driver->getMaximumPlayLatency();
+    if (maxLatency == Rosegarden::RealTime::zeroTime) return;
+
+    for (Rosegarden::MappedComposition::iterator i = composition.begin();
+	 i != composition.end(); ++i) {
+
+	Rosegarden::RealTime instrumentLatency =
+	    m_driver->getInstrumentPlayLatency((*i)->getInstrument());
+
+	(*i)->setEventTime((*i)->getEventTime() +
+			   maxLatency - instrumentLatency);
+    }
+}
+	     
 
 // The first fetch of events from the core/ and initialisation for
 // this session of playback.  We fetch up to m_readAhead ahead at

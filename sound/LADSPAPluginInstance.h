@@ -65,6 +65,8 @@ public:
     virtual bool isBypassed() const { return m_bypassed; }
     virtual void setBypassed(bool bypassed) { m_bypassed = bypassed; }
 
+    virtual size_t getLatency();
+
     virtual void silence();
     virtual void setIdealChannelCount(size_t channels); // may re-instantiate
 
@@ -122,6 +124,8 @@ protected:
     sample_t                **m_outputBuffers;
     bool                      m_ownBuffers;
     size_t                    m_sampleRate;
+    float                    *m_latencyPort;
+    bool                      m_run;
     
     bool                      m_bypassed;
 };

@@ -58,6 +58,8 @@ DSSIPluginInstance::DSSIPluginInstance(PluginFactory *factory,
     m_blockSize(blockSize),
     m_idealChannelCount(idealChannelCount),
     m_sampleRate(sampleRate),
+    m_latencyPort(0),
+    m_run(false),
     m_bypassed(false),
     m_grouped(false)
 {
@@ -110,6 +112,8 @@ DSSIPluginInstance::DSSIPluginInstance(PluginFactory *factory,
     m_ownBuffers(false),
     m_idealChannelCount(0),
     m_sampleRate(sampleRate),
+    m_latencyPort(0),
+    m_run(false),
     m_bypassed(false),
     m_grouped(false)
 {
@@ -171,6 +175,13 @@ DSSIPluginInstance::init()
 		LADSPA_Data *data = new LADSPA_Data(0.0);
 		m_controlPortsOut.push_back(
                     std::pair<unsigned long, LADSPA_Data*>(i, data));
+		if (!strcmp(descriptor->PortNames[i], "latency") ||
+		    !strcmp(descriptor->PortNames[i], "_latency")) {
+#ifdef DEBUG_DSSI
+		    std::cerr << "Wooo! We have a latency port!" << std::endl;
+#endif
+		    m_latencyPort = data;
+		}
 	    }
         }
 #ifdef DEBUG_DSSI
@@ -181,6 +192,16 @@ DSSIPluginInstance::init()
     }
 
     m_outputBufferCount = std::max(m_idealChannelCount, m_audioPortsOut.size());
+}
+
+size_t
+DSSIPluginInstance::getLatency()
+{
+    if (m_latencyPort) {
+	if (!m_run) run(RealTime::zeroTime);
+	return *m_latencyPort;
+    }
+    return 0;
 }
 
 void
@@ -775,6 +796,7 @@ DSSIPluginInstance::run(const RealTime &blockTime)
 		memset(m_outputBuffers[ch], 0, m_blockSize * sizeof(sample_t));
 	    }
 	}
+	m_run = true;
 	return;
     }
 
@@ -869,6 +891,7 @@ DSSIPluginInstance::run(const RealTime &blockTime)
     }	
 
     m_lastRunTime = blockTime;
+    m_run = true;
 }
 
 void

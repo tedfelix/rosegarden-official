@@ -641,6 +641,21 @@ JackDriver::getAudioRecordLatency() const
     return RealTime::frame2RealTime(latency, m_sampleRate);
 }
 
+RealTime
+JackDriver::getInstrumentPlayLatency(InstrumentId id) const
+{
+    if (m_instrumentLatencies.find(id) == m_instrumentLatencies.end()) {
+	return RealTime::zeroTime;
+    } else {
+	return m_instrumentLatencies.find(id)->second;
+    }
+}
+
+RealTime
+JackDriver::getMaximumPlayLatency() const
+{
+    return m_maxInstrumentLatency;
+}
 
 int
 JackDriver::jackProcessStatic(jack_nframes_t nframes, void *arg)
@@ -1643,6 +1658,9 @@ JackDriver::updateAudioData()
     int synthInstruments;
     m_alsaDriver->getSoftSynthInstrumentNumbers(synthInstrumentBase, synthInstruments);
 
+    RealTime jackLatency = getAudioPlayLatency();
+    RealTime maxLatency = RealTime::zeroTime;
+
     for (int i = 0; i < audioInstruments + synthInstruments; ++i) {
 
 	InstrumentId id;
@@ -1713,6 +1731,8 @@ JackDriver::updateAudioData()
 	    }
 	}
 
+	size_t pluginLatency = m_instrumentMixer->getPluginLatency(id);
+
 	// If we find the object is connected to no output, or to buss
 	// number 0 (the master), then we set the bit appropriately.
 
@@ -1725,11 +1745,22 @@ JackDriver::updateAudioData()
 	    } else {
 		directMasterSynthInstruments |= (1 << (i - audioInstruments));
 	    }		
+	} else {
+	    pluginLatency +=
+		m_instrumentMixer->getPluginLatency((unsigned int)*connections.begin());
+	}
+
+	m_instrumentLatencies[id] = jackLatency +
+	    RealTime::frame2RealTime(pluginLatency, m_sampleRate);
+
+	if (m_instrumentLatencies[id] > maxLatency) {
+	    maxLatency = m_instrumentLatencies[id];
 	}
     }
 
     m_directMasterAudioInstruments = directMasterAudioInstruments;
     m_directMasterSynthInstruments = directMasterSynthInstruments;
+    m_maxInstrumentLatency = maxLatency;
     
     int inputs = m_alsaDriver->getMappedStudio()->
 	getObjectCount(MappedObject::AudioInput);

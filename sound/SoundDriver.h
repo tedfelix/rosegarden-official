@@ -341,8 +341,10 @@ public:
 
     // Latencies
     //
-    virtual RealTime getAudioPlayLatency() { return RealTime(0, 0); }
-    virtual RealTime getAudioRecordLatency() { return RealTime(0, 0); }
+    virtual RealTime getAudioPlayLatency() { return RealTime::zeroTime; }
+    virtual RealTime getAudioRecordLatency() { return RealTime::zeroTime; }
+    virtual RealTime getInstrumentPlayLatency(InstrumentId id) { return RealTime::zeroTime; }
+    virtual RealTime getMaximumPlayLatency() { return RealTime::zeroTime; }
 
     // Buffer sizes
     //

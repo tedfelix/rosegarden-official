@@ -204,6 +204,12 @@ public:
     RunnablePluginInstance *getSynthPlugin(InstrumentId id) { return m_synths[id]; }
 
     /**
+     * Return the total of the plugin latencies for a given instrument
+     * or buss id.
+     */
+    size_t getPluginLatency(unsigned int id);
+
+    /**
      * Prebuffer.  This should be called only when the transport is
      * not running. 
      */

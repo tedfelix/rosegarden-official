@@ -1036,6 +1036,28 @@ AudioInstrumentMixer::destroyAllPlugins()
     releaseLock();
 }
 
+size_t
+AudioInstrumentMixer::getPluginLatency(unsigned int id)
+{
+    getLock();
+
+    size_t latency = 0;
+
+    if (m_synths.find(id) != m_synths.end()) {
+	if (m_synths[id]) latency += m_synths[id]->getLatency();
+    }
+
+    if (m_plugins.find(id) != m_plugins.end()) {
+	for (PluginList::iterator i = m_plugins[id].begin();
+	     i != m_plugins[id].end(); ++i) {
+	    if (*i) latency += (*i)->getLatency();
+	}
+    }
+
+    releaseLock();
+    return latency;
+}
+
 void
 AudioInstrumentMixer::generateBuffers()
 {

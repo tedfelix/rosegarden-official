@@ -89,6 +89,9 @@ public:
     virtual bool isBypassed() const = 0;
     virtual void setBypassed(bool value) = 0;
 
+    // This should be called after setup, but while not actually playing.
+    virtual size_t getLatency() = 0;
+
     virtual void silence() = 0;
     virtual void setIdealChannelCount(size_t channels) = 0; // must also silence(); may also re-instantiate
 

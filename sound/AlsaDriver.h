@@ -115,6 +115,35 @@ public:
     //
     void insertMappedEventForReturn(MappedEvent *mE);
 
+    
+    virtual RealTime getAudioPlayLatency() {
+#ifdef HAVE_LIBJACK
+	if (m_jackDriver) return m_jackDriver->getAudioPlayLatency();
+#endif
+	return RealTime::zeroTime;
+    }
+
+    virtual RealTime getAudioRecordLatency() {
+#ifdef HAVE_LIBJACK
+	if (m_jackDriver) return m_jackDriver->getAudioRecordLatency();
+#endif
+	return RealTime::zeroTime;
+    }
+
+    virtual RealTime getInstrumentPlayLatency(InstrumentId id) {
+#ifdef HAVE_LIBJACK
+	if (m_jackDriver) return m_jackDriver->getInstrumentPlayLatency(id);
+#endif
+	return RealTime::zeroTime;
+    }
+
+    virtual RealTime getMaximumPlayLatency() {
+#ifdef HAVE_LIBJACK
+	if (m_jackDriver) return m_jackDriver->getMaximumPlayLatency();
+#endif
+	return RealTime::zeroTime;
+    }
+	
 
     // Plugin instance management
     //

@@ -68,6 +68,8 @@ public:
 
     RealTime getAudioPlayLatency() const;
     RealTime getAudioRecordLatency() const;
+    RealTime getInstrumentPlayLatency(InstrumentId) const;
+    RealTime getMaximumPlayLatency() const;
 
     // Plugin instance management
     //
@@ -251,6 +253,8 @@ protected:
     float                        m_masterLevel;
     unsigned long                m_directMasterAudioInstruments; // bitmap
     unsigned long                m_directMasterSynthInstruments;
+    std::map<InstrumentId, RealTime> m_instrumentLatencies;
+    RealTime                     m_maxInstrumentLatency;
     bool                         m_haveAsyncAudioEvent;
 
     int                          m_recordInput;
