@@ -281,8 +281,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     // Scroll view to centre middle-C and warp to pointer position
     //
-    m_canvasView->center
-	(0, m_staffs[0]->getCanvasYForHeight(60) - m_canvasView->height()/2);
+    m_canvasView->scrollBy(0, m_canvasView->canvas()->height()/4);
+
     slotSetPointerPosition(comp.getPosition());
 
 #ifdef RGKDE3
