@@ -233,29 +233,25 @@ MultiViewCommandHistory::clearStack(CommandStack &stack)
 void
 MultiViewCommandHistory::slotUndoActivated(int pos)
 {
-    kdDebug(KDEBUG_AREA) << "KCommandHistory::slotUndoActivated " << pos << endl;
     for (int i = 0 ; i <= pos; ++i) undo();
 }
 
 void
 MultiViewCommandHistory::slotRedoActivated(int pos)
 {
-    kdDebug(KDEBUG_AREA) << "KCommandHistory::slotRedoActivated " << pos << endl;
     for (int i = 0 ; i <= pos; ++i) redo();
 }
 
 void
 MultiViewCommandHistory::slotUndoAboutToShow()
 {
-    kdDebug(KDEBUG_AREA) << "MultiViewCommandHistory::slotUndoAboutToShow" << endl;
-    updateMenu("Undo", KStdAction::stdName(KStdAction::Undo), m_undoStack);
+    updateMenu("Und&o", KStdAction::stdName(KStdAction::Undo), m_undoStack);
 }
 
 void
 MultiViewCommandHistory::slotRedoAboutToShow()
 {
-    kdDebug(KDEBUG_AREA) << "MultiViewCommandHistory::slotRedoAboutToShow" << endl;
-    updateMenu("Redo", KStdAction::stdName(KStdAction::Redo), m_redoStack);
+    updateMenu("Re&do", KStdAction::stdName(KStdAction::Redo), m_redoStack);
 }
 
 void

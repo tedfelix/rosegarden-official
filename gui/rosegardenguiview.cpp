@@ -24,6 +24,7 @@
 
 // KDE includes
 #include <kdebug.h>
+#include <kmessagebox.h>
 
 // application specific includes
 #include "rosegardenguiview.h"
@@ -149,6 +150,11 @@ RosegardenGUIView::editSegmentNotation(Rosegarden::Segment* p)
 void
 RosegardenGUIView::editAllTracks(Rosegarden::Composition* p)
 {
+    if (p->getNbSegments() == 0) {
+	KMessageBox::sorry(0, "Please create some tracks first (until we implement menu state management)");
+	return;
+    }
+
     std::vector<Rosegarden::Segment *> segmentsToEdit;
 
     for (Rosegarden::Composition::iterator i = p->begin(); i != p->end(); ++i) {

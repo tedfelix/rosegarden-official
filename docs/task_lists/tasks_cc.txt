@@ -10,6 +10,10 @@ Post-0.1.1 task list
  attempt to get the LegatoDuration property on an event that doesn't
  have it.  Why?
 
+ !! Restore the position pointer in trackeditor.cpp
+
+ !! Restore the current-time indicator in the notation view status bar
+
  1. Sort out true legato quantization [DONE]
 
  2. Display real bar numbers and proportional bar durations on track
@@ -22,13 +26,14 @@ Post-0.1.1 task list
 
  5. Slurs
 
- 6. Add time sig support to RG2.1 import
+ 6. Add time sig support to RG2.1 import [DONE]
 
- 7. Ponder undo
+ 7. Ponder undo [DONE -- needs constant updating though]
 
  8. Ponder help
 
  9. Speed up MIDI import, particularly for files with lots of short rests
+ [DONE]
 
 
 

@@ -179,7 +179,7 @@ NoteInserter::NoteInserter(NotationView* view)
         noteAction->setExclusiveGroup("accidentals");
     }
 
-    new KToggleAction(i18n("Toggle Dot"), 0, this,
+    new KToggleAction(i18n("Dotted note"), 0, this,
                       SLOT(slotToggleDot()), actionCollection(),
                       "toggle_dot");
 
@@ -415,6 +415,7 @@ ClefInserter::ClefInserter(NotationView* view)
 void ClefInserter::finalize()
 {
     m_parentView->setCanvasCursor(Qt::crossCursor);
+    m_parentView->setPositionTracking(false);
 }
 
 NotationTool* ClefInserter::getInstance(NotationView* view)
@@ -468,7 +469,7 @@ NotationEraser::NotationEraser(NotationView* view)
     : NotationTool("NotationEraser", view),
       m_collapseRest(false)
 {
-    new KToggleAction(i18n("Toggle Rest Collapse"), 0, this,
+    new KToggleAction(i18n("Collapse rests after erase"), 0, this,
                       SLOT(toggleRestCollapse()), actionCollection(),
                       "toggle_rest_collapse");
 
@@ -478,6 +479,7 @@ NotationEraser::NotationEraser(NotationView* view)
 void NotationEraser::finalize()
 {
     m_parentView->setCanvasCursor(Qt::pointingHandCursor);
+    m_parentView->setPositionTracking(false);
 }
 
 NotationTool* NotationEraser::getInstance(NotationView* view)
@@ -507,42 +509,6 @@ void NotationEraser::handleLeftButtonPress(int, int staffNo,
 			 (int)pitch, m_collapseRest);
 
     m_parentView->getCommandHistory()->addCommand(command);
-
-
-
-/*
-    Event *event = command->getLastInsertedEvent();
-    if (event) m_parentView->setSingleSelectedEvent(staffNo, event);
-
-
-
-    SegmentNotationHelper nt
-        (m_parentView->getStaff(staffNo)->getSegment());
-
-    timeT absTime = 0;
-
-    if (element->isNote()) {
-
-        absTime = element->getAbsoluteTime();
-        nt.deleteNote(element->event(), m_collapseRest);
-        needLayout = true;
-
-    } else if (element->isRest()) {
-
-        absTime = element->getAbsoluteTime();
-        nt.deleteRest(element->event());
-        needLayout = true;
-
-    } else {
-        // we don't know what it is
-        KMessageBox::sorry(0, "Not Implemented Yet");
-
-    }
-    
-    if (needLayout) {
-        m_parentView->redoLayout(&nt.segment(), absTime, absTime);
-    }
-*/
 }
 
 void NotationEraser::toggleRestCollapse()

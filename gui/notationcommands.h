@@ -200,7 +200,7 @@ public:
 	BasicSelectionCommand(name(), selection) { }
     virtual ~GroupMenuAutoBeamCommand() { }
 
-    static QString name() { return i18n("Auto-Beam Group"); }
+    static QString name() { return i18n("Auto-Beam"); }
 
 protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper) {
@@ -217,7 +217,7 @@ public:
 	BasicSelectionCommand(name(), selection) { }
     virtual ~GroupMenuBreakCommand() { }
 
-    static QString name() { return i18n("Break Group"); }
+    static QString name() { return i18n("Break Groups"); }
 
 protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper) {

@@ -3,10 +3,14 @@
 <kpartgui name="Rosegarden" version="1">
 
 <MenuBar>
-  <Menu  name="file"><text>&amp;File</text>
-    <Action name="file_import_midi" append="new_merge" />
-    <Action name="file_export_midi" append="new_merge" />
-    <Action name="file_import_rg21" append="new_merge" />
+  <Menu name="file"><text>&amp;File</text>
+    <Menu name="import" append="new_merge"><text>&amp;Import</text>
+      <Action name="file_import_midi" />
+      <Action name="file_import_rg21" />
+    </Menu>
+    <Menu name="export" append="new_merge"><text>&amp;Export</text>
+      <Action name="file_export_midi" />
+    </Menu>
   </Menu>
   <Menu name="View">
 	<text>&amp;View</text>

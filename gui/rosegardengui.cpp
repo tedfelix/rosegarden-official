@@ -120,15 +120,15 @@ void RosegardenGUIApp::setupActions()
     m_fileClose  = KStdAction::close (this, SLOT(fileClose()),         actionCollection());
     m_filePrint  = KStdAction::print (this, SLOT(filePrint()),         actionCollection());
 
-    new KAction(i18n("Import MIDI file..."), 0, 0, this,
+    new KAction(i18n("Import &MIDI file..."), 0, 0, this,
                 SLOT(importMIDI()), actionCollection(),
                 "file_import_midi");
 
-    new KAction(i18n("Import Rosegarden 2.1 file..."), 0, 0, this,
+    new KAction(i18n("Import &Rosegarden 2.1 file..."), 0, 0, this,
                 SLOT(importRG21()), actionCollection(),
                 "file_import_rg21");
 
-    new KAction(i18n("Export as MIDI file..."), 0, 0, this,
+    new KAction(i18n("Export as &MIDI file..."), 0, 0, this,
                 SLOT(exportMIDI()), actionCollection(),
                 "file_export_midi");
 
@@ -162,36 +162,36 @@ void RosegardenGUIApp::setupActions()
     KRadioAction *action = 0;
     
     // TODO : add some shortcuts here
-    action = new KRadioAction(i18n("Erase"), "eraser",
+    action = new KRadioAction(i18n("&Erase"), "eraser",
                               0,
                               this, SLOT(eraseSelected()),
                               actionCollection(), "erase");
     action->setExclusiveGroup("segmenttools");
 
-    action = new KRadioAction(i18n("Draw"), "pencil",
+    action = new KRadioAction(i18n("&Draw"), "pencil",
                               0,
                               this, SLOT(drawSelected()),
                               actionCollection(), "draw");
     action->setExclusiveGroup("segmenttools");
 
-    action = new KRadioAction(i18n("Move"), "move",
+    action = new KRadioAction(i18n("&Move"), "move",
                               0,
                               this, SLOT(moveSelected()),
                               actionCollection(), "move");
     action->setExclusiveGroup("segmenttools");
 
-    action = new KRadioAction(i18n("Resize"), "misc", // TODO : find a better icon
+    action = new KRadioAction(i18n("&Resize"), "misc", // TODO : find a better icon
                               0,
                               this, SLOT(resizeSelected()),
                               actionCollection(), "resize");
     action->setExclusiveGroup("segmenttools");
 
-    new KAction(i18n("Change Time Resolution..."), 
+    new KAction(i18n("Change &Time Resolution..."), 
                 0,
                 this, SLOT(slotChangeTimeResolution()),
                 actionCollection(), "change_time_res");
 
-    new KAction(i18n("Edit all Tracks as Score"),
+    new KAction(i18n("&Score Editor"),
                 0,
                 this, SLOT(editAllTracks()),
                 actionCollection(), "edit_all_tracks");
@@ -202,23 +202,23 @@ void RosegardenGUIApp::setupActions()
     // use 1 (End) and 3 (Page Down) for Rwd and Ffwd and
     // 0 (insert) and Enter for Play and Stop 
     //
-    m_playTransport = new KAction(i18n("Play"), 0, Key_Enter, this,
+    m_playTransport = new KAction(i18n("&Play"), 0, Key_Enter, this,
                                   SLOT(play()), actionCollection(),
                                   "play");
     m_playTransport->setGroup("transportcontrols");
 
-    m_stopTransport = new KAction(i18n("Stop"), 0, Key_Insert, this,
+    m_stopTransport = new KAction(i18n("&Stop"), 0, Key_Insert, this,
                                   SLOT(stop()), actionCollection(),
                                   "stop");
     m_stopTransport->setGroup("transportcontrols");
 
-    m_ffwdTransport = new KAction(i18n("Fast Forward"), 0, Key_PageDown,
+    m_ffwdTransport = new KAction(i18n("&Fast Forward"), 0, Key_PageDown,
                                   this,
                                   SLOT(fastforward()), actionCollection(),
                                   "fast_forward");
     m_ffwdTransport->setGroup("transportcontrols");
 
-    m_rewindTransport = new KAction(i18n("Rewind"), 0, Key_End, this,
+    m_rewindTransport = new KAction(i18n("&Rewind"), 0, Key_End, this,
                                   SLOT(rewind()), actionCollection(),
                                   "rewind");
     m_rewindTransport->setGroup("transportcontrols");
