@@ -45,6 +45,8 @@
 #include <map>
 #include <arts/artsmidi.h>
 #include <arts/soundserver.h>
+#include <arts/artsflow.h>     // audio subsys
+#include <arts/artsmodules.h>  // handling wavs
 #include "MappedComposition.h"
 #include "Midi.h"
 #include "MidiRecord.h"
@@ -108,6 +110,14 @@ public:
 	RECORD_MIDI,
 	RECORD_AUDIO
     } RecordStatus;
+
+    typedef enum
+    {
+        MIDI_AND_AUDIO_SUBSYS_OK,  // Everything's OK
+        MIDI_SUBSYS_OK,            // MIDI's OK
+        AUDIO_SUBSYS_OK,           // AUDIO's OK
+        NO_SEQUENCE_SUBSYS         // Nothing's OK
+    } SequencerStatus;
 
     Sequencer();
     ~Sequencer();
@@ -190,10 +200,14 @@ public:
     //
     Arts::MidiPort* playMidiPort() { return &m_midiPlayPort; }
 
+    SequencerStatus getStatus() const { return m_sequencerStatus; }
+
 private:
 
-    // set-up
+    // start MIDI and Audio subsystems
+    //
     void initializeMidi();
+    void initializeAudio();
 
     // get a vector of recorded events from aRTS
     // (only for internal use)
@@ -207,15 +221,25 @@ private:
     void processMidiIn(const Arts::MidiCommand &midiCommand,
                        const Arts::TimeStamp &timeStamp);
 
-    // aRTS devices
+    // aRTS sound server reference
     //
-    Arts::Dispatcher       m_dispatcher;
-    Arts::SoundServer      m_soundServer;
-    Arts::MidiManager      m_midiManager;
-    Arts::MidiClient       m_midiPlayClient;
-    Arts::MidiClient       m_midiRecordClient;
-    RosegardenMidiRecord   m_midiRecordPort;
-    Arts::MidiPort         m_midiPlayPort;
+    Arts::SoundServerV2      m_soundServer;
+
+    // aRTS MIDI devices
+    //
+    Arts::MidiManager        m_midiManager;
+    Arts::Dispatcher         m_dispatcher;
+    Arts::MidiClient         m_midiPlayClient;
+    Arts::MidiClient         m_midiRecordClient;
+    RosegardenMidiRecord     m_midiRecordPort;
+    Arts::MidiPort           m_midiPlayPort;
+
+    // aRTS Audio devices
+    //
+    Arts::Synth_AMAN_PLAY    m_amanPlay;
+    Arts::Synth_AMAN_RECORD  m_amanRecord;
+    Arts::Synth_CAPTURE_WAV  m_captureWav;
+    Arts::Synth_PLAY_WAV     m_playWav;
 
     // TimeStamps mark the real world (aRts) times of the start
     // of play or record.  These are for internal use when
@@ -243,11 +267,14 @@ private:
 
     std::map<unsigned int, MappedEvent*> m_noteOnMap;
 
+    // State of the sequencer
+    //
+    SequencerStatus        m_sequencerStatus;
+
 };
 
 
 }
-
  
 
 #endif // _ROSEGARDEN_SEQUENCER_H_

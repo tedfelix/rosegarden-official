@@ -19,8 +19,10 @@
 */
 
 
-#include "Sequencer.h"
 #include <iostream>
+#include <arts/connect.h>  // connect aRTS objects
+
+#include "Sequencer.h"
 #include "MidiArts.h"
 #include "MidiFile.h"
 #include "Composition.h"
@@ -45,9 +47,23 @@ Sequencer::Sequencer():
     m_startPlayback(true),
     m_playing(false),
     m_ppq(Note(Note::Crotchet).getDuration()),
-    m_tempo(120.0)     // default tempo
+    m_tempo(120.0), // default tempo
+    m_sequencerStatus(NO_SEQUENCE_SUBSYS)
 {
-    initializeMidi();
+
+    // Get a reference on the aRTS sound server
+    //
+    m_soundServer = Arts::Reference("global:Arts_SoundServerV2");
+    if (m_soundServer.isNull())
+    {
+        cerr << "RosegardenSequencer(): Can't find aRTS SoundServer - " <<
+                "ensure that artsd is running!" << endl;
+        m_sequencerStatus = NO_SEQUENCE_SUBSYS;
+        return;
+    }
+
+    initializeMidi();   // start the MIDI
+    initializeAudio();  // start the Audio
 }
 
 
@@ -55,30 +71,30 @@ Sequencer::~Sequencer()
 {
 }
 
+
+// Initialize MIDI and set the m_sequencerStatus flag accordingly
+//
+//
 void
 Sequencer::initializeMidi()
 {
+    // don't come in here if there's no SoundServer
+    if (m_soundServer.isNull()) return;
+
     m_midiManager = Arts::Reference("global:Arts_MidiManager");
     if (m_midiManager.isNull())
     {
         cerr << "RosegardenSequencer - Can't get aRTS MidiManager" << endl;
-        exit(1);
+        return;
     }
 
-    m_soundServer = Arts::Reference("global:Arts_SoundServer");
-    if (m_soundServer.isNull())
-    {
-        cerr << "RosegardenSequencer - Can't get aRTS SoundServer" << endl;
-        exit(1);
-    }
-
-    m_midiRecordPort = Arts::DynamicCast(m_soundServer.createObject("RosegardenMidiRecord"));
-
+    m_midiRecordPort =
+        Arts::DynamicCast(m_soundServer.createObject("RosegardenMidiRecord"));
 
     if (m_midiRecordPort.isNull())
     {
         cerr << "RosegardenSequencer - Can't create aRTS MidiRecorder" << endl;
-        exit(1);
+        return;
     }
 
     m_midiPlayClient = m_midiManager.addClient(Arts::mcdPlay,
@@ -87,14 +103,15 @@ Sequencer::initializeMidi()
     if (m_midiPlayClient.isNull())
     {
         cerr << "RosegardenSequencer - Can't create aRTS MidiClient" << endl;
-        exit(1);
+        return;
     }
 
     m_midiPlayPort = m_midiPlayClient.addOutputPort();
     if (m_midiPlayPort.isNull())
     {
-        cerr << "RosegardenSequencer - Can't create aRTS Midi Output Port" << endl;
-        exit(1);
+        cerr << "RosegardenSequencer - Can't create aRTS Midi Output Port"
+             << endl;
+        return;
     }
 
     m_midiRecordClient = m_midiManager.addClient(Arts::mcdRecord,
@@ -103,8 +120,9 @@ Sequencer::initializeMidi()
                                                  "rosegarden");
     if (m_midiRecordClient.isNull())
     {
-        cerr << "RosegardenSequencer - Can't create aRTS MidiRecordClient" << endl;
-        exit(1);
+        cerr << "RosegardenSequencer - Can't create aRTS MidiRecordClient"
+             << endl;
+        return;
     }
 
     // Create our recording midi port
@@ -120,7 +138,109 @@ Sequencer::initializeMidi()
     //
     m_midiRecordPort.record(true);
 
+    cout << "RosegardenSequencer - initialized MIDI subsystem" << endl;
+
+    if(m_sequencerStatus == AUDIO_SUBSYS_OK)
+        m_sequencerStatus = MIDI_AND_AUDIO_SUBSYS_OK;
+    else
+        m_sequencerStatus = MIDI_SUBSYS_OK;
 }
+
+// Initialize audio and report back some basic facts
+//
+void
+Sequencer::initializeAudio()
+{
+    // don't come in here if there's no SoundServer
+    if (m_soundServer.isNull()) return;
+
+    m_amanPlay =
+        Arts::DynamicCast(m_soundServer.createObject("Arts::Synth_AMAN_PLAY"));
+
+    m_amanPlay.title("Rosegarden Audio Play");
+    m_amanPlay.autoRestoreID("Rosegarden Play");
+
+    if (m_amanPlay.isNull())
+    {
+        cerr << "RosegardenSequencer - can't create audio play object" << endl;
+        return;
+    }
+
+    m_amanRecord = 
+      Arts::DynamicCast(m_soundServer.createObject("Arts::Synth_AMAN_RECORD")); 
+
+    m_amanRecord.title("Rosegarden Audio Record");
+    m_amanRecord.autoRestoreID("Rosegarden Record");
+
+    if (m_amanRecord.isNull())
+    {
+        cerr << "RosegardenSequencer - can't create audio record object" <<
+             endl;
+        return;
+    }
+
+    m_playWav = Arts::DynamicCast(m_soundServer.
+                               createObject("Arts::Synth_PLAY_WAV"));
+
+    if (m_playWav.isNull())
+    {
+        cerr << "RosegardenSequencer - can't create .wav play object "<< endl;
+        return;
+    }
+
+    m_captureWav = Arts::DynamicCast(m_soundServer.
+                               createObject("Arts::Synth_CAPTURE_WAV"));
+
+    if (m_captureWav.isNull())
+    {
+        cerr << "RosegardenSequencer - can't create .wav record object" << endl;
+        return;
+    }
+
+    // Now test the "play" connection
+    //
+    m_playWav.start();
+    m_amanPlay.start();
+    connect (m_playWav, "left", m_amanPlay, "left");
+    connect (m_playWav, "right", m_amanPlay, "right");
+    disconnect (m_playWav, "left", m_amanPlay, "left");
+    disconnect (m_playWav, "right", m_amanPlay, "right");
+    m_playWav.stop();
+    m_amanPlay.stop();
+
+    // and then test the "record" connection
+    //
+    m_captureWav.start();
+    m_amanRecord.start();
+    connect (m_captureWav, "left", m_amanRecord, "left");
+    connect (m_captureWav, "right", m_amanRecord, "right");
+    disconnect (m_captureWav, "left", m_amanRecord, "left");
+    disconnect (m_captureWav, "right", m_amanRecord, "right");
+    m_captureWav.stop();
+    m_amanRecord.stop();
+
+
+    // Seems the audio is OK, report some figures and exit
+    //
+    if (m_soundServer.fullDuplex())
+        cout << "RosegardenSequencer - aRTS is in full duplex audio mode"
+             << endl;
+
+    cout << "RosegardenSequencer - audio sampling rate = "
+         << m_soundServer.samplingRate() << "Hz" << endl;
+
+    cout << "RosegardenSequencer - sample resolution = "
+         << m_soundServer.bits() << " bits" << endl;
+
+    cout << "RosegardenSequencer - initialized audio subsystem" << endl;
+
+    if(m_sequencerStatus == MIDI_SUBSYS_OK)
+        m_sequencerStatus = MIDI_AND_AUDIO_SUBSYS_OK;
+    else
+        m_sequencerStatus = AUDIO_SUBSYS_OK;
+}
+
+
 
 // Check the recording status we're moving to and set internal
 // counters or anything else we need to prepare.
@@ -550,9 +670,6 @@ Sequencer::getMappedComposition()
     // code ... [rwb]
     //
     delete midiQueue;
-
-    // Now normalise the start times
-    
 
     return m_recordComposition;
 
