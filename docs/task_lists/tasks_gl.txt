@@ -22,6 +22,8 @@ Current Task list
 
 - better error report when failing to load a resource
 
+- make matrix tools use shift modifier for smoth move
+
 Task list from 18/19th August meetings
 ======================================
 
