@@ -722,6 +722,14 @@ RosegardenSequencerApp::processMappedEvent(unsigned int id,
     m_sequencer->processEventsOut(mC, Rosegarden::RealTime(0, 0), true);
 }
 
+void
+RosegardenSequencerApp::processMappedEvent(Rosegarden::MappedEvent mE)
+{
+    Rosegarden::MappedComposition mC;
+    mC.insert(new Rosegarden::MappedEvent(mE));
+    m_sequencer->processEventsOut(mC, Rosegarden::RealTime(0, 0), true);
+}
+
 // Get the MappedDevice (DCOP wrapped vector of MappedInstruments)
 //
 Rosegarden::MappedDevice

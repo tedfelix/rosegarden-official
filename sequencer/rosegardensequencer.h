@@ -170,6 +170,10 @@ public:
                                     long audioStartMarkerSec,
                                     long audioStartMarkerUSec);
 
+    // And now do it properly
+    //
+    virtual void processMappedEvent(Rosegarden::MappedEvent mE);
+
     virtual unsigned int getDevices();
     virtual Rosegarden::MappedDevice getMappedDevice(unsigned int id);
 

@@ -114,6 +114,10 @@ public:
                                     long audioStartMarkerSec,
                                     long audioStartMarkerUSec) = 0;
 
+    // The proper implementation
+    //
+    virtual void processMappedEvent(Rosegarden::MappedEvent mE) = 0;
+
     // Return number of devices found
     //
     virtual unsigned int getDevices() = 0;

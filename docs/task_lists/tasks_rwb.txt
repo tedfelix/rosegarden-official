@@ -10,11 +10,9 @@ o Event playback on selection movement
 
 Other pending tasks:
 
-o ALSA audio
+o ALSA/JACK audio 
 
 o Starting playback in middle of long Events should actually play them
-
-o MidiNote sending from Matrix view
 
 o Matrix view scrolling
 
@@ -131,6 +129,8 @@ Completed POST 0.1.4
 - horizontal zoom would be really useful [cc DONE]
 
 - Last Note seems broken again [FIXED]
+
+- MidiNote sending from Matrix view [DONE]
 
 
 

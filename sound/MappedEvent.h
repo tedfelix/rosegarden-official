@@ -19,6 +19,14 @@
   COPYING included with this distribution for more information.
 */
 
+#include <multiset.h>
+
+#include <qdatastream.h>
+
+#include "Composition.h" // for Rosegarden::RealTime
+#include "Event.h"
+
+
 #ifndef _MAPPEDEVENT_H_
 #define _MAPPEDEVENT_H_
 
@@ -38,11 +46,6 @@
 // which is just a very cut down Sequencer-side version of an Instrument.
 //
 //
-
-#include "Composition.h" // for Rosegarden::RealTime
-#include "Event.h"
-#include <multiset.h>
-#include <qdatastream.h>
 
 namespace Rosegarden
 {
@@ -242,6 +245,14 @@ public:
     };
 
     friend bool operator<(const MappedEvent &a, const MappedEvent &b);
+
+    MappedEvent& operator=(const MappedEvent &mE);
+
+    friend QDataStream& operator>>(QDataStream &dS, MappedEvent *mE);
+    friend QDataStream& operator<<(QDataStream &dS, MappedEvent *mE);
+    friend QDataStream& operator>>(QDataStream &dS, MappedEvent &mE);
+    friend QDataStream& operator<<(QDataStream &dS, const MappedEvent &mE);
+
 
 private:
     InstrumentId     m_instrument;

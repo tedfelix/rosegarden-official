@@ -59,6 +59,112 @@ operator<(const MappedEvent &a, const MappedEvent &b)
     return a.getEventTime() < b.getEventTime();
 }
 
+MappedEvent&
+MappedEvent::operator=(const MappedEvent &mE)
+{
+    m_instrument = mE.getInstrument();
+    m_type = mE.getType();
+    m_data1 = mE.getData1();
+    m_data2 = mE.getData2();
+    m_eventTime = mE.getEventTime();
+    m_duration = mE.getDuration();
+    m_audioStartMarker = mE.getAudioStartMarker();
+
+    return *this;
+}
+
+QDataStream&
+operator<<(QDataStream &dS, MappedEvent *mE)
+{
+    dS << (unsigned int)mE->getInstrument();
+    dS << (unsigned int)mE->getType();
+    dS << (unsigned int)mE->getData1();
+    dS << (unsigned int)mE->getData2();
+    dS << (unsigned int)mE->getEventTime().sec;
+    dS << (unsigned int)mE->getEventTime().usec;
+    dS << (unsigned int)mE->getDuration().sec;
+    dS << (unsigned int)mE->getDuration().usec;
+    dS << (unsigned int)mE->getAudioStartMarker().sec;
+    dS << (unsigned int)mE->getAudioStartMarker().usec;
+
+    return dS;
+}
+
+QDataStream&
+operator<<(QDataStream &dS, MappedEvent &mE)
+{
+    dS << (unsigned int)mE.getInstrument();
+    dS << (unsigned int)mE.getType();
+    dS << (unsigned int)mE.getData1();
+    dS << (unsigned int)mE.getData2();
+    dS << (unsigned int)mE.getEventTime().sec;
+    dS << (unsigned int)mE.getEventTime().usec;
+    dS << (unsigned int)mE.getDuration().sec;
+    dS << (unsigned int)mE.getDuration().usec;
+    dS << (unsigned int)mE.getAudioStartMarker().sec;
+    dS << (unsigned int)mE.getAudioStartMarker().usec;
+
+    return dS;
+}
+
+QDataStream&
+operator>>(QDataStream &dS, MappedEvent *mE)
+{
+    unsigned int instrument, type, data1, data2;
+    long eventTimeSec, eventTimeUsec, durationSec, durationUsec,
+         audioSec, audioUsec;
+         
+    dS >> instrument;
+    dS >> type;
+    dS >> data1;
+    dS >> data2;
+    dS >> eventTimeSec;
+    dS >> eventTimeUsec;
+    dS >> durationSec;
+    dS >> durationUsec;
+    dS >> audioSec;
+    dS >> audioUsec;
+
+    mE->setInstrument((InstrumentId)instrument);
+    mE->setType((MappedEvent::MappedEventType)type);
+    mE->setData1((Rosegarden::MidiByte)data1);
+    mE->setData2((Rosegarden::MidiByte)data2);
+    mE->setEventTime(Rosegarden::RealTime(eventTimeSec, eventTimeUsec));
+    mE->setDuration(Rosegarden::RealTime(durationSec, durationUsec));
+    mE->setAudioStartMarker(Rosegarden::RealTime(audioSec, audioUsec));
+
+    return dS;
+}
+
+QDataStream&
+operator>>(QDataStream &dS, MappedEvent &mE)
+{
+    unsigned int instrument, type, data1, data2;
+    long eventTimeSec, eventTimeUsec, durationSec, durationUsec,
+         audioSec, audioUsec;
+         
+    dS >> instrument;
+    dS >> type;
+    dS >> data1;
+    dS >> data2;
+    dS >> eventTimeSec;
+    dS >> eventTimeUsec;
+    dS >> durationSec;
+    dS >> durationUsec;
+    dS >> audioSec;
+    dS >> audioUsec;
+
+    mE.setInstrument((InstrumentId)instrument);
+    mE.setType((MappedEvent::MappedEventType)type);
+    mE.setData1((Rosegarden::MidiByte)data1);
+    mE.setData2((Rosegarden::MidiByte)data2);
+    mE.setEventTime(Rosegarden::RealTime(eventTimeSec, eventTimeUsec));
+    mE.setDuration(Rosegarden::RealTime(durationSec, durationUsec));
+    mE.setAudioStartMarker(Rosegarden::RealTime(audioSec, audioUsec));
+
+    return dS;
+}
+
 
 }
 

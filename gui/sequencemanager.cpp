@@ -1087,10 +1087,22 @@ SequenceManager::sendMappedComposition(const Rosegarden::MappedComposition &mC)
     MappedComposition::iterator it = mC.begin();
 
     // scan output MappedComposition
+    //
     for (; it != mC.end(); it++)
     {
         QByteArray data;
         QDataStream streamOut(data, IO_WriteOnly);
+
+        // Use new MappedEvent interface
+        //
+        streamOut << (*it);
+        if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                      ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                      "processMappedEvent(Rosegarden::MappedEvent)",
+                                      data))
+        {
+            throw(i18n("Failed to contact Rosegarden sequencer"));
+        }
 
         /*
         cout << "PC TYPE = " << (*it)->getType() << endl;
@@ -1098,6 +1110,7 @@ SequenceManager::sendMappedComposition(const Rosegarden::MappedComposition &mC)
         cout << "PC PC = " << (int)(*it)->getPitch() << endl << endl;
         */
 
+        /*
         streamOut << (*it)->getInstrument();
         streamOut << (*it)->getType();
         streamOut << (*it)->getData1();
@@ -1115,6 +1128,7 @@ SequenceManager::sendMappedComposition(const Rosegarden::MappedComposition &mC)
         {
             throw(i18n("Failed to contact Rosegarden sequencer"));
         }
+        */
     }
 }
 
