@@ -46,7 +46,8 @@ void MatrixHLayout::resetStaff(StaffType&, timeT, timeT)
 {
 }
 
-void MatrixHLayout::scanStaff(MatrixHLayout::StaffType &staffBase, timeT, timeT)
+void MatrixHLayout::scanStaff(MatrixHLayout::StaffType &staffBase,
+			      timeT startTime, timeT endTime)
 {
     // The Matrix layout is not currently designed to be able to lay
     // out more than one staff, because we have no requirement to show
@@ -57,6 +58,7 @@ void MatrixHLayout::scanStaff(MatrixHLayout::StaffType &staffBase, timeT, timeT)
     // last staff scanned as they are now).
 
     MatrixStaff &staff = dynamic_cast<MatrixStaff &>(staffBase);
+    bool isFullScan = (startTime == endTime);
 
     // Do this in two parts: bar lines separately from elements.
     // (We don't need to do all that stuff notationhlayout has to do,
@@ -64,10 +66,12 @@ void MatrixHLayout::scanStaff(MatrixHLayout::StaffType &staffBase, timeT, timeT)
     // in the theoretically-correct places and do the same with the
     // notes quite independently.)
 
-    // 1. Bar lines and time signatures
+    // 1. Bar lines and time signatures.  For the moment we re-make
+    // these for the entire segment, disregarding startTime and
+    // endTime (this is not as slow as the element layout part)
 
-    for (BarDataList::iterator i = m_barData.begin(); i != m_barData.end(); ++i)
-	delete i->second;
+    for (BarDataList::iterator i = m_barData.begin();
+	 i != m_barData.end(); ++i) delete i->second;
     m_barData.clear();
     Rosegarden::Segment &segment = staff.getSegment();
     Rosegarden::Composition *composition = segment.getComposition();
@@ -79,7 +83,7 @@ void MatrixHLayout::scanStaff(MatrixHLayout::StaffType &staffBase, timeT, timeT)
     int barNo = m_firstBar;
     double startPosition = from;
 
-    MATRIX_DEBUG << "MatrixHLayout::scanStaff() : start time = " << segment.getStartTime() << ", first bar = " << m_firstBar << ", end marker time = " << segment.getEndMarkerTime() << ", from = " << from << ", to = " << to << endl;
+    MATRIX_DEBUG << "MatrixHLayout::scanStaff() : start time = " << startTime << ", first bar = " << m_firstBar << ", end time = " << endTime << ", end marker time = "  << segment.getEndMarkerTime() << ", from = " << from << ", to = " << to << endl;
 
     while (from < to) {
 
@@ -109,8 +113,14 @@ void MatrixHLayout::scanStaff(MatrixHLayout::StaffType &staffBase, timeT, timeT)
 
     MatrixElementList *notes = staff.getViewElementList();
     MatrixElementList::iterator i = notes->begin();
+    MatrixElementList::iterator e = notes->end();
 
-    while (i != notes->end()) {
+    if (!isFullScan) {
+	i = notes->findNearestTime(startTime);
+	e = notes->findTime(endTime);
+    }
+
+    while (i != e) {
 
 	(*i)->setLayoutX(((*i)->getAbsoluteTime() - startPosition)
                           * staff.getTimeScaleFactor());
@@ -118,7 +128,12 @@ void MatrixHLayout::scanStaff(MatrixHLayout::StaffType &staffBase, timeT, timeT)
 	double width = (*i)->getDuration() * staff.getTimeScaleFactor();
 	(*i)->setWidth((int)width);
 	
-	m_totalWidth = (*i)->getLayoutX() + width;
+	if (isFullScan) {
+	    m_totalWidth = (*i)->getLayoutX() + width;
+	} else {
+	    m_totalWidth = std::max(m_totalWidth, (*i)->getLayoutX() + width);
+	}
+	    
 	++i;
     }
 }

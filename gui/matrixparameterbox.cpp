@@ -25,6 +25,8 @@
 #include <qlayout.h>
 #include <qpixmap.h>
 
+#include "SnapGrid.h"
+
 #include "matrixparameterbox.h"
 #include "notepixmapfactory.h"
 #include "rosestrings.h"
@@ -33,6 +35,9 @@
 using std::cout;
 using std::cerr;
 using std::endl;
+
+using Rosegarden::Note;
+
 
 MatrixParameterBox::MatrixParameterBox(QWidget *parent):
     RosegardenParameterBox(i18n("Parameters "), parent),
@@ -91,13 +96,48 @@ MatrixParameterBox::initBox()
 
     QLabel *snapGridLabel = new QLabel(i18n("Snap grid"), this);
     m_snapGridCombo = new RosegardenComboBox(false, false, this);
+    m_snapGridCombo->setFont(font);
 
+    m_snapValues.push_back(Rosegarden::SnapGrid::NoSnap);
+    m_snapGridCombo->insertItem(i18n("None"));
+
+    m_snapValues.push_back(Rosegarden::SnapGrid::SnapToUnit);
+    m_snapGridCombo->insertItem(i18n("Unit"));
+
+    m_snapValues.push_back(Rosegarden::SnapGrid::SnapToBeat);
+    m_snapGridCombo->insertItem(i18n("Beat"));
+
+    m_snapValues.push_back(Rosegarden::SnapGrid::SnapToBar);
+    m_snapGridCombo->insertItem(i18n("Bar"));
+
+    for (int i = 1; i < 4; i++) // based on delay-combo code
+    {
+	// this could be anything
+	Rosegarden::timeT time = Note(Note::Crotchet).getDuration() * i;
+	
+	m_snapValues.push_back(time);
+
+	// check if it's a valid note duration (it will be for the
+	// time defn above, but if we were basing it on the sequencer
+	// resolution it might not be) & include a note pixmap if so
+	// 
+	Note nearestNote = Note::getNearestNote(time);
+	if (nearestNote.getDuration() == time) {
+	    std::string noteName = nearestNote.getReferenceName(); 
+	    noteName = "menu-" + noteName;
+	    QPixmap pmap = npf.makeToolbarPixmap(strtoqstr(noteName));
+	    m_snapGridCombo->insertItem(pmap, i18n("Snap %1").arg(time));
+	} else {
+	    m_snapGridCombo->insertItem(i18n("Snap %1").arg(time));
+	}	    
+    }
+/*!!!
     for (Rosegarden::timeT i = 0; i < 3840; i += 960)
     {
         m_snapValues.push_back(i);
         m_snapGridCombo->insertItem(QString("Snap %1").arg(i));
     }
-
+*/
     connect(m_snapGridCombo, SIGNAL(activated(int)),
             this, SLOT(slotSetSnap(int)));
 

@@ -409,14 +409,16 @@ void MatrixView::initStatusBar()
 }
 
 
-bool MatrixView::applyLayout(int /*staffNo*/)
+bool MatrixView::applyLayout(int staffNo,
+			     timeT startTime,
+			     timeT endTime)
 {
     m_hlayout.reset();
     m_vlayout.reset();
         
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-        m_hlayout.scanStaff(*m_staffs[i]);
-        m_vlayout.scanStaff(*m_staffs[i]);
+        m_hlayout.scanStaff(*m_staffs[i], startTime, endTime);
+        m_vlayout.scanStaff(*m_staffs[i], startTime, endTime);
     }
 
     m_hlayout.finishLayout();
@@ -447,7 +449,7 @@ void MatrixView::refreshSegment(Segment *segment,
     MATRIX_DEBUG << "MatrixView::refreshSegment(" << startTime
                          << ", " << endTime << ")\n";
 
-    applyLayout();
+    applyLayout(-1, startTime, endTime);
 
     if (!segment) segment = m_segments[0];
 

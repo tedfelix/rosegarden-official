@@ -70,7 +70,9 @@ public:
 
     virtual ~MatrixView();
 
-    virtual bool applyLayout(int staffNo = -1);
+    virtual bool applyLayout(int staffNo = -1,
+			     Rosegarden::timeT startTime = 0,
+			     Rosegarden::timeT endTime = 0);
 
     virtual void refreshSegment(Rosegarden::Segment *segment,
 				Rosegarden::timeT startTime = 0,

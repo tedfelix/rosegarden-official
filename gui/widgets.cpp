@@ -297,10 +297,13 @@ RosegardenProgressBar::processEvents()
 	    // want to permit editing-type events to happen)
 
 	    setProgress(m_value);
-	    QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
 	    m_shown = true;
-	    m_changedCursor = true;
 	    m_timeoutSet = 0;
+
+	    if (!m_changedCursor) {
+		QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
+		m_changedCursor = true;
+	    }
 	}
     }
 
