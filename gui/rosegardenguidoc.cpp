@@ -181,7 +181,8 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     m_title=fileInfo.fileName();
 
     // Check if file readable with fileInfo ?
-    if (!fileInfo.isReadable()) {
+    if (!fileInfo.isReadable() ||
+	fileInfo.isDir()) {
         QString msg(i18n("Can't open file '"));
         msg += filename;
         msg += "'";
@@ -271,8 +272,16 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
                     if (currentGroup != -1) fileStream << "</group>" << endl;
                     std::string type = (*i)->get<String>
                         (TrackNotationHelper::BeamedGroupTypePropertyName);
-                    fileStream << "<group type=\""
-                               << type.c_str() << "\">" << endl;
+                    fileStream << "<group type=\"" << type.c_str() << "\"";
+		    if (type == "tupled") {
+			fileStream << " length=\"" << (*i)->get<Int>
+			    (TrackNotationHelper::BeamedGroupTupledLengthPropertyName)
+				   << "\" count=\"" << (*i)->get<Int>
+			    (TrackNotationHelper::BeamedGroupTupledCountPropertyName)
+				   << "\"";
+		    }
+			    
+		    fileStream << ">" << endl;
                     currentGroup = group;
                 }
             } else if (currentGroup != -1) {

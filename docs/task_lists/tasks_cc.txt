@@ -1,4 +1,27 @@
 
+Post-0.1.1 task list
+====================
+
+ 1. Sort out true legato quantization [DONE]
+
+ 2. Display real bar numbers and proportional bar durations on track
+ canvas [DONE]
+
+ 3. Tuplets
+
+ 4. Text, lyrics etc -- need to talk about this, there are various
+ possible ways to do it
+
+ 5. Slurs
+
+ 6. Add time sig support to RG2.1 import
+
+ 7. Ponder undo
+
+ 8. Ponder help
+
+
+
 Task list from 18/19th August meetings
 ======================================
 
