@@ -941,8 +941,10 @@ AlsaDriver::allNotesOff()
         snd_seq_event_output_direct(m_midiHandle, event);
 
         delete(*i);
-        m_noteOffQueue.erase(i);
     }
+    
+    // erase iterators
+    m_noteOffQueue.erase(m_noteOffQueue.begin(), m_noteOffQueue.end());
 
     // drop - does this work?
     //
@@ -965,34 +967,32 @@ AlsaDriver::processNotesOff(const RealTime &time)
     snd_seq_ev_clear(event);
     snd_seq_ev_set_source(event, m_port);
 
-    for (NoteOffQueue::iterator i = m_noteOffQueue.begin();
-         i != m_noteOffQueue.end(); i++)
+    for (NoteOffQueue::iterator it = m_noteOffQueue.begin();
+         it != m_noteOffQueue.end(); it++)
     {
-        if ((*i)->getRealTime() <= time)
+        if ((*it)->getRealTime() <= time)
         {
             // Set destination according to instrument mapping to port
             //
-            outputDevice = getPairForMappedInstrument((*i)->getInstrument());
-
+            outputDevice = getPairForMappedInstrument((*it)->getInstrument());
             snd_seq_ev_set_dest(event,
                                 outputDevice.first,
                                 outputDevice.second);
 
-            offTime = (*i)->getRealTime();
+            offTime = (*it)->getRealTime();
 
-            snd_seq_real_time_t time = { offTime.sec,
-                                         offTime.usec * 1000 };
+            snd_seq_real_time_t alsaOffTime = { offTime.sec,
+                                                offTime.usec * 1000 };
 
-            snd_seq_ev_schedule_real(event, m_queue, 0, &time);
+            snd_seq_ev_schedule_real(event, m_queue, 0, &alsaOffTime);
             snd_seq_ev_set_noteoff(event,
-                                   (*i)->getChannel(),
-                                   (*i)->getPitch(),
+                                   (*it)->getChannel(),
+                                   (*it)->getPitch(),
                                    127);
             // send note off
             snd_seq_event_output(m_midiHandle, event);
-
-            delete(*i);
-            m_noteOffQueue.erase(i);
+            delete(*it);
+            m_noteOffQueue.erase(it);
         }
     }
 
@@ -1426,17 +1426,33 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
         //
         if ((*i)->getType() == MappedEvent::MidiNote)
         {
-            NoteOffEvent *noteOffEvent =
-                new NoteOffEvent(midiRelativeStopTime, // already calculated
-                                 (*i)->getPitch(),
-                                 channel,
-                                 (*i)->getInstrument());
-            m_noteOffQueue.insert(noteOffEvent);
+            bool extended = false;
+            NoteOffQueue::iterator it;
+
+            for (it = m_noteOffQueue.begin(); it != m_noteOffQueue.end(); it++)
+            {
+                if ((*it)->getPitch() == (*i)->getPitch() &&
+                    (*it)->getChannel() == channel &&
+                    (*it)->getInstrument() == (*i)->getInstrument())
+                {
+                    (*it)->setRealTime(midiRelativeStopTime);
+                    extended = true;
+                }
+            }
+
+            if (!extended)
+            {
+                NoteOffEvent *noteOffEvent =
+                    new NoteOffEvent(midiRelativeStopTime, // already calculated
+                                     (*i)->getPitch(),
+                                     channel,
+                                     (*i)->getInstrument());
+                m_noteOffQueue.insert(noteOffEvent);
+            }
         }
     }
 
     snd_seq_drain_output(m_midiHandle);
-    //processNotesOff(midiRelativeTime);
 
     delete event;
 }
@@ -1686,7 +1702,7 @@ void
 AlsaDriver::processPending(const RealTime &playLatency)
 {
     if (m_playing)
-        processNotesOff(getAlsaTime());
+        processNotesOff(getAlsaTime() + playLatency);
     else
     {
         // Process audio
