@@ -51,7 +51,7 @@ public:
 
     void clear();
     
-    void attachView(KActionCollection *collection, KToolBar* toolbar = 0);
+    void attachView(KActionCollection *collection);
     void detachView(KActionCollection *collection);
 
     void addCommand(KCommand *command, bool execute = true);

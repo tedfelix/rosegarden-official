@@ -57,8 +57,7 @@ MultiViewCommandHistory::clear()
 }
 
 void
-MultiViewCommandHistory::attachView(KActionCollection *collection,
-                                    KToolBar* toolbar)
+MultiViewCommandHistory::attachView(KActionCollection *collection)
 {
     if (m_views.find(collection) != m_views.end()) return;
 
@@ -109,11 +108,6 @@ MultiViewCommandHistory::attachView(KActionCollection *collection,
     m_views.insert(collection);
     updateButtons();
 
-    if (toolbar) {
-        undo->plug(toolbar);
-        redo->plug(toolbar);
-    }
-    
 }
 
 void

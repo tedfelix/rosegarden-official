@@ -80,10 +80,11 @@ RosegardenGUIApp::RosegardenGUIApp()
 
     ///////////////////////////////////////////////////////////////////
     // call inits to invoke all other construction parts
-    setupActions();
     
     initStatusBar();
     initDocument();
+    setupActions();
+
     initView();
 
     readOptions();
@@ -352,7 +353,7 @@ void RosegardenGUIApp::initDocument()
     m_doc = new RosegardenGUIDoc(this);
     m_doc->newDocument();
 
-    m_doc->getCommandHistory()->attachView(actionCollection(), toolBar("mainToolBar"));
+    m_doc->getCommandHistory()->attachView(actionCollection());
 }
 
 void RosegardenGUIApp::initView()
