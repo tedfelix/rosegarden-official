@@ -1716,7 +1716,23 @@ InsertTriggerNoteCommand::modifySegment()
 	Rosegarden::Marks::addMark(*e, m_mark, true);
     }
 
-    (void)Rosegarden::SegmentMatrixHelper(getSegment()).insertNote(e);
+    Segment &s(getSegment());
+    Segment::iterator i = Rosegarden::SegmentMatrixHelper(s).insertNote(e);
+
+    Segment::iterator j = i;
+    while (++j != s.end()) {
+	if ((*j)->getAbsoluteTime() >
+	    (*i)->getAbsoluteTime() + (*i)->getDuration()) break;
+	if ((*j)->isa(Note::EventType)) {
+	    if ((*j)->getAbsoluteTime() ==
+		(*i)->getAbsoluteTime() + (*i)->getDuration()) {
+		if ((*j)->has(TIED_BACKWARD) && (*j)->get<Rosegarden::Bool>(TIED_BACKWARD) &&
+		    ((*j)->get<Int>(PITCH) == m_pitch)) {
+		    (*i)->set<Rosegarden::Bool>(TIED_FORWARD, true);
+		}
+	    }
+	}
+    }
 
     Rosegarden::TriggerSegmentRec *rec =
 	getSegment().getComposition()->getTriggerSegmentRec(m_id);

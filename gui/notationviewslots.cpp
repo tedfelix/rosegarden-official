@@ -1590,39 +1590,52 @@ void NotationView::slotEditAddKeySignature()
 void NotationView::slotEditElement(NotationStaff *staff,
 				   NotationElement *element, bool advanced)
 {
-    if (!advanced) {
+    if (advanced) {
+	
+	EventEditDialog dialog(this, *element->event(), true);
+	
+	if (dialog.exec() == QDialog::Accepted &&
+	    dialog.isModified()) {
+	    
+	    EventEditCommand *command = new EventEditCommand
+		(staff->getSegment(),
+		 element->event(),
+		 dialog.getEvent());
+	    
+	    addCommandToHistory(command);
+	}
 
-	if (element->event()->isa(Rosegarden::Clef::EventType)) {
+    } else if (element->event()->isa(Rosegarden::Clef::EventType)) {
 
-	    try {
-		ClefDialog dialog(this, m_notePixmapFactory,
-				  Rosegarden::Clef(*element->event()));
+	try {
+	    ClefDialog dialog(this, m_notePixmapFactory,
+			      Rosegarden::Clef(*element->event()));
+	    
+	    if (dialog.exec() == QDialog::Accepted) {
 		
-		if (dialog.exec() == QDialog::Accepted) {
-		    
-		    ClefDialog::ConversionType conversion = dialog.getConversionType();
-		    bool shouldChangeOctave = (conversion != ClefDialog::NoConversion);
-		    bool shouldTranspose = (conversion == ClefDialog::Transpose);
-		    addCommandToHistory
-			(new ClefInsertionCommand
-			 (staff->getSegment(), element->event()->getAbsoluteTime(),
-			  dialog.getClef(), shouldChangeOctave, shouldTranspose));
-		}
-	    } catch (Rosegarden::Exception e) {
-		std::cerr << e.getMessage() << std::endl;
+		ClefDialog::ConversionType conversion = dialog.getConversionType();
+		bool shouldChangeOctave = (conversion != ClefDialog::NoConversion);
+		bool shouldTranspose = (conversion == ClefDialog::Transpose);
+		addCommandToHistory
+		    (new ClefInsertionCommand
+		     (staff->getSegment(), element->event()->getAbsoluteTime(),
+		      dialog.getClef(), shouldChangeOctave, shouldTranspose));
 	    }
-
-	    return;
-	    
-	} else if (element->event()->isa(Rosegarden::Key::EventType)) {
-	    
-	    try {
-		Rosegarden::Clef clef(staff->getSegment().getClefAtTime
-				      (element->event()->getAbsoluteTime()));
+	} catch (Rosegarden::Exception e) {
+	    std::cerr << e.getMessage() << std::endl;
+	}
+	
+	return;
+	
+    } else if (element->event()->isa(Rosegarden::Key::EventType)) {
+	
+	try {
+	    Rosegarden::Clef clef(staff->getSegment().getClefAtTime
+				  (element->event()->getAbsoluteTime()));
 		KeySignatureDialog dialog
 		    (this, m_notePixmapFactory, clef, Rosegarden::Key(*element->event()),
 		     false, true);
-	
+		
 		if (dialog.exec() == QDialog::Accepted &&
 		    dialog.isValid()) {
 		
@@ -1637,57 +1650,56 @@ void NotationView::slotEditElement(NotationStaff *staff,
 			  conversion == KeySignatureDialog::Transpose));
 		}
 
-	    } catch (Rosegarden::Exception e) {
-		std::cerr << e.getMessage() << std::endl;
-	    }
-
-	    return;
-
-	} else if (element->event()->isa(Rosegarden::Text::EventType)) {
-	
-	    try {
-		TextEventDialog dialog
-		    (this, m_notePixmapFactory, Rosegarden::Text(*element->event()));
-		if (dialog.exec() == QDialog::Accepted) {
-		    TextInsertionCommand *command = new TextInsertionCommand
-			(staff->getSegment(),
-			 element->event()->getAbsoluteTime(),
-			 dialog.getText());
-		    KMacroCommand *macroCommand = new KMacroCommand(command->name());
-		    macroCommand->addCommand(new EraseEventCommand(staff->getSegment(),
-								   element->event(), false));
-		    macroCommand->addCommand(command);
-		    addCommandToHistory(macroCommand);
-		}
-	    } catch (Rosegarden::Exception e) {
-		std::cerr << e.getMessage() << std::endl;
-	    }
-
-	    return;
-
-	} else if (element->isNote() &&
-		   element->event()->has(Rosegarden::BaseProperties::TRIGGER_SEGMENT_ID)) {
-	    
-	    int id = element->event()->get<Rosegarden::Int>
-		(Rosegarden::BaseProperties::TRIGGER_SEGMENT_ID);
-	    emit editTriggerSegment(id);
-	    return;
+	} catch (Rosegarden::Exception e) {
+	    std::cerr << e.getMessage() << std::endl;
 	}
-    }
 
-    // catch-all, and advanced mode
-		     
-    EventEditDialog dialog(this, *element->event(), true);
+	return;
 
-    if (dialog.exec() == QDialog::Accepted &&
-	dialog.isModified()) {
+    } else if (element->event()->isa(Rosegarden::Text::EventType)) {
 	
-	EventEditCommand *command = new EventEditCommand
-	    (staff->getSegment(),
-	     element->event(),
-	     dialog.getEvent());
+	try {
+	    TextEventDialog dialog
+		(this, m_notePixmapFactory, Rosegarden::Text(*element->event()));
+	    if (dialog.exec() == QDialog::Accepted) {
+		TextInsertionCommand *command = new TextInsertionCommand
+		    (staff->getSegment(),
+		     element->event()->getAbsoluteTime(),
+		     dialog.getText());
+		KMacroCommand *macroCommand = new KMacroCommand(command->name());
+		macroCommand->addCommand(new EraseEventCommand(staff->getSegment(),
+							       element->event(), false));
+		macroCommand->addCommand(command);
+		addCommandToHistory(macroCommand);
+	    }
+	} catch (Rosegarden::Exception e) {
+	    std::cerr << e.getMessage() << std::endl;
+	}
+
+	return;
+
+    } else if (element->isNote() &&
+	       element->event()->has(Rosegarden::BaseProperties::TRIGGER_SEGMENT_ID)) {
+	    
+	int id = element->event()->get<Rosegarden::Int>
+	    (Rosegarden::BaseProperties::TRIGGER_SEGMENT_ID);
+	emit editTriggerSegment(id);
+	return;
+
+    } else {
+
+	SimpleEventEditDialog dialog(this, getDocument(), *element->event(), false);
 	
-	addCommandToHistory(command);
+	if (dialog.exec() == QDialog::Accepted &&
+	    dialog.isModified()) {
+	    
+	    EventEditCommand *command = new EventEditCommand
+		(staff->getSegment(),
+		 element->event(),
+		 dialog.getEvent());
+	    
+	    addCommandToHistory(command);
+	}
     }
 }                       
 

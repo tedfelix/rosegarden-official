@@ -540,7 +540,7 @@ void MatrixSelector::handleMidButtonPress(Rosegarden::timeT time,
 void MatrixSelector::handleMouseDoubleClick(Rosegarden::timeT ,
 					    int ,
 					    int staffNo,
-					    QMouseEvent* ,
+					    QMouseEvent *ev,
 					    Rosegarden::ViewElement *element)
 {
 /*
@@ -566,18 +566,36 @@ void MatrixSelector::handleMouseDoubleClick(Rosegarden::timeT ,
 	    return;
 	}
 
-	EventEditDialog dialog(m_mParentView, *m_clickedElement->event(), true);
+	if (ev->state() & ShiftButton) { // advanced edit
 
-	if (dialog.exec() == QDialog::Accepted &&
-	    dialog.isModified()) {
+	    EventEditDialog dialog(m_mParentView, *m_clickedElement->event(), true);
 
-	    EventEditCommand *command = new EventEditCommand
-		(staff->getSegment(),
-		 m_clickedElement->event(),
-		 dialog.getEvent());
+	    if (dialog.exec() == QDialog::Accepted &&
+		dialog.isModified()) {
+		
+		EventEditCommand *command = new EventEditCommand
+		    (staff->getSegment(),
+		     m_clickedElement->event(),
+		     dialog.getEvent());
+		
+		m_mParentView->addCommandToHistory(command);
+	    }
+	} else {
 
-	    m_mParentView->addCommandToHistory(command);
-	}
+	    SimpleEventEditDialog dialog(m_mParentView, m_mParentView->getDocument(),
+					 *m_clickedElement->event(), false);
+
+	    if (dialog.exec() == QDialog::Accepted &&
+		dialog.isModified()) {
+		
+		EventEditCommand *command = new EventEditCommand
+		    (staff->getSegment(),
+		     m_clickedElement->event(),
+		     dialog.getEvent());
+		
+		m_mParentView->addCommandToHistory(command);
+	    }
+	}	    
     }
 
 }

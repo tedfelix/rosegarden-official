@@ -445,8 +445,6 @@ void SegmentMmapper::dump()
     Rosegarden::RealTime duration;
     Rosegarden::Track* track = comp.getTrackById(m_segment->getTrack());
     
-    Rosegarden::SegmentPerformanceHelper helper(*m_segment);
-
     timeT segmentStartTime = m_segment->getStartTime();
     timeT segmentEndTime = m_segment->getEndMarkerTime();
     timeT segmentDuration = segmentEndTime - segmentStartTime;
@@ -489,7 +487,8 @@ void SegmentMmapper::dump()
 
 		    if (rec && rec->getSegment()) {
 			Rosegarden::timeT performanceDuration =
-			    helper.getSoundingDuration(j);
+			    Rosegarden::SegmentPerformanceHelper(*m_segment).
+			    getSoundingDuration(j);
 			if (performanceDuration > 0) {
 			    mergeTriggerSegment(&triggered, *j,
 						performanceDuration, rec);
@@ -528,6 +527,9 @@ void SegmentMmapper::dump()
 	    // Ignore rests
 	    //
             if (!(**k)->isa(Rosegarden::Note::EventRestType)) {
+
+		Rosegarden::SegmentPerformanceHelper helper
+		    (usingi ? *triggered : *m_segment);
 
 		timeT playTime =
 		    helper.getSoundingAbsoluteTime(*k) + repeatNo * segmentDuration;
