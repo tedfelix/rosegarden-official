@@ -65,6 +65,10 @@ public:
     static DataBlockRepository* getInstance();
     static std::string getDataBlockForEvent(MappedEvent*);
     static void setDataBlockForEvent(MappedEvent*, const std::string&);
+    /**
+     * Clear all block files
+     */
+    static void clear();
     bool hasDataBlock(blockid);
 
 protected:

@@ -129,6 +129,8 @@ void SequenceManager::setDocument(RosegardenGUIDoc* doc)
     }
 
     resetCompositionMmapper();
+
+    DataBlockRepository::clear();
 }
 
 RosegardenGUIDoc* SequenceManager::getDocument()

@@ -811,6 +811,11 @@ void EditView::showPropertyControlRuler(PropertyName propertyName)
     }
 }
 
+ControlRuler* EditView::getCurrentControlRuler()
+{
+    return dynamic_cast<ControlRuler*>(m_controlRulers->currentPage());
+}
+
 void EditView::slotShowVelocityControlRuler()
 {
     showPropertyControlRuler(Rosegarden::BaseProperties::VELOCITY);

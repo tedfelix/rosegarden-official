@@ -147,6 +147,15 @@
   <text>Zoom Toolbar</text>
 </ToolBar>
 
+<!--     RMB Menus           -->
+
+<Menu noMerge="1" name="controller_events_ruler_menu">
+   <Action name="add_control_ruler_item"/>
+   <Action name="delete_control_ruler_item"/>
+</Menu>
+
+<!--     Application States           -->
+
 <State name="have_selection">
   <enable>
     <Action name="edit_cut"/>

@@ -436,6 +436,11 @@ void DataBlockRepository::unregisterDataBlockForEvent(MappedEvent* e)
 DataBlockRepository::DataBlockRepository()
     : m_lastId(1)
 {
+    clear();
+}
+
+void DataBlockRepository::clear()
+{
     // Erase all 'datablock_*' files
     //
     QString tmpPath = KGlobal::dirs()->resourceDirs("tmp").first();
@@ -446,6 +451,7 @@ DataBlockRepository::DataBlockRepository()
         QFile::remove(segmentName);
     }
 }
+
 
 void DataBlockRepository::addDataByteForEvent(MidiByte byte, MappedEvent* e)
 {

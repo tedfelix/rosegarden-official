@@ -231,6 +231,10 @@ protected:
      */ 
     void showPropertyControlRuler(Rosegarden::PropertyName propertyName);
     
+    /**
+     * Return the control ruler currently displayed, or 0 if none exist
+     */
+    ControlRuler* getCurrentControlRuler();
     
     /**
      * Set up those actions common to any EditView (e.g. note insertion,

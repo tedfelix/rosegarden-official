@@ -21,13 +21,15 @@
 
 #include <algorithm>
 
-#include <klocale.h>
-
+#include <qcursor.h>
 #include <qpainter.h>
 #include <qtooltip.h>
 #include <qlabel.h>
 #include <qhbox.h>
 #include <qframe.h>
+#include <qpopupmenu.h>
+
+#include <klocale.h>
 
 #include "MidiTypes.h"
 #include "Selection.h"
@@ -436,7 +438,8 @@ ControlRuler::ControlRuler(Segment& segment,
     m_currentX(0.0),
     m_selecting(false),
     m_selector(new ControlSelector(this)),
-    m_selectionRect(new QCanvasRectangle(canvas()))
+    m_selectionRect(new QCanvasRectangle(canvas())),
+    m_menu(0)    
 {
     setControlTool(new TestTool);
     m_selectionRect->setPen(Qt::red);
@@ -495,6 +498,8 @@ void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
 
 void ControlRuler::contentsMouseReleaseEvent(QMouseEvent* e)
 {
+    if (e->button() == Qt::RightButton) return;
+    
     if (m_selecting) {
         updateSelection();
         m_selector->handleMouseButtonRelease(e);
@@ -561,6 +566,36 @@ void ControlRuler::updateSelection()
             item->setSelected(true);
             m_selectedItems << item;
         }
+    }
+}
+
+void ControlRuler::contentsContextMenuEvent(QContextMenuEvent* e)
+{
+    if (!m_menu && !m_menuName.isEmpty()) createMenu();
+
+    if (m_menu) {
+        RG_DEBUG << "ControlRuler::showMenu() - show menu with" << m_menu->count() << " items\n";
+        m_lastEventPos = e->pos();
+        m_menu->exec(QCursor::pos());
+    } else
+        RG_DEBUG << "ControlRuler::showMenu() : no menu to show\n";
+
+}
+
+void ControlRuler::createMenu()
+{
+    RG_DEBUG << "ControlRuler::createMenu()\n";
+
+    KMainWindow* parentMainWindow = dynamic_cast<KMainWindow*>(topLevelWidget());
+
+    if (parentMainWindow && parentMainWindow->factory()) {
+        m_menu = static_cast<QPopupMenu*>(parentMainWindow->factory()->container(m_menuName, parentMainWindow));
+
+        if (!m_menu) {
+            RG_DEBUG << "ControlRuler::createMenu() failed\n";
+        }
+    } else {
+        RG_DEBUG << "ControlRuler::createMenu() failed: no parent factory\n";
     }
 }
 
@@ -741,6 +776,7 @@ ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment& segment,
 
     }
     
+    setMenuName("controller_events_ruler_menu");
 }
 
 
@@ -797,7 +833,19 @@ void ControllerEventsRuler::segmentDeleted(const Segment*)
     m_segmentDeleted = false;
 }
 
+void ControllerEventsRuler::addControllerEvent()
+{
+    RG_DEBUG << "ControllerEventsRuler::addControllerEvent() : inserting event at "
+             << m_rulerScale->getTimeForX(m_lastEventPos.x())
+             << endl;
+}
 
+void ControllerEventsRuler::deleteControllerEvent()
+{
+    RG_DEBUG << "ControllerEventsRuler::addControllerEvent() : deleting event at "
+             << m_rulerScale->getTimeForX(m_lastEventPos.x())
+             << endl;
+}
 
 //----------------------------------------
 

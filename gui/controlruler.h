@@ -41,6 +41,7 @@ class ControlItem;
 class ControlTool;
 class ControlSelector;
 class EditViewBase;
+class QPopupMenu;
 
 /**
  * ControlRuler : base class for Control Rulers
@@ -88,6 +89,7 @@ protected:
     virtual void contentsMouseReleaseEvent(QMouseEvent*);
     virtual void contentsMouseMoveEvent(QMouseEvent*);
     virtual void contentsWheelEvent(QWheelEvent*);
+    virtual void contentsContextMenuEvent(QContextMenuEvent*);
 
     int valueToHeight(long val);
     long heightToValue(int height);
@@ -95,6 +97,9 @@ protected:
 
     void clearSelectedItems();
     void updateSelection();
+
+    void setMenuName(QString menuName) { m_menuName = menuName; }
+    void createMenu();
 
     //--------------- Data members ---------------------------------
 
@@ -117,6 +122,9 @@ protected:
     bool m_selecting;
     ControlSelector* m_selector;
     QCanvasRectangle* m_selectionRect;
+
+    QString m_menuName;
+    QPopupMenu* m_menu;
 };
 
 /**
@@ -179,6 +187,9 @@ public:
     virtual void eventRemoved(const Rosegarden::Segment *, Rosegarden::Event *);
     virtual void endMarkerTimeChanged(const Rosegarden::Segment *, bool shorten);
     virtual void segmentDeleted(const Rosegarden::Segment *);
+
+    virtual void addControllerEvent();
+    virtual void deleteControllerEvent();
 
 protected:
     //--------------- Data members ---------------------------------

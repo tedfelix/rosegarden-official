@@ -275,6 +275,10 @@ public slots:
     void slotJumpCursorToPlayback();
     void slotJumpPlaybackToCursor();
 
+    /// Control ruler actions
+    void slotAddControlRulerItem();
+    void slotDeleteControlRulerItem();
+
     /// Canvas actions slots
 
     /**
@@ -282,7 +286,7 @@ public slots:
      * or somewhere on the staff
      */
     void slotMousePressed(Rosegarden::timeT time, int pitch,
-                      QMouseEvent*, MatrixElement*);
+                          QMouseEvent*, MatrixElement*);
 
     void slotMouseMoved(Rosegarden::timeT time, int pitch, QMouseEvent*);
     void slotMouseReleased(Rosegarden::timeT time, int pitch, QMouseEvent*);
