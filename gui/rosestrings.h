@@ -1,3 +1,4 @@
+// -*- c-basic-offset: 4 -*-
 /*
     Rosegarden-4
     A sequencer and musical notation editor.
@@ -28,5 +29,7 @@
 extern QString strtoqstr(const std::string &);
 extern QString strtoqstr(const Rosegarden::PropertyName &);
 extern std::string qstrtostr(const QString &);
+extern double strtodouble(const std::string &);
+extern double qstrtodouble(const QString &);
 
 #endif

@@ -581,7 +581,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         double tempo = 120.0;
         QString tempoStr = atts.value("defaultTempo");
         if (tempoStr) {
-            tempo = tempoStr.toDouble();
+            tempo = qstrtodouble(tempoStr);
         }
 
         getComposition().setDefaultTempo(tempo);
@@ -1041,7 +1041,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         getAudioFileManager().setAudioPath(qstrtostr(search));
 
     } else if (lcName == "begin") {
-        float marker = atts.value("index").toFloat();
+
+        double marker = qstrtodouble(atts.value("index"));
 
         if (!m_currentSegment)
         {
@@ -1059,12 +1060,13 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         // convert to RealTime from float
         int sec = (int)marker;
-        int usec = (int)((marker - ((float)sec)) * 1000000.0);
+        int usec = (int)((marker - ((double)sec)) * 1000000.0);
         m_currentSegment->setAudioStartTime(Rosegarden::RealTime(sec, usec * 1000));
 
 
     } else if (lcName == "end") {
-        float marker = atts.value("index").toFloat();
+
+        double marker = qstrtodouble(atts.value("index"));
 
         if (!m_currentSegment)
         {
@@ -1081,7 +1083,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         }
 
         int sec = (int)marker;
-        int usec = (int)((marker - ((float)sec)) * 1000000.0);
+        int usec = (int)((marker - ((double)sec)) * 1000000.0);
         Rosegarden::RealTime markerTime(sec, usec * 1000);
 
         if (markerTime < m_currentSegment->getAudioStartTime())
@@ -1118,9 +1120,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             return false;
         }
 
-        float marker = atts.value("time").toFloat();
+        double marker = qstrtodouble(atts.value("time"));
         int sec = (int)marker;
-        int usec = (int)((marker - ((float)sec)) * 1000000.0);
+        int usec = (int)((marker - ((double)sec)) * 1000000.0);
         Rosegarden::RealTime markerTime(sec, usec * 1000);
 
         m_currentSegment->setFadeInTime(markerTime);
@@ -1143,9 +1145,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             return false;
         }
 
-        float marker = atts.value("time").toFloat();
+        double marker = qstrtodouble(atts.value("time"));
         int sec = (int)marker;
-        int usec = (int)((marker - ((float)sec)) * 1000000.0);
+        int usec = (int)((marker - ((double)sec)) * 1000000.0);
         Rosegarden::RealTime markerTime(sec, usec * 1000);
 
         m_currentSegment->setFadeOutTime(markerTime);
@@ -1568,7 +1570,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             return false;
         }
 
-	float value = atts.value("value").toFloat();
+        double value = qstrtodouble(atts.value("value"));
 
 	if (m_section == InBuss) {
 	    if (m_buss) m_buss->setLevel(value);
@@ -1700,7 +1702,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             return false;
         }
         unsigned long portId = atts.value("id").toULong();
-        Rosegarden::MappedObjectValue value = atts.value("value").toFloat();
+	double value = qstrtodouble(atts.value("value"));
 
         if (m_plugin)
         {
@@ -1856,7 +1858,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             return false;
         }
 
-        float value = atts.value("value").toFloat();
+	double value = qstrtodouble(atts.value("value"));
 
 	// if the value retrieved is greater than (say) 15 then we
 	// must have an old-style 0-127 value instead of a shiny new

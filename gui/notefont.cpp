@@ -252,29 +252,29 @@ NoteFontMap::startElement(const QString &, const QString &,
 	QString s;
 
         s = attributes.value("font-height");
-	if (s) fontHeight = s.toDouble();
+	if (s) fontHeight = qstrtodouble(s);
 	else {
 	    m_errorString = "font-height is a required attribute of font-scale";
 	    return false;
 	}
 
         s = attributes.value("staff-line-thickness");
-	if (s) staffLineThickness = s.toDouble();
+	if (s) staffLineThickness = qstrtodouble(s);
 
         s = attributes.value("leger-line-thickness");
-	if (s) legerLineThickness = s.toDouble();
+	if (s) legerLineThickness = qstrtodouble(s);
 
         s = attributes.value("stem-thickness");
-	if (s) stemThickness = s.toDouble();
+	if (s) stemThickness = qstrtodouble(s);
 
         s = attributes.value("beam-thickness");
-	if (s) beamThickness = s.toDouble();
+	if (s) beamThickness = qstrtodouble(s);
 
         s = attributes.value("stem-length");
-	if (s) stemLength = s.toDouble();
+	if (s) stemLength = qstrtodouble(s);
 
         s = attributes.value("flag-spacing");
-	if (s) flagSpacing = s.toDouble();
+	if (s) flagSpacing = qstrtodouble(s);
 
 	int fontId = 0;
 	s = attributes.value("font-id");
@@ -474,14 +474,14 @@ NoteFontMap::startElement(const QString &, const QString &,
 
 	QString s = attributes.value("x");
 	double x = -1.0;
-	if (s) x = s.toDouble();
+	if (s) x = qstrtodouble(s);
 
 	s = attributes.value("y");
 	if (!s) {
 	    m_errorString = "y is a required attribute of scaled";
 	    return false;
 	}
-	double y = s.toDouble();
+	double y = qstrtodouble(s);
 	
         HotspotDataMap::iterator i = m_hotspots.find(m_hotspotCharName);
         if (i == m_hotspots.end()) {

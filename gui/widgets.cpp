@@ -88,7 +88,7 @@ RosegardenSpinBox::mapValueToText(int value)
 int
 RosegardenSpinBox::mapTextToValue(bool * /*ok*/)
 {
-    double number = text().toDouble();
+    double number = qstrtodouble(text());
 
     if (number)
     {

@@ -336,13 +336,13 @@ HydrogenXMLHandler::characters(const QString& chars)
         if (m_currentProperty == "position") {
             m_position = ch.toInt();
         } else if (m_currentProperty == "velocity") {
-            m_velocity = ch.toDouble();
+            m_velocity = qstrtodouble(ch);
         } else if (m_currentProperty == "pan_L") {
-            m_panL = ch.toDouble();
+            m_panL = qstrtodouble(ch);
         } else if (m_currentProperty == "pan_R") {
-            m_panR = ch.toDouble();
+            m_panR = qstrtodouble(ch);
         } else if (m_currentProperty == "pitch") {
-            m_pitch = ch.toDouble();
+            m_pitch = qstrtodouble(ch);
         } else if (m_currentProperty == "instrument") {
             m_instrument = ch.toInt();
 
@@ -380,7 +380,7 @@ HydrogenXMLHandler::characters(const QString& chars)
         } else if (m_currentProperty == "filename") {
             m_fileName = qstrtostr(chars); // don't strip whitespace from the filename
         } else if (m_currentProperty == "volume") {
-            m_instrumentVolumes.push_back(ch.toDouble());
+            m_instrumentVolumes.push_back(qstrtodouble(ch));
         }
 
 
@@ -404,11 +404,11 @@ HydrogenXMLHandler::characters(const QString& chars)
             m_version = qstrtostr(chars);
         } else if (m_currentProperty == "bpm") {
 
-            m_bpm = ch.toDouble();
+            m_bpm = qstrtodouble(ch);
             m_composition->addTempo(0, m_bpm);
 
         } else if (m_currentProperty == "volume") {
-            m_volume = ch.toDouble();
+            m_volume = qstrtodouble(ch);
         } else if (m_currentProperty == "name") {
             m_name = qstrtostr(chars);
         } else if (m_currentProperty == "author") {
