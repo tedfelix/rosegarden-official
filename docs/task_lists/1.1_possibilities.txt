@@ -1,0 +1,47 @@
+
+Features for 1.1, or at least post-1.0
+======================================
+
+Just somewhere to write down random feature suggestions for after the
+1.0 release.  As much as anything, the point is simply to know that a
+feature has been "listed" while avoiding the temptation to do it
+quickly for 1.0.
+
+(This is supposed to be a bit more vague and general than the
+SourceForge feature requests tracker.)
+
+
+General
+-------
+
+ * Scripting API!
+
+ * Beat location and tempo tracking in MIDI (and audio?).
+
+
+Notation etc
+------------
+
+ * Performable ornaments!  Finally.  Generic macros of that type.
+
+ * Micro-tuned key signatures.  Oh, the possibilities.
+
+ * Drum staffs.
+
+ * Guitar tab (not something that interests me, but I'm sure it'd
+   interest Guillaume).
+
+ * Multi-voice staffs, by overlaying segments.
+
+ * Different spacing algorithms.  One could have a menu of three or
+   four likely candidates.
+
+ * Better synchronisation in x-coord of elements in different staffs,
+   without reverting to a completely naive layout.  This is probably
+   harder than either of the two foregoing.  Each bar record (per
+   staff) can contain a series of duration/spacing pairs for timed
+   events, but how to reconcile them?
+
+ * Lilypond import.  Ignore those, ahem, lily-livered milquetoasts
+   who suggest it'd be "really damn difficult" or any of that rot.
+
