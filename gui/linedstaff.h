@@ -34,7 +34,6 @@
 #include "qcanvas.h"
 
 namespace Rosegarden { class SnapGrid; }
-class ConstantWidthRectangle;
 
 /**
  * LinedStaffManager is a trivial abstract base for classes that own
@@ -515,6 +514,8 @@ protected:
     // the staff-drawing process.
     virtual void drawStaffName();
 
+    void initCursors();
+
 protected:
 
     //--------------- Data members ---------------------------------
@@ -553,8 +554,8 @@ protected:
     BarLineList m_beatLines;
     BarLineList m_barConnectingLines;
 
-    ConstantWidthRectangle *m_pointer;
-    ConstantWidthRectangle *m_insertCursor;
+    QCanvasLine *m_pointer;
+    QCanvasLine *m_insertCursor;
 };
 
 #include "linedstaff.cpp"
