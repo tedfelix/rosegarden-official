@@ -93,7 +93,8 @@ RosegardenTempoDialog::showPosition()
 void
 RosegardenTempoDialog::slotOK()
 {
-    m_doc->getComposition().setDefaultTempo(TempoSpin->getDoubleValue());
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    comp.addTempo(comp.getPosition(), TempoSpin->getDoubleValue());
     slotCancel();
 }
 
