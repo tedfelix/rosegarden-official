@@ -27,9 +27,9 @@
 PianoKeyboard::PianoKeyboard(QSize keySize, QWidget *parent,
                              const char* name, WFlags f)
     : QWidget(parent, name, f),
-      m_keySize(keySize),
-      m_blackKeySize(keySize / 2),
-      m_nbKeys(44)
+      m_keySize(48, 18), // keySize),
+      m_blackKeySize(24, 9),
+      m_nbKeys(88)
 {
     addTips();
 }
@@ -49,9 +49,9 @@ void PianoKeyboard::paintEvent(QPaintEvent*)
 {
     QPainter paint(this);
 
-    QPoint pos;
+    QPoint pos(0, 0);
     unsigned int posInOctave = 0;
-    
+
     for(unsigned int i = 0; i < m_nbKeys; ++i) {
         posInOctave = i % 7;
 
@@ -64,9 +64,8 @@ void PianoKeyboard::paintEvent(QPaintEvent*)
             paint.setBrush(colorGroup().foreground());
 
             QPoint bPos = pos;
-            bPos.setX(bPos.x() + m_keySize.width() / 2);
-            bPos.setY(bPos.y() + m_keySize.height() / 2
-                      + m_blackKeySize.height() / 2 + 1);
+
+            bPos.setY(bPos.y() + m_keySize.height() - m_blackKeySize.height() / 2);
             
             paint.drawRect(QRect(bPos, m_blackKeySize));
 
