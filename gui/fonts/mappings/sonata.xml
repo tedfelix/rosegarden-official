@@ -17,7 +17,7 @@
 </font-requirements>
 
 <font-sizes>
-	<font-scale font-height="4.4" beam-thickness="0.5" staff-line-thickness="0.1" stem-thickness="0.1"/>
+	<font-scale font-height="4.5" beam-thickness="0.5" staff-line-thickness="0.12" stem-thickness="0.14"/>
 </font-sizes>
 
 <font-symbol-map>
