@@ -824,6 +824,7 @@ protected:
     bool m_ok;
 
     bool m_printMode;
+    int m_printSize;
 };
 
 #endif

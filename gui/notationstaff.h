@@ -66,6 +66,11 @@ public:
      */
     virtual void changeFont(std::string fontName, int resolution);
 
+    void setLegerLineCount(int legerLineCount) {
+	if (legerLineCount == -1) m_legerLineCount = 8;
+	else m_legerLineCount = legerLineCount;
+    }
+
     LinedStaff::setPageMode;
     LinedStaff::setPageWidth;
     LinedStaff::setRowsPerPage;
@@ -254,11 +259,6 @@ protected:
     virtual int getLegerLineCount() const    { return m_legerLineCount; }
     virtual int getBottomLineHeight() const  { return 0; }
     virtual int getHeightPerLine() const     { return 2; }
-
-    void setLegerLineCount(int legerLineCount) {
-	if (legerLineCount == -1) m_legerLineCount = 8;
-	else m_legerLineCount = legerLineCount;
-    }
 
     /** 
      * Assign a suitable sprite to the given element (the clef is

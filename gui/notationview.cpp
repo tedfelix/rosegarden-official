@@ -209,7 +209,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_progressEventFilterInstalled(false),
     m_inhibitRefresh(true),
     m_ok(false),
-    m_printMode(false)
+    m_printMode(false),
+    m_printSize(8) // set in positionStaffs
 {
     initActionDataMaps(); // does something only the 1st time it's called
     
@@ -654,7 +655,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_progressEventFilterInstalled(false),
     m_inhibitRefresh(true),
     m_ok(false),
-    m_printMode(true)
+    m_printMode(true),
+    m_printSize(8) // set in positionStaffs
 {
     assert(segments.size() > 0);
     NOTATION_DEBUG << "NotationView print ctor" << endl;
@@ -797,51 +799,128 @@ NotationView::getProperties() const
 
 void NotationView::positionStaffs()
 {
+    m_config->setGroup(NotationView::ConfigGroup);
+    m_printSize = m_config->readUnsignedNumEntry("printingnotesize", 6);
+
     Rosegarden::TrackId minTrack = 0, maxTrack = 0;
     bool haveMinTrack = false;
     typedef std::map<Rosegarden::TrackId, int> TrackIntMap;
     TrackIntMap trackHeights;
     TrackIntMap trackCoords;
 
-    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+    int pageWidth, pageHeight, leftMargin, topMargin;
+    int accumulatedHeight;
+    int rowsPerPage;
+    int legerLines = 8;
+//    int origPrintSize = m_printSize;
+    bool haveRowGap = true;
 
-	int height = m_staffs[i]->getHeightOfRow();
-	Rosegarden::TrackId track = m_staffs[i]->getSegment().getTrack();
+    bool done = false;
 
-	TrackIntMap::iterator hi = trackHeights.find(track);
-	if (hi == trackHeights.end()) {
-	    trackHeights.insert(TrackIntMap::value_type(track, height));
-	} else if (height > hi->second) {
-	    hi->second = height;
-	}
+    while (1) {
+
+	pageWidth = getPageWidth();
+	pageHeight = getPageHeight();
+	leftMargin = 0, topMargin = 0;
+	getPageMargins(leftMargin, topMargin);
+
+	accumulatedHeight = 0;
+	int maxTrackHeight = 0;
+
+	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+
+	    m_staffs[i]->setLegerLineCount(legerLines);
+
+	    int height = m_staffs[i]->getHeightOfRow();
+	    Rosegarden::TrackId track = m_staffs[i]->getSegment().getTrack();
+
+	    TrackIntMap::iterator hi = trackHeights.find(track);
+	    if (hi == trackHeights.end()) {
+		trackHeights.insert(TrackIntMap::value_type(track, height));
+	    } else if (height > hi->second) {
+		hi->second = height;
+	    }
 	
-	if (track < minTrack || !haveMinTrack) {
-	    minTrack = track;
-	    haveMinTrack = true;
+	    if (height > maxTrackHeight) maxTrackHeight = height;
+
+	    if (track < minTrack || !haveMinTrack) {
+		minTrack = track;
+		haveMinTrack = true;
+	    }
+	    if (track > maxTrack) {
+		maxTrack = track;
+	    }
 	}
-	if (track > maxTrack) {
-	    maxTrack = track;
+
+	for (Rosegarden::TrackId i = minTrack; i <= maxTrack; ++i) {
+	    TrackIntMap::iterator hi = trackHeights.find(i);
+	    if (hi != trackHeights.end()) {
+		trackCoords[i] = accumulatedHeight;
+		accumulatedHeight += hi->second;
+	    }
+	}
+
+	if (haveRowGap) accumulatedHeight += maxTrackHeight/7;
+
+	if (done) break;
+
+	if (m_pageMode != LinedStaff::MultiPageMode) {
+
+	    rowsPerPage = 0;
+	    done = true;
+	    break;
+
+	} else {
+
+	    // Check how well all this stuff actually fits on the
+	    // page.  If things don't fit as well as we'd like, modify
+	    // at most one parameter so as to save some space, then
+	    // loop around again and see if it worked.  This iterative
+	    // approach is inefficient but the time spent here is
+	    // neglible in context, and it's a simple way to code it.
+
+	    int staffPageHeight = pageHeight - topMargin * 2;
+	    rowsPerPage = staffPageHeight / accumulatedHeight;
+
+	    if (rowsPerPage < 1) {
+
+		if (haveRowGap) haveRowGap = false;
+		else if (legerLines > 4) --legerLines;
+		else if (m_printSize > 3) --m_printSize;
+		else { // just accept that we'll have to overflow
+		    rowsPerPage = 1;
+		    done = true;
+		    continue;
+		}
+
+	    } else if (rowsPerPage == 1/* &&
+					  2 * accumulatedHeight <= 1.3 * staffPageHeight*/) {
+
+		// we can perhaps accommodate two rows, with care
+		if (haveRowGap) haveRowGap = false;
+		else if (legerLines > 4) --legerLines;
+		else { // no, we can't
+		    haveRowGap = true;
+		    legerLines = 8;
+		    done = true;
+		    continue;
+		}
+
+	    } else {
+		done = true;
+		continue;
+	    }
 	}
     }
 
-    int accumulatedHeight = 0;
-    for (Rosegarden::TrackId i = minTrack; i <= maxTrack; ++i) {
-	TrackIntMap::iterator hi = trackHeights.find(i);
-	if (hi != trackHeights.end()) {
-	    trackCoords[i] = accumulatedHeight;
-	    accumulatedHeight += hi->second;
-	}
-    }
-
-    int pageWidth = getPageWidth();
-    int pageHeight = getPageHeight();
-    int leftMargin = 0, topMargin = 0;
-    getPageMargins(leftMargin, topMargin);
+    m_hlayout->setPageWidth(pageWidth - leftMargin * 2);
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
 	Rosegarden::TrackId track = m_staffs[i]->getSegment().getTrack();
-        m_staffs[i]->setRowSpacing(accumulatedHeight + trackHeights[track] / 7);
+
+        m_staffs[i]->setRowSpacing(accumulatedHeight);
+	
         if (track < maxTrack) {
             m_staffs[i]->setConnectingLineLength(trackHeights[track]);
         }
@@ -849,10 +928,6 @@ void NotationView::positionStaffs()
 	m_staffs[i]->setX(20);
 	m_staffs[i]->setY(trackCoords[track] + (topMargin * 3) / 2);
 	m_staffs[i]->setPageWidth(pageWidth - leftMargin * 2);
-
-	int staffPageHeight = pageHeight - topMargin * 2;
-	int rowsPerPage = staffPageHeight / m_staffs[i]->getRowSpacing();
-	if (rowsPerPage < 1) rowsPerPage = 1;
 	m_staffs[i]->setRowsPerPage(rowsPerPage);
         m_staffs[i]->setPageMode(m_pageMode);
 	m_staffs[i]->setMargin(leftMargin);
@@ -910,6 +985,13 @@ void NotationView::positionPages()
 	QFontMetrics metrics(pageNumberFont);
 
 	canvas()->setBackgroundPixmap(deskBackground);
+	
+	int thumbScale = 20;
+	QPixmap thumbnail(canvas()->width() / thumbScale,
+			  canvas()->height() / thumbScale);
+	thumbnail.fill(Qt::white);
+	QPainter thumbPainter(&thumbnail);
+	thumbPainter.setPen(Qt::black);
 
 	for (int page = 0; page < maxPageCount; ++page) {
 
@@ -932,7 +1014,17 @@ void NotationView::positionPages()
 	    text->setZ(-999);
 	    text->show();
 	    m_pageNumbers.push_back(text);
+
+	    thumbPainter.drawRect(x / thumbScale, y / thumbScale,
+				  w / thumbScale, h / thumbScale);
+
+	    int tx = (x + w/2) / thumbScale, ty = (y + h/2) / thumbScale;
+	    tx -= thumbPainter.fontMetrics().width(str)/2;
+	    thumbPainter.drawText(tx, ty, str);
 	}
+
+	thumbPainter.end();
+	if (m_pannerDialog) m_pannerDialog->scrollbox()->setThumbnail(thumbnail);
     }
 
     m_config->setGroup(NotationView::ConfigGroup);
@@ -1881,12 +1973,6 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
 	if (m_tempoRuler && getToggleAction("show_tempo_ruler")->isChecked())
 	    m_tempoRuler->show();
     }
-    
-    if (pageMode != LinedStaff::MultiPageMode) {
-	m_pannerDialog->hide();
-    } else {
-	m_pannerDialog->show();
-    }
 
     int pageWidth = getPageWidth();
     int topMargin = 0, leftMargin = 0;
@@ -1928,9 +2014,7 @@ NotationView::getPageWidth()
 
 	//!!! For the moment we use A4 for this calculation
 	
-	m_config->setGroup(NotationView::ConfigGroup);
-	unsigned int printSizePt = m_config->readUnsignedNumEntry("printingnotesize", 6); 
-	double printSizeMm = 25.4 * ((double)printSizePt / 72.0);
+	double printSizeMm = 25.4 * ((double)m_printSize / 72.0);
 	double mmPerPixel = printSizeMm / (double)m_notePixmapFactory->getSize();
 	return (int)(210.0 / mmPerPixel);
     }
@@ -1945,9 +2029,7 @@ NotationView::getPageHeight()
 
 	//!!! For the moment we use A4 for this calculation
 	
-	m_config->setGroup(NotationView::ConfigGroup);
-	unsigned int printSizePt = m_config->readUnsignedNumEntry("printingnotesize", 8); 
-	double printSizeMm = 25.4 * ((double)printSizePt / 72.0);
+	double printSizeMm = 25.4 * ((double)m_printSize / 72.0);
 	double mmPerPixel = printSizeMm / (double)m_notePixmapFactory->getSize();
 	return (int)(297.0 / mmPerPixel);
     }
@@ -1965,9 +2047,7 @@ NotationView::getPageMargins(int &left, int &top)
 
 	//!!! For the moment we use A4 for this calculation
 	
-	m_config->setGroup(NotationView::ConfigGroup);
-	unsigned int printSizePt = m_config->readUnsignedNumEntry("printingnotesize", 6); 
-	double printSizeMm = 25.4 * ((double)printSizePt / 72.0);
+	double printSizeMm = 25.4 * ((double)m_printSize / 72.0);
 	double mmPerPixel = printSizeMm / (double)m_notePixmapFactory->getSize();
 	left = (int)(20.0 / mmPerPixel);
 	top  = (int)(15.0 / mmPerPixel);
@@ -2431,9 +2511,7 @@ void NotationView::print(KPrinter* printer)
 
     // We need to be in multi-page mode at this point
 
-    m_config->setGroup(NotationView::ConfigGroup);
-    unsigned int printSizePt = m_config->readUnsignedNumEntry("printingnotesize", 6);
-    double printSizePx = printSizePt * (double)printer->resolution() / 72.0;
+    double printSizePx = m_printSize * (double)printer->resolution() / 72.0;
     double scaleFactor = printSizePx / (double)m_fontSize;
 
     int pageWidth = getPageWidth();
@@ -2625,26 +2703,30 @@ void NotationView::readjustCanvasSize()
 	PRINT_ELAPSED("NotationView::readjustCanvasSize checkpoint");
     }
 
+    if (maxWidth  < getPageWidth()  + 40) maxWidth  = getPageWidth()  + 40;
+    if (maxHeight < getPageHeight() + 40) maxHeight = getPageHeight() + 40;
+
     // now get the EditView to do the biz
     readjustViewSize(QSize(int(maxWidth), maxHeight));
     UPDATE_PROGRESS(2);
 
-    //!!! EXPERIMENTAL
     if (m_pannerDialog) {
-//	int pdw = getCanvasView()->width() / 8;
-//	int pdh = getCanvasView()->height() / 8;
-//	m_pannerDialog->scrollbox()->setFixedSize(std::max(pdw, 150), std::max(pdh, 100));
-	m_pannerDialog->scrollbox()->setMinimumHeight(100);
-	m_pannerDialog->setPageSize
-	    (QSize(getCanvasView()->canvas()->width(),
-		   getCanvasView()->canvas()->height()));
-	m_pannerDialog->scrollbox()->setViewSize
-	    (QSize(getCanvasView()->width(),
-		   getCanvasView()->height()));
+    
+	if (m_pageMode != LinedStaff::MultiPageMode) {
+	    m_pannerDialog->hide();
 
-//	m_pannerDialog->setFixedSize(m_pannerDialog->scrollbox()->size());
-//	m_pannerDialog->show();
-//	if (m_pannerDialog->visible()) m_pannerDialog->raise();
+	} else {
+
+	    m_pannerDialog->show();
+
+	    m_pannerDialog->setPageSize
+		(QSize(canvas()->width(),
+		       canvas()->height()));
+
+	    m_pannerDialog->scrollbox()->setViewSize
+		(QSize(getCanvasView()->width(),
+		       getCanvasView()->height()));
+	}
     }
 
     PRINT_ELAPSED("NotationView::readjustCanvasSize total");

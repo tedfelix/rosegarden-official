@@ -26,6 +26,7 @@
 #include <qdrawutil.h>
 #include <qpainter.h>
 #include <qpixmap.h>
+#include <qapplication.h>
 
 #include "scrollbox.h"
 
@@ -80,11 +81,29 @@ void ScrollBox::drawContents(QPainter* paint)
 void ScrollBox::setPageSize(const QSize& s)
 {
     m_pagesize = s;
+
+    setFixedWidth(100);
+    setFixedHeight(100);
+
+    int maxWidth  = int(QApplication::desktop()->width()  * 0.75);
+    int maxHeight = int(QApplication::desktop()->height() * 0.75);
+
     if (m_sizeMode == FixWidth) {
-	setFixedHeight(s.height() * width() / s.width());
+	int height = s.height() * width() / s.width();
+	if (height > maxHeight) {
+	    setFixedWidth(width() * maxHeight / height);
+	    height = maxHeight;
+	}
+	setFixedHeight(height);
     } else {
-	setFixedWidth(s.width() * height() / s.height());
+	int width = s.width() * height() / s.height();
+	if (width > maxWidth) {
+	    setFixedHeight(height() * maxWidth / width);
+	    width = maxWidth;
+	}
+	setFixedWidth(width);
     }	
+
     repaint();
 }
 

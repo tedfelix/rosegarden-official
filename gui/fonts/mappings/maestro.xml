@@ -68,9 +68,9 @@
         <symbol name="MUSICAL SYMBOL COMBINING FLAG-4" 
                 font-id="0" code="136" inversion-code="142"/>
 -->
-        <symbol name="MUSICAL SYMBOL MULTI REST" font-id="0" code="214"/>
-        <symbol name="MUSICAL SYMBOL WHOLE REST" font-id="0" code="227"/>
-        <symbol name="MUSICAL SYMBOL HALF REST" font-id="0" code="238"/>
+        <symbol name="MUSICAL SYMBOL MULTI REST" font-id="0" code="227"/>
+        <symbol name="MUSICAL SYMBOL WHOLE REST" font-id="0" code="238"/>
+        <symbol name="MUSICAL SYMBOL HALF REST" font-id="0" code="238"/> <!--!!! baseline -->
         <symbol name="MUSICAL SYMBOL QUARTER REST" font-id="0" code="206"/>
         <symbol name="MUSICAL SYMBOL EIGHTH REST" font-id="0" code="228"/>
         <symbol name="MUSICAL SYMBOL SIXTEENTH REST" font-id="0" code="197"/>
