@@ -193,7 +193,6 @@ ChordNameRuler::segmentDeleted(const Rosegarden::Segment *s)
 {
     m_segments.erase((Rosegarden::Segment *)s);
     if (m_currentSegment == s) m_currentSegment = 0;
-    ((Rosegarden::Segment *)s)->removeObserver(this);
     m_needsRecalculate = true;
 }
 
