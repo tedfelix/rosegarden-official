@@ -101,7 +101,9 @@ NotePixmapParameters::NotePixmapParameters(Note::Type noteType,
     m_tupletCount(0),
     m_tuplingLineY(0),
     m_tuplingLineWidth(0),
-    m_tuplingLineGradient(0.0)
+    m_tuplingLineGradient(0.0),
+    m_tied(false),
+    m_tieLength(0)
 {
     // nothing else
 }
@@ -1372,7 +1374,7 @@ NotePixmapFactory::makeClefDisplayPixmap(const Clef &clef)
     int lw = getLineSpacing();
     int width = clefPixmap->width() + 6 * getNoteBodyWidth();
 
-    createPixmapAndMask(width, lw * 9 + 1);
+    createPixmapAndMask(width, lw * 10 + 1);
 
     int h = clef.getAxisHeight();
     int y = (lw * 3) + ((8 - h) * lw) / 2;
@@ -1400,8 +1402,7 @@ NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef)
                          NoteCharacterNames::SHARP :
                          NoteCharacterNames::FLAT);
 
-    QCanvasPixmap* clefPixmap = m_font->getCanvasPixmap
-			     (m_style->getClefCharName(clef));
+    QCanvasPixmap* clefPixmap = makeClefPixmap(clef);
     QPixmap accidentalPixmap(m_font->getPixmap(charName));
     QPoint hotspot(m_font->getHotspot(charName));
 
@@ -1411,17 +1412,17 @@ NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef)
 	clefPixmap->width();
     int x = clefPixmap->width() + 3 * delta;
 
-    createPixmapAndMask(width, lw * 8 + 1);
+    createPixmapAndMask(width, lw * 10 + 1);
 
     int h = clef.getAxisHeight();
-    int y = (lw * 2) + ((8 - h) * lw) / 2;
+    int y = (lw * 3) + ((8 - h) * lw) / 2;
     m_p.drawPixmap(2 * delta, y - clefPixmap->offsetY(), *clefPixmap);
     m_pm.drawPixmap(2 * delta, y - clefPixmap->offsetY(), *(clefPixmap->mask()));
 
     for (unsigned int i = 0; i < ah.size(); ++i) {
 
 	h = ah[i];
-	y = (lw * 2) + ((8 - h) * lw) / 2 - hotspot.y();
+	y = (lw * 3) + ((8 - h) * lw) / 2 - hotspot.y();
 
 	m_p.drawPixmap(x, y, accidentalPixmap);
 	m_pm.drawPixmap(x, y, *(accidentalPixmap.mask()));
@@ -1430,12 +1431,70 @@ NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef)
     }
 
     for (h = 0; h <= 8; h += 2) {
-        y = (lw * 2) + ((8 - h) * lw) / 2;
+        y = (lw * 3) + ((8 - h) * lw) / 2;
 	m_p.drawLine(delta, y, m_generatedPixmap->width() - 2*delta - 1, y);
 	m_pm.drawLine(delta, y, m_generatedPixmap->width() - 2*delta - 1, y);
     }
 
     delete clefPixmap;
+    return makeCanvasPixmap(m_pointZero);
+}
+
+QCanvasPixmap*
+NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef)
+{
+    NotePixmapParameters params(Rosegarden::Note::Crotchet, 0);
+    Rosegarden::Pitch pitch(p);
+
+    QCanvasPixmap* clefPixmap = makeClefPixmap(clef);
+
+    int lw = getLineSpacing();
+    int width = clefPixmap->width() + 9 * getNoteBodyWidth();
+
+    int h = pitch.getHeightOnStaff(clef, Rosegarden::Key());
+    params.setStemGoesUp(h <= 4);
+
+    if (h < -1) params.setStemLength(lw * (4 - h) / 2);
+    else if (h > 9) params.setStemLength(lw * (h - 4) / 2);
+    if (h > 8) params.setLegerLines(h - 8);
+    else if (h < 0) params.setLegerLines(h);
+
+    params.setIsOnLine(h % 2 == 0);
+    params.setSelected(m_selected);
+
+    QCanvasPixmap *notePixmap = makeNotePixmap(params);
+
+    int pixmapHeight = lw * 10 + 1;
+    int yoffset = lw * 3;
+    if (h > 8) {
+	pixmapHeight += (h - 8) * lw / 2;
+	yoffset += (h - 8) * lw / 2;
+    } else if (h < 0) {
+	pixmapHeight += (0 - h) * lw / 2;
+    }
+
+    createPixmapAndMask(width, pixmapHeight);
+
+    int x = clefPixmap->width() + 4 * getNoteBodyWidth();
+    int y = yoffset + ((8 - h) * lw) / 2 - notePixmap->offsetY();
+    m_p.drawPixmap(x, y, *notePixmap);
+    m_pm.drawPixmap(x, y, *(notePixmap->mask()));
+
+    h = clef.getAxisHeight();
+    x = 3 * getNoteBodyWidth();
+    y = yoffset + ((8 - h) * lw) / 2;
+    m_p.drawPixmap(x, y - clefPixmap->offsetY(), *clefPixmap);
+    m_pm.drawPixmap(x, y - clefPixmap->offsetY(), *(clefPixmap->mask()));
+
+    for (h = 0; h <= 8; h += 2) {
+        y = yoffset + ((8 - h) * lw) / 2;
+	m_p.drawLine(x/2, y, m_generatedPixmap->width() - x/2 - 1, y);
+	m_pm.drawLine(x/2, y, m_generatedPixmap->width() - x/2 - 1, y);
+    }
+
+    delete clefPixmap;
+    delete notePixmap;
+
     return makeCanvasPixmap(m_pointZero);
 }
     

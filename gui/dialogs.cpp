@@ -1948,15 +1948,21 @@ ClefDialog::ClefDialog(QWidget *parent,
     QToolTip::add(clefDown, i18n("Lower clef"));
 
     QHBox *clefLabelBox = new QVBox(clefBox);
+
+    m_octaveUp = new BigArrowButton(clefLabelBox, Qt::UpArrow);
+    QToolTip::add(m_octaveUp, i18n("Up an Octave"));
     
     m_clefLabel = new QLabel(i18n("Clef"), clefLabelBox);
     m_clefLabel->setAlignment(AlignVCenter | AlignHCenter);
 
-    m_clefNameLabel = new QLabel(i18n("Clef"), clefLabelBox);
-    m_clefNameLabel->setAlignment(AlignVCenter | AlignHCenter);
+    m_octaveDown = new BigArrowButton(clefLabelBox, Qt::DownArrow);
+    QToolTip::add(m_octaveDown, i18n("Down an Octave"));
 
     BigArrowButton *clefUp = new BigArrowButton(clefBox, Qt::RightArrow);
     QToolTip::add(clefUp, i18n("Higher clef"));
+
+    m_clefNameLabel = new QLabel(i18n("Clef"), clefLabelBox);
+    m_clefNameLabel->setAlignment(AlignVCenter | AlignHCenter);
       
     if (showConversionOptions) {
 	m_noConversionButton =
@@ -1981,6 +1987,8 @@ ClefDialog::ClefDialog(QWidget *parent,
     
     QObject::connect(clefUp, SIGNAL(clicked()), this, SLOT(slotClefUp()));
     QObject::connect(clefDown, SIGNAL(clicked()), this, SLOT(slotClefDown()));
+    QObject::connect(m_octaveUp, SIGNAL(clicked()), this, SLOT(slotOctaveUp()));
+    QObject::connect(m_octaveDown, SIGNAL(clicked()), this, SLOT(slotOctaveDown()));
 
     redrawClefPixmap();
 }
@@ -2004,21 +2012,19 @@ ClefDialog::getConversionType() const
     return NoConversion;
 }
 
-//!!! This would probably be better with up/down buttons as well as
-//left/right ones.  The left/right buttons could choose clef type,
-//up/down choose octave offset
 
 void
 ClefDialog::slotClefUp()
 {
+    int octaveOffset = m_clef.getOctaveOffset();
     Rosegarden::Clef::ClefList clefs(Rosegarden::Clef::getClefs());
 
     for (Rosegarden::Clef::ClefList::iterator i = clefs.begin();
 	 i != clefs.end(); ++i) {
 
-	if (m_clef == *i) {
+	if (m_clef.getClefType() == i->getClefType()) {
 	    if (++i == clefs.end()) i = clefs.begin();
-	    m_clef = *i;
+	    m_clef = Rosegarden::Clef(i->getClefType(), octaveOffset);
 	    break;
 	}
     }
@@ -2030,20 +2036,59 @@ ClefDialog::slotClefUp()
 void
 ClefDialog::slotClefDown()
 {
+    int octaveOffset = m_clef.getOctaveOffset();
     Rosegarden::Clef::ClefList clefs(Rosegarden::Clef::getClefs());
 
     for (Rosegarden::Clef::ClefList::iterator i = clefs.begin();
 	 i != clefs.end(); ++i) {
 
-	if (m_clef == *i) {
+	if (m_clef.getClefType() == i->getClefType()) {
 	    if (i == clefs.begin()) i = clefs.end();
-	    m_clef = *--i;
+	    --i;
+	    m_clef = Rosegarden::Clef(i->getClefType(), octaveOffset);
 	    break;
 	}
     }
 
     redrawClefPixmap();
 }
+
+
+void
+ClefDialog::slotOctaveUp()
+{
+    int octaveOffset = m_clef.getOctaveOffset();
+    if (octaveOffset == 2) return;
+
+    ++octaveOffset;
+
+    m_octaveDown->setEnabled(true);
+    if (octaveOffset == 2) {
+	m_octaveUp->setEnabled(false);
+    }
+
+    m_clef = Rosegarden::Clef(m_clef.getClefType(), octaveOffset);
+    redrawClefPixmap();
+}
+
+
+void
+ClefDialog::slotOctaveDown()
+{
+    int octaveOffset = m_clef.getOctaveOffset();
+    if (octaveOffset == -2) return;
+
+    --octaveOffset;
+
+    m_octaveUp->setEnabled(true);
+    if (octaveOffset == 2) {
+	m_octaveDown->setEnabled(false);
+    }
+
+    m_clef = Rosegarden::Clef(m_clef.getClefType(), octaveOffset);
+    redrawClefPixmap();
+}
+
 
 void
 ClefDialog::redrawClefPixmap()

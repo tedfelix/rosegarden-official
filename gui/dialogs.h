@@ -49,6 +49,7 @@ class RosegardenSpinBox;
 class QTextEdit;
 class QAccel;
 class RosegardenQuantizeParameters;
+class BigArrowButton;
 
 
 // Definitions of various simple dialogs that may be used in multiple
@@ -455,6 +456,8 @@ public:
 public slots:
     void slotClefUp();
     void slotClefDown();
+    void slotOctaveUp();
+    void slotOctaveDown();
 
 protected:
     void redrawClefPixmap();
@@ -466,6 +469,9 @@ protected:
     
     QLabel *m_clefLabel;
     QLabel *m_clefNameLabel;
+
+    BigArrowButton *m_octaveUp;
+    BigArrowButton *m_octaveDown;
 
     QRadioButton *m_noConversionButton;
     QRadioButton *m_changeOctaveButton;

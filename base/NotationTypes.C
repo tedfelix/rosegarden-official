@@ -215,14 +215,10 @@ Clef::ClefList
 Clef::getClefs()
 {
     ClefList clefs;
-    clefs.push_back(Clef(Bass, -2)); 
-    clefs.push_back(Clef(Bass, -1));
     clefs.push_back(Clef(Bass));
     clefs.push_back(Clef(Tenor));
     clefs.push_back(Clef(Alto));
     clefs.push_back(Clef(Treble));
-    clefs.push_back(Clef(Treble, 1));
-    clefs.push_back(Clef(Treble, 2));
     return clefs;
 }
 

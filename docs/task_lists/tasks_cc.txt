@@ -55,6 +55,8 @@ Post-0.9 task list
 
 22. Generic file merge -- important feature
 
+23. Chord computations: don't include percussion tracks
+
 
 Priorities for 0.9
 ==================

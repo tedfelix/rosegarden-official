@@ -154,14 +154,17 @@ public:
     QCanvasPixmap* makeHairpinPixmap(int length, bool isCrescendo);
     QCanvasPixmap* makeSlurPixmap(int length, int dy, bool above);
     QCanvasPixmap* makeUnknownPixmap();
-    QCanvasPixmap* makeClefDisplayPixmap(const Rosegarden::Clef &clef);
-    QCanvasPixmap* makeKeyDisplayPixmap(const Rosegarden::Key &key,
-				       const Rosegarden::Clef &clef);
     QCanvasPixmap* makeTextPixmap(const Rosegarden::Text &text);
 
     QCanvasPixmap* makeToolbarPixmap(const char *name);
     QCanvasPixmap* makeNoteMenuPixmap(Rosegarden::timeT duration,
 				     Rosegarden::timeT &errorReturn);
+
+    QCanvasPixmap* makePitchDisplayPixmap(int pitch,
+					  const Rosegarden::Clef &clef);
+    QCanvasPixmap* makeClefDisplayPixmap(const Rosegarden::Clef &clef);
+    QCanvasPixmap* makeKeyDisplayPixmap(const Rosegarden::Key &key,
+				       const Rosegarden::Clef &clef);
 
     int getNoteBodyWidth (Rosegarden::Note::Type =
                           Rosegarden::Note::Crotchet) const;
