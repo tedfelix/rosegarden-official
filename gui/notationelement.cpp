@@ -32,6 +32,13 @@ NotationElement::~NotationElement()
     delete m_canvasItem;
 }
 
+bool
+NotationElement::isRest() const
+{
+    return event()->getType() == "rest";
+}
+
+
 void
 NotationElement::setCanvasItem(QCanvasItem *e)
 {

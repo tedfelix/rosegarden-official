@@ -18,6 +18,7 @@
 #ifndef NOTATIONELEMENT_H
 #define NOTATIONELEMENT_H
 
+#include <multiset.h>
 #include "Element2.h"
 
 class QCanvasItem;
@@ -39,6 +40,8 @@ public:
     void setX(double x) { m_x = x; }
     void setY(double y) { m_y = y; }
 
+    bool isRest() const;
+
     /// The object takes ownership of its canvas item
     void setCanvasItem(QCanvasItem *e);
     QCanvasItem* canvasItem() { return m_canvasItem; }
@@ -52,7 +55,16 @@ protected:
     QCanvasItem *m_canvasItem;
 };
 
-typedef list<NotationElement*> NotationElementList;
+class NotationElementCmp
+{
+public:
+    bool operator()(NotationElement *e1, NotationElement *e2) 
+    {
+        return  *e1 < *e2;
+    }
+};
+
+typedef multiset<NotationElement*, NotationElementCmp> NotationElementList;
 
 // inline bool operator<(NotationElement &e1, NotationElement &e2)
 // {
