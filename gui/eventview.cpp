@@ -200,11 +200,16 @@ EventView::applyLayout(int /*staffNo*/)
 {
     // Remember list position if we've selected something
     //
-    /*
-    QListViewItem previousItem;
+    int lastTime = 0;
+    int lastDuration = 0;
+    bool lastEventSelected = false;
+
     if (m_eventList->selectedItem())
-        previousTime = *(m_eventList->selectedItem());
-        */
+    {
+        lastEventSelected = true;
+        lastTime = m_eventList->selectedItem()->text(0).toInt();
+        lastDuration = m_eventList->selectedItem()->text(1).toInt();
+    }
 
     // Ok, recreate list
     //
@@ -308,7 +313,14 @@ EventView::applyLayout(int /*staffNo*/)
 			      data1Str,
 			      data2Str);
 
-            //previewItem = *(m_eventList.lastItem());
+            // Select the same event as the one we had selected before
+            //
+            if (lastEventSelected &&
+                lastTime == eventTime &&
+                lastDuration == (*it)->getDuration())
+            {
+                m_eventList->setSelected(m_eventList->lastItem(), true);
+            }
         }
     }
 
