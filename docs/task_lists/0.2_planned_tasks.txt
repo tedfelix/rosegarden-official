@@ -59,6 +59,9 @@ Work required to fix existing stuff
 10. Implement undo for cut/copy/paste, and for the track
     insert/delete/resize tools
 
+11. Composition to become container for multiset of Segments
+    instead of just set?
+
 
 
 New features suitable for 0.2

@@ -1,4 +1,35 @@
 
+Post-0.1.3 task list (superseding older ones)
+====================
+
+ 1. Text, lyrics etc -- something like LoopRuler that places lyrics
+    on a toggleable non-vertical-scrolling area at the top or
+    bottom?  Place chord names on the same kind of area?
+
+ 2. Ponder help
+
+ 3. Implement "Collapse Notes" and inverse (see notes on paper)
+
+ 4. Tuplet GUI -- but how?
+
+ 5. See why accidentals appear to be wrong when not in treble clef (see paper)
+
+ 6. Speed up NotationHLayout::scanStaff (delay is possibly in
+    the NotePixmapFactory::getXXXWidth methods)
+
+ 7. Work on signals/refresh for modifications other than BasicCommand ones
+
+ 8. Bring LoopRuler into NotationView
+
+ 9. Extend Chord (in notationsets) so as to handle case where some notes
+    at a given time have stem up and some have stem down (explicitly set
+    by user) -- make two chords instead of one.  NotationElementList is
+    now sorted by pitch, which should make this easier.  Can we assign
+    stem directions sensibly for chords that begin during other chords? 
+
+10. Key signature GUI
+
+
 Post-0.1.1 task list
 ====================
 
@@ -12,7 +43,7 @@ Post-0.1.1 task list
  doing in the middle of the staff?]
 
  !! Segment should barf meaningfully if getComposition without composition
-
+ [No, it shouldn't]
 
  1. Sort out true legato quantization [DONE]
 
