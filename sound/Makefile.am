@@ -1,7 +1,8 @@
 kde_includes=/usr/include
 
-# we define it but make sometimes ignores it
+# we define it here but make sometimes ignores it
 LIBTOOL=/usr/bin/libtool
+MCOPIDL=/usr/bin/mcopidl
 
 # set the include path for X, qt and KDE
 INCLUDES= $(all_includes) -I$(kde_includes)/arts -I../core
@@ -27,7 +28,7 @@ libMidiArts_la_LIBADD   = -lartsmidi
 #	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot $(kless_SOURCES) && mv messages.po ../po/kless.pot
 
 MidiArts.h: $(srcdir)/MidiArts.idl
-	$(MCOPIDL) -t $(srcdir)/MidiArts.idl -I$(kde_includes)/arts
+	$(MCOPIDL) -I$(kde_includes) -t $(srcdir)/MidiArts.idl
 
 MidiArts.cc: MidiArts.h
 
