@@ -317,6 +317,14 @@ public:
     int getTimeSignatureCount() const;
 
     /**
+     * Return the index of the last time signature change before
+     * the given time, in a range suitable for passing to 
+     * getTimeSignatureChange.  Return -1 if there has been no
+     * time signature by this time.
+     */
+    int getTimeSignatureNumberAt(timeT time) const;
+
+    /**
      * Return the absolute time of and time signature introduced
      * by time-signature change n.
      */
@@ -367,6 +375,13 @@ public:
      * Return the number of tempo changes in the composition.
      */
     int getTempoChangeCount() const;
+
+    /**
+     * Return the index of the last tempo change before the given
+     * time, in a range suitable for passing to getRawTempoChange.
+     * Return -1 if the default tempo is in effect at this time.
+     */
+    int getTempoChangeNumberAt(timeT time) const;
 
     /**
      * Return the absolute time of and tempo introduced by tempo

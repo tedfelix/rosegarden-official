@@ -614,6 +614,14 @@ Composition::getTimeSignatureCount() const
     return m_timeSigSegment.size();
 }
 
+int
+Composition::getTimeSignatureNumberAt(timeT t) const
+{
+    ReferenceSegment::iterator i = getTimeSignatureAtAux(t);
+    if (i == m_timeSigSegment.end()) return -1;
+    else return std::distance(m_timeSigSegment.begin(), i);
+}
+
 std::pair<timeT, TimeSignature>
 Composition::getTimeSignatureChange(int n) const
 {
@@ -669,10 +677,19 @@ Composition::addRawTempo(timeT time, int tempo)
     cerr << "Composition: Added tempo " << tempo << " at " << time << endl;
 #endif
 }
+
 int
 Composition::getTempoChangeCount() const
 {
     return m_tempoSegment.size();
+}
+
+int
+Composition::getTempoChangeNumberAt(timeT t) const
+{
+    ReferenceSegment::iterator i = m_tempoSegment.findNearestTime(t);
+    if (i == m_tempoSegment.end()) return -1;
+    else return std::distance(m_tempoSegment.begin(), i);
 }
 
 std::pair<timeT, long>
