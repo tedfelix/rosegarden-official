@@ -29,12 +29,12 @@ public:
     static const Key DefaultKey;
     struct BadKeyName { };
   
-    Key(Element2 &e)
-        throw (Element2::NoData, Element2::BadType, BadKeyName) :
+    Key(const Event &e)
+        throw (Event::NoData, Event::BadType, BadKeyName) :
         m_accidentalHeights(0) {
         checkMap();
         if (e.package() != ElementPackage || e.type() != ElementType) {
-            throw Element2::BadType();
+            throw Event::BadType();
         }
         m_name = e.get<String>(KeyPropertyName);
         if (m_keyDetailMap.find(m_name) == m_keyDetailMap.end()) {
@@ -60,38 +60,38 @@ public:
         return *this;
     }
 
-    bool isMinor() {
+    bool isMinor() const {
         return m_keyDetailMap[m_name].m_minor;
     }
 
-    bool isSharp() {
+    bool isSharp() const {
         return m_keyDetailMap[m_name].m_sharps;
     }
 
-    int getAccidentalCount() {
+    int getAccidentalCount() const {
         return m_keyDetailMap[m_name].m_sharpCount;
     }
 
-    Key getEquivalent() { // e.g. called on C major, return A minor
+    Key getEquivalent() const { // e.g. called on C major, return A minor
         return Key(m_keyDetailMap[m_name].m_equivalence);
     }
 
-    string getName() {
+    string getName() const {
         return m_name;
     }
 
-    string getRosegarden2Name() {
+    string getRosegarden2Name() const {
         return m_keyDetailMap[m_name].m_rg2name;
     }
 
-    vector<int> getAccidentalHeights() {
+    vector<int> getAccidentalHeights() const {
         // staff positions of accidentals, if we're in the treble clef
         checkAccidentalHeights();
         return *m_accidentalHeights;
     }
 
-    Element2 getAsElement() {
-        Element2 e(ElementPackage, ElementType);
+    Event getAsEvent() const {
+        Event e(ElementPackage, ElementType);
         e.set<String>(KeyPropertyName, m_name);
         return e;
     }
@@ -110,7 +110,7 @@ public:
 
 private:
     string m_name;
-    vector<int> *m_accidentalHeights;
+    mutable vector<int> *m_accidentalHeights;
 
     struct KeyDetails {
         bool   m_sharps;
@@ -145,7 +145,7 @@ private:
     typedef hash_map<string, KeyDetails, hashstring, eqstring> KeyDetailMap;
     static KeyDetailMap m_keyDetailMap;
     static void checkMap();
-    void checkAccidentalHeights();
+    void checkAccidentalHeights() const;
 };
 
 const string Key::ElementPackage = "core";
@@ -163,7 +163,7 @@ const Key Key::DefaultKey = Key("C major");
      have considered using double the MIDI pitch so as to allow
      quarter-tones; this time let's go for the simpler option as if we
      ever want quarter-tones we can always code them using special
-     Element2 properties.)
+     Event properties.)
      
      For notation purposes we need a display pitch, which is a
      composite of height on the staff plus accidental.  The
@@ -201,10 +201,10 @@ public:
     NotationDisplayPitch(int heightOnStaff, Accidental accidental) :
         m_heightOnStaff(heightOnStaff), m_accidental(accidental) { }
 
-    int getHeightOnStaff() { return m_heightOnStaff; }
-    Accidental getAccidental() { return m_accidental; }
+    int getHeightOnStaff() const { return m_heightOnStaff; }
+    Accidental getAccidental() const { return m_accidental; }
 
-    int getPerformancePitch(Clef clef, Key key) {
+    int getPerformancePitch(Clef clef, Key key) const {
         int p = 0;
         displayPitchToRawPitch(m_heightOnStaff, m_accidental, clef, key, p);
         return p;
@@ -214,8 +214,8 @@ private:
     int m_heightOnStaff;
     Accidental m_accidental;
 
-    void rawPitchToDisplayPitch(int, Clef, Key, int &, Accidental &);
-    void displayPitchToRawPitch(int, Accidental, Clef, Key, int &);
+    void rawPitchToDisplayPitch(int, Clef, Key, int &, Accidental &) const;
+    void displayPitchToRawPitch(int, Accidental, Clef, Key, int &) const;
 };
 
 
@@ -226,6 +226,49 @@ private:
      hemidemisemiquaver (and 1 unit = 4 MIDI clocks).
 
 */     
+
+class TimeSignature
+{
+public:
+    static const string ElementPackage;
+    static const string ElementType;
+    static const string NumeratorPropertyName;
+    static const string DenominatorPropertyName;
+    static const TimeSignature DefaultTimeSignature;
+    struct BadTimeSignature { };
+
+    TimeSignature(const Event &e)
+        throw (Event::NoData, Event::BadType, BadTimeSignature) {
+        if (e.package() != ElementPackage || e.type() != ElementType) {
+            throw Event::BadType();
+        }
+        m_numerator = e.get<Int>(NumeratorPropertyName);
+        m_denominator = e.get<Int>(DenominatorPropertyName);
+        //!!! check, and throw BadTimeSignature if appropriate
+    }
+
+    TimeSignature(const TimeSignature &ts) :
+        m_numerator(ts.m_numerator), m_denominator(ts.m_denominator) { }
+
+    virtual ~TimeSignature() { }
+
+    TimeSignature &operator=(const TimeSignature &ts) {
+        if (&ts == this) return *this;
+        m_numerator = ts.m_numerator;
+        m_denominator = ts.m_denominator;
+        return *this;
+    }
+
+    int getNumerator()   const { return m_numerator; }
+    int getDenominator() const { return m_denominator; }
+    int getBarLength()   const { return m_numerator * getBeatLength(); }
+    int getBeatLength()  const { return 6 * (64 / m_denominator); }
+
+private:
+    int m_numerator;
+    int m_denominator;
+};
+
 
 class Note
 {
@@ -261,25 +304,37 @@ public:
         return *this;
     }
 
-    bool isFilled()     { return m_type <= Crotchet; }
-    bool isDotted()     { return m_dotted; }
-    bool isStalked()    { return m_type <= Minim; }
-    bool getTailCount() { return m_type >= Crotchet ? 0 : Crotchet - m_type; }
-
-    int  getDuration()  {
-        int d = 6;
-        for (int t = m_type; t > Hemidemisemiquaver; --t) d *= 2;
-        return (m_dotted ? (d + d/2) : d);
+    bool isFilled()     const { return m_type <= Crotchet; }
+    bool isDotted()     const { return m_dotted; }
+    bool isStalked()    const { return m_type <= Minim; }
+    bool getTailCount() const {
+        return m_type >= Crotchet ? 0 : Crotchet - m_type;
+    }
+    int  getDuration()  const {
+        return (m_dotted ? m_dottedShortestTime : m_shortestTime) *
+            (1 << m_type);
     }
 
     // these default to whatever I am:
-    string getEnglishName(Type type = -1, bool dotted = false);
-    string getAmericanName(Type type = -1, bool dotted = false);
-    string getShortName(Type type = -1, bool dotted = false);
+    string getEnglishName(Type type = -1, bool dotted = false)  const;
+    string getAmericanName(Type type = -1, bool dotted = false) const;
+    string getShortName(Type type = -1, bool dotted = false)    const;
+
+    static Note getNearestNote(int duration);
+    static vector<int> getNoteLengthList(int start, int duration,
+                                         const TimeSignature &ts);
   
 private:
     Type m_type;
     bool m_dotted;
+    static void makeTimeListSub(int time, bool dottedTime,
+                                vector<int> &timeList);
+
+    // a time & effort saving device
+    static const int m_shortestTime;
+    static const int m_dottedShortestTime;
+    static const int m_crotchetTime;
+    static const int m_dottedCrotchetTime;
 };
 
 const Note::Type Note::SixtyFourthNote     = 0;

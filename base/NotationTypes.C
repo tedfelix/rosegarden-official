@@ -1,7 +1,7 @@
 
 #include "NotationTypes.h"
 
-void Key::checkAccidentalHeights() {
+void Key::checkAccidentalHeights() const {
 
     if (m_accidentalHeights) return;
     m_accidentalHeights = new vector<int>;
@@ -58,7 +58,7 @@ void Key::checkMap() {
 // accidentals for current key.
 
 void NotationDisplayPitch::rawPitchToDisplayPitch
-(int pitch, Clef clef, Key key, int &height, Accidental &accidental)
+(int pitch, Clef clef, Key key, int &height, Accidental &accidental) const
 {
     int octave;
     bool modified = false;
@@ -117,8 +117,8 @@ void NotationDisplayPitch::rawPitchToDisplayPitch
 }
 
 
-void displayPitchToRawPitch
-(int height, Accidental accidental, Clef clef, Key key, int &pitch)
+void NotationDisplayPitch::displayPitchToRawPitch
+(int height, Accidental accidental, Clef clef, Key key, int &pitch) const
 {
     int octave = 5;
 
@@ -175,6 +175,11 @@ void displayPitchToRawPitch
 }
 
 
+const int Note::m_shortestTime       = 6;
+const int Note::m_dottedShortestTime = 9;
+const int Note::m_crotchetTime       = 96;
+const int Note::m_dottedCrotchetTime = 144;
+
 Note::Note(const string &n)
     throw (BadType) :
     m_type(-1), m_dotted(false)
@@ -196,7 +201,7 @@ Note::Note(const string &n)
     if (m_type == -1) throw BadType();
 }
 
-string Note::getEnglishName(Type type, bool dotted) {
+string Note::getEnglishName(Type type, bool dotted) const {
     static const string names[] = {
         "hemidemisemiquaver", "demisemiquaver", "semiquaver",
             "quaver", "crotchet", "minim", "semibreve", "breve"
@@ -205,7 +210,7 @@ string Note::getEnglishName(Type type, bool dotted) {
     return dotted ? ("dotted " + names[type]) : names[type];
 }
 
-string Note::getAmericanName(Type type, bool dotted) {
+string Note::getAmericanName(Type type, bool dotted) const {
     static const string names[] = {
         "sixty-fourth note", "thirty-second note", "sixteenth note",
             "eighth note", "quarter note", "half note", "whole note", "breve"
@@ -214,7 +219,7 @@ string Note::getAmericanName(Type type, bool dotted) {
     return dotted ? ("dotted " + names[type]) : names[type];
 }
 
-string Note::getShortName(Type type, bool dotted) {
+string Note::getShortName(Type type, bool dotted) const {
     static const string names[] = {
         "64th", "32nd", "16th", "8th", "quarter", "half", "whole", "breve"
             };
@@ -222,3 +227,101 @@ string Note::getShortName(Type type, bool dotted) {
     return dotted ? ("dotted " + names[type]) : names[type];
 }
 
+
+Note Note::getNearestNote(int duration)
+{
+    int d = m_shortestTime;
+    //!!! too short -- reconsider?
+    if (d < duration) return Note(m_shortestTime);
+
+    for (int tag = Shortest + 1; tag <= Longest; ++tag) {
+        if (d + d/2 > duration) {
+            return Note(tag-1);
+        }
+        if (d*2 > duration) {
+            return Note(tag-1, true);
+        }
+        d = d*2;
+    }
+
+    //!!! too long -- should subdivide
+    return Note(Longest, true);
+}
+
+
+// Derived from RG2's MidiMakeRestList in editor/src/MidiIn.c.
+
+// Create a list of durations, totalling (as close as possible) the
+// given duration, such that each is an exact note length and the
+// notes are the proper sort for the time signature.  start is the
+// elapsed duration since the beginning of the bar (or of the last
+// beat); for use independent of a particular bar, pass zero.
+
+// Currently uses no note-lengths longer than a dotted-crotchet; for
+// general use in /2 time, this is a defect
+
+vector<int> Note::getNoteLengthList(int start, int duration,
+                                    const TimeSignature &ts)
+{
+    bool dotted = false;
+    int toNextBeat;
+    int beatLength;
+    vector<int> v;
+               
+    if (ts.getNumerator() % 3 == 0 &&
+        ts.getBarLength() >= m_dottedCrotchetTime) {
+        dotted = true;
+    }
+               
+    beatLength = dotted ? m_dottedCrotchetTime : m_crotchetTime;
+    toNextBeat = beatLength - (start % beatLength);
+               
+    if (toNextBeat > duration) {
+        makeTimeListSub(duration, dotted, v);
+    } else {
+        // first fill up to the next crotchet (or, in 6/8 or some
+        // other such time, the next dotted crotchet); then fill in
+        // crotchet or dotted-crotchet leaps until the end of the
+        // section needing filling
+        makeTimeListSub(toNextBeat, dotted, v);
+        makeTimeListSub(duration - toNextBeat, dotted, v);
+    }
+
+    return v;
+}
+
+
+// Derived from RG2's MidiMakeRestListSub in editor/src/MidiIn.c.
+
+void Note::makeTimeListSub(int t, bool dotted, vector<int> &v)
+    // (we append to v, it's expected to have stuff in it already)
+{
+    assert(t >= 0);
+
+    if (t < m_shortestTime) return;
+    int current;
+
+    if ((current = (dotted ? m_dottedCrotchetTime : m_crotchetTime)) <= t) {
+        v.push_back(current);
+        makeTimeListSub(t - current, dotted, v);
+        return;
+    }
+               
+    current = m_shortestTime;
+    for (int tag = Shortest + 1; tag <= Crotchet; ++tag) {
+        int next = Note(tag).getDuration();
+        if (next > t) {
+            v.push_back(current);
+            makeTimeListSub(t - current, dotted, v);
+            return;
+        }
+        current = next;
+    }
+               
+    // should only be reached in dotted time for lengths between
+    // crotchet and dotted crotchet:
+
+    current = m_crotchetTime;
+    v.push_back(current);
+    makeTimeListSub(t - current, dotted, v);
+}
