@@ -1216,11 +1216,11 @@ void NotationView::setupActions()
                 SLOT(slotEditAddClef()), actionCollection(),
                 "add_clef");
 
-    new KAction(i18n(AddTempoChangeCommand::getGlobalName()), 0, this,
+    new KAction(AddTempoChangeCommand::getGlobalName(), 0, this,
                 SLOT(slotEditAddTempo()), actionCollection(),
                 "add_tempo");
 
-    new KAction(i18n(AddTimeSignatureCommand::getGlobalName()), 0, this,
+    new KAction(AddTimeSignatureCommand::getGlobalName(), 0, this,
                 SLOT(slotEditAddTimeSignature()), actionCollection(),
                 "add_time_signature");
 

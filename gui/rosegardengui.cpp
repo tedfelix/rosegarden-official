@@ -523,17 +523,17 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotEditInEventList()), actionCollection(),
                 "edit_event_list");
 
-    new KAction(i18n(AddTempoChangeCommand::getGlobalName()),
+    new KAction(AddTempoChangeCommand::getGlobalName(),
                 0,
                 this, SLOT(slotEditTempo()),
                 actionCollection(), "add_tempo");
 
-    new KAction(i18n(AddTimeSignatureCommand::getGlobalName()),
+    new KAction(AddTimeSignatureCommand::getGlobalName(),
                 0,
                 this, SLOT(slotEditTimeSignature()),
                 actionCollection(), "add_time_signature");
 
-    new KAction(i18n(ChangeCompositionLengthCommand::getGlobalName()),
+    new KAction(ChangeCompositionLengthCommand::getGlobalName(),
                 0,
                 this, SLOT(slotChangeCompositionLength()),
                 actionCollection(), "change_composition_length");
