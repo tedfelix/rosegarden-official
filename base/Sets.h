@@ -101,6 +101,9 @@ public:
 
     virtual bool contains(const Iterator &) const = 0;
 
+    /// Return the pointed-to element, in Event form (public to work around gcc-2.95 bug)
+    static Event *getAsEvent(const Iterator &i);
+
 protected:
     GenericSet(const Container &c, Iterator elementInSet, const Quantizer *);
     void initialise();
@@ -110,9 +113,6 @@ protected:
 
     /// Return true if this element, known to test() true, is a set member
     virtual bool sample(const Iterator &i);
-
-    /// Return the pointed-to element, in Event form
-    static Event *getAsEvent(const Iterator &i);
 
     const Container &getContainer() const { return m_container; }
     const Quantizer &getQuantizer() const { return *m_quantizer; }
