@@ -120,13 +120,13 @@ msgstr "Rosegarden"
 msgid ""
 "_: NAME OF TRANSLATORS\n"
 "Your names"
-msgstr "Guillaume Laurent - Didier Burli\n"
+msgstr "Guillaume Laurent - Didier Burli"
 
 #: main.cpp:407 _translatorinfo.cpp:3
 msgid ""
 "_: EMAIL OF TRANSLATORS\n"
 "Your emails"
-msgstr "glaurent@telegraph-road.org - didierburli@hotmail.com\n"
+msgstr "glaurent@telegraph-road.org - didierburli@hotmail.com"
 
 #: notationvlayout.cpp:145
 msgid ""
