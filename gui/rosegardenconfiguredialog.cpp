@@ -971,7 +971,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
         Rosegarden::MidiDevice *dev =
             dynamic_cast<Rosegarden::MidiDevice*>(*it);
 
-        if (dev && dev->isDuplex())
+        if (dev && dev->getDirection() == MidiDevice::Duplex)
         {
             // Label and DeviceId
             //
@@ -1089,7 +1089,7 @@ SequencerConfigurationPage::apply()
         Rosegarden::MidiDevice *dev =
             dynamic_cast<Rosegarden::MidiDevice*>(*it);
 
-        if (dev && dev->isDuplex())
+        if (dev && dev->getDirection() == MidiDevice::Duplex)
         {
             if (m_recordDevice->currentItem() == count)
             {

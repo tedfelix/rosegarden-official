@@ -1271,7 +1271,7 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
     {
         if (mD->getType() == Rosegarden::Device::Midi)
         {
-            device = new Rosegarden::MidiDevice(id, mD->getName(), false);
+            device = new Rosegarden::MidiDevice(id, mD->getName());
 
             m_studio.addDevice(device);
 
@@ -1314,6 +1314,18 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
         instrument->setPort((*it)->getPort());
 
         device->addInstrument(instrument);
+
+        // set the Direction
+        if (device->getType() == Rosegarden::Device::Midi)
+        {
+            Rosegarden::MidiDevice *midiDevice =
+                dynamic_cast<Rosegarden::MidiDevice*>(device);
+
+            if (midiDevice)
+                midiDevice->setDirection(
+                        Rosegarden::MidiDevice::DeviceDirection(
+                            (*it)->getDirection()));
+        }
     }
 
 }

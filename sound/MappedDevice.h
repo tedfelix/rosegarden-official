@@ -25,6 +25,7 @@
 #include <qdatastream.h>
 
 #include "Device.h"
+#include "MidiDevice.h"
 
 #ifndef _MAPPEDDEVICE_H_
 #define _MAPPEDDEVICE_H_
@@ -71,6 +72,10 @@ public:
 
     int getClient() const { return m_client; }
     void setClient(int client) { m_client = client; }
+
+    // Get te DeviceDirection from the attached MappedInstruments
+    //
+    Rosegarden::MidiDevice::DeviceDirection getDirection() const;
 
 protected:
 

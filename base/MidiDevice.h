@@ -38,10 +38,19 @@ typedef std::vector<MidiBank*> BankList;
 
 class MidiDevice : public Device
 {
-
 public:
+
+    typedef enum
+    {
+        ReadOnly,
+        WriteOnly,
+        Duplex
+    } DeviceDirection;
+
     MidiDevice();
-    MidiDevice(DeviceId id, const std::string &name, bool duplex);
+    MidiDevice(DeviceId id,
+               const std::string &name,
+               DeviceDirection dir = WriteOnly);
     virtual ~MidiDevice();
 
     // Copy constructor
@@ -101,8 +110,6 @@ public:
     void mergeBankList(const std::vector<Rosegarden::MidiBank> &bank);
     void mergeProgramList(const std::vector<Rosegarden::MidiProgram> &program);
 
-    bool isDuplex() const { return m_duplex; }
-
     // Retrieve Librarian details
     //
     const std::string getLibrarianName() const { return m_librarian.first; }
@@ -114,6 +121,9 @@ public:
     //
     void setLibrarian(const std::string &name, const std::string &email)
         { m_librarian = std::pair<std::string, std::string>(name, email); }
+
+    DeviceDirection getDirection() const { return m_direction; }
+    void setDirection(DeviceDirection dir) { m_direction = dir; }
 
 protected:
     void generatePresentationList();
@@ -144,9 +154,11 @@ protected:
     MidiMetronome *m_metronome;
 
     // used when we're presenting the instruments
-    InstrumentList m_presentationInstrumentList;
+    InstrumentList  m_presentationInstrumentList;
 
-    bool m_duplex;  // is this a duplex device (i.e. a MIDI out/in port) ?
+    // Is this device Read-Only, Write-Only or Duplex
+    //
+    DeviceDirection m_direction; 
 
     // Librarian contact details
     //

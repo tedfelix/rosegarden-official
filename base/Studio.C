@@ -125,7 +125,7 @@ Studio::addDevice(const std::string &name,
     switch(type)
     {
         case Device::Midi:
-            m_devices.push_back(new MidiDevice(id, name, false)); // non duplex
+            m_devices.push_back(new MidiDevice(id, name));
             break;
 
         case Device::Audio:
@@ -173,13 +173,24 @@ Studio::getPresentationInstruments()
     InstrumentList list, subList;
 
     std::vector<Device*>::iterator it;
+    MidiDevice *midiDevice;
 
     // Append lists
     //
     for (it = m_devices.begin(); it != m_devices.end(); it++)
     {
+        midiDevice = dynamic_cast<MidiDevice*>(*it);
+
+        if (midiDevice)
+       {
+           // skip read-only devices
+          if (midiDevice->getDirection() == MidiDevice::ReadOnly)
+              continue;
+        }
+
         // get sub list
         subList = (*it)->getPresentationInstruments();
+
 
         // concetenate
         list.insert(list.end(), subList.begin(), subList.end());
@@ -343,7 +354,7 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
     {
         midiDevice = dynamic_cast<MidiDevice*>(*it);
 
-        if (midiDevice && !midiDevice->isDuplex())
+        if (midiDevice && !midiDevice->getDirection() == MidiDevice::WriteOnly)
         {
             instList = (*it)->getPresentationInstruments();
 

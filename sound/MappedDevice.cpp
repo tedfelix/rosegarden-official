@@ -202,5 +202,24 @@ operator<<(QDataStream &dS, const MappedDevice &mD)
 }
 
 
+Rosegarden::MidiDevice::DeviceDirection
+MappedDevice::getDirection() const
+{
+    Rosegarden::MidiDevice::DeviceDirection direction = WriteOnly;
+
+    for (MappedDeviceConstIterator it = this->begin(); it != this->end(); ++it)
+    {
+        if ((Rosegarden::MidiDevice::DeviceDirection((*it)->getDirection()))
+             != direction)
+        {
+            direction =
+                (Rosegarden::MidiDevice::DeviceDirection) (*it)->getDirection();
+        }
+    }
+
+    return direction;
+}
+
+
 }
 
