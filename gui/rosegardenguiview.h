@@ -135,12 +135,6 @@ public:
      */
     void showVisuals(const Rosegarden::MappedEvent *mE);
 
-    /*
-     * Highlight a Track and its Segments
-     *
-     */
-    void selectTrack(int trackId);
-
     /**
      * Change zoom size -- set the RulerScale's units-per-pixel to size
      */

@@ -751,7 +751,7 @@ void RosegardenGUIApp::initView()
     m_transport->SoloButton()->setOn(comp.isSolo());
 
     // set the highlighted track
-    m_view->selectTrack(comp.getSelectedTrack());
+    m_view->slotSelectTrackSegments(comp.getSelectedTrack());
 
     // We only check for the SequenceManager to make sure
     // we're not on the first pass though - we don't want
@@ -3042,7 +3042,7 @@ void RosegardenGUIApp::slotTrackUp()
     if (track)
     {
        comp.setSelectedTrack(pos - 1);
-       m_view->selectTrack(comp.getSelectedTrack());
+       m_view->slotSelectTrackSegments(comp.getSelectedTrack());
     }
 
 }
@@ -3060,7 +3060,7 @@ void RosegardenGUIApp::slotTrackDown()
     if (track)
     {
        comp.setSelectedTrack(pos + 1);
-       m_view->selectTrack(comp.getSelectedTrack());
+       m_view->slotSelectTrackSegments(comp.getSelectedTrack());
     }
 
 }
@@ -3722,7 +3722,7 @@ RosegardenGUIApp::slotEditBanks()
     // Crudely force bank update
     //
     if (m_view)
-       m_view->selectTrack(m_doc->getComposition().getSelectedTrack());
+       m_view->slotSelectTrackSegments(m_doc->getComposition().getSelectedTrack());
 
 }
 
