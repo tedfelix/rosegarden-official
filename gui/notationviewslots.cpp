@@ -585,6 +585,22 @@ void NotationView::slotExtendSelectionForward(bool bar)
     setCurrentSelection(es);
 }
 
+
+void NotationView::slotPreviewSelection()
+{
+    if (!m_currentEventSelection) return;
+
+    m_document->slotSetLoop(m_currentEventSelection->getStartTime(),
+			    m_currentEventSelection->getEndTime());
+}
+
+
+void NotationView::slotClearLoop()
+{
+    m_document->slotSetLoop(0, 0);
+}
+
+
 void NotationView::slotClearSelection()
 {
     // Actually we don't clear the selection immediately: if we're
@@ -1102,7 +1118,7 @@ void NotationView::slotSwitchFromNoteToRest()
     setTool(restInserter);
 }
 
-void NotationView::slotTransformsTranspose()
+void NotationView::slotTranspose()
 {
     if (!m_currentEventSelection) return;
 
@@ -1114,44 +1130,40 @@ void NotationView::slotTransformsTranspose()
     if (!ok || semitones == 0) return;
 
     KTmpStatusMsg msg(i18n("Transposing..."), this);
-    addCommandToHistory(new TransformsMenuTransposeCommand
+    addCommandToHistory(new TransposeCommand
                         (semitones, *m_currentEventSelection));
 }
 
-void NotationView::slotTransformsTransposeUp()
+void NotationView::slotTransposeUp()
 {
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Transposing up one semitone..."), this);
 
-    addCommandToHistory(new TransformsMenuTransposeCommand
-                        (1, *m_currentEventSelection));
+    addCommandToHistory(new TransposeCommand(1, *m_currentEventSelection));
 }
 
-void NotationView::slotTransformsTransposeUpOctave()
+void NotationView::slotTransposeUpOctave()
 {
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Transposing up one octave..."), this);
 
-    addCommandToHistory(new TransformsMenuTransposeCommand
-                        (12, *m_currentEventSelection));
+    addCommandToHistory(new TransposeCommand(12, *m_currentEventSelection));
 }
 
-void NotationView::slotTransformsTransposeDown()
+void NotationView::slotTransposeDown()
 {
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Transposing down one semitone..."), this);
 
-    addCommandToHistory(new TransformsMenuTransposeCommand
-                        (-1, *m_currentEventSelection));
+    addCommandToHistory(new TransposeCommand(-1, *m_currentEventSelection));
 }
 
-void NotationView::slotTransformsTransposeDownOctave()
+void NotationView::slotTransposeDownOctave()
 {
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Transposing down one octave..."), this);
 
-    addCommandToHistory(new TransformsMenuTransposeCommand
-                        (-12, *m_currentEventSelection));
+    addCommandToHistory(new TransposeCommand(-12, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsQuantize()
@@ -1427,7 +1439,7 @@ NotationView::slotCurrentStaffUp()
     m_staffs[m_currentStaff]->setCurrent(false);
     if (m_currentStaff-- <= 0) m_currentStaff = m_staffs.size()-1;
     m_staffs[m_currentStaff]->setCurrent(true);
-    slotSetInsertCursorPosition(m_insertionTime);
+    slotSetInsertCursorPosition(getInsertionTime());
 }
 
 void
@@ -1437,7 +1449,7 @@ NotationView::slotCurrentStaffDown()
     m_staffs[m_currentStaff]->setCurrent(false);
     if (++m_currentStaff >= (int)m_staffs.size()) m_currentStaff = 0;
     m_staffs[m_currentStaff]->setCurrent(true);
-    slotSetInsertCursorPosition(m_insertionTime);
+    slotSetInsertCursorPosition(getInsertionTime());
 }
 
 void
@@ -1590,11 +1602,12 @@ NotationView::slotStepBackward()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
     Segment &segment = staff->getSegment();
-    timeT time = m_insertionTime;
+    timeT time = getInsertionTime();
     Segment::iterator i = segment.findTime(time);
 
     while (i != segment.begin() &&
 	   (i == segment.end() || (*i)->getAbsoluteTime() == time)) --i;
+
     if (i != segment.end()) slotSetInsertCursorPosition((*i)->getAbsoluteTime());
 }
 
@@ -1603,12 +1616,17 @@ NotationView::slotStepForward()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
     Segment &segment = staff->getSegment();
-    timeT time = m_insertionTime;
+    timeT time = getInsertionTime();
     Segment::iterator i = segment.findTime(time);
 
-    while (i != segment.end() && (*i)->getAbsoluteTime() == time) ++i;
-    if (i == segment.end()) slotSetInsertCursorPosition(segment.getEndTime());
-    else slotSetInsertCursorPosition((*i)->getAbsoluteTime());
+    while (segment.isBeforeEndMarker(i) &&
+	   (*i)->getAbsoluteTime() == time) ++i;
+
+    if (!segment.isBeforeEndMarker(i)) {
+	slotSetInsertCursorPosition(segment.getEndMarkerTime());
+    } else {
+	slotSetInsertCursorPosition((*i)->getAbsoluteTime());
+    }
 }
 
 void
@@ -1616,7 +1634,7 @@ NotationView::slotJumpBackward()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
     Segment &segment = staff->getSegment();
-    timeT time = segment.getBarStartForTime(m_insertionTime - 1);
+    timeT time = segment.getBarStartForTime(getInsertionTime() - 1);
     slotSetInsertCursorPosition(time);
 }
 
@@ -1625,7 +1643,7 @@ NotationView::slotJumpForward()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
     Segment &segment = staff->getSegment();
-    timeT time = segment.getBarEndForTime(m_insertionTime);
+    timeT time = segment.getBarEndForTime(getInsertionTime());
     slotSetInsertCursorPosition(time);
 }
 

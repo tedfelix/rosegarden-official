@@ -1148,11 +1148,13 @@ void NotationView::setupActions()
 		SLOT(slotTransformsDeCounterpoint()), actionCollection(),
 		"de_counterpoint");
 
-    new KAction(i18n(TransformsMenuChangeStemsCommand::getGlobalName(true)), 0,Key_Up + CTRL, this,
+    new KAction(i18n(TransformsMenuChangeStemsCommand::getGlobalName(true)),
+		0, Key_PageUp + CTRL, this,
                 SLOT(slotTransformsStemsUp()), actionCollection(),
                 "stems_up");
 
-    new KAction(i18n(TransformsMenuChangeStemsCommand::getGlobalName(false)), 0, Key_Down + CTRL, this,
+    new KAction(i18n(TransformsMenuChangeStemsCommand::getGlobalName(false)),
+		0, Key_PageDown + CTRL, this,
                 SLOT(slotTransformsStemsDown()), actionCollection(),
                 "stems_down");
 
@@ -1160,28 +1162,28 @@ void NotationView::setupActions()
                 SLOT(slotTransformsRestoreStems()), actionCollection(),
                 "restore_stems");
 
-    new KAction(i18n(TransformsMenuTransposeCommand::getGlobalName(1)), 0,
+    new KAction(i18n(TransposeCommand::getGlobalName(1)), 0,
 		Key_Up, this,
-                SLOT(slotTransformsTransposeUp()), actionCollection(),
+                SLOT(slotTransposeUp()), actionCollection(),
                 "transpose_up");
 
-    new KAction(i18n(TransformsMenuTransposeCommand::getGlobalName(12)), 0,
+    new KAction(i18n(TransposeCommand::getGlobalName(12)), 0,
 		Key_Up + CTRL, this,
-                SLOT(slotTransformsTransposeUpOctave()), actionCollection(),
+                SLOT(slotTransposeUpOctave()), actionCollection(),
                 "transpose_up_octave");
 
-    new KAction(i18n(TransformsMenuTransposeCommand::getGlobalName(-1)), 0,
+    new KAction(i18n(TransposeCommand::getGlobalName(-1)), 0,
 		Key_Down, this,
-                SLOT(slotTransformsTransposeDown()), actionCollection(),
+                SLOT(slotTransposeDown()), actionCollection(),
                 "transpose_down");
 
-    new KAction(i18n(TransformsMenuTransposeCommand::getGlobalName(-12)), 0,
+    new KAction(i18n(TransposeCommand::getGlobalName(-12)), 0,
 		Key_Down + CTRL, this,
-                SLOT(slotTransformsTransposeDownOctave()), actionCollection(),
+                SLOT(slotTransposeDownOctave()), actionCollection(),
                 "transpose_down_octave");
 
-    new KAction(i18n(TransformsMenuTransposeCommand::getGlobalName(0)), 0, this,
-                SLOT(slotTransformsTranspose()), actionCollection(),
+    new KAction(i18n(TransposeCommand::getGlobalName(0)), 0, this,
+                SLOT(slotTranspose()), actionCollection(),
                 "general_transpose");
 
     new KAction(i18n(EventQuantizeCommand::getGlobalName()), 0, this,
@@ -1305,6 +1307,12 @@ void NotationView::setupActions()
 		SLOT(slotExtendSelectionForwardBar()), actionCollection(),
 		"extend_selection_forward_bar");
 
+/*!!! not here yet
+    new KAction(i18n("Move Selection Left"), Key_Minus, this,
+		SLOT(slotMoveSelectionLeft()), actionCollection(),
+		"move_selection_left");
+*/
+
     new KAction(i18n("Cursor to St&art"), 0, Key_A + CTRL, this,
 		SLOT(slotJumpToStart()), actionCollection(),
 		"cursor_start");
@@ -1366,6 +1374,14 @@ void NotationView::setupActions()
     new KAction(i18n("Playback Pointer to &Cursor"), icon, 0, this,
 		SLOT(slotJumpPlaybackToCursor()), actionCollection(),
 		"playback_pointer_to_cursor");
+
+    new KAction(i18n("Set Loop to Selection"), Key_Semicolon + CTRL, this,
+		SLOT(slotPreviewSelection()), actionCollection(),
+		"preview_selection");
+
+    new KAction(i18n("Clear L&oop"), Key_Colon + CTRL, this,
+		SLOT(slotClearLoop()), actionCollection(),
+		"clear_loop");
 
     new KAction(i18n("Clear Selection"), Key_Escape, this,
 		SLOT(slotClearSelection()), actionCollection(),

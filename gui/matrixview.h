@@ -101,7 +101,7 @@ public:
 
     virtual void updateView();
 
-    void setCurrentSelection(Rosegarden::EventSelection* s, bool preview);
+    void setCurrentSelection(Rosegarden::EventSelection* s, bool preview = false);
     Rosegarden::EventSelection* getCurrentSelection()
         { return m_currentEventSelection; }
 
@@ -189,6 +189,14 @@ signals:
      */
     void usedSelection();
 
+    void play();
+    void stop();
+    void fastForwardPlayback();
+    void rewindPlayback();
+    void fastForwardPlaybackToEnd();
+    void rewindPlaybackToBeginning();
+    void jumpPlaybackTo(Rosegarden::timeT);
+
 public slots:
 
     /**
@@ -212,6 +220,17 @@ public slots:
      */
     void slotEditDelete();
 
+    void slotPreviewSelection();
+    void slotClearLoop();
+    void slotClearSelection();
+    
+    void slotExtendSelectionBackward();
+    void slotExtendSelectionForward();
+    void slotExtendSelectionBackwardBar();
+    void slotExtendSelectionForwardBar();
+    void slotExtendSelectionBackward(bool bar);
+    void slotExtendSelectionForward(bool bar);
+
     /// edition tools
     void slotPaintSelected();
     void slotEraseSelected();
@@ -221,6 +240,23 @@ public slots:
 
     /// transforms
     void slotTransformsQuantize();
+    void slotTranspose();
+    void slotTransposeUp();
+    void slotTransposeUpOctave();
+    void slotTransposeDown();
+    void slotTransposeDownOctave();
+    void slotVelocityUp();
+    void slotVelocityDown();
+
+    /// move
+    void slotStepBackward();
+    void slotStepForward();
+    void slotJumpBackward();
+    void slotJumpForward();
+    void slotJumpToStart();
+    void slotJumpToEnd();
+    void slotJumpCursorToPlayback();
+    void slotJumpPlaybackToCursor();
 
     /// Canvas actions slots
 
@@ -261,12 +297,14 @@ public slots:
     /*
      * Set the time pointer position during playback
      */
-    void slotSetPointerPosition(Rosegarden::timeT time, bool scroll = true);
+    void slotSetPointerPosition(Rosegarden::timeT time,
+				bool scroll = true);
 
     /*
      * Set the insertion pointer position (from the bottom LoopRuler)
      */
-    void slotSetInsertCursorPosition(Rosegarden::timeT position);
+    void slotSetInsertCursorPosition(Rosegarden::timeT position,
+				     bool scroll = true);
 
     /*
      * Catch the keyboard being pressed
@@ -325,6 +363,8 @@ public slots:
     void slotSelectAll();
 
 protected:
+
+    Rosegarden::timeT getInsertionTime();
 
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void keyReleaseEvent(QKeyEvent *event);
@@ -395,6 +435,8 @@ protected:
     MatrixHLayout             m_hlayout;
     MatrixVLayout             m_vlayout;
     Rosegarden::SnapGrid     *m_snapGrid;
+
+    Rosegarden::timeT         m_lastEndMarkerTime;
 
     // Status bar elements
     QLabel* m_hoveredOverAbsoluteTime;

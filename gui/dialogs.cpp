@@ -2219,7 +2219,7 @@ AudioPlayingDialog::AudioPlayingDialog(QWidget *parent,
 {
     QHBox *w = makeHBoxMainWidget();
     QLabel *label = new
-        QLabel(i18n("Playing audio file \"") + name + QString("\""), w);
+        QLabel(i18n("Playing audio file \"%1\"").arg(name), w);
 
     label->setMinimumHeight(80);
 
@@ -2658,8 +2658,8 @@ EventParameterDialog::EventParameterDialog(
 
     QHBox *topBox = new QHBox(vBox);
     QLabel *explainLabel = new QLabel(topBox);
-    QString text = i18n("Set the ") + strtoqstr(property) +
-                   i18n(" property of the event selection:");
+    QString text = i18n("Set the %1 property of the event selection:").
+	arg(strtoqstr(property));
     explainLabel->setText(text);
 
     QHBox *patternBox = new QHBox(vBox);
@@ -2667,23 +2667,19 @@ EventParameterDialog::EventParameterDialog(
     m_patternCombo = new RosegardenComboBox(true, patternBox);
 
     // create options
-    text = i18n("Flat - set ") + strtoqstr(property) + (" to value");
+    text = i18n("Flat - set %1 to value").arg(strtoqstr(property));
     m_patternCombo->insertItem(text);
 
-    text = i18n("Alternating - set ") + strtoqstr(property) +
-           i18n(" to max and min on alternate events");
+    text = i18n("Alternating - set %1 to max and min on alternate events").arg(strtoqstr(property));
     m_patternCombo->insertItem(text);
 
-    text = i18n("Crescendo - set ") + strtoqstr(property) + 
-           i18n(" rising from min to max");
+    text = i18n("Crescendo - set %1 rising from min to max").arg(strtoqstr(property));
     m_patternCombo->insertItem(text);
 
-    text = i18n("Diminuendo - set ") + strtoqstr(property) +
-           i18n(" falling from max to min");
+    text = i18n("Diminuendo - set %1 falling from max to min").arg(strtoqstr(property));
     m_patternCombo->insertItem(text);
 
-    text = i18n("Ringing - set ") + strtoqstr(property) +
-           i18n(" alternating from max to min with both dying to zero");
+    text = i18n("Ringing - set %1 alternating from max to min with both dying to zero").arg(strtoqstr(property));
     m_patternCombo->insertItem(text);
 
     connect(m_patternCombo, SIGNAL(activated(int)),

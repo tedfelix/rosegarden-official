@@ -323,7 +323,7 @@ MultiViewCommandHistory::updateMenu(const QString &text,
 	    QString commandName = command->name();
 	    commandName.replace(QRegExp("&"), "");
 
-	    menu->insertItem(i18n(text + " " + commandName), j++);
+	    menu->insertItem(i18n(text + " %1").arg(commandName), j++);
 	}
 
 	while (!tempStack.empty()) {

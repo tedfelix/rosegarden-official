@@ -45,7 +45,8 @@ void MatrixVLayout::resetStaff(StaffType&, timeT, timeT)
 {
 }
 
-void MatrixVLayout::scanStaff(MatrixVLayout::StaffType& staffBase, timeT, timeT)
+void MatrixVLayout::scanStaff(MatrixVLayout::StaffType& staffBase,
+			      timeT startTime, timeT endTime)
 {
     MatrixStaff& staff = dynamic_cast<MatrixStaff&>(staffBase);
 
@@ -56,6 +57,12 @@ void MatrixVLayout::scanStaff(MatrixVLayout::StaffType& staffBase, timeT, timeT)
     MatrixElementList::iterator from = notes->begin();
     MatrixElementList::iterator to = notes->end();
     MatrixElementList::iterator i;
+
+    if (startTime != endTime) {
+	from = notes->findNearestTime(startTime);
+	if (from == notes->end()) from = notes->begin();
+	to = notes->findTime(endTime);
+    }
 
     MATRIX_DEBUG << "MatrixVLayout::scanStaff : id = "
                          << staff.getId() << endl;

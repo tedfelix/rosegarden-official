@@ -588,27 +588,27 @@ SelectionPropertyCommand::modifySegment()
     for (i = m_selection->getSegmentEvents().begin();
          i != m_selection->getSegmentEvents().end(); ++i)
     {
-        if (m_pattern == Rosegarden::Flat)
+        if (m_pattern == Rosegarden::FlatPattern)
             (*i)->set<Rosegarden::Int>(m_property, m_value1);
-        else if (m_pattern == Rosegarden::Alternating)
+        else if (m_pattern == Rosegarden::AlternatingPattern)
         {
             if (count % 2 == 0)
                 (*i)->set<Rosegarden::Int>(m_property, m_value1);
             else
                 (*i)->set<Rosegarden::Int>(m_property, m_value2);
 
-        } else if (m_pattern == Rosegarden::Crescendo)
+        } else if (m_pattern == Rosegarden::CrescendoPattern)
         {
 
             (*i)->set<Rosegarden::Int>(m_property,
                                        m_value2 +
                                        int(step * (*i)->getAbsoluteTime()));
-        } else if (m_pattern == Rosegarden::Diminuendo)
+        } else if (m_pattern == Rosegarden::DecrescendoPattern)
         {
             (*i)->set<Rosegarden::Int>(m_property,
                                        m_value1 -
                                        int(step * (*i)->getAbsoluteTime()));
-        } else if (m_pattern == Rosegarden::Ringing)
+        } else if (m_pattern == Rosegarden::RingingPattern)
         {
             if (count % 2 == 0)
                 (*i)->set<Rosegarden::Int>
@@ -880,3 +880,48 @@ SetLyricsCommand::unexecute()
 }
 
     
+void
+TransposeCommand::modifySegment()
+{
+    EventSelection::eventcontainer::iterator i;
+
+    for (i  = m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+
+	if ((*i)->isa(Note::EventType)) {
+	    long pitch = (*i)->get<Int>(PITCH);
+	    pitch += m_semitones;
+	    if (pitch < 0) pitch = 0;
+	    if (pitch > 127) pitch = 127;
+	    (*i)->set<Int>(PITCH, pitch); 
+	    (*i)->unset(ACCIDENTAL);
+	}
+    }
+}
+
+   
+void
+ChangeVelocityCommand::modifySegment()
+{
+    EventSelection::eventcontainer::iterator i;
+
+    for (i  = m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+
+	if ((*i)->isa(Note::EventType)) {
+
+	    long velocity = 100;
+	    (*i)->get<Int>(VELOCITY, velocity);
+
+	    // round velocity up to the next multiple of delta
+	    velocity /= m_delta;
+	    velocity *= m_delta;
+	    velocity += m_delta;
+
+	    if (velocity < 0) velocity = 0;
+	    if (velocity > 127) velocity = 127;
+	    (*i)->set<Int>(VELOCITY, velocity); 
+	}
+    }
+}
+

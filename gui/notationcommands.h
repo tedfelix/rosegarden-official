@@ -494,33 +494,6 @@ private:
 };
 
 
-class TransformsMenuTransposeCommand : public BasicSelectionCommand
-{
-public:
-    TransformsMenuTransposeCommand(int semitones,
-				   Rosegarden::EventSelection &selection) :
-	BasicSelectionCommand(getGlobalName(semitones), selection, true),
-	m_selection(&selection), m_semitones(semitones) { }
-
-    static QString getGlobalName(int semitones = 0) {
-	switch (semitones) {
-	case   1: return "&Up a Semitone";
-	case  -1: return "&Down a Semitone";
-	case  12: return "Up an &Octave";
-	case -12: return "Down an Octa&ve";
-	default:  return "&Transpose...";
-	}
-    }
-
-protected:
-    virtual void modifySegment();
-
-private:
-    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
-    int m_semitones;
-};
-
-
 class NotesMenuAddSlashesCommand : public BasicSelectionCommand
 {
 public:

@@ -140,18 +140,21 @@
   <Separator/>
   <Action name="extend_selection_backward"/>
   <Action name="extend_selection_forward"/>
+  <Action name="preview_selection"/>
+  <Action name="clear_loop"/>
+<!-- not implemented yet
+  <Separator/>
+  <Action name="move_selection_left"/>
+  <Action name="move_selection_right"/>
+  <Action name="copy_selection_left"/>
+  <Action name="copy_selection_right"/>
+-->
 <Separator/>
   <Action name="cursor_to_playback_pointer"/>
   <Action name="playback_pointer_to_cursor"/>
 <Separator/>
   <Action name="cursor_up_staff"/>
   <Action name="cursor_down_staff"/>
-<!--
-<Separator/>
-  <Menu name="Transport">
-  <text>&amp;Transport</text>
-  </Menu>
--->
 </Menu>
 
   <Menu name="Transport">
@@ -371,6 +374,8 @@
     <Action name="delete"/>
     <Action name="cut_and_close"/>
     <Action name="debug_dump"/>
+    <Action name="preview_selection"/>
+    <Action name="clear_selection"/>
   </enable>
 </State>
 

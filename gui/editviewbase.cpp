@@ -200,7 +200,6 @@ void EditViewBase::paintEvent(QPaintEvent* e)
 		return;
 	    }
 	}
-        setCompositionModified(false);
     }
 
 
@@ -259,6 +258,11 @@ void EditViewBase::paintEvent(QPaintEvent* e)
 
     KMainWindow::paintEvent(e);
 
+    // moved this to the end of the method so that things called
+    // from this method can still test whether the composition had
+    // been modified (it's sometimes useful to know whether e.g.
+    // any time signatures have changed)
+    setCompositionModified(false);
 }
 
 

@@ -323,6 +323,8 @@ public slots:
     void slotExtendSelectionForwardBar();
     void slotExtendSelectionBackward(bool bar);
     void slotExtendSelectionForward(bool bar);
+    void slotPreviewSelection();
+    void slotClearLoop();
     void slotClearSelection();
     void slotEditSelectFromStart();
     void slotEditSelectToEnd();
@@ -360,11 +362,11 @@ public slots:
     void slotTransformsStemsUp();
     void slotTransformsStemsDown();
     void slotTransformsRestoreStems();
-    void slotTransformsTranspose();
-    void slotTransformsTransposeUp();
-    void slotTransformsTransposeUpOctave();
-    void slotTransformsTransposeDown();
-    void slotTransformsTransposeDownOctave();
+    void slotTranspose();
+    void slotTransposeUp();
+    void slotTransposeUpOctave();
+    void slotTransposeDown();
+    void slotTransposeDownOctave();
     void slotTransformsQuantize();
     void slotTransformsFixSmoothing();
 

@@ -25,6 +25,7 @@
 #include <qlabel.h>
 #include <qhbox.h>
 #include <qslider.h>
+#include <qinputdialog.h>
 
 #include <kapp.h>
 #include <kconfig.h>
@@ -86,6 +87,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
       m_hlayout(&doc->getComposition()),
       m_vlayout(),
       m_snapGrid(new Rosegarden::SnapGrid(&m_hlayout)),
+      m_lastEndMarkerTime(0),
       m_hoveredOverAbsoluteTime(0),
       m_hoveredOverNoteName(0),
       m_selectionCounter(0),
@@ -375,22 +377,22 @@ void MatrixView::setupActions()
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
     QIconSet icon(QPixmap(pixmapDir + "/toolbar/select.xpm"));
 
-    toolAction = new KRadioAction(i18n("Select"), icon, 0,
+    toolAction = new KRadioAction(i18n("&Select"), icon, 0,
                                   this, SLOT(slotSelectSelected()),
                                   actionCollection(), "select");
     toolAction->setExclusiveGroup("tools");
 
-    toolAction = new KRadioAction(i18n("Paint"), "pencil", 0,
+    toolAction = new KRadioAction(i18n("&Draw"), "pencil", 0,
                                   this, SLOT(slotPaintSelected()),
                                   actionCollection(), "draw");
     toolAction->setExclusiveGroup("tools");
 
-    toolAction = new KRadioAction(i18n("Erase"), "eraser", 0,
+    toolAction = new KRadioAction(i18n("&Erase"), "eraser", 0,
                                   this, SLOT(slotEraseSelected()),
                                   actionCollection(), "erase");
     toolAction->setExclusiveGroup("tools");
 
-    toolAction = new KRadioAction(i18n("Move"), "move", 0,
+    toolAction = new KRadioAction(i18n("&Move"), "move", 0,
                                   this, SLOT(slotMoveSelected()),
                                   actionCollection(), "move");
     toolAction->setExclusiveGroup("tools");
@@ -405,6 +407,40 @@ void MatrixView::setupActions()
                 SLOT(slotTransformsQuantize()), actionCollection(),
                 "quantize");
 
+    new KAction(i18n(TransposeCommand::getGlobalName(1)), 0,
+		Key_Up, this,
+                SLOT(slotTransposeUp()), actionCollection(),
+                "transpose_up");
+
+    new KAction(i18n(TransposeCommand::getGlobalName(12)), 0,
+		Key_Up + CTRL, this,
+                SLOT(slotTransposeUpOctave()), actionCollection(),
+                "transpose_up_octave");
+
+    new KAction(i18n(TransposeCommand::getGlobalName(-1)), 0,
+		Key_Down, this,
+                SLOT(slotTransposeDown()), actionCollection(),
+                "transpose_down");
+
+    new KAction(i18n(TransposeCommand::getGlobalName(-12)), 0,
+		Key_Down + CTRL, this,
+                SLOT(slotTransposeDownOctave()), actionCollection(),
+                "transpose_down_octave");
+
+    new KAction(i18n(TransposeCommand::getGlobalName(0)), 0, this,
+                SLOT(slotTranspose()), actionCollection(),
+                "general_transpose");
+
+    new KAction(i18n(ChangeVelocityCommand::getGlobalName(10)), 0,
+		Key_Up + SHIFT, this,
+                SLOT(slotVelocityUp()), actionCollection(),
+                "velocity_up");
+
+    new KAction(i18n(ChangeVelocityCommand::getGlobalName(-10)), 0,
+		Key_Down + SHIFT, this,
+                SLOT(slotVelocityDown()), actionCollection(),
+                "velocity_down");
+
     new KAction(i18n("Set Event &Velocities..."), 0, this,
                 SLOT(slotSetVelocities()), actionCollection(),
                 "set_velocities");
@@ -416,6 +452,105 @@ void MatrixView::setupActions()
     new KAction(i18n("&Delete"), Key_Delete, this,
                 SLOT(slotEditDelete()), actionCollection(),
                 "delete");
+
+    new KAction(i18n("Cursor &Back"), 0, Key_Left, this,
+		SLOT(slotStepBackward()), actionCollection(),
+		"cursor_back");
+
+    new KAction(i18n("Cursor &Forward"), 0, Key_Right, this,
+		SLOT(slotStepForward()), actionCollection(),
+		"cursor_forward");
+
+    new KAction(i18n("Cursor Ba&ck Bar"), 0, Key_Left + CTRL, this,
+		SLOT(slotJumpBackward()), actionCollection(),
+		"cursor_back_bar");
+
+    new KAction(i18n("Cursor For&ward Bar"), 0, Key_Right + CTRL, this,
+		SLOT(slotJumpForward()), actionCollection(),
+		"cursor_forward_bar");
+
+    new KAction(i18n("Cursor Back and Se&lect"), SHIFT + Key_Left, this,
+		SLOT(slotExtendSelectionBackward()), actionCollection(),
+		"extend_selection_backward");
+
+    new KAction(i18n("Cursor Forward and &Select"), SHIFT + Key_Right, this,
+		SLOT(slotExtendSelectionForward()), actionCollection(),
+		"extend_selection_forward");
+
+    new KAction(i18n("Cursor Back Bar and Select"), SHIFT + CTRL + Key_Left, this,
+		SLOT(slotExtendSelectionBackwardBar()), actionCollection(),
+		"extend_selection_backward_bar");
+
+    new KAction(i18n("Cursor Forward Bar and Select"), SHIFT + CTRL + Key_Right, this,
+		SLOT(slotExtendSelectionForwardBar()), actionCollection(),
+		"extend_selection_forward_bar");
+
+    new KAction(i18n("Cursor to St&art"), 0, Key_A + CTRL, this,
+		SLOT(slotJumpToStart()), actionCollection(),
+		"cursor_start");
+
+    new KAction(i18n("Cursor to &End"), 0, Key_E + CTRL, this,
+		SLOT(slotJumpToEnd()), actionCollection(),
+		"cursor_end");
+
+    NotePixmapFactory npf;
+    icon = QIconSet(npf.makeToolbarPixmap
+		    ("transport-cursor-to-pointer"));
+    new KAction(i18n("Cursor to &Playback Pointer"), icon, 0, this,
+		SLOT(slotJumpCursorToPlayback()), actionCollection(),
+		"cursor_to_playback_pointer");
+
+    icon = QIconSet(npf.makeToolbarPixmap
+		    ("transport-play"));
+    new KAction(i18n("&Play"), icon, Key_Enter, this,
+		SIGNAL(play()), actionCollection(), "play");
+
+    icon = QIconSet(npf.makeToolbarPixmap
+		    ("transport-stop"));
+    new KAction(i18n("&Stop"), icon, Key_Insert, this,
+		SIGNAL(stop()), actionCollection(), "stop");
+
+    icon = QIconSet(npf.makeToolbarPixmap
+		    ("transport-rewind"));
+    new KAction(i18n("Re&wind"), icon, Key_End, this,
+		SIGNAL(rewindPlayback()), actionCollection(),
+		"playback_pointer_back_bar");
+
+    icon = QIconSet(npf.makeToolbarPixmap
+		    ("transport-ffwd"));
+    new KAction(i18n("&Fast Forward"), icon, Key_PageDown, this,
+		SIGNAL(fastForwardPlayback()), actionCollection(),
+		"playback_pointer_forward_bar");
+
+    icon = QIconSet(npf.makeToolbarPixmap
+		    ("transport-rewind-end"));
+    new KAction(i18n("Rewind to &Beginning"), icon, 0, this,
+		SIGNAL(rewindPlaybackToBeginning()), actionCollection(),
+		"playback_pointer_start");
+
+    icon = QIconSet(npf.makeToolbarPixmap
+		    ("transport-ffwd-end"));
+    new KAction(i18n("Fast Forward to &End"), icon, 0, this,
+		SIGNAL(fastForwardPlaybackToEnd()), actionCollection(),
+		"playback_pointer_end");
+
+    icon = QIconSet(npf.makeToolbarPixmap
+		    ("transport-pointer-to-cursor"));
+    new KAction(i18n("Playback Pointer to &Cursor"), icon, 0, this,
+		SLOT(slotJumpPlaybackToCursor()), actionCollection(),
+		"playback_pointer_to_cursor");
+
+    new KAction(i18n("Set Loop to Selection"), Key_Semicolon + CTRL, this,
+		SLOT(slotPreviewSelection()), actionCollection(),
+		"preview_selection");
+
+    new KAction(i18n("Clear L&oop"), Key_Colon + CTRL, this,
+		SLOT(slotClearLoop()), actionCollection(),
+		"clear_loop");
+
+    new KAction(i18n("Clear Selection"), Key_Escape, this,
+		SLOT(slotClearSelection()), actionCollection(),
+		"clear_selection");
 
     createGUI(getRCFileName());
 
@@ -468,7 +603,12 @@ bool MatrixView::applyLayout(int staffNo,
     m_hlayout.finishLayout();
     m_vlayout.finishLayout();
 
-    readjustCanvasSize();
+    if (m_staffs[0]->getSegment().getEndMarkerTime() != m_lastEndMarkerTime ||
+	m_lastEndMarkerTime == 0 ||
+	isCompositionModified()) {
+	readjustCanvasSize();
+	m_lastEndMarkerTime = m_staffs[0]->getSegment().getEndMarkerTime();
+    }
     
     return true;
 }
@@ -724,6 +864,54 @@ void MatrixView::slotTransformsQuantize()
     }
 }
 
+void MatrixView::slotTranspose()
+{
+    if (!m_currentEventSelection) return;
+
+    bool ok = false;
+    int semitones = QInputDialog::getInteger
+	(i18n("Transpose"),
+	 i18n("Enter the number of semitones to transpose up by:"),
+	 0, -127, 127, 1, &ok, this);
+    if (!ok || semitones == 0) return;
+
+    KTmpStatusMsg msg(i18n("Transposing..."), this);
+    addCommandToHistory(new TransposeCommand
+                        (semitones, *m_currentEventSelection));
+}
+
+void MatrixView::slotTransposeUp()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Transposing up one semitone..."), this);
+
+    addCommandToHistory(new TransposeCommand(1, *m_currentEventSelection));
+}
+
+void MatrixView::slotTransposeUpOctave()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Transposing up one octave..."), this);
+
+    addCommandToHistory(new TransposeCommand(12, *m_currentEventSelection));
+}
+
+void MatrixView::slotTransposeDown()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Transposing down one semitone..."), this);
+
+    addCommandToHistory(new TransposeCommand(-1, *m_currentEventSelection));
+}
+
+void MatrixView::slotTransposeDownOctave()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Transposing down one octave..."), this);
+
+    addCommandToHistory(new TransposeCommand(-12, *m_currentEventSelection));
+}
+
 void MatrixView::slotMousePressed(Rosegarden::timeT time, int pitch,
                                   QMouseEvent* e, MatrixElement* el)
 {
@@ -831,12 +1019,21 @@ MatrixView::slotSetPointerPosition(timeT time, bool scroll)
 }
 
 void
-MatrixView::slotSetInsertCursorPosition(timeT time)
+MatrixView::slotSetInsertCursorPosition(timeT time, bool scroll)
 {
     //!!! For now.  Probably unlike slotSetPointerPosition this one
     // should snap to the nearest event.
 
     m_staffs[0]->setInsertCursorPosition(m_hlayout, time);
+
+    if (scroll) {
+#ifdef RGKDE3
+        getCanvasView()->slotScrollHoriz(getXbyWorldMatrix(m_hlayout.getXForTime(time)));
+#else
+        getCanvasView()->slotScrollHoriz(m_hlayout.getXForTime(time));
+#endif
+    }
+
     updateView();
 }
 
@@ -1483,6 +1680,224 @@ MatrixView::removeControlRuler(unsigned int number)
 }
 
 
+timeT
+MatrixView::getInsertionTime()
+{
+    MatrixStaff *staff = m_staffs[0];
+    double ix = staff->getLayoutXOfInsertCursor();
+    return m_hlayout.getTimeForX(ix);
+}
+
+
+//!!! The move and extend-selection methods are almost exact
+// duplicates of those in NotationView.  We should probably
+// factor these out -- but where to?
+
+
+void
+MatrixView::slotStepBackward()
+{
+    MatrixStaff *staff = m_staffs[0];
+    Segment &segment = staff->getSegment();
+    timeT time = getInsertionTime();
+    Segment::iterator i = segment.findTime(time);
+
+    while (i != segment.begin() &&
+	   (i == segment.end() || (*i)->getAbsoluteTime() == time)) --i;
+
+    if (i != segment.end()) slotSetInsertCursorPosition((*i)->getAbsoluteTime());
+}
+
+void
+MatrixView::slotStepForward()
+{
+    MatrixStaff *staff = m_staffs[0];
+    Segment &segment = staff->getSegment();
+    timeT time = getInsertionTime();
+    Segment::iterator i = segment.findTime(time);
+
+    while (segment.isBeforeEndMarker(i) &&
+	   (*i)->getAbsoluteTime() == time) ++i;
+
+    if (!segment.isBeforeEndMarker(i)) {
+	slotSetInsertCursorPosition(segment.getEndMarkerTime());
+    } else {
+	slotSetInsertCursorPosition((*i)->getAbsoluteTime());
+    }
+}
+
+void
+MatrixView::slotJumpBackward()
+{
+    MatrixStaff *staff = m_staffs[0];
+    Segment &segment = staff->getSegment();
+    timeT time = getInsertionTime();
+    time = segment.getBarStartForTime(time - 1);
+    slotSetInsertCursorPosition(time);
+}
+
+void
+MatrixView::slotJumpForward()
+{
+    MatrixStaff *staff = m_staffs[0];
+    Segment &segment = staff->getSegment();
+    timeT time = getInsertionTime();
+    time = segment.getBarEndForTime(time);
+    slotSetInsertCursorPosition(time);
+}
+
+void
+MatrixView::slotJumpToStart()
+{
+    MatrixStaff *staff = m_staffs[0];
+    Segment &segment = staff->getSegment();
+    timeT time = segment.getStartTime();
+    slotSetInsertCursorPosition(time);
+}    
+
+void
+MatrixView::slotJumpToEnd()
+{
+    MatrixStaff *staff = m_staffs[0];
+    Segment &segment = staff->getSegment();
+    timeT time = segment.getEndMarkerTime();
+    slotSetInsertCursorPosition(time);
+}    
+
+void
+MatrixView::slotJumpCursorToPlayback()
+{
+    slotSetInsertCursorPosition(m_document->getComposition().getPosition());
+}
+
+void
+MatrixView::slotJumpPlaybackToCursor()
+{
+    emit jumpPlaybackTo(getInsertionTime());
+}
+
+
+void MatrixView::slotExtendSelectionBackward()
+{
+    slotExtendSelectionBackward(false);
+}
+
+void MatrixView::slotExtendSelectionBackwardBar()
+{
+    slotExtendSelectionBackward(true);
+}
+
+void MatrixView::slotExtendSelectionBackward(bool bar)
+{
+    // If there is no current selection, or the selection is entirely
+    // to the right of the cursor, move the cursor left and add to the
+    // selection
+
+    timeT oldTime = getInsertionTime();
+    if (bar) slotJumpBackward();
+    else slotStepBackward();
+    timeT newTime = getInsertionTime();
+
+    Segment &segment = m_staffs[0]->getSegment();
+    EventSelection *es = new EventSelection(segment);
+    if (m_currentEventSelection) es->addFromSelection(m_currentEventSelection);
+
+    if (!m_currentEventSelection ||
+	&m_currentEventSelection->getSegment() != &segment ||
+	m_currentEventSelection->getSegmentEvents().size() == 0 ||
+	m_currentEventSelection->getStartTime() >= oldTime) {
+
+	Segment::iterator extendFrom = segment.findTime(oldTime);
+
+	while (extendFrom != segment.begin() &&
+	       (*--extendFrom)->getAbsoluteTime() >= newTime) {
+	    if ((*extendFrom)->isa(Rosegarden::Note::EventType)) {
+		es->addEvent(*extendFrom);
+	    }
+	}
+
+    } else { // remove an event
+
+	EventSelection::eventcontainer::iterator i =
+	    es->getSegmentEvents().end();
+
+	std::vector<Rosegarden::Event *> toErase;
+
+	while (i != es->getSegmentEvents().begin() &&
+	       (*--i)->getAbsoluteTime() >= newTime) {
+	    toErase.push_back(*i);
+	}
+
+	for (unsigned int j = 0; j < toErase.size(); ++j) {
+	    es->removeEvent(toErase[j]);
+	}
+    }
+    
+    setCurrentSelection(es);
+}
+
+void MatrixView::slotExtendSelectionForward()
+{
+    slotExtendSelectionForward(false);
+}
+
+void MatrixView::slotExtendSelectionForwardBar()
+{
+    slotExtendSelectionForward(true);
+}
+
+void MatrixView::slotExtendSelectionForward(bool bar)
+{
+    // If there is no current selection, or the selection is entirely
+    // to the left of the cursor, move the cursor right and add to the
+    // selection
+
+    timeT oldTime = getInsertionTime();
+    if (bar) slotJumpForward();
+    else slotStepForward();
+    timeT newTime = getInsertionTime();
+
+    Segment &segment = m_staffs[0]->getSegment();
+    EventSelection *es = new EventSelection(segment);
+    if (m_currentEventSelection) es->addFromSelection(m_currentEventSelection);
+
+    if (!m_currentEventSelection ||
+	&m_currentEventSelection->getSegment() != &segment ||
+	m_currentEventSelection->getSegmentEvents().size() == 0 ||
+	m_currentEventSelection->getEndTime() <= oldTime) {
+
+	Segment::iterator extendFrom = segment.findTime(oldTime);
+
+	while (extendFrom != segment.end() &&
+	       (*extendFrom)->getAbsoluteTime() < newTime) {
+	    if ((*extendFrom)->isa(Rosegarden::Note::EventType)) {
+		es->addEvent(*extendFrom);
+	    }
+	    ++extendFrom;
+	}
+
+    } else { // remove an event
+
+	EventSelection::eventcontainer::iterator i =
+	    es->getSegmentEvents().begin();
+
+	std::vector<Rosegarden::Event *> toErase;
+
+	while (i != es->getSegmentEvents().end() &&
+	       (*i)->getAbsoluteTime() < newTime) {
+	    toErase.push_back(*i);
+	    ++i;
+	}
+
+	for (unsigned int j = 0; j < toErase.size(); ++j) {
+	    es->removeEvent(toErase[j]);
+	}
+    }
+    
+    setCurrentSelection(es);
+}
+
+
 void
 MatrixView::slotSelectAll()
 {
@@ -1496,6 +1911,38 @@ MatrixView::slotSelectAll()
 
     setCurrentSelection(selection, false);
 }
+
+
+void MatrixView::slotPreviewSelection()
+{
+    if (!m_currentEventSelection) return;
+
+    m_document->slotSetLoop(m_currentEventSelection->getStartTime(),
+			    m_currentEventSelection->getEndTime());
+}
+
+
+void MatrixView::slotClearLoop()
+{
+    m_document->slotSetLoop(0, 0);
+}
+
+
+void MatrixView::slotClearSelection()
+{
+    // Actually we don't clear the selection immediately: if we're
+    // using some tool other than the select tool, then the first
+    // press switches us back to the select tool.
+
+    MatrixSelector *selector = dynamic_cast<MatrixSelector *>(m_tool);
+    
+    if (!selector) {
+	slotSelectSelected();
+    } else {
+	setCurrentSelection(0);
+    }
+}
+
 
 
 void
@@ -1533,6 +1980,27 @@ MatrixView::readjustCanvasSize()
 
     repaintRulers();
 }
+
+
+
+void MatrixView::slotVelocityUp()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Raising velocities..."), this);
+
+    addCommandToHistory
+	(new ChangeVelocityCommand(10, *m_currentEventSelection));
+}
+
+void MatrixView::slotVelocityDown()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Lowering velocities..."), this);
+
+    addCommandToHistory
+	(new ChangeVelocityCommand(-10, *m_currentEventSelection));
+}
+
 
 // Set the velocities of the current selection (if we have one)
 //

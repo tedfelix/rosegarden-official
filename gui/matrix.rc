@@ -1,17 +1,72 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+ <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
 <kpartgui name="Rosegarden::Matrix" version="1">
-
-<MenuBar>
+  
+  <MenuBar>
 
 <Menu name="edit" append="new_merge">
   <Action name="select_all"/>
+  <Action name="clear_selection"/>
 </Menu>
 
 <Menu name="Transforms">
   <text>Trans&amp;forms</text>
   <Action name="quantize"/>
-  <Action name="set_velocities"/>
+  <Menu name="Velocity">
+    <text>&amp;Velocity</text>
+    <Action name="velocity_up"/>
+    <Action name="velocity_down"/>
+    <Separator/>
+    <Action name="set_velocities"/>
+  </Menu>
+  <Menu name="Transpose">
+    <text>Trans&amp;pose</text>
+    <Action name="transpose_up"/>
+    <Action name="transpose_down"/>
+    <Separator/>
+    <Action name="transpose_up_octave"/>
+    <Action name="transpose_down_octave"/>
+    <Separator/>
+    <Action name="general_transpose"/>
+  </Menu>
+</Menu>
+
+<Menu name="Move">
+  <text>&amp;Move</text>
+  <Action name="cursor_back"/>
+  <Action name="cursor_forward"/>
+  <Action name="cursor_back_bar"/>
+  <Action name="cursor_forward_bar"/>
+  <Action name="cursor_start"/>
+  <Action name="cursor_end"/>
+  <Separator/>
+  <Action name="extend_selection_backward"/>
+  <Action name="extend_selection_forward"/>
+  <Action name="preview_selection"/>
+  <Action name="clear_loop"/>
+<Separator/>
+  <Action name="cursor_to_playback_pointer"/>
+  <Action name="playback_pointer_to_cursor"/>
+</Menu>
+
+<Menu name="Transport">
+<text>T&amp;ransport</text>
+  <Action name="play"/> 
+  <Action name="stop"/> 
+  <Action name="playback_pointer_back_bar"/>
+  <Action name="playback_pointer_forward_bar"/>
+  <Action name="playback_pointer_start"/>
+  <Action name="playback_pointer_end"/>
+</Menu>
+
+<Menu name="Tools">
+  <text>&amp;Tools</text>
+
+  <Action name="select" />
+  <Action name="move" />
+  <Action name="draw" />
+  <Action name="erase" />
+  <Action name="resize" />
 </Menu>
 
 </MenuBar>
@@ -22,6 +77,17 @@
   <Action name="draw" />
   <Action name="erase" />
   <Action name="resize" />
+</ToolBar>
+
+<ToolBar name="transportToolBar">
+  <Action name="playback_pointer_start" />
+  <Action name="playback_pointer_back_bar" />
+  <Action name="play" />
+  <Action name="playback_pointer_forward_bar" />
+  <Action name="playback_pointer_end" />
+  <Action name="stop" />
+  <Action name="playback_pointer_to_cursor" />
+  <Action name="cursor_to_playback_pointer" />
 </ToolBar>
 
 <ToolBar name="actionsToolBar">
@@ -35,7 +101,16 @@
     <Action name="edit_cut"/>
     <Action name="edit_copy"/>
     <Action name="quantize"/>
+    <Action name="velocity_up"/>
+    <Action name="velocity_down"/>
     <Action name="set_velocities"/>
+    <Action name="transpose_up"/>
+    <Action name="transpose_down"/>
+    <Action name="transpose_up_octave"/>
+    <Action name="transpose_down_octave"/>
+    <Action name="general_transpose"/>
+    <Action name="preview_selection"/>
+    <Action name="clear_selection"/>
   </enable>
 </State>
 
@@ -46,3 +121,4 @@
 </State>
 
 </kpartgui>
+ 

@@ -327,9 +327,6 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
     //
     RosegardenGUIApp *par = dynamic_cast<RosegardenGUIApp*>(parent());
 
-//!!!    if (par)
-//        par->plugAccelerators(notationView, notationView->getAccelerators());
-
     // For tempo changes (ugh -- it'd be nicer to make a tempo change
     // command that could interpret all this stuff from the dialog)
     //
@@ -398,8 +395,20 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
     //
     RosegardenGUIApp *par = dynamic_cast<RosegardenGUIApp*>(parent());
 
-    if (par)
-        par->plugAccelerators(matrixView, matrixView->getAccelerators());
+    connect(matrixView, SIGNAL(play()),
+	    par, SLOT(slotPlay()));
+    connect(matrixView, SIGNAL(stop()),
+	    par, SLOT(slotStop()));
+    connect(matrixView, SIGNAL(fastForwardPlayback()),
+	    par, SLOT(slotFastforward()));
+    connect(matrixView, SIGNAL(rewindPlayback()),
+	    par, SLOT(slotRewind()));
+    connect(matrixView, SIGNAL(fastForwardPlaybackToEnd()),
+	    par, SLOT(slotFastForwardToEnd()));
+    connect(matrixView, SIGNAL(rewindPlaybackToBeginning()),
+	    par, SLOT(slotRewindToBeginning()));
+    connect(matrixView, SIGNAL(jumpPlaybackTo(Rosegarden::timeT)),
+	    getDocument(), SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
     // Encourage the matrix view window to open to the same
     // interval as the current segment view

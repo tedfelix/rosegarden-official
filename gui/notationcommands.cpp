@@ -116,6 +116,7 @@ NoteInsertionCommand::modifySegment()
 	(Note::EventType, m_insertionTime, m_note.getDuration());
 
     e->set<Int>(PITCH, m_pitch);
+    e->set<Int>(VELOCITY, 100);
 
     if (m_accidental != Rosegarden::Accidentals::NoAccidental) {
 	e->set<String>(ACCIDENTAL, m_accidental);
@@ -862,26 +863,6 @@ TransformsMenuChangeStyleCommand::modifySegment()
 		(*i)->set<Rosegarden::String>
 			(NotationProperties::NOTE_STYLE, m_style);
 	    }
-	}
-    }
-}
-
-
-void
-TransformsMenuTransposeCommand::modifySegment()
-{
-    EventSelection::eventcontainer::iterator i;
-
-    for (i  = m_selection->getSegmentEvents().begin();
-	 i != m_selection->getSegmentEvents().end(); ++i) {
-
-	if ((*i)->isa(Note::EventType)) {
-	    long pitch = (*i)->get<Int>(PITCH);
-	    pitch += m_semitones;
-	    if (pitch < 0) pitch = 0;
-	    if (pitch > 127) pitch = 127;
-	    (*i)->set<Int>(PITCH, pitch); 
-	    (*i)->unset(ACCIDENTAL);
 	}
     }
 }

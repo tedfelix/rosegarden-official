@@ -513,7 +513,7 @@ NoteStyleFileReader::NoteStyleFileReader(std::string name) :
 
     if (!fileInfo.isReadable()) {
         throw StyleFileReadFailed
-	    (qstrtostr(i18n("Can't open style file ") + styleFileName));
+	    (qstrtostr(i18n("Can't open style file %1").arg(styleFileName)));
     }
 
     QFile styleFile(styleFileName);
@@ -557,7 +557,7 @@ NoteStyleFileReader::startElement(const QString &, const QString &,
 	    if (!setFromAttributes(type, attributes)) return false;
 
 	} catch (Note::MalformedNoteName n) {
-	    m_errorString = i18n("Unrecognised note name " + s);
+	    m_errorString = i18n("Unrecognised note name %1").arg(s);
 	    return false;
 	}
 

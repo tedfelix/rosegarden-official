@@ -36,12 +36,12 @@ namespace Rosegarden {
     //
     typedef enum 
     {
-        Flat,           // set selection to velocity 1.
-        Alternating,    // alternate between velocity 1 and 2 on subsequent
-                        // events.
-        Crescendo,      // increasing from velocity 1 to velocity 2.
-        Diminuendo,     // decreasing from velocity 1 to velocity 2.
-        Ringing         // between velocity 1 and 2, dying away.
+        FlatPattern,          // set selection to velocity 1.
+        AlternatingPattern,   // alternate between velocity 1 and 2 on
+                              // subsequent events.
+        CrescendoPattern,     // increasing from velocity 1 to velocity 2.
+        DecrescendoPattern,   // decreasing from velocity 1 to velocity 2.
+        RingingPattern        // between velocity 1 and 2, dying away.
     } PropertyPattern;
 
 }
@@ -312,6 +312,56 @@ private:
     Rosegarden::Segment *m_segment;
     std::vector<Rosegarden::Event *> m_oldLyricEvents;
     QString m_newLyricData;
+};
+
+
+class TransposeCommand : public BasicSelectionCommand
+{
+public:
+    TransposeCommand(int semitones, Rosegarden::EventSelection &selection) :
+	BasicSelectionCommand(getGlobalName(semitones), selection, true),
+	m_selection(&selection), m_semitones(semitones) { }
+
+    static QString getGlobalName(int semitones = 0) {
+	switch (semitones) {
+	case   1: return "&Up a Semitone";
+	case  -1: return "&Down a Semitone";
+	case  12: return "Up an &Octave";
+	case -12: return "Down an Octa&ve";
+	default:  return "&Transpose...";
+	}
+    }
+
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    int m_semitones;
+};
+
+
+/** Add or subtract a constant from all event velocities.
+    Use SelectionPropertyCommand if you want to do something more
+    creative. */
+class ChangeVelocityCommand : public BasicSelectionCommand
+{
+public:
+    ChangeVelocityCommand(int delta, Rosegarden::EventSelection &selection) :
+	BasicSelectionCommand(getGlobalName(delta), selection, true),
+	m_selection(&selection), m_delta(delta) { }
+
+    static QString getGlobalName(int delta = 0) {
+	if (delta > 0) return "&Increase Velocity";
+	else return "&Reduce Velocity";
+    }
+
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    int m_delta;
 };
 
 

@@ -65,7 +65,7 @@ ControlRuler::ControlRuler(RulerScale *rulerScale,
 
     setBackgroundColor(RosegardenGUIColours::SegmentCanvas);
 
-    QString tip = strtoqstr(property) + i18n(" controller");
+    QString tip = i18n("%1 controller").arg(strtoqstr(property));
     QToolTip::add(this, tip);
 }
 

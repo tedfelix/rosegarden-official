@@ -133,6 +133,20 @@ Until we get around to fixing it the workaround is to:
 and then continue with the build as normal.
 
 
+I'm using RedHat 7.3, what packages do I need?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This is most often asked by someone who's also using GNOME and hasn't
+built a KDE application before, in which case the answer is that you
+need the kdelibs, kdemultimedia and arts packages (yes, you currently
+need the arts package for trivial reasons even if you aren't building
+aRts support), plus the -dev versions of all of those.
+
+Note that at the time of writing RedHat don't ship ALSA 0.9.x, so if
+you want to build on a RedHat system with ALSA support you have to
+upgrade rather than using the ALSA packages they supply.
+
+
 The Composition View
 --------------------
 
