@@ -23,7 +23,6 @@ rosegarden_SOURCES = \
         instrumentparameterbox.cpp \
 	kstartuplogo.cpp \
 	ktmpstatusmsg.cpp \
-	kprogress_imported.cpp \
         lilypondio.cpp \
         loopruler.cpp \
 	main.cpp \
