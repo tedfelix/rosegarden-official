@@ -1170,7 +1170,7 @@ void RosegardenGUIApp::slotFilePrint()
 
     KTmpStatusMsg msg(i18n("Printing..."), this);
 
-    KPrinter printer(QPrinter::HighResolution);
+    KPrinter printer(true, QPrinter::HighResolution);
 
     if (printer.setup(this)) {
         m_view->print(&printer, &m_doc->getComposition());
