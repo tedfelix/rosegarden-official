@@ -1861,25 +1861,43 @@ void RosegardenGUIApp::slotTogglePreviews()
 
 void RosegardenGUIApp::slotToggleAll()
 {
-    m_viewRulers->setChecked(!m_viewRulers->isChecked());
+    int c = 0;
+
+    c += m_viewTransport->isChecked();
+    c += m_viewRulers->isChecked();
+    c += m_viewChordNameRuler->isChecked();
+    c += m_viewTempoRuler->isChecked();
+    c += m_viewPreviews->isChecked();
+    c += m_viewTrackLabels->isChecked();
+    c += m_viewSegmentParameters->isChecked();
+    c += m_viewInstrumentParameters->isChecked();
+
+    bool state = false;
+    
+    if (c < 4) state = true;
+
+    m_viewTransport->setChecked(state);
+    slotToggleTransport();
+    
+    m_viewRulers->setChecked(state);
     slotToggleRulers();
    
-    m_viewChordNameRuler->setChecked(!m_viewChordNameRuler->isChecked());
+    m_viewChordNameRuler->setChecked(state);
     slotToggleChordNameRuler();
     
-    m_viewTempoRuler->setChecked(!m_viewTempoRuler->isChecked());
+    m_viewTempoRuler->setChecked(state);
     slotToggleTempoRuler();
     
-    m_viewPreviews->setChecked(!m_viewPreviews->isChecked());
+    m_viewPreviews->setChecked(state);
     slotTogglePreviews();
     
-    m_viewTrackLabels->setChecked(!m_viewTrackLabels->isChecked());
+    m_viewTrackLabels->setChecked(state);
     slotToggleTrackLabels();
 
-    m_viewSegmentParameters->setChecked(!m_viewSegmentParameters->isChecked());
+    m_viewSegmentParameters->setChecked(state);
     slotToggleSegmentParameters();
     
-    m_viewInstrumentParameters->setChecked(!m_viewInstrumentParameters->isChecked());
+    m_viewInstrumentParameters->setChecked(state);
     slotToggleInstrumentParameters();
 }
 
