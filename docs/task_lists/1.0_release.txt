@@ -1,0 +1,15 @@
+1.0 features
+
+- Studio GUI
+
+- MIDI Remapping feature - being able to load a song created on an alien setup
+  and play it adequately (not perfectly) without too much hassle.
+
+- Management of the user's setup (autoload.rg)
+
+- MIDI export
+
+- Improve GUI response when playing (multithread / mmap) (after 1.0 ?)
+
+- ??
+
