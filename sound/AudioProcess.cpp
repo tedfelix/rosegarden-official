@@ -1545,6 +1545,7 @@ AudioFileWriter::createRecordFile(InstrumentId id,
 	return true;
     }
 
+    std::cerr << "AudioFileWriter::createRecordFile: no audio fader for record instrument " << m_driver->getAudioMonitoringInstrument() << "!" << std::endl;
     releaseLock();
     return false;
 }	
