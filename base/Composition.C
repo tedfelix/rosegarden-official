@@ -164,6 +164,7 @@ Composition::calculateBarPositions()
 {
     std::cerr << "Composition::calculateBarPositions" << std::endl;
 
+    if (!m_barPositionsNeedCalculating) return;
 
     Track &t = m_timeReference;
     Track::iterator i;
@@ -205,7 +206,61 @@ Composition::calculateBarPositions()
 	if (s == segments.size() - 1 && time != duration) addNewBar(time);
     }
 
+    m_barPositionsNeedCalculating = false;
     std::cerr << "Composition::calculateBarPositions ending" << std::endl;
+}
+
+int
+Composition::getBarNumber(timeT t)
+{
+    calculateBarPositions();
+
+    Track::iterator i = m_timeReference.findTime(t);
+    return distance(m_timeReference.begin(), i);
+}
+
+timeT
+Composition::getBarStart(timeT t)
+{
+    calculateBarPositions();
+
+    Track::iterator i = m_timeReference.findTime(t);
+    if (i != m_timeReference.begin() && i == m_timeReference.end()) --i;
+    if (i == m_timeReference.end()) return 0;
+
+    return (*i)->getAbsoluteTime();
+}
+
+timeT
+Composition::getBarEnd(timeT t)
+{
+    calculateBarPositions();
+
+    Track::iterator i = m_timeReference.findTime(t);
+    if (i == m_timeReference.end() || ++i == m_timeReference.end()) {
+        return m_timeReference.getDuration();
+    }
+    return (*i)->getAbsoluteTime();
+}
+
+std::pair<timeT, timeT>
+Composition::getBarRange(int n)
+{
+    calculateBarPositions();
+
+    Track::iterator i = m_timeReference.begin();
+
+    timeT  start = m_timeReference.getDuration(),
+          finish = start;
+    
+    for (int m = 0; m < n; ++m) {
+        if (i == m_timeReference.end()) break;
+        start = (*i)->getAbsoluteTime();
+        ++i;
+        if (i != m_timeReference.end()) finish = (*i)->getAbsoluteTime();
+    }
+
+    return std::pair<timeT, timeT>(start, finish);
 }
 
 
@@ -312,8 +367,7 @@ void Composition::eventRemoved(const Track *t, Event *e)
 
 void Composition::referenceTrackRequested(const Track *)
 {
-    if (m_barPositionsNeedCalculating) calculateBarPositions();
-    m_barPositionsNeedCalculating = false;
+    calculateBarPositions();
 }
 
 

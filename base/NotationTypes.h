@@ -25,6 +25,38 @@
 
 #include "Event.h"
 
+/*
+ * NotationTypes.h
+ *
+ * This file contains definitions of several classes to assist in
+ * creating and manipulating certain event types.  The classes are:
+ * 
+ *   Accidental
+ *   Clef
+ *   Key
+ *   NotationDisplayPitch
+ *   Note
+ *   TimeSignature
+ *
+ * The classes in this file are _not_ actually used for storing
+ * events.  Events are always stored in Event objects (see Event.h).
+ *
+ * These classes are usually constructed on-the-fly when a particular
+ * operation specific to a single sort of event is required, and
+ * usually destroyed as soon as they go out of scope.  The most common
+ * usages are for creating events (create an instance of one of these
+ * classes with the data you require, then call getAsEvent on it), for
+ * doing notation-related calculations from existing events (such as
+ * the bar duration of a time signature), and for doing calculations
+ * that are independent of any particular instance of an event (such
+ * as the Note methods that calculate duration-related values without
+ * reference to any specific pitch or other note-event properties; or
+ * everything in NotationDisplayPitch).
+ * 
+ * This file also defines the event types and standard property names
+ * for the basic events.
+ */
+
 namespace Rosegarden 
 {
 
@@ -431,6 +463,12 @@ private:
     static const int m_shortestTime;
 };
 
+
+/**
+ * TimeSignature contains arithmetic methods relevant to time
+ * signatures and bar durations, including code for splitting long
+ * rest intervals into bite-sized chunks.
+ */
 
 class TimeSignature
 {

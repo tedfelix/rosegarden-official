@@ -342,7 +342,7 @@ NotationDisplayPitch::getPerformancePitch(const Clef &clef, const Key &key) cons
 
 int
 NotationDisplayPitch::getPerformancePitchFromRG21Pitch(const Clef &clef,
-						       const Key &key) const
+						       const Key &) const
 {
     // Rosegarden 2.1 pitches are a bit weird; see
     // docs/data_struct/units.txt

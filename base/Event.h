@@ -40,6 +40,24 @@ namespace Rosegarden
 
 typedef int timeT;
 
+/**
+ * The Event class represents an event with some basic attributes and
+ * an arbitrary number of properties of dynamically-determined name
+ * and type.
+ *
+ * An Event has a type; a duration, often zero for events other than
+ * notes; an absolute time, the time at which the event begins, which
+ * is used to order events within a Track; and a "sub-ordering", used
+ * to determine an order for events that have the same absolute time
+ * (for example to ensure that the clef always appears before the key
+ * signature at the start of a piece).  Besides these, an event can
+ * have any number of properties, which are typed values stored and
+ * retrieved by name.  Properties may be persistent or non-persistent,
+ * depending on whether they are saved to file with the rest of the
+ * event data or are considered to be only cached values that can be
+ * recomputed at will if necessary.
+ */
+
 class Event
 {
 public:

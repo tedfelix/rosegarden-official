@@ -34,7 +34,7 @@ namespace Rosegarden
  * non-Event data.
  * 
  * The Composition owns the Tracks it holds, and deletes them on
- * destruction. When tracks are removed, it will also delete them.
+ * destruction.  When tracks are removed, it will also delete them.
  */
 
 class Composition : public TrackObserver
@@ -88,8 +88,7 @@ public:
     void         clear();
 
 
-    //!!! The following four functions are not yet implemented
-    // (shouldn't be difficult -- lookups on m_timeReference)
+    //!!! The following four functions are currently entirely untested
 
     /**
      * Return the number of the bar that starts at or contains time t
@@ -107,7 +106,7 @@ public:
     timeT getBarEnd(timeT t);
 
     /**
-     * Return the time range of bar n
+     * Return the time range of bar n.  Relatively inefficient
      */
     std::pair<timeT, timeT> getBarRange(int n);
 
