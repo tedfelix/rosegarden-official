@@ -76,7 +76,7 @@ RosegardenSpinBox::mapValueToText(int value)
     if ((int)m_doubleValue != value)
         m_doubleValue = (double) value;
 
-    doubleStr.sprintf("%4.3f", m_doubleValue);
+    doubleStr.sprintf("%4.6f", m_doubleValue);
 
     //setSpecialValueText(doubleStr);
 

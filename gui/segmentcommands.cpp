@@ -578,6 +578,45 @@ AddTempoChangeCommand::unexecute()
     }
 }
 
+void
+RemoveTempoChangeCommand::execute()
+{
+    if (m_tempoChangeIndex >= 0)
+    {
+        std::pair<timeT, long> data = 
+            m_composition->getRawTempoChange(m_tempoChangeIndex);
+
+        // store
+        m_oldTime = data.first;
+        m_oldTempo = data.second;
+    }
+
+    // do we need to (re)store the index number?
+    //
+    m_composition->removeTempoChange(m_tempoChangeIndex);
+
+}
+
+void
+RemoveTempoChangeCommand::unexecute()
+{
+    m_composition->addRawTempo(m_oldTime, m_oldTempo);
+}
+
+void
+ModifyDefaultTempoCommand::execute()
+{
+    m_oldTempo = m_tempo;
+    m_composition->setDefaultTempo(m_tempo);
+}
+
+void
+ModifyDefaultTempoCommand::unexecute()
+{
+    m_composition->setDefaultTempo(m_oldTempo);
+}
+
+
 
 // --------- Add Tracks --------
 //

@@ -20,6 +20,10 @@
 #include "dialogs.h"
 #include "notepixmapfactory.h"
 #include "rosedebug.h"
+#include "rosegardenguidoc.h"
+#include "widgets.h"
+
+#include "RealTime.h"
 
 #include <qlineedit.h>
 #include <qlabel.h>
@@ -38,6 +42,8 @@
 #include <qmessagebox.h>
 #include <qgrid.h>
 #include <qbitmap.h>
+#include <qspinbox.h>
+#include <qvalidator.h>
 
 #include <klocale.h>
 #include <karrowbutton.h>
@@ -1422,4 +1428,120 @@ EventEditDialog::slotPropertyMadePersistent()
 	break;
     }
 }
+
+class TempoValidator : public QDoubleValidator
+{
+public:
+    TempoValidator(QWidget *parent, const char *name = 0):
+        QDoubleValidator(parent, name) {;}
+
+    TempoValidator(double bottom, double top, int decimals,
+                   QWidget *parent, const char *name = 0):
+        QDoubleValidator(bottom, top, decimals, parent, name) {;}
+    virtual ~TempoValidator() {;}
+
+    virtual void fixup(QString &input) const
+    {
+        // do nothing for the moment
+    }
+
+private:
+};
+
+
+
+TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc):
+    KDialogBase(parent, 0, true, i18n("Tempo"), Ok | Cancel),
+    m_doc(doc),
+    m_tempoTime(0),
+    m_tempoValue(0.0)
+{
+    static QFont *tempoFont = 0;
+
+    if (tempoFont == 0) {
+	tempoFont = new QFont("new century schoolbook", 8, QFont::Bold);
+	tempoFont->setPixelSize(20);
+    }
+
+    QVBox *vbox = makeVBoxMainWidget();
+    QGroupBox *groupBox = new QGroupBox(1, Horizontal,
+                                        i18n("Insert Tempo Change"), vbox);
+    QVBox *topBox = new QVBox(groupBox);
+
+    QGrid *labelGrid = new QGrid(2, QGrid::Horizontal, topBox);
+    labelGrid->setMargin(4);
+    labelGrid->setSpacing(4);
+
+    QLabel *tempoLabel = new QLabel(i18n("New Tempo value"), labelGrid);
+    m_tempoValueSpinBox = new RosegardenSpinBox(labelGrid);
+
+    // create a validator
+    TempoValidator *validator = new TempoValidator(1.0, 1000.0, 6, this);
+    m_tempoValueSpinBox->setValidator(validator);
+    m_tempoValueSpinBox->setMinValue(1);
+    m_tempoValueSpinBox->setMaxValue(1000);
+
+    // Scope Box
+    //
+    QGroupBox *scopeBox = new QGroupBox(1, Horizontal,
+                                        i18n("Scope"), vbox);
+
+    QHBox *scopeHBox = new QHBox(scopeBox);
+    new QLabel(i18n("This Tempo Event will be inserted at "), scopeHBox);
+    m_tempoTimeLabel = new QLabel(scopeHBox);
+
+    // Option Box
+    //
+    QGroupBox *optionBox = new QGroupBox(1, Horizontal,
+                                        i18n("Options"), vbox);
+
+    m_makeDefaultCheckBox = new QCheckBox(i18n("make this the default tempo"),
+                                          optionBox);
+    m_deleteOthersCheckBox =
+        new QCheckBox(i18n("remove all other tempo changes"),
+                                          optionBox);
+    populateTempo();
+}
+
+TempoDialog::~TempoDialog()
+{
+}
+
+void
+TempoDialog::setTempoPosition(Rosegarden::timeT time)
+{
+    m_tempoTime = time;
+    populateTempo();
+}
+
+// Using current m_tempoTime
+//
+void
+TempoDialog::populateTempo()
+{
+    Rosegarden::Composition &comp = m_doc->getComposition();
+
+    double tempo = comp.getTempoAt(m_tempoTime);
+    QString tempoString;
+    tempoString.sprintf("%4.6f", tempo);
+    m_tempoValueSpinBox->setValue((int)tempo);
+
+    Rosegarden::RealTime tempoTime= comp.getElapsedRealTime(m_tempoTime);
+    QString milliSeconds;
+    milliSeconds.sprintf("%03ld", tempoTime.usec / 1000);
+    m_tempoTimeLabel->setText(QString("%1.%2 s").arg(tempoTime.sec)
+                                           .arg(milliSeconds));
+}
+
+void
+TempoDialog::slotOk()
+{
+    emit changeTempo(m_tempoTime,
+                     m_tempoValueSpinBox->getDoubleValue(),
+                     m_makeDefaultCheckBox->isChecked(),
+                     m_deleteOthersCheckBox->isChecked());
+    delete this;
+}
+
+
 

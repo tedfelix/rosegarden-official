@@ -233,6 +233,64 @@ public:
 
 
 
+class ModifyDefaultTempoCommand : public XKCommand
+{
+public:
+    ModifyDefaultTempoCommand(Rosegarden::Composition *composition,
+                              double tempo):
+	XKCommand(name()),
+        m_composition(composition),
+        m_tempo(tempo) {}
+
+    virtual ~ModifyDefaultTempoCommand() {}
+
+#ifdef RGKDE3
+    virtual QString name() { return i18n("Modify &Default Tempo..."); }
+#else
+    static QString name() { return i18n("Modify &Default Tempo..."); }
+#endif
+
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+    Rosegarden::Composition *m_composition;
+    double                   m_tempo;
+    double                   m_oldTempo;
+};
+
+
+class RemoveTempoChangeCommand : public XKCommand
+{
+public:
+    RemoveTempoChangeCommand(Rosegarden::Composition *composition,
+                             int index):
+	XKCommand(name()),
+        m_composition(composition),
+        m_tempoChangeIndex(index),
+        m_oldTime(0),
+        m_oldTempo(0){}
+
+    virtual ~RemoveTempoChangeCommand() {}
+
+#ifdef RGKDE3
+    virtual QString name() { return i18n("Remove &Tempo Change..."); }
+#else
+    static QString name() { return i18n("Remove &Tempo Change..."); }
+#endif
+
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+    Rosegarden::Composition *m_composition;
+    int                      m_tempoChangeIndex;
+    Rosegarden::timeT        m_oldTime;
+    long                     m_oldTempo; // bph
+};
+
+
+
 class AddTempoChangeCommand : public XKCommand
 {
 public:

@@ -640,6 +640,14 @@ public slots:
      */
     void slotChangeZoom(int index);
 
+    /**
+     * Modify tempo
+     */
+    void slotChangeTempo(Rosegarden::timeT time,
+                         double value,      
+                         bool makeDefault,  
+                         bool deleteOthers);
+
 private:
 
     //--------------- Data members ---------------------------------

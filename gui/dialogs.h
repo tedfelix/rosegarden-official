@@ -36,6 +36,8 @@ class QComboBox;
 class QRadioButton;
 class NotePixmapFactory;
 class QGrid;
+class RosegardenGUIDoc;
+class RosegardenSpinBox;
 
 
 // Definitions of various simple dialogs that may be used in multiple
@@ -313,6 +315,44 @@ public slots:
 
 protected:
     void addPersistentProperty(const Rosegarden::PropertyName &);
+};
+
+class TempoDialog : public KDialogBase
+{
+    Q_OBJECT
+
+public:
+    TempoDialog(QWidget *parent, RosegardenGUIDoc *doc);
+    ~TempoDialog();
+
+    // Set the position at which we're checking the tempo
+    //
+    void setTempoPosition(Rosegarden::timeT time);
+
+public slots:
+    virtual void slotOk();
+
+signals:
+    // Return results in this signal
+    //
+    void changeTempo(Rosegarden::timeT, // tempo change time
+                     double,            // tempo value
+                     bool,              // make default
+                     bool);             // clear other
+
+protected:
+    void populateTempo();
+
+    RosegardenGUIDoc   *m_doc;
+    Rosegarden::timeT   m_tempoTime;
+    double              m_tempoValue;
+
+    QLabel             *m_tempoTimeLabel;
+    RosegardenSpinBox  *m_tempoValueSpinBox;
+
+    QCheckBox          *m_makeDefaultCheckBox;
+    QCheckBox          *m_deleteOthersCheckBox;
+
 };
 
 

@@ -51,8 +51,6 @@ rosegarden_SOURCES = \
 	rosegardenguiiface.skel \
 	rosegardenguiiface.cpp \
 	rosegardenguiview.cpp \
-        rosegardentempodialog.cpp \
-        rosegardentempo.ui \
         rosegardentransport.ui \
         rosegardentransportdialog.cpp \
 	rosexmlhandler.cpp \
