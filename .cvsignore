@@ -16,3 +16,8 @@ configure
 configure.in
 autom4te.cache
 stamp-h1
+config.py
+*.pyc
+.sconf_temp
+scons_signatures.dblite
+cache
