@@ -649,6 +649,8 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 			 RealTime::frame2RealTime(position.frame,
 						  position.frame_rate));
 		}
+	    } else if (m_alsaDriver->areClocksRunning()) {
+		jackProcessRecord(nframes, 0, 0); // for monitoring
 	    }
 	    return jackProcessEmpty(nframes);
 	} else if (state == JackTransportStarting) {
