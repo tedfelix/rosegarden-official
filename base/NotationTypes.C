@@ -40,6 +40,10 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
+// This is the fundamental definition of the resolution used throughout.
+// It must be a multiple of 16, and should ideally be a multiple of 96.
+static const timeT basePPQ = 96;
+
 const int MIN_SUBORDERING = -100000;
 
 namespace Accidentals
@@ -634,8 +638,7 @@ NotationDisplayPitch::getAsString(const Clef &clef, const Key &key,
 const string Note::EventType = "note";
 const string Note::EventRestType = "rest";
 
-const int Note::m_shortestTime       = 6;
-//const int Note::m_dottedShortestTime = 9;
+const timeT Note::m_shortestTime = basePPQ / 16;
  
 
 Note::Note(const string &n)
@@ -1011,8 +1014,8 @@ void TimeSignature::setInternalDurations()
 
 }
 
-const int TimeSignature::m_crotchetTime       = 96;
-const int TimeSignature::m_dottedCrotchetTime = 144;
+const timeT TimeSignature::m_crotchetTime       = basePPQ;
+const timeT TimeSignature::m_dottedCrotchetTime = basePPQ + basePPQ/2;
 
 
 } // close namespace

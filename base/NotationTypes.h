@@ -536,7 +536,7 @@ private:
 
     // a time & effort saving device; if changing this, change
     // TimeSignature::m_crotchetTime etc too
-    static const int m_shortestTime;
+    static const timeT m_shortestTime;
 };
 
 
@@ -634,8 +634,8 @@ private:
     void setInternalDurations();
 
     // a time & effort saving device
-    static const int m_crotchetTime;
-    static const int m_dottedCrotchetTime;
+    static const timeT m_crotchetTime;
+    static const timeT m_dottedCrotchetTime;
 };
  
 }
