@@ -840,6 +840,12 @@ RosegardenGUIView::slotSelectedSegments(const Rosegarden::SegmentSelection &segm
 {
     // update the segment parameter box
     m_segmentParameterBox->useSegments(segments);
+
+    if (segments.size())
+        emit stateChange("have_selection", false);
+    else
+        emit stateChange("have_selection", true);
+
     emit segmentsSelected(segments);
 }
 
