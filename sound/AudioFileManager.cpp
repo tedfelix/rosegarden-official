@@ -35,6 +35,7 @@
 
 #include "AudioFile.h"
 #include "AudioFileManager.h"
+#include "WAVAudioFile.h"
 
 
 namespace Rosegarden
@@ -61,7 +62,7 @@ AudioFileManager::addFile(const std::string &filePath)
 {
     unsigned int id = getFirstUnusedID();
 
-    AudioFile *aF = new AudioFile(id, getShortFilename(filePath), filePath);
+    AudioFile *aF = new WAVAudioFile(id, getShortFilename(filePath), filePath);
 
     if (aF->open() == false)
     {
@@ -124,7 +125,7 @@ AudioFileManager::insertFile(const std::string &name,
 
     unsigned int id = getFirstUnusedID();
 
-    AudioFile *aF = new AudioFile(id, name, foundFileName);
+    AudioFile *aF = new WAVAudioFile(id, name, foundFileName);
 
     // if we don't recognise the file then don't insert it
     //
@@ -203,7 +204,7 @@ AudioFileManager::insertFile(const std::string &name,
     removeFile(id);
 
     // and insert
-    AudioFile *aF = new AudioFile(id, name, foundFileName);
+    AudioFile *aF = new WAVAudioFile(id, name, foundFileName);
 
     // Test the file
     if (aF->open() == false)
@@ -396,7 +397,7 @@ AudioFileManager::createRecordingAudioFile()
     file = prefix + number + ".wav";
 
     // insert file into vector
-    AudioFile *aF = new AudioFile(newId, file, file);
+    AudioFile *aF = new WAVAudioFile(newId, file, file);
     m_audioFiles.push_back(aF);
 
     // what we return is the full path to the file

@@ -24,23 +24,14 @@
 
 // SoundFile is an abstract base class - both MidiFile and AudioFile
 // are derived from this class and have to implement the open() and
-// write() methods.  There is some additional commonality which will
-// hopefully leak through into this class and be removed from its
-// descendants.
+// write() methods.
 // 
-// A SoundFile is a binary file of specific format.  This class helps
-// to manipulate the binary data with some general methods based
-// around std::strings.
-//
 // [rwb]
-//
 //
 
 #include <iostream>
 #include <fstream>
 #include <string>
-
-#include <math.h>
 
 namespace Rosegarden
 {
@@ -61,10 +52,6 @@ public:
     std::string getFilename() { return m_fileName; }
     void setFilename(const std::string &fileName) { m_fileName = fileName; }
 
-    int getIntegerFromLittleEndian(const std::string &s);
-    std::string getLittleEndianFromInteger(unsigned int value,
-                                           unsigned int length);
-
 protected:
     std::string m_fileName;
 
@@ -74,9 +61,6 @@ protected:
     // write some bytes to an output stream
     void putBytes(std::ofstream *file,
                   const std::string outputString);
-
-    // sinc of input value
-    float sinc(float value) { return sin(M_PI * value)/ M_PI * value; }
 
 };
 

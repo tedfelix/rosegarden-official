@@ -20,6 +20,8 @@
 
 
 #include "SoundDriver.h"
+#include "WAVAudioFile.h"
+
 
 namespace Rosegarden
 {
@@ -257,7 +259,7 @@ SoundDriver::clearAudioPlayQueue()
 bool
 SoundDriver::addAudioFile(const std::string &fileName, unsigned int id)
 {
-    AudioFile *ins = new AudioFile(id, fileName, fileName);
+    AudioFile *ins = new WAVAudioFile(id, fileName, fileName);
     try
     {
         ins->open();

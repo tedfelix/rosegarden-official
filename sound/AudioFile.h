@@ -25,144 +25,149 @@
 
 #include <string>
 #include <vector>
+#include <math.h>
 
 #include "SoundFile.h"
 #include "RealTime.h"
 
-// An AudioFile extracts and maintains information pertaining
-// to an audio (sample) file.  For the moment the only format
-// we handle is the .wav
+// An AudioFile maintains information pertaining to an audio sample.
+// This is an abstract base class from which we derive our actual
+// AudioFile types - WAV, BWF, AIFF etc.
 //
-// Our "open" call in this case only examines the header and
-// populates useful information/checks for errors.  We don't
-// yet attempt to scan the body of the file as it could be
-// potentially very big.
-//
-// When it comes to writing this file out we may need to get
-// chunks of data from the file itself depending on what driver
-// we're using.  For JACK/ALSA we do have to fill the output
-// buffer ourselves in this manner.
 //
 
 namespace Rosegarden
 {
 
+// The different types of audio file we support.
+//
 typedef enum
 {
-    UNKNOWN,
-    WAV
+
+    UNKNOWN, // not yet known
+    WAV,     // RIFF (Resource Interchange File Format) wav file 
+    BWF,     // RIFF Broadcast Wave File
+    AIFF     // Audio Interchange File Format
+
 } AudioFileType;
 
 class AudioFile : public SoundFile
 {
 public:
-
-    // the "read" constructor - open a file
+    // The "read" constructor - open a file
     // an assign a name and id to it.
     //
-    AudioFile(const unsigned int &id,
+    AudioFile(unsigned int id,
               const std::string &name,
               const std::string &fileName);
 
-    // the "write" constructor - we only really want
-    // to specify a filename
+    // The "write" constructor - we only need to
+    // specify a filename and some parameters and
+    // then write it out.
     //
     AudioFile(const std::string &fileName,
-              AudioFileType type,
               unsigned int channels,
               unsigned int sampleRate,
-              unsigned int bytesPerSecond,
-              unsigned int bytesPerSample,
               unsigned int bitsPerSample);
 
     ~AudioFile();
 
-    // Return a normalised representation of the audio file waveform
-    // at the required resolution - don't use this for a high
-    // definition view of the waveform - just for overviews.  Could
-    // in future be optimised with a local data file no doubt.
-    // 
-    std::vector<float> getPreview(const RealTime &resolution);
+    // Id of this audio file (used by AudioFileManager)
+    //
+    void setId(unsigned int id) { m_id = id; }
+    unsigned int getId() const { return m_id; }
 
+    // Name of this sample - in addition to a filename
+    //
     void setName(const std::string &name) { m_name = name; }
     std::string getName() const { return m_name; }
 
-    unsigned int getId() const { return m_id; }
+    // Useful methods that operate on our file data
+    //
+    int getIntegerFromLittleEndian(const std::string &s);
+    std::string getLittleEndianFromInteger(unsigned int value,
+                                           unsigned int length);
+
+    int getIntegerFromBigEndian(const std::string &s);
+    std::string getBigEndianFromInteger(unsigned int value,
+                                        unsigned int length);
+
+    // Used for waveform interpolation at a point
+    //
+    float sinc(float value) { return sin(M_PI * value)/ M_PI * value; }
+
+    // Audio file identifier - set in constructor of file type
+    //
+    AudioFileType getType() { return m_type; }
+
     unsigned int getBitsPerSample() const { return m_bitsPerSample; }
     unsigned int getSampleRate() const { return m_sampleRate; }
     unsigned int getChannels() const { return m_channels; }
     
-    AudioFileType getType() { return m_type; }
-
-    // We must define our two abstract methods in this class
+    // We must continue our two abstract methods through from SoundFile.
     //
-    virtual bool open();
-    virtual bool write();
+    virtual bool open() = 0;
+    virtual bool write() = 0;
 
     // Show the information we have on this file
     //
-    void printStats();
+    virtual void printStats() = 0;
 
-    // Slightly dodgy code here - we keep these functions here
-    // because I don't want to duplicate them in PlayableAudioFile
-    // and also don't want that class to inherit this one.
-    //
-    // Of course the file handle we use in might be pointing to
-    // any file - for the most part we just assume it's an audio
-    // file.
-    //
-    //
     // Move file pointer to relative time in data chunk -
     // shouldn't be less than zero.  Returns true if the
     // scan time was valid and successful.
     // 
-    bool scanTo(std::ifstream *file, const RealTime &time);
+    virtual bool scanTo(std::ifstream *file, const RealTime &time) = 0;
 
     // Scan forward in a file by a certain amount of time
     //
-    bool scanForward(std::ifstream *file, const RealTime &time);
+    virtual bool scanForward(std::ifstream *file, const RealTime &time) = 0;
 
     // Return a number of samples - caller will have to
     // de-interleave n-channel samples themselves.
     //
-    std::string getSampleFrames(std::ifstream *file, unsigned int frames);
+    virtual std::string getSampleFrames(std::ifstream *file,
+                                        unsigned int frames) = 0;
 
     // Return a number of (possibly) interleaved samples
     // over a time slice from current file pointer position.
     //
-    std::string getSampleFrameSlice(std::ifstream *file, const RealTime &time);
+    virtual std::string getSampleFrameSlice(std::ifstream *file,
+                                            const RealTime &time) = 0;
 
     // Append a string of samples to an already open (for writing)
     // audio file.
     //
-    bool appendSamples(const std::string &buffer);
+    virtual bool appendSamples(const std::string &buffer) = 0;
 
-    // Explicitly close the file - we need to calculate some totals
-    // and write them back into the file after its closed.
+    // Explicitly close the file - calculate some totals and write
+    // them into the header.
     //
-    void close();
+    virtual void close() = 0;
 
-    // write out the header
+    // Get the length of the sample file in RealTime
     //
-    void writeHeader();
+    virtual RealTime getLength() = 0;
 
-    // Get the length of the sample in Seconds/Microseconds
+    // Must be accessible from the Driver
     //
-    RealTime getLength();
+    virtual void writeHeader() = 0;
 
-private:
+    // Generate the preview
+    //
+    virtual std::vector<float> getPreview(const RealTime &resolution) = 0;
 
-    void parseHeader(const std::string &header);
-    void parseBody();
+protected:
+    virtual void parseHeader(const std::string &header) = 0;
+    virtual void parseBody() = 0;
 
-    unsigned int   m_id;
-    std::string    m_name;
+    AudioFileType  m_type;   // AudioFile type
+    unsigned int   m_id;     // AudioFile ID
+    std::string    m_name;   // AudioFile name (not filename)
+
     unsigned int   m_bitsPerSample;
     unsigned int   m_sampleRate;
-    unsigned int   m_bytesPerSecond;
-    unsigned int   m_bytesPerSample;
     unsigned int   m_channels;
-    AudioFileType  m_type;
     unsigned int   m_fileSize;
 
     std::ifstream *m_inFile;

@@ -30,6 +30,7 @@
 #include "AlsaDriver.h"
 #include "MappedInstrument.h"
 #include "Midi.h"
+#include "WAVAudioFile.h"
 
 #ifdef HAVE_JACK
 #include <jack/types.h>
@@ -1992,13 +1993,13 @@ AlsaDriver::createAudioFile(const std::string &fileName)
     // we use JACK_DEFAULT_AUDIO_TYPE for all ports currently so
     // we're recording 32 bit float MONO audio.
     //
-    _recordFile = new AudioFile(fileName,
-                                 WAV,
-                                 1,                    // channels
-                                 _jackSampleRate,      // bits per second
-                                 _jackSampleRate/16,   // bytes per second
-                                 2,                    // bytes per sample
-                                 16);                  // bits per sample
+    _recordFile =
+        new Rosegarden::WAVAudioFile(fileName,
+                                     1,                    // channels
+                                     _jackSampleRate,      // bits per second
+                                     _jackSampleRate/16,   // bytes per second
+                                     2,                    // bytes per sample
+                                     16);                  // bits per sample
 
     // open the file for writing
     //
