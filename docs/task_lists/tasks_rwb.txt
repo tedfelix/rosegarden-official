@@ -65,7 +65,7 @@ o Audio VU meters [DONE]
 o Audio file playing feedback - async events and how to
   operate outside the ALSA timing loop [DONE]
 
-o Very cool audio vu meters show real time audio signal
+o VU meters show real time audio signal [DONE]
 
 o Fix/Complete repeating Segments [DONE]
 

@@ -553,16 +553,18 @@ public slots:
     void slotThresholdChanged(int);
 
 protected:
-    RosegardenGUIDoc    *m_doc;
-    Rosegarden::Segment *m_segment;
-    QCanvas             *m_canvas;
-    QCanvasView         *m_canvasView;
-    QSpinBox            *m_thresholdSpin;
+    RosegardenGUIDoc              *m_doc;
+    Rosegarden::Segment           *m_segment;
+    QCanvas                       *m_canvas;
+    QCanvasView                   *m_canvasView;
+    QSpinBox                      *m_thresholdSpin;
 
-    int                  m_canvasWidth;
-    int                  m_canvasHeight;
-    int                  m_previewWidth;
-    int                  m_previewHeight;
+    int                            m_canvasWidth;
+    int                            m_canvasHeight;
+    int                            m_previewWidth;
+    int                            m_previewHeight;
+
+    std::vector<QCanvasRectangle*> m_previewBoxes;
 
 };
 

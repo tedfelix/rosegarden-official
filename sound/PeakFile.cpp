@@ -743,7 +743,8 @@ PeakFile::getPeak(const RealTime &time)
 RealTime
 PeakFile::getTime(int peak)
 {
-    long usecs = peak * m_blockSize * 1000000 / m_audioFile->getSampleRate();
+    int usecs = int((double)peak * (double)m_blockSize *
+        double(1000000.0) / double(m_audioFile->getSampleRate()));
     return RealTime(usecs/1000000, usecs % 1000000);
 }
 
@@ -760,13 +761,6 @@ PeakFile::getSplitPoints(const RealTime &startTime,
 
     int startPeak = getPeak(startTime);
     int endPeak = getPeak(endTime);
-
-    cout << "START PEAK = " << startPeak << endl;
-    cout << "START PEAK TIME = " << startTime << endl;
-    cout << "START PEAK TIME REGEN = " << getTime(startPeak) << endl;
-    cout << "END PEAK = " << endPeak << endl;
-    cout << "END PEAK TIME = " << endTime << endl;
-    cout << "END PEAK TIME REGEN = " << getTime(endPeak) << endl;
 
     if (endPeak < startPeak) return std::vector<SplitPointPair>();
 
@@ -792,25 +786,32 @@ PeakFile::getSplitPoints(const RealTime &startTime,
     bool belowThreshold = true;
     RealTime startSplit;
 
-    for (int i = 0; i < endPeak - startPeak; i++)
+    for (int i = startPeak; i < endPeak; i++)
     {
-        try
+        value = 0.0;
+
+        for (int j = 0; j < m_channels; j++)
         {
-            peakData = getBytes(m_inFile, m_format * m_pointsPerValue);
-        }
-        catch (std::string e)
-        {
-            break;
+            try
+            {
+                peakData = getBytes(m_inFile, m_format * m_pointsPerValue);
+            }
+            catch (std::string e)
+            {
+                break;
+            }
+
+            if (peakData.length() == (unsigned int)(m_format *
+                                                    m_pointsPerValue))
+            {
+                int peakValue =
+                    getIntegerFromLittleEndian(peakData.substr(0, m_format));
+
+                value += fabs(float(peakValue) / divisor);
+            }
         }
 
-        if (peakData.length() == (unsigned int)(m_format *
-                                                m_pointsPerValue))
-        {
-            int peakValue =
-                getIntegerFromLittleEndian(peakData.substr(0, m_format));
-
-            value = fabs(float(peakValue) / divisor);
-        }
+        value /= float(m_channels);
 
         if (belowThreshold)
         {
@@ -822,23 +823,20 @@ PeakFile::getSplitPoints(const RealTime &startTime,
         }
         else
         {
-            if (value <= fThreshold)
+            if (value < fThreshold)
             {
                 // insert values
                 points.push_back(SplitPointPair(startSplit, getTime(i)));
                 belowThreshold = true;
             }
         }
-
-        if (!scanForward(1)) // forward one peak
-            break;
     }
 
     // if we've got a split point open the close it
     if (belowThreshold == false)
     {
         points.push_back(SplitPointPair(startSplit,
-                                        getTime(endPeak - startPeak)));
+                                        getTime(endPeak)));
     }
 
     return points;
