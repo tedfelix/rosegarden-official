@@ -123,12 +123,12 @@ public:
 
     PlayableAudioFile(AudioFile *audioFile,
                       const RealTime &startTime,
-                      const RealTime &startTime,
+                      const RealTime &startIndex,
                       const RealTime &duration,
                       Arts::SoundServerV2 &soundServer):
         m_id(audioFile->getID()),
         m_startTime(startTime),
-        m_startTime(startTime),
+        m_startIndex(startIndex),
         m_duration(duration),
         m_status(Idle)
     {
@@ -154,7 +154,7 @@ public:
 private:
     unsigned int          m_id;
     RealTime              m_startTime;
-    RealTime              m_startTime;
+    RealTime              m_startIndex;
     RealTime              m_duration;
     Arts::Synth_PLAY_WAV  m_artsAudioObject;
     PlayStatus            m_status;
