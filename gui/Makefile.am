@@ -27,6 +27,7 @@ rosegarden_SOURCES = \
 	notationelement.cpp \
 	notationhlayout.cpp \
 	notationproperties.cpp \
+	notationrulerscale.cpp \
 	notationsets.cpp \
 	notationstaff.cpp \
 	notationtool.cpp \

@@ -76,7 +76,7 @@ EditView::EditView(RosegardenGUIDoc *doc,
 
     m_rulerScale = new SimpleRulerScale
 	(&doc->getComposition(),
-	 0, Rosegarden::Note(Rosegarden::Note::Crotchet).getDuration() / 20),
+	 0, 0, Rosegarden::Note(Rosegarden::Note::Crotchet).getDuration() / 20),
 
     m_barButtonsView = new QScrollView(topSplit);
     m_barButtonsView->setHScrollBarMode(QScrollView::AlwaysOff);

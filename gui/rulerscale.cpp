@@ -27,8 +27,10 @@ using Rosegarden::timeT;
 
 
 SimpleRulerScale::SimpleRulerScale(Composition *composition,
+				   int firstBarNo,
 				   double origin, double ratio) :
     m_composition(composition),
+    m_firstBar(firstBarNo),
     m_origin(origin),
     m_ratio(ratio)
 {
@@ -71,12 +73,19 @@ SimpleRulerScale::getBarForX(double x)
 timeT
 SimpleRulerScale::getTimeForX(double x)
 {
-    return (timeT)((x - m_origin) * m_ratio);
+    timeT t = (timeT)((x - m_origin) * m_ratio);
+    if (m_firstBar != 0) {
+	t += m_composition->getBarRange(m_firstBar, false).first;
+    }
+    return t;
 }
 
 double
 SimpleRulerScale::getXForTime(timeT time)
 {
+    if (m_firstBar != 0) {
+	time -= m_composition->getBarRange(m_firstBar, false).first;
+    }
     return m_origin + (double)time / m_ratio;
 }
 

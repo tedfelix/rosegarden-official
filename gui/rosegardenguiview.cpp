@@ -59,8 +59,11 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     double unitsPerPixel =
         Rosegarden::TimeSignature(4, 4).getBarDuration() / barWidth44;
 
+    Rosegarden::Composition *comp = &doc->getComposition();
     m_rulerScale = new SimpleRulerScale
-        (&doc->getComposition(), 0, unitsPerPixel);
+        (comp,
+	 comp->getBarNumber(comp->getStartMarker(), false),
+	 0, unitsPerPixel);
     
     // Construct the trackEditor first so we can then
     // query it for placement information

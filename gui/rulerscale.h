@@ -43,16 +43,6 @@ public:
     virtual ~RulerScale() { }
 
     /**
-     * Return the number of the first visible bar.
-     */
-//    int getFirstVisibleBar() = 0;
-    
-    /**
-     * Return the number of the last visible bar.
-     */
-//    int getLastVisibleBar() = 0;
-
-    /**
      * Return the x-coordinate at which bar number n starts.
      */
     virtual double getBarPosition(int n) = 0;
@@ -101,8 +91,17 @@ public:
      * 10 means that one pixel equals 10 time units.)
      */
     SimpleRulerScale(Rosegarden::Composition *composition,
-		     double origin, double unitsPerPixel);
+		     int firstBarNo, double origin, double unitsPerPixel);
     virtual ~SimpleRulerScale();
+
+    int    getFirstBarNumber() { return m_firstBar; }
+    void   setFirstBarNumber(int firstBar) { m_firstBar = firstBar; }
+    
+    double getOrigin() { return m_origin; }
+    void   setOrigin(double origin) { m_origin = origin; }
+
+    double getUnitsPerPixel() { return m_ratio; }
+    void   setUnitsPerPixel(double ratio) { m_ratio = ratio; }
 
     virtual double getBarPosition(int n);
     virtual double getBarWidth(int n);
@@ -113,6 +112,7 @@ public:
 
 protected:
     Rosegarden::Composition *m_composition;
+    int m_firstBar;
     double m_origin;
     double m_ratio;
 };
