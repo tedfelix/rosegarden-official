@@ -30,10 +30,19 @@ namespace Rosegarden
 using std::string;
 
 PropertyMap::PropertyMap(const PropertyMap &pm) :
+
+#ifdef PROPERTY_MAP_IS_HASH_MAP
+
     __HASH_NS::hash_map<PropertyName,
 			PropertyStoreBase *,
 			PropertyNameHash,
 			PropertyNamesEqual>()
+#else
+
+    std::map<PropertyName, PropertyStoreBase *>()
+
+#endif
+
 {
     for (const_iterator i = pm.begin(); i != pm.end(); ++i) {
 	insert(PropertyPair(i->first, i->second->clone()));

@@ -27,6 +27,7 @@
 #include "Exception.h"
 
 #include <string>
+#include <vector>
 #ifndef NDEBUG
 #include <iostream>
 #include <ctime>

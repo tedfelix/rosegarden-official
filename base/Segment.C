@@ -37,7 +37,7 @@ using std::cerr;
 using std::endl;
 using std::string;
 
-#define DEBUG_NORMALIZE_RESTS 1    
+//#define DEBUG_NORMALIZE_RESTS 1    
 
 
 Segment::Segment(SegmentType segmentType, timeT startTime) :

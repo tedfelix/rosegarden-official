@@ -409,8 +409,7 @@ Event::getNonPersistentPropertyNames() const
 void
 Event::clearNonPersistentProperties()
 {
-    delete m_nonPersistentProperties;
-    m_nonPersistentProperties = 0;
+    if (m_nonPersistentProperties) m_nonPersistentProperties->clear();
 }
 
 size_t
