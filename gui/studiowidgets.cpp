@@ -696,6 +696,11 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
 	m_muteButton->setFixedHeight(m_stereoButton->height());
 	m_soloButton->setFixedHeight(m_stereoButton->height());
 	m_recordButton->setFixedHeight(m_stereoButton->height());
+
+    } else {
+	m_stereoButton = 0;
+	m_soloButton = 0;
+	m_recordButton = 0;
     }
 
     if (haveInOut) {
@@ -854,12 +859,12 @@ AudioFaderWidget::setAudioChannels(int channels)
     switch (channels)
     {
         case 1:
-            m_stereoButton->setPixmap(m_monoPixmap);
+	    if (m_stereoButton) m_stereoButton->setPixmap(m_monoPixmap);
             m_isStereo = false;
             break;
 
         case 2:
-            m_stereoButton->setPixmap(m_stereoPixmap);
+            if (m_stereoButton) m_stereoButton->setPixmap(m_stereoPixmap);
             m_isStereo = true;
             break;
         default:

@@ -55,15 +55,46 @@ private:
     RosegardenGUIDoc *m_document;
     Rosegarden::Studio *m_studio;
 
-    typedef std::map<Rosegarden::InstrumentId, AudioFaderWidget *> FaderMap;
+    // Not practical to use a single widget for this, as we want to
+    // manage the various bits of it in horizontal/vertical slices
+    // with other faders:
+
+    struct FaderRec {
+
+	FaderRec() :
+	    m_input(0), m_output(0), m_pan(0), m_fader(0), m_meter(0),
+	    m_muteButton(0), m_soloButton(0), m_recordButton(0),
+	    m_stereoButton(0), m_pluginBox(0)
+	{ }
+
+	QPushButton *m_input;
+	QPushButton *m_output;
+
+	RosegardenRotary *m_pan;
+	RosegardenFader *m_fader;
+	AudioVUMeter *m_meter;
+
+	QPushButton *m_muteButton;
+	QPushButton *m_soloButton;
+	QPushButton *m_recordButton;
+	QPushButton *m_stereoButton;
+
+	QVBox *m_pluginBox;
+	std::vector<QPushButton *> m_plugins;
+    };
+
+    typedef std::map<Rosegarden::InstrumentId, FaderRec> FaderMap;
     FaderMap m_faders;
 
-    typedef std::vector<AudioFaderWidget *> FaderVector;
+    typedef std::vector<FaderRec> FaderVector;
     FaderVector m_submasters;
-    AudioFaderWidget *m_monitor;
-    AudioFaderWidget *m_master;
+    FaderRec m_monitor;
+    FaderRec m_master;
 
     void updateFader(int id); // instrument id if large enough, master/sub otherwise
+
+    QPixmap m_monoPixmap;
+    QPixmap m_stereoPixmap;
 };
 
 #endif

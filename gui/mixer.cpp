@@ -48,84 +48,197 @@ MixerWindow::MixerWindow(QWidget *parent,
     font.setBold(false);
     setFont(font);
 
+    QFont boldFont(font);
+    boldFont.setBold(true);
+
     QFrame *mainBox = new QFrame(this);
-    mainBox->setBackgroundMode(Qt::PaletteMidlight);
-    setCentralWidget(mainBox);
-    QHBoxLayout *mainLayout = new QHBoxLayout(mainBox, 4, 4);
+//    mainBox->setBackgroundMode(Qt::PaletteMidlight);
+//    QHBoxLayout *mainLayout = new QHBoxLayout(mainBox, 4, 4);
+
+    Rosegarden::InstrumentList instruments = m_studio->getPresentationInstruments();
+    Rosegarden::BussList busses = m_studio->getBusses();
+    
+    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+    m_monoPixmap.load(QString("%1/misc/mono.xpm").arg(pixmapDir));
+    m_stereoPixmap.load(QString("%1/misc/stereo.xpm").arg(pixmapDir));
+
+    QGridLayout *mainLayout = new QGridLayout
+	(mainBox, instruments.size() + busses.size(), 7);
 
     setCaption(i18n("Mixer"));
 
-    Rosegarden::InstrumentList instruments = m_studio->getPresentationInstruments();
-
     int count = 1;
+    int col = 0;
+
     for (Rosegarden::InstrumentList::iterator i = instruments.begin();
 	 i != instruments.end(); ++i) {
 	
-	if ((*i)->getType() == Rosegarden::Instrument::Audio) {
+	if ((*i)->getType() != Rosegarden::Instrument::Audio) continue;
 
-	    AudioFaderWidget *fader = 
-		new AudioFaderWidget(mainBox, AudioFaderWidget::FaderStrip,
-				     QString("%1").arg(count));
+	FaderRec rec;
 
-	    fader->m_fader->setFader((*i)->getLevel());
-	    fader->m_pan->setPosition((*i)->getPan() - 100);
-	    fader->setAudioChannels((*i)->getAudioChannels());
+//!!! bring across the tooltips
 
-	    connect(fader->m_fader, SIGNAL(faderChanged(float)),
-		    this, SLOT(slotFaderLevelChanged(float)));
+	rec.m_input = new QPushButton(mainBox);
+	rec.m_output = new QPushButton(mainBox);
 
-	    connect(fader->m_signalMapper, SIGNAL(mapped(int)),
-		    this, SLOT(slotSelectPlugin(int)));
+	rec.m_pan = new RosegardenRotary
+	    (mainBox, -100.0, 100.0, 1.0, 5.0, 0.0, 22);
+	rec.m_fader = new RosegardenFader
+	    (Rosegarden::AudioLevel::LongFader, 20, 240, mainBox);
+	rec.m_meter = new AudioVUMeter
+	    (mainBox, VUMeter::AudioPeakHoldLong, true, 14, 240);
 
-	    mainLayout->addWidget(fader);
-	    m_faders[(*i)->getId()] = fader;
-	    ++count;
+	rec.m_muteButton = new QPushButton(mainBox);
+	rec.m_muteButton->setText("M");
+	rec.m_muteButton->setToggleButton(true);
+	rec.m_muteButton->setFlat(true);
+
+	rec.m_soloButton = new QPushButton(mainBox);
+	rec.m_soloButton->setText("S");
+	rec.m_soloButton->setToggleButton(true);
+	rec.m_soloButton->setFlat(true);
+
+	rec.m_recordButton = new QPushButton(mainBox);
+	rec.m_recordButton->setText("R");
+	rec.m_recordButton->setToggleButton(true);
+	rec.m_recordButton->setFlat(true);
+
+	rec.m_stereoButton = new QPushButton(mainBox);
+	rec.m_stereoButton->setPixmap(m_monoPixmap); // default is mono
+	rec.m_stereoButton->setFixedSize(24, 24);
+	rec.m_stereoButton->setFlat(true);
+
+	rec.m_pluginBox = new QVBox(mainBox);
+	
+	for (int p = 0; p < 5; ++p) {
+	    QPushButton *plugin = new QPushButton(rec.m_pluginBox);
+	    plugin->setText(i18n("<none>"));
+	    QToolTip::add(plugin, i18n("Audio plugin button"));
+	    rec.m_plugins.push_back(plugin);
+//!!!	    m_signalMapper->setMapping(plugin, p);
+//!!!	    connect(plugin, SIGNAL(clicked()),
+//!!!		    m_signalMapper, SLOT(map()));
 	}
+	
+	QLabel *idLabel = new QLabel(QString("%1").arg(count), mainBox);
+	idLabel->setFont(boldFont);
+
+	mainLayout->addMultiCellWidget(rec.m_input, 0, 0, col, col+1);
+	mainLayout->addMultiCellWidget(rec.m_output, 1, 1, col, col+1);
+	mainLayout->addWidget(idLabel, 2, col, Qt::AlignRight);
+	mainLayout->addWidget(rec.m_pan, 2, col+1, Qt::AlignLeft);
+	mainLayout->addWidget(rec.m_fader, 3, col, Qt::AlignRight);
+	mainLayout->addWidget(rec.m_meter, 3, col+1, Qt::AlignLeft);
+	mainLayout->addWidget(rec.m_muteButton, 4, col);
+	mainLayout->addWidget(rec.m_soloButton, 4, col+1);
+	mainLayout->addWidget(rec.m_recordButton, 5, col);
+	mainLayout->addWidget(rec.m_stereoButton, 5, col+1);
+	mainLayout->addMultiCellWidget(rec.m_pluginBox, 6, 6, col, col+1);
+
+	rec.m_fader->setFader((*i)->getLevel());
+	rec.m_pan->setPosition((*i)->getPan() - 100);
+//!!!	rec.setAudioChannels((*i)->getAudioChannels());
+
+	connect(rec.m_fader, SIGNAL(faderChanged(float)),
+		this, SLOT(slotFaderLevelChanged(float)));
+
+//!!!	    connect(rec.m_signalMapper, SIGNAL(mapped(int)),
+//!!!		    this, SLOT(slotSelectPlugin(int)));
+
+	m_faders[(*i)->getId()] = rec;
+	++count;
+	col += 2;
     }
     
-    Rosegarden::BussList busses = m_studio->getBusses();
-    
     count = 1;
+
     for (Rosegarden::BussList::iterator i = busses.begin();
 	 i != busses.end(); ++i) {
 
 	if (i == busses.begin()) continue; // that one's the master
 
-	AudioFaderWidget *fader = 
-	    new AudioFaderWidget(mainBox, AudioFaderWidget::FaderStrip,
-				 i18n("S%1").arg(count),
-				 false, false, false);
+	FaderRec rec;
 
-	fader->m_fader->setFader((*i)->getLevel());
-	fader->m_pan->setPosition((*i)->getPan() - 100);
-	fader->setAudioChannels(2);
-	    
-	connect(fader->m_fader, SIGNAL(faderChanged(float)),
+//!!! tooltips
+
+	rec.m_pan = new RosegardenRotary
+	    (mainBox, -100.0, 100.0, 1.0, 5.0, 0.0, 22);
+	rec.m_fader = new RosegardenFader
+	    (Rosegarden::AudioLevel::LongFader, 20, 240, mainBox);
+	rec.m_meter = new AudioVUMeter
+	    (mainBox, VUMeter::AudioPeakHoldLong, true, 14, 240);
+
+	rec.m_muteButton = new QPushButton(mainBox);
+	rec.m_muteButton->setText("M");
+	rec.m_muteButton->setToggleButton(true);
+
+	QLabel *idLabel = new QLabel(i18n("S%1").arg(count), mainBox);
+	idLabel->setFont(boldFont);
+
+	mainLayout->addWidget(idLabel, 2, col);
+	mainLayout->addWidget(rec.m_pan, 2, col+1);
+	mainLayout->addWidget(rec.m_fader, 3, col);
+	mainLayout->addWidget(rec.m_meter, 3, col+1);
+	mainLayout->addWidget(rec.m_muteButton, 4, col);
+
+	rec.m_fader->setFader((*i)->getLevel());
+	rec.m_pan->setPosition((*i)->getPan() - 100);
+
+	connect(rec.m_fader, SIGNAL(faderChanged(float)),
 		this, SLOT(slotFaderLevelChanged(float)));
 
-	mainLayout->addWidget(fader);
-	m_submasters.push_back(fader);
+	m_submasters.push_back(rec);
 	++count;
+	col += 2;
     }
 
     if (busses.size() > 0) {
-	AudioFaderWidget *fader = 
-	    new AudioFaderWidget
-	    (mainBox, AudioFaderWidget::FaderStrip, i18n("Rec"), false, false, false);
-	fader->m_fader->setFader(0.0);
-	connect(fader->m_fader, SIGNAL(faderChanged(float)),
-		this, SLOT(slotFaderLevelChanged(float)));
-	mainLayout->addWidget(fader);
-	m_monitor = fader;
 
-	fader = new AudioFaderWidget
-	    (mainBox, AudioFaderWidget::FaderStrip, i18n("M"), false, false, false);
-	fader->m_fader->setFader(busses[0]->getLevel());
-	connect(fader->m_fader, SIGNAL(faderChanged(float)),
+	FaderRec rec;
+
+//!!! tooltips
+
+	rec.m_meter = new AudioVUMeter
+	    (mainBox, VUMeter::AudioPeakHoldLong, true, 14, 240);
+
+	QLabel *idLabel = new QLabel(i18n("Rec"), mainBox);
+	idLabel->setFont(boldFont);
+
+	mainLayout->addWidget(idLabel, 2, col);
+	mainLayout->addWidget(rec.m_meter, 3, col);
+
+	m_monitor = rec;
+	++col;
+
+	rec.m_fader = new RosegardenFader
+	    (Rosegarden::AudioLevel::LongFader, 20, 240, mainBox);
+	rec.m_meter = new AudioVUMeter
+	    (mainBox, VUMeter::AudioPeakHoldLong, true, 14, 240);
+
+	rec.m_muteButton = new QPushButton(mainBox);
+	rec.m_muteButton->setText("M");
+	rec.m_muteButton->setToggleButton(true);
+
+	idLabel = new QLabel(i18n("M"), mainBox);
+	idLabel->setFont(boldFont);
+
+	mainLayout->addWidget(idLabel, 2, col);
+	mainLayout->addWidget(rec.m_fader, 3, col);
+	mainLayout->addWidget(rec.m_meter, 3, col+1);
+	mainLayout->addWidget(rec.m_muteButton, 4, col);
+
+	rec.m_fader->setFader(0.0);
+
+	connect(rec.m_fader, SIGNAL(faderChanged(float)),
 		this, SLOT(slotFaderLevelChanged(float)));
-	mainLayout->addWidget(fader);
-	m_master = fader;
+
+	m_master = rec;
+	++col;
     }
+
+    setCentralWidget(mainBox);
+    createGUI("mixer.rc");
 }
 
 MixerWindow::~MixerWindow()
@@ -138,18 +251,18 @@ void
 MixerWindow::updateFader(int id)
 {
     if (id >= (int)Rosegarden::AudioInstrumentBase) {
-	AudioFaderWidget *fader = m_faders[id];
+	FaderRec &rec = m_faders[id];
 	Rosegarden::Instrument *instrument = m_studio->getInstrumentById(id);
-	fader->m_fader->setFader(instrument->getLevel());
-	fader->setAudioChannels(instrument->getAudioChannels());
-	fader->m_pan->setPosition(instrument->getPan() - 100);
+	rec.m_fader->setFader(instrument->getLevel());
+//!!!	rec.setAudioChannels(instrument->getAudioChannels());
+	rec.m_pan->setPosition(instrument->getPan() - 100);
     } else {
-	AudioFaderWidget *fader = (id == 0 ? m_master : m_submasters[id-1]);
+	FaderRec &rec = (id == 0 ? m_master : m_submasters[id-1]);
 	Rosegarden::BussList busses = m_studio->getBusses();
 	Rosegarden::Buss *buss = busses[id];
-	fader->m_fader->setFader(buss->getLevel());
-	fader->setAudioChannels(2);
-	fader->m_pan->setPosition(buss->getPan() - 100);
+	rec.m_fader->setFader(buss->getLevel());
+//!!!	rec.setAudioChannels(2);
+	rec.m_pan->setPosition(buss->getPan() - 100);
     }
 }
 	
@@ -164,9 +277,14 @@ MixerWindow::slotSelectPlugin(int index)
     for (FaderMap::iterator i = m_faders.begin();
 	 i != m_faders.end(); ++i) {
 	
-	if (i->second->owns(s)) {
+	for (std::vector<QPushButton *>::iterator pli = i->second.m_plugins.begin();
+	     pli != i->second.m_plugins.end(); ++pli) {
 
-	    emit selectPlugin(this, i->first, index);
+	    if (*pli == s) {
+
+		emit selectPlugin(this, i->first, index);
+		return;
+	    }
 	}
     }	    
 }
@@ -179,7 +297,7 @@ MixerWindow::slotFaderLevelChanged(float dB)
 
     Rosegarden::BussList busses = m_studio->getBusses();
     
-    if (m_master->owns(s)) {
+    if (m_master.m_fader == s) {
 
 	if (busses.size() > 0) {
 	    Rosegarden::StudioControl::setStudioObjectProperty
@@ -196,7 +314,7 @@ MixerWindow::slotFaderLevelChanged(float dB)
     for (FaderVector::iterator i = m_submasters.begin();
 	 i != m_submasters.end(); ++i) {
 
-	if ((*i)->owns(s)) {
+	if (i->m_fader == s) {
 	    if ((int)busses.size() > index) {
 		Rosegarden::StudioControl::setStudioObjectProperty
 		    (Rosegarden::MappedObjectId(busses[index]->getMappedId()),
@@ -213,7 +331,7 @@ MixerWindow::slotFaderLevelChanged(float dB)
     for (FaderMap::iterator i = m_faders.begin();
 	 i != m_faders.end(); ++i) {
 	
-	if (i->second->owns(s)) {
+	if (i->second.m_fader == s) {
 	    Rosegarden::StudioControl::setStudioObjectProperty
 		(Rosegarden::MappedObjectId
 		 (m_studio->getInstrumentById(i->first)->getMappedId()),
@@ -237,8 +355,9 @@ MixerWindow::updateMeters(SequencerMapper *mapper)
     for (FaderMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
 
 	Rosegarden::InstrumentId id = i->first;
-	AudioFaderWidget *fader = i->second;
-	if (!fader) continue;
+//	AudioFaderWidget *fader = i->second;
+	FaderRec &rec = i->second;
+//	if (!fader) continue;
 
 	Rosegarden::LevelInfo info;
 	if (!mapper->getInstrumentLevel(id, info)) continue;
@@ -250,21 +369,21 @@ MixerWindow::updateMeters(SequencerMapper *mapper)
 	float dBleft = Rosegarden::AudioLevel::fader_to_dB
 	    (info.level, 127, Rosegarden::AudioLevel::LongFader);
 
-	if (fader->isStereo()) {
+//!!!	if (rec.isStereo()) {
 	    float dBright = Rosegarden::AudioLevel::fader_to_dB
 		(info.levelRight, 127, Rosegarden::AudioLevel::LongFader);
 
-	    fader->m_vuMeter->setLevel(dBleft, dBright);
+	    rec.m_meter->setLevel(dBleft, dBright);
 
-	} else {
-	    fader->m_vuMeter->setLevel(dBleft);
-	}
+//!!!	} else {
+//!!!	    rec.m_meter->setLevel(dBleft);
+//!!!	}
     }
 
     for (unsigned int i = 0; i < m_submasters.size(); ++i) {
 
-	AudioFaderWidget *fader = m_submasters[i];
-	if (!fader) continue;
+	FaderRec &rec = m_submasters[i];
+//	if (!fader) continue;
 
 	Rosegarden::LevelInfo info;
 	if (!mapper->getSubmasterLevel(i, info)) continue;
@@ -278,7 +397,7 @@ MixerWindow::updateMeters(SequencerMapper *mapper)
 	float dBright = Rosegarden::AudioLevel::fader_to_dB
 	    (info.levelRight, 127, Rosegarden::AudioLevel::LongFader);
 
-	fader->m_vuMeter->setLevel(dBleft, dBright);
+	rec.m_meter->setLevel(dBleft, dBright);
     }
 
     Rosegarden::LevelInfo monitorInfo;
@@ -289,7 +408,7 @@ MixerWindow::updateMeters(SequencerMapper *mapper)
 	float dBright = Rosegarden::AudioLevel::fader_to_dB
 	    (monitorInfo.levelRight, 127, Rosegarden::AudioLevel::LongFader);
 
-	m_monitor->m_vuMeter->setLevel(dBleft, dBright);
+	m_monitor.m_meter->setLevel(dBleft, dBright);
     }
 
     Rosegarden::LevelInfo masterInfo;
@@ -300,7 +419,7 @@ MixerWindow::updateMeters(SequencerMapper *mapper)
 	float dBright = Rosegarden::AudioLevel::fader_to_dB
 	    (masterInfo.levelRight, 127, Rosegarden::AudioLevel::LongFader);
 
-	m_master->m_vuMeter->setLevel(dBleft, dBright);
+	m_master.m_meter->setLevel(dBleft, dBright);
     }
 }
 

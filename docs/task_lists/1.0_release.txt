@@ -22,6 +22,8 @@ Features for 1.0 - updated 20040226
   than we've given it credit for so far, I think.  [We now have a
   tempo event editor, so this has become less critical than it was]
 
+- add pitch bend control events to all existing .rgd files
+
 - native printing
   o it's too slow
   o adding fluff and nicities to printed staves
@@ -38,7 +40,7 @@ Features for 1.0 - updated 20040226
     are together and clearly described -- for example, the notation
     Transforms menu is not at all ideal
   o relatedly: make sure translators have time/awareness of changes!
-
+  o add sensible accelerators for the main window menu options (particularly studio menu)
 
 Completed
 ---------
