@@ -30,6 +30,8 @@
 
 #include "Studio.h"
 #include "AudioLevel.h"
+#include "Midi.h"
+#include "Instrument.h"
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -1316,6 +1318,7 @@ MidiMixerWindow::setupTabs()
     Rosegarden::MidiDevice *dev = 0;
     Rosegarden::InstrumentList instruments;
     Rosegarden::InstrumentList::const_iterator iIt;
+    int faderCount = 0;
 
     for (it = m_studio->begin(); it != m_studio->end(); ++it)
     {
@@ -1328,13 +1331,24 @@ MidiMixerWindow::setupTabs()
             QFrame *frame = new QFrame(m_tabWidget);
 
             QGridLayout *mainLayout = new QGridLayout
-                (frame, instruments.size(), 7);
+                (frame, instruments.size() + 2, 7, 5);
 
-            int posCount = 0;
+            // Label vertical axis
+            //
+            QLabel *label = new QLabel(i18n("Pan"), frame);
+            mainLayout->addWidget(label, 2, 0, Qt::AlignCenter);
+            label = new QLabel(i18n("Volume"), frame);
+            mainLayout->addWidget(label, 3, 0, Qt::AlignCenter);
+
+            int posCount = 1;
             int firstInstrument = -1;
 
             for (iIt = instruments.begin(); iIt != instruments.end(); ++iIt)
             {
+
+                // Add new fader struct
+                //
+                m_faders.push_back(new FaderStruct());
 
                 // Store the first ID
                 //
@@ -1345,20 +1359,36 @@ MidiMixerWindow::setupTabs()
 	        QLabel *idLabel = new QLabel(QString("%1").
                         arg((*iIt)->getId() - firstInstrument + 1), frame, "idLabel");
                 mainLayout->addWidget(idLabel, 6, posCount, Qt::AlignCenter);
+                m_faders[faderCount]->m_id = (*iIt)->getId(); // store id in struct
 
                 // Pan rotary
                 //
                 RosegardenRotary *pan = new RosegardenRotary
-                    (frame, -100.0, 100.0, 1.0, 5.0, 0.0, 20);
-                pan->setKnobColour(RosegardenGUIColours::RotaryPastelGreen);
+                    (frame, 0.0, 127.0, 1.0, 5.0, 64.0, 20);
+                pan->setKnobColour(RosegardenGUIColours::RotaryPastelRed);
                 mainLayout->addWidget(pan, 2, posCount, Qt::AlignCenter);
+                pan->setPosition(double((*iIt)->getPan()));
+                m_faders[faderCount]->m_panRotary = pan;
 
                 // Volume fader
                 //
                 RosegardenFader *fader = new RosegardenFader(0, 127, 100, 20, 80, frame);
                 mainLayout->addWidget(fader, 3, posCount, Qt::AlignCenter);
+                fader->setFader(float((*iIt)->getVolume()));
+                m_faders[faderCount]->m_volumeFader = fader;
 
+                // Connect them up
+                //
+	        connect(fader, SIGNAL(faderChanged(float)),
+		        this, SLOT(slotFaderLevelChanged(float)));
+
+	        connect(pan, SIGNAL(valueChanged(float)),
+		        this, SLOT(slotPanChanged(float)));
+
+                // Increment counters
+                //
                 posCount++;
+                faderCount++;
             }
 
             addTab(frame, strtoqstr(dev->getName()));
@@ -1371,5 +1401,97 @@ MidiMixerWindow::addTab(QWidget *tab, const QString &title)
 {
     m_tabWidget->addTab(tab, title);
 }
+
+
+void 
+MidiMixerWindow::slotPanChanged(float value)
+{
+    const QObject *s = sender();
+
+    for (FaderVector::const_iterator it = m_faders.begin();
+         it != m_faders.end(); ++it)
+    {
+        if ((*it)->m_panRotary == s)
+        {
+            Rosegarden::Instrument *instr = m_studio->getInstrumentById((*it)->m_id);
+
+            if (instr)
+            {
+                instr->setPan(Rosegarden::MidiByte(value));
+                Rosegarden::MappedEvent mE((*it)->m_id,
+                                           Rosegarden::MappedEvent::MidiController,
+                                           Rosegarden::MIDI_CONTROLLER_PAN,
+                                           Rosegarden::MidiByte(value));
+                Rosegarden::StudioControl::sendMappedEvent(mE);
+            }
+
+            emit instrumentParametersChanged((*it)->m_id);
+            return;
+        }
+    }
+}
+
+void
+MidiMixerWindow::slotFaderLevelChanged(float value)
+{
+    const QObject *s = sender();
+
+    for (FaderVector::const_iterator it = m_faders.begin();
+         it != m_faders.end(); ++it)
+    {
+        if ((*it)->m_volumeFader == s)
+        {
+            Rosegarden::Instrument *instr = m_studio->getInstrumentById((*it)->m_id);
+
+            if (instr)
+            {
+                instr->setVolume(Rosegarden::MidiByte(value));
+                Rosegarden::MappedEvent mE((*it)->m_id,
+                                           Rosegarden::MappedEvent::MidiController,
+                                           Rosegarden::MIDI_CONTROLLER_VOLUME,
+                                           Rosegarden::MidiByte(value));
+                Rosegarden::StudioControl::sendMappedEvent(mE);
+            }
+
+            emit instrumentParametersChanged((*it)->m_id);
+            return;
+        }
+    }
+}
+
+
+void 
+MidiMixerWindow::slotUpdateInstrument(Rosegarden::InstrumentId id)
+{
+    Rosegarden::DeviceListConstIterator it;
+    Rosegarden::MidiDevice *dev = 0;
+    Rosegarden::InstrumentList instruments;
+    Rosegarden::InstrumentList::const_iterator iIt;
+    int count = 0;
+
+    for (it = m_studio->begin(); it != m_studio->end(); ++it)
+    {
+        dev = dynamic_cast<Rosegarden::MidiDevice*>(*it);
+
+        if (dev)
+        {
+            instruments = dev->getPresentationInstruments();
+
+            for (iIt = instruments.begin(); iIt != instruments.end(); ++iIt)
+            {
+                // Match and set
+                //
+                if ((*iIt)->getId() == id)
+                {
+                    m_faders[count]->m_panRotary->setPosition(float((*iIt)->getPan()));
+                    m_faders[count]->m_volumeFader->setFader(float((*iIt)->getVolume()));
+                    return;
+                }
+                count++;
+            }
+        }
+    }
+}
+
 
 

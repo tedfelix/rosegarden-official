@@ -72,8 +72,8 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
     m_listView->addColumn(i18n("Control Event type  "));
     m_listView->addColumn(i18n("Control Event value  "));
     m_listView->addColumn(i18n("Description  "));
-    m_listView->addColumn(i18n("Max  "));
     m_listView->addColumn(i18n("Min  "));
+    m_listView->addColumn(i18n("Max  "));
     m_listView->addColumn(i18n("Default  "));
     m_listView->addColumn(i18n("Color  "));
     m_listView->addColumn(i18n("Position on instrument panel"));

@@ -177,11 +177,44 @@ public:
      */
     void setupTabs();
 
+signals:
+    void play();
+    void stop();
+    void fastForwardPlayback();
+    void rewindPlayback();
+    void fastForwardPlaybackToEnd();
+    void rewindPlaybackToBeginning();
+
+    // to be redirected to the instrument parameter box if necessary
+    void instrumentParametersChanged(Rosegarden::InstrumentId);
+
+protected slots:
+    void slotUpdateInstrument(Rosegarden::InstrumentId);
+
+    void slotPanChanged(float);
+    void slotFaderLevelChanged(float level);
+
 protected:
     void addTab(QWidget *tab, const QString &title);
 
-    QTabWidget    *m_tabWidget;
+    QTabWidget                        *m_tabWidget;
+
+    struct FaderStruct {
+
+        FaderStruct() {}
+
+        Rosegarden::InstrumentId       m_id;
+        RosegardenRotary              *m_panRotary;
+        RosegardenFader               *m_volumeFader;
+        std::vector<RosegardenRotary*> m_controllerRotaries;
+
+    };
+
+    typedef std::vector<FaderStruct*>  FaderVector;
+    FaderVector                        m_faders;
 
 };
 
 #endif
+
+
