@@ -1565,7 +1565,7 @@ TimeSignature::TimeSignature(const Event &e)
     }
 
     if (e.has(DenominatorPropertyName)) {
-	m_numerator = e.get<Int>(DenominatorPropertyName);
+	m_denominator = e.get<Int>(DenominatorPropertyName);
     }
 
     m_common = false;
