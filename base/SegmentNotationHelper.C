@@ -400,8 +400,6 @@ SegmentNotationHelper::insertNote(timeT absoluteTime, Note note, int pitch,
 
     //!!! Deal with end-of-bar issues!
 
-//    int barNo = segment().getBarNumber(i);
-
     return insertSomething(i, note.getDuration(), pitch, false, false,
 			   explicitAccidental);
 }
@@ -414,8 +412,6 @@ SegmentNotationHelper::insertRest(timeT absoluteTime, Note note)
     segment().getTimeSlice(absoluteTime, i, j);
 
     //!!! Deal with end-of-bar issues!
-
-//    int barNo = segment().getBarNumber(i);
 
     return insertSomething(i, note.getDuration(), 0, true, false,
 			   Accidentals::NoAccidental);

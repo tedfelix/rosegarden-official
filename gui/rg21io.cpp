@@ -380,7 +380,7 @@ bool RG21Loader::parseBarType()
     int numerator   = m_tokens[4].toInt();
     int denominator = m_tokens[5].toInt();
 
-    timeT sigTime = m_composition->getBarRange(barNo, true).first;
+    timeT sigTime = m_composition->getBarRange(barNo).first;
     TimeSignature timeSig(numerator, denominator);
     m_composition->addTimeSignature(sigTime, timeSig);
 

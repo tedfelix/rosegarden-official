@@ -242,8 +242,8 @@ NotationHLayout::scanStaff(StaffType &staff)
 
     Composition *composition = t.getComposition();
 
-    int barNo = composition->getBarNumber(t.getStartTime(), true);
-    int endBarNo = composition->getBarNumber(t.getEndTime(), true);
+    int barNo = composition->getBarNumber(t.getStartTime());
+    int endBarNo = composition->getBarNumber(t.getEndTime());
     int barCounter = 0;
 
     SegmentNotationHelper nh(t);
@@ -256,8 +256,7 @@ NotationHLayout::scanStaff(StaffType &staff)
 
     while (barNo <= endBarNo) {
 
-	std::pair<timeT, timeT> barTimes =
-	    composition->getBarRange(barNo, true);
+	std::pair<timeT, timeT> barTimes = composition->getBarRange(barNo);
 
         NotationElementList::iterator from = 
 	    getStartOfQuantizedSlice(notes, barTimes.first);
@@ -569,7 +568,7 @@ NotationHLayout::fillFakeBars()
 
 	for (int b = 0; b < segment.getComposition()->getNbBars(); ++b) {
 
-	    if (segment.getComposition()->getBarRange(b, true).first
+	    if (segment.getComposition()->getBarRange(b).first
 		>= segment.getStartTime()) break;
 
             list.push_front(BarData(-1, staff->getViewElementList()->end()));

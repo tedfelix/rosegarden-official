@@ -45,14 +45,14 @@ SimpleRulerScale::~SimpleRulerScale()
 double
 SimpleRulerScale::getBarPosition(int n)
 {
-    timeT barStart = m_composition->getBarRange(n, false).first;
+    timeT barStart = m_composition->getBarRange(n).first;
     return getXForTime(barStart);
 }
 
 double
 SimpleRulerScale::getBarWidth(int n)
 {
-    std::pair<timeT, timeT> range = m_composition->getBarRange(n, false);
+    std::pair<timeT, timeT> range = m_composition->getBarRange(n);
     return (double)(range.second - range.first) / m_ratio;
 }
 
@@ -67,7 +67,7 @@ SimpleRulerScale::getBeatWidth(int n)
 int
 SimpleRulerScale::getBarForX(double x)
 {
-    return m_composition->getBarNumber(getTimeForX(x), false);
+    return m_composition->getBarNumber(getTimeForX(x));
 }
 
 timeT
@@ -75,7 +75,7 @@ SimpleRulerScale::getTimeForX(double x)
 {
     timeT t = (timeT)((x - m_origin) * m_ratio);
     if (m_firstBar != 0) {
-	t += m_composition->getBarRange(m_firstBar, false).first;
+	t += m_composition->getBarRange(m_firstBar).first;
     }
     return t;
 }
@@ -84,7 +84,7 @@ double
 SimpleRulerScale::getXForTime(timeT time)
 {
     if (m_firstBar != 0) {
-	time -= m_composition->getBarRange(m_firstBar, false).first;
+	time -= m_composition->getBarRange(m_firstBar).first;
     }
     return m_origin + (double)time / m_ratio;
 }

@@ -371,7 +371,7 @@ void RosegardenGUIApp::initView()
     if (comp.getStartMarker() == 0 &&
         comp.getEndMarker() == 0)
     {
-        int endMarker = comp.getBarRange(10 + comp.getNbBars(), false).second;
+        int endMarker = comp.getBarRange(10 + comp.getNbBars()).second;
         comp.setEndMarker(endMarker);
     }
     
@@ -1531,8 +1531,7 @@ void RosegardenGUIApp::rewind()
     timeT position = composition.getPosition();
     
     // want to cope with bars beyond the actual end of the piece
-    int barNumber = composition.getBarNumber(position - 1, false);
-    timeT newPosition = composition.getBarRange(barNumber, false).first;
+    timeT newPosition = composition.getBarRangeForTime(position - 1).first;
 
     setPointerPosition(newPosition);
 }
@@ -1545,9 +1544,7 @@ void RosegardenGUIApp::fastforward()
     Rosegarden::Composition &composition = m_doc->getComposition();
 
     timeT position = composition.getPosition() + 1;
-
-    int barNumber = composition.getBarNumber(position, false);
-    timeT newPosition = composition.getBarRange(barNumber + 1, false).first;
+    timeT newPosition = composition.getBarRangeForTime(position).second;
 
     // we need to work out where the trackseditor finishes so we
     // don't skip beyond it.  Generally we need extra-Composition
@@ -1754,9 +1751,9 @@ RosegardenGUIApp::record()
 
     // Adjust backwards by the bar count in
     //
-    int startBar = comp.getBarNumber(comp.getPosition(), false);
+    int startBar = comp.getBarNumber(comp.getPosition());
     startBar -= comp.getCountInBars();
-    setPointerPosition(comp.getBarRange(startBar, false).first);
+    setPointerPosition(comp.getBarRange(startBar).first);
 
 
     // Some locals
@@ -2177,8 +2174,8 @@ RosegardenGUIApp::insertMetronomeClicks(timeT sliceStart, timeT sliceEnd)
     int metronomeBeatVely = 80;
 
     Rosegarden::Composition &comp = m_doc->getComposition();
-    std::pair<timeT, timeT> barStart = comp.getBarRange(comp.getBarNumber(sliceStart, false), false);
-    std::pair<timeT, timeT> barEnd = comp.getBarRange(comp.getBarNumber(sliceEnd, false), false);
+    std::pair<timeT, timeT> barStart = comp.getBarRange(comp.getBarNumber(sliceStart));
+    std::pair<timeT, timeT> barEnd = comp.getBarRange(comp.getBarNumber(sliceEnd));
 
     // The slice can straddle a bar boundary so check
     // in both bars for the marker
@@ -2214,7 +2211,7 @@ RosegardenGUIApp::insertMetronomeClicks(timeT sliceStart, timeT sliceEnd)
     //
     //
     bool isNew;
-    Rosegarden::TimeSignature timeSig = comp.getTimeSignatureInBar(comp.getBarNumber(sliceStart, false), isNew);
+    Rosegarden::TimeSignature timeSig = comp.getTimeSignatureInBar(comp.getBarNumber(sliceStart), isNew);
     for (int i = barStart.first + timeSig.getBeatDuration();
              i < barStart.second;
              i += timeSig.getBeatDuration())

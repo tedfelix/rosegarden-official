@@ -81,8 +81,8 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
     }
 
     init(tracks,
-	 comp.getBarNumber(comp.getStartMarker(), false),
-	 comp.getBarNumber(comp.getEndMarker(), false));
+	 comp.getBarNumber(comp.getStartMarker()),
+	 comp.getBarNumber(comp.getEndMarker()));
 }
 
 
@@ -388,13 +388,13 @@ TrackEditor::updateRecordingSegmentItem(Rosegarden::Segment *segment)
     // here to test getBarRange
     {
 	
-	int startBar = comp.getBarNumber(segment->getStartTime(), false);
-	std::pair<timeT, timeT> bar = comp.getBarRange(startBar, false);
+	int startBar = comp.getBarNumber(segment->getStartTime());
+	std::pair<timeT, timeT> bar = comp.getBarRange(startBar);
      
 	std::cerr << "bar " << startBar << ": " << bar.first << " -> " << bar.second << " (start)" << std::endl;
 
-	int endBar = comp.getBarNumber(comp.getPosition(), false);
-	bar = comp.getBarRange(endBar, false);
+	int endBar = comp.getBarNumber(comp.getPosition());
+	bar = comp.getBarRange(endBar);
 	
 	std::cerr << "bar " << endBar << ": " << bar.first << " -> " << bar.second << " (end)" << std::endl;
 	std::cerr << "(composition's duration is " << comp.getDuration() << ")" << std::endl;

@@ -53,7 +53,7 @@ void
 NotationRulerScale::setFirstStartingStaff(NotationStaff *staff)
 {
     timeT t = staff->getSegment().getStartTime();
-    m_firstBar = staff->getSegment().getComposition()->getBarNumber(t, false);
+    m_firstBar = staff->getSegment().getComposition()->getBarNumber(t);
 }
 
 void
@@ -81,7 +81,7 @@ NotationRulerScale::getBarWidth(int n)
 double
 NotationRulerScale::getBeatWidth(int n)
 {
-    std::pair<timeT, timeT> barRange = getComposition()->getBarRange(n, false);
+    std::pair<timeT, timeT> barRange = getComposition()->getBarRange(n);
     timeT barDuration = barRange.second - barRange.first;
 
     bool isNew;
@@ -130,7 +130,7 @@ NotationRulerScale::getTimeForX(double x)
     int n = getBarForX(x);
 
     double barWidth = getBarWidth(n);
-    std::pair<timeT, timeT> barRange = getComposition()->getBarRange(n, false);
+    std::pair<timeT, timeT> barRange = getComposition()->getBarRange(n);
     timeT barDuration = barRange.second - barRange.first;
 
     x -= getBarPosition(n);
@@ -142,10 +142,10 @@ NotationRulerScale::getTimeForX(double x)
 double
 NotationRulerScale::getXForTime(timeT time)
 {
-    int n = getComposition()->getBarNumber(time, false);
+    int n = getComposition()->getBarNumber(time);
 
     double barWidth = getBarWidth(n);
-    std::pair<timeT, timeT> barRange = getComposition()->getBarRange(n, false);
+    std::pair<timeT, timeT> barRange = getComposition()->getBarRange(n);
     timeT barDuration = barRange.second - barRange.first;
 
     time -= barRange.first;

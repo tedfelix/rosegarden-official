@@ -191,7 +191,7 @@ void
 LoopRuler::calculateExtents()
 {
     Rosegarden::Composition &comp = m_doc->getComposition();
-    m_firstBar = comp.getBarNumber(comp.getStartMarker(), false);
-    m_lastBar = comp.getBarNumber(comp.getEndMarker(), false);
+    m_firstBar = comp.getBarNumber(comp.getStartMarker());
+    m_lastBar = comp.getBarNumber(comp.getEndMarker());
 }
 

@@ -52,8 +52,7 @@ typedef trackcontainer::iterator trackiterator;
  * destruction.  When Segments are removed, it will also delete them.
  */
 
-class Composition : public SegmentObserver,
-		    public XmlExportable
+class Composition : public XmlExportable
 {
     
 public:
@@ -202,42 +201,41 @@ public:
 
     /**
      * Return the starting time of the bar that contains time t
+     *!!! rename to ...ForTime and add a getBarStart that takes n?
      */
     timeT getBarStart(timeT t) const;
 
     /**
      * Return the ending time of the bar that contains time t
+     *!!! rename to ...ForTime and add a getBarEnd that takes n?
      */
     timeT getBarEnd(timeT t) const;
 
     /**
      * Return the number of the bar that starts at or contains time t.
      *
-     * If truncate is true, will stop at the end of the composition
-     * and return the last real bar number if t is out of range;
-     * otherwise will happily return computed bar numbers for times
-     * beyond the real end of the composition.
+     * Will happily return computed bar numbers for times before
+     * the start or beyond the real end of the composition.
      */
-    int getBarNumber(timeT t, bool truncate) const;
+    int getBarNumber(timeT t) const;
 
     /**
      * Return the time range of bar n.
      * 
-     * If truncate is true, will stop at the end of the composition
-     * and return last real bar if n is out of range; otherwise will
-     * happily return theoretical timings for bars beyond the real end
-     * of composition (this is used when extending segments on the
-     * segment editor).
+     * Will happily return theoretical timings for bars before the
+     * start or beyond the end of composition (i.e. there is no
+     * requirement that 0 <= n < getNbBars()).
      */
-    std::pair<timeT, timeT> getBarRange(int n, bool truncate) const;
+    std::pair<timeT, timeT> getBarRange(int n) const;
 
     /**
      * Return the starting and ending times of the bar that contains
-     * time t.  Unlike getBarRange(int, bool) this will only work for
-     * bars that actually exist and will stop working at the end of
-     * the composition.
+     * time t.
+     * 
+     * Will happily return theoretical timings for bars before the
+     * start or beyond the end of composition.
      */
-    std::pair<timeT, timeT> getBarRange(timeT t) const;
+    std::pair<timeT, timeT> getBarRangeForTime(timeT t) const;
 
 
 
@@ -393,20 +391,22 @@ public:
 
 
 
-    /////////////
+    //////
     //
     // START AND END MARKERS
-    //
+
     timeT getStartMarker() const { return m_startMarker; }
     timeT getEndMarker() const { return m_endMarker; }
 
     void setStartMarker(const timeT &sM) { m_startMarker = sM; }
     void setEndMarker(const timeT &eM) { m_endMarker = eM; }
 
-    ////////////
+
+
+    //////
     //
     // LOOP 
-    //
+
     timeT getLoopStart() const { return m_loopStart; }
     timeT getLoopEnd() const { return m_loopEnd;}
 
@@ -417,17 +417,19 @@ public:
     //
     bool isLooping() const { return (m_loopStart != m_loopEnd); }
 
+
+    
+    //////
+    //
+    // OTHER STUFF
+
+
     // Some set<> API delegation
     iterator       begin()       { return m_segments.begin(); }
     const_iterator begin() const { return m_segments.begin(); }
     iterator       end()         { return m_segments.end(); }
     const_iterator end() const   { return m_segments.end(); }
 
-
-    // SegmentObserver methods:
-
-    virtual void eventAdded(const Segment *, Event *);
-    virtual void eventRemoved(const Segment *, Event *);
 
     // XML exportable method
     //
@@ -500,10 +502,7 @@ protected:
     };
 
     static const PropertyName NoAbsoluteTimeProperty;
-
-    static const std::string BarEventType;
     static const PropertyName BarNumberProperty;
-    static const PropertyName BarHasTimeSigProperty;
 
     static const std::string TempoEventType; 
     static const PropertyName TempoProperty; // stored in beats per hour
@@ -516,27 +515,33 @@ protected:
     struct ReferenceSegmentEventCmp
     {
 	bool operator()(const Event &e1, const Event &e2) const;
-	bool operator()(const Event *e1, const Event *e2) const;
+	bool operator()(const Event *e1, const Event *e2) const {
+	    return operator()(*e1, *e2);
+	}
     };
     
+    struct BarNumberComparator
+    {
+	bool operator()(const Event &e1, const Event &e2) const {
+	    return (e1.get<Int>(BarNumberProperty) <
+		    e2.get<Int>(BarNumberProperty));
+	}
+	bool operator()(const Event *e1, const Event *e2) const {
+	    return operator()(*e1, *e2);
+	}
+    };
+ 
 
     trackcontainer m_tracks;
     segmentcontainer m_segments;
     instrumentcontainer m_instruments;
     int m_recordTrack;
 
-    /// Contains new-bar events -- not saved, but based on the timesigs
-    mutable ReferenceSegment m_barSegment;
-
     /// Contains time signature events
     mutable ReferenceSegment m_timeSigSegment;
 
     /// Contains tempo events
     mutable ReferenceSegment m_tempoSegment;
-
-    // called from calculateBarPositions
-    ReferenceSegment::iterator addNewBar(timeT time, timeT duration, int barNo,
-					 bool hasTimeSig) const;
 
     Quantizer m_quantizer;
 
@@ -556,7 +561,7 @@ protected:
     timeT m_loopStart;
     timeT m_loopEnd;
 
-    /// affects m_barSegment
+    /// affects m_timeSigSegment
     void calculateBarPositions() const;
     mutable bool m_barPositionsNeedCalculating;
 

@@ -1571,8 +1571,8 @@ NotationView::setPositionPointer(int position)
 
     Rosegarden::Composition &comp = m_document->getComposition();
 
-    int barNo = comp.getBarNumber(position, true);
-    std::pair<timeT, timeT> times = comp.getBarRange(position);
+    int barNo = comp.getBarNumber(position);
+    std::pair<timeT, timeT> times = comp.getBarRangeForTime(position);
 
     double canvasPosition = m_hlayout->getTotalWidth();
 

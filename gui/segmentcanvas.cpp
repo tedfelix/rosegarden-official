@@ -480,8 +480,8 @@ SegmentCanvas::SnapGrid::getSnapTime(double x) const
     timeT time = m_rulerScale->getTimeForX(x);
 
     Rosegarden::Composition *composition = m_rulerScale->getComposition();
-    int barNo = composition->getBarNumber(time, false);
-    std::pair<timeT, timeT> barRange = composition->getBarRange(barNo, false);
+    int barNo = composition->getBarNumber(time);
+    std::pair<timeT, timeT> barRange = composition->getBarRange(barNo);
 
     timeT snapTime = barRange.second - barRange.first;
 
@@ -502,8 +502,8 @@ SegmentCanvas::SnapGrid::snapX(double x) const
     if (m_snapTime == NoSnap) return time;
 
     Rosegarden::Composition *composition = m_rulerScale->getComposition();
-    int barNo = composition->getBarNumber(time, false);
-    std::pair<timeT, timeT> barRange = composition->getBarRange(barNo, false);
+    int barNo = composition->getBarNumber(time);
+    std::pair<timeT, timeT> barRange = composition->getBarRange(barNo);
 
     timeT snapTime = barRange.second - barRange.first;
 

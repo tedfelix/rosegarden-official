@@ -62,7 +62,7 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     Rosegarden::Composition *comp = &doc->getComposition();
     m_rulerScale = new SimpleRulerScale
         (comp,
-	 comp->getBarNumber(comp->getStartMarker(), false),
+	 comp->getBarNumber(comp->getStartMarker()),
 	 0, unitsPerPixel);
     
     // Construct the trackEditor first so we can then

@@ -46,8 +46,8 @@ BarButtons::BarButtons(RosegardenGUIDoc* doc,
 
     Rosegarden::Composition &comp = doc->getComposition();
 
-    m_firstBar = comp.getBarNumber(comp.getStartMarker(), false);
-    m_lastBar  = comp.getBarNumber(comp.getEndMarker(),   false);
+    m_firstBar = comp.getBarNumber(comp.getStartMarker());
+    m_lastBar  = comp.getBarNumber(comp.getEndMarker());
 
     drawButtons();
 }
