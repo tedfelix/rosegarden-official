@@ -93,7 +93,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     QGroupBox *pluginSelectionBox = new QGroupBox
 	(1, Horizontal, i18n("Plugin"), vbox);
 
-    makePluginParamsBox(vbox, 0);
+    makePluginParamsBox(vbox, 0, 10);
 
     m_pluginCategoryBox = new QHBox(pluginSelectionBox);
     new QLabel(i18n("Category:"), m_pluginCategoryBox);
@@ -289,12 +289,15 @@ AudioPluginDialog::populatePluginList()
 }
 
 void
-AudioPluginDialog::makePluginParamsBox(QWidget *parent, int portCount)
+AudioPluginDialog::makePluginParamsBox(QWidget *parent, int portCount,
+				       int tooManyPorts)
 {
     m_pluginParamsBox = new QFrame(parent);
 
     int columns = 2;
-    if (portCount > 24) {
+    if (portCount > tooManyPorts) {
+	columns = 2;
+    } else if (portCount > 24) {
 	if (portCount > 60) {
 	    columns = (portCount - 1) / 16 + 1;
 	} else {
@@ -371,16 +374,16 @@ AudioPluginDialog::slotPluginSelected(int i)
 	}
     }
 
-    makePluginParamsBox(parent, portCount);
+    int tooManyPorts = 96;
+    makePluginParamsBox(parent, portCount, tooManyPorts);
     bool showBounds = (portCount <= 48);
 
-    int tooManyPorts = 96;
     if (portCount > tooManyPorts) {
 
 	m_gridLayout->addMultiCellWidget(
 	    new QLabel(i18n("This plugin has too many controls to edit here."),
 		       m_pluginParamsBox),
-	    1, 1, 0, m_gridLayout->numCols()-1);
+	    1, 1, 0, m_gridLayout->numCols()-1, Qt::AlignCenter);
     }
 
     AudioPluginInstance *inst = m_instrument->getPlugin(m_index);

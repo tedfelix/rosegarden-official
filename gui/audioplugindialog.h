@@ -175,7 +175,7 @@ protected slots:
 protected:
     virtual void closeEvent(QCloseEvent *e);
 
-    void makePluginParamsBox(QWidget*, int portCount);
+    void makePluginParamsBox(QWidget*, int portCount, int tooManyPorts);
     QStringList getProgramsForInstance(AudioPluginInstance *inst, int &current);
 
     //--------------- Data members ---------------------------------
