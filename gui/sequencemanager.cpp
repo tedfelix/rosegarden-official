@@ -2311,7 +2311,20 @@ bool SegmentMmapper::refresh()
 {
     bool res = false;
 
-    size_t newMmappedSize = m_segment->size() * MappedEvent::streamedSize;
+    int repeatCount = 0;
+
+    timeT segmentStartTime = m_segment->getStartTime();
+    timeT segmentEndTime = m_segment->getEndMarkerTime();
+    timeT segmentDuration = segmentEndTime - segmentStartTime;
+
+    if (m_segment->isRepeating() && segmentDuration > 0) {
+	timeT repeatEndTime = m_segment->getRepeatEndTime();
+	//!!! this could be fractional, so we use 2 instead of 1 so as to round up:
+	repeatCount = 2 + (repeatEndTime - segmentEndTime) / segmentDuration;
+    }
+
+    size_t newMmappedSize =
+	repeatCount * m_segment->size() * MappedEvent::streamedSize;
 
     SEQMAN_DEBUG << "SegmentMmapper::refresh() - m_mmappedBuffer = "
                  << (void*)m_mmappedBuffer << " - size = " << newMmappedSize << endl;
@@ -2439,18 +2452,21 @@ void SegmentMmapper::dump()
     
     SegmentPerformanceHelper helper(*m_segment);
 
-    int repeatNo = 0;
-       
-    //         if (segmentDuration != 0)
-    //             repeatNo = (seekStartTime - segmentStartTime) / segmentDuration;
-    //         else
-    //             repeatNo = 0;
+    int repeatCount = 0;
 
     timeT segmentStartTime = m_segment->getStartTime();
     timeT segmentEndTime = m_segment->getEndMarkerTime();
     timeT segmentDuration = segmentEndTime - segmentStartTime;
+    timeT repeatEndTime = segmentEndTime;
+
+    if (m_segment->isRepeating() && segmentDuration > 0) {
+	repeatEndTime = m_segment->getRepeatEndTime();
+	repeatCount = 1 + (repeatEndTime - segmentEndTime) / segmentDuration;
+    }
 
     unsigned int nbEvents = 0;
+
+    for (int repeatNo = 0; repeatNo <= repeatCount; ++repeatNo) {
 
     for (Segment::iterator j = m_segment->begin();
          j != m_segment->end(); ++j) {
@@ -2459,11 +2475,19 @@ void SegmentMmapper::dump()
 
         timeT playTime =
             helper.getSoundingAbsoluteTime(j) + repeatNo * segmentDuration;
+	    if (playTime >= repeatEndTime) break;
 
         eventTime = comp.getElapsedRealTime(playTime);
 
         duration = helper.getRealSoundingDuration(j);
 
+	    // No duration and we're a note?  Probably in a tied
+	    // series, but not as first note
+	    //
+	    if (duration == Rosegarden::RealTime(0, 0) &&
+		(*j)->isa(Rosegarden::Note::EventType))
+		continue;
+	    
         try {
             // Create mapped event
             MappedEvent mE(track->getInstrument(),
@@ -2480,7 +2504,7 @@ void SegmentMmapper::dump()
         } catch(...) {
             SEQMAN_DEBUG << "SegmentMmapper::dump - caught exception while trying to create MappedEvent\n";
         }
-
+	}
     }
 
     if (byteArray.size() > 0) {
