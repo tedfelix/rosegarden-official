@@ -58,8 +58,8 @@ class AudioFileManager : public QObject, public XmlExportable
     Q_OBJECT
 public:
     AudioFileManager();
-    ~AudioFileManager();
-
+    virtual ~AudioFileManager();
+    
 private:
     AudioFileManager(const AudioFileManager &aFM);
     AudioFileManager& operator=(const AudioFileManager &);

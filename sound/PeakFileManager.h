@@ -57,7 +57,7 @@ public:
     // each exception.
     //
     PeakFileManager();
-    ~PeakFileManager();
+    virtual ~PeakFileManager();
 
 private:
     PeakFileManager(const PeakFileManager &pFM);
