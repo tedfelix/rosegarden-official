@@ -1,15 +1,8 @@
 Rosegarden 0.8.0 release notes
 ==============================
-The source tree builds for KDE 3.x as default and should configure as such
-straight out of the box.  To build for KDE 2.x it's necessary to do a little
-extra work - namely replacing the admin/ directory.  From the top level
-rosegarden/ or rosegarden-0.x.y/ directory perform the following commands
-to swap over the admin directories:
-
- % rm -r admin/
- % cp -r admin_kde2/ admin/
-
-It's then necessary to regenerate the "configure" script like so:
+The source tree builds for KDE 3.x. KDE 2.x support has been removed, as of
+Dec. 3rd 2002. To build it, you first need to regenerate the "configure"
+script like so:
 
   % make -f Makefile.cvs
 

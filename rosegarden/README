@@ -14,12 +14,10 @@ this in mind and keep an eye on the FAQ for known problems and workarounds:
 Build requirements
 ------------------
 
-The big requirement is KDE.  This program depends on the KDE 2.2 or KDE 3.x
-development libraries and build for KDE 3.x as default.  Please look in the
-INSTALL file for notes on how to build for KDE2.2.
+The big requirement is KDE 3.x, or more specifically the KDE 3.x
+development libraries (you don't need the whole KDE environment).
 
-Our code should compile with gcc-2.95 or gcc-3.0, although you may
-find that KDE 2.2 won't easily compile with the latter.
+Our code compiles with gcc-3.x.
 
 
 Compiling from source
@@ -106,35 +104,6 @@ starting-points include:
 
   docs/discussion/tasks_available.txt and
   docs/discussion/0.2_planned_tasks.txt -- ideas for what to do next
-
-
-WARNING: Qt 2.3.x and Xft
--------------------------
-
-If you are using Qt 2.3.x and have text font anti-aliasing switched
-on, either in the KDE control panel or by exporting QT_XFT=true, you
-may find that the Rosegarden notation views become pathologically slow
-when rendering large quantities of music.
-
-(The notation views are not especially quick anyway, but the symptom
-of this particular problem is that the first staff on a multi-staff
-view appears relatively quickly but the view almost grinds to a halt
-as it renders subsequent staffs.)
-
-This appears to be caused by a very naive implementation of Xft
-support in Qt 2.3.0 which causes a linear traversal of a list of
-font-related structures for all kinds of non-font-related drawing
-operations; the length of the list is proportional to the number of
-extant QPixmaps, and we may have thousands of those as we use one for
-every note.
-
-At the moment the only workaround we know of is not to use font
-anti-aliasing with Rosegarden and Qt 2.3.0.  (You can switch off
-anti-aliasing for a single application by unsetting the QT_XFT
-environment variable before starting it from the command-line.)  If
-font anti-aliasing is important to you, consider upgrading to
-Qt3/KDE3, which has a much more intelligent implementation of Xft
-support and is generally better anyway.
 
 
 Authors and copyright
