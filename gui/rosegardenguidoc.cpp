@@ -375,6 +375,11 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
         outStream << "label=\"" <<
 	    strtoqstr(Rosegarden::XmlExportable::encode(segment->getLabel()));
 
+	const Rosegarden::timeT *endMarker = segment->getRawEndMarkerTime();
+	if (endMarker) {
+	    outStream << "\" endmarker=\"" << *endMarker;
+	}
+
         if (segment->getType() == Rosegarden::Segment::Audio) {
             outStream << "\" type=\"audio\" "
                       << "file=\""

@@ -74,7 +74,7 @@ void MatrixHLayout::scanStaff(MatrixHLayout::StaffType &staffBase, timeT, timeT)
 
     m_firstBar = composition->getBarNumber(segment.getStartTime());
     timeT from = composition->getBarStart(m_firstBar),
-	    to = composition->getBarEndForTime(segment.getEndTime());
+	    to = composition->getBarEndForTime(segment.getEndMarkerTime());
 
     int barNo = m_firstBar;
     double startPosition = from;

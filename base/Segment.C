@@ -240,6 +240,12 @@ Segment::clearEndMarker()
     if (m_type != Audio) notifyEndMarkerChange(false);
 }
 
+const timeT *
+Segment::getRawEndMarkerTime() const
+{
+    return m_endMarkerTime;
+}
+
 
 void
 Segment::updateRefreshStatuses(timeT startTime, timeT endTime)

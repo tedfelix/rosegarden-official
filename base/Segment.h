@@ -238,7 +238,14 @@ public:
      * end marker is earlier).
      */
     void clearEndMarker();
-    
+
+    /**
+     * Return the end marker in raw form, that is, a pointer to
+     * its value or null if none is set.  Does not take the
+     * composition's end marker into account.
+     */
+    const timeT *getRawEndMarkerTime() const;
+
 
     //////
     //

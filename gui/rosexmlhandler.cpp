@@ -430,6 +430,11 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 	m_currentTime = startTime;
         m_composition.addSegment(m_currentSegment);
 
+	QString endMarkerStr = atts.value("endmarker");
+	if (endMarkerStr) {
+	    m_currentSegment->setEndMarkerTime(endMarkerStr.toInt());
+	}
+
     } else if (lcName == "resync") {
 	
 	QString time(atts.value("time"));
