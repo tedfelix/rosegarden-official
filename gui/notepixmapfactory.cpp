@@ -295,8 +295,8 @@ NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
     m_timeSigFontMetrics(m_timeSigFont),
     m_bigTimeSigFont("new century schoolbook", 12, QFont::Normal),
     m_bigTimeSigFontMetrics(m_bigTimeSigFont),
-    m_ottavoFont("times", 8, QFont::Normal, true),
-    m_ottavoFontMetrics(m_ottavoFont),
+    m_ottavaFont("times", 8, QFont::Normal, true),
+    m_ottavaFontMetrics(m_ottavaFont),
     m_generatedPixmap(0),
     m_generatedMask(0),
     m_generatedWidth(-1),
@@ -318,8 +318,8 @@ NotePixmapFactory::NotePixmapFactory(const NotePixmapFactory &npf) :
     m_timeSigFontMetrics(m_timeSigFont),
     m_bigTimeSigFont(npf.m_bigTimeSigFont),
     m_bigTimeSigFontMetrics(m_bigTimeSigFont),
-    m_ottavoFont("times", 8, QFont::Normal, true),
-    m_ottavoFontMetrics(m_ottavoFont),
+    m_ottavaFont("times", 8, QFont::Normal, true),
+    m_ottavaFontMetrics(m_ottavaFont),
     m_generatedPixmap(0),
     m_generatedMask(0),
     m_generatedWidth(-1),
@@ -344,8 +344,8 @@ NotePixmapFactory::operator=(const NotePixmapFactory &npf)
 	m_tupletCountFontMetrics = QFontMetrics(m_tupletCountFont);
 	m_textMarkFont = npf.m_textMarkFont;
 	m_textMarkFontMetrics = QFontMetrics(m_textMarkFont);
-	m_ottavoFont = npf.m_ottavoFont;
-	m_ottavoFontMetrics = QFontMetrics(m_ottavoFontMetrics);
+	m_ottavaFont = npf.m_ottavaFont;
+	m_ottavaFontMetrics = QFontMetrics(m_ottavaFontMetrics);
 	init(npf.m_font->getName(), npf.m_font->getSize());
 	m_dottedRestCache->clear();
 	m_textFontCache.clear();
@@ -402,8 +402,8 @@ NotePixmapFactory::init(std::string fontName, int size)
     m_textMarkFont.setPixelSize(size * 2);
     m_textMarkFontMetrics = QFontMetrics(m_textMarkFont);
 
-    m_ottavoFont.setPixelSize(size * 2);
-    m_ottavoFontMetrics = QFontMetrics(m_ottavoFont);
+    m_ottavaFont.setPixelSize(size * 2);
+    m_ottavaFontMetrics = QFontMetrics(m_ottavaFont);
 }
 
 NotePixmapFactory::~NotePixmapFactory()
@@ -2338,38 +2338,38 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above,
 }
 
 QCanvasPixmap*
-NotePixmapFactory::makeOttavoPixmap(int length, int octavesUp)
+NotePixmapFactory::makeOttavaPixmap(int length, int octavesUp)
 {
-    Rosegarden::Profiler profiler("NotePixmapFactory::makeOttavoPixmap");
-    drawOttavoAux(length, octavesUp, 0, 0, 0);
+    Rosegarden::Profiler profiler("NotePixmapFactory::makeOttavaPixmap");
+    drawOttavaAux(length, octavesUp, 0, 0, 0);
     return makeCanvasPixmap(QPoint(0, m_generatedHeight-1));
 }
 
 void
-NotePixmapFactory::drawOttavo(int length, int octavesUp,
+NotePixmapFactory::drawOttava(int length, int octavesUp,
 			      QPainter &painter, int x, int y)
 {
-    Rosegarden::Profiler profiler("NotePixmapFactory::drawOttavo");
+    Rosegarden::Profiler profiler("NotePixmapFactory::drawOttava");
     m_inPrinterMethod = true;
-    drawOttavoAux(length, octavesUp, &painter, x, y);
+    drawOttavaAux(length, octavesUp, &painter, x, y);
     m_inPrinterMethod = false;
 }
 
 void
-NotePixmapFactory::drawOttavoAux(int length, int octavesUp,
+NotePixmapFactory::drawOttavaAux(int length, int octavesUp,
 				 QPainter *painter, int x, int y)
 {
-    int height = m_ottavoFontMetrics.height();
+    int height = m_ottavaFontMetrics.height();
     int backpedal = 0;
     QString label;
     QRect r;
 
     if (octavesUp == 2 || octavesUp == -2) {
 	label = "15ma";
-	backpedal = m_ottavoFontMetrics.width("15") / 2;
+	backpedal = m_ottavaFontMetrics.width("15") / 2;
     } else {
 	label = "8va";
-	backpedal = m_ottavoFontMetrics.width("8") / 2;
+	backpedal = m_ottavaFontMetrics.width("8") / 2;
     }
 
     int width = length + backpedal;
@@ -2390,18 +2390,18 @@ NotePixmapFactory::drawOttavoAux(int length, int octavesUp,
 	pen.setColor(RosegardenGUIColours::SelectedElement);
     }
 
-    m_p->painter().setFont(m_ottavoFont);
-    if (!m_inPrinterMethod) m_p->maskPainter().setFont(m_ottavoFont);
+    m_p->painter().setFont(m_ottavaFont);
+    if (!m_inPrinterMethod) m_p->maskPainter().setFont(m_ottavaFont);
 
-    m_p->drawText(0, m_ottavoFontMetrics.ascent(), label);
+    m_p->drawText(0, m_ottavaFontMetrics.ascent(), label);
 
     m_p->painter().setPen(pen);
     if (!m_inPrinterMethod) m_p->maskPainter().setPen(pen);
 
-    int y0 = m_ottavoFontMetrics.ascent() * 2 / 3 - getStemThickness()/2;
-    int y1 = (octavesUp < 0 ? 0 : m_ottavoFontMetrics.ascent());
+    int y0 = m_ottavaFontMetrics.ascent() * 2 / 3 - getStemThickness()/2;
+    int y1 = (octavesUp < 0 ? 0 : m_ottavaFontMetrics.ascent());
     
-    m_p->drawLine(m_ottavoFontMetrics.width(label) + getStemThickness(),
+    m_p->drawLine(m_ottavaFontMetrics.width(label) + getStemThickness(),
 		  y0, width - 1, y0);
 
     pen.setStyle(Qt::SolidLine);

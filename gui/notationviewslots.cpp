@@ -935,7 +935,7 @@ void NotationView::slotGroupOctave2Up()
     KTmpStatusMsg msg(i18n("Adding octave..."), this);
 
     GroupMenuAddIndicationCommand *command =
-        new GroupMenuAddIndicationCommand(Rosegarden::Indication::Ottavo2Up,
+        new GroupMenuAddIndicationCommand(Rosegarden::Indication::QuindicesimaUp,
                                           *m_currentEventSelection);
     
     addCommandToHistory(command);
@@ -950,7 +950,7 @@ void NotationView::slotGroupOctaveUp()
     KTmpStatusMsg msg(i18n("Adding octave..."), this);
 
     GroupMenuAddIndicationCommand *command =
-        new GroupMenuAddIndicationCommand(Rosegarden::Indication::OttavoUp,
+        new GroupMenuAddIndicationCommand(Rosegarden::Indication::OttavaUp,
                                           *m_currentEventSelection);
     
     addCommandToHistory(command);
@@ -965,7 +965,7 @@ void NotationView::slotGroupOctaveDown()
     KTmpStatusMsg msg(i18n("Adding octave..."), this);
 
     GroupMenuAddIndicationCommand *command =
-        new GroupMenuAddIndicationCommand(Rosegarden::Indication::OttavoDown,
+        new GroupMenuAddIndicationCommand(Rosegarden::Indication::OttavaDown,
                                           *m_currentEventSelection);
     
     addCommandToHistory(command);
@@ -980,7 +980,7 @@ void NotationView::slotGroupOctave2Down()
     KTmpStatusMsg msg(i18n("Adding octave..."), this);
 
     GroupMenuAddIndicationCommand *command =
-        new GroupMenuAddIndicationCommand(Rosegarden::Indication::Ottavo2Down,
+        new GroupMenuAddIndicationCommand(Rosegarden::Indication::QuindicesimaDown,
                                           *m_currentEventSelection);
     
     addCommandToHistory(command);

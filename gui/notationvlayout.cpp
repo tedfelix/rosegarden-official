@@ -276,8 +276,8 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
 		    getSlurList(staff).push_back(i);
 		}
 
-		if (indicationType == Indication::OttavoUp ||
-		    indicationType == Indication::Ottavo2Up) {
+		if (indicationType == Indication::OttavaUp ||
+		    indicationType == Indication::QuindicesimaUp) {
 		    el->setLayoutY(staff.getLayoutYForHeight(15));
 		} else {
 		    el->setLayoutY(staff.getLayoutYForHeight(-9));

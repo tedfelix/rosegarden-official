@@ -670,13 +670,13 @@ GroupMenuAddIndicationCommand::getGlobalName(std::string indicationType)
 {
     if (indicationType == Rosegarden::Indication::Slur) {
 	return i18n("Add S&lur");
-    } else if (indicationType == Rosegarden::Indication::Ottavo2Up) {
+    } else if (indicationType == Rosegarden::Indication::QuindicesimaUp) {
 	return i18n("Add Double-Octave Up");
-    } else if (indicationType == Rosegarden::Indication::OttavoUp) {
+    } else if (indicationType == Rosegarden::Indication::OttavaUp) {
 	return i18n("Add Octave &Up");
-    } else if (indicationType == Rosegarden::Indication::OttavoDown) {
+    } else if (indicationType == Rosegarden::Indication::OttavaDown) {
 	return i18n("Add Octave &Down");
-    } else if (indicationType == Rosegarden::Indication::Ottavo2Down) {
+    } else if (indicationType == Rosegarden::Indication::QuindicesimaDown) {
 	return i18n("Add Double Octave Down");
     }
 

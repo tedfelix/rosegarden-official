@@ -1591,7 +1591,7 @@ void NotationView::setupActions()
                 SLOT(slotGroupDecrescendo()), actionCollection(), "decrescendo");
 
     new KAction(GroupMenuAddIndicationCommand::getGlobalName
-                (Rosegarden::Indication::Ottavo2Up), 0, 0, this,
+                (Rosegarden::Indication::QuindicesimaUp), 0, 0, this,
                 SLOT(slotGroupOctave2Up()), actionCollection(), "octave_2up");
 
     icon = QIconSet
@@ -1599,7 +1599,7 @@ void NotationView::setupActions()
         ("group-octave-up")));
 
     new KAction(GroupMenuAddIndicationCommand::getGlobalName
-                (Rosegarden::Indication::OttavoUp), icon, 0, this,
+                (Rosegarden::Indication::OttavaUp), icon, 0, this,
                 SLOT(slotGroupOctaveUp()), actionCollection(), "octave_up");
 
     icon = QIconSet
@@ -1607,11 +1607,11 @@ void NotationView::setupActions()
         ("group-octave-down")));
 
     new KAction(GroupMenuAddIndicationCommand::getGlobalName
-                (Rosegarden::Indication::OttavoDown), icon, 0, this,
+                (Rosegarden::Indication::OttavaDown), icon, 0, this,
                 SLOT(slotGroupOctaveDown()), actionCollection(), "octave_down");
 
     new KAction(GroupMenuAddIndicationCommand::getGlobalName
-                (Rosegarden::Indication::Ottavo2Down), icon, 0, this,
+                (Rosegarden::Indication::QuindicesimaDown), icon, 0, this,
                 SLOT(slotGroupOctave2Down()), actionCollection(), "octave_2down");
 
     icon = QIconSet

@@ -620,10 +620,10 @@ const std::string Indication::Slur = "slur";
 const std::string Indication::Crescendo = "crescendo";
 const std::string Indication::Decrescendo = "decrescendo";
 const std::string Indication::Glissando = "glissando";
-const std::string Indication::Ottavo2Up = "ottavo2up";
-const std::string Indication::OttavoUp = "ottavoup";
-const std::string Indication::OttavoDown = "ottavodown";
-const std::string Indication::Ottavo2Down = "ottavo2down";
+const std::string Indication::QuindicesimaUp = "ottava2up";
+const std::string Indication::OttavaUp = "ottavaup";
+const std::string Indication::OttavaDown = "ottavadown";
+const std::string Indication::QuindicesimaDown = "ottava2down";
 
 Indication::Indication(const Event &e)
 {
@@ -671,7 +671,7 @@ Indication::isValid(const std::string &s) const
 {
     return
 	(s == Slur || s == Crescendo || s == Decrescendo || s == Glissando ||
-	 s == Ottavo2Up || s == OttavoUp || s == OttavoDown || s == Ottavo2Down);
+	 s == QuindicesimaUp || s == OttavaUp || s == OttavaDown || s == QuindicesimaDown);
 }
 
 

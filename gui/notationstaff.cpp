@@ -989,18 +989,18 @@ NotationStaff::renderSingleElement(ViewElement *velt,
 
 		int octaves = 0;
 
-		if (indicationType == Indication::Ottavo2Up) octaves = 2;
-		else if (indicationType == Indication::OttavoUp) octaves = 1;
-		else if (indicationType == Indication::OttavoDown) octaves = -1;
-		else if (indicationType == Indication::Ottavo2Down) octaves = -2;
+		if (indicationType == Indication::QuindicesimaUp) octaves = 2;
+		else if (indicationType == Indication::OttavaUp) octaves = 1;
+		else if (indicationType == Indication::OttavaDown) octaves = -1;
+		else if (indicationType == Indication::QuindicesimaDown) octaves = -2;
 
 		if (octaves != 0) {
 		    if (m_printPainter) {
-			m_notePixmapFactory->drawOttavo
+			m_notePixmapFactory->drawOttava
 			    (length, octaves,
 			     *m_printPainter, int(coords.first), coords.second);
 		    } else {
-			pixmap = m_notePixmapFactory->makeOttavoPixmap
+			pixmap = m_notePixmapFactory->makeOttavaPixmap
 			    (length, octaves);
 		    }
 		} else {

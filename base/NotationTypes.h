@@ -528,10 +528,10 @@ public:
     static const std::string Decrescendo;
     static const std::string Glissando;
 
-    static const std::string Ottavo2Up;
-    static const std::string OttavoUp;
-    static const std::string OttavoDown;
-    static const std::string Ottavo2Down;
+    static const std::string QuindicesimaUp;
+    static const std::string OttavaUp;
+    static const std::string OttavaDown;
+    static const std::string QuindicesimaDown;
 
     Indication(const Event &e)
         /* throw (Event::NoData, Event::BadType) */;

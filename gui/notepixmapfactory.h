@@ -169,7 +169,7 @@ public:
     QCanvasPixmap* makeTimeSigPixmap(const Rosegarden::TimeSignature& sig);
     QCanvasPixmap* makeHairpinPixmap(int length, bool isCrescendo);
     QCanvasPixmap* makeSlurPixmap(int length, int dy, bool above);
-    QCanvasPixmap* makeOttavoPixmap(int length, int octavesUp);
+    QCanvasPixmap* makeOttavaPixmap(int length, int octavesUp);
     QCanvasPixmap* makeUnknownPixmap();
     QCanvasPixmap* makeTextPixmap(const Rosegarden::Text &text);
 
@@ -183,7 +183,7 @@ public:
 		     QPainter &painter, int x, int y);
     void drawSlur(int length, int dy, bool above,
 		  QPainter &painter, int x, int y);
-    void drawOttavo(int length, int octavesUp,
+    void drawOttava(int length, int octavesUp,
 		    QPainter &painter, int x, int y);
     void drawText(const Rosegarden::Text &text,
 		  QPainter &painter, int x, int y);
@@ -252,7 +252,7 @@ protected:
     void drawSlurAux(int length, int dy, bool above, bool smooth, bool flat,
 		     QPoint &hotspot,
 		     QPainter *painter, int x, int y);
-    void drawOttavoAux(int length, int octavesUp,
+    void drawOttavaAux(int length, int octavesUp,
 		       QPainter *painter, int x, int y);
     void drawTextAux(const Rosegarden::Text &text,
 		     QPainter *painter, int x, int y);
@@ -323,8 +323,8 @@ protected:
     QFont m_bigTimeSigFont;
     QFontMetrics m_bigTimeSigFontMetrics;
 
-    QFont m_ottavoFont;
-    QFontMetrics m_ottavoFontMetrics;
+    QFont m_ottavaFont;
+    QFontMetrics m_ottavaFontMetrics;
 
     QPixmap *m_generatedPixmap;
     QBitmap *m_generatedMask;
