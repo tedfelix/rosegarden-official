@@ -45,20 +45,21 @@ class MappedComposition : public std::multiset<MappedEvent *,
                           MappedEvent::MappedEventCmp>
 {
 public:
-    MappedComposition():m_startTime(0), m_endTime(0) {;}
+    MappedComposition():m_startTime(0, 0), m_endTime(0, 0) {;}
 
     MappedComposition(Rosegarden::Composition &comp,
-                      const Rosegarden::timeT &sT,
-                      const Rosegarden::timeT &eT);
+                      const Rosegarden::RealTime &sT,
+                      const Rosegarden::RealTime &eT);
 
-    MappedComposition(const Rosegarden::timeT &sT, const Rosegarden::timeT &eT):
+    MappedComposition(const Rosegarden::RealTime &sT,
+                      const Rosegarden::RealTime &eT):
         m_startTime(sT), m_endTime(eT) {;}
     ~MappedComposition() {;}
 
-    const Rosegarden::timeT getStartTime() const { return m_startTime; }
-    const Rosegarden::timeT getEndTime() const { return m_endTime; }
-    void setStartTime(const Rosegarden::timeT &sT) { m_startTime = sT; }
-    void setEndTime(const Rosegarden::timeT &eT) { m_endTime = eT; }
+    const Rosegarden::RealTime getStartTime() const { return m_startTime; }
+    const Rosegarden::RealTime getEndTime() const { return m_endTime; }
+    void setStartTime(const Rosegarden::RealTime &sT) { m_startTime = sT; }
+    void setEndTime(const Rosegarden::RealTime &eT) { m_endTime = eT; }
 
 
     // This section is used for serialising this class over DCOP
@@ -68,8 +69,8 @@ public:
     friend QDataStream& operator>>(QDataStream &dS, MappedComposition &mC);
 
 private:
-    Rosegarden::timeT m_startTime;
-    Rosegarden::timeT m_endTime;
+    Rosegarden::RealTime m_startTime;
+    Rosegarden::RealTime m_endTime;
 
 };
 

@@ -206,6 +206,8 @@ Composition::Composition() :
     m_tempoSegment(TempoEventType),
     m_position(0),
     m_defaultTempo(120.0),
+    m_startMarker(0),
+    m_endMarker(0),
     m_barPositionsNeedCalculating(true),
     m_tempoTimestampsNeedCalculating(true)
 {
@@ -841,6 +843,7 @@ void Composition::deleteTrack(const int &track)
 {
      trackiterator titerator = m_tracks.find(track);
 
+     delete ((*titerator).second);
      m_tracks.erase(titerator);
 }
 
@@ -848,6 +851,7 @@ void Composition::deleteInstrument(const int &instrument)
 {
      instrumentiterator iiterator = m_instruments.find(instrument);
 
+     delete ((*iiterator).second);
      m_instruments.erase(iiterator);
 }
 
@@ -920,32 +924,23 @@ std::string Composition::toXmlString()
 void
 Composition::clearTracks()
 {
-/*
     trackiterator it = m_tracks.begin();
-    for (; it != m_tracks.end(); it++)
-    {
-        m_tracks.erase(it);
-        //delete (*it);
-    }
-*/
 
-    m_tracks.clear();
+    for (; it != m_tracks.end(); it++)
+        delete ((*it).second);
+
+    m_tracks.erase(m_tracks.begin(), m_tracks.end());
 }
 
 void
 Composition::clearInstruments()
 {
-/*
     instrumentiterator it = m_instruments.begin();
  
     for (; it != m_instruments.end(); it++)
-    {
-        m_instruments.erase(it);
-        // delete(*it);
-    }
-*/
+        delete((*it).second);
 
-    m_instruments.clear();
+    m_instruments.erase(m_instruments.begin(), m_instruments.end());
 }
 
 

@@ -49,17 +49,17 @@
 namespace Rosegarden
 {
 
-// NOTE OFF queue. These hold a time ordered set of
-// NOTE OFF events.
+// NOTE OFF queue. This holds a time ordered set of
+// pending NOTE OFF events.
 //
 class NoteOffEvent
 {
 public:
     NoteOffEvent() {;}
-    NoteOffEvent(const unsigned int &midiTime,
+    NoteOffEvent(const Rosegarden::RealTime &realTime,
                  const unsigned int &pitch,
                  const Rosegarden::MidiByte &status):
-        m_midiTime(midiTime),
+        m_realTime(realTime),
         m_pitch(pitch),
         m_status(status) {;}
     ~NoteOffEvent() {;}
@@ -68,15 +68,15 @@ public:
     {
         bool operator()(NoteOffEvent *nO1, NoteOffEvent *nO2)
         { 
-            return nO1->getMidiTime() < nO2->getMidiTime();
+            return nO1->getRealTime() < nO2->getRealTime();
         }
     };
     
-    unsigned int getMidiTime() { return m_midiTime; }
+    Rosegarden::RealTime getRealTime() { return m_realTime; }
     Rosegarden::MidiByte getPitch() { return m_pitch; }
 
 private: 
-    unsigned int         m_midiTime;
+    Rosegarden::RealTime m_realTime;
     Rosegarden::MidiByte m_pitch;
     Rosegarden::MidiByte m_status;
 
@@ -144,14 +144,6 @@ public:
     // the maths here.
     //
     //
-    inline Rosegarden::timeT convertToInternalTime(const Arts::TimeStamp &timeStamp)
-    {
-        return (Rosegarden::timeT)
-            ((((double)(timeStamp.sec * 1000000 + timeStamp.usec)) *
-              m_ppq * (double) m_tempo )  /
-             60000000.0);
-    }
-
     // See docs/discussion/sequencer_timing.txt for explanation of
     // the maths here.
     //
@@ -177,23 +169,25 @@ public:
 
     // Process MappedComposition into MIDI events and send to aRTS.
     void processMidiOut(Rosegarden::MappedComposition mappedComp,
-                        const Rosegarden::timeT &playLatency);
+                        const Rosegarden::RealTime &playLatency);
 
     // Reset internal states ready for new playback to commence
     //
-    void initializePlayback(const timeT &position);
+    void initializePlayback(const Rosegarden::RealTime &position);
 
-    Rosegarden::timeT getSequencerTime();
+    Rosegarden::RealTime getSequencerTime();
 
     bool isPlaying() { return m_playing; }
 
     void stopPlayback();
 
-    // NOTE OFF control
-    void processNotesOff(unsigned int midiTime);
+    // Control of Notes off.  At the moment aRTS doesn't support
+    // the killing of Notes already pending to play.
+    //
+    void processNotesOff(const Rosegarden::RealTime &midiTime);
     void allNotesOff();
 
-    Rosegarden::timeT getStartPosition() { return m_playStartPosition; }
+    Rosegarden::RealTime getStartPosition() { return m_playStartPosition; }
 
     // Temporary cheat to enable quick sending of midi events from a 
     // thin aRTS client - not to be used in anger!
@@ -236,7 +230,7 @@ private:
     NoteOffQueue           m_noteOffQueue;
 
     // Absolute time playback start position
-    Rosegarden::timeT      m_playStartPosition;
+    Rosegarden::RealTime      m_playStartPosition;
 
     // Current recording status
     RecordStatus           m_recordStatus;

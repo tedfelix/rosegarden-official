@@ -30,7 +30,8 @@
 // coding the velocity components of all MappedEvents to maximum (127)
 //
 
-#include <Event.h>
+#include "Composition.h" // for Rosegarden::RealTime
+#include "Event.h"
 #include <multiset.h>
 #include <qdatastream.h>
 
@@ -43,17 +44,25 @@ typedef unsigned int velocityT;
 class MappedEvent
 {
 public:
-    MappedEvent() {;}
+    MappedEvent(): m_pitch(0),
+                   m_absoluteTime(0, 0),
+                   m_duration(0, 0),
+                   m_velocity(0),
+                   m_track(0) {;}
 
-    // Our major constructors used to convert from Events -
+    // Our main constructors used to convert from Events -
     // note that we put in place default velocities at this
     // point in case our Composition is missing them.
     //
     //
     MappedEvent(const Event &e);
-    MappedEvent(const Event &e, timeT duration);
 
-    MappedEvent(const int &pitch, const timeT &absTime, const timeT &duration,
+    MappedEvent(const Event &e,
+                const Rosegarden::RealTime &absoluteTime,
+                const Rosegarden::RealTime &duration);
+
+    MappedEvent(const int &pitch, const Rosegarden::RealTime &absTime,
+                const Rosegarden::RealTime &duration,
                 const velocityT &velocity, const trackT &track):
         m_pitch(pitch),
         m_absoluteTime(absTime),
@@ -63,14 +72,14 @@ public:
     ~MappedEvent() {;}
 
     void setPitch(const int &p) { m_pitch = p; }
-    void setAbsoluteTime(const timeT &a) { m_absoluteTime = a; }
-    void setDuration(const timeT &d) { m_duration = d; }
+    void setAbsoluteTime(const Rosegarden::RealTime &a) { m_absoluteTime = a; }
+    void setDuration(const Rosegarden::RealTime &d) { m_duration = d; }
     void setTrack(const trackT &i) { m_track = i; }
     void setVelocity(const velocityT &v) { m_velocity = v; }
 
     int   getPitch() const { return m_pitch; }
-    timeT getAbsoluteTime() const { return m_absoluteTime; }
-    timeT getDuration() const { return m_duration; }
+    Rosegarden::RealTime getAbsoluteTime() const { return m_absoluteTime; }
+    Rosegarden::RealTime getDuration() const { return m_duration; }
     velocityT getVelocity() const { return m_velocity; }
     trackT getTrack() const { return m_track; }
 
@@ -86,11 +95,11 @@ public:
 
 private:
 
-    int          m_pitch;
-    timeT        m_absoluteTime;
-    timeT        m_duration;
-    velocityT    m_velocity;
-    trackT       m_track;
+    int                      m_pitch;
+    Rosegarden::RealTime     m_absoluteTime;
+    Rosegarden::RealTime     m_duration;
+    velocityT                m_velocity;
+    trackT                   m_track;
 
 };
 

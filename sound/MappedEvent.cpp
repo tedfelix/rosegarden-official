@@ -21,15 +21,20 @@
 
 #include "MappedEvent.h"
 #include "BaseProperties.h"
-
+ 
 namespace Rosegarden
 {
 
-MappedEvent::MappedEvent(const Event &e, timeT duration):
+MappedEvent::MappedEvent(const Event &e,
+                         const Rosegarden::RealTime &absoluteTime,
+                         const Rosegarden::RealTime &duration):
        m_pitch(e.get<Int>(BaseProperties::PITCH)),
-       m_absoluteTime(e.getAbsoluteTime()),
+       m_absoluteTime(absoluteTime),
        m_duration(duration)
 {
+    // Attempt to get a velocity - if it fails then
+    // set the velocity to default maximum (127)
+    //
     try
     {
         m_velocity = e.get<Int>(BaseProperties::VELOCITY);
@@ -39,22 +44,6 @@ MappedEvent::MappedEvent(const Event &e, timeT duration):
         m_velocity = 127;
     }
 }
-
-MappedEvent::MappedEvent(const Event &e):
-       m_pitch(e.get<Int>(BaseProperties::PITCH)),
-       m_absoluteTime(e.getAbsoluteTime()),
-       m_duration(e.getDuration())
-{
-    try
-    {
-        m_velocity = e.get<Int>(BaseProperties::VELOCITY);
-    }
-    catch(...)
-    {
-        m_velocity = 127;
-    }
-}
-
 
 bool
 operator<(const MappedEvent &a, const MappedEvent &b)

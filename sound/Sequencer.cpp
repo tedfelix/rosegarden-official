@@ -40,6 +40,7 @@ using std::endl;
 Sequencer::Sequencer():
     m_playStartTime(0, 0),
     m_recordStartTime(0, 0),
+    m_playStartPosition(0, 0),
     m_recordStatus(ASYNCHRONOUS_MIDI),
     m_startPlayback(true),
     m_playing(false),
@@ -198,7 +199,7 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
     // we use a map of Notes and this is the key
     unsigned int chanNoteKey = ( channel << 8 ) + midiCommand.data1;
     //double absoluteSecs;
-    int duration;
+    Rosegarden::RealTime duration;
 
     // scan for our event
     switch(message)
@@ -221,7 +222,8 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
                 // Set time, pitch and velocity on the MappedEvent
                 //
                 m_noteOnMap[chanNoteKey]->
-                            setAbsoluteTime(convertToInternalTime(timeStamp));
+                       setAbsoluteTime(RealTime(timeStamp.sec, timeStamp.usec));
+
                 m_noteOnMap[chanNoteKey]->setPitch(midiCommand.data1);
                 m_noteOnMap[chanNoteKey]->setVelocity(midiCommand.data2);
     
@@ -233,12 +235,12 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
             //
             if ( m_noteOnMap[chanNoteKey] != 0 )
             {
-                duration = convertToInternalTime(timeStamp) -
-                       m_noteOnMap[chanNoteKey]->getAbsoluteTime();
+                Rosegarden::RealTime rTS(timeStamp.sec, timeStamp.usec);
+                duration = rTS - m_noteOnMap[chanNoteKey]->getAbsoluteTime();
 
                 // for the moment, ensure we're positive like this
                 //
-                assert(duration >= 0);
+                assert(duration.sec >= 0 || duration.usec >= 0 );
 
                 // set the duration
                 m_noteOnMap[chanNoteKey]->setDuration(duration);
@@ -272,7 +274,7 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
 
 void
 Sequencer::processMidiOut(Rosegarden::MappedComposition mappedComp,
-                          const timeT &playLatency)
+                          const Rosegarden::RealTime &playLatency)
 {
     Arts::MidiEvent event;
 
@@ -290,8 +292,8 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mappedComp,
     // for the moment hardcode the channel
     MidiByte channel = 0;
 
-    unsigned int midiRelativeTime = 0;
-    unsigned int midiRelativeStopTime = 0;
+    Rosegarden::RealTime midiRelativeTime;
+    Rosegarden::RealTime midiRelativeStopTime;
 
     // get current port time at start of playback
     if (m_startPlayback)
@@ -308,13 +310,13 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mappedComp,
         // sort out the correct TimeStamp for playback
         assert((*i)->getAbsoluteTime() >= m_playStartPosition);
 
-        // add the fiddle factor for timeT to MIDI conversion in here
+        // add the fiddle factor for RealTime to MIDI conversion in here
         midiRelativeTime = (*i)->getAbsoluteTime() - m_playStartPosition +
             playLatency;
 
 
         event.time = aggregateTime(m_playStartTime,
-                   convertToArtsTimeStamp(midiRelativeTime));
+                  Arts::TimeStamp(midiRelativeTime.sec, midiRelativeTime.usec));
 
         midiRelativeStopTime = midiRelativeTime + (*i)->getDuration();
     
@@ -376,7 +378,7 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mappedComp,
     // not processing any NOTE ONs.
     //
     //
-    if (midiRelativeTime == 0)
+    if (midiRelativeTime.sec == 0 && midiRelativeTime.usec == 0)
     {
         Arts::TimeStamp now = m_midiPlayPort.time();
         int sec = now.sec - m_playStartTime.sec;
@@ -389,7 +391,8 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mappedComp,
         }
 
         Arts::TimeStamp relativeNow(sec, usec);
-        midiRelativeTime = convertToInternalTime(relativeNow);
+        midiRelativeTime =
+               Rosegarden::RealTime(relativeNow.sec, relativeNow.usec);
     }
 
     // Process NOTE OFFs for current time
@@ -398,10 +401,11 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mappedComp,
 
 
 void
-Sequencer::processNotesOff(unsigned int midiTime)
+Sequencer::processNotesOff(const Rosegarden::RealTime &midiTime)
 {
     Arts::MidiEvent event;
     MidiByte channel = 0;
+    Rosegarden::RealTime noteOff;
 
     // process any pending NOTE OFFs
     for ( NoteOffQueue::iterator i = m_noteOffQueue.begin();
@@ -409,11 +413,15 @@ Sequencer::processNotesOff(unsigned int midiTime)
 
     {
         // If there's a pregnant NOTE OFF around then send it
-        if ((*i)->getMidiTime() <= midiTime)
+        if ((*i)->getRealTime() <= midiTime)
         {
             //event.time = m_midiPlayPort.time();
+
+            // Conversion from RealTime to Arts::TimeStamp
+            noteOff = (*i)->getRealTime();
             event.time = aggregateTime(m_playStartTime,
-                           convertToArtsTimeStamp((*i)->getMidiTime()));
+                           Arts::TimeStamp(noteOff.sec, noteOff.usec));
+
             event.command.data1 = (*i)->getPitch();
             event.command.data2 = 127;
             event.command.status = Arts::mcsNoteOff | channel;
@@ -437,12 +445,17 @@ Sequencer::allNotesOff()
 {
     Arts::MidiEvent event;
     MidiByte channel = 0;
+    Rosegarden::RealTime noteOff;
 
     for ( NoteOffQueue::iterator i = m_noteOffQueue.begin();
           i != m_noteOffQueue.end(); ++i )
     {
+        // Rather long way around of converting these two
+        //
+        noteOff = (*i)->getRealTime();
         event.time = aggregateTime(m_playStartTime,
-                       convertToArtsTimeStamp((*i)->getMidiTime()));
+                       Arts::TimeStamp(noteOff.sec, noteOff.usec));
+
         event.command.data1 = (*i)->getPitch();
         event.command.data2 = 127;
         event.command.status = Arts::mcsNoteOff | channel;
@@ -455,7 +468,7 @@ Sequencer::allNotesOff()
 }
 
 void 
-Sequencer::initializePlayback(const timeT &position)
+Sequencer::initializePlayback(const Rosegarden::RealTime &position)
 {
     m_startPlayback = true;
     m_playStartTime.sec = 0;
@@ -470,21 +483,21 @@ Sequencer::stopPlayback()
     m_playing = false;
 }
 
-Rosegarden::timeT
+Rosegarden::RealTime
 Sequencer::getSequencerTime()
 {
     if (m_playing)
     {
         Arts::TimeStamp artsTimeNow = m_midiPlayPort.time();
 
-        unsigned int internalRelativeTime =
-            convertToInternalTime(artsTimeNow) -
-            convertToInternalTime(m_playStartTime);
+        Rosegarden::RealTime internalRelativeTime =
+            Rosegarden::RealTime(artsTimeNow.sec, artsTimeNow.usec) -
+            Rosegarden::RealTime(m_playStartTime.sec, m_playStartTime.usec);
 
         return (m_playStartPosition + internalRelativeTime);
     }
 
-    return (0);
+    return Rosegarden::RealTime(0, 0);
 }
 
 // Returns a Composition containing the latest recording

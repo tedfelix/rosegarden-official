@@ -43,6 +43,7 @@
 #include <kmainwindow.h>
 #include <kaccel.h>
 
+#include "Composition.h"
 #include "rosegardendcop.h"
 #include "rosegardensequenceriface.h"
 #include "MappedComposition.h"
@@ -70,29 +71,47 @@ protected:
 public slots:
     virtual void quit();
 
-    // start the sequencer
+    // Based on RealTime timestamps
     //
-    // DCOP doesn't currently like to stream bools so we have to
-    // use ints for the return types of these slots.
-    //
-    virtual int play(const Rosegarden::timeT &position,
-                     const Rosegarden::timeT &playLatency,
-                     const Rosegarden::timeT &fetchLatency,
-                     const double &tempo);
+    int play(const Rosegarden::RealTime &position,
+             const Rosegarden::RealTime &playLatency,
+             const Rosegarden::RealTime &fetchLatency);
 
     // recording
-    virtual int record(const Rosegarden::timeT &position,
-                       const Rosegarden::timeT &playLatency,
-                       const Rosegarden::timeT &fetchLatency,
-                       const double &tempo,
+    int record(const Rosegarden::RealTime &position,
+               const Rosegarden::RealTime &playLatency,
+               const Rosegarden::RealTime &fetchLatency,
+               const int &recordMode);
+
+    // Play wrapper for DCOP
+    //
+    virtual int play(const long &timeSec,
+                     const long &timeUsec,
+                     const long &playLatencySec,
+                     const long &playLatencyUSec,
+                     const long &fetchLatencySec,
+                     const long &fetchLatencyUSec);
+
+    // Record wrapper for DCOP
+    //
+    virtual int record(const long &timeSec,
+                       const long &timeUSec,
+                       const long &playLatencySec,
+                       const long &playLatencyUSec,
+                       const long &fetchLatencySec,
+                       const long &fetchLatencyUSec,
                        const int &recordMode);
+
+    
+    // Jump to a pointer in the playback (uses longs instead
+    // of RealTime for DCOP)
+    //
+    //
+    virtual void jumpTo(const long &posSec, const long &posUsec);
 
     // stops the sequencer
     //
     virtual void stop();
-
-    // Any sudden moves
-    virtual void jumpTo(const Rosegarden::timeT &position);
 
     void setStatus(const TransportStatus &status)
             { m_transportStatus = status; }
@@ -122,17 +141,16 @@ public slots:
     //
     void processAsynchronousEvents();
 
-
 private:
-    Rosegarden::MappedComposition* fetchEvents(const Rosegarden::timeT &start,
-                                               const Rosegarden::timeT &end);
+    Rosegarden::MappedComposition* fetchEvents(const Rosegarden::RealTime &start,
+                                               const Rosegarden::RealTime &end);
 
     Rosegarden::Sequencer *m_sequencer;
     TransportStatus m_transportStatus;
 
     // Position pointer
-    Rosegarden::timeT m_songPosition;
-    Rosegarden::timeT m_lastFetchSongPosition;
+    Rosegarden::RealTime m_songPosition;
+    Rosegarden::RealTime m_lastFetchSongPosition;
 
     // Latency - m_fetchLatency - when we should fetch new events and
     //                            spool them onto aRTS
@@ -144,9 +162,9 @@ private:
     // We can throttle these values internally at first and see how
     // we get on.
     //
-    Rosegarden::timeT m_fetchLatency;
-    Rosegarden::timeT m_playLatency;
-    Rosegarden::timeT m_readAhead;
+    Rosegarden::RealTime m_fetchLatency;
+    Rosegarden::RealTime m_playLatency;
+    Rosegarden::RealTime m_readAhead;
 
 };
  

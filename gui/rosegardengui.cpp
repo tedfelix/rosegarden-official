@@ -68,8 +68,8 @@ RosegardenGUIApp::RosegardenGUIApp()
       m_fileRecent(0),
       m_view(0),
       m_doc(0),
-      m_playbackLatency(30),
-      m_fetchLatency(20),
+      m_playbackLatency(0, 300),
+      m_fetchLatency(0, 200),
       m_transportStatus(STOPPED),
       m_sequencerProcess(0)
 {
@@ -391,7 +391,8 @@ void RosegardenGUIApp::initView()
 
     // set the pointer position
     //
-    setPointerPosition(m_doc->getComposition().getPosition());
+    setPointerPosition(m_doc->getComposition().getElapsedRealTime(
+                        m_doc->getComposition().getPosition()));
 
     // set the tempo in the transport
     //
@@ -956,8 +957,10 @@ void RosegardenGUIApp::changeTimeResolution()
 //
 //
 const Rosegarden::MappedComposition&
-RosegardenGUIApp::getSequencerSlice(const Rosegarden::timeT &sliceStart,
-                                    const Rosegarden::timeT &sliceEnd)
+RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
+                                    const long &sliceStartUsec,
+                                    const long &sliceEndSec,
+                                    const long &sliceEndUsec)
 {
     // [rwb] - moved this code in here from MappedComposition
     //         to reduce playback latency
@@ -978,17 +981,26 @@ RosegardenGUIApp::getSequencerSlice(const Rosegarden::timeT &sliceStart,
     if (m_transportStatus == STOPPING)
       return mappComp;
   
-    mappComp.setStartTime(sliceStart);
-    mappComp.setEndTime(sliceEnd);
+    mappComp.setStartTime(Rosegarden::RealTime(sliceStartSec, sliceStartUsec));
+    mappComp.setEndTime(Rosegarden::RealTime(sliceEndSec, sliceEndUsec));
 
-    Rosegarden::timeT eventTime;
+/*
+    timeT sliceStartElapsed =
+      m_doc->getComposition().getElapsedTimeForRealTime(mappComp.getStartTime());
+*/
+
+    timeT sliceEndElapsed =
+      m_doc->getComposition().getElapsedTimeForRealTime(mappComp.getEndTime());
+
+    Rosegarden::RealTime eventTime;
+    Rosegarden::RealTime duration;
   
     for (Rosegarden::Composition::iterator i = m_doc->getComposition().begin();
                              i != m_doc->getComposition().end(); i++ )
     {
         // Skip the Segment if it starts too late to be of
         // interest to our slice.
-        if ( (*i)->getStartIndex() > sliceEnd )
+        if ( (*i)->getStartIndex() > sliceEndElapsed )
             continue;
 
         Rosegarden::SegmentPerformanceHelper helper(**i);
@@ -1009,30 +1021,36 @@ RosegardenGUIApp::getSequencerSlice(const Rosegarden::timeT &sliceStart,
             if (!(*j)->isa(Rosegarden::Note::EventType))
                 continue;
 
-            // Find the performance duration, i.e. taking into account any
-            // ties etc that this note may have  --cc
-            // 
-            timeT duration = helper.getSoundingDuration(j);
-
-            // probably in a tied series, but not as first note
-            if (duration == 0)
-                continue;
-
             // get the eventTime
-            eventTime = (unsigned int) (*j)->getAbsoluteTime();
+            eventTime = m_doc->getComposition().
+                          getElapsedRealTime((*j)->getAbsoluteTime());
 
             // As events are stored chronologically we can escape if
             // we're already beyond our event horizon for this slice.
             //
-            if ( eventTime > sliceEnd )
+            if ( eventTime > mappComp.getEndTime() )
                 break;
 
+            // Find the performance duration, i.e. taking into account any
+            // ties etc that this note may have  --cc
+            // 
+            duration = m_doc->getComposition().
+                          getElapsedRealTime(helper.getSoundingDuration(j));
+
+            // probably in a tied series, but not as first note
+            //
+            if (duration > Rosegarden::RealTime(0, 0))
+                continue;
+
             // Eliminate events before our required time
-            if ( eventTime >= sliceStart && eventTime <= sliceEnd)
+            //
+            if ( eventTime >= mappComp.getStartTime() &&
+                 eventTime <= mappComp.getEndTime())
             {
                 // insert event
                 Rosegarden::MappedEvent *me =
-                                  new Rosegarden::MappedEvent(**j, duration);
+                      new Rosegarden::MappedEvent(**j, eventTime, duration);
+
                 me->setTrack((*i)->getTrack());
                 mappComp.insert(me);
             }
@@ -1129,7 +1147,8 @@ void RosegardenGUIApp::importRG21File(const QString &file)
     initView();
 }
 
-void RosegardenGUIApp::setPointerPosition(const int &position)
+void RosegardenGUIApp::setPointerPosition(const long &posSec,
+                                          const long &posUsec)
 {
     // We do this the lazily dangerous way of setting Composition
     // time and then gui time - we should probably make this
@@ -1137,8 +1156,6 @@ void RosegardenGUIApp::setPointerPosition(const int &position)
     // it nice and encapsulated ... but as long as we only EVER
     // use this modifier method for changing composition time
     // we can probably get away with it.
-
-//    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::setPointerPosition" << endl;
 
     // cc -- this seems like a good idea, but is it safe?
     //
@@ -1148,16 +1165,19 @@ void RosegardenGUIApp::setPointerPosition(const int &position)
     //
     //if (m_doc->getComposition().getPosition() == position) return;
 
+    Rosegarden::RealTime rT(posSec, posUsec);
+
+    timeT elapsedTime = m_doc->getComposition().getElapsedTimeForRealTime(rT);
+
     // set the composition time
-    m_doc->getComposition().setPosition((timeT) position);
+    m_doc->getComposition().setPosition(elapsedTime);
 
     // and the gui time
-    m_view->setPointerPosition(position);
+    m_view->setPointerPosition(elapsedTime);
 
     // and the time
     //
-    m_transport->displayTime
-	(m_doc->getComposition().getElapsedRealTime(position));
+    m_transport->displayTime(rT);
 }
 
 void RosegardenGUIApp::play()
@@ -1209,15 +1229,26 @@ void RosegardenGUIApp::play()
 
     // The arguments for the Sequencer
     //
-    streamOut << m_doc->getComposition().getPosition(); // playback start position
-    streamOut << m_playbackLatency;                     // playback latency
-    streamOut << m_fetchLatency;                        // fetch latency
-    streamOut << m_doc->getComposition().getTempo();    // tempo
+
+    Rosegarden::RealTime startPos = m_doc->getComposition().
+                getElapsedRealTime(m_doc->getComposition().getPosition());
+
+    // playback start position
+    streamOut << startPos.sec;
+    streamOut << startPos.usec;
+
+    // playback latency
+    streamOut << m_playbackLatency.sec;
+    streamOut << m_playbackLatency.usec;
+
+    // fetch latency
+    streamOut << m_fetchLatency.sec;
+    streamOut << m_fetchLatency.usec;
 
     // Send Play to the Sequencer
     if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
                                   ROSEGARDEN_SEQUENCER_IFACE_NAME,
-         "play(Rosegarden::timeT, Rosegarden::timeT, Rosegarden::timeT, double)",
+            "play(long int, long int, long int, long int, long int, long int)",
                                   data, replyType, replyData))
     {
         // failed - pop up and disable sequencer options
@@ -1257,7 +1288,7 @@ void RosegardenGUIApp::stop()
 
     if (m_transportStatus == STOPPED)
     {
-        setPointerPosition(0);
+        setPointerPosition(0, 0);
         return;
     }
 
@@ -1309,7 +1340,7 @@ void RosegardenGUIApp::rewind()
     
     // want to cope with bars beyond the actual end of the piece
     int barNumber = composition.getBarNumber(position - 1, false);
-    timeT jumpTo = composition.getBarRange(barNumber, false).first;
+    Rosegarden::RealTime jumpTo = composition.getElapsedRealTime(composition.getBarRange(barNumber, false).first);
 
     if ( m_transportStatus == PLAYING ||
          m_transportStatus == RECORDING_MIDI ||
@@ -1335,7 +1366,7 @@ void RosegardenGUIApp::fastforward()
     cerr<<"RosegardenGUIApp::fastforward:position="<<position<<endl;
 
     int  barNumber = composition.getBarNumber(position, false);
-    timeT   jumpTo = composition.getBarRange(barNumber + 1, false).first;
+    Rosegarden::RealTime jumpTo = composition.getElapsedRealTime(composition.getBarRange(barNumber + 1, false).first);
 
 
     // we need to work out where the trackseditor finishes so we
@@ -1372,15 +1403,16 @@ void RosegardenGUIApp::notifySequencerStatus(const int& status)
 }
 
 
-void RosegardenGUIApp::sendSequencerJump(const Rosegarden::timeT &position)
+void RosegardenGUIApp::sendSequencerJump(const Rosegarden::RealTime &position)
 {
     QByteArray data;
     QDataStream streamOut(data, IO_WriteOnly);
-    streamOut << position;
+    streamOut << position.sec;
+    streamOut << position.usec;
 
     if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
                                   ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "jumpTo(Rosegarden::timeT)",
+                                  "jumpTo(long int, long int)",
                                   data))
     {
       // failed - pop up and disable sequencer options
@@ -1585,7 +1617,7 @@ RosegardenGUIApp::record()
     }
     else
     {
-        cout << "RosegardenGUIApp::play() - playing at tempo " << 
+        cout << "RosegardenGUIApp::record() - recording at tempo " << 
                   m_doc->getComposition().getTempo() << endl;
     }
 
@@ -1596,16 +1628,29 @@ RosegardenGUIApp::record()
     // The arguments for the Sequencer  - record is similar to playback,
     // we must being playing to record
     //
-    streamOut << m_doc->getComposition().getPosition();
-    streamOut << m_playbackLatency;                     // playback latency
-    streamOut << m_fetchLatency;                        // fetch latency
-    streamOut << m_doc->getComposition().getTempo();    // tempo
-    streamOut << (int)recordType;                       // midi or audio
+
+    Rosegarden::RealTime startPos = m_doc->getComposition().
+                getElapsedRealTime(m_doc->getComposition().getPosition());
+
+    // playback start position
+    streamOut << startPos.sec;
+    streamOut << startPos.usec;
+
+    // playback latency
+    streamOut << m_playbackLatency.sec;
+    streamOut << m_playbackLatency.usec;
+
+    // fetch latency
+    streamOut << m_fetchLatency.sec;
+    streamOut << m_fetchLatency.usec;
+
+    // record type
+    streamOut << (int)recordType;
 
     // Send Play to the Sequencer
     if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
                                   ROSEGARDEN_SEQUENCER_IFACE_NAME,
-      "record(Rosegarden::timeT, Rosegarden::timeT, Rosegarden::timeT, double, int)",
+                                  "record(long int, long int, long int, long int, long int, long int, int)",
                                   data, replyType, replyData))
     {
         // failed - pop up and disable sequencer options
@@ -1715,11 +1760,11 @@ RosegardenGUIApp::rewindToBeginning()
          m_transportStatus == RECORDING_MIDI ||
          m_transportStatus == RECORDING_AUDIO )
     {
-        sendSequencerJump(0);
+        sendSequencerJump(Rosegarden::RealTime(0, 0));
     }
     else
     {
-        setPointerPosition(0);
+        setPointerPosition(Rosegarden::RealTime(0, 0));
     }
 
 
@@ -1732,7 +1777,7 @@ RosegardenGUIApp::fastForwardToEnd()
     cout << "RosegardenGUIApp::fastForwardToEnd()" << endl;
 
     Rosegarden::Composition &composition = m_doc->getComposition();
-    timeT jumpTo = composition.getDuration();
+    Rosegarden::RealTime jumpTo = composition.getElapsedRealTime(composition.getDuration());
 
     if ( m_transportStatus == PLAYING ||
          m_transportStatus == RECORDING_MIDI ||
@@ -1769,7 +1814,5 @@ RosegardenGUIApp::activateTool(SegmentCanvas::ToolType tt)
              break;
     }
 }
-
-
 
 

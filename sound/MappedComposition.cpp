@@ -40,8 +40,8 @@ MappedCompositionIterator it;
 MappedEvent               *insertEvent;
 int                       sliceSize;
 int                       pitch;
-timeT                     absTime;
-timeT                     duration;
+Rosegarden::RealTime      absTime;
+Rosegarden::RealTime      duration;
 trackT                    track;
 velocityT                 velocity;
 
@@ -53,20 +53,21 @@ velocityT                 velocity;
 // stage.  [rwb]
 //
 MappedComposition::MappedComposition(Rosegarden::Composition &comp,
-                                     const Rosegarden::timeT &sT,
-                                     const Rosegarden::timeT &eT):
+                                     const Rosegarden::RealTime &sT,
+                                     const Rosegarden::RealTime &eT):
     m_startTime(sT),
     m_endTime(eT)
 {
     assert(m_endTime >= m_startTime);
     
-    Rosegarden::timeT eventTime;
+    Rosegarden::RealTime eventTime;
+    Rosegarden::RealTime duration;
 
     for (Composition::iterator i = comp.begin(); i != comp.end(); i++ )
     {
 	// Skip the Segment if it starts too late to be of
 	// interest to our slice.
-	if ( (*i)->getStartIndex() > int(m_endTime) )
+	if ( comp.getElapsedRealTime((*i)->getStartIndex()) > m_endTime )
 	    continue;
 
 	SegmentPerformanceHelper helper(**i);
@@ -84,13 +85,13 @@ MappedComposition::MappedComposition(Rosegarden::Composition &comp,
 	    // Find the performance duration, i.e. taking into account any
 	    // ties etc that this note may have  --cc
 	    // 
-	    timeT duration = helper.getSoundingDuration(j);
+	    duration = comp.getElapsedRealTime(helper.getSoundingDuration(j));
 
-	    if (duration == 0) // probably in a tied series, but not as first note
+	    if (duration > Rosegarden::RealTime(0, 0)) // probably in a tied series, but not as first note
 		continue;
 
 	    // get the eventTime
-	    eventTime = (unsigned int) (*j)->getAbsoluteTime();
+	    eventTime = comp.getElapsedRealTime((*j)->getAbsoluteTime());
 
 	    // As events are stored chronologically we can escape if
 	    // we're already beyond our event horizon for this slice.
@@ -102,7 +103,7 @@ MappedComposition::MappedComposition(Rosegarden::Composition &comp,
 	    if ( eventTime >= m_startTime && eventTime <= m_endTime)
 	    {
 		// insert event
-		MappedEvent *me = new MappedEvent(**j, duration);
+		MappedEvent *me = new MappedEvent(**j, eventTime, duration);
 		me->setTrack((*i)->getTrack());
 		this->insert(me);
 	    }
@@ -123,8 +124,10 @@ operator<<(QDataStream &dS, const MappedComposition &mC)
     for ( it = mC.begin(); it != mC.end(); ++it )
     {
 	dS << (*it)->getPitch();
-	dS << (*it)->getAbsoluteTime();
-	dS << (*it)->getDuration();
+	dS << (*it)->getAbsoluteTime().sec;
+	dS << (*it)->getAbsoluteTime().usec;
+	dS << (*it)->getDuration().sec;
+	dS << (*it)->getDuration().usec;
 	dS << (*it)->getVelocity();
 	dS << (*it)->getTrack();
     }
@@ -143,8 +146,10 @@ operator>>(QDataStream &dS, MappedComposition &mC)
     while (!dS.atEnd() && sliceSize)
     {
 	dS >> pitch;
-	dS >> absTime;
-	dS >> duration;
+        dS >> absTime.sec;
+	dS >> absTime.usec;
+	dS >> duration.sec;
+	dS >> duration.usec;
 	dS >> velocity;
 	dS >> track;
 

@@ -61,8 +61,10 @@ k_dcop:
     // of what we have in Event and Composition.  
     //
     virtual const Rosegarden::MappedComposition&
-            getSequencerSlice(const Rosegarden::timeT &sliceStart,
-                              const Rosegarden::timeT &sliceEnd) = 0;
+            getSequencerSlice(const long &sliceStartSec,
+                              const long &sliceStartUsec,
+                              const long &sliceEndSec,
+                              const long &sliceEndUsec) = 0;
 
     // The Sequencer sends back MappedCompositions full of
     // newly recorded MappedEvents for storage and presentation
@@ -77,7 +79,8 @@ k_dcop:
 
     // Sequencer updates GUI pointer position
     //
-    virtual void setPointerPosition(const int &position) = 0;
+    virtual void setPointerPosition(const long &realTimeSec,
+                                    const long &realTimeUsec) = 0;
 
     // Sequencer updates GUI with status
     //

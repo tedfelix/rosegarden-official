@@ -127,8 +127,10 @@ public:
      * full of MappedEvents for it to play.
      */
     const Rosegarden::MappedComposition&
-            getSequencerSlice(const Rosegarden::timeT &sliceStart,
-                              const Rosegarden::timeT &sliceEnd);
+            getSequencerSlice(const long &sliceStartSec,
+                              const long &sliceStartUSec,
+                              const long &sliceEndSec,
+                              const long &sliceEndUSec);
 
     /**
      * The Sequencer sends back a MappedComposition full of
@@ -399,9 +401,19 @@ public slots:
     void editAllTracks();
 
     /**
-     * Set the song position pointer
+     * Set the song position pointer - we use longs so that
+     * this method is directly accesible from the sequencer
+     * (longs are required over DCOP)
      */
-    void setPointerPosition(const int &position);
+    void setPointerPosition(const long &posSec, const long &posUSec);
+
+
+    /*
+     * Rosegarden::RealTime version of the same
+     */
+    inline void setPointerPosition(const Rosegarden::RealTime &rT)
+        { setPointerPosition(rT.sec, rT.usec); }
+
 
     /**
      * Transport controls
@@ -426,7 +438,7 @@ public slots:
      * sequencer if we're ffwding, rwding or just jumping about on the
      * Composition.
      */
-    void sendSequencerJump(const Rosegarden::timeT &position);
+    void sendSequencerJump(const Rosegarden::RealTime &position);
 
     /**
      * Called when the sequencer auxiliary process exits
@@ -504,8 +516,8 @@ private:
     KAction *m_rewindEndTransport;
     KAction *m_ffwdEndTransport;
 
-    int m_playbackLatency;
-    int m_fetchLatency;
+    Rosegarden::RealTime m_playbackLatency;
+    Rosegarden::RealTime m_fetchLatency;
 
     /**
      * Transport (Playback and Recording) status

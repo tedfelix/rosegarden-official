@@ -33,18 +33,22 @@ public:
 
     virtual void quit() = 0;
 
-    virtual int play(const Rosegarden::timeT &position,
-                     const Rosegarden::timeT &playLatency,
-                     const Rosegarden::timeT &fetchLatency,
-                     const double &tempo) = 0;
+    virtual int play(const long &timeSec,
+                     const long &timeUsec,
+                     const long &playLatencySec,
+                     const long &playLatencyUSec,
+                     const long &fetchLatencySec,
+                     const long &fetchLatencyUSec) = 0;
 
-    virtual int record(const Rosegarden::timeT &position,
-                     const Rosegarden::timeT &playLatency,
-                     const Rosegarden::timeT &fetchLatency,
-                     const double &tempo,
-                     const int &recordMode) = 0;
+    virtual int record(const long &timeSec,
+                       const long &timeUSec,
+                       const long &playLatencySec,
+                       const long &playLatencyUSec,
+                       const long &fetchLatencySec,
+                       const long &fetchLatencyUSec,
+                       const int &recordMode) = 0;
 
-    virtual void jumpTo(const Rosegarden::timeT &position) = 0;
+    virtual void jumpTo(const long &posSec, const long &posUSec) = 0;
 
     virtual void stop() = 0;
 

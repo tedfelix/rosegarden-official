@@ -40,6 +40,8 @@ struct RealTime
     long sec;
     long usec;
 
+    RealTime(): sec(0), usec(0) {;}
+
     RealTime(long s, long u) :
 	sec(s), usec(u) {
 	while (usec > 1000000) { usec -= 1000000; ++sec; }
@@ -400,6 +402,16 @@ public:
      */
     void setPosition(timeT position);
 
+    /////////////
+    //
+    // START AND END MARKERS
+    //
+    timeT getStartMarker() const { return m_startMarker; }
+    timeT getEndMarker() const { return m_endMarker; }
+
+    void setStartMarker(const timeT &sM) { m_startMarker = sM; }
+    void setEndMarker(const timeT &eM) { m_endMarker = eM; }
+
 
     // Some set<> API delegation
     iterator       begin()       { return m_segments.begin(); }
@@ -505,6 +517,13 @@ protected:
 
     timeT m_position;
     double m_defaultTempo;
+
+    // Notional Composition markers - these define buffers for the
+    // start and end of the piece, Segments can still exist outside
+    // of these markers - these are for visual and playback cueing.
+    //
+    timeT m_startMarker;
+    timeT m_endMarker;
 
     /// affects m_barSegment
     void calculateBarPositions() const;
