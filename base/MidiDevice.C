@@ -119,16 +119,8 @@ MidiDevice::MidiDevice(const MidiDevice &dev):
         m_instruments.push_back(newInst);
     }
 
-    // Copy the presentation instruments
-    //
-    insList = dev.getPresentationInstruments();
-    for (iIt = insList.begin(); iIt != insList.end(); iIt++)
-    {
-        Instrument *newInst = new Instrument(**iIt);
-        newInst->setDevice(this);
-        m_presentationInstrumentList.push_back(newInst);
-    }
-
+    // generate presentation instruments
+    generatePresentationList();
 }
 
 MidiDevice
@@ -141,6 +133,10 @@ MidiDevice::operator=(const MidiDevice &dev)
     m_programList->clear();
     m_bankList->clear();
     m_duplex = dev.isDuplex();
+
+    // clear down instruments list
+    m_instruments.clear();
+    m_presentationInstrumentList.clear();
 
     // Device
     m_label = dev.getUserLabel();
@@ -206,15 +202,8 @@ MidiDevice::operator=(const MidiDevice &dev)
         m_instruments.push_back(newInst);
     }
 
-    // Copy the presentation instruments
-    //
-    insList = dev.getPresentationInstruments();
-    for (iIt = insList.begin(); iIt != insList.end(); iIt++)
-    {
-        Instrument *newInst = new Instrument(**iIt);
-        newInst->setDevice(this);
-        m_presentationInstrumentList.push_back(newInst);
-    }
+    // generate presentation instruments
+    generatePresentationList();
 
     return (*this);
 }
