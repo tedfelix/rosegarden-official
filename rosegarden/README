@@ -27,13 +27,16 @@ Compiling from source
 
 If you obtained the source code from the SourceForge CVS repository:
 
-  This application is packaged in the same way as most other KDE
-  applications.  Please consult the "COMPILING" file found in the KDE
-  source code for a description of how to compile code from CVS.
+  just grab one of the developers' configure scripts such as
+  "gl_configure", edit it to your needs (you will most likely first
+  need to change the Qt and KDE install paths in the script according
+  to your setup), and run it. It will setup your source tree so you'll
+  just have to run "make" afterwards.
 
-  You may wish to run one of the developers' configure scripts such as
-  "gl_configure"; you will first need to change the Qt and KDE install
-  paths in the script according to your setup.
+  For more info, you can refer to the "COMPILING" file found in the
+  KDE source code for a description of how to compile code from CVS,
+  but the xx_configure scripts should perform the actions described in
+  that file for you (make -f Makefile.cvs ; ./configure...).
 
   After configuring, run "make" and, if the compile succeeds, "make
   install".  (The pixmaps need to be installed to the global KDE
