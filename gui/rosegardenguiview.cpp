@@ -497,8 +497,13 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
 
 void RosegardenGUIView::slotEditSegmentsMatrix(std::vector<Rosegarden::Segment *> segmentsToEdit)
 {
-    MatrixView *view = createMatrixView(segmentsToEdit);
-    if (view) view->show();
+    for (std::vector<Rosegarden::Segment *>::iterator i = segmentsToEdit.begin();
+	 i != segmentsToEdit.end(); ++i) {
+	std::vector<Rosegarden::Segment *> tmpvec;
+	tmpvec.push_back(*i);
+	MatrixView *view = createMatrixView(tmpvec);
+	if (view) view->show();
+    }
 }
 
 MatrixView *
@@ -611,6 +616,17 @@ void RosegardenGUIView::slotEditSegmentEventList(Rosegarden::Segment *p)
 
 void RosegardenGUIView::slotEditSegmentsEventList(std::vector<Rosegarden::Segment *> segmentsToEdit)
 {
+    for (std::vector<Rosegarden::Segment *>::iterator i = segmentsToEdit.begin();
+	 i != segmentsToEdit.end(); ++i) {
+	std::vector<Rosegarden::Segment *> tmpvec;
+	tmpvec.push_back(*i);
+	EventView *view = createEventView(tmpvec);
+	if (view) view->show();
+    }
+}
+
+EventView *RosegardenGUIView::createEventView(std::vector<Rosegarden::Segment *> segmentsToEdit)
+{
     EventView *eventView = new EventView(getDocument(),
                                          segmentsToEdit,
                                          this);
@@ -644,7 +660,7 @@ void RosegardenGUIView::slotEditSegmentsEventList(std::vector<Rosegarden::Segmen
         par->plugAccelerators(eventView, eventView->getAccelerators());
     }
 
-    eventView->show();
+    return eventView;
 }
 
 void RosegardenGUIView::slotEditTriggerSegment(int id)

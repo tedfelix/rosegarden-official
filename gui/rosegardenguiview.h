@@ -58,6 +58,7 @@ class MultiViewCommandHistory;
 class KCommand;
 class NotationView;
 class MatrixView;
+class EventView;
 class SequencerMapper;
 
 /**
@@ -306,6 +307,7 @@ protected:
 
     NotationView *createNotationView(std::vector<Rosegarden::Segment *>);
     MatrixView   *createMatrixView  (std::vector<Rosegarden::Segment *>);
+    EventView    *createEventView   (std::vector<Rosegarden::Segment *>);
 
     //--------------- Data members ---------------------------------
 
