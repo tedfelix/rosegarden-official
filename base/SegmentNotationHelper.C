@@ -668,13 +668,6 @@ SegmentNotationHelper::insertSingleSomething(iterator i, int duration,
     } else {
 	time = (*i)->getAbsoluteTime();
 	if (isRest || (*i)->isa(Note::EventRestType)) eraseI = true;
-/*!!!
-	if ((*i)->has(TUPLET_NOMINAL_DURATION)) {
-	    effectiveDuration =
-		(effectiveDuration * (*i)->getDuration()) /
-		(*i)->get<Int>(TUPLET_NOMINAL_DURATION);
-	}
-*/
     }
 
     Event *e = new Event(isRest ? Note::EventRestType : Note::EventType,
@@ -1350,21 +1343,6 @@ SegmentNotationHelper::quantize()
 	}
     }
 }
-
-/*!!!
-void
-SegmentNotationHelper::normalizeRests(timeT startTime, timeT endTime)
-{
-    //!!! This method should also check for places where rests are
-    // absent but necessary (i.e. no notes are sounding -- trickier
-    // than it looks), or present but unwanted, or present but simply
-    // wrong.  In fact it should probably regenerate the rests
-    // completely within the given range...
-
-    reorganizeRests(startTime, endTime,
-		    &SegmentNotationHelper::normalizeContiguousRests);
-}
-*/
 
 
 void

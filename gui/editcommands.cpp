@@ -368,7 +368,7 @@ EraseCommand::EraseCommand(EventSelection &selection) :
 void
 EraseCommand::modifySegment()
 {
-    std::vector<Event *> eventsToErase;
+    std::vector<Segment::iterator> toErase;
     EventSelection::eventcontainer::iterator i;
 
     for (i  = m_selection->getSegmentEvents().begin();
@@ -379,29 +379,22 @@ EraseCommand::modifySegment()
 	    m_relayoutEndTime = getSegment().getEndTime();
 	}
 
-	// Erasing rests is dangerous and unnecessary -- when we erase
-	// a note or rest, any surrounding rests may be erased and
-	// collapsed as well, which means we may blow up when attempting
-	// subsequently to erase one of those explicitly.  If we never
-	// explicitly erase a rest, we should be fine.
+	// We used to do this by calling SegmentNotationHelper::deleteEvent
+	// on each event in the selection, but it's probably easier to
+	// cope with general selections by deleting everything in the
+	// selection and then normalizing the rests.  The deleteEvent
+	// mechanism is still the more sensitive way to do it for single
+	// events, and it's what's used by EraseEventCommand and thus
+	// the notation eraser tool.
 
-	//!!! unless we _really_ want to do it, and should find some
-	// way to make it work at the SegmentNotationHelper level -- 
-	// perhaps we should anyway (eraseEvents method?) -- we
-	// desperately need a method to make all the rests in a
-	// region valid and "canonical" 
-
-	//!!! We now have it (normalizeRests does this), so use it
-
-	if (!(*i)->isa(Rosegarden::Note::EventRestType)) {
-	    eventsToErase.push_back(*i);
-	}
+	toErase.push_back(i);
     }
 
-    SegmentNotationHelper helper(getSegment());
-    for (unsigned int j = 0; j < eventsToErase.size(); ++j) {
-	helper.deleteEvent(eventsToErase[j], false);
+    for (unsigned int j = 0; j < toErase.size(); ++j) {
+	getSegment().erase(toErase[j]);
     }
+
+    getSegment().normalizeRests(getBeginTime(), getEndTime());
 }
 
 timeT
