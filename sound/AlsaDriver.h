@@ -18,6 +18,10 @@
   COPYING included with this distribution for more information.
 */
 
+#include "config.h"
+
+#ifdef HAVE_ALSA
+
 #include <vector>
 #include <alsa/asoundlib.h> // ALSA
 
@@ -167,3 +171,4 @@ private:
 
 #endif // _SOUNDDRIVER_H_
 
+#endif // HAVE_ALSA

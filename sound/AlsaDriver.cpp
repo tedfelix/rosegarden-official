@@ -18,6 +18,9 @@
   COPYING included with this distribution for more information.
 */
 
+#include "config.h"
+
+#ifdef HAVE_ALSA
 
 // ALSA
 #include <alsa/asoundlib.h>
@@ -1118,4 +1121,4 @@ AlsaDriver::processPending()
 
 }
 
-
+#endif // HAVE_ALSA
