@@ -1,4 +1,4 @@
-Rosegarden 0.2.0 release notes
+Rosegarden 0.8.0 release notes
 ==============================
 The source tree builds for KDE 3.x as default and should configure as such
 straight out of the box.  To build for KDE 2.x it's necessary to do a little
@@ -28,7 +28,9 @@ Full duplex audio is provided through the JACK library and server:
 
    http://jackit.sourceforge.net
 
-Forthcoming audio plugin support will be courtesy of LADSPA.
+Audio plugin support is a courtesy of LADSPA:
+
+  http://www.ladspa.org
 
 If you want to use an ALSA soft synth as a Rosegarden Instrument you
 must start the synth (such as iiwusynth) _before_ you start Rosegarden.
