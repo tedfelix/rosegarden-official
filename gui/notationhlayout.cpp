@@ -74,7 +74,7 @@ NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
     m_npf(npf),
     m_legatoQuantizer(legatoQuantizer),
     m_properties(properties),
-    m_progress(0),
+    m_timePerProgressIncrement(0),
     m_staffCount(0)
 {
 //    NOTATION_DEBUG << "NotationHLayout::NotationHLayout()" << endl;
@@ -492,14 +492,11 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 			   actualBarEnd - barTimes.first);
 	}
 
-	if (m_progress && (endTime > startTime)) {
-	    m_progress->setCompleted
-		((barTimes.second - startTime) * 95 / (endTime - startTime));
-	    m_progress->processEvents();
-	    if (m_progress->wasOperationCancelled()) {
-		throw std::string("Action cancelled");
-	    }
-	}
+        emit setProgress((barTimes.second - startTime) * 95 / (endTime - startTime));
+
+        if (isCancelled()) {
+            throw std::string("Action cancelled");
+        }
 	++barNo;
     }
 
@@ -1072,32 +1069,26 @@ NotationHLayout::finishLayout(timeT startTime, timeT endTime)
     for (BarDataMap::iterator i(m_barData.begin());
 	 i != m_barData.end(); ++i) {
 	
-	if (m_progress) {
+        emit setProgress(100 * staffNo / m_barData.size());
 
-	    m_progress->setCompleted(100 * staffNo / m_barData.size());
+        if (isCancelled()) {
+            throw std::string("Action cancelled");
+        }
 
-	    m_progress->processEvents();
-	    if (m_progress->wasOperationCancelled()) {
-		throw std::string("Action cancelled");
-	    }
-
-	    timeT timeCovered = endTime - startTime;
+        timeT timeCovered = endTime - startTime;
 	    
-	    if (timeCovered == 0) { // full layout
+        if (timeCovered == 0) { // full layout
 
-		NotationElementList *notes = i->first->getViewElementList();
-		if (notes->begin() != notes->end()) {
-		    NotationElementList::iterator j(notes->end());
-		    timeCovered =
-			(*--j)->getAbsoluteTime() -
-			(*notes->begin())->getAbsoluteTime();
-		}
-	    }
+            NotationElementList *notes = i->first->getViewElementList();
+            if (notes->begin() != notes->end()) {
+                NotationElementList::iterator j(notes->end());
+                timeCovered =
+                    (*--j)->getAbsoluteTime() -
+                    (*notes->begin())->getAbsoluteTime();
+            }
+        }
 
-	    m_timePerProgressIncrement = timeCovered / (100 / m_barData.size());
-	} else {
-	    m_timePerProgressIncrement = 0;
-	}
+        m_timePerProgressIncrement = timeCovered / (100 / m_barData.size());
 
 	layout(i, startTime, endTime);
 	++staffNo;
@@ -1128,6 +1119,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
     double x = 0, barX = 0;
     TieMap tieMap;
+    resetCancelledState();
 
     timeT lastIncrement =
 	(isFullLayout && (notes->begin() != notes->end())) ?
@@ -1308,16 +1300,15 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
             x += delta;
 	    
-	    if (m_progress && m_timePerProgressIncrement > 0) {
+	    if (m_timePerProgressIncrement > 0) {
 		timeT sinceIncrement = el->getAbsoluteTime() - lastIncrement;
 		if (sinceIncrement > m_timePerProgressIncrement) {
-		    m_progress->incrementCompletion
+		    emit incrementProgress
 			(sinceIncrement / m_timePerProgressIncrement);
 		    lastIncrement +=
 			(sinceIncrement / m_timePerProgressIncrement)
 			* m_timePerProgressIncrement;
-		    m_progress->processEvents();
-		    if (m_progress->wasOperationCancelled()) {
+		    if (isCancelled()) {
 			throw std::string("Action cancelled");
 		    }
 		}
@@ -1674,6 +1665,7 @@ NotationHLayout::reset()
     m_barData.clear();
     m_barPositions.clear();
     m_totalWidth = 0;
+    resetCancelledState();
 }
 
 void

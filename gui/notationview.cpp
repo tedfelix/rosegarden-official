@@ -290,10 +290,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     if (showProgressive) {
 	show();
 	RosegardenProgressDialog *progressDlg = new RosegardenProgressDialog
-	    (i18n("Starting..."), i18n("Cancel"), 100, this,
-	     i18n("Notation progress"), true);
+	    (i18n("Starting..."), 100, this);
 	progressDlg->setAutoClose(false);
 	m_progress = progressDlg;
+        setupProgress(progressDlg);
 	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 	    m_staffs[i]->setProgressReporter(m_progress);
 	}
@@ -1552,6 +1552,7 @@ void NotationView::initStatusBar()
     sb->addWidget(m_selectionCounter);
 
     m_progressBar = new RosegardenProgressBar(100, true, sb);
+    setupProgress(m_progressBar);
     sb->addWidget(m_progressBar);
 }
 
@@ -1639,13 +1640,11 @@ NotationView::paintEvent(QPaintEvent *e)
     EditView::paintEvent(e);
 }
 
-
 bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
 {
     if (m_progress) {
 	m_progress->setOperationName(qstrtostr(i18n("Laying out score...")));
 	m_progress->processEvents();
-	m_hlayout->setProgressReporter(m_progress);
 	m_hlayout->setStaffCount(m_staffs.size());
     }
 
@@ -1673,7 +1672,6 @@ bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
 
     m_hlayout->finishLayout(startTime, endTime);
     m_vlayout->finishLayout(startTime, endTime);
-    m_hlayout->setProgressReporter(0);
 
     // find the last finishing staff for future use
 
@@ -2257,8 +2255,6 @@ void NotationView::slotAddMark()
     }
 }
 
-
-
 void NotationView::initActionDataMaps()
 {
     static bool called = false;
@@ -2319,6 +2315,24 @@ void NotationView::initActionDataMaps()
     }
 	     
 }
+
+void NotationView::setupProgress(KProgress* bar)
+{
+    m_hlayout->disconnect(SIGNAL(setProgress(int)));
+    m_hlayout->disconnect(SIGNAL(incrementProgress(int)));
+    
+    connect(m_hlayout, SIGNAL(setProgress(int)),
+            bar,       SLOT(setValue(int)));
+
+    connect(m_hlayout, SIGNAL(incrementProgress(int)),
+            bar,       SLOT(advance(int)));
+}
+
+void NotationView::setupProgress(KProgressDialog* dialog)
+{
+    setupProgress(dialog->progressBar());
+}
+
 
     
 NotationView::NoteActionDataMap* NotationView::m_noteActionDataMap = 0;

@@ -28,12 +28,11 @@
 #include <qspinbox.h>
 #include <qgroupbox.h>
 #include <qfont.h>
-#include <qprogressdialog.h>
-#include <qprogressbar.h>
 #include <qpushbutton.h>
 #include <qslider.h>
 #include <qvbox.h>
 #include <qcolor.h>
+#include <kprogress.h>
 
 #include "Progress.h"
 
@@ -155,23 +154,20 @@ private:
     QFont m_font;
 };
 
-class RosegardenProgressDialog : public QProgressDialog,
+class RosegardenProgressDialog : public KProgressDialog,
                                  public Rosegarden::Progress
 {
     Q_OBJECT
 public:
     RosegardenProgressDialog(QWidget * creator = 0,
                              const char * name = 0,
-                             bool modal = TRUE,
-                             WFlags f = 0);
+                             bool modal = true);
 
     RosegardenProgressDialog(const QString &labelText,
-                             const QString &cancelButtonText,
                              int totalSteps,
                              QWidget *creator = 0,
                              const char *name = 0,
-                             bool modal = TRUE,
-                             WFlags f = 0);
+                             bool modal = true);
 
     // Set the name of the current operation
     //
@@ -191,7 +187,7 @@ public:
     virtual void done();
 
     virtual bool wasOperationCancelled() {
-	return QProgressDialog::wasCancelled();
+	return KProgressDialog::wasCancelled();
     }
     
 public slots:
@@ -212,7 +208,7 @@ private:
 };
 
 
-class RosegardenProgressBar : public QProgressBar,
+class RosegardenProgressBar : public KProgress,
 			      public Rosegarden::Progress
 {
     Q_OBJECT

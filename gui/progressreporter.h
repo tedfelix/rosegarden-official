@@ -29,12 +29,23 @@ class ProgressReporter : public QObject
     Q_OBJECT
 public:
     ProgressReporter(QObject* parent, const char* name = 0)
-        : QObject(parent, name) {}
+        : QObject(parent, name), m_isCancelled(false) {}
+
+protected:
+    bool isCancelled() const { return m_isCancelled; }
+    void resetCancelledState() { m_isCancelled = false; }
+
+protected slots:
+    virtual void slotCancel() { m_isCancelled = true; };
 
 signals:
     /// Report progress
     void setProgress(int);
     void incrementProgress(int);
+
+protected:
+    //--------------- Data members ---------------------------------
+    bool m_isCancelled;
 };
 
 

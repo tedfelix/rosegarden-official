@@ -1764,7 +1764,6 @@ void RosegardenGUIApp::importMIDIFile(const QString &file)
 
     RosegardenProgressDialog *progressDlg =
             new RosegardenProgressDialog(i18n("Importing MIDI file..."),
-                                         0, //i18n("Cancel"),
                                          100,
                                          this);
 
@@ -1836,7 +1835,6 @@ void RosegardenGUIApp::importRG21File(const QString &file)
 {
     RosegardenProgressDialog *progressDlg =
             new RosegardenProgressDialog(i18n("Importing Rosegarden 2.1 file..."),
-                                         0, //i18n("Cancel"),
                                          100,
                                          this);
 
@@ -2065,7 +2063,6 @@ void RosegardenGUIApp::exportMIDIFile(const QString &file)
 {
     RosegardenProgressDialog *progressDlg =
             new RosegardenProgressDialog(i18n("Exporting MIDI file..."),
-                                         0, //i18n("Cancel"),
                                          100,
                                          this);
 
@@ -2099,7 +2096,6 @@ void RosegardenGUIApp::exportCsoundFile(const QString &file)
 {
     RosegardenProgressDialog *progressDlg =
             new RosegardenProgressDialog(i18n("Exporting Csound file..."),
-                                         0, //i18n("Cancel"),
                                          100,
                                          this);
 
@@ -2125,7 +2121,6 @@ void RosegardenGUIApp::exportLilypondFile(const QString &file)
 {
     RosegardenProgressDialog *progressDlg =
             new RosegardenProgressDialog(i18n("Exporting Lilypond file..."),
-                                         0, //i18n("Cancel"),
                                          100,
                                          this);
 

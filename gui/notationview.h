@@ -46,8 +46,10 @@ class ActiveItem;
 class NoteActionData;
 class MarkActionData;
 class ChordNameRuler;
-class RosegardenProgressDialog;
 class RosegardenProgressBar;
+class KProgress;
+class KProgressDialog;
+class ProgressReporter;
 class NotationHLayout;
 class NotationVLayout;
 
@@ -672,7 +674,10 @@ protected:
 
     void doDeferredCursorMove();
 
-    void removeViewLocalProperties(Rosegarden::Event *);
+    void removeViewLocalProperties(Rosegarden::Event*);
+
+    void setupProgress(KProgress*);
+    void setupProgress(KProgressDialog*);
 
     //--------------- Data members ---------------------------------
 

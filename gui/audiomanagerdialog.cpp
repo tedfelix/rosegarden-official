@@ -934,7 +934,6 @@ AudioManagerDialog::addFile(const KURL& kurl)
     //
     RosegardenProgressDialog *progressDlg =
         new RosegardenProgressDialog(i18n("Generating audio preview..."),
-                                     i18n("Cancel"),
                                      100,
                                      this);
     QString newFilePath;

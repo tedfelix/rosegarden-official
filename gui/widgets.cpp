@@ -177,45 +177,41 @@ void RosegardenParameterBox::init()
 
 RosegardenProgressDialog::RosegardenProgressDialog(QWidget *creator,
                                                    const char *name,
-                                                   bool modal,
-                                                   WFlags f):
-    QProgressDialog(creator, name, modal, f),
+                                                   bool modal):
+    KProgressDialog(creator, name,
+                    i18n("Processing..."), QString::null, modal),
     Rosegarden::Progress(100), // default to percent
     m_timeoutSet(clock()),
     m_firstTimeout(true),
     m_shown(false)
 {
-    setCaption(i18n("Processing..."));
+//     setCaption(i18n("Processing..."));
 }
 
 
 RosegardenProgressDialog::RosegardenProgressDialog(
                 const QString &labelText,
-                const QString &cancelButtonText,
                 int totalSteps,
                 QWidget *creator,
                 const char *name,
-                bool modal,
-                WFlags f) :
-    QProgressDialog(labelText,
-		    cancelButtonText,
-		    totalSteps,
-		    creator,
+                bool modal) :
+    KProgressDialog(creator,
 		    name,
-		    modal,
-		    f | WDestructiveClose),
+                    i18n("Processing..."),
+                    labelText,
+		    modal),
     Rosegarden::Progress(totalSteps),
     m_timeoutSet(clock()),
     m_firstTimeout(true),
     m_shown(false)
 {
-    setCaption(i18n("Processing..."));
+    progressBar()->setTotalSteps(totalSteps);
 }
 
 void
 RosegardenProgressDialog::setOperationName(std::string name)
 {
-    setLabelText(strtoqstr(name));
+    setLabel(strtoqstr(name));
 }
 
 void
@@ -226,7 +222,7 @@ RosegardenProgressDialog::setCompleted(int value)
     else
 	m_value = value; //???
 
-    if (m_shown) setProgress(value);
+    if (m_shown) progressBar()->setProgress(value);
 }
 
 void
@@ -242,7 +238,7 @@ RosegardenProgressDialog::processEvents()
 	    clock_t now = clock();
 	    int msElapsed = (now - m_timeoutSet) * 1000 / CLOCKS_PER_SEC;
 	    
-	    if (msElapsed > 500) {
+	    if (msElapsed > 5/*00*/) {
 		if (!m_firstTimeout || ((m_value * 4) < (m_max * 3))) {
 		    slotShowMyself();
 		} else {
@@ -257,7 +253,7 @@ RosegardenProgressDialog::processEvents()
 void
 RosegardenProgressDialog::slotShowMyself()
 {
-    setProgress(m_value);
+    progressBar()->setProgress(m_value);
     show();
     m_shown = true;
 }
@@ -275,7 +271,7 @@ RosegardenProgressBar::RosegardenProgressBar(int totalSteps,
 					     QWidget *creator,
 					     const char *name,
 					     WFlags f) :
-    QProgressBar(totalSteps, creator, name, f),
+    KProgress(totalSteps, creator, name, f),
     Rosegarden::Progress(totalSteps),
     m_timeoutSet(0),
     m_shown(true),

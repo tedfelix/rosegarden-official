@@ -293,7 +293,6 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 	// parse xml file
 	RosegardenProgressDialog *progressDlg =
 	    new RosegardenProgressDialog(i18n("Reading file..."),
-					 0, // i18n("Cancel"),
 					 100,
 					 (QWidget*)parent());
 
@@ -326,9 +325,8 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     //
     RosegardenProgressDialog *progressDlg =
         new RosegardenProgressDialog(i18n("Generating audio previews..."),
-                                     i18n("Cancel"),
-                                     100,
-                                     (QWidget*)parent());
+                                     100/*,
+                                          (QWidget*)parent()*/);
 
     try
     {
@@ -1378,9 +1376,8 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::AudioFileId /*id*/)
     //
     RosegardenProgressDialog *progressDlg =
         new RosegardenProgressDialog(i18n("Generating audio preview..."),
-                                     i18n("Cancel"),
-                                     100,
-                                     (QWidget*)parent());
+                                     100/*,
+                                          (QWidget*)parent()*/);
 
     try
     {

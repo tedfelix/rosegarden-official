@@ -177,16 +177,13 @@ public:
     virtual Rosegarden::Event *getTimeSignaturePosition
     (StaffType &staff, int barNo, double &timeSigX);
 
-    void setProgressReporter(Rosegarden::Progress *progress) {
-	m_progress = progress;
-    }
-
     /// purely optional, used only for progress reporting
     void setStaffCount(int staffCount) {
 	m_staffCount = staffCount;
     }
 
 protected:
+
     class AccidentalTable
     {
     public:
@@ -375,7 +372,7 @@ protected:
 
     Rosegarden::Quantizer *m_legatoQuantizer;
     const NotationProperties &m_properties;
-    Rosegarden::Progress *m_progress;
+
     int m_timePerProgressIncrement;
     int m_staffCount; // purely for progress reporting
 };
