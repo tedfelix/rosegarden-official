@@ -1247,6 +1247,20 @@ Composition::detachMarker(Rosegarden::timeT time)
     return false;
 }
 
+bool
+Composition::isMarkerAtPosition(Rosegarden::timeT time) const
+{
+    markerconstiterator it = m_markers.begin();
+
+    for (; it != m_markers.end(); ++it)
+        if ((*it)->getTime() == time) return true;
+
+    return false;
+}
+
+
+
+
 
 }
 

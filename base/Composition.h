@@ -181,6 +181,10 @@ public:
     void addMarker(Rosegarden::Marker *marker);
     bool detachMarker(Rosegarden::timeT time);
 
+    // Is there a marker at given time?
+    //
+    bool isMarkerAtPosition(Rosegarden::timeT time) const;
+
     //////
     //
     //  SEGMENT
