@@ -960,8 +960,8 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 
             case MIDI_PITCH_BEND:
                 rosegardenEvent =
-		    PitchBend((*midiEvent)->getData1(),
-			      (*midiEvent)->getData2()).
+		    PitchBend((*midiEvent)->getData2(),
+			      (*midiEvent)->getData1()).
 		    getAsEvent(rosegardenTime);
                 rosegardenSegment->insert(rosegardenEvent);
                 break;
@@ -1329,7 +1329,7 @@ MidiFile::convertToMidi(Composition &comp)
 			midiEvent =
 			    new MidiEvent(midiEventAbsoluteTime,
 					  MIDI_PITCH_BEND | midiChannel,
-					  pb.getMSB(), pb.getLSB());
+					  pb.getLSB(), pb.getMSB());
 
 			m_midiComposition[trackNumber].push_back(midiEvent);
 		    }

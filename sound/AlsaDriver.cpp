@@ -2019,8 +2019,8 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
                     MappedEvent *mE = new MappedEvent();
                     mE->setType(MappedEvent::MidiKeyPressure);
                     mE->setEventTime(eventTime);
-                    mE->setData1(event->data.control.value >> 7);
-                    mE->setData2(event->data.control.value & 0x7f);
+                    mE->setData1(event->data.note.note);
+                    mE->setData2(event->data.note.velocity);
                     m_recordComposition.insert(mE);
                 }
                 break;
@@ -2049,22 +2049,25 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
 
             case SND_SEQ_EVENT_PITCHBEND:
                 {
+                    int s = event->data.control.value + 8192;
+                    int d1 = (s >> 7) & 0x7f; // data1 = MSB
+                    int d2 = s & 0x7f; // data2 = LSB
                     MappedEvent *mE = new MappedEvent();
                     mE->setType(MappedEvent::MidiPitchBend);
                     mE->setEventTime(eventTime);
-                    mE->setData1(event->data.control.value >> 7);
-                    mE->setData2(event->data.control.value & 0x7f);
+                    mE->setData1(d1);
+                    mE->setData2(d2);
                     m_recordComposition.insert(mE);
                 }
                 break;
 
             case SND_SEQ_EVENT_CHANPRESS:
                 {
+                    int s = event->data.control.value & 0x7f;
                     MappedEvent *mE = new MappedEvent();
                     mE->setType(MappedEvent::MidiChannelPressure);
                     mE->setEventTime(eventTime);
-                    mE->setData1(event->data.control.value >> 7);
-                    mE->setData2(event->data.control.value & 0x7f);
+                    mE->setData1(s);
                     m_recordComposition.insert(mE);
                 }
                break;
@@ -2288,13 +2291,14 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 
             case MappedEvent::MidiPitchBend:
                 {
-                    int value = (((int)(*i)->getData1()) << 7) |
-                                (((int)(*i)->getData2()) & 0x7F);
+                    int d1 = (int)((*i)->getData1());
+                    int d2 = (int)((*i)->getData2());
+                    int value = ((d1 << 7) | d2) - 8192;
 
                     // keep within -8192 to +8192
                     //
-                    if (value & 0x4000)
-                        value -= 0x8000;
+                    // if (value & 0x4000)
+                    //    value -= 0x8000;
 
                     snd_seq_ev_set_pitchbend(event,
                                              channel,
