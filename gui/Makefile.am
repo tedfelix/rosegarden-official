@@ -7,6 +7,7 @@ rosegarden_SOURCES = \
         audiomanagerdialog.cpp \
         audioplugindialog.cpp \
         audiopluginmanager.cpp \
+	audiopluginoscgui.cpp \
         bankeditor.cpp\
         barbuttons.cpp \
 	basiccommand.cpp \
@@ -123,7 +124,7 @@ rosegarden_SOURCES = \
         widgets.cpp \
 	xmlstorableevent.cpp
 
-rosegarden_LDADD   = ../sound/libRosegardenSound.la ../base/libbase.la -lkdeui -lkdecore -lkdeprint $(LIB_QT) $(LIBSOCKET) $(LIB_KFILE) @XFT_LIBS@ @JACK_LIBS@
+rosegarden_LDADD   = ../sound/libRosegardenSound.la ../base/libbase.la -lkdeui -lkdecore -lkdeprint $(LIB_QT) $(LIBSOCKET) $(LIB_KFILE) @XFT_LIBS@ @JACK_LIBS@ @LIBLO_LIBS@
 
 SUBDIRS = docs
 
@@ -246,7 +247,7 @@ uninstall-local:
 # kde_wallpaperdir  Where general wallpapers should go to.
 
 # set the include path for X, qt and KDE
-INCLUDES= $(all_includes) -I$(top_srcdir)/base -I$(top_srcdir)/sound $(KDE_CXXFLAGS) @XFT_CFLAGS@
+INCLUDES= $(all_includes) -I$(top_srcdir)/base -I$(top_srcdir)/sound $(KDE_CXXFLAGS) @XFT_CFLAGS@ @JACK_CFLAGS@ @LIBLO_CFLAGS@
 
 # claim, which subdirectories you want to install
 # you can add here more. This one gets installed 
