@@ -132,7 +132,13 @@ LoopRuler::contentsMouseReleaseEvent(QMouseEvent *mE)
                 m_loopMarker->hide();
                 m_canvas->update();
             }
-            emit setLoop(m_startLoop, m_endLoop);
+
+            // emit with the args around the right way
+            //
+            if (m_endLoop < m_startLoop)
+                emit setLoop(m_endLoop, m_startLoop);
+            else
+                emit setLoop(m_startLoop, m_endLoop);
         }
     }
 }

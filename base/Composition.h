@@ -390,6 +390,19 @@ public:
     void setStartMarker(const timeT &sM) { m_startMarker = sM; }
     void setEndMarker(const timeT &eM) { m_endMarker = eM; }
 
+    ////////////
+    //
+    // LOOP 
+    //
+    timeT getLoopStart() const { return m_loopStart; }
+    timeT getLoopEnd() const { return m_loopEnd;}
+
+    void setLoopStart(const timeT &lS) { m_loopStart = lS; }
+    void setLoopEnd(const timeT &lE) { m_loopEnd = lE; }
+
+    // Determine if we're currently looping
+    //
+    bool isLooping() const { return (m_loopStart != m_loopEnd); }
 
     // Some set<> API delegation
     iterator       begin()       { return m_segments.begin(); }
@@ -502,6 +515,12 @@ protected:
     //
     timeT m_startMarker;
     timeT m_endMarker;
+
+    // Loop start and end positions.  If they're both the same
+    // value (usually 0) then there's no loop set.
+    //
+    timeT m_loopStart;
+    timeT m_loopEnd;
 
     /// affects m_barSegment
     void calculateBarPositions() const;

@@ -1185,6 +1185,17 @@ void RosegardenGUIApp::setPointerPosition(const long &posSec,
 
     timeT elapsedTime = m_doc->getComposition().getElapsedTimeForRealTime(rT);
 
+    // Check for loop - if we're in one and we've reached the
+    // end of it then jump back to the beginning
+    if (m_doc->getComposition().isLooping())
+    {
+        if (elapsedTime >= m_doc->getComposition().getLoopEnd())
+        {
+            sendSequencerJump(m_doc->getComposition().getElapsedRealTime(
+                            m_doc->getComposition().getLoopStart()));
+        }
+    }
+
     // set the composition time
     m_doc->getComposition().setPosition(elapsedTime);
 
@@ -1274,6 +1285,13 @@ void RosegardenGUIApp::play()
 
     Rosegarden::RealTime startPos = m_doc->getComposition().
                 getElapsedRealTime(m_doc->getComposition().getPosition());
+
+    // If we're looping then jump to loop start
+    //
+    if (m_doc->getComposition().isLooping())
+        startPos = m_doc->getComposition().getElapsedRealTime(
+                            m_doc->getComposition().getLoopStart());
+
 
     // playback start position
     streamOut << startPos.sec;
@@ -1900,7 +1918,12 @@ RosegardenGUIApp::setPlayPosition(Rosegarden::timeT position)
 void
 RosegardenGUIApp::setLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
 {
-    std::cout << "setGUILoop" << std::endl;
+    m_doc->getComposition().setLoopStart(lhs);
+    m_doc->getComposition().setLoopEnd(rhs);
+    std::cout << "setGUILoop(): START = "
+              << m_doc->getComposition().getLoopStart()
+              << " END = "
+              << m_doc->getComposition().getLoopEnd() << std::endl;
 }
 
 
