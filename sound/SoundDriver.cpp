@@ -251,8 +251,9 @@ SoundDriver::getMappedDevice(DeviceId id)
               << "name = \"" << retDevice.getName() 
               << "\" type = " << retDevice.getType()
               << " direction = " << retDevice.getDirection()
-              << " connection = \"" << retDevice.getConnection()
-              << "\"" << std::endl;
+              << " connection = \"" << retDevice.getConnection() << "\"" 
+              << " recording = " << retDevice.isRecording()
+              << std::endl;
 
     return retDevice;
 }

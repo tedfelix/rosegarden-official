@@ -412,7 +412,7 @@ protected:
 
     // MIDI Note-off handling
     //
-    std::map<unsigned int, MappedEvent*>        m_noteOnMap;
+    //std::map<unsigned int, MappedEvent*>        m_noteOnMap;
     NoteOffQueue                                m_noteOffQueue;
 
     // This is our driver's own list of MappedInstruments and MappedDevices.  

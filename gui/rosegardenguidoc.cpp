@@ -732,7 +732,7 @@ void RosegardenGUIDoc::initialiseStudio()
 
             // Initialise all the plugins for this Instrument
             //
-            Rosegarden::AudioPluginInstance *plugin;
+            //Rosegarden::AudioPluginInstance *plugin;
 
 	    for (Rosegarden::PluginInstanceIterator pli = (*it)->beginPlugins();
 		 pli != (*it)->endPlugins(); ++pli) {
@@ -1319,10 +1319,14 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
             rEvent = 0;
 	    bool isNoteOn = false;
 	    int pitch = 0;
-
+	    int channel = (*i)->getRecordedChannel();
+	    int port = (*i)->getRecordedPort();
+	    
             switch((*i)->getType()) {
                 case Rosegarden::MappedEvent::MidiNote:
 
+		    pitch = (*i)->getPitch();
+		    
                     if ((*i)->getDuration() < Rosegarden::RealTime::zeroTime) {
 
 			// it's a note-on; give it a default duration
@@ -1332,32 +1336,34 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
 
                         duration =
 			    Rosegarden::Note(Rosegarden::Note::Crotchet).getDuration();
-			pitch = (*i)->getPitch();
 			isNoteOn = true;
 
 			rEvent = new Event(Rosegarden::Note::EventType,
 					   absTime,
 					   duration);
 
-			rEvent->set<Int>(PITCH, (*i)->getPitch());
+			rEvent->set<Int>(PITCH, pitch);
 			rEvent->set<Int>(VELOCITY, (*i)->getVelocity());
 
 		    } else {
 
 			// it's a note-off
 	
-			NoteOnMap::iterator mi = m_noteOnEvents.find((*i)->getPitch());
+			//NoteOnMap::iterator mi = m_noteOnEvents.find((*i)->getPitch());
+			PitchMap *pm = &m_noteOnEvents[port][channel];
+			PitchMap::iterator mi = pm->find(pitch);
 
-			if (mi != m_noteOnEvents.end()) {
+			if (mi != pm->end()) {
 
 			    // modify the previously held note-on event,
 			    // instead of assigning to rEvent
 			    Rosegarden::Event *oldEv = *mi->second;
 			    Rosegarden::Event *newEv = new Rosegarden::Event
 				(*oldEv, oldEv->getAbsoluteTime(), duration);
+			    newEv->set<Int>(RECORDED_CHANNEL, channel);
 			    m_recordSegment->erase(mi->second);
 			    m_recordSegment->insert(newEv);
-			    m_noteOnEvents.erase(mi);
+			    pm->erase(mi);
 
 			    if (updateFrom > newEv->getAbsoluteTime()) {
 				updateFrom = newEv->getAbsoluteTime();
@@ -1369,7 +1375,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
 			    // tracking in a notation view
 
 			} else {
-			    std::cerr << "WARNING: NOTE OFF received without corresponding NOTE ON" << std::endl;
+			    std::cerr << " WARNING: NOTE OFF received without corresponding NOTE ON" << std::endl;
 			}
 		    }
 
@@ -1378,11 +1384,13 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
                 case Rosegarden::MappedEvent::MidiPitchBend:
                     rEvent = Rosegarden::PitchBend
                         ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
+                    rEvent->set<Int>(RECORDED_CHANNEL, channel);
                     break;
 
                 case Rosegarden::MappedEvent::MidiController:
                     rEvent = Rosegarden::Controller
                         ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
+                    rEvent->set<Int>(RECORDED_CHANNEL, channel);
                     break;
 
                 case Rosegarden::MappedEvent::MidiProgramChange:
@@ -1394,11 +1402,13 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
                 case Rosegarden::MappedEvent::MidiKeyPressure:
                     rEvent = Rosegarden::KeyPressure
                         ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
+                    rEvent->set<Int>(RECORDED_CHANNEL, channel);
                     break;
 
                 case Rosegarden::MappedEvent::MidiChannelPressure:
                     rEvent = Rosegarden::ChannelPressure
                         ((*i)->getData1()).getAsEvent(absTime);
+                    rEvent->set<Int>(RECORDED_CHANNEL, channel);
                     break;
 
                 case Rosegarden::MappedEvent::MidiSystemMessage:
@@ -1439,6 +1449,10 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
             //
             if (rEvent == 0)
                 continue;
+            
+            // Set the recorded input port
+            //
+            rEvent->set<Int>(RECORDED_PORT, port);
 
             // Set the start index and then insert into the Composition
             // (if we haven't before)
@@ -1453,7 +1467,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
             // Now insert the new event
             //
 	    if (isNoteOn) {
-		m_noteOnEvents[pitch] = m_recordSegment->insert(rEvent);
+		m_noteOnEvents[port][channel][pitch] = m_recordSegment->insert(rEvent);
 	    } else {
 		m_recordSegment->insert(rEvent);
 	    }
@@ -1492,26 +1506,30 @@ RosegardenGUIDoc::updateRecordingSegment()
 	// make this call once to create one
 	insertRecordedMidi(Rosegarden::MappedComposition(), RECORDING_MIDI);
     }
-
-    NoteOnMap tweakedNoteOnEvents;
     
+    NoteOnMap tweakedNoteOnEvents;
     for (NoteOnMap::iterator mi = m_noteOnEvents.begin();
-	 mi != m_noteOnEvents.end(); ++mi) {
+ 	 mi != m_noteOnEvents.end(); ++mi)
+	for (ChanMap::iterator cm = mi->second.begin();
+	     cm != mi->second.end(); ++cm)
+	    for (PitchMap::iterator pm = cm->second.begin();
+	         pm != cm->second.end(); ++pm) 
+    {
 
 	// anything in the note-on map should be tweaked so as to end
 	// at the recording pointer
-
-	Rosegarden::Event *ev = *mi->second;
+	Rosegarden::Event *ev = *pm->second;
 	Rosegarden::Event *newEv = new Rosegarden::Event
 	    (*ev, ev->getAbsoluteTime(),
 	     m_composition.getPosition() - ev->getAbsoluteTime());
 
-	m_recordSegment->erase(mi->second);
-	tweakedNoteOnEvents[mi->first] = m_recordSegment->insert(newEv);
+	m_recordSegment->erase(pm->second);
+	tweakedNoteOnEvents[mi->first][cm->first][pm->first] = 
+		m_recordSegment->insert(newEv);
     }
 
     m_noteOnEvents = tweakedNoteOnEvents;
-
+    
     // update this segment on the GUI
     RosegardenGUIView *v;
     for (v = m_viewList.first(); v != 0; v = m_viewList.next()) {
@@ -1537,15 +1555,20 @@ RosegardenGUIDoc::stopRecordingMidi()
         w->deleteRecordingSegmentItem();
     }
 
-    for (NoteOnMap::iterator mi = m_noteOnEvents.begin(); mi != m_noteOnEvents.end();
-	 ++mi) {
+    for (NoteOnMap::iterator mi = m_noteOnEvents.begin(); 
+	 mi != m_noteOnEvents.end(); ++mi) 
+	for (ChanMap::iterator cm = mi->second.begin();
+	     cm != mi->second.end(); ++cm)
+	    for (PitchMap::iterator pm = cm->second.begin();
+	         pm != cm->second.end(); ++pm) 
+    {
 	// anything remaining in the note-on map should be made to end at
 	// the end of the segment
-	Rosegarden::Event *oldEv = *mi->second;
+	Rosegarden::Event *oldEv = *pm->second;
 	Rosegarden::Event *newEv = new Rosegarden::Event
 	    (*oldEv, oldEv->getAbsoluteTime(),
 	     m_recordSegment->getEndTime() - oldEv->getAbsoluteTime());
-	m_recordSegment->erase(mi->second);
+	m_recordSegment->erase(pm->second);
 	m_recordSegment->insert(newEv);
     }
     m_noteOnEvents.clear();
@@ -1785,13 +1808,17 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
 		(id,
 		 mD->getName(),
 		 mD->getDirection());
-
+		 
+	    dynamic_cast<Rosegarden::MidiDevice *>(device)
+		->setRecording(mD->isRecording());	    
+		
             m_studio.addDevice(device);
 
             RG_DEBUG  << "RosegardenGUIDoc::getMappedDevice - "
                           << "adding MIDI Device \""
                           << device->getName() << "\" id = " << id
 		          << " direction = " << mD->getDirection()
+		          << " recording = " << mD->isRecording()
 			  << endl;
         }
         else if (mD->getType() == Rosegarden::Device::SoftSynth)
@@ -1827,12 +1854,18 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
 	if (mD->getType() == Rosegarden::Device::Midi) {
 	    Rosegarden::MidiDevice *midid =
 		dynamic_cast<Rosegarden::MidiDevice *>(device);
-	    if (midid) midid->setDirection(mD->getDirection());
+	    if (midid) {
+	    	midid->setDirection(mD->getDirection());
+	    	midid->setRecording(mD->isRecording());
+	    }
 	}
     }
 
     std::string connection(mD->getConnection());
-    RG_DEBUG << "RosegardenGUIDoc::getMappedDevice - got device on connection \"" << connection << "\", direction " << mD->getDirection() << endl;
+    RG_DEBUG << "RosegardenGUIDoc::getMappedDevice - got \"" << connection 
+	     << "\", direction " << mD->getDirection() 
+	     << " recording " << mD->isRecording()
+	     << endl;
     device->setConnection(connection);
 
     Rosegarden::Instrument *instrument;

@@ -32,7 +32,8 @@ MappedDevice::MappedDevice():
     m_type(Rosegarden::Device::Midi),
     m_name("Unconfigured device"),
     m_connection(""),
-    m_direction(MidiDevice::Play)
+    m_direction(MidiDevice::Play),
+    m_recording(false)
 {
 }
 
@@ -45,7 +46,8 @@ MappedDevice::MappedDevice(Rosegarden::DeviceId id,
     m_type(type),
     m_name(name),
     m_connection(connection),
-    m_direction(MidiDevice::Play)
+    m_direction(MidiDevice::Play),
+    m_recording(false)
 {
 }
 
@@ -66,6 +68,7 @@ MappedDevice::MappedDevice(const MappedDevice &mD):
     m_name = mD.getName();
     m_connection = mD.getConnection();
     m_direction = mD.getDirection();
+    m_recording = mD.isRecording();
 }
 
 void
@@ -103,6 +106,7 @@ MappedDevice::operator=(const MappedDevice &mD)
     m_name = mD.getName();
     m_connection = mD.getConnection();
     m_direction = mD.getDirection();
+    m_recording = mD.isRecording();
 
     return *this;
 }
@@ -126,17 +130,20 @@ operator>>(QDataStream &dS, MappedDevice *mD)
     unsigned int id, dType;
     QString connection;
     unsigned int direction;
+    unsigned int recording;
 
     dS >> id;
     dS >> dType;
     dS >> name;
     dS >> connection;
     dS >> direction;
+    dS >> recording;
     mD->setId(id);
     mD->setType(Rosegarden::Device::DeviceType(dType));
     mD->setName(std::string(name.data()));
     mD->setConnection(connection.data());
     mD->setDirection(MidiDevice::DeviceDirection(direction));
+    mD->setRecording((bool)recording);
 
 #ifdef DEBUG_MAPPEDDEVICE
     if (instruments)
@@ -169,17 +176,20 @@ operator>>(QDataStream &dS, MappedDevice &mD)
     QString name;
     QString connection;
     unsigned int direction;
+    unsigned int recording;
 
     dS >> id;
     dS >> dType;
     dS >> name;
     dS >> connection;
     dS >> direction;
+    dS >> recording;
     mD.setId(id);
     mD.setType(Rosegarden::Device::DeviceType(dType));
     mD.setName(std::string(name.data()));
     mD.setConnection(connection.data());
     mD.setDirection(MidiDevice::DeviceDirection(direction));
+    mD.setRecording((bool)recording);
 
 #ifdef DEBUG_MAPPEDDEVICE
     if (instruments)
@@ -205,6 +215,7 @@ operator<<(QDataStream &dS, MappedDevice *mD)
     dS << QString(mD->getName().c_str());
     dS << QString(mD->getConnection().c_str());
     dS << mD->getDirection();
+    dS << (unsigned int)(mD->isRecording());
 
 #ifdef DEBUG_MAPPEDDEVICE
     std::cerr << "MappedDevice::operator>> - wrote \"" << mD->getConnection() << "\""
@@ -227,6 +238,7 @@ operator<<(QDataStream &dS, const MappedDevice &mD)
     dS << QString(mD.getName().c_str());
     dS << QString(mD.getConnection().c_str());
     dS << mD.getDirection();
+    dS << (unsigned int)(mD.isRecording());
 
 #ifdef DEBUG_MAPPEDDEVICE
     std::cerr << "MappedDevice::operator>> - wrote \"" << mD.getConnection() << "\""

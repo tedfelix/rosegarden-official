@@ -567,7 +567,20 @@ protected:
      */
     Rosegarden::Segment *m_recordSegment;
 
-    typedef std::map<int, Rosegarden::Segment::iterator> NoteOnMap;
+    /**
+     * a map[Pitch] of Rosegarden::Event elements, for NoteOn calculations
+     */
+    typedef std::map<int, Rosegarden::Segment::iterator>	PitchMap;
+    
+    /**
+     * a map[Channel] of PitchMap
+     */
+    typedef std::map<int, PitchMap>				ChanMap;
+    
+    /**
+     * a map[Port] of ChanMap
+     */
+    typedef std::map<int, ChanMap>				NoteOnMap;
 
     /**
      * During recording, we collect note-ons that haven't yet had a note-off

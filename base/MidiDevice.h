@@ -162,6 +162,10 @@ public:
     void generateDefaultControllers();
 
     virtual std::string toXmlString();
+    
+    // Accessors for recording property
+    bool isRecording() {return m_recording; }
+    void setRecording(bool recording) {m_recording = recording;}
 
 protected:
     void generatePresentationList();
@@ -177,7 +181,11 @@ protected:
     // Is this device Play or Record?
     //
     DeviceDirection m_direction; 
-
+    
+    // Is this device recording?
+    //
+    bool m_recording;	
+    
     // Should we present LSB or MSB of bank info as a Variation number?
     //
     VariationType m_variationType;

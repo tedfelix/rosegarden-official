@@ -77,6 +77,9 @@ public:
 
     MidiDevice::DeviceDirection getDirection() const { return m_direction; }
     void setDirection(MidiDevice::DeviceDirection direction) { m_direction = direction; }
+    
+    bool isRecording() const { return m_recording; }
+    void setRecording(bool recording) { m_recording = recording; }
 
 protected:
 
@@ -85,6 +88,7 @@ protected:
     std::string                     m_name;
     std::string                     m_connection;
     MidiDevice::DeviceDirection     m_direction;
+    bool			    m_recording;
 };
 
 typedef std::vector<Rosegarden::MappedInstrument*>::const_iterator

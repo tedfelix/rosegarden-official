@@ -22,6 +22,7 @@
 
 #ifndef HAVE_ALSA
 
+#include <map>
 #include <arts/artsmidi.h>
 #include <arts/soundserver.h>
 #include <arts/artsflow.h>     // aRts audio subsys
@@ -143,7 +144,8 @@ protected:
                                 bool now);
 
     void sendDeviceController(MidiByte controller, MidiByte value);
-
+    std::map<unsigned int, MappedEvent*>        m_noteOnMap;
+    
 private:
     // aRts sound server reference
     //

@@ -2,45 +2,133 @@ Multiport recording implementation
 ----------------------------------
 June 27, 2004
 
-The implementation of the multiport recording functionality can be phased out, each step with separate development, test and debugging. At the end of each step, the changes will be committed using a branch created for the  project, named 'multiport_recording'. Each step is an incremental and accumulative approach to the final goal: to have several input sources working at once in Rosegarden, and to have a smart and comfortable management  of input subscriptions. This feature is limited to the ALSA driver.
+The implementation of the multiport recording functionality can be phased out,
+each step with separate development, test and debugging. At the end of each
+step, the changes will be committed using a branch created for the  project,
+named 'multiport_recording'. Each step is an incremental and accumulative
+approach to the final goal: to have several input sources working at once in
+Rosegarden, and to have a smart and comfortable management  of input
+subscriptions. This feature is limited to the ALSA driver.
 
 Phase 1 
 =======
 
-Split the single Rosegarden port into an input port and an output one. This is not strictly necessary, but is better for readability and debugging purposes. The input port will be created with automatic timestamping in real time units. This allow the connections made with external programs behave like the internally made ones. The output port will be hidden, at least for polite programs (kaconnect). The client name will be renamed to only "Rosegarden".
+Split the single Rosegarden port into an input port and an output one. This is
+not strictly necessary, but is better for readability and debugging purposes.
+The input port will be created with automatic timestamping in real time units.
+This allow the connections made with external programs behave like the
+internally made ones. The output port will be hidden, at least for polite
+programs (kaconnect). The client name will be renamed to only "Rosegarden".
 Each port will have the following properties:
 #0, name: Rosegarden input, 
 	capabilities: SND_SEQ_PORT_CAP_WRITE | SND_SEQ_PORT_CAP_SUBS_WRITE
 #1, name: Rosegarden output, 
 	capabilities: SND_SEQ_PORT_CAP_READ
-The AlsaDriver's variable member m_port will be replaced by two: m_inputport and m_outputport (both private). All the changes involve only the files sound/AlsaDriver.cpp and sound/AlsaDriver.h
+The AlsaDriver's variable member m_port will be replaced by two: m_inputport
+and m_outputport (both private). All the changes involve only the files
+sound/AlsaDriver.cpp and sound/AlsaDriver.h
 
-At this point, we will be able to make subscriptions to the Rosegarden input port with a command like this:
+At this point, we will be able to make subscriptions to the Rosegarden input
+port with a command like this:
 
 	$ aconnect 72:0 Rosegarden:0
 
-Yes, it is not a mistake. You can use the client name instead the port name. We know that the input port number will be 0, and no options are required, because that has been done at input port creation time. Output port  connection management isn't allowed outside of Rosegarden.
+Yes, it is not a mistake. You can use the client name instead the port name. We
+know that the input port number will be 0, and no options are required,
+because that has been done at input port creation time. Output port 
+connection management isn't allowed outside of Rosegarden.
 
 Phase 2
 =======
 
-The selected input port is stored in the file "rosegardenrc", section "[SequencerOptions]", key "midirecorddevice". This was a single value (a device number), but it will be a list, now. So, the configuration files will  be compatible, but the values are stored into a QStringList in the program, and must be read with KConfig::readListEntry()
+The selected input port is stored in the file "rosegardenrc", section
+"[SequencerOptions]", key "midirecorddevice". This was a single value (a
+device number), but it will be a list, now. So, the configuration files will
+be compatible, but the values are stored into a QStringList in the program,
+and must be read with KConfig::readListEntry()
 
-The message id MappedEvent::SystemRecordDevice was used by the GUI to tell the sequencer that a new device is selected for recording. The only change required is to use another constructor with one more parameter to disconnect a recording port, too. The MappedEvent object will be constructed with the device as Data1 and true/false in Data2. See sequencemanager.cpp:1380 and devicemanager.cpp:460. When this message was received in AlsaDriver, the old connection was removed, and a new one was established. The new behavior is to only perform the requested operation (connect/disconnect) upon the indicated device.
+The message id MappedEvent::SystemRecordDevice was used by the GUI to tell the
+sequencer that a new device is selected for recording. The only change
+required is to use another constructor with one more parameter to disconnect a
+recording port, too. The MappedEvent object will be constructed with the
+device as Data1 and true/false in Data2. See sequencemanager.cpp:1380 and
+devicemanager.cpp:460. When this message was received in AlsaDriver, the old
+connection was removed, and a new one was established. The new behavior is to
+only perform the requested operation (connect/disconnect) upon the indicated
+device.
 
-The MappedEvent::SystemUpdateInstruments message is generated by a timer each 3 seconds when the ALSA port list has changed. It is necessary to generate it also when the connections to the Rosegarden input port has changed (checkForNewClients). Here may be useful to substitute the timer by a subscription to the ALSA System:Announce port.
+The MappedEvent::SystemUpdateInstruments message is generated by a timer each 3
+seconds when the ALSA port list has changed. It is necessary to generate it
+also when the connections to the Rosegarden input port has changed
+(checkForNewClients). Here may be useful to complement the 3 seconds timer with
+a subscription to the ALSA System:Announce port. Another needed change
+involves sound/MappedDevice, and base/MidiDevice. Both classes have now a
+boolean m_recording data member and public accesors.
 
-Files Changed: (gui/) rosegardenguidoc.cpp, devicemanager.cpp, sequencemanager.cpp, (sound/) AlsaDriver.cpp
+Files Changed: (gui/) rosegardenguidoc.cpp, devicemanager.cpp,
+sequencemanager.cpp, (sound/) AlsaDriver.cpp, MappedDevice.cpp (base/)
+MidiDevice.C
 
-At this point we can connect a external port to Rosegarden (with aconnect), and it will be reflected in the Studio window. We can also connect several recording inputs in the Studio window, and disconnect any connection. The port connection state will be saved in the resource settings file (rosegardenrc), and restored again in the next program run. 
+At this point we can connect a external port to Rosegarden (with aconnect), and
+it will be reflected in the Studio window. We can also connect several
+recording inputs in the Studio window, and disconnect any connection. The port
+connection state will be saved in the resource settings file (rosegardenrc),
+and restored again in the next program run.
+
+There is a funny behavior, though. If you connect another input device using a
+external program, like aconnect, the connection is shown in the Studio window,
+but it is not saved to the configuration file, so it won't be restored 
+the next time rosegarden is run. Also, externally made connections take less
+precedence over persistent connections, so if you unsubscribe a saved (in
+rosegardenrc) connection with an external program, it will be restored by
+rosegarden as soon as the change is detected, obstinately.
 
 Phase 3
 =======
 
-We can store for each event recorded a set of properties. Two new properties  will be created, with names "recorded-port" and "recorded-channel". The former  will hold the ALSA client:port pair of the originating event, and the latter the original MIDI channel. These properties will be used for future functionalities as "Split by channel" or "Split by input port" dialogs, similar to the "Split by pitch" one.
+We can store for each event recorded a set of properties. Two new properties
+will be created, with names "recorded-port" and "recorded-channel". The former
+will hold the ALSA client:port pair of the originating event, and the latter
+the original MIDI channel. These properties will be used for future
+functionalities as "Split by channel" or "Split by input port" dialogs,
+similar to the "Split by pitch" one.
 
-The implementation should modify MappedEvent class, including two new properties:  recordedPort and recordedChannel, with the corresponding setters/getters. Store these properties in AlsaDriver::getMappedComposition(), when applicable. Note and other Channel Events have channel information, and can be retrieved with event->data.note.channel or event->data.control.channel. The property value for recordedPort can be retrieved from event->source.client and event->source.port (two integers); event->source is a snd_seq_addr_t. Files  sound/MappedEvent.h and sound/MappedEvent.cpp
+The implementation should modify MappedEvent class, including two new
+properties:  recordedPort and recordedChannel, with the corresponding
+setters/getters. Store these properties in AlsaDriver::getMappedComposition(),
+when applicable. Note and other Channel Events have channel information, and
+can be retrieved with event->data.note.channel or event->data.control.channel.
+The property value for recordedPort can be retrieved from event->source.client
+and event->source.port (two integers); event->source is a snd_seq_addr_t.
+Files  sound/MappedEvent.h and sound/MappedEvent.cpp
 
-It is necessary also to modify rosegardenguidoc.cpp, method RosegardenGUIDoc::insertRecordedMidi(), inserting the new properties in rEvent. The new properties are non-persistent. See base/Event.[C|h]
+It is necessary also to modify rosegardenguidoc.cpp, method
+RosegardenGUIDoc::insertRecordedMidi(), inserting the new properties in
+rEvent. The new properties are non-persistent. See base/Event.[C|h]
 
 Phase 3 can be delayed until it is required by a real functionality.
+
+Known issues
+============
+
+You can record from several input sources, but (of course) all the inputs are
+merged on a single output port. They are also merged in a single segment. The
+note duration detection is based on a single map (m_noteOnMap, member of
+SoundDriver). The map handles a event for each noteon received, and it's
+updated with the note length when a noteoff is received. When you record from
+several input sources, two musicians can collide in the same note, and one is
+lost (and the other note may have a wrong length). 
+
+To solve this issue, several changes are needed. m_noteOnMap is a SoundDriver
+data member but it's not referred to in any SoundDriver code and there are no
+public SoundDriver methods using it.  Ergo, there's no compelling reason it
+should be a member of SoundDriver rather than the subclasses (AlsaDriver and
+ArtsDriver).  And it's a bit of a hack anyway; conceptually it's really a
+map<ChannelNo, map<Pitch, MappedEvent *> > but the channel number and pitch
+have been rolled into a single int for brevity.  I would see no problem with
+unrolling them, giving a more complex definition but probably simpler usage,
+and making it obvious how to include another level of indirection (say to map
+from origin port to channel number to pitch to mapped event). 
+
+
+Last update: July 3, 2004

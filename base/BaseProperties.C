@@ -113,6 +113,9 @@ const std::string TRIGGER_SEGMENT_ADJUST_SQUISH = "squish";
 const std::string TRIGGER_SEGMENT_ADJUST_SYNC_START = "syncstart";
 const std::string TRIGGER_SEGMENT_ADJUST_SYNC_END = "syncend";
 
+const PropertyName RECORDED_CHANNEL		 = "recordedchannel";
+const PropertyName RECORDED_PORT		 = "recordedport";
+
 }
 
 }

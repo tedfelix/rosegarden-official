@@ -27,6 +27,7 @@
 
 #include <vector>
 #include <set>
+#include <map>
 
 #include "config.h"
 
@@ -226,7 +227,7 @@ public:
 
     // Set the record device
     //
-    void setRecordDevice(DeviceId id);
+    void setRecordDevice(DeviceId id, bool connectAction);
     void unsetRecordDevices();
 
     virtual bool canReconnect(Device::DeviceType type);
@@ -281,6 +282,7 @@ protected:
 
     ClientPortPair getFirstDestination(bool duplex);
     ClientPortPair getPairForMappedInstrument(InstrumentId id);
+    std::map<unsigned int, std::map<unsigned int, MappedEvent*> >  m_noteOnMap;
 
     /**
      * Bring m_alsaPorts up-to-date; if newPorts is non-null, also
@@ -304,6 +306,8 @@ protected:
 					  const snd_seq_event_t *event,
 					  bool now);
 
+    virtual bool isRecording(AlsaPortDescription *port);
+
     virtual void processAudioQueue(bool /* now */) { }
 
 private:
@@ -323,7 +327,8 @@ private:
     //
     snd_seq_t                   *m_midiHandle;
     int                          m_client;
-    int                          m_port;
+    int                          m_inputport;
+    int                          m_outputport;
     int                          m_queue;
     int                          m_maxClients;
     int                          m_maxPorts;
@@ -373,6 +378,8 @@ private:
     std::string m_currentTimer;
 
     bool m_queueRunning;
+    
+    bool m_portCheckNeeded;
 };
 
 }

@@ -918,10 +918,11 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 		//
 		m_doc->syncDevices();
 		
-		KConfig* config = kapp->config();
+		/*KConfig* config = kapp->config();
     		config->setGroup(SequencerOptionsConfigGroup);
 		QString recordDeviceStr = config->readEntry("midirecorddevice");
-		sendMIDIRecordingDevice(recordDeviceStr);
+		sendMIDIRecordingDevice(recordDeviceStr);*/
+		restoreRecordSubscriptions();
 	    }
 
             if (m_transportStatus == PLAYING ||
@@ -1363,13 +1364,29 @@ SequenceManager::sendMIDIRecordingDevice(const QString recordDeviceStr)
         {
             MappedEvent mE(MidiInstrumentBase, // InstrumentId
                                        MappedEvent::SystemRecordDevice,
-                                       MidiByte(recordDevice));
+                                       MidiByte(recordDevice),
+                                       MidiByte(true));
 
             StudioControl::sendMappedEvent(mE);
             SEQMAN_DEBUG << "set MIDI record device to "
                          << recordDevice << endl;
         }
     }
+}
+
+void 
+SequenceManager::restoreRecordSubscriptions()
+{
+    KConfig* config = kapp->config();
+    config->setGroup(SequencerOptionsConfigGroup);
+    //QString recordDeviceStr = config->readEntry("midirecorddevice");
+    QStringList devList = config->readListEntry("midirecorddevice");
+    
+    for( QStringList::ConstIterator it = devList.begin(); 
+         it != devList.end(); ++it) {
+    	sendMIDIRecordingDevice(*it);
+    }
+	
 }
 
 // Clear down all temporary (non read-only) objects and then
@@ -1380,9 +1397,10 @@ SequenceManager::reinitialiseSequencerStudio()
 {
     KConfig* config = kapp->config();
     config->setGroup(SequencerOptionsConfigGroup);
-    QString recordDeviceStr = config->readEntry("midirecorddevice");
+    //QString recordDeviceStr = config->readEntry("midirecorddevice");
     
-	sendMIDIRecordingDevice(recordDeviceStr);
+    //sendMIDIRecordingDevice(recordDeviceStr);
+    restoreRecordSubscriptions();
 	
     // Toggle JACK audio ports appropriately
     //

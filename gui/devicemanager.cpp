@@ -264,10 +264,10 @@ DeviceManagerDialog::populate()
 {
     Rosegarden::DeviceList *devices = m_studio->getDevices();
 
-    KConfig *config = kapp->config();
-    config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
-    Rosegarden::DeviceId recordDevice =
-	config->readUnsignedNumEntry("midirecorddevice");
+    //KConfig *config = kapp->config();
+    //config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
+    //Rosegarden::DeviceId recordDevice =
+	//config->readUnsignedNumEntry("midirecorddevice");
 
     m_playDevices.clear();
     m_recordDevices.clear();
@@ -350,9 +350,11 @@ DeviceManagerDialog::populate()
 	m_recordTable->setItem(deviceCount, RECORD_CONNECTION_COL, item);
 
 	QCheckTableItem *check = new QCheckTableItem(m_recordTable, QString());
-	check->setChecked((*it)->getId() == recordDevice);
-	check->setText(((*it)->getId() == recordDevice) ?
-		       i18n("Yes") : i18n("No"));
+	//check->setChecked((*it)->getId() == recordDevice);
+	//check->setText(((*it)->getId() == recordDevice) ?
+	//	       i18n("Yes") : i18n("No"));
+	check->setChecked((*it)->isRecording());
+	check->setText((*it)->isRecording() ? i18n("Yes") : i18n("No"));
 	m_recordTable->setItem(deviceCount, RECORD_CURRENT_COL, check);
 
 	m_recordTable->adjustRow(deviceCount);
@@ -435,33 +437,43 @@ DeviceManagerDialog::closeEvent(QCloseEvent *e)
 class ChangeRecordDeviceCommand : public KNamedCommand
 {
 public:
-    ChangeRecordDeviceCommand(Rosegarden::DeviceId deviceId) :
+    ChangeRecordDeviceCommand(Rosegarden::DeviceId deviceId, bool action) :
 	KNamedCommand(i18n("Change Record Device")),
-	m_deviceId(deviceId) { }
+	m_deviceId(deviceId), m_action(action) { }
     
     virtual void execute() { swap(); }
     virtual void unexecute() { swap(); }
 
 private:
     Rosegarden::DeviceId m_deviceId;
+    bool m_action;
     void swap() {
 
 	KConfig *config = kapp->config();
 	config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
-	Rosegarden::DeviceId oldDeviceId = config->readUnsignedNumEntry
-	    ("midirecorddevice", 0);
-
-	Rosegarden::DeviceId newDeviceId = m_deviceId;
-	config->writeEntry("midirecorddevice", newDeviceId);
+	QStringList devList = config->readListEntry("midirecorddevice");
+	QString sdevice = QString::number(m_deviceId);
+	if (m_action) 
+	{
+	    if(!devList.contains(sdevice))
+		devList.append(sdevice);
+	}
+	else
+	{
+	    if(devList.contains(sdevice))
+	    	devList.remove(sdevice);
+	}
+	config->writeEntry("midirecorddevice", devList);
 
         // send the selected device to the sequencer
         Rosegarden::MappedEvent mEdevice
-	    (Rosegarden::MidiInstrumentBase, // InstrumentId
+	    (Rosegarden::MidiInstrumentBase, 
 	     Rosegarden::MappedEvent::SystemRecordDevice,
-	     Rosegarden::MidiByte(newDeviceId));
+	     Rosegarden::MidiByte(m_deviceId),
+	     Rosegarden::MidiByte(m_action));
         Rosegarden::StudioControl::sendMappedEvent(mEdevice);
 
-	m_deviceId = oldDeviceId;
+	m_action = !m_action;
     }
 };
 
@@ -621,32 +633,22 @@ DeviceManagerDialog::slotRecordValueChanged(int row, int col)
 	QCheckTableItem *check =
 	    dynamic_cast<QCheckTableItem *>(m_recordTable->item(row, col));
 	if (!check) return;
+	
+	bool actionConnect = check->isChecked();
 
-	check->setText(i18n("Yes"));
-	check->setChecked(true);
-
-	for (int i = 0; i < m_recordTable->numRows(); ++i) {
-	    if (i == row) continue;
-	    QCheckTableItem *othercheck =
-		dynamic_cast<QCheckTableItem *>(m_recordTable->item(i, col));
-	    if (othercheck) {
-		othercheck->setChecked(false);
-		othercheck->setText(i18n("No"));
-	    }
-	}
+	// The following lines are not strictly needed, but give the checkboxes 
+	// a smoother behavior while waiting a confirmation from the sequencer.
+	//
+	check->setText(actionConnect ? i18n("Yes") : i18n("No"));
+	Rosegarden::MidiDevice *device = 
+	    dynamic_cast<Rosegarden::MidiDevice*>(m_studio->getDevice(id));
+	device->setRecording(actionConnect);
 
 	m_recordTable->setCurrentCell(row, 0);
 
-	KConfig *config = kapp->config();
-	config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
-	Rosegarden::DeviceId oldRecordId = config->readUnsignedNumEntry
-	    ("midirecorddevice", 0);
-
-	if (oldRecordId != id) {
-	    m_document->getCommandHistory()->addCommand
-		(new ChangeRecordDeviceCommand(id));
-	}
-
+	m_document->getCommandHistory()->addCommand
+	    (new ChangeRecordDeviceCommand(id, actionConnect));
+		
 	m_recordTable->blockSignals(false);
     }
     break;

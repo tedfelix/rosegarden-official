@@ -248,6 +248,7 @@ protected:
     void resetTimeSigSegmentMmapper();
     void checkRefreshStatus();
     void sendMIDIRecordingDevice(const QString recordDeviceStr);
+    void restoreRecordSubscriptions();
     
     //--------------- Data members ---------------------------------
 

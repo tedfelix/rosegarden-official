@@ -192,7 +192,9 @@ public:
                    m_runtimeSegmentId(-1),
                    m_autoFade(false),
                    m_fadeInTime(Rosegarden::RealTime::zeroTime),
-                   m_fadeOutTime(Rosegarden::RealTime::zeroTime) {}
+                   m_fadeOutTime(Rosegarden::RealTime::zeroTime),
+                   m_recordedChannel(0),
+                   m_recordedPort(0) {}
 
     // Construct from Events to Internal (MIDI) type MappedEvent
     //
@@ -225,7 +227,9 @@ public:
         m_runtimeSegmentId(-1),
         m_autoFade(false),
         m_fadeInTime(Rosegarden::RealTime::zeroTime),
-        m_fadeOutTime(Rosegarden::RealTime::zeroTime) {}
+        m_fadeOutTime(Rosegarden::RealTime::zeroTime),
+        m_recordedChannel(0),
+        m_recordedPort(0) {}
 
     // A general MappedEvent constructor for any MappedEvent type
     //
@@ -249,7 +253,9 @@ public:
         m_runtimeSegmentId(-1),
         m_autoFade(false),
         m_fadeInTime(Rosegarden::RealTime::zeroTime),
-        m_fadeOutTime(Rosegarden::RealTime::zeroTime) {}
+        m_fadeOutTime(Rosegarden::RealTime::zeroTime),
+        m_recordedChannel(0),
+        m_recordedPort(0) {}
 
     // Audio MappedEvent shortcut constructor
     //
@@ -271,7 +277,9 @@ public:
          m_runtimeSegmentId(-1),
          m_autoFade(false),
          m_fadeInTime(Rosegarden::RealTime::zeroTime),
-         m_fadeOutTime(Rosegarden::RealTime::zeroTime) {}
+         m_fadeOutTime(Rosegarden::RealTime::zeroTime),
+         m_recordedChannel(0),
+         m_recordedPort(0) {}
 
     // More generalised MIDI event containers for
     // large and small events (one param, two param)
@@ -293,7 +301,9 @@ public:
          m_runtimeSegmentId(-1),
          m_autoFade(false),
          m_fadeInTime(Rosegarden::RealTime::zeroTime),
-         m_fadeOutTime(Rosegarden::RealTime::zeroTime) {}
+         m_fadeOutTime(Rosegarden::RealTime::zeroTime),
+         m_recordedChannel(0),
+         m_recordedPort(0) {}
 
     MappedEvent(InstrumentId id,
                 MappedEventType type,
@@ -311,7 +321,9 @@ public:
         m_runtimeSegmentId(-1),
         m_autoFade(false),
         m_fadeInTime(Rosegarden::RealTime::zeroTime),
-        m_fadeOutTime(Rosegarden::RealTime::zeroTime) {}
+        m_fadeOutTime(Rosegarden::RealTime::zeroTime),
+        m_recordedChannel(0),
+        m_recordedPort(0) {}
 
 
     // Construct SysExs say
@@ -331,7 +343,9 @@ public:
         m_runtimeSegmentId(-1),
         m_autoFade(false),
         m_fadeInTime(Rosegarden::RealTime::zeroTime),
-        m_fadeOutTime(Rosegarden::RealTime::zeroTime) {}
+        m_fadeOutTime(Rosegarden::RealTime::zeroTime),
+        m_recordedChannel(0),
+        m_recordedPort(0) {}
 
     // Copy constructor
     //
@@ -350,7 +364,9 @@ public:
         m_runtimeSegmentId(mE.getRuntimeSegmentId()),
         m_autoFade(mE.isAutoFading()),
         m_fadeInTime(mE.getFadeInTime()),
-        m_fadeOutTime(mE.getFadeOutTime()) {}
+        m_fadeOutTime(mE.getFadeOutTime()),
+        m_recordedChannel(mE.getRecordedChannel()),
+        m_recordedPort(mE.getRecordedPort()) {}
 
     // Copy from pointer
     // Fix for 674731 by Pedro Lopez-Cabanillas (20030531)
@@ -368,7 +384,9 @@ public:
         m_runtimeSegmentId(mE->getRuntimeSegmentId()),
         m_autoFade(mE->isAutoFading()),
         m_fadeInTime(mE->getFadeInTime()),
-        m_fadeOutTime(mE->getFadeOutTime()) {}
+        m_fadeOutTime(mE->getFadeOutTime()),
+        m_recordedChannel(mE->getRecordedChannel()),
+        m_recordedPort(mE->getRecordedPort()) {}
 
     // Construct perhaps without initialising, for placement new or equivalent
     MappedEvent(bool initialise) {
@@ -482,6 +500,18 @@ public:
     RealTime getFadeOutTime() const { return m_fadeOutTime; }
     void setFadeOutTime(const Rosegarden::RealTime &time)
             { m_fadeOutTime = time; }
+    
+    // Original event input channel as it was recorded
+    //
+    unsigned int getRecordedChannel() const { return m_recordedChannel; }
+    void setRecordedChannel(const unsigned int channel) 
+	    { m_recordedChannel = channel; }
+	    
+    // Original event input port as it was recorded
+    //
+    unsigned int getRecordedPort() const { return m_recordedPort; }
+    void setRecordedPort(const unsigned int port)
+	    { m_recordedPort = port; }    
 
 private:
     TrackId          m_trackId;
@@ -514,6 +544,11 @@ private:
     Rosegarden::RealTime  m_fadeInTime;
     Rosegarden::RealTime  m_fadeOutTime;
 
+    // input event original data,
+    // stored as it was recorded
+    //
+    unsigned int	  m_recordedChannel;
+    unsigned int	  m_recordedPort;
 };
 
 
