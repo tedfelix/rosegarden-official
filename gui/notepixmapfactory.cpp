@@ -2684,8 +2684,15 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
     if (sig.isCommon()) {
 
 	NoteCharacter character;
-	if (getCharacter(NoteCharacterNames::COMMON_TIME, character,
-			 PlainColour, false)) {
+	
+	CharName charName;
+	if (sig.getNumerator() == 2) { 
+	    charName = NoteCharacterNames::CUT_TIME;
+	} else {
+	    charName = NoteCharacterNames::COMMON_TIME;
+	}
+	
+	if (getCharacter(charName, character, PlainColour, false)) {
 	    createPixmapAndMask(character.getWidth(), character.getHeight());
 	    m_p->drawNoteCharacter(0, 0, character);
 	    return makeCanvasPixmap(QPoint(0, character.getHeight()/2));
