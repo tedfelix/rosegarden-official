@@ -106,6 +106,7 @@ public:
     static string unparse(basic_type i);
 };
 
+
 class PropertyStoreBase {
 public:
     virtual ~PropertyStoreBase();
@@ -118,12 +119,13 @@ public:
 #ifndef NDEBUG
     virtual void dump(ostream&) const = 0;
 #else
-    void dump(ostream&) const {}
+    virtual void dump(ostream&) const {}
 #endif
 };
 
 #ifndef NDEBUG
-inline ostream& operator<<(ostream &out, PropertyStoreBase &e) { e.dump(out); return out; }
+inline ostream& operator<<(ostream &out, PropertyStoreBase &e)
+{ e.dump(out); return out; }
 #endif
 
 template <PropertyType P>
@@ -223,7 +225,6 @@ public:
 };
 
 //////////////////////////////////////////////////////////////////////
-
 
 class Element2
 {
