@@ -31,6 +31,7 @@
 #include "notepixmapfactory.h"
 #include "rosestrings.h"
 #include "Quantizer.h"
+#include "Selection.h"
 
 
 using std::cout;
@@ -100,6 +101,8 @@ MatrixParameterBox::initBox()
     m_quantizeCombo->setCurrentItem(m_quantizeCombo->count() - 1);
 
     QLabel *snapGridLabel = new QLabel(i18n("Snap grid"), this);
+    snapGridLabel->setFont(font);
+
     m_snapGridCombo = new RosegardenComboBox(false, false, this);
     m_snapGridCombo->setFont(font);
 
@@ -160,6 +163,13 @@ MatrixParameterBox::initBox()
 void
 MatrixParameterBox::setSelection(Rosegarden::EventSelection *selection)
 {
+    Rosegarden::EventSelection::eventcontainer::iterator
+        it = selection->getSegmentEvents().begin();
+
+    for (; it != selection->getSegmentEvents().end(); it++)
+    {
+    }
+
 }
 
 void
@@ -171,7 +181,7 @@ MatrixParameterBox::slotQuantizeSelected(int q)
 
     // if we're the last value then we're Off
     //
-    if (q == m_quantizations.size() - 1)
+    if (q == m_quantizations.size())
         unit = 0;
 
     emit quantizeSelection(Quantizer(Quantizer::RawEventData,

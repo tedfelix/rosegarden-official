@@ -417,8 +417,8 @@ bool MatrixView::applyLayout(int staffNo,
     m_vlayout.reset();
         
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-        m_hlayout.scanStaff(*m_staffs[i], startTime, endTime);
-        m_vlayout.scanStaff(*m_staffs[i], startTime, endTime);
+        m_hlayout.scanStaff(*m_staffs[i]); //, startTime, endTime);
+        m_vlayout.scanStaff(*m_staffs[i]); //, startTime, endTime);
     }
 
     m_hlayout.finishLayout();
@@ -1067,10 +1067,18 @@ MatrixView::slotQuantizeSelection(Rosegarden::Quantizer q)
 
     MATRIX_DEBUG << "MatrixView::slotQuantizeSelection\n";
 
-    KTmpStatusMsg msg(i18n("Quantizing..."), statusBar());
-    addCommandToHistory(new EventQuantizeCommand
-			    (*m_currentEventSelection,
-                             q));
+    if (q.getUnit() > 0)
+    {
+        KTmpStatusMsg msg(i18n("Quantizing..."), statusBar());
+        addCommandToHistory(
+                new EventQuantizeCommand(*m_currentEventSelection, q));
+    }
+    else
+    {
+        KTmpStatusMsg msg(i18n("Unquantizing..."), statusBar());
+        addCommandToHistory(
+                new EventUnquantizeCommand(*m_currentEventSelection, q));
+    }
 }
 
 

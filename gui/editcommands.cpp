@@ -523,7 +523,6 @@ EventEditCommand::modifySegment()
 }
 
 
-
 EventQuantizeCommand::EventQuantizeCommand(Rosegarden::Segment &segment,
 					   Rosegarden::timeT startTime,
 					   Rosegarden::timeT endTime,
@@ -608,6 +607,98 @@ EventQuantizeCommand::modifySegment()
 
     } else {
 	m_quantizer.quantize(&segment,
+			     segment.findTime(getStartTime()),
+			     segment.findTime(getEndTime()));
+    }
+}
+
+
+// ---------------- Unquantize -----------
+EventUnquantizeCommand::EventUnquantizeCommand(Rosegarden::Segment &segment,
+					       Rosegarden::timeT startTime,
+					       Rosegarden::timeT endTime,
+					       Rosegarden::Quantizer quantizer) :
+    BasicCommand(getGlobalName(&quantizer), segment, startTime, endTime,
+		 true), // bruteForceRedo
+    m_quantizer(quantizer),
+    m_selection(0)
+{
+    // nothing else
+}
+
+EventUnquantizeCommand::EventUnquantizeCommand(
+        Rosegarden::EventSelection &selection,
+        Rosegarden::Quantizer quantizer) :
+    BasicCommand(getGlobalName(&quantizer),
+		 selection.getSegment(),
+		 selection.getStartTime(),
+		 selection.getEndTime(),
+		 true), // bruteForceRedo
+    m_quantizer(quantizer),
+    m_selection(&selection)
+{
+    // nothing else
+}
+
+QString
+EventUnquantizeCommand::getGlobalName(Rosegarden::Quantizer *quantizer)
+{
+    if (quantizer) {
+	switch (quantizer->getType()) {
+	case Rosegarden::Quantizer::PositionQuantize:
+	    return "Position &Quantize";
+	case Rosegarden::Quantizer::UnitQuantize:
+	    return "Unit &Quantize";
+	case Rosegarden::Quantizer::NoteQuantize:
+	    return "Note &Quantize";
+	case Rosegarden::Quantizer::LegatoQuantize:
+	    return "Smoothing &Quantize";
+	}
+    }
+
+    return "&Quantize...";
+}
+
+void
+EventUnquantizeCommand::modifySegment()
+{
+    Segment &segment = getSegment();
+
+    if (m_selection) {
+
+	// Attempt to handle non-contiguous selections.
+
+	// We have to be a bit careful here, because the rest-
+	// normalisation that's carried out as part of a quantize
+	// process is liable to replace the event that follows
+	// the quantized range.
+
+	typedef std::vector<std::pair<Segment::iterator,
+				      Segment::iterator> > RangeList;
+	RangeList ranges;
+
+	Segment::iterator i = segment.findTime(getStartTime());
+	Segment::iterator j;
+	Segment::iterator k = segment.findTime(getEndTime());
+
+	while (j != k) {
+	
+	    for (j = i; j != k && m_selection->contains(*j); ++j);
+
+	    if (j != i) {
+		ranges.push_back(RangeList::value_type(i, j));
+		
+		for (i = j; i != k && !m_selection->contains(*i); ++i);
+		j = i;
+	    }
+	}
+
+	for (RangeList::iterator r = ranges.begin(); r != ranges.end(); ++r) {
+	    m_quantizer.unquantize(&segment, r->first, r->second);
+	}
+
+    } else {
+	m_quantizer.unquantize(&segment,
 			     segment.findTime(getStartTime()),
 			     segment.findTime(getEndTime()));
     }

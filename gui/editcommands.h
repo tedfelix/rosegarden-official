@@ -237,5 +237,26 @@ private:
     Rosegarden::EventSelection *m_selection;
 };
 
+class EventUnquantizeCommand : public BasicCommand
+{
+public:
+    EventUnquantizeCommand(Rosegarden::Segment &segment,
+			   Rosegarden::timeT startTime,
+			   Rosegarden::timeT endTime,
+			   Rosegarden::Quantizer);
+    
+    EventUnquantizeCommand(Rosegarden::EventSelection &selection,
+			   Rosegarden::Quantizer);
+    
+    static QString getGlobalName(Rosegarden::Quantizer *quantizer = 0);
+    
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::Quantizer m_quantizer;
+    Rosegarden::EventSelection *m_selection;
+};
+
 
 #endif
