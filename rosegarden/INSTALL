@@ -1,13 +1,13 @@
-KDE3 Build (0.1.6 release notes)
-================================
-The source tree builds for KDE3 as default and should configure as such
-straight out of the box.  To build for KDE2 it's necessary to do a little
+Rosegarden 0.2.0 release notes
+==============================
+The source tree builds for KDE 3.x as default and should configure as such
+straight out of the box.  To build for KDE 2.x it's necessary to do a little
 extra work - namely replacing the admin/ directory.  From the top level
 rosegarden/ or rosegarden-0.x.y/ directory perform the following commands
 to swap over the admin directories:
 
- % mv admin admin_kde3
- % mv admin_kde2 admin
+ % rm -r admin/
+ % cp -r admin_kde2/ admin/
 
 It's then necessary to regenerate the "configure" script like so:
 
@@ -19,20 +19,25 @@ and now you can configure and make as usual:
   % make
 
 
-ALSA 0.9.0beta12 and above support
-==================================
-Rosegarden-4 v0.1.5 now supports ALSA (www.alsa-project.org).
+ALSA 0.9.0 support, JACK and LADSPA
+===================================
+Rosegarden-4 supports ALSA (www.alsa-project.org) sound drivers as
+default.  Any version above ALSA 0.9.0beta12 will do.
 
-Rosegarden-4 v0.1.5 has been tested with ALSA 0.9.0beta12 and ALSA 0.9.0rc1
-on both KDE2 and KDE3.  If you want to use an ALSA soft synth as a Rosegarden
-Instrument you must start the synth (such as iiwusynth) _before_ you start
-Rosegarden.  You should then see the ports of the soft synth available
-in the Rosegarden Instrument list (click and hold on the Track name to
-pop up the Instrument selection list).
+Full duplex audio is provided through the JACK library and server:
+
+   http://jackit.sourceforge.net
+
+Forthcoming audio plugin support will be courtesy of LADSPA.
+
+If you want to use an ALSA soft synth as a Rosegarden Instrument you
+must start the synth (such as iiwusynth) _before_ you start Rosegarden.
+You should then see the ports of the soft synth available in the
+Rosegarden Instrument list (click and hold on the Track name to pop up
+the Instrument selection list).
 
 
-
-
+--
 
 
 Basic Installation

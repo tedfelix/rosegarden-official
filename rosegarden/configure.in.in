@@ -1,6 +1,6 @@
 #MIN_CONFIG
 
-AM_INIT_AUTOMAKE(rosegarden,0.1.6)
+AM_INIT_AUTOMAKE(rosegarden,0.2.0)
 
 dnl These are common macros that you might or might not want to use
 
