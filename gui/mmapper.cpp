@@ -207,7 +207,7 @@ SegmentMmapper::SegmentMmapper(RosegardenGUIDoc* doc,
       m_segment(segment),
       m_fileName(fileName),
       m_fd(-1),
-      m_mmappedSize(computeMmappedSize()),
+      m_mmappedSize(0),
       m_mmappedBuffer((MappedEvent*)0)
 {
     SEQMAN_DEBUG << "SegmentMmapper : " << this
@@ -224,15 +224,21 @@ SegmentMmapper::SegmentMmapper(RosegardenGUIDoc* doc,
 
     SEQMAN_DEBUG << "SegmentMmapper : mmap size = " << m_mmappedSize
                  << endl;
+}
+
+void SegmentMmapper::init()
+{
+    m_mmappedSize = computeMmappedSize();
 
     if (m_mmappedSize > 0) {
         setFileSize(m_mmappedSize);
         doMmap();
         dump();
     } else {
-        SEQMAN_DEBUG << "SegmentMmapper : mmap size = 0 - skipping mmapping for now\n";
+        SEQMAN_DEBUG << "SegmentMmapper::init : mmap size = 0 - skipping mmapping for now\n";
     }
 }
+
 
 size_t SegmentMmapper::computeMmappedSize()
 {
@@ -411,6 +417,8 @@ void SegmentMmapper::dump()
         for (Segment::iterator j = m_segment->begin();
              j != m_segment->end(); ++j) {
 
+            // Skip rests
+            //
             if ((*j)->isa(Rosegarden::Note::EventRestType)) continue;
 
             timeT playTime =
@@ -427,7 +435,7 @@ void SegmentMmapper::dump()
             if (duration == Rosegarden::RealTime(0, 0) &&
                 (*j)->isa(Rosegarden::Note::EventType))
                 continue;
-	    
+                
             try {
                 // Create mapped event in mmapped buffer
                 MappedEvent *mE = new (bufPos) MappedEvent(0, // the instrument will be extracted from the ControlBlock by the sequencer
@@ -442,8 +450,8 @@ void SegmentMmapper::dump()
                 SEQMAN_DEBUG << "SegmentMmapper::dump - caught exception while trying to create MappedEvent\n";
             }
         }
+        
     }
-
 
     ::msync(m_mmappedBuffer, m_mmappedSize, MS_ASYNC);
 }
@@ -464,6 +472,68 @@ unsigned int SegmentMmapper::getSegmentRepeatCount()
 
     return repeatCount;
 }
+
+//----------------------------------------
+
+AudioSegmentMmapper::AudioSegmentMmapper(RosegardenGUIDoc* doc, Rosegarden::Segment* s,
+                        const QString& fileName)
+    : SegmentMmapper(doc, s, fileName)
+{
+}
+
+size_t AudioSegmentMmapper::computeMmappedSize()
+{
+    if (!m_segment) return 0;
+
+    int repeatCount = getSegmentRepeatCount();
+
+    return (repeatCount + 1) * 1 * sizeof(MappedEvent);
+    // audio segments don't have events, we just need room for 1 MappedEvent
+}
+
+
+void AudioSegmentMmapper::dump()
+{
+    Composition &comp = m_doc->getComposition();
+
+    Rosegarden::RealTime eventTime;
+    Rosegarden::RealTime duration;
+    Rosegarden::Track* track = comp.getTrackById(m_segment->getTrack());
+    
+    Rosegarden::SegmentPerformanceHelper helper(*m_segment);
+
+    timeT segmentStartTime = m_segment->getStartTime();
+    timeT segmentEndTime = m_segment->getEndMarkerTime();
+    timeT segmentDuration = segmentEndTime - segmentStartTime;
+    timeT repeatEndTime = segmentEndTime;
+
+    int repeatCount = getSegmentRepeatCount();
+
+    if (repeatCount > 0) repeatEndTime = m_segment->getRepeatEndTime();
+
+    MappedEvent* bufPos = m_mmappedBuffer;
+
+    for (int repeatNo = 0; repeatNo <= repeatCount; ++repeatNo) {
+
+        if (m_segment->getType() == Rosegarden::Segment::Audio) {
+            //
+            // Audio segment
+            //
+            Rosegarden::RealTime audioStart    = m_segment->getAudioStartTime();
+            Rosegarden::RealTime audioDuration = m_segment->getAudioEndTime() - audioStart;
+            Rosegarden::MappedEvent *mE =
+                new (bufPos) Rosegarden::MappedEvent(0, // track->getInstrument() - the instrument will be extracted from the ControlBlock by the sequencer
+                                                     m_segment->getAudioFileId(),
+                                                     eventTime,
+                                                     audioDuration,
+                                                     audioStart);
+            mE->setTrackId(track->getId());
+            ++bufPos;
+        }
+    }
+    
+}
+
 
 //----------------------------------------
 
@@ -551,10 +621,12 @@ void CompositionMmapper::mmapSegment(Segment* segment)
 {
     SEQMAN_DEBUG << "CompositionMmapper::mmapSegment(" << segment << ")\n";
 
-    SegmentMmapper* mmapper = new SegmentMmapper(m_doc, segment,
-                                                 makeFileName(segment));
+    SegmentMmapper* mmapper = SegmentMmapperFactory::makeMmapperForSegment(m_doc,
+                                                                           segment,
+                                                                           makeFileName(segment));
 
-    m_segmentMmappers[segment] = mmapper;
+    if (mmapper)
+        m_segmentMmappers[segment] = mmapper;
 }
 
 QString CompositionMmapper::makeFileName(Segment* segment)
@@ -725,4 +797,43 @@ bool operator<(MetronomeMmapper::Tick a, MetronomeMmapper::Tick b)
 void MetronomeMmapper::sortTicks()
 {
     sort(m_ticks.begin(), m_ticks.end());
+}
+
+
+SegmentMmapper* SegmentMmapperFactory::makeMmapperForSegment(RosegardenGUIDoc* doc,
+                                                             Rosegarden::Segment* segment,
+                                                             const QString& fileName)
+{
+    SegmentMmapper* mmapper = 0;
+
+    if (segment == 0) {
+        SEQMAN_DEBUG << "SegmentMmapperFactory::makeMmapperForSegment() segment == 0\n";
+        return 0;
+    }
+    
+    switch (segment->getType()) {
+    case Segment::Internal :
+        mmapper = new SegmentMmapper(doc, segment, fileName);
+        break;
+    case Segment::Audio :
+        mmapper = new AudioSegmentMmapper(doc, segment, fileName);
+        break;
+    default:
+        SEQMAN_DEBUG << "SegmentMmapperFactory::makeMmapperForSegment(" << segment
+                     << ") : can't map, unknown segment type " << segment->getType() << endl;
+        mmapper = 0;
+    }
+    
+    if (mmapper)
+        mmapper->init();
+
+    return mmapper;
+}
+
+SegmentMmapper* SegmentMmapperFactory::makeMetronome(RosegardenGUIDoc* doc, int depth)
+{
+    MetronomeMmapper* mmapper = new MetronomeMmapper(doc, depth);
+    mmapper->init();
+    
+    return mmapper;
 }

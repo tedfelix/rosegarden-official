@@ -70,9 +70,9 @@ protected:
 
 class SegmentMmapper
 {
+    friend class SegmentMmapperFactory;
+
 public:
-    SegmentMmapper(RosegardenGUIDoc*, Rosegarden::Segment*,
-                   const QString& fileName);
     virtual ~SegmentMmapper();
 
     /**
@@ -88,6 +88,12 @@ public:
     virtual size_t computeMmappedSize();
 
 protected:
+    SegmentMmapper(RosegardenGUIDoc*, Rosegarden::Segment*,
+                   const QString& fileName);
+
+    /// actual setup, must be called after ctor, calls virtual methods
+    virtual void init();
+
     /// set the size of the mmapped filed
     void setFileSize(size_t);
 
@@ -111,6 +117,76 @@ protected:
 };
 
 //----------------------------------------
+
+class AudioSegmentMmapper : public SegmentMmapper
+{
+    friend class SegmentMmapperFactory;
+
+public:
+    virtual size_t computeMmappedSize();
+
+protected:
+    AudioSegmentMmapper(RosegardenGUIDoc*, Rosegarden::Segment*,
+                        const QString& fileName);
+
+    /// dump all segment data in the file
+    virtual void dump();
+};
+
+//----------------------------------------
+
+class MetronomeMmapper : public SegmentMmapper
+{
+    friend class SegmentMmapperFactory;
+
+public:
+
+    virtual ~MetronomeMmapper();
+
+    Rosegarden::InstrumentId getMetronomeInstrument();
+
+    // overrides from SegmentMmapper
+    virtual unsigned int getSegmentRepeatCount();
+    virtual size_t computeMmappedSize();
+
+protected:
+    /**
+     * The depth argument is the level of subdivision (0 = bars only,
+     * 3 = bars, beats, beat divisions, subdivisions -- etc).
+     */
+    MetronomeMmapper(RosegardenGUIDoc* doc, int depth = 2);
+
+    void setupMetronome();
+    void sortTicks();
+    QString createFileName();
+
+    // override from SegmentMmapper
+    virtual void dump();
+
+    //--------------- Data members ---------------------------------
+    typedef std::pair<Rosegarden::timeT, int> Tick;
+    typedef std::vector<Tick> TickContainer;
+    friend bool operator<(Tick, Tick);
+
+    TickContainer m_ticks;
+    bool m_deleteMetronome;
+    const Rosegarden::MidiMetronome* m_metronome;
+    Rosegarden::MidiByte m_barVelocity;
+    Rosegarden::MidiByte m_beatVelocity;
+    Rosegarden::RealTime m_tickDuration;
+};
+
+//----------------------------------------
+
+class SegmentMmapperFactory
+{
+public:
+
+    static SegmentMmapper* makeMmapperForSegment(RosegardenGUIDoc*, Rosegarden::Segment*,
+                                                 const QString& fileName);
+
+    static SegmentMmapper* makeMetronome(RosegardenGUIDoc*, int depth = 2);
+};
 
 namespace Rosegarden { class SequenceManager; }
 
@@ -141,46 +217,5 @@ protected:
 
     segmentmmapers m_segmentMmappers;
 };
-
-//----------------------------------------
-
-class MetronomeMmapper : public SegmentMmapper
-{
-public:
-
-    /**
-     * The depth argument is the level of subdivision (0 = bars only,
-     * 3 = bars, beats, beat divisions, subdivisions -- etc).
-     */
-    MetronomeMmapper(RosegardenGUIDoc* doc, int depth = 2);
-    virtual ~MetronomeMmapper();
-
-    Rosegarden::InstrumentId getMetronomeInstrument();
-
-    // overrides from SegmentMmapper
-    virtual unsigned int getSegmentRepeatCount();
-    virtual size_t computeMmappedSize();
-
-protected:
-    void setupMetronome();
-    void sortTicks();
-    QString createFileName();
-
-    // override from SegmentMmapper
-    virtual void dump();
-
-    //--------------- Data members ---------------------------------
-    typedef std::pair<Rosegarden::timeT, int> Tick;
-    typedef std::vector<Tick> TickContainer;
-    friend bool operator<(Tick, Tick);
-
-    TickContainer m_ticks;
-    bool m_deleteMetronome;
-    const Rosegarden::MidiMetronome* m_metronome;
-    Rosegarden::MidiByte m_barVelocity;
-    Rosegarden::MidiByte m_beatVelocity;
-    Rosegarden::RealTime m_tickDuration;
-};
-
 
 #endif
