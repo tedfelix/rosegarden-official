@@ -584,7 +584,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
             // If there was a gap between the last note and this one
             // then fill it with rests
             //
-            if ( (absTime + duration) > m_endOfLastRecordedNote)
+            if ( absTime > m_endOfLastRecordedNote)
                 m_recordSegment->fillWithRests(absTime + duration);
 
             // Now insert the new event
@@ -719,11 +719,14 @@ RosegardenGUIDoc::setLoopMarker(Rosegarden::timeT startLoop,
 
 
 
+// Split a Segment into two pieces preserving key, time sig and
+// clef in the new Segment
+//
 void
 RosegardenGUIDoc::splitSegment(Rosegarden::Segment *segment,
                                Rosegarden::timeT splitTime)
 {
-    // Initialise and add to Composition
+    // Initialise new Segment and add to Composition
     //
     Rosegarden::Segment *rhSegment = new Rosegarden::Segment();
     rhSegment->setTrack(segment->getTrack());
@@ -731,45 +734,90 @@ RosegardenGUIDoc::splitSegment(Rosegarden::Segment *segment,
     m_composition.addSegment(rhSegment);
 
     Rosegarden::Segment::iterator it;
-    Rosegarden::Event *lhEvent;
+    Rosegarden::Event *rhEvent;
     Rosegarden::timeT absTime, duration;
     Rosegarden::timeT lastNote = 0;
     Rosegarden::timeT endTime = segment->getEndTime();
-    int count = 0;
 
-    // Copy through Events
+    Rosegarden::Event *clefEvent = 0;
+    Rosegarden::Event *keyEvent = 0;
+    Rosegarden::Event *timeSigEvent = 0;
+
+    // Copy the last occurence of clef, keys and time signature
+    // from the left hand side of the split
+    //
+    for (it = segment->begin(); it != segment->findTime(splitTime); it++)
+    {
+        if ((*it)->isa(Rosegarden::Clef::EventType))
+        {
+            if (clefEvent)
+                delete clefEvent;
+
+            clefEvent = new Event(**it);
+            clefEvent->setAbsoluteTime(splitTime);
+        }
+
+        if ((*it)->isa(Rosegarden::Key::EventType))
+        {
+            if (keyEvent)
+                delete keyEvent;
+
+            keyEvent = new Event(**it);
+            keyEvent->setAbsoluteTime(splitTime);
+        }
+
+        if ((*it)->isa(Rosegarden::TimeSignature::EventType))
+        {
+            if (timeSigEvent)
+                delete timeSigEvent;
+
+            timeSigEvent = new Event(**it);
+            timeSigEvent->setAbsoluteTime(splitTime);
+        }
+    }
+
+    // Insert relevant meta info if we've found some
+    //
+    if(clefEvent)
+        rhSegment->insert(clefEvent);
+
+    if(keyEvent)
+        rhSegment->insert(keyEvent);
+
+    if(timeSigEvent)
+        rhSegment->insert(timeSigEvent);
+
+
+    // Copy through the Events
     //
     for (it = segment->findTime(splitTime); it != segment->end(); it++)
     {
         absTime = (*it)->getAbsoluteTime();
         duration = (*it)->getDuration();
 
-        if ( absTime + duration > lastNote)
+        if ( absTime > lastNote)
             rhSegment->fillWithRests(absTime + duration);
 
-        lhEvent = new Event(**it);
-        Segment::iterator loc = rhSegment->insert(lhEvent);
+        rhEvent = new Event(**it);
+        Segment::iterator loc = rhSegment->insert(rhEvent);
 
         SegmentNotationHelper helper(*rhSegment);
-        if (!helper.isViable(lhEvent))
+        if (!helper.isViable(rhEvent))
             helper.makeNoteViable(loc);
 
         lastNote = absTime + duration;
-        count++;
     }
 
-    // resize left hand Segment
+    // Resize left hand Segment
     //
-    segment->erase(segment->begin(), segment->findTime(splitTime));
+    segment->erase(segment->findTime(splitTime), segment->end());
     segment->setDuration(splitTime - segment->getStartTime());
     updateSegmentItem(segment);
 
+    // Ensure new Segment size in correct and insert a new
+    // SegmentItem
     rhSegment->setDuration(endTime - splitTime);
-
     addSegmentItem(rhSegment);
-    addSegmentItem(segment);
-
-    cout << count << " Events to the left hand segment" << endl;
 
     slotUpdateAllViews(0);
 
