@@ -1961,6 +1961,9 @@ void NotationView::initLayoutToolbar()
 
     new QLabel(i18n("  Font:  "), layoutToolbar, "font label");
 
+    //
+    // font combo
+    //
     m_fontCombo = new KComboBox(layoutToolbar);
     m_fontCombo->setEditable(false);
 
@@ -2006,11 +2009,12 @@ void NotationView::initLayoutToolbar()
         value.setNum(*i);
         m_fontSizeCombo->insertItem(value);
     }
+    // set combo's current value to default
     value.setNum(m_fontSize);
     m_fontSizeCombo->setCurrentText(value);
 
     connect(m_fontSizeCombo, SIGNAL(activated(const QString&)),
-            this, SLOT(slotChangeFontSizeFromIndex(const QString&)));
+            this, SLOT(slotChangeFontSizeFromStringValue(const QString&)));
 
     new QLabel(i18n("  Spacing:  "), layoutToolbar, "spacing label");
 
@@ -2024,14 +2028,15 @@ void NotationView::initLayoutToolbar()
     for (std::vector<int>::iterator i = spacings.begin(); i != spacings.end(); ++i) {
 
         value.setNum(*i);
+        value += "%";
         m_spacingCombo->insertItem(value);
     }
-    value.setNum(defaultSpacing);
-
+    // set combo's current value to default
+    value.setNum(defaultSpacing); value += "%";
     m_spacingCombo->setCurrentText(value);
     
     connect(m_spacingCombo, SIGNAL(activated(const QString&)),
-            this, SLOT(slotChangeSpacingFromIndex(const QString&)));
+            this, SLOT(slotChangeSpacingFromStringValue(const QString&)));
 }
 
 void NotationView::initStatusBar()

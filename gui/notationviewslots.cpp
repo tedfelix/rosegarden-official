@@ -103,9 +103,11 @@ NotationView::slotUpdateAnnotationsStatus()
 }
 
 void
-NotationView::slotChangeSpacingFromIndex(const QString& spacingT)
+NotationView::slotChangeSpacingFromStringValue(const QString& spacingT)
 {
-    int spacing = spacingT.toInt();
+    // spacingT has a '%' at the end
+    //
+    int spacing = spacingT.left(spacingT.length() - 1).toInt();
     slotChangeSpacing(spacing);
 }
 
@@ -288,7 +290,7 @@ NotationView::slotChangeFontSize(int newSize)
 
 
 void
-NotationView::slotChangeFontSizeFromIndex(const QString& sizeT)
+NotationView::slotChangeFontSizeFromStringValue(const QString& sizeT)
 {
     int size = sizeT.toInt();
     slotChangeFont(m_fontName, size);

@@ -574,13 +574,13 @@ public slots:
     void slotChangeFontSizeFromAction();
 
     /// Changes the font size of the staffs on the view to the nth size in the available size list
-    void slotChangeFontSizeFromIndex(const QString&);
+    void slotChangeFontSizeFromStringValue(const QString&);
 
     /// Changes the hlayout spacing of the staffs on the view
     void slotChangeSpacing(int newSpacing);
 
     /// Changes the hlayout spacing of the staffs on the view
-    void slotChangeSpacingFromIndex(const QString&);
+    void slotChangeSpacingFromStringValue(const QString&);
 
     /// Changes the hlayout spacing of the staffs on the view
     void slotChangeSpacingFromAction();
