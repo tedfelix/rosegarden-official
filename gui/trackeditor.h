@@ -38,6 +38,7 @@ class TrackButtons;
 class MultiViewCommandHistory;
 class KCommand;
 class QCanvasLine;
+class QScrollView;
 
 /**
  * Global widget for segment edition.
@@ -159,6 +160,8 @@ protected slots:
 
     void slotSplitSegment(Rosegarden::Segment *, Rosegarden::timeT);
 
+    void slotTrackButtonsWidthChanged();
+
 signals:
     /**
      * Emitted when the represented data changed and the SegmentCanvas
@@ -190,8 +193,7 @@ protected:
     QScrollBar              *m_horizontalScrollBar;
     SegmentCanvas           *m_segmentCanvas;
     QCanvasLine             *m_pointer;
-
-    int m_trackButtonsScrollPos;
+    QScrollView             *m_trackButtonScroll;
 };
 
 #endif

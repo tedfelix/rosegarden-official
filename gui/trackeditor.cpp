@@ -27,6 +27,7 @@
 
 #include <kcommand.h>
 #include <kmessagebox.h>
+#include <kapp.h>
 
 #include "RulerScale.h"
 #include "Track.h"
@@ -63,7 +64,7 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
     m_trackButtons(0),
     m_horizontalScrollBar(0),
     m_segmentCanvas(0),
-    m_trackButtonsScrollPos(0)
+    m_trackButtonScroll(0)
 {
     Composition &comp = doc->getComposition();
 
@@ -178,27 +179,29 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     //
     // (must be put in a QScrollView)
     //
-    QScrollView *trackButtonScroll = new QScrollView(this);
-    grid->addWidget(trackButtonScroll, 1, 0);
+    m_trackButtonScroll = new QScrollView(this);
+    grid->addWidget(m_trackButtonScroll, 1, 0);
 
     m_trackButtons = new TrackButtons(m_document,
                                       getTrackCellHeight(),
                                       trackLabelWidth,
-                                      trackButtonScroll->viewport());
-    trackButtonScroll->addChild(m_trackButtons);
-    trackButtonScroll->setHScrollBarMode(QScrollView::AlwaysOff);
-    trackButtonScroll->setVScrollBarMode(QScrollView::AlwaysOff);
-    trackButtonScroll->setMinimumWidth(trackButtonScroll->contentsWidth());
-    //trackButtonScroll->setMaximumHeight(trackButtonScroll->contentsHeight());
-    
+                                      m_trackButtonScroll->viewport());
+    m_trackButtonScroll->addChild(m_trackButtons);
+    m_trackButtonScroll->setHScrollBarMode(QScrollView::AlwaysOff);
+    m_trackButtonScroll->setVScrollBarMode(QScrollView::AlwaysOff);
+    m_trackButtonScroll->setMinimumWidth(m_trackButtonScroll->contentsWidth());
+
+    connect(m_trackButtons, SIGNAL(widthChanged()),
+            this, SLOT(slotTrackButtonsWidthChanged()));
+
     //grid->addWidget(m_trackButtons, 1, 0);
 
     // Synchronize bar buttons' scrollview with segment canvas' scrollbar
     //
     connect(m_segmentCanvas->verticalScrollBar(), SIGNAL(valueChanged(int)),
-            trackButtonScroll->verticalScrollBar(), SIGNAL(valueChanged(int)));
+            m_trackButtonScroll->verticalScrollBar(), SIGNAL(valueChanged(int)));
     connect(m_segmentCanvas->verticalScrollBar(), SIGNAL(sliderMoved(int)),
-            trackButtonScroll->verticalScrollBar(), SIGNAL(sliderMoved(int)));
+            m_trackButtonScroll->verticalScrollBar(), SIGNAL(sliderMoved(int)));
 
     // Connect horizontal scrollbar
     //
@@ -274,6 +277,16 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     m_pointer->show();
 
 }
+
+void TrackEditor::slotTrackButtonsWidthChanged()
+{
+    // We need to make sure the trackButtons geometry is fully updated
+    //
+    kapp->processEvents();
+
+    m_trackButtonScroll->setMinimumWidth(m_trackButtons->width());
+}
+
 
 int TrackEditor::getTrackCellHeight() const
 {

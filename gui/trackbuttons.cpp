@@ -103,7 +103,8 @@ TrackButtons::drawButtons()
         QHBoxLayout *hblayout = new QHBoxLayout(trackHBox);
         
         trackHBox->setMinimumSize(m_trackLabelWidth, m_cellSize - borderGap);
-        trackHBox->setMaximumSize(m_trackLabelWidth, m_cellSize - borderGap);
+        trackHBox->setFixedHeight(m_cellSize - borderGap);
+        //trackHBox->setMaximumSize(m_trackLabelWidth, m_cellSize - borderGap);
 
         // Try a style for the box
         //
@@ -158,7 +159,8 @@ TrackButtons::drawButtons()
         //label->setText(QString("Track %1").arg(i));
 
         trackLabel->setMinimumSize(80, m_cellSize - buttonGap);
-        trackLabel->setMaximumSize(80, m_cellSize - buttonGap);
+        //trackLabel->setMaximumSize(80, m_cellSize - buttonGap);
+        trackLabel->setFixedHeight(m_cellSize - buttonGap);
         trackLabel->setIndent(7);
 
         connect(trackLabel, SIGNAL(renameTrack(QString, int)),
@@ -182,11 +184,8 @@ TrackButtons::drawButtons()
         mute->setText("M");
         record->setText("R"); 
 
-        mute->setMinimumSize(m_cellSize - buttonGap, m_cellSize - buttonGap);
-        mute->setMaximumSize(m_cellSize - buttonGap, m_cellSize - buttonGap);
-
-        record->setMinimumSize(m_cellSize - buttonGap, m_cellSize - buttonGap);
-        record->setMaximumSize(m_cellSize - buttonGap, m_cellSize - buttonGap);
+        mute->setFixedSize(m_cellSize - buttonGap, m_cellSize - buttonGap);
+        record->setFixedSize(m_cellSize - buttonGap, m_cellSize - buttonGap);
 
         // set the mute button
         //
@@ -348,10 +347,10 @@ TrackButtons::slotRenameTrack(QString newName, int trackNum)
         if ((*it)->trackNum() == trackNum)
         {
             (*it)->setText(newName);
+            emit widthChanged();
             return;
         }
     }
-
 }
 
 

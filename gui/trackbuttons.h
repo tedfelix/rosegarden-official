@@ -69,6 +69,7 @@ signals:
     // to emit what Track has been selected
     //
     void trackSelected(int);
+    void widthChanged();
 
 public slots:
 
