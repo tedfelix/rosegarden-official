@@ -298,8 +298,8 @@ SequenceManager::play()
     QDataStream streamOut(data, IO_WriteOnly);
 
     // playback start position
-    streamOut << startPos.sec;
-    streamOut << startPos.nsec;
+    streamOut << (long)startPos.sec;
+    streamOut << (long)startPos.nsec;
 
     // Apart from perhaps the small file size, I think with hindsight
     // that these options are more easily set to reasonable defaults
@@ -551,8 +551,8 @@ SequenceManager::sendSequencerJump(const RealTime &time)
 {
     QByteArray data;
     QDataStream streamOut(data, IO_WriteOnly);
-    streamOut << time.sec;
-    streamOut << time.nsec;
+    streamOut << (long)time.sec;
+    streamOut << (long)time.nsec;
 
     rgapp->sequencerSend("jumpTo(long int, long int)", data);
 }
@@ -628,6 +628,7 @@ SequenceManager::record(bool toggled)
 
             // Send Record to the Sequencer to signal it to drop out of record mode
             //
+	    //!!! huh? this doesn't look very plausible
             if (!rgapp->sequencerCall("play(long int, long int, long int, long int, long int, long int, long int, long int, long int, long int, long int)",
                                   replyType, replyData, data))
             {
@@ -780,8 +781,8 @@ punchin:
         QDataStream streamOut(data, IO_WriteOnly);
 
         // playback start position
-        streamOut << startPos.sec;
-        streamOut << startPos.nsec;
+        streamOut << (long)startPos.sec;
+        streamOut << (long)startPos.nsec;
 
 	// Apart from perhaps the small file size, I think with hindsight
 	// that these options are more easily set to reasonable defaults
@@ -1212,10 +1213,10 @@ SequenceManager::setLoop(const timeT &lhs, const timeT &rhs)
     RealTime loopEnd =
             m_doc->getComposition().getElapsedRealTime(rhs);
 
-    streamOut << loopStart.sec;
-    streamOut << loopStart.nsec;
-    streamOut << loopEnd.sec;
-    streamOut << loopEnd.nsec;
+    streamOut << (long)loopStart.sec;
+    streamOut << (long)loopStart.nsec;
+    streamOut << (long)loopEnd.sec;
+    streamOut << (long)loopEnd.nsec;
   
     rgapp->sequencerSend("setLoop(long int, long int, long int, long int)", data);
 }
@@ -1789,8 +1790,8 @@ void SequenceManager::segmentModified(Segment* s)
         QByteArray data;
         QDataStream streamOut(data, IO_WriteOnly);
 
-        streamOut << m_compositionMmapper->getSegmentFileName(s);
-	streamOut << m_compositionMmapper->getSegmentFileSize(s);
+        streamOut << (QString)m_compositionMmapper->getSegmentFileName(s);
+	streamOut << (size_t)m_compositionMmapper->getSegmentFileSize(s);
         
         SEQMAN_DEBUG << "SequenceManager::segmentModified() : DCOP-call sequencer remapSegment"
                      << m_compositionMmapper->getSegmentFileName(s) << endl;

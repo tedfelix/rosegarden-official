@@ -1740,7 +1740,7 @@ RosegardenGUIDoc::prepareAudio()
         // We have to pass the filename as a QString
         //
         streamOut << QString(strtoqstr((*it)->getFilename()));
-        streamOut << (*it)->getId();
+        streamOut << (int)(*it)->getId();
 
         rgapp->sequencerCall("addAudioFile(QString, int)", replyType, replyData, data);
         QDataStream streamIn(replyData, IO_ReadOnly);
@@ -2237,7 +2237,7 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::AudioFileId /*id*/)
     QByteArray data;
     QDataStream streamOut(data, IO_WriteOnly);
     streamOut << QString(strtoqstr(newAudioFile->getFilename()));
-    streamOut << newAudioFile->getId();
+    streamOut << (int)newAudioFile->getId();
     rgapp->sequencerSend("addAudioFile(QString, int)", data);
 
     // clear down
@@ -2292,7 +2292,7 @@ RosegardenGUIDoc::setAudioMonitoringState(bool value,
     QByteArray data;
     QDataStream streamOut(data, IO_WriteOnly);
 
-    streamOut << id;
+    streamOut << (unsigned int)id;
 
     rgapp->sequencerSend("setAudioMonitoringInstrument(unsigned int)", data);
     

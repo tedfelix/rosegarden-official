@@ -5218,7 +5218,7 @@ RosegardenGUIApp::slotAddAudioFile(unsigned int id)
     // We have to pass the filename as a QString
     //
     streamOut << QString(strtoqstr(aF->getFilename()));
-    streamOut << aF->getId();
+    streamOut << (int)aF->getId();
 
     if (rgapp->sequencerCall("addAudioFile(QString, int)", replyType, replyData, data)) {
         QDataStream streamIn(replyData, IO_ReadOnly);
@@ -5246,7 +5246,7 @@ RosegardenGUIApp::slotDeleteAudioFile(unsigned int id)
 
     // file id
     //
-    streamOut << id;
+    streamOut << (int)id;
 
     if (rgapp->sequencerCall("removeAudioFile(int)", replyType, replyData, data)) {
         QDataStream streamIn(replyData, IO_ReadOnly);

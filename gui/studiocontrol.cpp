@@ -35,13 +35,13 @@ StudioControl::createStudioObject(MappedObject::MappedObjectType type)
 {
     Rosegarden::Profiler profiler("StudioControl::createStudioObject", true);
 
-    Rosegarden::MappedObjectId value = -1;
+    int value = -1;
     QByteArray data;
     QCString replyType;
     QByteArray replyData;
     QDataStream streamOut(data, IO_WriteOnly);
 
-    streamOut << type;
+    streamOut << (int)type;
 
     if (!rgapp->sequencerCall("createMappedObject(int)",
                               replyType, replyData, data))
@@ -104,7 +104,7 @@ StudioControl::getStudioObjectProperty(MappedObjectId id,
     QByteArray replyData;
     QDataStream streamOut(data, IO_WriteOnly);
 
-    streamOut << id;
+    streamOut << (int)id;
     streamOut << QString(property);
 
     if (!rgapp->sequencerCall("getPropertyList(int, QString)",
@@ -133,9 +133,9 @@ StudioControl::setStudioObjectProperty(MappedObjectId id,
     QByteArray data;
     QDataStream streamOut(data, IO_WriteOnly);
 
-    streamOut << id;
-    streamOut << property;
-    streamOut << value;
+    streamOut << (int)id;
+    streamOut << (QString)property;
+    streamOut << (float)value;
 
     rgapp->sequencerSend("setMappedProperty(int, QString, float)", data);
 
@@ -171,9 +171,9 @@ StudioControl::setStudioObjectProperty(MappedObjectId id,
     QByteArray data;
     QDataStream streamOut(data, IO_WriteOnly);
 
-    streamOut << id;
-    streamOut << property;
-    streamOut << value;
+    streamOut << (int)id;
+    streamOut << (QString)property;
+    streamOut << (QString)value;
 
     rgapp->sequencerSend("setMappedProperty(int, QString, QString)", data);
 
@@ -190,8 +190,8 @@ StudioControl::setStudioObjectPropertyList(MappedObjectId id,
     QByteArray data;
     QDataStream streamOut(data, IO_WriteOnly);
 
-    streamOut << id;
-    streamOut << property;
+    streamOut << (int)id;
+    streamOut << (QString)property;
     streamOut << values;
 
     RG_DEBUG << "StudioControl::setStudioObjectPropertyList: " << values.size() << " values for property " << property << endl;
@@ -207,13 +207,13 @@ StudioControl::getStudioObjectByType(MappedObject::MappedObjectType type)
 {
     Rosegarden::Profiler profiler("StudioControl::getStudioObjectByType", true);
 
-    Rosegarden::MappedObjectId value = -1;
+    int value = -1;
     QByteArray data;
     QCString replyType;
     QByteArray replyData;
     QDataStream streamOut(data, IO_WriteOnly);
 
-    streamOut << type;
+    streamOut << (int)type;
 
     if (!rgapp->sequencerCall("getMappedObjectId(int)",
                               replyType, replyData, data))
@@ -243,9 +243,9 @@ StudioControl::setStudioPluginPort(MappedObjectId pluginId,
 
     // Use new MappedEvent interface
     //
-    streamOut << pluginId;
-    streamOut << portId;
-    streamOut << value;
+    streamOut << (int)pluginId;
+    streamOut << (unsigned long)portId;
+    streamOut << (float)value;
 
     rgapp->sequencerSend("setMappedPort(int, unsigned long int, float)", data);
 }
@@ -256,14 +256,14 @@ StudioControl::getStudioPluginPort(MappedObjectId pluginId,
 {
     Rosegarden::Profiler profiler("StudioControl::getStudioPluginPort", true);
 
-    Rosegarden::MappedObjectValue value = 0.0;
+    float value = 0.0;
     QByteArray data;
     QCString replyType;
     QByteArray replyData;
     QDataStream streamOut(data, IO_WriteOnly);
 
-    streamOut << pluginId;
-    streamOut << portId;
+    streamOut << (int)pluginId;
+    streamOut << (unsigned long)portId;
 
     if (!rgapp->sequencerCall("getMappedPort(int, unsigned long int)",
                               replyType, replyData, data))
@@ -316,9 +316,9 @@ StudioControl::getPluginProgram(MappedObjectId id, int bank, int program)
     QByteArray replyData;
     QDataStream streamOut(data, IO_WriteOnly);
 
-    streamOut << id;
-    streamOut << bank;
-    streamOut << program;
+    streamOut << (int)id;
+    streamOut << (int)bank;
+    streamOut << (int)program;
 
     QString programName;
 
@@ -347,7 +347,7 @@ StudioControl::getPluginProgram(MappedObjectId id, QString name)
     QByteArray replyData;
     QDataStream streamOut(data, IO_WriteOnly);
 
-    streamOut << id;
+    streamOut << (int)id;
     streamOut << name;
 
     unsigned long rv;
@@ -378,8 +378,8 @@ StudioControl::connectStudioObjects(MappedObjectId id1,
     QByteArray data;
     QDataStream streamOut(data, IO_WriteOnly);
 
-    streamOut << id1;
-    streamOut << id2;
+    streamOut << (int)id1;
+    streamOut << (int)id2;
 
     if (!rgapp->sequencerSend("connectMappedObjects(int, int)", data))
     {
@@ -400,8 +400,8 @@ StudioControl::disconnectStudioObjects(MappedObjectId id1,
     QByteArray data;
     QDataStream streamOut(data, IO_WriteOnly);
 
-    streamOut << id1;
-    streamOut << id2;
+    streamOut << (int)id1;
+    streamOut << (int)id2;
 
     if (!rgapp->sequencerSend("disconnectMappedObjects(int, int)", data))
     {
@@ -421,7 +421,7 @@ StudioControl::disconnectStudioObject(MappedObjectId id)
     QByteArray data;
     QDataStream streamOut(data, IO_WriteOnly);
 
-    streamOut << id;
+    streamOut << (int)id;
 
     if (!rgapp->sequencerSend("disconnectMappedObject(int)", data))
     {
@@ -481,9 +481,9 @@ StudioControl::sendMappedInstrument(const Rosegarden::MappedInstrument &mI)
     QByteArray data;
     QDataStream streamOut(data, IO_WriteOnly);
 
-    streamOut << mI.getType();
-    streamOut << mI.getChannel();
-    streamOut << mI.getId();
+    streamOut << (int)mI.getType();
+    streamOut << (unsigned char)mI.getChannel();
+    streamOut << (unsigned int)mI.getId();
 
     rgapp->sequencerSend("setMappedInstrument(int, unsigned char, unsigned int)", data);
 }
@@ -497,8 +497,8 @@ StudioControl::sendQuarterNoteLength(const Rosegarden::RealTime &length)
     QByteArray data;
     QDataStream streamOut(data, IO_WriteOnly);
 
-    streamOut << length.sec;
-    streamOut << length.nsec;
+    streamOut << (long)length.sec;
+    streamOut << (long)length.nsec;
 
     rgapp->sequencerSend("setQuarterNoteLength(long int, long int)", data);
 }
