@@ -5,3 +5,7 @@ config.h
 config.status
 stamp-h
 libtool
+subdirs
+configure.files
+config.h.bot
+config.cache
