@@ -28,13 +28,19 @@
 
 #include "PluginIdentifier.h"
 #include "AudioPluginInstance.h"
+#include "MappedCommon.h"
 
 #include "rosestrings.h"
 #include "rosedebug.h"
 
 #include <kprocess.h>
+#include <klocale.h>
 #include <qdir.h>
 #include <qfileinfo.h>
+
+using Rosegarden::Instrument;
+using Rosegarden::InstrumentId;
+using Rosegarden::AudioPluginInstance;
 
 
 OSCMessage::~OSCMessage()
@@ -86,8 +92,6 @@ OSCMessage::getArg(size_t i, char &type) const
 }
 
 
-#define PLUGIN_PREFIX "/plugin/"
-
 static void osc_error(int num, const char *msg, const char *path)
 {
     std::cerr << "Rosegarden: ERROR: liblo server error " << num
@@ -99,34 +103,24 @@ static int osc_message_handler(const char *path, const char *types, lo_arg **arg
 {
     AudioPluginOSCGUIManager *manager = (AudioPluginOSCGUIManager *)user_data;
 
-    if (strncmp(path, PLUGIN_PREFIX, strlen(PLUGIN_PREFIX))) {
-	std::cerr << "Rosegarden: ERROR: unexpected OSC path " << path << std::endl;
-	return 1;
-    }
-	
-    char *scooter = (char *)(path + strlen(PLUGIN_PREFIX));
-    
-    int id = (int)strtol(scooter, &scooter, 0);
-    if (id == 0) {
-	std::cerr << "Rosegarden: ERROR: malformed plugin id in " << path << std::endl;
-	return 1;
-    }
+    InstrumentId instrument;
+    int position;
+    QString method;
 
-    if (!scooter || (*scooter != '/') || !*++scooter) {
-	std::cerr << "Rosegarden: ERROR: malformed method in " << path << std::endl;
+    if (!manager->parseOSCPath(path, instrument, position, method)) {
 	return 1;
     }
-
-    std::string method = scooter;
 
     OSCMessage *message = new OSCMessage();
-    message->setTarget(id);
-    message->setMethod(method);
+    message->setTarget(instrument);
+    message->setTargetData(position);
+    message->setMethod(qstrtostr(method));
     message->clearArgs();
 
     int arg = 0;
     while (types && arg < argc && types[arg]) {
 	message->addArg(types[arg], argv[arg]);
+	++arg;
     }
 
     manager->postMessage(message);
@@ -134,16 +128,18 @@ static int osc_message_handler(const char *path, const char *types, lo_arg **arg
 }
     
 AudioPluginOSCGUIManager::AudioPluginOSCGUIManager() :
+    m_studio(0),
     m_oscBuffer(1023)
 {
     m_serverThread = lo_server_thread_new(NULL, osc_error);
-
-    // OSC URL will be of the form localhost:54343/plugin/<mapped id>/method
 
     lo_server_thread_add_method(m_serverThread, NULL, NULL,
 				osc_message_handler, this);
 
     lo_server_thread_start(m_serverThread);
+
+    RG_DEBUG << "AudioPluginOSCGUIManager: Base OSC URL is "
+	     << lo_server_thread_get_url(m_serverThread) << endl;
 
     m_dispatchTimer = new TimerCallbackAssistant(20, timerCallback, this);
 }
@@ -161,6 +157,119 @@ AudioPluginOSCGUIManager::postMessage(OSCMessage *message)
 {
     RG_DEBUG << "AudioPluginOSCGUIManager::postMessage" << endl;
     m_oscBuffer.write(&message, 1);
+}
+
+QString
+AudioPluginOSCGUIManager::getOSCUrl(InstrumentId instrument, int position,
+				    QString identifier)
+{
+    // OSC URL will be of the form
+    //   osc.udp://localhost:54343/plugin/dssi/<instrument>/<position>/<label>
+    // where <position> will be "synth" for synth plugins
+
+    QString type, soName, label;
+    Rosegarden::PluginIdentifier::parseIdentifier(identifier, type, soName, label);
+
+    QString url = QString("%1/%2/%3/%4/%5/%6")
+	.arg(lo_server_thread_get_url(m_serverThread))
+	.arg("plugin")
+	.arg(type)
+	.arg(instrument);
+
+    if (position == Instrument::SYNTH_PLUGIN_POSITION) {
+	url = url.arg("synth");
+    } else {
+	url = url.arg(position);
+    }
+
+    url = url.arg(label);
+
+    return url;
+}
+
+bool
+AudioPluginOSCGUIManager::parseOSCPath(QString path, InstrumentId &instrument,
+				       int &position, QString &method)
+{
+    if (!m_studio) return false;
+
+    QString pluginStr("/plugin/");
+
+    if (!path.startsWith(pluginStr)) {
+	RG_DEBUG << "AudioPluginOSCGUIManager::parseOSCPath: malformed path "
+		 << path << endl;
+    }
+
+    path = path.right(path.length() - pluginStr.length());
+
+    QString type = path.section('/', 0, 0);
+    QString instrumentStr = path.section('/', 1, 1);
+    QString positionStr = path.section('/', 2, 2);
+    QString label = path.section('/', 3, -2);
+    method = path.section('/', -1, -1);
+
+    if (!instrumentStr || !positionStr) {
+	RG_DEBUG << "AudioPluginOSCGUIManager::parseOSCPath: no instrument or position in " << path << endl;
+	return false;
+    }
+
+    instrument = instrumentStr.toUInt();
+
+    if (positionStr == "synth") {
+	position = Instrument::SYNTH_PLUGIN_POSITION;
+    } else {
+	position = positionStr.toInt();
+    }
+
+    // check the label
+    Instrument *i = m_studio->getInstrumentById(instrument);
+    if (!i) {
+	RG_DEBUG << "AudioPluginOSCGUIManager::parseOSCPath: no such instrument as "
+		 << instrument << " in path " << path << endl;
+	return false;
+    }
+
+    AudioPluginInstance *pluginInstance = i->getPlugin(position);
+    if (!pluginInstance) {
+	RG_DEBUG << "AudioPluginOSCGUIManager::parseOSCPath: no plugin at position "
+		 << position << " for instrument " << instrument << " in path "
+		 << path << endl;
+	return false;
+    }
+
+    QString identifier = strtoqstr(pluginInstance->getIdentifier());
+    QString iType, iSoName, iLabel;
+    Rosegarden::PluginIdentifier::parseIdentifier(identifier, iType, iSoName, iLabel);
+    if (iLabel != label) {
+	RG_DEBUG << "AudioPluginOSCGUIManager::parseOSCPath: wrong label for plugin"
+		 << " at position " << position << " for instrument " << instrument
+		 << " in path " << path << " (actual label is " << iLabel
+		 << ")" << endl;
+	return false;
+    }
+
+    RG_DEBUG << "AudioPluginOSCGUIManager::parseOSCPath: good path " << path
+	     << ", got mapped id " << pluginInstance->getMappedId() << endl;
+
+    return true;
+}
+
+
+QString
+AudioPluginOSCGUIManager::getFriendlyName(InstrumentId instrument, int position,
+					  QString)
+{
+    Instrument *i = m_studio->getInstrumentById(instrument);
+    if (!i) return i18n("Rosegarden Plugin");
+    else {
+	QString str = i18n("Rosegarden: %1: %2").arg(strtoqstr(i->getPresentationName()));
+	if (position == Instrument::SYNTH_PLUGIN_POSITION) {
+	    str = str.arg(i18n("Synth"));
+	} else {
+	    str = str.arg(i18n("Plugin slot %1").arg(position));
+	}
+	return str;
+    }
 }
 
 void
@@ -191,7 +300,7 @@ AudioPluginOSCGUIManager::dispatch()
     }
 }
 
-AudioPluginOSCGUI::AudioPluginOSCGUI(Rosegarden::AudioPluginInstance *instance,
+AudioPluginOSCGUI::AudioPluginOSCGUI(AudioPluginInstance *instance,
 				     QString oscUrl) :
     m_instance(instance),
     m_gui(0),

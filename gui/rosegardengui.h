@@ -78,6 +78,10 @@ class PlayListDialog;
 class SegmentParameterBox;
 class InstrumentParameterBox;
 
+#ifdef HAVE_LIBLO
+class AudioPluginOSCGUIManager;
+#endif
+
 /**
   * The base class for RosegardenGUI application windows. It sets up the main
   * window and reads the config file as well as providing a menubar, toolbar
@@ -1359,6 +1363,9 @@ private:
     TriggerSegmentManager *m_triggerSegmentManager;
     std::set<ControlEditorDialog *> m_controlEditors;
     std::map<int, Rosegarden::AudioPluginDialog*> m_pluginDialogs;
+#ifdef HAVE_LIBLO
+    AudioPluginOSCGUIManager *m_pluginGUIManager;
+#endif
 
     static const char* const MainWindowConfigGroup;
 

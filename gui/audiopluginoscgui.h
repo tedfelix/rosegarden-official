@@ -31,6 +31,7 @@
 #include <vector>
 #include <map>
 #include "RingBuffer.h"
+#include "Studio.h"
 
 namespace Rosegarden {
     class AudioPluginInstance;
@@ -48,6 +49,9 @@ public:
     void setTarget(const int &target) { m_target = target; }
     int getTarget() const { return m_target; }
 
+    void setTargetData(const int &targetData) { m_targetData = targetData; }
+    int getTargetData() const { return m_targetData; }
+
     void setMethod(const std::string &method) { m_method = method; }
     std::string getMethod() const { return m_method; }
 
@@ -59,6 +63,7 @@ public:
 
 private:
     int m_target;
+    int m_targetData;
     std::string m_method;
     typedef std::pair<char, lo_arg *> OSCArg;
     std::vector<OSCArg> m_args;
@@ -73,16 +78,29 @@ public:
     AudioPluginOSCGUIManager();
     virtual ~AudioPluginOSCGUIManager();
 
+    void setStudio(Rosegarden::Studio *studio) { m_studio = studio; }
+
     void postMessage(OSCMessage *message); // I take over ownership of message
     void dispatch();
+
+    QString getOSCUrl(Rosegarden::InstrumentId instrument, int position,
+		      QString identifier);
+    QString getFriendlyName(Rosegarden::InstrumentId instrument, int position,
+			    QString identifier);
+    bool parseOSCPath(QString path, Rosegarden::InstrumentId &instrument, int &position,
+		      QString &method);
 
     static void timerCallback(void *data);
 
 protected:
+    Rosegarden::Studio *m_studio;
+
     lo_server_thread m_serverThread;
     Rosegarden::RingBuffer<OSCMessage *> m_oscBuffer;
+
     typedef std::map<int, AudioPluginOSCGUI *> TargetGUIMap;
     TargetGUIMap m_guis;
+
     TimerCallbackAssistant *m_dispatchTimer;
 };
 

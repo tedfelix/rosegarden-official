@@ -122,6 +122,10 @@
 #include <jack/jack.h>
 #endif
 
+#ifdef HAVE_LIBLO
+#include "audiopluginoscgui.h"
+#endif
+
 
 //!!! ditch these when harmonize() moves out
 #include "CompositionTimeSliceAdapter.h"
@@ -179,6 +183,11 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
       m_bankEditor(0),
       m_markerEditor(0),
       m_triggerSegmentManager(0),
+#ifdef HAVE_LIBLO
+      //!!! better to create this only if/when needed -- perhaps make it
+      // a singleton that creates itself on demand
+      m_pluginGUIManager(new AudioPluginOSCGUIManager()),
+#endif
       m_playTimer(new QTimer(this)),
       m_stopTimer(new QTimer(this))
 {
@@ -1235,6 +1244,12 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
 
     m_segmentParameterBox->setDocument(m_doc);
     m_instrumentParameterBox->setDocument(m_doc);
+
+#ifdef HAVE_LIBLO
+    if (m_pluginGUIManager) {
+	m_pluginGUIManager->setStudio(&m_doc->getStudio());
+    }
+#endif
 
     // this will delete all edit views
     //

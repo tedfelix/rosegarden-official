@@ -242,7 +242,7 @@ public:
 protected:
     virtual void threadRun();
 
-    //!!! want to make this optional under user control
+    //!!! want to make this optional under user control?
     virtual int getPriority() { return 3; }
 
     void processBlocks(bool &readSomething);

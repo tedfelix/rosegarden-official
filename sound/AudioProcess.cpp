@@ -360,6 +360,8 @@ AudioBussMixer::emptyBuffers()
     std::cerr << "AudioBussMixer::emptyBuffers" << std::endl;
 #endif
 
+    // We can't generate buffers before this, because we don't know how
+    // many busses there are
     generateBuffers();
 
     for (int i = 0; i < m_bussCount; ++i) {
@@ -663,12 +665,9 @@ AudioInstrumentMixer::AudioInstrumentMixer(SoundDriver *driver,
     }
 
     // Leave the buffer map and process buffer list empty for now.
-    // The number of channels per fader can change between plays, so
-    // we always examine the buffers in fillBuffers and are prepared
-    // to regenerate from scratch if necessary.
-
-    //!!! actually we always have 2 channels per instrument, so we
-    // _could_ generate them here
+    // The buffer length can change between plays, so we always
+    // examine the buffers in fillBuffers and are prepared to
+    // regenerate from scratch if necessary.  Don't like it though.
 }
 
 AudioInstrumentMixer::~AudioInstrumentMixer()
