@@ -1442,6 +1442,8 @@ void RosegardenGUIApp::slotSaveOptions()
 
 void RosegardenGUIApp::readOptions()
 {
+    kapp->config()->reparseConfiguration();
+    
     // Statusbar and toolbars toggling action status
     //
     m_viewStatusBar       ->setChecked(!statusBar()                ->isHidden());
