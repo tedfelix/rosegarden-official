@@ -196,7 +196,7 @@ void RosegardenCanvasView::doAutoScroll()
     if (dx || dy) quiet = 0;
     else ++quiet;
 
-    if (quiet == 100) {
+    if (quiet == 20) {
 	stopAutoScroll();
 	quiet = 0;
     }
