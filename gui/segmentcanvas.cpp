@@ -1752,6 +1752,7 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
     //
     emit selectedSegments(getSelectedSegments());
 
+    m_passedInertiaEdge = false;
 }
 
 SegmentSelection
@@ -1892,6 +1893,15 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 	{
 	    int x = e->pos().x() - m_clickPoint.x(),
 		y = e->pos().y() - m_clickPoint.y();
+
+	    const int inertiaDistance = m_canvas->grid().getYSnap() / 3;
+	    if (!m_passedInertiaEdge &&
+		(x < inertiaDistance && x > -inertiaDistance) &&
+		(y < inertiaDistance && y > -inertiaDistance)) {
+		return false;
+	    } else {
+		m_passedInertiaEdge = true;
+	    }
 
 	    timeT newStartTime = m_canvas->grid().snapX(it->first.x() + x);
 	    it->second->setEndTime(it->second->getEndTime() + newStartTime -

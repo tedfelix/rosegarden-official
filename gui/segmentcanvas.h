@@ -570,6 +570,7 @@ private:
     bool m_segmentCopyMode;
     QPoint m_clickPoint;
     bool m_segmentQuickCopyDone;
+    bool m_passedInertiaEdge;
 
     SegmentTool *m_dispatchTool;
 };
