@@ -119,13 +119,13 @@ protected:
 };
 
 
+/*!!!
 class ClassicalNoteStyle : public NoteStyle
 {
 protected:
     virtual void initialiseNotes();
 };
 
-/*!!!
 class CrossNoteStyle : public NoteStyle
 {
 protected:

@@ -83,6 +83,7 @@ rosegarden_LDADD   = ../sound/libRosegardenSound.la ../base/libbase.la -lkdeui -
 SUBDIRS = docs
 
 EXTRA_DIST = rosegardenguiiface.kidl trackseditoriface.kidl \
+	styles/*.xml \
 	pixmaps/rg21/mapping.xml \
 	pixmaps/rg21/4/*.xpm \
 	pixmaps/rg21/8/*.xpm \
@@ -112,6 +113,7 @@ install-data-local:
 	$(mkinstalldirs) $(kde_icondir)/small/hicolor/apps/
 	test -d $(kde_icondir)/locolor && $(INSTALL_DATA) $(srcdir)/mini-rosegarden.xpm $(kde_icondir)/locolor/16x16/apps/rosegarden.xpm
 	test -d $(kde_icondir)/hicolor && $(INSTALL_DATA) $(srcdir)/mini-rosegarden.xpm $(kde_icondir)/hicolor/16x16/apps/rosegarden.xpm
+	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/styles
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/rg21
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/rg21/4
@@ -124,6 +126,7 @@ install-data-local:
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/feta/12
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/toolbar
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/transport
+	$(INSTALL_DATA) $(srcdir)/styles/*.xml $(kde_datadir)/$(data_dirname)/styles
 	$(INSTALL_DATA) $(srcdir)/pixmaps/rg21/mapping.xml $(kde_datadir)/$(data_dirname)/pixmaps/rg21
 	$(INSTALL_DATA) $(srcdir)/pixmaps/rg21/4/*.xpm     $(kde_datadir)/$(data_dirname)/pixmaps/rg21/4
 	$(INSTALL_DATA) $(srcdir)/pixmaps/rg21/8/*.xpm     $(kde_datadir)/$(data_dirname)/pixmaps/rg21/8
@@ -144,6 +147,7 @@ uninstall-local:
 	-rm -f $(kde_icondir)/hicolor/32x32/apps/rosegarden.xpm
 	-rm -f $(kde_icondir)/locolor/16x16/apps/rosegarden.xpm
 	-rm -f $(kde_icondir)/hicolor/16x16/apps/rosegarden.xpm
+	-rm -rf $(kde_datadir)/$(data_dirname)/styles
 	-rm -rf $(kde_datadir)/$(data_dirname)/pixmaps
 	-rm -f $(kde_datadir)/$(data_dirname)/autoload.rg
 

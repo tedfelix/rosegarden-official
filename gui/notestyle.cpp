@@ -349,6 +349,7 @@ NoteStyle::getFlagCharName(int flagCount)
     }
 }
 
+/*!!!
 
 void
 ClassicalNoteStyle::initialiseNotes()
@@ -363,7 +364,6 @@ ClassicalNoteStyle::initialiseNotes()
     m_notes[Note::Breve]     = NoteDescription(Breve,      false, false, 0);
 }
 
-/*!!!
 void
 CrossNoteStyle::initialiseNotes()
 {
