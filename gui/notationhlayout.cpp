@@ -203,13 +203,16 @@ NotationHLayout::layout(NotationElementList::iterator from,
 
                 kdDebug(KDEBUG_AREA) << " to " << x << endl;
 
-                try {
-                    Accidental a = (Accidental)nel->event()->get<Int>
-                        ("Notation::Accidental");
-                    if (a != NoAccidental) x += Staff::accidentWidth;
-                } catch (Event::NoData) {
-                    // not a problem
+                long tmp;
+                
+                if (nel->event()->get<Int>("Notation::Accidental", tmp)) {
+
+                    Accidental a = Accidental(tmp);
+
+                    if (a != NoAccidental)
+                        x += Staff::accidentWidth;
                 }
+
             }
 
             // See if we've completed a bar
