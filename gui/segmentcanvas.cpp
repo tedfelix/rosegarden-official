@@ -164,12 +164,9 @@ void SegmentItem::drawShape(QPainter& painter)
 
     // TODO : remove this...
     QRect previewRect =
-	painter.hasClipping() ?
+	painter.xFormDev(painter.hasClipping() ?
 	painter.clipRegion().boundingRect() :
-	painter.viewport();
-
-    previewRect.moveBy(-painter.worldMatrix().dx(),
-		       -painter.worldMatrix().dy());
+	painter.viewport());
 
     previewRect = previewRect.intersect(rect());
 
@@ -250,12 +247,20 @@ void SegmentItem::drawShape(QPainter& painter)
 	if (m_showPreview && m_segment) {
             updatePreview();
             painter.save();
+
             painter.translate(rect().x(), rect().y());
             painter.setPen(RosegardenGUIColours::SegmentInternalPreview);
-
+            QRect viewportRect = painter.xFormDev(painter.viewport());
+            
             for(unsigned int i = 0; i < m_previewInfo.size(); ++i) {
+                //
+                // draw rectangles, discarding those which are clipped
+                //
                 QRect p = m_previewInfo[i];
-                painter.drawRect(p);
+                if (p.x() >= viewportRect.x() &&
+                    p.x() <= (viewportRect.x() + viewportRect.width()))
+                    painter.drawRect(p);
+                
             }
 
             painter.restore();
