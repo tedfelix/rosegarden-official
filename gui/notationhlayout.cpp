@@ -35,7 +35,6 @@ NotationHLayout::NotationHLayout(NotationElementList& elements,
       m_nbTimeUnitsInCurrentBar(0),
       m_previousNbTimeUnitsInCurrentBar(0),
       m_currentPos(barMargin),
-      m_lastElementPos(barMargin),
       m_noteWidthTable(LastNote)
 {
     initNoteWidthTable();
@@ -98,35 +97,6 @@ NotationHLayout::initNoteWidthTable()
 
 }
 
-// const vector<unsigned int>&
-// NotationHLayout::splitNote(unsigned int noteLen)
-// {
-//     static vector<unsigned int> notes;
-
-//     notes.clear();
-
-//     unsigned int timeUnitsLeftInThisBar = m_timeUnitsPerBar - m_previousNbTimeUnitsInCurrentBar,
-//         timeUnitsLeftInNote = m_nbTimeUnitsInCurrentBar - m_timeUnitsPerBar;
-
-//     unsigned int nbWholeNotes = timeUnitsLeftInNote / m_quantizer.wholeNoteDuration();
-    
-//     // beginning of the note - what fills up the bar
-//     notes.push_back(timeUnitsLeftInThisBar);
-
-//     // the whole notes (if any)
-//     for (unsigned int i = 0; i < nbWholeNotes; ++i) {
-//         notes.push_back(Whole);
-//         timeUnitsLeftInNote -= m_timeUnitsPerBar;
-//     }
-    
-//     notes.push_back(timeUnitsLeftInNote);
-
-//     m_nbTimeUnitsInCurrentBar = timeUnitsLeftInNote;
-
-//     return notes;
-    
-// }
-
 void
 NotationHLayout::addNewBar(unsigned int barPos)
 {
@@ -146,6 +116,14 @@ const NotationHLayout::barpositions&
 NotationHLayout::barPositions() const
 {
     return m_barPositions;
+}
+
+void
+NotationHLayout::reset()
+{
+    m_currentPos = barMargin;
+    m_nbTimeUnitsInCurrentBar = 0;
+    m_previousNbTimeUnitsInCurrentBar = 0;
 }
 
 bool compareNoteElement(NotationElement *el1, NotationElement *el2)
@@ -200,3 +178,33 @@ NotationHLayout::insertNote(NotationElement *el)
 
 }
 
+
+
+// const vector<unsigned int>&
+// NotationHLayout::splitNote(unsigned int noteLen)
+// {
+//     static vector<unsigned int> notes;
+
+//     notes.clear();
+
+//     unsigned int timeUnitsLeftInThisBar = m_timeUnitsPerBar - m_previousNbTimeUnitsInCurrentBar,
+//         timeUnitsLeftInNote = m_nbTimeUnitsInCurrentBar - m_timeUnitsPerBar;
+
+//     unsigned int nbWholeNotes = timeUnitsLeftInNote / m_quantizer.wholeNoteDuration();
+    
+//     // beginning of the note - what fills up the bar
+//     notes.push_back(timeUnitsLeftInThisBar);
+
+//     // the whole notes (if any)
+//     for (unsigned int i = 0; i < nbWholeNotes; ++i) {
+//         notes.push_back(Whole);
+//         timeUnitsLeftInNote -= m_timeUnitsPerBar;
+//     }
+    
+//     notes.push_back(timeUnitsLeftInNote);
+
+//     m_nbTimeUnitsInCurrentBar = timeUnitsLeftInNote;
+
+//     return notes;
+    
+// }

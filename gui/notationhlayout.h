@@ -22,22 +22,6 @@
 #include "quantizer.h"
 #include "notationelement.h"
 
-class ElementHPos
-{
-public:
-    ElementHPos(unsigned int p=0) : pos(p) {}
-    ElementHPos(unsigned int p, NotationElementList::iterator i) : pos(p), it(i) {}
-
-    ElementHPos& operator=(const ElementHPos &h) { pos = h.pos; it = h.it; return *this; }
-
-    unsigned int pos;
-    NotationElementList::iterator it;
-};
-
-inline bool operator<(const ElementHPos &h1, const ElementHPos &h2) { return h1.pos < h2.pos; }
-inline bool operator>(const ElementHPos &h1, const ElementHPos &h2) { return h1.pos > h2.pos; }
-inline bool operator==(const ElementHPos &h1, const ElementHPos &h2) { return h1.pos == h2.pos; }
-
 /**
   *@author Guillaume Laurent, Chris Cannam, Rich Bown
   */
@@ -61,7 +45,8 @@ public:
     barpositions& barPositions();
     const barpositions& barPositions() const;
 
-    ElementHPos& lastElementPos() { return m_lastElementPos; }
+    /// resets the internal position counters of the object
+    void reset();
 
     NotationElementList::iterator insertNote(NotationElement *el);
 
@@ -92,7 +77,6 @@ protected:
     unsigned int m_nbTimeUnitsInCurrentBar;
     unsigned int m_previousNbTimeUnitsInCurrentBar;
     unsigned int m_currentPos;
-    ElementHPos m_lastElementPos;
 
     typedef vector<unsigned int> NoteWidthTable;
 
@@ -103,5 +87,23 @@ protected:
 
     vector<ElementHPos> m_notePositions;
 };
+
+// Looks like we don't need this at the moment but I'd rather keep it around just in case
+class ElementHPos
+{
+public:
+    ElementHPos(unsigned int p=0) : pos(p) {}
+    ElementHPos(unsigned int p, NotationElementList::iterator i) : pos(p), it(i) {}
+
+    ElementHPos& operator=(const ElementHPos &h) { pos = h.pos; it = h.it; return *this; }
+
+    unsigned int pos;
+    NotationElementList::iterator it;
+};
+
+inline bool operator<(const ElementHPos &h1, const ElementHPos &h2) { return h1.pos < h2.pos; }
+inline bool operator>(const ElementHPos &h1, const ElementHPos &h2) { return h1.pos > h2.pos; }
+inline bool operator==(const ElementHPos &h1, const ElementHPos &h2) { return h1.pos == h2.pos; }
+
 
 #endif
