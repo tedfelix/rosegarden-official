@@ -41,7 +41,7 @@ static KCmdLineOptions options[] =
 int main(int argc, char *argv[])
 {
 
-    KAboutData aboutData( "rosegardengui", I18N_NOOP("Rosegarden"),
+    KAboutData aboutData( "rosegarden", I18N_NOOP("Rosegarden"),
                           VERSION, description, KAboutData::License_GPL,
                           "(c) 2000-2001, Guillaume Laurent, Chris Cannam, Richard Bown");
     aboutData.addAuthor("Guillaume Laurent, Chris Cannam, Richard Bown",0,

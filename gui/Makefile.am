@@ -38,15 +38,19 @@ SUBDIRS = docs
 EXTRA_DIST = main.cpp notationproperties.cpp rosegardengui.cpp rosegardengui.h rosegardenguidoc.cpp rosegardenguidoc.h rosegardenguiview.cpp rosegardenguiview.h resource.h rosegardengui.desktop rosegardengui.xpm mini-rosegardengui.xpm notepixmapfactory.cpp notepixmapfactory.h qcanvasgroupableitem.cpp qcanvasgroupableitem.h qcanvasitemgroup.cpp qcanvasitemgroup.h qcanvaslinegroupable.cpp qcanvaslinegroupable.h qcanvasspritegroupable.cpp qcanvasspritegroupable.h staff.cpp staff.h qcanvassimplesprite.cpp qcanvassimplesprite.h layoutengine.cpp layoutengine.h notationhlayout.cpp notationhlayout.h notationvlayout.cpp notationvlayout.h xmlstorableevent.cpp xmlstorableevent.h rosexmlhandler.cpp rosexmlhandler.h rosedebug.h notationelement.cpp notationelement.h notationsets.cpp notationsets.h viewelementsmanager.cpp viewelementsmanager.h notationview.cpp notationview.h notationcanvasview.cpp notationcanvasview.h staffline.cpp staffline.h rosedebug.cpp trackseditor.cpp trackseditor.h trackscanvas.cpp trackscanvas.h rosegardenguiiface.h rosegardenguiiface.cpp trackseditoriface.cpp qcanvasspline.cpp qcanvasspline.h
 
 # Where pixmaps for notes, clefs, etc... will be installed
-data_dirname = rosegardengui
+data_dirname = rosegarden
 
 install-data-local:
 	$(mkinstalldirs) $(kde_appsdir)/Applications/
-	$(INSTALL_DATA) $(srcdir)/rosegardengui.desktop $(kde_appsdir)/Applications/rosegardengui.desktop
+	$(INSTALL_DATA) $(srcdir)/rosegarden.desktop $(kde_appsdir)/Applications/rosegarden.desktop
 	$(mkinstalldirs) $(kde_icondir)/medium/locolor/apps/
-	$(INSTALL_DATA) $(srcdir)/rosegardengui.xpm $(kde_icondir)/medium/locolor/apps/rosegardengui.xpm
+	$(mkinstalldirs) $(kde_icondir)/medium/hicolor/apps/
+	$(INSTALL_DATA) $(srcdir)/rosegarden.xpm $(kde_icondir)/medium/locolor/apps/rosegarden.xpm
+	$(INSTALL_DATA) $(srcdir)/rosegarden.xpm $(kde_icondir)/medium/hicolor/apps/rosegarden.xpm
 	$(mkinstalldirs) $(kde_icondir)/small/locolor/apps/
-	$(INSTALL_DATA) $(srcdir)/mini-rosegardengui.xpm $(kde_icondir)/small/locolor/apps/rosegardengui.xpm
+	$(mkinstalldirs) $(kde_icondir)/small/hicolor/apps/
+	$(INSTALL_DATA) $(srcdir)/mini-rosegarden.xpm $(kde_icondir)/small/locolor/apps/rosegarden.xpm
+	$(INSTALL_DATA) $(srcdir)/mini-rosegarden.xpm $(kde_icondir)/small/hicolor/apps/rosegarden.xpm
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/5
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/9
@@ -54,9 +58,11 @@ install-data-local:
 	$(INSTALL_DATA) $(srcdir)/pixmaps/9/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/9
 
 uninstall-local:
-	-rm -f $(kde_appsdir)/Applications/rosegardengui.desktop
-	-rm -f $(kde_icondir)/medium/locolor/apps/rosegardengui.xpm
-	-rm -f $(kde_icondir)/small/locolor/apps/rosegardengui.xpm
+	-rm -f $(kde_appsdir)/Applications/rosegarden.desktop
+	-rm -f $(kde_icondir)/medium/locolor/apps/rosegarden.xpm
+	-rm -f $(kde_icondir)/medium/hicolor/apps/rosegarden.xpm
+	-rm -f $(kde_icondir)/small/locolor/apps/rosegarden.xpm
+	-rm -f $(kde_icondir)/small/hicolor/apps/rosegarden.xpm
 	-rm -f $(kde_datadir)/rosegarden/pixmaps
 
 # this 10 paths are KDE specific. Use them:
@@ -85,8 +91,11 @@ rosegarden_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 # them while "make clean", use CLEANFILES
 DISTCLEANFILES = $(rosegarden_METASOURCES)
 
+rcdir = $(kde_datadir)/rosegarden
+rc_DATA = rosegardenui.rc notation.rc
+
 # make messages.po. Move this one to ../po/ and "make merge" in po
 # the -x is for skipping messages already translated in kdelibs
 messages:
-	$(XGETTEXT) -C -ki18n -x $(KDEDIR)/include/kde.pot `find . -name \*.h -o -name \*.cpp -o -name \*.cc` -o ../po/rosegardengui.pot 
+	$(XGETTEXT) -C -ki18n -x $(KDEDIR)/include/kde.pot `find . -name \*.h -o -name \*.cpp -o -name \*.cc` -o ../po/rosegarden.pot 
 
