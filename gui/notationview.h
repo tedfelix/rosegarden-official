@@ -427,6 +427,7 @@ public slots:
     void slotGroupOctaveUp();
     void slotGroupOctaveDown();
     void slotGroupOctave2Down();
+    void slotAddIndication(std::string type, QString cat);
 
     /// transforms slots
     void slotTransformsNormalizeRests();

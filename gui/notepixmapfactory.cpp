@@ -2366,10 +2366,10 @@ NotePixmapFactory::drawOttavaAux(int length, int octavesUp,
     QRect r;
 
     if (octavesUp == 2 || octavesUp == -2) {
-	label = "15ma";
+	label = "15ma  ";
 	backpedal = m_ottavaFontMetrics.width("15") / 2;
     } else {
-	label = "8va";
+	label = "8va  ";
 	backpedal = m_ottavaFontMetrics.width("8") / 2;
     }
 
@@ -2385,7 +2385,7 @@ NotePixmapFactory::drawOttavaAux(int length, int octavesUp,
     }
 
     int thickness = getStemThickness();
-    QPen pen(Qt::black, thickness, Qt::DashLine);
+    QPen pen(Qt::black, thickness, Qt::DotLine);
 
     if (m_selected) {
 	m_p->painter().setPen(RosegardenGUIColours::SelectedElement);
@@ -2398,7 +2398,7 @@ NotePixmapFactory::drawOttavaAux(int length, int octavesUp,
     m_p->drawText(0, m_ottavaFontMetrics.ascent(), label);
 
     m_p->painter().setPen(pen);
-    if (!m_inPrinterMethod) m_p->maskPainter().setPen(pen);
+//    if (!m_inPrinterMethod) m_p->maskPainter().setPen(pen);
 
     int x0 = m_ottavaFontMetrics.width(label) + thickness;
     int x1 = width - thickness;
@@ -2411,7 +2411,9 @@ NotePixmapFactory::drawOttavaAux(int length, int octavesUp,
 
     pen.setStyle(Qt::SolidLine);
     m_p->painter().setPen(pen);
-    if (!m_inPrinterMethod) m_p->maskPainter().setPen(pen);
+//    if (!m_inPrinterMethod) m_p->maskPainter().setPen(pen);
+    
+    NOTATION_DEBUG << "NotePixmapFactory::drawOttavaAux: drawing " << x1 << "," << y0 << " to " << x1 << "," << y1 << ", thickness " << thickness << endl;
 
     m_p->drawLine(x1, y0, x1, y1);
 

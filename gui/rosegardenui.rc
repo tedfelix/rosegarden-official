@@ -168,7 +168,6 @@
         <Action name="audio_mixer"/>
         <Action name="midi_mixer"/>
         <Action name="quantize_selection"/>
-	<Action name="repeat_quantize"/>
 </ToolBar>
 
 <ToolBar name="Transport Toolbar">

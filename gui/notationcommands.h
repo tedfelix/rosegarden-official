@@ -326,6 +326,10 @@ public:
 				  Rosegarden::EventSelection &selection);
     virtual ~GroupMenuAddIndicationCommand();
 
+    // tests whether the indication can be added without overlapping
+    // another one of the same type
+    bool canExecute();
+
     Rosegarden::Event *getLastInsertedEvent() {
 	return m_lastInsertedEvent;
     }

@@ -654,6 +654,13 @@ GroupMenuAddIndicationCommand::~GroupMenuAddIndicationCommand()
     // empty
 }
 
+bool
+GroupMenuAddIndicationCommand::canExecute()
+{
+    //!!! implement!
+    return true;
+}
+
 void
 GroupMenuAddIndicationCommand::modifySegment()
 {
