@@ -483,6 +483,12 @@ void RosegardenGUIView::slotShowRulers(bool v)
     }
 }
 
+void RosegardenGUIView::slotShowPreviews(bool v)
+{
+    m_trackEditor->getSegmentCanvas()->setShowPreviews(v);
+    m_trackEditor->getSegmentCanvas()->repaint();
+}
+
 void RosegardenGUIView::slotAddTracks(unsigned int nbTracks)
 {
     kdDebug(KDEBUG_AREA) << "RosegardenGUIView::slotAddTracks(" << nbTracks << ")\n";

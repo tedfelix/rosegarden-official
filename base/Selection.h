@@ -30,15 +30,10 @@ class Composition;
 
 
 /**
- * EventSelection stores a (possibly non-contiguous) selection
- * of Events taken from a single Segment, used for cut'n paste
- * operations.
- *
- *!!! It's not completely clear that we need this _and_ the
- * Clipboard object.  EventSelection isn't general enough to
- * contain all possible sorts of selection (it's specifically
- * limited to bits of a single segment) but Clipboard is, and
- * may well serve both roles if it was asked to.
+ * EventSelection records a (possibly non-contiguous) selection
+ * of Events in a single Segment, used for cut'n paste operations.
+ * It does not take a copy of those Events, it just remembers
+ * which ones they are.
  */
 
 class EventSelection
@@ -50,6 +45,12 @@ public:
      * Construct an empty EventSelection based on the given Segment.
      */
     EventSelection(Segment &);
+
+    /**
+     * Construct an EventSelection selecting all the events in the
+     * given range of the given Segment.
+     */
+    EventSelection(Segment &, timeT beginTime, timeT endTime);
 
     ~EventSelection();
 
@@ -112,7 +113,7 @@ protected:
 
     Segment& m_originalSegment;
 
-    /// iterators pointing to Events from the original Segment
+    /// pointers to Events in the original Segment
     eventcontainer m_segmentEvents;
 
     timeT m_beginTime;

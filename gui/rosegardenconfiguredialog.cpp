@@ -102,6 +102,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
     layout->addWidget(new QLabel(i18n("MIDI pitch to string offset"),
                                  frame), 2, 0);
 
+
     m_client = new QComboBox(frame);
     m_client->insertItem(i18n("Notation"));
     m_client->insertItem(i18n("Matrix"));

@@ -136,7 +136,7 @@ public:
     virtual void apply();
 
     static QString iconLabel() { return i18n("General"); }
-    static QString title()     { return i18n("General Document Configuration"); }
+    static QString title()     { return i18n("General Configuration"); }
 
     int getCountInSpin()            { return m_countIn->value(); }
     int getDblClickClient()         { return m_client->currentItem(); }

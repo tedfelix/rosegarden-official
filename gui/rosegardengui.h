@@ -633,6 +633,11 @@ public slots:
      */
     void slotToggleRulers();
 
+    /**
+     * Toggle the segment canvas previews
+     */
+    void slotTogglePreviews();
+
     /*
      * slotSendMidiController
      **/
@@ -723,6 +728,7 @@ private:
     KToggleAction* m_viewSegmentParameters;
     KToggleAction* m_viewInstrumentParameters;
     KToggleAction* m_viewRulers;
+    KToggleAction* m_viewPreviews;
 
     KAction *m_playTransport;
     KAction *m_stopTransport;

@@ -32,6 +32,26 @@ EventSelection::EventSelection(Segment& t)
 {
 }
 
+EventSelection::EventSelection(Segment& t, timeT beginTime, timeT endTime)
+    : m_originalSegment(t),
+      m_beginTime(0),
+      m_endTime(0),
+      m_haveRealBeginTime(false)
+{
+    Segment::iterator i = t.findTime(beginTime);
+    Segment::iterator j = t.findTime(endTime);
+
+    if (i != t.end()) {
+	m_beginTime = (*i)->getAbsoluteTime();
+	while (i != j) {
+	    m_endTime = (*i)->getAbsoluteTime() + (*i)->getDuration();
+	    m_segmentEvents.insert(*i);
+	    ++i;
+	}
+	m_haveRealBeginTime = true;
+    }
+}
+
 EventSelection::~EventSelection()
 {
 }

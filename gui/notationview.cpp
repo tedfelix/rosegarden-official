@@ -309,6 +309,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_selectDefaultNote->activate();
     slotSetInsertCursorPosition(0);
     slotSetPointerPosition(doc->getComposition().getPosition());
+    m_chordNameRuler->repaint();
 }
 
 NotationView::~NotationView()
@@ -1276,6 +1277,7 @@ void NotationView::slotEditCut()
 
     addCommandToHistory(new CutCommand(*m_currentEventSelection,
 				       m_document->getClipboard()));
+    setCurrentSelection(0);
 }
 
 void NotationView::slotEditDelete()
@@ -1284,6 +1286,7 @@ void NotationView::slotEditDelete()
     KTmpStatusMsg msg(i18n("Deleting selection..."), statusBar());
 
     addCommandToHistory(new EraseCommand(*m_currentEventSelection));
+    setCurrentSelection(0);
 }
 
 void NotationView::slotEditCopy()
@@ -1293,17 +1296,17 @@ void NotationView::slotEditCopy()
 
     addCommandToHistory(new CopyCommand(*m_currentEventSelection,
 					m_document->getClipboard()));
-
-    emit usedSelection();
 }
 
 void NotationView::slotEditPaste()
 {
-    if (m_document->getClipboard()->isEmpty()) {
+    Rosegarden::Clipboard *clipboard = m_document->getClipboard();
+
+    if (clipboard->isEmpty()) {
         slotStatusHelpMsg(i18n("Clipboard is empty"));
         return;
     }
-    if (!m_document->getClipboard()->isSingleSegment()) {
+    if (!clipboard->isSingleSegment()) {
         slotStatusHelpMsg(i18n("Can't paste multiple Segments into one"));
         return;
     }
@@ -1315,19 +1318,28 @@ void NotationView::slotEditPaste()
     
     // Paste at cursor position
     //
+    timeT insertionTime = getInsertionTime();
+    timeT endTime = insertionTime +
+	(clipboard->getSingleSegment()->getEndTime() - 
+	 clipboard->getSingleSegment()->getFirstEventTime());
+
     PasteEventsCommand *command = new PasteEventsCommand
-	(segment, m_document->getClipboard(), getInsertionTime());
+	(segment, clipboard, insertionTime);
 
     if (!command->isPossible()) {
 	slotStatusHelpMsg(i18n("Couldn't paste at this point"));
     } else {
 	addCommandToHistory(command);
+	setCurrentSelection(new EventSelection
+			    (segment, insertionTime, endTime));
     }
 }
 
 void NotationView::slotEditGeneralPaste()
 {
-    if (m_document->getClipboard()->isEmpty()) {
+    Rosegarden::Clipboard *clipboard = m_document->getClipboard();
+
+    if (clipboard->isEmpty()) {
         slotStatusHelpMsg(i18n("Clipboard is empty"));
         return;
     }
@@ -1347,69 +1359,48 @@ void NotationView::slotEditGeneralPaste()
 	    PasteEventsCommand::setDefaultPasteType(type);
 	}
 
+	timeT insertionTime = getInsertionTime();
+	timeT endTime = insertionTime +
+	    (clipboard->getSingleSegment()->getEndTime() - 
+	     clipboard->getSingleSegment()->getFirstEventTime());
+
 	PasteEventsCommand *command = new PasteEventsCommand
-	    (segment, m_document->getClipboard(), getInsertionTime(), type);
+	    (segment, clipboard, insertionTime, type);
 
 	if (!command->isPossible()) {
 	    slotStatusHelpMsg(i18n("Couldn't paste at this point"));
 	} else {
 	    addCommandToHistory(command);
+	    setCurrentSelection(new EventSelection
+				(segment, insertionTime, endTime));
 	}
     }
 }
 
 void NotationView::slotEditSelectFromStart()
 {
-    NotationStaff *staff = m_staffs[m_currentStaff];
-    double layoutX = staff->getLayoutXOfInsertCursor();
-
-    NotationElementList *notes = staff->getViewElementList();
-    EventSelection *selection = new EventSelection(staff->getSegment());
-
-    for (NotationElementList::iterator i = notes->begin();
-	 i != notes->end(); ++i) {
-	if ((*i)->getLayoutX() < layoutX) selection->addEvent((*i)->event());
-    }
-
-    setCurrentSelection(selection);
+    timeT t = getInsertionTime();
+    Segment &segment = m_staffs[m_currentStaff]->getSegment();
+    setCurrentSelection(new EventSelection(segment,
+					   segment.getStartTime(),
+					   t));
 }
 
 void NotationView::slotEditSelectToEnd()
 {
-    NotationStaff *staff = m_staffs[m_currentStaff];
-    double layoutX = staff->getLayoutXOfInsertCursor();
-
-    NotationElementList *notes = staff->getViewElementList();
-    EventSelection *selection = new EventSelection(staff->getSegment());
-
-    for (NotationElementList::iterator i = notes->begin();
-	 i != notes->end(); ++i) {
-	if ((*i)->getLayoutX() > layoutX) selection->addEvent((*i)->event());
-    }
-
-    setCurrentSelection(selection);
+    timeT t = getInsertionTime();
+    Segment &segment = m_staffs[m_currentStaff]->getSegment();
+    setCurrentSelection(new EventSelection(segment,
+					   t,
+					   segment.getEndTime()));
 }
 
 void NotationView::slotEditSelectWholeStaff()
 {
-    //!!! The problem with this is it only selects those events that are
-    // visible in this notation view.  We should really select every
-    // event in the segment, not every event that has an element in the
-    // notation element list.  Unfortunately while that would be fine
-    // for this method, it can't be done efficiently in the select-from-
-    // start and select-to-end methods, where it's also the right thing
-    // to do.  Needs thought.
-
-    NotationStaff *staff = m_staffs[m_currentStaff];
-    NotationElementList *notes = staff->getViewElementList();
-    EventSelection *selection = new EventSelection(staff->getSegment());
-
-    for (NotationElementList::iterator i = notes->begin();
-	 i != notes->end(); ++i) {
-	selection->addEvent((*i)->event());
-    }
-
-    setCurrentSelection(selection);
+    Segment &segment = m_staffs[m_currentStaff]->getSegment();
+    setCurrentSelection(new EventSelection(segment,
+					   segment.getStartTime(),
+					   segment.getEndTime()));
 }
 
 void NotationView::slotToggleNotesToolBar()
@@ -1629,6 +1620,7 @@ void NotationView::slotTransformsNormalizeRests()
 
     addCommandToHistory(new TransformsMenuNormalizeRestsCommand
                         (*m_currentEventSelection));
+    setCurrentSelection(0);
 }
 
 void NotationView::slotTransformsCollapseRests()
@@ -1638,6 +1630,7 @@ void NotationView::slotTransformsCollapseRests()
 
     addCommandToHistory(new TransformsMenuCollapseRestsCommand
                         (*m_currentEventSelection));
+    setCurrentSelection(0);
 }
 
 void NotationView::slotTransformsCollapseNotes()
@@ -1647,6 +1640,7 @@ void NotationView::slotTransformsCollapseNotes()
 
     addCommandToHistory(new TransformsMenuCollapseNotesCommand
                         (*m_currentEventSelection));
+    setCurrentSelection(0);
 }
 
 void NotationView::slotTransformsStemsUp()
@@ -1914,6 +1908,8 @@ void NotationView::slotEditAddTimeSignature()
 				 insertionTime,
 				 dialog->getTimeSignature()));
 	}
+
+	setCurrentSelection(0);
     }
     
     delete dialog;
@@ -1967,6 +1963,8 @@ void NotationView::slotEditAddKeySignature()
 		  conversion == KeySignatureDialog::Convert,
 		  conversion == KeySignatureDialog::Transpose));
 	}
+
+	setCurrentSelection(0);
     }
 
     delete dialog;

@@ -172,6 +172,8 @@ public slots:
 
     void slotShowRulers(bool);
 
+    void slotShowPreviews(bool);
+
     void slotAddTracks(unsigned int);
 
     /*

@@ -224,6 +224,11 @@ void RosegardenGUIApp::setupActions()
                                      actionCollection(),
                                      "show_rulers");
 
+    m_viewPreviews = new KToggleAction(i18n("Show Segment Pre&views"), 0, this,
+				       SLOT(slotTogglePreviews()),
+				       actionCollection(),
+				       "show_previews");
+
     // Standard Actions 
     //
     KStdAction::saveOptions(this,
@@ -550,6 +555,7 @@ void RosegardenGUIApp::initView()
         slotToggleSegmentParameters();
         slotToggleInstrumentParameters();
         slotToggleRulers();
+        slotTogglePreviews();
 
         // Reset any loop on the sequencer
         //
@@ -666,6 +672,7 @@ void RosegardenGUIApp::slotSaveOptions()
     m_config->writeEntry("Show Segment Parameters",      m_viewSegmentParameters->isChecked());
     m_config->writeEntry("Show Instrument Parameters",   m_viewInstrumentParameters->isChecked());
     m_config->writeEntry("Show Rulers",                  m_viewRulers->isChecked());
+    m_config->writeEntry("Show Previews",                m_viewPreviews->isChecked());
 
 
     m_config->writeEntry("ToolBarPos", (int) toolBar("mainToolBar")->barPos());
@@ -720,6 +727,10 @@ void RosegardenGUIApp::readOptions()
     opt = m_config->readBoolEntry("Show Rulers", false);
     m_viewRulers->setChecked(opt);
     slotToggleRulers();
+
+    opt = m_config->readBoolEntry("Show Previews", false);
+    m_viewPreviews->setChecked(opt);
+    slotTogglePreviews();
 
     // bar position settings
     KToolBar::BarPosition toolBarPos;
@@ -1153,6 +1164,11 @@ void RosegardenGUIApp::slotToggleInstrumentParameters()
 void RosegardenGUIApp::slotToggleRulers()
 {
     m_view->slotShowRulers(m_viewRulers->isChecked());
+}
+
+void RosegardenGUIApp::slotTogglePreviews()
+{
+    m_view->slotShowPreviews(m_viewPreviews->isChecked());
 }
 
 

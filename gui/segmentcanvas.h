@@ -52,6 +52,7 @@ public:
      */
     SegmentItem(Rosegarden::TrackId track,
 		Rosegarden::timeT startTime, Rosegarden::timeT duration,
+		bool showPreview,
 		Rosegarden::SnapGrid *snapGrid, QCanvas* canvas,
                 RosegardenGUIDoc *doc);
 
@@ -59,6 +60,7 @@ public:
      * Create a new segment item with an associated segment
      */
     SegmentItem(Rosegarden::Segment *segment,
+		bool showPreview,
 		Rosegarden::SnapGrid *snapGrid, QCanvas* canvas,
                 RosegardenGUIDoc *doc);
 
@@ -81,6 +83,8 @@ public:
     /// Update track of the rectangle (doesn't modify underlying segment)
     void setTrack(Rosegarden::TrackId track);
     Rosegarden::TrackId getTrack() const { return m_track; }
+
+    void setShowPreview(bool preview);
 
     /**
      * Reset the rectangle's location and dimensions following
@@ -126,6 +130,7 @@ protected:
 
     bool m_selected;
     Rosegarden::SnapGrid *m_snapGrid;
+    bool m_showPreview;
 
     QCanvasRepeatRectangle*   m_repeatRectangle;
     QString m_label;
@@ -269,6 +274,11 @@ public:
     void setSnapGrain(bool fine);
 
     /**
+     * Set whether the segment items contain previews or not
+     */
+    void setShowPreviews(bool previews);
+
+    /**
      * Show a preview of the Segment we're recording
      */
     void showRecordingSegmentItem(Rosegarden::TrackId track,
@@ -375,6 +385,7 @@ private:
     QPopupMenu *m_editMenu;
 
     bool m_fineGrain;
+    bool m_showPreviews;
     RosegardenGUIDoc *m_doc;
     
     KConfig* m_config;

@@ -96,6 +96,7 @@ QFontMetrics *SegmentItem::m_fontMetrics = 0;
 int SegmentItem::m_fontHeight = 0;
 
 SegmentItem::SegmentItem(TrackId track, timeT startTime, timeT duration,
+			 bool showPreview,
                          SnapGrid *snapGrid, QCanvas *canvas,
                          RosegardenGUIDoc *doc) :
     QCanvasRectangle(0, 0, 1, 1, canvas),
@@ -106,6 +107,7 @@ SegmentItem::SegmentItem(TrackId track, timeT startTime, timeT duration,
     m_duration(duration),
     m_selected(false),
     m_snapGrid(snapGrid),
+    m_showPreview(showPreview),
     m_repeatRectangle(0)
 {
     if (!m_font) makeFont();
@@ -114,6 +116,7 @@ SegmentItem::SegmentItem(TrackId track, timeT startTime, timeT duration,
 }
 
 SegmentItem::SegmentItem(Segment *segment,
+			 bool showPreview,
                          SnapGrid *snapGrid,
                          QCanvas *canvas,
                          RosegardenGUIDoc *doc) :
@@ -122,6 +125,7 @@ SegmentItem::SegmentItem(Segment *segment,
     m_doc(doc),
     m_selected(false),
     m_snapGrid(snapGrid),
+    m_showPreview(showPreview),
     m_repeatRectangle(0)
 {
     if (!m_font) makeFont();
@@ -133,6 +137,11 @@ SegmentItem::~SegmentItem()
 {
     if (m_repeatRectangle)
         CanvasItemGC::mark(m_repeatRectangle);
+}
+
+void SegmentItem::setShowPreview(bool preview)
+{
+    m_showPreview = preview;
 }
 
 void SegmentItem::makeFont()
@@ -151,10 +160,15 @@ void SegmentItem::drawShape(QPainter& painter)
 	painter.hasClipping() ?
 	painter.clipRegion(QPainter::CoordPainter).boundingRect() :
 	painter.viewport();
+
+    //!!! very slow
+    if (!painter.hasClipping()) previewRect = rect();
+
     QCanvasRectangle::drawShape(painter);
     Rosegarden::RulerScale *rulerScale = m_snapGrid->getRulerScale();
 
-    if (m_segment && m_segment->getType() == Rosegarden::Segment::Audio)
+    if (m_showPreview && m_segment &&
+	m_segment->getType() == Rosegarden::Segment::Audio)
     {
         // Draw waveform preview - fetch the audio waveform data as
         // a vector of floats (normalised between -1.0 and +1.0)
@@ -203,7 +217,7 @@ void SegmentItem::drawShape(QPainter& painter)
     }
     else
     {
-	if (m_segment) {
+	if (m_showPreview && m_segment) {
 
 	    painter.setPen(RosegardenGUIColours::SegmentInternalPreview);
 
@@ -214,6 +228,7 @@ void SegmentItem::drawShape(QPainter& painter)
 	    Segment::iterator start = m_segment->findNearestTime(startTime);
 	    Segment::iterator end = m_segment->findTime(endTime);
 	    if (start == m_segment->end()) start = m_segment->begin();
+	    else start = m_segment->findTime((*start)->getAbsoluteTime());
 
 	    if (!painter.hasClipping())
 		kdDebug(KDEBUG_AREA) << "SegmentCanvas::drawShape: clipping is off " << endl;
@@ -223,12 +238,6 @@ void SegmentItem::drawShape(QPainter& painter)
 				 << previewRect.x() << ","
 				 << previewRect.y() << endl;
 
-//#define PREVIEW_WITH_RECTANGLES
-
-
-#ifdef PREVIEW_WITH_RECTANGLES
-	    double prevX0 = 0.0, prevX1 = 0.0;
-#endif
 	    for (Segment::iterator i = start; i != end; ++i) {
 
 		long pitch = 0;
@@ -242,27 +251,6 @@ void SegmentItem::drawShape(QPainter& painter)
 		double x1 = rulerScale->getXForTime((*i)->getAbsoluteTime() +
 						    (*i)->getDuration());
 
-#ifdef PREVIEW_WITH_RECTANGLES
-
-		if (x0 >= 0.0 && x1 >= x0) {
-		    if (x0 > (prevX1 + 10.0)) {
-			if ((int)prevX1 > (int)prevX0) {
-			    int width = (int)(prevX1 - prevX0);
-			    if (width > 2) --width;
-			    painter.drawRect
-				((int)prevX0,
-				 rect().y() + rect().height()/4,
-				 width, rect().height()/2);
-			}
-			prevX0 = x0;
-			prevX1 = x1;
-		    } else if (x1 > prevX1) {
-			if (x0 == 0.0) x0 = prevX0;
-			prevX1 = x1;
-		    }
-		}
-
-#else
 		int width = (int)(x1 - x0);
 		if (width > 0) --width;
 		if (width > 0) --width;
@@ -275,7 +263,6 @@ void SegmentItem::drawShape(QPainter& painter)
 		
 		painter.drawLine((int)x0, (int)y, (int)x0 + width, (int)y);
 		painter.drawLine((int)x0, (int)y+1, (int)x0 + width, (int)y+1);
-#endif
 	    }
 	}
 
@@ -468,6 +455,7 @@ SegmentCanvas::SegmentCanvas(RosegardenGUIDoc *doc,
     m_pen(RosegardenGUIColours::SegmentBorder),
     m_editMenu(new QPopupMenu(this)),
     m_fineGrain(false),
+    m_showPreviews(true),
     m_doc(doc),
     m_config(kapp->config())
 {
@@ -763,7 +751,7 @@ SegmentItem *
 SegmentCanvas::addSegmentItem(TrackId track, timeT startTime, timeT duration)
 {
     SegmentItem *newItem = new SegmentItem
-	(track, startTime, duration, &m_grid, canvas(), m_doc);
+	(track, startTime, duration, m_showPreviews, &m_grid, canvas(), m_doc);
 
     newItem->setPen(m_pen);
     newItem->setBrush(m_brush);
@@ -776,7 +764,8 @@ SegmentCanvas::addSegmentItem(TrackId track, timeT startTime, timeT duration)
 SegmentItem *
 SegmentCanvas::addSegmentItem(Segment *segment)
 {
-    SegmentItem *newItem = new SegmentItem(segment, &m_grid, canvas(), m_doc);
+    SegmentItem *newItem = new SegmentItem
+	(segment, m_showPreviews, &m_grid, canvas(), m_doc);
 
     newItem->setPen(m_pen);
     newItem->setBrush(m_brush);
@@ -941,6 +930,21 @@ void SegmentCanvas::setSnapGrain(bool fine)
     } else {
 	grid().setSnapTime(fine ? SnapGrid::SnapToBeat : SnapGrid::SnapToBar);
     }
+}
+
+
+void SegmentCanvas::setShowPreviews(bool previews)
+{
+    QCanvasItemList itemList = canvas()->allItems();
+    QCanvasItemList::Iterator it;
+
+    for (it = itemList.begin(); it != itemList.end(); ++it) {
+        SegmentItem* segItem = dynamic_cast<SegmentItem*>(*it);
+	if (segItem) segItem->setShowPreview(previews);
+    }
+
+    m_showPreviews = previews;
+    canvas()->update();
 }
 
 
