@@ -98,12 +98,12 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     m_pluginCategoryBox = new QHBox(pluginSelectionBox);
     new QLabel(i18n("Category:"), m_pluginCategoryBox);
     m_pluginCategoryList = new KComboBox(m_pluginCategoryBox);
-    m_pluginCategoryList->setSizeLimit(30);
+    m_pluginCategoryList->setSizeLimit(20);
 
     QHBox *hbox = new QHBox(pluginSelectionBox);
     m_pluginLabel = new QLabel(i18n("Plugin:"), hbox);
     m_pluginList = new KComboBox(hbox);
-    m_pluginList->setSizeLimit(30);
+    m_pluginList->setSizeLimit(20);
     QToolTip::add(m_pluginList, i18n("Select a plugin from this list."));
 
     QHBox *h = new QHBox(pluginSelectionBox);
@@ -415,7 +415,7 @@ AudioPluginDialog::slotPluginSelected(int i)
 	    m_programLabel = new QLabel(i18n("Program:  "), m_pluginParamsBox);
 
 	    m_programCombo = new KComboBox(m_pluginParamsBox);
-	    m_programCombo->setSizeLimit(30);
+	    m_programCombo->setSizeLimit(20);
 	    m_programCombo->insertItem(i18n("<none selected>"));
 	    m_gridLayout->addMultiCellWidget(m_programLabel,
 					     0, 0, 0, 0, Qt::AlignRight);
@@ -589,7 +589,43 @@ AudioPluginDialog::updatePluginProgramList()
     AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
     if (!inst) return;
 
-    m_programCombo->blockSignals(true);
+    if (!m_programCombo) {
+
+	int current = -1;
+	QStringList programs = getProgramsForInstance(inst, current);
+
+	if (programs.count() > 0) {
+
+	    m_programLabel = new QLabel(i18n("Program:  "), m_pluginParamsBox);
+
+	    m_programCombo = new KComboBox(m_pluginParamsBox);
+	    m_programCombo->setSizeLimit(20);
+	    m_programCombo->insertItem(i18n("<none selected>"));
+	    m_gridLayout->addMultiCellWidget(m_programLabel,
+					     0, 0, 0, 0, Qt::AlignRight);
+	    m_gridLayout->addMultiCellWidget(m_programCombo,
+					     0, 0, 1, m_gridLayout->numCols()-1,
+					     Qt::AlignLeft);
+
+	    m_programCombo->clear();
+	    m_programCombo->insertItem(i18n("<none selected>"));
+	    m_programCombo->insertStringList(programs);
+	    m_programCombo->setCurrentItem(current + 1);
+	    m_programCombo->adjustSize();
+
+	    m_programLabel->show();
+	    m_programCombo->show();
+
+	    m_programCombo->blockSignals(true);
+	    connect(m_programCombo, SIGNAL(activated(const QString &)),
+		    this, SLOT(slotPluginProgramChanged(const QString &)));
+
+	} else {
+	    return;
+	}
+    } else {
+    
+    }
 
     while (m_programCombo->count() > 0) {
 	m_programCombo->removeItem(0);
