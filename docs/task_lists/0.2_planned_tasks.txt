@@ -44,6 +44,9 @@ Work required to fix existing stuff
 7.  a few fixes to basic note drawing -- sometimes shifts the
     wrong notehead, note's stem sometimes doesn't meet its beam &c
 
+8.  mucho cleaning up and tidying in the GUI: toolbars, menus,
+    palettes etc.  kind of obvious
+
 
 
 
