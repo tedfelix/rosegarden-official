@@ -106,7 +106,7 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
         kdDebug(KDEBUG_AREA) << "mousepress : m_currentHighlightedLine != 0 - inserting note - staff pitch : "
                              << "(no longer relevant)" << endl;
 //!!!                             << m_currentHighlightedLine->associatedPitch() << endl;
-        insertNote(m_currentHighlightedLine, e->pos());
+        handleClick(m_currentHighlightedLine, e->pos());
 
         return;
     }
@@ -159,13 +159,13 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 
 
 void
-NotationCanvasView::insertNote(const StaffLine *line, const QPoint &pos)
+NotationCanvasView::handleClick(const StaffLine *line, const QPoint &pos)
 {
     int h = line->getHeight();
 
     kdDebug(KDEBUG_AREA) << "NotationCanvasView::insertNote() : insertNote at height " << h << endl;
 
-    emit noteInserted(h, pos);
+    emit noteClicked(h, pos);
 }
 
 bool

@@ -59,13 +59,14 @@ public slots:
 //     void currentNoteChanged(Note::Type);
 
 signals:
-    void noteInserted(int pitch, const QPoint&);
+    void noteClicked(int pitch, const QPoint&);
+
     void hoveredOverNoteChange(const QString &noteName);
     void hoveredOverAbsoluteTimeChange(unsigned int);
     
 protected:
 
-    void insertNote(const StaffLine*, const QPoint&);
+    void handleClick(const StaffLine*, const QPoint&);
 
     bool posIsTooFarFromStaff(const QPoint &pos);
 
