@@ -72,6 +72,7 @@ rosegarden_SOURCES = \
 	qdeferscrollview.cpp \
 	rawnoteruler.cpp \
 	rg21io.cpp \
+	rgapplication.cpp \
 	rosedebug.cpp \
 	rosegardencanvasview.cpp \
         rosegardenconfiguredialog.cpp \

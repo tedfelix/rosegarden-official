@@ -32,12 +32,12 @@
 #include <qcursor.h>
 #include <qtimer.h>
 
-#include <dcopclient.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
 #include <kstddirs.h>
 
+#include "rgapplication.h"
 #include "constants.h"
 #include "audiopluginmanager.h"
 #include "ktmpstatusmsg.h"
@@ -155,15 +155,7 @@ void ControlBlockMmapper::refresh()
     if (m_needsRefresh) {
         ::msync(m_mmappedBuffer, m_mmappedSize, MS_ASYNC);
 
-        QByteArray dummy;
-        
-        if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                      ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                      "remapControlBlock()",
-                                      dummy)) {
-            // failed
-            throw(Rosegarden::Exception("ControlBlockMmapper::refresh failed to contact Rosegarden sequencer"));
-        }
+        rgapp->sequencerSend("remapControlBlock()");
 
         m_needsRefresh = false;
     }
@@ -397,10 +389,10 @@ SequenceManager::play()
     if (m_transportStatus == PLAYING ||
         m_transportStatus == RECORDING_MIDI ||
         m_transportStatus == RECORDING_AUDIO )
-    {
-        stopping();
-        return;
-    }
+        {
+            stopping();
+            return;
+        }
 
     // This check may throw an exception
     checkSoundDriverStatus();
@@ -422,15 +414,15 @@ SequenceManager::play()
     QDataStream streamOut(data, IO_WriteOnly);
 
     if (comp.getTempo() == 0)
-    {
-        comp.setDefaultTempo(120.0);
+        {
+            comp.setDefaultTempo(120.0);
 
-        SEQMAN_DEBUG << "SequenceManager::play() - setting Tempo to Default value of 120.000\n";
-    }
+            SEQMAN_DEBUG << "SequenceManager::play() - setting Tempo to Default value of 120.000\n";
+        }
     else
-    {
-        SEQMAN_DEBUG << "SequenceManager::play() - starting to play\n";
-    }
+        {
+            SEQMAN_DEBUG << "SequenceManager::play() - starting to play\n";
+        }
 
     // set the tempo in the transport
     m_transport->setTempo(comp.getTempo());
@@ -465,32 +457,27 @@ SequenceManager::play()
     streamOut << config->readLongNumEntry("readaheadusec", 40000);
 
     // Send Play to the Sequencer
-    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "play(long int, long int, long int, long int, long int, long int, long int, long int)",
-                                  data, replyType, replyData))
-    {
-        // failed
+    try {
+        
+        rgapp->sequencerCall("play(long int, long int, long int, long int, long int, long int, long int, long int)",
+                             replyType, replyData, data);
+    
+    } catch (Rosegarden::Exception e) {
         m_transportStatus = STOPPED;
-        throw(Rosegarden::Exception("Playback failed to contact Rosegarden sequencer"));
+        throw(e);
     }
-    else
-    {
-        // ensure the return type is ok
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        int result;
-        streamIn >> result;
+
+    // ensure the return type is ok
+    QDataStream streamIn(replyData, IO_ReadOnly);
+    int result;
+    streamIn >> result;
   
-        if (result)
-        {
-            // completed successfully 
-            m_transportStatus = STARTING_TO_PLAY;
-        }
-        else
-        {
-            m_transportStatus = STOPPED;
-            throw(Rosegarden::Exception("Failed to start playback"));
-        }
+    if (result) {
+        // completed successfully 
+        m_transportStatus = STARTING_TO_PLAY;
+    } else {
+        m_transportStatus = STOPPED;
+        throw(Rosegarden::Exception("Failed to start playback"));
     }
 }
 
@@ -553,22 +540,12 @@ SequenceManager::stop()
     // without worrying about the sequencer causing problems
     // with access to the same audio files.
     //
-    //TransportStatus recordType;
-    QByteArray data;
-    QCString replyType;
-    QByteArray replyData;
 
     // wait cursor
     //
     QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
 
-    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "stop()", data))
-    {
-        // failed
-        throw(Rosegarden::Exception("Failed to contact Rosegarden sequencer with stop command"));
-    }
+    rgapp->sequencerSend("stop()");
 
     // restore
     QApplication::restoreOverrideCursor();
@@ -685,17 +662,7 @@ SequenceManager::sendSequencerJump(const Rosegarden::RealTime &time)
     streamOut << time.sec;
     streamOut << time.usec;
 
-    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "jumpTo(long int, long int)",
-                                  data))
-    {
-      // failed
-      m_transportStatus = STOPPED;
-      throw(Rosegarden::Exception("Failed to contact Rosegarden sequencer with jumpTo command"));
-    }
-
-    return;
+    rgapp->sequencerSend("jumpTo(long int, long int)", data);
 }
 
 
@@ -720,24 +687,20 @@ SequenceManager::record(bool toggled)
     // recording - once we enforce audio subsystems then this will
     // become redundant.
     //
-    if (!(m_soundDriverStatus & AUDIO_OK))
-    {
+    if (!(m_soundDriverStatus & AUDIO_OK)) {
         int rID = comp.getRecordTrack();
         Rosegarden::InstrumentId instrId =
             comp.getTrackById(rID)->getInstrument();
         Rosegarden::Instrument *instr = studio.getInstrumentById(instrId);
 
-        if (!instr || instr->getType() == Rosegarden::Instrument::Audio)
-        {
+        if (!instr || instr->getType() == Rosegarden::Instrument::Audio) {
             m_transport->RecordButton()->setOn(false);
             throw(Rosegarden::Exception("Audio subsystem is not available - can't record audio"));
         }
     }
 
-    if (toggled)
-    {
-        if (m_transportStatus == RECORDING_ARMED)
-        {
+    if (toggled) {
+        if (m_transportStatus == RECORDING_ARMED) {
             SEQMAN_DEBUG << "SequenceManager::record - unarming record\n";
             m_transportStatus = STOPPED;
 
@@ -748,8 +711,7 @@ SequenceManager::record(bool toggled)
             return;
         }
 
-        if (m_transportStatus == STOPPED)
-        {
+        if (m_transportStatus == STOPPED) {
             SEQMAN_DEBUG << "SequenceManager::record - armed record\n";
             m_transportStatus = RECORDING_ARMED;
 
@@ -761,26 +723,21 @@ SequenceManager::record(bool toggled)
         }
 
         if (m_transportStatus == RECORDING_MIDI ||
-            m_transportStatus == RECORDING_AUDIO)
-        {
+            m_transportStatus == RECORDING_AUDIO) {
             SEQMAN_DEBUG << "SequenceManager::record - stop recording and keep playing\n";
             return;
         }
 
-        if (m_transportStatus == PLAYING)
-        {
+        if (m_transportStatus == PLAYING) {
             SEQMAN_DEBUG << "SequenceManager::record - punch in recording\n";
             return;
         }
 
-    }
-    else
-    {
+    } else {
         // if already recording then stop
         //
         if (m_transportStatus == RECORDING_MIDI ||
-            m_transportStatus == RECORDING_AUDIO)
-        {
+            m_transportStatus == RECORDING_AUDIO) {
             stopping();
             return;
         }
@@ -792,8 +749,7 @@ SequenceManager::record(bool toggled)
 
         // If no matching record instrument
         //
-        if (studio.getInstrumentById(inst) == 0)
-        {
+        if (studio.getInstrumentById(inst) == 0) {
             m_transport->RecordButton()->setDown(false);
             throw(Rosegarden::Exception("No Record instrument selected"));
         }
@@ -811,10 +767,8 @@ SequenceManager::record(bool toggled)
         //
         if(comp.isLooping())
             m_doc->setPointerPosition(comp.getLoopStart());
-        else
-        {
-            if (m_transportStatus != RECORDING_ARMED)
-            {
+        else {
+            if (m_transportStatus != RECORDING_ARMED) {
                 int startBar = comp.getBarNumber(comp.getPosition());
                 startBar -= config->readUnsignedNumEntry("countinbars", 2);
                 m_doc->setPointerPosition(comp.getBarRange(startBar).first);
@@ -828,58 +782,55 @@ SequenceManager::record(bool toggled)
         QCString replyType;
         QByteArray replyData;
 
-        switch (studio.getInstrumentById(inst)->getType())
-        {
-            case Rosegarden::Instrument::Midi:
-                recordType = STARTING_TO_RECORD_MIDI;
-                SEQMAN_DEBUG << "SequenceManager::record() - starting to record MIDI\n";
-                break;
+        switch (studio.getInstrumentById(inst)->getType()) {
+        case Rosegarden::Instrument::Midi:
+            recordType = STARTING_TO_RECORD_MIDI;
+            SEQMAN_DEBUG << "SequenceManager::record() - starting to record MIDI\n";
+            break;
 
-            case Rosegarden::Instrument::Audio:
+        case Rosegarden::Instrument::Audio: {
+            // check for disk space available
+            Rosegarden::DiskSpace *space;
+            Rosegarden::AudioFileManager &afm = 
+                m_doc->getAudioFileManager();
+            QString audioPath = strtoqstr(afm.getAudioPath());
+
+            try {
+                space = new Rosegarden::DiskSpace(audioPath);
+            }
+            catch(QString e)
                 {
-                    // check for disk space available
-                    Rosegarden::DiskSpace *space;
-                    Rosegarden::AudioFileManager &afm = 
-                        m_doc->getAudioFileManager();
-                    QString audioPath = strtoqstr(afm.getAudioPath());
-
-                    try
-                    {
-                        space = new Rosegarden::DiskSpace(audioPath);
-                    }
-                    catch(QString e)
-                    {
-                        // Add message and re-throw
-                        //
-                        QString m = i18n("Audio record path \"") +
-                           audioPath + QString("\". ") + e + QString("\n") +
-                           i18n("Edit your audio path properties (Edit->Edit Document Properties->Audio)");
-                        throw(m);
-                    }
-
-                    // Check the disk space available is within current
-                    // audio recording limit
+                    // Add message and re-throw
                     //
-                    config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
-                    int audioRecordMinutes = config->
-                        readNumEntry("audiorecordminutes", 5);
-
-                    Rosegarden::AudioPluginManager *apm = 
-                        m_doc->getPluginManager();
-
-                    // Ok, check disk space and compare to limits
-                    //space->getFreeKBytes()
-
-                    recordType = STARTING_TO_RECORD_AUDIO;
-                    SEQMAN_DEBUG << "SequenceManager::record() - "
-                                 << "starting to record Audio\n";
+                    QString m = i18n("Audio record path \"") +
+                        audioPath + QString("\". ") + e + QString("\n") +
+                        i18n("Edit your audio path properties (Edit->Edit Document Properties->Audio)");
+                    throw(m);
                 }
-                break;
 
-            default:
-                SEQMAN_DEBUG << "SequenceManager::record() - unrecognised instrument type\n";
-                return;
-                break;
+            // Check the disk space available is within current
+            // audio recording limit
+            //
+            config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
+            int audioRecordMinutes = config->
+                readNumEntry("audiorecordminutes", 5);
+
+            Rosegarden::AudioPluginManager *apm = 
+                m_doc->getPluginManager();
+
+            // Ok, check disk space and compare to limits
+            //space->getFreeKBytes()
+
+            recordType = STARTING_TO_RECORD_AUDIO;
+            SEQMAN_DEBUG << "SequenceManager::record() - "
+                         << "starting to record Audio\n";
+            break;
+        }
+            
+        default:
+            SEQMAN_DEBUG << "SequenceManager::record() - unrecognised instrument type\n";
+            return;
+            break;
         }
 
         // set the buttons
@@ -890,13 +841,10 @@ SequenceManager::record(bool toggled)
         //
         QDataStream streamOut(data, IO_WriteOnly);
 
-        if (comp.getTempo() == 0)
-        {
+        if (comp.getTempo() == 0) {
             SEQMAN_DEBUG << "SequenceManager::play() - setting Tempo to Default value of 120.000\n";
             comp.setDefaultTempo(120.0);
-        }
-        else
-        {
+        } else {
             SEQMAN_DEBUG << "SequenceManager::record() - starting to record\n";
         }
 
@@ -935,81 +883,71 @@ SequenceManager::record(bool toggled)
         streamOut << (int)recordType;
     
         // Send Play to the Sequencer
-        if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                      ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                      "record(long int, long int, long int, long int, long int, long int, long int, long int, int)",
-                                      data, replyType, replyData))
-        {
+        try {
+            
+            rgapp->sequencerCall("record(long int, long int, long int, long int, long int, long int, long int, long int, int)",
+                                 replyType, replyData, data);
+        } catch(Rosegarden::Exception e) {
             // failed
             m_transportStatus = STOPPED;
-            throw(Rosegarden::Exception("Failed to contact Rosegarden sequencer with record command"));
+            throw(e);
         }
-        else
-        {
-            // ensure the return type is ok
-            QDataStream streamIn(replyData, IO_ReadOnly);
-            int result;
-            streamIn >> result;
+
+        // ensure the return type is ok
+        QDataStream streamIn(replyData, IO_ReadOnly);
+        int result;
+        streamIn >> result;
   
-            if (result)
-            {
-                // completed successfully 
-                m_transportStatus = recordType;
+        if (result) {
+            // completed successfully 
+            m_transportStatus = recordType;
 
-                if (recordType == STARTING_TO_RECORD_AUDIO)
-                {
-                    // Create the countdown timer dialog for limiting the
-                    // audio recording time.
-                    //
-                    KConfig* config = kapp->config();
-                    config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
-
-                    int seconds = 60 * 
-                        (config->readNumEntry("audiorecordminutes", 5));
-
-                    // re-initialise
-                    m_countdownDialog->setTotalTime(seconds);
-
-                    connect(m_countdownDialog, SIGNAL(stopped()),
-                            this, SLOT(slotCountdownCancelled()));
-
-                    connect(m_countdownDialog, SIGNAL(completed()),
-                            this, SLOT(slotCountdownStop()));
-
-                    // Create the timer
-                    //
-                    m_recordTime->start();
-
-                    // Start an elapse timer for updating the dialog -
-                    // it will fire every second.
-                    //
-                    m_countdownTimer->start(1000);
-
-                    // Pop-up the dialog (don't use exec())
-                    //
-                    m_countdownDialog->show();
-
-                }
-            }
-            else
-            {
-                // Stop immediately - turn off buttons in parent
+            if (recordType == STARTING_TO_RECORD_AUDIO) {
+                // Create the countdown timer dialog for limiting the
+                // audio recording time.
                 //
-                m_transportStatus = STOPPED;
+                KConfig* config = kapp->config();
+                config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
 
-                if (recordType == STARTING_TO_RECORD_AUDIO)
-                {
-                    throw(Rosegarden::Exception("Couldn't start recording audio.  Ensure your audio record path is valid\nin Document Properties (Edit->Edit Document Properties->Audio)"));
-                }
-                else
-                {
-                    throw(Rosegarden::Exception("Couldn't start recording MIDI"));
-                }
+                int seconds = 60 * 
+                    (config->readNumEntry("audiorecordminutes", 5));
+
+                // re-initialise
+                m_countdownDialog->setTotalTime(seconds);
+
+                connect(m_countdownDialog, SIGNAL(stopped()),
+                        this, SLOT(slotCountdownCancelled()));
+
+                connect(m_countdownDialog, SIGNAL(completed()),
+                        this, SLOT(slotCountdownStop()));
+
+                // Create the timer
+                //
+                m_recordTime->start();
+
+                // Start an elapse timer for updating the dialog -
+                // it will fire every second.
+                //
+                m_countdownTimer->start(1000);
+
+                // Pop-up the dialog (don't use exec())
+                //
+                m_countdownDialog->show();
 
             }
+        } else {
+            // Stop immediately - turn off buttons in parent
+            //
+            m_transportStatus = STOPPED;
+
+            if (recordType == STARTING_TO_RECORD_AUDIO) {
+                throw(Rosegarden::Exception("Couldn't start recording audio.  Ensure your audio record path is valid\nin Document Properties (Edit->Edit Document Properties->Audio)"));
+            } else {
+                throw(Rosegarden::Exception("Couldn't start recording MIDI"));
+            }
+
         }
     }
-
 }
 
 
@@ -1230,49 +1168,39 @@ SequenceManager::setLoop(const timeT &lhs, const timeT &rhs)
     streamOut << loopEnd.sec;
     streamOut << loopEnd.usec;
   
-    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                 ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                 "setLoop(long int, long int, long int, long int)", data))
-    {
-        // failed
-        throw(Rosegarden::Exception("Failed to contact Rosegarden sequencer with setLoop command"));
-    }
+    rgapp->sequencerSend("setLoop(long int, long int, long int, long int)", data);
 }
 
 void
 SequenceManager::checkSoundDriverStatus()
 {
-    QByteArray data;
     QCString replyType;
     QByteArray replyData;
 
-    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "getSoundDriverStatus()",
-                                  data, replyType, replyData))
-    {
+    try {
+        rgapp->sequencerCall("getSoundDriverStatus()", replyType, replyData);
+
+    } catch (Rosegarden::Exception e) {
         // failed
 	m_soundDriverStatus = NO_DRIVER;
-        throw(Rosegarden::Exception("Failed to contact Rosegarden sequencer with getSoundDriverStatus command"));
+        throw(e);
     }
-    else
-    {
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        unsigned int result;
-        streamIn >> result;
-        m_soundDriverStatus = result;
 
-        if (m_soundDriverStatus == NO_DRIVER)
-            throw(Rosegarden::Exception("MIDI and Audio subsystems have failed to initialise"));
+    QDataStream streamIn(replyData, IO_ReadOnly);
+    unsigned int result;
+    streamIn >> result;
+    m_soundDriverStatus = result;
 
-        if (!(m_soundDriverStatus & MIDI_OK))
-            throw(Rosegarden::Exception("MIDI subsystem has failed to initialise"));
+    if (m_soundDriverStatus == NO_DRIVER)
+        throw(Rosegarden::Exception("MIDI and Audio subsystems have failed to initialise"));
 
-        /*
-        if (!(m_soundDriverStatus & AUDIO_OK))
-            throw(Rosegarden::Exception("Audio subsystem has failed to initialise"));
-        */
-    }
+    if (!(m_soundDriverStatus & MIDI_OK))
+        throw(Rosegarden::Exception("MIDI subsystem has failed to initialise"));
+
+    /*
+      if (!(m_soundDriverStatus & AUDIO_OK))
+      throw(Rosegarden::Exception("Audio subsystem has failed to initialise"));
+    */
 }
 
 
@@ -1726,58 +1654,58 @@ SequenceManager::applyFiltering(const Rosegarden::MappedComposition &mC,
 void
 SequenceManager::setSequencerSliceSize(const RealTime &time)
 {
-    if (m_transportStatus == PLAYING ||
-        m_transportStatus == RECORDING_MIDI ||
-        m_transportStatus == RECORDING_AUDIO )
-    {
-        QByteArray data;
-        QDataStream streamOut(data, IO_WriteOnly);
+//     if (m_transportStatus == PLAYING ||
+//         m_transportStatus == RECORDING_MIDI ||
+//         m_transportStatus == RECORDING_AUDIO )
+//     {
+//         QByteArray data;
+//         QDataStream streamOut(data, IO_WriteOnly);
 
-        KConfig* config = kapp->config();
-        config->setGroup(Rosegarden::LatencyOptionsConfigGroup);
+//         KConfig* config = kapp->config();
+//         config->setGroup(Rosegarden::LatencyOptionsConfigGroup);
 
-        if (time == RealTime(0, 0)) // reset to default values
-        {
-            streamOut << config->readLongNumEntry("readaheadsec", 0);
-            streamOut << config->readLongNumEntry("readaheadusec", 40000);
-        }
-        else
-        {
-            streamOut << time.sec;
-            streamOut << time.usec;
-        }
+//         if (time == RealTime(0, 0)) // reset to default values
+//         {
+//             streamOut << config->readLongNumEntry("readaheadsec", 0);
+//             streamOut << config->readLongNumEntry("readaheadusec", 40000);
+//         }
+//         else
+//         {
+//             streamOut << time.sec;
+//             streamOut << time.usec;
+//         }
 
-        if (!kapp->dcopClient()->
-                send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                     ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                     "setSliceSize(long int, long int)",
-                     data))
-        {
-            SEQMAN_DEBUG << "couldn't set sequencer slice" << endl;
-            return;
-        }
+//         if (!kapp->dcopClient()->
+//                 send(ROSEGARDEN_SEQUENCER_APP_NAME,
+//                      ROSEGARDEN_SEQUENCER_IFACE_NAME,
+//                      "setSliceSize(long int, long int)",
+//                      data))
+//         {
+//             SEQMAN_DEBUG << "couldn't set sequencer slice" << endl;
+//             return;
+//         }
 
-        // Ok, set this token and wait for the sequencer to fetch a
-        // new slice.
-        //
-        m_sliceFetched = false;
+//         // Ok, set this token and wait for the sequencer to fetch a
+//         // new slice.
+//         //
+//         m_sliceFetched = false;
 
-        int msecs = (time.sec * 1000) + (time.usec / 1000);
-        SEQMAN_DEBUG << "set sequencer slice = " << msecs
-                     << "ms" << endl;
+//         int msecs = (time.sec * 1000) + (time.usec / 1000);
+//         SEQMAN_DEBUG << "set sequencer slice = " << msecs
+//                      << "ms" << endl;
 
-        // Spin until the sequencer has got the next slice - we only
-        // do this if we're at the top loop level (otherwise DCOP
-        // events don't get processed)
-        //
-        /*
-        if (kapp->loopLevel() > 1)
-            SEQMAN_DEBUG << "can't wait for slice fetch" << endl;
-        else
-            while (m_sliceFetched == false) kapp->processEvents();
-            */
+//         // Spin until the sequencer has got the next slice - we only
+//         // do this if we're at the top loop level (otherwise DCOP
+//         // events don't get processed)
+//         //
+//         /*
+//         if (kapp->loopLevel() > 1)
+//             SEQMAN_DEBUG << "can't wait for slice fetch" << endl;
+//         else
+//             while (m_sliceFetched == false) kapp->processEvents();
+//             */
 
-    }
+//     }
 }
 
 // Set a temporary slice size.  Wait until this slice is fetched
@@ -1881,13 +1809,9 @@ CompositionMmapper::~CompositionMmapper()
 
 void CompositionMmapper::cleanup()
 {
-    QByteArray data;
-
     // In case the sequencer is still running, mapping some segments
     //
-    kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                             ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                             "closeAllSegments()", data);
+    rgapp->sequencerSend("closeAllSegments()");
 
     // Erase all 'segment_*' files
     //
@@ -2357,13 +2281,11 @@ void SequenceManager::segmentModified(Segment* s)
 
         streamOut << m_compositionMmapper->getSegmentFileName(s);
         
-        if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                      ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                      "remapSegment(QString)",
-                                      data)) {
+        try { rgapp->sequencerSend("remapSegment(QString)", data); }
+        catch(Rosegarden::Exception e) {
             // failed
             m_transportStatus = STOPPED;
-            throw(Rosegarden::Exception("segmentModified failed to contact Rosegarden sequencer"));
+            throw(e);
         }
     }
 }
@@ -2393,13 +2315,11 @@ void SequenceManager::processAddedSegment(Segment* s)
 
         streamOut << m_compositionMmapper->getSegmentFileName(s);
         
-        if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                      ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                      "addSegment(QString)",
-                                      data)) {
+        try { rgapp->sequencerSend("addSegment(QString)", data); }
+        catch (Rosegarden::Exception e) {
             // failed
             m_transportStatus = STOPPED;
-            throw(Rosegarden::Exception("segmentAdded failed to contact Rosegarden sequencer"));
+            throw(e);
         }
     }
 
@@ -2422,14 +2342,12 @@ void SequenceManager::processRemovedSegment(Segment* s)
         QDataStream streamOut(data, IO_WriteOnly);
 
         streamOut << filename;
-        
-        if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                      ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                      "deleteSegment(QString)",
-                                      data)) {
+
+        try { rgapp->sequencerSend("deleteSegment(QString)", data); }
+        catch (Rosegarden::Exception e) {
             // failed
             m_transportStatus = STOPPED;
-            throw(Rosegarden::Exception("segmentDeleted failed to contact Rosegarden sequencer"));
+            throw(e);
         }
     }
 

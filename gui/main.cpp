@@ -30,7 +30,6 @@
 #include <kmessagebox.h>
 #include <kstddirs.h>
 #include <ktip.h>
-#include <kuniqueapplication.h>
 
 #include "constants.h"
 #include "rosestrings.h"
@@ -38,6 +37,8 @@
 #include "rosegardengui.h"
 #include "rosegardenguidoc.h"
 #include "kstartuplogo.h"
+
+#include "rgapplication.h"
 
 /*! \mainpage Rosegarden-4 global design
 
@@ -317,47 +318,6 @@ static KCmdLineOptions options[] =
     { 0, 0, 0 }
 };
 
-// --------------------- RosegardenApplication --------------------
-//
-// Handles RosegardenGUIApps perceived uniqueness for us.
-//
-//
-
-class RosegardenApplication : public KUniqueApplication
-{
-public:
-    RosegardenApplication(): KUniqueApplication() {;}
-
-    virtual int newInstance();
-
-    void commitData(QSessionManager& sm)
-    {
-        KApplication::commitData( sm );
-    }
-};
-
-// Handle the attempt at creation of a new instance - 
-// only accept new file names which we attempt to load
-// into the existing instance (if it exists)
-//
-int RosegardenApplication::newInstance()
-{
-    //std::cout << "RosegardenApplication::newInstance" << std::endl;
-
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-
-    if (RosegardenGUIApp::self() && args->count() &&
-        RosegardenGUIApp::self()->getDocument() &&
-        RosegardenGUIApp::self()->getDocument()->saveIfModified())
-    {
-        // Check for modifications and save if necessary - if cancelled
-        // then don't load the new file.
-        //
-        RosegardenGUIApp::self()->openFile(args->arg(0));
-    }
-
-    return KUniqueApplication::newInstance();
-}
 
 // -----------------------------------------------------------------
 
