@@ -26,12 +26,15 @@
     COPYING included with this distribution for more information.
 */
 
+#include <klocale.h> // i18n
+#include <kapp.h>
+
+#include <qstring.h>
+#include <qregexp.h> // QT3.0 replace()
+
 #include "lilypondio.h"
 #include "config.h"
-#include "qstring.h"
-#include "qregexp.h" // QT3.0 replace()
 #include "rosestrings.h" // strtoqstr
-#include <klocale.h> // i18n
 
 #include "Composition.h"
 #include "BaseProperties.h"
@@ -60,10 +63,12 @@ using Rosegarden::Text;
 using Rosegarden::PropertyName;
 using Rosegarden::Marks;
 
-LilypondExporter::LilypondExporter(Composition *composition,
+LilypondExporter::LilypondExporter(QObject *parent,
+                                   Composition *composition,
                                    std::string fileName) :
-                                   m_composition(composition),
-                                   m_fileName(fileName) {
+    ProgressReporter(parent, "lilypondExporter"),
+    m_composition(composition),
+    m_fileName(fileName) {
     // nothing else
 }
 
@@ -433,9 +438,15 @@ LilypondExporter::write() {
     Note::Type lastType = Note::QuarterNote;
     int lastNumDots = 0;
 
+    int trackNo = 0;
+
     // Write out all segments for each Track
     for (Composition::iterator i = m_composition->begin();
          i != m_composition->end(); ++i) {
+
+        emit setProgress(int(double(trackNo++)/
+                             double(m_composition->getNbTracks()) * 100.0));
+        kapp->processEvents(50);
 
         timeT lastChordTime = m_composition->getStartMarker() - 1;
         bool currentlyWritingChord = false;
@@ -829,7 +840,7 @@ LilypondExporter::write() {
                 else if (whichClef == Clef::Bass) { str << "bass\n"; }
                 str << "\t\t\t"; //cc
 
-            } else if ((*j)->isa(Key::EventType)) {
+            } else if ((*j)->isa(Rosegarden::Key::EventType)) {
                 if (currentlyWritingChord) {
                     // Incomplete: Consolidate
                     currentlyWritingChord = false;
@@ -838,7 +849,7 @@ LilypondExporter::write() {
                 }
 
                 str << "\\key ";
-                Key whichKey(**j);
+                Rosegarden::Key whichKey(**j);
                 isFlatKeySignature = !whichKey.isSharp();
                 accidentalCount = whichKey.getAccidentalCount();
                 

@@ -2545,7 +2545,14 @@ void RosegardenGUIApp::exportLilypondFile(const QString &file)
                                          100,
                                          this);
 
-    LilypondExporter e(&m_doc->getComposition(), qstrtostr(file));
+    LilypondExporter e(this, &m_doc->getComposition(), qstrtostr(file));
+
+    connect(&e, SIGNAL(setProgress(int)),
+            progressDlg.progressBar(), SLOT(setValue(int)));
+
+    connect(&e, SIGNAL(incrementProgress(int)),
+            progressDlg.progressBar(), SLOT(advance(int)));
+
     if (!e.write()) {
         KMessageBox::sorry(this, i18n("Export failed.  The file could not be opened for writing."));
     }
@@ -2567,7 +2574,14 @@ void RosegardenGUIApp::exportMusicXmlFile(const QString &file)
                                          100,
                                          this);
 
-    MusicXmlExporter e(m_doc, qstrtostr(file));
+    MusicXmlExporter e(this, m_doc, qstrtostr(file));
+
+    connect(&e, SIGNAL(setProgress(int)),
+            progressDlg.progressBar(), SLOT(setValue(int)));
+
+    connect(&e, SIGNAL(incrementProgress(int)),
+            progressDlg.progressBar(), SLOT(advance(int)));
+
     if (!e.write()) {
         KMessageBox::sorry(this, i18n("Export failed.  The file could not be opened for writing."));
     }

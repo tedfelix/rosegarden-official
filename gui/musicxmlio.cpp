@@ -51,8 +51,10 @@ using Rosegarden::timeT;
 using Rosegarden::TimeSignature;
 
 
-MusicXmlExporter::MusicXmlExporter(RosegardenGUIDoc *doc,
+MusicXmlExporter::MusicXmlExporter(QObject *parent,
+                                   RosegardenGUIDoc *doc,
                                    std::string fileName) :
+    ProgressReporter(parent, "musicXmlExporter"),
     m_doc(doc),
     m_fileName(fileName) {
     // nothing else
@@ -171,7 +173,7 @@ MusicXmlExporter::writeNote(Event *e, bool isFlatKeySignature, std::ofstream &st
 
 void
 MusicXmlExporter::writeKey(Event *event, std::ofstream &str) {
-    Key whichKey(*event);
+    Rosegarden::Key whichKey(*event);
     str << "\t\t\t\t<key>" << std::endl;
     str << "\t\t\t\t<fifths>" << convertKeyToFifths(whichKey) << "</fifths>" << std::endl;
     str << "\t\t\t\t<mode>";                
@@ -249,6 +251,8 @@ MusicXmlExporter::write() {
     // MIDI information
     str << "\t<part-list>" << std::endl;
     Composition::trackcontainer * tracks = composition->getTracks();
+
+    int trackNo = 0;
     for (Composition::trackiterator i = tracks->begin();
          i != tracks->end(); ++i) {
         // Incomplete: What about all the other Midi stuff?
@@ -267,12 +271,16 @@ MusicXmlExporter::write() {
         }
         str << "\t\t</score-part>" << std::endl;
 
+        emit setProgress(int(double(trackNo++)/double(tracks->size()) * 20.0));
+        kapp->processEvents(50);
+
     } // end track iterator
     str << "\t</part-list>" << std::endl;
     
     // Notes!
     // Write out all segments for each Track
     bool startedPart = false;
+    trackNo = 0;
     for (Composition::trackiterator j = tracks->begin();
          j != tracks->end(); ++j) {
         // Code courtesy docs/code/iterators.txt
@@ -321,13 +329,13 @@ MusicXmlExporter::write() {
             oldMeasureNumber = measureNumber;
             
             // process event
-            if (event->isa(Key::EventType)) {
+            if (event->isa(Rosegarden::Key::EventType)) {
                 if (!startedAttributes) {
                     str << "\t\t\t<attributes>" << std::endl;
                     startedAttributes = true;
                 }
                 writeKey(event, str);
-                Key whichKey(*event);
+                Rosegarden::Key whichKey(*event);
                 if (whichKey.isSharp()) {
                     isFlatKeySignature = false;
                 } else {
@@ -363,6 +371,10 @@ MusicXmlExporter::write() {
         if (oldMeasureNumber > 0) { // no events at all
             str << "\t\t</measure>\n" << std::endl;
         }
+
+        emit setProgress(20 +
+                         int(double(trackNo++)/double(tracks->size()) * 80.0));
+        kapp->processEvents(50);
     }
     str << "\t</part>" << std::endl;
 

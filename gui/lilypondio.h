@@ -33,6 +33,7 @@
 #include <vector>
 #include "Event.h"
 #include "Segment.h"
+#include "progressreporter.h"
 
 namespace Rosegarden { class Composition; class Event; class Segment; }
 using Rosegarden::Event;
@@ -42,13 +43,14 @@ using Rosegarden::Segment;
  * Lilypond scorefile export
  */
 
-class LilypondExporter
+class LilypondExporter : public ProgressReporter
 {
 public:
     typedef std::multiset<Event*, Event::EventCmp> eventstartlist;
     typedef std::multiset<Event*, Event::EventEndCmp> eventendlist;
 public:
-    LilypondExporter(Rosegarden::Composition *, std::string fileName);
+    LilypondExporter(QObject *parent, Rosegarden::Composition *,
+                     std::string fileName);
     ~LilypondExporter();
 
     bool write();

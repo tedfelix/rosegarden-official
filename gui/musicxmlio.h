@@ -35,6 +35,7 @@
 #include "Segment.h"
 #include "NotationTypes.h"
 #include "rosegardenguidoc.h"
+#include "progressreporter.h"
 
 namespace Rosegarden {
     class Event;
@@ -49,13 +50,13 @@ using Rosegarden::TimeSignature;
  * MusicXml scorefile export
  */
 
-class MusicXmlExporter
+class MusicXmlExporter : public ProgressReporter
 {
 public:
     typedef std::multiset<Event*, Event::EventCmp> eventstartlist;
     typedef std::multiset<Event*, Event::EventEndCmp> eventendlist;
 public:
-    MusicXmlExporter(RosegardenGUIDoc *, std::string fileName);
+    MusicXmlExporter(QObject *parent, RosegardenGUIDoc *, std::string fileName);
     ~MusicXmlExporter();
 
     bool write();
