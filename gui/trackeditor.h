@@ -123,6 +123,14 @@ signals:
     void needUpdate();
 
     /**
+     * Emitted when the SegmentCanvas needs to be scrolled 
+     * horizontally to a position
+     *
+     * @see 
+     */
+    void scrollHorizTo(int);
+
+    /**
      * Emitted when a new segment is created by the user
      * \a item is the SegmentItem representing the segment on the SegmentCanvas
      * \a instrument is the instrument for the segment

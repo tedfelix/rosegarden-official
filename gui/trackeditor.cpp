@@ -99,13 +99,13 @@ TrackEditor::init(unsigned int nbTracks, unsigned int nbBars)
 
     QCanvas *canvas = new QCanvas(this);
     canvas->resize(m_hHeader->sectionSize(0) * nbBars,
-                   m_vHeader->sectionSize(0) * nbTracks);
+                   /*m_vHeader->sectionSize(0)*/ 20 * nbTracks);
 
     canvas->setBackgroundColor(Qt::lightGray);
 
     m_segmentsCanvas = new SegmentCanvas(m_hHeader->sectionSize(0),
-                                      m_vHeader->sectionSize(0),
-                                      *canvas, this);
+                                         m_vHeader->sectionSize(0),
+                                         *canvas, this);
 
     grid->addWidget(m_segmentsCanvas, 1,1);
 
@@ -353,13 +353,7 @@ TrackEditor::setPointerPosition(int position)
     if (distance >= 1.0) {
 	m_pointer->setX(canvasPosition);
 
-        // rwb - scroll the view with our pointer  ... ?
-        //
-        //m_segmentsCanvas->setContentsPos(canvasPosition - 100, 0);
-        //m_segmentsCanvas->scrollBy(-10, 0);
-        m_segmentsCanvas->ensureVisible(canvasPosition, 0);
-        m_segmentsCanvas->update();
-
+        emit scrollHorizTo(canvasPosition);
 	emit needUpdate();
     }
 }

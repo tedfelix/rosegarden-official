@@ -42,7 +42,8 @@
 RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     : QVBox(parent),
       m_notationView(0),
-      m_matrixView(0)
+      m_matrixView(0),
+      m_trackEditorScrollView(0)
 {
     RosegardenGUIDoc* doc = getDocument();
 
@@ -84,14 +85,14 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     buttonsView->setMinimumWidth(125);
     buttonsView->setMaximumWidth(125);
 
-    QScrollView *scrollView = new QScrollView(topBox);
+    m_trackEditorScrollView = new QScrollView(topBox);
 
     // Now link up the vertical scrollbar to the track buttons
     //
-    connect(scrollView, SIGNAL(contentsMoving(int, int)),
-            buttonsView, SLOT(setContentsPos(int, int)));
+    connect(m_trackEditorScrollView, SIGNAL(contentsMoving(int, int)),
+            buttonsView,             SLOT(setContentsPos(int, int)));
 
-    scrollView->addChild(tracksEditor);
+    m_trackEditorScrollView->addChild(tracksEditor);
 
     connect(tracksEditor->canvas(), SIGNAL(editSegmentNotation(Rosegarden::Segment*)),
             SLOT(editSegmentNotation(Rosegarden::Segment*)));
@@ -102,8 +103,11 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     connect(tracksEditor,  SIGNAL(createNewSegment(SegmentItem*,int)),
             getDocument(), SLOT  (createNewSegment(SegmentItem*,int)));
 
+    connect(tracksEditor,  SIGNAL(scrollHorizTo(int)),
+            SLOT(scrollTrackEditorHoriz(int)));
+
     connect(this,                   SIGNAL(setTool(SegmentCanvas::ToolType)),
-            tracksEditor->canvas(), SLOT(setTool(SegmentCanvas::ToolType)));
+            tracksEditor->canvas(), SLOT  (setTool(SegmentCanvas::ToolType)));
 
     connect(this,                   SIGNAL(setPositionPointer(int)),
             tracksEditor,           SLOT(setPointerPosition(int)));
@@ -176,8 +180,7 @@ void RosegardenGUIView::resizeSelected()
 }
 
 
-void
-RosegardenGUIView::editSegmentNotation(Rosegarden::Segment* p)
+void RosegardenGUIView::editSegmentNotation(Rosegarden::Segment* p)
 {
     std::vector<Rosegarden::Segment *> segmentsToEdit;
     segmentsToEdit.push_back(p);
@@ -186,8 +189,7 @@ RosegardenGUIView::editSegmentNotation(Rosegarden::Segment* p)
     m_notationView->show();
 }
 
-void
-RosegardenGUIView::editSegmentMatrix(Rosegarden::Segment* p)
+void RosegardenGUIView::editSegmentMatrix(Rosegarden::Segment* p)
 {
     std::vector<Rosegarden::Segment *> segmentsToEdit;
     segmentsToEdit.push_back(p);
@@ -196,8 +198,14 @@ RosegardenGUIView::editSegmentMatrix(Rosegarden::Segment* p)
     m_matrixView->show();
 }
 
-void
-RosegardenGUIView::editAllTracks(Rosegarden::Composition* p)
+void RosegardenGUIView::scrollTrackEditorHoriz(int hpos)
+{
+    m_trackEditorScrollView->ensureVisible(hpos,
+                                           m_trackEditorScrollView->contentsY() +
+                                           m_trackEditorScrollView->visibleHeight() / 2);
+}
+
+void RosegardenGUIView::editAllTracks(Rosegarden::Composition* p)
 {
     if (p->getNbSegments() == 0) {
 	KMessageBox::sorry(0, "Please create some tracks first (until we implement menu state management)");
@@ -214,8 +222,7 @@ RosegardenGUIView::editAllTracks(Rosegarden::Composition* p)
     m_notationView->show();
 }
 
-void
-RosegardenGUIView::setPointerPosition(const int &position)
+void RosegardenGUIView::setPointerPosition(const int &position)
 {
 //    kdDebug(KDEBUG_AREA) << "RosegardenGUIView::setPointerPosition" << endl;
 

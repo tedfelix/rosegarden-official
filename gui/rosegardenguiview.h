@@ -35,6 +35,7 @@
 
 namespace Rosegarden { class Composition; }
 
+class QScrollView;
 class RosegardenGUIDoc;
 class NotationView;
 class MatrixView;
@@ -121,6 +122,14 @@ public slots:
     void editSegmentNotation(Rosegarden::Segment*);
     void editSegmentMatrix(Rosegarden::Segment*);
 
+    /**
+     * Scroll the TrackEditor horizontally to the specified
+     * position
+     *
+     * @see TrackEditor#scrollHorizTo(int)
+     */
+    void scrollTrackEditorHoriz(int hpos);
+
 signals:
     void setTool(SegmentCanvas::ToolType);
     void setPositionPointer(int);
@@ -129,8 +138,9 @@ protected:
     //--------------- Data members ---------------------------------
 
     NotationView* m_notationView;
-    MatrixView* m_matrixView;
+    MatrixView*   m_matrixView;
 
+    QScrollView* m_trackEditorScrollView;
 };
 
 #endif // ROSEGARDENGUIVIEW_H
