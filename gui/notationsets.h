@@ -18,17 +18,18 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _NOTATION_GROUP_H_
-#define _NOTATION_GROUP_H_
+#ifndef _NOTATION_SETS_H_
+#define _NOTATION_SETS_H_
 
 #include "NotationTypes.h"
 #include "notationelement.h"
+#include "notationproperties.h"
 #include "notepixmapfactory.h"
 
 
 // A "notation set" is an object made up from a contiguous set of
 // elements from an element list.  Examples of notation sets include
-// Chord and BeamedGroup.
+// the Chord and BeamedGroup.
 
 // To construct a set requires (at least) a NotationElementList
 // reference plus an iterator into that list.  The constructor (or
@@ -53,19 +54,29 @@
 // you should let them expire when you've finished with them.
 
 
-class NotationSet
+class NotationSet // abstract base
 {
 public:
     typedef NotationElementList::iterator NELIterator;
 
     virtual ~NotationSet() { }
 
+    // getInitialElement() returns end() if there are no elements in
+    // the set.  getInitialElement() == getFinalElement() if there is
+    // only one element in the set
     virtual NELIterator getInitialElement() const  { return m_initial;  }
     virtual NELIterator getFinalElement() const    { return m_final;    }
 
+    // only return note elements; will return end() if there are none
+    virtual NELIterator getInitialNote() const;
+    virtual NELIterator getFinalNote() const;
+
+    // only elements with duration > 0 are candidates for shortest and
+    // longest; these will return end() if there are no such elements
     virtual NELIterator getLongestElement() const  { return m_longest;  }
     virtual NELIterator getShortestElement() const { return m_shortest; }
 
+    // these will return end() if there are no note elements in the set
     virtual NELIterator getHighestNote() const     { return m_highest;  }
     virtual NELIterator getLowestNote() const      { return m_lowest;   }
 
@@ -79,9 +90,9 @@ protected:
 
     const NotationElementList &getList() const { return m_nel; }
 
-private:
-    Rosegarden::Event::timeT duration(const NELIterator &i, bool quantized);
+    Rosegarden::Event::timeT durationOf(const NELIterator &i, bool quantized);
 
+private:
     const NotationElementList &m_nel;
     NELIterator m_initial, m_final, m_shortest, m_longest, m_highest, m_lowest;
     bool m_quantized;
@@ -144,6 +155,7 @@ public:
         double gradient;        // -- then this is m
         double startHeight;     // -- and this is c (in height-on-staff units,
         bool aboveNotes;        //                   relative to 1st notehead)
+        bool necessary;
     };
 
     Beam calculateBeam(const NotePixmapFactory&, int width);
@@ -151,7 +163,7 @@ public:
 protected:
     virtual bool test(const NELIterator &i) {
         long n;
-        return ((*i)->event()->get<Rosegarden::Int>("GroupNo", n) &&
+        return ((*i)->event()->get<Rosegarden::Int>(P_GROUP_NO, n) &&
                 n == m_groupNo);
     }
     virtual void sample(const NELIterator &i);

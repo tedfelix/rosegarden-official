@@ -132,6 +132,7 @@ NotationHLayout::preparse(NotationElementList::iterator from,
     int shortCount = 0;
     NotationElementList::iterator it = from;
     Event::timeT absoluteTime = 0;
+    long pGroupNo = -1;
 
     for ( ; it != to; ++it) {
         
@@ -194,6 +195,23 @@ NotationHLayout::preparse(NotationElementList::iterator from,
         } else if (el->isNote() || el->isRest()) {
 
             if (el->isNote()) {
+                
+                long groupNo = -1;
+                if (el->event()->get<Int>(P_GROUP_NO, groupNo) &&
+                    groupNo != pGroupNo) {
+                    kdDebug(KDEBUG_AREA) << "NotationHLayout::layout: entering group" << endl;
+                    NotationGroup group(m_notationElements, it, clef, key);
+                    kdDebug(KDEBUG_AREA) << "NotationHLayout::layout: group type is " << group.getGroupType() << ", now calculating beam" << endl;
+                    //!! just testing, for the moment -- we should
+                    //probably note when we enter a group, and then
+                    //when we're about to leave it (so we've
+                    //calculated the width) we do the beam stuff.
+                    //Maybe group.calculateBeam should write
+                    //beam-indication properties straight into the
+                    //elements of the group
+                    NotationGroup::Beam beam(group.calculateBeam(npf, 100));
+                }
+                pGroupNo = groupNo;
 
                 try {
                     int pitch = el->event()->get<Int>("pitch");
@@ -215,8 +233,6 @@ NotationHLayout::preparse(NotationElementList::iterator from,
 
                 Chord chord(m_notationElements, it);
                 if (chord.size() < 2 || it == chord.getFinalElement()) {
-
-//!                if (!m_notationElements.hasSucceedingChordElements(it)) {
 
                     int d = el->event()->get<Int>(P_QUANTIZED_DURATION); 
                     nbTimeUnitsInCurrentBar += d;
@@ -296,7 +312,8 @@ NotationHLayout::layout()
 
             } else if (nel->isNote() || nel->isRest()) {
 
-                if (!m_notationElements.hasSucceedingChordElements(it)) {
+                Chord chord(m_notationElements, it);
+                if (chord.size() < 2 || it == chord.getFinalElement()) {
 
                     // To work out how much space to allot a note (or
                     // chord), start with the amount alloted to the

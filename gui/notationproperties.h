@@ -38,5 +38,8 @@
 #define  P_DRAW_TAIL             "NoteDrawTail"
 #define  P_NOTE_NAME             "NoteName"
 
+#define  P_GROUP_NO              "GroupNo"
+#define  P_GROUP_TYPE            "GroupType"
+
 #endif
 

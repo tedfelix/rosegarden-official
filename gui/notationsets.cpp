@@ -1,7 +1,27 @@
 
+/*
+    Rosegarden-4 v0.1
+    A sequencer and musical notation editor.
+
+    This program is Copyright 2000-2001
+        Guillaume Laurent   <glaurent@telegraph-road.org>,
+        Chris Cannam        <cannam@all-day-breakfast.com>,
+        Richard Bown        <bownie@bownie.com>
+
+    The moral right of the authors to claim authorship of this work
+    has been asserted.
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
+*/
+
 #include "notationsets.h"
 #include "notationproperties.h"
 #include "rosedebug.h"
+#include "Equation.h"
 #include <cstring>
 
 using Rosegarden::Event;
@@ -9,6 +29,8 @@ using Rosegarden::String;
 using Rosegarden::Int;
 using Rosegarden::Clef;
 using Rosegarden::Key;
+using Rosegarden::Note;
+using Rosegarden::Equation;
 
 NotationSet::NotationSet(const NotationElementList &nel,
                          NELIterator i, bool quantized) :
@@ -25,7 +47,8 @@ NotationSet::NotationSet(const NotationElementList &nel,
     // ...
 }
 
-void NotationSet::initialise()
+void
+NotationSet::initialise()
 {
     NELIterator &i(m_baseIterator);
     if (i == m_nel.end() || !test(i)) return;
@@ -50,15 +73,20 @@ void NotationSet::initialise()
     m_final = i;
 }
 
-void NotationSet::sample(const NELIterator &i)
+void
+NotationSet::sample(const NELIterator &i)
 {
-    if (m_longest == m_nel.end() ||
-        duration(i, m_quantized) > duration(m_longest, m_quantized)) {
-        m_longest = i;
-    }
-    if (m_shortest == m_nel.end() ||
-        duration(i, m_quantized) < duration(m_shortest, m_quantized)) {
-        m_shortest = i;
+    Event::timeT d(durationOf(i, m_quantized));
+
+    if (d > 0) {
+        if (m_longest == m_nel.end() ||
+            d > durationOf(m_longest, m_quantized)) {
+            m_longest = i;
+        }
+        if (m_shortest == m_nel.end() ||
+            d < durationOf(m_shortest, m_quantized)) {
+            m_shortest = i;
+        }
     }
 
     if ((*i)->isNote()) {
@@ -75,7 +103,8 @@ void NotationSet::sample(const NELIterator &i)
     }
 }
 
-Event::timeT NotationSet::duration(const NELIterator &i, bool quantized)
+Event::timeT
+NotationSet::durationOf(const NELIterator &i, bool quantized)
 {
     if (quantized) {
         long d;
@@ -91,6 +120,37 @@ Event::timeT NotationSet::duration(const NELIterator &i, bool quantized)
     }
 }
 
+NotationSet::NELIterator
+NotationSet::getInitialNote() const
+{
+    NELIterator i(getInitialElement());
+    if ((*i)->isNote()) return i;
+
+    NELIterator j(getFinalElement());
+    ++j;
+    while (i != j) {
+        if ((*i)->isNote()) return i;
+        ++i;
+    }
+
+    return getList().end();
+}
+
+NotationSet::NELIterator
+NotationSet::getFinalNote() const
+{
+    NELIterator i(getFinalElement());
+    if ((*i)->isNote()) return i;
+
+    NELIterator j(getInitialElement());
+    --j;
+    while (i != j) {
+        if ((*i)->isNote()) return i;
+        --i;
+    }
+
+    return getList().end();
+}
 
 
 class PitchGreater {
@@ -119,7 +179,7 @@ Chord::Chord(const NotationElementList &nel, NELIterator i, bool quantized) :
     }
 
     kdDebug(KDEBUG_AREA) << "Chord::Chord: pitches are:" << endl;
-    for (int i = 0; i < size(); ++i) {
+    for (unsigned int i = 0; i < size(); ++i) {
         try {
             kdDebug(KDEBUG_AREA) << i << ": " << (*(*this)[i])->event()->get<Int>("pitch") << endl;
         } catch (Event::NoData) {
@@ -139,7 +199,7 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
     m_weightBelow(0),
     m_type(Beamed)
 {
-    if (!(*i)->event()->get<Rosegarden::Int>("GroupNo", m_groupNo))
+    if (!(*i)->event()->get<Rosegarden::Int>(P_GROUP_NO, m_groupNo))
         m_groupNo = -1;
 
     initialise();
@@ -147,7 +207,7 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
     if ((i = getInitialElement()) != getList().end()) {
 
         try {
-            std::string t = (*i)->event()->get<String>("GroupType");
+            std::string t = (*i)->event()->get<String>(P_GROUP_TYPE);
             if (strcasecmp(t.c_str(), "beamed")) {
                 m_type = Beamed;
             } else if (strcasecmp(t.c_str(), "tupled")) {
@@ -197,99 +257,117 @@ NotationGroup::Beam
 NotationGroup::calculateBeam(const NotePixmapFactory &npf, int width)
 {
     Beam beam;
-
-    // Should be doing above/below sums in sample() so as to avoid
-    // this first loop...
-
-    NELIterator i;
-    NELIterator begin = getInitialElement();
-    NELIterator end = getFinalElement();
-    ++end;
-
-    // First calculate whether the beam goes above or below the notes.
-
     beam.aboveNotes = !(m_weightAbove > m_weightBelow);
     beam.gradient = 0.0;
-    beam.startHeight = npf.getStalkLength();
+    beam.startHeight = 0;
+    beam.necessary = false;
+    
+    NELIterator initialNote(getInitialNote()),
+                  finalNote(  getFinalNote());
 
-    // Now collect some pitch and duration data
-
-    //!!! We can use the sampled stuff for much of this
-
-    Event::timeT shortestDuration = 1000000;
-    Event::timeT longestDuration = 0, totalDuration = 0;
-
-    int topHeight = -1000, bottomHeight = 1000;
-    int prevHeight, firstHeight = -1000, lastHeight;
-
-    int angle = -2; // -2 = don't know, -1 = down, 0 = no direction, 1 = up
-
-    for (i = begin; i != end; ++i) {
-        Chord chord(getList(), i, true);
-        if (chord.size() < 1) continue;
-
-        // strictly perhaps not getLongestNote(), but in practice I
-        // doubt if we'll ever really support chords that have notes
-        // of differing lengths:
-        Event *e = (*chord.getLongestElement())->event();
-
-        Event::timeT d = e->getDuration();
-        totalDuration += d;
-        if (d < shortestDuration) shortestDuration = d;
-        if (d >  longestDuration)  longestDuration = d;
-
-        int h = (beam.aboveNotes ? 
-                 height(chord.getHighestNote()) :
-                 height(chord.getLowestNote()));
-
-        if (firstHeight == -1000) {
-            firstHeight = prevHeight = h;
-        }
-        lastHeight = h;
-
-        if (h >    topHeight)    topHeight = h;
-        if (h < bottomHeight) bottomHeight = h;
-
-        if (h < prevHeight) {
-            if      (angle == -2) angle = -1;
-            else if (angle ==  1) angle =  0;
-        } else if (h > prevHeight) {
-            if      (angle == -2) angle =  1;
-            else if (angle == -1) angle =  0;
-        }
-        
-        prevHeight = h;
-        while (i != chord.getFinalElement()) ++i;
+    if (initialNote == getList().end() ||
+        initialNote == finalNote) {
+        return beam; // no notes, no case to answer
     }
 
-    // shortestWidth is the screen width of shortest note in group,
-    // used as a multiplier for widths; shortestDuration is the length
-    // of that note (already calculated)
-    int shortestWidth;
-    if (totalDuration == 0 || width == 0) {
-        shortestWidth = npf.getNoteBodyWidth() + 2;
-    } else {
-        shortestWidth = (width * shortestDuration) / totalDuration;
+    Chord initialChord(getList(), initialNote),
+            finalChord(getList(),   finalNote);
+
+    if (initialChord.getInitialElement() == finalChord.getInitialElement()) {
+        return beam;
     }
 
-    static double gradients[] = { 0.1, 0.17, 0.3 };
-    int diff = firstHeight - lastHeight;
-    if (diff < 0) diff = 0;
-
-    if (angle == 0 || angle == -2) {    // nonincreasing, nondecreasing group
-        if (diff > 2)       beam.gradient = gradients[0];
-        else                beam.gradient = 0.0;
-    } else {                                        // some overall direction
-        if (diff > 4)       beam.gradient = gradients[2];
-        else if (diff > 3)  beam.gradient = gradients[1];
-        else                beam.gradient = gradients[0];
-    }
-    if (lastHeight > firstHeight) beam.gradient = -beam.gradient;
+    int initialHeight, finalHeight, extremeHeight;
+    Event::timeT extremeTime;
 
     if (beam.aboveNotes) {
-        int nearestHeight = topHeight + 1;
-        //???
-    } //... else
+        initialHeight = height(initialChord.getHighestNote());
+          finalHeight = height(  finalChord.getHighestNote());
+        extremeHeight = height(             getHighestNote());
+        extremeTime = (*getHighestNote())->event()->getAbsoluteTime();
+
+    } else {
+        initialHeight = height(initialChord.getLowestNote());
+          finalHeight = height(  finalChord.getLowestNote());
+        extremeHeight = height(             getLowestNote());
+        extremeTime = (*getLowestNote())->event()->getAbsoluteTime();
+    }
+        
+    int diff = initialHeight - finalHeight;
+    if (diff < 0) diff = -diff;
+
+    bool linear =
+        (beam.aboveNotes ?
+         (extremeHeight <= std::max(initialHeight, finalHeight)) :
+         (extremeHeight >= std::min(initialHeight, finalHeight)));
+
+    if (!linear) {
+        if (diff > 2) diff = 1;
+        else diff = 0;
+    }
+
+    // some magic numbers
+    if (diff > 4) beam.gradient = 0.3;
+    else if (diff > 3) beam.gradient = 0.17;
+    else if (diff > 0) beam.gradient = 0.1;
+    else beam.gradient = 0.0;
+
+    if (initialHeight > finalHeight) beam.gradient = -beam.gradient;
+
+    // Now, we need to judge the height of the beam such that the
+    // nearest note of the whole group, the nearest note of the first
+    // chord and the nearest note of the final chord are all at least
+    // two note-body-heights away from it, and at least one of the
+    // start and end points is at least the usual note stalk-length
+    // away from it.  This is a straight-line equation y = mx + c,
+    // where we have m and two x,y pairs and need to find c.
+    
+    Event::timeT
+        initialTime = (*initialNote)->event()->getAbsoluteTime(),
+          finalTime =   (*finalNote)->event()->getAbsoluteTime();
+
+    int extremeX = 
+        ((extremeTime - initialTime) * width) / (finalTime - initialTime);
+
+    int c0 = initialHeight, c1, c2;
+    Equation::solve(Equation::C, extremeHeight, beam.gradient, extremeX, c1);
+    Equation::solve(Equation::C,   finalHeight, beam.gradient, width,    c2);
+
+    using std::max;
+    using std::min;
+    int stalkLength = npf.getStalkLength();
+    long shortestNoteType = Note::Quaver;
+    if (!(*getShortestElement())->event()->get<Int>(P_NOTE_TYPE,
+                                                    shortestNoteType)) {
+        kdDebug(KDEBUG_AREA) << "NotationGroup::calculateBeam: WARNING: Shortest element has no note-type; should this be possible?" << endl;
+    }
+
+    if (beam.aboveNotes) {
+        beam.startHeight =
+            max(max(c0, c1),
+                max(c2, min(initialHeight + stalkLength,
+                              finalHeight + stalkLength)));
+        if (shortestNoteType < Note::Quaver)
+            beam.startHeight += 3 * (Note::Quaver - shortestNoteType);
+    } else {
+        beam.startHeight =
+            min(min(c0, c1),
+                min(c2, max(initialHeight - stalkLength,
+                              finalHeight - stalkLength)));
+        if (shortestNoteType < Note::Quaver)
+            beam.startHeight -= 3 * (Note::Quaver - shortestNoteType);
+    }  
+
+    Event::timeT crotchet = Note(Note::Crotchet).getDuration();
+    beam.necessary =
+         (*initialNote)->event()->getDuration() < crotchet
+        && (*finalNote)->event()->getDuration() < crotchet;
+
+    kdDebug(KDEBUG_AREA) << "NotationGroup::calculateBeam: returning beam:" << endl
+                         << "gradient: " << beam.gradient << endl
+                         << "start height: " << beam.startHeight << endl
+                         << "aboveNotes: " << beam.aboveNotes << endl
+                         << "necessary: " << beam.necessary << endl;
 
     return beam;
 }

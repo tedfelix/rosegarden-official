@@ -120,13 +120,6 @@ public:
     iterator findPrevious(const std::string &type, iterator i);
     iterator findNext(const std::string &type, iterator i);
 
-    // Discovers whether this note is in a chord at some position
-    // other than at the end, i.e. it is true if you could construct a
-    // Chord object (see below) from the passed iterator and the
-    // getFinalNote() method on that object would succeed and return
-    // something other than this iterator.  Obvious really
-    bool hasSucceedingChordElements(iterator i);
-
 private:
     Quantizer m_quantizer;
 };

@@ -148,18 +148,6 @@ NotationElementList::findNext(const std::string &type, iterator i)
     return i;
 }
 
-bool NotationElementList::hasSucceedingChordElements(iterator i)
-{
-    // find out whether there are any following chord elements
-    int c = 0;
-    Event::timeT myTime = (*i)->getAbsoluteTime();
-    while (i != end() && (*i)->isNote() && (*i)->getAbsoluteTime() == myTime) {
-        if (++c > 1) return true;
-        ++i;
-    }
-    return false;
-}
-
 #ifndef NDEBUG
 kdbgstream& operator<<(kdbgstream &dbg, NotationElement &e)
 {

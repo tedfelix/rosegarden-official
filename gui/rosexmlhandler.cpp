@@ -21,6 +21,7 @@
 #include "rosedebug.h"
 #include "rosexmlhandler.h"
 #include "xmlstorableevent.h"
+#include "notationproperties.h" //!!! Needed for group no & type, but we shouldn't be including notation* files in here
 
 using Rosegarden::Composition;
 using Rosegarden::Int;
@@ -100,8 +101,8 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         newEvent->setAbsoluteTime(m_currentTime);
 
         if (m_inGroup) {
-            newEvent->set<Int>("GroupNo", m_groupNo);
-            newEvent->set<String>("GroupType", m_groupType);
+            newEvent->set<Int>(P_GROUP_NO, m_groupNo);
+            newEvent->set<String>(P_GROUP_TYPE, m_groupType);
         }
         
         if (!m_inChord) {
