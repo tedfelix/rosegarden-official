@@ -39,7 +39,7 @@
 
 InstrumentParameterBox::InstrumentParameterBox(QWidget *parent,
                                                const char *name,
-                                               WFlags f)
+                                               WFlags)
     : QGroupBox(i18n("Instrument Parameters"), parent, name),
       m_bankValue(new RosegardenComboBox(true, false, this)),
       m_channelValue(new RosegardenComboBox(true, false, this)),
@@ -64,16 +64,27 @@ InstrumentParameterBox::initBox()
 {
     QFont plainFont;
     plainFont.setPointSize(10);
+    QFont boldFont(plainFont);
+    boldFont.setBold(true);
 
-    setFont(plainFont);
+    setFont(boldFont);
 
     QGridLayout *gridLayout = new QGridLayout(this, 6, 3, 8, 1);
 
     QLabel *channelLabel = new QLabel(i18n("Channel"), this);
     QLabel *panLabel = new QLabel(i18n("Pan"), this);
-    QLabel *velocityLabel = new QLabel(i18n("Vely"), this);
-    QLabel *programLabel = new QLabel(i18n("Prg"), this);
+    QLabel *velocityLabel = new QLabel(i18n("Velocity"), this);
+    QLabel *programLabel = new QLabel(i18n("Program"), this);
     QLabel *bankLabel = new QLabel(i18n("Bank"), this);
+
+    channelLabel->setFont(plainFont);
+    panLabel->setFont(plainFont);
+    velocityLabel->setFont(plainFont);
+    programLabel->setFont(plainFont);
+    bankLabel->setFont(plainFont);
+    m_channelValue->setFont(plainFont);
+    m_panValue->setFont(plainFont);
+    m_velocityValue->setFont(plainFont);
 
     gridLayout->addRowSpacing(0, 8);
     gridLayout->addWidget(bankLabel,      1, 0, AlignLeft);
@@ -100,17 +111,13 @@ InstrumentParameterBox::initBox()
     for (int i = 0; i < 16; i++)
         m_channelValue->insertItem(QString("%1").arg(i));
 
-    // Populate pan
-    //
-    QString mod;
-
     for (int i = -Rosegarden::MidiMidValue;
              i < Rosegarden::MidiMidValue + 1; i++)
     {
         if (i > 0)
-            mod = QString("+");
-
-        m_panValue->insertItem(mod + QString("%1").arg(i));
+            m_panValue->insertItem(QString("+%1").arg(i));
+        else
+            m_panValue->insertItem(QString("%1").arg(i));
     }
 
     // velocity values
