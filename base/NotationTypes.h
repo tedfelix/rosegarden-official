@@ -51,8 +51,10 @@ public:
     static const std::string Bass;
 
     Clef();
-    Clef(const Event &e); // throw (Event::NoData, Event::BadType, BadClefName);
-    Clef(const std::string &s); // throw (BadClefName);
+    Clef(const Event &e)
+        /* throw (Event::NoData, Event::BadType, BadClefName) */;
+    Clef(const std::string &s)
+        /* throw (BadClefName) */;
     Clef(const Clef &c);
 
     Clef &operator=(const Clef &c);
@@ -86,8 +88,10 @@ public:
     struct BadKeyName { };
 
     Key();
-    Key(const Event &e); // throw (Event::NoData, Event::BadType, BadKeyName);
-    Key(const std::string &name); // throw (BadKeyName);
+    Key(const Event &e)
+        /* throw (Event::NoData, Event::BadType, BadKeyName) */;
+    Key(const std::string &name)
+        /* throw (BadKeyName) */;
     Key(const Key &kc);
     virtual ~Key();
 
@@ -278,8 +282,10 @@ public:
         Longest             = 7;
 
 
-    Note(Type type, int dots = 0); // throw (BadType, TooManyDots);
-    Note(const std::string &s); // throw (BadType);
+    Note(Type type, int dots = 0)
+        /* throw (BadType, TooManyDots) */;
+    Note(const std::string &s)
+        /* throw (BadType) */;
     Note(const Note &);
     virtual ~Note();
 
@@ -324,11 +330,11 @@ public:
 
     TimeSignature();
 
-    TimeSignature(int numerator, int denominator);
-//         throw (BadTimeSignature);
+    TimeSignature(int numerator, int denominator)
+        /* throw (BadTimeSignature) */;
 
-    TimeSignature(const Event &e);
-//         throw (Event::NoData, Event::BadType, BadTimeSignature);
+    TimeSignature(const Event &e)
+        /* throw (Event::NoData, Event::BadType, BadTimeSignature) */;
     
     TimeSignature(const TimeSignature &ts);
 
