@@ -170,7 +170,25 @@ void Track::erase(iterator from, iterator to)
     //!!! not very efficient, but without an observer event for
     //multiple erase we can't do any better:
 
-    for (Track::iterator i = from; i != to; ++i) erase(i);
+    // We can't do this :
+    //
+    //for (Track::iterator i = from; i != to; ++i) erase(i);
+    //
+    // because erasing an iterator invalidates it
+
+    // So, gather the events which we'll have to delete
+    // call notifyRemove() for each of them,
+    // and finally call std::multiset<>::erase(from, to)
+
+    for (Track::iterator i = from; i != to; ++i) {
+        Event *e = *i;
+        if (e->isa(TimeSignature::EventType)) invalidateTimeSigAtEnd();
+        notifyRemove(e);
+        delete e;
+    }
+    
+    std::multiset<Event*, Event::EventCmp>::erase(from, to);
+
 }
 
 
