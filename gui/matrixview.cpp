@@ -82,6 +82,9 @@ void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
 {
     timeT evTime = m_staff.getTimeForCanvasX(e->x());
 
+    kdDebug(KDEBUG_AREA) << "MatrixCanvasView::contentsMouseMoveEvent() at time "
+                         << evTime << endl;
+
     emit mouseMoved(evTime, e);
 }
 
@@ -680,9 +683,16 @@ void MatrixPainter::handleMouseMove(int,
 
     timeT newDuration = newTime - m_currentElement->getAbsoluteTime();
 
-    kdDebug(KDEBUG_AREA) << "MatrixPainter::handleMouseMove : time = "
-                         << newTime << ", new duration = "
-                         << newDuration << endl;
+    using Rosegarden::BaseProperties::PITCH;
+
+    kdDebug(KDEBUG_AREA) << "MatrixPainter::handleMouseMove : new time = "
+                         << newTime << ", old time = "
+                         << m_currentElement->getAbsoluteTime()
+                         << ", new duration = "
+                         << newDuration
+                         << ", pitch = "
+                         << m_currentElement->event()->get<Rosegarden::Int>(PITCH)
+                         << endl;
 
     m_currentElement->setDuration(newDuration);
 
@@ -696,9 +706,21 @@ void MatrixPainter::handleMouseRelease(int,
                                        Rosegarden::timeT,
                                        QMouseEvent*)
 {
+    // Insert element if it has a non null duration,
+    // discard it otherwise
+    //
+    if (m_currentElement->getDuration() != 0) {
+        
+        m_currentStaff->insert(m_currentElement->event(), true);
+
+    } else {
+
+        delete m_currentElement;
+
+    }
+    
     m_currentElement = 0;
 
-    // Insert element
 }
 
 void MatrixPainter::setResolution(Rosegarden::Note::Type note)
