@@ -3,6 +3,7 @@ KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 bin_PROGRAMS = rosegarden
 
 rosegarden_SOURCES = \
+	basiccommand.cpp \
 	colours.cpp \
 	edittool.cpp \
 	editview.cpp \

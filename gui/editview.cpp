@@ -89,6 +89,10 @@ void EditView::readjustViewSize(QSize requestedSize, bool exact)
     setViewSize(newSize);
 }
 
+void EditView::addCommandToHistory(BasicCommand*)
+{
+}
+
 void EditView::setTool(EditTool* tool)
 {
     if (m_tool)

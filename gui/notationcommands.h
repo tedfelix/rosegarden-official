@@ -20,78 +20,13 @@
 #ifndef NOTATION_COMMANDS_H
 #define NOTATION_COMMANDS_H
 
-#include "Segment.h"
-#include "SegmentNotationHelper.h"
 #include "BaseProperties.h"
 #include <kcommand.h>
 #include <klocale.h>
 
 class EventSelection;
 
-/**
- * Command that handles undo on a single Segment by brute-force,
- * saving the affected area of the Segment before the execute() and
- * then restoring it on unexecute().  Subclass this with your own
- * implementation.
- *
- * This class implements execute() and unexecute(); in order to create
- * a working subclass, you should normally put the code you would
- * otherwise have put in execute() into modifySegment().
- */
-
-class BasicCommand : public KCommand
-{
-public:
-    virtual ~BasicCommand();
-
-    virtual void execute();
-    virtual void unexecute();
-
-    Rosegarden::Segment &getSegment() { return m_segment; }
-    const Rosegarden::Segment &getSegment() const { return m_segment; }
-
-    Rosegarden::timeT getBeginTime() { return m_savedEvents.getStartIndex(); }
-    Rosegarden::timeT getEndTime() { return m_endTime; }
-    virtual Rosegarden::timeT getRelayoutEndTime() { return getEndTime(); }
-
-protected:
-    /**
-     * You should pass "bruteForceRedoRequired = true" if your
-     * subclass's implementation of modifySegment uses discrete
-     * event pointers or segment iterators to determine which
-     * events to modify, in which case it won't work when
-     * replayed for redo because the pointers may no longer be
-     * valid.  In which case, BasicCommand will implement redo
-     * much like undo, and will only call your modifySegment 
-     * the very first time the command object is executed.
-     *
-     * It is always safe to pass bruteForceRedoRequired true,
-     * it's just normally a waste of memory.
-     */
-    BasicCommand(const QString &name,
-		 Rosegarden::Segment &segment,
-		 Rosegarden::timeT begin, Rosegarden::timeT end,
-		 bool bruteForceRedoRequired = false);
-
-    virtual void modifySegment(Rosegarden::SegmentNotationHelper &) = 0;
-
-    virtual void beginExecute();
-    virtual void finishExecute();
-
-private:
-    //--------------- Data members ---------------------------------
-
-    void copyTo(Rosegarden::Segment *);
-    void copyFrom(Rosegarden::Segment *);
-
-    Rosegarden::Segment &m_segment;
-    Rosegarden::Segment m_savedEvents;
-    Rosegarden::timeT m_endTime;
-    
-    bool m_doBruteForceRedo;
-    Rosegarden::Segment *m_redoEvents;
-};
-
+#include "basiccommand.h"
 
 /**
  * Subclass of BasicCommand that manages the brute-force undo and redo

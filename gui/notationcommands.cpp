@@ -46,91 +46,6 @@ using std::cerr;
 using std::endl;
 
 
-BasicCommand::BasicCommand(const QString &name, Segment &segment,
-			   timeT begin, timeT end, bool bruteForceRedo) :
-    KCommand(name),
-    m_segment(segment),
-    m_savedEvents(begin),
-    m_endTime(end),
-    m_doBruteForceRedo(false),
-    m_redoEvents(0)
-{
-    if (bruteForceRedo) m_redoEvents = new Segment(begin);
-}
-
-BasicCommand::~BasicCommand()
-{
-    m_savedEvents.clear();
-    if (m_redoEvents) m_redoEvents->clear();
-    delete m_redoEvents;
-}
-
-void
-BasicCommand::beginExecute()
-{
-    copyTo(&m_savedEvents);
-}
-
-void
-BasicCommand::finishExecute()
-{
-    //!!! we could do this a lot more elegantly with a signal
-    NotationView::redoLayout(&m_segment,
-			     m_savedEvents.getStartIndex(),
-			     getRelayoutEndTime());
-}
-
-void
-BasicCommand::execute()
-{
-    beginExecute();
-
-    if (!m_doBruteForceRedo) {
-
-	SegmentNotationHelper helper(m_segment);
-	modifySegment(helper);
-
-    } else {
-	copyFrom(m_redoEvents);
-    }
-
-    finishExecute();
-}
-
-void
-BasicCommand::unexecute()
-{
-    if (m_redoEvents) {
-	copyTo(m_redoEvents);
-	m_doBruteForceRedo = true;
-    }
-
-    copyFrom(&m_savedEvents);
-    finishExecute();
-}
-    
-void
-BasicCommand::copyTo(Rosegarden::Segment *events)
-{
-    for (Segment::iterator i = m_segment.findTime(events->getStartIndex());
-	 i != m_segment.findTime(m_endTime); ++i) {
-	events->insert(new Event(**i));
-    }
-}
-   
-void
-BasicCommand::copyFrom(Rosegarden::Segment *events)
-{
-    m_segment.erase(m_segment.findTime(events->getStartIndex()),
-		    m_segment.findTime(m_endTime));
-
-    for (Segment::iterator i = events->begin(); i != events->end(); ++i) {
-	m_segment.insert(new Event(**i));
-    }
-
-    events->clear();
-}
-
 BasicSelectionCommand::BasicSelectionCommand(const QString &name,
 					     EventSelection &selection,
 					     bool bruteForceRedo) :
@@ -147,7 +62,6 @@ BasicSelectionCommand::~BasicSelectionCommand()
 {
     // nothing
 }
-
 
 NoteInsertionCommand::NoteInsertionCommand(Segment &segment, timeT time,
                                            timeT endTime, Note note, int pitch,
@@ -179,7 +93,7 @@ RestInsertionCommand::RestInsertionCommand(Segment &segment, timeT time,
                                            timeT endTime, Note note) :
     NoteInsertionCommand(segment, time, endTime, note, 0, NoAccidental)
 {
-    setName("Insert Rest");
+    KCommand::setName("Insert Rest");
 }
 
 RestInsertionCommand::~RestInsertionCommand()

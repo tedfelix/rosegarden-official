@@ -128,14 +128,6 @@ public:
     void setPageMode(bool pageMode);
 
     /**
-     * redo the layout of any affected views after something changes.
-     * default is all staffs
-     */
-    static void redoLayout(Rosegarden::Segment *segment = 0,
-			   Rosegarden::timeT startTime = 0,
-			   Rosegarden::timeT endTime = -1); // -1 => end
-
-    /**
      * get the document's global command history
      */
     MultiViewCommandHistory *getCommandHistory();
@@ -149,11 +141,24 @@ public:
     }
 
    
+    /// Sets the position of the cursor to the given pixel X coord
+    void setCursorPosition(unsigned int);
+
+    /// Gets the position of the cursor as a pixel X coord
+    unsigned int getCursorPosition() const;
+
     /**
      * From LinedStaffManager
      */
     virtual NotationStaff *getStaffForCanvasY(int y) const;
 
+    /**
+     * redo the layout of any affected views after something changes.
+     * default is all staffs
+     */
+    void redoLayout(Rosegarden::Segment *segment = 0,
+                    Rosegarden::timeT startTime = 0,
+                    Rosegarden::timeT endTime = -1); // -1 => end
 
 public slots:
 
@@ -325,6 +330,16 @@ public slots:
      */
     void hoveredOverAbsoluteTimeChanged(unsigned int);
 
+    /**
+     * redo the layout of any affected views after a command is finished
+     * works on all staffs
+     *
+     * @see BasicCommand#finishExecute
+     */
+    void commandFinished(Rosegarden::Segment *segment,
+                         Rosegarden::timeT startTime,
+                         Rosegarden::timeT endTime);
+
      /// Set the time pointer position during playback
     void setPositionPointer(const int &position);
 
@@ -343,11 +358,8 @@ public slots:
     /// Changes the display quantization of the staffs on the view
     void changeLegato(int newLegatoIndex);
 
-    /// Sets the position of the cursor to the given pixel X coord
-    void setCursorPosition(unsigned int);
-
-    /// Gets the position of the cursor as a pixel X coord
-    unsigned int getCursorPosition() const;
+    /// Override from EditView
+    virtual void addCommandToHistory(BasicCommand*);
 
 signals:
     /**

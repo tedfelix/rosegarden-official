@@ -31,6 +31,7 @@ namespace Rosegarden { class Segment; }
 class RosegardenGUIDoc;
 class EditTool;
 class EditToolBox;
+class BasicCommand;
 
 class EditView : public KMainWindow
 {
@@ -57,6 +58,11 @@ public:
      * @arg exact if true, then set to newSize exactly
      */
     virtual void readjustViewSize(QSize newSize, bool exact = false);
+
+    /**
+     * Add a Command to the history
+     */
+    virtual void addCommandToHistory(BasicCommand*);
 
 public slots:
     /**

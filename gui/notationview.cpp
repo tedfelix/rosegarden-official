@@ -552,7 +552,7 @@ void NotationView::setupActions()
     { "1slotTransformsAddAccent()",      "1slotTransformsAddTenuto()",
       "1slotTransformsAddStaccato()",    "1slotTransformsAddSforzando()",
       "1slotTransformsAddRinforzando()", "1slotTransformsAddTrill()",
-      "1slotTransformsAddTurn()",         "1slotTransformsAddPause()",
+      "1slotTransformsAddTurn()",        "1slotTransformsAddPause()",
       "1slotTransformsAddUpBow()",       "1slotTransformsAddDownBow()" };
 
     for (unsigned int i = 0; i < 10; ++i) {
@@ -1078,6 +1078,19 @@ PositionCursor* NotationView::getCursor()
     return getRuler()->getCursor();
 }
 
+void NotationView::addCommandToHistory(BasicCommand* command)
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::addCommandToHistory\n";
+
+    QObject::connect(command, SIGNAL(finishExecute(Rosegarden::Segment*,
+                                                   Rosegarden::timeT,
+                                                   Rosegarden::timeT)),
+                     this, SLOT(commandFinished(Rosegarden::Segment*,
+                                                Rosegarden::timeT,
+                                                Rosegarden::timeT)));
+    getCommandHistory()->addCommand(command);
+
+}
 
 //////////////////////////////////////////////////////////////////////
 //                    Slots
@@ -1212,8 +1225,8 @@ void NotationView::slotGroupBeam()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Beaming group..."), statusBar());
 
-    getCommandHistory()->addCommand(new GroupMenuBeamCommand
-                                    (*m_currentEventSelection));
+    addCommandToHistory(new GroupMenuBeamCommand
+                        (*m_currentEventSelection));
 }
 
 void NotationView::slotGroupAutoBeam()
@@ -1221,8 +1234,8 @@ void NotationView::slotGroupAutoBeam()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Auto-beaming selection..."), statusBar());
 
-    getCommandHistory()->addCommand(new GroupMenuAutoBeamCommand
-                                    (*m_currentEventSelection));
+    addCommandToHistory(new GroupMenuAutoBeamCommand
+                        (*m_currentEventSelection));
 }
 
 void NotationView::slotGroupBreak()
@@ -1230,8 +1243,8 @@ void NotationView::slotGroupBreak()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Breaking groups..."), statusBar());
 
-    getCommandHistory()->addCommand(new GroupMenuBreakCommand
-                                    (*m_currentEventSelection));
+    addCommandToHistory(new GroupMenuBreakCommand
+                        (*m_currentEventSelection));
 }
 
 //
@@ -1247,7 +1260,7 @@ void NotationView::slotGroupSlur()
         new GroupMenuAddIndicationCommand(Rosegarden::Indication::Slur,
                                           *m_currentEventSelection);
     
-    getCommandHistory()->addCommand(command);
+    addCommandToHistory(command);
 
     setSingleSelectedEvent(m_currentEventSelection->getSegment(),
                            command->getLastInsertedEvent());
@@ -1262,7 +1275,7 @@ void NotationView::slotGroupCrescendo()
         new GroupMenuAddIndicationCommand(Rosegarden::Indication::Crescendo,
                                           *m_currentEventSelection);
     
-    getCommandHistory()->addCommand(command);
+    addCommandToHistory(command);
 
     setSingleSelectedEvent(m_currentEventSelection->getSegment(),
                            command->getLastInsertedEvent());
@@ -1277,7 +1290,7 @@ void NotationView::slotGroupDecrescendo()
         new GroupMenuAddIndicationCommand(Rosegarden::Indication::Decrescendo,
                                           *m_currentEventSelection);
     
-    getCommandHistory()->addCommand(command);
+    addCommandToHistory(command);
 
     setSingleSelectedEvent(m_currentEventSelection->getSegment(),
                            command->getLastInsertedEvent());
@@ -1293,8 +1306,8 @@ void NotationView::slotTransformsNormalizeRests()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Normalizing rests..."), statusBar());
 
-    getCommandHistory()->addCommand(new TransformsMenuNormalizeRestsCommand
-                                    (*m_currentEventSelection));
+    addCommandToHistory(new TransformsMenuNormalizeRestsCommand
+                        (*m_currentEventSelection));
 }
 
 void NotationView::slotTransformsCollapseRests()
@@ -1302,8 +1315,8 @@ void NotationView::slotTransformsCollapseRests()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Collapsing rests..."), statusBar());
 
-    getCommandHistory()->addCommand(new TransformsMenuCollapseRestsCommand
-                                    (*m_currentEventSelection));
+    addCommandToHistory(new TransformsMenuCollapseRestsCommand
+                        (*m_currentEventSelection));
 }
 
 void NotationView::slotTransformsStemsUp()
@@ -1311,8 +1324,8 @@ void NotationView::slotTransformsStemsUp()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Pointing stems up..."), statusBar());
 
-    getCommandHistory()->addCommand(new TransformsMenuChangeStemsCommand
-                                    (true, *m_currentEventSelection));
+    addCommandToHistory(new TransformsMenuChangeStemsCommand
+                        (true, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsStemsDown()
@@ -1320,8 +1333,8 @@ void NotationView::slotTransformsStemsDown()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Pointing stems down..."), statusBar());
 
-    getCommandHistory()->addCommand(new TransformsMenuChangeStemsCommand
-                                    (false, *m_currentEventSelection));
+    addCommandToHistory(new TransformsMenuChangeStemsCommand
+                        (false, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsRestoreStems()
@@ -1329,8 +1342,8 @@ void NotationView::slotTransformsRestoreStems()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Restoring computed stem directions..."), statusBar());
 
-    getCommandHistory()->addCommand(new TransformsMenuRestoreStemsCommand
-                                    (*m_currentEventSelection));
+    addCommandToHistory(new TransformsMenuRestoreStemsCommand
+                        (*m_currentEventSelection));
 }
 
 void NotationView::slotTransformsTransposeUp()
@@ -1338,8 +1351,8 @@ void NotationView::slotTransformsTransposeUp()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Transposing up one semitone..."), statusBar());
 
-    getCommandHistory()->addCommand(new TransformsMenuTransposeOneStepCommand
-                                    (true, *m_currentEventSelection));
+    addCommandToHistory(new TransformsMenuTransposeOneStepCommand
+                        (true, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsTransposeDown()
@@ -1347,88 +1360,100 @@ void NotationView::slotTransformsTransposeDown()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Transposing down one semitone..."), statusBar());
 
-    getCommandHistory()->addCommand(new TransformsMenuTransposeOneStepCommand
-                                    (false, *m_currentEventSelection));
+    addCommandToHistory(new TransformsMenuTransposeOneStepCommand
+                        (false, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsAddAccent()
 {
     if (m_currentEventSelection)
-        getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
-                                        (Accent, *m_currentEventSelection));
+        addCommandToHistory(new TransformsMenuAddMarkCommand
+                            (Accent, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsAddTenuto()
 {
     if (m_currentEventSelection)
-        getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
-                                        (Tenuto, *m_currentEventSelection));
+        addCommandToHistory(new TransformsMenuAddMarkCommand
+                            (Tenuto, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsAddStaccato()
 {
     if (m_currentEventSelection)
-        getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
-                                        (Staccato, *m_currentEventSelection));
+        addCommandToHistory(new TransformsMenuAddMarkCommand
+                            (Staccato, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsAddSforzando()
 {
     if (m_currentEventSelection)
-        getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
-                                        (Sforzando, *m_currentEventSelection));
+        addCommandToHistory(new TransformsMenuAddMarkCommand
+                            (Sforzando, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsAddRinforzando()
 {
     if (m_currentEventSelection)
-        getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
-                                        (Rinforzando, *m_currentEventSelection));
+        addCommandToHistory(new TransformsMenuAddMarkCommand
+                            (Rinforzando, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsAddTrill()
 {
     if (m_currentEventSelection)
-        getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
-                                        (Trill, *m_currentEventSelection));
+        addCommandToHistory(new TransformsMenuAddMarkCommand
+                            (Trill, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsAddTurn()
 {
     if (m_currentEventSelection)
-        getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
-                                        (Turn, *m_currentEventSelection));
+        addCommandToHistory(new TransformsMenuAddMarkCommand
+                            (Turn, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsAddPause()
 {
     if (m_currentEventSelection)
-        getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
-                                        (Pause, *m_currentEventSelection));
+        addCommandToHistory(new TransformsMenuAddMarkCommand
+                            (Pause, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsAddUpBow()
 {
     if (m_currentEventSelection)
-        getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
-                                        (UpBow, *m_currentEventSelection));
+        addCommandToHistory(new TransformsMenuAddMarkCommand
+                            (UpBow, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsAddDownBow()
 {
     if (m_currentEventSelection)
-        getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
-                                        (DownBow, *m_currentEventSelection));
+        addCommandToHistory(new TransformsMenuAddMarkCommand
+                            (DownBow, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsRemoveMarks()
 {
     if (m_currentEventSelection)
-        getCommandHistory()->addCommand(new TransformsMenuRemoveMarksCommand
-                                        (*m_currentEventSelection));
+        addCommandToHistory(new TransformsMenuRemoveMarksCommand
+                            (*m_currentEventSelection));
 }
 
 
+
+//
+// Post processing of a command
+//                     
+void NotationView::commandFinished(Rosegarden::Segment *segment,
+                                   Rosegarden::timeT startTime,
+                                   Rosegarden::timeT endTime)
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::commandFinished()\n";
+
+    redoLayout(segment, startTime, endTime);
+}
 
 // Code required to work out where to put the pointer
 // (i.e. where is the nearest note) and also if indeed
@@ -1885,7 +1910,6 @@ NotationView::getStaffForCanvasY(int y) const
     return 0;
 }
 
-
 /*!!!
 
 int
@@ -1952,50 +1976,50 @@ NotationView::findClosestNote(double eventX, double eventY,
     //
     for (it = notes->begin();
          it != notes->end(); ++it) 
-{
-        if (!(*it)->isNote() && !(*it)->isRest()) {
-            if ((*it)->event()->isa(Clef::EventType)) {
-                kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : found clef: type is "
-                                     << (*it)->event()->get<String>(Clef::ClefPropertyName) << endl;
-                clef = (*it)->event();
-            } else if ((*it)->event()->isa(TimeSignature::EventType)) {
-                kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : found time sig " << endl;
-                timeSignature = (*it)->event();
-            } else if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
-                kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : found key: type is "
-                                     << (*it)->event()->get<String>(Rosegarden::Key::KeyPropertyName) << endl;
-                key = (*it)->event();
+        {
+            if (!(*it)->isNote() && !(*it)->isRest()) {
+                if ((*it)->event()->isa(Clef::EventType)) {
+                    kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : found clef: type is "
+                                         << (*it)->event()->get<String>(Clef::ClefPropertyName) << endl;
+                    clef = (*it)->event();
+                } else if ((*it)->event()->isa(TimeSignature::EventType)) {
+                    kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : found time sig " << endl;
+                    timeSignature = (*it)->event();
+                } else if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
+                    kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : found key: type is "
+                                         << (*it)->event()->get<String>(Rosegarden::Key::KeyPropertyName) << endl;
+                    key = (*it)->event();
+                }
+                continue;
             }
-            continue;
+
+            double xdist, ydist;
+        
+            if ( (*it)->getCanvasX() >= eventX )
+                xdist = (*it)->getCanvasX() - eventX;
+            else
+                xdist = eventX - (*it)->getCanvasX();
+        
+            if ( (*it)->getCanvasY() >= eventY )
+                ydist = (*it)->getCanvasY() - eventY;
+            else
+                ydist = eventY - (*it)->getCanvasY();
+
+            // bit of a hack to get the correct row in page layout:
+            if (ydist > m_staffs[staffNo]->getHeightOfRow()/2) continue;
+
+            if (xdist < minDist) {
+                kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : minDist was "
+                                     << minDist << " now = " << xdist << endl;
+                minDist = xdist;
+                res = it;
+            }
+        
+            // not sure about this
+            if (xdist > prevDist) break; // we can stop right now
+
+            prevDist = xdist;
         }
-
-        double xdist, ydist;
-        
-        if ( (*it)->getCanvasX() >= eventX )
-            xdist = (*it)->getCanvasX() - eventX;
-        else
-            xdist = eventX - (*it)->getCanvasX();
-        
-        if ( (*it)->getCanvasY() >= eventY )
-            ydist = (*it)->getCanvasY() - eventY;
-        else
-            ydist = eventY - (*it)->getCanvasY();
-
-        // bit of a hack to get the correct row in page layout:
-        if (ydist > m_staffs[staffNo]->getHeightOfRow()/2) continue;
-
-        if (xdist < minDist) {
-            kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : minDist was "
-                                 << minDist << " now = " << xdist << endl;
-            minDist = xdist;
-            res = it;
-        }
-        
-        // not sure about this
-        if (xdist > prevDist) break; // we can stop right now
-
-        prevDist = xdist;
-    }
 
     if (minDist > proximityThreshold) {
         kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : element is too far away : "
@@ -2011,12 +2035,13 @@ NotationView::findClosestNote(double eventX, double eventY,
 
 void NotationView::redoLayout(Segment *segment, timeT startTime, timeT endTime)
 {
+    kdDebug(KDEBUG_AREA) << "NotationView::redoLayout()\n";
+
     for (NotationViewSet::iterator i = m_viewsExtant.begin();
          i != m_viewsExtant.end(); ++i) {
         (*i)->redoLayoutAdvised(segment, startTime, endTime);
     }
 }
-
 
 void NotationView::redoLayoutAdvised(Segment *segment,
                                      timeT startTime, timeT endTime)
@@ -2037,7 +2062,7 @@ void NotationView::redoLayoutAdvised(Segment *segment,
         Segment *ssegment = &m_staffs[i]->getSegment();
         bool thisStaff = (ssegment == segment || segment == 0);
 
-//        if (thisStaff && (segment != 0)) applyLayout(i);
+        //        if (thisStaff && (segment != 0)) applyLayout(i);
 
         NotationElementList *notes = m_staffs[i]->getViewElementList();
         NotationElementList::iterator starti = notes->begin();
@@ -2047,13 +2072,13 @@ void NotationView::redoLayoutAdvised(Segment *segment,
         
         if (startTime > 0) {
             barStartTime = ssegment->getBarStart(startTime);
-//            starti = notes->findTime(barStartTime);
+            //            starti = notes->findTime(barStartTime);
             starti = notes->findTime(startTime);
         }
 
         if (endTime >= 0) {
             barEndTime = ssegment->getBarEnd(endTime);
-//            endi = notes->findTime(barEndTime);
+            //            endi = notes->findTime(barEndTime);
             endi = notes->findTime(endTime);
         }
 

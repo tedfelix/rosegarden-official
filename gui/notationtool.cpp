@@ -263,7 +263,7 @@ NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
     NoteInsertionCommand *command = 
 	new NoteInsertionCommand
         (segment, time, endTime, note, pitch, accidental);
-    m_nParentView->getCommandHistory()->addCommand(command);
+    m_nParentView->addCommandToHistory(command);
     return command->getLastInsertedEvent();
 } 
 
@@ -378,7 +378,7 @@ RestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 {
     NoteInsertionCommand *command = 
 	new RestInsertionCommand(segment, time, endTime, note);
-    m_nParentView->getCommandHistory()->addCommand(command);
+    m_nParentView->addCommandToHistory(command);
     return command->getLastInsertedEvent();
 } 
 
@@ -427,7 +427,7 @@ void ClefInserter::handleLeftButtonPress(Rosegarden::timeT,
 	new ClefInsertionCommand(m_nParentView->getStaff(staffNo)->getSegment(),
 				 time, m_clef);
 
-    m_nParentView->getCommandHistory()->addCommand(command);
+    m_nParentView->addCommandToHistory(command);
 
     Event *event = command->getLastInsertedEvent();
     if (event) m_nParentView->setSingleSelectedEvent(staffNo, event);
@@ -466,7 +466,7 @@ void NotationEraser::handleLeftButtonPress(Rosegarden::timeT,
 			 element->event(),
 			 m_collapseRest);
 
-    m_nParentView->getCommandHistory()->addCommand(command);
+    m_nParentView->addCommandToHistory(command);
 }
 
 void NotationEraser::toggleRestCollapse()
