@@ -18,7 +18,9 @@ o End of loop flyback sends duplicate copies of start of loop events
 
 o bar and loop ruler bar widths for partial bars
 
-o rg file saving is still broken for some trivial cases (Segments wrong size)
+o tidy up getSequencerSlice and MappedEvent
+
+o Metronome
 
 
 ==
@@ -48,8 +50,12 @@ o Audio output VU meters
 
 o MIDI CC, PC and sysex handling
 
-Recently completed
-------------------
+
+Recently completed/fixed
+------------------------
+
+- rg file saving is still broken for some trivial cases (Segments wrong size)
+    [FIXED with recent segmentcanvas changes]
 
 - Bar lines widget (similar to TrackButtons).
   Implementation to allow for:

@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>343</width>
+            <width>339</width>
             <height>117</height>
         </rect>
     </property>
@@ -607,92 +607,6 @@
             <class>QPushButton</class>
             <property stdset="1">
                 <name>name</name>
-                <cstring>MetronomeButton</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>2</x>
-                    <y>84</y>
-                    <width>40</width>
-                    <height>34</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>font</name>
-                <font>
-                    <family>lucidatypewriter</family>
-                    <pointsize>8</pointsize>
-                </font>
-            </property>
-            <property stdset="1">
-                <name>cursor</name>
-                <cursor>0</cursor>
-            </property>
-            <property stdset="1">
-                <name>focusPolicy</name>
-                <enum>NoFocus</enum>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>Met.</string>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Metronome</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>LoopButton</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>39</x>
-                    <y>84</y>
-                    <width>40</width>
-                    <height>34</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>font</name>
-                <font>
-                    <family>lucidatypewriter</family>
-                    <pointsize>8</pointsize>
-                </font>
-            </property>
-            <property stdset="1">
-                <name>cursor</name>
-                <cursor>0</cursor>
-            </property>
-            <property stdset="1">
-                <name>focusPolicy</name>
-                <enum>NoFocus</enum>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>Loop</string>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Loop</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
                 <cstring>StopButton</cstring>
             </property>
             <property stdset="1">
@@ -723,61 +637,6 @@
             <property>
                 <name>toolTip</name>
                 <string>Stop</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>SoloButton</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>76</x>
-                    <y>84</y>
-                    <width>40</width>
-                    <height>34</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>font</name>
-                <font>
-                    <family>lucidatypewriter</family>
-                    <pointsize>8</pointsize>
-                </font>
-            </property>
-            <property stdset="1">
-                <name>cursor</name>
-                <cursor>0</cursor>
-            </property>
-            <property stdset="1">
-                <name>focusPolicy</name>
-                <enum>NoFocus</enum>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>Solo</string>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>default</name>
-                <bool>false</bool>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>flat</name>
-                <bool>true</bool>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Solo</string>
             </property>
         </widget>
         <widget>
@@ -1119,6 +978,155 @@
             </property>
             <property>
                 <name>vAlign</name>
+            </property>
+        </widget>
+        <widget>
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>SoloButton</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>76</x>
+                    <y>84</y>
+                    <width>40</width>
+                    <height>34</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>font</name>
+                <font>
+                    <family>lucidatypewriter</family>
+                    <pointsize>8</pointsize>
+                </font>
+            </property>
+            <property stdset="1">
+                <name>cursor</name>
+                <cursor>0</cursor>
+            </property>
+            <property stdset="1">
+                <name>focusPolicy</name>
+                <enum>NoFocus</enum>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>Solo</string>
+            </property>
+            <property stdset="1">
+                <name>toggleButton</name>
+                <bool>true</bool>
+            </property>
+            <property stdset="1">
+                <name>default</name>
+                <bool>false</bool>
+            </property>
+            <property stdset="1">
+                <name>toggleButton</name>
+                <bool>true</bool>
+            </property>
+            <property stdset="1">
+                <name>flat</name>
+                <bool>true</bool>
+            </property>
+            <property>
+                <name>toolTip</name>
+                <string>Solo</string>
+            </property>
+        </widget>
+        <widget>
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>MetronomeButton</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>2</x>
+                    <y>84</y>
+                    <width>40</width>
+                    <height>34</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>font</name>
+                <font>
+                    <family>lucidatypewriter</family>
+                    <pointsize>8</pointsize>
+                </font>
+            </property>
+            <property stdset="1">
+                <name>cursor</name>
+                <cursor>0</cursor>
+            </property>
+            <property stdset="1">
+                <name>focusPolicy</name>
+                <enum>NoFocus</enum>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>Met.</string>
+            </property>
+            <property stdset="1">
+                <name>toggleButton</name>
+                <bool>true</bool>
+            </property>
+            <property stdset="1">
+                <name>toggleButton</name>
+                <bool>true</bool>
+            </property>
+            <property>
+                <name>toolTip</name>
+                <string>Metronome</string>
+            </property>
+        </widget>
+        <widget>
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>LoopButton</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>39</x>
+                    <y>84</y>
+                    <width>40</width>
+                    <height>34</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>font</name>
+                <font>
+                    <family>lucidatypewriter</family>
+                    <pointsize>8</pointsize>
+                </font>
+            </property>
+            <property stdset="1">
+                <name>cursor</name>
+                <cursor>0</cursor>
+            </property>
+            <property stdset="1">
+                <name>focusPolicy</name>
+                <enum>NoFocus</enum>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>Loop</string>
+            </property>
+            <property stdset="1">
+                <name>toggleButton</name>
+                <bool>true</bool>
+            </property>
+            <property stdset="1">
+                <name>toggleButton</name>
+                <bool>true</bool>
+            </property>
+            <property>
+                <name>toolTip</name>
+                <string>Loop</string>
             </property>
         </widget>
     </widget>

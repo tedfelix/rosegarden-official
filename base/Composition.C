@@ -220,7 +220,9 @@ Composition::Composition() :
     m_barPositionsNeedCalculating(true),
     m_tempoTimestampsNeedCalculating(true),
     m_copyright(""),
-    m_countInBars(DefaultCountInBars)
+    m_countInBars(DefaultCountInBars),
+    m_playMetronome(true),
+    m_recordMetronome(true)
 {
     // nothing else
 }

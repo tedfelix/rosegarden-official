@@ -41,7 +41,7 @@ TrackVUMeter::TrackVUMeter(QWidget *parent,
 void
 TrackVUMeter::meterStart()
 {
-    setText(QString(""));
+    clear();
     setMinimumHeight(m_originalHeight);
     setMaximumHeight(m_originalHeight);
 }

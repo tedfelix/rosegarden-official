@@ -447,6 +447,15 @@ public:
     void setCountInBars(int countInBars) { m_countInBars = countInBars; }
 
 
+    // We can have the metronome on or off while playing or
+    // recording - get and set values from here
+    //
+    bool usePlayMetronome() const { return m_playMetronome; }
+    bool useRecordMetronome() const { return m_recordMetronome; }
+
+    void setPlayMetronome(bool value) { m_playMetronome = value; }
+    void setRecordMetronome(bool value) { m_recordMetronome = value; }
+
 protected:
 
     class ReferenceSegment;
@@ -559,6 +568,9 @@ protected:
 
     std::string m_copyright;
     unsigned int m_countInBars;
+
+    bool m_playMetronome;
+    bool m_recordMetronome;
 
 private:
     Composition(const Composition &);

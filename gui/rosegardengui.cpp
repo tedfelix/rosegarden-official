@@ -1022,13 +1022,50 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
     mappComp.setStartTime(Rosegarden::RealTime(sliceStartSec, sliceStartUsec));
     mappComp.setEndTime(Rosegarden::RealTime(sliceEndSec, sliceEndUsec));
 
-    //timeT sliceStartElapsed = comp.getElapsedTimeForRealTime(mappComp.getStartTime());
-
     timeT sliceStartElapsed =
               comp.getElapsedTimeForRealTime(mappComp.getStartTime());
 
     timeT sliceEndElapsed =
               comp.getElapsedTimeForRealTime(mappComp.getEndTime());
+
+    /*
+    std::pair<timeT, timeT> bMSt = comp.getBarRange(comp.getBarNumber(sliceStartElapsed, false), false);
+    std::pair<timeT, timeT> bMEnd = comp.getBarRange(comp.getBarNumber(sliceStartElapsed, false), false);
+
+    if (bMSt.first >= sliceStartElapsed && bMSt.first <= sliceEndElapsed)
+    {
+        Rosegarden::MappedEvent *me =
+            new Rosegarden::MappedEvent(70, //pitch
+                                        comp.getElapsedRealTime(bMSt.first), //t 
+                                        Rosegarden::RealTime(0, 100000),   // d
+                                        Rosegarden::RealTime(0, 0),
+                                        110, // velocity
+                                        0,   // instrument
+                                        0,   // track
+                                        Rosegarden::MappedEvent::Internal);
+
+
+        mappComp.insert(me);
+    }
+    else if (bMEnd.first >= sliceStartElapsed && bMEnd.first <= sliceEndElapsed)
+    {
+        Rosegarden::MappedEvent *me =
+            new Rosegarden::MappedEvent(70, //pitch
+                                        comp.getElapsedRealTime(bMEnd.first), //t 
+                                        Rosegarden::RealTime(0, 100000),   // d
+                                        Rosegarden::RealTime(0, 0),
+                                        110, // velocity
+                                        0,   // instrument
+                                        0,   // track
+                                        Rosegarden::MappedEvent::Internal);
+
+
+        mappComp.insert(me);
+    }
+    */
+             
+
+
 
     Rosegarden::RealTime eventTime;
     Rosegarden::RealTime duration;
