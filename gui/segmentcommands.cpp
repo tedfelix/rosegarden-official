@@ -64,6 +64,36 @@ SegmentEraseCommand::unexecute()
     m_composition->addSegment(m_segment);
 }
 
+// --------- Copy Segment ---------
+//
+SegmentCopyCommand::SegmentCopyCommand(Segment *segment):
+    KCommand("Copy Segment"),
+    m_composition(segment->getComposition()),
+    m_segmentToCopy(segment),
+    m_segment(0)
+{
+}
+
+SegmentCopyCommand::~SegmentCopyCommand()
+{
+    if (m_segment->getComposition()) {
+        delete m_segment;
+    }
+}
+
+void
+SegmentCopyCommand::execute()
+{
+    m_segment = new Segment(*m_segmentToCopy);
+    m_composition->addSegment(m_segment);
+}
+
+void
+SegmentCopyCommand::unexecute()
+{
+    m_composition->detachSegment(m_segment);
+}
+
 
 // --------- Insert Segment --------
 //

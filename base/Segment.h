@@ -88,6 +88,10 @@ public:
      */
     Segment(SegmentType segmentType = Internal,
             timeT startTime = 0);
+    /*
+     * Copy constructor
+     */
+    Segment(const Segment &);
 
     virtual ~Segment();
 
@@ -542,9 +546,8 @@ private: // stuff to support SegmentObservers
     void notifyAdd(Event *) const;
     void notifyRemove(Event *) const;
 
-private: // copy ctor, assignment operator -- not provided
+private: // assignment operator not provided
 
-    Segment(const Segment &);
     Segment &operator=(const Segment &);
 
 };

@@ -317,25 +317,25 @@ void SegmentCanvas::slotSetTool(ToolType t)
 
     switch(t) {
     case Pencil:
-        m_tool = new SegmentPencil(this);
+        m_tool = new SegmentPencil(this, m_doc);
         break;
     case Eraser:
-        m_tool = new SegmentEraser(this);
+        m_tool = new SegmentEraser(this, m_doc);
         break;
     case Mover:
-        m_tool = new SegmentMover(this);
+        m_tool = new SegmentMover(this, m_doc);
         break;
     case Resizer:
-        m_tool = new SegmentResizer(this);
+        m_tool = new SegmentResizer(this, m_doc);
         break;
     case Selector:
-        m_tool = new SegmentSelector(this);
+        m_tool = new SegmentSelector(this, m_doc);
         break;
     case Splitter:
-        m_tool = new SegmentSplitter(this);
+        m_tool = new SegmentSplitter(this, m_doc);
         break;
     case Joiner:
-        m_tool = new SegmentJoiner(this);
+        m_tool = new SegmentJoiner(this, m_doc);
         break;
 
     default:
@@ -746,9 +746,10 @@ void SegmentCanvas::slotSetFineGrain(bool value)
 //                 Segment Tools
 //////////////////////////////////////////////////////////////////////
 
-SegmentTool::SegmentTool(SegmentCanvas* canvas)
+SegmentTool::SegmentTool(SegmentCanvas* canvas, RosegardenGUIDoc *doc)
     : m_canvas(canvas),
-      m_currentItem(0)
+      m_currentItem(0),
+      m_doc(doc)
 {
     m_canvas->setCursor(Qt::arrowCursor);
 }
@@ -757,22 +758,25 @@ SegmentTool::~SegmentTool()
 {
 }
 
+void
+SegmentTool::addCommandToHistory(KCommand *command)
+{
+    m_doc->getCommandHistory()->addCommand(command);
+}
+
 
 //////////////////////////////
 // SegmentPencil
 //////////////////////////////
 
-SegmentPencil::SegmentPencil(SegmentCanvas *c)
-    : SegmentTool(c),
+SegmentPencil::SegmentPencil(SegmentCanvas *c, RosegardenGUIDoc *d)
+    : SegmentTool(c, d),
       m_newRect(false),
       m_track(0),
       m_startTime(0),
       m_duration(0)
 {
 //    m_canvas->setCursor(Qt::ibeamCursor);
-
-    connect(this, SIGNAL(addSegment(Rosegarden::TrackId, Rosegarden::timeT, Rosegarden::timeT)),
-            c,    SIGNAL(addSegment(Rosegarden::TrackId, Rosegarden::timeT, Rosegarden::timeT)));
 
     kdDebug(KDEBUG_AREA) << "SegmentPencil()\n";
 }
@@ -807,9 +811,13 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent*)
     m_currentItem->normalize();
 
     if (m_newRect) {
-	emit addSegment(m_currentItem->getTrack(),
-			m_currentItem->getStartTime(),
-			m_currentItem->getDuration());
+        SegmentInsertCommand *command =
+            new SegmentInsertCommand(&(m_doc->getComposition()),
+                                     m_currentItem->getTrack(),
+                                     m_currentItem->getStartTime(),
+                                     m_currentItem->getDuration());
+
+        addCommandToHistory(command);
     }
 
     delete m_currentItem;
@@ -849,13 +857,10 @@ void SegmentPencil::handleMouseMove(QMouseEvent *e)
 // SegmentEraser
 //////////////////////////////
 
-SegmentEraser::SegmentEraser(SegmentCanvas *c)
-    : SegmentTool(c)
+SegmentEraser::SegmentEraser(SegmentCanvas *c, RosegardenGUIDoc *d)
+    : SegmentTool(c, d)
 {
     m_canvas->setCursor(Qt::pointingHandCursor);
-
-    connect(this, SIGNAL(deleteSegment(Rosegarden::Segment*)),
-            c,    SIGNAL(deleteSegment(Rosegarden::Segment*)));
 
     kdDebug(KDEBUG_AREA) << "SegmentEraser()\n";
 }
@@ -867,7 +872,12 @@ void SegmentEraser::handleMouseButtonPress(QMouseEvent *e)
 
 void SegmentEraser::handleMouseButtonRelease(QMouseEvent*)
 {
-    if (m_currentItem) emit deleteSegment(m_currentItem->getSegment());
+    if (m_currentItem)
+    {
+        addCommandToHistory(
+                new SegmentEraseCommand(m_currentItem->getSegment()));
+    }
+
     m_canvas->canvas()->update();
     
     m_currentItem = 0;
@@ -881,13 +891,10 @@ void SegmentEraser::handleMouseMove(QMouseEvent*)
 // SegmentMover
 //////////////////////////////
 
-SegmentMover::SegmentMover(SegmentCanvas *c)
-    : SegmentTool(c)
+SegmentMover::SegmentMover(SegmentCanvas *c, RosegardenGUIDoc *d)
+    : SegmentTool(c, d)
 {
     m_canvas->setCursor(Qt::sizeAllCursor);
-
-    connect(this, SIGNAL(changeSegmentTrackAndStartTime(Rosegarden::Segment *, Rosegarden::TrackId, Rosegarden::timeT)),
-            c,    SIGNAL(changeSegmentTrackAndStartTime(Rosegarden::Segment *, Rosegarden::TrackId, Rosegarden::timeT)));
 
     kdDebug(KDEBUG_AREA) << "SegmentMover()\n";
 }
@@ -907,9 +914,16 @@ void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
 void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
 {
     if (m_currentItem)
-        emit changeSegmentTrackAndStartTime(m_currentItem->getSegment(),
-					    m_currentItem->getTrack(),
-					    m_currentItem->getStartTime());
+    {
+        SegmentReconfigureCommand *command =
+                new SegmentReconfigureCommand("Move Segment");
+
+        command->addSegment(m_currentItem->getSegment(),
+                            m_currentItem->getStartTime(),
+                            m_currentItem->getDuration(),
+                            m_currentItem->getTrack());
+        addCommandToHistory(command);
+    }
 
     m_currentItem = 0;
 }
@@ -934,17 +948,11 @@ void SegmentMover::handleMouseMove(QMouseEvent *e)
 // SegmentResizer
 //////////////////////////////
 
-SegmentResizer::SegmentResizer(SegmentCanvas *c)
-    : SegmentTool(c),
+SegmentResizer::SegmentResizer(SegmentCanvas *c, RosegardenGUIDoc *d)
+    : SegmentTool(c, d),
       m_edgeThreshold(10)
 {
     m_canvas->setCursor(Qt::sizeHorCursor);
-
-    connect(this, SIGNAL(deleteSegment(Rosegarden::Segment*)),
-            c,    SIGNAL(deleteSegment(Rosegarden::Segment*)));
-
-    connect(this, SIGNAL(changeSegmentTimes(Rosegarden::Segment*, Rosegarden::timeT, Rosegarden::timeT)),
-            c,    SIGNAL(changeSegmentTimes(Rosegarden::Segment*, Rosegarden::timeT, Rosegarden::timeT)));
 
     kdDebug(KDEBUG_AREA) << "SegmentResizer()\n";
 }
@@ -964,9 +972,14 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
     m_currentItem->normalize();
 
     // normalisation may mean start time has changed as well as duration
-    emit changeSegmentTimes(m_currentItem->getSegment(),
-			    m_currentItem->getStartTime(),
-			    m_currentItem->getDuration());
+    SegmentReconfigureCommand *command =
+                new SegmentReconfigureCommand("Resize Segment");
+
+    command->addSegment(m_currentItem->getSegment(),
+                        m_currentItem->getStartTime(),
+                        m_currentItem->getDuration(),
+                        m_currentItem->getTrack());
+    addCommandToHistory(command);
 
     m_currentItem = 0;
 }
@@ -1002,14 +1015,11 @@ bool SegmentResizer::cursorIsCloseEnoughToEdge(SegmentItem* p, QMouseEvent* e)
 // SegmentSelector (bo!)
 //////////////////////////////
 
-SegmentSelector::SegmentSelector(SegmentCanvas *c)
-    : SegmentTool(c), m_segmentAddMode(false), m_segmentCopyMode(false)
+SegmentSelector::SegmentSelector(SegmentCanvas *c, RosegardenGUIDoc *d)
+    : SegmentTool(c, d), m_segmentAddMode(false), m_segmentCopyMode(false)
 
 {
     kdDebug(KDEBUG_AREA) << "SegmentSelector()\n";
-
-    connect(this, SIGNAL(changeSegmentTrackAndStartTime(const SegmentReconfigureCommand::SegmentRecSet &)),
-            c,    SIGNAL(changeSegmentTrackAndStartTime(const SegmentReconfigureCommand::SegmentRecSet &)));
 
     connect(this, SIGNAL(selectedSegments(std::vector<Rosegarden::Segment*>)),
             c,     SIGNAL(selectedSegments(std::vector<Rosegarden::Segment*>)));
@@ -1117,8 +1127,17 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent * /*e*/)
 
     if (m_segmentCopyMode)
     {
-	std::cout << "Segment quick copy mode not implemented" << std::endl;
+	//std::cout << "Segment quick copy mode not implemented" << std::endl;
+	SegmentCopyCommand *command =
+            new SegmentCopyCommand(m_currentItem->getSegment());
+
+        addCommandToHistory(command);
 	return;
+
+        m_currentItem = m_canvas->addSegmentItem(command->getCopy());
+    
+        m_canvas->slotUpdate();
+
     }
 
     if (m_currentItem->isSelected())
@@ -1144,7 +1163,11 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent * /*e*/)
 	}
 
 	if (set.size() > 0) {
-	    emit changeSegmentTrackAndStartTime(set);
+            SegmentReconfigureCommand *command =
+                    new SegmentReconfigureCommand("Move Segment");
+            command->addSegments(set);
+            addCommandToHistory(command);
+
 	    m_canvas->canvas()->update();
 	}
     }
@@ -1195,16 +1218,11 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 //////////////////////////////
 
 
-SegmentSplitter::SegmentSplitter(SegmentCanvas *c)
-    : SegmentTool(c)
+SegmentSplitter::SegmentSplitter(SegmentCanvas *c, RosegardenGUIDoc *d)
+    : SegmentTool(c, d)
 {
     kdDebug(KDEBUG_AREA) << "SegmentSplitter()\n";
     m_canvas->setCursor(Qt::splitHCursor);
-
-    connect(this,
-            SIGNAL(splitSegment(Rosegarden::Segment*, Rosegarden::timeT)),
-            c,
-            SIGNAL(splitSegment(Rosegarden::Segment*, Rosegarden::timeT)));
 }
 
 SegmentSplitter::~SegmentSplitter()
@@ -1239,9 +1257,11 @@ SegmentSplitter::handleMouseButtonRelease(QMouseEvent *e)
     {
 	m_canvas->setSnapGrain(true);
 
-        // Split this Segment at snapped time
-        emit splitSegment(item->getSegment(),
-                          m_canvas->grid().snapX(e->pos().x()));
+        SegmentSplitCommand *command =
+            new SegmentSplitCommand(item->getSegment(),
+                                    m_canvas->grid().snapX(e->pos().x()));
+
+        addCommandToHistory(command);
     }
  
     // Reinstate the cursor
@@ -1299,8 +1319,8 @@ SegmentSplitter::contentsMouseDoubleClickEvent(QMouseEvent *e)
 // SegmentJoiner
 //
 //////////////////////////////
-SegmentJoiner::SegmentJoiner(SegmentCanvas *c)
-    : SegmentTool(c)
+SegmentJoiner::SegmentJoiner(SegmentCanvas *c, RosegardenGUIDoc *d)
+    : SegmentTool(c, d)
 {
     kdDebug(KDEBUG_AREA) << "SegmentJoiner()\n";
 }

@@ -143,27 +143,6 @@ public slots:
 protected slots:
     void slotSegmentOrderChanged(int section, int fromIdx, int toIdx);
 
-    void slotAddSegment(Rosegarden::TrackId track,
-			Rosegarden::timeT time,
-			Rosegarden::timeT duration);
-
-    void slotDeleteSegment(Rosegarden::Segment *);
-
-    void slotChangeSegmentDuration(Rosegarden::Segment *,
-				   Rosegarden::timeT);
-
-    void slotChangeSegmentTimes(Rosegarden::Segment *,
-				Rosegarden::timeT,
-				Rosegarden::timeT);
-
-    void slotChangeSegmentTrackAndStartTime(Rosegarden::Segment *,
-					    Rosegarden::TrackId,
-					    Rosegarden::timeT);
-
-    void slotChangeSegmentTrackAndStartTime(const SegmentReconfigureCommand::SegmentRecSet &);
-
-    void slotSplitSegment(Rosegarden::Segment *, Rosegarden::timeT);
-
     void slotTrackButtonsWidthChanged();
 
     void slotSelectedSegments(std::vector<Rosegarden::Segment*> segments);

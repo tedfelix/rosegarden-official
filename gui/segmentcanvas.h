@@ -332,51 +332,6 @@ protected slots:
     void slotOnEditAudio();
 
 signals:
-    /**
-     * Emitted when a new Segment is created, the arguments are the
-     * dimensions for a new SegmentItem but we don't create it at
-     * this stage
-     */
-    void addSegment(Rosegarden::TrackId, Rosegarden::timeT, Rosegarden::timeT);
-
-    /**
-     * Emitted when a Segment is deleted, the argument is a pointer to
-     * the Segment being deleted
-     */
-    void deleteSegment(Rosegarden::Segment *);
-
-    /**
-     * Emitted when a Segment's duration is changed
-     */
-    void changeSegmentDuration(Rosegarden::Segment *,
-			       Rosegarden::timeT duration);
-
-    /**
-     * Emitted when a Segment's start time and duration have changed
-     */
-    void changeSegmentTimes(Rosegarden::Segment *,
-			    Rosegarden::timeT startTime,
-			    Rosegarden::timeT duration);
-
-    /**
-     * Emitted when a Segment is moved to a different start time
-     * (horizontally) or instrument (vertically)
-     */
-    void changeSegmentTrackAndStartTime(Rosegarden::Segment *,
-					Rosegarden::TrackId track,
-					Rosegarden::timeT startTime);
-
-    /**
-     * Emitted when many Segments are moved to a different start time
-     * (horizontally) or instrument (vertically)
-     */
-    void changeSegmentTrackAndStartTime(const SegmentReconfigureCommand::SegmentRecSet &);
-
-    /*
-     * Split a Segment - send it to the doc
-     */
-    void splitSegment(Rosegarden::Segment *, Rosegarden::timeT);
-
     void editSegmentNotation(Rosegarden::Segment*);
     void editSegmentMatrix(Rosegarden::Segment*);
     void editSegmentAudio(Rosegarden::Segment*);
@@ -414,18 +369,21 @@ private:
 class SegmentTool : public QObject
 {
 public:
-    SegmentTool(SegmentCanvas*);
+    SegmentTool(SegmentCanvas*, RosegardenGUIDoc *doc);
     virtual ~SegmentTool();
 
     virtual void handleMouseButtonPress(QMouseEvent*)  = 0;
     virtual void handleMouseButtonRelease(QMouseEvent*) = 0;
     virtual void handleMouseMove(QMouseEvent*)         = 0;
 
+    void addCommandToHistory(KCommand *command);
+
 protected:
     //--------------- Data members ---------------------------------
 
     SegmentCanvas*  m_canvas;
     SegmentItem* m_currentItem;
+    RosegardenGUIDoc* m_doc;
 };
 
 //////////////////////////////
@@ -436,14 +394,11 @@ class SegmentPencil : public SegmentTool
 {
     Q_OBJECT
 public:
-    SegmentPencil(SegmentCanvas*);
+    SegmentPencil(SegmentCanvas*, RosegardenGUIDoc*);
 
     virtual void handleMouseButtonPress(QMouseEvent*);
     virtual void handleMouseButtonRelease(QMouseEvent*);
     virtual void handleMouseMove(QMouseEvent*);
-
-signals:
-    void addSegment(Rosegarden::TrackId, Rosegarden::timeT, Rosegarden::timeT);
 
 protected:
     //--------------- Data members ---------------------------------
@@ -458,30 +413,23 @@ class SegmentEraser : public SegmentTool
 {
     Q_OBJECT
 public:
-    SegmentEraser(SegmentCanvas*);
+    SegmentEraser(SegmentCanvas*, RosegardenGUIDoc*);
 
     virtual void handleMouseButtonPress(QMouseEvent*);
     virtual void handleMouseButtonRelease(QMouseEvent*);
     virtual void handleMouseMove(QMouseEvent*);
 
-signals:
-    void deleteSegment(Rosegarden::Segment*);
 };
 
 class SegmentMover : public SegmentTool
 {
     Q_OBJECT
 public:
-    SegmentMover(SegmentCanvas*);
+    SegmentMover(SegmentCanvas*, RosegardenGUIDoc*);
 
     virtual void handleMouseButtonPress(QMouseEvent*);
     virtual void handleMouseButtonRelease(QMouseEvent*);
     virtual void handleMouseMove(QMouseEvent*);
-
-signals:
-    void changeSegmentTrackAndStartTime(Rosegarden::Segment*,
-					Rosegarden::TrackId,
-					Rosegarden::timeT);
 
 private:
     QPoint m_clickPoint;
@@ -495,15 +443,11 @@ class SegmentResizer : public SegmentTool
 {
     Q_OBJECT
 public:
-    SegmentResizer(SegmentCanvas*);
+    SegmentResizer(SegmentCanvas*, RosegardenGUIDoc*);
 
     virtual void handleMouseButtonPress(QMouseEvent*);
     virtual void handleMouseButtonRelease(QMouseEvent*);
     virtual void handleMouseMove(QMouseEvent*);
-
-signals:
-    void deleteSegment(Rosegarden::Segment*);
-    void changeSegmentTimes(Rosegarden::Segment*, Rosegarden::timeT, Rosegarden::timeT);
 
 protected:
     bool cursorIsCloseEnoughToEdge(SegmentItem*, QMouseEvent*);
@@ -517,7 +461,7 @@ class SegmentSelector : public SegmentTool
 {
     Q_OBJECT
 public:
-    SegmentSelector(SegmentCanvas*);
+    SegmentSelector(SegmentCanvas*, RosegardenGUIDoc*);
     virtual ~SegmentSelector();
 
     virtual void handleMouseButtonPress(QMouseEvent*);
@@ -547,8 +491,6 @@ public slots:
     void slotSelectSegmentItem(SegmentItem *selectedItem);
 
 signals:
-    void changeSegmentTrackAndStartTime(const SegmentReconfigureCommand::SegmentRecSet &);
-
     void selectedSegments(std::vector<Rosegarden::Segment*>);
 
 private:
@@ -566,7 +508,7 @@ class SegmentSplitter : public SegmentTool
 {
     Q_OBJECT
 public:
-    SegmentSplitter(SegmentCanvas*);
+    SegmentSplitter(SegmentCanvas*, RosegardenGUIDoc*);
     virtual ~SegmentSplitter();
 
     virtual void handleMouseButtonPress(QMouseEvent*);
@@ -575,11 +517,6 @@ public:
 
     // don't do double clicks
     virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
-
-signals:
-    // Emit this when we want to split the Segment
-    //
-    void splitSegment(Rosegarden::Segment *, Rosegarden::timeT);
 
 private:
     void drawSplitLine(QMouseEvent*);
@@ -591,7 +528,7 @@ class SegmentJoiner : public SegmentTool
 {
     Q_OBJECT
 public:
-    SegmentJoiner(SegmentCanvas*);
+    SegmentJoiner(SegmentCanvas*, RosegardenGUIDoc*);
     virtual ~SegmentJoiner();
 
     virtual void handleMouseButtonPress(QMouseEvent*);

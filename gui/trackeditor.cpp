@@ -264,48 +264,6 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
 
     connect(this, SIGNAL(needUpdate()), m_segmentCanvas, SLOT(slotUpdate()));
 
-    //
-    // Other signals
-    //
-    connect(m_segmentCanvas, SIGNAL(addSegment(Rosegarden::TrackId,
-					       Rosegarden::timeT,
-					       Rosegarden::timeT)),
-	    this, SLOT(slotAddSegment(Rosegarden::TrackId,
-				      Rosegarden::timeT,
-				      Rosegarden::timeT)));
-
-    connect(m_segmentCanvas, SIGNAL(deleteSegment(Rosegarden::Segment *)),
-	    this, SLOT(slotDeleteSegment(Rosegarden::Segment *)));
-
-    connect(m_segmentCanvas, SIGNAL(changeSegmentDuration(Rosegarden::Segment*,
-							  Rosegarden::timeT)),
-	    this, SLOT(slotChangeSegmentDuration(Rosegarden::Segment *,
-						 Rosegarden::timeT)));
-
-    connect(m_segmentCanvas, SIGNAL(changeSegmentTimes(Rosegarden::Segment *,
-						       Rosegarden::timeT,
-						       Rosegarden::timeT)),
-	    this, SLOT(slotChangeSegmentTimes(Rosegarden::Segment *,
-					      Rosegarden::timeT,
-					      Rosegarden::timeT)));
-
-    connect(m_segmentCanvas, SIGNAL(changeSegmentTrackAndStartTime
-				    (Rosegarden::Segment *,
-				     Rosegarden::TrackId, Rosegarden::timeT)),
-	    this, SLOT(slotChangeSegmentTrackAndStartTime(Rosegarden::Segment*,
-							  Rosegarden::TrackId,
-							  Rosegarden::timeT)));
-
-    connect(m_segmentCanvas, SIGNAL(changeSegmentTrackAndStartTime
-				    (const SegmentReconfigureCommand::SegmentRecSet &)),
-	    this, SLOT(slotChangeSegmentTrackAndStartTime
-		       (const SegmentReconfigureCommand::SegmentRecSet &)));
-
-    connect(m_segmentCanvas, SIGNAL(splitSegment(Rosegarden::Segment*,
-						 Rosegarden::timeT)),
-	    this, SLOT(slotSplitSegment(Rosegarden::Segment*,
-					Rosegarden::timeT)));
-
     connect(m_segmentCanvas, 
             SIGNAL(selectedSegments(std::vector<Rosegarden::Segment*>)),
             this,
@@ -421,15 +379,7 @@ void TrackEditor::slotAddTracks(unsigned int nbNewTracks)
     addCommandToHistory(command);
 }
 
-void TrackEditor::addSegment(int track, int start, unsigned int duration)
-{
-    slotAddSegment(Rosegarden::TrackId(track),
-		   Rosegarden::timeT(start),
-		   Rosegarden::timeT(duration));
-}
-
-
-void TrackEditor::slotAddSegment(TrackId track, timeT time, timeT duration)
+void TrackEditor::addSegment(int track, int time, unsigned int duration)
 {
     if (!m_document) return; // sanity check
 
@@ -448,54 +398,6 @@ void TrackEditor::slotSegmentOrderChanged(int section, int fromIdx, int toIdx)
 
     //!!! how do we get here? need to involve a command
     emit needUpdate();
-}
-
-
-void TrackEditor::slotDeleteSegment(Rosegarden::Segment *segment)
-{
-    addCommandToHistory(new SegmentEraseCommand(segment));
-}
-
-
-void TrackEditor::slotChangeSegmentDuration(Segment *s, timeT duration)
-{
-    SegmentReconfigureCommand *command =
-	new SegmentReconfigureCommand("Resize Segment");
-    command->addSegment(s, s->getStartTime(), duration, s->getTrack());
-    addCommandToHistory(command);
-}
-
-
-void TrackEditor::slotChangeSegmentTimes(Segment *s,
-					 timeT startTime, timeT duration)
-{
-    SegmentReconfigureCommand *command =
-	new SegmentReconfigureCommand("Resize Segment");
-    command->addSegment(s, startTime, duration, s->getTrack());
-    addCommandToHistory(command);
-}
-
-void TrackEditor::slotChangeSegmentTrackAndStartTime(Segment *s, TrackId track,
-						     timeT time)
-{
-    SegmentReconfigureCommand *command =
-	new SegmentReconfigureCommand("Move Segment");
-    command->addSegment(s, time, s->getDuration(), track);
-    addCommandToHistory(command);
-}
-
-void TrackEditor::slotChangeSegmentTrackAndStartTime(const SegmentReconfigureCommand::SegmentRecSet &recSet)
-{
-    SegmentReconfigureCommand *command =
-	new SegmentReconfigureCommand("Move Segment");
-    command->addSegments(recSet);
-    addCommandToHistory(command);
-}
-
-
-void TrackEditor::slotSplitSegment(Segment *s, timeT splitTime)
-{
-    addCommandToHistory(new SegmentSplitCommand(s, splitTime));
 }
 
 

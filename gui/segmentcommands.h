@@ -44,6 +44,25 @@ private:
     Rosegarden::Segment *m_segment;
 };
 
+class SegmentCopyCommand : public KCommand
+{
+public:
+    SegmentCopyCommand(Rosegarden::Segment *segment);
+    virtual ~SegmentCopyCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+    // return pointer to new copy
+    Rosegarden::Segment* getCopy() { return m_segment; }
+
+private:
+    Rosegarden::Composition *m_composition;
+    Rosegarden::Segment     *m_segmentToCopy;
+    Rosegarden::Segment     *m_segment;
+
+};
+
 
 class SegmentInsertCommand : public KCommand
 {

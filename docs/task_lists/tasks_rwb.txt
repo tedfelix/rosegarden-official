@@ -1,24 +1,18 @@
 0.2 TO-DO for rwb
 -----------------
-updated 17.04.2002
+updated 18.04.2002
 
-usabilty work:
-
-o quantisation problems - shifting notes further away from where
-  they should be
+Immediate usability work:
 
 o copying segments quickly
 
-o segment movement is broken? [FIXED]
-
 o horizontal zoom would be really useful
 
-o Instrument list labels - change the Instrument and the old
-  label is stored behind the current one when a program is
-  active [FIXED]
+o sweep selection on Matrix
 
+o quantize to only quantize
 
-Currently looking at:
+Other pending tasks:
 
 o ALSA audio
 
@@ -123,6 +117,17 @@ Completed POST 0.1.4
 - missing events in playback [FIXED - RealTime timestamps issue]
 
 - Running key up PianoKeyboard should produce note run [DONE]
+
+- quantisation problems - shifting notes further away from where
+  they should be [CC fixed]
+
+- Instrument list labels - change the Instrument and the old
+  label is stored behind the current one when a program is
+  active [FIXED]
+
+- segment movement is broken? [FIXED]
+
+- commandExecuted signal for tempo dialog [gl FIXED]
 
 
 
