@@ -1023,8 +1023,8 @@ void SegmentNotationHelper::normalizeRests(timeT startTime, timeT endTime)
 		    &SegmentNotationHelper::normalizeContiguousRests);
 }
 
-void SegmentNotationHelper::mergeRestsAggressively(timeT startTime,
-						   timeT endTime)
+void SegmentNotationHelper::collapseRestsAggressively(timeT startTime,
+						      timeT endTime)
 {
     reorganizeRests(startTime, endTime,
 		    &SegmentNotationHelper::mergeContiguousRests);

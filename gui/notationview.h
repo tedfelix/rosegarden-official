@@ -278,7 +278,7 @@ public slots:
 
     // transforms slots
     void slotTransformsNormalizeRests();
-    void slotTransformsMergeRests();
+    void slotTransformsCollapseRests();
 
     /// Canvas actions slots
 

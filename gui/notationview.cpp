@@ -451,9 +451,9 @@ void NotationView::setupActions()
                 SLOT(slotTransformsNormalizeRests()), actionCollection(),
                 "normalize_rests");
 
-    new KAction(i18n("Merge Rests Aggressively"), 0, this,
-                SLOT(slotTransformsMergeRests()), actionCollection(),
-                "merge_rests_aggressively");
+    new KAction(i18n("Collapse Rests Aggressively"), 0, this,
+                SLOT(slotTransformsCollapseRests()), actionCollection(),
+                "collapse_rests_aggressively");
 
 
     // setup Settings menu
@@ -1162,9 +1162,9 @@ void NotationView::slotTransformsNormalizeRests()
                m_currentEventSelection->getEndTime());
 }
 
-void NotationView::slotTransformsMergeRests()
+void NotationView::slotTransformsCollapseRests()
 {
-    kdDebug(KDEBUG_AREA) << "NotationView::slotTransformsMergeRests()\n";
+    kdDebug(KDEBUG_AREA) << "NotationView::slotTransformsCollapseRests()\n";
 
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Merging rests..."), statusBar());
@@ -1172,8 +1172,8 @@ void NotationView::slotTransformsMergeRests()
     Segment &segment = m_currentEventSelection->getSegment();
     SegmentNotationHelper helper(segment);
 
-    helper.mergeRestsAggressively(m_currentEventSelection->getBeginTime(),
-                                  m_currentEventSelection->getEndTime());
+    helper.collapseRestsAggressively(m_currentEventSelection->getBeginTime(),
+				     m_currentEventSelection->getEndTime());
 
     emit usedSelection();
 

@@ -284,7 +284,7 @@ public:
      * the same duration but composed of the longest possible valid
      * rest plus the remainder
      */
-    void mergeRestsAggressively(timeT startTime, timeT endTime);
+    void collapseRestsAggressively(timeT startTime, timeT endTime);
 
 
     /**
@@ -348,7 +348,7 @@ private:
     /// for use by normalizeRests
     void normalizeContiguousRests(timeT, timeT, std::vector<Event *>&);
 
-    /// for use by mergeRestsAggressively
+    /// for use by collapseRestsAggressively
     void mergeContiguousRests(timeT, timeT, std::vector<Event *>&);
 };
 

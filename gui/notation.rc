@@ -107,7 +107,7 @@
   <Action name="retrograde"/>
   <Separator/>
   <Action name="normalize_rests"/>
-  <Action name="merge_rests_aggressively"/>
+  <Action name="collapse_rests_aggressively"/>
 </Menu>
 
 <Menu  name="settings"><text>&amp;Settings</text>
