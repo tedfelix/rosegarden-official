@@ -44,6 +44,7 @@ class QGroupBox;
 class QCheckBox;
 class QLabel;
 class QGridLayout;
+class QAccel;
 
 namespace Rosegarden
 {
@@ -112,6 +113,8 @@ public:
 
     Instrument* getInstrument() const { return m_instrument; }
 
+    QAccel* getAccelerators() { return m_accelerators; }
+
 public slots:
     void slotPluginSelected(int index);
     void slotPluginPortChanged(float value);
@@ -151,6 +154,7 @@ protected:
 
     bool                 m_generating;
 
+    QAccel              *m_accelerators;
 
 };
 

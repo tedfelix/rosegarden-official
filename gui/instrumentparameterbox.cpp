@@ -49,6 +49,7 @@
 #include "studiocontrol.h"
 #include "rosegardenguidoc.h"
 #include "trackvumeter.h"
+#include "rosegardengui.h"
 
 #include "rosestrings.h"
 #include "rosedebug.h"
@@ -611,11 +612,25 @@ AudioInstrumentParameterPanel::slotSelectPlugin(int index)
 
         if (inst)
         {
+            // Create the plugin dialog
+            //
             m_pluginDialogs[key] = 
                 new Rosegarden::AudioPluginDialog(this,
                                               m_pluginManager,
                                               m_selectedInstrument,
                                               index);
+
+            // Get the App pointer and plug the new dialog into the 
+            // standard keyboard accelerators so that we can use them
+            // still while the plugin has focus.
+            //
+            QWidget *par = parentWidget();
+            while (!par->isTopLevel()) par = par->parentWidget();
+
+            RosegardenGUIApp *app = dynamic_cast<RosegardenGUIApp*>(par);
+
+            app->plugAccelerators(m_pluginDialogs[key],
+                                  m_pluginDialogs[key]->getAccelerators());
 
             connect(m_pluginDialogs[key], SIGNAL(pluginSelected(int, int)),
                     this, SLOT(slotPluginSelected(int, int)));

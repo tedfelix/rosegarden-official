@@ -293,6 +293,11 @@ public:
      */
     Rosegarden::Clipboard* getClipboard() { return m_clipboard; }
 
+    /**
+     * Plug a widget into our common accelerators
+     */
+    void plugAccelerators(QWidget *widget, QAccel *accel);
+
 protected:
 
     static const void* SequencerExternal;
@@ -386,11 +391,6 @@ protected:
      */
     void insertMetronomeClicks(Rosegarden::timeT sliceStart,
                                Rosegarden::timeT sliceEnd);
-
-    /**
-     * Plug a widget into our common accelerators
-     */
-    void plugAccelerators(QWidget *widget, QAccel *accel);
 
     /**
      * Create a new audio file for the sequencer and return the

@@ -26,6 +26,7 @@
 #include <qgroupbox.h>
 #include <qcheckbox.h>
 #include <qlayout.h>
+#include <qaccel.h>
 
 #include <klocale.h>
 #include <kcombobox.h>
@@ -115,6 +116,8 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
         slotPluginSelected(m_pluginList->currentItem());
 
     m_generating = false;
+
+    m_accelerators = new QAccel(this);
 }
 
 void
