@@ -28,104 +28,85 @@ namespace Rosegarden
 
 MappedEvent::MappedEvent(InstrumentId id,
                          const Event &e,
-                         const Rosegarden::RealTime &eventTime,
-                         const Rosegarden::RealTime &duration):
+                         const RealTime &eventTime,
+                         const RealTime &duration):
        m_instrument(id),
        m_type(MidiNote),
        m_data1(0),
-       m_data2(MidiMaxValue),
+       m_data2(0),
        m_eventTime(eventTime),
        m_duration(duration),
        m_audioStartMarker(0, 0),
        m_dataBlock("")
 {
-    if (e.isa(Rosegarden::Note::EventType))
-    {
-        if (e.get<Int>(BaseProperties::PITCH))
+    try {
+
+	// For each event type, we set the properties in a particular
+	// order: first the type, then whichever of data1 and data2 fits
+	// less well with its default value.  This way if one throws an
+	// exception for no data, we still have a good event with the
+	// defaults set.
+
+	if (e.isa(Note::EventType))
+	{
+	    m_type = MidiNote;
+	    long v = MidiMaxValue;
+	    e.get<Int>(BaseProperties::VELOCITY, v);
+	    m_data2 = v;
             m_data1 = e.get<Int>(BaseProperties::PITCH);
-        else
-            m_data1 = 0;
-
-        if (e.has(BaseProperties::VELOCITY))
-        {
-	    try {
-	        m_data2 = e.get<Int>(BaseProperties::VELOCITY);
-	    }
-	    catch(...)
-	    {
-	        m_data2 = MidiMaxValue;
-	    }
-        }
-
-        m_type = MidiNote;
-    }
-    else if (e.isa(Rosegarden::PitchBend::EventType))
-    {
-        if (e.has(Rosegarden::PitchBend::MSB))
-            m_data1 = e.get<Int>(Rosegarden::PitchBend::MSB);
-        else
-            m_data1 = 0;
-
-        if (e.has(Rosegarden::PitchBend::LSB))
-            m_data2 = e.get<Int>(Rosegarden::PitchBend::LSB);
-        else
-            m_data2 = 0;
-
-        m_type = MidiPitchBend;
-    }
-    else if (e.isa(Rosegarden::Controller::EventType))
-    {
-        if (e.has(Rosegarden::Controller::NUMBER))
-            m_data1 = e.get<Int>(Rosegarden::Controller::NUMBER);
-        else
-            m_data1 = 0;
-
-        if (e.has(Rosegarden::Controller::VALUE))
-            m_data2 = e.get<Int>(Rosegarden::Controller::VALUE);
-        else
-            m_data2 = 0;
-
-        m_type = MidiController;
-    }
-    else if (e.isa(Rosegarden::ProgramChange::EventType))
-    {
-        if (e.has(Rosegarden::ProgramChange::PROGRAM))
-            m_data1 = e.get<Int>(Rosegarden::ProgramChange::PROGRAM);
-        else
-            m_data1 = 0;
-
-        m_type = MidiProgramChange;
-    }
-    else if (e.isa(Rosegarden::KeyPressure::EventType))
-    {
-        if (e.has(Rosegarden::KeyPressure::PITCH))
-            m_data1 = e.get<Int>(Rosegarden::KeyPressure::PITCH);
-        else
-            m_data1 = 0;
-
-        if (e.has(Rosegarden::KeyPressure::PRESSURE))
-            m_data2 = e.get<Int>(Rosegarden::KeyPressure::PRESSURE);
-        else
-            m_data2 = 0;
-
-        m_type = MidiKeyPressure;
-    }
-    else if (e.isa(Rosegarden::ChannelPressure::EventType))
-    {
-        if (e.has(Rosegarden::ChannelPressure::PRESSURE))
-            m_data1 = e.get<Int>(Rosegarden::ChannelPressure::PRESSURE);
-        else
-            m_data1 = 0;
-
-        m_type = MidiChannelPressure;
-    }
-    else if (e.isa(Rosegarden::SystemExclusive::EventType))
-    {
-        m_type = MidiSystemExclusive;
-    }
-    else 
-    {
-        m_type = InvalidMappedEvent;
+	}
+	else if (e.isa(PitchBend::EventType))
+	{
+	    m_type = MidiPitchBend;
+	    PitchBend pb(e);
+	    m_data1 = pb.getMSB();
+	    m_data2 = pb.getLSB();
+	}
+	else if (e.isa(Controller::EventType))
+	{
+	    m_type = MidiController;
+	    Controller c(e);
+	    m_data1 = c.getNumber();
+	    m_data2 = c.getValue();
+	}
+	else if (e.isa(ProgramChange::EventType))
+	{
+	    m_type = MidiProgramChange;
+	    ProgramChange pc(e);
+	    m_data1 = pc.getProgram();
+	}
+	else if (e.isa(KeyPressure::EventType))
+	{
+	    m_type = MidiKeyPressure;
+	    KeyPressure kp(e);
+	    m_data1 = kp.getPitch();
+	    m_data2 = kp.getPressure();
+	}
+	else if (e.isa(ChannelPressure::EventType))
+	{
+	    m_type = MidiChannelPressure;
+	    ChannelPressure cp(e);
+	    m_data1 = cp.getPressure();
+	}
+	else if (e.isa(SystemExclusive::EventType))
+	{
+	    m_type = MidiSystemExclusive;
+	    SystemExclusive s(e);
+	    m_dataBlock = s.getRawData();
+	}
+	else 
+	{
+	    m_type = InvalidMappedEvent;
+	}
+    } catch (MIDIValueOutOfRange r) {
+	std::cerr << "MIDI value out of range in MappedEvent ctor"
+		  << std::endl;
+    } catch (Event::NoData d) {
+	std::cerr << "Caught Event::NoData in MappedEvent ctor, message is:"
+		  << std::endl << d.getMessage() << std::endl;
+    } catch (Event::BadType b) {
+	std::cerr << "Caught Event::BadType in MappedEvent ctor, message is:"
+		  << std::endl << b.getMessage() << std::endl;
     }
 }
 
@@ -221,11 +202,11 @@ operator>>(QDataStream &dS, MappedEvent *mE)
 
     mE->setInstrument((InstrumentId)instrument);
     mE->setType((MappedEvent::MappedEventType)type);
-    mE->setData1((Rosegarden::MidiByte)data1);
-    mE->setData2((Rosegarden::MidiByte)data2);
-    mE->setEventTime(Rosegarden::RealTime(eventTimeSec, eventTimeUsec));
-    mE->setDuration(Rosegarden::RealTime(durationSec, durationUsec));
-    mE->setAudioStartMarker(Rosegarden::RealTime(audioSec, audioUsec));
+    mE->setData1((MidiByte)data1);
+    mE->setData2((MidiByte)data2);
+    mE->setEventTime(RealTime(eventTimeSec, eventTimeUsec));
+    mE->setDuration(RealTime(durationSec, durationUsec));
+    mE->setAudioStartMarker(RealTime(audioSec, audioUsec));
     mE->setDataBlock(dataBlock);
 
     return dS;
@@ -260,11 +241,11 @@ operator>>(QDataStream &dS, MappedEvent &mE)
 
     mE.setInstrument((InstrumentId)instrument);
     mE.setType((MappedEvent::MappedEventType)type);
-    mE.setData1((Rosegarden::MidiByte)data1);
-    mE.setData2((Rosegarden::MidiByte)data2);
-    mE.setEventTime(Rosegarden::RealTime(eventTimeSec, eventTimeUsec));
-    mE.setDuration(Rosegarden::RealTime(durationSec, durationUsec));
-    mE.setAudioStartMarker(Rosegarden::RealTime(audioSec, audioUsec));
+    mE.setData1((MidiByte)data1);
+    mE.setData2((MidiByte)data2);
+    mE.setEventTime(RealTime(eventTimeSec, eventTimeUsec));
+    mE.setDuration(RealTime(durationSec, durationUsec));
+    mE.setAudioStartMarker(RealTime(audioSec, audioUsec));
     mE.setDataBlock(dataBlock);
 
     return dS;

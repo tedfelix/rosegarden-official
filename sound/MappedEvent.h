@@ -118,8 +118,8 @@ public:
     // Another Internal constructor from Events
     MappedEvent(InstrumentId id,
                 const Event &e,
-                const Rosegarden::RealTime &eventTime,
-                const Rosegarden::RealTime &duration);
+                const RealTime &eventTime,
+                const RealTime &duration);
 
     // A shortcut for creating MIDI/Internal MappedEvents
     // from base properties
@@ -127,15 +127,15 @@ public:
     MappedEvent(InstrumentId id,
                 MidiByte pitch,
                 MidiByte velocity,
-                const Rosegarden::RealTime &absTime,
-                const Rosegarden::RealTime &duration):
+                const RealTime &absTime,
+                const RealTime &duration):
         m_instrument(id),
         m_type(MidiNote),
         m_data1(pitch),
         m_data2(velocity),
         m_eventTime(absTime),
         m_duration(duration),
-        m_audioStartMarker(Rosegarden::RealTime(0,0)),
+        m_audioStartMarker(RealTime(0,0)),
         m_dataBlock("") {;}
 
     // A general MappedEvent constructor for any MappedEvent type
@@ -160,9 +160,9 @@ public:
     //
     MappedEvent(InstrumentId id,
                 MidiByte audioID,
-                const Rosegarden::RealTime &eventTime,
-                const Rosegarden::RealTime &duration,
-                const Rosegarden::RealTime &audioStartMarker):
+                const RealTime &eventTime,
+                const RealTime &duration,
+                const RealTime &audioStartMarker):
          m_instrument(id),
          m_type(Audio),
          m_data1(audioID),
@@ -183,9 +183,9 @@ public:
          m_type(type),
          m_data1(data1),
          m_data2(data2),
-         m_eventTime(Rosegarden::RealTime(0, 0)),
-         m_duration(Rosegarden::RealTime(0, 0)),
-         m_audioStartMarker(Rosegarden::RealTime(0, 0)),
+         m_eventTime(RealTime(0, 0)),
+         m_duration(RealTime(0, 0)),
+         m_audioStartMarker(RealTime(0, 0)),
          m_dataBlock("") {;}
 
     MappedEvent(InstrumentId id,
@@ -195,9 +195,9 @@ public:
         m_type(type),
         m_data1(data1),
         m_data2(0),
-        m_eventTime(Rosegarden::RealTime(0, 0)),
-        m_duration(Rosegarden::RealTime(0, 0)),
-        m_audioStartMarker(Rosegarden::RealTime(0, 0)),
+        m_eventTime(RealTime(0, 0)),
+        m_duration(RealTime(0, 0)),
+        m_audioStartMarker(RealTime(0, 0)),
         m_dataBlock("") {;}
 
 
@@ -209,9 +209,9 @@ public:
         m_type(type),
         m_data1(0),
         m_data2(0),
-        m_eventTime(Rosegarden::RealTime(0, 0)),
-        m_duration(Rosegarden::RealTime(0, 0)),
-        m_audioStartMarker(Rosegarden::RealTime(0, 0)),
+        m_eventTime(RealTime(0, 0)),
+        m_duration(RealTime(0, 0)),
+        m_audioStartMarker(RealTime(0, 0)),
         m_dataBlock("") {;}
 
     // Copy constructor
@@ -241,13 +241,13 @@ public:
 
     // Event time
     //
-    void setEventTime(const Rosegarden::RealTime &a) { m_eventTime = a; }
-    Rosegarden::RealTime getEventTime() const { return m_eventTime; }
+    void setEventTime(const RealTime &a) { m_eventTime = a; }
+    RealTime getEventTime() const { return m_eventTime; }
 
     // Duration
     //
-    void setDuration(const Rosegarden::RealTime &d) { m_duration = d; }
-    Rosegarden::RealTime getDuration() const { return m_duration; }
+    void setDuration(const RealTime &d) { m_duration = d; }
+    RealTime getDuration() const { return m_duration; }
 
     // Instrument
     void setInstrument(InstrumentId id) { m_instrument = id; }
@@ -284,9 +284,9 @@ public:
     // against total sounding length (not absolute position).
     //
     //
-    void setAudioStartMarker(const Rosegarden::RealTime &aS)
+    void setAudioStartMarker(const RealTime &aS)
         { m_audioStartMarker = aS; }
-    Rosegarden::RealTime getAudioStartMarker() const
+    RealTime getAudioStartMarker() const
         { return m_audioStartMarker; }
 
     MappedEventType getType() const { return m_type; }

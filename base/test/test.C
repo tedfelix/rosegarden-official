@@ -17,6 +17,8 @@
 #include "SegmentPerformanceHelper.h"
 #endif
 
+#include "MidiTypes.h"
+
 #include <cstdio>
 
 #include <sys/times.h>

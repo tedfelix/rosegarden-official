@@ -925,54 +925,40 @@ MidiFile::convertToRosegarden(Composition *composition,
 		    break;
 		}
 
-                rosegardenEvent =
-                    new Event(Controller::EventType,
-                              rosegardenTime);
-                rosegardenEvent->set<Int>(Controller::NUMBER,
-                                          (*midiEvent)->getData1());
-                rosegardenEvent->set<Int>(Controller::VALUE,
-                                          (*midiEvent)->getData2());
+		rosegardenEvent =
+		    Controller((*midiEvent)->getData1(),
+			       (*midiEvent)->getData2()).
+		    getAsEvent(rosegardenTime);
                 rosegardenSegment->insert(rosegardenEvent);
                 break;
 
             case MIDI_PITCH_BEND:
                 rosegardenEvent =
-                    new Event(PitchBend::EventType,
-                              rosegardenTime);
-                rosegardenEvent->set<Int>(PitchBend::MSB,
-                                          (*midiEvent)->getData1());
-                rosegardenEvent->set<Int>(PitchBend::LSB,
-                                          (*midiEvent)->getData2());
+		    PitchBend((*midiEvent)->getData1(),
+			      (*midiEvent)->getData2()).
+		    getAsEvent(rosegardenTime);
                 rosegardenSegment->insert(rosegardenEvent);
                 break;
 
             case MIDI_SYSTEM_EXCLUSIVE:
                 rosegardenEvent = 
-                    new Event(SystemExclusive::EventType,
-                              rosegardenTime);
-                rosegardenEvent->
-                    set<String>(SystemExclusive::DATABLOCK,
-                                (*midiEvent)->getMetaMessage());
+		    SystemExclusive((*midiEvent)->getMetaMessage()).
+		    getAsEvent(rosegardenTime);
                 rosegardenSegment->insert(rosegardenEvent);
                 break;
 
             case MIDI_POLY_AFTERTOUCH:
                 rosegardenEvent =
-                    new Event(KeyPressure::EventType,
-                              rosegardenTime);
-                rosegardenEvent->set<Int>(KeyPressure::PITCH,
-                                          (*midiEvent)->getData1());
-                rosegardenEvent->set<Int>(KeyPressure::PRESSURE,
-                                          (*midiEvent)->getData2());
+		    KeyPressure((*midiEvent)->getData1(),
+				(*midiEvent)->getData2()).
+		    getAsEvent(rosegardenTime);
                 rosegardenSegment->insert(rosegardenEvent);
                 break;
 
             case MIDI_CHNL_AFTERTOUCH:
                 rosegardenEvent =
-                    new Event(ChannelPressure::EventType,
-                              rosegardenTime);
-                rosegardenEvent->set<Int>(ChannelPressure::PRESSURE,
-                                          (*midiEvent)->getData1());
+		    ChannelPressure((*midiEvent)->getData1()).
+		    getAsEvent(rosegardenTime);
                 rosegardenSegment->insert(rosegardenEvent);
                 break;
 
@@ -1328,11 +1314,11 @@ MidiFile::convertToMidi(Composition &comp)
 		}
 		else if ((*el)->isa(PitchBend::EventType))
 		{
+		    PitchBend pb(**el);
 		    midiEvent =
 			new MidiEvent(midiEventAbsoluteTime,
 				      MIDI_PITCH_BEND | midiChannel,
-				      (*el)->get<Int>(PitchBend::MSB),
-				      (*el)->get<Int>(PitchBend::LSB));
+				      pb.getMSB(), pb.getLSB());
 
 		    m_midiComposition[trackNumber].push_back(midiEvent);
 		}
@@ -1361,27 +1347,31 @@ MidiFile::convertToMidi(Composition &comp)
 		}
 		else if ((*el)->isa(Controller::EventType))
 		{
+		    //!!! Any of these MidiTypes constructors could
+		    // throw exceptions
+		    
+		    Controller c(**el);
 		    midiEvent =
 			new MidiEvent(midiEventAbsoluteTime,
 				      MIDI_CTRL_CHANGE | midiChannel,
-				      (*el)->get<Int>(Controller::NUMBER),
-				      (*el)->get<Int>(Controller::VALUE));
+				      c.getNumber(), c.getValue());
 
 		    m_midiComposition[trackNumber].push_back(midiEvent);
 		}
 		else if ((*el)->isa(ProgramChange::EventType))
 		{
+		    ProgramChange pc(**el);
 		    midiEvent =
 			new MidiEvent(midiEventAbsoluteTime,
 				      MIDI_PROG_CHANGE | midiChannel,
-				      (*el)->get<Int>(ProgramChange::PROGRAM));
+				      pc.getProgram());
 
 		    m_midiComposition[trackNumber].push_back(midiEvent);
 		}
 		else if ((*el)->isa(SystemExclusive::EventType))
 		{
-		    std::string data = 
-			(*el)->get<String>(SystemExclusive::DATABLOCK);
+		    SystemExclusive s(**el);
+		    std::string data = s.getRawData();
 
 		    // check for closing EOX and add one if none found
 		    //
@@ -1401,20 +1391,21 @@ MidiFile::convertToMidi(Composition &comp)
 		}
 		else if ((*el)->isa(ChannelPressure::EventType))
 		{
+		    ChannelPressure cp(**el);
 		    midiEvent =
 			new MidiEvent(midiEventAbsoluteTime,
 				      MIDI_CHNL_AFTERTOUCH | midiChannel,
-				      (*el)->get<Int>(ChannelPressure::PRESSURE));
+				      cp.getPressure());
 
 		    m_midiComposition[trackNumber].push_back(midiEvent);
 		}
 		else if ((*el)->isa(KeyPressure::EventType))
 		{
+		    KeyPressure kp(**el);
 		    midiEvent =
 			new MidiEvent(midiEventAbsoluteTime,
 				      MIDI_POLY_AFTERTOUCH | midiChannel,
-				      (*el)->get<Int>(KeyPressure::PITCH),
-				      (*el)->get<Int>(KeyPressure::PRESSURE));
+				      kp.getPitch(), kp.getPressure());
 
 		    m_midiComposition[trackNumber].push_back(midiEvent);
 		}

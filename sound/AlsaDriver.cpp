@@ -1442,7 +1442,6 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
                    mE->setType(MappedEvent::MidiSystemExclusive);
                    mE->setDataBlock(data);
                    m_recordComposition.insert(mE);
-
                }
                break;
 

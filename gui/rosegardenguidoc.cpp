@@ -865,95 +865,70 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
 
             switch((*i)->getType())
             {
-                case Rosegarden::MappedEvent::MidiNote:
-                   // Create and populate a new Event (for the moment
-                   // all we get from the Sequencer is Notes)
-                   //
-                   if ((*i)->getDuration() < Rosegarden::RealTime(0, 0))
-                       duration = -1;
+	    case Rosegarden::MappedEvent::MidiNote:
+		if ((*i)->getDuration() < Rosegarden::RealTime(0, 0))
+		    duration = -1;
+		    
+		rEvent = new Event(Rosegarden::Note::EventType,
+				   absTime,
+				   duration);
 
-                   rEvent = new Event(Rosegarden::Note::EventType,
-                                      absTime,
-                                      duration);
+		rEvent->set<Int>(PITCH, (*i)->getPitch());
+		rEvent->set<Int>(VELOCITY, (*i)->getVelocity());
 
-                   rEvent->set<Int>(PITCH, (*i)->getPitch());
-                   rEvent->set<Int>(VELOCITY, (*i)->getVelocity());
+		break;
 
-                   break;
+	    case Rosegarden::MappedEvent::MidiPitchBend:
+		rEvent = Rosegarden::PitchBend
+		    ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
+		break;
 
-                case Rosegarden::MappedEvent::MidiPitchBend:
-                   rEvent = new Event(Rosegarden::PitchBend::EventType,
-                                      absTime);
+	    case Rosegarden::MappedEvent::MidiController:
+		rEvent = Rosegarden::Controller
+		    ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
+		break;
 
-                   rEvent->set<Int>(PitchBend::MSB, (*i)->getData1());
-                   rEvent->set<Int>(PitchBend::LSB, (*i)->getData2());
-                   break;
+	    case Rosegarden::MappedEvent::MidiProgramChange:
+		SEQMAN_DEBUG << "RosegardenGUIDoc::insertRecordedMidi() - "
+			     << "got Program Change (unsupported)"
+			     << endl;
+		break;
 
-                case Rosegarden::MappedEvent::MidiController:
-                   rEvent = new Event(Rosegarden::Controller::EventType,
-                                      absTime);
+	    case Rosegarden::MappedEvent::MidiKeyPressure:
+		rEvent = Rosegarden::KeyPressure
+		    ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
+		break;
 
-                   rEvent->set<Int>(Controller::NUMBER, (*i)->getData1());
-                   rEvent->set<Int>(Controller::VALUE, (*i)->getData2());
-                   break;
+	    case Rosegarden::MappedEvent::MidiChannelPressure:
+		rEvent = Rosegarden::ChannelPressure
+		    ((*i)->getData1()).getAsEvent(absTime);
+		break;
 
-                case Rosegarden::MappedEvent::MidiProgramChange:
-                   SEQMAN_DEBUG << "RosegardenGUIDoc::insertRecordedMidi() - "
-                                << "got Program Change (unsupported)"
-                                << endl;
-                   break;
+	    case Rosegarden::MappedEvent::MidiSystemExclusive:
+		rEvent = Rosegarden::SystemExclusive
+		    ((*i)->getDataBlock()).getAsEvent(absTime);
+		break;
+		    
+	    case Rosegarden::MappedEvent::MidiNoteOneShot:
+		SEQMAN_DEBUG << "RosegardenGUIDoc::insertRecordedMidi() - "
+			     << "GOT UNEXPECTED MappedEvent::MidiNoteOneShot"
+			     << endl;
+		break;
+		
+	    // Audio control signals - ignore these
+	    case Rosegarden::MappedEvent::Audio:
+	    case Rosegarden::MappedEvent::AudioCancel:
+	    case Rosegarden::MappedEvent::AudioLevel:
+	    case Rosegarden::MappedEvent::AudioStopped:
+	    case Rosegarden::MappedEvent::AudioGeneratePreview:
+	    case Rosegarden::MappedEvent::SystemUpdateInstruments:
+		break;
 
-                case Rosegarden::MappedEvent::MidiKeyPressure:
-                   /*
-                   SEQMAN_DEBUG << "RosegardenGUIDoc::insertRecordedMidi() - "
-                                << "got Key Pressure (unsupported)"
-                                << endl;
-                   */
-                   rEvent = new Event(Rosegarden::KeyPressure::EventType,
-                                      absTime);
-                   rEvent->set<Int>(KeyPressure::PITCH, (*i)->getData1());
-                   rEvent->set<Int>(KeyPressure::PRESSURE, (*i)->getData2());
-                   break;
-
-                case Rosegarden::MappedEvent::MidiChannelPressure:
-                   /*
-                   SEQMAN_DEBUG << "RosegardenGUIDoc::insertRecordedMidi() - "
-                                << "got Channel Pressure (unsupported)"
-                                << endl;
-                                */
-                   rEvent = new Event(Rosegarden::ChannelPressure::EventType,
-                                      absTime);
-                   rEvent->set<Int>(ChannelPressure::PRESSURE, (*i)->getData1());
-                   break;
-
-                case Rosegarden::MappedEvent::MidiSystemExclusive:
-                   rEvent = new Event(Rosegarden::SystemExclusive::EventType,
-                                      absTime);
-                   rEvent->set<String>(SystemExclusive::DATABLOCK,
-                                       (*i)->getDataBlock());
-                   break;
-
-
-                case Rosegarden::MappedEvent::MidiNoteOneShot:
-                   SEQMAN_DEBUG << "RosegardenGUIDoc::insertRecordedMidi() - "
-                                << "GOT UNEXPECTED MappedEvent::MidiNoteOneShot"
-                                << endl;
-                   break;
-
-                   // Audio control signals - ignore these
-                case Rosegarden::MappedEvent::Audio:
-                case Rosegarden::MappedEvent::AudioCancel:
-                case Rosegarden::MappedEvent::AudioLevel:
-                case Rosegarden::MappedEvent::AudioStopped:
-                case Rosegarden::MappedEvent::AudioGeneratePreview:
-                case Rosegarden::MappedEvent::SystemUpdateInstruments:
-                   break;
-
-                default:
-                   SEQMAN_DEBUG << "RosegardenGUIDoc::insertRecordedMidi() - "
-                                << "GOT UNSUPPORTED MAPPED EVENT"
-                                << endl;
-                   break;
+	    default:
+		SEQMAN_DEBUG << "RosegardenGUIDoc::insertRecordedMidi() - "
+			     << "GOT UNSUPPORTED MAPPED EVENT"
+			     << endl;
+		break;
             }
 
             // sanity check

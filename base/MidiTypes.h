@@ -37,6 +37,15 @@
 namespace Rosegarden 
 {
 
+class MIDIValueOutOfRange : public Exception {
+public:
+    MIDIValueOutOfRange(std::string name) :
+	Exception("Value of " + name + " out of byte range") { }
+    MIDIValueOutOfRange(std::string name, std::string file, int line) :
+	Exception("Value of " + name + " out of byte range", file, line) { }
+};
+
+
 // Rosegarden's internal represetation of MIDI PitchBend
 //
 class PitchBend
@@ -48,17 +57,19 @@ public:
     static const PropertyName MSB;
     static const PropertyName LSB;
 
-    /*
+    PitchBend(MidiByte msb, MidiByte lsb);
+    PitchBend(const Event &);
+    ~PitchBend();
+
+    MidiByte getMSB() const { return m_msb; }
+    MidiByte getLSB() const { return m_lsb; }
+    
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsEvent(timeT absoluteTime) const;
 
-    PitchBend(Rosegarden::MidiByte msb, Rosegarden::MidiByte lsb);
-    ~PitchBend();
-
 private:
-    Rosegarden::MidiByte m_msb;
-    Rosegarden::MidiByte m_lsb;
-    */
+    MidiByte m_msb;
+    MidiByte m_lsb;
 };
 
 
@@ -79,21 +90,27 @@ public:
     static const std::string Modulation;
     static const std::string Pan;
 
-    /*
-    Controller(const std::string &t,
-               Rosegarden::MidiByte data1,
-               Rosegarden::MidiByte data2);
+    Controller(const std::string &type,
+               MidiByte number,
+               MidiByte value);
+
+    Controller(MidiByte number,
+               MidiByte value);
+
+    Controller(const Event &);
     ~Controller();
+
+    std::string getType() const { return m_type; }
+    MidiByte getNumber() const { return m_number; }
+    MidiByte getValue() const { return m_value; }
 
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsEvent(timeT absoluteTime) const;
 
 private:
-    std::string          m_type;
-    Rosegarden::MidiByte m_data1;
-    Rosegarden::MidiByte m_data2;
-    */
-
+    std::string m_type;
+    MidiByte m_number;
+    MidiByte m_value;
 };
 
 
@@ -109,17 +126,19 @@ public:
     static const PropertyName PITCH;
     static const PropertyName PRESSURE;
 
-    /*
+    KeyPressure(MidiByte pitch, MidiByte pressure);
+    KeyPressure(const Event &event);
+    ~KeyPressure();
+
+    MidiByte getPitch() const { return m_pitch; }
+    MidiByte getPressure() const { return m_pressure; }
+
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsEvent(timeT absoluteTime) const;
 
-    KeyPressure(Rosegarden::MidiByte pitch, Rosegarden::MidiByte pressure);
-    ~KeyPressure();
-
 private:
-    Rosegarden::MidiByte m_pitch;
-    Rosegarden::MidiByte m_pressure;
-    */
+    MidiByte m_pitch;
+    MidiByte m_pressure;
 };
 
 
@@ -134,15 +153,17 @@ public:
 
     static const PropertyName PRESSURE;
 
-    /*
-    Event *getAsEvent(timeT absoluteTime) const;
-
-    ChannelPressure(Rosegarden::MidiByte pressure);
+    ChannelPressure(MidiByte pressure);
+    ChannelPressure(const Event &event);
     ~ChannelPressure();
 
+    MidiByte getPressure() const { return m_pressure; }
+
+    /// Returned event is on heap; caller takes responsibility for ownership
+    Event *getAsEvent(timeT absoluteTime) const;
+
 private:
-    Rosegarden::MidiByte m_pressure;
-    */
+    MidiByte m_pressure;
 };
 
 
@@ -157,15 +178,17 @@ public:
 
     static const PropertyName PROGRAM;
 
-    /*
-    Event *getAsEvent(timeT absoluteTime) const;
-
-    ProgramChange(Rosegarden::MidiByte program);
+    ProgramChange(MidiByte program);
+    ProgramChange(const Event &event);
     ~ProgramChange();
 
+    MidiByte getProgram() const { return m_program; }
+
+    /// Returned event is on heap; caller takes responsibility for ownership
+    Event *getAsEvent(timeT absoluteTime) const;
+
 private:
-    Rosegarden::MidiByte m_program;
-    */
+    MidiByte m_program;
 };
 
 
@@ -178,17 +201,29 @@ public:
     static const std::string EventType;
     static const int EventSubOrdering;
 
+    struct BadEncoding : public Exception {
+	BadEncoding() : Exception("Bad SysEx encoding") { }
+    };
+
     static const PropertyName DATABLOCK;
 
-    /*
-    SystemExclusive();
+    SystemExclusive(std::string rawData);
+    SystemExclusive(const Event &event);
     ~SystemExclusive();
 
+    std::string getRawData() const { return m_rawData; }
+    std::string getHexData() const { return toHex(m_rawData); }
+
+    /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsEvent(timeT absoluteTime) const;
 
-private:
-*/
+    static std::string toHex(std::string rawData);
+    static std::string toRaw(std::string hexData);
+    static bool isHex(std::string data);
 
+private:
+    std::string m_rawData;
+    static unsigned char toRawNibble(char);
 };
 
 
