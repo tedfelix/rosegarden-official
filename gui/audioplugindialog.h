@@ -17,7 +17,7 @@
     COPYING included with this distribution for more information.
 */
 
-#include <vector.h>
+#include <vector>
 
 #include <kdialogbase.h>
 

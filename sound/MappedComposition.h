@@ -35,7 +35,7 @@
 
 #include <Composition.h>
 #include "MappedEvent.h"
-#include <multiset.h>
+#include <set>
 #include <qdatastream.h>
 
 namespace Rosegarden

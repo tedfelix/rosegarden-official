@@ -19,7 +19,7 @@
   COPYING included with this distribution for more information.
 */
 
-#include <multiset.h>
+#include <set>
 #include <string>
 
 #include <qdatastream.h>

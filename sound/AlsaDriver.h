@@ -23,7 +23,7 @@
 #ifdef HAVE_ALSA
 
 #include <vector>
-#include <multiset.h>
+#include <set>
 
 #include <alsa/asoundlib.h> // ALSA
 
