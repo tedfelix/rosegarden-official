@@ -32,7 +32,7 @@ TrackLabel::TrackLabel(Rosegarden::TrackId id,
     m_pressTimer = new QTimer(this);
 
     connect(m_pressTimer, SIGNAL(timeout()),
-            this, SIGNAL(changeToInstrumentList()));
+            this, SLOT(slotChangeToInstrumentList()));
 }
 
 TrackLabel::~TrackLabel()
@@ -113,4 +113,10 @@ TrackLabel::mouseDoubleClickEvent(QMouseEvent *e)
 
     if ( ok && !newText.isEmpty() )
         emit renameTrack(newText, m_position);
+}
+
+void
+TrackLabel::slotChangeToInstrumentList()
+{
+    emit changeToInstrumentList(m_position);
 }

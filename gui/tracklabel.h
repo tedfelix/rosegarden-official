@@ -62,6 +62,9 @@ public:
 
     QPoint getPressPosition() const { return m_pressPosition; }
 
+public slots:
+    void slotChangeToInstrumentList();
+    
 signals:
     // Our version of released() has an int id associated with it
     //
