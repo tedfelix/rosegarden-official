@@ -114,6 +114,9 @@ void ViewElementsManager::erase(NotationElementList::iterator it)
 {
     std::pair<Track::iterator, Track::iterator> interval
         = m_track.equal_range((*it)->event());
+    // we can't use find() because events are sorted by time
+    // and there could be more than one event at the same time
+    // so we have to look for the actual event in the given interval
 
     bool foundEvent = false;
 

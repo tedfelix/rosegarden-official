@@ -56,7 +56,16 @@ public:
     void insert(Rosegarden::Event*);
 
     // overload these for each ViewElement type
+
+    /**
+     * Insert a new NotationElement
+     */
     void insert(NotationElement*);
+
+    /**
+     * Erase the element pointed to by iterator
+     * Also erase it from the wrapped Track
+     */
     void erase(NotationElementList::iterator);
 
     Rosegarden::Track& getTrack() { return m_track; }
