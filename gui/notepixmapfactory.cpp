@@ -1257,12 +1257,13 @@ NotePixmapFactory::makeNoteMenuPixmap(Rosegarden::timeT duration,
 	}
     }
 
-    std::string noteName = nearestNote.getReferenceName();
+    QString noteName = NotationStrings::getReferenceName(nearestNote);
     if (triplet) noteName = "3-" + noteName;
     noteName = "menu-" + noteName;
-    return makeToolbarPixmap(strtoqstr(noteName));
+    return makeToolbarPixmap(noteName);
 }
 
+/*!!!
 QString
 NotePixmapFactory::makeNoteMenuLabel(Rosegarden::timeT duration,
 				     bool brief,
@@ -1327,7 +1328,7 @@ NotePixmapFactory::makeNoteMenuLabel(Rosegarden::timeT duration,
         return noteName;
     }
 }
-
+*/
 
 QCanvasPixmap*
 NotePixmapFactory::makeKeyPixmap(const Key &key, const Clef &clef)

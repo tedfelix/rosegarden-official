@@ -70,6 +70,14 @@ Configuration::getPropertyNames()
     std::sort(v.begin(), v.end());
     return v;
 }
+
+
+bool
+Configuration::has(const PropertyName &name) const
+{
+    const_iterator i = find(name);
+    return (i != end());
+}
     
 
 std::string

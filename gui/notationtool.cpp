@@ -41,6 +41,7 @@
 #include "rosegardenguidoc.h"
 #include "notationtool.h"
 #include "notationview.h"
+#include "notationstrings.h"
 #include "staffline.h"
 #include "qcanvassimplesprite.h"
 
@@ -597,7 +598,7 @@ void NoteInserter::slotToggleDot()
 {
     m_noteDots = (m_noteDots) ? 0 : 1;
     Note note(m_noteType, m_noteDots);
-    QString actionName(strtoqstr(note.getReferenceName()));
+    QString actionName(NotationStrings::getReferenceName(note));
     actionName.replace(QRegExp(" "), "_");
     m_parentView->actionCollection()->action(actionName)->activate();
 }
@@ -620,7 +621,7 @@ void NoteInserter::slotSelectSelected()
 void NoteInserter::slotRestsSelected()
 {
     Note note(m_noteType, m_noteDots);
-    QString actionName(strtoqstr(note.getReferenceName()));
+    QString actionName(NotationStrings::getReferenceName(note));
     actionName.replace(QRegExp(" "), "_");
     actionName += "_rest";
     m_parentView->actionCollection()->action(actionName)->activate();
@@ -714,7 +715,7 @@ void RestInserter::slotToggleDot()
 {
     m_noteDots = (m_noteDots) ? 0 : 1;
     Note note(m_noteType, m_noteDots);
-    QString actionName(strtoqstr(note.getReferenceName()));
+    QString actionName(NotationStrings::getReferenceName(note));
     actionName.replace(QRegExp(" "), "_");
     actionName += "_rest";
     m_parentView->actionCollection()->action(actionName)->activate();
@@ -723,7 +724,7 @@ void RestInserter::slotToggleDot()
 void RestInserter::slotNotesSelected()
 {
     Note note(m_noteType, m_noteDots);
-    QString actionName(strtoqstr(note.getReferenceName()));
+    QString actionName(NotationStrings::getReferenceName(note));
     actionName.replace(QRegExp(" "), "_");
     m_parentView->actionCollection()->action(actionName)->activate();
 }

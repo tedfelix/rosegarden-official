@@ -44,8 +44,9 @@ sub style_para
     # something wholly indented?
     my @nni = grep { /^\s/ } @p;
     if (@p and $#nni == $#p) {
-	$p[0] =~ s/^\s+[^\w\s\$\%]\s+([\w\"])/$1/ and return "uli";
+	$p[0] =~ s/^\s+[^\w\s\$\%\#]\s+([\w\"])/$1/ and return "uli";
 	$p[0] =~ s/^\s+\d+[^\w\s]\s+([\w\"])/$1/ and return "oli";
+	$p[0] =~ s/^\s+[a-z][^\w\s]\s+([\w\"])/$1/ and return "cli";
 	$p[0] =~ s/^(\s+[^\w\s\d])/$1/ and return "pre";
 	return "cont";
     }
@@ -67,7 +68,8 @@ sub write_para
 {
     my $style = shift;
 
-    if ($style eq "cont" and !($laststyle eq "uli" or $laststyle eq "oli")) {
+    if ($style eq "cont" and
+	!($laststyle eq "uli" or $laststyle eq "oli" or $laststyle eq "cli")) {
 	$style = "pre";
     }
 
@@ -77,6 +79,8 @@ sub write_para
 	    print "</ul>";
 	} elsif ($laststyle eq "oli") {
 	    print "</ol>";
+	} elsif ($laststyle eq "cli") {
+	    print "</ol>";
 	} elsif ($laststyle eq "pre") {
 	    print "</pre>";
 	}
@@ -85,6 +89,8 @@ sub write_para
 	    print "<ul>";
 	} elsif ($style eq "oli") {
 	    print "<ol>";
+	} elsif ($style eq "cli") {
+	    print "<ol type='a'>";
 	} elsif ($style eq "pre") {
 	    print "<pre>";
 	}
@@ -103,7 +109,7 @@ sub write_para
         write_head 2, $p[0];
     } elsif ($style eq "h3") {
         write_head 3, $p[0];
-    } elsif ($style eq "uli" or $style eq "oli") {
+    } elsif ($style eq "uli" or $style eq "oli" or $style eq "cli") {
 	print "</li><P>" if ($laststyle eq $style);
 	$p[0] =~ s/^\s+(?:\d+)?[^\w\s]\s+//;
 	print "<li>@p";

@@ -32,6 +32,7 @@
 #include "rosestrings.h"
 #include "rosedebug.h"
 #include "notationproperties.h"
+#include "notationstrings.h"
 
 
 using Rosegarden::Accidental;
@@ -551,10 +552,10 @@ NoteStyleFileReader::startElement(const QString &, const QString &,
 	}
 	
 	try {
-	    Note::Type type = Note(qstrtostr(s)).getNoteType();
+	    Note::Type type = NotationStrings::getNoteForName(s).getNoteType();
 	    if (!setFromAttributes(type, attributes)) return false;
 
-	} catch (Note::MalformedNoteName n) {
+	} catch (NotationStrings::MalformedNoteName n) {
 	    m_errorString = i18n("Unrecognised note name %1").arg(s);
 	    return false;
 	}

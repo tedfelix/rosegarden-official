@@ -768,11 +768,11 @@ NotationDisplayPitch::rawPitchToDisplayPitch(int pitch,
     // We calculate height on a virtual staff, and then make necessary adjustments to
     // translate them onto a particular Clef later on...
     //
-    // ---------F--------- Staff Height   Note(semitone) for each of five states:                 
+    // ---------F--------- Staff Height   Note(semitone) for each of five states:
     //          E          
-    // ---------D---------               Natural|  Sharp | Flat   |DblSharp| DblFlat           
+    // ---------D---------               Natural|  Sharp | Flat   |DblSharp| DblFlat
     //          C                               |        |        |        |
-    // ---------B--------- height  4      B(11) | B#( 0) | Bb(10) | Bx( 1) | Bbb( 9)   
+    // ---------B--------- height  4      B(11) | B#( 0) | Bb(10) | Bx( 1) | Bbb( 9)
     //          A          height  3      A( 9) | A#(10) | Ab( 8) | Ax(11) | Abb( 7)
     // ---------G--------- height  2      G( 7) | G#( 8) | Gb( 6) | Gx( 9) | Gbb( 5)
     //          F          height  1      F( 5) | F#( 6) | Fb( 4) | Fx( 7) | Fbb( 3)
@@ -1066,6 +1066,7 @@ const string Note::EventRestType = "rest";
 
 const timeT Note::m_shortestTime = basePPQ / 16;
  
+/*!!!
 
 Note::Note(const string &n)
     // throw (MalformedNoteName)
@@ -1105,6 +1106,7 @@ Note::Note(const string &n)
         throw MalformedNoteName("Can't parse note name \"" + n + "\"");
     }
 }
+*/
 
 Note& Note::operator=(const Note &n)
 {
@@ -1125,6 +1127,8 @@ timeT Note::getDurationAux() const
     return duration;
 }
 
+
+/*!!!
 
 static string addDots(int dots, string s, bool hyphenate = false)
 {
@@ -1164,7 +1168,7 @@ string Note::getReferenceName(bool isRest, Type type, int dots) const {
     if (dots) return addDots(dots, name, true);
     else return name;
 }
-
+*/
 
 Note Note::getNearestNote(timeT duration, int maxDots)
 {

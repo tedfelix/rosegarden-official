@@ -144,7 +144,6 @@ public:
     enum NoteNameStyle
     { 
 	American,
-        British,
 	Local
     };
 

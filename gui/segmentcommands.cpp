@@ -23,6 +23,7 @@
 #include "rosestrings.h"
 #include "rosedebug.h"
 #include "notationcommands.h"
+#include "notationstrings.h"
 #include "NotationTypes.h"
 #include "SegmentNotationHelper.h"
 #include "Property.h"
@@ -1241,8 +1242,7 @@ SegmentChangeQuantizationCommand::getGlobalName(Rosegarden::timeT unit)
 	return "Unquantize";
     } else {
 	Rosegarden::timeT error = 0;
-	QString label = NotePixmapFactory().makeNoteMenuLabel
-	    (unit, true, error);
+	QString label = NotationStrings::makeNoteMenuLabel(unit, true, error);
 	return QString("Quantize to %1").arg(label);
     }
 }

@@ -31,6 +31,7 @@
 
 #include "rg21io.h"
 #include "rosestrings.h"
+#include "notationstrings.h"
 #include "rosedebug.h"
 
 using std::vector;
@@ -569,10 +570,10 @@ timeT RG21Loader::convertRG21Duration(QStringList::Iterator& i)
 
     try {
 
-        Rosegarden::Note n(qstrtostr(durationString));
+        Rosegarden::Note n(NotationStrings::getNoteForName(durationString));
         return n.getDuration();
 
-    } catch (Rosegarden::Note::MalformedNoteName m) {
+    } catch (NotationStrings::MalformedNoteName m) {
 
         RG_DEBUG << "RG21Loader::convertRG21Duration: Bad duration: "
                              << durationString << endl;

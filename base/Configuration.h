@@ -62,6 +62,8 @@ public:
     Configuration(const Configuration &);
     ~Configuration();
 
+    bool has(const PropertyName &name) const;
+
     template <PropertyType P>
     void
     set(const PropertyName &name,

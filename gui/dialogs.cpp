@@ -22,6 +22,7 @@
 #include "dialogs.h"
 #include "notepixmapfactory.h"
 #include "rosestrings.h"
+#include "notationstrings.h"
 #include "rosedebug.h"
 #include "rosegardenguidoc.h"
 #include "segmentcommands.h"
@@ -703,7 +704,7 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
 	if (maxDuration > 0 && (2 * duration > maxDuration)) break;
 	timeT e; // error factor, ignore
 	m_unitCombo->insertItem(NotePixmapFactory::toQPixmap(npf.makeNoteMenuPixmap(duration, e)),
-				npf.makeNoteMenuLabel(duration, false, e, true));
+				NotationStrings::makeNoteMenuLabel(duration, false, e, true));
 	if (defaultUnitType == t) {
 	    m_unitCombo->setCurrentItem(m_unitCombo->count() - 1);
 	}

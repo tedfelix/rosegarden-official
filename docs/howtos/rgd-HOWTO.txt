@@ -1,17 +1,20 @@
-MINI-HOWTO: Creating the Instrument and Voice definitions for Rosegarden-4
+mini-HOWTO: Creating the Instrument and Voice definitions for Rosegarden-4
 ==========================================================================
 
 
 
+Document maintained by: Ryurick M. Hristev <ryurick dot hristev at canterbury dot ac dot nz>
+
+
 Introduction
 ------------
-  Document maintained by: Ryurick M. Hristev <ryurick.hristev@canterbury.ac.nz>
 
 This mini-howto explains how to create a device definition file (in
 Rosegarden speak). Please refer to the Rosegarden tutorial paying
 particular attention to sections 2.4 to 2.10:
 
 <URL:http://rosegarden.sourceforge.net/tutorial/using-rosegarden/using-rosegarden.html>
+
 
 The Beginner Section
 --------------------
@@ -40,7 +43,8 @@ The first voice in this bank is the "Acoustic/Grand Piano", i.e. pianoforte
 and all 128 voices are well defined.
 
 So we will tell Rosegarden about this voice somewhat like:
-  At MSB=0, LSB=0, Program=0 you find "Acoustic/Grand Piano"
+
+  * At MSB=0, LSB=0, Program=0 you find "Acoustic/Grand Piano"
 
 The MIDI devices and software cares only about numbers, the name is for
 human consumption. I.e. you will use "Acoustic/Grand Piano" and the
@@ -49,13 +53,16 @@ computer will understand "MSB=0, LSB=0, Program=0"
 Rosegarden stores this information in the *.rgd file.
 
 There are several ways you can tell Rosegarden what voices are available:
-1. Use Rosegarden itself, via the Studio -> Manage MIDI Devices menu
-   However consider that only the GM bank contains already 128 voices
-   and most keyboards or sound cards may well contain in excess of 500
-   voices. So entering by hand is a very tedious process.
-2. Edit the *.rgd file directly: possible but not for the beginner
-   (more about that below)
-3. Create a list of voices and then convert it to the *.rgd format
+
+ 1. Use Rosegarden itself, via the Studio -> Manage MIDI Devices menu
+    However consider that only the GM bank contains already 128 voices
+    and most keyboards or sound cards may well contain in excess of 500
+    voices. So entering by hand is a very tedious process.
+
+ 2. Edit the *.rgd file directly: possible but not for the beginner
+    (more about that below)
+
+ 3. Create a list of voices and then convert it to the *.rgd format
 
 We will take here the third approach.
 
@@ -65,26 +72,35 @@ in CSV (Comma Separated Values) format (any spreadsheet should be able to
 do this).
 
 The format of the file is very simple:
-a. Each line contains 5 parameters. Each parameter is separated from the
-   next by either whitespace (spaces, tabs) and/or commas (only one comma
-   between fields);
-b. Empty lines are ignored;
-c. You can add comments in any (reasonable) place. Comments start with
-   the "#" character and continue to the end of line.
+
+ a. Each line contains 5 parameters. Each parameter is separated from the
+    next by either whitespace (spaces, tabs) and/or commas (only one comma
+    between fields);
+
+ b. Empty lines are ignored;
+
+ c. You can add comments in any (reasonable) place. Comments start with
+    the "#" character and continue to the end of line.
 
 The list of the parameters is as follows:
-1. The first one is for your reference, it will be ignored in the final
-   output. You can put whatever you like except whitespaces and commas
-   (because they are separators) and "#" because it will be taken as a
-   comment. An example of what you can put in here is the voice number,
-   in order to keep track of what you have entered;
-2. The second one is the MSB, it is a integer between 0 and 127;
-3. The third one is the LSB, it is a integer between 0 and 127;
-4. The fourth one is the program change number, it is an integer between
-   0 and 127 (remember, this is displayed as 1 to 128 in Rosegarden and
-   in your manual);
-5. And finally the last one is the voice name. This field in particular
-   may contain whitespace and/or commas but not "#";
+
+ 1. The first one is for your reference, it will be ignored in the final
+    output. You can put whatever you like except whitespaces and commas
+    (because they are separators) and "#" because it will be taken as a
+    comment. An example of what you can put in here is the voice number,
+    in order to keep track of what you have entered;
+
+ 2. The second one is the MSB, it is a integer between 0 and 127;
+
+ 3. The third one is the LSB, it is a integer between 0 and 127;
+
+ 4. The fourth one is the program change number, it is an integer between
+    0 and 127 (remember, this is displayed as 1 to 128 in Rosegarden and
+    in your manual);
+
+ 5. And finally the last one is the voice name. This field in particular
+    may contain whitespace and/or commas but not "#";
+
 You can optionally add comments after the fifth parameter.
 
 Example:
@@ -99,14 +115,18 @@ Example:
 If you want to save yourself some time and make sure that the data entered is
 correct you may proceed as follows:
 
-* First the manual in pdf format (it is available for the Yamaha keyboards
-  from their site, other manufacturers may have it; check you CD's as well)
-* Then try to see if you can copy & paste. You can do it from xpdf if the
-  pdf allows it (sadly the Yamaha manuals don't!). Save the pastings
-  into a text file.
-* If you can't then you are down to a qute tedious process: use ps2ascii
-  to convert to text.
-* Finally edit the text to transform it into a format as described above.
+ * First obtain the manual in pdf format (it is available for the
+   Yamaha keyboards from their site, other manufacturers may have it;
+   check your CDs as well)
+
+ * Then try to see if you can copy & paste. You can do it from xpdf if the
+   pdf allows it (sadly the Yamaha manuals don't!). Save the pastings
+   into a text file.
+
+ * If you can't then you are down to a qute tedious process: use ps2ascii
+   to convert to text.
+
+ * Finally edit the text to transform it into a format as described above.
 
 It is still a tedious process but maybe less so than entering all voices
 from scratch. And very likey less error-prone.
@@ -122,7 +142,9 @@ Step Two: Convert To *.rgd
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The next step involves converting the text file to the *.rgd format.
-Use the provided txt2rgd.py script as follows:
+Use the provided txt2rgd.py script (in the docs/howtos directory of
+the Rosegarden source distribution, or from
+<URL:http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/rosegarden/docs/howtos/txt2rgd.py>) as follows:
 
     txt2rgd.py <input file> <output file>
 
@@ -134,10 +156,13 @@ This script will try to catch some possible errors. If it does report any
 errors then correct the offending line(s) and try again.
 
 Notes:
-1. txt2rgd.py is a Python script, you need Python 2.2 (or above) installed
-   on your system.
-2. the output file is overwritten if there was a previous version.
-3. the name of the output file must end with the ".rgd" extension.
+
+ 1. txt2rgd.py is a Python script, you need Python 2.2 (or above) installed
+    on your system.
+
+ 2. the output file is overwritten if there was a previous version.
+
+ 3. the name of the output file must end with the ".rgd" extension.
 
 
 Step Three: Verify And Adjust
@@ -169,18 +194,18 @@ have to gunzip it first (it figures out for itself).
 
 Some things you may want to change in the file:
 
-1. In the device tag you may change the name. E.g.:
+ * In the device tag you may change the name. E.g.:
 
-    <device id="0" name="Yamaha PSR 550" type="midi">
+     <device id="0" name="Yamaha PSR 550" type="midi">
 
    (leave the id at "0")
 
-2. After the device and before the first instrument tag you may add a
+ * After the device and before the first instrument tag you may add a
    librarian tag. E.g.:
 
-    <librarian name="Joe Schmoe" email="Joe.Schmoe@somewere.on.the.net"/>
+     <librarian name="Joe Schmoe" email="Joe.Schmoe@somewere.on.the.net"/>
 
-3. You may want to change the bank names directly here, it's easier.
+ * You may want to change the bank names directly here, it's easier.
 
 Note that some chars need to be replaced with XML friendly formats.
 Check the converter_table dictionary in the txt2rgd.py script for the

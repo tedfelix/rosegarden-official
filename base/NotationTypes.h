@@ -608,8 +608,6 @@ public:
 
     typedef int Type; // not an enum, too much arithmetic at stake
 
-    typedef Exception MalformedNoteName;
-
     // define both sorts of names; some people prefer the American
     // names, but I just can't remember which of them is which
 
@@ -649,8 +647,11 @@ public:
 	       type),
 	m_dots(dots) { }
 
+#ifdef NOT_DEFINED
     Note(const std::string &s)
         /* throw (BadType, MalformedNoteName) */;
+#endif
+
     Note(const Note &n) : m_type(n.m_type), m_dots(n.m_dots) { }
     ~Note() { }
 
@@ -672,9 +673,10 @@ public:
      * The default arguments are the values of the note on which the
      * method is called; non-default arguments specify another note type.
      */
+#ifdef NOT_DEFINED
     std::string getReferenceName(bool isRest = false,
 				 Type type = -1, int dots = 0) const;
-
+#endif
     /**
      * Return the Note whose duration is closest to (but shorter than or
      * equal to) the given duration, permitting at most maxDots dots.

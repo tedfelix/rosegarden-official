@@ -53,6 +53,7 @@
 #include "notepixmapfactory.h"
 #include "notestyle.h"
 #include "notationtool.h"
+#include "notationstrings.h"
 #include "barbuttons.h"
 #include "loopruler.h"
 #include "rosedebug.h"
@@ -2288,9 +2289,15 @@ void NotationView::initActionDataMaps()
 	    for (int type = Note::Longest; type >= Note::Shortest; --type) {
 		if (dots && (type == Note::Longest)) continue;
 
-		QString refName(strtoqstr(referenceNote.getReferenceName(rest,type,dots)));
-		QString shortName(NotationStrings::getShortNoteName(type,dots));
-		QString titleName(NotationStrings::getNoteName(type,dots));
+		QString refName
+		    (NotationStrings::getReferenceName(Note(type, dots), rest == 1));
+
+		QString shortName
+		    (NotationStrings::getShortNoteName(Note(type, dots)));
+
+		QString titleName
+		    (NotationStrings::getNoteName(Note(type, dots)));
+
 		titleName = titleName.left(1).upper() +
 		            titleName.right(titleName.length()-1);
 

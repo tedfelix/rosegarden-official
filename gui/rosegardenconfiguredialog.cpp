@@ -128,7 +128,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
 
     m_nameStyle = new QComboBox(frame);
     m_nameStyle->insertItem(i18n("Always use US names (e.g. quarter, 8th)"));
-    m_nameStyle->insertItem(i18n("Localised (where available, else UK)"));
+    m_nameStyle->insertItem(i18n("Localised (where available)"));
     m_nameStyle->setCurrentItem(m_cfg->readUnsignedNumEntry("notenamestyle", Local));
     layout->addWidget(m_nameStyle, 0, 1);
 
@@ -412,28 +412,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     }
 
     layout->addWidget(m_spacing, 1, 1);
-/*!!!
-    layout->addWidget(new QLabel(i18n("Default smoothing"), frame), 2, 0);
-    
-    m_smoothing = new QComboBox(frame);
-    m_smoothing->setEditable(false);
 
-    Note::Type defaultSmoothing =
-	m_cfg->readNumEntry("smoothing", Note::Shortest);
-
-    NotePixmapFactory npf;
-    Note referenceNote(Note::Crotchet);
-    for (Note::Type type = Note::Shortest; type <= Note::Longest; ++type) {
-	QPixmap pmap = NotePixmapFactory::toQPixmap(npf.makeToolbarPixmap
-	    (strtoqstr((std::string("menu-") + referenceNote.getReferenceName(type)))));
-	m_smoothing->insertItem(pmap, NotationStrings::getNoteName(type));
-	if (defaultSmoothing == type) {
-	    m_smoothing->setCurrentItem(m_smoothing->count() - 1);
-	}
-    }
-
-    layout->addWidget(m_smoothing, 2, 1);
-*/
     m_showUnknowns = new QCheckBox
 	(i18n("Show non-notation events as question marks"), frame);
     bool defaultShowUnknowns = m_cfg->readBoolEntry("showunknowns", true);
@@ -1164,7 +1143,8 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
     TabbedConfigurationPage(doc, parent, name)
 {
     QFrame *frame = new QFrame(m_tabWidget);
-    QGridLayout *layout = new QGridLayout(frame, 3, 2,
+    QGridLayout *layout = new QGridLayout(frame,
+					  3, 2,
                                           10, 5);
 
     layout->addWidget(new QLabel(i18n("Filename:"), frame), 0, 0);
@@ -1198,12 +1178,16 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
     m_metadata->setItemsRenameable(true);
     m_metadata->setRenameable(0);
     m_metadata->setRenameable(1);
+    m_metadata->setItemMargin(5);
     //m_metadata->setSelectionModeExt(KListView::NoSelection);
 
     Rosegarden::Configuration &metadata = doc->getComposition().getMetadata();
     std::vector<std::string> names(metadata.getPropertyNames());
     for (unsigned int i = 0; i < names.size(); ++i) {
-	new KListViewItem(m_metadata, strtoqstr(names[i]),
+	QString name(strtoqstr(names[i]));
+	// property names stored in lower case
+	name = name.left(1).upper() + name.right(name.length()-1);
+	new KListViewItem(m_metadata, name,
 			  strtoqstr(metadata.get<String>(names[i])));
     }
 
@@ -1223,13 +1207,6 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
     connect(deletePropButton, SIGNAL(clicked()),
             this, SLOT(slotDeleteProperty()));
     
-/*!!!    layout->addWidget(new QLabel(i18n("Copyright"), frame), 3, 0);
-    m_copyright = new QLineEdit
-	(strtoqstr(doc->getComposition().getCopyrightNote()), frame);
-    m_copyright->setMinimumWidth(300);
-    layout->addWidget(m_copyright, 3, 1);
-*/
-
     addTab(frame, i18n("Description"));
 
 }
@@ -1237,7 +1214,16 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
 void
 DocumentMetaConfigurationPage::slotAddNewProperty()
 {
-    new KListViewItem(m_metadata, i18n("<property>"), i18n("<value>"));
+    QString propertyName;
+    int i = 0;
+
+    while (1) {
+	propertyName = (i > 0 ? i18n("New property %1").arg(i) : i18n("New property"));
+	if (!m_doc->getComposition().getMetadata().has(qstrtostr(propertyName))) break;
+	++i;
+    }
+
+    new KListViewItem(m_metadata, propertyName, i18n("Undefined"));
 }
 
 void
@@ -1249,20 +1235,12 @@ DocumentMetaConfigurationPage::slotDeleteProperty()
 void
 DocumentMetaConfigurationPage::apply()
 {
-/*!!!
-    Rosegarden::Composition &comp = m_doc->getComposition();
-    QString copyright = m_copyright->text();
-    
-    if (!copyright.isNull()) {
-        comp.setCopyrightNote(qstrtostr(copyright));
-    }
-*/
-
     Rosegarden::Configuration &metadata = m_doc->getComposition().getMetadata();
 
-    for(QListViewItem *item = m_metadata->firstChild();
-        item != 0; item = item->nextSibling()) {
-        metadata.set<String>(qstrtostr(item->text(0)),
+    for (QListViewItem *item = m_metadata->firstChild();
+	 item != 0; item = item->nextSibling()) {
+	
+        metadata.set<String>(qstrtostr(item->text(0).lower()),
                              qstrtostr(item->text(1)));
     }
 }
@@ -1278,12 +1256,12 @@ AudioConfigurationPage::AudioConfigurationPage(RosegardenGUIDoc *doc,
     Rosegarden::AudioFileManager &afm = doc->getAudioFileManager();
 
     QFrame *frame = new QFrame(m_tabWidget);
-    QGridLayout *layout = new QGridLayout(frame, 1, 4,
+    QGridLayout *layout = new QGridLayout(frame, 2, 4,
                                           10, 5);
     layout->addWidget(new QLabel(i18n("Audio file path"), frame), 0, 0);
     m_path = new QLineEdit(QString(afm.getAudioPath().c_str()), frame);
     m_path->setMinimumWidth(200);
-    layout->addMultiCellWidget(m_path, 0, 1, 0, 2);
+    layout->addMultiCellWidget(m_path, 0, 0, 1, 2);
     
     m_changePathButton =
         new QPushButton(i18n("Choose..."), frame);

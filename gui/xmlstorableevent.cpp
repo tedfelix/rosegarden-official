@@ -27,6 +27,7 @@
 #include "XmlExportable.h"
 
 #include "rosestrings.h"
+#include "notationstrings.h"
 #include "rosedebug.h"
 
 using Rosegarden::Event;
@@ -73,9 +74,9 @@ XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes,
 
             if (!isNumeric) {
 		try {
-		    Note n(qstrtostr(attrVal));
+		    Note n(NotationStrings::getNoteForName(attrVal));
 		    setDuration(n.getDuration());
-		} catch (Note::MalformedNoteName m) {
+		} catch (NotationStrings::MalformedNoteName m) {
                     RG_DEBUG << "XmlStorableEvent::XmlStorableEvent: Bad duration: " << attrVal << " (" << m.getMessage() << ")" << endl;
 		}
             } else {

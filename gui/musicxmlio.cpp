@@ -31,6 +31,8 @@
 #include "SegmentNotationHelper.h"
 #include "Instrument.h"
 
+#include "notationstrings.h"
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -166,7 +168,7 @@ MusicXmlExporter::writeNote(Event *e, bool isFlatKeySignature, std::ofstream &st
     Note tmpNote = Note::getNearestNote(e->getDuration(), MAX_DOTS);
     // Incomplete: getReferenceName probably is not the list of valid
     // MusicXML types (need to convert)
-    str << "\t\t\t\t<type>" << tmpNote.getReferenceName() << "</type>" << std::endl;
+    str << "\t\t\t\t<type>" << NotationStrings::getReferenceName(tmpNote) << "</type>" << std::endl;
     // could also do <stem>down</stem> if you wanted
     str << "\t\t\t\t</note>" << std::endl;
 }

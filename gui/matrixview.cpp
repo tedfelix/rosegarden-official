@@ -58,6 +58,7 @@
 #include "midipitchlabel.h"
 #include "dialogs.h"
 #include "rosestrings.h"
+#include "notationstrings.h"
 #include "rosegardenguidoc.h"
 #include "ktmpstatusmsg.h"
 #include "barbuttons.h"
@@ -606,7 +607,7 @@ void MatrixView::setupActions()
 		SLOT(slotClearSelection()), actionCollection(),
 		"clear_selection");
 
-    //!!! should be using NotePixmapFactory::makeNoteMenuLabel for these
+    //!!! should be using NotationStrings::makeNoteMenuLabel for these
     new KAction(i18n("Snap to 1/64"), Key_0, this,
                 SLOT(slotSetSnapFromAction()), actionCollection(), "snap_64");
     new KAction(i18n("Snap to 1/32"), Key_3, this,
@@ -1685,7 +1686,7 @@ MatrixView::initActionsToolbar()
 	} else {
 
 	    timeT err = 0;
-	    QString label = npf.makeNoteMenuLabel(m_snapValues[i], true, err);
+	    QString label = NotationStrings::makeNoteMenuLabel(m_snapValues[i], true, err);
 	    QPixmap pixmap = NotePixmapFactory::toQPixmap(npf.makeNoteMenuPixmap(m_snapValues[i], err));
 	    m_snapGridCombo->insertItem((err ? noMap : pixmap), label);
 	}
@@ -1708,7 +1709,7 @@ MatrixView::initActionsToolbar()
 
 	Rosegarden::timeT time = m_quantizations[i];
 	Rosegarden::timeT error = 0;
-	QString label = npf.makeNoteMenuLabel(time, true, error);
+	QString label = NotationStrings::makeNoteMenuLabel(time, true, error);
 	QPixmap pmap = NotePixmapFactory::toQPixmap(npf.makeNoteMenuPixmap(time, error));
 	m_quantizeCombo->insertItem(error ? noMap : pmap, label);
     }

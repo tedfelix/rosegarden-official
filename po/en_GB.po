@@ -1,0 +1,146 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: en_GB\n"
+"POT-Creation-Date: 2003-02-20 14:40+0000\n"
+"PO-Revision-Date: 2003-02-20 14:40+0000\n"
+"Last-Translator: Chris Cannam <cannam@all-day-breakfast.com>\n"
+"Language-Team: None\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: notationstrings.cpp:71
+msgid "sixty-fourth note"
+msgstr "hemidemisemiquaver"
+
+#: notationstrings.cpp:71
+msgid "thirty-second note"
+msgstr "demisemiquaver"
+
+#: notationstrings.cpp:72
+msgid "sixteenth note"
+msgstr "semiquaver"
+
+#: notationstrings.cpp:72
+msgid "eighth note"
+msgstr "quaver"
+
+#: notationstrings.cpp:73
+msgid "quarter note"
+msgstr "crotchet"
+
+#: notationstrings.cpp:73
+msgid "half note"
+msgstr "minim"
+
+#: notationstrings.cpp:74
+msgid "whole note"
+msgstr "semibreve"
+
+#: notationstrings.cpp:74
+msgid "double whole note"
+msgstr "breve"
+
+#: notationstrings.cpp:77
+msgid "sixty-fourth notes"
+msgstr "hemidemisemiquavers"
+
+#: notationstrings.cpp:77
+msgid "thirty-second notes"
+msgstr "demisemiquavers"
+
+#: notationstrings.cpp:78
+msgid "sixteenth notes"
+msgstr "semiquavers"
+
+#: notationstrings.cpp:78
+msgid "eighth notes"
+msgstr "quavers"
+
+#: notationstrings.cpp:79
+msgid "quarter notes"
+msgstr "crotchets"
+
+#: notationstrings.cpp:79
+msgid "half notes"
+msgstr "minims"
+
+#: notationstrings.cpp:80
+msgid "whole notes"
+msgstr "semibreves"
+
+#: notationstrings.cpp:80
+msgid "double whole notes"
+msgstr "breves"
+
+#: notationstrings.cpp:137 notationstrings.cpp:262
+msgid "64th"
+msgstr "hemidemisemi"
+
+#: notationstrings.cpp:137 notationstrings.cpp:262
+msgid "32nd"
+msgstr "demisemi"
+
+#: notationstrings.cpp:137 notationstrings.cpp:262
+msgid "16th"
+msgstr "semiquaver"
+
+#: notationstrings.cpp:137 notationstrings.cpp:262
+msgid "8th"
+msgstr "quaver"
+
+#: notationstrings.cpp:138 notationstrings.cpp:263
+msgid "quarter"
+msgstr "crotchet"
+
+#: notationstrings.cpp:138 notationstrings.cpp:263
+msgid "half"
+msgstr "minim"
+
+#: notationstrings.cpp:138 notationstrings.cpp:263
+msgid "whole"
+msgstr "semibreve"
+
+#: notationstrings.cpp:139 notationstrings.cpp:264
+msgid "double whole"
+msgstr "breve"
+
+#: notationstrings.cpp:142
+msgid "64ths"
+msgstr "hemidemisemis"
+
+#: notationstrings.cpp:142
+msgid "32nds"
+msgstr "demisemis"
+
+#: notationstrings.cpp:142
+msgid "16ths"
+msgstr "semiquavers"
+
+#: notationstrings.cpp:142
+msgid "8ths"
+msgstr "quavers"
+
+#: notationstrings.cpp:143
+msgid "quarters"
+msgstr "crotchets"
+
+#: notationstrings.cpp:143
+msgid "halves"
+msgstr "minims"
+
+#: notationstrings.cpp:143
+msgid "wholes"
+msgstr "semibreves"
+
+#: notationstrings.cpp:144
+msgid "double wholes"
+msgstr "breves"
+
+

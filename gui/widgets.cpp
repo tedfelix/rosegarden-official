@@ -40,6 +40,7 @@
 #include "widgets.h"
 #include "rosedebug.h"
 #include "rosestrings.h"
+#include "notationstrings.h"
 #include "notepixmapfactory.h"
 
 #include "Quantizer.h"
@@ -830,7 +831,7 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
 
 	QPixmap pmap =
 	    NotePixmapFactory::toQPixmap(npf.makeNoteMenuPixmap(time, error));
-	QString label = npf.makeNoteMenuLabel(time, false, error);
+	QString label = NotationStrings::makeNoteMenuLabel(time, false, error);
 
 	if (error == 0) {
 	    m_gridUnitCombo->insertItem(pmap, label);

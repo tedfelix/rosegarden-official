@@ -33,6 +33,7 @@
 #include "notepixmapfactory.h"
 #include "segmentcommands.h"
 #include "rosestrings.h"
+#include "notationstrings.h"
 #include "rosegardenguiview.h"
 
 using Rosegarden::Note;
@@ -158,7 +159,7 @@ SegmentParameterBox::initBox()
 
 	Rosegarden::timeT time = m_standardQuantizations[i];
 	Rosegarden::timeT error = 0;
-	QString label = npf.makeNoteMenuLabel(time, true, error);
+	QString label = NotationStrings::makeNoteMenuLabel(time, true, error);
 	QPixmap pmap = NotePixmapFactory::toQPixmap(npf.makeNoteMenuPixmap(time, error));
 	m_quantizeValue->insertItem(error ? noMap : pmap, label);
     }
@@ -193,7 +194,7 @@ SegmentParameterBox::initBox()
 	// resolution it might not be) & include a note pixmap if so
 	// 
 	Rosegarden::timeT error = 0;
-	QString label = npf.makeNoteMenuLabel(time, true, error);
+	QString label = NotationStrings::makeNoteMenuLabel(time, true, error);
 	QPixmap pmap = NotePixmapFactory::toQPixmap(npf.makeNoteMenuPixmap(time, error));
 	m_delayValue->insertItem((error ? noMap : pmap), label);
     }
@@ -436,7 +437,7 @@ SegmentParameterBox::populateBoxFromSegments()
 
 		NotePixmapFactory npf;
 		Rosegarden::timeT error = 0;
-		QString label = npf.makeNoteMenuLabel(delayLevel, true, error);
+		QString label = NotationStrings::makeNoteMenuLabel(delayLevel, true, error);
 		m_delayValue->setEditText(label);
 
 	    } else if (delayLevel < 0) {
