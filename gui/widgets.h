@@ -27,11 +27,10 @@
 #ifndef _WIDGETS_H_
 #define _WIDGETS_H_
 
-// Create out own check box which is always Tristate 
-// and allows us to click only between on and off
-// and only to _show_ the third ("Some") state 
-//
-//
+/** Create out own check box which is always Tristate 
+ * and allows us to click only between on and off
+ * and only to _show_ the third ("Some") state 
+ */
 class RosegardenTristateCheckBox : public QCheckBox
 {
 Q_OBJECT
@@ -49,9 +48,10 @@ protected:
 private:
 };
 
-// Turn a normal QComboBox into one that accepts mouse wheel
-// events to change the value
-//
+/**
+ * Turn a normal QComboBox into one that accepts mouse wheel
+ * events to change the value
+ */
 class RosegardenComboBox : public QComboBox
 {
 Q_OBJECT
@@ -93,10 +93,11 @@ signals:
 
 };
 
-// A Combobox that just about handles doubles - you have
-// to set the precision outside of this class if you're
-// using it with Qt designer.  Urch.
-//
+/**
+ * A Combobox that just about handles doubles - you have
+ * to set the precision outside of this class if you're
+ * using it with Qt designer.  Urch.
+ */
 class RosegardenSpinBox : public QSpinBox
 {
     Q_OBJECT
@@ -113,7 +114,5 @@ protected:
 signals:
     double m_doubleValue;
 };
-
-
 
 #endif // _WIDGETS_H_
