@@ -149,17 +149,6 @@ Event::copyFrom(const Event &e)
 
 
 void
-Event::setViewElements(ViewElements *ve)
-{
-    if (m_viewElements) {
-        // this will also delete all elements in m_group
-        delete m_viewElements;
-    }
-    
-    m_viewElements = ve;
-}
-
-void
 Event::dump(ostream& out) const
 {
 #ifndef NDEBUG
