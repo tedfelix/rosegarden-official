@@ -84,6 +84,11 @@ k_dcop:
     //
     virtual void notifySequencerStatus(const int &status) = 0;
 
+    // The sequencer tries to call this action until it can - then
+    // we can go on and retrive device information
+    //
+    virtual void alive() = 0;
+
     // Actions proxy
     //
     DCOPRef action( const QCString &name );

@@ -29,6 +29,7 @@
 #include "rosegardentransportdialog.h"
 #include "sequencemanager.h"
 #include "SegmentPerformanceHelper.h"
+#include "MappedDevice.h"
 
 namespace Rosegarden
 {
@@ -1075,6 +1076,54 @@ SequenceManager::sendMappedEvent(Rosegarden::MappedEvent *mE)
 
     mC.insert(mE);
     sendMappedComposition(mC);
+
+}
+
+
+void
+SequenceManager::alive()
+{
+    QByteArray data;
+    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                  "alive()",
+                                  data))
+    {
+        std::cerr << "SequenceManager::alive() - "
+                  << "can't call Sequencer" << std::endl;
+        return;
+    }
+
+    QByteArray replyData;
+    QCString replyType;
+    QDataStream arg(data, IO_WriteOnly);
+
+    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                  "getMappedDevice()",
+                                  data, replyType, replyData, true))
+    {
+        std::cerr << "SequenceManager::alive() - "
+                  << "can't call Sequencer" << std::endl;
+        return;
+    }
+
+    QDataStream reply(replyData, IO_ReadOnly);
+    if (replyType == "Rosegarden::MappedDevice")
+    {
+        std::cout << "SequenceManager::alive() - "
+                  << "got Rosegarden::MappedDevice" << std::endl;
+
+        Rosegarden::MappedDevice *mD = new Rosegarden::MappedDevice();
+
+        // unfurl
+        reply >> mD;
+    }
+
+    std::cout << "SequenceManager::alive() - "
+              << "Sequencer alive - Instruments synced"
+              << std::endl;
+
 
 }
 

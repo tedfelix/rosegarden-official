@@ -27,6 +27,7 @@
 #include "MappedComposition.h"
 #include "MappedEvent.h"
 #include "Instrument.h"
+#include "MappedDevice.h"
 
 class RosegardenSequencerIface : virtual public DCOPObject
 {
@@ -113,6 +114,11 @@ public:
                                     long audioStartMarkerSec,
                                     long audioStartMarkerUSec) = 0;
 
+    virtual const Rosegarden::MappedDevice& getMappedDevice() = 0;
+
+    // The GUI let's us know it's alive
+    //
+    virtual void alive() = 0;
 
 };
 

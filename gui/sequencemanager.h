@@ -99,6 +99,9 @@ public:
     void sendMappedComposition(const Rosegarden::MappedComposition &mC);
     void sendMappedEvent(Rosegarden::MappedEvent *mE);
 
+    // Send "alive" to sequencer and collect Instrument data
+    //
+    void alive();
 private:
 
     Rosegarden::MappedComposition m_mC;

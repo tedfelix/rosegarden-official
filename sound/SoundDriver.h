@@ -220,6 +220,14 @@ public:
     RealTime getStartPosition() const { return m_playStartPosition; }
     RecordStatus getRecordStatus() const { return m_recordStatus; }
 
+    // Return the MappedDevice full of the Instrument mappings
+    // that the driver has discovered.  The gui can then use
+    // this list (complete with names) to generate its proper
+    // Instruments under the MidiDevice and AudioDevice.
+    //
+    const Rosegarden::MappedDevice& getMappedDevice()
+        { return m_instruments; }
+
 protected:
     // Helper functions to be implemented by subclasses
     //

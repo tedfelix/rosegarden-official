@@ -51,6 +51,7 @@
 #include "MidiEvent.h"
 #include "AudioFile.h"
 #include "SoundDriver.h"
+#include "MappedDevice.h"
 
 
 namespace Rosegarden
@@ -149,6 +150,13 @@ public:
     MappedInstrument* getMappedInstrument(InstrumentId id)
         { return m_soundDriver->getMappedInstrument(id); }
 
+    // Return a list of MappedInstruments as a DCOP friendly MappedDevice.
+    //
+    //
+    const MappedDevice& getMappedDevice()
+        { return m_soundDriver->getMappedDevice(); }
+
+    
 protected:
     std::vector<AudioFile*>::iterator getAudioFile(const unsigned int &id);
 

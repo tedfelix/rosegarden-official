@@ -119,6 +119,11 @@ int main(int argc, char *argv[])
     //
     TransportStatus lastSeqStatus = roseSeq->getStatus();
 
+    // sleep time is 5000 microseconds
+    //
+    const int sequencerSleep = 5000;
+    int sendAliveCount = 0;
+
     while(roseSeq->getStatus() != QUIT)
     {
         // process any pending events (5ms of events)
@@ -245,8 +250,29 @@ int main(int argc, char *argv[])
         // to throttle - this could be done automatically or within
         // parameters sent down from the GUI.
         //
-        usleep(5000);
+        usleep(sequencerSleep);
+
+        // While we're sending the "alive" signal
+        //
+        if (roseSeq->sendAlive())
+        {
+           // increment counter
+           sendAliveCount += sequencerSleep;
+
+           // if we've waited a second then try (we're also processing
+           // 5ms of Qt events don't forget)
+           //
+           if (sendAliveCount > 500000)
+           {
+                // send the alive signal
+                roseSeq->sequencerAlive();
+
+                // and reset counter
+                sendAliveCount = 0;
+           }
+        }
     }
+
 
     return app.exec();
 

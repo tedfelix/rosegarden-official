@@ -90,7 +90,5 @@ SoundDriver::setMappedInstrument(MappedInstrument *mI)
 
 }
 
-
-
 }
 

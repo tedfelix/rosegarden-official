@@ -47,7 +47,8 @@ RosegardenSequencerApp::RosegardenSequencerApp():
     m_playLatency(0, 50000),       // default value
     m_readAhead(0, 40000),         // default value
     m_loopStart(0, 0),
-    m_loopEnd(0, 0)
+    m_loopEnd(0, 0),
+    m_sendAlive(true)
 {
     // Without DCOP we are nothing
     QCString realAppId = kapp->dcopClient()->registerAs(kapp->name(), false);
@@ -683,6 +684,54 @@ RosegardenSequencerApp::processMappedEvent(unsigned int id,
     m_sequencer->processEventsOut(mC, Rosegarden::RealTime(0, 0), true);
 }
 
+// Get the MappedDevice (DCOP wrapped vector of MappedInstruments)
+//
+const Rosegarden::MappedDevice&
+RosegardenSequencerApp::getMappedDevice()
+{
+    return m_sequencer->getMappedDevice();
+}
 
 
+// The GUI lets us know it's alive - so all we ever respond with 
+// is the same call back.  We lock out loops of this at the
+// sequencer end using sendAlive() (m_sendAlive).
+//
+void
+RosegardenSequencerApp::alive()
+{
+    std::cout << "RosegardenSequencerApp::alive() - "
+              << "GUI is alive, Instruments synced" << std::endl;
+
+    // now turn off the automatic sendalive
+    m_sendAlive = false;
+}
+
+
+void
+RosegardenSequencerApp::sequencerAlive()
+{
+    if (!kapp->dcopClient()->
+        isApplicationRegistered(QCString(ROSEGARDEN_GUI_APP_NAME)))
+    {
+        std::cout << "RosegardenSequencerApp::sequencerAlive() - "
+                  << "waiting for GUI to register" << std::endl;
+        return;
+    }
+
+    QByteArray data;
+
+    if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+                                  ROSEGARDEN_GUI_IFACE_NAME,
+                                 "alive()",
+                                  data))
+    {
+        std::cerr << "RosegardenSequencer::alive()"
+                  << " - can't call RosegardenGUI client"
+                  << std::endl;
+    }
+
+    std::cout << "RosegardenSequencerApp::sequencerAlive() - "
+              << "trying to tell GUI that we're alive" << std::endl;
+}
 

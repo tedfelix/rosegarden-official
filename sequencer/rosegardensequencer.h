@@ -68,9 +68,12 @@ public:
     RosegardenSequencerApp();
     ~RosegardenSequencerApp();
 
-protected:
+    //      -------- START OF DCOP INTERFACE METHODS --------
+    //
+    //
 
-public slots:
+
+    // Quit
     virtual void quit();
 
     // Based on RealTime timestamps
@@ -167,7 +170,19 @@ public slots:
                                     long audioStartMarkerSec,
                                     long audioStartMarkerUSec);
 
-public:
+    virtual const Rosegarden::MappedDevice& getMappedDevice();
+
+    // The GUI tells us that it's alive
+    //
+    virtual void alive();
+
+    //
+    //
+    //
+    //      -------- END OF DCOP INTERFACE --------
+
+
+
 
     void setStatus(TransportStatus status)
             { m_transportStatus = status; }
@@ -200,6 +215,13 @@ public:
     // Are we looping?
     //
     bool isLooping() const { return !(m_loopStart == m_loopEnd); }
+
+    // Do we send the "alive" call to the gui ?
+    //
+    bool sendAlive() const { return m_sendAlive; }
+
+    // the call itself
+    void sequencerAlive();
 
 private:
 
@@ -243,6 +265,10 @@ private:
     Rosegarden::RealTime m_loopEnd;
 
     std::vector<Rosegarden::MappedInstrument*> m_instruments;
+
+    // If we should poll the GUI to see if it's alive
+    //
+    bool m_sendAlive;
 
 };
  

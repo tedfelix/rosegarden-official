@@ -2089,5 +2089,13 @@ void RosegardenGUIApp::slotCommandExecuted(Command *command)
 }
 
 
+// The sequencer calls this method when it's alive to get us
+// to poll it for Device/Instrument information.  We also tell
+// it to shut up at the same time.
+//
+void RosegardenGUIApp::alive()
+{
+    m_seqManager->alive();
+}
 
 

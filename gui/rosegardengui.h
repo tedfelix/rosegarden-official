@@ -188,6 +188,14 @@ public:
     virtual void notifySequencerStatus(const int &status);
 
     /*
+     * The sequencer calls this method when it's running to
+     * allow us to sync data with it.
+     *
+     */
+    virtual void alive();
+
+
+    /*
      * Autoload the autoload song for Studio parameters
      *
      */
