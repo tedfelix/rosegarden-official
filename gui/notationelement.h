@@ -50,7 +50,7 @@ public:
      * layout. This is not the coordinate of the associated canvas
      * item.
      *
-     * @see getEffectiveX()
+     * @see getCanvasX()
      */
     double getLayoutX() { return m_x; }
 
@@ -59,15 +59,15 @@ public:
      * layout. This is not the coordinate of the associated canvas
      * item.
      *
-     * @see getEffectiveY()
+     * @see getCanvasY()
      */
     double getLayoutY() { return m_y; }
 
     /// returns the x pos of the associated canvas item
-    double getEffectiveX() throw (NoCanvasItem);
+    double getCanvasX() throw (NoCanvasItem);
 
     /// returns the y pos of the associated canvas item
-    double getEffectiveY() throw (NoCanvasItem);
+    double getCanvasY() throw (NoCanvasItem);
 
     /**
      * Sets the X coordinate which was computed by the layout engine

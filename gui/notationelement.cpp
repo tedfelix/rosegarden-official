@@ -53,7 +53,7 @@ NotationElement::~NotationElement()
 }
 
 double
-NotationElement::getEffectiveX() throw (NoCanvasItem)
+NotationElement::getCanvasX() throw (NoCanvasItem)
 {
     if (m_canvasItem)
         return m_canvasItem->x();
@@ -62,7 +62,7 @@ NotationElement::getEffectiveX() throw (NoCanvasItem)
 }
 
 double
-NotationElement::getEffectiveY() throw (NoCanvasItem)
+NotationElement::getCanvasY() throw (NoCanvasItem)
 {
     if (m_canvasItem)
         return m_canvasItem->y();

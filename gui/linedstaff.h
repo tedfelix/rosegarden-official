@@ -175,6 +175,9 @@ protected:
     /// Subclass may wish to expose this
     virtual void setRowSpacing(int rowSpacing);
 
+    /// Subclass may wish to expose this.  Default is zero
+    virtual void setConnectingLineLength(int length);
+
 public:
     /**
      * Return the id of the staff.  This is only useful to external
@@ -421,6 +424,7 @@ protected:
     bool     m_pageMode;
     double   m_pageWidth;
     int	     m_rowSpacing;
+    int	     m_connectingLineLength;
 
     double   m_startLayoutX;
     double   m_endLayoutX;

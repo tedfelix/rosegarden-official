@@ -31,6 +31,7 @@
 #include "LayoutEngine.h"
 
 #include "editview.h"
+#include "linedstaff.h"
 
 namespace Rosegarden { class Segment; }
 
@@ -47,42 +48,58 @@ public:
     void setCanvas(QCanvas* c);
 
     /**
-     * Returns the X coordinate of the element, as computed by the
-     * layout. This is not the coordinate of the associated canvas
-     * item.
-     *
-     * @see getEffectiveX()
+     * Returns the layout x coordinate of the element (not the same
+     * as the canvas x coordinate, which is assigned by the staff
+     * depending on its own location)
      */
-    double getLayoutX() { return m_canvasRect->x(); }
+    double getLayoutX() const { return m_layoutX; }
 
     /**
-     * Returns the Y coordinate of the element, as computed by the
-     * layout. This is not the coordinate of the associated canvas
-     * item.
-     *
-     * @see getEffectiveY()
+     * Returns the layout y coordinate of the element (not the same
+     * as the canvas y coordinate, which is assigned by the staff
+     * depending on its own location)
      */
-    double getLayoutY() { return m_canvasRect->y(); }
+    double getLayoutY() const { return m_layoutY; }
 
     /**
-     * Sets the X coordinate which was computed by the layout engine
-     * @see getLayoutX()
+     * Sets the layout x coordinate of the element (to be translated
+     * to canvas coordinate according to the staff's location)
      */
-    void setLayoutX(double x) { m_canvasRect->setX(x); }
+    void setLayoutX(double x) { m_layoutX = x; }
 
     /**
-     * Sets the Y coordinate which was computed by the layout engine
-     * @see getLayoutY()
+     * Sets the layout y coordinate of the element (to be translated
+     * to canvas coordinate according to the staff's location)
      */
-    void setLayoutY(double y) { m_canvasRect->setY(y); }
+    void setLayoutY(double y) { m_layoutY = y; }
 
     /**
-     * Sets the width of the rectangle computed by the layout engine
+     * Returns the actual x coordinate of the element on the canvas
+     */
+    double getCanvasX() const { return m_canvasRect->x(); }
+
+    /**
+     * Returns the actual y coordinate of the element on the canvas
+     */
+    double getCanvasY() const { return m_canvasRect->y(); }
+
+    /**
+     * Sets the x coordinate of the element on the canvas
+     */
+    void setCanvasX(double x) { m_canvasRect->setX(x); }
+
+    /**
+     * Sets the y coordinate of the element on the canvas
+     */
+    void setCanvasY(double y) { m_canvasRect->setY(y); }
+
+    /**
+     * Sets the width of the rectangle on the canvas
      */
     void setWidth(int w)   { m_canvasRect->setSize(w, m_canvasRect->height()); }
 
     /**
-     * Sets the height of the rectangle computed by the layout engine
+     * Sets the height of the rectangle on the canvas
      */
     void setHeight(int h)   { m_canvasRect->setSize(m_canvasRect->width(), h); }
 
@@ -94,6 +111,9 @@ protected:
     //--------------- Data members ---------------------------------
 
     QCanvasRectangle* m_canvasRect;
+
+    double m_layoutX;
+    double m_layoutY;
 };
 
 
@@ -191,15 +211,18 @@ protected:
 
 //------------------------------
 
-typedef std::vector<QCanvasLine *> HLineList;
 typedef std::vector<double> BarData;
 
 class MatrixHLayout : public Rosegarden::HorizontalLayoutEngine<MatrixElement>
 {
 public:
-    MatrixHLayout();
+    MatrixHLayout(double scaleFactor);
 
     virtual ~MatrixHLayout();
+
+    void setScaleFactor(double scaleFactor) {
+	m_scaleFactor = scaleFactor;
+    }
 
     /**
      * Resets internal data stores for all staffs
@@ -250,8 +273,8 @@ protected:
     //--------------- Data members ---------------------------------
 
     BarData m_barData;
-    HLineList m_hlines;
 
+    double m_scaleFactor;
     double m_totalWidth;
 };
 
@@ -259,51 +282,17 @@ protected:
 
 typedef Rosegarden::ViewElementList<MatrixElement> MatrixElementList;
 
-class MatrixStaff : public Rosegarden::Staff<MatrixElement>
+class MatrixStaff : public LinedStaff<MatrixElement>
 {
-    typedef std::vector<QCanvasLine *> StaffLineList;
-
 public:
-    MatrixStaff(QCanvas*, Rosegarden::Segment*, unsigned int id,
-                unsigned int pitchScaleFactor = defaultPitchScaleFactor);
-
-    ~MatrixStaff();
-
-    void renderElements(MatrixElementList::iterator from,
-			MatrixElementList::iterator to);
-
-    /**
-     * Call renderElements(from, to) on the whole staff.
-     */
-    void renderElements();
-
-    int getId() { return m_id; }
-
-    void setPitchScaleFactor(unsigned int f) { m_pitchScaleFactor = f; }
-    unsigned int getPitchScaleFactor()       { return m_pitchScaleFactor; }
-
-    void setTimeScaleFactor(float f) { m_timeScaleFactor = f; }
-    float getTimeScaleFactor()       { return m_timeScaleFactor; }
-
-    void setTimeResolution(float f) { m_timeResolution = f; }
-    float getTimeResolution()       { return m_timeResolution; }
-
-    /**
-     * This must be called each time the canvas is resized
-     */
-    void resizeStaffHLines();
-
-    void setBarData(const BarData& bd) { m_barData = bd; }
-
-    Rosegarden::timeT xToTime(double x);
-
-    int yToPitch(double y);
-
-    static const unsigned int nbHLines;
-
-    static const unsigned int defaultPitchScaleFactor;
+    MatrixStaff(QCanvas *, Rosegarden::Segment *, int id, int vResolution);
+    virtual ~MatrixStaff();
 
 protected:
+    virtual int getLineCount() const;
+    virtual int getLegerLineCount() const;
+    virtual int getBottomLineHeight() const;
+    virtual int getHeightPerLine() const;
 
     /**
      * Override from Rosegarden::Staff<T>
@@ -311,25 +300,13 @@ protected:
      */
     virtual bool wrapEvent(Rosegarden::Event*);
 
-    /// Create staff's vertical lines
-    void createLines();
+public:
+    LinedStaff<MatrixElement>::setResolution;
 
+    int getElementHeight() { return m_resolution; }
 
-    //--------------- Data members ---------------------------------
-
-    StaffLineList m_staffHLines, m_staffVLines;
-
-    QCanvas* m_canvas;
-
-    unsigned int m_id;
-
-    unsigned int m_pitchScaleFactor;
-    float m_timeScaleFactor;
-    float m_timeResolution;
-
-    BarData m_barData;
-
-    unsigned int m_currentBarLength;
+    virtual void positionElements(Rosegarden::timeT from = -1,
+				  Rosegarden::timeT to = -1);
 };
 
 

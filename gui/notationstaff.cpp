@@ -65,7 +65,6 @@ NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
 				pageMode, pageWidth,
 				0 //!!!
 	),
-    m_connectingLineHeight(0), //!!!
     m_npf(0)
 {
     setLegatoDuration(Note(Note::Shortest).getDuration());
@@ -342,14 +341,14 @@ NotationStaff::elementNotMoved(NotationElement *elt)
     int yoff = coords.second;
 
     bool ok =
-	(int)(elt->getCanvasItem()->x()) == (int)(elt->getLayoutX() + xoff) &&
-	(int)(elt->getCanvasItem()->y()) == (int)(elt->getLayoutY() + yoff);
+	(int)(elt->getCanvasX()) == (int)(elt->getLayoutX() + xoff) &&
+	(int)(elt->getCanvasY()) == (int)(elt->getLayoutY() + yoff);
     cerr << "elementNotMoved: elt at " << elt->getAbsoluteTime() <<
 	", ok is " << ok << endl;
     if (!ok) {
-	cerr << "(cf " << (int)(elt->getCanvasItem()->x()) << " vs "
+	cerr << "(cf " << (int)(elt->getCanvasX()) << " vs "
 	     << (int)(elt->getLayoutX() + xoff) << ", "
-	     << (int)(elt->getCanvasItem()->y()) << " vs "
+	     << (int)(elt->getCanvasY()) << " vs "
 	     << (int)(elt->getLayoutY() + yoff) << ")" << endl;
     }
     return ok;

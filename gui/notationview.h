@@ -148,39 +148,11 @@ public:
 	return &m_toolbarNotePixmapFactory;
     }
 
-    
+   
     /**
      * From LinedStaffManager
      */
     virtual NotationStaff *getStaffForCanvasY(int y) const;
-
-/*!!!
-    virtual int getHeightAtY(int y) const;
-*/
-/*!!!
-    virtual Rosegarden::timeT getTimeAtCoordinates(int x, int y) const {
-	//!!! this is currently unused
-	return 0;
-    }
-
-    virtual int getYOfHeightAtTime(Rosegarden::Staff<NotationElement> *staff,
-			   int height, Rosegarden::timeT time) const {
-	NotationStaff *ns(dynamic_cast<NotationStaff *>(staff));
-	return (int)(ns->yCoordOfHeight(height) + ns->y());
-    }
-*/
-
-/*!!!
-    virtual int getYOfHeight(Rosegarden::Staff<NotationElement> *staff,
-			     int height, int baseY = -1) const;
-
-    virtual int getYSnappedToLine(int y) const;
-
-    virtual void getBarExtents(int x, int y, 
-			       int &rx, int &ry, int &rw, int &rh) const;
-*/
-//!!!    virtual std::string getNoteNameAtCoordinates(int x, int y) const;	
-    
 
 
 public slots:
@@ -418,6 +390,11 @@ protected:
      * setup status bar
      */
     virtual void initStatusBar();
+
+    /**
+     * Place the staffs at the correct x & y coordinates
+     */
+    void positionStaffs();
 
     /**
      * setup the "zoom" toolbar

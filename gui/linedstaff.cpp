@@ -35,7 +35,8 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_lineThickness(lineThickness),
     m_pageMode(false),
     m_pageWidth(0.0),
-    m_rowSpacing(0.0),
+    m_rowSpacing(0),
+    m_connectingLineLength(0),
     m_startLayoutX(0),
     m_endLayoutX(0)
 {
@@ -56,6 +57,7 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_pageMode(true),
     m_pageWidth(pageWidth),
     m_rowSpacing(rowSpacing),
+    m_connectingLineLength(0),
     m_startLayoutX(0),
     m_endLayoutX(0)
 {
@@ -76,6 +78,7 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_pageMode(pageMode),
     m_pageWidth(pageWidth),
     m_rowSpacing(rowSpacing),
+    m_connectingLineLength(0),
     m_startLayoutX(0),
     m_endLayoutX(0)
 {
@@ -122,6 +125,13 @@ void
 LinedStaff<T>::setRowSpacing(int rowSpacing)
 {
     m_rowSpacing = rowSpacing;
+}
+
+template <class T>
+void
+LinedStaff<T>::setConnectingLineLength(int connectingLineLength)
+{
+    m_connectingLineLength = connectingLineLength;
 }
 
 template <class T>
@@ -374,8 +384,9 @@ template <class T>
 void
 LinedStaff<T>::insertBar(int layoutX, bool isCorrect)
 {
-    //!!! Where to get this from?
-    int barThickness = 1;
+    // rather arbitrary
+    int barThickness = m_resolution / 5;
+    if (barThickness < 1) barThickness = 1;
 
     for (int i = 0; i < barThickness; ++i) {
 
@@ -388,37 +399,34 @@ LinedStaff<T>::insertBar(int layoutX, bool isCorrect)
 
         if (isCorrect) line->setPen(QPen(RosegardenGUIColours::BarLine, 1));
         else line->setPen(QPen(RosegardenGUIColours::BarLineIncorrect, 1));
-        line->show();
 	line->setZ(-1);
+        line->show();
 
 	BarLine barLine(layoutX, line);
         BarLineList::iterator insertPoint = lower_bound
 	    (m_barLines.begin(), m_barLines.end(), barLine, compareBars);
         m_barLines.insert(insertPoint, barLine);
 
-//!!!
-#ifdef NOT_DEFINED_YET
-	if (m_connectingLineHeight > 0) {
+	if (m_connectingLineLength > 0) {
 
-	    QCanvasLine *connectingLine = new QCanvasLine(canvas());
+	    line = new QCanvasLine(m_canvas);
 	    
-	    connectingLine->setPoints(0, 0, 0, m_connectingLineHeight);
-	    connectingLine->moveBy
+	    line->setPoints(0, 0, 0, m_connectingLineLength);
+	    line->moveBy
 		(getCanvasXForLayoutX(layoutX) + i,
-		 getCanvasYForTopLine(row) + getBarLineHeight());
+		 getCanvasYForTopLine(row));
 
-	    connectingLine->setPen
+	    line->setPen
 		(QPen(RosegardenGUIColours::StaffConnectingLine, 1));
-	    connectingLine->setZ(-3);
-	    connectingLine->show();
+	    line->setZ(-3);
+	    line->show();
 
-	    BarLine connectingLine(barPos, connectingLine);
+	    BarLine connectingLine(layoutX, line);
 	    insertPoint = lower_bound
 		(m_barConnectingLines.begin(), m_barConnectingLines.end(),
 		 connectingLine, compareBars);
 	    m_barConnectingLines.insert(insertPoint, connectingLine);
 	}
-#endif
     }
 }
 
@@ -541,7 +549,10 @@ LinedStaff<T>::resizeStaffLineRow(int row, double x, double length)
     QColor lineColour(level, level, level);
 
     int h, j;
-/*
+
+/*!!! No longer really good enough. But we could potentially use the
+  bar positions to sort this out
+
     if (m_pageMode && row > 0 && offset == 0.0) {
 	offset = (double)m_npf->getBarMargin() / 2;
 	length -= offset;
@@ -552,19 +563,18 @@ LinedStaff<T>::resizeStaffLineRow(int row, double x, double length)
 
     delete m_staffConnectingLines[row];
     line = 0;
-/*
-    if (m_pageMode && m_connectingLineHeight > 0.1) {
+
+    if (m_pageMode && m_connectingLineLength > 0.1) {
 	line = new QCanvasLine(m_canvas);
-	lx = (int)x() + getRowLeftX(row) + offset + length - 1;
-	ly = (int)y() + getTopLineOffsetForRow(row);
-	line->setPoints(lx, ly, lx,
-			ly + getBarLineHeight() + m_connectingLineHeight);
-	line->setPen
-	    (QPen(RosegardenGUIColours::StaffConnectingTerminatingLine, 1));
-	line->setZ(-2);
-	line->show();
+	y = getCanvasYForTopLine(row);
+	line->setPoints(x + length - 1, y, x + length - 1,
+			y + m_connectingLineLength);
+ 	line->setPen
+            (QPen(RosegardenGUIColours::StaffConnectingTerminatingLine, 1));
+        line->setZ(-2);
+        line->show();
     }
-*/
+
     m_staffConnectingLines[row] = line;
 
     while ((int)m_staffLines[row].size() <= getLineCount() * m_lineThickness) {

@@ -53,7 +53,7 @@ public:
     NotationStaff(QCanvas *, Rosegarden::Segment *, int id,
 		  bool pageMode, double pageWidth,
                   std::string fontName, int resolution);
-    ~NotationStaff();
+    virtual ~NotationStaff();
 
     /**
      * Changes the resolution of the note pixmap factory and the
@@ -66,9 +66,7 @@ public:
     LinedStaff<NotationElement>::setPageMode;
     LinedStaff<NotationElement>::setPageWidth;
     LinedStaff<NotationElement>::setRowSpacing;
-
-    //!!! should be in LinedStaff
-    void setConnectingLineHeight(int clh) { m_connectingLineHeight = clh; }
+    LinedStaff<NotationElement>::setConnectingLineLength;
 
     /**
      * Gets a read-only reference to the pixmap factory used by the
@@ -187,9 +185,6 @@ protected:
      * at the correct layout coordinates
      */
     bool elementNotMoved(NotationElement *);
-
-    //!!! to LinedStaff
-    int m_connectingLineHeight;
 
     typedef std::set<QCanvasSimpleSprite *> SpriteSet;
     SpriteSet m_timeSigs;

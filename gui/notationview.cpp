@@ -167,38 +167,13 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
                    .arg(segments.size()));
     }
 
-    vector<int> staffHeights;
-    int totalHeight = 0;
-
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new NotationStaff(canvas(), segments[i], i,
 					     false, width() - 50,
                                              m_fontName, m_fontSize));
-	staffHeights.push_back(m_staffs[i]->getHeightOfRow());
-	totalHeight += staffHeights[i];
     }
 
-    int h = 0;
-    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	m_staffs[i]->setRowSpacing(totalHeight + staffHeights[i] / 7);
-	if (i < m_staffs.size() - 1) {
-/*!!! fix, along with other references to connecting line height in staff code
-	    m_staffs[i]->setConnectingLineHeight
-		(m_staffs[i]->getTopLineOffset() +
-		 (m_staffs[i+1]->getHeightOfRow() -
-		  m_staffs[i+1]->getTopLineOffset()));
-*/
-	}
-	
-	m_staffs[i]->setX(20);
-	m_staffs[i]->setY(h + 45);
-
-/*
-        m_staffs[i]->move(20, h + 45);
-        m_staffs[i]->show();
-*/
-	h += staffHeights[i];
-    }
+    positionStaffs();
     m_currentStaff = 0;
 
     m_vlayout = new NotationVLayout();
@@ -253,6 +228,30 @@ NotationView::~NotationView()
 
     kdDebug(KDEBUG_AREA) << "<- ~NotationView()\n";
 }
+
+void NotationView::positionStaffs()
+{
+    vector<int> staffHeights;
+    int totalHeight = 0;
+
+    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+	staffHeights.push_back(m_staffs[i]->getHeightOfRow());
+	totalHeight += staffHeights[i];
+    }
+
+    int h = 0;
+    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+	m_staffs[i]->setRowSpacing(totalHeight + staffHeights[i] / 7);
+	if (i < m_staffs.size() - 1) {
+	    m_staffs[i]->setConnectingLineLength(staffHeights[i]);
+	}
+	
+	m_staffs[i]->setX(20);
+	m_staffs[i]->setY(h + 45);
+
+	h += staffHeights[i];
+    }
+}    
 
 void NotationView::saveOptions()
 {        
@@ -910,12 +909,10 @@ NotationView::changeFont(string newName, int newSize)
     m_hlayout->setSpacing(spacing);
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-//!!! update to use correct location code (see ctor) and to set
-// lineBreakGap correctly
-//!!!        m_staffs[i]->move(0, 0);
         m_staffs[i]->changeFont(m_fontName, m_fontSize);
-//!!!        m_staffs[i]->move(20, m_staffs[i]->getHeightOfRow() * i + 45);
     }
+
+    positionStaffs();
 
     bool layoutApplied = applyLayout();
     if (!layoutApplied) KMessageBox::sorry(0, "Couldn't apply layout");
@@ -1962,15 +1959,15 @@ NotationView::findClosestNote(double eventX, double eventY,
 
         double xdist, ydist;
         
-        if ( (*it)->getEffectiveX() >= eventX )
-            xdist = (*it)->getEffectiveX() - eventX;
+        if ( (*it)->getCanvasX() >= eventX )
+            xdist = (*it)->getCanvasX() - eventX;
         else
-            xdist = eventX - (*it)->getEffectiveX();
+            xdist = eventX - (*it)->getCanvasX();
         
-        if ( (*it)->getEffectiveY() >= eventY )
-            ydist = (*it)->getEffectiveY() - eventY;
+        if ( (*it)->getCanvasY() >= eventY )
+            ydist = (*it)->getCanvasY() - eventY;
         else
-            ydist = eventY - (*it)->getEffectiveY();
+            ydist = eventY - (*it)->getCanvasY();
 
 	// bit of a hack to get the correct row in page layout:
 	if (ydist > m_staffs[staffNo]->getHeightOfRow()/2) continue;
