@@ -90,6 +90,7 @@ rosegarden_SOURCES = \
 	rgled.cpp \
 	rosedebug.cpp \
 	rosegardencanvasview.cpp \
+        rosegardenconfigurationpage.cpp \
         rosegardenconfiguredialog.cpp \
 	rosegardengui.cpp \
 	rosegardenguidoc.cpp \
