@@ -29,13 +29,12 @@ class QCanvasItem;
 class NotationElementList;
 
 /**
- *@author Guillaume Laurent, Chris Cannam, Rich Bown
- *
  * The Notation H and V layout is performed on a
  * NotationElementList. Once this is done, each NotationElement is
  * affected a QCanvasItem which is set at these coords.
  *
  * @see see NotationView::showElements()
+ * @author Guillaume Laurent, Chris Cannam, Rich Bown
  */
 
 class NotationElement : public ViewElement
