@@ -270,7 +270,6 @@ PlayableAudioFile::getSample(int channel)
 void
 PlayableAudioFile::checkSmallFileCache()
 {    
-    return;//!!!
     if (m_isSmallFile) return; // already done this
 
     SmallFileMap::iterator smfi = m_smallFileCache.find(m_audioFile);

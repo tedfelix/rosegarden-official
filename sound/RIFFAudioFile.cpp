@@ -23,6 +23,7 @@
 #include "RIFFAudioFile.h"
 #include "RealTime.h"
 #include "Sound.h"
+#include "Profiler.h"
 
 using std::cout;
 using std::cerr;
@@ -132,6 +133,8 @@ RIFFAudioFile::scanTo(const RealTime &time)
 bool
 RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
 {
+    Rosegarden::Profiler("RIFFAudioFile::scanTo", true); //!!!
+
     // sanity
     if (file == 0) return false;
 
