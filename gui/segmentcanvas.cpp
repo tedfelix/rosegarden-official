@@ -604,7 +604,7 @@ void SegmentCanvas::slotShowSplitLine(int x, int y)
 //
 void SegmentCanvas::slotHideSplitLine()
 {
-    m_splitLine->hideLine();
+    if (m_splitLine) m_splitLine->hideLine();
     slotUpdate();
 }
 

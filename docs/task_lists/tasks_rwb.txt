@@ -16,6 +16,13 @@ o stabilise and bug fix
 
 o update README and INSTALL with latest instructions/features
 
+BUGS:
+
+o Splitting recorded Segment and Moving Segments (Segment::erase())
+
+
+
+
 
 --
 

@@ -752,6 +752,24 @@ AlsaDriver::processNotesOff(const RealTime &time)
 void
 AlsaDriver::processAudioQueue()
 {
+    std::vector<PlayableAudioFile*>::iterator it;
+    RealTime currentTime = getSequencerTime();
+
+    for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); ++it)
+    {
+        if ((*it)->getStartTime() >= currentTime &&
+            (*it)->getStatus() == PlayableAudioFile::IDLE)
+        {
+            (*it)->setStatus(PlayableAudioFile::PLAYING);
+        }
+
+        if (currentTime >= (*it)->getEndTime() &&
+            (*it)->getStatus() == PlayableAudioFile::PLAYING)
+        {
+             (*it)->setStatus(PlayableAudioFile::DEFUNCT);
+        }
+    }
+
 }
 
 // Get the queue time and convert it to RealTime for the gui
