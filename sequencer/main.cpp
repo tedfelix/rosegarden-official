@@ -131,6 +131,12 @@ int main(int argc, char *argv[])
         app.processEvents(5);
 
 
+        // Unset this flag - only gets set by call()'d operations
+        // in the next section.  After which if this flag is set
+        // we can tell the gui to send back down to us in safety.
+        //
+        roseSeq->setClearToSend(false);
+
         // Do the main conditional loop
         //
         if(roseSeq)
@@ -251,7 +257,7 @@ int main(int argc, char *argv[])
             roseSeq->getStatus() == RECORDING_MIDI ||
             roseSeq->getStatus() == RECORDING_AUDIO)
         {
-            roseSeq->updateClocks();
+            roseSeq->updateClocks(roseSeq->clearToSend());
         }
 
         // Pause for breath while we're gnashing this loop (5 milliseconds)

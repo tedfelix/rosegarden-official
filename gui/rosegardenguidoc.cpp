@@ -1226,6 +1226,7 @@ RosegardenGUIDoc::stopRecordingAudio()
     // now move the segment back by the jack record latency
     //
     KConfig* config = kapp->config();
+    config->setGroup("Latency Options");
 
     int recordSec = config->readLongNumEntry("jackrecordlatencysec", 0);
     int recordUSec = config->readLongNumEntry("jackrecordlatencyusec", 0);

@@ -86,6 +86,15 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
     timeT sliceEndElapsed =
               comp.getElapsedTimeForRealTime(m_mC.getEndTime());
 
+    KConfig* config = kapp->config();
+    config->setGroup("Latency Options");
+    int jackSec = config->readLongNumEntry("jackplaybacklatencysec", 0);
+    int jackUSec = config->readLongNumEntry("jackplaybacklatencyusec", 0);
+    RealTime jackPlaybackLatency(jackSec, jackUSec);
+
+    timeT jackPlaybackLatencyTimeT = comp.getElapsedTimeForRealTime(sliceStart)
+        - comp.getElapsedTimeForRealTime(sliceStart - jackPlaybackLatency);
+
     // Place metronome clicks in the MappedComposition
     // if they're required
     //
@@ -119,16 +128,18 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
         if (comp.isSolo() && track->getID() != comp.getSelectedTrack())
             continue;
 
-        // Skip the Segment if it starts too late to be of
-        // interest to our slice.
-        if (segmentStartTime > sliceEndElapsed)
-            continue;
-
-	// Skip the Segment if it ends too early to be of
-	// interest and it's not repeating.
-	if (segmentEndTime <= sliceStartElapsed && !(*it)->isRepeating())
-	    continue;
-
+        // With audio segments we can cheat and look further
+        // ahead into time than this slice - this is because
+        // we have the JACK/Audio latency to interpret and
+        // this could very well mean we should start audio
+        // events more than a single slice away from where
+        // they should start.
+        //
+        // More mind bending timing issues follow.  Don't
+        // mess with any of this unless you're really unsure
+        // what you're doing.
+        //
+        //
         if ((*it)->getType() == Rosegarden::Segment::Audio)
         {
 
@@ -139,7 +150,16 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
             // EndTime is how far into the sample playback should
             // stop.  We make sure that an overlapping duration (part
             // of a sample) isn't cast away.
+            // 
+            // The EndTime can of course be worked out from the StartTime
+            // and segment duration so we certainly have something
+            // redundant here.
             //
+
+            // Adjust for JACK latency for Audio segments
+            //
+            segmentStartTime -= jackPlaybackLatencyTimeT;
+
             if ((segmentStartTime < sliceStartElapsed ||
                  segmentStartTime > sliceEndElapsed) &&
                  firstFetch == false)
@@ -183,7 +203,7 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
                 // condition doesn't hold.
                 if (firstFetch)
                 {
-                    cout << "SKIPPING" << endl;
+                    //cout << "SKIPPING" << endl;
                     continue;
                 }
             }
@@ -198,6 +218,16 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
             m_mC.insert(me);
             continue; // next Segment
         }
+
+        // Skip the Segment if it starts too late to be of
+        // interest to our slice.
+        if (segmentStartTime > sliceEndElapsed)
+            continue;
+
+	// Skip the Segment if it ends too early to be of
+	// interest and it's not repeating.
+	if (segmentEndTime <= sliceStartElapsed && !(*it)->isRepeating())
+	    continue;
 
         SegmentPerformanceHelper helper(**it);
 
@@ -389,7 +419,7 @@ SequenceManager::play()
 
     // Send audio latencies
     //
-    sendAudioLatencies();
+    //sendAudioLatencies();
 
     // make sure we toggle the play button
     // 
@@ -424,6 +454,8 @@ SequenceManager::play()
         startPos = comp.getElapsedRealTime(comp.getLoopStart());
 
     KConfig* config = kapp->config();
+    config->setGroup("Latency Options");
+
     Rosegarden::Configuration& docConfig = m_doc->getConfiguration();
 
     // playback start position
@@ -667,6 +699,7 @@ SequenceManager::record()
     Rosegarden::Composition &comp = m_doc->getComposition();
     Rosegarden::Studio &studio = m_doc->getStudio();
     KConfig* config = kapp->config();
+    config->setGroup("General Options");
 
     // if already recording then stop
     //
@@ -1279,6 +1312,7 @@ SequenceManager::processRecordedAudio(const Rosegarden::RealTime &time,
 }
 
 
+/*
 void
 SequenceManager::sendAudioLatencies()
 {
@@ -1286,6 +1320,7 @@ SequenceManager::sendAudioLatencies()
     QDataStream streamOut(data, IO_WriteOnly);
 
     KConfig* config = kapp->config();
+    config->setGroup("Latency Options");
 
     streamOut << config->readLongNumEntry("jackplaybacklatencysec", 0);
     streamOut << config->readLongNumEntry("jackplaybacklatencyusec", 0);
@@ -1300,6 +1335,7 @@ SequenceManager::sendAudioLatencies()
       throw(i18n("Failed to contact Rosegarden sequencer to send audio latenices"));
     }
 }
+*/
 
 }
 

@@ -181,12 +181,14 @@ public:
     //
     virtual void alive();
 
+    /*
     // Set both the audio latencies
     //
     virtual void setAudioLatencies(long playTimeSec,
                                    long playTimeUsec,
                                    long recordTimeSec,
-                                   long recordTimeUsec);
+    /                              long recordTimeUsec);
+    */
 
     //
     //
@@ -207,7 +209,7 @@ public:
     bool keepPlaying();
 
     // Update internal clock and send GUI position pointer movement
-    void updateClocks();
+    void updateClocks(bool clearToSend);
 
     // Sends status changes up to GUI
     void notifySequencerStatus();
@@ -235,6 +237,7 @@ public:
     // the call itself
     void sequencerAlive();
 
+    /*
     // Audio latencies
     //
     Rosegarden::RealTime getAudioPlaybackLatency()
@@ -246,6 +249,12 @@ public:
         { return m_audioRecordLatency; }
     void setAudioRecordLatency(const Rosegarden::RealTime &latency)
         { m_audioRecordLatency = latency; }
+    */
+
+    // Clear-To-Send flag
+    //
+    bool clearToSend() { return m_clearToSend; }
+    void setClearToSend(bool value) { m_clearToSend = value; }
 
 private:
 
@@ -286,6 +295,10 @@ private:
     Rosegarden::RealTime m_playLatency;
     Rosegarden::RealTime m_readAhead;
 
+    /*
+
+    // Not required at the sequencer
+
     // Two more latencies for audio play and record - when we 
     // use an unsynchronised audio and MIDI system such as
     // ALSA and JACK we need to use these additional values
@@ -293,6 +306,8 @@ private:
     //
     Rosegarden::RealTime m_audioPlayLatency;
     Rosegarden::RealTime m_audioRecordLatency;
+
+    */
 
 
     Rosegarden::RealTime m_loopStart;
@@ -304,6 +319,10 @@ private:
     //
     bool m_sendAlive;
     int  m_guiCount;
+
+    // Are we clear to send after a call()?
+    //
+    bool m_clearToSend;
 
 };
  

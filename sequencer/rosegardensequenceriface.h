@@ -130,6 +130,10 @@ public:
     //
     virtual void alive() = 0;
 
+    /*
+
+    // This isn't required at the sequencer - yet
+
     // Set the audio latencies if we need them to differ from
     // overall (MIDI) latencies.
     //
@@ -137,6 +141,7 @@ public:
                                    long playTimeUsec,
                                    long recordTimeSec,
                                    long recordTimeUsec) = 0;
+                                   */
 
 };
 

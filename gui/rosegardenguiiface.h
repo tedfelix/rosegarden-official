@@ -88,8 +88,9 @@ k_dcop:
 
     // Sequencer updates GUI pointer position
     //
-    virtual void setPointerPosition(const long &realTimeSec,
-                                    const long &realTimeUsec) = 0;
+    virtual void setPointerPosition(long realTimeSec,
+                                    long realTimeUsec,
+                                    bool clearToSend) = 0;
 
     // Sequencer updates GUI with status
     //

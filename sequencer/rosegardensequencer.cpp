@@ -46,12 +46,13 @@ RosegardenSequencerApp::RosegardenSequencerApp():
     m_fetchLatency(0, 30000),      // default value
     m_playLatency(0, 50000),       // default value
     m_readAhead(0, 40000),         // default value
-    m_audioPlayLatency(0, 0),
-    m_audioRecordLatency(0, 0),
+    //m_audioPlayLatency(0, 0),
+    //m_audioRecordLatency(0, 0),
     m_loopStart(0, 0),
     m_loopEnd(0, 0),
     m_sendAlive(true),
-    m_guiCount(0)       // how many GUIs have we known?
+    m_guiCount(0),       // how many GUIs have we known?
+    m_clearToSend(false)
 {
     // Without DCOP we are nothing
     QCString realAppId = kapp->dcopClient()->registerAs(kapp->name(), false);
@@ -219,6 +220,10 @@ RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
         }
     }
 
+    // We've completed a call - clear to send now for a while
+    //
+    m_clearToSend = true;
+
     return mC;
 }
 
@@ -319,7 +324,7 @@ RosegardenSequencerApp::keepPlaying()
 // ticks from our current m_songPosition.
 //
 void
-RosegardenSequencerApp::updateClocks()
+RosegardenSequencerApp::updateClocks(bool clearToSend)
 {
     QByteArray data, replyData;
     QCString replyType;
@@ -363,10 +368,11 @@ RosegardenSequencerApp::updateClocks()
 
     arg << newPosition.sec;
     arg << newPosition.usec;
+    arg << clearToSend;
     
     if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                       ROSEGARDEN_GUI_IFACE_NAME,
-                      "setPointerPosition(long int, long int)",
+                      "setPointerPosition(long int, long int, bool)",
                       data))
     {
         cerr << "RosegardenSequencer::updateClocks()"
@@ -580,16 +586,19 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
     //
     m_transportStatus = localRecordMode;
 
+    /*
+
     // Work out the record latency
     Rosegarden::RealTime recordLatency = playLatency;
     if (m_audioRecordLatency > recordLatency)
         recordLatency = m_audioRecordLatency;
+    */
 
     // Ensure that playback is initialised
     //
     m_sequencer->initialisePlayback(m_songPosition);
 
-    return play(time, recordLatency, fetchLatency, readAhead);
+    return play(time, playLatency, fetchLatency, readAhead);
 }
 
 // We receive a starting time from the GUI which we use as the
@@ -630,8 +639,10 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
 
     // Ensure that we have time for audio synchronisation
     //
+    /*
     if (m_audioPlayLatency > m_playLatency)
         m_playLatency = m_audioPlayLatency;
+        */
 
     // report
     //
@@ -870,6 +881,8 @@ RosegardenSequencerApp::sequencerAlive()
               << "trying to tell GUI that we're alive" << std::endl;
 }
 
+
+/*
 void
 RosegardenSequencerApp::setAudioLatencies(long playTimeSec,
                                           long playTimeUsec,
@@ -885,6 +898,7 @@ RosegardenSequencerApp::setAudioLatencies(long playTimeSec,
     std::cout << "RosegardenSequencerApp::setAudioLatencies - "
               << "record latency = " << m_audioRecordLatency << std::endl;
 }
+*/
 
 
 

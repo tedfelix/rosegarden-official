@@ -1550,8 +1550,9 @@ void RosegardenGUIApp::importRG21File(const QString &file)
     initView();
 }
 
-void RosegardenGUIApp::setPointerPosition(const long &posSec,
-                                          const long &posUsec)
+void RosegardenGUIApp::setPointerPosition(long posSec,
+                                          long posUsec,
+                                          bool clearToSend)
 {
     Rosegarden::RealTime rT(posSec, posUsec);
     Rosegarden::Composition &comp = m_doc->getComposition();
@@ -1570,16 +1571,17 @@ void RosegardenGUIApp::setPointerPosition(const long &posSec,
     if (elapsedTime >= comp.getEndMarker())
         slotStop();
 
-    // Check for a pending stop every time the clock is updated.
+    // Check for a pending stop if we're clear to send
     //
-    checkForStop();
+    if (clearToSend) checkForStop();
+
     return;
 }
 
 void
 RosegardenGUIApp::slotSetPointerPosition(Rosegarden::RealTime time)
 {
-    setPointerPosition(time.sec, time.usec);
+    setPointerPosition(time.sec, time.usec, false);
 }
 
 

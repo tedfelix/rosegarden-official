@@ -197,7 +197,9 @@ public:
      * this method is directly accesible from the sequencer
      * (longs are required over DCOP)
      */
-    virtual void setPointerPosition(const long &posSec, const long &posUSec);
+    virtual void setPointerPosition(long posSec,
+                                    long posUSec,
+                                    bool clearToSend);
 
     /**
      * If we've called stopping() at the SequenceManager then we'll

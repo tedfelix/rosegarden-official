@@ -610,8 +610,10 @@ PeakFile::writePeaks(Progress *progress,
             // for peak of peaks as well as frame count
             sampleFrameCount++;
         }
+        /*
         if (showCount++ == 10)
           cout << endl;
+          */
 
         // Write absolute peak data in channel order
         //

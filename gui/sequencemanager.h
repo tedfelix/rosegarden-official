@@ -121,9 +121,11 @@ public:
     //
     void suspendSequencer(bool value);
 
+    /*
     // Send the audio latencies over to the sequencer
     //
     void sendAudioLatencies();
+    */
 
 public slots:
     // Empty the m_clearToSend flag
