@@ -15,13 +15,25 @@ Randall Farmer <rfarme@simons-rock.edu>
 Hans Kieserman <hkieserman@mail.com> 
     * Lilypond output
     * assorted other patches
+    * i18n-ization
     
 Michael McIntyre <dmmcintyr@users.sourceforge.net>
     * Lilypond output fixes and improvements
     * miscellaneous patches
     * sundry pixmaps and toolbars
+    * Spanish translation
     
 Levi Burton <donburton@sbcglobal.net> 
     * UI improvements
     * other bug fixes
 
+Alexandre Prokoudine <avp@altlinux.ru>
+    * Russian translation
+    * i18n-ization
+    
+Pedro Lopez-Cabanillas <plcl@bigfoot.com>
+    * Spanish translation
+    * ALSA research
+    
+Jörg Schumann <jrschumann@gmx.de>
+    * German translation
