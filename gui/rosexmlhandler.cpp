@@ -353,7 +353,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
     } else if (lcName == "segment") {
 
-        int track = -1, startIndex = 0;
+        int track = -1, startTime = 0;
         QString trackNbStr = atts.value("track");
         if (trackNbStr) {
             track = trackNbStr.toInt();
@@ -361,7 +361,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
         QString startIdxStr = atts.value("start");
         if (startIdxStr) {
-            startIndex = startIdxStr.toInt();
+            startTime = startIdxStr.toInt();
         }
         
         QString segmentType = (atts.value("type")).lower();
@@ -394,8 +394,8 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             m_currentSegment = new Segment(Rosegarden::Segment::Internal);
     
         m_currentSegment->setTrack(track);
-        m_currentSegment->setStartIndex(startIndex);
-	m_currentTime = startIndex;
+        m_currentSegment->setStartTime(startTime);
+	m_currentTime = startTime;
         m_composition.addSegment(m_currentSegment);
 
     } else if (lcName == "resync") {
@@ -468,7 +468,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             return false;
         }
 
-        m_currentSegment->setAudioStartIndex(marker);
+        m_currentSegment->setAudioStartTime(marker);
 
 
     } else if (lcName == "end") {
@@ -486,15 +486,15 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             return false;
         }
 
-        if (marker < m_currentSegment->getAudioStartIndex())
+        if (marker < m_currentSegment->getAudioStartTime())
         {
             m_errorString = i18n("audio end marker before audio start marker");
             return false;
         }
 
-        m_currentSegment->setAudioEndIndex(marker);
+        m_currentSegment->setAudioEndTime(marker);
         m_currentSegment->setDuration(marker -
-                               m_currentSegment->getAudioStartIndex());
+                               m_currentSegment->getAudioStartTime());
 
     } else {
         kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : Don't know how to parse this : " << qName << endl;

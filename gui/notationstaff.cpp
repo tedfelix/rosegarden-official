@@ -329,7 +329,7 @@ NotationStaff::positionElements(timeT from, timeT to)
 	    to = (*candidate)->getAbsoluteTime();
 	    if (nextBarTime < 0) nextBarTime = to;
 	} else {
-	    nextBarTime = getSegment().getEndIndex();
+	    nextBarTime = getSegment().getEndTime();
 	}
 	++changedBarCount;
     } while (changedBarCount < 4 &&

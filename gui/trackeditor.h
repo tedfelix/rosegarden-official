@@ -127,7 +127,7 @@ protected slots:
     void addSegment(SegmentItem*);
     void deleteSegment(Rosegarden::Segment*);
     void updateSegmentDuration(SegmentItem*);
-    void updateSegmentTrackAndStartIndex(SegmentItem*);
+    void updateSegmentTrackAndStartTime(SegmentItem*);
 
 signals:
     /**

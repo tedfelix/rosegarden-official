@@ -120,7 +120,7 @@ timeT
 ClefInsertionCommand::getRelayoutEndTime()
 {
     // Inserting a clef can change the y-coord of every subsequent note
-    return getSegment().getEndIndex();
+    return getSegment().getEndTime();
 }
 
 void
@@ -187,7 +187,7 @@ EraseCommand::modifySegment()
     } else if (eventType == Clef::EventType) {
 
 	helper.segment().eraseSingle(m_event);
-	m_relayoutEndTime = helper.segment().getEndIndex();
+	m_relayoutEndTime = helper.segment().getEndTime();
 	return;
 	
     } else {

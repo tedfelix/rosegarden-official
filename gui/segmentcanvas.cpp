@@ -59,12 +59,12 @@ SegmentItem::SegmentItem(int y, timeT startTime, timeT duration,
 
 SegmentItem::SegmentItem(int y, Segment *segment,
 			 RulerScale *rulerScale, QCanvas *canvas) :
-    QCanvasRectangle(rulerScale->getXForTime(segment->getStartIndex()), y,
-		     rulerScale->getWidthForDuration(segment->getStartIndex(),
+    QCanvasRectangle(rulerScale->getXForTime(segment->getStartTime()), y,
+		     rulerScale->getWidthForDuration(segment->getStartTime(),
 						     segment->getDuration()),
 		     m_itemHeight, canvas),
     m_segment(segment),
-    m_startTime(segment->getStartIndex()),
+    m_startTime(segment->getStartTime()),
     m_duration(segment->getDuration()),
     m_selected(false),
     m_rulerScale(rulerScale)
@@ -83,7 +83,7 @@ SegmentItem::setSegment(Segment *segment)
 {
     m_segment = segment;
 
-    m_startTime = segment->getStartIndex();
+    m_startTime = segment->getStartTime();
     m_duration = segment->getDuration();
 
     setX(m_rulerScale->getXForTime(m_startTime));
@@ -681,8 +681,8 @@ SegmentMover::SegmentMover(SegmentCanvas *c)
 {
     m_canvas->setCursor(Qt::sizeAllCursor);
 
-    connect(this, SIGNAL(updateSegmentTrackAndStartIndex(SegmentItem*)),
-            c,    SIGNAL(updateSegmentTrackAndStartIndex(SegmentItem*)));
+    connect(this, SIGNAL(updateSegmentTrackAndStartTime(SegmentItem*)),
+            c,    SIGNAL(updateSegmentTrackAndStartTime(SegmentItem*)));
 
     kdDebug(KDEBUG_AREA) << "SegmentMover()\n";
 }
@@ -700,7 +700,7 @@ void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
 void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
 {
     if (m_currentItem)
-        emit updateSegmentTrackAndStartIndex(m_currentItem);
+        emit updateSegmentTrackAndStartTime(m_currentItem);
 
     m_currentItem = 0;
 }
@@ -785,8 +785,8 @@ SegmentSelector::SegmentSelector(SegmentCanvas *c)
 {
     kdDebug(KDEBUG_AREA) << "SegmentSelector()\n";
 
-    connect(this, SIGNAL(updateSegmentTrackAndStartIndex(SegmentItem*)),
-            c,    SIGNAL(updateSegmentTrackAndStartIndex(SegmentItem*)));
+    connect(this, SIGNAL(updateSegmentTrackAndStartTime(SegmentItem*)),
+            c,    SIGNAL(updateSegmentTrackAndStartTime(SegmentItem*)));
 }
 
 SegmentSelector::~SegmentSelector()
@@ -835,7 +835,7 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
     {
         m_currentItem = item;
         selectSegmentItem(m_currentItem);
-        emit updateSegmentTrackAndStartIndex(m_currentItem);
+        emit updateSegmentTrackAndStartTime(m_currentItem);
     }
 
 }
@@ -885,7 +885,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 		    (*it)->setStartTime(m_canvas->grid().snapX(e->pos().x()));
                     (*it)->setY(m_canvas->grid().snapY(e->pos().y()));
                     m_canvas->canvas()->update();
-                    emit updateSegmentTrackAndStartIndex(*it);
+                    emit updateSegmentTrackAndStartTime(*it);
                 }
             }
         }

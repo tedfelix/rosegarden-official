@@ -567,7 +567,7 @@ MidiFile::convertToRosegarden()
         if (notesOnTrack) {
             rosegardenSegment = new Segment;
             rosegardenSegment->setTrack(compositionTrack);
-            rosegardenSegment->setStartIndex(0);
+            rosegardenSegment->setStartTime(0);
 
             track = new Rosegarden::Track(compositionTrack,
                                           false,

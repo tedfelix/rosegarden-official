@@ -46,7 +46,7 @@ CompositionTimeSliceAdapter::begin() {
     for (Composition::iterator ci = m_composition->begin();
          ci != m_composition->end(); ++ci) {
 
-        if (!(*ci)->empty() && (*ci)->getEndIndex() >= m_begin) {
+        if (!(*ci)->empty() && (*ci)->getEndTime() >= m_begin) {
             Segment::iterator j = (*ci)->findTime(m_begin);
 
             if (j != (*ci)->end()) {

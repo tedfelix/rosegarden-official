@@ -146,8 +146,8 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     QObject::connect(m_segmentCanvas, SIGNAL(updateSegmentDuration(SegmentItem*)),
                      this,            SLOT  (updateSegmentDuration(SegmentItem*)));
 
-    QObject::connect(m_segmentCanvas, SIGNAL(updateSegmentTrackAndStartIndex(SegmentItem*)),
-                     this,            SLOT  (updateSegmentTrackAndStartIndex(SegmentItem*)));
+    QObject::connect(m_segmentCanvas, SIGNAL(updateSegmentTrackAndStartTime(SegmentItem*)),
+                     this,            SLOT  (updateSegmentTrackAndStartTime(SegmentItem*)));
 
     // create the position pointer
     m_pointer = new QCanvasLine(canvas);
@@ -171,7 +171,7 @@ TrackEditor::setupSegments()
         if (!(*i)) continue;
 
 	kdDebug(KDEBUG_AREA) << "TrackEditor::setupSegments() add segment"
-			     << " - start idx : " << (*i)->getStartIndex()
+			     << " - start idx : " << (*i)->getStartTime()
 			     << " - nb time steps : " << (*i)->getDuration()
 			     << " - track : " << (*i)->getTrack()
 			     << endl;
@@ -182,7 +182,7 @@ TrackEditor::setupSegments()
 	//"m_segmentCanvas->addSegment(*i);" -- it'd simplify lots of
 	//other things too
 	SegmentItem *newItem = m_segmentCanvas->addSegmentItem
-	    (y, (*i)->getStartIndex(), (*i)->getDuration());
+	    (y, (*i)->getStartTime(), (*i)->getDuration());
 	newItem->setSegment(*i);
     }
 }
@@ -204,7 +204,7 @@ void TrackEditor::addSegment(int track, int start,
 
     int y = m_vHeader->sectionPos(track);
     SegmentItem *newItem = m_segmentCanvas->addSegmentItem
-	(y, segment->getStartIndex(), segment->getDuration());
+	(y, segment->getStartTime(), segment->getDuration());
     newItem->setSegment(segment);
 
     emit needUpdate();
@@ -255,20 +255,20 @@ void TrackEditor::updateSegmentDuration(SegmentItem *i)
 // drag backwards on canvas as well as forwards -- possibility
 // of -ve duration, which gets normalised to a change in start
 // time) -- so this function's a bit misnamed
-    composition.setSegmentStartIndexAndTrack
+    composition.setSegmentStartTimeAndTrack
 	(i->getSegment(), i->getStartTime(), i->getSegment()->getTrack());
 
     m_document->documentModified();
 }
 
 
-void TrackEditor::updateSegmentTrackAndStartIndex(SegmentItem *i)
+void TrackEditor::updateSegmentTrackAndStartTime(SegmentItem *i)
 {
     Composition& composition = m_document->getComposition();
 
     int track = m_vHeader->sectionAt(int(i->y()));
 
-    composition.setSegmentStartIndexAndTrack
+    composition.setSegmentStartTimeAndTrack
 	(i->getSegment(), i->getStartTime(), track);
     m_document->documentModified();
 }
@@ -369,7 +369,7 @@ TrackEditor::addSegmentItem(Rosegarden::Segment *segment)
 
     int y = m_vHeader->sectionPos(segment->getTrack());
     SegmentItem *newItem = m_segmentCanvas->addSegmentItem
-	(y, segment->getStartIndex(), segment->getDuration());
+	(y, segment->getStartTime(), segment->getDuration());
     newItem->setSegment(segment);
 
     emit needUpdate();
@@ -388,7 +388,7 @@ TrackEditor::updateRecordingSegmentItem(Rosegarden::Segment *segment)
     // here to test getBarRange
     {
 	
-	int startBar = comp.getBarNumber(segment->getStartIndex(), false);
+	int startBar = comp.getBarNumber(segment->getStartTime(), false);
 	std::pair<timeT, timeT> bar = comp.getBarRange(startBar, false);
      
 	cout << "bar " << startBar << ": " << bar.first << " -> " << bar.second << " (start)" << endl;
@@ -400,7 +400,7 @@ TrackEditor::updateRecordingSegmentItem(Rosegarden::Segment *segment)
 
     }
 
-    timeT startTime = segment->getStartIndex();
+    timeT startTime = segment->getStartTime();
     timeT duration = segment->getDuration();
 
     //!!! or do we want
@@ -411,10 +411,10 @@ TrackEditor::updateRecordingSegmentItem(Rosegarden::Segment *segment)
 
 /*!!!
 
-    int startBar = comp.getBarNumber(segment->getStartIndex(), false);
+    int startBar = comp.getBarNumber(segment->getStartTime(), false);
     std::pair<timeT, timeT> bar = comp.getBarRange(startBar, false);
      
-    int xAdj = (segment->getStartIndex() - bar.first) *
+    int xAdj = (segment->getStartTime() - bar.first) *
                 m_hHeader->sectionSize(startBar)/
                 (bar.second - bar.first);
 
@@ -432,7 +432,7 @@ TrackEditor::updateRecordingSegmentItem(Rosegarden::Segment *segment)
     //int width = m_hHeader->sectionPos(endBar)  - x;
     //cout << "WADJ = " << wAdj << endl;
     //cout << "X = " << x << " : WIDTH = " << width << endl;
-    //cout << "START INDEX = " << segment->getStartIndex() << endl;
+    //cout << "START INDEX = " << segment->getStartTime() << endl;
     //cout << "POSITION    = " << comp.getPosition() << endl;
     //cout << "BAR RANGE = " << bar.first << " - " << bar.second << endl;
 

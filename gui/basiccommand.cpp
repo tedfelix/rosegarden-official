@@ -85,7 +85,7 @@ BasicCommand::unexecute()
 void
 BasicCommand::copyTo(Rosegarden::Segment *events)
 {
-    for (Segment::iterator i = m_segment.findTime(events->getStartIndex());
+    for (Segment::iterator i = m_segment.findTime(events->getStartTime());
 	 i != m_segment.findTime(m_endTime); ++i) {
 	events->insert(new Event(**i));
     }
@@ -94,7 +94,7 @@ BasicCommand::copyTo(Rosegarden::Segment *events)
 void
 BasicCommand::copyFrom(Rosegarden::Segment *events)
 {
-    m_segment.erase(m_segment.findTime(events->getStartIndex()),
+    m_segment.erase(m_segment.findTime(events->getStartTime()),
 		    m_segment.findTime(m_endTime));
 
     for (Segment::iterator i = events->begin(); i != events->end(); ++i) {

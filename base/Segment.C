@@ -65,7 +65,7 @@ Segment::getQuantizer() const
 }
 
 
-void Segment::setStartIndex(timeT idx)
+void Segment::setStartTime(timeT idx)
 {
     int idxDiff = idx - m_startIdx;
 
@@ -85,7 +85,7 @@ timeT Segment::getDuration() const
 
     return (*lastEl)->getAbsoluteTime() +
            (*lastEl)->getDuration() -
-           getStartIndex();
+           getStartTime();
 }
 
 
@@ -100,7 +100,7 @@ void Segment::setDuration(timeT d)
     
     if (d > currentDuration) {
 
-	fillWithRests(getStartIndex() + d);
+	fillWithRests(getStartTime() + d);
 
     } else { // shrink
 
@@ -111,7 +111,7 @@ void Segment::setDuration(timeT d)
 //             return;
 //         }
 
-//         unsigned int cutTime = ((nbBars-1) * 384) + getStartIndex();
+//         unsigned int cutTime = ((nbBars-1) * 384) + getStartTime();
 
 //         iterator lastElToKeep = std::upper_bound(begin(), end(),
 //                                                  cutTime,
@@ -315,7 +315,7 @@ int Segment::getNextId() const
 
 void Segment::fillWithRests(timeT endTime, bool permitQuantize)
 {
-    fillWithRests(getEndIndex(), endTime, permitQuantize);
+    fillWithRests(getEndTime(), endTime, permitQuantize);
 }
 
 void Segment::fillWithRests(timeT startTime,

@@ -959,14 +959,14 @@ bool NotationView::applyLayout(int staffNo)
 
     for (i = 0; i < m_staffs.size(); ++i) {
 
-	timeT thisStartTime = m_staffs[i]->getSegment().getStartIndex();
+	timeT thisStartTime = m_staffs[i]->getSegment().getStartTime();
 	if (thisStartTime < startTime || !haveStartTime) {
 	    startTime = thisStartTime;
 	    haveStartTime = true;
 	    firstStartingStaff = i;
 	}
 
-        timeT thisEndTime = m_staffs[i]->getSegment().getEndIndex();
+        timeT thisEndTime = m_staffs[i]->getSegment().getEndTime();
         if (thisEndTime > endTime || !haveEndTime) {
             endTime = thisEndTime;
 	    haveEndTime = true;
@@ -1126,7 +1126,7 @@ void NotationView::slotEditPaste()
     NotationElementList::iterator i = staff->getClosestElementToLayoutX
 	(layoutX, timeSig, clef, key, false, -1);
 
-    timeT insertionTime = segment.getEndIndex();
+    timeT insertionTime = segment.getEndTime();
     if (i != staff->getViewElementList()->end()) {
 	insertionTime = (*i)->getAbsoluteTime();
     }
@@ -1522,7 +1522,7 @@ void NotationView::slotTransformsAddTimeSignature()
 	NotationElementList::iterator i = staff->getClosestElementToLayoutX
 	    (layoutX, timeSigEvt, clefEvt, keyEvt, false, -1);
 
-	timeT insertionTime = segment.getEndIndex();
+	timeT insertionTime = segment.getEndTime();
 	if (i != staff->getViewElementList()->end()) {
 	    insertionTime = (*i)->getAbsoluteTime();
 	}

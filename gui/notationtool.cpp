@@ -242,7 +242,7 @@ NoteInserter::handleLeftButtonPress(Rosegarden::timeT,
 
     Segment::iterator realEnd = segment.findTime(endTime);
     if (realEnd == segment.end() || ++realEnd == segment.end()) {
-	endTime = segment.getEndIndex();
+	endTime = segment.getEndTime();
     } else {
 	endTime = std::max(endTime, (*realEnd)->getAbsoluteTime());
     }

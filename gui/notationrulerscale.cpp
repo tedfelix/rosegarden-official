@@ -52,7 +52,7 @@ NotationRulerScale::setLayout(NotationHLayout *layout)
 void
 NotationRulerScale::setFirstStartingStaff(NotationStaff *staff)
 {
-    timeT t = staff->getSegment().getStartIndex();
+    timeT t = staff->getSegment().getStartTime();
     m_firstBar = staff->getSegment().getComposition()->getBarNumber(t, false);
 }
 

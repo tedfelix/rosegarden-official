@@ -299,7 +299,7 @@ signals:
      * Emitted when a Segment is moved to a different start time
      * (horizontally) or instrument (vertically)
      */
-    void updateSegmentTrackAndStartIndex(SegmentItem*);
+    void updateSegmentTrackAndStartTime(SegmentItem*);
 
     void editSegmentNotation(Rosegarden::Segment*);
     void editSegmentMatrix(Rosegarden::Segment*);
@@ -395,7 +395,7 @@ public:
     virtual void handleMouseMove(QMouseEvent*);
 
 signals:
-    void updateSegmentTrackAndStartIndex(SegmentItem*);
+    void updateSegmentTrackAndStartTime(SegmentItem*);
 };
 
 /**
@@ -454,7 +454,7 @@ public slots:
     void selectSegmentItem(SegmentItem *selectedItem);
 
 signals:
-    void updateSegmentTrackAndStartIndex(SegmentItem*);
+    void updateSegmentTrackAndStartTime(SegmentItem*);
 
 
 private:

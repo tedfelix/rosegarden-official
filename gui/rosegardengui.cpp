@@ -1060,28 +1060,28 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
 
             // An Audio event has three time parameters associated
             // with it.  The start of the Segment is when the audio
-            // event should start.  The StartIndex is how far into
+            // event should start.  The StartTime is how far into
             // the sample the playback should commence and the
-            // EndIndex is how far into the sample playback should
+            // EndTime is how far into the sample playback should
             // stop.
             //
             //
-            if ((*i)->getStartIndex() < sliceStartElapsed ||
-                (*i)->getStartIndex() > sliceEndElapsed)
+            if ((*i)->getStartTime() < sliceStartElapsed ||
+                (*i)->getStartTime() > sliceEndElapsed)
                 continue;
 
-            cout << "AUDIO START = " << (*i)->getAudioStartIndex() << endl;
-            cout << "AUDIO END   = " << (*i)->getAudioEndIndex() << endl;
+            cout << "AUDIO START = " << (*i)->getAudioStartTime() << endl;
+            cout << "AUDIO END   = " << (*i)->getAudioEndTime() << endl;
             cout << "SLICE START = " << sliceStartElapsed << endl;
             cout << "SLICE END   = " << sliceEndElapsed << endl << endl;
 
-            eventTime = comp.getElapsedRealTime((*i)->getStartIndex());
+            eventTime = comp.getElapsedRealTime((*i)->getStartTime());
 
-            Rosegarden::RealTime startIndex =
-                       comp.getElapsedRealTime (((*i)->getAudioStartIndex()));
+            Rosegarden::RealTime startTime =
+                       comp.getElapsedRealTime (((*i)->getAudioStartTime()));
 
             duration = comp.getElapsedRealTime
-                            (((*i)->getAudioEndIndex())) - startIndex;
+                            (((*i)->getAudioEndTime())) - startTime;
 
             assert (duration >= Rosegarden::RealTime(0,0));
             
@@ -1094,7 +1094,7 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
             //
             Rosegarden::MappedEvent *me =
                     new Rosegarden::MappedEvent(eventTime,
-                                                startIndex,
+                                                startTime,
                                                 duration,
                                                 instrument,
                                                 track,
@@ -1108,7 +1108,7 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
         {
             // Skip the Segment if it starts too late to be of
             // interest to our slice.
-            if ( (*i)->getStartIndex() > sliceEndElapsed )
+            if ( (*i)->getStartTime() > sliceEndElapsed )
                 continue;
         }
 

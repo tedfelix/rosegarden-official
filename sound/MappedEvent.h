@@ -118,7 +118,7 @@ public:
     TrackId getTrack() const { return m_track; }
 
     // Audio MappedEvent methods
-    Rosegarden::RealTime getStartIndex() const { return m_absoluteTime; }
+    Rosegarden::RealTime getStartTime() const { return m_absoluteTime; }
 
     void setAudioID(const int &id) { m_pitch = id; }
     int getAudioID() const { return m_pitch; }

@@ -275,7 +275,7 @@ Composition::addSegment(Segment *segment)
 {
     std::cerr << "Composition::addSegment: segment is " << segment
 	      << ", with track " << segment->getTrack() << " and start index "
-	      << segment->getStartIndex() << "; currently have " << m_segments.size() << " segments"
+	      << segment->getStartTime() << "; currently have " << m_segments.size() << " segments"
 	      << std::endl;
 
     if (!segment) return end();
@@ -284,7 +284,7 @@ Composition::addSegment(Segment *segment)
     segment->addObserver(this);
     segment->setComposition(this);
 
-    if (segment->getEndIndex() > m_barSegment.getDuration()) {
+    if (segment->getEndTime() > m_barSegment.getDuration()) {
 	m_barPositionsNeedCalculating = true;
     }
 
@@ -331,11 +331,11 @@ Composition::detachSegment(Segment *p)
 }
 
 bool
-Composition::setSegmentStartIndexAndTrack(Segment *s, timeT t, unsigned int track)
+Composition::setSegmentStartTimeAndTrack(Segment *s, timeT t, unsigned int track)
 {
     iterator i = m_segments.find(s);
     if (i == end()) {
-        std::cerr << "Composition::setSegmentStartIndexAndTrack() : couldn't find segment " << s
+        std::cerr << "Composition::setSegmentStartTimeAndTrack() : couldn't find segment " << s
                   << std::endl;
         return false;
     }
@@ -343,11 +343,11 @@ Composition::setSegmentStartIndexAndTrack(Segment *s, timeT t, unsigned int trac
     m_segments.erase(i);
 
     s->setTrack(track);
-    s->setStartIndex(t);
+    s->setStartTime(t);
 
     m_segments.insert(s);
 
-    if (s->getEndIndex() > m_barSegment.getDuration()) {
+    if (s->getEndTime() > m_barSegment.getDuration()) {
 	m_barPositionsNeedCalculating = true;
     }
 
@@ -362,7 +362,7 @@ Composition::getDuration() const
     for (segmentcontainer::const_iterator i = m_segments.begin();
          i != m_segments.end(); ++i) {
 
-	timeT segmentTotal = (*i)->getEndIndex();
+	timeT segmentTotal = (*i)->getEndTime();
 
         if (segmentTotal > maxDuration) {
             maxDuration = segmentTotal;

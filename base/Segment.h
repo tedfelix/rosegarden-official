@@ -78,7 +78,7 @@ public:
      * Get the formal starting time of the Segment.  This is not
      * necessarily the same as the time of the first event in it.
      */
-    timeT getStartIndex() const { return m_startIdx; }
+    timeT getStartTime() const { return m_startIdx; }
 
     /**
      * Set the formal starting time of the Segment.  It is usually
@@ -86,9 +86,9 @@ public:
      * in a Composition, because the Composition uses the start index
      * as a part of the ordering for Segments and if the index changes
      * the ordering may break.  If your Segment is already in a
-     * Composition, use Composition::setSegmentStartIndex instead.
+     * Composition, use Composition::setSegmentStartTime instead.
      */
-    void setStartIndex(timeT i);
+    void setStartTime(timeT i);
 
     /**
      * Return the effective duration of the segment.  This is the
@@ -115,7 +115,7 @@ public:
      * Return the end time of the Segment.  This is the end time of
      * the final event.
      */
-    timeT getEndIndex() const { return m_startIdx + getDuration(); }
+    timeT getEndTime() const { return m_startIdx + getDuration(); }
 
     /**
      * Get the track number this Segment is associated with.
@@ -304,7 +304,7 @@ public:
         bool operator()(const Segment* a, const Segment* b) const 
         {
             if (a->getTrack() == b->getTrack())
-                return a->getStartIndex() < b->getStartIndex();
+                return a->getStartTime() < b->getStartTime();
 
             return a->getTrack() < b->getTrack();
         }
@@ -316,7 +316,7 @@ public:
     struct SegmentTimeCmp
     {
 	bool operator()(const Segment *a, const Segment *b) const {
-	    return a->getStartIndex() < b->getStartIndex();
+	    return a->getStartTime() < b->getStartTime();
 	}
     };
 
@@ -344,14 +344,14 @@ public:
     //
     //    audioEnd - audioStart + start of Segment
     //
-    void setAudioStartIndex(const timeT& audioStart)
+    void setAudioStartTime(const timeT& audioStart)
         { m_audioStartIdx = audioStart; }
 
-    void setAudioEndIndex(const timeT & audioEnd)
+    void setAudioEndTime(const timeT & audioEnd)
         { m_audioEndIdx = audioEnd; }
 
-    timeT getAudioStartIndex() const { return m_audioStartIdx; }
-    timeT getAudioEndIndex() const { return m_audioEndIdx; }
+    timeT getAudioStartTime() const { return m_audioStartIdx; }
+    timeT getAudioEndTime() const { return m_audioEndIdx; }
 
 private:
     timeT m_startIdx;

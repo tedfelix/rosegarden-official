@@ -791,7 +791,7 @@ template <class T>
 void
 LinedStaff<T>::positionAllElements()
 {
-    positionElements(getSegment().getStartIndex(),
-		     getSegment().getEndIndex());
+    positionElements(getSegment().getStartTime(),
+		     getSegment().getEndTime());
 }
 

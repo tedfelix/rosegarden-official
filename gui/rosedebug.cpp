@@ -56,7 +56,7 @@ kdbgstream&
 operator<<(kdbgstream &dbg, const Rosegarden::Segment &t)
 {
     dbg << "Segment for instrument " << t.getTrack()
-        << " starting at " << t.getStartIndex() << endl;
+        << " starting at " << t.getStartTime() << endl;
 
     for(Rosegarden::Segment::const_iterator i = t.begin();
         i != t.end(); ++i) {

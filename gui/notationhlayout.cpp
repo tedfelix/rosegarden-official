@@ -242,8 +242,8 @@ NotationHLayout::scanStaff(StaffType &staff)
 
     Composition *composition = t.getComposition();
 
-    int barNo = composition->getBarNumber(t.getStartIndex(), true);
-    int endBarNo = composition->getBarNumber(t.getEndIndex(), true);
+    int barNo = composition->getBarNumber(t.getStartTime(), true);
+    int endBarNo = composition->getBarNumber(t.getEndTime(), true);
     int barCounter = 0;
 
     SegmentNotationHelper nh(t);
@@ -265,7 +265,7 @@ NotationHLayout::scanStaff(StaffType &staff)
         NotationElementList::iterator to =
 	    getStartOfQuantizedSlice(notes, barTimes.second);
 
-//	kdDebug(KDEBUG_AREA) << "NotationHLayout::scanStaff: bar " << barNo << ", from " << barTimes.first << ", to " << barTimes.second << " (end " << t.getEndIndex() << ")" << endl;
+//	kdDebug(KDEBUG_AREA) << "NotationHLayout::scanStaff: bar " << barNo << ", from " << barTimes.first << ", to " << barTimes.second << " (end " << t.getEndTime() << ")" << endl;
 
         NotationElementList::iterator shortest = notes->end();
         int shortCount = 0;
@@ -570,7 +570,7 @@ NotationHLayout::fillFakeBars()
 	for (int b = 0; b < segment.getComposition()->getNbBars(); ++b) {
 
 	    if (segment.getComposition()->getBarRange(b, true).first
-		>= segment.getStartIndex()) break;
+		>= segment.getStartTime()) break;
 
             list.push_front(BarData(-1, staff->getViewElementList()->end()));
         }

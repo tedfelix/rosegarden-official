@@ -283,12 +283,12 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
         //--------------------------
         outStream << QString("<segment track=\"%1\" start=\"%2\">")
             .arg(segment->getTrack())
-            .arg(segment->getStartIndex()) << endl;
+            .arg(segment->getStartTime()) << endl;
 
         long currentGroup = -1;
 	bool inChord = false;
 	timeT chordStart = 0, chordDuration = 0;
-	timeT expectedTime = segment->getStartIndex();
+	timeT expectedTime = segment->getStartTime();
 
         for (Segment::iterator i = segment->begin();
              i != segment->end(); ++i) {
@@ -473,12 +473,12 @@ RosegardenGUIDoc::createNewSegment(SegmentItem *p, int track)
     kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewSegment() startBar = " 
 			 << startBar << ", barCount = " << barCount << endl;
 
-    timeT startIndex =
+    timeT startTime =
 	m_composition.getBarRange(startBar, false).first;
 
     timeT duration =
 	m_composition.getBarRange(startBar + barCount, false).first -
-	startIndex;
+	startTime;
 */
 
     timeT startTime = p->getStartTime();
@@ -490,7 +490,7 @@ RosegardenGUIDoc::createNewSegment(SegmentItem *p, int track)
     // We can safely call this here because the segment is not in
     // its composition yet
     // 
-    newSegment->setStartIndex(startTime);
+    newSegment->setStartTime(startTime);
 
     // Now we can add the segment to the right place in the composition
     //
@@ -523,7 +523,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
     {
         m_recordSegment = new Segment();
         m_recordSegment->setTrack(m_composition.getRecordTrack());
-        m_recordSegment->setStartIndex(m_composition.getPosition());
+        m_recordSegment->setStartTime(m_composition.getPosition());
     }
 
 
