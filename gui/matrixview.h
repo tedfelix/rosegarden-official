@@ -69,6 +69,7 @@ class MatrixView : public EditView
 public:
     MatrixView(RosegardenGUIDoc *doc,
                std::vector<Rosegarden::Segment *> segments,
+               Rosegarden::SimpleRulerScale *,
                QWidget *parent);
 
     virtual ~MatrixView();
@@ -114,15 +115,20 @@ public:
                                 Rosegarden::Event *event);
 
 
-    // Play a Note Event using the keyPressed() signal
-    //
+    /**
+     * Play a Note Event using the keyPressed() signal
+     */
     void playNote(Rosegarden::Event *event);
 
-    // Play a preview (same as above but a simpler interface)
-    //
+    /**
+     * Play a preview (same as above but a simpler interface)
+     */
     void playNote(const Rosegarden::Segment &segment, int pitch);
 
-    Rosegarden::SnapGrid &getSnapGrid() { return m_snapGrid; }
+    /**
+     * Get the SnapGrid
+     */
+    Rosegarden::SnapGrid getSnapGrid() { return *m_snapGrid; }
 
 
 signals:    
@@ -317,9 +323,9 @@ protected:
 
     std::vector<MatrixStaff*> m_staffs;
 
-    MatrixHLayout m_hlayout;
-    MatrixVLayout m_vlayout;
-    Rosegarden::SnapGrid m_snapGrid;
+    MatrixHLayout             m_hlayout;
+    MatrixVLayout             m_vlayout;
+    Rosegarden::SnapGrid     *m_snapGrid;
 
     // Status bar elements
     QLabel* m_hoveredOverAbsoluteTime;
@@ -361,6 +367,7 @@ protected:
     std::vector<Rosegarden::StandardQuantization> m_quantizations;
     std::vector<Rosegarden::timeT>                m_snapValues;
 
+    Rosegarden::SimpleRulerScale                 *m_rulerScale;
 };
 
 #endif

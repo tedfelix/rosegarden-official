@@ -1728,6 +1728,7 @@ void RosegardenGUIApp::importRG21File(const QString &file)
     m_doc->getComposition().swap(*tmpComp);
 
     delete tmpComp;
+    delete progressDlg;
 
     // Set modification flag
     //
@@ -1985,6 +1986,8 @@ void RosegardenGUIApp::exportCsoundFile(const QString &file)
     if (!e.write()) {
 	KMessageBox::sorry(this, i18n("The Csound file has not been exported."));
     }
+
+    delete progressDlg;
 }
 
 void RosegardenGUIApp::slotExportLilypond()
@@ -2009,6 +2012,8 @@ void RosegardenGUIApp::exportLilypondFile(const QString &file)
     if (!e.write()) {
 	KMessageBox::sorry(this, i18n("The Lilypond file has not been exported."));
     }
+
+    delete progressDlg;
 }
 
 // Uncheck the transport window check box
@@ -3142,7 +3147,7 @@ RosegardenGUIApp::slotDeleteAllAudioFiles()
 }
 
 void
-RosegardenGUIApp::skippedSlices(unsigned int slices)
+RosegardenGUIApp::skippedSlices(unsigned int /*slices*/)
 {
     //std::cout << "SEQUENCER HAS SKIPPED " << slices << " SLICES" << endl;
 }

@@ -74,13 +74,13 @@ using Rosegarden::timeT;
 
 MatrixView::MatrixView(RosegardenGUIDoc *doc,
                        std::vector<Segment *> segments,
+                       Rosegarden::SimpleRulerScale *rulerScale,
                        QWidget *parent)
     : EditView(doc, segments, 3, parent, "matrixview"),
       m_currentEventSelection(0),
       m_pushSegment(0),
       m_hlayout(&doc->getComposition()),
       m_vlayout(),
-      m_snapGrid(&m_hlayout),
       m_hoveredOverAbsoluteTime(0),
       m_hoveredOverNoteName(0),
       m_selectionCounter(0),
@@ -90,8 +90,20 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
       m_lastNote(0),
       m_quantizations(
               Rosegarden::StandardQuantization::getStandardQuantizations())
+      //m_rulerScale(rulerScale)
 {
     MATRIX_DEBUG << "MatrixView ctor\n";
+
+    Rosegarden::Composition &comp = doc->getComposition();
+
+    double barWidth44 = 100.0;  // so random, so rare
+    double unitsPerPixel =
+        Rosegarden::TimeSignature(4, 4).getBarDuration() / barWidth44;
+
+    m_rulerScale = new Rosegarden::SimpleRulerScale(&comp, 0, unitsPerPixel);
+
+    //m_snapGrid(&m_hlayout),
+    m_snapGrid = new Rosegarden::SnapGrid(m_rulerScale, 10);
 
     m_toolBox = new MatrixToolBox(this);
 
@@ -107,7 +119,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new MatrixStaff(tCanvas, 
                                            segments[i],
-                                           &m_snapGrid,
+                                           m_snapGrid,
                                            i,
                                            8, //!!! so random, so rare
                                            this));
@@ -130,8 +142,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     // Set the instrument we're using on this segment
     //
-    Rosegarden::Track *track = m_document->getComposition().getTrackByIndex(
-            m_staffs[0]->getSegment().getTrack());
+    Rosegarden::Track *track =
+        comp.getTrackByIndex(m_staffs[0]->getSegment().getTrack());
 
     Rosegarden::Instrument *instr = m_document->getStudio().
         getInstrumentById(track->getInstrument());
@@ -148,11 +160,13 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
             SIGNAL(sendMappedInstrument(const Rosegarden::MappedInstrument&)),
             SIGNAL(sendMappedInstrument(const Rosegarden::MappedInstrument&)));
 
-    m_snapGrid.setSnapTime(Rosegarden::SnapGrid::SnapToBeat);
+    m_snapGrid->setSnapTime(Rosegarden::SnapGrid::SnapToBeat);
 
-    m_canvasView = new MatrixCanvasView(*m_staffs[0], m_snapGrid,
+    m_canvasView = new MatrixCanvasView(*m_staffs[0],
+                                        m_snapGrid,
 					m_horizontalScrollBar,
-                                        tCanvas, getCentralFrame());
+                                        tCanvas,
+                                        getCentralFrame());
     setCanvasView(m_canvasView);
 
     // do this after we have a canvas
@@ -263,7 +277,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
                    .arg(doc->getTitle())
                    .arg(segments[0]->getTrack()));
 
-    } else if (segments.size() == doc->getComposition().getNbSegments()) {
+    } else if (segments.size() == comp.getNbSegments()) {
 
         setCaption(QString("%1 - All Segments")
                    .arg(doc->getTitle()));
@@ -278,7 +292,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     // Scroll view to half way up and warp to pointer position
     //
     m_canvasView->center(0, m_canvasView->contentsHeight()/2);
-    slotSetPointerPosition(doc->getComposition().getPosition());
+    slotSetPointerPosition(comp.getPosition());
 
 #ifdef RGKDE3
     stateChanged("have_selection", KXMLGUIClient::StateReverse);
@@ -1097,7 +1111,7 @@ MatrixView::slotSetSnap(int s)
     MATRIX_DEBUG << "MatrixView::slotSetSnap: time is "
                  << m_snapValues[s] << endl;
 
-    m_snapGrid.setSnapTime(m_snapValues[s]);
+    m_snapGrid->setSnapTime(m_snapValues[s]);
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i)
         m_staffs[i]->sizeStaff(m_hlayout);
@@ -1296,14 +1310,19 @@ MatrixView::initZoomToolbar()
 
 
 void
-MatrixView::slotChangeHorizontalZoom(int zoom)
+MatrixView::slotChangeHorizontalZoom(int)
 {
     double duration44 = Rosegarden::TimeSignature(4,4).getBarDuration();
     double value = double(m_hZoomSlider->getCurrentSize());
     m_zoomLabel->setText(i18n("%1%").arg(duration44/value));
     
-    //m_view->setZoomSize(m_zoomSlider->getCurrentSize());
+    cout << "CURR = " << m_hZoomSlider->getCurrentSize() << endl;
+    m_rulerScale->setUnitsPerPixel(m_hZoomSlider->getCurrentSize());
 
+    for (unsigned int i = 0; i < m_staffs.size(); ++i)
+        m_staffs[i]->sizeStaff(m_hlayout);
+
+    updateView();
 }
 
 

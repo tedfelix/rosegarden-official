@@ -117,15 +117,6 @@ void MatrixStaff::positionElement(MatrixElement* el)
 
     // Is the event currently selected?  Colour accordingly.
     //
-
-/*!!! This property is no longer set -- need to get hold of the
-      current EventSelection from somewhere and test whether
-      selection->contains(el->event())
-
-    if (el->event()->has(m_selectedProperty))
-        el->setColour(RosegardenGUIColours::SelectedElement);
-    else*/
-
     Rosegarden::EventSelection *selection = m_view->getCurrentSelection();
 
     if (selection && selection->contains(el->event()))

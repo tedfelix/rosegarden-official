@@ -29,7 +29,7 @@ using Rosegarden::timeT;
 using Rosegarden::SnapGrid;
 
 MatrixCanvasView::MatrixCanvasView(MatrixStaff& staff,
-				   Rosegarden::SnapGrid &snapGrid,
+				   Rosegarden::SnapGrid *snapGrid,
                                    QScrollBar* hsb,
                                    QCanvas *viewing, QWidget *parent,
                                    const char *name, WFlags f)
@@ -52,14 +52,14 @@ MatrixCanvasView::~MatrixCanvasView()
 
 void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 {
-    if (m_snapGrid.getSnapTime(e->x()))
-        m_lastSnap = m_snapGrid.getSnapTime(e->x());
+    if (m_snapGrid->getSnapTime(e->x()))
+        m_lastSnap = m_snapGrid->getSnapTime(e->x());
 
     updateGridSnap(e);
 
-    MATRIX_DEBUG << "MatrixCanvasView::contentsMousePressEvent: snap time is " << m_snapGrid.getSnapTime(e->x()) << endl;
+    MATRIX_DEBUG << "MatrixCanvasView::contentsMousePressEvent: snap time is " << m_snapGrid->getSnapTime(e->x()) << endl;
 
-    timeT evTime = m_snapGrid.snapX(e->x(), SnapGrid::SnapLeft);
+    timeT evTime = m_snapGrid->snapX(e->x(), SnapGrid::SnapLeft);
     int evPitch = m_staff.getHeightAtCanvasY(e->y());
 
     timeT emTime = m_staff.getSegment().getEndMarkerTime();
@@ -107,14 +107,14 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 
 void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
 {
-    if (m_snapGrid.getSnapTime(e->x()))
-        m_lastSnap = m_snapGrid.getSnapTime(e->x());
+    if (m_snapGrid->getSnapTime(e->x()))
+        m_lastSnap = m_snapGrid->getSnapTime(e->x());
 
     updateGridSnap(e);
 
     if (m_ignoreClick) return;
 
-    timeT evTime = m_snapGrid.snapX(e->x());
+    timeT evTime = m_snapGrid->snapX(e->x());
     int evPitch = m_staff.getHeightAtCanvasY(e->y());
 
     timeT emTime = m_staff.getSegment().getEndMarkerTime();
@@ -150,7 +150,7 @@ void MatrixCanvasView::contentsMouseReleaseEvent(QMouseEvent* e)
         return;
     }
 
-    timeT evTime = m_snapGrid.snapX(e->x());
+    timeT evTime = m_snapGrid->snapX(e->x());
     int evPitch = m_staff.getHeightAtCanvasY(e->y());
 
     timeT emTime = m_staff.getSegment().getEndMarkerTime();
@@ -160,7 +160,7 @@ void MatrixCanvasView::contentsMouseReleaseEvent(QMouseEvent* e)
     m_mouseWasPressed = false;
 
     // Restore grid snap
-    //m_snapGrid.setSnapTime(m_lastSnap);
+    //m_snapGrid->setSnapTime(m_lastSnap);
     
 }
 
@@ -177,7 +177,7 @@ void MatrixCanvasView::updateGridSnap(QMouseEvent *e)
 //                          << bs << " - sm = " << getSmoothModifier() << endl;
 
     if (bs & getSmoothModifier())
-        m_snapGrid.setSnapTime(SnapGrid::NoSnap);
+        m_snapGrid->setSnapTime(SnapGrid::NoSnap);
     else
-        m_snapGrid.setSnapTime(m_lastSnap);
+        m_snapGrid->setSnapTime(m_lastSnap);
 }

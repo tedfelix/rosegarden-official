@@ -36,7 +36,7 @@ class MatrixCanvasView : public RosegardenCanvasView
 
 public:
     MatrixCanvasView(MatrixStaff&,
-		     Rosegarden::SnapGrid &,
+		     Rosegarden::SnapGrid *,
 		     QScrollBar* hsb,
                      QCanvas *viewing,
                      QWidget *parent=0, const char *name=0, WFlags f=0);
@@ -120,17 +120,17 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    MatrixStaff& m_staff;
-    Rosegarden::SnapGrid &m_snapGrid;
+    MatrixStaff          &m_staff;
+    Rosegarden::SnapGrid *m_snapGrid;
 
-    Rosegarden::timeT m_previousEvTime;
-    int m_previousEvPitch;
+    Rosegarden::timeT     m_previousEvTime;
+    int                   m_previousEvPitch;
 
-    bool m_mouseWasPressed;
-    bool m_ignoreClick;
+    bool                  m_mouseWasPressed;
+    bool                  m_ignoreClick;
 
-    Qt::ButtonState   m_smoothModifier;
-    Rosegarden::timeT m_lastSnap;
+    Qt::ButtonState       m_smoothModifier;
+    Rosegarden::timeT     m_lastSnap;
 };
 
 
