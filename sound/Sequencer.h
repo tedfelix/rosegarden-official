@@ -179,7 +179,7 @@ public:
 
     // Reset internal states ready for new playback to commence
     //
-    void initializePlayback(const Rosegarden::RealTime &position);
+    void initialisePlayback(const Rosegarden::RealTime &position);
 
     Rosegarden::RealTime getSequencerTime();
 
@@ -206,8 +206,8 @@ private:
 
     // start MIDI and Audio subsystems
     //
-    void initializeMidi();
-    void initializeAudio();
+    void initialiseMidi();
+    void initialiseAudio();
 
     // get a vector of recorded events from aRTS
     // (only for internal use)

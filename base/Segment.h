@@ -279,6 +279,18 @@ public:
     /// For use by SegmentObserver objects like Composition & ViewElementsManager
     void removeObserver(SegmentObserver *obs) { m_observers.erase (obs); }
 
+
+    // Get and set WAV file name
+    //
+    string getWavFileName() const { return m_wavFileName; }
+    void setWavFileName(const string &wavFileName) 
+        { m_wavFileName = wavFileName; }
+
+    // Get and set WAV ID - identifies beyond filename
+    //
+    int getWavID() const { return m_wavID; }
+    void setWavID(const int &id) { m_wavID = id; }
+
 private:
     timeT m_startIdx;
     unsigned int m_track;
@@ -296,6 +308,9 @@ private:
 private:
     Segment(const Segment &);
     Segment &operator=(const Segment &);
+
+    string m_wavFileName;          // name of a .wav file 
+    int    m_wavID;
 };
 
 

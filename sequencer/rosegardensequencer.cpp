@@ -54,7 +54,7 @@ RosegardenSequencerApp::RosegardenSequencerApp():
         close();
     }
 
-    // creating this object also initializes the Rosegarden
+    // creating this object also initialises the Rosegarden
     // aRTS interface for both playback and recording.  We
     // will fall over at this point if the sequencer can't
     // initialise.
@@ -179,7 +179,7 @@ RosegardenSequencerApp::fetchEvents(const Rosegarden::RealTime &start,
 }
 
 
-// The first fetch of events from the core/ and initialization for
+// The first fetch of events from the core/ and initialisation for
 // this session of playback.  We fetch up to m_playLatency microseconds/
 // seconds ahead at first at then top up once we're within m_fetchLatency
 // of the end of the last fetch.
@@ -193,7 +193,7 @@ RosegardenSequencerApp::startPlaying()
 
     // This will reset the Sequencer's internal clock
     // ready for new playback
-    m_sequencer->initializePlayback(m_songPosition);
+    m_sequencer->initialisePlayback(m_songPosition);
 
     // Send the first events (starting the clock)
     m_sequencer->processMidiOut( *fetchEvents(m_songPosition,

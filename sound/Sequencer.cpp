@@ -62,8 +62,8 @@ Sequencer::Sequencer():
         return;
     }
 
-    initializeMidi();   // start the MIDI
-    initializeAudio();  // start the Audio
+    initialiseMidi();   // start the MIDI
+    initialiseAudio();  // start the Audio
 }
 
 
@@ -72,11 +72,11 @@ Sequencer::~Sequencer()
 }
 
 
-// Initialize MIDI and set the m_sequencerStatus flag accordingly
+// Initialise MIDI and set the m_sequencerStatus flag accordingly
 //
 //
 void
-Sequencer::initializeMidi()
+Sequencer::initialiseMidi()
 {
     // don't come in here if there's no SoundServer
     if (m_soundServer.isNull()) return;
@@ -138,7 +138,7 @@ Sequencer::initializeMidi()
     //
     m_midiRecordPort.record(true);
 
-    cout << "RosegardenSequencer - initialized MIDI subsystem" << endl;
+    cout << "RosegardenSequencer - initialised MIDI subsystem" << endl;
 
     if(m_sequencerStatus == AUDIO_SUBSYS_OK)
         m_sequencerStatus = MIDI_AND_AUDIO_SUBSYS_OK;
@@ -146,10 +146,10 @@ Sequencer::initializeMidi()
         m_sequencerStatus = MIDI_SUBSYS_OK;
 }
 
-// Initialize audio and report back some basic facts
+// Initialise audio and report back some basic facts
 //
 void
-Sequencer::initializeAudio()
+Sequencer::initialiseAudio()
 {
     // don't come in here if there's no SoundServer
     if (m_soundServer.isNull()) return;
@@ -232,7 +232,7 @@ Sequencer::initializeAudio()
     cout << "RosegardenSequencer - sample resolution = "
          << m_soundServer.bits() << " bits" << endl;
 
-    cout << "RosegardenSequencer - initialized audio subsystem" << endl;
+    cout << "RosegardenSequencer - initialised audio subsystem" << endl;
 
     if(m_sequencerStatus == MIDI_SUBSYS_OK)
         m_sequencerStatus = MIDI_AND_AUDIO_SUBSYS_OK;
@@ -597,7 +597,7 @@ Sequencer::allNotesOff()
 }
 
 void 
-Sequencer::initializePlayback(const Rosegarden::RealTime &position)
+Sequencer::initialisePlayback(const Rosegarden::RealTime &position)
 {
     m_startPlayback = true;
     m_playStartTime.sec = 0;

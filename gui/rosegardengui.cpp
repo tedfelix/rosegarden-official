@@ -523,7 +523,7 @@ void RosegardenGUIApp::readOptions()
     toolBarPos=(KToolBar::BarPosition) m_config->readNumEntry("TracksToolBarPos", KToolBar::Top);
     toolBar("tracksToolBar")->setBarPos(toolBarPos);
 	
-    // initialize the recent file list
+    // initialise the recent file list
     //
     m_fileRecent->loadEntries(m_config);
 

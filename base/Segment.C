@@ -42,7 +42,9 @@ Segment::Segment(timeT startIdx) :
     m_startIdx(startIdx),
     m_track(0),
     m_id(0),
-    m_composition(0)
+    m_composition(0),
+    m_wavFileName(""),
+    m_wavID(0)
 {
     // nothing
 }

@@ -62,7 +62,7 @@ main(int argc, char **argv)
     //outMidiFile->write();
 
 
-    // initialize MIDI and audio subsystems
+    // initialise MIDI and audio subsystems
     //
     cout << "HERE" << endl;
     Rosegarden::Sequencer sequencer;
