@@ -243,7 +243,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     // Change this when the matrix view will have its own page
     // in the config dialog.
-    setConfigDialogPageIndex(0);
+    setConfigDialogPageIndex(2);
 
 }
 

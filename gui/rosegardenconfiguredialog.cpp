@@ -27,6 +27,7 @@
 #include <qspinbox.h>
 #include <qslider.h>
 #include <qcombobox.h>
+#include <qcheckbox.h>
 #include <qlayout.h>
 #include <qtabwidget.h>
 #include <qlabel.h>
@@ -50,6 +51,7 @@
 #include "RealTime.h"
 #include "rosedebug.h"
 #include "notepixmapfactory.h"
+#include "matrixtool.h"
 
 namespace Rosegarden
 {
@@ -481,6 +483,37 @@ NotationConfigurationPage::apply()
 }
 
 
+MatrixConfigurationPage::MatrixConfigurationPage(KConfig *cfg,
+                                                 QWidget *parent,
+                                                 const char *name) :
+    TabbedConfigurationPage(cfg, parent, name),
+    m_selectorGreedyMode(0)
+{
+    m_cfg->setGroup("Matrix Options");
+
+    QFrame *frame = new QFrame(m_tabWidget);
+    QGridLayout *layout = new QGridLayout(frame,
+                                          4, 2, // nbrow, nbcol
+                                          10, 5);
+
+    m_selectorGreedyMode = new QCheckBox(i18n("Selector greedy mode"), frame);
+    layout->addWidget(m_selectorGreedyMode, 0, 0);
+
+    m_selectorGreedyMode->setChecked(m_cfg->readBoolEntry("selectorgreedymode",
+                                                          true));
+
+    addTab(frame, i18n("General"));
+    
+}
+
+void MatrixConfigurationPage::apply()
+{
+    MatrixSelector::setGreedyMode(m_selectorGreedyMode->isChecked());
+
+    m_cfg->setGroup("Matrix Options");
+    m_cfg->writeEntry("selectorgreedymode", m_selectorGreedyMode->isChecked());
+}
+
 
 LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
                                                    KConfig *cfg,
@@ -851,6 +884,16 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
 			 loadIcon(NotationConfigurationPage::iconName()));
     vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
     page = new NotationConfigurationPage(cfg, pageWidget);
+    vlay->addWidget(page);
+    page->setPageIndex(pageIndex(pageWidget));
+    m_configurationPages.push_back(page);
+
+    // Matrix Page
+    pageWidget = addPage(MatrixConfigurationPage::iconLabel(),
+			 MatrixConfigurationPage::title(),
+			 loadIcon(MatrixConfigurationPage::iconName()));
+    vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
+    page = new MatrixConfigurationPage(cfg, pageWidget);
     vlay->addWidget(page);
     page->setPageIndex(pageIndex(pageWidget));
     m_configurationPages.push_back(page);

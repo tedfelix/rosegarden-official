@@ -37,6 +37,7 @@ class QLineEdit;
 class QPushButton;
 class QRadioButton;
 class QLabel;
+class QCheckBox;
 
 namespace Rosegarden
 {
@@ -150,11 +151,14 @@ public:
     int getMIDIPitch2StringOffset() { return m_midiPitchOffset->value(); }
     QString getExternalAudioEditor() { return m_externalAudioEditorPath->text(); }
 
-public slots:
+protected slots:
     void slotFileDialog();
 
 
 protected:
+
+    //--------------- Data members ---------------------------------
+
     QComboBox* m_client;
     QSpinBox* m_countIn;
     QSpinBox* m_midiPitchOffset;
@@ -177,10 +181,13 @@ public:
     static QString iconLabel() { return i18n("Notation"); }
     static QString title()     { return i18n("Notation"); }
 
-public slots:
+protected slots:
     void slotFontComboChanged(const QString &);
 
 protected:
+
+    //--------------- Data members ---------------------------------
+
     QComboBox *m_font;
     QComboBox *m_singleStaffSize;
     QComboBox *m_multiStaffSize;
@@ -199,6 +206,30 @@ protected:
     void populateSizeCombo(QComboBox *combo, std::string font, int dfltSize);
 };
 
+/**
+ * Notation Configuration page
+ */
+class MatrixConfigurationPage : public TabbedConfigurationPage
+{
+    Q_OBJECT;
+
+public:
+    MatrixConfigurationPage(KConfig *cfg,
+                            QWidget *parent = 0, const char *name=0);
+
+    virtual void apply();
+
+    static QString iconLabel() { return i18n("Matrix"); }
+    static QString title()     { return i18n("Matrix"); }
+
+protected slots:
+
+protected:
+
+    //--------------- Data members ---------------------------------
+
+    QCheckBox *m_selectorGreedyMode;
+};
 
 /**
  * Latency Configuration page
@@ -225,12 +256,15 @@ public:
     int getJACKPlaybackValue() { return m_jackPlayback->value(); }
     int getJACKRecordValue() { return m_jackRecord->value(); }
 
-public slots:
+protected slots:
     // Get the latest latency values from the sequencer
     //
     void slotFetchLatencyValues();
 
 protected:
+
+    //--------------- Data members ---------------------------------
+
     QSlider* m_readAhead;
     QSlider* m_playback;
 
@@ -259,9 +293,12 @@ public:
     static QString iconLabel() { return i18n("About"); }
     static QString title() { return i18n("About"); }
 
-public slots:
+protected slots:
     
 protected:
+
+    //--------------- Data members ---------------------------------
+
     QLineEdit *m_copyright;
 };
 
@@ -282,10 +319,13 @@ public:
     static QString iconLabel() { return i18n("Audio"); }
     static QString title()     { return i18n("Audio Settings"); }
 
-public slots:
+protected slots:
     void slotFileDialog();
 
 protected:
+
+    //--------------- Data members ---------------------------------
+
     QLineEdit        *m_path;
     QPushButton      *m_changePathButton;
 };
