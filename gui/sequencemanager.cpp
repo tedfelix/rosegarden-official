@@ -377,7 +377,7 @@ SequenceManager::stop()
     QByteArray replyData;
 
     if (!rgapp->sequencerCall("stop()", replyType, replyData)) {
-        throw(Rosegarden::Exception("Failed to contact Rosegarden sequencer with stop command"));
+        throw(Rosegarden::Exception("Failed to contact Rosegarden sequencer with stop command.   Please save your composition and restart Rosegarden to continue."));
     }
 
     // restore
@@ -409,8 +409,8 @@ SequenceManager::stop()
     m_transport->PlayButton()->setOn(false);
     SEQMAN_DEBUG << "SequenceManager::stop() - stopped playing\n";
 
-    // We don't reset controllers at this point - what happens with static controllers
-    // the next time we play otherwise?  [rwb]
+    // We don't reset controllers at this point - what happens with static 
+    // controllers the next time we play otherwise?  [rwb]
     //resetControllers();
 }
 
@@ -1140,23 +1140,27 @@ void
 SequenceManager::resetControllers()
 {
     SEQMAN_DEBUG << "SequenceManager::resetControllers - resetting\n";
-    Rosegarden::MappedComposition mC;
 
     // Should do all Midi Instrument - not just guess like this is doing
     // currently.
 
-    for (unsigned int i = 0; i < 16; i++)
-    {
-        Rosegarden::MappedEvent *mE =
-            new Rosegarden::MappedEvent(Rosegarden::MidiInstrumentBase + i,
-                                        Rosegarden::MappedEvent::MidiController,
-                                        MIDI_CONTROLLER_RESET,
-                                        0);
+    InstrumentList list = m_doc->getStudio().getPresentationInstruments();
+    InstrumentList::iterator it;
 
-        mC.insert(mE);
+    for (it = list.begin(); it != list.end(); it++)
+    {
+        if ((*it)->getType() == Instrument::Midi)
+        {
+            Rosegarden::MappedEvent 
+                mE((*it)->getId(),
+                   Rosegarden::MappedEvent::MidiController,
+                   MIDI_CONTROLLER_RESET,
+                   0);
+            Rosegarden::StudioControl::sendMappedEvent(mE);
+        }
     }
-    showVisuals(mC);
-    Rosegarden::StudioControl::sendMappedComposition(mC);
+
+    //showVisuals(mC);
 }
 
 void
@@ -1331,38 +1335,31 @@ SequenceManager::panic()
     InstrumentList list = studio.getPresentationInstruments();
     InstrumentList::iterator it;
 
-    Rosegarden::MappedComposition mC;
-    Rosegarden::MappedEvent *mE;
-
     int maxDevices = 0, device = 0;
     for (it = list.begin(); it != list.end(); it++)
         if ((*it)->getType() == Instrument::Midi)
             maxDevices++;
 
-    emit setProgress(10);
     for (it = list.begin(); it != list.end(); it++)
     {
         if ((*it)->getType() == Instrument::Midi)
         {
-            emit setProgress(int(70.0 * float(device)/float(maxDevices)));
             for (unsigned int i = 0; i < 128; i++)
             {
-                mE = new MappedEvent((*it)->getId(),
-                                     Rosegarden::MappedEvent::MidiNote,
-                                     i,
-                                     0,
-                                     RealTime::zeroTime,
-                                     RealTime::zeroTime,
-                                     RealTime::zeroTime);
-                mC.insert(mE);
+                MappedEvent 
+                    mE((*it)->getId(),
+                                Rosegarden::MappedEvent::MidiNote,
+                                i,
+                                0);
+
+                Rosegarden::StudioControl::sendMappedEvent(mE);
             }
 
             device++;
         }
-    }
 
-    Rosegarden::StudioControl::sendMappedComposition(mC);
-    emit setProgress(90);
+        emit setProgress(int(90.0 * (double(device) / double(maxDevices))));
+    }
 
     resetControllers();
 }

@@ -730,8 +730,8 @@ MetronomeMmapper::MetronomeMmapper(RosegardenGUIDoc* doc)
     SEQMAN_DEBUG << "MetronomeMmapper ctor : " << this << endl;
 
     // get metronome device
-    Rosegarden::Configuration &config = m_doc->getConfiguration();
-    int device = config.get<Rosegarden::Int>("metronomedevice", 0);
+    Rosegarden::Studio &studio = m_doc->getStudio();
+    int device = studio.getMetronomeDevice();
 
     const Rosegarden::MidiMetronome *metronome = 
         m_doc->getStudio().getMetronomeFromDevice(device);

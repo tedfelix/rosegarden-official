@@ -128,6 +128,8 @@
 
 #define ID_STATUS_MSG 1
 
+//#define SETTING_LOG_DEBUG
+#ifdef SETTING_LOG_DEBUG
 static void _settingLog(QString msg)
 {
     RG_DEBUG << msg << endl;
@@ -137,6 +139,7 @@ static void _settingLog(QString msg)
     QTextStream out(&log);
     out << QDateTime::currentDateTime().toString() << " : " << msg << endl;
 }
+#endif
 
 
 RosegardenGUIApp *RosegardenGUIApp::m_myself = 0;
@@ -1432,9 +1435,11 @@ RosegardenGUIDoc *RosegardenGUIApp::getDocument() const
 void RosegardenGUIApp::slotSaveOptions()
 {
     RG_DEBUG << "RosegardenGUIApp::slotSaveOptions()\n";
+
+#ifdef SETTING_LOG_DEBUG
     _settingLog(QString("SETTING 2 : transport flap extended = %1").arg(m_transport->isExpanded()));
     _settingLog(QString("SETTING 2 : show track labels = %1").arg(m_viewTrackLabels->isChecked()));
-
+#endif
     kapp->config()->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     kapp->config()->writeEntry("Show Transport",               m_viewTransport->isChecked());
     kapp->config()->writeEntry("Expanded Transport",           m_transport->isExpanded());
@@ -1477,7 +1482,10 @@ void RosegardenGUIApp::readOptions()
     slotToggleTransport();
 
     opt = kapp->config()->readBoolEntry("Expanded Transport", false);
+
+#ifdef SETTING_LOG_DEBUG
     _settingLog(QString("SETTING 3 : transport flap extended = %1").arg(opt));
+#endif
 
     if(opt)
         m_transport->slotPanelOpenButtonClicked();
@@ -1485,7 +1493,11 @@ void RosegardenGUIApp::readOptions()
         m_transport->slotPanelCloseButtonClicked();
 
     opt = kapp->config()->readBoolEntry("Show Track labels", true);
+
+#ifdef SETTING_LOG_DEBUG
     _settingLog(QString("SETTING 3 : show track labels = %1").arg(opt));
+#endif
+
     m_viewTrackLabels->setChecked(opt);
     slotToggleTrackLabels();
 
@@ -1570,8 +1582,10 @@ void RosegardenGUIApp::showEvent(QShowEvent* e)
 
 bool RosegardenGUIApp::queryClose()
 {
+#ifdef SETTING_LOG_DEBUG
     _settingLog(QString("SETTING 1 : transport flap extended = %1").arg(m_transport->isExpanded()));
     _settingLog(QString("SETTING 1 : show track labels = %1").arg(m_viewTrackLabels->isChecked()));
+#endif
 
     bool canClose = m_doc->saveIfModified();
 
@@ -2420,13 +2434,17 @@ void RosegardenGUIApp::slotToggleTrackLabels()
 {
     if (m_viewTrackLabels->isChecked())
     {
+#ifdef SETTING_LOG_DEBUG
         _settingLog("toggle track labels on");
+#endif
         m_view->getTrackEditor()->getTrackButtons()->
             changeTrackInstrumentLabels(TrackLabel::ShowTrack);
     }
     else
     {
+#ifdef SETTING_LOG_DEBUG
         _settingLog("toggle track labels off");
+#endif
         m_view->getTrackEditor()->getTrackButtons()->
             changeTrackInstrumentLabels(TrackLabel::ShowInstrument);
     }
@@ -4155,8 +4173,15 @@ void RosegardenGUIApp::slotStartAtTime(int sec, int usec)
 //
 void RosegardenGUIApp::slotStop()
 {
-    if (m_seqManager)
-        m_seqManager->stopping();
+    try
+    {
+        if (m_seqManager)
+            m_seqManager->stopping();
+    }
+    catch(Rosegarden::Exception e)
+    {
+        KMessageBox::error(this, strtoqstr(e.getMessage()));
+    }
 
     // stop the playback timer
     m_playTimer->stop();
@@ -5506,6 +5531,8 @@ RosegardenGUIApp::slotPanic()
         RosegardenProgressDialog progressDlg(i18n("Sending MIDI panic..."),
                                              100,
                                              this);
+        CurrentProgressDialog::set(&progressDlg);
+        RosegardenProgressDialog::processEvents();
 
         connect(m_seqManager, SIGNAL(setProgress(int)),
                 progressDlg.progressBar(), SLOT(setValue(int)));

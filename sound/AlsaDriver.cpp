@@ -2114,7 +2114,9 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
             RealTime nowTime = getAlsaTime();
             snd_seq_real_time_t outTime = { nowTime.sec,
                                             nowTime.nsec };
+#ifdef DEBUG_ALSA
 	std::cerr << "processMidiOut[" << now << "]: rescheduled event to " << nowTime << std::endl;
+#endif
             snd_seq_ev_schedule_real(&event, m_queue, 0, &outTime);
             error = snd_seq_event_output_direct(m_midiHandle, &event);
 	}

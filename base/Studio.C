@@ -43,7 +43,8 @@ namespace Rosegarden
 Studio::Studio() :
     m_midiThruFilter(0),
     m_midiRecordFilter(0),
-    m_mixerDisplayOptions(0)
+    m_mixerDisplayOptions(0),
+    m_metronomeDevice(0)
 {
     // We _always_ have a buss with id zero, for the master out
     m_busses.push_back(new Buss(0));
@@ -281,6 +282,7 @@ Studio::toXmlString(const std::vector<DeviceId> &devices)
            << "\" recordfilter=\"" << m_midiRecordFilter
 	   << "\" audioinputpairs=\"" << m_recordIns.size()
 	   << "\" mixerdisplayoptions=\"" << m_mixerDisplayOptions
+           << "\" metronomedevice=\"" << m_metronomeDevice
            << "\">" << endl << endl;
 
     studio << endl;

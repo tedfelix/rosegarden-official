@@ -171,6 +171,9 @@ public:
     void setMixerDisplayOptions(unsigned int options) { m_mixerDisplayOptions = options; }
     unsigned int getMixerDisplayOptions() const { return m_mixerDisplayOptions; }
 
+    DeviceId getMetronomeDevice() const { return m_metronomeDevice; }
+    void setMetronomeDevice(DeviceId device) { m_metronomeDevice = device; }
+
 private:
 
     DeviceList        m_devices;
@@ -184,6 +187,8 @@ private:
     MidiFilter        m_midiRecordFilter;
 
     unsigned int      m_mixerDisplayOptions;
+
+    DeviceId          m_metronomeDevice;
 };
 
 }

@@ -4223,8 +4223,6 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     QFrame *frame = new QFrame(deviceBox);
     QGridLayout *layout = new QGridLayout(frame, 2, 2, 10, 5);
 
-    Rosegarden::Configuration &config = m_doc->getConfiguration();
-
     layout->addWidget(new QLabel(i18n("Device"), frame), 0, 0);
     m_metronomeDevice = new KComboBox(frame);
     layout->addWidget(m_metronomeDevice, 0, 1);
@@ -4232,7 +4230,8 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     Rosegarden::DeviceList *devices = doc->getStudio().getDevices();
     Rosegarden::DeviceListConstIterator it;
 
-    Rosegarden::DeviceId deviceId = config.get<Int>("metronomedevice", 0);
+    Rosegarden::Studio &studio = m_doc->getStudio();
+    Rosegarden::DeviceId deviceId = studio.getMetronomeDevice();
 
     for (it = devices->begin(); it != devices->end(); it++)
     {
@@ -4488,7 +4487,7 @@ ManageMetronomeDialog::setModified(bool value)
 void
 ManageMetronomeDialog::slotApply()
 {
-    Rosegarden::Configuration &config = m_doc->getConfiguration();
+    Rosegarden::Studio &studio = m_doc->getStudio();
 
     Rosegarden::DeviceList *devices = m_doc->getStudio().getDevices();
     Rosegarden::DeviceListConstIterator it;
@@ -4514,7 +4513,7 @@ ManageMetronomeDialog::slotApply()
     }
 
     Rosegarden::DeviceId deviceId = dev->getId();
-    config.set<Int>("metronomedevice", deviceId);
+    studio.setMetronomeDevice(deviceId);
 
     if (dev->getMetronome() == 0) return;
     Rosegarden::MidiMetronome metronome(*dev->getMetronome());

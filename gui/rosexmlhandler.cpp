@@ -459,6 +459,13 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 	    getStudio().setMixerDisplayOptions(mixer);
 	}
 
+        QString metronomeStr = atts.value("metronomedevice");
+
+        if (metronomeStr) {
+            Rosegarden::DeviceId metronome = metronomeStr.toUInt();
+            getStudio().setMetronomeDevice(metronome);
+        }
+
     } else if (lcName == "timesignature") {
 
         if (m_inComposition == false)

@@ -299,6 +299,19 @@ void SegmentAudioPreview::updatePreview()
         RG_DEBUG << "SegmentAudioPreview::updatePreview() - for file id "
                  << m_segment->getAudioFileId() << " fetching values" <<endl;
 
+        /*
+        SegmentCanvas *segmentCanvas = 
+            dynamic_cast<SegmentCanvas*>(m_parent.parent());
+
+        QRect tRect = segmentCanvas->worldMatrix().map(rect());
+        QRect uRect = segmentCanvas->inverseWorldMatrix().map(rect());
+        RG_DEBUG << "SegmentAudioPreview::updatePreview "
+                 << "rect().width() = " << rect().width()
+                 << ", mapped width = " << tRect.width()
+                 << ", inverse mapped width = " <<  uRect.width()
+                 << endl;
+        */
+
         m_values =
             aFM.getPreview(m_segment->getAudioFileId(),
                            audioStartTime,
