@@ -3,9 +3,9 @@
 <rosegarden-data>
 <Track>
 	<event duration="12" pitch="4"/>
-	<event duration="24" pitch="4"/>
+	<event duration="24" pitch="5"/>
 	<event duration="48" pitch="4"/>
-	<event duration="96" pitch="4"/>
+	<event duration="96" pitch="5"/>
 	<event duration="192" pitch="4"/>
 	<event duration="quarter" pitch="4"/>
 	<event duration="breve" pitch="4"/>
