@@ -1222,6 +1222,7 @@ SegmentNotationHelper::makeTupletGroup(timeT t, int untupled, int tupled,
 	if (!haveStartNotationTime) {
 	    notationTime = (*i)->getNotationAbsoluteTime();
 	    fillWithRestsTo = notationTime + (untupled * unit);
+	    haveStartNotationTime = true;
 	}
 
 	if ((*i)->getNotationAbsoluteTime() >=
