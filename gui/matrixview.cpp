@@ -50,7 +50,15 @@ MatrixVLayout::~MatrixVLayout()
 {
 }
 
-void MatrixVLayout::layout(MatrixVLayout::StaffType& staff)
+void MatrixVLayout::reset()
+{
+}
+
+void MatrixVLayout::resetStaff(StaffType&)
+{
+}
+
+void MatrixVLayout::scanStaff(MatrixVLayout::StaffType& staff)
 {
     MatrixElementList *notes = staff.getViewElementList();
 
@@ -66,10 +74,15 @@ void MatrixVLayout::layout(MatrixVLayout::StaffType& staff)
     
 }
 
+void MatrixVLayout::finishLayout()
+{
+}
+
 //-----------------------------------
 
-MatrixHLayout::MatrixHLayout()
-    : m_totalWidth(0)
+MatrixHLayout::MatrixHLayout(unsigned int durationScaleFactor)
+    : m_totalWidth(0),
+      m_durationScaleFactor(durationScaleFactor)
 {
 }
 
@@ -77,9 +90,37 @@ MatrixHLayout::~MatrixHLayout()
 {
 }
 
-void MatrixHLayout::layout(MatrixHLayout::StaffType& staff)
+void MatrixHLayout::reset()
+{
+}
+
+void MatrixHLayout::resetStaff(StaffType&)
+{
+}
+
+void MatrixHLayout::scanStaff(MatrixHLayout::StaffType& staff)
 {
     m_totalWidth = 0;
+    double currentX = 0.0;
+
+    MatrixElementList *notes = staff.getViewElementList();
+
+    MatrixElementList::iterator from = notes->begin();
+    MatrixElementList::iterator to = notes->end();
+    MatrixElementList::iterator i;
+
+    for (i = from; i != to; ++i) {
+
+        MatrixElement *el = (*i);
+        Rosegarden::timeT duration = el->event()->getDuration();
+        el->setLayoutX(currentX);
+        double width = duration * m_durationScaleFactor;
+        el->setWidth(width);
+        currentX += width;
+
+    }
+
+    m_totalWidth = currentX + 50;
 }
 
 double MatrixHLayout::getTotalWidth()
@@ -95,6 +136,10 @@ unsigned int MatrixHLayout::getBarLineCount(StaffType &staff)
 double MatrixHLayout::getBarLineX(StaffType &staff, unsigned int barNo)
 {
     return 0;
+}
+
+void MatrixHLayout::finishLayout()
+{
 }
 
 //----------------------------------------------------------------------
@@ -131,6 +176,17 @@ MatrixStaff::MatrixStaff(QCanvas* c, Rosegarden::Segment* segment,
 {
 }
 
+void MatrixStaff::renderElements(MatrixElementList::iterator from,
+                                 MatrixElementList::iterator to)
+{
+}
+
+void MatrixStaff::renderElements()
+{
+    renderElements(getViewElementList()->begin(),
+		   getViewElementList()->end());
+}
+
 //----------------------------------------------------------------------
 
 MatrixView::MatrixView(RosegardenGUIDoc *doc,
@@ -139,18 +195,30 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     : EditView(doc, segments, parent),
       m_canvasView(new MatrixCanvasView(new QCanvas(width() * 2,
                                                     height() * 2),
-                                        this))
+                                        this)),
+      m_hLayout(new MatrixHLayout),
+      m_vLayout(new MatrixVLayout)
 {
     setCentralWidget(m_canvasView);
 
     for (unsigned int i = 0; i < segments.size(); ++i)
         m_staffs.push_back(new MatrixStaff(canvas(), segments[i], i));
 
-    applyLayout();
+    bool layoutApplied = applyLayout();
+    if (!layoutApplied) KMessageBox::sorry(0, i18n("Couldn't apply piano roll layout"));
+    else {
+        for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+            m_staffs[i]->renderElements();
+	    // m_staffs[i]->positionElements();
+        }
+    }
 }
 
 MatrixView::~MatrixView()
 {
+    delete m_hLayout;
+    delete m_vLayout;
+
     // Delete remaining canvas items.
     QCanvasItemList allItems = canvas()->allItems();
     QCanvasItemList::Iterator it;
@@ -198,8 +266,8 @@ void MatrixView::initStatusBar()
 bool MatrixView::applyLayout()
 {
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-        m_hLayout->layout(*m_staffs[i]);
-        m_vLayout->layout(*m_staffs[i]);
+        m_hLayout->scanStaff(*m_staffs[i]);
+        m_vLayout->scanStaff(*m_staffs[i]);
     }
 }
 

@@ -75,6 +75,7 @@ public:
      */
     void setLayoutY(double y) { m_rect.setY(int(y)); }
 
+    void setWidth(double w)   { m_rect.setWidth(int(w)); }
 
     void setXOffset(double x) { m_xOffset = x; }
     void setYOffset(double y) { m_yOffset = y; }
@@ -108,16 +109,48 @@ public:
     virtual ~MatrixVLayout();
 
     /**
-     * Perform the layout
+     * Resets internal data stores for all staffs
      */
-    void layout(StaffType&);
+    virtual void reset();
+
+    /**
+     * Resets internal data stores for a specific staff
+     */
+    virtual void resetStaff(StaffType &staff);
+
+    /**
+     * Precomputes layout data for a single staff, updating any
+     * internal data stores associated with that staff and updating
+     * any layout-related properties in the events on the staff's
+     * segment.
+     */
+    virtual void scanStaff(StaffType &staff);
+
+    /**
+     * Computes any layout data that may depend on the results of
+     * scanning more than one staff.  This may mean doing most of
+     * the layout (likely for horizontal layout) or nothing at all
+     * (likely for vertical layout).
+     */
+    virtual void finishLayout();
+
 };
 
 class MatrixHLayout : public Rosegarden::HorizontalLayoutEngine<MatrixElement>
 {
 public:
-    MatrixHLayout();
+    MatrixHLayout(unsigned int durationScaleFactor = 2);
     virtual ~MatrixHLayout();
+
+    /**
+     * Resets internal data stores for all staffs
+     */
+    virtual void reset();
+
+    /**
+     * Resets internal data stores for a specific staff
+     */
+    virtual void resetStaff(StaffType &staff);
 
     /**
      * Returns the total length of all elements once layout is done.
@@ -138,12 +171,24 @@ public:
     virtual double getBarLineX(StaffType &staff, unsigned int barNo);
 
     /**
-     * Perform the layout
+     * Precomputes layout data for a single staff, updating any
+     * internal data stores associated with that staff and updating
+     * any layout-related properties in the events on the staff's
+     * segment.
      */
-    void layout(StaffType&);
+    virtual void scanStaff(StaffType&);
+
+    /**
+     * Computes any layout data that may depend on the results of
+     * scanning more than one staff.  This may mean doing most of
+     * the layout (likely for horizontal layout) or nothing at all
+     * (likely for vertical layout).
+     */
+    virtual void finishLayout();
 
 protected:
     double m_totalWidth;
+    double m_durationScaleFactor;
 };
 
 //------------------------------------------------------------
