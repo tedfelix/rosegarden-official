@@ -239,15 +239,19 @@ bool Track::expandIntoGroup(iterator from, iterator to,
 
             // set the initial event's duration to base
             (*i)->setDuration(minDuration);
-
+            
             // Add 2nd event
             Event* ev = new Event(*(*i));
             ev->setDuration(maxDuration - minDuration);
             ev->setAbsoluteTime((*i)->getAbsoluteTime() + minDuration);       
-            if (gid >= 0) {
+
+            if (gid >= 0) { // we need to group both notes
                 cerr << "Track::expandIntoGroup() : Setting gid = " << gid << endl;
                 ev->set<Int>("GroupNo", gid);
                 ev->set<String>("GroupType", groupType);
+
+                (*i)->set<Int>("GroupNo", gid);
+                (*i)->set<String>("GroupType", groupType);
             }
             
 //             long pitch = 0;
