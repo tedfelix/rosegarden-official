@@ -179,6 +179,12 @@ public:
     Rosegarden::Studio& getStudio() { return m_studio;}
 
     /*
+     * return the AudioFileManager
+     */
+    Rosegarden::AudioFileManager& getAudioFileManager()
+        { return m_audioFileManager; }
+
+    /*
      * return the Configuration object
      */
     Rosegarden::Configuration& getConfiguration() { return m_config; }

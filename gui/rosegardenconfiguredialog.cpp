@@ -30,6 +30,8 @@
 #include <qlayout.h>
 #include <qtabwidget.h>
 #include <qlabel.h>
+#include <qfiledialog.h>
+#include <qpushbutton.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -202,6 +204,68 @@ void PlaybackConfigurationPage::apply()
     config.setPlaybackLatency((RealTime(0, (playback * 1000))));
 }
 
+AudioConfigurationPage::AudioConfigurationPage(RosegardenGUIDoc *doc,
+                                               QWidget *parent,
+                                               const char *name)
+    : TabbedConfigurationPage(doc, parent, name),
+    m_doc(doc),
+    m_newDirectory("")
+{
+    Rosegarden::Configuration &config = doc->getConfiguration();
+    Rosegarden::AudioFileManager &afm = doc->getAudioFileManager();
+
+    QFrame *frame = new QFrame(m_tabWidget);
+    QGridLayout *layout = new QGridLayout(frame, 3, 2,
+                                          10, 5);
+    layout->addWidget(new QLabel(i18n("Audio file path:"), frame), 1, 0);
+
+    m_changePathButton =
+        new QPushButton(i18n(QString(afm.getAudioRecordPath().c_str())),
+                        frame);
+
+    layout->addWidget(m_changePathButton, 1, 1);
+
+    connect(m_changePathButton, SIGNAL(released()),
+            SLOT(slotFileDialog()));
+
+    addTab(frame, i18n("Modify audio path"));
+}
+
+void
+AudioConfigurationPage::slotFileDialog()
+{
+    Rosegarden::AudioFileManager &afm = m_doc->getAudioFileManager();
+
+    QFileDialog *fileDialog = new QFileDialog(this, "file dialog", TRUE);
+    fileDialog->setMode(QFileDialog::DirectoryOnly);
+    fileDialog->setDir(QString(afm.getAudioRecordPath().c_str()));
+
+    connect(fileDialog, SIGNAL(fileSelected(const QString&)),
+            SLOT(slotFileSelected(const QString&)));
+
+    connect(fileDialog, SIGNAL(destroyed()),
+            SLOT(slotDirectoryDialogClosed()));
+
+    if (fileDialog->exec() == QDialog::Accepted)
+    {
+        m_newDirectory = fileDialog->selectedFile();
+        m_changePathButton->setText(m_newDirectory);
+    }
+    delete fileDialog;
+}
+
+void
+AudioConfigurationPage::apply()
+{
+    Rosegarden::AudioFileManager &afm = m_doc->getAudioFileManager();
+
+    if (!m_newDirectory.isNull())
+    {
+        afm.setAudioRecordPath(std::string(m_newDirectory.data()));
+    }
+}
+
+
 //------------------------------------------------------------
 static inline QPixmap loadIcon( const char * name ) {
   return KGlobal::instance()->iconLoader()
@@ -240,6 +304,16 @@ RosegardenConfigureDialog::RosegardenConfigureDialog(RosegardenGUIDoc *doc,
   vlay->addWidget(m_playbackConfigurationPage);
   m_playbackConfigurationPage->setPageIndex(pageIndex(page));
 
+  // Audio Page
+  //
+  page = addPage(AudioConfigurationPage::iconLabel(),
+                 AudioConfigurationPage::title(),
+                 loadIcon(AudioConfigurationPage::iconName()));
+  vlay = new QVBoxLayout(page, 0, spacingHint());
+  m_audioConfigurationPage = new AudioConfigurationPage(m_doc, page);
+  vlay->addWidget(m_audioConfigurationPage);
+  m_audioConfigurationPage->setPageIndex(pageIndex(page));
+
 }
 
 RosegardenConfigureDialog::~RosegardenConfigureDialog()
@@ -251,6 +325,7 @@ RosegardenConfigureDialog::slotApply()
 {
     m_generalConfigurationPage->apply();
     m_playbackConfigurationPage->apply();
+    m_audioConfigurationPage->apply();
 }
 
 

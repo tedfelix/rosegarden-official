@@ -5,7 +5,8 @@ o basic JACK audio
   - click on sample start (resampling probably required) [DONE]
   - multiple sample (Segments problem?) [FIXED]
   - audio recording [DONE]
-  - saving RG files with audio
+  - saving RG files with audio [HALF COMPLETE - absolute paths need sorting]
+  - audio file selection dialog
 
 o Create WAV files [DONE]
 

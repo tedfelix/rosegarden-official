@@ -25,6 +25,7 @@
 //#include "rosegardenconfigure.h"
 
 #include <kdialogbase.h>
+#include <klocale.h>
 
 class RosegardenGUIDoc;
 
@@ -105,6 +106,28 @@ protected:
 class GeneralConfigurationPage;
 class PlaybackConfigurationPage;
 
+class AudioConfigurationPage : public TabbedConfigurationPage
+{
+    Q_OBJECT
+public:
+    AudioConfigurationPage(RosegardenGUIDoc *doc,
+                           QWidget *parent=0, const char *name=0);
+    virtual void apply();
+
+    static QString iconLabel() { return i18n("Audio"); }
+    static QString title()     { return i18n("Audio Settings"); }
+
+public slots:
+    void slotFileDialog();
+
+protected:
+    RosegardenGUIDoc *m_doc;
+    QPushButton      *m_changePathButton;
+    QString           m_newDirectory;
+};
+
+
+
 class RosegardenConfigureDialog : public KDialogBase
 {
 Q_OBJECT
@@ -126,6 +149,7 @@ private:
     RosegardenGUIDoc *m_doc;
     GeneralConfigurationPage*  m_generalConfigurationPage;
     PlaybackConfigurationPage* m_playbackConfigurationPage;
+    AudioConfigurationPage*    m_audioConfigurationPage;
 };
 
 }
