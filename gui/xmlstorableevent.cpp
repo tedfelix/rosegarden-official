@@ -48,26 +48,26 @@ XMLStorableEvent::initMap()
     m_noteName2DurationMap["64th"]               = 6;
     m_noteName2DurationMap["hemidemisemiquaver"] = 6;
 
-    m_noteName2DurationMap["32nd"]           = 12;
-    m_noteName2DurationMap["demisemiquaver"] = 12;
+    m_noteName2DurationMap["32nd"]               = 12;
+    m_noteName2DurationMap["demisemiquaver"]     = 12;
 
-    m_noteName2DurationMap["16th"]       = 24;
-    m_noteName2DurationMap["semiquaver"] = 24;
+    m_noteName2DurationMap["16th"]               = 24;
+    m_noteName2DurationMap["semiquaver"]         = 24;
 
-    m_noteName2DurationMap["8th"]    = 48;
-    m_noteName2DurationMap["quaver"] = 48;
+    m_noteName2DurationMap["8th"]                = 48;
+    m_noteName2DurationMap["quaver"]             = 48;
 
-    m_noteName2DurationMap["quarter"]  = 96;
-    m_noteName2DurationMap["crotchet"] = 96;
+    m_noteName2DurationMap["quarter"]            = 96;
+    m_noteName2DurationMap["crotchet"]           = 96;
 
-    m_noteName2DurationMap["half"]  = 192;
-    m_noteName2DurationMap["minim"] = 192;
+    m_noteName2DurationMap["half"]               = 192;
+    m_noteName2DurationMap["minim"]              = 192;
 
-    m_noteName2DurationMap["whole"]     = 384;
-    m_noteName2DurationMap["semibreve"] = 384;
+    m_noteName2DurationMap["whole"]              = 384;
+    m_noteName2DurationMap["semibreve"]          = 384;
 
     // what is the american name ??
-    m_noteName2DurationMap["breve"] = 768;
+    m_noteName2DurationMap["breve"]              = 768;
 
 }
 
