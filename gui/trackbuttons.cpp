@@ -664,9 +664,10 @@ TrackButtons::populateInstrumentPopup()
 
             // Check for sub-ordering
             //
-            int subOrderDepth = studio.getDevice(devId)->getSubOrderDepth();
+            int subOrderDepth =
+                studio.getDevice(devId)->getPortNumbers().size();
 
-            if (subOrderDepth)
+            if (subOrderDepth > 1)
             {
                 QPopupMenu *groupMenu = new QPopupMenu(this);
 
@@ -689,7 +690,7 @@ TrackButtons::populateInstrumentPopup()
                         i18n(" (sub-group ") + QString("%1)").arg(j+1);
                     */
 
-                    QString label = i18n("sub-group ") + QString("%1").arg(j+1);
+                    QString label = i18n("port ") + QString("%1").arg(j+1);
 
                     groupMenu->insertItem(label, subMenu);
 
@@ -733,7 +734,15 @@ TrackButtons::populateInstrumentPopup()
         }
         else
         {
-	    m_instrumentSubMenu[groupBase + (*it)->getSubOrdering()]->
+            int position =  (*it)->getDevice()->getPortNumberPosition(
+                                     (*it)->getPort());
+
+            cout << "POSITION = " << position << endl;
+            cout << "GROUP = " << groupBase << endl;
+
+            if (position == -1) position = 0;
+
+	    m_instrumentSubMenu[groupBase + position]->
                 insertItem(strtoqstr(iname), i++);
         }
 

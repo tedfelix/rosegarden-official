@@ -24,21 +24,67 @@
 namespace Rosegarden
 {
 
-int
-Device::getSubOrderDepth() const
-{
-    InstrumentList::const_iterator it = m_instruments.begin();
 
-    int depth = -1;
+// Find all the unique port numbers in the Instrument list and return them.
+//
+//
+std::vector<int>
+Device::getPortNumbers() const
+{
+    std::vector<int> portNumbers;
+    std::vector<int>::iterator pIt;
+
+    bool addPort = false;
+    InstrumentList::const_iterator it = m_instruments.begin();
     for (; it != m_instruments.end(); ++it)
     {
-        if (depth == -1) depth = (*it)->getSubOrdering();
+        addPort = true;
 
-        if ((*it)->getSubOrdering() > depth)
-            depth = (*it)->getSubOrdering();
+        // There's probably a more efficient STL way of doing this
+        // but I can't be bothered to look it up.
+        //
+        for (pIt = portNumbers.begin(); pIt != portNumbers.end(); ++pIt)
+        {
+            if ((*pIt) == (*it)->getPort())
+            {
+                addPort = false;
+                continue;
+            }
+        }
+
+        // Only add positive port numbers
+        //
+        if ((*it)->getPort() >= 0 && addPort)
+            portNumbers.push_back((*it)->getPort());
     }
 
-    return depth;
+    return portNumbers;
 }
+
+// Return the position of the port number in the total instrument
+// hierarchy for this device.
+//
+int
+Device::getPortNumberPosition(int port) const
+{
+    int position = -1;
+    int lastPort = -1;
+
+    InstrumentList::const_iterator it = m_instruments.begin();
+    for (; it != m_instruments.end(); ++it)
+    {
+        if (lastPort != (*it)->getPort())
+        {
+            lastPort = (*it)->getPort();
+            position++;
+        }
+
+        if (port == (*it)->getPort()) break;
+    }
+
+    return position;
+
+}
+
 
 }

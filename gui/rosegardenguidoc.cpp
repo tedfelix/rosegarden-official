@@ -1292,7 +1292,6 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
         if (mD->getType() == Rosegarden::Device::Midi)
         {
             device = new Rosegarden::MidiDevice(id, mD->getName(), false);
-                                                //mD->getDuplex());
 
             m_studio.addDevice(device);
 
@@ -1332,7 +1331,7 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
                                              device);
 
         // set the sub-ordering
-        //instrument->setSubOrdering((*it)->getSubOrdering());
+        instrument->setPort((*it)->getPort());
 
         device->addInstrument(instrument);
     }

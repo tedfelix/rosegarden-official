@@ -204,8 +204,8 @@ public:
     int getMappedId() const { return m_mappedId; }
     void setMappedId(int id) { m_mappedId = id; }
 
-    int getSubOrdering() const { return m_subOrdering; }
-    void setSubOrdering(int subOrdering) { m_subOrdering = subOrdering; }
+    int getPort() const { return m_port; }
+    void setPort(int port) { m_port = port; }
 
 private:
     InstrumentId    m_id;
@@ -250,10 +250,11 @@ private:
     //
     int              m_mappedId;
 
-    // Sub ordering (i.e. ports in ALSA) allows us to group
-    // instruments sub-Devices.
+    // If a MIDI Instrument then we might have a port number.
+    // The Device to which this Instrument belongs will give
+    // us a client ID on the sequencer side in the ALSA case.
     //
-    int              m_subOrdering;
+    int              m_port;
 
 };
 

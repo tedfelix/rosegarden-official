@@ -1174,14 +1174,14 @@ MIDIInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument *instrum
     //
     if (instrument->getDevice()) {
 
-        int depth = instrument->getDevice()->getSubOrderDepth();
+        int depth = instrument->getDevice()->getPortNumbers().size();
 
-        if (depth)
+        if (depth > 1)
         {
             QString label = 
                 strtoqstr(instrument->getDevice()->getName()) +
-                i18n(" / sub-group ") +
-                QString("%1").arg(instrument->getSubOrdering() + 1);
+                i18n(" / port ") +
+                QString("%1").arg(instrument->getPort());
             m_deviceLabel->setText(label);
         }
         else

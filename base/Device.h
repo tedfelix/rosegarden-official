@@ -84,9 +84,16 @@ public:
     virtual InstrumentList getAllInstruments() const = 0;
     virtual InstrumentList getPresentationInstruments() const = 0;
 
-    // Return the depth of sub-ordering of Instruments in this Device
+    // Return the used port numbers for this Device (discovered
+    // from the Instruments)
     //
-    int getSubOrderDepth() const;
+    std::vector<int> getPortNumbers() const;
+
+    // Return the position of the port number in the total instrument
+    // hierarchy for this device.   Used for working out display 
+    // positions in menus etc.
+    //
+    int getPortNumberPosition(int port) const;
 
 protected:
     InstrumentList     m_instruments;
