@@ -254,6 +254,11 @@ void RosegardenGUIApp::setupActions()
                               actionCollection(), "join");
     action->setExclusiveGroup("segmenttools");
 
+    new KAction(i18n("Add Tracks..."), 
+                0,
+                this, SLOT(slotAddTracks()),
+                actionCollection(), "add_tracks");
+
     /*
     new KAction(i18n("Change &Time Resolution..."), 
                 0,
@@ -1106,7 +1111,7 @@ void RosegardenGUIApp::slotSplitSelected()
 
 #include <qlayout.h>
 #include <qspinbox.h>
-#include <kdialog.h>
+#include <kdialogbase.h>
 
 class GetTimeResDialog : public KDialog
 {
@@ -1147,6 +1152,12 @@ void GetTimeResDialog::setInitialTimeRes(unsigned int v)
     m_spinbox->setValue(v);
 }
 
+
+void RosegardenGUIApp::slotAddTracks()
+{
+    if (m_view)
+        m_view->slotAddTracks(5);
+}
 
 
 /*

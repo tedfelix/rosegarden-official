@@ -16,15 +16,19 @@
 	<text>&amp;View</text>
 	<Action name="edit_all_tracks"/>
   </Menu>
+  <Menu name="Tracks">
+	<text>&amp;Tracks</text>
+	<Action name="add_tracks"/>
+  </Menu>
   <Menu name="Segments">
 	<text>&amp;Segments</text>
-    <Action name="select"/>
+        <Action name="select"/>
 	<Action name="move"/>
 	<Action name="draw"/>
 	<Action name="erase"/>
 	<Action name="resize"/>
-    <Action name="split"/>
-    <Action name="join"/>
+        <Action name="split"/>
+        <Action name="join"/>
   </Menu>
   <Menu name="Transport">
         <text>T&amp;ransport</text>
@@ -46,13 +50,13 @@
 </MenuBar>
 
 <ToolBar fullWidth="true" name="tracksToolBar" newline="true">
-    <Action name="select"/>
+        <Action name="select"/>
 	<Action name="move"/>
 	<Action name="resize"/>
 	<Action name="draw"/>
 	<Action name="erase"/>
-    <Action name="split"/>
-    <Action name="join"/>
+        <Action name="split"/>
+        <Action name="join"/>
 </ToolBar>
 
 </kpartgui>

@@ -36,6 +36,7 @@
 #include "trackvumeter.h"
 #include "instrumentlabel.h"
 
+#include "rosedebug.h"
 
 TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
                            unsigned int trackCellHeight,
@@ -364,7 +365,11 @@ TrackButtons::slotToggleMutedTrack(int mutedTrack)
 void
 TrackButtons::slotAddTracks(unsigned int nbTracks)
 {
+    kdDebug(KDEBUG_AREA) << "TrackButtons::slotAddTracks(" << nbTracks << ")\n";
     m_tracks += nbTracks;
+    kdDebug(KDEBUG_AREA) << "TrackButtons::slotAddTracks() : m_tracks = " << m_tracks
+                         << "\n";
+    update();
 }
 
 // Set a newly selected record button to a shocking palette and

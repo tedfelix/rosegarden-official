@@ -460,6 +460,11 @@ public slots:
     //void slotChangeTimeResolution();
 
     /**
+     * Add new tracks
+     */
+    void slotAddTracks();
+
+    /**
      * edit all tracks at once
      */
     void slotEditAllTracks();
@@ -514,8 +519,9 @@ public slots:
     //
     void slotCloseTransport();
 
-    // Put the GUI into a given ToolType edit mode
-    //
+    /**
+     * Put the GUI into a given ToolType edit mode
+     */
     void slotActivateTool(SegmentCanvas::ToolType tt);
 
     /**

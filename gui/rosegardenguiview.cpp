@@ -337,6 +337,11 @@ void RosegardenGUIView::slotShowRulers(bool v)
     }
 }
 
+void RosegardenGUIView::slotAddTracks(unsigned int nbTracks)
+{
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIView::slotAddTracks(" << nbTracks << ")\n";
+    m_trackEditor->slotAddTracks(nbTracks);
+}
 
 
 MultiViewCommandHistory*

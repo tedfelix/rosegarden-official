@@ -152,6 +152,8 @@ public slots:
 
     void slotShowRulers(bool);
 
+    void slotAddTracks(unsigned int);
+
     /*
      * Commands
      *
