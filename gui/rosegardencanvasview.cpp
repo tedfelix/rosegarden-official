@@ -46,11 +46,18 @@ void RosegardenCanvasView::slotUpdate()
 
     canvas()->update();
 
+    // Ugly hack needed for Qt3 : otherwise we get dummy min/max
+    // values from horizontalScrollBar()
+    //
+    setHScrollBarMode(Auto);
+    updateScrollBars();
     m_horizontalScrollBar->setRange(horizontalScrollBar()->minValue(),
                                     horizontalScrollBar()->maxValue());
 
     m_horizontalScrollBar->setSteps(horizontalScrollBar()->lineStep(),
                                     horizontalScrollBar()->pageStep());
+
+    setHScrollBarMode(AlwaysOff);
 }
 
 void CanvasItemGC::mark(QCanvasItem* item)

@@ -146,6 +146,9 @@ void EditView::paintEvent(QPaintEvent* e)
         kdDebug(KDEBUG_AREA) << "EditView::paintEvent() - calling updateView\n";
         updateView();
         getCanvasView()->slotUpdate();
+    } else {
+
+        getCanvasView()->slotUpdate();
     }
 
 }
