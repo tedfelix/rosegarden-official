@@ -20,6 +20,9 @@ There is the "Mandrake devfs problem" as documented in this link:
 This is a major gotcha.  Switching off devfs support in your lilo or
 grub boot menu should fix this problem.
 
+(Note  - 29.09.2002 : Recent MDK versions like 9.0 come with Alsa 0.9
+correctly configured).
+
 Search the alsa-users list archive for any other specific problems:
 
  http://www.mail-archive.com/alsa-user@lists.sourceforge.net/
