@@ -210,6 +210,7 @@ int RosegardenGUIApp::openFile(const QString& url, int mode)
 
     m_doc->closeDocument();
     m_doc->openDocument(u->path());
+    initView();
 
     return OK;
 }
@@ -412,7 +413,7 @@ void RosegardenGUIApp::slotFileOpen()
     
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 
-    initView();
+//     initView();
 }
 
 void RosegardenGUIApp::slotFileOpenRecent(const KURL &url)
