@@ -1,5 +1,64 @@
 #include "Element2.h"
 
+string
+PropertyDefn<Int>::name()
+{
+    return "Int";
+}    
+
+PropertyDefn<Int>::basic_type
+PropertyDefn<Int>::parse(string s)
+{
+    return atoi(s.c_str());
+}
+
+string
+PropertyDefn<Int>::unparse(PropertyDefn<Int>::basic_type i)
+{
+    static char buffer[20]; sprintf(buffer, "%ld", i);
+    return buffer;
+}
+
+
+string
+PropertyDefn<String>::name()
+{
+    return "String";
+}    
+
+PropertyDefn<String>::basic_type
+PropertyDefn<String>::parse(string s)
+{
+    return s;
+}
+
+string
+PropertyDefn<String>::unparse(PropertyDefn<String>::basic_type i)
+{
+    return i;
+}
+
+string
+PropertyDefn<Bool>::name()
+{
+    return "Bool";
+}    
+
+PropertyDefn<Bool>::basic_type
+PropertyDefn<Bool>::parse(string s)
+{
+    return s == "true";
+}
+
+string
+PropertyDefn<Bool>::unparse(PropertyDefn<Bool>::basic_type i)
+{
+    return (i ? "true" : "false");
+}
+
+
+
+
 PropertyStoreBase::~PropertyStoreBase()
 {
 }

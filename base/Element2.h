@@ -50,41 +50,57 @@ public:
 	PropertyDefnNotDefined() { assert(0); }
     };
     typedef PropertyDefnNotDefined basic_type;
-    static basic_type parse(string) { assert(0); }
-    static string unparse(basic_type) { assert(0); }
+    static basic_type parse(string);
+    static string unparse(basic_type);
 };
+
+template <PropertyType P>
+PropertyDefn<P>::basic_type
+PropertyDefn<P>::parse(string)
+{
+    assert(0);
+}
+
+template <PropertyType P>
+string 
+PropertyDefn<P>::unparse(PropertyDefn<P>::basic_type)
+{
+    assert(0);
+}
+
 
 template <>
 class PropertyDefn<Int>
 {
 public:
-    static string name() { return "Int"; }
+    static string name();
     typedef long basic_type;
 
-    static basic_type parse(string s) { return atoi(s.c_str()); }
-    static string unparse(basic_type i) { static char buffer[20]; sprintf(buffer, "%ld", i); return buffer; }
+    static basic_type parse(string s);
+    static string unparse(basic_type i);
 };
+
 
 template <>
 class PropertyDefn<String>
 {
 public:
-    static string name() { return "String"; }
+    static string name();
     typedef string basic_type;
 
-    static basic_type parse(string s) { return s; }
-    static string unparse(basic_type i) { return i; }
+    static basic_type parse(string s);
+    static string unparse(basic_type i);
 };
 
 template <>
 class PropertyDefn<Bool>
 {
 public:
-    static string name() { return "Bool"; }
+    static string name();
     typedef bool basic_type;
 
-    static basic_type parse(string s) { return (s == "true"); }
-    static string unparse(basic_type i) { return (i ? "true" : "false"); }
+    static basic_type parse(string s);
+    static string unparse(basic_type i);
 };
 
 class PropertyStoreBase {
