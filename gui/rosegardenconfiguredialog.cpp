@@ -82,12 +82,14 @@ public:
     static QString iconLabel() { return i18n("General"); }
     static QString title() { return i18n("General Configuration"); }
 
-    int getCountInSpin()    { return m_countIn->value(); }
-    int getDblClickClient() { return m_client->currentItem(); }
-    
+    int getCountInSpin()            { return m_countIn->value(); }
+    int getDblClickClient()         { return m_client->currentItem(); }
+    int getMIDIPitch2StringOffset() { return m_midiPitchOffset->value(); }
+
 protected:
     QComboBox* m_client;
     QSpinBox* m_countIn;
+    QSpinBox* m_midiPitchOffset;
 };
 
 GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
@@ -100,11 +102,16 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     Rosegarden::Configuration &config = doc->getConfiguration();
 
     QFrame *frame = new QFrame(m_tabWidget);
-    QGridLayout *layout = new QGridLayout(frame, 2, 2,
+    QGridLayout *layout = new QGridLayout(frame,
+                                          2, 2, // nbrow, nbcol
                                           10, 5);
 
-    layout->addWidget(new QLabel(i18n("Double click on segment opens..."), frame), 0, 0);
-    layout->addWidget(new QLabel(i18n("Number of count-in bars when recording"), frame), 1, 0);
+    layout->addWidget(new QLabel(i18n("Double click on segment opens..."),
+                                 frame), 0, 0);
+    layout->addWidget(new QLabel(i18n("Number of count-in bars when recording"),
+                                 frame), 1, 0);
+    layout->addWidget(new QLabel(i18n("MIDI pitch to string offset"),
+                                 frame), 2, 0);
 
     m_client = new QComboBox(frame);
     m_client->insertItem(i18n("Notation"));
@@ -119,6 +126,13 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     m_countIn->setMinValue(0);
 
     layout->addWidget(m_countIn, 1, 1);
+
+    m_midiPitchOffset = new QSpinBox(frame);
+    m_midiPitchOffset->setValue(comp.getCountInBars());
+    m_midiPitchOffset->setMaxValue(10);
+    m_midiPitchOffset->setMinValue(0);
+
+    layout->addWidget(m_midiPitchOffset, 2, 1);
 
     addTab(frame, i18n("General"));
 }
