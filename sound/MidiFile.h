@@ -151,7 +151,8 @@ private:
     //
     int midiBytesToInt(const std::string& bytes);
     long midiBytesToLong(const std::string& bytes);
-    long getNumberFromMidiBytes(std::ifstream* midiFile);
+    long getNumberFromMidiBytes(std::ifstream* midiFile, int firstByte = -1);
+    MidiByte getMidiByte(std::ifstream* midiFile);
     std::string getMidiBytes(std::ifstream* midiFile,
                                    unsigned long bytes);
     bool skipToNextTrack(std::ifstream *midiFile);

@@ -117,6 +117,8 @@ MidiFile::midiBytesToLong(const string& bytes)
                    ((long)(((MidiByte)bytes[2]) << 8)) |
                    ((long)((MidiByte)(bytes[3])));
 
+    std::cerr << "midiBytesToLong(" << int((MidiByte)bytes[0]) << "," << int((MidiByte)bytes[1]) << "," << int((MidiByte)bytes[2]) << "," << int((MidiByte)bytes[3]) << ") -> " << longRet << std::endl;
+
     return longRet;
 }
 
@@ -138,11 +140,50 @@ MidiFile::midiBytesToInt(const string& bytes)
 
 
 
-// Our MIDI file accessor function and best regarded as single point of entry
-// despite the ifstream pointer flying around the place.  Gets a specified
-// number of bytes from the MIDI byte stream.  For each track section we
-// can read only a specified number of bytes held in m_trackByteCount.
+// Gets a single byte from the MIDI byte stream.  For each track
+// section we can read only a specified number of bytes held in
+// m_trackByteCount.
 //
+MidiByte
+MidiFile::getMidiByte(ifstream* midiFile)
+{
+    static int bytesGot = 0; // purely for progress reporting purposes
+
+    if (midiFile->eof())
+    {
+        throw(Exception("End of MIDI file encountered while reading"));
+    }
+
+    if (m_decrementCount && m_trackByteCount <= 0)
+    {
+        throw(Exception("Attempt to get more bytes than expected on Track"));
+    }
+
+    char byte;
+    if (midiFile->read(&byte, 1)) {
+
+	--m_trackByteCount;
+	
+	// update a progress dialog if we have one
+	//
+	++bytesGot;
+	if (bytesGot % 2000 == 0) {
+
+	    emit setProgress((int)(double(midiFile->tellg())/
+				   double(m_fileSize) * 20.0));
+	    kapp->processEvents(50);
+	}
+
+	return (MidiByte)byte;
+    }
+
+    throw(Exception("Attempt to read past MIDI file end"));
+}
+
+
+// Gets a specified number of bytes from the MIDI byte stream.  For
+// each track section we can read only a specified number of bytes
+// held in m_trackByteCount.
 //
 string
 MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
@@ -150,23 +191,6 @@ MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
     string stringRet;
     char fileMidiByte;
     static int bytesGot = 0; // purely for progress reporting purposes
-
-    if (m_decrementCount && (numberOfBytes > (unsigned long)m_trackByteCount))
-    {
-#ifdef MIDI_DEBUG
-        std::cerr << "Attempt to get more bytes than allowed on Track - ( "
-             << numberOfBytes
-             << " > "
-             << m_trackByteCount
-             << " )" << endl;
-#endif
-
-	//!!! Investigate -- I'm seeing this on new-notation-quantization
-	// branch: load glazunov.rg, run Interpret on first segment, export
-	// and attempt to import again
-	
-        throw(Exception("Attempt to get more bytes than allowed on Track"));
-    }
 
     if (midiFile->eof())
     {
@@ -176,8 +200,24 @@ MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
              << numberOfBytes << endl;
 #endif
 
-        throw(Exception("MIDI EOF encountered while reading"));
+        throw(Exception("End of MIDI file encountered while reading"));
 
+    }
+
+    if (m_decrementCount && (numberOfBytes > (unsigned long)m_trackByteCount))
+    {
+#ifdef MIDI_DEBUG
+        std::cerr << "Attempt to get more bytes than allowed on Track ("
+             << numberOfBytes
+             << " > "
+             << m_trackByteCount << endl;
+#endif
+
+	//!!! Investigate -- I'm seeing this on new-notation-quantization
+	// branch: load glazunov.rg, run Interpret on first segment, export
+	// and attempt to import again
+	
+        throw(Exception("Attempt to get more bytes than expected on Track"));
     }
 
     while(stringRet.length() < numberOfBytes &&
@@ -209,13 +249,11 @@ MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
     // update a progress dialog if we have one
     //
     bytesGot += numberOfBytes;
-    if (bytesGot > 2000) {
+    if (bytesGot % 2000 == 0) {
 
         emit setProgress((int)(double(midiFile->tellg())/
 			       double(m_fileSize) * 20.0));
         kapp->processEvents(50);
-
-        bytesGot = 0;
     }
 
     return stringRet;
@@ -226,28 +264,31 @@ MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
 //
 //
 long
-MidiFile::getNumberFromMidiBytes(ifstream* midiFile)
+MidiFile::getNumberFromMidiBytes(ifstream* midiFile, int firstByte)
 {
     long longRet = 0;
     MidiByte midiByte;
 
-    if(!midiFile->eof())
-    {
-        midiByte = getMidiBytes(midiFile, 1)[0];
-
-        longRet = midiByte;
-        if(midiByte & 0x80 )
-        {
-            longRet &= 0x7F;
-            do
-            {
-                midiByte = getMidiBytes(midiFile, 1)[0];
-
-                longRet = (longRet << 7) + (midiByte & 0x7F);
-            }
-            while (!midiFile->eof() && (midiByte & 0x80));
-        }
+    if (firstByte >= 0) {
+	midiByte = (MidiByte)firstByte;
+    } else if (midiFile->eof()) {
+	return longRet;
+    } else {
+	midiByte = getMidiByte(midiFile);
     }
+
+    longRet = midiByte;
+    if (midiByte & 0x80 )
+    {
+	longRet &= 0x7F;
+	do
+	{
+	    midiByte = getMidiByte(midiFile);
+	    longRet = (longRet << 7) + (midiByte & 0x7F);
+	}
+	while (!midiFile->eof() && (midiByte & 0x80));
+    }
+
     return longRet;
 }
 
@@ -493,6 +534,9 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
     // track number instead
     TrackId metaTrack = lastTrackNum;
 
+    // Remember the last non-meta status byte (-1 if we haven't seen one)
+    int runningStatus = -1;
+
     bool firstTrack = true;
 
     while (!midiFile->eof() && ( m_trackByteCount > 0 ) )
@@ -507,21 +551,42 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
 
         deltaTime = getNumberFromMidiBytes(midiFile);
 
+#ifdef MIDI_DEBUG
+	cerr << "read delta time " << deltaTime << endl;
+#endif
+
         // Get a single byte
-        midiByte = (MidiByte) getMidiBytes(midiFile, 1)[0];
+        midiByte = getMidiByte(midiFile);
 
         if (!(midiByte & MIDI_STATUS_BYTE_MASK))
         {
-            midiFile->seekg(-1, ios::cur);
-            m_trackByteCount++;
-        }
-        else
+	    if (runningStatus < 0) {
+		throw (Exception("Running status used for first event in track"));
+	    }
+
+	    eventCode = (MidiByte)runningStatus;
+	    data1 = midiByte;
+
+#ifdef MIDI_DEBUG
+	    std::cerr << "using running status (byte " << int(midiByte) << " found)" << std::endl;
+#endif
+        } else {
+#ifdef MIDI_DEBUG
+	    std::cerr << "have new event code " << int(midiByte) << std::endl;
+#endif
             eventCode = midiByte;
+	    data1 = getMidiByte(midiFile);
+	}
 
         if (eventCode == MIDI_FILE_META_EVENT) // meta events
         { 
-            metaEventCode = getMidiBytes(midiFile,1)[0];
+//            metaEventCode = getMidiByte(midiFile);
+	    metaEventCode = data1;
             messageLength = getNumberFromMidiBytes(midiFile);
+
+#ifdef MIDI_DEBUG
+	    std::cerr << "Meta event of type " << int(metaEventCode) << " and " << messageLength << " bytes found" << std::endl;
+#endif
             metaMessage = getMidiBytes(midiFile, messageLength);
 
 	    if (metaEventCode == MIDI_TIME_SIGNATURE ||
@@ -543,6 +608,8 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
         }
         else // the rest
         {
+	    runningStatus = eventCode;
+
             MidiEvent *midiEvent;
 
 	    int channel = (eventCode & MIDI_CHANNEL_NUM_MASK);
@@ -568,9 +635,7 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
             case MIDI_NOTE_OFF:
             case MIDI_POLY_AFTERTOUCH:
             case MIDI_CTRL_CHANGE:
-
-                data1 = (MidiByte) getMidiBytes(midiFile, 1)[0];
-                data2 = (MidiByte) getMidiBytes(midiFile, 1)[0];
+                data2 = getMidiByte(midiFile);
 
                 // create and store our event
                 midiEvent = new MidiEvent(deltaTime, eventCode, data1, data2);
@@ -586,9 +651,7 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
                 break;
 
             case MIDI_PITCH_BEND:
-
-                data1 = (MidiByte) getMidiBytes(midiFile, 1)[0];
-                data2 = (MidiByte) getMidiBytes(midiFile, 1)[0];
+                data2 = getMidiByte(midiFile);
 
                 // create and store our event
                 midiEvent = new MidiEvent(deltaTime, eventCode, data1, data2);
@@ -597,15 +660,18 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
 
             case MIDI_PROG_CHANGE:
             case MIDI_CHNL_AFTERTOUCH:
-                data1 = (MidiByte) getMidiBytes(midiFile, 1)[0];
-
                 // create and store our event
                 midiEvent = new MidiEvent(deltaTime, eventCode, data1);
                 m_midiComposition[trackNum].push_back(midiEvent);
                 break;
 
             case MIDI_SYSTEM_EXCLUSIVE:
-                messageLength = getNumberFromMidiBytes(midiFile);
+                messageLength = getNumberFromMidiBytes(midiFile, data1);
+
+#ifdef MIDI_DEBUG
+		std::cerr << "SysEx of " << messageLength << " bytes found" << std::endl;
+#endif
+
                 metaMessage= getMidiBytes(midiFile, messageLength);
 
                 if (MidiByte(metaMessage[metaMessage.length() - 1]) !=
