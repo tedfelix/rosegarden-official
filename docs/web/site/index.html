@@ -30,57 +30,54 @@
 
     <div id="main">
 
-      <h3>What is Rosegarden-4?</h3>
+      <h2>What is Rosegarden-4?</h2>
 
       <p><b>Rosegarden-4</b> is the new development series of the
       Rosegarden MIDI and audio sequencer and musical notation
       editor.  It is free software for Unix and X, running within the
       KDE desktop environment.
 
-      <p>Rosegarden-4 is <b>not</b> a stable release product; it is
-      intended for developers, contributors and other interested
-      parties.  If you want a proper version of Rosegarden that works,
-      but that looks old and has a rather limited design, try <a
-      href="2.1/index.html">Rosegarden-2.1</a>.
-      
-      <h3>Current status</h3>
+      <p>If you want to try it out then please go to the
+      <a href="download.html">download</a> page for more information.
 
-      <p>The latest developer release of Rosegarden-4 is the rather
-      confusingly-numbered 0.1.4, released on 22 Mar 2002.
+      <h4>Current Release</h4>
+      <p>The latest release of Rosegarden-4 is the rather
+      confusingly-numbered 0.1.5, released on 02 May 2002.
+      Significantly this release adds
+      <a href="http://www.kde.org" target="_blank">KDE3</a> and
+      <a href="http://www.alsa-project.org" target="_blank">ALSA</a>
+      support.
 
-      <p>It includes complete or partial support for MIDI file I/O,
-      playback and recording, a track editor, score display and
-      editing, and a piano-roll editor.  Changes since 0.1.3 include:
+      <p>The current release also includes complete or partial support for
+      MIDI file I/O, playback and recording, a track editor, score display
+      and editing, and a piano-roll/matrix style editor.
+    
+      <p>Changes since 0.1.4 include</p>
 
 <ul>
-<li class="close">High (960 ppq) sequencer resolution</li>
-<li class="close">Properly working Matrix (piano roll) view</li>
-<li class="close">Much prettier Transport</li>
-<li class="close">Much improved Looping</li>
-<li class="close">Undoable Segment actions</li>
-<li class="close">Undoable and non-destructive Quantization</li>
-<li class="close">More undoable stuff generally</li>
-<li class="close">A Metronome</li>
-<li class="close">Cute coloured MIDI VU-meters with peak hold</li>
-<li class="close">Segment Parameter Box (Repeat, Quantize, Transpose, Delay)</li>
-<li class="close">Instrument Parameter Box (Bank select, Program, Channel, Pan, Velocity)</li>
-<li class="close">Segment (MIDI or Audio containers) splitting and joining</li>
-<li class="close">The beginnings of a Rosegarden "Studio" concept.  This is a MIDI and
-  Audio mapping layer similar to the Logic "Environment".  First pass
-  support includes GM patches and some XG extensions.</li>
-<li class="close">Audio playback (proof of concept bit still buggy)</li>
-<li class="close">MIDI Recording with count-in and recording segment trail</li>
-<li class="close">Fixed some leaks in the Sequencer</li>
-<li class="close">Repeating Segments -- only supported for performance, no
-  visual representation yet</li>
-<li class="close">Switchable Instrument/Track labels</li>
-<li class="close">Much faster notation rendering and update</li>
-<li class="close">Key signature and time signature dialogs in notation view</li>
-<li class="close">Chord labelling in notation view (due to Randall Farmer)</li>
-<li class="close">Playback tracking in notation and matrix views</li>
-<li class="close">More graceful notation rendering from complex performance-type MIDI files</li>
-<li class="close">Better refresh between concurrent views</li>
-<li class="close">Switched to a compressed file format</li>
+<li class="close">KDE3 support (builds from same source tree as KDE2 version)</li>
+<li class="close">ALSA support for MIDI playback and recording (0.9.0beta12 and above)</li>
+<li class="close">Notation View "Finale style" note entry - notes sound before entry</li>
+<li class="close">Triplet and tuplet editing in the Notation view</li>
+<li class="close">Event editor dialog</li>
+<li class="close">Tempo dialog accessed through double click on current tempo,
+  new tempo changes can be inserted or overall tempo changed</li>
+<li class="close">Internal reworking and tidying of command framework for improved
+  undo/redo capability</li>
+<li class="close">Keyboard accelerators for Transport controls shared across all clients
+  (you can control playback from client windows)</li>
+<li class="close">Song state information (including Studio parameters) saved to
+  Composition file</li>
+<li class="close">Playback Latency can be modified through Configuration dialog</li>
+<li class="close">Instrument program names appear on Track buttons when selected</li>
+<li class="close">Bigger, brighter song position pointers</li>
+<li class="close">MatrixView keyboard now plays notes</li>
+<li class="close">MatrixView Events are coloured by velocity</li>
+<li class="close">Quick copy of Segments (ctrl and click/drag on Segment)</li>
+<li class="close">Segments are labelled according to Track</li>
+<li class="close">Soloing Tracks now works</li>
+<li class="close">Notation and Matrix clients are labelled against the current file</li>
+<li class="close">Notional JACK audio support (not working)</li>
 </ul>
 
       <p>Have a look
@@ -90,8 +87,8 @@
       package from SourceForge, or obtain more recent source code
       directly from the <a href="http://sourceforge.net/cvs/?group_id=4932">CVS repository</a>.  In order to
       build it, you will need a Unix-like operating system, the
-      gcc-2.9x C++ compiler, KDE 2.2 including the kdemultimedia
-      package, and Qt 2.  If you haven't got KDE, see the <a
+      gcc-2.9x C++ compiler, KDE 2.2 with Qt2 or KDE3 wth Qt3.
+      If you haven't got KDE, see the <a
       href="http://www.kde.org/">KDE web site</a>.
 
       <p>The SourceForge site also contains <a href="http://rosegarden.sourceforge.net/code_doc">some code documentation</a> and <a href="http://sourceforge.net/mail/?group_id=4932">a mailing-list</a>.
@@ -101,6 +98,15 @@
       <p>We're always looking for people willing to participate in the
       project.  If you're interested, <a
       href="development.html">read the development page</a>.
+
+      <h2>Rosegarden-2.1</h2>
+
+      <p>Rosegarden-4 is not yet a stable release product; it is
+      intended for developers, contributors and other interested
+      parties.  If you want a proper version of Rosegarden that works,
+      but that looks old and has a rather limited design, try
+      <a href="2.1/index.html">Rosegarden-2.1</a>.
+      
 
   </body>
 </html> 
