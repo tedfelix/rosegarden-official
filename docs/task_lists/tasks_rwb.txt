@@ -1,10 +1,12 @@
 0.2 TO-DO for rwb
 -----------------
-updated 24.04.2002
+updated 25.04.2002
 
 Immediate work:
 
 o sweep selection on Matrix
+
+o bar buttons and loop ruler repaint
 
 o Event playback on selection movement
 

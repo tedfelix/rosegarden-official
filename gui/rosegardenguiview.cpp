@@ -268,11 +268,11 @@ void RosegardenGUIView::setZoomSize(double size)
     m_trackEditor->getSegmentCanvas()->slotUpdate();
 
     if (m_trackEditor->getTopBarButtons()) {
-	m_trackEditor->getTopBarButtons()->update();
+	m_trackEditor->getTopBarButtons()->repaint();
     }
 
     if (m_trackEditor->getBottomBarButtons()) {
-	m_trackEditor->getBottomBarButtons()->update();
+	m_trackEditor->getBottomBarButtons()->repaint();
     }
 }
 

@@ -135,6 +135,13 @@ void BarButtons::setMinimumWidth(int width)
     m_loopRuler->setMinimumWidth(width);
 }
 
+void BarButtons::paintEvent(QPaintEvent*)
+{
+    m_hButtonBar->repaint();
+    m_loopRuler->repaint();
+}
+
+
 
 //----------------------------------------------------------------------
 

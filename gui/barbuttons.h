@@ -60,6 +60,9 @@ public:
 public slots:
     void slotScrollHoriz(int x);
 
+protected:
+    virtual void paintEvent(QPaintEvent *);
+
 private:
     //--------------- Data members ---------------------------------
     bool m_invert;
