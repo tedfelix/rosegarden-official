@@ -3,13 +3,13 @@ Current Task list
 
 - guitar chord display
 
-- fix toolbar pos. saving
+- fix toolbar pos. saving - ALMOST DONE - toolbar visibility is not saved in notation view.
 
 - fix wait cursors
 
 - AA text on canvas
 
-- daily compile check for various confing options
+- daily compile check for various confing options (DONE - mostly, I run it by hand from time to time)
 
 - valgrind/kcachegrind
 
