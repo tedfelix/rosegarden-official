@@ -25,5 +25,6 @@
 # or
 #DEFAULT (echo ""; id; echo %{sVv}; date; cat) >> $CVSROOT/CVSROOT/commitlog
 
-ALL (echo ""; echo %{sVv}; date; cat) | mail -s "[CVS COMMIT]" rosegarden-bugs@lists.sourceforge.net
+#ALL (echo ""; echo %{sVv}; date; cat) | mail -s "[CVS COMMIT]" rosegarden-bugs@lists.sourceforge.net
+ALL $CVSROOT/CVSROOT/logmailer %{sVv}
 

@@ -1,0 +1,5 @@
+#!/bin/sh
+
+CVS_MAILING_LIST="rosegarden-bugs@lists.sourceforge.net"
+
+cat | mail -s "[CVS COMMIT] $1" $CVS_MAILING_LIST
