@@ -1376,20 +1376,25 @@ void NotationView::setupActions()
     //
     int layoutMode = m_config->readNumEntry("layoutmode", 0);
 
+    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/linear-layout.xpm"));
     KRadioAction *linearModeAction = new KRadioAction
-        (i18n("&Linear Layout"), 0, this, SLOT(slotLinearMode()),
+        (i18n("&Linear Layout"), icon, 0, this, SLOT(slotLinearMode()),
          actionCollection(), "linear_mode");
     linearModeAction->setExclusiveGroup("layoutMode");
     if (layoutMode == 0) linearModeAction->setChecked(true);
 
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/continuous-page-mode.xpm"));
     KRadioAction *continuousPageModeAction = new KRadioAction
-        (i18n("&Continuous Page Layout"), 0, this, SLOT(slotContinuousPageMode()),
+        (i18n("&Continuous Page Layout"), icon, 0, this, SLOT(slotContinuousPageMode()),
          actionCollection(), "continuous_page_mode");
     continuousPageModeAction->setExclusiveGroup("layoutMode");
     if (layoutMode == 1) continuousPageModeAction->setChecked(true);
 
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/multi-page-mode.xpm"));
     KRadioAction *multiPageModeAction = new KRadioAction
-        (i18n("&Multiple Page Layout"), 0, this, SLOT(slotMultiPageMode()),
+        (i18n("&Multiple Page Layout"), icon, 0, this, SLOT(slotMultiPageMode()),
          actionCollection(), "multi_page_mode");
     multiPageModeAction->setExclusiveGroup("layoutMode");
     if (layoutMode == 2) multiPageModeAction->setChecked(true);

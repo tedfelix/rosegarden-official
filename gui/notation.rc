@@ -491,7 +491,10 @@
 
 <ToolBar name="Layout Toolbar">
   <text>Layout Toolbar</text>
-<!-- filled entirely at runtime -->
+  <Action name="linear_mode"               />
+  <Action name="continuous_page_mode"      />
+  <Action name="multi_page_mode"           />
+<!-- the remainder filled at runtime -->
 </ToolBar>
 
 <Menu noMerge="1" name="controller_events_ruler_menu">
