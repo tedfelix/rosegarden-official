@@ -19,8 +19,6 @@ o Segment start and end markers
 
 o smooth position pointer
 
-o Latency dialog
-
 o Segment paramters and modifiers - looping of Segments, quantisation
   [GETTING THERE]
 
@@ -54,6 +52,8 @@ Completed POST 0.1.4
 - Solo [DONE]
 
 - Metronome Channel/Instrument [DONE]
+
+- Latency dialog [DONE]
 
 
 --

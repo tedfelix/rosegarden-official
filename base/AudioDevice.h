@@ -43,6 +43,7 @@ public:
     virtual ~AudioDevice();
 
     virtual void createInstruments();
+    virtual void addInstrument(Instrument*);
 
     // Turn into XML string
     //

@@ -86,7 +86,14 @@ MidiDevice::createInstruments()
                        (MidiByte)9,                   // channel
                        dynamic_cast<Device*>(this))); // parent device 
 
-    // Now fill the presentation list for the instruments
+
+    generatePresentationList();
+}
+
+void
+MidiDevice::generatePresentationList()
+{
+    // Fill the presentation list for the instruments
     //
     m_presentationInstrumentList.clear();
 
@@ -96,8 +103,6 @@ MidiDevice::createInstruments()
         if ((*it)->getID() >= AudioInstrumentBase)
             m_presentationInstrumentList.push_back(*it);
     }
-
-
 }
 
 void
@@ -256,6 +261,13 @@ InstrumentList&
 MidiDevice::getPresentationInstruments()
 {
     return m_presentationInstrumentList;
+}
+
+void
+MidiDevice::addInstrument(Instrument *instrument)
+{
+    m_instruments.push_back(instrument);
+    generatePresentationList();
 }
 
 

@@ -215,7 +215,7 @@ Studio::toXmlString()
         // Send Instruments
         list = (*it)->getAllInstruments();
         for (iit = list.begin(); iit != list.end(); iit++)
-            studio << (*iit)->toXmlString() << std::endl;
+            studio << (*iit)->toXmlString();
     }
 
     studio << "</studio>" << std::endl << std::ends;

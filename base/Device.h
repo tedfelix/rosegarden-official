@@ -57,6 +57,7 @@ public:
     // show the world what they want it to see
     //
     virtual void createInstruments() = 0;
+    virtual void addInstrument(Instrument*) = 0;
 
     // Two functions - one to return all Instruments on a
     // Device - one to return all Instruments that a user

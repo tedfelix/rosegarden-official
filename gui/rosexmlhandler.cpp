@@ -563,25 +563,32 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
     } else if (lcName == "program") {
 
-        if (m_section != InStudio)
+        if (m_section == InStudio)
         {
-            m_errorString = i18n("Found Program outside Studio");
+            QString nameStr = (atts.value("name"));
+            Rosegarden::MidiByte pc = atts.value("id").toInt();
+
+            // Create a new program
+            Rosegarden::MidiProgram *program = new Rosegarden::MidiProgram();
+            program->name = std::string(nameStr.data());
+            program->program = pc;
+            program->msb = m_msb;
+            program->lsb = m_lsb;
+
+            // Insert the program
+            //
+            dynamic_cast<Rosegarden::MidiDevice*>(m_device)->addProgram(program);
+
+        }
+        else if (m_section == InInstrument)
+        {
+            Rosegarden::MidiByte id = atts.value("id").toInt();
+        }
+        else
+        {
+            m_errorString = i18n("Found Program outside Studio and Instrument");
             return false;
         }
-
-        QString nameStr = (atts.value("name"));
-        Rosegarden::MidiByte pc = atts.value("id").toInt();
-
-        // Create a new program
-        Rosegarden::MidiProgram *program = new Rosegarden::MidiProgram();
-        program->name = std::string(nameStr.data());
-        program->program = pc;
-        program->msb = m_msb;
-        program->lsb = m_lsb;
-
-        // Insert the program
-        //
-        dynamic_cast<Rosegarden::MidiDevice*>(m_device)->addProgram(program);
 
     } else if (lcName == "metronome") {
 
@@ -606,6 +613,42 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         dynamic_cast<Rosegarden::MidiDevice*>(m_device)->
           setMetronome(instrument, msb, lsb, program, pitch,
                        std::string("MIDI Metronome"));
+
+    } else if (lcName == "instrument") {
+
+        if (m_section != InStudio)
+        {
+            m_errorString = i18n("Found Instrument outside Studio");
+            return false;
+        }
+
+        m_section = InInstrument;
+
+        Rosegarden::InstrumentId id = atts.value("id").toInt();
+        std::string stringType = std::string(atts.value("type").data());
+        Rosegarden::Instrument::InstrumentType type;
+
+        if (stringType == "midi")
+            type = Rosegarden::Instrument::Midi;
+        else if (stringType == "audio")
+            type = Rosegarden::Instrument::Audio;
+        else
+        {
+            m_errorString = i18n("Found unknown Instrument type");
+            return false;
+        }
+            
+        std::string name = std::string(atts.value("name").data());
+
+        // Create the instrument
+        Rosegarden::Instrument *inst =
+            new Rosegarden::Instrument(id,
+                                       type,
+                                       name,
+                                       m_device);
+
+        // and insert into the current device
+        m_device->addInstrument(inst);
 
     } else {
         kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : Don't know how to parse this : " << qName << endl;
@@ -655,7 +698,14 @@ RoseXmlHandler::endElement(const QString& /*namespaceURI*/,
     } else if (lcName == "studio") {
 
         m_section = NoSection;
+    } else if (lcName == "instrument") {
+
+        m_section = InStudio;
+    } else if (lcName == "device") {
+
+        m_device = 0;
     }
+
 
     return true;
 }

@@ -87,6 +87,12 @@ AudioDevice::toXmlString()
 }
 
 
+void
+AudioDevice::addInstrument(Instrument*)
+{
+}
+
+
 }
 
 

@@ -45,6 +45,7 @@ public:
     virtual ~MidiDevice();
 
     virtual void createInstruments();
+    virtual void addInstrument(Instrument*);
 
     void setMetronome(InstrumentId instrument,
                       MidiByte msb, MidiByte lsb, MidiByte program,
@@ -75,6 +76,7 @@ public:
 
 private:
     void clearProgramList();
+    void generatePresentationList();
 
     // Brief (probably incorrect) synopsis of bank select 
     // messages for XG:

@@ -42,7 +42,8 @@ public:
         NoSection,
         InComposition,
         InSegment,
-        InStudio
+        InStudio,
+        InInstrument
     } RosegardenFileSection;
 
     /**
