@@ -31,7 +31,7 @@ namespace Rosegarden
 //
 const std::string AUDIO_RIFF_ID = "RIFF";
 const std::string AUDIO_WAVE_ID = "WAVE";
-const std::string AUDIO_FORMAT_ID = "fmt_";
+const std::string AUDIO_FORMAT_ID = "fmt ";   // Always four bytes
 
 
 

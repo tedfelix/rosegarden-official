@@ -45,10 +45,15 @@ AudioFile::~AudioFile()
 void
 AudioFile::parseHeader(const std::string &hS)
 {
-    // The WAV file itself consists of three "chunks" of information:
-    // The RIFF chunk which identifies the file as a WAV file, The FORMAT
-    // chunk which identifies parameters such as sample rate and the DATA
-    // chunk which contains the actual data (samples). 
+    // Courtesy of:
+    //   http://www.technology.niagarac.on.ca/courses/comp630/WavFileFormat.html
+    //
+    // 'The WAV file itself consists of three "chunks" of information:
+    //  The RIFF chunk which identifies the file as a WAV file, The FORMAT
+    //  chunk which identifies parameters such as sample rate and the DATA
+    //  chunk which contains the actual data (samples).'
+    //
+    //
 
 
     // Look for the RIFF identifier and bomb out if we don't find it
@@ -73,6 +78,17 @@ AudioFile::parseHeader(const std::string &hS)
         throw((string("AudioFile::parseHeader - can't find WAV identifier")));
     }
 
+    // Look for the FORMAT identifier
+    //
+#if (__GNUC__ < 3)
+    if (hS.compare(Rosegarden::AUDIO_FORMAT_ID, 12, 4) != 0)
+#else
+    if (hS.compare(4, 4, Rosegarden::AUDIO_FORMAT_ID) != 0)
+#endif
+    {
+        throw((string("AudioFile::parseHeader - can't find FORMAT identifier")));
+    }
+
     return true;
 }
 
@@ -81,6 +97,13 @@ AudioFile::open()
 {
     ifstream *file = new ifstream(m_fileName.c_str(), ios::in | ios::binary);
 
+    // get the actual file size
+    //
+    file->seekg(0, ios::end);
+    m_fileSize = file->tellg();
+    file->seekg(0, ios::beg);
+
+    // now parse the file
     try
     {
         if (*file)

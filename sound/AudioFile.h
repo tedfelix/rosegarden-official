@@ -69,6 +69,8 @@ private:
     bool m_stereo;
     AudioFileType m_type;
 
+    int m_fileSize;
+
 };
 
 }
