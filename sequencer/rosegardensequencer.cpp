@@ -89,6 +89,7 @@ public:
         iterator& operator-=(int);
 
         MappedEvent operator*();
+        const MappedEvent* peek() const { return m_currentEvent; }
 
         MmappedSegment* getSegment() { return m_s; }
 
@@ -511,22 +512,13 @@ bool MmappedSegmentsMetaIterator::jumpToTime(const Rosegarden::RealTime& startTi
 }
 
 bool MmappedSegmentsMetaIterator::moveIteratorToTime(MmappedSegment::iterator& iter,
-                                                       const Rosegarden::RealTime& startTime)
+                                                     const Rosegarden::RealTime& startTime)
 {
-    MmappedSegment* mmappedSegment = iter.getSegment();
-
-    MappedEvent e = *iter;
-
-    while ((e.getEventTime() < startTime) && (iter != mmappedSegment->end())) {
+    while ((iter.peek()->getEventTime() < startTime) && (!iter.atEnd())) {
         ++iter;
-        e = *iter;
     }
-    bool res = iter != mmappedSegment->end();
+    bool res = !iter.atEnd();
 
-//     if (!res)
-//         SEQUENCER_DEBUG << "moveIteratorToTime for segment #" << mmappedSegment->getFileName()
-//                         << " to time " << startTime
-//                         << " moved iterator to end\n";
     return res;
 }
 
