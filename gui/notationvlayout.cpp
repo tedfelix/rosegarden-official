@@ -29,7 +29,6 @@ NotationVLayout::~NotationVLayout() { }
 
 void NotationVLayout::reset() { }
 
-<<<<<<< notationvlayout.cpp
 void
 NotationVLayout::layout(NotationElementList::iterator from,
                         NotationElementList::iterator to)

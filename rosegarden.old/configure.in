@@ -57,5 +57,4 @@ po/Makefile \
 rosegardengui/Makefile \
 rosegardengui/docs/Makefile \
 rosegardengui/docs/en/Makefile \
-rosegardengui/notation/Makefile \
 )

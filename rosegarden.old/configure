@@ -7710,7 +7710,6 @@ po/Makefile \
 rosegardengui/Makefile \
 rosegardengui/docs/Makefile \
 rosegardengui/docs/en/Makefile \
-rosegardengui/notation/Makefile \
  config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -7914,7 +7913,6 @@ po/Makefile \
 rosegardengui/Makefile \
 rosegardengui/docs/Makefile \
 rosegardengui/docs/en/Makefile \
-rosegardengui/notation/Makefile \
 "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
