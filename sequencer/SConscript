@@ -23,8 +23,8 @@ rgseq = KDEprogram('rosegardensequencer', rgseqSources, myenv)
 KDEaddpaths( ['../base', '../sound', '../gui', '../', './'], myenv)
 KDEaddlibs(['RosegardenSequencer', 'RosegardenSound', 'base', 'kdeui', 'kdecore'], myenv)
 
-myenv['LIBPATH'].append('../base')
-myenv['LIBPATH'].append('../sound')
+myenv['LIBPATH'].insert(0, '../base')
+myenv['LIBPATH'].insert(0, '../sound')
 
 for dep in soundLibs:
     Depends(rgseq, dep)
