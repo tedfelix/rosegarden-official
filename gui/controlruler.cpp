@@ -19,6 +19,8 @@
     COPYING included with this distribution for more information.
 */
 
+#include <algorithm>
+
 #include <klocale.h>
 
 #include <qpainter.h>
@@ -61,11 +63,13 @@ public:
 
 int TestTool::operator()(double x, int val)
 {
-    int res = (int)x / 10 + val;
+//     int res = (int)x / 10 + val;
 
-    RG_DEBUG << "TestTool::operator() : x = " << x
-             << ", val = " << val
-             << ", res = " << res << endl;
+    int res = val;
+
+//     RG_DEBUG << "TestTool::operator() : x = " << x
+//              << ", val = " << val
+//              << ", res = " << res << endl;
 
     return res;
 }
@@ -118,10 +122,12 @@ protected:
 
     static const unsigned int BorderThickness;
     static const unsigned int DefaultWidth;
+    static const int MinHeight;
 };
 
 const unsigned int ControlItem::BorderThickness = 2;
 const unsigned int ControlItem::DefaultWidth    = 20;
+const int ControlItem::MinHeight                = -5;
 
 ControlItem::ControlItem(ControlRuler* ruler, ViewElement *el,
                          ViewElement *nextEl)
@@ -134,7 +140,7 @@ ControlItem::ControlItem(ControlRuler* ruler, ViewElement *el,
     setBrush(Qt::blue);
 
     setX(el->getLayoutX());
-    setY(canvas()->height() - 10);
+    setY(canvas()->height());
     updateFromValue();
     RG_DEBUG << "ControlItem x = " << x() << " - y = " << y() << endl;
     show();
@@ -149,7 +155,9 @@ void ControlItem::setValue(long v)
 
 int ControlItem::valueToHeight(long val)
 {
-    return -val;
+    int res = std::min(int(-val), MinHeight);
+    RG_DEBUG << "ControlItem::valueToHeight : height = " << res;
+    return res;
 }
 
 long ControlItem::heightToValue(int h)

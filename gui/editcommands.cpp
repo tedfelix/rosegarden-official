@@ -52,6 +52,7 @@ using Rosegarden::Accidentals::NoAccidental;
 using Rosegarden::Indication;
 using Rosegarden::EventSelection;
 using Rosegarden::SegmentSelection;
+using Rosegarden::TrackId;
 
 using namespace Rosegarden::BaseProperties;
 
@@ -231,6 +232,7 @@ PasteSegmentsCommand::execute()
     // to that as they did before
 
     timeT earliestStartTime = 0;
+    timeT latestEndTime = 0;
     int trackOffset = 0;
 
     for (Rosegarden::Clipboard::iterator i = m_clipboard->begin();
@@ -241,6 +243,9 @@ PasteSegmentsCommand::execute()
 	    earliestStartTime = (*i)->getStartTime();
             trackOffset = (*i)->getTrack();
 	}
+
+        if ((*i)->getEndTime() > latestEndTime)
+            latestEndTime = (*i)->getEndMarkerTime();
     }
 
     timeT offset = m_pasteTime - earliestStartTime;
@@ -248,7 +253,7 @@ PasteSegmentsCommand::execute()
     for (Rosegarden::Clipboard::iterator i = m_clipboard->begin();
 	 i != m_clipboard->end(); ++i) {
 
-        int newTrackId = m_composition->getSelectedTrack() 
+        TrackId newTrackId = m_composition->getSelectedTrack() 
             + (*i)->getTrack()
             - trackOffset;
 
@@ -262,6 +267,11 @@ PasteSegmentsCommand::execute()
         m_composition->addSegment(segment);
 	m_addedSegments.push_back(segment);
     }
+
+    // User preference? Update song pointer position on paste
+    m_composition->setPosition(latestEndTime 
+                               + m_pasteTime 
+                               - earliestStartTime);
 }
 
 void

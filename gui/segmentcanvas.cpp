@@ -980,11 +980,13 @@ void SegmentCanvas::contentsMouseDoubleClickEvent(QMouseEvent* e)
 	emit editSegment(item->getSegment());
     } else {
 	SegmentRepeatRectangle *rect = findRepeatClickedOn(e->pos());
+        if (rect) {
 	Rosegarden::timeT time = rect->getRepeatStartTime(e->x());
 
 	RG_DEBUG << "editRepeat at time " << time << endl;
 	
 	emit editRepeat(rect->getSegment(), time);
+        }
     }
 }
 

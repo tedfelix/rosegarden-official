@@ -1553,6 +1553,9 @@ void RosegardenGUIApp::slotEditPaste()
     m_doc->getCommandHistory()->addCommand
         (new PasteSegmentsCommand(&m_doc->getComposition(),
                                   m_clipboard, insertionTime));
+
+    // User preference? Update song pointer position on paste
+    m_doc->setPointerPosition(m_doc->getComposition().getPosition());
 }
 
 void RosegardenGUIApp::slotSelectAll()
