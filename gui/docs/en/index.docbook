@@ -4468,7 +4468,45 @@
     <sect1 id="developers-note-styles">
       <title>Creating new notation styles</title>
 
-      <para></para>
+      <para>
+	Rosegarden's notation editor has the ability to display and
+	edit notes in various standard styles: classical, diamond
+	heads and so on.  These styles are all defined in XML style
+	definition files installed along with the application, and
+	it's possible to create a new one by writing a simple XML
+	file.  You can refer to the files installed in the styles
+	subdirectory of the Rosegarden installation directory for
+	examples.
+      </para>
+
+      <para>
+	The file format is not yet especially comprehensive; at the
+	moment it has been designed to be powerful enough to describe
+	the standard styles that come with Rosegarden, but not much
+	more.  If you should try to create new styles this way, we'd
+	be very interested in your feedback on the Rosegarden
+	mailing-lists.
+      </para>
+      
+      <sect2 id="developers-note-styles-format">
+	<title>Notation style XML format</title>
+
+	<para>
+	  Here is a summary of the XML elements that may be used in
+	  a style definition file.
+	</para>
+
+	<sect3 id="developers-note-styles-note-style">
+	  <title>rosegarden-note-style</title>
+
+	  <para>This element must exist in every style file, and
+	  should contain all the other elements.  It has no
+	  attributes.  (The name of the style is currently drawn from
+	  the name of the file it is defined in.  At some point in the
+	  future we may add internationalizable style name attributes
+	  to the rosegarden-note-style element.)</para>
+	</sect3>
+      </sect2>
     </sect1>
     
 

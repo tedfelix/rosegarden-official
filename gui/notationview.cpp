@@ -623,7 +623,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 NotationView::NotationView(RosegardenGUIDoc *doc,
                            std::vector<Segment *> segments,
                            KPrinter *printer,
-			   QWidget *parent)
+			   QWidget *parent,
+			   NotationView *referenceView)
     : EditView(doc, segments, 1, 0, "printview"),
     m_properties(getViewLocalPropertyPrefix()),
     m_selectionCounter(0),
@@ -666,14 +667,25 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     m_config->setGroup(NotationView::ConfigGroup);
 
-    m_fontName = qstrtostr(m_config->readEntry
-			   ("notefont",
-			    strtoqstr(NoteFontFactory::getDefaultFontName())));
+    if (referenceView) {
+	m_fontName = referenceView->m_fontName;
+    } else {
+	m_fontName = qstrtostr(m_config->readEntry
+			       ("notefont",
+				strtoqstr(NoteFontFactory::getDefaultFontName())));
+    }
 
 
     // Force largest font size
     std::vector<int> sizes = NoteFontFactory::getAllSizes(m_fontName);
     m_fontSize = sizes[sizes.size()-1];
+
+    if (referenceView) {
+	m_hlayout->setSpacing(referenceView->m_hlayout->getSpacing());
+    } else {
+	int defaultSpacing = m_config->readNumEntry("spacing", 100);
+	m_hlayout->setSpacing(defaultSpacing);
+    }
 
     delete m_notePixmapFactory;
     m_notePixmapFactory = new NotePixmapFactory(m_fontName, m_fontSize);
@@ -1106,6 +1118,8 @@ void NotationView::readOptions()
 
 void NotationView::setupActions()
 {
+    KStdAction::print(this, SLOT(slotFilePrint()), actionCollection());
+
     EditViewBase::setupActions("notation.rc");
     EditView::setupActions();
 

@@ -86,12 +86,15 @@ public:
 
     /**
      * Constructor for printing only.  If parent is provided, a
-     * progress dialog will be shown -- otherwise not.
+     * progress dialog will be shown -- otherwise not.  If another
+     * NotationView is provided, the fonts and other settings used
+     * for printing will be taken from that view.
      */
     NotationView(RosegardenGUIDoc *doc,
                  std::vector<Rosegarden::Segment *> segments,
                  KPrinter*,
-                 QWidget *parent);
+                 QWidget *parent,
+		 NotationView *referenceView = 0);
 
     ~NotationView();
 
@@ -249,13 +252,27 @@ public:
     virtual void updateView();
 
     /**
-     * Render segments on printing painter
+     * Render segments on printing painter.  This uses the current
+     * font size and layout, rather than the optimal ones for the
+     * printer configuration (notation editing is not quite WYSIWYG,
+     * and we may be in a non-page mode).
+     * 
+     * To print optimally use slotFilePrint, which will create
+     * another NotationView with the optimal settings and call print
+     * on that.
      *
      * @see NotationCanvasView#print
      */
     virtual void print(KPrinter*);
 
 public slots:
+
+    /**
+     * Print the current set of segments, by creating another
+     * NotationView with the printing configuration but the same
+     * segments, font etc as this view and asking it to print.
+     */
+    void slotFilePrint();
 
     /**
      * put the marked text/object into the clipboard and remove it

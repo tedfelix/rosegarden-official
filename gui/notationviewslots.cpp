@@ -28,6 +28,7 @@
 #include <kapp.h>
 #include <kconfig.h>
 #include <klineeditdlg.h>
+#include <kprinter.h>
 
 #include "notationview.h"
 
@@ -318,6 +319,30 @@ NotationView::slotChangeFont(std::string newName, int newSize)
     positionPages();
     updateView();
 }
+
+
+void
+NotationView::slotFilePrint()
+{
+    KTmpStatusMsg msg(i18n("Printing..."), this);
+
+    KPrinter printer(true, QPrinter::HighResolution);
+
+    if (printer.setup(this)) {
+
+	SetWaitCursor waitCursor;
+	NotationView printingView(getDocument(), m_segments, &printer,
+				  (QWidget *)parent(), this);
+
+	if (!printingView.isOK()) {
+	    RG_DEBUG << "RosegardenGUIView::print : operation cancelled\n";
+	    return;
+	}
+
+	printingView.print(&printer);
+    }
+}
+
 
 //
 // Cut, Copy, Paste
