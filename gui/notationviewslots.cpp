@@ -1283,6 +1283,31 @@ void NotationView::slotSwitchFromNoteToRest()
     setMenuStates();
 }
 
+void NotationView::slotToggleDot()
+{
+    NoteInserter *noteInserter = dynamic_cast<NoteInserter *>(m_tool);
+    if (noteInserter) {
+	Rosegarden::Note note(noteInserter->getCurrentNote());
+	if (note.getNoteType() == Rosegarden::Note::Shortest ||
+	    note.getNoteType() == Rosegarden::Note::Longest) return;
+	noteInserter->slotSetDots(note.getDots() ? 0 : 1);
+	setTool(noteInserter);
+    } else {
+	RestInserter *restInserter = dynamic_cast<RestInserter *>(m_tool);
+	if (restInserter) {
+	    Rosegarden::Note note(restInserter->getCurrentNote());
+	    if (note.getNoteType() == Rosegarden::Note::Shortest ||
+		note.getNoteType() == Rosegarden::Note::Longest) return;
+	    restInserter->slotSetDots(note.getDots() ? 0 : 1);
+	    setTool(restInserter);
+	} else {
+	    KMessageBox::sorry(this, i18n("No note or rest duration selected"));
+	}
+    }
+
+    setMenuStates();
+}
+
 void NotationView::slotRespellDoubleFlat()
 {
     if (!m_currentEventSelection) return;
@@ -1411,6 +1436,19 @@ void NotationView::slotTransformsInterpret()
     }
 }
     
+void NotationView::slotSetNoteDurations(Rosegarden::Note::Type type)
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Setting note durations..."), this);
+    addCommandToHistory(new SetNoteTypeCommand(*m_currentEventSelection, type));
+}
+
+void NotationView::slotAddDot()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Adding dot..."), this);
+    addCommandToHistory(new AddDotCommand(*m_currentEventSelection));
+}
 
 void NotationView::slotAddSlashes()
 {

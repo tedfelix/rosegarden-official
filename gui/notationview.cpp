@@ -1332,7 +1332,7 @@ void NotationView::setupActions()
 				      actionCollection(),
 				      data.actionName);
     }
-    
+
     //
     // Accidentals
     //
@@ -2048,6 +2048,14 @@ void NotationView::setupActions()
     new KAction(i18n("Make &Visible"), 0, this,
 		SLOT(slotMakeVisible()), actionCollection(),
 		"make_visible");
+
+    new KAction(i18n("Toggle Dot"), Key_Period, this,
+		SLOT(slotToggleDot()), actionCollection(),
+		"toggle_dot");
+
+    new KAction(i18n("Add Dot"), Key_Period + CTRL, this,
+		SLOT(slotAddDot()), actionCollection(),
+		"add_dot");
 
     createGUI(getRCFileName(), false);
 }
@@ -3377,6 +3385,21 @@ void NotationView::slotAddMark()
     if (i != m_markActionDataMap->end()) {
 	addCommandToHistory(new NotesMenuAddMarkCommand
 			    ((*i).mark, *m_currentEventSelection));
+    }
+}
+
+void NotationView::slotNoteChangeAction()
+{
+    const QObject* sigSender = sender();
+
+    NoteChangeActionDataMap::Iterator noteAct =
+	m_noteChangeActionDataMap->find(sigSender->name());
+    
+    if (noteAct != m_noteChangeActionDataMap->end()) {
+	slotSetNoteDurations((*noteAct).noteType);
+    } else {
+        std::cerr << "NotationView::slotNoteChangeAction() : couldn't find NoteChangeAction named '"
+                             << sigSender->name() << "'\n";
     }
 }
 

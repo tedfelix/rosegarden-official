@@ -470,6 +470,7 @@ public slots:
     void slotInsertRest();
     void slotSwitchFromRestToNote();
     void slotSwitchFromNoteToRest();
+    void slotToggleDot();
 
     void slotAddMark();
     void slotMarksAddTextMark();
@@ -480,6 +481,10 @@ public slots:
     void slotMakeOrnament();
     void slotUseOrnament();
     void slotRemoveOrnament();
+
+    void slotNoteChangeAction();
+    void slotSetNoteDurations(Rosegarden::Note::Type);
+    void slotAddDot();
 
     void slotAddSlashes();
 

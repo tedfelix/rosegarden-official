@@ -664,4 +664,48 @@ protected:
 };
 
 
+class SetNoteTypeCommand : public BasicSelectionCommand
+{
+public:
+    SetNoteTypeCommand(Rosegarden::EventSelection &selection,
+		       Rosegarden::Note::Type type) :
+	BasicSelectionCommand(getGlobalName(), selection, true),
+	m_selection(&selection),
+	m_type(type)
+    { }
+
+    static QString getGlobalName() {
+	return i18n("&Set Note Type");
+    }
+
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    Rosegarden::Note::Type m_type;
+};
+
+
+class AddDotCommand : public BasicSelectionCommand
+{
+public:
+    AddDotCommand(Rosegarden::EventSelection &selection) :
+	BasicSelectionCommand(getGlobalName(), selection, true),
+	m_selection(&selection)
+    { }
+
+    static QString getGlobalName() {
+	return i18n("&Add Dot");
+    }
+
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+};
+
+
+
 #endif

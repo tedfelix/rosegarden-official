@@ -1784,3 +1784,89 @@ InsertTriggerNoteCommand::modifySegment()
     if (rec) rec->updateReferences();
 }
 
+
+void
+SetNoteTypeCommand::modifySegment()
+{
+    std::vector<Event *> toErase;
+    std::vector<Event *> toInsert;
+    
+    EventSelection::eventcontainer::iterator i;
+    timeT endTime = getEndTime();
+
+    for (i  = m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+
+	if ((*i)->isa(Rosegarden::Note::EventType)) {
+	    toErase.push_back(*i);
+
+	    Event *e = new Event(**i,
+				 (*i)->getNotationAbsoluteTime(),
+				 Rosegarden::Note(m_type).getDuration());
+
+	    if (e->getAbsoluteTime() + e->getDuration() > endTime) {
+		endTime = e->getAbsoluteTime() + e->getDuration();
+	    }
+
+	    toInsert.push_back(e);
+	}
+    }
+
+    for (std::vector<Event *>::iterator i = toErase.begin(); i != toErase.end(); ++i) {
+	m_selection->getSegment().eraseSingle(*i);
+    }
+
+    for (std::vector<Event *>::iterator i = toInsert.begin(); i != toInsert.end(); ++i) {
+	m_selection->getSegment().insert(*i);
+	m_selection->addEvent(*i);
+    }
+
+    m_selection->getSegment().normalizeRests(getStartTime(), endTime);
+}
+
+void
+AddDotCommand::modifySegment()
+{
+    std::vector<Event *> toErase;
+    std::vector<Event *> toInsert;
+    
+    EventSelection::eventcontainer::iterator i;
+    timeT endTime = getEndTime();
+
+    for (i  = m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+
+	if ((*i)->isa(Rosegarden::Note::EventType)) {
+
+	    Rosegarden::Note note = Rosegarden::Note::getNearestNote
+		((*i)->getNotationDuration());
+	    int dots = note.getDots();
+	    if (++dots > 2) dots = 0;
+
+	    toErase.push_back(*i);
+
+	    Event *e = new Event(**i,
+				 (*i)->getNotationAbsoluteTime(),
+				 Rosegarden::Note(note.getNoteType(),
+						  dots).getDuration());
+
+	    if (e->getAbsoluteTime() + e->getDuration() > endTime) {
+		endTime = e->getAbsoluteTime() + e->getDuration();
+	    }
+
+	    toInsert.push_back(e);
+	}
+    }
+
+    for (std::vector<Event *>::iterator i = toErase.begin(); i != toErase.end(); ++i) {
+	m_selection->getSegment().eraseSingle(*i);
+    }
+
+    for (std::vector<Event *>::iterator i = toInsert.begin(); i != toInsert.end(); ++i) {
+	m_selection->getSegment().insert(*i);
+	m_selection->addEvent(*i);
+    }
+
+    m_selection->getSegment().normalizeRests(getStartTime(), endTime);
+}
+
