@@ -107,7 +107,7 @@ RIFFAudioFile::scanForward(std::ifstream *file, const RealTime &time)
     // do the seek
     file->seekg(totalBytes, std::ios::cur);
 
-    if (file->get() == EOF)
+    if (file->eof())
         return false;
 
     return true;
@@ -142,15 +142,19 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
     //
     m_loseBuffer = true;
 
+    file->clear();
+
     // seek past header - don't hardcode this - use the file format
     // spec to get header length and then scoot to that.
     //
     file->seekg(16, std::ios::beg);
-    unsigned int lengthOfFormat = getIntegerFromLittleEndian(getBytes(file, 4));
-    file->seekg(lengthOfFormat, std::ios::cur);
 
-    try
-    {
+    unsigned int lengthOfFormat = 0;
+
+    try {
+	lengthOfFormat = getIntegerFromLittleEndian(getBytes(file, 4));
+	file->seekg(lengthOfFormat, std::ios::cur);
+
         // check we've got data chunk start
         if (getBytes(file, 4) != "data")
         {
@@ -224,7 +228,12 @@ RIFFAudioFile::getSampleFrames(std::ifstream *file, unsigned int frames)
     // of channels we're using
     //
     long totalBytes = frames * m_bytesPerFrame;
-    return getBytes(file, totalBytes);
+
+    try {
+	return getBytes(file, totalBytes);
+    } catch (std::string s) {
+	return "";
+    }
 }
 
 unsigned int
@@ -232,7 +241,11 @@ RIFFAudioFile::getSampleFrames(std::ifstream *file, char *buf,
 			       unsigned int frames)
 {
     if (file == 0) return 0;
-    return getBytes(file, buf, frames * m_bytesPerFrame) / m_bytesPerFrame;
+    try {
+	return getBytes(file, buf, frames * m_bytesPerFrame) / m_bytesPerFrame;
+    } catch (std::string s) {
+	return 0;
+    }
 }
 
 std::string
@@ -257,7 +270,11 @@ RIFFAudioFile::getSampleFrameSlice(std::ifstream *file, const RealTime &time)
                         ( ( m_sampleRate * time.usec() ) / 1000000 );
 
     long totalBytes = totalSamples * m_channels * m_bytesPerFrame;
-    return getBytes(file, totalBytes);
+    try {
+	return getBytes(file, totalBytes);
+    } catch (std::string s) {
+	return "";
+    }
 }
 
 std::string
