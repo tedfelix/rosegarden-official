@@ -79,6 +79,8 @@ BasicCommand::execute()
     } else {
 	copyFrom(m_redoEvents);
     }
+
+    m_segment.updateRefreshStatuses(getBeginTime(), getEndTime());
 }
 
 void
@@ -90,6 +92,8 @@ BasicCommand::unexecute()
     }
 
     copyFrom(&m_savedEvents);
+
+    m_segment.updateRefreshStatuses(getBeginTime(), getEndTime());
 }
     
 void

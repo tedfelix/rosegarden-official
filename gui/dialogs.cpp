@@ -685,7 +685,7 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
     
     updateUntupledCombo();
 
-    new QLabel(i18n("In the time of  "), timingGrid);
+    new QLabel(i18n("in the time of  "), timingGrid);
     m_tupledCombo = new QComboBox(true, timingGrid);
     updateTupledCombo();
 
