@@ -35,7 +35,7 @@ namespace Rosegarden
 class Progress
 {
 public:
-    Progress(int max):m_max(max), m_value(0) {;}
+    Progress(int max) : m_max(max), m_value(0) {;}
     virtual ~Progress() {;}
 
     int getMax() { return m_max; }
@@ -60,9 +60,9 @@ public:
     //
     virtual void processEvents() = 0;
 
-    // Kill this progress instance
+    // Do the necessary to remove/kill/close this progress instance
     //
-    virtual void destroy() = 0;
+    virtual void done() = 0;
 
     // Return true if the operation has been cancelled
     //

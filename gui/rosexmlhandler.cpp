@@ -650,7 +650,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             //
             if (m_progress)
             {
-                m_progress->destroy();
+                m_progress->done();
 
                 // clunktastic
                 m_doc->progressDialogDead();

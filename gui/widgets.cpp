@@ -259,7 +259,7 @@ RosegardenProgressDialog::slotShowMyself()
 }
 
 void
-RosegardenProgressDialog::destroy()
+RosegardenProgressDialog::done()
 {
     QApplication::restoreOverrideCursor();
     close();
@@ -292,12 +292,13 @@ RosegardenProgressBar::setCompleted(int value)
 void
 RosegardenProgressBar::processEvents()
 {
-    kapp->processEvents(50);
+    update();
+//    kapp->processEvents(50);
 }
 
 void
-RosegardenProgressBar::destroy()
+RosegardenProgressBar::done()
 {
-    setCompleted(0);
+    reset();
 }
 

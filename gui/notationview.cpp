@@ -306,7 +306,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     }
 
     if (showProgressive) {
-	delete m_progress;
+	m_progress->done();
 	m_progress = 0;
 	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 	    m_staffs[i]->setProgressReporter(0);
@@ -1316,6 +1316,16 @@ void NotationView::setCurrentSelectedNote(NoteActionData noteAction)
 
 void NotationView::setCurrentSelection(EventSelection* s)
 {
+    bool usingProgressBar = false;
+
+    if (!m_progress) {
+	m_progress = m_progressBar;
+	usingProgressBar = true;
+	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+	    m_staffs[i]->setProgressReporter(m_progress);
+	}
+    }
+
     if (m_currentEventSelection) {
         m_currentEventSelection->removeSelectionFromSegment
 	    (m_properties.SELECTED);
@@ -1351,6 +1361,14 @@ void NotationView::setCurrentSelection(EventSelection* s)
 			 KXMLGUIClient::StateNoReverse);
 	}
 #endif
+    }
+
+    if (usingProgressBar) {
+	m_progress->done();
+	m_progress = 0;
+	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+	    m_staffs[i]->setProgressReporter(0);
+	}
     }
 
     updateView();
@@ -1480,22 +1498,15 @@ void NotationView::refreshSegment(Segment *segment,
 
     if (m_inhibitRefresh) return;
 
-    bool ownProgressDlg = false;
+    bool usingProgressBar = false;
 
     if (!m_progress) {
-/*!!!
-	m_progress = new RosegardenProgressDialog
-	    (i18n("Updating..."), 0, 100, this,
-	     i18n("Notation progress"), true);
-	m_progress->setAutoClose(false);
+	m_progress = m_progressBar;
+	usingProgressBar = true;
 	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 	    m_staffs[i]->setProgressReporter(m_progress);
 	}
-*/
-	m_progress = m_progressBar;
-	ownProgressDlg = true;
     }
-
 
     emit usedSelection();
 
@@ -1537,8 +1548,8 @@ void NotationView::refreshSegment(Segment *segment,
     PRINT_ELAPSED("NotationView::refreshSegment (without update/GC)");
 
     PixmapArrayGC::deleteAll();
-    if (ownProgressDlg) {
-//!!!   delete m_progress;
+    if (usingProgressBar) {
+	m_progress->done();
 	m_progress = 0;
 	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 	    m_staffs[i]->setProgressReporter(0);

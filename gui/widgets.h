@@ -176,7 +176,7 @@ public:
 
     // Destroy
     //
-    virtual void destroy();
+    virtual void done();
 
     virtual bool wasOperationCancelled() {
 	return QProgressDialog::wasCancelled();
@@ -216,7 +216,7 @@ public:
     virtual void setOperationName(std::string) { }
     virtual void setCompleted(int value);
     virtual void processEvents();
-    virtual void destroy();
+    virtual void done();
 };
    
 			      
