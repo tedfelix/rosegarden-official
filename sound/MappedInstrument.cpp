@@ -48,6 +48,24 @@ MappedInstrument::MappedInstrument(Instrument::InstrumentType type,
 {
 }
 
+MappedInstrument::MappedInstrument(const Instrument &instr):
+    m_type(instr.getType()),
+    m_channel(instr.getMidiChannel()),
+    m_id(instr.getId()),
+    m_name(instr.getName()),
+    m_device((instr.getDevice())->getId())
+{
+}
+
+MappedInstrument::MappedInstrument(Instrument *instr):
+    m_type(instr->getType()),
+    m_channel(instr->getMidiChannel()),
+    m_id(instr->getId()),
+    m_name(instr->getName()),
+    m_device(instr->getDevice()->getId())
+{
+}
+
 
 MappedInstrument::~MappedInstrument()
 {

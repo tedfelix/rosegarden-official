@@ -53,8 +53,13 @@ public:
                      const std::string &name,
                      DeviceId device);
 
+    // from instrument
+    MappedInstrument(const Instrument &instrument);
+    MappedInstrument(Instrument *instrument);
+
     // extra and copy
     MappedInstrument(MappedInstrument *mI);
+
 
     ~MappedInstrument();
 

@@ -527,6 +527,9 @@ InstrumentParameterBox::slotSelectChannel(int index)
         return;
 
     m_selectedInstrument->setMidiChannel(index);
+
+
+    emit sendMappedInstrument(Rosegarden::MappedInstrument(m_selectedInstrument));
 }
 
 

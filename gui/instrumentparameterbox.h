@@ -25,6 +25,7 @@
 #include "widgets.h"
 #include "Instrument.h"
 #include "MappedEvent.h"
+#include "MappedInstrument.h"
 
 #ifndef _INSTRUMENTPARAMETERBOX_H_
 #define _INSTRUMENTPARAMETERBOX_H_
@@ -64,6 +65,7 @@ signals:
     // real time during playback.
     //
     void sendMappedEvent(Rosegarden::MappedEvent *mE);
+    void sendMappedInstrument(const Rosegarden::MappedInstrument &mI);
     void changeInstrumentLabel(Rosegarden::InstrumentId id, QString label);
 
 protected:

@@ -1331,6 +1331,26 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
     }
 }
 
+void
+SequenceManager::sendMappedInstrument(const MappedInstrument &mI)
+{
+    QByteArray data;
+    QDataStream streamOut(data, IO_WriteOnly);
+
+    streamOut << mI.getType();
+    streamOut << mI.getChannel();
+    streamOut << mI.getId();
+
+    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
+             "setMappedInstrument(int, unsigned char, unsigned int)", data))
+    {
+        throw(i18n("Failed to contact Rosegarden sequencer"));
+    }
+}
+
+
+
 // Send Instrument list to Sequencer and ensure that initial program
 // changes follow them.  Sending the instruments ensures that we have
 // channels available on the Sequencer and then the program changes
@@ -1351,19 +1371,7 @@ SequenceManager::preparePlayback()
     InstrumentList::iterator it = list.begin();
     for (; it != list.end(); it++)
     {
-        QByteArray data;
-        QDataStream streamOut(data, IO_WriteOnly);
-
-        streamOut << (*it)->getType();
-        streamOut << (*it)->getMidiChannel();
-        streamOut << (*it)->getId();
-
-        if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                      ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                 "setMappedInstrument(int, unsigned char, unsigned int)", data))
-        {
-            throw(i18n("Failed to contact Rosegarden sequencer"));
-        }
+        sendMappedInstrument(MappedInstrument(*it));
 
         // Send program changes for MIDI Instruments
         //

@@ -221,6 +221,7 @@ SoundDriver::setMappedInstrument(MappedInstrument *mI)
         {
             (*it)->setChannel(mI->getChannel());
             (*it)->setType(mI->getType());
+            delete mI;
             return;
         }
     }
@@ -232,7 +233,6 @@ SoundDriver::setMappedInstrument(MappedInstrument *mI)
               << "type = " << mI->getType() << " : "
               << "channel = " << (int)(mI->getChannel()) << " : "
               << "id = " << mI->getId() << std::endl;
-
 
 }
 

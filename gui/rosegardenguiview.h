@@ -215,6 +215,7 @@ signals:
     // through the GUIApp)
     //
     void sendMappedEvent(Rosegarden::MappedEvent *mE);
+    void sendMappedInstrument(const Rosegarden::MappedInstrument &mI);
 
     void stateChange(const QString&, bool);
 

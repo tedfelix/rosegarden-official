@@ -142,6 +142,11 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
             SIGNAL(sendMappedEvent(Rosegarden::MappedEvent*)));
 
     connect(m_instrumentParameterBox,
+            SIGNAL(sendMappedInstrument(const Rosegarden::MappedInstrument &)),
+            this,
+            SIGNAL(sendMappedInstrument(const Rosegarden::MappedInstrument &)));
+
+    connect(m_instrumentParameterBox,
             SIGNAL(changeInstrumentLabel(Rosegarden::InstrumentId, QString)),
             this,
             SLOT(slotChangeInstrumentLabel(Rosegarden::InstrumentId, QString)));

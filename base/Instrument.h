@@ -93,7 +93,7 @@ public:
 
     ~Instrument();
 
-    std::string getName() { return m_name; }
+    std::string getName() const { return m_name; }
 
     void setId(int id) { m_id = id; }
     InstrumentId getId() const { return m_id; }
@@ -143,7 +143,7 @@ public:
 
     // Return the device pointer
     //
-    Device* getDevice() { return m_device; }
+    Device* getDevice() const { return m_device; }
 
     // Return a string describing the current program for
     // this Instrument

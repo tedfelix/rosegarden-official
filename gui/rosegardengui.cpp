@@ -556,6 +556,11 @@ void RosegardenGUIApp::initView()
             this, SLOT(slotSendMappedEvent(Rosegarden::MappedEvent*)));
 
     connect(m_view,
+            SIGNAL(sendMappedInstrument(const Rosegarden::MappedInstrument &)),
+            this,
+            SLOT(slotSendMappedInstrument(const Rosegarden::MappedInstrument&)));
+
+    connect(m_view,
             SIGNAL(segmentsSelected(const Rosegarden::SegmentSelection &)),
             SLOT(slotSegmentsSelected(const Rosegarden::SegmentSelection &)));
 
@@ -2427,6 +2432,14 @@ RosegardenGUIApp::slotSendMappedEvent(Rosegarden::MappedEvent *mE)
 {
     if (m_seqManager)
         m_seqManager->sendMappedEvent(mE);
+}
+
+void
+RosegardenGUIApp::slotSendMappedInstrument(
+        const Rosegarden::MappedInstrument &mI)
+{
+    if (m_seqManager)
+        m_seqManager->sendMappedInstrument(mI);
 }
 
 

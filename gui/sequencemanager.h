@@ -134,6 +134,10 @@ public:
     //
     void resetControllers();
 
+    // Send this to the sequencer to update its map
+    //
+    void sendMappedInstrument(const MappedInstrument &mI);
+
 public slots:
     // Empty the m_clearToSend flag
     //
