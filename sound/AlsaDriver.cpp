@@ -766,7 +766,6 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
         eventTime = eventTime - m_alsaRecordStartTime + m_playStartPosition
                               - playLatency;
 
-        cout << "EVENT TIME = " << eventTime << endl;
         switch(event->type)
         {
 
@@ -780,10 +779,12 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
                         setVelocity(event->data.note.velocity);
                     m_noteOnMap[chanNoteKey]->setEventTime(eventTime);
 
-                    // Hour long duration - we need to hear the NOTE ON
-                    // so we must insert it now with a duration.
+                    // Negative duration - we need to hear the NOTE ON
+                    // so we must insert it now with a negative duration
+                    // and pick and mix against the following NOTE OFF
+                    // when we create the recorded segment.
                     //
-                    m_noteOnMap[chanNoteKey]->setDuration(RealTime(3600, 0));
+                    m_noteOnMap[chanNoteKey]->setDuration(RealTime(-1, 0));
 
                     // Create a copy of this when we insert the NOTE ON -
                     // keeping a copy alive on the m_noteOnMap.

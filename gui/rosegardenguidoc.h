@@ -281,6 +281,14 @@ protected:
      * @return false for failure
      */
     bool readFromFile(const QString &fileName, QString &text);
+
+    /*
+     * Recording might have to insert NOTE ONs and NOTE OFFs
+     * (NOTE ONs marked with negative duration) - this rolls
+     * them out.
+     *
+     */
+    void convertToSinglePoint(Rosegarden::Segment *segment);
  	
 public:	
     /**
