@@ -202,10 +202,14 @@ PeakFileManager::generatePeaks(AudioFile *audioFile,
             throw(rS);
         }
 
-        // close writes out important things
-        m_currentPeakFile->close();
-        m_currentPeakFile->disconnect();
-
+        // The m_currentPeakFile might have been cancelled (see stopPreview())
+        //
+        if (m_currentPeakFile)
+        {
+            // close writes out important things
+            m_currentPeakFile->close();
+            m_currentPeakFile->disconnect();
+        }
     }
     else if (audioFile->getType() == BWF)
     {
