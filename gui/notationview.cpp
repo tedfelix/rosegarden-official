@@ -914,7 +914,7 @@ void NotationView::noteClicked(int height, const QPoint &eventPos,
 
         deleteNote(el);
 
-    } else if (!deleteNote()) {
+    } else if (!deleteMode()) {
 
         Rosegarden::Key key;
         Clef clef;
