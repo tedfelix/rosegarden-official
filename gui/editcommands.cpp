@@ -220,6 +220,7 @@ PasteSegmentsCommand::execute()
     if (m_addedSegments.size() > 0) {
 	// been here before
 	for (unsigned int i = 0; i < m_addedSegments.size(); ++i) {
+      m_addedSegments[i]->setTrack(m_composition->getSelectedTrack());
 	    m_composition->addSegment(m_addedSegments[i]);
 	}
 	return;
@@ -247,7 +248,8 @@ PasteSegmentsCommand::execute()
 
 	Segment *segment = new Segment(**i);
 	segment->setStartTime(segment->getStartTime() + offset);
-	m_composition->addSegment(segment);
+  segment->setTrack(m_composition->getSelectedTrack());
+  m_composition->addSegment(segment);
 	m_addedSegments.push_back(segment);
     }
 }
