@@ -32,7 +32,11 @@ using std::cout;
 
 RosegardenSequencerApp::RosegardenSequencerApp():
     DCOPObject("RosegardenSequencerIface"),
-    m_sequencer(0)
+    m_sequencer(0),
+    m_transportStatus(STOPPED),
+    m_songPosition(0),
+    m_fetchLatency(200),
+    m_playLatency(200)
 {
   // Without DCOP we are nothing
   QCString realAppId = kapp->dcopClient()->registerAs(kapp->name(), false);
@@ -77,18 +81,21 @@ RosegardenSequencerApp::quit()
 // DCOP wants us to use an int as a return type instead of a bool.
 //
 int
-RosegardenSequencerApp::play(const Rosegarden::timeT &position)
+RosegardenSequencerApp::play(const Rosegarden::timeT &position,
+                             const Rosegarden::timeT &latency)
 {
-
-  if (m_sequencer->isPlaying())
+  if (m_transportStatus == PLAYING || m_transportStatus == STARTING_TO_PLAY)
     return true;
 
-  // play from the given song position - this sets
-  // up the internal play state that is caught in
+  // To play from the given song position sets up the internal
+  // play state to "STARTING_TO_PLAY" which is then caught in
   // the main event loop
   //
-  m_sequencer->play(position);
 
+  m_songPosition = position;
+  m_transportStatus = STARTING_TO_PLAY;
+
+  // simple for the moment
   return true;
 }
 
@@ -123,23 +130,27 @@ RosegardenSequencerApp::fetchEvents(const Rosegarden::timeT &start,
                                 "getSequencerSlice(int, int)",
                                 data, replyType, replyData))
   {
-    cerr << "RosegardenSequencer - can't call RosegardenGUI client" << endl;
+    cerr <<
+     "RosegardenSequencer::fetchEvents() - can't call RosegardenGUI client"
+         << endl;
   }
   else
   {
     QDataStream reply(replyData, IO_ReadOnly);
+/*
     if (replyType == "QString")
     {
       QString result;
       reply >> result;
     }
-    else if (replyType = "Rosegarden::MappedComposition")
+    else*/
+    if (replyType == "Rosegarden::MappedComposition")
     {
       reply >> mappedComp;
     }
     else
     {
-      cerr << "RosegardenSequencer::fetchEvents - unrecognised type returned"
+      cerr << "RosegardenSequencer::fetchEvents() - unrecognised type returned"
            << endl;
     }
   }
@@ -147,5 +158,34 @@ RosegardenSequencerApp::fetchEvents(const Rosegarden::timeT &start,
   return mappedComp;
 }
 
+
+bool
+RosegardenSequencerApp::startPlaying()
+{
+  Rosegarden::MappedComposition mappedComp;
+  mappedComp = fetchEvents(m_songPosition, m_songPosition + m_fetchLatency);
+
+  // This will reset the Sequencer's internal clock
+  // ready for new playback
+  m_sequencer->initializePlayback(m_songPosition);
+
+  // Send the first events (starting the clock)
+  m_sequencer->processMidiOut(&mappedComp, m_playLatency);
+
+  return true;
+}
+
+bool
+RosegardenSequencerApp::keepPlaying()
+{
+  return true;
+}
+
+// return current Sequencer time in GUI compatible terms
+Rosegarden::timeT
+RosegardenSequencerApp::getSequencerTime()
+{
+  return 0;
+}
 
 

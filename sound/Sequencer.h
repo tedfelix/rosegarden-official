@@ -30,7 +30,7 @@
 #include <map>
 #include <arts/artsmidi.h>
 #include <arts/soundserver.h>
-#include "Composition.h"
+#include "MappedComposition.h"
 #include "Midi.h"
 #include "MidiRecord.h"
 #include "MidiEvent.h"
@@ -95,15 +95,7 @@ namespace Rosegarden
     Sequencer();
     ~Sequencer();
 
-    // Start playing from a song position
-    //
-    void play(const timeT &position);
-
-    // Stop playing and/or recording
-    //
-    void stop();
-
-    // Active a recording state
+    // Activate a recording state
     //
     void record(const RecordStatus& recordStatus);
 
@@ -118,20 +110,12 @@ namespace Rosegarden
     //
     RecordStatus recordStatus() { return _recordStatus; }
     
-    inline bool isPlaying() { return _playing; }
-
     // set and get tempo
     const unsigned int tempo() const { return _tempo; }
     void tempo(const unsigned int &tempo) { _tempo = tempo; }
 
     // resolution - required?
     const unsigned int resolution() const { return _ppq; }
-
-    // update the song position to the current time according
-    // to the MIDI Timers
-    void updateSongPosition();
-
-    const unsigned int songPosition() const { return _songPosition; }
 
     // get the difference in TimeStamps
     Arts::TimeStamp deltaTime(const Arts::TimeStamp &ts1,
@@ -162,7 +146,7 @@ namespace Rosegarden
     // We're leaving the calculations expanded for the moment
     // to ease understanding of what we're doing with the maths.
     //
-    inline Arts::TimeStamp convertToTimeStamp(const unsigned int& midiTime)
+    inline Arts::TimeStamp convertToArtsTimeStamp(const unsigned int& midiTime)
     {
       unsigned int usec = (unsigned int) ( ( 60.0 * 1000000.0 *
                                            (double) midiTime ) /
@@ -177,44 +161,42 @@ namespace Rosegarden
     void processMidiIn(const Arts::MidiCommand &midiCommand,
                        const Arts::TimeStamp &timeStamp);
 
-    // Process a chunk of Rosegarden Composition into MIDI events and send
-    // them to aRTS.
-    void processMidiOut(Rosegarden::Composition *composition);
+    // Process MappedComposition into MIDI events and send to aRTS.
+    void processMidiOut(Rosegarden::MappedComposition *mappedComp,
+                        const Rosegarden::timeT &playLatency);
+
+    // Reset internal states ready for new playback to commence
+    //
+    void initializePlayback(const timeT &position);
 
   private:
 
     void initializeMidi();
 
-    Arts::Dispatcher _dispatcher;
-    Arts::SoundServer _soundServer;
-    Arts::MidiManager _midiManager;
-
-    Arts::MidiClient _midiPlayClient;
-    Arts::MidiClient _midiRecordClient;
-    RosegardenMidiRecord _midiRecordPort;
-    Arts::MidiPort _midiPlayPort;
-
-    NoteOffQueue _noteOffQueue;
-
-    // A distinction - songPositions are in MIDI clocks
-    // from the beginning of the composition..
+    // aRTS devices
     //
-    unsigned int _songPosition;
-    unsigned int _songPlayPosition;
-    unsigned int _songRecordPosition;
+    Arts::Dispatcher       _dispatcher;
+    Arts::SoundServer      _soundServer;
+    Arts::MidiManager      _midiManager;
+    Arts::MidiClient       _midiPlayClient;
+    Arts::MidiClient       _midiRecordClient;
+    RosegardenMidiRecord   _midiRecordPort;
+    Arts::MidiPort         _midiPlayPort;
 
-    // internal marker of when the last fetch of playing Events was made
-    // in MIDI clocks
-    unsigned int _lastFetchPosition;
-
-    // TimeStamps mark the actual times of the commencement
-    // of play or record.  These are for internal use only.
+    // TimeStamps mark the real world times of the commencement
+    // of play or record.  These are for internal use when calculating
+    // how to queue up playback.
+    //
     Arts::TimeStamp _playStartTime;
     Arts::TimeStamp _recordStartTime;
+    NoteOffQueue _noteOffQueue;
 
+    Rosegarden::timeT _playStartPosition;
+
+    // Current recording status
     RecordStatus _recordStatus;
 
-    bool _playing;
+    bool _startPlayback;
 
     unsigned int _ppq;   // sequencer resolution
     unsigned int _tempo; // Beats Per Minute

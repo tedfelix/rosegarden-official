@@ -34,6 +34,7 @@
 #include <kmainwindow.h>
 #include <kaccel.h>
 
+#include "rosegardendcop.h"
 #include "rosegardenguiiface.h"
 
 // the sequencer interface
@@ -81,15 +82,6 @@ public:
     enum { OPEN_READWRITE 	= 1,
 	   OPEN_READONLY 	= 2,
 	   OPEN_INSERT 		= 4 };
-
-    enum TransportStatus {
-           STOPPED,
-           PLAYING,
-           RECORDING_MIDI,
-           RECORDING_AUDIO,
-           STOPPING,
-           STARTINGTOPLAY
-    };
 
     /**
      * construtor of RosegardenGUIApp, calls all init functions to
@@ -388,6 +380,10 @@ public slots:
     void stop();
     void rewind();
     void fastforward();
+
+    // set the sequencer status - pass through DCOP as an int
+    //
+    void notifySequencerStatus(const int &status);
 
 
 private:

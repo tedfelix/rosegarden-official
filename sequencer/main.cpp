@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
     KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
 
   KApplication app;
-  RosegardenSequencerApp *rosegardensequencer = 0;
+  RosegardenSequencerApp *roseSeq = 0;
 
   if (app.isRestored())
   {
@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
   }
   else
   {
-    rosegardensequencer = new RosegardenSequencerApp();
+    roseSeq = new RosegardenSequencerApp();
 
     // we don't show() the sequencer application as we're just taking
     // advantage of DCOP/KApplication and there's nothing to show().
@@ -190,10 +190,33 @@ int main(int argc, char *argv[])
   {
     app.processOneEvent();
 
-    if(rosegardensequencer)
+    if(roseSeq)
     {
-      if (rosegardensequencer->isPlaying())
+      switch(roseSeq->getStatus())
       {
+        case STARTING_TO_PLAY:
+          if (!roseSeq->startPlaying())
+          {
+            // send result failed and stop Sequencer
+          }
+          else
+          {
+            roseSeq->setStatus(PLAYING);
+          }
+          break;
+
+        case PLAYING:
+          if (!roseSeq->keepPlaying())
+          {
+            // there's a problem or the piece has finished
+            // so stop playing
+          }
+          break;
+
+        case STOPPING:
+        case STOPPED:
+        default:
+          break;
       }
     }
   }

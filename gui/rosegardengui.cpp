@@ -891,20 +891,21 @@ RosegardenGUIApp::play()
   //
   QDataStream streamOut(data, IO_WriteOnly);
   streamOut << m_doc->getComposition().getPosition();
+  streamOut << 200;  // default latency
 
   // Send Play to the Sequencer
-  if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
+  if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
                                 ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                "play(Rosegarden::timeT)", data))
+                                "play(Rosegarden::timeT, Rosegarden::timeT)",
+                                data, replyType, replyData))
   {
     // failed - pop up and disable sequencer options
     m_transportStatus = STOPPED;
     KMessageBox::error(this,
-      i18n("Failed to contact RosegardenSequencer. Cannot start playback."));
+      i18n("Failed to contact RosegardenSequencer"));
   }
   else
   {
-/*
     // ensure the return type is ok
     QDataStream streamIn(replyData, IO_ReadOnly);
     int result;
@@ -913,16 +914,13 @@ RosegardenGUIApp::play()
     if (result)
     {
       // completed successfully 
-*/
-      m_transportStatus = PLAYING;
-/*
+      m_transportStatus = STARTING_TO_PLAY;
     }
     else
     {
       m_transportStatus = STOPPED;
       KMessageBox::error(this, i18n("Failed to start playback"));
     }
-*/
   }
 
 }
@@ -951,7 +949,7 @@ RosegardenGUIApp::stop()
     // failed - pop up and disable sequencer options
     m_transportStatus = STOPPED;
     KMessageBox::error(this,
-      i18n("Failed to contact RosegardenSequencer. Cannot stop playback!"));
+      i18n("Failed to contact RosegardenSequencer"));
   }
   else
   {
@@ -1010,4 +1008,21 @@ RosegardenGUIApp::fastforward()
                      m_doc->getComposition().getNbTicksPerBar());
 
 }
+
+
+// This method is a callback from the Sequencer to update the GUI
+// with state change information.  The GUI requests the Sequencer
+// to start playing or to start recording and enters a pending
+// state (see rosegardendcop.h for TransportStatus values).
+// The Sequencer replies when ready with it's status.  If anything
+// fails then we default (or try to default) to STOPPED at both
+// the GUI and the Sequencer.
+//
+void
+RosegardenGUIApp::notifySequencerStatus(const int& status)
+{
+  // for the moment we don't do anything fancy
+  m_transportStatus = (TransportStatus) status;
+}
+
 

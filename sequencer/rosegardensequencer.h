@@ -42,6 +42,7 @@
 #include <kmainwindow.h>
 #include <kaccel.h>
 
+#include "rosegardendcop.h"
 #include "rosegardensequenceriface.h"
 #include "MappedComposition.h"
 #include "Sequencer.h"
@@ -63,24 +64,50 @@ public:
   RosegardenSequencerApp();
   ~RosegardenSequencerApp();
 
-  bool isPlaying() { return m_sequencer->isPlaying(); }
-
 protected:
 
 public slots:
   virtual void quit();
 
   // DCOP doesn't currently like to stream bools so we have to
-  // use ints for the return types of these slots.
+  // use ints for the return types of these slots.  This is
+  // the GUI level control interface for the Sequencer.
   //
-  virtual int play(const Rosegarden::timeT &position);
+  virtual int play(const Rosegarden::timeT &position,
+                   const Rosegarden::timeT &latency);
   virtual int stop();
-    
+
+  void setStatus(const TransportStatus &status) { m_transportStatus = status; }
+  TransportStatus getStatus() { return m_transportStatus; }
+   
+  // Process the first chunk of Sequencer events
+  bool startPlaying();
+
+  // Process all subsequent events
+  bool keepPlaying();
+
+  // get the current Sequencer Time (in GUI speak)
+  //
+  Rosegarden::timeT getSequencerTime();
+
 private:
   Rosegarden::MappedComposition fetchEvents(const Rosegarden::timeT &start,
                                             const Rosegarden::timeT &end);
 
   Rosegarden::Sequencer *m_sequencer;
+  TransportStatus m_transportStatus;
+
+  // Position pointer
+  Rosegarden::timeT m_songPosition;
+
+  // Latency - time to fetch new events and spool them onto aRTS
+  //         - time to allow at startup and hence generally over the piece
+  //
+  // We can throttle these values internally at first and see how
+  // we get on.
+  //
+  Rosegarden::timeT m_fetchLatency;
+  Rosegarden::timeT m_playLatency;
 
 };
  

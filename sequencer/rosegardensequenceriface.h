@@ -30,7 +30,8 @@ public:
 k_dcop:
 
   virtual void quit() = 0;
-  virtual int play(const Rosegarden::timeT &position) = 0;
+  virtual int play(const Rosegarden::timeT &position,
+                   const Rosegarden::timeT &latency) = 0;
   virtual int stop() = 0;
 };
 

@@ -21,11 +21,28 @@
 #ifndef _ROSEGARDEN_DCOP_H_
 #define _ROSEGARDEN_DCOP_H_
 
+
+// The names of our applications and interfaces that we share
+//
 #define ROSEGARDEN_SEQUENCER_APP_NAME   "rosegardensequencer"
 #define ROSEGARDEN_SEQUENCER_IFACE_NAME "RosegardenSequencerIface"
 
 #define ROSEGARDEN_GUI_APP_NAME         "rosegardengui"
 #define ROSEGARDEN_GUI_IFACE_NAME       "RosegardenGUIIface"
+
+
+// Sequencer communicates its state through this enum - 
+// it's sent over the wire as an "int" for the moment
+//
+enum TransportStatus
+{
+     STOPPED,
+     PLAYING,
+     RECORDING_MIDI,
+     RECORDING_AUDIO,
+     STOPPING,
+     STARTING_TO_PLAY
+};
 
 
 #endif // _ROSEGARDEN_DCOP_H_
