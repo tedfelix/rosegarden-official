@@ -44,7 +44,7 @@ sub style_para
     # something wholly indented?
     my @nni = grep { /^\s/ } @p;
     if (@p and $#nni == $#p) {
-	$p[0] =~ s/^\s+[^\w\s]\s+([\w\"])/$1/ and return "uli";
+	$p[0] =~ s/^\s+[^\w\s\$\%]\s+([\w\"])/$1/ and return "uli";
 	$p[0] =~ s/^\s+\d+[^\w\s]\s+([\w\"])/$1/ and return "oli";
 	$p[0] =~ s/^(\s+[^\w\s\d])/$1/ and return "pre";
 	return "cont";

@@ -203,7 +203,7 @@ that Settings->Show Track Labels is unchecked.  You can change Instrument
 for a Track by clicking and holding on the Track/Instrument label.  A
 pop up menu will appear from which you can select a different output
 Instrument.  Rosegarden automatically assigns the first available synth
-device on your soundcard for it's default output Instrument when importing
+device on your soundcard for its default output Instrument when importing
 MIDI files.
 
 
@@ -228,12 +228,12 @@ If you've done everything we've suggested above then you can check
 what devices the sequencer is seeing by running the Rosegarden 
 sequencer up by itself.  Try:
 
-$ rosegardensequencer
+  $ rosegardensequencer
 
 and examine the output of the screen.  The output for JACK and ALSA
 for an SBLive! should look something like this:
 
-Rosegarden AlsaDriver - alsa-lib version 0.9.0beta12
+  Rosegarden AlsaDriver - alsa-lib version 0.9.0beta12
 
   ALSA Client information:
 
