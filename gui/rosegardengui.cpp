@@ -452,19 +452,19 @@ void RosegardenGUIApp::slotFileSaveAs()
 
     kdDebug(KDEBUG_AREA) << "slotFileSaveAs()" << endl;
 
-//     QString newName=KFileDialog::getSaveFileName(QDir::currentDirPath(),
-//                                                  i18n("*.xml"), this, i18n("Save as..."));
-//     if (!newName.isEmpty())
-//         {
-//             QFileInfo saveAsInfo(newName);
-//             m_doc->setTitle(saveAsInfo.fileName());
-//             m_doc->setAbsFilePath(saveAsInfo.absFilePath());
-//             m_doc->saveDocument(newName);
-//             m_fileRecent->addFile(newName);
+    QString newName=KFileDialog::getSaveFileName(QDir::currentDirPath(),
+                                                 i18n("*.xml"), this, i18n("Save as..."));
+    if (!newName.isEmpty())
+        {
+            QFileInfo saveAsInfo(newName);
+            m_doc->setTitle(saveAsInfo.fileName());
+            m_doc->setAbsFilePath(saveAsInfo.absFilePath());
+            m_doc->saveDocument(newName);
+            m_fileRecent->addURL(newName);
 
-//             QString caption=kapp->caption();	
-//             setCaption(caption+": "+m_doc->getTitle());
-//         }
+            QString caption=kapp->caption();	
+            setCaption(caption+": "+m_doc->getTitle());
+        }
 
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 }
