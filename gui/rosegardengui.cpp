@@ -1338,7 +1338,9 @@ void RosegardenGUIApp::slotAutoSplitSelection()
                                                          *i,
                                                          aSD->getThreshold()));
             }
-        }
+        } else {
+	    command->addCommand(new SegmentAutoSplitCommand(*i));
+	}
     }
 
     m_view->slotAddCommandToHistory(command);
