@@ -1420,14 +1420,20 @@ void RosegardenGUIApp::slotSetPointerPosition(timeT t)
 	slotDisplayBarTime(t);
 
     } else {
-
 	Rosegarden::RealTime rT(comp.getElapsedRealTime(t));
 
 	if (m_transport->isShowingTimeToEnd()) {
 	    rT = rT - comp.getElapsedRealTime(comp.getDuration());
 	}
 
-	m_transport->displayRealTime(rT);
+	if (m_transport->getCurrentMode() ==
+	    Rosegarden::RosegardenTransportDialog::RealMode) {
+
+	    m_transport->displayRealTime(rT);
+
+	} else {
+	    m_transport->displaySMPTETime(rT);
+	}
     }
 }
 

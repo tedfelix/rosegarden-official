@@ -133,7 +133,7 @@
             </property>
             <property stdset="1">
                 <name>toggleButton</name>
-                <bool>true</bool>
+                <bool>false</bool>
             </property>
             <property stdset="1">
                 <name>flat</name>

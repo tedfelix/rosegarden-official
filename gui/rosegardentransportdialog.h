@@ -53,6 +53,9 @@ public:
     void setTempo(const double &tempo);
     void setTimeSignature(const Rosegarden::TimeSignature &timeSig);
 
+    void setSMPTEResolution(int framesPerSecond, int bitsPerFrame);
+    void getSMPTEResolution(int &framesPerSecond, int &bitsPerFrame);
+
     // Called indirectly from the sequencer and from the GUI to
     // show incoming and outgoing MIDI events on the Transport
     //
@@ -132,6 +135,9 @@ private:
     double m_tempo;
     int m_numerator;
     int m_denominator;
+
+    int m_framesPerSecond;
+    int m_bitsPerFrame;
 
     QTimer *m_midiInTimer;
     QTimer *m_midiOutTimer;

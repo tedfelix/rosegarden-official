@@ -54,7 +54,9 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     m_lastNegative(false),
     m_lastMode(RealMode),
     m_currentMode(RealMode),
-    m_tempo(0)
+    m_tempo(0),
+    m_framesPerSecond(24),
+    m_bitsPerFrame(80)
 {
     resetFonts();
 
@@ -139,6 +141,12 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     setFixedSize(width(), height() - rfh);
     PanelOpenButton->setOn(false);
     PanelOpenButton->setPixmap(m_panelClosed);
+
+    // and since by default we show real time (not SMPTE), by default
+    // we hide the small colon pixmaps
+    //
+    SecondColonPixmap->hide();
+    HundredthColonPixmap->hide();
 
     // We have to specify these settings in this class (copied
     // from rosegardentransport.cpp) as we're using a specialised
@@ -225,6 +233,22 @@ RosegardenTransportDialog::resetFont(QWidget *w)
     QFont font = w->font();
     font.setPixelSize(10);
     w->setFont(font);
+}
+
+void
+RosegardenTransportDialog::setSMPTEResolution(int framesPerSecond,
+					      int bitsPerFrame)
+{
+    m_framesPerSecond = framesPerSecond;
+    m_bitsPerFrame = bitsPerFrame;
+}
+
+void
+RosegardenTransportDialog::getSMPTEResolution(int &framesPerSecond,
+					      int &bitsPerFrame)
+{
+    framesPerSecond = m_framesPerSecond;
+    bitsPerFrame = m_bitsPerFrame;
 }
 
 void
@@ -316,8 +340,52 @@ RosegardenTransportDialog::displayRealTime(const Rosegarden::RealTime &rt)
 void
 RosegardenTransportDialog::displaySMPTETime(const Rosegarden::RealTime &rt)
 {
-    //!!! for now
-    displayRealTime(rt);
+    Rosegarden::RealTime st = rt;
+
+    if (m_lastMode != SMPTEMode) {
+	HourColonPixmap->show();
+	SecondColonPixmap->show();
+	HundredthColonPixmap->show();
+	m_lastMode = SMPTEMode;
+    }
+
+    // If time is negative then reverse the time and set the minus flag
+    //
+    if (st < Rosegarden::RealTime(0,0))
+    {
+        st = Rosegarden::RealTime(0,0) - st;
+        if (!m_lastNegative) {
+	    NegativePixmap->setPixmap(m_lcdNegative);
+	    m_lastNegative = true;
+	}
+    }
+    else // don't show the flag
+    {
+	if (m_lastNegative) {
+	    NegativePixmap->clear();
+	    m_lastNegative = false;
+	}
+    }
+
+    m_tenThousandths =
+	(( st.usec * m_framesPerSecond * m_bitsPerFrame) / 1000000 ) % 10;
+    m_thousandths =
+	(( st.usec * m_framesPerSecond * m_bitsPerFrame) / 10000000 ) % 10;
+    m_hundreths =
+	(( st.usec * m_framesPerSecond) / 1000000 ) % 10;
+    m_tenths = 
+	(( st.usec * m_framesPerSecond) / 10000000 ) % 10;
+
+    m_unitSeconds = ( st.sec ) % 10;
+    m_tenSeconds = ( st.sec / 10 ) % 6;
+
+    m_unitMinutes = ( st.sec / 60 ) % 10;
+    m_tenMinutes = ( st.sec / 600 ) % 6;
+    
+    m_unitHours = ( st.sec / 3600 ) % 10;
+    m_tenHours = (st.sec / 36000 ) % 24;
+    
+    updateTimeDisplay();
 }
 
 void
