@@ -3,9 +3,8 @@
 <kpartgui name="Rosegarden" version="1">
 
 <MenuBar>
-  <Menu name="Import">
-  <text>Import</text>
-    <Action name="file_import_midi"/>
+  <Menu  name="file"><text>&amp;File</text>
+    <Action name="file_import_midi" append="new_merge" />
   </Menu>
   <Menu name="Tracks">
 	<text>Tracks</text>
