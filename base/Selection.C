@@ -91,7 +91,17 @@ void EventSelection::addFromSelection(EventSelection *sel)
 
 bool EventSelection::contains(Event *e) const
 {
-    return m_segmentEvents.find(e) != m_segmentEvents.end();
+    std::pair<eventcontainer::iterator,eventcontainer::iterator> 
+      interval = m_segmentEvents.equal_range(e);
+
+    for (eventcontainer::iterator it = interval.first;
+         it != interval.second; it++)
+    {
+        if (*it == e)
+            return true;
+    }
+
+    return false;
 }
 
 bool EventSelection::contains(const std::string &type) const
