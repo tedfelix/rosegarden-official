@@ -156,26 +156,26 @@ if test $prefix = "/usr/local/kde"
 then
     prefix=$matchDir
 fi
-AC_MSG_WARN([ ])
-AC_MSG_WARN([-------------------------------])
-AC_MSG_WARN([| Installation Summary        |])
-AC_MSG_WARN([|-----------------------------|])
-AC_MSG_WARN([| Install Directory           |])
-AC_MSG_WARN([| $prefix ])
-AC_MSG_WARN([|-----------------------------|])
+
+echo "-------------------------------"
+echo "| Installation Summary        |"
+echo "|-----------------------------|"
+echo "| Install Directory           |"
+echo "| $prefix "
+echo "|-----------------------------|"
 if test "$with_sound" = "no"; then
-AC_MSG_WARN([| No Sound Support!           |])
+echo "| No Sound Support!           |"
 else
 	if test "$with_alsa" = "yes"; then
-AC_MSG_WARN([| ALSA Sound Support          |])
+echo "| ALSA Sound Support          |"
 		if test "$with_jack" = "yes"; then
-AC_MSG_WARN([| JACK Audio Server           |])
+echo "| JACK Audio Server           |"
 		fi
 		if test "$with_ladspa" = "yes"; then
-AC_MSG_WARN([| LADSPA Plugin Support       |])
+echo "| LADSPA Plugin Support       |"
 		fi
 	else
-AC_MSG_WARN([| ARTS Sound Support          |])
+echo "| ARTS Sound Support          |"
 	fi
 fi
-AC_MSG_WARN([-------------------------------])
+echo "-------------------------------"
