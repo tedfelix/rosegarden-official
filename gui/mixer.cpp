@@ -62,8 +62,10 @@ MixerWindow::MixerWindow(QWidget *parent,
     m_monoPixmap.load(QString("%1/misc/mono.xpm").arg(pixmapDir));
     m_stereoPixmap.load(QString("%1/misc/stereo.xpm").arg(pixmapDir));
 
+    // Total number of cols is 2 for each fader, submaster or master,
+    // plus 2 for the monitor strip, plus 1 for each spacer
     QGridLayout *mainLayout = new QGridLayout
-	(mainBox, instruments.size() + busses.size(), 7);
+	(mainBox, (instruments.size() + busses.size() + 1) * 3, 7);
 
     setCaption(i18n("Mixer"));
 
@@ -115,6 +117,7 @@ MixerWindow::MixerWindow(QWidget *parent,
 	    QPushButton *plugin = new QPushButton(rec.m_pluginBox);
 	    plugin->setText(i18n("<none>"));
 	    QToolTip::add(plugin, i18n("Audio plugin button"));
+//	    plugin->setFlat(true);
 	    rec.m_plugins.push_back(plugin);
 //!!!	    m_signalMapper->setMapping(plugin, p);
 //!!!	    connect(plugin, SIGNAL(clicked()),
@@ -126,10 +129,10 @@ MixerWindow::MixerWindow(QWidget *parent,
 
 	mainLayout->addMultiCellWidget(rec.m_input, 0, 0, col, col+1);
 	mainLayout->addMultiCellWidget(rec.m_output, 1, 1, col, col+1);
-	mainLayout->addWidget(idLabel, 2, col, Qt::AlignRight);
+	mainLayout->addWidget(idLabel, 2, col, Qt::AlignCenter);
 	mainLayout->addWidget(rec.m_pan, 2, col+1, Qt::AlignLeft);
-	mainLayout->addWidget(rec.m_fader, 3, col, Qt::AlignRight);
-	mainLayout->addWidget(rec.m_meter, 3, col+1, Qt::AlignLeft);
+	mainLayout->addWidget(rec.m_fader, 3, col, Qt::AlignCenter);
+	mainLayout->addWidget(rec.m_meter, 3, col+1, Qt::AlignCenter);
 	mainLayout->addWidget(rec.m_muteButton, 4, col);
 	mainLayout->addWidget(rec.m_soloButton, 4, col+1);
 	mainLayout->addWidget(rec.m_recordButton, 5, col);
@@ -148,7 +151,10 @@ MixerWindow::MixerWindow(QWidget *parent,
 
 	m_faders[(*i)->getId()] = rec;
 	++count;
-	col += 2;
+
+	mainLayout->addMultiCell(new QSpacerItem(2, 0), 0, 6, col+2, col+2);
+
+	col += 3;
     }
     
     count = 1;
@@ -172,15 +178,16 @@ MixerWindow::MixerWindow(QWidget *parent,
 	rec.m_muteButton = new QPushButton(mainBox);
 	rec.m_muteButton->setText("M");
 	rec.m_muteButton->setToggleButton(true);
+	rec.m_muteButton->setFlat(true);
 
 	QLabel *idLabel = new QLabel(i18n("S%1").arg(count), mainBox);
 	idLabel->setFont(boldFont);
 
-	mainLayout->addWidget(idLabel, 2, col);
-	mainLayout->addWidget(rec.m_pan, 2, col+1);
-	mainLayout->addWidget(rec.m_fader, 3, col);
-	mainLayout->addWidget(rec.m_meter, 3, col+1);
-	mainLayout->addWidget(rec.m_muteButton, 4, col);
+	mainLayout->addWidget(idLabel, 2, col, Qt::AlignCenter);
+	mainLayout->addWidget(rec.m_pan, 2, col+1, Qt::AlignLeft);
+	mainLayout->addWidget(rec.m_fader, 3, col, Qt::AlignCenter);
+	mainLayout->addWidget(rec.m_meter, 3, col+1, Qt::AlignCenter);
+	mainLayout->addMultiCellWidget(rec.m_muteButton, 4, 4, col, col+1);
 
 	rec.m_fader->setFader((*i)->getLevel());
 	rec.m_pan->setPosition((*i)->getPan() - 100);
@@ -190,7 +197,10 @@ MixerWindow::MixerWindow(QWidget *parent,
 
 	m_submasters.push_back(rec);
 	++count;
-	col += 2;
+
+	mainLayout->addMultiCell(new QSpacerItem(2, 0), 0, 6, col+2, col+2);
+
+	col += 3;
     }
 
     if (busses.size() > 0) {
@@ -199,17 +209,27 @@ MixerWindow::MixerWindow(QWidget *parent,
 
 //!!! tooltips
 
+	rec.m_fader = new RosegardenFader
+	    (Rosegarden::AudioLevel::LongFader, 20, 240, mainBox);
 	rec.m_meter = new AudioVUMeter
 	    (mainBox, VUMeter::AudioPeakHoldLong, true, 14, 240);
+
+	rec.m_muteButton = new QPushButton(mainBox);
+	rec.m_muteButton->setText("M");
+	rec.m_muteButton->setToggleButton(true);
 
 	QLabel *idLabel = new QLabel(i18n("Rec"), mainBox);
 	idLabel->setFont(boldFont);
 
-	mainLayout->addWidget(idLabel, 2, col);
-	mainLayout->addWidget(rec.m_meter, 3, col);
+	mainLayout->addWidget(idLabel, 2, col, Qt::AlignCenter);
+	mainLayout->addWidget(rec.m_fader, 3, col, Qt::AlignCenter);
+	mainLayout->addWidget(rec.m_meter, 3, col+2, Qt::AlignCenter);
+	mainLayout->addWidget(rec.m_muteButton, 4, col, Qt::AlignCenter);
 
 	m_monitor = rec;
-	++col;
+	mainLayout->addMultiCell(new QSpacerItem(2, 0), 0, 6, col+2, col+2);
+
+	col += 3;
 
 	rec.m_fader = new RosegardenFader
 	    (Rosegarden::AudioLevel::LongFader, 20, 240, mainBox);
@@ -223,10 +243,11 @@ MixerWindow::MixerWindow(QWidget *parent,
 	idLabel = new QLabel(i18n("M"), mainBox);
 	idLabel->setFont(boldFont);
 
-	mainLayout->addWidget(idLabel, 2, col);
-	mainLayout->addWidget(rec.m_fader, 3, col);
-	mainLayout->addWidget(rec.m_meter, 3, col+1);
-	mainLayout->addWidget(rec.m_muteButton, 4, col);
+	mainLayout->addWidget(idLabel, 2, col, Qt::AlignCenter);
+	mainLayout->addWidget(rec.m_fader, 3, col, Qt::AlignCenter);
+	mainLayout->addWidget(rec.m_meter, 3, col+1, Qt::AlignCenter);
+	mainLayout->addWidget(rec.m_muteButton, 4, col, Qt::AlignCenter);
+	mainLayout->addMultiCell(new QSpacerItem(2, 0), 0, 6, col+2, col+2);
 
 	rec.m_fader->setFader(0.0);
 
@@ -234,7 +255,6 @@ MixerWindow::MixerWindow(QWidget *parent,
 		this, SLOT(slotFaderLevelChanged(float)));
 
 	m_master = rec;
-	++col;
     }
 
     setCentralWidget(mainBox);
