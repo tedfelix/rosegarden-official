@@ -188,7 +188,7 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
             m_segmentCanvas->horizontalScrollBar(), SIGNAL(sliderMoved(int)));
 
     connect(this, SIGNAL(needUpdate()),
-            m_segmentCanvas, SLOT(update()));
+            m_segmentCanvas, SLOT(slotUpdate()));
 
     QObject::connect(m_segmentCanvas, SIGNAL(addSegment(Rosegarden::TrackId, Rosegarden::timeT, Rosegarden::timeT)),
                      this,            SLOT  (slotAddSegment(Rosegarden::TrackId, Rosegarden::timeT, Rosegarden::timeT)));
