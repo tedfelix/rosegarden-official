@@ -17,7 +17,7 @@ From the top level source dir :
 Clone (cp -R) the whole directory tree to another dir, named
 rosegarden-$version (for instance, rosegarden-0.1).
 
-cd to that new directory and do 'make distrib'
+cd to that new directory and do 'make dist'
 
 the tarball should be built in the new directory, that is at
 rosegarden-0.1/rosegarden-0.1.tar.gz
