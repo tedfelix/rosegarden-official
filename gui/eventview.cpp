@@ -1005,9 +1005,8 @@ EventView::setupActions()
                 SLOT(slotEditEventAdvanced()), actionCollection(),
                 "edit_advanced");
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/eventfilter.xpm"));
-
-    new KAction(i18n("&Filter Selection"), icon, Key_F, this,
+//    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/eventfilter.xpm"));
+    new KAction(i18n("&Filter Selection"), "filter", Key_F, this,
                 SLOT(slotFilterSelection()), actionCollection(),
                 "filter_selection");
 

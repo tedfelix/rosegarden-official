@@ -651,8 +651,8 @@ void MatrixView::setupActions()
 		SLOT(slotClearSelection()), actionCollection(),
 		"clear_selection");
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/eventfilter.xpm"));
-    new KAction(i18n("&Filter Selection"), icon, 0, this,
+//    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/eventfilter.xpm"));
+    new KAction(i18n("&Filter Selection"), "filter", 0, this,
 	    	SLOT(slotFilterSelection()), actionCollection(),
 		"filter_selection");
     
