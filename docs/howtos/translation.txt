@@ -1,0 +1,28 @@
+How to make a new translation for Rosegarden :
+
+- do 'make package-messages' to ensure messages are up to date. This
+will update the 'rosegarden.pot' file in the po/ directory.
+
+- go to the po/ directory, copy 'rosegarden.pot' to the new xx.po file
+you want to translate, for instance fr.po
+
+- back to the top level, run 'make -f Makefile.cvs ; ./configure' (or
+your preferred xx_configure wrapper script). This will refresh
+po/Makefile so the new .po file will be taken into account.
+
+- From now on, a 'make' in po/ will compile the message files into
+.gmo files, and 'make package-messages' at top-level will update the
+new po files with newly found messages as well.
+
+XEmacs has a very good mode for po edition.
+
+IMPORTANT NOTE : DO NOT USE QString CONCATENATION TO CREATE MESSAGES,
+ALWAYS USE .arg().
+
+E.g. this is WRONG :
+
+QString message = i18n("Can't open file ") + filename;
+
+And this is RIGHT :
+
+QString message = QString(i18n("Can't open file %1")).arg(filename);
