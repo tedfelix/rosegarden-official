@@ -52,6 +52,7 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
 
     setBackgroundMode(PaletteBase);
 
+#ifndef TEST_CANVAS
     if (!applyLayout()) {
 
         // Show all elements
@@ -62,8 +63,9 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
     } else {
         KMessageBox::sorry(0, "Couldn't apply layout");
     }
-    
-    // test();
+#else
+    test();
+#endif
 }
 
 RosegardenGUIView::~RosegardenGUIView()
@@ -192,7 +194,7 @@ RosegardenGUIView::test()
 
     QCanvasPixmapArray *notePixmap = new QCanvasPixmapArray("pixmaps/note-bodyfilled.xpm");
 
-    const vector<int>& pitchToHeight(PitchToHeight::instance());
+    PitchToHeight& pitchToHeight(PitchToHeight::instance());
 
     for(unsigned int i = 0; i < pitchToHeight.size(); ++i) {
         QCanvasSprite *note = new QCanvasSprite(notePixmap, canvas());
@@ -210,29 +212,21 @@ RosegardenGUIView::test()
 
     NotePixmapFactory npf;
 
-    for(unsigned int i = 0; i < 7; ++i) {
+    for(unsigned int j = 0; j < 100; ++j) {
+
+        for(unsigned int i = 0; i < 7; ++i) {
 
 
-        QPixmap note(npf.makeNotePixmap(i, true, true));
+            QPixmap note(npf.makeNotePixmap(i, true, true));
 
-//         QList<QPixmap> pixlist;
+            QCanvasSimpleSprite *noteSprite = new QCanvasSimpleSprite(&note,
+                                                                      canvas());
 
-//         pixlist.append(&note);
+            noteSprite->move(50 + (i+j) * 20 , 100);
 
-//         QList<QPoint> spotlist;
-//         spotlist.append(new QPoint(0,0));
-
-//         QCanvasPixmapArray *notePixmap2 = new QCanvasPixmapArray(pixlist,
-//                                                                  spotlist);
-
-//         QCanvasSprite *noteSprite = new QCanvasSprite(notePixmap2, canvas());
-
-        QCanvasSimpleSprite *noteSprite = new QCanvasSimpleSprite(&note, canvas());
-
-        noteSprite->move(50 + i * 20, 100);
-
+        }
     }
-
+    
 #if 0
 
     for(unsigned int i = 0; i < 7; ++i) {
@@ -240,17 +234,8 @@ RosegardenGUIView::test()
 
         QPixmap note(npf.makeNotePixmap(i, true, false));
 
-        QList<QPixmap> pixlist;
-
-        pixlist.append(&note);
-
-        QList<QPoint> spotlist;
-        spotlist.append(new QPoint(0,0));
-
-        QCanvasPixmapArray *notePixmap2 = new QCanvasPixmapArray(pixlist,
-                                                                 spotlist);
-
-        QCanvasSprite *noteSprite = new QCanvasSprite(notePixmap2, canvas());
+        QCanvasSprite *noteSprite = new QCanvasSimpleSpriteSprite(&note,
+                                                                  canvas());
 
         noteSprite->move(50 + i * 20, 150);
 
@@ -263,17 +248,8 @@ RosegardenGUIView::test()
     pitches.push_back(0);
 
     QPixmap chord(npf.makeChordPixmap(pitches, 6, true, false));
-    QList<QPixmap> pixlist;
 
-    pixlist.append(&chord);
-
-    QList<QPoint> spotlist;
-    spotlist.append(new QPoint(0,0));
-
-    QCanvasPixmapArray *chordPixmap = new QCanvasPixmapArray(pixlist,
-                                                             spotlist);
-
-    QCanvasSprite *chordSprite = new QCanvasSprite(chordPixmap, canvas());
+    QCanvasSprite *chordSprite = new QCanvasSimpleSprite(&chord, canvas());
 
     chordSprite->move(50, 50);
    

@@ -141,7 +141,7 @@ NotePixmapFactory::makeChordPixmap(const chordpitches &pitches,
                                    unsigned int duration, bool drawTail,
                                    bool stalkGoesUp)
 {
-    static const vector<int>& pitchToHeight(PitchToHeight::instance());
+    PitchToHeight& pitchToHeight(PitchToHeight::instance());
 
     int highestNote = pitchToHeight[pitches[pitches.size() - 1]],
         lowestNote = pitchToHeight[pitches[0]];

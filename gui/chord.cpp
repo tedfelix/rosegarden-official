@@ -32,7 +32,7 @@ Chord::Chord(QCanvas *c)
 void
 Chord::addNote(int pitch)
 {
-    const vector<int>& pitchToHeight(PitchToHeight::instance());
+    PitchToHeight& pitchToHeight(PitchToHeight::instance());
 
     if(m_pitches.contains(pitch)) return;
 
