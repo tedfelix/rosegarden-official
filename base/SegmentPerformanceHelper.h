@@ -55,6 +55,9 @@ public:
      * expected behaviour; don't create tied notes without pitches.
      */
     timeT getSoundingDuration(iterator i);
+
+private:
+    timeT getDurationWithTupling(Event *e);
 };
 
 }

@@ -275,6 +275,8 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 		    if (type == "tupled") { //!!!
 			fileStream << " length=\"" << (*i)->get<Int>
 			    (TrackNotationHelper::BeamedGroupTupledLengthPropertyName)
+				   << "\" untupled=\"" << (*i)->get<Int>
+			    (TrackNotationHelper::BeamedGroupUntupledLengthPropertyName)
 				   << "\" count=\"" << (*i)->get<Int>
 			    (TrackNotationHelper::BeamedGroupTupledCountPropertyName)
 				   << "\"";

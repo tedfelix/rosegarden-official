@@ -2,6 +2,7 @@
 
 
 #include "TrackPerformanceHelper.h"
+#include "TrackNotationHelper.h" //!!! for tupled stuff; should move from TrackNotationHelper to somewhere more global
 #include <iostream>
 
 namespace Rosegarden 
@@ -13,10 +14,11 @@ using std::string;
 TrackPerformanceHelper::~TrackPerformanceHelper() { }
 
 
-timeT TrackPerformanceHelper::getSoundingDuration(iterator i)
+timeT
+TrackPerformanceHelper::getSoundingDuration(iterator i)
 {
     Event *e = *i;
-    timeT d = e->getDuration();
+    timeT d = getDurationWithTupling(e);
 
     if (d == 0 || !e->isa(Note::EventType)) return d;
 
@@ -49,12 +51,37 @@ timeT TrackPerformanceHelper::getSoundingDuration(iterator i)
         if (!e->get<Bool>(Note::TiedBackwardPropertyName, tiedBack) ||
             !tiedBack) break;
 
-        d += e->getDuration();
+        d += getDurationWithTupling(e);
         if (!e->get<Bool>(Note::TiedForwardPropertyName, tiedForward) ||
             !tiedForward) return d;
     }
 
     return d;
 }
+
+
+timeT TrackPerformanceHelper::getDurationWithTupling(Event *e)
+{
+    timeT d = e->getDuration();
+
+    long tupledLength;
+    if (e->get<Int>(TrackNotationHelper::BeamedGroupTupledLengthPropertyName,
+		    tupledLength)) {
+
+	long untupledLength;
+	if (e->get<Int>
+	    (TrackNotationHelper::BeamedGroupUntupledLengthPropertyName,
+	     untupledLength)) {
+	    return (d * tupledLength) / untupledLength;
+	} else {
+	    cerr << "TrackPerformanceHelper::getDurationWithTupling: WARNING: "
+		 << "Found tupled length without untupled length property"
+		 << endl;
+	}
+    }
+
+    return d;
+}
+
 
 }

@@ -21,6 +21,7 @@ const PropertyName TrackNotationHelper::BeamedGroupIdPropertyName   = "BGroupId"
 const PropertyName TrackNotationHelper::BeamedGroupTypePropertyName = "BGroupType";
 const PropertyName TrackNotationHelper::BeamedGroupTupledLengthPropertyName = "BGroupTupledLength";
 const PropertyName TrackNotationHelper::BeamedGroupTupledCountPropertyName = "BGroupTupledCount";
+const PropertyName TrackNotationHelper::BeamedGroupUntupledLengthPropertyName = "BGroupUntupledLength";
 
 TrackNotationHelper::~TrackNotationHelper() { }
 

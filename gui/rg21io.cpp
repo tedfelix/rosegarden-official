@@ -41,6 +41,7 @@ using Rosegarden::Sharp;
 using Rosegarden::Flat;
 using Rosegarden::Natural;
 using Rosegarden::NoAccidental;
+using Rosegarden::Note;
 
 RG21Loader::RG21Loader(const QString& fileName)
     : m_file(fileName),
@@ -139,8 +140,8 @@ bool RG21Loader::parseChordItem()
 	    }
         }
         
-
         m_currentTrack->insert(noteEvent);
+	m_groupUntupledLength += duration;
     }
 
     m_currentTrackTime += duration;
@@ -169,6 +170,7 @@ bool RG21Loader::parseGroupStart()
     m_groupType = m_tokens[0].lower();
     m_inGroup = true;
     m_groupId = m_currentTrack->getNextId();
+    m_groupStartTime = m_currentTrackTime;
 
     if (m_groupType == "beamed") {
 
@@ -176,8 +178,10 @@ bool RG21Loader::parseGroupStart()
         
     } else if (m_groupType == "tupled") {
 
-	m_groupTupledLength = m_tokens[1].toUInt();
+	m_groupTupledLength = m_tokens[1].toUInt() *
+	    Note(Note::Hemidemisemiquaver).getDuration();
 	m_groupTupledCount = m_tokens[2].toUInt();
+	m_groupUntupledLength = 0;
 
     } else {
 
@@ -202,6 +206,49 @@ void RG21Loader::closeMark()
 
 void RG21Loader::closeGroup()
 {
+    if (m_groupType == "tupled") {
+	Track::iterator i = m_currentTrack->end();
+	if (i != m_currentTrack->begin()) {
+
+	    --i;
+	    long groupId;
+
+	    while ((*i)->get<Int>(TrackNotationHelper::BeamedGroupIdPropertyName,
+				  groupId) &&
+		   groupId == m_groupId) {
+
+		(*i)->setMaybe<Int>
+		    (TrackNotationHelper::BeamedGroupUntupledLengthPropertyName,
+		     m_groupUntupledLength);
+
+		Rosegarden::timeT offset =
+		    (*i)->getAbsoluteTime() - m_groupStartTime;
+		Rosegarden::timeT intended =
+		    (offset * m_groupTupledLength) / m_groupUntupledLength;
+		
+		kdDebug(KDEBUG_AREA)
+		    << "RG21Loader::closeGroup:"
+		    << " m_groupStartTime = " << m_groupStartTime
+		    << ", m_groupTupledLength = " << m_groupTupledLength
+		    << ", m_groupUntupledLength = " << m_groupUntupledLength
+		    << ", absoluteTime = " << (*i)->getAbsoluteTime()
+		    << ", offset = " << offset
+		    << ", intended = " << intended
+		    << ", new absolute time = " <<
+		    ((*i)->getAbsoluteTime() + intended - offset) << endl;
+
+		(*i)->setDuration((*i)->getDuration() * m_groupTupledLength /
+				  m_groupUntupledLength);
+		(*i)->addAbsoluteTime(intended - offset);
+
+		if (i == m_currentTrack->begin()) break;
+		--i;
+	    }
+	}
+
+	m_currentTrackTime = m_groupStartTime + m_groupTupledLength;
+    }
+
     m_inGroup = false;
 }
 

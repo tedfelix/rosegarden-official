@@ -134,6 +134,9 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 		m_currentEvent->set<Int>
 		    (TrackNotationHelper::BeamedGroupTupledCountPropertyName,
 		     m_groupTupledCount);
+		m_currentEvent->set<Int>
+		    (TrackNotationHelper::BeamedGroupUntupledLengthPropertyName,
+		     m_groupUntupledLength);
 	    }
         }
         
@@ -178,6 +181,9 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 	if (m_groupType == "tupled") { //!!!
 	    m_groupTupledLength = atts.value("length").toInt();
 	    m_groupTupledCount = atts.value("count").toInt();
+	    m_groupUntupledLength = atts.value("untupled").toInt();
+
+	    //!!! Deal with tupled notes' absolute times as in rg21io.cpp
 	}
 
     } else if (lcName == "property") {

@@ -87,8 +87,10 @@ protected:
     bool m_inGroup;
     unsigned int m_groupId;
     std::string m_groupType;
+    Rosegarden::timeT m_groupStartTime;
     int m_groupTupledLength;
     int m_groupTupledCount;
+    int m_groupUntupledLength;
 
     QString m_currentLine;
     QString m_currentStaffName;

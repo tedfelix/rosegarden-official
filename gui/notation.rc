@@ -3,8 +3,9 @@
 <kpartgui name="Rosegarden::Notation" version="1">
 
 <MenuBar>
+
 <Menu noMerge="1" name="Notes">
-  <text>Notes</text>
+  <text>&amp;Notes</text>
   <Action name="breve" />
   <Action name="whole_note" />
   <Action name="half" />
@@ -23,7 +24,7 @@
 </Menu>
 
 <Menu noMerge="1" name="Rests">
-  <text>Rests</text>
+  <text>&amp;Rests</text>
   <Action name="breve_rest" />
   <Action name="whole_note_rest" />
   <Action name="half_rest" />
@@ -42,7 +43,7 @@
 </Menu>
 
 <Menu noMerge="1" name="Accidentals">
-  <text>Accidentals</text>
+  <text>&amp;Accidentals</text>
   <Action name="no_accidental" />
   <Action name="sharp_accidental" />
   <Action name="flat_accidental" />
@@ -52,11 +53,33 @@
 </Menu>
 
 <Menu noMerge="1" name="Clefs">
-  <text>Clefs</text>
+  <text>&amp;Clefs</text>
   <Action name="treble_clef" />
   <Action name="tenor_clef" />
   <Action name="alto_clef" />
   <Action name="bass_clef" />
+</Menu>
+
+<Menu name="Group">
+  <text>&amp;Group</text>
+  <Action name="beam"/>
+  <Action name="auto_beam"/>
+  <Action name="tuplet"/>
+  <Action name="simple_tuplet"/>
+  <Action name="break_group"/>
+  <Separator/>
+  <Action name="tie"/>
+  <Action name="slur"/>
+  <Action name="crescendo"/>
+  <Action name="decrescendo"/>
+  <Action name="remove_indications"/>
+</Menu>
+
+<Menu name="Transforms">
+  <text>&amp;Transforms</text>
+  <Action name="transpose"/>
+  <Action name="invert"/>
+  <Action name="retrograde"/>
 </Menu>
 
 <Menu  name="settings"><text>&amp;Settings</text>

@@ -9,7 +9,7 @@
     <Action name="file_import_rg21" append="new_merge" />
   </Menu>
   <Menu name="Tracks">
-	<text>Tracks</text>
+	<text>&amp;Tracks</text>
 	<Action name="move"/>
 	<Action name="draw"/>
 	<Action name="erase"/>
@@ -17,7 +17,7 @@
 	<Action name="change_time_res"/>
 	<Action name="edit_all_tracks"/>
   </Menu>
-  <Menu name="Transport">
+  <Menu name="T&amp;ransport">
         <text>Transport</text>
         <Action name="play"/> 
         <Action name="stop"/> 

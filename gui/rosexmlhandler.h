@@ -82,6 +82,7 @@ protected:
     int m_groupId;
     int m_groupTupledLength;
     int m_groupTupledCount;
+    int m_groupUntupledLength;
 
     bool m_foundTempo;
 
