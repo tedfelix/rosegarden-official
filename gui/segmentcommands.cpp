@@ -1117,22 +1117,25 @@ AddTimeSignatureAndNormalizeCommand::AddTimeSignatureAndNormalizeCommand
     addCommand(new AddTimeSignatureCommand(composition, time, timeSig));
 
     // only up to the next time signature
-    timeT endTime(composition->getDuration());
+    timeT nextTimeSigTime(composition->getDuration());
 
     int index = composition->getTimeSignatureNumberAt(time);
     if (composition->getTimeSignatureCount() > index + 1) {
-	endTime = composition->getTimeSignatureChange(index + 1).first;
+	nextTimeSigTime = composition->getTimeSignatureChange(index + 1).first;
     }
 	
     for (Composition::iterator i = composition->begin();
 	 i != composition->end(); ++i) {
 
-	int startTime = (*i)->getStartTime();
-	if (startTime >= endTime) continue;
-	if (startTime < time) startTime = time;
+	timeT startTime = (*i)->getStartTime();
+	timeT   endTime = (*i)->getEndTime();
+
+	if (startTime >= nextTimeSigTime || endTime <= time) continue;
 
 	addCommand(new TransformsMenuNormalizeRestsCommand
-		   (**i, time, std::min((*i)->getEndTime(), endTime)));
+		   (**i,
+		    std::max(startTime, time),
+		    std::min(endTime, nextTimeSigTime)));
     }
 }
 
