@@ -123,8 +123,8 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
 
     m_viewElementsManager = new ViewElementsManager(allEvents);
 
-    m_notationElements = m_viewElementsManager->notationElementList(allEvents.begin(),
-                                                                    allEvents.end());
+    m_notationElements = m_viewElementsManager->getNotationElementList
+        (allEvents.begin(), allEvents.end());
 
     m_mainStaff->move(20, 15);
     m_mainStaff->show();

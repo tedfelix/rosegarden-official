@@ -615,8 +615,15 @@ MidiFile::convertToRosegarden()
             rosegardenEvent->set<Int>("pitch", midiEvent->note());
             rosegardenEvent->setDuration(rosegardenDuration);
 
-            // insert into Track
-            rosegardenTrack->insert(rosegardenEvent);
+            {
+              // insert into Track
+              Track::iterator loc = rosegardenTrack->insert(rosegardenEvent);
+            
+              // cc -- a bit of an experiment
+              if (!rosegardenTrack->isViable(rosegardenEvent)) {
+                 rosegardenTrack->makeNoteViable(loc);
+              }
+            }
 
             break;
 

@@ -28,17 +28,11 @@
 /**
  *
  * ViewElementsManager manages the relationship between Track/Event
- * and NotationElementList/NotationElement objects.
+ * and NotationElementList/NotationElement objects.  For most
+ * purposes the only interesting method is getNotationElementList.
  * 
  * @author Guillaume Laurent, Chris Cannam, Rich Bown
  */
-
-
-//!!! I really think this class may become obsolete with the
-//introduction of the TrackObserver; we should no longer need to wrap
-//events carefully before inserting them into the NotationElementList,
-//because we could instead make the NotationElementList a
-//TrackObserver and get it to wrap its own events. 
 
 class ViewElementsManager : public Rosegarden::TrackObserver
 {
@@ -46,70 +40,36 @@ public:
     ViewElementsManager(Rosegarden::Track&);
     virtual ~ViewElementsManager();
 
-
     /**
      * Create a new NotationElementList wrapping Events in the
-     * [from, to[ interval or return the previously created one
+     * [from, to[ interval, or return the previously created one
      * (even if passed new arguments)
      */
-    NotationElementList* notationElementList(Rosegarden::Track::iterator from,
-                                             Rosegarden::Track::iterator to);
-
-    /**
-     * Scan [from, to[ for events which aren't wrapped in ViewElements
-     * and wrap them
-     */
-//    void insertNewEvents(Rosegarden::Track::iterator from,
-//                         Rosegarden::Track::iterator to);
+    NotationElementList* getNotationElementList
+    (Rosegarden::Track::iterator from,
+     Rosegarden::Track::iterator to);
 
     /**
      * Wrap Event in a ViewElement if it doesn't have one already, and
      * insert it in a ViewElements list.
      *
-     * If insertInTrack is true, insert the Event itself in the wrapped
-     * Track as well.  In this case, behaviour is equivalent to simply
-     * inserting in the track instead of calling this method...
+     * If insertInTrack is true, insert the Event itself in the
+     * wrapped Track as well.  In this case behaviour is equivalent to
+     * simply inserting in the track instead of calling this method,
+     * so you should usually only use this method if you don't want
+     * the event to appear in the underlying track.
      */
     void insert(Rosegarden::Event*, bool insertInTrack = false);
 
-    //!!! We perhaps could do with methods to insert and erase
-    //notationelements (etc) that are not also in the underlying
-    //track, but these currently do not do that -- consider later.
-
-    // overload these for each ViewElement type
-
     /**
-     * Insert a new NotationElement
-     *
-     * Think about using wrapAndInsert() before using this. This is
-     * for cases where you need control over the NotationElement after
-     * its creation (like changing the note it represents) and therefore
-     * need to create the NotationElement yourself. See
-     * NotationView::chordEvent() for an example of this.
-     *
-     * If insertInTrack is true, also insert the Event which the
-     * NotationElement points to in the wrapped Track.
+     * Erase the element pointed to by iterator.  If eraseFromTrack is
+     * true, erase the Event from the wrapped Track as well.  In this
+     * case behaviour is equivalent to simply erasing from the track
+     * instead of calling this method, so you should usually only use
+     * this method if you know that the event is not in the Track.
      */
-//!!!    void insert(NotationElement*, bool insertInTrack = false);
+    void erase(NotationElementList::iterator, bool eraseFromTrack = false);
 
-    /**
-     * Erase the element pointed to by iterator
-     * Also erase the corresponding Event from the wrapped Track
-     */
-//!!!    void erase(NotationElementList::iterator);
-
-    /**
-     * Erase the element
-     * Also erase the corresponding Event from the wrapped Track
-     */
-//!!!    void eraseSingle(NotationElement*);
-
-    /**
-     * Try to collapse the element (note or rest)
-     * with the next or previous one if this is possible
-     * without breaking the bar count
-     */
-    void tryCollapse(NotationElement*);
 
     Rosegarden::Track& getTrack() { return m_track; }
 
