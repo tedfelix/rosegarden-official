@@ -90,6 +90,8 @@ void TrackItem::setItemHeight(unsigned int h)
 
 unsigned int TrackItem::nbStepsToWidth(unsigned int nbSteps)
 {
+    if (nbSteps < m_timeStepsResolution) nbSteps = m_timeStepsResolution;
+
     return nbSteps * m_widthToDurationRatio / m_timeStepsResolution;
 }
 
