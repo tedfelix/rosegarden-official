@@ -12,8 +12,22 @@
     <div id="maincontainer">
       <div id="main">
 	<br>
-	<h2>Tour 1: What does Rosegarden do?</h2>
-	
+
+	<h2>Take a Tour of Rosegarden</h2>
+
+	<p>Rosegarden is designed to be easy to use, attractive, and familiar.  If you've some experience with other sequencer applications for other platforms, you should find it easy enough to get up and running with: even if you haven't, it's not hard.</p>
+
+	<p>This tour will quickly show a few of the things Rosegarden can do, and hopefully explain how Rosegarden can work at the centre of a whole world of music composition and editing software.</p>
+
+	<p>There are six stops on this tour:</p>
+	<p><a href="/tour/editing">1. Editing</a> &ndash; Intuitive ways to record and edit notes.</p>
+	<p><a href="/tour/midi">2. MIDI</a> &ndash; Managing your MIDI ports, banks, programs and controllers without having to remember any numbers.</p>
+	<p><a href="/tour/notation">3. Notation</a> &ndash; Entering, editing and printing score.</p>
+	<p><a href="/tour/audio">4. Audio</a> &ndash; Recording, mixing, and using samples and effects.</p>
+	<p><a href="/tour/languages">5. Languages</a> &ndash; The international state of Rosegarden.</p>
+	<p><a href="/tour/integration">6. Integration</a> &ndash; How Rosegarden works together with other software.</p>
+
+	<br>
 	    <p><b>Next: <a href="/tour/editing/">Editing</a></b></p>
 
       </div>

@@ -12,9 +12,9 @@
     <div id="maincontainer">
       <div id="main">
 	<br>
-	<h2>Tour 2: Editing</h2>
-	
-	    <p><b>Next: <a href="/tour/notation/">Notation</a></b></p>
+	<h2>Tour 1: Editing</h2>
+
+	    <p><b>Next: <a href="/tour/midi/">MIDI</a></b></p>
 
       </div>
     </div>

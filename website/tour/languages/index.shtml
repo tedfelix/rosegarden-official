@@ -14,7 +14,7 @@
     <div id="main">
     <br>
 
-    <h2>Tour 6: Language support</h2>
+    <h2>Tour 5: Language support</h2>
 
     <p>Rosegarden is an international project with contributors all
     over the world, and one way that people can contribute is by
@@ -41,6 +41,7 @@
     <p>Is your language on that list?  If not, perhaps you or somebody
     you know might be able to maintain a translation.</p>
 
+    <br>
     <p><b>Next: <a href="/tour/integration/">Integration</a></b></p>
 
     </div>

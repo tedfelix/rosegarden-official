@@ -45,7 +45,7 @@
     <p>Rosegarden can of course print directly,
     what-you-see-is-what-you-get &ndash; or, for some of the highest
     quality typesetting anywhere, export straight to the <a
-    href="http://www.lilypond.org/">LilyPond</a> system.</p>
+    href="http://www.lilypond.org/">LilyPond</a> system, for results like this:</p>
 
     <br>
     <div align="center"><img style="max-width: 100%" src="lilypond-output.png"/></div>
