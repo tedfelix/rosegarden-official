@@ -109,10 +109,12 @@ LADSPAPluginInstance::init(int idealChannelCount)
         {
 	    if (LADSPA_IS_PORT_INPUT(m_descriptor->PortDescriptors[i])) {
 		LADSPA_Data *data = new LADSPA_Data(0.0);
-		m_controlPorts.push_back(
+		m_controlPortsIn.push_back(
                     std::pair<unsigned long, LADSPA_Data*>(i, data));
 	    } else {
-		// We don't do anything at all with control output ports
+		LADSPA_Data *data = new LADSPA_Data(0.0);
+		m_controlPortsOut.push_back(
+                    std::pair<unsigned long, LADSPA_Data*>(i, data));
 	    }
         }
 #ifdef DEBUG_LADSPA
@@ -149,10 +151,14 @@ LADSPAPluginInstance::~LADSPAPluginInstance()
 {
     cleanup();
 
-    for (unsigned int i = 0; i < m_controlPorts.size(); ++i)
-        delete m_controlPorts[i].second;
+    for (unsigned int i = 0; i < m_controlPortsIn.size(); ++i)
+        delete m_controlPortsIn[i].second;
 
-    m_controlPorts.erase(m_controlPorts.begin(), m_controlPorts.end());
+    for (unsigned int i = 0; i < m_controlPortsOut.size(); ++i)
+        delete m_controlPortsOut[i].second;
+
+    m_controlPortsIn.clear();
+    m_controlPortsOut.clear();
 
     if (m_ownBuffers) {
 	for (size_t i = 0; i < m_audioPortsIn.size(); ++i) {
@@ -232,12 +238,21 @@ LADSPAPluginInstance::connectPorts()
 	}
 
 	// If there is more than one instance, they all share the same
-	// control port ins.  Note that we've already ignored any
-	// output control ports.
-	for (unsigned int i = 0; i < m_controlPorts.size(); ++i) {
+	// control port ins (and outs, for the moment, because we
+	// don't actually do anything with the outs anyway -- but they
+	// do have to be connected as the plugin can't know if they're
+	// not and will write to them anyway).
+
+	for (unsigned int i = 0; i < m_controlPortsIn.size(); ++i) {
 	    m_descriptor->connect_port(*hi,
-				       m_controlPorts[i].first,
-				       m_controlPorts[i].second);
+				       m_controlPortsIn[i].first,
+				       m_controlPortsIn[i].second);
+	}
+
+	for (unsigned int i = 0; i < m_controlPortsOut.size(); ++i) {
+	    m_descriptor->connect_port(*hi,
+				       m_controlPortsOut[i].first,
+				       m_controlPortsOut[i].second);
 	}
     }
 }
@@ -245,11 +260,11 @@ LADSPAPluginInstance::connectPorts()
 void
 LADSPAPluginInstance::setPortValue(unsigned int portNumber, float value)
 {
-    for (unsigned int i = 0; i < m_controlPorts.size(); ++i)
+    for (unsigned int i = 0; i < m_controlPortsIn.size(); ++i)
     {
-        if (m_controlPorts[i].first == portNumber)
+        if (m_controlPortsIn[i].first == portNumber)
         {
-            (*m_controlPorts[i].second) = value;
+            (*m_controlPortsIn[i].second) = value;
         }
     }
 }

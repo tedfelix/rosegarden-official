@@ -125,7 +125,8 @@ protected:
     int                        m_instanceCount;
     const LADSPA_Descriptor   *m_descriptor;
 
-    std::vector<std::pair<unsigned long, LADSPA_Data*> > m_controlPorts;
+    std::vector<std::pair<unsigned long, LADSPA_Data*> > m_controlPortsIn;
+    std::vector<std::pair<unsigned long, LADSPA_Data*> > m_controlPortsOut;
 
     std::vector<int>          m_audioPortsIn;
     std::vector<int>          m_audioPortsOut;
