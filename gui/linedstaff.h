@@ -266,6 +266,18 @@ public:
      * Get the canvas width of the left and right margins.
      */
     virtual double getMargin() const;
+
+    /**
+     * Set the canvas height of the area at the top of the first page
+     * reserved for the composition title and composer's name (used
+     * only in MultiPageMode).
+     */
+    virtual void setTitleHeight(int h);
+
+    /**
+     * Get the canvas height of the title area.
+     */
+    virtual int getTitleHeight() const;
     
     /**
      * Returns the width of the entire staff after layout.  Call
@@ -571,6 +583,7 @@ protected:
     double   m_x;
     int	     m_y;
     double   m_margin;
+    int      m_titleHeight;
     int	     m_resolution;
     int	     m_lineThickness;
     

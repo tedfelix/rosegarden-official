@@ -856,6 +856,7 @@ AnalysisHelper::PitchProfile::operator+=(const PitchProfile& d)
 TimeSignature
 AnalysisHelper::guessTimeSignature(CompositionTimeSliceAdapter &c)
 {
+    bool haveNotes = false;
 
     // 1. Guess the duration of the beat. The right beat length is going
     //    to be a common note length, and beat boundaries should be likely
@@ -874,6 +875,7 @@ AnalysisHelper::guessTimeSignature(CompositionTimeSliceAdapter &c)
 
         // Skip non-notes
         if (!(*i)->isa(Note::EventType)) continue;
+	haveNotes = true;
 
         for (int k = 0; k < 4; ++k)
         {
@@ -898,6 +900,8 @@ AnalysisHelper::guessTimeSignature(CompositionTimeSliceAdapter &c)
         }
 
     }
+
+    if (!haveNotes) return TimeSignature();
 
     int beatDuration = 0,
         bestScore = 0;

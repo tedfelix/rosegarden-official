@@ -2729,17 +2729,19 @@ NotePixmapFactory::getTextFont(const Rosegarden::Text &text) const
 	serif = false;
 	textFont = QFont("lucida");
     }
-	
-    textFont.setStyleHint(serif ? QFont::Serif : QFont::SansSerif);
-    textFont.setWeight(weight);
-    textFont.setItalic(italic);
 
     int size;
     if (large) size = getLineSpacing() * 7 / 2;
     else if (serif) size = getLineSpacing() * 2;
     else size = getLineSpacing() * 3 / 2;
-
+	
     textFont.setPixelSize(size);
+    textFont.setStyleHint(serif ? QFont::Serif : QFont::SansSerif);
+    textFont.setWeight(weight);
+    textFont.setItalic(italic);
+
+    NOTATION_DEBUG << "NotePixmapFactory::getTextFont: requested size " << size
+		   << ", got " << textFont.pixelSize() << endl;
 
     m_textFontCache[type.c_str()] = textFont;
     return textFont;

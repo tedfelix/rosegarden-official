@@ -45,6 +45,7 @@ LinedStaff::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_x(0.0),
     m_y(0),
     m_margin(0.0),
+    m_titleHeight(0),
     m_resolution(resolution),
     m_lineThickness(lineThickness),
     m_pageMode(LinearMode),
@@ -72,6 +73,7 @@ LinedStaff::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_x(0.0),
     m_y(0),
     m_margin(0.0),
+    m_titleHeight(0),
     m_resolution(resolution),
     m_lineThickness(lineThickness),
     m_pageMode(rowsPerPage ? MultiPageMode : ContinuousPageMode),
@@ -100,6 +102,7 @@ LinedStaff::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_x(0.0),
     m_y(0),
     m_margin(0.0),
+    m_titleHeight(0),
     m_resolution(resolution),
     m_lineThickness(lineThickness),
     m_pageMode(pageMode),
@@ -220,6 +223,18 @@ LinedStaff::getMargin() const
 {
     if (m_pageMode != MultiPageMode) return 0;
     return m_margin;
+}
+
+void
+LinedStaff::setTitleHeight(int titleHeight)
+{
+    m_titleHeight = titleHeight;
+}
+
+int
+LinedStaff::getTitleHeight() const
+{
+    return m_titleHeight;
 }
 
 double
@@ -466,8 +481,12 @@ LinedStaff::getCanvasYForTopOfStaff(int row) const
 	else return m_y + (row * m_rowSpacing);
     
     case MultiPageMode:
-	if (row <= 0) return m_y;
-	else return m_y + ((row % getRowsPerPage()) * m_rowSpacing);
+	if (row <= 0)
+	    return m_y + m_titleHeight;
+	else if (row < getRowsPerPage()) 
+	    return m_y + ((row % getRowsPerPage()) * m_rowSpacing) + m_titleHeight;
+	else
+	    return m_y + ((row % getRowsPerPage()) * m_rowSpacing);
 	
     case LinearMode: default:
 	return m_y;
@@ -506,7 +525,7 @@ LinedStaff::sizeStaff(Rosegarden::HorizontalLayoutEngine &layout)
     double xleft = 0, xright = 0;
     bool haveXLeft = false;
 
-    xright = layout.getBarPosition(lastBar);
+    xright = layout.getBarPosition(lastBar) - 1;
 
     Rosegarden::TimeSignature currentTimeSignature;
 
@@ -591,7 +610,13 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
     // hack to ensure the bar line appears on the correct row in
     // notation page layouts, with a conditional to prevent us from
     // moving the bar and beat lines in the matrix
-    if (!showBeatLines()) layoutX += 1;
+    if (!showBeatLines()) {
+	if (width > 0.01) { // not final bar in staff
+	    layoutX += 1;
+	} else {
+	    layoutX -= 1;
+	}
+    }
 
     int row = getRowForLayoutX(layoutX);
     double x = getCanvasXForLayoutX(layoutX);
@@ -620,7 +645,7 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
     m_barLines.insert(insertPoint, barLine);
 
     if (m_pageMode != LinearMode &&
-	width > 0 && // width == 0 for final bar in staff
+	width > 0.01 && // width == 0 for final bar in staff
 	(getRowForLayoutX(layoutX) <
 	 getRowForLayoutX(layoutX + width + getMargin() + 2))) {
 

@@ -228,7 +228,7 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
     m_hideSignatureButton = new QCheckBox
 	(i18n("Make the time signature hidden"), groupBox);
     m_hideSignatureButton->setChecked
-	(config->readBoolEntry("timesigdialogmakehidden", true));
+	(config->readBoolEntry("timesigdialogmakehidden", false));
 
     m_commonTimeButton = new QCheckBox
 	(i18n("Show as common time"), groupBox);

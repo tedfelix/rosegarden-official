@@ -26,7 +26,7 @@ namespace Rosegarden
 {
 
 //#define DEBUG_PLAYABLE 1
-#define DEBUG_RECORDABLE 1
+//#define DEBUG_RECORDABLE 1
 
 PlayableAudioFile::SmallFileMap PlayableAudioFile::m_smallFileCache;
 

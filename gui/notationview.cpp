@@ -195,6 +195,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_fontName(NoteFontFactory::getDefaultFontName()),
     m_fontSize(NoteFontFactory::getDefaultSize(m_fontName)),
     m_pageMode(LinedStaff::LinearMode),
+    m_leftGutter(20),
     m_notePixmapFactory(new NotePixmapFactory(m_fontName, m_fontSize)),
     m_hlayout(new NotationHLayout(&doc->getComposition(), m_notePixmapFactory,
                                   m_properties, this)),
@@ -283,24 +284,24 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     }
 
     setTopBarButtons(new BarButtons(getDocument(),
-                                    m_hlayout, 20.0, 25,
+                                    m_hlayout, m_leftGutter, 25,
 				    false, getCentralWidget()));
 
     m_topBarButtons->getLoopRuler()->setBackgroundColor
 	(RosegardenGUIColours::InsertCursorRuler);
 
     m_chordNameRuler = new ChordNameRuler
-	(m_hlayout, doc, segments, 20.0, 20, getCentralWidget());
+	(m_hlayout, doc, segments, m_leftGutter, 20, getCentralWidget());
     addRuler(m_chordNameRuler);
     if (showProgressive) m_chordNameRuler->show();
 
     m_tempoRuler = new TempoRuler
-	(m_hlayout, doc, 20.0, 20, false, getCentralWidget());
+	(m_hlayout, doc, m_leftGutter, 20, false, getCentralWidget());
     addRuler(m_tempoRuler);
     m_tempoRuler->hide();
 
     m_rawNoteRuler = new RawNoteRuler
-	(m_hlayout, segments[0], 20.0, 20, getCentralWidget());
+	(m_hlayout, segments[0], m_leftGutter, 20, getCentralWidget());
     addRuler(m_rawNoteRuler);
     m_rawNoteRuler->show();
 
@@ -312,7 +313,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     readOptions();
 
 
-    setBottomBarButtons(new BarButtons(getDocument(), m_hlayout, 20.0, 25,
+    setBottomBarButtons(new BarButtons(getDocument(), m_hlayout, m_leftGutter, 25,
 				       true, getBottomWidget()));
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
@@ -518,6 +519,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_fontName(NoteFontFactory::getDefaultFontName()),
     m_fontSize(NoteFontFactory::getDefaultSize(m_fontName)),
     m_pageMode(LinedStaff::LinearMode),
+    m_leftGutter(0),
     m_notePixmapFactory(new NotePixmapFactory(m_fontName, m_fontSize)),
     m_hlayout(new NotationHLayout(&doc->getComposition(), m_notePixmapFactory,
 				  m_properties, this)),
@@ -697,7 +699,7 @@ void NotationView::positionStaffs()
     int accumulatedHeight;
     int rowsPerPage = 1;
     int legerLines = 8;
-    if (m_pageMode != LinedStaff::LinearMode) legerLines = 6;
+    if (m_pageMode != LinedStaff::LinearMode) legerLines = 7;
     int rowGapPercent = (m_staffs.size() > 1 ? 40 : 10);
     int aimFor = -1;
 
@@ -816,6 +818,19 @@ void NotationView::positionStaffs()
 
     m_hlayout->setPageWidth(pageWidth - leftMargin * 2);
 
+    int topGutter = 0;
+
+    if (m_pageMode == LinedStaff::MultiPageMode) {
+
+	topGutter = 20;
+
+    } else if (m_pageMode == LinedStaff::ContinuousPageMode) {
+
+	// fewer leger lines above staff than in linear mode --
+	// compensate for this on the top staff
+	topGutter = m_notePixmapFactory->getLineSpacing() * 2;
+    }
+
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
 	Rosegarden::TrackId trackId = m_staffs[i]->getSegment().getTrack();
@@ -840,9 +855,8 @@ void NotationView::positionStaffs()
 	    m_staffs[i]->setBarNumbersEvery(0);
 	}
         
-	m_staffs[i]->setX(20);
-	m_staffs[i]->setY((m_pageMode == LinedStaff::MultiPageMode ? 20 : 0) +
-			  trackCoords[trackPosition] + topMargin);
+	m_staffs[i]->setX(m_leftGutter);
+	m_staffs[i]->setY(topGutter + trackCoords[trackPosition] + topMargin);
 	m_staffs[i]->setPageWidth(pageWidth - leftMargin * 2);
 	m_staffs[i]->setRowsPerPage(rowsPerPage);
         m_staffs[i]->setPageMode(m_pageMode);
@@ -893,14 +907,24 @@ void NotationView::positionPages()
     m_pageNumbers.clear();
     
     if (m_pageMode != LinedStaff::MultiPageMode) {
-	if (haveBackground) canvas()->setBackgroundPixmap(background);
+	if (haveBackground) {
+	    canvas()->setBackgroundPixmap(background);
+	    getCanvasView()->setBackgroundMode(Qt::FixedPixmap);
+	    getCanvasView()->setPaletteBackgroundPixmap(background);
+	    getCanvasView()->setErasePixmap(background);
+	}
     } else {
 
 	QFont pageNumberFont;
 	pageNumberFont.setPixelSize(m_fontSize * 2);
 	QFontMetrics metrics(pageNumberFont);
 
-	canvas()->setBackgroundPixmap(deskBackground);
+	if (haveBackground) {
+	    canvas()->setBackgroundPixmap(deskBackground);
+	    getCanvasView()->setBackgroundMode(Qt::FixedPixmap);
+	    getCanvasView()->setPaletteBackgroundPixmap(background);
+	    getCanvasView()->setErasePixmap(background);
+	}
 	
 	int thumbScale = 20;
 	QPixmap thumbnail(canvas()->width() / thumbScale,
@@ -911,7 +935,7 @@ void NotationView::positionPages()
 
 	for (int page = 0; page < maxPageCount; ++page) {
 
-	    int x = 20 + pageWidth * page + leftMargin/4;
+	    int x = m_leftGutter + pageWidth * page + leftMargin/4;
 	    int y = 20;
 	    int w = pageWidth - leftMargin/2;
 	    int h = pageHeight;
@@ -2059,7 +2083,12 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
     }
 
     positionPages();
-    if (!m_printMode) updateView();
+
+    if (!m_printMode) {
+	updateView();
+	slotSetInsertCursorPosition(getInsertionTime(), false, false);
+	slotSetPointerPosition(getDocument()->getComposition().getPosition(), false);
+    }
 
     Rosegarden::Profiles::getInstance()->dump();
 }   
@@ -2072,8 +2101,12 @@ NotationView::getPageWidth()
 	if (isInPrintMode() && getCanvasView() && getCanvasView()->canvas())
 	    return getCanvasView()->canvas()->width();
 	
-	if (getCanvasView())
-	    return getCanvasView()->width() - 50;
+	if (getCanvasView()) {
+	    return
+		getCanvasView()->width() -
+		getCanvasView()->verticalScrollBar()->width() -
+		m_leftGutter - 10;
+	}
 
 	return width() - 50;
 
@@ -2091,7 +2124,16 @@ int
 NotationView::getPageHeight()
 {
     if (m_pageMode != LinedStaff::MultiPageMode) {
-	return 0;
+
+	if (isInPrintMode() && getCanvasView() && getCanvasView()->canvas())
+	    return getCanvasView()->canvas()->height();
+	
+	if (getCanvasView()) {
+	    return getCanvasView()->height();
+	}
+
+	return (height() > 200 ? height() - 100 : height());
+
     } else {
 
 	//!!! For the moment we use A4 for this calculation
@@ -2179,7 +2221,9 @@ NotationView::paintEvent(QPaintEvent *e)
 
     // relayout if the window width changes significantly in continuous page mode
     if (m_pageMode == LinedStaff::ContinuousPageMode) {
-	int diff = int(getPageWidth() - m_hlayout->getPageWidth());
+	int topMargin = 0, leftMargin = 0;
+	getPageMargins(topMargin, leftMargin);
+	int diff = int(getPageWidth() - leftMargin*2 - m_hlayout->getPageWidth());
 	NOTATION_DEBUG << "NotationView::paintEvent: diff is " << diff <<endl;
 	if (diff < -10 || diff > 10) {
 	    setPageMode(m_pageMode);
@@ -2690,7 +2734,7 @@ void NotationView::print(bool previewOnly)
 
 	NOTATION_DEBUG << "Printing page " << page << endl;
 
-	QRect pageRect(20 + pageWidth * page, topMargin, pageWidth, pageHeight);
+	QRect pageRect(m_leftGutter + pageWidth * page, topMargin, pageWidth, pageHeight);
 	
 	for (size_t i = 0; i < m_staffs.size(); ++i) {
 
@@ -2808,6 +2852,7 @@ void NotationView::refreshSegment(Segment *segment,
 			    KTmpStatusMsg::getDefaultId());
 
     Event::dumpStats(std::cerr);
+    slotSetInsertCursorPosition(getInsertionTime(), false, false);
     slotSetPointerPosition(getDocument()->getComposition().getPosition(), false);
 
     if (m_currentEventSelection &&
@@ -2906,15 +2951,33 @@ void NotationView::readjustCanvasSize()
         }
     }
 
-    NOTATION_DEBUG << "NotationView::readjustCanvasSize: maxHeight is "
-		   << maxHeight << ", page height is " << getPageHeight() << endl
-                   << " - maxWidth is " << maxWidth << ", page width is " << getPageWidth() << endl;
+    int topMargin = 0, leftMargin = 0;
+    getPageMargins(topMargin, leftMargin);
 
-    if (maxWidth  < getPageWidth()  + 40) maxWidth  = getPageWidth()  + 40;
-    if (maxHeight < getPageHeight() + 40) maxHeight = getPageHeight() + 40;
+    int pageWidth = getPageWidth();
+    int pageHeight = getPageHeight();
+
+    NOTATION_DEBUG << "NotationView::readjustCanvasSize: maxHeight is "
+		   << maxHeight << ", page height is " << pageHeight << endl
+                   << " - maxWidth is " << maxWidth << ", page width is " << pageWidth << endl;
+
+
+    if (m_pageMode == LinedStaff::LinearMode) {
+	maxWidth = ((maxWidth / pageWidth) + 1) * pageWidth;
+	if (maxHeight < pageHeight) maxHeight = pageHeight;
+    } else {
+	if (maxWidth  < pageWidth) maxWidth  = pageWidth;
+	if (maxHeight < pageHeight + topMargin*2)
+	    maxHeight = pageHeight + topMargin*2;
+    }
+
+//    if (maxWidth  < getPageWidth()) maxWidth  = getPageWidth();
+//    if (maxHeight < getPageHeight() + topMargin*2)
+//	maxHeight = getPageHeight() + topMargin*2;
 
     // now get the EditView to do the biz
-    readjustViewSize(QSize(int(maxWidth), maxHeight));
+    readjustViewSize(QSize(int(maxWidth), maxHeight), true);
+//		     m_pageMode != LinedStaff::LinearMode);
     UPDATE_PROGRESS(2);
 
     if (m_pannerDialog) {

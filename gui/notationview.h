@@ -877,6 +877,7 @@ protected:
     std::string m_fontName;
     int m_fontSize;
     LinedStaff::PageMode m_pageMode;
+    int m_leftGutter;
 
     NotePixmapFactory *m_notePixmapFactory;
     

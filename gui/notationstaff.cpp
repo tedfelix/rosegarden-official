@@ -579,10 +579,6 @@ NotationStaff::positionElements(timeT from, timeT to)
 	    needNewSprite = true;
 	}
 
-	//!!! for the sake of tidying up for a release -- this is definitely
-	// not the Right Thing to do here
-//	if (el->getLayoutX() == 0) continue;
-
 	if (needNewSprite) {
 	    renderSingleElement(it, currentClef, currentKey, selected);
 	    ++elementsRendered;
@@ -593,9 +589,11 @@ NotationStaff::positionElements(timeT from, timeT to)
 	    currentKey = Rosegarden::Key(*el->event());
 	}
 
-	LinedStaffCoords coords = getCanvasCoordsForLayoutCoords
-	    (el->getLayoutX(), (int)el->getLayoutY());
-	el->reposition(coords.first, (double)coords.second);
+	if (!needNewSprite) {
+	    LinedStaffCoords coords = getCanvasCoordsForLayoutCoords
+		(el->getLayoutX(), (int)el->getLayoutY());
+	    el->reposition(coords.first, (double)coords.second);
+	}
 
 	el->setSelected(selected);
 
@@ -814,7 +812,6 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
     try {
 
 	QCanvasPixmap *pixmap = 0;
-	QCanvasItem *canvasItem = 0;
 
 	m_notePixmapFactory->setSelected(selected);
 	int z = selected ? 3 : 0;
@@ -825,9 +822,11 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 	    coords = getCanvasCoordsForLayoutCoords
 		(elt->getLayoutX(), (int)elt->getLayoutY());
 
+	FitPolicy policy = PretendItFittedAllAlong;
+
 	if (elt->isNote()) {
 
-	    canvasItem = makeNoteSprite(vli);
+	    renderNote(vli);
 
 	} else if (elt->isRest()) {
 
@@ -874,6 +873,8 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 
 	} else if (elt->event()->isa(Rosegarden::Text::EventType)) {
 
+	    policy = MoveBackToFit;
+
 	    if (elt->event()->has(Rosegarden::Text::TextTypePropertyName) &&
 		elt->event()->get<String>
 		(Rosegarden::Text::TextTypePropertyName) ==
@@ -886,9 +887,18 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 
 		try {
 		    if (m_printPainter) {
-			m_notePixmapFactory->drawText
-			    (Rosegarden::Text(*elt->event()),
-			     *m_printPainter, int(coords.first), coords.second);
+			Rosegarden::Text text(*elt->event());
+			int length = m_notePixmapFactory->getTextWidth(text);
+			for (double w = -1, inc = 0; w != 0; inc += w) {
+			    w = setPainterClipping(m_printPainter,
+						   elt->getLayoutX(),
+						   int(elt->getLayoutY()),
+						   int(inc), length, coords,
+						   policy);
+			    m_notePixmapFactory->drawText
+				(text, *m_printPainter, int(coords.first), coords.second);
+			    m_printPainter->restore();
+			}
 		    } else {
 			pixmap = m_notePixmapFactory->makeTextPixmap
 			    (Rosegarden::Text(*elt->event()));
@@ -899,6 +909,8 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 	    }
 
 	} else if (elt->event()->isa(Indication::EventType)) {
+	    
+	    policy = SplitToFit;
 
 	    try {
 		Indication indication(*elt->event());
@@ -924,8 +936,10 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 		    (indicationEnd == getViewElementList()->end() ||
 		     indicationEndTime ==
 		     getSegment().getBarStartForTime(indicationEndTime))) {
-		    
-		    --indicationEnd;
+
+		    while (indicationEnd == getViewElementList()->end() ||
+			   (*indicationEnd)->getViewAbsoluteTime() >= indicationEndTime)
+			--indicationEnd;
 		    
 		    double x, w;
 		    static_cast<NotationElement *>(*indicationEnd)->
@@ -957,7 +971,8 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 			    w = setPainterClipping(m_printPainter,
 						   elt->getLayoutX(),
 						   int(elt->getLayoutY()),
-						   int(inc), length, coords);
+						   int(inc), length, coords,
+						   policy);
 			    m_notePixmapFactory->drawHairpin
 				(length, indicationType == Indication::Crescendo,
 				 *m_printPainter, int(coords.first), coords.second);
@@ -983,7 +998,8 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 			    w = setPainterClipping(m_printPainter,
 						   elt->getLayoutX(),
 						   int(elt->getLayoutY()),
-						   int(inc), length, coords);
+						   int(inc), length, coords,
+						   policy);
 			    m_notePixmapFactory->drawSlur
 				(length, dy, above,
 				 *m_printPainter, int(coords.first), coords.second);
@@ -1003,7 +1019,8 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 				w = setPainterClipping(m_printPainter,
 						       elt->getLayoutX(),
 						       int(elt->getLayoutY()),
-						       int(inc), length, coords);
+						       int(inc), length, coords,
+						       policy);
 				m_notePixmapFactory->drawOttava
 				    (length, octaves,
 				     *m_printPainter, int(coords.first), coords.second);
@@ -1035,29 +1052,13 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 
 	// Show the result, one way or another
 
-	if (!canvasItem && pixmap) {
+	if (elt->isNote()) {
+	    
+	    // No need, we already set and showed it in renderNote
 
-	    setPixmap(elt, pixmap, z);
+	} else if (pixmap) {
 
-	} else if (canvasItem) {
-
-	    // This branch should only be used for note sprites,
-	    // so we can safely assume they won't need to be split
-	    // across a row boundary (as may happen in setPixmap).
-	    //!!! Not true -- note sprites might contain ties!
-
-	    canvasItem->setZ(z);
-
-	    double layoutX = elt->getLayoutX();
-	    int layoutY = (int)elt->getLayoutY();
-
-	    LinedStaffCoords coords =
-		getCanvasCoordsForLayoutCoords(layoutX, layoutY);
-
-	    elt->setCanvasItem
-		(canvasItem, coords.first, (double)coords.second);
-
-	    canvasItem->show();
+	    setPixmap(elt, pixmap, z, policy);
 
 	} else {
 	    elt->removeCanvasItem();
@@ -1074,7 +1075,8 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 
 double
 NotationStaff::setPainterClipping(QPainter *painter, double lx, int ly,
-				  double dx, double w, LinedStaffCoords &coords)
+				  double dx, double w, LinedStaffCoords &coords,
+				  FitPolicy policy)
 {
     painter->save();
 
@@ -1087,25 +1089,34 @@ NotationStaff::setPainterClipping(QPainter *painter, double lx, int ly,
 
     NOTATION_DEBUG << "NotationStaff::setPainterWindow: row " << row << ", rightMargin " << rightMargin << ", available " << available << endl;
 
-    QRect clip(coords.first, coords.second - getRowSpacing()/2,
-	       int(available), getRowSpacing());
-    painter->setClipRect(clip, QPainter::CoordPainter);
+    switch (policy) {
 
-    NOTATION_DEBUG << "NotationStaff::setPainterWindow: set clip rect to " << clip.x() << "," << clip.y() << " " << clip.width() << "x" << clip.height() << endl;
-
-    coords.first -= dx;
-    NOTATION_DEBUG << "canvas coords: " << coords.first << "," << coords.second << endl;
-
-    if (w - dx < available + m_notePixmapFactory->getNoteBodyWidth()) {
-	return 0.0;
+    case SplitToFit:
+    {
+	QRect clip(int(coords.first), coords.second - getRowSpacing()/2,
+		   int(available), getRowSpacing());
+	painter->setClipRect(clip, QPainter::CoordPainter);
+	coords.first -= dx;
+	if (w - dx <= available + m_notePixmapFactory->getNoteBodyWidth()) {
+	    return 0.0;
+	}
+	return available;
     }
 
-    return available;
+    case MoveBackToFit:
+	if (w - dx > available + m_notePixmapFactory->getNoteBodyWidth()) {
+	    coords.first -= (w - dx) - available;
+	}
+	return 0.0;
+
+    default:
+	return 0.0;
+    }
 }
 
-
 void
-NotationStaff::setPixmap(NotationElement *elt, QCanvasPixmap *pixmap, int z)
+NotationStaff::setPixmap(NotationElement *elt, QCanvasPixmap *pixmap, int z,
+			 FitPolicy policy)
 {
     double layoutX = elt->getLayoutX();
     int layoutY = (int)elt->getLayoutY();
@@ -1122,53 +1133,62 @@ NotationStaff::setPixmap(NotationElement *elt, QCanvasPixmap *pixmap, int z)
 	
 	QCanvasItem *item = 0;
 
-	NOTATION_DEBUG << "NotationStaff::setPixmap: layout " << layoutX << "," << layoutY << ", canvas " << canvasX << "," << canvasY << endl;
+	if (m_pageMode == LinearMode || policy == PretendItFittedAllAlong) {
 
-	if (m_pageMode != LinearMode) {
+	    item = new QCanvasNotationSprite(*elt, pixmap, m_canvas);
+
+	} else {
 
 	    int row = getRowForLayoutX(layoutX);
 	    double rightMargin = getCanvasXForRightOfRow(row);
 	    double extent = canvasX + pixmap->width();
-
-	    NOTATION_DEBUG << "NotationStaff::setPixmap: row " << row << ", right margin " << rightMargin << ", extent " << extent << endl;
-
+	    
+//	    NOTATION_DEBUG << "NotationStaff::setPixmap: row " << row << ", right margin " << rightMargin << ", extent " << extent << endl;
+	    
 	    if (extent > rightMargin + m_notePixmapFactory->getNoteBodyWidth()) {
-
-		NOTATION_DEBUG << "splitting at " << (rightMargin-canvasX) << endl;
-
-		std::pair<QPixmap, QPixmap> split =
-		    PixmapFunctions::splitPixmap(*pixmap,
-						 int(rightMargin - canvasX));
-
-		QCanvasPixmap *leftCanvasPixmap = new QCanvasPixmap
-		    (split.first, QPoint(pixmap->offsetX(), pixmap->offsetY()));
-
-		QCanvasPixmap *rightCanvasPixmap = new QCanvasPixmap
-		    (split.second, QPoint(0, pixmap->offsetY()));
-
-		item = new QCanvasNotationSprite(*elt, leftCanvasPixmap, m_canvas);
-		item->setZ(z);
-
-		if (elt->getCanvasItem()) {
-		    elt->addCanvasItem(item, canvasX, canvasY);
-		} else {
-		    elt->setCanvasItem(item, canvasX, canvasY);
-		}
-		    
-		item->show();
 		
-		delete pixmap;
-		pixmap = rightCanvasPixmap;
+		if (policy == SplitToFit) {
+    
+//		    NOTATION_DEBUG << "splitting at " << (rightMargin-canvasX) << endl;
+		    
+		    std::pair<QPixmap, QPixmap> split =
+			PixmapFunctions::splitPixmap(*pixmap,
+						     int(rightMargin - canvasX));
+		    
+		    QCanvasPixmap *leftCanvasPixmap = new QCanvasPixmap
+			(split.first, QPoint(pixmap->offsetX(), pixmap->offsetY()));
+		    
+		    QCanvasPixmap *rightCanvasPixmap = new QCanvasPixmap
+			(split.second, QPoint(0, pixmap->offsetY()));
+		    
+		    item = new QCanvasNotationSprite(*elt, leftCanvasPixmap, m_canvas);
+		    item->setZ(z);
+		    
+		    if (elt->getCanvasItem()) {
+			elt->addCanvasItem(item, canvasX, canvasY);
+		    } else {
+			elt->setCanvasItem(item, canvasX, canvasY);
+		    }
+		    
+		    item->show();
+		    
+		    delete pixmap;
+		    pixmap = rightCanvasPixmap;
+		    
+		    layoutX += rightMargin - canvasX + 0.01; // ensure flip to next row
+		    
+		    continue;
 
-		layoutX += rightMargin - canvasX + 0.01; // ensure flip to next row
+		} else { // policy == MoveBackToFit
 
-		continue;
-
+		    item = new QCanvasNotationSprite(*elt, pixmap, m_canvas);
+		    elt->setLayoutX(elt->getLayoutX() - (extent - rightMargin));
+		    coords = getCanvasCoordsForLayoutCoords(layoutX, layoutY);
+		    canvasX = coords.first;
+		}
 	    } else {
 		item = new QCanvasNotationSprite(*elt, pixmap, m_canvas);
 	    }
-	} else {
-	    item = new QCanvasNotationSprite(*elt, pixmap, m_canvas);
 	}
 
 	item->setZ(z);
@@ -1180,31 +1200,11 @@ NotationStaff::setPixmap(NotationElement *elt, QCanvasPixmap *pixmap, int z)
 	item->show();
 	break;
     }
-
-/*
-    QCanvasItem *canvasItem = new QCanvasNotationSprite(*elt, pixmap, m_canvas);
-    canvasItem->setZ(z);
-    
-    elt->setCanvasItem
-	(canvasItem, coords.first, (double)coords.second);
-    
-    canvasItem->show();
-
-    // Test whether this item overruns the end of a row
-    if (m_pageMode != LinearMode && pixmap) {
-	int row = getRowForLayoutX(layoutX);
-	double right = getCanvasXForRightOfRow(row);
-	double extent = layoutX + coords.first + pixmap->width();
-	if (extent > right) {
-	    NOTATION_DEBUG << "Pixmap overlaps border (at " << right << ") by " << (extent - right) << "px" << endl;
-	}
-    }
-*/
 }
     
 
-QCanvasSimpleSprite *
-NotationStaff::makeNoteSprite(Rosegarden::ViewElementList::iterator &vli)
+void
+NotationStaff::renderNote(Rosegarden::ViewElementList::iterator &vli)
 {
     NotationElement* elt = static_cast<NotationElement*>(*vli);
 
@@ -1365,7 +1365,6 @@ NotationStaff::makeNoteSprite(Rosegarden::ViewElementList::iterator &vli)
     params.setSafeVertDistance(safeVertDistance);
     setTuplingParameters(elt, params);
 
-    QCanvasNotationSprite *item = 0;
     NotePixmapFactory *factory = m_notePixmapFactory;
 
     if (elt->isGrace()) {
@@ -1378,24 +1377,41 @@ NotationStaff::makeNoteSprite(Rosegarden::ViewElementList::iterator &vli)
 
 	// Return no canvas item, but instead render straight to
 	// the printer.
-	
+
 	LinedStaffCoords coords = getCanvasCoordsForLayoutCoords
 	    (elt->getLayoutX(), (int)elt->getLayoutY());
-	factory->drawNote
-	    (params, *m_printPainter, int(coords.first), coords.second);
+	
+	// We don't actually know how wide the note drawing will be,
+	// but we should be able to use a fairly pessimistic estimate
+	// without causing any problems
+	int length = tieLength + 10 * m_notePixmapFactory->getNoteBodyWidth();
+
+	for (double w = -1, inc = 0; w != 0; inc += w) {
+
+	    w = setPainterClipping(m_printPainter,
+				   elt->getLayoutX(),
+				   int(elt->getLayoutY()),
+				   int(inc), length, coords,
+				   SplitToFit);
+
+	    factory->drawNote
+		(params, *m_printPainter, int(coords.first), coords.second);
+
+	    m_printPainter->restore(); // save() called by setPainterClipping
+	}
 
     } else {
+
 	// The normal on-screen case
+
+	QCanvasPixmap *pixmap = factory->makeNotePixmap(params);
 	
-	item = new QCanvasNotationSprite
-	    (*elt, factory->makeNotePixmap(params), m_canvas);
+	int z = 0;
+	if (factory->isSelected()) z = 3;
+	else if (quantized) z = 2;
 
-	if (factory->isSelected()) item->setZ(3);
-	else if (quantized) item->setZ(2);
-	else item->setZ(0);
+	setPixmap(elt, pixmap, z, SplitToFit);
     }
-
-    return item;
 }
 
 void

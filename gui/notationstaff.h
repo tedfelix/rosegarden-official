@@ -338,9 +338,9 @@ protected:
     void setTuplingParameters(NotationElement *, NotePixmapParameters &);
 
     /**
-     * Return a QCanvasSimpleSprite representing the given note event
+     * Set a sprite representing the given note event to the given notation element
      */
-    virtual QCanvasSimpleSprite *makeNoteSprite(Rosegarden::ViewElementList::iterator &);
+    virtual void renderNote(Rosegarden::ViewElementList::iterator &);
 
     /**
      * Return a NotationElementList::iterator pointing to the
@@ -380,6 +380,12 @@ protected:
      */
     virtual bool elementShiftedOnly(NotationElementList::iterator);
 
+    enum FitPolicy {
+	PretendItFittedAllAlong = 0,
+	MoveBackToFit,
+	SplitToFit
+    };
+
     /**
      * Prepare a painter to draw an object of logical width w at
      * layout-x coord x, starting at offset dx into the object, by
@@ -394,14 +400,16 @@ protected:
      * painter.restore() after use.
      */
     virtual double setPainterClipping(QPainter *, double layoutX, int layoutY,
-				      double dx, double w, LinedStaffCoords &coords);
+				      double dx, double w, LinedStaffCoords &coords,
+				      FitPolicy policy);
 
     /**
      * Set a single pixmap to a notation element, or split it into
      * bits if it overruns the end of a row and set the bits
      * separately.
      */
-    virtual void setPixmap(NotationElement *, QCanvasPixmap *, int z);
+    virtual void setPixmap(NotationElement *, QCanvasPixmap *, int z,
+			   FitPolicy policy);
 
     bool isSelected(NotationElementList::iterator);
 
