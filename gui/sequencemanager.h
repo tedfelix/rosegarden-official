@@ -100,7 +100,6 @@ public:
     void setLoop(const timeT &lhs, const timeT &rhs);
     void notifySequencerStatus(TransportStatus status);
     void sendSequencerJump(const RealTime &time);
-    void insertMetronomeClicks(const timeT &sliceStart, const timeT &sliceEnd);
 
     // Events coming in
     void processRecordedMidi(const MappedComposition &mC);
