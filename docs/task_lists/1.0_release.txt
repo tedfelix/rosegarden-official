@@ -27,16 +27,23 @@ Features for 1.0 - updated 20030627
 
 - look at other updates for RG manual [dmm]
     
-- request: import studio from file [dmm] [IN PROGRESS]
-
-- request: use studio from file instead of default [dmm] [IN PROGRESS]
+- request: import studio from file
+- request: use studio from file instead of default
+  
+  dmm - stubbed out in GUI, but I've had no time to figure out how to
+  implement it, and what time I might have in the forseeable future is better
+  spent hacking on the Lilypond bugs, so either someone finish this or we
+  should just dump it and forget about it, though I _do_ still think it's an
+  excellent idea.
 
 - implement Pitch in lilypondio in parallel with existing methods, so we can
-  eventually wean it off of the junky code it currently uses. [dmm/hk]
+  eventually wean it off of the junky code it currently uses. [dmm]
 
-- look at the "Chord" class for Lilypond and see how it might help resolve
-  the weird "measures that just don't add up" problems I've been seeing
-  [dmm/hk]
+- fix lilypond lyric duration bug [dmm]
+
+- look at ways to avoid having multi-voice music completely fuck up the
+  lilypond export (Chord class, plus possible measure by measure voice
+  resolution/separation algorithm I've been thinking about in spare moments) [dmm]
 
 - named controllers for studio with associated bankeditor-like dialog [rwb/dmm]
   [ALMOST DONE - needs linking up to colours and implementing in IPBs
