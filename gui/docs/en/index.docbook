@@ -274,6 +274,94 @@
     </sect1>
     -->
 
+    <sect1 id="track_editor">
+      <title>The Track Editor</title>
+      <para>
+      <application>Rosegarden</application>'s main layout is similar in
+      concept to many other popular sequencers.  It is based around a
+      Track concept - the main window shows a Track Editor with a list of Tracks
+      and their associated Instruments down the left hand side.  The user can
+      manipulate and move blocks of music data (Segments) on the Track Editor
+      as well as opening the Segments themselves for editing in specialised
+      clients known as Views.
+      </para>
+
+      <para>
+      <screenshot>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="rg-trackeditor.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>Rosegarden's Track Editor showing two Segments of music data</phrase>
+	  </textobject>
+	</mediaobject>
+      </screenshot>
+      </para>
+
+      <para>
+      Tracks can be assigned to a range of Instruments (either MIDI or
+      Audio). Instruments can be selected from a pop-up menu that appears
+      when the user clicks and hold with the left mouse button on the
+      Track labels.  In the screenshot we see two Segments (shown as
+      yellow blocks) on the Track Editor.  These Segments are shown on
+      Tracks tat are assigned to the IIWUSYNTH instrument.
+      </para>
+    </sect1>
+
+    <sect1 id="transport">
+    <title>The Transport</title>
+      <para>
+        The Track Editor display a series of Segments arranged against the
+        assigned Instruments.  When we want to hear the Composition,
+        <application>Rosegarden</application> sweeps a pointer across the
+        Tracks from left to right playing the contents of the Segments as
+        it hits them.  The pointer's position on the screen is tracked and
+        controlled by a dialog called the Transport.
+      </para>
+    
+      <para>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="rg-transport.png" format="PNG"/>
+            </imageobject>
+            <textobject>
+              <phrase>Rosegarden's Transport dialog</phrase>
+            </textobject>
+        </mediaobject>
+      </screenshot>
+      </para>
+
+      <para>
+        If the Transport isn't visible it can activated by going to the
+        Settings menu (Settings->Show Transport).
+      </para>
+    
+      <para>
+        The Transport shows the current position of the pointer either in
+        terms of absolute time from the first bar (in seconds) or in SMTPE
+        time or alternatively in bars and beats.  It can also show time from
+        the end of composition if you should so wish.  These functions are
+        controlled by the small buttons on the left of the main 
+        Transport display.
+      </para>
+
+      <para>
+        The main controls on the Transport start the sequencer playing
+        and pause it, fast forward the pointer position, rewind it, stop
+        it or jump to beginning or end of composition.
+      </para>
+
+      <para>
+        Additional controls and a MIDI event display are hidden on the
+        bottom flap on the Transport which is toggleable.  Also on this
+        extra portion there are buttons for recording, looping, soloing
+        and for turning on a metronome.
+      </para>
+
+    </sect1>
+
     <sect1 id="basics">
       <title>How Rosegarden stores a composition</title>
       <para></para>
