@@ -18,7 +18,7 @@ dnl AC_CHECK_LIB(z, gzgets,, AC_MSG_ERROR("gzgets not found in zlib - need zlib-
 export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
 
 dnl check for Xft and fontconfig
-AC_ARG_WITH(xft, [  --with-xft             enable Xft support (enabled by default when installed)],
+AC_ARG_WITH(xft, [  --with-xft              enable Xft support (enabled by default when installed)],
   [ if test "$withval" = "yes"; then with_xft=yes; else with_xft=no; fi ],
   with_xft=yes)
 
@@ -100,6 +100,8 @@ else
 
   fi
 
+  PKG_CHECK_MODULES(LIBLO,liblo >= 0.5,,[with_dssi="no"])
+
   dnl check whether user wants to have LADSPA
   AC_ARG_WITH(ladspa, [  --with-ladspa           enable LADSPA plugins (enabled by default when installed)],
   [
@@ -117,6 +119,27 @@ else
 
   if test "$with_ladspa" = "yes"; then
     AC_DEFINE(HAVE_LADSPA, 1, [Define if you have LADSPA])
+
+    dnl check whether user wants to have DSSI
+    AC_ARG_WITH(dssi, [  --with-dssi             enable DSSI soft synth plugins (requires LADSPA and liblo; enabled by default when available)],
+    [
+      if test "$withval" = "yes"; then
+        with_dssi=yes
+      else
+        with_dssi=no
+      fi
+     ], with_dssi=yes)
+
+    dnl only use DSSI when dssi.h is found
+    if test "$with_dssi" = "yes"; then
+      AC_CHECK_HEADERS(dssi.h,,[with_dssi=no])
+    fi
+
+    if test "$with_dssi" = "yes"; then
+      AC_DEFINE(HAVE_DSSI, 1, [Define if you have DSSI as well as LADSPA])
+    fi
+  else
+    with_dssi=no
   fi
 
   dnl check whether user wants to have liblrdf
@@ -224,18 +247,19 @@ echo
 if test "$with_sound" = "no"; then
     echo "No sound support configured"
 else
-    echo "ALSA MIDI support         : ${with_alsa}"
-    echo "JACK audio support        : ${with_jack}"
-    echo "LADSPA plugin support     : ${with_ladspa}"
-    echo "liblrdf metadata support  : ${with_liblrdf}"
+    echo "ALSA MIDI support            : ${with_alsa}"
+    echo "JACK audio support           : ${with_jack}"
+    echo "LADSPA plugin support        : ${with_ladspa}"
+    echo "DSSI synth plugin support    : ${with_dssi}"
+    echo "LRDF plugin metadata support : ${with_liblrdf}"
 
     if test "$with_alsa" = "yes"; then
-        echo "aRTS MIDI and audio       : no"
+        echo "aRts MIDI and audio          : no"
     else
-        echo "aRTS MIDI and audio       : yes"
+        echo "aRts MIDI and audio          : yes"
     fi
 
-    echo "Xft notation font support : ${with_xft}"
+    echo "Xft notation font support    : ${with_xft}"
 fi
 echo
 echo
