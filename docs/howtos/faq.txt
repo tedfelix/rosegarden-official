@@ -58,6 +58,11 @@ in progress.  If you can translate musical or technical documentation
 docs/howtos/i18n.txt in CVS if you are interested in the technical
 aspects of translation.
 
+Rosegarden apparently saves in a binary format, where can I find the format definition ?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Actually it's just gzipped XML.
+
 
 Compilation or installation problems
 ------------------------------------
