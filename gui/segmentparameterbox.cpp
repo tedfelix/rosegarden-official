@@ -76,12 +76,12 @@ SegmentParameterBox::initBox()
     m_quantizeValue->setFixedSize(comboWidth, comboHeight);
 
     // motif style read-only combo
-    m_transposeValue = new RosegardenComboBox(false, this);
+    m_transposeValue = new RosegardenComboBox(true, this);
     m_transposeValue->setFont(font);
     m_transposeValue->setFixedSize(comboWidth, comboHeight);
 
     // motif style read-only combo
-    m_delayValue = new RosegardenComboBox(false, this);
+    m_delayValue = new RosegardenComboBox(true, this);
     m_delayValue->setFont(font);
     m_delayValue->setFixedSize(comboWidth, comboHeight);
 
