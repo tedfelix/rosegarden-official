@@ -31,7 +31,7 @@
 #include "rosegardenguidoc.h"
 #include "rosegardengui.h"
 #include "rosegardenguiview.h"
-#include "xmlstorableelement.h"
+#include "rosexmlhandler.h"
 
 QList<RosegardenGUIView> *RosegardenGUIDoc::pViewList = 0L;
 
@@ -161,33 +161,21 @@ bool RosegardenGUIDoc::openDocument(const QString &filename, const char *format 
     m_absFilePath=fileInfo.absFilePath();	
 
     QFile file(filename);
-
-    if ( !file.open( IO_ReadOnly ) ) {
-        QString msg(i18n("Can't open file '"));
-        msg += filename;
-        msg += "'";
-        
-        KMessageBox::sorry(0, msg);
-
-        return false;
-    }
-    
-    size_t size = file.size();
-    char* buffer = new char[ size + 1 ];
-    file.readBlock( buffer, size );
-    buffer[ size ] = 0;
+    bool rc = xmlParse(file);
     file.close();
 
-    QString res(QString::fromUtf8( buffer, size ));
+    // Check if file readable with fileInfo ?
+//     if ( !file.open( IO_ReadOnly ) ) {
+//         QString msg(i18n("Can't open file '"));
+//         msg += filename;
+//         msg += "'";
+        
+//         KMessageBox::sorry(0, msg);
+
+//         return false;
+//     }
     
-    delete[] buffer;
-
-    if (xmlParse(res)) {
-        m_modified=false;
-        return true;
-    }
-
-    return false;
+    return rc;
 }
 
 bool RosegardenGUIDoc::saveDocument(const QString &filename, const char *format /*=0*/)
@@ -204,7 +192,7 @@ void RosegardenGUIDoc::deleteContents()
 {
     deleteViews();
 
-    for(ElementList::iterator i = m_elements.begin(); i != m_elements.end(); ++i) {
+    for(EventList::iterator i = m_elements.begin(); i != m_elements.end(); ++i) {
         delete *i;
     }
 
@@ -229,53 +217,66 @@ void RosegardenGUIDoc::deleteViews()
 //          384 units =  96 clocks = 1 semibreve
 //          768 units = 192 clocks = 1 breve
 
+// bool
+// RosegardenGUIDoc::xmlParseElement(const QDomElement &base)
+// {
+//     QString tag;
+//     QDomElement domElement(base);
+
+//     while ( !domElement.isNull() ) {
+
+//         tag = domElement.tagName();
+
+//         if (tag == "element") {
+
+//             QDomNamedNodeMap attributes(domElement.attributes());
+//             QDomNodeList children(domElement.childNodes());
+
+//             m_elements.push_back(new XMLStorableElement(attributes, children));
+
+//         } else if (tag == "rosegarden-data") {
+
+//             QDomNodeList children(domElement.childNodes());
+// 	    if (children.length())
+//                 xmlParseElement(children.item(0).toElement());
+
+//         } else {
+//             kdDebug(KDEBUG_AREA) << "xmlParseElement: Unknown tag " << tag
+//                                  << " - checking children" << endl;
+//             QDomNodeList children(domElement.childNodes());
+// 	    if (children.length())
+//                 xmlParseElement(children.item(0).toElement());
+
+//         }
+
+//         domElement = domElement.nextSibling().toElement();
+//     }
+//     return true;
+// }
+
+
+
+
+
 bool
-RosegardenGUIDoc::xmlParseElement(const QDomElement &base)
+RosegardenGUIDoc::xmlParse(QFile &file)
 {
-    QString tag;
-    QDomElement domElement(base);
+    // parse xml file
+    RoseXmlHandler handler(m_elements);
 
-    while ( !domElement.isNull() ) {
+    QXmlInputSource source(file);
+    QXmlSimpleReader reader;
+    reader.setContentHandler(&handler);
+    reader.setErrorHandler(&handler);
 
-        tag = domElement.tagName();
-
-        if (tag == "element") {
-
-            QDomNamedNodeMap attributes(domElement.attributes());
-            QDomNodeList children(domElement.childNodes());
-
-            m_elements.push_back(new XMLStorableElement(attributes, children));
-
-        } else if (tag == "rosegarden-data") {
-
-            QDomNodeList children(domElement.childNodes());
-	    if (children.length())
-                xmlParseElement(children.item(0).toElement());
-
-        } else {
-            kdDebug(KDEBUG_AREA) << "xmlParseElement: Unknown tag " << tag
-                                 << " - checking children" << endl;
-            QDomNodeList children(domElement.childNodes());
-	    if (children.length())
-                xmlParseElement(children.item(0).toElement());
-
-        }
-
-        domElement = domElement.nextSibling().toElement();
-    }
-    return true;
-}
+    bool ok = reader.parse(source);
 
 
-
-bool
-RosegardenGUIDoc::xmlParse(const QString &xmldata)
-{
-    m_doc.setContent(xmldata);
+    // m_doc.setContent(xmldata);
     
-    QDomElement baseNode = m_doc.documentElement();
+//     QDomElement baseNode = m_doc.documentElement();
 
-    xmlParseElement(baseNode);
+//     xmlParseElement(baseNode);
 
-    return true;
+    return ok;
 }

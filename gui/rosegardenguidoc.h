@@ -26,7 +26,7 @@
 #include <qobject.h>
 #include <qstring.h>
 #include <qlist.h>
-#include <qdom.h>
+#include <qxml.h>
 
 // Element
 #include "Element2.h"
@@ -86,8 +86,8 @@ public:
     /** deletes the document views */
     void deleteViews();
 
-    ElementList&       getElements()       { return m_elements; }
-    const ElementList& getElements() const { return m_elements; }
+    EventList&       getElements()       { return m_elements; }
+    const EventList& getElements() const { return m_elements; }
 
 public slots:
 /** calls repaint() on all views connected to the document object and is called by the view by which the document has been changed.
@@ -96,8 +96,8 @@ public slots:
 void slotUpdateAllViews(RosegardenGUIView *sender);
 
 protected:
-    bool xmlParse(const QString &xmldata);
-    bool xmlParseElement(const QDomElement &elmnt);
+    bool xmlParse(QFile &file);
+    // bool xmlParseElement(const QDomElement &elmnt);
  	
 public:	
     /** the list of the views currently connected to the document */
@@ -109,8 +109,7 @@ private:
     QString m_title;
     QString m_absFilePath;
 
-    QDomDocument m_doc;
-    ElementList m_elements;
+    EventList m_elements;
 };
 
 #endif // ROSEGARDENGUIDOC_H
