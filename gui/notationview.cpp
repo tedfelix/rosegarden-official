@@ -546,6 +546,9 @@ void NotationView::setupActions()
     new KAction(GroupMenuBreakCommand::name(), 0, this,
                 SLOT(slotGroupBreak()), actionCollection(), "break_group");
 
+    new KAction(GroupMenuTupletCommand::name(), 0, this,
+		SLOT(slotGroupSimpleTuplet()), actionCollection(), "simple_tuplet");
+
     new KAction(GroupMenuAddIndicationCommand::name
                 (Rosegarden::Indication::Slur), 0, this,
                 SLOT(slotGroupSlur()), actionCollection(), "slur");
@@ -1324,6 +1327,36 @@ void NotationView::slotGroupAutoBeam()
     addCommandToHistory(new GroupMenuAutoBeamCommand
                         (*m_currentEventSelection));
 }
+
+void NotationView::slotGroupSimpleTuplet()
+{
+    //!!! Should take this stuff out into a separate method: we do this
+    // in a few places now
+
+    NotationStaff *staff = m_staffs[m_currentStaff];
+    Segment &segment = staff->getSegment();
+    
+    double layoutX = staff->getLayoutXOfInsertCursor();
+    if (layoutX < 0) {
+	slotStatusHelpMsg(i18n("Couldn't make tuplet at this point"));
+	return;
+    }
+
+    Rosegarden::Event *timeSig, *clef, *key;
+
+    NotationElementList::iterator i = staff->getClosestElementToLayoutX
+	(layoutX, timeSig, clef, key, false, -1);
+
+    timeT insertionTime = segment.getEndTime();
+    if (i != staff->getViewElementList()->end()) {
+	insertionTime = (*i)->getAbsoluteTime();
+    }
+
+    addCommandToHistory(new GroupMenuTupletCommand
+			(segment, insertionTime,
+			 Note(Note::Quaver).getDuration())); //!!! for now 
+}
+
 
 void NotationView::slotGroupBreak()
 {

@@ -184,6 +184,29 @@ protected:
 };
 
 
+class GroupMenuTupletCommand : public BasicCommand
+{
+public:
+    GroupMenuTupletCommand(Rosegarden::Segment &segment,
+			   Rosegarden::timeT startTime,
+			   Rosegarden::timeT unit,
+			   int untupled = 3, int tupled = 2);
+
+    static QString name(bool simple = true) {
+	if (simple) return "&Simple Tuplet";
+	else return "Tu&plet";
+    }
+
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::timeT m_unit;
+    int m_untupled;
+    int m_tupled;
+};
+
+
 class GroupMenuBreakCommand : public BasicSelectionCommand
 {
 public:

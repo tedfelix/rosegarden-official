@@ -263,7 +263,11 @@ public:
     /**
      * Give all events between the start of the timeslice containing
      * from and the start of the timeslice containing to the same new
-     * group id and the given type
+     * group id and the given type.
+     *
+     * Do not use this for making tuplet groups, unless the events
+     * in the group already have the other tuplet properties or you
+     * intend to add those yourself.  Use makeTupletGroup instead.
      */
     void makeBeamedGroup(timeT from, timeT to, std::string type);
 
@@ -271,8 +275,29 @@ public:
      * Give all events between the start of the timeslice containing
      * from and the start of the timeslice containing to the same new
      * group id and the given type
+     *
+     * Do not use this for making tuplet groups, unless the events
+     * in the group already have the other tuplet properties or you
+     * intend to add those yourself.  Use makeTupletGroup instead.
      */
     void makeBeamedGroup(iterator from, iterator to, std::string type);
+
+
+    /**
+     * Make a beamed group of tuplet type, whose tuplet properties are
+     * specified as "(untupled-count) notes of duration (unit) played
+     * in the time of (tupled-count)".  For example, a quaver triplet 
+     * group could be specified with untupled = 3, tupled = 2, unit =
+     * (the duration of a quaver).
+     *
+     * The group will start at the beginning of the timeslice containing
+     * the time t, and will be constructed by compressing the appropriate
+     * number of following notes into the tuplet time, and filling the
+     * space that this compression left behind (after the group) with
+     * rests.  The results may be unexpected if overlapping events are
+     * present.
+     */
+    void makeTupletGroup(timeT t, int untupled, int tupled, timeT unit);
 
 
     /**

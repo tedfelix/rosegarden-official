@@ -71,6 +71,7 @@ SegmentNotationHelper::getNotationDuration(iterator i)
 	    "requires SegmentNotationHelper::quantize()\n  to have been "
 	    "called, to provide non-destructive legato quantization.\n  "
 	    "Ignoring error and returning incorrect value" << endl;
+	assert((*i)->has(TUPLET_NOMINAL_DURATION));
 	return legatoQuantizer().getQuantizedDuration(*i);
     } else {
 	return legatoQuantizer().getQuantizedDuration(*i);
@@ -249,7 +250,7 @@ SegmentNotationHelper::splitIntoTie(iterator &from, iterator to,
     }
 
     list<Event *> toInsert;
-    list<Event *> toErase;
+    list<iterator> toErase;
           
     // Split all the events in range [from, to[
     //
@@ -310,13 +311,13 @@ SegmentNotationHelper::splitIntoTie(iterator &from, iterator to,
 
 	toInsert.push_back(eva);
         toInsert.push_back(evb);
-	toErase.push_back(*i);
+	toErase.push_back(i);
     }
 
     // erase the old events
-    for (list<Event *>::iterator i = toErase.begin();
+    for (list<iterator>::iterator i = toErase.begin();
 	 i != toErase.end(); ++i) {
-	segment().eraseSingle(*i);
+	segment().erase(*i);
     }
 
     from = end();
@@ -429,9 +430,16 @@ SegmentNotationHelper::insertNote(timeT absoluteTime, Note note, int pitch,
 	i = splitIntoTie(i, absoluteTime - (*i)->getAbsoluteTime());
     }
 
+    timeT duration(note.getDuration());
+
+    if (i != end() && (*i)->has(BEAMED_GROUP_TUPLET_BASE)) {
+	duration = duration * (*i)->get<Int>(BEAMED_GROUP_TUPLED_COUNT) /
+	    (*i)->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT);
+    }
+
     //!!! Deal with end-of-bar issues!
 
-    return insertSomething(i, note.getDuration(), pitch, false, false,
+    return insertSomething(i, duration, pitch, false, false,
 			   explicitAccidental);
 }
 
@@ -444,7 +452,14 @@ SegmentNotationHelper::insertRest(timeT absoluteTime, Note note)
 
     //!!! Deal with end-of-bar issues!
 
-    return insertSomething(i, note.getDuration(), 0, true, false,
+    timeT duration(note.getDuration());
+
+    if (i != end() && (*i)->has(BEAMED_GROUP_TUPLET_BASE)) {
+	duration = duration * (*i)->get<Int>(BEAMED_GROUP_TUPLED_COUNT) /
+	    (*i)->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT);
+    }
+
+    return insertSomething(i, duration, 0, true, false,
 			   Accidentals::NoAccidental);
 }
 
@@ -623,12 +638,13 @@ SegmentNotationHelper::insertSingleSomething(iterator i, int duration,
     } else {
 	time = (*i)->getAbsoluteTime();
 	if (isRest || (*i)->isa(Note::EventRestType)) eraseI = true;
-
+/*!!!
 	if ((*i)->has(TUPLET_NOMINAL_DURATION)) {
 	    effectiveDuration =
 		(effectiveDuration * (*i)->getDuration()) /
 		(*i)->get<Int>(TUPLET_NOMINAL_DURATION);
 	}
+*/
     }
 
     Event *e = new Event(isRest ? Note::EventRestType : Note::EventType,
@@ -801,6 +817,52 @@ SegmentNotationHelper::makeBeamedGroupAux(iterator from, iterator to,
         (*i)->set<String>(BEAMED_GROUP_TYPE, type);
     }
 }
+
+void
+SegmentNotationHelper::makeTupletGroup(timeT t, int untupled, int tupled,
+				       timeT unit)
+{
+    int groupId = segment().getNextId();
+
+    list<Event *> toInsert;
+    list<iterator> toErase;
+
+    for (iterator i = segment().findTime(t); i != end(); ++i) {
+
+	if ((*i)->getAbsoluteTime() > t + (untupled * unit)) break;
+
+	timeT offset = (*i)->getAbsoluteTime() - t;
+	Event *e = new Event(**i,
+			     t + (offset * tupled / untupled),
+			     (*i)->getDuration() * tupled / untupled);
+
+	e->set<Int>(BEAMED_GROUP_ID, groupId);
+	e->set<String>(BEAMED_GROUP_TYPE, GROUP_TYPE_TUPLED);
+
+	e->set<Int>(BEAMED_GROUP_TUPLET_BASE, unit);
+	e->set<Int>(BEAMED_GROUP_TUPLED_COUNT, tupled);
+	e->set<Int>(BEAMED_GROUP_UNTUPLED_COUNT, untupled);
+	e->unset(TUPLET_NOMINAL_DURATION); // should be non-persistent anyway
+
+	toInsert.push_back(e);
+	toErase.push_back(i);
+    }
+
+    for (list<iterator>::iterator i = toErase.begin();
+	 i != toErase.end(); ++i) {
+	segment().erase(*i);
+    }
+
+    for (list<Event *>::iterator i = toInsert.begin();
+	 i != toInsert.end(); ++i) {
+	segment().insert(*i);
+    }
+
+    segment().fillWithRests(t + (tupled * unit), t + (untupled * unit));
+}
+
+    
+
 
 void
 SegmentNotationHelper::unbeam(timeT from, timeT to)
@@ -1216,17 +1278,18 @@ SegmentNotationHelper::quantize()
 
     for (iterator i = begin(); i != end(); ++i) {
 
+	timeT duration = legatoQuantizer().getQuantizedDuration(*i);
+
+	if ((*i)->has(BEAMED_GROUP_TUPLET_BASE)) {
+	    int tcount = (*i)->get<Int>(BEAMED_GROUP_TUPLED_COUNT);
+	    int ucount = (*i)->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT);
+	    assert(tcount != 0);
+	    timeT nominalDuration = ((*i)->getDuration() / tcount) * ucount;
+	    duration = legatoQuantizer().quantizeDuration(nominalDuration);
+	    (*i)->setMaybe<Int>(TUPLET_NOMINAL_DURATION, duration);
+	}
+
 	if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType)) {
-
-	    timeT duration = legatoQuantizer().getQuantizedDuration(*i);
-
-	    if ((*i)->has(BEAMED_GROUP_TUPLET_BASE)) {
-		int tcount = (*i)->get<Int>(BEAMED_GROUP_TUPLED_COUNT);
-		int ucount = (*i)->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT);
-		timeT nominalDuration = ((*i)->getDuration()/tcount) * ucount;
-		duration = legatoQuantizer().quantizeDuration(nominalDuration);
-		(*i)->setMaybe<Int>(TUPLET_NOMINAL_DURATION, duration);
-	    }
 
 	    Note n(Note::getNearestNote(duration));
 	    (*i)->setMaybe<Int>(NOTE_TYPE, n.getNoteType());

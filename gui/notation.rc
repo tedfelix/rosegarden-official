@@ -119,7 +119,7 @@ etc
   <Action name="break_group"/>
   <Separator/>
   <Menu name="Stems">
-    <text>&amp;Stem Direction</text>
+    <text>S&amp;tem Direction</text>
     <Action name="stems_up"/>
     <Action name="stems_down"/>
     <Action name="restore_stems"/>

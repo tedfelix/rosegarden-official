@@ -274,7 +274,8 @@ EraseEventCommand::modifySegment()
 
 
 
-void GroupMenuBeamCommand::modifySegment()
+void
+GroupMenuBeamCommand::modifySegment()
 {
     SegmentNotationHelper helper(getSegment());
 
@@ -282,7 +283,8 @@ void GroupMenuBeamCommand::modifySegment()
                            GROUP_TYPE_BEAMED);
 }
 
-void GroupMenuAutoBeamCommand::modifySegment()
+void
+GroupMenuAutoBeamCommand::modifySegment()
 {
     SegmentNotationHelper helper(getSegment());
 
@@ -290,7 +292,29 @@ void GroupMenuAutoBeamCommand::modifySegment()
                     GROUP_TYPE_BEAMED);
 }
 
-void GroupMenuBreakCommand::modifySegment()
+GroupMenuTupletCommand::GroupMenuTupletCommand(Rosegarden::Segment &segment,
+					       timeT startTime,
+					       timeT unit,
+					       int untupled, int tupled) :
+    BasicCommand(name((untupled == 3) && (tupled == 2)),
+		 segment, startTime, startTime + (unit * untupled)),
+    m_unit(unit),
+    m_untupled(untupled),
+    m_tupled(tupled)
+{
+    // nothing else
+}
+
+void
+GroupMenuTupletCommand::modifySegment()
+{
+    SegmentNotationHelper helper(getSegment());
+    helper.makeTupletGroup(getBeginTime(), m_untupled, m_tupled, m_unit);
+}
+
+
+void
+GroupMenuBreakCommand::modifySegment()
 {
     SegmentNotationHelper helper(getSegment());
 
@@ -329,6 +353,10 @@ GroupMenuAddIndicationCommand::modifySegment()
 QString
 GroupMenuAddIndicationCommand::name(std::string indicationType)
 {
+    if (indicationType == Rosegarden::Indication::Slur) {
+	return "Add S&lur";
+    }
+
     std::string n = "Add &";
     n += (char)toupper(indicationType[0]);
     n += indicationType.substr(1);

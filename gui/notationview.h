@@ -274,6 +274,7 @@ public slots:
     /// group slots
     void slotGroupBeam();
     void slotGroupAutoBeam();
+    void slotGroupSimpleTuplet();
     void slotGroupBreak();
     void slotGroupSlur();
     void slotGroupCrescendo();

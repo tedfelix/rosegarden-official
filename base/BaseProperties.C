@@ -92,17 +92,6 @@ const PropertyName BEAMED_GROUP_UNTUPLED_COUNT	 = "untupledcount";
 const PropertyName TUPLET_NOMINAL_DURATION	 = "TupletNominalDuration";
 
 
-/*!!!
-const PropertyName BEAMED_GROUP_TUPLED_LENGTH	 = "BGroupTupledLength";
-const PropertyName BEAMED_GROUP_TUPLED_COUNT	 = "BGroupTupledCount";
-const PropertyName BEAMED_GROUP_UNTUPLED_LENGTH	 = "BGroupUntupledLength";
-
-// This one is persistent, though, because it obviously isn't the same
-// for each event in a group:
-
-const PropertyName TUPLET_NOMINAL_DURATION	 = "TupletNominalDuration";
-*/
-
 const std::string GROUP_TYPE_BEAMED		 = "beamed";
 const std::string GROUP_TYPE_TUPLED		 = "tupled";
 const std::string GROUP_TYPE_GRACE		 = "grace";
