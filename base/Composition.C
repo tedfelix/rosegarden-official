@@ -167,7 +167,7 @@ Composition::addNewBar(timeT time, int barNo) const
 void
 Composition::calculateBarPositions() const
 {
-//    std::cerr << "Composition::calculateBarPositions" << std::endl;
+    std::cerr << "Composition::calculateBarPositions" << std::endl;
 
     if (!m_barPositionsNeedCalculating) return;
 
@@ -180,10 +180,26 @@ Composition::calculateBarPositions() const
     FastVector<Segment::iterator> baritrs;
 
     for (i = t.begin(); i != t.end(); ++i) {
-	if ((*i)->isa(BarEventType)) baritrs.push_back(i);
-	else {
-	    segments.push_back((*i)->getAbsoluteTime());
-	    segmentTimes.push_back(TimeSignature(**i).getBarDuration());
+
+	if ((*i)->isa(BarEventType)) {
+
+	    baritrs.push_back(i);
+
+	} else if ((*i)->isa(TimeSignature::EventType)) {
+
+	    if (segments.size() > 0 &&
+		segments[segments.size()-1] == (*i)->getAbsoluteTime()) {
+		std::cerr << "Ignoring time sig at "
+			  << (*i)->getAbsoluteTime()
+			  << " because we already have it" << endl;
+	    } else {
+		std::cerr << "Pushing time sig duration "
+			  << TimeSignature(**i).getBarDuration()
+			  << " at time "
+			  << (*i)->getAbsoluteTime() << endl;
+		segments.push_back((*i)->getAbsoluteTime());
+		segmentTimes.push_back(TimeSignature(**i).getBarDuration());
+	    }
 	}
     }
 
@@ -192,7 +208,7 @@ Composition::calculateBarPositions() const
 	t.erase(baritrs[j]);
     }
 
-//    std::cerr << "have " << t.size() << " non-bars in ref segment" << std::endl;
+    std::cerr << "have " << t.size() << " non-bars in ref segment" << std::endl;
 
     bool segment0isTimeSig = true;
     if (segments.size() == 0 || segments[0] != 0) {

@@ -51,6 +51,7 @@ class NotationStaff : public Rosegarden::Staff<NotationElement>,
 {
 public:
     typedef std::vector<QCanvasLineGroupable *> LineList;
+    typedef std::vector<LineList> LineListList;
     typedef std::set<QCanvasSimpleSprite *> SpriteSet;
     
     /**
@@ -269,6 +270,9 @@ protected:
      */
     bool elementNotMoved(NotationElement *);
 
+    void recreateStaffLines();
+//    void changePageWidth(int newWidth);
+
     int m_id;
 
     bool m_pageMode;
@@ -281,9 +285,12 @@ protected:
     int getRowForLayoutX(int x);
     int getXForLayoutX(int x);
     int getTopLineOffsetForRow(int row);
+    int getRowCount();
+    int getRowLeftX(int row);
+    int getRowRightX(int row);
 
     LineList m_barLines;
-    LineList m_staffLines;
+    LineListList m_staffLines;
     SpriteSet m_timeSigs;
 
     typedef std::pair<int, Rosegarden::Clef> ClefChange;

@@ -654,7 +654,24 @@ MidiFile::convertToRosegarden()
 
 			rosegardenEvent = Rosegarden::TimeSignature
 			    (numerator, denominator).getAsEvent(rosegardenTime);
-			composition->getReferenceSegment()->insert(rosegardenEvent);
+			
+			//!!! Insert the time sig only if we haven't already
+			// got one at that time.  A bit ugly, this -- remind
+			// me to write Composition::addTimeSignature
+			{
+			Segment::iterator timeSigItr =
+			    composition->getReferenceSegment()->findTime
+			    (rosegardenTime);
+
+			if (timeSigItr ==
+			    composition->getReferenceSegment()->end() ||
+			    (*timeSigItr)->getAbsoluteTime() != rosegardenTime
+			    || !(*timeSigItr)->isa(TimeSignature::EventType)) {
+
+			    composition->getReferenceSegment()->insert
+				(rosegardenEvent);
+			}
+			}
 
 			break;
 

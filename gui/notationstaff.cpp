@@ -97,6 +97,12 @@ NotationStaff::changeFont(string fontName, int resolution)
     delete m_npf;
     m_npf = new NotePixmapFactory(fontName, resolution);
 
+    recreateStaffLines();
+}
+
+void
+NotationStaff::recreateStaffLines()
+{
     // Pitch is represented with the MIDI pitch scale; NotationTypes.h
     // contains methods to convert this to and from staff-height
     // according to the current clef and key.  Staff-height is
@@ -110,9 +116,12 @@ NotationStaff::changeFont(string fontName, int resolution)
     // For a staff at height h, m = (8-h)/2.  Therefore the y-coord of
     // a staff at height h is (8-h)/2 * lineWidth + lineOffset
 
-    int h;
-    for (h = 0; h < int(m_staffLines.size()); ++h) {
-        delete m_staffLines[h];
+    int i, h;
+    for (i = 0; i < int(m_staffLines.size()); ++i) {
+	for (h = 0; h < int(m_staffLines[i].size()); ++h) {
+	    delete m_staffLines[i][h];
+	}
+	m_staffLines[i].clear();
     }
     m_staffLines.clear();
 
@@ -127,30 +136,36 @@ NotationStaff::changeFont(string fontName, int resolution)
     }
     QColor lineColour(level, level, level);
 
-    for (h = 0; h <= (2*nbLines - 2); h += 2) {
+    for (i = 0; i < getRowCount(); ++i) {
 
-        for (int i = 0; i < m_npf->getStaffLineThickness(); ++i) {
+	m_staffLines.push_back(LineList());
 
-            StaffLine *line = new StaffLine(canvas(), this, h);
-            int y = yCoordOfHeight(h) + i;
-            line->setPoints(0, y, m_horizLineLength, y);
-	    if (i > 0) line->setSignificant(false);
+	for (h = 0; h <= (2*nbLines - 2); h += 2) {
 
-            if ((h % 2 == 1) ||
-                (h < 0 || h > (nbLines * 2 - 2))) {
+	    for (int j = 0; j < m_npf->getStaffLineThickness(); ++j) {
 
-                // make the line invisible
-                line->setPen(QPen(white, 1));
-                line->setZ(-1);
+		StaffLine *line = new StaffLine(canvas(), this, h);
+		int y = yCoordOfHeight(h) + j; //!!!
+		line->setPoints(getRowLeftX(i) - x(), y,
+				getRowRightX(i) - x(), y);
+		if (j > 0) line->setSignificant(false);
+
+		if ((h % 2 == 1) ||
+		    (h < 0 || h > (nbLines * 2 - 2))) {
+
+		    // make the line invisible
+		    line->setPen(QPen(white, 1));
+		    line->setZ(-1);
                 
-            } else {
-                line->setPen(QPen(lineColour, 1));
-                line->setZ(z);
-            }
-
-            line->show();
-            m_staffLines.push_back(line);
-        }
+		} else {
+		    line->setPen(QPen(lineColour, 1));
+		    line->setZ(z);
+		}
+		
+		line->show();
+		m_staffLines[i].push_back(line);
+	    }
+	}
     }
 
     delete m_initialBarA;
@@ -207,10 +222,10 @@ int NotationStaff::heightOfYCoord(int y) const
     //!!! the lazy route: approximate, then get the right value
     // by calling yCoordOfHeight a few times... ugh
 
-    kdDebug(KDEBUG_AREA) << "\nNotationStaff::heightOfYCoord: y = " << y
-			 << ", getTopLineOffset() = " << getTopLineOffset()
-			 << ", getLineSpacing() = " << m_npf->getLineSpacing()
-			 << endl;
+//    kdDebug(KDEBUG_AREA) << "\nNotationStaff::heightOfYCoord: y = " << y
+//			 << ", getTopLineOffset() = " << getTopLineOffset()
+//			 << ", getLineSpacing() = " << m_npf->getLineSpacing()
+//			 << endl;
 
     int ph = (y - (int)getTopLineOffset()) * 2 / m_npf->getLineSpacing();
     ph = 8 - ph;
@@ -230,17 +245,17 @@ int NotationStaff::heightOfYCoord(int y) const
     }
     
     if (mi > -2) {
-	kdDebug(KDEBUG_AREA) << "NotationStaff::heightOfYCoord: " << y
-			     << " -> " << (ph + mi) << " (mi is " << mi << ", distance "
-			     << md << ")" << endl;
+//	kdDebug(KDEBUG_AREA) << "NotationStaff::heightOfYCoord: " << y
+//			     << " -> " << (ph + mi) << " (mi is " << mi << ", distance "
+//			     << md << ")" << endl;
 	if (mi == 0) {
-	    kdDebug(KDEBUG_AREA) << "GOOD APPROXIMATION" << endl;
+//	    kdDebug(KDEBUG_AREA) << "GOOD APPROXIMATION" << endl;
 	} else {
-	    kdDebug(KDEBUG_AREA) << "BAD APPROXIMATION" << endl;
+//	    kdDebug(KDEBUG_AREA) << "BAD APPROXIMATION" << endl;
 	}
 	return ph + mi;
     } else {
-	kdDebug(KDEBUG_AREA) << "NotationStaff::heightOfYCoord: heuristic got " << ph << ", nothing within range (closest was " << (ph + testi) << " which is " << testMd << " away)" << endl;
+//	kdDebug(KDEBUG_AREA) << "NotationStaff::heightOfYCoord: heuristic got " << ph << ", nothing within range (closest was " << (ph + testi) << " which is " << testMd << " away)" << endl;
 	return 0;
     }
 }
@@ -352,6 +367,14 @@ void NotationStaff::setLines(double xfrom, double xto)
 {
     START_TIMING;
 
+    int beginRow = getRowForLayoutX(xfrom),
+	  endRow = getRowForLayoutX(xto);
+
+    if (endRow >= m_staffLines.size()) {
+	m_horizLineLength = xto;
+	recreateStaffLines();
+    }
+/*!!!   needs to be cleverer
     for (LineList::iterator i = m_staffLines.begin();
          i != m_staffLines.end(); ++i) {
 
@@ -364,7 +387,7 @@ void NotationStaff::setLines(double xfrom, double xto)
 
     m_initialBarA->setPoints((int)xfrom - 4, sp.y(), (int)xfrom - 4, ep.y());
     m_initialBarB->setPoints((int)xfrom, sp.y(), (int)xfrom, ep.y());
-
+*/
     PRINT_ELAPSED("NotationStaff::setLines");
 }
 
@@ -862,6 +885,27 @@ NotationStaff::getXForLayoutX(int lx)
 int
 NotationStaff::getTopLineOffsetForRow(int row)
 {
-    return (getTopLineOffset() + (m_lineBreakGap * row));
+    if (!m_pageMode) return getTopLineOffset();
+    else return (getTopLineOffset() + (m_lineBreakGap * row));
+}
+
+int
+NotationStaff::getRowCount()
+{
+    return getRowForLayoutX(m_horizLineLength) + 1;
+}
+
+int
+NotationStaff::getRowLeftX(int row)
+{
+    if (!m_pageMode) return (row * getPageWidth()) + x();
+    else return x();
+}
+
+int
+NotationStaff::getRowRightX(int row)
+{
+    if (!m_pageMode) return (row * getPageWidth()) + getPageWidth() + x();
+    else return getPageWidth() + x();
 }
 
