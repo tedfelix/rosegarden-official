@@ -24,6 +24,7 @@
 #include <qprinter.h>
 #include <qpainter.h>
 #include <qdragobject.h>
+#include <qlcdnumber.h>
 
 // include files for KDE
 #include <kstdaccel.h>
@@ -224,21 +225,29 @@ void RosegardenGUIApp::setupActions()
 
     // create the Transport GUI and add the callbacks
     //
-    m_rosegardenTransport = new RosegardenTransport(this);
+    m_transport = new RosegardenTransport(this);
 
-    connect((QObject *) m_rosegardenTransport->PlayButton,
+    // set the style - Outline, Filled, Flat
+    //
+    m_transport->TimeDisplay->setSegmentStyle(QLCDNumber::Filled);
+
+    //  toggling
+    //
+    m_transport->PlayButton->setToggleButton(true);
+
+    connect((QObject *) m_transport->PlayButton,
              SIGNAL(released()),
              SLOT(play()));
              
-    connect((QObject *) m_rosegardenTransport->StopButton,
+    connect((QObject *) m_transport->StopButton,
              SIGNAL(released()),
              SLOT(stop()));
              
-    connect((QObject *) m_rosegardenTransport->FfwdButton,
+    connect((QObject *) m_transport->FfwdButton,
              SIGNAL(released()),
              SLOT(fastforward()));
             
-    connect((QObject *) m_rosegardenTransport->RewindButton,
+    connect((QObject *) m_transport->RewindButton,
              SIGNAL(released()),
              SLOT(rewind()));
 
@@ -259,7 +268,7 @@ void RosegardenGUIApp::initDocument()
 {
     // For the moment we show the Transport all the time
     //
-    m_rosegardenTransport->show();
+    m_transport->show();
 
     m_doc = new RosegardenGUIDoc(this);
     m_doc->newDocument();
@@ -976,6 +985,10 @@ void RosegardenGUIApp::setPointerPosition(const int &position)
 
   // and the gui time
   m_view->setPointerPosition(position);
+
+  // and the time (well, position for the moment)
+  //
+  m_transport->TimeDisplay->display(position);
 }
 
 void RosegardenGUIApp::play()
@@ -989,6 +1002,11 @@ void RosegardenGUIApp::play()
 
   if (!m_sequencerProcess && !launchSequencer())
       return;
+
+  // make sure we toggle the play button
+  // 
+  if (m_transport->PlayButton->state() == QButton::Off)
+    m_transport->PlayButton->toggle();
 
   // write the start position argument to the outgoing stream
   //
@@ -1048,12 +1066,20 @@ void RosegardenGUIApp::play()
 // return to start of track
 void RosegardenGUIApp::stop()
 {
+  // Animate the stop button - this seems to get caught looping
+  // at the moment
+  //
+  // m_transport->StopButton->animateClick();
+
   if (m_transportStatus == STOPPED)
   {
     setPointerPosition(0);
     return;
   }
 
+  // untoggle the play button
+  //
+  m_transport->PlayButton->toggle();
   QByteArray data;
   QCString replyType;
   QByteArray replyData;

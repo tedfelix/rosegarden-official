@@ -464,7 +464,7 @@ private:
 
     // transport dialog pointer
     //
-    RosegardenTransport *m_rosegardenTransport;
+    RosegardenTransport *m_transport;
 };
  
 #endif // ROSEGARDENGUI_H
