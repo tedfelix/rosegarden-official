@@ -17,23 +17,22 @@
         </group>
         <group type="beamed">
         <event type="note" duration="semiquaver" pitch="64"/>
-        <event type="note" duration="semiquaver" pitch="65"/>
-        <event type="note" duration="semiquaver" pitch="66"/>
+        <event type="note" duration="quaver" pitch="65"/>
         <event type="note" duration="semiquaver" pitch="67"/>
         </group>
         <group type="beamed">
         <event type="note" duration="semiquaver" pitch="67"/>
-        <event type="note" duration="semiquaver" pitch="66"/>
-        <event type="note" duration="semiquaver" pitch="65"/>
+        <event type="rest" duration="quaver"/>
         <event type="note" duration="semiquaver" pitch="64"/>
         </group>
         <group type="beamed">
         <event type="note" duration="semiquaver" pitch="64"/>
-        <event type="note" duration="semiquaver" pitch="66"/>
+        <event type="note" duration="semiquaver" pitch="86"/>
         <chord>
-        <event type="note" duration="semiquaver" pitch="68"/>
-        <event type="note" duration="semiquaver" pitch="72"/>
+        <event type="note" duration="demisemiquaver" pitch="68"/>
+        <event type="note" duration="demisemiquaver" pitch="62"/>
         </chord>
+        <event type="clefchange" clef="alto"/>
         <event type="note" duration="semiquaver" pitch="66"/>
         </group>
         <group type="beamed">

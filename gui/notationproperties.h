@@ -48,6 +48,8 @@
 #define  P_BEAM_GRADIENT         "BeamGradient"
 #define  P_BEAM_SECTION_WIDTH    "BeamSectionWidth"
 #define  P_BEAM_NEXT_TAIL_COUNT  "BeamNextTailCount"
+#define  P_BEAM_NEXT_PART_TAILS  "BeamNextPartTails"
+#define  P_BEAM_THIS_PART_TAILS  "BeamThisPartTails"
 #define  P_BEAM_MY_Y		 "BeamMyY"
 //#define  P_BEAM_NEXT_Y		 "BeamNextY"
 

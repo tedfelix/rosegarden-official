@@ -445,7 +445,7 @@ NotationGroup::applyBeam(Staff &staff)
     // indicate that they aren't part of the beam-drawing process and
     // don't need to draw a stalk.
 
-    NELIterator prev = getList().end();
+    NELIterator prev = getList().end(), prevprev = getList().end();
     double gradient = (double)beam.gradient / 100.0;
 
     for (NELIterator i = getInitialNote(); i != getList().end(); ++i) {
@@ -474,18 +474,59 @@ NotationGroup::applyBeam(Staff &staff)
 
 	    int myY = (int)(gradient * (x - initialX)) + beam.startY;
 
-	    if (prev != getList().end()) {
-		int secWidth = x - (int)(*prev)->getLayoutX();
-//		(*prev)->event()->setMaybe<Int>(P_BEAM_NEXT_Y, myY);
-		(*prev)->event()->setMaybe<Int>(P_BEAM_SECTION_WIDTH, secWidth);
+            // If THIS_PART_TAILS is true, then when drawing the
+            // chord, if it requires more tails than the following
+            // chord then they should be added as partial tails to the
+            // right of the stem.
 
-		int noteType = el->event()->get<Int>(P_NOTE_TYPE);
-		kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam: note type is " << noteType << endl;
-		int tailCount = Note(noteType).getTailCount();
-		kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam: setting next tail count to " << tailCount << endl;
-		(*prev)->event()->setMaybe<Int>
+            // If NEXT_PART_TAILS is true, then when drawing the
+            // chord, if it requires fewer tails than the following
+            // chord then the difference should be added as partial
+            // tails to the left of the following chord's stem.
+
+            // Procedure for setting these: If we have more tails than
+            // the preceding chord, then the preceding chord should
+            // have NEXT_PART_TAILS set, until possibly unset again on
+            // the next iteration.  If we have at least as many tails
+            // as the preceding chord, then the preceding chord should
+            // have THIS_PART_TAILS unset and the one before it should
+            // have NEXT_PART_TAILS unset.  The first chord should
+            // have THIS_PART_TAILS set, until possibly unset again on
+            // the next iteration.
+
+            int tailCount = Note(el->event()->get<Int>
+                                 (P_NOTE_TYPE)).getTailCount();
+
+	    if (prev != getList().end()) {
+
+                NotationElement *prevEl = (*prev);
+		int secWidth = x - (int)prevEl->getLayoutX();
+
+//		prevEl->event()->setMaybe<Int>(P_BEAM_NEXT_Y, myY);
+
+		prevEl->event()->setMaybe<Int>
+                    (P_BEAM_SECTION_WIDTH, secWidth);
+		prevEl->event()->setMaybe<Int>
 		    (P_BEAM_NEXT_TAIL_COUNT, tailCount);
-	    }
+
+                int prevTailCount = Note(prevEl->event()->get<Int>
+                                         (P_NOTE_TYPE)).getTailCount();
+                if (tailCount >= prevTailCount) {
+                    prevEl->event()->setMaybe<Bool>
+                        (P_BEAM_THIS_PART_TAILS, false);
+                    if (prevprev != getList().end()) {
+                        (*prevprev)->event()->setMaybe<Bool>
+                            (P_BEAM_NEXT_PART_TAILS, false);
+                    }
+                }
+
+                if (tailCount > prevTailCount) {
+                    prevEl->event()->setMaybe<Bool>
+                        (P_BEAM_NEXT_PART_TAILS, true);
+                }                    
+	    } else {
+                el->event()->setMaybe<Bool>(P_BEAM_THIS_PART_TAILS, true);
+            }
 
 	    el->event()->setMaybe<Bool>(P_BEAM_PRIMARY_NOTE, true);
 
@@ -497,6 +538,7 @@ NotationGroup::applyBeam(Staff &staff)
 	    el->event()->setMaybe<Int>(P_BEAM_SECTION_WIDTH, 0);
 	    el->event()->setMaybe<Int>(P_BEAM_NEXT_TAIL_COUNT, 1);
 
+            prevprev = prev;
 	    prev = chord[j];
 	    i = chord.getFinalElement();
         }

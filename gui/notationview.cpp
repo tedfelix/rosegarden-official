@@ -442,21 +442,6 @@ NotationView::showElements(NotationElementList::iterator from,
 
 			stemLength = myY - (int)(*it)->getLayoutY();
 			if (stemLength < 0) stemLength = -stemLength;
-/*
-			// just experimental
-			for (int h = 0; h < 3; ++h) {
-			    QCanvasLine *beam = new QCanvasLine(canvas());
-			    QPen pen(black, 1);
-			    beam->setPen(pen);
-			    int x = (int)(*it)->getLayoutX();
-			    if ((*it)->event()->get<Bool>(P_STALK_UP)) {
-				x += npf.getNoteBodyWidth() - 1;
-			    }
-			    beam->setPoints(dxoffset + x, dyoffset + myY + h,
-					    dxoffset + x + dx, dyoffset + nextY + h);
-			    beam->show();
-			}
-*/
 
 			int nextTailCount =
 			    (*it)->event()->get<Int>(P_BEAM_NEXT_TAIL_COUNT);
@@ -465,10 +450,17 @@ NotationView::showElements(NotationElementList::iterator from,
 			int gradient =
 			    (*it)->event()->get<Int>(P_BEAM_GRADIENT);
 
+                        bool thisPartialTails(false), nextPartialTails(false);
+                        (void)(*it)->event()->get<Bool>
+                            (P_BEAM_THIS_PART_TAILS, thisPartialTails);
+                        (void)(*it)->event()->get<Bool>
+                            (P_BEAM_NEXT_PART_TAILS, nextPartialTails);
+
 			QCanvasPixmap notePixmap
 			    (npf.makeBeamedNotePixmap
 			     (note, dotted, accident, up, stemLength,
-			      nextTailCount, width, (double)gradient / 100.0));
+			      nextTailCount, thisPartialTails, nextPartialTails,
+                              width, (double)gradient / 100.0));
 			sprite = new QCanvasSimpleSprite(&notePixmap, canvas());
 
 		    } else {

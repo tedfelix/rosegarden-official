@@ -463,6 +463,10 @@ NotePixmapFactory::makeNotePixmap(Note::Type note,
 }
 
 
+// Implementation-wise this could easily be rolled in with
+// makeNotePixmap (taking the beam stuff out into another method), but
+// the real problem is how to make a coherent API for all this
+
 QCanvasPixmap
 NotePixmapFactory::makeBeamedNotePixmap(Note::Type note,
 					bool dotted,
@@ -470,6 +474,8 @@ NotePixmapFactory::makeBeamedNotePixmap(Note::Type note,
 					bool stalkGoesUp,
 					int stalkLength,
 					int nextTailCount,
+                                        bool thisPartialTails,
+                                        bool nextPartialTails,
 					int width,
 					double gradient)
 {
@@ -554,9 +560,9 @@ NotePixmapFactory::makeBeamedNotePixmap(Note::Type note,
 	    int offset = j * (thickness + gap) + i;
 	    if (!stalkGoesUp) offset = -offset;
 	    m_p.drawLine(startX, startY + offset, startX + width,
-			 startY + width * gradient + offset);
+			 startY + (int)(width * gradient) + offset);
 	    m_pm.drawLine(startX, startY + offset, startX + width,
-			  startY + width * gradient + offset);
+			  startY + (int)(width * gradient) + offset);
 	}
     }
 
@@ -565,24 +571,41 @@ NotePixmapFactory::makeBeamedNotePixmap(Note::Type note,
     //one after that... and to deal with the case where the opening
     //note of a group has more beams than the following note.  Should
     //be fixable in notationsets
-/*
+
     int partWidth = width / 3;
     if (partWidth < 2) partWidth = 2;
     else if (partWidth > getNoteBodyWidth()) partWidth = getNoteBodyWidth();
-    startX +=  width - partWidth;
-    startY += (width - partWidth) * gradient;
 
-    for (int j = commonTailCount; j < nextTailCount; ++j) {
-	for (int i = 0; i < thickness; ++i) {
-	    int offset = j * (thickness + gap) + i;
-	    if (!stalkGoesUp) offset = -offset;
-	    m_p.drawLine(startX, startY + offset, startX + partWidth,
-			 startY + partWidth * gradient + offset);
-	    m_pm.drawLine(startX, startY + offset, startX + partWidth,
-			  startY + partWidth * gradient + offset);
-	}
+    if (thisPartialTails) {
+        for (int j = commonTailCount; j < myTailCount; ++j) {
+            for (int i = 0; i < thickness; ++i) {
+                int offset = j * (thickness + gap) + i;
+                if (!stalkGoesUp) offset = -offset;
+                m_p.drawLine(startX, startY + offset, startX + partWidth,
+                             startY + (int)(partWidth * gradient) + offset);
+                m_pm.drawLine(startX, startY + offset, startX + partWidth,
+                              startY + (int)(partWidth * gradient) + offset);
+            }
+        }
     }
-*/
+
+    if (nextPartialTails) {
+        startX += width - partWidth;
+        startY += (int)((width - partWidth) * gradient);
+        
+        for (int j = commonTailCount; j < nextTailCount; ++j) {
+            for (int i = 0; i < thickness; ++i) {
+                int offset = j * (thickness + gap) + i;
+                if (!stalkGoesUp) offset = -offset;
+                m_p.drawLine(startX, startY + offset, startX + partWidth,
+                             startY + (int)(partWidth * gradient) + offset);
+                m_pm.drawLine(startX, startY + offset, startX + partWidth,
+                              startY + (int)(partWidth * gradient) + offset);
+            }
+        }
+    }
+        
+
 //#define ROSE_DEBUG_NOTE_PIXMAP_FACTORY
 #ifdef ROSE_DEBUG_NOTE_PIXMAP_FACTORY
     m_p.setPen(Qt::red); m_p.setBrush(Qt::red);

@@ -140,6 +140,8 @@ public:
 				       bool stalkGoesUp,
 				       int stalkLength,
 				       int nextTailCount,
+                                       bool thisPartialTails,
+                                       bool nextPartialTails,
 				       int width,
 				       double gradient);
     
