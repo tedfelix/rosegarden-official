@@ -142,7 +142,7 @@ NotationTool::NotationTool(const QString& menuName, NotationView* view)
 
 NotationTool::~NotationTool()
 {
-    NOTATION_DEBUG << "NotationTool::~NotationTool()\n";
+    NOTATION_DEBUG << "NotationTool::~NotationTool()" << endl;
 
     //     delete m_menu;
     //     m_parentView->factory()->removeClient(this);
@@ -605,7 +605,7 @@ void NoteInserter::slotToggleDot()
     actionName.replace(QRegExp("-"), "_");
     KAction *action = m_parentView->actionCollection()->action(actionName);
     if (!action) {
-	NOTATION_DEBUG << "WARNING: No such action as " << actionName << std::endl;
+	std::cerr << "WARNING: No such action as " << actionName << std::endl;
     } else {
 	action->activate();
     }
@@ -633,7 +633,7 @@ void NoteInserter::slotRestsSelected()
     actionName.replace(QRegExp("-"), "_");
     KAction *action = m_parentView->actionCollection()->action(actionName);
     if (!action) {
-	NOTATION_DEBUG << "WARNING: No such action as " << actionName << std::endl;
+	std::cerr << "WARNING: No such action as " << actionName << std::endl;
     } else {
 	action->activate();
     }
@@ -731,7 +731,7 @@ void RestInserter::slotToggleDot()
     actionName.replace(QRegExp("-"), "_");
     KAction *action = m_parentView->actionCollection()->action(actionName);
     if (!action) {
-	NOTATION_DEBUG << "WARNING: No such action as " << actionName << std::endl;
+	std::cerr << "WARNING: No such action as " << actionName << std::endl;
     } else {
 	action->activate();
     }

@@ -217,7 +217,7 @@ RosegardenTransportDialog::loadPixmaps()
       fileName = QString("%1/transport/led-%2.xpm").arg(pixmapDir).arg(i);
       if (!m_lcdList[i].load(fileName))
       {
-        RG_DEBUG << "RosegardenTransportDialog - failed to load pixmap \""
+        std::cerr << "RosegardenTransportDialog - failed to load pixmap \""
                   << fileName << "\""<< std::endl;
       }
     }

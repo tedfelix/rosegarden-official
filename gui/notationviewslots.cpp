@@ -139,10 +139,10 @@ NotationView::slotChangeSpacing(int spacing)
         (actionCollection()->action(QString("spacing_%1").arg(spacing)));
     if (action) action->setChecked(true);
     else {
-        NOTATION_DEBUG
+	std::cerr
             << "WARNING: Expected action \"spacing_" << spacing
             << "\" to be a KToggleAction, but it isn't (or doesn't exist)"
-            << endl;
+            << std::endl;
     }
 
     applyLayout();
@@ -271,10 +271,10 @@ NotationView::slotChangeFont(std::string newName, int newSize)
         NOTATION_DEBUG << "inspecting " << f[i] << (action ? ", have action" : ", no action") << endl;
         if (action) action->setChecked(thisOne);
         else {
-            NOTATION_DEBUG
+	    std::cerr
                 << "WARNING: Expected action \"note_font_" << f[i]
                 << "\" to be a KToggleAction, but it isn't (or doesn't exist)"
-                << endl;
+                << std::endl;
         }
     }
 
@@ -331,7 +331,7 @@ NotationView::slotFilePrint()
 			      (QWidget *)parent(), this);
 
     if (!printingView.isOK()) {
-	RG_DEBUG << "Print : operation cancelled\n";
+	NOTATION_DEBUG << "Print : operation cancelled\n";
 	return;
     }
 
@@ -348,7 +348,7 @@ NotationView::slotFilePrintPreview()
 			      (QWidget *)parent(), this);
 
     if (!printingView.isOK()) {
-	RG_DEBUG << "Print preview : operation cancelled\n";
+	NOTATION_DEBUG << "Print preview : operation cancelled\n";
 	return;
     }
 
@@ -564,7 +564,7 @@ void NotationView::slotEditSelectWholeStaff()
 
 void NotationView::slotFilterSelection()
 {
-    RG_DEBUG << "NotationView::slotFilterSelection" << endl;
+    NOTATION_DEBUG << "NotationView::slotFilterSelection" << endl;
 
     Segment *segment = getCurrentSegment();
     EventSelection *existingSelection = m_currentEventSelection;
@@ -572,7 +572,7 @@ void NotationView::slotFilterSelection()
 
     EventFilterDialog dialog(this);
     if (dialog.exec() == QDialog::Accepted) {
-        RG_DEBUG << "slotFilterSelection- accepted" << endl;
+        NOTATION_DEBUG << "slotFilterSelection- accepted" << endl;
 
         EventSelection *newSelection = new EventSelection(*segment);
         EventSelection::eventcontainer &ec =
@@ -1334,7 +1334,7 @@ void NotationView::slotDebugDump()
         for (EventSelection::eventcontainer::iterator i =
                  ec.begin();
              i != ec.end(); ++i) {
-            NOTATION_DEBUG << "\n" << n++ << " [" << (*i) << "]" << std::endl;
+	    std::cerr << "\n" << n++ << " [" << (*i) << "]" << std::endl;
             (*i)->dump(std::cerr);
         }
     }
@@ -1677,14 +1677,14 @@ void NotationView::slotText()
 
 void NotationView::slotEraseSelected()
 {
-    NOTATION_DEBUG << "NotationView::slotEraseSelected()\n";
+    NOTATION_DEBUG << "NotationView::slotEraseSelected()" << endl;
     setTool(m_toolBox->getTool(NotationEraser::ToolName));
     setMenuStates();
 }
 
 void NotationView::slotSelectSelected()
 {
-    NOTATION_DEBUG << "NotationView::slotSelectSelected()\n";
+    NOTATION_DEBUG << "NotationView::slotSelectSelected()" << endl;
     setTool(m_toolBox->getTool(NotationSelector::ToolName));
     setMenuStates();
 }
@@ -1757,7 +1757,7 @@ void NotationView::slotItemPressed(int height, int staffNo,
 {
     NOTATION_DEBUG << "NotationView::slotItemPressed(height = "
                          << height << ", staffNo = " << staffNo
-                         << ")\n";
+                         << ")" << endl;
 
     ButtonState btnState = e->state();
 

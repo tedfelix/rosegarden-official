@@ -206,7 +206,7 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
     //
     if (m_channels == 0)
     {
-        RG_DEBUG << "SegmentAudioPreview::drawShape - m_channels == 0 "
+        std::cerr << "SegmentAudioPreview::drawShape - m_channels == 0 "
                  << "problem with audio file" <<std::endl;
         return;
     }
@@ -284,7 +284,7 @@ void SegmentAudioPreview::updatePreview()
     try
     {
         RG_DEBUG << "SegmentAudioPreview::updatePreview() - for file id "
-                 << m_segment->getAudioFileId() << " fetching values\n";
+                 << m_segment->getAudioFileId() << " fetching values" <<endl;
 
         m_values =
             aFM.getPreview(m_segment->getAudioFileId(),

@@ -846,7 +846,7 @@ NotePixmapFactory::drawFlags(int flagCount,
 				  !params.m_stemGoesUp);
 	
 	if (!found) {
-	   NOTATION_DEBUG << "Warning: NotePixmapFactory::drawFlags: No way to draw note with " << flagCount << " flags in this font!?" << std::endl;
+	    std::cerr << "Warning: NotePixmapFactory::drawFlags: No way to draw note with " << flagCount << " flags in this font!?" << std::endl;
 	    return;
 	}
 	
@@ -984,7 +984,7 @@ NotePixmapFactory::drawShallowLine(int x0, int y0, int x1, int y1,
         if (quartile > 3) quartile = 3;
         if (inc > 0) quartile = 4 - quartile;
 /*
-        RG_DEBUG
+        NOTATION_DEBUG
             << "x = " << cx << ", y = " << cy
             << ", g = " << g << ", dg1 = " << dg1 << ", dg2 = " << dg2
             << ", seg = " << segment << ", q = " << quartile << endl;
@@ -1180,11 +1180,11 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
     if (params.m_tuplingLineY >= 0) tickOffset = -tickOffset;
 
 /*
-    RG_DEBUG << "adjusted params.m_tuplingLineWidth = "
+    NOTATION_DEBUG << "adjusted params.m_tuplingLineWidth = "
 			 << tlw
 			 << ", cr.width = " << cr.width()
 			 << ", tickOffset = " << tickOffset << endl;
-    RG_DEBUG << "line: (" << startX << "," << startY << ") -> ("
+    NOTATION_DEBUG << "line: (" << startX << "," << startY << ") -> ("
 			 << endX << "," << endY << ")" << endl;
 */
     bool smooth = m_font->isSmooth();
@@ -1202,7 +1202,7 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
 
     int textX = endX + countSpace;
     int textY = endY + cr.height()/2;
-    RG_DEBUG << "text: (" << textX << "," << textY << ")" << endl;
+    NOTATION_DEBUG << "text: (" << textX << "," << textY << ")" << endl;
 
     m_p.drawText(textX, textY, count);
     m_pm.drawText(textX, textY, count);
@@ -1213,7 +1213,7 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
     startY += (int)(params.m_tuplingLineGradient * (tlw - w));
     endY = startY + (int)(params.m_tuplingLineGradient * w);
 
-    RG_DEBUG << "line: (" << startX << "," << startY << ") -> ("
+    NOTATION_DEBUG << "line: (" << startX << "," << startY << ") -> ("
 			 << endX << "," << endY << ")" << endl;
 
     if (!params.m_tuplingLineFollowsBeam) {
@@ -1665,7 +1665,7 @@ NotePixmapFactory::makeHairpinPixmap(int length, bool isCrescendo)
     int height = (int)(((double)nbh / (double)(nbw * 40)) * length) + nbh;
     int thickness = getStaffLineThickness() * 3 / 2;
 
-//    RG_DEBUG << "NotePixmapFactory::makeHairpinPixmap: mapped length " << length << " to height " << height << " (nbh = " << nbh << ", nbw = " << nbw << ")" << endl;
+//    NOTATION_DEBUG << "NotePixmapFactory::makeHairpinPixmap: mapped length " << length << " to height " << height << " (nbh = " << nbh << ", nbw = " << nbw << ")" << endl;
 
     if (height < nbh)   height = nbh;
     if (height > nbh*2) height = nbh*2;
@@ -1755,7 +1755,7 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
     }
 
 
-//    RG_DEBUG << "Pixmap dimensions: " << length << "x" << height << endl;
+//    NOTATION_DEBUG << "Pixmap dimensions: " << length << "x" << height << endl;
 
     bool havePixmap = false;
     QPoint topLeft, bottomRight, hotspot;

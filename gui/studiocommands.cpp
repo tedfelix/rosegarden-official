@@ -89,12 +89,12 @@ ModifyDeviceCommand::execute()
 
     if (device) {
 	if (!midiDevice) {
-	    RG_DEBUG << "ERROR: ModifyDeviceCommand::execute: device "
+	    std::cerr << "ERROR: ModifyDeviceCommand::execute: device "
 		      << m_device << " is not a MIDI device" << std::endl;
 	    return;
 	}
     } else {
-	RG_DEBUG
+	std::cerr
 	    << "ERROR: ModifyDeviceCommand::execute: no such device as "
 	    << m_device << std::endl;
 	return;
@@ -139,12 +139,12 @@ ModifyDeviceCommand::unexecute()
 
     if (device) {
 	if (!midiDevice) {
-	    RG_DEBUG << "ERROR: ModifyDeviceCommand::unexecute: device "
+	    std::cerr << "ERROR: ModifyDeviceCommand::unexecute: device "
 		      << m_device << " is not a MIDI device" << std::endl;
 	    return;
 	}
     } else {
-	RG_DEBUG
+	std::cerr
 	    << "ERROR: ModifyDeviceCommand::unexecute: no such device as "
 	    << m_device << std::endl;
 	return;

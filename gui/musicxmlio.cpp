@@ -227,7 +227,7 @@ MusicXmlExporter::write() {
 
     std::ofstream str(m_fileName.c_str(), std::ios::out);
     if (!str) {
-        RG_DEBUG << "MusicXmlExporter::write() - can't write file " << m_fileName << std::endl;
+        std::cerr << "MusicXmlExporter::write() - can't write file " << m_fileName << std::endl;
         return false;
     }
 

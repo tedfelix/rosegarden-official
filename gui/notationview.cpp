@@ -488,7 +488,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	show();
         kapp->processEvents();
 
-        RG_DEBUG << "NotationView : setting up progress dialog\n";
+        NOTATION_DEBUG << "NotationView : setting up progress dialog" << endl;
 
         progressDlg = new RosegardenProgressDialog(i18n("Starting..."),
                                                    100, this);
@@ -525,7 +525,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     } catch (ProgressReporter::Cancelled c) {
 	// when cancelled, m_ok is false -- checked by calling method
-        NOTATION_DEBUG << "NotationView ctor : layout Cancelled\n";
+        NOTATION_DEBUG << "NotationView ctor : layout Cancelled" << endl;
     }
     
     NOTATION_DEBUG << "NotationView ctor : m_ok = " << m_ok << endl;
@@ -620,7 +620,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     setConfigDialogPageIndex(1);
     setOutOfCtor();
     
-    NOTATION_DEBUG << "NotationView ctor exiting\n";
+    NOTATION_DEBUG << "NotationView ctor exiting" << endl;
 }
 
 //
@@ -719,7 +719,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
         kapp->processEvents();
 
-        RG_DEBUG << "NotationView : setting up progress dialog\n";
+	NOTATION_DEBUG << "NotationView : setting up progress dialog" << endl;
 
         progressDlg = new RosegardenProgressDialog(i18n("Preparing to print..."),
                                                    100, parent);
@@ -744,7 +744,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     } catch (ProgressReporter::Cancelled c) {
 	// when cancelled, m_ok is false -- checked by calling method
-        NOTATION_DEBUG << "NotationView ctor : layout Cancelled\n";
+        NOTATION_DEBUG << "NotationView ctor : layout Cancelled" << endl;
     }
 
     NOTATION_DEBUG << "NotationView ctor : m_ok = " << m_ok << endl;
@@ -762,7 +762,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
 NotationView::~NotationView()
 {
-    NOTATION_DEBUG << "-> ~NotationView()\n";
+    NOTATION_DEBUG << "-> ~NotationView()" << endl;
 
     if (!m_printMode) slotSaveOptions();
 
@@ -781,7 +781,7 @@ NotationView::~NotationView()
 
     Rosegarden::Profiles::getInstance()->dump();
 
-    NOTATION_DEBUG << "<- ~NotationView()\n";
+    NOTATION_DEBUG << "<- ~NotationView()" << endl;
 }
 
 void
@@ -1065,12 +1065,12 @@ void NotationView::setOneToolbar(const char *actionName,
 {
     KToggleAction *action = getToggleAction(actionName);
     if (!action) {
-	NOTATION_DEBUG << "WARNING: No such action as " << actionName << std::endl;
+	std::cerr << "WARNING: No such action as " << actionName << std::endl;
 	return;
     }
     QWidget *toolbar = toolBar(toolbarName);
     if (!toolbar) {
-	NOTATION_DEBUG << "WARNING: No such toolbar as " << toolbarName << std::endl;
+	std::cerr << "WARNING: No such toolbar as " << toolbarName << std::endl;
 	return;
     }
     action->setChecked(!toolbar->isHidden());
@@ -1894,8 +1894,9 @@ void NotationView::initLayoutToolbar()
     KToolBar *layoutToolbar = toolBar("Layout Toolbar");
     
     if (!layoutToolbar) {
-        NOTATION_DEBUG
-            << "NotationView::initLayoutToolbar() : layout toolbar not found\n";
+	std::cerr
+            << "NotationView::initLayoutToolbar() : layout toolbar not found"
+	    << std::endl;
         return;
     }
 
@@ -2803,7 +2804,7 @@ void NotationView::slotNoteAction()
         setCurrentSelectedNote(*noteAct);
 	setMenuStates();
     } else {
-        NOTATION_DEBUG << "NotationView::slotNoteAction() : couldn't find NoteActionData named '"
+        std::cerr << "NotationView::slotNoteAction() : couldn't find NoteActionData named '"
                              << sigSender->name() << "'\n";
     }
 }
@@ -2817,7 +2818,7 @@ void NotationView::slotLastNoteAction()
     if (action) {
 	action->activate();
     } else {
-        NOTATION_DEBUG << "NotationView::slotNoteAction() : couldn't find action named '"
+        std::cerr << "NotationView::slotNoteAction() : couldn't find action named '"
                              << m_lastNoteAction << "' or 'crotchet'\n";
     }
 }
@@ -2901,7 +2902,7 @@ void NotationView::initActionDataMaps()
 void NotationView::setupProgress(KProgress* bar)
 {
     if (bar) {
-        RG_DEBUG << "NotationView::setupProgress(bar)\n";
+        NOTATION_DEBUG << "NotationView::setupProgress(bar)\n";
 
         connect(m_hlayout, SIGNAL(setProgress(int)),
                 bar,       SLOT(setValue(int)));
@@ -2928,7 +2929,7 @@ void NotationView::setupProgress(KProgress* bar)
 
 void NotationView::setupProgress(RosegardenProgressDialog* dialog)
 {
-    RG_DEBUG << "NotationView::setupProgress(dialog)\n";
+    NOTATION_DEBUG << "NotationView::setupProgress(dialog)" << endl;
     disconnectProgress();
     
     if (dialog) {
@@ -2952,7 +2953,7 @@ void NotationView::setupProgress(RosegardenProgressDialog* dialog)
 
 void NotationView::disconnectProgress()
 {
-    RG_DEBUG << "NotationView::disconnectProgress()\n";
+    NOTATION_DEBUG << "NotationView::disconnectProgress()" << endl;
 
     m_hlayout->disconnect();
     disconnect(SIGNAL(setProgress(int)));
@@ -2967,7 +2968,7 @@ void NotationView::disconnectProgress()
 void NotationView::setupDefaultProgress()
 {
     if (m_progressDisplayer != PROGRESS_BAR) {
-        RG_DEBUG << "NotationView::setupDefaultProgress()\n";
+        NOTATION_DEBUG << "NotationView::setupDefaultProgress()" << endl;
         disconnectProgress();
         setupProgress(m_progressBar);
         m_progressDisplayer = PROGRESS_BAR;
@@ -2978,11 +2979,11 @@ void NotationView::installProgressEventFilter()
 {
     if (m_progressDisplayer == PROGRESS_BAR &&
         !m_progressEventFilterInstalled) {
-        RG_DEBUG << "NotationView::installProgressEventFilter()\n";
+        NOTATION_DEBUG << "NotationView::installProgressEventFilter()" << endl;
         kapp->installEventFilter(m_progressBar);
         m_progressEventFilterInstalled = true;
     } else {
-        RG_DEBUG << "NotationView::installProgressEventFilter() - skipping install : "
+        NOTATION_DEBUG << "NotationView::installProgressEventFilter() - skipping install : "
                  << m_progressDisplayer << "," << PROGRESS_BAR << endl;
     }
 }
@@ -2991,12 +2992,12 @@ void NotationView::removeProgressEventFilter()
 {
     if (m_progressDisplayer == PROGRESS_BAR &&
         m_progressEventFilterInstalled) {
-        RG_DEBUG << "NotationView::removeProgressEventFilter()\n";
+        NOTATION_DEBUG << "NotationView::removeProgressEventFilter()" << endl;
         kapp->removeEventFilter(m_progressBar);
         m_progressBar->setValue(0);
         m_progressEventFilterInstalled = false;
     } else {
-        RG_DEBUG << "NotationView::removeProgressEventFilter() - skipping remove : "
+        NOTATION_DEBUG << "NotationView::removeProgressEventFilter() - skipping remove : "
                  << m_progressDisplayer << "," << PROGRESS_BAR << endl;
     }
 }

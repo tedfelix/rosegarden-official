@@ -171,7 +171,7 @@ NotationChord::isNoteHeadShifted(const Iterator &itr) const
     }
 
     if (i == size()) {
-        NOTATION_DEBUG << "NotationChord::isNoteHeadShifted: Warning: Unable to find note head " << getAsEvent(itr) << std::endl;
+	std::cerr << "NotationChord::isNoteHeadShifted: Warning: Unable to find note head " << getAsEvent(itr) << std::endl;
         return false;
     }
 

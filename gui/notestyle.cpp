@@ -78,7 +78,7 @@ NoteStyleFactory::getAvailableStyleNames()
     QString styleDir = KGlobal::dirs()->findResource("appdata", "styles/");
     QDir dir(styleDir);
     if (!dir.exists()) {
-        RG_DEBUG << "NoteStyle::getAvailableStyleNames: directory \"" << styleDir
+        std::cerr << "NoteStyle::getAvailableStyleNames: directory \"" << styleDir
              << "\" not found" << std::endl;
         return names;
     }
@@ -99,7 +99,7 @@ NoteStyleFactory::getAvailableStyleNames()
     }
 
     if (!foundDefault) {
-	RG_DEBUG << "NoteStyleFactory::getAvailableStyleNames: WARNING: Default style name \"" << DefaultStyle << "\" not found" << endl;
+	std::cerr << "NoteStyleFactory::getAvailableStyleNames: WARNING: Default style name \"" << DefaultStyle << "\" not found" << std::endl;
     }
 
     return names;
@@ -118,9 +118,9 @@ NoteStyleFactory::getStyle(NoteStyleName name)
 	    return newStyle;
 
 	} catch (NoteStyleFileReader::StyleFileReadFailed f) {
-	    RG_DEBUG
+	    std::cerr
 		<< "NoteStyleFactory::getStyle: Style file read failed: "
-		<< f.getMessage() << endl;
+		<< f.getMessage() << std::endl;
 	    throw StyleUnavailable("Style file read failed: " +
 				   f.getMessage());
 	}
@@ -168,9 +168,9 @@ NoteStyle::getShape(Note::Type type)
     NoteDescriptionMap::iterator i = m_notes.find(type);
     if (i == m_notes.end()) { 
 	if (m_baseStyle) return m_baseStyle->getShape(type);
-	RG_DEBUG
+	std::cerr
 	    << "WARNING: NoteStyle::getShape: No shape defined for note type "
-	    << type << ", defaulting to AngledOval" << endl;
+	    << type << ", defaulting to AngledOval" << std::endl;
 	return AngledOval;
     }
 
@@ -184,9 +184,9 @@ NoteStyle::isFilled(Note::Type type)
     NoteDescriptionMap::iterator i = m_notes.find(type);
     if (i == m_notes.end()) { 
 	if (m_baseStyle) return m_baseStyle->isFilled(type);
-	RG_DEBUG 
+	std::cerr 
 	    << "WARNING: NoteStyle::isFilled: No definition for note type "
-	    << type << ", defaulting to true" << endl;
+	    << type << ", defaulting to true" << std::endl;
 	return true;
     }
 
@@ -200,9 +200,9 @@ NoteStyle::hasStem(Note::Type type)
     NoteDescriptionMap::iterator i = m_notes.find(type);
     if (i == m_notes.end()) { 
 	if (m_baseStyle) return m_baseStyle->hasStem(type);
-	RG_DEBUG 
+	std::cerr
 	    << "WARNING: NoteStyle::hasStem: No definition for note type "
-	    << type << ", defaulting to true" << endl;
+	    << type << ", defaulting to true" << std::endl;
 	return true;
     }
 
@@ -216,9 +216,9 @@ NoteStyle::getFlagCount(Note::Type type)
     NoteDescriptionMap::iterator i = m_notes.find(type);
     if (i == m_notes.end()) { 
 	if (m_baseStyle) return m_baseStyle->getFlagCount(type);
-	RG_DEBUG 
+	std::cerr 
 	    << "WARNING: NoteStyle::getFlagCount: No definition for note type "
-	    << type << ", defaulting to 0" << endl;
+	    << type << ", defaulting to 0" << std::endl;
 	return 0;
     }
 
@@ -232,9 +232,9 @@ NoteStyle::getSlashCount(Note::Type type)
     NoteDescriptionMap::iterator i = m_notes.find(type);
     if (i == m_notes.end()) { 
 	if (m_baseStyle) return m_baseStyle->getSlashCount(type);
-	RG_DEBUG 
+	std::cerr 
 	    << "WARNING: NoteStyle::getSlashCount: No definition for note type "
-	    << type << ", defaulting to 0" << endl;
+	    << type << ", defaulting to 0" << std::endl;
 	return 0;
     }
 
@@ -252,10 +252,10 @@ NoteStyle::getStemFixPoints(Note::Type type,
 	    m_baseStyle->getStemFixPoints(type, hfix, vfix);
 	    return;
 	}
-	RG_DEBUG 
+	std::cerr 
 	    << "WARNING: NoteStyle::getStemFixPoints: "
 	    << "No definition for note type " << type
-	    << ", defaulting to (Normal,Middle)" << endl;
+	    << ", defaulting to (Normal,Middle)" << std::endl;
 	hfix = Normal;
 	vfix = Middle;
 	return;
@@ -273,9 +273,9 @@ NoteStyle::getNoteHeadCharName(Note::Type type)
     NoteDescriptionMap::iterator i = m_notes.find(type);
     if (i == m_notes.end()) { 
 	if (m_baseStyle) return m_baseStyle->getNoteHeadCharName(type);
-	RG_DEBUG 
+	std::cerr 
 	    << "WARNING: NoteStyle::getNoteHeadCharName: No definition for note type "
-	    << type << ", defaulting to NOTEHEAD_BLACK" << endl;
+	    << type << ", defaulting to NOTEHEAD_BLACK" << std::endl;
 	return CharNameRec(NoteCharacterNames::NOTEHEAD_BLACK, false);
     }
 
@@ -291,14 +291,14 @@ NoteStyle::getNoteHeadCharName(Note::Type type)
     } else if (desc.shape == LevelOval) {
 
 	if (desc.filled) {
-	    RG_DEBUG << "WARNING: NoteStyle::getNoteHeadCharName: No filled level oval head";
+	    std::cerr << "WARNING: NoteStyle::getNoteHeadCharName: No filled level oval head" << std::endl;
 	}
 	name = NoteCharacterNames::WHOLE_NOTE;
 	
     } else if (desc.shape == Breve) {
 
 	if (desc.filled) {
-	    RG_DEBUG << "WARNING: NoteStyle::getNoteHeadCharName: No filled breve head";
+	    std::cerr << "WARNING: NoteStyle::getNoteHeadCharName: No filled breve head" << std::endl;
 	}
 	name = NoteCharacterNames::BREVE;
 	
@@ -330,7 +330,7 @@ NoteStyle::getNoteHeadCharName(Note::Type type)
 	
     } else if (desc.shape == Number) {
 
-	RG_DEBUG << "WARNING: NoteStyle::getNoteHeadCharName: Number not yet implemented" << endl;
+	std::cerr << "WARNING: NoteStyle::getNoteHeadCharName: Number not yet implemented" << std::endl;
 	name = NoteCharacterNames::UNKNOWN; //!!!
 
     } else if (desc.shape == CustomCharName) {
@@ -431,15 +431,15 @@ NoteStyle::setBaseStyle(NoteStyleName name)
 	if (m_baseStyle == this) m_baseStyle = 0;
     } catch (NoteStyleFactory::StyleUnavailable u) {
 	if (name != NoteStyleFactory::DefaultStyle) {
-	    RG_DEBUG
+	    std::cerr
 		<< "NoteStyle::setBaseStyle: Base style "
 		<< name << " not available, defaulting to "
-		<< NoteStyleFactory::DefaultStyle << endl;
+		<< NoteStyleFactory::DefaultStyle << std::endl;
 	    setBaseStyle(NoteStyleFactory::DefaultStyle);
 	} else {
-	    RG_DEBUG
+	    std::cerr
 		<< "NoteStyle::setBaseStyle: Base style "
-		<< name << " not available" << endl;
+		<< name << " not available" << std::endl;
 	    m_baseStyle = 0;
 	}
     }	    

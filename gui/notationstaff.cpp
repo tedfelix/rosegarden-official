@@ -143,7 +143,7 @@ NotationStaff::insertTimeSignature(double layoutX,
 void
 NotationStaff::deleteTimeSignatures()
 {
-    NOTATION_DEBUG << "NotationStaff::deleteTimeSignatures()\n";
+    NOTATION_DEBUG << "NotationStaff::deleteTimeSignatures()" << endl;
     
     for (SpriteSet::iterator i = m_timeSigs.begin();
 	 i != m_timeSigs.end(); ++i) {
@@ -388,7 +388,7 @@ void
 NotationStaff::positionElements(timeT from, timeT to)
 {
     NOTATION_DEBUG << "NotationStaff " << this << "::positionElements()"
-                         << from << " -> " << to << "\n";
+                         << from << " -> " << to << endl;
     START_TIMING;
 
     emit setOperationName(i18n("Positioning staff %1...").arg(getId() + 1));
@@ -604,7 +604,7 @@ NotationStaff::elementNotMoved(NotationElement *elt)
 	NOTATION_DEBUG << "(cf " << (int)(elt->getCanvasX()) << " vs "
 		  << (int)(coords.first) << ", "
 		  << (int)(elt->getCanvasY()) << " vs "
-		  << (int)(coords.second) << ")" << std::endl;
+		  << (int)(coords.second) << ")" << endl;
     } else {
 	NOTATION_DEBUG << "elementNotMoved: elt at " << elt->getViewAbsoluteTime()
 		       << " is ok" << endl;
@@ -689,8 +689,8 @@ NotationStaff::renderSingleElement(ViewElement *velt,
 
     } catch (NoteStyleFactory::StyleUnavailable u) {
 
-	NOTATION_DEBUG
-	    << "WARNING: Note style unavailable: " << u.getMessage() << endl;
+	std::cerr << "WARNING: Note style unavailable: "
+		  << u.getMessage() << std::endl;
 
 	static bool warned = false;
 	if (!warned) {
@@ -849,9 +849,9 @@ NotationStaff::renderSingleElement(ViewElement *velt,
 //	NOTATION_DEBUG << "NotationStaff::renderSingleElement: Setting selected at " << elt->getAbsoluteTime() << " to " << selected << endl;
             
     } catch (...) {
-	NOTATION_DEBUG << "Event lacks the proper properties: "
-			     << (*elt->event())
-			     << endl;
+	std::cerr << "Event lacks the proper properties: "
+		  << std::endl;
+	elt->event()->dump(std::cerr);
     }
 }
 

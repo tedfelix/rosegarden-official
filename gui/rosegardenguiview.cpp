@@ -180,7 +180,7 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
 
 RosegardenGUIView::~RosegardenGUIView()
 {
-    RG_DEBUG << "~RosegardenGUIView()\n";
+    RG_DEBUG << "~RosegardenGUIView()" << endl;
     delete m_rulerScale;
 }
 
@@ -190,14 +190,14 @@ RosegardenGUIView::getDocument() const
     QWidget *t = parentWidget();
     
     if (!t) {
-        RG_DEBUG << "CRITICAL ERROR : RosegardenGUIView::getDocument() : widget parent is 0\n";
+        std::cerr << "CRITICAL ERROR : RosegardenGUIView::getDocument() : widget parent is 0\n";
         return 0;
     }
 
     RosegardenGUIApp *theApp = dynamic_cast<RosegardenGUIApp*>(t);
     
     if (!theApp) {
-        RG_DEBUG << "CRITICAL ERROR : RosegardenGUIView::getDocument() : widget parent is of the wrong type\n";
+        std::cerr << "CRITICAL ERROR : RosegardenGUIView::getDocument() : widget parent is of the wrong type\n";
         return 0;
     }
     
@@ -227,7 +227,7 @@ void RosegardenGUIView::print(Composition* p, bool previewOnly)
 						  (NotationView *)0);
 
     if (!notationView->isOK()) {
-	RG_DEBUG << "RosegardenGUIView::print : operation cancelled\n";
+	RG_DEBUG << "RosegardenGUIView::print : operation cancelled" << endl;
 	delete notationView;
 	return;
     }
@@ -320,7 +320,7 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
     SetWaitCursor waitCursor;
     std::vector<Rosegarden::Segment *> segmentsToEdit;
 
-    RG_DEBUG << "\n\n\n\nRosegardenGUIView::slotEditSegmentNotation: p is " << p << std::endl;
+    RG_DEBUG << "\n\n\n\nRosegardenGUIView::slotEditSegmentNotation: p is " << p << endl;
 
     // The logic here is: If we're calling for this operation to
     // happen on a particular segment, then open that segment and if
@@ -362,7 +362,7 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
 	new NotationView(getDocument(), segmentsToEdit, this, true);
 
     if (!notationView->isOK()) {
-	RG_DEBUG << "slotEditSegmentNotation : operation cancelled\n";
+	RG_DEBUG << "slotEditSegmentNotation : operation cancelled" << endl;
 	delete notationView;
 	return;
     }
@@ -576,7 +576,7 @@ void RosegardenGUIView::slotEditSegmentAudio(Rosegarden::Segment *segment)
 
     if (application.isEmpty())
     {
-        RG_DEBUG << "RosegardenGUIView::slotEditSegmentAudio() - "
+        std::cerr << "RosegardenGUIView::slotEditSegmentAudio() - "
                   << "external editor \"" << application.data()
                   << "\" not found" << std::endl;
         return;
@@ -585,7 +585,7 @@ void RosegardenGUIView::slotEditSegmentAudio(Rosegarden::Segment *segment)
     QFileInfo *appInfo = new QFileInfo(application);
     if (appInfo->exists() == false || appInfo->isExecutable() == false)
     {
-        RG_DEBUG << "RosegardenGUIView::slotEditSegmentAudio() - "
+        std::cerr << "RosegardenGUIView::slotEditSegmentAudio() - "
                   << "can't execute \"" << application << "\""
                   << std::endl;
         return;
@@ -595,7 +595,7 @@ void RosegardenGUIView::slotEditSegmentAudio(Rosegarden::Segment *segment)
                                     getAudioFile(segment->getAudioFileId());
     if (aF == 0)
     {
-        RG_DEBUG << "RosegardenGUIView::slotEditSegmentAudio() - "
+        std::cerr << "RosegardenGUIView::slotEditSegmentAudio() - "
                   << "can't find audio file" << std::endl;
         return;
     }
@@ -614,7 +614,7 @@ void RosegardenGUIView::slotEditSegmentAudio(Rosegarden::Segment *segment)
     //
     if (!process->start())
     {
-        RG_DEBUG << "RosegardenGUIView::slotEditSegmentAudio() - "
+        std::cerr << "RosegardenGUIView::slotEditSegmentAudio() - "
                   << "can't start external editor" << std::endl;
     }
 
@@ -964,7 +964,7 @@ void RosegardenGUIView::slotShowPreviews(bool v)
 void RosegardenGUIView::slotAddTracks(unsigned int nbTracks,
                                       Rosegarden::InstrumentId id)
 {
-    RG_DEBUG << "RosegardenGUIView::slotAddTracks(" << nbTracks << ")\n";
+    RG_DEBUG << "RosegardenGUIView::slotAddTracks(" << nbTracks << ")" << endl;
     m_trackEditor->slotAddTracks(nbTracks, id);
 }
 
@@ -1072,7 +1072,7 @@ RosegardenGUIView::slotDroppedAudio(QString audioDesc)
         slotAddAudioSegmentAndTrack(audioFileId, instrumentId,
                                     startTime, endTime);
     else
-        RG_DEBUG << "instrument id == 0\n";
+        RG_DEBUG << "instrument id == 0" << endl;
 }
 
 void
