@@ -65,7 +65,6 @@ class Event
 {
 public:
     friend class ViewElement;
-    friend class Quantizer;
 
     struct NoData { };
     struct BadType { };
@@ -206,18 +205,17 @@ protected:
     void viewElementRef()   { ++m_viewElementRefCount; }
     void viewElementUnRef() { --m_viewElementRefCount; }
 
-    // these are for subclasses, some are also used by Quantizer
-    // (though we'd like to lose the Quantizer friendship eventually)
+    // these are for subclasses such as XmlStorableEvent
 
     Event() :
 	m_data(new EventData("", 0, 0, 0)),
 	m_viewElementRefCount(0),
 	m_nonPersistentProperties(0) { }
     
-    void setType(const std::string &t)    { unshare(); m_data->m_type = t; }
-    void setAbsoluteTime(timeT t) { unshare(); m_data->m_absoluteTime = t; }
-    void setDuration(timeT d)     { unshare(); m_data->m_duration = d; }
-    void setSubOrdering(int o)      { unshare(); m_data->m_subOrdering = o; }
+    void setType(const std::string &t) { unshare(); m_data->m_type = t; }
+    void setAbsoluteTime(timeT t)      { unshare(); m_data->m_absoluteTime = t; }
+    void setDuration(timeT d)	       { unshare(); m_data->m_duration = d; }
+    void setSubOrdering(int o)	       { unshare(); m_data->m_subOrdering = o; }
 
 private:
     struct PropertyMap : public std::hash_map<PropertyName,
