@@ -51,6 +51,8 @@ Staff::Staff(QCanvas *canvas, Staff::Clef clef)
     
     QCanvasSpriteGroupable *clef = new QCanvasSpriteGroupable(clefPixmap, canvas, this);
 
+    clef->moveBy(8, 0);
+
     // horizontal lines
     //
     int w = canvas->width();
@@ -172,18 +174,7 @@ Staff::Staff(QCanvas *canvas, Staff::Clef clef)
     m_pitchToHeight[pitch + 3] = y + lineWidth / 2 + 1; // D#
     
 
-//     for(unsigned int l = 0; l < nbLines; ++l) {
-
-//             QCanvasLineGroupable *staffLine = new QCanvasLineGroupable(canvas, this);
-
-//             int y = l * lineWidth;
-
-//             staffLine->setPoints(0,y, len,y);
-//             staffLine->moveBy(0,linesOffset);
-
-//         }
-
-    // Add vertical line
+    // Add vertical lines
     //
     QCanvasLineGroupable *staffVertLine = new QCanvasLineGroupable(canvas, this);
 
@@ -192,8 +183,15 @@ Staff::Staff(QCanvas *canvas, Staff::Clef clef)
     staffVertLine->setPoints(0,linesOffset,
                              0,vertLineHeight + linesOffset);
 
-    QPen pen(black, 3); // QCanvasLine says this is not supported yet (Qt 2.2beta)
+    QPen pen(black, 3);
     staffVertLine->setPen(pen);
+
+    staffVertLine = new QCanvasLineGroupable(canvas, this);
+
+    staffVertLine->setPoints(4,linesOffset,
+                             4,vertLineHeight + linesOffset - 1);
+ // why -1 ? Otherwise the line is 1 pixel too long - probably a bug
+ // in QCanvas (v2.2.0beta2)
 
 //     staffVertLine = new QCanvasLineGroupable(canvas(), staff);
 //     staffVertLine->setPoints(5,linesOffset,
