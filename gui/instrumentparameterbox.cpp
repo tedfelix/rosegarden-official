@@ -44,7 +44,7 @@ InstrumentParameterBox::InstrumentParameterBox(QWidget *parent,
       m_channelValue(new RosegardenComboBox(true, false, this)),
       m_programValue(new RosegardenComboBox(true, false, this)),
       m_panValue(new RosegardenComboBox(true, false, this)),
-      m_velocityValue(new RosegardenComboBox(true, true, this)),
+      m_velocityValue(new RosegardenComboBox(true, false, this)),
       m_bankCheckBox(new QCheckBox(this)),
       m_programCheckBox(new QCheckBox(this)),
       m_panCheckBox(new QCheckBox(this)),
@@ -68,9 +68,9 @@ InstrumentParameterBox::initBox()
 
     QGridLayout *gridLayout = new QGridLayout(this, 6, 3, 8, 1);
 
-    QLabel *channelLabel = new QLabel(i18n("Chan"), this);
+    QLabel *channelLabel = new QLabel(i18n("Channel"), this);
     QLabel *panLabel = new QLabel(i18n("Pan"), this);
-    QLabel *velocityLabel = new QLabel(i18n("Vol"), this);
+    QLabel *velocityLabel = new QLabel(i18n("Vely"), this);
     QLabel *programLabel = new QLabel(i18n("Prg"), this);
     QLabel *bankLabel = new QLabel(i18n("Bank"), this);
 
@@ -84,8 +84,8 @@ InstrumentParameterBox::initBox()
     gridLayout->addWidget(m_programCheckBox, 2, 1);
     gridLayout->addWidget(m_programValue,    2, 2, AlignRight);
 
-    gridLayout->addWidget(channelLabel,            3, 0, AlignLeft);
-    gridLayout->addMultiCellWidget(m_channelValue, 3, 3, 1, 2, AlignRight);
+    gridLayout->addMultiCellWidget(channelLabel, 3, 3, 0, 1, AlignLeft);
+    gridLayout->addWidget(m_channelValue, 3, 2, AlignRight);
 
     gridLayout->addWidget(panLabel,      4, 0, AlignLeft);
     gridLayout->addWidget(m_panCheckBox, 4, 1);
@@ -114,7 +114,7 @@ InstrumentParameterBox::initBox()
 
     // velocity values
     //
-    for (int i = 0; i < Rosegarden::MidiMaxValue; i++)
+    for (int i = 0; i < Rosegarden::MidiMaxValue + 1; i++)
         m_velocityValue->insertItem(QString("%1").arg(i));
 
 
@@ -161,6 +161,34 @@ InstrumentParameterBox::initBox()
 
     connect(m_velocityValue, SIGNAL(activated(int)),
             this, SLOT(slotSelectVelocity(int)));
+
+    connect(m_channelValue, SIGNAL(activated(int)),
+            this, SLOT(slotSelectChannel(int)));
+
+    // connect up mouse wheel movement
+    //
+    connect(m_bankValue, SIGNAL(propagate(int)),
+            this, SLOT(slotSelectBank(int)));
+
+    connect(m_panValue, SIGNAL(propagate(int)),
+            this, SLOT(slotSelectPan(int)));
+
+    connect(m_programValue, SIGNAL(propagate(int)),
+            this, SLOT(slotSelectProgram(int)));
+
+    connect(m_velocityValue, SIGNAL(propagate(int)),
+            this, SLOT(slotSelectVelocity(int)));
+
+    connect(m_channelValue, SIGNAL(propagate(int)),
+            this, SLOT(slotSelectChannel(int)));
+
+    // don't select any of the options in any dropdown
+    m_panValue->setCurrentItem(-1);
+    m_velocityValue->setCurrentItem(-1);
+    m_programValue->setCurrentItem(-1);
+    m_bankValue->setCurrentItem(-1);
+    m_channelValue->setCurrentItem(-1);
+
 }
 
 void
@@ -199,12 +227,8 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
     //
     if (instrument->sendsPan())
     {
-        // activate
         m_panValue->setDisabled(false);
-
-        // Set pan
-        m_panValue->setCurrentItem(instrument->getPan()
-                                   - Rosegarden::MidiMidValue);
+        m_panValue->setCurrentItem(instrument->getPan());
     }
     else
     {
@@ -288,6 +312,7 @@ InstrumentParameterBox::slotActivateVelocity(bool value)
 
     m_selectedInstrument->setSendVelocity(value);
     m_velocityValue->setDisabled(!value);
+    m_velocityValue->setCurrentItem(m_selectedInstrument->getVelocity());
 }
 
 void
@@ -301,6 +326,8 @@ InstrumentParameterBox::slotActivatePan(bool value)
 
     m_selectedInstrument->setSendPan(value);
     m_panValue->setDisabled(!value);
+
+    m_panValue->setCurrentItem(m_selectedInstrument->getPan());
 }
 
 void
@@ -339,9 +366,7 @@ InstrumentParameterBox::slotSelectPan(int index)
     if (m_selectedInstrument == 0)
         return;
 
-    Rosegarden::MidiByte newPan = m_panValue->text(index).toInt();
-
-    m_selectedInstrument->setPan(newPan);
+    m_selectedInstrument->setPan(index);
 }
 
 void
@@ -350,9 +375,7 @@ InstrumentParameterBox::slotSelectVelocity(int index)
     if (m_selectedInstrument == 0)
         return;
 
-    Rosegarden::MidiByte newVely = m_velocityValue->text(index).toInt();
-
-    m_selectedInstrument->setVelocity(newVely);
+    m_selectedInstrument->setVelocity(index);
 }
 
 void
@@ -371,6 +394,17 @@ InstrumentParameterBox::slotSelectBank(int index)
     // repopulate program list
     populateProgramList();
 }
+
+void
+InstrumentParameterBox::slotSelectChannel(int index)
+{
+    if (m_selectedInstrument == 0)
+        return;
+
+    m_selectedInstrument->setMidiChannel(index);
+}
+
+
 
 
 

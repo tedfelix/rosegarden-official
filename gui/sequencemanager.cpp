@@ -72,6 +72,7 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
                                    const Rosegarden::RealTime &sliceEnd)
 {
     Composition &comp = m_doc->getComposition();
+    Studio &studio = m_doc->getStudio();
   
     // Reset MappedComposition
     m_mC.clear();
@@ -94,14 +95,19 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 
     Rosegarden::RealTime eventTime;
     Rosegarden::RealTime duration;
+    Rosegarden::Instrument *instrument;
+    Rosegarden::Track *track;
   
     for (Composition::iterator it = comp.begin(); it != comp.end(); it++)
     {
 	timeT segmentStartTime = (*it)->getStartTime();
 	timeT segmentDuration  = (*it)->getDuration();
 
+        track = comp.getTrackByIndex((*it)->getTrack());
+        instrument = studio.getInstrumentById(track->getInstrument());
+
         // Skip if track is muted
-        if (comp.getTrackByIndex((*it)->getTrack())->isMuted())
+        if (track->isMuted())
             continue;
 
         // Skip the Segment if it starts too late to be of
@@ -145,15 +151,10 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 
             assert (duration >= Rosegarden::RealTime(0,0));
             
-            Rosegarden::TrackId track = (*it)->getTrack();
-
-            Rosegarden::InstrumentId instrument = comp.
-                             getTrackByIndex(track)->getInstrument();
-
             // Insert Audio event
             //
             Rosegarden::MappedEvent *me =
-                    new Rosegarden::MappedEvent(instrument,
+                    new Rosegarden::MappedEvent(track->getInstrument(),
                                                 (*it)->getAudioFileID(),
                                                 eventTime,
                                                 duration,
@@ -276,15 +277,10 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 	    if (duration == Rosegarden::RealTime(0, 0))
 		continue;
 
-	    Rosegarden::TrackId track = (*it)->getTrack();
-
-	    Rosegarden::InstrumentId instrument = comp.
-		getTrackByIndex(track)->getInstrument();
-
 	    // Make mapped event
 	    // 
 	    Rosegarden::MappedEvent *mE =
-		new Rosegarden::MappedEvent(instrument,
+		new Rosegarden::MappedEvent(track->getInstrument(),
                                             **j,
                                             eventTime,
                                             duration);
@@ -292,6 +288,11 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 	    // Add any performance transposition
 	    // 
 	    mE->setPitch(mE->getPitch() + ((*it)->getTranspose()));
+
+            // Force velocity if the Instrument is set
+            //
+            if (instrument->sendsVelocity())
+                mE->setVelocity(instrument->getVelocity());
 
 	    // And stick it in the mapped composition
 	    // 

@@ -47,6 +47,7 @@ public slots:
     void slotSelectPan(int index);
     void slotSelectVelocity(int index);
     void slotSelectBank(int index);
+    void slotSelectChannel(int index);
 
     void slotActivateProgramChange(bool value);
     void slotActivateVelocity(bool value);
