@@ -509,7 +509,7 @@ public:
     static Note getNearestNote(int duration, int maxDots = 2);
 
     /// Returned event is on heap; caller takes responsibility for ownership
-    Event *getAsNoteEvent(int pitch, timeT absoluteTime) const;
+    Event *getAsNoteEvent(timeT absoluteTime, int pitch) const;
 
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsRestEvent(timeT absoluteTime) const;

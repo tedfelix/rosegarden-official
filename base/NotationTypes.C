@@ -756,7 +756,7 @@ Note Note::getNearestNote(int duration, int maxDots)
     else return Note(tag, std::max(maxDots, tag));
 } 
 
-Event *Note::getAsNoteEvent(int pitch, timeT absoluteTime) const
+Event *Note::getAsNoteEvent(timeT absoluteTime, int pitch) const
 {
     Event *e = new Event(EventType);
     e->set<Int>(BaseProperties::PITCH, pitch);
