@@ -53,7 +53,8 @@ class MultiViewCommandHistory;
  * NotationVLayout and Staff data, as well as using rendering the
  * actual notes (using NotePixmapFactory to generate the pixmaps).
  */
-class NotationView : public KMainWindow
+class NotationView : public KMainWindow,
+		     public NotationStaffLayout
 {
     friend class NoteInserter;
     friend class ClefInserter;
@@ -152,6 +153,45 @@ public:
 	return &m_toolbarNotePixmapFactory;
     }
 
+    
+
+    // StaffLayout methods.  These will be reworked soon.
+    // (So please don't bother de-inlining them, Guillaume;
+    // the nastier they are, the better, for now, 'cos it'll
+    // help remind me to deal with them.)   --cc
+
+    NotationStaff *getStaffAtY(int y) const {
+	int i = ((NotationView *)this)->findClosestStaff(y);
+	return (i >= 0 ? m_staffs[i] : 0);
+    }
+
+    int getHeightAtY(int y) const {
+	int i = ((NotationView *)this)->findClosestStaff(y);
+	return (i >= 0 ? m_staffs[i]->heightOfYCoord(y - m_staffs[i]->y()) : -1000); //!!!
+    }
+
+    Rosegarden::timeT getTimeAtCoordinates(int x, int y) const {
+	//!!! this is currently unused
+	return 0;
+    }
+
+    int getYOfHeightAtTime(Rosegarden::Staff<NotationElement> *staff,
+			   int height, Rosegarden::timeT time) const {
+	NotationStaff *ns(dynamic_cast<NotationStaff *>(staff));
+	return (int)(ns->yCoordOfHeight(height) + ns->y());
+    }
+
+    int getYSnappedToLine(int y) const {
+	int i = ((NotationView *)this)->findClosestStaff(y);
+	if (i < 0) return y;
+	return (int)(m_staffs[i]->yCoordOfHeight(m_staffs[i]->heightOfYCoord
+						 (y - m_staffs[i]->y())) +
+		     m_staffs[i]->y());
+    }
+
+    std::string getNoteNameAtCoordinates(int x, int y) const;	
+    
+
 
 public slots:
     /**
@@ -159,16 +199,6 @@ public slots:
      */
     void closeWindow();
 
-    /**
-     * undo
-     */
-    void slotEditUndo();
-
-    /**
-     * redo
-     */
-    void slotEditRedo();
-    
     /**
      * put the indicationed text/object into the clipboard and remove * it
      * from the document
@@ -448,6 +478,7 @@ protected:
      * If the closest event is further than \a proximityThreshold,
      * (in pixels), end() is returned;
      */
+    //!!! Need x and y
     NotationElementList::iterator findClosestNote(double x,
                                                   Rosegarden::Event *&timeSignature,
                                                   Rosegarden::Event *&clef,
@@ -526,6 +557,8 @@ protected:
     std::vector<NotationStaff*> m_staffs;
     int m_currentStaff;
     int m_lastFinishingStaff;
+
+    Rosegarden::Accidental m_currentAccidental;
 
     StaffRuler* m_ruler;
     ActiveItem* m_activeItem;

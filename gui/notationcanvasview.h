@@ -25,9 +25,8 @@
 #include <qcanvas.h>
 #include <vector>
 
-// #include "notepixmapfactory.h"
+#include "notationstaff.h" // for NotationStaffLayout typedef only (can't predeclare a typedef)
 
-class StaffLine;
 class NotationElement;
 class QCanvasItemGroup;
 class QCanvasLineGroupable;
@@ -43,12 +42,14 @@ class QCanvasLineGroupable;
  *
  *@see NotationView
  */
+
 class NotationCanvasView : public QCanvasView
 {
     Q_OBJECT
 
 public:
-    NotationCanvasView(QCanvas *viewing=0, QWidget *parent=0,
+    NotationCanvasView(const NotationStaffLayout &staffLayout,
+		       QCanvas *viewing=0, QWidget *parent=0,
                        const char *name=0, WFlags f=0);
 
     ~NotationCanvasView();
@@ -107,6 +108,8 @@ signals:
     
 protected:
 
+    const NotationStaffLayout &m_staffLayout;
+
     /**
      * Callback for a mouse button press event in the canvas
      */
@@ -129,33 +132,24 @@ protected:
 
     void processActiveItems(QMouseEvent*, QCanvasItemList);
 
-    void handleMousePress(const StaffLine*, int staffNo,
+    void handleMousePress(int height, int staffNo,
                           QMouseEvent*,
                           NotationElement* pressedNotationElement = 0);
 
     bool posIsTooFarFromStaff(const QPoint &pos);
 
-    /// returns the staff line closest to the mouse event position
-    StaffLine* findClosestLineWithinThreshold(QMouseEvent*);
+    int getLegerLineCount(int height, bool &offset);
 
-    /** Returns the note name (C4, Bb3) corresponding to the given x-coord
-	on the given line (x-coord needed to take clef/key into account) */
-    QString getNoteNameForLine(const StaffLine *line, int x);
-
-    int getStaffLineSpacing(const StaffLine *line);
-
-    int getLegerLineCount(const StaffLine *line, bool &offset);
-
-    void setPositionMarkerHeight(const StaffLine *line);
+    void setPositionMarkerHeight(QMouseEvent *e);
 
     NotationElement *getElementAtXCoord(QMouseEvent *e);
 
-    /// the staff line over which the mouse cursor is
-    StaffLine* m_currentHighlightedLine;
-
     int m_lastYPosNearStaff;
 
-    unsigned int m_staffLineThreshold;
+    unsigned int m_staffLineThreshold; //!!! better name please
+
+    NotationStaff *m_currentStaff;
+    int m_currentHeight;
 
     QCanvasItemGroup *m_positionMarker;
     QCanvasLineGroupable *m_vert1;

@@ -156,8 +156,9 @@ TrackEditor::setupSegments()
                                  << " - instrument : " << (*i)->getInstrument()
                                  << endl;
 
-	    int startBar = comp.getBarNumber((*i)->getStartIndex());
-	    int barCount = comp.getBarNumber((*i)->getEndIndex()) - startBar +1;
+	    int startBar = comp.getBarNumber((*i)->getStartIndex(), true);
+	    int barCount = comp.getBarNumber((*i)->getEndIndex(), true)
+		- startBar +1;
 
             int y = m_vHeader->sectionPos((*i)->getInstrument());
 	    int x = m_hHeader->sectionPos(startBar);
@@ -182,8 +183,8 @@ void TrackEditor::addSegment(int instrument, int start,
     comp.addSegment(segment);
     segment->setDuration(nbTimeSteps);
 
-    int startBar = comp.getBarNumber(start);
-    int barCount = comp.getBarNumber(start + nbTimeSteps) - startBar + 1;
+    int startBar = comp.getBarNumber(start, true);
+    int barCount = comp.getBarNumber(start + nbTimeSteps, true) - startBar + 1;
 
     int y = m_vHeader->sectionPos(instrument);
     int x = m_hHeader->sectionPos(startBar);
@@ -323,8 +324,12 @@ TrackEditor::setPointerPosition(int position)
 
     Composition &comp = m_document->getComposition();
 
-    int barNo = comp.getBarNumber(position);
-    pair<timeT, timeT> times = comp.getBarRange(position);
+    int barNo = comp.getBarNumber(position, false);
+
+    // no, no good beyond end of piece:
+//    pair<timeT, timeT> times = comp.getBarRange(position);
+
+    pair<timeT, timeT> times = comp.getBarRange(barNo, false);
 
     int canvasPosition = m_hHeader->sectionPos(barNo);
 

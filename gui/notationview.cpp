@@ -53,7 +53,6 @@
 #include "BaseProperties.h"
 #include "SegmentNotationHelper.h"
 #include "Quantizer.h"
-#include "staffline.h"
 #include "staffruler.h"
 #include "notationcommands.h"
 #include "multiviewcommandhistory.h"
@@ -93,8 +92,8 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     m_currentNotePixmap(0),
     m_hoveredOverNoteName(0),
     m_hoveredOverAbsoluteTime(0),
-    m_canvasView(new NotationCanvasView(new QCanvas(width() * 2,
-                                                    height() * 2),
+    m_canvasView(new NotationCanvasView(*this,
+					new QCanvas(width() * 2, height() * 2),
                                         this)),
     m_lastFinishingStaff(-1),
     m_ruler(new StaffRuler(20, 0, canvas())),
@@ -441,8 +440,6 @@ void NotationView::setupActions()
     // setup edit menu
     getCommandHistory()->attachView(actionCollection());
 
-//    KStdAction::undo    (this, SLOT(slotEditUndo()),       actionCollection());
-//    KStdAction::redo    (this, SLOT(slotEditRedo()),       actionCollection());
     KStdAction::cut     (this, SLOT(slotEditCut()),        actionCollection());
     KStdAction::copy    (this, SLOT(slotEditCopy()),       actionCollection());
     KStdAction::paste   (this, SLOT(slotEditPaste()),      actionCollection());
@@ -982,6 +979,22 @@ PositionCursor* NotationView::getCursor()
     return getRuler()->getCursor();
 }
 
+string NotationView::getNoteNameAtCoordinates(int x, int y) const
+{
+//!!!
+    int i = ((NotationView *)this)->findClosestStaff(y);
+    if (i < 0) return "";
+
+    Rosegarden::Clef clef;
+    Rosegarden::Key key;
+    m_staffs[i]->getClefAndKeyAtX(x, clef, key);
+
+    return
+	Rosegarden::NotationDisplayPitch
+	(getHeightAtY(y), m_currentAccidental).getAsString(clef, key);
+}
+
+
 
 //////////////////////////////////////////////////////////////////////
 //                    Slots
@@ -990,19 +1003,6 @@ PositionCursor* NotationView::getCursor()
 void NotationView::closeWindow()
 {
     close();
-}
-
-//
-// Undo, Redo
-//
-void NotationView::slotEditUndo()
-{
-    KTmpStatusMsg msg(i18n("Undo..."), statusBar());
-}
-
-void NotationView::slotEditRedo()
-{
-    KTmpStatusMsg msg(i18n("Redo..."), statusBar());
 }
 
 //
@@ -1329,7 +1329,7 @@ NotationView::setPositionPointer(const int& position)
 
     Rosegarden::Composition &comp = m_document->getComposition();
 
-    int barNo = comp.getBarNumber(position);
+    int barNo = comp.getBarNumber(position, true);
     pair<timeT, timeT> times = comp.getBarRange(position);
 
     double canvasPosition = m_hlayout->getTotalWidth();
@@ -1566,31 +1566,37 @@ void NotationView::slotDottedR64th()
 //----------------------------------------
 void NotationView::slotNoAccidental()
 {
+    m_currentAccidental = Rosegarden::Accidentals::NoAccidental;
     emit changeAccidental(Rosegarden::Accidentals::NoAccidental);
 }
 
 void NotationView::slotSharp()
 {
+    m_currentAccidental = Rosegarden::Accidentals::Sharp;
     emit changeAccidental(Rosegarden::Accidentals::Sharp);
 }
 
 void NotationView::slotFlat()
 {
+    m_currentAccidental = Rosegarden::Accidentals::Flat;
     emit changeAccidental(Rosegarden::Accidentals::Flat);
 }
 
 void NotationView::slotNatural()
 {
+    m_currentAccidental = Rosegarden::Accidentals::Natural;
     emit changeAccidental(Rosegarden::Accidentals::Natural);
 }
 
 void NotationView::slotDoubleSharp()
 {
+    m_currentAccidental = Rosegarden::Accidentals::DoubleSharp;
     emit changeAccidental(Rosegarden::Accidentals::DoubleSharp);
 }
 
 void NotationView::slotDoubleFlat()
 {
+    m_currentAccidental = Rosegarden::Accidentals::DoubleFlat;
     emit changeAccidental(Rosegarden::Accidentals::DoubleFlat);
 }
 

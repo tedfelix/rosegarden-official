@@ -101,23 +101,22 @@ public:
      */
     bool deleteSegment(Segment*);
 
-    /// Removes all Segments from the Composition and destroys them
+    /**
+     * Remove all Segments from the Composition and destroy them
+     */
     void clear();
 
-
-    /// return the absolute end time of the segment that ends last
+    /**
+     * Return the absolute end time of the segment that ends last
+     */
     timeT getDuration() const;
 
-
-    /// return the total number of bars in the composition
-    unsigned int getNbBars() const {
-	return getBarNumber(getDuration()) + 1;
-    }
-
     /**
-     * Return the number of the bar that starts at or contains time t
+     * Return the total number of bars in the composition
      */
-    int getBarNumber(timeT t) const;
+    unsigned int getNbBars() const {
+	return getBarNumber(getDuration(), false) + 1;
+    }
 
     /**
      * Return the starting time of the bar that contains time t
@@ -130,12 +129,23 @@ public:
     timeT getBarEnd(timeT t) const;
 
     /**
+     * Return the number of the bar that starts at or contains time t.
+     *
+     * If truncate is true, will stop at the end of the composition
+     * and return the last real bar number if t is out of range;
+     * otherwise will happily return computed bar numbers for times
+     * beyond the real end of the composition.
+     */
+    int getBarNumber(timeT t, bool truncate) const;
+
+    /**
      * Return the time range of bar n.  Relatively inefficient.
      * 
-     * If truncate is true, will stop at end of segment and return last
-     * real bar if n is out of range; otherwise will happily return
-     * theoretical timings for bars beyond the real end of composition
-     * (this is used when extending segments on the segment editor).
+     * If truncate is true, will stop at the end of the composition
+     * and return last real bar if n is out of range; otherwise will
+     * happily return theoretical timings for bars beyond the real end
+     * of composition (this is used when extending segments on the
+     * segment editor).
      */
     std::pair<timeT, timeT> getBarRange(int n, bool truncate) const;
 

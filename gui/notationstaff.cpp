@@ -124,7 +124,11 @@ NotationStaff::changeFont(string fontName, int resolution)
     }
     QColor lineColour(level, level, level);
 
-    for (h = -2 * nbLegerLines; h <= (2*(nbLines + nbLegerLines) - 2); ++h) {
+    //!!! Hope this becomes a permanent change (although we'll
+    //hopefully end up doing page-view stuff too...)
+
+//!!!    for (h = -2 * nbLegerLines; h <= (2*(nbLines + nbLegerLines) - 2); ++h) {
+    for (h = 0; h <= (2*nbLines - 2); h += 2) {
 
         for (int i = 0; i < m_npf->getStaffLineThickness(); ++i) {
 
@@ -195,6 +199,51 @@ int NotationStaff::yCoordOfHeight(int h) const
     if (h > 0 && h < 8 && (h % 2 == 1)) ++y;
     else if (h < 0 && (-h % 2 == 1)) ++y;
     return y;
+}
+
+int NotationStaff::heightOfYCoord(int y) const
+{
+    // 0 is bottom staff-line, 8 is top one, leger lines above & below
+
+    //!!! the lazy route: approximate, then get the right value
+    // by calling yCoordOfHeight a few times... ugh
+
+    kdDebug(KDEBUG_AREA) << "\nNotationStaff::heightOfYCoord: y = " << y
+			 << ", getTopLineOffset() = " << getTopLineOffset()
+			 << ", getLineSpacing() = " << m_npf->getLineSpacing()
+			 << endl;
+
+    int ph = (y - (int)getTopLineOffset()) * 2 / m_npf->getLineSpacing();
+    ph = 8 - ph;
+
+    int i;
+    int mi = -2;
+    int md = m_npf->getLineSpacing() * 2;
+
+    int testi = -2;
+    int testMd = 1000;
+
+    for (i = -1; i <= 1; ++i) {
+	int d = y - yCoordOfHeight(ph + i);
+	if (d < 0) d = -d;
+	if (d < md) { md = d; mi = i; }
+	if (d < testMd) { testMd = d; testi = i; }
+    }
+    
+    if (mi > -2) {
+	kdDebug(KDEBUG_AREA) << "NotationStaff::heightOfYCoord: " << y
+			     << " -> " << (ph + mi) << " (mi is " << mi << ", distance "
+			     << md << ")" << endl;
+	if (mi == 0) {
+	    kdDebug(KDEBUG_AREA) << "GOOD APPROXIMATION" << endl;
+	} else {
+	    kdDebug(KDEBUG_AREA) << "BAD APPROXIMATION" << endl;
+	}
+	return ph + mi;
+    } else {
+	kdDebug(KDEBUG_AREA) << "NotationStaff::heightOfYCoord: heuristic got " << ph << ", nothing within range (closest was " << (ph + testi) << " which is " << testMd << " away)" << endl;
+	return 0;
+    }
 }
 
 static bool

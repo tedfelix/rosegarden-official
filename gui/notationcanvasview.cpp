@@ -23,7 +23,6 @@
 #include "notationelement.h"
 #include "qcanvasgroupableitem.h"
 #include "qcanvassimplesprite.h"
-#include "staffline.h"
 #include "NotationTypes.h"
 #include "notationproperties.h"
 #include "notationstaff.h"
@@ -32,12 +31,14 @@
 
 using namespace NotationProperties;
 
-NotationCanvasView::NotationCanvasView(QCanvas *viewing, QWidget *parent,
+NotationCanvasView::NotationCanvasView(const NotationStaffLayout &staffLayout,
+				       QCanvas *viewing, QWidget *parent,
                                        const char *name, WFlags f) :
     QCanvasView(viewing, parent, name, f),
-    m_currentHighlightedLine(0),
+    m_staffLayout(staffLayout),
     m_lastYPosNearStaff(0),
-    m_staffLineThreshold(10),
+    m_currentStaff(0),
+    m_currentHeight(-1000),
     m_legerLineOffset(false),
     m_positionTracking(false)
 {
@@ -81,13 +82,17 @@ NotationCanvasView::contentsMouseReleaseEvent(QMouseEvent *e)
 void
 NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
 {
-    StaffLine *prevLine = m_currentHighlightedLine;
-    m_currentHighlightedLine = findClosestLineWithinThreshold(e);
+    NotationStaff *prevStaff = m_currentStaff;
+    int prevHeight = m_currentHeight;
+    
+    m_currentStaff = dynamic_cast<NotationStaff *>
+	(m_staffLayout.getStaffAtY(e->y()));
+    m_currentHeight = m_staffLayout.getHeightAtY(e->y());
 
-    if (!m_currentHighlightedLine) {
+    if (!m_currentStaff) {
 
 	emit hoveredOverNoteChange(QString::null);
-	if (prevLine) {
+	if (prevStaff) {
 	    m_positionMarker->hide();
 	    canvas()->update();
 	}
@@ -98,16 +103,18 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
 	bool needUpdate = (m_positionTracking && (m_positionMarker->x() != x));
 	m_positionMarker->setX(x);
 
-	if (prevLine != m_currentHighlightedLine) {
+	if (prevStaff  != m_currentStaff ||
+	    prevHeight != m_currentHeight) {
 
 	    if (m_positionTracking) {
-		setPositionMarkerHeight(m_currentHighlightedLine);
+		setPositionMarkerHeight(e);
 		m_positionMarker->show();
 		needUpdate = true;
 	    }
 
 	    emit hoveredOverNoteChange
-		(getNoteNameForLine(m_currentHighlightedLine, e->x()));
+		(m_staffLayout.getNoteNameAtCoordinates
+		 (e->x(), e->y()).c_str());
 	}
 
 	if (needUpdate) canvas()->update();
@@ -134,16 +141,19 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
     // to make sure the event happens at the point we clicked at
     // rather than the last point for which contentsMouseMoveEvent
     // happened to be called
-
+/*
     StaffLine *staffLine = findClosestLineWithinThreshold(e);
+*/
+    NotationStaff *staff = dynamic_cast<NotationStaff *>
+	(m_staffLayout.getStaffAtY(e->y()));
 
-    if (!staffLine) {
+    if (!staff) {
 
         if (itemList.count() != 0) // the mouse press occurred on at least one
                                    // item - check if some are active
             processActiveItems(e, itemList);
         else 
-            handleMousePress(0, -1, e); // it didn't occur anywhere special
+            handleMousePress(-1000, -1, e); // it didn't occur anywhere special
 
         return;
 
@@ -153,12 +163,7 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
     QCanvasNotationSprite* sprite = 0;
     QCanvasItem* activeItem = 0;
 
-    // Get the actual pitch where the click occurred
-    //
-    Rosegarden::Key key;
-    Rosegarden::Clef clef;
-
-    int clickHeight = staffLine->getHeight();
+    int clickHeight = m_staffLayout.getHeightAtY(e->y());
 
     for (it = itemList.begin(); it != itemList.end(); ++it) {
 
@@ -194,10 +199,6 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 
     int staffNo = -1;
 
-    // Find staff on which the click occurred
-    QCanvasItemGroup *group = staffLine->group();
-    NotationStaff *staff = dynamic_cast<NotationStaff*>(group);
-
     if (staff)
         staffNo = staff->getId();
     else
@@ -205,10 +206,10 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 
 
     if (sprite)
-        handleMousePress(staffLine, staffNo,
+        handleMousePress(clickHeight, staffNo,
                          e, &(sprite->getNotationElement()));
     else
-        handleMousePress(staffLine, staffNo, e);
+        handleMousePress(clickHeight, staffNo, e);
 }
 
 void NotationCanvasView::contentsMouseDoubleClickEvent(QMouseEvent* e)
@@ -241,16 +242,14 @@ NotationCanvasView::processActiveItems(QMouseEvent* e,
 }
 
 void
-NotationCanvasView::handleMousePress(const StaffLine *line,
+NotationCanvasView::handleMousePress(int height,
                                      int staffNo,
                                      QMouseEvent *e,
                                      NotationElement *el)
 {
-    int h = line ? line->getHeight() : StaffLine::NoHeight;
+    kdDebug(KDEBUG_AREA) << "NotationCanvasView::handleMousePress() at height " << height << endl;
 
-    kdDebug(KDEBUG_AREA) << "NotationCanvasView::handleMousePress() at height " << h << endl;
-
-    emit itemPressed(h, staffNo, e, el);
+    emit itemPressed(height, staffNo, e, el);
 }
 
 bool
@@ -265,45 +264,10 @@ NotationCanvasView::posIsTooFarFromStaff(const QPoint &pos)
     
 }
 
-QString
-NotationCanvasView::getNoteNameForLine(const StaffLine *line, int x)
-{
-    int h = line->getHeight();
-
-    // Ideally we'd need to take currently-selected accidental into
-    // account, but that information is tricky to get and not essential
-
-    const NotationStaff *staff =
-	dynamic_cast<const NotationStaff *>(line->group());
-
-    Rosegarden::Clef clef;
-    Rosegarden::Key key;
-    staff->getClefAndKeyAtX(x, clef, key);
-
-    std::string noteName =
-	Rosegarden::NotationDisplayPitch
-	(h, Rosegarden::Accidentals::NoAccidental).getAsString(clef, key);
-
-    return QString(noteName.c_str());
-}
-
 int
-NotationCanvasView::getStaffLineSpacing(const StaffLine *line)
-{
-    //!!! There should be a better structure for doing this stuff
-
-    const NotationStaff *staff =
-	dynamic_cast<const NotationStaff *>(line->group());
-
-    return staff->getLineSpacing() - 1;
-}
-
-int
-NotationCanvasView::getLegerLineCount(const StaffLine *line, bool &offset)
+NotationCanvasView::getLegerLineCount(int height, bool &offset)
 {
     //!!! This is far too specifically notation-related to be here, really
-
-    int height = line->getHeight();
 
     if (height < 0) {
 
@@ -320,16 +284,27 @@ NotationCanvasView::getLegerLineCount(const StaffLine *line, bool &offset)
 }
 
 void
-NotationCanvasView::setPositionMarkerHeight(const StaffLine *line)
+NotationCanvasView::setPositionMarkerHeight(QMouseEvent *e)
 {
-    int spacing = getStaffLineSpacing(line);
+    int lineY = m_staffLayout.getYSnappedToLine(e->y());
+    int height = m_staffLayout.getHeightAtY(e->y());
+
+    kdDebug(KDEBUG_AREA) << "NotationCanvasView::setPositionMarkerHeight: "
+			 << e->y() << " snapped to line -> " << lineY
+			 << " (height " << height << ")" << endl;
+
+    //!!! nasty
+    int spacing =
+	m_staffLayout.getYOfHeightAtTime(m_currentStaff, 0, 0) -
+	m_staffLayout.getYOfHeightAtTime(m_currentStaff, 2, 0) - 1;
+
     m_staffLineThreshold = spacing;
     m_vert1->setPoints(0, -spacing/2, 0, spacing/2);
     m_vert2->setPoints(17, -spacing/2, 17, spacing/2); // magic based on mouse cursor size
-    m_positionMarker->setY(line->y() + line->startPoint().y());
+    m_positionMarker->setY(lineY);
 
     bool legerLineOffset = false;
-    int  legerLineCount = getLegerLineCount(line, legerLineOffset);
+    int  legerLineCount = getLegerLineCount(height, legerLineOffset);
 
     if (legerLineCount  != (int)m_legerLines.size() ||
 	legerLineOffset != m_legerLineOffset) {
@@ -369,60 +344,6 @@ NotationCanvasView::setPositionMarkerHeight(const StaffLine *line)
 	m_legerLineOffset = legerLineOffset;
     }
 }
-
-    
-StaffLine *
-NotationCanvasView::findClosestLineWithinThreshold(QMouseEvent* e)
-{
-//    kdDebug(KDEBUG_AREA) << "NotationCanvasView::findClosestLineWithinThreshold()\n";
-    
-    // Compute a threshold rectangle around the event's position
-    //
-    QRect threshold(e->pos(), QSize(30,30));
-    threshold.moveCenter(e->pos());
-
-    QCanvasItemList nearbyLines = canvas()->collisions(threshold);
-
-    QCanvasItemList::Iterator it;
-
-    unsigned int minDist = canvas()->height();
-    StaffLine* closestLine = 0;
-
-    // Scan all StaffLines which collide with the threshold rectangle
-    // to find the closest one
-    //
-    for (it = nearbyLines.begin(); it != nearbyLines.end(); ++it) {
-
-        StaffLine* line = 0;
-        QCanvasItem *item = *it;
-
-        if ((line = dynamic_cast<StaffLine*>(item))) {
-
-	    if (!line->isSignificant()) continue;
-
-            unsigned int dist = 0;
-	    int y = (int)(line->y() + line->startPoint().y());
-
-            if (y == e->y()) {
-                minDist = 0;
-                closestLine = line;
-                break;
-            }
-
-            dist = abs(int(y - e->y()));
-
-            if (dist < minDist) {
-                minDist = dist;
-                closestLine = line;
-            }           
-        }
-    }
-
-    if (closestLine && minDist <= m_staffLineThreshold) return closestLine;
-
-    return 0;
-}
-
 
 NotationElement *
 NotationCanvasView::getElementAtXCoord(QMouseEvent *e) // any old element

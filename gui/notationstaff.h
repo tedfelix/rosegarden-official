@@ -30,10 +30,13 @@
 #include "FastVector.h"
 
 #include "Staff.h"
+#include "StaffLayout.h"
 
 class QCanvasLineGroupable;
 class QCanvasSimpleSprite;
 class EventSelection;
+
+typedef Rosegarden::StaffLayout<NotationElement> NotationStaffLayout;
 
 /**
  * The Staff is a repository for information about the notation
@@ -82,6 +85,14 @@ public:
      * 0 is the bottom staff-line, 8 is the top one.
      */
     int yCoordOfHeight(int height) const;
+
+    /**
+     * Returns the height of the nearest line on the staff to the
+     * specified Y coordinate.
+     *
+     * 0 is the bottom staff-line, 8 is the top one.
+     */
+    int heightOfYCoord(int height) const;
 
     /**
      * Returns the difference between the y-coord of one visible line
@@ -149,7 +160,6 @@ public:
     void renderElements();
 
     /**
-     *
      * Assign suitable coordinates to all the elements on the staff,
      * based entirely on the layout X and Y coordinates they were
      * given by the horizontal and vertical layout processes.

@@ -684,6 +684,7 @@ NotationHLayout::layout(BarDataMap::iterator i)
 
 	    if (el->isNote()) {
 
+		// This modifies "it" and "tieMap"
 		delta = positionChord
 		    (staff, it, bdi, timeSignature, clef, key, tieMap);
 
