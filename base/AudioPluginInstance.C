@@ -25,7 +25,8 @@ namespace Rosegarden
 AudioPluginInstance::AudioPluginInstance(unsigned int position):
     m_id(0),
     m_position(position),
-    m_assigned(false)
+    m_assigned(false),
+    m_bypass(false)
 {
 }
 

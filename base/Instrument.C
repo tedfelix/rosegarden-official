@@ -251,6 +251,20 @@ Instrument::clearPlugins()
 }
 
 
+// Get an instance for an index
+//
+AudioPluginInstance*
+Instrument::getPlugin(int index)
+{
+    PluginInstanceIterator it = m_audioPlugins.begin();
+    for (; it != m_audioPlugins.end(); it++)
+    {
+        if ((*it)->getPosition() == ((unsigned int)index))
+            return *it;
+    }
+
+    return 0;
+}
 
 
 }

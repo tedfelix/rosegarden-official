@@ -24,6 +24,7 @@
 #include <qlabel.h>
 #include <qdial.h>
 #include <qfont.h>
+#include <qpushbutton.h>
 
 #include "audioplugindialog.h"
 #include "audiopluginmanager.h"
@@ -48,6 +49,13 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     m_pluginList = new RosegardenComboBox(true, v);
     m_pluginList->insertItem(i18n("<no plugin>"));
 
+    m_pluginId = new QLabel(i18n("<no id>"), v);
+
+    m_bypassButton = new QPushButton(i18n("Bypass"), v);
+    m_bypassButton->setToggleButton(true);
+    connect(m_bypassButton, SIGNAL(toggled(bool)),
+            this, SIGNAL(bypassed(bool)));
+
     // Store the height so we can resize the whole dialog later
     // if required
     //
@@ -67,7 +75,24 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
         m_pluginList->insertItem(*it);
     }
 
-    slotPluginSelected(m_pluginList->currentItem());
+    // Check for plugin and setup as required
+    AudioPluginInstance *inst = instrument->getPlugin(index);
+    if (inst)
+    {
+        if (inst->isAssigned())
+        {
+            if (inst->isBypassed())
+                m_bypassButton->setDown(true);
+
+            // do the same to the controls too
+            slotPluginSelected(aPM->getPositionByUniqueId(inst->getId()));
+        }
+        else
+            slotPluginSelected(m_pluginList->currentItem());
+    }
+    else
+        slotPluginSelected(m_pluginList->currentItem());
+
 }
 
 void
@@ -76,10 +101,13 @@ AudioPluginDialog::slotPluginSelected(int number)
     QString caption = strtoqstr(m_instrument->getName()) + QString(" - ");
 
     // tell the sequencer
-    emit pluginSelected(number - 1);
+    emit pluginSelected(m_index, number - 1);
 
     if (number == 0)
+    {
         setCaption(caption + i18n("<no plugin>"));
+        m_pluginId->setText(i18n("<no id>"));
+    }
 
     AudioPlugin *plugin = m_pluginManager->getPlugin(number - 1);
 
@@ -95,6 +123,7 @@ AudioPluginDialog::slotPluginSelected(int number)
     if (plugin)
     {
         setCaption(caption + plugin->getName());
+        m_pluginId->setText(QString("%1").arg(plugin->getUniqueId()));
 
         PortIterator it = plugin->begin();
         int count = 0;
@@ -170,6 +199,8 @@ PluginControl::PluginControl(QWidget *parent,
     QLabel *title = new QLabel(port->getName(), this);
     setStretchFactor(title, 20);
 
+    QLabel *value = new QLabel(this);
+    setStretchFactor(value, 1);
 
     if (type == Rotary)
     {
@@ -231,6 +262,12 @@ PluginControl::slotValueChanged(int value)
     emit valueChanged((float(value))/m_multiplier);
 }
 
+void
+PluginControl::setValue(float value)
+{
+    m_dial->setValue(int(value * m_multiplier));
+    // set the label too..
+}
 
 
 

@@ -23,6 +23,7 @@
 
 #include <qhbox.h>
 #include <qdial.h>
+#include <qpushbutton.h>
 
 #include "Instrument.h"
 
@@ -63,6 +64,8 @@ public:
                   AudioPluginManager *pluginManager,
                   int index);
  
+    void setValue(float value);
+
 public slots:
     void slotValueChanged(int value);
 
@@ -99,8 +102,11 @@ public slots:
     void slotPluginPortChanged(float value);
 
 signals:
-    void pluginSelected(int port);
-    void pluginPortChanged(int port, float value);
+    void pluginSelected(int index, int plugin);
+    void pluginPortChanged(int index, float value);
+
+    // is this plugin being bypassed?
+    void bypassed(bool);
 
 protected:
 
@@ -108,6 +114,8 @@ protected:
     Instrument          *m_instrument;
 
     RosegardenComboBox  *m_pluginList;
+    QLabel              *m_pluginId;
+    QPushButton         *m_bypassButton;
 
     std::vector<PluginControl*> m_pluginWidgets;
 

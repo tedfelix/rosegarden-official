@@ -76,6 +76,9 @@ public:
     void setAssigned(bool ass) { m_assigned = ass; }
     bool isAssigned() const { return m_assigned; }
 
+    void setBypass(bool bypass) { m_bypass = bypass; }
+    bool isBypassed() const { return m_bypass; }
+
 protected:
 
     unsigned long                      m_id;
@@ -86,6 +89,7 @@ protected:
     // a matching instance at the sequencer?
     //
     bool                               m_assigned; 
+    bool                               m_bypass;
 
 };
 

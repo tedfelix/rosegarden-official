@@ -697,8 +697,8 @@ InstrumentParameterBox::slotSelectPlugin(int /*index*/) // no index 4 moment
                                           m_selectedInstrument,
                                           index);
 
-    connect(aPD, SIGNAL(pluginSelected(int)),
-            this, SLOT(slotPluginSelected(int)));
+    connect(aPD, SIGNAL(pluginSelected(int, int)),
+            this, SLOT(slotPluginSelected(int, int)));
 
     connect(aPD, SIGNAL(pluginPortChanged(int, float)),
             this, SLOT(slotPluginPortChanged(int, float)));
@@ -708,21 +708,39 @@ InstrumentParameterBox::slotSelectPlugin(int /*index*/) // no index 4 moment
 }
 
 void
-InstrumentParameterBox::slotPluginSelected(int plugin)
+InstrumentParameterBox::slotPluginSelected(int index, int plugin)
 {
 
-    if (plugin == -1)
+    Rosegarden::AudioPluginInstance *inst = 
+        m_selectedInstrument->getPlugin(index);
+
+    if (inst)
     {
-        std:: cout << "InstrumentParameterBox::slotPluginSelected - "
-                   << "no plugin selected" << std::endl;
+        if (plugin == -1)
+        {
+            std:: cout << "InstrumentParameterBox::slotPluginSelected - "
+                       << "no plugin selected" << std::endl;
+        }
+        else
+        {
+            std::cout << "InstrumentParameterBox::slotPluginSelected" 
+                      << std::endl;
+
+            Rosegarden::AudioPlugin *plgn = 
+                m_pluginManager->getPlugin(plugin);
+
+            // initialise the instance from the plugin
+            //
+            //inst->
+        }
     }
     else
-        std::cout << "InstrumentParameterBox::slotPluginSelected" 
-                  << std::endl;
+        std::cerr << "InstrumentParameterBox::slotPluginSelected - "
+                  << "got index of unknown plugin!" << std::endl;
 }
 
 void
-InstrumentParameterBox::slotPluginPortChanged(int plugin, float value)
+InstrumentParameterBox::slotPluginPortChanged(int index, float value)
 {
     std::cout << "InstrumentParameterBox::slotPluginPortChanged - "
               << "value = " << value << std::endl;

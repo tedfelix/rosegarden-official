@@ -165,6 +165,10 @@ public:
     bool removePlugin(unsigned int position);
     void clearPlugins();
 
+    // Get a plugin for this instrument
+    //
+    AudioPluginInstance* getPlugin(int index);
+
 private:
     InstrumentId    m_id;
     std::string     m_name;
