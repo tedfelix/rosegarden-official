@@ -18,6 +18,10 @@ General
 
  * Beat location and tempo tracking in MIDI (and audio?).
 
+ * better integration of fluidsynth/softsynths
+
+ * search facility for patch sounds (search all banks)
+
 
 Notation etc
 ------------
@@ -44,9 +48,4 @@ Notation etc
 
  * Lilypond import.  Ignore those, ahem, lily-livered milquetoasts
    who suggest it'd be "really damn difficult" or any of that rot.
-
- * better integration of fluidsynth/softsynths
-
- * search facility for patch sounds (search all banks)
-
 
