@@ -161,7 +161,6 @@ public slots:
     void slotAddTempo();
     void slotAddTimeSignature();
 
-    virtual void slotToggleControlRulers();
     virtual void slotShowVelocityControlRuler();
     virtual void slotShowPropertyControlRuler();
 

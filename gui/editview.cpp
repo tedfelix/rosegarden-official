@@ -516,15 +516,11 @@ EditView::setupActions()
                 SLOT(slotAddTimeSignature()), actionCollection(),
                 "add_time_signature");
 
-    new KToggleAction(i18n("Show Control Rulers"), 0, this,
-                      SLOT(slotToggleControlRulers()), actionCollection(),
-                      "show_control_rulers");
-
     new KAction(i18n("Add Velocity Control Ruler"), 0, this,
                 SLOT(slotShowVelocityControlRuler()), actionCollection(),
                 "add_velocity_control_ruler");
 
-    new KAction(i18n("Add Property Control Ruler"), 0, this,
+    new KAction(i18n("Add Control Ruler..."), 0, this,
                 SLOT(slotShowPropertyControlRuler()), actionCollection(),
                 "add_control_ruler");
 }
@@ -759,14 +755,6 @@ void EditView::slotAddTimeSignature()
     delete dialog;
 }                       
 
-void EditView::slotToggleControlRulers()
-{
-    if (m_controlRulers->isVisible())
-        m_controlRulers->hide();
-    else
-        m_controlRulers->show();
-}
-
 ControlRuler* EditView::findRuler(PropertyName propertyName, int &index)
 {
     for(index = 0; index < m_controlRulers->count(); ++index) {
@@ -795,7 +783,7 @@ void EditView::showPropertyControlRuler(PropertyName propertyName)
     }
     
      if (!m_controlRulers->isVisible()) {
-        actionCollection()->action("show_control_rulers")->activate();
+        m_controlRulers->show();
     }
 }
 

@@ -22,7 +22,6 @@
 <Separator/>
   <Action name="lyric_editor"/>
   <Separator/>
-    <Action name="show_control_rulers"/>
     <Action name="add_velocity_control_ruler"/>
     <Action name="add_control_ruler"/>
 </Menu>
