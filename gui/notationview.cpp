@@ -156,6 +156,13 @@ bool EventSelection::pasteToTrack(Track& t, timeT atTime)
 
 timeT EventSelection::getTotalDuration() const
 {
+    //!!! with the marked mod to updateBeginEndTime, this seems
+    //reasonable I think?
+    updateBeginEndTime();
+    return getEndTime() - getBeginTime();
+
+
+
     if (m_ownEvents.empty()) return 0;
 
     eventcontainer::const_iterator last = m_ownEvents.end();
@@ -185,6 +192,9 @@ void EventSelection::updateBeginEndTime() const
     m_beginTime = (*iter)->getAbsoluteTime();
     iter = selectedEvents->end(); --iter;
     m_endTime = (*iter)->getAbsoluteTime();
+
+    //!!! I think we almost always want this, don't we?
+    m_endTime += (*iter)->getDuration();
 
     kdDebug(KDEBUG_AREA) << "EventSelection::updateBeginEndTime() : begin : "
                          << m_beginTime << ", end : " << m_endTime << endl;
@@ -558,6 +568,9 @@ void NotationView::setupActions()
     new KAction(i18n("Beam Group"), 0, this,
 		SLOT(slotGroupBeam()), actionCollection(), "beam");
 
+    new KAction(i18n("Auto-Beam Group"), 0, this,
+		SLOT(slotGroupAutoBeam()), actionCollection(), "auto_beam");
+
 
     // setup Settings menu
     KStdAction::showToolbar(this, SLOT(slotToggleToolBar()), actionCollection());
@@ -636,6 +649,15 @@ NotationView::ZoomSlider<T>::reinitialise(const vector<T> &sizes, T size)
     setValue(getIndex(sizes, size));
     setLineStep(1);
     setTickmarks(Below);
+}
+
+NotationStaff *
+NotationView::getStaff(const Track &track)
+{
+    for (int i = 0; i < m_staffs.size(); ++i) {
+	if (&(m_staffs[i]->getTrack()) == &track) return m_staffs[i];
+    }
+    return 0;
 }
 
 void NotationView::initFontToolbar(int legatoUnit)
@@ -949,11 +971,15 @@ void NotationView::setCurrentSelectedNote(const char *pixmapName,
 
 void NotationView::setCurrentSelection(EventSelection* s)
 {
+    if (m_currentEventSelection && s != m_currentEventSelection) {
+	getStaff(m_currentEventSelection->getTrack())->showSelection(0);
+    }
+
     delete m_currentEventSelection;
     m_currentEventSelection = s;
 
-    //!!! TODO: get the right staff
-    getStaff(0)->showSelection(s);
+    if (s) getStaff(s->getTrack())->showSelection(s);
+
     canvas()->update();
 }
 
@@ -1019,13 +1045,12 @@ void NotationView::slotEditCut()
 
     emit usedSelection();
 
-    redoLayout(0, // TODO : get the right staff
+    redoLayout(getStaff(m_currentEventSelection->getTrack())->getId(),
                m_currentEventSelection->getBeginTime(),
                m_currentEventSelection->getEndTime());
 
     kdDebug(KDEBUG_AREA) << "NotationView::slotEditCut() : selection duration = "
                          << m_currentEventSelection->getTotalDuration() << endl;
-    
 }
 
 void NotationView::slotEditCopy()
@@ -1165,7 +1190,32 @@ void NotationView::slotGroupBeam()
 
     emit usedSelection();
 
-    redoLayout(0, //!!! TODO : get the right staff
+    redoLayout(getStaff(m_currentEventSelection->getTrack())->getId(),
+	       m_currentEventSelection->getBeginTime(),
+	       m_currentEventSelection->getEndTime());
+}
+
+void NotationView::slotGroupAutoBeam()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotGroupAutoBeam()\n";
+
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Auto-beaming selection..."), statusBar());
+
+    Track &track = m_currentEventSelection->getTrack();
+    TrackNotationHelper helper(track);
+
+    kdDebug(KDEBUG_AREA) << "Auto-beaming between "
+			 << m_currentEventSelection->getBeginTime() << " and "
+			 << m_currentEventSelection->getEndTime() << endl;
+
+    helper.autoBeam(m_currentEventSelection->getBeginTime(),
+		    m_currentEventSelection->getEndTime(),
+		    "beamed"); //!!!
+
+    emit usedSelection();
+
+    redoLayout(getStaff(m_currentEventSelection->getTrack())->getId(),
 	       m_currentEventSelection->getBeginTime(),
 	       m_currentEventSelection->getEndTime());
 }
@@ -2020,7 +2070,6 @@ void NotationSelector::hideSelection()
 {
     m_selectionRect->hide();
     m_selectionRect->setSize(0,0);
-    
     m_parentView.canvas()->update();
 }
 
@@ -2040,8 +2089,10 @@ EventSelection* NotationSelector::getSelection()
         m_selectionRect->height() > -2 &&
         m_selectionRect->height() <  2) return 0;
 
-    //!!! TODO: get the right staff
-    Track& originalTrack = m_parentView.getStaff(0)->getTrack();
+    double middleY = m_selectionRect->y() + m_selectionRect->height()/2;
+    int staffNo = m_parentView.findClosestStaff(middleY);
+    if (staffNo < 0) return 0;
+    Track& originalTrack = m_parentView.getStaff(staffNo)->getTrack();
     
     EventSelection* selection = new EventSelection(originalTrack);
 

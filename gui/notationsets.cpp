@@ -676,7 +676,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
 void 
 NotationGroup::applyTuplingLine(NotationStaff &staff)
 {
-    kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam, group no is " << m_groupNo << endl;
+    kdDebug(KDEBUG_AREA) << "NotationGroup::applyTuplingLine, group no is " << m_groupNo << endl;
 
     if (m_type != Tupled) return;
 

@@ -37,7 +37,6 @@ namespace Rosegarden { class Composition; }
 
 class RosegardenGUIDoc;
 class NotationView;
-class TrackPart;
 class TracksEditor;
 
 /**

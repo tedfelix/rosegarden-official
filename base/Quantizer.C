@@ -36,6 +36,14 @@ Quantizer::Quantizer(int unit, int maxDots) :
     m_unit(unit), m_maxDots(maxDots)
 {
     if (unit < 0) setUnit(Note(Note::Shortest));
+
+    if (m_maxDots != 1 && m_maxDots != 2) {
+	cerr << "Quantizer::Quantizer: WARNING: m_maxDots = " << m_maxDots
+	     << endl;
+	// dump core, please
+	char *myString = (char *)1;
+	cerr << "myString -> " << myString << endl;
+    }
 }
 
 Quantizer::~Quantizer()

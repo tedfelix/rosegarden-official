@@ -409,8 +409,6 @@ bool NotationStaff::showElements(NotationElementList::iterator from,
 		} else {
 		    needNewSprite = false;
 		}
-
-		if (inNewSelection) needBlueSprite = true;
 	    }
 	    break;
         }
@@ -419,6 +417,8 @@ bool NotationStaff::showElements(NotationElementList::iterator from,
 	    (*it)->reposition(x(), y());
 	    continue;
 	}
+
+	(void)((*it)->event()->get<Bool>(SELECTED, needBlueSprite));
 
 	if (needBlueSprite) {
 	    m_npf->setSelected(true);

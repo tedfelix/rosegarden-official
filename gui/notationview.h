@@ -88,8 +88,14 @@ public:
 
     bool contains(Rosegarden::Event *e) const;
 
-    Rosegarden::timeT getBeginTime()       const { return m_beginTime; }
-    Rosegarden::timeT getEndTime()         const { return m_endTime; }
+    Rosegarden::timeT getBeginTime() const {
+	updateBeginEndTime(); return m_beginTime;
+    }
+
+    Rosegarden::timeT getEndTime() const {
+	updateBeginEndTime(); return m_endTime;
+    }
+
     Rosegarden::timeT getTotalDuration()   const;
     unsigned int      getNbEvents()        const { return m_ownEvents.size(); }
     unsigned int      getAddedEvents()     const { return m_trackEvents.size(); }
@@ -153,7 +159,10 @@ public:
     int getStaffCount() { return m_staffs.size(); }
 
     /// Return a pointer to the staff at the specified index
-    NotationStaff* getStaff(int i) { return m_staffs[i]; }
+    NotationStaff *getStaff(int i) { return m_staffs[i]; }
+
+    /// Return a pointer to the staff corresponding to the given track
+    NotationStaff *getStaff(const Rosegarden::Track &track);
 
     QCanvas* canvas() { return m_canvasView->canvas(); }
     
@@ -179,6 +188,13 @@ public:
 
     /// Changes the font and font size of the staffs on the view
     void changeFont(std::string newFont, int newSize);
+    
+    /**
+     * find the Staff whose Y coord range includes y, and return the
+     * index of that Staff in m_staffs.  If no Staff is suitable,
+     * return -1.
+     */
+    int findClosestStaff(double y);
 
 
 public slots:
@@ -322,6 +338,7 @@ public slots:
 
     /// group slots
     void slotGroupBeam();
+    void slotGroupAutoBeam();
 
     /// Canvas actions slots
 
@@ -453,13 +470,6 @@ protected:
      * update the top ruler according to bar lines
      */
     void updateRuler();
-    
-    /**
-     * find the Staff whose Y coord range includes y, and return the
-     * index of that Staff in m_staffs.  If no Staff is suitable,
-     * return -1.
-     */
-    int findClosestStaff(double y);
 
     /**
      * find the NotationElement which X coord is closest to x
