@@ -23,6 +23,8 @@
 #include "xmlstorableevent.h"
 #include "notationproperties.h" //!!! Needed for group no & type, but we shouldn't be including notation* files in here
 
+#include <klocale.h>
+
 using Rosegarden::Composition;
 using Rosegarden::Int;
 using Rosegarden::String;
@@ -163,6 +165,9 @@ RoseXmlHandler::endElement(const QString& /*namespaceURI*/,
         if (m_currentTrack && m_currentEvent) {
             m_currentTrack->insert(m_currentEvent);
             m_currentEvent = 0;
+        } else if (!m_currentTrack && m_currentEvent) {
+            m_errorString = i18n("Got event outside of a Track");
+            return false;
         }
         
     } else if (lcName == "chord") {
@@ -193,9 +198,15 @@ RoseXmlHandler::characters(const QString&)
 QString
 RoseXmlHandler::errorString()
 {
-    return "The document is not in the Rosegarden XML format";
+    return m_errorString;
 }
 
+// Not used yet
+bool
+RoseXmlHandler::error(const QXmlParseException& exception)
+{
+    return QXmlDefaultHandler::error( exception );
+}
 
 bool
 RoseXmlHandler::fatalError(const QXmlParseException& exception)

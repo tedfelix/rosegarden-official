@@ -124,7 +124,7 @@ public slots:
     void createNewTrack(TrackItem*);
 
 protected:
-    bool xmlParse(QFile &file);
+    bool xmlParse(QFile &file, QString &errMsg);
     // bool xmlParseElement(const QDomElement &elmnt);
  	
 public:	

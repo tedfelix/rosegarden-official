@@ -188,13 +188,14 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     m_absFilePath=fileInfo.absFilePath();	
 
     QFile file(filename);
-    bool fileParsedOk = xmlParse(file);
+    QString errMsg;
+    bool fileParsedOk = xmlParse(file, errMsg);
     file.close();   
 
-    if (! fileParsedOk) {
-        QString msg(i18n("Error when parsing file '"));
-        msg += filename;
-        msg += "'";
+    if (!fileParsedOk) {
+        QString msg(i18n("Error when parsing file '%1' : %2")
+                    .arg(filename)
+                    .arg(errMsg));
         
         KMessageBox::sorry(0, msg);
 
@@ -317,7 +318,7 @@ void RosegardenGUIDoc::deleteViews()
 
 
 bool
-RosegardenGUIDoc::xmlParse(QFile &file)
+RosegardenGUIDoc::xmlParse(QFile &file, QString &errMsg)
 {
     // parse xml file
     RoseXmlHandler handler(m_composition);
@@ -329,6 +330,7 @@ RosegardenGUIDoc::xmlParse(QFile &file)
 
     bool ok = reader.parse(source);
 
+    if (!ok) errMsg = handler.errorString();
 
     // m_doc.setContent(xmldata);
     

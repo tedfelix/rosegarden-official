@@ -55,6 +55,7 @@ public:
 
     QString errorString();
 
+    bool error(const QXmlParseException& exception);
     bool fatalError(const QXmlParseException& exception);
 
 protected:
@@ -69,6 +70,8 @@ protected:
     bool m_inGroup;
     std::string m_groupType;
     int m_groupNo;
+
+    QString m_errorString;
 };
 
 #endif
