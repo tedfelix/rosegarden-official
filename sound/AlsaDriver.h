@@ -61,7 +61,8 @@ public:
 
     virtual void initialiseMidi();
     virtual void initialiseAudio();
-    virtual void initialisePlayback(const RealTime &position);
+    virtual void initialisePlayback(const RealTime &position,
+                                    const RealTime &playLatency);
     virtual void stopPlayback();
     virtual void resetPlayback(const RealTime &position,
                                const RealTime &latency);
@@ -131,7 +132,7 @@ public:
 
     // Send the MIDI clock
     //
-    virtual void sendMidiClock();
+    virtual void sendMidiClock(const RealTime &playLatency);
 
     // ----------------------- End of Virtuals ----------------------
 

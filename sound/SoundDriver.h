@@ -220,7 +220,8 @@ public:
 
     virtual void initialiseMidi() = 0;
     virtual void initialiseAudio() = 0;
-    virtual void initialisePlayback(const RealTime &position) = 0;
+    virtual void initialisePlayback(const RealTime &position,
+                                    const RealTime &playLatency) = 0;
     virtual void stopPlayback() = 0;
     virtual void resetPlayback(const RealTime &position,
                                const RealTime &latency) = 0;
@@ -281,7 +282,7 @@ public:
 
     // Send the MIDI clock
     //
-    virtual void sendMidiClock() = 0;
+    virtual void sendMidiClock(const RealTime &playLatency) = 0;
 
     // Mapped Instruments
     //

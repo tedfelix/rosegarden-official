@@ -272,7 +272,7 @@ RosegardenSequencerApp::startPlaying()
 
     // This will reset the Sequencer's internal clock
     // ready for new playback
-    m_sequencer->initialisePlayback(m_songPosition);
+    m_sequencer->initialisePlayback(m_songPosition, m_playLatency);
 
     // Send the first events (starting the clock)
     Rosegarden::MappedComposition *mC =
@@ -375,8 +375,7 @@ RosegardenSequencerApp::updateClocks(bool clearToSend)
 {
     // Attempt to send MIDI clock 
     //
-    m_sequencer->sendMidiClock();
-
+    m_sequencer->sendMidiClock(m_playLatency);
 
     // If we're not playing etc. then that's all we need to do
 
@@ -656,7 +655,7 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
 
     // Ensure that playback is initialised
     //
-    m_sequencer->initialisePlayback(m_songPosition);
+    m_sequencer->initialisePlayback(m_songPosition, playLatency);
 
     return play(time, playLatency, fetchLatency, readAhead);
 }
@@ -1234,7 +1233,7 @@ void
 RosegardenSequencerApp::setQuarterNoteLength(long timeSec, long timeUSec)
 {
     long usecs =
-        long((double(timeSec) * 1000.0 + double(timeUSec)) / 24.0);
+        long((double(timeSec) * 1000000.0 + double(timeUSec)) / 24.0);
 
     SEQUENCER_DEBUG << "sending MIDI clock every " << usecs << " usecs" << endl;
     m_sequencer->setMIDIClockInterval(usecs);

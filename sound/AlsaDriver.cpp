@@ -682,9 +682,9 @@ AlsaDriver::initialiseMidi()
 
     // Set the input queue size
     //
-    if (snd_seq_set_client_pool_output(m_midiHandle, 200) < 0 ||
-        snd_seq_set_client_pool_input(m_midiHandle, 20) < 0 ||
-        snd_seq_set_client_pool_output_room(m_midiHandle, 20) < 0)
+    if (snd_seq_set_client_pool_output(m_midiHandle, 2000) < 0 ||
+        snd_seq_set_client_pool_input(m_midiHandle, 2000) < 0 ||
+        snd_seq_set_client_pool_output_room(m_midiHandle, 2000) < 0)
     {
         std::cerr << "AlsaDriver::initialiseMidi - "
                   << "can't modify pool parameters"
@@ -907,16 +907,40 @@ AlsaDriver::initialiseAudio()
 }
 
 void
-AlsaDriver::initialisePlayback(const RealTime &position)
+AlsaDriver::initialisePlayback(const RealTime &position,
+                               const RealTime &playLatency)
 {
     std::cout << "AlsaDriver - initialisePlayback" << std::endl;
     m_alsaPlayStartTime = getAlsaTime();
     m_playStartPosition = position;
     m_startPlayback = true;
 
-    // Send sequencer start on to duplex MIDI devices
+    // If the clock is enabled then adjust for the MIDI Clock to 
+    // synchronise the sequencer with the clock.
     //
-    if (m_midiClockEnabled) sendSystemDirect(SND_SEQ_EVENT_START);
+    if (m_midiClockEnabled)
+    {
+        // Last clock sent should always be ahead of current
+        // ALSA time - adjust for latency and find nearest
+        // clock for start time.
+        //
+        RealTime alsaClockSent = m_midiClockSendTime - playLatency;
+
+        while (alsaClockSent > m_alsaPlayStartTime)
+            alsaClockSent = alsaClockSent - RealTime(0, m_midiClockInterval);
+
+        /*
+        cout << "START ADJUST FROM " << m_alsaPlayStartTime
+             << " to " << alsaClockSent << endl;
+             */
+
+        m_alsaPlayStartTime = alsaClockSent;
+
+        // Send sequencer start message at the correct timing signal too.
+        //
+        sendSystemQueued(SND_SEQ_EVENT_START,
+                         m_alsaPlayStartTime + playLatency);
+    }
 
     if (isMMCMaster())
     {
@@ -3343,6 +3367,8 @@ AlsaDriver::sendSystemDirect(MidiByte command)
             }
         }
     }
+
+    snd_seq_drain_output(m_midiHandle);
 }
 
 
@@ -3376,24 +3402,31 @@ AlsaDriver::sendSystemQueued(Rosegarden::MidiByte command,
             // Schedule the command
             //
             event.type = command;
+
+            // useful for debugging
+            //snd_seq_ev_set_note(&event, 0, 64, 127, 100);
+
             snd_seq_ev_schedule_real(&event, m_queue, 0, &sendTime);
 
             int error = snd_seq_event_output(m_midiHandle, &event);
 
             if (error < 0)
             {
-                std::cerr << "AlsaDriver::sendSystemDirect - "
+                std::cerr << "AlsaDriver::sendSystemQueued - "
                           << "can't send event (" << int(command) << ")"
+                          << " - error = (" << error << ")"
                           << std::endl;
             }
         }
     }
+
+    snd_seq_drain_output(m_midiHandle);
 }
 
 // Send the MIDI clock signal
 //
 void
-AlsaDriver::sendMidiClock()
+AlsaDriver::sendMidiClock(const RealTime &playLatency)
 {
     // Don't send the clock if it's disabled
     //
@@ -3402,7 +3435,7 @@ AlsaDriver::sendMidiClock()
     // Get the number of ticks in (say) two seconds
     //
     unsigned int numTicks =
-        (unsigned int)(Rosegarden::RealTime(2, 0)/
+        (unsigned int)(Rosegarden::RealTime(10, 0)/
                        Rosegarden::RealTime(0, m_midiClockInterval));
 
     // First time through set the clock send time - this will also
@@ -3410,14 +3443,17 @@ AlsaDriver::sendMidiClock()
     //
     if (m_midiClockSendTime == Rosegarden::RealTime(0, 0))
     {
-        m_midiClockSendTime = getAlsaTime();
-        //cout << "INITIAL ALSA TIME = " << m_midiClockSendTime << endl;
+        m_midiClockSendTime = getAlsaTime() + playLatency;
+        /*
+        cout << "INITIAL ALSA TIME = " << m_midiClockSendTime << endl;
+        */
     }
 
-    // If we're within twenty milliseconds of running out of clock
-    // then send a batch of clock signals.
+    // If we're within a tenth of a second of running out of clock
+    // then send a new batch of clock signals.
     //
-    if (getAlsaTime() > (m_midiClockSendTime - Rosegarden::RealTime(0, 20000)))
+    if ((getAlsaTime() + playLatency) >
+        (m_midiClockSendTime - Rosegarden::RealTime(0, 100000)))
     {
         /*
         cout << "SENDING " << numTicks

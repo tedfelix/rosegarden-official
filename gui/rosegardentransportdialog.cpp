@@ -567,9 +567,10 @@ RosegardenTransportDialog::setTempo(const double &tempo)
     // where the tempo should always be consistent.  Quarter Note
     // Length is sent (MIDI CLOCK) at 24ppqn.
     //
-    double qnD = 60.0/tempo * 4.0/m_denominator;
+    double qnD = 60.0/tempo;
     Rosegarden::RealTime qnTime =
-        Rosegarden::RealTime(long(qnD), long(qnD * 1000000.0) - long(qnD));
+        Rosegarden::RealTime(long(qnD),
+                             long((qnD - double(long(qnD))) * 1000000.0));
 
     StudioControl::sendQuarterNoteLength(qnTime);
 }

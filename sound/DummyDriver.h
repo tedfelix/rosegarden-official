@@ -41,7 +41,8 @@ public:
 
     virtual void initialiseMidi()  { m_recordComposition.clear();}
     virtual void initialiseAudio()  {;}
-    virtual void initialisePlayback(const RealTime & /*position*/) {;}
+    virtual void initialisePlayback(const RealTime & /*position*/,
+                                    const RealTime & /*playLatency*/) {;}
     virtual void stopPlayback() {;}
     virtual void resetPlayback(const RealTime & /*position*/,
                                const RealTime & /*latency*/) {;}
@@ -95,7 +96,7 @@ public:
 
     virtual void setRecordDevice(Rosegarden::DeviceId /*id*/) {;}
 
-    virtual void sendMidiClock() {;}
+    virtual void sendMidiClock(const RealTime &/*playLatency*/) {;}
 
 protected:
     virtual void processMidiOut(const MappedComposition & /*mC*/,

@@ -284,7 +284,8 @@ ArtsDriver::initialiseAudio()
 }
 
 void
-ArtsDriver::initialisePlayback(const Rosegarden::RealTime &position)
+ArtsDriver::initialisePlayback(const Rosegarden::RealTime &position,
+                               const Rosegarden::RealTime &/*playLatency*/)
 {
     cout << "ArtsDriver - initialisePlayback" << endl;
     m_startPlayback = true;

@@ -67,8 +67,9 @@ public:
 
     // Control playback - initialisePlayback starts us playing
     //
-    void initialisePlayback(const Rosegarden::RealTime &startTime)
-        { m_soundDriver->initialisePlayback(startTime); }
+    void initialisePlayback(const Rosegarden::RealTime &startTime,
+                            const Rosegarden::RealTime &playLatency)
+        { m_soundDriver->initialisePlayback(startTime, playLatency); }
 
     void stopPlayback() { m_soundDriver->stopPlayback(); }
 
@@ -274,7 +275,8 @@ public:
 
     // Send the MIDI clock now
     //
-    void sendMidiClock() { m_soundDriver->sendMidiClock(); }
+    void sendMidiClock(const RealTime &playLatency)
+        { m_soundDriver->sendMidiClock(playLatency); }
 
 protected:
 
