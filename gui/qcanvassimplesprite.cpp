@@ -35,7 +35,7 @@ QCanvasSimpleSprite::QCanvasSimpleSprite(const QString &pixmapfile,
 
 QCanvasSimpleSprite::~QCanvasSimpleSprite()
 {
-    delete m_pixmapArray;
+    // don't delete m_pixmapArray, it's owned by QCanvasSprite
 }
 
 QCanvasPixmapArray*
