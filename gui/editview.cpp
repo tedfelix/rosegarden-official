@@ -68,8 +68,8 @@ EditView::EditView(RosegardenGUIDoc *doc,
     getCommandHistory()->attachView(actionCollection());
     
     QObject::connect
-        (getCommandHistory(), SIGNAL(commandExecuted(KCommand *)),
-         this,                      SLOT(slotCommandExecuted(KCommand *)));
+        (getCommandHistory(), SIGNAL(commandExecuted(Command *)),
+         this,                      SLOT(slotCommandExecuted(Command *)));
 
     m_grid->addWidget(m_horizontalScrollBar, 4, m_mainCol);
     m_grid->addLayout(m_rulerBox, 0, m_mainCol);
@@ -160,7 +160,7 @@ MultiViewCommandHistory *EditView::getCommandHistory()
     return getDocument()->getCommandHistory();
 }
 
-void EditView::addCommandToHistory(KCommand *command)
+void EditView::addCommandToHistory(Command *command)
 {
     getCommandHistory()->addCommand(command);
 }
@@ -215,7 +215,7 @@ void EditView::slotToggleStatusBar()
         statusBar()->show();
 }
 
-void EditView::slotCommandExecuted(KCommand *command)
+void EditView::slotCommandExecuted(Command *command)
 {
     // might be better done with a visitor pattern or some such
 
@@ -284,7 +284,7 @@ void EditView::slotCommandExecuted(KCommand *command)
 
     kdDebug(KDEBUG_AREA)
         << "Warning: EditView::slotCommandExecuted:\n"
-        << "Unknown sort of KCommand, don't know how to refresh"
+        << "Unknown sort of Command, don't know how to refresh"
         << endl;
 }
 

@@ -26,7 +26,7 @@
 #include <qlabel.h>
 #include <qaccel.h>
 
-#include <kcommand.h>
+
 #include <kmessagebox.h>
 #include <kapp.h>
 
@@ -275,8 +275,8 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
             this,
             SLOT(slotSelectedSegments(std::vector<Rosegarden::Segment*>)));
 
-    connect(getCommandHistory(), SIGNAL(commandExecuted(KCommand *)),
-	    this, SLOT(slotCommandExecuted(KCommand *)));
+    connect(getCommandHistory(), SIGNAL(commandExecuted(Command *)),
+	    this, SLOT(slotCommandExecuted(Command *)));
 
     connect(m_document, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
 	    this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
@@ -342,7 +342,7 @@ TrackEditor::setupSegments()
     }
 }
 
-void TrackEditor::slotCommandExecuted(KCommand *command)
+void TrackEditor::slotCommandExecuted(Command *command)
 {
     kdDebug(KDEBUG_AREA) << "TrackEditor::commandExecuted" << endl;
 
@@ -578,7 +578,7 @@ TrackEditor::getCommandHistory()
 
 
 void
-TrackEditor::addCommandToHistory(KCommand *command)
+TrackEditor::addCommandToHistory(Command *command)
 {
     getCommandHistory()->addCommand(command);
 }

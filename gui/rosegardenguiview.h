@@ -27,7 +27,7 @@
 #endif 
 
 // include files for Qt
-#include <kcommand.h>
+
 #include <qvbox.h>
 #include <list>
 #include "segmentcanvas.h" // needed for SegmentCanvas::ToolType
@@ -43,6 +43,7 @@ class KPrinter;
 class SegmentParameterBox;
 class InstrumentParameterBox;
 class MultiViewCommandHistory;
+class Command;
 
 /**
  * The RosegardenGUIView class provides the view widget for the
@@ -155,7 +156,7 @@ public slots:
      * Commands
      *
      */
-    void slotAddCommandToHistory(KCommand *command);
+    void slotAddCommandToHistory(Command *command);
 
     /*
      * For re-emission purposes

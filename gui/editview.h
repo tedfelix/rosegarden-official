@@ -31,7 +31,7 @@ namespace Rosegarden { class Segment; }
 
 class RosegardenGUIDoc;
 class MultiViewCommandHistory;
-class KCommand;
+class Command;
 class EditTool;
 class EditToolBox;
 class BasicCommand;
@@ -115,7 +115,7 @@ public:
     /**
      * Add a Command to the history
      */
-    virtual void addCommandToHistory(KCommand *);
+    virtual void addCommandToHistory(Command *);
 
     /**
      * Update the view
@@ -185,7 +185,7 @@ public slots:
     /**
      * Receives word of a modification, calls segmentModified
      */
-    virtual void slotCommandExecuted(KCommand *command);
+    virtual void slotCommandExecuted(Command *command);
 
     /**
      * Called when a mouse press occurred on an active canvas item

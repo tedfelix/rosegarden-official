@@ -40,7 +40,7 @@ namespace Rosegarden { class EventSelection; }
 
 
 /**
- * BasicCommand is an abstract subclass of KCommand that manages undo,
+ * BasicCommand is an abstract subclass of Command that manages undo,
  * redo and notification of changes within a contiguous region of a
  * single Rosegarden Segment, by brute force.  When a subclass
  * of BasicCommand executes, it stores a copy of the events that are

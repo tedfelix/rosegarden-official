@@ -21,7 +21,7 @@
 
 #include <vector>
 
-#include <kcommand.h>
+
 #include <qgroupbox.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
@@ -39,6 +39,7 @@
 namespace Rosegarden { class Segment; }
 class RosegardenGUIView;
 class MultiViewCommandHistory;
+class Command;
 
 #ifndef _SEGMENTPARAMETERBOX_H_
 #define _SEGMENTPARAMETERBOX_H_
@@ -69,7 +70,7 @@ public:
 
     // Command history stuff
     MultiViewCommandHistory* getCommandHistory();
-    void addCommandToHistory(KCommand *command);
+    void addCommandToHistory(Command *command);
 
 
 public slots:
@@ -83,7 +84,7 @@ public slots:
     void slotDelayTextChanged(const QString &);
 
     // catching commands
-    void slotCommandExecuted(KCommand *command);
+    void slotCommandExecuted(Command *command);
 
 private:
     void initBox();

@@ -188,7 +188,7 @@ components:
 
  - Commands, which are the fundamental implementations of editing
     operations (both menu functions and tool operations) subclassed
-    from KDE's KCommand and used for undo and redo.
+    from KDE's Command and used for undo and redo.
 
  - a canvas view.  Although this isn't a part of the EditView's
     definition, both of the existing edit views (notation and matrix)

@@ -60,7 +60,7 @@ CutCommand::CutCommand(EventSelection &selection,
 
 CopyCommand::CopyCommand(EventSelection &selection,
 					   Rosegarden::Clipboard *clipboard) :
-    KCommand(name()),
+    Command(name()),
     m_targetClipboard(clipboard)
 {
     m_sourceClipboard = new Rosegarden::Clipboard;

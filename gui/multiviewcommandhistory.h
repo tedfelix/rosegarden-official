@@ -25,7 +25,7 @@
 #include <stack>
 #include <set>
 
-class KCommand;
+class Command;
 class KActionCollection;
 class KToolBar;
 
@@ -54,7 +54,7 @@ public:
     void attachView(KActionCollection *collection);
     void detachView(KActionCollection *collection);
 
-    void addCommand(KCommand *command, bool execute = true);
+    void addCommand(Command *command, bool execute = true);
     
     /// @return the maximum number of items in the undo history
     int undoLimit() { return m_undoLimit; }
@@ -93,7 +93,7 @@ signals:
      * (whether by addCommand, undo or redo).
      * You can use this to update the GUI, for instance.
      */
-    void commandExecuted(KCommand *);
+    void commandExecuted(Command *);
 
     /**
      * This is emitted every time we reach the index where you
@@ -107,7 +107,7 @@ private:
     typedef std::set<KActionCollection *> ViewSet;
     ViewSet m_views;
 
-    typedef std::stack<KCommand *> CommandStack;
+    typedef std::stack<Command *> CommandStack;
     CommandStack m_undoStack;
     CommandStack m_redoStack;
 

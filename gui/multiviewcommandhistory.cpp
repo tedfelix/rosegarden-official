@@ -18,13 +18,14 @@
 */
 
 #include "multiviewcommandhistory.h"
+#include "command.h"
 
 #include "rosedebug.h"
 #include <iostream>
 
 #include <kaction.h>
 #include <kstdaction.h>
-#include <kcommand.h>
+
 #include <klocale.h>
 #include <kpopupmenu.h>
 #include <ktoolbar.h>
@@ -118,7 +119,7 @@ MultiViewCommandHistory::detachView(KActionCollection *collection)
 }
 
 void
-MultiViewCommandHistory::addCommand(KCommand *command, bool execute)
+MultiViewCommandHistory::addCommand(Command *command, bool execute)
 {
     if (!command) return;
 
@@ -144,7 +145,7 @@ MultiViewCommandHistory::slotUndo()
 {
     if (m_undoStack.empty()) return;
 
-    KCommand *command = m_undoStack.top();
+    Command *command = m_undoStack.top();
     command->unexecute();
     emit commandExecuted(command);
 
@@ -162,7 +163,7 @@ MultiViewCommandHistory::slotRedo()
 {
     if (m_redoStack.empty()) return;
 
-    KCommand *command = m_redoStack.top();
+    Command *command = m_redoStack.top();
     command->execute();
     emit commandExecuted(command);
 
@@ -314,7 +315,7 @@ MultiViewCommandHistory::updateMenu(const QString &text,
 
 	while (j < 10 && !stack.empty()) {
 
-	    KCommand *command = stack.top();
+	    Command *command = stack.top();
 	    tempStack.push(command);
 	    stack.pop();
 

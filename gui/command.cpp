@@ -35,7 +35,7 @@ CompoundCommand::getCommandCount() const
     return m_commands.size();
 }
 
-KCommand *
+Command *
 CompoundCommand::getCommand(int n)
 {
     // Strange one, this.  If views request the commands that
@@ -75,7 +75,7 @@ CompoundCommand::unexecute()
 }
 
 void
-CompoundCommand::addCommand(KCommand *command)
+CompoundCommand::addCommand(Command *command)
 {
     m_commands.push_back(command);
 }

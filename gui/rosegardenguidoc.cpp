@@ -73,7 +73,7 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent, const char *name)
 
     pViewList->setAutoDelete(true);
 
-    connect(m_commandHistory, SIGNAL(commandExecuted(KCommand *)),
+    connect(m_commandHistory, SIGNAL(commandExecuted(Command *)),
 	    this, SLOT(slotDocumentModified()));
 
     connect(m_commandHistory, SIGNAL(documentRestored()),

@@ -20,7 +20,7 @@
 #ifndef NOTATION_COMMANDS_H
 #define NOTATION_COMMANDS_H
 
-#include <kcommand.h>
+
 #include "basiccommand.h"
 
 

@@ -20,7 +20,7 @@
 #ifndef EDIT_COMMANDS_H
 #define EDIT_COMMANDS_H
 
-#include <kcommand.h>
+
 #include "basiccommand.h"
 
 namespace Rosegarden {
@@ -42,7 +42,7 @@ public:
 
 /// Copy a selection from within a segment
 
-class CopyCommand : public KCommand // no refresh needed
+class CopyCommand : public Command // no refresh needed
 {
 public:
     CopyCommand(Rosegarden::EventSelection &selection,

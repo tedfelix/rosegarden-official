@@ -32,7 +32,7 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kaction.h>
-#include <kcommand.h>
+
 #include <kstdaction.h>
 #include <kapp.h>
 
