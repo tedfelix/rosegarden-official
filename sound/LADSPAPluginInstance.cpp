@@ -36,24 +36,25 @@ LADSPAPluginInstance::LADSPAPluginInstance(Rosegarden::InstrumentId instrument,
                                            int position,
 					   unsigned long sampleRate,
 					   size_t bufferSize,
+					   int idealChannelCount,
                                            const LADSPA_Descriptor* descriptor):
     m_instrument(instrument),
     m_ladspaId(ladspaId),
     m_position(position),
-    m_instanceHandle(0),
+    m_instanceCount(0),
     m_descriptor(descriptor),
     m_bufferSize(bufferSize),
     m_bypassed(false)
 {
-    init();
+    init(idealChannelCount);
 
-    m_inputBuffers = new sample_t*[m_audioPortsIn.size()];
-    m_outputBuffers = new sample_t*[m_audioPortsOut.size()];
+    m_inputBuffers  = new sample_t*[m_instanceCount * m_audioPortsIn.size()];
+    m_outputBuffers = new sample_t*[m_instanceCount * m_audioPortsOut.size()];
 
-    for (size_t i = 0; i < m_audioPortsIn.size(); ++i) {
+    for (size_t i = 0; i < m_instanceCount * m_audioPortsIn.size(); ++i) {
 	m_inputBuffers[i] = new sample_t[bufferSize];
     }
-    for (size_t i = 0; i < m_audioPortsOut.size(); ++i) {
+    for (size_t i = 0; i < m_instanceCount * m_audioPortsOut.size(); ++i) {
 	m_outputBuffers[i] = new sample_t[bufferSize];
     }
 
@@ -61,12 +62,6 @@ LADSPAPluginInstance::LADSPAPluginInstance(Rosegarden::InstrumentId instrument,
 
     instantiate(sampleRate);
     if (isOK()) connectPorts();
-
-    /*
-    std::cout << m_audioPortsIn.size() << " AUDIO PORTS IN" << std::endl;
-    std::cout << m_audioPortsOut.size() << " AUDIO PORTS OUT" << std::endl;
-    std::cout << m_controlPorts.size() << " CONTROL PORTS" << std::endl;
-    */
 }
 
 LADSPAPluginInstance::LADSPAPluginInstance(Rosegarden::InstrumentId instrument,
@@ -80,7 +75,7 @@ LADSPAPluginInstance::LADSPAPluginInstance(Rosegarden::InstrumentId instrument,
     m_instrument(instrument),
     m_ladspaId(ladspaId),
     m_position(position),
-    m_instanceHandle(0),
+    m_instanceCount(0),
     m_descriptor(descriptor),
     m_bufferSize(bufferSize),
     m_inputBuffers(inputBuffers),
@@ -90,19 +85,13 @@ LADSPAPluginInstance::LADSPAPluginInstance(Rosegarden::InstrumentId instrument,
 {
     init();
 
-    /*
-    std::cout << m_audioPortsIn.size() << " AUDIO PORTS IN" << std::endl;
-    std::cout << m_audioPortsOut.size() << " AUDIO PORTS OUT" << std::endl;
-    std::cout << m_controlPorts.size() << " CONTROL PORTS" << std::endl;
-    */
-
     instantiate(sampleRate);
     if (isOK()) connectPorts();
 }
 
 
 void
-LADSPAPluginInstance::init()
+LADSPAPluginInstance::init(int idealChannelCount)
 {
     // Discover ports numbers and identities
     //
@@ -119,7 +108,6 @@ LADSPAPluginInstance::init()
         if (LADSPA_IS_PORT_CONTROL(m_descriptor->PortDescriptors[i]))
         {
 	    if (LADSPA_IS_PORT_INPUT(m_descriptor->PortDescriptors[i])) {
-		//cout << "ADDING CONTROL PORT" << endl;
 		LADSPA_Data *data = new LADSPA_Data(0.0);
 		m_controlPorts.push_back(
                     std::pair<unsigned long, LADSPA_Data*>(i, data));
@@ -133,10 +121,21 @@ LADSPAPluginInstance::init()
                       << "unrecognised port type" << std::endl;
 #endif
     }
+
+    m_instanceCount = 1;
+
+    if (idealChannelCount > 0) {
+	if (m_audioPortsIn.size() == 1) {
+	    // mono plugin: duplicate it if need be
+	    m_instanceCount = idealChannelCount;
+	}
+    }
 }
 
 LADSPAPluginInstance::~LADSPAPluginInstance()
 {
+    cleanup();
+
     for (unsigned int i = 0; i < m_controlPorts.size(); ++i)
         delete m_controlPorts[i].second;
 
@@ -166,56 +165,68 @@ LADSPAPluginInstance::instantiate(unsigned long sampleRate)
     std::cout << "LADSPAPluginInstance::instantiate - plugin unique id = "
               << m_descriptor->UniqueID << std::endl;
 #endif
+    if (!m_descriptor) return;
 
-    m_instanceHandle = m_descriptor->instantiate(m_descriptor, sampleRate);
+    if (!m_descriptor->instantiate) {
+	std::cerr << "Bad plugin: plugin id " << m_descriptor->UniqueID
+		  << ":" << m_descriptor->Label
+		  << " has no instantiate method!" << std::endl;
+	return;
+    }
+
+    for (int i = 0; i < m_instanceCount; ++i) {
+	m_instanceHandles.push_back
+	    (m_descriptor->instantiate(m_descriptor, sampleRate));
+    }
 }
 
 void
 LADSPAPluginInstance::activate()
 {
-    if (m_instanceHandle && m_descriptor->activate)
-        m_descriptor->activate(m_instanceHandle);
-    /*
-    else
-        std::cerr << "LADSPAPluginInstance::activate - no ACTIVATE method"
-                  << std::endl;
-                  */
+    if (!m_descriptor || !m_descriptor->activate) return;
+
+    for (std::vector<LADSPA_Handle>::iterator hi = m_instanceHandles.begin();
+	 hi != m_instanceHandles.end(); ++hi) {
+	m_descriptor->activate(*hi);
+    }
 }
 
 void
 LADSPAPluginInstance::connectPorts()
 {
-    if (m_descriptor == 0) return;
+    if (!m_descriptor || !m_descriptor->connect_port) return;
 
     assert(sizeof(LADSPA_Data) == sizeof(float));
     assert(sizeof(sample_t) == sizeof(float));
 
-    // Ensure we connect _all_ audio ports to our two
-    // choices.
-    //
-    for (unsigned int i = 0; i < m_audioPortsIn.size(); ++i)
-    {
-        m_descriptor->connect_port(m_instanceHandle,
-                                   m_audioPortsIn[i],
-                                   (LADSPA_Data *)m_inputBuffers[i]);
-    }
+    int inbuf = 0, outbuf = 0;
 
-    for (unsigned int i = 0; i < m_audioPortsOut.size(); ++i)
-    {
-        m_descriptor->connect_port(m_instanceHandle,
-                                   m_audioPortsOut[i],
-                                   (LADSPA_Data *)m_outputBuffers[i]);
-    }
+    for (std::vector<LADSPA_Handle>::iterator hi = m_instanceHandles.begin();
+	 hi != m_instanceHandles.end(); ++hi) {
 
-    // Connect all control ports
-    //
-    for (unsigned int i = 0; i < m_controlPorts.size(); ++i)
-    {
-        m_descriptor->connect_port(m_instanceHandle,
-                                   m_controlPorts[i].first,
-                                   m_controlPorts[i].second);
-    }
+	for (unsigned int i = 0; i < m_audioPortsIn.size(); ++i) {
+	    m_descriptor->connect_port(*hi,
+				       m_audioPortsIn[i],
+				       (LADSPA_Data *)m_inputBuffers[inbuf]);
+	    ++inbuf;
+	}
 
+	for (unsigned int i = 0; i < m_audioPortsOut.size(); ++i) {
+	    m_descriptor->connect_port(*hi,
+				       m_audioPortsOut[i],
+				       (LADSPA_Data *)m_outputBuffers[outbuf]);
+	    ++outbuf;
+	}
+
+	// If there is more than one instance, they all share the same
+	// control port ins.  Note that we've already ignored any
+	// output control ports.
+	for (unsigned int i = 0; i < m_controlPorts.size(); ++i) {
+	    m_descriptor->connect_port(*hi,
+				       m_controlPorts[i].first,
+				       m_controlPorts[i].second);
+	}
+    }
 }
 
 void
@@ -225,11 +236,6 @@ LADSPAPluginInstance::setPortValue(unsigned int portNumber, float value)
     {
         if (m_controlPorts[i].first == portNumber)
         {
-            /*
-            std::cout << "LADSPAPluginInstance::setPortValue - "
-                      << "setting value = " << value << std::endl;
-                      */
-
             (*m_controlPorts[i].second) = value;
         }
     }
@@ -238,43 +244,43 @@ LADSPAPluginInstance::setPortValue(unsigned int portNumber, float value)
 void
 LADSPAPluginInstance::run()
 {
-    if (m_descriptor && m_descriptor->run)
-    {
-        /*
-        std::cout << "LADSPAPluginInstance::run - running plugin "
-                  << "for " << sampleCount << " frames" << std::endl;
-                  */
-        m_descriptor->run(m_instanceHandle, m_bufferSize);
+    if (!m_descriptor || !m_descriptor->run) return;
+
+    for (std::vector<LADSPA_Handle>::iterator hi = m_instanceHandles.begin();
+	 hi != m_instanceHandles.end(); ++hi) {
+        m_descriptor->run(*hi, m_bufferSize);
     }
 }
 
 void
 LADSPAPluginInstance::deactivate()
 {
-    /*
-    std::cout << "LADSPAPluginInstance::deactivate - " 
-              << "descriptor = " << m_descriptor << std::endl;
+    if (!m_descriptor || !m_descriptor->deactivate) return;
 
-    std::cout << "LADSPAPluginInstance::deactivate - "
-              << "instance handle = " << m_instanceHandle << std::endl;
-              */
-
-    if (m_descriptor && m_descriptor->deactivate)
-    {
-        m_descriptor->deactivate(m_instanceHandle);
+    for (std::vector<LADSPA_Handle>::iterator hi = m_instanceHandles.begin();
+	 hi != m_instanceHandles.end(); ++hi) {
+        m_descriptor->deactivate(*hi);
     }
-    /*
-    else
-        std::cout << "LADSPAPluginInstance::deactivate - " 
-                  << "no DEACTIVATE method" << std::endl;
-                  */
 }
 
 void
 LADSPAPluginInstance::cleanup()
 {
-    m_descriptor->cleanup(m_instanceHandle);
-    m_instanceHandle = 0;
+    if (!m_descriptor) return;
+
+    if (!m_descriptor->cleanup) {
+	std::cerr << "Bad plugin: plugin id " << m_descriptor->UniqueID
+		  << ":" << m_descriptor->Label
+		  << " has no cleanup method!" << std::endl;
+	return;
+    }
+
+    for (std::vector<LADSPA_Handle>::iterator hi = m_instanceHandles.begin();
+	 hi != m_instanceHandles.end(); ++hi) {
+	m_descriptor->cleanup(*hi);
+    }
+
+    m_instanceHandles.clear();
 }
 
 

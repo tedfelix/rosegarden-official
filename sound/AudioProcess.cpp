@@ -577,7 +577,8 @@ AudioInstrumentMixer::setPlugin(InstrumentId id, int position, unsigned int plug
         // create and store
         LADSPAPluginInstance *instance =
             new LADSPAPluginInstance
-	    (id, pluginId, position, m_sampleRate, m_blockSize, des);
+	    (id, pluginId, position, m_sampleRate, m_blockSize,
+	     m_bufferMap[id].channels, des);
 
 	if (instance->isOK()) {
 	    m_plugins[id][position] = instance;
@@ -606,14 +607,12 @@ AudioInstrumentMixer::removePlugin(InstrumentId id, int position)
 	    // Deactivate and cleanup
 	    //
 	    instance->deactivate();
-	    instance->cleanup();
+	    delete instance;
 	
 	    // Potentially unload the shared library in which the plugin
 	    // came from if none of its siblings are in use.
 	    //
 	    m_driver->getMappedStudio()->unloadPlugin(instance->getLADSPAId());
-	
-	    delete instance;
 	}
 #endif
 
@@ -647,14 +646,12 @@ AudioInstrumentMixer::removeAllPlugins()
 		// Deactivate and cleanup
 		//
 		instance->deactivate();
-		instance->cleanup();
+		delete instance;
 		
 		// Potentially unload the shared library in which the plugin
 		// came from if none of its siblings are in use.
 		//
 		m_driver->getMappedStudio()->unloadPlugin(instance->getLADSPAId());
-	
-		delete instance;
 	    }
 #endif
 
@@ -701,6 +698,8 @@ void
 AudioInstrumentMixer::resetAllPlugins()
 {
     getLock();
+
+    std::cerr << "AudioInstrumentMixer::resetAllPlugins!" << std::endl;
 
     for (PluginMap::iterator j = m_plugins.begin();
 	 j != m_plugins.end(); ++j) {

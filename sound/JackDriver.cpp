@@ -868,12 +868,12 @@ JackDriver::jackProcessRecord(jack_nframes_t nframes,
 	int port = input * channels + channel;
 	int portRight = input * channels + 1;
 
-	if (port < m_inputPorts.size()) {
+	if (port < int(m_inputPorts.size())) {
 	    inputBufferLeft = static_cast<sample_t*>
 		(jack_port_get_buffer(m_inputPorts[port], nframes));
 	}
     
-	if (channels == 2 && portRight < m_inputPorts.size()) {
+	if (channels == 2 && portRight < int(m_inputPorts.size())) {
 	    inputBufferRight = static_cast<sample_t*>
 		(jack_port_get_buffer(m_inputPorts[portRight], nframes));
 	}

@@ -49,6 +49,7 @@ public:
                          int position,
 			 unsigned long sampleRate,
 			 size_t bufferSize,
+			 int idealChannelCount,
                          const LADSPA_Descriptor* descriptor);
 
     // Constructor that uses shared buffers
@@ -64,7 +65,7 @@ public:
 
     virtual ~LADSPAPluginInstance();
 
-    bool isOK() const { return m_instanceHandle != 0; }
+    bool isOK() const { return m_instanceHandles.size() != 0; }
 
     Rosegarden::InstrumentId getInstrument() const { return m_instrument; }
     unsigned long getLADSPAId() const { return m_ladspaId; }
@@ -78,8 +79,8 @@ public:
     //
     virtual void run();
     virtual size_t getBufferSize() { return m_bufferSize; }
-    virtual size_t getAudioInputCount() { return m_audioPortsIn.size(); }
-    virtual size_t getAudioOutputCount() { return m_audioPortsOut.size(); }
+    virtual size_t getAudioInputCount() { return m_instanceCount * m_audioPortsIn.size(); }
+    virtual size_t getAudioOutputCount() { return m_instanceCount * m_audioPortsOut.size(); }
     virtual sample_t **getAudioInputBuffers() { return m_inputBuffers; }
     virtual sample_t **getAudioOutputBuffers() { return m_outputBuffers; }
 
@@ -87,7 +88,6 @@ public:
     //
     void activate();
     void deactivate();
-    void cleanup();
 
     virtual bool isBypassed() const { return m_bypassed; }
     virtual void setBypassed(bool bypassed) { m_bypassed = bypassed; }
@@ -107,18 +107,20 @@ public:
     };
 
 protected:
-    void init();
+    void init(int idealChannelCount = 0);
     void instantiate(unsigned long sampleRate);
+    void cleanup();
 
     // Connection of data (and behind the scenes control) ports
     //
     void connectPorts();
     
-    Rosegarden::InstrumentId  m_instrument;
-    unsigned long             m_ladspaId;
-    int                       m_position;
-    LADSPA_Handle             m_instanceHandle;
-    const LADSPA_Descriptor  *m_descriptor;
+    Rosegarden::InstrumentId   m_instrument;
+    unsigned long              m_ladspaId;
+    int                        m_position;
+    std::vector<LADSPA_Handle> m_instanceHandles;
+    int                        m_instanceCount;
+    const LADSPA_Descriptor   *m_descriptor;
 
     std::vector<std::pair<unsigned long, LADSPA_Data*> > m_controlPorts;
 
