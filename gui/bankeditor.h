@@ -214,10 +214,17 @@ public slots:
     void slotPaste();
 
 protected:
+    void updateDeviceItem(QListViewItem* deviceItem,
+                          Rosegarden::MidiDevice* midiDevice);
+
+    void clearItemChildren(QListViewItem* deviceItem);
+
     void importFromSF2(QString filename);
 
     MidiDeviceListViewItem* getParentDeviceItem(QListViewItem*);
     void keepBankListForNextPopulate() { m_keepBankList = true; }
+
+    void populateDevice(QListViewItem*);
 
     //--------------- Data members ---------------------------------
     Rosegarden::Studio      *m_studio;

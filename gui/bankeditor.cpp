@@ -719,27 +719,45 @@ BankEditorDialog::initDialog()
 		(midiDevice->getId(), m_listView, itemName);
             deviceItem->setOpen(true);
 
-            MidiProgramsEditor::MidiBankContainer banks = midiDevice->getBanks();
-            // add banks for this device
-            for (unsigned int i = 0; i < banks.size(); ++i) {
-                RG_DEBUG << "BankEditorDialog : adding "
-                         << itemName << " - " << strtoqstr(banks[i].name)
-                         << endl;
-                new MidiBankListViewItem(midiDevice->getId(), i, deviceItem,
-                                         strtoqstr(banks[i].name),
-                                         QString("%1").arg(banks[i].msb),
-                                         QString("%1").arg(banks[i].lsb));
-            }
-            
-            
+            updateDeviceItem(deviceItem, midiDevice);
         }
     }
 
     // Select the first Device
     //
-    slotPopulateDevice(m_listView->firstChild());
+    populateDevice(m_listView->firstChild());
     m_listView->setSelected(m_listView->firstChild(), true);
 
+}
+
+void
+BankEditorDialog::updateDeviceItem(QListViewItem* deviceItem, Rosegarden::MidiDevice* midiDevice)
+{
+    clearItemChildren(deviceItem);
+
+    QString itemName = strtoqstr(midiDevice->getName());
+
+    MidiProgramsEditor::MidiBankContainer banks = midiDevice->getBanks();
+    // add banks for this device
+    for (unsigned int i = 0; i < banks.size(); ++i) {
+        RG_DEBUG << "BankEditorDialog : adding "
+                 << itemName << " - " << strtoqstr(banks[i].name)
+                 << endl;
+        new MidiBankListViewItem(midiDevice->getId(), i, deviceItem,
+                                 strtoqstr(banks[i].name),
+                                 QString("%1").arg(banks[i].msb),
+                                 QString("%1").arg(banks[i].lsb));
+    }
+            
+    
+}
+
+void
+BankEditorDialog::clearItemChildren(QListViewItem* item)
+{
+    QListViewItem* child = 0;
+    
+    while((child = item->firstChild())) delete child;
 }
 
 
@@ -788,7 +806,13 @@ BankEditorDialog::checkModified()
             else
             {
                 Rosegarden::MidiDevice *device = getMidiDevice(m_lastDevice);
-
+                if (!device) {
+                    RG_DEBUG << "%%% WARNING : BankEditorDialog::checkModified() - NO MIDI DEVICE for device "
+                             << m_lastDevice << endl;
+                    setModified(false);
+                    return;
+                }
+                
                 command = new ModifyDeviceCommand(m_studio,
                                                   m_lastDevice,
                                                   m_deviceNameMap[m_lastDevice],
@@ -814,7 +838,15 @@ BankEditorDialog::slotPopulateDevice(QListViewItem* item)
     if (!item) return;
 
     checkModified();
-    
+
+    populateDevice(item);
+}
+
+void
+BankEditorDialog::populateDevice(QListViewItem* item)
+{
+    RG_DEBUG << "BankEditorDialog::populateDevice" << endl;
+
     MidiBankListViewItem* bankItem = dynamic_cast<MidiBankListViewItem*>(item);
 
     if (!bankItem) {
@@ -826,7 +858,7 @@ BankEditorDialog::slotPopulateDevice(QListViewItem* item)
         m_bankList = device->getBanks();
         m_programList = device->getPrograms();
 
-        RG_DEBUG << "BankEditorDialog::slotPopulateDevice : not a bank item - disabling" << endl;
+        RG_DEBUG << "BankEditorDialog::populateDevice : not a bank item - disabling" << endl;
         m_deleteBank->setEnabled(false);
         m_copyPrograms->setEnabled(false);
         m_pastePrograms->setEnabled(false);
@@ -1382,10 +1414,11 @@ BankEditorDialog::slotImport()
                     std::vector<Rosegarden::MidiProgram> programs;
                     std::string librarianName, librarianEmail;
 
+                    Rosegarden::MidiDevice *device = 0;
+
                     for (it = list->begin(); it != list->end(); ++it)
                     {
-                        Rosegarden::MidiDevice *device = 
-                            dynamic_cast<Rosegarden::MidiDevice*>(*it);
+                        device = dynamic_cast<Rosegarden::MidiDevice*>(*it);
 
                         if (device)
                         {
@@ -1424,10 +1457,12 @@ BankEditorDialog::slotImport()
                                         overwrite);
                             addCommandToHistory(command);
 
+                            // Redraw the dialog
+                            updateDeviceItem(deviceItem, device);
+                            m_listView->setCurrentItem(deviceItem->firstChild());
 			    setModified(true);
 
-                            // Redraw the dialog
-                            initDialog();
+                            // initDialog();
                         }
                     }
                 }
