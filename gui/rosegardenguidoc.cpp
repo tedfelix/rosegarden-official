@@ -889,7 +889,7 @@ RosegardenGUIDoc::prepareAudio()
     {
         SEQMAN_DEBUG << "prepareAudio() - "
                      << "couldn't delete all audio files from sequencer"
-                     << std::endl;
+                     << endl;
         return;
     }
     
@@ -910,7 +910,7 @@ RosegardenGUIDoc::prepareAudio()
                                       "addAudioFile(QString, int)", data, replyType, replyData))
         {
             SEQMAN_DEBUG << "prepareAudio() - couldn't add audio file"
-                         << std::endl;
+                         << endl;
             return;
         }
         else
@@ -964,7 +964,7 @@ RosegardenGUIDoc::alive()
            isApplicationRegistered(QCString(ROSEGARDEN_SEQUENCER_APP_NAME)))
     {
         SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice - "
-                     << "waiting for Sequencer to come up" << std::endl;
+                     << "waiting for Sequencer to come up" << endl;
 
         kapp->processEvents(1000);
         sleep(1); // 1s
@@ -978,7 +978,7 @@ RosegardenGUIDoc::alive()
                                   data))
     {
         SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice - "
-                     << "can't call the Sequencer" << std::endl;
+                     << "can't call the Sequencer" << endl;
         return;
     }
 
@@ -994,7 +994,7 @@ RosegardenGUIDoc::alive()
                                   data, replyType, replyData, true))
     {
         SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice - "
-                     << "can't get number of devices" << std::endl;
+                     << "can't get number of devices" << endl;
         return;
     }
 
@@ -1008,7 +1008,7 @@ RosegardenGUIDoc::alive()
     else
     {
         SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice - "
-                     << "got unknown returntype from getDevices()" << std::endl;
+                     << "got unknown returntype from getDevices()" << endl;
         return;
     }
 
@@ -1017,17 +1017,17 @@ RosegardenGUIDoc::alive()
     m_studio.clear();
 
     SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice - devices = "
-                 << devices << std::endl;
+                 << devices << endl;
 
     for (unsigned int i = 0; i < devices; i++)
     {
         SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice - i = "
-                     << i << std::endl;
+                     << i << endl;
         getMappedDevice(i);
     }
 
     SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice - "
-                 << "Sequencer alive - Instruments synced" << std::endl;
+                 << "Sequencer alive - Instruments synced" << endl;
 
     // Ok, we've sync'd - make sure that this app doesn't
     // drive this sync again by switching our startUpSync
@@ -1054,7 +1054,7 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
                                   data, replyType, replyData, false))
     {
         SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice() - "
-                     << "can't call Sequencer" << std::endl;
+                     << "can't call Sequencer" << endl;
         return;
     }
 
@@ -1064,7 +1064,7 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
     if (replyType == "Rosegarden::MappedDevice")
     {
         SEQMAN_DEBUG  << "RosegardenGUIDoc::getMappedDevice() - "
-                      << "got Rosegarden::MappedDevice" << std::endl;
+                      << "got Rosegarden::MappedDevice" << endl;
 
         // unfurl
         reply >> mD;
@@ -1073,12 +1073,12 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
     {
         SEQMAN_DEBUG  << "RosegardenGUIDoc::getMappedDevice() - "
                       << "didn't get MappedDevice " 
-                      << id << std::endl;
+                      << id << endl;
         return;
     }
 
     SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice() - "
-                 << "check if we've got this device already" << std::endl;
+                 << "check if we've got this device already" << endl;
 
     // See if we've got this device already
     //
@@ -1091,7 +1091,7 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
     if (mD->size() == 0)
     {
         SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice() - "
-                     << "0 instrument found" << std::endl;
+                     << "0 instrument found" << endl;
         return;
     }
     
@@ -1269,7 +1269,7 @@ RosegardenGUIDoc::insertRecordedAudio(const Rosegarden::RealTime &time,
         else
         {
             SEQMAN_DEBUG << "RosegardenGUIDoc::insertRecordedAudio - "
-                         << "no audio file" << std::endl;
+                         << "no audio file" << endl;
         }
 
         // always insert straight away for audio
@@ -1320,7 +1320,7 @@ RosegardenGUIDoc::stopRecordingAudio()
 
     // now add the Segment
     SEQMAN_DEBUG << "RosegardenGUIDoc::stopRecordingAudio - "
-                 << "got recorded segment" << std::endl;
+                 << "got recorded segment" << endl;
 
     // now move the segment back by the jack record latency
     //
@@ -1341,7 +1341,7 @@ RosegardenGUIDoc::stopRecordingAudio()
     SEQMAN_DEBUG << "RosegardenGUIDoc::stopRecordingAudio - "
                  << "shifted recorded audio segment by "
                  <<  m_recordSegment->getStartTime() - shiftedStartTime
-                 << " clicks" << std::endl;
+                 << " clicks" << endl;
 
     m_recordSegment->setStartTime(shiftedStartTime);
 
@@ -1358,7 +1358,7 @@ RosegardenGUIDoc::stopRecordingAudio()
 void
 RosegardenGUIDoc::finalizeAudioFile(Rosegarden::AudioFileId /*id*/)
 {
-    SEQMAN_DEBUG << "RosegardenGUIDoc::finalizeAudioFile" << std::endl;
+    SEQMAN_DEBUG << "RosegardenGUIDoc::finalizeAudioFile" << endl;
 
     // Get the last added audio file - the one we've just recorded
     // and generate a preview of this audio file for population
@@ -1423,7 +1423,7 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::AudioFileId /*id*/)
                                   "addAudioFile(QString, int)", data))
     {
         SEQMAN_DEBUG << "prepareAudio() - couldn't add audio file"
-                     << std::endl;
+                     << endl;
         return;
     }
 
@@ -1445,7 +1445,7 @@ RosegardenGUIDoc::slotNewRecordButton()
 {
     // Inform the sequencer if it's an audio track
     //
-    SEQMAN_DEBUG << "RosegardenGUIDoc::slotNewRecordButton()" << std::endl;
+    SEQMAN_DEBUG << "RosegardenGUIDoc::slotNewRecordButton()" << endl;
 
     // Document modified
     setModified(true);
@@ -1478,7 +1478,7 @@ RosegardenGUIDoc::slotNewRecordButton()
             {
                 SEQMAN_DEBUG << "RosegardenGUIDoc::slotNewRecordButton - "
                              << "can't set monitoring instrument at sequencer"
-                             << std::endl;
+                             << endl;
             }
 
             QByteArray data2;
@@ -1493,7 +1493,7 @@ RosegardenGUIDoc::slotNewRecordButton()
             {
                 SEQMAN_DEBUG << "RosegardenGUIDoc::slotNewRecordButton - "
                              << "can't turn on audio monitoring at sequencer"
-                             << std::endl;
+                             << endl;
             }
         }
     }
@@ -1514,7 +1514,7 @@ RosegardenGUIDoc::getAudioPlayLatency()
     {
         SEQMAN_DEBUG << "RosegardenGUIDoc::getAudioPlayLatency - "
                      << "Playback failed to contact Rosegarden sequencer"
-                     << std::endl;
+                     << endl;
         return Rosegarden::RealTime(0, 0);
     }
     else
@@ -1543,7 +1543,7 @@ RosegardenGUIDoc::getAudioRecordLatency()
     {
         SEQMAN_DEBUG << "RosegardenGUIDoc::getAudioRecordLatency - "
                      << "Playback failed to contact Rosegarden sequencer"
-                     << std::endl;
+                     << endl;
         return Rosegarden::RealTime(0, 0);
     }
     else
