@@ -19,11 +19,8 @@ Rosegarden?
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>If you're having problems with stem directions in your Lilypond export not
-matching what's in the notation editor, you can force all the stem direction
-properties for the composition to become permanent, and thus ensure their
-correct export, by toggling the direction of one of the stems while in the
-notation editor.</html>
+<p>...that Rosegarden can detect and create a default connection for ALSA soft
+synths that are started after Rosegarden is already running?</html>
 </tip>
 <tip category="Rosegarden|General">
 <html>
