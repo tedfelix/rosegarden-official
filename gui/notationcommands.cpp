@@ -32,8 +32,6 @@
 
 using Rosegarden::Segment;
 using Rosegarden::SegmentNotationHelper;
-using Rosegarden::CompositionTimeSliceAdapter;
-using Rosegarden::AnalysisHelper;
 using Rosegarden::Event;
 using Rosegarden::timeT;
 using Rosegarden::Note;
