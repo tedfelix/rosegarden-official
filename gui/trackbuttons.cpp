@@ -89,11 +89,13 @@ TrackButtons::drawButtons()
 
     // Create a buttonGap at the top of the layout widget
     //
+    QLabel *label = 0;
+/*!!!
     QLabel *label = new QLabel(this);
     label->setText(QString(""));
     label->setMinimumHeight(m_offset);
     label->setMaximumHeight(m_offset);
-
+*/
     // Create a horizontal box for each track
     // plus the two buttons
     //

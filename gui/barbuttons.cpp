@@ -40,6 +40,8 @@ public:
                      QWidget* parent = 0,
                      const char* name = 0,
                      WFlags f=0);
+
+    virtual ~BarButtonsWidget();
     
     virtual QSize sizeHint() const;
 
@@ -51,6 +53,8 @@ protected:
     //--------------- Data members ---------------------------------
     int m_barHeight;
     int m_currentXOffset;
+
+    QFont *m_barFont;
 
     Rosegarden::RulerScale *m_rulerScale;
 
@@ -123,7 +127,13 @@ BarButtonsWidget::BarButtonsWidget(RulerScale *rulerScale,
       m_currentXOffset(0),
       m_rulerScale(rulerScale)
 {
-    
+    m_barFont = new QFont("helvetica", 12);
+    m_barFont->setPixelSize(12);
+}
+
+BarButtonsWidget::~BarButtonsWidget()
+{
+    delete m_barFont;
 }
 
 void BarButtonsWidget::scrollHoriz(int x)
@@ -135,15 +145,17 @@ void BarButtonsWidget::scrollHoriz(int x)
 
 QSize BarButtonsWidget::sizeHint() const
 {
-    int nbBars = m_rulerScale->getLastVisibleBar() - m_rulerScale->getFirstVisibleBar();
-    double firstBarWidth = m_rulerScale->getBarWidth(0);
+    double width = m_rulerScale->getBarPosition(m_rulerScale->getLastVisibleBar()) +
+	m_rulerScale->getBarWidth(m_rulerScale->getLastVisibleBar()) -
+	m_rulerScale->getBarPosition(m_rulerScale->getFirstVisibleBar());
 
-    return QSize(nbBars * firstBarWidth, m_barHeight);
+    return QSize(int(width), m_barHeight);
 }
 
 void BarButtonsWidget::paintEvent(QPaintEvent*)
 {
     QPainter painter(this);
+    painter.setFont(*m_barFont);
 
     int firstBar = m_rulerScale->getFirstVisibleBar(),
 	 lastBar = m_rulerScale->getLastVisibleBar();
@@ -163,6 +175,6 @@ void BarButtonsWidget::paintEvent(QPaintEvent*)
 	if (x + width < clipRect.x()) continue;
 
 	painter.drawLine(x, 0, x, m_barHeight);
-	painter.drawText(x + 4, m_barHeight / 2, QString("%1").arg(i));
+	painter.drawText(x + 4, 12, QString("%1").arg(i));
     }
 }

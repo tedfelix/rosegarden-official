@@ -117,17 +117,21 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     canvas->setBackgroundColor(RosegardenGUIColours::SegmentCanvas);
 
     int trackLabelWidth = 156;
-    unsigned int barButtonsHeight = 30;
+    int trackLabelOffset = 3;
+
+    int barButtonsHeight = 25;
+    int barButtonsOffset = 2;
 
     m_segmentCanvas = new SegmentCanvas(m_rulerScale,
                                         getTrackCellHeight(),
-                                        trackLabelWidth, barButtonsHeight,
+                                        trackLabelOffset + trackLabelWidth,
+					barButtonsOffset + barButtonsHeight,
                                         canvas, this);
 
     hbox->addWidget(m_segmentCanvas);
     m_barButtons = new BarButtons(m_document,
                                   m_rulerScale,
-                                  30,
+                                  barButtonsHeight,
                                   false,
                                   m_segmentCanvas);
 
@@ -136,11 +140,13 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
                                       trackLabelWidth,
                                       m_segmentCanvas);
 
-    m_trackButtons->setGeometry(3, barButtonsHeight,
+    m_trackButtons->setGeometry(trackLabelOffset,
+				barButtonsOffset + barButtonsHeight,
                                 trackLabelWidth,
                                 getTrackCellHeight() * nbTracks + 5);
 
-    m_barButtons->setGeometry(trackLabelWidth, 2,
+    m_barButtons->setGeometry(trackLabelOffset + trackLabelWidth,
+			      barButtonsOffset,
                               getSegmentCanvas()->viewport()->width(),
                               barButtonsHeight);
 
@@ -215,7 +221,7 @@ int TrackEditor::getTrackCellHeight() const
 {
     static QFont defaultFont;
     
-    return defaultFont.pixelSize() + 8; // For the moment
+    return defaultFont.pixelSize() + 12; // For the moment
 }
 
 void
