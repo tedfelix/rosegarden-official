@@ -97,105 +97,105 @@ Staff::Staff(QCanvas *canvas, Staff::Clef clef)
     //
     StaffLine *staffLine = new StaffLine(canvas, this);
 
-    int y = l * lineWidth;
+    int y = l * lineWidth + linesOffset;
 
     staffLine->setPoints(0,y, m_horizLineLength,y);
-    staffLine->moveBy(0,linesOffset);
+    // staffLine->moveBy(0,linesOffset);
     staffLine->setAssociatedPitch(pitch);
     
     m_pitchToHeight[pitch] = y; // F
     m_pitchToHeight[pitch + 1] = y; // F#
 
-    m_pitchToHeight[pitch + 2] = y + lineWidth / 2 + 1; // G
-    m_pitchToHeight[pitch + 3] = y + lineWidth / 2 + 1; // G#
-    m_pitchToHeight[pitch + 4] = y + lineWidth;     // A
+    m_pitchToHeight[pitch + 2] = y - lineWidth / 2; // G
+    m_pitchToHeight[pitch + 3] = y - lineWidth / 2; // G#
+    m_pitchToHeight[pitch + 4] = y - lineWidth;     // A
 
     // Intermediate invisible line just below this one
     //
-    makeInvisibleLine(y + lineWidth / 2 + 1, 16); // E
+    makeInvisibleLine(y - lineWidth / 2, 16); // E
     
     // Line 1 : D - pitch 14
     //
     ++l; pitch = 14;
     staffLine = new StaffLine(canvas, this);
     
-    y = l * lineWidth;
+    y = l * lineWidth + linesOffset;
 
     staffLine->setPoints(0,y, m_horizLineLength,y);
-    staffLine->moveBy(0,linesOffset);
+    // staffLine->moveBy(0,linesOffset);
     staffLine->setAssociatedPitch(pitch);
 
     m_pitchToHeight[pitch] = y; // D
     m_pitchToHeight[pitch + 1] = y; // D#
-    m_pitchToHeight[pitch + 2] = y + lineWidth / 2 + 1; // E
+    m_pitchToHeight[pitch + 2] = y - lineWidth / 2; // E
     
-    makeInvisibleLine(y + lineWidth / 2 + 1, 12); // C
+    makeInvisibleLine(y - lineWidth / 2, 12); // C
 
     // Line 2 : B - pitch 11
     //
     ++l; pitch = 11;
     staffLine = new StaffLine(canvas, this);
 
-    y = l * lineWidth;
+    y = l * lineWidth + linesOffset;
 
     staffLine->setPoints(0,y, m_horizLineLength,y);
-    staffLine->moveBy(0,linesOffset);
+    // staffLine->moveBy(0,linesOffset);
     staffLine->setAssociatedPitch(pitch);
 
     m_pitchToHeight[pitch] = y; // B
-    m_pitchToHeight[pitch + 1] = y + lineWidth / 2 + 1; // C
-    m_pitchToHeight[pitch + 2] = y + lineWidth / 2 + 1; // C#
+    m_pitchToHeight[pitch + 1] = y - lineWidth / 2; // C
+    m_pitchToHeight[pitch + 2] = y - lineWidth / 2; // C#
     
-    makeInvisibleLine(y + lineWidth / 2 + 1, 9); // A
+    makeInvisibleLine(y - lineWidth / 2, 9); // A
 
     // Line 3 : G - pitch 7
     //
     ++l; pitch = 7;
     staffLine = new StaffLine(canvas, this);
 
-    y = l * lineWidth;
+    y = l * lineWidth + linesOffset;
 
     staffLine->setPoints(0,y, m_horizLineLength,y);
-    staffLine->moveBy(0,linesOffset);
+    // staffLine->moveBy(0,linesOffset);
     staffLine->setAssociatedPitch(pitch);
 
     m_pitchToHeight[pitch] = y; // G
     m_pitchToHeight[pitch + 1] = y; // G#
-    m_pitchToHeight[pitch + 2] = y + lineWidth / 2 + 1; // A
-    m_pitchToHeight[pitch + 3] = y + lineWidth / 2 + 1; // A#
+    m_pitchToHeight[pitch + 2] = y - lineWidth / 2; // A
+    m_pitchToHeight[pitch + 3] = y - lineWidth / 2; // A#
     
-    makeInvisibleLine(y + lineWidth / 2 + 1, 5); // F
+    makeInvisibleLine(y - lineWidth / 2, 5); // F
 
     // Line 4 : E - pitch 4
     //
     ++l; pitch = 4;
     staffLine = new StaffLine(canvas, this);
 
-    y = l * lineWidth;
+    y = l * lineWidth + linesOffset;
 
     staffLine->setPoints(0,y, m_horizLineLength,y);
-    staffLine->moveBy(0,linesOffset);
+    // staffLine->moveBy(0,linesOffset);
     staffLine->setAssociatedPitch(pitch);
 
     m_pitchToHeight[pitch] = y; // E
-    m_pitchToHeight[pitch + 1] = y + lineWidth / 2 + 1; // F
-    m_pitchToHeight[pitch + 2] = y + lineWidth / 2 + 1; // F#
+    m_pitchToHeight[pitch + 1] = y - lineWidth / 2; // F
+    m_pitchToHeight[pitch + 2] = y - lineWidth / 2; // F#
 
-    makeInvisibleLine(y + lineWidth / 2 + 1, 2); // D
+    makeInvisibleLine(y - lineWidth / 2, 2); // D
 
     // Line 5 : middle C - pitch 0 (not actually displayed)
     //
     ++l; pitch = 0;
-    y = l * lineWidth;
+    y = l * lineWidth + linesOffset;
 
     makeInvisibleLine(y, pitch);
 
     m_pitchToHeight[pitch] = y; // C
     m_pitchToHeight[pitch + 1] = y; // C#
-    m_pitchToHeight[pitch + 2] = y + lineWidth / 2 + 1; // D
-    m_pitchToHeight[pitch + 3] = y + lineWidth / 2 + 1; // D#
+    m_pitchToHeight[pitch + 2] = y - lineWidth / 2; // D
+    m_pitchToHeight[pitch + 3] = y - lineWidth / 2; // D#
     
-    makeInvisibleLine(y + lineWidth / 2 + 1, -2);
+    makeInvisibleLine(y - lineWidth / 2, -2);
 
     //
     // Add vertical lines
@@ -242,10 +242,13 @@ Staff::makeInvisibleLine(int y, int pitch)
     // Intermediate invisible line
     //
     StaffLine *invisibleLine = new StaffLine(canvas(), this);
-    invisibleLine->setPen(red);
-    
+    if (pitch)
+        invisibleLine->setPen(red);
+    else
+        invisibleLine->setPen(blue); // middle C
+
     invisibleLine->setPoints(0,y, m_horizLineLength,y);
-    invisibleLine->moveBy(0,linesOffset);
+    invisibleLine->setZ(-1);
     invisibleLine->setAssociatedPitch(pitch);
 }
 
