@@ -972,58 +972,49 @@ AlsaDriver::allNotesOff()
 void
 AlsaDriver::processNotesOff(const RealTime &time)
 {
-    snd_seq_event_t *event = new snd_seq_event_t();
+    static snd_seq_event_t event;
 
     ClientPortPair outputDevice;
     RealTime offTime;
 
     // prepare the event
-    snd_seq_ev_clear(event);
-    snd_seq_ev_set_source(event, m_port);
+    snd_seq_ev_clear(&event);
+    snd_seq_ev_set_source(&event, m_port);
 
     NoteOffQueue::iterator it = m_noteOffQueue.begin();
-    while (it != m_noteOffQueue.end())
+
+    for (;it != m_noteOffQueue.end() && (*it)->getRealTime() <= time; ++it)
     {
-        NoteOffQueue::iterator nextIt(it);
-        ++nextIt;
+        // Set destination according to instrument mapping to port
+        //
+        outputDevice = getPairForMappedInstrument((*it)->getInstrument());
+        snd_seq_ev_set_dest(&event,
+                            outputDevice.first,
+                            outputDevice.second);
 
-        if ((*it)->getRealTime() <= time)
-        {
-            // Set destination according to instrument mapping to port
-            //
-            outputDevice = getPairForMappedInstrument((*it)->getInstrument());
-            snd_seq_ev_set_dest(event,
-                                outputDevice.first,
-                                outputDevice.second);
+        offTime = (*it)->getRealTime();
 
-            offTime = (*it)->getRealTime();
+        snd_seq_real_time_t alsaOffTime = { offTime.sec,
+                                            offTime.usec * 1000 };
 
-            snd_seq_real_time_t alsaOffTime = { offTime.sec,
-                                                offTime.usec * 1000 };
-
-            snd_seq_ev_schedule_real(event, m_queue, 0, &alsaOffTime);
-            snd_seq_ev_set_noteoff(event,
-                                   (*it)->getChannel(),
-                                   (*it)->getPitch(),
-                                   127);
-            // send note off
-            snd_seq_event_output(m_midiHandle, event);
-            delete(*it);
-            m_noteOffQueue.erase(it);
-        }
-        it = nextIt;
+        snd_seq_ev_schedule_real(&event, m_queue, 0, &alsaOffTime);
+        snd_seq_ev_set_noteoff(&event,
+                               (*it)->getChannel(),
+                               (*it)->getPitch(),
+                               127);
+        // send note off
+        snd_seq_event_output(m_midiHandle, &event);
+        delete(*it);
+        m_noteOffQueue.erase(it);
     }
 
     // and flush them
     snd_seq_drain_output(m_midiHandle);
 
     /*
-    std::cout << "AlsaDriver::processNotesOff - "
-              << " queue size = " << m_noteOffQueue.size() << std::endl;
-              */
-
-    // and clear up
-    delete event;
+      std::cout << "AlsaDriver::processNotesOff - "
+      << " queue size = " << m_noteOffQueue.size() << std::endl;
+    */
 }
 
 void
