@@ -120,7 +120,7 @@ MultiViewCommandHistory::addCommand(KCommand *command, bool execute)
 {
     if (!command) return;
 
-    RG_DEBUG << "MultiViewCommandHistory::addCommand: " << command << endl;
+    RG_DEBUG << "MultiViewCommandHistory::addCommand: " << command->name() << endl;
 
     // We can't redo after adding a command
     clearStack(m_redoStack);

@@ -90,7 +90,7 @@ public:
     virtual const rectcontainer& getRectanglesIn(const QRect& rect, notationpreviewdata*, audiopreviewdata*) = 0;
 
     virtual itemcontainer     getItemsAt      (const QPoint&) = 0;
-    virtual Rosegarden::timeT getRepeatTimeAt (const QPoint&) = 0;
+    virtual Rosegarden::timeT getRepeatTimeAt (const QPoint&, const CompositionItem&) = 0;
 
     virtual Rosegarden::SnapGrid& grid() = 0;
 
@@ -133,7 +133,7 @@ public:
     virtual unsigned int getNbRows();
     virtual const rectcontainer& getRectanglesIn(const QRect& rect, notationpreviewdata*, audiopreviewdata*);
     virtual itemcontainer     getItemsAt      (const QPoint&);
-    virtual Rosegarden::timeT getRepeatTimeAt (const QPoint&);
+    virtual Rosegarden::timeT getRepeatTimeAt (const QPoint&, const CompositionItem&);
 
     virtual Rosegarden::SnapGrid& grid() { return m_grid; }
 

@@ -93,7 +93,7 @@ const double RosegardenScrollView::ScrollAccelValue = 1.04;// acceleration rate
 /// Copied from QScrollView
 void RosegardenScrollView::startAutoScroll()
 {
-    RG_DEBUG << "RosegardenScrollView::startAutoScroll()\n";
+//     RG_DEBUG << "RosegardenScrollView::startAutoScroll()\n";
 
     if ( !m_autoScrollTimer.isActive() ) {
         m_autoScrollTime = InitialScrollTime;
@@ -116,7 +116,7 @@ void RosegardenScrollView::startAutoScroll(int directionConstraint)
 
 void RosegardenScrollView::stopAutoScroll()
 {
-    RG_DEBUG << "RosegardenScrollView::stopAutoScroll()\n";
+//     RG_DEBUG << "RosegardenScrollView::stopAutoScroll()\n";
 
     m_autoScrollTimer.stop();
     m_minDeltaScroll = DefaultMinDeltaScroll;
@@ -127,7 +127,7 @@ void RosegardenScrollView::stopAutoScroll()
 
 void RosegardenScrollView::doAutoScroll()
 {
-    RG_DEBUG << "RosegardenScrollView::doAutoScroll()\n";
+//     RG_DEBUG << "RosegardenScrollView::doAutoScroll()\n";
 
     static QPoint previousP;
     QPoint p = viewport()->mapFromGlobal( QCursor::pos() );

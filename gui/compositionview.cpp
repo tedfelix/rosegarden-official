@@ -44,7 +44,7 @@ const QColor CompositionRect::DefaultBrushColor = Qt::white;
 timeT CompositionItemHelper::getStartTime(const CompositionItem& item, const Rosegarden::SnapGrid& grid)
 {
     if (item)
-        return grid.snapX(item->rect().x());
+        return std::max(grid.snapX(item->rect().x()) - 1, 0L);
 
     return 0;
 }
@@ -52,7 +52,7 @@ timeT CompositionItemHelper::getStartTime(const CompositionItem& item, const Ros
 timeT CompositionItemHelper::getEndTime(const CompositionItem& item, const Rosegarden::SnapGrid& grid)
 {
     if (item)
-        return grid.snapX(item->rect().x() + item->rect().width());
+        return std::max(grid.snapX(item->rect().x() + item->rect().width()) - 1, 0L);
 
     return 0;
 }
@@ -112,7 +112,25 @@ CompositionItem CompositionItemHelper::findSiblingCompositionItem(const Composit
     return referenceItem;
 }
 
+bool CompositionItemHelper::itemHasChanged(const CompositionItem& item, const Rosegarden::SnapGrid& grid)
+{
+    Segment* segment    = getSegment(item);
+    Rosegarden::TrackId itemTrackId = getTrackPos(item, grid);
+    timeT itemStartTime = getStartTime(item, grid);
+    timeT itemEndTime   = getEndTime(item, grid);
 
+    RG_DEBUG << "CompositionHelper::itermHasChanged : moving segment - itemStartTime = "
+             << itemStartTime << " - segmentStartTime = " << segment->getStartTime()
+             << " - itemEndTime = " << itemEndTime << " - segmentEndTime = " << segment->getRepeatEndTime()
+             << " - itemTrackId = " << itemTrackId << " - segmentTrackId = " << segment->getTrack()
+             << endl;
+
+
+    return (itemStartTime != segment->getStartTime() ||
+            itemEndTime   != segment->getRepeatEndTime() ||
+            itemTrackId   != segment->getTrack());
+    
+}
 
 bool operator<(const CompositionRect& a, const CompositionRect& b)
 {
@@ -310,7 +328,10 @@ CompositionModel::itemcontainer CompositionModelImpl::getItemsAt(const QPoint& p
         if (sr.contains(point)) {
             RG_DEBUG << "CompositionModelImpl::getItemsAt() adding " << sr << endl;
             res.push_back(CompositionItem(new CompositionItemImpl(*s, sr)));
+        } else {
+            RG_DEBUG << "CompositionModelImpl::getItemsAt() skiping " << sr << endl;
         }
+        
     }
     std::sort(res.begin(), res.end());
     return res;
@@ -416,11 +437,24 @@ int CompositionModelImpl::getLength()
     return w;
 }
 
-Rosegarden::timeT CompositionModelImpl::getRepeatTimeAt(const QPoint& p)
+Rosegarden::timeT CompositionModelImpl::getRepeatTimeAt(const QPoint& p, const CompositionItem& cItem)
 {
-    // TODO TODO TODO
-#warning "CompositionModelImpl::getRepeatTimeAt needs implementation"
-    assert(false);
+//     timeT timeAtClick = m_grid.getRulerScale()->getTimeForX(p.x());
+
+    CompositionItemImpl* itemImpl = dynamic_cast<CompositionItemImpl*>((_CompositionItem*)cItem);
+
+    const Segment* s = itemImpl->getSegment();
+
+    timeT startTime = s->getStartTime();
+    timeT endTime = s->getEndMarkerTime();
+    timeT repeatInterval = endTime - startTime;
+
+    int rWidth = int(m_grid.getRulerScale()->getXForTime(repeatInterval));
+
+    int count = (p.x() - int(itemImpl->rect().x())) / rWidth;
+    
+    return s->getEndMarkerTime() + count *
+	(s->getEndMarkerTime() - s->getStartTime());
 }
 
 
@@ -437,13 +471,16 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s,
     int h = grid.getYSnap();
     double w = 0.0;
     if (s.isRepeating()) {
-        
         timeT repeatStart = endTime;
         timeT repeatEnd   = s.getRepeatEndTime();
         w = grid.getRulerScale()->getWidthForDuration(repeatStart,
                                                       repeatEnd - repeatStart) + 1;
+        RG_DEBUG << "CompositionModelImpl::computeSegmentRect : s is repeating - repeatStart = "
+                 << repeatStart << " - repeatEnd : " << repeatEnd
+                 << " w = " << w << endl;
         
     } else {
+        RG_DEBUG << "CompositionModelImpl::computeSegmentRect : s is NOT repeating\n";
         w = grid.getRulerScale()->getWidthForDuration(startTime, endTime - startTime);
     }
     
@@ -1098,16 +1135,23 @@ void CompositionView::contentsMouseReleaseEvent(QMouseEvent* e)
 
 void CompositionView::contentsMouseDoubleClickEvent(QMouseEvent* e)
 {
-    m_currentItem = getFirstItemAt(e->pos());
+    QPoint tPos = inverseMapPoint(e->pos());
 
-    if (!m_currentItem) return;
+    m_currentItem = getFirstItemAt(tPos);
+
+    if (!m_currentItem) {
+        RG_DEBUG << "CompositionView::contentsMouseDoubleClickEvent - no currentItem\n";
+        return;
+    }
+    
+    RG_DEBUG << "CompositionView::contentsMouseDoubleClickEvent - have currentItem\n";
 
     CompositionItemImpl* itemImpl = dynamic_cast<CompositionItemImpl*>((_CompositionItem*)m_currentItem);
         
     if (m_currentItem->isRepeating()) {
-        Rosegarden::timeT time = m_model->getRepeatTimeAt(e->pos());
+        Rosegarden::timeT time = m_model->getRepeatTimeAt(tPos, m_currentItem);
 
-//	    RG_DEBUG << "editRepeat at time " << time << endl;
+        RG_DEBUG << "editRepeat at time " << time << endl;
 
         emit editRepeat(itemImpl->getSegment(), time);
 

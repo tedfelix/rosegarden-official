@@ -523,16 +523,13 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
 	     it++) {
 
             CompositionItem item = *it;
-            Rosegarden::Segment* segment = CompositionItemHelper::getSegment(item);
 
-            Rosegarden::TrackId itemTrackId = m_canvas->grid().getYBin(item->rect().y());
+            if (CompositionItemHelper::itemHasChanged(item, m_canvas->grid())) {
 
-            timeT itemStartTime = CompositionItemHelper::getStartTime(item, m_canvas->grid());
-            timeT itemEndTime   = CompositionItemHelper::getEndTime(item, m_canvas->grid());
-
-            if (itemStartTime != segment->getStartTime() ||
-                itemEndTime   != segment->getEndMarkerTime() ||
-                itemTrackId   != segment->getTrack()) {
+                Rosegarden::Segment* segment = CompositionItemHelper::getSegment(item);
+                Rosegarden::TrackId itemTrackId = m_canvas->grid().getYBin(item->rect().y());
+                timeT itemStartTime = CompositionItemHelper::getStartTime(item, m_canvas->grid());
+                timeT itemEndTime   = CompositionItemHelper::getEndTime(item, m_canvas->grid());
 
                 command->addSegment(segment,
                                     itemStartTime,
@@ -543,6 +540,7 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
         }
 
         if (haveChange) addCommandToHistory(command);
+        else delete command;
 
         m_canvas->hideTextFloat();
         m_canvas->setDrawGuides(false);
@@ -706,7 +704,7 @@ void SegmentResizer::handleMouseButtonPress(QMouseEvent *e)
 
 void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
 {
-    if (!m_currentItem) return;
+    if (!m_currentItem || !CompositionItemHelper::itemHasChanged(m_currentItem, m_canvas->grid())) return;
 
     timeT newStartTime = CompositionItemHelper::getStartTime(m_currentItem, m_canvas->grid());
     timeT newEndTime = CompositionItemHelper::getEndTime(m_currentItem, m_canvas->grid());
@@ -725,7 +723,7 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
 	
 	Rosegarden::Composition &comp = m_doc->getComposition();
 	Rosegarden::Track *track = comp.getTrackByPosition(trackPos);
-	
+
 	command->addSegment(segment,
 			    newStartTime,
 			    newEndTime,
@@ -1016,16 +1014,13 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 	     it++) {
 
             CompositionItem item = *it;
-            Rosegarden::Segment* segment = CompositionItemHelper::getSegment(item);
 
-            Rosegarden::TrackId itemTrackId = m_canvas->grid().getYBin(item->rect().y());
+            if (CompositionItemHelper::itemHasChanged(item, m_canvas->grid())) {
 
-            timeT itemStartTime = CompositionItemHelper::getStartTime(item, m_canvas->grid());
-            timeT itemEndTime   = CompositionItemHelper::getEndTime(item, m_canvas->grid());
-
-            if (itemStartTime != segment->getStartTime() ||
-                itemEndTime   != segment->getEndMarkerTime() ||
-                itemTrackId   != segment->getTrack()) {
+                Rosegarden::Segment* segment = CompositionItemHelper::getSegment(item);
+                Rosegarden::TrackId itemTrackId = m_canvas->grid().getYBin(item->rect().y());
+                timeT itemStartTime = CompositionItemHelper::getStartTime(item, m_canvas->grid());
+                timeT itemEndTime   = CompositionItemHelper::getEndTime(item, m_canvas->grid());
 
                 command->addSegment(segment,
                                     itemStartTime,
@@ -1037,6 +1032,7 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 	}
 
 	if (haveChange) addCommandToHistory(command);
+        else delete command;
 
         m_canvas->getModel()->endMove();
 	m_canvas->updateContents();
