@@ -197,26 +197,6 @@ MatrixView::~MatrixView()
     QCanvasItemList::Iterator it;
 
     for (it = allItems.begin(); it != allItems.end(); ++it) delete *it;
-
-
-    // We must disconnect these before we close so that MatrixCanvasView 
-    // doesn't barf.
-    //
-    disconnect(m_canvasView->verticalScrollBar(),
-               SIGNAL(valueChanged(int)),
-               this,
-               SLOT(slotVerticalScrollPianoKeyboard(int)));
-
-    disconnect(m_canvasView->verticalScrollBar(),
-               SIGNAL(sliderMoved(int)),
-               this,
-               SLOT(slotVerticalScrollPianoKeyboard(int)));
-
-    disconnect(m_pianoView,
-               SIGNAL(contentsMoving(int, int)),
-               this,
-               SLOT(slotVerticalScrollMatrixCanvas(int, int)));
-
 }
 
 void MatrixView::saveOptions()
