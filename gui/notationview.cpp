@@ -462,35 +462,35 @@ void NotationView::setupActions()
 
     // Treble
     icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-treble"));
-    noteAction = new KRadioAction(i18n("Treble Clef"), icon, 0, this,
+    noteAction = new KRadioAction(i18n("&Treble Clef"), icon, 0, this,
                                   SLOT(slotTrebleClef()),
                                   actionCollection(), "treble_clef");
     noteAction->setExclusiveGroup("notes");
 
     // Tenor
     icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-tenor"));
-    noteAction = new KRadioAction(i18n("Tenor Clef"), icon, 0, this,
+    noteAction = new KRadioAction(i18n("Te&nor Clef"), icon, 0, this,
                                   SLOT(slotTenorClef()),
                                   actionCollection(), "tenor_clef");
     noteAction->setExclusiveGroup("notes");
 
     // Alto
     icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-alto"));
-    noteAction = new KRadioAction(i18n("Alto Clef"), icon, 0, this,
+    noteAction = new KRadioAction(i18n("&Alto Clef"), icon, 0, this,
                                   SLOT(slotAltoClef()),
                                   actionCollection(), "alto_clef");
     noteAction->setExclusiveGroup("notes");
 
     // Bass
     icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-bass"));
-    noteAction = new KRadioAction(i18n("Bass Clef"), icon, 0, this,
+    noteAction = new KRadioAction(i18n("&Bass Clef"), icon, 0, this,
                                   SLOT(slotBassClef()),
                                   actionCollection(), "bass_clef");
     noteAction->setExclusiveGroup("notes");
 
 
     icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap("text"));
-    noteAction = new KRadioAction(i18n("Text"), icon, 0, this,
+    noteAction = new KRadioAction(i18n("&Text"), icon, 0, this,
                                   SLOT(slotText()),
                                   actionCollection(), "text");
     noteAction->setExclusiveGroup("notes");
@@ -499,13 +499,13 @@ void NotationView::setupActions()
     //
     // Edition tools (eraser, selector...)
     //
-    noteAction = new KRadioAction(i18n("Erase"), "eraser", 0,
+    noteAction = new KRadioAction(i18n("&Erase"), "eraser", 0,
                                   this, SLOT(slotEraseSelected()),
                                   actionCollection(), "erase");
     noteAction->setExclusiveGroup("notes");
 
     icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap("select"));
-    noteAction = new KRadioAction(i18n("Select"), icon, 0,
+    noteAction = new KRadioAction(i18n("&Select"), icon, 0,
                                   this, SLOT(slotSelectSelected()),
                                   actionCollection(), "select");
     noteAction->setExclusiveGroup("notes");

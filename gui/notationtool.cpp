@@ -614,32 +614,56 @@ void TextInserter::handleLeftButtonPress(Rosegarden::timeT,
                                          int,
                                          int staffNo,
 					 QMouseEvent* e,
-					 ViewElement*)
+					 ViewElement *element)
 {
     if (staffNo < 0) return;
-    Event *tsig = 0, *clef = 0, *key = 0;
-
     NotationStaff *staff = m_nParentView->getStaff(staffNo);
     
-    NotationElementList::iterator closestElement =
-	staff->getClosestElementToCanvasCoords(e->x(), (int)e->y(),
-					       tsig, clef, key, false, -1);
+    Rosegarden::Text defaultText(m_text);
+    timeT insertionTime;
+    Event *eraseEvent = 0;
 
-    if (closestElement == staff->getViewElementList()->end()) return;
+    if (element && element->event()->isa(Rosegarden::Text::EventType)) {
 
-    timeT time = (*closestElement)->getAbsoluteTime();
+	// edit an existing text, if that's what we clicked on
+
+	defaultText = Rosegarden::Text(*element->event());
+	insertionTime = element->getAbsoluteTime();
+	eraseEvent = element->event();
+
+    } else {
+
+	Event *tsig = 0, *clef = 0, *key = 0;
+
+	NotationElementList::iterator closestElement =
+	    staff->getClosestElementToCanvasCoords(e->x(), (int)e->y(),
+						   tsig, clef, key, false, -1);
+
+	if (closestElement == staff->getViewElementList()->end()) return;
+	
+	insertionTime = (*closestElement)->getAbsoluteTime();
+    }
 
     TextEventDialog *dialog = new TextEventDialog
-	(m_nParentView, m_nParentView->getNotePixmapFactory(), m_text);
+	(m_nParentView, m_nParentView->getNotePixmapFactory(), defaultText);
 
     if (dialog->exec() == QDialog::Accepted) {
 	
 	m_text = dialog->getText();
 
 	TextInsertionCommand *command = 
-	    new TextInsertionCommand(staff->getSegment(), time, m_text);
+	    new TextInsertionCommand
+	    (staff->getSegment(), insertionTime, m_text);
 
-	m_nParentView->addCommandToHistory(command);
+	if (eraseEvent) {
+	    MacroCommand *macroCommand = new MacroCommand(command->name());
+	    macroCommand->addCommand(new EraseEventCommand(staff->getSegment(),
+							   eraseEvent, false));
+	    macroCommand->addCommand(command);
+	    m_nParentView->addCommandToHistory(macroCommand);
+	} else {
+	    m_nParentView->addCommandToHistory(command);
+	}
 
 	Event *event = command->getLastInsertedEvent();
 	if (event) m_nParentView->setSingleSelectedEvent(staffNo, event);
