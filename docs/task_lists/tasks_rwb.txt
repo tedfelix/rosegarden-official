@@ -1,14 +1,26 @@
-0.2 TO-DO for rwb
------------------
+0.15 urgent tasks for w/e 5.05.02
+=================================
+
 updated 29.04.2002
 
-Immediate work:
-
 o KDE3 bug fixes
-
   - track height [DONE]
+  - track button update [DONE]
   - record button colour
-  - track button update
+
+o KDE2 compatability checking with Mandrake 8.1
+
+o ALSA and ARTS testing on both KDE platforms
+
+o stabilise and bug fix
+
+o update README and INSTALL with latest instructions/features
+
+
+--
+
+0.2 tasks for completion by 28.05.02
+====================================
 
 o selection of ALSA recording device
 

@@ -62,8 +62,3 @@ if test "$with_jack" = "yes"; then
   AC_CHECK_FUNCS(libRosegardenSequencer.la, [],
                  [JACKLIB="-ljack"])
 fi
-
-
-dnl if we have lib kfile (KDE2) then we use it
-AC_CHECK_LIB(kfile, KFile, [KFILELIB="-lkfile"],[KFILELIB=""])
-AC_SUBST(KFILELIB)
