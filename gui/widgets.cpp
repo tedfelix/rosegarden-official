@@ -228,7 +228,28 @@ RosegardenProgressDialog::polish()
 {
     KProgressDialog::polish();
     QApplication::setOverrideCursor(Qt::ArrowCursor, true);
-    kapp->processEvents();
+    installFilter();
+}
+
+bool
+RosegardenProgressDialog::eventFilter(QObject *watched, QEvent *e)
+{
+    if (e->type() == QEvent::MouseButtonPress    ||
+        e->type() == QEvent::MouseButtonRelease  ||
+        e->type() == QEvent::MouseButtonDblClick ||
+        e->type() == QEvent::KeyPress            ||
+        e->type() == QEvent::KeyRelease          ||
+        e->type() == QEvent::DragEnter           ||
+        e->type() == QEvent::DragMove            ||
+        e->type() == QEvent::DragLeave           ||
+        e->type() == QEvent::Drop                ||
+        e->type() == QEvent::DragResponse)
+
+        return true;
+
+    else
+
+        return RosegardenProgressDialog::eventFilter(watched, e);
 }
 
 void
@@ -268,6 +289,8 @@ void RosegardenProgressDialog::slotFreeze()
     m_wasVisible = isVisible();
     if (isVisible()) hide();
 
+    removeFilter();
+
     mShowTimer->stop();
     m_frozen = true;
 }
@@ -277,12 +300,27 @@ void RosegardenProgressDialog::slotThaw()
     RG_DEBUG << "RosegardenProgressDialog::slotThaw()\n";
 
     if (m_wasVisible) show();
+    installFilter();
 
     // Restart timer
     mShowTimer->start(minimumDuration());
     m_frozen = false;
     m_chrono.restart();
 }
+
+void RosegardenProgressDialog::installFilter()
+{
+    if (kapp->mainWidget())
+        kapp->mainWidget()->installEventFilter(this);
+}
+
+void RosegardenProgressDialog::removeFilter()
+{
+    if (kapp->mainWidget())
+        kapp->mainWidget()->removeEventFilter(this);
+}
+
+
 
 //----------------------------------------
 

@@ -172,6 +172,8 @@ public:
 
     virtual void polish();
 
+    virtual bool eventFilter(QObject *watched, QEvent *e);
+
 public slots:
     void slotSetOperationName(QString);
     void slotCancel();
@@ -185,11 +187,10 @@ public slots:
 protected slots:
     void slotCheckShow(int);
 
-signals:
-    void operationCancelled();
-
 protected:
-
+    void installFilter();
+    void removeFilter();
+    
     //--------------- Data members ---------------------------------
 
     QTime m_chrono;
