@@ -144,6 +144,32 @@ RingBuffer::readSpace()
         return (w - r + m_size) & m_sizeMask;
 }
 
+// Concatenates the passed string
+//
+size_t 
+RingBuffer::read(std::string *bytes, size_t cnt)
+{
+    char *buffer = new char[cnt];
+    size_t num = read(buffer, cnt);
+
+    for (size_t i = 0; i < num; ++i)
+        (*bytes) += buffer[i];
+
+    return num;
+}
+
+// Writes the passed string into the buffer
+//
+size_t 
+RingBuffer::write(const std::string &bytes)
+{
+    char *buffer = new char[bytes.length()];
+    for (unsigned int i = 0; i < bytes.length(); ++i)
+        buffer[i] = bytes[i];
+
+    return write(buffer, bytes.length());
+}
+
 
 // The copying data reader.  Copy at most `cnt' bytes from buffer to
 // `dest'.  Returns the actual number of bytes copied.

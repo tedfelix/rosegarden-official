@@ -73,6 +73,11 @@ public:
 
     void resetStream() { m_inFile->seekg(0); m_inFile->clear(); }
 
+    // check EOF status
+    //
+    bool isEof() const 
+        { if (m_inFile) return m_inFile->eof(); else return true; }
+
 protected:
     std::string m_fileName;
 

@@ -164,6 +164,7 @@ static const int reportPasses = 5;
 static const int     _jackPeakLevelsMax = 200;
 static float         _jackPeakLevels[_jackPeakLevelsMax];
 
+pthread_t            _diskThread;
 pthread_mutex_t      _diskThreadLock = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t       _dataReady = PTHREAD_COND_INITIALIZER;
 
@@ -252,6 +253,9 @@ AlsaDriver::~AlsaDriver()
 #endif // HAVE_LADSPA
 
 #ifdef HAVE_LIBJACK
+
+    // wait for disk thread
+    pthread_join(_diskThread, NULL);
 
     if (_threadJackClosing == false && m_audioClient)
     {
@@ -1136,7 +1140,7 @@ AlsaDriver::initialiseMidi()
 #ifdef DEBUG_ALSA
         std::cerr << "AlsaDriver::initialiseMidi - "
                   << "can't subscribe input client:port "
-		  << sender.client << ":" << sender.port
+		  << int(sender.client) << ":" << int(sender.port)
                   << std::endl;
 #endif
         // Not the end of the world if this fails but we
@@ -1367,6 +1371,10 @@ AlsaDriver::initialiseAudio()
 #ifdef HAVE_LIBJACK
     AUDIT_START;
     AUDIT_STREAM << std::endl;
+
+    // setup disk thread
+    //
+    pthread_create(&_diskThread, NULL, jackDiskThread, this);
 
     // Using JACK instead
     //
@@ -1880,6 +1888,12 @@ AlsaDriver::processAudioQueue(const RealTime &playLatency, bool now)
         if ((currentTime >= (*it)->getStartTime() || now) &&
             (*it)->getStatus() == PlayableAudioFile::IDLE)
         {
+
+            // get the disk thread to fill up the ringbuffer
+            //
+            pthread_cond_signal(&_dataReady);
+            pthread_mutex_unlock(&_diskThreadLock);
+
             (*it)->setStatus(PlayableAudioFile::PLAYING);
         }
 
@@ -2882,10 +2896,12 @@ AlsaDriver::getPairForMappedInstrument(InstrumentId id)
 	}
     }
 #ifdef DEBUG_ALSA
+    /*
     else
     {
 	cerr << "WARNING: AlsaDriver::getPairForMappedInstrument: couldn't find instrument for id " << id << ", falling through" << endl;
     }
+    */
 #endif
 
     return ClientPortPair(-1, -1);
@@ -3358,6 +3374,26 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
         int audioFilesProcessed = 0;
         float peakLevelLeft, peakLevelRight;
 
+
+        // If there is something on the audio queue then make sure
+        // the disk thread is running (and hence ensuring the ring
+        // buffers are full).
+        //
+        if (audioQueue.size() > 0)
+        {
+
+            if (pthread_mutex_trylock(&_diskThreadLock) != EBUSY)
+            {
+#ifdef DEBUG_DISK_THREAD
+                std::cerr << "AlsaDriver::jackProcess "
+                          << "- starting disk thread" << std::endl;
+#endif
+
+                pthread_cond_signal(&_dataReady);
+                pthread_mutex_unlock(&_diskThreadLock);
+            }
+        }
+
         for (it = audioQueue.begin(); it != audioQueue.end(); ++it)
         {
             // Another thread could've cleared down all the
@@ -3406,27 +3442,17 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                                */
                 }
 
-                // Get the number of frames according to the number of
-                // channels.
+                // Get some frames from the PlayableAudioFile - this
+                // data is ringbuffered.
                 //
-                try
-                {
-                    samples = (*it)->getSampleFrames(fetchFrames);
-                }
-                catch(std::string es)
-                {
-                    // We've run out of samples in the PlayableAudioFile
-                    // - throw it away
-                    //
-#ifdef DEBUG_ALSA
-                    std::cerr << "jackProcess - EXCEPTION \"" << es << "\""
-                              << std::endl;
-#endif
-                }
+                samples = (*it)->getSampleFrames(fetchFrames);
 
                 // If we can't fetch everything then we must be at
-                // the end of the AudioFile.
+                // the end of the AudioFile.  (disable for the
+                // moment)
                 //
+
+                /*
                 if (samples.length() !=
                     (fetchFrames * (*it)->getBytesPerSample()))
                 {
@@ -3452,6 +3478,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                     if (_jackMappedEventCounter >= _jackMappedEventsMax)
                         _jackMappedEventCounter = 0;
                 }
+                */
 
 
                 // How do we convert the audio files into a format that
@@ -3868,7 +3895,6 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
         // Process any queue vector operations now it's safe to do so
         //
         inst->pushPlayableAudioQueue();
-
 
         // Every n times through we report the current audio level
         // back to the gui.
@@ -4429,7 +4455,7 @@ AlsaDriver::setRecordDevice(DeviceId id)
     {
         AUDIT_STREAM << "AlsaDriver::setRecordDevice - "
 		     << "can't subscribe input client:port"
-		     << sender.client << ":" << sender.port
+		     << int(sender.client) << ":" << int(sender.port)
 		     << std::endl;
 
         // Not the end of the world if this fails but we
@@ -4828,6 +4854,81 @@ AlsaDriver::getStatusLog()
 void *
 AlsaDriver::jackDiskThread(void *arg)
 {
+    AlsaDriver *inst = static_cast<AlsaDriver*>(arg);
+
+#define DEBUG_DISK_THREAD
+#ifdef DEBUG_DISK_THREAD
+    std::cerr << "AlsaDriver::jackDiskThread - starting" << std::endl;
+#endif 
+
+    // Get the AlsaDriver instance
+    //
+    if (inst)
+    {
+        pthread_setcanceltype (PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
+        pthread_mutex_lock(&_diskThreadLock);
+
+        std::vector<PlayableAudioFile*> &audioQueue = inst->getAudioPlayQueue();
+        std::vector<PlayableAudioFile*>::iterator it;
+
+        while(true)
+        {
+            for (it = audioQueue.begin(); it != audioQueue.end(); ++it)
+            {
+
+                // Check how much data we have in the ringbuffer and
+                // fill it up as necessary.  Half a second of sample
+                // data is just an arbitrary amount for the moment.
+                //
+                unsigned int fillLevel =  ((*it)->getSampleRate() *
+                                           (*it)->getBytesPerSample());
+
+                unsigned int readSpace = 
+                    (*it)->getRingBuffer()->readSpace();
+
+                unsigned int writeSpace = (*it)->getRingBuffer()->writeSpace();
+
+#ifdef DEBUG_DISK_THREAD
+                std::cerr << "READSPACE = " << readSpace << std::endl;
+                std::cerr << "WRITESPACE = " << writeSpace << std::endl;
+#endif
+
+                if (readSpace < fillLevel)
+                {
+                    // bytePerSample takes into account the number
+                    // of channels - calculate frames
+                    (*it)->fillRingBuffer(fillLevel);
+                }
+
+            }
+
+            // Wait until there's a signal from the main thread to do some
+            // more processing.
+            //
+            pthread_cond_wait (&_dataReady, &_diskThreadLock);
+
+#ifdef DEBUG_DISK_THREAD
+            std::cerr << "AlsaDriver::jackDiskThread - continuing" 
+                      << std::endl;
+#endif
+
+            // refresh queue on continue
+            audioQueue = inst->getAudioPlayQueue();
+
+#ifdef DEBUG_DISK_THREAD
+
+            std::cerr << "AlsaDriver::jackDiskThread - audio queue size "
+                      << audioQueue.size() << std::endl;
+#endif
+
+        }
+    }
+
+#ifdef DEBUG_DISK_THREAD
+    std::cerr << "AlsaDriver::jackDiskThread - completed" << std::endl;
+#endif 
+
+    pthread_mutex_unlock(&_diskThreadLock);
     return 0;
 }
 

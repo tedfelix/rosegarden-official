@@ -66,7 +66,6 @@ SoundFile::getBytes(std::ifstream *file, unsigned int numberOfBytes)
         //
         file->clear();
 
-        std::cerr << "SoundFile::getBytes() -  EOF encountered";
         throw(std::string("SoundFile::getBytes() - EOF encountered"));
     }
 

@@ -23,6 +23,9 @@
 #include "WAVAudioFile.h"
 #include "MappedStudio.h"
 
+// To ensure thread-safe access to the audio file list vector
+//
+pthread_mutex_t      _audioFileList = PTHREAD_MUTEX_INITIALIZER;
 
 namespace Rosegarden
 {
@@ -31,14 +34,16 @@ PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
                                      AudioFile *audioFile,
                                      const RealTime &startTime,
                                      const RealTime &startIndex,
-                                     const RealTime &duration):
+                                     const RealTime &duration,
+                                     RingBuffer *ringBuffer):
         m_startTime(startTime),
         m_startIndex(startIndex),
         m_duration(duration),
         m_status(IDLE),
         m_file(0),
         m_audioFile(audioFile),
-        m_instrumentId(instrumentId)
+        m_instrumentId(instrumentId),
+        m_ringBuffer(ringBuffer)
 {
     m_file = new std::ifstream(m_audioFile->getFilename().c_str(),
                                std::ios::in | std::ios::binary);
@@ -48,6 +53,13 @@ PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
 
     // scan to the beginning of the data chunk
     scanTo(RealTime(0, 0));
+
+    // if no external ringbuffer then create one
+    if (m_ringBuffer == 0)
+    {
+        m_ringBuffer = new RingBuffer(262176);
+    }
+
 }
 
 PlayableAudioFile::~PlayableAudioFile()
@@ -75,11 +87,34 @@ PlayableAudioFile::scanTo(const RealTime &time)
 std::string
 PlayableAudioFile::getSampleFrames(unsigned int frames)
 {
+    /*
     if (m_audioFile)
     {
         return m_audioFile->getSampleFrames(m_file, frames);
     }
     return std::string("");
+    */
+    // Use the ring buffer 
+    std::string data;
+
+    if (m_audioFile)
+    {
+        int bytes = frames * getBytesPerSample();
+        size_t count = m_ringBuffer->read(&data, bytes);
+
+        cout << "GOT " << count << " BYTES from " << bytes << endl;
+
+        if (count != size_t(bytes))
+        {
+            std::cerr << "PlayableAudioFile::getSampleFrames - "
+                      << "got fewer audio file bytes than required : "
+                      << count << " out of " << bytes
+                      << std::endl;
+        }
+    }
+
+    return data;
+
 }
 
 // Get a sample file slice using this object's file handle
@@ -88,11 +123,44 @@ std::string
 PlayableAudioFile::getSampleFrameSlice(const RealTime &time)
 {
     if (m_audioFile)
-    {
+   {
         return m_audioFile->getSampleFrameSlice(m_file, time);
     }
     return std::string("");
 }
+
+void
+PlayableAudioFile::fillRingBuffer(int bytes)
+{
+    std::cerr << "PlayableAudioFile::fillRingBuffer - " << bytes << std::endl;
+
+    if (m_audioFile) // && !m_audioFile->isEof())
+    {
+        int frames = bytes / getBytesPerSample();
+
+        std::string data;
+
+        // get the frames
+        try
+        {
+            data = m_audioFile->getSampleFrames(m_file, frames);
+        }
+        catch(std::string e)
+        {
+            // most likely we've run out of data in the file -
+            // we can live with this - just write out what we
+            // have got.
+            std::cerr << "PlayableAudioFile::fillRingBuffer - "
+                      << e << std::endl;
+
+        }
+
+        cerr << "WRITING " << data.length() << " BYTES" << endl;
+        m_ringBuffer->write(data);
+    }
+
+}
+
 
 // How many channels in the base AudioFile?
 //
@@ -165,10 +233,9 @@ SoundDriver::SoundDriver(MappedStudio *studio, const std::string &name):
     m_midiClockSendTime(Rosegarden::RealTime(0, 0)),
     m_midiSongPositionPointer(0)
 {
-    // Do some preallocating of the audio vectors to improve RT performance
+    // Do some preallocating of the audio vector to minimise overhead
     //
     m_audioPlayQueue.reserve(100);
-    m_audioPlayThreadQueue.reserve(100);
 }
 
 
@@ -194,11 +261,15 @@ SoundDriver::getMappedInstrument(InstrumentId id)
 void
 SoundDriver::queueAudio(PlayableAudioFile *audioFile)
 {
+    pthread_mutex_lock(&_audioFileList);
+
     // Push to the back of the thread queue and then we must
     // process this across to the proper audio queue when
     // it's safe to do so - use the method below
     //
     m_audioPlayThreadQueue.push_back(audioFile);
+
+    pthread_mutex_unlock(&_audioFileList);
 }
 
 // Move the pending thread queue across to the real queue

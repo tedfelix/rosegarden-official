@@ -28,6 +28,7 @@
 #include "RealTime.h"
 #include "AudioFile.h"
 #include "MappedDevice.h"
+#include "RingBuffer.h"
 
 // Abstract base to support SoundDrivers such as aRts and ALSA.
 //
@@ -92,7 +93,8 @@ public:
                       AudioFile *audioFile,
                       const RealTime &startTime,
                       const RealTime &startIndex,
-                      const RealTime &duration);
+                      const RealTime &duration,
+                      RingBuffer *ringBuffer = 0);
 
     ~PlayableAudioFile();
 
@@ -121,6 +123,8 @@ public:
     //
     //
     bool scanTo(const RealTime &time);
+
+    // 
     std::string getSampleFrames(unsigned int frames);
     std::string getSampleFrameSlice(const RealTime &time);
 
@@ -131,6 +135,17 @@ public:
     unsigned int getSampleRate();
     unsigned int getBytesPerSample();
 
+    // Using these methods we can load up the audio file with
+    // an external ringbuffer to use in favour of an internally
+    // generated one.  The caller is in charge of deleting the
+    // old buffer if we change.
+    //
+    void setRingBuffer(RingBuffer *rB) { m_ringBuffer = rB; }
+    RingBuffer* getRingBuffer() { return m_ringBuffer; }
+
+    // Push a number of frames into the ringbuffer
+    //
+    void fillRingBuffer(int bytes);
 
 private:
     RealTime              m_startTime;
@@ -151,6 +166,10 @@ private:
     // Originating Instrument Id
     //
     InstrumentId          m_instrumentId;
+
+    // Our i/o buffer
+    //
+    RingBuffer           *m_ringBuffer;
 
 };
 
