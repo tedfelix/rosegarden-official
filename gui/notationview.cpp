@@ -662,6 +662,10 @@ void NotationView::setupActions()
                 SLOT(slotTransformsTieNotes()), actionCollection(),
                 "tie_notes");
 
+    new KAction(TransformsMenuUntieNotesCommand::getGlobalName(), 0, this,
+                SLOT(slotTransformsUntieNotes()), actionCollection(),
+                "untie_notes");
+
     new KAction(TransformsMenuChangeStemsCommand::getGlobalName(true), 0, this,
                 SLOT(slotTransformsStemsUp()), actionCollection(),
                 "stems_up");
@@ -1689,6 +1693,16 @@ void NotationView::slotTransformsTieNotes()
     KTmpStatusMsg msg(i18n("Tying notes..."), statusBar());
 
     addCommandToHistory(new TransformsMenuTieNotesCommand
+                        (*m_currentEventSelection));
+    setCurrentSelection(0);
+}
+
+void NotationView::slotTransformsUntieNotes()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Untying notes..."), statusBar());
+
+    addCommandToHistory(new TransformsMenuUntieNotesCommand
                         (*m_currentEventSelection));
     setCurrentSelection(0);
 }

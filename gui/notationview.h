@@ -293,6 +293,7 @@ public slots:
     void slotTransformsCollapseRests();
     void slotTransformsCollapseNotes();
     void slotTransformsTieNotes();
+    void slotTransformsUntieNotes();
     void slotTransformsStemsUp();
     void slotTransformsStemsDown();
     void slotTransformsRestoreStems();

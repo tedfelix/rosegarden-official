@@ -558,6 +558,20 @@ TransformsMenuTieNotesCommand::modifySegment()
 }
 
 
+
+void
+TransformsMenuUntieNotesCommand::modifySegment()
+{
+    for (EventSelection::eventcontainer::iterator i =
+	     m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+
+	(*i)->unset(TIED_FORWARD);
+	(*i)->unset(TIED_BACKWARD);
+    }
+}
+
+
 void
 TransformsMenuChangeStemsCommand::modifySegment()
 {

@@ -345,6 +345,10 @@ void RosegardenGUIApp::setupActions()
 		SLOT(slotQuantizeSelection()), actionCollection(),
 		"quantize_selection");
 
+    new KAction(i18n("&Harmonize"), 0, this,
+		SLOT(slotHarmonizeSelection()), actionCollection(),
+		"harmonize_selection");
+
     new KAction(i18n("Open in Matri&x Editor"), 0, this,
 		SLOT(slotEditInMatrix()), actionCollection(),
 		"edit_matrix");
@@ -1152,6 +1156,15 @@ void RosegardenGUIApp::slotQuantizeSelection()
 
     m_view->slotAddCommandToHistory(command);
 }
+
+void RosegardenGUIApp::slotHarmonizeSelection()
+{
+    if (!m_view->haveSelection()) return;
+
+    Rosegarden::SegmentSelection selection = m_view->getSelection();
+    //!!!
+}
+
 
 
 void RosegardenGUIApp::slotEditAsNotation()

@@ -11,7 +11,8 @@ Post-0.1.5-and-a-bit task list
  4. Try actually editing some notation!  Devise a basic set of transforms
     (split/join notes etc)
 
-    a. Tie Equal-Pitch Notes
+    a. Tie Equal-Pitch Notes [DONE]
+       Untie
     b. Make Notes Viable
 
  5. Mess around with tuplets, locate and fix the many bugs there
@@ -22,13 +23,14 @@ Post-0.1.5-and-a-bit task list
  5b. Find some way to identify tuplets in MIDI import
 
  6. See why accidentals appear to be wrong when not in treble clef (see paper)
+    [DONE by Hans]
 
  7. Things like Split Segment and Resize Segment won't work correctly
     until the Segment's moveable start/end markers are implemented.  Look
     into this.
 
  8. Add origin to start of hlayout, so that first bar is indented on both
-    ruler and staff (preceded by staff name perhaps) [DONEish but see sf bug]
+    ruler and staff (preceded by staff name perhaps) [DONE]
 
  9. Extend Chord (in notationsets) so as to handle case where some notes
     at a given time have stem up and some have stem down (explicitly set
@@ -61,6 +63,8 @@ Post-0.1.5-and-a-bit task list
 15a. Need to fix up so it has a key to work from, instead of always
     using default key!  argh!
 
+15b. Finish Segments | Harmonize on main view
+
 16. Rationalise segment editor tools into "simple" and "extended"
     as per discussion on mailing list:
     http://www.geocrawler.com/mail/thread.php3?subject=a+question%2C+was+Re%3A+%5BRosegarden-devel%5D+0.2+roadmap+-+some+thoughts&list=16004
@@ -85,7 +89,7 @@ Post-0.1.5-and-a-bit task list
 
 21. Implement view-local properties in NotationElement [DONE but see 23]
 
-22. Event dialog really needs to be scrollable or something
+22. Event dialog really needs to be scrollable or something [DONE by G]
 
 23. View-local event properties:
 
@@ -143,10 +147,11 @@ Post-0.1.5-and-a-bit task list
 27. Event quantize command needs to be able to be constructed with
     an EventSelection argument, and to operate by quantizing in
     turn each of the contiguous sequences of events in that selection
+    [DONE]
 
 28. "Add Time Signature" should be on Edit menu of main screen; adding
     a timesig from the transport or undoing a time sig change doesn't
-    update notation windows
+    update notation windows [DONE]
 
 29. Add "Lengthen notes" and "shorten notes" transforms to notation view.
     No!  Make note tools _change the length of a note_ if clicked directly

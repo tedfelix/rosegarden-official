@@ -451,6 +451,11 @@ public slots:
     void slotQuantizeSelection();
 
     /**
+     * Produce a harmony segment from the selected segments
+     */
+    void slotHarmonizeSelection();
+
+    /**
      * open a matrix view for each of the currently-selected segments
      */
     void slotEditInMatrix();

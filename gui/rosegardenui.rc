@@ -33,6 +33,7 @@
       	<Action name="edit_notation"/>
 	<Separator/>
 	<Action name="quantize_selection"/>
+	<Action name="harmonize_selection"/>
   </Menu>
   <Menu name="Tracks">
 	<text>Trac&amp;ks</text>

@@ -345,7 +345,24 @@ private:
     Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
 };
     
+
+class TransformsMenuUntieNotesCommand : public BasicSelectionCommand
+{
+public:
+    TransformsMenuUntieNotesCommand(Rosegarden::EventSelection &selection) :
+	BasicSelectionCommand(getGlobalName(), selection, true),
+	m_selection(&selection) { }
+
+    static QString getGlobalName() { return "&Untie Notes"; }
+
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+};
   
+
 class TransformsMenuChangeStemsCommand : public BasicSelectionCommand
 {
 public:
