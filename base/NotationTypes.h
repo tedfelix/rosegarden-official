@@ -264,22 +264,19 @@ private:
 class NotationDisplayPitch
 {
 public:
-    NotationDisplayPitch(int pitch, const Clef &clef, const Key &key) {
-        //!!! explicit accidentals in the note event properties?
-        rawPitchToDisplayPitch(pitch, clef, key, m_heightOnStaff, m_accidental);
-    }
+    NotationDisplayPitch(int pitch, const Clef &clef, const Key &key);
+    NotationDisplayPitch(int heightOnStaff, Accidental accidental);
 
-    NotationDisplayPitch(int heightOnStaff, Accidental accidental) :
-        m_heightOnStaff(heightOnStaff), m_accidental(accidental) { }
+    int        getHeightOnStaff() const { return m_heightOnStaff; }
+    Accidental getAccidental()    const { return m_accidental; }
 
-    int getHeightOnStaff() const { return m_heightOnStaff; }
-    Accidental getAccidental() const { return m_accidental; }
+    int getPerformancePitch(const Clef &clef, const Key &key) const;
 
-    int getPerformancePitch(const Clef &clef, const Key &key) const {
-        int p = 0;
-        displayPitchToRawPitch(m_heightOnStaff, m_accidental, clef, key, p);
-        return p;
-    }
+    /**
+     * Returns the pitch as a string (C4, Bb2, etc...)
+     * according to http://www.harmony-central.com/MIDI/Doc/table2.html
+     */
+    std::string getAsString(const Clef &clef, const Key &key) const;
 
 private:
     int m_heightOnStaff;

@@ -18,6 +18,7 @@
     COPYING included with this distribution for more information.
 */
 
+#include <cstdio> // needed for sprintf()
 #include "NotationTypes.h"
 
 const string Clef::EventPackage = "core";
@@ -99,14 +100,64 @@ void Key::checkMap() {
 }
 
 
+//////////////////////////////////////////////////////////////////////
+// NotationDisplayPitch
+//////////////////////////////////////////////////////////////////////
+
+NotationDisplayPitch::NotationDisplayPitch(int pitch, const Clef &clef, const Key &key)
+{
+    //!!! explicit accidentals in the note event properties?
+    rawPitchToDisplayPitch(pitch, clef, key, m_heightOnStaff, m_accidental);
+}
+
+NotationDisplayPitch::NotationDisplayPitch(int heightOnStaff, Accidental accidental)
+    : m_heightOnStaff(heightOnStaff),
+      m_accidental(accidental)
+{
+}
+
+int
+NotationDisplayPitch::getPerformancePitch(const Clef &clef, const Key &key) const
+{
+    int p = 0;
+    displayPitchToRawPitch(m_heightOnStaff, m_accidental, clef, key, p);
+    return p;
+}
+
+string
+NotationDisplayPitch::getAsString(const Clef &clef, const Key &key) const
+{
+    static const string noteNamesSharps[] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"  };
+    static const string noteNamesFlats[]  = { "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B" };
+    
+    int performancePitch = getPerformancePitch(clef, key);
+
+    int octave = performancePitch / 12;
+    int pitch  = performancePitch % 12;
+
+    char tmp[1024];
+
+    if (key.isSharp())
+        sprintf(tmp, "%s%d", noteNamesSharps[pitch].c_str(), octave);
+    else
+        sprintf(tmp, "%s%d", noteNamesFlats[pitch].c_str(), octave);
+    
+    return string(tmp);
+    
+}
+
+
 // Derived from RG2.1's MidiPitchToVoice in editor/src/Methods.c,
 // InitialiseAccidentalTable in Format.c, and PutItemListInClef in
 // MidiIn.c.  Converts performance pitch to height on staff + correct
 // accidentals for current key.
 
-void NotationDisplayPitch::rawPitchToDisplayPitch
-(int pitch, const Clef &clef, const Key &key,
- int &height, Accidental &accidental) const
+void
+NotationDisplayPitch::rawPitchToDisplayPitch(int pitch,
+                                             const Clef &clef,
+                                             const Key &key,
+                                             int &height,
+                                             Accidental &accidental) const
 {
     int octave;
     bool modified = false;
@@ -119,7 +170,7 @@ void NotationDisplayPitch::rawPitchToDisplayPitch
     pitch  = pitch % 12;
 
     switch (pitch) {
-    case  0: height = -2; break;	                  // C  
+    case  0: height = -2; break;	            // C  
     case  1: height = -2; modified = true; break;   // C# 
     case  2: height = -1; break;                    // D  
     case  3: height = -1; modified = true; break;   // D# 
@@ -159,9 +210,12 @@ void NotationDisplayPitch::rawPitchToDisplayPitch
 }
 
 
-void NotationDisplayPitch::displayPitchToRawPitch
-(int height, Accidental accidental, const Clef &clef, const Key &key,
- int &pitch) const
+void
+NotationDisplayPitch::displayPitchToRawPitch(int height,
+                                             Accidental accidental,
+                                             const Clef &clef,
+                                             const Key &key,
+                                             int &pitch) const
 {
     int octave = 5;
 
@@ -211,6 +265,10 @@ void NotationDisplayPitch::displayPitchToRawPitch
     pitch += 12 * octave;
 }
 
+
+//////////////////////////////////////////////////////////////////////
+// Note
+//////////////////////////////////////////////////////////////////////
 
 const string Note::EventPackage = "core";
 const string Note::EventType = "note";
