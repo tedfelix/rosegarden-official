@@ -46,6 +46,11 @@ using Rosegarden::Note;
 using Rosegarden::timeT;
 using std::endl;
 
+// Use this to make sure that Matrix events butt up to the grid
+// lines in a pleasing fashion,
+//
+const double _fiddleFactor = 1.0;
+
 //////////////////////////////////////////////////////////////////////
 //                     MatrixToolBox
 //////////////////////////////////////////////////////////////////////
@@ -240,7 +245,7 @@ void MatrixPainter::handleLeftButtonPress(Rosegarden::timeT time,
     m_currentElement->setHeight(m_currentStaff->getElementHeight());
 
     double width = ev->getDuration() * m_currentStaff->getTimeScaleFactor();
-    m_currentElement->setWidth(int(width + 1.0)); // fiddle factor
+    m_currentElement->setWidth(int(width + _fiddleFactor)); // fiddle factor
 
     m_currentStaff->positionElement(m_currentElement);
     m_mParentView->update();
@@ -268,7 +273,7 @@ int MatrixPainter::handleMouseMove(Rosegarden::timeT time,
 
     // ensure we don't have a zero width preview
     if (width == 0) width = initialWidth;
-    else width += 1; // fiddle factor
+    else width += _fiddleFactor; // fiddle factor
 
     m_currentElement->setWidth(int(width));
     
@@ -849,11 +854,17 @@ int MatrixMover::handleMouseMove(Rosegarden::timeT newTime,
             m_currentElement->event()->get<Rosegarden::Int>(PITCH);
     }
 
-    int diffX = int(double(newTime -
-			   m_currentElement->getViewAbsoluteTime()) *
+    int diffX = 
+        int(double(newTime - m_currentElement->getViewAbsoluteTime()) *
 		    m_currentStaff->getTimeScaleFactor());
 
-    int diffY = int(((m_currentStaff->getLayoutYForHeight(newPitch) -
+    // Add this fiddle factor to ensure the notes butt properly
+    //
+    if (diffX < 0) diffX -= int(_fiddleFactor);
+    else if (diffX > 0) diffX += int(_fiddleFactor);
+
+    int diffY = 
+        int(((m_currentStaff->getLayoutYForHeight(newPitch) -
 		      m_currentStaff->getElementHeight() / 2) -
 		     m_currentElement->getLayoutY()));
 
@@ -864,6 +875,12 @@ int MatrixMover::handleMouseMove(Rosegarden::timeT newTime,
     MatrixElement *element = 0;
     int maxY = m_currentStaff->getCanvasYForHeight(0);
 
+    /*
+    MATRIX_DEBUG << "MatrixMover::handleMouseMove - "
+                 << "oldX = " << m_oldX
+                 << ", diffX = " << diffX << endl;
+                 */
+
     m_currentElement->setLayoutX(m_oldX + diffX);
     
     for (; it != selection->getSegmentEvents().end(); it++)
@@ -872,18 +889,25 @@ int MatrixMover::handleMouseMove(Rosegarden::timeT newTime,
 
         if (element)
         {
-            int newX = int(m_currentElement->getLayoutX() +
-			   double(element->getViewAbsoluteTime() -
+            int newDiffX = int(
+                double(element->getViewAbsoluteTime() -
 				  m_currentElement->getViewAbsoluteTime()) *
 			   m_currentStaff->getTimeScaleFactor());
-            if (newX < 0) newX = 0;
 
+            if (newDiffX < 0) newDiffX -= int(_fiddleFactor);
+            else if (newDiffX > 0) newDiffX += int(_fiddleFactor);
+
+            int newX = int(m_currentElement->getLayoutX() + newDiffX);
             int newY = int(element->getLayoutY() + diffY);
+
+            // bounds checking
+            if (newX < 0) newX = 0;
             if (newY < 0) newY = 0;
             if (newY > maxY) newY = maxY;
 
             if (element != m_currentElement) element->setLayoutX(newX);
             element->setLayoutY(newY);
+
             m_currentStaff->positionElement(element);
         }
 
@@ -1091,7 +1115,10 @@ int MatrixResizer::handleMouseMove(Rosegarden::timeT newTime,
     int initialWidth = m_currentElement->getWidth();
     double width = newDuration * m_currentStaff->getTimeScaleFactor();
 
-    if (width == 0) width = initialWidth;
+    // Don't allow zero width here - always at least _fiddleFactor wide
+    if (width > 0) width += _fiddleFactor;
+    else if (width < 0) width -= _fiddleFactor;
+
     int diffWidth = initialWidth - int(width);
 
     EventSelection* selection = m_mParentView->getCurrentSelection();
@@ -1106,7 +1133,11 @@ int MatrixResizer::handleMouseMove(Rosegarden::timeT newTime,
         if (element)
         {
             int newWidth = element->getWidth() - diffWidth;
-            if (newWidth <= 0) newWidth = 1; // minimum width
+
+            /*
+            MATRIX_DEBUG << "MatrixResizer::handleMouseMove - "
+                         << "new width = " << newWidth << endl;
+                         */
 
             element->setWidth(newWidth);
             m_currentStaff->positionElement(element);
@@ -1122,10 +1153,9 @@ void MatrixResizer::handleMouseRelease(Rosegarden::timeT newTime,
 {
     if (!m_currentElement || !m_currentStaff) return;
 
-    timeT oldTime = m_currentElement->getViewAbsoluteTime();
-    timeT oldDuration = m_currentElement->getViewDuration();
-    timeT newDuration = newTime - oldTime;
-    timeT diffDuration = newDuration - oldDuration;
+    timeT diffDuration = 
+        newTime - m_currentElement->getViewAbsoluteTime() - 
+        m_currentElement->getViewDuration();
 
     EventSelection *selection = m_mParentView->getCurrentSelection();
 
@@ -1151,9 +1181,22 @@ void MatrixResizer::handleMouseRelease(Rosegarden::timeT newTime,
             timeT eventTime = (*it)->getAbsoluteTime();
             timeT eventDuration = (*it)->getDuration() + diffDuration;
 
+            /*
+            MATRIX_DEBUG << "MatrixResizer::handleMouseRelease - "
+                         << "Time = " << eventTime
+                         << ", Duration = " << eventDuration << endl;
+                         */
+
+            if (eventDuration < 0)
+            {
+                eventTime += eventDuration;
+                eventDuration = -eventDuration;
+            }
+
+
             // ensure the duration is always (arbitrary) positive
-            if (eventDuration <= 0)
-                eventDuration = 60;
+            //if (eventDuration == 0)
+                //eventDuration = 60;
                 //m_mParentView->getSnapGrid().getSnapTime(e->x());
             
             Rosegarden::Event *newEvent =
