@@ -36,6 +36,27 @@ int main(int argc, char **argv)
         clock_t st, et;
         struct tms spare;
 
+	basic_string<wchar_t> widestring(L"This is a test");
+	widestring += L" of wide character strings";
+	for (unsigned int i = 0; i < widestring.length(); ++i) {
+	    if (widestring[i] == L'w' ||
+		widestring[i] == L'c') {
+		widestring[i] = toupper(widestring[i]);
+	    }
+	}
+	cout << "Testing wide string: string value is \"" << widestring << "\""
+	     << endl;
+	cout << "String's length is " << widestring.length() << endl;
+	cout << "and storage space is " 
+	     << (widestring.length() * sizeof(widestring[0]))
+	     << endl;
+	cout << "Characters are: ";
+	for (unsigned int i = 0; i < widestring.length(); ++i) {
+	    cout << widestring[i];
+	    if (i < widestring.length()-1) cout << " ";
+	    else cout << endl;
+	}
+
         cout << "\nTesting Event..." << endl
              << "sizeof Event : " << sizeof(Event) << endl;
 
