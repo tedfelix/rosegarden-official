@@ -53,6 +53,9 @@ VUMeter::VUMeter(QWidget *parent,
             this,         SLOT(slotStopShowingPeak()));
 
 
+    if (m_type == Plain)
+        m_showPeakLevel == false;
+
     m_velocityColour = new VelocityColour(RosegardenGUIColours::LevelMeterRed,
                                           RosegardenGUIColours::LevelMeterOrange,
                                           RosegardenGUIColours::LevelMeterGreen,

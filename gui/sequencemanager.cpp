@@ -32,6 +32,7 @@
 #include "rosestrings.h"
 #include "rosegardenguidoc.h"
 #include "rosegardentransportdialog.h"
+#include "rosegardenguiview.h"
 #include "sequencemanager.h"
 #include "SegmentPerformanceHelper.h"
 
@@ -958,20 +959,8 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC)
                 }
 
                 if ((*i)->getType() == Rosegarden::MappedEvent::AudioLevel)
-                {
-                    cout << "AUDIO LEVEL = "
-                         << (int)(*i)->getVelocity()
-                         << " for INSTRUMENT "
-                         << (*i)->getInstrument() << endl;
+                    sendAudioLevel(*i);
 
-                    // Create a:
-                    //
-                    // m_doc->showVisuals();
-
-                    // and ensure that m_view->showVisuals can handle
-                    // audio file thing
-                    //
-                }
                 continue;
             }
 #ifdef HAVE_ALSA
@@ -1362,30 +1351,19 @@ SequenceManager::processRecordedAudio(const Rosegarden::RealTime &time,
 }
 
 
-/*
 void
-SequenceManager::sendAudioLatencies()
+SequenceManager::sendAudioLevel(Rosegarden::MappedEvent *mE)
 {
-    QByteArray data;
-    QDataStream streamOut(data, IO_WriteOnly);
+    RosegardenGUIView *v;
 
-    KConfig* config = kapp->config();
-    config->setGroup("Latency Options");
-
-    streamOut << config->readLongNumEntry("jackplaybacklatencysec", 0);
-    streamOut << config->readLongNumEntry("jackplaybacklatencyusec", 0);
-
-    streamOut << config->readLongNumEntry("jackrecordlatencysec", 0);
-    streamOut << config->readLongNumEntry("jackrecordlatencyusec", 0);
-
-    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "setAudioLatencies(long int, long int, long int, long int)", data))
+    for (v = m_doc->pViewList->first(); v != 0; v = m_doc->pViewList->next())
     {
-      throw(i18n("Failed to contact Rosegarden sequencer to send audio latenices"));
+        v->showVisuals(mE);
     }
-}
-*/
 
 }
+
+}
+
+
 

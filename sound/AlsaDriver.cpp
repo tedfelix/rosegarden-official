@@ -1651,7 +1651,8 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
         // Are we recording?
         //
-        if (inst->getRecordStatus() == RECORD_AUDIO)
+        if (inst->getRecordStatus() == RECORD_AUDIO ||
+            inst->getRecordStatus() == ASYNCHRONOUS_AUDIO)
         {
             // Get input buffer
             //
@@ -1677,8 +1678,11 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 buffer += b1;
             }
 
-            // append the sample string
-            inst->appendToAudioFile(buffer);
+            if (inst->getRecordStatus() == RECORD_AUDIO)
+            {
+               // append the sample string
+               inst->appendToAudioFile(buffer);
+            }
         }
 
         /*
@@ -1737,6 +1741,9 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
         double dSamplesIn = 0.0;
         double dInSamplesInc = 0.0;
         jack_nframes_t samplesOut = 0;
+
+        std::vector<float> peakLevels;
+        float peakLevel;
 
         for (it = audioQueue.begin(); it != audioQueue.end(); it++)
         {
@@ -1861,6 +1868,8 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 char *origSamplePtr = samplePtr;
                 float outBytes;
 
+                peakLevel = 0.0;
+
                 while (samplesOut < nframes)
                 {
                     switch(bytes)
@@ -1871,6 +1880,9 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                                          _8bitSampleMax;
 
                             _leftTempBuffer[samplesOut] += outBytes;
+
+                            if (fabs(outBytes) > peakLevel)
+                                peakLevel = fabs(outBytes);
 
                             if (channels == 2)
                             {
@@ -1887,6 +1899,9 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                                            _16bitSampleMax;
 
                             _leftTempBuffer[samplesOut] += outBytes;
+
+                            if (fabs(outBytes) > peakLevel)
+                                peakLevel = fabs(outBytes);
 
                             // Get other sample if we have one
                             //
@@ -1946,9 +1961,14 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                         */
                     }
                 }
+
+                peakLevels.push_back(peakLevel);
+
             }
             layerCount++;
         }
+
+        
 
         // Transfer the sum of the samples
         //
@@ -1966,21 +1986,25 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
         // Every time times through we report the current audio level
         // back to the gui.
         //
-        if (audioQueue.size() > 0 && _passThroughCounter++ > 10)
+        if (audioQueue.size() > 0 && _passThroughCounter++ > 5)
         {
+            int i = 0;
             for (it = audioQueue.begin(); it != audioQueue.end(); it++)
             {
-                MappedEvent *mE =
-                    new MappedEvent((*it)->getInstrument(),
-                                    MappedEvent::AudioLevel,
+                if ((*it)->getStatus() == PlayableAudioFile::PLAYING)
+                {
+                    MappedEvent *mE =
+                        new MappedEvent((*it)->getInstrument(),
+                                        MappedEvent::AudioLevel,
+    
+                                        // hmm, watch conversion here
 
-                                    // hmm, watch conversion here
+                                        (*it)->getAudioFile()->getId(),
+                                        int(peakLevels[i++] * 127.0)); // velocity
 
-                                    (*it)->getAudioFile()->getId(),
-                                    100); // velocity
-
-                // send completion event
-                inst->insertMappedEventForReturn(mE);
+                    // send completion event
+                    inst->insertMappedEventForReturn(mE);
+                }
             }
 
             _passThroughCounter = 0;

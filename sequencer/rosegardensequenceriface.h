@@ -130,18 +130,13 @@ public:
     //
     virtual void alive() = 0;
 
-    /*
-
-    // This isn't required at the sequencer - yet
-
-    // Set the audio latencies if we need them to differ from
-    // overall (MIDI) latencies.
+    // Set audio monitoring Instrument - tells the sequencer that the
+    // gui is currently monitoring audio and which Instrument to report
+    // the input level against - this is so we can get a real time
+    // display of the audio input stream.
     //
-    virtual void setAudioLatencies(long playTimeSec,
-                                   long playTimeUsec,
-                                   long recordTimeSec,
-                                   long recordTimeUsec) = 0;
-                                   */
+    virtual void setAudioMonitoring(bool value) = 0;
+    virtual void setAudioMonitoringInstrument(unsigned int id) = 0;
 
 };
 

@@ -121,11 +121,9 @@ public:
     //
     void suspendSequencer(bool value);
 
-    /*
-    // Send the audio latencies over to the sequencer
+    // Send the audio level to VU meters
     //
-    void sendAudioLatencies();
-    */
+    void sendAudioLevel(Rosegarden::MappedEvent *mE);
 
 public slots:
     // Empty the m_clearToSend flag

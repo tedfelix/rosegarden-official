@@ -881,24 +881,28 @@ RosegardenSequencerApp::sequencerAlive()
               << "trying to tell GUI that we're alive" << std::endl;
 }
 
-
-/*
 void
-RosegardenSequencerApp::setAudioLatencies(long playTimeSec,
-                                          long playTimeUsec,
-                                          long recordTimeSec,
-                                          long recordTimeUsec)
+RosegardenSequencerApp::setAudioMonitoring(bool value)
 {
-    m_audioPlayLatency = Rosegarden::RealTime(playTimeSec, playTimeUsec);
-    m_audioRecordLatency = Rosegarden::RealTime(recordTimeSec, recordTimeUsec);
+    if (value &&
+            m_sequencer->getRecordStatus() == Rosegarden::ASYNCHRONOUS_MIDI)
+    {
+        m_sequencer->record(Rosegarden::ASYNCHRONOUS_AUDIO);
+        return;
+    }
 
-    std::cout << "RosegardenSequencerApp::setAudioLatencies - " 
-              << "playback latency = " << m_audioPlayLatency << std::endl;
-
-    std::cout << "RosegardenSequencerApp::setAudioLatencies - "
-              << "record latency = " << m_audioRecordLatency << std::endl;
+    if (value == false &&
+            m_sequencer->getRecordStatus() == Rosegarden::ASYNCHRONOUS_AUDIO)
+    {
+        m_sequencer->record(Rosegarden::ASYNCHRONOUS_MIDI);
+    }
+    
 }
-*/
 
+void
+RosegardenSequencerApp::setAudioMonitoringInstrument(unsigned int id)
+{
+    m_sequencer->setAudioMonitoringInstrument(id);
+}
 
 

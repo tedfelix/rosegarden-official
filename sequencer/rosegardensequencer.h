@@ -181,14 +181,10 @@ public:
     //
     virtual void alive();
 
-    /*
-    // Set both the audio latencies
+    // Audio monitoring
     //
-    virtual void setAudioLatencies(long playTimeSec,
-                                   long playTimeUsec,
-                                   long recordTimeSec,
-    /                              long recordTimeUsec);
-    */
+    virtual void setAudioMonitoring(bool value);
+    virtual void setAudioMonitoringInstrument(unsigned int id);
 
     //
     //

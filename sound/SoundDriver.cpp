@@ -149,7 +149,8 @@ SoundDriver::SoundDriver(const std::string &name):
     m_recordStatus(ASYNCHRONOUS_MIDI),
     m_midiRunningId(MidiInstrumentBase),
     m_audioRunningId(AudioInstrumentBase),
-    m_deviceRunningId(0)
+    m_deviceRunningId(0),
+    m_audioMonitoringInstrument(Rosegarden::AudioInstrumentBase)
 {
 }
 

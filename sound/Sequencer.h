@@ -195,6 +195,16 @@ public:
     //
     void setRecordingFilename(const std::string &file)
         { m_soundDriver->setRecordingFilename(file); }
+
+    RecordStatus getRecordStatus() const
+        { return m_soundDriver->getRecordStatus(); }
+
+    // Audio monitoring Instrument
+    //
+    void setAudioMonitoringInstrument(Rosegarden::InstrumentId id)
+        { m_soundDriver->setAudioMonitoringInstrument(id); }
+    Rosegarden::InstrumentId getAudioMonitoringInstrument()
+        { return m_soundDriver->getAudioMonitoringInstrument(); }
     
 private:
 

@@ -303,6 +303,16 @@ public:
     void setRecordingFilename(const std::string &file)
         {  m_recordingFilename = file; }
 
+
+    // Audio monitoring InstrumentId
+    //
+    Rosegarden::InstrumentId getAudioMonitoringInstrument()
+        { return m_audioMonitoringInstrument; }
+
+    void setAudioMonitoringInstrument(Rosegarden::InstrumentId id)
+        { m_audioMonitoringInstrument = id; }
+
+
 protected:
     // Helper functions to be implemented by subclasses
     //
@@ -360,6 +370,7 @@ protected:
     // Filename we should record to
     std::string                                 m_recordingFilename;
 
+    Rosegarden::InstrumentId                    m_audioMonitoringInstrument;
 };
 
 }

@@ -37,7 +37,8 @@ public:
     typedef enum
     {
         Plain,
-        PeakHold
+        PeakHold,
+        AudioPeakHold
     } VUMeterType;
 
     VUMeter(QWidget *parent = 0,
