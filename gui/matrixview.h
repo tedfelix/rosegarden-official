@@ -130,6 +130,23 @@ public:
 
 signals:
 
+    /**
+     * Emitted when the mouse cursor moves to a different height
+     * on the staff
+     *
+     * \a noteName contains the MIDI name of the corresponding note
+     */
+    void hoveredOverNoteChanged(const QString &noteName);
+
+    /**
+     * Emitted when the mouse cursor moves to a note which is at a
+     * different time
+     *
+     * \a time is set to the absolute time of the note the cursor is
+     * hovering on
+     */
+    void hoveredOverAbsoluteTimeChanged(unsigned int time);
+
     void mousePressed(Rosegarden::timeT time, int pitch,
                       QMouseEvent*, MatrixElement*);
 
@@ -156,6 +173,9 @@ protected:
     //--------------- Data members ---------------------------------
 
     MatrixStaff& m_staff;
+
+    Rosegarden::timeT m_previousEvTime;
+    int m_previousEvPitch;
 };
 
 //------------------------------------------------------------
@@ -304,6 +324,8 @@ public:
 
     virtual void positionElement(MatrixElement*);
 
+    QString getNoteNameForPitch(unsigned int pitch);
+
 private:
     double m_scaleFactor;
 };
@@ -377,6 +399,22 @@ public slots:
     void mouseMoved(Rosegarden::timeT time, QMouseEvent*);
     void mouseReleased(Rosegarden::timeT time, QMouseEvent*);
 
+    /**
+     * Called when the mouse cursor moves over a different height on
+     * the staff
+     *
+     * @see MatrixCanvasView#hoveredOverNoteChange()
+     */
+    void hoveredOverNoteChanged(const QString&);
+
+    /**
+     * Called when the mouse cursor moves over a note which is at a
+     * different time on the staff
+     *
+     * @see MatrixCanvasView#hoveredOverNoteChange()
+     */
+    void hoveredOverAbsoluteTimeChanged(unsigned int);
+
 protected:
 
     /**
@@ -419,6 +457,10 @@ protected:
     
     MatrixHLayout* m_hlayout;
     MatrixVLayout* m_vlayout;
+
+    // Status bar elements
+    QLabel* m_hoveredOverAbsoluteTime;
+    QLabel* m_hoveredOverNoteName;
 };
 
 //////////////////////////////////////////////////////////////////////

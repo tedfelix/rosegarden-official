@@ -48,8 +48,11 @@ MatrixCanvasView::MatrixCanvasView(MatrixStaff& staff,
                                    QCanvas *viewing, QWidget *parent,
                                    const char *name, WFlags f)
     : QCanvasView(viewing, parent, name, f),
-      m_staff(staff)
+      m_staff(staff),
+      m_previousEvTime(0),
+      m_previousEvPitch(0)
 {
+    viewport()->setMouseTracking(true);
 }
 
 MatrixCanvasView::~MatrixCanvasView()
@@ -81,11 +84,23 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
 {
     timeT evTime = m_staff.getTimeForCanvasX(e->x());
+    int evPitch = m_staff.getHeightAtCanvasY(e->y());
 
     kdDebug(KDEBUG_AREA) << "MatrixCanvasView::contentsMouseMoveEvent() at time "
                          << evTime << endl;
 
-    emit mouseMoved(evTime, e);
+    if (evTime != m_previousEvTime) {
+        emit hoveredOverAbsoluteTimeChanged(evTime);
+        m_previousEvTime = evTime;
+    }
+
+    if (evPitch != m_previousEvPitch) {
+        emit hoveredOverNoteChanged(m_staff.getNoteNameForPitch(evPitch));
+        m_previousEvPitch = evPitch;
+    }
+
+    if (e->button() != NoButton)
+        emit mouseMoved(evTime, e);
 }
 
 void MatrixCanvasView::contentsMouseReleaseEvent(QMouseEvent* e)
@@ -344,6 +359,19 @@ timeT MatrixStaff::getTimeForCanvasX(double x)
     return (timeT)(layoutX / m_scaleFactor);
 }
 
+QString MatrixStaff::getNoteNameForPitch(unsigned int pitch)
+{
+    static const char* noteNamesSharps[] = {
+        "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
+    };
+
+    int octave = pitch / 12;
+    pitch  = pitch % 12;
+
+    return QString("%1%2").arg(noteNamesSharps[pitch]).arg(octave);
+}
+
+
 //----------------------------------------------------------------------
 
 MatrixView::MatrixView(RosegardenGUIDoc *doc,
@@ -352,11 +380,15 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     : EditView(doc, segments, parent),
       m_canvasView(0),
       m_hlayout(new MatrixHLayout),
-      m_vlayout(new MatrixVLayout)
+      m_vlayout(new MatrixVLayout),
+      m_hoveredOverAbsoluteTime(0),
+      m_hoveredOverNoteName(0)
 {
     m_toolBox = new MatrixToolBox(this);
 
     setupActions();
+
+    initStatusBar();
 
     QCanvas *tCanvas = new QCanvas(100, 100);
 
@@ -384,6 +416,13 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
         (m_canvasView, SIGNAL(mouseReleased(Rosegarden::timeT, QMouseEvent*)),
          this,         SLOT  (mouseReleased(Rosegarden::timeT, QMouseEvent*)));
 
+    QObject::connect
+        (m_canvasView, SIGNAL(hoveredOverNoteChanged(const QString&)),
+         this,         SLOT  (hoveredOverNoteChanged(const QString&)));
+
+    QObject::connect
+        (m_canvasView, SIGNAL(hoveredOverAbsoluteTimeChanged(unsigned int)),
+         this,         SLOT  (hoveredOverAbsoluteTimeChanged(unsigned int)));
 
 
     kdDebug(KDEBUG_AREA) << "MatrixView : applying layout\n";
@@ -470,6 +509,22 @@ void MatrixView::setupActions()
 
 void MatrixView::initStatusBar()
 {
+    KStatusBar* sb = statusBar();
+    
+    m_hoveredOverNoteName      = new QLabel(sb);
+    m_hoveredOverAbsoluteTime  = new QLabel(sb);
+
+    m_hoveredOverNoteName->setMinimumWidth(32);
+    m_hoveredOverAbsoluteTime->setMinimumWidth(80);
+
+    sb->addWidget(m_hoveredOverAbsoluteTime);
+    sb->addWidget(m_hoveredOverNoteName);
+
+    sb->insertItem(KTmpStatusMsg::getDefaultMsg(),
+                   KTmpStatusMsg::getDefaultId(), 1);
+    sb->setItemAlignment(KTmpStatusMsg::getDefaultId(), 
+                         AlignLeft | AlignVCenter);
+
 }
 
 
@@ -548,6 +603,19 @@ void MatrixView::mouseReleased(Rosegarden::timeT time, QMouseEvent* e)
 {
     m_tool->handleMouseRelease(time, 0, e);
 }
+
+void
+MatrixView::hoveredOverNoteChanged(const QString &noteName)
+{
+    m_hoveredOverNoteName->setText(QString(" ") + noteName);
+}
+
+void
+MatrixView::hoveredOverAbsoluteTimeChanged(unsigned int time)
+{
+    m_hoveredOverAbsoluteTime->setText(QString(" Time: %1").arg(time));
+}
+
 
 
 //////////////////////////////////////////////////////////////////////
