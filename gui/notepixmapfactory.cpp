@@ -334,8 +334,8 @@ NotePixmapFactory::drawStalk(Note note,
         if(stalkGoesUp) {
             tailPixmap = tailUp(note);
 
-            m_p.drawPixmap (m_noteBodyWidth, 0, *tailPixmap);
-            m_pm.drawPixmap(m_noteBodyWidth, 0, *(tailPixmap->mask()));
+            m_p.drawPixmap (m_noteBodyWidth - 1, 0, *tailPixmap);
+            m_pm.drawPixmap(m_noteBodyWidth - 1, 0, *(tailPixmap->mask()));
 
         } else {
 
