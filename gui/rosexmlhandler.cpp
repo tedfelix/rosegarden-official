@@ -76,7 +76,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
       m_foundTempo = true;
 
     } else if (lcName == "track") {
-        m_currentTime = 0;
+
         int instrument = -1, startIndex = 0;
         QString instrumentNbStr = atts.value("instrument");
         if (instrumentNbStr) {
@@ -95,6 +95,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         m_currentTrack = new Track;
         m_currentTrack->setInstrument(instrument);
         m_currentTrack->setStartIndex(startIndex);
+	m_currentTime = startIndex;
 
         m_composition.addTrack(m_currentTrack);
     

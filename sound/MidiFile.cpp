@@ -727,8 +727,6 @@ MidiFile::convertToRosegarden()
           (notationTrack.guessClef
            (rosegardenTrack->begin(), rosegardenTrack->end()).getAsEvent(0));
 
-//!!!      rosegardenTrack->calculateBarPositions();
-
       notationTrack.autoBeam
           (rosegardenTrack->begin(), rosegardenTrack->end(),
            "beamed"); //!!! probably shouldn't be hardcoded!
@@ -772,8 +770,10 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
 
   //int midiInstrument;
 
-  _timingDivision = (int)((float) Note(Note::Crotchet).getDuration() * 120.0 /
-                          (float) comp.getTempo());
+  //!!! cc -- I'm seeing floating-point rounding errors in the resulting file
+  _timingDivision = Note(Note::Crotchet).getDuration() * 120 / comp.getTempo();
+//  _timingDivision = (int)((float) Note(Note::Crotchet).getDuration() * 120.0 /
+//                          (float) comp.getTempo());
 
   _format = MIDI_SIMULTANEOUS_TRACK_FILE;
 
@@ -805,8 +805,11 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
 
   // Our Composition to MIDI timing factor
   //
-  float timingFactor = (float) _timingDivision/
-                       (float) Note(Note::Crotchet).getDuration();
+
+  //!!! cc -- avoiding floating-point
+  timeT crotchetDuration = Note(Note::Crotchet).getDuration();
+//  float timingFactor = (float) _timingDivision/
+//                       (float) Note(Note::Crotchet).getDuration();
 
 #ifdef MIDI_DEBUG
   cout << "TIMING DIVISION = " << _timingDivision << endl;
@@ -845,8 +848,11 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
       {
         // Set delta time temporarily to absolute time for this event.
         //
-        midiEventAbsoluteTime = (int)(timingFactor * (float)
-                                                  ((*el)->getAbsoluteTime()));
+        //!!! cc -- avoiding floating-point
+	midiEventAbsoluteTime =
+	    (*el)->getAbsoluteTime() * _timingDivision / crotchetDuration;
+//        midiEventAbsoluteTime = (int)(timingFactor * (float)
+//                                                  ((*el)->getAbsoluteTime()));
                               
         // insert the NOTE_ON at the appropriate channel
         //
@@ -862,8 +868,12 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
         // We use TrackPerformanceHelper::getSoundingDuration()
         // to work out the tied duration of the NOTE.
         //
-        midiEventAbsoluteTime += (int)(timingFactor * (float)
-                                            (helper.getSoundingDuration(el)));
+        //!!! cc -- avoiding floating-point
+	midiEventAbsoluteTime +=
+	    helper.getSoundingDuration(el) * _timingDivision / crotchetDuration;
+//        midiEventAbsoluteTime += (int)(timingFactor * (float)
+//                                            (helper.getSoundingDuration(el)));
+
         // insert the matching NOTE OFF
         //
         midiEvent = new MidiEvent(midiEventAbsoluteTime,

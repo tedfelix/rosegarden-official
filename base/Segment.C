@@ -439,7 +439,7 @@ void Track::fillWithRests(timeT endTime)
     DurationList dl;
     ts.getDurationListForInterval(dl, endTime - duration, sigTime);
 
-    timeT acc = duration;
+    timeT acc = getStartIndex() + duration;
 
     for (DurationList::iterator i = dl.begin(); i != dl.end(); ++i) {
 	Event *e = new Event(Note::EventRestType);

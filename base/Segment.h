@@ -87,11 +87,13 @@ public:
     timeT getStartIndex() const { return m_startIdx; }
     void  setStartIndex(timeT i);
 
-    unsigned int getInstrument() const         { return m_instrument; }
-    void         setInstrument(unsigned int i) { m_instrument = i; }
-
     timeT getDuration() const;
     void  setDuration(timeT); // fills up with rests when lengthening
+
+    timeT getEndIndex() const { return m_startIdx + getDuration(); }
+
+    unsigned int getInstrument() const         { return m_instrument; }
+    void         setInstrument(unsigned int i) { m_instrument = i; }
 
     /**
      * Calculates suitable positions for the bar lines, taking into

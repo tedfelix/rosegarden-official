@@ -183,39 +183,30 @@ NotationHLayout::preparse(Staff &staff)
     barList.clear();
     int fixedWidth = staff.getBarMargin();
 
-//!!!    if (firstBar < 0) firstBar = 0;
-//!!!    if ( lastBar < 0)  lastBar = barPositions.size() - 1;
-
     Track::iterator refStart = timeRef->findTime(t.getStartIndex());
-//    Track::iterator refStart = timeRef->begin();
-    Track::iterator refEnd =
-	timeRef->findTime(t.getStartIndex() + t.getDuration() + 1);
+    Track::iterator refEnd = timeRef->findTime(t.getEndIndex() + 1); //!!!
 
-    int barNo = 0; //!!!
+    int barNo = 0;
 
     for (Track::iterator refi = refStart; refi != refEnd; ++refi) {
 
-//!!!    for (int barNo = firstBar; barNo <= lastBar; ++barNo) {
+	timeT barStartTime = (*refi)->getAbsoluteTime();
+	timeT   barEndTime;
 
-//!!!        kdDebug(KDEBUG_AREA) << "preparse: Looking at bar " << barNo << " with start time " << barPositions[barNo].start << endl;
+	Track::iterator refi0(refi);
+	if (++refi0 != refEnd) {
+	    barEndTime = (*refi0)->getAbsoluteTime();
+	} else {
+//	    break; //!!!
+	    barEndTime = t.getEndIndex();
+	}
+
+        NotationElementList::iterator from = notes->findTime(barStartTime);
+        NotationElementList::iterator to = notes->findTime(barEndTime);
 
         NotationElementList::iterator shortest = notes->end();
         int shortCount = 0;
         int totalCount = 0;
-
-        NotationElementList::iterator from =
-	    notes->findTime((*refi)->getAbsoluteTime() - t.getStartIndex());
-//            notes->findTime(barPositions[barNo].start);
-
-        NotationElementList::iterator to;
-	Track::iterator refi0(refi); ++refi0;
-	if (refi0 != timeRef->end()) {
-//        if (barNo < (int)barPositions.size() - 1) {
-//            to = notes->findTime(barPositions[barNo+1].start);
-            to = notes->findTime((*refi0)->getAbsoluteTime() - t.getStartIndex());
-        } else {
-            to = notes->end();
-        }
 
         for (NotationElementList::iterator it = from; it != to; ++it) {
         
@@ -333,16 +324,16 @@ NotationHLayout::preparse(Staff &staff)
 
                     int sd = 0;
                     try {
-                    if (shortest == notes->end() ||
-                        d <= (sd = (*shortest)->event()->get<Int>
-                              (Quantizer::NoteDurationProperty))) {
-                        if (d == sd) ++shortCount;
-                        else {
-                            kdDebug(KDEBUG_AREA) << "New shortest! Duration is " << d << " (at " << el->getAbsoluteTime() << " time units)"<< endl;
-                            shortest = it;
-                            shortCount = 1;
-                        }
-                    }
+			if (shortest == notes->end() ||
+			    d <= (sd = (*shortest)->event()->get<Int>
+				  (Quantizer::NoteDurationProperty))) {
+			    if (d == sd) ++shortCount;
+			    else {
+				kdDebug(KDEBUG_AREA) << "New shortest! Duration is " << d << " (at " << el->getAbsoluteTime() << " time units)"<< endl;
+				shortest = it;
+				shortCount = 1;
+			    }
+			}
                     } catch (Event::NoData e) {
                         kdDebug(KDEBUG_AREA) << "No quantized duration in shortest! event is " << *((*shortest)->event()) << endl;
                     }
@@ -352,12 +343,16 @@ NotationHLayout::preparse(Staff &staff)
             el->event()->setMaybe<Int>(Properties::MIN_WIDTH, mw);
         }
         
+	timeT actualStart =
+	    (from == notes->end() ? t.getEndIndex() :
+	                            (*from)->getAbsoluteTime());
+
         addNewBar(staff, barNo, from,
                   getIdealBarWidth(staff, fixedWidth, shortest, npf,
                                    shortCount, totalCount, timeSignature),
-                  fixedWidth);
+                  fixedWidth, actualStart == barStartTime);
 
-	++barNo; //!!!
+	++barNo;
     }
 }
 
@@ -365,9 +360,10 @@ NotationHLayout::preparse(Staff &staff)
 void
 NotationHLayout::addNewBar(Staff &staff,
 			   int barNo,  NotationElementList::iterator start,
-                           int width, int fwidth)
+                           int width, int fwidth, bool correct)
 {
-   m_barData[&staff].push_back(BarData(barNo, start, -1, width, fwidth));
+   m_barData[&staff].push_back
+       (BarData(barNo, start, -1, width, fwidth, correct));
 }
 
 
@@ -459,7 +455,7 @@ NotationHLayout::reconcileBars()
             if ((*j)->getAbsoluteTime() >= track.getStartIndex()) break;
             list.push_front
                 (BarData
-                 (-1, staff->getNotationElementList()->end(), -1, 0, 0));
+                 (-1, staff->getNotationElementList()->end(), -1, 0, 0, true));
         }
     }
 

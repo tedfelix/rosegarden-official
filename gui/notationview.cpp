@@ -642,36 +642,17 @@ bool NotationView::showBars(int staffNo,
     Staff *staff = m_staffs[staffNo];
     
     const NotationHLayout::BarDataList &barData(m_hlayout->getBarData(*staff));
-//!!!    const Track::BarPositionList &barPositions
-//	(staff->getViewElementsManager()->getTrack().getBarPositions());
-
-    NotationElementList::iterator lastElement = to;
-    --lastElement;
-
-    //     kdDebug(KDEBUG_AREA) << "NotationView::showBars() : from->x = " <<(*from)->x()
-    //                          << " - lastElement->x = " << (*lastElement)->x() << endl
-    //                          << "lastElement : " << *(*lastElement) << endl;
     
-    m_staffs[staffNo]->deleteBars(int((*from)->getEffectiveX()));
+//    m_staffs[staffNo]->deleteBars(int((*from)->getEffectiveX()));
+    m_staffs[staffNo]->deleteBars(0);
 
     for (NotationHLayout::BarDataList::const_iterator it = barData.begin();
          it != barData.end(); ++it) {
 
-//	if (it->barNo < 0 || it->barNo >= (int)barPositions.size()) {
-//	    kdDebug(KDEBUG_AREA) << "ERROR: Synchronisation problem: barNo "
-//				 << it->barNo << " is out of legal range (0,"
-//				 << barPositions.size()-1 << ")" << endl;
-//	} else {
-	    kdDebug(KDEBUG_AREA) << "Adding bar number " << it->barNo
-				 << " at pos " << it->x << endl;
+	kdDebug(KDEBUG_AREA) << "Adding bar number " << it->barNo
+			     << " at pos " << it->x << endl;
 
-	    //!!! We've lost bar correctness indication here; it's
-	    // going to be a bit more work than it was, I think
-
-	    if (it->barNo >= 0) {
-		staff->insertBar(it->x, true /*!!! barPositions[it->barNo].correct */);
-	    }
-//	}
+	if (it->barNo >= 0) staff->insertBar(it->x, it->correct);
     }
 
     return true;
@@ -1262,9 +1243,6 @@ void NotationView::redoLayout()
     //things like beamed notes earlier in the same group may need to
     //be redrawn with different beam angles.  We may be able to get
     //away with redrawing from the start of the group or bar, some day
-
-    //!!! besides, gotta ignore "from" for now, because we have more
-    //than one staff
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 	NotationElementList *notes = m_staffs[i]->getNotationElementList();

@@ -36,11 +36,11 @@ A.  Features without which nobody will even believe we're serious:
 9a. make it possible to insert dotted notes and notes with accidentals
 
 10. be able to both read and write MIDI files, even if we only handle
-    the most basic events
+    the most basic events: DONEish
 
 11. basic MIDI record and playback infrastructure through aRts (RB - 18.06.01)
 
-12. the basics of Rosegarden 2.1 file loading
+12. the basics of Rosegarden 2.1 file loading: DONEish
 
 13. Get 'make install' working (icons)
 
@@ -66,7 +66,7 @@ B.  The basis for more advanced features, where that basis should be
 
 7.  moveable begin and end markers in tracks
 
-8.  show several tracks in a single notation window
+8.  show several tracks in a single notation window: DONE
 
 
 ===

@@ -69,11 +69,12 @@ public:
         int x;                // coordinate for display of barline
         int idealWidth;       // theoretical width of bar following barline
         int fixedWidth;       // minimum possible width of bar following barline
+	bool correct;         // bar preceding barline has correct duration
         
         BarData(int ibarno, NotationElementList::iterator istart,
-                int ix, int iwidth, int fwidth) :
+                int ix, int iwidth, int fwidth, bool icorrect) :
             barNo(ibarno), start(istart), x(ix), idealWidth(iwidth),
-            fixedWidth(fwidth) { }
+            fixedWidth(fwidth), correct(icorrect) { }
     };
 
     typedef FastVector<BarData> BarDataList;
@@ -109,7 +110,7 @@ protected:
     void layout(BarDataMap::iterator);
 
     void addNewBar(Staff &staff, int barNo, NotationElementList::iterator start,
-                   int width, int fwidth);
+                   int width, int fwidth, bool correct);
 
     int getMinWidth(const NotePixmapFactory &, const NotationElement &) const;
 

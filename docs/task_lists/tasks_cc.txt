@@ -29,7 +29,7 @@ References in round brackets are to 0.1_planned_features.txt.
 
     4c. Modify NotationHLayout so layout() can work on multiple staffs
     at once -- needs sync track? coping with partial bars at start and
-    end?  Need to think about this.
+    end?  Need to think about this. [DONE]
 
     4d. Finish NotationView by making it possible to receive and
     locate mouse events across all staffs [DONEish]
