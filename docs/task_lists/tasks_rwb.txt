@@ -12,6 +12,10 @@ o JACK connection management - stereo, panning
 
 o Matrix Hypereditor [HALF COMPLETED]
 
+o FEATURE - double/half speed event selection in Matrix
+
+o FEATURE - turn repeats to real segments
+
 o BUG - Matrix width bug [HALF COMPLETED]
 
 o BUG - Matrix pointer width

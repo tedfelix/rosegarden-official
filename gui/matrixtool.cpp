@@ -296,7 +296,11 @@ void MatrixPainter::handleLeftButtonPress(Rosegarden::timeT time,
         new QMouseEvent(inE->type(), p, inE->button(), inE->state());
 
     // Don't create an overlapping event on the same note on the same channel
-    if (dynamic_cast<MatrixElement*>(element)) return;
+    if (dynamic_cast<MatrixElement*>(element))
+    {
+        cout << "OVERLAP" << endl;
+        return;
+    }
 
     // Round event time to a multiple of resolution
     SnapGrid grid(m_mParentView->getSnapGrid());
@@ -347,8 +351,9 @@ bool MatrixPainter::handleMouseMove(Rosegarden::timeT time,
 
     // ensure we don't have a zero width preview
     if (width == 0) width = initialWidth;
+    else width += 2; // fiddle factor
 
-    m_currentElement->setWidth(int(width) + 2); // fiddle factor
+    m_currentElement->setWidth(int(width));
     
     if (pitch != m_currentElement->event()->get<Rosegarden::Int>(PITCH)) {
 	m_currentElement->event()->set<Rosegarden::Int>(PITCH, pitch);
@@ -826,7 +831,7 @@ bool MatrixMover::handleMouseMove(Rosegarden::timeT newTime,
             Rosegarden::Event *e = new Event(*(element->event()));
             int newPitch = e->get<Rosegarden::Int>(PITCH) + diffPitch;
 
-            m_mParentView->playNote(selection->getSegment(), newPitch);
+            //m_mParentView->playNote(selection->getSegment(), newPitch);
         }
     }
 
