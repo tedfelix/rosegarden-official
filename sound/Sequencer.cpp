@@ -23,9 +23,8 @@
 
 #include "Sequencer.h"
 
-//#define _WITH_ALSA_
 
-#ifdef _WITH_ALSA_
+#ifdef HAVE_ALSA
 #include "AlsaDriver.h"
 #else
 #include "ArtsDriver.h"
@@ -44,7 +43,7 @@ using std::endl;
 //
 Sequencer::Sequencer()
 {
-#ifdef _WITH_ALSA_
+#ifdef HAVE_ALSA
     m_soundDriver = new AlsaDriver();
 #else
     m_soundDriver = new ArtsDriver();
