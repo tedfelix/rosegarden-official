@@ -42,7 +42,7 @@
 
 #include "Sound.h"
 #include "MappedEvent.h"
-#include "MappedStudio.h"
+#include "MappedCommon.h"
 
 class KURL;
 class KRecentFilesAction;

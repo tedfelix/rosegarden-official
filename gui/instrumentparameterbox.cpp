@@ -34,6 +34,8 @@
 #include "Midi.h"
 #include "Instrument.h"
 #include "MidiDevice.h"
+#include "MappedStudio.h"
+
 #include "instrumentparameterbox.h"
 #include "audiopluginmanager.h"
 #include "widgets.h"

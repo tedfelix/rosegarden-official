@@ -91,54 +91,7 @@ protected:
                               // have the descriptor available
 
 };
-#endif
-
-/*
-typedef std::vector<Plugin*>::const_iterator PluginIterator;
-
-class PluginManager
-{
-public:
-    PluginManager();
-    ~PluginManager();
-
-#ifdef HAVE_LADSPA
-    // Modify path
-    void getenvLADSPAPath();
-    std::string getLADSPAPath() { return m_path; }
-    void setLADSPAPath(const std::string &path);
-    void addLADSPAPath(const std::string &path);
-#endif
-
-    // Search path for all plugins
-    void discoverPlugins();
-
-    // Load a given plugin
-    void loadPlugin(const std::string &path);
-
-    // Return the plugin to load for a given id
-    //
-    Plugin* getPluginForId(PluginId id);
-
-    // Clear list down
-    //
-    void clearPlugins();
-
-    // Iterate over plugins
-    //
-    PluginIterator begin() { return m_plugins.begin(); }
-    PluginIterator end() { return m_plugins.end(); }
-    
-protected:
-
-    std::string m_path;
-
-    std::vector<Plugin*> m_plugins;
-    PluginId             m_runningId;
-
-};
-*/
-
+#endif // HAVE_LADSPA
 
 };
 

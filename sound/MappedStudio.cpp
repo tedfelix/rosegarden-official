@@ -85,14 +85,19 @@ MappedStudio::createObject(MappedObjectType type, MappedObjectId id)
                                   id,
                                   2); // channels
     }
-    else if (type == MappedObject::AudioPluginLADSPA)
+    else if (type == MappedObject::LADSPAPlugin)
     {
         // create plugins under the pluginmanager if it exists
         ///
-        MappedObject *mAPM =
+        MappedObject *mLP =
             getObjectOfType(MappedObject::AudioPluginManager);
 
-        mO = new MappedLADSPAPlugin(mAPM, id);
+        mO = new MappedLADSPAPlugin(mLP, id);
+    }
+    else if (type == MappedObject::LADSPAPort)
+    {
+        // reset the parent after creation
+        mO = new MappedLADSPAPort(this, id);
     }
 
     // Insert
@@ -341,7 +346,7 @@ MappedAudioPluginManager::getPropertyList(const MappedObjectProperty &property)
         {
             MappedLADSPAPlugin *plugin =
                 dynamic_cast<MappedLADSPAPlugin*>
-                    (studio->getFirst(AudioPluginLADSPA));
+                    (studio->getFirst(MappedObject::LADSPAPlugin));
 
             while (plugin)
             {
@@ -373,7 +378,7 @@ void
 MappedAudioPluginManager::clearPlugins(MappedStudio *studio)
 {
     MappedObject *object;
-    while ((object = studio->getObjectOfType(AudioPluginLADSPA)))
+    while ((object = studio->getObjectOfType(MappedObject::LADSPAPlugin)))
     {
         studio->destroyObject(object->getId());
     }
@@ -439,10 +444,23 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
                 {
                     MappedLADSPAPlugin *plugin =
                         dynamic_cast<MappedLADSPAPlugin*>
-                            (studio->createObject(AudioPluginLADSPA));
+                            (studio->createObject
+                                 (MappedObject::LADSPAPlugin));
 
                     plugin->setLibraryName(path);
                     plugin->setPluginName(descriptor->Name);
+
+                    for (unsigned long i = 0; i < descriptor->PortCount; i++)
+                    {
+                        MappedLADSPAPort *port = 
+                            dynamic_cast<MappedLADSPAPort*>
+                            (studio->createObject
+                             (MappedObject::LADSPAPort));
+
+                        port->setParent(plugin);
+                        port->setPortName(descriptor->PortNames[i]);
+                    }
+
                     
                     //plugin->setDescriptor(descriptor);
                 }
@@ -495,6 +513,22 @@ MappedLADSPAPlugin::getPropertyList(const MappedObjectProperty &property)
 
 }
 #endif // HAVE_LADSPA
+
+MappedLADSPAPort::MappedLADSPAPort(MappedObject *parent,
+                                   MappedObjectId id):
+    MappedObject(parent, "MappedAudioPluginPort", LADSPAPort, id)
+{
+}
+
+MappedObjectPropertyList
+MappedLADSPAPort::getPropertyList(const MappedObjectProperty &property)
+{
+    MappedObjectPropertyList list;
+
+    return list;
+}
+
+
 
 
 

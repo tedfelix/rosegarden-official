@@ -31,6 +31,7 @@
 #include "Sound.h"
 #include "Track.h"
 #include "MappedComposition.h"
+#include "MappedCommon.h"
 #include "MappedStudio.h"
 #include "RealTime.h"
 

@@ -42,7 +42,6 @@
 #include "Studio.h"
 #include "Configuration.h"
 #include "MappedDevice.h"
-#include "MappedStudio.h"
 
 // forward declaration of the RosegardenGUI classes
 class RosegardenGUIView;

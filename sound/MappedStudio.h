@@ -21,10 +21,9 @@
 
 #include <string> 
 
-#include <qvaluevector.h>
-#include <qpair.h>
 #include <qdatastream.h>
 
+#include "MappedCommon.h"
 #include "Instrument.h"
 #include "Device.h"
 #include "Plugins.h"
@@ -43,14 +42,9 @@
 namespace Rosegarden
 {
 
-// Some types
 //
-typedef int          MappedObjectId;
-typedef QString      MappedObjectProperty;
-typedef int          MappedObjectValue;
-
-typedef QValueVector<MappedObjectProperty> MappedObjectPropertyList;
-
+// Types are in MappedCommon.h
+//
 
 // Every MappedStudio object derives from this class - if an
 // object is static then you're only allowed one per Studio
@@ -71,8 +65,9 @@ public:
         Studio,
         AudioFader,
         AudioPluginManager,
-        AudioPluginLADSPA
-    
+        LADSPAPlugin,
+        LADSPAPort
+   
     } MappedObjectType;
 
     MappedObject(MappedObject *parent,
@@ -106,6 +101,11 @@ public:
 
     virtual MappedObjectPropertyList
         getPropertyList(const MappedObjectProperty &property) = 0;
+
+    // Ownership
+    //
+    MappedObject* getParent() { return m_parent; }
+    void setParent(MappedObject *parent) { m_parent = parent; }
 
 protected:
 
@@ -236,8 +236,8 @@ class MappedLADSPAPlugin : public MappedObject, public LADSPAPlugin
 public:
     MappedLADSPAPlugin(MappedObject *parent, MappedObjectId id):
         MappedObject(parent,
-                     std::string("MappedLADSPAPlugin"),
-                     AudioPluginLADSPA,
+                     "MappedLADSPAPlugin",
+                     MappedObject::LADSPAPlugin,
                      id) {;}
 
     virtual MappedObjectPropertyList getPropertyList(
@@ -245,8 +245,34 @@ public:
 
 protected:
 };
-#endif
 
+class MappedLADSPAPort : public MappedObject
+{
+public:
+    MappedLADSPAPort(MappedObject *parent, MappedObjectId id);
+
+    virtual MappedObjectPropertyList getPropertyList(
+                        const MappedObjectProperty &property);
+
+    void setPortName(const std::string &name) { m_portName = name; }
+    std::string getPortName() const { return m_portName; }
+
+    void setRangeHint(const LADSPA_PortRangeHint &pRH)
+        { m_portRangeHint = pRH; }
+    LADSPA_PortRangeHint getRangeHint() const { return m_portRangeHint; }
+
+    void setDescriptor(const LADSPA_PortDescriptor &pD)
+        { m_portDescriptor = pD; }
+    LADSPA_PortDescriptor getDescriptor() const { return m_portDescriptor; }
+
+protected:
+    std::string           m_portName;
+    LADSPA_PortRangeHint  m_portRangeHint;
+    LADSPA_PortDescriptor m_portDescriptor;
+
+};
+
+#endif
 
 
 // MappedPluginManager locates and lists plugins and

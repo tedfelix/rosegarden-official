@@ -26,7 +26,7 @@
 #include "Instrument.h"
 #include "MappedEvent.h"
 #include "MappedInstrument.h"
-#include "MappedStudio.h"
+#include "MappedCommon.h"
 
 #ifndef _INSTRUMENTPARAMETERBOX_H_
 #define _INSTRUMENTPARAMETERBOX_H_
