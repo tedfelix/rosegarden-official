@@ -60,10 +60,6 @@ SoundFile::~SoundFile()
 std::string
 SoundFile::getBytes(std::ifstream *file, unsigned int numberOfBytes)
 {
-    std::cerr << "SoundFile::getBytes() -  " << this
-              << " reading " << numberOfBytes
-              << " bytes from stream " << file << std::endl;
-
     if (file->eof())
     {
         // Reset the input stream so it's operational again

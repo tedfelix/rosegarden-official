@@ -100,10 +100,7 @@ WAVAudioFile::open()
     }
 
     // Get the file size and store it for comparison later
-    // TODO : you can get this much faster through the m_fileInfo
-    m_inFile->seekg(0, std::ios::end);
-    m_fileSize = m_inFile->tellg();
-    m_inFile->seekg(0, std::ios::beg);
+    m_fileSize = m_fileInfo->size();
 
     try
     {
