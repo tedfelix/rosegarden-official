@@ -1,6 +1,6 @@
 <!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>RosegardenTransport</class>
-<widget class="QDialog">
+<widget class="QFrame">
     <property name="name">
         <cstring>RosegardenTransport</cstring>
     </property>

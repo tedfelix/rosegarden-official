@@ -555,7 +555,7 @@ void RosegardenGUIApp::setupActions()
     // buttons and keyboard accelerators
     //
     m_transport =
-        new Rosegarden::RosegardenTransportDialog(this, ""); //, WStyle_StaysOnTop);
+        new Rosegarden::RosegardenTransportDialog(0, "", WStyle_StaysOnTop);
     plugAccelerators(m_transport, m_transport->getAccelerators());
 
     // create main gui

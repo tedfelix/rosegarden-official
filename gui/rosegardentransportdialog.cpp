@@ -42,7 +42,7 @@ namespace Rosegarden
 RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
                                                      const char *name,
                                                      WFlags flags):
-    RosegardenTransport(parent, name, flags),
+    RosegardenTransport(parent, name/*, flags*/),
     m_lastTenHours(0),
     m_lastUnitHours(0),
     m_lastTenMinutes(0),
