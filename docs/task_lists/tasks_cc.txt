@@ -59,7 +59,10 @@ Post-0.1.1 task list
     afterwards if a position hasn't changed [DONE]
 
 15a. Optimise NotationStaff::setLines and do "the
-     positionChord thing in notationhlayout"
+     positionChord thing in notationhlayout" [DONE]
+
+16. Fix staff ruler so it's owned by the staff (and works in page mode);
+    fix bar-at-end-of-row in page mode
 
 
 

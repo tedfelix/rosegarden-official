@@ -99,6 +99,13 @@ public:
     virtual int getYSnappedToLine(int y) const = 0;
 
     /**
+     * Obtain the rectangle extents of the bar containing the given
+     * canvas point.
+     */
+    virtual void getBarExtents(int x, int y,
+			       int &rx, int &ry, int &rw, int &rh) const = 0;
+
+    /**
      * Return the note name (C4, Bb3, whatever) corresponding to the
      * given coordinates
      */

@@ -41,8 +41,6 @@
 class NotationHLayout : public Rosegarden::HorizontalLayoutEngine<NotationElement>
 {
 public:
-//     typedef Rosegarden::Staff<NotationElement> StaffType;
-    
     NotationHLayout(NotePixmapFactory &npf);
     virtual ~NotationHLayout();
 
@@ -71,6 +69,11 @@ public:
      * Lays out all staffs that have been scanned
      */
     virtual void finishLayout();
+
+    /**
+     * Set a page width
+     */
+    virtual void setPageWidth(double pageWidth) { m_pageWidth = pageWidth; }
 
     /**
      * Gets the current spacing factor (1.0 == "normal" spacing)
@@ -137,17 +140,19 @@ protected:
         NotationElementList::iterator start; // i.e. event following barline
         int x;                // coordinate for display of barline
         int idealWidth;       // theoretical width of bar following barline
-        int fixedWidth;       // minimum possible width of bar following barline
+        int fixedWidth;       // width of non-note items in bar
+	int baseWidth;        // minimum width of note items in bar
 	bool correct;         // bar preceding barline has correct duration
         bool needsLayout;
 	Rosegarden::Event *timeSignature; // or zero if no new one in this bar
 	int timeSigX;
         
         BarData(int ibarno, NotationElementList::iterator istart,
-                int ix, int iwidth, int fwidth, bool icorrect,
+                int ix, int iwidth, int fwidth, int bwidth, bool icorrect,
 		Rosegarden::Event *timesig) :
             barNo(ibarno), start(istart), x(ix), idealWidth(iwidth),
-            fixedWidth(fwidth), correct(icorrect), needsLayout(true),
+            fixedWidth(fwidth), baseWidth(bwidth), 
+	    correct(icorrect), needsLayout(true),
 	    timeSignature(timesig), timeSigX(0) { }
     };
 
@@ -163,14 +168,23 @@ protected:
     BarDataList& getBarData(StaffType &staff);
     const BarDataList& getBarData(StaffType &staff) const;
 
-    /// Tries to harmonize the bar positions for all the staves
-    void reconcileBars();
+    /// Find the staff in which bar "barNo" is widest
+    StaffType *getStaffWithWidestBar(int barNo);
+
+    /// Prepends empty fake bars onto staffs that start later than the first
+    void fillFakeBars();
+
+    /// Tries to harmonize the bar positions for all the staves (linear mode)
+    void reconcileBarsLinear();
+
+    /// Tries to harmonize the bar positions for all the staves (page mode)
+    void reconcileBarsPage();
 
     void layout(BarDataMap::iterator);
 
     void addNewBar
     (StaffType &staff, int barNo, NotationElementList::iterator start,
-     int width, int fwidth, bool correct, Rosegarden::Event *timesig);
+     int width, int fwidth, int bwidth, bool correct, Rosegarden::Event *timesig);
 
     int getIdealBarWidth
     (StaffType &staff, int fixedWidth, int baseWidth,
@@ -209,11 +223,14 @@ protected:
     int getMinWidth(NotationElement &) const;
     int getComfortableGap(Rosegarden::Note::Type type) const;
     int getBarMargin() const;
+    int getPreBarMargin() const;
+    int getPostBarMargin() const;
     int getFixedItemSpacing() const {
 	return (int)((m_npf.getNoteBodyWidth() / 5) * m_spacing);
     }
 
     double m_totalWidth;
+    double m_pageWidth;
     double m_spacing;
     NotePixmapFactory &m_npf;
 

@@ -63,14 +63,15 @@ using std::string;
 
 NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
                              unsigned int id, bool pageMode,
-			     double pageWidth, int lineBreakGap,
+			     double pageWidth, 
                              string fontName, int resolution) :
     Rosegarden::Staff<NotationElement>(*segment),
     QCanvasItemGroup(canvas),
     m_id(id),
     m_pageMode(pageMode),
     m_pageWidth(pageWidth),
-    m_lineBreakGap(lineBreakGap),
+    m_lineBreakGap(0),
+    m_connectingLineHeight(0),
     m_horizLineStart(getRowLeftX(0)),
     m_horizLineEnd(getRowRightX(0)),
     m_initialBarA(0),
@@ -108,7 +109,8 @@ NotationStaff::resizeStaffLines()
     int i;
 
     while ((int)m_staffLines.size() <= lastRow) {
-	m_staffLines.push_back(LineList());
+	m_staffLines.push_back(StaffLineList());
+	m_staffConnectingLines.push_back(0);
     }
 
     // Remove all the staff lines that precede the start of the staff
@@ -138,26 +140,6 @@ NotationStaff::resizeStaffLines()
     // now i == lastRow+1
 
     while (i < (int)m_staffLines.size()) clearStaffLineRow(i++);
-
-    //!!! should be per-row in createStaffLineRow?
-
-    delete m_initialBarA;
-    delete m_initialBarB;
-
-    // First line - thick
-    //
-    QPen pen(black, 3);
-    pen.setCapStyle(Qt::SquareCap);
-    m_initialBarA = new QCanvasLineGroupable(canvas(), this);
-    m_initialBarA->setPen(pen);
-    m_initialBarA->setPoints(0, getTopLineOffset() + 1,
-                             0, getBarLineHeight() + getTopLineOffset() - 1);
-    
-    // Second line - thin
-    //
-    m_initialBarB = new QCanvasLineGroupable(canvas(), this);
-    m_initialBarB->setPoints(4, getTopLineOffset(),
-                             4, getBarLineHeight() + getTopLineOffset());
 }
 
 
@@ -170,6 +152,9 @@ NotationStaff::clearStaffLineRow(int row)
 	delete m_staffLines[row][h];
     }
     m_staffLines[row].clear();
+
+    delete m_staffConnectingLines[row];
+    m_staffConnectingLines[row] = 0;
 }
 
 
@@ -178,13 +163,14 @@ NotationStaff::clearStaffLineRow(int row)
 void
 NotationStaff::resizeStaffLineRow(int row, double offset, double length)
 {
-    kdDebug(KDEBUG_AREA) << "NotationStaff::resizeStaffLineRow: row "
-			 << row << ", offset " << offset << ", length " 
-			 << length << ", pagewidth " << getPageWidth() << endl;
+//    kdDebug(KDEBUG_AREA) << "NotationStaff::resizeStaffLineRow: row "
+//			 << row << ", offset " << offset << ", length " 
+//			 << length << ", pagewidth " << getPageWidth() << endl;
 
 
     // If the resolution is 8 or less, we want to reduce the blackness
     // of the staff lines somewhat to make them less intrusive
+
     int level = 0;
     int z = 1;
     if (m_resolution < 6) {
@@ -194,8 +180,35 @@ NotationStaff::resizeStaffLineRow(int row, double offset, double length)
     }
     QColor lineColour(level, level, level);
 
+    QColor connectingLineColour(128, 128, 128);
+
     int h, j;
     int staffLineThickness = m_npf->getStaffLineThickness();
+
+    if (row > 0 && offset == 0.0) {
+	offset = (double)m_npf->getBarMargin() / 2;
+	length -= offset;
+    }
+
+    QCanvasLine *line;
+    double lx;
+    int ly;
+
+    delete m_staffConnectingLines[row];
+    line = 0;
+
+    if (m_connectingLineHeight > 0.1) {
+	line = new QCanvasLine(canvas());
+	lx = (int)x() + getRowLeftX(row) + offset + length - 1;
+	ly = (int)y() + getTopLineOffsetForRow(row);
+	line->setPoints(lx, ly, lx,
+			ly + getBarLineHeight() + m_connectingLineHeight);
+	line->setPen(QPen(connectingLineColour, 1));
+	line->setZ(-2);
+	line->show();
+    }
+
+    m_staffConnectingLines[row] = line;
 
     while ((int)m_staffLines[row].size() <= nbLines * staffLineThickness) {
 	m_staffLines[row].push_back(0);
@@ -207,22 +220,20 @@ NotationStaff::resizeStaffLineRow(int row, double offset, double length)
 
 	for (j = 0; j < staffLineThickness; ++j) {
 
-	    QCanvasLine *line;
-
 	    if (m_staffLines[row][lineIndex] != 0) {
 		line = m_staffLines[row][lineIndex];
 	    } else {
 		line = new QCanvasLine(canvas());
 	    }
 
-	    double lx = (int)x() + getRowLeftX(row) + offset;
-	    int ly = (int)y() + getTopOfStaffForRow(row) +
+	    lx = (int)x() + getRowLeftX(row) + offset;
+	    ly = (int)y() + getTopOfStaffForRow(row) +
 		yCoordOfHeight(2 * h) + j; //!!!
 
-	    kdDebug(KDEBUG_AREA) << "My coords: " << x() << "," << y()
-				 << "; setting line points to ("
-				 << lx << "," << ly << ") -> ("
-				 << (lx+length-1) << "," << ly << ")" << endl;
+//	    kdDebug(KDEBUG_AREA) << "My coords: " << x() << "," << y()
+//				 << "; setting line points to ("
+//				 << lx << "," << ly << ") -> ("
+//				 << (lx+length-1) << "," << ly << ")" << endl;
 
 	    line->setPoints(lx, ly, lx + length - 1, ly);
 
@@ -246,6 +257,27 @@ NotationStaff::resizeStaffLineRow(int row, double offset, double length)
 	m_staffLines[row][lineIndex] = 0;
 	++lineIndex;
     }
+/*
+    delete m_initialBarA;
+    delete m_initialBarB;
+
+    // First line - thick
+    //
+    QPen pen(black, 3);
+    pen.setCapStyle(Qt::SquareCap);
+    m_initialBarA = new QCanvasLineGroupable(canvas(), this);
+    m_initialBarA->setPen(pen);
+    m_initialBarA->setPoints(0, getTopLineOffset() + 1,
+                             0, getBarLineHeight() + getTopLineOffset() - 1);
+    m_initialBarA->show();
+    
+    // Second line - thin
+    //
+    m_initialBarB = new QCanvasLineGroupable(canvas(), this);
+    m_initialBarB->setPoints(4, getTopLineOffset(),
+                             4, getBarLineHeight() + getTopLineOffset());
+    m_initialBarB->show();
+*/
 }    
 
 
@@ -334,44 +366,71 @@ int NotationStaff::heightOfYCoord(int y) const
     }
 }
 
-static bool
-compareBarPos(QCanvasLine *barLine1, QCanvasLine *barLine2)
+bool
+NotationStaff::compareBarPos(const BarPair &barLine1, const BarPair &barLine2)
 {
-    return barLine1->x() < barLine2->x();
+    return (barLine1.first < barLine2.first);
 }
 
-static bool
-compareBarToPos(QCanvasLine *barLine1, unsigned int pos)
+bool
+NotationStaff::compareBarToPos(const BarPair &barLine1, unsigned int pos)
 {
-    return barLine1->x() < pos;
+    return (barLine1.first < pos);
 }
 
 void NotationStaff::insertBar(unsigned int barPos, bool correct)
 {
     for (int i = 0; i < m_npf->getStemThickness(); ++i) {
 
-        QCanvasLineGroupable* barLine =
+        QCanvasLineGroupable *barLine =
             new QCanvasLineGroupable(canvas(), this);
 
 	int row = getRowForLayoutX(barPos);
 
-        barLine->setPoints(0, getTopLineOffsetForRow(row),
-                           0, getBarLineHeight() + getTopLineOffsetForRow(row));
+        barLine->setPoints
+	    (0, getTopLineOffsetForRow(row),
+	     0, getBarLineHeight() + getTopLineOffsetForRow(row));
 
-        barLine->moveBy(getRowLeftX(row) + getXForLayoutX(barPos) + x() + i,
-			y());
+        barLine->moveBy
+	    (getRowLeftX(row) + getXForLayoutX(barPos) + x() + i,
+	     y());
 
         if (!correct) barLine->setPen(QPen(red, 1));
         barLine->show();
+	barLine->setZ(-1);
 
-        LineList::iterator insertPoint = lower_bound(m_barLines.begin(),
-                                                     m_barLines.end(),
-                                                     barLine, compareBarPos);
+	BarPair barPair(barPos, barLine);
+        BarLineList::iterator insertPoint = lower_bound
+	    (m_barLines.begin(), m_barLines.end(), barPair, compareBarPos);
+        m_barLines.insert(insertPoint, barPair);
 
-        m_barLines.insert(insertPoint, barLine);
+	if (m_connectingLineHeight > 0) {
+
+	    QCanvasLineGroupable *connectingLine =
+		new QCanvasLineGroupable(canvas(), this);
+	    
+	    connectingLine->setPoints
+		(0, getBarLineHeight() + getTopLineOffsetForRow(row) + 1,
+		 0, getBarLineHeight() + getTopLineOffsetForRow(row) + 1 +
+		 m_connectingLineHeight);
+	    
+	    connectingLine->moveBy
+		(getRowLeftX(row) + getXForLayoutX(barPos) + x() + i, y());
+
+	    connectingLine->setPen(QPen(QColor(160, 160, 160), 1));
+	    connectingLine->setZ(-3);
+	    connectingLine->show();
+
+	    BarPair connectingPair(barPos, connectingLine);
+	    insertPoint = lower_bound
+		(m_barLines.begin(), m_barLines.end(),
+		 connectingPair, compareBarPos);
+	    m_barLines.insert(insertPoint, connectingPair);
+	}
     }
 }
 
+//!!! Can't work with page mode
 QRect
 NotationStaff::getBarExtents(unsigned int myx)
 {
@@ -379,10 +438,10 @@ NotationStaff::getBarExtents(unsigned int myx)
 
     for (unsigned int i = 1; i < m_barLines.size(); ++i) {
 
-	if (m_barLines[i]->x() <= myx) continue;
+	if (m_barLines[i].second->x() <= myx) continue;
 	
-	rect.setX(m_barLines[i-1]->x());
-	rect.setWidth(m_barLines[i]->x() - m_barLines[i-1]->x());
+	rect.setX(m_barLines[i-1].second->x());
+	rect.setWidth(m_barLines[i].second->x() - m_barLines[i-1].second->x());
 
 	return rect;
     }
@@ -407,17 +466,19 @@ void NotationStaff::deleteBars(unsigned int fromPos)
 {
     kdDebug(KDEBUG_AREA) << "NotationStaff::deleteBars from " << fromPos << endl;
 
-    LineList::iterator startDeletePoint =
+    BarLineList::iterator startDeletePoint =
         lower_bound(m_barLines.begin(), m_barLines.end(),
                     fromPos, compareBarToPos);
 
     if (startDeletePoint != m_barLines.end())
         kdDebug(KDEBUG_AREA) << "startDeletePoint pos : "
-                             << (*startDeletePoint)->x() << endl;
+                             << (*startDeletePoint).first << endl;
 
     // delete the canvas lines
-    for (LineList::iterator i = startDeletePoint; i != m_barLines.end(); ++i)
-        delete (*i);
+    for (BarLineList::iterator i = startDeletePoint;
+	 i != m_barLines.end(); ++i) {
+	delete i->second;
+    }
 
     m_barLines.erase(startDeletePoint, m_barLines.end());
 }
@@ -426,8 +487,10 @@ void NotationStaff::deleteBars()
 {
     kdDebug(KDEBUG_AREA) << "NotationStaff::deleteBars()\n";
     
-    for (LineList::iterator i = m_barLines.begin(); i != m_barLines.end(); ++i)
-        delete (*i);
+    for (BarLineList::iterator i = m_barLines.begin();
+	 i != m_barLines.end(); ++i) {
+        delete i->second;
+    }
 
     m_barLines.clear();
 }
@@ -481,6 +544,7 @@ void NotationStaff::setLines(double xfrom, double xto, bool sizeCanvas)
     PRINT_ELAPSED("NotationStaff::setLines");
 }
 
+//!!! page mode
 void NotationStaff::getClefAndKeyAtX(int myx, Clef &clef,
 				     Rosegarden::Key &key) const
 {
@@ -672,12 +736,22 @@ NotationStaff::positionElements(timeT from, timeT to)
 bool
 NotationStaff::elementNotMoved(NotationElement *elt)
 {
+    if (!elt->getCanvasItem()) return false;
+
+    double xoff, yoff;
+    getPageOffsets(elt, xoff, yoff);
+
     bool ok =
-	((elt->getCanvasItem()) &&
-	 (int)(elt->getCanvasItem()->x()) == (int)(elt->getLayoutX() + x()) &&
-	 (int)(elt->getCanvasItem()->y()) == (int)(elt->getLayoutY() + y()));
+	(int)(elt->getCanvasItem()->x()) == (int)(elt->getLayoutX() + xoff) &&
+	(int)(elt->getCanvasItem()->y()) == (int)(elt->getLayoutY() + yoff);
     cerr << "elementNotMoved: elt at " << elt->getAbsoluteTime() <<
 	", ok is " << ok << endl;
+    if (!ok) {
+	cerr << "(cf " << (int)(elt->getCanvasItem()->x()) << " vs "
+	     << (int)(elt->getLayoutX() + xoff) << ", "
+	     << (int)(elt->getCanvasItem()->y()) << " vs "
+	     << (int)(elt->getLayoutY() + yoff) << ")" << endl;
+    }
     return ok;
 }
 

@@ -163,28 +163,28 @@ public:
     // the nastier they are, the better, for now, 'cos it'll
     // help remind me to deal with them.)   --cc
 
-    NotationStaff *getStaffAtY(int y) const {
+   virtual  NotationStaff *getStaffAtY(int y) const {
 	int i = ((NotationView *)this)->findClosestStaff(y);
 	return (i >= 0 ? m_staffs[i] : 0);
     }
 
-    int getHeightAtY(int y) const {
+    virtual int getHeightAtY(int y) const {
 	int i = ((NotationView *)this)->findClosestStaff(y);
 	return (i >= 0 ? m_staffs[i]->heightOfYCoord(y - m_staffs[i]->y()) : -1000); //!!!
     }
 
-    Rosegarden::timeT getTimeAtCoordinates(int x, int y) const {
+    virtual Rosegarden::timeT getTimeAtCoordinates(int x, int y) const {
 	//!!! this is currently unused
 	return 0;
     }
 
-    int getYOfHeightAtTime(Rosegarden::Staff<NotationElement> *staff,
+    virtual int getYOfHeightAtTime(Rosegarden::Staff<NotationElement> *staff,
 			   int height, Rosegarden::timeT time) const {
 	NotationStaff *ns(dynamic_cast<NotationStaff *>(staff));
 	return (int)(ns->yCoordOfHeight(height) + ns->y());
     }
 
-    int getYSnappedToLine(int y) const {
+    virtual int getYSnappedToLine(int y) const {
 	int i = ((NotationView *)this)->findClosestStaff(y);
 	if (i < 0) return y;
 	return (int)(m_staffs[i]->yCoordOfHeight(m_staffs[i]->heightOfYCoord
@@ -192,7 +192,18 @@ public:
 		     m_staffs[i]->y());
     }
 
-    std::string getNoteNameAtCoordinates(int x, int y) const;	
+    virtual void getBarExtents(int x, int y, 
+			       int &rx, int &ry, int &rw, int &rh) const {
+	int i = ((NotationView *)this)->findClosestStaff(y);
+	if (i < 0) return;
+	QRect extents = m_staffs[i]->getBarExtents(x);
+	rx = extents.x();
+	ry = extents.y();
+	rw = extents.width();
+	rh = extents.height();
+    }
+
+    virtual std::string getNoteNameAtCoordinates(int x, int y) const;	
     
 
 

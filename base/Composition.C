@@ -171,7 +171,7 @@ Composition::addNewBar(timeT time, int barNo) const
 void
 Composition::calculateBarPositions() const
 {
-    std::cerr << "Composition::calculateBarPositions" << std::endl;
+//    std::cerr << "Composition::calculateBarPositions" << std::endl;
 
     if (!m_barPositionsNeedCalculating) return;
 
@@ -212,7 +212,7 @@ Composition::calculateBarPositions() const
 	t.erase(baritrs[j]);
     }
 
-    std::cerr << "have " << t.size() << " non-bars in ref segment" << std::endl;
+//    std::cerr << "have " << t.size() << " non-bars in ref segment" << std::endl;
 
     bool segment0isTimeSig = true;
     if (segments.size() == 0 || segments[0] != 0) {
@@ -263,8 +263,8 @@ Composition::getBarNumber(timeT t, bool truncate) const
 {
     calculateBarPositions();
 
-//    std::cerr << "Composition::getBarNumber: time is " << t
-//	      << " (my duration is " << getDuration() << ")" << endl;
+    std::cerr << "Composition::getBarNumber: time is " << t
+	      << " (my duration is " << getDuration() << ")" << endl;
 
     Segment::iterator i = m_referenceSegment.findTime(t);
     long n = 0;
@@ -293,14 +293,9 @@ Composition::getBarNumber(timeT t, bool truncate) const
 	n += slack;
     }
 
-//    std::cerr << "Composition::getBarNumber: returning " << n << endl;
+    std::cerr << "Composition::getBarNumber: returning " << n << endl;
 
     return (int)n;
-    
-//    int n = distance(m_referenceSegment.begin(), i);
-//    if (i != m_referenceSegment.end() && (*i)->getAbsoluteTime() == t) return n;
-//    else if (n > 0) return n - 1;
-//    else return n;
 }
 
 timeT

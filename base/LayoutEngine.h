@@ -87,6 +87,20 @@ public:
     typedef Staff<T> StaffType;
 
     /**
+     * Sets a page width for the layout.
+     *
+     * A layout implementation does not have to use this.  Some might
+     * use it (for example) to ensure that bar lines fall precisely at
+     * the right-hand margin of each page.  The computed x-coordinates
+     * will still require to be wrapped into lines by the staff or
+     * view implementation, however.
+     *
+     * A width of zero indicates no requirement for division into
+     * pages.
+     */
+    virtual void setPageWidth(double) { /* default: ignore it */ }
+
+    /**
      * Returns the total length of all elements once layout is done.
      * This is the x-coord of the end of the last element on the
      * longest staff
@@ -125,6 +139,14 @@ public:
      */
     virtual bool isBarLineCorrect(StaffType &, unsigned int) {
         return true;
+    }
+
+    /**
+     * Returns true if the specified bar line is at the very start
+     * of a row, in a page view (may mean different visual treatment)
+     */
+    virtual bool isBarLineAtRowStart(StaffType &, unsigned int) {
+        return false;
     }
 };
 

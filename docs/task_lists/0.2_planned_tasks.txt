@@ -116,6 +116,9 @@ Basis for later features
     get independent contributors to work on I/O -- although I can
     imagine doing the basic Lilypond stuff myself if need be)
 
+7a. ETF import.  See http://www.cs.uu.nl/~hanwen/lily-devel/etf.html
+    and various sample files available at http://www.cpdl.org
+
 8.  Brahms file I/O -- I'd ideally like to see export as well as
     import, if only as a matter of goodwill.  The Brahms file
     format is XML and looks straightforward.

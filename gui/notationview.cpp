@@ -171,7 +171,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new NotationStaff(canvas(), segments[i], i,
-					     false, width() - 50, 100,
+					     false, width() - 50,
                                              m_fontName, m_fontSize));
 	staffHeights.push_back(m_staffs[i]->getStaffHeight());
 	totalHeight += staffHeights[i];
@@ -179,7 +179,12 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
 
     int h = 0;
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	m_staffs[i]->setLineBreakGap(totalHeight);
+	m_staffs[i]->setLineBreakGap(totalHeight + staffHeights[i] / 7);
+	if (i < m_staffs.size() - 1) {
+	    m_staffs[i]->setConnectingLineHeight
+		(m_staffs[i]->getTopLineOffset() +
+		 m_staffs[i+1]->getTopLineOffset());
+	}
         m_staffs[i]->move(20, h + 45);
         m_staffs[i]->show();
 	h += staffHeights[i];
@@ -451,12 +456,13 @@ void NotationView::setupActions()
 
     // View menu
     KRadioAction *linearModeAction = new KRadioAction
-	(i18n("Linear View"), 0, this, SLOT(slotLinearMode()),
+	(i18n("Linear Layout"), 0, this, SLOT(slotLinearMode()),
 	 actionCollection(), "linear_mode");
     linearModeAction->setExclusiveGroup("layoutMode");
+    linearModeAction->setChecked(true);
 
     KRadioAction *pageModeAction = new KRadioAction
-	(i18n("Page View"), 0, this, SLOT(slotPageMode()),
+	(i18n("Page Layout"), 0, this, SLOT(slotPageMode()),
 	 actionCollection(), "page_mode");
     pageModeAction->setExclusiveGroup("layoutMode");
 
@@ -884,6 +890,8 @@ NotationView::changeFont(string newName, int newSize)
 void
 NotationView::setPageMode(bool pageMode)
 {
+    m_hlayout->setPageWidth(pageMode ? (width() - 50) : 0.0);
+    
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 //        m_staffs[i]->move(0, 0);
         m_staffs[i]->setPageWidth(width() - 50);

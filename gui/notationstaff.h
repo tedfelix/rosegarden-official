@@ -54,16 +54,13 @@ class NotationStaff : public Rosegarden::Staff<NotationElement>,
 		      public QCanvasItemGroup
 {
 public:
-    typedef std::vector<QCanvasLine *> LineList;
-    typedef std::vector<LineList> LineListList;
-    typedef std::set<QCanvasSimpleSprite *> SpriteSet;
-    
+
     /**
      * Creates a new NotationStaff for the specified Segment
      * \a id is the id of the staff in the NotationView
      */
     NotationStaff(QCanvas *, Rosegarden::Segment *, unsigned int id,
-		  bool pageMode, double pageWidth, int lineBreakGap,
+		  bool pageMode, double pageWidth,
                   std::string fontName, int resolution);
     ~NotationStaff();
 
@@ -79,6 +76,7 @@ public:
     void setPageMode(bool pageMode) { m_pageMode = pageMode; }
     void setPageWidth(double pageWidth) { m_pageWidth = pageWidth; }
     void setLineBreakGap(int lineBreakGap) { m_lineBreakGap = lineBreakGap; }
+    void setConnectingLineHeight(int clh) { m_connectingLineHeight = clh; }
 
     /**
      * Gets a read-only reference to the pixmap factory used by the
@@ -286,6 +284,7 @@ protected:
     bool m_pageMode;
     double m_pageWidth;
     int m_lineBreakGap;
+    int m_connectingLineHeight;
 
     double m_horizLineStart;
     double m_horizLineEnd;
@@ -307,8 +306,18 @@ protected:
     void   getPageOffsets(NotationElement *,
 			  double &xoff, double &yoff);
 
-    LineList m_barLines;
-    LineListList m_staffLines;
+    typedef std::pair<int, QCanvasLine *> BarPair;
+    typedef std::vector<BarPair> BarLineList;
+    BarLineList m_barLines;
+    static bool compareBarPos(const BarPair &, const BarPair &);
+    static bool compareBarToPos(const BarPair &, unsigned int);
+
+    typedef std::vector<QCanvasLine *> StaffLineList;
+    typedef std::vector<StaffLineList> StaffLineListList;
+    StaffLineListList m_staffLines;
+    StaffLineList m_staffConnectingLines;
+
+    typedef std::set<QCanvasSimpleSprite *> SpriteSet;
     SpriteSet m_timeSigs;
 
     typedef std::pair<int, Rosegarden::Clef> ClefChange;
