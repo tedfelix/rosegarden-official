@@ -279,6 +279,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     // All toolbars should be created before this is called
     setAutoSaveSettings("NotationView", true);
+    // All rulers must have been created before this is called,
+    // or the program will crash
     readOptions();
 
 
