@@ -361,8 +361,9 @@ private:
     Segment(const Segment &);
     Segment &operator=(const Segment &);
 
-    unsigned int m_audioFileID; // audio file ID (see AudioFileManager)
     SegmentType m_type;         // identifies Segment type
+
+    unsigned int m_audioFileID; // audio file ID (see AudioFileManager)
 
     timeT m_audioStartIdx;      // how far into m_audioFileID our Segment starts
     timeT m_audioEndIdx;        // how far into m_audioFileID our Segment ends

@@ -44,7 +44,9 @@ Segment::Segment(SegmentType segmentType, timeT startIdx) :
     m_id(0),
     m_composition(0),
     m_type(segmentType),
-    m_audioFileID(0)
+    m_audioFileID(0),
+    m_audioStartIdx(0),
+    m_audioEndIdx(0)
 {
     // nothing
 }
