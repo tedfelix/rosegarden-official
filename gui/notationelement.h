@@ -30,6 +30,7 @@ class NotationElementList;
 
 class NotationElement : public ViewElement
 {
+
 public:
     NotationElement(Event *event);
 
@@ -62,6 +63,14 @@ protected:
     QCanvasItem *m_canvasItem;
 };
 
+class kdbgstream;
+#ifndef NDEBUG
+kdbgstream& operator<<(kdbgstream&, NotationElement&);
+#else
+inline kndgstream& operator<<(kdbgstream &e, NotationElement&)
+{ return e; }
+#endif
+
 class NotationElementCmp
 {
 public:
@@ -77,6 +86,14 @@ public:
     NotationElementList() : multiset<NotationElement*, NotationElementCmp>() {};
     ~NotationElementList();
 };
+
+#ifndef NDEBUG
+kdbgstream& operator<<(kdbgstream&, NotationElementList&);
+#else
+inline kndgstream& operator<<(kdbgstream &e, NotationElementList&)
+{ return e; }
+#endif
+
 
 // inline bool operator<(NotationElement &e1, NotationElement &e2)
 // {

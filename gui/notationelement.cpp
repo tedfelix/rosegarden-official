@@ -19,7 +19,12 @@
 
 #include "viewelementsmanager.h"
 #include "notationelement.h"
+
+#ifndef NDEBUG
+#include <iostream>
 #include "rosedebug.h"
+#include "Element2.h"
+#endif
 
 NotationElement::NotationElement(Event *event)
     : ViewElement(event),
@@ -79,3 +84,27 @@ NotationElementList::~NotationElementList()
         delete (*i);
     }
 }
+
+#ifndef NDEBUG
+kdbgstream& operator<<(kdbgstream &dbg, NotationElement &e)
+{
+    if (e.isGroup()) {
+        dbg << "Group NotationElement" << endl;
+    } else {
+        dbg << "NotationElement - x : " << e.x() << " - y : " << e.y();
+        e.event()->dump(cerr);
+    }
+
+    return dbg;
+}
+
+kdbgstream& operator<<(kdbgstream &dbg, NotationElementList &l)
+{
+    for(NotationElementList::const_iterator i = l.begin();
+        i != l.end(); ++i) {
+        dbg << *(*i) << endl;
+    }
+
+    return dbg;
+}
+#endif
