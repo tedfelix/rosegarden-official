@@ -912,22 +912,9 @@ void NotationView::noteClicked(int height, const QPoint &eventPos,
 {
     if (deleteMode() && el) {
 
-        Rosegarden::Key key;
-        Clef clef;
-
-        int clickPitch = Rosegarden::NotationDisplayPitch(height, NoAccidental).
-            getPerformancePitch(clef, key);
-
-        long eventPitch = 0;
-        el->event()->get<Int>("pitch", eventPitch);
-        
-        kdDebug(KDEBUG_AREA) << "NotationView::noteClicked() : clickPitch = "
-                             << clickPitch << ", eventPitch = "
-                             << eventPitch << endl;
-
         deleteNote(el);
 
-    } else {
+    } else if (!deleteNote()) {
 
         Rosegarden::Key key;
         Clef clef;
@@ -986,7 +973,7 @@ void NotationView::deleteNote(NotationElement* element)
 
     }
     
-    if (needLayout)
+    if (needLayout) // TODO : be more subtle
         redoLayout(m_notationElements->begin());
 }
 

@@ -115,11 +115,34 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
     QCanvasItemList::Iterator it;
     QCanvasNotationSprite *sprite = 0;
 
+    // Get the pitch were the click occurred
+    Rosegarden::Key key;
+    Rosegarden::Clef clef;
+
+    int clickPitch = Rosegarden::NotationDisplayPitch(m_currentHighlightedLine->getHeight(), Rosegarden::NoAccidental).
+        getPerformancePitch(clef, key);
+
     for (it = itemList.begin(); it != itemList.end(); ++it) {
 
         QCanvasItem *item = *it;
-        if ((sprite = dynamic_cast<QCanvasNotationSprite*>(item)))
-            break;
+        if ((sprite = dynamic_cast<QCanvasNotationSprite*>(item))) {
+            NotationElement &el = sprite->getNotationElement();
+
+            if (el.isNote()) { // make sure we get the right note
+
+                using Rosegarden::Int;
+                long eventPitch = 0;
+                el.event()->get<Int>("pitch", eventPitch);
+                if (eventPitch == clickPitch) break;
+
+            } else { // it's not a note, so we don't care about checking the pitch
+
+                break;
+
+            }
+            
+        }
+        
     }
 
     if (sprite)
