@@ -194,8 +194,16 @@ PeakFile::write(Progress *progress, unsigned short updatePercentage)
     // Attempt to open AudioFile so that we can extract sample data
     // for preview file generation
     //
-    if (!m_audioFile->open())
+    try
+    {
+        if (!m_audioFile->open())
+            return false;
+    }
+    catch(std::string e)
+    {
+        std::cerr << "PeakFile::write - \"" << e << "\"" << std::endl;
         return false;
+    }
 
     // create and test that we've made it
     m_outFile = new std::ofstream(m_fileName.c_str(),

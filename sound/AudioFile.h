@@ -156,8 +156,7 @@ public:
 
     // Return the modification timestamp
     //
-    QDateTime getModificationDateTime()
-        { return m_fileInfo->lastModified(); }
+    QDateTime getModificationDateTime();
 
     // Implement in actual file type
     //

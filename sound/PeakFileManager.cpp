@@ -58,7 +58,7 @@ PeakFileManager::~PeakFileManager()
 }
 
 // Inserts PeakFile based on AudioFile if it doesn't already exist
-void
+bool
 PeakFileManager::insertAudioFile(AudioFile *audioFile)
 {
     std::vector<PeakFile*>::iterator it;
@@ -66,16 +66,18 @@ PeakFileManager::insertAudioFile(AudioFile *audioFile)
     for (it = m_peakFiles.begin(); it != m_peakFiles.end(); it++)
     {
         if ((*it)->getAudioFile()->getId() == audioFile->getId())
-            return;
+            return false;
     }
 
     // insert
     m_peakFiles.push_back(new PeakFile(audioFile));
+
+    return true;
 }
 
 // Removes peak file from PeakFileManager - doesn't affect audioFile
 //
-void
+bool
 PeakFileManager::removeAudioFile(AudioFile *audioFile)
 {
     std::vector<PeakFile*>::iterator it;
@@ -85,9 +87,11 @@ PeakFileManager::removeAudioFile(AudioFile *audioFile)
         if ((*it)->getAudioFile()->getId() == audioFile->getId())
         {
             m_peakFiles.erase(it);
-            return;
+            return true;
         }
     }
+
+    return false;
 }
 
 // Auto-insert PeakFile into manager if it doesn't already exist
@@ -108,11 +112,10 @@ PeakFileManager::getPeakFile(AudioFile *audioFile)
         //
         if (ptr == 0)
         {
-            insertAudioFile(audioFile);
-            for (it = m_peakFiles.begin(); it != m_peakFiles.end(); it++)
-                if ((*it)->getAudioFile()->getId() == audioFile->getId())
-                    ptr = *it;
-
+            // Insert - if we fail we return as empty
+            //
+            if (insertAudioFile(audioFile) == false)
+                return 0;
         }
     }
 
@@ -125,8 +128,6 @@ PeakFileManager::getPeakFile(AudioFile *audioFile)
 bool
 PeakFileManager::hasValidPeaks(AudioFile *audioFile)
 {
-    bool rV = true;
-
     if (audioFile->getType() == WAV)
     {
         // Check external peak file
@@ -140,11 +141,11 @@ PeakFileManager::hasValidPeaks(AudioFile *audioFile)
         }
         // If it doesn't open and parse correctly
         if (peakFile->open() == false)
-            rV = false;
+            return false;
 
         // or if the data is old or invalid
         if (peakFile->isValid() == false)
-            rV = false;
+            return false;
 
     }
     else if (audioFile->getType() == BWF)
@@ -155,10 +156,10 @@ PeakFileManager::hasValidPeaks(AudioFile *audioFile)
     {
         std::cout << "PeakFileManager::hasValidPeaks - unsupported file type"
                   << std::endl;
-        rV = false;
+        return false;
     }
 
-    return rV;
+    return true;
 
 }
 
@@ -346,4 +347,17 @@ PeakFileManager::getPreview(AudioFile *audioFile,
     return rV;
 }
 
+void
+PeakFileManager::clear()
+{
+    std::vector<PeakFile*>::iterator it;
+
+    for (it = m_peakFiles.begin(); it != m_peakFiles.end(); it++)
+        delete (*it);
+
+    m_peakFiles.erase(m_peakFiles.begin(), m_peakFiles.end());
 }
+
+}
+
+

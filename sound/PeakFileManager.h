@@ -88,13 +88,17 @@ public:
                                   const RealTime &startIndex,
                                   const RealTime &endIndex,
                                   int width); // width in floats
+
+    // Clear down
+    //
+    void clear();
                     
 protected:
 
     // Add and remove from our PeakFile cache
     //
-    void insertAudioFile(AudioFile *audioFile);
-    void removeAudioFile(AudioFile *audioFile);
+    bool insertAudioFile(AudioFile *audioFile);
+    bool removeAudioFile(AudioFile *audioFile);
     PeakFile* getPeakFile(AudioFile *audioFile);
 
     std::vector<PeakFile*> m_peakFiles;

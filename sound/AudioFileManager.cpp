@@ -53,6 +53,7 @@ AudioFileManager::AudioFileManager()
 AudioFileManager::~AudioFileManager()
 {
     clear();
+    m_peakManager.clear();
 }
 
 // Add a file from an absolute path

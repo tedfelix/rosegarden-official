@@ -376,9 +376,9 @@ AudioManagerDialog::generateEnvelopePixmap(QPixmap *pixmap, AudioFile *aF)
                    */
 
     m_audioFileManager->
-        drawPreview(dynamic_cast<Rosegarden::WAVAudioFile*>(aF)->getId(),
+        drawPreview(aF->getId(),
                     RealTime(0, 0),
-                    dynamic_cast<Rosegarden::WAVAudioFile*>(aF)->getLength(),
+                    aF->getLength(),
                     pixmap);
 
 }

@@ -58,8 +58,15 @@ AudioFile::AudioFile(const std::string &fileName,
 
 AudioFile::~AudioFile()
 {
-    delete m_fileInfo;
 }
+
+QDateTime
+AudioFile::getModificationDateTime()
+{
+    if (m_fileInfo)
+        return m_fileInfo->lastModified();
+}
+
 
 }
 
