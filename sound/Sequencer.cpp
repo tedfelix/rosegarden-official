@@ -695,10 +695,6 @@ Sequencer::initialisePlayback(const Rosegarden::RealTime &position)
     m_artsPlayStartTime.usec = 0;
     m_playStartPosition = position;
 
-    // reset the wav player object
-    //
-    m_amanPlay.stop();
-    m_amanPlay.start();
 }
 
 // Used when looping or jumping to a particular part of the piece
