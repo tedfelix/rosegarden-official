@@ -230,6 +230,7 @@ Event *Clef::getAsEvent(timeT absoluteTime) const
 {
     Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
     e->set<String>(ClefPropertyName, m_clef);
+    e->set<Int>(OctaveOffsetPropertyName, m_octaveOffset);
     return e;
 }
 

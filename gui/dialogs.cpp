@@ -2044,10 +2044,27 @@ ClefDialog::slotClefDown()
 void
 ClefDialog::redrawClefPixmap()
 {
-    QPixmap pmap = NotePixmapFactory::toQPixmap(m_notePixmapFactory->makeClefDisplayPixmap(m_clef));
+    QPixmap pmap = NotePixmapFactory::toQPixmap
+	(m_notePixmapFactory->makeClefDisplayPixmap(m_clef));
     m_clefLabel->setPixmap(pmap);
-    QString name(strtoqstr(m_clef.getClefType()));
-    name = name.left(1).upper() + name.right(name.length() - 1);
+
+    QString name;
+    int octave = m_clef.getOctaveOffset();
+
+    switch (octave) {
+    case -1: name = "%1 down an octave"; break;
+    case -2: name = "%1 down two octaves"; break;
+    case  1: name = "%1 up an octave"; break;
+    case  2: name = "%1 up two octaves"; break;
+    default: name = "%1"; break;
+    }
+
+    std::string type = m_clef.getClefType();
+    if (type == Rosegarden::Clef::Treble) name = name.arg(i18n("Treble"));
+    else if (type == Rosegarden::Clef::Alto) name = name.arg(i18n("Alto"));
+    else if (type == Rosegarden::Clef::Tenor) name = name.arg(i18n("Tenor"));
+    else if (type == Rosegarden::Clef::Bass) name = name.arg(i18n("Bass"));
+
     m_clefNameLabel->setText(name);
 }
 

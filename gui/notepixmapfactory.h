@@ -147,7 +147,7 @@ public:
 
     QCanvasPixmap* makeNotePixmap(const NotePixmapParameters &parameters);
     QCanvasPixmap* makeRestPixmap(const NotePixmapParameters &parameters);
-    QCanvasPixmap* makeClefPixmap(const Rosegarden::Clef &clef) const;
+    QCanvasPixmap* makeClefPixmap(const Rosegarden::Clef &clef);
     QCanvasPixmap* makeKeyPixmap(const Rosegarden::Key &key,
 				const Rosegarden::Clef &clef);
     QCanvasPixmap* makeTimeSigPixmap(const Rosegarden::TimeSignature& sig);

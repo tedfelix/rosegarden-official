@@ -212,15 +212,19 @@ ClefInsertionCommand::~ClefInsertionCommand()
 }
 
 QString
-ClefInsertionCommand::getGlobalName(Rosegarden::Clef *clef) 
+ClefInsertionCommand::getGlobalName(Rosegarden::Clef *) 
 {
+/* doesn't handle octave offset -- leave it for now
     if (clef) {
 	QString name(strtoqstr(clef->getClefType()));
 	name = name.left(1).upper() + name.right(name.length()-1);
 	return i18n("Change to %1 Cle&f...").arg(name);
     } else {
+*/
 	return i18n("Add Cle&f Change...");
+/*
     }
+*/
 }
 
 timeT

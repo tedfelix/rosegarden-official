@@ -1219,7 +1219,7 @@ NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params)
 
 
 QCanvasPixmap*
-NotePixmapFactory::makeClefPixmap(const Clef &clef) const
+NotePixmapFactory::makeClefPixmap(const Clef &clef)
 {
     QCanvasPixmap *plainMap = 0;
 
@@ -1232,14 +1232,39 @@ NotePixmapFactory::makeClefPixmap(const Clef &clef) const
 	plainMap = m_font->getCanvasPixmap(m_style->getClefCharName(clef));
     }
 
-    if (clef.getOctaveOffset() == 0) return plainMap;
+    int oct = clef.getOctaveOffset();
+    if (oct == 0) return plainMap;
 
     QFont octaveFont("times");
+    QFontMetrics octaveFontMetrics(octaveFont);
+    QString text = QString("%1").arg(8 * (oct < 0 ? -oct : oct));
+    QRect rect = octaveFontMetrics.boundingRect(text);
     
+    createPixmapAndMask(plainMap->width(),
+			plainMap->height() + rect.height());
 
-    //!!! finish!
-    return plainMap;
+    if (m_selected) {
+	m_p.setPen(RosegardenGUIColours::SelectedElement);
+    }
+	
+    m_p.drawPixmap(0, oct < 0 ? 0 : rect.height(), *plainMap);
+    m_pm.drawPixmap(0, oct < 0 ? 0 : rect.height(), *(plainMap->mask()));
 
+    m_p.setFont(octaveFont);
+    m_pm.setFont(octaveFont);
+
+    m_p.drawText(plainMap->width()/2 - rect.width()/2,
+		 oct < 0 ? plainMap->height() + rect.height() - 1 :
+		                                rect.height(), text);
+    m_pm.drawText(plainMap->width()/2 - rect.width()/2,
+		  oct < 0 ? plainMap->height() + rect.height() - 1 :
+		                                 rect.height(), text);
+
+    m_p.setPen(Qt::black);
+    QPoint hotspot(plainMap->offsetX(), plainMap->offsetY());
+    if (oct > 0) hotspot.setY(hotspot.y() + rect.height());
+    delete plainMap;
+    return makeCanvasPixmap(hotspot);
 }
 
 QCanvasPixmap*
@@ -1342,22 +1367,21 @@ NotePixmapFactory::makeKeyPixmap(const Key &key, const Clef &clef)
 QCanvasPixmap*
 NotePixmapFactory::makeClefDisplayPixmap(const Clef &clef)
 {
-    QCanvasPixmap* clefPixmap = m_font->getCanvasPixmap
-			     (m_style->getClefCharName(clef));
+    QCanvasPixmap* clefPixmap = makeClefPixmap(clef);
 
     int lw = getLineSpacing();
     int width = clefPixmap->width() + 6 * getNoteBodyWidth();
 
-    createPixmapAndMask(width, lw * 8 + 1);
+    createPixmapAndMask(width, lw * 9 + 1);
 
     int h = clef.getAxisHeight();
-    int y = (lw * 2) + ((8 - h) * lw) / 2;
+    int y = (lw * 3) + ((8 - h) * lw) / 2;
     int x = 3 * getNoteBodyWidth();
     m_p.drawPixmap(x, y - clefPixmap->offsetY(), *clefPixmap);
     m_pm.drawPixmap(x, y - clefPixmap->offsetY(), *(clefPixmap->mask()));
 
     for (h = 0; h <= 8; h += 2) {
-        y = (lw * 2) + ((8 - h) * lw) / 2;
+        y = (lw * 3) + ((8 - h) * lw) / 2;
 	m_p.drawLine(x/2, y, m_generatedPixmap->width() - x/2 - 1, y);
 	m_pm.drawLine(x/2, y, m_generatedPixmap->width() - x/2 - 1, y);
     }
@@ -1523,7 +1547,7 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
     bool havePixmap = false;
     QPoint topLeft, bottomRight, hotspot;
 
-    bool smooth = m_font->getNoteFontMap().isSmooth();
+    bool smooth = m_font->getNoteFontMap().isSmooth() && thickness > 3;
 
     if (smooth) thickness += 2;
 
