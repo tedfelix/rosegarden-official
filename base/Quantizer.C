@@ -74,7 +74,61 @@ Quantizer::getUnitQuantizedDuration(Event *e) const
 void
 Quantizer::quantizeByNote(Track::iterator from, Track::iterator to) const
 {
-    for ( ; from != to; ++from) quantizeByNote(*from);
+//    for ( ; from != to; ++from) quantizeByNote(*from);
+
+    timeT excess = 0;
+
+    for ( ; from != to; ++from) {
+
+	timeT duration = quantizeByUnit(*from);
+
+	//!!! Obviously too much duplication here at the moment
+
+/*!!! I think we should move much of this stuff up into
+ quantizeByUnit, and do the excess sums using un-quantized values as a
+ lot of the problem is with MIDI files where notes are "inaccurate" to
+ degrees smaller than the note resolution.
+
+ Then we need to find a way to tell the renderer to omit altogether
+ any events with a quantized duration of zero.
+
+ We could also use a "fixNoteQuantizedValues" type of function that
+ could be used explicitly by a user to state that (across a particular
+ selection) they want quantized values to be saved as the normal ones,
+ with the file.
+
+ What about the distinction between quantizing starts of notes versus
+ note durations?
+*/
+
+	if ((*from)->isa(Note::EventType)) {
+
+	    timeT prev = duration;
+	    Note note(requantizeByNote(duration));
+	    (*from)->setMaybe<Int>(m_noteDurationProperty, duration);
+	    (*from)->setMaybe<Int>(Note::NoteType, note.getNoteType());
+	    (*from)->setMaybe<Int>(Note::NoteDots, note.getDots());
+	    excess = duration - prev;
+
+	} else if ((*from)->isa(Note::EventRestType)) {
+
+	    if (excess > duration) {
+		
+		(*from)->setMaybe<Int>(m_noteDurationProperty, 0);
+		excess -= duration;
+
+	    } else {
+
+		if (excess != 0) duration -= excess;
+
+		Note note(requantizeByNote(duration));
+		(*from)->setMaybe<Int>(m_noteDurationProperty, duration);
+		(*from)->setMaybe<Int>(Note::NoteType, note.getNoteType());
+		(*from)->setMaybe<Int>(Note::NoteDots, note.getDots());
+
+	    }
+	}
+    }
 }
 
 

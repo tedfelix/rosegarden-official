@@ -40,9 +40,9 @@ using std::endl;
 
 NoteFontMap::NoteFontMap(string name) :
     m_name(name),
+    m_smooth(false),
     m_characterDestination(0),
-    m_hotspotCharName(""),
-    m_smooth(false)
+    m_hotspotCharName("")
 {
     m_fontDirectory = KGlobal::dirs()->findResource("appdata", "pixmaps/");
 
@@ -690,10 +690,10 @@ NoteFont::recolour(QPixmap in, PixmapColour colour) const
                     cerr << "NoteFont::recolour: Not a greyscale pixmap "
                          << "(found rgb value " << pixel.red() << ","
                          << pixel.green() << "," << pixel.blue() 
-                         << "), ignoring coloured pixels" << endl;
+                         << "), hoping for the best" << endl;
                     warned = true;
                 }
-                continue;
+//                continue;
             }
 
             image.setPixel

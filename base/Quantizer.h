@@ -204,6 +204,7 @@ public:
 
 protected:
     Note requantizeByNote(timeT &unitQuantizedDuration) const;
+    void requantizeByNote(Event *event) const;
 
     int m_unit;
     int m_maxDots;

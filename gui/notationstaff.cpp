@@ -359,7 +359,9 @@ bool NotationStaff::showElements(NotationElementList::iterator from,
 		    } else {
 			(*it)->event()->unset(SELECTED);
 		    }
-		}			
+		} else {
+		    needNewSprite = false;
+		}
 
 		if (inNewSelection) needBlueSprite = true;
 	    }
@@ -385,7 +387,7 @@ bool NotationStaff::showElements(NotationElementList::iterator from,
             if ((*it)->isNote()) {
 
                 sprite = makeNoteSprite(it);
-              pixmap = (QCanvasPixmap *)0;    // to supress warning only
+		pixmap = (QCanvasPixmap *)0;    // to suppress warning only
 
             } else if ((*it)->isRest()) {
 
@@ -426,6 +428,8 @@ bool NotationStaff::showElements(NotationElementList::iterator from,
             //
             if (sprite) {
                 (*it)->setCanvasItem(sprite, x(), y());
+		if (needBlueSprite) sprite->setZ(2);
+		else sprite->setZ(0);
                 sprite->show();
             }
             

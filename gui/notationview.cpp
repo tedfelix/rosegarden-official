@@ -1905,6 +1905,10 @@ void NotationSelector::handleMouseMove(QMouseEvent* e)
     int w = int(e->x() - m_selectionRect->x());
     int h = int(e->y() - m_selectionRect->y());
 
+    // Qt rectangle dimensions appear to be 1-based
+    if (w > 0) ++w; else --w;
+    if (h > 0) ++h; else --h;
+
     m_selectionRect->setSize(w,h);
 
     m_parentView.canvas()->update();
@@ -1932,8 +1936,13 @@ EventSelection* NotationSelector::getSelection()
     //
     if (!m_selectionRect->visible()) return 0;
 
-    if(m_selectionRect->width() < 2 &&
-       m_selectionRect->height() < 2) return 0;
+//    kdDebug(KDEBUG_AREA) << "Selection x,y: " << m_selectionRect->x() << ","
+//			 << m_selectionRect->y() << "; w,h: " << m_selectionRect->width() << "," << m_selectionRect->height() << endl;
+
+    if (m_selectionRect->width()  > -2 &&
+	m_selectionRect->width()  <  2 &&
+        m_selectionRect->height() > -2 &&
+        m_selectionRect->height() <  2) return 0;
 
     //!!! TODO: get the right staff
     Track& originalTrack = m_parentView.getStaff(0)->getTrack();
@@ -1941,8 +1950,26 @@ EventSelection* NotationSelector::getSelection()
     EventSelection* selection = new EventSelection(originalTrack);
 
     QCanvasItemList itemList = m_selectionRect->collisions(true);
-
     QCanvasItemList::Iterator it;
+
+    // The QRect returned by rect() appears to be pretty useless for
+    // our purposes if width or height is negative, which rather loses
+    // much of the point of using it
+
+    int x = m_selectionRect->x(),
+	y = m_selectionRect->y(),
+	w = m_selectionRect->width(),
+	h = m_selectionRect->height();
+    
+    if (w < 0) {
+	x += w;
+	w = -w;
+    }
+    if (h < 0) {
+	y += h;
+	h = -h;
+    }
+    QRect rect(x, y, w, h);
 
     for (it = itemList.begin(); it != itemList.end(); ++it) {
 
@@ -1951,9 +1978,12 @@ EventSelection* NotationSelector::getSelection()
         
         if ((sprite = dynamic_cast<QCanvasNotationSprite*>(item))) {
 
-            if (!m_selectionRect->rect().contains(int(item->x()),
-                                                  int(item->y()), true)) {
+            if (!rect.contains(int(item->x()), int(item->y()), true)) {
 //                 kdDebug(KDEBUG_AREA) << "Skipping item not really in selection rect\n";
+//		 kdDebug(KDEBUG_AREA) << "Rect: x,y: " << rect.x() << ","
+//				      << rect.y() << "; w,h: " << rect.width()
+//				      << "," << rect.height() << " / Item: x,y: "
+//				      << item->x() << "," << item->y() << endl;
                 continue;
             }
 
@@ -1973,6 +2003,10 @@ EventSelection* NotationSelector::getSelection()
 void NotationSelector::setViewCurrentSelection()
 {
     EventSelection* selection = getSelection();
+
+    //!!! Actually, shouldn't we clear the parent's selection if we've
+    // just dragged an invalid selection?  Highly counterintuitive otherwise
+
     if (selection)
         m_parentView.setCurrentSelection(selection);
 }
