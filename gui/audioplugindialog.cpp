@@ -92,7 +92,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     QGroupBox *pluginSelectionBox = new QGroupBox
 	(1, Horizontal, i18n("Plugin"), vbox);
 
-    makePluginParamsBox(vbox);
+    makePluginParamsBox(vbox, 0);
 
     m_pluginCategoryBox = new QHBox(pluginSelectionBox);
     new QLabel(i18n("Category:"), m_pluginCategoryBox);
@@ -245,13 +245,18 @@ AudioPluginDialog::populatePluginList()
 }
 
 void
-AudioPluginDialog::makePluginParamsBox(QWidget *parent)
+AudioPluginDialog::makePluginParamsBox(QWidget *parent, int portCount)
 {
     m_pluginParamsBox = new QFrame(parent);
 
+    int columns = 2;
+    if (portCount > 24) {
+	columns = (portCount-1) / 12 + 1;
+    }
+
     m_gridLayout = new QGridLayout(m_pluginParamsBox,
                                    1,  // rows (will expand)
-                                   8,  // columns
+                                   columns * 4,
                                    5); // margin
 
     m_gridLayout->setColStretch(3, 2);
@@ -305,7 +310,15 @@ AudioPluginDialog::slotPluginSelected(int i)
     m_pluginWidgets.clear(); // The widgets are deleted with the parameter box
     m_programCombo = 0;
 
-    makePluginParamsBox(parent);
+    int portCount = 0;
+    if (plugin) {
+        for (PortIterator it = plugin->begin(); it != plugin->end(); ++it) {
+            if (((*it)->getType() & PluginPort::Control) &&
+		((*it)->getType() & PluginPort::Input)) ++portCount;
+	}
+    }
+
+    makePluginParamsBox(parent, portCount);
 
     AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
     if (!inst) return;
@@ -319,7 +332,8 @@ AudioPluginDialog::slotPluginSelected(int i)
 	m_gridLayout->addMultiCellWidget(programLabel,
 					 0, 0, 0, 0, Qt::AlignRight);
 	m_gridLayout->addMultiCellWidget(m_programCombo,
-					 0, 0, 1, 7, Qt::AlignLeft);
+					 0, 0, 1, m_gridLayout->numCols()-1,
+					 Qt::AlignLeft);
 	connect(m_programCombo, SIGNAL(activated(const QString &)),
 		this, SLOT(slotPluginProgramChanged(const QString &)));
     }
@@ -347,14 +361,8 @@ AudioPluginDialog::slotPluginSelected(int i)
         int count = 0;
 	int ins = 0, outs = 0;
 
-        //!!! if we've got more than 10 control ports then opt for a slider
-        // model so they fit on the screen?
-
         for (; it != plugin->end(); ++it)
         {
-            // Weed out non-control ports and those which have erroneous
-            // looking bounds - uninitialised values?
-            //
             if (((*it)->getType() & PluginPort::Control) &&
 		((*it)->getType() & PluginPort::Input))
             {
