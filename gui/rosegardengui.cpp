@@ -711,7 +711,8 @@ void RosegardenGUIApp::setupActions()
     //
     // Studio menu
     //
-    new KAction(i18n("Audio Mi&xer"), 0, this,
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/mixer.xpm"));
+    new KAction(i18n("Audio Mi&xer"), icon, 0, this,
 		SLOT(slotOpenMixer()),
 		actionCollection(), "audio_mixer");
 

@@ -154,6 +154,7 @@
         <Action name="edit_matrix"/>
         <Action name="edit_notation"/>
         <Action name="edit_event_list"/>
+        <Action name="audio_mixer"/>
         <Action name="quantize_selection"/>
 </ToolBar>
 
