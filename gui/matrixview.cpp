@@ -1,4 +1,4 @@
-
+// -*- c-basic-offset: 4 -*-
 
 /*
     Rosegarden-4
@@ -25,6 +25,7 @@
 #include <qlabel.h>
 #include <qhbox.h>
 #include <qslider.h>
+#include <qtimer.h>
 #include <qinputdialog.h>
 
 #include <kapp.h>
@@ -1212,6 +1213,7 @@ void MatrixView::slotKeyPressed(unsigned int y, bool repeating)
 
 }
 
+
 void MatrixView::slotKeySelected(unsigned int y, bool repeating)
 {
     getCanvasView()->slotScrollVertSmallSteps(y);
@@ -1232,18 +1234,16 @@ void MatrixView::slotKeySelected(unsigned int y, bool repeating)
 
     EventSelection *s = new EventSelection(segment);
 
-    // slow, but we'll leave it like this unless we decide it's
-    // just too slow
+    for (Rosegarden::Segment::iterator i = segment.begin();
+	 segment.isBeforeEndMarker(i); ++i) {
 
-    for (int p = std::min(m_firstNote, evPitch);
-	     p < std::max(m_firstNote, evPitch);
-	 ++p) {
-	for (Rosegarden::Segment::iterator i = segment.begin();
-	     segment.isBeforeEndMarker(i); ++i) {
-	    if ((*i)->isa(Rosegarden::Note::EventType) &&
-		(*i)->has(Rosegarden::BaseProperties::PITCH) &&
-		(*i)->get<Rosegarden::Int>
-		(Rosegarden::BaseProperties::PITCH) == p) {
+	if ((*i)->isa(Rosegarden::Note::EventType) &&
+	    (*i)->has(Rosegarden::BaseProperties::PITCH)) {
+
+	    Rosegarden::MidiByte p = (*i)->get<Rosegarden::Int>
+		(Rosegarden::BaseProperties::PITCH);
+	    if (p >= std::min(m_firstNote, evPitch) &&
+		p <= std::max(m_firstNote, evPitch)) {
 		s->addEvent(*i);
 	    }
 	}
@@ -1256,10 +1256,7 @@ void MatrixView::slotKeySelected(unsigned int y, bool repeating)
 
     setCurrentSelection(s, false);
 
-    // now play the note as well -- twice, to distinguish the fact
-    // that we're selecting
-    //!!! playing twice doesn't work; clearly the call I'm using
-    // doesn't handle that (hardly surprising I guess)
+    // now play the note as well
 
     Rosegarden::Composition &comp = m_document->getComposition();
     Rosegarden::Studio &studio = m_document->getStudio();
@@ -1272,32 +1269,19 @@ void MatrixView::slotKeySelected(unsigned int y, bool repeating)
     if (ins == 0)
         return;
 
-    // Send out two notes of just shy of 1/3 second duration at
-    // 1/3 second intervals approx
+    // Send out note of half second duration
     //
     try
     {
-        Rosegarden::MappedComposition mC;
-
-	mC.insert(new Rosegarden::MappedEvent
-		  (ins->getId(),
-		   Rosegarden::MappedEvent::MidiNoteOneShot,
-		   evPitch,
-		   Rosegarden::MidiMaxValue,
-		   Rosegarden::RealTime(0, 0),
-		   Rosegarden::RealTime(0, 250000),
-		   Rosegarden::RealTime(0, 0)));
-
-	mC.insert(new Rosegarden::MappedEvent
-		  (ins->getId(),
-		   Rosegarden::MappedEvent::MidiNoteOneShot,
-		   evPitch,
-		   Rosegarden::MidiMaxValue,
-		   Rosegarden::RealTime(0, 330000),
-		   Rosegarden::RealTime(0, 250000),
-		   Rosegarden::RealTime(0, 0)));
-	
-        Rosegarden::StudioControl::sendMappedComposition(mC);
+        Rosegarden::MappedEvent *mE = 
+          new Rosegarden::MappedEvent(ins->getId(),
+                                      Rosegarden::MappedEvent::MidiNoteOneShot,
+                                      evPitch,
+                                      Rosegarden::MidiMaxValue,
+                                      Rosegarden::RealTime(0, 0),
+                                      Rosegarden::RealTime(0, 500000),
+                                      Rosegarden::RealTime(0, 0));
+        Rosegarden::StudioControl::sendMappedEvent(mE);
     }
     catch(...) {;}
 }

@@ -483,6 +483,21 @@ protected:
     QWidget *m_tempoRuler;
 
     bool m_documentDestroyed; // bit of a hack, as in NotationView
+
+    class NoteSender : public QObject
+    {
+	Q_OBJECT
+	
+    public:
+	NoteSender(int i, int p) : m_insid(i), m_pitch(p) { }
+	virtual ~NoteSender();
+	
+    public slots:
+        void sendNote();
+    
+    private:
+	int m_insid, m_pitch;
+    };
 };
 
 #endif
