@@ -129,7 +129,7 @@ convertPitchToName(int pitch, bool isFlatKeySignature)
     if (isFlatKeySignature &&
 	(pitch == 1 || pitch == 4 ||
 	 pitch == 6 || pitch == 9 || pitch == 11)) {
-	pitch += 2;
+	pitch++;
     }
     pitch = pitch % 12;
 
