@@ -25,6 +25,8 @@
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kfiledialog.h>
+#include <kio/job.h>
+#include <kio/netaccess.h>
 #include <kmenubar.h>
 #include <klocale.h>
 #include <kconfig.h>
@@ -40,10 +42,12 @@
 
 
 RosegardenGUIApp::RosegardenGUIApp()
-    : KMainWindow(0)
+    : KMainWindow(0),
+      m_config(kapp->config()),
+      m_fileRecent(0),
+      m_view(0),
+      m_doc(0)
 {
-    config=kapp->config();
-
     ///////////////////////////////////////////////////////////////////
     // call inits to invoke all other construction parts
     setupActions();
@@ -52,17 +56,17 @@ RosegardenGUIApp::RosegardenGUIApp()
     initDocument();
     initView();
 	
-//     readOptions();
+    readOptions();
 
-    ///////////////////////////////////////////////////////////////////
-    // disable menu and toolbar items at startup
-    disableCommand(ID_FILE_SAVE);
-    disableCommand(ID_FILE_SAVE_AS);
-    disableCommand(ID_FILE_PRINT);
+//     ///////////////////////////////////////////////////////////////////
+//     // disable menu and toolbar items at startup
+//     disableCommand(ID_FILE_SAVE);
+//     disableCommand(ID_FILE_SAVE_AS);
+//     disableCommand(ID_FILE_PRINT);
  	
-    disableCommand(ID_EDIT_CUT);
-    disableCommand(ID_EDIT_COPY);
-    disableCommand(ID_EDIT_PASTE);
+//     disableCommand(ID_EDIT_CUT);
+//     disableCommand(ID_EDIT_COPY);
+//     disableCommand(ID_EDIT_PASTE);
 }
 
 RosegardenGUIApp::~RosegardenGUIApp()
@@ -119,8 +123,8 @@ void RosegardenGUIApp::initStatusBar()
 
 void RosegardenGUIApp::initDocument()
 {
-    doc = new RosegardenGUIDoc(this);
-    doc->newDocument();
+    m_doc = new RosegardenGUIDoc(this);
+    m_doc->newDocument();
 }
 
 void RosegardenGUIApp::initView()
@@ -131,10 +135,10 @@ void RosegardenGUIApp::initView()
 
     kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::initView()" << endl;
 
-    view = new RosegardenGUIView(this);
-    doc->addView(view);
-    setCentralWidget(view);	
-    setCaption(doc->getTitle());
+    m_view = new RosegardenGUIView(this);
+    m_doc->addView(m_view);
+    setCentralWidget(m_view);	
+    setCaption(m_doc->getTitle());
 
 }
 
@@ -161,81 +165,119 @@ void RosegardenGUIApp::openDocumentFile(const char* _cmdl)
     kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::openDocumentFile("
                          << _cmdl << ")" << endl;
 
-    doc->openDocument(_cmdl);
+    m_doc->saveIfModified();
+    m_doc->closeDocument();
+    m_doc->openDocument(_cmdl);
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 
     initView();
 }
 
+int RosegardenGUIApp::openFile(const QString& url, int mode)
+{
+
+    setCaption(url);
+    KURL *u = new KURL( url );
+
+    if (u->isMalformed()) {
+        KMessageBox::sorry(this, i18n("This is not a valid filename.\n"));
+        return RETRY;
+    }
+
+    if (!u->isLocalFile()) {
+        KMessageBox::sorry(this, i18n("This is not a local file.\n"));
+        return RETRY;
+    }
+
+    QFileInfo info(u->path());
+
+    if (!info.exists()) {
+        KMessageBox::sorry(this, i18n("The specified file does not exist"));
+        return RETRY;
+    }
+
+    if (info.isDir()) {
+        KMessageBox::sorry(this, i18n("You have specified a directory"));
+        return RETRY;
+    }
+
+    QFile file(u->path());
+
+    if (!file.open(IO_ReadOnly)) {
+        KMessageBox::sorry(this, i18n("You do not have read permission to this file."));
+        return RETRY;
+    }
+
+    m_doc->closeDocument();
+    m_doc->openDocument(u->path());
+
+    return OK;
+}
+
 
 RosegardenGUIDoc *RosegardenGUIApp::getDocument() const
 {
-    return doc;
+    return m_doc;
 }
 
 void RosegardenGUIApp::saveOptions()
 {	
-    config->setGroup("General Options");
-    config->writeEntry("Geometry", size());
-    config->writeEntry("Show Toolbar", toolBar()->isVisible());
-    config->writeEntry("Show Statusbar",statusBar()->isVisible());
-    config->writeEntry("ToolBarPos", (int) toolBar()->barPos());
-//     config->writeEntry("Recent Files", recentFiles);
+    m_config->setGroup("General Options");
+    m_config->writeEntry("Geometry", size());
+    m_config->writeEntry("Show Toolbar", toolBar()->isVisible());
+    m_config->writeEntry("Show Statusbar",statusBar()->isVisible());
+    m_config->writeEntry("ToolBarPos", (int) toolBar()->barPos());
+
+    m_fileRecent->saveEntries(m_config);
 }
 
 
 void RosegardenGUIApp::readOptions()
 {
 	
-//     config->setGroup("General Options");
+    m_config->setGroup("General Options");
 
-//     // bar status settings
-//     bool bViewToolbar = config->readBoolEntry("Show Toolbar", true);
-//     viewMenu->setItemChecked(ID_VIEW_TOOLBAR, bViewToolbar);
-
-//     if(!bViewToolbar) {
-//         KMessageBox::sorry(0, "Need to re-implement toolbar hide");
-//         // enableToolBar(KToolBar::Hide);
+//     bool viewStatusbar = m_config->readBoolEntry("Show Statusbar", true);
+//     if(viewStatusbar) {
+//         enableStatusBar(KStatusBar::Hide);
+//     } else {
+//         enableStatusBar(KStatusBar::Show);
 //     }
-	
-//     bool bViewStatusbar = config->readBoolEntry("Show Statusbar", true);
-//     viewMenu->setItemChecked(ID_VIEW_STATUSBAR, bViewStatusbar);
-//     if(!bViewStatusbar) {
-//         KMessageBox::sorry(0, "Need to re-implement statusbar hide");
-//         // enableStatusBar(KStatusBar::Hide);
+
+//     bool viewToolbar = m_config->readBoolEntry("Show Toolbar", true);
+//     if(viewToolbar) {
+//         enableToolBar(KToolBar::Hide);
+//     } else {
+//         enableToolBar(KToolBar::Show);
 //     }
 
 //     // bar position settings
 //     KToolBar::BarPosition toolBarPos;
-//     toolBarPos=(KToolBar::BarPosition) config->readNumEntry("ToolBarPos", KToolBar::Top);
+//     toolBarPos=(KToolBar::BarPosition) m_config->readNumEntry("ToolBarPos", KToolBar::Top);
 //     toolBar()->setBarPos(toolBarPos);
 	
-//     // initialize the recent file list
-//     recentFiles.setAutoDelete(TRUE);
-//     config->readListEntry("Recent Files", recentFiles);
-	
-//     for (int i=0; i < (int) recentFiles.count(); i++) {
-//         recentFilesMenu->insertItem(recentFiles.at(i), i);
-//     }
+    // initialize the recent file list
+    //
+    m_fileRecent->loadEntries(m_config);
 
-//     QSize size=config->readSizeEntry("Geometry");
+    QSize size(m_config->readSizeEntry("Geometry"));
 
-//     if(!size.isEmpty()) {
-//         resize(size);
-//     }
+    if(!size.isEmpty()) {
+        resize(size);
+    }
 }
 
 void RosegardenGUIApp::saveProperties(KConfig *_cfg)
 {
-    if(doc->getTitle()!=i18n("Untitled") && !doc->isModified()) {
+    if (m_doc->getTitle()!=i18n("Untitled") && !m_doc->isModified()) {
         // saving to tempfile not necessary
     } else {
-        QString filename=doc->getAbsFilePath();	
+        QString filename=m_doc->getAbsFilePath();	
         _cfg->writeEntry("filename", filename);
-        _cfg->writeEntry("modified", doc->isModified());
+        _cfg->writeEntry("modified", m_doc->isModified());
 		
         QString tempname = kapp->tempSaveName(filename);
-        doc->saveDocument(tempname);
+        m_doc->saveDocument(tempname);
     }
 }
 
@@ -244,32 +286,32 @@ void RosegardenGUIApp::readProperties(KConfig* _cfg)
 {
     QString filename = _cfg->readEntry("filename", "");
     bool modified = _cfg->readBoolEntry("modified", false);
-    if(modified)
-        {
+
+    if (modified) {
             bool canRecover;
             QString tempname = kapp->checkRecoverFile(filename, canRecover);
   	
-            if(canRecover) {
-                doc->openDocument(tempname);
-                doc->setModified();
+            if (canRecover) {
+                m_doc->openDocument(tempname);
+                m_doc->setModified();
                 QFileInfo info(filename);
-                doc->setAbsFilePath(info.absFilePath());
-                doc->setTitle(info.fileName());
+                m_doc->setAbsFilePath(info.absFilePath());
+                m_doc->setTitle(info.fileName());
                 QFile::remove(tempname);
             }
         } else {
-            if(!filename.isEmpty()) {
-                doc->openDocument(filename);
+            if (!filename.isEmpty()) {
+                m_doc->openDocument(filename);
             }
         }
 
     QString caption=kapp->caption();	
-    setCaption(caption+": "+doc->getTitle());
+    setCaption(caption+": "+m_doc->getTitle());
 }		
 
 bool RosegardenGUIApp::queryClose()
 {
-    return doc->saveModified();
+    return m_doc->saveIfModified();
 }
 
 bool RosegardenGUIApp::queryExit()
@@ -282,6 +324,8 @@ bool RosegardenGUIApp::queryExit()
 // SLOT IMPLEMENTATION
 /////////////////////////////////////////////////////////////////////
 
+// Not connected to anything at the moment
+//
 void RosegardenGUIApp::slotFileNewWindow()
 {
     slotStatusMsg(i18n("Opening a new application window..."));
@@ -296,40 +340,76 @@ void RosegardenGUIApp::slotFileNew()
 {
     slotStatusMsg(i18n("Creating new document..."));
 
-    if(!doc->saveModified()) {
+    if (!m_doc->saveIfModified()) {
         // here saving wasn't successful
 
     } else {	
-        doc->newDocument();		
+        m_doc->newDocument();		
 
         QString caption=kapp->caption();	
-        setCaption(caption+": "+doc->getTitle());
+        setCaption(caption+": "+m_doc->getTitle());
     }
 
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+}
+
+int RosegardenGUIApp::openURL(const KURL& url, int mode)
+{
+    QString netFile = url.url();
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::openURL: " << netFile << endl;
+
+    if (url.isMalformed()) {
+        QString string;
+        string = i18n( "Malformed URL\n%1").arg(netFile);
+
+        KMessageBox::sorry(this, string);
+        return USER_ERROR;
+    }
+
+    QString target;
+
+    if (KIO::NetAccess::download(url, target) == false) {
+        KMessageBox::error(this, i18n("Cannot download file!"));
+        return OS_ERROR;
+    }
+
+    int result = openFile(target, 0);
+    if (result == OK) {
+        setCaption(url.path());
+        m_fileRecent->addURL(url);
+        //         setGeneralStatusField(i18n("Done"));
+    }
+
+    return OK;
 }
 
 void RosegardenGUIApp::slotFileOpen()
 {
     slotStatusMsg(i18n("Opening file..."));
 
-    kdDebug(KDEBUG_AREA) << "slotFileOpen()" << endl;
-	
-//     if(!doc->saveModified()) {
-//         // here saving wasn't successful
-//     } else {	
-//         QString fileToOpen=KFileDialog::getOpenFileName(QDir::homeDirPath(),
-//                                                         i18n("*.xml"),
-//                                                         this, i18n("Open File..."));
-//         if(!fileToOpen.isEmpty()) {
-//             doc->closeDocument();
-//             doc->openDocument(fileToOpen);
-//             QString caption=kapp->caption();	
-//             setCaption(caption+": "+doc->getTitle());
-//             m_fileRecent->addFile(fileToOpen);
-//         }
-//     }
+    while( 1 ) {
 
+        KURL url = KFileDialog::getOpenURL(QString::null, "*.xml", this,
+                                           i18n("Open File"));
+        if ( url.isEmpty() ) { return; }
+
+        QString tmpfile;
+        KIO::NetAccess::download( url, tmpfile );
+        int result = openFile( tmpfile, 0 );
+        KIO::NetAccess::removeTempFile( tmpfile );
+
+        if (result == OK) {
+
+            setCaption(url.path());
+            m_fileRecent->addURL( url );
+//             setGeneralStatusField(i18n("Done"));
+//             statusbar_slot();
+            break;
+
+        } else if (result == RETRY) {
+        }
+    }
+    
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 
     initView();
@@ -337,9 +417,9 @@ void RosegardenGUIApp::slotFileOpen()
 
 void RosegardenGUIApp::slotFileOpenRecent(const KURL &url)
 {
-//     slotStatusMsg(i18n("Opening file..."));
+    slotStatusMsg(i18n("Opening file..."));
 	
-//     if(!doc->saveModified()) {
+//     if (!doc->saveIfModified()) {
 //         // here saving wasn't successful
 //     } else {
 //         doc->closeDocument();
@@ -348,19 +428,18 @@ void RosegardenGUIApp::slotFileOpenRecent(const KURL &url)
 //         setCaption(caption+": "+doc->getTitle());
 //     }
 
-//     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
-
 //     initView();
 
-    kdDebug(KDEBUG_AREA) << "slotFileOpenRecent()" << endl;
-    //openURL(url);
+    openURL(url, 0);
+
+    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
 void RosegardenGUIApp::slotFileSave()
 {
     slotStatusMsg(i18n("Saving file..."));
 	
-    doc->saveDocument(doc->getAbsFilePath());
+    m_doc->saveDocument(m_doc->getAbsFilePath());
 
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 }
@@ -373,16 +452,16 @@ void RosegardenGUIApp::slotFileSaveAs()
 
 //     QString newName=KFileDialog::getSaveFileName(QDir::currentDirPath(),
 //                                                  i18n("*.xml"), this, i18n("Save as..."));
-//     if(!newName.isEmpty())
+//     if (!newName.isEmpty())
 //         {
 //             QFileInfo saveAsInfo(newName);
-//             doc->setTitle(saveAsInfo.fileName());
-//             doc->setAbsFilePath(saveAsInfo.absFilePath());
-//             doc->saveDocument(newName);
+//             m_doc->setTitle(saveAsInfo.fileName());
+//             m_doc->setAbsFilePath(saveAsInfo.absFilePath());
+//             m_doc->saveDocument(newName);
 //             m_fileRecent->addFile(newName);
 
 //             QString caption=kapp->caption();	
-//             setCaption(caption+": "+doc->getTitle());
+//             setCaption(caption+": "+m_doc->getTitle());
 //         }
 
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
@@ -403,7 +482,7 @@ void RosegardenGUIApp::slotFilePrint()
     QPrinter printer;
 
     if (printer.setup(this)) {
-        view->print(&printer);
+        m_view->print(&printer);
     }
 
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
@@ -416,12 +495,12 @@ void RosegardenGUIApp::slotFileQuit()
     // close the first window, the list makes the next one the first again.
     // This ensures that queryClose() is called on each window to ask for closing
     KMainWindow* w;
-    if(memberList) {
+    if (memberList) {
 
         for(w=memberList->first(); w!=0; w=memberList->first()) {
-            // only close the window if the closeEvent is accepted. If the user presses Cancel on the saveModified() dialog,
+            // only close the window if the closeEvent is accepted. If the user presses Cancel on the saveIfModified() dialog,
             // the window and the application stay open.
-            if(!w->close())
+            if (!w->close())
                 break;
         }
     }	

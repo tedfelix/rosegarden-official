@@ -60,6 +60,20 @@ class RosegardenGUIApp : public KMainWindow
   friend class RosegardenGUIView;
 
   public:
+
+    enum { OK,
+	   OS_ERROR,
+           USER_ERROR,
+	   USER_CANCEL,
+	   RETRY,
+	   NOPERMISSIONS
+    };
+
+    enum { OPEN_READWRITE 	= 1,
+	   OPEN_READONLY 	= 2,
+	   OPEN_INSERT 		= 4 };
+
+
     /** construtor of RosegardenGUIApp, calls all init functions to create the application.
      * @see initMenuBar initToolBar
      */
@@ -80,6 +94,15 @@ class RosegardenGUIApp : public KMainWindow
      */	
     RosegardenGUIDoc *getDocument() const; 	
 
+    /** open a file
+     */
+    int openFile(const QString& url, int mode);
+
+    /**
+     * Works like openFile but is able to open remote files
+     */
+    int openURL(const KURL& url, int mode);
+    
   protected:
     /** save general Options like all bar positions and status as well as the geometry and the recent file list to the configuration
      * file
@@ -203,12 +226,13 @@ class RosegardenGUIApp : public KMainWindow
      */
     void slotStatusHelpMsg(const QString &text);
 
-  private:
+private:
+
     /** contains the recently used filenames */
 //     QStrList recentFiles;
 
     /** the configuration object of the application */
-    KConfig *config;
+    KConfig* m_config;
     /** the key accelerator container */
 //     KAccel *keyAccel;
 
@@ -218,14 +242,14 @@ class RosegardenGUIApp : public KMainWindow
      * changing the view class.
      */
 
-    KRecentFilesAction *m_fileRecent;
+    KRecentFilesAction* m_fileRecent;
 
 
-    RosegardenGUIView *view;
+    RosegardenGUIView* m_view;
     /** doc represents your actual document and is created only once. It keeps
      * information such as filename and does the serialization of your files.
      */
-    RosegardenGUIDoc *doc;
+    RosegardenGUIDoc* m_doc;
 
 };
  
