@@ -416,7 +416,7 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 
     } else { // we are not, so create one
 
-        int gx = m_canvas->grid().snapX(e->pos().x()),
+        int gx = m_canvas->grid().snappedSegmentSizeX(e->pos().x()),
             gy = m_canvas->grid().snapY(e->pos().y());
 
         m_currentItem = new SegmentItem(gx, gy,
@@ -725,10 +725,18 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
         {
             if (m_currentItem->isSelected())
             {
-                m_currentItem->setX(m_canvas->grid().snapX(e->pos().x()));
-                m_currentItem->setY(m_canvas->grid().snapY(e->pos().y()));
-                m_canvas->canvas()->update();
-                emit updateSegmentTrackAndStartIndex(m_currentItem);
+                list<SegmentItem*>::iterator it;
+
+                for (it = m_selectedItems.begin();
+                     it != m_selectedItems.end();
+                     it++)
+                {
+
+                    (*it)->setX(m_canvas->grid().snapX(e->pos().x()));
+                    (*it)->setY(m_canvas->grid().snapY(e->pos().y()));
+                    m_canvas->canvas()->update();
+                    emit updateSegmentTrackAndStartIndex(*it);
+                }
             }
         }
     }

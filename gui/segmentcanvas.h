@@ -153,10 +153,17 @@ public:
     {
     public:
         SnapGrid(unsigned int hstep, unsigned int vstep)
-            : m_hstep(hstep), m_vstep(vstep)
+            : m_hstep(hstep), m_vstep(vstep), m_hdiv(hstep / 1) // disabled
         {}
 
-        int snapX(int x) const { return x / m_hstep * m_hstep; }
+        // We provide two methods for getting X snap - one for
+        // actual new Segment size (as provided by m_hstep) -
+        // and one to allow us to change the X snap division
+        // (to allow for smaller than m_hstep movement)
+        //
+        int snappedSegmentSizeX(int x) const { return x / m_hstep * m_hstep; }
+
+        int snapX(int x) const { return x / m_hdiv * m_hdiv; }
         int snapY(int y) const { return y / m_vstep * m_vstep; }
 
         unsigned int hstep() const { return m_hstep; }
@@ -165,7 +172,9 @@ public:
     protected:
         unsigned int m_hstep;
         unsigned int m_vstep;
+        unsigned int m_hdiv;
     };
+
 
     const SnapGrid& grid() const { return m_grid; }
 
