@@ -236,6 +236,7 @@ public slots:
     void slotSelectAttack(float index);
     void slotSelectRelease(float index);
 
+    void slotActivatePercussion(bool value);
     void slotActivateProgramChange(bool value);
     void slotActivateBank(bool value);
     void slotActivateVariation(bool value);

@@ -108,8 +108,8 @@ public:
     typedef std::vector<Rosegarden::MidiProgram> MidiProgramContainer;
     typedef std::vector<Rosegarden::MidiBank>    MidiBankContainer;
     
-    int ensureUniqueMSB(bool percussion, int msb, bool ascending);
-    int ensureUniqueLSB(bool percussion, int lsb, bool ascending);
+    int ensureUniqueMSB(int msb, bool ascending);
+    int ensureUniqueLSB(int lsb, bool ascending);
 
     // Does the banklist contain this combination already?
     //
@@ -139,9 +139,9 @@ public slots:
 
     // Check that any new MSB/LSB combination is unique for this device
     //
-//!!!    void slotNewPercussion(bool percussion);
     void slotNewMSB(int value);
     void slotNewLSB(int value);
+    void slotNewPercussion(); // gets value from checkbox
 
     void slotProgramChanged(const QString&);
 

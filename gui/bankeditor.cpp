@@ -208,6 +208,8 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
     gridLayout->addWidget(new QLabel(i18n("Percussion"), m_mainFrame),
                           1, 0, AlignLeft);
     gridLayout->addWidget(m_percussion, 1, 1, AlignLeft);
+    connect(m_percussion, SIGNAL(clicked()),
+	    this, SLOT(slotNewPercussion()));
 
     gridLayout->addWidget(new QLabel(i18n("MSB Value"), m_mainFrame),
                           2, 0, AlignLeft);
@@ -441,6 +443,20 @@ MidiProgramsEditor::resetMSBLSB()
 
 
 void
+MidiProgramsEditor::slotNewPercussion()
+{
+    RG_DEBUG << "MidiProgramsEditor::slotNewPercussion" << endl;
+    bool percussion = m_percussion->isChecked();
+    m_percussion->blockSignals(true);
+    if (banklistContains(MidiBank(percussion, m_msb->value(), m_lsb->value()))) {
+	RG_DEBUG << "MidiProgramsEditor::slotNewPercussion: calling setChecked(" << !percussion << ")" << endl;
+	m_percussion->setChecked(!percussion);
+    }
+    m_percussion->blockSignals(false);
+    m_bankEditor->setModified(true);
+}
+
+void
 MidiProgramsEditor::slotNewMSB(int value)
 {
     RG_DEBUG << "MidiProgramsEditor::slotNewMSB(" << value << ")\n";
@@ -451,17 +467,16 @@ MidiProgramsEditor::slotNewMSB(int value)
 
     try
         {
-            msb = ensureUniqueMSB(getCurrentBank()->isPercussion(),
-				  value, value > getCurrentBank()->getMSB());
+            msb = ensureUniqueMSB(value, value > getCurrentBank()->getMSB());
         }
     catch(bool)
         {
             msb = getCurrentBank()->getMSB();
         }
 
-    MidiBank newBank(getCurrentBank()->isPercussion(),
+    MidiBank newBank(m_percussion->isChecked(),
 		     msb,
-		     getCurrentBank()->getLSB());
+		     m_lsb->value());
 
     modifyCurrentPrograms(*getCurrentBank(), newBank);
 
@@ -484,16 +499,15 @@ MidiProgramsEditor::slotNewLSB(int value)
 
     try
         {
-            lsb = ensureUniqueLSB(getCurrentBank()->isPercussion(),
-				  value, value > getCurrentBank()->getLSB());
+            lsb = ensureUniqueLSB(value, value > getCurrentBank()->getLSB());
         }
     catch(bool)
         {
             lsb = getCurrentBank()->getLSB();
         }
 
-    MidiBank newBank(getCurrentBank()->isPercussion(),
-		     getCurrentBank()->getMSB(),
+    MidiBank newBank(m_percussion->isChecked(),
+		     m_msb->value(),
 		     lsb);
 
     modifyCurrentPrograms(*getCurrentBank(), newBank);
@@ -589,10 +603,11 @@ MidiProgramsEditor::slotProgramChanged(const QString& programName)
 }
 
 int
-MidiProgramsEditor::ensureUniqueMSB(bool percussion, int msb, bool ascending)
+MidiProgramsEditor::ensureUniqueMSB(int msb, bool ascending)
 {
     int newMSB = msb;
-    while (banklistContains(MidiBank(percussion, newMSB, m_lsb->value()))
+    while (banklistContains(MidiBank(m_percussion->isChecked(),
+				     newMSB, m_lsb->value()))
            && newMSB < 128
            && newMSB > -1)
         if (ascending) newMSB++;
@@ -605,10 +620,11 @@ MidiProgramsEditor::ensureUniqueMSB(bool percussion, int msb, bool ascending)
 }
 
 int
-MidiProgramsEditor::ensureUniqueLSB(bool percussion, int lsb, bool ascending)
+MidiProgramsEditor::ensureUniqueLSB(int lsb, bool ascending)
 {
     int newLSB = lsb;
-    while (banklistContains(MidiBank(percussion, m_msb->value(), newLSB))
+    while (banklistContains(MidiBank(m_percussion->isChecked(),
+				     m_msb->value(), newLSB))
            && newLSB < 128
            && newLSB > -1)
         if (ascending) newLSB++;

@@ -218,238 +218,6 @@ InstrumentParameterBox::setSolo(bool value)
 }
 
 
-void
-MIDIInstrumentParameterPanel::slotActivateProgramChange(bool value)
-{
-    if (m_selectedInstrument == 0)
-    {
-        m_programCheckBox->setChecked(false);
-        emit updateAllBoxes();
-        return;
-    }
-
-    m_selectedInstrument->setSendProgramChange(value);
-    m_programValue->setDisabled(!value);
-    populateProgramList();
-
-    Rosegarden::MappedEvent *mE = 
-     new Rosegarden::MappedEvent(m_selectedInstrument->getId(),
-                                 Rosegarden::MappedEvent::MidiProgramChange,
-                                 m_selectedInstrument->getProgramChange(),
-                                 (Rosegarden::MidiByte)0);
-    // Send the controller change
-    //
-    Rosegarden::StudioControl::sendMappedEvent(mE);
-    emit updateAllBoxes();
-
-    emit changeInstrumentLabel(m_selectedInstrument->getId(),
-			       strtoqstr(m_selectedInstrument->
-					 getProgramName()));
-    emit updateAllBoxes();
-}
-
-void
-MIDIInstrumentParameterPanel::slotActivateBank(bool value)
-{
-    if (m_selectedInstrument == 0)
-    {
-        m_bankCheckBox->setChecked(false);
-        emit updateAllBoxes();
-        return;
-    }
-
-    m_bankValue->setDisabled(!value);
-    value |= m_variationCheckBox->isChecked();
-    m_selectedInstrument->setSendBankSelect(value);
-
-    emit changeInstrumentLabel(m_selectedInstrument->getId(),
-			       strtoqstr(m_selectedInstrument->
-					 getProgramName()));
-    emit updateAllBoxes();
-}
-
-void
-MIDIInstrumentParameterPanel::slotActivateVariation(bool value)
-{
-    if (m_selectedInstrument == 0)
-    {
-        m_variationCheckBox->setChecked(false);
-        emit updateAllBoxes();
-        return;
-    }
-
-    m_variationValue->setDisabled(!value);
-    value |= m_bankCheckBox->isChecked();
-    m_selectedInstrument->setSendBankSelect(value);
-
-    emit changeInstrumentLabel(m_selectedInstrument->getId(),
-			       strtoqstr(m_selectedInstrument->
-					 getProgramName()));
-    emit updateAllBoxes();
-}
-
-
-void
-MIDIInstrumentParameterPanel::slotSelectBank(int index)
-{
-    if (m_selectedInstrument == 0)
-        return;
-
-    MidiDevice *md = dynamic_cast<MidiDevice*>
-	(m_selectedInstrument->getDevice());
-    if (!md) {
-	std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotSelectBank: No MidiDevice for Instrument "
-		  << m_selectedInstrument->getId() << std::endl;
-	return;
-    }
-
-    const Rosegarden::MidiBank *bank = &m_banks[index];
-
-//!!! wrong now
-
-    m_selectedInstrument->setMSB(bank->getMSB());
-    m_selectedInstrument->setLSB(bank->getLSB());
-
-    // repopulate program list (variation list is populated by slotSelectProgram)
-    populateProgramList();
-
-    Rosegarden::MappedEvent *mE = 
-        new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                    Rosegarden::MappedEvent::MidiController,
-                                    Rosegarden::MIDI_CONTROLLER_BANK_MSB,
-                                    bank->getMSB());
-    Rosegarden::StudioControl::sendMappedEvent(mE);
-
-    mE = new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                    Rosegarden::MappedEvent::MidiController,
-                                    Rosegarden::MIDI_CONTROLLER_BANK_LSB,
-                                    bank->getLSB());
-    // Send the lsb
-    //
-    Rosegarden::StudioControl::sendMappedEvent(mE);
-
-    // also need to resend Program change to activate new program
-    slotSelectProgram(m_selectedInstrument->getProgramChange());
-
-    emit updateAllBoxes();
-}
-
-void
-MIDIInstrumentParameterPanel::slotSelectProgram(int index)
-{
-    if (m_selectedInstrument == 0)
-        return;
-
-    MidiDevice *md = dynamic_cast<MidiDevice*>
-	(m_selectedInstrument->getDevice());
-    if (!md) {
-	std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotSelectBank: No MidiDevice for Instrument "
-		  << m_selectedInstrument->getId() << std::endl;
-	return;
-    }
-
-    const Rosegarden::MidiProgram *prg = &m_programs[index];
-    
-    if (m_selectedInstrument->sendsBankSelect())
-    {
-        // Send the bank select message before any PC message
-        //
-        Rosegarden::MappedEvent *mE = 
-            new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                    Rosegarden::MappedEvent::MidiController,
-                                    Rosegarden::MIDI_CONTROLLER_BANK_MSB,
-                                    prg->getBank().getMSB());
-        Rosegarden::StudioControl::sendMappedEvent(mE);
-
-        mE = new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                    Rosegarden::MappedEvent::MidiController,
-                                    Rosegarden::MIDI_CONTROLLER_BANK_LSB,
-                                    prg->getBank().getLSB());
-        Rosegarden::StudioControl::sendMappedEvent(mE);
-
-//        RG_DEBUG << "sending bank select "
-//		 << bank.getMSB() << " : "
-//		 << bank.getLSB() << endl;
-    }
-
-    if (prg == 0)
-    {
-	//!!! how will we deal with case where banks/programs have been deleted between gui interactions? should store indices after all?
-        RG_DEBUG << "program change not found in bank" << endl;
-        return;
-    }
-
-    m_selectedInstrument->setProgramChange(prg->getProgram());
-
-    RG_DEBUG << "sending program change " << prg->getProgram() << endl;
-
-    //!!! wrong now
-
-    Rosegarden::MappedEvent *mE = 
-     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                 Rosegarden::MappedEvent::MidiProgramChange,
-                                 prg->getProgram(),
-                                 (Rosegarden::MidiByte)0);
-    // Send the controller change
-    //
-    Rosegarden::StudioControl::sendMappedEvent(mE);
-
-    populateVariationList();
-
-    emit changeInstrumentLabel(m_selectedInstrument->getId(),
-			       strtoqstr(m_selectedInstrument->
-					 getProgramName()));
-    emit updateAllBoxes();
-}
-
-void
-MIDIInstrumentParameterPanel::slotSelectVariation(int index)
-{
-//!!! implement
-}
-
-void
-MIDIInstrumentParameterPanel::slotSelectPan(float value)
-{
-    if (m_selectedInstrument == 0)
-        return;
-
-    // For audio instruments we pan from -100 to +100 but storage
-    // within an unsigned char is 0 - 200 - so we adjust by 100
-    //
-    float adjValue = value;
-    if (m_selectedInstrument->getType() == Instrument::Audio)
-        value += 100;
-
-    m_selectedInstrument->setPan(Rosegarden::MidiByte(adjValue));
-
-    Rosegarden::MappedEvent *mE = 
-     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                 Rosegarden::MappedEvent::MidiController,
-                                 Rosegarden::MIDI_CONTROLLER_PAN,
-                                 (Rosegarden::MidiByte)value);
-    Rosegarden::StudioControl::sendMappedEvent(mE);
-
-    emit updateAllBoxes();
-}
-
-void
-MIDIInstrumentParameterPanel::slotSelectVolume(float value)
-{
-    if (m_selectedInstrument == 0)
-        return;
-
-    m_selectedInstrument->setVolume(Rosegarden::MidiByte(value));
-
-    Rosegarden::MappedEvent *mE = 
-     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                 Rosegarden::MappedEvent::MidiController,
-                                 Rosegarden::MIDI_CONTROLLER_VOLUME,
-                                 (Rosegarden::MidiByte)value);
-    Rosegarden::StudioControl::sendMappedEvent(mE);
-
-    emit updateAllBoxes();
-}
 
 void
 AudioInstrumentParameterPanel::slotSelectAudioLevel(int value)
@@ -565,268 +333,6 @@ AudioInstrumentParameterPanel::slotSetRecord(bool value)
     }
 
     m_audioFader->m_recordButton->setOn(value);
-}
-
-
-void
-MIDIInstrumentParameterPanel::slotSelectChannel(int index)
-{
-    if (m_selectedInstrument == 0)
-        return;
-
-    m_selectedInstrument->setMidiChannel(index);
-
-    // don't use the emit - use this method instead
-    Rosegarden::StudioControl::sendMappedInstrument(
-            Rosegarden::MappedInstrument(m_selectedInstrument));
-    emit updateAllBoxes();
-}
-
-
-void
-MIDIInstrumentParameterPanel::populateBankList()
-{
-    if (m_selectedInstrument == 0)
-	return;
-
-    m_bankValue->clear();
-    m_banks.clear();
-
-    MidiDevice *md = dynamic_cast<MidiDevice*>
-	(m_selectedInstrument->getDevice());
-    if (!md) {
-	std::cerr << "WARNING: MIDIInstrumentParameterPanel::populateBankList: No MidiDevice for Instrument "
-		  << m_selectedInstrument->getId() << std::endl;
-	return;
-    }
-
-    int currentBank = -1;
-    Rosegarden::BankList banks;
-
-    RG_DEBUG << "MIDIInstrumentParameterPanel::populateBankList: variation type is " << md->getVariationType() << endl;
-
-    if (md->getVariationType() == MidiDevice::NoVariations) {
-
-	m_bankLabel->show();
-	m_bankCheckBox->show();
-	m_bankValue->show();
-	banks = md->getBanks(m_selectedInstrument->isPercussion());
-
-	for (unsigned int i = 0; i < banks.size(); ++i) {
-	    if (m_selectedInstrument->getProgram().getBank() == *banks[i]) {
-		currentBank = i;
-	    }
-	}
-
-    } else {
-
-	Rosegarden::MidiByteList bytes;
-	bool useMSB = (md->getVariationType() == MidiDevice::VariationFromLSB);
-
-	if (useMSB) {
-	    bytes = md->getDistinctMSBs(m_selectedInstrument->isPercussion());
-	} else {
-	    bytes = md->getDistinctLSBs(m_selectedInstrument->isPercussion());
-	}
-	
-	if (bytes.size() < 2) {
-	    m_bankLabel->hide();
-	    m_bankCheckBox->hide();
-	    m_bankValue->hide();
-
-	} else {
-	    m_bankLabel->show();
-	    m_bankCheckBox->show();
-	    m_bankValue->show();
-	}
-
-	if (useMSB) {
-	    for (unsigned int i = 0; i < bytes.size(); ++i) {
-		Rosegarden::BankList bl = md->getBanksByMSB
-		    (m_selectedInstrument->isPercussion(), bytes[i]);
-		RG_DEBUG << "MIDIInstrumentParameterPanel::populateBankList: have " << bl.size() << " variations for msb " << bytes[i] << endl;
-
-		if (bl.size() == 0) continue;
-		if (m_selectedInstrument->getMSB() == bytes[i]) {
-		    currentBank = banks.size();
-		}
-		banks.push_back(bl[0]);
-	    }
-	} else {
-	    for (unsigned int i = 0; i < bytes.size(); ++i) {
-		Rosegarden::BankList bl = md->getBanksByLSB
-		    (m_selectedInstrument->isPercussion(), bytes[i]);
-		RG_DEBUG << "MIDIInstrumentParameterPanel::populateBankList: have " << bl.size() << " variations for lsb " << bytes[i] << endl;
-		if (bl.size() == 0) continue;
-		if (m_selectedInstrument->getLSB() == bytes[i]) {
-		    currentBank = banks.size();
-		}
-		banks.push_back(bl[0]);
-	    }
-	}
-    }
-
-    for (Rosegarden::BankList::const_iterator i = banks.begin();
-	 i != banks.end(); ++i) {
-	m_banks.push_back(**i);
-	m_bankValue->insertItem(strtoqstr((*i)->getName()));
-    }
-	    
-    m_bankValue->setCurrentItem(currentBank);
-    m_bankValue->setEnabled(m_selectedInstrument->sendsBankSelect());
-}    
-	
-// Populate program list by bank context
-//
-void
-MIDIInstrumentParameterPanel::populateProgramList()
-{
-    if (m_selectedInstrument == 0)
-        return;
-
-    m_programValue->clear();
-    m_programs.clear();
-
-    MidiDevice *md = dynamic_cast<MidiDevice*>
-	(m_selectedInstrument->getDevice());
-    if (!md) {
-	std::cerr << "WARNING: MIDIInstrumentParameterPanel::populateProgramList: No MidiDevice for Instrument "
-		  << m_selectedInstrument->getId() << std::endl;
-	return;
-    }
-
-    RG_DEBUG << "MIDIInstrumentParameterPanel::populateProgramList: variation type is " << md->getVariationType() << endl;
-
-    Rosegarden::MidiBank bank(m_selectedInstrument->isPercussion(), 0, 0);
-
-    if (m_selectedInstrument->sendsBankSelect()) {
-	bank = m_selectedInstrument->getProgram().getBank();
-    }
-
-    Rosegarden::ProgramList programs = md->getPrograms(bank);
-    for (unsigned int i = 0; i < programs.size(); ++i) {
-	std::string programName = programs[i]->getName();
-	if (programName != "") {
-	    m_programValue->insertItem(strtoqstr(programName));
-	    if (m_selectedInstrument->getProgram() == *programs[i]) {
-		m_programValue->setCurrentItem(i);
-	    }
-	    m_programs.push_back(*programs[i]);
-	}
-    }
-
-    m_programValue->setEnabled(m_selectedInstrument->sendsProgramChange());
-
-/*!!!
-    Rosegarden::StringList list = md->getProgramList(bank);
-    Rosegarden::StringList::iterator it;
-
-    for (it = list.begin(); it != list.end(); it++) {
-
-        m_programValue->insertItem(strtoqstr(*it));
-
-	const Rosegarden::MidiProgram *program = 
-	    md->getProgramByIndex(m_programValue->count() - 1);
-
-	if (m_selectedInstrument->getProgramChange() == program->getProgram()) {
-	    m_programValue->setCurrentItem(m_programValue->count() - 1);
-	}
-    }
-*/
-//    m_programValue->setCurrentItem(
-//            (int)m_selectedInstrument->getProgramChange());
-}
-
-void
-MIDIInstrumentParameterPanel::populateVariationList()
-{
-    if (m_selectedInstrument == 0)
-	return;
-
-    m_variationValue->clear();
-    m_variations.clear();
-
-    MidiDevice *md = dynamic_cast<MidiDevice*>
-	(m_selectedInstrument->getDevice());
-    if (!md) {
-	std::cerr << "WARNING: MIDIInstrumentParameterPanel::populateVariationList: No MidiDevice for Instrument "
-		  << m_selectedInstrument->getId() << std::endl;
-	return;
-    }
-
-    RG_DEBUG << "MIDIInstrumentParameterPanel::populateVariationList: variation type is " << md->getVariationType() << endl;
-
-    if (md->getVariationType() == MidiDevice::NoVariations) {
-	m_variationLabel->hide();
-	m_variationCheckBox->hide();
-	m_variationValue->hide();
-	return;
-    } 
-
-    bool useMSB = (md->getVariationType() == MidiDevice::VariationFromMSB);
-    Rosegarden::MidiByteList variations;
-
-    if (useMSB) {
-	Rosegarden::MidiByte lsb = m_selectedInstrument->getLSB();
-	variations = md->getDistinctMSBs(m_selectedInstrument->isPercussion(),
-					 lsb);
-	RG_DEBUG << "MIDIInstrumentParameterPanel::populateVariationList: have " << variations.size() << " variations for lsb " << lsb << endl;
-
-    } else {
-	Rosegarden::MidiByte msb = m_selectedInstrument->getMSB();
-	variations = md->getDistinctLSBs(m_selectedInstrument->isPercussion(),
-					 msb);
-	RG_DEBUG << "MIDIInstrumentParameterPanel::populateVariationList: have " << variations.size() << " variations for msb " << msb << endl;
-    }
-    
-    m_variationValue->setCurrentItem(-1);
-
-    for (unsigned int i = 0; i < variations.size(); ++i) {
-
-	Rosegarden::MidiProgram program;
-
-	if (useMSB) {
-	    program = Rosegarden::MidiProgram
-		(Rosegarden::MidiBank(m_selectedInstrument->isPercussion(),
-				      variations[i],
-				      m_selectedInstrument->getLSB()),
-		 m_selectedInstrument->getProgramChange());
-	} else {
-	    program = Rosegarden::MidiProgram
-		(Rosegarden::MidiBank(m_selectedInstrument->isPercussion(),
-				      m_selectedInstrument->getMSB(),
-				      variations[i]),
-		 m_selectedInstrument->getProgramChange());
-	}
-
-	std::string programName = md->getProgramName(program);
-	if (programName != "") { // yes, that is how you know whether it exists
-	    m_variationValue->insertItem(strtoqstr(programName));
-	    if (m_selectedInstrument->getProgram() == program) {
-		m_variationValue->setCurrentItem(i);
-	    }
-	    m_variations.push_back(variations[i]);
-	}
-    }
-
-    if (m_variations.size() < 2) {
-	m_variationLabel->hide();
-	m_variationCheckBox->hide();
-	m_variationValue->hide();
-	
-    } else {
-	m_variationLabel->show();
-	m_variationCheckBox->show();
-	m_variationValue->show();
-
-	if (m_programValue->width() > m_variationValue->width()) {
-	    m_variationValue->setMinimumWidth(m_programValue->width());
-	} else {
-	    m_programValue->setMinimumWidth(m_variationValue->width());
-	}
-    }
-
-    m_variationValue->setEnabled(m_selectedInstrument->sendsBankSelect());
 }
 
 
@@ -1118,146 +624,6 @@ AudioInstrumentParameterPanel::setBypassButtonColour(int pluginIndex,
     }
 }
 
-
-void
-MIDIInstrumentParameterPanel::slotSelectChorus(float index)
-{
-    if (m_selectedInstrument == 0)
-        return;
-
-    m_selectedInstrument->setChorus(Rosegarden::MidiByte(index));
-
-    Rosegarden::MappedEvent *mE = 
-     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                 Rosegarden::MappedEvent::MidiController,
-                                 Rosegarden::MIDI_CONTROLLER_CHORUS,
-                                 (Rosegarden::MidiByte)index);
-    Rosegarden::StudioControl::sendMappedEvent(mE);
-
-    updateAllBoxes();
-}
-
-void
-MIDIInstrumentParameterPanel::slotSelectReverb(float index)
-{
-    if (m_selectedInstrument == 0)
-        return;
-
-    m_selectedInstrument->setReverb(Rosegarden::MidiByte(index));
-
-    Rosegarden::MappedEvent *mE = 
-     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                 Rosegarden::MappedEvent::MidiController,
-                                 Rosegarden::MIDI_CONTROLLER_REVERB,
-                                 (Rosegarden::MidiByte)index);
-    Rosegarden::StudioControl::sendMappedEvent(mE);
-
-    updateAllBoxes();
-}
-
-
-void
-MIDIInstrumentParameterPanel::slotSelectHighPass(float index)
-{
-    if (m_selectedInstrument == 0)
-        return;
-
-    m_selectedInstrument->setFilter(Rosegarden::MidiByte(index));
-
-    Rosegarden::MappedEvent *mE = 
-     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                 Rosegarden::MappedEvent::MidiController,
-                                 Rosegarden::MIDI_CONTROLLER_FILTER,
-                                 (Rosegarden::MidiByte)index);
-    Rosegarden::StudioControl::sendMappedEvent(mE);
-
-    updateAllBoxes();
-}
-
-void
-MIDIInstrumentParameterPanel::slotSelectResonance(float index)
-{
-    if (m_selectedInstrument == 0)
-        return;
-
-    m_selectedInstrument->setResonance(Rosegarden::MidiByte(index));
-
-    Rosegarden::MappedEvent *mE = 
-     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                 Rosegarden::MappedEvent::MidiController,
-                                 Rosegarden::MIDI_CONTROLLER_RESONANCE,
-                                 (Rosegarden::MidiByte)index);
-    Rosegarden::StudioControl::sendMappedEvent(mE);
-
-    // Send the controller change
-    //
-    /*
-
-    Rosegarden::MappedEvent *mE = 
-     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                 Rosegarden::MappedEvent::MidiController,
-                                 Rosegarden::MidiByte(99),
-                                 (Rosegarden::MidiByte)0);
-    // Send the controller change
-    //
-    emit Rosegarden::StudioControl::sendMappedEvent(mE);
-    mE = 
-     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                 Rosegarden::MappedEvent::MidiController,
-                                 Rosegarden::MidiByte(98),
-                                 (Rosegarden::MidiByte)33);
-    // Send the controller change
-    //
-    emit Rosegarden::StudioControl::sendMappedEvent(mE);
-    mE = 
-     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                 Rosegarden::MappedEvent::MidiController,
-                                 Rosegarden::MidiByte(6),
-                                 (Rosegarden::MidiByte)index);
-    // Send the controller change
-    //
-    emit Rosegarden::StudioControl::sendMappedEvent(mE);
-    */
-
-    updateAllBoxes();
-}
-
-
-void
-MIDIInstrumentParameterPanel::slotSelectAttack(float index)
-{
-    if (m_selectedInstrument == 0)
-        return;
-
-    m_selectedInstrument->setAttack(Rosegarden::MidiByte(index));
-
-    Rosegarden::MappedEvent *mE = 
-     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                 Rosegarden::MappedEvent::MidiController,
-                                 Rosegarden::MIDI_CONTROLLER_ATTACK,
-                                 (Rosegarden::MidiByte)index);
-    Rosegarden::StudioControl::sendMappedEvent(mE);
-
-    updateAllBoxes();
-}
-
-void
-MIDIInstrumentParameterPanel::slotSelectRelease(float index)
-{
-    if (m_selectedInstrument == 0)
-        return;
-
-    m_selectedInstrument->setRelease(Rosegarden::MidiByte(index));
-
-    Rosegarden::MappedEvent *mE = 
-     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                 Rosegarden::MappedEvent::MidiController,
-                                 Rosegarden::MIDI_CONTROLLER_RELEASE,
-                                 (Rosegarden::MidiByte)index);
-    Rosegarden::StudioControl::sendMappedEvent(mE);
-
-    updateAllBoxes();
-}
 
 
 InstrumentParameterPanel::InstrumentParameterPanel(RosegardenGUIDoc *doc, 
@@ -1663,12 +1029,16 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
 
     // Only active if we have an Instrument selected
     //
+    m_percussionCheckBox->setDisabled(true);
     m_programCheckBox->setDisabled(true);
     m_bankCheckBox->setDisabled(true);
     m_variationCheckBox->setDisabled(true);
 
     // Connect up the toggle boxes
     //
+    connect(m_percussionCheckBox, SIGNAL(toggled(bool)),
+	    this, SLOT(slotActivatePercussion(bool)));
+
     connect(m_programCheckBox, SIGNAL(toggled(bool)),
             this, SLOT(slotActivateProgramChange(bool)));
 
@@ -1787,12 +1157,14 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
 
     // Enable all check boxes
     //
+    m_percussionCheckBox->setDisabled(false);
     m_programCheckBox->setDisabled(false);
     m_bankCheckBox->setDisabled(false);
     m_variationCheckBox->setDisabled(false);
 
     // Activate all checkboxes
     //
+    m_percussionCheckBox->setChecked(instrument->isPercussion());
     m_programCheckBox->setChecked(instrument->sendsProgramChange());
     m_bankCheckBox->setChecked(instrument->sendsBankSelect());
     m_variationCheckBox->setChecked(instrument->sendsBankSelect());
@@ -1808,35 +1180,7 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     populateBankList();
     populateProgramList();
     populateVariationList();
-    m_percussionCheckBox->setChecked(instrument->isPercussion());
 
-/*!!!
-    Rosegarden::StringList list = md->getBankList();
-
-    Rosegarden::StringList::iterator it;
-
-    for (it = list.begin(); it != list.end(); it++) {
-
-        m_bankValue->insertItem(strtoqstr(*it));
-
-	// Select 
-	if (instrument->sendsBankSelect())
-	{
-	    const Rosegarden::MidiBank *bank = 
-		md->getBankByIndex(m_bankValue->count() - 1);
-
-	    if (instrument->getProgram().getBank() == *bank) {
-		m_bankValue->setCurrentItem(m_bankValue->count() - 1);
-	    }
-	}
-    }
-
-    if (!instrument->sendsBankSelect())
-    {
-        m_bankValue->setDisabled(true);
-        m_bankValue->setCurrentItem(-1);
-    }
-*/
     // Advanced MIDI controllers
     //
     m_chorusRotary->setPosition(float(instrument->getChorus()));
@@ -1849,5 +1193,654 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
 
 }
 
+void
+MIDIInstrumentParameterPanel::slotSelectChannel(int index)
+{
+    if (m_selectedInstrument == 0)
+        return;
 
+    m_selectedInstrument->setMidiChannel(index);
+
+    // don't use the emit - use this method instead
+    Rosegarden::StudioControl::sendMappedInstrument(
+            Rosegarden::MappedInstrument(m_selectedInstrument));
+    emit updateAllBoxes();
+}
+
+
+void
+MIDIInstrumentParameterPanel::populateBankList()
+{
+    if (m_selectedInstrument == 0)
+	return;
+
+    m_bankValue->clear();
+    m_banks.clear();
+
+    MidiDevice *md = dynamic_cast<MidiDevice*>
+	(m_selectedInstrument->getDevice());
+    if (!md) {
+	std::cerr << "WARNING: MIDIInstrumentParameterPanel::populateBankList: No MidiDevice for Instrument "
+		  << m_selectedInstrument->getId() << std::endl;
+	return;
+    }
+
+    int currentBank = -1;
+    Rosegarden::BankList banks;
+
+    RG_DEBUG << "MIDIInstrumentParameterPanel::populateBankList: variation type is " << md->getVariationType() << endl;
+
+    if (md->getVariationType() == MidiDevice::NoVariations) {
+
+	m_bankLabel->show();
+	m_bankCheckBox->show();
+	m_bankValue->show();
+	banks = md->getBanks(m_selectedInstrument->isPercussion());
+
+	for (unsigned int i = 0; i < banks.size(); ++i) {
+	    if (m_selectedInstrument->getProgram().getBank() == *banks[i]) {
+		currentBank = i;
+	    }
+	}
+
+    } else {
+
+	Rosegarden::MidiByteList bytes;
+	bool useMSB = (md->getVariationType() == MidiDevice::VariationFromLSB);
+
+	if (useMSB) {
+	    bytes = md->getDistinctMSBs(m_selectedInstrument->isPercussion());
+	} else {
+	    bytes = md->getDistinctLSBs(m_selectedInstrument->isPercussion());
+	}
+	
+	if (bytes.size() < 2) {
+	    m_bankLabel->hide();
+	    m_bankCheckBox->hide();
+	    m_bankValue->hide();
+
+	} else {
+	    m_bankLabel->show();
+	    m_bankCheckBox->show();
+	    m_bankValue->show();
+	}
+
+	if (useMSB) {
+	    for (unsigned int i = 0; i < bytes.size(); ++i) {
+		Rosegarden::BankList bl = md->getBanksByMSB
+		    (m_selectedInstrument->isPercussion(), bytes[i]);
+		RG_DEBUG << "MIDIInstrumentParameterPanel::populateBankList: have " << bl.size() << " variations for msb " << bytes[i] << endl;
+
+		if (bl.size() == 0) continue;
+		if (m_selectedInstrument->getMSB() == bytes[i]) {
+		    currentBank = banks.size();
+		}
+		banks.push_back(bl[0]);
+	    }
+	} else {
+	    for (unsigned int i = 0; i < bytes.size(); ++i) {
+		Rosegarden::BankList bl = md->getBanksByLSB
+		    (m_selectedInstrument->isPercussion(), bytes[i]);
+		RG_DEBUG << "MIDIInstrumentParameterPanel::populateBankList: have " << bl.size() << " variations for lsb " << bytes[i] << endl;
+		if (bl.size() == 0) continue;
+		if (m_selectedInstrument->getLSB() == bytes[i]) {
+		    currentBank = banks.size();
+		}
+		banks.push_back(bl[0]);
+	    }
+	}
+    }
+
+    for (Rosegarden::BankList::const_iterator i = banks.begin();
+	 i != banks.end(); ++i) {
+	m_banks.push_back(**i);
+	m_bankValue->insertItem(strtoqstr((*i)->getName()));
+    }
+	    
+    m_bankValue->setCurrentItem(currentBank);
+    m_bankValue->setEnabled(m_selectedInstrument->sendsBankSelect());
+}    
+	
+// Populate program list by bank context
+//
+void
+MIDIInstrumentParameterPanel::populateProgramList()
+{
+    if (m_selectedInstrument == 0)
+        return;
+
+    m_programValue->clear();
+    m_programs.clear();
+
+    MidiDevice *md = dynamic_cast<MidiDevice*>
+	(m_selectedInstrument->getDevice());
+    if (!md) {
+	std::cerr << "WARNING: MIDIInstrumentParameterPanel::populateProgramList: No MidiDevice for Instrument "
+		  << m_selectedInstrument->getId() << std::endl;
+	return;
+    }
+
+    RG_DEBUG << "MIDIInstrumentParameterPanel::populateProgramList: variation type is " << md->getVariationType() << endl;
+
+    Rosegarden::MidiBank bank(m_selectedInstrument->isPercussion(), 0, 0);
+
+    if (m_selectedInstrument->sendsBankSelect()) {
+	bank = m_selectedInstrument->getProgram().getBank();
+    }
+
+    Rosegarden::ProgramList programs = md->getPrograms(bank);
+    for (unsigned int i = 0; i < programs.size(); ++i) {
+	std::string programName = programs[i]->getName();
+	if (programName != "") {
+	    m_programValue->insertItem(strtoqstr(programName));
+	    if (m_selectedInstrument->getProgram() == *programs[i]) {
+		m_programValue->setCurrentItem(i);
+	    }
+	    m_programs.push_back(*programs[i]);
+	}
+    }
+
+    m_programValue->setEnabled(m_selectedInstrument->sendsProgramChange());
+
+/*!!!
+    Rosegarden::StringList list = md->getProgramList(bank);
+    Rosegarden::StringList::iterator it;
+
+    for (it = list.begin(); it != list.end(); it++) {
+
+        m_programValue->insertItem(strtoqstr(*it));
+
+	const Rosegarden::MidiProgram *program = 
+	    md->getProgramByIndex(m_programValue->count() - 1);
+
+	if (m_selectedInstrument->getProgramChange() == program->getProgram()) {
+	    m_programValue->setCurrentItem(m_programValue->count() - 1);
+	}
+    }
+*/
+//    m_programValue->setCurrentItem(
+//            (int)m_selectedInstrument->getProgramChange());
+}
+
+void
+MIDIInstrumentParameterPanel::populateVariationList()
+{
+    if (m_selectedInstrument == 0)
+	return;
+
+    m_variationValue->clear();
+    m_variations.clear();
+
+    MidiDevice *md = dynamic_cast<MidiDevice*>
+	(m_selectedInstrument->getDevice());
+    if (!md) {
+	std::cerr << "WARNING: MIDIInstrumentParameterPanel::populateVariationList: No MidiDevice for Instrument "
+		  << m_selectedInstrument->getId() << std::endl;
+	return;
+    }
+
+    RG_DEBUG << "MIDIInstrumentParameterPanel::populateVariationList: variation type is " << md->getVariationType() << endl;
+
+    if (md->getVariationType() == MidiDevice::NoVariations) {
+	m_variationLabel->hide();
+	m_variationCheckBox->hide();
+	m_variationValue->hide();
+	return;
+    } 
+
+    bool useMSB = (md->getVariationType() == MidiDevice::VariationFromMSB);
+    Rosegarden::MidiByteList variations;
+
+    if (useMSB) {
+	Rosegarden::MidiByte lsb = m_selectedInstrument->getLSB();
+	variations = md->getDistinctMSBs(m_selectedInstrument->isPercussion(),
+					 lsb);
+	RG_DEBUG << "MIDIInstrumentParameterPanel::populateVariationList: have " << variations.size() << " variations for lsb " << lsb << endl;
+
+    } else {
+	Rosegarden::MidiByte msb = m_selectedInstrument->getMSB();
+	variations = md->getDistinctLSBs(m_selectedInstrument->isPercussion(),
+					 msb);
+	RG_DEBUG << "MIDIInstrumentParameterPanel::populateVariationList: have " << variations.size() << " variations for msb " << msb << endl;
+    }
+    
+    m_variationValue->setCurrentItem(-1);
+
+    for (unsigned int i = 0; i < variations.size(); ++i) {
+
+	Rosegarden::MidiProgram program;
+
+	if (useMSB) {
+	    program = Rosegarden::MidiProgram
+		(Rosegarden::MidiBank(m_selectedInstrument->isPercussion(),
+				      variations[i],
+				      m_selectedInstrument->getLSB()),
+		 m_selectedInstrument->getProgramChange());
+	} else {
+	    program = Rosegarden::MidiProgram
+		(Rosegarden::MidiBank(m_selectedInstrument->isPercussion(),
+				      m_selectedInstrument->getMSB(),
+				      variations[i]),
+		 m_selectedInstrument->getProgramChange());
+	}
+
+	std::string programName = md->getProgramName(program);
+	if (programName != "") { // yes, that is how you know whether it exists
+	    m_variationValue->insertItem(strtoqstr(programName));
+	    if (m_selectedInstrument->getProgram() == program) {
+		m_variationValue->setCurrentItem(i);
+	    }
+	    m_variations.push_back(variations[i]);
+	}
+    }
+
+    if (m_variations.size() < 2) {
+	m_variationLabel->hide();
+	m_variationCheckBox->hide();
+	m_variationValue->hide();
+	
+    } else {
+	m_variationLabel->show();
+	m_variationCheckBox->show();
+	m_variationValue->show();
+
+	if (m_programValue->width() > m_variationValue->width()) {
+	    m_variationValue->setMinimumWidth(m_programValue->width());
+	} else {
+	    m_programValue->setMinimumWidth(m_variationValue->width());
+	}
+    }
+
+    m_variationValue->setEnabled(m_selectedInstrument->sendsBankSelect());
+}
+
+
+void
+MIDIInstrumentParameterPanel::slotActivatePercussion(bool value)
+{
+    if (m_selectedInstrument == 0)
+    {
+	m_percussionCheckBox->setChecked(false);
+        emit updateAllBoxes();
+        return;
+    }
+
+    m_selectedInstrument->setPercussion(value);
+    populateBankList();
+    //!!! send bank select, program change again
+}
+
+
+void
+MIDIInstrumentParameterPanel::slotActivateProgramChange(bool value)
+{
+    if (m_selectedInstrument == 0)
+    {
+        m_programCheckBox->setChecked(false);
+        emit updateAllBoxes();
+        return;
+    }
+
+    m_selectedInstrument->setSendProgramChange(value);
+    m_programValue->setDisabled(!value);
+    populateProgramList();
+
+    Rosegarden::MappedEvent *mE = 
+     new Rosegarden::MappedEvent(m_selectedInstrument->getId(),
+                                 Rosegarden::MappedEvent::MidiProgramChange,
+                                 m_selectedInstrument->getProgramChange(),
+                                 (Rosegarden::MidiByte)0);
+    // Send the controller change
+    //
+    Rosegarden::StudioControl::sendMappedEvent(mE);
+    emit updateAllBoxes();
+
+    emit changeInstrumentLabel(m_selectedInstrument->getId(),
+			       strtoqstr(m_selectedInstrument->
+					 getProgramName()));
+    emit updateAllBoxes();
+}
+
+void
+MIDIInstrumentParameterPanel::slotActivateBank(bool value)
+{
+    if (m_selectedInstrument == 0)
+    {
+        m_bankCheckBox->setChecked(false);
+        emit updateAllBoxes();
+        return;
+    }
+
+    m_bankValue->setDisabled(!value);
+    value |= m_variationCheckBox->isChecked();
+    m_selectedInstrument->setSendBankSelect(value);
+
+    emit changeInstrumentLabel(m_selectedInstrument->getId(),
+			       strtoqstr(m_selectedInstrument->
+					 getProgramName()));
+    emit updateAllBoxes();
+}
+
+void
+MIDIInstrumentParameterPanel::slotActivateVariation(bool value)
+{
+    if (m_selectedInstrument == 0)
+    {
+        m_variationCheckBox->setChecked(false);
+        emit updateAllBoxes();
+        return;
+    }
+
+    m_variationValue->setDisabled(!value);
+    value |= m_bankCheckBox->isChecked();
+    m_selectedInstrument->setSendBankSelect(value);
+
+    emit changeInstrumentLabel(m_selectedInstrument->getId(),
+			       strtoqstr(m_selectedInstrument->
+					 getProgramName()));
+    emit updateAllBoxes();
+}
+
+
+void
+MIDIInstrumentParameterPanel::slotSelectBank(int index)
+{
+    if (m_selectedInstrument == 0)
+        return;
+
+    MidiDevice *md = dynamic_cast<MidiDevice*>
+	(m_selectedInstrument->getDevice());
+    if (!md) {
+	std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotSelectBank: No MidiDevice for Instrument "
+		  << m_selectedInstrument->getId() << std::endl;
+	return;
+    }
+
+    const Rosegarden::MidiBank *bank = &m_banks[index];
+
+//!!! wrong now
+
+    m_selectedInstrument->setMSB(bank->getMSB());
+    m_selectedInstrument->setLSB(bank->getLSB());
+
+    // repopulate program list (variation list is populated by slotSelectProgram)
+    populateProgramList();
+
+    Rosegarden::MappedEvent *mE = 
+        new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                    Rosegarden::MappedEvent::MidiController,
+                                    Rosegarden::MIDI_CONTROLLER_BANK_MSB,
+                                    bank->getMSB());
+    Rosegarden::StudioControl::sendMappedEvent(mE);
+
+    mE = new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                    Rosegarden::MappedEvent::MidiController,
+                                    Rosegarden::MIDI_CONTROLLER_BANK_LSB,
+                                    bank->getLSB());
+    // Send the lsb
+    //
+    Rosegarden::StudioControl::sendMappedEvent(mE);
+
+    // also need to resend Program change to activate new program
+    slotSelectProgram(m_selectedInstrument->getProgramChange());
+
+    emit updateAllBoxes();
+}
+
+void
+MIDIInstrumentParameterPanel::slotSelectProgram(int index)
+{
+    if (m_selectedInstrument == 0)
+        return;
+
+    MidiDevice *md = dynamic_cast<MidiDevice*>
+	(m_selectedInstrument->getDevice());
+    if (!md) {
+	std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotSelectBank: No MidiDevice for Instrument "
+		  << m_selectedInstrument->getId() << std::endl;
+	return;
+    }
+
+    const Rosegarden::MidiProgram *prg = &m_programs[index];
+    
+    if (m_selectedInstrument->sendsBankSelect())
+    {
+        // Send the bank select message before any PC message
+        //
+        Rosegarden::MappedEvent *mE = 
+            new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                    Rosegarden::MappedEvent::MidiController,
+                                    Rosegarden::MIDI_CONTROLLER_BANK_MSB,
+                                    prg->getBank().getMSB());
+        Rosegarden::StudioControl::sendMappedEvent(mE);
+
+        mE = new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                    Rosegarden::MappedEvent::MidiController,
+                                    Rosegarden::MIDI_CONTROLLER_BANK_LSB,
+                                    prg->getBank().getLSB());
+        Rosegarden::StudioControl::sendMappedEvent(mE);
+
+//        RG_DEBUG << "sending bank select "
+//		 << bank.getMSB() << " : "
+//		 << bank.getLSB() << endl;
+    }
+
+    if (prg == 0)
+    {
+	//!!! how will we deal with case where banks/programs have been deleted between gui interactions? should store indices after all?
+        RG_DEBUG << "program change not found in bank" << endl;
+        return;
+    }
+
+    m_selectedInstrument->setProgramChange(prg->getProgram());
+
+    RG_DEBUG << "sending program change " << prg->getProgram() << endl;
+
+    //!!! wrong now
+
+    Rosegarden::MappedEvent *mE = 
+     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                 Rosegarden::MappedEvent::MidiProgramChange,
+                                 prg->getProgram(),
+                                 (Rosegarden::MidiByte)0);
+    // Send the controller change
+    //
+    Rosegarden::StudioControl::sendMappedEvent(mE);
+
+    populateVariationList();
+
+    emit changeInstrumentLabel(m_selectedInstrument->getId(),
+			       strtoqstr(m_selectedInstrument->
+					 getProgramName()));
+    emit updateAllBoxes();
+}
+
+void
+MIDIInstrumentParameterPanel::slotSelectVariation(int index)
+{
+//!!! implement
+}
+
+void
+MIDIInstrumentParameterPanel::slotSelectPan(float value)
+{
+    if (m_selectedInstrument == 0)
+        return;
+
+    // For audio instruments we pan from -100 to +100 but storage
+    // within an unsigned char is 0 - 200 - so we adjust by 100
+    //
+    float adjValue = value;
+    if (m_selectedInstrument->getType() == Instrument::Audio)
+        value += 100;
+
+    m_selectedInstrument->setPan(Rosegarden::MidiByte(adjValue));
+
+    Rosegarden::MappedEvent *mE = 
+     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                 Rosegarden::MappedEvent::MidiController,
+                                 Rosegarden::MIDI_CONTROLLER_PAN,
+                                 (Rosegarden::MidiByte)value);
+    Rosegarden::StudioControl::sendMappedEvent(mE);
+
+    emit updateAllBoxes();
+}
+
+void
+MIDIInstrumentParameterPanel::slotSelectVolume(float value)
+{
+    if (m_selectedInstrument == 0)
+        return;
+
+    m_selectedInstrument->setVolume(Rosegarden::MidiByte(value));
+
+    Rosegarden::MappedEvent *mE = 
+     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                 Rosegarden::MappedEvent::MidiController,
+                                 Rosegarden::MIDI_CONTROLLER_VOLUME,
+                                 (Rosegarden::MidiByte)value);
+    Rosegarden::StudioControl::sendMappedEvent(mE);
+
+    emit updateAllBoxes();
+}
+
+void
+MIDIInstrumentParameterPanel::slotSelectChorus(float index)
+{
+    if (m_selectedInstrument == 0)
+        return;
+
+    m_selectedInstrument->setChorus(Rosegarden::MidiByte(index));
+
+    Rosegarden::MappedEvent *mE = 
+     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                 Rosegarden::MappedEvent::MidiController,
+                                 Rosegarden::MIDI_CONTROLLER_CHORUS,
+                                 (Rosegarden::MidiByte)index);
+    Rosegarden::StudioControl::sendMappedEvent(mE);
+
+    updateAllBoxes();
+}
+
+void
+MIDIInstrumentParameterPanel::slotSelectReverb(float index)
+{
+    if (m_selectedInstrument == 0)
+        return;
+
+    m_selectedInstrument->setReverb(Rosegarden::MidiByte(index));
+
+    Rosegarden::MappedEvent *mE = 
+     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                 Rosegarden::MappedEvent::MidiController,
+                                 Rosegarden::MIDI_CONTROLLER_REVERB,
+                                 (Rosegarden::MidiByte)index);
+    Rosegarden::StudioControl::sendMappedEvent(mE);
+
+    updateAllBoxes();
+}
+
+
+void
+MIDIInstrumentParameterPanel::slotSelectHighPass(float index)
+{
+    if (m_selectedInstrument == 0)
+        return;
+
+    m_selectedInstrument->setFilter(Rosegarden::MidiByte(index));
+
+    Rosegarden::MappedEvent *mE = 
+     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                 Rosegarden::MappedEvent::MidiController,
+                                 Rosegarden::MIDI_CONTROLLER_FILTER,
+                                 (Rosegarden::MidiByte)index);
+    Rosegarden::StudioControl::sendMappedEvent(mE);
+
+    updateAllBoxes();
+}
+
+void
+MIDIInstrumentParameterPanel::slotSelectResonance(float index)
+{
+    if (m_selectedInstrument == 0)
+        return;
+
+    m_selectedInstrument->setResonance(Rosegarden::MidiByte(index));
+
+    Rosegarden::MappedEvent *mE = 
+     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                 Rosegarden::MappedEvent::MidiController,
+                                 Rosegarden::MIDI_CONTROLLER_RESONANCE,
+                                 (Rosegarden::MidiByte)index);
+    Rosegarden::StudioControl::sendMappedEvent(mE);
+
+    // Send the controller change
+    //
+    /*
+
+    Rosegarden::MappedEvent *mE = 
+     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                 Rosegarden::MappedEvent::MidiController,
+                                 Rosegarden::MidiByte(99),
+                                 (Rosegarden::MidiByte)0);
+    // Send the controller change
+    //
+    emit Rosegarden::StudioControl::sendMappedEvent(mE);
+    mE = 
+     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                 Rosegarden::MappedEvent::MidiController,
+                                 Rosegarden::MidiByte(98),
+                                 (Rosegarden::MidiByte)33);
+    // Send the controller change
+    //
+    emit Rosegarden::StudioControl::sendMappedEvent(mE);
+    mE = 
+     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                 Rosegarden::MappedEvent::MidiController,
+                                 Rosegarden::MidiByte(6),
+                                 (Rosegarden::MidiByte)index);
+    // Send the controller change
+    //
+    emit Rosegarden::StudioControl::sendMappedEvent(mE);
+    */
+
+    updateAllBoxes();
+}
+
+
+void
+MIDIInstrumentParameterPanel::slotSelectAttack(float index)
+{
+    if (m_selectedInstrument == 0)
+        return;
+
+    m_selectedInstrument->setAttack(Rosegarden::MidiByte(index));
+
+    Rosegarden::MappedEvent *mE = 
+     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                 Rosegarden::MappedEvent::MidiController,
+                                 Rosegarden::MIDI_CONTROLLER_ATTACK,
+                                 (Rosegarden::MidiByte)index);
+    Rosegarden::StudioControl::sendMappedEvent(mE);
+
+    updateAllBoxes();
+}
+
+void
+MIDIInstrumentParameterPanel::slotSelectRelease(float index)
+{
+    if (m_selectedInstrument == 0)
+        return;
+
+    m_selectedInstrument->setRelease(Rosegarden::MidiByte(index));
+
+    Rosegarden::MappedEvent *mE = 
+     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                 Rosegarden::MappedEvent::MidiController,
+                                 Rosegarden::MIDI_CONTROLLER_RELEASE,
+                                 (Rosegarden::MidiByte)index);
+    Rosegarden::StudioControl::sendMappedEvent(mE);
+
+    updateAllBoxes();
+}
 
