@@ -933,13 +933,18 @@ RosegardenGUIView::updateMeters(SequencerMapper *mapper)
 		m_instrumentParameterBox->setAudioMeter(left, right);
 	    }
 
-	    m_trackEditor->getTrackButtons()->slotSetTrackMeter
-		((info.level + info.levelRight) / 2.0, track->getId());
+	    if (instrument->getAudioChannels() > 1) {
+		m_trackEditor->getTrackButtons()->slotSetTrackMeter
+		    ((info.level + info.levelRight) / 254.0, track->getId());
+	    } else {
+		m_trackEditor->getTrackButtons()->slotSetTrackMeter
+		    ((info.level + info.levelRight) / 127.0, track->getId());
+	    }
 
 	} else {
 
 	    m_trackEditor->getTrackButtons()->slotSetTrackMeter
-		(info.level, track->getId());
+		(info.level / 127.0, track->getId());
 	}
     }
 }    

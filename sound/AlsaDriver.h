@@ -18,6 +18,12 @@
   COPYING included with this distribution for more information.
 */
 
+// Specialisation of SoundDriver to support ALSA (http://www.alsa-project.org)
+//
+//
+#ifndef _ALSADRIVER_H_
+#define _ALSADRIVER_H_
+
 #include <vector>
 #include <set>
 
@@ -43,12 +49,6 @@ typedef jack_default_audio_sample_t sample_t;
 
 #endif
 
-
-// Specialisation of SoundDriver to support ALSA (http://www.alsa-project.org)
-//
-//
-#ifndef _ALSADRIVER_H_
-#define _ALSADRIVER_H_
 
 namespace Rosegarden
 {
@@ -377,6 +377,8 @@ private:
 };
 
 }
-#endif // _ALSADRIVER_H_
 
 #endif // HAVE_ALSA
+
+#endif // _ALSADRIVER_H_
+

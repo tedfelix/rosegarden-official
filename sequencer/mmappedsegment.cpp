@@ -607,8 +607,8 @@ MmappedSegmentsMetaIterator::getPlayingAudioFiles(const Rosegarden::RealTime &so
 
 #define PLAYING_AUDIO_FILES_DEBUG
 #ifdef PLAYING_AUDIO_FILES_DEBUG
-                std::cout << "MmappedSegmentsMetaIterator::getPlayingAudioFiles - "
-                          << "instrument id = " << evt.getInstrument() << std::endl;
+//                std::cout << "MmappedSegmentsMetaIterator::getPlayingAudioFiles - "
+//                          << "instrument id = " << evt.getInstrument() << std::endl;
 
                 /*
                 std::cout << "MmappedSegmentsMetaIterator::getPlayingAudioFiles - "

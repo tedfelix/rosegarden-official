@@ -766,7 +766,7 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
     m_readAhead->setMinValue(20);
     layout->addWidget(new QLabel("20", frame), 2, 1);
 
-    m_readAhead->setMaxValue(500);
+    m_readAhead->setMaxValue(300);
     layout->addWidget(new QLabel("300", frame), 2, 3);
 
     int readAheadValue = m_cfg->readLongNumEntry("readaheadusec", 80000) / 1000;
@@ -783,13 +783,13 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
 
     m_playback = new QSlider(Horizontal, frame);
 
-    m_playback->setMinValue(20);
-    layout->addWidget(new QLabel("20", frame), 4, 1);
+    m_playback->setMinValue(0);
+    layout->addWidget(new QLabel("0", frame), 4, 1);
 
-    m_playback->setMaxValue(500);
-    layout->addWidget(new QLabel("300", frame), 4, 3);
+    m_playback->setMaxValue(100);
+    layout->addWidget(new QLabel("100", frame), 4, 3);
 
-    int playbackValue = m_cfg->readLongNumEntry("playbacklatencyusec", 120000)
+    int playbackValue = m_cfg->readLongNumEntry("playbacklatencyusec", 10000)
                         / 1000;
     m_playback->setValue(playbackValue);
     m_playback->setTickmarks(QSlider::Below);

@@ -3609,6 +3609,9 @@ void RosegardenGUIApp::processAsynchronousMidi(const Rosegarden::MappedCompositi
 {
     if (m_seqManager)
 	m_seqManager->processAsynchronousMidi(mC, 0);
+
+    SequencerMapper *mapper = m_seqManager->getSequencerMapper();
+    if (mapper) m_view->updateMeters(mapper);
 }
 
 

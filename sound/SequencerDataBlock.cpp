@@ -143,9 +143,9 @@ SequencerDataBlock::getRecordLevel(TrackLevelInfo &level) const
 }
 
 void
-SequencerDataBlock::setRecordLevel(const TrackLevelInfo &level)
+SequencerDataBlock::setRecordLevel(const TrackLevelInfo &info)
 {
-    m_recordLevel = level;
+    m_recordLevel = info;
     ++m_recordLevelUpdateIndex;
 }
 
