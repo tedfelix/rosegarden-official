@@ -282,10 +282,19 @@ public slots:
     void slotNewSelection();
 
     /*
-     * Set the snaptime of the grid
-     *
+     * Set the snaptime of the grid from an item in the snap combo
      */
-    void slotSetSnap(int);
+    void slotSetSnapFromIndex(int);
+
+    /*
+     * Set the snaptime of the grid based on the name of the invoking action
+     */
+    void slotSetSnapFromAction();
+
+    /*
+     * Set the snaptime of the grid
+     */
+    void slotSetSnap(Rosegarden::timeT);
 
     /*
      * Quantize a selection to a given level

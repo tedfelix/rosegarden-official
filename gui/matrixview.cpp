@@ -521,7 +521,10 @@ MatrixCanvasView* MatrixView::getCanvasView()
 
 void MatrixView::setCurrentSelection(EventSelection* s, bool preview)
 {
-    if (!m_currentEventSelection && !s) return;
+    if (!s) {
+	m_quantizeCombo->setCurrentItem(m_quantizeCombo->count() - 1); // "Off"
+    }
+    if (!m_currentEventSelection && !s)	return;
 
     if (m_currentEventSelection) {
         getStaff(0)->positionElements(m_currentEventSelection->getStartTime(),
@@ -546,6 +549,8 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview)
 
     bool updateRequired = true;
 
+    timeT quantizeUnit = 0;
+
     if (s) {
 
         bool foundNewEvent = false;
@@ -567,17 +572,46 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview)
 		}
 	    }
 
-	    //!!! Need to calculate current-quantize-boundary so as
-	    // to work out the most coarse quantize level consistent
-	    // with all selected events and update the quantize combo
-        }
+	    if ((*i)->isa(Rosegarden::Note::EventType)) {
 
+		timeT absTime = (*i)->getAbsoluteTime();
+		timeT myQuantizeUnit = 0;
+
+		// m_quantizations is in descending order of duration;
+		// stop when we reach one that divides into the note's time
+
+		for (unsigned int i = 0; i < m_quantizations.size(); ++i) {
+		    if (absTime % m_quantizations[i].unit == 0) {
+			myQuantizeUnit = m_quantizations[i].unit;
+			break;
+		    }
+		}
+		
+		if (myQuantizeUnit != 0 &&
+		    (quantizeUnit == 0 || myQuantizeUnit > quantizeUnit)) {
+		    quantizeUnit = myQuantizeUnit;
+		}
+	    }
+	}
+	
         if (!foundNewEvent) {
             if (oldSelection &&
                 oldSelection->getSegment() == s->getSegment() &&
                 oldSelection->getSegmentEvents().size() ==
                 s->getSegmentEvents().size()) updateRequired = false;
         }
+    }
+
+    MATRIX_DEBUG << "quantize unit is " << quantizeUnit << endl;
+
+    for (unsigned int i = 0; i < m_quantizations.size(); ++i) {
+	if (quantizeUnit == m_quantizations[i].unit) {
+	    m_quantizeCombo->setCurrentItem(i);
+	    break;
+	}
+	if (i == m_quantizations.size() - 1) {
+	    m_quantizeCombo->setCurrentItem(i+1); // "Off"
+	}
     }
 
     if (updateRequired) {
@@ -1095,19 +1129,47 @@ MatrixView::slotNewSelection()
 
 
 void
-MatrixView::slotSetSnap(int s)
+MatrixView::slotSetSnapFromIndex(int s)
 {
-    MATRIX_DEBUG << "MatrixView::slotSetSnap: time is "
-                 << m_snapValues[s] << endl;
+    slotSetSnap(m_snapValues[s]);
+}
 
-    m_snapGrid->setSnapTime(m_snapValues[s]);
+
+void
+MatrixView::slotSetSnapFromAction()
+{
+    const QObject *s = sender();
+    QString name = s->name();
+
+    if (name.left(5) == "snap_") {
+	int snap = name.right(name.length() - 5).toInt();
+	if (snap > 0) {
+	    slotSetSnap
+		(Rosegarden::Note(Rosegarden::Note::Semibreve).getDuration() /
+		 snap);
+	}
+    }
+}
+
+
+void
+MatrixView::slotSetSnap(timeT t)
+{
+    MATRIX_DEBUG << "MatrixView::slotSetSnap: time is " << t << endl;
+    m_snapGrid->setSnapTime(t);
+
+    for (unsigned int i = 0; i < m_snapValues.size(); ++i) {
+	if (m_snapValues[i] == t) {
+	    m_snapGridCombo->setCurrentItem(i);
+	    break;
+	}
+    }
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i)
         m_staffs[i]->sizeStaff(m_hlayout);
 
     updateView();
 }
-
 
 void
 MatrixView::slotQuantizeSelection(int q)
@@ -1198,11 +1260,19 @@ MatrixView::initActionsToolbar()
     }
 
     connect(m_snapGridCombo, SIGNAL(activated(int)),
-            this, SLOT(slotSetSnap(int)));
+            this, SLOT(slotSetSnapFromIndex(int)));
 
     connect(m_snapGridCombo, SIGNAL(propagate(int)),
-            this, SLOT(slotSetSnap(int)));
+            this, SLOT(slotSetSnapFromIndex(int)));
 
+    new KAction(i18n("Snap to 1/64"), Key_0, this,
+                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_64");
+    new KAction(i18n("Snap to 1/32"), Key_3, this,
+                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_32");
+    new KAction(i18n("Snap to 1/16"), Key_6, this,
+                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_16");
+    new KAction(i18n("Snap to 1/8"), Key_8, this,
+                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_8");
 
     // Quantize combo
     //

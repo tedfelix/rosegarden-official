@@ -1039,6 +1039,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         // If we find the plugin all is well and good but if
         // we don't we just skip it.
         //
+#ifdef HAVE_LADSPA
+	
         if (plugin)
         {
             m_plugin = m_instrument->getPlugin(position);
@@ -1079,6 +1081,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_errorString = i18n("Can't find Plugin");
             return false;
         }
+
+#endif
 
     } else if (lcName == "port") {
 

@@ -182,7 +182,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_chordNamesVisible(false),
     m_temposVisible(false),
     m_annotationsVisible(false),
-//!!!    m_tupletMode(false),
     m_selectDefaultNote(0),
     m_fontCombo(0),
     m_fontSizeSlider(0),
@@ -452,7 +451,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_chordNamesVisible(false),
     m_temposVisible(false),
     m_annotationsVisible(false),
-//!!!    m_tupletMode(false),
     m_selectDefaultNote(0),
     m_fontCombo(0),
     m_fontSizeSlider(0),
@@ -904,21 +902,6 @@ void NotationView::setupActions()
 
     actionCollection()->insert(insertNoteActionMenu);
 
-
-/*!!!    
-    KRadioAction *insertChordMode = new KRadioAction
-	(i18n("&Chord Insert Mode"), Key_G, this, SLOT(slotInsertChordMode()),
-	 actionCollection(), "insert_chord_mode");
-    insertChordMode->setExclusiveGroup("insertMode");
-
-    KRadioAction *insertMelodyMode = new KRadioAction
-	(i18n("&Melody Insert Mode"), Key_H, this, SLOT(slotInsertMelodyMode()),
-	 actionCollection(), "insert_melody_mode");
-    insertMelodyMode->setExclusiveGroup("insertMode");
-    insertMelodyMode->setChecked(true);
-    m_insertChordMode = false;
-*/
-
     (new KToggleAction(i18n("C&hord Insert Mode"), Key_H, // this, 0,  // SLOT can't be null
 		      actionCollection(), "chord_mode"))->
 	setChecked(false);
@@ -1108,7 +1091,7 @@ void NotationView::setupActions()
 
     // SLOT can't be null
     (new KToggleAction(i18n("Tri&plet Insert Mode"), Key_G, // this, 0,
-                       /*!!! SLOT(slotToggleTriplet()),*/ actionCollection(), "triplet_mode"))->
+                       actionCollection(), "triplet_mode"))->
 	setChecked(false);
 
     new KAction(i18n(GroupMenuGraceCommand::getGlobalName()), 0, this,
@@ -1818,35 +1801,7 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview)
     }
     m_selectionCounter->update();
 
-    //!!! dup with refreshSegment, move to other fn somewhere
-
-#ifdef RGKDE3
-    // Clear states first, then enter only those ones that apply
-    // (so as to avoid ever clearing one after entering another, in
-    // case the two overlap at all)
-    stateChanged("have_selection", KXMLGUIClient::StateReverse);
-    stateChanged("have_notes_in_selection", KXMLGUIClient::StateReverse);
-    stateChanged("have_rests_in_selection", KXMLGUIClient::StateReverse);
-
-    if (s) {
-
-	NOTATION_DEBUG << "NotationView::setCurrentSelection: Have selection; it's " << s << " covering range from " << s->getStartTime() << " to " << s->getEndTime() << " (" << s->getSegmentEvents().size() << " events)" << endl;
-
-	stateChanged("have_selection", KXMLGUIClient::StateNoReverse);
-	if (s->contains(Rosegarden::Note::EventType)) {
-	    stateChanged("have_notes_in_selection",
-			 KXMLGUIClient::StateNoReverse);
-	}
-	if (s->contains(Rosegarden::Note::EventRestType)) {
-	    stateChanged("have_rests_in_selection",
-			 KXMLGUIClient::StateNoReverse);
-	}
-    }
-#else
-
-    NOTATION_DEBUG << "Not using KDE3, not setting selection-related states"
-		   << endl;
-#endif
+    setMenuStatesFromSelection();
 
     updateView();
 }
@@ -2113,9 +2068,6 @@ void NotationView::refreshSegment(Segment *segment,
 //!!!    slotSetInsertCursorPosition(m_insertionTime, false);
     slotSetPointerPosition(m_document->getComposition().getPosition(), false);
 
-
-    //!!! dup with setCurrentSelection, move to other fn somewhere
-
     if (m_currentEventSelection &&
 	m_currentEventSelection->getSegmentEvents().size() == 0) {
 	delete m_currentEventSelection;
@@ -2123,6 +2075,14 @@ void NotationView::refreshSegment(Segment *segment,
 	//!!!??? was that the right thing to do?
     }
 
+    setMenuStatesFromSelection();
+
+    PRINT_ELAPSED("NotationView::refreshSegment (including update/GC)");
+}
+
+
+void NotationView::setMenuStatesFromSelection()
+{
 #ifdef RGKDE3
     // Clear states first, then enter only those ones that apply
     // (so as to avoid ever clearing one after entering another, in
@@ -2152,11 +2112,7 @@ void NotationView::refreshSegment(Segment *segment,
     NOTATION_DEBUG << "Not using KDE3, not setting selection-related states"
 		   << endl;
 #endif
-
-
-    PRINT_ELAPSED("NotationView::refreshSegment (including update/GC)");
 }
-
 
 
 #define UPDATE_PROGRESS(n) \

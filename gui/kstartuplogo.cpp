@@ -71,7 +71,8 @@ void KStartupLogo::paintEvent(QPaintEvent*)
 
     paint.setPen(QColor(206,214,163));
     paint.setBrush(QColor(206,214,163));
-    paint.drawRect(QRect(m_pixmap.width() - 220, y - 15, 220, 22));
+    paint.drawRect(QRect(m_pixmap.width() - 220, m_pixmap.height() - 43,
+			 220, (y + 8) - (m_pixmap.height() - 43)));
 
     paint.setPen(Qt::black);
     paint.setBrush(Qt::black);

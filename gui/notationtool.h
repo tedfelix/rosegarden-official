@@ -161,9 +161,6 @@ public slots:
     /// Set the accidental for the notes which will be inserted
     void slotSetAccidental(Rosegarden::Accidental);
 
-    /// Set the tuplet mode
-//!!!    void slotSetTupletMode(bool);
-
     /**
      * Set the accidental for the notes which will be inserted
      * and put the parent view toolbar in sync
@@ -213,7 +210,6 @@ protected:
     bool m_autoBeam;
     bool m_matrixInsertType;
     NoteStyleName m_defaultStyle;
-//!!!    bool m_tupletMode;
 
     bool m_clickHappened;
     Rosegarden::timeT m_clickTime;
@@ -393,11 +389,6 @@ public:
      * Delete the selection rect.
      */
     virtual void stow();
-
-    /**
-     * Returns whether the selection rectangle is visible or not
-     */
-//!!!    bool isRectangleVisible(); // no -- it's not visible, guaranteed
 
     /**
      * Returns the currently selected events

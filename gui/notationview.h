@@ -288,8 +288,6 @@ public slots:
     /// note switch slot
     void slotNoteAction();
 
-//!!!    void slotToggleTriplet();
-
     /// accidental switch slots
     void slotNoAccidental();
     void slotSharp();
@@ -363,8 +361,6 @@ public slots:
 
     void slotSetStyleFromAction();
     void slotInsertNoteFromAction();
-//!!!    void slotInsertChordMode();
-//    void slotInsertMelodyMode();
     void slotInsertRest();
     void slotSwitchFromRestToNote();
     void slotSwitchFromNoteToRest();
@@ -535,11 +531,6 @@ signals:
     void changeAccidental(Rosegarden::Accidental);
 
     /**
-     * Emitted when the tuplet mode has been toggled by the user
-     */
-//!!!    void changeTupletMode(bool newTupletMode);
-
-    /**
      * Emitted when the selection has been cut or copied
      *
      * @see NotationSelector#hideSelection
@@ -590,6 +581,11 @@ protected:
      * create or re-initialise (after font change) the font size menu
      */
     virtual void setupFontSizeMenu(std::string oldFontName = "");
+
+    /**
+     * Set KDE3+ menu states based on the current selection
+     */
+    virtual void setMenuStatesFromSelection();
 
     /**
      * setup status bar
@@ -719,8 +715,6 @@ protected:
     bool m_chordNamesVisible;
     bool m_temposVisible;
     bool m_annotationsVisible;
-    
-//!!!    bool m_tupletMode;
     
     std::vector<int> m_legatoDurations;
 

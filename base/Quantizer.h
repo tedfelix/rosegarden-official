@@ -389,6 +389,8 @@ struct StandardQuantization {
 	type(_type), unit(_unit), maxDots(_maxDots),
 	name(_name), description(_description), noteName(_noteName) { }
 
+    // This is defined to return the standard quantizations in
+    // descending order of unit duration
     static std::vector<StandardQuantization> getStandardQuantizations();
 };
 
