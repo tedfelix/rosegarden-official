@@ -49,6 +49,13 @@ main(int argc, char **argv)
   // Create a Rosegarden composition from the file
   Rosegarden::Composition *comp = midiFile->convertToRosegarden();
 
+  Rosegarden::MidiFile *outMidiFile = new Rosegarden::MidiFile("outfile.mid");
+
+  outMidiFile->convertToMidi(*comp);
+  outMidiFile->write();
+
+
+/*
   // initialize MIDI and audio subsystems
   //
   Rosegarden::Sequencer sequencer;
@@ -127,5 +134,6 @@ main(int argc, char **argv)
 
    //sequencer.incrementSongPosition(60000);
   }
+*/
 
 }

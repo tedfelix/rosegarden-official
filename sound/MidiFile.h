@@ -100,8 +100,8 @@ namespace Rosegarden
     //
     bool parseHeader(const std::string& midiHeader);
     bool parseTrack(std::ifstream* midiFile, const unsigned int &trackNum);
-    bool writeHeader();
-    bool writeTrack();
+    bool writeHeader(std::ofstream* midiFile);
+    bool writeTrack(std::ofstream* midiFile, const unsigned int &trackNumber);
 
     // Internal convenience functions
     //
@@ -110,6 +110,8 @@ namespace Rosegarden
     const unsigned int getNumberFromMidiBytes(std::ifstream* midiFile);
     const std::string getMidiBytes(std::ifstream* midiFile, const unsigned int &bytes);
     bool skipToNextTrack(std::ifstream *midiFile);
+
+    void intToHexMidiBytes(std::ofstream* midiFile, int number);
 
   };
 

@@ -759,7 +759,6 @@ void
 MidiFile::convertToMidi(const Rosegarden::Composition &comp)
 {
   MidiEvent *midiEvent;
-  int midiInstrument;
   int trackNumber = 0;
 
   int trackStartTime;
@@ -767,6 +766,7 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
   int midiEventDeltaTime;
   int midiChannel = 0;
 
+  //int midiInstrument;
 
   _timingDivision = (int)((float) Note(Note::Crotchet).getDuration() * 120.0 /
                           (float) comp.getTempo());
@@ -776,6 +776,10 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
   // Clear out anything we have stored in this object already.
   //
   _midiComposition.clear();
+
+  // Insert the Rosegarden Signature Track here and any relevant
+  // file META information
+  //
 
   // Our Composition to MIDI timing factor
   //
@@ -847,9 +851,13 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
       midiChannel++;
       midiChannel %= 16;
 
-      // increment track number
-      trackNumber++;
     }
+
+    if (trackNumber == 99)
+      break;
+
+    // increment track number
+    trackNumber++;
   }
 
   // Setup number of tracks
@@ -859,30 +867,101 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
   return;
 }
 
-
-bool
-MidiFile::writeHeader()
+// Convert an integer into a two byte representation and
+// write out to the MidiFile.
+//
+void
+MidiFile::intToHexMidiBytes(std::ofstream* midiFile, int number)
 {
+  MidiByte upper;
+  MidiByte lower;
+
+  upper = ( (number & 0xF000) << 24 ) + ( (number & 0x0F00) << 16 );
+  lower = ( (number & 0xF0) << 8 ) + (number & 0x0F);
+
+  *midiFile << (MidiByte) upper;
+  *midiFile << (MidiByte) lower;
+
+}
+
+// Write out the MIDI file header
+//
+bool
+MidiFile::writeHeader(std::ofstream* midiFile)
+{
+  // Our identifying Header string
+  //
+  *midiFile << MIDI_FILE_HEADER.c_str();
+
+  // Write number of Bytes to follow
+  //
+  *midiFile << (MidiByte) 0x00;
+  *midiFile << (MidiByte) 0x00;
+  *midiFile << (MidiByte) 0x00;
+  *midiFile << (MidiByte) 0x06;
+
+  // Write File Format
+  //
+  *midiFile << (MidiByte) 0x00;            
+  *midiFile << (MidiByte) _format;
+
+  // Number of Tracks we're writing and add one for
+  // a first Data track.
+  //
+  intToHexMidiBytes(midiFile, _numberOfTracks + 1);
+
+  // Timing Division
+  //
+  intToHexMidiBytes(midiFile, _timingDivision);
+
   return(true);
 }
 
+// Write out a MIDI file track
+//
 bool
-MidiFile::writeTrack()
+MidiFile::writeTrack(std::ofstream* midiFile, const unsigned int &trackNumber)
 {
+  *midiFile << MIDI_TRACK_HEADER.c_str();
+
+  // get the length of the track and write it out
+
+  // parse all the elements out
+
+  std::cout << trackNumber  << endl;
+
   return(true);
 }
 
+// Writes out a MIDI file from the internal Midi representation
+//
 bool
 MidiFile::write()
 {
-  ofstream *midiFile = new ofstream(_filename.c_str(), ios::out | ios::binary);
+  std::ofstream *midiFile =
+           new std::ofstream(_filename.c_str(), ios::out | ios::binary);
 
-  //midiFile->close();
 
-  writeHeader();
-  writeTrack();
+  if (!(*midiFile))
+  {
+    std::cerr << "MidiFile::write() - can't write file" << endl;
+    return false;
+  }
+
+  // Write out the Header
+  writeHeader(midiFile);
+
+  // And now the Tracks
+  //
+  for(unsigned int i = 0; i < _numberOfTracks; i++ )
+  {
+    writeTrack(midiFile, i);
+  }
+
+  midiFile->close();
 
   return (true);
 }
 
 }
+
