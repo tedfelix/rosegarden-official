@@ -89,7 +89,9 @@ NotationElementList::~NotationElementList()
 kdbgstream& operator<<(kdbgstream &dbg, NotationElement &e)
 {
     if (e.isGroup()) {
-        dbg << "Group NotationElement" << endl;
+        dbg << "Group NotationElement {" << endl;
+        dbg << *(e.group());
+        dbg << "} End Group NotationElement" << endl;
     } else {
         dbg << "NotationElement - x : " << e.x() << " - y : " << e.y();
         e.event()->dump(cerr);
