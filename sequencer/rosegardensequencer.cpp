@@ -211,7 +211,10 @@ RosegardenSequencerApp::keepPlaying()
   return true;
 }
 
-// return current Sequencer time in GUI compatible terms
+// Return current Sequencer time in GUI compatible terms
+// remembering that our playback is delayed by m_playLatency
+// ticks from our current m_songPosition.
+//
 void
 RosegardenSequencerApp::updateClocks()
 {
@@ -219,23 +222,34 @@ RosegardenSequencerApp::updateClocks()
   QCString replyType;
   QDataStream arg(data, IO_WriteOnly);
 
+  Rosegarden::timeT newPosition = m_sequencer->getSequencerTime();
+
   // Sequencer time is a subset of MIDI time so GUI song
   // position won't be updating every pass through a tight
   // loop.
   //
-  if (m_sequencer->getSequencerTime() != m_songPosition)
+  if (newPosition != m_songPosition)
   {
-    m_songPosition = m_sequencer->getSequencerTime();
-    arg << m_songPosition;
+    m_songPosition = newPosition;
+
+    // Now use newPosition to work out if we need to move the
+    // GUI pointer.
+    //
+    if (m_songPosition > m_sequencer->getStartPosition() + m_playLatency)
+      newPosition -= m_playLatency;
+    else
+      newPosition = m_sequencer->getStartPosition();
+
+    arg << newPosition;
 
     cout << "updateClocks() - m_songPosition = " << m_songPosition << endl;
-    if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
+    if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                                   ROSEGARDEN_GUI_IFACE_NAME,
                                   "setPointerPosition(int)",
-                                  data, replyType, replyData))
+                                  data)) //, replyType, replyData))
     {
       cerr <<
-       "RosegardenSequencer::updateClocks() - can't call RosegardenGUI client"
+       "RosegardenSequencer::updateClocks() - can't send to RosegardenGUI client"
            << endl;
       m_transportStatus = STOPPING;
     }
@@ -251,13 +265,13 @@ RosegardenSequencerApp::notifySequencerStatus()
 
   arg << (int)m_transportStatus;
 
-  if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
+  if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                                 ROSEGARDEN_GUI_IFACE_NAME,
                                 "notifySequencerStatus(int)",
-                                data, replyType, replyData))
+                                data)) //, replyType, replyData))
   {
     cerr <<
-     "RosegardenSequencer::notifySequencerStatus() - can't call RosegardenGUI client"
+     "RosegardenSequencer::notifySequencerStatus() - can't send to RosegardenGUI client"
          << endl;
   }
 }

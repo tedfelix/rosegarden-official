@@ -878,7 +878,7 @@ RosegardenGUIApp::play()
   //
   QDataStream streamOut(data, IO_WriteOnly);
   streamOut << m_doc->getComposition().getPosition();
-  streamOut << 50;  // default latency
+  streamOut << 20;  // default latency
 
   // Send Play to the Sequencer
   if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,

@@ -190,6 +190,8 @@ namespace Rosegarden
     void processNotesOff(unsigned int midiTime);
     void allNotesOff();
 
+    Rosegarden::timeT getStartPosition() { return _playStartPosition; }
+
   private:
 
     void initializeMidi();
