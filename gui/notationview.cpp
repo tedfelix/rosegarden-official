@@ -723,7 +723,10 @@ void NotationView::setupActions()
              this, actionsToolbars[i][1],
              actionCollection(), actionsToolbars[i][2]);
 
-        toolbarAction->setChecked(true);
+        if (i == 3)
+            toolbarAction->setChecked(false);
+        else
+            toolbarAction->setChecked(true);
     }
 
     QAccel *accelerators(getAccelerators());
