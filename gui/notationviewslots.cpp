@@ -1560,7 +1560,7 @@ NotationView::slotSetCurrentStaff(int staffNo)
 
 	updateView();
 	
-	slotSetInsertCursorPosition(getInsertionTime());
+	slotSetInsertCursorPosition(getInsertionTime(), false, false);
     }
 }    
 

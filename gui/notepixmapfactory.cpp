@@ -1257,13 +1257,14 @@ NotePixmapFactory::drawShallowLine(int x0, int y0, int x1, int y1,
     int dv = y1 - y0;
     int dh = x1 - x0;
 
-    static std::vector<QColor> colours;
+    static std::vector<QColor> colours, selectedColours;
     if (colours.size() == 0) {
-        colours.push_back(QColor(-1, 0, 0, QColor::Hsv));
-        colours.push_back(QColor(-1, 0, 63, QColor::Hsv));
-        colours.push_back(QColor(-1, 0, 127, QColor::Hsv));
-        colours.push_back(QColor(-1, 0, 191, QColor::Hsv));
-        colours.push_back(QColor(-1, 0, 255, QColor::Hsv));
+	int h, s, v;
+	RosegardenGUIColours::SelectedElement.getHsv(&h, &s, &v);
+	for (int step = 0; step < 256; step += (step == 0 ? 63 : 64)) {
+	    colours.push_back(QColor(-1, 0, step, QColor::Hsv));
+	    selectedColours.push_back(QColor(h, 255-step, v, QColor::Hsv));
+	}
     }
 
     int cx = x0, cy = y0;
@@ -1305,17 +1306,34 @@ NotePixmapFactory::drawShallowLine(int x0, int y0, int x1, int y1,
 
 	int off = 0;
 
-        m_p->painter().setPen(colours[quartile]);
+	if (m_selected) {
+	    m_p->painter().setPen(selectedColours[quartile]);
+	} else {
+	    m_p->painter().setPen(colours[quartile]);
+	}
+
         m_p->drawPoint(cx, cy);
 	drawBeamsCount ++;
 
-	if (thickness > 1) m_p->painter().setPen(Qt::black);
+	if (thickness > 1) {
+	    if (m_selected) {
+		m_p->painter().setPen(RosegardenGUIColours::SelectedElement);
+	    } else {
+		m_p->painter().setPen(Qt::black);
+	    }
+	}
+
 	while (++off < thickness) {
             m_p->drawPoint(cx, cy + off);
 	    drawBeamsCount ++;
         }
         
-        m_p->painter().setPen(colours[4 - quartile]);
+	if (m_selected) {
+	    m_p->painter().setPen(selectedColours[4 - quartile]);
+	} else {
+	    m_p->painter().setPen(colours[4 - quartile]);
+	}
+
         m_p->drawPoint(cx, cy + off);
 	drawBeamsCount ++;
 	    
