@@ -919,7 +919,7 @@ void NotationView::setupActions()
     m_insertChordMode = false;
 */
 
-    (new KToggleAction(i18n("C&hord Insert Mode"), Key_H, this, 0,
+    (new KToggleAction(i18n("C&hord Insert Mode"), Key_H, // this, 0,  // SLOT can't be null
 		      actionCollection(), "chord_mode"))->
 	setChecked(false);
 
@@ -1106,8 +1106,9 @@ void NotationView::setupActions()
     new KAction(i18n(GroupMenuTupletCommand::getGlobalName(false)), 0, this,
 		SLOT(slotGroupGeneralTuplet()), actionCollection(), "tuplet");
 
-    (new KToggleAction(i18n("Tri&plet Insert Mode"), Key_G, this,
-		      0, /*!!! SLOT(slotToggleTriplet()),*/ actionCollection(), "triplet_mode"))->
+    // SLOT can't be null
+    (new KToggleAction(i18n("Tri&plet Insert Mode"), Key_G, // this, 0,
+                       /*!!! SLOT(slotToggleTriplet()),*/ actionCollection(), "triplet_mode"))->
 	setChecked(false);
 
     new KAction(i18n(GroupMenuGraceCommand::getGlobalName()), 0, this,
