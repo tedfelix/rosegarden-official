@@ -190,6 +190,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_currentStaff(-1),
     m_lastFinishingStaff(-1),
     m_insertionTime(0),
+    m_deferredCursorMove(NoCursorMoveNeeded),
+    m_currentAccidental(Rosegarden::Accidentals::NoAccidental),
     m_fontName(NoteFontFactory::getDefaultFontName()),
     m_fontSize(NoteFontFactory::getDefaultSize(m_fontName)),
     m_pageMode(LinedStaff::LinearMode),
@@ -676,6 +678,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_hoveredOverAbsoluteTime(0),
     m_lastFinishingStaff(-1),
     m_insertionTime(0),
+    m_deferredCursorMove(NoCursorMoveNeeded),
+    m_currentAccidental(Rosegarden::Accidentals::NoAccidental),
     m_fontName(NoteFontFactory::getDefaultFontName()),
     m_fontSize(NoteFontFactory::getDefaultSize(m_fontName)),
     m_pageMode(LinedStaff::LinearMode),
@@ -815,7 +819,8 @@ NotationView::~NotationView()
 	}
 	delete m_staffs[i]; // this will erase all "notes" canvas items
     }
-
+    
+    PixmapArrayGC::deleteAll();
     Rosegarden::Profiles::getInstance()->dump();
 
     NOTATION_DEBUG << "<- ~NotationView()" << endl;
@@ -2725,6 +2730,7 @@ void NotationView::print(bool previewOnly)
 
 	m_config->setGroup(NotationView::ConfigGroup);
 
+	NOTATION_DEBUG << "NotationView::print: calling QCanvas::drawArea" << endl;
 	if (m_config->readBoolEntry("forcedoublebufferprinting", false)) {
 	    getCanvasView()->canvas()->drawArea(pageRect, &printpainter, true);
 	} else {
@@ -2734,6 +2740,7 @@ void NotationView::print(bool previewOnly)
 	    getCanvasView()->canvas()->drawArea(pageRect, &printpainter, true);
 #endif
 	}
+	NOTATION_DEBUG << "NotationView::print: QCanvas::drawArea done" << endl;
 
         printpainter.translate(-pageWidth, 0);
 
@@ -2741,9 +2748,19 @@ void NotationView::print(bool previewOnly)
 	
 	for (size_t i = 0; i < m_staffs.size(); ++i) {
 	    m_staffs[i]->markChanged(); // recover any memory used for this page
+	    PixmapArrayGC::deleteAll();
 	}
     }
 
+    for (size_t i = 0; i < m_staffs.size(); ++i) {
+	for (Segment::iterator j = m_staffs[i]->getSegment().begin();
+	     j != m_staffs[i]->getSegment().end(); ++j) {
+	    removeViewLocalProperties(*j);
+	}
+	delete m_staffs[i];
+    }
+    m_staffs.clear();
+    
     printpainter.end();
 }
 

@@ -504,7 +504,7 @@ void SegmentMmapper::dump()
     *(size_t *)m_mmappedRegion = (bufPos - m_mmappedEventBuffer);
 
     size_t coveredArea = (bufPos - m_mmappedEventBuffer) * sizeof(MappedEvent);
-    memset(bufPos, 0, m_mmappedSize - coveredArea);
+    memset(bufPos, 0, m_mmappedSize - coveredArea - sizeof(size_t));
 
     ::msync(m_mmappedRegion, m_mmappedSize, MS_ASYNC);
 }

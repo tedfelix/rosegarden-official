@@ -52,6 +52,7 @@
 #include "notationhlayout.h"
 #include "notefont.h"
 #include "eventfilter.h"
+#include "qcanvassimplesprite.h"
 
 #include "ktmpstatusmsg.h"
 
@@ -2086,6 +2087,8 @@ NotationView::slotRenderSomething()
 	    connect(m_renderTimer, SIGNAL(timeout()), SLOT(slotRenderSomething()));
 	    m_renderTimer->start(0, true);
 	    return;
+	} else {
+	    PixmapArrayGC::deleteAll();
 	}
     }
 }

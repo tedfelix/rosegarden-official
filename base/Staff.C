@@ -35,6 +35,7 @@ Staff::~Staff()
 {
     if (m_viewElementList) m_segment.removeObserver(this);
     notifySourceDeletion();
+    delete m_viewElementList;
 }
 
 ViewElementList *

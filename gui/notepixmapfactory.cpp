@@ -2197,6 +2197,10 @@ NotePixmapFactory::createPixmapAndMask(int width, int height,
     m_generatedPixmap = new QPixmap(width, height);
     m_generatedMask = new QBitmap(maskWidth, maskHeight);
 
+//    static unsigned long total = 0;
+//    total += width*height;
+//!!!    NOTATION_DEBUG << "createPixmapAndMask: " << width << "x" << height << " (" << (width*height) << " px, " << total << " total)" << endl;
+
     // clear up pixmap and mask
     m_generatedPixmap->fill();
     m_generatedMask->fill(Qt::color0);
