@@ -1285,7 +1285,9 @@ void RosegardenGUIApp::rewind()
     int barNumber = composition.getBarNumber(position - 1, false);
     timeT jumpTo = composition.getBarRange(barNumber, false).first;
 
-    if ( m_transportStatus == PLAYING )
+    if ( m_transportStatus == PLAYING ||
+         m_transportStatus == RECORDING_MIDI ||
+         m_transportStatus == RECORDING_AUDIO )
     {
         sendSequencerJump(jumpTo);
     }
@@ -1312,7 +1314,9 @@ void RosegardenGUIApp::fastforward()
     // non-destructive start and end markers for the piece.
     //
 
-    if ( m_transportStatus == PLAYING )
+    if ( m_transportStatus == PLAYING ||
+         m_transportStatus == RECORDING_MIDI ||
+         m_transportStatus == RECORDING_AUDIO )
     {
         sendSequencerJump(jumpTo);
     }
