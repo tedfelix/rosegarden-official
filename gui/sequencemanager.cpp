@@ -789,6 +789,24 @@ SequenceManager::record(bool toggled)
     KConfig* config = kapp->config();
     config->setGroup("General Options");
 
+    // Rather clumsy additional check for audio subsys when we start
+    // recording - once we enforce audio subsystems then this will
+    // become redundant.
+    //
+    if (!(m_soundDriverStatus & AUDIO_OK))
+    {
+        int rID = comp.getRecordTrack();
+        Rosegarden::InstrumentId instrId =
+            comp.getTrackByIndex(rID)->getInstrument();
+        Rosegarden::Instrument *instr = studio.getInstrumentById(instrId);
+
+        if (!instr || instr->getType() == Rosegarden::Instrument::Audio)
+        {
+            m_transport->RecordButton->setOn(false);
+            throw(i18n("Audio subsystem is not available - can't record audio"));
+        }
+    }
+
     if (toggled)
     {
         if (m_transportStatus == RECORDING_ARMED)
