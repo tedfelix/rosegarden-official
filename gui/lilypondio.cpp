@@ -13,6 +13,9 @@
         Hans Kieserman      <hkieserman@mail.com>
     with heavy lifting from csoundio as it was on 13/5/2002.
 
+    Enharmonics fix and trivial additions by
+        Michael McIntyre    <dmmcintyr@users.sourceforge.net>
+
     The moral right of the authors to claim authorship of this work
     has been asserted.
 
@@ -423,7 +426,6 @@ LilypondExporter::write()
 
             timeT duration = (*j)->getDuration();
 
-            // DMM - enharmonics modifications            
             if ((*j)->isa(Note::EventType) ||
                 (*j)->isa(Note::EventRestType)) {
                 // Tuplet code from notationhlayout.cpp
