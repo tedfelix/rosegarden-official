@@ -75,6 +75,10 @@ public:
 
     QCanvas* canvas() { return m_canvasView->canvas(); }
 
+    void setCurrentSelectedNote(Note::Type);
+
+    Note::Type currentSelectedNote() const { return m_currentSelectedNote; }
+
 public slots:
 
     /** undo
@@ -128,6 +132,9 @@ public slots:
 
     // Canvas actions slots
     void insertNote(int pitch, const QPoint&);
+
+signals:
+    void changeCurrentNote(Note::Type);
 
 protected:
 

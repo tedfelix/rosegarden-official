@@ -20,6 +20,8 @@
 
 #include <qcanvas.h>
 
+#include "notepixmapfactory.h"
+
 class StaffLine;
 
 /**
@@ -34,12 +36,20 @@ public:
     NotationCanvasView(QCanvas *viewing=0, QWidget *parent=0,
                        const char *name=0, WFlags f=0);
 
+    ~NotationCanvasView();
+
     /** Callback for a mouse button press event in the canvas */
     virtual void contentsMousePressEvent(QMouseEvent *e);
     /** Callback for a mouse button release event in the canvas */
     virtual void contentsMouseReleaseEvent(QMouseEvent *e);
     /** Callback for a mouse move event in the canvas */
     virtual void contentsMouseMoveEvent(QMouseEvent *e);
+
+    void setCurrentNotePixmap(QCanvasPixmap note);
+
+public slots:
+
+    void currentNoteChanged(Note::Type);
 
 signals:
     void noteInserted(int pitch, const QPoint&);
@@ -48,9 +58,12 @@ protected:
 
     void insertNote(const StaffLine*, const QPoint&);
 
+    
     StaffLine* m_currentHighlightedLine;
 
-    QCanvasSprite *m_currentNote;
+    QCanvasSprite *m_currentNotePixmap;
+
+    NotePixmapFactory m_notePixmapFactory;
     
 };
 

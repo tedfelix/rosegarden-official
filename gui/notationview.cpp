@@ -133,6 +133,9 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     QObject::connect(m_canvasView, SIGNAL(noteInserted(int, const QPoint&)),
                      this,         SLOT  (insertNote  (int, const QPoint&)));
 
+    QObject::connect(this,         SIGNAL(changeCurrentNote(Note::Type)),
+                     m_canvasView, SLOT(currentNoteChanged(Note::Type)));
+
     readOptions();
 
     if (!doc) {
@@ -455,6 +458,15 @@ NotationView::applyVerticalLayout()
     return m_vlayout->status() == 0;
 }
 
+
+void
+NotationView::setCurrentSelectedNote(Note::Type n)
+{
+    m_currentSelectedNote = n;
+    emit changeCurrentNote(n);
+}
+
+
 //////////////////////////////////////////////////////////////////////
 //                    Slots
 //////////////////////////////////////////////////////////////////////
@@ -550,49 +562,49 @@ void
 NotationView::slotWhole()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotWhole()\n";
-    m_currentSelectedNote = Note::WholeNote;
+    setCurrentSelectedNote(Note::WholeNote);
 }
 
 void
 NotationView::slotHalf()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotHalf()\n";
-    m_currentSelectedNote = Note::HalfNote;
+    setCurrentSelectedNote(Note::HalfNote);
 }
 
 void
 NotationView::slotQuarter()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotQuarter()\n";
-    m_currentSelectedNote = Note::QuarterNote;
+    setCurrentSelectedNote(Note::QuarterNote);
 }
 
 void
 NotationView::slot8th()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slot8th()\n";
-    m_currentSelectedNote = Note::EighthNote;
+    setCurrentSelectedNote(Note::EighthNote);
 }
 
 void
 NotationView::slot16th()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slot16th()\n";
-    m_currentSelectedNote = Note::SixteenthNote;
+    setCurrentSelectedNote(Note::SixteenthNote);
 }
 
 void
 NotationView::slot32nd()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slot32nd()\n";
-    m_currentSelectedNote = Note::ThirtySecondNote;
+    setCurrentSelectedNote(Note::ThirtySecondNote);
 }
 
 void
 NotationView::slot64th()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slot64th()\n";
-    m_currentSelectedNote = Note::SixtyFourthNote;
+    setCurrentSelectedNote(Note::SixtyFourthNote);
 }
 
 void
