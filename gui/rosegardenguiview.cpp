@@ -239,13 +239,21 @@ void RosegardenGUIView::setZoomSize(double size)
 {
     m_rulerScale->setUnitsPerPixel(size);
 
-    m_trackEditor->getSegmentCanvas()->update();
+    for (Rosegarden::Composition::iterator i = 
+              getDocument()->getComposition().begin();
+         i != getDocument()->getComposition().end(); i++) {
+	m_trackEditor->getSegmentCanvas()->updateSegmentItem(*i);
+    }
 
-    if (m_trackEditor->getTopBarButtons())
+    m_trackEditor->getSegmentCanvas()->slotUpdate();
+
+    if (m_trackEditor->getTopBarButtons()) {
 	m_trackEditor->getTopBarButtons()->update();
+    }
 
-    if (m_trackEditor->getBottomBarButtons())
+    if (m_trackEditor->getBottomBarButtons()) {
 	m_trackEditor->getBottomBarButtons()->update();
+    }
 }
 
 

@@ -134,14 +134,17 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
     setX(m_snapGrid->getRulerScale()->getXForTime(m_startTime));
     setY(m_snapGrid->getYBinCoordinate(m_track));
 
-    setSize((int)m_snapGrid->getRulerScale()->
-	    getWidthForDuration(m_startTime, m_duration) + 1,
-	    m_snapGrid->getYSnap());
+    int h = m_snapGrid->getYSnap();
+    double w = m_snapGrid->getRulerScale()->getWidthForDuration
+	(m_startTime, m_duration); 
+
+    setSize(int(w) + 1, h);
 
     bool dots = false;
 
     while (m_label.length() > 0 &&
-	   (m_fontMetrics->boundingRect(dots ? (m_label + "...") : m_label).width() >
+	   (m_fontMetrics->boundingRect
+	    (dots ? (m_label + "...") : m_label).width() >
 	    width() - 5)) {
 	if (!dots && m_label.length() > 6) {
 	    m_label.truncate(m_label.length() - 4);
@@ -340,25 +343,28 @@ void SegmentCanvas::updateAllSegmentItems()
         // if the composition and the segment canvas have the same
         // number of segments, but one of them got deleted they can't
         // be all the same segments, so we also have to look
-        {
-            using Rosegarden::Composition;
+    {
+	using Rosegarden::Composition;
 
-            // check all composition's segments if there's a SegmentItem for it
-            //
-            const Composition::segmentcontainer& compositionSegments = m_doc->getComposition().getSegments();
-            for(Composition::segmentcontainer::const_iterator i = compositionSegments.begin();
-                i != compositionSegments.end(); ++i) {
+	// check all composition's segments if there's a SegmentItem for it
+	//
+	const Composition::segmentcontainer& compositionSegments =
+	    m_doc->getComposition().getSegments();
 
-                Segment* seg = (*i);
-
-                if (std::find(currentSegments.begin(), currentSegments.end(), seg) == currentSegments.end()) {
-                    // found one - update
-                    addSegmentItem(seg);
-                }
-
-            }
-
-        }
+	for (Composition::segmentcontainer::const_iterator i =
+		 compositionSegments.begin();
+	     i != compositionSegments.end(); ++i) {
+	    
+	    Segment* seg = (*i);
+	    
+	    if (std::find(currentSegments.begin(),
+			  currentSegments.end(), seg) ==
+		currentSegments.end()) {
+		// found one - update
+		addSegmentItem(seg);
+	    }
+	}
+    }
 
     slotUpdate();
 }
