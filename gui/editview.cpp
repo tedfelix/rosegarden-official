@@ -57,13 +57,19 @@ void EditView::readjustViewSize(QSize requestedSize, bool exact)
 
     QSize currentSize = getViewSize();
     
-    int requestedWidth = requestedSize.width(),
+    int requestedWidth  = requestedSize.width(),
         requestedHeight = requestedSize.height(),
-        currentWidth = currentSize.width(),
-        currentHeight = currentSize.height();
+//        currentWidth    = currentSize.width(),
+//        currentHeight   = currentSize.height(),
+	windowWidth     = width(),
+	windowHeight	= height();
 
-    QSize newSize = requestedSize;
+    QSize newSize;
 
+    newSize.setWidth(((requestedWidth / windowWidth) + 1) * windowWidth);
+    newSize.setHeight(((requestedHeight / windowHeight) + 1) * windowHeight);
+
+/*!!!
     if ((requestedWidth < currentWidth) &&
         ((requestedWidth / currentWidth) < 0.75))
 
@@ -79,7 +85,7 @@ void EditView::readjustViewSize(QSize requestedSize, bool exact)
 
     else // requestedHeight >= currentHeight
         newSize.setHeight(requestedHeight + requestedHeight / 2);
-
+*/
     setViewSize(newSize);
 }
 

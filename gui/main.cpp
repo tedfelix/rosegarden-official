@@ -94,6 +94,13 @@ int main(int argc, char *argv[])
         rosegardengui = new RosegardenGUIApp();
         rosegardengui->show();
 
+	// raise start logo
+	//
+	if (start_logo) {
+	    start_logo->raise();
+	    QApplication::flushX();
+	}
+
         KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 		
         if (args->count()) {
@@ -118,7 +125,7 @@ int main(int argc, char *argv[])
     //
     rosegardengui->launchSequencer();
 
-    QTimer::singleShot(2*1000, start_logo, SLOT(close()));
+    QTimer::singleShot(1000, start_logo, SLOT(close()));
 
     return app.exec();
 }  
