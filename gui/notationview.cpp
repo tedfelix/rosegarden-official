@@ -118,7 +118,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     m_config(kapp->config()),
     m_document(doc),
     m_currentNotePixmap(0),
-    m_currentPitch(0),
+    m_hoveredOverNoteName(0),
     m_canvasView(new NotationCanvasView(new QCanvas(width() * 2,
                                                     height() * 2),
                                         this)),
@@ -144,8 +144,8 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     QObject::connect(m_canvasView, SIGNAL(noteInserted(int, const QPoint&)),
                      this,         SLOT  (insertNote  (int, const QPoint&)));
 
-    QObject::connect(m_canvasView, SIGNAL(currentPitchChange(int)),
-                     this,         SLOT  (currentPitchChanged(int)));
+    QObject::connect(m_canvasView, SIGNAL(hoveredOverNoteChange(const QString&)),
+                     this,         SLOT  (hoveredOverNoteChanged(const QString&)));
 
 //     QObject::connect(this,         SIGNAL(changeCurrentNote(Note::Type)),
 //                      m_canvasView, SLOT(currentNoteChanged(Note::Type)));
@@ -319,10 +319,10 @@ void NotationView::initStatusBar()
 
     sb->insertItem(i18n(IDS_STATUS_DEFAULT), ID_STATUS_MSG);
     m_currentNotePixmap = new QLabel(sb);
-    m_currentPitch = new QLabel(sb);
+    m_hoveredOverNoteName = new QLabel(sb);
     
     sb->addWidget(m_currentNotePixmap);
-    sb->addWidget(m_currentPitch);
+    sb->addWidget(m_hoveredOverNoteName);
 }
 
 
@@ -873,12 +873,9 @@ NotationView::replaceRestWithNote(NotationElementList::iterator rest,
 }
 
 void
-NotationView::currentPitchChanged(int pitch)
+NotationView::hoveredOverNoteChanged(const QString &noteName)
 {
-    if (pitch == -1)
-        m_currentPitch->setText(QString::null);
-    else
-        m_currentPitch->setText(QString().setNum(pitch));
+    m_hoveredOverNoteName->setText(noteName);
 }
 
 

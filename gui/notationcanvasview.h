@@ -29,8 +29,11 @@ class StaffLine;
 class QCanvasSimpleSprite;
 
 /**
-  *@author Guillaume Laurent, Chris Cannam, Rich Bown
-  */
+ * Central widget for the NotationView window
+ *
+ *@author Guillaume Laurent, Chris Cannam, Rich Bown
+ *@see NotationView
+ */
 
 class NotationCanvasView : public QCanvasView
 {
@@ -57,7 +60,7 @@ public slots:
 
 signals:
     void noteInserted(int pitch, const QPoint&);
-    void currentPitchChange(int pitch);
+    void hoveredOverNoteChange(const QString &noteName);
     
 protected:
 
@@ -67,6 +70,9 @@ protected:
 
     /// returns the pitch the staff line is associated with
     int getPitchForLine(const StaffLine *line);
+
+    /// returns the note name (C4, Bb3) the staff line is associated with
+    QString getNoteNameForLine(const StaffLine *line);
 
     /// the staff line over which the mouse cursor is
     StaffLine* m_currentHighlightedLine;

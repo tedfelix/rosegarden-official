@@ -55,7 +55,7 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
 
     if(itemList.isEmpty() && posIsTooFarFromStaff(e->pos())) {
 
-        emit currentPitchChange(-1);
+        emit hoveredOverNoteChange(QString::null);
 
         m_currentHighlightedLine = 0;
 
@@ -74,9 +74,12 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
 
                 m_lastYPosNearStaff = e->y();
 
-                int pitch = getPitchForLine(m_currentHighlightedLine);
-                
-                emit currentPitchChange(pitch);
+                //int pitch = getPitchForLine(m_currentHighlightedLine);
+                QString noteName = getNoteNameForLine(m_currentHighlightedLine);
+//                 kdDebug(KDEBUG_AREA) << "NotationCanvasView::contentsMouseMoveEvent() : "
+//                                      << noteName << endl;
+
+                emit hoveredOverNoteChange(noteName);
 
                 break;
             }
@@ -180,4 +183,16 @@ NotationCanvasView::getPitchForLine(const StaffLine *line)
         getPerformancePitch(Clef::DefaultClef, ::Key::DefaultKey);
 
     return pitch;
+}
+
+QString
+NotationCanvasView::getNoteNameForLine(const StaffLine *line)
+{
+    int h = line->getHeight();
+
+    //!!! TODO -- take clef & key into account, and then accidental
+    string noteName = NotationDisplayPitch(h, NoAccidental).
+        getAsString(Clef::DefaultClef, ::Key::DefaultKey);
+
+    return QString(noteName.c_str());
 }

@@ -139,7 +139,7 @@ public slots:
 
     // Canvas actions slots
     void insertNote(int pitch, const QPoint&);
-    void currentPitchChanged(int pitch);
+    void hoveredOverNoteChanged(const QString&);
 
 
 signals:
@@ -200,7 +200,7 @@ protected:
     QLabel* m_currentNotePixmap;
 
     /// Displayed in the status bar, shows the pitch the cursor is at
-    QLabel* m_currentPitch;
+    QLabel* m_hoveredOverNoteName;
 
     NotationCanvasView* m_canvasView;
 
