@@ -100,8 +100,6 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     initStatusBar();
 
-    readOptions();
-
     QCanvas *tCanvas = new QCanvas(this);
     tCanvas->resize(width() * 2, height() * 2);
 
@@ -166,6 +164,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     // tool bars
     initActionsToolbar();
     initZoomToolbar();
+
+    readOptions();
 
     // Connect vertical scrollbars between matrix and piano
     //
@@ -351,6 +351,10 @@ void MatrixView::slotSaveOptions()
                                                       // toolbar in the future
     toolBar("toolsToolBar")->saveSettings(m_config,
                                           "Matrix Options toolsToolbar");
+    toolBar("zoomToolBar")->saveSettings(m_config,
+                                         "Matrix Options zoomToolbar");
+    toolBar("actionsToolBar")->saveSettings(m_config,
+                                            "Matrix Options actionsToolbar");
 }
 
 void MatrixView::readOptions()
@@ -366,6 +370,12 @@ void MatrixView::readOptions()
 
     toolBar("toolsToolBar")->applySettings(m_config,
                                            "Matrix Options toolsToolbar");
+
+    toolBar("zoomToolBar")->applySettings(m_config,
+                                          "Matrix Options zoomToolbar");
+
+    toolBar("actionsToolBar")->applySettings(m_config,
+                                             "Matrix Options actionsToolbar");
 }
 
 void MatrixView::setupActions()
@@ -1171,8 +1181,6 @@ MatrixView::initActionsToolbar()
         return;
     }
 
-    //actionsToolbar->setBarPos(KToolBar::Right);
-
     // The SnapGrid combo
     //
     QLabel *sLabel = new QLabel(i18n("Grid"), actionsToolbar);
@@ -1283,8 +1291,6 @@ MatrixView::initZoomToolbar()
         return;
     }
 
-    //zoomToolbar->setBarPos(KToolBar::Right);
-
     std::vector<double> zoomSizes; // in units-per-pixel
     double defaultBarWidth44 = 100.0;
     double duration44 = Rosegarden::TimeSignature(4,4).getBarDuration();
@@ -1293,7 +1299,8 @@ MatrixView::initZoomToolbar()
     // Zoom labels
     //
     for (unsigned int i = 0; i < sizeof(factors)/sizeof(factors[0]); ++i)
-        zoomSizes.push_back(duration44 / (defaultBarWidth44 * factors[i]));
+//         zoomSizes.push_back(duration44 / (defaultBarWidth44 * factors[i]));
+        zoomSizes.push_back(factors[i]);
 
     m_hZoomSlider = new ZoomSlider<double>
         (zoomSizes, -1, QSlider::Horizontal, zoomToolbar);
@@ -1314,18 +1321,28 @@ MatrixView::initZoomToolbar()
 void
 MatrixView::slotChangeHorizontalZoom(int)
 {
-    double duration44 = Rosegarden::TimeSignature(4,4).getBarDuration();
-    double value = double(m_hZoomSlider->getCurrentSize());
-    m_zoomLabel->setText(i18n("%1%").arg(duration44/value));
-    
-    for (unsigned int i = 0; i < m_staffs.size(); ++i)
-    {
-        m_staffs[i]->setTimeScaleFactor(1.0/m_hZoomSlider->getCurrentSize());
-        m_staffs[i]->sizeStaff(m_hlayout);
-    }
+//     double duration44 = Rosegarden::TimeSignature(4,4).getBarDuration();
+    double value = m_hZoomSlider->getCurrentSize();
+//     m_zoomLabel->setText(i18n("%1%").arg(duration44/value));
+    m_zoomLabel->setText(i18n("%1%").arg(value));
 
-    if (m_topBarButtons) m_topBarButtons->repaint();
-    if (m_bottomBarButtons) m_bottomBarButtons->repaint();
+    QWMatrix zoomTransfo;
+
+    MATRIX_DEBUG << "MatrixView::slotChangeHorizontalZoom() : zoom factor = "
+                 << value << endl;
+
+    zoomTransfo.scale(value, 1.0);
+
+    m_canvasView->setWorldMatrix(zoomTransfo);
+
+//     for (unsigned int i = 0; i < m_staffs.size(); ++i)
+//     {
+//         m_staffs[i]->setTimeScaleFactor(1.0/m_hZoomSlider->getCurrentSize());
+//         m_staffs[i]->sizeStaff(m_hlayout);
+//     }
+
+//     if (m_topBarButtons) m_topBarButtons->update();
+//     if (m_bottomBarButtons) m_bottomBarButtons->update();
 
     /*
 
@@ -1347,7 +1364,7 @@ MatrixView::slotChangeHorizontalZoom(int)
     */
 
     m_canvasView->slotUpdate();
-    refreshSegment(0, 0, 0);
+    //refreshSegment(0, 0, 0);
     updateView();
 }
 
