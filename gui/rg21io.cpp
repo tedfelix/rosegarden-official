@@ -40,6 +40,8 @@ RG21Loader::RG21Loader(const QString& fileName)
       m_currentTrack(0),
       m_currentTrackTime(0),
       m_currentTrackNb(0),
+      m_currentClef(TrebleClef),
+      m_inGroup(false),
       m_nbStaves(0)
 {
 
@@ -100,6 +102,14 @@ bool RG21Loader::parseChordItem()
         kdDebug(KDEBUG_AREA) << "RG21Loader::parseChordItem() : insert note pitch " << pitch
                              << " at time " << m_currentTrackTime << endl;
 
+        if (m_inGroup) {
+            noteEvent->setMaybe<Int>
+                (Track::BeamedGroupIdPropertyName, m_groupId);
+            noteEvent->setMaybe<String>
+                (Track::BeamedGroupTypePropertyName, m_groupType);
+        }
+        
+
         m_currentTrack->insert(noteEvent);
     }
 
@@ -123,6 +133,30 @@ bool RG21Loader::parseRest()
 
     return true;
 }
+
+bool RG21Loader::parseGroupStart()
+{
+    m_groupType = m_tokens[0].lower();
+    m_inGroup = true;
+
+    if (m_groupType == "beamed") {
+
+        m_groupId = m_currentTrack->getNextGroupId();
+        
+    } else if (m_groupType == "tupled") {
+        unsigned int nbTuples = m_tokens[1].toUInt();
+        // we don't do anything with it yet
+    }
+
+    return true;
+}
+
+
+void RG21Loader::closeGroup()
+{
+    m_inGroup = false;
+}
+
 
 Rosegarden::timeT RG21Loader::convertRG21Duration(QStringList::Iterator& i)
 {
@@ -202,18 +236,39 @@ long RG21Loader::convertRG21Pitch(long pitch, int noteModifier)
   return rtn;
 }
 
+bool RG21Loader::readNextLine()
+{
+    bool inComment = false;
+    
+    do {
+        inComment = false;
+
+        m_currentLine = m_stream->readLine();
+
+        if (m_stream->eof()) return false;
+        
+        m_currentLine = m_currentLine.simplifyWhiteSpace();
+
+        if (m_currentLine[0] == '#' ||
+            m_currentLine.length() == 0) {
+            inComment = true;
+            continue; // skip comments
+        }
+
+        m_tokens = QStringList::split(' ', m_currentLine);
+        
+    } while (inComment);
+
+    return true;
+}
+
 
 bool RG21Loader::parse()
 {
     while (!m_stream->eof()) {
-        m_currentLine = m_stream->readLine();
-        m_currentLine = m_currentLine.simplifyWhiteSpace();
 
-        if (m_currentLine[0] == '#' ||
-            m_currentLine.length() == 0) continue; // skip comments
-
-        m_tokens = QStringList::split(' ', m_currentLine);
-
+        if (!readNextLine()) break;
+        
         QString firstToken = m_tokens.first();
         
         if (firstToken == "Staves" || firstToken == "Staffs") { // nb staves
@@ -237,15 +292,23 @@ bool RG21Loader::parse()
             parseChordItem();
 
         } else if (firstToken == "Rest") { // rest
-            // read next line
-            m_currentLine = m_stream->readLine();
-            m_currentLine = m_currentLine.simplifyWhiteSpace();
-            m_tokens = QStringList::split(' ', m_currentLine);
+
+            if (!readNextLine()) break;
+
             parseRest();
 
+        } else if (firstToken == "Group") {
+
+            if (!readNextLine()) break;
+
+            parseGroupStart();
+            
         } else if (firstToken == "End") {
 
-            closeTrackOrComposition();
+            if (m_inGroup)
+                closeGroup();
+            else
+                closeTrackOrComposition();
             
         }
         

@@ -50,10 +50,15 @@ protected:
     bool parseClef();
     bool parseChordItem();
     bool parseRest();
+    bool parseGroupStart();
+
+    void closeGroup();
     void closeTrackOrComposition();
 
     long convertRG21Pitch(long rg21pitch, int nodeModifier);
     Rosegarden::timeT convertRG21Duration(QStringList::Iterator&);
+
+    bool readNextLine();
 
     QFile m_file;
     QTextStream *m_stream;
@@ -63,6 +68,9 @@ protected:
     unsigned int m_currentTrackTime;
     unsigned int m_currentTrackNb;
     unsigned int m_currentClef;
+    bool m_inGroup;
+    unsigned int m_groupId;
+    std::string m_groupType;
 
     QString m_currentLine;
     QString m_currentStaffName;
@@ -70,7 +78,6 @@ protected:
     QStringList m_tokens;
 
     unsigned int m_nbStaves;
-
 };
 
 
