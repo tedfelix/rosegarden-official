@@ -909,6 +909,44 @@ Track* Composition::getTrackById(TrackId track)
     return 0;
 }
 
+// Move a track object to a new id and position in the container -
+// used when deleting and undoing deletion of tracks.
+//
+//
+void Composition::resetTrackIdAndPosition(TrackId oldId, TrackId newId,
+                                          int position)
+{
+    trackiterator titerator = m_tracks.find(oldId);
+
+    if (titerator != m_tracks.end())
+    {
+        // detach old track
+        Track *track = (*titerator).second;
+        m_tracks.erase(titerator);
+
+        // set new position and 
+        track->setId(newId);
+        track->setPosition(position);
+        m_tracks[newId] = track;
+
+        // modify segment mappings
+        //
+        for (segmentcontainer::const_iterator i = m_segments.begin();
+             i != m_segments.end(); ++i) 
+        {
+            if ((*i)->getTrack() == oldId) (*i)->setTrack(newId);
+        }
+
+        checkSelectedAndRecordTracks();
+        updateRefreshStatuses();
+    }
+    else
+        std::cerr << "Composition::resetTrackIdAndPosition - "
+                  << "can't move track " << oldId << " to " << newId 
+                  << std::endl;
+}
+
+
 // Insert a Track representation into the Composition
 //
 void Composition::addTrack(Track *track)

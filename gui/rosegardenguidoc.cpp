@@ -1776,16 +1776,16 @@ RosegardenGUIDoc::slotNewRecordButton()
                 setAudioMonitoringState(true, recordInstr->getId());
             else
                 setAudioMonitoringState(false, recordInstr->getId());
-        }
 
-        // Update the instrument parameter box
-        //
-        RosegardenGUIView *w;
-        for(w=m_viewList.first(); w!=0; w=m_viewList.next())
-        {
-            w->slotSetRecord(recordInstr->getId(), 
-                    (m_composition.getRecordTrack() == 
-                     m_composition.getSelectedTrack()));
+            // Update the instrument parameter box
+            //
+            RosegardenGUIView *w;
+            for(w=m_viewList.first(); w!=0; w=m_viewList.next())
+            {
+                w->slotSetRecord(recordInstr->getId(), 
+                        (m_composition.getRecordTrack() == 
+                         m_composition.getSelectedTrack()));
+            }
         }
     }
 

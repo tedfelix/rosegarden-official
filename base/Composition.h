@@ -94,7 +94,6 @@ public:
     //////
     //
     //  INSTRUMENT & TRACK
-
     Track* getTrackById(TrackId track);
 
     Track* getTrackByPosition(int position);
@@ -106,6 +105,9 @@ public:
     const trackcontainer& getTracks() const {
 	return m_tracks;
     }
+
+    // Reset id and position
+    void resetTrackIdAndPosition(TrackId oldId, TrackId newId, int position);
 
     TrackId getMinTrackId() const;
 

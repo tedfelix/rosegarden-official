@@ -1513,6 +1513,8 @@ void DeleteTracksCommand::execute()
     const Composition::segmentcontainer &segments =
         m_composition->getSegments();
 
+    //cout << "DeleteTracksCommand::execute()" << endl;
+
     m_oldSegments.clear();
     m_oldTracks.clear();
     
@@ -1522,16 +1524,6 @@ void DeleteTracksCommand::execute()
     Rosegarden::Composition::trackiterator tit;
     Rosegarden::Composition::trackcontainer
                 &tracks = m_composition->getTracks();
-
-    /*
-    for (tit = tracks.begin(); tit != tracks.end(); ++tit)
-    {
-    std::cout << "TRACK " << (*tit).first << " - "
-             << (*tit).second->getId()
-             << " - POSITION = " << (*tit).second->getPosition()
-             << std::endl;
-    }
-    */
 
     for (unsigned int i = 0; i < m_tracks.size(); ++i)
     {
@@ -1563,28 +1555,27 @@ void DeleteTracksCommand::execute()
         }
     }
 
-
     std::vector<Rosegarden::Track*>::iterator otIt;
     for (otIt = m_oldTracks.begin(); otIt != m_oldTracks.end(); ++otIt)
     {
         for (tit = tracks.begin(); tit != tracks.end(); ++tit)
         {
-            if ((*tit).second->getPosition() > (*otIt)->getPosition())
+            if ((*tit).second->getId() > (*otIt)->getId())
             {
-                (*tit).second->setPosition((*tit).second->getPosition() - 1);
+                // If the track we've removed was after the current
+                // track then decrement the track position.
+                //
+                int newPosition = (*tit).second->getPosition();
+                if ((*tit).second->getPosition() > (*otIt)->getPosition())
+                    --newPosition;
+
+                m_composition->resetTrackIdAndPosition
+                    ((*tit).second->getId(),
+                     (*tit).second->getId() - 1,
+                     newPosition);
             }
         }
     }
-
-    /*
-    for (tit = tracks->begin(); tit != tracks->end(); ++tit)
-    {
-    std::cout << "TRACK " << (*tit).first << " - "
-             << (*tit).second->getId()
-             << " - POSITION = " << (*tit).second->getPosition()
-             << std::endl;
-    }
-    */
 
     m_detached = true;
 }
@@ -1603,10 +1594,30 @@ void DeleteTracksCommand::unexecute()
     std::vector<Rosegarden::Track*>::iterator otIt;
     for (otIt = m_oldTracks.begin(); otIt != m_oldTracks.end(); ++otIt)
     {
-        for (tit = tracks.begin(); tit != tracks.end(); ++tit)
+        // From the back we shuffle out the tracks to allow the new
+        // (old) track some space to come back in.
+        //
+        tit = tracks.end();
+        while(true)
         {
-            if ((*tit).second->getPosition() >= (*otIt)->getPosition())
-                (*tit).second->setPosition((*tit).second->getPosition() + 1);
+            --tit;
+
+            if ((*tit).second->getId() >= (*otIt)->getId())
+            {
+                // If the track we're adding has position after the
+                // current track then increment position.
+                //
+                int newPosition = (*tit).second->getPosition();
+                if ((*tit).second->getPosition() >= (*otIt)->getPosition())
+                   ++newPosition;
+
+                m_composition->resetTrackIdAndPosition
+                    ((*tit).second->getId(),
+                     (*tit).second->getId() + 1,
+                     newPosition);
+            }
+
+            if (tit == tracks.begin()) break;
         }
 
         m_composition->addTrack(*otIt);
