@@ -580,7 +580,7 @@ TempoView::setupActions()
     EditViewBase::setupActions("tempoview.rc", false);
     
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QIconSet icon(QPixmap(pixmapDir + "/toolbar/event-insert.xpm"));
+    QIconSet icon(QPixmap(pixmapDir + "/toolbar/event-insert-tempo.xpm"));
     
     new KAction(AddTempoChangeCommand::getGlobalName(), icon, Key_I, this,
                 SLOT(slotEditInsertTempo()), actionCollection(),

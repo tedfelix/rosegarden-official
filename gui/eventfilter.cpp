@@ -75,23 +75,6 @@ EventFilterDialog::initDialog()
 {
     QVBox* mainWidget = makeVBoxMainWidget();
 
-    //---------[ Buttons ]--------------------------------------
-    QFrame* privateLayoutWidget = new QFrame(mainWidget);
-    QGridLayout* buttonLayout = new QGridLayout(privateLayoutWidget, 1, 1, 20, 6); 
-
-    m_buttonAll = new QPushButton(i18n("Include all"), privateLayoutWidget);
-    m_buttonAll->setAutoDefault(true);
-    QToolTip::add(m_buttonAll, i18n("Include entire range of values"));  
-    buttonLayout->addWidget( m_buttonAll, 0, 0 );
-    
-    m_buttonNone = new QPushButton(i18n("Exclude all"), privateLayoutWidget);
-    m_buttonNone->setAutoDefault(true);
-    QToolTip::add(m_buttonNone, i18n("Exclude entire range of values"));  
-    buttonLayout->addWidget( m_buttonNone, 0, 1 );
-    
-    connect(m_buttonAll, SIGNAL(clicked()), this, SLOT(slotToggleAll()));
-    connect(m_buttonNone, SIGNAL(clicked()), this, SLOT(slotToggleNone()));
-
 
     //----------[ Note Filter Widgets ]-------------------------
     
@@ -346,6 +329,26 @@ EventFilterDialog::initDialog()
     slotNoteCheckBoxToggle(0);
     slotControllerCheckBoxToggle(0);
     slotWheelCheckBoxToggle(0);
+
+
+    //---------[ Buttons ]--------------------------------------
+    QFrame* privateLayoutWidget = new QFrame(mainWidget);
+    QGridLayout* buttonLayout = new QGridLayout(privateLayoutWidget, 1, 1, 20, 6); 
+
+    m_buttonAll = new QPushButton(i18n("Include all"), privateLayoutWidget);
+    m_buttonAll->setAutoDefault(true);
+    QToolTip::add(m_buttonAll, i18n("Include entire range of values"));  
+    buttonLayout->addWidget( m_buttonAll, 0, 0 );
+    
+    m_buttonNone = new QPushButton(i18n("Exclude all"), privateLayoutWidget);
+    m_buttonNone->setAutoDefault(true);
+    QToolTip::add(m_buttonNone, i18n("Exclude entire range of values"));  
+    buttonLayout->addWidget( m_buttonNone, 0, 1 );
+    
+    connect(m_buttonAll, SIGNAL(clicked()), this, SLOT(slotToggleAll()));
+    connect(m_buttonNone, SIGNAL(clicked()), this, SLOT(slotToggleNone()));
+
+    
 }
 
 // Populate the duration combos with a few reasonable values, including

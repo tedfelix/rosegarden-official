@@ -204,8 +204,9 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 		SLOT(slotRename()), 
 		actionCollection(), "rename_audio");
 
+    icon = QIconSet(QPixmap(pixmapDir + "/toolbar/insert_audio_into_track.xpm"));
     new KAction(i18n("&Insert into Selected Audio Track"), 
-		0, 0, this, SLOT(slotInsert()), 
+		icon, 0, this, SLOT(slotInsert()), 
 		actionCollection(), "insert_audio");
 
     new KAction(i18n("Unload &all Audio Files"), 0, 0, this,
