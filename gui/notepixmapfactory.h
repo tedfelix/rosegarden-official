@@ -43,6 +43,7 @@ public:
     void setStemGoesUp(bool up)           { m_stemGoesUp       = up;       }
     void setStemLength(int length)        { m_stemLength       = length;   }
     void setLegerLines(int lines)         { m_legerLines       = lines;    }
+    void setNoteHeadColour(QColor colour) { m_noteHeadColour   = colour;   }
 
     void setBeamed(bool beamed)           { m_beamed           = beamed;   }
     void setNextBeamCount(int tc)         { m_nextBeamCount    = tc;       }
@@ -63,6 +64,7 @@ private:
     bool    m_stemGoesUp;
     int     m_stemLength;
     int     m_legerLines;
+    QColor  m_noteHeadColour;
 
     bool    m_beamed;
     int     m_nextBeamCount;
