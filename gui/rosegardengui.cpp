@@ -25,6 +25,8 @@
 #include <qregexp.h>
 #include <qlabel.h>
 
+#include <qmetaobject.h> // remove this
+
 // include files for KDE
 #include <kstdaccel.h>
 #include <kiconloader.h>
@@ -603,8 +605,8 @@ void RosegardenGUIApp::initView()
     }
 
 #ifdef RGKDE3
-    connect(m_view, SIGNAL(void stateChange(const QString&, KXMLGUIClient::ReverseStateChange)),
-            this,   SLOT  (void slotStateChanged(const QString&, KXMLGUIClient::ReverseStateChange)));
+    connect(m_view, SIGNAL(stateChange(const QString&, bool)),
+            this,   SLOT  (slotStateChanged(const QString&, bool)));
 #endif
 
     // make sure we show
