@@ -2455,7 +2455,8 @@ void NotationView::print(KPrinter* printer)
         // slow down printing considerably but without it we get
 	// all sorts of horrible artifacts (possibly related to
 	// mishandling of pixmap masks?)
-        getCanvasView()->canvas()->drawArea(pageRect, &printpainter, true);
+	//!!! hmm, seems to be working now -- make this an option?
+        getCanvasView()->canvas()->drawArea(pageRect, &printpainter, false);//!!! true);
 
         printpainter.translate(-pageWidth, 0);
 
