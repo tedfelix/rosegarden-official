@@ -21,6 +21,7 @@
 
 #include <qapplication.h>
 
+#include <kmainwindow.h>
 #include <kstatusbar.h>
 #include <klocale.h>
 
@@ -28,14 +29,27 @@
 
 KTmpStatusMsg::KTmpStatusMsg(const QString& msg, KStatusBar* bar, int id)
     : m_statusBar(bar),
+      m_mainWindow(0),
       m_id(id)
 {
     m_statusBar->changeItem(msg, m_id);
     qApp->processEvents(500);
 }
 
+KTmpStatusMsg::KTmpStatusMsg(const QString& msg, KMainWindow* window, int id)
+    : m_statusBar(0),
+      m_mainWindow(window),
+      m_id(id)
+{
+    m_mainWindow->statusBar()->changeItem(msg, m_id);
+    qApp->processEvents(500);
+}
+
 KTmpStatusMsg::~KTmpStatusMsg()
 {
+    if (!m_statusBar)
+        m_statusBar = m_mainWindow->statusBar();
+
     m_statusBar->clear();
     m_statusBar->changeItem(m_defaultMsg, m_id);
     qApp->processEvents(500);
