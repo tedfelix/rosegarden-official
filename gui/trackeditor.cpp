@@ -64,7 +64,7 @@ using Rosegarden::timeT;
 using Rosegarden::Segment;
 using Rosegarden::TrackId;
 
-static double _pointerWidth = 2.0;
+static double _pointerWidth = 3.0;
 
 TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
                          QWidget* rosegardenguiview,
@@ -112,7 +112,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
     QCanvas *canvas = new QCanvas(this);
     canvas->resize(100, 100); // call slotReadjustCanvasSize later
     canvas->setBackgroundColor(RosegardenGUIColours::SegmentCanvas);
-    canvas->retune(128);
+    //canvas->retune(128);
 
     kapp->config()->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     if (kapp->config()->readBoolEntry("backgroundtextures", false)) {
@@ -314,7 +314,8 @@ void TrackEditor::slotReadjustCanvasSize()
     Rosegarden::SimpleRulerScale *sRuler = 
         dynamic_cast<Rosegarden::SimpleRulerScale*>(m_rulerScale);
 
-    int width = int(rint((_pointerWidth * sRuler->getUnitsPerPixel()) / m_initialUnitsPerPixel));
+    int width = int(rint((_pointerWidth * sRuler->getUnitsPerPixel())/ m_initialUnitsPerPixel));
+    width = int(_pointerWidth);
 
     m_pointer->setSize(width, m_segmentCanvas->canvas()->height());
 
@@ -504,7 +505,8 @@ TrackEditor::slotSetPointerPosition(Rosegarden::timeT position)
     /*
     RG_DEBUG << "TrackEditor::setPointerPosition - scale = " << ruler->getUnitsPerPixel() << endl;
     */
-    int width = int(rint((_pointerWidth * ruler->getUnitsPerPixel()) / m_initialUnitsPerPixel));
+    int width = int(rint((_pointerWidth * ruler->getUnitsPerPixel())/ m_initialUnitsPerPixel));
+    width = int(_pointerWidth);
 
     m_pointer->setSize(width, m_segmentCanvas->canvas()->height());
 

@@ -1164,13 +1164,15 @@ void SegmentCanvas::contentsMousePressEvent(QMouseEvent* e)
 
 void SegmentCanvas::contentsMouseDoubleClickEvent(QMouseEvent* e)
 {
-    SegmentItem *item = findSegmentClickedOn(e->pos());
+    SegmentItem *item = findSegmentClickedOn(
+            inverseWorldMatrix().map(e->pos()));
 
     if (item) {
         m_currentItem = item;
 	emit editSegment(item->getSegment());
     } else {
-	SegmentRepeatRectangle *rect = findRepeatClickedOn(e->pos());
+	SegmentRepeatRectangle *rect = findRepeatClickedOn(
+                inverseWorldMatrix().map(e->pos()));
         if (rect) {
 	    Rosegarden::timeT time = rect->getRepeatStartTime(e->x());
 

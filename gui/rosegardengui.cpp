@@ -318,10 +318,10 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 
     emit startupStatusMessage(i18n("Starting..."));
 
+    readOptions();
+
     // All toolbars should be created before this is called
     setAutoSaveSettings(RosegardenGUIApp::MainWindowConfigGroup, true);
-
-    readOptions();
 }
 
 RosegardenGUIApp::~RosegardenGUIApp()
@@ -938,9 +938,8 @@ void RosegardenGUIApp::initZoomToolbar()
     double defaultBarWidth44 = 100.0;
     double duration44 = Rosegarden::TimeSignature(4,4).getBarDuration();
     static double factors[] = { 0.025, 0.05, 0.1, 0.2, 0.5,
-                                1.0, 1.5, 2.5, 5.0, 10.0 /*, 20.0*/ }; // remove the top two
-                                                                       // zoom sizes for pointer
-                                                                       // width sake on scaled canvas
+                                1.0, 1.5, 2.5, 5.0, 10.0 , 20.0 };
+
     for (unsigned int i = 0; i < sizeof(factors)/sizeof(factors[0]); ++i) {
         zoomSizes.push_back(duration44 / (defaultBarWidth44 * factors[i]));
     }
@@ -1442,6 +1441,9 @@ void RosegardenGUIApp::slotSaveOptions()
 
 void RosegardenGUIApp::readOptions()
 {
+    applyMainWindowSettings(kapp->config(), 
+            RosegardenGUIApp::MainWindowConfigGroup);
+
     kapp->config()->reparseConfiguration();
     
     // Statusbar and toolbars toggling action status
@@ -1499,7 +1501,7 @@ void RosegardenGUIApp::readOptions()
 
 }
 
-void RosegardenGUIApp::saveProperties(KConfig *cfg)
+void RosegardenGUIApp::saveGlobalProperties(KConfig *cfg)
 {
     if (m_doc->getTitle()!=i18n("Untitled") && !m_doc->isModified()) {
         // saving to tempfile not necessary
@@ -1514,7 +1516,7 @@ void RosegardenGUIApp::saveProperties(KConfig *cfg)
 }
 
 
-void RosegardenGUIApp::readProperties(KConfig* _cfg)
+void RosegardenGUIApp::readGlobalProperties(KConfig* _cfg)
 {
     QString filename = _cfg->readEntry("filename", "");
     bool modified = _cfg->readBoolEntry("modified", false);
@@ -4378,6 +4380,9 @@ void RosegardenGUIApp::slotChangeZoom(int)
     double duration44 = Rosegarden::TimeSignature(4,4).getBarDuration();
     double value = double(m_zoomSlider->getCurrentSize());
     m_zoomLabel->setText(i18n("%1%").arg(duration44/value));
+
+    RG_DEBUG << "RosegardenGUIApp::slotChangeZoom : zoom size = "
+             << m_zoomSlider->getCurrentSize() << endl;
 
     // initZoomToolbar sets the zoom value. With some old versions of
     // Qt3.0, this can cause slotChangeZoom() to be called while the

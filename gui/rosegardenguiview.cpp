@@ -81,7 +81,7 @@ using Rosegarden::timeT;
 // than it sounds.
 //
 
-static double barWidth44 = 500.0;
+static double barWidth44 = 100.0;
 
 RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
                                      SegmentParameterBox* segmentParameterBox,
@@ -719,12 +719,14 @@ void RosegardenGUIView::setZoomSize(double size)
     m_rulerScale->setUnitsPerPixel(size);
 
     //m_trackEditor->slotReadjustCanvasSize();
-    RG_DEBUG << "RosegardenGUIView::setZoomSize - " << size << endl;
 
     double duration44 = Rosegarden::TimeSignature(4,4).getBarDuration();
 
     QWMatrix zoomMatrix;
-    zoomMatrix.scale(duration44/(size * barWidth44), 1.0);
+    double xScale = duration44/(size * barWidth44);
+    //RG_DEBUG << "RosegardenGUIView::setZoomSize - xScale =  " << xScale << endl;
+
+    zoomMatrix.scale(xScale, 1.0);
     m_trackEditor->getSegmentCanvas()->setWorldMatrix(zoomMatrix);
 
     m_trackEditor->slotSetPointerPosition
