@@ -243,9 +243,14 @@ class RosegardenGUIApp : public KMainWindow
     void drawSelected();
     
     /**
-     * move tool is selected
+     * track move tool is selected
      */
     void moveSelected();
+
+    /**
+     * track resize tool is selected
+     */
+    void resizeSelected();
 
 private:
 

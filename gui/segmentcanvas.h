@@ -56,7 +56,7 @@ class TracksCanvas : public QCanvasView
     Q_OBJECT
 
 public:
-    enum ToolType { Pencil, Eraser, Mover };
+    enum ToolType { Pencil, Eraser, Mover, Resizer };
     
     TracksCanvas(int gridH, int gridV,
                  QCanvas&,
@@ -221,6 +221,25 @@ public:
     virtual void handleMouseButtonPress(QMouseEvent*);
     virtual void handleMouseButtonRelase(QMouseEvent*);
     virtual void handleMouseMove(QMouseEvent*);
+};
+
+
+class TrackResizer : public TrackTool
+{
+public:
+    TrackResizer(TracksCanvas*);
+
+    virtual void handleMouseButtonPress(QMouseEvent*);
+    virtual void handleMouseButtonRelase(QMouseEvent*);
+    virtual void handleMouseMove(QMouseEvent*);
+
+protected:
+    bool cursorIsCloseEnoughToEdge(TrackPartItem*, QMouseEvent*);
+
+    unsigned int m_edgeThreshold;
+
+    // true if the user clicked on the left side of a part rectangle
+    bool m_onLeftSide;
 };
 
 

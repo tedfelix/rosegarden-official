@@ -131,6 +131,12 @@ void RosegardenGUIApp::setupActions()
                               actionCollection(), "move");
     action->setExclusiveGroup("tracktools");
 
+    action = new KRadioAction(i18n("Resize"), "misc", // TODO : find a better icon
+                              0,
+                              this, SLOT(resizeSelected()),
+                              actionCollection(), "resize");
+    action->setExclusiveGroup("tracktools");
+
 
     createGUI("rosegardenui.rc");
     // createGUI(); // we don't have non-standard actions for the moment
@@ -612,19 +618,21 @@ void RosegardenGUIApp::slotStatusHelpMsg(const QString &text)
 
 void RosegardenGUIApp::eraseSelected()
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::eraserSelected()\n";
     m_view->eraseSelected();
 }
 
 void RosegardenGUIApp::drawSelected()
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::pencilSelected()\n";
     m_view->drawSelected();
 }
 
 void RosegardenGUIApp::moveSelected()
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::moveSelected()\n";
     m_view->moveSelected();
+}
+
+void RosegardenGUIApp::resizeSelected()
+{
+    m_view->resizeSelected();
 }
 

@@ -150,6 +150,9 @@ TracksCanvas::setTool(ToolType t)
     case Mover:
         m_tool = new TrackMover(this);
         break;
+    case Resizer:
+        m_tool = new TrackResizer(this);
+        break;
     default:
         KMessageBox::error(0, QString("TracksCanvas::setTool() : unknown tool id %1").arg(t));
     }
@@ -259,6 +262,7 @@ TrackTool::TrackTool(TracksCanvas* canvas)
 
 TrackTool::~TrackTool()
 {
+    m_canvas->setCursor(Qt::arrowCursor);
 }
 
 //////////////////////////////
@@ -359,6 +363,8 @@ void TrackPencil::handleMouseMove(QMouseEvent *e)
 TrackEraser::TrackEraser(TracksCanvas *c)
     : TrackTool(c)
 {
+    m_canvas->setCursor(Qt::crossCursor);
+
     connect(this, SIGNAL(deleteTrackPart(TrackPart*)),
             c,    SIGNAL(deleteTrackPart(TrackPart*)));
 
@@ -390,6 +396,8 @@ void TrackEraser::handleMouseMove(QMouseEvent*)
 TrackMover::TrackMover(TracksCanvas *c)
     : TrackTool(c)
 {
+    m_canvas->setCursor(Qt::pointingHandCursor);
+
     kdDebug(KDEBUG_AREA) << "TrackMover()\n";
 }
 
@@ -422,3 +430,65 @@ void TrackMover::handleMouseMove(QMouseEvent *e)
     }
 }
 
+//////////////////////////////
+// TrackResizer
+//////////////////////////////
+
+TrackResizer::TrackResizer(TracksCanvas *c)
+    : TrackTool(c),
+      m_edgeThreshold(10),
+      m_onLeftSide(true)
+{
+    kdDebug(KDEBUG_AREA) << "TrackResizer()\n";
+}
+
+void TrackResizer::handleMouseButtonPress(QMouseEvent *e)
+{
+    TrackPartItem* item = m_canvas->findPartClickedOn(e->pos());
+
+    if (item && cursorIsCloseEnoughToEdge(item, e)) {
+        m_currentItem = item;
+    }
+}
+
+void TrackResizer::handleMouseButtonRelase(QMouseEvent*)
+{
+    m_currentItem = 0;
+}
+
+void TrackResizer::handleMouseMove(QMouseEvent *e)
+{
+    if (!m_currentItem) return;
+
+    if (m_onLeftSide) { // change x and width
+        int oldX = m_currentItem->x(),
+            newX = m_canvas->grid().snapX(e->pos().x()),
+            offSet = oldX - newX;
+        
+        m_currentItem->setX(newX);
+
+        m_currentItem->setSize(m_currentItem->rect().width() + offSet,
+                               m_currentItem->rect().height());
+
+    } else { // change width only
+
+        m_currentItem->setSize(m_canvas->grid().snapX(e->pos().x()) - m_currentItem->rect().x(),
+                               m_currentItem->rect().height());
+    }
+    
+    m_canvas->canvas()->update();
+    
+}
+
+bool TrackResizer::cursorIsCloseEnoughToEdge(TrackPartItem* p, QMouseEvent* e)
+{
+    if ( abs(p->rect().x() - e->x()) < m_edgeThreshold) {
+        m_onLeftSide = true;
+        return true;
+    } else if ( abs(p->rect().x() + p->rect().width() - e->x()) < m_edgeThreshold) {
+        m_onLeftSide = false;
+        return true;
+    }
+    
+    return false;
+}

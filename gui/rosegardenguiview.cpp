@@ -112,20 +112,22 @@ void RosegardenGUIView::print(QPrinter *pPrinter)
 
 void RosegardenGUIView::drawSelected()
 {
-    //m_tracksEditor->canvas()->setTool(TracksCanvas::Pencil);
     emit setTool(TracksCanvas::Pencil);
 }
 
 void RosegardenGUIView::eraseSelected()
 {
-    //m_tracksEditor->canvas()->setTool(TracksCanvas::Eraser);
     emit setTool(TracksCanvas::Eraser);
 }
 
 void RosegardenGUIView::moveSelected()
 {
-    //m_tracksEditor->canvas()->setTool(TracksCanvas::Mover);
     emit setTool(TracksCanvas::Mover);
+}
+
+void RosegardenGUIView::resizeSelected()
+{
+    emit setTool(TracksCanvas::Resizer);
 }
 
 

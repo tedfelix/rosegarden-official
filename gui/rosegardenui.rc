@@ -15,6 +15,7 @@
 	<Action name="draw"/>
 	<Action name="erase"/>
 	<Action name="move"/>
+	<Action name="resize"/>
 </ToolBar>
 
 </kpartgui>

@@ -86,9 +86,14 @@ public:
     void drawSelected();
     
     /**
-     * move tool is selected
+     * track move tool is selected
      */
     void moveSelected();
+
+    /**
+     * track resize tool is selected
+     */
+    void resizeSelected();
     
 public slots:
     void editTrackNotation(TrackPart*);
