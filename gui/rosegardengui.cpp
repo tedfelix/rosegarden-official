@@ -2156,7 +2156,7 @@ bool RosegardenGUIApp::launchSequencer()
     
     if (isSequencerRunning())
     {
-        RG_DEBUG << "RosegardenGUIApp::launchSequencer() - sequencer already launched by us - returning\n";
+        RG_DEBUG << "RosegardenGUIApp::launchSequencer() - sequencer already running - returning\n";
         if (m_seqManager) m_seqManager->checkSoundDriverStatus();
         return true;
     }
@@ -2167,12 +2167,15 @@ bool RosegardenGUIApp::launchSequencer()
     if (kapp->dcopClient()->
         isApplicationRegistered(QCString(ROSEGARDEN_SEQUENCER_APP_NAME)))
     {
-        RG_DEBUG << "RosegardenGUIApp::launchSequencer() - sequencer already running - returning\n";
+        RG_DEBUG << "RosegardenGUIApp::launchSequencer() - already running sequencer found - returning\n";
         if (m_seqManager) m_seqManager->checkSoundDriverStatus();
         m_sequencerProcess = SequencerExternal;
         return true;
     }
 
+    //
+    // No sequencer is running, so start one
+    //
     KTmpStatusMsg msg(i18n("Starting the sequencer..."), this);
     
     m_sequencerProcess = new KProcess;
