@@ -30,12 +30,14 @@
 
 #include <qvbox.h>
 #include <list>
+#include <vector>
 
 #include "segmentcanvas.h" // needed for SegmentCanvas::ToolType
 #include "rosedebug.h"
 
 #include "AudioFile.h"
 #include "MappedCommon.h"
+#include "Track.h"
 
 namespace Rosegarden { 
     class Composition; 
@@ -188,6 +190,8 @@ public slots:
     void slotShowPreviews(bool);
 
     void slotAddTracks(unsigned int, Rosegarden::InstrumentId);
+
+    void slotDeleteTracks(std::vector<Rosegarden::TrackId> tracks);
 
     void slotAddAudioSegmentAndTrack(Rosegarden::AudioFileId,
                                      Rosegarden::InstrumentId,

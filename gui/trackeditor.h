@@ -22,6 +22,8 @@
 #ifndef SEGMENTSEDITOR_H
 #define SEGMENTSEDITOR_H
 
+#include <vector>
+
 #include <qwidget.h>
 
 #include "trackseditoriface.h"
@@ -149,6 +151,11 @@ public slots:
      * Add given number of tracks
      */
     void slotAddTracks(unsigned int nbTracks, Rosegarden::InstrumentId id);
+
+    /*
+     * Delete a given track
+     */
+    void slotDeleteTracks(std::vector<Rosegarden::TrackId> tracks);
 
     void slotDeleteSelectedSegments();
     void slotTurnRepeatingSegmentToRealCopies();

@@ -1426,6 +1426,90 @@ void AddTracksCommand::unexecute()
     }
 }
 
+// ------------ Delete Tracks -------------
+//
+
+DeleteTracksCommand::DeleteTracksCommand(Rosegarden::Composition *composition,
+                    std::vector<Rosegarden::TrackId> tracks):
+    KNamedCommand(getGlobalName()),
+    m_composition(composition),
+    m_tracks(tracks),
+    m_detached(false)
+{
+}
+
+DeleteTracksCommand::~DeleteTracksCommand()
+{
+    if (m_detached)
+    {
+        for (unsigned int i = 0; i < m_oldTracks.size(); ++i)
+            delete m_oldTracks[i];
+
+        for (unsigned int i = 0; i < m_oldSegments.size(); ++i)
+            delete m_oldSegments[i];
+
+        m_oldTracks.clear();
+        m_oldSegments.clear();
+    }
+}
+
+
+void DeleteTracksCommand::execute()
+{
+    Rosegarden::Track *track = 0;
+    const Composition::segmentcontainer &segments =
+        m_composition->getSegments();
+
+    m_oldSegments.clear();
+    m_oldTracks.clear();
+
+    for (unsigned int i = 0; i < m_tracks.size(); ++i)
+    {
+        // detach segments and store tracks somewhere
+        track = m_composition->getTrackByIndex(m_tracks[i]);
+
+        if (track)
+        {
+            // detach all segments for that track
+            //
+            for (Composition::segmentcontainer::const_iterator
+                    it = segments.begin();
+                    it != segments.end(); ++it)
+            {
+                if ((*it)->getTrack() == m_tracks[i])
+                {
+                    m_oldSegments.push_back(*it);
+                    m_composition->detachSegment(*it);
+                }
+            }
+
+            // store old tracks
+            m_oldTracks.push_back(track);
+            if (m_composition->detachTrack(track) == false)
+            {
+                std::cerr << "DeleteTracksCommand::execute - "
+                          << "can't detach track" << std::endl;
+            }
+
+        }
+    }
+
+    m_detached = true;
+}
+
+void DeleteTracksCommand::unexecute()
+{
+    // Add the tracks and the segments back in
+
+    for (unsigned int i = 0; i < m_oldTracks.size(); ++i)
+        m_composition->addTrack(m_oldTracks[i]);
+
+    for (unsigned int i = 0; i < m_oldSegments.size(); ++i)
+        m_composition->addSegment(m_oldSegments[i]);
+
+    m_detached = false;
+}
+
 // ------------------ ChangeCompositionLengthCommand ------------------
 //
 ChangeCompositionLengthCommand::ChangeCompositionLengthCommand(

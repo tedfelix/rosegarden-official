@@ -55,6 +55,8 @@ o selection of ALSA recording device [DONE]
 
 o extra cascade level in Instrument selection menu [DONE]
 
+o Segment labelling [DONE]
+
 
 
 Smaller stuff

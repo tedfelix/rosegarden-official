@@ -56,6 +56,7 @@
   <Menu name="Tracks">
 	<text>Trac&amp;ks</text>
 	<Action name="add_tracks"/>
+	<Action name="delete_track"/>
         <Action name="select_next_track"/>
         <Action name="select_previous_track"/>
 	<Separator/>

@@ -731,6 +731,11 @@ public slots:
      */
     void slotAddTracks();
 
+    /*
+     * Delete Tracks
+     */
+    void slotDeleteTrack();
+
     /**
      * Set the song position pointer
      */

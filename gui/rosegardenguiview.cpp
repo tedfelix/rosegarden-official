@@ -894,6 +894,17 @@ void RosegardenGUIView::slotAddTracks(unsigned int nbTracks,
     m_trackEditor->slotAddTracks(nbTracks, id);
 }
 
+void RosegardenGUIView::slotDeleteTracks(
+        std::vector<Rosegarden::TrackId> tracks)
+{
+    RG_DEBUG << "RosegardenGUIView::slotDeleteTracks - "
+             << "deleting " << tracks.size() << " tracks"
+             << endl;
+
+    m_trackEditor->slotDeleteTracks(tracks);
+}
+
+
 
 MultiViewCommandHistory*
 RosegardenGUIView::getCommandHistory()

@@ -523,11 +523,33 @@ public:
     virtual void execute();
     virtual void unexecute();
 
-private:
-    Rosegarden::Composition *m_composition;
-    unsigned int m_nbNewTracks;
-    Rosegarden::InstrumentId m_instrumentId;
+protected:
+    Rosegarden::Composition   *m_composition;
+    unsigned int               m_nbNewTracks;
+    Rosegarden::InstrumentId   m_instrumentId;
 };
+
+class DeleteTracksCommand : public KNamedCommand
+{
+public:
+    DeleteTracksCommand(Rosegarden::Composition *composition,
+                        std::vector<Rosegarden::TrackId> tracks);
+    virtual ~DeleteTracksCommand();
+
+    static QString getGlobalName() { return i18n("Delete Tracks..."); }
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    Rosegarden::Composition           *m_composition;
+    std::vector<Rosegarden::TrackId>   m_tracks;
+
+    std::vector<Rosegarden::Track*>    m_oldTracks;
+    std::vector<Rosegarden::Segment*>  m_oldSegments;
+    bool                               m_detached;
+};
+
 
 class ChangeCompositionLengthCommand : public KNamedCommand
 {

@@ -449,6 +449,11 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotAddTracks()),
                 actionCollection(), "add_tracks");
 
+    new KAction(i18n("&Delete Track"), 
+                0,
+                this, SLOT(slotDeleteTrack()),
+                actionCollection(), "delete_track");
+
     new KAction(i18n("Select &Next Track"),
                 Key_Down, 
                 this, SLOT(slotTrackDown()),
@@ -1944,44 +1949,67 @@ void GetTimeResDialog::setInitialTimeRes(unsigned int v)
 
 void RosegardenGUIApp::slotAddTracks()
 {
-    if (m_view)
+    if (!m_view) return;
+
+    // Get the first Internal/MIDI instrument
+    //
+
+    Rosegarden::DeviceList *devices = m_doc->getStudio().getDevices();
+    Rosegarden::DeviceListIterator it;
+    Rosegarden::InstrumentList instruments;
+    Rosegarden::InstrumentList::iterator iit;
+    Rosegarden::Instrument *instr = 0;
+
+    for (it = devices->begin(); it != devices->end(); it++)
     {
-        // Get the first Internal/MIDI instrument
-        //
-
-        Rosegarden::DeviceList *devices = m_doc->getStudio().getDevices();
-        Rosegarden::DeviceListIterator it;
-        Rosegarden::InstrumentList instruments;
-        Rosegarden::InstrumentList::iterator iit;
-        Rosegarden::Instrument *instr = 0;
-
-        for (it = devices->begin(); it != devices->end(); it++)
+        if ((*it)->getType() == Rosegarden::Device::Midi)
         {
-            if ((*it)->getType() == Rosegarden::Device::Midi)
+            instruments = (*it)->getAllInstruments();
+
+            for (iit = instruments.begin(); iit != instruments.end(); iit++)
             {
-                instruments = (*it)->getAllInstruments();
-    
-                for (iit = instruments.begin(); iit != instruments.end(); iit++)
-                {
-                    if ((*iit)->getId() >= Rosegarden::MidiInstrumentBase)
+            if ((*iit)->getId() >= Rosegarden::MidiInstrumentBase)
                     {
-                        instr = (*iit);
-                        break;
-                    }
+                    instr = (*iit);
+                    break;
                 }
             }
         }
-
-        // default to the base number - might not actually exist though
-        //
-        Rosegarden::InstrumentId id = Rosegarden::MidiInstrumentBase;
-
-        if (instr) id = instr->getId();
-
-        // create tracks
-        m_view->slotAddTracks(5, id);
     }
+
+    // default to the base number - might not actually exist though
+    //
+    Rosegarden::InstrumentId id = Rosegarden::MidiInstrumentBase;
+
+    if (instr) id = instr->getId();
+
+    bool ok = false;
+
+    int tracks = QInputDialog::getInteger(
+                i18n("How many tracks do you want to add?"),
+                i18n("Tracks to add"),
+                1,
+                1,
+                24,
+                1,
+                &ok,
+                this);
+
+    // create tracks if ok
+    //
+    if (ok) m_view->slotAddTracks(tracks, id);
 }
+
+void RosegardenGUIApp::slotDeleteTrack()
+{
+    if (!m_view) return;
+
+    std::vector<Rosegarden::TrackId> tracks;
+    tracks.push_back(m_doc->getComposition().getSelectedTrack());
+
+    m_view->slotDeleteTracks(tracks);
+}
+
 
 
 void RosegardenGUIApp::slotRevertToSaved()

@@ -99,6 +99,8 @@ public:
     //
     //  INSTRUMENT & TRACK
 
+    // This should be getTrackById
+    //
     Track* getTrackByIndex(TrackId track) {
 	return m_tracks[track];
     }
@@ -155,7 +157,12 @@ public:
     /**
      * Delete a Track by index
      */
-    void deleteTrack(const int &track);
+    void deleteTrack(Rosegarden::TrackId track);
+
+    /**
+     * Detach a Track
+     */
+    bool detachTrack(Rosegarden::Track *track);
 
     //////
     //

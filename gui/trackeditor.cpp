@@ -480,6 +480,15 @@ void TrackEditor::slotAddTracks(unsigned int nbNewTracks,
     addCommandToHistory(command);
 }
 
+void TrackEditor::slotDeleteTracks(std::vector<Rosegarden::TrackId> tracks)
+{
+    Composition &comp = m_doc->getComposition();
+
+    DeleteTracksCommand* command = new DeleteTracksCommand(&comp, tracks);
+    addCommandToHistory(command);
+}
+
+
 void TrackEditor::addSegment(int track, int time, unsigned int duration)
 {
     if (!m_doc) return; // sanity check

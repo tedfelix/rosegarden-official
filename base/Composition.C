@@ -333,8 +333,8 @@ Composition::mergeFrom(Composition &c, MergeType type)
 	    
 	    // new track
 
-	    Instrument *remoteInstrument = c.getTrackByIndex(origId)->getInstrument();
-	    
+	    Instrument *remoteInstrument =
+                c.getTrackByIndex(origId)->getInstrument();
 
 	    Track *track = new Track(localId,
 				     instrument,
@@ -972,14 +972,33 @@ void Composition::addTrack(Track *track)
 }
 
 
-void Composition::deleteTrack(const int &track)
+void Composition::deleteTrack(Rosegarden::TrackId track)
 {
-     trackiterator titerator = m_tracks.find(track);
+    trackiterator titerator = m_tracks.find(track);
 
-     delete ((*titerator).second);
-     m_tracks.erase(titerator);
+    delete ((*titerator).second);
+    m_tracks.erase(titerator);
     updateRefreshStatuses();
+    
 }
+
+bool Composition::detachTrack(Rosegarden::Track *track)
+{
+    trackiterator it = m_tracks.begin();
+    for (; it != m_tracks.end(); ++it)
+    {
+        if ((*it).second == track)
+            break;
+    }
+
+    if (it == end()) return false;
+
+    m_tracks.erase(it);
+    updateRefreshStatuses();
+
+    return true;
+}
+
 
 TrackId
 Composition::getMinTrackId() const
