@@ -26,7 +26,6 @@ EXTRA_DIST = rosegardensequenceriface.kidl
 INCLUDES= $(all_includes) -I$(kde_includes)/arts -I../base -I../sound -I../gui
 # claim, which subdirectories you want to install
 # you can add here more. This one gets installed 
-bin_PROGRAMS = rosegardensequencer
 
 rosegardensequencer_METASOURCES = AUTO
 

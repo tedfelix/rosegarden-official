@@ -520,11 +520,22 @@ void RosegardenGUIApp::initView()
     //
     if(m_seqManager != 0)
     {
-      slotToggleSegmentParameters();
-      slotToggleInstrumentParameters();
-      slotToggleRulers();
-    }
+        slotToggleSegmentParameters();
+        slotToggleInstrumentParameters();
+        slotToggleRulers();
 
+        // Reset any loop on the sequencer
+        //
+        try
+        {
+            m_seqManager->setLoop(0, 0);
+        }
+        catch(QString s)
+        {
+            KMessageBox::error(this, s);
+        }
+
+    }
 }
 
 bool RosegardenGUIApp::openDocumentFile(const char* _cmdl)
@@ -1728,6 +1739,8 @@ RosegardenGUIApp::slotSetLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
 {
     try
     {
+        m_doc->setModified();
+
         m_seqManager->setLoop(lhs, rhs);
 
         // toggle the loop button
@@ -1855,7 +1868,14 @@ bool RosegardenGUIApp::performAutoload()
     kdDebug(KDEBUG_AREA)
         << "RosegardenGUIApp::performAutoload() - autoloading" << endl;
 
-    return openDocumentFile(autoloadFile.data());
+    bool res = openDocumentFile(autoloadFile.data());
+
+    // So we don't get the "autoload" title
+    //
+    m_doc->setTitle(i18n("Untitled"));
+    setCaption(m_doc->getTitle());
+
+    return res;
 }
 
 
@@ -1866,7 +1886,9 @@ bool RosegardenGUIApp::performAutoload()
 void RosegardenGUIApp::slotToggleSolo()
 {
     kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotToggleSolo" << std::endl;
+
     m_doc->getComposition().setSolo(m_transport->SoloButton->isOn());
+    m_doc->setModified();
 }
 
 

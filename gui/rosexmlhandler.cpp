@@ -296,6 +296,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
                 (Rosegarden::TrackId)soloTrackStr.toInt();
 
             m_composition.setSoloTrack(soloTrack);
+            m_composition.setSolo(true);
         }
 
     } else if (lcName == "track") {

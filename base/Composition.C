@@ -386,6 +386,8 @@ Composition::clear()
     m_position = 0;
     m_startMarker = 0;
     m_endMarker = 0;
+    m_solo = false;
+    m_soloTrack = 0;
     m_copyright = "";
     m_countInBars = DefaultCountInBars;
 }

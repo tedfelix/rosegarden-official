@@ -147,7 +147,7 @@ void RosegardenGUIDoc::slotDocumentRestored()
 
 bool RosegardenGUIDoc::saveIfModified()
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::saveIfModified()" << endl;
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::saveIfModified()" << endl;
     bool completed=true;
 
     if (m_modified) {
