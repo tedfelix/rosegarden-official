@@ -18,12 +18,12 @@
   COPYING included with this distribution for more information.
 */
 
+#include <vector>
+#include <set>
+
 #include "config.h"
 
 #ifdef HAVE_ALSA
-
-#include <vector>
-#include <set>
 
 #include <alsa/asoundlib.h> // ALSA
 
@@ -252,7 +252,6 @@ public:
                                             int position,
                                             unsigned long portNumber,
                                             float value);
-
 #ifdef HAVE_LADSPA
 
     LADSPAPluginInstance* getPlugin(InstrumentId id, int position);
@@ -389,7 +388,7 @@ private:
     // Change this container to something a bit more efficient for
     // finding lots of plugins once we have lots of plugins available.
     //
-    PluginInstances m_pluginInstances;
+    PluginInstances              m_pluginInstances;
 
 #endif // HAVE_LADSPA
 

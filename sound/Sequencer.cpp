@@ -52,7 +52,10 @@ using std::endl;
 // Initialisation of the driver is performed at construction
 //
 //
-Sequencer::Sequencer(MappedStudio *studio):m_soundDriver(0)
+Sequencer::Sequencer(MappedStudio *studio,
+                     const QValueVector<QString> &args)
+    :m_soundDriver(0),
+     m_args(args)
 {
 #ifdef NO_SOUND
     m_soundDriver = new DummyDriver(studio);
@@ -63,6 +66,11 @@ Sequencer::Sequencer(MappedStudio *studio):m_soundDriver(0)
     m_soundDriver = new ArtsDriver(studio);
 #endif
 #endif
+
+    // Set the args if we have any
+    //
+    if (m_args.size())
+        m_soundDriver->setArgs(m_args);
 
     m_soundDriver->initialiseMidi();
     m_soundDriver->initialiseAudio();

@@ -32,6 +32,7 @@
 #include "Midi.h"
 #include "WAVAudioFile.h"
 #include "MappedStudio.h"
+#include "rosestrings.h"
 
 #ifdef HAVE_LIBJACK
 #include <jack/types.h>
@@ -793,11 +794,25 @@ AlsaDriver::initialiseAudio()
     }
     free(ports);
     */
+    std::string playback_1 = std::string("alsa_pcm:playback_1");
+    std::string playback_2 = std::string("alsa_pcm:playback_2");
+    std::string capture_1 = std::string("alsa_pcm:capture_1");
+    std::string capture_2 = std::string("alsa_pcm:capture_2");
+
+    // Reassign if we match
+    //
+    if (m_args.size() == 4)
+    {
+        playback_1 = m_args[0].data();
+        playback_2 = m_args[1].data();
+        capture_1 = m_args[2].data();
+        capture_2 = m_args[3].data();
+    }
 
     // connect our client up to the ALSA ports - first left output
     //
     if (jack_connect(m_audioClient, jack_port_name(m_audioOutputPortLeft),
-                     "alsa_pcm:playback_1"))
+                     playback_1.c_str()))
     {
         std::cerr << "AlsaDriver::initialiseAudio - "
                   << "cannot connect to JACK output port" << std::endl;
@@ -805,7 +820,7 @@ AlsaDriver::initialiseAudio()
     }
 
     if (jack_connect(m_audioClient, jack_port_name(m_audioOutputPortRight),
-                     "alsa_pcm:playback_2"))
+                     playback_2.c_str()))
     {
         std::cerr << "AlsaDriver::initialiseAudio - "
                   << "cannot connect to JACK output port" << std::endl;
@@ -813,14 +828,14 @@ AlsaDriver::initialiseAudio()
     }
 
     // now input
-    if (jack_connect(m_audioClient, "alsa_pcm:capture_1",
+    if (jack_connect(m_audioClient, capture_1.c_str(),
                      jack_port_name(m_audioInputPortLeft)))
     {
         std::cerr << "AlsaDriver::initialiseAudio - "
                   << "cannot connect to JACK input port" << std::endl;
     }
 
-    if (jack_connect(m_audioClient, "alsa_pcm:capture_2",
+    if (jack_connect(m_audioClient, capture_2.c_str(),
                      jack_port_name(m_audioInputPortRight)))
     {
         std::cerr << "AlsaDriver::initialiseAudio - "

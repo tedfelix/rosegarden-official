@@ -18,10 +18,14 @@
   COPYING included with this distribution for more information.
 */
 
-#include <klocale.h>
-#include <dcopclient.h>
 #include <iostream>
+
+#include <klocale.h>
+
+#include <dcopclient.h>
 #include <qdatetime.h>
+#include <qvaluevector.h>
+#include <qstring.h>
 
 #include "rosedebug.h"
 #include "rosegardensequencer.h"
@@ -38,7 +42,8 @@ using std::cout;
 // so the local values are kind of meaningless.
 //
 //
-RosegardenSequencerApp::RosegardenSequencerApp():
+RosegardenSequencerApp::RosegardenSequencerApp(
+        const QValueVector<QString> &jackArgs):
     DCOPObject("RosegardenSequencerIface"),
     m_sequencer(0),
     m_transportStatus(STOPPED),
@@ -74,7 +79,7 @@ RosegardenSequencerApp::RosegardenSequencerApp():
     // ALSA/JACK interface for both playback and recording. MappedStudio
     // aduio faders are also created.
     //
-    m_sequencer = new Rosegarden::Sequencer(m_studio);
+    m_sequencer = new Rosegarden::Sequencer(m_studio, jackArgs);
     m_studio->setSequencer(m_sequencer);
 
     if (!m_sequencer)

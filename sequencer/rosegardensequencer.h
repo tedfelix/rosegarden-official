@@ -37,6 +37,7 @@
 
 // include files for Qt
 #include <qstrlist.h>
+#include <qvaluevector.h>
 
 // include files for KDE 
 #include <kapp.h>
@@ -66,7 +67,7 @@ class RosegardenSequencerApp : public KMainWindow,
     Q_OBJECT
 
 public:
-    RosegardenSequencerApp();
+    RosegardenSequencerApp(const QValueVector<QString> &jackArgs);
     ~RosegardenSequencerApp();
 
     //      -------- START OF DCOP INTERFACE METHODS --------

@@ -24,6 +24,8 @@
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <dcopclient.h>
+#include <qvaluevector.h>
+
 #include <iostream>
 #include <unistd.h>
 #include <signal.h>
@@ -43,8 +45,10 @@ static RosegardenSequencerApp *roseSeq = 0;
 static KCmdLineOptions options[] =
     {
 //        { "+[File]", I18N_NOOP("file to open"), 0 },
-        { 0, 0, 0 }
         // INSERT YOUR COMMANDLINE OPTIONS HERE
+        { "+[playback_1 playback_2 capture_1 capture_2]",
+            I18N_NOOP("JACK playback and capture ports"), 0 },
+        { 0, 0, 0 }
     };
 
 static void
@@ -71,25 +75,20 @@ int main(int argc, char *argv[])
     //
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     KApplication app;
-/*!!!
-    if (argc > 1)
-    {
-        std::cerr
-          << "RosegardenSequencer - doesn't accept any command line arguments"
-          << std::endl
-          << "RosegardenSequencer - exiting"
-          << std::endl;
+    QValueVector<QString> jackArgs;
 
-        exit(1);
-    }
-*/
+    // Construct JACK args
+    //
+    for (int i = 0; i < args->count(); i++)
+        jackArgs.push_back(args->arg(i));
+
     if (app.isRestored())
     {
-        RESTORE(RosegardenSequencerApp);
+        RESTORE(RosegardenSequencerApp(jackArgs));
     }
     else
     {
-        roseSeq = new RosegardenSequencerApp();
+        roseSeq = new RosegardenSequencerApp(jackArgs);
 
         // we don't show() the sequencer application as we're just taking
         // advantage of DCOP/KApplication and there's nothing to show().

@@ -21,6 +21,9 @@
 #include <string>
 #include <vector>
 
+#include <qvaluevector.h>
+#include <qstring.h>
+
 #include "Instrument.h"
 #include "Device.h"
 #include "MappedComposition.h"
@@ -356,6 +359,10 @@ public:
     MappedStudio* getMappedStudio() { return m_studio; }
     void setMappedStudio(MappedStudio *studio) { m_studio = studio; }
 
+    // Arguments
+    //
+    void setArgs(const QValueVector<QString> &args) { m_args = args; }
+
 protected:
     // Helper functions to be implemented by subclasses
     //
@@ -423,6 +430,8 @@ protected:
     // Virtual studio hook
     //
     MappedStudio                *m_studio;
+
+    QValueVector<QString>        m_args;
 
 };
 
