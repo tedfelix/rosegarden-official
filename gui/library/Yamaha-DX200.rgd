@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rosegarden-data>
+<rosegarden-data version="4-0.9.1">
+
+    <studio thrufilter="0" recordfilter="0">
+    <device id="0" name="Yamaha DX200" direction="play" variation="" type="midi">
+
+        <librarian name="Joost Damad" email="joost@lumatec.be"/>
+
+	<bank name="Patterns 1" percussion="false" msb="63" lsb="0">
+	    <program id="0" name="P001 Nosebleed" category="Techno"/>
+	    <program id="1" name="P002 KlingKlang" category="Techno"/>
+	    <program id="2" name="P003 Swimming" category="Techno"/>
+	    <program id="3" name="P004 Ethnectric" category="Techno"/>
+	    <program id="4" name="P005 Percussive" category="Techno"/>
+	    <program id="5" name="P006 Skirmish" category="Techno"/>
+	    <program id="6" name="P007 Still DX" category="Techno"/>
+	    <program id="7" name="P008 Stomper" category="Techno"/>
+	    <program id="8" name="P009 Wreath" category="Techno"/>
+	    <program id="9" name="P010 Subculture" category="Techno"/>
+	    <program id="10" name="P011 Ni-Chi-Bu" category="Techno"/>
+	    <program id="11" name="P012 KAGERO" category="Techno"/>
+	    <program id="12" name="P013 Warp" category="Techno"/>
+	    <program id="13" name="P014 Energie" category="Techno"/>
+	    <program id="14" name="P015 Clokker" category="Techno"/>
+	    <program id="15" name="P016 GB Trance" category="Techno"/>
+	    <program id="16" name="P017 Hypnotic" category="Techno"/>
+	    <program id="17" name="P018 RaggaGabba" category="Techno"/>
+	    <program id="18" name="P019 Nose Dive" category="Techno"/>
+	    <program id="19" name="P020 Sink" category="Techno"/>
+	    <program id="20" name="P021 Logi Drum" category="Techno"/>
+	    <program id="21" name="P022 Bombay" category="Techno"/>
+	    <program id="22" name="P023 Oaz" category="Techno"/>
+	    <program id="23" name="P024 BrasilDrum" category="Techno"/>
+	    <program id="24" name="P025 Asiara" category="Techno"/>
+	    <program id="25" name="P026 Acid Pulse" category="Techno"/>
+	    <program id="26" name="P027 Elec Pulse" category="Techno"/>
+	    <program id="27" name="P028 Dredzs" category="Techno"/>
+	    <program id="28" name="P029 Elec Rezz" category="Techno"/>
+	    <program id="29" name="P030 Night Life" category="Techno"/>
+	    <program id="30" name="P031 Orbo Fuzz" category="Techno"/>
+	    <program id="31" name="P032 Big Up" category="Techno"/>
+	    <program id="32" name="P033 Drenched" category="Techno"/>
+	    <program id="33" name="P034 TunaMooger" category="Techno"/>
+	    <program id="34" name="P035 Digi Touch" category="Techno"/>
+	    <program id="35" name="P036 Floaty" category="Techno"/>
+	    <program id="36" name="P037 Cyanine" category="Techno"/>
+	    <program id="37" name="P038 Ping Pong" category="Techno"/>
+	    <program id="38" name="P039 Mini Jim" category="Techno"/>
+	    <program id="39" name="P040 Distcore" category="Techno"/>
+	    <program id="40" name="P041 Hardcore" category="Techno"/>
+	    <program id="41" name="P042 HouseParty" category="House"/>
+	    <program id="42" name="P043 Ibiza" category="House"/>
+	    <program id="43" name="P044 Sand" category="House"/>
+	    <program id="44" name="P045 ChimeNoise" category="House"/>
+	    <program id="45" name="P046 Deep Beat" category="House"/>
+	    <program id="46" name="P047 Full House" category="House"/>
+	    <program id="47" name="P048 E-Salsa" category="House"/>
+	    <program id="48" name="P049 Scream" category="House"/>
+	    <program id="49" name="P050 FJA" category="House"/>
+	    <program id="50" name="P051 Minimal At" category="House"/>
+	    <program id="51" name="P052 Voodoo Key" category="House"/>
+	    <program id="52" name="P053 Oskylaytor" category="House"/>
+	    <program id="53" name="P054 Stupid" category="House"/>
+	    <program id="54" name="P055 Solo Bass" category="House"/>
+	    <program id="55" name="P056 Saw BD" category="House"/>
+	    <program id="56" name="P057 Badass" category="House"/>
+	    <program id="57" name="P058 Quid" category="House"/>
+	    <program id="58" name="P059 Reeper" category="House"/>
+	    <program id="59" name="P060 Scratches" category="House"/>
+	    <program id="60" name="P061 Fuzz Line" category="House"/>
+	    <program id="61" name="P062 House Dog" category="House"/>
+	    <program id="62" name="P063 FreeGroove" category="House"/>
+	    <program id="63" name="P064 Life Line" category="House"/>
+	    <program id="64" name="P065 Building" category="House"/>
+	    <program id="65" name="P066 Calcutta" category="House"/>
+	    <program id="66" name="P067 SolidHouse" category="House"/>
+	    <program id="67" name="P068 Nu House" category="House"/>
+	    <program id="68" name="P069 Plastix" category="House"/>
+	    <program id="69" name="P070 Aquafer" category="House"/>
+	    <program id="70" name="P071 Rezz Buzz" category="Breaks 1"/>
+	    <program id="71" name="P072 Tech Mini" category="Breaks 1"/>
+	    <program id="72" name="P073 DX Scratch" category="Breaks 1"/>
+	    <program id="73" name="P074 WV 2001" category="Breaks 1"/>
+	    <program id="74" name="P075 Warning" category="Breaks 1"/>
+	    <program id="75" name="P076 Distone" category="Breaks 1"/>
+	    <program id="76" name="P077 Electrics" category="Breaks 1"/>
+	    <program id="77" name="P078 Freaky" category="Breaks 1"/>
+	    <program id="78" name="P079 Lo Go" category="Breaks 1"/>
+	    <program id="79" name="P080 Q-Baz" category="Breaks 1"/>
+	    <program id="80" name="P081 Barbarossa" category="Breaks 1"/>
+	    <program id="81" name="P082 Up Link" category="Breaks 1"/>
+	    <program id="82" name="P083 Dyammaka" category="Breaks 1"/>
+	    <program id="83" name="P084 Double One" category="Breaks 1"/>
+	    <program id="84" name="P085 Koo-KAl" category="Breaks 1"/>
+	    <program id="85" name="P086 Snow" category="Breaks 1"/>
+	    <program id="86" name="P087 Dasboot" category="Breaks 1"/>
+	    <program id="87" name="P088 Run!" category="Trance"/>
+	    <program id="88" name="P089 Siva" category="Trance"/>
+	    <program id="89" name="P090 Syn Bell" category="Trance"/>
+	    <program id="90" name="P091 DJ DX" category="Trance"/>
+	    <program id="91" name="P092 Reeberfed" category="Trance"/>
+	    <program id="92" name="P093 Psy Trance" category="Trance"/>
+	    <program id="93" name="P094 Mini Pit" category="Trance"/>
+	    <program id="94" name="P095 Psy Mini" category="Trance"/>
+	    <program id="95" name="P096 Plazma" category="Trance"/>
+	    <program id="96" name="P097 Rave Synth" category="Trance"/>
+	    <program id="97" name="P098 Psy Seq" category="Trance"/>
+	    <program id="98" name="P099 TEKKEN" category="Trance"/>
+	    <program id="99" name="P100 Buh!" category="Trance"/>
+	    <program id="100" name="P101 Tokyo" category="Trance"/>
+	    <program id="101" name="P102 Bass Pad" category="Trance"/>
+	    <program id="102" name="P103 Wave" category="Trance"/>
+	    <program id="103" name="P104 Runaway" category="Trance"/>
+	    <program id="104" name="P105 Screak" category="Trance"/>
+	    <program id="105" name="P106 Two Three" category="Trance"/>
+	    <program id="106" name="P107 Straight" category="Trance"/>
+	    <program id="107" name="P108 Klic Klac" category="Trance"/>
+	    <program id="108" name="P109 Ana Pluck" category="Trance"/>
+	    <program id="109" name="P110 Fun Disc" category="Trance"/>
+	    <program id="110" name="P111 Puppet" category="Trance"/>
+	    <program id="111" name="P112 Comp Pluck" category="Trance"/>
+	    <program id="112" name="P113 Fluid" category="Trance"/>
+	    <program id="113" name="P114 Dawning" category="Trance"/>
+	    <program id="114" name="P115 Nickel" category="Trance"/>
+	    <program id="115" name="P116 Ambisonics" category="Trance"/>
+	    <program id="116" name="P117 SpaceTrip" category="Trance"/>
+	    <program id="117" name="P118 Wire SP" category="Trance"/>
+	    <program id="118" name="P119 Precint" category="Trance"/>
+	    <program id="119" name="P120 U boat" category="Trance"/>
+	    <program id="120" name="P121 Fuzzy Sun" category="Trance"/>
+	    <program id="121" name="P122 Tune Tek" category="Trance"/>
+	    <program id="122" name="P123 DCS" category="Trance"/>
+	    <program id="123" name="P124 Napalm" category="Trance"/>
+	    <program id="124" name="P125 Paradise" category="Trance"/>
+	    <program id="125" name="P126 Cedar" category="Trance"/>
+	    <program id="126" name="P127 Dino" category="Trance"/>
+	    <program id="127" name="P128 Hortin" category="Trance"/>
+	</bank>
+
+	<bank name="Patterns 2" percussion="false" msb="63" lsb="1">
+	    <program id="0" name="P129 Spacy Keys" category="Hiphop"/>
+	    <program id="1" name="P130 Deep Sea" category="Hiphop"/>
+	    <program id="2" name="P131 Jam" category="Hiphop"/>
+	    <program id="3" name="P132 Bluntz" category="Hiphop"/>
+	    <program id="4" name="P133 Getaway" category="Hiphop"/>
+	    <program id="5" name="P134 Angel City" category="Hiphop"/>
+	    <program id="6" name="P135 Sixteen" category="Hiphop"/>
+	    <program id="7" name="P136 GTA" category="Hiphop"/>
+	    <program id="8" name="P137 Seismic" category="Hiphop"/>
+	    <program id="9" name="P138 Lap Dance" category="Hiphop"/>
+	    <program id="10" name="P139 Hazard" category="Hiphop"/>
+	    <program id="11" name="P140 Phonk E5" category="Hiphop"/>
+	    <program id="12" name="P141 SugarDaddy" category="Hiphop"/>
+	    <program id="13" name="P142 Modem Beat" category="Triphop"/>
+	    <program id="14" name="P143 Liger" category="Triphop"/>
+	    <program id="15" name="P144 R-B" category="Triphop"/>
+	    <program id="16" name="P145 Minstrels" category="Triphop"/>
+	    <program id="17" name="P146 Apus" category="Triphop"/>
+	    <program id="18" name="P147 Saeidi" category="Triphop"/>
+	    <program id="19" name="P148 Hip Fusion" category="Triphop"/>
+	    <program id="20" name="P149 TrendyVibe" category="Triphop"/>
+	    <program id="21" name="P150 Stop Go" category="Triphop"/>
+	    <program id="22" name="P151 Hip Q" category="Triphop"/>
+	    <program id="23" name="P152 Mrmb Tech" category="Triphop"/>
+	    <program id="24" name="P153 Minor" category="Triphop"/>
+	    <program id="25" name="P154 Melody Man" category="Triphop"/>
+	    <program id="26" name="P155 Two Break" category="Triphop"/>
+	    <program id="27" name="P156 Aquila" category="Triphop"/>
+	    <program id="28" name="P157 Pavo" category="Triphop"/>
+	    <program id="29" name="P158 Infrared" category="DrumNBass"/>
+	    <program id="30" name="P159 Groover" category="DrumNBass"/>
+	    <program id="31" name="P160 Moa" category="DrumNBass"/>
+	    <program id="32" name="P161 Fuzzy Moon" category="DrumNBass"/>
+	    <program id="33" name="P162 Discordant" category="DrumNBass"/>
+	    <program id="34" name="P163 Clanker" category="DrumNBass"/>
+	    <program id="35" name="P164 Prelude" category="DrumNBass"/>
+	    <program id="36" name="P165 Wicked" category="DrumNBass"/>
+	    <program id="37" name="P166 Sameagle" category="DrumNBass"/>
+	    <program id="38" name="P167 Acidic" category="DrumNBass"/>
+	    <program id="39" name="P168 Feel Noise" category="DrumNBass"/>
+	    <program id="40" name="P169 Over DNB" category="DrumNBass"/>
+	    <program id="41" name="P170 Ruffle" category="DrumNBass"/>
+	    <program id="42" name="P171 Lyla" category="DrumNBass"/>
+	    <program id="43" name="P172 Antlia" category="DrumNBass"/>
+	    <program id="44" name="P173 Volans" category="DrumNBass"/>
+	    <program id="45" name="P174 Crux" category="DrumNBass"/>
+	    <program id="46" name="P175 Scorpius" category="DrumNBass"/>
+	    <program id="47" name="P176 Caelum" category="DrumNBass"/>
+	    <program id="48" name="P177 Tribez" category="DrumNBass"/>
+	    <program id="49" name="P178 Bossa Call" category="DrumNBass"/>
+	    <program id="50" name="P179 Dirt Box" category="DrumNBass"/>
+	    <program id="51" name="P180 Delhi" category="Breaks 2"/>
+	    <program id="52" name="P181 Bang Tech" category="Breaks 2"/>
+	    <program id="53" name="P182 Highway" category="Breaks 2"/>
+	    <program id="54" name="P183 Spacecraft" category="Breaks 2"/>
+	    <program id="55" name="P184 Hyp Fuzz" category="Breaks 2"/>
+	    <program id="56" name="P185 FunkyFingr" category="Breaks 2"/>
+	    <program id="57" name="P186 HPF Metal" category="Breaks 2"/>
+	    <program id="58" name="P187 Software" category="Breaks 2"/>
+	    <program id="59" name="P188 Shin-Wa" category="Breaks 2"/>
+	    <program id="60" name="P189 Stepping" category="Breaks 2"/>
+	    <program id="61" name="P190 Dada Fly" category="Breaks 2"/>
+	    <program id="62" name="P191 FlyingRoad" category="Breaks 2"/>
+	    <program id="63" name="P192 Deep Grey" category="Breaks 2"/>
+	    <program id="64" name="P193 Driver" category="Breaks 2"/>
+	    <program id="65" name="P194 Big Punch" category="Breaks 2"/>
+	    <program id="66" name="P195 Big Step" category="Breaks 2"/>
+	    <program id="67" name="P196 BreakDance" category="Breaks 2"/>
+	    <program id="68" name="P197 Port Fuzz" category="Breaks 2"/>
+	    <program id="69" name="P198 Syn Pick" category="Breaks 2"/>
+	    <program id="70" name="P199 Body" category="Breaks 2"/>
+	    <program id="71" name="P200 Ge Ge Ge" category="Breaks 2"/>
+	    <program id="72" name="P201 Hip Pick" category="Breaks 2"/>
+	    <program id="73" name="P202 Retro Jam" category="Breaks 2"/>
+	    <program id="74" name="P203 Funk Hop" category="Breaks 2"/>
+	    <program id="75" name="P204 Basic Bass" category="Breaks 2"/>
+	    <program id="76" name="P205 Tomic Bass" category="Breaks 2"/>
+	    <program id="77" name="P206 Data Bass" category="Breaks 2"/>
+	    <program id="78" name="P207 Claviphunk" category="Breaks 2"/>
+	    <program id="79" name="P208 Hexadron" category="Breaks 2"/>
+	    <program id="80" name="P209 Bunglemon" category="Breaks 2"/>
+	    <program id="81" name="P210 Stabber" category="Breaks 2"/>
+	    <program id="82" name="P211 Tribe Vibe" category="Breaks 2"/>
+	    <program id="83" name="P212 New York" category="Breaks 2"/>
+	    <program id="84" name="P213 Puffy Wind" category="Breaks 2"/>
+	    <program id="85" name="P214 Clouds" category="Breaks 2"/>
+	    <program id="86" name="P215 Sqotesue" category="Breaks 2"/>
+	    <program id="87" name="P216 Reflex" category="Breaks 2"/>
+	    <program id="88" name="P217 Ambernecta" category="Breaks 2"/>
+	    <program id="89" name="P218 Devastated" category="Breaks 2"/>
+	    <program id="90" name="P219 Reborn" category="Breaks 2"/>
+	    <program id="91" name="P220 Aquarium" category="Breaks 2"/>
+	    <program id="92" name="P221 Breathing" category="Breaks 2"/>
+	    <program id="93" name="P222 WorkGarage" category="Breaks 2"/>
+	    <program id="94" name="P223 Frettin" category="Breaks 2"/>
+	    <program id="95" name="P224 Artoo" category="Breaks 2"/>
+	    <program id="96" name="P225 Cowbelly" category="Breaks 2"/>
+	    <program id="97" name="P226 Electro FX" category="Breaks 2"/>
+	    <program id="98" name="P227 FX Track" category="Breaks 2"/>
+	    <program id="99" name="P228 Guillemot" category="Breaks 2"/>
+	    <program id="100" name="P229 Ruler" category="Breaks 2"/>
+	    <program id="101" name="P230 Impetus" category="Breaks 2"/>
+	    <program id="102" name="P231 Fritenite" category="Breaks 2"/>
+	    <program id="103" name="P232 Octans" category="Breaks 2"/>
+	    <program id="104" name="P233 Bossa" category="Breaks 2"/>
+	    <program id="105" name="P234 New Delhi" category="Breaks 2"/>
+	    <program id="106" name="P235 Vela" category="Ambient"/>
+	    <program id="107" name="P236 Tock" category="Ambient"/>
+	    <program id="108" name="P237 Jixtuken" category="Ambient"/>
+	    <program id="109" name="P238 Blue" category="Ambient"/>
+	    <program id="110" name="P239 Reflection" category="Ambient"/>
+	    <program id="111" name="P240 Turmoil" category="Ambient"/>
+	    <program id="112" name="P241 ZOOM" category="Ambient"/>
+	    <program id="113" name="P242 Diazepam" category="Ambient"/>
+	    <program id="114" name="P243 Dubby" category="Ambient"/>
+	    <program id="115" name="P244 Effect" category="Ambient"/>
+	    <program id="116" name="P245 Boom FX" category="Ambient"/>
+	    <program id="117" name="P246 Bass Face" category="Ambient"/>
+	    <program id="118" name="P247 Darker T" category="Ambient"/>
+	    <program id="119" name="P248 Mach Man" category="Ambient"/>
+	    <program id="120" name="P249 Flicker" category="Ambient"/>
+	    <program id="121" name="P250 Flash Back" category="Ambient"/>
+	    <program id="122" name="P251 Reticulum" category="Ambient"/>
+	    <program id="123" name="P252 Sagitta" category="Ambient"/>
+	    <program id="124" name="P253 Perseus" category="Ambient"/>
+	    <program id="125" name="P254 Auriga" category="Ambient"/>
+	    <program id="126" name="P255 Libra" category="Ambient"/>
+	    <program id="127" name="P256 Grus" category="Ambient"/>
+	</bank>
+
+	<bank name="User Patterns" percussion="false" msb="63" lsb="2">
+	    <program id="0" name="U001"/>
+	    <program id="1" name="U002"/>
+	    <program id="2" name="U003"/>
+	    <program id="3" name="U004"/>
+	    <program id="4" name="U005"/>
+	    <program id="5" name="U006"/>
+	    <program id="6" name="U007"/>
+	    <program id="7" name="U008"/>
+	    <program id="8" name="U009"/>
+	    <program id="9" name="U010"/>
+	    <program id="10" name="U011"/>
+	    <program id="11" name="U012"/>
+	    <program id="12" name="U013"/>
+	    <program id="13" name="U014"/>
+	    <program id="14" name="U015"/>
+	    <program id="15" name="U016"/>
+	    <program id="16" name="U017"/>
+	    <program id="17" name="U018"/>
+	    <program id="18" name="U019"/>
+	    <program id="19" name="U020"/>
+	    <program id="20" name="U021"/>
+	    <program id="21" name="U022"/>
+	    <program id="22" name="U023"/>
+	    <program id="23" name="U024"/>
+	    <program id="24" name="U025"/>
+	    <program id="25" name="U026"/>
+	    <program id="26" name="U027"/>
+	    <program id="27" name="U028"/>
+	    <program id="28" name="U029"/>
+	    <program id="29" name="U030"/>
+	    <program id="30" name="U031"/>
+	    <program id="31" name="U032"/>
+	    <program id="32" name="U033"/>
+	    <program id="33" name="U034"/>
+	    <program id="34" name="U035"/>
+	    <program id="35" name="U036"/>
+	    <program id="36" name="U037"/>
+	    <program id="37" name="U038"/>
+	    <program id="38" name="U039"/>
+	    <program id="39" name="U040"/>
+	    <program id="40" name="U041"/>
+	    <program id="41" name="U042"/>
+	    <program id="42" name="U043"/>
+	    <program id="43" name="U044"/>
+	    <program id="44" name="U045"/>
+	    <program id="45" name="U046"/>
+	    <program id="46" name="U047"/>
+	    <program id="47" name="U048"/>
+	    <program id="48" name="U049"/>
+	    <program id="49" name="U050"/>
+	    <program id="50" name="U051"/>
+	    <program id="51" name="U052"/>
+	    <program id="52" name="U053"/>
+	    <program id="53" name="U054"/>
+	    <program id="54" name="U055"/>
+	    <program id="55" name="U056"/>
+	    <program id="56" name="U057"/>
+	    <program id="57" name="U058"/>
+	    <program id="58" name="U059"/>
+	    <program id="59" name="U060"/>
+	    <program id="60" name="U061"/>
+	    <program id="61" name="U062"/>
+	    <program id="62" name="U063"/>
+	    <program id="63" name="U064"/>
+	    <program id="64" name="U065"/>
+	    <program id="65" name="U066"/>
+	    <program id="66" name="U067"/>
+	    <program id="67" name="U068"/>
+	    <program id="68" name="U069"/>
+	    <program id="69" name="U070"/>
+	    <program id="70" name="U071"/>
+	    <program id="71" name="U072"/>
+	    <program id="72" name="U073"/>
+	    <program id="73" name="U074"/>
+	    <program id="74" name="U075"/>
+	    <program id="75" name="U076"/>
+	    <program id="76" name="U077"/>
+	    <program id="77" name="U078"/>
+	    <program id="78" name="U079"/>
+	    <program id="79" name="U080"/>
+	    <program id="80" name="U081"/>
+	    <program id="81" name="U082"/>
+	    <program id="82" name="U083"/>
+	    <program id="83" name="U084"/>
+	    <program id="84" name="U085"/>
+	    <program id="85" name="U086"/>
+	    <program id="86" name="U087"/>
+	    <program id="87" name="U088"/>
+	    <program id="88" name="U089"/>
+	    <program id="89" name="U090"/>
+	    <program id="90" name="U091"/>
+	    <program id="91" name="U092"/>
+	    <program id="92" name="U093"/>
+	    <program id="93" name="U094"/>
+	    <program id="94" name="U095"/>
+	    <program id="95" name="U096"/>
+	    <program id="96" name="U097"/>
+	    <program id="97" name="U098"/>
+	    <program id="98" name="U099"/>
+	    <program id="99" name="U100"/>
+	    <program id="100" name="U101"/>
+	    <program id="101" name="U102"/>
+	    <program id="102" name="U103"/>
+	    <program id="103" name="U104"/>
+	    <program id="104" name="U105"/>
+	    <program id="105" name="U106"/>
+	    <program id="106" name="U107"/>
+	    <program id="107" name="U108"/>
+	    <program id="108" name="U109"/>
+	    <program id="109" name="U110"/>
+	    <program id="110" name="U111"/>
+	    <program id="111" name="U112"/>
+	    <program id="112" name="U113"/>
+	    <program id="113" name="U114"/>
+	    <program id="114" name="U115"/>
+	    <program id="115" name="U116"/>
+	    <program id="116" name="U117"/>
+	    <program id="117" name="U118"/>
+	    <program id="118" name="U119"/>
+	    <program id="119" name="U120"/>
+	    <program id="120" name="U121"/>
+	    <program id="121" name="U122"/>
+	    <program id="122" name="U123"/>
+	    <program id="123" name="U124"/>
+	    <program id="124" name="U125"/>
+	    <program id="125" name="U126"/>
+	    <program id="126" name="U127"/>
+	    <program id="127" name="U128"/>
+	</bank>
+
+	 <controls>
+<!-- used by Bank Select: <Controller name="Bank Select MSB"   type="Control" l="0" />-->
+<!-- used by Bank Select: <Controller name="Bank Select MSB"   type="Control" l="32" />-->
+<!-- used for NRPN: <Controller name="Data Entry MSB"    type="Control" l="6" />-->
+<!-- user for NRPN: <Controller name="Data Entry LSB"    type="Control" l="38" />-->
+
+
+    <control name="Modulation"        type="controller" controllervalue="1" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="Portamento Time"   type="controller" controllervalue="5" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+
+    <control name="Main Volume"       type="controller" controllervalue="7" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="Pan"               type="controller" controllervalue="10" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="Expression"        type="controller" controllervalue="11" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="Hold1"             type="controller" controllervalue="64" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="Portamento"        type="controller" controllervalue="65" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="Sostenuto"         type="controller" controllervalue="66" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="ReleaseTime"       type="controller" controllervalue="72" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="AttackTime"        type="controller" controllervalue="73" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="Brightness"        type="controller" controllervalue="74" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="Decay Time"        type="controller" controllervalue="75" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="Effect4 Depth"     type="controller" controllervalue="94" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+
+    <control name="Scene"             type="controller" controllervalue="3" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="LFO Wave"          type="controller" controllervalue="15" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="LFO PMD"           type="controller" controllervalue="18" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="LFO FMD"           type="controller" controllervalue="19" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="LFO AMD"           type="controller" controllervalue="80" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="LFO Speed"         type="controller" controllervalue="16" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="AEG Sustain"       type="controller" controllervalue="31" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="FEG Attack"        type="controller" controllervalue="82" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="FEG Decay"         type="controller" controllervalue="83" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="FEG Sustain"       type="controller" controllervalue="28" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="FEG Release"       type="controller" controllervalue="29" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="Key Assign 1"      type="controller" controllervalue="8" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="Key Assign 2"      type="controller" controllervalue="9" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="Algoritm Type"     type="controller" controllervalue="33" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="Noise Osc Type"    type="controller" controllervalue="51" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="Harmonic Mod 1"    type="controller" controllervalue="20" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="Harmonic Mod 2"    type="controller" controllervalue="21" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="Harmonic Mod 3"    type="controller" controllervalue="22" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="FM Depth Mod 1"    type="controller" controllervalue="23" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="FM Depth Mod 2"    type="controller" controllervalue="24" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="FM Depth Mod 3"    type="controller" controllervalue="25" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="FM Decay Mod 1"    type="controller" controllervalue="26" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="FM Decay Mod 2"    type="controller" controllervalue="27" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="FM Decay Mod 3"    type="controller" controllervalue="30" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="Noise Level"       type="controller" controllervalue="39" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="Effect Type 1"     type="controller" controllervalue="88" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="Effect Type 2"     type="controller" controllervalue="89" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="Effect Param"      type="controller" controllervalue="48" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="Distortion"        type="controller" controllervalue="49" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="Resonance"         type="controller" controllervalue="71" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="FEG Depth"         type="controller" controllervalue="81" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="All Sounds Off"       type="controller" controllervalue="120" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="Reset All control"    type="controller" controllervalue="121" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="All Notes Off"        type="controller" controllervalue="123" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="Omni Off"             type="controller" controllervalue="124" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="Omni On"              type="controller" controllervalue="125" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="Mono"                 type="controller" controllervalue="126" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+    <control name="Poly"                 type="controller" controllervalue="127" description=" /lt;none /gt;" min="0" max="127" default="0"  colourindex="2" ipbposition="-1"/>
+
+<!--    <Controller name="Drum Pitch Coarse" type="NRPN" h="0x18" l="pitch" />-->
+<!--    <Controller name="RPN Null"          type="RPN" h="0x7f" l="0x7f" />-->
+<!-- TODO: The FM instruments are controllable more in detail via SysEx -->
+
+	<control name="PitchBend" type="pitchbend" description="&lt;none&gt;" min="0" max="127" default="0" controllervalue="0" colourindex="0" ipbposition="-1"/>
+	 </controls>
+
+    </device>
+
+</studio>
+
+</rosegarden-data>

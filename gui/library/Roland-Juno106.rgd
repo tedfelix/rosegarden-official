@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rosegarden-data>
+<rosegarden-data version="4-0.9.7-cvs">
+<studio thrufilter="0" recordfilter="0" audioinputpairs="2">
+
+
+    <device id="0" name="Roland Juno106" direction="play" variation="" connection="65:0 Emu10k1 Port 0 (write)" type="midi">
+
+        <librarian name="Joost Damad" email="joost@lumatec.be"/>
+        <metronome instrument="2009" pitch="37" depth="2" barvelocity="120" beatvelocity="80" subbeatvelocity="80"/>
+
+        <bank name="Juno106" percussion="false" msb="0" lsb="0">
+            <program id="0" name="A11 Brass"/>
+            <program id="1" name="A12 Brass Swell"/>
+            <program id="2" name="A13 Trumpet"/>
+            <program id="3" name="A14 Flutes"/>
+            <program id="4" name="A15 Moving Strings"/>
+            <program id="5" name="A16 Brass &amp; Strings"/>
+            <program id="6" name="A17 Choir"/>
+            <program id="7" name="A18 Piano I"/>
+            <program id="8" name="A21 Organ I"/>
+            <program id="9" name="A22 Organ II"/>
+            <program id="10" name="A23 Combo Organ"/>
+            <program id="11" name="A24 Calliope"/>
+            <program id="12" name="A25 Donald Pluck"/>
+            <program id="13" name="A26 Celeste* (oct up)"/>
+            <program id="14" name="A27 Elect Piano I"/>
+            <program id="15" name="A28 Elect Piano II"/>
+            <program id="16" name="A31 Clock Chimes* (oct up)"/>
+            <program id="17" name="A32 Steel Drums"/>
+            <program id="18" name="A33 Xylophone"/>
+            <program id="19" name="A34 Brass III"/>
+            <program id="20" name="A35 Fanfare"/>
+            <program id="21" name="A36 Strings III"/>
+            <program id="22" name="A37 Pizzacato"/>
+            <program id="23" name="A38 High Strings"/>
+            <program id="24" name="A41 Bass Clarinet"/>
+            <program id="25" name="A42 English Horn"/>
+            <program id="26" name="A43 Brass Ensemble"/>
+            <program id="27" name="A44 Guitar"/>
+            <program id="28" name="A45 Koto"/>
+            <program id="29" name="A46 Dark Pluck"/>
+            <program id="30" name="A47 Funky I"/>
+            <program id="31" name="A48 Synth Bass I (unison)"/>
+            <program id="32" name="A51 Lead I"/>
+            <program id="33" name="A52 Lead II"/>
+            <program id="34" name="A53 Lead III"/>
+            <program id="35" name="A54 Funky II"/>
+            <program id="36" name="A55 Synth Bass II"/>
+            <program id="37" name="A56 Funky III"/>
+            <program id="38" name="A57 Thud Wah"/>
+            <program id="39" name="A58 Going Up"/>
+            <program id="40" name="A61 Piano II"/>
+            <program id="41" name="A62 Clav."/>
+            <program id="42" name="A63 Frontier Organ"/>
+            <program id="43" name="A64 Snare Drum (unison)"/>
+            <program id="44" name="A65 Tom Toms (unison)"/>
+            <program id="45" name="A66 Timpani (unison)"/>
+            <program id="46" name="A67 Shaker"/>
+            <program id="47" name="A68 Synth Pad"/>
+            <program id="48" name="A71 Sweep I"/>
+            <program id="49" name="A72 Pluck Sweep"/>
+            <program id="50" name="A73 Repeater"/>
+            <program id="51" name="A74 Sweep II"/>
+            <program id="52" name="A75 Pluck Bell"/>
+            <program id="53" name="A76 Dark Synth Piano"/>
+            <program id="54" name="A77 Sustainer"/>
+            <program id="55" name="A78 Wah Release"/>
+            <program id="56" name="A81 Gong (play low chords)"/>
+            <program id="57" name="A82 Resonance Funk"/>
+            <program id="58" name="A83 Drum Booms* (1 oct. down)"/>
+            <program id="59" name="A84 Dust Storm"/>
+            <program id="60" name="A85 Rocket Men"/>
+            <program id="61" name="A86 Hand Claps"/>
+            <program id="62" name="A87 F X Sweep"/>
+            <program id="63" name="A88 Caverns"/>
+            <program id="64" name="B11 Strings"/>
+            <program id="65" name="B12 Violin"/>
+            <program id="66" name="B13 Chorus Vibes"/>
+            <program id="67" name="B14 Organ 1"/>
+            <program id="68" name="B15 Harpsichord 1"/>
+            <program id="69" name="B16 Recorder"/>
+            <program id="70" name="B17 Perc. Pluck"/>
+            <program id="71" name="B18 Noise Sweep"/>
+            <program id="72" name="B21 Space Chimes"/>
+            <program id="73" name="B22 Nylon Guitar"/>
+            <program id="74" name="B23 Orchestral Pad"/>
+            <program id="75" name="B24 Bright Pluck"/>
+            <program id="76" name="B25 Organ Bell"/>
+            <program id="77" name="B26 Accordion"/>
+            <program id="78" name="B27 FX Rise 1"/>
+            <program id="79" name="B28 FX Rise 2"/>
+            <program id="80" name="B31 Brass"/>
+            <program id="81" name="B32 Helicopter"/>
+            <program id="82" name="B33 Lute"/>
+            <program id="83" name="B34 Chorus Funk"/>
+            <program id="84" name="B35 Tomita"/>
+            <program id="85" name="B36 FX Sweep 1"/>
+            <program id="86" name="B37 Sharp Reed"/>
+            <program id="87" name="B38 Bass Pluck"/>
+            <program id="88" name="B41 Resonant Rise"/>
+            <program id="89" name="B42 Harpsichord 2"/>
+            <program id="90" name="B43 Dark Ensemble"/>
+            <program id="91" name="B44 Contact Wah"/>
+            <program id="92" name="B45 Noise Sweep 2"/>
+            <program id="93" name="B46 Glassy Wah"/>
+            <program id="94" name="B47 Phase Ensemble"/>
+            <program id="95" name="B48 Chorused Bell"/>
+            <program id="96" name="B51 Clav"/>
+            <program id="97" name="B52 Organ 2"/>
+            <program id="98" name="B53 Bassoon"/>
+            <program id="99" name="B54 Auto Release Noise Sweep"/>
+            <program id="100" name="B55 Brass Ensemble"/>
+            <program id="101" name="B56 Ethereal"/>
+            <program id="102" name="B57 Chorus Bell 2"/>
+            <program id="103" name="B58 Blizzard"/>
+            <program id="104" name="B61 E. Piano w/Tremelo"/>
+            <program id="105" name="B62 Clarinet"/>
+            <program id="106" name="B63 Thunder"/>
+            <program id="107" name="B64 Reedy Organ"/>
+            <program id="108" name="B65 Flute / Horn"/>
+            <program id="109" name="B66 Toy Rhodes"/>
+            <program id="110" name="B67 Surf&apos;s Up"/>
+            <program id="111" name="B68 OW Bass"/>
+            <program id="112" name="B71 Piccolo"/>
+            <program id="113" name="B72 Melodic Taps"/>
+            <program id="114" name="B73 Meow Brass"/>
+            <program id="115" name="B74 Violin (high)"/>
+            <program id="116" name="B75 High Bells"/>
+            <program id="117" name="B76 Rolling Wah"/>
+            <program id="118" name="B77 Ping Bell"/>
+            <program id="119" name="B78 Brassy Organ"/>
+            <program id="120" name="B81 Low Dark Strings"/>
+            <program id="121" name="B82 Piccolo Trumpet"/>
+            <program id="122" name="B83 Cello"/>
+            <program id="123" name="B84 High Strings"/>
+            <program id="124" name="B85 Rocket Men"/>
+            <program id="125" name="B86 Forbidden Planet"/>
+            <program id="126" name="B87 Froggy"/>
+            <program id="127" name="B88 Owgan"/>
+        </bank>
+
+        <controls>
+            <control name="Modulation" type="controller" description="&lt;none&gt;" min="0" max="127" default="0" controllervalue="1" colourindex="2" ipbposition="0"/>
+            <control name="Pedal" type="controller" description="&lt;none&gt;" min="0" max="127" default="0" controllervalue="40" colourindex="2" ipbposition="0"/>
+            <control name="PitchBend" type="pitchbend" description="&lt;none&gt;" min="0" max="127" default="0" controllervalue="0" colourindex="0" ipbposition="-1"/>
+        </controls>
+
+        <instrument id="2000" channel="0" type="midi">
+            <pan value="64"/>
+            <volume value="100"/>
+            <controlchange type="91" value="0"/>
+            <controlchange type="93" value="0"/>
+            <controlchange type="74" value="127"/>
+            <controlchange type="71" value="0"/>
+            <controlchange type="73" value="0"/>
+            <controlchange type="72" value="0"/>
+        </instrument>
+
+        <instrument id="2001" channel="1" type="midi">
+            <pan value="64"/>
+            <volume value="100"/>
+            <controlchange type="91" value="0"/>
+            <controlchange type="93" value="0"/>
+            <controlchange type="74" value="127"/>
+            <controlchange type="71" value="0"/>
+            <controlchange type="73" value="0"/>
+            <controlchange type="72" value="0"/>
+        </instrument>
+
+        <instrument id="2002" channel="2" type="midi">
+            <pan value="64"/>
+            <volume value="100"/>
+            <controlchange type="91" value="0"/>
+            <controlchange type="93" value="0"/>
+            <controlchange type="74" value="127"/>
+            <controlchange type="71" value="0"/>
+            <controlchange type="73" value="0"/>
+            <controlchange type="72" value="0"/>
+        </instrument>
+
+        <instrument id="2003" channel="3" type="midi">
+            <pan value="64"/>
+            <volume value="100"/>
+            <controlchange type="91" value="0"/>
+            <controlchange type="93" value="0"/>
+            <controlchange type="74" value="127"/>
+            <controlchange type="71" value="0"/>
+            <controlchange type="73" value="0"/>
+            <controlchange type="72" value="0"/>
+        </instrument>
+
+        <instrument id="2004" channel="4" type="midi">
+            <pan value="64"/>
+            <volume value="100"/>
+            <controlchange type="91" value="0"/>
+            <controlchange type="93" value="0"/>
+            <controlchange type="74" value="127"/>
+            <controlchange type="71" value="0"/>
+            <controlchange type="73" value="0"/>
+            <controlchange type="72" value="0"/>
+        </instrument>
+
+        <instrument id="2005" channel="5" type="midi">
+            <pan value="64"/>
+            <volume value="100"/>
+            <controlchange type="91" value="0"/>
+            <controlchange type="93" value="0"/>
+            <controlchange type="74" value="127"/>
+            <controlchange type="71" value="0"/>
+            <controlchange type="73" value="0"/>
+            <controlchange type="72" value="0"/>
+        </instrument>
+
+        <instrument id="2006" channel="6" type="midi">
+            <pan value="64"/>
+            <volume value="100"/>
+            <controlchange type="91" value="0"/>
+            <controlchange type="93" value="0"/>
+            <controlchange type="74" value="127"/>
+            <controlchange type="71" value="0"/>
+            <controlchange type="73" value="0"/>
+            <controlchange type="72" value="0"/>
+        </instrument>
+
+        <instrument id="2007" channel="7" type="midi">
+            <pan value="64"/>
+            <volume value="100"/>
+            <controlchange type="91" value="0"/>
+            <controlchange type="93" value="0"/>
+            <controlchange type="74" value="127"/>
+            <controlchange type="71" value="0"/>
+            <controlchange type="73" value="0"/>
+            <controlchange type="72" value="0"/>
+        </instrument>
+
+        <instrument id="2008" channel="8" type="midi">
+            <pan value="64"/>
+            <volume value="100"/>
+            <controlchange type="91" value="0"/>
+            <controlchange type="93" value="0"/>
+            <controlchange type="74" value="127"/>
+            <controlchange type="71" value="0"/>
+            <controlchange type="73" value="0"/>
+            <controlchange type="72" value="0"/>
+        </instrument>
+
+        <instrument id="2009" channel="9" type="midi">
+            <pan value="64"/>
+            <volume value="100"/>
+            <controlchange type="91" value="0"/>
+            <controlchange type="93" value="0"/>
+            <controlchange type="74" value="127"/>
+            <controlchange type="71" value="0"/>
+            <controlchange type="73" value="0"/>
+            <controlchange type="72" value="0"/>
+        </instrument>
+
+        <instrument id="2010" channel="10" type="midi">
+            <pan value="64"/>
+            <volume value="100"/>
+            <controlchange type="91" value="0"/>
+            <controlchange type="93" value="0"/>
+            <controlchange type="74" value="127"/>
+            <controlchange type="71" value="0"/>
+            <controlchange type="73" value="0"/>
+            <controlchange type="72" value="0"/>
+        </instrument>
+
+        <instrument id="2011" channel="11" type="midi">
+            <pan value="64"/>
+            <volume value="100"/>
+            <controlchange type="91" value="0"/>
+            <controlchange type="93" value="0"/>
+            <controlchange type="74" value="127"/>
+            <controlchange type="71" value="0"/>
+            <controlchange type="73" value="0"/>
+            <controlchange type="72" value="0"/>
+        </instrument>
+
+        <instrument id="2012" channel="12" type="midi">
+            <pan value="64"/>
+            <volume value="100"/>
+            <controlchange type="91" value="0"/>
+            <controlchange type="93" value="0"/>
+            <controlchange type="74" value="127"/>
+            <controlchange type="71" value="0"/>
+            <controlchange type="73" value="0"/>
+            <controlchange type="72" value="0"/>
+        </instrument>
+
+        <instrument id="2013" channel="13" type="midi">
+            <pan value="64"/>
+            <volume value="100"/>
+            <controlchange type="91" value="0"/>
+            <controlchange type="93" value="0"/>
+            <controlchange type="74" value="127"/>
+            <controlchange type="71" value="0"/>
+            <controlchange type="73" value="0"/>
+            <controlchange type="72" value="0"/>
+        </instrument>
+
+        <instrument id="2014" channel="14" type="midi">
+            <pan value="64"/>
+            <volume value="100"/>
+            <controlchange type="91" value="0"/>
+            <controlchange type="93" value="0"/>
+            <controlchange type="74" value="127"/>
+            <controlchange type="71" value="0"/>
+            <controlchange type="73" value="0"/>
+            <controlchange type="72" value="0"/>
+        </instrument>
+
+        <instrument id="2015" channel="15" type="midi">
+            <pan value="64"/>
+            <volume value="100"/>
+            <controlchange type="91" value="0"/>
+            <controlchange type="93" value="0"/>
+            <controlchange type="74" value="127"/>
+            <controlchange type="71" value="0"/>
+            <controlchange type="73" value="0"/>
+            <controlchange type="72" value="0"/>
+        </instrument>
+
+    </device>
+
+
+
+
+</studio>
+
+
+</rosegarden-data>
