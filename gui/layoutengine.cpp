@@ -23,8 +23,7 @@
 // I woke up on the last day of the year
 // with the sudden realisation
 // that people have brought terrible ills upon themselves by
-// trying to cover the earth with
-// fields in shapes such as squares
+// trying to cover the earth with fields in shapes such as squares
 // which don't tesselate when mapped onto curved surfaces.
 // War and famine would cease, if only we could all
 // move at once onto a system of triangles.
