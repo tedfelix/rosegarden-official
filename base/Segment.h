@@ -73,6 +73,52 @@ public:
     bool eraseSingle(Event*);
 
     /**
+     * If possible, collapse the event with the following or previous
+     * one.
+     *
+     * @return true if collapse was done
+     *
+     * collapseForward is set to true if * the collapse was with the
+     * following element, false if it was * with the previous one
+     *
+     * collapsedEvent will point to the deleted Event (so we can
+     * easily find the corresponding ViewElements to delete), or null
+     * if no event was deleted
+     */
+    bool collapse(Event*, bool& collapseForward, Event*& collapsedEvent);
+
+    /**
+     * Returns an iterator pointing to that specific element,
+     * end() otherwise
+     */
+    iterator findSingle(Event*);
+
+    /**
+     * Returns an iterator pointing to the next contiguous element of
+     * the same type (note or rest) as the one passed as argument, if
+     * any. Returns end() otherwise.
+     *
+     * (for instance if the argument points to a note and the next
+     * element is a rest, end() will be returned)
+     */
+    iterator findContiguousNext(iterator);
+
+    /**
+     * Returns an iterator pointing to the previous contiguous element
+     * of the same type (note or rest) as the one passed as argument,
+     * if any. Returns end() otherwise.
+     *
+     * (for instance if the argument points to a note and the previous
+     * element is a rest, end() will be returned)
+     */
+    iterator findContiguousPrevious(iterator);
+
+    /**
+     * Returns true if both Events can be collapsed
+     */
+    bool canCollapse(iterator, iterator);
+    
+    /**
      * Returns an event group id
      * The id is guaranteed to be unique within the track
      */

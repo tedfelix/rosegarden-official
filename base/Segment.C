@@ -182,20 +182,173 @@ void Track::erase(iterator from, iterator to)
 
 bool Track::eraseSingle(Event* e)
 {
-    std::pair<iterator, iterator> interval = equal_range(e);
+    iterator elPos = findSingle(e);
 
-    bool foundIt = false;
+    if (elPos != end()) {
+
+        erase(elPos);
+        return true;
+            
+    } else return false;
     
-    for(iterator i = interval.first; i != interval.second; ++i) {
-        if (*i == e) {
-            foundIt = true;
-            erase(i);
+}
+
+bool Track::collapse(Event* e, bool& collapseForward, Event*& collapsedEvent)
+{
+    collapsedEvent = 0;
+
+    iterator elPos = findSingle(e);
+
+    if (elPos == end()) return false;
+
+    iterator nextEvent = findContiguousNext(elPos),
+        previousEvent  = findContiguousPrevious(elPos);
+
+    if (nextEvent != end() &&
+        canCollapse(nextEvent, elPos)) {
+
+        // collapse with next event
+        e->setDuration(e->getDuration() + (*nextEvent)->getDuration());
+
+        Note n = Note::getNearestNote(e->getDuration());
+        
+        e->set<Int>(Note::NoteType, n.getNoteType());
+        e->set<Int>(Note::NoteDots, n.getDots());
+        
+        collapsedEvent = *nextEvent;
+        collapseForward = true;
+
+        erase(nextEvent);
+
+    } else if (previousEvent != end() &&
+               canCollapse(previousEvent, elPos)) {
+
+        // collapse with previous event
+        (*previousEvent)->setDuration(e->getDuration() +
+                                      (*previousEvent)->getDuration());
+
+        Note n = Note::getNearestNote(e->getDuration());
+        
+        e->set<Int>(Note::NoteType, n.getNoteType());
+        e->set<Int>(Note::NoteDots, n.getDots());
+
+        collapsedEvent = e;
+        erase(elPos);
+        collapseForward = false;
+    }
+    
+    
+    return collapsedEvent != 0;
+}
+
+Track::iterator Track::findContiguousNext(Track::iterator el)
+{
+    std::string elType = (*el)->getType(),
+        reject, accept;
+     
+    if (elType == Note::EventType) {
+        accept = Note::EventType;
+        reject = Note::EventRestType;
+    } else if (elType == Note::EventRestType) {
+        accept = Note::EventRestType;
+        reject = Note::EventType;
+    } else {
+        accept = elType;
+        reject = "";
+    }
+
+    bool success = false;
+
+    iterator i = ++el;
+    
+    for(; i != end(); ++i) {
+        std::string iType = (*i)->getType();
+
+        if (iType == reject) {
+            success = false;
+            break;
+        }
+        if (iType == accept) {
+            success = true;
             break;
         }
     }
 
-    return foundIt;
+    if (success) return i;
+    else return end();
+    
 }
+
+Track::iterator Track::findContiguousPrevious(Track::iterator el)
+{
+    std::string elType = (*el)->getType(),
+        reject, accept;
+     
+    if (elType == Note::EventType) {
+        accept = Note::EventType;
+        reject = Note::EventRestType;
+    } else if (elType == Note::EventRestType) {
+        accept = Note::EventRestType;
+        reject = Note::EventType;
+    } else {
+        accept = elType;
+        reject = "";
+    }
+
+    bool success = false;
+
+    iterator i = --el;
+    for(; i != begin(); --i) {
+        std::string iType = (*i)->getType();
+
+        if (iType == reject) {
+            success = false;
+            break;
+        }
+        if (iType == accept) {
+            success = true;
+            break;
+        }
+    }
+
+    if (success) return i;
+    else return end();
+}
+
+bool Track::canCollapse(Track::iterator a, Track::iterator b)
+{
+    time_t durationMax, durationMin;
+
+    if ((*a)->getDuration() > (*b)->getDuration()) {
+        durationMax = (*a)->getDuration();
+        durationMin = (*b)->getDuration();
+    } else {
+        durationMax = (*b)->getDuration();
+        durationMin = (*a)->getDuration();
+    }
+
+    return ((durationMax == durationMin) ||
+            (durationMax == (2 * durationMin)));
+    // TODO : and some test on not fucking up bar count
+}
+
+
+Track::iterator Track::findSingle(Event* e)
+{
+    iterator res = end();
+
+    std::pair<iterator, iterator> interval = equal_range(e);
+
+    for(iterator i = interval.first; i != interval.second; ++i) {
+        if (*i == e) {
+            res = i;
+            break;
+        }
+    }
+    return res;
+}
+
+
 
 int Track::getNextGroupId() const
 {
