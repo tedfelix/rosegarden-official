@@ -310,22 +310,27 @@ AudioManagerDialog::slotDelete()
     {
         // Get the next item to highlight
         //
-        QListViewItem *newItem = item->nextSibling();
+        QListViewItem *newItem = item->itemBelow();
         
-        if(newItem == 0)
-        {
-            cout << "FIRST CHILD" << endl;
-            newItem = item->firstChild();
-        }
+        // Or try above
+        //
+        if (newItem == 0) newItem = item->itemAbove();
 
+        // Or the parent
+        //
+        if(newItem == 0) newItem = item->parent();
+
+        // Get the id and segment of the next item so that we can
+        // match against it
+        //
         unsigned int id = 0;
         Rosegarden::Segment *segment = 0;
-        AudioListItem *aItem = dynamic_cast<AudioListItem*>(item);
+        AudioListItem *aItem = dynamic_cast<AudioListItem*>(newItem);
         
         if (aItem)
         {
-            segment = item->getSegment();
-            id = item->getId();
+            segment = aItem->getSegment();
+            id = aItem->getId();
         }
 
         // Do the things
@@ -333,7 +338,7 @@ AudioManagerDialog::slotDelete()
         emit deleteSegment(item->getSegment());
         slotPopulateFileList();
 
-        // Show new selection
+        // Now show new selection with stored values
         //
         if (newItem)
             setSelected(id, segment);
@@ -529,7 +534,7 @@ AudioManagerDialog::setSelected(unsigned int id, Rosegarden::Segment *segment)
 
     while (it)
     {
-        if (it->childCount() == 0)
+        if (it->childCount() > 0)
             chIt = it->firstChild();
         
         while (chIt)
@@ -540,8 +545,9 @@ AudioManagerDialog::setSelected(unsigned int id, Rosegarden::Segment *segment)
             {
                 if (aItem->getId() == id && aItem->getSegment() == segment)
                 {
-                    m_fileList->ensureItemVisible(it);
-                    m_fileList->setSelected(it, true);
+                    m_fileList->ensureItemVisible(chIt);
+                    m_fileList->setSelected(chIt, true);
+                    emit segmentSelected(segment);
                     return;
                 }
             }
