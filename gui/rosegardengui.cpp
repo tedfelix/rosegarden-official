@@ -60,7 +60,7 @@ using std::cout;
 static Rosegarden::MappedComposition mappComp;
 
 RosegardenGUIApp::RosegardenGUIApp()
-    : KMainWindow(0), DCOPObject("RosegardenGUIIface"),
+    : KMainWindow(0), DCOPObject("RosegardenIface"),
       m_config(kapp->config()),
       m_fileRecent(0),
       m_view(0),

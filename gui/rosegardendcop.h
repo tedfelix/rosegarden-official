@@ -28,8 +28,8 @@
 #define ROSEGARDEN_SEQUENCER_APP_NAME   "rosegardensequencer"
 #define ROSEGARDEN_SEQUENCER_IFACE_NAME "RosegardenSequencerIface"
 
-#define ROSEGARDEN_GUI_APP_NAME         "rosegardengui"
-#define ROSEGARDEN_GUI_IFACE_NAME       "RosegardenGUIIface"
+#define ROSEGARDEN_GUI_APP_NAME         "rosegarden"
+#define ROSEGARDEN_GUI_IFACE_NAME       "RosegardenIface"
 
 
 // Sequencer communicates its state through this enum - 

@@ -28,7 +28,7 @@
 /**
  * RosegardenGUI DCOP Interface
  */
-class RosegardenGUIIface : virtual public DCOPObject
+class RosegardenIface : virtual public DCOPObject
 {
     K_DCOP
 

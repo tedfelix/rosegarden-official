@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
 
     QObject::connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
     app.dcopClient()->registerAs(app.name(), false);
-    app.dcopClient()->setDefaultObject("RosegardenGUIIface");
+    app.dcopClient()->setDefaultObject(ROSEGARDEN_GUI_IFACE_NAME);
 
     // Check for sequencer and launch if needed
     //
