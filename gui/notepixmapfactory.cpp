@@ -1680,6 +1680,8 @@ NotePixmapFactory::drawRestAux(const NotePixmapParameters &params,
     m_noteBodyHeight = character.getHeight();
 
     if (params.m_tupletCount) makeRoomForTuplingLine(params);
+
+    //!!! This hotspot is totally wrong if we have a tupling line!
     QPoint hotspot(m_font->getHotspot(charName));
 
     if (painter) {

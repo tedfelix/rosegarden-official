@@ -430,8 +430,6 @@ NotationStaff::renderPrintable(timeT from, timeT to)
     NotationElementList::iterator endAt =
 	getViewElementList()->findTime(composition->getBarEndForTime(to));
 
-//!!! hmm -- last chord is getting chopped
-
     int elementCount = 0;
 
     for (NotationElementList::iterator it = beginAt, nextIt = beginAt;

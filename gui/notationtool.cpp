@@ -1418,8 +1418,6 @@ void NotationSelector::drag(int x, int y, bool final)
 		    m_nParentView->setSingleSelectedEvent(targetStaff->getId(),
 							  lastInsertedEvent);
 
-
-		    //!!! why is Staff::findSingle protected?
 /*!!!
 		    Rosegarden::ViewElementList::iterator vli =
 			m_selectedStaff->getViewElementList()->findTime(lastInsertedEvent->getAbsoluteTime());
@@ -1431,10 +1429,14 @@ void NotationSelector::drag(int x, int y, bool final)
 			m_clickedElement = 0;
 		    }
 */
+
 		    Rosegarden::ViewElementList::iterator vli =
-			targetStaff->getViewElementList()->findTime(lastInsertedEvent->getAbsoluteTime());
-		    while (vli != targetStaff->getViewElementList()->end() &&
-			   (*vli)->event() != lastInsertedEvent) ++vli;
+			targetStaff->findEvent(lastInsertedEvent);
+
+//!!!		    Rosegarden::ViewElementList::iterator vli =
+//			targetStaff->getViewElementList()->findTime(lastInsertedEvent->getAbsoluteTime());
+//		    while (vli != targetStaff->getViewElementList()->end() &&
+//			   (*vli)->event() != lastInsertedEvent) ++vli;
 		    if (vli != targetStaff->getViewElementList()->end()) {
 			m_clickedElement = dynamic_cast<NotationElement *>(*vli);
 		    } else {

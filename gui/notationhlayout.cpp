@@ -1659,3 +1659,72 @@ bool NotationHLayout::getTimeSignaturePosition(Staff &staff,
     } else return 0;
 }
 
+Rosegarden::timeT
+NotationHLayout::getTimeForX(double x)
+{
+//!!!
+    return RulerScale::getTimeForX(x);
+}
+
+double
+NotationHLayout::getXForTime(Rosegarden::timeT time)
+{
+    NOTATION_DEBUG << "NotationHLayout::getXForTime(" << time << ")" << endl;
+
+    for (BarDataMap::iterator i(m_barData.begin()); i != m_barData.end(); ++i) {
+
+	Rosegarden::Staff *staff = i->first;
+
+	if (staff->getSegment().getStartTime() <= time &&
+	    staff->getSegment().getEndMarkerTime() > time) {
+
+	    Rosegarden::ViewElementList::iterator vli =
+		staff->getViewElementList()->findNearestTime(time);
+
+	    bool found = false;
+	    double x = 0.0, dx = 0.0;
+	    Rosegarden::timeT t = 0, dt = 0;
+
+	    while (!found) {
+		if (vli == staff->getViewElementList()->end()) break;
+		NotationElement *element = static_cast<NotationElement *>(*vli);
+		if (element->getCanvasItem()) {
+		    x = element->getLayoutX();
+		    double temp;
+		    element->getLayoutAirspace(temp, dx);
+		    t = element->event()->getNotationAbsoluteTime();
+		    dt = element->event()->getNotationDuration();
+		    found = true;
+		    break;
+		}
+		++vli;
+	    }
+
+	    if (found) {
+		if (time > t) {
+
+		    while (vli != staff->getViewElementList()->end() &&
+			   ((*vli)->event()->getNotationAbsoluteTime() < time ||
+			    !((static_cast<NotationElement *>(*vli))->getCanvasItem())))
+			++vli;
+
+		    if (vli != staff->getViewElementList()->end()) {
+			NotationElement *element = static_cast<NotationElement *>(*vli);
+			dx = element->getLayoutX() - x;
+			dt = element->event()->getNotationAbsoluteTime() - t;
+		    }
+
+		    if (dt > 0 && dx > 0) {
+			return x + dx * (time - t) / dt;
+		    }
+		}
+			
+		return x - 3;
+	    }
+	}
+    }
+
+    return RulerScale::getXForTime(time);
+}
+
+

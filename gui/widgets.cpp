@@ -278,8 +278,8 @@ void RosegardenProgressDialog::slotThaw()
 
 void RosegardenProgressDialog::processEvents()
 {
-    RG_DEBUG << "RosegardenProgressDialog::processEvents: modalVisible is "
-	     << m_modalVisible << endl;
+//    RG_DEBUG << "RosegardenProgressDialog::processEvents: modalVisible is "
+//	     << m_modalVisible << endl;
     if (m_modalVisible) {
 	kapp->processEvents(50);
     } else {

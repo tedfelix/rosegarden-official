@@ -185,6 +185,16 @@ public:
     virtual double getBarPosition(int barNo);
 
     /**
+     * Returns the nearest time value to the given X coord.
+     */
+    virtual Rosegarden::timeT getTimeForX(double x);
+
+    /**
+     * Returns the X coord corresponding to the given time value.
+     */
+    virtual double getXForTime(Rosegarden::timeT time);
+
+    /**
      * Returns true if the specified bar has the correct length
      */
     virtual bool isBarCorrectOnStaff(Rosegarden::Staff &staff, int barNo);

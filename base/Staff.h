@@ -72,6 +72,11 @@ public:
     const Segment &getSegment() const { return m_segment; }
 
     /**
+     * Return the location of the given event in this Staff
+     */
+    ViewElementList::iterator findEvent(Rosegarden::Event *);
+
+    /**
      * SegmentObserver method - called after the event has been added to
      * the segment
      */
@@ -100,8 +105,6 @@ public:
 protected:
     Staff(Segment &);
     virtual ViewElement* makeViewElement(Event*) = 0;
-
-    ViewElementList::iterator findEvent(Rosegarden::Event *);
     
     /**
      * Return true if the event should be wrapped

@@ -970,7 +970,7 @@ LinedStaff::setPointerPosition(double canvasX, int canvasY)
 
 void
 LinedStaff::setPointerPosition(Rosegarden::HorizontalLayoutEngine &layout,
-				  Rosegarden::timeT time)
+			       Rosegarden::timeT time)
 {
     double x = layout.getXForTime(time);
     LinedStaffCoords coords = getCanvasCoordsForLayoutCoords(x, 0);
