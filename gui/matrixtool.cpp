@@ -23,6 +23,8 @@
 #include <klocale.h>
 #include <kaction.h>
 #include <kstddirs.h>
+#include <qapplication.h>
+#include <qtimer.h>
 
 #include "BaseProperties.h"
 #include "SegmentMatrixHelper.h"
@@ -280,7 +282,8 @@ int MatrixPainter::handleMouseMove(Rosegarden::timeT time,
 
     m_currentElement->setWidth(int(width));
     
-    if (pitch != m_currentElement->event()->get<Rosegarden::Int>(PITCH)) {
+    if (m_currentElement->event()->has(PITCH) &&
+	pitch != m_currentElement->event()->get<Rosegarden::Int>(PITCH)) {
 	m_currentElement->event()->set<Rosegarden::Int>(PITCH, pitch);
 	int y = m_currentStaff->getLayoutYForHeight(pitch) -
 	    m_currentStaff->getElementHeight() / 2;
@@ -405,6 +408,7 @@ MatrixSelector::MatrixSelector(MatrixView* view)
       m_currentStaff(0),
       m_clickedElement(0),
       m_dispatchTool(0),
+      m_justSelectedBar(false),
       m_selectionToMerge(0)
 {
     connect(m_parentView, SIGNAL(usedSelection()),
@@ -449,6 +453,11 @@ void MatrixSelector::handleEventRemoved(Rosegarden::Event *event)
     }
 }
 
+void MatrixSelector::slotClickTimeout()
+{
+    m_justSelectedBar = false;
+}
+
 void MatrixSelector::handleLeftButtonPress(Rosegarden::timeT time,
                                            int height,
                                            int staffNo,
@@ -456,6 +465,12 @@ void MatrixSelector::handleLeftButtonPress(Rosegarden::timeT time,
                                            Rosegarden::ViewElement *element)
 {
     MATRIX_DEBUG << "MatrixSelector::handleMousePress" << endl;
+
+    if (m_justSelectedBar) {
+	handleMouseTripleClick(time, height, staffNo, e, element);
+	m_justSelectedBar = false;
+	return;
+    }
 
     QPoint p = m_mParentView->inverseMapPoint(e->pos());
 
@@ -602,8 +617,58 @@ void MatrixSelector::handleMouseDoubleClick(Rosegarden::timeT ,
 		m_mParentView->addCommandToHistory(command);
 	    }
 	}	    
-    }
 
+    } /*  
+	  
+      #988167: Matrix:Multiclick select methods don't work in matrix editor
+      Postponing this, as it falls foul of world-matrix transformation
+      etiquette and other such niceties
+
+	  else {
+
+	QRect rect = staff->getBarExtents(ev->x(), ev->y());
+
+	m_selectionRect->setX(rect.x() + 2);
+	m_selectionRect->setY(rect.y());
+	m_selectionRect->setSize(rect.width() - 4, rect.height());
+
+	m_selectionRect->show();
+	m_updateRect = false;
+	
+	m_justSelectedBar = true;
+	QTimer::singleShot(QApplication::doubleClickInterval(), this,
+			   SLOT(slotClickTimeout()));
+    } */
+}
+
+void MatrixSelector::handleMouseTripleClick(Rosegarden::timeT t,
+					    int height,
+					    int staffNo,
+					    QMouseEvent *ev,
+					    Rosegarden::ViewElement *element)
+{
+    if (!m_justSelectedBar) return;
+    m_justSelectedBar = false;
+
+    MatrixStaff *staff = m_mParentView->getStaff(staffNo);
+    if (!staff) return;
+
+    if (m_clickedElement) {
+
+	// should be safe, as we've already set m_justSelectedBar false
+	handleLeftButtonPress(t, height, staffNo, ev, element);
+	return;
+
+    } else {
+
+	m_selectionRect->setX(staff->getX());
+	m_selectionRect->setY(staff->getY());
+	m_selectionRect->setSize(int(staff->getTotalWidth()) - 1,
+				 staff->getTotalHeight() - 1);
+
+	m_selectionRect->show();
+	m_updateRect = false;
+    }
 }
 
 int MatrixSelector::handleMouseMove(timeT time, int height,

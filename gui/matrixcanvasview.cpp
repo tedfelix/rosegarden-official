@@ -189,8 +189,8 @@ void MatrixCanvasView::updateGridSnap(QMouseEvent *e)
 {
     Qt::ButtonState bs = e->state();
 
-    MATRIX_DEBUG << "MatrixCanvasView::updateGridSnap : bs = "
-		 << bs << " - sm = " << getSmoothModifier() << ", is temporary " << m_isSnapTemporary << ", saved is " << m_lastSnap << endl;
+//    MATRIX_DEBUG << "MatrixCanvasView::updateGridSnap : bs = "
+//		 << bs << " - sm = " << getSmoothModifier() << ", is temporary " << m_isSnapTemporary << ", saved is " << m_lastSnap << endl;
 
     if (bs & getSmoothModifier()) {
 

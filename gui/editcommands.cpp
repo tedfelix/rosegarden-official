@@ -1272,10 +1272,12 @@ TransposeCommand::modifySegment()
 	 i != m_selection->getSegmentEvents().end(); ++i) {
 
 	if ((*i)->isa(Note::EventType)) {
-	    long pitch = (*i)->get<Int>(PITCH);
-	    pitch += m_semitones;
-	    (*i)->set<Int>(PITCH, pitch); 
-	    (*i)->unset(ACCIDENTAL);
+	    try {
+		long pitch = (*i)->get<Int>(PITCH);
+		pitch += m_semitones;
+		(*i)->set<Int>(PITCH, pitch); 
+		(*i)->unset(ACCIDENTAL);
+	    } catch (...) { }
 	}
     }
 }
@@ -1808,7 +1810,7 @@ InsertTriggerNoteCommand::modifySegment()
 	    if ((*j)->getAbsoluteTime() ==
 		(*i)->getAbsoluteTime() + (*i)->getDuration()) {
 		if ((*j)->has(TIED_BACKWARD) && (*j)->get<Rosegarden::Bool>(TIED_BACKWARD) &&
-		    ((*j)->get<Int>(PITCH) == m_pitch)) {
+		    (*j)->has(PITCH) && ((*j)->get<Int>(PITCH) == m_pitch)) {
 		    (*i)->set<Rosegarden::Bool>(TIED_FORWARD, true);
 		}
 	    }

@@ -183,9 +183,18 @@ public:
                                     QMouseEvent *event);
 
     /**
-     *
+     * Double-click: edit an event or make a whole-bar selection
      */
     virtual void handleMouseDoubleClick(Rosegarden::timeT time,
+					int height,
+					int staffNo,
+					QMouseEvent* event,
+					Rosegarden::ViewElement *element);
+
+    /**
+     * Triple-click: maybe make a whole-staff selection
+     */
+    virtual void handleMouseTripleClick(Rosegarden::timeT time,
 					int height,
 					int staffNo,
 					QMouseEvent* event,
@@ -231,6 +240,8 @@ public slots:
      */
     void slotHideSelection();
 
+    void slotClickTimeout();
+
 signals:
     void gotSelection(); // inform that we've got a new selection
     void editTriggerSegment(int);
@@ -252,6 +263,8 @@ protected:
 
     // tool to delegate to
     EditTool*    m_dispatchTool;
+
+    bool m_justSelectedBar;
 
     Rosegarden::EventSelection *m_selectionToMerge;
 };

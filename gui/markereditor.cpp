@@ -476,6 +476,12 @@ MarkerEditorDialog::slotEdit(QListViewItem *i)
 {
     RG_DEBUG << "MarkerEditorDialog::slotEdit" << endl;
 
+    if (m_listView->selectionMode() == QListView::NoSelection) {
+	// The marker list is empty, so we shouldn't allow editing the
+	// <none> placeholder
+	return;
+    }
+
     // Need to get the raw time from the ListViewItem
     //
     MarkerEditorViewItem *item = 
