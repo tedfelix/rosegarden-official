@@ -438,16 +438,36 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool firstFetch,
                 // audio and partially overlaps the slice, fix the
                 // audio start marker and stuff it in.
                 //
-                if (firstFetch &&
-                    evt->getType() == MappedEvent::Audio &&
-                    evt->getEventTime() < startTime) {
+                if (evt->getType() == MappedEvent::Audio)
+                {
+                    if (evt->getEventTime() < startTime) 
+                    {
+                        if (firstFetch)
+                        {
 
-                    SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : "
-                                    << "adjusting event audio start marker to "
-                                    << startTime << endl;
+                            std::cout << "fillCompositionWithEventsUntil : "
+                                       << "adjusting event audio start marker"
+                                       << " to " << startTime << endl;
 
-                    evt->setAudioStartMarker(startTime);
+                            // Reset event timings
+                            //
+                            evt->setAudioStartMarker(
+                                    evt->getAudioStartMarker() + startTime);
+                            evt->setEventTime(evt->getEventTime() + startTime);
+                            evt->setDuration(evt->getDuration() - startTime);
+                        }
+                        else
+                        {
+                            // Ignore an audio event if we're not first fetch
+                            // and the start time is before current slice -
+                            // it must already be playing (or will soon be 
+                            // started by the "rationalise" code).
+                            //
+                            continue;
+                        }
+                    }
                 }
+
 
                 if (evt->getType() == MappedEvent::TimeSignature) {
                     // do something
