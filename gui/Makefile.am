@@ -81,6 +81,7 @@ rosegarden_SOURCES = \
 	rawnoteruler.cpp \
 	rg21io.cpp \
 	rgapplication.cpp \
+	rgled.cpp \
 	rosedebug.cpp \
 	rosegardencanvasview.cpp \
         rosegardenconfiguredialog.cpp \

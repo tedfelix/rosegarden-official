@@ -29,7 +29,7 @@
 #include <qframe.h>
 #include <qpopupmenu.h>
 
-#include <kled.h>
+#include "kled.h"
 
 #include "Instrument.h"
 #include "Track.h"

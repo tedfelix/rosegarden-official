@@ -1,3 +1,4 @@
+// -*- c-basic-offset: 4 -*-
 
 /*
     Rosegarden-4
@@ -119,6 +120,9 @@ namespace RosegardenGUIColours
     extern const QColor MatrixKeyboardFocus;
 
     extern const QColor MarkerBackground;
+
+    extern const QColor MuteTrackLED;
+    extern const QColor RecordTrackLED;
 
     Rosegarden::Colour convertColour(const QColor &input);
     QColor convertColour(const Rosegarden::Colour &input);

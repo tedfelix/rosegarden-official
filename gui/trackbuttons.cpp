@@ -263,10 +263,10 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     //
     // 'mute' and 'record' leds
     //
-    mute = new KLedButton(Qt::green, trackHBox);
+    mute = new KLedButton(RosegardenGUIColours::MuteTrackLED, trackHBox);
     QToolTip::add(mute, i18n("Mute track"));
     hblayout->addWidget(mute);
-    record = new KLedButton(Qt::red, trackHBox);
+    record = new KLedButton(RosegardenGUIColours::RecordTrackLED, trackHBox);
     QToolTip::add(record, i18n("Record on this track"));
     hblayout->addWidget(record);
 
