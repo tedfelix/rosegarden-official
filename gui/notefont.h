@@ -427,6 +427,7 @@ public:
 
     static std::string getDefaultFontName();
     static int getDefaultSize(std::string fontName);
+    static bool isAvailableInSize(std::string fontName, int size);
 
 private:
     static std::set<std::string> m_fontNames;

@@ -210,6 +210,9 @@ public:
     /// Returns the page width according to the layout mode (page/linear)
     int getPageWidth();
 
+    /// Returns the page height according to the layout mode (page/linear)
+    int getPageHeight();
+
     /// Scrolls the view such that the given time is centered
     void scrollToTime(Rosegarden::timeT t);
 
@@ -771,6 +774,7 @@ protected:
 
     std::string m_fontName;
     int m_fontSize;
+    LinedStaff::PageMode m_pageMode;
 
     NotePixmapFactory *m_notePixmapFactory;
     NotePixmapFactory m_toolbarNotePixmapFactory;

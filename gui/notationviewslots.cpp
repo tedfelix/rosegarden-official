@@ -202,9 +202,20 @@ NotationView::slotChangeFont(const QString &newName)
 void
 NotationView::slotChangeFont(std::string newName)
 {
-    int newSize = m_config->readUnsignedNumEntry
-	((getStaffCount() > 1 ? "multistaffnotesize" : "singlestaffnotesize"),
-	 NoteFontFactory::getDefaultSize(newName));
+    int newSize = m_fontSize;
+
+    if (!NoteFontFactory::isAvailableInSize(newName, newSize)) {
+
+	int defaultSize = NoteFontFactory::getDefaultSize(newName);
+	newSize = m_config->readUnsignedNumEntry
+	    ((getStaffCount() > 1 ?
+	      "multistaffnotesize" : "singlestaffnotesize"), defaultSize);
+
+	if (!NoteFontFactory::isAvailableInSize(newName, newSize)) {
+	    newSize = defaultSize;
+	}
+    }
+
     slotChangeFont(newName, newSize);
 }
 

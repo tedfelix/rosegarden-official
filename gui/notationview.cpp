@@ -191,6 +191,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_insertionTime(0),
     m_fontName(NoteFontFactory::getDefaultFontName()), //!!! exceptions
     m_fontSize(NoteFontFactory::getDefaultSize(m_fontName)), //!!! exceptions
+    m_pageMode(LinedStaff::LinearMode),
     m_notePixmapFactory(new NotePixmapFactory(m_fontName, m_fontSize)),
     m_hlayout(new NotationHLayout(&doc->getComposition(), m_notePixmapFactory,
                                   m_properties, this)),
@@ -639,6 +640,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_insertionTime(0),
     m_fontName(NoteFontFactory::getDefaultFontName()),
     m_fontSize(NoteFontFactory::getDefaultSize(m_fontName)), //!!! exceptions
+    m_pageMode(LinedStaff::LinearMode),
     m_notePixmapFactory(new NotePixmapFactory(m_fontName, m_fontSize)),
     m_hlayout(new NotationHLayout(&doc->getComposition(), m_notePixmapFactory,
 				  m_properties, this)),
@@ -1781,6 +1783,8 @@ void NotationView::setViewSize(QSize s)
 void
 NotationView::setPageMode(LinedStaff::PageMode pageMode)
 {
+    m_pageMode = pageMode;
+
     if (pageMode != LinedStaff::LinearMode) {
 	if (m_topBarButtons) m_topBarButtons->hide();
 	if (m_bottomBarButtons) m_bottomBarButtons->hide();
@@ -1796,6 +1800,7 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
     }
 
     int pageWidth = getPageWidth();
+    int pageHeight = getPageHeight();
 
     m_hlayout->setPageMode(pageMode != LinedStaff::LinearMode);
     m_hlayout->setPageWidth(pageWidth);
@@ -1805,7 +1810,7 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         m_staffs[i]->setPageMode(pageMode);
         m_staffs[i]->setPageWidth(pageWidth);
-	m_staffs[i]->setPageHeight(2000); //!!! fix for pageHeight
+	m_staffs[i]->setPageHeight(pageHeight);
     }
 
     bool layoutApplied = applyLayout();
@@ -1823,10 +1828,26 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
 int
 NotationView::getPageWidth()
 {
-    if (isInPrintMode() && getCanvasView() && getCanvasView()->canvas())
-        return getCanvasView()->canvas()->width();
+    if (m_pageMode != LinedStaff::MultiPageMode) {
 
-    return width() - 50;
+	if (isInPrintMode() && getCanvasView() && getCanvasView()->canvas())
+	    return getCanvasView()->canvas()->width();
+	
+	return width() - 50;
+
+    } else {
+	return width() - 50; //!!!
+    }
+}
+
+int
+NotationView::getPageHeight()
+{
+    if (m_pageMode != LinedStaff::MultiPageMode) {
+	return 0;
+    } else {
+	return 2000; //!!!
+    }
 }
 
 /// Scrolls the view such that the given time is centered

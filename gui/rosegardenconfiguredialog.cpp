@@ -334,7 +334,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 
     QFrame *frame = new QFrame(m_tabWidget);
     QGridLayout *layout = new QGridLayout(frame,
-                                          5, 2, // nbrow, nbcol
+                                          6, 2, // nbrow, nbcol
                                           10, 5);
 
     layout->addWidget
@@ -345,6 +345,9 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     layout->addWidget
         (new QLabel(i18n("Font size for multi-staff views"), frame),
          3, 0);
+    layout->addWidget
+        (new QLabel(i18n("Font size for printing (pt)"), frame),
+         4, 0);
 
     QFrame *subFrame = new QFrame(frame);
     QGridLayout *subLayout = new QGridLayout(subFrame,
@@ -397,10 +400,14 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     m_multiStaffSize = new KComboBox(frame);
     m_multiStaffSize->setEditable(false);
 
+    m_printingSize = new KComboBox(frame);
+    m_printingSize->setEditable(false);
+
     slotFontComboChanged(defaultFont);
 
     layout->addWidget(m_singleStaffSize, 2, 1);
     layout->addWidget(m_multiStaffSize, 3, 1);
+    layout->addWidget(m_printingSize, 4, 1);
 
     addTab(frame, i18n("Font"));
 
@@ -627,6 +634,14 @@ NotationConfigurationPage::slotFontComboChanged(const QString &font)
                       ("multistaffnotesize",
                        NoteFontFactory::getDefaultSize(fontStr)));
 
+    int printpt = m_cfg->readUnsignedNumEntry("printingnotesize", 8);
+    for (int i = 2; i < 16; ++i) {
+	m_printingSize->insertItem(QString("%1").arg(i));
+	if (i == printpt) {
+	    m_printingSize->setCurrentItem(m_printingSize->count()-1);
+	}
+    }
+
     try {
 	NoteFont *noteFont = NoteFontFactory::getFont
 	    (fontStr, NoteFontFactory::getDefaultSize(fontStr));
@@ -668,6 +683,8 @@ NotationConfigurationPage::apply()
                       m_singleStaffSize->currentText().toUInt());
     m_cfg->writeEntry("multistaffnotesize",
                       m_multiStaffSize->currentText().toUInt());
+    m_cfg->writeEntry("printingnotesize",
+                      m_printingSize->currentText().toUInt());
 
     std::vector<int> s = NotationHLayout::getAvailableSpacings();
     m_cfg->writeEntry("spacing", s[m_spacing->currentItem()]);

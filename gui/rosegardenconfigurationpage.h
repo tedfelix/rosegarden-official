@@ -233,6 +233,7 @@ protected:
     QComboBox *m_font;
     QComboBox *m_singleStaffSize;
     QComboBox *m_multiStaffSize;
+    QComboBox *m_printingSize;
     QLabel *m_fontOriginLabel;
     QLabel *m_fontCopyrightLabel;
     QLabel *m_fontMappedByLabel;

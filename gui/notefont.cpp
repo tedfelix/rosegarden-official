@@ -252,7 +252,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 	//notehead is noticeably smaller than the notehead should be,
 	//and reject if so?
 	
-	for (int sz = 2; sz <= 30; sz += (sz < 8 ? 1 : 2)) {
+	for (int sz = 1; sz <= 30; sz += (sz < 8 ? 1 : 2)) {
 
 	    SizeData &sizeData = m_sizes[sz];
 	    unsigned int temp, temp1;
@@ -1377,7 +1377,7 @@ std::vector<int>
 NoteFontFactory::getScreenSizes(std::string fontName)
 {
     //!!!
-    return getAllSizes(fontName);
+//    return getAllSizes(fontName);
 
     NoteFont *font = getFont(fontName, 0);
     if (!font) return std::vector<int>();
@@ -1385,7 +1385,7 @@ NoteFontFactory::getScreenSizes(std::string fontName)
     std::set<int> s(font->getSizes());
     std::vector<int> v;
     for (std::set<int>::iterator i = s.begin(); i != s.end(); ++i) {
-	if (*i >= 3 && *i <= 16) v.push_back(*i);
+	if (*i <= 16) v.push_back(*i);
     }
     std::sort(v.begin(), v.end());
     return v;
@@ -1427,10 +1427,23 @@ NoteFontFactory::getDefaultFontName()
 int
 NoteFontFactory::getDefaultSize(std::string fontName)
 {
-    return 8;
-//!!!    std::vector<int> sizes(getScreenSizes(fontName));
-//    return sizes[sizes.size()/2];
+    // always return 8 if it's supported!
+    std::vector<int> sizes(getScreenSizes(fontName));
+    for (unsigned int i = 0; i < sizes.size(); ++i) {
+	if (sizes[i] == 8) return sizes[i];
+    }
+    return sizes[sizes.size()/2];
 }
+
+bool
+NoteFontFactory::isAvailableInSize(std::string fontName, int size)
+{
+    std::vector<int> sizes(getAllSizes(fontName));
+    for (unsigned int i = 0; i < sizes.size(); ++i) {
+	if (sizes[i] == size) return true;
+    }
+}
+    
 
 std::set<std::string> NoteFontFactory::m_fontNames;
 std::map<std::pair<std::string, int>, NoteFont *> NoteFontFactory::m_fonts;
