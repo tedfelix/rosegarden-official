@@ -119,7 +119,7 @@ public:
      */ 
     RosegardenGUIDoc *getDocument() const;      
 
-    enum ImportType { ImportRG4, ImportMIDI, ImportRG21 };
+    enum ImportType { ImportRG4, ImportMIDI, ImportRG21, ImportCheckType };
 
     /**
      * open a Rosegarden file

@@ -53,6 +53,7 @@
 #include <kstdaction.h>
 #include <ktip.h>
 #include <kpopupmenu.h>
+#include <kfilemetainfo.h>
 
 // application specific includes
 #include "Clipboard.h"
@@ -1214,12 +1215,24 @@ RosegardenGUIApp::createDocument(QString filePath, ImportType importType)
 
     slotEnableTransport(false);
 
+    if (importType == ImportCheckType) {
+        KMimeType::Ptr fileMimeType = KMimeType::findByPath(filePath);
+        if (fileMimeType->name() == "audio/x-midi")
+            importType = ImportMIDI;
+        else if (fileMimeType->name() == "audio/x-rosegarden")
+            importType = ImportRG4;
+        else if (filePath.endsWith(".rose"))
+            importType = ImportRG21;
+    }
+    
+
     switch (importType) {
     case ImportMIDI:
         doc = createDocumentFromMIDIFile(filePath);
         break;
     case ImportRG21:
         doc = createDocumentFromRG21File(filePath);
+        break;
     default:
         doc = createDocumentFromRGFile(filePath);
     }

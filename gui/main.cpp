@@ -508,7 +508,7 @@ int main(int argc, char *argv[])
         }
 
         if (args->count()) {
-            rosegardengui->openFile(args->arg(0));
+            rosegardengui->openFile(args->arg(0), RosegardenGUIApp::ImportCheckType);
         } else {
             // rosegardengui->openDocumentFile();
         }
