@@ -1888,7 +1888,6 @@ MatrixView::addPropertyViewRuler(const Rosegarden::PropertyName &property)
     PropertyViewRuler *newRuler = new PropertyViewRuler(&m_hlayout,
                                                         m_segments[0],
                                                         property,
-                                                        m_staffs[0]->getVelocityColour(),
                                                         xorigin,
                                                         height,
                                                         getCentralFrame());

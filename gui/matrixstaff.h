@@ -25,7 +25,6 @@
 #include "linedstaff.h"
 #include "matrixelement.h"
 
-class VelocityColour;
 class MatrixView;
 
 class MatrixStaff : public LinedStaff
@@ -74,11 +73,6 @@ public:
 
     virtual void positionElement(Rosegarden::ViewElement*);
 
-    // Return this so that the tools can use it for recolouring
-    // unselected elements.
-    //
-    VelocityColour* getVelocityColour() { return m_elementColour; }
-
     // Get an element for an Event
     //
     MatrixElement* getElement(Rosegarden::Event *event);
@@ -86,9 +80,7 @@ public:
 private:
     double m_scaleFactor;
 
-    VelocityColour *m_elementColour;
     MatrixView     *m_view;
-
 };
 
 #endif

@@ -44,8 +44,7 @@ MatrixStaff::MatrixStaff(QCanvas *canvas,
                          MatrixView *view) :
     LinedStaff(canvas, segment, snapGrid, id, vResolution, 1),
     m_scaleFactor(2.0/
-            Rosegarden::Note(Rosegarden::Note::Shortest).getDuration()),
-    m_elementColour(new DefaultVelocityColour()),
+                  Rosegarden::Note(Rosegarden::Note::Shortest).getDuration()),
     m_view(view)
 {
 }
@@ -111,7 +110,7 @@ void MatrixStaff::positionElement(Rosegarden::ViewElement* vel)
     if (selection && selection->contains(el->event()))
         el->setColour(RosegardenGUIColours::SelectedElement);
     else
-        el->setColour(m_elementColour->getColour(velocity));
+        el->setColour(DefaultVelocityColour::getInstance()->getColour(velocity));
 
     el->setCanvasX(coords.first);
     el->setCanvasY((double)coords.second);

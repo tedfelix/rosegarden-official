@@ -115,3 +115,13 @@ VelocityColour::getColour(int value)
 
     return m_mixedColour;
 }
+
+
+DefaultVelocityColour* DefaultVelocityColour::getInstance()
+{
+    if (!m_instance) m_instance = new DefaultVelocityColour;
+    
+    return m_instance;
+}
+
+DefaultVelocityColour* DefaultVelocityColour::m_instance = 0;

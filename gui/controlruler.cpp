@@ -510,8 +510,7 @@ long ControlRuler::heightToValue(int h)
 
 QColor ControlRuler::valueToColor(int val)
 {
-    QColor b = Qt::blue;
-    return b.light(100 - val);
+    return DefaultVelocityColour::getInstance()->getColour(val);
 }
 
 
@@ -527,7 +526,6 @@ int ControlRuler::applyTool(double x, int val)
 PropertyViewRuler::PropertyViewRuler(RulerScale *rulerScale,
                                      Segment *segment,
                                      const PropertyName &property,
-                                     VelocityColour *velocityColour,
                                      double xorigin,
                                      int height,
                                      QWidget *parent,
@@ -540,8 +538,7 @@ PropertyViewRuler::PropertyViewRuler(RulerScale *rulerScale,
     m_width(-1),
     m_segment(segment),
     m_rulerScale(rulerScale),
-    m_fontMetrics(m_boldFont),
-    m_velocityColour(velocityColour)
+    m_fontMetrics(m_boldFont)
 {
     m_boldFont.setBold(true);
     m_fontMetrics = QFontMetrics(m_boldFont);
@@ -594,9 +591,6 @@ PropertyViewRuler::paintEvent(QPaintEvent* e)
 
     paint.setPen(RosegardenGUIColours::MatrixElementBorder);
 
-    if (m_velocityColour == 0)
-       paint.setBrush(RosegardenGUIColours::MatrixElementBlock);
-
     paint.setClipRegion(e->region());
     paint.setClipRect(e->rect().normalize());
 
@@ -630,8 +624,7 @@ PropertyViewRuler::paintEvent(QPaintEvent* e)
 
         int blockHeight = int(double(height()) * (value/127.0));
 
-        if (m_velocityColour)
-            paint.setBrush(m_velocityColour->getColour(value));
+        paint.setBrush(DefaultVelocityColour::getInstance()->getColour(value));
             
         paint.drawRect(x, height() - blockHeight, width, blockHeight);
     }

@@ -412,8 +412,6 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
 
     PRINT_ELAPSED("RawNoteRuler::paintEvent: drawing bar lines and divisions");
 
-    DefaultVelocityColour vc;
-
 #ifdef DEBUG_RAW_NOTE_RULER
     NOTATION_DEBUG << "RawNoteRuler: from is " << from << ", to is " << to << endl;
 #endif
@@ -441,7 +439,7 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
 	// playing during its parent node's note, or at the same time
 	// as it.
 
-	drawNode(paint, vc, *fi, m_height - 3, 2);
+	drawNode(paint, *DefaultVelocityColour::getInstance(), *fi, m_height - 3, 2);
 
     }
 

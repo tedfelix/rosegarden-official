@@ -27,13 +27,11 @@
 #ifndef _VELOCITYCOLOUR_H_
 #define _VELOCITYCOLOUR_H_
 
-// Returns a QColour according to a formula.  We provide three
-// colours to mix, a maximum value and three knees at which
-// points the intermediate colours max out.  Play around to
-// your satisfaction.
-//
-//
-
+/**
+ * Returns a QColour according to a formula.  We provide three colours
+ * to mix, a maximum value and three knees at which points the
+ * intermediate colours max out.  Play around to your satisfaction.
+ */
 class VelocityColour
 {
 
@@ -87,6 +85,9 @@ private:
 class DefaultVelocityColour : public VelocityColour
 {
 public:
+    static DefaultVelocityColour* getInstance();
+    
+protected:
     DefaultVelocityColour() :
 	VelocityColour(RosegardenGUIColours::LevelMeterRed,
 		       RosegardenGUIColours::LevelMeterOrange,
@@ -96,6 +97,8 @@ public:
 		       75,  // orange knee
 		       25)  // green knee
     { }
+
+    static DefaultVelocityColour* m_instance;
 };
 
 
