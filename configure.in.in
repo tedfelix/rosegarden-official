@@ -90,3 +90,22 @@ dnl
 AM_CONDITIONAL(NO_SOUND, test "$with_sound" = "no")
 AM_CONDITIONAL(HAVE_ALSA, test "$with_alsa" = "yes")
 
+
+dnl check whether user wants to have LADSPA
+AC_ARG_WITH(ladspa, [  --with-ladspa           enable LADSPA plugins],
+[
+   if test "$withval" = "yes"; then
+     with_ladspa=yes
+   else
+     with_ladspa=no
+  fi
+], with_ladspa=no)
+
+dnl only use LADSPA when ladspa.h is found
+if test "$ac_header_ladspa_h" = "no"; then
+  with_ladspa=no
+fi
+
+if test "$with_ladspa" = "yes"; then
+  AC_DEFINE(HAVE_LADSPA, 1, [Define if you have LADSPA])
+fi
