@@ -21,7 +21,8 @@
 #ifndef _REAL_TIME_H_
 #define _REAL_TIME_H_
 
-namespace std { class ostream; }
+#include <iostream>
+
 
 namespace Rosegarden 
 {

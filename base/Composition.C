@@ -25,6 +25,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <algorithm>
 
 #if (__GNUC__ < 3)
 #include <strstream>
@@ -209,8 +210,8 @@ Composition::Composition() :
     m_defaultTempo(120.0),
     m_startMarker(0),
     m_endMarker(0),
-    m_loopStart(0, 0),
-    m_loopEnd(0, 0),
+    m_loopStart(0),
+    m_loopEnd(0),
     m_barPositionsNeedCalculating(true),
     m_tempoTimestampsNeedCalculating(true)
 {
