@@ -519,13 +519,6 @@ JackDriver::createRecordInputs(int pairs)
     
 
 void
-JackDriver::setAudioPortCounts(int inputs, int submasters)
-{
-    std::cerr << "JackDriver::setAudioPortCounts(" << inputs << "," << submasters << ")" << std::endl;
-    //!!! ignore for now.
-}
-
-void
 JackDriver::setAudioPorts(bool faderOuts, bool submasterOuts)
 {
     Audit audit;
@@ -716,7 +709,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	    // to keep the instrument moving along, as well as for
 	    // monitoring.  If the instrument is connected straight to
 	    // the master, then we also need to mix from it.  (We have
-	    // that information cached courtesy of updateAudioLevels.)
+	    // that information cached courtesy of updateAudioData.)
 
 	    bool directToMaster =
 		(m_directMasterInstruments & (1 << (id - instrumentBase)));
@@ -871,13 +864,18 @@ JackDriver::jackProcessRecord(jack_nframes_t nframes,
     } else {
 
 	int input = m_recordInput - 1000;
+
+	int port = input * channels + channel;
+	int portRight = input * channels + 1;
+
+	if (port < m_inputPorts.size()) {
+	    inputBufferLeft = static_cast<sample_t*>
+		(jack_port_get_buffer(m_inputPorts[port], nframes));
+	}
     
-	inputBufferLeft = static_cast<sample_t*>
-	    (jack_port_get_buffer(m_inputPorts[input * channels + channel], nframes));
-    
-	if (channels == 2) {
+	if (channels == 2 && portRight < m_inputPorts.size()) {
 	    inputBufferRight = static_cast<sample_t*>
-		(jack_port_get_buffer(m_inputPorts[input * channels + 1], nframes));
+		(jack_port_get_buffer(m_inputPorts[portRight], nframes));
 	}
     }
     
@@ -904,14 +902,15 @@ JackDriver::jackProcessRecord(jack_nframes_t nframes,
 	wroteSomething = true;
     }
 
-    if (m_outputMonitors.size() > 0) {
+    if (m_outputMonitors.size() > 0 && inputBufferLeft) {
 	
 	sample_t *buf = 
 	    static_cast<sample_t *>
 	    (jack_port_get_buffer(m_outputMonitors[0], nframes));
 	memcpy(buf, inputBufferLeft, nframes * sizeof(sample_t));
 	
-	if (channels == 2 && m_outputMonitors.size() > 1) {
+	if (channels == 2 && m_outputMonitors.size() > 1 &&
+	    inputBufferRight) {
 	    buf =
 		static_cast<sample_t *>
 		(jack_port_get_buffer(m_outputMonitors[1], nframes));
@@ -919,11 +918,11 @@ JackDriver::jackProcessRecord(jack_nframes_t nframes,
 	}
     }
 
-    if (!havePeaks) {
+    if (!havePeaks && inputBufferLeft) {
 	for (size_t i = 0; i < nframes; ++i) {
 	    if (inputBufferLeft[i] > peakLeft) peakLeft = inputBufferLeft[i];
 	}
-	if (channels == 2) {
+	if (channels == 2 && inputBufferRight) {
 	    for (size_t i = 0; i < nframes; ++i) {
 		if (inputBufferRight[i] > peakRight) peakRight = inputBufferRight[i];
 	    }
@@ -1218,7 +1217,7 @@ JackDriver::kickAudio()
 }
 
 void
-JackDriver::updateAudioLevels()
+JackDriver::updateAudioData()
 {
     MappedAudioBuss *mbuss =
 	m_alsaDriver->getMappedStudio()->getAudioBuss(0);
@@ -1318,6 +1317,12 @@ JackDriver::updateAudioLevels()
     }
 
     m_directMasterInstruments = directMasterInstruments;
+    
+    int inputs = m_alsaDriver->getMappedStudio()->
+	getObjectCount(MappedObject::AudioInput);
+
+    // this will return with no work if the inputs are already correct:
+    createRecordInputs(inputs);
 }
 
 RealTime

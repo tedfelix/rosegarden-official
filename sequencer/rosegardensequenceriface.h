@@ -218,6 +218,7 @@ public:
     // gui is currently monitoring audio and which Instrument to report
     // the input level against - this is so we can get a real time
     // display of the audio input stream.
+    //!!! This is also the recording instrument!
     //
     virtual void setAudioMonitoring(long value) = 0;
     virtual void setAudioMonitoringInstrument(unsigned int id) = 0;

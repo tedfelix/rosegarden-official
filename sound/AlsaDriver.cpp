@@ -2547,10 +2547,12 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 
         if ((*i)->getType() == MappedEvent::SystemAudioPortCounts)
         {
+	    //!!! never actually used, I think?
+
 #ifdef HAVE_LIBJACK
 	    if (m_jackDriver) {
-		m_jackDriver->setAudioPortCounts((*i)->getData1(),
-						 (*i)->getData2());
+//		m_jackDriver->setAudioPortCounts((*i)->getData1(),
+//						 (*i)->getData2());
 	    }
 #else
 #ifdef DEBUG_ALSA
@@ -2593,7 +2595,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 		m_jackDriver->kickAudio();
 	    }
 	}
-	m_jackDriver->updateAudioLevels();
+	m_jackDriver->updateAudioData();
     }
 #endif
 }
