@@ -324,8 +324,8 @@ RosegardenSequencerApp::keepPlaying(Rosegarden::RealTime &waitTime)
 	waitTime = Rosegarden::RealTime::zeroTime;
 
         m_mC.clear();
-        m_mC = *fetchEvents(m_lastFetchSongPosition,
-                            m_lastFetchSongPosition + m_readAhead,
+        m_mC = *fetchEvents(m_lastFetchSongPosition - m_fetchLatency,
+                            m_lastFetchSongPosition - m_fetchLatency + m_readAhead,
                             false);
 
         // Again, process whether we need to or not to keep

@@ -1699,6 +1699,7 @@ AlsaDriver::initialisePlayback(const RealTime &position,
 
     m_alsaPlayStartTime = getAlsaTime();
     m_playStartPosition = position;
+
     m_startPlayback = true;
 
     // If the clock is enabled then adjust for the MIDI Clock to 
@@ -2425,10 +2426,17 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
     {
         if ((*i)->getType() >= MappedEvent::Audio)
             continue;
-
+	
 
         midiRelativeTime = (*i)->getEventTime() - m_playStartPosition +
                            playLatency + m_alsaPlayStartTime;
+
+	Rosegarden::RealTime alsaTimeNow = getAlsaTime();
+	if (midiRelativeTime < alsaTimeNow) {
+	    std::cerr << "WARNING: processMidiOut: event is at "
+		      << midiRelativeTime << " but queue is at "
+		      << alsaTimeNow << std::endl;
+	}
 
         // Second and nanoseconds for ALSA
         //
