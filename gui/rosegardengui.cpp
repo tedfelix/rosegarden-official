@@ -1944,7 +1944,7 @@ void RosegardenGUIApp::slotFileOpenRecent(const KURL &url)
 
 void RosegardenGUIApp::slotFileSave()
 {
-    if (!m_doc || !m_doc->isModified()) return;
+    if (!m_doc /*|| !m_doc->isModified()*/) return; // ALWAYS save, even if doc is not modified.
 
     KTmpStatusMsg msg(i18n("Saving file..."), this);
 
