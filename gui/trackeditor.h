@@ -55,6 +55,9 @@ public:
     
     TrackPart* getTrackAtIdx(int idx);
 
+    TracksCanvas*       canvas()       { return m_tracksCanvas; }
+    const TracksCanvas* canvas() const { return m_tracksCanvas; }
+
 protected slots:
     void trackOrderChanged(int section, int fromIdx, int toIdx);
     void addTrackPart(TrackPart*);
