@@ -37,7 +37,7 @@ public:
     virtual QSize minimumSizeHint() const;
 
 signals:
-    void notePressed(int pitch);
+    void keyPressed(unsigned int y);
 
     /**
      * Emitted when the mouse cursor moves to a different key
@@ -51,6 +51,7 @@ protected:
     virtual void paintEvent(QPaintEvent*);
 
     virtual void mouseMoveEvent(QMouseEvent*);
+    virtual void mousePressEvent(QMouseEvent*);
 
     // compute all key positions and store them
     //

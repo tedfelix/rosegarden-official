@@ -187,6 +187,12 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
     segmentsToEdit.push_back(p);
 
     MatrixView *matrixView = new MatrixView(getDocument(), segmentsToEdit, this);
+
+    // For sending key presses
+    //
+    connect(matrixView, SIGNAL(keyPressed(Rosegarden::MappedEvent*)),
+            this, SLOT(slotSendMappedEvent(Rosegarden::MappedEvent*)));
+
     matrixView->show();
 }
 

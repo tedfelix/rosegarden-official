@@ -643,8 +643,8 @@ RosegardenSequencerApp::setMappedInstrument(int type, unsigned char channel,
 void
 RosegardenSequencerApp::processSequencerSlice(Rosegarden::MappedComposition mC)
 {
-    std::cout << "processSequencerSlice() - processing slice immediately"
-              << std:: endl;
+    //std::cout << "processSequencerSlice() - processing slice immediately"
+              //<< std:: endl;
     m_sequencer->immediateProcessEventsOut(mC);
 }
 
@@ -671,6 +671,16 @@ RosegardenSequencerApp::processMappedEvent(unsigned int id,
             Rosegarden::RealTime(audioStartMarkerSec, audioStartMarkerUSec));
 
     Rosegarden::MappedComposition mC;
+
+    std::cout << "processMappedEvent() - sending out single event"
+              << std::endl;
+
+    /*
+    std::cout << "ID = " << mE->getInstrument() << std::endl;
+    std::cout << "TYPE = " << mE->getType() << std::endl;
+    std::cout << "D1 = " << (int)mE->getData1() << std::endl;
+    std::cout << "D2 = " << (int)mE->getData2() << std::endl;
+    */
 
     mC.insert(mE);
 

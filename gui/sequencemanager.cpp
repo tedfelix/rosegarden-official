@@ -1064,8 +1064,18 @@ SequenceManager::sendMappedEvent(Rosegarden::MappedEvent *mE)
 {
     Rosegarden::MappedComposition mC;
 
+    /*
+    cout << "ID = " << mE->getInstrument() << endl;
+    cout << "TYPE = " << mE->getType() << endl;
+    cout << "D1 = " << (int)mE->getData1() << endl;
+    cout << "D2 = " << (int)mE->getData2() << endl;
+    */
+
     mC.insert(mE);
     sendMappedComposition(mC);
+
+    delete mE;
+
 }
 
 

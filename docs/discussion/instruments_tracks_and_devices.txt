@@ -35,45 +35,39 @@ Instruments will be of type Midi or type Audio.
 Instruments are created by AudioDevices and MidiDevices.  For the moment
 Instruments will be automatically created (16 MIDI instruments to a MIDI
 device and an arbitrary number of audio Instruments) because of the absence
-of query or mapping mechanism in the uderlying sound API (aRts).
+of query or mapping mechanism in the underlying sound API (aRts).
 
 A Track will have no notion of whether it's Audio or Midi.  Only the
 Instrument mapped to that Track will define the type.  Then this type
 will be used for performance or recording purposes.
 
 Both the Device and the Instrument will have performance parameters
-(Program, Channel, Volume, Delay etc).  Where overlaps occur the
-Instrument parameters override those of the Device.  In this way a
-MidiDevice provides default values for all Instruments and the
-Instruments themselves can modify these values via the InstrumentParameterBox
-(GUI element on the TrackEditor) i.e.
+(Program, Channel, Volume, Delay etc).  Where overlaps of these
+parameters occur the Instrument's parameters override those of the
+Device.  In this way a MidiDevice provides default values for all
+Instruments.  The Instruments themselves can modify these parameters
+via the InstrumentParameterBox (GUI element on the TrackEditor) i.e.
 
  A MidiDevice by default assigns 1 single MIDI channel to each Instrument
  and assigns Programs (MIDI "voices") 0-15 to the Instruments.  These can
  be modified at the MidiDevice or directly overridden by the specific
  Instrument.  In the case that Program Changes are not simple General
- MIDI the device-specific Program Change information can be stored
- at the MidiDevice level to give a cleaner Instrument interface.
-
-
-Don't worry it the end of that last paragraph doesn't make any sense.
+ MIDI there will also be Bank Select messages available.
 
 
 Instrument list
 ---------------
 
-The Instrument list itself is held centrally at the Composition.
-When MidiDevices and AudioDevices are they generate their own Instrument
-lists.  These lists are combined into the Composition's canonical list of
-Instruments.  When a Composition is saved the Instrument list (including
-basic Device information) is saved along with it.  On reloading if the
-Composition's Instrument list does not form a valid subset of the current
-application's instrument list then an error will be flagged and Tracks
-will either be remapped automatically of left to for the user to sort
-out.
+MidiDevices and AudioDevices generate and own their Instrument lists.
+Instruments are numbered and grouped by type (from 1000 for Audio
+and from 2000 for MIDI).  System Instruments (Metrnome etc) start 
+from 0.
 
-Incompatible Instrument lists should not preclude the Composition from
-being remapped.  If users are sharing Composition between different
-instances of the application then it's more than likely that underlying
-hardware or software APIs may provide differing Instrument configurations.
+Instruments are accessed through the Studio and are seen as a 
+canonical list even though they may be spread over many different
+Devices.
+
+Tracks are mapped to Instruments by InstrumentId.  On saving to XML
+the Tracks save this InstrumentId with them.  The Instruments themselves
+are not yet saved - only the Devices and programs (with bank selects).
 

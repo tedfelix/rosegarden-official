@@ -38,6 +38,7 @@
 namespace Rosegarden { 
     class Segment;
     class EventSelection;
+    class MappedEvent;
 }
 
 class RosegardenGUIDoc;
@@ -90,6 +91,10 @@ signals:
      * @see MatrixSelector#hideSelection
      */
     void usedSelection();
+
+    // Return a pressed key
+    //
+    void keyPressed(Rosegarden::MappedEvent*);
 
 public slots:
 
@@ -155,6 +160,10 @@ public slots:
 
     /// Set the insertion pointer position (from the bottom LoopRuler)
     void slotSetInsertCursorPosition(Rosegarden::timeT position);
+
+    // Catch the keyboard being pressed
+    //
+    void slotKeyPressed(unsigned int y);
 
 protected:
 

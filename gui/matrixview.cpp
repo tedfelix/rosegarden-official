@@ -31,6 +31,7 @@
 #include <kstdaction.h>
 #include <kmessagebox.h>
 
+#include "Instrument.h"
 #include "Composition.h"
 #include "Event.h"
 
@@ -133,6 +134,10 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     QObject::connect
         (pianoKeyboard, SIGNAL(hoveredOverKeyChanged(unsigned int)),
          this,      SLOT  (slotHoveredOverKeyChanged(unsigned int)));
+
+    QObject::connect
+        (pianoKeyboard, SIGNAL(keyPressed(unsigned int)),
+         this,      SLOT  (slotKeyPressed(unsigned int)));
 
     QObject::connect
         (getCanvasView(), SIGNAL(hoveredOverAbsoluteTimeChanged(unsigned int)),
@@ -507,3 +512,35 @@ void MatrixView::slotEditPaste()
 	addCommandToHistory(command);
     }
 }
+
+// Propagate a key press upwards
+//
+void MatrixView::slotKeyPressed(unsigned int y)
+{
+    Rosegarden::Composition &comp = m_document->getComposition();
+    Rosegarden::Studio &studio = m_document->getStudio();
+
+    MatrixStaff& staff = *(m_staffs[0]);
+    int evPitch = staff.getHeightAtCanvasY(y);
+
+    Rosegarden::Track *track = comp.getTrackByIndex(
+            m_staffs[0]->getSegment().getTrack());
+
+    Rosegarden::Instrument *ins =
+        studio.getInstrumentById(track->getInstrument());
+
+    // Send out note of half second duration
+    //
+    Rosegarden::MappedEvent *mE = 
+        new Rosegarden::MappedEvent(ins->getID(),
+                                    Rosegarden::MappedEvent::MidiNote,
+                                    evPitch,
+                                    Rosegarden::MidiMaxValue,
+                                    Rosegarden::RealTime(0,0),
+                                    Rosegarden::RealTime(0, 500000),
+                                    Rosegarden::RealTime(0, 0));
+
+    emit keyPressed(mE);
+}
+
+

@@ -26,6 +26,7 @@
 #include <set>
 #include <string>
 
+#include "Track.h"
 #include "Event.h"
 #include "NotationTypes.h"
 
@@ -161,7 +162,7 @@ public:
     /**
      * Get the track number this Segment is associated with.
      */
-    unsigned int getTrack() const { return m_track; }
+    TrackId getTrack() const { return m_track; }
 
     /**
      * Set the track number this Segment is associated with.  It is
@@ -171,7 +172,7 @@ public:
      * changes the ordering may break.  If your Segment is already in a
      * Composition, use Composition::setSegmentTrack instead.
      */
-    void setTrack(unsigned int i) { m_track = i; }
+    void setTrack(TrackId i) { m_track = i; }
 
     /**
      * Note that a Segment does not have to be in a Composition;
@@ -426,7 +427,7 @@ public:
 
 private:
     timeT m_startIdx;
-    unsigned int m_track;
+    TrackId m_track;
 
     mutable int m_id;
 

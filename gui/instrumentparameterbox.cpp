@@ -373,6 +373,7 @@ InstrumentParameterBox::slotSelectProgram(int index)
     // Send the controller change
     //
     emit sendMappedEvent(mE);
+
 }
 
 

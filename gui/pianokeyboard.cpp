@@ -120,5 +120,15 @@ void PianoKeyboard::paintEvent(QPaintEvent*)
 
 void PianoKeyboard::mouseMoveEvent(QMouseEvent* e)
 {
-    emit hoveredOverKeyChanged(e->y());
+    /*
+    if (e->button() == LeftButton || e->button() == RightButton)
+        emit keyPressed(e->y());
+    else
+    */
+        emit hoveredOverKeyChanged(e->y());
+}
+
+void PianoKeyboard::mousePressEvent(QMouseEvent *e)
+{
+    emit keyPressed(e->y());
 }
