@@ -1,0 +1,29 @@
+Features for release 0.1
+
+- be able to store music in multiple tracks and display multiple
+  tracks (however basic that display may be)
+
+- track part deletion
+
+- proper saving/restoring of track part start time
+
+- be able to both read and write MIDI files, even if we only handle
+  the most basic events
+
+- note insertion (by replacing rests)
+
+- note deletion
+
+- sort the source files in rosegardengui a bit better (core/,
+  gui/main/, gui/notation/, gui/trackedit)
+
+- do a global core/rosegardengui Makefile
+
+
+Nice to have :
+
+- loading Rosegarden 2.1 files
+
+- selection/deletion/editing etc of single events and groups thereof
+
+- all the notation elegances (more precise description needed here)
