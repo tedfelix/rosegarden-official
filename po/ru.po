@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "POT-Creation-Date: 2003-05-05 10:01-0400\n"
-"PO-Revision-Date: 2003-06-09 18:08+0400\n"
+"PO-Revision-Date: 2003-06-16 18:21+0400\n"
 "Last-Translator: Alexandre Prokoudine <avp@altlinux.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -339,8 +339,7 @@ msgid "Export Banks"
 msgstr "Экспортировать банки"
 
 #: bankeditor.cpp:734
-msgid ""
-"Import Bank and Program data from a Rosegarden file to the current Device"
+msgid "Import Bank and Program data from a Rosegarden file to the current Device"
 msgstr ""
 "Импортировать данные о банке и программах\n"
 "из файла Rosegarden в текущее устройство"
@@ -958,8 +957,7 @@ msgstr "Бемоль - установить значение %1"
 
 #: dialogs.cpp:2500
 msgid "Alternating - set %1 to max and min on alternate events"
-msgstr ""
-"Переменный - установить %1 в макс. или мин. значение на переменных событиях"
+msgstr "Переменный - установить %1 в макс. или мин. значение на переменных событиях"
 
 #: dialogs.cpp:2503
 msgid "Crescendo - set %1 rising from min to max"
@@ -2520,8 +2518,7 @@ msgstr "  Шрифт:  "
 
 #: notationview.cpp:1432
 msgid "Unknown font \"%1\", using default"
-msgstr ""
-"Размер шрифта \"%1\" не подходит - вместо него используется стандартный"
+msgstr "Размер шрифта \"%1\" не подходит - вместо него используется стандартный"
 
 #: notationview.cpp:1440
 msgid "  Size:  "
@@ -2789,8 +2786,7 @@ msgid "global element must precede note elements"
 msgstr "элемент global должен предшестовать элементу note"
 
 #: notestyle.cpp:595
-msgid ""
-"global and note elements may have shape or charname attribute, but not both"
+msgid "global and note elements may have shape or charname attribute, but not both"
 msgstr ""
 
 #: rosegardenconfigurationpage.h:166 rosegardenconfiguredialog.cpp:688
@@ -4968,7 +4964,7 @@ msgid ""
 "on the values displayed in the transport window?</p>\n"
 msgstr ""
 "<p>...что вы можете добавить изменение темпа и размера двойным щелчком \n"
-"мыши по значениям, отображённым в окне пульта управления?></p>\\n"
+"мыши по значениям, отображённым в окне пульта управления?></p>\n"
 
 #: tips.cpp:139
 msgid ""
@@ -5568,3 +5564,4 @@ msgstr "avp@altlinux.ru"
 
 #~ msgid "  Smoothing:  "
 #~ msgstr "  Сглаживание:  "
+
