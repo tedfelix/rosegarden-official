@@ -297,10 +297,9 @@ int main(int argc, char *argv[])
             //
             newClientCheck += sequencerSleep;
 
-            // This figure works out to about 5 seconds after everything
-            // else in the loop is factored in.
+            // Check for new clients every few seconds
             //
-            if (newClientCheck > 1250000)
+            if (newClientCheck > 750000)
             {
                 if (roseSeq->checkForNewClients())
                 {

@@ -48,7 +48,7 @@ public:
     } DeviceType;
 
     Device(DeviceId id, const std::string &name, DeviceType type):
-        m_name(name), m_type(type), m_id(id) { }
+        m_name(name), m_label(""), m_type(type), m_id(id) { }
 
     virtual ~Device() {;}
 
@@ -57,6 +57,9 @@ public:
 
     void setName(const std::string &name) { m_name = name; }
     std::string getName() const { return m_name; }
+
+    void setUserLabel(const std::string &label) { m_label = label; }
+    std::string getUserLabel() const { return m_label; }
 
     void setId(DeviceId id) { m_id = id; }
     DeviceId getId() const { return m_id; }
@@ -77,6 +80,7 @@ public:
 protected:
     InstrumentList     m_instruments;
     std::string        m_name;
+    std::string        m_label;
     DeviceType         m_type;
     DeviceId           m_id;
 

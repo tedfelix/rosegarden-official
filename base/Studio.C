@@ -56,7 +56,7 @@ Studio::addDevice(const std::string &name,
     switch(type)
     {
         case Device::Midi:
-            m_devices.push_back(new MidiDevice(id, name));
+            m_devices.push_back(new MidiDevice(id, name, false)); // non duplex
             break;
 
         case Device::Audio:
@@ -286,7 +286,7 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
     {
         midiDevice = dynamic_cast<MidiDevice*>(*it);
 
-        if (midiDevice)
+        if (midiDevice && !midiDevice->isDuplex())
         {
             instList = (*it)->getPresentationInstruments();
 

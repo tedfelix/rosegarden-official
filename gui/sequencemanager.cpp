@@ -1160,7 +1160,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                 {
                     // resync Instruments
                     //
-                    //m_doc->alive();
+                    m_doc->alive();
                     ;
                 }
 

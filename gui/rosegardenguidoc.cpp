@@ -1149,7 +1149,9 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
     {
         if (mD->getType() == Rosegarden::Device::Midi)
         {
-            device = new Rosegarden::MidiDevice(id, mD->getName());
+            device = new Rosegarden::MidiDevice(id, mD->getName(),
+                                                mD->getDuplex());
+
             m_studio.addDevice(device);
 
             SEQMAN_DEBUG  << "RosegardenGUIDoc::getMappedDevice - "

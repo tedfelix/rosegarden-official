@@ -39,16 +39,18 @@ MidiDevice::MidiDevice():
     Device(0, "Default Midi Device", Device::Midi),
     m_programList(new ProgramList()),
     m_bankList(new BankList()),
-    m_metronome(0)
+    m_metronome(0),
+    m_duplex(false)
 {
     createInstruments();
 }
 
-MidiDevice::MidiDevice(DeviceId id, const std::string &name):
+MidiDevice::MidiDevice(DeviceId id, const std::string &name, bool duplex):
     Device(id, name, Device::Midi),
     m_programList(new ProgramList()),
     m_bankList(new BankList()),
-    m_metronome(0)
+    m_metronome(0),
+    m_duplex(duplex)
 {
     createInstruments();
 }

@@ -41,7 +41,7 @@ class MidiDevice : public Device
 
 public:
     MidiDevice();
-    MidiDevice(DeviceId id, const std::string &name);
+    MidiDevice(DeviceId id, const std::string &name, bool duplex);
     virtual ~MidiDevice();
 
     virtual void createInstruments();
@@ -95,7 +95,9 @@ public:
     void mergeBankList(const std::vector<Rosegarden::MidiBank> &bank);
     void mergeProgramList(const std::vector<Rosegarden::MidiProgram> &program);
 
-private:
+    bool isDuplex() const { return m_duplex; }
+
+protected:
     void generatePresentationList();
 
     // Brief (probably incorrect) synopsis of bank select 
@@ -126,6 +128,7 @@ private:
     // used when we're presenting the instruments
     InstrumentList m_presentationInstrumentList;
 
+    bool m_duplex;  // is this a duplex device (i.e. a MIDI out/in port) ?
 };
 
 }

@@ -260,6 +260,63 @@ AlsaDriver::showQueueStatus(int queue)
 }
 
 
+// Use this to hold all client information so that we can sort it
+// before generating devices - we want to put non-duplex devices
+// at the front of any device list (makes thing much easier at the
+// GUI and we already have some backwards compatability issues with
+// this).
+//
+class AlsaPortDescription
+{
+public:
+    AlsaPortDescription(Instrument::InstrumentType type,
+                        const std::string &name,
+                        int client,
+                        int port,
+                        bool duplex):
+        m_type(type),
+        m_name(name),
+        m_client(client),
+        m_port(port),
+        m_duplex(duplex) {;}
+
+    Instrument::InstrumentType m_type;
+    std::string                m_name;
+    int                        m_client;
+    int                        m_port;
+    bool                       m_duplex;
+};
+
+// Sort by checking duplex state
+//
+struct AlsaPortCmp
+{
+    bool operator()(AlsaPortDescription *a1,
+                    AlsaPortDescription *a2)
+    {
+        // Handle non-system clients by pushing them to the end of the
+        // device list always.  This will keep devices in the order:
+        //
+        // o write-only system devices (soundcard synths)
+        // o duplex system devices (MIDI ports)
+        // o software devices (softsynths)
+        //
+        // I don't want to use the 128 here but this is at least
+        // emperically correct for the moment and can't see a 
+        // working alternative.
+        //
+        if (a1->m_client < 128 && a1->m_duplex != a2->m_duplex)
+            return true;
+        else
+        {
+            if (a1->m_client != a2->m_client)
+                return a1->m_client < a2->m_client;
+            else
+                return a1->m_port < a2->m_port;
+        }
+    }
+};
+
 void
 AlsaDriver::generateInstruments()
 {
@@ -288,16 +345,10 @@ AlsaDriver::generateInstruments()
     std::cout << std::endl << "  ALSA Client information:"
               << std::endl << std::endl;
 
-    //bool duplex = false;
+    std::vector<AlsaPortDescription*> alsaPorts;
 
-    // Use these to store ONE input (duplex) port
-    // which we push onto the Instrument list last
-    //
-    std::string inputName;
-    int inputClient = -1;
-    int inputPort = -1;
-
-    // Get only the client ports we're interested in 
+    // Get only the client ports we're interested in and store them
+    // for sorting and then device creation.
     //
     while (snd_seq_query_next_client(m_midiHandle, cinfo) >= 0)
     {
@@ -321,30 +372,12 @@ AlsaDriver::generateInstruments()
                           << snd_seq_port_info_get_port(pinfo) << " - ("
                           << snd_seq_client_info_get_name(cinfo) << ", "
                           << snd_seq_port_info_get_name(pinfo) << ")";
-                          /*
-                          << snd_seq_port_info_get_midi_channels(pinfo)
-                          << " : MIDI VOICES = "
-                          << snd_seq_port_info_get_midi_voices(pinfo)
-                          << " : SYNTH VOICES = "
-                          << snd_seq_port_info_get_synth_voices(pinfo)
-                          */
-                if ((snd_seq_port_info_get_capability(pinfo) &
-                     SND_SEQ_PORT_TYPE_SYNTH) == SND_SEQ_PORT_TYPE_SYNTH)
-                    std::cout << " (SYNTH)";
 
                 if (snd_seq_port_info_get_capability(pinfo) &
                     SND_SEQ_PORT_CAP_DUPLEX)
-                {
-                    std::cout << "\t\t(DUPLEX)" << std::endl;
-                    inputName = std::string(snd_seq_port_info_get_name(pinfo));
-                    inputClient = snd_seq_port_info_get_client(pinfo);
-                    inputPort = snd_seq_port_info_get_port(pinfo);
-                    continue;
-                }
+                    std::cout << "\t\t\t(DUPLEX)";
                 else
-                {
                     std::cout << "\t\t(WRITE ONLY)";
-                }
 
                 // Generate a unique name using the client id
                 //
@@ -356,47 +389,45 @@ AlsaDriver::generateInstruments()
                 std::string fullClientName = 
                     std::string(snd_seq_client_info_get_name(cinfo));
 
-                /*
-                unsigned int pos = fullClientName.find_first_of(" ");
-
-                if (pos)
-                {
-                    fullClientName = fullClientName.substr(0, pos);
-                }
-                else
-                    fullClientName = fullClientName.substr(0, 10);
-                    */
-
                 std::string clientName =
                     std::string(clientId) + fullClientName;
 
-                // For the moment limit to two strictly synth devices
-                //
-                addInstrumentsForPort(
+                AlsaPortDescription *portDescription = 
+                    new AlsaPortDescription(
                             Instrument::Midi,
-                            // std::string(snd_seq_port_info_get_name(pinfo)),
                             clientName,
                             snd_seq_port_info_get_client(pinfo),
                             snd_seq_port_info_get_port(pinfo),
-                            false);
+                            snd_seq_port_info_get_capability(pinfo) &
+                            SND_SEQ_PORT_CAP_DUPLEX);
+
+                alsaPorts.push_back(portDescription);
 
                 std::cout << std::endl;
-
             }
         }
     }
-
-    if (inputPort != -1 && inputClient != -1)
-    {
-        addInstrumentsForPort(
-                    Instrument::Midi,
-                    inputName,
-                    inputClient,
-                    inputPort,
-                    true);
-    }
-
     std::cout << std::endl;
+
+    // Ok now sort by duplexicity
+    //
+    std::sort(alsaPorts.begin(), alsaPorts.end(), AlsaPortCmp());
+
+    std::vector<AlsaPortDescription*>::iterator it = alsaPorts.begin();
+    for (; it != alsaPorts.end(); it++)
+    {
+        /*
+        cout << "installing device " << (*it)->m_name
+             << " client = " << (*it)->m_client
+             << " port = " << (*it)->m_port << endl;
+             */
+
+        addInstrumentsForPort((*it)->m_type,
+                              (*it)->m_name,
+                              (*it)->m_client,
+                              (*it)->m_port,
+                              (*it)->m_duplex);
+    }
 
 #ifdef HAVE_LIBJACK
 
@@ -416,7 +447,7 @@ AlsaDriver::generateInstruments()
     for (int channel = 0; channel < 16; ++channel)
     {
         sprintf(number, " #%d", channel);
-        audioName = "Audio" + std::string(number);
+        audioName = "JACK Audio" + std::string(number);
         instr = new MappedInstrument(Instrument::Audio,
                                      channel,
                                      m_audioRunningId,
@@ -444,7 +475,7 @@ AlsaDriver::generateInstruments()
     MappedDevice *device =
                     new MappedDevice(m_deviceRunningId,
                                      Rosegarden::Device::Audio,
-                                     "JACK audio",
+                                     "JACK Audio",
                                      true);
     m_devices.push_back(device);
 
@@ -630,11 +661,13 @@ AlsaDriver::initialiseMidi()
                                (*it)->m_client,
                                (*it)->m_port) < 0)
         {
+            /*
             std::cerr << "AlsaDriver::initialiseMidi - "
                       << "can't subscribe output client/port ("
                       << (*it)->m_client << ", "
                       << (*it)->m_port << ")"
                       << std::endl;
+                      */
         }
     }
 
@@ -2351,9 +2384,12 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 (jack_port_get_buffer(inst->getJackInputPortLeft(),
                                       nframes));
 
+            /*
             sample_t *inputBufferRight = static_cast<sample_t*>
                 (jack_port_get_buffer(inst->getJackInputPortRight(),
                                       nframes));
+                                      */
+
             /*
             std::cout << "AlsaDriver::jackProcess - recording samples"
                       << std::endl;
@@ -3091,7 +3127,8 @@ AlsaDriver::checkForNewClients()
             oldClientCount++;
     }
 
-
+    // Count current clients
+    //
     while (snd_seq_query_next_client(m_midiHandle, cinfo) >= 0)
     {
         client = snd_seq_client_info_get_client(cinfo);
@@ -3107,47 +3144,7 @@ AlsaDriver::checkForNewClients()
             cap = (SND_SEQ_PORT_CAP_SUBS_WRITE|SND_SEQ_PORT_CAP_WRITE);
 
             if ((snd_seq_port_info_get_capability(pinfo) & cap) == cap)
-            {
-                if ((snd_seq_port_info_get_capability(pinfo) &
-                     SND_SEQ_PORT_TYPE_SYNTH) == SND_SEQ_PORT_TYPE_SYNTH)
-                {
-                    // we've got a synth
-                    ;
-                }
-
-                if (snd_seq_port_info_get_capability(pinfo) &
-                    SND_SEQ_PORT_CAP_DUPLEX)
-                {
-                    // we've got duplex
-                    ;
-                }
-
-                // Generate a unique name using the client id
-                //
-                char clientId[10];
-                sprintf(clientId,
-                        "%d ",
-                        snd_seq_port_info_get_client(pinfo));
-
-                std::string fullClientName = 
-                    std::string(snd_seq_client_info_get_name(cinfo));
-
-                /*
-                unsigned int pos = fullClientName.find_first_of(" ");
-
-                if (pos)
-                {
-                    fullClientName = fullClientName.substr(0, pos);
-                }
-                else
-                    fullClientName = fullClientName.substr(0, 10);
-                    */
-
-                std::string clientName =
-                    std::string(clientId) + fullClientName;
-
                 currentClientCount++;
-            }
         }
     }
 
@@ -3155,11 +3152,6 @@ AlsaDriver::checkForNewClients()
     //
     if (oldClientCount != currentClientCount)
     {
-        /*
-        std::cout << "NEW CLIENT COUNT = " << currentClientCount << endl;
-        std::cout << "OLD CLIENT COUNT = " << oldClientCount << endl;
-        */
-
         generateInstruments();
 
         MappedEvent *mE =
