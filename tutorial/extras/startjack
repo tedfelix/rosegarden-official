@@ -1,0 +1,18 @@
+#!/bin/bash
+#
+# startjack
+#
+# D. Michael McIntyre <dmmcintyr@users.sourceforge.net>
+#
+# starts jackd server, if it's not already running...
+#
+
+# JACK PARAMETERS 
+jack_parameters=" -v -d alsa -d hw:0"
+
+if (pgrep jackd > /dev/null 2>&1); then
+    echo "jackd already running...  aborting..."
+    exit 1
+else
+    jackd $jack_parameters
+fi

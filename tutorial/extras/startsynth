@@ -1,0 +1,23 @@
+#!/bin/bash
+#
+# startrg
+#
+# D. Michael McIntyre <dmmcintyr@users.sourceforge.net>
+#
+# Starts IIWU Synth with user-supplied variables below
+
+# USER VARIABLES
+
+#
+# SOUNDFONT TO USE WITH IIWUSYNTH
+soundfont="$HOME/data/soundfonts/4GMGSMT.SF2"
+
+# COMMAND USED TO START IIWUSYNTH
+ii_command="-m alsa_seq $soundfont"
+
+if (pgrep iiwusynth > /dev/null 2>&1); then
+    echo "iiwusynth already running...  aborting..."
+    exit 1
+else
+    iiwusynth  $ii_command 
+fi
