@@ -9,13 +9,12 @@
 
     <h2>Files needed</h2> 
     <ul>
-      <li><a href ="ftp://ftp.trolltech.com/qt/source/qt-x11-2.2.0-beta1.tar.gz">Qt 2.1.1</a>
-      <li><a href ="ftp://ftp.kde.org/pub/kde/unstable/distribution/2.0Beta3/tar/src/kde-qt-addon-1.92.tar.bz2">kde-qt-addon</a>
+      <li><a href ="ftp://ftp.trolltech.com/qt/source/qt-x11-2.2.0.tar.gz">Qt 2.1.1</a>
       <li><a href ="ftp://ftp.kde.org/pub/kde/unstable/distribution/2.0Beta3/tar/src/kdelibs-1.92.tar.bz2">kdelibs</a>
     </ul>
 
     <p>
-      <b>UPDATE: You need Qt 2.2.0 beta to compile the current code.</b>
+      <b>UPDATE: You need Qt 2.2.0 to compile the current code.</b>
     </p>
 
     <p>These are not RPMs because I've had troubles with them
@@ -39,7 +38,7 @@
     <ol><code>
       <li>cd /opt/kde2/qt2
       <li>export QTDIR=$PWD
-      <li>./configure -gif (<i>this is to include GIF support</i>)
+      <li>./configure -gif -sm -system-zlib -system-libpng -system-jpeg
       <li>make
 	</code>
     </ol>
@@ -78,7 +77,7 @@
     <address><a href="mailto:glaurent@telegraph-road.org">Guillaume Laurent</a></address>
 <!-- Created: Wed Jun  7 19:04:58 CEST 2000 -->
 <!-- hhmts start -->
-Last modified: Mon Aug 14 01:15:47 CEST 2000
+Last modified: Sat Sep  9 13:42:59 CEST 2000
 <!-- hhmts end -->
   </body>
 </html>
