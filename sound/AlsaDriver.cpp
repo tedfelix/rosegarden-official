@@ -803,10 +803,10 @@ AlsaDriver::initialiseAudio()
     //
     if (m_args.size() == 4)
     {
-        playback_1 = m_args[0].data();
-        playback_2 = m_args[1].data();
-        capture_1 = m_args[2].data();
-        capture_2 = m_args[3].data();
+        playback_1 = std::string(m_args[0].data());
+        playback_2 = std::string(m_args[1].data());
+        capture_1 = std::string(m_args[2].data());
+        capture_2 = std::string(m_args[3].data());
     }
 
     // connect our client up to the ALSA ports - first left output

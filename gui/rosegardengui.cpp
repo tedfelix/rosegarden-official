@@ -2095,6 +2095,16 @@ bool RosegardenGUIApp::launchSequencer()
 
     (*m_sequencerProcess) << "rosegardensequencer";
 
+    // Command line arguments
+    //
+    KConfig *config = kapp->config();
+    config->setGroup("Sequencer Options");
+    QString options = config->readEntry("commandlineoptions");
+    (*m_sequencerProcess) << options;
+
+    if (options != "")
+        RG_DEBUG << "sequencer options \"" << options << "\"" << endl;
+
     connect(m_sequencerProcess, SIGNAL(processExited(KProcess*)),
             this, SLOT(slotSequencerExited(KProcess*)));
 

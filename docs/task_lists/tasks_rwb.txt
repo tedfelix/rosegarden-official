@@ -1,26 +1,24 @@
 0.9 tasks
 =========
 
-o Banks/Programs Editor Dialog
-
 o Make RG a jack mixer (transport, control client)
-
-o MIDI Event filters
-
-o MIDI Panic button [DONE cc/rwb]
 
 o MTC/MMC - transport awareness
 
-o JACK connection management - stereo, panning
+o JACK connection management - stereo, panning, bypass
 
 o Tidy up AudioFiles:
    - hardcoded format segment values
    - BWF format writing/reading
    - exceptions and return values
+   - multithreading
+   - autosplitting
 
-o MIDI export broken for key sig and SysExs
+o MIDI export broken for key sig and SysExs [CC?]
 
 o multi-threaded base/
+
+o re-poll ALSA clients every so often
 
 
 
@@ -86,10 +84,16 @@ o selection of ALSA recording device
 Post 0.8 completed
 =================
 
+o MIDI Panic button [DONE cc/rwb]
+
 o BUG - recorded audio file inserting to AudioManagerDialog before it's ready
   [DONE]
 
 o ALSA seq bug on incoming events (infinite length) [FIXED]
+
+o MIDI Event filters [DONE]
+
+o Banks/Programs Editor Dialog [DONE]
 
 
 Completed for 0.8

@@ -776,30 +776,42 @@ void LatencyConfigurationPage::slotPlaybackChanged(int value)
 //
 
 SequencerConfigurationPage::SequencerConfigurationPage(
-                                                   RosegardenGUIDoc *doc,
+                                                   RosegardenGUIDoc * /*doc*/,
                                                    KConfig *cfg,
                                                    QWidget *parent,
                                                    const char *name):
     TabbedConfigurationPage(cfg, parent, name)
 {
     m_cfg->setGroup("Sequencer Options");
+    QFrame *frame = new QFrame(m_tabWidget);
 
-    QFrame *frame = new QFrame(m_tabWidget, "sequencer options");
-    QGridLayout *layout = new QGridLayout(frame, 2, 3,
-                                          10, 5);
+    QGridLayout *layout = new QGridLayout(frame, 4, 2, 10, 5);
 
-    layout->addMultiCellWidget(new QLabel(i18n("Define some sequencer options"), frame),
-                               0, 0,
+    layout->addMultiCellWidget(new QLabel(i18n("Sequencer command line options"), frame),
+                               1, 1,
                                0, 1);
 
-    layout->addWidget(new QLabel(i18n("Options:"), frame), 1, 0);
+    layout->addWidget(new QLabel(i18n("Options:"), frame), 2, 0);
     m_sequencerArguments = new QLineEdit("", frame);
-    layout->addWidget(m_sequencerArguments, 1, 1);
+    layout->addWidget(m_sequencerArguments, 2, 1);
+
+    layout->addWidget(new QLabel(i18n("Any changes made to these options will only come into effect the next time you start Rosegarden."),
+                               frame),
+                               3, 1);
+
+    // Get the options
+    //
+    QString commandLine = m_cfg->readEntry("commandlineoptions", "");
+    m_sequencerArguments->setText(commandLine);
+
+    addTab(frame, i18n("Sequencer Options"));
 }
 
 void
 SequencerConfigurationPage::apply()
 {
+    m_cfg->setGroup("Sequencer Options");
+    m_cfg->writeEntry("commandlineoptions", m_sequencerArguments->text());
 }
 
 // ---
@@ -1021,8 +1033,8 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
     // Sequencer Page
     //
     pageWidget = addPage(SequencerConfigurationPage::iconLabel(),
-                              SequencerConfigurationPage::title(),
-                              loadIcon(SequencerConfigurationPage::iconName()));
+                         SequencerConfigurationPage::title(),
+                         loadIcon(SequencerConfigurationPage::iconName()));
     vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
     page = new SequencerConfigurationPage(doc, cfg, pageWidget);
     vlay->addWidget(page);
