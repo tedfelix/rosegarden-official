@@ -1832,7 +1832,12 @@ BankEditorDialog::slotImport()
     }
 
     KURL url = KFileDialog::getOpenURL
-        (deviceDir,
+        (
+#if KDE_VERSION >= 306
+         deviceDir,
+#else
+         QString::null,
+#endif
          "*.rgd *.rg *.sf2|Rosegarden and Soundfont files\n*.rgd|Rosegarden device file\n*.rg|Rosegarden file\n*.sf2|SoundFont file\n*|All files",
          this, i18n("Import Banks from Device in File"));
 

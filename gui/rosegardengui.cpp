@@ -1404,7 +1404,12 @@ void RosegardenGUIApp::slotFileOpen()
     slotStatusHelpMsg(i18n("Opening file..."));
 
     KURL url = KFileDialog::getOpenURL
-	(":ROSEGARDEN",
+	(
+#if KDE_VERSION >= 306
+         ":ROSEGARDEN",
+#else
+         QString::null,
+#endif
 	 i18n("*.rg|Rosegarden-4 files\n*|All files"), this,
 	 i18n("Open File"));
     if ( url.isEmpty() ) { return; }
@@ -1423,7 +1428,12 @@ void RosegardenGUIApp::slotFileOpen()
 void RosegardenGUIApp::slotMerge()
 {
     KURL url = KFileDialog::getOpenURL
-	(":ROSEGARDEN",
+	(
+#if KDE_VERSION >= 306
+         ":ROSEGARDEN",
+#else
+         QString::null,
+#endif
 	 i18n("*.rg|Rosegarden-4 files\n*|All files"), this,
 	 i18n("Open File"));
     if ( url.isEmpty() ) { return; }
@@ -2369,7 +2379,12 @@ void RosegardenGUIApp::slotRevertToSaved()
 void RosegardenGUIApp::slotImportMIDI()
 {
     KURL url = KFileDialog::getOpenURL
-        (":MIDI",
+        (
+#if KDE_VERSION >= 306
+         ":MIDI",
+#else
+         QString::null,
+#endif
          i18n("*.mid *.midi|Standard MIDI files\n*|All files"), this,
          i18n("Open MIDI File"));
     if (url.isEmpty()) { return; }
@@ -2384,7 +2399,12 @@ void RosegardenGUIApp::slotImportMIDI()
 void RosegardenGUIApp::slotMergeMIDI()
 {
     KURL url = KFileDialog::getOpenURL
-        (":MIDI",
+        (
+#if KDE_VERSION >= 306
+         ":MIDI",
+#else
+         QString::null,
+#endif
          i18n("*.mid *.midi|Standard MIDI files\n*|All files"), this,
          i18n("Merge MIDI File"));
     if (url.isEmpty()) { return; }
@@ -2533,7 +2553,12 @@ void RosegardenGUIApp::slotImportRG21()
     if (!m_doc->saveIfModified()) return;
 
     KURL url = KFileDialog::getOpenURL
-        (":ROSEGARDEN21",
+        (
+#if KDE_VERSION >= 306
+         ":ROSEGARDEN21",
+#else
+         QString::null,
+#endif
          i18n("*.rose|Rosegarden-2 files\n*|All files"), this,
          i18n("Open Rosegarden 2.1 File"));
     if (url.isEmpty()) { return; }
@@ -2548,7 +2573,12 @@ void RosegardenGUIApp::slotImportRG21()
 void RosegardenGUIApp::slotMergeRG21()
 {
     KURL url = KFileDialog::getOpenURL
-        (":ROSEGARDEN21",
+        (
+#if KDE_VERSION >= 306
+         ":ROSEGARDEN21",
+#else
+         QString::null,
+#endif
          i18n("*.rose|Rosegarden-2 files\n*|All files"), this,
          i18n("Open Rosegarden 2.1 File"));
     if (url.isEmpty()) { return; }
@@ -4525,7 +4555,12 @@ RosegardenGUIApp::slotImportStudio()
     }
 
     KURL url = KFileDialog::getOpenURL
-        (studioDir,
+        (
+#if KDE_VERSION >= 306
+         studioDir,
+#else
+         QString::null,
+#endif
          "*.rgd *.rg|Rosegarden files\n*.rgd|Rosegarden device file\n*.rg|Rosegarden file\n*|All files",
          this, i18n("Import Studio from File"));
 
