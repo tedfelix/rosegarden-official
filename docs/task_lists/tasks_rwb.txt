@@ -6,7 +6,7 @@ o Process management
   - starting and managing JACK if requested in configure options
 
 o File loading/importing
-  - improve performance
+  - improve performance  [DONE]
   - MDI
   
 o MTC/MMC - transport awareness
@@ -31,6 +31,8 @@ o Audio
    - copy/paste plugin controls
 
    - fix endless sequencer recording on GUI crash [DONE]
+
+   - JACK in soft mode problem?
 
 o Audio busses and routing
    - multiple audio record arm [HALF DONE - for 0.9.5]

@@ -1,20 +1,42 @@
-1.0 features
+Features for 1.0 - updated 20030627
+-----------------------------------
 
-- Studio GUI
+- banks/variations [cc]
 
-- MIDI Remapping feature - being able to load a song created on an alien setup
-  and play it adequately (not perfectly) without too much hassle.
+- tidy up audio parameter box [cc/rwb/gl]
 
-- Management of the user's setup (autoload.rg)
+- ALSA ports [cc]
 
-- Fix MIDI export
+- general file merging [cc]
 
-- Improve GUI response when playing (multithread / mmap) (after 1.0 ?)
+- multiple document interface (switcheable buffers, loading while playing) [rwb]
 
-- Simulataneous multiple audio track record
+- playlists (essential for demos!) [rwb]
 
-- Score Scanning?
+- song markers - jumping to, creating loops between [rwb]
 
-- MIDI clock support
+- search facility for patch sounds (search all banks) [rwb]
 
+- request: notation segment expanding itself as you enter 
+           notes past the end of it
+
+- request: importing lilypond after manual hackery?
+
+- request: triplets of more than three (erm, quintuplets?)
+
+- Studio faders (MIDI and audio fader controls)
+
+- porting to shared memory experimental branch [rwb/cc/gl]
+
+
+Bugs
+----
+
+Many - but additional ones are:
+
+- audio cutting and moving is right off
+- select a load of notes in the matrix view and quantize - the
+  view screws up quite a bit.
+- can't move the start time of a segment
+- Repeating segment ghosts when moving them.
 
