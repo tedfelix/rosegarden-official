@@ -502,6 +502,13 @@ void SegmentMmapper::dump()
         
     }
 
+    size_t coveredArea = (bufPos - m_mmappedBuffer) * sizeof(MappedEvent);
+//     SEQMAN_DEBUG << "SegmentMmapper::dump - coveredArea = " << coveredArea
+//                  << " out of " << m_mmappedSize
+//                  << " - about to memset " << m_mmappedSize - coveredArea << endl;
+    
+    memset(bufPos, 0, m_mmappedSize - coveredArea);
+
     ::msync(m_mmappedBuffer, m_mmappedSize, MS_ASYNC);
 }
 
