@@ -50,6 +50,8 @@ using std::cerr;
 using std::endl;
 
 #ifdef HAVE_XFT
+#include <ft2build.h>
+#include FT_FREETYPE_H 
 #include <X11/Xft/Xft.h>
 #endif
 
@@ -1038,7 +1040,110 @@ NoteFontMap::dump() const
 }
 
 
+NoteCharacter::NoteCharacter() :
+    m_type(Screen),
+    m_hotspot(0, 0),
+    m_pixmap(0),
+    m_image(0)
+{
+}
+
+NoteCharacter::NoteCharacter(CharacterType type, QPixmap pixmap,
+			     QPoint hotspot, QImage *image) :
+    m_type(type),
+    m_hotspot(hotspot),
+    m_pixmap(0),
+    m_image(0)
+{
+    if (type == Screen) m_pixmap = new QPixmap(pixmap);
+    if (image && (type == Printer)) m_image = new QImage(*image);
+}
+
+NoteCharacter::NoteCharacter(const NoteCharacter &c) :
+    m_type(c.m_type),
+    m_hotspot(c.m_hotspot),
+    m_pixmap(c.m_pixmap ? new QPixmap(*c.m_pixmap) : 0),
+    m_image(c.m_image ? new QImage(*c.m_image) : 0)
+{
+    // nothing else
+}
+
+NoteCharacter &
+NoteCharacter::operator=(const NoteCharacter &c)
+{
+    if (&c == this) return *this;
+    m_type = c.m_type;
+    m_hotspot = c.m_hotspot;
+    m_pixmap = (c.m_pixmap ? new QPixmap(*c.m_pixmap) : 0);
+    m_image = (c.m_image ? new QImage(*c.m_image) : 0);
+    return *this;
+}
+
+NoteCharacter::~NoteCharacter()
+{
+    delete m_pixmap;
+    delete m_image;
+}
+
+int
+NoteCharacter::getWidth() const
+{
+    if (m_type == Screen) return m_pixmap->width();
+    else if (m_image) return m_image->width();
+    else return m_pixmap->width();
+}
+
+int
+NoteCharacter::getHeight() const
+{
+    if (m_type == Screen) return m_pixmap->height();
+    else if (m_image) return m_image->height();
+    else return m_pixmap->height();
+}
+
+QPoint
+NoteCharacter::getHotspot() const
+{
+    return m_hotspot;
+}
+
+QPixmap *
+NoteCharacter::getPixmap() const
+{
+    return m_pixmap;
+}
+
+QCanvasPixmap *
+NoteCharacter::getCanvasPixmap() const
+{
+    return new QCanvasPixmap(*m_pixmap, m_hotspot);
+}
+
+void
+NoteCharacter::draw(QPainter *painter, int x, int y) const
+{
+    if (m_type == Screen) {
+	painter->drawPixmap(x, y, *m_pixmap);
+    } else if (m_image) {
+	painter->drawImage(x, y, *m_image);
+    } else {
+	painter->drawPixmap(x, y, *m_pixmap);
+    }
+}
+
+void
+NoteCharacter::drawMask(QPainter *painter, int x, int y) const
+{
+    if (m_type == Screen) {
+	painter->drawPixmap(x, y, *(m_pixmap->mask()));
+    } else {
+	// no need
+    }
+}
+    
+
 NoteFont::FontPixmapMap *NoteFont::m_fontPixmapMap = 0;
+NoteFont::ImageMap *NoteFont::m_imageCache = 0;
 QPixmap *NoteFont::m_blankPixmap = 0;
 
 NoteFont::NoteFont(string fontName, int size) :
@@ -1172,6 +1277,36 @@ NoteFont::add(CharName charName, bool inverted, QPixmap *pixmap) const
         } else {
             (*m_map)[charName] = PixmapPair(pixmap, 0);
         }
+    }
+}
+
+QImage *
+NoteFont::lookupImage(QPixmap *pixmap) const
+{
+    //!!! profile this to make sure the cache is working OK
+
+    if (!m_imageCache) m_imageCache = new ImageMap();
+
+    if (m_imageCache->find(pixmap) != m_imageCache->end()) {
+
+	return (*m_imageCache)[pixmap];
+
+    } else {
+	
+	QImage image = pixmap->convertToImage();
+	if (image.isNull()) return 0;
+
+	if (image.depth() > 1) {
+	    QImage shallowImage = image.convertDepth
+		(1, Qt::MonoOnly | Qt::ThresholdDither);
+	    if (!shallowImage.isNull()) {
+		image = shallowImage;
+	    }
+	}
+
+	QImage *newImage = new QImage(image);
+	(*m_imageCache)[pixmap] = newImage;
+	return newImage;
     }
 }
 
@@ -1426,6 +1561,66 @@ NoteFont::getHotspot(CharName charName, bool inverted) const
     int x, y;
     (void)getHotspot(charName, x, y, inverted);
     return QPoint(x, y);
+}
+
+NoteCharacter
+NoteFont::getCharacter(CharName charName, NoteCharacter::CharacterType type,
+		       bool inverted)
+{
+    QPixmap pixmap = getPixmap(charName, inverted);
+
+    if (type == NoteCharacter::Screen) {
+	return NoteCharacter(type,
+			     pixmap,
+			     getHotspot(charName, inverted),
+			     0);
+    } else {
+
+	// Get the pointer direct from cache (depends on earlier call
+	// to getPixmap to put it in the cache if available)
+
+	QImage *image = 0;
+	QPixmap *pmapptr = 0;
+	bool found = lookup(charName, inverted, pmapptr);
+
+	if (found && pmapptr) image = lookupImage(pmapptr);
+
+	return NoteCharacter(type,
+			     pixmap,
+			     getHotspot(charName, inverted),
+			     image);
+    }
+}
+
+NoteCharacter
+NoteFont::getCharacterColoured(CharName charName,
+			       int hue, int minValue,
+			       NoteCharacter::CharacterType type,
+			       bool inverted)
+{
+    QPixmap pixmap = getColouredPixmap(charName, hue, minValue, inverted);
+
+    if (type == NoteCharacter::Screen) {
+	return NoteCharacter(type,
+			     pixmap,
+			     getHotspot(charName, inverted),
+			     0);
+    } else {
+
+	// Get the pointer direct from cache (depends on earlier call
+	// to getPixmap to put it in the cache if available)
+
+	QImage *image = 0;
+	QPixmap *pmapptr = 0;
+	bool found = lookup(charName, inverted, pmapptr);
+
+	if (found && pmapptr) image = lookupImage(pmapptr);
+
+	return NoteCharacter(type,
+			     pixmap,
+			     getHotspot(charName, inverted),
+			     image);
+    }
 }
 
 

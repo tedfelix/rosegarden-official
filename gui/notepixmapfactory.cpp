@@ -178,6 +178,11 @@ public:
 	if (m_useMask) m_maskPainter.drawText(x, y, string);
     }
 
+    void drawNoteCharacter(int x, int y, const NoteCharacter &character) {
+	character.draw(m_painter, x, y);
+	if (m_useMask) character.drawMask(&m_maskPainter, x, y);
+    }
+
 private:
     bool m_useMask;
     QPainter  m_myPainter;
@@ -563,32 +568,43 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
         drawAccidental(params.m_accidental);
     }
 
-    QPixmap body;
+//    QPixmap body;
+    NoteCharacter body;
     NoteStyle::CharNameRec charNameRec
 	(m_style->getNoteHeadCharName(params.m_noteType));
     CharName charName = charNameRec.first;
     bool inverted = charNameRec.second;
 
     if (m_selected || params.m_selected) {
-	body = m_font->getColouredPixmap
+//	body = m_font->getColouredPixmap
+	body = m_font->getCharacterColoured
 	    (charName,
 	     RosegardenGUIColours::SelectedElementHue,
 	     RosegardenGUIColours::SelectedElementMinValue,
+	     m_inDrawMethod ? NoteCharacter::Printer : NoteCharacter::Screen,
 	     inverted);
     } else if (params.m_highlighted) {
-	body = m_font->getColouredPixmap
+//	body = m_font->getColouredPixmap
+	body = m_font->getCharacterColoured
 	    (charName,
 	     RosegardenGUIColours::HighlightedElementHue,
 	     RosegardenGUIColours::HighlightedElementMinValue,
+	     m_inDrawMethod ? NoteCharacter::Printer : NoteCharacter::Screen,
 	     inverted);
     } else if (params.m_quantized) {
-	body = m_font->getColouredPixmap
+//	body = m_font->getColouredPixmap
+	body = m_font->getCharacterColoured
 	    (charName,
 	     RosegardenGUIColours::QuantizedNoteHue,
 	     RosegardenGUIColours::QuantizedNoteMinValue,
+	     m_inDrawMethod ? NoteCharacter::Printer : NoteCharacter::Screen,
 	     inverted);
     } else {
-	body = m_font->getPixmap(charName, inverted);
+//	body = m_font->getPixmap(charName, inverted);
+	body = m_font->getCharacter
+	    (charName, 
+	     m_inDrawMethod ? NoteCharacter::Printer : NoteCharacter::Screen,
+	     inverted);
     }
 
     QPoint bodyLocation(m_left - m_borderX, m_above - m_borderY);
@@ -600,7 +616,8 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
         }
     }
     
-    m_p->drawPixmap(bodyLocation.x(), bodyLocation.y(), body);
+//    m_p->drawPixmap(bodyLocation.x(), bodyLocation.y(), body);
+    m_p->drawNoteCharacter(bodyLocation.x(), bodyLocation.y(), body);
 
     if (params.m_dots > 0) {
 
@@ -1122,6 +1139,7 @@ NotePixmapFactory::drawShallowLine(int x0, int y0, int x1, int y1,
 
         return;
     }
+
     Rosegarden::Profiler profiler("NotePixmapFactory::drawShallowLine(points)");
   
     int dv = y1 - y0;

@@ -335,6 +335,39 @@ private:
 };
 
 
+class NoteCharacter
+{
+public:
+    enum CharacterType { Screen, Printer };
+
+    NoteCharacter();
+    NoteCharacter(const NoteCharacter &);
+    NoteCharacter &operator=(const NoteCharacter &);
+    ~NoteCharacter();
+
+    int getWidth() const;
+    int getHeight() const;
+    
+    QPoint getHotspot() const;
+
+    QPixmap *getPixmap() const;
+    QCanvasPixmap *getCanvasPixmap() const;
+
+    void draw(QPainter *painter, int x, int y) const;
+    void drawMask(QPainter *painter, int x, int y) const;
+
+private:
+    friend class NoteFont;
+    NoteCharacter(CharacterType type,
+		  QPixmap pixmap, QPoint hotspot, QImage *image);
+
+    CharacterType m_type;
+    QPoint        m_hotspot;
+    QPixmap      *m_pixmap; // I own this
+    QImage       *m_image; // I own this
+};
+    
+
 // Encapsulates NoteFontMap, and loads pixmaps etc on demand
 
 class NoteFont
@@ -366,6 +399,17 @@ public:
     /// Returns false + thickness=1 if not specified
     bool getLegerLineThickness(unsigned int &thickness) const;
 
+
+    NoteCharacter getCharacter
+    (CharName charName,
+     NoteCharacter::CharacterType type = NoteCharacter::Screen,
+     bool inverted = false);
+
+    NoteCharacter getCharacterColoured
+    (CharName charName,
+     int hue, int minValue,
+     NoteCharacter::CharacterType type = NoteCharacter::Screen,
+     bool inverted = false);
 
     /// Returns false + blank pixmap if it can't find the right one
     bool getPixmap(CharName charName, QPixmap &pixmap,
@@ -423,6 +467,8 @@ private:
     bool lookup(CharName charName, bool inverted, QPixmap *&pixmap) const;
     void add(CharName charName, bool inverted, QPixmap *pixmap) const;
 
+    QImage *lookupImage(QPixmap *pixmap) const;
+
     CharName getNameWithColour(CharName origName, int hue) const;
     QPixmap *recolour(QPixmap in, int hue, int minValue) const;
 
@@ -430,13 +476,18 @@ private:
     typedef std::map<CharName, PixmapPair>     PixmapMap;
     typedef std::map<std::string, PixmapMap *> FontPixmapMap;
 
+    typedef std::map<QPixmap *, QImage *>      ImageMap;
+
     //--------------- Data members ---------------------------------
 
     int m_size;
     NoteFontMap m_fontMap;
 
     mutable PixmapMap *m_map; // pointer at a member of m_fontPixmapMap
+
     static FontPixmapMap *m_fontPixmapMap;
+    static ImageMap *m_imageCache;
+
     static QPixmap *m_blankPixmap;
 };
 
