@@ -280,14 +280,14 @@
     <para>
       <application>Rosegarden</application> is a &MIDI; and audio
       sequencer and musical notation editor.  Rosegarden allows you to
-      record, arrange and compose music, in the shape of traditional
+      record, arrange, and compose music, in the shape of traditional
       score or &MIDI; data, or of audio files either imported or
       recorded from a microphone, guitar or whatever audio source you
-      care to specify.  You can write, edit, and organise music data
-      to create a composition, which you can then synthesise, add
-      effects to, and mix down for burning to CD or distribution on
-      the web.  Rosegarden also contains professional notation editing
-      support for high quality printed output.
+      care to specify.  You can use Rosegarden to write, edit, and
+      organise music to create a composition, which you can then
+      synthesise, add effects to, and mix down for burning to CD or
+      distribution on the web.  Rosegarden also contains professional
+      notation editing support for high quality printed output.
     </para>
 
     <para>
@@ -297,6 +297,8 @@
       to users new to music software generally.
     </para>
 
+    <sect1 id="intro-handbook">
+      <title>About this Handbook</title>
     <para>
     This handbook summarises the capabilities of &rosegarden; and
     provides a reference for some of the concepts involved.  It's
@@ -312,6 +314,31 @@
     Rosegarden website</ulink> for Frequently Asked Questions and
     mailing list instructions.
     </para>
+    </sect1>
+
+    <sect1 id="intro-menufunctions">
+      <title>About Menus and Shortcuts</title> <para>This handbook
+      usually refers to the functions you can use in Rosegarden by
+      describing where they live on the menus.  For example, the
+      function to add a single new track to the main track editor is
+	<menuchoice>
+	  <guimenu lang="en">Tracks</guimenu>
+	  <guimenuitem>Add Track</guimenuitem>
+	</menuchoice>.</para>
+
+      <para>In many cases, this is not the only way to reach a
+      particular function.  In this case the same function is also
+      available through the keyboard shortcut Ctrl+T, and it also
+      appears as an icon on one of the main window's toolbars.  Both
+      the keyboard shortcut and the icon can quickly be learned,
+      because they are shown on the menu in Rosegarden alongside the
+      name of the function.  You should bear in mind that although we
+      always give the full menu location in this documentation for
+      reference purposes, it's not necessarily the best or most usual
+      way to use a function, and you should keep an eye on the
+      keyboard shortcuts or toolbar icons as well.
+      </para>
+    </sect1>
   </chapter>
 
 
@@ -746,6 +773,41 @@
 	  By default segments are split on the closest barline to the
 	  cursor, but this can be prevented by holding down Shift
 	  while splitting the segment.
+	</para>
+      </sect2>
+    </sect1>
+
+    <sect1 id="segment-view-tempo-timesig">
+      <title>Tempo and Time Signature</title>
+      <sect2 id="tempo">
+	<title>Tempo</title>
+	<para>
+	  <screenshot>
+	    <mediaobject>
+	      <imageobject>
+		<imagedata fileref="rg-tempodialog.png" format="PNG"/>
+	</imageobject>
+	  <textobject>
+	    <phrase>&rosegarden;'s tempo dialog</phrase>
+	  </textobject>
+	</mediaobject>
+	</screenshot>
+	</para>
+      </sect2>
+      
+      <sect2 id="time-signature">
+	<title>Time signature</title>
+	<para>
+	  <screenshot>
+	    <mediaobject>
+	      <imageobject>
+		<imagedata fileref="rg-timesigdialog.png" format="PNG"/>
+	</imageobject>
+	  <textobject>
+	    <phrase>&rosegarden;'s time signature dialog</phrase>
+	  </textobject>
+	</mediaobject>
+	</screenshot>
 	</para>
       </sect2>
     </sect1>
@@ -1241,7 +1303,45 @@
           </mediaobject>
         </screenshot>
       </para>
-      
+
+      <para>
+	Rosegarden's audio mixer window, reached through 
+	<menuchoice>
+	  <guimenu lang="en">Composition</guimenu>
+	  <guimenuitem>Studio</guimenuitem> <guimenuitem>Audio
+	  Mixer</guimenuitem></menuchoice>, resembles a hardware audio
+	  mixer and provides a way to see and change the state of a
+	  number of audio instruments at once.  It contains many of
+	  the same controls as found in the audio and synth plugin
+	  <link
+	  linkend="segment-view-instrumentparameterbox">instrument
+	  parameter boxes</link>, most importantly a playback level
+	  meter and fader control for each audio and synth plugin
+	  instrument, as well as routing controls, pan, mono/stereo
+	  and effects plugin slots.
+      </para>
+      <para>
+	The audio mixer window is also where you see and control the
+	master audio output level (at the far right of the picture
+	above), as well as the record level (to the left of the master
+	fader) and submaster output levels.
+      </para>
+      <para>
+	The audio mixer's <menuchoice> <guimenu
+	lang="en">Settings</guimenu></menuchoice> menu is particularly
+	relevant.  Apart from controlling what will be shown in the
+	mixer window, this menu also contains the <link
+	linkend="studio-audio-routing">audio routing</link> settings
+	for the number of stereo audio record inputs available and the
+	number of submasters.  These are studio settings whose values
+	are saved with your Rosegarden format file.</para>
+
+      <para>Note that if you are not actually using any submasters
+      (i.e. if there are no instruments configured to route their
+      output to a submaster) you may see a small performance
+      improvement if you set the number of submasters explicitly to
+      None, rather than keeping unused ones in the configuration.
+      </para>
     </sect1>
 
     <sect1 id="studio-midi-mixer">
@@ -1257,6 +1357,30 @@
 	    </textobject>
           </mediaobject>
         </screenshot>
+      </para>
+      <para>
+	Rosegarden's MIDI mixer window, reached through 
+	<menuchoice>
+	  <guimenu lang="en">Composition</guimenu>
+	  <guimenuitem>Studio</guimenuitem> <guimenuitem>MIDI
+	  Mixer</guimenuitem></menuchoice>, provides a way to see and
+	  edit the <link
+	  linkend="segment-view-instrumentparameterbox-midi">instrument
+	  parameter values</link> for a number of MIDI instruments at once.</para>
+      
+      <para>The window is organised using a tabbed pane.  Along the
+	bottom, you will see one tab for each playback MIDI device in
+	your studio configuration.  When you select a device tab, the
+	rest of the window will update to show the controls for the 16
+	instruments of that device.
+      </para>
+
+      <para>
+	The controls shown for each instrument are those set up in the
+	<!-- !!! link linkend="studio-device-controllers" --> control
+	parameter manager, as well as volume (corresponding to the
+	MIDI volume control change, not to MIDI velocity or audio dB
+	levels) and an approximate output level indicator.
       </para>
     </sect1>
 
@@ -2552,7 +2676,8 @@
 
     <sect1 id="nv-signatures">
       <title>Clefs, keys, tempo and time signatures</title>
-      
+
+<!-- !!! rework -->      
       <para>The first thing to know about the way &rosegarden; handles
 	these is that time-related changes (tempos and time
 	signatures) are treated entirely differently from clefs and
@@ -2655,39 +2780,6 @@
 	</para>
       </sect2>
       
-      <sect2 id="tempo">
-	<title>Tempo</title>
-	<!-- Should be in general section, not notation -->
-	<para>
-	  <screenshot>
-	    <mediaobject>
-	      <imageobject>
-		<imagedata fileref="rg-tempodialog.png" format="PNG"/>
-	</imageobject>
-	  <textobject>
-	    <phrase>&rosegarden;'s tempo dialog</phrase>
-	  </textobject>
-	</mediaobject>
-	</screenshot>
-	</para>
-      </sect2>
-      
-      <sect2 id="time-signature">
-	<title>Time signature</title>
-	<!-- Should be in general section, not notation -->
-	<para>
-	  <screenshot>
-	    <mediaobject>
-	      <imageobject>
-		<imagedata fileref="rg-timesigdialog.png" format="PNG"/>
-	</imageobject>
-	  <textobject>
-	    <phrase>&rosegarden;'s time signature dialog</phrase>
-	  </textobject>
-	</mediaobject>
-	</screenshot>
-	</para>
-      </sect2>
     </sect1>
 
     <!-- Text -->
