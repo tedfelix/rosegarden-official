@@ -158,7 +158,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
         
     Track &allEvents = *t;
 
-    m_viewElementsManager = doc->getViewElementsManager();
+    m_viewElementsManager = new ViewElementsManager(allEvents);
 
     m_notationElements = m_viewElementsManager->notationElementList(allEvents.begin(),
                                                                     allEvents.end());
@@ -200,6 +200,7 @@ NotationView::~NotationView()
     delete canvas();
     delete m_hlayout;
     delete m_vlayout;
+    delete m_viewElementsManager;
 
     saveOptions();
 
