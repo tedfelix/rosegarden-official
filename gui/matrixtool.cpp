@@ -164,7 +164,8 @@ MatrixPainter::MatrixPainter(MatrixView* parent)
       m_currentStaff(0)
 {
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QIconSet icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/select.xpm"));
+    QCanvasPixmap pixmap(pixmapDir + "/toolbar/select.xpm");
+    QIconSet icon = QIconSet(pixmap);
 
     new KAction(i18n("Switch to Select Tool"), icon, 0, this,
                 SLOT(slotSelectSelected()), actionCollection(),
@@ -178,7 +179,8 @@ MatrixPainter::MatrixPainter(MatrixView* parent)
                 SLOT(slotMoveSelected()), actionCollection(),
                 "move");
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/resize.xpm"));
+    QCanvasPixmap pixmap2(pixmapDir + "/toolbar/resize.xpm");
+    icon = QIconSet(pixmap2);
     new KAction(i18n("Switch to Resize Tool"), icon, 0, this,
                 SLOT(slotResizeSelected()), actionCollection(),
                 "resize");
@@ -341,7 +343,8 @@ MatrixEraser::MatrixEraser(MatrixView* parent)
       m_currentStaff(0)
 {
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QIconSet icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/select.xpm"));
+    QCanvasPixmap pixmap(pixmapDir + "/toolbar/select.xpm");
+    QIconSet icon = QIconSet(pixmap);
 
     new KAction(i18n("Switch to Select Tool"), icon, 0, this,
                 SLOT(slotSelectSelected()), actionCollection(),
@@ -355,7 +358,8 @@ MatrixEraser::MatrixEraser(MatrixView* parent)
                 SLOT(slotMoveSelected()), actionCollection(),
                 "move");
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/resize.xpm"));
+    QCanvasPixmap pixmap2(pixmapDir + "/toolbar/resize.xpm");
+    icon = QIconSet(pixmap2);
     new KAction(i18n("Switch to Resize Tool"), icon, 0, this,
                 SLOT(slotResizeSelected()), actionCollection(),
                 "resize");
@@ -419,7 +423,8 @@ MatrixSelector::MatrixSelector(MatrixView* view)
                 "move");
 
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QIconSet icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/resize.xpm"));
+    QCanvasPixmap pixmap(pixmapDir + "/toolbar/resize.xpm");
+    QIconSet icon = QIconSet(pixmap);
 
     new KAction(i18n("Switch to Resize Tool"), icon, 0, this,
                 SLOT(slotResizeSelected()), actionCollection(),
@@ -753,7 +758,8 @@ MatrixMover::MatrixMover(MatrixView* parent)
       m_oldY(0)
 {
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QIconSet icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/select.xpm"));
+    QCanvasPixmap pixmap(pixmapDir + "/toolbar/select.xpm");
+    QIconSet icon = QIconSet(pixmap);
 
     new KAction(i18n("Switch to Select Tool"), icon, 0, this,
                 SLOT(slotSelectSelected()), actionCollection(),
@@ -767,7 +773,8 @@ MatrixMover::MatrixMover(MatrixView* parent)
                 SLOT(slotEraseSelected()), actionCollection(),
                 "erase");
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/resize.xpm"));
+    QCanvasPixmap pixmap2(pixmapDir + "/toolbar/resize.xpm");
+    icon = QIconSet(pixmap2);
     new KAction(i18n("Switch to Resize Tool"), icon, 0, this,
                 SLOT(slotResizeSelected()), actionCollection(),
                 "resize");
@@ -1056,7 +1063,8 @@ MatrixResizer::MatrixResizer(MatrixView* parent)
       m_currentStaff(0)
 {
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QIconSet icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/select.xpm"));
+    QCanvasPixmap pixmap(pixmapDir + "/toolbar/select.xpm");
+    QIconSet icon = QIconSet(pixmap);
 
     new KAction(i18n("Switch to Select Tool"), icon, 0, this,
                 SLOT(slotSelectSelected()), actionCollection(),

@@ -506,7 +506,8 @@ void MatrixView::setupActions()
                                   actionCollection(), "move");
     toolAction->setExclusiveGroup("tools");
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/resize.xpm"));
+    QCanvasPixmap pixmap(pixmapDir + "/toolbar/resize.xpm");
+    icon = QIconSet(pixmap);
     toolAction = new KRadioAction(i18n("Resi&ze"), icon, Key_F5,
                                   this, SLOT(slotResizeSelected()),
                                   actionCollection(), "resize");
@@ -518,12 +519,14 @@ void MatrixView::setupActions()
 		       actionCollection(), "chord_mode"))->
 	setChecked(false);
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/step_by_step.xpm"));
+    QCanvasPixmap pixmap2(pixmapDir + "/toolbar/step_by_step.xpm");
+    icon = QIconSet(pixmap2);
     new KToggleAction(i18n("Ste&p Recording"), icon, 0, this,
                 SLOT(slotToggleStepByStep()), actionCollection(),
                 "toggle_step_by_step");
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/quantize.xpm"));
+    QCanvasPixmap pixmap3(pixmapDir + "/toolbar/quantize.xpm");
+    icon = QIconSet(pixmap3);
     new KAction(EventQuantizeCommand::getGlobalName(), icon, Key_Equal, this,
                 SLOT(slotTransformsQuantize()), actionCollection(),
                 "quantize");

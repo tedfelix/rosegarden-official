@@ -1195,19 +1195,22 @@ EventView::setupActions()
                 SLOT(slotEditInsert()), actionCollection(),
                 "insert");
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/event-delete.xpm"));
+    QCanvasPixmap pixmap(pixmapDir + "/toolbar/event-delete.xpm");
+    icon = QIconSet(pixmap);
     
     new KAction(i18n("&Delete Event"), icon, Key_Delete, this,
                 SLOT(slotEditDelete()), actionCollection(),
                 "delete");
     
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/event-edit.xpm"));
+    QCanvasPixmap pixmap2(pixmapDir + "/toolbar/event-edit.xpm");
+    icon = QIconSet(pixmap2);
 
     new KAction(i18n("&Edit Event"), icon, Key_E, this,
                 SLOT(slotEditEvent()), actionCollection(),
                 "edit_simple");
     
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/event-edit-advanced.xpm"));
+    QCanvasPixmap pixmap3(pixmapDir + "/toolbar/event-edit-advanced.xpm");
+    icon = QIconSet(pixmap3);
 
     new KAction(i18n("&Advanced Event Editor"), icon, Key_A, this,
                 SLOT(slotEditEventAdvanced()), actionCollection(),
@@ -1231,7 +1234,8 @@ EventView::setupActions()
 
     KRadioAction *action;
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/time-musical.xpm"));
+    QCanvasPixmap pixmap4(pixmapDir + "/toolbar/time-musical.xpm");
+    icon = QIconSet(pixmap4);
 
     action = new KRadioAction(i18n("&Musical Times"), icon, 0, this,
 			      SLOT(slotMusicalTime()),
@@ -1239,7 +1243,8 @@ EventView::setupActions()
     action->setExclusiveGroup("timeMode");
     if (timeMode == 0) action->setChecked(true);
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/time-real.xpm"));
+    QCanvasPixmap pixmap5(pixmapDir + "/toolbar/time-real.xpm");
+    icon = QIconSet(pixmap5);
 
     action = new KRadioAction(i18n("&Real Times"), icon, 0, this,
 			      SLOT(slotRealTime()),
@@ -1247,7 +1252,8 @@ EventView::setupActions()
     action->setExclusiveGroup("timeMode");
     if (timeMode == 1) action->setChecked(true);
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/time-raw.xpm"));
+    QCanvasPixmap pixmap6(pixmapDir + "/toolbar/time-raw.xpm");
+    icon = QIconSet(pixmap6);
 
     action = new KRadioAction(i18n("Ra&w Times"), icon, 0, this,
 			      SLOT(slotRawTime()),

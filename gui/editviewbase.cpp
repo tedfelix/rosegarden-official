@@ -212,17 +212,20 @@ void EditViewBase::setupActions(QString rcFileName, bool haveClipboard)
 
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
 
-    QIconSet icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/matrix.xpm"));
+    QCanvasPixmap pixmap(pixmapDir + "/toolbar/matrix.xpm");
+    QIconSet icon = QIconSet(pixmap);
     new KAction(i18n("Open in Matri&x Editor"), icon, 0, this,
                 SLOT(slotOpenInMatrix()), actionCollection(),
                 "open_in_matrix");
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/notation.xpm"));
+    QCanvasPixmap pixmap2(pixmapDir + "/toolbar/notation.xpm");
+    icon = QIconSet(pixmap2);
     new KAction(i18n("Open in &Notation Editor"), icon, 0, this,
                 SLOT(slotOpenInNotation()), actionCollection(),
                 "open_in_notation");
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/eventlist.xpm"));
+    QCanvasPixmap pixmap3(pixmapDir + "/toolbar/eventlist.xpm");
+    icon = QIconSet(pixmap3);
     new KAction(i18n("Open in &Event List Editor"), icon, 0, this,
                 SLOT(slotOpenInEventList()), actionCollection(),
                 "open_in_event_list");

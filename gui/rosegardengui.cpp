@@ -649,7 +649,8 @@ void RosegardenGUIApp::setupActions()
     // Create the select icon
     //
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QIconSet icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/select.xpm"));
+    QCanvasPixmap pixmap(pixmapDir + "/toolbar/select.xpm");
+    QIconSet icon = QIconSet(pixmap);
 
     // TODO : add some shortcuts here
     action = new KRadioAction(i18n("&Select"), icon, Key_F1,
@@ -673,19 +674,22 @@ void RosegardenGUIApp::setupActions()
                               actionCollection(), "move");
     action->setExclusiveGroup("segmenttools");
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/resize.xpm"));
+    QCanvasPixmap pixmap2(pixmapDir + "/toolbar/resize.xpm");
+    icon = QIconSet(pixmap2);
     action = new KRadioAction(i18n("&Resize"), icon, Key_F5,
                               this, SLOT(slotResizeSelected()),
                               actionCollection(), "resize");
     action->setExclusiveGroup("segmenttools");
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/split.xpm"));
+    QCanvasPixmap pixmap3(pixmapDir + "/toolbar/split.xpm");
+    icon = QIconSet(pixmap3);
     action = new KRadioAction(i18n("&Split"), icon, Key_F6,
                               this, SLOT(slotSplitSelected()),
                               actionCollection(), "split");
     action->setExclusiveGroup("segmenttools");
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/join.xpm"));
+    QCanvasPixmap pixmap4(pixmapDir + "/toolbar/join.xpm");
+    icon = QIconSet(pixmap4);
     action = new KRadioAction(i18n("&Join"), icon, 0/* Key_F7 */,
                               this, SLOT(slotJoinSelected()),
                               actionCollection(), "join");
@@ -741,17 +745,20 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotEdit()), actionCollection(),
                 "edit_default");
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/matrix.xpm"));
+    QCanvasPixmap pixmap5(pixmapDir + "/toolbar/matrix.xpm");
+    icon = QIconSet(pixmap5);
     new KAction(i18n("Open in Matri&x Editor"), icon, Key_M, this,
                 SLOT(slotEditInMatrix()), actionCollection(),
                 "edit_matrix");
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/notation.xpm"));
+    QCanvasPixmap pixmap6(pixmapDir + "/toolbar/notation.xpm");
+    icon = QIconSet(pixmap6);
     new KAction(i18n("Open in &Notation Editor"), icon, Key_N, this,
                 SLOT(slotEditAsNotation()), actionCollection(),
                 "edit_notation");
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/eventlist.xpm"));
+    QCanvasPixmap pixmap7(pixmapDir + "/toolbar/eventlist.xpm");
+    icon = QIconSet(pixmap7);
     new KAction(i18n("Open in &Event List Editor"), icon, Key_E, this,
                 SLOT(slotEditInEventList()), actionCollection(),
                 "edit_event_list");
@@ -761,7 +768,8 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotRelabelSegments()),
                 actionCollection(), "relabel_segment");
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/quantize.xpm"));
+    QCanvasPixmap pixmap8(pixmapDir + "/toolbar/quantize.xpm");
+    icon = QIconSet(pixmap8);
     new KAction(i18n("&Quantize..."), icon, Key_Equal, this,
                 SLOT(slotQuantizeSelection()), actionCollection(),
                 "quantize_selection");
@@ -820,7 +828,8 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotTempoToSegmentLength()), actionCollection(),
                 "set_tempo_to_segment_length");
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/manage-audio-segments.xpm"));
+    QCanvasPixmap pixmap9(pixmapDir + "/toolbar/manage-audio-segments.xpm");
+    icon = QIconSet(pixmap9);
     new KAction(i18n("Manage A&udio Segments"), icon,
                 Key_U + CTRL, 
                 this, SLOT(slotAudioManager()),
@@ -830,7 +839,8 @@ void RosegardenGUIApp::setupActions()
     //
     // Tracks menu
     //
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/add_tracks.xpm"));
+    QCanvasPixmap pixmap10(pixmapDir + "/toolbar/add_tracks.xpm");
+    icon = QIconSet(pixmap10);
     new KAction(i18n("Add &Track"), icon, CTRL + Key_T,
                 this, SLOT(slotAddTrack()),
                 actionCollection(), "add_track");
@@ -839,17 +849,20 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotAddTracks()),
                 actionCollection(), "add_tracks");
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/delete_track.xpm"));
+    QCanvasPixmap pixmap11(pixmapDir + "/toolbar/delete_track.xpm");
+    icon = QIconSet(pixmap11);
     new KAction(i18n("D&elete Track"), icon, CTRL + Key_D,
                 this, SLOT(slotDeleteTrack()),
                 actionCollection(), "delete_track");
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/move_track_down.xpm"));
+    QCanvasPixmap pixmap12(pixmapDir + "/toolbar/move_track_down.xpm");
+    icon = QIconSet(pixmap12);
     new KAction(i18n("Move Track &Down"), icon, SHIFT + Key_Down,
                 this, SLOT(slotMoveTrackDown()),
                 actionCollection(), "move_track_down");
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/move_track_up.xpm"));
+    QCanvasPixmap pixmap13(pixmapDir + "/toolbar/move_track_up.xpm");
+    icon = QIconSet(pixmap13);
     new KAction(i18n("Move Track &Up"), icon, SHIFT + Key_Up,
                 this, SLOT(slotMoveTrackUp()),
                 actionCollection(), "move_track_up");
@@ -864,12 +877,14 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotTrackUp()),
                 actionCollection(), "select_previous_track");
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/mute-all.xpm"));
+    QCanvasPixmap pixmap14(pixmapDir + "/toolbar/mute_all.xpm");
+    icon = QIconSet(pixmap14);
     new KAction(i18n("&Mute all Tracks"), icon, 0, 
                 this, SLOT(slotMuteAllTracks()),
                 actionCollection(), "mute_all_tracks");
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/un-mute-all.xpm"));
+    QCanvasPixmap pixmap15(pixmapDir + "/toolbar/un-mute-all.xpm");
+    icon = QIconSet(pixmap15);
     new KAction(i18n("&Unmute all Tracks"), icon, 0, 
                 this, SLOT(slotUnmuteAllTracks()),
                 actionCollection(), "unmute_all_tracks");
@@ -881,22 +896,26 @@ void RosegardenGUIApp::setupActions()
     //
     // Studio menu
     //
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/mixer.xpm"));
+    QCanvasPixmap pixmap16(pixmapDir + "/toolbar/mixer.xpm");
+    icon = QIconSet(pixmap16);
     new KAction(i18n("&Audio Mixer"), icon, 0, this,
 		SLOT(slotOpenAudioMixer()),
 		actionCollection(), "audio_mixer");
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/midimixer.xpm"));
+    QCanvasPixmap pixmap17(pixmapDir + "/toolbar/midimixer.xpm");
+    icon = QIconSet(pixmap17);
     new KAction(i18n("Midi Mi&xer"), icon, 0, this,
 		SLOT(slotOpenMidiMixer()),
 		actionCollection(), "midi_mixer");
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "toolbar/manage-midi-devices.xpm"));
+    QCanvasPixmap pixmap18(pixmapDir + "/toolbar/manage-midi-devices.xpm");
+    icon = QIconSet(pixmap18);
     new KAction(i18n("Manage MIDI &Devices"), icon, 0, this,
                 SLOT(slotManageMIDIDevices()),
                 actionCollection(), "manage_devices");
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "toolbar/manage-synth-plugins.xpm"));
+    QCanvasPixmap pixmap19(pixmapDir + "/toolbar/manage-synth-plugins.xpm");
+    icon = QIconSet(pixmap19);
     new KAction(i18n("Manage S&ynth Plugins"), icon, 0, this,
                 SLOT(slotManageSynths()),
                 actionCollection(), "manage_synths");
@@ -905,7 +924,8 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotModifyMIDIFilters()),
                 actionCollection(), "modify_midi_filters");
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "toolbar/time-musical.xpm"));
+    QCanvasPixmap pixmap21(pixmapDir + "/toolbar/time-musical.xpm");
+    icon = QIconSet(pixmap21);
     new KAction(i18n("Manage &Metronome"), 0, this,
                 SLOT(slotManageMetronome()),
                 actionCollection(), "manage_metronome");
@@ -936,56 +956,65 @@ void RosegardenGUIApp::setupActions()
     // use 1 (End) and 3 (Page Down) for Rwd and Ffwd and
     // 0 (insert) and keypad Enter for Play and Stop 
     //
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/transport-play.xpm"));
+    QCanvasPixmap pixmap22(pixmapDir + "/toolbar/transport-play.xpm");
+    icon = QIconSet(pixmap22);
     m_playTransport = new KAction(i18n("&Play"), icon, Key_Enter, this,
                                   SLOT(slotPlay()), actionCollection(),
                                   "play");
     m_playTransport->setGroup(RosegardenTransportDialog::ConfigGroup);
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/transport-stop.xpm"));
+    QCanvasPixmap pixmap23(pixmapDir + "/toolbar/transport-stop.xpm");
+    icon = QIconSet(pixmap23);
     m_stopTransport = new KAction(i18n("&Stop"), icon, Key_Insert, this,
                                   SLOT(slotStop()), actionCollection(),
                                   "stop");
     m_stopTransport->setGroup(RosegardenTransportDialog::ConfigGroup);
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/transport-ffwd.xpm"));
+    QCanvasPixmap pixmap24(pixmapDir + "/toolbar/transport-ffwd.xpm");
+    icon = QIconSet(pixmap24);
     m_ffwdTransport = new KAction(i18n("&Fast Forward"), icon, Key_PageDown,
                                   this,
                                   SLOT(slotFastforward()), actionCollection(),
                                   "fast_forward");
     m_ffwdTransport->setGroup(RosegardenTransportDialog::ConfigGroup);
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/transport-rewind.xpm"));
+    QCanvasPixmap pixmap25(pixmapDir + "/toolbar/transport-rewind.xpm");
+    icon = QIconSet(pixmap25);
     m_rewindTransport = new KAction(i18n("Re&wind"), icon, Key_End, this,
                                     SLOT(slotRewind()), actionCollection(),
                                     "rewind");
     m_rewindTransport->setGroup(RosegardenTransportDialog::ConfigGroup);
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/transport-record.xpm"));
+    QCanvasPixmap pixmap26(pixmapDir + "/toolbar/transport-record.xpm");
+    icon = QIconSet(pixmap26);
     m_recordTransport = new KAction(i18n("P&unch in Record"), icon, Key_Space, this,
                                     SLOT(slotToggleRecord()), actionCollection(),
                                     "recordtoggle");
     m_recordTransport->setGroup(RosegardenTransportDialog::ConfigGroup);
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/transport-record.xpm"));
+    QCanvasPixmap pixmap27(pixmapDir + "/toolbar/transport-record.xpm");
+    icon = QIconSet(pixmap27);
     m_recordTransport = new KAction(i18n("&Record"), icon, 0, this,
                                     SLOT(slotRecord()), actionCollection(),
                                     "record");
     m_recordTransport->setGroup(RosegardenTransportDialog::ConfigGroup);
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/transport-rewind-end.xpm"));
+    QCanvasPixmap pixmap28(pixmapDir + "/toolbar/transport-rewind-end.xpm");
+    icon = QIconSet(pixmap28);
     m_rewindEndTransport = new KAction(i18n("Rewind to &Beginning"), icon, 0, this,
                                        SLOT(slotRewindToBeginning()), actionCollection(),
                                        "rewindtobeginning");
     m_rewindEndTransport->setGroup(RosegardenTransportDialog::ConfigGroup);
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/transport-ffwd-end.xpm"));
+    QCanvasPixmap pixmap29(pixmapDir + "/toolbar/transport-ffwd-end.xpm");
+    icon = QIconSet(pixmap29);
     m_ffwdEndTransport = new KAction(i18n("Fast Forward to &End"), icon, 0, this,
                                      SLOT(slotFastForwardToEnd()), actionCollection(),
                                      "fastforwardtoend");
     m_ffwdEndTransport->setGroup(RosegardenTransportDialog::ConfigGroup);
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/transport-tracking.xpm"));
+    QCanvasPixmap pixmap30(pixmapDir + "/toolbar/transport-tracking.xpm");
+    icon = QIconSet(pixmap30);
     (new KToggleAction(i18n("Scro&ll to Follow Playback"), icon, Key_Pause, this,
 		       SLOT(slotToggleTracking()), actionCollection(),
 		       "toggle_tracking"))->setChecked(true);

@@ -454,7 +454,8 @@ TriggerSegmentManager::setupActions()
 
     KRadioAction *action;
 
-    QIconSet icon(QCanvasPixmap(pixmapDir + "/toolbar/time-musical.xpm"));
+    QCanvasPixmap pixmap(pixmapDir + "/toolbar/time-musical.xpm");
+    QIconSet icon(pixmap);
 
     action = new KRadioAction(i18n("&Musical Times"), icon, 0, this,
                               SLOT(slotMusicalTime()),
@@ -462,7 +463,8 @@ TriggerSegmentManager::setupActions()
     action->setExclusiveGroup("timeMode");
     if (timeMode == 0) action->setChecked(true);
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/time-real.xpm"));
+    QCanvasPixmap pixmap2(pixmapDir + "/toolbar/time-real.xpm");
+    icon = QIconSet(pixmap2);
 
     action = new KRadioAction(i18n("&Real Times"), icon, 0, this,
                               SLOT(slotRealTime()),
@@ -470,7 +472,8 @@ TriggerSegmentManager::setupActions()
     action->setExclusiveGroup("timeMode");
     if (timeMode == 1) action->setChecked(true);
 
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/time-raw.xpm"));
+    QCanvasPixmap pixmap3(pixmapDir + "/toolbar/time-raw.xpm");
+    icon = QIconSet(pixmap3);
 
     action = new KRadioAction(i18n("Ra&w Times"), icon, 0, this,
                               SLOT(slotRawTime()),
