@@ -1379,7 +1379,7 @@ void NotationView::slotItemPressed(int height, int staffNo,
 
     ButtonState btnState = e->state();
 
-    if (btnState & ShiftButton) { // on shift-click, set cursor position
+    if (btnState & ControlButton) { // on ctrl-click, set cursor position
 
 	slotSetInsertCursorPosition(e->x(), (int)e->y());
 

@@ -326,7 +326,7 @@
 	  Cursors</link>), and this is the staff on which any editing
 	  operations that use the insert cursor will take place.  The
 	  topmost staff is the current one by default, but you can
-	  switch to a different staff by shift-clicking on it <!--- !!! check this --> or by using the <!-- link linkend="commands-nv-move-cursor-up-staff" -->Move Cursor Up Staff<!-- /link --> and  <!-- link linkend="commands-nv-move-cursor-up-staff" -->Move Cursor Down Staff<!-- /link --> menu functions.
+	  switch to a different staff by ctrl-clicking on it <!--- !!! check this --> or by using the <!-- link linkend="commands-nv-move-cursor-up-staff" -->Move Cursor Up Staff<!-- /link --> and  <!-- link linkend="commands-nv-move-cursor-up-staff" -->Move Cursor Down Staff<!-- /link --> menu functions.
 	</para>
 
       </sect2>
@@ -381,7 +381,7 @@
 	  although it can only ever be positioned between two events
 	  on its staff.  You can also position it by clicking with the
 	  Select tool on an empty part of the staff (avoiding any
-	  events), or by clicking anywhere with Shift held down.
+	  events), or by clicking anywhere with Ctrl held down.
 	</para>
 
 	<para>

@@ -326,6 +326,7 @@ NotationStaff::renderElements(NotationElementList::iterator from,
     if (m_progress) {
 	m_progress->setOperationName
 	    (qstrtostr(i18n("Rendering staff %1...").arg(getId() + 1)));
+	m_progress->setCompleted(0);
 	m_progress->processEvents();
 	if (m_progress->wasOperationCancelled()) {
 	    throw std::string("Action cancelled");
@@ -385,6 +386,7 @@ NotationStaff::positionElements(timeT from, timeT to)
     if (m_progress) {
 	m_progress->setOperationName
 	    (qstrtostr(i18n("Positioning staff %1...").arg(getId() + 1)));
+	m_progress->setCompleted(0);
 	m_progress->processEvents();
 	if (m_progress->wasOperationCancelled()) {
 	    throw std::string("Action cancelled");

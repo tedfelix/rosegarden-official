@@ -53,6 +53,8 @@ public:
      */
     EventSelection(Segment &, timeT beginTime, timeT endTime);
 
+    EventSelection(const EventSelection&);
+
     virtual ~EventSelection();
 
     /**
@@ -60,6 +62,11 @@ public:
      * the Segment that was passed to the constructor.
      */
     void addEvent(Event* e);
+
+    /**
+     * Add all the Events in the given Selection to this one.
+     */
+    void addFromSelection(EventSelection *sel);
 
     /**
      * Test whether a given Event (in the Segment) is part of
@@ -106,7 +113,7 @@ public:
     virtual void endMarkerTimeChanged(const Segment *, bool) { }
     
 private:
-    EventSelection(const EventSelection&);
+    EventSelection &operator=(const EventSelection &);
 
 protected:
     //--------------- Data members ---------------------------------

@@ -55,6 +55,15 @@ EventSelection::EventSelection(Segment& t, timeT beginTime, timeT endTime) :
     }
 }
 
+EventSelection::EventSelection(const EventSelection &sel) :
+    m_originalSegment(sel.m_originalSegment),
+    m_segmentEvents(sel.m_segmentEvents),
+    m_beginTime(sel.m_beginTime),
+    m_endTime(sel.m_endTime),
+    m_haveRealStartTime(sel.m_haveRealStartTime)
+{
+}
+
 EventSelection::~EventSelection()
 {
     m_originalSegment.removeObserver(this);
@@ -70,6 +79,14 @@ void EventSelection::addEvent(Event *e)
 	m_endTime = e->getAbsoluteTime() + e->getDuration();
     }
     m_segmentEvents.insert(e);
+}
+
+void EventSelection::addFromSelection(EventSelection *sel)
+{
+    for (eventcontainer::iterator i = sel->getSegmentEvents().begin();
+	 i != sel->getSegmentEvents().end(); ++i) {
+	if (!contains(*i)) addEvent(*i);
+    }
 }
 
 bool EventSelection::contains(Event *e) const

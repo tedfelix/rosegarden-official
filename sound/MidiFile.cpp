@@ -903,11 +903,10 @@ MidiFile::convertToRosegarden()
             (rosegardenSegment->getStartTime(),
              rosegardenSegment->getEndTime());
  
-        /*
+
         helper.autoBeam(rosegardenSegment->begin(),
                         rosegardenSegment->end(),
                         BaseProperties::GROUP_TYPE_BEAMED);
-                        */
     }
 
     return composition;

@@ -345,6 +345,8 @@ class NotationSelector : public NotationTool
 
 public:
 
+    ~NotationSelector();
+
     virtual void handleLeftButtonPress(Rosegarden::timeT,
                                        int height,
                                        int staffNo,
@@ -447,6 +449,8 @@ protected:
 
     int m_clickedStaff;
     NotationElement *m_clickedElement;
+
+    Rosegarden::EventSelection *m_selectionToMerge;
 
     bool m_justSelectedBar;
 

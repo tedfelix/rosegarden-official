@@ -1175,43 +1175,29 @@ SegmentNotationHelper::autoBeam(iterator from, iterator to, string type,
     // the from-to range out to encompass the whole bars in which they
     // each occur
 
-    for (;;) {
+    if (!segment().getComposition()) {
+	cerr << "WARNING: SegmentNotationHelper::autoBeam requires Segment be in a Composition" << endl;
+	return;
+    }
 
-	timeT t = (*from)->getAbsoluteTime();
+    Composition *comp = segment().getComposition();
 
-	timeT barStartTime = segment().getBarStartForTime(t);
-	timeT barEndTime   = segment().getBarEndForTime(t);
+    int fromBar = comp->getBarNumber((*from)->getAbsoluteTime());
+    int toBar = comp->getBarNumber(segment().isBeforeEndMarker(to) ?
+				   (*to)->getAbsoluteTime() :
+				   segment().getEndMarkerTime());
 
-	if (barEndTime > segment().getEndMarkerTime()) {
-	    barEndTime = segment().getEndMarkerTime();
-	    if (barEndTime <= barStartTime) return;
-	}
+    for (int barNo = fromBar; barNo <= toBar; ++barNo) {
 
-	if (barEndTime <= barStartTime) {
-
-	    cerr << "barEndTime is " << barEndTime << ", barStartTime is "
-		 << barStartTime << ", segment start time is "
-		 << segment().getStartTime() << ", segment end marker time is "
-		 << segment().getEndMarkerTime() << endl;
-
-	    // should only happen if the segment is empty (if so, it's fine)
-	    assert(segment().getEndMarkerTime() == segment().getStartTime());
-	    return;
-	}
-
-	iterator barStart  = segment().findTime(barStartTime);
-	iterator barEnd    = segment().findTime(barEndTime);
+	std::pair<timeT, timeT> barRange = comp->getBarRange(barNo);
+	iterator barStart = segment().findTime(barRange.first);
+	iterator barEnd   = segment().findTime(barRange.second);
 
 	TimeSignature timeSig =
-	    segment().getComposition()->getTimeSignatureAt(t);
+	    segment().getComposition()->getTimeSignatureAt(barRange.first);
 
 	autoBeamBar(barStart, barEnd, timeSig, type,
 		    (quantizer ? quantizer : &legatoQuantizer()));
-	
-	if (!isBeforeEndMarker(barEnd) ||
-	    (to != end() && (barEndTime > (*to)->getAbsoluteTime()))) return;
-
-	from = barEnd;
     }
 }
 

@@ -879,6 +879,7 @@ NotationSelector::NotationSelector(NotationView* view)
       m_updateRect(false),
       m_clickedStaff(-1),
       m_clickedElement(0),
+      m_selectionToMerge(0),
       m_justSelectedBar(false)
 {
     connect(m_parentView, SIGNAL(usedSelection()),
@@ -898,19 +899,36 @@ NotationSelector::NotationSelector(NotationView* view)
     createMenu("notationselector.rc");
 }
 
+NotationSelector::~NotationSelector()
+{
+    delete m_selectionToMerge;
+}
+
 void NotationSelector::handleLeftButtonPress(Rosegarden::timeT t,
                                              int height,
                                              int staffNo,
                                              QMouseEvent* e,
                                              ViewElement *element)
 {
+    NOTATION_DEBUG << "NotationSelector::handleMousePress" << endl;
+
     if (m_justSelectedBar) {
 	handleMouseTripleClick(t, height, staffNo, e, element);
 	m_justSelectedBar = false;
 	return;
     }
 
-    NOTATION_DEBUG << "NotationSelector::handleMousePress" << endl;
+    delete m_selectionToMerge;
+    const EventSelection *selectionToMerge = 0;
+    if (e->state() && ShiftButton) {
+	NOTATION_DEBUG << "shift is down" << endl;
+	NotationView *nView = dynamic_cast<NotationView *>(m_parentView);
+	if (nView) selectionToMerge = nView->getCurrentSelection();
+	NOTATION_DEBUG << "selection is " << selectionToMerge << endl;
+    }
+    m_selectionToMerge =
+	(selectionToMerge ? new EventSelection(*selectionToMerge) : 0);
+
     m_clickedStaff = staffNo;
     m_clickedElement = dynamic_cast<NotationElement*>(element);
 
@@ -1042,8 +1060,6 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
         m_selectionRect->height() > -3 &&
         m_selectionRect->height() <  3) {
 
-	m_selectionRect->hide();
-
 	if (m_clickedElement != 0 &&
 	    m_clickedStaff   >= 0) {
 
@@ -1065,6 +1081,9 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
 	    m_nParentView->slotSetInsertCursorPosition(e->x(), (int)e->y());
 	}
     }
+
+    m_selectionRect->hide();
+    m_nParentView->canvas()->update();
 }
 
 void NotationSelector::ready()
@@ -1169,7 +1188,13 @@ EventSelection* NotationSelector::getSelection()
 
 void NotationSelector::setViewCurrentSelection(bool preview)
 {
-    EventSelection* selection = getSelection();
+    EventSelection *selection = getSelection();
+    
+    if (m_selectionToMerge && selection &&
+	m_selectionToMerge->getSegment() == selection->getSegment()) {
+	selection->addFromSelection(m_selectionToMerge);
+    }
+
     m_nParentView->setCurrentSelection(selection, preview);
 }
 

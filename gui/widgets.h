@@ -219,9 +219,6 @@ public:
     virtual void processEvents();
     virtual void done();
 
-public slots:
-    void slotTimerElapsed();
-    
 private:
     clock_t m_timeoutSet;
     bool m_firstTimeout;
