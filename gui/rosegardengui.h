@@ -54,6 +54,8 @@ class KProcess;
 class RosegardenGUIDoc;
 class RosegardenGUIView;
 
+namespace Rosegarden { class SequenceManager; }
+
 /**
   * The base class for RosegardenGUI application windows. It sets up the main
   * window and reads the config file as well as providing a menubar, toolbar
@@ -583,6 +585,7 @@ private:
     // transport dialog pointer
     //
     Rosegarden::RosegardenTransportDialog *m_transport;
+    Rosegarden::SequenceManager *m_seqManager;
 
     // A local copy of the last SoundSystem status
     // 

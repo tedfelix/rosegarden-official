@@ -72,6 +72,9 @@ public:
     friend QDataStream& operator<<(QDataStream &dS,
                                    const MappedComposition &mC);
 
+    // Clear out
+    void clear();
+
 private:
     Rosegarden::RealTime m_startTime;
     Rosegarden::RealTime m_endTime;

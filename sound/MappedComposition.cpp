@@ -34,10 +34,7 @@ using std::endl;
 
 MappedComposition::~MappedComposition()
 {
-    for (MappedCompositionIterator it = this->begin(); it != this->end(); it++)
-        delete (*it);
-
-    this->clear();
+    clear();
 }
 
 
@@ -142,11 +139,7 @@ MappedComposition::operator+(const MappedComposition &mC)
 MappedComposition&
 MappedComposition::operator=(const MappedComposition &mC)
 {
-    // clear down
-    for (MappedCompositionIterator it = this->begin(); it != this->end(); it++)
-        delete (*it);
-
-    this->clear();
+    clear();
 
     // deep copy
     for (MappedCompositionIterator it = mC.begin(); it != mC.end(); it++)
@@ -154,6 +147,16 @@ MappedComposition::operator=(const MappedComposition &mC)
 
     return *this;
 }
+
+void
+MappedComposition::clear()
+{
+    for (MappedCompositionIterator it = this->begin(); it != this->end(); it++)
+        delete (*it);
+
+    this->erase(this->begin(), this->end());
+}
+
 
 
 }

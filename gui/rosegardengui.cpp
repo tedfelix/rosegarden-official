@@ -51,6 +51,7 @@
 #include "ktmpstatusmsg.h"
 #include "SegmentPerformanceHelper.h"
 #include "NotationTypes.h"
+#include "sequencemanager.h"
 
 #define ID_STATUS_MSG 1
 
@@ -85,6 +86,9 @@ RosegardenGUIApp::RosegardenGUIApp()
     setupActions();
 
     initView();
+
+    // Create a sequence manager
+    m_seqManager = new Rosegarden::SequenceManager(m_doc, m_transport);
 
     readOptions();
 
@@ -1206,9 +1210,17 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
     // send the MappedEvents to the GUI as well so we can process
     // them for the level meters
     //
-    showVisuals(mappComp);
-
     return mappComp;
+
+    /*
+    Rosegarden::RealTime startTime(sliceStartSec, sliceStartUsec);
+    Rosegarden::RealTime endTime(sliceEndSec, sliceEndUsec);
+    Rosegarden::MappedComposition *mC = m_seqManager->getSequencerSlice(startTime, endTime);
+
+    showVisuals(*mC);
+
+    return *mC;
+    */
 }
 
 
