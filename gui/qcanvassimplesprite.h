@@ -90,7 +90,7 @@ class ConstantWidthRectangle : public QCanvasRectangle
 public:
     ConstantWidthRectangle(QCanvas *canvas) : QCanvasRectangle(canvas) {}
 protected:
-    virtual void drawShape(QPainter &p);
+//     virtual void drawShape(QPainter &p);
 };
 
 
