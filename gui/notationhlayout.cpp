@@ -1427,8 +1427,8 @@ NotationHLayout::positionChord(Staff &staff,
     // Also use this loop to check for beamed-group information.
 
     unsigned int i;
-    int accWidth = 0;
-    long groupId = -1;
+//    int accWidth = 0;
+//    long groupId = -1;
 
     for (i = 0; i < chord.size(); ++i) {
 
@@ -1569,15 +1569,15 @@ NotationHLayout::getLayoutWidth(Rosegarden::ViewElement &ve) const
 	switch (noteType) {
 	case Note::Hemidemisemiquaver:
 	case Note::Demisemiquaver:
-	case Note::Semiquaver:         gap = bw / 8;     break;
-	case Note::Quaver:             gap = bw / 2;     break;
+	case Note::Semiquaver:         gap = bw / 3;     break;
+	case Note::Quaver:             gap = bw * 2 / 3; break;
 	case Note::Crotchet:           gap = bw * 3 / 2; break;
 	case Note::Minim:              gap = bw * 3;     break;
 	case Note::Semibreve:          gap = bw * 9 / 2; break;
 	case Note::Breve:              gap = bw * 7;     break;
 	}
 
-	return bw + gap;
+	return bw + m_spacing * gap / 100;
 
     } else {
 
@@ -1601,7 +1601,7 @@ NotationHLayout::getLayoutWidth(Rosegarden::ViewElement &ve) const
 	    w += 24;
 	}
 
-	return w;
+	return w + m_spacing * w / 300;
     }
 }
 

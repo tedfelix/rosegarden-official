@@ -120,6 +120,18 @@ public:
     void setSpacing(int spacing) { m_spacing = spacing; }
 
     /**
+     * Gets the current proportionality (100 == spaces proportional to
+     * durations, 0 == equal spacings)
+     */
+    int getProportionality() const { return m_proportionality; }
+
+    /**
+     * Sets the current proportionality (100 == spaces proportional to
+     * durations, 0 == equal spacings)
+     */
+    void setProportionality(int proportionality) { m_proportionality = proportionality; }
+
+    /**
      * Gets the range of "standard" spacing factors (you can
      * setSpacing() to anything you want, but it makes sense to
      * have a standard list for GUI use).  The only guaranteed
@@ -367,6 +379,7 @@ protected:
     bool m_pageMode;
     double m_pageWidth;
     int m_spacing;
+    int m_proportionality;
     NotePixmapFactory *m_npf;
 
     static std::vector<int> m_availableSpacings;

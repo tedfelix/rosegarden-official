@@ -597,6 +597,9 @@ public slots:
     /// Do on-demand rendering for a region.
     void slotCheckRendered(double cx0, double cx1);
 
+    /// Do some background rendering work.
+    void slotRenderSomething();
+
 signals:
     /**
      * Emitted when the note selected in the palette changes

@@ -22,6 +22,7 @@
 
 #include <qlabel.h>
 #include <qinputdialog.h>
+#include <qtimer.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kaction.h>
@@ -1923,8 +1924,40 @@ NotationView::slotCheckRendered(double cx0, double cx1)
 	if (staff->checkRendered(t0, t1)) something = true;
     }
 
-    if (something) emit renderComplete();
+    if (something) {
+	emit renderComplete();
+	QTimer *t = new QTimer(this);
+	connect(t, SIGNAL(timeout()), SLOT(slotRenderSomething()));
+	t->start(0, true);
+    }
 
-    doDeferredCursorMove();
+    if (m_deferredCursorMove != NoCursorMoveNeeded) doDeferredCursorMove();
+}
+
+void
+NotationView::slotRenderSomething()
+{
+    static clock_t lastWork = 0;
+    
+    clock_t now = clock();
+    long elapsed = ((now - lastWork) * 1000 / CLOCKS_PER_SEC);
+    if (elapsed < 100) {
+	QTimer *t = new QTimer(this);
+	connect(t, SIGNAL(timeout()), SLOT(slotRenderSomething()));
+	t->start(0, true);
+	return;
+    }
+    lastWork = now;
+
+    for (size_t i = 0; i < m_staffs.size(); ++i) {
+
+	if (m_staffs[i]->doRenderWork(m_staffs[i]->getSegment().getStartTime(),
+				      m_staffs[i]->getSegment().getEndTime())) {
+	    QTimer *t = new QTimer(this);
+	    connect(t, SIGNAL(timeout()), SLOT(slotRenderSomething()));
+	    t->start(0, true);
+	    return;
+	}
+    }
 }
 

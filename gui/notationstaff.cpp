@@ -1230,3 +1230,40 @@ NotationStaff::checkRendered(timeT from, timeT to)
     m_lastRenderCheck = std::pair<int, int>(fromBar, toBar);
     return something;
 }
+
+bool
+NotationStaff::doRenderWork(timeT from, timeT to)
+{
+    if (!m_ready) return true;
+    Rosegarden::Composition *composition = getSegment().getComposition();
+
+    int fromBar = composition->getBarNumber(from);
+    int toBar   = composition->getBarNumber(to);
+
+    if (fromBar > toBar) std::swap(fromBar, toBar);
+
+    for (int bar = fromBar; bar <= toBar; ++bar) {
+	
+	switch (m_status[bar]) {
+
+	case UnRendered:
+	    renderElements
+		(getViewElementList()->findTime(composition->getBarStart(bar)),
+		 getViewElementList()->findTime(composition->getBarEnd(bar)));
+	    m_status[bar] = Rendered;
+	    return true;
+
+	case Rendered:
+	    positionElements
+		(composition->getBarStart(bar),
+		 composition->getBarEnd(bar));
+	    m_status[bar] = Positioned;
+	    return true;
+
+	case Positioned:
+	    continue;
+	}
+    }
+
+    return false;
+}

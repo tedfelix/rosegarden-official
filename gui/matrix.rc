@@ -20,9 +20,13 @@
     <Action name="snap_none"/>
     <Action name="snap_unit"/>
     <Action name="snap_64"/>
+    <Action name="snap_48"/>
     <Action name="snap_32"/>
+    <Action name="snap_24"/>
     <Action name="snap_16"/>
+    <Action name="snap_12"/>
     <Action name="snap_8"/>
+    <Action name="snap_6"/>
     <Action name="snap_4"/>
     <Action name="snap_2"/>
     <Action name="snap_beat"/>

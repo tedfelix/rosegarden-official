@@ -585,12 +585,20 @@ void MatrixView::setupActions()
     //!!! should be using NotationStrings::makeNoteMenuLabel for these
     new KAction(i18n("Snap to 1/64"), Key_0, this,
                 SLOT(slotSetSnapFromAction()), actionCollection(), "snap_64");
+    new KAction(i18n("Snap to 1/48"), 0, this,
+                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_48");
     new KAction(i18n("Snap to 1/32"), Key_3, this,
                 SLOT(slotSetSnapFromAction()), actionCollection(), "snap_32");
+    new KAction(i18n("Snap to 1/24"), 0, this,
+                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_24");
     new KAction(i18n("Snap to 1/16"), Key_6, this,
                 SLOT(slotSetSnapFromAction()), actionCollection(), "snap_16");
+    new KAction(i18n("Snap to 1/12"), 0, this,
+                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_12");
     new KAction(i18n("Snap to 1/8"), Key_8, this,
                 SLOT(slotSetSnapFromAction()), actionCollection(), "snap_8");
+    new KAction(i18n("Snap to 1/6"), 0, this,
+                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_6");
     new KAction(i18n("Snap to 1/4"), Key_4, this,
                 SLOT(slotSetSnapFromAction()), actionCollection(), "snap_4");
     new KAction(i18n("Snap to 1/2"), Key_2, this,
@@ -1641,9 +1649,13 @@ MatrixView::initActionsToolbar()
     m_snapValues.push_back(Rosegarden::SnapGrid::NoSnap);
     m_snapValues.push_back(Rosegarden::SnapGrid::SnapToUnit);
     m_snapValues.push_back(crotchetDuration / 16);
+    m_snapValues.push_back(crotchetDuration / 12);
     m_snapValues.push_back(crotchetDuration / 8);
+    m_snapValues.push_back(crotchetDuration / 6);
     m_snapValues.push_back(crotchetDuration / 4);
+    m_snapValues.push_back(crotchetDuration / 3);
     m_snapValues.push_back(crotchetDuration / 2);
+    m_snapValues.push_back(crotchetDuration / 1.5);
     m_snapValues.push_back(crotchetDuration);
     m_snapValues.push_back(crotchetDuration * 2);
     m_snapValues.push_back(Rosegarden::SnapGrid::SnapToBeat);

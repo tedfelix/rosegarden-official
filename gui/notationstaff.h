@@ -158,6 +158,15 @@ public:
 			       Rosegarden::timeT to);
 
     /**
+     * Find something between the given times that has not yet been
+     * rendered, and render a small amount of it.  Return true if it
+     * found something to do.  This is to be used as a background work
+     * procedure for rendering not-yet-visible areas of notation.
+     */
+    virtual bool doRenderWork(Rosegarden::timeT from,
+			      Rosegarden::timeT to);
+
+    /**
      * Mark a region of staff as changed, for use by the on-demand
      * rendering mechanism.  If fromBar == toBar == -1, mark the
      * entire staff as changed (and recover the memory used for its
