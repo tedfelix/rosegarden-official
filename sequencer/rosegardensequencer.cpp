@@ -1087,7 +1087,32 @@ RosegardenSequencerApp::reinitialiseStudio()
 {
     SEQUENCER_DEBUG << "reinitialiseStudio()" << endl;
     m_studio->clearTemporaries();
+} 
+
+void
+RosegardenSequencerApp::setMappedPort(int pluginId,
+                                      unsigned long portId,
+                                      float value)
+{
+    Rosegarden::MappedObject *object =
+        m_studio->getObject(pluginId);
+
+#ifdef HAVE_LADSPA
+
+    Rosegarden::MappedLADSPAPlugin *plugin = 
+        dynamic_cast<Rosegarden::MappedLADSPAPlugin*>(object);
+
+    if (plugin)
+    {
+        plugin->setPort(portId, value);
+    }
+
+
+#endif // HAVE_LADSPA
+
 }
+
+
 
 
 

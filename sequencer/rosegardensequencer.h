@@ -205,6 +205,13 @@ public:
     //
     virtual QValueVector<QString> getPropertyList(int id,
                                                   const QString &property);
+
+    // Set a plugin port
+    //
+    virtual void setMappedPort(int pluginId,
+                               unsigned long portId,
+                               float value);
+
     // Create a MappedObject
     virtual int createMappedObject(int type);
 

@@ -401,6 +401,11 @@ public:
     // redefine
     virtual void clone(MappedObject *object);
 
+    // Cheat - we want to use a thin interface to ports from
+    // the gui - this sets port values on port number.
+    //
+    void setPort(unsigned long portNumber, float value);
+
 protected:
 
     unsigned long             m_uniqueId;
@@ -455,6 +460,9 @@ public:
  
     void setPortNumber(unsigned long portNumber) { m_portNumber = portNumber; }
     unsigned long getPortNumber() const { return m_portNumber; }
+
+    void setValue(MappedObjectValue value) { m_value = value; }
+    MappedObjectValue getValue() const { return m_value; }
 
     // redefine clone() here to copy across value only
     //

@@ -1620,7 +1620,7 @@ SequenceManager::getSequencerPlugins(Rosegarden::AudioPluginManager *aPM)
 
     while (i < seqPlugins.size())
     {
-        cout << "COUNT = " << seqPlugins.size() << endl;
+        //cout << "COUNT = " << seqPlugins.size() << endl;
         //cout << "VALUE = " << seqPlugins[i] << endl;
 
         Rosegarden::MappedObjectId id = seqPlugins.at(i++).toInt();

@@ -163,6 +163,13 @@ public:
     virtual QValueVector<QString> getPropertyList(int id,
                                                   const QString &property) = 0;
 
+    // Cheat - we can't use a call (getPropertyList) during playback
+    // so we use this method to set port N on plugin X.
+    //
+    virtual void setMappedPort(int pluginIn,
+                               unsigned long id,
+                               float value) = 0;
+
     // Create a (transient, writeable) object
     //
     virtual int createMappedObject(int type) = 0;

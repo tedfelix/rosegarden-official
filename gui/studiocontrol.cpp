@@ -173,6 +173,32 @@ StudioControl::getStudioObjectByType(MappedObject::MappedObjectType type)
     return value;
 }
 
+void
+StudioControl::setStudioPluginPort(MappedObjectId pluginId,
+                                   unsigned long portId,
+                                   MappedObjectValue value)
+{
+    QByteArray data;
+    QDataStream streamOut(data, IO_WriteOnly);
+
+    // Use new MappedEvent interface
+    //
+    streamOut << pluginId;
+    streamOut << portId;
+    streamOut << value;
+
+    if (!kapp->dcopClient()->
+            send(ROSEGARDEN_SEQUENCER_APP_NAME,
+                 ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                 "setMappedPort(int, unsigned long int, float)",
+                 data))
+    {
+        SEQMAN_DEBUG << "setStudioPluginPort - "
+                     << "failed to contact Rosegarden sequencer" << endl;
+    }
+}
+
+
 
 };
 

@@ -2092,7 +2092,7 @@ LADSPAPluginInstance::run(unsigned long sampleCount)
 {
     if (m_descriptor && m_descriptor->run)
     {
-        std::cout << "LADSPAPluginInstance::run - running plugin"
+        std::cout << "LADSPAPluginInstance::run - running plugin "
                   << "for " << sampleCount << " frames" << std::endl;
         m_descriptor->run(m_instanceHandle, sampleCount);
     }

@@ -1348,6 +1348,24 @@ MappedLADSPAPlugin::clone(MappedObject *object)
         std::cerr << "MappedLADSPAPlugin::clone - " 
                   << "no children to clone" << std::endl;
 }
+
+void
+MappedLADSPAPlugin::setPort(unsigned long portNumber, float value)
+{
+    std::vector<MappedObject*> ports = getChildObjects();
+    std::vector<MappedObject*>::iterator it = ports.begin();
+    MappedLADSPAPort *port = 0;
+
+    for (; it != ports.end(); it++)
+    {
+        port = dynamic_cast<MappedLADSPAPort*>(*it);
+
+        if (port && port->getPortNumber() == portNumber)
+            setProperty(MappedLADSPAPort::Value, value);
+    }
+}
+
+
 #endif // HAVE_LADSPA
 
 

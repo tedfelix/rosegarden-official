@@ -832,12 +832,17 @@ InstrumentParameterBox::slotPluginPortChanged(int pluginIndex,
         // get the list of ports
         //
 #ifdef HAVE_LADSPA
+
+        /*
+        // can't use a call() during playback
         Rosegarden::MappedObjectPropertyList
             list = Rosegarden::StudioControl::
                 getStudioObjectProperty(inst->getMappedId(),
                                         Rosegarden::MappedLADSPAPlugin::Ports);
+                                        */
 
         //cout << "COUNT = "  << list.size() << endl;
+        /*
 
         if (portIndex > (int(list.size() - 1)))
         {
@@ -845,14 +850,22 @@ InstrumentParameterBox::slotPluginPortChanged(int pluginIndex,
                       << "got port out of range on plugin" << std::endl;
             return;
         }
+        */
 
+        Rosegarden::StudioControl::
+            setStudioPluginPort(inst->getMappedId(),
+                                portIndex,
+                                value);
+                                
         std::cout << "InstrumentParameterBox::slotPluginPortChanged - "
                   << "setting plugin port to " << value << std::endl;
 
+        /*
         Rosegarden::StudioControl::setStudioObjectProperty
             (list[portIndex].toInt(),
              Rosegarden::MappedLADSPAPort::Value,
              value);
+             */
 #endif
 
         /*
