@@ -1,33 +1,19 @@
 0.2 TO-DO for rwb
 -----------------
-updated 15.02.2001
+updated 07.03.2001
 
 Currently looking at:
 
-o Segment operation undo/redo
+o Looping doesn't pick up first loop events cleanly
 
-o Segment Join tool
+o Playing Audio files broken - get seeking working
 
-o Segment Split tool [DONE 15.02.2002]
-  
-o Playing Audio files
-  o synchronisation with MIDI [SITUATION IMPROVED]
-  o clearing down handles without crashing aRTS [STILL BUGGY]
+o Split/Join - segment start and end markers
 
-o SoundFile file reading debacle
-
-o Looping at the origin - Looping bug?
-
-o End of loop flyback sends duplicate copies of start of loop events
-
-o bar and loop ruler bar widths for partial bars
-
-o smooth position pointer [attempted moved readahead component to gui control]
+o smooth position pointer
 
 
 ==
-
-o tidy up getSequencerSlice and MappedEvent [MappedEvent DONE]
 
 o Complete segment edit shortcuts (click/copy/multiple segment drag)
 
@@ -91,6 +77,9 @@ Recently completed/fixed
 - Segment movement resolution [CC]
 
 - Recording segments - trails [DONE]
+
+- tidy up getSequencerSlice and MappedEvent [MappedEvent DONE]
+
 
 
 
