@@ -209,6 +209,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_fontSizeSlider(0),
     m_selectDefaultNote(0),
     m_progressDlg(0),
+    m_inhibitRefresh(true),
     m_documentDestroyed(false)
 {
     initActionDataMaps(); // does something only the 1st time it's called
@@ -305,7 +306,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     } else {
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
-//!!!            m_staffs[i]->renderAllElements();
+            m_staffs[i]->renderAllElements();
             m_staffs[i]->positionAllElements();
             m_staffs[i]->getSegment().getRefreshStatus
 		(m_segmentsRefreshStatusIds[i]).setNeedsRefresh(false);
@@ -368,6 +369,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     slotSetInsertCursorPosition(0);
     slotSetPointerPosition(doc->getComposition().getPosition());
     m_chordNameRuler->repaint();
+    m_inhibitRefresh = false;
 }
 
 NotationView::~NotationView()
@@ -401,6 +403,7 @@ NotationView::slotDocumentDestroyed()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotDocumentDestroyed()\n";
     m_documentDestroyed = true;
+    m_inhibitRefresh = true;
 }
 
     
@@ -2696,6 +2699,7 @@ void NotationView::refreshSegment(Segment *segment,
 				  timeT startTime, timeT endTime)
 {
     START_TIMING;
+    if (m_inhibitRefresh) return;
 
     emit usedSelection();
 

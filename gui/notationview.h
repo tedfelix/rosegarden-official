@@ -635,6 +635,7 @@ protected:
     static MarkActionDataMap *m_markActionDataMap;
 
     RosegardenProgressDialog *m_progressDlg;
+    bool m_inhibitRefresh;
     bool m_documentDestroyed;
 };
 
