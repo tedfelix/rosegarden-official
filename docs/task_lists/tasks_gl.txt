@@ -1,6 +1,14 @@
 Current Task list
 ======================================
 
+- add signals for progress reporting in layout classes DONE
+
+- use a QWidgetStack for the InstrumentParameterBox DONE
+
+- auto-scroll in matrix (and piano keyb widget too ?) DONE
+
+- audio peak files in tmp. dir with hashed names
+
 - RPM building.
 
 - look at lazy note pixmap rendering again (see
