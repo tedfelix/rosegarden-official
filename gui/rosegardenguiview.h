@@ -133,6 +133,12 @@ public:
      * Show output levels
      */
     void showVisuals(const Rosegarden::MappedEvent *mE);
+
+    /*
+     * Highlight a Track and its Segments
+     *
+     */
+    void selectTrack(int trackId);
     
 public slots:
     void slotEditSegmentNotation(Rosegarden::Segment*);

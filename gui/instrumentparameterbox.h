@@ -20,6 +20,7 @@
 */
 
 #include <qgroupbox.h>
+#include <qlabel.h>
 
 #include "Instrument.h"
 #include "MappedEvent.h"
@@ -68,6 +69,12 @@ protected:
     void initBox();
 
     //--------------- Data members ---------------------------------
+
+    QLabel             *m_channelLabel;
+    QLabel             *m_panLabel;
+    QLabel             *m_velocityLabel;
+    QLabel             *m_programLabel;
+    QLabel             *m_bankLabel;
 
     RosegardenComboBox *m_bankValue;
     RosegardenComboBox *m_channelValue;

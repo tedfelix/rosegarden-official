@@ -218,6 +218,18 @@ void RosegardenGUIView::editAllTracks(Rosegarden::Composition* p)
     notationView->show();
 }
 
+
+// Select a track label and segments (when we load a file or
+// move up a 
+//
+//
+void RosegardenGUIView::selectTrack(int trackId)
+{
+    m_trackEditor->getTrackButtons()->slotLabelSelected(trackId);
+    slotSelectTrackSegments(trackId);
+}
+
+
 // Highlight all the Segments on a Track because the Track has been selected
 // We have to ensure we create a Selector object before we can highlight
 // these tracks.
@@ -259,9 +271,9 @@ void RosegardenGUIView::slotSelectTrackSegments(int trackId)
 
     m_instrumentParameterBox->useInstrument(instrument);
 
-    // Store the selected Track in the Composition in case
-    // we need to Solo with it
-    comp.setSoloTrack(trackId);
+    // Store the selected Track in the Composition
+    //
+    comp.setSelectedTrack(trackId);
 }
 
 // Show a segment as it records

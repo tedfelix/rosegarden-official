@@ -295,7 +295,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             Rosegarden::TrackId soloTrack =
                 (Rosegarden::TrackId)soloTrackStr.toInt();
 
-            m_composition.setSoloTrack(soloTrack);
+            m_composition.setSelectedTrack(soloTrack);
             m_composition.setSolo(true);
         }
 

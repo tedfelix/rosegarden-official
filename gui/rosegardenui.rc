@@ -19,6 +19,8 @@
   <Menu name="Tracks">
 	<text>&amp;Tracks</text>
 	<Action name="add_tracks"/>
+        <Action name="select_next_track"/>
+        <Action name="select_previous_track"/>
   </Menu>
   <Menu name="Segments">
 	<text>&amp;Segments</text>

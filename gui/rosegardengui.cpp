@@ -259,6 +259,16 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotAddTracks()),
                 actionCollection(), "add_tracks");
 
+    new KAction(i18n("Select Next Track"),
+                     Key_Down, 
+                     this, SLOT(slotTrackDown()),
+                     actionCollection(), "select_next_track");
+
+    new KAction(i18n("Select Previous Track"),
+                     Key_Up, 
+                     this, SLOT(slotTrackUp()),
+                     actionCollection(), "select_previous_track");
+
     /*
     new KAction(i18n("Change &Time Resolution..."), 
                 0,
@@ -509,6 +519,12 @@ void RosegardenGUIApp::initView()
 
     // set the play metronome button
     m_transport->MetronomeButton->setOn(comp.usePlayMetronome());
+
+    // Set the solo button
+    m_transport->SoloButton->setOn(comp.isSolo());
+
+    // set the highlighted track
+    m_view->selectTrack(comp.getSelectedTrack());
 
 
     // We only check for the SequenceManager to make sure
@@ -1891,4 +1907,43 @@ void RosegardenGUIApp::slotToggleSolo()
     m_doc->setModified();
 }
 
+void RosegardenGUIApp::slotTrackUp()
+{
+    Rosegarden::Composition &comp = m_doc->getComposition();
+
+    Rosegarden::TrackId tid = comp.getSelectedTrack();
+    Rosegarden::TrackId pos = comp.getTrackByIndex(tid)->getPosition();
+
+    // If at top already
+    if (pos == 0)
+        return;
+
+    Rosegarden::Track *track = comp.getTrackByPosition(pos - 1);
+
+    // If the track exists
+    if (track)
+    {
+       comp.setSelectedTrack(pos - 1);
+       m_view->selectTrack(comp.getSelectedTrack());
+    }
+
+}
+
+void RosegardenGUIApp::slotTrackDown()
+{
+    Rosegarden::Composition &comp = m_doc->getComposition();
+
+    Rosegarden::TrackId tid = comp.getSelectedTrack();
+    Rosegarden::TrackId pos = comp.getTrackByIndex(tid)->getPosition();
+
+    Rosegarden::Track *track = comp.getTrackByPosition(pos + 1);
+
+    // If the track exists
+    if (track)
+    {
+       comp.setSelectedTrack(pos + 1);
+       m_view->selectTrack(comp.getSelectedTrack());
+    }
+
+}
 

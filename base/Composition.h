@@ -122,11 +122,11 @@ public:
 
     // Get and set Solo Track
     //
-    TrackId getSoloTrack() const {
-        return m_soloTrack;
+    TrackId getSelectedTrack() const {
+        return m_selectedTrack;
     }
 
-    void setSoloTrack(TrackId track) { m_soloTrack = track; }
+    void setSelectedTrack(TrackId track) { m_selectedTrack = track; }
 
     // Are we soloing a Track?
     //
@@ -584,7 +584,7 @@ protected:
     // Are we soloing and if so which Track?
     //
     bool                m_solo;
-    Rosegarden::TrackId m_soloTrack;
+    Rosegarden::TrackId m_selectedTrack;
 
     /// Contains time signature events
     mutable ReferenceSegment m_timeSigSegment;

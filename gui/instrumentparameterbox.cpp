@@ -41,6 +41,11 @@ InstrumentParameterBox::InstrumentParameterBox(QWidget *parent,
                                                const char *name,
                                                WFlags)
     : QGroupBox(i18n("Instrument Parameters"), parent, name),
+      m_channelLabel(new QLabel(i18n("Channel"), this)),
+      m_panLabel(new QLabel(i18n("Pan"), this)),
+      m_velocityLabel(new QLabel(i18n("Velocity"), this)),
+      m_programLabel(new QLabel(i18n("Program"), this)),
+      m_bankLabel(new QLabel(i18n("Bank"), this)),
       m_bankValue(new RosegardenComboBox(false, false, this)),
       m_channelValue(new RosegardenComboBox(true, false, this)),
       m_programValue(new RosegardenComboBox(false, false, this)),
@@ -71,39 +76,33 @@ InstrumentParameterBox::initBox()
 
     QGridLayout *gridLayout = new QGridLayout(this, 6, 3, 8, 1);
 
-    QLabel *channelLabel = new QLabel(i18n("Channel"), this);
-    QLabel *panLabel = new QLabel(i18n("Pan"), this);
-    QLabel *velocityLabel = new QLabel(i18n("Velocity"), this);
-    QLabel *programLabel = new QLabel(i18n("Program"), this);
-    QLabel *bankLabel = new QLabel(i18n("Bank"), this);
-
-    channelLabel->setFont(plainFont);
-    panLabel->setFont(plainFont);
-    velocityLabel->setFont(plainFont);
-    programLabel->setFont(plainFont);
-    bankLabel->setFont(plainFont);
+    m_channelLabel->setFont(plainFont);
+    m_panLabel->setFont(plainFont);
+    m_velocityLabel->setFont(plainFont);
+    m_programLabel->setFont(plainFont);
+    m_bankLabel->setFont(plainFont);
     m_channelValue->setFont(plainFont);
     m_panValue->setFont(plainFont);
     m_velocityValue->setFont(plainFont);
 
     gridLayout->addRowSpacing(0, 8);
-    gridLayout->addWidget(bankLabel,      1, 0, AlignLeft);
+    gridLayout->addWidget(m_bankLabel,      1, 0, AlignLeft);
     gridLayout->addWidget(m_bankCheckBox, 1, 1);
     gridLayout->addWidget(m_bankValue,    1, 2, AlignRight);
 
     // program label under heading - filling the entire cell
-    gridLayout->addWidget(programLabel,      2, 0);
+    gridLayout->addWidget(m_programLabel,      2, 0);
     gridLayout->addWidget(m_programCheckBox, 2, 1);
     gridLayout->addWidget(m_programValue,    2, 2, AlignRight);
 
-    gridLayout->addMultiCellWidget(channelLabel, 3, 3, 0, 1, AlignLeft);
+    gridLayout->addMultiCellWidget(m_channelLabel, 3, 3, 0, 1, AlignLeft);
     gridLayout->addWidget(m_channelValue, 3, 2, AlignRight);
 
-    gridLayout->addWidget(panLabel,      4, 0, AlignLeft);
+    gridLayout->addWidget(m_panLabel,      4, 0, AlignLeft);
     gridLayout->addWidget(m_panCheckBox, 4, 1);
     gridLayout->addWidget(m_panValue,    4, 2, AlignRight);
 
-    gridLayout->addWidget(velocityLabel,      5, 0, AlignLeft);
+    gridLayout->addWidget(m_velocityLabel,      5, 0, AlignLeft);
     gridLayout->addWidget(m_velocityCheckBox, 5, 1);
     gridLayout->addWidget(m_velocityValue,    5, 2, AlignRight);
 
@@ -207,12 +206,45 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
     if (instrument == 0)
         return;
 
-    // for the moment ignore everything other than MIDI
-    //
-    if (instrument->getType() != Rosegarden::Instrument::Midi)
-        return;
-
+    // ok
     m_selectedInstrument = instrument;
+
+    // Hide or Show according to Instrumen type
+    //
+    if (instrument->getType() == Rosegarden::Instrument::Audio)
+    {
+        m_channelLabel->hide();
+        m_panLabel->hide();
+        m_velocityLabel->hide();
+        m_programLabel->hide();
+        m_bankLabel->hide();
+        m_bankValue->hide();
+        m_channelValue->hide();
+        m_programValue->hide();
+        m_panValue->hide();
+        m_velocityValue->hide();
+        m_bankCheckBox->hide();
+        m_programCheckBox->hide();
+        m_panCheckBox->hide();
+        m_velocityCheckBox->hide();
+        return; // for the moment
+    }
+    else // Midi
+    {
+        m_channelLabel->show();
+        m_panLabel->show();
+        m_velocityLabel->show();
+        m_programLabel->show();
+        m_bankLabel->show();
+        m_bankValue->show();
+        m_channelValue->show();
+        m_programValue->show();
+        m_panValue->show();
+        m_velocityValue->show();
+        m_bankCheckBox->show();
+        m_programCheckBox->show();
+        m_panCheckBox->show();
+    }
 
     // Enable all check boxes
     //

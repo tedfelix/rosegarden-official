@@ -569,6 +569,13 @@ public slots:
      **/
     void slotSendMappedEvent(Rosegarden::MappedEvent *mE);
 
+    /*
+     * Select Track up or down
+     */
+    void slotTrackUp();
+    void slotTrackDown();
+
+
 private:
 
     //--------------- Data members ---------------------------------
