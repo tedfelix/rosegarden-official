@@ -125,14 +125,16 @@ TrackLabel::setSelected(bool on)
 void
 TrackLabel::mousePressEvent(QMouseEvent *e)
 {
-    if (e->button() == RightButton)
-        emit changeToInstrumentList();
-        
-    if (e->button() != LeftButton)
-        return;
+    if (e->button() == RightButton) {
 
-    // start a timer on this hold
-    m_pressTimer->start(200, true); // 200ms, single shot
+        emit clicked();
+        emit changeToInstrumentList();
+
+    } else if (e->button() == LeftButton) {
+
+        // start a timer on this hold
+        m_pressTimer->start(200, true); // 200ms, single shot
+    }
 }
 
 void
@@ -142,10 +144,9 @@ TrackLabel::mouseReleaseEvent(QMouseEvent *e)
     if (m_pressTimer->isActive())
         m_pressTimer->stop();
 
-    if (e->button() != LeftButton)
-        return;
-
-    emit clicked();
+    if (e->button() == LeftButton) {
+        emit clicked();
+    }
 }
 
 void

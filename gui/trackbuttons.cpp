@@ -129,20 +129,6 @@ TrackButtons::makeButtons()
     // plus the two buttons
     //
 
-    /*
-    QFrame *trackHBox = 0;
-
-    // Populate the widgets
-    //
-    for (TrackId i = 0; i < m_tracks; i++)
-    {
-        trackHBox = makeButton(i);
-
-        m_layout->addWidget(trackHBox);
-        m_trackHBoxes.push_back(trackHBox);
-    }
-    */
-
     Rosegarden::Composition::trackcontainer &tracks =
         m_doc->getComposition().getTracks();
     Rosegarden::Composition::trackiterator it;
@@ -712,10 +698,11 @@ TrackButtons::slotInstrumentSelection(int trackId)
 
     populateInstrumentPopup(instrument, &instrumentPopup);
 
-    instrumentPopup.exec(QCursor::pos());
     // Store the popup item position
     //
     m_popupItem = position;
+
+    instrumentPopup.exec(QCursor::pos());
 
     // Restore the label back to what it was showing
     m_trackLabels[position]->showLabel(m_trackInstrumentLabels);
