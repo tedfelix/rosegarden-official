@@ -33,6 +33,7 @@
 #include "NotationTypes.h"
 #include "editcommands.h"
 #include "notepixmapfactory.h"
+#include "commondialogs.h" // HSpinBox
 
 class QWidget;
 class QLineEdit;
@@ -496,7 +497,7 @@ protected:
     RosegardenGUIDoc     *m_doc;
     Rosegarden::timeT     m_tempoTime;
     double                m_tempoValue;
-    RosegardenSpinBox    *m_tempoValueSpinBox;
+    HSpinBox  	  	  *m_tempoValueSpinBox;
 
     QLabel	         *m_tempoBeatLabel;
     QLabel	         *m_tempoBeat;

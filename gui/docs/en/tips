@@ -1,6 +1,11 @@
 <tip category="Rosegarden|General">
 <html>
-<p>...to assign a track to a new instrument, right-click on the track label.  You'll be presented with a menu listing the available MIDI and audio devices, where you can select an instrument on one of those devices.</p>
+<p>To configure a track to play using a particular instrument:</p>
+&nbsp;&nbsp;* click on the track label and hold a moment
+&nbsp;&nbsp;* select an output device
+&nbsp;&nbsp;* select one of that device's available instruments (#1 - #16)
+&nbsp;&nbsp;* adjust that instrument's output channel, program, bank, and
+controllers via the instrument parameters box
 </html>
 </tip>
 <tip category="Rosegarden|General">
@@ -15,11 +20,9 @@ option to load the autosaved version, or the unmodified original.</p>
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>...that you can create a default studio by copying any<br>
-.rg or .rgd file to
-<b>~/.kde/share/apps/rosegarden/autoload.rg?</b><br><br>
-You can also save the current document as an autoload.rg file by using
-<b>Studio -> Save Current Document as Default Studio</b>.</p>
+<p>
+You can save the current document as your default studio by using
+<b>Composition -> Studio -> Save Current Document as Default Studio</b>.</p>
 </html>
 </tip>
 <tip category="Rosegarden|General">
@@ -67,14 +70,14 @@ segment canvas in order to avoid the "snap-to" effect and exert finer control?</
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>...that you can edit multiple segments on multiple tracks simultaneously in
-the notation editor?  Simply select the segments, then use <b>Edit -> Open in Notation Editor</b>.</p>
+<p>...that you can hold down the Shift key while repositioning or resizing events in the
+matrix view in order to avoid the "snap-to" effect and exert finer control?</p>
 </html>
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>...that you can toggle all the rulers, instrument parameters, and several
-other options simultaneously with <b>Settings -> Toggle All of the Above</b>?</p>
+<p>...that you can edit multiple segments on multiple tracks simultaneously in
+the notation editor?  Simply select the segments, then use <b>Edit -> Open in Notation Editor</b>.</p>
 </html>
 </tip>
 <tip category="Rosegarden|General">
@@ -82,13 +85,6 @@ other options simultaneously with <b>Settings -> Toggle All of the Above</b>?</p
 <p>...that Rosegarden can export files for use by Lilypond, the high-quality score typesetting system?
 
 From the <b>File</b> menu, navigate to <b>Export -> Export Lilypond File</b></p>
-</html>
-</tip>
-<tip category="Rosegarden|General">
-<html>
-<p>...that you can change various parameters controlling how Rosegarden
-handles Lilypond export with <b>Settings -> Configure Rosegarden -> Notation
--> Lilypond?</p>
 </html>
 </tip>
 <tip category="Rosegarden|General">
@@ -109,7 +105,7 @@ your autoload.rg file?
 
 Whether you prefer to start with three tracks or 43, create a document that
 contains the desired number of tracks, plus any other studio or document properties settings
-you wish to configure, and use <b>Studio -> Save Current Document as Default
+you wish to configure, and use <b>Composition -> Studio -> Save Current Document as Default
 Studio</b> to make this your new default.</p>
 </html>
 </tip>
@@ -129,7 +125,7 @@ label must be visible for this to work.)</p>
 <p>...that Rosegarden is being developed as a community effort with
 contributions from around the world?<br><br>
 The primary developers live in the UK and France, and we've had contributors
-from the US, Spain, Germany, Russia, and elsewhere... </p>
+from the US, Spain, Germany, Russia, Slovenia, and elsewhere... </p>
 </html>
 </tip>
 <tip category="Rosegarden|General">
@@ -180,3 +176,36 @@ feature.<br><br>
 <p>...that if you're editing a section in the matrix or notation view, you can set that section to loop while you edit it?  Select it and use <b>Move -> Set Loop to Selection</b>, then hit Play.</p>
 </html>
 </tip>
+<tip category="Rosegarden|General">
+<html>
+<p>...if you have more than one note or controller event at the same time, you
+can use the [ and ] keys to flip the stack of events around on the controller
+and velocity rulers in order to bring the item you wish to adjust into
+focus.</p>
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
+<p>A Rosegarden composition is not infinite, and does not automatically expand
+if you attempt to insert events beyond the end of it.  While recording, you will see a
+countdown showing you how much time you have remaining.  In order to extend
+this, use <b>Composition -> Change Composition Duration</b></p>
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
+<p>The notation view shows you notes using their display duration, while the
+matrix allows you to edit their performance duration.</p>
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
+<p>If you're working with a human performance and you need to insert some new
+notes, these new notes will sound for their entire written duration.  To blend
+these new notes into a human performance, use <b>Adjust -> Notes ->
+Interpret</b> from the notation view to interpret any marks and  massage their performance
+durations to something less mechanical.</p>
+</html>
+</tip>
+
+

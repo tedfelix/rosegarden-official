@@ -74,6 +74,7 @@
 #include "instrumentparameterbox.h"
 #include "sequencemanager.h" // for metronomeChanged()
 #include "timewidget.h"
+#include "commondialogs.h" // HSpinBox
 
 #include "rosedebug.h"
 
@@ -2732,14 +2733,7 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
 
     // Set tempo
     new QLabel(i18n("New tempo"), tempoBox);
-    m_tempoValueSpinBox = new RosegardenSpinBox(tempoBox);
-    m_tempoValueSpinBox->setMinValue(1);
-    m_tempoValueSpinBox->setMaxValue(1000);
-//    new QLabel(i18n("bpm"), tempoBox);
-
-    // create a validator
-    TempoValidator *validator = new TempoValidator(1.0, 1000.0, 6, this);
-    m_tempoValueSpinBox->setValidator(validator);
+    m_tempoValueSpinBox = new HSpinBox(tempoBox, 0, 1, 0.0, 1000.0, 6);
 
     connect(m_tempoValueSpinBox, SIGNAL(valueChanged(const QString &)),
             SLOT(slotTempoChanged(const QString &)));
@@ -2830,14 +2824,8 @@ TempoDialog::populateTempo()
     Rosegarden::Composition &comp = m_doc->getComposition();
 
     double tempo = comp.getTempoAt(m_tempoTime);
-    QString tempoString;
-    tempoString.sprintf("%4.6f", tempo);
 
-    // We have to frig this by setting both integer tempo
-    // and the special text field.
-    //
-    m_tempoValueSpinBox->setValue((int)tempo);
-    m_tempoValueSpinBox->setSpecialValueText(tempoString);
+    m_tempoValueSpinBox->setValuef(float(tempo));    
 
     updateBeatLabels(tempo);
 
@@ -2951,7 +2939,7 @@ TempoDialog::updateBeatLabels(double tempo)
 void
 TempoDialog::slotTempoChanged(const QString &)
 {
-    updateBeatLabels(m_tempoValueSpinBox->getDoubleValue());
+    updateBeatLabels(double(m_tempoValueSpinBox->valuef()));
 }
 
 void
@@ -2963,15 +2951,15 @@ TempoDialog::slotActionChanged()
 void
 TempoDialog::slotOk()
 {
-    double tempoDouble = m_tempoValueSpinBox->getDoubleValue();
+    double tempoDouble = double(m_tempoValueSpinBox->valuef());
 
     // Check for freakiness in the returned results - 
     // if we can't believe the double value then use
     // the value on the SpinBox itself - we just have 
     // to lose the precision.
     //
-    if ((int)tempoDouble != m_tempoValueSpinBox->value())
-        tempoDouble = m_tempoValueSpinBox->value();
+//    if ((int)tempoDouble != m_tempoValueSpinBox->value())
+//        tempoDouble = m_tempoValueSpinBox->value();
 
     if (m_timeEditor) {
 
@@ -4897,7 +4885,7 @@ MakeOrnamentDialog::MakeOrnamentDialog(QWidget *parent, QString defaultName,
     QVBox *vbox = makeVBoxMainWidget();
     QGroupBox *nameBox = new QGroupBox(2, Vertical, i18n("Name"), vbox);
 
-    QLabel *label = new QLabel(i18n("The name is used to identify both the ornament\nand the triggered segment that stores\nthe ornament's notes."), nameBox);
+    new QLabel(i18n("The name is used to identify both the ornament\nand the triggered segment that stores\nthe ornament's notes."), nameBox);
 
     QHBox *hbox = new QHBox(nameBox);
     new QLabel(i18n("Name:  "), hbox);

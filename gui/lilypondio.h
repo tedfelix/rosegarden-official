@@ -55,6 +55,7 @@ public:
 protected:
     Rosegarden::Composition *m_composition;
     std::string m_fileName;
+    bool m_pitchBorked;
 
     void writeBar(Rosegarden::Segment *, int barNo, int col,
 		  Rosegarden::Key &key, std::string &lilyText, std::string &lilyLyrics,

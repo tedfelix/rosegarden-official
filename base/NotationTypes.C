@@ -1135,15 +1135,21 @@ Pitch::rawPitchToDisplayPitch(int rawpitch,
     }
 
     // Failsafe...  If this ever executes, there's trouble to fix...
-// WIP - bug fix in progress; ignore the untidiness    
-//    if (accidental == "") {
-#ifdef DEBUG_PITCH
-//      std::cerr << "Pitch::rawPitchToDisplayPitch(): error! returning null accidental for:"
-        std::cerr << "Pitch::rawPitchToDisplayPitch performing calculation for:"      
-                  << std::endl << "pitch: " << rawpitch << " (" << pitch << " in oct " << octave << ")  userAcc: " << userAccidental
+// WIP - DMM - munged up to explore #937389, which is temporarily deferred,
+// owing to its non-critical nature, having been hacked around in the Lilypond
+// code
+#ifndef DEBUG_PITCH
+    if (accidental == "") {
+        std::cerr << "Pitch::rawPitchToDisplayPitch(): error! returning null accidental for:"
+#else
+	std::cerr << "Pitch::rawPitchToDisplayPitch(): calculating: "
+#endif						       
+                  << std::endl << "pitch: " << rawpitch << " (" << pitch << " in oct "
+		  << octave << ")  userAcc: " << userAccidental
                   << "  clef: " << clef.getClefType() << "  key: " << key.getName() << std::endl;
+#ifndef DEBUG_PITCH
+    }
 #endif
-//    }
     
     
     // 6.  "Recenter" height in case it's been changed:

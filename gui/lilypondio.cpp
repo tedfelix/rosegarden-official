@@ -89,7 +89,7 @@ LilypondExporter::LilypondExporter(QObject *parent,
                                    m_composition(composition),
                                    m_fileName(fileName)
 {
-    // nothing
+    m_pitchBorked = false;
 }
 
 LilypondExporter::~LilypondExporter()
@@ -184,6 +184,9 @@ LilypondExporter::handleEndingEvents(eventendlist &eventsInProgress,
 
 // processes input to produce a Lilypond-format note written correctly for all
 // keys and out-of-key accidental combinations.
+//
+// this code is deprecated, as it has been supplanted by the Pitch class,
+// but it remains, for the time being, as a necessary failsafe
 std::string
 LilypondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
 					 const Rosegarden::Key &key) 
@@ -332,23 +335,25 @@ LilypondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
        } 
     }
 
-    // leave this in to see if there are any _other_ problems that are going
-    // to break this method...
-#ifdef DEBUG_PITCH
-//!! DMM - ugly WIP debugging stuff
-//    if (lilyNote == "") { 
-//        std::cerr << "LilypondExporter::convertPitchToLilyNote() -  WARNING: cannot resolve note"
-          std::cerr << "LilypondExporter::cPTLN() chewing on: "
+    // the failsafe's failsafe
+#ifndef DEBUG_PITCH
+    if (lilyNote == "") { 
+        std::cerr << "LilypondExporter::convertPitchToLilyNote() -  WARNING: cannot resolve note"
+#else
+        std::cerr << "LilypondExporter::cPTLN() chewing on: "
+#endif	
                   << std::endl << "pitch = " << pitchNote << "\tkey sig. = "
                   << ((isFlatKeySignature) ? "flat" : "sharp") << "\tno. of accidentals = "
                   << accidentalCount << "\textra accidental = \"" << accidental << "\""
                   << std::endl;
+#ifndef DEBUG_PITCH
+	m_pitchBorked = true;
+    }
 #endif        
-//    }
 
     //!!! Alternative implementation in test:
 
-    Rosegarden::Pitch p(pitch, accidental);  // pitch + accidental, but no key?
+    Rosegarden::Pitch p(pitch, accidental);  // pitch + accidental, but no key? (DMM)
     std::string origLilyNote = lilyNote;
     lilyNote = "";
 
@@ -363,6 +368,9 @@ LilypondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
 	std::cerr << "WARNING: LilypondExporter::convertPitchToLilyNote: " << lilyNote << " != " << origLilyNote << std::endl;
 	lilyNote = origLilyNote;  // makes it return the correct value with my old, trusted code
 	                          // until I can fix this properly
+				  // (deferred until after 1.0 because users
+				  // don't care which version as long as it
+				  // works) - DMM
     }
 
     return lilyNote;
@@ -882,6 +890,18 @@ LilypondExporter::write()
 	str << indent(col) << "\\tempo 4 = " << tempo << std::endl;
         str << indent(--col) << "} " << std::endl;
     }    
+   
+    // DMM - a friendly userland warning if they happen to tease out any lingering
+    // trouble with this stuff;  since users don't usually see the debug messages
+    if (m_pitchBorked) {
+	CurrentProgressDialog::freeze();
+	KMessageBox::sorry(0,
+		i18n("You encountered an enharmonic resolution bug somewhere during this "
+		     "operation.  You may wish to save a copy of your current composition "
+		     "and email it to dmmcintyr@users.sourceforge.net for analysis.\n\n"
+		     "In the meantime, you will probably need to make manual adjustments "
+		     "to the file you've just exported."));
+    }	
 
     // close \score section and close out the file
     str << "} % score" << std::endl;
