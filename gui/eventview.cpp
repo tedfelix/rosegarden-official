@@ -260,8 +260,12 @@ EventView::EventView(RosegardenGUIDoc *doc,
 	layout->addWidget(editButton, 2, 2);
 	connect(editButton, SIGNAL(clicked()), this, SLOT(slotEditTriggerVelocity()));
 
-	layout->addWidget(new QLabel(i18n("Default timing:  "), frame), 3, 0);
+	/*!!! Comment out these two options, which are not yet used
+	  anywhere else -- intended for use with library ornaments, not
+	  yet implemented
 	
+	layout->addWidget(new QLabel(i18n("Default timing:  "), frame), 3, 0);
+
 	KComboBox *adjust = new KComboBox(frame);
 	layout->addMultiCellWidget(adjust, 3, 3, 1, 2);
 	adjust->insertItem(i18n("As stored"));
@@ -286,6 +290,8 @@ EventView::EventView(RosegardenGUIDoc *doc,
 	retune->setChecked(rec->getDefaultRetune());
 	connect(retune, SIGNAL(clicked()), this, SLOT(slotTriggerRetuneChanged()));
 	layout->addMultiCellWidget(retune, 4, 4, 1, 2);
+
+	*/
 
 	m_grid->addWidget(groupBox, 2, 2);
 	
