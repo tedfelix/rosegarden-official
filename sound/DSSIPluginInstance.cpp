@@ -24,7 +24,7 @@
 
 #include "DSSIPluginInstance.h"
 #include "PluginIdentifier.h"
-
+#include "LADSPAPluginFactory.h"
 
 #ifdef HAVE_DSSI
 
@@ -599,10 +599,17 @@ DSSIPluginInstance::setPortValue(unsigned int portNumber, float value)
 #ifdef DEBUG_DSSI
     std::cerr << "DSSIPluginInstance::setPortValue(" << portNumber << ") to " << value << std::endl;
 #endif
-    for (unsigned int i = 0; i < m_controlPortsIn.size(); ++i)
-    {
-        if (m_controlPortsIn[i].first == portNumber)
-        {
+    for (unsigned int i = 0; i < m_controlPortsIn.size(); ++i) {
+        if (m_controlPortsIn[i].first == portNumber) {
+	    LADSPAPluginFactory *f = dynamic_cast<LADSPAPluginFactory *>(m_factory);
+	    if (f) {
+		if (value < f->getPortMinimum(m_descriptor->LADSPA_Plugin, portNumber)) {
+		    value = f->getPortMinimum(m_descriptor->LADSPA_Plugin, portNumber);
+		}
+		if (value > f->getPortMaximum(m_descriptor->LADSPA_Plugin, portNumber)) {
+		    value = f->getPortMaximum(m_descriptor->LADSPA_Plugin, portNumber);
+		}
+	    }
             (*m_controlPortsIn[i].second) = value;
 	    m_backupControlPortsIn[i] = value;
         }

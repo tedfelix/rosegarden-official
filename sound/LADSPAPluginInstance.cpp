@@ -22,6 +22,7 @@
 #include <cassert>
 
 #include "LADSPAPluginInstance.h"
+#include "LADSPAPluginFactory.h"
 
 #ifdef HAVE_LADSPA
 
@@ -316,10 +317,17 @@ LADSPAPluginInstance::connectPorts()
 void
 LADSPAPluginInstance::setPortValue(unsigned int portNumber, float value)
 {
-    for (unsigned int i = 0; i < m_controlPortsIn.size(); ++i)
-    {
-        if (m_controlPortsIn[i].first == portNumber)
-        {
+    for (unsigned int i = 0; i < m_controlPortsIn.size(); ++i) {
+        if (m_controlPortsIn[i].first == portNumber) {
+	    LADSPAPluginFactory *f = dynamic_cast<LADSPAPluginFactory *>(m_factory);
+	    if (f) {
+		if (value < f->getPortMinimum(m_descriptor, portNumber)) {
+		    value = f->getPortMinimum(m_descriptor, portNumber);
+		}
+		if (value > f->getPortMaximum(m_descriptor, portNumber)) {
+		    value = f->getPortMaximum(m_descriptor, portNumber);
+		}
+	    }
             (*m_controlPortsIn[i].second) = value;
         }
     }

@@ -59,6 +59,11 @@ public:
 						      unsigned int blockSize,
 						      unsigned int channels);
 
+    MappedObjectValue getPortMinimum(const LADSPA_Descriptor *, int port);
+    MappedObjectValue getPortMaximum(const LADSPA_Descriptor *, int port);
+    MappedObjectValue getPortDefault(const LADSPA_Descriptor *, int port);
+    int getPortDisplayHint(const LADSPA_Descriptor *, int port);
+
 protected:
     LADSPAPluginFactory();
     friend class PluginFactory;
@@ -74,11 +79,6 @@ protected:
     virtual void generateFallbackCategories();
 
     virtual void releasePlugin(RunnablePluginInstance *, QString);
-
-    MappedObjectValue getPortMinimum(const LADSPA_Descriptor *, int port);
-    MappedObjectValue getPortMaximum(const LADSPA_Descriptor *, int port);
-    MappedObjectValue getPortDefault(const LADSPA_Descriptor *, int port);
-    int getPortDisplayHint(const LADSPA_Descriptor *, int port);
 
     virtual const LADSPA_Descriptor *getLADSPADescriptor(QString identifier);
 
