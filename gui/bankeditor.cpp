@@ -1767,15 +1767,12 @@ BankEditorDialog::slotImport()
 
                 int res = dialog->exec();
 
-                // Check for overwrite/rename flags and reset res as necessary
-                //
-		bool overwrite = ((res >> 25) & 1);
-		bool rename = ((res >> 24) & 1);
-		
-		res &= 0xffffff;
-
                 if (res > -1)
                 {
+		    bool overwrite = dialog->getOverwrite();
+		    bool rename = dialog->getRename();
+		    int deviceIndex = dialog->getDeviceIndex();
+
                     count = 0;
                     bool found = false;
                     std::vector<Rosegarden::MidiBank> banks;
@@ -1790,7 +1787,7 @@ BankEditorDialog::slotImport()
 
                         if (device)
                         {
-                            if (count == res)
+                            if (count == deviceIndex)
                             {
                                 banks = device->getBanks();
                                 programs = device->getPrograms();
@@ -1817,13 +1814,13 @@ BankEditorDialog::slotImport()
                                 new ModifyDeviceCommand(
                                         m_studio,
                                         deviceItem->getDevice(),
-                                        qstrtostr(importList[res]),
+                                        qstrtostr(importList[deviceIndex]),
                                         librarianName,
                                         librarianEmail,
                                         banks,
                                         programs,
                                         overwrite,
-					true);
+					rename);
                             addCommandToHistory(command);
 
                             // No need to redraw the dialog, this is done by
@@ -1901,14 +1898,10 @@ BankEditorDialog::importFromSF2(QString filename)
 
         int res = dialog->exec();
 
-        // Check for overwrite/rename flags and reset res as necessary
-        //
-        bool overwrite = ((res >> 25) & 1);
-	bool rename = ((res >> 24) & 1);
-
-	res &= 0xffffff;
-
         if (res > -1) {
+
+	    bool overwrite = dialog->getOverwrite();
+	    bool rename = dialog->getRename();
 
             if (device) {
                 ModifyDeviceCommand *command =
@@ -2283,11 +2276,7 @@ ImportDeviceDialog::slotOk()
     config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     config->writeEntry("importbanksoverwrite", v == 1);
     config->writeEntry("importbanksrename", m_rename->isChecked());
-    v <<= 1;
-    if (m_rename->isChecked()) v += 1;
-    v <<= 23;
-    if (m_deviceCombo) v += m_deviceCombo->currentItem();
-    done (v);
+    done(0);
 }
 
 void
@@ -2297,3 +2286,21 @@ ImportDeviceDialog::slotCancel()
 }
 
 
+int
+ImportDeviceDialog::getDeviceIndex() const
+{
+    if (m_deviceCombo) return m_deviceCombo->currentItem();
+    else return 0;
+}
+
+bool
+ImportDeviceDialog::getOverwrite() const
+{
+    return m_buttonGroup->id(m_buttonGroup->selected()) != 0;
+}
+
+bool
+ImportDeviceDialog::getRename() const
+{
+    return m_rename->isChecked();
+}

@@ -70,7 +70,7 @@ ModifyDeviceCommand::execute()
     {
         device->replaceBankList(m_bankList);
         device->replaceProgramList(m_programList);
-        if (rename) device->setName(m_name);
+        if (m_rename) device->setName(m_name);
         device->setLibrarian(m_librarianName, m_librarianEmail);
     }
     else
@@ -78,7 +78,7 @@ ModifyDeviceCommand::execute()
         device->mergeBankList(m_bankList);
         device->mergeProgramList(m_programList);
 
-	if (rename) {
+	if (m_rename) {
 	    std::string mergeName = device->getName() + std::string("/") + m_name;
 	    device->setName(mergeName);
 	}
@@ -91,7 +91,7 @@ ModifyDeviceCommand::unexecute()
 {
     Rosegarden::MidiDevice *device = m_studio->getMidiDevice(m_device);
 
-    if (rename) device->setName(m_oldName);
+    if (m_rename) device->setName(m_oldName);
     device->replaceBankList(m_oldBankList);
     device->replaceProgramList(m_oldProgramList);
     device->setLibrarian(m_oldLibrarianName, m_oldLibrarianEmail);

@@ -345,6 +345,10 @@ class ImportDeviceDialog : public KDialogBase
 public:
     ImportDeviceDialog(QWidget *parent,
                        std::vector<QString> devices);
+ 
+    int getDeviceIndex() const;
+    bool getOverwrite() const; 
+    bool getRename() const;
 
 public slots:
     void slotOk();

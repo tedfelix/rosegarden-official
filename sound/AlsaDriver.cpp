@@ -1996,7 +1996,7 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
                     RealTime duration = eventTime -
                              m_noteOnMap[chanNoteKey]->getEventTime();
 
-                    assert(duration >= RealTime(0, 0));
+                    if (duration < RealTime(0, 0)) break;
 
                     // Velocity 0 - NOTE OFF.  Set duration correctly
                     // for recovery later.
