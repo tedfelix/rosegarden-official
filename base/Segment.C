@@ -603,9 +603,12 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
     timeT lastNoteEnds = startTime;
     
     // Re-find this, as it might have been erased
-    ia = findTime(startTime);
+    ia = findNearestTime(startTime);
 
-    if (ia != end()) {
+    if (ia == end()) {
+	// already have good lastNoteStarts, lastNoteEnds
+	ia = begin();
+    } else {
 	lastNoteStarts = q->getQuantizedAbsoluteTime(*ia);
 	lastNoteEnds = lastNoteStarts;
     }
@@ -636,6 +639,10 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 	}
 
 	timeT thisNoteStarts = q->getQuantizedAbsoluteTime(*i);
+
+	cerr << "scanning: thisNoteStarts " << thisNoteStarts
+	     << ", lastNoteStarts " << lastNoteStarts
+	     << ", lastNoteEnds " << lastNoteEnds << endl;
 
 	//!!! This may be problematic.  We could end up adding a rest
 	// in the middle of what turns out to be a chord once the

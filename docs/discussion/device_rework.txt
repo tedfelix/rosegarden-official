@@ -46,8 +46,7 @@ Implementation notes
 On the sequencer side, MappedDevice is just a container for
 MappedInstruments.  These are concretely related to the ALSA
 read/write destination via the AlsaPort list in AlsaDriver, which maps
-instrument numbers onto ALSA ports.  The Device numbers themselves are
-relatively abstract, being derived from the instruments.
+instrument numbers onto ALSA ports.
 
 On the GUI side, everything is already set up with the device list and
 instrument sublists in pretty much the way we want; the problem is
@@ -71,24 +70,42 @@ We have two possibilities:
  the thing that gets converted to the MappedDevice when communicating
  with the sequencer.
 
-I suspect option 2 is probably simpler given the current setup,
-although it's appealing to be able to contact the sequencer directly
-to configure device/port mappings (i.e. option 1b is probably the most
-elegant of the three).
+I had thought option 2 looked easier to implement in our current
+scheme, but now I think it has problems with Instrument management
+(because the Instruments are originated at the sequencer, and so must
+have a virtual Device to associate with).  I suspect option 1b may be
+the best bet.  It's certainly the most elegant.
 
 
 Implementation strategy
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-1. Enforce a one-to-one correspondence between ALSA ports and
-AlsaDriver MappedDevices.  We don't want to know about ALSA client on
-the sequencer side except when querying the ports, and we don't want
-to know about ports on the GUI side.  Possibly we could do this by
-creating a new AlsaDriver (for test purposes) that pretends one port
-per device but has a device corresponding to an ALSA port?
+Ultimately we're working towards allowing the sequencer to specify
+whether it's able to support device reconnection (i.e. with ALSA it
+should be, but with the existing ArtsDriver which we don't want to
+change it shouldn't).  A sequencer able to support device reconnection
+should be able to supply a list of the available Connections (just
+names, presumably -- corresponding to ALSA ports in this case) and
+offer an API for reassociating a Device with a new Connection, as well
+as for creating and deleting Devices.  All this stuff would be used by
+the GUI's Manage Devices dialog only (i.e. nothing else in the GUI
+would care whether the sequencer has reconnectable devices or not) and
+be available to external processes for automation through DCOP.
 
+ 1. Create a new Driver class (ExperimentalAlsaDriver or something).
+ It should return one Device per ALSA port and the usual 16 Instruments
+ for that Device, but internally should also maintain a map of
+ Connections between Devices and actual ALSA ports (in other words, the
+ Devices it returns should simply be the default set in the new scheme).
+ Test.  Don't provide any reconnection API.
 
-2. ...
+ 2. Implement DCOP-based reconnection API -- should in theory be
+ pretty trivial... shouldn't it?
 
-3. Profit!
+ 3. Then worry about channel groups.  I'm very vague on this still.
+
+ 4. ...
+
+ 5. Profit!
+
 

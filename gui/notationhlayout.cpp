@@ -251,14 +251,6 @@ NotationHLayout::getStartOfQuantizedSlice(const NotationElementList *notes,
     while (true) {
 	if (i == notes->begin()) return i;
 	--j;
-/*!!!
-	timeT absTime;
-	if ((*j)->isTuplet()) {
-	    absTime = (*j)->getAbsoluteTime();
-	} else {
-	    absTime = m_notationQuantizer->getQuantizedAbsoluteTime((*j)->event());
-	}
-*/
 	if ((*j)->getViewAbsoluteTime() < t) return i;
 	i = j;
     }
@@ -1464,11 +1456,6 @@ NotationHLayout::positionRest(StaffType &staff,
 			bdi->second.sizeData.baseWidth)) * spacingDuration) /
 	barDuration;
     delta += (*itr)->event()->get<Int>(m_properties.MIN_WIDTH);
-/*!!!
-    long delta = (((int)bdi->second.sizeData.idealWidth -
-		        bdi->second.sizeData.fixedWidth) * spacingDuration) /
-	barDuration;
-*/
     rest->setLayoutAirspace(rest->getLayoutX(), delta);
 
     // Situate the rest somewhat further into its allotted space.  Not
@@ -1563,22 +1550,12 @@ NotationHLayout::positionChord(StaffType &staff,
     timeT barDuration = bdi->second.sizeData.actualDuration;
     if (barDuration == 0) barDuration = timeSignature.getBarDuration();
 
-    //!!! should be a proportion of idealWidth - (baseWidth + fixedWidth)
-    // plus minwidth for the chord?
     long delta = (((int)bdi->second.sizeData.idealWidth -
 		       (bdi->second.sizeData.fixedWidth +
 			bdi->second.sizeData.baseWidth)) *
 		  getSpacingDuration(staff, chord)) /
 	barDuration;
     delta += (*itr)->event()->get<Int>(m_properties.MIN_WIDTH);
-		  
-/*
-    long delta = (((int)bdi->second.sizeData.idealWidth -
-		        bdi->second.sizeData.fixedWidth) *
-		  getSpacingDuration(staff, chord)) /
-	barDuration;
-*/
-
     int noteWidth = m_npf->getNoteBodyWidth();
 
     // If the chord's allowed a lot of space, situate it somewhat
