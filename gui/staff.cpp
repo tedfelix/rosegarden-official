@@ -21,7 +21,9 @@
 
 
 Staff::Staff(QCanvas *canvas, Staff::Clef clef)
-    : QCanvasItemGroup(canvas)
+    : QCanvasItemGroup(canvas),
+      m_currentKey(clef),
+      m_pitchToHeight(32)
 {
 
     // clef
@@ -54,15 +56,132 @@ Staff::Staff(QCanvas *canvas, Staff::Clef clef)
     int w = canvas->width();
     int len = w - (w / 10);
 
-    for(unsigned int l = 0; l < nbLines; ++l) {
+// Pitch : 0  - C  - line 5 (leger)
+// Pitch : 1  - C# - line 5
+// Pitch : 2  - D  - line 4.5
+// Pitch : 3  - D# - line 4.5
+// Pitch : 4  - E  - line 4
+// Pitch : 5  - F  - line 3.5
+// Pitch : 6  - F# - line 3.5
+// Pitch : 7  - G  - line 3
+// Pitch : 8  - G# - line 3
+// Pitch : 9  - A  - line 2.5
+// Pitch : 10 - A# - line 2.5
+// Pitch : 11 - B  - line 2
+// Pitch : 12 - C  - line 1.5
+// Pitch : 13 - C# - line 1.5
+// Pitch : 14 - D  - line 1
+// Pitch : 15 - D# - line 1
+// Pitch : 16 - E  - line 0.5
+// Pitch : 17 - F  - line 0
+// Pitch : 18 - F# - line 0
+// Pitch : 19 - G  - line -0.5
+// Pitch : 20 - G# - line -0.5
+// Pitch : 21 - A  - line -1
 
-            QCanvasLineGroupable *staffLine = new QCanvasLineGroupable(canvas, this);
+    unsigned int pitch = 17, // F
+        l = 0;
 
-            int y = l * lineWidth;
+    // staff lines are numbered from 0 to 4, in a top-down order. Yes,
+    // the code below is butt ugly, but it works and it's fairly easy
+    // to maintain. For once I don't think trying to make this fit in
+    // a loop will do any good.
+    //
 
-            staffLine->setPoints(0,y, len,y);
-            staffLine->moveBy(0,linesOffset);
-        }
+    // Line 0 : Top-most line (F - pitch 17 in a Treble clef)
+    //
+    QCanvasLineGroupable *staffLine = new QCanvasLineGroupable(canvas, this);
+
+    int y = l * lineWidth;
+
+    staffLine->setPoints(0,y, len,y);
+    staffLine->moveBy(0,linesOffset);
+
+    m_pitchToHeight[pitch] = y; // F
+    m_pitchToHeight[pitch + 1] = y; // F#
+
+    m_pitchToHeight[pitch + 2] = y + lineWidth / 2 + 1; // G
+    m_pitchToHeight[pitch + 3] = y + lineWidth / 2 + 1; // G#
+    m_pitchToHeight[pitch + 4] = y + lineWidth;     // A
+    
+    // Line 1 : D - pitch 14
+    //
+    ++l; pitch = 14;
+    staffLine = new QCanvasLineGroupable(canvas, this);
+
+    y = l * lineWidth;
+
+    staffLine->setPoints(0,y, len,y);
+    staffLine->moveBy(0,linesOffset);
+
+    m_pitchToHeight[pitch] = y; // D
+    m_pitchToHeight[pitch + 1] = y; // D#
+    m_pitchToHeight[pitch + 2] = y + lineWidth / 2 + 1; // E
+    
+    // Line 2 : B - pitch 11
+    //
+    ++l; pitch = 11;
+    staffLine = new QCanvasLineGroupable(canvas, this);
+
+    y = l * lineWidth;
+
+    staffLine->setPoints(0,y, len,y);
+    staffLine->moveBy(0,linesOffset);
+
+    m_pitchToHeight[pitch] = y; // B
+    m_pitchToHeight[pitch + 1] = y + lineWidth / 2 + 1; // C
+    m_pitchToHeight[pitch + 2] = y + lineWidth / 2 + 1; // C#
+    
+    // Line 3 : G - pitch 7
+    //
+    ++l; pitch = 7;
+    staffLine = new QCanvasLineGroupable(canvas, this);
+
+    y = l * lineWidth;
+
+    staffLine->setPoints(0,y, len,y);
+    staffLine->moveBy(0,linesOffset);
+
+    m_pitchToHeight[pitch] = y; // G
+    m_pitchToHeight[pitch + 1] = y; // G#
+    m_pitchToHeight[pitch + 2] = y + lineWidth / 2 + 1; // A
+    m_pitchToHeight[pitch + 3] = y + lineWidth / 2 + 1; // A#
+    
+    // Line 4 : E - pitch 4
+    //
+    ++l; pitch = 4;
+    staffLine = new QCanvasLineGroupable(canvas, this);
+
+    y = l * lineWidth;
+
+    staffLine->setPoints(0,y, len,y);
+    staffLine->moveBy(0,linesOffset);
+
+    m_pitchToHeight[pitch] = y; // E
+    m_pitchToHeight[pitch + 1] = y + lineWidth / 2 + 1; // F
+    m_pitchToHeight[pitch + 2] = y + lineWidth / 2 + 1; // F#
+
+    // Line 5 : middle C - pitch 0 (not actually displayed)
+    //
+    ++l; pitch = 0;
+    y = l * lineWidth;
+
+    m_pitchToHeight[pitch] = y; // C
+    m_pitchToHeight[pitch + 1] = y; // C#
+    m_pitchToHeight[pitch + 2] = y + lineWidth / 2 + 1; // D
+    m_pitchToHeight[pitch + 3] = y + lineWidth / 2 + 1; // D#
+    
+
+//     for(unsigned int l = 0; l < nbLines; ++l) {
+
+//             QCanvasLineGroupable *staffLine = new QCanvasLineGroupable(canvas, this);
+
+//             int y = l * lineWidth;
+
+//             staffLine->setPoints(0,y, len,y);
+//             staffLine->moveBy(0,linesOffset);
+
+//         }
 
     // Add vertical line
     //
@@ -87,9 +206,10 @@ Staff::Staff(QCanvas *canvas, Staff::Clef clef)
 }
 
 int
-Staff::pitch0YOffset() const
+Staff::pitchYOffset(unsigned int pitch) const
 {
-    return nbLines * lineWidth - lineWidth / 2 - 22;
+    if (pitch <= 17)
+        return m_pitchToHeight[pitch];
 }
 
 

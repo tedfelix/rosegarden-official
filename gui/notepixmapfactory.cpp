@@ -96,7 +96,7 @@ NotePixmapFactory::makeNotePixmap(Note note, bool drawTail,
         m_p.drawPixmap (0,m_generatedPixmap->height() - body->height(), *body);
         m_pm.drawPixmap(0,m_generatedPixmap->height() - body->height(), *(body->mask()));
 
-        yOffset = m_generatedPixmap->height() - body->height() / 2;
+        yOffset = m_generatedPixmap->height() - body->height() / 2 + 1;
 
     } else {
 

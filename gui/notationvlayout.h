@@ -19,7 +19,7 @@
 #define NOTATIONVLAYOUT_H
 
 #include "layoutengine.h"
-#include "pitchtoheight.h"
+#include "staff.h"
 
 /**
   *@author Guillaume Laurent, Chris Cannam, Rich Bown
@@ -27,17 +27,12 @@
 
 class NotationVLayout : public LayoutEngine  {
 public:
-    NotationVLayout();
-
-    void setStaffOffsetY(int y) { m_staffOffsetY = y; }
-    int  getStaffOffsetY() const { return m_staffOffsetY; }
+    NotationVLayout(Staff&);
 
 protected:
     virtual void layout(Event*);
 
-    PitchToHeight& m_pitchToHeight;
-
-    int m_staffOffsetY;
+    Staff &m_staff;
 };
 
 #endif

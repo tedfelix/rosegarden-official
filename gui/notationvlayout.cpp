@@ -18,9 +18,8 @@
 #include "notationvlayout.h"
 #include "rosedebug.h"
 
-NotationVLayout::NotationVLayout()
-    : m_pitchToHeight(PitchToHeight::instance()),
-      m_staffOffsetY(0)
+NotationVLayout::NotationVLayout(Staff &s)
+    : m_staff(s)
 {
 }
 
@@ -35,5 +34,5 @@ NotationVLayout::layout(Event *el)
 //                          << " - height + staffOffset : " << m_pitchToHeight[pitch] + m_staffOffsetY
 //                          << endl;
 
-    el->set<Int>("Notation::Y", m_pitchToHeight[pitch] + m_staffOffsetY);
+    el->set<Int>("Notation::Y", m_staff.pitchYOffset(pitch));
 }

@@ -35,7 +35,6 @@
 #include "rosegardengui.h"
 #include "qcanvasspritegroupable.h"
 #include "qcanvaslinegroupable.h"
-#include "pitchtoheight.h"
 #include "staff.h"
 #include "chord.h"
 #include "notepixmapfactory.h"
@@ -47,10 +46,8 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
                   parent, name),
     m_movingItem(0),
     m_draggingItem(false),
-    m_hlayout(new NotationHLayout((Staff::noteWidth + 2) * 4, // this shouldn't be constant
-                                  4, // 4 beats per bar
-                                  10)),
-    m_vlayout(new NotationVLayout())
+    m_hlayout(0),
+    m_vlayout(0)
 {
 
     kdDebug(KDEBUG_AREA) << "RosegardenGUIView ctor" << endl;
@@ -64,12 +61,10 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
     Staff *staff = new Staff(canvas());
     staff->move(20, 15);
 
-//     m_vlayout->setStaffOffsetY((Staff::nbLines * Staff::lineWidth -
-//                                Staff::lineWidth / 2 - 4 + Staff::linesOffset));
-    kdDebug(KDEBUG_AREA) << "staff->pitch0YOffset() = "
-                         << staff->pitch0YOffset() << endl;
-
-    m_vlayout->setStaffOffsetY(staff->pitch0YOffset());
+    m_vlayout = new NotationVLayout(*staff);
+    m_hlayout = new NotationHLayout((Staff::noteWidth + 2) * 4, // this shouldn't be constant
+                                    4, // 4 beats per bar
+                                    40);
 
     if (!applyLayout()) {
 
@@ -220,12 +215,10 @@ RosegardenGUIView::test()
 
     QCanvasPixmapArray *notePixmap = new QCanvasPixmapArray("pixmaps/note-bodyfilled.xpm");
 
-    PitchToHeight& pitchToHeight(PitchToHeight::instance());
-
-    for(unsigned int i = 0; i < pitchToHeight.size(); ++i) {
+    for(unsigned int i = 0; i <= 17; ++i) {
         QCanvasSprite *note = new QCanvasSprite(notePixmap, canvas());
         note->move(20,14);
-        note->moveBy(40 + i * 20, pitchToHeight[i]);
+        note->moveBy(40 + i * 20, staff->pitchYOffset(i));
     }
 
     //     Chord *chord = new Chord(canvas());

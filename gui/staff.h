@@ -18,6 +18,8 @@
 #ifndef STAFF_H
 #define STAFF_H
 
+#include <vector>
+
 #include "qcanvasitemgroup.h"
 
 /**A Staff (treble and bass clef + lines) as displayed on screen.
@@ -32,10 +34,10 @@ public:
     Staff(QCanvas*, Clef clef = Treble);
 
     /**
-     * Returns the Y offset at which a note with pitch 0
-     * (middle-C) should be displayed.
+     * Returns the Y offset at which a note with pitch 'pitch'
+     * should be displayed on this staff
      */
-    int pitch0YOffset() const;
+    int pitchYOffset(unsigned int pitch) const;
 
     static const unsigned int noteHeight;
     static const unsigned int noteWidth;
@@ -43,6 +45,11 @@ public:
     static const unsigned int stalkLen;
     static const unsigned int nbLines;
     static const unsigned int linesOffset;
+protected:
+
+    Clef m_currentKey;
+
+    vector<int> m_pitchToHeight;
 };
 
 #endif
