@@ -1922,9 +1922,9 @@ MatrixView::getHLayout()
 }
 
 Rosegarden::Staff*
-MatrixView::getFirstStaff()
+MatrixView::getCurrentStaff()
 {
-    return m_staffs[0];
+    return getStaff(0);
 }
 
 Rosegarden::Segment *

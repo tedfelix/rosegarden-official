@@ -1230,17 +1230,21 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
 		    (m_selectedStaff->getId(), m_clickedElement->event(),
 		     false, true);
 	    }
-
+/*
 	} else if (m_selectedStaff) {
 
 	    // If we clicked on no event but on a staff, move the
 	    // insertion cursor to the point where we clicked. 
-	    //!!! Actually we only really want this to happen if
+	    // Actually we only really want this to happen if
 	    // we aren't double-clicking -- consider using a timer
 	    // to establish whether a double-click is going to happen
 
 	    m_nParentView->slotSetInsertCursorPosition(e->x(), (int)e->y());
+*/
+	} else {
+	    setViewCurrentSelection(false);
 	}
+
     } else {
 
 	if (m_clickedElement && !m_clickedElement->isRest()) {
@@ -1345,7 +1349,8 @@ void NotationSelector::drag(int x, int y, bool final)
 
 	NOTATION_DEBUG << "dragTime " << dragTime << ", clickedTime " << clickedTime << endl;
 
-	if (m_clickedElement->isNote()) {
+	if ((pitch != clickedPitch || dragTime != clickedTime) &&
+	    m_clickedElement->isNote()) {
 	    m_nParentView->showPreviewNote(m_selectedStaff->getId(),
 					   layoutX, pitch, height,
 					   Note::getNearestNote(duration));

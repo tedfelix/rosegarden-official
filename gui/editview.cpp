@@ -180,10 +180,9 @@ PropertyControlRuler* EditView::makePropertyControlRuler(PropertyName propertyNa
     QCanvas* controlRulerCanvas = new QCanvas(this);
     QSize viewSize = getViewSize();
     controlRulerCanvas->resize(viewSize.width(), ControlRuler::DefaultRulerHeight); // TODO - keep it in sync with main canvas size
-    PropertyControlRuler* controlRuler = new PropertyControlRuler(propertyName,
-                                                                  getFirstStaff(), getHLayout(),
-                                                                  this,
-                                                                  controlRulerCanvas, m_controlRulers);
+    PropertyControlRuler* controlRuler = new PropertyControlRuler
+	(propertyName, getCurrentStaff(), getHLayout(), this,
+	 controlRulerCanvas, m_controlRulers);
 
     return controlRuler;
 }
@@ -193,9 +192,9 @@ ControllerEventsRuler* EditView::makeControllerEventRuler()
     QCanvas* controlRulerCanvas = new QCanvas(this);
     QSize viewSize = getViewSize();
     controlRulerCanvas->resize(viewSize.width(), ControlRuler::DefaultRulerHeight); // TODO - keep it in sync with main canvas size
-    ControllerEventsRuler* controlRuler = new ControllerEventsRuler(getFirstStaff()->getSegment(), getHLayout(),
-                                                                    this,
-                                                                    controlRulerCanvas, m_controlRulers);
+    ControllerEventsRuler* controlRuler = new ControllerEventsRuler
+	(*getCurrentSegment(), getHLayout(), this,
+	 controlRulerCanvas, m_controlRulers);
 
     return controlRuler;
 }
@@ -327,32 +326,36 @@ void EditView::slotActiveItemPressed(QMouseEvent* e,
 void
 EditView::slotStepBackward()
 {
-    Rosegarden::Segment *segment = getCurrentSegment();
-    if (!segment) return;
+    Rosegarden::Staff *staff = getCurrentStaff();
+    if (!staff) return;
+    Rosegarden::ViewElementList *vel = staff->getViewElementList();
+
     Rosegarden::timeT time = getInsertionTime();
-    Rosegarden::Segment::iterator i = segment->findTime(time);
+    Rosegarden::ViewElementList::iterator i = vel->findTime(time);
 
-    while (i != segment->begin() &&
-	   (i == segment->end() || (*i)->getAbsoluteTime() >= time)) --i;
+    while (i != vel->begin() &&
+	   (i == vel->end() || (*i)->getViewAbsoluteTime() >= time)) --i;
 
-    if (i != segment->end()) slotSetInsertCursorPosition((*i)->getAbsoluteTime());
+    if (i != vel->end()) slotSetInsertCursorPosition((*i)->getViewAbsoluteTime());
 }
 
 void
 EditView::slotStepForward()
 {
-    Rosegarden::Segment *segment = getCurrentSegment();
-    if (!segment) return;
+    Rosegarden::Staff *staff = getCurrentStaff();
+    if (!staff) return;
+    Rosegarden::ViewElementList *vel = staff->getViewElementList();
+
     Rosegarden::timeT time = getInsertionTime();
-    Rosegarden::Segment::iterator i = segment->findTime(time);
+    Rosegarden::ViewElementList::iterator i = vel->findTime(time);
 
-    while (segment->isBeforeEndMarker(i) &&
-	   (*i)->getAbsoluteTime() <= time) ++i;
+    while (i != vel->end() &&
+	   (*i)->getViewAbsoluteTime() <= time) ++i;
 
-    if (!segment->isBeforeEndMarker(i)) {
-	slotSetInsertCursorPosition(segment->getEndMarkerTime());
+    if (i == vel->end()) {
+	slotSetInsertCursorPosition(staff->getSegment().getEndMarkerTime());
     } else {
-	slotSetInsertCursorPosition((*i)->getAbsoluteTime());
+	slotSetInsertCursorPosition((*i)->getViewAbsoluteTime());
     }
 }
 
@@ -416,22 +419,27 @@ void EditView::slotExtendSelectionBackward(bool bar)
     else slotStepBackward();
     Rosegarden::timeT newTime = getInsertionTime();
 
-    Rosegarden::Segment *segment = getCurrentSegment();
-    if (!segment) return;
+    Rosegarden::Staff *staff = getCurrentStaff();
+    if (!staff) return;
+    Rosegarden::Segment *segment = &staff->getSegment();
+    Rosegarden::ViewElementList *vel = staff->getViewElementList();
+
     Rosegarden::EventSelection *es = new Rosegarden::EventSelection(*segment);
-    if (m_currentEventSelection) es->addFromSelection(m_currentEventSelection);
+    if (m_currentEventSelection &&
+	&m_currentEventSelection->getSegment() == segment)
+	es->addFromSelection(m_currentEventSelection);
 
     if (!m_currentEventSelection ||
 	&m_currentEventSelection->getSegment() != segment ||
 	m_currentEventSelection->getSegmentEvents().size() == 0 ||
 	m_currentEventSelection->getStartTime() >= oldTime) {
 
-	Rosegarden::Segment::iterator extendFrom = segment->findTime(oldTime);
+	Rosegarden::ViewElementList::iterator extendFrom = vel->findTime(oldTime);
 
-	while (extendFrom != segment->begin() &&
-	       (*--extendFrom)->getAbsoluteTime() >= newTime) {
-	    if ((*extendFrom)->isa(Rosegarden::Note::EventType)) {
-		es->addEvent(*extendFrom);
+	while (extendFrom != vel->begin() &&
+	       (*--extendFrom)->getViewAbsoluteTime() >= newTime) {
+	    if ((*extendFrom)->event()->isa(Rosegarden::Note::EventType)) {
+		es->addEvent((*extendFrom)->event());
 	    }
 	}
 
@@ -476,22 +484,27 @@ void EditView::slotExtendSelectionForward(bool bar)
     else slotStepForward();
     Rosegarden::timeT newTime = getInsertionTime();
 
-    Rosegarden::Segment *segment = getCurrentSegment();
-    if (!segment) return;
+    Rosegarden::Staff *staff = getCurrentStaff();
+    if (!staff) return;
+    Rosegarden::Segment *segment = &staff->getSegment();
+    Rosegarden::ViewElementList *vel = staff->getViewElementList();
+
     Rosegarden::EventSelection *es = new Rosegarden::EventSelection(*segment);
-    if (m_currentEventSelection) es->addFromSelection(m_currentEventSelection);
+    if (m_currentEventSelection &&
+	&m_currentEventSelection->getSegment() == segment)
+	es->addFromSelection(m_currentEventSelection);
 
     if (!m_currentEventSelection ||
 	&m_currentEventSelection->getSegment() != segment ||
 	m_currentEventSelection->getSegmentEvents().size() == 0 ||
 	m_currentEventSelection->getEndTime() <= oldTime) {
 
-	Rosegarden::Segment::iterator extendFrom = segment->findTime(oldTime);
+	Rosegarden::ViewElementList::iterator extendFrom = vel->findTime(oldTime);
 
-	while (extendFrom != segment->end() &&
-	       (*extendFrom)->getAbsoluteTime() < newTime) {
-	    if ((*extendFrom)->isa(Rosegarden::Note::EventType)) {
-		es->addEvent(*extendFrom);
+	while (extendFrom != vel->end() &&
+	       (*extendFrom)->getViewAbsoluteTime() < newTime) {
+	    if ((*extendFrom)->event()->isa(Rosegarden::Note::EventType)) {
+		es->addEvent((*extendFrom)->event());
 	    }
 	    ++extendFrom;
 	}

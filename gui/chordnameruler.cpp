@@ -290,6 +290,8 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
 {
     if (!m_composition) return;
 
+    std::cerr << "*** Chord Name Ruler: paintEvent" << std::endl;
+
     recalculate();
 
     Rosegarden::Profiler profiler("ChordNameRuler::paintEvent (body)", true);

@@ -405,9 +405,9 @@ public slots:
 
 protected:
     virtual Rosegarden::RulerScale* getHLayout();
-    virtual Rosegarden::Staff* getFirstStaff();
 
     virtual Rosegarden::Segment *getCurrentSegment();
+    virtual Rosegarden::Staff *getCurrentStaff();
     virtual Rosegarden::timeT getInsertionTime();
 
     virtual void keyPressEvent(QKeyEvent *event);

@@ -2120,12 +2120,6 @@ NotationView::getHLayout()
     return m_hlayout;
 }
 
-Rosegarden::Staff*
-NotationView::getFirstStaff()
-{
-    return m_staffs[0];
-}
-
 void
 NotationView::paintEvent(QPaintEvent *e)
 {
@@ -2475,6 +2469,12 @@ NotationView::getCurrentSegment()
 {
     NotationStaff *staff = getStaff(m_currentStaff);
     return (staff ? &staff->getSegment() : 0);
+}
+
+Rosegarden::Staff *
+NotationView::getCurrentStaff()
+{
+    return getStaff(m_currentStaff);
 }
 
 timeT

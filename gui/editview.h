@@ -173,7 +173,6 @@ public slots:
 
 protected:
     virtual Rosegarden::RulerScale* getHLayout() = 0;
-    virtual Rosegarden::Staff* getFirstStaff() = 0;
 
     QVBox* getBottomWidget() { return m_bottomBox; }
 
@@ -293,6 +292,12 @@ protected:
      * Abstract method to get current segment
      */
     virtual Rosegarden::Segment *getCurrentSegment() = 0;
+
+    /**
+     * Abstract method to get current staff (the returned staff will be
+     * that representing the segment of getCurrentSegment())
+     */
+    virtual Rosegarden::Staff *getCurrentStaff() = 0;
 
     virtual RosegardenCanvasView* getCanvasView();
     virtual void setCanvasView(RosegardenCanvasView *cv);

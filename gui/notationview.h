@@ -634,7 +634,6 @@ signals:
 protected:
 
     virtual Rosegarden::RulerScale* getHLayout();
-    virtual Rosegarden::Staff* getFirstStaff();
 
     virtual void paintEvent(QPaintEvent* e);
 
@@ -739,6 +738,7 @@ protected:
     virtual NotationCanvasView* getCanvasView();
 
     virtual Rosegarden::Segment *getCurrentSegment();
+    virtual Rosegarden::Staff *getCurrentStaff();
 
     /**
      * Return the time at which the insert cursor may be found.

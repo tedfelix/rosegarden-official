@@ -168,36 +168,53 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
     }
     
     QCanvasItemList::Iterator it;
-    QCanvasNotationSprite* sprite = 0;
     QCanvasItem* activeItem = 0;
+    NotationElement *clickedNote = 0;
+    NotationElement *clickedVagueNote = 0;
+    NotationElement *clickedNonNote = 0;
 
     int clickHeight = staff->getHeightAtCanvasY(e->y());
 
     for (it = itemList.begin(); it != itemList.end(); ++it) {
 
-        QCanvasItem *item = *it;
-
-        if (item->active()) {
-            activeItem = item;
+        if ((*it)->active()) {
+            activeItem = (*it);
             break;
         }
 
-        if ((sprite = dynamic_cast<QCanvasNotationSprite*>(item))) {
-            NotationElement &el = sprite->getNotationElement();
+        QCanvasNotationSprite *sprite =
+	    dynamic_cast<QCanvasNotationSprite*>(*it);
+	if (!sprite) continue;
 
-            if (el.isNote()) { // try to get the right note -- but at worst
-			       // we're happy to end up with just any note
+	NotationElement &el = sprite->getNotationElement();
 
-		long eventHeight = 0;
-		if (el.event()->get<Rosegarden::Int>
-		    (NotationProperties::HEIGHT_ON_STAFF, eventHeight)
-		    && eventHeight == clickHeight) break;
+	if (el.isNote()) {
+	    long eventHeight = 0;
+	    if (el.event()->get<Rosegarden::Int>
+		(NotationProperties::HEIGHT_ON_STAFF, eventHeight)) {
 
-            } else { // it's not a note, so we don't care about the pitch
+		if (eventHeight == clickHeight) {
 
-                break;
-            }
-        }
+		    if (!clickedNote &&
+			e->x() >= el.getCanvasX() &&
+			e->x() <= el.getCanvasX() +
+			staff->getNotePixmapFactory(false).getNoteBodyWidth()) {
+			clickedNote = &el;
+		    } else if (!clickedVagueNote &&
+			       e->x() >= el.getCanvasX() - 2 &&
+			       e->x() <= el.getCanvasX() +
+			       staff->getNotePixmapFactory(false).getNoteBodyWidth() + 2) {
+			clickedVagueNote = &el;
+		    }
+
+		} else if (eventHeight-1 == clickHeight ||
+			   eventHeight+1 == clickHeight) {
+		    if (!clickedVagueNote) clickedVagueNote = &el;
+		}
+	    }
+        } else {
+	    if (!clickedNonNote) clickedNonNote = &el;
+	}
     }
 
     if (activeItem) { // active item takes precedence over notation elements
@@ -213,9 +230,12 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
         NOTATION_DEBUG << "NotationCanvasView::contentsMousePressEvent() : big problem - couldn't find staff for staff line\n";
 
 
-    if (sprite)
-        handleMousePress(clickHeight, staffNo,
-                         e, &(sprite->getNotationElement()));
+    if (clickedNote)
+        handleMousePress(clickHeight, staffNo, e, clickedNote);
+    else if (clickedNonNote)
+        handleMousePress(clickHeight, staffNo, e, clickedNonNote);
+    else if (clickedVagueNote)
+        handleMousePress(clickHeight, staffNo, e, clickedVagueNote);
     else
         handleMousePress(clickHeight, staffNo, e);
 }
