@@ -190,34 +190,89 @@ protected:
      */
     struct BarData
     {
-	// slots filled at construction time:
-        int barNo;            // local to this staff, not in composition terms
-        NotationElementList::iterator start; // i.e. event following barline
-	bool correct;         // bar preceding barline has correct duration
+	struct BasicData
+	{   // slots that can be filled at construction time
 
-	// slots that won't be known until the following bar has been scanned:
-        double idealWidth;    // theoretical width of bar following barline
-        int fixedWidth;       // width of non-note items in bar
-	int baseWidth;        // minimum width of note items in bar
-	Rosegarden::Event *timeSignature; // or zero if no new one in this bar
-	Rosegarden::timeT actualDuration; // may exceed nominal duration
+	    NotationElementList::iterator start; // i.e. event following barline
+	    bool correct; // bar preceding barline has correct duration
+	    bool fake;    // bar doesn't actually exist in this staff
 
-	// slots either assumed, or only known at layout time:
-        bool needsLayout;
-        double x;             // coordinate for display of barline
-	int timeSigX;
+	} basicData;
+
+	struct SizeData
+	{   // slots that can be filled when the following bar has been scanned
+
+	    double idealWidth;    // theoretical width of bar following barline
+	    int fixedWidth;       // width of non-note items in bar
+	    int baseWidth;        // minimum width of note items in bar
+//!!! time sig should be in basic data
+	    Rosegarden::Event *timeSignature; // null if no new one in this bar
+	    Rosegarden::timeT actualDuration; // may exceed nominal duration
+
+	} sizeData;
+
+	struct LayoutData
+	{   // slots either assumed, or only known at layout time
+
+//!!! should we merge LayoutData with SizeData?
+//!!! do we really use needsLayout?
+	    bool needsLayout;
+	    double x;             // coordinate for display of barline
+	    int timeSigX;
+
+	} layoutData;
         
-        BarData(int n, NotationElementList::iterator i, bool c = true) : 
-            barNo(n), start(i), correct(c),
-	    idealWidth(0), fixedWidth(0), baseWidth(0),
-	    timeSignature(0), actualDuration(0),
-	    needsLayout(true), x(-1), timeSigX(-1)
-	    { }
+        BarData(NotationElementList::iterator i,
+		bool correct = true, bool fake = false) {
+            basicData.start = i;
+	    basicData.correct = correct;
+	    basicData.fake = fake;
+	    sizeData.idealWidth = 0;
+	    sizeData.fixedWidth = 0;
+	    sizeData.baseWidth = 0;
+	    sizeData.timeSignature = 0;
+	    sizeData.actualDuration = 0;
+	    layoutData.needsLayout = true;
+	    layoutData.x = -1;
+	    layoutData.timeSigX = -1;
+	}
     };
 
     typedef FastVector<BarData> BarDataList;
     typedef std::map<StaffType *, BarDataList> BarDataMap;
     typedef std::map<StaffType *, int> FakeBarCountMap;
+
+    /**
+     * Set the basic data for the given barNo.  If barNo is
+     * beyond the end of the existing bar data list, create new
+     * records and/or fill with empty ones as appropriate.
+     */
+    void setBarBasicData(StaffType &staff, int barNo,
+			 NotationElementList::iterator start,
+			 bool correct, bool fake = false);
+
+    /**
+     * Set the size data for the given barNo.  If barNo is
+     * beyond the end of the existing bar data list, create new
+     * records and/or fill with empty ones as appropriate.
+     */
+    void setBarSizeData(StaffType &staff, int barNo,
+			double width, int fixedWidth, int baseWidth,
+			Rosegarden::Event *timeSig,
+			Rosegarden::timeT actualDuration);
+
+/*!!!
+    void addNewBar
+    (StaffType &staff, int barCounter, NotationElementList::iterator start,
+     double width, int fwidth, int bwidth, bool correct,
+     Rosegarden::Event *timesig, Rosegarden::timeT actual);
+
+    void setBar
+    (StaffType &staff, int barNo, int barCounter,
+     NotationElementList::iterator start,
+     double width, int fwidth, int bwidth, bool correct,
+     Rosegarden::Event *timesig, Rosegarden::timeT actual);
+*/
 
     /**
      * Returns the bar positions for a given staff, provided that
@@ -230,7 +285,7 @@ protected:
     StaffType *getStaffWithWidestBar(int barNo);
 
     /// Prepends empty fake bars onto staffs that start later than the first
-    void fillFakeBars();
+//!!!    void fillFakeBars();
 
     /// Tries to harmonize the bar positions for all the staves (linear mode)
     void reconcileBarsLinear();
@@ -241,17 +296,6 @@ protected:
     void layout(BarDataMap::iterator,
 		Rosegarden::timeT startTime,
 		Rosegarden::timeT endTime);
-
-    void addNewBar
-    (StaffType &staff, int barCounter, NotationElementList::iterator start,
-     double width, int fwidth, int bwidth, bool correct,
-     Rosegarden::Event *timesig, Rosegarden::timeT actual);
-
-    void setBar
-    (StaffType &staff, int barNo, int barCounter,
-     NotationElementList::iterator start,
-     double width, int fwidth, int bwidth, bool correct,
-     Rosegarden::Event *timesig, Rosegarden::timeT actual);
     
     double getIdealBarWidth
     (StaffType &staff, int fixedWidth, int baseWidth,

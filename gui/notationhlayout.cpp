@@ -59,21 +59,6 @@ using namespace NotationProperties;
 std::vector<double> NotationHLayout::m_availableSpacings;
 
 
-static int rwms;
-static int rwc;
-
-static int nwms;
-static int nwc;
-
-static int scms;
-static int scc;
-
-static int srms;
-static int src;
-
-static int abms;
-static int abc;
-
 NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf) :
     Rosegarden::HorizontalLayoutEngine<NotationElement>(c),
     m_totalWidth(0.),
@@ -245,8 +230,6 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 {
     START_TIMING;
 
-    rwms = rwc = nwms = nwc = scc = scms = src = srms = abc = abms = 0;
-
     Segment &t(staff.getSegment());
     NotationElementList *notes = staff.getViewElementList();
     BarDataList &barList(getBarData(staff));
@@ -255,7 +238,8 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
     Clef clef;
     TimeSignature timeSignature;
 
-    bool isFullScan = (startTime == endTime);
+//!!!   bool isFullScan = (startTime == endTime);
+    bool isFullScan = true;
 
     bool allDone = false; // used in partial scans
 
@@ -267,7 +251,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 
     int barNo = getComposition()->getBarNumber(t.getStartTime());
     int endBarNo = getComposition()->getBarNumber(t.getEndTime());
-    int barCounter = 0;
+//!!!    int barCounter = 0;
 
     SegmentNotationHelper nh(t);
     nh.quantize();
@@ -275,8 +259,14 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
     PRINT_ELAPSED("NotationHLayout::scanStaff: after quantize");
 
     BarDataList &bdl(m_barData[&staff]);
-    int fakeBarCount = m_fakeBarCountMap[&staff];
+//!!!    int fakeBarCount = m_fakeBarCountMap[&staff];
 
+    //!!! need to invalidate any stray iterators in "start" fields
+    // of bar data records that are no longer in the range of this
+    // staff
+
+
+/*!!!
     // because addNewBar/setNewBar normally makes changes to the next bar,
     // the first real bar has to be a special case
     if (isFullScan) {
@@ -287,8 +277,9 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
         bdl[fakeBarCount].correct = true;
         bdl[fakeBarCount].needsLayout = true;
     }
+*/
 
-    ++barCounter;
+//!!!    ++barCounter;
 
     while (barNo <= endBarNo) {
 
@@ -297,7 +288,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 
         NotationElementList::iterator to =
 	    getStartOfQuantizedSlice(notes, barTimes.second);
-
+/*!!!
         if (!isFullScan) {
             // Full scans set some things in the bar data list during
             // addNewBar and the BarDataList constructor. Since partial
@@ -319,9 +310,21 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
                 continue;
             }
         }
+*/
 
         NotationElementList::iterator from = 
 	    getStartOfQuantizedSlice(notes, barTimes.first);
+
+	setBarBasicData(staff, barNo, from, true, false);
+
+	if (barTimes.second >= startTime) {
+	    bdl[barNo].layoutData.needsLayout = true;
+	}
+
+	if (!isFullScan && allDone) {
+	    ++barNo;
+	    continue;
+	}
 
 //	kdDebug(KDEBUG_AREA) << "NotationHLayout::scanStaff: bar " << barNo << ", from " << barTimes.first << ", to " << barTimes.second << " (end " << t.getEndTime() << ")" << endl;
 
@@ -391,27 +394,17 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 
 		++totalCount;
 		
-		clock_t c = clock();
-
 		apparentBarDuration +=
 		    scanChord(notes, itr, clef, key, accTable,
 			      fixedWidth, baseWidth, shortest, shortCount, to);
-
-	++scc;
-	scms += (clock() - c) * 1000 / CLOCKS_PER_SEC;
 
 	    } else if (el->isRest()) {
 
 		++totalCount;
 
-clock_t c = clock();
-
 		apparentBarDuration +=
 		    scanRest(notes, itr,
 			     fixedWidth, baseWidth, shortest, shortCount);
-
-	++src;
-	srms += (clock() - c) * 1000 / CLOCKS_PER_SEC;
 
 	    } else if (el->event()->isa(Indication::EventType)) {
 
@@ -431,8 +424,7 @@ clock_t c = clock();
 
 	if (actualBarEnd == barTimes.first) actualBarEnd = barTimes.second;
 
-	clock_t c = clock();
-
+/*!!!
 	if (isFullScan) { 
 	    addNewBar(staff, barCounter, to,
 		      getIdealBarWidth(staff, fixedWidth, baseWidth, shortest, 
@@ -470,43 +462,70 @@ clock_t c = clock();
         }
 
 	++barCounter;
+*/
+
+	setBarSizeData(staff, barNo,
+		       getIdealBarWidth(staff, fixedWidth, baseWidth, shortest,
+					shortCount, totalCount, timeSignature),
+		       fixedWidth, baseWidth,
+		       timeSigEvent, actualBarEnd - barTimes.first);
+
 	++barNo;
     }
 
     PRINT_ELAPSED("NotationHLayout::scanStaff");
-
-    if (nwc == 0) nwc = 1;
-    if (rwc == 0) rwc = 1;
-    if (src == 0) src = 1;
-    if (scc == 0) scc = 1;
-    if (abc == 0) abc = 1;
-
-    kdDebug(KDEBUG_AREA) << "Calls to getNoteBodyWidth: " << nwc
-			 << " (total " << nwms << "ms, average "
-			 << (nwms/nwc) << "ms)" << endl;
-
-    kdDebug(KDEBUG_AREA) << "Calls to getRestWidth: " << rwc
-			 << " (total " << rwms << "ms, average "
-			 << (rwms/rwc) << "ms)" << endl;
-
-    kdDebug(KDEBUG_AREA) << "Calls to scanChord: " << scc
-			 << " (total " << scms << "ms, average "
-			 << (scms/scc) << "ms)" << endl;
-
-    kdDebug(KDEBUG_AREA) << "Calls to scanRest: " << src
-			 << " (total " << srms << "ms, average "
-			 << (srms/src) << "ms)" << endl;
-
-    kdDebug(KDEBUG_AREA) << "Calls to addNewBar: " << abc
-			 << " (total " << abms << "ms, average "
-			 << (abms/abc) << "ms)" << endl;
-
 }
+
+void
+NotationHLayout::setBarBasicData(StaffType &staff,
+				 int barNo,
+				 NotationElementList::iterator start,
+				 bool correct,
+				 bool fake)
+{
+    BarDataList &bdl(m_barData[&staff]);
+
+    while (barNo >= bdl.size()) {
+	bdl.push_back(BarData(staff.getViewElementList()->end(), true, true));
+    }
+
+    bdl[barNo].basicData.start = start;
+    bdl[barNo].basicData.correct = correct;
+    bdl[barNo].basicData.fake = fake;
+}
+
+void
+NotationHLayout::setBarSizeData(StaffType &staff,
+				int barNo,
+				double width,
+				int fixedWidth,
+				int baseWidth,
+				Rosegarden::Event *timeSig,
+				Rosegarden::timeT actualDuration)
+{
+    BarDataList &bdl(m_barData[&staff]);
+
+    while (barNo >= bdl.size()) {
+	bdl.push_back(BarData(staff.getViewElementList()->end(), true, true));
+    }
+
+    if (bdl[barNo].sizeData.timeSignature) {
+	delete bdl[barNo].sizeData.timeSignature;
+    }
+
+    bdl[barNo].sizeData.idealWidth = width;
+    bdl[barNo].sizeData.fixedWidth = fixedWidth;
+    bdl[barNo].sizeData.baseWidth = baseWidth;
+    bdl[barNo].sizeData.timeSignature = timeSig;
+    bdl[barNo].sizeData.actualDuration = actualDuration;
+}
+
 
 //!!! probably better to split this (and setBar) into methods that deal
 // with end-of-this-bar and start-of-next-bar separately?  also we have
 // significant confusion over difference between barNo and barCounter
 // in scanStaff
+/*!!!
 void
 NotationHLayout::addNewBar(StaffType &staff,
 			   int barCounter, NotationElementList::iterator i,
@@ -551,6 +570,7 @@ NotationHLayout::setBar(StaffType &staff,
     bdl[barNo+1].correct = correct;
     bdl[barNo+1].start = i;
 }
+*/
  
 timeT
 NotationHLayout::scanChord(NotationElementList *notes,
@@ -667,7 +687,7 @@ NotationHLayout::scanRest
     return d;
 }
 
-
+/*!!!
 void
 NotationHLayout::fillFakeBars()
 {
@@ -704,7 +724,7 @@ NotationHLayout::fillFakeBars()
     
     PRINT_ELAPSED("NotationHLayout::fillFakeBars");
 }    
-
+*/
 
 NotationHLayout::StaffType *
 NotationHLayout::getStaffWithWidestBar(int barNo)
@@ -717,9 +737,9 @@ NotationHLayout::getStaffWithWidestBar(int barNo)
 
 	BarDataList &list = i->second;
 
-	if ((int)list.size() > barNo) {
-	    if (list[barNo].idealWidth > maxWidth) {
-		maxWidth = list[barNo].idealWidth;
+	if ((int)list.size() > barNo && list[barNo].basicData.fake == false) {
+	    if (list[barNo].sizeData.idealWidth > maxWidth) {
+		maxWidth = list[barNo].sizeData.idealWidth;
 		widest = i->first;
 	    }
 	}
@@ -748,7 +768,7 @@ NotationHLayout::reconcileBarsLinear()
 	StaffType *widest = getStaffWithWidestBar(barNo);
 
 	if (!widest) break; // reached end of piece
-	double maxWidth = m_barData[widest][barNo].idealWidth;
+	double maxWidth = m_barData[widest][barNo].sizeData.idealWidth;
 	if (m_pageWidth > 0.1 && maxWidth > m_pageWidth) {
 	    maxWidth = m_pageWidth;
 	}
@@ -761,7 +781,7 @@ NotationHLayout::reconcileBarsLinear()
 
 	    if (list.size() > barNo) {
 
-		BarData &bd(list[barNo]);
+		BarData::SizeData &bd(list[barNo].sizeData);
 
 		if (bd.idealWidth != maxWidth) {
 		    if (bd.idealWidth > 0.0) {
@@ -773,7 +793,7 @@ NotationHLayout::reconcileBarsLinear()
                     aWidthChanged = true;
 		}
 
-                if (aWidthChanged) bd.needsLayout = true;
+                if (aWidthChanged) list[barNo].layoutData.needsLayout = true;
 	    }
 	}
 
@@ -805,7 +825,7 @@ NotationHLayout::reconcileBarsPage()
 	
 	StaffType *widest = getStaffWithWidestBar(barNo);
 	if (!widest) break; // reached end of piece
-	double maxWidth = m_barData[widest][barNo].idealWidth;
+	double maxWidth = m_barData[widest][barNo].sizeData.idealWidth;
 
 	// Work on the assumption that this bar is the last in the
 	// row.  How would that make things look?
@@ -837,7 +857,7 @@ NotationHLayout::reconcileBarsPage()
 		    BarDataList &list = i->second;
 
 		    if (list.size() > signed(barNo)) {
-			BarData &bd(list[barNo]);
+			BarData::SizeData &bd(list[barNo].sizeData);
 			if ((nextStretchFactor * bd.idealWidth) <
 			    (double)(bd.fixedWidth + bd.baseWidth)) {
 			    tooFar = true;
@@ -888,7 +908,7 @@ NotationHLayout::reconcileBarsPage()
 	    if (!widest) break; // reached end of piece (shouldn't happen)
 	    if (finalRow && (stretchFactor > 1.0)) stretchFactor = 1.0;
 	    double maxWidth = 
-		(stretchFactor * m_barData[widest][barNo].idealWidth);
+		(stretchFactor * m_barData[widest][barNo].sizeData.idealWidth);
 
 	    if (barNoThisRow == finalBarThisRow) {
 		if (!finalRow ||
@@ -903,9 +923,9 @@ NotationHLayout::reconcileBarsPage()
 
 		if (list.size() > signed(barNo)) {
 
-		    BarData &bd(list[barNo]);
+		    BarData::SizeData &bd(list[barNo].sizeData);
+		    list[barNo].layoutData.needsLayout = true;
 
-		    bd.needsLayout = true;
 		    if (bd.idealWidth > 0) {
 			double ratio = maxWidth / bd.idealWidth;
 			bd.fixedWidth +=
@@ -1015,12 +1035,13 @@ NotationHLayout::AccidentalTable::copyFrom(const AccidentalTable &t)
 void
 NotationHLayout::finishLayout(timeT startTime, timeT endTime)
 {
-    fillFakeBars();
+//!!!    fillFakeBars();
     if (m_pageMode && (m_pageWidth > 0.1)) reconcileBarsPage();
     else reconcileBarsLinear();
-    
-    for (BarDataMap::iterator i(m_barData.begin()); i != m_barData.end(); ++i)
+      
+    for (BarDataMap::iterator i(m_barData.begin()); i != m_barData.end(); ++i) {
 	layout(i, startTime, endTime);
+    }
 }
 
 void
@@ -1036,7 +1057,8 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
     Clef clef;
     TimeSignature timeSignature;
 
-    bool isFullLayout = (startTime == endTime);
+//!!!    bool isFullLayout = (startTime == endTime);
+    bool isFullLayout = true;
 
     // these two are for partial layouts:
     bool haveSimpleOffset = false;
@@ -1050,7 +1072,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
     for (BarDataList::iterator bdi = barList.begin();
          bdi != barList.end(); ++bdi) {
 
-        NotationElementList::iterator from = bdi->start;
+        NotationElementList::iterator from = bdi->basicData.start;
         NotationElementList::iterator to;
 
 //        kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): starting barNo " << bdi->barNo << ", x = " << barX << ", width = " << bdi->idealWidth << ", time = " << (from == notes->end() ? -1 : (*from)->getAbsoluteTime()) << endl;
@@ -1059,7 +1081,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
         if (++nbdi == barList.end()) {
             to = notes->end();
         } else {
-            to = nbdi->start;
+            to = nbdi->basicData.start;
         }
 
         if (from == notes->end()) {
@@ -1075,16 +1097,16 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
             // Find how far to move everything if necessary
             if (!haveSimpleOffset) {
-                simpleOffset = barX + getPreBarMargin() - bdi->x;
+                simpleOffset = barX + getPreBarMargin() - bdi->layoutData.x;
                 haveSimpleOffset = true;
             }
 
             // Move all elements
 
-            bdi->x += simpleOffset;
+            bdi->layoutData.x += simpleOffset;
 	    
-            if (bdi->timeSignature)
-                bdi->timeSigX += (int) simpleOffset;
+            if (bdi->sizeData.timeSignature)
+                bdi->layoutData.timeSigX += (int) simpleOffset;
 
             for (NotationElementList::iterator it = from;
 		 it != notes->end() && it != to; ++it) {
@@ -1095,27 +1117,27 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
             }
 
             // And skip the real layout work
-            bdi->needsLayout = false;
+            bdi->layoutData.needsLayout = false;
             continue;
         }
 
 	x = barX;
 	x += getPreBarMargin();
-        bdi->x = x;
+        bdi->layoutData.x = x;
         x += getPostBarMargin();
-	barX += bdi->idealWidth;
+	barX += bdi->sizeData.idealWidth;
 
 	bool timeSigToPlace = false;
-	if (bdi->timeSignature) {
-	    timeSignature = TimeSignature(*(bdi->timeSignature));
+	if (bdi->sizeData.timeSignature) {
+	    timeSignature = TimeSignature(*(bdi->sizeData.timeSignature));
 	    timeSigToPlace = true;
 	}
 
-        if (bdi->barNo < 0) { // fake bar
+        if (bdi->basicData.fake) {
 //            kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): fake bar " << bdi->barNo << endl;
             continue;
         }
-        if (!bdi->needsLayout) {
+        if (!bdi->layoutData.needsLayout) {
             //!!! clef and key may not be right
             // need a better way to find them than keeping track through the
             // whole staff
@@ -1137,7 +1159,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
 	    if (timeSigToPlace && !el->event()->isa(Clef::EventType)) {
 //		kdDebug(KDEBUG_AREA) << "Placing timesig at " << x << endl;
-		bdi->timeSigX = (int)x;
+		bdi->layoutData.timeSigX = (int)x;
 		x += getFixedItemSpacing()*2 +
 		    m_npf->getTimeSigWidth(timeSignature);
 //		kdDebug(KDEBUG_AREA) << "and moving next elt to " << x << endl;
@@ -1200,7 +1222,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
             x += delta;
         }
 
-        bdi->needsLayout = false;
+        bdi->layoutData.needsLayout = false;
     }
 
     if (!isFullLayout && haveSimpleOffset) m_totalWidth += simpleOffset;
@@ -1225,10 +1247,10 @@ NotationHLayout::positionRest(StaffType &staff,
     // (We use the actual duration of the bar, not the nominal time-
     // signature duration.)
 
-    timeT barDuration = bdi->actualDuration;
+    timeT barDuration = bdi->sizeData.actualDuration;
     if (barDuration == 0) barDuration = timeSignature.getBarDuration();
 
-    long delta = (((int)bdi->idealWidth - bdi->fixedWidth) *
+    long delta = (((int)bdi->sizeData.idealWidth - bdi->sizeData.fixedWidth) *
 		  getSpacingDuration(staff, itr)) /
 	barDuration;
     rest->setLayoutAirspace(rest->getLayoutX(), delta);
@@ -1291,10 +1313,10 @@ NotationHLayout::positionChord(StaffType &staff,
     // effective duration based on the absolute time of the first
     // following event not in the chord (see getSpacingDuration)
 
-    timeT barDuration = bdi->actualDuration;
+    timeT barDuration = bdi->sizeData.actualDuration;
     if (barDuration == 0) barDuration = timeSignature.getBarDuration();
 
-    long delta = (((int)bdi->idealWidth - bdi->fixedWidth) *
+    long delta = (((int)bdi->sizeData.idealWidth - bdi->sizeData.fixedWidth) *
 		  getSpacingDuration(staff, itr)) /
 	barDuration;
 
@@ -1429,14 +1451,7 @@ int NotationHLayout::getMinWidth(NotationElement &e) const
 
         long noteType = e.event()->get<Int>(NOTE_TYPE, noteType);
 
-
-	clock_t c = clock();
-
         w += m_npf->getNoteBodyWidth(noteType);
-
-	++nwc;
-	nwms += (clock() - c) * 1000 / CLOCKS_PER_SEC;
-
 
         long dots;
         if (e.event()->get<Int>(NOTE_DOTS, dots)) {
@@ -1447,13 +1462,8 @@ int NotationHLayout::getMinWidth(NotationElement &e) const
 
     } else if (e.isRest()) {
 
-	clock_t c = clock();
-
         w += m_npf->getRestWidth(Note(e.event()->get<Int>(NOTE_TYPE),
                                      e.event()->get<Int>(NOTE_DOTS)));
-
-	++rwc;
-	rwms += (clock() - c) * 1000 / CLOCKS_PER_SEC;
 
         return w;
     }
@@ -1517,7 +1527,7 @@ NotationHLayout::reset()
 	BarDataList &bdl = i->second;
 
 	for (int j = 0; j < bdl.size(); ++j) {
-	    delete bdl[j].timeSignature;
+	    delete bdl[j].sizeData.timeSignature;
 	}
 
 	bdl.erase(bdl.begin(), bdl.end());
@@ -1555,7 +1565,7 @@ NotationHLayout::getFirstVisibleBarOnStaff(StaffType &staff)
 {
     BarDataList &bdl(getBarData(staff));
     for (int i = 0; i < bdl.size(); ++i) {
-	if (bdl[i].barNo >= 0) return i;
+	if (!bdl[i].basicData.fake) return i;
     }
     return -1;
 }
@@ -1587,7 +1597,7 @@ NotationHLayout::getBarPosition(int bar)
     for (BarDataMap::iterator i = m_barData.begin();
 	 i != m_barData.end(); ++i) {
 	int barHere = i->second.size() - 1;
-	if (barHere >= bar) return i->second[bar].x;
+	if (barHere >= bar) return i->second[bar].layoutData.x;
     }
 
     int lvb = getLastVisibleBar();
@@ -1601,7 +1611,7 @@ NotationHLayout::isBarCorrectOnStaff(StaffType &staff, int i)
     BarDataList &bdl(getBarData(staff));
     ++i;
     if (i <= 0 || i >= bdl.size()) return true;
-    else return getBarData(staff)[i].correct;
+    else return getBarData(staff)[i].basicData.correct;
 }
 
 Event *NotationHLayout::getTimeSignaturePosition(StaffType &staff,
@@ -1610,7 +1620,7 @@ Event *NotationHLayout::getTimeSignaturePosition(StaffType &staff,
     BarDataList &bdl(getBarData(staff));
     if (i < 0) i = 0;
     if (i >= bdl.size()) i = bdl.size() - 1;
-    timeSigX = (double)(bdl[i]).timeSigX;
-    return (bdl[i]).timeSignature;
+    timeSigX = (double)(bdl[i]).layoutData.timeSigX;
+    return (bdl[i]).sizeData.timeSignature;
 }
 

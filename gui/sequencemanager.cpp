@@ -199,18 +199,7 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 	// track when we end at that other segment's start time
 	// 
 	timeT seekEndTime = sliceEndElapsed;
-
 	if ((*it)->isRepeating()) seekEndTime = (*it)->getRepeatEndTime();
-/*!!!	{
-	    Composition::iterator scooter(it);
-	    if (++scooter != comp.end() &&
-		(*scooter)->getTrack() == (*it)->getTrack()) {
-		//!!! What if the following segment starts before this one
-		// ends?  Do we want to ignore it and keep going?
-		seekEndTime = (*scooter)->getStartTime();
-	    }
-	}
-*/
 
 	// No ending condition -- we do all that in the initial
 	// conditional within the loop, and subsequent breaks
