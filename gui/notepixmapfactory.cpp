@@ -148,7 +148,13 @@ NotePixmapFactory::operator=(const NotePixmapFactory &npf)
 void
 NotePixmapFactory::init(std::string fontName, int size)
 {
-    m_style = NoteStyleFactory::getStyle(StandardNoteStyleNames::Classical);
+    try {
+	m_style = NoteStyleFactory::getStyle
+	    (StandardNoteStyleNames::Classical);
+    } catch (NoteStyleFactory::StyleUnavailable u) {
+	KMessageBox::error(0, i18n(strtoqstr(u.reason)));
+	throw;
+    }
 
     if (fontName == "") fontName = NotePixmapFactory::getDefaultFont();
     if (size < 0) size = NotePixmapFactory::getDefaultSize(fontName);

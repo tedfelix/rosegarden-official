@@ -40,15 +40,22 @@ No.  A matrix editor shows a single segment only.
 It's awfully slow.
 ~~~~~~~~~~~~~~~~~~
 
-Notation rendering in particular just _is_ fairly slow.  Unlike most
-other notation applications (including Rosegarden 2.1), we render the
-entire composition to a canvas at the outset, making scrolling
-relatively smooth and quick but the initial rendering phase relatively
+Notation rendering is fairly slow, yes.  Unlike most other notation
+applications (including Rosegarden 2.1), we render the full length of
+each segment to a canvas when the notation editor starts, instead of
+rendering sections at a time when it scrolls.  This means scrolling
+should be smooth and quick but the initial rendering phase relatively
 slow.  This can be a problem for long segments, although for other
 practical reasons you're probably better off dividing long pieces into
 more manageable segments anyway.
 
-There is also a problem with Qt 2.3.0 and anti-aliased fonts: if
+You can speed things up somewhat by switching to the RG21 font, which
+doesn't look as nice but is easier to draw (though there's not yet any
+way to make it the default, so you have to wait until the rendering
+has happened before you can switch to it -- oops).  You can also make
+scrolling smoother by switching off the chord-label ruler.
+
+There is a particular problem with Qt 2.3.0 and anti-aliased fonts: if
 you're using Qt 2.3.0 and have anti-aliased fonts enabled, rendering
 performance can be dramatically slower than it should be -- even if
 you aren't actually using any anti-aliased fonts in Rosegarden.  See

@@ -604,8 +604,6 @@ TransformsMenuRestoreStemsCommand::modifySegment()
 QString
 TransformsMenuChangeNoteHeadsCommand::getGlobalName(NoteStyleName style)
 {
-    style = style.substr(1); // remove leading underscore
-
     if (style == StandardNoteStyleNames::Cross) {
 	return "C&ross Note Heads";
     } else {

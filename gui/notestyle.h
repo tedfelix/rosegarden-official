@@ -53,6 +53,11 @@ class NoteStyleFactory
 public:
     static NoteStyle *getStyle(NoteStyleName name);
 
+    struct StyleUnavailable {
+        StyleUnavailable(std::string r) : reason(r) { }
+        std::string reason;
+    };
+
 private:
     typedef std::map<NoteStyleName, NoteStyle *> StyleMap;
     static StyleMap m_styles;
@@ -64,17 +69,17 @@ class NoteStyle
 public:
     virtual ~NoteStyle();
 
-    enum NoteHeadShape {
-	AngledOval,
-	LevelOval,
-	Breve,
-	Cross,
-	TriangleUp,
-	TriangleDown,
-	Diamond,
-	Rectangle,
-	Number
-    };
+    typedef std::string NoteHeadShape;
+
+    static const NoteHeadShape AngledOval;
+    static const NoteHeadShape LevelOval;
+    static const NoteHeadShape Breve;
+    static const NoteHeadShape Cross;
+    static const NoteHeadShape TriangleUp;
+    static const NoteHeadShape TriangleDown;
+    static const NoteHeadShape Diamond;
+    static const NoteHeadShape Rectangle;
+    static const NoteHeadShape Number;
 
     NoteHeadShape getShape     (Rosegarden::Note::Type);
     bool          isFilled     (Rosegarden::Note::Type);
@@ -91,16 +96,16 @@ public:
 protected:
     struct NoteDescription {
 	NoteHeadShape shape;
-	bool black;
+	bool filled;
 	bool stem;
 	int flags;
 
 	NoteDescription() :
-	    shape(AngledOval), black(true), stem(true), flags(0) { }
+	    shape(AngledOval), filled(true), stem(true), flags(0) { }
 
 	NoteDescription(NoteHeadShape _shape,
-			bool _black, bool _stem, int _flags) :
-	    shape(_shape), black(_black), stem(_stem), flags(_flags) { }
+			bool _filled, bool _stem, int _flags) :
+	    shape(_shape), filled(_filled), stem(_stem), flags(_flags) { }
     };
 
     typedef std::map<Rosegarden::Note::Type,
@@ -120,7 +125,7 @@ protected:
     virtual void initialiseNotes();
 };
 
-
+/*!!!
 class CrossNoteStyle : public NoteStyle
 {
 protected:
@@ -140,7 +145,7 @@ class MensuralNoteStyle : public NoteStyle
 protected:
     virtual void initialiseNotes();
 };
-
+*/
 
 class CustomNoteStyle : public NoteStyle, public QXmlDefaultHandler
 {

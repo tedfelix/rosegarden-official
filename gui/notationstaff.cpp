@@ -21,6 +21,9 @@
 
 #include <algorithm>
 
+#include <kmessagebox.h>
+#include <klocale.h>
+
 #include "notationstaff.h"
 #include "qcanvassimplesprite.h"
 #include "notationproperties.h"
@@ -589,11 +592,25 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 				   bool selected)
 {
     static NoteStyle *classicalStyle = 0;
+    static bool warned = false;
 
     if (elt->event()->has(NotationProperties::NOTE_STYLE)) {
-	NoteStyle *style = NoteStyleFactory::getStyle
-	    (elt->event()->get<String>(NotationProperties::NOTE_STYLE));
-	m_npf->setNoteStyle(style);
+
+	try {
+	    NoteStyle *style = NoteStyleFactory::getStyle
+		(elt->event()->get<String>(NotationProperties::NOTE_STYLE));
+	    m_npf->setNoteStyle(style);
+
+	} catch (NoteStyleFactory::StyleUnavailable u) {
+
+	    kdDebug(KDEBUG_AREA) << "WARNING: Note style unavailable: "
+				 << u.reason << endl;
+	    if (!warned) {
+		KMessageBox::error(0, i18n(strtoqstr(u.reason)));
+		warned = true;
+	    }
+	}
+
     } else {
 	if (!classicalStyle) {
 	    classicalStyle =
