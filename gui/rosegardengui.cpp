@@ -5410,7 +5410,10 @@ RosegardenGUIApp::slotAutoSave()
         m_seqManager->getTransportStatus() == RECORDING_AUDIO)
         return;
 
-//    RG_DEBUG << "RosegardenGUIApp::slotAutoSave" << endl;
+    KConfig* config = kapp->config();
+    config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
+    if (!config->readBoolEntry("autosave", true)) return;
+
     m_doc->slotAutoSave();
 }
 

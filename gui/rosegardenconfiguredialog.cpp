@@ -247,14 +247,18 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     //
     frame = new QFrame(m_tabWidget);
     layout = new QGridLayout(frame,
-                             2, 2, // nbrow, nbcol
+                             3, 2, // nbrow, nbcol
                              10, 5);
 
+    m_autosave = new QCheckBox(i18n("Enable auto-save"), frame);
+    m_autosave->setChecked(m_cfg->readBoolEntry("autosave", true));
+    layout->addWidget(m_autosave, 0, 0);
+
     layout->addWidget(new QLabel(i18n("Auto-save interval (in seconds)"),
-                                 frame), 0, 0);
+                                 frame), 1, 0);
     m_autosaveInterval = new QSpinBox(0, 600, 10, frame);
     m_autosaveInterval->setValue(m_cfg->readUnsignedNumEntry("autosaveinterval", 60));
-    layout->addWidget(m_autosaveInterval, 0, 1);
+    layout->addWidget(m_autosaveInterval, 1, 1);
 
     addTab(frame, i18n("Auto-save"));
 
@@ -287,6 +291,8 @@ void GeneralConfigurationPage::apply()
     m_cfg->writeEntry("notenamestyle", namestyle);
 
     m_cfg->writeEntry("backgroundtextures", m_backgroundTextures->isChecked());
+
+    m_cfg->writeEntry("autosave", m_autosave->isChecked());
 
     unsigned int autosaveInterval = m_autosaveInterval->value();
     m_cfg->writeEntry("autosaveinterval", autosaveInterval);

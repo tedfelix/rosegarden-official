@@ -203,6 +203,7 @@ protected:
     QSpinBox*  m_midiPitchOctave;
     QLineEdit* m_externalAudioEditorPath;
     QCheckBox* m_backgroundTextures;
+    QCheckBox *m_autosave;
     QSpinBox*  m_autosaveInterval;
     QComboBox* m_nameStyle;
 

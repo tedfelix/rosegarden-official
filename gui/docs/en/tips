@@ -1,7 +1,6 @@
 <tip category="Rosegarden|General">
 <html>
-<p>...to assign a track to a new instrument, click and hold with the left
-mouse button on the track label.  You'll be presented with a menu listing the available MIDI and audio devices, where you can select an instrument on one of those devices.</p>
+<p>...to assign a track to a new instrument, right-click on the track label.  You'll be presented with a menu listing the available MIDI and audio devices, where you can select an instrument on one of those devices.</p>
 </html>
 </tip>
 <tip category="Rosegarden|General">
@@ -158,7 +157,7 @@ feature.<br><br>
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>...that you can add tempo and time-signature changes by double-clicking on the values displayed in the transport window?</p>
+<p>...that you can add tempo and time-signature changes by double-clicking on the values displayed in the transport window or tempo rulers?</p>
 </html>
 </tip>
 <tip category="Rosegarden|General">
@@ -179,10 +178,5 @@ feature.<br><br>
 <tip category="Rosegarden|General">
 <html>
 <p>...that if you're editing a section in the matrix or notation view, you can set that section to loop while you edit it?  Select it and use <b>Move -> Set Loop to Selection</b>, then hit Play.</p>
-</html>
-</tip>
-<tip category="Rosegarden|General">
-<html>
-<p>...that you can change the MIDI record device from the configuration dialog?  Go to <b>Settings -> Configure Rosegarden</b>, select the Sequencer page and Recording tab, and then select the device you want from the MIDI Record Device dropdown.  Your selection will be remembered for next time.</p>
 </html>
 </tip>
