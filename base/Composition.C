@@ -215,7 +215,8 @@ Composition::Composition() :
     m_copyright(""),
     m_countInBars(DefaultCountInBars),
     m_playMetronome(false),
-    m_recordMetronome(true)
+    m_recordMetronome(true),
+    m_needsRefresh(true)
 {
     // nothing else
 }
@@ -288,6 +289,8 @@ Composition::addSegment(Segment *segment)
     cerr << "Composition::addSegment: added segment, now have "
 	      << m_segments.size() << " segments" << endl;
 
+    updateRefreshStatuses();
+
     return res;
 }
 
@@ -301,6 +304,8 @@ Composition::deleteSegment(Composition::iterator i)
 
     delete p;
     m_segments.erase(i);
+
+    updateRefreshStatuses();
 }
 
 bool
@@ -321,6 +326,8 @@ Composition::detachSegment(Segment *p)
     
     p->setComposition(0);
     m_segments.erase(i);
+
+    updateRefreshStatuses();
 
     return true;
 }
@@ -360,6 +367,8 @@ Composition::setSegmentStartTimeAndTrack(Segment *s, timeT t, unsigned int track
     s->setStartTime(t);
 
     m_segments.insert(s);
+
+    updateRefreshStatuses();
 
     return true;
 }
@@ -402,6 +411,7 @@ Composition::clear()
     m_selectedTrack = 0;
     m_copyright = "";
     m_countInBars = DefaultCountInBars;
+    updateRefreshStatuses();
 }
 
 void
@@ -559,6 +569,8 @@ Composition::addTimeSignature(timeT t, TimeSignature timeSig)
 	m_timeSigSegment.insert(timeSig.getAsEvent(t));
     m_barPositionsNeedCalculating = true;
 
+    updateRefreshStatuses();
+
     return std::distance(m_timeSigSegment.begin(), i);
 }
 
@@ -647,6 +659,7 @@ Composition::removeTimeSignature(int n)
 {
     m_timeSigSegment.erase(m_timeSigSegment[n]);
     m_barPositionsNeedCalculating = true;
+    updateRefreshStatuses();
 }
 
 
@@ -673,6 +686,7 @@ Composition::addTempo(timeT time, double tempo)
     ReferenceSegment::iterator i = m_tempoSegment.insert(tempoEvent);
 
     m_tempoTimestampsNeedCalculating = true;
+    updateRefreshStatuses();
 
 #ifdef DEBUG_TEMPO_STUFF
     cerr << "Composition: Added tempo " << tempo << " at " << time << endl;
@@ -687,6 +701,7 @@ Composition::addTempo(Event tempoEvent)
     ReferenceSegment::iterator i =
 	m_tempoSegment.insert(&tempoEvent);
     m_barPositionsNeedCalculating = true;
+    updateRefreshStatuses();
 
     return std::distance(m_tempoSegment.begin(), i);
 }
@@ -699,6 +714,7 @@ Composition::addRawTempo(timeT time, int tempo)
 
     ReferenceSegment::iterator i = m_tempoSegment.insert(tempoEvent);
 
+    updateRefreshStatuses();
     m_tempoTimestampsNeedCalculating = true;
 
 #ifdef DEBUG_TEMPO_STUFF
@@ -735,6 +751,7 @@ Composition::removeTempoChange(int n)
 {
     m_tempoSegment.erase(m_tempoSegment[n]);
     m_tempoTimestampsNeedCalculating = true;
+    updateRefreshStatuses();
 }
 
 
@@ -869,6 +886,7 @@ Composition::setPosition(timeT position)
 void Composition::addTrack(Track *track)
 {
     m_tracks[track->getID()] = track;
+    updateRefreshStatuses();
 }
 
 
@@ -878,6 +896,7 @@ void Composition::deleteTrack(const int &track)
 
      delete ((*titerator).second);
      m_tracks.erase(titerator);
+    updateRefreshStatuses();
 }
 
 // Export the Composition as XML, also iterates through
@@ -972,6 +991,7 @@ Composition::clearTracks()
         delete ((*it).second);
 
     m_tracks.erase(m_tracks.begin(), m_tracks.end());
+    updateRefreshStatuses();
 }
 
 Track*
@@ -988,8 +1008,6 @@ Composition::getTrackByPosition(TrackId position)
     return 0;
 
 }
-
-
 
 }
 

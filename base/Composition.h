@@ -539,6 +539,17 @@ public:
     static const std::string TempoEventType; 
     static const PropertyName TempoProperty; // stored in beats per hour
 
+
+    //////
+    //
+    // REFRESH STATUS
+
+    // delegate RefreshStatusArray API
+    unsigned int getNewRefreshStatusId() { m_refreshStatusArray.getNewRefreshStatusId(); }
+    RefreshStatus& getRefreshStatus(unsigned int id) { return m_refreshStatusArray.getRefreshStatus(id); }
+    /// Set all refresh statuses to true
+    void updateRefreshStatuses() { m_refreshStatusArray.updateRefreshStatuses(); }
+
 protected:
 
     class ReferenceSegment;
@@ -665,6 +676,10 @@ protected:
 
     bool m_playMetronome;
     bool m_recordMetronome;
+
+    RefreshStatusArray<RefreshStatus> m_refreshStatusArray;
+
+    bool m_needsRefresh;
 
 private:
     Composition(const Composition &);

@@ -37,7 +37,38 @@ public:
 protected:
     bool m_needsRefresh;
 };
- 
+
+template<class RS>
+class RefreshStatusArray
+{
+public:
+    unsigned int getNewRefreshStatusId();
+    size_t size() { return m_refreshStatuses.size(); }
+    RS& getRefreshStatus(unsigned int id) { return m_refreshStatuses[id]; }
+    void updateRefreshStatuses();
+
+protected:
+    std::vector<RS> m_refreshStatuses;
+};
+
+template<class RS>
+unsigned int RefreshStatusArray<RS>::getNewRefreshStatusId()
+{
+    m_refreshStatuses.push_back(RS());
+    unsigned int res = m_refreshStatuses.size() - 1;
+    std::cerr << "RefreshStatusArray<RS>::getNewRefreshStatusId() : res = "
+              << res << std::endl;
+    return res;
+}
+
+template<class RS>
+void RefreshStatusArray<RS>::updateRefreshStatuses()
+{
+    for(unsigned int i = 0; i < m_refreshStatuses.size(); ++i)
+        m_refreshStatuses[i].setNeedsRefresh(true);
+}
+
+
 }
 
 #endif

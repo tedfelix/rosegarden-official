@@ -162,8 +162,8 @@ void Segment::erase(iterator pos)
 
 void Segment::updateRefreshStatuses(timeT startTime, timeT endTime)
 {
-    for(unsigned int i = 0; i < m_refreshStatuses.size(); ++i)
-        m_refreshStatuses[i].push(startTime, endTime);
+    for(unsigned int i = 0; i < m_refreshStatusArray.size(); ++i)
+        m_refreshStatusArray.getRefreshStatus(i).push(startTime, endTime);
 }
 
 
@@ -656,12 +656,6 @@ void Segment::notifyRemove(Event *e) const
 	 i != m_observers.end(); ++i) {
 	(*i)->eventRemoved(this, e);
     }
-}
-
-unsigned int Segment::getNewRefreshStatusId()
-{
-    m_refreshStatuses.push_back(SegmentRefreshStatus());
-    return m_refreshStatuses.size() - 1;
 }
 
 

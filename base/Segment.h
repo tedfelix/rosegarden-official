@@ -450,8 +450,14 @@ public:
     int getTranspose() const { return m_transpose; }
     void setTranspose(const int &transpose) { m_transpose = transpose; }
 
-    unsigned int getNewRefreshStatusId();
-    SegmentRefreshStatus& refreshStatus(unsigned int id) { return m_refreshStatuses[id]; }
+    //////
+    //
+    // REFRESH STATUS
+
+    // delegate part of the RefreshStatusArray API
+
+    unsigned int getNewRefreshStatusId() { return m_refreshStatusArray.getNewRefreshStatusId(); }
+    SegmentRefreshStatus& getRefreshStatus(unsigned int id) { return m_refreshStatusArray.getRefreshStatus(id); }
     void updateRefreshStatuses(timeT startTime, timeT endTime);
 
 private:
@@ -486,7 +492,7 @@ private:
     int m_transpose;            // all Events tranpose
     Rosegarden::timeT m_delay;  // all Events delay
 
-    std::vector<SegmentRefreshStatus> m_refreshStatuses;
+    RefreshStatusArray<SegmentRefreshStatus> m_refreshStatusArray;
 
 };
 
