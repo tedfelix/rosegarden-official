@@ -500,6 +500,9 @@ void NotationView::slotSaveOptions()
     toolBar("clefsToolBar")->saveSettings(m_config, "Notation Options clefsToolBar");
     toolBar("fontToolBar")->saveSettings(m_config, "Notation Options fontToolBar");
     toolBar("accidentalsToolBar")->saveSettings(m_config, "Notation Options accidentalsToolBar");
+    toolBar("toolsToolBar")->saveSettings(m_config, "Notation Options toolsToolBar");
+    toolBar("textToolBar")->saveSettings(m_config, "Notation Options textToolBar");
+    toolBar("metaToolBar")->saveSettings(m_config, "Notation Options metaToolBar");
 }
 
 void NotationView::readOptions()
@@ -550,6 +553,9 @@ void NotationView::readOptions()
     toolBar("clefsToolBar")->applySettings(m_config, "Notation Options clefsToolBar");
     toolBar("fontToolBar")->applySettings(m_config, "Notation Options fontToolBar");
     toolBar("accidentalsToolBar")->applySettings(m_config, "Notation Options accidentalsToolBar");
+    toolBar("toolsToolBar")->applySettings(m_config, "Notation Options toolsToolBar");
+    toolBar("textToolBar")->applySettings(m_config, "Notation Options textToolBar");
+    toolBar("metaToolBar")->applySettings(m_config, "Notation Options metaToolBar");
 }
 
 void NotationView::setupActions()
