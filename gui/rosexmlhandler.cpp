@@ -129,8 +129,13 @@ bool ConfigurationXmlSubHandler::startElement(const QString&, const QString&,
     return true;
 }
 
-bool ConfigurationXmlSubHandler::characters(const QString& ch)
+bool ConfigurationXmlSubHandler::characters(const QString& chars)
 {
+    QString ch = chars.stripWhiteSpace();
+    // this method is also called on newlines - skip these cases
+    if (ch.isEmpty()) return true;
+
+
     if (m_propertyType == "Int") {
         long i = ch.toInt();
         RG_DEBUG << "\"" << m_propertyName << "\" "
@@ -177,6 +182,8 @@ ConfigurationXmlSubHandler::endElement(const QString&,
                                        const QString& lcName,
                                        bool& finished)
 {
+    m_propertyName = "";
+    m_propertyType = "";
     finished = (lcName == "configuration");
     return true;
 }
