@@ -27,6 +27,7 @@
 
 #include "Segment.h"
 #include "BaseProperties.h"
+#include "Composition.h"
 
 
 using Rosegarden::Segment;
@@ -38,8 +39,6 @@ MatrixStaff::MatrixStaff(QCanvas *canvas, Segment *segment,
     m_scaleFactor
         (1.5 / Rosegarden::Note(Rosegarden::Note::Shortest).getDuration())
 {
-    // nothing else yet
-
 
     // Create a velocity colouring object
     //
@@ -112,7 +111,15 @@ void MatrixStaff::positionElement(MatrixElement* el)
 timeT MatrixStaff::getTimeForCanvasX(double x)
 {
     double layoutX = x - m_x;
-    return (timeT)(layoutX / m_scaleFactor);
+    Rosegarden::Composition *comp = m_segment.getComposition();
+    Rosegarden::timeT firstBarTime = 0;
+
+    if (comp)
+    {
+        firstBarTime = comp->getBarStart(comp->getBarNumber(m_segment.getStartTime()));
+    }
+
+    return (timeT)((layoutX / m_scaleFactor) + firstBarTime);
 }
 
 QString MatrixStaff::getNoteNameForPitch(unsigned int pitch)
