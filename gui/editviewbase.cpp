@@ -66,7 +66,10 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
     m_compositionRefreshStatusId(doc->getComposition().getNewRefreshStatusId()),
     m_needUpdate(false),
     m_accelerators(0),
-    m_configDialogPageIndex(0)
+    m_configDialogPageIndex(0),
+    m_shiftDown(false),
+    m_controlDown(false)
+
 {
     initSegmentRefreshStatusIds();
 
@@ -392,3 +395,6 @@ KToggleAction* EditViewBase::getToggleAction(const QString& actionName)
 {
     return dynamic_cast<KToggleAction*>(actionCollection()->action(actionName));
 }
+
+
+

@@ -134,9 +134,6 @@ void MatrixCanvasView::contentsMouseDoubleClickEvent (QMouseEvent* e)
 
 void MatrixCanvasView::contentsMouseReleaseEvent(QMouseEvent* e)
 {
-    // Restore grid snap
-    m_snapGrid.setSnapTime(SnapGrid::SnapToBeat);
-    
     if (m_ignoreClick) {
         m_ignoreClick = false;
         return;
@@ -150,6 +147,10 @@ void MatrixCanvasView::contentsMouseReleaseEvent(QMouseEvent* e)
 
     emit mouseReleased(evTime, evPitch, e);
     m_mouseWasPressed = false;
+
+    // Restore grid snap
+    m_snapGrid.setSnapTime(SnapGrid::SnapToBeat);
+    
 }
 
 void MatrixCanvasView::slotExternalWheelEvent(QWheelEvent* e)

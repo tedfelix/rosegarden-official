@@ -108,7 +108,7 @@ class MatrixInsertionCommand : public BasicCommand
 public:
     MatrixInsertionCommand(Rosegarden::Segment &segment,
                            timeT time,
-                           timeT duration,
+                           timeT endTime,
                            MatrixStaff*,
                            Rosegarden::Event *event);
 
@@ -391,8 +391,14 @@ bool MatrixPainter::handleMouseMove(Rosegarden::timeT time,
 
     using Rosegarden::BaseProperties::PITCH;
 
+    int initialWidth = m_currentElement->getWidth();
+
     double width = (time - m_currentElement->event()->getAbsoluteTime())
 	* m_currentStaff->getTimeScaleFactor();
+
+    // ensure we don't have a zero width preview
+    if (width == 0) width = initialWidth;
+
     m_currentElement->setWidth(int(width));
     
     if (pitch != m_currentElement->event()->get<Rosegarden::Int>(PITCH)) {
@@ -430,8 +436,8 @@ void MatrixPainter::handleMouseRelease(Rosegarden::timeT endTime,
 
     MatrixInsertionCommand* command = 
 	new MatrixInsertionCommand(m_currentStaff->getSegment(),
-				   std::min(time, endTime),
-				   std::max(time, endTime),
+				   time,
+                                   endTime,
 				   m_currentStaff,
 				   m_currentElement->event());
     
@@ -503,7 +509,15 @@ void MatrixSelector::handleLeftButtonPress(Rosegarden::timeT,
 
     if (m_clickedElement)
     {
-        m_mParentView->playNote(m_clickedElement->event());
+        // If this element is already in the selection then go to
+        // move mode.
+        //
+        if (m_mParentView->isElementSelected(m_clickedElement))
+        {
+            cout << "MOVE" << endl;
+        }
+        else // select this by itself
+            m_mParentView->playNote(m_clickedElement->event());
     }
     else
     {
@@ -530,29 +544,13 @@ void MatrixSelector::handleMidButtonPress(Rosegarden::timeT time,
     m_dispatchTool->handleLeftButtonPress(time, height, staffNo, e, element);
 }
 
-// void MatrixSelector::handleMouseDblClick(Rosegarden::timeT,
-//                                            int,
-//                                            int staffNo,
-//                                            QMouseEvent* e,
-//                                            ViewElement *element)
-// {
-//     kdDebug(KDEBUG_AREA) << "MatrixSelector::handleMouseDblClick" << endl;
-//     m_clickedStaff = staffNo;
-//     m_clickedElement = dynamic_cast<MatrixElement*>(element);
-    
-//     MatrixStaff *staff = m_mParentView->getStaff(staffNo);
-//     if (!staff) return;
-
-//     QRect rect = staff->getBarExtents(e->x(), e->y());
-
-//     m_selectionRect->setX(rect.x() + 1);
-//     m_selectionRect->setY(rect.y());
-//     m_selectionRect->setSize(rect.width() - 1, rect.height());
-
-//     m_selectionRect->show();
-//     m_updateRect = false;
-//     return;
-// }
+void MatrixSelector::handleMouseDblClick(Rosegarden::timeT,
+                                         int,
+                                         int staffNo,
+                                         QMouseEvent* e,
+                                         Rosegarden::ViewElement *element)
+{
+}
 
 bool MatrixSelector::handleMouseMove(timeT time, int height,
                                      QMouseEvent *e)
@@ -593,7 +591,7 @@ bool MatrixSelector::handleMouseMove(timeT time, int height,
             if ((matrixRect = dynamic_cast<QCanvasMatrixRectangle*>(item)))
             {
                 MatrixElement *mE = &matrixRect->getMatrixElement();
-                mE->setColour(RosegardenGUIColours::SelectedElement);
+
                 m_mParentView->canvas()->update();
                 if (m_mParentView->addElementToSelection(mE))
                 {
@@ -606,38 +604,30 @@ bool MatrixSelector::handleMouseMove(timeT time, int height,
     }
 
     // Work out what has changed and adjust the element selection
-    // accordingly.
+    // accordingly.  Only if we've not got shift down - otherwise
+    // we can add to the selection.
     //
-    bool found = false;
-
-    for(SelectedElements::iterator oIt = oldElements.begin();
-            oIt != oldElements.end(); oIt++)
+    if (!m_mParentView->isShiftDown())
     {
-        found = false;
-        for (SelectedElements::iterator nIt = newElements.begin();
-                nIt != newElements.end(); nIt++)
+        bool found = false;
+
+        for(SelectedElements::iterator oIt = oldElements.begin();
+                oIt != oldElements.end(); oIt++)
         {
-            if (*oIt == *nIt)
+            found = false;
+            for (SelectedElements::iterator nIt = newElements.begin();
+                    nIt != newElements.end(); nIt++)
             {
-                found = true;
-                break;
+                if (*oIt == *nIt)
+                {
+                    found = true;
+                    break;
+                }
             }
-        }
-        if (found == false)
-        {
-            m_mParentView->removeElementFromSelection(*oIt);
-
-            // attempt to get original velocity colouring from
-            // the matrixstaff
-            //
-            using Rosegarden::BaseProperties::VELOCITY;
-            long velocity = 127;
-            if ((*oIt)->event()->has(VELOCITY))
-                (*oIt)->event()->get<Rosegarden::Int>(VELOCITY, velocity);
-
-            (*oIt)->setColour(m_mParentView->
-                getStaff(0)->getVelocityColour()->getColour(velocity));
-            m_mParentView->canvas()->update();
+            if (found == false)
+            {
+                m_mParentView->removeElementFromSelection(*oIt);
+            }
         }
     }
 
@@ -662,23 +652,16 @@ void MatrixSelector::handleMouseRelease(timeT time, int height, QMouseEvent *e)
 
     if (m_clickedElement)
     {
-        SelectedElements elements = m_mParentView->getSelectedElements();
-        for(SelectedElements::iterator it = elements.begin();
-                it != elements.end(); it++)
+        // if shift is down then we add this element to the selection
+        //
+        if (!m_mParentView->isShiftDown())
         {
-            m_mParentView->removeElementFromSelection(*it);
-
-            using Rosegarden::BaseProperties::VELOCITY;
-            long velocity = 127;
-            if ((*it)->event()->has(VELOCITY))
-                (*it)->event()->get<Rosegarden::Int>(VELOCITY, velocity);
-
-            (*it)->setColour(m_mParentView->
-                getStaff(0)->getVelocityColour()->getColour(velocity));
+            SelectedElements elements = m_mParentView->getSelectedElements();
+            for(SelectedElements::iterator it = elements.begin();
+                    it != elements.end(); it++)
+                m_mParentView->removeElementFromSelection(*it);
         }
 
-        // add in clicked element
-        m_clickedElement->setColour(RosegardenGUIColours::SelectedElement);
         m_mParentView->addElementToSelection(m_clickedElement);
 
         // translate the segment items in an Event selection
@@ -693,24 +676,6 @@ void MatrixSelector::handleMouseRelease(timeT time, int height, QMouseEvent *e)
         m_selectionRect->hide();
         m_mParentView->canvas()->update();
     }
-
-    // If we didn't drag out a meaningful area, but _did_ click on
-    // an individual event, then select just that event
-    
-//     if (m_selectionRect->width()  > -3 &&
-//         m_selectionRect->width()  <  3 &&
-//         m_selectionRect->height() > -3 &&
-//         m_selectionRect->height() <  3) {
-
-// 	m_selectionRect->hide();
-
-// 	if (m_clickedElement != 0 &&
-// 	    m_clickedStaff   >= 0) {
-
-// 	    m_mParentView->setSingleSelectedEvent
-// 		(m_clickedStaff, m_clickedElement->event());
-// 	}
-//     }
 }
 
 void MatrixSelector::ready()
@@ -853,10 +818,12 @@ bool MatrixMover::handleMouseMove(Rosegarden::timeT newTime,
 
     if (!m_currentElement || !m_currentStaff) return false;
 
-    int y = m_currentStaff->getLayoutYForHeight(pitch) - m_currentStaff->getElementHeight() / 2;
+    int y = m_currentStaff->getLayoutYForHeight(pitch) -
+            m_currentStaff->getElementHeight() / 2;
 
     m_currentElement->setLayoutY(y);
-    m_currentElement->setLayoutX(newTime * m_currentStaff->getTimeScaleFactor());
+    m_currentElement->
+        setLayoutX(newTime * m_currentStaff->getTimeScaleFactor());
 
     m_currentStaff->positionElement(m_currentElement);
     m_mParentView->canvas()->update();
@@ -918,7 +885,11 @@ bool MatrixResizer::handleMouseMove(Rosegarden::timeT newTime,
     if (!m_currentElement || !m_currentStaff) return false;
     timeT newDuration = newTime - m_currentElement->getAbsoluteTime();
 
+    int initialWidth = m_currentElement->getWidth();
     double width = newDuration * m_currentStaff->getTimeScaleFactor();
+
+    if (width == 0) width = initialWidth;
+
     m_currentElement->setWidth(int(width));
 
     m_mParentView->canvas()->update();

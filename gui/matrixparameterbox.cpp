@@ -86,10 +86,15 @@ MatrixParameterBox::initBox()
     // default to last item
     m_quantizeValue->setCurrentItem(m_quantizeValue->count() - 1);
 
+    QLabel *snapGridLabel = new QLabel(i18n("Snap grid"), this);
+    m_snapGridValue = new RosegardenComboBox(false, false, this);
+
     // Insert everything
     gridLayout->addRowSpacing(0, 8);
     gridLayout->addWidget(quantizeLabel, 1, 0, AlignLeft|AlignTop);
     gridLayout->addWidget(m_quantizeValue, 1, 1, AlignTop);
+    gridLayout->addWidget(snapGridLabel, 2, 0, AlignLeft|AlignTop);
+    gridLayout->addWidget(m_snapGridValue, 2, 1, AlignTop);
 
 
 }

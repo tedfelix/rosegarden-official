@@ -102,9 +102,22 @@ public:
     // Selection of current matrix elements
     //
     SelectedElements& getSelectedElements() { return m_selectedElements; }
+
+    // Set entire selection
+    //
     void setSelectedElements(const SelectedElements &eS);
+
+    // Add
+    //
     bool addElementToSelection(MatrixElement *mE);
+
+    // Remove
+    //
     void removeElementFromSelection(MatrixElement *mE);
+
+    // Is this element in the current selection?
+    //
+    bool isElementSelected(MatrixElement *mE);
 
 signals:    
     /**
@@ -207,6 +220,9 @@ public slots:
     void closeWindow();
 
 protected:
+
+    virtual void keyPressEvent(QKeyEvent *event);
+    virtual void keyReleaseEvent(QKeyEvent *event);
 
     /**
      * save general Options like all bar positions and status as well

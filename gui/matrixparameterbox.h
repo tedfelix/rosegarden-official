@@ -52,6 +52,7 @@ signals:
 protected:
 
     RosegardenComboBox         *m_quantizeValue;
+    RosegardenComboBox         *m_snapGridValue;
 
     std::vector<Rosegarden::StandardQuantization> m_standardQuantizations;
 

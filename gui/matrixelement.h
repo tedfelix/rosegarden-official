@@ -106,11 +106,13 @@ public:
      * Sets the width of the rectangle on the canvas
      */
     void setWidth(int w)   { m_canvasRect->setSize(w, m_canvasRect->height()); }
+    int getWidth() { return m_canvasRect->width(); }
 
     /**
      * Sets the height of the rectangle on the canvas
      */
     void setHeight(int h)   { m_canvasRect->setSize(m_canvasRect->width(), h); }
+    int getHeight() { return m_canvasRect->height(); }
 
     /// Returns true if the wrapped event is a note
     bool isNote() const;

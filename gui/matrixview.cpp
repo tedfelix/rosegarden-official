@@ -54,6 +54,7 @@
 #include "editcommands.h"
 #include "qdeferscrollview.h"
 #include "matrixparameterbox.h"
+#include "velocitycolour.h"
 
 #include "rosedebug.h"
 
@@ -860,6 +861,8 @@ void MatrixView::setSelectedElements(const SelectedElements &eS)
         m_selectedElements.push_back(*it);
 }
 
+// Takes care of the element colouring too
+//
 bool MatrixView::addElementToSelection(MatrixElement *mE)
 {
     SelectedElements::iterator it = m_selectedElements.begin();
@@ -871,12 +874,16 @@ bool MatrixView::addElementToSelection(MatrixElement *mE)
             return false;
     }
 
-    // otherwise add it in
+    // otherwise add it in and set the colour
     m_selectedElements.push_back(mE);
+    mE->setColour(RosegardenGUIColours::SelectedElement);
+    canvas()->update();
 
     return true;
 }
 
+// Takes care of the element colouring too
+//
 void MatrixView::removeElementFromSelection(MatrixElement *mE)
 {
     SelectedElements::iterator it = m_selectedElements.begin();
@@ -885,10 +892,74 @@ void MatrixView::removeElementFromSelection(MatrixElement *mE)
     {
         if (*it == mE)
         {
+            // change colour back to original
+            using Rosegarden::BaseProperties::VELOCITY;
+            long velocity = 127;
+            if (mE->event()->has(VELOCITY))
+                mE->event()->get<Rosegarden::Int>(VELOCITY, velocity);
+
+            (mE)->setColour(getStaff(0)->
+                            getVelocityColour()->getColour(velocity));
+            canvas()->update();
+
             m_selectedElements.erase(it);
             break;
         }
     }
 }
 
+bool
+MatrixView::isElementSelected(MatrixElement *mE)
+{
+    SelectedElements::iterator it = m_selectedElements.begin();
+
+    for (; it !=  m_selectedElements.end(); it++)
+    {
+        if (*it == mE)
+            return true;
+    }
+
+    return false;
+}
+
+
+
+void
+MatrixView::keyPressEvent(QKeyEvent *event)
+{
+    switch(event->key())
+    {
+        case Key_Shift:
+            m_shiftDown = true;
+            break;
+
+        case Key_Control:
+            m_controlDown = true;
+            break;
+
+        default:
+            event->ignore();
+            break;
+    }
+}
+
+
+void
+MatrixView::keyReleaseEvent(QKeyEvent *event)
+{
+    switch(event->key())
+    {
+        case Key_Shift:
+            m_shiftDown = false;
+            break;
+
+        case Key_Control:
+            m_controlDown = false;
+            break;
+
+        default:
+            event->ignore();
+            break;
+    }
+}
 

@@ -100,7 +100,7 @@ protected:
     MatrixPainter(QString name, MatrixView*);
 
     MatrixElement* m_currentElement;
-    MatrixStaff* m_currentStaff;
+    MatrixStaff*   m_currentStaff;
 };
 
 
@@ -128,6 +128,9 @@ protected:
 #include "Selection.h"
 class QCanvasRectangle;
 
+// Selector is a multipurpose tool and delegates often to other
+// tools to speciliase its behaviour.
+//
 class MatrixSelector : public MatrixTool
 {
     Q_OBJECT
@@ -136,31 +139,35 @@ class MatrixSelector : public MatrixTool
 
 public:
 
-    virtual void handleLeftButtonPress(Rosegarden::timeT,
+    virtual void handleLeftButtonPress(Rosegarden::timeT time,
                                        int height,
                                        int staffNo,
                                        QMouseEvent *event,
-                                       Rosegarden::ViewElement*);
+                                       Rosegarden::ViewElement *element);
 
-    virtual void handleMidButtonPress(Rosegarden::timeT,
+    virtual void handleMidButtonPress(Rosegarden::timeT time,
                                       int height,
                                       int staffNo,
                                       QMouseEvent *event,
-                                      Rosegarden::ViewElement*);
+                                      Rosegarden::ViewElement *element);
 
-    /**
-     * Set the duration of the element
-     */
-    virtual bool handleMouseMove(Rosegarden::timeT,
+    virtual bool handleMouseMove(Rosegarden::timeT time,
                                  int height,
-                                 QMouseEvent*);
+                                 QMouseEvent *event);
 
-    /**
-     * Actually insert the new element
-     */
     virtual void handleMouseRelease(Rosegarden::timeT,
                                     int height,
-                                    QMouseEvent*);
+                                    QMouseEvent *event);
+
+    /**
+     *
+     */
+    virtual void handleMouseDblClick(Rosegarden::timeT time,
+                                     int height,
+                                     int staffNo,
+                                     QMouseEvent* event,
+                                     Rosegarden::ViewElement *element);
+
 
     /**
      * Create the selection rect
