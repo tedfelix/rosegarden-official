@@ -37,15 +37,26 @@ class PositionCursor : public QObject, public QCanvasItemGroup
 public:
     PositionCursor(QCanvas*, QObject* parent = 0);
 
+    void handleMousePress();
+    void handleMouseMove(QMouseEvent*);
+    void handleMouseRelease(QMouseEvent*);
+
+    int getPosition() const { return int(x()); }
+
+    int getMinPosition() const { return m_minPos; }
+    void setMinPosition(int p);
+
 public slots:
-    void setPosition(unsigned int pos);
+    void setPosition(int pos);
 
 signals:
-    void positionChange(unsigned int pos);
+    void positionChange(int pos);
 
 protected:
     QCanvasRectangleGroupable* m_grip;
     QCanvasLineGroupable* m_line;
+
+    int m_minPos;
 };
 
 //////////////////////////////////////////////////////////////////////
@@ -71,8 +82,9 @@ public:
     void update();
 
     void setCursorPosition(unsigned int pos) { m_cursor->setPosition(pos); }
-    unsigned int getCursorPosition() const   { return int(m_cursor->x()); }
+    unsigned int getCursorPosition() const   { return int(m_cursor->x());  }
     
+    PositionCursor* getCursor() { return m_cursor; }
 
 protected:
     struct StepElement

@@ -1,5 +1,7 @@
 // -*- c-basic-offset: 4 -*-
 
+#include "rosedebug.h"
+
 #include "staffruler.h"
 
 #include "qcanvaslinegroupable.h"
@@ -82,11 +84,15 @@ void StaffRuler::addStep(double stepPos, unsigned short subSteps)
 
 void StaffRuler::update()
 {
+    if (m_steps.size() == 0) return;
+
     // TODO: perhaps recycle instead
 
     for (unsigned int i = 0; i < m_steps.size() - 1; ++i) {
          makeStep(i, m_steps[i].first, m_steps[i + 1].first, m_steps[i].second);
     }
+
+    m_cursor->setMinPosition(int(m_steps[0].first) + m_xPos);
 
 //     m_mainLine->setPoints
 // 	(m_xPos, m_yPos,
@@ -149,10 +155,11 @@ PositionCursor::PositionCursor(QCanvas* c, QObject* parent)
     : QObject(parent),
       QCanvasItemGroup(c),
       m_grip(new QCanvasRectangleGroupable(c, this)),
-      m_line(new QCanvasLineGroupable(c, this))
+      m_line(new QCanvasLineGroupable(c, this)),
+      m_minPos(0)
 {
     m_grip->setX(-5);
-    m_grip->setY(20);
+    m_grip->setY(30);
     m_grip->setSize(11, 10);
     m_grip->setBrush(magenta);
     m_line->setPoints(0, 0, 0, canvas()->height());
@@ -161,8 +168,35 @@ PositionCursor::PositionCursor(QCanvas* c, QObject* parent)
     setActive(true);
 }
 
-void PositionCursor::setPosition(unsigned int pos)
+void PositionCursor::setPosition(int pos)
 {
-    setX(pos);
+    setX((pos > getMinPosition()) ? pos : getMinPosition());
 }
 
+void PositionCursor::handleMousePress()
+{
+}
+
+void PositionCursor::handleMouseMove(QMouseEvent* e)
+{
+    if (e->x() > getMinPosition())
+        setPosition(e->x());
+    else
+        setPosition(getMinPosition());
+}
+
+void PositionCursor::handleMouseRelease(QMouseEvent* e)
+{
+    if (e->x() > getMinPosition())
+        setPosition(e->x());
+
+    emit positionChange(getPosition());
+}
+
+void PositionCursor::setMinPosition(int p)
+{
+    m_minPos = p;
+
+    if (getPosition() < getMinPosition())
+        setPosition(getMinPosition());
+}
