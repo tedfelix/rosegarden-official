@@ -1,0 +1,690 @@
+X-From-Line: richard.bown@wcom.co.uk  Mon Apr 17 20:38:30 2000
+Return-Path: <richard.bown@wcom.co.uk>
+Received: from localhost (localhost [127.0.0.1])
+	by linux2.wanadoo.fr (8.9.3/8.9.3) with ESMTP id UAA24956
+	for <glaurent@localhost>; Mon, 17 Apr 2000 20:38:30 +0200
+Received: from mailhost.worldnet.net
+	by localhost with POP3 (fetchmail-5.3.5)
+	for glaurent@localhost (single-drop); Mon, 17 Apr 2000 20:38:30 +0200 (CEST)
+Received: by m3.worldnet.net (mbox glaurent)
+ (with Cubic Circle's cucipop (v1.31 1998/05/13) Mon Apr 17 20:38:37 2000)
+X-From_: richard.bown@wcom.co.uk  Mon Apr 17 11:54:00 2000
+Received: from frontal.worldnet.net (frontal.nfs [192.168.0.5])
+	by m1.worldnet.net (8.9.3/8.9.3) with ESMTP id LAA10925
+	for <glaurent@worldnet.fr>; Mon, 17 Apr 2000 11:54:00 +0200 (CEST)
+Received: from gblon1imr1.wcom.co.uk ([194.203.119.44])
+	by frontal.worldnet.net (8.9.3/8.9.3) with ESMTP id NAA12554
+	for <glaurent@worldnet.fr>; Mon, 17 Apr 2000 13:45:38 +0200 (CEST)
+X-Internal-ID: 38F5E55900011165
+Received: from gblon1imr1.wcom.co.uk (170.127.34.15) by gblon1imr1.wcom.co.uk (NPlex 3.0.036); Mon, 17 Apr 2000 10:51:30 +0100
+Received: from gblon1gwi1.wcom.co.uk (gblon1gwi1.wcom.co.uk [170.127.34.16]) by gblon1imr1.wcom.co.uk with SMTP (MailShield v1.5); Mon, 17 Apr 2000 10:51:29 +0100
+Received: by gblon1gwi1.wcom.co.uk with Internet Mail Service (5.5.2650.10)
+	id <2K82QTJD>; Mon, 17 Apr 2000 10:52:14 +0100
+Message-ID: <E41A2CDB12D3D31198BD00508B6F75E60FAFC7@gblon1c7ex1.wcom.co.uk>
+From: "Bown, Richard" <richard.bown@wcom.co.uk>
+To: "'Chris Cannam'" <cannam@all-day-breakfast.com>,
+        Richard Bown
+	 <bownie@bownie.com>,
+        Guillaume Laurent <glaurent@worldnet.fr>
+Subject: RE: that Rosegarden email
+Date: Mon, 17 Apr 2000 10:52:37 +0100
+MIME-Version: 1.0
+X-Mailer: Internet Mail Service (5.5.2650.10)
+Content-Type: text/plain;
+	charset="iso-8859-1"
+X-SMTP-HELO: gblon1gwi1.wcom.co.uk
+X-SMTP-MAIL-FROM: richard.bown@wcom.co.uk
+X-SMTP-RCPT-TO: cannam@all-day-breakfast.com,bownie@bownie.com,glaurent@worldnet.fr
+X-SMTP-PEER-INFO: gblon1gwi1.wcom.co.uk [170.127.34.16]
+Lines: 126
+Xref: linux2.wanadoo.fr glaurent:7916
+
+> > MIDI instruments and Audio instruments are "channelised"
+> 
+> What sort of relationship do you anticipate between "notes"
+> and "instruments"?  Notes are stored in sets of series, each
+> note associated with one instrument and that instrument's
+> properties define things like positioning for all its notes?
+
+>From an operational point of the view the Track (a series of
+notes or audio files) should be associated with a Channel or
+an Instrument.  A Channel is a mixer analogy, have pan,
+stereo/mono, mute/unmute, record/safe and will be associated
+with some kind of audio mixing asbtract (or Performer studio
+type affair) - displaying the audio track will pop up a (say)
+wave file editor (maybe).  An Instrument will either be a 
+MIDI instrument or a "virtual synth" type of instrument such
+as Timidity/Rebirth.  The interfaces of these types we should
+consider carefully as there are emerging standards that we could
+quite nicely cop on to - VST2, layout and configuration of
+"virtual" MIDI networks (a la Logic's environment).
+
+If we want to derive information attrbutes that will support
+various views then we should list the views we're expecting
+to get out of the thing.  The superset of views for all file
+types would be along the following lines:
+
+
+o Score/Notation (first and foremost! and then views on that
+                  itself perhaps?)
+o Piano Roll/Matrix (I like "matrix view" - makes more sense
+                     especially for drums tracks)
+o Hyper editing - views on certain attributes, volume, pan, etc.
+                  May not apply to all type
+o Event List - all those things like sorting and stacking of
+               MIDI events according to X parameter can go on
+               in here.
+
+Also, audio editing view - a Mixer if you like.  This will be
+included in Song data.   Actually yeah, that's an obvious but
+unstated - we should ensure that a RG Song holds complete RG
+state information for a composition.  Hardware states (in sound
+cards, external devices) can then be reset when we load a song
+back in.
+
+Like I suggested before, the patch management of a card should
+be left open to the users - we make the MIDI implementation
+flexible otherwise we have to spend half of our time making up
+trial and error patches for cards and synths we haven't heard
+of.
+
+The Note/Instrument interface will therefore have to be quite
+loose.  A Note will occur on a Track or Stave and that will be
+tied to a Channel on which resides an Instrument and a Device
+(hardware device MIDI port OUT).  An Audio sample appears on
+a Track or Stave and interfaces with a Channel which is associated
+with an audio device and possibly though a Mixer.
+
+The Environment of MIDI and audio routing allows multiple views
+on the same audio devices and the various screen of the environment
+have to fight over how has control of the actual device.  Logic doesn't
+attempt to get too clever with guessing the state of the cards or
+devices.
+
+Hmm, lots of sentences but I don't know if they make any sense
+or even answer the question.
+
+> Do you want instrument information stored in the same
+> unit (composition or whatever) as note information, or do
+> you want to be able to associate a given instrument set
+> with more than one composition (a la CSound, I think)?
+> What are the pros and cons?
+
+Again, taking an "Environment layer" you do both.  Your instruments
+actually physically exist on soundcards, synths and in audio files.
+Modelling these instruments in this layers means you can import
+the definitions of the instruments as and when you need them.
+The environment is part of the song and gets incorporated as part
+so you can tweak it.  One thing you notice is how many copies of
+everything you end up with but This Is Good.  Lots of copies,
+little tweaks here and there but the finished Song is definitive
+and relys on no other resources for its state.  This is important.
+ 
+> Similarly, what about audio?
+
+Audio is actually a very simple case in all this.   All we need
+to do for the moment is to assume we will handle it as some point
+and put the hooks in.  Th playback, recording, sync and DSP of
+audio is something that I'm not pretending is simple but we can
+cross that bridge when we come to it.
+
+> By "queue jumping" do you just mean repositioning the
+> playback at a different point in the piece?  The performer
+> is effectively going to be reading linearly, with loops (?)
+> and with readahead for some sort of buffering -- yes?
+> If a client changes something that is already buffered, do
+> you care about it?  Your comments suggest not.
+
+You do care about it, but you don't care about it right away -
+you stick the delete event in a queue and see what happens.
+If it gets deleted all well and good, if it doesn't it will
+be by the next time it's played.  Logic has very good tight
+timing, plays looped sections of a track with MIDI and audio
+in lovely time - deletion of MIDI events usually flows through
+straight away, audio is "prepared" beforehand and therefore
+deletions lag a little behind.
+
+Erm, "queue jumping" stuff means like real-time notes.
+Clicking on the keyboard in the Matrix View sends through a
+note from that Instrument.  A keyboard plugged into the MIDI
+IN and associated with a soundcard MIDI instrument should be
+be able to play along with the composition with miminal or
+no lag.  This kind of, erm, queue jumping.
+
+How we handle the loops, the low level actual doing part of
+it isn't really important at this stage.  Sure we should
+support looping on the GUI though.
+
+B
+-- 
+This communication contains information which is confidential and 
+may also be privileged.  It is for the exclusive use of the 
+intended recipient(s).  If you are not the intended recipient(s), 
+please note that any distribution, copying or use of this 
+communication or the information in it is strictly prohibited.  
+If you have received this communication in error, please notify 
+the sender immediately and then destroy any copies of it.
+
+
+X-From-Line: cannam@frontal.worldnet.net  Mon Apr 24 17:08:36 2000
+Return-Path: <cannam@frontal.worldnet.net>
+Received: from localhost (localhost [127.0.0.1])
+	by linux2.wanadoo.fr (8.9.3/8.9.3) with ESMTP id RAA07383
+	for <glaurent@localhost>; Mon, 24 Apr 2000 17:08:36 +0200
+Received: from mailhost.worldnet.net
+	by localhost with POP3 (fetchmail-5.3.5)
+	for glaurent@localhost (single-drop); Mon, 24 Apr 2000 17:08:36 +0200 (CEST)
+Received: by m1.worldnet.net (mbox glaurent)
+ (with Cubic Circle's cucipop (v1.31 1998/05/13) Mon Apr 24 17:08:41 2000)
+X-From_: cannam@all-day-breakfast.com  Mon Apr 24 17:06:23 2000
+Received: from frontal.worldnet.net (frontal.nfs [192.168.0.5])
+	by m1.worldnet.net (8.9.3/8.9.3) with ESMTP id RAA16905
+	for <glaurent@worldnet.fr>; Mon, 24 Apr 2000 17:06:18 +0200 (CEST)
+Received: from anchor-post-34.mail.demon.net (anchor-post-34.mail.demon.net [194.217.242.92])
+	by frontal.worldnet.net (8.9.3/8.9.3) with ESMTP id SAA07161
+	for <glaurent@worldnet.fr>; Mon, 24 Apr 2000 18:56:42 +0200 (CEST)
+Received: from cannam.demon.co.uk ([212.228.77.150] helo=all-day-breakfast.com)
+	by anchor-post-34.mail.demon.net with esmtp (Exim 2.12 #1)
+	id 12jkRF-000JCp-0Y; Mon, 24 Apr 2000 16:06:17 +0100
+Sender: cannam@frontal.worldnet.net
+Message-ID: <390462C8.85696DA4@all-day-breakfast.com>
+Date: Mon, 24 Apr 2000 16:05:44 +0100
+From: Chris Cannam <cannam@all-day-breakfast.com>
+X-Mailer: Mozilla 4.61 [en] (X11; I; Linux 2.2.10 i686)
+X-Accept-Language: en
+MIME-Version: 1.0
+To: "Bown, Richard" <richard.bown@wcom.co.uk>
+CC: Richard Bown <bownie@bownie.com>, Guillaume Laurent <glaurent@worldnet.fr>
+Subject: a development-related email!
+References: <E41A2CDB12D3D31198BD00508B6F75E60FAFC7@gblon1c7ex1.wcom.co.uk>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Lines: 129
+Xref: linux2.wanadoo.fr glaurent:8011
+
+Right, back to the subject!  Let's take a look at some
+of the requirements Rich's comments might suggest.
+Warning, long rambly email afoot.
+
+"Bown, Richard" wrote:
+> 
+> From an operational point of the view the Track (a
+> series of notes or audio files) should be associated
+> with a Channel or an Instrument.
+
+That's fine and consistent with the old stuff (where
+a Part contained all the stuff intended to be played
+by one instrument at once).
+
+> A Channel is a mixer analogy, have pan, stereo/mono,
+> mute/unmute, record/safe and will be associated with
+> some kind of audio mixing asbtract (or Performer
+> studio type affair)
+
+So are you saying Channels deal with things that are
+not pure pitch/duration/etc note data, and Instruments
+deal with things that are?  And that you don't mix
+Channel-type and Instrument-type data on a single track.
+i.e. each track has either a Channel (which is a very
+abstract concept for me at the moment) or an Instrument
+(which is pretty concrete) but not both?  If you don't
+mean this, what do you mean?
+
+... ah hang on, there's more about this below I see.
+
+> The interfaces of these types we should consider
+> carefully
+
+And therefore also the types of data that get associated
+with them, presumably.
+
+> If we want to derive information attrbutes that
+> will support various views then we should list the
+> views we're expecting
+
+Yep.
+
+> o Score/Notation [...]
+> o Piano Roll/Matrix (I like "matrix view"
+
+Is that just like piano roll only binned by time as
+well as pitch?
+
+> o Hyper editing - views on certain attributes,
+>                   volume, pan, etc.
+
+Right, so things like viewing and editing dynamics
+(for X definition of "dynamics") without the actual
+pitch/duration/etc getting in the way.
+
+> we should ensure that a RG Song holds complete RG
+> state information for a composition.
+
+that was one of the open questions I was wondering
+about.
+
+> The Note/Instrument interface will therefore have
+> to be quite loose.  A Note will occur on a Track or
+> Stave and that will be tied to a Channel on which
+> resides an Instrument and a Device (hardware device
+> MIDI port OUT).  An Audio sample appears on a Track
+> or Stave and interfaces with a Channel which is
+> associated with an audio device and possibly though
+> a Mixer.
+
+So here you have two "Channels" but the two are different
+-- note data has an instrument-based channel, audio data
+an audio/mixer-based channel. Are they conceptually
+different?  (Hence to be named differently also)
+
+> multiple views on the same audio devices and the
+> various screen of the environment have to fight over
+> how has control of the actual device.
+
+Now you're losing me.
+
+> Modelling these instruments in this layers means you
+> can import the definitions of the instruments as and
+> when you need them.  The environment is part of the
+> song and gets incorporated as part so you can tweak it.
+
+So are you saying you can start out by importing your
+instrument setup from an existing piece (or a template)?
+...and then the changes never get remerged, each time
+you import it you get a new copy.
+
+> You do care about it, but you don't care about it
+> right away - you stick the delete event in a queue
+> and see what happens.
+
+Now here quite by accident we have a completely different
+mechanism from what we were building before.  The "old"
+stuff did not have events corresponding to actions, or
+queues of command objects -- in this situation, the UI
+would simply delete the event and that would be that.
+Any client subsequently reading that section of music
+would simply never see the event; any client that had
+already buffered in its own local format would simply
+keep it as it was.  The only issue would be if the client
+was unable to delete because something else was using it;
+but the assumption is that things like deletions happen
+when a user requests them, and if something mechanical is
+holding things up, the GUI will just have to wait to do
+the deletion.
+
+I suspect we could do it either way and it would all pan
+out in the end, but we do need to be careful about the
+assumptions we're making.  My assumption was that passing
+around events telling you when anything at all has been
+added or deleted would be rather inefficient; better to
+let the client keep pointers by position rather than by
+object and hope they'd never notice that something had
+changed unless they explicitly asked to be notified (e.g.
+a notation client asking for changes on a particular bar
+which happens to be visible to be passed to it).  This
+whole area needs a bit more thought.
+
+> Erm, "queue jumping" stuff means like real-time notes.
+
+Ooh, subtle.
+
+
+Chris
+
+
+X-From-Line: richard.bown@wcom.co.uk  Tue Apr 25 18:30:03 2000
+Return-Path: <richard.bown@wcom.co.uk>
+Received: from localhost (localhost [127.0.0.1])
+	by linux2.wanadoo.fr (8.9.3/8.9.3) with ESMTP id SAA08346
+	for <glaurent@localhost>; Tue, 25 Apr 2000 18:30:02 +0200
+Received: from mailhost.worldnet.net
+	by localhost with POP3 (fetchmail-5.3.5)
+	for glaurent@localhost (single-drop); Tue, 25 Apr 2000 18:30:03 +0200 (CEST)
+Received: by m2.worldnet.net (mbox glaurent)
+ (with Cubic Circle's cucipop (v1.31 1998/05/13) Tue Apr 25 18:30:09 2000)
+X-From_: richard.bown@wcom.co.uk  Tue Apr 25 11:04:20 2000
+Received: from frontal.worldnet.net (frontal.nfs [192.168.0.5])
+	by m1.worldnet.net (8.9.3/8.9.3) with ESMTP id LAA22656
+	for <glaurent@worldnet.fr>; Tue, 25 Apr 2000 11:04:20 +0200 (CEST)
+Received: from gblon1imr1.wcom.co.uk ([194.203.119.44])
+	by frontal.worldnet.net (8.9.3/8.9.3) with ESMTP id MAA24890
+	for <glaurent@worldnet.fr>; Tue, 25 Apr 2000 12:54:35 +0200 (CEST)
+X-Internal-ID: 38F5E5590003C1CB
+Received: from gblon1imr1.wcom.co.uk (170.127.34.15) by gblon1imr1.wcom.co.uk (NPlex 3.0.036); Tue, 25 Apr 2000 10:01:50 +0100
+Received: from gblon1gwi2.wcom.co.uk (gblon1gwi2.wcom.co.uk [170.127.49.145]) by gblon1imr1.wcom.co.uk with SMTP (MailShield v1.5); Tue, 25 Apr 2000 10:01:50 +0100
+Received: by gblon1gwi2.wcom.co.uk with Internet Mail Service (5.5.2650.21)
+	id <22VQ7TTQ>; Tue, 25 Apr 2000 10:01:20 +0100
+Message-ID: <E41A2CDB12D3D31198BD00508B6F75E60FAFDB@gblon1c7ex1.wcom.co.uk>
+From: "Bown, Richard" <richard.bown@wcom.co.uk>
+To: "'Chris Cannam'" <cannam@all-day-breakfast.com>
+Cc: Richard Bown <bownie@bownie.com>,
+        Guillaume Laurent
+	 <glaurent@worldnet.fr>
+Subject: RE: a development-related email!
+Date: Tue, 25 Apr 2000 10:02:57 +0100
+MIME-Version: 1.0
+X-Mailer: Internet Mail Service (5.5.2650.21)
+Content-Type: text/plain;
+	charset="iso-8859-1"
+X-SMTP-HELO: gblon1gwi2.wcom.co.uk
+X-SMTP-MAIL-FROM: richard.bown@wcom.co.uk
+X-SMTP-RCPT-TO: cannam@all-day-breakfast.com,bownie@bownie.com,glaurent@worldnet.fr
+X-SMTP-PEER-INFO: gblon1gwi2.wcom.co.uk [170.127.49.145]
+Lines: 131
+Xref: linux2.wanadoo.fr glaurent:8017
+
+> So are you saying Channels deal with things that are
+> not pure pitch/duration/etc note data, and Instruments
+> deal with things that are?  And that you don't mix
+> Channel-type and Instrument-type data on a single track.
+
+Yes and no.
+
+> i.e. each track has either a Channel (which is a very
+> abstract concept for me at the moment) or an Instrument
+> (which is pretty concrete) but not both?  If you don't
+> mean this, what do you mean?
+
+No, both.  This is really a MIDI thing.  You can apply
+MIDI controllers to a note or to a Channel.  The MIDI
+notes will always get played on a re-assignable channel
+and both the Notes (from the Track) and the Channel can
+have MIDI attributes.  The Channel is a useful abstraction
+because Audio tracks will also need channel information,
+stereo/mono, pan, mute etc.  So the Channel is really a
+superset of MIDI, Audio and sequencer functionality - a
+bucket for all the good things we'll be needing to control.
+
+> Yep.
+> 
+> > o Score/Notation [...]
+> > o Piano Roll/Matrix (I like "matrix view"
+> 
+> Is that just like piano roll only binned by time as
+> well as pitch?
+
+Well, piano roll has a time axis - what's the question?
+It's the same as a piano roll, only it's called a matrix view.
+
+> > o Hyper editing - views on certain attributes,
+> >                   volume, pan, etc.
+> 
+> Right, so things like viewing and editing dynamics
+> (for X definition of "dynamics") without the actual
+> pitch/duration/etc getting in the way.
+
+They might still be somehow represented but essentially yes.
+
+> > we should ensure that a RG Song holds complete RG
+> > state information for a composition.
+> 
+> that was one of the open questions I was wondering
+> about.
+
+Just so that when we reload a file we should get back
+to the setup we had in the last session.  Sure, we can
+export and import Instrument sets (say through out notion
+of "Environment" - the middle layer) but we also combine
+these with our RG song so that all specialisations are
+carried with it.
+
+> > The Note/Instrument interface will therefore have
+> > to be quite loose.  A Note will occur on a Track or
+> > Stave and that will be tied to a Channel on which
+> > resides an Instrument and a Device (hardware device
+> > MIDI port OUT).  An Audio sample appears on a Track
+> > or Stave and interfaces with a Channel which is
+> > associated with an audio device and possibly though
+> > a Mixer.
+> 
+> So here you have two "Channels" but the two are different
+> -- note data has an instrument-based channel, audio data
+> an audio/mixer-based channel. Are they conceptually
+> different?  (Hence to be named differently also)
+
+In terms of classes they could probably both be derived
+from a common base, they will have overlapping functionality
+but be named differently.
+
+> > multiple views on the same audio devices and the
+> > various screen of the environment have to fight over
+> > how has control of the actual device.
+> 
+> Now you're losing me.
+
+Sorry.  Got overexcited I think.  Meaningless garble.
+
+> > Modelling these instruments in this layers means you
+> > can import the definitions of the instruments as and
+> > when you need them.  The environment is part of the
+> > song and gets incorporated as part so you can tweak it.
+> 
+> So are you saying you can start out by importing your
+> instrument setup from an existing piece (or a template)?
+> ...and then the changes never get remerged, each time
+> you import it you get a new copy.
+
+Yes.  It gets bulky but it's the way everyone else does
+it (Logic) because it means you get what you saved.  
+Logic also has an autoload song which you can set up to
+be your basic Logic song or Logic template (the same thing).
+Once you've got an autoload song for your setup (soundcard,
+synths, any other MIDI equipment) you can immediately get
+to the music making.  Logic songs will also quite happily
+record all manner of exciting SysEx MIDI data that can be
+used to reset all your instruments.
+
+> My assumption was that passing
+> around events telling you when anything at all has been
+> added or deleted would be rather inefficient
+
+Yes, and the observer model (as such) is inefficient
+for large numbers of registrations.  How many clients
+are we expecting?  Logic has ten different workspaces
+(number keys 0-9 as shortcuts) and each workspace can
+have as many "clients" (windows) as you like.  I think
+perhaps as you say tho' we can just try it out and
+see what works.
+
+> > Erm, "queue jumping" stuff means like real-time notes.
+> 
+> Ooh, subtle.
+
+The Brahms and aRTS thing synchronise using a "MIDI bus" which
+I haven't as yet examined - I couldn't build aRTS either because
+it needed, wait for it, MICO.
+
+B
+-- 
+This communication contains information which is confidential and 
+may also be privileged.  It is for the exclusive use of the 
+intended recipient(s).  If you are not the intended recipient(s), 
+please note that any distribution, copying or use of this 
+communication or the information in it is strictly prohibited.  
+If you have received this communication in error, please notify 
+the sender immediately and then destroy any copies of it.
+
+
+X-From-Line: richard.bown@wcom.co.uk  Tue Apr 25 18:30:04 2000
+Return-Path: <richard.bown@wcom.co.uk>
+Received: from localhost (localhost [127.0.0.1])
+	by linux2.wanadoo.fr (8.9.3/8.9.3) with ESMTP id SAA08352
+	for <glaurent@localhost>; Tue, 25 Apr 2000 18:30:03 +0200
+Received: from mailhost.worldnet.net
+	by localhost with POP3 (fetchmail-5.3.5)
+	for glaurent@localhost (single-drop); Tue, 25 Apr 2000 18:30:04 +0200 (CEST)
+Received: by m2.worldnet.net (mbox glaurent)
+ (with Cubic Circle's cucipop (v1.31 1998/05/13) Tue Apr 25 18:30:10 2000)
+X-From_: richard.bown@wcom.co.uk  Tue Apr 25 12:06:28 2000
+Received: from frontal.worldnet.net (frontal.nfs [192.168.0.5])
+	by m1.worldnet.net (8.9.3/8.9.3) with ESMTP id MAA14128
+	for <glaurent@worldnet.fr>; Tue, 25 Apr 2000 12:06:27 +0200 (CEST)
+Received: from gblon1imr1.wcom.co.uk ([194.203.119.44])
+	by frontal.worldnet.net (8.9.3/8.9.3) with ESMTP id NAA06798
+	for <glaurent@worldnet.fr>; Tue, 25 Apr 2000 13:56:39 +0200 (CEST)
+X-Internal-ID: 38F5E5590003CFFE
+Received: from gblon1imr1.wcom.co.uk (170.127.34.15) by gblon1imr1.wcom.co.uk (NPlex 3.0.036); Tue, 25 Apr 2000 11:03:55 +0100
+Received: from gblon1gwi1.wcom.co.uk (gblon1gwi1.wcom.co.uk [170.127.34.16]) by gblon1imr1.wcom.co.uk with SMTP (MailShield v1.5); Tue, 25 Apr 2000 11:03:53 +0100
+Received: by gblon1gwi1.wcom.co.uk with Internet Mail Service (5.5.2650.10)
+	id <2K82TRYK>; Tue, 25 Apr 2000 11:04:41 +0100
+Message-ID: <E41A2CDB12D3D31198BD00508B6F75E60FAFDE@gblon1c7ex1.wcom.co.uk>
+From: "Bown, Richard" <richard.bown@wcom.co.uk>
+To: "'cannam'" <cannam@all-day-breakfast.com>,
+        Richard Bown
+	 <bownie@bownie.com>,
+        Guillaume Laurent <glaurent@worldnet.fr>
+Subject: RE: a development-related email!
+Date: Tue, 25 Apr 2000 11:05:00 +0100
+MIME-Version: 1.0
+X-Mailer: Internet Mail Service (5.5.2650.10)
+Content-Type: text/plain;
+	charset="iso-8859-1"
+X-SMTP-HELO: gblon1gwi1.wcom.co.uk
+X-SMTP-MAIL-FROM: richard.bown@wcom.co.uk
+X-SMTP-RCPT-TO: cannam@all-day-breakfast.com,bownie@bownie.com,glaurent@worldnet.fr
+X-SMTP-PEER-INFO: gblon1gwi1.wcom.co.uk [170.127.34.16]
+Lines: 59
+Xref: linux2.wanadoo.fr glaurent:8018
+
+> Okay, so each track has a channel and we try to make the
+> channel as general as possible in terms of contents.  Good
+> start.
+
+Good.
+ 
+> Hey, I just remembered how to join two lines in vi.  I'm
+> writing this email using w3m, a text-based web browser
+> that uses vi for editing textareas.  It seems to work
+> quite well for webmail compared with a graphical browser.
+
+I don't know how you find the time to keep up.
+ 
+> "binned by".  i.e. a piano roll is in theory infinitely
+> precise in the time axis (up to whatever your pixel size
+> is); I was guessing that a matrix view was quantized.
+> Not true?
+
+Not true.  The Matrix view is precise and zoomable (as are
+all views).  A general point about Logic arises here.  It
+uses sub windows in a "parameter area" on the left of the
+GUI to group together common bits of functionality - like
+a tool box.  Quantisation is represented by a "Q" and
+a drop down dox delivering the level of the quantisation.
+The quantisation is non destructive, meaning you can at
+any time turn it off and return to your original note
+positions - this would suggest it might need a parameter
+on "Note".  The views represent the current playback state
+of the note (how it will sound i.e. with Quantisation applied).
+"You hear what you see" I s'pose is how you could describe the
+interface.
+
+The parameter area holds quantisation information, channel information,
+device selection information and other important paramters.  This
+interface basically gives you quick "front panel" access to the
+main interfaces of the sequencer.  You then "drill down" (yeuch)
+to the specific stuff on other workspaces.
+
+> > Logic also has an autoload song which you can set up to
+> > be your basic Logic song or Logic template (the same thing).
+> 
+> Makes sense.  Somewhat like Microsoft Word.
+
+Yes, but you have a lot more power.  The template can include 
+virutal MIDI instruments or generators - all this power derived
+from the Environment.  This, like most of Logic really requires
+a demo.  The ability to make Logic a flexible MIDI hub is the
+most important from the perspective of the home musician.
+ 
+B
+-- 
+This communication contains information which is confidential and 
+may also be privileged.  It is for the exclusive use of the 
+intended recipient(s).  If you are not the intended recipient(s), 
+please note that any distribution, copying or use of this 
+communication or the information in it is strictly prohibited.  
+If you have received this communication in error, please notify 
+the sender immediately and then destroy any copies of it.
+
+
+X-From-Line: cannam@all-day-breakfast.com  Tue Apr 25 18:30:03 2000
+Return-Path: <cannam@all-day-breakfast.com>
+Received: from localhost (localhost [127.0.0.1])
+	by linux2.wanadoo.fr (8.9.3/8.9.3) with ESMTP id SAA08349
+	for <glaurent@localhost>; Tue, 25 Apr 2000 18:30:03 +0200
+Received: from mailhost.worldnet.net
+	by localhost with POP3 (fetchmail-5.3.5)
+	for glaurent@localhost (single-drop); Tue, 25 Apr 2000 18:30:03 +0200 (CEST)
+Received: by m2.worldnet.net (mbox glaurent)
+ (with Cubic Circle's cucipop (v1.31 1998/05/13) Tue Apr 25 18:30:10 2000)
+X-From_: cannam@all-day-breakfast.com  Tue Apr 25 11:29:34 2000
+Received: from frontal.worldnet.net (frontal.nfs [192.168.0.5])
+	by m1.worldnet.net (8.9.3/8.9.3) with ESMTP id LAA01245
+	for <glaurent@worldnet.fr>; Tue, 25 Apr 2000 11:29:34 +0200 (CEST)
+Received: from finch-post-12.mail.demon.net (finch-post-12.mail.demon.net [194.217.242.41])
+	by frontal.worldnet.net (8.9.3/8.9.3) with ESMTP id NAA29698
+	for <glaurent@worldnet.fr>; Tue, 25 Apr 2000 13:19:48 +0200 (CEST)
+Received: from uk-0-front.www.demon.net ([193.195.0.171] helo=www.all-day-breakfast.com)
+	by finch-post-12.mail.demon.net with smtp (Exim 2.12 #1)
+	id 12k1et-000MNz-0C; Tue, 25 Apr 2000 09:29:31 +0000
+Date: Tue, 25 Apr 2000 09:29:28 GMT
+From: "cannam" <cannam@all-day-breakfast.com>
+To: <richard.bown@wcom.co.uk>, "'Chris Cannam'" <cannam@all-day-breakfast.com>,
+        Richard Bown <bownie@bownie.com>,
+        Guillaume Laurent <glaurent@worldnet.fr>
+Subject: Re: a development-related email!
+X-Mailer: all-day-breakfast.com -- Amyl webmail, 1998 Chris Cannam
+X-Warning: The identity of the sender of this email has not been authenticated.
+Message-Id: <E12k1et-000MNz-0C@finch-post-12.mail.demon.net>
+Lines: 49
+Xref: linux2.wanadoo.fr glaurent:8022
+
+"Bown, Richard" <richard.bown@wcom.co.uk> writes:
+> 
+> [...]  So the Channel is really a
+> superset of MIDI, Audio and sequencer functionality - a
+> bucket for all the good things we'll be needing to control.
+
+Okay, so each track has a channel and we try to make the
+channel as general as possible in terms of contents.  Good
+start.
+
+Hey, I just remembered how to join two lines in vi.  I'm
+writing this email using w3m, a text-based web browser
+that uses vi for editing textareas.  It seems to work
+quite well for webmail compared with a graphical browser.
+
+> > Is that just like piano roll only binned by time as
+> > well as pitch?
+> 
+> Well, piano roll has a time axis - what's the question?
+
+"binned by".  i.e. a piano roll is in theory infinitely
+precise in the time axis (up to whatever your pixel size
+is); I was guessing that a matrix view was quantized.
+Not true?
+
+> Logic also has an autoload song which you can set up to
+> be your basic Logic song or Logic template (the same thing).
+
+Makes sense.  Somewhat like Microsoft Word.
+
+> Yes, and the observer model (as such) is inefficient
+> for large numbers of registrations.  How many clients
+> are we expecting?
+
+Probably not too many, but there's also an issue of how
+to describe the location of a change to a client (in
+preference to being very vague and saying "this track has
+changed somewhere") in a consistent way.  Kind of hangs
+together with the question of how clients refer to objects
+or areas on the datastore in the first place (i.e. the
+iterator question -- iterators being a time- or position-
+based reference rather than an object-based reference).
+
+That could be the kind of thing that just comes out in
+the wash though.
+
+
+Chris
+
+
