@@ -353,9 +353,8 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition *mappedComp,
   // for the moment hardcode the channel
   MidiByte channel = 0;
 
-  unsigned int midiRelativeTime;
-  unsigned int midiRelativeStopTime;
-
+  unsigned int midiRelativeTime = 0;
+  unsigned int midiRelativeStopTime = 0;
 
   // get current port time at start of playback
   if (_startPlayback)
@@ -364,6 +363,7 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition *mappedComp,
     _startPlayback = false;
     _playing = true;
   }
+
 
   for ( MappedComposition::iterator i = mappedComp->begin();
                                     i != mappedComp->end(); ++i )
@@ -399,11 +399,28 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition *mappedComp,
 
     _noteOffQueue.insert(noteOffEvent);
 
-    // Process NOTE OFFs for current time
-    processNotesOff(midiRelativeTime);
-
   }
 
+  // If there's no midiRelativeTime set then set one
+  //
+  if (midiRelativeTime == 0)
+  {
+    Arts::TimeStamp now = _midiPlayPort.time();
+    int sec = now.sec - _playStartTime.sec;
+    int usec = now.usec - _playStartTime.usec;
+
+    if (usec < 0)
+    {
+      sec--;
+      usec += 1000000;
+    }
+
+    Arts::TimeStamp relativeNow(sec, usec);
+    midiRelativeTime = convertToMidiTime(relativeNow);
+  }
+
+  // Process NOTE OFFs for current time
+  processNotesOff(midiRelativeTime);
 }
 
 
@@ -432,10 +449,23 @@ Sequencer::processNotesOff(unsigned int midiTime)
   }
 }
 
+// Force all pending note offs to stop immediately
+//
 void
 Sequencer::allNotesOff()
 {
-   processNotesOff(99999999); // big number
+  Arts::MidiEvent event;
+  MidiByte channel = 0;
+
+  for ( NoteOffQueue::iterator i = _noteOffQueue.begin();
+                               i != _noteOffQueue.end(); ++i )
+  {
+      event.time = _midiPlayPort.time();
+      event.command.data1 = (*i)->getPitch();
+      event.command.data2 = 127;
+      event.command.status = Arts::mcsNoteOff | channel;
+      _midiPlayPort.processEvent(event);
+  }
 }
 
 void 

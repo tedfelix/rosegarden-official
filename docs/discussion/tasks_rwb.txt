@@ -11,14 +11,17 @@ References in round brackets are to 0.1_planned_features.txt.
 
  2. DCOP API for sequencer process
      - getSlice (MappedEvents)          [DONE]
-     - stop/start/play/record           [IN PROGRESS]
+     - stop/start/play/record           [DONE]
 
  3. Componentising Sequencer application from earlier
     prototypes (fleshing out the basic features)     [IN PROGRESS]
 
- 3. Skeleton Transport controls and first keyboard mappings. [IN PROGRESS]
+ 3. Skeleton Transport controls and first keyboard mappings. [DONE]
 
  4. Position pointer on GUI trackseditor. [DONE]
 
  5. Remove MappedComposition from core/ and put
     into RosegardenSound lib  [DONE]
+
+ 6. Ensuring MIDI file conversions are correct (read MIDI,
+    save as RG, plays OK) [ IN PROGRESS ]
