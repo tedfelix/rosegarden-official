@@ -441,11 +441,17 @@ RosegardenProgressDialog* CurrentProgressDialog::m_currentProgressDialog = 0;
 //----------------------------------------
 
 RosegardenFader::RosegardenFader(QWidget *parent):
-    QSlider(Qt::Vertical, parent)
+    QSlider(Qt::Vertical, parent),
+    m_float(new RosegardenTextFloat(this)),
+    m_floatTimer(new QTimer())
 {
-    connect(this, SIGNAL(valueChanged(int)),
+    connect(this, SIGNAL(sliderMoved(int)),
             this, SLOT(slotValueChanged(int)));
 
+    // connect timer
+    connect(m_floatTimer, SIGNAL(timeout()), this, SLOT(slotFloatTimeout()));
+
+    m_float->hide(); // hide the floater
 }
 
 // We invert the value - so that it appear the top of the fader
@@ -459,6 +465,8 @@ RosegardenFader::slotValueChanged(int value)
     if (adjValue < 0) adjValue = 0;
 
     emit faderChanged(adjValue);
+
+    showFloatText();
 }
 
 void 
@@ -473,6 +481,46 @@ RosegardenFader::setFader(int value)
 
     setValue(value);
 }
+
+void
+RosegardenFader::showFloatText()
+{
+    float dbValue = 10.0 * log10(float(maxValue() - value())/100.0);
+
+    // draw on the float text
+    //m_float->setText(QString("%1").arg(maxValue() - value()));
+    m_float->setText(QString("%1 dB").arg(dbValue));
+
+    // Reposition - we need to sum the relative positions up to the
+    // topLevel or dialog to please move().
+    //
+    QWidget *par = parentWidget();
+    QPoint totalPos = this->pos();
+
+    while (par->parentWidget() && !par->isTopLevel() && !par->isDialog())
+    {
+        totalPos += par->pos();
+        par = par->parentWidget();
+    }
+    // Move just top/right
+    //
+    m_float->move(totalPos + QPoint(width() + 2, 0));
+
+    // Show
+    m_float->show();
+
+    // one shot, 500ms
+    m_floatTimer->start(500, true);
+}
+
+
+void
+RosegardenFader::slotFloatTimeout()
+{
+    m_float->hide();
+}
+
+
 
 // ------------------ RosegardenRotary -----------------
 //
@@ -496,6 +544,7 @@ RosegardenRotary::RosegardenRotary(QWidget *parent,
     m_lastY(0),
     m_lastX(0),
     m_knobColour(0, 0, 0),
+    m_float(new RosegardenTextFloat(this)),
     m_floatTimer(new QTimer())
 {
     QToolTip::add(this,
@@ -505,7 +554,6 @@ RosegardenRotary::RosegardenRotary(QWidget *parent,
     // connect timer
     connect(m_floatTimer, SIGNAL(timeout()), this, SLOT(slotFloatTimeout()));
 
-    m_float = new RosegardenTextFloat(this);
     m_float->hide();
 
     // set the initial position

@@ -262,6 +262,22 @@ protected:
     double m_hScaleFactor;
 };
 
+// A Text popup - a tooltip we can control.
+//
+class RosegardenTextFloat : public QWidget
+{
+public:
+    RosegardenTextFloat(QWidget *parent);
+    virtual ~RosegardenTextFloat() {;}
+
+    void setText(const QString &text);
+
+protected:
+    virtual void paintEvent(QPaintEvent *e);
+
+    QString m_text;
+};
+
 // We need one of these because the QSlider is stupid and won't
 // let us have the maximum value of the slider at the top.  Or
 // just I can't find a way of doing it.  Anyway, this is a 
@@ -281,26 +297,16 @@ public slots:
     //
     virtual void setFader(int);
 
+    void slotFloatTimeout();
+
 signals:
     void faderChanged(int);
 
 protected:
-};
+    void showFloatText();
 
-// A Text popup - a tooltip we can control.
-//
-class RosegardenTextFloat : public QWidget
-{
-public:
-    RosegardenTextFloat(QWidget *parent);
-    virtual ~RosegardenTextFloat() {;}
-
-    void setText(const QString &text);
-
-protected:
-    virtual void paintEvent(QPaintEvent *e);
-
-    QString m_text;
+    RosegardenTextFloat *m_float;
+    QTimer              *m_floatTimer;
 };
 
 
@@ -370,7 +376,6 @@ protected:
     QColor               m_knobColour;
 
     RosegardenTextFloat *m_float;
-
     QTimer              *m_floatTimer;
 };
 

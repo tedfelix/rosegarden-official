@@ -10,6 +10,7 @@ o MTC/MMC - transport awareness
 o Audio
    - new fader widget [DONE]
    - recording stereo WAVs [ALMOST DONE]
+   - audio connection management
    - hardcoded format segment values
    - panning [DONE]
    - plugin bypass [DONE but a couple of bugs]
