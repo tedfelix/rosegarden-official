@@ -144,10 +144,17 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
                               getSegmentCanvas()->viewport()->width(),
                               barButtonsHeight);
 
+    // Synchronize side widgets (bar and track buttons) with scrollbars
+    //
     connect(m_segmentCanvas->verticalScrollBar(), SIGNAL(valueChanged(int)),
             this, SLOT(scrollTrackButtons(int)));
     connect(m_segmentCanvas->verticalScrollBar(), SIGNAL(sliderMoved(int)),
             this, SLOT(scrollTrackButtons(int)));
+
+    connect(m_segmentCanvas->horizontalScrollBar(), SIGNAL(valueChanged(int)),
+            m_barButtons, SLOT(scrollHoriz(int)));
+    connect(m_segmentCanvas->horizontalScrollBar(), SIGNAL(sliderMoved(int)),
+            m_barButtons, SLOT(scrollHoriz(int)));
 
     connect(this, SIGNAL(needUpdate()),
             m_segmentCanvas, SLOT(update()));
@@ -192,13 +199,13 @@ void TrackEditor::scrollTrackButtons(int newPos)
 
     m_trackButtonsScrollPos = newPos;
 
-    kdDebug(KDEBUG_AREA) << "TrackEditor::scrollTrackButtons : y = "
-                         << m_trackButtons->y()
-                         << " - newPos = "
-                         << newPos
-                         << " - currentPos = " << oldPos
-                         << " - scroll by : " << oldPos - m_trackButtonsScrollPos
-                         << std::endl;
+//     kdDebug(KDEBUG_AREA) << "TrackEditor::scrollTrackButtons : y = "
+//                          << m_trackButtons->y()
+//                          << " - newPos = "
+//                          << newPos
+//                          << " - currentPos = " << oldPos
+//                          << " - scroll by : " << oldPos - m_trackButtonsScrollPos
+//                          << std::endl;
 
     m_trackButtons->scroll(0, oldPos - m_trackButtonsScrollPos);
 
