@@ -35,7 +35,7 @@
 // Sequencer communicates its state through this enum - 
 // it's sent over the wire as an "int" for the moment
 //
-enum TransportStatus
+typedef enum
 {
      STOPPED,
      PLAYING,
@@ -46,7 +46,7 @@ enum TransportStatus
      STARTING_TO_RECORD_MIDI,
      STARTING_TO_RECORD_AUDIO,
      QUIT
-};
+} TransportStatus;
 
 
 #endif // _ROSEGARDEN_DCOP_H_

@@ -32,6 +32,8 @@
 #include <qlist.h>
 #include <qxml.h>
 
+#include "rosegardendcop.h"
+
 #include "Composition.h"
 #include "Clipboard.h"
 #include "MappedComposition.h"
@@ -194,7 +196,8 @@ public:
     /**
      * insert some recorded MIDI events into our recording Segment
      */
-    void insertRecordedMidi(const Rosegarden::MappedComposition &mc);
+    void insertRecordedMidi(const Rosegarden::MappedComposition &mc,
+                            TransportStatus status);
 
     /**
      * Tidy up the recording Segment

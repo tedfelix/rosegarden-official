@@ -736,9 +736,15 @@ SequenceManager::processRecordedMidi(const MappedComposition &mC)
 #endif 
     }
 
-    // send any recorded Events to a Segment for storage and display
+    // Send any recorded Events to a Segment for storage and display.
+    // We have to send the transport status because this method is
+    // called asynchronously from the sequencer and the calls below
+    // can create a new recording SegmentItem on the canvas if we
+    // don't check that recording is coming to a close (or has already
+    // been stopped).
     //
-    m_doc->insertRecordedMidi(mC);
+    //
+    m_doc->insertRecordedMidi(mC, m_transportStatus);
 
 }
 

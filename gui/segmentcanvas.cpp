@@ -549,6 +549,7 @@ void SegmentCanvas::deleteRecordingSegmentItem()
 	delete m_recordingSegment;
 	m_recordingSegment = 0;
         canvas()->update();
+        cout << "DELETEING RECORDING SEGMENT" << endl;
     }
 }
 

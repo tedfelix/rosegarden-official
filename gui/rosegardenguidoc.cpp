@@ -57,6 +57,7 @@
 #include "rosegardenguiview.h"
 #include "rosexmlhandler.h"
 #include "xmlstorableevent.h"
+#include "rosegardendcop.h"
 
 const Rosegarden::PropertyName DOUBLEPOINT = "doublepoint";
 
@@ -503,7 +504,8 @@ RosegardenGUIDoc::readFromFile(const QString &file, QString &text)
 // Event-rich, Composition-inserted, mouthwateringly-ripe Segment.
 //
 void
-RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
+RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
+                                     TransportStatus status)
 {
     // Just create a new record Segment if we don't have one already
     //
@@ -606,13 +608,19 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
         }
     }
 
-    // update this segment on the GUI
-    RosegardenGUIView *w;
-    if(pViewList)
+    // Only update gui if we're still recording - otherwise we
+    // can get a recording SegmentItem hanging around.
+    //
+    if (status == RECORDING_MIDI)
     {
-        for(w=pViewList->first(); w!=0; w=pViewList->next())
+        // update this segment on the GUI
+        RosegardenGUIView *w;
+        if(pViewList)
         {
-            w->showRecordingSegmentItem(m_recordSegment);
+            for(w=pViewList->first(); w!=0; w=pViewList->next())
+            {
+                w->showRecordingSegmentItem(m_recordSegment);
+            }
         }
     }
 }
@@ -647,7 +655,7 @@ RosegardenGUIDoc::stopRecordingMidi()
     convertToSinglePoint(m_recordSegment);
         
     if (m_recordSegment->getComposition()) {
-        cout << "INSERTING" << endl;
+
 	// something in the record segment (that's why it was added
 	// to the composition)
 	m_commandHistory->addCommand
