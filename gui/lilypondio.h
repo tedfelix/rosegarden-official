@@ -71,7 +71,13 @@ protected:
 
     // compose an appropriate Lilypond representation for various Marks
     std::string composeLilyMark(std::string eventMark, bool stemUp);
-        
+
+    // find/protect illegal characters in user-supplied strings
+    std::string protectIllegalChars(std::string inStr);
+
+    // return a string full of column tabs
+    std::string indent(int column);
+                  
 
  private:
     static const int MAX_DOTS = 4;

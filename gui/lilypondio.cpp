@@ -13,7 +13,7 @@
         Hans Kieserman      <hkieserman@mail.com>
     with heavy lifting from csoundio as it was on 13/5/2002.
 
-    Enharmonics fix and trivial additions by
+    Additions by
         Michael McIntyre    <dmmcintyr@users.sourceforge.net>
 
     The moral right of the authors to claim authorship of this work
@@ -42,6 +42,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <string>
 
 using Rosegarden::BaseProperties;
@@ -66,9 +67,9 @@ using Rosegarden::Marks;
 LilypondExporter::LilypondExporter(QObject *parent,
                                    Composition *composition,
                                    std::string fileName) :
-    ProgressReporter(parent, "lilypondExporter"),
-    m_composition(composition),
-    m_fileName(fileName) {
+                                   ProgressReporter(parent, "lilypondExporter"),
+                                   m_composition(composition),
+                                   m_fileName(fileName) {
     // nothing else
 }
 
@@ -308,14 +309,14 @@ LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp) {
     
     // shoot text mark straight through unless it's sf or rf
     if (Marks::isTextMark(eventMark)) {
-        inStr = Marks::getTextFromMark(eventMark);
+        inStr = protectIllegalChars(Marks::getTextFromMark(eventMark));
         
         if (inStr == "sf") {
-            inStr = "\\sf";  // try this
+            inStr = "\\sf";
         } else if (inStr == "rf") {
             inStr = "\\rfz";
         } else {        
-            inStr = "\"" + inStr + "\"";
+            inStr = "#'(italic \"" + inStr + "\")";
         }
 
         outStr = prefix + inStr;
@@ -361,6 +362,44 @@ LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp) {
     return outStr;
 }
 
+// return a string of tabs, used to make it easier to change the horizontal
+// layout of export if sections need to be added/moved
+std::string LilypondExporter::indent(int columns) {
+    std::string outStr = "";
+    for (int c = 1; c <= columns; c++) {
+        outStr += "    ";
+    }
+    return outStr;
+}
+
+// find/protect illegal chars in user-supplied strings
+//
+// (lots of testing probably needed here...  many of these chars can't be
+// protected...  lilypond is OK with \{ , but TeX barfs...  none of that is very robust
+// at all, so I've changed to just completely dump the most questionable
+// things [ { ( ) } ]
+std::string
+LilypondExporter::protectIllegalChars(std::string inStr) {
+    QString tmpStr = strtoqstr(inStr);
+    tmpStr.replace(QRegExp("_"), "\\\\_");
+    tmpStr.replace(QRegExp("&"), "\\\\&");
+    tmpStr.replace(QRegExp("\\^"), "\\\\^");
+    tmpStr.replace(QRegExp("#"), "\\\\#");
+    tmpStr.replace(QRegExp("%"), "\\%");
+    tmpStr.replace(QRegExp("<"), "\\\\<");
+    tmpStr.replace(QRegExp(">"), "\\\\>");
+    tmpStr.replace(QRegExp("\\["), "");
+    tmpStr.replace(QRegExp("\\]"), "");
+    tmpStr.replace(QRegExp("\\{"), "");
+    tmpStr.replace(QRegExp("\\}"), "");
+    tmpStr.replace(QRegExp("\\("), "");
+    tmpStr.replace(QRegExp("\\)"), "");
+    tmpStr.replace(QRegExp("\""), "");
+    tmpStr.replace(QRegExp("'"), "");
+    tmpStr.replace(QRegExp("\\-"), "\\\\-");
+    return (qstrtostr(tmpStr));
+}
+
 bool
 LilypondExporter::write() {
     QString tmp_fileName = strtoqstr(m_fileName);
@@ -385,21 +424,26 @@ LilypondExporter::write() {
     }
 
     // Lilypond header information
-    str << "\\version \"1.4.10\"\n";
+    str << "\\version \"1.4.10\"" << std::endl;
     // user-specified headers coming in from new metadata eventually ???
     tmp_fileName.replace(QRegExp("&"), "\\&");
     tmp_fileName.replace(QRegExp("_"), "\\_");
-    str << "\\header {\n";
-    str << "\ttitle = \"" << tmp_fileName << "\"\n";
-    str << "\tsubtitle = \"subtitle\"\n";
-    str << "\tfooter = \"Rosegarden " << VERSION << "\"\n";
-    str << "\ttagline = \"Exported from " << tmp_fileName << " by Rosegarden " << VERSION << "\"\n";
+    str << "\\header {" << std::endl;
+
+    // set indention level to make future changes to horizontal layout less
+    // tedious, ++col to indent a new level, --col to de-indent
+    int col = 1;
+    
+    str << indent(col) << "title = \"" << tmp_fileName << "\"" << std::endl;
+    str << indent(col) << "subtitle = \"subtitle\"" << std::endl;
+    str << indent(col) << "footer = \"Rosegarden " << VERSION << "\"" << std::endl;
+    str << indent(col) << "tagline = \"Exported from " << tmp_fileName << " by Rosegarden "
+        << VERSION << "\"" << std::endl;
 
     try {
-       if (m_composition->getCopyrightNote() != "") {
-           str << "\tcopyright = \""
-               //??? Incomplete: need to remove newlines from copyright note?
-                << m_composition->getCopyrightNote() << "\"\n";
+       std::string copyrightNote = protectIllegalChars(m_composition->getCopyrightNote());
+       if (copyrightNote != "") {
+           str << indent(col) << "copyright = \"" << copyrightNote << "\"" << std::endl;
        }
     }
 
@@ -408,26 +452,28 @@ LilypondExporter::write() {
         ;
     }
     
-    str << "}\n";
+    // close \header
+    str << indent(--col) << "}" << std::endl;
 
     // Lilypond music data!   Mapping:
     // Lilypond Voice = Rosegarden Segment
     // Lilypond Staff = Rosegarden Track
     // (not the cleanest output but maybe the most reliable)
     // Incomplete: add an option to cram it all into one grand staff
-    str << "\\score {\n";
-    str << "\t\\notes <\n";
+    
+    str << "\\score {" << std::endl;
+    str << indent(++col) << "\\notes <" << std::endl;  // indent+
 
     // Make chords offset colliding notes by default
-    str << "\t\t\\property Score.NoteColumn \\override #\'force-hshift = #1.0\n";
+    str << indent(++col) << "\\property Score.NoteColumn \\override #\'force-hshift = #1.0" << std::endl;
     
     // set initial time signature
     TimeSignature timeSignature = m_composition->
             getTimeSignatureAt(m_composition->getStartMarker());
 
-    str << "\t\t\\time "
+    str << indent(col) << "\\time "
         << timeSignature.getNumerator() << "/"
-        << timeSignature.getDenominator() << "\n";
+        << timeSignature.getDenominator() << "" << std::endl;
 
     bool isFlatKeySignature = false;
     int lastTrackIndex = -1;
@@ -457,16 +503,26 @@ LilypondExporter::write() {
 
         if ((int) (*i)->getTrack() != lastTrackIndex) {
             if (lastTrackIndex != -1) {
-                // Close the old track (staff)
-                str << "\n\t\t>\n";
+                // close the old track (Staff context)
+                str << std::endl << indent(--col) << "> % Staff" << std::endl;  // indent-
             }
             lastTrackIndex = (*i)->getTrack();
-            // Will there be problems with quotes, spaces, etc. in staff/track labels?
-            str << "\t\t\\context Staff = \"" << m_composition->
-                    getTrackByIndex(lastTrackIndex)->getLabel() << "\" <\n";
+
+            // avoid problem with <untitled> tracks yielding a .ly file that
+            // jumbles all notes together on a single staff...
+            std::ostringstream staffName;
+            staffName << protectIllegalChars(m_composition->
+                    getTrackByIndex(lastTrackIndex)->getLabel());
+
+            if (staffName.str() == "") {
+                staffName << "track " << (voiceCounter + 1);
+            }
             
-            str << "\t\t\t\\property Staff.instrument = \"" << m_composition->
-                    getTrackByIndex(lastTrackIndex)->getLabel() << "\"\n";
+            str << indent(col) << "\\context Staff = \"" << staffName.str()
+                << "\" < " << std::endl;
+
+            str << indent(++col)<< "\\property Staff.instrument = \""  // indent+
+                << staffName.str() <<"\"" << std::endl;;
         
         }
         SegmentNotationHelper tmpHelper(**i);
@@ -481,19 +537,29 @@ LilypondExporter::write() {
         // No worries about overlapping segments, because Voices can overlap
         // voiceCounter is a hack because Lilypond does not by default make 
         // them unique
-        str << "\t\t\t\\context Voice = \"voice" << voiceCounter++ << "\" {\n";
+
+        std::ostringstream voiceNumber, lyricNumber;
+        voiceNumber << "voice " << voiceCounter;
+        lyricNumber << "lyric " << voiceCounter++;
+        
+        str << indent(col++) << "\\context Voice = \"" << voiceNumber.str()
+            << "\" {"; // indent+
+//        col++; // indent+ for notes/etc.
+        
         timeT segmentStart = (*i)->getStartTime(); // getFirstEventTime
+        
         if (segmentStart > 0) {
             long curNote = long(Note(Note::WholeNote).getDuration());
             long wholeNoteDuration = curNote;
             // Incomplete: Make this a constant!
             // This is the smallest unit on which a Segment may begin
             long MIN_NOTE_SKIP_DURATION = long(Note(Note::ThirtySecondNote).getDuration());
+            
             while (curNote >= MIN_NOTE_SKIP_DURATION) {
                 int numCurNotes = ((int)(segmentStart / curNote));
                 if (numCurNotes > 0) {
-                    str << "\\skip " << (wholeNoteDuration / curNote)
-                        << "*" << numCurNotes << "\n";
+                    str << indent(col) << "\\skip " << (wholeNoteDuration / curNote)
+                        << "*" << numCurNotes << std::endl;
                     segmentStart = segmentStart - numCurNotes*curNote;
                 }
                 curNote /= 2;
@@ -505,7 +571,9 @@ LilypondExporter::write() {
         int accidentalCount = 0; 
 // WIP       int timeSignatureIterator = 0;
 
-        std::string lilyText = "";  // must be declared outside the scope of the next for loop
+        // declare these outside the scope of the coming for loop
+        std::string lilyText = "";      // text events
+        std::ostringstream lilyLyrics;  // stream to collect/hold lyric events 
         
         // Write out all events for this Segment
         for (Segment::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
@@ -527,7 +595,7 @@ LilypondExporter::write() {
             
             if (j == (*i)->begin() ||
                 (prevTime < m_composition->getBarStartForTime(absoluteTime))) {
-                str << "\n\t\t\t";
+                str << std::endl << indent(col);  // carriage return at end of line
                 
                 // DMM - this is really pretty much an ugly hack, but it works...
                 // check time signature against previous one; if different,
@@ -556,7 +624,7 @@ LilypondExporter::write() {
                        ) {
                         str << "\\time "
                             << timeSignature.getNumerator() << "/"
-                            << timeSignature.getDenominator() << "\n\t\t\t";
+                            << timeSignature.getDenominator() << indent(col) << std::endl;
                     }
                 }
             }
@@ -579,28 +647,22 @@ LilypondExporter::write() {
                 
                 std::string text = "";
                 (*j)->get<String>(Text::TextPropertyName, text);
+                text = protectIllegalChars(text);
 
-                // Incomplete - these interpretations probably aren't very
-                // good...  I need to do more research to see how these
-                // type things are typically done in Lilypond.  The manual is
-                // sparse in this area, and I don't have any examples.  This
-                // will do for the time being anyway.
+                // Incomplete - these interpretations aren't that great, but
+                // this is about all we can do to represent what the notation
+                // editor displays for these text types without getting into highly
+                // arcane, complicated Lilypond twiddling...
 
                 if (Text::isTextOfType(*j, Text::Tempo)) {
-                    // print above staff
+                    // print above staff, bold, large
                     lilyText = "^#'((bold Large)\"" + text + "\")";
                 } else if (Text::isTextOfType(*j, Text::LocalTempo)) {
-                    // print above staff
+                    // print above staff, bold, small
                     lilyText = "^#'(bold \"" + text + "\")";
                 } else if (Text::isTextOfType(*j, Text::Lyric)) {
-                    // print below staff
-                    //
-                    // Lilypond has a mechanism dedicated to handling lyrics,
-                    // but making use of it seems like it would be very ugly.
-                    // It would be necessary to assemble all the Text::Lyric
-                    // events and then write them in a separate section, so
-                    // let's see how _this_ approach is received...
-                    lilyText = "_#\"" + text + "\"";
+//                    lilyText = "_#\"" + text + "\"";
+                    lilyLyrics << text << " ";
                 } else if (Text::isTextOfType(*j, Text::Dynamic)) {
                     // pass through only supported types
                     if (text == "ppp" || text == "pp"  || text == "p"  ||
@@ -614,11 +676,12 @@ LilypondExporter::write() {
                                   << text << std::endl;
                     }                         
                 } else if (Text::isTextOfType(*j, Text::Direction)) {
-                    // print above staff
-                    lilyText = "^#'((bold Large)\"" + text + "\")";
+                    // print above staff, large
+                    lilyText = "^#'(Large\"" + text + "\")";
+//                  lilyText = " \\mark \"" + text + "\"";  // better compromise?
                 } else if (Text::isTextOfType(*j, Text::LocalDirection)) {
-                    // print above staff
-                    lilyText = "^#'(bold \"" + text + "\")";
+                    // print below staff, bold italics, small
+                    lilyText = "_#'((bold italic) \"" + text + "\")";
                 } else {
                     (*j)->get<String>(Text::TextTypePropertyName, text);
                     std::cerr << "LilypondExporter::write() - unhandled text type: "
@@ -833,12 +896,19 @@ LilypondExporter::write() {
 
                 // Incomplete: Set which note the clef should center on
                 str << "\\clef ";
+                
                 std::string whichClef((*j)->get<String>(Clef::ClefPropertyName));
-                if (whichClef == Clef::Treble) { str << "treble\n"; }
-                else if (whichClef == Clef::Tenor) { str << "tenor\n"; }
-                else if (whichClef == Clef::Alto) { str << "alto\n"; }
-                else if (whichClef == Clef::Bass) { str << "bass\n"; }
-                str << "\t\t\t"; //cc
+                if (whichClef == Clef::Treble) {
+                    str << "treble" << std::endl;
+                } else if (whichClef == Clef::Tenor) {
+                    str << "tenor" << std::endl;
+                } else if (whichClef == Clef::Alto) {
+                    str << "alto" << std::endl;
+                } else if (whichClef == Clef::Bass) {
+                    str << "bass" << std::endl;
+                }
+                
+                str << indent(col);
 
             } else if ((*j)->isa(Rosegarden::Key::EventType)) {
                 if (currentlyWritingChord) {
@@ -861,14 +931,14 @@ LilypondExporter::write() {
                 } else {
                     str << " \\major";
                 }
-                str << "\n\t\t\t";
+                str << std::endl << indent(col);
                         
             } else if ((*j)->isa(Indication::EventType)) {
                 // Handle the end of these events when it's time
                 eventsToStart.insert(*j);
                 eventsInProgress.insert(*j);
             } else {
-                std::cerr << "\nLilypondExporter::write() - unhandled event type: "
+                std::cerr << std::endl << "LilypondExporter::write() - unhandled event type: "
                           << (*j)->getType();
             }
         }
@@ -878,12 +948,43 @@ LilypondExporter::write() {
             handleStartingEvents(eventsToStart, addTie, str);
             str << "> ";
         }
-        // Close the voice
-        str << "\n\t\t\t}\n";
+        
+        // close Voice context
+        str << std::endl << indent(--col) << "} % Voice" << std::endl;  // indent-  
+        
+        // write accumulated lyric events to the Lyric context
+        str << indent(col) << "\\context Lyrics = \"" << lyricNumber.str() << "\" \\lyrics  { "
+            << std::endl;
+        str << indent(++col) << lilyLyrics.str() << " " << std::endl;
+        str << std::endl << indent(--col) << "} % Lyrics"; // close Lyric context
     }
-    // Close the last track (staff)
-    str << "\n\t\t>\n";
+    
 
+    // close the last track (Staff context)
+    str << std::endl << indent (--col) << "> % Staff (final)";  // indent-
+    
+    // close \notes section
+    str << std::endl << indent(--col) << "> % notes" << std::endl;; // indent-
+
+    // Incomplete: Add paper info?
+    str << indent(col) << "\\paper { }" << std::endl;
+
+    // close \score section and close out the file
+    str << "} % score" << std::endl;
+    str.close();
+    return true;
+}
+
+
+
+// DMM
+// moved out of the way for enhanced readability when working out the indent()
+// stuff...
+//
+// this would go in a MIDI section, but I think it's probably not worth
+// handling...  why would anyone want to convert this Lilypond file back into
+// MIDI when it was MIDI in Rosegarden?
+// 
 //     int tempoCount = m_composition->getTempoChangeCount();
 
 //     if (tempoCount > 0) {
@@ -912,13 +1013,3 @@ LilypondExporter::write() {
 //          << m_composition->getRawTempoChange(tempoCount-1).second/60
 //          << std::endl;
 //     }
-
-    str << "\n\t>\n"; // close notes section
-
-    // Incomplete: Add paper info?
-    str << "\\paper {}\n";
-
-    str << "}\n" << std::endl; // close score section
-    str.close();
-    return true;
-}
