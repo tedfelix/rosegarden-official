@@ -716,7 +716,7 @@ SetLyricsCommand::execute()
     Rosegarden::Composition *comp = m_segment->getComposition();
     int barNo = comp->getBarNumber(m_segment->getStartTime());
     
-    for (QStringList::iterator bsi = barStrings.begin();
+    for (QStringList::Iterator bsi = barStrings.begin();
 	 bsi != barStrings.end(); ++bsi) {
 
 	NOTATION_DEBUG << "Parsing lyrics for bar number " << barNo << ": \"" << *bsi << "\"" << endl;
@@ -729,7 +729,7 @@ SetLyricsCommand::execute()
 	i = m_segment->findTime(barRange.first);
 	timeT laterThan = barRange.first - 1;
 
-	for (QStringList::iterator ssi = syllableList.begin();
+	for (QStringList::Iterator ssi = syllableList.begin();
 	     ssi != syllableList.end(); ++ssi) {
 
 	    while (m_segment->isBeforeEndMarker(i) &&
