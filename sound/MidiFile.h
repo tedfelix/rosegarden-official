@@ -65,11 +65,11 @@ namespace Rosegarden
       return *this;
     }
 
+    // open a file of the given filename
     bool open();
-    //const MidiEvent& getMidiEvent() {;}
 
-    //bool writeHeader();
-    //bool writeEvent();
+    // write a file of the internal filename
+    bool write();
 
     const std::string& filename() { return _filename; }
     const int& timingDivision() { return _timingDivision; }

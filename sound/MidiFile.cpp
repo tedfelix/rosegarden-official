@@ -26,6 +26,8 @@
 #include "Track.h"
 #include "NotationTypes.h"
 #include "TrackNotationHelper.h" //cc
+#include "TrackPerformanceHelper.h"
+
 
 namespace Rosegarden
 {
@@ -227,11 +229,16 @@ MidiFile::open()
 
     for ( unsigned int i = 0; i < _numberOfTracks; i++ )
     {
-      cout << "Parsing Track " << i << endl;
+
+#ifdef MIDI_DEBUG
+      std::cout << "Parsing Track " << i << endl;
+#endif
 
       if(!skipToNextTrack(midiFile))
       {
+#ifdef MIDI_DEBUG
         cerr << "Couldn't find Track " << i << endl;
+#endif
         _format = MIDI_FILE_NOT_LOADED;
         return(false);
       }
@@ -240,7 +247,9 @@ MidiFile::open()
       // representation.
       if (!parseTrack(midiFile, i))
       {
-        cerr << "Track " << i << " parsing failed" << endl;
+#ifdef MIDI_DEBUG
+        std::cerr << "Track " << i << " parsing failed" << endl;
+#endif
         _format = MIDI_FILE_NOT_LOADED;
         return(false);
       }
@@ -248,7 +257,10 @@ MidiFile::open()
   }
   else
   {
-    cerr << "MidiFile::open - \"" << _filename << "\" not recognised as a MIDI file" << endl;
+#ifdef MIDI_DEBUG
+    std::cerr << "MidiFile::open - \"" << _filename <<
+                 "\" not recognised as a MIDI file" << endl;
+#endif
     _format = MIDI_FILE_NOT_LOADED;
     return(false);
   }
@@ -267,7 +279,11 @@ MidiFile::parseHeader(const string &midiHeader)
 {
   if (midiHeader.size() < 14)
   {
-    cerr << "MidiFile::parseHeader - header undersized" << endl;
+
+#ifdef MIDI_DEBUG
+    std::cerr << "MidiFile::parseHeader - header undersized" << endl;
+#endif
+
     return(false);
   }
 
@@ -276,14 +292,24 @@ MidiFile::parseHeader(const string &midiHeader)
 #else
   if (midiHeader.compare(0, 4, Rosegarden::MIDI_FILE_HEADER) != 0)
 #endif
+
   {
-    cerr << "MidiFile::parseHeader - header not found or malformed" << endl;
+
+#ifdef MIDI_DEBUG
+    std::cerr << "MidiFile::parseHeader - header not found or malformed"
+              << endl;
+#endif
+
     return(false);
   }
 
   if(midiBytesToLong(midiHeader.substr(4,4)) != 6L)
   {
-    cerr << "MidiFile::parseHeader - header length incorrect" << endl;
+
+#ifdef MIDI_DEBUG
+    std::cerr << "MidiFile::parseHeader - header length incorrect" << endl;
+#endif
+
     return(false);
   }
 
@@ -293,13 +319,23 @@ MidiFile::parseHeader(const string &midiHeader)
 
   if ( _format == MIDI_SEQUENTIAL_TRACK_FILE )
   {
-    cerr << "MidiFile::parseHeader - can't load sequential track file" << endl;
+
+#ifdef MIDI_DEBUG
+    std::cerr << "MidiFile::parseHeader - can't load sequential track file"
+              << endl;
+#endif
+
     return(false);
   }
+  
 
   if ( _timingDivision < 0 )
   {
-    cerr << "MidiFile::parseHeader - Uses SMPTE timing" << endl;
+
+#ifdef MIDI_DEBUG
+    std::cerr << "MidiFile::parseHeader - Uses SMPTE timing" << endl;
+#endif
+
   }
 
   return(true); 
@@ -322,8 +358,9 @@ MidiFile::parseTrack(ifstream* midiFile, const unsigned int &trackNum)
   while (!midiFile->eof() && ( _trackByteCount > 0 ) )
   {
     deltaTime = getNumberFromMidiBytes(midiFile);
+
 #ifdef MIDI_DEBUG
-    cout << "TIME = " << deltaTime << endl;
+    std::cout << "deltaTime = " << deltaTime << endl;
 #endif
 
     // Get a single byte
@@ -385,7 +422,7 @@ MidiFile::parseTrack(ifstream* midiFile, const unsigned int &trackNum)
           break;
 
         default:
-          cerr << "MidiFile::parseTrack - Unsupported MIDI Event" << endl;
+          std::cerr << "MidiFile::parseTrack - Unsupported MIDI Event" << endl;
           break;
       } 
     }
@@ -538,7 +575,6 @@ MidiFile::convertToRosegarden()
 
           endOfLastNote = rosegardenTime + rosegardenDuration;
         }
-
         
 
         if (midiEvent->isMeta())
@@ -628,11 +664,9 @@ MidiFile::convertToRosegarden()
               break;
 
             case MIDI_SEQUENCER_SPECIFIC:
-              //cout << "SEQ SPEC" << endl;
               break;
 
             default:
-              cout << "UNKNOWN" << endl;
               break;
           } 
 
@@ -713,21 +747,114 @@ MidiFile::convertToRosegarden()
   return composition;
 }
 
+// Takes a Composition and turns it into internal MIDI representation
+// that can then be written out to file.
+//
+// For the moment we should watch to make sure that multiple
+// Track (parts) don't equate to multiple tracks in the MIDI
+// Composition.
+//
+//
 void
 MidiFile::convertToMidi(const Rosegarden::Composition &comp)
 {
-    // NB.  Instead of just using Event::getDuration to get the
-    // duration of an event, use TrackPerformanceHelper::getSoundingDuration,
-    // somewhat like the way TrackNotationHelper is used in the method
-    // above... (i.e. construct the TrackPerformanceHelper on the
-    // stack and let it be discarded after you've finished with
-    // it, all it is is a bunch of methods).
+  MidiEvent *midiEvent;
+  int midiInstrument;
+  int trackNumber = 0;
+
+  int trackStartTime;
+  int lastEventDeltaTime = 0;
+  int midiEventDeltaTime;
+  int midiChannel = 0;
+
+
+  _timingDivision = (int)((float) Note(Note::Crotchet).getDuration() * 120.0 /
+                          (float) comp.getTempo());
+
+  _format = MIDI_SIMULTANEOUS_TRACK_FILE;
+
+  // Clear out anything we have stored in this object already.
+  //
+  _midiComposition.clear();
+
+  // Our Composition to MIDI timing factor
+  //
+  float timingFactor = (float) _timingDivision/
+                       (float) Note(Note::Crotchet).getDuration();
+
+  for (Rosegarden::Composition::const_iterator trk = comp.begin();
+                                               trk != comp.end(); ++trk)
+  {
+    // We use this later to get NOTE durations
     //
-    // Advantage of using getSoundingDuration: it takes care of ties
-    // for you.  If it returns zero for a note event, discard the event.
-    // Of course, so far it hasn't been tested.
-    // 
-    // --cc
+    TrackPerformanceHelper helper(**trk);
+
+    trackStartTime = (int)(timingFactor * (float)(*trk)->getStartIndex());
+
+    for (Rosegarden::Track::iterator el = (*trk)->begin();
+                                     el != (*trk)->end(); ++el)
+    {
+
+      if ((*el)->isa(Note::EventType))
+      {
+        // Set delta time temporarily to absolute time for this event.
+        //
+        midiEventDeltaTime = (int)(timingFactor * (float)
+                                                  ((*el)->getAbsoluteTime()));
+                              
+        // Convert to proper delta time and store the marker
+        //
+        midiEventDeltaTime -= lastEventDeltaTime;
+        lastEventDeltaTime = midiEventDeltaTime;
+
+        // insert the NOTE_ON at the appropriate channel
+        //
+        midiEvent = new MidiEvent(midiEventDeltaTime,
+                                  MIDI_NOTE_ON & midiChannel, 
+                                  (*el)->get<Int>("pitch"),     // pitch
+                                  127);                         // velocity
+
+        _midiComposition[trackNumber].push_back(*midiEvent);
+
+
+        // Get the sounding time for the matching NOTE_OFF.
+        // We use TrackPerformanceHelper::getSoundingDuration()
+        // to work out the tied duration of the NOTE.
+        //
+        midiEventDeltaTime += (int)(timingFactor * (float)
+                                            (helper.getSoundingDuration(el)));
+
+        // insert the matching NOTE OFF
+        //
+        midiEvent = new MidiEvent(midiEventDeltaTime,
+                                  MIDI_NOTE_OFF & midiChannel,
+                                  (*el)->get<Int>("pitch"),
+                                  127);
+
+        _midiComposition[trackNumber].push_back(*midiEvent);
+
+      }
+      else if ((*el)->isa(Note::EventRestType))
+      {
+        // skip
+      }
+      else
+      {  
+        // skip
+      }
+
+      // rotate around to new MIDI channel
+      midiChannel++;
+      midiChannel %= 16;
+
+      // increment track number
+      trackNumber++;
+    }
+  }
+
+  // Setup number of tracks
+  //
+  _numberOfTracks = trackNumber;
 
   return;
 }
@@ -745,5 +872,17 @@ MidiFile::writeTrack()
   return(true);
 }
 
+bool
+MidiFile::write()
+{
+  ofstream *midiFile = new ofstream(_filename.c_str(), ios::out | ios::binary);
+
+  //midiFile->close();
+
+  writeHeader();
+  writeTrack();
+
+  return (true);
+}
 
 }
