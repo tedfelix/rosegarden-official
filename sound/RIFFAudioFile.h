@@ -55,6 +55,11 @@ public:
 
     ~RIFFAudioFile();
 
+    typedef enum {
+	PCM,
+	FLOAT
+    } SubFormat;
+
     // Our main control methods - again keeping abstract at this level
     //
     //virtual bool open() = 0;
@@ -121,6 +126,10 @@ public:
     //
     static AudioFileType identifySubType(const std::string &filename);
 
+    // Convert a single sample from byte format, given the right
+    // number of bytes for the sample width
+    float convertBytesToSample(const unsigned char *bytes);
+
     // Decode and de-interleave the given samples that were retrieved
     // from this file or another with the same format as it.  Place
     // the results in the given float buffer.  Return true for
@@ -147,6 +156,7 @@ protected:
     //
     void writeFormatChunk();
 
+    SubFormat m_subFormat;
     unsigned int   m_bytesPerSecond;
     unsigned int   m_bytesPerFrame;
 };

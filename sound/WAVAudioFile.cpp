@@ -190,7 +190,8 @@ WAVAudioFile::decode(const unsigned char *ubuf,
     int bitsPerSample = getBitsPerSample();
     if (bitsPerSample != 8 &&
 	bitsPerSample != 16 &&
-	bitsPerSample != 24) {
+	bitsPerSample != 24 && 
+	bitsPerSample != 32) { // 32-bit is IEEE-float (enforced in RIFFAudioFile)
 	std::cerr << "WAVAudioFile::decode: unsupported " <<
 	    bitsPerSample << "-bit sample size" << std::endl;
 	return false;
@@ -228,49 +229,12 @@ WAVAudioFile::decode(const unsigned char *ubuf,
 
 	    size_t j = i;
 	    if (sourceSampleRate != targetSampleRate) {
-		j = i * ratio;
+		j = size_t(i * ratio);
 	    }
 	    if (j >= fileFrames) j = fileFrames - 1;
 
-	    switch (bitsPerSample) {
-	    
-	    case 8:
-	    {
-		// WAV stores 8-bit samples unsigned, other sizes signed.
-		target[tch][i] +=
-		    (float)(ubuf[ch + j * sourceChannels] - 128.0) / 128.0;
-		break;
-	    }
-
-	    case 16:
-	    {
-		// Two's complement little-endian 16-bit integer.
-		// We convert endianness (if necessary) but assume 16-bit short.
-		unsigned char b2 = ubuf[2 * (ch + j * sourceChannels)];
-		unsigned char b1 = ubuf[2 * (ch + j * sourceChannels) + 1];
-		unsigned int bits = (b1 << 8) + b2;
-		target[tch][i] += (float)(short(bits)) / 32767.0;
-		break;
-	    }
-
-	    case 24:
-	    {
-		// Two's complement little-endian 24-bit integer.
-		// Again, convert endianness but assume 32-bit int.
-		unsigned char b3 = ubuf[2 * (ch + j * sourceChannels)];
-		unsigned char b2 = ubuf[2 * (ch + j * sourceChannels) + 1];
-		unsigned char b1 = ubuf[2 * (ch + j * sourceChannels) + 2];
-		// Rotate 8 bits too far in order to get the sign bit
-		// in the right place; this gives us a 32-bit value,
-		// hence the larger float divisor
-		unsigned int bits = (b1 << 24) + (b2 << 16) + (b3 << 8);
-		target[tch][i] += (float)(int(bits)) / 2147483647.0;
-		break;
-	    }
-
-	    default:
-		break;
-	    }
+	    target[tch][i] += convertBytesToSample
+		(&ubuf[(bitsPerSample / 8) * (ch + j * sourceChannels)]);
 	}
     }
 

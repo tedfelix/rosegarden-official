@@ -412,14 +412,17 @@ RIFFAudioFile::readFormatChunk()
     }
 
 
-    // Check our sub format is PCM encoded - currently the only encoding
-    // we support.
+    // Check sub format - we support PCM or IEEE floating point.
     //
-    unsigned int alwaysOne = getIntegerFromLittleEndian(hS.substr(20, 2));
+    unsigned int subFormat = getIntegerFromLittleEndian(hS.substr(20, 2));
 
-    if (alwaysOne != 0x01)
-        throw(std::string("Rosegarden currently only supports PCM encoded RIFF files"));
-
+    if (subFormat == 0x01) {
+	m_subFormat = PCM;
+    } else if (subFormat == 0x03) {
+	m_subFormat = FLOAT;
+    } else {
+        throw(std::string("Rosegarden currently only supports PCM or IEEE floating-point RIFF files"));
+    }
 
     // We seem to have a good looking .WAV file - extract the
     // sample information and populate this locally
@@ -446,6 +449,16 @@ RIFFAudioFile::readFormatChunk()
     m_bytesPerSecond = getIntegerFromLittleEndian(hS.substr(28,4));
     m_bytesPerFrame = getIntegerFromLittleEndian(hS.substr(32,2));
     m_bitsPerSample = getIntegerFromLittleEndian(hS.substr(34,2));
+
+    if (m_subFormat == PCM) {
+	if (m_bitsPerSample != 8 && m_bitsPerSample != 16 && m_bitsPerSample != 24) {
+	    throw std::string("Rosegarden currently only supports 8-, 16- or 24-bit PCM in RIFF files");
+	}
+    } else if (m_subFormat == FLOAT) {
+	if (m_bitsPerSample != 32) {
+	    throw std::string("Rosegarden currently only supports 32-bit floating-point in RIFF files");
+	}
+    }
 
     //printStats();
 
@@ -566,7 +579,51 @@ RIFFAudioFile::identifySubType(const std::string &filename)
     return type;
 }
 
+float
+RIFFAudioFile::convertBytesToSample(const unsigned char *ubuf)
+{
+    switch (getBitsPerSample()) {
+	
+    case 8:
+    {
+	// WAV stores 8-bit samples unsigned, other sizes signed.
+	return (float)(ubuf[0] - 128.0) / 128.0;
+    }
+    
+    case 16:
+    {
+	// Two's complement little-endian 16-bit integer.
+	// We convert endianness (if necessary) but assume 16-bit short.
+	unsigned char b2 = ubuf[0];
+	unsigned char b1 = ubuf[1];
+	unsigned int bits = (b1 << 8) + b2;
+	return (float)(short(bits)) / 32767.0;
+    }
 
+    case 24:
+    {
+	// Two's complement little-endian 24-bit integer.
+	// Again, convert endianness but assume 32-bit int.
+	unsigned char b3 = ubuf[0];
+	unsigned char b2 = ubuf[1];
+	unsigned char b1 = ubuf[2];
+	// Rotate 8 bits too far in order to get the sign bit
+	// in the right place; this gives us a 32-bit value,
+	// hence the larger float divisor
+	unsigned int bits = (b1 << 24) + (b2 << 16) + (b3 << 8);
+	return (float)(int(bits)) / 2147483647.0;
+    }
+
+    case 32:
+    {
+	// IEEE floating point
+	return *(float *)ubuf;
+    }
+    
+    default:
+	return 0.0f;
+    }
+}
 
 }
 

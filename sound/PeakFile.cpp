@@ -494,7 +494,7 @@ PeakFile::writePeaks(unsigned short /*updatePercentage*/,
     //
     std::vector<std::pair<int, int> > channelPeaks;
     std::string samples;
-    char *samplePtr;
+    unsigned char *samplePtr;
 
     int sampleValue;
     int sampleMax = 0 ;
@@ -502,6 +502,10 @@ PeakFile::writePeaks(unsigned short /*updatePercentage*/,
 
     int channels = m_audioFile->getChannels();
     int bytes = m_audioFile->getBitsPerSample() / 8;
+
+    m_format = bytes;
+    if (bytes == 3 || bytes == 4) // 24-bit PCM or 32-bit float
+	m_format = 2; // write 16-bit PCM instead
 
     // for the progress dialog
     unsigned int apprxTotalBytes = m_audioFile->getSize();
@@ -541,30 +545,48 @@ PeakFile::writePeaks(unsigned short /*updatePercentage*/,
                                double(apprxTotalBytes) * 100.0));
         kapp->processEvents();
 
-        samplePtr = (char *)samples.c_str();
+        samplePtr = (unsigned char *)samples.c_str();
 
         for (int i = 0; i < m_blockSize; i++)
         {
             for (unsigned int j = 0; j < m_audioFile->getChannels(); j++)
             {
-
                 // Single byte format values range from 0-255 and then
                 // shifted down about the x-axis.  Double byte and above
                 // are already centred about x-axis.
                 //
-                if(bytes == 1)
+                if (bytes == 1)
                 {
                     // get value
-                    sampleValue = (unsigned char)(*samplePtr)
-                                      - (int(SAMPLE_MAX_8BIT) / 2);
+		    sampleValue = int(*samplePtr) - 128;
                     samplePtr++;
-
                 }
                 else if (bytes == 2)
                 {
-                    sampleValue = (int)(*((short *)samplePtr));
+		    unsigned char b2 = samplePtr[0];
+		    unsigned char b1 = samplePtr[1];
+		    unsigned int bits = (b1 << 8) + b2;
+		    sampleValue = (short)bits;
                     samplePtr += 2;
                 }
+		else if (bytes == 3) 
+		{
+		    unsigned char b3 = samplePtr[0];
+		    unsigned char b2 = samplePtr[1];
+		    unsigned char b1 = samplePtr[2];
+		    unsigned int bits = (b1 << 24) + (b2 << 16) + (b3 << 8);
+
+		    // write out as 16-bit (m_format == 2)
+		    sampleValue = int(bits) / 65536;
+
+		    samplePtr += 3;
+		}
+		else if (bytes == 4)  // IEEE float (enforced by RIFFAudioFile)
+		{
+		    // write out as 16-bit (m_format == 2)
+		    float val = *(float *)samplePtr;
+		    sampleValue = (int)(32767.0 * val);
+		}
                 else
                 {
                     throw(std::string("PeakFile::writePeaks - unsupported bit depth"));
@@ -606,18 +628,15 @@ PeakFile::writePeaks(unsigned short /*updatePercentage*/,
         for (unsigned int i = 0; i < m_audioFile->getChannels(); i++)
         {
             putBytes(file, getLittleEndianFromInteger(channelPeaks[i].first,
-                                                      bytes));
+                                                      m_format));
             putBytes(file, getLittleEndianFromInteger(channelPeaks[i].second,
-                                                      bytes));
-            m_bodyBytes += bytes * 2;
+                                                      m_format));
+            m_bodyBytes += m_format * 2;
         }
 
         // increment number of peak frames
         m_numberOfPeaks++;
     }
-
-    // set format number
-    m_format = bytes;
 
 #ifdef DEBUG_PEAKFILE
     cout << "PeakFile::writePeaks - "
