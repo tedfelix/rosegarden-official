@@ -227,10 +227,10 @@ bool Track::collapse(Event* e, bool& collapseForward, Event*& collapsedEvent)
         (*previousEvent)->setDuration(e->getDuration() +
                                       (*previousEvent)->getDuration());
 
-        Note n = Note::getNearestNote(e->getDuration());
+        Note n = Note::getNearestNote((*previousEvent)->getDuration());
         
-        e->set<Int>(Note::NoteType, n.getNoteType());
-        e->set<Int>(Note::NoteDots, n.getDots());
+        (*previousEvent)->set<Int>(Note::NoteType, n.getNoteType());
+        (*previousEvent)->set<Int>(Note::NoteDots, n.getDots());
 
         collapsedEvent = e;
         erase(elPos);

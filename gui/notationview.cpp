@@ -978,8 +978,7 @@ void NotationView::deleteNote(NotationElement* element)
     } else if (element->isRest()) {
 
         m_viewElementsManager->tryCollapse(element);
-
-        //KMessageBox::sorry(0, "Rest deletion not Implemented Yet");
+        needLayout = true;
 
     } else {
         // we don't know what it is
