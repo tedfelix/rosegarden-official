@@ -102,11 +102,13 @@ class TrackTool;
 /**
  * A class to visualize and edit track parts
  *
- * It uses a coordinate grid to align TrackItem objects, which can be
+ * A coordinate grid is used to align TrackItem objects, which can be
  * manipulated with a set of tools : pencil, eraser, mover, resizer.
  *
  * There are no restrictions as to when a track part starts and how
  * long it lasts. Several parts can overlap partially or completely.
+ *
+ * @see TracksEditor
  */
 class TracksCanvas : public QCanvasView
 {
