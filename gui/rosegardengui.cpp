@@ -129,6 +129,10 @@ void RosegardenGUIApp::setupActions()
                 SLOT(importRG21()), actionCollection(),
                 "file_import_rg21");
 
+    new KAction(i18n("Export as MIDI file..."), 0, 0, this,
+                SLOT(exportMIDI()), actionCollection(),
+                "file_export_midi");
+
     m_fileQuit = KStdAction::quit  (this, SLOT(quit()),              actionCollection());
 
     // setup edit menu
@@ -1148,4 +1152,15 @@ void RosegardenGUIApp::sequencerExited(KProcess*)
 
     m_sequencerProcess = 0;
 }
+
+
+void RosegardenGUIApp::exportMIDI()
+{
+}
+
+
+void RosegardenGUIApp::exportMIDIFile(const QString &file)
+{
+}
+
 

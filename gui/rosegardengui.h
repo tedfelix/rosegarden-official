@@ -115,6 +115,11 @@ public:
     virtual void importMIDIFile(const QString &url);
 
     /**
+     * export a MIDI file
+     */
+    virtual void exportMIDIFile(const QString &url);
+
+    /**
      * the Sequencer accesses this method via DCOP
      */
     const Rosegarden::MappedComposition&
@@ -261,6 +266,12 @@ public slots:
      * Let the user select a Rosegarden 2.1 file for import 
      */
     void importRG21();
+
+
+    /**
+     * Let the user enter a MIDI file to export to
+     */
+    void exportMIDI();
 
     /**
      * closes all open windows by calling close() on each memberList

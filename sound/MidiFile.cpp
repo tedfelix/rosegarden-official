@@ -801,8 +801,8 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
 
         // insert the NOTE_ON at the appropriate channel
         //
-        midiEvent = new MidiEvent(midiEventDeltaTime,
-                                  MIDI_NOTE_ON & midiChannel, 
+        midiEvent = new MidiEvent(midiEventDeltaTime * 6,       // hack in the conversion
+                                  MIDI_NOTE_ON + midiChannel, 
                                   (*el)->get<Int>("pitch"),     // pitch
                                   127);                         // velocity
 
@@ -818,8 +818,8 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
 
         // insert the matching NOTE OFF
         //
-        midiEvent = new MidiEvent(midiEventDeltaTime,
-                                  MIDI_NOTE_OFF & midiChannel,
+        midiEvent = new MidiEvent(midiEventDeltaTime * 6,       // hack in the conversion
+                                  MIDI_NOTE_OFF + midiChannel,
                                   (*el)->get<Int>("pitch"),
                                   127);
 
@@ -942,10 +942,15 @@ MidiFile::writeTrack(std::ofstream* midiFile, const unsigned int &trackNumber)
   // parse all the elements out
 
   MidiTrackIterator midiEvent;
+  int lastRosegardenTime;
 
   for ( midiEvent = (_midiComposition[trackNumber].begin());
         midiEvent != (_midiComposition[trackNumber].end()); ++midiEvent )
   {
+    // Write the time
+    
+    
+
     if (midiEvent->isMeta())
     {
       trackBuffer += (MidiByte)MIDI_FILE_META_EVENT;
@@ -953,7 +958,6 @@ MidiFile::writeTrack(std::ofstream* midiFile, const unsigned int &trackNumber)
       //trackBuffer += (Number of message bytes);
       //trackBuffer += (Message bytes);
     }
-
     switch(midiEvent->messageType())
     {
       case MIDI_NOTE_ON:
