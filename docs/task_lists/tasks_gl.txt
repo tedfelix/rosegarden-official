@@ -1,33 +1,13 @@
 Current Task list
 ======================================
 
-- add signals for progress reporting in layout classes DONE
+- implement auto-extend of track editor's canvas when moving a segment
+beyond the canvas' boundary.
 
-- use a QWidgetStack for the InstrumentParameterBox DONE
+- harmonize namings of m_view* toggle actions, slotToggleXXX(), slotShowXXX()
+ (m_viewSegmentParameters / slotToggleSegmentParameters / slotShowSegmentParameters)
 
-- auto-scroll in matrix (and piano keyb widget too ?) DONE
-
-- audio peak files in tmp. dir with hashed names
-
-- RPM building.
-
-- look at lazy note pixmap rendering again (see
-gui/qcanvassimplesprite.h r1.18, qcanvassimplesprite.cpp r1.20,
-notationstaff.cpp r1.146).
-
-- optimize segment overlap shading - DONE
-
-- guitar chord display
-
-- fix toolbar pos. saving - ALMOST DONE - toolbar visibility is not saved in notation view.
-
-- fix wait cursors - DONE (upgrade to Qt 3.0.5)
-
-- AA text on canvas
-
-- daily compile check for various confing options (DONE - mostly, I run it by hand from time to time)
-
-- valgrind/kcachegrind
+- valgrind/kcachegrind - standby, not working on my P4
 
 - try to improve sequencer latency problems (GUI & seq. should mmap a
 tmp file which would hold easy-to-parse event data. File should have
@@ -35,28 +15,55 @@ lines of fixed length).
 
 - show selected zones à la RG2.1
 
+- audio peak files in tmp. dir with hashed names
+
+- menu item status (enabled/disabled) - ongoing work...
+
+- better error report when failing to load a resource
+
+- RPM building - taken over by nice volunteers
+
+- look at lazy note pixmap rendering again (see
+gui/qcanvassimplesprite.h r1.18, qcanvassimplesprite.cpp r1.20,
+notationstaff.cpp r1.146).
+
+- guitar chord display
+
+- AA text on canvas
+
+- use KFilterBase/KFilterDev for accessing .rg files (rather than calling zlib directly)
+
+
+"Done" stuff
+======================================
+
+- add signals for progress reporting in layout classes DONE
+
+- use a QWidgetStack for the InstrumentParameterBox DONE
+
+- auto-scroll in matrix (and piano keyb widget too ?) DONE
+
+- optimize segment overlap shading - DONE
+
+- fix toolbar pos. saving - DONE
+
+- fix wait cursors - DONE (upgrade to Qt 3.0.5)
+
+- daily compile check for various confing options (DONE - mostly, I run it by hand from time to time)
+
 - Matrix undo DONE
 
 - insertion in the middle of rests DONE (by Chris)
 
 - look for a way to represent overlapping segments DONE
 
-- look if note pixmaps gain from being turned into real QCanvasItems - PROBABLY NO
+- look if note pixmaps gain from being turned into real QCanvasItems - PROBABLY NOT
 
 - look to use a pixmap cache for notation - CHRIS SAYS IT WON'T HELP
 
-- use KFilterBase/KFilterDev for accessing .rg files (rather than calling zlib directly)
-
 - printing (at least the beginnings of it) - DONE
 
-- harmonize namings of m_view* toggle actions, slotToggleXXX(), slotShowXXX()
- (m_viewSegmentParameters / slotToggleSegmentParameters / slotShowSegmentParameters)
-
 - make MIDI pitch->string convertion configurable - DONE
-
-- menu item status (enabled/disabled) - ongoing work...
-
-- better error report when failing to load a resource
 
 - make matrix tools use shift modifier for smoth move - DONE
 
