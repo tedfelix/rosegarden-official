@@ -1298,14 +1298,16 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
     } else if (lcName == "level") {
 	
         if (m_section != InInstrument ||
-	    !m_instrument ||
-	    m_instrument->getType() != Rosegarden::Instrument::Audio) {
+	    (m_instrument &&
+	     m_instrument->getType() != Rosegarden::Instrument::Audio)) {
             m_errorString = "Found Level outside (audio) Instrument";
             return false;
         }
-    
-	float value = atts.value("value").toFloat();
-	m_instrument->setLevel(value);
+
+	if (m_instrument) {
+	    float value = atts.value("value").toFloat();
+	    m_instrument->setLevel(value);
+	}
 
     } else if (lcName == "controlchange") {
 

@@ -2555,6 +2555,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 	    m_jackDriver->kickAudio();
 	}
     }
+    m_jackDriver->updateAudioLevels();
 #endif
 }
 

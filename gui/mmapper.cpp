@@ -164,7 +164,7 @@ void ControlBlockMmapper::initControlBlock()
 
     Composition& comp = m_doc->getComposition();
     
-    for(Composition::trackiterator i = comp.getTracks().begin(); i != comp.getTracks().end(); ++i) {
+    for (Composition::trackiterator i = comp.getTracks().begin(); i != comp.getTracks().end(); ++i) {
         Track* track = i->second;
         if (track == 0) continue;
         
@@ -569,7 +569,9 @@ void AudioSegmentMmapper::dump()
             segmentStartTime + repeatNo * segmentDuration;
         if (playTime >= repeatEndTime) break;
 
+	playTime = playTime + m_segment->getDelay();
         eventTime = comp.getElapsedRealTime(playTime);
+	eventTime = eventTime + m_segment->getRealTimeDelay();
 
         Rosegarden::RealTime audioStart    = m_segment->getAudioStartTime();
         Rosegarden::RealTime audioDuration = m_segment->getAudioEndTime() - audioStart;

@@ -64,6 +64,8 @@ public:
 
     virtual ~LADSPAPluginInstance();
 
+    bool isOK() const { return m_instanceHandle != 0; }
+
     Rosegarden::InstrumentId getInstrument() const { return m_instrument; }
     unsigned long getLADSPAId() const { return m_ladspaId; }
     int getPosition() const { return m_position; }

@@ -273,6 +273,7 @@ public:
     virtual void addSegment(const QString& filename);
     virtual void deleteSegment(const QString& filename);
     virtual void closeAllSegments();
+    virtual void remapTracks();
 
     // Set Quarter note length
     //

@@ -944,6 +944,7 @@ RosegardenGUIView::updateMeters(SequencerMapper *mapper)
 	// a better way to manage that, clearly.
 	
 	if (instrument->getType() != Rosegarden::Instrument::Audio) {
+//	    RG_DEBUG << "isNew " << isNew << " on MIDI instrument" << endl;
 	    if (!isNew) continue;
 	}
 

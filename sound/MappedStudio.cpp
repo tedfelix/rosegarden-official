@@ -1642,112 +1642,90 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
 
             if (descriptor)
             {
-//		std::cout << "Found plugin; label is " << descriptor->Label
-//			  << "; " << (LADSPA_IS_HARD_RT_CAPABLE(descriptor->Properties) ? "is" : "is not") << " hard RT capable" << std::endl;
+		std::cout << "Found plugin; label is " << descriptor->Label
+			  << "; " << (LADSPA_IS_HARD_RT_CAPABLE(descriptor->Properties) ? "is" : "is not") << " hard RT capable" << std::endl;
 
-                // The sequencer is only interested in plugins that 
-                // will be able to run in real time.
-                //
-                if (LADSPA_IS_HARD_RT_CAPABLE(descriptor->Properties))
-                {
-
-		    std::string category = "";
-
+		std::string category = "";
+		
 #ifdef HAVE_LIBLRDF
-		    char *def_uri = 0;
-		    lrdf_defaults *defs = 0;
-
-		    if (useLRDF) {
-			category = lrdfTaxonomy[descriptor->UniqueID];
+		char *def_uri = 0;
+		lrdf_defaults *defs = 0;
+		
+		if (useLRDF) {
+		    category = lrdfTaxonomy[descriptor->UniqueID];
 #ifdef DEBUG_MAPPEDSTUDIO
-//			std::cout << "Plugin id is " << descriptor->UniqueID
-//				  << ", category is \""
-//				  << lrdfTaxonomy[descriptor->UniqueID]
-//				  << "\", name is " << descriptor->Name
-//				  << ", label is " << descriptor->Label
-//				  << std::endl;
+		    std::cout << "Plugin id is " << descriptor->UniqueID
+			      << ", category is \""
+			      << lrdfTaxonomy[descriptor->UniqueID]
+			      << "\", name is " << descriptor->Name
+			      << ", label is " << descriptor->Label
+			      << std::endl;
 #endif
-			def_uri = lrdf_get_default_uri(descriptor->UniqueID);
-			if (def_uri) {
-			    defs = lrdf_get_setting_values(def_uri);
+		    def_uri = lrdf_get_default_uri(descriptor->UniqueID);
+		    if (def_uri) {
+			defs = lrdf_get_setting_values(def_uri);
+			std::cout << "Have " << defs->count << " default settings" << std::endl;
+		    }
+		}
+#endif // HAVE_LIBLRDF
+		
+		if (category == "" && descriptor->Name != 0) {
+		    std::string name = descriptor->Name;
+		    if (name.length() > 4 &&
+			name.substr(name.length() - 4) == " VST")
+			category = "VSTs";
+		}
+		
+		MappedLADSPAPlugin *plugin =
+		    dynamic_cast<MappedLADSPAPlugin*>
+		    (studio->createObject
+		     (MappedObject::LADSPAPlugin, true)); // RO
+		
+		plugin->setLibraryName(path);
+		plugin->populate(descriptor, category);
+		
+		for (unsigned long i = 0; i < descriptor->PortCount; i++)
+		{
+		    MappedLADSPAPort *port = 
+			dynamic_cast<MappedLADSPAPort*>
+			(studio->createObject
+			 (MappedObject::LADSPAPort, true)); // read-only
+		    
+		    // tie up relationships
+		    plugin->addChild(port);
+		    port->setParent(plugin);
+		    
+		    port->setPortName(descriptor->PortNames[i]);
+		    port->setDescriptor(descriptor->PortDescriptors[i]);
+		    
+		    port->setRangeHint(
+			descriptor->PortRangeHints[i].HintDescriptor,
+			descriptor->PortRangeHints[i].LowerBound,
+			descriptor->PortRangeHints[i].UpperBound);
+		    
+		    port->setPortNumber(i);
+#ifdef HAVE_LIBLRDF
+		    if (def_uri)
+		    {
+			for (int j = 0; j < defs->count; j++)
+			{
+			    if (defs->items[j].pid == ((int)i))
+			    {
+				std::cout << "Default for this port (" << defs->items[j].pid << ", " << defs->items[j].label << ") is " << defs->items[j].value << std::endl;
+				port->setProperty(
+				    MappedLADSPAPort::Default,
+				    defs->items[j].value);
+			    }
 			}
 		    }
 #endif // HAVE_LIBLRDF
-
-                    MappedLADSPAPlugin *plugin =
-                        dynamic_cast<MappedLADSPAPlugin*>
-                            (studio->createObject
-                                 (MappedObject::LADSPAPlugin, true)); // RO
-
-                    plugin->setLibraryName(path);
-                    plugin->populate(descriptor, category);
-
-                    for (unsigned long i = 0; i < descriptor->PortCount; i++)
-                    {
-                        MappedLADSPAPort *port = 
-                            dynamic_cast<MappedLADSPAPort*>
-                            (studio->createObject
-                             (MappedObject::LADSPAPort, true)); // read-only
-
-                        // tie up relationships
-                        plugin->addChild(port);
-                        port->setParent(plugin);
-
-                        port->setPortName(descriptor->PortNames[i]);
-                        port->setDescriptor(descriptor->PortDescriptors[i]);
-
-                        port->setRangeHint(
-                                descriptor->PortRangeHints[i].HintDescriptor,
-                                descriptor->PortRangeHints[i].LowerBound,
-                                descriptor->PortRangeHints[i].UpperBound);
-
-                        port->setPortNumber(i);
+		}
 #ifdef HAVE_LIBLRDF
-			if (def_uri)
-			{
-                            for (int j = 0; j < defs->count; j++)
-			    {
-				if (defs->items[j].pid == ((int)i))
-				{
-//				    std::cout << "Default for this port (" << defs->items[j].pid << ", " << defs->items[j].label << ") is " << defs->items[j].value << std::endl;
-				    port->setProperty(
-					    MappedLADSPAPort::Default,
-					    defs->items[j].value);
-				}
-			    }
-			}
+		if (defs) {
+		    lrdf_free_setting_values(defs);
+		    defs = 0;
+		}
 #endif // HAVE_LIBLRDF
-
-                    }
-
-#ifdef HAVE_LIBLRDF
-		    if (defs) lrdf_free_setting_values(defs);
-#endif // HAVE_LIBLRDF
-
-		    /*
-                    //plugin->setDescriptor(descriptor);
-
-                    // If we have liblrdf then we can go to town and also
-                    // generate port defaults for this plugin
-                    //
-                    if (def_uri == NULL)
-                    {
-                        std::cout << "NO DESCRIPTOR FOR PLUGIN UID = "
-                                  << descriptor->UniqueID << std::endl;
-                    }
-                    else
-                    {
-                        std::cout << "Defaults for plugin "
-                                  << descriptor->UniqueID 
-                                  << " : " <<
-                                  lrdf_get_setting_metadata(def_uri, "title")
-                                  << std::endl;
-
-                        }
-
-                    }
-		    */
-                }
 
                 index++;
             }
@@ -1795,13 +1773,20 @@ MappedAudioPluginManager::getPluginInstance(unsigned long uniqueId,
 #ifdef HAVE_LADSPA
     std::vector<MappedObject*>::iterator it = m_children.begin();
 
+    std::cerr << "MappedAudioPluginManager::getPluginInstance: looking for "
+	      << uniqueId << " (ro " << readOnly << ")" << std::endl;
+
     for(; it != m_children.end(); it++)
     {
+	std::cerr << "found ro " << (*it)->isReadOnly() << std::endl;
+
         if ((*it)->getType() == LADSPAPlugin &&
             (*it)->isReadOnly() == readOnly)
         {
             MappedLADSPAPlugin *plugin =
                 dynamic_cast<MappedLADSPAPlugin*>(*it);
+
+	    std::cerr << "found id " << plugin->getUniqueId() << std::endl;
 
             if (plugin->getUniqueId() == uniqueId)
                 return *it;

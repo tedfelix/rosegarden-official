@@ -60,7 +60,7 @@ LADSPAPluginInstance::LADSPAPluginInstance(Rosegarden::InstrumentId instrument,
     m_ownBuffers = true;
 
     instantiate(sampleRate);
-    connectPorts();
+    if (isOK()) connectPorts();
 
     /*
     std::cout << m_audioPortsIn.size() << " AUDIO PORTS IN" << std::endl;
@@ -97,7 +97,7 @@ LADSPAPluginInstance::LADSPAPluginInstance(Rosegarden::InstrumentId instrument,
     */
 
     instantiate(sampleRate);
-    connectPorts();
+    if (isOK()) connectPorts();
 }
 
 

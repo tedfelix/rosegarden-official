@@ -475,9 +475,10 @@ AudioInstrumentMixer::setPlugin(InstrumentId id, int position, unsigned int plug
             new LADSPAPluginInstance
 	    (id, pluginId, position, m_sampleRate, m_blockSize, des);
 
-        m_plugins[id][position] = instance;
-
-        instance->activate();
+	if (instance->isOK()) {
+	    m_plugins[id][position] = instance;
+	    instance->activate();
+	}
     }
 #endif
 
@@ -572,6 +573,7 @@ AudioInstrumentMixer::setPluginPortValue(InstrumentId id, int position,
     
     PluginList::iterator i = m_plugins[id].find(position);
     if (i != m_plugins[id].end()) {
+	std::cerr << "Setting plugin port " << port << " to value " << value << std::endl;
 	i->second->setPortValue(port, value);
     }
     

@@ -268,10 +268,6 @@ RosegardenSequencerApp::startPlaying()
     // ready for new playback
     m_sequencer->initialisePlayback(m_songPosition);
 
-    // Ensure that the audio playing checks are cleared down
-    //
-    m_metaIterator->clearPlayingAudioSegments();
-
     m_mC.clear();
     m_mC = *fetchEvents(m_songPosition, m_songPosition + m_readAhead, true);
 
@@ -313,8 +309,6 @@ RosegardenSequencerApp::keepPlaying()
     //
     m_sequencer->processEventsOut(m_mC, false);
     
-    if (m_metaIterator) rationalisePlayingAudio();
-
     return true; // !isEndOfCompReached(); - until we sort this out, we don't stop at end of comp.
 }
 
@@ -427,10 +421,6 @@ RosegardenSequencerApp::jumpTo(long posSec, long posNsec)
     m_sequencer->resetPlayback(m_songPosition);
 
     // Now prebuffer as in startPlaying:
-    
-    // Ensure that the audio playing checks are cleared down
-    //
-    m_metaIterator->clearPlayingAudioSegments();
 
     m_mC.clear();
     m_mC = *fetchEvents(m_songPosition, m_songPosition + m_readAhead, true);
@@ -890,6 +880,11 @@ void RosegardenSequencerApp::closeAllSegments()
 
     m_mmappedSegments.clear();
     
+}
+
+void RosegardenSequencerApp::remapTracks()
+{
+    rationalisePlayingAudio();
 }
 
 // DCOP Wrapper for play(Rosegarden::RealTime,
@@ -1478,117 +1473,12 @@ RosegardenSequencerApp::rationalisePlayingAudio()
 {
     if (!m_metaIterator) return;
 
-    // This is actually rather problematic.  We really should be only
-    // doing this when something actually changes, e.g. a mute status.
-    // The problem is that the audio file buffering can ensure that a
-    // short audio file has been buffered, played, and discarded
-    // before its start time is actually reached -- so this method
-    // will then try to restart it.  That's not fatal, but it is
-    // hideously inefficient.  Also there are all sorts of possible
-    // race conditions with the disc thread (which likes to manage
-    // the audio files) requesting destruction of a file in the list
-    // that this method is using -- but we really don't want to take
-    // out the disc thread lock for every single keepPlaying loop.
-
-    //!!!
-    return;
-
-    std::vector<MappedEvent *> &segmentAudio =
+    std::vector<MappedEvent> &segmentAudio =
 	m_metaIterator->getPlayingAudioFiles(m_songPosition);
 
-    // The mixer already ensures that anything on the queue gets
-    // played and anything not on the queue doesn't.  We just need to
-    // find out what's on the queue.  Furthermore, we should only
-    // enqueue new files from this method if they are actually
-    // supposed to have started already, because this method is only
-    // intended to trap cases like unmuting in the middle of a file;
-    // any actual expected situation will be handled by the normal
-    // audio event route.
-
-    Rosegarden::PlayableAudioFileList driverAudio =
-	m_sequencer->getAudioPlayQueue();
-
-    Rosegarden::MappedComposition mC;
-
-    // Check for playing audio that shouldn't be
-    for (Rosegarden::PlayableAudioFileList::const_iterator i = driverAudio.begin();
-	 i != driverAudio.end(); ++i) {
-
-	if ((*i)->getStatus() == Rosegarden::PlayableAudioFile::DEFUNCT) continue;
-	if ((*i)->getDuration() <= m_audioRead) continue;
-
-	bool found = false;
-
-	for (std::vector<MappedEvent *>::const_iterator si = segmentAudio.begin();
-	     si != segmentAudio.end(); ++si) {
-	    if ((*si)->getRuntimeSegmentId() == (*i)->getRuntimeSegmentId() &&
-		(*si)->getInstrument() == (*i)->getInstrument() &&
-		(*si)->getEventTime() == (*i)->getStartTime()) {
-		found = true;
-		break;
-	    }
-	}
-
-	if (!found) {
-
-            // We've found an audio segment that shouldn't be playing - stop it
-            // through the normal channels.  Send a cancel event to the driver.
-            //
-            MappedEvent mE;
-            mE.setType(Rosegarden::MappedEvent::AudioCancel);
-            mE.setRuntimeSegmentId((*i)->getRuntimeSegmentId());
-	    mE.setEventTime((*i)->getStartTime());
-/*
-            std::cout << "RosegardenSequencerApp::rationalisePlayingAudio - " 
-                      << "stopping audio segment = " << (*i)->getRuntimeSegmentId() 
-                      << std::endl;
-*/
-	    mC.insert(new MappedEvent(mE));
-	}
-    }
-
-    // Check for audio that should be playing but isn't
-
-    for (std::vector<MappedEvent *>::const_iterator si = segmentAudio.begin();
-	 si != segmentAudio.end(); ++si) {
-
-	if (m_songPosition < (*si)->getEventTime()) continue;
-	if ((*si)->getDuration() <= m_audioRead) continue;
-
-	bool found = false;
-
-	for (Rosegarden::PlayableAudioFileList::const_iterator i = driverAudio.begin();
-	     i != driverAudio.end(); ++i) {
-
-	    if ((*si)->getRuntimeSegmentId() == (*i)->getRuntimeSegmentId() &&
-		(*si)->getInstrument() == (*i)->getInstrument() &&
-		(*si)->getEventTime() == (*i)->getStartTime()) {
-		found = true;
-		break;
-	    }
-	}
-
-	if (!found) {
-
-            // There's an audio event that should be playing but isn't,
-            // so start it
-            //
-            MappedEvent mE(m_metaIterator->
-                    getAudioSegment((*si)->getRuntimeSegmentId()));
-/*
-            std::cout << "RosegardenSequencerApp::rationalisePlayingAudio - " 
-                      << "starting audio segment = " << mE.getRuntimeSegmentId()
-                      << std::endl;
-*/
-	    mC.insert(new MappedEvent(mE));
-	}
-    }
-
-    if (!mC.empty()) {
-	m_sequencer->processEventsOut(mC, false);
-    }
+    m_sequencer->rationalisePlayingAudio(segmentAudio, m_songPosition);
 }
-	    
+
 
 Rosegarden::ExternalTransport::TransportToken
 RosegardenSequencerApp::transportChange(TransportRequest request)

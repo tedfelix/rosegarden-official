@@ -82,6 +82,8 @@ JackDriver::JackDriver(AlsaDriver *alsaDriver) :
     m_fileReader(0),
     m_fileWriter(0),
     m_alsaDriver(alsaDriver),
+    m_masterLevel(1.0),
+    m_masterPan(0.0),
     m_ok(false)
 {
     assert(sizeof(sample_t) == sizeof(float));
@@ -126,6 +128,17 @@ JackDriver::~JackDriver()
 #ifdef DEBUG_ALSA
 		std::cerr << "JackDriver::shutdown - "
 			  << "can't unregister output submaster " << i+1 << std::endl;
+#endif
+	    }
+	}
+
+	for (unsigned int i = 0; i < m_outputMonitors.size(); ++i)
+	{
+	    if (jack_port_unregister(m_client, m_outputMonitors[i]))
+	    {
+#ifdef DEBUG_ALSA
+		std::cerr << "JackDriver::shutdown - "
+			  << "can't unregister output monitor " << i+1 << std::endl;
 #endif
 	    }
 	}
@@ -209,6 +222,16 @@ JackDriver::initialise()
 	(m_client, "master_R",
 	 JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
     m_outputMasters.push_back(port);
+
+    port = jack_port_register
+	(m_client, "monitor_L",
+	 JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
+    m_outputMonitors.push_back(port);
+
+    port = jack_port_register
+	(m_client, "monitor_R",
+	 JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
+    m_outputMonitors.push_back(port);
 
     for (int i = 0; i < 4; ++i) {//!!!
 
@@ -320,6 +343,14 @@ JackDriver::initialise()
                          << "cannot connect to JACK output port" << std::endl;
             return;
         }
+
+        if (jack_connect(m_client, jack_port_name(m_outputMonitors[0]),
+                         playback_1.c_str()))
+        {
+            AUDIT_STREAM << "JackDriver::initialiseAudio - "
+                         << "cannot connect to JACK output port" << std::endl;
+            return;
+        }
     }
 
     if (playback_2 != "")
@@ -331,6 +362,14 @@ JackDriver::initialise()
                      << std::endl;
 
         if (jack_connect(m_client, jack_port_name(m_outputMasters[1]),
+                         playback_2.c_str()))
+        {
+            AUDIT_STREAM << "JackDriver::initialiseAudio - "
+                         << "cannot connect to JACK output port" << std::endl;
+            return;
+        }
+
+        if (jack_connect(m_client, jack_port_name(m_outputMonitors[1]),
                          playback_2.c_str()))
         {
             AUDIT_STREAM << "JackDriver::initialiseAudio - "
@@ -711,23 +750,15 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	}
     }
 
-    // Get master fader level.  This is a Bad Thing to do here because
-    // of the requirement to acquire a lock.
-    MappedAudioBuss *mbuss = m_alsaDriver->getMappedStudio()->getAudioBuss(0);
-    float masterGain[2] = { 1.0, 1.0 };
+    // Get master fader levels.
 
-    if (mbuss) {
-	float level = 0.0;
-	(void)mbuss->getProperty(MappedAudioBuss::Level, level);
+    float volume = AudioLevel::dB_to_multiplier(m_masterLevel);
+    float pan = m_masterPan;
 
-	float volume = AudioLevel::dB_to_multiplier(level);
-
-	float pan = 0.0;
-//!!!	(void)mbuss->getProperty(MappedAudioBuss::Pan, pan);
-
-	masterGain[0] = volume * ((pan > 0.0) ? (1.0 - (pan / 100.0)) : 1.0);
-	masterGain[1] = volume * ((pan < 0.0) ? ((pan + 100.0) / 100.0) : 1.0);
-    }
+    float masterGain[2] = {
+	volume * ((pan > 0.0) ? (1.0 - (pan / 100.0)) : 1.0),
+	volume * ((pan < 0.0) ? ((pan + 100.0) / 100.0) : 1.0)
+    };
 
     float masterPeak[2] = { 0.0, 0.0 };
 
@@ -765,12 +796,14 @@ JackDriver::jackProcessRecord(jack_nframes_t nframes)
     //!!! This absolutely should not be done here, as it involves
     //taking out a pthread lock -- either do it in the record
     //thread only, or cache it
+
+    int channels = 2;
+    int connection = 0;
+/*
     MappedAudioFader *fader =
 	m_alsaDriver->getMappedStudio()->
 	getAudioFader(m_alsaDriver->getAudioMonitoringInstrument());
     
-    int channels = 1;
-    int connection = 0;
     
     if (fader) {
 	float f = 2;
@@ -779,7 +812,7 @@ JackDriver::jackProcessRecord(jack_nframes_t nframes)
 //	(void)fader->getProperty(MappedAudioFader::Channels, f);
 	int channels = (int)f;
     }
-    
+*/  
     // Get input buffer
     //
     sample_t *inputBufferLeft = 0, *inputBufferRight = 0;
@@ -787,10 +820,10 @@ JackDriver::jackProcessRecord(jack_nframes_t nframes)
     inputBufferLeft = static_cast<sample_t*>
 	(jack_port_get_buffer(m_inputPorts[connection * channels], nframes));
     
-    if (channels == 2) {
+//    if (channels == 2) {
 	inputBufferRight = static_cast<sample_t*>
 	    (jack_port_get_buffer(m_inputPorts[connection * channels + 1], nframes));
-    }
+//    }
     
     //!!! want an actual instrument id
     //!!! want file writer to apply volume from fader?
@@ -810,6 +843,21 @@ JackDriver::jackProcessRecord(jack_nframes_t nframes)
 	}
     
 	wroteSomething = true;
+    }
+
+    if (m_outputMonitors.size() > 0) {
+
+	sample_t *buf = 
+	    static_cast<sample_t *>
+	    (jack_port_get_buffer(m_outputMonitors[0], nframes));
+	memcpy(buf, inputBufferLeft, nframes * sizeof(sample_t));
+
+	if (channels == 2 && m_outputMonitors.size() > 1) {
+	    buf =
+		static_cast<sample_t *>
+		(jack_port_get_buffer(m_outputMonitors[1], nframes));
+	    memcpy(buf, inputBufferRight, nframes * sizeof(sample_t));
+	}
     }
   
     sample_t peakLeft = 0.0, peakRight = 0.0;
@@ -1112,6 +1160,22 @@ JackDriver::kickAudio()
     if (m_fileWriter) m_fileWriter->kick();
 }
 
+void
+JackDriver::updateAudioLevels()
+{
+    MappedAudioBuss *mbuss =
+	m_alsaDriver->getMappedStudio()->getAudioBuss(0);
+
+    if (mbuss) {
+	float level = 0.0;
+	(void)mbuss->getProperty(MappedAudioBuss::Level, level);
+	m_masterLevel = level;
+
+//!!!	float pan = 0.0;
+//!!!	(void)mbuss->getProperty(MappedAudioBuss::Pan, pan);
+//!!!   m_masterPan = pan;
+    }
+}
 
 RealTime
 JackDriver::getNextSliceStart(const RealTime &now) const

@@ -289,6 +289,8 @@ public:
     void clearAudioFiles();
     bool addAudioFile(const std::string &fileName, unsigned int id);
     bool removeAudioFile(unsigned int id);
+    void rationalisePlayingAudio(const std::vector<MappedEvent> &list,
+				 const RealTime &playtime);
                     
     // Recording filename
     //
@@ -341,10 +343,8 @@ public:
 
     // Modify MIDI record device
     //
-    void setMidiRecordDevice(DeviceId id)
-        { m_midiRecordDevice = id; }
-    DeviceId getMIDIRecordDevice() const 
-        { return m_midiRecordDevice; }
+    void setMidiRecordDevice(DeviceId id) { m_midiRecordDevice = id; }
+    DeviceId getMIDIRecordDevice() const { return m_midiRecordDevice; }
 
     // Set MMC state
     //

@@ -134,6 +134,9 @@ public:
         { return m_soundDriver->addAudioFile(fileName, id); }
     bool removeAudioFile(const unsigned int &id)
         { return m_soundDriver->removeAudioFile(id); }
+    void rationalisePlayingAudio(const std::vector<MappedEvent> &list,
+				 const RealTime &playtime)
+        { m_soundDriver->rationalisePlayingAudio(list, playtime); }
 
     // Set a MappedInstrument at the Sequencer level
     //

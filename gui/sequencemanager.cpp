@@ -1488,6 +1488,10 @@ void SequenceManager::segmentEventsTimingChanged(const Composition*, Segment * s
 {
     SEQMAN_DEBUG << "SequenceManager::segmentEventsTimingChanged(" << s << ", " << t << ")\n";
     segmentModified(s);
+    if (s && s->getType() == Segment::Audio && m_transportStatus == PLAYING) {
+	QByteArray data;
+        rgapp->sequencerSend("remapTracks()", data);
+    }
 }
 
 void SequenceManager::segmentTransposeChanged(const Composition*, Segment *s, int transpose)
@@ -1500,6 +1504,10 @@ void SequenceManager::segmentTrackChanged(const Composition*, Segment *s, TrackI
 {
     SEQMAN_DEBUG << "SequenceManager::segmentTrackChanged(" << s << ", " << id << ")\n";
     segmentModified(s);
+    if (s && s->getType() == Segment::Audio && m_transportStatus == PLAYING) {
+	QByteArray data;
+        rgapp->sequencerSend("remapTracks()", data);
+    }
 }
 
 void SequenceManager::processAddedSegment(Segment* s)
@@ -1568,6 +1576,11 @@ void SequenceManager::compositionDeleted(const Composition *)
 void SequenceManager::trackChanged(const Composition *, Track* t)
 {
     m_controlBlockMmapper->updateTrackData(t);
+
+    if (m_transportStatus == PLAYING) {
+	QByteArray data;
+        rgapp->sequencerSend("remapTracks()", data);
+    }
 }
 
 void SequenceManager::metronomeChanged(Rosegarden::InstrumentId id,

@@ -504,51 +504,39 @@ void MmappedSegmentsMetaIterator::resetIteratorForSegment(const QString& filenam
     }
 }
 
-void
-MmappedSegmentsMetaIterator::stopPlayingAudioSegment(int segmentRuntimeId)
-{
-    for (std::vector<MappedEvent*>::iterator it = m_playingAudioSegments.begin();
-         it != m_playingAudioSegments.end(); ++it)
-    {
-        if ((*it)->getRuntimeSegmentId() == segmentRuntimeId)
-        {
-            delete *it;
-            m_playingAudioSegments.erase(it);
-            break;
-        }
-    }
-}
-
-std::vector<MappedEvent*>& 
-MmappedSegmentsMetaIterator::getPlayingAudioFiles(const Rosegarden::RealTime &songPosition)
+std::vector<MappedEvent>& 
+MmappedSegmentsMetaIterator::getPlayingAudioFiles(const Rosegarden::RealTime &
+						  songPosition)
 {
     // Clear playing audio segments
     //
-    for (std::vector<MappedEvent*>::iterator it = m_playingAudioSegments.begin();
-         it != m_playingAudioSegments.end(); ++it) delete (*it);
     m_playingAudioSegments.clear();
 
-    //std::cout << "MmappedSegmentsMetaIterator::getPlayingAudioFiles" << std::endl;
+    std::cout << "MmappedSegmentsMetaIterator::getPlayingAudioFiles" << std::endl;
     //int count = 0;
 
-    for(mmappedsegments::iterator i = m_segments.begin(); i != m_segments.end(); ++i)
-    {
-        //std::cout << "ITERATOR = " << count++ << std::endl;
+    for (mmappedsegments::iterator i = m_segments.begin();
+	 i != m_segments.end(); ++i) {
 
         MmappedSegment::iterator iter(i->second);
 
         bool found = false;
-        for(segmentiterators::iterator sI = m_iterators.begin(); sI != m_iterators.end(); ++sI) 
-        {
+
+        for (segmentiterators::iterator sI = m_iterators.begin();
+	     sI != m_iterators.end(); ++sI) {
             if ((*sI)->getSegment() == iter.getSegment())
                 found = true;
         }
 
         if (!found) continue;
 
-
         while (!iter.atEnd())
         {
+	    if ((*iter).getType() != MappedEvent::Audio) {
+		++iter;
+		continue;
+	    }
+	    
             //std::cout << "CONSTRUCTING MAPPEDEVENT" << std::endl;
             MappedEvent evt(*iter);
 
@@ -570,26 +558,25 @@ MmappedSegmentsMetaIterator::getPlayingAudioFiles(const Rosegarden::RealTime &so
             // If there's an audio event and it should be playing at this time
             // then flag as such.
             // 
-            if (evt.getType() == MappedEvent::Audio && 
-                songPosition > evt.getEventTime() - Rosegarden::RealTime(1, 0) &&
+            if (songPosition > evt.getEventTime() - Rosegarden::RealTime(1, 0) &&
                 songPosition < evt.getEventTime() + evt.getDuration())
             {
 
 #define PLAYING_AUDIO_FILES_DEBUG 1
 #ifdef PLAYING_AUDIO_FILES_DEBUG
-//                std::cout << "MmappedSegmentsMetaIterator::getPlayingAudioFiles - "
-//                          << "instrument id = " << evt.getInstrument() << std::endl;
+                std::cout << "MmappedSegmentsMetaIterator::getPlayingAudioFiles - "
+                          << "instrument id = " << evt.getInstrument() << std::endl;
 
 
-//                std::cout << "MmappedSegmentsMetaIterator::getPlayingAudioFiles - "
-//                          << " id " << evt.getRuntimeSegmentId() << ", audio event time     = " << evt.getEventTime() << std::endl;
-//                std::cout << "MmappedSegmentsMetaIterator::getPlayingAudioFiles - "
-//                          << "audio event duration = " << evt.getDuration() << std::endl;
+                std::cout << "MmappedSegmentsMetaIterator::getPlayingAudioFiles - "
+                          << " id " << evt.getRuntimeSegmentId() << ", audio event time     = " << evt.getEventTime() << std::endl;
+                std::cout << "MmappedSegmentsMetaIterator::getPlayingAudioFiles - "
+                          << "audio event duration = " << evt.getDuration() << std::endl;
 
 
 #endif // PLAYING_AUDIO_FILES_DEBUG
 
-                m_playingAudioSegments.push_back(new MappedEvent(evt));
+                m_playingAudioSegments.push_back(evt);
             }
 
             ++iter;
@@ -602,33 +589,6 @@ MmappedSegmentsMetaIterator::getPlayingAudioFiles(const Rosegarden::RealTime &so
     return m_playingAudioSegments;
 }
 
-
-// Get a MappedEvent that describes an audio segment - the caller frees this
-//
-MappedEvent*
-MmappedSegmentsMetaIterator::getAudioSegment(int segmentId)
-{
-
-    for (mmappedsegments::iterator i = m_segments.begin(); i != m_segments.end(); ++i)
-    {
-        MmappedSegment::iterator iter(i->second);
-
-         while (!iter.atEnd())
-         {
-            MappedEvent evt(*iter);
-
-            if (evt.getType() == MappedEvent::Audio &&
-                evt.getRuntimeSegmentId() == segmentId)
-                return new MappedEvent(evt);
-
-            ++iter;
-         }
-
-    }
-
-
-    return 0;
-}
 
 
 

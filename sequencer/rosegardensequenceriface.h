@@ -298,6 +298,13 @@ public:
 
     /// Close all mmapped segments
     virtual void closeAllSegments() = 0;
+
+    /** Update mute (etc) statuses while playing. The sequencer handles
+	this automatically (with no need for this call) for MIDI events,
+	but it needs to be prodded when an already-playing audio segment
+	drops in or out.
+    */
+    virtual void remapTracks() = 0;
 };
 
 #endif // _ROSEGARDENSEQUENCERIFACE_H_

@@ -171,6 +171,7 @@ public slots:
     //
     void slotSelectPlugin(int index);
     void slotSelectAudioLevel(float dB);
+    void slotSelectAudioRecordLevel(float dB);
     void slotAudioChannels(int channels);
     void slotSelectAudioInput(int value);
 

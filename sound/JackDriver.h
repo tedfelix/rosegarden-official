@@ -117,6 +117,14 @@ public:
     void flushAudio(); // when stopping
     void kickAudio();
 
+    // Because we don't want to do any lookups that might involve
+    // locking etc from within the JACK process thread, we instead
+    // call this regularly from the ALSA driver thread -- it looks
+    // up the master fader and monitoring levels and writes them
+    // into simple records in the JACK driver for process to read.
+    //
+    void updateAudioLevels();
+
     RealTime getNextSliceStart(const RealTime &now) const;
 
 protected:
@@ -161,6 +169,7 @@ protected:
     std::vector<jack_port_t *>   m_inputPorts;
     std::vector<jack_port_t *>   m_outputInstruments;
     std::vector<jack_port_t *>   m_outputSubmasters;
+    std::vector<jack_port_t *>   m_outputMonitors;
     std::vector<jack_port_t *>   m_outputMasters;
 
     jack_nframes_t               m_bufferSize;
@@ -183,6 +192,9 @@ protected:
     AudioFileReader             *m_fileReader;
     AudioFileWriter             *m_fileWriter;
     AlsaDriver                  *m_alsaDriver;
+
+    float                        m_masterLevel;
+    float                        m_masterPan;
 
     bool                         m_ok;
 };

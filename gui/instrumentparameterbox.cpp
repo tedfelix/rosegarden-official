@@ -251,6 +251,7 @@ AudioInstrumentParameterPanel::slotSelectAudioLevel(float dB)
     {
         // If this is the record track then we store and send the record level
         //
+/*
         if (m_audioFader->m_recordButton->isOn())
         {
             //cout << "SETTING STORED RECORD LEVEL = " << value << endl;
@@ -264,6 +265,7 @@ AudioInstrumentParameterPanel::slotSelectAudioLevel(float dB)
         }
         else
         {
+*/
             //cout << "SETTING STORED LEVEL = " << value << endl;
 
 	    m_selectedInstrument->setLevel(dB);
@@ -272,7 +274,31 @@ AudioInstrumentParameterPanel::slotSelectAudioLevel(float dB)
               (Rosegarden::MappedObjectId(m_selectedInstrument->getMappedId()),
                Rosegarden::MappedAudioFader::FaderLevel,
                Rosegarden::MappedObjectValue(dB));
-        }
+//        }
+    }
+
+    emit updateAllBoxes();
+}
+
+void
+AudioInstrumentParameterPanel::slotSelectAudioRecordLevel(float dB)
+{
+    if (m_selectedInstrument == 0)
+        return;
+
+    std::cerr << "AudioInstrumentParameterPanel::slotSelectAudioRecordLevel("
+	      << dB << ")" << std::endl;
+
+    if (m_selectedInstrument->getType() == Instrument::Audio)
+    {
+        // If this is the record track then we store and send the record level
+        //
+	m_selectedInstrument->setRecordLevel(dB);
+
+	Rosegarden::StudioControl::setStudioObjectProperty
+	    (Rosegarden::MappedObjectId(m_selectedInstrument->getMappedId()),
+	     Rosegarden::MappedAudioFader::FaderRecordLevel,
+	     Rosegarden::MappedObjectValue(dB));
     }
 
     emit updateAllBoxes();
@@ -310,7 +336,7 @@ AudioInstrumentParameterPanel::slotSetRecord(bool value)
     {
         m_audioFader->m_recordButton->
             setPalette(QPalette(RosegardenGUIColours::ActiveRecordTrack));
-
+/*
         if (m_selectedInstrument &&
             (m_selectedInstrument->getType() == Instrument::Audio))
         {
@@ -330,11 +356,12 @@ AudioInstrumentParameterPanel::slotSetRecord(bool value)
             // Set the prepend text on the audio fader
 //!!!            m_audioFader->m_fader->setPrependText(i18n("Record level = "));
         }
+*/
     }
     else
     {
         m_audioFader->m_recordButton->unsetPalette();
-
+/*
         if (m_selectedInstrument &&
             (m_selectedInstrument->getType() == Instrument::Audio))
         {
@@ -354,6 +381,7 @@ AudioInstrumentParameterPanel::slotSetRecord(bool value)
             // Set the prepend text on the audio fader
 //!!!            m_audioFader->m_fader->setPrependText(i18n("Playback level = "));
         }
+*/
     }
 
     m_audioFader->m_recordButton->setOn(value);
@@ -689,6 +717,9 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* d
     connect(m_audioFader->m_fader, SIGNAL(faderChanged(float)),
             this, SLOT(slotSelectAudioLevel(float)));
 
+    connect(m_audioFader->m_recordFader, SIGNAL(faderChanged(float)),
+            this, SLOT(slotSelectAudioRecordLevel(float)));
+
     connect(m_audioFader->m_muteButton, SIGNAL(clicked()),
             this, SLOT(slotMute()));
 
@@ -740,9 +771,11 @@ AudioInstrumentParameterPanel::slotRecord()
                  //<< int(m_selectedInstrument->getRecordLevel()) << endl;
 
             // set the fader value to the record value
-            m_audioFader->m_fader->
+/*
+            m_audioFader->m_recordFader->
                 setFader
 		(m_selectedInstrument->getRecordLevel());
+*/
         }
 
         emit recordButton(m_selectedInstrument->getId(),
