@@ -2,7 +2,9 @@
 [KDE Desktop Entry]
 Type=Application
 Categories=AudioVideo;Application;X-SuSE-Sequencer;X-Red-Hat-Base;
-Exec=rosegarden -caption "%c" %i %m  
+Exec=rosegarden -caption "%c" %i %m
+MimeType=audio/x-rosegarden;audio/x-rosegarden-device
+X-KDE-NativeMimeType=audio/x-rosegarden
 Icon=rosegarden.xpm
 MiniIcon=rosegarden.xpm
 DocPath=rosegarden/index.html
