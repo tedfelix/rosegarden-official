@@ -101,6 +101,8 @@ signals:
     void documentRestored();
 
 private:
+    //--------------- Data members ---------------------------------
+
     typedef std::set<KActionCollection *> ViewSet;
     ViewSet m_views;
 

@@ -37,14 +37,15 @@ public:
     virtual ~QCanvasSimpleSprite();
 
 protected:
-    QCanvasPixmapArray* m_pixmapArray;
-
     static QCanvasPixmapArray* makePixmapArray(QPixmap *pixmap);
 
     static QCanvasPixmapArray* makePixmapArray(QCanvasPixmap *pixmap);
 
     static QCanvasPixmapArray* makePixmapArray(const QString &pixmapfile);
 
+    //--------------- Data members ---------------------------------
+
+    QCanvasPixmapArray* m_pixmapArray;
 };
 
 class NotationElement;
@@ -63,6 +64,8 @@ public:
     NotationElement& getNotationElement() { return m_notationElement; }
     
 protected:
+    //--------------- Data members ---------------------------------
+
     NotationElement& m_notationElement;
 
 };
@@ -78,6 +81,8 @@ public:
     static void deleteAll();
     
 protected:
+    //--------------- Data members ---------------------------------
+
     static std::vector<QCanvasPixmapArray*> m_pixmapArrays;
 };
 

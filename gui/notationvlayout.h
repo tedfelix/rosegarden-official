@@ -67,12 +67,17 @@ public:
     virtual void finishLayout();
 
 private:
+
+    void positionSlur(NotationStaff &staff, NotationElementList::iterator i);
+
     typedef FastVector<NotationElementList::iterator> SlurList;
     typedef std::map<StaffType *, SlurList> SlurListMap;
+
+    //--------------- Data members ---------------------------------
+
     SlurListMap m_slurs;
     SlurList &getSlurList(StaffType &);
 
-    void positionSlur(NotationStaff &staff, NotationElementList::iterator i);
 };
 
 #endif

@@ -83,6 +83,8 @@ private:
 
     void drawButtons();
 
+    //--------------- Data members ---------------------------------
+
     RosegardenGUIDoc *m_doc;
 
     Rosegarden::TrackHeader *vHeader;

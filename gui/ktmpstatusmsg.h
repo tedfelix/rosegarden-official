@@ -72,6 +72,9 @@ public:
     static int getDefaultId();
     
 protected:
+
+    //--------------- Data members ---------------------------------
+
     KStatusBar* m_statusBar;
     int m_id;
 

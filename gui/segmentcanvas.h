@@ -88,6 +88,9 @@ public:
     static unsigned int widthToNbBars(unsigned int);
     
 protected:
+
+    //--------------- Data members ---------------------------------
+
     int m_instrument;
 
     Rosegarden::Segment* m_segment;
@@ -228,6 +231,8 @@ signals:
     void editSegmentMatrix(Rosegarden::Segment*);
 
 private:
+    //--------------- Data members ---------------------------------
+
     ToolType m_toolType;
     SegmentTool *m_tool;
 
@@ -259,6 +264,8 @@ public:
     virtual void handleMouseMove(QMouseEvent*)         = 0;
 
 protected:
+    //--------------- Data members ---------------------------------
+
     SegmentCanvas*  m_canvas;
     SegmentItem* m_currentItem;
 };
@@ -283,6 +290,8 @@ signals:
     void setSegmentDuration(SegmentItem*);
 
 protected:
+    //--------------- Data members ---------------------------------
+
     bool m_newRect;
 };
 
@@ -333,6 +342,8 @@ signals:
 
 protected:
     bool cursorIsCloseEnoughToEdge(SegmentItem*, QMouseEvent*);
+
+    //--------------- Data members ---------------------------------
 
     unsigned int m_edgeThreshold;
 };

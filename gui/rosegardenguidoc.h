@@ -205,6 +205,8 @@ public:
     static QList<RosegardenGUIView> *pViewList;	
 
 private:
+    //--------------- Data members ---------------------------------
+
     /**
      * the modified flag of the current document
      */

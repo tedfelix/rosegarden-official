@@ -78,6 +78,8 @@ protected:
     void detach();
     
 private:
+    //--------------- Data members ---------------------------------
+
     QCanvasItemGroup* m_group;
     QCanvasItem*      m_item;
 
@@ -149,6 +151,8 @@ private:
                               const QCanvasText* ) const;
 
 protected:
+    //--------------- Data members ---------------------------------
+
     QCanvasItemList m_items;
 };
 

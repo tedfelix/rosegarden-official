@@ -90,6 +90,9 @@ public:
     bool isNote() const;
 
 protected:
+
+    //--------------- Data members ---------------------------------
+
     QCanvasRectangle* m_canvasRect;
 };
 
@@ -169,6 +172,8 @@ public:
     static const unsigned int maxMIDIPitch;
 
 protected:
+    //--------------- Data members ---------------------------------
+
 
 };
 
@@ -229,6 +234,9 @@ public:
     virtual void finishLayout();
 
 protected:
+
+    //--------------- Data members ---------------------------------
+
     BarData m_barData;
     HLineList m_hlines;
 

@@ -281,17 +281,6 @@ protected:
      */
     bool elementNotMoved(NotationElement *);
 
-    int m_id;
-
-    bool m_pageMode;
-    double m_pageWidth;
-    int m_lineBreakGap;
-    int m_connectingLineHeight;
-
-    double m_horizLineStart;
-    double m_horizLineEnd;
-    int m_resolution;
-
     void resizeStaffLines();
     void clearStaffLineRow(int rowNo);
     void resizeStaffLineRow(int rowNo, double offset, double length);
@@ -319,6 +308,20 @@ protected:
 
     typedef std::vector<QCanvasLine *> StaffLineList;
     typedef std::vector<StaffLineList> StaffLineListList;
+
+    //--------------- Data members ---------------------------------
+
+    int m_id;
+
+    bool m_pageMode;
+    double m_pageWidth;
+    int m_lineBreakGap;
+    int m_connectingLineHeight;
+
+    double m_horizLineStart;
+    double m_horizLineEnd;
+    int m_resolution;
+
     StaffLineListList m_staffLines;
     StaffLineList m_staffConnectingLines;
 

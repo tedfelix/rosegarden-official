@@ -48,6 +48,8 @@ public:
 protected:
     virtual EditTool* createTool(const QString& toolName) = 0;
 
+    //--------------- Data members ---------------------------------
+
     EditView* m_parentView;
 
     QDict<EditTool> m_tools;
@@ -156,6 +158,8 @@ protected:
     EditTool(const QString& menuName, EditView*);
 
     void createMenu(const QString& rcFileName);
+
+    //--------------- Data members ---------------------------------
 
     const QString m_menuName;
 

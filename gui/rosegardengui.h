@@ -431,6 +431,7 @@ public slots:
 
 private:
 
+    //--------------- Data members ---------------------------------
 
     /**
      * the configuration object of the application

@@ -352,6 +352,9 @@ protected:
 				     const Rosegarden::TimeSignature &);
 
 protected:
+
+    //--------------- Data members ---------------------------------
+
     QCanvas *m_canvas;
 
     int	     m_id;

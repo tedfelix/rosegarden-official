@@ -102,6 +102,8 @@ protected:
     Rosegarden::timeT durationOf(const NELIterator &i);
 
 private:
+    //--------------- Data members ---------------------------------
+
     const NotationElementList &m_nel;
     NELIterator m_initial, m_final, m_shortest, m_longest, m_highest, m_lowest;
     NELIterator m_baseIterator;
@@ -151,6 +153,8 @@ protected:
     virtual void sample(const NELIterator&);
 
 private:
+    //--------------- Data members ---------------------------------
+
     int height(const NELIterator&) const;
     const Rosegarden::Clef &m_clef;
     const Rosegarden::Key &m_key;
@@ -214,6 +218,9 @@ private:
     Beam calculateBeam(NotationStaff &);
 
     int height(const NELIterator&) const;
+
+    //--------------- Data members ---------------------------------
+
     const Rosegarden::Clef &m_clef;
     const Rosegarden::Key &m_key;
     int m_weightAbove, m_weightBelow;

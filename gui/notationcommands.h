@@ -79,6 +79,8 @@ protected:
     virtual void finishExecute();
 
 private:
+    //--------------- Data members ---------------------------------
+
     void copyTo(Rosegarden::Segment *);
     void copyFrom(Rosegarden::Segment *);
 
@@ -125,6 +127,8 @@ public:
 protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
 
+    //--------------- Data members ---------------------------------
+
     Rosegarden::Note m_note;
     int m_pitch;
     Rosegarden::Accidental m_accidental;
@@ -159,6 +163,8 @@ public:
 protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
 
+    //--------------- Data members ---------------------------------
+
     Rosegarden::Clef m_clef;
     Rosegarden::Event *m_lastInsertedEvent;
 };
@@ -181,6 +187,8 @@ public:
 
 protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
+
+    //--------------- Data members ---------------------------------
 
     bool m_collapseRest;
 
@@ -262,6 +270,8 @@ public:
 protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
 
+    //--------------- Data members ---------------------------------
+
     std::string m_indicationType;
     Rosegarden::timeT m_indicationDuration;
     Rosegarden::Event *m_lastInsertedEvent;
@@ -319,6 +329,8 @@ protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
 
 private:
+    //--------------- Data members ---------------------------------
+
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     bool m_up;
 };
@@ -358,6 +370,8 @@ protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
 
 private:
+    //--------------- Data members ---------------------------------
+
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     bool m_up;
 };
@@ -377,6 +391,8 @@ protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
 
 private:
+    //--------------- Data members ---------------------------------
+
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     Rosegarden::Mark m_mark;
 };
@@ -397,6 +413,8 @@ protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
 
 private:
+    //--------------- Data members ---------------------------------
+
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
 };
 

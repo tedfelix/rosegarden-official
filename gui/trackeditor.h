@@ -139,6 +139,8 @@ protected:
     void init(unsigned int nbTracks, unsigned int nbBars);
     void setupHorizontalHeader();
 
+    //--------------- Data members ---------------------------------
+
     RosegardenGUIDoc* m_document;
 
     SegmentCanvas *m_segmentsCanvas;

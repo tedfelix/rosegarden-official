@@ -126,6 +126,8 @@ signals:
     void setPositionPointer(int);
 
 protected:
+    //--------------- Data members ---------------------------------
+
     NotationView* m_notationView;
     MatrixView* m_matrixView;
 

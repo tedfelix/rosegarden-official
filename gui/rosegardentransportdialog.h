@@ -45,6 +45,8 @@ public:
 private:
   void loadPixmaps();
 
+    //--------------- Data members ---------------------------------
+
   std::map<int, QPixmap> m_lcdList;
 
   int m_lastTenHours;

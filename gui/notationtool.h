@@ -53,6 +53,9 @@ public:
 protected:
     virtual EditTool* createTool(const QString& toolName);
 
+    //--------------- Data members ---------------------------------
+
+
 };
 
 
@@ -98,6 +101,8 @@ protected:
      * \a menuName : the name of the menu defined in the XML rc file
      */
     NotationTool(const QString& menuName, EditView*);
+
+    //--------------- Data members ---------------------------------
 
     NotationView* m_nParentView;
 };
@@ -166,6 +171,8 @@ protected slots:
     void slotSelectSelected();
 
 protected:
+    //--------------- Data members ---------------------------------
+
     Rosegarden::Note::Type m_noteType;
     unsigned int m_noteDots;
 
@@ -216,6 +223,8 @@ public:
 protected:
     ClefInserter(EditView*);
     
+    //--------------- Data members ---------------------------------
+
     Rosegarden::Clef m_clef;
 };
 
@@ -244,8 +253,9 @@ public slots:
 protected:
     NotationEraser(EditView*);
 
-    bool m_collapseRest;
+    //--------------- Data members ---------------------------------
 
+    bool m_collapseRest;
 };
 
 /**
@@ -311,6 +321,8 @@ protected:
      */
     void setViewCurrentSelection();
 
+    //--------------- Data members ---------------------------------
+
     QCanvasRectangle* m_selectionRect;
     bool m_updateRect;
 
@@ -336,6 +348,8 @@ public:
 protected:
     NotationSelectionPaster(EventSelection&,
                             NotationView*);
+
+    //--------------- Data members ---------------------------------
 
     EventSelection& m_selection;
 

@@ -195,6 +195,8 @@ private:
         int m_borderY;
     };
 
+    //--------------- Data members ---------------------------------
+
     std::string m_name;
     std::string m_origin;
     std::string m_copyright;
@@ -310,6 +312,8 @@ public:
 
 
 private:
+    //--------------- Data members ---------------------------------
+
     int m_currentSize;
     NoteFontMap m_fontMap;
 

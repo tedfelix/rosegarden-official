@@ -111,6 +111,8 @@ private:
 protected:
     void updateBeginEndTime() const;
 
+    //--------------- Data members ---------------------------------
+
     Rosegarden::Segment& m_originalSegment;
 
     /// iterators pointing to Events from the original Segment

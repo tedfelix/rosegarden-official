@@ -69,6 +69,8 @@ public:
 
 
 protected:
+    //--------------- Data members ---------------------------------
+
     Rosegarden::Composition &m_composition;
     Rosegarden::Segment *m_currentSegment;
     XmlStorableEvent *m_currentEvent;

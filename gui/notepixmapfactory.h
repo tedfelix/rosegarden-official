@@ -77,6 +77,8 @@ public:
 private:
     friend class NotePixmapFactory;
 
+    //--------------- Data members ---------------------------------
+
     Rosegarden::Note::Type m_noteType;
     int m_dots;
     Rosegarden::Accidental m_accidental;
@@ -162,12 +164,6 @@ public:
     int getKeyWidth(const Rosegarden::Key &key) const;
 
 protected:
-    NoteFont *m_font;
-    bool m_selected;
-
-    int m_noteBodyWidth, m_noteBodyHeight;
-    int m_left, m_right, m_above, m_below;
-
     void makeRoomForAccidental(Rosegarden::Accidental);
     void drawAccidental(Rosegarden::Accidental);
 
@@ -183,6 +179,14 @@ protected:
 
     void createPixmapAndMask(int width, int height);
     QCanvasPixmap makeCanvasPixmap(QPoint hotspot);
+
+    //--------------- Data members ---------------------------------
+
+    NoteFont *m_font;
+    bool m_selected;
+
+    int m_noteBodyWidth, m_noteBodyHeight;
+    int m_left, m_right, m_above, m_below;
 
     QPoint m_origin;
 

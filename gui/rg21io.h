@@ -91,6 +91,8 @@ protected:
 
     bool readNextLine();
 
+    //--------------- Data members ---------------------------------
+
     QFile m_file;
     QTextStream *m_stream;
 

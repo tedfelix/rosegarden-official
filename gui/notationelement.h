@@ -114,6 +114,8 @@ public:
     QCanvasItem* getCanvasItem() { return m_canvasItem; }
 
 protected:
+    //--------------- Data members ---------------------------------
+
     double m_x;
     double m_y;
 

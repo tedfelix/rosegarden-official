@@ -144,6 +144,8 @@ protected:
 
     NotationElement *getElementAtXCoord(QMouseEvent *e);
 
+    //--------------- Data members ---------------------------------
+
     int m_lastYPosNearStaff;
 
     unsigned int m_staffLineThreshold; //!!! better name please

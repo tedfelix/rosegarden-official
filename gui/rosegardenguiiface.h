@@ -85,6 +85,8 @@ k_dcop:
     QMap<QCString,DCOPRef> actionMap();
 
 protected:
+    //--------------- Data members ---------------------------------
+
     KDCOPActionProxy *m_dcopActionProxy;
 
 };

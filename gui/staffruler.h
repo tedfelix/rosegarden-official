@@ -69,6 +69,8 @@ signals:
     void positionChange(int pos);
 
 protected:
+    //--------------- Data members ---------------------------------
+
     QCanvasRectangleGroupable* m_grip;
     QCanvasLineGroupable* m_line;
 
@@ -150,6 +152,8 @@ protected:
     void makeStep(int stepValue,
                   double pos, double nextStepPos,
                   unsigned short nbSubsteps);
+
+    //--------------- Data members ---------------------------------
 
     int m_xPos;
     int m_yPos;

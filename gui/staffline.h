@@ -49,6 +49,8 @@ public:
     void setHighlighted(bool);
 
 protected:
+    //--------------- Data members ---------------------------------
+
     int m_height;
     bool m_significant;
 

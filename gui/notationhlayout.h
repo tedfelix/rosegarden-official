@@ -174,8 +174,6 @@ protected:
     typedef FastVector<BarData> BarDataList;
     typedef std::map<StaffType *, BarDataList> BarDataMap;
 
-    BarDataMap m_barData;
-
     /**
      * Returns the bar positions for a given staff, provided that
      * staff has been preparsed since the last reset
@@ -244,6 +242,10 @@ protected:
     int getFixedItemSpacing() const {
 	return (int)((m_npf.getNoteBodyWidth() / 5) * m_spacing);
     }
+
+    //--------------- Data members ---------------------------------
+
+    BarDataMap m_barData;
 
     double m_totalWidth;
     bool m_pageMode;
