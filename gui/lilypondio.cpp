@@ -193,6 +193,7 @@ LilypondExporter::write()
 
     bool isFlatKeySignature = false;
     int lastTrackIndex = -1;
+    int voiceCounter = 0;
 
     // Lilypond remembers the duration of the last note or
     // rest and reuses it unless explicitly changed.
@@ -213,11 +214,11 @@ LilypondExporter::write()
 	if ((*i)->getTrack() != lastTrackIndex) {
 	    if (lastTrackIndex != -1) {
 		// Close the old track (staff)
-		str << "\n\t\t}\n";
+		str << "\n\t\t>\n";
 	    }
 	    lastTrackIndex = (*i)->getTrack();
 	    // Will there be problems with quotes, spaces, etc. in staff/track labels?
-	    str << "\t\t\\context Staff = \"" << m_composition->getTrackByIndex(lastTrackIndex)->getLabel() << "\" {\n";
+	    str << "\t\t\\context Staff = \"" << m_composition->getTrackByIndex(lastTrackIndex)->getLabel() << "\" <\n";
 	    str << "\t\t\t\\property Staff.instrument = \"" << m_composition->getTrackByIndex(lastTrackIndex)->getLabel() << "\"\n";
 	
 	}
@@ -231,14 +232,22 @@ LilypondExporter::write()
       
         // If the segment doesn't start at 0, add a "skip" to the start
         // No worries about overlapping segments, because Voices can overlap
-        str << "\t\t\t\\context Voice {\n";
+        // voiceCounter is a hack because Lilypond does not by default make 
+        // them unique
+        str << "\t\t\t\\context Voice = \"voice" << voiceCounter++ << "\" {\n";
         timeT segmentStart = (*i)->getStartTime(); // getFirstEventTime
         if (segmentStart > 0) {
             long curNote = long(Note(Note::WholeNote).getDuration());
             long wholeNoteDuration = curNote;
-            while (curNote > 0 && (segmentStart / curNote) >= 1.0) {
-                str << "\\skip " << (wholeNoteDuration / curNote) << "*" << ((int)(segmentStart / curNote)) << "\n";
-                segmentStart = segmentStart - ((int)(segmentStart / curNote))*curNote;
+            // Incomplete: Make this a constant!
+            // This is the smallest unit on which a Segment may begin
+            long MIN_NOTE_SKIP_DURATION = long(Note(Note::ThirtySecondNote).getDuration());
+            while (curNote >= MIN_NOTE_SKIP_DURATION) {
+                int numCurNotes = ((int)(segmentStart / curNote));
+                if (numCurNotes > 0) {
+                    str << "\\skip " << (wholeNoteDuration / curNote) << "*" << numCurNotes << "\n";
+                    segmentStart = segmentStart - numCurNotes*curNote;
+                }
                 curNote /= 2;
             }
         }
@@ -380,10 +389,8 @@ LilypondExporter::write()
 			str << "2"; break;
                     case Note::WholeNote:
 			str << "1"; break;
-// Incomplete:
-//                   case Note::DoubleWholeNote:
-//                     str << "";
-//                    break;
+                   case Note::DoubleWholeNote:
+                       str << "\\breve"; break;
 		    }
 		    lastType = tmpNote.getNoteType();
 		    for (int numDots = 0; numDots < tmpNote.getDots(); numDots++) {
@@ -471,7 +478,7 @@ LilypondExporter::write()
 	str << "\n\t\t\t}\n";
     }
     // Close the last track (staff)
-    str << "\n\t\t}\n";
+    str << "\n\t\t>\n";
 
 //     int tempoCount = m_composition->getTempoChangeCount();
 
