@@ -1941,6 +1941,8 @@ BankEditorDialog::slotImport()
                     std::vector<Rosegarden::MidiBank> banks;
                     std::vector<Rosegarden::MidiProgram> programs;
                     std::string librarianName, librarianEmail;
+		    Rosegarden::MidiDevice::VariationType variationType =
+			Rosegarden::MidiDevice::NoVariations;
 
                     Rosegarden::MidiDevice *device = 0;
 
@@ -1956,6 +1958,7 @@ BankEditorDialog::slotImport()
                                 programs = device->getPrograms();
                                 librarianName = device->getLibrarianName();
                                 librarianEmail = device->getLibrarianEmail();
+				variationType = device->getVariationType();
                                 found = true;
                                 break;
                             }
@@ -1978,10 +1981,9 @@ BankEditorDialog::slotImport()
 				// merging banks -- it's misleading
 				librarianName = "";
 				librarianEmail = "";
-			    }
 
-                            ModifyDeviceCommand *command =
-                                new ModifyDeviceCommand(
+				ModifyDeviceCommand *command =
+				    new ModifyDeviceCommand(
                                         m_studio,
                                         deviceItem->getDeviceId(),
                                         qstrtostr(importList[deviceIndex]),
@@ -1991,7 +1993,24 @@ BankEditorDialog::slotImport()
                                         programs,
                                         overwrite,
 					rename);
-                            addCommandToHistory(command);
+				addCommandToHistory(command);
+
+			    } else {
+
+				ModifyDeviceCommand *command =
+				    new ModifyDeviceCommand(
+                                        m_studio,
+                                        deviceItem->getDeviceId(),
+                                        qstrtostr(importList[deviceIndex]),
+                                        librarianName,
+                                        librarianEmail,
+					variationType,
+                                        banks,
+                                        programs,
+                                        overwrite,
+					rename);
+				addCommandToHistory(command);
+			    }
 
                             // No need to redraw the dialog, this is done by
                             // slotUpdate, signalled by the MultiViewCommandHistory
@@ -2376,7 +2395,7 @@ ImportDeviceDialog::ImportDeviceDialog(QWidget *parent,
 				       bool showRenameOption):
     KDialogBase(parent, "importdevicedialog", true,
                 i18n("Import Banks from Device..."),
-                Ok | Cancel, Ok, true)
+                Ok | Cancel, Ok)
 {
     QVBox* mainFrame = makeVBoxMainWidget();
 

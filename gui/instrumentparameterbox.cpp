@@ -1575,9 +1575,14 @@ MIDIInstrumentParameterPanel::populateVariationList()
 	std::string programName = md->getProgramName(program);
 
 	if (programName != "") { // yes, that is how you know whether it exists
+/*
 	    m_variationValue->insertItem(programName == defaultProgramName ?
 					 i18n("(default)") :
 					 strtoqstr(programName));
+*/
+	    m_variationValue->insertItem(QString("%1. %2")
+					 .arg(variations[i] + 1)
+					 .arg(strtoqstr(programName)));
 	    if (m_selectedInstrument->getProgram() == program) {
 		m_variationValue->setCurrentItem(i);
 	    }
