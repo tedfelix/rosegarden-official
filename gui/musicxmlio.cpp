@@ -143,7 +143,7 @@ MusicXmlExporter::writeNote(Event *e, Rosegarden::timeT lastNoteTime,
 	bool haveNotations = false;
 	if (e->has(BaseProperties::TIED_BACKWARD) &&
 	    e->get<Bool>(BaseProperties::TIED_BACKWARD)) {
-	    if (!haveNotation) {
+	    if (!haveNotations) {
 		str << "\t\t\t\t<notations>" << std::endl;
 		haveNotations = true;
 	    }
@@ -151,7 +151,7 @@ MusicXmlExporter::writeNote(Event *e, Rosegarden::timeT lastNoteTime,
 	}
 	if (e->has(BaseProperties::TIED_FORWARD) &&
 	    e->get<Bool>(BaseProperties::TIED_FORWARD)) {
-	    if (!haveNotation) {
+	    if (!haveNotations) {
 		str << "\t\t\t\t<notations>" << std::endl;
 		haveNotations = true;
 	    }
