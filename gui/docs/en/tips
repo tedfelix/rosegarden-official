@@ -122,6 +122,11 @@ label must be visible for this to work.)</p>
 </tip>
 <tip category="Rosegarden|General">
 <html>
+<p>...that you can configure what happens when you double-click on a segment?  Go to <b>Settings -> Configure Rosegarden</b> and choose your preferred editor under the <b>Behaviour</b> tab.</p>
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
 <p>...that Rosegarden is being developed as a community effort with
 contributions from around the world?<br><br>
 The primary developers live in the UK and France, and we've had contributors
