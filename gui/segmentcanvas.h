@@ -27,6 +27,7 @@
 #include "Event.h"
 #include "Track.h"
 #include "RulerScale.h"
+#include "SnapGrid.h"
 #include "Selection.h"
 
 #include <qwidget.h>

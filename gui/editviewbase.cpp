@@ -407,10 +407,14 @@ EditViewBase::slotTestClipboard()
 {
 #ifdef RGKDE3
     if (m_document->getClipboard()->isEmpty()) {
+	RG_DEBUG << "EditViewBase::slotTestClipboard(): empty" << endl;
+
 	stateChanged("have_clipboard", KXMLGUIClient::StateReverse);
 	stateChanged("have_clipboard_single_segment",
 		     KXMLGUIClient::StateReverse);
     } else {
+	RG_DEBUG << "EditViewBase::slotTestClipboard(): not empty" << endl;
+
 	stateChanged("have_clipboard", KXMLGUIClient::StateNoReverse);
 	stateChanged("have_clipboard_single_segment",
 		     (m_document->getClipboard()->isSingleSegment() ?

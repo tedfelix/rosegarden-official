@@ -23,6 +23,8 @@
 #include "matrixstaff.h"
 #include "matrixelement.h"
 
+#include "SnapGrid.h"
+
 using Rosegarden::timeT;
 using Rosegarden::SnapGrid;
 
@@ -51,7 +53,7 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 {
     updateGridSnap(e);
 
-    timeT evTime = m_snapGrid.snapX(e->x());
+    timeT evTime = m_snapGrid.snapX(e->x(), SnapGrid::SnapLeft);
     int evPitch = m_staff.getHeightAtCanvasY(e->y());
 
     timeT emTime = m_staff.getSegment().getEndMarkerTime();

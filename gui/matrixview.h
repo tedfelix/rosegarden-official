@@ -29,6 +29,7 @@
 
 #include "Staff.h"
 #include "RulerScale.h"
+#include "SnapGrid.h"
 
 #include "editview.h"
 #include "matrixcanvasview.h"

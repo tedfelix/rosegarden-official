@@ -79,8 +79,7 @@ void MatrixHLayout::scanStaff(MatrixHLayout::StaffType &staffBase, timeT, timeT)
     int barNo = m_firstBar;
     double startPosition = from;
 
-    RG_DEBUG << "MatrixHLayout::scanStaff() : from = "
-                         << from << " - to = " << to << endl;
+    MATRIX_DEBUG << "MatrixHLayout::scanStaff() : start time = " << segment.getStartTime() << ", first bar = " << m_firstBar << ", end marker time = " << segment.getEndMarkerTime() << ", from = " << from << ", to = " << to << endl;
 
     while (from < to) {
 

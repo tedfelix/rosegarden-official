@@ -26,6 +26,7 @@
 #include <qwidget.h>
 #include "Event.h"
 #include "RulerScale.h"
+#include "SnapGrid.h"
 #include "rosegardenguidoc.h"
 
 

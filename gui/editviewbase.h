@@ -181,6 +181,12 @@ public slots:
      */
     virtual void slotStatusHelpMsg(const QString &text);
 
+    /**
+     * A command has happened; check the clipboard in case we
+     * need to change state
+     */
+    virtual void slotTestClipboard();
+
 protected:
 
     virtual void paintEvent(QPaintEvent* e);
@@ -208,12 +214,6 @@ protected:
      */
     virtual void initStatusBar() = 0;
     
-    /**
-     * A command has happened; check the clipboard in case we
-     * need to change state
-     */
-    virtual void slotTestClipboard();
-
 protected slots:
     /**
      * save general Options like all bar positions and status as well
