@@ -57,6 +57,19 @@ TrackHeader::paintEvent(QPaintEvent *e)
 
 }
 
+// QRect QHeader::sRect( int index )
+// {
+
+//     int section = mapToSection( index );
+//     if ( section < 0 )
+// 	return rect(); // ### eeeeevil
+
+//     if ( orient == Horizontal )
+// 	return QRect(  d->positions[index]-offset(), 0, d->sizes[section], height() );
+//     else
+// 	return QRect( 0, d->positions[index]-offset(), width(), d->sizes[section] );
+// }
+
 // void TrackHeader::paintSection(QPainter *p, int index, QRect fr)
 // {
 //     int section = mapToSection( index );
