@@ -3427,37 +3427,48 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
         float peakLevelLeft, peakLevelRight;
 
 
-        // If there is something on the audio queue then make sure
-        // the disk thread is running (and hence ensuring the ring
-        // buffers are full).  This is a signal to another thread
-        // through the condition value - not sure if this is 
-        // strictly realtime safe though..
-        //
-        /*
-        if (audioQueue.size() > 0)
-        {
-
-            if (pthread_mutex_trylock(&_diskThreadLock) != EBUSY)
-            {
-#ifdef DEBUG_DISK_THREAD
-                std::cerr << "AlsaDriver::jackProcess "
-                          << "- starting disk thread" << std::endl;
-#endif
-
-                pthread_cond_signal(&_dataReady);
-                pthread_mutex_unlock(&_diskThreadLock);
-            }
-        }
-        */
-
         for (it = audioQueue.begin(); it != audioQueue.end(); ++it)
         {
+
             // Another (JACK) thread could've cleared down all the
             // PlayableAudioFiles already.  As we've already
             // noted we must be careful.
             //
             if ((*it)->getStatus() == PlayableAudioFile::PLAYING)
             {
+
+                // Get a fader for this instrument - if we can't then this
+                // isn't a valid audio track.
+                //
+                MappedAudioFader *fader =
+                    dynamic_cast<MappedAudioFader*>
+                        (inst->getMappedStudio()->
+                             getAudioFader((*it)->getInstrument()));
+    
+                if (!fader) continue;
+                
+                // Do volume and pan processing now and use results after
+                // plugins
+                //
+                MappedObjectPropertyList result =
+                        fader->getPropertyList(MappedAudioFader::FaderLevel);
+                float volume = float(result[0].toFloat())/100.0;
+
+
+                // Don't do anything here if the volume is zero
+                //
+                if (volume == 0.0) continue;
+
+                // Work out the pan
+                //
+                float pan1 = 1.0f;
+                float pan2 = 1.0f;
+                result = fader->getPropertyList(MappedAudioFader::Pan);
+                float fpan = result[0].toFloat();
+                if (fpan < 0.0)
+                    pan2 = (fpan + 100.0) / 100.0;
+                else
+                    pan1 = 1.0 - (fpan / 100.0);
 
                 int channels = (*it)->getChannels();
                 int bytes = (*it)->getBitsPerSample() / 8;
@@ -3690,36 +3701,6 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
                 _jackPeakLevels[audioFilesProcessed * 2] = peakLevelLeft;
                 _jackPeakLevels[audioFilesProcessed * 2 + 1] = peakLevelRight;
-
-                // Do volume and pan processing now and use results after
-                // plugins
-                //
-                float volume = 1.0f;
-                float pan1 = 1.0f;
-                float pan2 = 1.0f;
-
-                MappedAudioFader *fader =
-                    dynamic_cast<MappedAudioFader*>
-                        (inst->getMappedStudio()->
-                             getAudioFader((*it)->getInstrument()));
-                
-                if (fader)
-                {
-                    MappedObjectPropertyList result =
-                        fader->getPropertyList(MappedAudioFader::FaderLevel);
-                    volume = float(result[0].toFloat())/100.0;
-
-                    // do the pan
-                    result = fader->getPropertyList(MappedAudioFader::Pan);
-                    float fpan = result[0].toFloat();
-                    if (fpan < 0.0)
-                        pan2 = (fpan + 100.0) / 100.0;
-                    else
-                        pan1 = 1.0 - (fpan / 100.0);
-                }
-
-                // Insert plugins go here
-                //
 
                 // At this point check for plugins on this
                 // instrument and step through them in the

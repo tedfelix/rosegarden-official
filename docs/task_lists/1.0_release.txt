@@ -12,13 +12,10 @@ Features for 1.0 - updated 20030923
   o libsndfile support
   o drag and drop [DONE]
 
-- banks/variations [cc]
-  Is this done? [rwb]
+- caching waveform previews at PeakFile [rwb]
 
 - tidy up audio parameter box [cc/rwb/gl]
-  What does this actually mean? [rwb]
-
-- ALSA ports [cc]
+  o audio VU meter needs to look cool (like ardour)
 
 - multiple document interface (switcheable buffers, loading while playing) [rwb]
 
@@ -32,7 +29,6 @@ Features for 1.0 - updated 20030923
 - look at other updates for RG manual [dmm]
     
 - request: import studio from file
-- request: use studio from file instead of default
   
   dmm - stubbed out in GUI, but I've had no time to figure out how to
   implement it, and what time I might have in the forseeable future is better
@@ -74,6 +70,8 @@ Features for 1.0 - updated 20030923
 Completed
 ---------
 
+- banks/variations [cc] [DONE]
+
 - named controllers for studio with associated bankeditor-like dialog [rwb/dmm]
   [DONE]
 
@@ -113,6 +111,10 @@ Completed
 
 To be ignored
 -------------
+
+- request: use studio from file instead of default [doesn't make any sense]
+
+- ALSA ports [cc]
 
 - request: importing lilypond after manual hackery?
   dmm:  No, I don't think so.  I saw the exchange Hans had on the
