@@ -236,8 +236,11 @@ NotationView::showElements(NotationElementList::iterator from,
     // Display bars
     const NotationHLayout::barpositions& barPositions(m_hlayout->barPositions());
 
-    // TODO : store bar elements and delete them before redisplaying them
-
+    NotationElementList::iterator lastElement = to;
+    --lastElement;
+    m_currentStaff->deleteBars((*from)->x(), (*lastElement)->x());
+        
+    
     for(NotationHLayout::barpositions::const_iterator it = barPositions.begin();
         it != barPositions.end(); ++it) {
 
@@ -245,13 +248,8 @@ NotationView::showElements(NotationElementList::iterator from,
 
         kdDebug(KDEBUG_AREA) << "Adding bar at pos " << barPos << endl;
 
-        QCanvasLineGroupable* barLine = new QCanvasLineGroupable(canvas(), m_currentStaff);
+        m_currentStaff->insertBar(barPos);
 
-        barLine->setPoints(0, Staff::linesOffset,
-                           0, m_currentStaff->barLineHeight() + Staff::linesOffset);
-        barLine->move(barPos + dxoffset,
-                      dyoffset);
-        barLine->show();
     }
     
 
@@ -279,9 +277,7 @@ NotationView::applyHorizontalLayout()
 
     m_hlayout->reset();
 
-    for (NotationElementList::iterator i = m_notationElements->begin();
-         i != m_notationElements->end(); ++i)
-        (*m_hlayout)(*i);
+    m_hlayout->layout(m_notationElements->begin(), m_notationElements->end());
 
     return m_hlayout->status();
 }
