@@ -148,7 +148,10 @@ public:
         // Time sig. event (from time sig. composition reference segment)
         TimeSignature            = 1 << 22,
         // Tempo event (from tempo composition reference segment)
-        Tempo                    = 1 << 23
+        Tempo                    = 1 << 23,
+        
+        // Panic function
+        Panic			 = 1 << 24
 
     } MappedEventType;
 

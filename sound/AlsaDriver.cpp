@@ -2917,6 +2917,17 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 #endif
 #endif
         }
+        
+	if ((*i)->getType() == MappedEvent::Panic)
+        {
+    	    AlsaPortList::iterator it;
+	    for (it = m_alsaPorts.begin(); it != m_alsaPorts.end(); ++it)
+	    {
+	    	ClientPortPair dest((*it)->m_client,(*it)->m_port);
+		sendDeviceController(dest, MIDI_CONTROLLER_ALL_NOTES_OFF, 0);
+		sendDeviceController(dest, MIDI_CONTROLLER_RESET, 0);
+	    }
+        }
     }
 
     // Process Midi and Audio
@@ -3070,7 +3081,8 @@ AlsaDriver::sendDeviceController(const ClientPortPair &device,
     snd_seq_ev_set_dest(&event,
                         device.first,
                         device.second);
-
+    snd_seq_ev_set_direct(&event);
+    
     for (int i = 0; i < 16; i++)
     {
         snd_seq_ev_set_controller(&event,

@@ -1463,41 +1463,46 @@ SequenceManager::panic()
     SEQMAN_DEBUG << "panic button\n";
 
     stopping();
-
-    Studio &studio = m_doc->getStudio();
-
-    InstrumentList list = studio.getPresentationInstruments();
-    InstrumentList::iterator it;
-
-    int maxDevices = 0, device = 0;
-    for (it = list.begin(); it != list.end(); it++)
-        if ((*it)->getType() == Instrument::Midi)
-            maxDevices++;
-
+    
+    MappedEvent mE(MidiInstrumentBase, MappedEvent::Panic, 0, 0);
     emit setProgress(40);
-
-    for (it = list.begin(); it != list.end(); it++)
-    {
-        if ((*it)->getType() == Instrument::Midi)
-        {
-            for (unsigned int i = 0; i < 128; i++)
-            {
-                MappedEvent 
-                    mE((*it)->getId(),
-                                MappedEvent::MidiNote,
-                                i,
-                                0);
-
-                StudioControl::sendMappedEvent(mE);
-            }
-
-            device++;
-        }
-        
-        emit setProgress(int(90.0 * (double(device) / double(maxDevices))));
-    }
-
-    resetControllers();
+    StudioControl::sendMappedEvent(mE);
+    emit setProgress(100);
+    
+//    Studio &studio = m_doc->getStudio();
+//
+//    InstrumentList list = studio.getPresentationInstruments();
+//    InstrumentList::iterator it;
+//
+//    int maxDevices = 0, device = 0;
+//    for (it = list.begin(); it != list.end(); it++)
+//        if ((*it)->getType() == Instrument::Midi)
+//            maxDevices++;
+//
+//    emit setProgress(40);
+//
+//    for (it = list.begin(); it != list.end(); it++)
+//    {
+//        if ((*it)->getType() == Instrument::Midi)
+//        {
+//            for (unsigned int i = 0; i < 128; i++)
+//            {
+//                MappedEvent 
+//                    mE((*it)->getId(),
+//                                MappedEvent::MidiNote,
+//                                i,
+//                                0);
+//
+//                StudioControl::sendMappedEvent(mE);
+//            }
+//
+//            device++;
+//        }
+//        
+//        emit setProgress(int(90.0 * (double(device) / double(maxDevices))));
+//    }
+//
+//    resetControllers();
 }
 
 // In this case we only route MIDI events to the transport ticker
