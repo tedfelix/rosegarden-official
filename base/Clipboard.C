@@ -110,9 +110,6 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to)
 	s->insert(new Event(**i));
     }
 
-#ifdef OLD_SEGMENT_API
-    s->recalculateStartTime();
-#endif
     m_segments.insert(s);
     return s;
 }
@@ -130,9 +127,6 @@ Clipboard::newSegment(const EventSelection *copyFrom)
 	s->insert(new Event(**i));
     }
 
-#ifdef OLD_SEGMENT_API
-    s->recalculateStartTime();
-#endif
     m_segments.insert(s);
     return s;
 }

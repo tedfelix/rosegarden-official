@@ -96,11 +96,7 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
     for (Composition::iterator it = comp.begin(); it != comp.end(); it++)
     {
 	timeT segmentStartTime = (*it)->getStartTime();
-#ifdef OLD_SEGMENT_API
-	timeT segmentDuration  = (*it)->getDuration();
-#else
 	timeT segmentDuration = (*it)->getEndTime() - segmentStartTime;
-#endif
 
         track = comp.getTrackByIndex((*it)->getTrack());
 

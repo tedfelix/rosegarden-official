@@ -1172,14 +1172,8 @@ RosegardenGUIDoc::insertRecordedAudio(const Rosegarden::RealTime &time,
         m_composition.addSegment(m_recordSegment);
     }
 
-#ifdef OLD_SEGMENT_API
-    Rosegarden::timeT duration = m_composition.getElapsedTimeForRealTime(time)
-                                 - m_recordSegment->getStartTime();
-    m_recordSegment->setDuration(duration);
-#else
     m_recordSegment->fillWithRests
 	(m_composition.getElapsedTimeForRealTime(time));
-#endif
 
     // update this segment on the GUI
     RosegardenGUIView *w;

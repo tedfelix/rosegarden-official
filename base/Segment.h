@@ -127,12 +127,7 @@ public:
      * changes the ordering may break.  If your Segment is already in a
      * Composition, use Composition::setSegmentTrack instead.
      */
-    void setTrack(TrackId i)
-#ifdef OLD_SEGMENT_API
-    { m_track = i; }
-#else
-    ;
-#endif
+    void setTrack(TrackId i);
 
     // label
     //
@@ -150,83 +145,6 @@ public:
     //////
     //
     // TIME & DURATION VALUES
-
-#ifdef OLD_SEGMENT_API
-    /**
-     * Get the formal starting time of the Segment.  This is not
-     * necessarily the same as the time of the first event in it.
-     */
-    timeT getStartTime() const { return m_startTime; }
-
-    /**
-     * Set the formal starting time of the Segment.  It is usually
-     * VERY DANGEROUS to call this on a Segment that has been stored
-     * in a Composition, because the Composition uses the start time
-     * as a part of the ordering for Segments and if the time changes
-     * the ordering may break.  If your Segment is already in a
-     * Composition, use Composition::setSegmentStartTime instead.
-     * 
-     * Changing the start time of a Segment will change the absolute
-     * times of all Events within that Segment.
-     */
-    void setStartTime(timeT i);
-
-    /**
-     * Get the time of the first actual event on the Segment.
-     * Returns the end time (which should be the same as the start
-     * time) if there are no events.
-     */
-    timeT getFirstEventTime() const;
-
-    /**
-     * Adjust the stored start time for this Segment to be equal to
-     * the time of the first Event in it.  Do not alter the absolute
-     * times of any of the Events.  This effectively tidies up the
-     * start time for a Segment that was built up by inserting Events
-     * into an empty Segment without knowing in advance where the
-     * first Event would appear.  It is usually VERY DANGEROUS to call
-     * this on a Segment that has been stored in a Composition,
-     * because the Composition uses the start time as a part of the
-     * ordering for Segments and if the time changes the ordering may
-     * break.  There is no easy way to do this if your Segment is
-     * already in a Composition.
-     */
-    void recalculateStartTime();
-
-    /**
-     * Return the effective duration of the segment.  This is the
-     * time at which the final event ends relative to the start time
-     * of the segment.
-     */
-    timeT getDuration() const;
-
-    /**
-     * Ensure that the duration of the segment reaches the given
-     * time, by filling it with suitable rests if it needs
-     * lengthening.
-     * 
-     * It is not strictly necessary to call setDuration to change the
-     * duration of a segment -- the duration is always taken from the
-     * time and duration of the final event, and events may be
-     * inserted anywhere.  But for segments that may be rendered in
-     * a score it's vital that the filling rests are present, so
-     * in practice setDuration should always be used.
-     */
-    void setDuration(timeT);
-
-    /**
-     * Return the end time of the Segment.  This is the end time of
-     * the final event.
-     */
-    timeT getEndTime() const { return m_startTime + getDuration(); }
-
-    /**
-     * Return the end-marker time.  This is earlier than or equal
-     * to the value returned by getEndTime() (segments always expand
-     * themselves to meet their end markers).
-     */
-    timeT getEndMarker() const;
-#else
 
     /**
      * Return the start time of the Segment.  For a non-audio

@@ -1485,11 +1485,7 @@ void NotationView::slotEditPaste()
     timeT insertionTime = getInsertionTime();
     timeT endTime = insertionTime +
 	(clipboard->getSingleSegment()->getEndTime() - 
-#ifndef OLD_SEGMENT_API
 	 clipboard->getSingleSegment()->getStartTime());
-#else
-	 clipboard->getSingleSegment()->getFirstEventTime());
-#endif
 
     PasteEventsCommand *command = new PasteEventsCommand
 	(segment, clipboard, insertionTime);
@@ -1530,11 +1526,7 @@ void NotationView::slotEditGeneralPaste()
 	timeT insertionTime = getInsertionTime();
 	timeT endTime = insertionTime +
 	    (clipboard->getSingleSegment()->getEndTime() - 
-#ifndef OLD_SEGMENT_API
 	     clipboard->getSingleSegment()->getStartTime());
-#else
-	     clipboard->getSingleSegment()->getFirstEventTime());
-#endif
 
 	PasteEventsCommand *command = new PasteEventsCommand
 	    (segment, clipboard, insertionTime, type);

@@ -556,11 +556,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
                     m_currentSegment->getAudioStartTime());
 
         timeT absEnd = m_composition.getElapsedTimeForRealTime(markerTime);
-#ifdef OLD_SEGMENT_API
-        m_currentSegment->setDuration(absEnd - absStart);
-#else
 	m_currentSegment->setEndTime(absEnd);
-#endif
 
     } else if (lcName == "device") {
 

@@ -295,11 +295,7 @@ PasteEventsCommand::getEffectiveEndTime(Rosegarden::Segment &segment,
     if (!clipboard->isSingleSegment()) return pasteTime;
     
     timeT d = clipboard->getSingleSegment()->getEndTime() -
-#ifdef OLD_SEGMENT_API
- 	      clipboard->getSingleSegment()->getFirstEventTime();
-#else
  	      clipboard->getSingleSegment()->getStartTime();
-#endif
 
     if (m_pasteType == OpenAndPaste) {
 	return segment.getEndTime() + d;
@@ -330,13 +326,8 @@ PasteEventsCommand::isPossible()
     Segment *source = m_clipboard->getSingleSegment();
 
     timeT pasteTime = getStartTime();
-#ifdef OLD_SEGMENT_API
-    timeT origin = source->getFirstEventTime();
-    timeT duration = source->getDuration() - origin;
-#else
     timeT origin = source->getStartTime();
     timeT duration = source->getEndTime() - origin;
-#endif
 
     kdDebug(KDEBUG_AREA) << "NotationView::slotEditPaste: paste time is " << pasteTime << ", origin is " << origin << ", duration is " << duration << endl;
 
@@ -353,11 +344,7 @@ PasteEventsCommand::modifySegment()
     Segment *source = m_clipboard->getSingleSegment();
 
     timeT pasteTime = getStartTime();
-#ifdef OLD_SEGMENT_API
-    timeT origin = source->getFirstEventTime();
-#else
     timeT origin = source->getStartTime();
-#endif
     timeT duration = source->getEndTime() - origin;
     
     Segment *destination(&getSegment());
@@ -437,11 +424,7 @@ PasteEventsCommand::modifySegment()
     }
 
     destination->normalizeRests
-#ifdef OLD_SEGMENT_API
-	(source->getFirstEventTime(), source->getEndTime());
-#else
 	(source->getStartTime(), source->getEndTime());
-#endif
 }
 
 

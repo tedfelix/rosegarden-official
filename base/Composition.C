@@ -350,30 +350,6 @@ Composition::findSegment(const Segment *s)
     return find(begin(), end(), s);
 }
 
-#ifdef OLD_SEGMENT_API
-bool
-Composition::setSegmentStartTimeAndTrack(Segment *s, timeT t, unsigned int track)
-{
-    iterator i = m_segments.find(s);
-    if (i == end()) {
-        cerr << "Composition::setSegmentStartTimeAndTrack() : couldn't find segment " << s
-                  << endl;
-        return false;
-    }
-
-    m_segments.erase(i);
-
-    s->setTrack(track);
-    s->setStartTime(t);
-
-    m_segments.insert(s);
-
-    updateRefreshStatuses();
-
-    return true;
-}
-#endif
-
 timeT
 Composition::getDuration() const
 {

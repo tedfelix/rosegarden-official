@@ -331,11 +331,7 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
 
 	m_track = m_segment->getTrack();
 	m_startTime = m_segment->getStartTime();
-#ifdef OLD_SEGMENT_API
-	m_duration = m_segment->getDuration();
-#else
 	m_duration = m_segment->getEndTime() - m_startTime;
-#endif
         m_label = strtoqstr(m_segment->getLabel());
 
 	if (m_segment->isRepeating()) {
@@ -1494,12 +1490,8 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 	    SegmentItem *item = it->second;
 
 	    if (item->getStartTime() != item->getSegment()->getStartTime() ||
-#ifdef OLD_SEGMENT_API
-		item->getDuration()  != item->getSegment()->getDuration() ||
-#else
 		item->getDuration()  != (item->getSegment()->getEndTime() -
 					 item->getSegment()->getStartTime()) ||
-#endif
 		item->getTrack()     != item->getSegment()->getTrack()) {
 
 		command->addSegment(item->getSegment(),

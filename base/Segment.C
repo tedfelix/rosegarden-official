@@ -90,105 +90,6 @@ Segment::~Segment()
     delete m_quantizer;
 }
 
-#ifdef OLD_SEGMENT_API
-void Segment::setStartTime(timeT idx)
-{
-    int idxDiff = idx - m_startTime;
-
-    // reset the time of all events.  can't just setAbsoluteTime on these,
-    // partly 'cos we're not allowed, partly 'cos it might screw up the
-    // quantizer (which is why we're not allowed)
-
-    // still, this is rather unsatisfactory
-    
-    FastVector<Event *> events;
-
-    for (iterator i = begin(); i != end(); ++i) {
-	events.push_back(new Event(**i, (*i)->getAbsoluteTime() + idxDiff));
-    }
-
-    erase(begin(), end());
-
-    for (int i = 0; i < events.size(); ++i) {
-	insert(events[i]);
-    }
-        
-    m_startTime = idx;
-}
-
-
-timeT Segment::getFirstEventTime() const
-{
-    iterator i = begin();
-    if (i == end()) return getEndTime();
-    return (*i)->getAbsoluteTime();
-}
-
-
-void Segment::recalculateStartTime()
-{
-    m_startTime = getFirstEventTime();
-}
-
-
-timeT Segment::getDuration() const
-{
-    //!!! hmm. return "real" end time (with another method for end
-    // marker time) or return end marker time? consider the various
-    // uses of this method in this file and elsewhere
-
-    const_iterator lastEl = end();
-    if (lastEl == begin()) return 0;
-    --lastEl;
-
-    return (*lastEl)->getAbsoluteTime() +
-           (*lastEl)->getDuration() -
-           getStartTime();
-}
-
-
-void Segment::setDuration(timeT d)
-{
-    timeT currentDuration = getDuration();
-
-    cerr << "Segment::setDuration() : current = " << currentDuration
-         << " - new : " << d << endl;
-    
-    if (d > currentDuration) {
-
-	delete m_endMarkerTime;
-	m_endMarkerTime = 0;
-	fillWithRests(getStartTime() + d);
-
-    } else { // shrink
-
-	if (!m_endMarkerTime) m_endMarkerTime = new timeT;
-	*m_endMarkerTime = d;
-    }
-
-    // Reset audio end marker if we're in an audio segment.
-    // How will this work when the Segment is moved to a
-    // different timezone?
-    //
-    if (m_type == Audio && m_composition)
-    {
-        m_audioEndTime = m_audioStartTime +
-                         m_composition->getRealTimeDifference(m_startTime, d);
-    }
-}
-
-timeT Segment::getEndMarker() const
-{
-    timeT endTime = getEndTime();
-    if (m_endMarkerTime)
-	endTime = std::min(endTime, *m_endMarkerTime);
-    if (m_composition)
-	endTime = std::min(endTime, m_composition->getEndMarker());
-    return endTime;
-}
-
-#else
-
 
 void
 Segment::setTrack(TrackId id)
@@ -372,8 +273,6 @@ Segment::insert(Event *e)
 {
     assert(e);
 
-#ifndef OLD_SEGMENT_API
-
     if (e->getAbsoluteTime() < m_startTime ||
 	begin() == end() ||
 	(*begin())->getAbsoluteTime() > e->getAbsoluteTime()) {
@@ -383,8 +282,6 @@ Segment::insert(Event *e)
 	m_startTime = e->getAbsoluteTime();
 	if (c) c->addSegment(this);
     }
-
-#endif
 
     iterator i = std::multiset<Event*, Event::EventCmp>::insert(e);
     notifyAdd(e);
@@ -511,16 +408,12 @@ void
 Segment::fillWithRests(timeT startTime,
 		       timeT endTime, bool permitQuantize)
 {
-#ifndef OLD_SEGMENT_API
-
     if (startTime < m_startTime) {
 	Composition *c = m_composition;
 	if (c) c->detachSegment(this); // sets m_composition to 0
 	m_startTime = startTime;
 	if (c) c->addSegment(this);
     }
-
-#endif
 
     TimeSignature ts;
     timeT sigTime = 0;
@@ -555,16 +448,12 @@ Segment::fillWithRests(timeT startTime,
 void
 Segment::normalizeRests(timeT startTime, timeT endTime, bool permitQuantize)
 {
-#ifndef OLD_SEGMENT_API
-
     if (startTime < m_startTime) {
 	Composition *c = m_composition;
 	if (c) c->detachSegment(this); // sets m_composition to 0
 	m_startTime = startTime;
 	if (c) c->addSegment(this);
     }
-
-#endif
 
     // Preliminary: If there are any time signature changes between
     // the start and end times, consider separately each of the sections

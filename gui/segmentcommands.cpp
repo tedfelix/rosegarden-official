@@ -213,11 +213,7 @@ SegmentInsertCommand::execute()
         m_segment->setTrack(m_track);
         m_segment->setStartTime(m_startTime);
 	m_composition->addSegment(m_segment);
-#ifdef OLD_SEGMENT_API
-        m_segment->setDuration(m_duration);
-#else
 	m_segment->setEndTime(m_duration + m_startTime);
-#endif
 
         // Do our best to label the Segment with whatever is currently
         // showing against it.
@@ -350,16 +346,6 @@ SegmentReconfigureCommand::swap()
 	// previous values back in to the record for use in the
 	// next iteration of the execute/unexecute cycle
 
-#ifdef OLD_SEGMENT_API
-	timeT currentDuration = i->segment->getDuration();
-	timeT currentStartTime = i->segment->getStartTime();
-	TrackId currentTrack = i->segment->getTrack();
-
-	if (currentDuration != i->duration) {
-	    i->segment->setDuration(i->duration);
-	    i->duration = currentDuration;
-	}
-#else
 	timeT currentEndTime = i->segment->getEndTime();
 	timeT currentStartTime = i->segment->getStartTime();
 	TrackId currentTrack = i->segment->getTrack();
@@ -368,16 +354,10 @@ SegmentReconfigureCommand::swap()
 	    i->segment->setEndTime(i->duration + currentStartTime);
 	    i->duration = currentEndTime - currentStartTime;
 	}
-#endif
 
 	if (currentStartTime != i->startTime || currentTrack != i->track) {
-#ifdef OLD_SEGMENT_API
-	    i->segment->getComposition()->setSegmentStartTimeAndTrack
-		(i->segment, i->startTime, i->track);
-#else
 	    i->segment->setStartTime(i->startTime);
 	    i->segment->setTrack(i->track);
-#endif
 	    i->startTime = currentStartTime;
 	    i->track = currentTrack;
 	}
@@ -459,11 +439,7 @@ SegmentSplitCommand::execute()
 	    m_newSegment->insert(new Event(**it));
 	    ++it;
 	}
-#ifdef OLD_SEGMENT_API
-	m_newSegment->setDuration(m_segment->getEndTime() - m_splitTime);
-#else
 	m_newSegment->setEndTime(m_segment->getEndTime());
-#endif
     }
 
     // Resize left hand Segment
@@ -471,11 +447,7 @@ SegmentSplitCommand::execute()
     //!!! should we be dividing any events that are extant during the
     // split?
     m_segment->erase(m_segment->findTime(m_splitTime), m_segment->end());
-#ifdef OLD_SEGMENT_API
-    m_segment->setDuration(m_splitTime - m_segment->getStartTime());
-#else
     m_segment->setEndTime(m_splitTime);
-#endif
 
     // Look for a final rest and shrink it
     Segment::iterator it = m_segment->end();
@@ -498,15 +470,9 @@ SegmentSplitCommand::execute()
 void
 SegmentSplitCommand::unexecute()
 {
-#ifdef OLD_SEGMENT_API
-    if (m_segment->getEndTime() < m_newSegment->getFirstEventTime()) {
-	m_segment->fillWithRests(m_newSegment->getFirstEventTime());
-    }
-#else
     if (m_segment->getEndTime() < m_newSegment->getStartTime()) {
 	m_segment->fillWithRests(m_newSegment->getStartTime());
     }
-#endif
 
     for (Segment::iterator it = m_newSegment->begin();
 	 it != m_newSegment->end(); ++it) {
