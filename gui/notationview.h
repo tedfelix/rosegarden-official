@@ -488,8 +488,19 @@ public slots:
      */
     void slotHoveredOverAbsoluteTimeChanged(unsigned int);
 
-    /// Set the time pointer position during playback (purely visual, doesn't affect playback)
+    /**
+     * Set the time pointer position during playback (purely visual,
+     * doesn't affect playback).  This is also at liberty to highlight
+     * some notes, if it so desires...
+     */
     void slotSetPointerPosition(Rosegarden::timeT position, bool scroll = true);
+
+    /**
+     * Update the recording segment if it's one of the ones in the
+     * view
+     */
+    void slotUpdateRecordingSegment(Rosegarden::Segment *recordingSegment,
+				    Rosegarden::timeT updatedFrom);
 
     /// Set the current staff to the one containing the given canvas Y coord
     void slotSetCurrentStaff(double canvasX, int canvasY);

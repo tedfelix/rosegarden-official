@@ -447,6 +447,7 @@ GroupMenuBreakCommand::modifySegment()
 	     m_selection->getSegmentEvents().begin();
 	 i != m_selection->getSegmentEvents().end(); ++i) {
 
+	(*i)->unset(NotationProperties::BEAMED);
 	(*i)->unset(BEAMED_GROUP_ID);
 	(*i)->unset(BEAMED_GROUP_TYPE);
     }

@@ -1188,7 +1188,8 @@ SegmentNotationHelper::hasEffectiveDuration(iterator i)
     if ((*i)->isa(Note::EventType)) {
 	iterator i0(i);
 	if (++i0 != end() &&
-	    (*i0)->getAbsoluteTime() == (*i)->getAbsoluteTime()) {
+	    (*i0)->getNotationAbsoluteTime() == 
+	     (*i)->getNotationAbsoluteTime()) {
 	    // we're in a chord or something
 	    hasDuration = false;
 	}

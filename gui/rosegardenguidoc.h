@@ -431,7 +431,21 @@ signals:
      */
     void documentModified(bool);
 
+    /**
+     * Emitted during playback, to suggest that views should track along
+     */
     void pointerPositionChanged(Rosegarden::timeT);
+
+    /**
+     * Emitted during recording, to indicate that some new notes (it's
+     * only emitted for notes) have appeared in the recording segment
+     * and anything tracking should track.  updatedFrom gives the
+     * start of the new region, which is presumed to extend up to the
+     * end of the segment.
+     */
+    void recordingSegmentUpdated(Rosegarden::Segment *recordSegment,
+				 Rosegarden::timeT updatedFrom);
+
     void playPositionChanged(Rosegarden::timeT);
     void loopChanged(Rosegarden::timeT, Rosegarden::timeT);
     void docColoursChanged();

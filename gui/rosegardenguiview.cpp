@@ -176,8 +176,13 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
             this,
             SLOT(slotSetRecord(Rosegarden::InstrumentId, bool)));
 
-    if (doc)
+    if (doc) {
         m_trackEditor->setupSegments();
+	connect(doc, SIGNAL(recordingSegmentUpdated(Rosegarden::Segment *,
+						    Rosegarden::timeT)),
+		this, SLOT(slotUpdateRecordingSegment(Rosegarden::Segment *,
+						      Rosegarden::timeT)));
+    }
 }
 
 
@@ -361,15 +366,21 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
 	return;
     }
 
+    NotationView *view = createNotationView(segmentsToEdit);
+    view->show();
+}
+
+NotationView *
+RosegardenGUIView::createNotationView(std::vector<Rosegarden::Segment *> segmentsToEdit)
+{
     NotationView *notationView =
 	new NotationView(getDocument(), segmentsToEdit, this, true);
 
     if (!notationView->isOK()) {
 	RG_DEBUG << "slotEditSegmentNotation : operation cancelled" << endl;
 	delete notationView;
-	return;
+	return 0;
     }
-
 
     // For tempo changes (ugh -- it'd be nicer to make a tempo change
     // command that could interpret all this stuff from the dialog)
@@ -420,7 +431,8 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
         notationView->scrollToTime(centerSegmentView);
         notationView->updateView();
     }
-    notationView->show();
+
+    return notationView;
 }
 
 void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
@@ -451,6 +463,13 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
 	return;
     }
 
+    MatrixView *view = createMatrixView(segmentsToEdit);
+    view->show();
+}
+
+MatrixView *
+RosegardenGUIView::createMatrixView(std::vector<Rosegarden::Segment *> segmentsToEdit)
+{
     MatrixView *matrixView = new MatrixView(getDocument(),
                                             segmentsToEdit,
                                             this);
@@ -505,7 +524,8 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
         matrixView->scrollToTime(centerSegmentView);
         matrixView->updateView();
     }
-    matrixView->show();
+
+    return matrixView;
 }
 
 void RosegardenGUIView::slotEditSegmentEventList(Rosegarden::Segment *p)
@@ -1305,6 +1325,35 @@ RosegardenGUIView::slotSetSolo(Rosegarden::InstrumentId id, bool value)
              << ",value = " << value << endl;
 
     emit toggleSolo(value);
+}
+
+void
+RosegardenGUIView::slotUpdateRecordingSegment(Rosegarden::Segment *segment,
+					      Rosegarden::timeT )
+{
+    // We're only interested in this on the first call per recording segment,
+    // when we possibly create a view for it
+    static Rosegarden::Segment *lastRecordingSegment = 0;
+
+    if (segment == lastRecordingSegment) return;
+    lastRecordingSegment = segment;
+
+    KConfig* config = kapp->config();
+    config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
+
+    int tracking = config->readUnsignedNumEntry("recordtracking", 0);
+    if (tracking != 1) return;
+
+    RG_DEBUG << "RosegardenGUIView::slotUpdateRecordingSegment: segment is " << segment << ", lastRecordingSegment is " << lastRecordingSegment << ", opening a new view" << endl;
+
+    std::vector<Rosegarden::Segment *> segments;
+    segments.push_back(segment);
+
+    NotationView *view = createNotationView(segments);
+    QObject::connect
+	(getDocument(), SIGNAL(recordingSegmentUpdated(Rosegarden::Segment *, Rosegarden::timeT)),
+	 view, SLOT(slotUpdateRecordingSegment(Rosegarden::Segment *, Rosegarden::timeT)));
+    view->show();
 }
 
 void 

@@ -1112,6 +1112,8 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
         Rosegarden::MappedComposition::iterator i;
         Rosegarden::Event *rEvent = 0;
         timeT duration, absTime;
+	timeT updateFrom = m_recordSegment->getEndTime();
+	bool haveNotes = false;
 
         // process all the incoming MappedEvents
         //
@@ -1172,6 +1174,12 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
 			    m_recordSegment->erase(mi->second);
 			    m_recordSegment->insert(newEv);
 			    m_noteOnEvents.erase(mi);
+
+			    if (updateFrom > newEv->getAbsoluteTime()) {
+				updateFrom = newEv->getAbsoluteTime();
+			    }
+
+			    haveNotes = true;
 
 			    // at this point we could quantize the bar if we were
 			    // tracking in a notation view
@@ -1259,6 +1267,27 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
 		m_recordSegment->insert(rEvent);
 	    }
         }
+
+	if (haveNotes) {
+
+	    KConfig* config = kapp->config();
+	    config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
+	    
+	    int tracking = config->readUnsignedNumEntry("recordtracking", 0);
+	    if (tracking == 1) { // notation
+		
+		EventQuantizeCommand *command = new EventQuantizeCommand
+		    (*m_recordSegment,
+		     updateFrom,
+		     m_recordSegment->getEndTime(),
+		     "Notation Options",
+		     true);
+		// don't add to history
+		command->execute();
+	    }
+
+	    emit recordingSegmentUpdated(m_recordSegment, updateFrom);
+	}
     }
 
     // Only update gui if we're still recording - otherwise we

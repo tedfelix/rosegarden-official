@@ -55,6 +55,8 @@ class SegmentParameterBox;
 class InstrumentParameterBox;
 class MultiViewCommandHistory;
 class KCommand;
+class NotationView;
+class MatrixView;
 
 /**
  * The RosegardenGUIView class provides the view widget for the
@@ -243,6 +245,13 @@ public slots:
     void slotSetRecord(Rosegarden::InstrumentId, bool);
     void slotSetSolo(Rosegarden::InstrumentId, bool);
 
+    /**
+     * To indicate that we should track the recording segment (despite
+     * no commands being issued on it)
+     */
+    void slotUpdateRecordingSegment(Rosegarden::Segment *segment,
+				    Rosegarden::timeT updatedFrom);
+
     /*
      * A manual fudgy way of creating a view update for certain
      * semi-static data (devices/instrument labels mainly)
@@ -277,6 +286,9 @@ signals:
 
 protected:
 
+    NotationView *createNotationView(std::vector<Rosegarden::Segment *>);
+    MatrixView   *createMatrixView  (std::vector<Rosegarden::Segment *>);
+
     //--------------- Data members ---------------------------------
 
     Rosegarden::SimpleRulerScale  *m_rulerScale;
@@ -285,7 +297,6 @@ protected:
     QVBoxLayout                   *m_vboxLayout;
     SegmentParameterBox		  *m_segmentParameterBox;
     InstrumentParameterBox	  *m_instrumentParameterBox;
-
 
 };
 

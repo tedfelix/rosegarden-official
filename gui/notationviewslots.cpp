@@ -1378,6 +1378,23 @@ NotationView::slotSetPointerPosition(timeT time, bool scroll)
     updateView();
 }
 
+
+void
+NotationView::slotUpdateRecordingSegment(Rosegarden::Segment *segment,
+					 timeT updateFrom)
+{
+    NOTATION_DEBUG << "NotationView::slotUpdateRecordingSegment: segment " << segment << ", updateFrom " << updateFrom << ", end time " << segment->getEndMarkerTime() << endl;
+    if (updateFrom >= segment->getEndMarkerTime()) return;
+    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+	if (&m_staffs[i]->getSegment() == segment) {
+//	    refreshSegment(segment, updateFrom, segment->getEndMarkerTime());
+	    refreshSegment(segment, 0, 0);
+	}
+    }
+    NOTATION_DEBUG << "NotationView::slotUpdateRecordingSegment: don't have segment " << segment << endl;
+}
+
+
 void
 NotationView::slotSetCurrentStaff(double x, int y)
 {

@@ -1531,7 +1531,7 @@ NotePixmapFactory::makeKeyPixmap(const Key &key, const Clef &clef)
 
     int x = 0;
     int lw = getLineSpacing();
-    int delta = accidentalPixmap.width() - accidentalPixmap.width()/4;
+    int delta = accidentalPixmap.width() - hotspot.x(); // - accidentalPixmap.width()/4 ;
 
     createPixmapAndMask(delta * ah.size() + accidentalPixmap.width()/4, lw * 8 + 1);
 
@@ -1968,7 +1968,7 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
 	    }
 
 	    for (unsigned int i = 0; i < denomS.length(); ++i) {
-		int x = width - (width - numW) / 2 - (i + 1) * map.width();
+		int x = width - (width - denomW) / 2 - (i + 1) * map.width();
 		int y = height/2 + height/4 - (map.height()/2);
 		QPixmap charMap = m_font->getPixmap
 		    (m_style->getTimeSignatureDigitName(denominator % 10));

@@ -1077,13 +1077,13 @@ RosegardenGUIApp::createDocument(QString filePath)
     if (!info.exists()) {
         // can happen with command-line arg, so...
         KStartupLogo::hideIfStillThere();
-        KMessageBox::sorry(this, i18n("The specified file does not exist"));
+        KMessageBox::sorry(this, i18n("File \"%1\" does not exist").arg(filePath));
         return 0;
     }
 
     if (info.isDir()) {
         KStartupLogo::hideIfStillThere();
-        KMessageBox::sorry(this, i18n("You have specified a directory"));
+        KMessageBox::sorry(this, i18n("File \"%1\" is actually a directory"));
         return 0;
     }
 
