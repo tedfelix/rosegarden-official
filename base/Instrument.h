@@ -170,9 +170,10 @@ public:
     //
     virtual std::string toXmlString();
 
-    // Return the device pointer
+    // Get and set the parent device
     //
     Device* getDevice() const { return m_device; }
+    void setDevice(Device* dev) { m_device = dev; }
 
     // Return a string describing the current program for
     // this Instrument

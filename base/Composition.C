@@ -84,7 +84,7 @@ Composition::ReferenceSegment::ReferenceSegment(const ReferenceSegment &seg):
 {
     clear();
 
-    for (iterator i = begin(); i != end(); ++i)
+    for (iterator i = seg.begin(); i != seg.end(); ++i)
 	this->push_back(new Event(**i));
 
     m_eventType = seg.getEventType();
@@ -95,7 +95,7 @@ Composition::ReferenceSegment::operator=(const ReferenceSegment &seg)
 {
     clear();
 
-    for (iterator i = begin(); i != end(); ++i)
+    for (iterator i = seg.begin(); i != seg.end(); ++i)
 	this->push_back(new Event(**i));
 
     m_eventType = seg.getEventType();

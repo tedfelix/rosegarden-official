@@ -113,13 +113,21 @@ MidiDevice::MidiDevice(const MidiDevice &dev):
     InstrumentList insList = dev.getAllInstruments();
     InstrumentList::iterator iIt = insList.begin();
     for (; iIt != insList.end(); iIt++)
-        m_instruments.push_back(new Instrument(**iIt));
+    {
+        Instrument *newInst = new Instrument(**iIt);
+        newInst->setDevice(this);
+        m_instruments.push_back(newInst);
+    }
 
     // Copy the presentation instruments
     //
     insList = dev.getPresentationInstruments();
     for (iIt = insList.begin(); iIt != insList.end(); iIt++)
-        m_presentationInstrumentList.push_back(new Instrument(**iIt));
+    {
+        Instrument *newInst = new Instrument(**iIt);
+        newInst->setDevice(this);
+        m_presentationInstrumentList.push_back(newInst);
+    }
 
 }
 

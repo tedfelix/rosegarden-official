@@ -47,7 +47,7 @@ public:
     // Copy constructor
     //
     MidiDevice(const MidiDevice &);
-
+ 
     virtual void createInstruments();
     virtual void addInstrument(Instrument*);
 
