@@ -266,13 +266,8 @@ LoopRuler::calculateBarDivisions()
     std::pair<Rosegarden::timeT, Rosegarden::timeT> barMarkers;
 
     Rosegarden::Composition &comp = m_doc->getComposition();
-    m_bars = comp.getNbBars();
-
-    if (m_bars == 0)
-    {
-        m_bars = comp.getBarNumber(comp.getEndMarker() -
+    m_bars = comp.getBarNumber(comp.getEndMarker() -
                                    comp.getStartMarker(), false);
-    }
  
     for (int i = 0; i < m_bars; i++)
     {

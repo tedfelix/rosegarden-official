@@ -44,13 +44,8 @@ BarButtons::BarButtons(RosegardenGUIDoc* doc,
     setMaximumHeight(m_barHeight);
 
     Rosegarden::Composition &comp = doc->getComposition();
-    m_bars = comp.getNbBars();
-
-    if (m_bars == 0)
-    {
-        m_bars = comp.getBarNumber(comp.getEndMarker() -
+    m_bars = comp.getBarNumber(comp.getEndMarker() -
                                    comp.getStartMarker(), false);
-    }
 
     drawButtons();
 }

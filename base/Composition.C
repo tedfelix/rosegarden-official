@@ -209,7 +209,7 @@ Composition::Composition() :
     m_position(0),
     m_defaultTempo(120.0),
     m_startMarker(0),
-    m_endMarker(0),
+    m_endMarker(getBarRange(100, false).second), //!!! default end marker
     m_loopStart(0),
     m_loopEnd(0),
     m_barPositionsNeedCalculating(true),

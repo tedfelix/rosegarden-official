@@ -47,8 +47,10 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
     m_hHeader(0),
     m_vHeader(0)
 {
+    Composition &comp = doc->getComposition();
+
     int tracks = doc->getNbTracks();
-    int bars = doc->getNbBars();
+    //int bars = doc->getNbBars();
 
     // If we have no Track then create a default document with 10 of them
     //
@@ -60,7 +62,6 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
 
         // Create the Tracks on the Composition
         //
-        Composition &comp = m_document->getComposition();
         Rosegarden::Track *track;
         for (int i = 0; i < tracks; i++)
         {
@@ -78,24 +79,10 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
     }
 
 
-    // If we have no length to our piece then check for (and if
-    // necessary create) start and end markers from which to
-    //  derive the bar length of the piece.
-    //
-    if (bars == 0)
-    {
-        Rosegarden::Composition &comp = doc->getComposition();
-
-        if(comp.getEndMarker() == 0)
-        {
-            comp.setStartMarker(0);
-            comp.setEndMarker(comp.getBarRange(100, false).second);
-        }
-
-        bars = comp.getBarNumber(comp.getEndMarker() -
+    int bars = comp.getBarNumber(comp.getEndMarker() -
                                  comp.getStartMarker(), false);
-    }
 
+    cout << "BARS = " << bars << endl;
     init(tracks, bars);
 }
 

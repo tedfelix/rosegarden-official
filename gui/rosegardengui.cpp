@@ -381,6 +381,18 @@ void RosegardenGUIApp::initView()
 
     kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::initView()" << endl;
 
+    Rosegarden::Composition &comp = m_doc->getComposition();
+
+    // Ensure that the start and end markers for the piece are set
+    // to something reasonable
+    //
+    if (comp.getStartMarker() == 0 &&
+        comp.getEndMarker() == 0)
+    {
+        int endMarker = comp.getBarRange(10 + comp.getNbBars(), false).second;
+        comp.setEndMarker(endMarker);
+    }
+    
     m_view = new RosegardenGUIView(this);
 
     // Connect up this signal so that we can force tool mode
@@ -473,6 +485,7 @@ void RosegardenGUIApp::openFile(const QString& url)
 
     m_doc->closeDocument();
     m_doc->openDocument(u->path());
+
     initView();
 
     // Ensure the sequencer knows about any audio files
@@ -480,14 +493,14 @@ void RosegardenGUIApp::openFile(const QString& url)
     //
     m_doc->prepareAudio();
 
+    Rosegarden::Composition &comp = m_doc->getComposition();
+
     // Set any loaded loop at the Composition and
     // on the marker on SegmentCanvas and clients
     //
-    setLoop(m_doc->getComposition().getLoopStart(),
-            m_doc->getComposition().getLoopEnd());
+    setLoop(comp.getLoopStart(), comp.getLoopEnd());
+    m_doc->setLoopMarker(comp.getLoopStart(), comp.getLoopEnd());
 
-    m_doc->setLoopMarker(m_doc->getComposition().getLoopStart(),
-                         m_doc->getComposition().getLoopEnd());
 
 }
 
@@ -1259,27 +1272,20 @@ void RosegardenGUIApp::setPointerPosition(const long &posSec,
     //
     //if (m_doc->getComposition().getPosition() == position) return;
 
-
     Rosegarden::RealTime rT(posSec, posUsec);
+    Rosegarden::Composition &comp = m_doc->getComposition();
 
-    timeT elapsedTime = m_doc->getComposition().getElapsedTimeForRealTime(rT);
+    timeT elapsedTime = comp.getElapsedTimeForRealTime(rT);
 
-/*
-    // Check for loop - if we're in one and we've reached the
-    // end of it then jump back to the beginning
-    if (m_doc->getComposition().isLooping())
+    if (elapsedTime >= comp.getEndMarker())
     {
-        if (elapsedTime >= m_doc->getComposition().getLoopEnd())
-        {
-            sendSequencerJump(m_doc->getComposition().getElapsedRealTime(
-                            m_doc->getComposition().getLoopStart()));
-            return;
-        }
+        stop();
+        rT = Rosegarden::RealTime(0, 0);
+        elapsedTime = 0;
     }
-*/
 
     // set the composition time
-    m_doc->getComposition().setPosition(elapsedTime);
+    comp.setPosition(elapsedTime);
 
     // and the gui time
     m_view->setPointerPosition(elapsedTime);
@@ -1289,7 +1295,7 @@ void RosegardenGUIApp::setPointerPosition(const long &posSec,
     m_transport->displayTime(rT);
 
     // and the tempo
-    m_transport->setTempo(m_doc->getComposition().getTempoAt(elapsedTime));
+    m_transport->setTempo(comp.getTempoAt(elapsedTime));
 
 }
 
