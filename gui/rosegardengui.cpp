@@ -218,6 +218,8 @@ void RosegardenGUIApp::initView()
     // create the main widget here that is managed by KTMainWindow's view-region and
     // connect the widget to your document to display document contents.
 
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::initView()" << endl;
+
     view = new RosegardenGUIView(this);
     doc->addView(view);
     setCentralWidget(view);	
@@ -251,7 +253,12 @@ void RosegardenGUIApp::addRecentFile(const QString &file)
             recentFiles.insert(0, file);
         }
         recentFilesMenu->clear();
+
         for ( int i=0 ; i < (int) recentFiles.count(); i++) {
+            kdDebug(KDEBUG_AREA) << "addRecentFile - insert "
+                                 << recentFiles.at(i) << " at "
+                                 << i << endl;
+
             recentFilesMenu->insertItem(recentFiles.at(i));
         }
     }
@@ -260,6 +267,9 @@ void RosegardenGUIApp::addRecentFile(const QString &file)
 void RosegardenGUIApp::openDocumentFile(const char* _cmdl)
 {
     slotStatusMsg(i18n("Opening file..."));
+    
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::openDocumentFile("
+                         << _cmdl << ")" << endl;
 
     doc->openDocument(_cmdl);
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
@@ -417,9 +427,10 @@ void RosegardenGUIApp::slotFileOpen()
         // here saving wasn't successful
     } else {	
         QString fileToOpen=KFileDialog::getOpenFileName(QDir::homeDirPath(),
-                                                        i18n("*|All files"),
+                                                        i18n("*.xml"),
                                                         this, i18n("Open File..."));
         if(!fileToOpen.isEmpty()) {
+            doc->closeDocument();
             doc->openDocument(fileToOpen);
             QString caption=kapp->caption();	
             setCaption(caption+": "+doc->getTitle());
@@ -428,6 +439,8 @@ void RosegardenGUIApp::slotFileOpen()
     }
 
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+
+    initView();
 }
 
 void RosegardenGUIApp::slotFileOpenRecent(int id_)
@@ -437,12 +450,15 @@ void RosegardenGUIApp::slotFileOpenRecent(int id_)
     if(!doc->saveModified()) {
         // here saving wasn't successful
     } else {
+        doc->closeDocument();
         doc->openDocument(recentFiles.at(id_));
         QString caption=kapp->caption();	
         setCaption(caption+": "+doc->getTitle());
     }
 
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+
+    initView();
 }
 
 void RosegardenGUIApp::slotFileSave()
@@ -459,7 +475,7 @@ void RosegardenGUIApp::slotFileSaveAs()
     slotStatusMsg(i18n("Saving file with a new filename..."));
 
     QString newName=KFileDialog::getSaveFileName(QDir::currentDirPath(),
-                                                 i18n("*|All files"), this, i18n("Save as..."));
+                                                 i18n("*.xml"), this, i18n("Save as..."));
     if(!newName.isEmpty())
         {
             QFileInfo saveAsInfo(newName);

@@ -152,29 +152,41 @@ bool RosegardenGUIDoc::newDocument()
 
 bool RosegardenGUIDoc::openDocument(const QString &filename, const char *format /*=0*/)
 {
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::openDocument("
+                         << filename << ")" << endl;
+    
     if (!filename || filename.isEmpty())
         return false;
 
     QFileInfo fileInfo(filename);
     m_title=fileInfo.fileName();
+
+    // Check if file readable with fileInfo ?
+    if (!fileInfo.isReadable()) {
+        QString msg(i18n("Can't open file '"));
+        msg += filename;
+        msg += "'";
+        
+        KMessageBox::sorry(0, msg);
+
+        return false;
+    }
+    
     m_absFilePath=fileInfo.absFilePath();	
 
     QFile file(filename);
-    bool rc = xmlParse(file);
-    file.close();
+    bool fileParsedOk = xmlParse(file);
+    file.close();   
 
-    // Check if file readable with fileInfo ?
-    //     if ( !file.open( IO_ReadOnly ) ) {
-    //         QString msg(i18n("Can't open file '"));
-    //         msg += filename;
-    //         msg += "'";
+    if (! fileParsedOk) {
+        QString msg(i18n("Error when parsing file '"));
+        msg += filename;
+        msg += "'";
         
-    //         KMessageBox::sorry(0, msg);
+        KMessageBox::sorry(0, msg);
 
-    //         return false;
-    //     }
-    
-    return rc;
+        return false;
+    }
 }
 
 bool RosegardenGUIDoc::saveDocument(const QString &filename, const char *format /*=0*/)

@@ -56,30 +56,43 @@ public:
 
     /** adds a view to the document which represents the document contents. Usually this is your main view. */
     void addView(RosegardenGUIView *view);
+
     /** removes a view from the list of currently connected views */
     void removeView(RosegardenGUIView *view);
+
     /** sets the modified flag for the document after a modifying action on the view connected to the document.*/
     void setModified(bool _m=true){ m_modified=_m; };
+
     /** returns if the document is modified or not. Use this to determine if your document needs saving by the user on closing.*/
     bool isModified(){ return m_modified; };
+
     /** "save modified" - asks the user for saving if the document is modified */
     bool saveModified();	
+
     /** deletes the document's contents */
     void deleteContents();
+
     /** initializes the document generally */
     bool newDocument();
+
     /** closes the acutal document */
     void closeDocument();
+
     /** loads the document by filename and format and emits the updateViews() signal */
     bool openDocument(const QString &filename, const char *format=0);
+
     /** saves the document under filename and format.*/	
     bool saveDocument(const QString &filename, const char *format=0);
+
     /** sets the path to the file connected with the document */
     void setAbsFilePath(const QString &filename);
+
     /** returns the pathname of the current document file*/
     const QString &getAbsFilePath() const;
+
     /** sets the filename of the document */
     void setTitle(const QString &_t);
+
     /** returns the title of the document */
     const QString &getTitle() const;
 
@@ -90,10 +103,13 @@ public:
     const EventList& getElements() const { return m_elements; }
 
 public slots:
-/** calls repaint() on all views connected to the document object and is called by the view by which the document has been changed.
- * As this view normally repaints itself, it is excluded from the paintEvent.
- */
-void slotUpdateAllViews(RosegardenGUIView *sender);
+
+    /** calls repaint() on all views connected to the document object
+     * and is called by the view by which the document has been
+     * changed.  As this view normally repaints itself, it is excluded
+     * from the paintEvent.
+     */
+    void slotUpdateAllViews(RosegardenGUIView *sender);
 
 protected:
     bool xmlParse(QFile &file);
@@ -106,10 +122,18 @@ public:
 private:
     /** the modified flag of the current document */
     bool m_modified;
+
+    /** the title of the current document */
     QString m_title;
+
+    /** absolute file path of the current document */
     QString m_absFilePath;
 
+    /** the document's data : the events (or elements) constituting
+     * the document
+    */
     EventList m_elements;
+
 };
 
 #endif // ROSEGARDENGUIDOC_H
