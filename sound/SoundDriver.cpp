@@ -18,6 +18,7 @@
   COPYING included with this distribution for more information.
 */
 
+#include <stdlib.h>
 
 #include "SoundDriver.h"
 #include "WAVAudioFile.h"
@@ -42,6 +43,7 @@ PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
         m_audioFile(audioFile),
         m_instrumentId(instrumentId),
         m_ringBuffer(ringBuffer),
+        m_ringBufferThreshold(0),
         m_initialised(false)
 {
 #define DEBUG_PLAYABLE_CONSTRUCTION
@@ -71,19 +73,28 @@ PlayableAudioFile::initialise()
     // if no external ringbuffer then create one
     if (m_ringBuffer == 0)
     {
-        int bufferSize = 131071; // 128k ringbuffer as default size
+        int bufferSize = 32767; // 32k ringbuffer as default size
 
-        // Default to a second's worth of audio buffer if we have an AudioFile handle
+        // Default to half a a second's worth of audio buffer if we have an 
+        // AudioFile handle.
         //
-        if (m_audioFile) bufferSize = m_audioFile->getSampleRate() * m_audioFile->getBytesPerFrame();
+        if (m_audioFile) bufferSize = m_audioFile->getSampleRate() * m_audioFile->getBytesPerFrame() / 8;
 
         m_ringBuffer = new RingBuffer(bufferSize);
     }
 
-    m_playBuffer = new char[m_ringBuffer->getSize()];
+    int size = m_ringBuffer->getSize();
 
-    // put something into the buffer to start with
-    fillRingBuffer(m_ringBuffer->getSize() / 3);
+    m_playBuffer = new char[size];
+
+    // Put a random amount of something into the buffer to start with
+    //
+    int initialSize = size / 8 + int(double(size)/4.0 * double(rand()) / double(RAND_MAX));
+    std::cout << "PlayableAudioFile::initialise - initial buffer size = " << initialSize << std::endl;
+
+    m_ringBufferThreshold = size / 10;
+
+    fillRingBuffer(initialSize);
 
     // ensure we can't do this again
     m_initialised = true;
@@ -157,6 +168,34 @@ PlayableAudioFile::getSampleFrameSlice(const RealTime &time)
         return m_audioFile->getSampleFrameSlice(m_file, time);
     }
     return std::string("");
+}
+
+// Self appointed way of working out whether we need to stream in from disk
+// or not - we let audio files manage this themselves so that we can work in
+// a random factor and hence hopefully force the audio files to use disk
+// reading for varying amounts of time _at_ varying amounts of time.  This
+// is in the case where we have n simultaneous audio files.
+//
+void
+PlayableAudioFile::fillRingBuffer()
+{
+    if (!m_initialised) return;
+
+    // Only fill if we are below the threshold
+    //
+    if (int(m_ringBuffer->readSpace()) < m_ringBufferThreshold)
+    {
+        int fetchSize = m_ringBuffer->getSize() / 8 + 
+            int(double(m_ringBuffer->getSize()) / 4.0 * double(rand()) / double(RAND_MAX));
+
+        if (fetchSize > int(m_ringBuffer->writeSpace()))
+        {
+            fetchSize = m_ringBuffer->writeSpace();
+            std::cerr << "PlayableAudioFile::fillRingBuffer - buffer maxed out" << std::endl;
+        }
+
+        fillRingBuffer(fetchSize);
+    }
 }
 
 void

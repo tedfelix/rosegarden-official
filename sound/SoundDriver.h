@@ -144,6 +144,12 @@ public:
     void setRingBuffer(RingBuffer *rB) { m_ringBuffer = rB; }
     RingBuffer* getRingBuffer() { return m_ringBuffer; }
 
+    // Let this object work out whether the RingBuffer needs filling -
+    // this will hopefully provide better performance when multiple audio
+    // files are accessing the disk at the same time.
+    //
+    void fillRingBuffer();
+
     // Push a number of frames into the ringbuffer
     //
     void fillRingBuffer(int bytes);
@@ -181,6 +187,7 @@ protected:
     // Our file i/o buffer
     //
     RingBuffer           *m_ringBuffer;
+    int                   m_ringBufferThreshold;
 
     // Our local fixed size playbuffer which takes from the RingBuffer
     //
@@ -190,6 +197,7 @@ protected:
     // the disk thread to pick up the slack.
     //
     bool                  m_initialised;
+
 };
 
 // A wrapper class for writing out a recording file
