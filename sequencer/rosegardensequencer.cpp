@@ -43,7 +43,7 @@ using std::cout;
 //
 //
 RosegardenSequencerApp::RosegardenSequencerApp(
-        const QValueVector<QString> &jackArgs):
+        const std::vector<std::string> &jackArgs):
     DCOPObject("RosegardenSequencerIface"),
     m_sequencer(0),
     m_transportStatus(STOPPED),

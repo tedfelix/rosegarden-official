@@ -45,9 +45,6 @@
 #ifndef _ROSEGARDEN_SEQUENCER_H_
 #define _ROSEGARDEN_SEQUENCER_H_
 
-#include <qvaluevector.h>
-#include <qstring.h>
-
 #include "MappedComposition.h"
 #include "Midi.h"
 #include "MidiEvent.h"
@@ -65,7 +62,7 @@ class MappedStudio;
 class Sequencer
 {
 public:
-    Sequencer(MappedStudio *studio, const QValueVector<QString> &args);
+    Sequencer(MappedStudio *studio, const std::vector<std::string> &args);
     ~Sequencer();
 
     // Control playback - initialisePlayback starts us playing
@@ -243,8 +240,6 @@ protected:
 
     SoundDriver                                *m_soundDriver;
     std::vector<AudioFile*>                     m_audioFiles;
-
-    QValueVector<QString>                       m_args;
 
 };
 

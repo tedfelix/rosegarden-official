@@ -53,9 +53,8 @@ using std::endl;
 //
 //
 Sequencer::Sequencer(MappedStudio *studio,
-                     const QValueVector<QString> &args)
-    :m_soundDriver(0),
-     m_args(args)
+                     const std::vector<std::string> &args)
+    :m_soundDriver(0)
 {
 #ifdef NO_SOUND
     m_soundDriver = new DummyDriver(studio);
@@ -69,8 +68,8 @@ Sequencer::Sequencer(MappedStudio *studio,
 
     // Set the args if we have any
     //
-    if (m_args.size())
-        m_soundDriver->setArgs(m_args);
+    if (args.size())
+        m_soundDriver->setArgs(args);
 
     m_soundDriver->initialiseMidi();
     m_soundDriver->initialiseAudio();

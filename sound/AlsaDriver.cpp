@@ -781,25 +781,9 @@ AlsaDriver::initialiseAudio()
               << "initialised JACK audio subsystem"
               << std::endl;
 
-    /*
-    // View all available ports
-    //
-    const char **ports = jack_get_ports(m_audioClient, NULL, NULL, 0);
-    int count = 0;
-    while (ports[count] != NULL)
-    {
-        std::cout << "PORT " << count << " = \"" << ports[count] <<
-                     "\"" << std::endl;
-        count++;
-    }
-    free(ports);
-    */
-    std::string playback_1 = std::string("alsa_pcm:playback_1");
-    std::string playback_2 = std::string("alsa_pcm:playback_2");
-    std::string capture_1 = std::string("alsa_pcm:capture_1");
-    std::string capture_2 = std::string("alsa_pcm:capture_2");
+    std::string playback_1, playback_2, capture_1, capture_2;
 
-    // Reassign if we match
+    // Assign port directly if they were specified
     //
     if (m_args.size() == 4)
     {
@@ -808,6 +792,23 @@ AlsaDriver::initialiseAudio()
         capture_1 = std::string(m_args[2].data());
         capture_2 = std::string(m_args[3].data());
     }
+    else // match from JACK
+    {
+        const char **ports =
+            jack_get_ports(m_audioClient, NULL, NULL,
+                           JackPortIsPhysical|JackPortIsInput);
+
+        playback_1 = std::string(ports[0]);
+        playback_2 = std::string(ports[1]);
+        free(ports);
+
+        ports = jack_get_ports(m_audioClient, NULL, NULL,
+                               JackPortIsPhysical|JackPortIsOutput);
+        capture_1 = std::string(ports[0]);
+        capture_2 = std::string(ports[1]);
+        free(ports);
+    }
+
 
     // connect our client up to the ALSA ports - first left output
     //

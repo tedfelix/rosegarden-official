@@ -75,12 +75,12 @@ int main(int argc, char *argv[])
     //
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     KApplication app;
-    QValueVector<QString> jackArgs;
+    std::vector<std::string> jackArgs;
 
     // Construct JACK args
     //
     for (int i = 0; i < args->count(); i++)
-        jackArgs.push_back(args->arg(i));
+        jackArgs.push_back(std::string(args->arg(i)));
 
     if (app.isRestored())
     {

@@ -21,9 +21,6 @@
 #include <string>
 #include <vector>
 
-#include <qvaluevector.h>
-#include <qstring.h>
-
 #include "Instrument.h"
 #include "Device.h"
 #include "MappedComposition.h"
@@ -361,7 +358,7 @@ public:
 
     // Arguments
     //
-    void setArgs(const QValueVector<QString> &args) { m_args = args; }
+    void setArgs(const std::vector<std::string> &args) { m_args = args; }
 
 protected:
     // Helper functions to be implemented by subclasses
@@ -431,7 +428,7 @@ protected:
     //
     MappedStudio                *m_studio;
 
-    QValueVector<QString>        m_args;
+    std::vector<std::string>     m_args;
 
 };
 

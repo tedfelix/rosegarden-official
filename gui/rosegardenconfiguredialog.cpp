@@ -795,7 +795,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     m_sequencerArguments = new QLineEdit("", frame);
     layout->addWidget(m_sequencerArguments, 2, 1);
 
-    layout->addWidget(new QLabel(i18n("Any changes made to these options will only come into effect the next time you start Rosegarden."),
+    layout->addWidget(new QLabel(i18n("Any change made here will come into effect the next time you start Rosegarden."),
                                frame),
                                3, 1);
 
