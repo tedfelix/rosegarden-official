@@ -60,7 +60,7 @@ If you obtained the source code from a distribution tarball:
 Running the application
 -----------------------
 
-Just run the rosegardengui application (found in the KDE bin directory
+Just run the "rosegarden" application (found in the KDE bin directory
 after installation, and also in the gui/ directory of the source tree).
 
 To get the sequencer working properly, please read

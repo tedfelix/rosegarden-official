@@ -22,8 +22,8 @@
 
 namespace Rosegarden {
 
-const std::string Quantizer::DurationProperty = "QuantizedDuration";
-const std::string Quantizer::NoteDurationProperty = "QuantizedNoteDuration";
+const PropertyName Quantizer::DurationProperty = "QuantizedDuration";
+const PropertyName Quantizer::NoteDurationProperty = "QuantizedNoteDuration";
 
 void
 Quantizer::quantizeByUnit(Track::iterator from, Track::iterator to) const

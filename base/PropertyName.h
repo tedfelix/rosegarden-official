@@ -27,7 +27,7 @@
 namespace Rosegarden 
 {
 
-/*
+/**
 
   A PropertyName is something that can be constructed from a
   string, hashed as a key in a hash map, and streamed out again as
@@ -53,9 +53,10 @@ namespace Rosegarden
 
     std::hash<const char *> PropertyNameHash::_H;
 
-  but our implementation is faster and smaller in practice,
-  because while it behaves outwardly like a string, for the Event
-  that makes use of it, it performs much like a machine integer.
+  but our implementation is faster in practice: while it behaves
+  outwardly like a string, for the Event that makes use of it,
+  it performs much like a machine integer.  It also shares
+  strings, reducing storage sizes if there are many names in use.
 
 */
 

@@ -31,26 +31,41 @@
 
 namespace Rosegarden {
 
+/**
+    Quantizes Event durations, and calculates quantized values
+    for durations not in Events.  When quantizing an Event, the
+    quantized values are stored in the Event in properties
+    separate from the original duration, so quantization is
+    non-destructive (apart from losing any previous quantized
+    values with different quantization parameters).
+
+    The quantizer does two sorts of quantization: unit and note.
+    Unit quantization is the usual sort a sequencer will expect:
+    each event has its duration rounded to an integral multiple of
+    a given unit duration.  Note quantization instead rounds each
+    event to the closest duration expressible as a single note
+    with a maximum number of dots.
+
+    For example, say you have an event with duration 110.  A unit
+    quantizer with a hemidemisemi unit (duration 6) will quantize
+    this to duration 108 (the nearest value divisible by 6).  But
+    108 is not a good note duration: a note quantizer would
+    instead quantize to 96 (the nearest note duration: a crotchet).
+    
+    If you request note quantization, it does unit quantization as
+    well -- the results are stored in separate Event properties
+    and do not conflict.
+*/
+
 class Quantizer
 {
 public:
-    /** The quantizer can do two sorts of quantization: unit and note.
-        Unit quantization is the usual sort a sequencer will expect;
-        each event has its duration rounded to an integral multiple of
-        a given unit duration.  Note quantization instead rounds each
-        event to the closest duration expressible as a single note
-        with a maximum number of dots.
-
-        For example, say you have an event with duration 110.  A unit
-        quantizer with a hemidemisemi unit (duration 6) will quantize
-        this to duration 108 (the nearest value divisible by 6).  But
-        108 is not a good note duration: a note quantizer would
-        quantize to 96 (the nearest note duration: a crotchet).
-
-        If you request note quantization, it does unit quantization as
-        well -- the results are stored in separate properties and do
-        not conflict.
-    */
+    /**
+     * Constructs a quantizer programmed to do unit quantization
+     * to a resolution of "unit" time units (defaulting to the
+     * shortest note duration), and note quantization with up to
+     * "maxDots" dots per note.
+     */
     Quantizer(int unit = -1, int maxDots = 2) :
 	m_unit(unit), m_maxDots(maxDots) {
 	if (unit < 0) setUnit(Note(Note::Shortest));
@@ -58,8 +73,8 @@ public:
 
     ~Quantizer() { }
 
-    static const std::string DurationProperty;
-    static const std::string NoteDurationProperty;
+    static const PropertyName DurationProperty;
+    static const PropertyName NoteDurationProperty;
 
     void setUnit(int unit)        { m_unit = unit; }
     void setUnit(Note note)	  { m_unit = note.getDuration(); }
