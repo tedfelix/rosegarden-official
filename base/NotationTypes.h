@@ -248,6 +248,8 @@ public:
     if (m_type < Shortest || m_type > Longest) throw BadType();
   }
 
+  Note(const string &s) throw (BadType);
+
   Note(const Note &n) : m_type(n.m_type), m_dotted(n.m_dotted) { }
   virtual ~Note() { }
 
@@ -269,9 +271,10 @@ public:
     return (m_dotted ? (d + d/2) : d);
   }
 
-  string getEnglishName();
-  string getAmericanName();
-  string getShortName();
+  // these default to whatever I am:
+  string getEnglishName(Type type = -1, bool dotted = false);
+  string getAmericanName(Type type = -1, bool dotted = false);
+  string getShortName(Type type = -1, bool dotted = false);
   
 private:
   Type m_type;

@@ -175,26 +175,50 @@ void displayPitchToRawPitch
 }
 
 
-string Note::getEnglishName() {
+Note::Note(const string &n)
+  throw (BadType) :
+  m_type(-1), m_dotted(false)
+{
+  string name(n);
+  if (name.length() > 7 && name.substr(0, 7) == "dotted ") {
+    m_dotted = true;
+    name = name.substr(8);
+  }
+  Type t;
+  for (t = Shortest; t <= Longest; ++t) {
+    if (name == getEnglishName(t) ||
+        name == getAmericanName(t) ||
+        name == getShortName(t)) {
+      m_type = t;
+      break;
+    }
+  }
+  if (m_type == -1) throw BadType();
+}
+
+string Note::getEnglishName(Type type, bool dotted) {
   static const string names[] = {
     "hemidemisemiquaver", "demisemiquaver", "semiquaver", "quaver",
     "crotchet", "minim", "semibreve", "breve"
   };
-  return m_dotted ? ("dotted " + names[m_type]) : names[m_type];
+  if (type < 0) { type = m_type; dotted = m_dotted; }
+  return dotted ? ("dotted " + names[type]) : names[type];
 }
 
-string Note::getAmericanName() {
+string Note::getAmericanName(Type type, bool dotted) {
   static const string names[] = {
     "sixty-fourth note", "thirty-second note", "sixteenth note", "eighth note",
     "quarter note", "half note", "whole note", "breve"
   };
-  return m_dotted ? ("dotted " + names[m_type]) : names[m_type];
+  if (type < 0) { type = m_type; dotted = m_dotted; }
+  return dotted ? ("dotted " + names[type]) : names[type];
 }
 
-string Note::getShortName() {
+string Note::getShortName(Type type, bool dotted) {
   static const string names[] = {
     "64th", "32nd", "16th", "8th", "quarter", "half", "whole", "breve"
   };
-  return m_dotted ? ("dotted " + names[m_type]) : names[m_type];
+  if (type < 0) { type = m_type; dotted = m_dotted; }
+  return dotted ? ("dotted " + names[type]) : names[type];
 }
 
