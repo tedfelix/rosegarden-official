@@ -11,3 +11,5 @@
 * give Track a pointer to the ViewElementsManager which represents it
 
 * status message and beep on input rejection in NotationView.
+
+* backport Qt3 QCanvasSpline
