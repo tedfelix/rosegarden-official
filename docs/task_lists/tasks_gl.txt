@@ -1,6 +1,13 @@
 Current Task list
 ======================================
 
+- make clipboard app-wide instead of doc-wide (move it to RosegardenGUIApp).
+
+- "stacked toolboxes" widget (something like Mozilla's left sidebar,
+but smaller and able to show (fold/unfold) several boxes at once).
+
+- fill up docs/sanity-test.txt
+
 - soundfont load at startup
 
 - implement auto-extend of track editor's canvas when moving a segment
