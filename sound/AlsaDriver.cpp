@@ -475,6 +475,10 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
 		    name = portId + fullClientName + ": " + fullPortName;
 		}
 
+                // Sanity check for length
+                //
+                if (name.length() > 25) name = portId + fullPortName;
+
 		if (direction == WriteOnly) {
 		    name += " (write)";
 		} else if (direction == ReadOnly) {
