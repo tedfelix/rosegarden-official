@@ -89,6 +89,8 @@ public:
     /// Return the error string set during the parsing (if any)
     QString errorString();
 
+    std::set<QString> &pluginsNotFound() { return m_pluginsNotFound; }
+
     bool error(const QXmlParseException& exception);
     bool fatalError(const QXmlParseException& exception);
 
@@ -136,6 +138,7 @@ protected:
     bool m_foundTempo;
 
     QString m_errorString;
+    std::set<QString> m_pluginsNotFound;
 
     RosegardenFileSection             m_section;
     Rosegarden::Device               *m_device;

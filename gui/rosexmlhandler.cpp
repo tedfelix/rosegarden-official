@@ -1661,6 +1661,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 		//
 		if (identifier) {
 		    RG_DEBUG << "WARNING: RoseXmlHandler: plugin " << identifier << " not found" << endl;
+		    m_pluginsNotFound.insert(identifier);
 		} else if (atts.value("id")) {
 		    RG_DEBUG << "WARNING: RoseXmlHandler: plugin uid " << atts.value("id") << " not found" << endl;
 		} else {

@@ -35,6 +35,8 @@
 #include "Studio.h"
 #include "colours.h"
 #include "tracklabel.h"
+#include "AudioPluginInstance.h"
+#include "PluginIdentifier.h"
 
 #include "segmentcommands.h"
 #include "rosestrings.h"
@@ -798,6 +800,23 @@ TrackButtons::populateInstrumentPopup(Rosegarden::Instrument *thisTrackInstr, QP
 	QString pname(strtoqstr((*it)->getProgramName()));
 	Rosegarden::Device *device = (*it)->getDevice();
         Rosegarden::DeviceId devId = device->getId();
+
+	if ((*it)->getType() == Rosegarden::Instrument::SoftSynth) {
+	    pname = "";
+	    Rosegarden::AudioPluginInstance *plugin = (*it)->getPlugin
+		(Rosegarden::Instrument::SYNTH_PLUGIN_POSITION);
+	    if (plugin) {
+		pname = strtoqstr(plugin->getProgram());
+		QString type, soName, label;
+		Rosegarden::PluginIdentifier::parseIdentifier
+		    (strtoqstr(plugin->getIdentifier()), type, soName, label);
+		if (pname != "") {
+		    pname = QString("%1: %2").arg(label).arg(pname);
+		} else {
+		    pname = label;
+		}
+	    }
+	}
 
 	bool instrUsedByMe = false;
 	bool instrUsedByAnyone = false;

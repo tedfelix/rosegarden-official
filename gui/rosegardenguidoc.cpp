@@ -59,6 +59,7 @@
 #include "Studio.h"
 #include "Profiler.h"
 #include "Midi.h"
+#include "PluginIdentifier.h"
 
 #include "controlruler.h"
 #include "rgapplication.h"
@@ -1255,6 +1256,25 @@ RosegardenGUIDoc::xmlParse(QIODevice* file, QString &errMsg,
 
         QString msg(i18n("This file contains one or more old element types that are now deprecated.\nSupport for these elements may disappear in future versions of Rosegarden.\nWe recommend you re-save this file from this version of Rosegarden to ensure that it can still be re-loaded in future versions."));
 	slotDocumentModified(); // so file can be re-saved immediately
+        
+	KStartupLogo::hideIfStillThere();
+	CurrentProgressDialog::freeze();
+        KMessageBox::information(0, msg);
+	CurrentProgressDialog::thaw();
+    }
+
+    if (!handler.pluginsNotFound().empty()) {
+
+	QString msg(i18n("The following plugins could not be loaded:\n\n"));
+
+	for (std::set<QString>::iterator i = handler.pluginsNotFound().begin();
+	     i != handler.pluginsNotFound().end(); ++i) {
+	    QString ident = *i;
+	    QString type, soName, label;
+	    Rosegarden::PluginIdentifier::parseIdentifier(ident, type, soName, label);
+	    QString pluginFileName = QFileInfo(soName).fileName();
+	    msg += i18n("--  %1 (from %2)\n").arg(label).arg(pluginFileName);
+	}
         
 	KStartupLogo::hideIfStillThere();
 	CurrentProgressDialog::freeze();
