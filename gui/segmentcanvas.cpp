@@ -316,10 +316,13 @@ void TrackPencil::handleMouseButtonRelase(QMouseEvent*)
 {
     if (!m_currentItem) return;
 
+    // TODO : this belongs to a resizer tool
     if (m_currentItem->width() == 0) {
         kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMouseReleaseEvent() : rect deleted"
                              << endl;
         emit deleteTrackPart(m_currentItem->part());
+        delete m_currentItem;
+        m_canvas->canvas()->update();
     }
 
     if (m_newRect) {
@@ -370,6 +373,9 @@ void TrackEraser::handleMouseButtonPress(QMouseEvent *e)
 void TrackEraser::handleMouseButtonRelase(QMouseEvent*)
 {
     if (m_currentItem) emit deleteTrackPart(m_currentItem->part());
+    delete m_currentItem;
+    m_canvas->canvas()->update();
+    
     m_currentItem = 0;
 }
 

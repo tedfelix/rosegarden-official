@@ -18,6 +18,8 @@
     COPYING included with this distribution for more information.
 */
 
+#include <algorithm>
+
 #include "trackseditor.h"
 #include "trackscanvas.h"
 #include "rosegardenguidoc.h"
@@ -26,6 +28,8 @@
 
 #include <qlayout.h>
 #include <qcanvas.h>
+
+#include <kmessagebox.h>
 
 using Rosegarden::Composition;
 
@@ -174,7 +178,8 @@ TracksEditor::addTrackPart(TrackPart *p)
     p->setTrackNb(trackNb);
 
     kdDebug(KDEBUG_AREA) << QString("TracksEditor::addTrackPart() : track nb is %1 at %2")
-        .arg(trackNb).arg(r->y()) << endl;
+        .arg(trackNb).arg(r->y())
+                         << ", p = " << p << endl;
 
     m_trackParts.push_back(p);
 
@@ -186,9 +191,22 @@ TracksEditor::addTrackPart(TrackPart *p)
 }
 
 void
-TracksEditor::deleteTrackPart(TrackPart*)
+TracksEditor::deleteTrackPart(TrackPart *p)
 {
-    kdDebug(KDEBUG_AREA) << "TracksEditor::deleteTrackPart() : not implemented yet" << endl;
+    std::list<TrackPart*>::iterator iter = std::find(m_trackParts.begin(),
+                                                     m_trackParts.end(),
+                                                     p);
+
+    if (iter != m_trackParts.end()) {
+        kdDebug(KDEBUG_AREA) << "TracksEditor::deleteTrackPart() : part "
+                             << p << " deleted" << endl;
+        m_trackParts.erase(iter);
+    } else {
+        KMessageBox::error(0, QString("TracksEditor::deleteTrackPart() : part %1 not found").arg(long(p), 0, 16));
+        
+        kdDebug(KDEBUG_AREA) << "TracksEditor::deleteTrackPart() : part "
+                             << p << " not found" << endl;
+    }
 }
 
 bool
