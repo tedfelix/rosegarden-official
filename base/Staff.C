@@ -114,6 +114,7 @@ Staff::eventAdded(const Segment *t, Event *e)
     if (wrapEvent(e)) {
         ViewElement *el = makeViewElement(e);
         m_viewElementList->insert(el);
+        notifyAdd(el);
     }
 }
 
@@ -129,6 +130,7 @@ Staff::eventRemoved(const Segment *t, Event *e)
     ViewElementList::iterator i = findEvent(e);
     if (i != m_viewElementList->end()) {
 //	std::cerr << "Found" << std::endl;
+        notifyRemove(*i);
         m_viewElementList->erase(i);
         return;
     }
@@ -166,5 +168,24 @@ Staff::endMarkerTimeChanged(const Segment *s, bool shorten)
 	}
     }
 }
+
+void
+Staff::notifyAdd(ViewElement *e) const
+{
+    for (ObserverSet::const_iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->elementAdded(e);
+    }
+}
+
+void
+Staff::notifyRemove(ViewElement *e) const
+{
+    for (ObserverSet::const_iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->elementRemoved(e);
+    }
+}
+
 
 }

@@ -31,6 +31,8 @@
 namespace Rosegarden 
 {
 
+class StaffObserver;
+
 /**
  * Staff is the base class for classes which represent a Segment as an
  * on-screen graphic.  It manages the relationship between Segment/Event
@@ -87,9 +89,14 @@ public:
      */
     virtual void endMarkerTimeChanged(const Segment *, bool shorten);
 
+    void addObserver   (StaffObserver *obs) { m_observers.push_back(obs); }
+    void removeObserver(StaffObserver *obs) { m_observers.remove(obs); }
+
 protected:
     Staff(Segment &);
     virtual ViewElement* makeViewElement(Event*) = 0;
+
+    ViewElementList::iterator findEvent(Rosegarden::Event *);
     
     /**
      * Return true if the event should be wrapped
@@ -98,14 +105,29 @@ protected:
      */
     virtual bool wrapEvent(Event *);
 
+    void notifyAdd(ViewElement *) const;
+    void notifyRemove(ViewElement *) const;
+
+    //--------------- Data members ---------------------------------
+
     Segment &m_segment;
     ViewElementList *m_viewElementList;
-    ViewElementList::iterator findEvent(Rosegarden::Event *);
+
+    typedef std::list<StaffObserver*> ObserverSet;
+    ObserverSet m_observers;
 
 private: // not provided
     Staff(const Staff &);
     Staff &operator=(const Staff &);
 };
+
+class StaffObserver
+{
+public:
+    virtual void elementAdded(ViewElement *) = 0;
+    virtual void elementRemoved(ViewElement *) = 0;
+};
+
 
 
 }

@@ -64,14 +64,11 @@ void
 ViewElementList::insert(ViewElement* el)
 {
     set_type::insert(el);
-    notifyAdd(el);
 }
 
 void
 ViewElementList::erase(iterator pos)
 {
-    notifyRemove(*pos);
-
     delete *pos;
     set_type::erase(pos);
 }
@@ -80,7 +77,6 @@ void
 ViewElementList::erase(iterator from, iterator to)
 {
     for (iterator i = from; i != to; ++i) {
-        notifyRemove(*i);
         delete *i;
     }
 
@@ -152,27 +148,6 @@ ViewElementList::findNearestTime(timeT t) const
     }
     return i;
 }
-
-void
-ViewElementList::notifyAdd(ViewElement *e) const
-{
-    for (ObserverSet::const_iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->elementAdded(e);
-    }
-}
-
-void
-ViewElementList::notifyRemove(ViewElement *e) const
-{
-    for (ObserverSet::const_iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->elementRemoved(e);
-    }
-}
-
-
-
  
 }
 

@@ -298,7 +298,7 @@ ControlRuler::ControlRuler(Staff* staff,
     m_selector(new ControlSelector(this)),
     m_selectionRect(new QCanvasRectangle(canvas()))
 {
-    m_staff->getViewElementList()->addObserver(this);
+    m_staff->addObserver(this);
     setControlTool(new TestTool);
     m_selectionRect->setPen(Qt::red);
 
@@ -310,7 +310,9 @@ ControlRuler::ControlRuler(Staff* staff,
 
 ControlRuler::~ControlRuler()
 {
-    m_staff->getViewElementList()->removeObserver(this);
+//     m_staff->removeObserver(this);
+// crashes because the staff is already gone when we're calling this
+// gotta be more clever than this.
 }
 
 void ControlRuler::init()

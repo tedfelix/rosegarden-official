@@ -25,7 +25,7 @@
 
 #include <qstring.h>
 
-#include "ViewElement.h"
+#include "Staff.h"
 
 #include "PropertyName.h"
 
@@ -50,7 +50,7 @@ class ControlSelector;
 /**
  * Property Control Ruler : edit range of event properties
  */
-class ControlRuler : public RosegardenCanvasView, public Rosegarden::ViewElementListObserver
+class ControlRuler : public RosegardenCanvasView, public Rosegarden::StaffObserver
 {
     Q_OBJECT
 
@@ -76,7 +76,7 @@ public:
     void setMaxPropertyValue(int val) { m_maxPropertyValue = val; }
     int getMaxPropertyValue()         { return m_maxPropertyValue; }
 
-    // ViewElementListObserver interface
+    // StaffObserver interface
     virtual void elementAdded(Rosegarden::ViewElement*);
     virtual void elementRemoved(Rosegarden::ViewElement*);
 
@@ -103,7 +103,8 @@ protected:
     void clearSelectedItems();
     void updateSelection();
 
-private:
+    //--------------- Data members ---------------------------------
+
     Rosegarden::Staff*      m_staff;
     Rosegarden::RulerScale* m_rulerScale;
 
@@ -160,7 +161,8 @@ public slots:
 protected:
     virtual void paintEvent(QPaintEvent *);
 
-private:
+    //--------------- Data members ---------------------------------
+
     Rosegarden::PropertyName m_propertyName;
 
     double m_xorigin;
@@ -199,6 +201,8 @@ public:
 
 protected:
     virtual void paintEvent(QPaintEvent *);
+
+    //--------------- Data members ---------------------------------
 
     QString m_label;
     int     m_width;

@@ -104,8 +104,6 @@ public:
     }
 };
 
-class ViewElementListObserver;
-
 /**
  * This class owns the objects its items are pointing at.
  *
@@ -145,27 +143,7 @@ public:
      * or before the given absolute time
      */
     iterator findNearestTime(timeT time) const;
-
-    void addObserver   (ViewElementListObserver *obs) { m_observers.push_back(obs); }
-    void removeObserver(ViewElementListObserver *obs) { m_observers.remove(obs); }
-
-protected:
-    void notifyAdd(ViewElement *) const;
-    void notifyRemove(ViewElement *) const;
-
-    typedef std::list<ViewElementListObserver*> ObserverSet;
-    ObserverSet m_observers;
-
 };
-
-
-class ViewElementListObserver
-{
-public:
-    virtual void elementAdded(ViewElement *) = 0;
-    virtual void elementRemoved(ViewElement *) = 0;
-};
-
 
 }
 
