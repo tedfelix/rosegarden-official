@@ -218,17 +218,13 @@ NoteInserter::handleLeftButtonPress(Rosegarden::timeT,
 
     Event *tsig = 0, *clef = 0, *key = 0;
 
-    //!!! wrong in page mode
+    NotationStaff *staff = m_nParentView->getStaff(staffNo);
+    
+    NotationElementList::iterator closestElement =
+	staff->getClosestElementToCanvasCoords(e->x(), (int)e->y(),
+					       tsig, clef, key, false);
 
-    NotationElementList::iterator closestNote =
-        m_nParentView->findClosestNote(e->x(), e->y(), tsig, clef, key, staffNo);
-
-    //!!! Could be nicer! Likewise the other inserters.
-
-    if (closestNote ==
-        m_nParentView->getStaff(staffNo)->getViewElementList()->end()) {
-        return;
-    }
+    if (closestElement == staff->getViewElementList()->end()) return;
 
     int pitch = Rosegarden::NotationDisplayPitch(height, m_accidental).
         getPerformancePitch(clef ? Clef(*clef) : Clef::DefaultClef,
@@ -238,7 +234,7 @@ NoteInserter::handleLeftButtonPress(Rosegarden::timeT,
     Note note(m_noteType, m_noteDots);
     Segment &segment = m_nParentView->getStaff(staffNo)->getSegment();
 
-    timeT time = (*closestNote)->getAbsoluteTime();
+    timeT time = (*closestElement)->getAbsoluteTime();
     timeT endTime = time + note.getDuration();
 
     Segment::iterator realEnd = segment.findTime(endTime);
@@ -408,24 +404,21 @@ void ClefInserter::handleLeftButtonPress(Rosegarden::timeT,
 					 QMouseEvent* e,
 					 ViewElement*)
 {
+    if (staffNo < 0) return;
     Event *tsig = 0, *clef = 0, *key = 0;
 
-    if (staffNo < 0) return;
+    NotationStaff *staff = m_nParentView->getStaff(staffNo);
+    
+    NotationElementList::iterator closestElement =
+	staff->getClosestElementToCanvasCoords(e->x(), (int)e->y(),
+					       tsig, clef, key, false, -1);
 
-    NotationElementList::iterator closestNote =
-        m_nParentView->findClosestNote
-        (e->x(), e->y(), tsig, clef, key, staffNo, 100);
+    if (closestElement == staff->getViewElementList()->end()) return;
 
-    if (closestNote ==
-        m_nParentView->getStaff(staffNo)->getViewElementList()->end()) {
-        return;
-    }
-
-    timeT time = (*closestNote)->getAbsoluteTime();
+    timeT time = (*closestElement)->getAbsoluteTime();
 
     ClefInsertionCommand *command = 
-	new ClefInsertionCommand(m_nParentView->getStaff(staffNo)->getSegment(),
-				 time, m_clef);
+	new ClefInsertionCommand(staff->getSegment(), time, m_clef);
 
     m_nParentView->addCommandToHistory(command);
 
@@ -703,36 +696,27 @@ void NotationSelectionPaster::handleLeftButtonPress(Rosegarden::timeT,
                                                     QMouseEvent* e,
                                                     ViewElement*)
 {
-    QPoint eventPos = e->pos();
-    
-    kdDebug(KDEBUG_AREA) << "NotationSelectionPaster::handleLeftButtonPress : staffNo = "
-                         << staffNo
-                         << "event pos : "
-                         << eventPos.x() << "," << eventPos.y() << endl;
-
     if (staffNo < 0) return;
-
     Event *tsig = 0, *clef = 0, *key = 0;
 
-    NotationElementList::iterator closestNote =
-        m_nParentView->findClosestNote(eventPos.x(),
-                                       eventPos.y(),
-                                       tsig, clef, key, staffNo);
+    NotationStaff *staff = m_nParentView->getStaff(staffNo);
+    
+    NotationElementList::iterator closestElement =
+	staff->getClosestElementToCanvasCoords(e->x(), (int)e->y(),
+					       tsig, clef, key, false, -1);
 
-    if (closestNote ==
-        m_nParentView->getStaff(staffNo)->getViewElementList()->end()) {
-        return;
-    }
+    if (closestElement == staff->getViewElementList()->end()) return;
 
-    timeT time = (*closestNote)->getAbsoluteTime();
+    timeT time = (*closestElement)->getAbsoluteTime();
 
-    Segment& segment = m_nParentView->getStaff(staffNo)->getSegment();
+    Segment& segment = staff->getSegment();
+
+    //!!! should be using a command here
 
     if (m_selection.pasteToSegment(segment, time)) {
 
-        m_nParentView->refreshSegment(&segment,
-				      0,
-				      time + m_selection.getTotalDuration() + 1);
+        m_nParentView->refreshSegment
+	    (&segment, 0, time + m_selection.getTotalDuration() + 1);
 
     } else {
         

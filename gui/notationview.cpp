@@ -153,12 +153,8 @@ NotationView::NotationView(RosegardenGUIView* rgView,
          this,         SLOT  (hoveredOverAbsoluteTimeChanged(unsigned int)));
 
     QObject::connect
-	(rgView, SIGNAL(setPositionPointer(int)),
-	 this,   SLOT  (setPositionPointer(int)));
-
-    QObject::connect
-	(rgView, SIGNAL(segmentModified(Rosegarden::Segment *, timeT, timeT)),
-	 this,   SLOT  (segmentModified(Rosegarden::Segment *, timeT, timeT)));
+	(rgView, SIGNAL(setGUIPositionPointer(timeT)),
+	 this,   SLOT  (setGUIPositionPointer(timeT)));
 
     //
     // Window appearance (options, title...)
@@ -1069,9 +1065,9 @@ void NotationView::slotEditPaste()
 	slotStatusHelpMsg(i18n("BLAT FOOP"));
 	return;
     }
-
-    NotationElementList *notes =
-	m_staffs[m_currentStaff]->getViewElementList();
+    
+    NotationStaff *staff = m_staffs[m_currentStaff];
+    NotationElementList *notes = staff->getViewElementList();
     timeT insertionTime = 0;
 
     //!!! Slow.
@@ -1897,7 +1893,7 @@ NotationView::getStaffForCanvasY(int y) const
 }
 
 
-
+/*!!!
 NotationElementList::iterator
 NotationView::findClosestNote(double eventX, double eventY,
                               Event *&timeSignature,
@@ -1921,26 +1917,20 @@ NotationView::findClosestNote(double eventX, double eventY,
     // (though we'd still have to scan back, potentially to the start of
     // the segment, to find the clef and key).
     //
-    for (it = notes->begin();
-         it != notes->end(); ++it) 
-        {
-            if (!(*it)->isNote() && !(*it)->isRest()) {
-                if ((*it)->event()->isa(Clef::EventType)) {
-                    kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : found clef: type is "
-                                         << (*it)->event()->get<String>(Clef::ClefPropertyName) << endl;
-                    clef = (*it)->event();
-                } else if ((*it)->event()->isa(TimeSignature::EventType)) {
-                    kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : found time sig " << endl;
-                    timeSignature = (*it)->event();
-                } else if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
-                    kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : found key: type is "
-                                         << (*it)->event()->get<String>(Rosegarden::Key::KeyPropertyName) << endl;
-                    key = (*it)->event();
-                }
-                continue;
-            }
+    for (it = notes->begin(); it != notes->end(); ++it) {
 
-            double xdist, ydist;
+	if (!(*it)->isNote() && !(*it)->isRest()) {
+	    if ((*it)->event()->isa(Clef::EventType)) {
+		clef = (*it)->event();
+	    } else if ((*it)->event()->isa(TimeSignature::EventType)) {
+		timeSignature = (*it)->event();
+	    } else if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
+		key = (*it)->event();
+	    }
+	    continue;
+	}
+
+	double xdist, ydist;
         
             if ( (*it)->getCanvasX() >= eventX )
                 xdist = (*it)->getCanvasX() - eventX;
@@ -1978,7 +1968,7 @@ NotationView::findClosestNote(double eventX, double eventY,
 
     return res;
 }
-
+*/
 
 void NotationView::refreshSegment(Segment *segment,
 				  timeT startTime, timeT endTime)

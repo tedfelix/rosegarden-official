@@ -102,7 +102,8 @@ NotationStaff::setLegatoDuration(Rosegarden::timeT duration)
     wq->setUnit(duration);
 }
 
-void NotationStaff::insertTimeSignature(double layoutX,
+void
+NotationStaff::insertTimeSignature(double layoutX,
 					const TimeSignature &timeSig)
 {
     m_npf->setSelected(false);
@@ -118,7 +119,8 @@ void NotationStaff::insertTimeSignature(double layoutX,
     m_timeSigs.insert(sprite);
 }
 
-void NotationStaff::deleteTimeSignatures()
+void
+NotationStaff::deleteTimeSignatures()
 {
     kdDebug(KDEBUG_AREA) << "NotationStaff::deleteTimeSignatures()\n";
     
@@ -131,9 +133,10 @@ void NotationStaff::deleteTimeSignatures()
 }
 
 //!!! to lined staff?
-void NotationStaff::getClefAndKeyAtCanvasCoords(double cx, int cy,
-						Clef &clef, 
-						Rosegarden::Key &key) const
+void
+NotationStaff::getClefAndKeyAtCanvasCoords(double cx, int cy,
+					   Clef &clef, 
+					   Rosegarden::Key &key) const
 {
     cx -= m_x;
 
@@ -155,6 +158,77 @@ void NotationStaff::getClefAndKeyAtCanvasCoords(double cx, int cy,
     }
 }
 
+NotationElementList::iterator
+NotationStaff::getClosestElementToCanvasCoords(double cx, int cy,
+					       Rosegarden::Event *&timeSignature,
+					       Rosegarden::Event *&clef,
+					       Rosegarden::Event *&key,
+					       bool notesAndRestsOnly,
+					       unsigned int proximityThreshold)
+{
+    START_TIMING;
+
+    //!!! slow
+
+    double minDist = 10e9, prevDist = 10e9;
+
+    NotationElementList *notes = getViewElementList();
+    NotationElementList::iterator it, result;
+
+    LinedStaffCoords layoutCoords = getLayoutCoordsForCanvasCoords(cx, cy);
+
+    kdDebug(KDEBUG_AREA) << "My coords: canvas (" << cx << "," << cy
+			 << "), layout (" << layoutCoords.first << ","
+			 << layoutCoords.second << ")" << endl;
+
+    // TODO: this is grossly inefficient
+
+    for (it = notes->begin(); it != notes->end(); ++it) {
+
+	bool before = ((*it)->getLayoutX() < layoutCoords.first);
+	
+	if (!(*it)->isNote() && !(*it)->isRest()) {
+	    if (before) {
+		if ((*it)->event()->isa(Clef::EventType)) {
+		    clef = (*it)->event();
+		} else if ((*it)->event()->isa(TimeSignature::EventType)) {
+		    timeSignature = (*it)->event();
+		} else if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
+		    key = (*it)->event();
+		}
+	    }
+	    if (notesAndRestsOnly) continue;
+	}
+
+	double dx = layoutCoords.first - (*it)->getLayoutX();
+	kdDebug(KDEBUG_AREA) << "dx: " << dx << endl;
+	if (dx < 0) dx = -dx;
+
+	if (dx < minDist) {
+	    minDist = dx;
+	    result = it;
+	} else if (!before) {
+	    kdDebug(KDEBUG_AREA) << "break" << endl;
+	    break;
+	}
+
+	prevDist = dx;
+    }
+
+    if (proximityThreshold > 0 && minDist > proximityThreshold) {
+        kdDebug(KDEBUG_AREA) << "NotationStaff::getClosestElementToCanvasCoords() : element is too far away : "
+                             << minDist << endl;
+        return notes->end();
+    }
+        
+    kdDebug(KDEBUG_AREA) << "NotationStaff::getClosestElementToCanvasCoords: found element at layout " << (*result)->getLayoutX() << " (" << (*result)->getCanvasX() << "," << (*result)->getCanvasY() << ") - we're at layout " << layoutCoords.first << " (" << cx << "," << cy << ")" << endl;
+
+    PRINT_ELAPSED("NotationStaff::getClosestElementToCanvasCoords");
+
+    return result;
+}
+
+ 
 string
 NotationStaff::getNoteNameAtCanvasCoords(double x, int y,
 					 Rosegarden::Accidental acc) const
