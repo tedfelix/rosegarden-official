@@ -872,22 +872,23 @@ AudioManagerDialog::getCommandHistory()
 // commands - but we may not want to or need to.
 //
 void
-AudioManagerDialog::slotCommandExecuted(KCommand * /*command */)
+AudioManagerDialog::slotCommandExecuted(KCommand*)
 {
-    AudioListItem *item =
-            dynamic_cast<AudioListItem*>(m_fileList->selectedItem());
+//     AudioListItem *item =
+//             dynamic_cast<AudioListItem*>(m_fileList->selectedItem());
 
     // repopulate
     slotPopulateFileList();
 
-    if (item)
-    {
-        Rosegarden::AudioFileId id = item->getId();
-        Rosegarden::Segment *segment = item->getSegment();
 
-        // set selected
-        setSelected(id, segment, true); // propagate
-    }
+//     if (item)
+//     {
+//         Rosegarden::AudioFileId id = item->getId();
+//         Rosegarden::Segment *segment = item->getSegment();
+
+//         // set selected
+//         setSelected(id, segment, true); // propagate
+//     }
 
 }
 
