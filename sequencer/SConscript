@@ -21,7 +21,7 @@ rosegardensequenceriface.skel
 rgseq = KDEprogram('rosegardensequencer', rgseqSources, myenv)
 
 KDEaddpaths( ['../base', '../sound', '../gui', '../', './'], myenv)
-KDEaddlibs(['kdeui', 'kdecore', 'base', 'RosegardenSound', 'RosegardenSequencer'], myenv)
+KDEaddlibs(['RosegardenSequencer', 'RosegardenSound', 'base', 'kdeui', 'kdecore'], myenv)
 
 myenv['LIBPATH'].append('../base')
 myenv['LIBPATH'].append('../sound')
