@@ -333,7 +333,7 @@ timeT Track::findTimeSignatureAt(timeT t, TimeSignature &timeSig) const
 timeT Track::findBarStartTime(timeT t) const
 {
     iterator barItr = findBarAt(t);
-    if (barItr == m_referenceTrack->end()) return -1;
+    if (barItr == m_referenceTrack->end()) return getEndIndex();
     return (*barItr)->getAbsoluteTime();
 }
 
@@ -341,22 +341,22 @@ timeT Track::findBarEndTime(timeT t) const
 {
     iterator barItr = findBarAt(t);
     if (barItr == m_referenceTrack->end() ||
-	++barItr == m_referenceTrack->end()) return -1;
+	++barItr == m_referenceTrack->end()) return getEndIndex();
     return (*barItr)->getAbsoluteTime();
 }
 
 Track::iterator Track::findStartOfBar(timeT t) const
 {
     t = findBarStartTime(t);
-    if (t < 0) return end();
-    else return findTime(t);
+/*    if (t < 0) return end();
+      else */ return findTime(t);
 }
 
 Track::iterator Track::findStartOfNextBar(timeT t) const
 {
     t = findBarEndTime(t);
-    if (t < 0) return end();
-    else return findTime(t);
+/*    if (t < 0) return end();
+      else */ return findTime(t);
 }
 
 
