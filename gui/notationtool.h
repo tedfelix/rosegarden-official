@@ -254,6 +254,29 @@ protected:
 
 
 /**
+ * This tool will request and insert text on mouse click events
+ */
+class TextInserter : public NotationTool
+{
+    friend class NotationToolBox;
+
+public:
+    virtual void ready();
+
+    virtual void handleLeftButtonPress(Rosegarden::timeT,
+                                       int height,
+                                       int staffNo,
+                                       QMouseEvent*,
+                                       Rosegarden::ViewElement* el);
+    static const QString ToolName;
+
+protected:
+    TextInserter(NotationView*);
+    Rosegarden::Text m_text;
+};
+
+
+/**
  * This tool will erase a note on mouse click events
  */
 class NotationEraser : public NotationTool

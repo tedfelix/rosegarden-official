@@ -753,6 +753,13 @@ SegmentNotationHelper::insertKey(timeT absoluteTime, Key key)
 }
 
 
+Segment::iterator
+SegmentNotationHelper::insertText(timeT absoluteTime, Text text)
+{
+    return insert(text.getAsEvent(absoluteTime));
+}
+
+
 void
 SegmentNotationHelper::deleteNote(Event *e, bool collapseRest)
 {

@@ -89,6 +89,12 @@ Post-0.1.4 task list
 20a. Why is the notation view's time sig dialog now getting the
      wrong default time sig? (i.e. it's always 4/4)
 
+21. Load test_tuplets, open score editor, then on segment editor
+    extend the first segment to the same length as the second -- blam!
+
+22. Rationalise segment editor tools into "simple" and "extended"
+    as per discussion on mailing list:
+    http://www.geocrawler.com/mail/thread.php3?subject=a+question%2C+was+Re%3A+%5BRosegarden-devel%5D+0.2+roadmap+-+some+thoughts&list=16004
 
 20020301 task list (based on outstanding items from post-0.1.3 list below)
 ==================

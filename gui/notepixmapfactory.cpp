@@ -1451,18 +1451,18 @@ NotePixmapFactory::makeTextPixmap(const Rosegarden::Text &text)
     QFontMetrics textMetrics(textFont);
     QRect r = textMetrics.boundingRect(s);
 
-    createPixmapAndMask(r.width() + 4, r.height() * 2);
+    createPixmapAndMask(r.width() + 4, r.height() * 2 + 4);
     
     if (m_selected) m_p.setPen(RosegardenGUIColours::SelectedElement);
 
     m_p.setFont(textFont);
     m_pm.setFont(textFont);
 
-    m_p.drawText(2, r.height(), s);
-    m_pm.drawText(2, r.height(), s);
+    m_p.drawText(2, r.height() + 2, s);
+    m_pm.drawText(2, r.height() + 2, s);
 
     m_p.setPen(Qt::black);
-    return makeCanvasPixmap(QPoint(2, 0));
+    return makeCanvasPixmap(QPoint(2, 2));
 }
     
 

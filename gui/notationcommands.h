@@ -84,6 +84,23 @@ protected:
     Rosegarden::Event *m_lastInsertedEvent;
 };
 
+class TextInsertionCommand : public BasicCommand
+{
+public:
+    TextInsertionCommand(Rosegarden::Segment &segment,
+			 Rosegarden::timeT time,
+			 Rosegarden::Text text);
+    virtual ~TextInsertionCommand();
+
+    Rosegarden::Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
+
+protected:
+    virtual void modifySegment();
+
+    Rosegarden::Text m_text;
+    Rosegarden::Event *m_lastInsertedEvent;
+};
+
 class KeyInsertionCommand : public BasicCommand
 {
 public:

@@ -135,6 +135,7 @@ RestInsertionCommand::modifySegment()
 }
 
 
+
 ClefInsertionCommand::ClefInsertionCommand(Segment &segment, timeT time,
 					   Clef clef) :
     BasicCommand("Insert Clef", segment, time, time + 1),
@@ -162,6 +163,30 @@ ClefInsertionCommand::modifySegment()
     SegmentNotationHelper helper(getSegment());
 
     Segment::iterator i = helper.insertClef(getBeginTime(), m_clef);
+    if (i != helper.segment().end()) m_lastInsertedEvent = *i;
+}
+
+
+TextInsertionCommand::TextInsertionCommand(Segment &segment, timeT time,
+					   Rosegarden::Text text) :
+    BasicCommand("Insert Text", segment, time, time + 1),
+    m_text(text),
+    m_lastInsertedEvent(0)
+{
+    // nothing
+}
+
+TextInsertionCommand::~TextInsertionCommand()
+{
+    // nothing
+}
+
+void
+TextInsertionCommand::modifySegment()
+{
+    SegmentNotationHelper helper(getSegment());
+
+    Segment::iterator i = helper.insertText(getBeginTime(), m_text);
     if (i != helper.segment().end()) m_lastInsertedEvent = *i;
 }
 

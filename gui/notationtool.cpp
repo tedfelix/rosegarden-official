@@ -40,6 +40,7 @@
 
 #include "notationcommands.h"
 #include "editcommands.h"
+#include "dialogs.h"
 
 #include "rosedebug.h"
 #include "colours.h"
@@ -95,6 +96,10 @@ EditTool* NotationToolBox::createTool(const QString& toolName)
     else if (toolNamelc == ClefInserter::ToolName)
 
         tool = new ClefInserter(m_nParentView);
+
+    else if (toolNamelc == TextInserter::ToolName)
+
+        tool = new TextInserter(m_nParentView);
 
     else if (toolNamelc == NotationEraser::ToolName)
 
@@ -593,6 +598,58 @@ void ClefInserter::handleLeftButtonPress(Rosegarden::timeT,
 
 //------------------------------
 
+TextInserter::TextInserter(NotationView* view)
+    : NotationTool("TextInserter", view),
+      m_text("")
+{
+}
+
+void TextInserter::ready()
+{
+    m_nParentView->setCanvasCursor(Qt::crossCursor);
+    m_nParentView->setPositionTracking(false);
+}
+
+void TextInserter::handleLeftButtonPress(Rosegarden::timeT,
+                                         int,
+                                         int staffNo,
+					 QMouseEvent* e,
+					 ViewElement*)
+{
+    if (staffNo < 0) return;
+    Event *tsig = 0, *clef = 0, *key = 0;
+
+    NotationStaff *staff = m_nParentView->getStaff(staffNo);
+    
+    NotationElementList::iterator closestElement =
+	staff->getClosestElementToCanvasCoords(e->x(), (int)e->y(),
+					       tsig, clef, key, false, -1);
+
+    if (closestElement == staff->getViewElementList()->end()) return;
+
+    timeT time = (*closestElement)->getAbsoluteTime();
+
+    TextEventDialog *dialog = new TextEventDialog
+	(m_nParentView, m_nParentView->getNotePixmapFactory(), m_text,
+	 Rosegarden::Text::Dynamic);
+
+    if (dialog->exec() == QDialog::Accepted) {
+	
+	m_text = dialog->getText();
+
+	TextInsertionCommand *command = 
+	    new TextInsertionCommand(staff->getSegment(), time, m_text);
+
+	m_nParentView->addCommandToHistory(command);
+
+	Event *event = command->getLastInsertedEvent();
+	if (event) m_nParentView->setSingleSelectedEvent(staffNo, event);
+    }
+}
+
+
+//------------------------------
+
 NotationEraser::NotationEraser(NotationView* view)
     : NotationTool("NotationEraser", view),
       m_collapseRest(false)
@@ -903,6 +960,7 @@ void NotationSelector::setViewCurrentSelection()
 const QString NoteInserter::ToolName     = "noteinserter";
 const QString RestInserter::ToolName     = "restinserter";
 const QString ClefInserter::ToolName     = "clefinserter";
+const QString TextInserter::ToolName     = "textinserter";
 const QString NotationEraser::ToolName   = "notationeraser";
 const QString NotationSelector::ToolName = "notationselector";
 

@@ -94,6 +94,8 @@ etc
   <Action name="tenor_clef" />
   <Action name="alto_clef" />
   <Action name="bass_clef" />
+  <Separator/>
+  <Action name="text" />
 </Menu>
 
 <Separator/>
@@ -198,6 +200,7 @@ etc
   <Action name="16th" />
   <Action name="32nd" />
   <Action name="64th" />
+  <Separator/>
 
   <Action name="dotted_whole_note" />
   <Action name="dotted_half" />
@@ -219,6 +222,7 @@ etc
   <Action name="16th_rest" />
   <Action name="32nd_rest" />
   <Action name="64th_rest" />
+  <Separator/>
 
   <Action name="dotted_whole_note_rest" />
   <Action name="dotted_half_rest" />
@@ -243,6 +247,8 @@ etc
   <Action name="tenor_clef" />
   <Action name="alto_clef" />
   <Action name="bass_clef" />
+  <Separator/>
+  <Action name="text" />
 </ToolBar>
 
 <ToolBar name="metaToolbar" newline="true">

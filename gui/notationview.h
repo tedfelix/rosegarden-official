@@ -124,6 +124,10 @@ public:
     /// Switches between page- and linear- layout mode
     void setPageMode(bool pageMode);
 
+    NotePixmapFactory *getNotePixmapFactory() const {
+	return m_notePixmapFactory;
+    }
+
     /**
      * get a NotePixmapFactory suitable for creating toolbar pixmaps
      * (but not guaranteed to be any good for anything else)
@@ -256,6 +260,9 @@ public slots:
     void slotTenorClef();
     void slotAltoClef();
     void slotBassClef();
+    
+    /// text tool
+    void slotText();
 
     /// edition tools
     void slotEraseSelected();

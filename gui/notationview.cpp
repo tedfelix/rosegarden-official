@@ -488,6 +488,14 @@ void NotationView::setupActions()
                                   actionCollection(), "bass_clef");
     noteAction->setExclusiveGroup("notes");
 
+
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap("text"));
+    noteAction = new KRadioAction(i18n("Text"), icon, 0, this,
+                                  SLOT(slotText()),
+                                  actionCollection(), "text");
+    noteAction->setExclusiveGroup("notes");
+
+
     //
     // Edition tools (eraser, selector...)
     //
@@ -2116,10 +2124,14 @@ void NotationView::slotBassClef()
 }
 
 
-//----------------------------------------
-// Time sigs.
-//----------------------------------------
-// TODO: time sig :-)
+
+void NotationView::slotText()
+{
+    m_currentNotePixmap->setPixmap
+        (m_toolbarNotePixmapFactory.makeToolbarPixmap("text"));
+    setTool(m_toolBox->getTool(TextInserter::ToolName));
+}
+
 
 //----------------------------------------
 // Edition Tools

@@ -231,12 +231,12 @@ class TextEventDialog : public KDialogBase
 public:
     TextEventDialog(QWidget *parent,
 		    NotePixmapFactory *npf,
-		    std::string defltText = "",
-		    std::string defltType = Rosegarden::Text::UnspecifiedType,
+		    Rosegarden::Text defaultText,
 		    int maxLength = -1); // for Qt default
-    
-    std::string getTextType() const;
-    std::string getText() const;
+
+    Rosegarden::Text getText() const {
+	return Rosegarden::Text(getTextString(), getTextType());
+    }
 
 protected:
     QLineEdit *m_text;
@@ -247,6 +247,10 @@ protected:
     QLabel *m_staffBelowLabel;
 
     NotePixmapFactory *m_notePixmapFactory;
+    std::vector<std::string> m_styles;
+
+    std::string getTextType() const;
+    std::string getTextString() const;
 
 public slots:
     void slotTextChanged(const QString &);

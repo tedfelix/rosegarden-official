@@ -912,41 +912,88 @@ TupletDialog::slotTupledChanged(const QString &)
 
 TextEventDialog::TextEventDialog(QWidget *parent,
 				 NotePixmapFactory *npf,
-				 std::string defaultText,
-				 std::string defaultType,
+				 Rosegarden::Text defaultText,
 				 int maxLength) :
     KDialogBase(parent, 0, true, i18n("Text"), Ok | Cancel),
-    m_notePixmapFactory(npf)
+    m_notePixmapFactory(npf),
+    m_styles(Rosegarden::Text::getUserStyles())
 {
     QVBox *vbox = makeVBoxMainWidget();
 
     QGroupBox *entryBox = new QGroupBox
-	(1, Horizontal, i18n("Text specification"), vbox);
+	(1, Horizontal, i18n("Specification"), vbox);
     QGroupBox *exampleBox = new QGroupBox
-	(1, Horizontal, i18n("Example"), vbox);
+	(1, Horizontal, i18n("Preview"), vbox);
 
     QGrid *entryGrid = new QGrid(2, QGrid::Horizontal, entryBox);
 
-    new QLabel(i18n("Text:"), entryGrid);
+    new QLabel(i18n("Text:  "), entryGrid);
     m_text = new QLineEdit(entryGrid);
-    m_text->setText(defaultText.c_str());
+    m_text->setText(defaultText.getText().c_str());
     if (maxLength > 0) m_text->setMaxLength(maxLength);
 
-    new QLabel(i18n("Style:"), entryGrid);
+    new QLabel(i18n("Style:  "), entryGrid);
     m_typeCombo = new QComboBox(false, entryGrid);
-    std::vector<std::string> styles = Rosegarden::Text::getUserStyles();
-    for (unsigned int i = 0; i < styles.size(); ++i) {
-	m_typeCombo->insertItem(styles[i].c_str());
-	if (styles[i] == defaultType) {
+
+    for (unsigned int i = 0; i < m_styles.size(); ++i) {
+
+	std::string style = m_styles[i];
+
+	std::string styleName;
+	styleName += (char)toupper(style[0]);
+	styleName += style.substr(1);
+
+	int uindex = styleName.find('_');
+	if (uindex > 0) {
+	    styleName =
+		styleName.substr(0, uindex) + " " +
+		styleName.substr(uindex + 1);
+	}
+
+	m_typeCombo->insertItem(styleName.c_str());
+
+	if (style == defaultText.getTextType()) {
 	    m_typeCombo->setCurrentItem(m_typeCombo->count() - 1);
 	}
     }
 
     QVBox *exampleVBox = new QVBox(exampleBox);
-    m_staffAboveLabel = new QLabel(i18n("Staff"), exampleVBox);
+    
+    int ls = m_notePixmapFactory->getLineSpacing();
+
+    int mapWidth = 200;
+    QPixmap map(mapWidth, ls * 5 + 1);
+    QBitmap mask(mapWidth, ls * 5 + 1);
+
+    map.fill();
+    mask.fill(Qt::color0);
+
+    QPainter p, pm;
+
+    p.begin(&map);
+    pm.begin(&mask);
+
+    p.setPen(Qt::black);
+    pm.setPen(Qt::white);
+    
+    for (int i = 0; i < 5; ++i) {
+	p.drawLine(0, ls * i, mapWidth-1, ls * i);
+	pm.drawLine(0, ls * i, mapWidth-1, ls * i);
+    }
+
+    p.end();
+    pm.end();
+
+    map.setMask(mask);
+
+    m_staffAboveLabel = new QLabel("staff", exampleVBox);
+    m_staffAboveLabel->setPixmap(map);
+
     m_textExampleLabel = new QLabel(i18n("Example"), exampleVBox);
-    m_staffBelowLabel = new QLabel(i18n("Staff"), exampleVBox);
- 
+
+    m_staffBelowLabel = new QLabel("staff", exampleVBox);
+    m_staffBelowLabel->setPixmap(map);
+
     QObject::connect(m_text, SIGNAL(textChanged(const QString &)),
 		     this, SLOT(slotTextChanged(const QString &)));
     QObject::connect(m_typeCombo, SIGNAL(activated(const QString &)),
@@ -959,28 +1006,42 @@ TextEventDialog::TextEventDialog(QWidget *parent,
 std::string
 TextEventDialog::getTextType() const
 {
-    return std::string(m_typeCombo->currentText().latin1());
+    return m_styles[m_typeCombo->currentItem()];
 }
 
 std::string
-TextEventDialog::getText() const
+TextEventDialog::getTextString() const
 {
     return std::string(m_text->text().latin1());
 }
 
 void
-TextEventDialog::slotTextChanged(const QString &text)
+TextEventDialog::slotTextChanged(const QString &qtext)
 {
     std::string type(getTextType());
-    Rosegarden::Text rtext(text.latin1(), type);
+    std::string text(qtext.latin1());
+
+    if (text == "") text = "Sample";
+    if (text.length() > 20) {
+	text = text.substr(0, 20) + "...";
+    }
+
+    Rosegarden::Text rtext(text, type);
     m_textExampleLabel->setPixmap(m_notePixmapFactory->makeTextPixmap(rtext));
 }
 
 void
-TextEventDialog::slotTypeChanged(const QString &qtype)
+TextEventDialog::slotTypeChanged(const QString &)
 {
-    std::string type(qtype.latin1());
-    Rosegarden::Text rtext(getText(), type);
+    std::string type(getTextType());
+    std::string text(getTextString());
+
+    if (text == "") text = "Sample";
+    if (text.length() > 20) {
+	text = text.substr(0, 20) + "...";
+    }
+
+    Rosegarden::Text rtext(text, type);
     m_textExampleLabel->setPixmap(m_notePixmapFactory->makeTextPixmap(rtext));
 
     if (type == Rosegarden::Text::Dynamic ||

@@ -194,6 +194,12 @@ public:
     iterator insertKey(timeT absoluteTime, Key key);
 
     /**
+     * Insert a text event.
+     * Returns iterator pointing to text event.
+     */
+    iterator insertText(timeT absoluteTime, Text text);
+
+    /**
      * Deletes a note, doing all the clever split/merge stuff as
      * appropriate.  Requires segment to be in a composition.  
      */
