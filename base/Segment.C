@@ -59,11 +59,12 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
 
 Segment::Segment(const Segment &segment):
     std::multiset<Event*, Event::EventCmp>(),
+    m_composition(segment.getComposition()),
     m_startTime(segment.getStartTime()),
     m_track(segment.getTrack()),
-    m_id(0),
-    m_composition(segment.getComposition()),
     m_type(segment.getType()),
+    m_label(segment.getLabel()),
+    m_id(0),
     m_audioFileID(segment.getAudioFileID()),
     m_audioStartIdx(segment.getAudioStartTime()),
     m_audioEndIdx(segment.getAudioEndTime()),
@@ -71,8 +72,7 @@ Segment::Segment(const Segment &segment):
     m_quantizer(new Quantizer("SegmentQ", Quantizer::RawEventData)),
     m_quantize(segment.hasQuantization()),
     m_transpose(segment.getTranspose()),
-    m_delay(segment.getDelay()),
-    m_label(segment.getLabel())
+    m_delay(segment.getDelay())
 {
     for (iterator it = begin(); it != end(); ++it)
         insert(new Event(**it));
