@@ -1,10 +1,14 @@
 0.2 TO-DO for rwb
 -----------------
-updated 05.02.2001
+updated 15.02.2001
 
 Currently looking at:
 
-o Segment operation undo/redo (plus scissors and glue)
+o Segment operation undo/redo
+
+o Segment Join tool
+
+o Segment Split tool [DONE 15.02.2002]
   
 o Playing Audio files
   o synchronisation with MIDI [SITUATION IMPROVED]
@@ -24,8 +28,6 @@ o smooth position pointer [attempted moved readahead component to gui control]
 ==
 
 o tidy up getSequencerSlice and MappedEvent [MappedEvent DONE]
-
-o Finish vu meters - colours and peak hold [DONE PEAK HOLD]
 
 o Complete segment edit shortcuts (click/copy/multiple segment drag)
 
@@ -55,7 +57,9 @@ o MIDI CC, PC and sysex handling
 Recently completed/fixed
 ------------------------
 
-- Some MIDI files won't load [DONE]
+- Finish vu meters - colours and peak hold [DONE 15.02.2002]
+
+- Some MIDI files won't load [DONE 14.02.2002]
 
 - Metronome [DONE]
 

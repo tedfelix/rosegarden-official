@@ -37,14 +37,19 @@ LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
                      const char *name)
     : QWidget(parent, name),
       m_height(height),
-      m_snap(0),
       m_invert(invert),
       m_doc(doc),
       m_rulerScale(rulerScale),
+      m_grid(rulerScale),
       m_loop(false),
       m_startLoop(0), m_endLoop(0)
 {
     setBackgroundColor(RosegardenGUIColours::LoopRulerBackground);
+
+    // Only allow loops to be snapped to Beats on this grid
+    //
+    m_grid.setSnapTime(Rosegarden::SnapGrid::SnapToBeat);
+
 }
 
 LoopRuler::~LoopRuler()
@@ -145,7 +150,7 @@ LoopRuler::mousePressEvent(QMouseEvent *mE)
     if (mE->button() == LeftButton)
     {
         if (m_loop)
-            m_endLoop = m_startLoop = m_rulerScale->getTimeForX(mE->pos().x());
+            m_endLoop = m_startLoop = m_grid.snapX(mE->pos().x());
         else
             emit setPointerPosition(m_rulerScale->getTimeForX(mE->pos().x()));
     }
@@ -197,7 +202,7 @@ LoopRuler::mouseMoveEvent(QMouseEvent *mE)
     
     if (m_loop)
     {
-        m_endLoop = m_rulerScale->getTimeForX(position);
+        m_endLoop = m_grid.snapX(mE->pos().x());
         update();
 
     }

@@ -25,6 +25,7 @@
 
 #include <qwidget.h>
 #include "Event.h"
+#include "RulerScale.h"
 #include "rosegardenguidoc.h"
 
 namespace Rosegarden {
@@ -90,11 +91,11 @@ private:
     void drawLoopMarker(QPainter*);  // between loop positions
 
     int m_height;
-    int m_snap;            // snap the loop to the nearest
     bool m_invert;
 
-    RosegardenGUIDoc *m_doc;
+    RosegardenGUIDoc       *m_doc;
     Rosegarden::RulerScale *m_rulerScale;
+    Rosegarden::SnapGrid    m_grid;
     
     bool m_loop;
     Rosegarden::timeT m_startLoop;
