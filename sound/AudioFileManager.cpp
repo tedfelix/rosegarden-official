@@ -516,7 +516,12 @@ AudioFileManager::toXmlString()
     }
 
     audioFiles << "</audiofiles>" << std::endl;
+
+#if (__GNUC__ < 3)
     audioFiles << std::ends;
+#else
+    audioFiles;
+#endif
 
     return audioFiles.str();
 }

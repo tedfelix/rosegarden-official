@@ -988,7 +988,12 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
         {
             stringstream trackName;
             // insert a track name
+
+#if (__GNUC__ < 3)
             trackName << "Track " << trackNumber << ends;
+#else
+            trackName << "Track " << trackNumber;
+#endif
 
             midiEvent = new MidiEvent(0,
                                       MIDI_FILE_META_EVENT,

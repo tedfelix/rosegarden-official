@@ -241,7 +241,11 @@ MidiDevice::toXmlString()
     for (iit = m_instruments.begin(); iit != m_instruments.end(); iit++)
         midiDevice << (*iit)->toXmlString();
 
+#if (__GNUC__ < 3)
     midiDevice << "    </device>" << std::endl << std::ends;
+#else
+    midiDevice << "    </device>" << std::endl;
+#endif
 
     return midiDevice.str();
 }

@@ -191,6 +191,11 @@ RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
 
     Rosegarden::MappedComposition *mC = new Rosegarden::MappedComposition();
 
+    // Don't get a slice if the sequencer has lost interest
+    //
+    if (!m_sequencer->isPlaying())
+        return mC;
+
     // Loop timing
     //
     //QTime t;

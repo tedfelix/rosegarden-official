@@ -214,7 +214,11 @@ Studio::toXmlString()
         studio << (*it)->toXmlString() << std::endl << std::endl;
     }
 
+#if (__GNUC__ < 3)
     studio << "</studio>" << std::endl << std::ends;
+#else
+    studio << "</studio>" << std::endl;
+#endif
 
     return studio.str();
 }

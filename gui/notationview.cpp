@@ -1473,6 +1473,7 @@ void NotationView::refreshSegment(Segment *segment,
     if (m_inhibitRefresh) return;
 
     bool ownProgressDlg = false;
+    /*
     if (!m_progressDlg) {
 	m_progressDlg = new RosegardenProgressDialog
 	    (i18n("Updating..."), 0, 100, this,
@@ -1483,6 +1484,7 @@ void NotationView::refreshSegment(Segment *segment,
 	}
 	ownProgressDlg = true;
     }
+    */
 
     emit usedSelection();
 

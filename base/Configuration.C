@@ -87,7 +87,11 @@ Configuration::toXmlString()
 
     config << "<" << MetronomeDuration << " type=\"RealTime\">" << r.sec << "," << r.usec << "</" << MetronomeDuration << ">" << endl;
 
+#if (__GNUC__ < 3)
     config << "</configuration>" << endl << std::ends;
+#else
+    config << "</configuration>" << endl;
+#endif
 
     return config.str();
 }

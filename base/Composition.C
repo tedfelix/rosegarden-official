@@ -965,7 +965,11 @@ std::string Composition::toXmlString()
 
     composition << endl;
 
+#if (__GNUC__ < 3)
     composition << "</composition>" << std::ends;
+#else
+    composition << "</composition>";
+#endif
 
     return composition.str();
 }

@@ -920,9 +920,17 @@ static string addDots(int dots, string s, bool hyphenate = false)
         os << dots << "-";
     }
     if (hyphenate) {
+#if (__GNUC__ < 3)
 	os << "dotted-" << s << std::ends;
+#else
+	os << "dotted-" << s;
+#endif
     } else {
+#if (__GNUC__ < 3)
 	os << "dotted " << s << std::ends;
+#else
+	os << "dotted " << s;
+#endif
     }
     return os.str();
 }

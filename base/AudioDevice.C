@@ -88,7 +88,12 @@ AudioDevice::toXmlString()
     for (iit = m_instruments.begin(); iit != m_instruments.end(); iit++)
         audioDevice << (*iit)->toXmlString();
 
-    audioDevice << "    </device>" << std::endl << std::ends;
+    audioDevice << "    </device>"
+#if (__GNUC__ < 3)
+                << std::endl << std::ends;
+#else
+                << std::endl;
+#endif
 
    return audioDevice.str();
 }

@@ -68,7 +68,13 @@ PropertyName getMarkPropertyName(int markNo)
     // firstFive cache
 
     std::stringstream markPropertyName;
+
+#if (__GNUC__ < 3)
     markPropertyName << "mark" << (markNo + 1) << std::ends;
+#else
+    markPropertyName << "mark" << (markNo + 1);
+#endif
+
     return markPropertyName.str();
 }
 

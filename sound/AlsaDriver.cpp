@@ -823,7 +823,8 @@ void
 AlsaDriver::stopPlayback()
 {
     allNotesOff();
-    snd_seq_drain_output(m_midiHandle);
+    snd_seq_drop_output_buffer(m_midiHandle);
+    snd_seq_drop_output(m_midiHandle);
     m_playing = false;
 
     // send sounds-off to all client port pairs

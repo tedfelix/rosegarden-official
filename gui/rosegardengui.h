@@ -848,6 +848,7 @@ private:
     KProcess* m_sequencerProcess;
 
     ZoomSlider<double> *m_zoomSlider;
+    QLabel             *m_zoomLabel;
 
     // SequenceManager
     //
@@ -869,6 +870,7 @@ private:
     Rosegarden::timeT m_storedLoopEnd;
 
     bool m_useSequencer;
+
 };
 
 /**

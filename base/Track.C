@@ -82,7 +82,11 @@ std::string Track::toXmlString()
 
     track << " instrument=\"" << m_instrument << "\"";
 
-    track << "/>" << std::ends;
+#if (__GNUC__ < 3)
+    track << "/>"<< std::ends;
+#else
+    track << "/>";
+#endif
 
     return track.str();
 

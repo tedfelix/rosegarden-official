@@ -489,12 +489,12 @@ void RosegardenGUIApp::initZoomToolbar()
     QString minZoom = QString("%1%").arg(factors[0] * 100.0);
     QString maxZoom = QString("%1%").arg(factors[(sizeof(factors)/sizeof(factors[0])) - 1] * 100.0);
 
-    new QLabel(minZoom, zoomToolbar);
     m_zoomSlider = new ZoomSlider<double>
 	(zoomSizes, -1, QSlider::Horizontal, zoomToolbar);
     m_zoomSlider->setTracking(true);
     m_zoomSlider->setFocusPolicy(QWidget::NoFocus);
-    new QLabel(maxZoom, zoomToolbar);
+    m_zoomLabel = new QLabel(minZoom, zoomToolbar);
+    m_zoomLabel->setIndent(10);
 
     connect(m_zoomSlider, SIGNAL(valueChanged(int)),
 	    this, SLOT(slotChangeZoom(int)));
@@ -2586,6 +2586,9 @@ void RosegardenGUIApp::slotEditTimeSignature(QWidget *parent)
 
 void RosegardenGUIApp::slotChangeZoom(int)
 {
+    double duration44 = Rosegarden::TimeSignature(4,4).getBarDuration();
+    double value = double(m_zoomSlider->getCurrentSize());
+    m_zoomLabel->setText(i18n("%1%").arg(duration44/value));
     m_view->setZoomSize(m_zoomSlider->getCurrentSize());
 }
 
