@@ -1,7 +1,4 @@
 // -*- c-basic-offset: 4 -*-
-
-// -*- c-basic-offset: 4 -*-
-
 // -*- c-file-style:  "bsd" -*-
 
 // This does some rather shoddy tests on a small selection of core classes.
