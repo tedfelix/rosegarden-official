@@ -23,7 +23,7 @@
 /**
  * This class implements QCanvasItem groups, à la GnomeCanvas.
  
- An item group will keep its items in a fixed relative position when
+An item group will keep its items in a fixed relative position when
 moved, just like in a drawing program.
 
 Proper behavior requires collaboration from the QCanvasView,
@@ -32,6 +32,7 @@ first check if it's not a groupable item, and if so fetch its
 QCanvasItemGroup and move it instead.
 
 *@author Guillaume Laurent
+
 */
 
 class QCanvasItemGroup : public QCanvasItem  {
