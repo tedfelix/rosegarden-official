@@ -203,7 +203,7 @@ public:
     virtual QString getTimer(unsigned int);
     virtual QString getCurrentTimer();
     virtual void setCurrentTimer(QString);
-
+ 
     virtual void getAudioInstrumentNumbers(InstrumentId &audioInstrumentBase,
 					   int &audioInstrumentCount) {
 	audioInstrumentBase = AudioInstrumentBase;

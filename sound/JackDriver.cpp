@@ -1165,14 +1165,12 @@ JackDriver::prebufferAudio()
     if (m_jackTransportEnabled) {
 	jack_position_t position;
 	jack_transport_query(m_client, &position);
-	m_instrumentMixer->fillBuffers
+	m_bussMixer->fillBuffers
 	    (RealTime::frame2RealTime(position.frame, m_sampleRate));
-	m_bussMixer->fillBuffers();
     } else {
 */
-	m_instrumentMixer->fillBuffers
+	m_bussMixer->fillBuffers
 	    (getNextSliceStart(m_alsaDriver->getSequencerTime()));
-	m_bussMixer->fillBuffers();
 //    }
 }
 

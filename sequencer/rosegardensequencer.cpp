@@ -173,15 +173,16 @@ RosegardenSequencerApp::stop()
 
 // Get a slice of events from the GUI
 //
-Rosegarden::MappedComposition*
-RosegardenSequencerApp::fetchEvents(const Rosegarden::RealTime &start,
+void
+RosegardenSequencerApp::fetchEvents(Rosegarden::MappedComposition &composition,
+				    const Rosegarden::RealTime &start,
                                     const Rosegarden::RealTime &end,
                                     bool firstFetch)
 {
     // Always return nothing if we're stopped
     //
     if ( m_transportStatus == STOPPED || m_transportStatus == STOPPING )
-        return 0;
+        return;
 
     // If we're looping then we should get as much of the rest of
     // the right hand of the loop as possible and also events from
@@ -225,17 +226,16 @@ RosegardenSequencerApp::fetchEvents(const Rosegarden::RealTime &start,
     }
     else
 */
-        return getSlice(start, end, firstFetch);
+    getSlice(composition, start, end, firstFetch);
 }
 
 
-Rosegarden::MappedComposition*
-RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
+void
+RosegardenSequencerApp::getSlice(Rosegarden::MappedComposition &composition,
+				 const Rosegarden::RealTime &start,
                                  const Rosegarden::RealTime &end,
                                  bool firstFetch)
 {
-    Rosegarden::MappedComposition *mC = new Rosegarden::MappedComposition();
-
 //    SEQUENCER_DEBUG << "RosegardenSequencerApp::getSlice (" << start << " -> " << end << ", " << firstFetch << ")" << endl;
 
     if (firstFetch || (start < m_lastStartTime)) {
@@ -243,14 +243,13 @@ RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
         m_metaIterator->jumpToTime(start);
     }
 
-    (void)m_metaIterator->fillCompositionWithEventsUntil(firstFetch, mC, start, end);
+    (void)m_metaIterator->fillCompositionWithEventsUntil
+	(firstFetch, &composition, start, end);
 
 //     setEndOfCompReached(eventsRemaining); // don't do that, it breaks recording because
 // playing stops right after it starts.
 
     m_lastStartTime = start;
-
-    return mC;
 }
 
 
@@ -270,7 +269,7 @@ RosegardenSequencerApp::startPlaying()
     m_sequencer->initialisePlayback(m_songPosition);
 
     m_mC.clear();
-    m_mC = *fetchEvents(m_songPosition, m_songPosition + m_readAhead, true);
+    fetchEvents(m_mC, m_songPosition, m_songPosition + m_readAhead, true);
 
     // process whether we need to or not as this also processes
     // the audio queue for us
@@ -301,7 +300,7 @@ RosegardenSequencerApp::keepPlaying()
 	fetchEnd = m_loopEnd - Rosegarden::RealTime(0, 1);
     }
     if (fetchEnd > m_lastFetchSongPosition) {
-	m_mC = *fetchEvents(m_lastFetchSongPosition, fetchEnd, false);
+	fetchEvents(m_mC, m_lastFetchSongPosition, fetchEnd, false);
 	m_lastFetchSongPosition = fetchEnd;
     }
 
@@ -353,7 +352,7 @@ RosegardenSequencerApp::updateClocks()
         m_sequencer->resetPlayback(m_songPosition);
 
 	m_mC.clear();
-	m_mC = *fetchEvents(m_songPosition, m_songPosition + m_readAhead, true);
+	fetchEvents(m_mC, m_songPosition, m_songPosition + m_readAhead, true);
 
 	m_sequencer->processEventsOut(m_mC, false);
 
@@ -429,7 +428,7 @@ RosegardenSequencerApp::jumpTo(long posSec, long posNsec)
     // Now prebuffer as in startPlaying:
 
     m_mC.clear();
-    m_mC = *fetchEvents(m_songPosition, m_songPosition + m_readAhead, true);
+    fetchEvents(m_mC, m_songPosition, m_songPosition + m_readAhead, true);
 
     // process whether we need to or not as this also processes
     // the audio queue for us
@@ -1393,6 +1392,11 @@ RosegardenSequencerApp::connectMappedObjects(int id1, int id2)
 {
     m_studio->connectObjects(Rosegarden::MappedObjectId(id1),
 			     Rosegarden::MappedObjectId(id2));
+    
+    // When this happens we need to resynchronise our audio processing,
+    // and this is the easiest (and most brutal) way to do it.
+    Rosegarden::RealTime seqTime = m_sequencer->getSequencerTime();
+    jumpTo(seqTime.sec, seqTime.nsec);
 }
     
 // Disconnect two objects

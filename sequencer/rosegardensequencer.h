@@ -394,16 +394,17 @@ protected:
 
     // get events whilst handling loop
     //
-    Rosegarden::MappedComposition*
-        fetchEvents(const Rosegarden::RealTime &start,
-                    const Rosegarden::RealTime &end,
-                    bool firstFetch);
+    void fetchEvents(Rosegarden::MappedComposition &,
+		     const Rosegarden::RealTime &start,
+		     const Rosegarden::RealTime &end,
+		     bool firstFetch);
 
     // just get a slice of events between markers
     //
-    Rosegarden::MappedComposition* getSlice(const Rosegarden::RealTime &start,
-                                            const Rosegarden::RealTime &end,
-                                            bool firstFetch);
+    void getSlice(Rosegarden::MappedComposition &,
+		  const Rosegarden::RealTime &start,
+		  const Rosegarden::RealTime &end,
+		  bool firstFetch);
 
     // mmap-related stuff
     MmappedSegment* mmapSegment(const QString&);

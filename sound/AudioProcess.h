@@ -93,7 +93,7 @@ public:
      * Prebuffer.  This should be called only when the transport is
      * not running.
      */
-    void fillBuffers();
+    void fillBuffers(const RealTime &currentTime);
 
     /**
      * Empty and discard buffer contents.
@@ -178,7 +178,10 @@ public:
 
     /**
      * Prebuffer.  This should be called only when the transport is
-     * not running.
+     * not running. 
+     *
+     * This function is called from AudioBussMixer::fillBuffers, so
+     * you do not normally need to call it yourself.
      */
     void fillBuffers(const RealTime &currentTime);
 

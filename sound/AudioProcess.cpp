@@ -279,12 +279,13 @@ AudioBussMixer::generateBuffers()
 }	
 
 void
-AudioBussMixer::fillBuffers()
+AudioBussMixer::fillBuffers(const RealTime &currentTime)
 {
 #ifdef DEBUG_BUSS_MIXER
     std::cerr << "AudioBussMixer::fillBuffers" << std::endl;
 #endif
     emptyBuffers();
+    m_instrumentMixer->fillBuffers(currentTime);
     kick();
 }
 
