@@ -242,13 +242,18 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
             }
 
             // Insert Audio event
-            Rosegarden::MappedEvent *me =
-                    new Rosegarden::MappedEvent(track->getInstrument(),
-                                                (*it)->getAudioFileId(),
-                                                segmentStart,
-                                                audioDuration,
-                                                audioStart);
-            m_mC.insert(me);
+            try
+            {
+                Rosegarden::MappedEvent *me =
+                        new Rosegarden::MappedEvent(track->getInstrument(),
+                                                    (*it)->getAudioFileId(),
+                                                    segmentStart,
+                                                    audioDuration,
+                                                    audioStart);
+                m_mC.insert(me);
+            }
+            catch(...) {;}
+
             continue; // next Segment
         }
 
@@ -403,13 +408,20 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 	    eventTime = eventTime + comp.getRealTimeDifference
 		(playTime, playTime + (*it)->getDelay());
 
-	    // Make mapped event
-	    // 
-	    Rosegarden::MappedEvent *mE =
-		new Rosegarden::MappedEvent(track->getInstrument(),
-                                            **j,
-                                            eventTime,
-                                            duration);
+	    Rosegarden::MappedEvent *mE;
+            try
+            {
+	        // Make mapped event
+	        // 
+	        mE = new Rosegarden::MappedEvent(track->getInstrument(),
+                                                 **j,
+                                                 eventTime,
+                                                 duration);
+            }
+            catch(...)
+            {
+                continue;
+            }
 
             // Do some more tweaking if we've got a note
             //
@@ -1047,7 +1059,13 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 #ifdef HAVE_ALSA
             (*i)->setInstrument(id);
 #endif
-            retMC.insert(new Rosegarden::MappedEvent(*i));
+            try
+            {
+                retMC.insert(new Rosegarden::MappedEvent(*i));
+            }
+            catch(...)
+            {
+            }
         }
 
 #ifdef HAVE_ALSA
@@ -1225,23 +1243,31 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
     //
     if (barStart.first >= sliceStart && barStart.first <= sliceEnd)
     {
-        MappedEvent *me =
-            new MappedEvent(metronome->instrument,
-                            metronome->pitch,
-                            config.get<Int>("metronomebarvelocity"),
-                            comp.getElapsedRealTime(barStart.first),
-                            config.get<RealTimeT>("metronomeduration"));
-        m_mC.insert(me);
+        try
+        {
+            MappedEvent *me =
+                    new MappedEvent(metronome->instrument,
+                                    metronome->pitch,
+                                    config.get<Int>("metronomebarvelocity"),
+                                    comp.getElapsedRealTime(barStart.first),
+                                    config.get<RealTimeT>("metronomeduration"));
+            m_mC.insert(me);
+        }
+        catch(...) {;}
     }
     else if (barEnd.first >= sliceStart && barEnd.first <= sliceEnd)
     {
-        MappedEvent *me =
-            new MappedEvent(metronome->instrument,
-                            metronome->pitch,
-                            config.get<Int>("metronomebarvelocity"),
-                            comp.getElapsedRealTime(barEnd.first),
-                            config.get<RealTimeT>("metronomeduration"));
-        m_mC.insert(me);
+        try
+        {
+            MappedEvent *me =
+                    new MappedEvent(metronome->instrument,
+                                    metronome->pitch,
+                                    config.get<Int>("metronomebarvelocity"),
+                                    comp.getElapsedRealTime(barEnd.first),
+                                    config.get<RealTimeT>("metronomeduration"));
+            m_mC.insert(me);
+        }
+        catch(...) {;}
     }
 
     // Is this solution for the beats bulletproof?  I'm not so sure.
@@ -1256,12 +1282,18 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
     {
         if (i >= sliceStart && i <= sliceEnd)
         {
-            MappedEvent *me =new MappedEvent(metronome->instrument,
-                                             metronome->pitch,
-                                             config.get<Int>("metronomebeatvelocity"),
-                                             comp.getElapsedRealTime(i),
-                                             config.get<RealTimeT>("metronomeduration"));
-            m_mC.insert(me);
+            try
+            {
+                MappedEvent *me = new MappedEvent(metronome->instrument,
+                                                  metronome->pitch,
+                                                  config.get<Int>(
+                                                      "metronomebeatvelocity"),
+                                                  comp.getElapsedRealTime(i),
+                                                  config.get<RealTimeT>(
+                                                      "metronomeduration"));
+                m_mC.insert(me);
+            }
+            catch(...) {;}
         }
     }
 }
@@ -1308,16 +1340,32 @@ SequenceManager::preparePlayback()
             //
             if ((*it)->sendsBankSelect())
             {
-                mE = new MappedEvent((*it)->getId(),
-                                     Rosegarden::MappedEvent::MidiController,
-                                     Rosegarden::MIDI_CONTROLLER_BANK_MSB,
-                                     (*it)->getMSB());
+                try
+                {
+                   mE = new MappedEvent((*it)->getId(),
+                                        Rosegarden::MappedEvent::MidiController,
+                                        Rosegarden::MIDI_CONTROLLER_BANK_MSB,
+                                        (*it)->getMSB());
+                }
+                catch(...)
+                {
+                    continue;
+                }
+
                 mC.insert(mE);
 
-                mE = new MappedEvent((*it)->getId(),
-                                     Rosegarden::MappedEvent::MidiController,
-                                     Rosegarden::MIDI_CONTROLLER_BANK_LSB,
-                                     (*it)->getLSB());
+                try
+                {
+                    mE = new MappedEvent((*it)->getId(),
+                                        Rosegarden::MappedEvent::MidiController,
+                                        Rosegarden::MIDI_CONTROLLER_BANK_LSB,
+                                        (*it)->getLSB());
+                }
+                catch(...)
+                {
+                    continue;
+                }
+
                 mC.insert(mE);
             }
 
@@ -1325,9 +1373,17 @@ SequenceManager::preparePlayback()
             //
             if ((*it)->sendsProgramChange())
             {
-                mE = new MappedEvent((*it)->getId(),
+                try
+                {
+                    mE = new MappedEvent((*it)->getId(),
                                      Rosegarden::MappedEvent::MidiProgramChange,
                                      (*it)->getProgramChange());
+                }
+                catch(...)
+                {
+                    continue;
+                } 
+
                 mC.insert(mE);
             }
 
@@ -1335,10 +1391,18 @@ SequenceManager::preparePlayback()
             //
             if ((*it)->sendsPan())
             {
-                mE = new MappedEvent((*it)->getId(),
-                                     Rosegarden::MappedEvent::MidiController,
-                                     Rosegarden::MIDI_CONTROLLER_PAN,
-                                     (*it)->getPan());
+                try
+                {
+                    mE = new MappedEvent((*it)->getId(),
+                                         Rosegarden::MappedEvent::MidiController,
+                                         Rosegarden::MIDI_CONTROLLER_PAN,
+                                         (*it)->getPan());
+                }
+                catch(...)
+                {
+                    continue;
+                }
+
                 mC.insert(mE);
             }
         }

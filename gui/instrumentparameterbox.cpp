@@ -351,14 +351,18 @@ InstrumentParameterBox::slotActivateProgramChange(bool value)
     m_programValue->setDisabled(!value);
     populateProgramList();
 
-    Rosegarden::MappedEvent *mE = 
-        new Rosegarden::MappedEvent(m_selectedInstrument->getId(),
-                                    Rosegarden::MappedEvent::MidiProgramChange,
-                                    m_selectedInstrument->getProgramChange(),
-                                    (Rosegarden::MidiByte)0);
-    // Send the controller change
-    //
-    emit sendMappedEvent(mE);
+    try
+    {
+        Rosegarden::MappedEvent *mE = 
+         new Rosegarden::MappedEvent(m_selectedInstrument->getId(),
+                                     Rosegarden::MappedEvent::MidiProgramChange,
+                                     m_selectedInstrument->getProgramChange(),
+                                     (Rosegarden::MidiByte)0);
+        // Send the controller change
+        //
+        emit sendMappedEvent(mE);
+    }
+    catch(...) {;}
 
     emit changeInstrumentLabel(m_selectedInstrument->getId(),
 			       strtoqstr(m_selectedInstrument->
@@ -424,14 +428,19 @@ InstrumentParameterBox::slotSelectProgram(int index)
 
     m_selectedInstrument->setProgramChange(prg->program);
 
-    Rosegarden::MappedEvent *mE = 
-        new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                    Rosegarden::MappedEvent::MidiProgramChange,
-                                    prg->program,
-                                    (Rosegarden::MidiByte)0);
-    // Send the controller change
-    //
-    emit sendMappedEvent(mE);
+    try
+    {
+        Rosegarden::MappedEvent *mE = 
+         new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                     Rosegarden::MappedEvent::MidiProgramChange,
+                                     prg->program,
+                                     (Rosegarden::MidiByte)0);
+        // Send the controller change
+        //
+        emit sendMappedEvent(mE);
+    }
+    catch(...) {;}
+
     emit changeInstrumentLabel(m_selectedInstrument->getId(),
 			       strtoqstr(m_selectedInstrument->
 					 getProgramName()));
@@ -447,15 +456,18 @@ InstrumentParameterBox::slotSelectPan(int index)
 
     m_selectedInstrument->setPan(index);
 
-    Rosegarden::MappedEvent *mE = 
-        new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                    Rosegarden::MappedEvent::MidiController,
-                                    Rosegarden::MIDI_CONTROLLER_PAN,
-                                    (Rosegarden::MidiByte)index);
-    // Send the controller change
-    //
-    emit sendMappedEvent(mE);
-
+    try
+    {
+        Rosegarden::MappedEvent *mE = 
+         new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                     Rosegarden::MappedEvent::MidiController,
+                                     Rosegarden::MIDI_CONTROLLER_PAN,
+                                     (Rosegarden::MidiByte)index);
+        // Send the controller change
+        //
+        emit sendMappedEvent(mE);
+    }
+    catch(...) {;}
 }
 
 void
@@ -483,22 +495,26 @@ InstrumentParameterBox::slotSelectBank(int index)
     // repopulate program list
     populateProgramList();
 
-    Rosegarden::MappedEvent *mE = 
-        new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                    Rosegarden::MappedEvent::MidiController,
-                                    Rosegarden::MIDI_CONTROLLER_BANK_MSB,
-                                    bank->msb);
-    // Send the msb
-    //
-    emit sendMappedEvent(mE);
+    try
+    {
+        Rosegarden::MappedEvent *mE = 
+            new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                        Rosegarden::MappedEvent::MidiController,
+                                        Rosegarden::MIDI_CONTROLLER_BANK_MSB,
+                                        bank->msb);
+        // Send the msb
+        //
+        emit sendMappedEvent(mE);
 
-    mE = new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                    Rosegarden::MappedEvent::MidiController,
-                                    Rosegarden::MIDI_CONTROLLER_BANK_LSB,
-                                    bank->lsb);
-    // Send the lsb
-    //
-    emit sendMappedEvent(mE);
+        mE = new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                        Rosegarden::MappedEvent::MidiController,
+                                        Rosegarden::MIDI_CONTROLLER_BANK_LSB,
+                                        bank->lsb);
+        // Send the lsb
+        //
+        emit sendMappedEvent(mE);
+    }
+    catch(...) {;}
 
     // also need to resend Program change to activate new program
     slotSelectProgram(m_selectedInstrument->getProgramChange());

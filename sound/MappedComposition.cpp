@@ -125,13 +125,17 @@ operator>>(QDataStream &dS, MappedComposition *mC)
 	dS >> audioStartMarker.sec;
 	dS >> audioStartMarker.usec;
 
-	mC->insert(new MappedEvent(instrument,
-                                   (MappedEvent::MappedEventType)type,
-                                   data1,
-                                   data2,
-                                   absTime,
-                                   duration,
-                                   audioStartMarker));
+        try
+        {
+	    mC->insert(new MappedEvent(instrument,
+                                       (MappedEvent::MappedEventType)type,
+                                       data1,
+                                       data2,
+                                       absTime,
+                                       duration,
+                                       audioStartMarker));
+        }
+        catch(...) {;}
 
 	sliceSize--;
 
@@ -172,13 +176,17 @@ operator>>(QDataStream &dS, MappedComposition &mC)
 	dS >> audioStartMarker.sec;
 	dS >> audioStartMarker.usec;
 
-	mC.insert(new MappedEvent(instrument,
-                                  (MappedEvent::MappedEventType)type,
-                                  data1,
-                                  data2,
-                                  absTime,
-                                  duration,
-                                  audioStartMarker));
+        try
+        {
+	    mC.insert(new MappedEvent(instrument,
+                                      (MappedEvent::MappedEventType)type,
+                                      data1,
+                                      data2,
+                                      absTime,
+                                      duration,
+                                      audioStartMarker));
+        }
+        catch(...) {;}
 
 	sliceSize--;
 

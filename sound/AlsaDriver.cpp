@@ -1063,13 +1063,17 @@ AlsaDriver::processAudioQueue(const RealTime &playLatency, bool now)
              // Simple event to inform that AudioFileId has
              // now stopped playing.
              //
-             MappedEvent *mE =
-                 new MappedEvent((*it)->getAudioFile()->getId(),
-                                 MappedEvent::AudioStopped,
-                                 0);
+             try
+             {
+                 MappedEvent *mE =
+                     new MappedEvent((*it)->getAudioFile()->getId(),
+                                     MappedEvent::AudioStopped,
+                                     0);
 
-             // send completion event
-             insertMappedEventForReturn(mE);
+                 // send completion event
+                 insertMappedEventForReturn(mE);
+             }
+             catch(...) {;}
         }
     }
 
@@ -1849,14 +1853,18 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
             // Simple event to inform that AudioFileId has
             // now stopped playing.
             //
-            MappedEvent *mE =
-                new MappedEvent((inst)->getAudioMonitoringInstrument(),
-                                MappedEvent::AudioLevel,
-                                0, // file id always empty
-                                int(inputLevel * 127.0));
+            try
+            {
+                MappedEvent *mE =
+                    new MappedEvent((inst)->getAudioMonitoringInstrument(),
+                                    MappedEvent::AudioLevel,
+                                    0, // file id always empty
+                                    int(inputLevel * 127.0));
 
-            // send completion event
-            inst->insertMappedEventForReturn(mE);
+                // send completion event
+                inst->insertMappedEventForReturn(mE);
+            }
+            catch(...) {;}
 
             if (inst->getRecordStatus() == RECORD_AUDIO)
             {
@@ -2000,13 +2008,17 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                     // Simple event to inform that AudioFileId has
                     // now stopped playing.
                     //
-                    MappedEvent *mE =
-                        new MappedEvent((*it)->getInstrument(),
-                                        MappedEvent::AudioStopped,
-                                        (*it)->getAudioFile()->getId());
+                    try
+                    {
+                        MappedEvent *mE =
+                            new MappedEvent((*it)->getInstrument(),
+                                            MappedEvent::AudioStopped,
+                                            (*it)->getAudioFile()->getId());
 
-                    // send completion event
-                    inst->insertMappedEventForReturn(mE);
+                        // send completion event
+                        inst->insertMappedEventForReturn(mE);
+                    }
+                    catch(...) {;}
                 }
 
 
@@ -2173,17 +2185,21 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
             {
                 if ((*it)->getStatus() == PlayableAudioFile::PLAYING)
                 {
-                    MappedEvent *mE =
-                        new MappedEvent((*it)->getInstrument(),
-                                        MappedEvent::AudioLevel,
+                    try
+                    {
+                        MappedEvent *mE =
+                            new MappedEvent((*it)->getInstrument(),
+                                            MappedEvent::AudioLevel,
     
-                                        // hmm, watch conversion here
+                                            // hmm, watch conversion here
+    
+                                            (*it)->getAudioFile()->getId(),
+                                            int(peakLevels[i++] * 127.0));
 
-                                        (*it)->getAudioFile()->getId(),
-                                        int(peakLevels[i++] * 127.0)); // velocity
-
-                    // send completion event
-                    inst->insertMappedEventForReturn(mE);
+                        // send completion event
+                        inst->insertMappedEventForReturn(mE);
+                    }
+                    catch(...) {;}
                 }
             }
 

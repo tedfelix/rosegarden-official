@@ -2880,16 +2880,21 @@ RosegardenGUIApp::slotPlayAudioFile(unsigned int id,
     if (aF == 0)
         return;
 
-    Rosegarden::MappedEvent *mE =
-        new Rosegarden::MappedEvent(m_doc->getStudio().
+    try
+    {
+        Rosegarden::MappedEvent *mE =
+          new Rosegarden::MappedEvent(m_doc->getStudio().
                                         getAudioPreviewInstrument(),
-                                    id,
-                                    Rosegarden::RealTime(-120, 0),  // event time
-                                    duration,                    // duration
-                                    startTime);                  // start index
+                                      id,
+                                      Rosegarden::RealTime(-120, 0),
+                                      duration,                  // duration
+                                      startTime);                // start index
 
-    if (m_seqManager)
-        m_seqManager->sendMappedEvent(mE);
+        if (m_seqManager)
+            m_seqManager->sendMappedEvent(mE);
+    }
+    catch(...) {;}
+
 }
 
 // Add an audio file to the sequencer - the AudioManagerDialog has
@@ -3025,14 +3030,18 @@ RosegardenGUIApp::slotCancelAudioPlayingFile(Rosegarden::AudioFileId id)
     if (aF == 0)
         return;
 
-    Rosegarden::MappedEvent *mE =
-        new Rosegarden::MappedEvent(m_doc->getStudio().
-                                        getAudioPreviewInstrument(),
-                                    Rosegarden::MappedEvent::AudioCancel,
-                                    id);
+    try
+    {
+        Rosegarden::MappedEvent *mE =
+            new Rosegarden::MappedEvent(m_doc->getStudio().
+                                            getAudioPreviewInstrument(),
+                                        Rosegarden::MappedEvent::AudioCancel,
+                                        id);
 
-    if (m_seqManager)
-        m_seqManager->sendMappedEvent(mE);
+        if (m_seqManager)
+            m_seqManager->sendMappedEvent(mE);
+    }
+    catch(...) {;}
 }
 
 

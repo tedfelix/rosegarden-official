@@ -124,9 +124,7 @@ MappedEvent::MappedEvent(InstrumentId id,
     }
     else
     {
-        std::cerr << "MappedEvent::MappedEvent - "
-                  << "can't handle ("
-                  << e.getType() << ") internal event yet" << std::endl;
+        throw(std::string("unsupported MappedEvent type"));
     }
 }
 
