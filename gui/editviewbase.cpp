@@ -99,58 +99,17 @@ EditViewBase::~EditViewBase()
 {
     getCommandHistory()->detachView(actionCollection());
     m_viewNumberPool.erase(m_viewNumber);
-    slotSaveOptions();
+//     slotSaveOptions();
 }
 
 void EditViewBase::slotSaveOptions()
 {
-    m_config->writeEntry("Geometry", size());
-
-    // FIXME: it seems this one doesn't exist in KDE3.1
-    if (getToggleAction("options_show_toolbar"))
-        m_config->writeEntry("Show Toolbar",
-                             getToggleAction("options_show_toolbar")->isChecked());
-
-    if (getToggleAction("options_show_statusbar"))
-        m_config->writeEntry("Show Statusbar",
-                             getToggleAction("options_show_statusbar")->isChecked());
-
-    toolBar()->saveSettings(m_config, m_config->group() + " Toolbar");
 }
 
 void EditViewBase::readOptions()
 {
-    QSize size(m_config->readSizeEntry("Geometry"));
-
-    if (!size.isEmpty()) {
-        resize(size);
-    }
-
-    // Read toolbars visibility
-    bool opt;
-
-    opt = m_config->readBoolEntry("Show Toolbar", true);
-
-    // FIXME: it seems this one doesn't exist in KDE3.1
-    if (getToggleAction("options_show_toolbar"))
-        getToggleAction("options_show_toolbar")->setChecked(opt);
-
-    if (opt)
-        toolBar()->show();
-    else
-        toolBar()->hide();
-
-    if (getToggleAction("options_show_statusbar")) {
-
-        opt = m_config->readBoolEntry("Show Statusbar", true);
-        getToggleAction("options_show_statusbar")->setChecked(opt);
-        if (opt)
-            statusBar()->show();
-        else
-            statusBar()->hide();
-    }
-    
-    toolBar()->applySettings(m_config, m_config->group() + " Toolbar");
+    getToggleAction("options_show_statusbar")->setChecked(!statusBar()->isHidden());
+    getToggleAction("options_show_toolbar")->setChecked(!toolBar()->isHidden());
 }
 
 void EditViewBase::setupActions(QString rcFileName)

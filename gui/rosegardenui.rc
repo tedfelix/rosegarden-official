@@ -69,6 +69,7 @@
   <Menu  name="settings"><text>&amp;Settings</text>
          <Action name="show_tracks_toolbar"        append="show_merge" />
          <Action name="show_transport_toolbar"     append="show_merge" />
+         <Action name="show_zoom_toolbar"          append="show_merge" />
   <Separator append="show_merge" />
          <Action name="show_transport"             append="show_merge" />
   <Separator append="show_merge" />

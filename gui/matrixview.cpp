@@ -165,8 +165,6 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     initActionsToolbar();
     initZoomToolbar();
 
-    readOptions();
-
     // Connect vertical scrollbars between matrix and piano
     //
     connect(m_canvasView->verticalScrollBar(), SIGNAL(valueChanged(int)),
@@ -303,6 +301,10 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     // default zoom
     slotChangeHorizontalZoom(-1);
 
+    // All toolbars should be created before this is called
+    setAutoSaveSettings("MatrixView", true);
+
+    readOptions();
 }
 
 MatrixView::~MatrixView()
@@ -343,39 +345,13 @@ void MatrixView::slotSaveOptions()
 {        
     m_config->setGroup("Matrix Options");
     EditView::slotSaveOptions();
-
-    m_config->writeEntry("Show Tools Toolbar", true); // in case we
-                                                      // may want to
-                                                      // let the user
-                                                      // hide this
-                                                      // toolbar in the future
-    toolBar("toolsToolBar")->saveSettings(m_config,
-                                          "Matrix Options toolsToolbar");
-    toolBar("zoomToolBar")->saveSettings(m_config,
-                                         "Matrix Options zoomToolbar");
-    toolBar("actionsToolBar")->saveSettings(m_config,
-                                            "Matrix Options actionsToolbar");
 }
 
 void MatrixView::readOptions()
 {
-    m_config->setGroup("Matrix Options");
     EditView::readOptions();
-
-    bool opt;
-
-    opt = m_config->readBoolEntry("Show Tools Toolbar", true);
-    // at the moment we always show this toolbar - the view isn't of
-    // much use without it
-
-    toolBar("toolsToolBar")->applySettings(m_config,
-                                           "Matrix Options toolsToolbar");
-
-    toolBar("zoomToolBar")->applySettings(m_config,
-                                          "Matrix Options zoomToolbar");
-
-    toolBar("actionsToolBar")->applySettings(m_config,
-                                             "Matrix Options actionsToolbar");
+    m_config->setGroup("Matrix Options");
+    // no options to read at the moment
 }
 
 void MatrixView::setupActions()

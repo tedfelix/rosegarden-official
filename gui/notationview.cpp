@@ -273,8 +273,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                                         true, getCentralFrame());
     setBottomBarButtons(m_bottomBarButtons);
 
-    readOptions();
-
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new NotationStaff(canvas(), segments[i], 0, // snap
                                              i, this, false, width() - 50,
@@ -408,6 +406,11 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_inhibitRefresh = false;
 
     setConfigDialogPageIndex(1);
+
+    // All toolbars should be created before this is called
+    setAutoSaveSettings("NotationView", true);
+
+    readOptions();
 }
 
 NotationView::~NotationView()
@@ -514,56 +517,25 @@ void NotationView::slotSaveOptions()
     m_config->setGroup("Notation Options");
     EditView::slotSaveOptions();
 
-    m_config->writeEntry("Show Notes Toolbar",       getToggleAction("show_notes_toolbar")->isChecked());
-    m_config->writeEntry("Show Rests Toolbar",       getToggleAction("show_rests_toolbar")->isChecked());
-    m_config->writeEntry("Show Clefs Toolbar",       getToggleAction("show_clefs_toolbar")->isChecked());
-    m_config->writeEntry("Show Font Toolbar",        getToggleAction("show_font_toolbar")->isChecked());
-    m_config->writeEntry("Show Accidentals Toolbar", getToggleAction("show_accidentals_toolbar")->isChecked());
-
     m_config->writeEntry("Show Chord Name Ruler", m_chordNamesVisible);
     m_config->writeEntry("Show Tempo Ruler", m_temposVisible);
-
-    toolBar("notesToolBar")->saveSettings(m_config, "Notation Options notesToolBar");
-    toolBar("restsToolBar")->saveSettings(m_config, "Notation Options restsToolBar");
-    toolBar("clefsToolBar")->saveSettings(m_config, "Notation Options clefsToolBar");
-    toolBar("fontToolBar")->saveSettings(m_config, "Notation Options fontToolBar");
-    toolBar("accidentalsToolBar")->saveSettings(m_config, "Notation Options accidentalsToolBar");
-    toolBar("toolsToolBar")->saveSettings(m_config, "Notation Options toolsToolBar");
-    toolBar("transportToolBar")->saveSettings(m_config, "Notation Options transportToolBar");
-    toolBar("textToolBar")->saveSettings(m_config, "Notation Options textToolBar");
-    toolBar("metaToolBar")->saveSettings(m_config, "Notation Options metaToolBar");
+    m_config->writeEntry("Show Annotations", m_annotationsVisible);
 }
 
 void NotationView::readOptions()
 {
-    m_config->setGroup("Notation Options");
     EditView::readOptions();
 
+    getToggleAction("show_notes_toolbar")      ->setChecked(!toolBar("notesToolBar")      ->isHidden());
+    getToggleAction("show_rests_toolbar")      ->setChecked(!toolBar("restsToolBar")      ->isHidden());
+    getToggleAction("show_clefs_toolbar")      ->setChecked(!toolBar("clefsToolBar")      ->isHidden());
+    getToggleAction("show_font_toolbar")       ->setChecked(!toolBar("fontToolBar")       ->isHidden());
+    getToggleAction("show_transport_toolbar")  ->setChecked(!toolBar("transportToolBar")  ->isHidden());
+    getToggleAction("show_accidentals_toolbar")->setChecked(!toolBar("accidentalsToolBar")->isHidden());
+
+    m_config->setGroup("Notation Options");
+
     bool opt;
-
-    opt = m_config->readBoolEntry("Show Notes Toolbar", true);
-    getToggleAction("show_notes_toolbar")->setChecked(opt);
-    toggleNamedToolBar("notesToolBar", &opt);
-
-    opt = m_config->readBoolEntry("Show Rests Toolbar", true);
-    getToggleAction("show_rests_toolbar")->setChecked(opt);
-    toggleNamedToolBar("restsToolBar", &opt);
-
-    opt = m_config->readBoolEntry("Show Clefs Toolbar", false);
-    getToggleAction("show_clefs_toolbar")->setChecked(opt);
-    toggleNamedToolBar("clefsToolBar", &opt);
-
-    opt = m_config->readBoolEntry("Show Font Toolbar", true);
-    getToggleAction("show_font_toolbar")->setChecked(opt);
-    toggleNamedToolBar("fontToolBar", &opt);
-
-    opt = m_config->readBoolEntry("Show Transport Toolbar", false);
-    getToggleAction("show_transport_toolbar")->setChecked(opt);
-    toggleNamedToolBar("transportToolBar", &opt);
-
-    opt = m_config->readBoolEntry("Show Accidentals Toolbar", true);
-    getToggleAction("show_accidentals_toolbar")->setChecked(opt);
-    toggleNamedToolBar("accidentalsToolBar", &opt);
 
     opt = m_config->readBoolEntry("Show Chord Name Ruler", true);
     if (opt) m_chordNameRuler->show();
@@ -581,19 +553,6 @@ void NotationView::readOptions()
     m_annotationsVisible = opt;
     getToggleAction("show_annotations")->setChecked(opt);
 
-    opt = m_config->readBoolEntry("Show Accidentals Toolbar", true);
-    getToggleAction("show_accidentals_toolbar")->setChecked(opt);
-    toggleNamedToolBar("accidentalsToolBar", &opt);
-
-    toolBar("notesToolBar")->applySettings(m_config, "Notation Options notesToolBar");
-    toolBar("restsToolBar")->applySettings(m_config, "Notation Options restsToolBar");
-    toolBar("clefsToolBar")->applySettings(m_config, "Notation Options clefsToolBar");
-    toolBar("fontToolBar")->applySettings(m_config, "Notation Options fontToolBar");
-    toolBar("accidentalsToolBar")->applySettings(m_config, "Notation Options accidentalsToolBar");
-    toolBar("toolsToolBar")->applySettings(m_config, "Notation Options toolsToolBar");
-    toolBar("transportToolBar")->applySettings(m_config, "Notation Options transportToolBar");
-    toolBar("textToolBar")->applySettings(m_config, "Notation Options textToolBar");
-    toolBar("metaToolBar")->applySettings(m_config, "Notation Options metaToolBar");
 }
 
 void NotationView::setupActions()

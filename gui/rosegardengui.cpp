@@ -154,8 +154,6 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
     connect(m_doc, SIGNAL(loopChanged(Rosegarden::timeT, Rosegarden::timeT)),
             this,  SLOT(slotSetLoop(Rosegarden::timeT, Rosegarden::timeT)));
 
-    readOptions();
-
     // Now autoload
     //
 #ifdef RGKDE3
@@ -164,6 +162,11 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
     stateChanged("segment_selected", KXMLGUIClient::StateReverse);
     slotTestClipboard();
 #endif
+
+    // All toolbars should be created before this is called
+    setAutoSaveSettings("MainView", true);
+
+    readOptions();
 }
 
 RosegardenGUIApp::~RosegardenGUIApp()
@@ -229,6 +232,10 @@ void RosegardenGUIApp::setupActions()
     m_viewTransportToolBar = new KToggleAction(i18n("Show Trans&port Toolbar"), 0, this,
                                             SLOT(slotToggleTransportToolBar()), actionCollection(),
                                             "show_transport_toolbar");
+
+    m_viewZoomToolBar = new KToggleAction(i18n("Show &Zoom Toolbar"), 0, this,
+                                            SLOT(slotToggleZoomToolBar()), actionCollection(),
+                                            "show_zoom_toolbar");
 
     m_viewStatusBar = KStdAction::showStatusbar(this, SLOT(slotToggleStatusBar()), actionCollection());
 
@@ -768,25 +775,14 @@ RosegardenGUIDoc *RosegardenGUIApp::getDocument() const
 void RosegardenGUIApp::slotSaveOptions()
 {	
     m_config->setGroup("General Options");
-    m_config->writeEntry("Geometry", size());
-    m_config->writeEntry("Show Toolbar",                 m_viewToolBar->isChecked());
-    m_config->writeEntry("Show Tracks Toolbar",          m_viewTracksToolBar->isChecked());
     m_config->writeEntry("Show Transport",               m_viewTransport->isChecked());
-    m_config->writeEntry("Show Transport Toolbar",       m_viewTransportToolBar->isChecked());
     m_config->writeEntry("Expanded Transport",           m_transport->isExpanded());
     m_config->writeEntry("Show Track labels",            m_viewTrackLabels->isChecked());
-    m_config->writeEntry("Show Statusbar",               m_viewStatusBar->isChecked());
     m_config->writeEntry("Show Segment Parameters",      m_viewSegmentParameters->isChecked());
     m_config->writeEntry("Show Instrument Parameters",   m_viewInstrumentParameters->isChecked());
     m_config->writeEntry("Show Rulers",                  m_viewRulers->isChecked());
     m_config->writeEntry("Show Tempo Ruler",             m_viewTempoRuler->isChecked());
     m_config->writeEntry("Show Previews",                m_viewPreviews->isChecked());
-
-
-    m_config->writeEntry("ToolBarPos", (int) toolBar("mainToolBar")->barPos());
-    m_config->writeEntry("TracksToolBarPos", (int) toolBar("tracksToolBar")->barPos());
-    m_config->writeEntry("TransportToolBarPos", (int) toolBar("transportToolBar")->barPos());
-    m_config->writeEntry("ZoomToolBarPos", (int) toolBar("zoomToolBar")->barPos());
 
     m_fileRecent->saveEntries(m_config);
 }
@@ -794,6 +790,14 @@ void RosegardenGUIApp::slotSaveOptions()
 
 void RosegardenGUIApp::readOptions()
 {
+    // Statusbar and toolbars toggling action status
+    //
+    m_viewStatusBar       ->setChecked(!statusBar()                ->isHidden());
+    m_viewToolBar         ->setChecked(!toolBar()                  ->isHidden());
+    m_viewTracksToolBar   ->setChecked(!toolBar("tracksToolBar")   ->isHidden());
+    m_viewTransportToolBar->setChecked(!toolBar("transportToolBar")->isHidden());
+    m_viewZoomToolBar     ->setChecked(!toolBar("zoomToolBar")     ->isHidden());
+
     bool opt;
 
     m_config->setGroup("General Options");
@@ -802,23 +806,6 @@ void RosegardenGUIApp::readOptions()
     MatrixSelector::setGreedyMode(opt);
     NotationSelector::setGreedyMode(opt);
     SegmentSelector::setGreedyMode(opt);
-
-    // status bar settings
-    opt = m_config->readBoolEntry("Show Statusbar", true);
-    m_viewStatusBar->setChecked(opt);
-    slotToggleStatusBar();
-
-    opt = m_config->readBoolEntry("Show Toolbar", true);
-    m_viewToolBar->setChecked(opt);
-    slotToggleToolBar();
-
-    opt = m_config->readBoolEntry("Show Tracks Toolbar", true);
-    m_viewTracksToolBar->setChecked(opt);
-    slotToggleTracksToolBar();
-
-    opt = m_config->readBoolEntry("Show Transport Toolbar", false);
-    m_viewTransportToolBar->setChecked(opt);
-    slotToggleTransportToolBar();
 
     opt = m_config->readBoolEntry("Show Transport", true);
     m_viewTransport->setChecked(opt);
@@ -854,20 +841,6 @@ void RosegardenGUIApp::readOptions()
     m_viewPreviews->setChecked(opt);
     slotTogglePreviews();
 
-    // bar position settings
-    KToolBar::BarPosition toolBarPos;
-    toolBarPos=(KToolBar::BarPosition) m_config->readNumEntry("ToolBarPos", KToolBar::Top);
-    toolBar("mainToolBar")->setBarPos(toolBarPos);
-
-    toolBarPos=(KToolBar::BarPosition) m_config->readNumEntry("TracksToolBarPos", KToolBar::Top);
-    toolBar("tracksToolBar")->setBarPos(toolBarPos);
-
-    toolBarPos=(KToolBar::BarPosition) m_config->readNumEntry("TransportToolBarPos", KToolBar::Top);
-    toolBar("transportToolBar")->setBarPos(toolBarPos);
-	
-    toolBarPos=(KToolBar::BarPosition) m_config->readNumEntry("ZoomToolBarPos", KToolBar::Top);
-    toolBar("zoomToolBar")->setBarPos(toolBarPos);
-	
     // initialise the recent file list
     //
     m_fileRecent->loadEntries(m_config);
@@ -1469,6 +1442,16 @@ void RosegardenGUIApp::slotToggleTransportToolBar()
         toolBar("transportToolBar")->show();
     else
         toolBar("transportToolBar")->hide();
+}
+
+void RosegardenGUIApp::slotToggleZoomToolBar()
+{
+    KTmpStatusMsg msg(i18n("Toggle the zoom toolbar..."), this);
+
+    if (m_viewZoomToolBar->isChecked())
+        toolBar("zoomToolBar")->show();
+    else
+        toolBar("zoomToolBar")->hide();
 }
 
 void RosegardenGUIApp::slotToggleTransport()
