@@ -1102,6 +1102,24 @@ static inline void denormalKill(float *buffer, int size)
 }
 
 void
+AudioInstrumentMixer::setInstrumentChannels(InstrumentId id, int channels)
+{
+    //!!!
+}
+
+void
+AudioInstrumentMixer::setInstrumentLevel(InstrumentId id, float dB)
+{
+    //!!!
+}
+
+void
+AudioInstrumentMixer::setInstrumentPan(InstrumentId id, float pan)
+{
+    //!!!
+}
+
+void
 AudioInstrumentMixer::processBlocks(bool forceFill, bool &readSomething)
 {
 #ifdef DEBUG_MIXER

@@ -105,12 +105,6 @@ int main(int argc, char *argv[])
     //
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     KApplication app;
-    std::vector<std::string> jackArgs;
-
-    // Construct JACK args
-    //
-    for (int i = 0; i < args->count(); i++)
-        jackArgs.push_back(std::string(args->arg(i)));
 
     if (app.isRestored())
     {
@@ -118,12 +112,7 @@ int main(int argc, char *argv[])
     }
     else
     {
-        roseSeq = new RosegardenSequencerApp(jackArgs);
-
-        // we don't show() the sequencer application as we're just taking
-        // advantage of DCOP/KApplication and there's nothing to show().
-
-        args->clear();
+        roseSeq = new RosegardenSequencerApp;
     }
 
     QObject::connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));

@@ -331,10 +331,6 @@ public:
     MappedStudio* getMappedStudio() { return m_studio; }
     void setMappedStudio(MappedStudio *studio) { m_studio = studio; }
 
-    // Arguments
-    //
-    void setArgs(const std::vector<std::string> &args) { m_args = args; }
-
     // Modify MIDI record device
     //
     void setMidiRecordDevice(DeviceId id) { m_midiRecordDevice = id; }
@@ -451,8 +447,6 @@ protected:
     // Controller to make externally originated transport requests on
     //
     ExternalTransport           *m_externalTransport;
-
-    std::vector<std::string>     m_args;
 
     // MMC status and ID
     //

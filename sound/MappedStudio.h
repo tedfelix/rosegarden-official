@@ -43,7 +43,7 @@
 namespace Rosegarden
 {
 
-class Sequencer;
+class SoundDriver;
 
 
 // Types are in MappedCommon.h
@@ -249,13 +249,12 @@ public:
     */
 
 
-    // Set the sequencer object so that we can do things like
+    // Set the driver object so that we can do things like
     // initialise plugins etc.
     //
-    Sequencer* getSequencer() { return m_sequencer; }
-    const Sequencer* getSequencer() const { return m_sequencer; }
-    void setSequencer(Sequencer *sequencer)
-        { m_sequencer = sequencer; }
+    SoundDriver* getSoundDriver() { return m_soundDriver; }
+    const SoundDriver* getSoundDriver() const { return m_soundDriver; }
+    void setSoundDriver(SoundDriver *driver) { m_soundDriver = driver; }
 
 protected:
 
@@ -278,9 +277,9 @@ private:
     typedef std::map<MappedObjectType, MappedObjectCategory> MappedObjectMap;
     MappedObjectMap m_objects;
     
-    // Sequencer object
+    // Driver object
     //
-    Sequencer     *m_sequencer;
+    SoundDriver *m_soundDriver;
 };
 
 

@@ -48,7 +48,6 @@
 #include "rosegardendcop.h"
 #include "rosegardensequenceriface.h"
 #include "MappedComposition.h"
-#include "Sequencer.h"
 #include "Event.h"
 #include "MappedStudio.h"
 #include "ExternalTransport.h"
@@ -65,7 +64,7 @@ class RosegardenGUIDoc;
 class RosegardenGUIView;
 class ControlBlockMmapper;
 
-namespace Rosegarden { class MappedInstrument; }
+namespace Rosegarden { class MappedInstrument; class SoundDriver; }
 
 /**
  * The sequencer application
@@ -77,7 +76,7 @@ class RosegardenSequencerApp : public KMainWindow,
     Q_OBJECT
 
 public:
-    RosegardenSequencerApp(const std::vector<std::string> &jackArgs);
+    RosegardenSequencerApp();
     ~RosegardenSequencerApp();
 
     //      -------- START OF DCOP INTERFACE METHODS --------
@@ -426,7 +425,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    Rosegarden::Sequencer *m_sequencer;
+    Rosegarden::SoundDriver *m_driver;
     TransportStatus m_transportStatus;
 
     // Position pointer

@@ -59,7 +59,8 @@ EXTRA_libRosegardenSequencer_la_SOURCES = MidiArts.cc \
                                           MidiRecord.cpp \
 					  PlayableAudioFile.cpp \
                                           SoundDriver.cpp \
-                                          Sequencer.cpp
+                                          SoundDriverFactory.cpp
+
 
 # Conditional compile for the different types of sound support.
 #
@@ -69,7 +70,7 @@ EXTRA_libRosegardenSequencer_la_SOURCES = MidiArts.cc \
 if NO_SOUND
 libRosegardenSequencer_la_SOURCES = PlayableAudioFile.cpp \
 				    SoundDriver.cpp \
-                                    Sequencer.cpp
+				    SoundDriverFactory.cpp
 else
 
 if HAVE_ALSA
@@ -77,8 +78,8 @@ libRosegardenSequencer_la_SOURCES = AlsaDriver.cpp \
                                     AlsaPort.cpp \
 				    JackDriver.cpp \
 				    PlayableAudioFile.cpp \
-                                    Sequencer.cpp \
-                                    SoundDriver.cpp
+                                    SoundDriver.cpp \
+                                    SoundDriverFactory.cpp
 
 else
 
@@ -88,8 +89,8 @@ libRosegardenSequencer_la_SOURCES = MidiArts.cc \
                                     ArtsDriver.cpp \
                                     MidiRecord.cpp \
 				    PlayableAudioFile.cpp \
-                                    Sequencer.cpp \
-                                    SoundDriver.cpp
+                                    SoundDriver.cpp \
+                                    SoundDriverFactory.cpp
 endif
 
 endif

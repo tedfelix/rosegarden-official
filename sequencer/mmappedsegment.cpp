@@ -21,6 +21,9 @@
 #include "mmappedsegment.h"
 #include "rosedebug.h"
 
+#include "MappedComposition.h"
+#include "Midi.h"
+
 using std::cerr;
 using std::endl;
 using std::cout;

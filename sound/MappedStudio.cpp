@@ -22,7 +22,7 @@
 #include <iostream>
 
 #include "MappedStudio.h"
-#include "Sequencer.h"
+#include "SoundDriver.h"
 #include "PluginFactory.h"
 
 #include <pthread.h> // for mutex
@@ -1194,10 +1194,10 @@ MappedPluginSlot::~MappedPluginSlot()
             dynamic_cast<MappedStudio*>(getParent());
 
 	if (studio) {
-	    Rosegarden::Sequencer *seq = studio->getSequencer();
+	    Rosegarden::SoundDriver *drv = studio->getSoundDriver();
 
-	    if (seq) {
-		seq->removePluginInstance(m_instrument, m_position);
+	    if (drv) {
+		drv->removePluginInstance(m_instrument, m_position);
 	    }
 	}
     }
@@ -1228,7 +1228,7 @@ MappedPluginSlot::getPropertyList(const MappedObjectProperty &property)
 
 	if (studio) {
 	    QStringList programs =
-		studio->getSequencer()->getPluginInstancePrograms(m_instrument,
+		studio->getSoundDriver()->getPluginInstancePrograms(m_instrument,
 								  m_position);
 
 	    for (int i = 0; i < programs.count(); ++i) {
@@ -1288,7 +1288,7 @@ MappedPluginSlot::getProperty(const MappedObjectProperty &property,
             dynamic_cast<MappedStudio*>(getParent());
 
 	if (studio) {
-	    value = studio->getSequencer()->getPluginInstanceProgram(m_instrument,
+	    value = studio->getSoundDriver()->getPluginInstanceProgram(m_instrument,
 								     m_position);
 	}
     } else {
@@ -1318,7 +1318,7 @@ MappedPluginSlot::setProperty(const MappedObjectProperty &property,
             dynamic_cast<MappedStudio*>(getParent());
 
 	if (studio) {
-	    studio->getSequencer()->setPluginInstanceBypass(m_instrument,
+	    studio->getSoundDriver()->setPluginInstanceBypass(m_instrument,
 							    m_position,
 							    m_bypassed);
 	}
@@ -1339,11 +1339,11 @@ MappedPluginSlot::setProperty(const MappedObjectProperty &property,
             dynamic_cast<MappedStudio*>(getParent());
 
 	if (studio) {
-	    Rosegarden::Sequencer *seq = studio->getSequencer();
+	    Rosegarden::SoundDriver *drv = studio->getSoundDriver();
 
-	    if (seq) {
+	    if (drv) {
 
-		// We don't call seq->removePluginInstance at this
+		// We don't call drv->removePluginInstance at this
 		// point: the sequencer will deal with that when we
 		// call setPluginInstance below.  If we removed the
 		// instance here, we might cause the library we want
@@ -1363,7 +1363,7 @@ MappedPluginSlot::setProperty(const MappedObjectProperty &property,
 		factory->populatePluginSlot(m_identifier, *this);
 		
 		// now create the new instance
-		seq->setPluginInstance(m_instrument,
+		drv->setPluginInstance(m_instrument,
 				       m_identifier,
 				       m_position);
 	    }
@@ -1385,7 +1385,7 @@ MappedPluginSlot::setProperty(const MappedObjectProperty &property,
             dynamic_cast<MappedStudio*>(getParent());
 
 	if (studio) {
-	    studio->getSequencer()->setPluginInstanceProgram(m_instrument,
+	    studio->getSoundDriver()->setPluginInstanceProgram(m_instrument,
 							     m_position,
 							     value);
 	}
@@ -1512,10 +1512,10 @@ MappedPluginPort::setValue(MappedObjectValue value)
 	    dynamic_cast<MappedStudio *>(slot->getParent());
     
 	if (studio) {
-	    Rosegarden::Sequencer *seq = studio->getSequencer();
+	    Rosegarden::SoundDriver *drv = studio->getSoundDriver();
 	
-	    if (seq) {
-		seq->setPluginInstancePortValue(slot->getInstrument(),
+	    if (drv) {
+		drv->setPluginInstancePortValue(slot->getInstrument(),
 						slot->getPosition(),
 						m_portNumber, m_value);
 	    }

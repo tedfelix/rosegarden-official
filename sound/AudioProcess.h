@@ -231,6 +231,15 @@ public:
 	}
     }
 
+    /// For call from MappedStudio.
+    void setInstrumentChannels(InstrumentId instrument, int channels);
+
+    /// For call from MappedStudio
+    void setInstrumentLevel(InstrumentId instrument, float dB);
+
+    /// For call from MappedStudio.  Pan is in range -100.0 -> 100.0
+    void setInstrumentPan(InstrumentId instrument, float pan);
+
 protected:
     virtual void threadRun();
     virtual int getPriority() { return 3; }

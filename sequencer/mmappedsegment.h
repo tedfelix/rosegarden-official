@@ -37,13 +37,14 @@
 #include <qbuffer.h>
 
 #include "mmappedcontrolblock.h"
-#include "Sequencer.h"
 #include "MappedInstrument.h"
 
 using std::cerr;
 using std::endl;
 using std::cout;
 using Rosegarden::MappedEvent;
+
+namespace Rosegarden { class MappedComposition; }
 
 // Seems not to be properly defined under some gcc 2.95 setups
 #ifndef MREMAP_MAYMOVE
