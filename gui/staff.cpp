@@ -229,8 +229,9 @@ Staff::Staff(QCanvas *canvas, Staff::Clef clef)
 
 Staff::~Staff()
 {
-    for (barlines::iterator i = m_barLines.begin(); i != m_barLines.end(); ++i)
-        delete (*i);
+    // TODO : this causes a crash on quit - don't know why
+//     for (barlines::iterator i = m_barLines.begin(); i != m_barLines.end(); ++i)
+//         delete (*i);
 }
 
 
