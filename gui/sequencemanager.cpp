@@ -1014,7 +1014,6 @@ SequenceManager::preparePlayback()
             //
             if ((*it)->sendsBankSelect())
             {
-                
                 mE = new MappedEvent((*it)->getId(),
                                      Rosegarden::MappedEvent::MidiController,
                                      Rosegarden::MIDI_CONTROLLER_BANK_MSB,
@@ -1030,13 +1029,14 @@ SequenceManager::preparePlayback()
 
             // send program change
             //
-            if ((*it)->sendsProgramChange())
-            {
+//             if ((*it)->sendsProgramChange()) // temporary fix for 820174
+//             {
+
                 mE = new MappedEvent((*it)->getId(),
                                      Rosegarden::MappedEvent::MidiProgramChange,
                                      (*it)->getProgramChange());
                 mC.insert(mE);
-            }
+//             }
 
         }
         else if ((*it)->getType() == Instrument::Audio)
