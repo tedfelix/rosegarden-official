@@ -103,3 +103,38 @@ Guillaume's preferences
  4D: Overview, (or no name at all)
 
 
+Rich's preferences
+--------------
+ 1A: Element (Event sounds a bit MIDI-specific)
+ 1B: Part or Track, don't mind
+ 1C: Composition or Workspace
+ 1D:
+ 1E: TrackPointer or something like that
+
+No, a workspace is a "screenset" if you like.  Composition or Song
+I think is more appropriate.  Rest is fine.
+
+ 2A:
+ 2B:
+ 2C:
+
+The Environment is more than just a set of playback channels or devices.
+Holds global system Device information as well.
+
+ 3A: Data-something
+ 3B: View? or does that sound too much like a specific programming paradigm?
+ 3C: Performer's fine
+
+Server - View - Performer get my vote.
+
+ 4A: Transport, I like that
+ 4B:
+ 4C:
+ 4D:
+
+Transport is a standard term anyway.
+Matrix view.
+Event List.
+Arrange.
+
+Just because they're Logic and what I know.
