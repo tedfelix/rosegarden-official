@@ -58,16 +58,16 @@ namespace Accidentals
 
     std::vector<Accidental> getStandardAccidentals() {
 
-	static Accidental a[] = {
-	    NoAccidental, Sharp, Flat, Natural, DoubleSharp, DoubleFlat
-	};
+        static Accidental a[] = {
+            NoAccidental, Sharp, Flat, Natural, DoubleSharp, DoubleFlat
+        };
 
-	static std::vector<Accidental> v;
-	if (v.size() == 0) {
-	    for (unsigned int i = 0; i < sizeof(a)/sizeof(a[0]); ++i)
-		v.push_back(a[i]);
-	}
-	return v;
+        static std::vector<Accidental> v;
+        if (v.size() == 0) {
+            for (unsigned int i = 0; i < sizeof(a)/sizeof(a[0]); ++i)
+                v.push_back(a[i]);
+        }
+        return v;
     }
 }
 
@@ -91,31 +91,31 @@ namespace Marks
     const Mark DownBow = "down-bow";
 
     string getTextMark(string text) {
-	return string("text_") + text;
+        return string("text_") + text;
     }
 
     bool isTextMark(Mark mark) {
-	return string(mark).substr(0, 5) == "text_";
+        return string(mark).substr(0, 5) == "text_";
     }
 
     string getTextFromMark(Mark mark) {
-	if (!isTextMark(mark)) return string();
-	else return string(mark).substr(5);
+        if (!isTextMark(mark)) return string();
+        else return string(mark).substr(5);
     }
 
     std::vector<Mark> getStandardMarks() {
 
-	static Mark a[] = {
-	    NoMark, Accent, Tenuto, Staccato, Staccatissimo, Marcato,
-	    Sforzando, Rinforzando, Trill, Turn, Pause, UpBow, DownBow
-	};
+        static Mark a[] = {
+            NoMark, Accent, Tenuto, Staccato, Staccatissimo, Marcato,
+            Sforzando, Rinforzando, Trill, Turn, Pause, UpBow, DownBow
+        };
 
-	static std::vector<Mark> v;
-	if (v.size() == 0) {
-	    for (unsigned int i = 0; i < sizeof(a)/sizeof(a[0]); ++i)
-		v.push_back(a[i]);
-	}
-	return v;
+        static std::vector<Mark> v;
+        if (v.size() == 0) {
+            for (unsigned int i = 0; i < sizeof(a)/sizeof(a[0]); ++i)
+                v.push_back(a[i]);
+        }
+        return v;
     }
 
 }
@@ -353,11 +353,10 @@ Accidental Key::getAccidentalAtHeight(int height, const Clef &clef) const
     checkAccidentalHeights();
     height = canonicalHeight(height);
     for (unsigned int i = 0; i < m_accidentalHeights->size(); ++i) {
-	if (height ==
-            static_cast<int>(canonicalHeight((*m_accidentalHeights)[i] +
-                                             clef.getPitchOffset()))) {
-	    return isSharp() ? Sharp : Flat;
-	}
+        if (height ==static_cast<int>(canonicalHeight((*m_accidentalHeights)[i] +
+                                                     clef.getPitchOffset()))) {
+            return isSharp() ? Sharp : Flat;
+        }
     }
     return NoAccidental;
 }
@@ -390,7 +389,7 @@ void Key::checkAccidentalHeights() const
 }
 
 int Key::convertFrom(int pitch, const Key &previousKey,
-		     const Accidental &explicitAccidental) const
+                     const Accidental &explicitAccidental) const
 {
     NotationDisplayPitch ndp(pitch, Clef(), previousKey, explicitAccidental);
     return ndp.getPerformancePitch(Clef(), *this);
@@ -456,7 +455,7 @@ Key::KeyDetails::KeyDetails()
 
 Key::KeyDetails::KeyDetails(bool sharps, bool minor, int sharpCount,
                             std::string equivalence, std::string rg2name,
-			    int tonicPitch)
+                            int tonicPitch)
     : m_sharps(sharps), m_minor(minor), m_sharpCount(sharpCount),
       m_equivalence(equivalence), m_rg2name(rg2name), m_tonicPitch(tonicPitch)
 {
@@ -517,8 +516,8 @@ Indication &
 Indication::operator=(const Indication &m)
 {
     if (&m != this) {
-	m_indicationType = m.m_indicationType;
-	m_duration = m.m_duration;
+        m_indicationType = m.m_indicationType;
+        m_duration = m.m_duration;
     }
     return *this;
 }
@@ -544,16 +543,16 @@ const PropertyName Text::TextPropertyName = "text";
 const PropertyName Text::TextTypePropertyName = "type";
 
 const std::string Text::UnspecifiedType = "unspecified";
-const std::string Text::StaffName	= "staffname";
-const std::string Text::ChordName	= "chordname";
-const std::string Text::KeyName		= "keyname";
-const std::string Text::Dynamic		= "dynamic";
-const std::string Text::Lyric		= "lyric";
-const std::string Text::Direction	= "direction";
-const std::string Text::LocalDirection	= "local_direction";
-const std::string Text::Tempo		= "tempo";
-const std::string Text::LocalTempo	= "local_tempo";
-const std::string Text::Annotation	= "annotation";
+const std::string Text::StaffName       = "staffname";
+const std::string Text::ChordName       = "chordname";
+const std::string Text::KeyName         = "keyname";
+const std::string Text::Dynamic         = "dynamic";
+const std::string Text::Lyric           = "lyric";
+const std::string Text::Direction       = "direction";
+const std::string Text::LocalDirection  = "local_direction";
+const std::string Text::Tempo           = "tempo";
+const std::string Text::LocalTempo      = "local_tempo";
+const std::string Text::Annotation      = "annotation";
 
 Text::Text(const Event &e)
 {
@@ -581,8 +580,8 @@ bool
 Text::isTextOfType(Event *e, std::string type)
 {
     return (e->isa(EventType) &&
-	    e->has(TextTypePropertyName) &&
-	    e->get<String>(TextTypePropertyName) == type);
+            e->has(TextTypePropertyName) &&
+            e->get<String>(TextTypePropertyName) == type);
 }
 
 std::vector<std::string>
@@ -615,7 +614,7 @@ Text::getAsEvent(timeT absoluteTime) const
 //////////////////////////////////////////////////////////////////////
 
 NotationDisplayPitch::NotationDisplayPitch(int heightOnStaff,
-					   const Accidental &accidental)
+                                           const Accidental &accidental)
     : m_heightOnStaff(heightOnStaff),
       m_accidental(accidental)
 {
@@ -639,7 +638,7 @@ NotationDisplayPitch::getPerformancePitch(const Clef &clef, const Key &key) cons
 
 int
 NotationDisplayPitch::getPerformancePitchFromRG21Pitch(const Clef &clef,
-						       const Key &) const
+                                                       const Key &) const
 {
     // Rosegarden 2.1 pitches are a bit weird; see
     // docs/data_struct/units.txt
@@ -660,8 +659,12 @@ NotationDisplayPitch::getPerformancePitchFromRG21Pitch(const Clef &clef,
  * MidiIn.c.  Converts performance pitch to height on staff + correct
  * accidentals for current key.
  *
- * Note that the incoming accidental is already included in the pitch
- * so we have to "undo" it to get the display height.
+ * This method takes a Clef, Key, Accidental and raw performance pitch, then
+ * applies this information to return a height on staff value and an
+ * accidental state.  The pitch itself contains a lot of information, but we
+ * need to use the Key and user-specified Accidental to make an accurate
+ * decision just where to put it on the staff, and what accidental it should
+ * display for (or against) the key.
  */
 void
 NotationDisplayPitch::rawPitchToDisplayPitch(int pitch,
@@ -670,57 +673,293 @@ NotationDisplayPitch::rawPitchToDisplayPitch(int pitch,
                                              int &height,
                                              Accidental &accidental) const
 {
-    // Display any "forced" accidental, and let the key
-    // take care of NoAccidentals.
-    // Double sharps and flats always take explicit notation
-    // Height needs special consideration for b/c e/f
 
-    if (accidental != NoAccidental && accidental != Natural) {
-        if (accidental == Sharp) { pitch--; }
-        else if (accidental == Flat) { pitch++; }
-        else if (accidental == DoubleSharp) { pitch -= 2; }
-        else if (accidental == DoubleFlat) { pitch += 2; }
-    }
-
-    // 1. Calculate with plain pitches, disregarding clef and key
+    // 1. Calculate the octave (for later):
     int octave = pitch / 12;
-    pitch  = pitch % 12; // pitch is now 0 (C) through 11 (B)
 
-    // This code converts pitch into staff lines in the
-    // range -2 (C) through 4 (B)
-    if (pitch >= 5) { pitch++; } // make white keys %2=0
-    height = (int)(pitch/2) - 2;
+    // 2. Set initial height to 0
+    height = 0;
 
-    // The case we're handling here is a note played on a
-    // white key that is the result of key-signature accidental
-    if (accidental == NoAccidental) {
-        // Fiddle with the height a bit for the b/c e/f case
-        if (pitch % 2 == 0) {
-            if (key.isSharp() &&
-                (height == 1 || height == -2) &&
-                key.getAccidentalAtHeight(height - 1, clef) == Sharp) {
-                height--;
-                if (height < -2) {
-                    height = 7 + height;
-                    octave--;
-                }
-            }
-        } else if (key.getAccidentalAtHeight(height + 1, clef) == Flat) {
-            height++;
-            if (height > 4) {
-                height = height - 7;
-                octave++;
-            }
+    // 3.  Calculate raw semitone number, yielding a value between 0 (C) and
+    // 11 (B)
+    pitch  = pitch % 12;
+
+    // 4.  Get info from the Key
+    long accidentalCount = key.getAccidentalCount();
+    bool keyIsSharp = key.isSharp(), keyIsFlat = !keyIsSharp;
+    Accidental userAccidental = accidental;
+
+    // clear the in-coming accidental so we can trap any failure to re-set
+    // it on the way out:
+    accidental = "";
+
+    // Calculate the flags needed for resolving accidentals against the key.
+    // First we initialize them false...
+    bool keyHasSharpC = false, keyHasSharpD = false, keyHasSharpE = false,
+         keyHasSharpF = false, keyHasSharpG = false, keyHasSharpA = false,
+         keyHasSharpB = false, keyHasFlatC  = false, keyHasFlatD  = false,
+         keyHasFlatE  = false, keyHasFlatF  = false, keyHasFlatG  = false,
+         keyHasFlatA  = false, keyHasFlatB  = false; 
+
+    // Then we use "trip points" based on the flat/sharp state of the key and
+    // its number of accidentals to set the flags:
+    if (keyIsSharp) {
+        switch (accidentalCount) {
+            case 7: keyHasSharpB = true;
+            case 6: keyHasSharpE = true;
+            case 5: keyHasSharpA = true;
+            case 4: keyHasSharpD = true;
+            case 3: keyHasSharpG = true;
+            case 2: keyHasSharpC = true;
+            case 1: keyHasSharpF = true;
         }
+    } else {
+        switch (accidentalCount) {
+            case 7: keyHasFlatF = true;
+            case 6: keyHasFlatC = true;
+            case 5: keyHasFlatG = true;
+            case 4: keyHasFlatD = true;
+            case 3: keyHasFlatA = true;
+            case 2: keyHasFlatE = true;
+            case 1: keyHasFlatB = true;
+        }
+   }
+               
+
+    // 5. Determine height on staff and accidental note should display with for key...
+    // 
+    // Every position on the staff is one of six accidental states:
+    //
+    // Natural, Sharp, Flat, DoubleSharp, DoubleFlat, NoAccidental
+    //
+    // DoubleSharp and DoubleFlat are always user-specified accidentals, so
+    // they are always used to decide how to draw the note, and they are
+    // always passed along unchanged.
+    //
+    // The Natural state indicates that a note is or might be going against
+    // the key.  Since the Natural state will always be attached to a plain
+    // pitch that can never resolve to a "black key" note, it is not necessary
+    // to handle this case differently unless the key has "white key" notes
+    // that are supposed to take accidentals for the key.  (eg. Cb Gb B C# major)
+    // For most keys we treat it the same as a NoAccidental, and use the key
+    // to decide where to draw the note, and what accidental to return.
+    //
+    // The Sharp and Flat states indicate that a user has specified an
+    // accidental for the note, and it might be "out of key."  We check to see
+    // if that's the case.  If the note is "in key" then the extra accidental
+    // property is removed, and we return NoAccidental.  If the note is "out of
+    // key" then the Sharp or Flat is used to decide where to draw the note, and
+    // the accidental is passed along unchanged.  (Incomplete?  Will a failure
+    // to always pass along the accidental cause strange behavior if a user
+    // specifies an explicit Bb in key of F and then transposes to G, wishing
+    // the Bb to remain an explicit Bb?  If someone complains, I'll know where
+    // to look.)
+    //
+    // The NoAccidental state is a default state.  We have nothing else upon
+    // which to base a decision in this case, so we make the best decisions
+    // possible using only the pitch and key.  Notes that are "in key" pass on
+    // with NoAccidental preserved, otherwise we return an appropriate
+    // accidental for the key.
+    
+    // We calculate height on a virtual staff, and then make necessary adjustments to
+    // translate them onto a particular Clef later on...
+    //
+    // ---------F--------- Staff Height   Note(semitone) for each of five states:                 
+    //          E          
+    // ---------D---------               Natural|  Sharp | Flat   |DblSharp| DblFlat           
+    //          C                               |        |        |        |
+    // ---------B--------- height  4      B(11) | B#( 0) | Bb(10) | Bx( 1) | Bbb( 9)   
+    //          A          height  3      A( 9) | A#(10) | Ab( 8) | Ax(11) | Abb( 7)
+    // ---------G--------- height  2      G( 7) | G#( 8) | Gb( 6) | Gx( 9) | Gbb( 5)
+    //          F          height  1      F( 5) | F#( 6) | Fb( 4) | Fx( 7) | Fbb( 3)
+    // ---------E--------- height  0      E( 4) | E#( 5) | Eb( 3) | Ex( 6) | Ebb( 2)
+    //          D          height -1      D( 2) | D#( 3) | Db( 1) | Dx( 4) | Dbb( 0)
+    //       ---C----      height -2      C( 0) | C#( 1) | Cb(11) | Cx( 2) | Cbb(10)
+    
+    
+    // use these constants instead of numeric literals in order to reduce the
+    // chance of making incorrect height assignments...
+    const char C = -2, D = -1, E = 0, F = 1, G = 2, A = 3, B = 4;
+    
+    // Here we do the actual work of making all the decisions explained above.
+    switch (pitch) {
+        case 0 : 
+                 if (userAccidental == Sharp ||                         // B#
+                    (userAccidental == NoAccidental && keyHasSharpB)) {
+                     height = B;
+                     octave--;
+                     accidental = (keyHasSharpB) ? NoAccidental : Sharp;
+                 } else if (userAccidental == DoubleFlat) {             // Dbb
+                     height = D;
+                     accidental = DoubleFlat;
+                 } else {
+                     height = C;                                        // C or C-Natural
+                     accidental = (keyHasSharpC ||(keyHasSharpB &&
+                                  userAccidental == Natural)) ? Natural : NoAccidental;
+                 }
+                 break;
+        case 1 : 
+                 if (userAccidental == Sharp ||                       // C#
+                    (userAccidental == NoAccidental &&  keyIsSharp)) {
+                     height = C;
+                     accidental = (keyHasSharpC) ?  NoAccidental : Sharp;
+                 } else if (userAccidental == Flat ||                 // Db
+                           (userAccidental == NoAccidental && keyIsFlat)) {
+                     height = D;
+                     accidental = (keyHasFlatD) ? NoAccidental : Flat;
+                 } else if (userAccidental == DoubleSharp) {          // Bx
+                    height = B;
+                    octave--;
+                    accidental = DoubleSharp;
+                 }
+                 break;
+        case 2 : 
+                 if (userAccidental == DoubleSharp) {                  // Cx
+                     height = C;
+                     accidental = DoubleSharp;
+                 } else if (userAccidental == DoubleFlat) {            // Ebb
+                     height = E;
+                     accidental = DoubleFlat;
+                 } else {                                              // D or D-Natural
+                     height = D;
+                     accidental = (keyHasSharpD || keyHasFlatD) ? Natural : NoAccidental;
+                 }
+                 break;
+        case 3 : 
+                 if (userAccidental == Sharp ||                        // D#
+                    (userAccidental == NoAccidental &&  keyIsSharp)) {
+                     height = D;
+                     accidental = (keyHasSharpD) ? NoAccidental : Sharp;
+                 } else if (userAccidental == Flat ||                  // Eb
+                           (userAccidental == NoAccidental &&  keyIsFlat)) {
+                     height = E;
+                     accidental = (keyHasFlatE) ? NoAccidental : Flat;
+                 } else if (userAccidental == DoubleFlat) {            // Fbb
+                     height = F;
+                     accidental = DoubleFlat;
+                 }
+                 break;
+        case 4 : 
+                 if (userAccidental == Flat ||                         // Fb
+                    (userAccidental == NoAccidental && keyHasFlatF)) {
+                     height = F;
+                     accidental = (keyHasFlatF) ? NoAccidental : Flat;
+                 } else if (userAccidental == DoubleSharp) {           // Dx
+                     height = D;
+                     accidental = DoubleSharp;
+                 } else {                                              // E or E-Natural
+                     height = E;
+                     accidental = (keyHasSharpE || keyHasFlatE) ? Natural : NoAccidental;
+                 }
+                 break;
+        case 5 : 
+                 if (userAccidental == Sharp ||                        // E#
+                    (userAccidental == NoAccidental && keyHasSharpE)) {
+                     height = E;
+                     accidental = (keyHasSharpE) ? NoAccidental : Sharp;
+                 } else if (userAccidental == DoubleFlat) {            // Gbb
+                     height = G;
+                     accidental = DoubleFlat;
+                 } else {                                              // F or F-Natural
+                     height = F;
+                     accidental = (keyHasSharpF || keyHasFlatF) ? Natural : NoAccidental;
+                 }
+                 break;
+        case 6 : 
+                 if (userAccidental == Sharp ||
+                    (userAccidental == NoAccidental && keyIsSharp)) {  // F#
+                     height = F;
+                     accidental = (keyHasSharpF) ? NoAccidental : Sharp;
+                 } else if (userAccidental == Flat ||                  // Gb
+                           (userAccidental == NoAccidental && keyIsFlat)) {
+                     height = G;
+                     accidental = (keyHasFlatG) ? NoAccidental : Flat;
+                 } else if (userAccidental == DoubleSharp) {           // Ex
+                     height = E;
+                     accidental = DoubleSharp;
+                 }
+                 break;
+        case 7 : 
+                 if (userAccidental == DoubleSharp) {                  // Fx
+                     height = F;
+                     accidental = DoubleSharp;
+                 } else if (userAccidental == DoubleFlat) {            // Abb
+                     height = A;
+                     accidental = DoubleFlat;
+                 } else {                                              // G or G-Natural
+                     height = G;
+                     accidental = (keyHasSharpG || keyHasFlatG) ? Natural : NoAccidental;
+                 }
+                 break;
+        case 8 : 
+                 if (userAccidental == Sharp ||
+                    (userAccidental == NoAccidental && keyIsSharp)) {  // G#
+                     height = G;
+                     accidental = (keyHasSharpG) ? NoAccidental : Sharp;
+                 } else if (userAccidental == Flat ||                  // Ab
+                           (userAccidental == NoAccidental && keyIsFlat)) {
+                     height = A;
+                     accidental = (keyHasFlatA) ? NoAccidental : Flat;
+                 }
+                 break;
+        case 9 :
+                 if (userAccidental == DoubleSharp) {                  // Gx
+                     height = G;
+                     accidental = DoubleSharp;
+                 } else if (userAccidental == DoubleFlat) {            // Bbb
+                     height = B;
+                     accidental = DoubleFlat;
+                 } else {                                              // A or A-Natural
+                     height = A;                
+                     accidental = (keyHasSharpA || keyHasFlatA) ? Natural : NoAccidental;
+                 }
+                 break;
+        case 10: 
+                 if (userAccidental == DoubleFlat) {                   // Cbb
+                     height = C;
+                     octave++;  // tweak B/C divide
+                     accidental = DoubleFlat;
+                 } else if (userAccidental == Sharp ||                 // A#
+                           (userAccidental == NoAccidental && keyIsSharp)) {
+                     height = A;
+                     accidental = (keyHasSharpA) ? NoAccidental : Sharp;
+                 } else if (userAccidental == Flat ||                  // Bb
+                           (userAccidental == NoAccidental && keyIsFlat)) {
+                     height = B;
+                     accidental = (keyHasFlatB) ? NoAccidental : Flat;
+                 }
+                 break;
+        case 11: 
+                 if (userAccidental == DoubleSharp) {                  // Ax
+                     height = A;
+                     accidental = DoubleSharp;
+                 } else if (userAccidental == Flat ||                  // Cb
+                           (userAccidental == NoAccidental && keyHasFlatC)) {
+                     height = C;
+                     octave++;  // tweak B/C divide
+                     accidental = (keyHasFlatC) ? NoAccidental : Flat;
+                 } else {                                             // B or B-Natural
+                     height = B;
+                     accidental = (keyHasSharpB || keyHasFlatB) ? Natural : NoAccidental;
+                 }
     }
 
-    // Note: There's duplicate work going on in these next few lines,
-    // but I haven't thought it through at all to safely fix it.
+    // Failsafe...  If this ever executes, there's trouble to fix...
+    if (accidental == "") {
+        std::cerr << "rawPitchToDisplayPitch(): error! returning null accidental for"
+                  << std::endl << "pitch: " << pitch << "\tuserAccidental: " << userAccidental
+                  << "\tkey: " << accidentalCount << "\t" << (keyIsSharp ? "sharp" : "flat")
+                  << std::endl;
+    }
+    
+    // 6.  "Recenter" height in case it's been changed:
+    height = ((height + 2) % 7) - 2;
+
     height += (octave - 5) * 7;
-
-    // 3. Transpose up or down for the clef
-
     height += clef.getPitchOffset();
+
+
+    // 7. Transpose up or down for the clef:
     height -= 7 * clef.getOctave();
 }
 
@@ -730,7 +969,7 @@ NotationDisplayPitch::displayPitchToRawPitch(int height,
                                              const Clef &clef,
                                              const Key &key,
                                              int &pitch,
-					     bool ignoreOffset) const
+                                             bool ignoreOffset) const
 {
     int octave = 5;
 
@@ -751,13 +990,13 @@ NotationDisplayPitch::displayPitchToRawPitch(int height,
     // Height is now relative to treble clef lines
     switch (height) {
 
-    case 0: pitch =  4; break;	/* bottom line, treble clef: E */
-    case 1: pitch =  5; break;	/* F */
-    case 2: pitch =  7; break;	/* G */
-    case 3: pitch =  9; break;	/* A, in next octave */
-    case 4: pitch = 11; break;	/* B, likewise*/
-    case 5: pitch =  0; break;	/* C, moved up an octave (see above) */
-    case 6: pitch =  2; break;	/* D, likewise */
+    case 0: pitch =  4; break;  /* bottom line, treble clef: E */
+    case 1: pitch =  5; break;  /* F */
+    case 2: pitch =  7; break;  /* G */
+    case 3: pitch =  9; break;  /* A, in next octave */
+    case 4: pitch = 11; break;  /* B, likewise*/
+    case 5: pitch =  0; break;  /* C, moved up an octave (see above) */
+    case 6: pitch =  2; break;  /* D, likewise */
     }
     // Pitch is now "natural"-ized note at given height
 
@@ -779,7 +1018,7 @@ NotationDisplayPitch::displayPitchToRawPitch(int height,
 
 string
 NotationDisplayPitch::getAsString(const Clef &clef, const Key &key,
-				  bool inclOctave, int octaveBase) const
+                                  bool inclOctave, int octaveBase) const
 {
     static const string noteNamesSharps[] = {
         "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
@@ -797,16 +1036,16 @@ NotationDisplayPitch::getAsString(const Clef &clef, const Key &key,
     int octave = performancePitch / 12;
 
     if (!inclOctave)
-	return key.isSharp() ? noteNamesSharps[pitch] : noteNamesFlats[pitch];
+        return key.isSharp() ? noteNamesSharps[pitch] : noteNamesFlats[pitch];
 
     char tmp[1024];
 
     if (key.isSharp())
         sprintf(tmp, "%s%d", noteNamesSharps[pitch].c_str(),
-		octave + octaveBase);
+                octave + octaveBase);
     else
         sprintf(tmp, "%s%d", noteNamesFlats[pitch].c_str(),
-		octave + octaveBase);
+                octave + octaveBase);
     
     return string(tmp);
     
@@ -838,7 +1077,7 @@ Note::Note(const string &n)
         name = name.substr(pos + 1);
         if (dots < 2)
             throw MalformedNoteName("Non-numeric or invalid dot count in \"" +
-				    n + "\"");
+                                    n + "\"");
     }
 
     if (name.length() > 7 && name.substr(0, 7) == "dotted ") {
@@ -847,19 +1086,19 @@ Note::Note(const string &n)
     } else {
         if (dots > 1)
             throw MalformedNoteName("Dot count without dotted tag in \"" +
-				    n + "\"");
+                                    n + "\"");
     }
 
     Type t;
     for (t = Shortest; t <= Longest; ++t) {
         if (name == getReferenceName(false, t) ||
-	    (t < Quaver && name == (getReferenceName(false, t) + "quaver"))) {
+            (t < Quaver && name == (getReferenceName(false, t) + "quaver"))) {
             m_type = t;
             break;
         }
     }
     if (m_type == -1) {
-	throw MalformedNoteName("Can't parse note name \"" + n + "\"");
+        throw MalformedNoteName("Can't parse note name \"" + n + "\"");
     }
 }
 
@@ -896,15 +1135,15 @@ static string addDots(int dots, string s, bool hyphenate = false)
     }
     if (hyphenate) {
 #if (__GNUC__ < 3)
-	os << "dotted-" << s << std::ends;
+        os << "dotted-" << s << std::ends;
 #else
-	os << "dotted-" << s;
+        os << "dotted-" << s;
 #endif
     } else {
 #if (__GNUC__ < 3)
-	os << "dotted " << s << std::ends;
+        os << "dotted " << s << std::ends;
 #else
-	os << "dotted " << s;
+        os << "dotted " << s;
 #endif
     }
     return os.str();
@@ -930,7 +1169,7 @@ Note Note::getNearestNote(timeT duration, int maxDots)
     while (d > 0) { ++tag; d /= 2; }
 
 //    cout << "Note::getNearestNote: duration " << duration <<
-//	" leading to tag " << tag << endl;
+//      " leading to tag " << tag << endl;
     if (tag < Shortest) return Note(Shortest);
     if (tag > Longest)  return Note(Longest, maxDots);
 
@@ -940,11 +1179,11 @@ Note Note::getNearestNote(timeT duration, int maxDots)
 
     while (dots <= maxDots &&
            dots <= tag) { // avoid TooManyDots exception from Note ctor
-	prospective += extra;
-	if (prospective > duration) return Note(tag, dots);
-	extra /= 2;
-	++dots;
-//	cout << "added another dot okay" << endl;
+        prospective += extra;
+        if (prospective > duration) return Note(tag, dots);
+        extra /= 2;
+        ++dots;
+//      cout << "added another dot okay" << endl;
     }
 
 //!!!    cout << "doh! ran out of dots" << endl;
@@ -978,16 +1217,16 @@ const PropertyName TimeSignature::IsHiddenPropertyName = "hidden";
 const TimeSignature TimeSignature::DefaultTimeSignature = TimeSignature(4, 4);
 
 TimeSignature::TimeSignature(int numerator, int denominator,
-			     bool preferCommon, bool hidden)
+                             bool preferCommon, bool hidden)
     // throw (BadTimeSignature)
     : m_numerator(numerator), m_denominator(denominator),
       m_common(preferCommon &&
-	       (m_denominator == m_numerator &&
-		(m_numerator == 2 || m_numerator == 4))),
+               (m_denominator == m_numerator &&
+                (m_numerator == 2 || m_numerator == 4))),
       m_hidden(hidden)
 {
     if (numerator < 1 || denominator < 1) {
-	throw BadTimeSignature("Numerator and denominator must be positive");
+        throw BadTimeSignature("Numerator and denominator must be positive");
     }
 }
 
@@ -1007,7 +1246,7 @@ TimeSignature::TimeSignature(const Event &e)
     e.get<Bool>(IsHiddenPropertyName, m_hidden);
 
     if (m_numerator < 1 || m_denominator < 1) {
-	throw BadTimeSignature("Numerator and denominator must be positive");
+        throw BadTimeSignature("Numerator and denominator must be positive");
     }
 }
 
@@ -1076,108 +1315,108 @@ void TimeSignature::getDurationListForInterval(DurationList &dlist,
 
     while (durationRemaining > 0) {
 
-	// Everything in this loop is of the form, "if we're on a
-	// [unit] boundary and there's a [unit] of space left to fill,
-	// insert a [unit] of time."
+        // Everything in this loop is of the form, "if we're on a
+        // [unit] boundary and there's a [unit] of space left to fill,
+        // insert a [unit] of time."
 
-	// See if we can insert a bar of time.
+        // See if we can insert a bar of time.
 
-	if (offset % m_barDuration == 0
-	    && durationRemaining >= m_barDuration) {
+        if (offset % m_barDuration == 0
+            && durationRemaining >= m_barDuration) {
 
-	    getDurationListForBar(dlist);
-	    durationRemaining -= m_barDuration,
-		offset += m_barDuration;
+            getDurationListForBar(dlist);
+            durationRemaining -= m_barDuration,
+                offset += m_barDuration;
     
-	}
+        }
 
-	// If that fails and we're in 4/4 time, see if we can insert a
-	// half-bar of time.
+        // If that fails and we're in 4/4 time, see if we can insert a
+        // half-bar of time.
 
-	//_else_ if!
-	else if (m_numerator == 4 && m_denominator == 4
-		 && offset % (m_barDuration/2) == 0
-		 && durationRemaining >= m_barDuration/2) {
+        //_else_ if!
+        else if (m_numerator == 4 && m_denominator == 4
+                 && offset % (m_barDuration/2) == 0
+                 && durationRemaining >= m_barDuration/2) {
 
-	    dlist.push_back(m_barDuration/2);
-	    durationRemaining -= m_barDuration/2;
-	    offset += m_barDuration;
+            dlist.push_back(m_barDuration/2);
+            durationRemaining -= m_barDuration/2;
+            offset += m_barDuration;
 
-	}
+        }
 
-	// If that fails, see if we can insert a beat of time.
+        // If that fails, see if we can insert a beat of time.
 
-	else if (offset % m_beatDuration == 0
-		 && durationRemaining >= m_beatDuration) {
+        else if (offset % m_beatDuration == 0
+                 && durationRemaining >= m_beatDuration) {
 
-	    dlist.push_back(m_beatDuration);
-	    durationRemaining -= m_beatDuration;
-	    offset += m_beatDuration;
+            dlist.push_back(m_beatDuration);
+            durationRemaining -= m_beatDuration;
+            offset += m_beatDuration;
 
-	}
+        }
 
-	// If that fails, see if we can insert a beat-division of time
-	// (half the beat in simple time, a third of the beat in compound
-	// time)
+        // If that fails, see if we can insert a beat-division of time
+        // (half the beat in simple time, a third of the beat in compound
+        // time)
 
-	else if (offset % m_beatDivisionDuration == 0
-		 && durationRemaining >= m_beatDivisionDuration) {
+        else if (offset % m_beatDivisionDuration == 0
+                 && durationRemaining >= m_beatDivisionDuration) {
 
-	    dlist.push_back(m_beatDivisionDuration);
-	    durationRemaining -= m_beatDivisionDuration;
-	    offset += m_beatDivisionDuration;
+            dlist.push_back(m_beatDivisionDuration);
+            durationRemaining -= m_beatDivisionDuration;
+            offset += m_beatDivisionDuration;
 
-	}
+        }
 
-	// cc: In practice, if the time we have remaining is shorter
-	// than our shortest note then we should just insert a single
-	// unit of the correct time; we won't be able to do anything
-	// useful with any shorter units anyway.
+        // cc: In practice, if the time we have remaining is shorter
+        // than our shortest note then we should just insert a single
+        // unit of the correct time; we won't be able to do anything
+        // useful with any shorter units anyway.
 
-	else if (durationRemaining <= Note(Note::Shortest).getDuration()) {
+        else if (durationRemaining <= Note(Note::Shortest).getDuration()) {
 
-	    dlist.push_back(durationRemaining);
-	    offset += durationRemaining;
-	    durationRemaining = 0;
+            dlist.push_back(durationRemaining);
+            offset += durationRemaining;
+            durationRemaining = 0;
 
-	}
+        }
 
-	// If that fails, keep halving the beat division until we
-	// find something to insert. (This could be part of the beat-division
-	// case; it's only in its own place for clarity.)
+        // If that fails, keep halving the beat division until we
+        // find something to insert. (This could be part of the beat-division
+        // case; it's only in its own place for clarity.)
 
-	else {
+        else {
 
-	    timeT currentDuration = m_beatDivisionDuration;
+            timeT currentDuration = m_beatDivisionDuration;
 
-	    while ( !(offset % currentDuration == 0
-		      && durationRemaining >= currentDuration) ) {
+            while ( !(offset % currentDuration == 0
+                      && durationRemaining >= currentDuration) ) {
 
-		if (currentDuration <= Note(Note::Shortest).getDuration()) {
-		    
-		    // okay, this isn't working.  If our duration takes
-		    // us past the next beat boundary, fill with an exact
-		    // rest duration to there and then continue  --cc
-		    
-		    timeT toNextBeat =
-			m_beatDuration - (offset % m_beatDuration);
+                if (currentDuration <= Note(Note::Shortest).getDuration()) {
+                    
+                    // okay, this isn't working.  If our duration takes
+                    // us past the next beat boundary, fill with an exact
+                    // rest duration to there and then continue  --cc
+                    
+                    timeT toNextBeat =
+                        m_beatDuration - (offset % m_beatDuration);
 
-		    if (durationRemaining > toNextBeat) {
-			currentDuration = toNextBeat;
-		    } else {
-			currentDuration  = durationRemaining;
-		    }
-		    break;
-		}
+                    if (durationRemaining > toNextBeat) {
+                        currentDuration = toNextBeat;
+                    } else {
+                        currentDuration  = durationRemaining;
+                    }
+                    break;
+                }
 
-		currentDuration /= 2;
-	    }
+                currentDuration /= 2;
+            }
 
-	    dlist.push_back(currentDuration);
-	    durationRemaining -= currentDuration;
-	    offset += currentDuration;
+            dlist.push_back(currentDuration);
+            durationRemaining -= currentDuration;
+            offset += currentDuration;
 
-	}
+        }
 
     }
 
@@ -1190,21 +1429,21 @@ void TimeSignature::getDurationListForBar(DurationList &dlist) const
     // Otherwise, represent it as individual beats.
 
     if (m_barDuration == m_crotchetTime ||
-	m_barDuration == m_crotchetTime * 2 ||
-	m_barDuration == m_crotchetTime * 4 ||
-	m_barDuration == m_crotchetTime * 8 ||
-	m_barDuration == m_dottedCrotchetTime ||
-	m_barDuration == m_dottedCrotchetTime * 2 ||
-	m_barDuration == m_dottedCrotchetTime * 4 ||
-	m_barDuration == m_dottedCrotchetTime * 8) {
+        m_barDuration == m_crotchetTime * 2 ||
+        m_barDuration == m_crotchetTime * 4 ||
+        m_barDuration == m_crotchetTime * 8 ||
+        m_barDuration == m_dottedCrotchetTime ||
+        m_barDuration == m_dottedCrotchetTime * 2 ||
+        m_barDuration == m_dottedCrotchetTime * 4 ||
+        m_barDuration == m_dottedCrotchetTime * 8) {
 
-	dlist.push_back(getBarDuration());
+        dlist.push_back(getBarDuration());
 
     } else {
 
-	for (int i = 0; i < getBeatsPerBar(); ++i) {
-	    dlist.push_back(getBeatDuration());
-	}
+        for (int i = 0; i < getBeatsPerBar(); ++i) {
+            dlist.push_back(getBeatDuration());
+        }
                
     }
 
@@ -1217,14 +1456,14 @@ int TimeSignature::getEmphasisForTime(timeT offset)
     if      (offset % m_barDuration == 0)
         return 4;
     else if (m_numerator == 4 && m_denominator == 4 &&
-	     offset % (m_barDuration/2) == 0)
-	return 3;
+             offset % (m_barDuration/2) == 0)
+        return 3;
     else if (offset % m_beatDuration == 0)
-	return 2;
+        return 2;
     else if (offset % m_beatDivisionDuration == 0)
-	return 1;
+        return 1;
     else
-	return 0;
+        return 0;
 }
 
 
@@ -1237,9 +1476,9 @@ TimeSignature::getDivisions(int depth) const
     timeT base = getBarDuration(); // calls setInternalDurations
 
     if (m_numerator == 4 && m_denominator == 4) {
-	divisions.push_back(2);
-	base /= 2;
-	--depth;
+        divisions.push_back(2);
+        base /= 2;
+        --depth;
     }
 
     if (depth <= 0) return divisions;
@@ -1255,8 +1494,8 @@ TimeSignature::getDivisions(int depth) const
     --depth;
 
     while (depth > 0) {
-	divisions.push_back(2);
-	--depth;
+        divisions.push_back(2);
+        --depth;
     }
 
     return divisions;
@@ -1277,16 +1516,16 @@ void TimeSignature::setInternalDurations() const
     // practice, you can say it's dotted time iff it has 6, 9, or 12 on top.
 
     m_dotted = (m_numerator % 3 == 0 &&
-		m_numerator > 3 &&
-		m_barDuration >= m_dottedCrotchetTime);
+                m_numerator > 3 &&
+                m_barDuration >= m_dottedCrotchetTime);
 
     if (m_dotted) {
-	m_beatDuration = unitLength * 3;
-	m_beatDivisionDuration = unitLength;
+        m_beatDuration = unitLength * 3;
+        m_beatDivisionDuration = unitLength;
     }
     else {
-	m_beatDuration = unitLength;
-	m_beatDivisionDuration = unitLength / 2;
+        m_beatDuration = unitLength;
+        m_beatDivisionDuration = unitLength / 2;
     }
 
 }
