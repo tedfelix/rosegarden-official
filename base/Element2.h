@@ -231,7 +231,7 @@ class Element2
 private:
 
 public:
-    typedef unsigned int duration;
+    typedef unsigned int timeT;
 
     struct NoData { };
     struct BadType { };
@@ -245,6 +245,7 @@ public:
     virtual ~Element2();
 
     Element2 &operator=(const Element2 &e);
+    friend bool operator<(const Element2&, const Element2&);
 
     // Accessors
     const string &package() const { return m_package; }
@@ -252,12 +253,10 @@ public:
     void setPackage(const string &p) { m_package = p; }
     void setType(const string &t)    { m_type = t; }
 
-    EventList* group()             { return m_group; }
-    const EventList* group() const { return m_group; }
-    void setGroup(EventList*);
-
-    duration timeDuration() const         { return m_duration; }
-    void setTimeDuration(duration d)      { m_duration = d; }
+    timeT absoluteTime() const         { return m_absoluteTime; }
+    timeT duration()     const         { return m_duration; }
+    void setTimeDuration(timeT d)      { m_duration = d; }
+    void setAbsoluteTime(timeT d)      { m_absoluteTime = d; }
 
     ViewElements* viewElements()             { return m_viewElements; }
     const ViewElements* viewElements() const { return m_viewElements; }
@@ -293,12 +292,11 @@ private:
 
     string m_package;
     string m_type;
-    duration m_duration;
+    timeT m_duration;
+    timeT m_absoluteTime;
 
     /// The ViewElements this Event corresponds to (one per View type)
     ViewElements *m_viewElements;
-
-    EventList *m_group;
 
     //    typedef map<string, PropertyStoreBase *> PropertyMap;
     typedef hash_map<string, PropertyStoreBase*, hashstring, eqstring> PropertyMap;
@@ -387,7 +385,11 @@ public:
     const Event* event() const { return m_event; }
     Event*       event()       { return m_event; }
 
+    Event::timeT absoluteTime() const { return event()->absoluteTime(); }
+
     void  dump(ostream&) const;
+
+    friend bool operator<(const ViewElement&, const ViewElement&);
 
 protected:
     Event *m_event;

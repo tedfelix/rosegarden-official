@@ -66,8 +66,8 @@ PropertyStoreBase::~PropertyStoreBase()
 
 Element2::Element2()
     : m_duration(0),
-      m_viewElements(0),
-      m_group(0)
+      m_absoluteTime(0),
+      m_viewElements(0)
 {
 }
 
@@ -75,15 +75,15 @@ Element2::Element2(const string &package, const string &type)
     : m_package(package),
       m_type(type),
       m_duration(0),
-      m_viewElements(0),
-      m_group(0)
+      m_absoluteTime(0),
+      m_viewElements(0)
 {
 }
 
 Element2::Element2(const Element2 &e)
     : m_duration(0),
-      m_viewElements(0),
-      m_group(0)
+      m_absoluteTime(0),
+      m_viewElements(0)
 {
     copyFrom(e);
 }
@@ -92,7 +92,6 @@ Element2::~Element2()
 {
     scrapMap();
     delete m_viewElements;
-    delete m_group;
 }
 
 Element2&
@@ -124,7 +123,6 @@ void
 Element2::copyFrom(const Element2 &e)
 {
     delete m_viewElements;
-    delete m_group;
     scrapMap();
 
     for (PropertyMap::const_iterator i = e.m_properties.begin();
@@ -135,21 +133,8 @@ Element2::copyFrom(const Element2 &e)
     if (e.viewElements())
         m_viewElements = new ViewElements(*(e.viewElements()));
 
-    if (e.group())
-        m_group = new EventList(*(e.group()));
 }
 
-
-void
-Element2::setGroup(EventList *el)
-{
-    if (m_group) {
-        // this will also delete all elements in m_group
-        delete m_group;
-    }
-    
-    m_group = el;
-}
 
 void
 Element2::setViewElements(ViewElements *ve)
@@ -183,7 +168,13 @@ Element2::dump(ostream& out) const
 #endif
 }
 
+bool
+operator<(const Element2 &a, const Element2 &b)
+{
+    return a.absoluteTime() < b.absoluteTime();
+}
 
+//////////////////////////////////////////////////////////////////////
 
 ViewElement::ViewElement(Event *e)
     : m_event(e)
@@ -212,3 +203,8 @@ ViewElements::~ViewElements()
 }
 
 
+bool
+operator<(const ViewElement &a, const ViewElement &b)
+{
+    return a.event()->absoluteTime() < b.event()->absoluteTime();
+}
