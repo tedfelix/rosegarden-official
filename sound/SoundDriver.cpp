@@ -34,7 +34,8 @@ PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
                                      const RealTime &startTime,
                                      const RealTime &startIndex,
                                      const RealTime &duration,
-                                     RingBuffer *ringBuffer):
+                                     unsigned int playBufferSize, // size of the required return buffer
+                                     RingBuffer *ringBuffer):     // external ringbuffer
         m_startTime(startTime),
         m_startIndex(startIndex),
         m_duration(duration),
@@ -44,7 +45,9 @@ PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
         m_instrumentId(instrumentId),
         m_ringBuffer(ringBuffer),
         m_ringBufferThreshold(0),
-        m_initialised(false)
+        m_playBufferSize(playBufferSize),
+        m_initialised(false),
+        m_externalRingbuffer(false)
 {
 #define DEBUG_PLAYABLE_CONSTRUCTION
 #ifdef DEBUG_PLAYABLE_CONSTRUCTION
@@ -68,6 +71,7 @@ PlayableAudioFile::initialise()
 
     // Scan to the beginning of the data chunk we need
     //
+    std::cout << "PlayableAudioFile::initialise - scanning to " << m_startIndex << std::endl;
     scanTo(m_startIndex);
 
     // if no external ringbuffer then create one
@@ -75,21 +79,23 @@ PlayableAudioFile::initialise()
     {
         int bufferSize = 32767; // 32k ringbuffer as default size
 
-        // Default to eighth of a second's worth of data
+        // Default to a quarter of a second's worth of data in the buffer
         //
-        if (m_audioFile) bufferSize = m_audioFile->getSampleRate() * m_audioFile->getBytesPerFrame() / 8;
+        if (m_audioFile) bufferSize = m_audioFile->getSampleRate() * m_audioFile->getBytesPerFrame() / 4;
 
         m_ringBuffer = new RingBuffer(bufferSize);
     }
+    else
+        m_externalRingbuffer = true;
 
     int size = m_ringBuffer->getSize();
 
-    m_playBuffer = new char[size];
+    m_playBuffer = new char[m_playBufferSize];
 
     // Put a random amount of something into the buffer to start with
     //
     int initialSize = size / 4 + int(double(size)/2.0 * double(rand()) / double(RAND_MAX));
-    std::cout << "PlayableAudioFile::initialise - initial buffer size = " << initialSize << std::endl;
+    //std::cout << "PlayableAudioFile::initialise - initial buffer size = " << initialSize << std::endl;
 
     m_ringBufferThreshold = size / 4;
 
@@ -107,7 +113,7 @@ PlayableAudioFile::~PlayableAudioFile()
         delete m_file;
     }
 
-    delete m_ringBuffer;
+    if (m_externalRingbuffer == false) delete m_ringBuffer;
     delete [] m_playBuffer;
 
 #ifdef DEBUG_PLAYABLE_CONSTRUCTION
@@ -142,7 +148,7 @@ PlayableAudioFile::getSampleFrames(unsigned int frames)
         {
             // Zero any output buffer that didn't get filled
             //
-            for (unsigned int i = count; i < m_ringBuffer->getSize(); ++i)
+            for (unsigned int i = count; i < m_playBufferSize; ++i)
                 m_playBuffer[i] = 0;
 
 #ifdef DEBUG_PLAYABLE
@@ -606,7 +612,8 @@ SoundDriver::queueAudio(InstrumentId instrumentId,
                                                audioFile,
                                                absoluteTime + playLatency,
                                                audioStartMarker - absoluteTime,
-                                               duration);
+                                               duration,
+                                               4096);
 
     queueAudio(newAF);
 

@@ -163,6 +163,10 @@ static const int reportPasses = 5;
 pthread_t            _diskThread;
 pthread_mutex_t      _diskThreadLock = PTHREAD_MUTEX_INITIALIZER;
 
+// A set of RingBuffers that we can reuse
+//
+static std::vector<std::pair<bool, RingBuffer*> > _ringBuffer;
+
 #endif
 
 static bool              _threadJackClosing;
@@ -222,8 +226,14 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
 
     _jackMappedEventCounter = 0;
 
-    // no disk thread
-    _diskThread = 0;
+    // Setup RingBuffer vector
+    //
+    for (unsigned int i = 0; i < 24; ++i)
+    {
+        RingBuffer *ringBuffer  = new RingBuffer(32767);
+        ringBuffer->lock(); // lock the ringbuffer into physical memory
+        _ringBuffer.push_back(std::pair<bool, RingBuffer*>(false, ringBuffer));
+    }
 
 #endif
 
@@ -338,6 +348,12 @@ AlsaDriver::shutdown()
     // Clear the mutex
     //
     pthread_mutex_destroy(&_diskThreadLock);
+
+    // clear ring buffers
+    //
+    for (unsigned int i = 0; i < _ringBuffer.size(); ++i)
+        delete _ringBuffer[i].second;
+    _ringBuffer.clear();
 
 #endif // HAVE_LIBJACK
     AUDIT_UPDATE;
@@ -1734,6 +1750,10 @@ AlsaDriver::stopPlayback()
     clearAudioPlayQueue();
     pthread_mutex_unlock(&_diskThreadLock);
 
+    // free all RingBuffers
+    //
+    for (unsigned int j = 0; j < _ringBuffer.size(); ++j) _ringBuffer[j].first = false;
+
 #endif
 
 #ifdef HAVE_LADSPA
@@ -1915,6 +1935,10 @@ AlsaDriver::processAudioQueue(const RealTime &playLatency, bool now)
 
     for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); ++it)
     {
+        // buffer up, buttercup
+        if ((*it)->getStatus() == PlayableAudioFile::IDLE)
+            (*it)->fillRingBuffer();
+
         if ((currentTime >= (*it)->getStartTime() || now) &&
             (*it)->getStatus() == PlayableAudioFile::IDLE)
         {
@@ -1924,22 +1948,32 @@ AlsaDriver::processAudioQueue(const RealTime &playLatency, bool now)
         if (currentTime >= (*it)->getEndTime() &&
             (*it)->getStatus() == PlayableAudioFile::PLAYING)
         {
-             (*it)->setStatus(PlayableAudioFile::DEFUNCT);
+            (*it)->setStatus(PlayableAudioFile::DEFUNCT);
 
-             // Simple event to inform that AudioFileId has
-             // now stopped playing.
-             //
-             try
-             {
-                 MappedEvent *mE =
-                     new MappedEvent((*it)->getAudioFile()->getId(),
-                                     MappedEvent::AudioStopped,
-                                     0);
+            // Simple event to inform that AudioFileId has
+            // now stopped playing.
+            //
+            try
+            {
+                MappedEvent *mE =
+                    new MappedEvent((*it)->getAudioFile()->getId(),
+                                    MappedEvent::AudioStopped,
+                                    0);
 
-                 // send completion event
-                 insertMappedEventForReturn(mE);
-             }
-             catch(...) {;}
+                // send completion event
+                insertMappedEventForReturn(mE);
+            }
+            catch(...) {;}
+
+            for (unsigned int j = 0; _ringBuffer.size(); ++j)
+            {
+                if (_ringBuffer[j].second == (*it)->getRingBuffer())
+                {
+                    _ringBuffer[j].first = false;
+                    break;
+                }
+            }
+            
         }
     }
 
@@ -2591,6 +2625,20 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                         adjustedEventTime = RealTime::zeroTime;
                 }
 
+                // Get a RingBuffer - if there's not one available the zero pointer
+                // will generate one inside the PlayableAudioFile.
+                //
+                RingBuffer *ringBuffer = 0;
+                for (unsigned int j = 0; _ringBuffer.size(); ++j)
+                {
+                    if (_ringBuffer[j].first == false)
+                    {
+                        ringBuffer = _ringBuffer[j].second;
+                        _ringBuffer[j].first = true;
+                        break;
+                    }
+                }
+
                 // Create this event in this thread and push it onto audio queue.
                 // All initialisation will occur in the disk thread.
                 //
@@ -2599,7 +2647,9 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                                           getAudioFile((*i)->getAudioID()),
                                           adjustedEventTime - playLatency,
                                           (*i)->getAudioStartMarker(),
-                                          (*i)->getDuration());
+                                          (*i)->getDuration(),
+                                          4096, // play buffer size
+                                          ringBuffer);
 
                 // This is thread safe as we push the audio file into a holding queue
                 // which is pushed onto the actual audio queue at pushPlayableAudioQueue()
@@ -4700,7 +4750,7 @@ AlsaDriver::jackDiskThread(void *arg)
                 pthread_mutex_unlock(&_diskThreadLock);
             }
 
-            usleep(10000); // sleep for a hundreth of a second
+            usleep(5000); // sleep for 5 milliseconds
 
 #ifdef DEBUG_DISK_THREAD
             std::cerr << "AlsaDriver::jackDiskThread - continuing" 

@@ -94,6 +94,7 @@ public:
                       const RealTime &startTime,
                       const RealTime &startIndex,
                       const RealTime &duration,
+                      unsigned int playBufferSize,
                       RingBuffer *ringBuffer = 0);
 
     ~PlayableAudioFile();
@@ -192,11 +193,16 @@ protected:
     // Our local fixed size playbuffer which takes from the RingBuffer
     //
     char                 *m_playBuffer;
+    unsigned int          m_playBufferSize;
 
     // Have we initialised yet?  Don't do this from the constructor as we want
     // the disk thread to pick up the slack.
     //
     bool                  m_initialised;
+
+    // So we know not to delete the RingBuffer when this object dies
+    //
+    bool                  m_externalRingbuffer;
 
 };
 
