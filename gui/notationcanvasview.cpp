@@ -58,15 +58,12 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
 {
     bool needUpdate = false;
     
-//     if (m_currentHighlightedLine)
-//         m_currentHighlightedLine->setHighlighted(false);
-
     QCanvasItemList itemList = canvas()->collisions(e->pos());
 
     if(itemList.isEmpty() && posIsTooFarFromStaff(e->pos())) {
 
         m_currentHighlightedLine = 0;
-        m_dualArrow->hide();
+//         m_dualArrow->hide();
 
         needUpdate = true;
 
@@ -83,17 +80,17 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
             if ((staffLine = dynamic_cast<StaffLine*>(item))) {
                 m_currentHighlightedLine = staffLine;
 
-                // the offset is needed to avoid that the pixmap is
-                // hidden by the mouse pointer
-                m_dualArrow->setX(e->x() + 10);
+//                 // the offset is needed to avoid that the pixmap is
+//                 // hidden by the mouse pointer
+//                 m_dualArrow->setX(e->x() + 10);
 
                 QPoint point = m_currentHighlightedLine->startPoint();
 
-                // TODO : change this when Chris finishes pitch<->y stuff
-                //
-                m_dualArrow->setY(point.y() + m_currentHighlightedLine->y());
+//                 // TODO : change this when Chris finishes pitch<->y stuff
+//                 //
+//                 m_dualArrow->setY(point.y() + m_currentHighlightedLine->y());
 
-                m_dualArrow->show();
+//                 m_dualArrow->show();
                 m_lastYPosNearStaff = e->y();
 
                 needUpdate = true;
@@ -111,7 +108,7 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 {
     kdDebug(KDEBUG_AREA) << "mousepress" << endl;
 
-    if (m_currentHighlightedLine && m_dualArrow->visible()) {
+    if (m_currentHighlightedLine /* && m_dualArrow->visible()*/) {
         kdDebug(KDEBUG_AREA) << "mousepress : m_currentHighlightedLine != 0 - inserting note - staff pitch : "
                              << "(no longer relevant)" << endl;
 //!!!                             << m_currentHighlightedLine->associatedPitch() << endl;
@@ -120,7 +117,7 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
         return;
     }
     
-#if 0 // all this should be removed
+#if 0 // old version : collision detection. Keep around just in case.
     QCanvasItemList itemList = canvas()->collisions(e->pos());
 
     if(itemList.isEmpty()) { // click was not on an item
