@@ -158,6 +158,8 @@ protected slots:
 
     void slotTrackButtonsWidthChanged();
 
+    void slotSelectedSegments(std::vector<Rosegarden::Segment*> segments);
+
 signals:
     /**
      * Emitted when the represented data changed and the SegmentCanvas
@@ -180,6 +182,12 @@ signals:
      *
      */
     void trackSelected(int);
+
+    /*
+     * Send up to RosegardenGUIView
+     *
+     */
+    void selectedSegments(std::vector<Rosegarden::Segment*> segments);
 
 protected:
     

@@ -263,6 +263,11 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
 	    this, SLOT(slotSplitSegment(Rosegarden::Segment*,
 					Rosegarden::timeT)));
 
+    connect(m_segmentCanvas, 
+            SIGNAL(selectedSegments(std::vector<Rosegarden::Segment*>)),
+            this,
+            SLOT(slotSelectedSegments(std::vector<Rosegarden::Segment*>)));
+
     connect(getCommandHistory(), SIGNAL(commandExecuted(KCommand *)),
 	    this, SLOT(slotCommandExecuted(KCommand *)));
 
@@ -564,6 +569,11 @@ TrackEditor::addCommandToHistory(KCommand *command)
 }
 
 
+void
+TrackEditor::slotSelectedSegments(std::vector<Rosegarden::Segment*> segments)
+{
+    emit selectedSegments(segments);
+}
 
 
 

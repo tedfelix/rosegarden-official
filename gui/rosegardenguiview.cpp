@@ -100,6 +100,10 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     connect(m_trackEditor, SIGNAL(trackSelected(int)),
             SLOT(slotSelectTrackSegments(int)));
 
+    connect(m_trackEditor,
+           SIGNAL(selectedSegments(std::vector<Rosegarden::Segment*>)),
+           this,
+           SLOT(slotSelectedSegments(std::vector<Rosegarden::Segment*>)));
 
     if (doc)
         m_trackEditor->setupSegments();
@@ -265,6 +269,14 @@ RosegardenGUIView::setShift(const bool &value)
 	slotSetLoopingMode(value);
     m_trackEditor->slotSetFineGrain(value);
 } 
+
+void
+RosegardenGUIView::slotSelectedSegments(std::vector<Rosegarden::Segment*> segments)
+{
+    // update the segment parameter box
+    m_segmentParameterBox->useSegments(segments);
+}
+
 
 
 

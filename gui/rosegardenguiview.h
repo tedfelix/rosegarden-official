@@ -133,6 +133,8 @@ public slots:
     //
     void slotSelectTrackSegments(int);
 
+    void slotSelectedSegments(std::vector<Rosegarden::Segment*> segments);
+
 signals:
     void activateTool(SegmentCanvas::ToolType);
 

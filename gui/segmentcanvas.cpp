@@ -819,6 +819,9 @@ SegmentSelector::SegmentSelector(SegmentCanvas *c)
 
     connect(this, SIGNAL(changeSegmentTrackAndStartTime(Rosegarden::Segment *, Rosegarden::TrackId, Rosegarden::timeT)),
             c,    SIGNAL(changeSegmentTrackAndStartTime(Rosegarden::Segment *, Rosegarden::TrackId, Rosegarden::timeT)));
+
+    connect(this, SIGNAL(selectedSegments(std::vector<Rosegarden::Segment*>)),
+            c,     SIGNAL(selectedSegments(std::vector<Rosegarden::Segment*>)));
 }
 
 SegmentSelector::~SegmentSelector()
@@ -829,7 +832,7 @@ SegmentSelector::~SegmentSelector()
 void
 SegmentSelector::clearSelected()
 {
-    // For the moment only clear all selected from the list
+    // For the moment only clear all selected from the vector
     //
     SegmentItemList::iterator it;
     for (it = m_selectedItems.begin();
@@ -839,7 +842,7 @@ SegmentSelector::clearSelected()
         it->second->setSelected(false, m_canvas->getSegmentBrush());
     }
 
-    // now clear the list
+    // now clear the vector
     //
     m_selectedItems.clear();
 
@@ -858,7 +861,7 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
     SegmentItem *item = m_canvas->findSegmentClickedOn(e->pos());
 
     // If we're in segmentAddMode then we don't clear the
-    // selection list
+    // selection vector
     //
     if (!m_segmentAddMode)
        clearSelected();
@@ -867,11 +870,32 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
     {
         m_currentItem = item;
         m_clickPoint = e->pos();
-       slotSelectSegmentItem(m_currentItem);
+        slotSelectSegmentItem(m_currentItem);
+
+        // emit this time for movement tracking (as we can move
+        // through the Selector)
+        //
         emit changeSegmentTrackAndStartTime(m_currentItem->getSegment(),
 					    m_currentItem->getTrack(),
 					    m_currentItem->getStartTime());
+
     }
+ 
+    // Tell the RosegardenGUIView that we've selected some new Segments -
+    // when the list is empty we're just unselecting.
+    //
+    //
+    std::vector<Rosegarden::Segment*> segmentList;
+    SegmentItemList::iterator it;
+
+    for (it = m_selectedItems.begin();
+         it != m_selectedItems.end();
+         it++)
+    {
+        segmentList.push_back(it->second->getSegment());
+    }
+
+    emit selectedSegments(segmentList);
 
 }
 

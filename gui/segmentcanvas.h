@@ -23,7 +23,6 @@
 #define SEGMENTCANVAS_H
 
 #include <vector>
-#include <list>
 
 #include "Event.h"
 #include "Track.h"
@@ -345,6 +344,8 @@ signals:
     //!!! what if the staff ruler changes (because of a change in time
     //sig or whatever)?
 
+    void selectedSegments(std::vector<Rosegarden::Segment*>);
+
 private:
 
     SegmentItem *findSegmentItem(Rosegarden::Segment *segment);
@@ -485,7 +486,7 @@ public:
     virtual void handleMouseButtonRelease(QMouseEvent*);
     virtual void handleMouseMove(QMouseEvent*);
 
-    // Clear all Segments in our list and on the view
+    // Clear all Segments in our vector and on the view
     //
     void clearSelected();
 
@@ -508,10 +509,11 @@ signals:
 					Rosegarden::TrackId,
 					Rosegarden::timeT);
 
+    void selectedSegments(std::vector<Rosegarden::Segment*>);
 
 private:
     typedef std::pair<QPoint, SegmentItem *> SegmentItemPair;
-    typedef std::list<SegmentItemPair> SegmentItemList;
+    typedef std::vector<SegmentItemPair> SegmentItemList;
     SegmentItemList m_selectedItems;
 
     bool m_segmentAddMode;

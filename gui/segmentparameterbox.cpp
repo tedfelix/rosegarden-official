@@ -185,7 +185,6 @@ SegmentParameterBox::populateBoxFromSegments()
         }
     }
 
-    cout << "REPEAT = " << repeat << endl;
     switch(repeat)
     {
         case All:
