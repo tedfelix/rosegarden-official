@@ -2236,6 +2236,9 @@ bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
     if (m_bottomBarButtons) {
 	m_bottomBarButtons->update();
     }
+    if (m_rawNoteRuler && m_rawNoteRuler->isVisible()) {
+	m_rawNoteRuler->update();
+    }
 
     return true;
 }
@@ -2705,7 +2708,6 @@ void NotationView::refreshSegment(Segment *segment,
     removeProgressEventFilter();
 
     Event::dumpStats(std::cerr);
-//!!!    doDeferredCursorMove();
     slotSetPointerPosition(getDocument()->getComposition().getPosition(), false);
 
     if (m_currentEventSelection &&

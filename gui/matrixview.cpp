@@ -1616,7 +1616,7 @@ MatrixView::initActionsToolbar()
     m_snapValues.push_back(crotchetDuration / 4);
     m_snapValues.push_back(crotchetDuration / 3);
     m_snapValues.push_back(crotchetDuration / 2);
-    m_snapValues.push_back(crotchetDuration / 1.5);
+    m_snapValues.push_back(crotchetDuration * 3 / 2);
     m_snapValues.push_back(crotchetDuration);
     m_snapValues.push_back(crotchetDuration * 2);
     m_snapValues.push_back(Rosegarden::SnapGrid::SnapToBeat);

@@ -776,6 +776,8 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
              midiEvent != m_midiComposition[i].end();
              midiEvent++)
         {
+	    rosegardenEvent = 0;
+
             // [cc] -- avoid floating-point
             rosegardenTime = origin +
                 timeT(((*midiEvent)->getTime() * crotchetTime) / divisor);
@@ -783,6 +785,11 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                 timeT(((*midiEvent)->getDuration() * crotchetTime) / divisor);
 	    if (rosegardenTime + rosegardenDuration > maxTime) {
 		maxTime = rosegardenTime + rosegardenDuration;
+	    }
+
+	    timeT fillFromTime = rosegardenTime;
+	    if (rosegardenSegment->empty()) {
+		fillFromTime = composition.getBarStartForTime(rosegardenTime);
 	    }
 
             if ((*midiEvent)->isMeta())
@@ -794,7 +801,6 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                         std::string text = (*midiEvent)->getMetaMessage();
                         rosegardenEvent =
                             Text(text).getAsEvent(rosegardenTime);
-			rosegardenSegment->insert(rosegardenEvent);
                     }
                     break;
 
@@ -804,7 +810,6 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                         rosegardenEvent =
                             Text(text, Text::Lyric).
 			    getAsEvent(rosegardenTime);
-			rosegardenSegment->insert(rosegardenEvent);
                     }
                     break;
 
@@ -869,7 +874,7 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                     isMinor     = (int) (*midiEvent)->getMetaMessage()[1];
                     isSharp     = accidentals < 0 ?        false  :  true;
                     accidentals = accidentals < 0 ?  -accidentals :  accidentals;
-                    // create and insert the key event
+                    // create the key event
                     //
                     try
                     {
@@ -887,7 +892,6 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 #endif
                         break;
                     }
-                    rosegardenSegment->insert(rosegardenEvent);
                     break;
 
                 case MIDI_SEQUENCE_NUMBER:
@@ -930,7 +934,6 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                                           (*midiEvent)->getPitch());
                 rosegardenEvent->set<Int>(BaseProperties::VELOCITY,
                                           (*midiEvent)->getVelocity());
-                rosegardenSegment->insert(rosegardenEvent);
                 break;
 
                 // We ignore any NOTE OFFs here as we've already
@@ -999,7 +1002,6 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 		rosegardenEvent =
 		    ProgramChange((*midiEvent)->getData1()).
 		    getAsEvent(rosegardenTime);
-		rosegardenSegment->insert(rosegardenEvent);
                 break;
 
             case MIDI_CTRL_CHANGE:
@@ -1062,7 +1064,6 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 		    Controller((*midiEvent)->getData1(),
 			       (*midiEvent)->getData2()).
 		    getAsEvent(rosegardenTime);
-                rosegardenSegment->insert(rosegardenEvent);
                 break;
 
             case MIDI_PITCH_BEND:
@@ -1070,14 +1071,12 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 		    PitchBend((*midiEvent)->getData2(),
 			      (*midiEvent)->getData1()).
 		    getAsEvent(rosegardenTime);
-                rosegardenSegment->insert(rosegardenEvent);
                 break;
 
             case MIDI_SYSTEM_EXCLUSIVE:
                 rosegardenEvent = 
 		    SystemExclusive((*midiEvent)->getMetaMessage()).
 		    getAsEvent(rosegardenTime);
-                rosegardenSegment->insert(rosegardenEvent);
                 break;
 
             case MIDI_POLY_AFTERTOUCH:
@@ -1085,14 +1084,12 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 		    KeyPressure((*midiEvent)->getData1(),
 				(*midiEvent)->getData2()).
 		    getAsEvent(rosegardenTime);
-                rosegardenSegment->insert(rosegardenEvent);
                 break;
 
             case MIDI_CHNL_AFTERTOUCH:
                 rosegardenEvent =
 		    ChannelPressure((*midiEvent)->getData1()).
 		    getAsEvent(rosegardenTime);
-                rosegardenSegment->insert(rosegardenEvent);
                 break;
 
             default:
@@ -1103,21 +1100,29 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 #endif
                 break;
             }
+
+	    if (rosegardenEvent) {
+		if (fillFromTime < rosegardenTime) {
+		    rosegardenSegment->fillWithRests(fillFromTime, rosegardenTime);
+		}
+		rosegardenSegment->insert(rosegardenEvent);
+	    }
         }
 
 	if (rosegardenSegment->size() > 0) {
 
-	    // if all we have is key signatures, take this to be a
-	    // conductor segment and don't insert it
+	    // if all we have is key signatures and rests, take this
+	    // to be a conductor segment and don't insert it
 	    //
 	    bool keySigsOnly = true;
 	    bool haveKeySig = false;
 	    for (Segment::iterator i = rosegardenSegment->begin();
 		 i != rosegardenSegment->end(); ++i) {
-		if (!(*i)->isa(Rosegarden::Key::EventType)) {
+		if (!(*i)->isa(Rosegarden::Key::EventType) &&
+		    !(*i)->isa(Rosegarden::Note::EventRestType)) {
 		    keySigsOnly = false;
 		    break;
-		} else {
+		} else if ((*i)->isa(Rosegarden::Key::EventType)) {
 		    haveKeySig = true;
 		}
 	    }

@@ -819,12 +819,13 @@ protected:
     std::vector<QCanvasItem *> m_pageNumbers;
 
     Rosegarden::timeT m_insertionTime;
-    enum {
+    enum DeferredCursorMoveType {
         NoCursorMoveNeeded,
         CursorMoveOnly,
         CursorMoveAndMakeVisible,
         CursorMoveAndScrollToPosition
-    } m_deferredCursorMove;
+    };
+    DeferredCursorMoveType m_deferredCursorMove;
     double m_deferredCursorScrollToX;
 
     Rosegarden::Accidental m_currentAccidental;

@@ -79,28 +79,28 @@ public:
      * quantized -- otherwise just return the unquantized duration.
      * Do not modify the event.
      */
-    timeT getQuantizedDuration(const Event *e) const;
+    virtual timeT getQuantizedDuration(const Event *e) const;
 
     /**
      * Return the quantized absolute time of the event if it has been
      * quantized -- otherwise just return the unquantized time.  Do
      * not modify the event.
      */
-    timeT getQuantizedAbsoluteTime(const Event *e) const;
+    virtual timeT getQuantizedAbsoluteTime(const Event *e) const;
 
     /**
      * Return the unquantized absolute time of the event --
      * the absolute time that would be restored by a call to
      * unquantize.
      */
-    timeT getUnquantizedAbsoluteTime(Event *e) const;
+    virtual timeT getUnquantizedAbsoluteTime(Event *e) const;
 
     /**
      * Return the unquantized absolute time of the event --
      * the absolute time that would be restored by a call to
      * unquantize.
      */
-    timeT getUnquantizedDuration(Event *e) const;
+    virtual timeT getUnquantizedDuration(Event *e) const;
 
     /**
      * Unquantize all events in the given range, for this
@@ -327,6 +327,14 @@ public:
      */
     void setMaxTuplet(int);
     int  getMaxTuplet() const;
+
+    /**
+     * Set whether we assume the music may be contrapuntal -- that is,
+     * may have notes that overlap rather than simply a sequence of
+     * individual notes and chords.
+     */
+    void setContrapuntal(bool);
+    bool getContrapuntal() const;
 
     /**
      * Set whether to add articulations (staccato, tenuto, slurs).

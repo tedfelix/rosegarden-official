@@ -156,7 +156,7 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 
     NotationStaff *staff = dynamic_cast<NotationStaff *>
 	(m_linedStaffManager.getStaffForCanvasCoords(e->x(), e->y()));
-
+/*!!!
     if (!staff) {
 
         if (itemList.count() != 0) // the mouse press occurred on at least one
@@ -168,14 +168,19 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
         return;
 
     }
-    
+*/
     QCanvasItemList::Iterator it;
     QCanvasItem* activeItem = 0;
     NotationElement *clickedNote = 0;
     NotationElement *clickedVagueNote = 0;
     NotationElement *clickedNonNote = 0;
 
-    int clickHeight = staff->getHeightAtCanvasY(e->y());
+    bool haveClickHeight = false;
+    int clickHeight = 0;
+    if (staff) {
+	clickHeight = staff->getHeightAtCanvasY(e->y());
+	haveClickHeight = true;
+    }
 
     for (it = itemList.begin(); it != itemList.end(); ++it) {
 
@@ -190,7 +195,7 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 
 	NotationElement &el = sprite->getNotationElement();
 
-	if (el.isNote()) {
+	if (el.isNote() && haveClickHeight) {
 	    long eventHeight = 0;
 	    if (el.event()->get<Rosegarden::Int>
 		(NotationProperties::HEIGHT_ON_STAFF, eventHeight)) {
@@ -214,7 +219,7 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 		    if (!clickedVagueNote) clickedVagueNote = &el;
 		}
 	    }
-        } else {
+        } else if (!el.isNote()) {
 	    if (!clickedNonNote) clickedNonNote = &el;
 	}
     }
@@ -225,12 +230,7 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
     }
 
     int staffNo = -1;
-
-    if (staff)
-        staffNo = staff->getId();
-    else
-        NOTATION_DEBUG << "NotationCanvasView::contentsMousePressEvent() : big problem - couldn't find staff for staff line\n";
-
+    if (staff) staffNo = staff->getId();
 
     if (clickedNote)
         handleMousePress(clickHeight, staffNo, e, clickedNote);

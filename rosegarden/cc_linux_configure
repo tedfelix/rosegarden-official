@@ -21,5 +21,7 @@ make -f Makefile.cvs
 
 #CXX='gfilt' CXXFLAGS="-gstabs+3 -Wall -O0" ./configure --enable-debug=full
 
+#CXXFLAGS="-gstabs+3 -Wall -O0" ./configure --enable-debug=full --with-qt-dir=/home/cannam/qt-x11-free-3.2.1
+
 CXXFLAGS="-gstabs+3 -Wall -O0" ./configure --enable-debug=full
 

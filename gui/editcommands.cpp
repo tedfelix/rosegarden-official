@@ -826,6 +826,7 @@ EventQuantizeCommand::makeQuantizer(QString configGroup,
     bool durations = config->readBoolEntry("quantizedurations", false);
     int simplicity = config->readNumEntry("quantizesimplicity", 13);
     int maxTuplet = config->readNumEntry("quantizemaxtuplet", 3);
+    bool counterpoint = config->readNumEntry("quantizecounterpoint", false);
     bool articulate = config->readBoolEntry("quantizearticulate", true);
     
     m_quantizer = 0;
@@ -851,6 +852,7 @@ EventQuantizeCommand::makeQuantizer(QString configGroup,
 	nq->setUnit(unit);
 	nq->setSimplicityFactor(simplicity);
 	nq->setMaxTuplet(maxTuplet);
+	nq->setContrapuntal(counterpoint);
 	nq->setArticulate(articulate);
 
 	m_quantizer = nq;

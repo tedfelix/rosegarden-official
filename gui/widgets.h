@@ -416,6 +416,7 @@ protected:
     KComboBox *m_notationUnitCombo;
     KComboBox *m_simplicityCombo;
     KComboBox *m_maxTuplet;
+    QCheckBox *m_counterpoint;
 
     QPushButton *m_advancedButton;
     QGroupBox *m_postProcessingBox;

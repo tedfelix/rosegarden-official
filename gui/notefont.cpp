@@ -26,6 +26,7 @@
 #include <qbitmap.h>
 #include <qdir.h>
 #include <qpainter.h>
+#include <qfontdatabase.h>
 
 #include <kglobal.h>
 #include <kstddirs.h>
@@ -597,6 +598,8 @@ NoteFontMap::checkFont(QString name, int size, QFont &font) const
 
     NOTATION_DEBUG << "NoteFontMap::checkFont: have family " << info.family() << ", size " << info.pixelSize() << " (exactMatch " << info.exactMatch() << ")" << endl;
 
+//    return info.exactMatch();
+
     // The Qt documentation says:
     //
     //   bool QFontInfo::exactMatch() const
@@ -605,10 +608,63 @@ NoteFontMap::checkFont(QString name, int size, QFont &font) const
     //
     // My arse.  I specify "feta", I get "Verdana", and exactMatch
     // returns true.  Uh huh.
+    //
+    // UPDATE: in newer versions of Qt, I specify "fughetta", I get
+    // "Fughetta [macromedia]", and exactMatch returns false.  Just as
+    // useless, but in a different way.  WHY OH WHY IS FONT MANAGEMENT
+    // UNDER X STILL SO SHIT AFTER ALL THESE YEARS???  WHY???  It's
+    // like people are trying to fix the old deficiencies by inventing
+    // new incompatible ways of doing things and then deploying
+    // several different fixes at once so that none of them actually
+    // works.  At least in the past I used to be able to see the
+    // definitive list of fonts with xlsfonts and know exactly what I
+    // had to work with; now there are fonts that Qt knows about but
+    // xlsfonts doesn't even list, and my Qt applications no longer
+    // seem to be able to load _any_ of the fonts xlsfonts _does_ know
+    // about.  I can't even set misc-fixed in konsole!  Is it me?  Is
+    // it the distro I'm using?  Are SuSE just morons?  This stuff has
+    // worked fine under Windows for nearly TEN YEARS now, and X just
+    // can't do it.  The situation is totally fucked and getting
+    // worse.
 
-//    return info.exactMatch();
+    QString family = info.family().lower();
 
-    return info.family().lower() == name.lower();
+    if (family == name.lower()) return true;
+    else {
+	int bracket = family.find(" [");
+	if (bracket > 1) family = family.left(bracket);
+	if (family == name.lower()) return true;
+    }
+
+//    static bool printed = false;
+    static bool printed = true;
+    if (!printed) {
+	std::cerr << "WARNING: couldn't load requested font " << name << std::endl;
+	std::cerr << "Fonts in database are as follows (* = couldn't load)" << std::endl;
+	QFontDatabase db;
+	QStringList families(db.families());
+	for (QStringList::iterator i = families.begin(); i != families.end(); ++i) {
+	    std::cerr << *i << " { ";
+	    QStringList styles = db.styles(*i);
+	    for (QStringList::iterator j = styles.begin(); j != styles.end(); ++j) {
+		std::cerr << *j << " ( ";
+
+		QValueList<int> sizes = db.smoothSizes(*i, *j);
+		for (QValueList<int>::iterator k = sizes.begin(); k != sizes.end(); ++k) {
+		    std::cerr << *k;
+		    QFont font(*i, *k);
+		    QFontInfo info(font);
+		    if (!info.family().startsWith(*i)) std::cerr << "*";
+		    std::cerr << " ";
+		}
+		std::cerr << ") ";
+	    }
+	    std::cerr << "}" << std::endl;
+	}
+	printed = true;
+    }
+
+    return false;
 }
 
 bool

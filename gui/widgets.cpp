@@ -775,7 +775,7 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
 	(1, Horizontal, i18n("Notation parameters"), parameterBox);
     QFrame *notationFrame = new QFrame(m_notationBox);
 
-    layout = new QGridLayout(notationFrame, 3, 2, 5, 3);
+    layout = new QGridLayout(notationFrame, 4, 2, 5, 3);
 
     layout->addWidget(new QLabel(i18n("Base grid unit:"), notationFrame),
 		      1, 0);
@@ -808,6 +808,9 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
 */
     m_maxTuplet->insertItem(i18n("Any"));
     layout->addWidget(m_maxTuplet, 2, 1);
+
+    m_counterpoint = new QCheckBox(i18n("Permit counterpoint"), notationFrame);
+    layout->addMultiCellWidget(m_counterpoint, 3, 3, 0, 1);
 
     m_gridBox = new QGroupBox
 	(1, Horizontal, i18n("Grid parameters"), parameterBox);
@@ -888,6 +891,8 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
 	    (config->readNumEntry("quantizesimplicity", 13) - 11);
 	m_maxTuplet->setCurrentItem
 	    (config->readNumEntry("quantizemaxtuplet", 3) - 1);
+	m_counterpoint->setChecked
+	    (config->readBoolEntry("quantizecounterpoint", false));
 	m_rebeam->setChecked
 	    (config->readBoolEntry("quantizerebeam", true));
 	m_makeViable->setChecked
@@ -905,6 +910,7 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
 	m_durationCheckBox->setChecked(false);
 	m_simplicityCombo->setCurrentItem(2);
 	m_maxTuplet->setCurrentItem(2);
+	m_counterpoint->setChecked(false);
 	m_rebeam->setChecked(true);
 	m_makeViable->setChecked(defaultQuantizer == Notation);
 	m_deCounterpoint->setChecked(defaultQuantizer == Notation);
@@ -1000,6 +1006,7 @@ RosegardenQuantizeParameters::getQuantizer() const
 	nq->setUnit(unit);
 	nq->setSimplicityFactor(m_simplicityCombo->currentItem() + 11);
 	nq->setMaxTuplet(m_maxTuplet->currentItem() + 1);
+	nq->setContrapuntal(m_counterpoint->isChecked());
 	nq->setArticulate(m_articulate->isChecked());
 
 	quantizer = nq;
@@ -1020,6 +1027,8 @@ RosegardenQuantizeParameters::getQuantizer() const
 			       m_simplicityCombo->currentItem() + 11);
 	    config->writeEntry("quantizemaxtuplet",
 			       m_maxTuplet->currentItem() + 1);
+	    config->writeEntry("quantizecounterpoint",
+			       m_counterpoint->isChecked());
 	    config->writeEntry("quantizearticulate",
 			       m_articulate->isChecked());
 	}

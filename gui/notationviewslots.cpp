@@ -1483,6 +1483,9 @@ NotationView::doDeferredCursorMove()
     if (m_deferredCursorMove == NoCursorMoveNeeded) {
         return;
     }
+    
+    DeferredCursorMoveType type = m_deferredCursorMove;
+    m_deferredCursorMove = NoCursorMoveNeeded;
 
     timeT t = m_insertionTime;
 
@@ -1519,7 +1522,7 @@ NotationView::doDeferredCursorMove()
 
         staff->setInsertCursorPosition(*m_hlayout, t);
 
-        if (m_deferredCursorMove == CursorMoveAndMakeVisible) {
+        if (type == CursorMoveAndMakeVisible) {
             getCanvasView()->slotScrollHoriz(int(staff->getCanvasXForLayoutX
 						 (m_hlayout->getXForTime(t))));
         }
@@ -1550,7 +1553,7 @@ NotationView::doDeferredCursorMove()
 		(static_cast<NotationElement*>(*i)->getCanvasX() - 2,
 		 int(static_cast<NotationElement*>(*i)->getCanvasY()));
 	    
-	    if (m_deferredCursorMove == CursorMoveAndMakeVisible) {
+	    if (type == CursorMoveAndMakeVisible) {
 		getCanvasView()->slotScrollHoriz
 		    (int(static_cast<NotationElement*>(*i)->getCanvasX()) - 4);
 	    }
@@ -1560,7 +1563,7 @@ NotationView::doDeferredCursorMove()
 	}
     }
 
-    if (m_deferredCursorMove == CursorMoveAndScrollToPosition) {
+    if (type == CursorMoveAndScrollToPosition) {
 
         // get current canvas x of insert cursor, which might not be
         // what we just set
@@ -1590,7 +1593,6 @@ NotationView::doDeferredCursorMove()
 	}   
     }
 
-    m_deferredCursorMove = NoCursorMoveNeeded;
     updateView();
 }
 
@@ -1788,6 +1790,20 @@ void NotationView::slotItemPressed(int height, int staffNo,
                          << height << ", staffNo = " << staffNo
                          << ")" << endl;
 
+    if (staffNo < 0 && el != 0) {
+	// We have an element but no staff -- that's because the
+	// element extended outside the staff region.  But we need
+	// to handle it properly, so we rather laboriously need to
+	// find out which staff it was.
+	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+	    if (m_staffs[i]->getViewElementList()->findSingle(el) !=
+		m_staffs[i]->getViewElementList()->end()) {
+		staffNo = m_staffs[i]->getId();
+		break;
+	    }
+	}
+    }
+
     ButtonState btnState = e->state();
 
     if (btnState & ControlButton) { // on ctrl-click, set cursor position
@@ -1804,7 +1820,7 @@ void NotationView::slotItemPressed(int height, int staffNo,
         // preceded by a single click event
         if (e->type() == QEvent::MouseButtonDblClick)
             m_tool->handleMouseDoubleClick(unknownTime, height,
-                                        staffNo, e, el);
+					   staffNo, e, el);
         else
             m_tool->handleMousePress(unknownTime, height,
                                      staffNo, e, el);

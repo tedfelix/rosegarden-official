@@ -705,7 +705,11 @@ SegmentNotationHelper::makeNoteViable(iterator i, bool splitAtBars)
 	delete e;
 	e = splits.second;
 
-	if (!havej) j = k;
+	if (!havej) {
+	    j = k;
+	    havej = true;
+	}
+
 	acc += *dli;
 
         e->set<Bool>(TIED_BACKWARD, true);
@@ -962,18 +966,22 @@ SegmentNotationHelper::insertSingleSomething(iterator i, int duration,
 					     Event *modelEvent, bool tiedBack)
 {
     timeT time;
+    timeT notationTime;
     bool eraseI = false;
     timeT effectiveDuration(duration);
 
     if (i == end()) {
 	time = segment().getEndTime();
+	notationTime = time;
     } else {
 	time = (*i)->getAbsoluteTime();
+	notationTime = (*i)->getNotationAbsoluteTime();
 	if (modelEvent->isa(Note::EventRestType) ||
 	    (*i)->isa(Note::EventRestType)) eraseI = true;
     }
 
     Event *e = new Event(*modelEvent, time, effectiveDuration);
+    e->setNotationAbsoluteTime(notationTime);
 
     setInsertedNoteGroup(e, i);
 

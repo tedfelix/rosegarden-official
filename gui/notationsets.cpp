@@ -294,20 +294,10 @@ NotationGroup::sample(const NELIterator &i)
     }
     if (m_userSamples) m_final = i;
 
-    try {
-	std::string t = (*i)->event()->get<String>(BEAMED_GROUP_TYPE);
-
-	if (t == GROUP_TYPE_BEAMED) {
-	    m_type = Beamed;
-	} else if (t == GROUP_TYPE_TUPLED) {
-	    m_type = Tupled;
-	} else if (t == GROUP_TYPE_GRACE) {
-	    m_type = Grace;
-	} else {
-	    NOTATION_DEBUG << "NotationGroup::NotationGroup: Warning: Unknown GroupType \"" << t << "\", defaulting to Beamed" << endl;
-	}
-    } catch (Rosegarden::Event::NoData) {
-	NOTATION_DEBUG << "NotationGroup::NotationGroup: Warning: No GroupType in grouped element, defaulting to Beamed" << endl;
+    std::string t;
+    if (!(*i)->event()->get<String>(BEAMED_GROUP_TYPE, t)) {
+	NOTATION_DEBUG << "NotationGroup::NotationGroup: Rejecting sample() for non-beamed element" << endl;
+	return false;
     }
 
     long n;
@@ -315,7 +305,18 @@ NotationGroup::sample(const NELIterator &i)
     if (m_groupNo == -1) {
 	m_groupNo = n;
     } else if (n != m_groupNo) {
-	NOTATION_DEBUG << "NotationGroup::NotationGroup: Warning: Rejecting sample() for event with group id " << n << " (mine is " << m_groupNo << ")" << endl;
+	NOTATION_DEBUG << "NotationGroup::NotationGroup: Rejecting sample() for event with group id " << n << " (mine is " << m_groupNo << ")" << endl;
+	return false;
+    }
+    
+    if (t == GROUP_TYPE_BEAMED) {
+	m_type = Beamed;
+    } else if (t == GROUP_TYPE_TUPLED) {
+	m_type = Tupled;
+    } else if (t == GROUP_TYPE_GRACE) {
+	m_type = Grace;
+    } else {
+	NOTATION_DEBUG << "NotationGroup::NotationGroup: Warning: Rejecting sample() for unknown GroupType \"" << t << "\"" << endl;
 	return false;
     }
 
