@@ -133,7 +133,8 @@ protected:
         m_subStepLineHeight;
 
     QCanvasLineGroupable* m_mainLine;
-    QCanvasRectangleGroupable* m_background;
+    QCanvasRectangleGroupable* m_greyBackground;
+    QCanvasRectangleGroupable* m_whiteBackground;
 
     PositionCursor* m_cursor;
 
