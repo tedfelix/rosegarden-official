@@ -1300,26 +1300,29 @@ AddMarkerCommand::AddMarkerCommand(Rosegarden::Composition *comp,
                                    const std::string &name,
                                    const std::string &description):
     KNamedCommand(getGlobalName()),
-    m_composition(comp)
+    m_composition(comp),
+    m_detached(true)
 {
     m_marker = new Rosegarden::Marker(time, name, description);
 }
 
 AddMarkerCommand::~AddMarkerCommand()
 {
+    if (m_detached) delete m_marker;
 }
-
 
 void
 AddMarkerCommand::execute()
 {
     m_composition->addMarker(m_marker);
+    m_detached = false;
 }
 
 void
 AddMarkerCommand::unexecute()
 {
     m_composition->detachMarker(m_marker);
+    m_detached = true;
 }
 
 
@@ -1332,12 +1335,14 @@ RemoveMarkerCommand::RemoveMarkerCommand(Rosegarden::Composition *comp,
     m_marker(0),
     m_time(time),
     m_name(name),
-    m_descr(description)
+    m_descr(description),
+    m_detached(false)
 {
 }
 
 RemoveMarkerCommand::~RemoveMarkerCommand()
 {
+    if (m_detached) delete m_marker;
 }
 
 void
@@ -1356,6 +1361,7 @@ RemoveMarkerCommand::execute()
         {
             m_marker = (*it);
             m_composition->detachMarker(m_marker);
+	    m_detached = true;
             return;
         }
     }
@@ -1365,6 +1371,7 @@ void
 RemoveMarkerCommand::unexecute()
 {
     if (m_marker) m_composition->addMarker(m_marker);
+    m_detached = false;
 }
 
 ModifyMarkerCommand::ModifyMarkerCommand(Rosegarden::Composition *comp,

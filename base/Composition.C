@@ -354,6 +354,7 @@ Composition::clear()
     }
 
     clearTracks();
+    clearMarkers();
 
     m_timeSigSegment.clear();
     m_tempoSegment.clear();

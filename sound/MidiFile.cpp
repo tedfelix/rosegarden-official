@@ -814,6 +814,14 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                     }
                     break;
 
+                case MIDI_TEXT_MARKER:
+		    {
+			std::string text = (*midiEvent)->getMetaMessage();
+			composition.addMarker(new Rosegarden::Marker
+					      (rosegardenTime, text, ""));
+		    }
+		    break;
+
                 case MIDI_COPYRIGHT_NOTICE:
 		    if (type == CONVERT_REPLACE) {
 			composition.setCopyrightNote((*midiEvent)->
@@ -898,7 +906,6 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                 case MIDI_SEQUENCE_NUMBER:
                 case MIDI_CHANNEL_PREFIX_OR_PORT:
                 case MIDI_INSTRUMENT_NAME:
-                case MIDI_TEXT_MARKER:
                 case MIDI_CUE_POINT:
                 case MIDI_CHANNEL_PREFIX:
                 case MIDI_SEQUENCER_SPECIFIC:

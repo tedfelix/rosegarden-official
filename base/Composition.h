@@ -142,7 +142,8 @@ public:
     void clearTracks();
 
     /**
-     * Insert a new Track
+     * Insert a new Track.  The Composition takes over ownership of
+     * the track object.
      */
     void addTrack(Track *track);
  
@@ -152,7 +153,8 @@ public:
     void deleteTrack(Rosegarden::TrackId track);
 
     /**
-     * Detach a Track
+     * Detach a Track (revert ownership of the Track object to the
+     * caller).
      */
     bool detachTrack(Rosegarden::Track *track);
 
@@ -166,15 +168,26 @@ public:
     //////
     //
     // MARKERS
+
     markercontainer& getMarkers() { return m_markers; }
     const markercontainer& getMarkers() const { return m_markers; }
 
-    // Convenience stuff for markers
-    //
+    /**
+     * Add a new Marker.  The Composition takes ownership of the
+     * marker object.
+     */
     void addMarker(Rosegarden::Marker *marker);
+
+    /**
+     * Detach a Marker (revert ownership of the Marker object to the
+     * caller).
+     */
     bool detachMarker(Rosegarden::Marker *marker);
+
     bool isMarkerAtPosition(Rosegarden::timeT time) const;
+
     void clearMarkers();
+
 
     //////
     //

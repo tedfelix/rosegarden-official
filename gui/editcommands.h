@@ -460,6 +460,7 @@ protected:
 
     Rosegarden::Composition     *m_composition;
     Rosegarden::Marker          *m_marker;
+    bool                         m_detached;
 
 };
 
@@ -485,6 +486,7 @@ protected:
     Rosegarden::timeT            m_time;
     std::string                  m_name;
     std::string                  m_descr;
+    bool                         m_detached;
 
 };
 
