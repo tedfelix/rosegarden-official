@@ -588,8 +588,13 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 
     int barThickness = m_lineThickness * 5 / 4;
 
-    int row = getRowForLayoutX(layoutX + 1);
-    double x = getCanvasXForLayoutX(layoutX + 1);
+    // hack to ensure the bar line appears on the correct row in
+    // notation page layouts, with a conditional to prevent us from
+    // moving the bar and beat lines in the matrix
+    if (!showBeatLines()) ++layoutX;
+
+    int row = getRowForLayoutX(layoutX);
+    double x = getCanvasXForLayoutX(layoutX);
     int y = getCanvasYForTopLine(row);
 
     QCanvasRectangle *line = new QCanvasRectangle
