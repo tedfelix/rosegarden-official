@@ -121,6 +121,7 @@ class SegmentPencil : public SegmentTool
 public:
 
     virtual void ready();
+    virtual void stow();
 
     virtual void handleMouseButtonPress(QMouseEvent*);
     virtual void handleMouseButtonRelease(QMouseEvent*);
@@ -128,6 +129,9 @@ public:
 
     static const QString ToolName;
 
+protected slots:
+    void slotCanvasScrolled(int newX, int newY);
+    
 protected:
     SegmentPencil(SegmentCanvas*, RosegardenGUIDoc*);
 
@@ -168,12 +172,16 @@ class SegmentMover : public SegmentTool
 public:
 
     virtual void ready();
+    virtual void stow();
 
     virtual void handleMouseButtonPress(QMouseEvent*);
     virtual void handleMouseButtonRelease(QMouseEvent*);
     virtual int  handleMouseMove(QMouseEvent*);
 
     static const QString ToolName;
+
+protected slots:
+    void slotCanvasScrolled(int newX, int newY);
 
 protected:
     SegmentMover(SegmentCanvas*, RosegardenGUIDoc*);
@@ -203,6 +211,7 @@ class SegmentResizer : public SegmentTool
 public:
 
     virtual void ready();
+    virtual void stow();
 
     virtual void handleMouseButtonPress(QMouseEvent*);
     virtual void handleMouseButtonRelease(QMouseEvent*);
@@ -214,6 +223,9 @@ public:
     int getEdgeThreshold() { return m_edgeThreshold; }
 
     static const QString ToolName;
+
+protected slots:
+    void slotCanvasScrolled(int newX, int newY);
 
 protected:
     SegmentResizer(SegmentCanvas*, RosegardenGUIDoc*, int edgeThreshold = 10);
@@ -236,6 +248,7 @@ public:
 
     virtual ~SegmentSelector();
 
+    virtual void ready();
     virtual void stow();
 
     virtual void handleMouseButtonPress(QMouseEvent*);
@@ -288,10 +301,14 @@ public slots:
      */
     void slotDestroyedSegmentItem(QObject*);
 
+protected slots:
+    void slotCanvasScrolled(int newX, int newY);
+
 protected:
     SegmentSelector(SegmentCanvas*, RosegardenGUIDoc*);
 
     void addToSelection(SegmentItem*);
+    void updateSelectionRect(int w, int h);
 
     //--------------- Data members ---------------------------------
 

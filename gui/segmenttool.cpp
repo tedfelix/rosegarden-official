@@ -204,7 +204,76 @@ SegmentPencil::SegmentPencil(SegmentCanvas *c, RosegardenGUIDoc *d)
 void SegmentPencil::ready()
 {
     m_canvas->viewport()->setCursor(Qt::ibeamCursor);
+    connect(m_canvas, SIGNAL(contentsMoving (int, int)),
+            this, SLOT(slotCanvasScrolled(int, int)));
+
 }
+
+void SegmentPencil::stow()
+{
+    disconnect(m_canvas, SIGNAL(contentsMoving (int, int)),
+               this, SLOT(slotCanvasScrolled(int, int)));
+}
+
+void SegmentPencil::slotCanvasScrolled(int newX, int newY)
+{
+    if (!m_currentItem) return;
+
+    QPoint newP1(newX, newY), oldP1(m_canvas->contentsX(),
+                                    m_canvas->contentsY());
+
+    QPoint offset = newP1 - oldP1;
+
+    QPoint absPos = m_canvas->viewport()->mapFromGlobal(QCursor::pos());
+
+    offset = m_canvas->inverseMapPoint(offset);
+    absPos = m_canvas->inverseMapPoint(absPos);
+    
+    QPoint tPos(m_currentItem->x(), m_currentItem->y());
+
+    if (absPos.x() > m_currentItem->x())
+        tPos.setX(tPos.x() + m_currentItem->width());
+    tPos += offset;
+
+    SnapGrid::SnapDirection direction = SnapGrid::SnapRight;
+    if (tPos.x() < m_currentItem->x()) direction = SnapGrid::SnapLeft;
+
+    timeT snap = m_canvas->grid().getSnapTime(double(tPos.x()));
+    if (snap == 0) snap = Note(Note::Shortest).getDuration();
+
+    timeT time = m_canvas->grid().snapX(tPos.x(), direction);
+    double xForTime = m_canvas->grid().getRulerScale()->getXForTime(time);
+
+    if ((absPos.x() > m_currentItem->x()) &&
+        (xForTime < tPos.x())) 
+        return;
+
+    if ((absPos.x() < m_currentItem->x()) &&
+        (xForTime > tPos.x())) 
+        return;
+
+    timeT startTime = m_currentItem->getStartTime();
+
+    if (time >= startTime) {
+	if ((time - startTime) < snap) {
+	    time = startTime + snap;
+	}
+    } else {
+	if ((startTime - time) < snap) {
+	    time = startTime - snap;
+	}
+    }
+
+    if (direction == SnapGrid::SnapLeft) {
+	time += std::max(m_currentItem->getEndTime() -
+			 m_currentItem->getStartTime(), timeT(0));
+    }
+
+    m_currentItem->setEndTime(time);
+
+    m_canvas->slotUpdate();
+}
+
 
 void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 {
@@ -301,8 +370,7 @@ int SegmentPencil::handleMouseMove(QMouseEvent *e)
 
     m_canvas->setSnapGrain(false);
 
-    QWMatrix matrix = m_canvas->worldMatrix().invert();
-    QPoint tPos = matrix.map(e->pos());
+    QPoint tPos = m_canvas->inverseMapPoint(e->pos());
 
     SnapGrid::SnapDirection direction = SnapGrid::SnapRight;
     if (tPos.x() < m_currentItem->x()) direction = SnapGrid::SnapLeft;
@@ -403,7 +471,21 @@ SegmentMover::SegmentMover(SegmentCanvas *c, RosegardenGUIDoc *d)
 void SegmentMover::ready()
 {
     m_canvas->viewport()->setCursor(Qt::sizeAllCursor);
+    connect(m_canvas, SIGNAL(contentsMoving (int, int)),
+            this, SLOT(slotCanvasScrolled(int, int)));
+
 }
+
+void SegmentMover::stow()
+{
+    disconnect(m_canvas, SIGNAL(contentsMoving (int, int)),
+               this, SLOT(slotCanvasScrolled(int, int)));
+}
+
+void SegmentMover::slotCanvasScrolled(int newX, int newY)
+{
+}
+
 
 void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
 {
@@ -635,7 +717,21 @@ SegmentResizer::SegmentResizer(SegmentCanvas *c, RosegardenGUIDoc *d,
 void SegmentResizer::ready()
 {
     m_canvas->viewport()->setCursor(Qt::sizeHorCursor);
+    connect(m_canvas, SIGNAL(contentsMoving (int, int)),
+            this, SLOT(slotCanvasScrolled(int, int)));
+
 }
+
+void SegmentResizer::stow()
+{
+    disconnect(m_canvas, SIGNAL(contentsMoving (int, int)),
+               this, SLOT(slotCanvasScrolled(int, int)));
+}
+
+void SegmentResizer::slotCanvasScrolled(int newX, int newY)
+{
+}
+
 
 void SegmentResizer::handleMouseButtonPress(QMouseEvent *e)
 {
@@ -823,12 +919,41 @@ SegmentSelector::~SegmentSelector()
 {
 }
 
+void SegmentSelector::ready()
+{
+    connect(m_canvas, SIGNAL(contentsMoving (int, int)),
+            this, SLOT(slotCanvasScrolled(int, int)));
+
+}
+
 void SegmentSelector::stow()
 {
     // don't clear selection, it's nice to still have it when you
     // switch back to the selector tool
     //
     // clearSelected();
+    disconnect(m_canvas, SIGNAL(contentsMoving (int, int)),
+               this, SLOT(slotCanvasScrolled(int, int)));
+}
+
+void SegmentSelector::slotCanvasScrolled(int newX, int newY)
+{
+    int offsetX = newX - m_canvas->contentsX();
+    int offsetY = newY - m_canvas->contentsY();
+
+    QCanvasRectangle *selectionRect  = m_canvas->getSelectionRectangle();
+
+    if (!selectionRect) return;
+
+    int w = int(selectionRect->width() + offsetX);
+    int h = int(selectionRect->height() + offsetY);
+
+    // Qt rectangle dimensions appear to be 1-based
+    if (w > 0) ++w; else --w;
+    if (h > 0) ++h; else --h;
+
+    updateSelectionRect(w, h);
+
 }
 
 void
@@ -1221,80 +1346,8 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
             if (w > 0) ++w; else --w;
             if (h > 0) ++h; else --h;
 
-            // Translate these points
-            //
-            selectionRect->setSize(w, h);
+            updateSelectionRect(w, h);
 
-	    m_canvas->canvas()->update();
-
-            // Get collisions and do selection (true for exact collisions)
-            //
-            QCanvasItemList l = selectionRect->collisions(true);
-
-            // selection management
-            SegmentSelection oldSelection = getSelectedSegments();
-            SegmentSelection newSelection;
-
-            int segCount = 0;
-
-            if (l.count()) {
-                for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
-                {
-                    if (SegmentItem *item = dynamic_cast<SegmentItem*>(*it))
-                    {
-                        if (m_segmentAddMode)
-                        {
-                            slotSelectSegmentItem(item);
-                            addToSelection(item);
-                        }
-                        else
-                        {
-                            segCount++;
-                            slotSelectSegmentItem(item);
-                            newSelection.insert(item->getSegment());
-                        }
-                    }
-                }
-            }
-
-            if (m_segmentAddMode)
-            { 
-                emit selectedSegments(getSelectedSegments());
-                return RosegardenCanvasView::FollowHorizontal | RosegardenCanvasView::FollowVertical;
-            }
-
-            // Check for unselected items with this piece of crap
-            //
-            bool found = false;
-
-            for (SegmentSelection::const_iterator oIt = oldSelection.begin();
-                  oIt != oldSelection.end(); oIt++)
-            {
-                found = false;
-                for (SegmentSelection::const_iterator nIt = newSelection.begin();
-                     nIt != newSelection.end(); nIt++)
-                {
-                    if (*oIt == *nIt)
-                    {
-                        found = true;
-                        break;
-                    }
-                }
-                if (found == false)
-                {
-                    removeFromSelection(*oIt);
-                    m_canvas->getSegmentItem(*oIt)->
-                        setSelected(false, GUIPalette::convertColour(
-                            m_doc->getComposition().getSegmentColourMap().
-                            getColourByIndex(m_canvas->getSegmentItem(*oIt)
-                            ->getSegment()->getColourIndex())));
-                }
-            }
-
-            if (segCount)
-            {
-                emit selectedSegments(getSelectedSegments());
-            }
         }
         return RosegardenCanvasView::FollowHorizontal | RosegardenCanvasView::FollowVertical;
     }
@@ -1417,6 +1470,76 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 
     return RosegardenCanvasView::FollowHorizontal | RosegardenCanvasView::FollowVertical;
 }
+
+void SegmentSelector::updateSelectionRect(int w, int h) 
+{
+    QCanvasRectangle *selectionRect  = m_canvas->getSelectionRectangle();
+    if (!selectionRect) return;
+
+    selectionRect->setSize(w, h);
+
+    m_canvas->canvas()->update();
+
+    // Get collisions and do selection (true for exact collisions)
+    //
+    QCanvasItemList l = selectionRect->collisions(true);
+
+    // selection management
+    SegmentSelection oldSelection = getSelectedSegments();
+    SegmentSelection newSelection;
+
+    int segCount = 0;
+
+    if (l.count()) {
+        for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
+            if (SegmentItem *item = dynamic_cast<SegmentItem*>(*it)) {
+                if (m_segmentAddMode) {
+                    slotSelectSegmentItem(item);
+                    addToSelection(item);
+                } else {
+                    segCount++;
+                    slotSelectSegmentItem(item);
+                    newSelection.insert(item->getSegment());
+                }
+            }
+        }
+    }
+
+    if (m_segmentAddMode) { 
+        emit selectedSegments(getSelectedSegments());
+    } else {
+
+        // Check for unselected items with this piece of crap
+        //
+        bool found = false;
+
+        for (SegmentSelection::const_iterator oIt = oldSelection.begin();
+             oIt != oldSelection.end(); oIt++) {
+            found = false;
+            for (SegmentSelection::const_iterator nIt = newSelection.begin();
+                 nIt != newSelection.end(); nIt++) {
+                if (*oIt == *nIt) {
+                    found = true;
+                    break;
+                }
+            }
+            if (found == false) {
+                removeFromSelection(*oIt);
+                m_canvas->getSegmentItem(*oIt)->
+                    setSelected(false, GUIPalette::convertColour(m_doc->getComposition().getSegmentColourMap().
+                                                                 getColourByIndex(m_canvas->getSegmentItem(*oIt)
+                                                                                  ->getSegment()->getColourIndex())));
+            }
+        }
+
+        if (segCount) {
+            emit selectedSegments(getSelectedSegments());
+        }
+    }
+            
+    
+}
+
 
 //////////////////////////////
 //
