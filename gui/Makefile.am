@@ -40,7 +40,6 @@ rosegarden_SOURCES = \
 	notepixmapfactory.cpp \
 	qcanvasgroupableitem.cpp \
 	qcanvassimplesprite.cpp \
-        quantizevalues.cpp \
 	rg21io.cpp \
 	rosedebug.cpp \
 	rosegardencanvasview.cpp \

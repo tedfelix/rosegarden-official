@@ -23,7 +23,6 @@
 #include <qhbox.h>
 #include <qlayout.h>
 
-#include "quantizevalues.h"
 #include "Segment.h"
 #include "Quantizer.h"
 
