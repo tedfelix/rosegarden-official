@@ -767,7 +767,8 @@ NotationDisplayPitch::rawPitchToDisplayPitch(int pitch,
                (height == 4 || height == 0)) {
         modified = true;
     } else if (accidental == Sharp &&
-               (height == -2 || height == 1)) {
+               (height == -2 || height == 1) &&
+               modified == false) {
         height--; modified = true;
     }
     // "Recenter" height in case it's been changed
