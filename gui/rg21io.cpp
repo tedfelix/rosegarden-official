@@ -114,6 +114,26 @@ bool RG21Loader::parseKey()
     return true;
 }
 
+bool RG21Loader::parseMetronome()
+{
+    if (m_tokens.count() < 2) return false;
+    if (!m_composition) return false;
+
+    QStringList::Iterator i = m_tokens.begin();
+    timeT duration = convertRG21Duration(i);
+
+    bool isNumeric = false;
+    int count = (*i).toInt(&isNumeric);
+    if (!count || !isNumeric) return false;
+
+    // RG4 raw tempos are in crotchets-per-hour, and we need to take
+    // into account the fact that "duration" might not be a crotchet
+
+    int raw = (count * duration * 60) / Note(Note::Crotchet).getDuration();
+    m_composition->addRawTempo(m_currentSegmentTime, raw);
+    return true;
+}
+
 bool RG21Loader::parseChordItem()
 {
     if (m_tokens.count() < 4) return false;
@@ -659,6 +679,11 @@ bool RG21Loader::parse()
         } else if (firstToken == "Key") {
 
             parseKey();
+
+	} else if (firstToken == "Metronome") {
+
+	    if (!readNextLine()) break;
+	    parseMetronome();
 
         } else if (firstToken == ":") { // chord
 

@@ -83,6 +83,7 @@ protected:
     bool parse();
     bool parseClef();
     bool parseKey();
+    bool parseMetronome();
     bool parseChordItem();
     bool parseRest();
     bool parseText();
