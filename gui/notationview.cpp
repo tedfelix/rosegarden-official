@@ -1023,20 +1023,20 @@ NotationView::insertNote(int height, const QPoint &eventPos)
                 // new note is being chorded with notes which are shorter
                 // shorten its duration to same one as other notes
 
-                Rosegarden::Track::iterator lastInsertedEvent;
+//                 Rosegarden::Track::iterator lastInsertedEvent;
                 
-                if (track.expandAndInsertEvent(insertedEvent,
-                                                closestEvent->getDuration(),
-                                                lastInsertedEvent)) {
+//                 if (track.expandAndInsertEvent(insertedEvent,
+//                                                 closestEvent->getDuration(),
+//                                                 lastInsertedEvent)) {
                     
-                    // put a NotationElement around the newly created event
+//                     // put a NotationElement around the newly created event
 
-                    m_viewElementsManager->insert(*lastInsertedEvent);
+//                     m_viewElementsManager->insert(*lastInsertedEvent);
                     
-                } else {
-                    // force the new 
+//                 } else {
+                    // force the new note to be of the same length as the existing one
                     newNotationElement->setNote((*closestNote)->getNote());
-                }
+//                 }
                 
             } else if (closestEvent->getDuration() > insertedEvent->getDuration()) {
 
@@ -1046,12 +1046,11 @@ NotationView::insertNote(int height, const QPoint &eventPos)
 
                 // new note is being chorded with notes which are longer
                 // for the moment, do the same as in other case
-                if (!track.expandIntoGroup(start, end,
-                                           insertedEvent->getDuration(),
-                                           newEnd)) {
+                if (track.expandIntoGroup(start, end,
+                                          insertedEvent->getDuration(),
+                                          newEnd)) {
 
                     // put NotationElements around the newly created events
-
                     ++newEnd; // insertNewEvents works on a [from,to[ range
                     // and we need to wrap this last event
                     m_viewElementsManager->insertNewEvents(start, newEnd);
