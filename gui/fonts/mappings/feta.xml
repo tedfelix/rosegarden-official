@@ -98,6 +98,18 @@
 		<fixed x="1"/>
                 <scaled y="0.5"/>
         </hotspot>
+        <hotspot name="MUSICAL SYMBOL COMBINING FLAG-1">
+		<fixed x="1"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL COMBINING FLAG-2">
+		<fixed x="1"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL COMBINING FLAG-3">
+		<fixed x="1"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL COMBINING FLAG-4">
+		<fixed x="1"/>
+        </hotspot>
         <hotspot name="MUSIC FLAT SIGN">
                 <when note-height="4" y="8"/>
                 <when note-height="6" y="12"/>

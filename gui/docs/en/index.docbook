@@ -4231,6 +4231,12 @@
       supplied files are actually wrong, please let us know.)
       </para>
 
+      <sect2 id="developers-note-fonts-codes-glyphs">
+        <title>Codes and Glyphs</title>
+
+        <para></para>
+      </sect2>
+
       <sect2 id="developers-note-fonts-mapping-format">
 	<title>Notation font mapping XML format</title>
 
@@ -4586,10 +4592,10 @@
 	      <listitem>
 		<para>The code point at which this symbol may be found
 		in the relevant system font, as a decimal integer.
-		This is the usual way of describing a symbol in a
-		scalable font.  This attribute will only be referred
-		to if no pixmap file is supplied, or if the pixmap
-		file fails to load.
+		This is a way of describing a symbol in a scalable
+		font.  This attribute will only be referred to if no
+		pixmap file is supplied, or if the pixmap file fails
+		to load.
 		</para>
 	      </listitem>
 	    </varlistentry>
@@ -4598,6 +4604,32 @@
 	      <term>inversion-code</term>
 	      <listitem>
 		<para>The code point at which an inverted version of
+		this symbol may be found in the relevant system font.
+		If this attribute is absent and an inverted version of
+		the symbol is required, it will be generated simply by
+		loading the normal version and reflecting it in a
+		central x-axis.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry>
+	      <term>glyph</term>
+	      <listitem>
+		<para>The raw glyph index at which this symbol may be found
+		in the relevant system font, as a decimal integer.
+		This is a way of describing a symbol in a scalable
+		font.  This attribute will only be referred to if no
+		pixmap file is supplied, or if the pixmap file fails
+		to load.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry>
+	      <term>inversion-glyph</term>
+	      <listitem>
+		<para>The raw glyph index at which an inverted version of
 		this symbol may be found in the relevant system font.
 		If this attribute is absent and an inverted version of
 		the symbol is required, it will be generated simply by
@@ -4636,10 +4668,10 @@
 	  <para>
 	    Although none of these attributes is mandatory except for
 	    the name, a symbol obviously needs to supply at least one
-	    of "src", "inversion-src", "code", or "inversion-code" to
-	    stand any chance of being rendered at all.  It is of course
-	    perfectly legitimate to supply several or all of these
-	    attributes.
+	    of "src", "inversion-src", "code", "inversion-code",
+	    "glyph", or "inversion-glyph" to stand any chance of being
+	    rendered at all.  It is of course perfectly legitimate to
+	    supply several or all of these attributes.
 	  </para>
 
 	</sect3>

@@ -646,7 +646,7 @@ NotePixmapFactory::drawMarks(bool isStemmed,
 
 	    int x = m_left + m_noteBodyWidth/2 - pixmap.width()/2;
 	    int y = (markAbove ? (m_above - dy - pixmap.height() - 1) :
-			         (m_above + m_noteBodyHeight + dy));
+			         (m_above + m_noteBodyHeight + m_borderY*2 + dy));
 
 	    m_p.drawPixmap(x, y, pixmap);
 	    m_pm.drawPixmap(x, y,  *(pixmap.mask()));
@@ -663,7 +663,7 @@ NotePixmapFactory::drawMarks(bool isStemmed,
 
 	    int x = m_left + m_noteBodyWidth/2 - bounds.width()/2;
 	    int y = (markAbove ? (m_above - dy - 3) :
-				 (m_above + m_noteBodyHeight +
+				 (m_above + m_noteBodyHeight + m_borderY*2 +
 				  dy + bounds.height() + 1));
 
 	    m_p.drawText(x, y, text);
@@ -869,11 +869,13 @@ NotePixmapFactory::drawFlags(int flagCount,
 	found = m_font->getPixmap(m_style->getPartialFlagCharName(false),
 				  flagMap,
 				  !params.m_stemGoesUp);
-	
+
 	if (!found) {
 	    std::cerr << "Warning: NotePixmapFactory::drawFlags: No way to draw note with " << flagCount << " flags in this font!?" << std::endl;
 	    return;
 	}
+
+	QPoint hotspot = m_font->getHotspot(m_style->getPartialFlagCharName(false));
 	
 	QPixmap oneFlagMap;
 	bool foundOne = (flagCount > 1 ?
@@ -901,7 +903,7 @@ NotePixmapFactory::drawFlags(int flagCount,
 	    
 	    PixmapFunctions::drawPixmapMasked(*m_generatedPixmap,
 					      *m_generatedMask,
-					      m_left + s1.x(),
+					      m_left + s1.x() - hotspot.x(),
 					      y,
 					      flagMap);
 	    
@@ -910,12 +912,14 @@ NotePixmapFactory::drawFlags(int flagCount,
 	}
 
     } else { // the normal case
+
+	QPoint hotspot = m_font->getHotspot(m_style->getFlagCharName(flagCount));
 	
 	int y = m_above + s1.y();
 	if (!params.m_stemGoesUp) y -= flagMap.height();
 	
-	m_p.drawPixmap(m_left + s1.x(), y, flagMap);
-	m_pm.drawPixmap(m_left + s1.x(), y, *(flagMap.mask()));
+	m_p.drawPixmap(m_left + s1.x() - hotspot.x(), y, flagMap);
+	m_pm.drawPixmap(m_left + s1.x() - hotspot.x(), y, *(flagMap.mask()));
     }
 }
 
@@ -1858,12 +1862,14 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
 	delete m_generatedMask;
 	QPixmap newPixmap(i);
 	QCanvasPixmap *p = new QCanvasPixmap(newPixmap, hotspot);
-	p->setMask(PixmapFunctions::generateMask(newPixmap));
+	p->setMask(PixmapFunctions::generateMask(newPixmap,
+						 Qt::white.rgb()));
 	return p;
 
     } else {
 	QCanvasPixmap *p = new QCanvasPixmap(*m_generatedPixmap, hotspot);
-	p->setMask(PixmapFunctions::generateMask(*m_generatedPixmap));
+	p->setMask(PixmapFunctions::generateMask(*m_generatedPixmap, 
+						 Qt::white.rgb()));
 	delete m_generatedPixmap;
 	delete m_generatedMask;
 	return p;
