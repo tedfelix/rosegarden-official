@@ -49,6 +49,17 @@
 namespace Rosegarden
 {
 
+
+
+#ifdef HAVE_JACK
+static int jackProcess(nframes_t nframes, void *arg);
+static int jackBufferSize(nframes_t nframes, void *arg);
+static int jackSampleRate(nframes_t nframes, void *arg);
+static void jackShutdown(void *arg);
+#endif // HAVE_JACK
+
+
+
 // An AlsaPort represents one or more (usually 16) MappedInstruments.
 //
 //
@@ -185,7 +196,10 @@ private:
     bool                         m_addedMetronome;
 
 #ifdef HAVE_JACK
+
     jack_client_t               *m_audioClient;
+    jack_port_t                 *m_audioInputPort;
+    jack_port_t                 *m_audioOutputPort;
 #endif
 
 };

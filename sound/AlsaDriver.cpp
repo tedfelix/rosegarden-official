@@ -56,6 +56,11 @@ AlsaDriver::~AlsaDriver()
 {
     snd_seq_stop_queue(m_midiHandle, m_queue, 0);
     snd_seq_close(m_midiHandle);
+
+#ifdef HAVE_JACK
+    jack_client_close(m_audioClient);
+#endif // HAVE_JACK
+
 }
 
 void
@@ -352,7 +357,7 @@ AlsaDriver::initialiseMidi()
     if((m_queue = snd_seq_alloc_named_queue(m_midiHandle,
                                                 "Rosegarden queue")) < 0)
     {
-        std::cerr << "AlsaDriver::initialiseMidi() - can't allocate queue"
+        std::cerr << "AlsaDriver::initialiseMidi - can't allocate queue"
                   << std::endl;
         m_driverStatus = NO_DRIVER;
         return;
@@ -364,7 +369,7 @@ AlsaDriver::initialiseMidi()
     snd_seq_set_client_name(m_midiHandle, "Rosegarden sequencer");
     if((m_client = snd_seq_client_id(m_midiHandle)) < 0)
     {
-        std::cerr << "AlsaDriver::initialiseMidi() - can't create client"
+        std::cerr << "AlsaDriver::initialiseMidi - can't create client"
                   << std::endl;
         m_driverStatus = NO_DRIVER;
         return;
@@ -381,7 +386,7 @@ AlsaDriver::initialiseMidi()
                                         SND_SEQ_PORT_TYPE_MIDI_GENERIC);
     if (m_port < 0)
     {
-        std::cerr << "AlsaDriver::initialiseMidi() - can't create port"
+        std::cerr << "AlsaDriver::initialiseMidi - can't create port"
                   << std::endl;
         m_driverStatus = NO_DRIVER;
         return;
@@ -389,8 +394,10 @@ AlsaDriver::initialiseMidi()
 
     ClientPortPair inputDevice = getFirstDestination(true); // duplex = true
 
-    std::cout << "   Record client set to (" << inputDevice.first << ", "
-                                << inputDevice.second << ")" << std::endl;
+    std::cout << "    Record client set to (" << inputDevice.first
+              << ", "
+              << inputDevice.second
+              << ")" << std::endl << std::endl;
 
     std::vector<AlsaPort*>::iterator it;
 
@@ -403,7 +410,7 @@ AlsaDriver::initialiseMidi()
                                (*it)->m_client,
                                (*it)->m_port) < 0)
         {
-            std::cerr << "AlsaDriver::initialiseMidi() - "
+            std::cerr << "AlsaDriver::initialiseMidi - "
                       << "can't subscribe output client/port"
                       << std::endl;
         }
@@ -436,7 +443,7 @@ AlsaDriver::initialiseMidi()
 
     if (snd_seq_subscribe_port(m_midiHandle, subs) < 0)
     {
-        std::cerr << "AlsaDriver::initialiseMidi() - "
+        std::cerr << "AlsaDriver::initialiseMidi - "
                   << "can't subscribe input client/port"
                   << std::endl;
         // Not the end of the world if this fails but we
@@ -453,7 +460,7 @@ AlsaDriver::initialiseMidi()
         snd_seq_set_client_pool_input(m_midiHandle, 20) < 0 ||
         snd_seq_set_client_pool_output_room(m_midiHandle, 20) < 0)
     {
-        std::cerr << "AlsaDriver::initialiseMidi() - "
+        std::cerr << "AlsaDriver::initialiseMidi - "
                   << "can't modify pool parameters"
                   << std::endl;
         m_driverStatus = NO_DRIVER;
@@ -472,7 +479,7 @@ AlsaDriver::initialiseMidi()
     // Start the timer
     if ((result = snd_seq_start_queue(m_midiHandle, m_queue, NULL)) < 0)
     {
-        std::cerr << "AlsaDriver::initialisePlayback - couldn't start queue - "
+        std::cerr << "AlsaDriver::initialiseMidi - couldn't start queue - "
                   << snd_strerror(result)
                   << std::endl;
         exit(1);
@@ -481,7 +488,8 @@ AlsaDriver::initialiseMidi()
     // process anything pending
     snd_seq_drain_output(m_midiHandle);
 
-    std::cout << "AlsaDriver - initialised MIDI subsystem" << std::endl;
+    std::cout << "AlsaDriver::initialiseMidi -  initialised MIDI subsystem"
+              << std::endl;
 }
 
 // Thanks to Matthias Nagorni's ALSA 0.9.0 HOWTO:
@@ -542,18 +550,17 @@ AlsaDriver::initialiseAudio()
     std::cout << "AlsaDriver - initialised Audio (PCM) subsystem" << std::endl;
     */
 
+#ifdef HAVE_JACK
     // Using JACK instead
     //
- 
-#ifdef HAVE_JACK
 
-    std::string jackServer = "jack";
+    std::string jackClientName = "Rosegarden";
 
     // attempt connection to JACK server
     //
-    if ((m_audioClient = jack_client_new(jackServer.c_str())) == 0)
+    if ((m_audioClient = jack_client_new(jackClientName.c_str())) == 0)
     {
-        std::cerr << "AlsaDriver::initialiseAudio() - "
+        std::cerr << "AlsaDriver::initialiseAudio - "
                   << "JACK server not running"
                   << std::endl;
 
@@ -564,6 +571,45 @@ AlsaDriver::initialiseAudio()
 
         return;
     }
+
+    jack_set_process_callback(m_audioClient, jackProcess, 0);
+
+    jack_set_buffer_size_callback(m_audioClient, jackBufferSize, 0);
+    jack_set_sample_rate_callback(m_audioClient, jackSampleRate, 0);
+    jack_on_shutdown(m_audioClient, jackShutdown, 0);
+
+    std::cout << "AlsaDriver::initialiseAudio - JACK sample rate = "
+              << jack_get_sample_rate(m_audioClient)
+              << endl;
+
+    m_audioInputPort = jack_port_register(m_audioClient,
+                                          "input",
+                                          JACK_DEFAULT_AUDIO_TYPE,
+                                          JackPortIsInput,
+                                          0);
+
+    m_audioOutputPort = jack_port_register(m_audioClient,
+                                           "output",
+                                           JACK_DEFAULT_AUDIO_TYPE,
+                                           JackPortIsOutput,
+                                           0);
+
+    if (jack_activate(m_audioClient))
+    {
+        std::cerr << "AlsaDriver::initialiseAudio - "
+                  << "cannot activate JACK client" << std::endl;
+
+        if (m_driverStatus == MIDI_AND_AUDIO_OK)
+            m_driverStatus = MIDI_OK;
+        else if (m_driverStatus == AUDIO_OK)
+            m_driverStatus = NO_DRIVER;
+
+        return;
+    }
+
+    std::cout << "AlsaDriver::initialiseAudio - "
+              << "initialised JACK audio subsystem"
+              << std::endl;
 
 #endif
 }
@@ -597,7 +643,6 @@ AlsaDriver::stopPlayback()
     }
 
 }
-
 
 
 void
@@ -1233,6 +1278,35 @@ AlsaDriver::processPending(const RealTime &playLatency)
         processNotesOff(getAlsaTime() + m_playStartPosition + playLatency);
     }
 }
+
+// ------------ JACK callbacks -----------
+//
+//
+#ifdef HAVE_JACK
+int
+jackProcess(nframes_t nframes, void *arg)
+{
+    return 0;
+}
+
+int
+jackBufferSize(nframes_t nframes, void *arg)
+{
+    return 0;
+}
+
+int
+jackSampleRate(nframes_t nframes, void *arg)
+{
+    return 0;
+}
+
+void
+jackShutdown(void *arg)
+{
+}
+#endif
+
 
 
 }
