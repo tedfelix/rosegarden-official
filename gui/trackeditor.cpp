@@ -299,8 +299,10 @@ void TrackEditor::updateSegmentTrackAndStartIndex(SegmentItem *i)
                          << track
                          << " - start Index to : " << startIndex << endl;
 
-    composition.setSegmentTrack(i->getSegment(), track);
-    composition.setSegmentStartIndex(i->getSegment(), startIndex);
+    composition.setSegmentStartIndexAndTrack(i->getSegment(), startIndex, track);
+
+    m_document->documentModified();
+
 /*!!!
     i->setTrack(track);
     i->getSegment()->setStartIndex(startIndex);

@@ -164,24 +164,16 @@ public:
     bool deleteSegment(Segment*);
 
     /**
-     * Set the formal starting time of the Segment.  You should
-     * normally use this in preference to Segment::setStartIndex
-     * because it correctly updates the location of the Segment
-     * in the Composition's container (whose ordering depends on
-     * the start index).
+     * Set the start index and track number the given Segment is
+     * associated with.  You should normally use this in preference to
+     * Segment::setTrack and Segment::setStartIndex because it
+     * correctly updates the location of the Segment in the
+     * Composition's container (whose ordering depends on the track
+     * number).
+     *
      * \return false if the Segment was not found
      */
-    bool setSegmentStartIndex(Segment *, timeT);
-
-    /**
-     * Set the track number the given Segment is associated with.
-     * You should normally use this in preference to Segment::setTrack
-     * because it correctly updates the location of the Segment
-     * in the Composition's container (whose ordering depends on
-     * the track number).
-     * \return false if the Segment was not found
-     */
-    bool setSegmentTrack(Segment *, unsigned int);
+    bool setSegmentStartIndexAndTrack(Segment *, timeT, unsigned int);
 
 
 

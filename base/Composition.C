@@ -307,26 +307,28 @@ Composition::deleteSegment(Segment *p)
 }
 
 bool
-Composition::setSegmentStartIndex(Segment *s, timeT t)
+Composition::setSegmentStartIndexAndTrack(Segment *s, timeT t, unsigned int track)
 {
-    iterator i = find(begin(), end(), s);
-    if (i == end()) return false;
+    iterator i = m_segments.find(s);
+    if (i == end()) {
+        std::cerr << "Composition::setSegmentTrack() : couldn't find segment " << s
+                  << endl;
+        return false;
+    }
 
     m_segments.erase(i);
-    s->setStartIndex(t);
-    m_segments.insert(s);
-    return true;
-}
 
-bool
-Composition::setSegmentTrack(Segment *s, unsigned int track)
-{
-    iterator i = find(begin(), end(), s);
-    if (i == end()) return false;
-
-    m_segments.erase(i);
     s->setTrack(track);
-    m_segments.insert(s);
+    s->setStartIndex(t);
+
+    std::pair<iterator, bool> res = m_segments.insert(s);
+
+    if (res.second)
+        std::cerr << "Composition::setSegmentTrack: re-added segment, now have "
+                  << m_segments.size() << " segments" << endl;
+    else
+        std::cerr << "Composition::setSegmentStartIndex: re-added segment failed\n";
+
     return true;
 }
 
