@@ -154,10 +154,13 @@ public:
     /**
      * Set the formal starting time of the Segment.  It is usually
      * VERY DANGEROUS to call this on a Segment that has been stored
-     * in a Composition, because the Composition uses the start index
-     * as a part of the ordering for Segments and if the index changes
+     * in a Composition, because the Composition uses the start time
+     * as a part of the ordering for Segments and if the time changes
      * the ordering may break.  If your Segment is already in a
      * Composition, use Composition::setSegmentStartTime instead.
+     * 
+     * Changing the start time of a Segment will change the absolute
+     * times of all Events within that Segment.
      */
     void setStartTime(timeT i);
 
@@ -167,6 +170,21 @@ public:
      * time) if there are no events.
      */
     timeT getFirstEventTime() const;
+
+    /**
+     * Adjust the stored start time for this Segment to be equal to
+     * the time of the first Event in it.  Do not alter the absolute
+     * times of any of the Events.  This effectively tidies up the
+     * start time for a Segment that was built up by inserting Events
+     * into an empty Segment without knowing in advance where the
+     * first Event would appear.  It is usually VERY DANGEROUS to call
+     * this on a Segment that has been stored in a Composition,
+     * because the Composition uses the start time as a part of the
+     * ordering for Segments and if the time changes the ordering may
+     * break.  There is no easy way to do this if your Segment is
+     * already in a Composition.
+     */
+    void recalculateStartTime();
 
     /**
      * Return the effective duration of the segment.  This is the

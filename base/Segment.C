@@ -59,7 +59,7 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
 
 Segment::Segment(const Segment &segment):
     std::multiset<Event*, Event::EventCmp>(),
-    m_composition(segment.getComposition()),
+    m_composition(0), // Composition should decide what's in it and what's not
     m_startTime(segment.getStartTime()),
     m_track(segment.getTrack()),
     m_type(segment.getType()),
@@ -119,6 +119,12 @@ timeT Segment::getFirstEventTime() const
     iterator i = begin();
     if (i == end()) return getEndTime();
     return (*i)->getAbsoluteTime();
+}
+
+
+void Segment::recalculateStartTime()
+{
+    m_startTime = getFirstEventTime();
 }
 
 

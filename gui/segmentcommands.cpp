@@ -76,7 +76,7 @@ SegmentCopyCommand::SegmentCopyCommand(Segment *segment):
 
 SegmentCopyCommand::~SegmentCopyCommand()
 {
-    if (m_segment->getComposition()) {
+    if (m_segment && !m_segment->getComposition()) {
         delete m_segment;
     }
 }

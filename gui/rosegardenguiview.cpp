@@ -188,9 +188,22 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
     SetWaitCursor waitCursor;
 
     std::vector<Rosegarden::Segment *> segmentsToEdit;
-    segmentsToEdit.push_back(p);
 
-    NotationView *notationView = new NotationView(getDocument(), segmentsToEdit, this);
+    if (m_trackEditor->getSegmentCanvas()->haveSelection()) {
+
+	Rosegarden::SegmentSelection selection =
+	    m_trackEditor->getSegmentCanvas()->getSelectedSegments();
+	for (Rosegarden::SegmentSelection::iterator i = selection.begin();
+	     i != selection.end(); ++i) {
+	    segmentsToEdit.push_back(*i);
+	}
+
+    } else {
+	segmentsToEdit.push_back(p);
+    }
+
+    NotationView *notationView =
+	new NotationView(getDocument(), segmentsToEdit, this);
     notationView->show();
 }
 
