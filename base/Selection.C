@@ -65,6 +65,7 @@ EventSelection::EventSelection(const EventSelection &sel) :
     m_endTime(sel.m_endTime),
     m_haveRealStartTime(sel.m_haveRealStartTime)
 {
+    m_originalSegment.addObserver(this);
 }
 
 EventSelection::~EventSelection()

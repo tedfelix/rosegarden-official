@@ -102,6 +102,10 @@ protected:
     Segment &m_segment;
     ViewElementList<T> *m_viewElementList;
     typename ViewElementList<T>::iterator findEvent(Rosegarden::Event *);
+
+private: // not provided
+    Staff(const Staff &);
+    Staff &operator=(const Staff &);
 };
 
 
@@ -177,7 +181,8 @@ Staff<T>::findEvent(Event *e)
         }
     }
 
-    std::cerr << "event not found in ViewElementList" << std::endl;
+//    std::cerr << "Event at " << e->getAbsoluteTime() << ", type " << e->getType()
+//	      << " not found in Staff" << std::endl;
     return m_viewElementList->end();
 }
 
@@ -210,7 +215,9 @@ Staff<T>::eventRemoved(const Segment *t, Event *e)
         m_viewElementList->erase(i);
         return;
     }
-    std::cerr << "Not found\n";
+
+    std::cerr << "Event at " << e->getAbsoluteTime() << ", type " << e->getType()
+	      << " not found in Staff" << std::endl;
 }
 
 template <class T>
