@@ -24,14 +24,17 @@ NotationHLayout::NotationHLayout(unsigned int barWidth,
                                  unsigned int barMargin,
                                  unsigned int noteMargin)
     : m_barWidth(barWidth),
+      m_timeUnitsPerBar(0),
       m_beatsPerBar(beatsPerBar),
       m_barMargin(barMargin),
       m_noteMargin(noteMargin),
-      m_nbBeatsInCurrentBar(0),
+      m_nbTimeUnitsInCurrentBar(0),
+      m_previousNbTimeUnitsInCurrentBar(0),
       m_currentPos(barMargin),
-      m_noteLengthMap(LastNote)
+      m_noteWidthMap(LastNote)
 {
-    initNoteLengthTable();
+    initNoteWidthTable();
+    m_timeUnitsPerBar = m_quantizer.wholeNoteDuration();
 }
 
 void
@@ -46,16 +49,18 @@ NotationHLayout::layout(Event *el)
     // kdDebug(KDEBUG_AREA) << "Quantized" << endl;
 
     // Add note to current bar
-    m_nbBeatsInCurrentBar += el->get<Int>("QuantizedDuration") / m_quantizer.wholeNoteDuration();
+    m_previousNbTimeUnitsInCurrentBar = m_nbTimeUnitsInCurrentBar;
+    m_nbTimeUnitsInCurrentBar += el->get<Int>("QuantizedDuration");
 
-    // kdDebug(KDEBUG_AREA) << "m_nbBeatsInCurrentBar : " << m_nbBeatsInCurrentBar << endl;
+    // kdDebug(KDEBUG_AREA) << "m_nbTimeUnitsInCurrentBar : " << m_nbTimeUnitsInCurrentBar << endl;
 
-    if (m_nbBeatsInCurrentBar > m_beatsPerBar) {
+    if (m_nbTimeUnitsInCurrentBar > m_timeUnitsPerBar) {
         kdDebug(KDEBUG_AREA) << "split element" << endl;
         // TODO
-    } else if (m_nbBeatsInCurrentBar == m_beatsPerBar) {
+    } else if (m_nbTimeUnitsInCurrentBar == m_timeUnitsPerBar) {
         kdDebug(KDEBUG_AREA) << "start a new bar" << endl;
         // TODO
+        m_nbTimeUnitsInCurrentBar = 0;
     }    
 
     kdDebug(KDEBUG_AREA) << "set to m_currentPos = " << m_currentPos << endl;
@@ -64,28 +69,73 @@ NotationHLayout::layout(Event *el)
     Note note = Note(el->get<Int>("Notation::NoteType")); // check the property is here ?
 
     // Move current pos to next note
-    m_currentPos += m_noteLengthMap[note] + Staff::noteWidth + m_noteMargin;
+    m_currentPos += m_noteWidthMap[note] + Staff::noteWidth + m_noteMargin;
 
     kdDebug(KDEBUG_AREA) << "m_currentPos pushed to = " << m_currentPos << endl;
 }
 
 void
-NotationHLayout::initNoteLengthTable(void)
+NotationHLayout::initNoteWidthTable(void)
 {
-    m_noteLengthMap[Whole]        = m_barWidth;
-    m_noteLengthMap[Half]         = m_barWidth / 2;
-    m_noteLengthMap[Quarter]      = m_barWidth / 4;
-    m_noteLengthMap[Eighth]       = m_barWidth / 8;
-    m_noteLengthMap[Sixteenth]    = m_barWidth / 16;
-    m_noteLengthMap[ThirtySecond] = m_barWidth / 32;
-    m_noteLengthMap[SixtyFourth]  = m_barWidth / 64;
+    m_noteWidthMap[Whole]        = m_barWidth;
+    m_noteWidthMap[Half]         = m_barWidth / 2;
+    m_noteWidthMap[Quarter]      = m_barWidth / 4;
+    m_noteWidthMap[Eighth]       = m_barWidth / 8;
+    m_noteWidthMap[Sixteenth]    = m_barWidth / 16;
+    m_noteWidthMap[ThirtySecond] = m_barWidth / 32;
+    m_noteWidthMap[SixtyFourth]  = m_barWidth / 64;
 
-    m_noteLengthMap[WholeDotted]        = m_noteLengthMap[Whole]        + m_noteLengthMap[Half];
-    m_noteLengthMap[HalfDotted]         = m_noteLengthMap[Half]         + m_noteLengthMap[Quarter];
-    m_noteLengthMap[QuarterDotted]      = m_noteLengthMap[Quarter]      + m_noteLengthMap[Eighth];
-    m_noteLengthMap[EighthDotted]       = m_noteLengthMap[Eighth]       + m_noteLengthMap[Sixteenth];
-    m_noteLengthMap[SixteenthDotted]    = m_noteLengthMap[Sixteenth]    + m_noteLengthMap[ThirtySecond];
-    m_noteLengthMap[ThirtySecondDotted] = m_noteLengthMap[ThirtySecond] + m_noteLengthMap[SixtyFourth];
-    m_noteLengthMap[SixtyFourthDotted]  = m_noteLengthMap[SixtyFourth]  + m_noteLengthMap[SixtyFourth] / 2;
+    m_noteWidthMap[WholeDotted]        = m_noteWidthMap[Whole]        + m_noteWidthMap[Half];
+    m_noteWidthMap[HalfDotted]         = m_noteWidthMap[Half]         + m_noteWidthMap[Quarter];
+    m_noteWidthMap[QuarterDotted]      = m_noteWidthMap[Quarter]      + m_noteWidthMap[Eighth];
+    m_noteWidthMap[EighthDotted]       = m_noteWidthMap[Eighth]       + m_noteWidthMap[Sixteenth];
+    m_noteWidthMap[SixteenthDotted]    = m_noteWidthMap[Sixteenth]    + m_noteWidthMap[ThirtySecond];
+    m_noteWidthMap[ThirtySecondDotted] = m_noteWidthMap[ThirtySecond] + m_noteWidthMap[SixtyFourth];
+    m_noteWidthMap[SixtyFourthDotted]  = m_noteWidthMap[SixtyFourth]  + m_noteWidthMap[SixtyFourth] / 2;
 
+}
+
+const vector<unsigned int>&
+NotationHLayout::splitNote(unsigned int noteLen)
+{
+    static vector<unsigned int> notes;
+
+    notes.clear();
+
+    unsigned int timeUnitsLeftInThisBar = m_timeUnitsPerBar - m_previousNbTimeUnitsInCurrentBar,
+        timeUnitsLeftInNote = m_nbTimeUnitsInCurrentBar - m_timeUnitsPerBar;
+
+    unsigned int nbWholeNotes = timeUnitsLeftInNote / m_quantizer.wholeNoteDuration();
+    
+    // beginning of the note - what fills up the bar
+    notes.push_back(timeUnitsLeftInThisBar);
+
+    // the whole notes (if any)
+    for (unsigned int i = 0; i < nbWholeNotes; ++i) {
+        notes.push_back(Whole);
+        timeUnitsLeftInNote -= m_timeUnitsPerBar;
+    }
+    
+    notes.push_back(timeUnitsLeftInNote);
+
+    m_nbTimeUnitsInCurrentBar = timeUnitsLeftInNote;
+
+    return notes;
+    
+//     $nbBeatsInThisBar = $nbBeatsPerBar - $previousNbBeats;
+//     $beatsLeftInNote =  $nbBeats - $nbBeatsPerBar;
+
+//     print "$nbBeatsInThisBar | ";
+
+//     $nbWholeNotes = $beatsLeftInNote / $nbBeatsPerBar;
+//     # print "\n nbWholeNotes : $nbWholeNotes\n";
+
+//     for ($i = 0; $i < $nbWholeNotes; ++$i) {
+//       print "$nbBeatsPerBar | ";
+//       $beatsLeftInNote -= $nbBeatsPerBar;
+//     }
+
+//     print "$beatsLeftInNote ";
+//     $nbBeats = $beatsLeftInNote;
+    
 }

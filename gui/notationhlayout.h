@@ -36,25 +36,34 @@ public:
                     unsigned int beatsPerBar,
                     unsigned int barMargin,
                     unsigned int noteMargin = 2);
+
 protected:
-    typedef vector<unsigned int> NoteLengthMap;
+    /**
+     * Breaks down a note which doesn't fit in a bar into shorter notes
+     */
+    const vector<unsigned int>& splitNote(unsigned int noteLen);
 
     virtual void layout(Event*);
 
-    void initNoteLengthTable();
+    void initNoteWidthTable();
 
     Quantizer m_quantizer;
 
     unsigned int m_barWidth;
+    unsigned int m_timeUnitsPerBar;
     unsigned int m_beatsPerBar;
     unsigned int m_barMargin;
     /// minimal space between two notes
     unsigned int m_noteMargin;
 
-    unsigned int m_nbBeatsInCurrentBar;
+    unsigned int m_nbTimeUnitsInCurrentBar;
+    unsigned int m_previousNbTimeUnitsInCurrentBar;
     unsigned int m_currentPos;
 
-    NoteLengthMap m_noteLengthMap;
+    typedef vector<unsigned int> NoteWidthMap;
+
+    /// maps note types (Whole, Half, etc...) to the width they should take on the bar
+    NoteWidthMap m_noteWidthMap;
 
 };
 
