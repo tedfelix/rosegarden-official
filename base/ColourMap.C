@@ -23,6 +23,7 @@
     COPYING included with this distribution for more information.
 */
 
+#include <string>
 #include "ColourMap.h"
 
 namespace Rosegarden 
@@ -32,14 +33,14 @@ RColourMap::RColourMap()
 {
 	// Set up the default colour.  The #defines can be found in ColourMap.h
 	RColour tempcolour(COLOUR_DEF_R, COLOUR_DEF_G, COLOUR_DEF_B);
-	m_map[0] = make_pair(tempcolour, (const char *)"");
+	m_map[0] = make_pair(tempcolour, std::string(""));
 	m_map_iterator = m_map.begin();
 }
 
 RColourMap::RColourMap(RColour& input)
 {
 	// Set up the default colour based on the input
-	m_map[0] = make_pair(input, (const char *)"");
+	m_map[0] = make_pair(input, std::string(""));
 	m_map_iterator = m_map.begin();
 }
 
