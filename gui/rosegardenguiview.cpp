@@ -78,16 +78,11 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
 
     // Segment and Instrument Parameter Boxes [rwb]
     //
-    m_segmentParameterBox = new SegmentParameterBox(vbox);
+    m_segmentParameterBox = new SegmentParameterBox(this, vbox);
     vboxLayout->addWidget(m_segmentParameterBox);
     m_instrumentParameterBox = new InstrumentParameterBox(vbox);
     vboxLayout->addWidget(m_instrumentParameterBox);
     vboxLayout->addStretch();
-
-    // Connect up command path
-    //
-    connect(m_segmentParameterBox, SIGNAL(addCommandToHistory(KCommand*)),
-            this, SLOT(slotAddCommandToHistory(KCommand*)));
 
     // Construct the trackEditor first so we can then
     // query it for placement information

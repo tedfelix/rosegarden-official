@@ -31,16 +31,25 @@
 
 #include "notepixmapfactory.h"
 #include "segmentcommands.h"
+#include "rosegardenguiview.h"
 
 using Rosegarden::Note;
 
-SegmentParameterBox::SegmentParameterBox(QWidget *parent,
+SegmentParameterBox::SegmentParameterBox(RosegardenGUIView *view,
+                                         QWidget *parent,
                                          const char *name,
                                          WFlags)
     : QGroupBox(i18n("Segment Parameters"), parent, name),
-      m_standardQuantizations(Rosegarden::StandardQuantization::getStandardQuantizations())
+      m_standardQuantizations(Rosegarden::StandardQuantization::getStandardQuantizations()),
+      m_view(view)
 {
     initBox();
+
+    // For Quantization commands (or any other undo/redo commands)
+    //
+    connect(getCommandHistory(), SIGNAL(commandExecuted(KCommand *)),
+                        this, SLOT(slotCommandExecuted(KCommand *)));
+
 }
 
 
@@ -467,7 +476,7 @@ SegmentParameterBox::slotQuantizeSelected(int qLevel)
     // command history from the document -- do it here or emit
     // signal & do it elsewhere?
     //
-    emit addCommandToHistory(command);
+    addCommandToHistory(command);
     
 }
 
@@ -524,7 +533,32 @@ void
 SegmentParameterBox::slotDelaySelected(int value)
 {
     slotDelayTextChanged(m_delayValue->text(value));
+} 
+
+MultiViewCommandHistory*
+SegmentParameterBox::getCommandHistory()
+{
+        return m_view->getDocument()->getCommandHistory();
 }
+
+void
+SegmentParameterBox::addCommandToHistory(KCommand *command)
+{
+        m_view->getCommandHistory()->addCommand(command);
+}
+
+void
+SegmentParameterBox::slotCommandExecuted(KCommand *command)
+{
+    SegmentChangeQuantizationCommand *qCommand = 
+        dynamic_cast<SegmentChangeQuantizationCommand* >(command);
+
+    if (qCommand)
+    {
+       ; 
+    }
+}
+
 
 
 

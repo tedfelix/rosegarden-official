@@ -37,6 +37,8 @@
 //
 
 namespace Rosegarden { class Segment; }
+class RosegardenGUIView;
+class MultiViewCommandHistory;
 
 #ifndef _SEGMENTPARAMETERBOX_H_
 #define _SEGMENTPARAMETERBOX_H_
@@ -54,7 +56,10 @@ public:
         All
     } Tristate;
 
-    SegmentParameterBox(QWidget *parent=0, const char *name=0, WFlags f=0);
+    SegmentParameterBox(RosegardenGUIView *view,
+                        QWidget *parent=0,
+                        const char *name=0,
+                        WFlags f=0);
     ~SegmentParameterBox();
 
     // Use Segments to update GUI parameters
@@ -62,12 +67,10 @@ public:
     void useSegment(Rosegarden::Segment *segment);
     void useSegments(std::vector<Rosegarden::Segment*> segments);
 
-signals:
-    /*
-     * KCommand
-     *
-     */
+    // Command history stuff
+    MultiViewCommandHistory* getCommandHistory();
     void addCommandToHistory(KCommand *command);
+
 
 public slots:
     void slotRepeatPressed();
@@ -78,6 +81,9 @@ public slots:
 
     void slotDelaySelected(int);
     void slotDelayTextChanged(const QString &);
+
+    // catching commands
+    void slotCommandExecuted(KCommand *command);
 
 private:
     void initBox();
@@ -92,6 +98,8 @@ private:
 
     std::vector<Rosegarden::StandardQuantization>
     m_standardQuantizations;
+
+    RosegardenGUIView          *m_view;
 };
 
 

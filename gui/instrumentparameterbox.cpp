@@ -209,6 +209,7 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
     else
     {
         m_panValue->setDisabled(true);
+        m_panValue->setCurrentItem(-1);
     }
 
     // Check for program change
@@ -221,6 +222,7 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
     else
     {
         m_programValue->setDisabled(true);
+        m_programValue->setCurrentItem(-1);
     }
 
     // Check for velocity
@@ -232,6 +234,7 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
     else
     {
         m_velocityValue->setDisabled(true);
+        m_velocityValue->setCurrentItem(-1);
     }
 
     // clear bank list
@@ -247,7 +250,16 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
     for (it = list.begin(); it != list.end(); it++)
         m_bankValue->insertItem(QString((*it).data()));
 
-
+    // Select 
+    if (instrument->sendsBankSelect())
+    {
+        //m_bankValue
+    }
+    else
+    {
+        m_bankValue->setDisabled(true);
+        m_bankValue->setCurrentItem(-1);
+    }
 
 }
 

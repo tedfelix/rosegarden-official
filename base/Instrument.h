@@ -126,7 +126,7 @@ public:
     bool sendsProgramChange() const { return m_sendProgramChange; }
 
     void setSendPan(bool value) { m_sendPan = value; }
-    bool sendsPan() const { return m_pan; }
+    bool sendsPan() const { return m_sendPan; }
 
     void setSendVelocity(bool value) { m_sendVelocity = value; }
     bool sendsVelocity() const { return m_sendVelocity; } 
