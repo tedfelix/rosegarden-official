@@ -6,6 +6,10 @@
 # echo "Running configure..."
 # CXX="g++ -O0 -g3 -Wall" ./configure --enable-debug --with-qt-dir=/usr/lib/qt2 --prefix=/opt/kde2.2
 
+export WANT_AUTOCONF_2_5=1
+
 make -f Makefile.cvs
 
-CXXFLAGS="-pipe -g3 -gstabs+" ./configure --enable-debug --with-qt-dir=/usr/lib/qt2 --prefix=/opt/kde2.2
+#CXXFLAGS="-g3 -gstabs+" ./configure --enable-debug --with-qt-dir=/opt/qt3 --prefix=/opt/kde3 --with-alsa
+#CXXFLAGS="-z combreloc" ./configure --enable-debug --with-qt-dir=/opt/kde3-gcc32/qt3 --prefix=/opt/kde3-gcc32 --with-alsa --with-jack --with-ladspa
+CXXFLAGS="-z combreloc" ./configure --enable-debug --with-qt-dir=/opt/qt3 --prefix=/opt/kde3.1 --with-alsa --with-jack --with-ladspa
