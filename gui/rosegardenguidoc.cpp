@@ -708,7 +708,56 @@ void
 RosegardenGUIDoc::splitSegment(Rosegarden::Segment *segment,
                                Rosegarden::timeT splitTime)
 {
-    std::cout << "SPLITTING SEGMENT AT "<< splitTime << endl;
+    // Initialise and add to Composition
+    //
+    Rosegarden::Segment *rhSegment = new Rosegarden::Segment();
+    rhSegment->setTrack(segment->getTrack());
+    rhSegment->setStartTime(splitTime);
+    m_composition.addSegment(rhSegment);
+
+    Rosegarden::Segment::iterator it;
+    Rosegarden::Event *lhEvent;
+    Rosegarden::timeT absTime, duration;
+    Rosegarden::timeT lastNote = 0;
+    int count = 0;
+
+    // Copy through Events
+    //
+    for (it = segment->findTime(splitTime); it != segment->end(); it++)
+    {
+        absTime = (*it)->getAbsoluteTime();
+        duration = (*it)->getDuration();
+
+        /*
+        if ( absTime + duration > lastNote)
+            rhSegment->fillWithRests(absTime + duration);
+            */
+
+        lhEvent = new Event(**it);
+        Segment::iterator loc = rhSegment->insert(lhEvent);
+
+        /*
+        SegmentNotationHelper helper(*rhSegment);
+        if (!helper.isViable(lhEvent))
+            helper.makeNoteViable(loc);
+
+        lastNote = absTime + duration;
+        */
+        count++;
+    }
+
+    // zap the left hand Segment
+    //
+    segment->erase(segment->begin(), segment->findTime(splitTime));
+    deleteSegmentItem(segment);
+
+    addSegmentItem(rhSegment);
+    addSegmentItem(segment);
+
+    cout << count << " Events to the left hand segment" << endl;
+
+    slotUpdateAllViews(0);
+
 }
 
 

@@ -969,10 +969,13 @@ SegmentSplitter::handleMouseButtonPress(QMouseEvent *e)
 
 }
 
+// Actually perform a split if we're on a Segment.
+// Return the Segment pointer and the desired split
+// time to the Document level.
+//
 void
 SegmentSplitter::handleMouseButtonRelease(QMouseEvent *e)
 {
-    // Do the Split
     SegmentItem *item = m_canvas->findSegmentClickedOn(e->pos());
 
     if (item)
@@ -1010,6 +1013,8 @@ SegmentSplitter::handleMouseMove(QMouseEvent *e)
     }
 }
 
+// Draw the splitting line
+//
 void
 SegmentSplitter::drawSplitLine(QMouseEvent *e)
 { 
@@ -1018,13 +1023,23 @@ SegmentSplitter::drawSplitLine(QMouseEvent *e)
     else
         m_canvas->grid().setSnapTime(SnapGrid::SnapToBeat);
 
-    // turn the real X into a snapped X
+    // Turn the real X into a snapped X
     //
     timeT xT = m_canvas->grid().snapX(e->pos().x());
     int x = (int)(m_canvas->grid().getRulerScale()->getXForTime(xT));
+
+    // Need to watch y doesn't leak over the edges of the
+    // current Segment.
+    //
     int y = m_canvas->grid().snapY(e->pos().y());
 
     m_canvas->showSplitLine(x, y);
+}
+
+
+void
+SegmentSplitter::contentsMouseDoubleClickEvent(QMouseEvent *e)
+{
 }
 
 
@@ -1059,6 +1074,10 @@ SegmentJoiner::handleMouseMove(QMouseEvent*)
 {
 }
 
+void
+SegmentJoiner::contentsMouseDoubleClickEvent(QMouseEvent*)
+{
+}
 
 
 

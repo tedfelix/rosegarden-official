@@ -480,7 +480,7 @@ public:
     virtual void handleMouseMove(QMouseEvent*);
 
     // don't do double clicks
-    virtual void contentsMouseDoubleClickEvent(QMouseEvent) {;}
+    virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
 
 signals:
     // Emit this when we want to split the Segment
@@ -505,7 +505,7 @@ public:
     virtual void handleMouseMove(QMouseEvent*);
  
     // don't do double clicks
-    virtual void contentsMouseDoubleClickEvent(QMouseEvent*) {;}
+    virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
 
 private:
 
