@@ -313,12 +313,32 @@ void
 ArtsDriver::resetPlayback(const RealTime &position,
                           const RealTime &latency)
 {
-    allNotesOff();
+    //allNotesOff();
+    RealTime artsPlayStartTime = RealTime(m_artsPlayStartTime.sec,
+                                          m_artsPlayStartTime.usec);
+
+    // save the modification period
+    RealTime  modifyNoteOff = m_playStartPosition - artsPlayStartTime;
 
     m_artsPlayStartTime = deltaTime(m_midiPlayPort.time(),
                                     Arts::TimeStamp(latency.sec, latency.usec));
+    artsPlayStartTime = RealTime(m_artsPlayStartTime.sec,
+                                 m_artsPlayStartTime.usec);
+
     m_playStartPosition = position;
 
+    // adjust modification period
+    modifyNoteOff = modifyNoteOff - m_playStartPosition + artsPlayStartTime;
+
+    for (NoteOffQueue::iterator i = m_noteOffQueue.begin();
+                                i != m_noteOffQueue.end(); i++)
+    {
+        // if we're fast forwarding then we bring the note off closer
+        if (modifyNoteOff <= RealTime(0, 0))
+            (*i)->setRealTime((*i)->getRealTime() + modifyNoteOff);
+        else // we're rewinding - kill the note immediately
+            (*i)->setRealTime(m_playStartPosition);
+    }
 }
 
 // Force all pending note offs to stop immediately.
