@@ -1,6 +1,6 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 
-EXTRA_DIST = AUTHORS COPYING ChangeLog INSTALL README TODO rosegarden.lsm 
+EXTRA_DIST = AUTHORS COPYING ChangeLog INSTALL README TODO TRANSLATORS rosegarden.lsm 
 
 ####### kdevelop will overwrite this part!!! (end)############
 
@@ -27,7 +27,8 @@ package-messages:
 	$(MAKE) -f admin/Makefile.common package-messages
 	$(MAKE) -C po merge
 
-EXTRA_DIST += admin docs
+# omit docs/web from dist for space reasons, and omit docs/CVS just because
+EXTRA_DIST += admin docs/code docs/data_struct docs/design docs/discussion docs/howtos docs/old docs/RAISONDETRE docs/task_lists docs/test
 
 dist-hook:
 	cd $(top_distdir) && perl admin/am_edit -padmin
