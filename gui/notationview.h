@@ -284,7 +284,9 @@ public slots:
     void slotTransformsRestoreStems();
     void slotTransformsTranspose();
     void slotTransformsTransposeUp();
+    void slotTransformsTransposeUpOctave();
     void slotTransformsTransposeDown();
+    void slotTransformsTransposeDownOctave();
 
     void slotTransformsAddAccent();
     void slotTransformsAddTenuto();

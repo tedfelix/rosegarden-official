@@ -989,6 +989,44 @@ SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
 }
 
 
+void
+SegmentNotationHelper::getClefAndKeyAt(timeT time, Clef &clef, Key &key)
+{
+    Event *clefEvent = 0;
+    Event *keyEvent = 0;
+
+    iterator i = segment().findTime(time);
+    while (i != end() && (*i)->getAbsoluteTime() == time) ++i;
+
+    while (i != segment().begin()) {
+
+	--i;
+
+	if (!clefEvent && (*i)->isa(Rosegarden::Clef::EventType)) {
+	    clefEvent = *i;
+	}
+
+	if (!keyEvent && (*i)->isa(Rosegarden::Key::EventType)) {
+	    keyEvent = *i;
+	}
+	
+	if (clefEvent && keyEvent) break;
+    }
+
+    if (clefEvent) {
+	clef = Clef(*clefEvent);
+    } else {
+	clef = Clef();
+    }
+
+    if (keyEvent) {
+	key = Key(*keyEvent);
+    } else {
+	key = Key();
+    }
+}
+
+
 // based on Rosegarden 2.1's GuessItemListClef in editor/src/MidiIn.c
 
 Clef

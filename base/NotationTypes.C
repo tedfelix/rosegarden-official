@@ -231,6 +231,22 @@ Key::Key(int accidentalCount, bool isSharp, bool isMinor)
     }
     throw BadKeySpec();
 }
+
+Key::Key(int tonicPitch, bool isMinor)
+    // throw (BadKeySpec)
+    : m_accidentalHeights(0)
+{
+    checkMap();
+    for (KeyDetailMap::const_iterator i = m_keyDetailMap.begin();
+         i != m_keyDetailMap.end(); ++i) {
+        if ((*i).second.m_tonicPitch == tonicPitch &&
+            (*i).second.m_minor == isMinor) {
+            m_name = (*i).first;
+            return;
+        }
+    }
+    throw BadKeySpec();
+}
     
 
 Key::Key(const Key &kc)
@@ -284,8 +300,8 @@ vector<int> Key::getAccidentalHeights(const Clef &clef) const
     return v;
 }
 
-void Key::checkAccidentalHeights() const {
-
+void Key::checkAccidentalHeights() const
+{
     if (m_accidentalHeights) return;
     m_accidentalHeights = new vector<int>;
   
@@ -298,6 +314,19 @@ void Key::checkAccidentalHeights() const {
         if (sharp) { pitch -= 3; if (pitch < 3) pitch += 7; }
         else       { pitch += 3; if (pitch > 7) pitch -= 7; }
     }
+}
+
+int Key::convertFrom(int pitch, const Key &previousKey) const
+{
+    NotationDisplayPitch ndp(pitch, Clef(), previousKey);
+    return ndp.getPerformancePitch(Clef(), *this);
+}
+
+int Key::transposeFrom(int pitch, const Key &previousKey) const
+{
+    pitch += getTonicPitch();
+    pitch -= previousKey.getTonicPitch();
+    return pitch;
 }
 
 Event *Key::getAsEvent(timeT absoluteTime) const

@@ -32,6 +32,7 @@ class QLineEdit;
 class QCheckBox;
 class QLabel;
 class QComboBox;
+class QRadioButton;
 class NotePixmapFactory;
 
 
@@ -86,19 +87,25 @@ class KeySignatureDialog : public KDialogBase
     Q_OBJECT
 
 public:
+    enum ConversionType {
+	NoConversion,
+	Convert,
+	Transpose
+    };
+
     KeySignatureDialog(QWidget *parent,
 		       NotePixmapFactory *npf,
 		       Rosegarden::Clef clef,
 		       Rosegarden::Key defaultKey =
 		       Rosegarden::Key::DefaultKey,
 		       bool showApplyToAll = true,
-		       bool showTranspose = true);
+		       bool showConversionOptions = true);
 
     bool isValid() const;
     Rosegarden::Key getKey() const;
 
     bool shouldApplyToAll() const;
-    bool shouldTranspose() const;
+    ConversionType getConversionType() const;
 
 protected:
     NotePixmapFactory *m_notePixmapFactory;
@@ -112,8 +119,11 @@ protected:
     QComboBox *m_keyCombo;
     QComboBox *m_majorMinorCombo;
 
-    QCheckBox *m_transposeButton;
-    QCheckBox *m_applyToAllButton;
+    QRadioButton *m_applyToAllButton;
+
+    QRadioButton *m_noConversionButton;
+    QRadioButton *m_convertButton;
+    QRadioButton *m_transposeButton;
 
     void redrawKeyPixmap();
     void regenerateKeyCombo();

@@ -179,12 +179,6 @@ private:
 };
 
 
-/**
-     All we store in a key Event is the name of the key.  A Key object
-     can be constructed from such an Event or just from its name, and
-     will return all the properties of the key.
-*/
-
 struct eqstring {
     bool operator() (const std::string &s1, const std::string &s2) const {
         return s1 == s2;
@@ -198,6 +192,14 @@ struct hashstring {
 
 std::hash<const char *> hashstring::_H;
 
+/**
+ * All we store in a key Event is the name of the key.  A Key object
+ * can be constructed from such an Event or just from its name, and
+ * will return all the properties of the key.  The Key class also
+ * provides some useful mechanisms for getting information about and
+ * transposing between keys.
+ */
+
 class Key {
 public:
     static const std::string EventType;
@@ -207,13 +209,25 @@ public:
     struct BadKeyName { };
     struct BadKeySpec { };
 
+    /// Construct the default key (C major).
     Key();
+
+    /// Construct a key from the given Event of type Key::EventType.
     Key(const Event &e)
         /* throw (Event::NoData, Event::BadType, BadKeyName) */;
+
+    /// Construct the named key.
     Key(const std::string &name)
         /* throw (BadKeyName) */;
+
+    /// Construct a key from signature and mode.
     Key(int accidentalCount, bool isSharp, bool isMinor)
         /* throw (BadKeySpec) */;
+
+    /// Construct the key with the given tonic and mode.
+    Key(int tonicPitch, bool isMinor)
+        /* throw (BadKeySpec) */;
+
     Key(const Key &kc);
 
     ~Key() {
@@ -226,50 +240,113 @@ public:
 	return k.m_name == m_name;
     }
 
+    /**
+     * Return true if this is a minor key.  Unlike in RG2.1,
+     * we distinguish betwenn major and minor keys with the
+     * same signature.
+     */
     bool isMinor() const {
         return m_keyDetailMap[m_name].m_minor;
     }
 
+    /**
+     * Return true if this key's signature is made up of
+     * sharps, false if flats.
+     */
     bool isSharp() const {
         return m_keyDetailMap[m_name].m_sharps;
     }
 
+    /**
+     * Return the pitch of the tonic note in this key, as a
+     * MIDI (or RG4) pitch modulo 12 (i.e. in the range 0-11).
+     * This is the pitch of the note named in the key's name,
+     * e.g. 0 for the C in C major.
+     */
     int getTonicPitch() const {
         return m_keyDetailMap[m_name].m_tonicPitch;
     }
 
+    /**
+     * Return the number of sharps or flats in the key's signature.
+     */
     int getAccidentalCount() const {
         return m_keyDetailMap[m_name].m_sharpCount;
     }
 
-    Key getEquivalent() const { // e.g. called on C major, return A minor
+    /**
+     * Return the key with the same signature but different
+     * major/minor mode.  For example if called on C major, 
+     * returns A minor.
+     */
+    Key getEquivalent() const {
         return Key(m_keyDetailMap[m_name].m_equivalence);
     }
 
+    /**
+     * Return the name of the key, in a human-readable form
+     * also suitable for passing to the Key constructor.
+     */
     std::string getName() const {
         return m_name;
     }
 
+    /**
+     * Return the name of the key, in the form used by RG2.1.
+     */
     std::string getRosegarden2Name() const {
         return m_keyDetailMap[m_name].m_rg2name;
     }
 
+    /**
+     * Return the accidental at the given height-on-staff
+     * (in NotationDisplayPitch terminology) in the given clef.
+     */
     Accidental getAccidentalAtHeight(int height, const Clef &clef) const;
 
-    /// staff positions of accidentals
+    /**
+     * Return the heights-on-staff (in NotationDisplayPitch
+     * terminology) of all accidentals in the key's signature,
+     * in the given clef.
+     */
     std::vector<int> getAccidentalHeights(const Clef &clef) const;
 
-    /** to permit comparison of one height with another irrespective of
-        octave, for key/accidental calculations &c */
+    /**
+     * Return the result of applying this key to the given
+     * pitch, that is, modifying the pitch so that it has the
+     * same status in terms of accidentals as it had when
+     * found in the given previous key.
+     */
+    int convertFrom(int pitch, const Key &previousKey) const;
+
+    /**
+     * Return the result of transposing the given pitch into
+     * this key, that is, modifying the pitch by the difference
+     * between the tonic pitches of this and the given previous
+     * key.
+     */
+    int transposeFrom(int pitch, const Key &previousKey) const;
+
+    /**
+     * Reduce a height-on-staff to a single octave, so that it
+     * can be compared against the accidental heights returned
+     * by the preceding method.
+     */
     static inline unsigned int canonicalHeight(int height) {
 	return (height > 0) ? (height % 7) : ((7 - (-height % 7)) % 7);
     }
 
+    typedef std::vector<Key> KeySet;
+
+    /**
+     * Return all the keys in the given major/minor mode, in
+     * no particular order.
+     */
+    static KeySet getKeys(bool minor = false);
+
+
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsEvent(timeT absoluteTime) const;
-
-    typedef std::vector<Key> KeySet;
-    static KeySet getKeys(bool minor = false);
 
 private:
     std::string m_name;
@@ -359,27 +436,25 @@ private:
 
 
 /**
-
-  NotationDisplayPitch stores a note's pitch in terms of the position
-  of the note on the staff and its associated accidental, and
-  converts these values to and from performance (MIDI) pitches.
-
-  Rationale: When we insert a note, we need to query the height of the
-  staff line next to which it's being inserted, then translate this
-  back to raw pitch according to the clef in force at the x-coordinate
-  at which the note is inserted.  For display, we translate from raw
-  pitch using both the clef and the key in force.
-
-  Whether an accidental should be displayed or not depends on the
-  current key, on whether we've already shown the same accidental for
-  that pitch in the same bar, on whether the note event explicitly
-  requests an accidental...  All we calculate here is whether the
-  pitch "should" have an accidental, not whether it really will
-  (e.g. if the accidental has already appeared).
-
-  (See also docs/discussion/units.txt for explanation of pitch units.)
-
-*/
+ * NotationDisplayPitch stores a note's pitch in terms of the position
+ * of the note on the staff and its associated accidental, and
+ * converts these values to and from performance (MIDI) pitches.
+ *
+ * Rationale: When we insert a note, we need to query the height of the
+ * staff line next to which it's being inserted, then translate this
+ * back to raw pitch according to the clef in force at the x-coordinate
+ * at which the note is inserted.  For display, we translate from raw
+ * pitch using both the clef and the key in force.
+ *
+ * Whether an accidental should be displayed or not depends on the
+ * current key, on whether we've already shown the same accidental for
+ * that pitch in the same bar, on whether the note event explicitly
+ * requests an accidental...  All we calculate here is whether the
+ * pitch "should" have an accidental, not whether it really will
+ * (e.g. if the accidental has already appeared).
+ *
+ * (See also docs/discussion/units.txt for explanation of pitch units.)
+ */
 
 class NotationDisplayPitch
 {

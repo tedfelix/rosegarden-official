@@ -86,20 +86,22 @@ protected:
 class KeyInsertionCommand : public BasicCommand
 {
 public:
-    //!!! deal with transposition
     KeyInsertionCommand(Rosegarden::Segment &segment,
 			Rosegarden::timeT time,
-			Rosegarden::Key key);
+			Rosegarden::Key key,
+			bool shouldConvert,
+			bool shouldTranspose);
     virtual ~KeyInsertionCommand();
 
     static QString name(Rosegarden::Key *key = 0) {
 	if (key) {
-	    return QString("Add &Key ") + key->getName().c_str() + "...";
+	    return QString("Change to &Key ") + key->getName().c_str() + "...";
 	} else {
 	    return "Add &Key Change...";
 	}
     }
 
+    virtual Rosegarden::timeT getRelayoutEndTime();
     Rosegarden::Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
 
 protected:
@@ -107,6 +109,9 @@ protected:
 
     Rosegarden::Key m_key;
     Rosegarden::Event *m_lastInsertedEvent;
+    Rosegarden::timeT m_relayoutEndTime;
+    bool m_convert;
+    bool m_transpose;
 };
 
 
@@ -313,6 +318,26 @@ public:
 
     static QString name(bool up) {
 	return up ? "&Up a Semitone" : "&Down a Semitone";
+    }
+
+protected:
+    virtual void modifySegment();
+
+private:
+    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    bool m_up;
+};
+
+
+class TransformsMenuTransposeOctaveCommand : public BasicSelectionCommand
+{
+public:
+    TransformsMenuTransposeOctaveCommand(bool up, EventSelection &selection) :
+	BasicSelectionCommand(name(up), selection, true),
+	m_selection(&selection), m_up(up) { }
+
+    static QString name(bool up) {
+	return up ? "Up an &Octave" : "Down an Octa&ve";
     }
 
 protected:

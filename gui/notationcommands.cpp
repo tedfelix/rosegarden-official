@@ -45,6 +45,7 @@ using Rosegarden::String;
 using Rosegarden::Accidental;
 using Rosegarden::Accidentals::NoAccidental;
 using Rosegarden::Indication;
+using Rosegarden::NotationDisplayPitch;
 
 using std::string;
 using std::cerr;
@@ -134,10 +135,15 @@ ClefInsertionCommand::modifySegment()
 
 
 KeyInsertionCommand::KeyInsertionCommand(Segment &segment, timeT time,
-					 Rosegarden::Key key) :
+					 Rosegarden::Key key,
+					 bool convert,
+					 bool transpose) :
     BasicCommand(name(&key), segment, time, time + 1),
     m_key(key),
-    m_lastInsertedEvent(0)
+    m_lastInsertedEvent(0),
+    m_relayoutEndTime(getEndTime()),
+    m_convert(convert),
+    m_transpose(transpose)
 {
     // nothing
 }
@@ -147,13 +153,66 @@ KeyInsertionCommand::~KeyInsertionCommand()
     // nothing
 }
 
+timeT
+KeyInsertionCommand::getRelayoutEndTime()
+{
+    return m_relayoutEndTime;
+}
+
 void
 KeyInsertionCommand::modifySegment()
 {
     SegmentNotationHelper helper(getSegment());
+    Rosegarden::Clef clef;
+    Rosegarden::Key oldKey;
+
+    if (m_convert || m_transpose) {
+	helper.getClefAndKeyAt(getBeginTime(), clef, oldKey);
+    }
 
     Segment::iterator i = helper.insertKey(getBeginTime(), m_key);
-    if (i != helper.segment().end()) m_lastInsertedEvent = *i;
+
+    if (i != helper.segment().end()) {
+
+	m_lastInsertedEvent = *i;
+	if (!m_convert && !m_transpose) return;
+
+	while (++i != helper.segment().end()) {
+
+	    //!!! what if we get two keys at the same time...?
+	    if ((*i)->isa(Rosegarden::Key::EventType)) break;
+
+	    if ((*i)->isa(Rosegarden::Clef::EventType)) {
+		clef = Rosegarden::Clef(**i);
+		continue;
+	    }
+
+	    if ((*i)->isa(Rosegarden::Note::EventType) &&
+		(*i)->has(Rosegarden::BaseProperties::PITCH)) {
+
+		long pitch = (*i)->get<Int>(Rosegarden::BaseProperties::PITCH);
+		
+		if (m_convert) {
+		    (*i)->set<Int>(Rosegarden::BaseProperties::PITCH,
+				   m_key.convertFrom(pitch, oldKey));
+		} else {
+		    (*i)->set<Int>(Rosegarden::BaseProperties::PITCH,
+				   m_key.transposeFrom(pitch, oldKey));
+		    kdDebug(KDEBUG_AREA) << "transpose from "
+					 << pitch << " to " <<
+			(*i)->get<Int>(Rosegarden::BaseProperties::PITCH)
+					 << " (" << oldKey.getName()
+					 << " to " << m_key.getName() << ")"
+			<< endl;
+		}
+
+		(*i)->unset(Rosegarden::BaseProperties::ACCIDENTAL);
+
+		m_relayoutEndTime =
+		    (*i)->getAbsoluteTime() + (*i)->getDuration();
+	    }
+	}
+    }
 }
 
 
@@ -348,6 +407,7 @@ TransformsMenuRestoreStemsCommand::modifySegment()
     }
 }
 
+//!!! bleah -- merge these three classes 
 
 void
 TransformsMenuTransposeCommand::modifySegment()
@@ -376,6 +436,28 @@ TransformsMenuTransposeOneStepCommand::modifySegment()
     EventSelection::eventcontainer::iterator i;
 
     int offset = m_up ? 1 : -1;
+
+    for (i  = m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+
+	if ((*i)->isa(Note::EventType)) {
+	    long pitch = (*i)->get<Int>(Rosegarden::BaseProperties::PITCH);
+	    pitch += offset;
+	    if (pitch < 0) pitch = 0;
+	    if (pitch > 127) pitch = 127;
+	    (*i)->set<Int>(Rosegarden::BaseProperties::PITCH, pitch); 
+	    (*i)->unset(Rosegarden::BaseProperties::ACCIDENTAL);
+	}
+    }
+}
+
+void
+TransformsMenuTransposeOctaveCommand::modifySegment()
+{
+    SegmentNotationHelper helper(getSegment());
+    EventSelection::eventcontainer::iterator i;
+
+    int offset = m_up ? 12 : -12;
 
     for (i  = m_selection->getSegmentEvents().begin();
 	 i != m_selection->getSegmentEvents().end(); ++i) {

@@ -127,7 +127,9 @@ etc
   <Menu name="Transpose">
   <text>Trans&amp;pose</text>
   <Action name="transpose_up"/>
+  <Action name="transpose_up_octave"/>
   <Action name="transpose_down"/>
+  <Action name="transpose_down_octave"/>
   <Action name="general_transpose"/>
   </Menu>
   <Separator/>

@@ -293,11 +293,17 @@ public:
 
 
     /**
+     * Find the clef and key in effect at the given time.  Slow.
+     */
+    void getClefAndKeyAt(timeT time, Clef &clef, Key &key);
+    
+
+    /**
      * Guess which clef a section of music is supposed to be in,
      * ignoring any clef events actually found in the section.
      */
     Clef guessClef(iterator from, iterator to);
-    
+
 
     /**
      * Remove all rests starting at \a time for \a duration,

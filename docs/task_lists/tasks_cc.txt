@@ -34,6 +34,11 @@ Post-0.1.3 task list (superseding older ones)
 10a. Implement Transpose Rest of Staff and Insert Into All Tracks options
      on key signature GUI
 
+10b. Look at refresh in NotationView: create a 2-bar-or-more empty segment,
+    put some notes in 2nd bar, add a keysig to start of 1st bar.  The notes
+    are changed according to keysig settings but aren't refreshed in this
+    view.  Works for clefs though.
+
 11. Rework Composition's bar methods so that truncate argument is no
     longer requested, assuming truncate = false always.
     Rename getBarRange(timeT) to getBarRangeForTime or something.

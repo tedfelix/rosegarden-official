@@ -216,7 +216,7 @@ void EditView::slotCommandExecuted(KCommand *command)
     if ((basicCommand = dynamic_cast<BasicCommand *>(command)) != 0) {
 	refreshSegment
 	    (&basicCommand->getSegment(), basicCommand->getBeginTime(),
-					  basicCommand->getEndTime());
+					  basicCommand->getRelayoutEndTime());
     } else {
 	//!!! deal with other command superclasses from segmentcommands.h
 	// (non-basic-partial-segment-commands -> refresh whole segment;

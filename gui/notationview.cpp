@@ -564,9 +564,17 @@ void NotationView::setupActions()
                 SLOT(slotTransformsTransposeUp()), actionCollection(),
                 "transpose_up");
 
+    new KAction(TransformsMenuTransposeOctaveCommand::name(true), 0, this,
+                SLOT(slotTransformsTransposeUpOctave()), actionCollection(),
+                "transpose_up_octave");
+
     new KAction(TransformsMenuTransposeOneStepCommand::name(false), 0, this,
                 SLOT(slotTransformsTransposeDown()), actionCollection(),
                 "transpose_down");
+
+    new KAction(TransformsMenuTransposeOctaveCommand::name(false), 0, this,
+                SLOT(slotTransformsTransposeDownOctave()), actionCollection(),
+                "transpose_down_octave");
 
     new KAction(TransformsMenuTransposeCommand::name(), 0, this,
                 SLOT(slotTransformsTranspose()), actionCollection(),
@@ -1411,12 +1419,30 @@ void NotationView::slotTransformsTransposeUp()
                         (true, *m_currentEventSelection));
 }
 
+void NotationView::slotTransformsTransposeUpOctave()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Transposing up one octave..."), statusBar());
+
+    addCommandToHistory(new TransformsMenuTransposeOctaveCommand
+                        (true, *m_currentEventSelection));
+}
+
 void NotationView::slotTransformsTransposeDown()
 {
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Transposing down one semitone..."), statusBar());
 
     addCommandToHistory(new TransformsMenuTransposeOneStepCommand
+                        (false, *m_currentEventSelection));
+}
+
+void NotationView::slotTransformsTransposeDownOctave()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Transposing down one octave..."), statusBar());
+
+    addCommandToHistory(new TransformsMenuTransposeOctaveCommand
                         (false, *m_currentEventSelection));
 }
 
@@ -1569,10 +1595,15 @@ void NotationView::slotTransformsAddKeySignature()
 	if (dialog->exec() == QDialog::Accepted &&
 	    dialog->isValid()) {
 
+	    KeySignatureDialog::ConversionType conversion =
+		dialog->getConversionType();
+
 	    addCommandToHistory
 		(new KeyInsertionCommand
 		 (m_staffs[m_currentStaff]->getSegment(),
-		  insertionTime, dialog->getKey()));
+		  insertionTime, dialog->getKey(),
+		  conversion == KeySignatureDialog::Convert,
+		  conversion == KeySignatureDialog::Transpose));
 	}
 
 	delete dialog;

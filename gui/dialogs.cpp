@@ -29,6 +29,8 @@
 #include <qcombobox.h>
 #include <qcheckbox.h>
 #include <qgroupbox.h>
+#include <qradiobutton.h>
+#include <qbuttongroup.h>
 #include <qlayout.h>
 #include <qtooltip.h>
 
@@ -154,7 +156,7 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
 				       Rosegarden::Clef clef,
 				       Rosegarden::Key defaultKey,
 				       bool showApplyToAll,
-				       bool showTranspose) :
+				       bool showConversionOptions) :
     KDialogBase(parent, 0, true, i18n("Key Change"), Ok | Cancel),
     m_notePixmapFactory(npf),
     m_key(defaultKey),
@@ -166,23 +168,18 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
 
     QHBox *keyBox = 0;
     QHBox *nameBox = 0;
-    QGroupBox *buttonFrame = 0;
 
-    if (showTranspose || showApplyToAll) {
+    QGroupBox *keyFrame = new QGroupBox
+	(1, Horizontal, i18n("Key signature"), vbox);
+
+    QGroupBox *buttonFrame = new QGroupBox
+	(1, Horizontal, i18n("Scope"), vbox);
+    
+    QButtonGroup *conversionFrame = new QButtonGroup
+	(1, Horizontal, i18n("Existing notes following key change"), vbox);
 	
-	QGroupBox *keyFrame = new QGroupBox
-	    (1, Horizontal, i18n("Key signature"), vbox);
-
-	keyBox = new QHBox(keyFrame);
-	nameBox = new QHBox(keyFrame);
-
-	buttonFrame = new QGroupBox
-	    (1, Horizontal, i18n("Key options"), vbox);
-
-    } else {
-	keyBox = new QHBox(vbox);
-	nameBox = new QHBox(vbox);
-    }
+    keyBox = new QHBox(keyFrame);
+    nameBox = new QHBox(keyFrame);
     
     BigArrowButton *keyDown = new BigArrowButton(keyBox, Qt::LeftArrow);
     QToolTip::add(keyDown, i18n("Flatten"));
@@ -205,17 +202,34 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     m_keyLabel->setMinimumHeight(m_keyLabel->pixmap()->height());
 
     if (showApplyToAll) {
+	QRadioButton *applyToOneButton =
+	    new QRadioButton(i18n("Apply to current segment only"),
+			     buttonFrame);
 	m_applyToAllButton =
-	    new QCheckBox(i18n("Insert into all tracks"), buttonFrame);
+	    new QRadioButton(i18n("Apply to all segments at this time"),
+			     buttonFrame);
+	applyToOneButton->setChecked(true);
     } else {
 	m_applyToAllButton = 0;
+	buttonFrame->hide();
     }
     
-    if (showTranspose) {
+    if (showConversionOptions) {
+	m_noConversionButton =
+	    new QRadioButton
+	    (i18n("Maintain current pitches"), conversionFrame);
+	m_convertButton =
+	    new QRadioButton
+	    (i18n("Maintain current accidentals"), conversionFrame);
 	m_transposeButton =
-	    new QCheckBox(i18n("Transpose existing notes"), buttonFrame);
+	    new QRadioButton
+	    (i18n("Transpose into this key"), conversionFrame);
+	m_noConversionButton->setChecked(true);
     } else {
+	m_noConversionButton = 0;
+	m_convertButton = 0;
 	m_transposeButton = 0;
+	conversionFrame->hide();
     }
     
     QObject::connect(keyUp, SIGNAL(pressed()), this, SLOT(slotKeyUp()));
@@ -228,16 +242,23 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
 		     this, SLOT(slotMajorMinorChanged(const QString &)));
 }
 
-bool
-KeySignatureDialog::shouldTranspose() const
+KeySignatureDialog::ConversionType
+KeySignatureDialog::getConversionType() const
 {
-    return m_transposeButton && m_transposeButton->isOn();
+    if (m_noConversionButton && m_noConversionButton->isChecked()) {
+	return NoConversion;
+    } else if (m_convertButton && m_convertButton->isChecked()) {
+	return Convert;
+    } else if (m_transposeButton && m_transposeButton->isChecked()) {
+	return Transpose;
+    }
+    return NoConversion;
 }
 
 bool
 KeySignatureDialog::shouldApplyToAll() const
 {
-    return m_applyToAllButton && m_applyToAllButton->isOn();
+    return m_applyToAllButton && m_applyToAllButton->isChecked();
 }
 
 void
