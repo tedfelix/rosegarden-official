@@ -149,7 +149,7 @@ public:
      * The depth argument is the level of subdivision (0 = bars only,
      * 3 = bars, beats, beat divisions, subdivisions -- etc).
      */
-    MetronomeMmapper(RosegardenGUIDoc* doc, int depth);
+    MetronomeMmapper(RosegardenGUIDoc* doc, int depth = 2);
     virtual ~MetronomeMmapper();
 
     Rosegarden::InstrumentId getMetronomeInstrument();
