@@ -559,6 +559,11 @@
     <Action name="slur"/>
     <Action name="crescendo"/>
     <Action name="decrescendo"/>
+<!--  <Action name="glissando"/> -->
+     <Action name="octave_2up"/>
+     <Action name="octave_up"/>
+     <Action name="octave_down"/>
+     <Action name="octave_2down"/>
     <Action name="remove_indications"/>
     <Action name="stems_up"/>
     <Action name="stems_down"/>
@@ -571,6 +576,7 @@
     <Action name="slashes_5"/>
     <Action name="note_style_actionmenu"/>
     <Action name="remove_marks"/>
+    <Action name="remove_fingering_marks"/>
     <Action name="add_fingering_0"/>
     <Action name="add_fingering_1"/>
     <Action name="add_fingering_2"/>
