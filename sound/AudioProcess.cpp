@@ -1384,16 +1384,32 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
 #endif
 
 	if (!acceptable) {
-	    haveBlock = false;
+	    if (!m_driver->getLowLatencyMode()) {
+
+		// Not a serious problem, just block on this
+		// instrument and return to it a little later.
+		haveBlock = false;
+
+	    } else {
+		// In low latency mode, this is a serious problem if
+		// the file has been buffered and simply isn't filling
+		// fast enough.  Otherwise we have to assume that the
+		// problem is something like a new file being dropped
+		// in by unmute during playback, in which case we have
+		// to accept that it won't be available for a while
+		// and just read silence from it instead.
+		if (file->isBuffered()) {
+		    m_driver->reportFailure(MappedEvent::FailureDiscUnderrun);
+		    haveBlock = false;
+		} else {
+		    // ignore happily.
+		}
+	    }
 	}
     }
 	
     if (!haveBlock) {
-	//!!! Is this actually a problem? It should mean we just block
-	// on this one instrument and return to it a little later.
-//	std::cerr << "WARNING: buffer underrun in file ringbuffer for instrument " << id << std::endl;
-//	m_driver->reportFailure(MappedEvent::FailureDiscUnderrun);
-	return false; // blocked
+	return false; // blocked;
     }
 
 #ifdef DEBUG_MIXER

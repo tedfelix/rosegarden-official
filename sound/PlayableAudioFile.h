@@ -128,6 +128,10 @@ public:
     //
     bool updateBuffers();
 
+    // Has fillBuffers been called and completed yet?
+    //
+    bool isBuffered() const { return m_currentScanPoint > m_startIndex; }
+
     // Has all the data in this file now been read into the buffers?
     //
     bool isFullyBuffered() const { return m_isSmallFile || m_fileEnded; }
