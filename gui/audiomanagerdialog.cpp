@@ -507,7 +507,10 @@ AudioManagerDialog::slotExportAudio()
                            sourceFile->getBitsPerSample());
     
     if (sourceFile->open() == false) 
+    {
+        delete destFile;
         return;
+    }
     
     destFile->write();
 
