@@ -60,7 +60,6 @@ RosegardenComboBox::wheelEvent(QWheelEvent *e)
         if (currentItem() < count() - 1)
         {
             setCurrentItem(currentItem() + 1);
-//!!!            emit propagate(currentItem());
 	    emit activated(currentItem());
         }
     }
@@ -69,7 +68,6 @@ RosegardenComboBox::wheelEvent(QWheelEvent *e)
         if (currentItem() > 0)
         {
             setCurrentItem(currentItem() - 1);
-//!!!            emit propagate(currentItem());
 	    emit activated(currentItem());
         }
     }

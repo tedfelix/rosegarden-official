@@ -82,10 +82,7 @@ public:
 
 protected:
     virtual void wheelEvent(QWheelEvent *e);
-/*!!!
-signals:
-    void propagate(int); // update the Segment with new value
-*/
+
 private:
     bool m_reverse;
 

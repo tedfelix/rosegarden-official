@@ -126,7 +126,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
     new QLabel(i18n("    (takes effect only from next restart)"), box);
     layout->addWidget(box, 2, 0);
 
-    m_nameStyle = new QComboBox(frame);
+    m_nameStyle = new RosegardenComboBox(frame);
     m_nameStyle->insertItem(i18n("Always use US names (e.g. quarter, 8th)"));
     m_nameStyle->insertItem(i18n("Localised (where available)"));
     m_nameStyle->setCurrentItem(m_cfg->readUnsignedNumEntry("notenamestyle", Local));
@@ -162,7 +162,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
     layout->addWidget(new QLabel(i18n("Number of count-in bars when recording"),
                                  frame), 2, 0);
 
-    m_client = new QComboBox(frame);
+    m_client = new RosegardenComboBox(frame);
     m_client->insertItem(i18n("Notation"));
     m_client->insertItem(i18n("Matrix"));
     m_client->insertItem(i18n("Event List"));
@@ -345,7 +345,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
                                1, 1,
                                0, 1);
 
-    m_font = new QComboBox(frame);
+    m_font = new RosegardenComboBox(frame);
     m_font->setEditable(false);
 
     QString defaultFont = m_cfg->readEntry
@@ -364,10 +364,10 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
                      this, SLOT(slotFontComboChanged(const QString &)));
     layout->addWidget(m_font, 0, 1);
 
-    m_singleStaffSize = new QComboBox(frame);
+    m_singleStaffSize = new RosegardenComboBox(frame);
     m_singleStaffSize->setEditable(false);
 
-    m_multiStaffSize = new QComboBox(frame);
+    m_multiStaffSize = new RosegardenComboBox(frame);
     m_multiStaffSize->setEditable(false);
 
     slotFontComboChanged(defaultFont);
@@ -382,7 +382,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 
     layout->addWidget(new QLabel(i18n("Default layout mode"), frame), 0, 0);
 
-    m_layoutMode = new QComboBox(frame);
+    m_layoutMode = new RosegardenComboBox(frame);
     m_layoutMode->setEditable(false);
     m_layoutMode->insertItem(i18n("Linear layout"));
     m_layoutMode->insertItem(i18n("Page layout"));
@@ -394,7 +394,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     
     layout->addWidget(new QLabel(i18n("Default spacing"), frame), 1, 0);
 
-    m_spacing = new QComboBox(frame);
+    m_spacing = new RosegardenComboBox(frame);
     m_spacing->setEditable(false);
 
     std::vector<int> s = NotationHLayout::getAvailableSpacings();
@@ -433,7 +433,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     layout->addWidget
         (new QLabel(i18n("Default note style for new notes"), frame), 0, 0);
 
-    m_noteStyle = new QComboBox(frame);
+    m_noteStyle = new RosegardenComboBox(frame);
     m_noteStyle->setEditable(false);
 
     QString defaultStyle =
@@ -458,7 +458,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 
     int defaultInsertType = m_cfg->readNumEntry("inserttype", 0);
 
-    m_insertType = new QComboBox(frame);
+    m_insertType = new RosegardenComboBox(frame);
     m_insertType->setEditable(false);
     m_insertType->insertItem
         (i18n("Split notes into ties to make durations match"));
@@ -485,7 +485,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     layout->addWidget
         (new QLabel(i18n("Default paste type"), frame), 4, 0);
 
-    m_pasteType = new QComboBox(frame);
+    m_pasteType = new RosegardenComboBox(frame);
     m_pasteType->setEditable(false);
 
     unsigned int defaultPasteType = m_cfg->readUnsignedNumEntry
@@ -554,7 +554,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     layout->addWidget(new QLabel(
         i18n("Paper size to use in \\paper block:"), frame), 3, 0);
     
-    m_lilyPaperSize = new QComboBox(frame);
+    m_lilyPaperSize = new RosegardenComboBox(frame);
     m_lilyPaperSize->insertItem(i18n("US Letter"));
     m_lilyPaperSize->insertItem(i18n("A4"));
     m_lilyPaperSize->insertItem(i18n("Legal"));
@@ -564,7 +564,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     layout->addWidget(new QLabel(
         i18n("Lilypond font size:"), frame), 4, 0);
 
-    m_lilyFontSize = new QComboBox(frame);
+    m_lilyFontSize = new RosegardenComboBox(frame);
     m_lilyFontSize->insertItem("11");
     m_lilyFontSize->insertItem("13");
     m_lilyFontSize->insertItem("16");
@@ -578,7 +578,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     layout->addWidget(new QLabel(
         i18n("Fill time gaps with:"), frame), 5, 0);
             
-    m_lilyRestType = new QComboBox(frame);
+    m_lilyRestType = new RosegardenComboBox(frame);
     m_lilyRestType->insertItem("\\skip");
     m_lilyRestType->insertItem("multi-measure rests");
     m_lilyRestType->setCurrentItem(m_cfg->readUnsignedNumEntry("lilyresttype", 0));
@@ -957,7 +957,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     layout = new QGridLayout(frame, 4, 2, 10, 5);
 
     label = new QLabel("MIDI Record Device", frame);
-    m_recordDevice = new QComboBox(frame);
+    m_recordDevice = new RosegardenComboBox(frame);
 
     layout->addWidget(label, 0, 0);
     layout->addWidget(m_recordDevice, 0, 1);
@@ -1013,7 +1013,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     label = new QLabel("JACK transport mode", frame);
     layout->addWidget(label, 1, 0);
 
-    m_jackTransport = new QComboBox(frame);
+    m_jackTransport = new RosegardenComboBox(frame);
     layout->addWidget(m_jackTransport, 1, 1); //, Qt::AlignHCenter);
 
     m_jackTransport->insertItem(i18n("off"));
@@ -1038,7 +1038,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     label = new QLabel("MMC transport mode", frame);
     layout->addWidget(label, 2, 0);
     
-    m_mmcTransport = new QComboBox(frame);
+    m_mmcTransport = new RosegardenComboBox(frame);
     layout->addWidget(m_mmcTransport, 2, 1); //, Qt::AlignHCenter);
 
     m_mmcTransport->insertItem(i18n("off"));

@@ -430,7 +430,8 @@ int main(int argc, char *argv[])
         // RESTORE(RosegardenGUIApp);
         int n = 1;
         while (KMainWindow::canBeRestored(n)) {
-            (new RosegardenGUIApp)->restore(n);
+	    // memory leak if more than one can be restored?
+            (rosegardengui = new RosegardenGUIApp)->restore(n);
             n++;
         }
 

@@ -86,7 +86,8 @@ int main(int argc, char *argv[])
         // RESTORE(RosegardenSequencerApp(jackArgs));
         int n = 1;
         while (KMainWindow::canBeRestored(n)) {
-            (new RosegardenSequencerApp(jackArgs))->restore(n);
+	    // memory leak if more than one can be restored?
+            (roseSeq = new RosegardenSequencerApp(jackArgs))->restore(n);
             n++;
         }
     }
