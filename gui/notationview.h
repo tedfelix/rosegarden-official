@@ -50,6 +50,7 @@ class MarkActionData;
 class ChordNameRuler;
 class RosegardenProgressDialog;
 class RosegardenProgressBar;
+class KPrinter;
 
 /**
  * NotationView is a view for one or more Staff objects, each of
@@ -79,7 +80,8 @@ public:
 
     /// Constructor for printing only
     NotationView(RosegardenGUIDoc *doc,
-                 std::vector<Rosegarden::Segment *> segments);
+                 std::vector<Rosegarden::Segment *> segments,
+                 KPrinter*);
 
     ~NotationView();
 
@@ -181,6 +183,9 @@ public:
 
     /// Switches between page- and linear- layout mode
     void setPageMode(bool pageMode);
+
+    /// Returns the page width according to the layout mode (page/linear)
+    int getPageWidth();
 
     NotePixmapFactory *getNotePixmapFactory() const {
 	return m_notePixmapFactory;
