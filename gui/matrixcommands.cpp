@@ -53,6 +53,10 @@ void MatrixInsertionCommand::modifySegment()
 {
     MATRIX_DEBUG << "MatrixInsertionCommand::modifySegment()\n";
 
+    if (!m_event->has(Rosegarden::BaseProperties::VELOCITY)) {
+	m_event->set<Rosegarden::Int>(Rosegarden::BaseProperties::VELOCITY, 100);
+    }
+
     Rosegarden::SegmentMatrixHelper helper(getSegment());
     m_lastInsertedEvent = new Event(*m_event);
     helper.insertNote(m_lastInsertedEvent);
