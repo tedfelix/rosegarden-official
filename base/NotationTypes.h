@@ -314,7 +314,7 @@ public:
 	return (m_type >= Crotchet) ? 0 : (Crotchet - m_type);
     }
 
-    int  getDuration()  const {
+    timeT getDuration()  const {
         return m_dots ? getDurationAux() : (m_shortestTime * (1 << m_type));
     }
 
@@ -329,7 +329,7 @@ private:
     Type m_type;
     int m_dots;
 
-    int  getDurationAux()  const;
+    timeT getDurationAux()  const;
 
     // a time & effort saving device; if changing this, change
     // TimeSignature::m_crotchetTime etc too

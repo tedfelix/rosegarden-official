@@ -529,7 +529,7 @@ Note& Note::operator=(const Note &n)
     return *this;
 }
 
-int Note::getDurationAux() const
+timeT Note::getDurationAux() const
 {
     //!!! may be able to tighten this up a bit so it can remain inline
     int duration = m_shortestTime * (1 << m_type);
