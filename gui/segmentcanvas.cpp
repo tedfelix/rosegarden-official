@@ -152,6 +152,36 @@ SegmentItem::setSelected(const bool &select, const QBrush &brush)
 unsigned int SegmentItem::m_itemHeight = 10;
 
 
+//////////////////////////////////////////////////////////////////////
+////             SegmentSplitLine
+//////////////////////////////////////////////////////////////////////
+SegmentSplitLine::SegmentSplitLine(int x, int y, int height,
+                                   Rosegarden::RulerScale *rulerScale,
+                                   QCanvas* canvas):
+                                   QCanvasLine(canvas),
+                                   m_rulerScale(rulerScale),
+                                   m_height(height)
+{
+    setPen(Qt::black);
+    setBrush(Qt::black);
+    setZ(3);
+    moveLine(x, y);
+}
+
+void
+SegmentSplitLine::moveLine(int x, int y)
+{
+    setPoints(x, y, x, y + m_height);
+    show();
+}
+
+void
+SegmentSplitLine::hideLine()
+{
+    hide();
+}
+
+
 
 //////////////////////////////////////////////////////////////////////
 //                SegmentCanvas
@@ -166,6 +196,7 @@ SegmentCanvas::SegmentCanvas(RulerScale *rulerScale, int vStep,
     m_grid(rulerScale, vStep),
     m_currentItem(0),
     m_recordingSegment(0),
+    m_splitLine(0),
     m_brush(RosegardenGUIColours::SegmentBlock),
     m_highlightBrush(RosegardenGUIColours::SegmentHighlightBlock),
     m_pen(RosegardenGUIColours::SegmentBorder),
@@ -328,6 +359,33 @@ void SegmentCanvas::clear()
 	    delete *it;
     }
 }
+
+// Show the split line - where we perform Segment splits from
+//
+void
+SegmentCanvas::showSplitLine(int x, int y)
+{
+    if (m_splitLine == 0)
+        m_splitLine = new SegmentSplitLine(x, y,
+                                           SegmentItem::getItemHeight(),
+                                           m_grid.getRulerScale() - 4,
+                                           canvas());
+    else
+        m_splitLine->moveLine(x, y);
+
+    update();
+}
+
+// Hide the split line
+//
+void
+SegmentCanvas::hideSplitLine()
+{
+    m_splitLine->hideLine();
+    update();
+}
+
+
 
 SegmentItem *
 SegmentCanvas::addSegmentItem(int y, timeT startTime, timeT duration)
@@ -873,10 +931,18 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
     }
 }
 
+//////////////////////////////
+//
+// SegmentSplitter
+//
+//////////////////////////////
+
+
 SegmentSplitter::SegmentSplitter(SegmentCanvas *c)
     : SegmentTool(c)
 {
     kdDebug(KDEBUG_AREA) << "SegmentSplitter()\n";
+    m_canvas->setCursor(Qt::splitHCursor);
 }
 
 SegmentSplitter::~SegmentSplitter()
@@ -884,22 +950,83 @@ SegmentSplitter::~SegmentSplitter()
 }
 
 void
-SegmentSplitter::handleMouseButtonPress(QMouseEvent*)
+SegmentSplitter::handleMouseButtonPress(QMouseEvent *e)
 {
+    // Remove cursor and replace with line on a SegmentItem
+    // at where the cut will be made
+    SegmentItem *item = m_canvas->findSegmentClickedOn(e->pos());
+
+    if (item)
+    {
+        m_canvas->setCursor(Qt::blankCursor);
+        drawSplitLine(e);
+    }
+
 }
 
 void
-SegmentSplitter::handleMouseButtonRelease(QMouseEvent*)
+SegmentSplitter::handleMouseButtonRelease(QMouseEvent *e)
 {
+    // Do the Split
+    SegmentItem *item = m_canvas->findSegmentClickedOn(e->pos());
+
+    if (item)
+    {
+        m_canvas->grid().setSnapTime(SnapGrid::NoSnap);
+        timeT time = m_canvas->grid().snapX(e->pos().x());
+    }
+ 
+    // Reinstate the cursor
+    m_canvas->setCursor(Qt::splitHCursor);
+    m_canvas->hideSplitLine();
 }
 
 
 void
-SegmentSplitter::handleMouseMove(QMouseEvent*)
+SegmentSplitter::handleMouseMove(QMouseEvent *e)
+{
+    SegmentItem *item = m_canvas->findSegmentClickedOn(e->pos());
+
+    if (item)
+    {
+        m_canvas->setCursor(Qt::blankCursor);
+        drawSplitLine(e);
+    }
+    else
+        m_canvas->setCursor(Qt::splitHCursor);
+}
+
+void
+SegmentSplitter::drawSplitLine(QMouseEvent *e)
+{ 
+    if (m_fineGrain)
+        m_canvas->grid().setSnapTime(SnapGrid::NoSnap);
+    else
+        m_canvas->grid().setSnapTime(SnapGrid::SnapToBeat);
+
+    // turn the real X into a snapped X
+    //
+    timeT xT = m_canvas->grid().snapX(e->pos().x());
+    int x = (int)(m_canvas->grid().getRulerScale()->getXForTime(xT));
+    int y = m_canvas->grid().snapY(e->pos().y());
+
+    m_canvas->showSplitLine(x, y);
+}
+
+// Split a given Segment at a certain time
+//
+void
+SegmentSplitter::splitSegment(Rosegarden::Segment *segment,
+                              Rosegarden::timeT &splitTime)
 {
 }
 
 
+//////////////////////////////
+//
+// SegmentJoiner
+//
+//////////////////////////////
 SegmentJoiner::SegmentJoiner(SegmentCanvas *c)
     : SegmentTool(c)
 {

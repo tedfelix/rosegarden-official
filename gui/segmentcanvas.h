@@ -41,6 +41,7 @@ namespace Rosegarden {
  */
 class SegmentItem : public QCanvasRectangle
 {
+
 public:
     static const int SegmentItemRTTI = 1001;
 
@@ -92,8 +93,9 @@ public:
 
     virtual int rtti() const { return SegmentItemRTTI; }
 
-    /// Set the height of all new SegmentItem objects
+    /// Set (and get) the height of all new SegmentItem objects
     static void setItemHeight(unsigned int);
+    static unsigned int getItemHeight() { return m_itemHeight; }
     
 protected:
     Rosegarden::Segment *m_segment;
@@ -108,6 +110,30 @@ protected:
 
     static unsigned int m_itemHeight;
 };
+
+// Marker on Segments to show exactly where a split will
+// be made.
+//
+class SegmentSplitLine : public QCanvasLine
+{
+public:
+    static const int SegmentSplitLineRTTI = 1002;
+    SegmentSplitLine(int x, int y, int height,
+                     Rosegarden::RulerScale *rulerScale,
+                     QCanvas* canvas);
+
+    void moveLine(int x, int y);
+    void hideLine();
+
+    virtual int rtti() const { return SegmentSplitLineRTTI; }
+
+private:
+    Rosegarden::RulerScale *m_rulerScale;
+    int m_height;
+
+};
+
+
 
 class SegmentTool;
 
@@ -203,6 +229,11 @@ public slots:
 
     void setFineGrain(bool value);
 
+    // Show and hige the splitting line on a Segment
+    //
+    void showSplitLine(int x, int y);
+    void hideSplitLine();
+
 protected:
     virtual void contentsMousePressEvent(QMouseEvent*);
     virtual void contentsMouseReleaseEvent(QMouseEvent*);
@@ -270,6 +301,8 @@ private:
 
     SegmentItem *m_currentItem;
     SegmentItem *m_recordingSegment;
+
+    SegmentSplitLine *m_splitLine;
 
     QBrush m_brush;
     QBrush m_highlightBrush;
@@ -440,6 +473,14 @@ public:
     virtual void handleMouseButtonPress(QMouseEvent*);
     virtual void handleMouseButtonRelease(QMouseEvent*);
     virtual void handleMouseMove(QMouseEvent*);
+
+    // don't do double clicks
+    virtual void contentsMouseDoubleClickEvent(QMouseEvent) {;}
+
+private:
+    void drawSplitLine(QMouseEvent*);
+    void splitSegment(Rosegarden::Segment *segment,
+                      Rosegarden::timeT &splitTime);
 };
 
 class SegmentJoiner : public SegmentTool
@@ -452,6 +493,12 @@ public:
     virtual void handleMouseButtonPress(QMouseEvent*);
     virtual void handleMouseButtonRelease(QMouseEvent*);
     virtual void handleMouseMove(QMouseEvent*);
+ 
+    // don't do double clicks
+    virtual void contentsMouseDoubleClickEvent(QMouseEvent*) {;}
+
+private:
+
 };
 
 

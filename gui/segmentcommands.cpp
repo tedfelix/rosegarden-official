@@ -71,9 +71,11 @@ SegmentInsertCommand::SegmentInsertCommand(RosegardenGUIDoc *doc,
 
 SegmentInsertCommand::~SegmentInsertCommand()
 {
+    /* - just to stop horribleness
     if (!m_segment->getComposition()) {
 	delete m_segment;
     }
+    */
 }
 
 void
