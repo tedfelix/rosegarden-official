@@ -44,7 +44,8 @@ web() {
 	echo Moving files, fixing links...
 	mv -f /tmp/$1-src/index.html ../$1/chapter-0.html
 	mv -f /tmp/$1-src/*.html ../$1
-	../admin/fix-links ../$1
+	../admin/fix-links ../$1       # repair HTMLDOC-mangled links
+	../admin/fix-local-links ../$1 # repair Open Office-mangled links
 	echo Done...
 	case $1 in
 	    "en") ;;
