@@ -3196,9 +3196,9 @@ RosegardenGUIApp::slotDocumentModified(bool m)
 
 void
 RosegardenGUIApp::slotStateChanged(const QString& s,
-                                   bool reverse)
+                                   bool noReverse)
 {
-    stateChanged(s, reverse ? KXMLGUIClient::StateReverse : KXMLGUIClient::StateNoReverse);
+    stateChanged(s, noReverse ? KXMLGUIClient::StateNoReverse : KXMLGUIClient::StateReverse);
 }
 
 void

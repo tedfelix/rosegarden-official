@@ -885,10 +885,15 @@ public slots:
 
 
     /**
-     * Get rid of this eventually
-     * - will be in KMainWindow
+     * This slot is here to be connected to RosegardenGUIView's
+     * stateChange signal. We use a bool for the 2nd arg rather than a
+     * KXMLGUIClient::ReverseStateChange to spare the include of
+     * kxmlguiclient.h just for one typedef.
+     *
+     * Hopefully we'll be able to get rid of this eventually,
+     * I should slip this in KMainWindow for KDE 4.
      */
-    void slotStateChanged(const QString&, bool);
+    void slotStateChanged(const QString&, bool noReverse);
 
     /**
      * A command has happened; check the clipboard in case we
