@@ -19,7 +19,7 @@
 
 	<p>This tour will quickly show a few of the things Rosegarden can do, and hopefully explain how Rosegarden can work at the centre of a whole world of music composition and editing software.</p>
 
-	<p>There are six stops on this tour:</p>
+	<p>There are seven stops on this tour:</p>
 	<p><a href="/tour/editing">1. Editing</a> &ndash; Intuitive ways to record and edit notes.</p>
 	<p><a href="/tour/midi">2. MIDI</a> &ndash; Managing your MIDI ports, banks, programs and controllers without having to remember any numbers.</p>
 	<p><a href="/tour/notation">3. Notation</a> &ndash; Entering, editing and printing score.</p>

@@ -15,12 +15,19 @@
     <br>
     <h2>How to get Rosegarden</h2>
 
-    <p>During this pre-1.0-release development phase, we are only
-    making Rosegarden available in source code form to be compiled
-    after download.  There are some binary packages listed below, but
-    they are all provided by third parties.  Making it easier to
-    obtain and install Rosegarden is a priority as we approach 1.0, so
-    there may be some improvements to this process soon.</p>
+    <p>The Rosegarden development team currently only makes Rosegarden
+    available in source code form to be compiled after download.</p>
+
+    <h2>New! Fervent Software's Studio to Go!</h2>
+
+    <p><b>Studio..<i>to
+    go!</i></b> is a commercial package of music software on a
+    single bootable Live CD, with support.  Rosegarden is included,
+    along with a wide selection of other software all configured and
+    ready to go.  This is almost certainly the easiest way to get a
+    complete Rosegarden configuration, particularly if you aren't a
+    Linux user already.  <a
+    href="http://www.ferventsoftware.com/">Find out more here!</a></p>
 
     <h2>Downloads</h2>
 
@@ -34,8 +41,8 @@
     <ul><li><a href="http://sourceforge.net/"><img align="right"
 src="http://sourceforge.net/sflogo.php?group_id=4932&type=1"
 width="88" height="31" border="0" alt="SourceForge.net Logo"/></a><a
-href="http://sourceforge.net/project/showfiles.php?group_id=4932&release_id=257060">Rosegarden
-release 0.9.9 sources</a>, 30th July 2004, for download from the
+href="http://sourceforge.net/project/showfiles.php?group_id=4932&release_id=290255">Rosegarden
+release 1.0pre1 sources</a>, 16th December 2004, for download from the
 SourceForge page.</li>
 
 	    <li><a href="http://sourceforge.net/cvs/?group_id=4932">Rosegarden
@@ -46,12 +53,13 @@ mailing list.</li></ul>
 
     <h3>Binary packages</h3>
 
-    <p>These are all maintained by other people, so it
-    may take a short while before they are brought up-to-date with
-    each new release of Rosegarden and there's no guarantee of their
+    <p>These are all maintained by other people, so it may take a
+    short while before they are brought up-to-date with each new
+    release of Rosegarden and there's no guarantee of their
     completeness.  Please take a moment to check whether you are
-    really getting the latest release (currently Rosegarden-4-0.9.9)
-    before you download a binary package.</p>
+    really getting the latest release (currently Rosegarden-4-1.0pre1,
+    also known as Rosegarden-4-0.9.91) before you download a binary
+    package.</p>
 
 <h3>Rosegarden for Mandrake</h3>
 
@@ -83,11 +91,6 @@ audio and sound applications for RedHat, which can install everything
 you need semi-automatically.  If you want to set up an audio
 workstation on RedHat, your best bet is to install the Planet CCRMA
 system: read the documentation on the Planet site, and go from there.</ul>
-
-<p>If you want to run Rosegarden on RedHat but you don't want to use
-Planet CCRMA, you're probably on your own.  It's a difficult
-distribution to run much modern audio software on, because it doesn't
-include the ALSA 0.9.x sound drivers.</p>
 
 <h3>Rosegarden for Debian</h3>
 
