@@ -232,7 +232,8 @@ NotationChord::applyAccidentalShiftProperties()
     }
 
     int lastShift = minShift;
-    int lastHeight = 0, maxHeight = 0;
+    int lastHeight = 0, maxHeight = 999;
+    int lastWidth = 1;
 
     for (iterator i = end(); i != begin(); ) {
 
@@ -249,6 +250,10 @@ NotationChord::applyAccidentalShiftProperties()
 	}
     }
 
+    if (maxHeight == 999) {
+	return;
+    }
+
     for (iterator i = begin(); i != end(); ++i) {
 
 	Event *e = getAsEvent(*i);
@@ -260,32 +265,39 @@ NotationChord::applyAccidentalShiftProperties()
 	}
 
 	Rosegarden::Accidental acc;
+
 	if (e->get<String>(m_properties.DISPLAY_ACCIDENTAL, acc) &&
 	    acc != Rosegarden::Accidentals::NoAccidental) {
 
+	    int shift = lastShift;
+
 	    if (height < lastHeight) { // lastHeight was the first, up top
-		if (lastHeight - height >= 6) {
-		    e->setMaybe<Int>(m_properties.ACCIDENTAL_SHIFT, lastShift);
-		} else {
-		    e->setMaybe<Int>(m_properties.ACCIDENTAL_SHIFT, lastShift+1);
-		    lastShift = lastShift+1;
+		if (lastHeight - height < 6) {
+		    shift = lastShift + lastWidth;
 		}
 	    } else {
 		if (height - lastHeight >= 6) {
 		    if (maxHeight - height >= 6) {
-			e->setMaybe<Int>(m_properties.ACCIDENTAL_SHIFT, minShift);
-			lastShift = minShift;
+			shift = minShift;
 		    } else {
-			e->setMaybe<Int>(m_properties.ACCIDENTAL_SHIFT, minShift+1);
-			lastShift = minShift+1;
+			shift = minShift + 1;
 		    }
 		} else {
-		    e->setMaybe<Int>(m_properties.ACCIDENTAL_SHIFT, lastShift+1);
-		    lastShift = lastShift+1;
+		    shift = lastShift + lastWidth;
 		}
 	    }
 
+	    e->setMaybe<Int>(m_properties.ACCIDENTAL_SHIFT, shift);
+
 	    lastHeight = height;
+	    lastShift = shift;
+
+	    lastWidth = 1;
+	    bool c = false;
+	    if (e->get<Bool>(m_properties.DISPLAY_ACCIDENTAL_IS_CAUTIONARY, c)
+		&& c) {
+		lastWidth = 2;
+	    }
 	}
     }
 }
