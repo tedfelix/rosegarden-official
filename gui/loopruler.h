@@ -83,6 +83,10 @@ private:
 
     void drawBarSections();
     void drawLoopMarker();  // between loop positions
+
+    // Get drawing position from pointer position and vice versa
+    //
+    int getXPosition(const Rosegarden::timeT &pos);
     Rosegarden::timeT getPointerPosition(const int &xPos);
 
     int m_bars;
@@ -97,6 +101,8 @@ private:
     Rosegarden::timeT m_endLoop;
 
     QCanvasRectangle *m_loopMarker;
+
+    std::map<int, int> m_barWidthMap;
 
 };
 

@@ -25,6 +25,10 @@
 #include <iostream>
 #include "Event.h"
 
+using std::cerr;
+using std::cout;
+using std::endl;
+
 LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
                      QCanvas *canvas,
                      QWidget *parent,
@@ -41,6 +45,17 @@ LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
     setMaximumSize(bars * barWidth, height);
     setFrameStyle(NoFrame);
 
+    // Load in our bar widths from the Composition
+    //
+    std::pair<Rosegarden::timeT, Rosegarden::timeT> barMarkers;
+    for (int i = 0; i < m_bars; i++)
+    {
+        barMarkers = m_doc->getComposition().getBarRange(i, false);
+        m_barWidthMap[i] = barMarkers.second - barMarkers.first;
+    }
+ 
+    // Draw out the sections according to the bar widths
+    //
     drawBarSections();
 }
 
@@ -52,26 +67,17 @@ void
 LoopRuler::drawBarSections()
 {
     QCanvasLine *line;
-    int subSectionLinePos;
-
-    std::pair<Rosegarden::timeT, Rosegarden::timeT> fTimes =
-        m_doc->getComposition().getBarRange(1, false);
-
-    int firstBarWidth = fTimes.second - fTimes.first;
+    int subSectionLinePos, barWidth;
     int runningWidth = 0;
 
     for (int i = 0; i < m_bars; i++)
     {
-        std::pair<Rosegarden::timeT, Rosegarden::timeT> times =
-            m_doc->getComposition().getBarRange(i, false);
-
         // Normalise this bar width to a ratio of the first
         //
-        int barWidth = m_barWidth * (times.second - times.first)
-                          / firstBarWidth;
+        barWidth = m_barWidth * m_barWidthMap[i] / m_barWidthMap[0];
 
         line = new QCanvasLine(m_canvas);
-        line->setPoints(runningWidth, 0,
+        line->setPoints(runningWidth, 2 * m_height / 7,
                         runningWidth, m_height);
         line->setPen(RosegardenGUIColours::LoopRulerForeground);
         line->show();
@@ -85,7 +91,7 @@ LoopRuler::drawBarSections()
 
             line = new QCanvasLine(m_canvas);
             line->setPoints(subSectionLinePos, m_height,
-                            subSectionLinePos, 3 * m_height / 5);
+                            subSectionLinePos, 5 * m_height / 7);
             line->setPen(RosegardenGUIColours::LoopRulerForeground);
             line->show();
 
@@ -163,36 +169,50 @@ Rosegarden::timeT
 LoopRuler::getPointerPosition(const int &xPos)
 {
     Rosegarden::timeT result = 0;
-
-    std::pair<Rosegarden::timeT, Rosegarden::timeT> fTimes =
-        m_doc->getComposition().getBarRange(1, false);
-
-    int firstBarWidth = fTimes.second - fTimes.first;
-
-    int runningWidth = 0;
     Rosegarden::timeT runningPosition = 0;
+    int barWidth, runningWidth = 0;
 
     for (int i = 0; i < m_bars; i++)
     {
-        std::pair<Rosegarden::timeT, Rosegarden::timeT> times =
-            m_doc->getComposition().getBarRange(i, false);
-
-        int barWidth = m_barWidth * (times.second - times.first)
-                          / firstBarWidth;
+        barWidth = m_barWidth * m_barWidthMap[i] / m_barWidthMap[0];
 
         if (runningWidth + barWidth > xPos)
         {
-            result = runningPosition + ((times.second - times.first) *
+            result = runningPosition + (m_barWidthMap[i] *
                                         (xPos - runningWidth)/barWidth);
             return result;
         }
 
-        runningPosition += times.second - times.first;
+        runningPosition += m_barWidthMap[i];
         runningWidth += barWidth;
     }
 
     return result;
 }
+
+// Compute an X position on the LoopRuler from a given pos
+//
+int
+LoopRuler::getXPosition(const Rosegarden::timeT &pos)
+{
+    int result = 0;
+    int thisBar = m_doc->getComposition().getBarNumber(pos, false);
+
+    cout << "POS = " << pos << " : BAR = " << thisBar << endl;
+
+    for (int i = 0; i < thisBar; i++)
+    {
+        result += m_barWidth * m_barWidthMap[i] / m_barWidthMap[0];
+    }
+
+    cout << "BAR START = " << m_doc->getComposition().getBarStart(pos) << endl;
+
+    result += (pos - m_doc->getComposition().getBarStart(pos))
+              * m_barWidth * m_barWidthMap[thisBar]/m_barWidthMap[0];
+
+    return result;
+}
+
 
 void
 LoopRuler::drawLoopMarker()
@@ -200,8 +220,6 @@ LoopRuler::drawLoopMarker()
     if (m_loopMarker == 0)
         m_loopMarker = new QCanvasRectangle(m_canvas);
 
+    getXPosition(m_startLoop);
     
-
 }
-
-
