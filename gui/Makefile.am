@@ -63,7 +63,7 @@ EXTRA_DIST = rosegardenguiiface.kidl trackseditoriface.kidl \
 	pixmaps/feta/12/*.xpm \
 	pixmaps/toolbar/*.xpm \
 	pixmaps/transport/*.xpm \
-	pixmaps/splash/splash.png \
+	pixmaps/splash.png \
 	testfiles/*.xml \
 	testfiles/*.rose
 
