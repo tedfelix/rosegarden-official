@@ -705,3 +705,17 @@ void RosegardenGUIApp::changeTimeResolution()
     }
     
 }
+
+const Rosegarden::MappedComposition&
+RosegardenGUIApp::getSequencerSlice(const int &sliceStart, const int &sliceEnd)
+{
+  Rosegarden::MappedComposition *retComp ;
+
+  retComp = m_doc->getComposition().
+                            getMappedComposition(sliceStart, sliceEnd);
+
+  cerr << "GET SEQUENCER SLICE" << endl;
+
+  return *retComp;
+}
+

@@ -1,6 +1,7 @@
 <!DOCTYPE DCOP-IDL><DCOP-IDL>
 <SOURCE>./rosegardenguiiface.h</SOURCE>
 <INCLUDE>dcopobject.h</INCLUDE>
+<INCLUDE>MappedEvent.h</INCLUDE>
 <CLASS>
     <NAME>RosegardenGUIIface</NAME>
     <SUPER>DCOPObject</SUPER>
@@ -25,6 +26,12 @@
     <FUNC>
         <TYPE>void</TYPE>
         <NAME>quit</NAME>
+     </FUNC>
+    <FUNC>
+        <TYPE  qleft="const" qright="&amp;">Rosegarden::MappedComposition</TYPE>
+        <NAME>getSequencerSlice</NAME>
+        <ARG><TYPE  qleft="const" qright="&amp;">int</TYPE><NAME>sliceStart</NAME></ARG>
+        <ARG><TYPE  qleft="const" qright="&amp;">int</TYPE><NAME>sliceEnd</NAME></ARG>
      </FUNC>
 </CLASS>
 </DCOP-IDL>

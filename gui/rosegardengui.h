@@ -36,6 +36,10 @@
 
 #include "rosegardenguiiface.h"
 
+// the sequencer interface
+//
+#include <MappedEvent.h>
+
 class KURL;
 class KRecentFilesAction;
 
@@ -108,6 +112,12 @@ class RosegardenGUIApp : public KMainWindow, virtual public RosegardenGUIIface
      */
     int openURL(const KURL& url, int mode);
     
+
+    // the Sequencer accesses this method via DCOP
+    //
+    const Rosegarden::MappedComposition&
+            getSequencerSlice(const int &sliceStart, const int &sliceEnd);
+
   protected:
     /** save general Options like all bar positions and status as well as the geometry and the recent file list to the configuration
      * file
