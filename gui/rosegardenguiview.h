@@ -103,7 +103,8 @@ protected:
     void perfTest();
     void test();
 
-private:
+    Staff *m_mainStaff;
+    
     QCanvasItem *m_movingItem;
     bool m_draggingItem;
 

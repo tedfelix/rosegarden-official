@@ -21,6 +21,8 @@
 #include <vector>
 #include <qcanvas.h>
 
+#include "staff.h"
+
 typedef vector<int> chordpitches;
 
 // enum Note { WholeDotted = 0, Whole,
@@ -44,13 +46,15 @@ enum Note {
 
 
 /**Generates pixmaps for single notes and chords
-
-  *@author Guillaume Laurent
-  */
+ *
+ *@author Guillaume Laurent
+ */
 class NotePixmapFactory
 {
 public:
-    NotePixmapFactory();
+
+    /// The Staff is used for pitch->height conversion with chord pixmap
+    NotePixmapFactory(const Staff&);
     ~NotePixmapFactory();
 
     /**
@@ -107,6 +111,8 @@ protected:
 
     vector<QPixmap*> m_tailsUp;
     vector<QPixmap*> m_tailsDown;
+
+    const Staff &m_referenceStaff;
 };
 
 #endif

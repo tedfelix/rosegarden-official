@@ -43,6 +43,7 @@
 RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
     : QCanvasView(new QCanvas(parent->width() * 2, parent->height() * 2),
                   parent, name),
+    m_mainStaff(new Staff(canvas())),
     m_movingItem(0),
     m_draggingItem(false),
     m_hlayout(0),
@@ -56,11 +57,9 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
     //#define TEST_CANVAS
 #ifndef TEST_CANVAS
 
-    // Add a new staff
-    Staff *staff = new Staff(canvas());
-    staff->move(20, 15);
+    m_mainStaff->move(20, 15);
 
-    m_vlayout = new NotationVLayout(*staff);
+    m_vlayout = new NotationVLayout(*m_mainStaff);
     m_hlayout = new NotationHLayout((Staff::noteWidth + 2) * 4, // this shouldn't be constant
                                     4, // 4 beats per bar
                                     40);
@@ -70,7 +69,7 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
         // Show all elements in the staff
         EventList& elements(getDocument()->getElements());
 
-        showElements(elements.begin(), elements.end(), staff);
+        showElements(elements.begin(), elements.end(), m_mainStaff);
 
     } else {
         KMessageBox::sorry(0, "Couldn't apply layout");
@@ -220,7 +219,7 @@ RosegardenGUIView::test()
         note->moveBy(40 + i * 20, staff->pitchYOffset(i));
     }
 
-    NotePixmapFactory npf;
+    NotePixmapFactory npf(*staff);
 
     for(unsigned int j = 0; j < 100; ++j) {
 
@@ -285,7 +284,7 @@ RosegardenGUIView::showElements(EventList::iterator from,
                                 EventList::iterator to,
                                 double dxoffset, double dyoffset)
 {
-    static NotePixmapFactory npf;
+    static NotePixmapFactory npf(*m_mainStaff);
 
     for(EventList::iterator it = from; it != to; ++it) {
         

@@ -24,14 +24,14 @@
 #include "rosegardenguiview.h"
 #include "notepixmapfactory.h"
 #include "staff.h"
-#include "pitchtoheight.h"
 
-NotePixmapFactory::NotePixmapFactory()
+NotePixmapFactory::NotePixmapFactory(const Staff &s)
     : m_generatedPixmapHeight(0),
       m_noteBodyHeight(0),
       m_tailWidth(0),
       m_noteBodyFilled("pixmaps/note-bodyfilled.xpm"),
-      m_noteBodyEmpty("pixmaps/note-bodyempty.xpm")
+      m_noteBodyEmpty("pixmaps/note-bodyempty.xpm"),
+      m_referenceStaff(s)
 {
     // Yes, this is not a mistake. Don't ask me why - Chris named those
     QString pixmapTailUpFileName("pixmaps/tail-up-%1.xpm"),
@@ -188,10 +188,14 @@ NotePixmapFactory::makeChordPixmap(const chordpitches &pitches,
                                    Note note, bool drawTail,
                                    bool stalkGoesUp)
 {
-    PitchToHeight& pitchToHeight(PitchToHeight::instance());
+//     PitchToHeight& pitchToHeight(PitchToHeight::instance());
 
-    int highestNote = pitchToHeight[pitches[pitches.size() - 1]],
-        lowestNote = pitchToHeight[pitches[0]];
+//     int highestNote = pitchToHeight[pitches[pitches.size() - 1]],
+//         lowestNote = pitchToHeight[pitches[0]];
+
+    int highestNote = m_referenceStaff.pitchYOffset(pitches[pitches.size() - 1]),
+        lowestNote = m_referenceStaff.pitchYOffset(pitches[0]);
+
 
     bool noteHasStalk = note < Whole;
 
@@ -222,15 +226,15 @@ NotePixmapFactory::makeChordPixmap(const chordpitches &pitches,
         int offset = m_generatedPixmap->height() - body->height() - highestNote;
         
         for(int i = pitches.size() - 1; i >= 0; --i) {
-            m_p.drawPixmap (0, pitchToHeight[pitches[i]] + offset, *body);
-            m_pm.drawPixmap(0, pitchToHeight[pitches[i]] + offset, *(body->mask()));
+            m_p.drawPixmap (0, m_referenceStaff.pitchYOffset(pitches[i]) + offset, *body);
+            m_pm.drawPixmap(0, m_referenceStaff.pitchYOffset(pitches[i]) + offset, *(body->mask()));
         }
         
     } else {
         int offset = lowestNote;
         for(unsigned int i = 0; i < pitches.size(); ++i) {
-            m_p.drawPixmap (0,pitchToHeight[pitches[i]] - offset, *body);
-            m_pm.drawPixmap(0,pitchToHeight[pitches[i]] - offset, *(body->mask()));
+            m_p.drawPixmap (0, m_referenceStaff.pitchYOffset(pitches[i]) - offset, *body);
+            m_pm.drawPixmap(0, m_referenceStaff.pitchYOffset(pitches[i]) - offset, *(body->mask()));
         }
     }
 
