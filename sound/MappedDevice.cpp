@@ -80,10 +80,10 @@ MappedDevice::operator=(const MappedDevice &mD)
 QDataStream&
 operator>>(QDataStream &dS, MappedDevice *mD)
 {
-    int instruments;
+    int instruments = 0;
     dS >> instruments;
 
-    unsigned int type, channel, id, device;
+    unsigned int type = 0, channel = 0, id = 0, device = 0;
     QString name;
 
     while (!dS.atEnd() && instruments)
