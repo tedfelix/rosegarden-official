@@ -231,7 +231,7 @@ NotationView::slotChangeFont(std::string newName, int newSize)
 void NotationView::slotEditCut()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Cutting selection to clipboard..."), statusBar());
+    KTmpStatusMsg msg(i18n("Cutting selection to clipboard..."), this);
 
     addCommandToHistory(new CutCommand(*m_currentEventSelection,
 				       m_document->getClipboard()));
@@ -240,7 +240,7 @@ void NotationView::slotEditCut()
 void NotationView::slotEditDelete()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Deleting selection..."), statusBar());
+    KTmpStatusMsg msg(i18n("Deleting selection..."), this);
 
     addCommandToHistory(new EraseCommand(*m_currentEventSelection));
 }
@@ -248,7 +248,7 @@ void NotationView::slotEditDelete()
 void NotationView::slotEditCopy()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Copying selection to clipboard..."), statusBar());
+    KTmpStatusMsg msg(i18n("Copying selection to clipboard..."), this);
 
     addCommandToHistory(new CopyCommand(*m_currentEventSelection,
 					m_document->getClipboard()));
@@ -257,7 +257,7 @@ void NotationView::slotEditCopy()
 void NotationView::slotEditCutAndClose()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Cutting selection to clipboard..."), statusBar());
+    KTmpStatusMsg msg(i18n("Cutting selection to clipboard..."), this);
 
     addCommandToHistory(new CutAndCloseCommand(*m_currentEventSelection,
 					       m_document->getClipboard()));
@@ -428,7 +428,7 @@ void NotationView::toggleNamedToolBar(const QString& toolBarName, bool* force)
 void NotationView::slotGroupBeam()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Beaming group..."), statusBar());
+    KTmpStatusMsg msg(i18n("Beaming group..."), this);
 
     addCommandToHistory(new GroupMenuBeamCommand
                         (*m_currentEventSelection));
@@ -437,7 +437,7 @@ void NotationView::slotGroupBeam()
 void NotationView::slotGroupAutoBeam()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Auto-beaming selection..."), statusBar());
+    KTmpStatusMsg msg(i18n("Auto-beaming selection..."), this);
 
     addCommandToHistory(new GroupMenuAutoBeamCommand
                         (*m_currentEventSelection, m_legatoQuantizer));
@@ -446,7 +446,7 @@ void NotationView::slotGroupAutoBeam()
 void NotationView::slotGroupBreak()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Breaking groups..."), statusBar());
+    KTmpStatusMsg msg(i18n("Breaking groups..."), this);
 
     addCommandToHistory(new GroupMenuBreakCommand
                         (*m_currentEventSelection));
@@ -528,7 +528,7 @@ void NotationView::slotGroupTuplet(bool simple)
 void NotationView::slotGroupGrace()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Making grace notes..."), statusBar());
+    KTmpStatusMsg msg(i18n("Making grace notes..."), this);
 
     addCommandToHistory(new GroupMenuGraceCommand(*m_currentEventSelection));
 }
@@ -536,7 +536,7 @@ void NotationView::slotGroupGrace()
 void NotationView::slotGroupUnGrace()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Making non-grace notes..."), statusBar());
+    KTmpStatusMsg msg(i18n("Making non-grace notes..."), this);
 
     addCommandToHistory(new GroupMenuUnGraceCommand(*m_currentEventSelection));
 }
@@ -549,7 +549,7 @@ void NotationView::slotGroupUnGrace()
 void NotationView::slotGroupSlur()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Adding slur..."), statusBar());
+    KTmpStatusMsg msg(i18n("Adding slur..."), this);
 
     GroupMenuAddIndicationCommand *command =
         new GroupMenuAddIndicationCommand(Rosegarden::Indication::Slur,
@@ -564,7 +564,7 @@ void NotationView::slotGroupSlur()
 void NotationView::slotGroupCrescendo()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Adding crescendo..."), statusBar());
+    KTmpStatusMsg msg(i18n("Adding crescendo..."), this);
 
     GroupMenuAddIndicationCommand *command =
         new GroupMenuAddIndicationCommand(Rosegarden::Indication::Crescendo,
@@ -579,7 +579,7 @@ void NotationView::slotGroupCrescendo()
 void NotationView::slotGroupDecrescendo()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Adding decrescendo..."), statusBar());
+    KTmpStatusMsg msg(i18n("Adding decrescendo..."), this);
 
     GroupMenuAddIndicationCommand *command =
         new GroupMenuAddIndicationCommand(Rosegarden::Indication::Decrescendo,
@@ -599,7 +599,7 @@ void NotationView::slotGroupDecrescendo()
 void NotationView::slotTransformsNormalizeRests()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Normalizing rests..."), statusBar());
+    KTmpStatusMsg msg(i18n("Normalizing rests..."), this);
 
     addCommandToHistory(new TransformsMenuNormalizeRestsCommand
                         (*m_currentEventSelection));
@@ -608,7 +608,7 @@ void NotationView::slotTransformsNormalizeRests()
 void NotationView::slotTransformsCollapseRests()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Collapsing rests..."), statusBar());
+    KTmpStatusMsg msg(i18n("Collapsing rests..."), this);
 
     addCommandToHistory(new TransformsMenuCollapseRestsCommand
                         (*m_currentEventSelection));
@@ -617,7 +617,7 @@ void NotationView::slotTransformsCollapseRests()
 void NotationView::slotTransformsCollapseNotes()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Collapsing notes..."), statusBar());
+    KTmpStatusMsg msg(i18n("Collapsing notes..."), this);
 
     addCommandToHistory(new TransformsMenuCollapseNotesCommand
                         (*m_currentEventSelection));
@@ -626,7 +626,7 @@ void NotationView::slotTransformsCollapseNotes()
 void NotationView::slotTransformsTieNotes()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Tying notes..."), statusBar());
+    KTmpStatusMsg msg(i18n("Tying notes..."), this);
 
     addCommandToHistory(new TransformsMenuTieNotesCommand
                         (*m_currentEventSelection));
@@ -635,7 +635,7 @@ void NotationView::slotTransformsTieNotes()
 void NotationView::slotTransformsUntieNotes()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Untying notes..."), statusBar());
+    KTmpStatusMsg msg(i18n("Untying notes..."), this);
 
     addCommandToHistory(new TransformsMenuUntieNotesCommand
                         (*m_currentEventSelection));
@@ -644,7 +644,7 @@ void NotationView::slotTransformsUntieNotes()
 void NotationView::slotTransformsStemsUp()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Pointing stems up..."), statusBar());
+    KTmpStatusMsg msg(i18n("Pointing stems up..."), this);
 
     addCommandToHistory(new TransformsMenuChangeStemsCommand
                         (true, *m_currentEventSelection));
@@ -653,7 +653,7 @@ void NotationView::slotTransformsStemsUp()
 void NotationView::slotTransformsStemsDown()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Pointing stems down..."), statusBar());
+    KTmpStatusMsg msg(i18n("Pointing stems down..."), this);
 
     addCommandToHistory(new TransformsMenuChangeStemsCommand
                         (false, *m_currentEventSelection));
@@ -663,7 +663,7 @@ void NotationView::slotTransformsStemsDown()
 void NotationView::slotTransformsRestoreStems()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Restoring computed stem directions..."), statusBar());
+    KTmpStatusMsg msg(i18n("Restoring computed stem directions..."), this);
 
     addCommandToHistory(new TransformsMenuRestoreStemsCommand
                         (*m_currentEventSelection));
@@ -680,7 +680,7 @@ void NotationView::slotSetStyleFromAction()
 	name = name.right(name.length() - 6);
 
 	KTmpStatusMsg msg(i18n("Changing to %1 style...").arg(name),
-			  statusBar());
+			  this);
 
 	addCommandToHistory(new TransformsMenuChangeStyleCommand
 			    (NoteStyleName(name),
@@ -702,7 +702,7 @@ void NotationView::slotTransformsTranspose()
 	 0, -127, 127, 1, &ok, this);
     if (!ok || semitones == 0) return;
 
-    KTmpStatusMsg msg(i18n("Transposing..."), statusBar());
+    KTmpStatusMsg msg(i18n("Transposing..."), this);
     addCommandToHistory(new TransformsMenuTransposeCommand
                         (semitones, *m_currentEventSelection));
 }
@@ -710,7 +710,7 @@ void NotationView::slotTransformsTranspose()
 void NotationView::slotTransformsTransposeUp()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Transposing up one semitone..."), statusBar());
+    KTmpStatusMsg msg(i18n("Transposing up one semitone..."), this);
 
     addCommandToHistory(new TransformsMenuTransposeCommand
                         (1, *m_currentEventSelection));
@@ -719,7 +719,7 @@ void NotationView::slotTransformsTransposeUp()
 void NotationView::slotTransformsTransposeUpOctave()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Transposing up one octave..."), statusBar());
+    KTmpStatusMsg msg(i18n("Transposing up one octave..."), this);
 
     addCommandToHistory(new TransformsMenuTransposeCommand
                         (12, *m_currentEventSelection));
@@ -728,7 +728,7 @@ void NotationView::slotTransformsTransposeUpOctave()
 void NotationView::slotTransformsTransposeDown()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Transposing down one semitone..."), statusBar());
+    KTmpStatusMsg msg(i18n("Transposing down one semitone..."), this);
 
     addCommandToHistory(new TransformsMenuTransposeCommand
                         (-1, *m_currentEventSelection));
@@ -737,7 +737,7 @@ void NotationView::slotTransformsTransposeDown()
 void NotationView::slotTransformsTransposeDownOctave()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Transposing down one octave..."), statusBar());
+    KTmpStatusMsg msg(i18n("Transposing down one octave..."), this);
 
     addCommandToHistory(new TransformsMenuTransposeCommand
                         (-12, *m_currentEventSelection));
@@ -753,7 +753,7 @@ void NotationView::slotTransformsQuantize()
 	 Rosegarden::Quantizer::RawEventData);
 
     if (dialog->exec() == QDialog::Accepted) {
-	KTmpStatusMsg msg(i18n("Quantizing..."), statusBar());
+	KTmpStatusMsg msg(i18n("Quantizing..."), this);
 	addCommandToHistory(new EventQuantizeCommand
 			    (*m_currentEventSelection,
 			     dialog->getQuantizer()));

@@ -699,7 +699,7 @@ void MatrixView::slotTransformsQuantize()
 						Quantizer::RawEventData);
 
     if (dialog->exec() == QDialog::Accepted) {
-	KTmpStatusMsg msg(i18n("Quantizing..."), statusBar());
+	KTmpStatusMsg msg(i18n("Quantizing..."), this);
 	addCommandToHistory(new EventQuantizeCommand
 			    (*m_currentEventSelection,
 			     dialog->getQuantizer()));
@@ -824,7 +824,7 @@ void MatrixView::slotEditCut()
     MATRIX_DEBUG << "MatrixView::slotEditCut()\n";
 
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Cutting selection to clipboard..."), statusBar());
+    KTmpStatusMsg msg(i18n("Cutting selection to clipboard..."), this);
 
     addCommandToHistory(new CutCommand(*m_currentEventSelection,
 				       m_document->getClipboard()));
@@ -833,7 +833,7 @@ void MatrixView::slotEditCut()
 void MatrixView::slotEditCopy()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Copying selection to clipboard..."), statusBar());
+    KTmpStatusMsg msg(i18n("Copying selection to clipboard..."), this);
 
     addCommandToHistory(new CopyCommand(*m_currentEventSelection,
 					m_document->getClipboard()));
@@ -848,7 +848,7 @@ void MatrixView::slotEditPaste()
         return;
     }
 
-    KTmpStatusMsg msg(i18n("Inserting clipboard contents..."), statusBar());
+    KTmpStatusMsg msg(i18n("Inserting clipboard contents..."), this);
 
     double ix = m_staffs[0]->getLayoutXOfInsertCursor();
     timeT time = m_hlayout.getTimeForX(ix);
@@ -867,7 +867,7 @@ void MatrixView::slotEditPaste()
 void MatrixView::slotEditDelete()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Deleting selection..."), statusBar());
+    KTmpStatusMsg msg(i18n("Deleting selection..."), this);
 
     addCommandToHistory(new EraseCommand(*m_currentEventSelection));
 
@@ -1139,13 +1139,13 @@ MatrixView::slotQuantizeSelection(int q)
 
     if (quant.getUnit() != 0)
     {
-        KTmpStatusMsg msg(i18n("Quantizing..."), statusBar());
+        KTmpStatusMsg msg(i18n("Quantizing..."), this);
         addCommandToHistory(
                 new EventQuantizeCommand(*m_currentEventSelection, quant));
     }
     else
     {
-        KTmpStatusMsg msg(i18n("Unquantizing..."), statusBar());
+        KTmpStatusMsg msg(i18n("Unquantizing..."), this);
         addCommandToHistory(
                 new EventUnquantizeCommand(*m_currentEventSelection, quant));
     }

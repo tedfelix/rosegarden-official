@@ -910,7 +910,7 @@ bool RosegardenGUIApp::queryExit()
 //
 void RosegardenGUIApp::slotFileNewWindow()
 {
-    KTmpStatusMsg msg(i18n("Opening a new application window..."), statusBar());
+    KTmpStatusMsg msg(i18n("Opening a new application window..."), this);
 	
     RosegardenGUIApp *new_window= new RosegardenGUIApp();
     new_window->show();
@@ -1013,7 +1013,7 @@ void RosegardenGUIApp::slotFileOpen()
 
 void RosegardenGUIApp::slotFileOpenRecent(const KURL &url)
 {
-    KTmpStatusMsg msg(i18n("Opening file..."), statusBar());
+    KTmpStatusMsg msg(i18n("Opening file..."), this);
 
     if (m_doc) {
         
@@ -1033,7 +1033,7 @@ void RosegardenGUIApp::slotFileSave()
 {
     if (!m_doc || !m_doc->isModified()) return;
 
-    KTmpStatusMsg msg(i18n("Saving file..."), statusBar());
+    KTmpStatusMsg msg(i18n("Saving file..."), this);
 
     if (!m_doc->getAbsFilePath()) {
 	slotFileSaveAs();
@@ -1097,7 +1097,7 @@ void RosegardenGUIApp::slotFileSaveAs()
 {
     if (!m_doc) return;
 
-    KTmpStatusMsg msg(i18n("Saving file with a new filename..."), statusBar());
+    KTmpStatusMsg msg(i18n("Saving file with a new filename..."), this);
 
     QString newName = getValidWriteFile("rg", "Save as...");
     if (newName.isEmpty()) return;
@@ -1119,7 +1119,7 @@ void RosegardenGUIApp::slotFileClose()
     
     if (!m_doc) return;
 
-    KTmpStatusMsg msg(i18n("Closing file..."), statusBar());
+    KTmpStatusMsg msg(i18n("Closing file..."), this);
 	
     m_doc->saveIfModified();
     m_doc->closeDocument();
@@ -1137,7 +1137,7 @@ void RosegardenGUIApp::slotFilePrint()
         return;
     }
 
-    KTmpStatusMsg msg(i18n("Printing..."), statusBar());
+    KTmpStatusMsg msg(i18n("Printing..."), this);
 
     KPrinter printer;
 
@@ -1172,7 +1172,7 @@ void RosegardenGUIApp::slotQuit()
 void RosegardenGUIApp::slotEditCut()
 {
     if (!m_view->haveSelection()) return;
-    KTmpStatusMsg msg(i18n("Cutting selection..."), statusBar());
+    KTmpStatusMsg msg(i18n("Cutting selection..."), this);
 
     Rosegarden::SegmentSelection selection(m_view->getSelection());
     m_doc->getCommandHistory()->addCommand
@@ -1182,7 +1182,7 @@ void RosegardenGUIApp::slotEditCut()
 void RosegardenGUIApp::slotEditCopy()
 {
     if (!m_view->haveSelection()) return;
-    KTmpStatusMsg msg(i18n("Copying selection to clipboard..."), statusBar());
+    KTmpStatusMsg msg(i18n("Copying selection to clipboard..."), this);
 
     Rosegarden::SegmentSelection selection(m_view->getSelection());
     m_doc->getCommandHistory()->addCommand
@@ -1193,10 +1193,10 @@ void RosegardenGUIApp::slotEditPaste()
 {
     Rosegarden::Clipboard *clipboard = m_doc->getClipboard();
     if (clipboard->isEmpty()) {
-	KTmpStatusMsg msg(i18n("Clipboard is empty"), statusBar());
+	KTmpStatusMsg msg(i18n("Clipboard is empty"), this);
 	return;
     }
-    KTmpStatusMsg msg(i18n("Inserting clipboard contents..."), statusBar());
+    KTmpStatusMsg msg(i18n("Inserting clipboard contents..."), this);
 
     // for now, but we could paste at the time of the first copied
     // segment and then do ghosting drag or something
@@ -1395,7 +1395,7 @@ void RosegardenGUIApp::slotEditInMatrix()
 
 void RosegardenGUIApp::slotToggleToolBar()
 {
-    KTmpStatusMsg msg(i18n("Toggle the toolbar..."), statusBar());
+    KTmpStatusMsg msg(i18n("Toggle the toolbar..."), this);
 
     if (m_viewToolBar->isChecked())
         toolBar("mainToolBar")->show();
@@ -1405,7 +1405,7 @@ void RosegardenGUIApp::slotToggleToolBar()
 
 void RosegardenGUIApp::slotToggleTracksToolBar()
 {
-    KTmpStatusMsg msg(i18n("Toggle the tracks toolbar..."), statusBar());
+    KTmpStatusMsg msg(i18n("Toggle the tracks toolbar..."), this);
 
     if (m_viewTracksToolBar->isChecked())
         toolBar("tracksToolBar")->show();
@@ -1415,7 +1415,7 @@ void RosegardenGUIApp::slotToggleTracksToolBar()
 
 void RosegardenGUIApp::slotToggleTransport()
 {
-    KTmpStatusMsg msg(i18n("Toggle the Transport"), statusBar());
+    KTmpStatusMsg msg(i18n("Toggle the Transport"), this);
 
     if (m_viewTransport->isChecked())
     {
@@ -1468,7 +1468,7 @@ void RosegardenGUIApp::slotTogglePreviews()
 
 void RosegardenGUIApp::slotToggleStatusBar()
 {
-    KTmpStatusMsg msg(i18n("Toggle the statusbar..."), statusBar());
+    KTmpStatusMsg msg(i18n("Toggle the statusbar..."), this);
 
     if(!m_viewStatusBar->isChecked())
         statusBar()->hide();
@@ -1894,7 +1894,7 @@ bool RosegardenGUIApp::launchSequencer()
         return true;
     }
 
-    KTmpStatusMsg msg(i18n("Starting the sequencer..."), statusBar());
+    KTmpStatusMsg msg(i18n("Starting the sequencer..."), this);
     
     m_sequencerProcess = new KProcess;
 
@@ -1932,7 +1932,7 @@ void RosegardenGUIApp::slotSequencerExited(KProcess*)
 
 void RosegardenGUIApp::slotExportMIDI()
 {
-    KTmpStatusMsg msg(i18n("Exporting to MIDI file..."), statusBar());
+    KTmpStatusMsg msg(i18n("Exporting to MIDI file..."), this);
 
     QString fileName = getValidWriteFile("mid", "Export as...");
     if (fileName.isEmpty()) return;
@@ -1966,7 +1966,7 @@ void RosegardenGUIApp::exportMIDIFile(const QString &file)
 
 void RosegardenGUIApp::slotExportCsound()
 {
-    KTmpStatusMsg msg(i18n("Exporting to Csound scorefile..."), statusBar());
+    KTmpStatusMsg msg(i18n("Exporting to Csound scorefile..."), this);
 
     QString fileName = getValidWriteFile("", "Export as...");
     if (fileName.isEmpty()) return;
@@ -1992,7 +1992,7 @@ void RosegardenGUIApp::exportCsoundFile(const QString &file)
 
 void RosegardenGUIApp::slotExportLilypond()
 {
-    KTmpStatusMsg msg(i18n("Exporting to Lilypond file..."), statusBar());
+    KTmpStatusMsg msg(i18n("Exporting to Lilypond file..."), this);
 
     QString fileName = getValidWriteFile("ly", "Export as...");
     if (fileName.isEmpty()) return;

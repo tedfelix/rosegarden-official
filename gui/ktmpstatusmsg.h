@@ -22,15 +22,14 @@
 #ifndef KTMPSTATUSMSG_H
 #define KTMPSTATUSMSG_H
 
-class KStatusBar;
 class KMainWindow;
 
 /**
- * A class to create a temporary message on the status bar
+ * A class to create a temporary message on KMainWindow's status bar
  *
  * Use as follows :
  * { // some block of code starts here
- *  KTmpStatusMsg tmpMsg("doing something...", statusBar);
+ *  KTmpStatusMsg tmpMsg("doing something...", mainWindow);
  *
  *  // do something
  *
@@ -40,16 +39,10 @@ class KMainWindow;
 class KTmpStatusMsg
 {
 public:
-    /**
-     * Creates a new temporary status message on the specified
-     * status bar.
-     * The id of the text widget in the status bar can be specified
-     */
-    KTmpStatusMsg(const QString& msg, KStatusBar*, int id = m_defaultId);
 
     /**
-     * Creates a new temporary status message on the status bar of the specified
-     * KMainWindow.
+     * Creates a new temporary status message on the status bar
+     * of the specified KMainWindow.
      * The id of the text widget in the status bar can be specified
      */
     KTmpStatusMsg(const QString& msg, KMainWindow*, int id = m_defaultId);
@@ -84,7 +77,6 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    KStatusBar* m_statusBar;
     KMainWindow* m_mainWindow;
     int m_id;
 

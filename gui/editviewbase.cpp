@@ -339,7 +339,7 @@ void EditViewBase::slotCloseWindow()
 //
 void EditViewBase::slotToggleToolBar()
 {
-    KTmpStatusMsg msg(i18n("Toggle the toolbar..."), statusBar());
+    KTmpStatusMsg msg(i18n("Toggle the toolbar..."), this);
 
     if (toolBar()->isVisible())
         toolBar()->hide();
@@ -349,7 +349,7 @@ void EditViewBase::slotToggleToolBar()
 
 void EditViewBase::slotToggleStatusBar()
 {
-    KTmpStatusMsg msg(i18n("Toggle the statusbar..."), statusBar());
+    KTmpStatusMsg msg(i18n("Toggle the statusbar..."), this);
 
     if (statusBar()->isVisible())
         statusBar()->hide();
