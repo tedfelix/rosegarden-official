@@ -1058,7 +1058,7 @@ AlsaDriver::initialiseMidi()
         audit << "AlsaDriver::initialiseMidi - "
                   << "couldn't open sequencer - " << snd_strerror(errno)
                   << std::endl;
-        return;
+        exit(EXIT_FAILURE);
     }
 
     generatePortList();
