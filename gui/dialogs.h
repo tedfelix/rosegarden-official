@@ -22,6 +22,7 @@
 
 #include <kdialogbase.h>
 #include <qstring.h>
+#include <qcanvas.h>
 
 #include <string>
 
@@ -546,6 +547,8 @@ signals:
 
     RosegardenGUIDoc    *m_doc;
     Rosegarden::Segment *m_segment;
+    QCanvasView         *m_canvasView;
+    QSpinBox            *m_sensitivitySpin;
 
 };
 

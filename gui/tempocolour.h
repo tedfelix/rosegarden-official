@@ -59,6 +59,8 @@ TempoColour::getColour(double tempo)
     double adjusted = (tempo - 120.0);
     h = h + int(adjusted);
 
+    if (h > 255) h = 255;
+
     return QColor(h, s, v, QColor::Hsv);
 }
 

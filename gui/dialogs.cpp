@@ -2219,9 +2219,83 @@ AudioSplitDialog::AudioSplitDialog(QWidget *parent,
             m_doc(doc),
             m_segment(segment)
 {
-    QHBox *w = makeHBoxMainWidget();
-    QLabel *label = new QLabel(i18n("AutoSplit \"") +
+    if (!segment || segment->getType() != Rosegarden::Segment::Audio)
+        reject();
+
+    QVBox *w = makeVBoxMainWidget();
+
+    new QLabel(i18n("AutoSplit Segment \"") +
         QString(m_segment->getLabel().c_str()) + QString("\""), w);
+
+    int width = 400;
+    int height = 150;
+
+    QCanvas *canvas = new QCanvas(width, height);
+    //canvas->resize(width, height);
+
+    m_canvasView = new QCanvasView(canvas, w);
+    m_canvasView->resize(width, height);
+
+    QHBox *hbox = new QHBox(w);
+    new QLabel(i18n("Sensitivity %"), hbox);
+    m_sensitivitySpin = new QSpinBox(hbox);
+    m_sensitivitySpin->setValue(1);
+
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::AudioFileManager &aFM = m_doc->getAudioFileManager();
+
+    QCanvasRectangle *rect = new QCanvasRectangle(canvas);
+    rect->setSize(width, height);
+
+    std::vector<float> values =
+        aFM.getPreview(segment->getAudioFileId(),
+                       segment->getAudioStartTime(),
+                       segment->getAudioEndTime(),
+                       width);
+
+/*
+    QPainter painter(canvas);
+    painter.setPen(Qt::black);
+    painter.setBrush(Qt::black);
+*/
+
+    int halfHeight = height / 2;
+    float h1, h2;
+    std::vector<float>::iterator it = values.begin();
+
+    int channels = aFM.getAudioFile(segment->getAudioFileId())->getChannels();
+
+    for (int i = 0; i < width; i++)
+    {
+        if (channels == 1)
+        {
+            h1 = *(it++);
+            h2 = h1;
+        }
+        else
+        {
+            h1 = *(it++);
+            h2 = *(it++);
+        }
+
+        cout << "VALUE = " << values[i] << endl;
+/*
+        painter.drawLine(i,
+                         halfHeight + h1 * halfHeight,
+                         i,
+                         halfHeight - h2 * halfHeight);
+*/
+        QCanvasLine *line = new QCanvasLine(canvas);
+
+        line->setPen(Qt::black);
+        line->setPoints(i,
+                        halfHeight + h1 * halfHeight,
+                        i,
+                        halfHeight - h2 * halfHeight);
+    }
+
+    canvas->update();
+
 }
 
 
