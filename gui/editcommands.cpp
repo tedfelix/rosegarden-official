@@ -1105,12 +1105,14 @@ AdjustMenuCollapseNotesCommand::modifySegment()
     EventSelection::eventcontainer::iterator i =
 	m_selection->getSegmentEvents().end();
     EventSelection::eventcontainer::iterator j = i;
+    EventSelection::eventcontainer::iterator beg =
+	m_selection->getSegmentEvents().begin();
     bool thisOne = false;
 
-    while (i != m_selection->getSegmentEvents().begin()) {
+    while (i != beg && (!thisOne || (*i != *beg))) {
 	
 	--j;
-	
+
 	if (thisOne) {
 	    helper.collapseNoteAggressively(*i, endTime);
 	}
