@@ -75,11 +75,17 @@ namespace Rosegarden
     inline const MidiByte note() { return _data1; }
     inline const MidiByte velocity() { return _data2; }
 
+    // Just so we don't have to call them note and vely
+    // for things that they're not
+    //
+    inline const MidiByte data1() { return _data1; }
+    inline const MidiByte data2() { return _data2; }
+
     inline const bool isMeta()
       { return (_eventCode == MIDI_FILE_META_EVENT ? true : false ); }
 
     inline std::string metaMessage() const { return _metaMessage; }
-    inline const MidiByte metaMessageType() { return _metaEventCode; }
+    inline const MidiByte metaEventCode() { return _metaEventCode; }
 
     void duration(const unsigned int& duration)
         { _duration = duration; }

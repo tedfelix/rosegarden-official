@@ -591,7 +591,7 @@ MidiFile::convertToRosegarden()
 
         if (midiEvent->isMeta())
         {
-          switch(midiEvent->metaMessageType())
+          switch(midiEvent->metaEventCode())
           {
             case MIDI_SEQUENCE_NUMBER:
               break;
@@ -785,6 +785,13 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
   // any other MIDI track.
   //
   //
+  midiEvent = new MidiEvent(0, MIDI_FILE_META_EVENT, MIDI_TEXT_MARKER,
+                            "Created by Rosegarden 4.0 for Linux");
+
+  _midiComposition[trackNumber].push_back(*midiEvent);
+  
+
+  trackNumber = 1;
 
   // Our Composition to MIDI timing factor
   //
@@ -807,6 +814,16 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
     //
     TrackPerformanceHelper helper(**trk);
 
+    // insert a track name
+    midiEvent = new MidiEvent(0, MIDI_FILE_META_EVENT, MIDI_TRACK_NAME,
+                              std::string("Track " + trackNumber));
+    _midiComposition[trackNumber].push_front(*midiEvent);
+
+    // insert a program change
+    midiEvent = new MidiEvent(0, MIDI_PROG_CHANGE | midiChannel, 0);
+    _midiComposition[trackNumber].push_front(*midiEvent);
+
+ 
     for (Rosegarden::Track::iterator el = (*trk)->begin();
                                      el != (*trk)->end(); ++el)
     {
@@ -877,6 +894,7 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
   //
   MidiTrackIterator midiEventIt;
   int lastMidiTime;
+  int endOfTrackTime;
 
   for (unsigned int i = 0; i < _numberOfTracks; i++)
   {
@@ -885,6 +903,12 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
     // First sort the list
     //
     _midiComposition[i].sort();
+
+    // insert end of track event
+    endOfTrackTime = _midiComposition[i].end()->time();
+
+    midiEvent = new MidiEvent(endOfTrackTime, MIDI_FILE_META_EVENT,
+                              MIDI_END_OF_TRACK, "");
 
     for ( midiEventIt = (_midiComposition[i].begin());
           midiEventIt != (_midiComposition[i].end()); midiEventIt++ )
@@ -1014,23 +1038,19 @@ MidiFile::writeHeader(std::ofstream* midiFile)
   return(true);
 }
 
-// Write out a MIDI file track
+// Write a MIDI track to file
 //
 bool
 MidiFile::writeTrack(std::ofstream* midiFile, const unsigned int &trackNumber)
 {
-  // We write into the trackBuffer, then write it out to the
-  // file with accompanying length field.
+  bool retOK = true;
+  MidiByte eventCode = 0;
+  MidiTrackIterator midiEvent;
+
+  // First we write into the trackBuffer, then write it out to the
+  // file with it's accompanying length.
   //
   string trackBuffer;
-
-  // get the length of the track in bytes and write it out
-  //*midiFile << (MidiByte) _midiComposition[trackNumber];
-
-  // parse all the elements out
-
-  MidiTrackIterator midiEvent;
-  int lastRosegardenTime;
 
   // Our timing factor here converts into the MIDI _timingDivision
   //
@@ -1049,15 +1069,19 @@ MidiFile::writeTrack(std::ofstream* midiFile, const unsigned int &trackNumber)
     if (midiEvent->isMeta())
     {
       trackBuffer += (MidiByte)MIDI_FILE_META_EVENT;
-      //trackBuffer += (Meta Event Code);
-      //trackBuffer += (Number of message bytes);
-      //trackBuffer += (Message bytes);
+      trackBuffer += (MidiByte)midiEvent->metaEventCode();
+      trackBuffer += (MidiByte)midiEvent->metaMessage().length();
+      trackBuffer += midiEvent->metaMessage();
     }
     else
     {
       // Send the normal event code (with encoded channel information)
       //
-      trackBuffer += (MidiByte)midiEvent->eventCode();
+      if ((MidiByte)midiEvent->eventCode() != eventCode)
+      {
+        trackBuffer += (MidiByte)midiEvent->eventCode();
+        eventCode = (MidiByte)midiEvent->eventCode();
+      }
 
       // Send the relevant data
       //
@@ -1071,28 +1095,36 @@ MidiFile::writeTrack(std::ofstream* midiFile, const unsigned int &trackNumber)
           break;
 
         case MIDI_CTRL_CHANGE:
+          trackBuffer += (MidiByte)midiEvent->data1();
+          trackBuffer += (MidiByte)midiEvent->data2();
           break;
 
         case MIDI_PROG_CHANGE:
+          trackBuffer += (MidiByte)midiEvent->data1();
           break;
 
         case MIDI_CHNL_AFTERTOUCH:
+          trackBuffer += (MidiByte)midiEvent->data1();
           break;
 
         case MIDI_PITCH_BEND:
+          trackBuffer += (MidiByte)midiEvent->data1();
+          trackBuffer += (MidiByte)midiEvent->data2();
           break;
 
         default:
+          std::cerr << "MidiFile::writeTrack - cannot write unsupported MIDI event"
+                    << endl;
           break;
       }
     }
   }
 
-  // Now we write the track - First the header..
+  // Now we write the track - First thei standard header..
   //
   *midiFile << MIDI_TRACK_HEADER.c_str();
 
-  // ..length of buffer..
+  // ..now the length of the buffer..
   //
   longToMidiBytes(midiFile, (long)trackBuffer.length());
 
@@ -1104,7 +1136,7 @@ MidiFile::writeTrack(std::ofstream* midiFile, const unsigned int &trackNumber)
   //
   *midiFile << trackBuffer;
 
-  return(true);
+  return(retOK);
 }
 
 // Writes out a MIDI file from the internal Midi representation
@@ -1112,6 +1144,8 @@ MidiFile::writeTrack(std::ofstream* midiFile, const unsigned int &trackNumber)
 bool
 MidiFile::write()
 {
+  bool retOK = true;
+
   std::ofstream *midiFile =
            new std::ofstream(_filename.c_str(), ios::out | ios::binary);
 
@@ -1129,12 +1163,13 @@ MidiFile::write()
   //
   for(unsigned int i = 0; i < _numberOfTracks; i++ )
   {
-    writeTrack(midiFile, i);
+    if (!writeTrack(midiFile, i))
+      retOK = false;
   }
 
   midiFile->close();
 
-  return (true);
+  return (retOK);
 }
 
 }
