@@ -659,4 +659,19 @@ RosegardenGUIDoc::prepareAudio()
     }
 }
 
+void
+RosegardenGUIDoc::setLoopMarker(Rosegarden::timeT startLoop,
+                                Rosegarden::timeT endLoop)
+{
+    RosegardenGUIView *w;
+    if(pViewList)
+    {
+        for(w=pViewList->first(); w!=0; w=pViewList->next())
+        {
+            w->setLoopMarker(startLoop, endLoop);
+        }
+    }
+}
+
+
 

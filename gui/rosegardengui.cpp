@@ -481,6 +481,15 @@ void RosegardenGUIApp::openFile(const QString& url)
     //
     m_doc->prepareAudio();
 
+    // Set any loaded loop at the Composition and
+    // on the marker on SegmentCanvas and clients
+    //
+    setLoop(m_doc->getComposition().getLoopStart(),
+            m_doc->getComposition().getLoopEnd());
+
+    m_doc->setLoopMarker(m_doc->getComposition().getLoopStart(),
+                         m_doc->getComposition().getLoopEnd());
+
 }
 
 

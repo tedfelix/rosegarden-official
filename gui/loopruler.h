@@ -56,6 +56,7 @@ public:
 
 public slots:
     void setLoopingMode(bool value) { m_loop = value; }
+    void setLoopMarker(Rosegarden::timeT startLoop, Rosegarden::timeT endLoop);
 
 protected:
     // ActiveItem interface

@@ -377,6 +377,11 @@ Composition::clear()
     m_barSegment.clear();
     m_timeSigSegment.clear();
     m_tempoSegment.clear();
+    m_loopStart = 0;
+    m_loopEnd = 0;
+    m_position = 0;
+    m_startMarker = 0;
+    m_endMarker = 0;
 }
 
 Composition::ReferenceSegment::iterator
@@ -948,6 +953,13 @@ std::string Composition::toXmlString()
     composition << "\" defaultTempo=\"";
     composition << std::setiosflags(std::ios::fixed)
                 << std::setprecision(4) << m_defaultTempo;
+
+    if (m_loopStart != m_loopEnd)
+    {
+        composition << "\" loopstart=\"" << m_loopStart;
+        composition << "\" loopend=\"" << m_loopEnd;
+    }
+
     composition << "\">" << std::endl << std::endl;
 
     for (instrumentiterator iit = getInstruments()->begin();

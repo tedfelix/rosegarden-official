@@ -248,3 +248,22 @@ LoopRuler::getXPosition(Rosegarden::timeT pos)
 
     return result;
 }
+
+void
+LoopRuler::setLoopMarker(Rosegarden::timeT startLoop, Rosegarden::timeT endLoop)
+{
+    if (startLoop == endLoop) 
+        return;
+
+    m_startLoop = startLoop;
+    m_endLoop = endLoop;
+
+    QPainter paint(this);
+    paint.setBrush(colorGroup().foreground());
+    drawBarSections(&paint);
+    drawLoopMarker(&paint);
+
+    update();
+}
+
+

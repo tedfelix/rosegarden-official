@@ -51,6 +51,8 @@ signals:
 
     void signalSetLoopingMode(bool);
 
+    void signalSetLoopMarker(Rosegarden::timeT, Rosegarden::timeT);
+
 public slots:
 
     // Re-imit
@@ -63,6 +65,9 @@ public slots:
 
     void slotSetLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
         { emit setLoop(lhs, rhs); }
+
+    void slotSetLoopMarker(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
+        { emit signalSetLoopMarker(lhs, rhs); }
 
     void setLoopingMode(bool value);
 

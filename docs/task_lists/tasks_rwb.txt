@@ -16,7 +16,7 @@ o Segment level Undo/Redo [cc - IN PROGRESS?]
 o Bar lines widget (similar to TrackButtons).
   Implementation to allow for:
 
-  - Looping [just about DONE - bar width issues]
+  - Looping [DONE]
 
   - Start and End Markers for Composition growth and shrinkage
 
@@ -27,15 +27,21 @@ o Track addition/deletion and moving on TrackButtons canvas
 o Complete segment edit shortcuts (click/copy/multiple
   segment drag)
 
-o Segment colouring [low priority obviously!]
+o Segment colouring
 
-o Segment modifiers - looping of Segments, quantisation
+o Segment paramters and modifiers - looping of Segments, quantisation
 
 o Instrument display - aRTS environment, MIDI/Audio assignable
   parameters
 
+o Segment movement resolution
+
+o Segment Zooming - (midi and audio previews of Segments)
+
 o More MIDI events at Composition level. Sys Exs, Program Changes,
   Controller changes etc. etc.
+
+o Audio noise eliminator - recording
 
 o MIDI output VU meters and Transport feedback
 

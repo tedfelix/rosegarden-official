@@ -143,6 +143,11 @@ public:
      */
     void createSegmentItem(Rosegarden::Segment* segment);
 
+
+    /**
+     * set the viewable loop on the clients and SegmentCanvas
+     */      
+    void setLoopMarker(Rosegarden::timeT startLoop, Rosegarden::timeT endLoop);
     
 public slots:
     void editSegmentNotation(Rosegarden::Segment*);
@@ -189,6 +194,8 @@ signals:
     void signalSetLoop(bool);
 
     void addSegmentItem(Rosegarden::Segment*);
+
+    void signalSetLoopMarker(Rosegarden::timeT, Rosegarden::timeT);
 
 
 protected:

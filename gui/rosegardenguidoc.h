@@ -185,6 +185,10 @@ public:
      */
     void prepareAudio();
 
+    /*
+     * Set the visible loop on the Segment Canvas or any open clients 
+     */
+    void setLoopMarker(Rosegarden::timeT startLoop, Rosegarden::timeT endLoop);
 
 public slots:
 

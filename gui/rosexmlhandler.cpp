@@ -72,6 +72,11 @@ RoseXmlHandler::startDocument()
     m_composition.clearTracks();
     m_composition.clearInstruments();
 
+    // and the loop
+    //
+    m_composition.setLoopStart(0);
+    m_composition.setLoopEnd(0);
+
     // reset state
     return true;
 }
@@ -270,6 +275,21 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         
         // set the composition flag
         m_inComposition = true;
+
+
+        // Set the loop
+        //
+        QString loopStartStr = atts.value("loopstart");
+        QString loopEndStr = atts.value("loopend");
+
+        if (loopStartStr && loopEndStr)
+        {
+            int loopStart = loopStartStr.toInt();
+            int loopEnd = loopEndStr.toInt();
+
+            m_composition.setLoopStart(loopStart);
+            m_composition.setLoopEnd(loopEnd);
+        }
 
     } else if (lcName == "track") {
 

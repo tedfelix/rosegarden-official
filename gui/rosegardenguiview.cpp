@@ -120,6 +120,11 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     connect(this,       SIGNAL(signalSetLoop(bool)),
             barButtons, SLOT(setLoopingMode(bool)));
 
+    connect(this,
+            SIGNAL(signalSetLoopMarker(Rosegarden::timeT, Rosegarden::timeT)),
+            barButtons,
+            SLOT(slotSetLoopMarker(Rosegarden::timeT, Rosegarden::timeT)));
+
     
     // Construct the top level horizontal box and drop the
     // button box (TrackButtons) and the main ScrollView
@@ -394,4 +399,16 @@ void RosegardenGUIView::createSegmentItem(Rosegarden::Segment* segment)
 {
     emit addSegmentItem(segment);
 }
+
+// Set the visible loop markers on all clients and the SegmentCanvas.
+// Used when we've loaded a file or somehow set the loop marker from
+// the top down rather than from the LoopRuler upwards.
+//
+void RosegardenGUIView::setLoopMarker(Rosegarden::timeT startLoop,
+                                      Rosegarden::timeT endLoop)
+{
+    emit signalSetLoopMarker(startLoop, endLoop);
+}
+
+
 
