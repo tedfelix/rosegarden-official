@@ -350,7 +350,8 @@ protected:
     (NotationElementList *notes, NotationElementList::iterator &i,
      const Rosegarden::Clef &, const Rosegarden::Key &,
      Rosegarden::AccidentalTable &, float &lyricWidth, ChunkList &chunks,
-     int &graceCount, NotationElementList::iterator &to);
+     int &graceCount, int ottavaShift,
+     NotationElementList::iterator &to);
 
     typedef std::map<int, NotationElementList::iterator> TieMap;
 

@@ -401,7 +401,8 @@ void RG21Loader::closeIndication()
     m_indicationsExtant.erase(i);
 
     indicationEvent->set<Int>
-	(Indication::IndicationDurationPropertyName,
+//!!!	(Indication::IndicationDurationPropertyName,
+	("indicationduration",
 	 m_currentSegmentTime - indicationEvent->getAbsoluteTime());
 }
 

@@ -898,119 +898,107 @@ NotationStaff::renderSingleElement(ViewElement *velt,
 
 	} else if (elt->event()->isa(Indication::EventType)) {
 
-	    timeT indicationDuration =
-		elt->event()->get<Int>
-		(Indication::IndicationDurationPropertyName);
+	    try {
+		Indication indication(*elt->event());
 
-	    timeT indicationEndTime =
-		elt->getViewAbsoluteTime() + indicationDuration;
+		timeT indicationDuration = indication.getIndicationDuration();
+		timeT indicationEndTime =
+		    elt->getViewAbsoluteTime() + indicationDuration;
 
-	    NotationElementList::iterator indicationEnd =
-		getViewElementList()->findTime(indicationEndTime);
+		NotationElementList::iterator indicationEnd =
+		    getViewElementList()->findTime(indicationEndTime);
 
-	    string indicationType = 
-		elt->event()->get<String>
-		(Indication::IndicationTypePropertyName);
+		string indicationType = indication.getIndicationType();
 
-	    int length, y1;
+		int length, y1;
 
-	    if (indicationType == Indication::Slur &&
-		indicationEnd != getViewElementList()->begin()) {
-		--indicationEnd;
-	    }
-
-	    if (indicationType != Indication::Slur &&
-		indicationEnd != getViewElementList()->begin() &&
-
-		(indicationEnd == getViewElementList()->end() ||
-
-		 indicationEndTime ==
-		 getSegment().getBarStartForTime(indicationEndTime))) {
-
-		--indicationEnd;
-
-		double x, w;
-		static_cast<NotationElement *>(*indicationEnd)->
-		    getLayoutAirspace(x, w);
-		length = (int)(x + w - elt->getLayoutX() -
-			       m_notePixmapFactory->getBarMargin());
-
-	    } else /*if (indicationEnd != getViewElementList()->end()) */ {
-
-		length = (int)((*indicationEnd)->getLayoutX() -
-			       elt->getLayoutX());
-
-/*
-	    } else {
-		--indicationEnd;
-		length = (int)((*indicationEnd)->getLayoutX() +
-			       m_notePixmapFactory->getNoteBodyWidth() * 3 -
-			       elt->getLayoutX());
-*/
-	    }
-		
-	    y1 = (int)(*indicationEnd)->getLayoutY();
-
-	    if (length < m_notePixmapFactory->getNoteBodyWidth()) {
-		length = m_notePixmapFactory->getNoteBodyWidth();
-	    }
-
-	    if (indicationType == Indication::Crescendo ||
-		indicationType == Indication::Decrescendo) {
-
-		if (m_printPainter) {
-		    m_notePixmapFactory->drawHairpin
-			(length, indicationType == Indication::Crescendo,
-			 *m_printPainter, int(coords.first), coords.second);
-		} else {
-		    pixmap = m_notePixmapFactory->makeHairpinPixmap
-			(length, indicationType == Indication::Crescendo);
+		if (indicationType == Indication::Slur &&
+		    indicationEnd != getViewElementList()->begin()) {
+		    --indicationEnd;
 		}
 
-	    } else if (indicationType == Indication::Slur) {
-
-		bool above = true;
-		long dy = 0;
-		long length = 10;
-		
-		elt->event()->get<Bool>(properties.SLUR_ABOVE, above);
-		elt->event()->get<Int>(properties.SLUR_Y_DELTA, dy);
-		elt->event()->get<Int>(properties.SLUR_LENGTH, length);
-
-		if (m_printPainter) {
-		    m_notePixmapFactory->drawSlur
-			(length, dy, above,
-			 *m_printPainter, int(coords.first), coords.second);
-		} else {
-		    pixmap = m_notePixmapFactory->makeSlurPixmap(length, dy, above);
-		}
+		if (indicationType != Indication::Slur &&
+		    indicationEnd != getViewElementList()->begin() &&
 		    
-	    } else {
+		    (indicationEnd == getViewElementList()->end() ||
+		     
+		     indicationEndTime ==
+		     getSegment().getBarStartForTime(indicationEndTime))) {
+		    
+		    --indicationEnd;
+		    
+		    double x, w;
+		    static_cast<NotationElement *>(*indicationEnd)->
+			getLayoutAirspace(x, w);
+		    length = (int)(x + w - elt->getLayoutX() -
+				   m_notePixmapFactory->getBarMargin());
+		    
+		} else {
+		    
+		    length = (int)((*indicationEnd)->getLayoutX() -
+				   elt->getLayoutX());
+		}
+		
+		y1 = (int)(*indicationEnd)->getLayoutY();
+		
+		if (length < m_notePixmapFactory->getNoteBodyWidth()) {
+		    length = m_notePixmapFactory->getNoteBodyWidth();
+		}
 
-		int octaves = 0;
+		if (indicationType == Indication::Crescendo ||
+		    indicationType == Indication::Decrescendo) {
 
-		if (indicationType == Indication::QuindicesimaUp) octaves = 2;
-		else if (indicationType == Indication::OttavaUp) octaves = 1;
-		else if (indicationType == Indication::OttavaDown) octaves = -1;
-		else if (indicationType == Indication::QuindicesimaDown) octaves = -2;
-
-		if (octaves != 0) {
 		    if (m_printPainter) {
-			m_notePixmapFactory->drawOttava
-			    (length, octaves,
+			m_notePixmapFactory->drawHairpin
+			    (length, indicationType == Indication::Crescendo,
 			     *m_printPainter, int(coords.first), coords.second);
 		    } else {
-			pixmap = m_notePixmapFactory->makeOttavaPixmap
-			    (length, octaves);
+			pixmap = m_notePixmapFactory->makeHairpinPixmap
+			    (length, indicationType == Indication::Crescendo);
 		    }
+		    
+		} else if (indicationType == Indication::Slur) {
+		    
+		    bool above = true;
+		    long dy = 0;
+		    long length = 10;
+		    
+		    elt->event()->get<Bool>(properties.SLUR_ABOVE, above);
+		    elt->event()->get<Int>(properties.SLUR_Y_DELTA, dy);
+		    elt->event()->get<Int>(properties.SLUR_LENGTH, length);
+		    
+		    if (m_printPainter) {
+			m_notePixmapFactory->drawSlur
+			    (length, dy, above,
+			     *m_printPainter, int(coords.first), coords.second);
+		    } else {
+			pixmap = m_notePixmapFactory->makeSlurPixmap(length, dy, above);
+		    }
+		    
 		} else {
+		    
+		    int octaves = indication.getOttavaShift();
 
-		    NOTATION_DEBUG
-			<< "Unrecognised indicationType " << indicationType << endl;
-		    if (m_showUnknowns) {
-			pixmap = m_notePixmapFactory->makeUnknownPixmap();
+		    if (octaves != 0) {
+			if (m_printPainter) {
+			    m_notePixmapFactory->drawOttava
+				(length, octaves,
+				 *m_printPainter, int(coords.first), coords.second);
+			} else {
+			    pixmap = m_notePixmapFactory->makeOttavaPixmap
+				(length, octaves);
+			}
+		    } else {
+			
+			NOTATION_DEBUG
+			    << "Unrecognised indicationType " << indicationType << endl;
+			if (m_showUnknowns) {
+			    pixmap = m_notePixmapFactory->makeUnknownPixmap();
+			}
 		    }
 		}
+	    } catch (...) {
+		NOTATION_DEBUG << "Bad indication!" << endl;
 	    }
 
 	} else {
@@ -1245,7 +1233,7 @@ NotationStaff::setTuplingParameters(NotationElement *elt,
 	    std::cerr << "WARNING: Tupled event at " << elt->event()->getAbsoluteTime() << " has no tupling line width" << std::endl;
 	}
 
-	long tuplingLineGradient = 0.0;
+	long tuplingLineGradient = 0;
 	if (!(elt->event()->get<Int>(properties.TUPLING_LINE_GRADIENT),
 	      tuplingLineGradient)) {
 	    std::cerr << "WARNING: Tupled event at " << elt->event()->getAbsoluteTime() << " has no tupling line gradient" << std::endl;

@@ -208,6 +208,9 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 	segment.getComposition()->getTimeSignatureAt(startTime);
     bool barCorrect = true;
 
+    int ottavaShift = 0;
+    timeT ottavaEnd = 0;
+
     //!!! problematic: if we're scanning from the middle, we won't
     //have recorded any accidentals in the previous bar for the
     //desirable BarResetCautionary/BarResetNaturals accidental table
@@ -278,6 +281,10 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
             NotationElement *el = static_cast<NotationElement*>((*itr));
 	    NOTATION_DEBUG << "element is a " << el->event()->getType() << endl;
 
+	    if (ottavaShift != 0) {
+		if (el->event()->getAbsoluteTime() >= ottavaEnd) ottavaShift = 0;
+	    }
+
 	    if (el->event()->has(BEAMED_GROUP_ID)) {
 		NOTATION_DEBUG << "element is beamed" << endl;
 		long groupId = el->event()->get<Int>(BEAMED_GROUP_ID);
@@ -334,7 +341,7 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 	    } else if (el->isNote()) {
 		
 		scanChord(notes, itr, clef, key, accTable,
-			  lyricWidth, chunks, graceCount, to);
+			  lyricWidth, chunks, graceCount, ottavaShift, to);
 
 	    } else if (el->isRest()) {
 
@@ -349,6 +356,19 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 
 		chunks.push_back(Chunk(el->event()->getSubOrdering(), 0));
 
+		if (isFullScan) {
+		    try {
+			Indication indication(*el->event());
+			if (indication.isOttavaType()) {
+			    ottavaShift = indication.getOttavaShift();
+			    ottavaEnd = el->event()->getAbsoluteTime() +
+				indication.getIndicationDuration();
+			}
+		    } catch (...) {
+			NOTATION_DEBUG << "Bad indication!" << endl;
+		    }
+		}
+
 	    } else {
 		
 		NOTATION_DEBUG << "Found something I don't know about (type is " << el->event()->getType() << ")" << endl;
@@ -357,7 +377,6 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 	    }
 
 	    actualBarEnd = el->getViewAbsoluteTime() + el->getViewDuration();
-//!!!            el->event()->setMaybe<Int>(m_properties.MIN_WIDTH, mw);
 	}
 
 	if (actualBarEnd == barTimes.first) actualBarEnd = barTimes.second;
@@ -450,6 +469,7 @@ NotationHLayout::scanChord(NotationElementList *notes,
 			   float &lyricWidth,
 			   ChunkList &chunks,
 			   int &graceCount,
+			   int ottavaShift,
 			   NotationElementList::iterator &to)
 {
     NotationChord chord(*notes, itr, m_notationQuantizer, m_properties);
@@ -501,6 +521,15 @@ NotationHLayout::scanChord(NotationElementList *notes,
 	Rosegarden::Pitch p(pitch, explicitAccidental);
 	int h = p.getHeightOnStaff(clef, key);
 	Accidental acc = p.getDisplayAccidental(key);
+
+	if (ottavaShift == 0) {
+	    if (el->event()->has(NotationProperties::OTTAVA_SHIFT)) {
+		ottavaShift = el->event()->get<Int>(NotationProperties::OTTAVA_SHIFT);
+	    }
+	}
+	
+	h -= 7 * ottavaShift;
+	el->event()->setMaybe<Int>(NotationProperties::OTTAVA_SHIFT, ottavaShift);
 
 	el->event()->setMaybe<Int>(NotationProperties::HEIGHT_ON_STAFF, h);
 	el->event()->setMaybe<String>(m_properties.CALCULATED_ACCIDENTAL, acc);

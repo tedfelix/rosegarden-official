@@ -28,6 +28,7 @@ const Rosegarden::PropertyName NotationProperties::BEAM_ABOVE	      = "BeamAbove
 const Rosegarden::PropertyName NotationProperties::SLASHES	      = "Slashes";
 const Rosegarden::PropertyName NotationProperties::STEM_UP	      = "NoteStemUp";
 const Rosegarden::PropertyName NotationProperties::USE_CAUTIONARY_ACCIDENTAL = "UseCautionaryAccidental";
+const Rosegarden::PropertyName NotationProperties::OTTAVA_SHIFT       = "OttavaShift";
 
 
 NotationProperties::NotationProperties(const std::string &prefix) :

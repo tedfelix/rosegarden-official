@@ -26,6 +26,7 @@
 #include <iostream>
 #include <cstdlib> // for atoi
 #include <limits.h> // for SHRT_MIN
+#include <cassert>
 
 #if (__GNUC__ < 3)
 #include <strstream>

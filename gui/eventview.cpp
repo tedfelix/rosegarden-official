@@ -407,11 +407,13 @@ EventView::applyLayout(int /*staffNo*/)
 		data2Str = QString("%1  ").
 		    arg(strtoqstr((*it)->get<String>
 				  (Rosegarden::Text::TextPropertyName)));
+/*!!!
 	    } else if ((*it)->has(Rosegarden::Indication::
 				  IndicationTypePropertyName)) {
 		data2Str = QString("%1  ").
 		    arg((*it)->get<Int>(Rosegarden::Indication::
 					IndicationDurationPropertyName));
+*/
 	    } else if ((*it)->has(Rosegarden::PitchBend::LSB)) {
                 data2Str = QString("%1  ").
                     arg((*it)->get<Int>(Rosegarden::PitchBend::LSB));

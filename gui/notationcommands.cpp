@@ -478,7 +478,25 @@ EraseEventCommand::modifySegment()
 
     if (m_event->isa(Rosegarden::Clef::EventType) ||
 	m_event->isa(Rosegarden::Key ::EventType)) {
+
 	m_relayoutEndTime = helper.segment().getEndTime();
+
+    } else if (m_event->isa(Rosegarden::Indication::EventType)) {
+
+	try {
+	    Indication indication(*m_event);
+	    if (indication.isOttavaType()) {
+		
+		for (Segment::iterator i = getSegment().findTime
+			 (m_event->getAbsoluteTime());
+		     i != getSegment().findTime
+			 (m_event->getAbsoluteTime() + indication.getIndicationDuration());
+		     ++i) {
+		    (*i)->unset(NotationProperties::OTTAVA_SHIFT);
+		}
+	    }
+	} catch (...) {
+	}
     }
 
     helper.deleteEvent(m_event, m_collapseRest);
@@ -640,8 +658,9 @@ GroupMenuUnTupletCommand::modifySegment()
 GroupMenuAddIndicationCommand::GroupMenuAddIndicationCommand(std::string indicationType, 
 							     EventSelection &selection) :
     BasicCommand(getGlobalName(indicationType),
-		 selection.getSegment(), selection.getStartTime(),
-		 selection.getStartTime() + 1),
+		 selection.getSegment(),
+		 selection.getStartTime(),
+		 selection.getEndTime()),
     m_indicationType(indicationType),
     m_indicationDuration(selection.getEndTime() - selection.getStartTime()),
     m_lastInsertedEvent(0)
@@ -657,7 +676,56 @@ GroupMenuAddIndicationCommand::~GroupMenuAddIndicationCommand()
 bool
 GroupMenuAddIndicationCommand::canExecute()
 {
-    //!!! implement!
+    Segment &s(getSegment());
+    
+    for (Segment::iterator i = s.begin(); s.isBeforeEndMarker(i); ++i) {
+
+	if ((*i)->getAbsoluteTime() >= getStartTime() + m_indicationDuration) {
+	    return true;
+	}
+
+	if ((*i)->isa(Indication::EventType)) {
+
+	    try {
+		Indication indication(**i);
+
+		if ((*i)->getAbsoluteTime() + indication.getIndicationDuration() <=
+		    getStartTime()) continue;
+		
+		std::string type = indication.getIndicationType();
+
+		if (type == m_indicationType) {
+		    // for all indications (including slur), we reject an
+		    // exact overlap
+		    if ((*i)->getAbsoluteTime() == getStartTime() &&
+			indication.getIndicationDuration() == m_indicationDuration) {
+			return false;
+		    }
+		} else if (m_indicationType == Indication::Slur) {
+		    continue;
+		}
+
+		// for non-slur indications we reject a partial
+		// overlap such as this one, if it's an overlap with
+		// an indication of the same "sort"
+
+		if (m_indicationType == Indication::Crescendo ||
+		    m_indicationType == Indication::Decrescendo) {
+		    if (type == Indication::Crescendo ||
+			type == Indication::Decrescendo) return false;
+		}
+
+		if (m_indicationType == Indication::QuindicesimaUp ||
+		    m_indicationType == Indication::OttavaUp ||
+		    m_indicationType == Indication::OttavaDown ||
+		    m_indicationType == Indication::QuindicesimaDown) {
+		    if (indication.isOttavaType()) return false;
+		}
+	    } catch (...) {
+	    }		    
+	}
+    }    
+
     return true;
 }
 
@@ -670,6 +738,17 @@ GroupMenuAddIndicationCommand::modifySegment()
     Event *e = indication.getAsEvent(getStartTime());
     helper.segment().insert(e);
     m_lastInsertedEvent = e;
+
+    if (indication.isOttavaType()) {
+	for (Segment::iterator i = getSegment().findTime(getStartTime());
+	     i != getSegment().findTime(getStartTime() + m_indicationDuration);
+	     ++i) {
+	    if ((*i)->isa(Note::EventType)) {
+		(*i)->setMaybe<Int>(NotationProperties::OTTAVA_SHIFT,
+				    indication.getOttavaShift());
+	    }
+	}
+    }
 }
 
 QString

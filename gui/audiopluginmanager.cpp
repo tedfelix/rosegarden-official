@@ -163,7 +163,7 @@ AudioPlugin::AudioPlugin(MappedObjectId id,
     m_author(author),
     m_copyright(copyright),
     m_category(category),
-    m_colour(Qt::red)
+    m_colour(Qt::darkRed)
 {
 }
 

@@ -548,6 +548,21 @@ public:
     std::string getIndicationType() const { return m_indicationType; }
     timeT getIndicationDuration() const { return m_duration; }
 
+    bool isOttavaType() const {
+	return
+	    m_indicationType == QuindicesimaUp ||
+	    m_indicationType == OttavaUp ||
+	    m_indicationType == OttavaDown ||
+	    m_indicationType == QuindicesimaDown;
+    }
+
+    int getOttavaShift() const {
+	return (m_indicationType == QuindicesimaUp ? 2 :
+		m_indicationType == OttavaUp ? 1 :
+		m_indicationType == OttavaDown ? -1 :
+		m_indicationType == QuindicesimaDown ? -2 : 0);
+    }
+
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsEvent(timeT absoluteTime) const;
 

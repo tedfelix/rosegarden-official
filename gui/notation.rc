@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="Rosegarden::Notation" version="097">
+<kpartgui name="Rosegarden::Notation" version="098">
 
 <MenuBar>
 
@@ -65,7 +65,7 @@
 <!--  <Action name="ungrace"/> -->
   <Separator/>
   <Action name="slur"/>
-  <Action name="glissando"/>
+<!--  <Action name="glissando"/> -->
   <Action name="crescendo"/>
   <Action name="decrescendo"/>
   <Menu name="octaves">
@@ -447,7 +447,7 @@
   <Action name="grace"/>
   <Separator/>
   <Action name="slur"/>
-  <Action name="glissando"/>
+<!--  <Action name="glissando"/> -->
   <Action name="tie_notes"/>
   <Action name="de_counterpoint"/>
   <Separator/>
