@@ -112,6 +112,11 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
 
 TrackEditor::~TrackEditor()
 {
+    // delete all remaining canvas items
+    //
+    QCanvasItemList list = m_segmentCanvas->canvas()->allItems();
+    for (QCanvasItemList::Iterator it = list.begin(); it != list.end(); ++it)
+        delete *it;
 }
 
 void
@@ -383,14 +388,6 @@ void TrackEditor::slotSegmentOrderChanged(int section, int fromIdx, int toIdx)
     //!!! how do we get here? need to involve a command
     emit needUpdate();
 }
-
-
-void TrackEditor::clear()
-{
-    //!!! when is this used? do we want to throw away the command history too?
-    m_segmentCanvas->clear();
-}
-
 
 // Move the position pointer
 void

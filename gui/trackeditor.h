@@ -71,9 +71,6 @@ public:
 
     ~TrackEditor();
 
-    /// Clear the SegmentCanvas
-    void clear();
-
     SegmentCanvas* getSegmentCanvas()       { return m_segmentCanvas; }
     BarButtons*    getTopBarButtons()       { return m_topBarButtons; }
     BarButtons*    getBottomBarButtons()    { return m_bottomBarButtons; }
