@@ -58,13 +58,14 @@ case $AUTOHEADER_VERSION in
 esac
 
 AUTOMAKE_STRING=`$AUTOMAKE --version | head -1`
+echo AUTOMAKE_STRING=$AUTOMAKE_STRING
 case $AUTOMAKE_STRING in
   automake*1.5d* )
     echo "*** YOU'RE USING $AUTOMAKE_STRING."
     echo "*** KDE requires automake 1.5"
     exit 1
     ;;
-  automake*1.5* | automake*1.5-* | automake*1.6.* | automake*1.7* |  automake*1.8* ) : ;;
+  automake*1.5* | automake*1.5-* | automake*1.6.* | automake*1.7* |  automake*1.8* | automake*1.9* ) : ;;
   "" )
     echo "*** AUTOMAKE NOT FOUND!."
     echo "*** Rosegarden requires automake 1.5 or higher (up through 1.8)"
