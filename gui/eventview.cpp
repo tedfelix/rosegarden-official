@@ -300,14 +300,14 @@ EventView::applyLayout(int /*staffNo*/)
 		velyStr = "<not set>";
 	    }
 
-            if ((*it)->has(Rosegarden::Controller::DATA1)) {
+            if ((*it)->has(Rosegarden::Controller::NUMBER)) {
                 data1Str = QString("%1  ").
-                    arg((*it)->get<Int>(Rosegarden::Controller::DATA1));
+                    arg((*it)->get<Int>(Rosegarden::Controller::NUMBER));
             }
 
-            if ((*it)->has(Rosegarden::Controller::DATA2)) {
+            if ((*it)->has(Rosegarden::Controller::VALUE)) {
                 data2Str = QString("%1  ").
-                    arg((*it)->get<Int>(Rosegarden::Controller::DATA2));
+                    arg((*it)->get<Int>(Rosegarden::Controller::VALUE));
             }
 
             if ((*it)->has(Rosegarden::PitchBend::MSB)) {

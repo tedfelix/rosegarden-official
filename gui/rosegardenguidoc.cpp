@@ -714,8 +714,8 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
                    rEvent = new Event(Rosegarden::Controller::EventType,
                                       absTime);
 
-                   rEvent->set<Int>(Controller::DATA1, (*i)->getData1());
-                   rEvent->set<Int>(Controller::DATA2, (*i)->getData2());
+                   rEvent->set<Int>(Controller::NUMBER, (*i)->getData1());
+                   rEvent->set<Int>(Controller::VALUE, (*i)->getData2());
                    break;
 
                 case Rosegarden::MappedEvent::MidiProgramChange:

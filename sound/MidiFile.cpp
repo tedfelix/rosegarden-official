@@ -23,6 +23,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cstdio>
 
 #include "Midi.h"
 #include "MidiFile.h"
@@ -697,7 +698,6 @@ MidiFile::convertToRosegarden()
                     break;
 
                 case MIDI_KEY_SIGNATURE:
-
                     if (!rosegardenSegment) break;
 
                     // get the details
@@ -705,7 +705,6 @@ MidiFile::convertToRosegarden()
                     isMinor     = (int) (*midiEvent)->getMetaMessage()[1];
                     isSharp     = accidentals < 0 ?        false  :  true;
                     accidentals = accidentals < 0 ?  -accidentals :  accidentals;
-
                     // create and insert the key event
                     //
                     rosegardenEvent = Rosegarden::Key
@@ -793,9 +792,9 @@ MidiFile::convertToRosegarden()
                 rosegardenEvent =
                     new Event(Rosegarden::Controller::EventType,
                               rosegardenTime);
-                rosegardenEvent->set<Int>(Controller::DATA1,
+                rosegardenEvent->set<Int>(Controller::NUMBER,
                                           (*midiEvent)->getData1());
-                rosegardenEvent->set<Int>(Controller::DATA2,
+                rosegardenEvent->set<Int>(Controller::VALUE,
                                           (*midiEvent)->getData2());
                 rosegardenSegment->insert(rosegardenEvent);
                 break;
@@ -931,9 +930,9 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
     MidiEvent *midiEvent;
     int trackNumber = 0;
 
-    int midiEventAbsoluteTime;
-    int midiVelocity;
-    int midiChannel = 0;
+    timeT midiEventAbsoluteTime;
+    MidiByte midiVelocity;
+    MidiByte midiChannel = 0;
 
     // [cc] int rather than floating point
     //
@@ -1027,12 +1026,12 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
     // In pass one just insert all events including new NOTE OFFs at the right
     // absolute times.
     //
-    for (Rosegarden::Composition::const_iterator trk = comp.begin();
-         trk != comp.end(); ++trk)
+    for (Rosegarden::Composition::const_iterator segment = comp.begin();
+         segment != comp.end(); ++segment)
     {
         // We use this later to get NOTE durations
         //
-        SegmentPerformanceHelper helper(**trk);
+        SegmentPerformanceHelper helper(**segment);
 
         {
             stringstream trackName;
@@ -1048,45 +1047,56 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
                                       MIDI_FILE_META_EVENT,
                                       MIDI_TRACK_NAME,
                                       //trackName.str());
-                          comp.getTrackByIndex((*trk)->getTrack())->getLabel());
+                          comp.getTrackByIndex((*segment)->getTrack())->getLabel());
 
-            m_midiComposition[trackNumber].push_back(midiEvent);
-
-            // insert a program change
-            midiEvent = new MidiEvent(0, MIDI_PROG_CHANGE | midiChannel, 0);
             m_midiComposition[trackNumber].push_back(midiEvent);
         }
 
- 
-        for (Rosegarden::Segment::iterator el = (*trk)->begin();
-             el != (*trk)->end(); ++el)
+        // Get the Instrument
+        //
+        Rosegarden::Track *track =
+            comp.getTrackByIndex((*segment)->getTrack());
+
+        Rosegarden::Instrument *instr =
+            m_studio->getInstrumentById(track->getInstrument());
+
+        MidiByte program = 0;
+        midiChannel = 0;
+
+        if (instr)
         {
+            midiChannel = instr->getMidiChannel();
+            program = instr->getProgramChange();
+        }
+
+        // insert a program change
+        midiEvent = new MidiEvent(0, // time
+                                 MIDI_PROG_CHANGE | midiChannel,
+                                 program);
+        m_midiComposition[trackNumber].push_back(midiEvent);
+
+ 
+        for (Rosegarden::Segment::iterator el = (*segment)->begin();
+             el != (*segment)->end(); ++el)
+        {
+
+            midiEventAbsoluteTime =
+                (*el)->getAbsoluteTime() * m_timingDivision / crotchetDuration;
 
             if ((*el)->isa(Note::EventType))
             {
-                // Set delta time temporarily to absolute time for this event.
-                //
-                // [cc] -- avoiding floating-point
-                midiEventAbsoluteTime =
-                    (*el)->getAbsoluteTime() * m_timingDivision / crotchetDuration;
-                try
-                {
+                if ((*el)->has(BaseProperties::VELOCITY))
                     midiVelocity = (*el)->get<Int>(BaseProperties::VELOCITY);
-                }
-                catch(...)
-                {
-                    std::cerr << "MidiFile::convertToMidi() - " <<
-                                 "couldn't get velocity - " << 
-                                 "using default (127)" << std::endl;
+                else
                     midiVelocity = 127;
-                }
                               
                 // insert the NOTE_ON at the appropriate channel
                 //
-                midiEvent = new MidiEvent(midiEventAbsoluteTime,
-                                        MIDI_NOTE_ON + midiChannel,
-                                        (*el)->get<Int>(BaseProperties::PITCH),
-                                        midiVelocity);
+                midiEvent = 
+                    new MidiEvent(midiEventAbsoluteTime,
+                                  MIDI_NOTE_ON | midiChannel,
+                                  (*el)->get<Int>(BaseProperties::PITCH),
+                                  midiVelocity);
 
                 m_midiComposition[trackNumber].push_back(midiEvent);
 
@@ -1103,12 +1113,67 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
                 //
                 midiEvent =
                     new MidiEvent(midiEventAbsoluteTime,
-                                  MIDI_NOTE_OFF + midiChannel,
+                                  MIDI_NOTE_OFF | midiChannel,
                                   (*el)->get<Int>(BaseProperties::PITCH),
                                   127); // full volume silence
 
                 m_midiComposition[trackNumber].push_back(midiEvent);
 
+            }
+            else if ((*el)->isa(PitchBend::EventType))
+            {
+                midiEvent =
+                    new MidiEvent(midiEventAbsoluteTime,
+                                  MIDI_PITCH_BEND | midiChannel,
+                                  (*el)->get<Int>(PitchBend::MSB),
+                                  (*el)->get<Int>(PitchBend::LSB));
+
+                m_midiComposition[trackNumber].push_back(midiEvent);
+            }
+            else if ((*el)->isa(Key::EventType))
+            {
+                Rosegarden::Key key = Rosegarden::Key(**el);
+
+                int accidentals = key.getAccidentalCount();
+                if (key.isSharp()) accidentals = -accidentals;
+
+                // stack out onto the meta string
+                //
+                char out[2];
+                sprintf(out, "%c", accidentals);
+                std::string metaMessage = out;
+                sprintf(out, "%c", key.isMinor());
+
+                midiEvent =
+                    new MidiEvent(midiEventAbsoluteTime,
+                                  MIDI_FILE_META_EVENT,
+                                  MIDI_KEY_SIGNATURE,
+                                  metaMessage);
+
+                m_midiComposition[trackNumber].push_back(midiEvent);
+
+            }
+            else if ((*el)->isa(Controller::EventType))
+            {
+                midiEvent =
+                    new MidiEvent(midiEventAbsoluteTime,
+                                  MIDI_PITCH_BEND | midiChannel,
+                                  (*el)->get<Int>(Controller::VALUE),
+                                  (*el)->get<Int>(Controller::NUMBER));
+
+                m_midiComposition[trackNumber].push_back(midiEvent);
+            }
+            else if ((*el)->isa(ProgramChange::EventType))
+            {
+            }
+            else if ((*el)->isa(SystemExclusive::EventType))
+            {
+            }
+            else if ((*el)->isa(ChannelPressure::EventType))
+            {
+            }
+            else if ((*el)->isa(KeyPressure::EventType))
+            {
             }
             else if ((*el)->isa(Note::EventRestType))
             {

@@ -75,13 +75,13 @@ MappedEvent::MappedEvent(InstrumentId id,
     }
     else if (e.isa(Rosegarden::Controller::EventType))
     {
-        if (e.has(Rosegarden::Controller::DATA1))
-            m_data1 = e.get<Int>(Rosegarden::Controller::DATA1);
+        if (e.has(Rosegarden::Controller::NUMBER))
+            m_data1 = e.get<Int>(Rosegarden::Controller::NUMBER);
         else
             m_data1 = 0;
 
-        if (e.has(Rosegarden::Controller::DATA2))
-            m_data2 = e.get<Int>(Rosegarden::Controller::DATA2);
+        if (e.has(Rosegarden::Controller::VALUE))
+            m_data2 = e.get<Int>(Rosegarden::Controller::VALUE);
         else
             m_data2 = 0;
 

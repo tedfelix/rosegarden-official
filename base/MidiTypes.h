@@ -48,6 +48,7 @@ public:
     static const PropertyName MSB;
     static const PropertyName LSB;
 
+    /*
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsEvent(timeT absoluteTime) const;
 
@@ -57,6 +58,7 @@ public:
 private:
     Rosegarden::MidiByte m_msb;
     Rosegarden::MidiByte m_lsb;
+    */
 };
 
 
@@ -69,13 +71,15 @@ public:
     static const std::string EventType;
     static const int EventSubOrdering;
 
-    static const PropertyName DATA1;
-    static const PropertyName DATA2;
+    static const PropertyName NUMBER; // controller number
+    static const PropertyName VALUE;  // and value
+    static const PropertyName TYPE;   // description of controller number
 
     static const std::string UnspecifiedType;
     static const std::string Modulation;
     static const std::string Pan;
 
+    /*
     Controller(const std::string &t,
                Rosegarden::MidiByte data1,
                Rosegarden::MidiByte data2);
@@ -85,10 +89,10 @@ public:
     Event *getAsEvent(timeT absoluteTime) const;
 
 private:
-    std::string m_type;
-
+    std::string          m_type;
     Rosegarden::MidiByte m_data1;
     Rosegarden::MidiByte m_data2;
+    */
 
 };
 
@@ -105,6 +109,7 @@ public:
     static const PropertyName PITCH;
     static const PropertyName PRESSURE;
 
+    /*
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsEvent(timeT absoluteTime) const;
 
@@ -114,6 +119,7 @@ public:
 private:
     Rosegarden::MidiByte m_pitch;
     Rosegarden::MidiByte m_pressure;
+    */
 };
 
 
@@ -128,6 +134,7 @@ public:
 
     static const PropertyName PRESSURE;
 
+    /*
     Event *getAsEvent(timeT absoluteTime) const;
 
     ChannelPressure(Rosegarden::MidiByte pressure);
@@ -135,6 +142,7 @@ public:
 
 private:
     Rosegarden::MidiByte m_pressure;
+    */
 };
 
 
@@ -149,6 +157,7 @@ public:
 
     static const PropertyName PROGRAM;
 
+    /*
     Event *getAsEvent(timeT absoluteTime) const;
 
     ProgramChange(Rosegarden::MidiByte program);
@@ -156,6 +165,7 @@ public:
 
 private:
     Rosegarden::MidiByte m_program;
+    */
 };
 
 
@@ -170,12 +180,14 @@ public:
 
     static const PropertyName DATABLOCK;
 
+    /*
     SystemExclusive();
     ~SystemExclusive();
 
     Event *getAsEvent(timeT absoluteTime) const;
 
 private:
+*/
 
 };
 

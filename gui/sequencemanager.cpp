@@ -692,6 +692,8 @@ SequenceManager::stop()
     //
     m_transportStatus = STOPPED;
     m_sendStop = false;
+
+    resetControllers();
 }
 
 // Jump to previous bar
@@ -1536,6 +1538,18 @@ SequenceManager::sendAudioLevel(Rosegarden::MappedEvent *mE)
         v->showVisuals(mE);
     }
 
+}
+
+void
+SequenceManager::resetControllers()
+{
+    std::cout << "SequencerManager::resetControllers - resetting" << std::endl;
+    Rosegarden::MappedEvent *mE =
+        new Rosegarden::MappedEvent(Rosegarden::MidiInstrumentBase,
+                                    Rosegarden::MappedEvent::MidiController,
+                                    MIDI_CONTROLLER_RESET,
+                                    0);
+    sendMappedEvent(mE);
 }
 
 }

@@ -130,6 +130,10 @@ public:
     //
     unsigned int getSoundDriverStatus() { return m_soundDriverStatus; }
 
+    // Reset MIDI controllers
+    //
+    void resetControllers();
+
 public slots:
     // Empty the m_clearToSend flag
     //

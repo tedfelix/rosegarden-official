@@ -34,6 +34,7 @@ const int PitchBend::EventSubOrdering = -70;
 const PropertyName PitchBend::MSB = "msb";
 const PropertyName PitchBend::LSB = "lsb";
 
+/*
 PitchBend::PitchBend(Rosegarden::MidiByte msb,
                      Rosegarden::MidiByte lsb):
                      m_msb(msb),
@@ -53,6 +54,7 @@ PitchBend::getAsEvent(timeT absoluteTime) const
     e->set<Int>(LSB, (int)m_lsb);
     return e;
 }
+*/
 
 
 //////////////////////////////////////////////////////////////////////
@@ -61,14 +63,16 @@ PitchBend::getAsEvent(timeT absoluteTime) const
 const std::string Controller::EventType = "controller";
 const int Controller::EventSubOrdering = -70;
 
-const PropertyName Controller::DATA1 = "data1";
-const PropertyName Controller::DATA2 = "data2";
+const PropertyName Controller::NUMBER = "number";
+const PropertyName Controller::VALUE  = "value";
+const PropertyName Controller::TYPE   = "type";
 
 const std::string Controller::UnspecifiedType = "unspecified";
 const std::string Controller::Modulation = "modulation";
 const std::string Controller::Pan = "pan";
 
 
+/*
 Controller::Controller(const std::string &type,
                        Rosegarden::MidiByte data1,
                        Rosegarden::MidiByte data2):
@@ -90,6 +94,7 @@ Controller::getAsEvent(timeT absoluteTime) const
     e->set<Int>(DATA2, (int)m_data2);
     return e;
 }
+*/
 
 //////////////////////////////////////////////////////////////////////
 // Key Pressure
@@ -100,6 +105,7 @@ const int KeyPressure::EventSubOrdering = -70;
 const PropertyName KeyPressure::PITCH = "pitch";
 const PropertyName KeyPressure::PRESSURE = "pressure";
 
+/*
 KeyPressure::KeyPressure(Rosegarden::MidiByte pitch,
                          Rosegarden::MidiByte pressure):
   m_pitch(pitch),
@@ -119,6 +125,7 @@ KeyPressure::getAsEvent(timeT absoluteTime) const
     e->set<Int>(PRESSURE, (int)m_pressure);
     return e;
 }
+*/
 
 
 //////////////////////////////////////////////////////////////////////
@@ -129,6 +136,7 @@ const int ChannelPressure::EventSubOrdering = -70;
 
 const PropertyName ChannelPressure::PRESSURE = "pressure";
 
+/*
 ChannelPressure::ChannelPressure(Rosegarden::MidiByte pressure):
   m_pressure(pressure)
 {
@@ -145,6 +153,7 @@ ChannelPressure::getAsEvent(timeT absoluteTime) const
     e->set<Int>(PRESSURE, (int)m_pressure);
     return e;
 }
+*/
 
 //////////////////////////////////////////////////////////////////////
 // ProgramChange
@@ -154,6 +163,7 @@ const int ProgramChange::EventSubOrdering = -70;
 
 const PropertyName ProgramChange::PROGRAM = "program";
 
+/*
 ProgramChange::ProgramChange(Rosegarden::MidiByte program):
   m_program(program)
 {
@@ -170,6 +180,7 @@ ProgramChange::getAsEvent(timeT absoluteTime) const
     e->set<Int>(PROGRAM, (int)m_program);
     return e;
 }
+*/
 
 
 //////////////////////////////////////////////////////////////////////
@@ -180,6 +191,7 @@ const int SystemExclusive::EventSubOrdering = -70;
 
 const PropertyName SystemExclusive::DATABLOCK = "datablock";
 
+/*
 SystemExclusive::SystemExclusive()
 {
 }
@@ -194,6 +206,7 @@ SystemExclusive::getAsEvent(timeT absoluteTime) const
     Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
     return e;
 }
+*/
 
 
 }
