@@ -116,6 +116,7 @@ namespace Marks
 	}
 	return v;
     }
+
 }
 
 using namespace Marks;
@@ -1056,29 +1057,6 @@ Event *Note::getAsRestEvent(timeT absoluteTime) const
     return e;
 }
 
-
-
-namespace NoteHeadStyles
-{
-    const NoteHeadStyle Classical = "classical";
-    const NoteHeadStyle Cross     = "x";
-    const NoteHeadStyle Triangle  = "triangle";
-    const NoteHeadStyle Mensural  = "mensural";
-
-    std::vector<NoteHeadStyle> getStandardStyles() {
-
-	static NoteHeadStyle a[] = {
-	    Classical, Cross, Triangle, Mensural
-	};
-
-	static std::vector<NoteHeadStyle> v;
-	if (v.size() == 0) {
-	    for (unsigned int i = 0; i < sizeof(a)/sizeof(a[0]); ++i)
-		v.push_back(a[i]);
-	}
-	return v;
-    }
-}
 
 
 ///////////////////////////////////////////////////////////////////////

@@ -64,6 +64,7 @@
 #include "notationcommands.h"
 #include "segmentcommands.h"
 #include "dialogs.h"
+#include "notestyle.h"
 
 #include "chordnameruler.h"
 #include "temporuler.h"
@@ -708,25 +709,25 @@ void NotationView::setupActions()
                 "restore_stems");
 
     new KAction(TransformsMenuChangeNoteHeadsCommand::getGlobalName
-		(Rosegarden::NoteHeadStyles::Classical),
+		(StandardNoteStyleNames::Classical),
 		0, this,
 		SLOT(slotTransformsClassicalNoteHeads()), actionCollection(),
 		"noteheads_classical");
 
     new KAction(TransformsMenuChangeNoteHeadsCommand::getGlobalName
-		(Rosegarden::NoteHeadStyles::Cross),
+		(StandardNoteStyleNames::Cross),
 		0, this,
 		SLOT(slotTransformsCrossNoteHeads()), actionCollection(),
 		"noteheads_x");
 
     new KAction(TransformsMenuChangeNoteHeadsCommand::getGlobalName
-		(Rosegarden::NoteHeadStyles::Mensural),
+		(StandardNoteStyleNames::Mensural),
 		0, this,
 		SLOT(slotTransformsMensuralNoteHeads()), actionCollection(),
 		"noteheads_mensural");
 
     new KAction(TransformsMenuChangeNoteHeadsCommand::getGlobalName
-		(Rosegarden::NoteHeadStyles::Triangle),
+		(StandardNoteStyleNames::Triangle),
 		0, this,
 		SLOT(slotTransformsTriangleNoteHeads()), actionCollection(),
 		"noteheads_triangle");
@@ -1791,7 +1792,7 @@ void NotationView::slotTransformsClassicalNoteHeads()
     KTmpStatusMsg msg(i18n("Changing to Classical note heads..."), statusBar());
 
     addCommandToHistory(new TransformsMenuChangeNoteHeadsCommand
-                        (Rosegarden::NoteHeadStyles::Classical,
+                        (StandardNoteStyleNames::Classical,
 			 *m_currentEventSelection));
 }
 
@@ -1801,7 +1802,7 @@ void NotationView::slotTransformsCrossNoteHeads()
     KTmpStatusMsg msg(i18n("Changing to Cross note heads..."), statusBar());
 
     addCommandToHistory(new TransformsMenuChangeNoteHeadsCommand
-                        (Rosegarden::NoteHeadStyles::Cross,
+                        (StandardNoteStyleNames::Cross,
 			 *m_currentEventSelection));
 }
 
@@ -1811,7 +1812,7 @@ void NotationView::slotTransformsTriangleNoteHeads()
     KTmpStatusMsg msg(i18n("Changing to Triangle note heads..."), statusBar());
 
     addCommandToHistory(new TransformsMenuChangeNoteHeadsCommand
-                        (Rosegarden::NoteHeadStyles::Triangle,
+                        (StandardNoteStyleNames::Triangle,
 			 *m_currentEventSelection));
 }
 
@@ -1821,7 +1822,7 @@ void NotationView::slotTransformsMensuralNoteHeads()
     KTmpStatusMsg msg(i18n("Changing to Mensural note heads..."), statusBar());
 
     addCommandToHistory(new TransformsMenuChangeNoteHeadsCommand
-                        (Rosegarden::NoteHeadStyles::Mensural,
+                        (StandardNoteStyleNames::Mensural,
 			 *m_currentEventSelection));
 }
 

@@ -75,7 +75,6 @@ NotePixmapParameters::NotePixmapParameters(Note::Type noteType,
     m_noteType(noteType),
     m_dots(dots),
     m_accidental(accidental),
-    m_style(Rosegarden::NoteHeadStyles::Classical),
     m_shifted(false),
     m_drawFlag(true),
     m_drawStem(true),
@@ -149,6 +148,8 @@ NotePixmapFactory::operator=(const NotePixmapFactory &npf)
 void
 NotePixmapFactory::init(std::string fontName, int size)
 {
+    m_style = NoteStyleFactory::getStyle(StandardNoteStyleNames::Classical);
+
     if (fontName == "") fontName = NotePixmapFactory::getDefaultFont();
     if (size < 0) size = NotePixmapFactory::getDefaultSize(fontName);
 
@@ -282,8 +283,8 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     m_left = m_right = m_origin.x();
     m_above = m_below = m_origin.y();
 
-    m_noteBodyWidth  = getNoteBodyWidth(params.m_noteType, params.m_style);
-    m_noteBodyHeight = getNoteBodyHeight(params.m_noteType, params.m_style);
+    m_noteBodyWidth  = getNoteBodyWidth(params.m_noteType);
+    m_noteBodyHeight = getNoteBodyHeight(params.m_noteType);
 
     bool isStemmed = note.hasStem();
     int flagCount = note.getFlagCount();
@@ -364,7 +365,8 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
 
     if (drawFlag && flagCount > 0) {
         if (params.m_stemGoesUp) {
-            m_right += m_font->getWidth(getFlagCharName(flagCount));
+            m_right += m_font->getWidth
+		(m_style->getFlagCharName(flagCount));
         }
     }
 
@@ -407,9 +409,13 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
             s1.setY(s0.y() + stemLength);
         }
 
-	if (params.m_style == Rosegarden::NoteHeadStyles::Triangle) {
+	NoteStyle::NoteHeadShape shape = m_style->getShape(params.m_noteType);
+	if (shape == NoteStyle::TriangleUp) {
 	    s0.setY(m_above + m_noteBodyHeight);
-	} else if (params.m_style == Rosegarden::NoteHeadStyles::Cross) {
+	} else if (shape == NoteStyle::TriangleDown) {
+	    s0.setY(m_above);
+	} else if (shape == NoteStyle::Cross ||
+		   shape == NoteStyle::Number) {
 	    if (params.m_stemGoesUp) s0.setY(m_above);
 	    else s0.setY(m_above + m_noteBodyHeight);
 	}
@@ -421,7 +427,8 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
             if (drawFlag) {
 
                 QPixmap flags = m_font->getPixmap
-                    (getFlagCharName(flagCount), !params.m_stemGoesUp);
+                    (m_style->getFlagCharName(flagCount),
+		     !params.m_stemGoesUp);
 
                 if (params.m_stemGoesUp) {
                     m_p.drawPixmap(s1.x() - m_origin.x(),
@@ -450,11 +457,11 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
 
     QPixmap body;
     if (!m_selected && !params.m_selected && !params.m_highlighted) {
-        body = m_font->getPixmap(getNoteHeadCharName(params.m_noteType,
-						     params.m_style));
+	body = m_font->getPixmap
+	    (m_style->getNoteHeadCharName(params.m_noteType));
     } else {
-        body = m_font->getColouredPixmap
-            (getNoteHeadCharName(params.m_noteType, params.m_style),
+	body = m_font->getColouredPixmap
+	    (m_style->getNoteHeadCharName(params.m_noteType),
 	     params.m_highlighted ? RosegardenGUIColours::HighlightedElementHue
 	                          : RosegardenGUIColours::   SelectedElementHue)
 	    ;
@@ -581,8 +588,8 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
 void
 NotePixmapFactory::makeRoomForAccidental(Accidental a)
 {
-    QPixmap ap(m_font->getPixmap(getAccidentalCharName(a)));
-    QPoint ah(m_font->getHotspot(getAccidentalCharName(a)));
+    QPixmap ap(m_font->getPixmap(m_style->getAccidentalCharName(a)));
+    QPoint ah(m_font->getHotspot(m_style->getAccidentalCharName(a)));
 
     m_left += ap.width();
 
@@ -597,8 +604,8 @@ NotePixmapFactory::makeRoomForAccidental(Accidental a)
 void
 NotePixmapFactory::drawAccidental(Accidental a)
 {
-    QPixmap ap(m_font->getPixmap(getAccidentalCharName(a)));
-    QPoint ah(m_font->getHotspot(getAccidentalCharName(a)));
+    QPixmap ap(m_font->getPixmap(m_style->getAccidentalCharName(a)));
+    QPoint ah(m_font->getHotspot(m_style->getAccidentalCharName(a)));
 
     m_p.drawPixmap(0, m_above + m_noteBodyHeight/2 - ah.y(), ap);
     m_pm.drawPixmap(0, m_above + m_noteBodyHeight/2 - ah.y(), *(ap.mask()));
@@ -614,7 +621,7 @@ NotePixmapFactory::makeRoomForMarks(bool isStemmed,
 	if (!Rosegarden::Marks::isTextMark(params.m_marks[i])) {
 
 	    QPixmap pixmap(m_font->getPixmap
-			   (getMarkCharName(params.m_marks[i])));
+			   (m_style->getMarkCharName(params.m_marks[i])));
 	    height += pixmap.height() + 1;
 	    if (pixmap.width() > width) width = pixmap.width();
 
@@ -654,7 +661,7 @@ NotePixmapFactory::drawMarks(bool isStemmed,
 	    // get pixmap, inverting if it's a pause
 
 	    QPixmap pixmap(m_font->getPixmap
-			   (getMarkCharName(params.m_marks[i]),
+			   (m_style->getMarkCharName(params.m_marks[i]),
 			    ((params.m_marks[i] == Rosegarden::Marks::Pause) &&
 			     !markAbove)));
 
@@ -1007,7 +1014,7 @@ NotePixmapFactory::drawTie(bool above, int length)
 QCanvasPixmap
 NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params) 
 {
-    CharName charName(getRestCharName(params.m_noteType));
+    CharName charName(m_style->getRestCharName(params.m_noteType));
     bool encache = false;
 
     if (params.m_tupletCount == 0 && !m_selected) {
@@ -1076,9 +1083,10 @@ NotePixmapFactory::makeClefPixmap(const Clef &clef) const
 {
     if (m_selected) {
         return m_font->getColouredCanvasPixmap
-	    (getClefCharName(clef), RosegardenGUIColours::SelectedElementHue);
+	    (m_style->getClefCharName(clef),
+	     RosegardenGUIColours::SelectedElementHue);
     } else {
-        return m_font->getCanvasPixmap(getClefCharName(clef));
+        return m_font->getCanvasPixmap(m_style->getClefCharName(clef));
     }
 }
 
@@ -1149,7 +1157,8 @@ NotePixmapFactory::makeKeyPixmap(const Key &key, const Clef &clef)
 QCanvasPixmap
 NotePixmapFactory::makeClefDisplayPixmap(const Clef &clef)
 {
-    QCanvasPixmap clefPixmap(m_font->getCanvasPixmap(getClefCharName(clef)));
+    QCanvasPixmap clefPixmap(m_font->getCanvasPixmap
+			     (m_style->getClefCharName(clef)));
 
     int lw = getLineSpacing();
     int width = clefPixmap.width() + 6 * getNoteBodyWidth();
@@ -1180,7 +1189,8 @@ NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef)
                          NoteCharacterNames::SHARP :
                          NoteCharacterNames::FLAT);
 
-    QCanvasPixmap clefPixmap(m_font->getCanvasPixmap(getClefCharName(clef)));
+    QCanvasPixmap clefPixmap(m_font->getCanvasPixmap
+			     (m_style->getClefCharName(clef)));
     QPixmap accidentalPixmap(m_font->getPixmap(charName));
     QPoint hotspot(m_font->getHotspot(charName));
 
@@ -1579,16 +1589,14 @@ QPoint
 NotePixmapFactory::m_pointZero;
 
 
-int NotePixmapFactory::getNoteBodyWidth(Note::Type type,
-					const Rosegarden::NoteHeadStyle &style)
+int NotePixmapFactory::getNoteBodyWidth(Note::Type type)
     const {
-    return m_font->getWidth(getNoteHeadCharName(type, style)) -2*m_origin.x();
+    return m_font->getWidth(m_style->getNoteHeadCharName(type)) -2*m_origin.x();
 }
 
-int NotePixmapFactory::getNoteBodyHeight(Note::Type type,
-					const Rosegarden::NoteHeadStyle &style)
+int NotePixmapFactory::getNoteBodyHeight(Note::Type type)
     const {
-    return m_font->getHeight(getNoteHeadCharName(type, style)) -2*m_origin.y();
+    return m_font->getHeight(m_style->getNoteHeadCharName(type)) -2*m_origin.y();
 }
 
 int NotePixmapFactory::getLineSpacing() const {
@@ -1596,11 +1604,11 @@ int NotePixmapFactory::getLineSpacing() const {
 }
 
 int NotePixmapFactory::getAccidentalWidth(const Accidental &a) const {
-    return m_font->getWidth(getAccidentalCharName(a));
+    return m_font->getWidth(m_style->getAccidentalCharName(a));
 }
 
 int NotePixmapFactory::getAccidentalHeight(const Accidental &a) const {
-    return m_font->getHeight(getAccidentalCharName(a));
+    return m_font->getHeight(m_style->getAccidentalCharName(a));
 }
 
 int NotePixmapFactory::getStemLength() const {
@@ -1624,7 +1632,7 @@ int NotePixmapFactory::getDotWidth() const {
 }
 
 int NotePixmapFactory::getClefWidth(const Clef &clef) const {
-    return m_font->getWidth(getClefCharName(clef.getClefType()));
+    return m_font->getWidth(m_style->getClefCharName(clef.getClefType()));
 }
 
 int NotePixmapFactory::getBarMargin() const {
@@ -1632,7 +1640,7 @@ int NotePixmapFactory::getBarMargin() const {
 }
 
 int NotePixmapFactory::getRestWidth(const Rosegarden::Note &restType) const {
-    return m_font->getWidth(getRestCharName(restType.getNoteType()))
+    return m_font->getWidth(m_style->getRestCharName(restType.getNoteType()))
         + (restType.getDots() * getDotWidth());
 }
 

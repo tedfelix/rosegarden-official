@@ -31,12 +31,8 @@
 #include <qcanvas.h>
 #include <qxml.h>
 
-#include "PropertyName.h"
+#include "notecharname.h"
 #include "NotationTypes.h"
-
-typedef Rosegarden::PropertyName CharName;
-typedef Rosegarden::PropertyNameHash CharNameHash;
-typedef Rosegarden::PropertyNamesEqual CharNamesEqual;
 
 
 // Helper class for looking up information about a font
@@ -329,77 +325,6 @@ private:
     mutable PixmapMap *m_map; // pointer at a member of m_fontPixmapMap
     static FontPixmapMap *m_fontPixmapMap;
     static QPixmap *m_blankPixmap;
-};
-
-
-/// A selection of Unicode character names for symbols in a note font
-
-namespace NoteCharacterNames
-{
-extern const CharName SHARP;
-extern const CharName FLAT;
-extern const CharName NATURAL;
-extern const CharName DOUBLE_SHARP;
-extern const CharName DOUBLE_FLAT;
-
-extern const CharName BREVE;
-extern const CharName WHOLE_NOTE;
-extern const CharName VOID_NOTEHEAD;
-extern const CharName NOTEHEAD_BLACK;
-
-extern const CharName X_NOTEHEAD;
-extern const CharName CIRCLE_X_NOTEHEAD;
-extern const CharName SEMIBREVIS_WHITE;
-extern const CharName SEMIBREVIS_BLACK;
-extern const CharName TRIANGLE_NOTEHEAD_UP_WHITE;
-extern const CharName TRIANGLE_NOTEHEAD_UP_BLACK;
-
-extern const CharName FLAG_1;
-extern const CharName FLAG_2;
-extern const CharName FLAG_3;
-extern const CharName FLAG_4;
-
-extern const CharName MULTI_REST;
-extern const CharName WHOLE_REST;
-extern const CharName HALF_REST;
-extern const CharName QUARTER_REST;
-extern const CharName EIGHTH_REST;
-extern const CharName SIXTEENTH_REST;
-extern const CharName THIRTY_SECOND_REST;
-extern const CharName SIXTY_FOURTH_REST;
-
-extern const CharName DOT;
-
-extern const CharName ACCENT;
-extern const CharName TENUTO;
-extern const CharName STACCATO;
-extern const CharName STACCATISSIMO;
-extern const CharName MARCATO;
-extern const CharName FERMATA;
-extern const CharName TRILL;
-extern const CharName TURN;
-extern const CharName UP_BOW;
-extern const CharName DOWN_BOW;
-
-extern const CharName C_CLEF;
-extern const CharName G_CLEF;
-extern const CharName F_CLEF;
-
-extern const CharName UNKNOWN;
-}
-
-
-class NoteCharacterNameLookup
-{
-public:
-    static CharName getAccidentalCharName(const Rosegarden::Accidental &);
-    static CharName getMarkCharName(const Rosegarden::Mark &);
-    static CharName getClefCharName(const Rosegarden::Clef &);
-    static CharName getRestCharName(const Rosegarden::Note::Type &);
-    static CharName getFlagCharName(int flagCount);
-    static CharName getNoteHeadCharName(Rosegarden::Note::Type,
-					const Rosegarden::NoteHeadStyle & =
-					Rosegarden::NoteHeadStyles::Classical);
 };
 
 

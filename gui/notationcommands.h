@@ -23,6 +23,7 @@
 
 #include "rosestrings.h"
 #include "basiccommand.h"
+#include "notestyle.h"
 
 
 // Insertion commands
@@ -403,7 +404,7 @@ private:
 class TransformsMenuChangeNoteHeadsCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuChangeNoteHeadsCommand(Rosegarden::NoteHeadStyle style,
+    TransformsMenuChangeNoteHeadsCommand(NoteStyleName style,
 					 Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(style), selection, true),
 	m_selection(&selection), m_style(style) { }
@@ -412,14 +413,14 @@ public:
 	return "Change Note &Head Style";
     }
 
-    static QString getGlobalName(Rosegarden::NoteHeadStyle style);
+    static QString getGlobalName(NoteStyleName style);
 
 protected:
     virtual void modifySegment();
 
 private:
     Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
-    Rosegarden::NoteHeadStyle m_style;
+    NoteStyleName m_style;
 };
 
 

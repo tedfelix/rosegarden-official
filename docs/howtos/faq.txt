@@ -36,3 +36,43 @@ Can I edit all the segments at once in the matrix editor?
 
 No.  A matrix editor shows a single segment only.
 
+
+It's awfully slow.
+~~~~~~~~~~~~~~~~~~
+
+Notation rendering in particular just _is_ fairly slow.  Unlike most
+other notation applications (including Rosegarden 2.1), we render the
+entire composition to a canvas at the outset, making scrolling
+relatively smooth and quick but the initial rendering phase relatively
+slow.  This can be a problem for long segments, although for other
+practical reasons you're probably better off dividing long pieces into
+more manageable segments anyway.
+
+There is also a problem with Qt 2.3.0 and anti-aliased fonts: if
+you're using Qt 2.3.0 and have anti-aliased fonts enabled, rendering
+performance can be dramatically slower than it should be -- even if
+you aren't actually using any anti-aliased fonts in Rosegarden.  See
+the Rosegarden-4 README for more details, and consider switching off
+anti-aliasing or upgrading to Qt 3 (i.e. KDE 3).
+
+
+Playback and recording
+----------------------
+
+
+Can I use an ALSA soft synth, such as iiwusynth?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Yep.  Make sure you're running iiwusynth in the -alsa-seq mode and make
+sure you run it up _before_ you run up Rosegarden.  They you should get
+iiwusynth channels available in the Instrument dropdowns (click and hold
+on the Track labels).
+
+Start up iiwusynth something like this:
+
+   $ iiwusynth -m alsa_seq path/to/soundfont.sf2
+
+Then start Rosegarden and assign some Tracks to the "Synth input port"
+Instrument.  By default RG will choose the onboard synth first so
+you'll have to manually reassign these Tracks.
+

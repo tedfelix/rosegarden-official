@@ -75,8 +75,6 @@ PropertyName getMarkPropertyName(int markNo)
 const PropertyName TIED_BACKWARD	= "tiedback";
 const PropertyName TIED_FORWARD		= "tiedforward";
 
-const PropertyName NOTE_HEAD_STYLE      = "notehead";
-
 const PropertyName BEAMED_GROUP_ID               = "groupid";
 const PropertyName BEAMED_GROUP_TYPE		 = "grouptype";
 

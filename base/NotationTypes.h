@@ -799,22 +799,6 @@ private:
 };
 
 
-typedef std::string NoteHeadStyle;
-
-namespace NoteHeadStyles
-{
-    extern const NoteHeadStyle Classical;
-    extern const NoteHeadStyle Cross;
-    extern const NoteHeadStyle Triangle;
-    extern const NoteHeadStyle Mensural;
-
-    /**
-     * Get the predefined note head styles (i.e. the ones listed
-     * above) in their defined order.
-     */
-    extern std::vector<NoteHeadStyle> getStandardStyles();
-}
-
 
 /**
  * TimeSignature contains arithmetic methods relevant to time

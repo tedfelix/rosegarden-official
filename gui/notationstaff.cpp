@@ -31,6 +31,7 @@
 #include "rosestrings.h"
 #include "rosedebug.h"
 #include "colours.h"
+#include "notestyle.h"
 
 #include "Event.h"
 #include "Segment.h"
@@ -587,6 +588,20 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 				   const Rosegarden::Clef &currentClef,
 				   bool selected)
 {
+    static NoteStyle *classicalStyle = 0;
+
+    if (elt->event()->has(NotationProperties::NOTE_STYLE)) {
+	NoteStyle *style = NoteStyleFactory::getStyle
+	    (elt->event()->get<String>(NotationProperties::NOTE_STYLE));
+	m_npf->setNoteStyle(style);
+    } else {
+	if (!classicalStyle) {
+	    classicalStyle =
+		NoteStyleFactory::getStyle(StandardNoteStyleNames::Classical);
+	}
+	m_npf->setNoteStyle(classicalStyle);
+    }
+
     try {
 
 	QCanvasPixmap *pixmap = 0;
@@ -784,14 +799,6 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
     params.setBeamed(false);
     params.setIsOnLine(heightOnStaff % 2 == 0);
     params.removeMarks();
-
-    if (elt->event()->has(NOTE_HEAD_STYLE)) {
-	Rosegarden::NoteHeadStyle style =
-	    elt->event()->get<String>(NOTE_HEAD_STYLE);
-	params.setNoteHeadStyle(style);
-    } else {
-	params.setNoteHeadStyle(Rosegarden::NoteHeadStyles::Classical);
-    }
 
     if (elt->event()->get<Bool>(m_properties.CHORD_PRIMARY_NOTE)) {
 	long markCount = 0;

@@ -602,9 +602,11 @@ TransformsMenuRestoreStemsCommand::modifySegment()
 }
 
 QString
-TransformsMenuChangeNoteHeadsCommand::getGlobalName(Rosegarden::NoteHeadStyle style)
+TransformsMenuChangeNoteHeadsCommand::getGlobalName(NoteStyleName style)
 {
-    if (style == Rosegarden::NoteHeadStyles::Cross) {
+    style = style.substr(1); // remove leading underscore
+
+    if (style == StandardNoteStyleNames::Cross) {
 	return "C&ross Note Heads";
     } else {
 	return "&" + strtoqstr((char)toupper(style[0]) + style.substr(1)) +
@@ -622,10 +624,11 @@ TransformsMenuChangeNoteHeadsCommand::modifySegment()
 	 i != m_selection->getSegmentEvents().end(); ++i) {
 
 	if ((*i)->isa(Note::EventType)) {
-	    if (m_style == Rosegarden::NoteHeadStyles::Classical) {
-		(*i)->unset(NOTE_HEAD_STYLE);
+	    if (m_style == StandardNoteStyleNames::Classical) {
+		(*i)->unset(NotationProperties::NOTE_STYLE);
 	    } else {
-		(*i)->set<Rosegarden::String>(NOTE_HEAD_STYLE, m_style);
+		(*i)->set<Rosegarden::String>
+			(NotationProperties::NOTE_STYLE, m_style);
 	    }
 	}
     }

@@ -30,6 +30,7 @@
 
 #include "NotationTypes.h"
 #include "notefont.h"
+#include "notestyle.h"
 
 class NotePixmapParameters
 {
@@ -43,7 +44,6 @@ public:
     void setNoteType(Rosegarden::Note::Type type) { m_noteType = type; }
     void setDots(int dots) { m_dots = dots; }
     void setAccidental(Rosegarden::Accidental acc) { m_accidental = acc; }
-    void setNoteHeadStyle(Rosegarden::NoteHeadStyle style) { m_style = style; }
     
     void setNoteHeadShifted(bool shifted) { m_shifted          = shifted;   }
     void setDrawFlag(bool df)             { m_drawFlag         = df;        }
@@ -85,7 +85,6 @@ private:
     Rosegarden::Note::Type m_noteType;
     int m_dots;
     Rosegarden::Accidental m_accidental;
-    Rosegarden::NoteHeadStyle m_style;
 
     bool    m_shifted;
     bool    m_drawFlag;
@@ -120,7 +119,7 @@ private:
  * Generates QCanvasPixmaps for various notation items
  */
 
-class NotePixmapFactory : private NoteCharacterNameLookup
+class NotePixmapFactory 
 {
 public:
     NotePixmapFactory(std::string fontName = "", int size = -1);
@@ -139,6 +138,9 @@ public:
     void setSelected(bool selected) { m_selected = selected; }
     bool isSelected() const { return m_selected; }
 
+    void setNoteStyle(NoteStyle *style) { m_style = style; }
+    const NoteStyle *getNoteStyle() const { return m_style; } 
+
     QCanvasPixmap makeNotePixmap(const NotePixmapParameters &parameters);
     QCanvasPixmap makeRestPixmap(const NotePixmapParameters &parameters);
     QCanvasPixmap makeClefPixmap(const Rosegarden::Clef &clef) const;
@@ -155,14 +157,10 @@ public:
     QCanvasPixmap makeTextPixmap(const Rosegarden::Text &text);
 
     int getNoteBodyWidth (Rosegarden::Note::Type =
-                          Rosegarden::Note::Crotchet,
-			  const Rosegarden::NoteHeadStyle & =
-			  Rosegarden::NoteHeadStyles::Classical) const;
+                          Rosegarden::Note::Crotchet) const;
 
     int getNoteBodyHeight(Rosegarden::Note::Type =
-                          Rosegarden::Note::Crotchet,
-			  const Rosegarden::NoteHeadStyle & =
-			  Rosegarden::NoteHeadStyles::Classical) const;
+                          Rosegarden::Note::Crotchet) const;
 
     int getAccidentalWidth (const Rosegarden::Accidental &) const;
     int getAccidentalHeight(const Rosegarden::Accidental &) const;
@@ -207,6 +205,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     NoteFont *m_font;
+    NoteStyle *m_style;
     bool m_selected;
 
     int m_noteBodyWidth, m_noteBodyHeight;
