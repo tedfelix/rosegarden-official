@@ -264,6 +264,7 @@ public slots:
     /// view menu
     void slotLinearMode();
     void slotPageMode();
+    void slotLabelChords();
 
     /// group slots
     void slotGroupBeam();
@@ -479,6 +480,8 @@ protected:
 
     BarButtons *m_topBarButtons;
     BarButtons *m_bottomBarButtons;
+    QWidget *m_chordNameRuler;
+    bool m_chordNamesVisible;
 
     template <class T>
     class ZoomSlider : public QSlider

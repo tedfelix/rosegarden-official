@@ -455,8 +455,17 @@ public:
     static const std::string EventType;
     static const int EventSubOrdering;
     static const PropertyName TextPropertyName;
+    static const PropertyName TextTypePropertyName;
 
-    Text(const std::string &text);
+    static const std::string UnspecifiedType;
+    static const std::string ChordName;
+    static const std::string KeyName;
+    static const std::string Lyric;
+    static const std::string Dynamic;
+    static const std::string Tempo;
+
+    Text(const std::string &text,
+	 const std::string &textType = UnspecifiedType);
     ~Text();
 
     /// Returned event is on heap; caller takes responsibility for ownership
@@ -464,6 +473,7 @@ public:
 
 private:
     std::string m_text;
+    std::string m_type;
 };
 
 

@@ -28,7 +28,6 @@
 namespace Rosegarden {
     class RulerScale;
     class Composition;
-    class Segment;
 }
 
 class QFont;
@@ -48,12 +47,10 @@ public:
     /**
      * Construct a ChordNameRuler that displays the chords in the
      * given Composition at positions calculated by the given
-     * RulerScale.  If segment is non-null, use that for positioning
-     * where possible so as to align chord names with visible notes.
+     * RulerScale.
      */
     ChordNameRuler(Rosegarden::RulerScale *rulerScale,
 		   Rosegarden::Composition *composition,
-		   Rosegarden::Segment *segment = 0,
 		   int height = 0,
 		   QWidget* parent = 0,
 		   const char *name = 0);
@@ -78,7 +75,6 @@ private:
 
     Rosegarden::RulerScale  *m_rulerScale;
     Rosegarden::Composition *m_composition;
-    Rosegarden::Segment     *m_segment;
 
     QFont m_font;
     QFont m_boldFont;

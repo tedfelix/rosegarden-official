@@ -65,6 +65,11 @@ extern const Rosegarden::PropertyName TUPLING_LINE_MY_Y;
 extern const Rosegarden::PropertyName TUPLING_LINE_WIDTH;
 extern const Rosegarden::PropertyName TUPLING_LINE_GRADIENT;
 
+// Set in chordnameruler.cpp:
+
+extern const Rosegarden::PropertyName TEXT_FORMAL_X;
+extern const Rosegarden::PropertyName TEXT_ACTUAL_X;
+
 }
 
 #endif

@@ -1062,7 +1062,9 @@ NotationHLayout::getSpacingDuration(StaffType &staff,
     NotationElementList::iterator j(i), e(staff.getViewElementList()->end());
     while (j != e && (*j)->getQuantizedAbsoluteTime() == t) ++j;
     if (j == e) return d;
-    else return (*j)->getQuantizedAbsoluteTime() - t;
+//    else return (*j)->getQuantizedAbsoluteTime() - t;
+    // better for things like short tuplets:
+    else return (*j)->getAbsoluteTime() - (*i)->getAbsoluteTime();
 }
 
 

@@ -23,7 +23,9 @@
 
 #include "chordnameruler.h"
 #include "colours.h"
+#include "notationproperties.h"
 #include "rosedebug.h"
+
 #include "Event.h"
 #include "Segment.h"
 #include "NotationTypes.h"
@@ -32,19 +34,18 @@
 #include "RulerScale.h"
 
 using Rosegarden::timeT;
+using Rosegarden::Int;
 using Rosegarden::String;
 using Rosegarden::RulerScale;
 using Rosegarden::Segment;
 using Rosegarden::Composition;
 using Rosegarden::CompositionTimeSliceAdapter;
 using Rosegarden::AnalysisHelper;
-using Rosegarden::Segment;
 using Rosegarden::Text;
 
 
 ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
 			       Composition *composition,
-			       Segment *segment,
 			       int height,
 			       QWidget *parent,
 			       const char *name) :
@@ -54,12 +55,11 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
     m_width(-1),
     m_rulerScale(rulerScale),
     m_composition(composition),
-    m_segment(segment),
     m_font("helvetica", 12),
     m_boldFont("helvetica", 12, QFont::Bold),
     m_fontMetrics(m_boldFont)
 {
-//!!!    setBackgroundColor(RosegardenGUIColours::ChordNameRulerBackground);
+    setBackgroundColor(RosegardenGUIColours::ChordNameRulerBackground);
 }
 
 ChordNameRuler::~ChordNameRuler()
@@ -99,7 +99,7 @@ void
 ChordNameRuler::paintEvent(QPaintEvent* e)
 {
     QPainter paint(this);
-//!!!    paint.setPen(RosegardenGUIColours::ChordNameRulerForeground);
+    paint.setPen(RosegardenGUIColours::ChordNameRulerForeground);
 
     paint.setClipRegion(e->region());
     paint.setClipRect(e->rect().normalize());
@@ -124,45 +124,64 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
     AnalysisHelper helper;
     helper.labelChords(adapter, segment);
 
-    Segment::iterator prevSi;
-    if (m_segment) prevSi = m_segment->end();
+    QRect boundsForHeight = m_fontMetrics.boundingRect("^j|lM");
+    int fontHeight = boundsForHeight.height();
+    int textY = (height() - 6)/2 + fontHeight/2;
+
+    double prevX = 0;
+    timeT keyAt = from - 1;
+    std::string keyText;
+
+    for (Segment::iterator i = segment.begin(); i != segment.end(); ++i) {
+
+	if (!(*i)->isa(Text::EventType)) continue;
+
+	std::string text((*i)->get<String>(Text::TextPropertyName));
+
+	if ((*i)->get<String>(Text::TextTypePropertyName) == Text::KeyName) {
+	    timeT myTime = (*i)->getAbsoluteTime();
+	    if (myTime == keyAt && text == keyText) continue;
+	    else {
+		keyAt = myTime;
+		keyText = text;
+	    }
+	}
+
+	double x = m_rulerScale->getXForTime((*i)->getAbsoluteTime());
+	(*i)->set<Int>(NotationProperties::TEXT_FORMAL_X, (long)x);
+
+	QRect textBounds = m_fontMetrics.boundingRect(text.c_str());
+	int width = textBounds.width();
+
+	x -= width / 2;
+	if (prevX >= x - 3) x = prevX + 3;
+	(*i)->set<Int>(NotationProperties::TEXT_ACTUAL_X, (long)x);
+	prevX = x + width;
+    }
 
     for (Segment::iterator i = segment.begin(); i != segment.end(); ++i) {
 	
 	if (!(*i)->isa(Text::EventType)) continue;
+	std::string text((*i)->get<String>(Text::TextPropertyName));
+	std::string type((*i)->get<String>(Text::TextTypePropertyName));
 
-	std::string text;
-	if (!(*i)->get<String>(Text::TextPropertyName, text)) {
-	    kdDebug(KDEBUG_AREA)
-		<< "Warning: ChordNameRuler::paintEvent: No text in text event"
-		<< endl;
-	    continue;
+	if (!(*i)->has(NotationProperties::TEXT_FORMAL_X)) continue;
+
+	long formalX = (*i)->get<Int>(NotationProperties::TEXT_FORMAL_X);
+	long actualX = (*i)->get<Int>(NotationProperties::TEXT_ACTUAL_X);
+
+	formalX += m_currentXOffset;
+	actualX += m_currentXOffset;
+
+	paint.drawLine(formalX, height() - 4, formalX, height());
+
+	if (type == Text::KeyName) {
+	    paint.setFont(m_boldFont);
+	} else {
+	    paint.setFont(m_font);
 	}
 
-	QString label(text.c_str());
-	QRect labelBounds = m_fontMetrics.boundingRect(label);
-
-	double x = m_rulerScale->getXForTime((*i)->getAbsoluteTime()) +
-	    m_currentXOffset /* - labelBounds.width()/2 */;
-	int y = height()/2 + labelBounds.height()/2;
-
-//!!! uh -- stupid.  I wanted to use the segment at this point to 
-// select a good x-coord for the label based on what events are
-// actually visible at this time, but (of course) Segment doesn't
-// have coords, I'd need a NotationElement.  Maybe it's not worth
-// the bother at the moment -- remove all Segment stuff from this
-// class?
-
-	QString noteName(label.left(1));
-	QString remainder(label.right(label.length() - 1));
-
-	paint.setFont(m_boldFont);
-	paint.drawText(x, y, noteName);
-	
-	QRect noteBounds = m_fontMetrics.boundingRect(noteName);
-
-	paint.setFont(m_font);
-	paint.drawText(x + noteBounds.width() + 2, y, remainder);
+	paint.drawText(actualX, textY, text.c_str());
     }
 }
 

@@ -476,9 +476,18 @@ Indication::getAsEvent(timeT absoluteTime) const
 const std::string Text::EventType = "text";
 const int Text::EventSubOrdering = -9;
 const PropertyName Text::TextPropertyName = "text";
+const PropertyName Text::TextTypePropertyName = "type";
 
-Text::Text(const std::string &s) :
-    m_text(s)
+const std::string Text::UnspecifiedType = "unspecified";
+const std::string Text::ChordName	= "chordname";
+const std::string Text::KeyName		= "keyname";
+const std::string Text::Lyric		= "lyric";
+const std::string Text::Dynamic		= "dynamic";
+const std::string Text::Tempo		= "tempo";
+
+Text::Text(const std::string &s, const std::string &type) :
+    m_text(s),
+    m_type(type)
 {
     // nothing else
 }
@@ -493,6 +502,7 @@ Text::getAsEvent(timeT absoluteTime) const
 {
     Event *e = new Event(EventType);
     e->set<String>(TextPropertyName, m_text);
+    e->set<String>(TextTypePropertyName, m_type);
     e->setAbsoluteTime(absoluteTime);
     e->setSubOrdering(EventSubOrdering);
     return e;

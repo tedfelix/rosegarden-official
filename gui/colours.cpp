@@ -41,11 +41,15 @@ namespace RosegardenGUIColours
     const QColor LoopRulerForeground = Qt::white;
     const QColor LoopHighlight = Qt::white;
   
-    const QColor TextRulerBackground = QColor(120, 120, 120);
-    const QColor TextRulerForeground = Qt::white;
+//    const QColor TextRulerBackground = QColor(120, 120, 120);
+//    const QColor TextRulerForeground = Qt::white;
+    const QColor TextRulerBackground = Qt::white;
+    const QColor TextRulerForeground = Qt::black;
 
-    const QColor ChordNameRulerBackground = QColor(120, 120, 120);
-    const QColor ChordNameRulerForeground = Qt::white;
+//    const QColor ChordNameRulerBackground = QColor(120, 120, 120);
+//    const QColor ChordNameRulerForeground = Qt::white;
+    const QColor ChordNameRulerBackground = Qt::white;
+    const QColor ChordNameRulerForeground = Qt::black;
 
     const QColor LevelMeterGreen = QColor(0, 200, 0);
     const QColor LevelMeterOrange = QColor(255, 165, 0);
@@ -56,22 +60,13 @@ namespace RosegardenGUIColours
     const QColor BeatLine = QColor(212, 212, 212);
     const QColor StaffConnectingLine = QColor(192, 192, 192);
     const QColor StaffConnectingTerminatingLine = QColor(128, 128, 128);
-    const QColor StaffRulerBackground = QColor(212, 212, 212);
+    const QColor StaffRulerBackground = QColor(212, 212, 212);//!!! obsolete
 
-//    const QColor TimePointer = Qt::darkBlue;
-//    const QColor PositionCursor = QColor(184, 120, 211);
-
-    const QColor Pointer = Qt::darkBlue; //QColor(80, 80, 80);
+    const QColor Pointer = Qt::darkBlue;
     const QColor PointerRuler = QColor(100, 100, 100);
-
-//    const QColor Pointer = QColor(0, 100, 140);
-//    const QColor PointerRuler = QColor(40, 120, 160);
 
     const QColor InsertCursor = QColor(160, 104, 186);
     const QColor InsertCursorRuler = QColor(160, 136, 170);
-
-//    const QColor InsertCursor = QColor(200, 0, 0);
-//    const QColor InsertCursorRuler = QColor(160, 40, 40);
 
     const QColor SelectionRectangle = QColor(103, 128, 211);
     const QColor SelectedElement = QColor(0, 54, 232);

@@ -85,10 +85,7 @@ AnalysisHelper::labelChords(CompositionTimeSliceAdapter &c, Segment &s) {
 
             if ((*i)->isa(Key::EventType)) {
 		key = Key(**i);
-
-		//!!! Should distinguish these events from the chord labels
-		// somehow (another property, presumably)
-		Text text(key.getName());
+		Text text(key.getName(), Text::KeyName);
 		s.insert(text.getAsEvent(time));
 	    }
 
@@ -108,7 +105,7 @@ AnalysisHelper::labelChords(CompositionTimeSliceAdapter &c, Segment &s) {
 
             std::cerr << ch.getName(key) << " at time " << time << std::endl;
 
-	    Text text(ch.getName(key));
+	    Text text(ch.getName(key), Text::ChordName);
 	    s.insert(text.getAsEvent(time));
         }
 

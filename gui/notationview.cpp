@@ -64,9 +64,7 @@
 #include "staffruler.h" // for ActiveItem
 
 #include "chordnameruler.h"
-//#include "textruler.h"
-//#include "CompositionTimeSliceAdapter.h"
-//#include "AnalysisTypes.h"
+
 
 using Rosegarden::Event;
 using Rosegarden::Int;
@@ -219,9 +217,11 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_topBarButtons->getLoopRuler()->setBackgroundColor
 	(RosegardenGUIColours::InsertCursorRuler);
 
-    ChordNameRuler *cnr = new ChordNameRuler
-	(m_hlayout, &doc->getComposition(), 0, 20, m_centralFrame);
-    addRuler(cnr);
+    m_chordNameRuler = new ChordNameRuler
+	(m_hlayout, &doc->getComposition(), 20, m_centralFrame);
+    addRuler(m_chordNameRuler);
+    m_chordNameRuler->hide();
+    m_chordNamesVisible = false;
 
     m_bottomBarButtons = new BarButtons(m_hlayout, 25,
                                         true, m_centralFrame);
@@ -517,6 +517,10 @@ void NotationView::setupActions()
          actionCollection(), "page_mode");
     pageModeAction->setExclusiveGroup("layoutMode");
 
+    KToggleAction *labelChordsAction = new KToggleAction
+	(i18n("Label &Chords"), 0, this, SLOT(slotLabelChords()),
+	 actionCollection(), "label_chords");
+
     KStdAction::cut     (this, SLOT(slotEditCut()),        actionCollection());
     KStdAction::copy    (this, SLOT(slotEditCopy()),       actionCollection());
     KStdAction::paste   (this, SLOT(slotEditPaste()),      actionCollection());
@@ -568,9 +572,9 @@ void NotationView::setupActions()
                 SLOT(slotTransformsRestoreStems()), actionCollection(),
                 "restore_stems");
 
-    new KAction(TransformsMenuLabelChordsCommand::name(), 0, this,
-                SLOT(slotTransformsLabelChords()), actionCollection(),
-                "label_chords");
+//    new KAction(TransformsMenuLabelChordsCommand::name(), 0, this,
+//                SLOT(slotTransformsLabelChords()), actionCollection(),
+//                "label_chords");
 
     new KAction(TransformsMenuTransposeOneStepCommand::name(true), 0, this,
                 SLOT(slotTransformsTransposeUp()), actionCollection(),
@@ -592,7 +596,7 @@ void NotationView::setupActions()
                 SLOT(slotTransformsTranspose()), actionCollection(),
                 "general_transpose");
 
-    new KAction("Dump selected events to stderr", 0, this,
+    new KAction(i18n("&Dump selected events to stderr"), 0, this,
 		SLOT(slotDebugDump()), actionCollection(), "debug_dump");
 
     static const Mark marks[] = 
@@ -932,19 +936,19 @@ NotationView::setPageMode(bool pageMode)
     if (pageMode) {
 	if (m_topBarButtons) m_topBarButtons->hide();
 	if (m_bottomBarButtons) m_bottomBarButtons->hide();
+	if (m_chordNameRuler) m_chordNameRuler->hide();
     } else {
 	if (m_topBarButtons) m_topBarButtons->show();
 	if (m_bottomBarButtons) m_bottomBarButtons->show();
+	if (m_chordNameRuler && m_chordNamesVisible) m_chordNameRuler->show();
     }
 
     m_hlayout->setPageMode(pageMode);
     m_hlayout->setPageWidth(width() - 50);
     
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-//!!!        m_staffs[i]->move(0, 0);
         m_staffs[i]->setPageMode(pageMode);
         m_staffs[i]->setPageWidth(width() - 50);
-//!!!        m_staffs[i]->move(20, m_staffs[i]->getHeightOfRow() * i + 45);
     }
 
     bool layoutApplied = applyLayout();
@@ -1996,6 +2000,17 @@ void NotationView::slotPageMode()
     setPageMode(true);
 }
 
+void NotationView::slotLabelChords()
+{
+    if (m_hlayout->getPageMode()) return;
+    m_chordNamesVisible = !m_chordNamesVisible;
+
+    if (!m_chordNamesVisible) {
+	m_chordNameRuler->hide();
+    } else {
+	m_chordNameRuler->show();
+    }
+}
 
 //----------------------------------------------------------------------
 

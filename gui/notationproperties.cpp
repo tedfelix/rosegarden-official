@@ -53,6 +53,9 @@ const Rosegarden::PropertyName TUPLING_LINE_MY_Y    = "TuplingLineMyY";
 const Rosegarden::PropertyName TUPLING_LINE_WIDTH   = "TuplingLineWidth";
 const Rosegarden::PropertyName TUPLING_LINE_GRADIENT= "TuplingLineGradient";
 
+const Rosegarden::PropertyName TEXT_FORMAL_X	    = "TextFormalX";
+const Rosegarden::PropertyName TEXT_ACTUAL_X	    = "TextActualX";
+
 }
 
 
