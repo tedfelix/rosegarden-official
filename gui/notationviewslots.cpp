@@ -2608,6 +2608,16 @@ NotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool note
 	return;
     }
 
+    // If the segment is transposed, we want to take that into
+    // account.  But the note has already been played back to the user
+    // at its untransposed pitch, because that's done by the MIDI THRU
+    // code in the sequencer which has no way to know whether a note
+    // was intended for step recording.  So rather than adjust the
+    // pitch for playback according to the transpose setting, we have
+    // to adjust the stored pitch in the opposite direction.
+
+    pitch -= segment.getTranspose();
+
 //    KTmpStatusMsg msg(i18n("Inserting note"), this);
 
     // We need to ensure that multiple notes hit at once come out as
