@@ -57,6 +57,8 @@ class KRecentFilesAction;
 class RosegardenGUIDoc;
 class RosegardenGUIView;
 
+namespace Rosegarden { class MappedInstrument; }
+
 class RosegardenSequencerApp : public KMainWindow,
                                virtual public RosegardenSequencerIface
 {
@@ -83,47 +85,47 @@ public slots:
                const Rosegarden::RealTime &playLatency,
                const Rosegarden::RealTime &fetchLatency,
                const Rosegarden::RealTime &readAhead,
-               const int &recordMode);
+               int recordMode);
 
     // looping
     void setLoop(const Rosegarden::RealTime &loopStart,
-                const Rosegarden::RealTime &loopEnd);
+                 const Rosegarden::RealTime &loopEnd);
 
 
     // Play wrapper for DCOP
     //
-    virtual int play(const long &timeSec,
-                     const long &timeUsec,
-                     const long &playLatencySec,
-                     const long &playLatencyUSec,
-                     const long &fetchLatencySec,
-                     const long &fetchLatencyUSec,
-                     const long &readAheadSec,
-                     const long &readAheadUSec);
+    virtual int play(long timeSec,
+                     long timeUsec,
+                     long playLatencySec,
+                     long playLatencyUSec,
+                     long fetchLatencySec,
+                     long fetchLatencyUSec,
+                     long readAheadSec,
+                     long readAheadUSec);
 
     // Record wrapper for DCOP
     //
-    virtual int record(const long &timeSec,
-                       const long &timeUSec,
-                       const long &playLatencySec,
-                       const long &playLatencyUSec,
-                       const long &fetchLatencySec,
-                       const long &fetchLatencyUSec,
-                       const long &readAheadSec,
-                       const long &readAheadUSec,
-                       const int &recordMode);
+    virtual int record(long timeSec,
+                       long timeUSec,
+                       long playLatencySec,
+                       long playLatencyUSec,
+                       long fetchLatencySec,
+                       long fetchLatencyUSec,
+                       long readAheadSec,
+                       long readAheadUSec,
+                       int recordMode);
 
     
     // Jump to a pointer in the playback (uses longs instead
     // of RealTime for DCOP)
     //
     //
-    virtual void jumpTo(const long &posSec, const long &posUsec);
+    virtual void jumpTo(long posSec, long posUsec);
 
     // Set a loop on the Sequencer
     //
-    virtual void setLoop(const long &loopStartSec, const long &loopStartUSec,
-                         const long &loopEndSec, const long &loopEndUSec);
+    virtual void setLoop(long loopStartSec, long loopStartUSec,
+                         long loopEndSec, long loopEndUSec);
  
     // Return the Sound system status (audio/MIDI)
     //
@@ -131,8 +133,8 @@ public slots:
 
     // Add and remove Audio files on the sequencer
     //
-    virtual int addAudioFile(const QString &fileName, const int &id);
-    virtual int removeAudioFile(const int &id);
+    virtual int addAudioFile(const QString &fileName, int id);
+    virtual int removeAudioFile(int id);
 
     // Deletes all the audio files and clears down any flapping i/o handles
     //
@@ -142,9 +144,13 @@ public slots:
     //
     virtual void stop();
 
+    virtual void setMappedInstrument(int type, short int channel,
+                                     unsigned int id);
+
+
 public:
 
-    void setStatus(const TransportStatus &status)
+    void setStatus(TransportStatus status)
             { m_transportStatus = status; }
     TransportStatus getStatus() { return m_transportStatus; }
    
@@ -216,6 +222,8 @@ private:
 
     Rosegarden::RealTime m_loopStart;
     Rosegarden::RealTime m_loopEnd;
+
+    std::vector<Rosegarden::MappedInstrument*> m_instruments;
 
 };
  

@@ -37,26 +37,26 @@ public:
 
     // play from a given time with given parameters
     //
-    virtual int play(const long &timeSec,
-                     const long &timeUsec,
-                     const long &playLatencySec,
-                     const long &playLatencyUSec,
-                     const long &fetchLatencySec,
-                     const long &fetchLatencyUSec,
-                     const long &readAheadSec,
-                     const long &readAheadUSec) = 0;
+    virtual int play(long timeSec,
+                     long timeUsec,
+                     long playLatencySec,
+                     long playLatencyUSec,
+                     long fetchLatencySec,
+                     long fetchLatencyUSec,
+                     long readAheadSec,
+                     long readAheadUSec) = 0;
 
     // record from a given time with given parameters
     //
-    virtual int record(const long &timeSec,
-                       const long &timeUSec,
-                       const long &playLatencySec,
-                       const long &playLatencyUSec,
-                       const long &fetchLatencySec,
-                       const long &fetchLatencyUSec,
-                       const long &readAheadSec,
-                       const long &readAheadUSec,
-                       const int &recordMode) = 0;
+    virtual int record(long timeSec,
+                       long timeUSec,
+                       long playLatencySec,
+                       long playLatencyUSec,
+                       long fetchLatencySec,
+                       long fetchLatencyUSec,
+                       long readAheadSec,
+                       long readAheadUSec,
+                       int recordMode) = 0;
 
     // stop the sequencer
     //
@@ -64,14 +64,14 @@ public:
 
     // Set the sequencer to a given time
     //
-    virtual void jumpTo(const long &posSec, const long &posUSec) = 0;
+    virtual void jumpTo(long posSec, long posUSec) = 0;
 
     // Set a loop on the sequencer
     //
-    virtual void setLoop(const long &loopStartSec,
-                         const long &loopStartUSec,
-                         const long &loopEndSec,
-                         const long &loopEndUSec) = 0;
+    virtual void setLoop(long loopStartSec,
+                         long loopStartUSec,
+                         long loopEndSec,
+                         long loopEndUSec) = 0;
 
     // Get the status of the Sequencer
     //
@@ -79,9 +79,16 @@ public:
 
     // Add and delete audio files on the Sequencer
     //
-    virtual int addAudioFile(const QString &fileName, const int &id) = 0;
-    virtual int removeAudioFile(const int &id) = 0;
+    virtual int addAudioFile(const QString &fileName, int id) = 0;
+    virtual int removeAudioFile(int id) = 0;
     virtual void clearAllAudioFiles() = 0;
+
+    // Single set function as the MappedInstrument is so lightweight.
+    // Any mods on the GUI are sent only through this method.
+    //
+    virtual void setMappedInstrument(int type,
+                                     short int channel,
+                                     unsigned int id) = 0;
 
 
 };

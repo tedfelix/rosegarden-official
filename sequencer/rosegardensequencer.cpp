@@ -26,6 +26,7 @@
 #include "rosegardensequencer.h"
 #include "rosegardendcop.h"
 #include "Sequencer.h"
+#include "MappedInstrument.h"
 
 using std::cerr;
 using std::endl;
@@ -370,7 +371,7 @@ RosegardenSequencerApp::notifySequencerStatus()
 //
 //
 void
-RosegardenSequencerApp::jumpTo(const long &posSec, const long &posUsec)
+RosegardenSequencerApp::jumpTo(long posSec, long posUsec)
 {
     if (posSec < 0 && posUsec < 0)
         return;
@@ -447,7 +448,7 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
                                const Rosegarden::RealTime &playLatency,
                                const Rosegarden::RealTime &fetchLatency,
                                const Rosegarden::RealTime &readAhead,
-                               const int &recordMode)
+                               int recordMode)
 {
     TransportStatus localRecordMode = (TransportStatus) recordMode;
 
@@ -530,14 +531,14 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
 //
 //
 int
-RosegardenSequencerApp::play(const long &timeSec,
-                             const long &timeUsec,
-                             const long &playLatencySec,
-                             const long &playLatencyUSec,
-                             const long &fetchLatencySec,
-                             const long &fetchLatencyUSec,
-                             const long &readAheadSec,
-                             const long &readAheadUSec)
+RosegardenSequencerApp::play(long timeSec,
+                             long timeUsec,
+                             long playLatencySec,
+                             long playLatencyUSec,
+                             long fetchLatencySec,
+                             long fetchLatencyUSec,
+                             long readAheadSec,
+                             long readAheadUSec)
 
 {
     return play(Rosegarden::RealTime(timeSec, timeUsec),
@@ -555,15 +556,15 @@ RosegardenSequencerApp::play(const long &timeSec,
 //
 //
 int
-RosegardenSequencerApp::record(const long &timeSec,
-                               const long &timeUSec,
-                               const long &playLatencySec,
-                               const long &playLatencyUSec,
-                               const long &fetchLatencySec,
-                               const long &fetchLatencyUSec,
-                               const long &readAheadSec,
-                               const long &readAheadUSec,
-                               const int &recordMode)
+RosegardenSequencerApp::record(long timeSec,
+                               long timeUSec,
+                               long playLatencySec,
+                               long playLatencyUSec,
+                               long fetchLatencySec,
+                               long fetchLatencyUSec,
+                               long readAheadSec,
+                               long readAheadUSec,
+                               int recordMode)
 
 {
     return record(Rosegarden::RealTime(timeSec, timeUSec),
@@ -584,10 +585,10 @@ RosegardenSequencerApp::setLoop(const Rosegarden::RealTime &loopStart,
 
 
 void
-RosegardenSequencerApp::setLoop(const long &loopStartSec,
-                                const long &loopStartUSec,
-                                const long &loopEndSec,
-                                const long &loopEndUSec)
+RosegardenSequencerApp::setLoop(long loopStartSec,
+                                long loopStartUSec,
+                                long loopEndSec,
+                                long loopEndUSec)
 {
     setLoop(Rosegarden::RealTime(loopStartSec, loopStartUSec),
             Rosegarden::RealTime(loopEndSec, loopEndUSec));
@@ -605,14 +606,13 @@ RosegardenSequencerApp::getSoundSystemStatus()
 
 // Add an audio file to the sequencer
 int
-RosegardenSequencerApp::addAudioFile(const QString &fileName,
-                                     const int &id)
+RosegardenSequencerApp::addAudioFile(const QString &fileName, int id)
 {
     return((int)m_sequencer->addAudioFile(std::string(fileName.data()), id));
 }
 
 int
-RosegardenSequencerApp::removeAudioFile(const int &id)
+RosegardenSequencerApp::removeAudioFile(int id)
 {
     return((int)m_sequencer->removeAudioFile(id));
 }
@@ -622,5 +622,37 @@ RosegardenSequencerApp::clearAllAudioFiles()
 {
     m_sequencer->clearAudioFiles();
 }
+
+void
+RosegardenSequencerApp::setMappedInstrument(int type, short int channel,
+                                            unsigned int id)
+{
+    // Convert the types
+    //
+    Rosegarden::InstrumentId mID = (Rosegarden::InstrumentId)id;
+    Rosegarden::Instrument::InstrumentType mType = 
+        (Rosegarden::Instrument::InstrumentType)type;
+    Rosegarden::MidiByte mChannel = (Rosegarden::MidiByte)channel;
+
+    std::vector<Rosegarden::MappedInstrument*>::iterator it;
+
+    // If we match then change
+    for (it = m_instruments.begin(); it != m_instruments.end(); it++)
+    {
+        if ((*it)->getID() == mID)
+        {
+            (*it)->setChannel(mChannel);
+            (*it)->setType(mType);
+            return;
+        }
+    }
+
+    // else create
+    m_instruments.push_back(
+            new Rosegarden::MappedInstrument (mType, mChannel, mID));
+}
+
+
+
 
 

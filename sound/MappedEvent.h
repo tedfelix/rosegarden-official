@@ -26,11 +26,17 @@
 // at the Sequencer this class and MidiComposition eliminate the notion
 // of the Segment and Track for ease of Event access.  The MappedEvents
 // are ready for playing or routing through an Instrument or Effects
-// boxes
+// boxes.
 //
 // MappedEvents can also represent instructions for playback of audio
 // samples - if the m_type is Audio then the sequencer will attempt to
 // map the Pitch (m_pitch) to the audio id.
+// 
+// The MappedEvent/Instrument relationship is interesting - we don't
+// want to duplicate the entire Instrument at the Sequencer level as
+// it'd be messy and unnecessary.  Instead we use a MappedInstrument
+// which is just a very cut down Sequencer-side version of an Instrument.
+//
 //
 
 #include "Composition.h" // for Rosegarden::RealTime

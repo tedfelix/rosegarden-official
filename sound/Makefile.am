@@ -15,6 +15,7 @@ libRosegardenSound_la_SOURCES = AudioFile.cpp \
                                 MidiEvent.cpp \
                                 MappedEvent.cpp \
                                 MappedComposition.cpp \
+                                MappedInstrument.cpp \
                                 SoundFile.cpp
 
 lib_LTLIBRARIES = libRosegardenSequencer.la
