@@ -103,6 +103,7 @@ public:
     NoteActionData(const QString& _title,
 		   QString _actionName,
 		   QString _pixmapName,
+		   int _keycode,
 		   bool _rest,
 		   Note::Type _noteType,
 		   int _dots);
@@ -110,6 +111,7 @@ public:
     QString title;
     QString actionName;
     QString pixmapName;
+    int keycode;
     bool rest;
     Note::Type noteType;
     int dots;
@@ -118,6 +120,7 @@ public:
 NoteActionData::NoteActionData()
     : actionName(0),
       pixmapName(0),
+      keycode(0),
       rest(false),
       noteType(0),
       dots(0)
@@ -128,12 +131,14 @@ NoteActionData::NoteActionData()
 NoteActionData::NoteActionData(const QString& _title,
 			       QString _actionName,
 			       QString _pixmapName,
+			       int _keycode,
 			       bool _rest,
 			       Note::Type _noteType,
 			       int _dots)
     : title(i18n(_title)),
       actionName(_actionName),
       pixmapName(_pixmapName),
+      keycode(_keycode),
       rest(_rest),
       noteType(_noteType),
       dots(_dots)
@@ -404,7 +409,10 @@ void NotationView::setupActions()
         icon = QIconSet
 	    (m_toolbarNotePixmapFactory.makeToolbarPixmap
 	     (noteActionData.pixmapName));
-        noteAction = new KRadioAction(noteActionData.title, icon, 0, this,
+        noteAction = new KRadioAction(noteActionData.title,
+				      icon,
+				      noteActionData.keycode,
+				      this,
                                       SLOT(slotNoteAction()),
                                       actionCollection(),
 				      noteActionData.actionName);
@@ -2330,6 +2338,8 @@ NotationView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
 void NotationView::initNoteActionDataMap()
 {
     static bool called = false;
+    static int keys[] =
+    { Key_0, Key_3, Key_6, Key_8, Key_4, Key_2, Key_1, Key_5 };
     
     if (called) return;
 
@@ -2357,9 +2367,14 @@ void NotationView::initNoteActionDataMap()
 		    titleName.replace(QRegExp("note"), "rest");
 		}
 
+		int keycode = keys[type - Note::Shortest];
+		if (dots) keycode += CTRL;
+		if (rest) keycode += SHIFT;
+
 		m_noteActionDataMap->insert
 		    (shortName, NoteActionData
-		     (titleName, shortName, refName, rest > 0, type, dots));
+		     (titleName, shortName, refName, keycode,
+		      rest > 0, type, dots));
 	    }
 	}
     }
