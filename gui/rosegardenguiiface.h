@@ -65,7 +65,7 @@ k_dcop:
     virtual const Rosegarden::MappedComposition&
             getSequencerSlice(long sliceStartSec, long sliceStartUsec,
                               long sliceEndSec, long sliceEndUsec,
-                              bool firstFetch) = 0;
+                              long firstFetch) = 0;
 
     // The Sequencer sends back MappedCompositions full of
     // newly recorded MappedEvents for storage and presentation
@@ -90,7 +90,7 @@ k_dcop:
     //
     virtual void setPointerPosition(long realTimeSec,
                                     long realTimeUsec,
-                                    bool clearToSend) = 0;
+                                    long clearToSend) = 0;
 
     // Sequencer updates GUI with status
     //

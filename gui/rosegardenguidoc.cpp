@@ -1454,11 +1454,11 @@ RosegardenGUIDoc::slotNewRecordButton()
             QByteArray data2;
             QDataStream streamOut2(data, IO_WriteOnly);
 
-            streamOut2 << monitorAudio;
+            streamOut2 << long(monitorAudio);
 
             if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
                                           ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                          "setAudioMonitoring(bool)",
+                                          "setAudioMonitoring(long int)",
                                           data))
             {
                 std::cerr << "RosegardenGUIDoc::slotNewRecordButton - "

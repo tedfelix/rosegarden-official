@@ -154,7 +154,7 @@ public:
     const Rosegarden::MappedComposition&
             getSequencerSlice(long sliceStartSec, long sliceStartUSec,
                               long sliceEndSec, long sliceEndUSec,
-                              bool firstFetch);
+                              long firstFetch);
 
     /**
      * The Sequencer sends back a MappedComposition full of
@@ -200,7 +200,7 @@ public:
      */
     virtual void setPointerPosition(long posSec,
                                     long posUSec,
-                                    bool clearToSend);
+                                    long clearToSend);
 
     /**
      * If we've called stopping() at the SequenceManager then we'll

@@ -136,7 +136,7 @@ public:
     // the input level against - this is so we can get a real time
     // display of the audio input stream.
     //
-    virtual void setAudioMonitoring(bool value) = 0;
+    virtual void setAudioMonitoring(long value) = 0;
     virtual void setAudioMonitoringInstrument(unsigned int id) = 0;
 
     // Fetch audio play latencies

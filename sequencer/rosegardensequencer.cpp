@@ -187,7 +187,7 @@ RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
     arg << start.usec;
     arg << end.sec;
     arg << end.usec;
-    arg << firstFetch;
+    arg << long(firstFetch);
 
     Rosegarden::MappedComposition *mC = new Rosegarden::MappedComposition();
 
@@ -198,7 +198,7 @@ RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
 
     if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
                                   ROSEGARDEN_GUI_IFACE_NAME,
-                                  "getSequencerSlice(long int, long int, long int, long int, bool)",
+                                  "getSequencerSlice(long int, long int, long int, long int, long int)",
                                   data, replyType, replyData, true))
     {
         cerr << "RosegardenSequencer::getSlice()"
@@ -374,11 +374,11 @@ RosegardenSequencerApp::updateClocks(bool clearToSend)
 
     arg << newPosition.sec;
     arg << newPosition.usec;
-    arg << clearToSend;
+    arg << long(clearToSend);
     
     if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                       ROSEGARDEN_GUI_IFACE_NAME,
-                      "setPointerPosition(long int, long int, bool)",
+                      "setPointerPosition(long int, long int, long int)",
                       data))
     {
         cerr << "RosegardenSequencer::updateClocks()"
@@ -887,9 +887,11 @@ RosegardenSequencerApp::sequencerAlive()
 }
 
 void
-RosegardenSequencerApp::setAudioMonitoring(bool value)
+RosegardenSequencerApp::setAudioMonitoring(long value)
 {
-    if (value &&
+    bool bValue = (bool)value;
+
+    if (bValue &&
             m_sequencer->getRecordStatus() == Rosegarden::ASYNCHRONOUS_MIDI)
     {
         m_sequencer->record(Rosegarden::ASYNCHRONOUS_AUDIO);
@@ -898,7 +900,7 @@ RosegardenSequencerApp::setAudioMonitoring(bool value)
         return;
     }
 
-    if (value == false &&
+    if (bValue == false &&
             m_sequencer->getRecordStatus() == Rosegarden::ASYNCHRONOUS_AUDIO)
     {
         std::cout << "RosegardenSequencerApp::setAudioMonitoring - "

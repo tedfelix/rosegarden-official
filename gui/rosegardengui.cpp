@@ -1706,7 +1706,7 @@ void RosegardenGUIApp::importRG21File(const QString &file)
 
 void RosegardenGUIApp::setPointerPosition(long posSec,
                                           long posUsec,
-                                          bool clearToSend)
+                                          long clearToSend)
 {
     Rosegarden::RealTime rT(posSec, posUsec);
     Rosegarden::Composition &comp = m_doc->getComposition();
@@ -1727,7 +1727,7 @@ void RosegardenGUIApp::setPointerPosition(long posSec,
 
     // Check for a pending stop if we're clear to send
     //
-    if (clearToSend) checkForStop();
+    if (bool(clearToSend)) checkForStop();
 
     return;
 }
@@ -2105,7 +2105,7 @@ RosegardenGUIApp::slotToggleMetronome()
 const Rosegarden::MappedComposition&
 RosegardenGUIApp::getSequencerSlice(long sliceStartSec, long sliceStartUsec,
                                     long sliceEndSec, long sliceEndUsec,
-                                    bool firstFetch)
+                                    long firstFetch)
 {
     // have to convert from char
     bool firstFetchBool = (bool)firstFetch;

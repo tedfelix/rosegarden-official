@@ -184,7 +184,7 @@ public:
 
     // Audio monitoring
     //
-    virtual void setAudioMonitoring(bool value);
+    virtual void setAudioMonitoring(long value);
     virtual void setAudioMonitoringInstrument(unsigned int id);
 
     // Audio latencies
