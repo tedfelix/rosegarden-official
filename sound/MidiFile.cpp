@@ -97,7 +97,7 @@ const string
 MidiFile::getMidiBytes(ifstream* midiFile, const unsigned int &numberOfBytes)
 {
   string stringRet;
-  char midiByte;
+  MidiByte midiByte;
 
   if (_decrementCount && (numberOfBytes > (unsigned int)_trackByteCount))
   {
@@ -148,7 +148,7 @@ const unsigned int
 MidiFile::getNumberFromMidiBytes(ifstream* midiFile)
 {
   long longRet = 0;
-  char midiByte;
+  MidiByte midiByte;
 
   if(!midiFile->eof())
   {
@@ -412,12 +412,15 @@ MidiFile::convertToRosegarden()
 
   // Time conversions
   //
-  int rosegardenTime;
-  int rosegardenDuration;
+  int rosegardenTime = 0;
+  int rosegardenDuration = 0;
 
   // To create rests
   //
   int endOfLastNote;
+
+  int numerator;
+  int denominator;
 
   Rosegarden::Composition *composition = new Composition;
 
@@ -502,6 +505,26 @@ MidiFile::convertToRosegarden()
             ++midiEvent )
       {
 
+        if (_timingDivision)
+        {
+          rosegardenTime = midiEvent->time() * 96 / _timingDivision;
+          rosegardenDuration = midiEvent->duration() * 96 / _timingDivision;
+        }
+
+
+        if ( midiEvent->messageType() == MIDI_NOTE_ON ||
+             midiEvent->messageType() == MIDI_NOTE_OFF )
+        {
+          // insert rests if we need them
+          //
+          if (endOfLastNote < rosegardenTime )
+	      rosegardenTrack->fillWithRests(rosegardenTime);
+
+          endOfLastNote = rosegardenTime + rosegardenDuration;
+        }
+
+        
+
         if (midiEvent->isMeta())
         {
           switch(midiEvent->metaMessageType())
@@ -559,7 +582,17 @@ MidiFile::convertToRosegarden()
               break;
 
             case MIDI_TIME_SIGNATURE:
-              cout << "TIME SIG" << endl;
+              rosegardenEvent = new Event(TimeSignature::EventType);
+              numerator = (int) midiEvent->metaMessage()[0];
+              denominator = 1 << ((int) midiEvent->metaMessage()[1]);
+
+              if (numerator == 0 ) numerator = 4;
+              if (denominator == 0 ) denominator = 4;
+
+              rosegardenEvent->set<Int>("numerator", numerator);
+              rosegardenEvent->set<Int>("denominator", denominator);
+              rosegardenEvent->setAbsoluteTime(rosegardenTime);
+              rosegardenTrack->insert(rosegardenEvent); 
               break;
 
             case MIDI_KEY_SIGNATURE:
@@ -575,39 +608,6 @@ MidiFile::convertToRosegarden()
               break;
           } 
 
-        }
-
-        if (_timingDivision)
-        {
-          rosegardenTime = midiEvent->time() * 96 / _timingDivision;
-          rosegardenDuration = midiEvent->duration() * 96 / _timingDivision;
-        }
-
-        if ( midiEvent->messageType() == MIDI_NOTE_ON ||
-             midiEvent->messageType() == MIDI_NOTE_OFF )
-        {
-          // insert rests if we need them
-          //
-          if (endOfLastNote < rosegardenTime )
-          {
-	      rosegardenTrack->fillWithRests(rosegardenTime);
-
-	      /*!!!
-            rosegardenEvent = new Event;
-            rosegardenEvent->setType("rest");
-            rosegardenEvent->setDuration(rosegardenTime - endOfLastNote);
-            rosegardenEvent->setAbsoluteTime(endOfLastNote);
-
-#ifdef MIDI_DEBUG
-            cerr << "INSERTED REST " << endl;
-            cerr << "DURATION = " << rosegardenTime - endOfLastNote << endl;
-            cerr << "ABS TIME = " << endOfLastNote << endl;
-#endif
-
-            rosegardenTrack->insert(rosegardenEvent);
-	      */
-          }
-          endOfLastNote = rosegardenTime + rosegardenDuration;
         }
 
 
@@ -685,7 +685,7 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
     // NB.  Instead of just using Event::getDuration to get the
     // duration of an event, use TrackPerformanceHelper::getSoundingDuration,
     // somewhat like the way TrackNotationHelper is used in the method
-    // above... (i.e. construct the TrackPerformanceHelper on the
+    // above... (i.e. construct the PerformanceTrack on the
     // stack and let it be discarded after you've finished with
     // it, all it is is a bunch of methods).
     //

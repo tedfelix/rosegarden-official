@@ -29,6 +29,8 @@ public:
 k_dcop:
 
   virtual void quit() = 0;
+  virtual bool play() = 0;
+  virtual bool stop() = 0;
 };
 
 #endif // _ROSEGARDENSEQUENCERIFACE_H_

@@ -73,7 +73,7 @@ namespace Rosegarden
     inline const MidiByte velocity() { return _data2; }
 
     inline const bool isMeta() { return (_eventCode & MIDI_FILE_META_EVENT); }
-    inline const std::string metaMessage() { return _metaMessage; }
+    inline std::string metaMessage() const { return _metaMessage; }
     inline const MidiByte metaMessageType() { return _metaEventCode; }
 
     void duration(const unsigned long& duration)
@@ -83,7 +83,6 @@ namespace Rosegarden
 
   private:
 
-    // please, if you aren't going to define it for real, make it private!
     MidiEvent& operator=(const MidiEvent mE) {;}
 
     unsigned long _deltaTime;

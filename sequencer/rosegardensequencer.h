@@ -56,6 +56,8 @@ protected:
 
 public slots:
   virtual void quit();
+  virtual bool play();
+  virtual bool stop();
     
 private:
 

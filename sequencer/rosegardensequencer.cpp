@@ -38,3 +38,16 @@ RosegardenSequencerApp::quit()
   cerr << "Rosegarden Sequencer closing" << endl;
   close();
 }
+
+
+bool
+RosegardenSequencerApp::play()
+{
+  return true;
+}
+
+bool
+RosegardenSequencerApp::stop()
+{
+  return true;
+}
