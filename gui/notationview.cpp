@@ -549,6 +549,9 @@ void NotationView::setupActions()
                 SLOT(slotTransformsTransposeDown()), actionCollection(),
                 "transpose_down");
 
+    new KAction("Dump selected events to stderr", 0, this,
+		SLOT(slotDebugDump()), actionCollection(), "debug_dump");
+
     static const Mark marks[] = 
     { Accent, Tenuto, Staccato, Sforzando, Rinforzando,
       Trill, Turn, Pause, UpBow, DownBow };
@@ -1455,6 +1458,18 @@ void NotationView::slotTransformsRemoveMarks()
                             (*m_currentEventSelection));
 }
 
+void NotationView::slotDebugDump()
+{
+    if (m_currentEventSelection) {
+	EventSelection::eventcontainer &ec = m_currentEventSelection->getSegmentEvents();
+	int n = 0;
+	for (EventSelection::eventcontainer::iterator i = ec.begin();
+	     i != ec.end(); ++i) {
+	    cerr << "\n" << n++ << " [" << (*i) << "]" << endl;
+	    (*i)->dump(cerr);
+	}
+    }
+}
 
 
 //

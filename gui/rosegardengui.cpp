@@ -1280,6 +1280,7 @@ void RosegardenGUIApp::rewind()
     Rosegarden::Composition &composition = m_doc->getComposition();
 
     timeT position = composition.getPosition();
+    cerr<<"RosegardenGUIApp::rewind:position="<<position<<endl;
     
     // want to cope with bars beyond the actual end of the piece
     int barNumber = composition.getBarNumber(position - 1, false);
@@ -1305,6 +1306,9 @@ void RosegardenGUIApp::fastforward()
     Rosegarden::Composition &composition = m_doc->getComposition();
 
     timeT position = composition.getPosition();
+
+    cerr<<"RosegardenGUIApp::fastforward:position="<<position<<endl;
+
     int  barNumber = composition.getBarNumber(position, false);
     timeT   jumpTo = composition.getBarRange(barNumber + 1, false).first;
 

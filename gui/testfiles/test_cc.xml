@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE rosegarden-data>
 <rosegarden-data>
-<bar-segment>
-<event type="timesignature" subordering="-10"><property name="numerator" int="4"/><property name="denominator" int="4"/></event>
-<resync time="660"/>
-<event type="timesignature"><property name="numerator" int="12"/><property name="denominator" int="8"/></event>
-</bar-segment>
 
 <composition recordtrack="0" pointer="0" defaultTempo="120">
 
@@ -15,19 +10,16 @@
   <instrument id="3" type="midi" name="Audio Samples"/>
 
   <track id="0" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
-  <track id="0" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
-  <track id="0" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
-  <track id="0" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
-  <track id="0" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
-  <track id="0" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
-  <track id="0" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
-  <track id="0" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
-  <track id="0" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
-  <track id="0" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
+  <track id="1" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
+  <track id="2" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
+  <track id="3" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
+
+  <timesignature time="0" numerator="4" denominator="4"/>
+  <timesignature time="660" numerator="12" denominator="8"/>
 
 </composition>
 
-<segment track="1" start="0">
+<segment track="0" start="0">
 <chord>
 	<event type="clefchange" subordering="-30"><property name="clef" string="treble"/></event>
 	<event type="keychange" subordering="-20"><property name="key" string="C# major"/></event>

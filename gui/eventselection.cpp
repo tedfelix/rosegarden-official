@@ -150,7 +150,7 @@ EventSelection::recordSelectionOnSegment()
     removeSelectionFromSegment();
     for (eventcontainer::iterator i = m_segmentEvents.begin();
 	 i != m_segmentEvents.end(); ++i) {
-	(*i)->set<Bool>(NotationProperties::SELECTED, true);
+	(*i)->setMaybe<Bool>(NotationProperties::SELECTED, true);
     }
 }
 

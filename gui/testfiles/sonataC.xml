@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE rosegarden-data>
 <rosegarden-data>
-<bar-segment>
-<event type="timesignature" subordering="-10"><property name="numerator" int="4"/><property name="denominator" int="4"/></event>
-</bar-segment>
 
 <composition recordtrack="0" pointer="384" defaultTempo="120">
 
@@ -16,6 +13,8 @@
   <track id="1" type="midi" label="Trk 1" position="1" muted="false" instrument="0"/>
   <track id="2" type="midi" label="Trk 2" position="2" muted="false" instrument="0"/>
   <track id="3" type="midi" label="Trk 3" position="2" muted="true" instrument="0"/>
+
+  <timesignature time="0" numerator="4" denominator="4"/>
 
 </composition>
 

@@ -357,7 +357,7 @@ Composition::calculateBarPositions() const
 //		std::cerr << "Pushing time sig duration "
 //			  << TimeSignature(**i).getBarDuration()
 //			  << " at time "
-//			  << (*i)->getAbsoluteTime() << endl;
+//			  << (*i)->getAbsoluteTime() << std::endl;
 	sections.push_back((*i)->getAbsoluteTime());
 	sectionTimes.push_back(TimeSignature(**i).getBarDuration());
     }
@@ -402,10 +402,15 @@ Composition::calculateBarPositions() const
     m_barPositionsNeedCalculating = false;
 //    std::cerr << "Composition::calculateBarPositions ending" << std::endl;
 
-//    std::cerr << "Reference segment contains:" << std::endl;
-//    for (i = t.begin(); i != t.end(); ++i) {
-//	(*i)->dump(std::cerr);
-//    }
+    std::cerr << "Time sig segment contains:" << std::endl;
+    for (i = t.begin(); i != t.end(); ++i) {
+	(*i)->dump(std::cerr);
+    }
+
+    std::cerr << "Bar segment contains:" << std::endl;
+    for (i = m_barSegment.begin(); i != m_barSegment.end(); ++i) {
+	(*i)->dump(std::cerr);
+    }
 }
 
 int
@@ -432,7 +437,7 @@ Composition::getBarNumber(timeT t, bool truncate) const
 
 	barNo = (int)(*i)->get<Int>(BarNumberProperty);
 
-//	cerr << "found " << barNo << " at " << (*i)->getAbsoluteTime() << endl;
+	std::cerr << "found " << barNo << " at " << (*i)->getAbsoluteTime() << std::endl;
 
 	if (!truncate && t >= m_barSegment.getDuration()) {
 	    TimeSignature sig = getTimeSignatureAt(t);
@@ -440,12 +445,12 @@ Composition::getBarNumber(timeT t, bool truncate) const
 		(t - m_barSegment.getDuration()) / sig.getBarDuration();
 	}
     }
-/*
-    cerr << "Composition::getBarNumber: returning " << barNo
+
+    std::cerr << "Composition::getBarNumber: returning " << barNo
 	 << " for " << t << " (m_barSegment.getDuration() is "
 	 << m_barSegment.getDuration() << ", size() is "
-	 << m_barSegment.size() << ")" << endl;
-*/
+	 << m_barSegment.size() << ")" << std::endl;
+
     return barNo;
 
 }
@@ -478,8 +483,8 @@ Composition::getBarRange(timeT t) const
 	finish = start + (*i)->getDuration();
     }
 
-//    cerr << "Composition::getBarRange for " << t  << ": range is " << start
-//	 << " -> " << finish << endl;
+    std::cerr << "Composition::getBarRange for " << t  << ": range is " << start
+	 << " -> " << finish << std::endl;
 
     return std::pair<timeT, timeT>(start, finish);
 }
@@ -500,9 +505,10 @@ Composition::getBarRange(int n, bool truncate) const
 	start = m_barSegment[n]->getAbsoluteTime();
 	barDuration = m_barSegment[n]->getDuration();
 
-//    cerr << "Composition::getBarRange[A] for " << n << ": range is " << start
-//	 << " -> " << (start + barDuration) << endl;
-//	return std::pair<timeT, timeT>(start, start + barDuration);
+    std::cerr << "Composition::getBarRange[A] for " << n << ": range is " << start
+	 << " -> " << (start + barDuration) << std::endl;
+
+	return std::pair<timeT, timeT>(start, start + barDuration);
     }
     
     ReferenceSegment::iterator i = m_barSegment.end();
@@ -528,8 +534,8 @@ Composition::getBarRange(int n, bool truncate) const
 	start += (n - (*i)->get<Int>(BarNumberProperty)) * barDuration;
     }
 
-//    cerr << "Composition::getBarRange[B] for " << n << ": range is " << start
-//	 << " -> " << (start + barDuration) << endl;
+    std::cerr << "Composition::getBarRange[B] for " << n << ": range is " << start
+	 << " -> " << (start + barDuration) << std::endl;
 
     return std::pair<timeT, timeT>(start, start + barDuration);
 }

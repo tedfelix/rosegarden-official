@@ -6,6 +6,8 @@
 
 <Menu name="View">
   <text>&amp;View</text>
+<Action name="debug_dump"/>
+<Separator/>
   <Action name="linear_mode"/>
   <Action name="page_mode"/>
 <!-- Stuff from font/layout toolbar, e.g...

@@ -62,7 +62,7 @@ typedef std::string ChordType;
 
 namespace ChordTypes {
 const ChordType
-NoChord = "no-chord",
+    NoChord = "no-chord",
     Major = "",
     Minor = "m",
     Diminished = "dim",

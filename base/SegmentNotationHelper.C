@@ -372,8 +372,8 @@ SegmentNotationHelper::collapseRestsForInsert(iterator i,
 
 Segment::iterator
 SegmentNotationHelper::insertSomething(iterator i, int duration, int pitch,
-				     bool isRest, bool tiedBack,
-				     Accidental acc)
+				       bool isRest, bool tiedBack,
+				       Accidental acc)
 {
     // Rules:
     // 
@@ -447,8 +447,8 @@ SegmentNotationHelper::insertSomething(iterator i, int duration, int pitch,
 
             // Recover viability for the second half of any split rest
 
-                makeRestViable(last);
-            }
+	    makeRestViable(last);
+	}
 
 	return insertSingleSomething(i, duration, pitch, isRest, tiedBack,
 				     acc);
@@ -545,21 +545,51 @@ SegmentNotationHelper::insertSingleSomething(iterator i, int duration,
 void
 SegmentNotationHelper::setInsertedNoteGroup(Event *e, iterator i)
 {
-    if (i == begin() || i == end() || !((*i)->isa(Note::EventType))) return;
+    // formerly this was posited on the note being inserted between
+    // two notes in the same group, but that's quite wrong-headed: we
+    // want to place it in the same group as any existing note at the
+    // same time, or else the nearest note thereafter if there are no
+    // rests in between
+
+    while (i != end()) {
+	if ((*i)->isa(Note::EventType)) {
+	    if ((*i)->has(BEAMED_GROUP_ID)) {
+		e->setMaybe<Int>(BEAMED_GROUP_ID,
+				 (*i)->get<Int>(BEAMED_GROUP_ID));
+		e->set<String>(BEAMED_GROUP_TYPE,
+			       (*i)->get<String>(BEAMED_GROUP_TYPE));
+	    }
+	    return;
+	} else if ((*i)->isa(Note::EventRestType)) {
+	    return;
+	}
+	++i;
+    }
+/*!!!
+    if (i == end() || !((*i)->isa(Note::EventType))) {
+	cerr << "SegmentNotationHelper::setInsertedNoteGroup: i no good" << endl;
+	return;
+    }
 
     iterator j = segment().findContiguousPrevious(i);
-    if (j == end()) return;
+
+    cerr << "\n i is" << endl;
+    (*i)->dump(cerr);
+    cerr << "\n j is" << endl;
+    if (j != end()) (*j)->dump(cerr);
+    else cerr << "end" << endl;
 
     if ((*i)->has(BEAMED_GROUP_ID) &&
-        (*j)->has(BEAMED_GROUP_ID) &&
-        (*i)->get<Int>(BEAMED_GROUP_ID) ==
-        (*j)->get<Int>(BEAMED_GROUP_ID)) {
+        (j == end() || ((*j)->has(BEAMED_GROUP_ID) &&
+			(*i)->get<Int>(BEAMED_GROUP_ID) ==
+			(*j)->get<Int>(BEAMED_GROUP_ID)))) {
 
         e->setMaybe<Int>(BEAMED_GROUP_ID,
                          (*i)->get<Int>(BEAMED_GROUP_ID));
         e->set<String>(BEAMED_GROUP_TYPE,
                        (*i)->get<String>(BEAMED_GROUP_TYPE));
     }
+*/
 }
 
 

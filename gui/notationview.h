@@ -296,6 +296,8 @@ public slots:
 
     void slotTransformsRemoveMarks();
 
+    void slotDebugDump();
+
     /// Canvas actions slots
 
     /**
