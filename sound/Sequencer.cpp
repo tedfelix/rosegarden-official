@@ -115,19 +115,6 @@ Sequencer::initializeMidi()
 
 }
 
-/*
-// Increment the song position in microseconds
-// and increment the seconds value as required.
-//
-void
-Sequencer::incrementSongPosition(long inc)
-{
-  _songTime.usec += inc;
-  _songTime.sec += _songTime.usec / 1000000;
-  _songTime.usec %= 1000000;
-}
-*/
-
 void
 Sequencer::record(const RecordStatus& recordStatus)
 {
@@ -164,49 +151,6 @@ Sequencer::record(const RecordStatus& recordStatus)
   }
   
 }
-
-/*
-void
-Sequencer::play(const timeT &position)
-{
-   if ( !_playing)
-   {
-     _playing = true;
-     _playStartTime = _midiPlayPort.time();
-
-     // store where we started playing from and initialise the
-     // playback slice marker (_lastFetchPosition)
-     //
-     _songPlayPosition = _currentSongPosition = position;
-   }
-   else
-   {
-     // jump back to last start position in MIDI clocks
-     _currentSongPosition = _songPlayPosition;
-
-     // reset the playStartTime to now  like this
-     //_playStartTime = deltaTime(_midiPlayPort.time(), _playStartTime);
-     _playStartTime = _midiPlayPort.time();
-   }
-}
-
-void
-Sequencer::stop()
-{
-  _recordStatus = ASYNCHRONOUS_MIDI;
-
-  if ( _playing )
-  {
-    // just stop
-    _playing = false;
-  }
-  else
-  {
-    // if already stopped then return to zero
-    _currentSongPosition = 0;
-  }
-}
-*/
 
 Arts::TimeStamp
 Sequencer::deltaTime(const Arts::TimeStamp &ts1, const Arts::TimeStamp &ts2)
@@ -320,18 +264,6 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
   }
 }
 
-
-/*
-void
-Sequencer::updateSongPosition()
-{
-  int deltaPosition = (int) convertToMidiTime(
-                                    deltaTime(_midiPlayPort.time(),
-                                              _playStartTime));
-  assert(deltaPosition >= 0);
-  _currentSongPosition = _songPlayPosition + deltaPosition;
-}
-*/
 
 void
 Sequencer::processMidiOut(Rosegarden::MappedComposition mappedComp,

@@ -31,6 +31,11 @@ timeT TrackPerformanceHelper::getSoundingDuration(iterator i)
 
     for (;;) {
         i = track().findContiguousNext(i);
+   
+        // Chris' own fix to stop this fux [rwb]
+        //
+        if (i == end()) return d;
+
         e = *i;
 
         timeT t2 = e->getAbsoluteTime();

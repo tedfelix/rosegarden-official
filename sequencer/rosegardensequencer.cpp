@@ -185,7 +185,6 @@ RosegardenSequencerApp::startPlaying()
 {
   // Fetch up to m_playLatency ahead
   //
-  //mappedComp =
   m_lastFetchSongPosition = m_songPosition + m_playLatency;
 
   // This will reset the Sequencer's internal clock
@@ -210,6 +209,14 @@ RosegardenSequencerApp::keepPlaying()
   if (m_songPosition > ( m_lastFetchSongPosition - m_fetchLatency ) )
   {
     m_lastFetchSongPosition = m_lastFetchSongPosition + m_playLatency;
+    
+/*
+    for ( Rosegarden::MappedComposition::iterator i = mappedComp->begin();
+                                                  i != mappedComp->end(); ++i )
+      if ( (*i)->getAbsoluteTime() < m_songPosition )
+        mappedComp->erase(i);
+*/
+  
     m_sequencer->processMidiOut( *fetchEvents(m_lastFetchSongPosition,
                                  m_lastFetchSongPosition + m_playLatency),
                                  m_playLatency);
@@ -253,7 +260,7 @@ RosegardenSequencerApp::updateClocks()
     if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                                   ROSEGARDEN_GUI_IFACE_NAME,
                                   "setPointerPosition(int)",
-                                  data)) //, replyType, replyData))
+                                  data))
     {
       cerr <<
        "RosegardenSequencer::updateClocks() - can't send to RosegardenGUI client"
@@ -279,7 +286,7 @@ RosegardenSequencerApp::notifySequencerStatus()
   if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                                 ROSEGARDEN_GUI_IFACE_NAME,
                                 "notifySequencerStatus(int)",
-                                data)) //, replyType, replyData))
+                                data)) 
   {
     cerr <<
      "RosegardenSequencer::notifySequencerStatus() - can't send to RosegardenGUI client"
