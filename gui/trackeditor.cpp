@@ -357,7 +357,7 @@ void TrackEditor::setupHorizontalHeader()
 
 // Move the position pointer
 void
-TrackEditor::setPointerPosition(int position)
+TrackEditor::setPointerPosition(Rosegarden::timeT position)
 {
 
 //    kdDebug(KDEBUG_AREA) << "TrackEditor::setPointerPosition: time is " << position << endl;

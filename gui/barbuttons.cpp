@@ -35,16 +35,16 @@ BarButtons::BarButtons(RosegardenGUIDoc* doc,
                        WFlags f):
     QHBox(parent, name), m_doc(doc)
 {
-   m_barHeight = vHeader->sectionSize(0);
-   m_barWidth = hHeader->sectionSize(0);
-   m_bars = hHeader->count();
+    m_barHeight = vHeader->sectionSize(0);
+    m_barWidth = hHeader->sectionSize(0);
+    m_bars = hHeader->count();
+    
+    m_offset = 4;
 
-   m_offset = 4;
+    setMinimumHeight(m_barHeight);
+    setMaximumHeight(m_barHeight);
 
-   setMinimumHeight(m_barHeight);
-   setMaximumHeight(m_barHeight);
-
-   drawButtons();
+    drawButtons();
 }
 
 BarButtons::~BarButtons()
@@ -80,7 +80,9 @@ BarButtons::drawButtons()
 
 
     // Loop ruler works its bar spacing out from the m_doc just
-    // like we do
+    // like we do in this class.  Then connect up the LoopRuler
+    // signals passing back through the outside world.
+    //
     //
     LoopRuler *loopRuler = new LoopRuler(m_doc,
                                          canvas,
@@ -88,6 +90,17 @@ BarButtons::drawButtons()
                                          m_bars,
                                          m_barWidth,
                                          loopBarHeight);
+
+    connect(loopRuler, SIGNAL(setPointerPosition(Rosegarden::timeT)),
+            this,      SLOT(slotSetPointerPosition(Rosegarden::timeT)));
+
+    connect(loopRuler, SIGNAL(setPlayPosition(Rosegarden::timeT)),
+            this,      SLOT(slotSetPlayPosition(Rosegarden::timeT)));
+
+    connect(loopRuler, SIGNAL(setLoop(Rosegarden::timeT, Rosegarden::timeT)),
+            this,      SLOT(slotSetLoop(Rosegarden::timeT, Rosegarden::timeT)));
+
+
 
     // Another horizontal layout box..
     //

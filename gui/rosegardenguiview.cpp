@@ -189,14 +189,25 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     connect(this,                   SIGNAL(setTool(SegmentCanvas::ToolType)),
             tracksEditor->canvas(), SLOT  (setTool(SegmentCanvas::ToolType)));
 
-    connect(this,                   SIGNAL(setPositionPointer(int)),
-            tracksEditor,           SLOT(setPointerPosition(int)));
+    connect(this,          SIGNAL(setCanvasPositionPointer(Rosegarden::timeT)),
+            tracksEditor,  SLOT(setPointerPosition(Rosegarden::timeT)));
 
     connect(this, SIGNAL(selectSegments(list<Rosegarden::Segment*>)),
             tracksEditor->canvas(), SLOT(selectSegments(list<Rosegarden::Segment*>)));
 
     connect(this,         SIGNAL(addSegmentItem(Rosegarden::Segment*)),
             tracksEditor, SLOT(addSegmentItem(Rosegarden::Segment*)));
+
+    // Connections upwards from LoopRuler - re-emission of signals
+    //
+    connect(barButtons, SIGNAL(setPointerPosition(Rosegarden::timeT)),
+            this,       SIGNAL(setGUIPositionPointer(Rosegarden::timeT)));
+
+    connect(barButtons, SIGNAL(setPlayPosition(Rosegarden::timeT)),
+            this,       SIGNAL(setGUIPlayPosition(Rosegarden::timeT)));
+
+    connect(barButtons, SIGNAL(setLoop(Rosegarden::timeT, Rosegarden::timeT)),
+            this,       SIGNAL(setGUILoop(Rosegarden::timeT, Rosegarden::timeT)));
 
     if (doc)
         tracksEditor->setupSegments();
@@ -336,11 +347,11 @@ void RosegardenGUIView::editAllTracks(Rosegarden::Composition* p)
     m_notationView->show();
 }
 
-void RosegardenGUIView::setPointerPosition(const int &position)
+void RosegardenGUIView::setPointerPosition(const Rosegarden::timeT &position)
 {
 //    kdDebug(KDEBUG_AREA) << "RosegardenGUIView::setPointerPosition" << endl;
 
-    emit setPositionPointer(position);
+    emit setCanvasPositionPointer(position);
 }
 
 // Highlight all the Segments on a Track because the Track has been selected

@@ -104,7 +104,7 @@ public slots:
     /**
      * Set the position pointer during playback
      */
-    void setPointerPosition(int position);
+    void setPointerPosition(Rosegarden::timeT position);
 
     /**
      * Create a Segment Item from a Segment (after recording)

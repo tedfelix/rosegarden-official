@@ -385,6 +385,15 @@ void RosegardenGUIApp::initView()
     connect((QObject *)m_view, SIGNAL(activateTool(SegmentCanvas::ToolType)),
                                SLOT(activateTool(SegmentCanvas::ToolType)));
 
+    connect(m_view, SIGNAL(setGUIPositionPointer(Rosegarden::timeT)),
+            this,   SLOT(setPointerPosition(Rosegarden::timeT)));
+
+    connect(m_view, SIGNAL(setGUIPlayPosition(Rosegarden::timeT)),
+            this,   SLOT(setPlayPosition(Rosegarden::timeT)));
+
+    connect(m_view, SIGNAL(setGUILoop(Rosegarden::timeT, Rosegarden::timeT)),
+            this,   SLOT(setLoop(Rosegarden::timeT, Rosegarden::timeT)));
+
     m_doc->addView(m_view);
     setCentralWidget(m_view);
     setCaption(m_doc->getTitle());
@@ -1890,6 +1899,28 @@ RosegardenGUIApp::keyReleaseEvent(QKeyEvent *event)
             break;
     }
 
+}
+
+
+// Called from the LoopRuler (usually a double click)
+// to set position and start playing
+//
+void
+RosegardenGUIApp::setPlayPosition(Rosegarden::timeT position)
+{
+    if (m_transportStatus == PLAYING)
+        stop();
+
+    setPointerPosition(position);
+
+    play();
+}
+
+
+void
+RosegardenGUIApp::setLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
+{
+    std::cout << "setGUILoop" << std::endl;
 }
 
 

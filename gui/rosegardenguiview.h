@@ -122,7 +122,7 @@ public:
     /**
      * Set the time pointer position during playback
      */
-    void setPointerPosition(const int &position);
+    void setPointerPosition(const Rosegarden::timeT &position);
 
     /**
      * These two are just-passing-through methods
@@ -160,7 +160,22 @@ public slots:
 
 signals:
     void setTool(SegmentCanvas::ToolType);
-    void setPositionPointer(int);
+
+    // This signal sets the pointer position on the Canvas
+    // (heading down)
+    //
+    void setCanvasPositionPointer(Rosegarden::timeT);
+
+    // This signals is emitted upwards towards the top level
+    // objects and sets the position pointer (this emit
+    // sets off a chain of events that comes back down
+    // through setCanvasPositionPointer() to actually
+    // move the pointer line
+    //
+    void setGUIPositionPointer(Rosegarden::timeT);
+    void setGUIPlayPosition(Rosegarden::timeT);
+    void setGUILoop(Rosegarden::timeT, Rosegarden::timeT);
+
     void activateTool(SegmentCanvas::ToolType);
     void selectSegments(list<Rosegarden::Segment*>);
 

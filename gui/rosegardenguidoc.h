@@ -199,6 +199,7 @@ public slots:
     void documentModified();
     void documentRestored();
 
+
 protected:
 
     /**

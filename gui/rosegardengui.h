@@ -409,6 +409,15 @@ public slots:
      */
     void setPointerPosition(const long &posSec, const long &posUSec);
 
+    /**
+     * Set the pointer position and start playing (from LoopRuler)
+     */
+    void setPlayPosition(Rosegarden::timeT position);
+
+    /**
+     * Set a loop
+     */
+    void setLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs);
 
     /*
      * Rosegarden::RealTime version of the same
@@ -468,6 +477,7 @@ public slots:
     // Put the GUI into a given ToolType edit mode
     //
     void activateTool(SegmentCanvas::ToolType tt);
+
 
 
 private:

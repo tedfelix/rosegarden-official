@@ -41,6 +41,27 @@ public:
 
     ~BarButtons();
 
+signals:
+
+    // Passed through from LoopRuler
+    //
+    void setPointerPosition(Rosegarden::timeT position);
+    void setPlayPosition(Rosegarden::timeT position);
+    void setLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs);
+
+public slots:
+
+    // Re-imit
+    //
+    void slotSetPointerPosition(Rosegarden::timeT position)
+        { emit setPointerPosition(position); }
+
+    void slotSetPlayPosition(Rosegarden::timeT position)
+        { emit setPlayPosition(position); }
+
+    void slotSetLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
+        { emit setLoop(lhs, rhs); }
+
 private:
     void drawButtons();
 

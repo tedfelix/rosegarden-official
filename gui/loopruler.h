@@ -67,15 +67,15 @@ signals:
 
     // Set the pointer position on mouse single click
     //
-    void setPointerPosition(Rosegarden::timeT position);
+    void setPointerPosition(Rosegarden::timeT);
 
     // Set pointer position and start playing on double click
     //
-    void setPlayPosition(Rosegarden::timeT position);
+    void setPlayPosition(Rosegarden::timeT);
 
     // Set a playing loop
     //
-    void setLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs);
+    void setLoop(Rosegarden::timeT, Rosegarden::timeT);
 
 private:
 
