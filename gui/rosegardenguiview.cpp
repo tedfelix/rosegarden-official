@@ -34,12 +34,27 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
 {
     QScrollView *scrollView = new QScrollView(this);
     
-    scrollView->addChild(new TracksEditor(12, 50, this));
+    RosegardenGUIDoc* doc = getDocument();
+    TracksEditor *tracksEditor = 0;
+    
+    if (doc) {
+
+        kdDebug(KDEBUG_AREA) << "RosegardenGUIView() : doc != 0\n";
+        tracksEditor = new TracksEditor(doc, this);
+
+    } else {
+
+        kdDebug(KDEBUG_AREA) << "RosegardenGUIView() : no doc\n";
+        tracksEditor = new TracksEditor(12, 50, this);
+
+    }
+    
+    scrollView->addChild(tracksEditor);
     
 //     if (getDocument()) {
         
 //         m_notationView = new NotationView(getDocument(), this);
-
+ 
 //         m_notationView->show();
 //     }
 }
