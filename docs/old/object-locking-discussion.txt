@@ -1,0 +1,204 @@
+
+Mutexes and object deletion issues in the Server
+================================================
+
+(This is not the most recent document on this subject although it is
+the most thorough one, particularly about Element locks.  See
+<URL:object-locking.txt> for a more up-to-date overview.)
+
+The Rosegarden Server is a shared resource database for distributed
+clients.  Because its resources are intended to be shared, some
+locking will be required to ensure objects are not modified by one
+client while another is trying to use them.
+
+Investigation
+-------------
+
+Here we consider three sorts of sharable objects within the Rosegarden
+Server: Element and its subclasses, Part, and PartIterator.  (Although
+PartIterator is not a sharable object -- each one belongs to a single
+distinct client -- it is a form of reference to a sharable resource.)
+
+Element
+~~~~~~~
+Elements need to be locked for both deletion and modification.
+
+The only way to get an Element reference is to use one of the accessor
+methods of a PartIterator interface.  This means the lock can be
+obtained "quietly" by the PartIterator method, and released explicitly
+when the user no longer wants the Element (a client-side wrapper would
+help here; it would be nicer if it could be done at the server, but
+the lack of multi-threading prohibits this).
+
+This limited access to Elements also means, given the mobile nature of
+PartIterators, that it's not a problem if an Element turns out to have
+been deleted while waiting for the lock: the PartIterator will then be
+automatically left pointing to the next Element, which it can lock and
+return instead.  The client will never know the difference, and nor
+should it.
+
+PartIterator
+~~~~~~~~~~~~
+The only time a PartIterator need concern itself with locking (apart
+from when negotiating locks for Elements, above) is if the Part it
+iterates over is deleted entirely.  For this reason, creating a
+PartIterator should probably involve locking the Part (see below), at
+least against deletion.
+
+Part
+~~~~
+Modifying something within a Part should only require locks insofar as
+it involves deleting or modifying Elements and therefore respecting
+and acquiring locks for those Elements.
+
+Inserting a new Element will not affect the other Elements or the
+PartIterators (which move along to remain pointing to the same Element
+as before).  However, it will change the stored time on a
+TimedIterator, and we should perhaps consider locking in this case for
+that reason.  (Alternatively it might not be completely unreasonable
+to declare that the stored time on a TimedIterator should be expected
+to be unstable.  Note to self: consider this, after the other locks
+have been implemented.)
+
+A client that wants to delete a Part should get a lock on the entire
+Part by waiting for all locks on all Elements in that Part (or another
+lock on the whole Part) to be released.
+
+What about Iterators: do we wait until all Iterators have also been
+released (and thus also lock the creation of Iterators)?  We probably
+have to; a pragmatic alternative might be to have Iterators on a
+deleted Part remain usable but pretend they're looking at an empty
+part: the implementation would be simpler, but it'd be difficult to
+ensure all the possible problems were worked out.  Ultimately it's
+probably simpler to do it correctly.
+
+Locking a Part could prove complicated, because again it'll have to be
+done at the client end; the client can simply delay and retry each
+time a Part lock is found to be unavailable, just as for Element
+locks, but the chance of finding a suitable moment (when all Elements
+are unlocked and there are no extant Iterators) by this method could
+be very small.  Better might be for the server to be made aware that a
+client was waiting, and to refuse to issue any new locks or create any
+new iterators in that time.  Unfortunately that could give rise to
+situations where a client could not release an element lock because it
+was waiting for a lock on the next element, which was not being served
+because another client was waiting to delete the part; this would be
+resolved incorrectly by the server timing out on the client's original
+element lock.  Maybe it *is* better to expect a deletePart to involve
+a potentially humongous delay.
+
+Note that this still leaves two places where an object can be deleted
+while awaiting a lock: a Part can be deleted while a client tries to
+lock it, or a Part can be deleted while a client tries to obtain an
+Iterator on it.  The former is fine if the client was only trying to
+lock it for the purposes of deletion anyway!  Otherwise, these should
+probably both result in exceptions.
+
+Transactions
+------------
+
+A separate problem is that of identified transactions.  A group of
+operations may have to be considered a transactional unit for the
+purposes of Undo and Redo, etc; in which case the Part needs to be
+locked during that group so that no other operations can disturb the
+integrity of the transaction.
+
+(Not every use of the Part corresponds to a transaction: most
+obviously, continuous read-only activities such as playback do not.
+Such uses still require integrity of small groups of operations, so we
+still need Element-level locking as discussed above in order to
+prevent, for instance, a transaction barging in and locking the Part
+between the getRightElement() and getPitch() calls of a single note's
+playback.  Transactions are not the complete solution on their own.)
+
+Unlike Element-level locks, transaction locks should be respected by
+any mutating operation: insert, delete, or an attempt to modify any
+Element; and no (out-of-process) client should be able to carry out
+one of these operations without having a valid transaction ID already.
+
+In summary, there can only be one transaction per Part at a given time
+(possibly even per Composition, not for locking reasons but because
+we'd prefer only to have one Undo stack); any mutating operation must
+be part of a transaction; and any number of read-only operations can
+go on at the same time as a transaction, subject to the finer-grained
+Element locks discussed in the previous section.
+
+Implementation summary
+----------------------
+
+Out-of-process clients
+~~~~~~~~~~~~~~~~~~~~~~
+Part and Element objects should be locked when accessed.  An attempt
+to access an object that someone else has locked should stall until
+the lock is available.  Note that Element-level locking is not
+required when inserting Elements into a Part, because this does not
+disturb existing Iterators or Element references.
+
+For operations that require transaction locks (insert, delete and
+other modifications) the wrappers should pass in a transaction ID, and
+should fail if no ID is available.  The ID should be initialised by
+some specific call on a Part or Composition wrapper (presumably with
+corresponding supporting IDL function), which should block until other
+transactions are complete and should only fail if something other than
+just obtaining the lock goes wrong.
+
+Because the Server is single-threaded, code in the Server can not wait
+for locks to be released (if it stops to wait, it will block the
+entire process so the ORB cannot process the unlock call and the lock
+will never be released).  Therefore lock negotiation will have to be
+carried out at the client.  We therefore introduce a client wrapper
+library that does all the blocking-waiting-for-locks stuff for us.
+Ideally this should employ oneway callbacks from the Server to
+indicate when a lock becomes available; it would be simpler, if less
+efficient, for the client to repeatedly poll the server at slightly
+randomised intervals; we'll start by doing it that way.
+
+(Because the locking is done at the client end, all the method calls
+used by the locking code will have to be defined in IDL.  This means a
+client could do its own locking without using the wrappers, if it
+wanted, or could even avoid doing it at all.  Note that we don't have
+to provide wrappers for any of the Element interfaces, because the
+Iterators will do the client-end negotiation for their locks.)
+
+This can only be of use for clients that are in a separate process
+from the Server, or for a multi-threaded environment.  (MICO does not
+support MT use.  We can move to MT immediately if we feel we really
+have to, but it'll mean moving to OmniORB.  I don't know what the
+situation with ORBit is.  We should try to find out.)
+
+In-process clients
+~~~~~~~~~~~~~~~~~~
+For clients that share a thread with the server, we provide an
+alternative: no locking.  Why?  Because we're only providing it for
+non-threaded clients, and no other client can modify a resource while
+a non-threaded client is using it anyway!
+
+This means a non-threaded in-process client is completely safe from
+other clients.  Unfortunately, other out-of-process clients are not
+safe from it.  Between any two method calls from out-of-process
+clients, an in-process client could have carried out an arbitrary
+number of changes without being able to help by waiting for the locks
+to be released before doing so.
+
+However, of the obvious candidates for in-process execution, several
+(file export, playback note-marshaller) are read-only; and the file
+import clients presently act only on whole Compositions.  (Even if
+they didn't, file I/O is something that's only carried out in response
+to an atomic request from some other client -- and if that client is
+out-of-process, it can wait for the proper locks itself, provided it
+has the right tools.)
+
+So, none of these can cause problems for other clients.  That leaves
+note-marshalling on recording, which is a rather unplumbed depth in
+every way, so far.  The probability is that the performer would buffer
+incoming data in the same way as outgoing, and would simply notify the
+incoming marshaller that some notes are available.  The marshaller
+itself may have to be out-of-process, which could have efficiency
+implications.
+
+Of course, in-process clients may still use to mark out groups of
+operations as unit transactions for Undo or Redo.  But they won't be
+locked.
+
+
+_Chris Cannam 981127_

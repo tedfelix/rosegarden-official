@@ -1,0 +1,38 @@
+
+Naming
+------
+
+ * Class names, typedefs, enums and structs begin with a capital letter,
+   e.g. RipeBanana
+
+ * Method names and local variables begin with a lower-case,
+   e.g. getRipeBanana(), doComplexCalculation(), dumpCore()
+
+ * Data members begin with m_ plus lower-case, e.g. m_ripeBanana.  This
+   is a Microsoft-ism, but it's the only one I use.  This conflicts with
+   Guillaume's native style
+
+ * Global variables, and functions that aren't class methods, begin with
+   an upper-case
+
+ * Read accessors all begin with "get", unless they return a boolean
+   value in which case "is", and write accessors begin with "set".
+
+ * Macros are all-caps with underscores
+
+Style
+-----
+
+Classes are defined in the order:
+
+	1. public methods
+
+        2. protected methods
+
+        3. private methods
+
+        4. private data members
+
+Constructors and destructor go at the start of whichever
+section they're in
+

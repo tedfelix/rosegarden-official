@@ -1,0 +1,110 @@
+
+Object locking in the Server: transactions, Undo, and read-only clients
+=======================================================================
+
+The Rosegarden Server is a shared resource database for distributed
+clients.  Because its resources are intended to be shared, locking is
+needed to ensure objects are not modified by one client while another
+is trying to use them; furthermore, the requirement to provide Undo
+and Redo services means that we need to enforce the ordering and
+integrity of undoable operations.
+
+This document describes the techniques used.  See also
+<URL:object-locking-discussion.txt> for an older discussion with more
+emphasis on design rather than usage.
+
+Transactions
+------------
+
+A client that wishes to modify data on the Server (a mutator) must
+comply with the transaction-locking scheme.  (That's a rule for
+successful living, not something that the software is necessarily able
+to enforce.)  In general, such a client will be able to divide its
+modifications up into individual "atomic" operations.  It's desirable
+that the Server should be told which operation is which, so that it
+can backup any affected data before it's modified and thus supply a
+transparent Undo capability.  Equally, it's important that the Server
+can ensure that two operations from different clients never attempt to
+modify the same thing at the same time.  Transaction locks fulfil
+these requirements.
+
+For a client to modify something, it must first wait for a transaction
+lock and obtain a transaction ID.  To do so, it has to provide a name
+for the transaction, for use in the Undo menu, and to specify the
+extents of the area in a Part which the transaction will modify, so
+that the server can backup that area before it's modified.  There are
+client wrappers to handle this lock negotiation: always use a client
+wrapper (from [server/wrapper/RosegardenServerWrappers.h]) when
+available.  The [Composition] wrapper handles lock waits, etc, and the
+[Transaction] wrapper simplifies starting and ending transactions.
+Similarly the transaction must be explicitly ended when complete.  The
+only really troublesome requirement here is to specify the start and
+end extents of the area to be modified; but you have to get these
+right, as they define the area that the server will automatically save
+for use in the Undo stack.
+
+
+Element-level (read-only) locks
+-------------------------------
+
+
+Read-only clients
+-----------------
+
+Some clients do not carry out transactions, as such: a client such as
+a Performer may wish to keep Performing constantly regardless of what
+else is going on around it.  This is fine, so long as the client is
+read-only; it should simply never start nor end a transaction, and as
+it only calls those (read-only) methods that do not require a
+TransactionId, there should be no problem.  It should still use the
+wrappers, though, as it still needs to use Element-level locks to
+insulate itself against inconsistencies from modifications made by
+transactions that may be going on at the same time.
+
+In-process clients
+------------------
+
+Other clients may be linked in-process with the server, and so cannot
+wait for locks at all: to wait would mean sleeping and blocking the
+single thread, and then it could never process the locking client's
+request to release the lock.
+
+Such clients must have strictly limited capabilities: basically they
+should either be read-only, or else should only work on an area that
+no other client could be using, such as a new Composition in for
+instance a file import client.  In the latter case, they effectively
+have to omit the transaction lock/release stage and to pass
+NoTransaction to every modifying method; fortunately, the Composition
+and Transaction wrappers are clever enough to spot an in-process
+client and will do exactly that automatically, so usually the
+mechanics for the in-process client are the same as for the
+out-of-process one.
+
+Note that operations made by an in-process client will not be
+available on the Undo stack.
+
+Timeouts
+--------
+
+All types of lock have server-side timeouts.  A transaction lock will
+timeout if unused within ten seconds (at the moment, though that's
+probably a bit severe); each call to an IDL method passing a
+TransactionId will cause the timeout to be refreshed.  Element-level
+locks timeout in five seconds and are not refreshed by operations on
+that element, so keeping inactive [Element_ptr]s hanging around at the
+client is a very bad idea (you should instead keep the Iterator
+hanging around, and then check [isOK()] and dereference it to get the
+Element when you need it).
+
+Client-side wrappers
+--------------------
+
+The methods defined in IDL that attempt to use locks are polling
+calls; they return immediately if the lock is unavailable (or carry
+out the operation and return if the lock was available).  The usual
+way to negotiate a lock at the client side is to call the desired
+method in its locking version, examine the result and if it failed, to
+delay and try again.  The onus of managing the delay and retry is
+solely on the client, and this is one of the tasks that the wrappers
+generally carry out.
+

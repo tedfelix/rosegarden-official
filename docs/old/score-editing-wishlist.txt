@@ -1,0 +1,109 @@
+
+Comments about score editing from the Rosegarden mailing-list
+=============================================================
+
+I said:
+
+ * I need as much information as possible (from a user's point of
+   view) about how existing score-editing packages handle editing of
+   chords and counterpoint, and about how their editing could be
+   improved upon.
+
+
+Observations about existing packages
+------------------------------------
+
+ * Finale:  If I click (almost) directly above or below a note,
+   the new note is added to the existing one(s) as a chord.  If I
+   click off to the side a bit, it's a standalone note.  \[To edit an
+   existing note,\] click directly on the note you want to change,
+   rather than to the side.  You can also select a region (a rectangle
+   like in most graphics programs), and just make sure the region only
+   includes the note you want.  Finale also has an "eraser" built into
+   the note palette, so generally to delete a single note you select
+   the eraser tool and click the note.  To delete multiple notes, I
+   select regions and either press delete or use one of the editing
+   options (like "remove all notes but leave time signature changes").
+   \[It also has\] distinct layers (up to 4 per staff).  There are also
+   "voices" (2 per staff), which mostly appear to allow you to have 2
+   sets of 4 layers (1 set per "voice") per staff, instead of just
+   one.  There's also the ability to superimpose one staff on top of
+   another, which I've never even bothered figuring out how to use.
+   (Will Lowe)
+
+ * It's pretty easy \[to select notes in Finale\] provided you're not
+   looking at the score at, say %50 magnification.  I have a 17"
+   screen and I like to work "close in" (say %75 - %125
+   magnification). Sometimes to edit really dense clusters you need to
+   zoom way in though, to be sure to get the right note.  Perhaps some
+   keyboard shortcuts would be useful here (e.g. a way to click the
+   mouse on a measure, then use the arrow keys to select a note in the
+   measure).  (Will)
+
+ * Finale: When loading a MIDI file, there are three options: "Tracks
+   Become Staves", "Channels Become Staves", "Set Track-to-Staff list"
+   (Will)
+
+ * Noteworthy creates/adds to the chord immediately to the left of the
+   cursor if the control key is held down as the note is
+   added. Otherwise the note being added just becomes the next note in
+   the melody. ... as yet, the only way of deleting notes I've found
+   is by deleting the whole chord - which gets a bit trying after a
+   while.  \[Noteworthy has\] good keyboard shortcuts - for example, it
+   is possible to select length of notes by using the numbers on the
+   keyboard - 1 for breve, 2 - semibreve etc.  (Tim Robinson)
+
+ * One of the features I like \[in Rosegarden\] is being able to select
+   notes/chords/phrases and transpose them up and down the stave using
+   the cursor keys.  (Tim Robinson)
+
+
+Wishlist
+--------
+
+ * It would be _really_ nice to be able to "hide" and "freeze" voices,
+   and to "collapse" scores with many staves. ... "freeze", "thaw"
+   and colour assignment for layers make sense.  (Herman Robak)
+
+ * Finale's method is ``nice because you can display each layer in a
+   different color. ... It's great for entering counterpoint -- select
+   the layer you want to enter music into, and play (or type or click)
+   the notes in. ... Sometimes it's a bit painful to edit lots of
+   counterpoint, because the layer selection button is at the bottom
+   left corner of the screen, so you have to move the mouse around a
+   lot.  There are keyboard shortcuts, but they're a pain to use if
+   your hand is already on the mouse.  If the layer selection buttons
+   floated, though, it'd be wonderful.  Or maybe if you could
+   right-click on a note in another layer to bring that layer to the
+   "foreground".''  (Will Lowe)
+
+ * it would also be helpful to be able to drag one note head onto a
+   chord and have it added to that chord (or even drag one chord onto
+   another to make a big chord).  (Behfar Bastani)
+
+ * one way \[to select notes\] would be to click on the stem of the
+   chord to select the whole chord, as opposed to clicking on one note
+   head to just select that note in the chord. for chords without
+   stems (whole notes or bigger) one could select them via a rectangle.
+   (Behfar)
+
+ * another really helpful feature would be the ability to use the
+   mouse and "slide" individual note heads up & down the staff lines
+   to change their pitch within a given chord. for example you could
+   drag the E down by half a step to Eflat to make a C major chord
+   into minor.  another nice way of doing this would be to select one
+   note head on the staff, and use the arrow keys to lower/raise the
+   pitch (like rosegarden does it in a chord edit window right now).
+   (Behfar)
+
+ * maybe the note "under" the mouse (the one that would be selected if
+   I clicked now) could turn colors.  (Will)
+
+ * This \[per-staff rather than global layers\] would make perfect
+   sense, if staves could be grouped in clusters or groups, with the
+   same layer space. I mean, the left hand and right hand stave of a
+   piano score is a logical unit. It would be nice to have the editing
+   functions reflect that. ... Would it be too confusing for the users
+   to let layer spaces span all the staves connected by braces?
+   (Herman Robak)
+
