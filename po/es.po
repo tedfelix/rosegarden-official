@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "POT-Creation-Date: 2003-04-26 11:56+0200\n"
-"PO-Revision-Date: 2003-04-18 16:45+0200\n"
+"PO-Revision-Date: 2003-04-26 17:10+0200\n"
 "Last-Translator: Pedro Lopez-Cabanillas <plcl@bigfoot.com>\n"
 "Language-Team: Spanish <rosegarden-devel@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -334,9 +334,8 @@ msgid "&Studio"
 msgstr "E&studio"
 
 #: rc.cpp:49
-#, fuzzy
 msgid "Tracks Toolbar"
-msgstr "Barra de Herramientas de Marcadores"
+msgstr "Barra de Herramientas de Pistas"
 
 #: rc.cpp:50
 msgid "Editors Toolbar"
@@ -641,45 +640,40 @@ msgid "Found Metadata outside Composition"
 msgstr "Encontrado Metadata fuera de Composición"
 
 #: rosexmlhandler.cpp:1363
-#, fuzzy
 msgid "Found recordLevel outside Instrument"
-msgstr "Encontrada Reverberación fuera del Instrumento"
+msgstr "Encontrado \"recordLevel\" (volumen de grabación) fuera de \"Instrument\""
 
 #: rosexmlhandler.cpp:1376
-#, fuzzy
 msgid "Found audioInput outside Instrument"
-msgstr "Encontrado Panorama fuera del Instrumento"
+msgstr "Encontrado \"audioInput\" (entrada de Audio) fuera de \"Instrument\""
 
 #: rosexmlhandler.cpp:1419
 msgid "Got event outside of a Segment"
 msgstr "Encontrado Evento fuera de Segmento"
 
 #: rosegardentempo.cpp:35
-#, fuzzy
 msgid "Set Tempo"
-msgstr "Establecer Tempo global"
+msgstr "Establecer Tempo"
 
 #: rosegardentempo.cpp:44
-#, fuzzy
 msgid "Modify Tempo"
-msgstr "Modificar Nota"
+msgstr "Modificar Tempo"
 
 #: rosegardentempo.cpp:51
 msgid "Change this tempo to"
-msgstr ""
+msgstr "Cambiar este tempo a"
 
 #: rosegardentempo.cpp:55
 msgid "Tempo at time"
-msgstr ""
+msgstr "Tempo en "
 
 #: rosegardentempo.cpp:59 rosegardentempo.cpp:70
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #: rosegardentempo.cpp:66
-#, fuzzy
 msgid "is currently"
-msgstr "El cursor está actualmente en el "
+msgstr "está actualmente"
 
 #: notefont.cpp:59
 msgid "Can't open mapping file "
@@ -790,9 +784,8 @@ msgid "Manage MIDI Banks and Programs"
 msgstr "Gestionar Bancos y Programas MIDI"
 
 #: bankeditor.cpp:660
-#, fuzzy
 msgid "Reset"
-msgstr "Silencio"
+msgstr "Reiniciar"
 
 #: bankeditor.cpp:679
 msgid "MIDI Device"
@@ -843,8 +836,7 @@ msgid "Export Banks"
 msgstr "Exportar Bancos"
 
 #: bankeditor.cpp:714
-msgid ""
-"Import Bank and Program data from a Rosegarden file to the current Device"
+msgid "Import Bank and Program data from a Rosegarden file to the current Device"
 msgstr ""
 "Importar datos de Banco y Programa desde un archivo de Rosegarden para el "
 "dispositivo actual"
@@ -1188,9 +1180,8 @@ msgid "Show T&ools Toolbar"
 msgstr "M&ostrar Barra de Herramientas de Herramientas"
 
 #: rosegardengui.cpp:298
-#, fuzzy
 msgid "Show Trac&ks Toolbar"
-msgstr "Mostrar Barra de Herramientas de &Marcadores"
+msgstr "Mostrar Barra de Herramientas de &Pistas"
 
 #: rosegardengui.cpp:302
 msgid "Show &Editors Toolbar"
@@ -1509,9 +1500,8 @@ msgid "Toggle the toolbar..."
 msgstr "Conmuta la barra de herramientas..."
 
 #: rosegardengui.cpp:1789
-#, fuzzy
 msgid "Toggle the tools toolbar..."
-msgstr "Conmutar la barra de herramientas de ampliación..."
+msgstr "Conmutar la barra de herramientas de herramientas..."
 
 #: rosegardengui.cpp:1799
 msgid "Toggle the tracks toolbar..."
@@ -1663,8 +1653,7 @@ msgstr "Exportar como..."
 #: rosegardengui.cpp:2830 rosegardengui.cpp:2860 rosegardengui.cpp:2893
 #: rosegardengui.cpp:2925
 msgid "Export failed.  The file could not be opened for writing."
-msgstr ""
-"Ha fallado la exportación. El archivo no se ha podido abrir para escritura."
+msgstr "Ha fallado la exportación. El archivo no se ha podido abrir para escritura."
 
 #: rosegardengui.cpp:2836 rosegardengui.cpp:2847
 msgid "Exporting Csound score file..."
@@ -2194,8 +2183,7 @@ msgstr "Crescendo - establecer %1 creciendo desde el mínimo al máximo"
 
 #: dialogs.cpp:2506
 msgid "Diminuendo - set %1 falling from max to min"
-msgstr ""
-"Diminuendo - establecer %1 descendiendo desde el máximo hasta el mínimo"
+msgstr "Diminuendo - establecer %1 descendiendo desde el máximo hasta el mínimo"
 
 #: dialogs.cpp:2509
 msgid "Ringing - set %1 alternating from max to min with both dying to zero"
@@ -2225,8 +2213,7 @@ msgstr "Cambiar Duración de la Composición"
 
 #: dialogs.cpp:2625
 msgid "Set the Start and End bar markers for this Composition"
-msgstr ""
-"Establecer los marcadores de compás Inicial y Final para esta Composición"
+msgstr "Establecer los marcadores de compás Inicial y Final para esta Composición"
 
 #: dialogs.cpp:2629
 msgid "Start Bar"
@@ -2488,8 +2475,7 @@ msgstr "Cuantizador heurístico de partitura"
 
 #: widgets.cpp:821
 msgid "Quantize for notation only (leave performance unchanged)"
-msgstr ""
-"Cuantizar para la partitura sólamente (dejar la interpretación intacta)"
+msgstr "Cuantizar para la partitura sólamente (dejar la interpretación intacta)"
 
 #: widgets.cpp:829
 msgid "Notation parameters"
@@ -2773,14 +2759,12 @@ msgid "Instrument Parameters"
 msgstr "Parámetros de Instrumento"
 
 #: instrumentparameterbox.cpp:455
-#, fuzzy
 msgid "Record level = "
-msgstr "Añadir Dispositivo de Grabación"
+msgstr "Volumen de Grabación = "
 
 #: instrumentparameterbox.cpp:479
-#, fuzzy
 msgid "Playback level = "
-msgstr "Reproducción (en ms)"
+msgstr "Volumen de Reproducción = "
 
 #: instrumentparameterbox.cpp:687 instrumentparameterbox.cpp:1171
 #: studiowidgets.cpp:56 audioplugindialog.cpp:153
@@ -2943,8 +2927,7 @@ msgstr "Solapar notas, enlazando con las preexistentes [\"solapamiento\"]"
 
 #: editcommands.cpp:309
 msgid "Overlay notes, ignoring present notes [\"matrix-overlay\"]"
-msgstr ""
-"Solapar notas, ignorando notas preexistentes [\"solapamiento en matriz\"]"
+msgstr "Solapar notas, ignorando notas preexistentes [\"solapamiento en matriz\"]"
 
 #: editcommands.cpp:703
 msgid "Heuristic Notation &Quantize"
@@ -4062,44 +4045,43 @@ msgstr "Exportar Archivo de Audio"
 
 #: audiomanagerdialog.cpp:176
 msgid "Add an audio file to this manager dialog."
-msgstr ""
+msgstr "Añadir un archivo de audio a este diálogo de gestión"
 
 #: audiomanagerdialog.cpp:179
 msgid "Remove an audio file from this manager dialog."
-msgstr ""
+msgstr "Eliminar un archivo de audio de este diálogo de gestión."
 
 #: audiomanagerdialog.cpp:182
-#, fuzzy
 msgid "Hear a preview of the currently selected audio file."
-msgstr "Silencia todas las pistas excepto la seleccionada"
+msgstr "Escuchar una pre-visualización del archivo de audio actualmente seleccionado."
 
 #: audiomanagerdialog.cpp:185
-#, fuzzy
 msgid "Rename the currently selected audio file."
-msgstr "Silencia todas las pistas excepto la seleccionada"
+msgstr "Renombrar el archivo de audio actualmente seleccionado."
 
 #: audiomanagerdialog.cpp:188
 msgid ""
 "Insert the current audio file at the bottom of your composition in a new "
 "audio track."
-msgstr ""
+msgstr "Insertar el archivo de audio actual al final de la composición en una nueva pista de audio."
 
 #: audiomanagerdialog.cpp:191
 msgid ""
 "Remove all audio files (and any representations of them) from this dialog "
 "and the composition."
 msgstr ""
+"Eliminar todos los archivos de audio (y cualquier representación de los mismos) "
+"de este diálogo y de la composición"
 
 #: audiomanagerdialog.cpp:194
-#, fuzzy
 msgid "Export this audio file."
-msgstr "Exportando archivo de audio..."
+msgstr "Exportar este archivo de audio."
 
 #: audiomanagerdialog.cpp:197
 msgid ""
 "You can drag and drop .wav files here to insert them from Konqueror or other "
 "KDE file browsers."
-msgstr ""
+msgstr "Puede arrastrar-y-soltar archivos \"wav\" aquí desde Konqueror u otro gestor de archivos de KDE."
 
 #: audiomanagerdialog.cpp:203
 msgid "Duration"
@@ -4585,8 +4567,7 @@ msgid "global element must precede note elements"
 msgstr "elemento global debe preceder a elementos de nota"
 
 #: notestyle.cpp:595
-msgid ""
-"global and note elements may have shape or charname attribute, but not both"
+msgid "global and note elements may have shape or charname attribute, but not both"
 msgstr ""
 "elementos globales y notas pueden tener forma o nombre de carácter, pero no "
 "ambos"
@@ -4677,7 +4658,7 @@ msgstr "(ninguno)"
 
 #: audioplugindialog.cpp:73 audioplugindialog.cpp:159
 msgid "Select a plugin from this list."
-msgstr ""
+msgstr "Seleccionar un \"plugin\" de esta lista"
 
 #: audioplugindialog.cpp:78
 msgid "Bypass"
@@ -4685,16 +4666,15 @@ msgstr "Desviación"
 
 #: audioplugindialog.cpp:79
 msgid "Bypass this plugin."
-msgstr ""
+msgstr "Evitar este plugin."
 
 #: audioplugindialog.cpp:84 audioplugindialog.cpp:154
-#, fuzzy
 msgid "<id>"
-msgstr "<sin identificador>"
+msgstr "<id>"
 
 #: audioplugindialog.cpp:86
 msgid "Unique ID of plugin."
-msgstr ""
+msgstr "ID único del \"plugin\"."
 
 #: matrixcommands.cpp:63
 msgid "Erase Note"
@@ -4732,406 +4712,3 @@ msgstr "Crear Dispositivo"
 msgid "Reconnect Device"
 msgstr "Reconectar Dispositivo"
 
-#, fuzzy
-#~ msgid "Rosegarden::AudioManagerDialog"
-#~ msgstr "Gestor de Archivos de Audio - Rosegarden"
-
-#, fuzzy
-#~ msgid "Rosegarden::PluginControl"
-#~ msgstr "Gestor de Archivos de Audio - Rosegarden"
-
-#, fuzzy
-#~ msgid "Rosegarden::AudioPluginDialog"
-#~ msgstr "Gestor de Archivos de Audio - Rosegarden"
-
-#, fuzzy
-#~ msgid "BankEditorDialog"
-#~ msgstr "Abrir Editor de &Letra"
-
-#, fuzzy
-#~ msgid "RemapInstrumentDialog"
-#~ msgstr "&Remapear Instrumentos..."
-
-#, fuzzy
-#~ msgid "ImportDeviceDialog"
-#~ msgstr "Tempo"
-
-#, fuzzy
-#~ msgid "BarButtons"
-#~ msgstr "Botón de Pánico"
-
-#, fuzzy
-#~ msgid "ChordNameRuler"
-#~ msgstr "M&ostrar Regla de Nombres de Acorde"
-
-#, fuzzy
-#~ msgid "ControlRuler"
-#~ msgstr "Controlador"
-
-#, fuzzy
-#~ msgid "ControlBox"
-#~ msgstr "Controlador"
-
-#, fuzzy
-#~ msgid "DeviceEditorDialog"
-#~ msgstr "Abrir Editor de &Letra"
-
-#, fuzzy
-#~ msgid "TimeSignatureDialog"
-#~ msgstr "Medida del Compás"
-
-#, fuzzy
-#~ msgid "KeySignatureDialog"
-#~ msgstr "Armadura"
-
-#, fuzzy
-#~ msgid "TupletDialog"
-#~ msgstr "Grupo irregular"
-
-#, fuzzy
-#~ msgid "TextEventDialog"
-#~ msgstr "Grupo irregular"
-
-#, fuzzy
-#~ msgid "EventEditDialog"
-#~ msgstr "Parámetros de Segmento"
-
-#, fuzzy
-#~ msgid "TempoDialog"
-#~ msgstr "Tempo"
-
-#, fuzzy
-#~ msgid "ClefDialog"
-#~ msgstr "Grupo irregular"
-
-#, fuzzy
-#~ msgid "QuantizeDialog"
-#~ msgstr "Cuantización"
-
-#, fuzzy
-#~ msgid "RescaleDialog"
-#~ msgstr "Cambiar de escala"
-
-#, fuzzy
-#~ msgid "FileLocateDialog"
-#~ msgstr "Cambiar de escala"
-
-#, fuzzy
-#~ msgid "AudioPlayingDialog"
-#~ msgstr "Plugin de audio"
-
-#, fuzzy
-#~ msgid "AudioSplitDialog"
-#~ msgstr "Opciones de Audio"
-
-#, fuzzy
-#~ msgid "LyricEditDialog"
-#~ msgstr "Abrir Editor de &Letra"
-
-#, fuzzy
-#~ msgid "EventParameterDialog"
-#~ msgstr "Parámetros de Segmento"
-
-#, fuzzy
-#~ msgid "CompositionLengthDialog"
-#~ msgstr "Cambiar Duración de la Composición"
-
-#, fuzzy
-#~ msgid "SplitByPitchDialog"
-#~ msgstr "Dividir por tono"
-
-#, fuzzy
-#~ msgid "InterpretDialog"
-#~ msgstr "Interpretación"
-
-#, fuzzy
-#~ msgid "ShowSequencerStatusDialog"
-#~ msgstr "Estado del Secuenciador"
-
-#, fuzzy
-#~ msgid "CountdownDialog"
-#~ msgstr "Cuantización"
-
-#, fuzzy
-#~ msgid "Rosegarden::DiskSpace"
-#~ msgstr "Rosegarden"
-
-#, fuzzy
-#~ msgid "EditViewBase"
-#~ msgstr "Edición"
-
-#, fuzzy
-#~ msgid "EditView"
-#~ msgstr "Edición"
-
-#, fuzzy
-#~ msgid "EventView"
-#~ msgstr "Filtros de Evento"
-
-#, fuzzy
-#~ msgid "InstrumentLabel"
-#~ msgstr "Instrumento"
-
-#, fuzzy
-#~ msgid "InstrumentParameterBox"
-#~ msgstr "Parámetros de Instrumento"
-
-#, fuzzy
-#~ msgid "InstrumentParameterPanel"
-#~ msgstr "Parámetros de Instrumento"
-
-#, fuzzy
-#~ msgid "AudioInstrumentParameterPanel"
-#~ msgstr "Parámetros de Instrumento"
-
-#, fuzzy
-#~ msgid "MIDIInstrumentParameterPanel"
-#~ msgstr "Parámetros de Instrumento"
-
-#, fuzzy
-#~ msgid "LoopRuler"
-#~ msgstr "Repetir"
-
-#, fuzzy
-#~ msgid "MatrixCanvasView"
-#~ msgstr "Matriz"
-
-#, fuzzy
-#~ msgid "MatrixParameterBox"
-#~ msgstr "Parámetros de rejilla"
-
-#, fuzzy
-#~ msgid "MatrixPainter"
-#~ msgstr "Matriz"
-
-#, fuzzy
-#~ msgid "MatrixSelector"
-#~ msgstr "Limpiar selección"
-
-#, fuzzy
-#~ msgid "MatrixView"
-#~ msgstr "Matriz"
-
-#, fuzzy
-#~ msgid "MidiFilterDialog"
-#~ msgstr "Abrir Editor de &Letra"
-
-#, fuzzy
-#~ msgid "NotationCanvasView"
-#~ msgstr "Partitura"
-
-#, fuzzy
-#~ msgid "NoteInserter"
-#~ msgstr "Insertar Nota"
-
-#, fuzzy
-#~ msgid "RestInserter"
-#~ msgstr "Insertar Nota"
-
-#, fuzzy
-#~ msgid "NotationEraser"
-#~ msgstr "Partitura"
-
-#, fuzzy
-#~ msgid "NotationSelector"
-#~ msgstr "Partitura"
-
-#, fuzzy
-#~ msgid "NotationView"
-#~ msgstr "Partitura"
-
-#, fuzzy
-#~ msgid "RawNoteRuler"
-#~ msgstr "Mostrar &Regla Cruda de Nota"
-
-#, fuzzy
-#~ msgid "RosegardenCanvasView"
-#~ msgstr "Rosegarden"
-
-#, fuzzy
-#~ msgid "Rosegarden::ConfigurationPage"
-#~ msgstr "Configuración General"
-
-#, fuzzy
-#~ msgid "Rosegarden::TabbedConfigurationPage"
-#~ msgstr "Configuración General"
-
-#, fuzzy
-#~ msgid "Rosegarden::GeneralConfigurationPage"
-#~ msgstr "Configuración General"
-
-#, fuzzy
-#~ msgid "Rosegarden::NotationConfigurationPage"
-#~ msgstr "Configuración General"
-
-#, fuzzy
-#~ msgid "Rosegarden::MatrixConfigurationPage"
-#~ msgstr "Configuración General"
-
-#, fuzzy
-#~ msgid "Rosegarden::LatencyConfigurationPage"
-#~ msgstr "Configuración General"
-
-#, fuzzy
-#~ msgid "Rosegarden::DocumentMetaConfigurationPage"
-#~ msgstr "Configuración General"
-
-#, fuzzy
-#~ msgid "Rosegarden::AudioConfigurationPage"
-#~ msgstr "Gestor de Archivos de Audio - Rosegarden"
-
-#, fuzzy
-#~ msgid "Rosegarden::SequencerConfigurationPage"
-#~ msgstr "Configuración General"
-
-#, fuzzy
-#~ msgid "Rosegarden::ConfigureDialogBase"
-#~ msgstr "Configuración General"
-
-#, fuzzy
-#~ msgid "Rosegarden::ConfigureDialog"
-#~ msgstr "Configuración General"
-
-#, fuzzy
-#~ msgid "RosegardenGUIDoc"
-#~ msgstr "Rosegarden"
-
-#, fuzzy
-#~ msgid "RosegardenGUIApp"
-#~ msgstr "Rosegarden"
-
-#, fuzzy
-#~ msgid "RosegardenGUIView"
-#~ msgstr "Rosegarden"
-
-#, fuzzy
-#~ msgid "Rosegarden::RosegardenTransportDialog"
-#~ msgstr "Transporte de Rosegarden"
-
-#, fuzzy
-#~ msgid "SegmentCanvas"
-#~ msgstr "Segmentos:"
-
-#, fuzzy
-#~ msgid "SegmentParameterBox"
-#~ msgstr "Parámetros de Segmento"
-
-#, fuzzy
-#~ msgid "SegmentTool"
-#~ msgstr "Seg&mentos"
-
-#, fuzzy
-#~ msgid "SegmentPencil"
-#~ msgstr "Seg&mentos"
-
-#, fuzzy
-#~ msgid "SegmentEraser"
-#~ msgstr "Segmentos:"
-
-#, fuzzy
-#~ msgid "SegmentMover"
-#~ msgstr "Seg&mentos"
-
-#, fuzzy
-#~ msgid "SegmentResizer"
-#~ msgstr "Seg&mentos"
-
-#, fuzzy
-#~ msgid "SegmentSelector"
-#~ msgstr "Parámetros de Segmento"
-
-#, fuzzy
-#~ msgid "SegmentSplitter"
-#~ msgstr "Parámetros de Segmento"
-
-#, fuzzy
-#~ msgid "SegmentJoiner"
-#~ msgstr "Seg&mentos"
-
-#, fuzzy
-#~ msgid "Rosegarden::SequenceManager"
-#~ msgstr "Gestor de Archivos de Audio - Rosegarden"
-
-#, fuzzy
-#~ msgid "AudioFaderWidget"
-#~ msgstr "Deslizador de Audio"
-
-#, fuzzy
-#~ msgid "TempoRuler"
-#~ msgstr "Mostrar Barra de Te&mpo"
-
-#, fuzzy
-#~ msgid "TextRuler"
-#~ msgstr "Texto"
-
-#, fuzzy
-#~ msgid "TrackButtons"
-#~ msgstr "Botón de Pánico"
-
-#, fuzzy
-#~ msgid "TrackEditor"
-#~ msgstr "Botón de Pánico"
-
-#, fuzzy
-#~ msgid "TrackLabel"
-#~ msgstr "Mostrar &Etiquetas de Pista"
-
-#, fuzzy
-#~ msgid "VUMeter"
-#~ msgstr "VU-metro de Audio"
-
-#, fuzzy
-#~ msgid "RosegardenTristateCheckBox"
-#~ msgstr "Transporte de Rosegarden"
-
-#, fuzzy
-#~ msgid "RosegardenComboBox"
-#~ msgstr "Rosegarden"
-
-#, fuzzy
-#~ msgid "RosegardenLabel"
-#~ msgstr "Rosegarden"
-
-#, fuzzy
-#~ msgid "RosegardenSpinBox"
-#~ msgstr "Rosegarden"
-
-#, fuzzy
-#~ msgid "RosegardenParameterBox"
-#~ msgstr "Parámetros de Segmento"
-
-#, fuzzy
-#~ msgid "RosegardenProgressDialog"
-#~ msgstr "Rosegarden"
-
-#, fuzzy
-#~ msgid "RosegardenProgressBar"
-#~ msgstr "Rosegarden"
-
-#, fuzzy
-#~ msgid "CurrentProgressDialog"
-#~ msgstr "Interpretación"
-
-#, fuzzy
-#~ msgid "RosegardenFader"
-#~ msgstr "Rosegarden"
-
-#, fuzzy
-#~ msgid "RosegardenRotary"
-#~ msgstr "Rosegarden"
-
-#, fuzzy
-#~ msgid "RosegardenQuantizeParameters"
-#~ msgstr "Parámetros de Segmento"
-
-#~ msgid "No Plugin object found for Port"
-#~ msgstr "No hay objeto Plugin para Puerto"
-
-#~ msgid "&Show Tips on Startup"
-#~ msgstr "Mostrar &Sugerencias al Inicio"
-
-#~ msgid "Drag'n Drop .wav files here"
-#~ msgstr "Arrastrar y soltar archivos wav aquí"
-
-#~ msgid "Display bar/beat time"
-#~ msgstr "Muestra compás/parte"

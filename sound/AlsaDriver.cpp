@@ -455,12 +455,20 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
 
 		std::string name;
 
-		// if the client name is the same as the start of the port
-		// name, just use the port name.  otherwise concatenate
+		// If the first part of the client name is the same as the 
+                // start of the port name, just use the port name.  otherwise
+                // concatenate.
+                //
+                int firstSpace = fullClientName.find(" ");
 
-		if (fullPortName.length() >= fullClientName.length() &&
-		    fullPortName.substr(0, fullClientName.length()) ==
-		    fullClientName) {
+                // If no space is found then we try to match the whole string
+                //
+                if (firstSpace < 0) firstSpace = fullClientName.length();
+
+                if (firstSpace &&
+		    fullPortName.length() >= firstSpace &&
+		    fullPortName.substr(0, firstSpace) ==
+		    fullClientName.substr(0, firstSpace)) {
 		    name = portId + fullPortName;
 		} else {
 		    name = portId + fullClientName + ": " + fullPortName;
