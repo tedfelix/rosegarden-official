@@ -2057,21 +2057,23 @@ BankEditorDialog::slotFileClose()
 void
 BankEditorDialog::closeEvent(QCloseEvent *e)
 {
+    if (m_modified) {
+        
+        int res = KMessageBox::warningYesNoCancel(this, 
+                                                  i18n("There are unsaved changes.\n"
+                                                       "Do you want to apply the changes before exiting "
+                                                       "the Bank Editor or discard the changes ?"),
+                                                  i18n("Unsaved Changes"),
+                                                  i18n("&Apply"),
+                                                  i18n("&Discard"));
+        if (res == KMessageBox::Yes) {
 
-    int res = KMessageBox::warningYesNoCancel(this, 
-                                              i18n("There are unsaved changes.\n"
-                                                   "Do you want to apply the changes before exiting "
-                                                   "the Bank Editor or discard the changes ?"),
-                                              i18n("Unsaved Changes"),
-                                              i18n("&Apply"),
-                                              i18n("&Discard"));
-    if (res == KMessageBox::Yes) {
+            slotApply();
 
-        slotApply();
-
-    } else if (res == KMessageBox::Cancel)
-        return;
-
+        } else if (res == KMessageBox::Cancel)
+            return;
+    }
+    
     emit closing();
     KMainWindow::closeEvent(e);
 }
