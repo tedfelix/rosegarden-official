@@ -414,6 +414,9 @@ MatrixSelector::MatrixSelector(MatrixView* view)
     connect(m_parentView, SIGNAL(usedSelection()),
             this,         SLOT(slotHideSelection()));
 
+    connect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
+            this, SLOT(slotMatrixScrolled(int, int)));
+
     new KAction(i18n("Switch to Draw Tool"), "pencil", 0, this,
                 SLOT(slotDrawSelected()), actionCollection(),
                 "draw");
@@ -764,6 +767,26 @@ void MatrixSelector::slotHideSelection()
     m_selectionRect->setSize(0,0);
     m_mParentView->canvas()->update();
 }
+
+void MatrixSelector::slotMatrixScrolled(int newX, int newY)
+{
+    if (m_updateRect) {
+        int offsetX = newX - m_parentView->getCanvasView()->contentsX();
+        int offsetY = newY - m_parentView->getCanvasView()->contentsY();
+
+        int w = int(m_selectionRect->width() + offsetX);
+        int h = int(m_selectionRect->height() + offsetY);
+
+        // Qt rectangle dimensions appear to be 1-based
+        if (w > 0) ++w; else --w;
+        if (h > 0) ++h; else --h;
+
+        m_selectionRect->setSize(w,h);
+        setViewCurrentSelection();
+        m_mParentView->canvas()->update();
+    }
+}
+
 
 void MatrixSelector::setViewCurrentSelection()
 {

@@ -136,6 +136,7 @@ public:
         { return m_currentEventSelection; }
 
     RosegardenCanvasView* getRawCanvasView() { return m_canvasView; }
+    virtual RosegardenCanvasView* getCanvasView();
 
 signals:
     void changeTempo(Rosegarden::timeT,  // tempo change time
@@ -367,7 +368,6 @@ protected:
      */
     Rosegarden::Device *getCurrentDevice();
 
-    virtual RosegardenCanvasView* getCanvasView();
     virtual void setCanvasView(RosegardenCanvasView *cv);
 
     virtual void keyPressEvent(QKeyEvent *event);

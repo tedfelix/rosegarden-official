@@ -242,6 +242,8 @@ public slots:
 
     void slotClickTimeout();
 
+    void slotMatrixScrolled(int x, int y);
+
 signals:
     void gotSelection(); // inform that we've got a new selection
     void editTriggerSegment(int);
