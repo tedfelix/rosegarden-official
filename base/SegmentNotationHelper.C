@@ -617,13 +617,26 @@ bool TrackNotationHelper::hasEffectiveDuration(iterator i)
 
 
 void
+TrackNotationHelper::makeBeamedGroup(timeT from, timeT to, string type)
+{
+    makeBeamedGroupAux(track().findTime(from), track().findTime(to), type);
+}
+
+void
 TrackNotationHelper::makeBeamedGroup(iterator from, iterator to, string type)
+{
+    makeBeamedGroupAux
+	(track().findTime((*from)->getAbsoluteTime()),
+	 (to == end()) ? to : track().findTime((*to)->getAbsoluteTime()),
+	 type);
+}
+
+void
+TrackNotationHelper::makeBeamedGroupAux(iterator from, iterator to,
+					string type)
 {
     int groupId = track().getNextId();
     
-    from = track().findTime((*from)->getAbsoluteTime());
-    if (to != end()) to = track().findTime((*to)->getAbsoluteTime());
-
     for (iterator i = from; i != to; ++i) {
         (*i)->setMaybe<Int>(BEAMED_GROUP_ID, groupId);
         (*i)->set<String>(BEAMED_GROUP_TYPE, type);
@@ -638,6 +651,11 @@ TrackNotationHelper::makeBeamedGroup(iterator from, iterator to, string type)
   and ItemListAutoBeamSub in editor/src/ItemList.c.
   
 */
+
+void TrackNotationHelper::autoBeam(timeT from, timeT to, string type)
+{
+    autoBeam(track().findTime(from), track().findTime(to), type);
+}
 
 void TrackNotationHelper::autoBeam(iterator from, iterator to, string type)
 {

@@ -218,6 +218,12 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     m_notePixmapFactory = new NotePixmapFactory(m_fontName, m_fontSize);
 
     setupActions();
+
+    kdDebug(KDEBUG_AREA) << "NotationView: Quantizer status is:\n"
+			 << "Unit = " << tracks[0]->getQuantizer()->getUnit()
+			 << "\nMax Dots = "
+			 << tracks[0]->getQuantizer()->getMaxDots() << endl;
+
     initFontToolbar(tracks[0]->getQuantizer()->getUnit());
     initStatusBar();
     
@@ -534,12 +540,17 @@ void NotationView::setupActions()
     // File menu
     KStdAction::close (this, SLOT(closeWindow()),          actionCollection());
 
-   // setup edit menu
+    // setup edit menu
     KStdAction::undo    (this, SLOT(slotEditUndo()),       actionCollection());
     KStdAction::redo    (this, SLOT(slotEditRedo()),       actionCollection());
     KStdAction::cut     (this, SLOT(slotEditCut()),        actionCollection());
     KStdAction::copy    (this, SLOT(slotEditCopy()),       actionCollection());
     KStdAction::paste   (this, SLOT(slotEditPaste()),      actionCollection());
+
+    // setup Group menu
+    new KAction(i18n("Beam Group"), 0, this,
+		SLOT(slotGroupBeam()), actionCollection(), "beam");
+
 
     // setup Settings menu
     KStdAction::showToolbar(this, SLOT(slotToggleToolBar()), actionCollection());
@@ -1122,6 +1133,37 @@ void NotationView::slotToggleStatusBar()
     else
         statusBar()->show();
 }
+
+//
+// Group stuff
+//
+
+void NotationView::slotGroupBeam()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotGroupBeam()\n";
+
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Beaming group..."), statusBar());
+
+    Track &track = m_currentEventSelection->getTrack();
+    TrackNotationHelper helper(track);
+
+    kdDebug(KDEBUG_AREA) << "Beaming between "
+			 << m_currentEventSelection->getBeginTime() << " and "
+			 << m_currentEventSelection->getEndTime() << endl;
+
+    helper.makeBeamedGroup(m_currentEventSelection->getBeginTime(),
+			   m_currentEventSelection->getEndTime(),
+			   "beamed"); //!!!
+
+    emit usedSelection();
+
+    redoLayout(0, //!!! TODO : get the right staff
+	       m_currentEventSelection->getBeginTime(),
+	       m_currentEventSelection->getEndTime());
+}
+
+  
 
 //
 // Status messages

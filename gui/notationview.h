@@ -320,6 +320,9 @@ public slots:
     void slotEraseSelected();
     void slotSelectSelected();
 
+    /// group slots
+    void slotGroupBeam();
+
     /// Canvas actions slots
 
     /**

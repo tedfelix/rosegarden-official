@@ -1,0 +1,33 @@
+
+Tuplets
+=======
+
+Tuplet is a general term for series of notes played with durations
+(usually) shorter than the nominal durations of the drawn notes.  The
+obvious example is the triplet, in which three notes are played in the
+time of two.
+
+The terminology we use in Rosegarden 4 is: a Tuplet is a single note
+within one of these series; Tupled Group (which is a special sort of
+Beamed Group -- see sets.txt) is the name for the whole series.  Each
+tuplet has a nominal duration, which is the duration of the note as
+drawn on the score (e.g. triplet quavers have a nominal one-quaver
+duration), and an effective duration, which is the duration of the
+note as performed (e.g. two-thirds of a quaver).
+
+Rosegarden 2.1 stored tuplets with their nominal type and duration,
+plus some information that could be used to calculate the effective
+duration.  For Rosegarden 4, in which each event has a starting time
+as well as a duration (RG2.1's events were just a contiguous series,
+and didn't store a starting time) it makes more sense to ensure that
+the starting times of the tuplets and of the first event after the
+tupled group are consistent with the stored durations.  For this
+reason, Rosegarden 4 stores the effective duration of each tuplet, and
+records the nominal duration separately in an event property.
+
+A side-effect of our choice of base unit of time (6 units == 1
+hemidemisemiquaver, see units.txt) is that the effective durations of
+triplets can be stored exactly in integers.  Other tuplets are less
+fortunate; for the moment we're prepared to simply put up with the
+loss of precision implicit in trying to represent tuplets in this way.
+

@@ -201,8 +201,23 @@ public:
      * from and the start of the timeslice containing to the same new
      * group id and the given type
      */
+    void makeBeamedGroup(timeT from, timeT to, std::string type);
+
+    /**
+     * Give all events between the start of the timeslice containing
+     * from and the start of the timeslice containing to the same new
+     * group id and the given type
+     */
     void makeBeamedGroup(iterator from, iterator to, std::string type);
 
+
+    /**
+     * Divide the notes between the start of the timeslice containing
+     * from and the start of the timeslice containing to up into sensible
+     * beamed groups and give each group the right group properties
+     * using makeBeamedGroup.  Requires up-to-date bar position list.
+     */
+    void autoBeam(timeT from, timeT to, std::string type);
 
     /**
      * Divide the notes in the interval [from, to[ up into sensible
@@ -265,6 +280,9 @@ private:
 
     /// for use by insertSingleSomething
     void setInsertedNoteGroup(Event *e, iterator i);
+
+    /// for use by makeBeamedGroup
+    void makeBeamedGroupAux(iterator from, iterator to, std::string type);
 
     /// for use by autoBeam
 

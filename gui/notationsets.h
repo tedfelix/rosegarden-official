@@ -177,6 +177,13 @@ public:
      */
     void applyBeam(NotationStaff &);
 
+    /**
+     * Writes tupling line data into each note in the group. 
+     * Notes' layout x coordinates must already have been set.
+     * Does nothing if this is not a tupled group.
+     */
+    void applyTuplingLine(NotationStaff &);
+
     virtual bool contains(const NELIterator &) const;
 
 protected:

@@ -423,7 +423,12 @@ NotationGroup::calculateBeam(NotationStaff &staff)
          (*initialNote)->event()->getDuration() < crotchet
         && (*finalNote)->event()->getDuration() < crotchet
         && (*finalNote)->getAbsoluteTime() > (*initialNote)->getAbsoluteTime();
-    if (!beam.necessary) return beam;
+
+    // We continue even if the beam is not necessary, because the
+    // same data is used to generate the tupling line in tupled
+    // groups that do not have beams
+
+    // if (!beam.necessary) return beam;
 
     Chord initialChord(getList(), initialNote, m_clef, m_key),
             finalChord(getList(),   finalNote, m_clef, m_key);
@@ -668,4 +673,21 @@ NotationGroup::applyBeam(NotationStaff &staff)
     }
 }
 
+void 
+NotationGroup::applyTuplingLine(NotationStaff &staff)
+{
+    kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam, group no is " << m_groupNo << endl;
+
+    if (m_type != Tupled) return;
+
+    Beam beam(calculateBeam(staff));
+
+    NELIterator initialNote(getInitialNote()),
+	          finalNote(  getFinalNote());
+    int initialX = (int)(*initialNote)->getLayoutX();
+
+    //!!!
+    //...
+
+}
 

@@ -2,6 +2,14 @@
 Post-0.1.1 task list
 ====================
 
+ !! Sometimes when you load glazunov.rose, the quantizer appears to be
+ misbehaving -- it looks like it has maxDots equal to zero, and the
+ legato slider is set to somewhere in the middle.  Why?
+
+ !! Load glazunov.mid and open the first staff: it crashes with an
+ attempt to get the LegatoDuration property on an event that doesn't
+ have it.  Why?
+
  1. Sort out true legato quantization [DONE]
 
  2. Display real bar numbers and proportional bar durations on track

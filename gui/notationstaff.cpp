@@ -177,6 +177,12 @@ NotationStaff::setLegatoDuration(Rosegarden::timeT duration)
     kdDebug(KDEBUG_AREA) << "NotationStaff::setLegatoDuration" << endl;
 
     const Rosegarden::Quantizer *q = getTrack().getQuantizer();
+
+
+    kdDebug(KDEBUG_AREA) << "NotationStaff: Quantizer status is:\n"
+			 << "Unit = " << q->getUnit()
+			 << "\nMax Dots = " << q->getMaxDots() << endl;
+
     Rosegarden::Quantizer *wq = const_cast<Rosegarden::Quantizer *>(q);
     wq->setUnit(duration);
 }
