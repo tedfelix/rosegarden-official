@@ -932,6 +932,10 @@ RosegardenGUIView::updateMeters(SequencerMapper *mapper)
 	Rosegarden::Instrument *instrument =
 	    getDocument()->getStudio().getInstrumentById(track->getInstrument());
 	if (!instrument) continue;
+
+        // Don't send a 0 to any meters
+        //
+        if (info.level == 0 && info.levelRight == 0) continue;
 	
 	if (instrument->getType() == Rosegarden::Instrument::Audio) {
 
