@@ -83,10 +83,10 @@ public:
         AudioGeneratePreview    = 0x001000,
         // Update Instruments - new ALSA client detected
         SystemUpdateInstruments = 0x002000,
-        // Set RG as JACK master
-        SystemJackMaster        = 0x004000,
-        // Set RG as MMC master
-        SystemMMCMaster         = 0x008000,
+        // Set RG as JACK master/slave
+        SystemJackTransport     = 0x004000,
+        // Set RG as MMC master/slave
+        SystemMMCTransport      = 0x008000,
         // Set Record device
         SystemRecordDevice      = 0x010000,
         // Set Metronome device

@@ -315,11 +315,6 @@ public:
     bool createAudioFile(const std::string &fileName);
     void appendToAudioFile(const std::string &buffer);
 
-    // Set JACK transport slave/master
-    //
-    void setJackTransportMaster(bool value) { m_jackTransportMaster = value; }
-    void setJackTransportEnabled(bool value) { m_jackTransportEnabled = value; }
-
 #endif
 
 
@@ -418,11 +413,6 @@ private:
     jack_port_t                 *m_audioInputPortRight;
     jack_port_t                 *m_audioOutputPortLeft;
     jack_port_t                 *m_audioOutputPortRight;
-
-    // Jack transport controls
-    //
-    bool                         m_jackTransportEnabled;
-    bool                         m_jackTransportMaster;
 
     jack_nframes_t               m_transportPosition;
 

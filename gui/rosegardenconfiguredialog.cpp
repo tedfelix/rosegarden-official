@@ -819,35 +819,87 @@ SequencerConfigurationPage::SequencerConfigurationPage(
 
     QGridLayout *layout = new QGridLayout(frame, 4, 2, 10, 5);
 
+    // ---------------  Send Controllers ----------------
+    //
     QLabel *label = new QLabel("Send all MIDI Controllers at start of playback\n(will usually incur noticeable delay)", frame);
 
     QString controllerTip = i18n("Rosegarden can send all MIDI Controllers (Pan, Reverb etc) to all\ndevices at the start of playback if you so wish.  This will usually\n take some time to perform however so be aware that this might make\nRosegarden appear less responsive when playback starts.");
     QToolTip::add(label, controllerTip);
-    layout->addWidget(label, 1, 0);
+    layout->addWidget(label, 0, 0);
 
     m_sendControllersAtPlay = new QCheckBox(frame);
-    layout->addWidget(m_sendControllersAtPlay, 1, 1);
+    layout->addWidget(m_sendControllersAtPlay, 0, 1,  Qt::AlignHCenter);
     QToolTip::add(m_sendControllersAtPlay, controllerTip);
 
     bool sendControllers = m_cfg->readBoolEntry("alwayssendcontrollers", false);
     m_sendControllersAtPlay->setChecked(sendControllers);
 
-    label = new QLabel("Make Rosegarden Master for JACK transport", frame);
+    // --------------- JACK Transport ---------------
+    //
+    label = new QLabel("Enable JACK transport", frame);
+    layout->addWidget(label, 1, 0);
+
+    m_jackTransportEnabled = new QCheckBox(frame);
+    layout->addWidget(m_jackTransportEnabled, 1, 1, Qt::AlignHCenter);
+
+    label = new QLabel("make Rosegarden master for JACK transport", frame);
     layout->addWidget(label, 2, 0);
+    label->setIndent(10);
 
     m_jackTransportMaster = new QCheckBox(frame);
-    layout->addWidget(m_jackTransportMaster, 2, 1);
+    layout->addWidget(m_jackTransportMaster, 2, 1, Qt::AlignHCenter);
 
     bool jackMaster = m_cfg->readBoolEntry("jackmaster", false);
     m_jackTransportMaster->setChecked(jackMaster);
 
+    // Connect the enabling signal
+    //
+    connect(m_jackTransportEnabled, SIGNAL(toggled(bool)),
+            m_jackTransportMaster, SLOT(setEnabled(bool)));
+
+    // Initial status
+    //
+    bool jackTransport = m_cfg->readBoolEntry("jacktransport", false);
+    m_jackTransportEnabled->setChecked(jackTransport);
+    m_jackTransportMaster->setEnabled(jackTransport);
+
+    // ---------------  MMC Transport -----------------
+    //
+    label = new QLabel("Enable MMC", frame);
+    layout->addWidget(label, 3, 0);
+    
+    m_mmcTransportEnabled = new QCheckBox(frame);
+    layout->addWidget(m_mmcTransportEnabled, 3, 1, Qt::AlignHCenter);
+
+    label = new QLabel("make Rosegarden master for MMC", frame);
+    layout->addWidget(label, 4, 0);
+    label->setIndent(10);
+
+    m_mmcTransportMaster = new QCheckBox(frame);
+    layout->addWidget(m_mmcTransportMaster, 4, 1, Qt::AlignHCenter);
+
+    bool mmcMaster = m_cfg->readBoolEntry("mmcmaster", false);
+    m_mmcTransportMaster->setChecked(mmcMaster);
+
+    bool mmcTransport = m_cfg->readBoolEntry("mmctransport", false);
+    m_mmcTransportEnabled->setChecked(mmcTransport);
+    m_mmcTransportMaster->setEnabled(mmcTransport);
+
+    // Connect the enabling signal
+    //
+    connect(m_mmcTransportEnabled, SIGNAL(toggled(bool)),
+            m_mmcTransportMaster, SLOT(setEnabled(bool)));
+
+
+    // ---------------- Command-line --------------------
+    //
     layout->addMultiCellWidget(new QLabel(i18n("Sequencer command line options\n(any change made here will come into effect the next time you start Rosegarden)"), frame),
-                               3, 3,
+                               6, 6,
                                0, 1);
 
-    layout->addWidget(new QLabel(i18n("Options:"), frame), 4, 0);
+    layout->addWidget(new QLabel(i18n("Options:"), frame), 7, 0);
     m_sequencerArguments = new QLineEdit("", frame);
-    layout->addWidget(m_sequencerArguments, 4, 1);
+    layout->addWidget(m_sequencerArguments, 7, 1);
 
     // Get the options
     //
@@ -865,27 +917,77 @@ SequencerConfigurationPage::apply()
     m_cfg->writeEntry("alwayssendcontrollers",
                        m_sendControllersAtPlay->isChecked());
 
-    // Send the JACK master control
-    //
-    if (m_jackTransportMaster->isChecked() !=
-        m_cfg->readBoolEntry("jackmaster", false))
-    {
-        try
-        {
-            Rosegarden::MappedEvent *mE =
-                new Rosegarden::MappedEvent(
-                    0, // InstrumentId
-                    Rosegarden::MappedEvent::SystemJackMaster,
-                    Rosegarden::MidiByte(m_jackTransportMaster->isChecked()));
-
-            Rosegarden::StudioControl::sendMappedEvent(mE);
-        }
-        catch(...) {;}
-    }
-
     // Write the JACK entry
     //
-    m_cfg->writeEntry("jackmaster", m_jackTransportMaster->isChecked());
+    bool jackTransport =  m_jackTransportEnabled->isChecked();
+    bool jackMaster = m_jackTransportMaster->isChecked();
+
+    m_cfg->writeEntry("jacktransport", jackTransport);
+    m_cfg->writeEntry("jackmaster", jackMaster);
+
+
+    int jackValue = 0;
+
+    // Code the value as follows
+    //
+    if (jackTransport && jackMaster)
+        jackValue = 2;
+    else
+    {
+        if (jackTransport)
+            jackValue = 1;
+        else
+            jackValue = 0;
+    }
+
+    // Now send it
+    //
+    try
+    {
+        Rosegarden::MappedEvent *mE =
+            new Rosegarden::MappedEvent(
+                0, // InstrumentId
+                Rosegarden::MappedEvent::SystemJackTransport,
+                Rosegarden::MidiByte(jackValue));
+
+        Rosegarden::StudioControl::sendMappedEvent(mE);
+    }
+    catch(...) {;}
+
+
+    // Now write the MMC entry
+    //
+    bool mmcTransport = m_mmcTransportEnabled->isChecked();
+    bool mmcMaster = m_mmcTransportMaster->isChecked();
+
+    m_cfg->writeEntry("mmctransport", jackTransport);
+    m_cfg->writeEntry("mmcmaster", jackMaster);
+
+    int mmcValue = 0;
+
+    if (mmcTransport && mmcMaster)
+        mmcValue = 2;
+    else
+    {
+        if (mmcTransport)
+            mmcValue = 1;
+        else
+            mmcValue = 0;
+    }
+
+    // Now send it
+    //
+    try
+    {
+        Rosegarden::MappedEvent *mE =
+            new Rosegarden::MappedEvent(
+                0, // InstrumentId
+                Rosegarden::MappedEvent::SystemMMCTransport,
+                Rosegarden::MidiByte(mmcValue));
+
+        Rosegarden::StudioControl::sendMappedEvent(mE);
+    }
+    catch(...) {;}
 
 }
 

@@ -110,6 +110,9 @@ static int               _passThroughCounter;
 static const float  _8bitSampleMax  = (float)(0xff/2);
 static const float  _16bitSampleMax = (float)(0xffff/2);
 
+static bool _jackTransportEnabled;
+static bool _jackTransportMaster;
+
 #endif
 
 static bool              _threadJackClosing;
@@ -142,8 +145,6 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
 
 #ifdef HAVE_LIBJACK
     ,m_audioClient(0)
-    ,m_jackTransportEnabled(false)
-    ,m_jackTransportMaster(false)
     ,m_transportPosition(0)
 #endif
 
@@ -155,6 +156,10 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
     _jackSampleRate = 0;
     _usingAudioQueueVector = false;
     _passThroughCounter = 0;
+
+    _jackTransportEnabled = false;
+    _jackTransportMaster = false;
+
 #endif
 
     _threadAlsaClosing = false;
@@ -1658,6 +1663,11 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
             case MappedEvent::AudioStopped:
                 break;
 
+            case MappedEvent::SystemJackTransport:
+            case MappedEvent::SystemMMCTransport:
+                continue;
+                break;
+
             default:
                 std::cout << "AlsaDriver::processMidiOut - "
                           << "unrecognised event type"
@@ -1821,17 +1831,47 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 #ifdef HAVE_LIBJACK
 
         // Set the JACK transport 
-        if ((*i)->getType() == MappedEvent::SystemJackMaster)
+        if ((*i)->getType() == MappedEvent::SystemJackTransport)
         {
-            if (((int)(*i)->getData1()) == 1)
+            _jackTransportMaster = false;
+            _jackTransportEnabled = false;
+
+            switch ((int)(*i)->getData1())
             {
-                m_jackTransportMaster = true;
-                m_jackTransportEnabled = true;
+                case 2:
+                    _jackTransportMaster = true;
+                    _jackTransportEnabled = true;
+                    break;
+
+                case 1:
+                    _jackTransportEnabled = true;
+                    break;
+
+                case 0:
+                default:
+                    break;
             }
-            else
+        }
+
+        if ((*i)->getType() == MappedEvent::SystemMMCTransport)
+        {
+            m_mmcMaster = false;
+            m_mmcEnabled = false;
+
+            switch ((int)(*i)->getData1())
             {
-                m_jackTransportMaster = false;
-                m_jackTransportEnabled = false;
+                case 2:
+                    m_mmcMaster = true;
+                    m_mmcEnabled = true;
+                    break;
+
+                case 1:
+                    m_mmcEnabled = true;
+                    break;
+
+                case 0:
+                default:
+                    break;
             }
         }
 #endif // HAVE_LIBJACK
@@ -3160,7 +3200,7 @@ AlsaDriver::getJACKFrame(const RealTime &time)
 void
 AlsaDriver::sendJACKTransportState()
 {
-    if (!m_jackTransportMaster || !m_jackTransportEnabled) return;
+    if (!_jackTransportMaster || !_jackTransportEnabled) return;
 
     jack_transport_info_t info;
 
@@ -3182,7 +3222,7 @@ AlsaDriver::sendJACKTransportState()
     {
         if (m_looping)
         {
-            cout << "LOOPING (frame = " << info.position << ")" << endl;
+            //cout << "LOOPING (frame = " << info.position << ")" << endl;
             info.state = JackTransportLooping;
             info.loop_start = getJACKFrame(m_loopStartTime);
             info.loop_end = getJACKFrame(m_loopEndTime);
@@ -3192,7 +3232,7 @@ AlsaDriver::sendJACKTransportState()
         }
         else
         {
-            cout << "PLAYING (frame = " << info.position << ")" << endl;
+            //cout << "PLAYING (frame = " << info.position << ")" << endl;
             info.state = JackTransportRolling;
             info.valid = jack_transport_bits_t(JackTransportPosition |
                                                JackTransportState);
@@ -3200,7 +3240,7 @@ AlsaDriver::sendJACKTransportState()
     }
     else
     {
-        cout << "STOPPED (frame = " << info.position << ")" << endl;
+        //cout << "STOPPED (frame = " << info.position << ")" << endl;
         info.state = JackTransportStopped;
         info.valid = jack_transport_bits_t(JackTransportPosition |
                                            JackTransportState);
