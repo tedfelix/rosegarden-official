@@ -151,6 +151,12 @@ if test $kde_qtver = 3; then
   CXXFLAGS="-DRGKDE3 $CXXFLAGS"
 fi
 
+dnl set -fno-gcse if using gcc; it's just too risky -- too many builds
+dnl ruined by optimization bugs already
+if test "$GCC" = yes; then
+  CXXFLAGS="$CXXFLAGS -fno-gcse"
+fi
+
 dnl automake conditionals
 dnl isn't this redundant to the above AC_DEFINE?
 dnl
