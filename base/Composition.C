@@ -1292,6 +1292,15 @@ Composition::notifySegmentTransposeChanged(Segment *s, int transpose) const
 }
 
 void
+Composition::notifySegmentTrackChanged(Segment *s, TrackId id) const
+{
+    for (ObserverSet::const_iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->segmentTrackChanged(this, s, id);
+    }
+}
+
+void
 Composition::notifyEndMarkerChange(bool shorten) const
 {
     for (ObserverSet::const_iterator i = m_observers.begin();

@@ -1483,6 +1483,12 @@ void SequenceManager::segmentTransposeChanged(const Composition*, Segment *s, in
     segmentModified(s);
 }
 
+void SequenceManager::segmentTrackChanged(const Composition*, Segment *s, TrackId id)
+{
+    SEQMAN_DEBUG << "SequenceManager::segmentTrackChanged(" << s << ", " << id << ")\n";
+    segmentModified(s);
+}
+
 void SequenceManager::processAddedSegment(Segment* s)
 {
     SEQMAN_DEBUG << "SequenceManager::processAddedSegment(" << s << ")\n";

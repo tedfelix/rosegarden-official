@@ -126,6 +126,7 @@ Segment::setTrack(TrackId id)
     if (c) {
         c->weakAddSegment(this);
         c->updateRefreshStatuses();
+	c->notifySegmentTrackChanged(this, id);
     }
 }
 

@@ -187,6 +187,7 @@ public:
     virtual void segmentRepeatChanged      (const Composition*, Segment*, bool);
     virtual void segmentEventsTimingChanged(const Composition*, Segment *, timeT delay, RealTime rtDelay);
     virtual void segmentTransposeChanged   (const Composition*, Segment *, int transpose);
+    virtual void segmentTrackChanged       (const Composition*, Segment *, TrackId id);
     virtual void endMarkerTimeChanged      (const Composition*, bool shorten);
     virtual void trackChanged              (const Composition*, Track*);
     virtual void timeSignatureChanged      (const Composition*);
