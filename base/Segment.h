@@ -24,6 +24,7 @@
 #define _SEGMENT_H_
 
 #include <set>
+#include <list>
 #include <string>
 
 #include "Track.h"
@@ -473,10 +474,10 @@ public:
 
 
     /// For use by SegmentObserver objects like Composition & ViewElementsManager
-    void    addObserver(SegmentObserver *obs) { m_observers.insert(obs); }
+    void    addObserver(SegmentObserver *obs) { m_observers.push_back(obs); }
 
     /// For use by SegmentObserver objects like Composition & ViewElementsManager
-    void removeObserver(SegmentObserver *obs) { m_observers.erase (obs); }
+    void removeObserver(SegmentObserver *obs) { m_observers.remove(obs); }
 
 
     //////
@@ -535,7 +536,7 @@ private:
 
 private: // stuff to support SegmentObservers
 
-    typedef std::set<SegmentObserver *> ObserverSet;
+    typedef std::list<SegmentObserver *> ObserverSet;
     ObserverSet m_observers;
 
     void notifyAdd(Event *) const;

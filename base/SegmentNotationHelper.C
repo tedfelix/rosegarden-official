@@ -667,16 +667,17 @@ SegmentNotationHelper::makeNoteViable(iterator i, bool splitAtBars)
         acc += component;
     }
 
-    if (acc == required) return i; // event is already of the correct duration
+    if (dl.size() < 2) return i; // event is already of the correct duration
     
+    acc = (*i)->getNotationAbsoluteTime();
     Event *e = new Event(*(*i));
+    e->setNotationAbsoluteTime(acc);
 
     bool lastTiedForward;
     e->get<Bool>(TIED_FORWARD, lastTiedForward);
 
     e->set<Bool>(TIED_FORWARD, true);
     erase(i);
-    acc = e->getNotationAbsoluteTime();
 
     iterator j;
     bool havej = false;
@@ -684,8 +685,10 @@ SegmentNotationHelper::makeNoteViable(iterator i, bool splitAtBars)
     for (DurationList::iterator dli = dl.begin(); dli != dl.end(); ++dli) {
 
         DurationList::iterator dlj(dli);
-        if (++dlj == dl.end() && !lastTiedForward) {
-            e->unset(TIED_FORWARD);
+        if (++dlj == dl.end()) {
+	    // end of duration list
+	    if (!lastTiedForward) e->unset(TIED_FORWARD);
+	    return insert(e);
         }
 
 	std::pair<Event *, Event *> splits =
@@ -694,7 +697,6 @@ SegmentNotationHelper::makeNoteViable(iterator i, bool splitAtBars)
 	if (!splits.first || !splits.second) {
 	    cerr << "WARNING: SegmentNotationHelper::makeNoteViable(): No valid split for event of duration " << e->getDuration() << " at " << e->getAbsoluteTime() << " (split duration " << *dli << "), ignoring remainder\n";
 	    cerr << "WARNING: This is probably a bug; fix required" << std::endl;
-	    //!!!
 	    return insert(e);
 	}
 

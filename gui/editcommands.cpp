@@ -773,7 +773,7 @@ EventQuantizeCommand::modifySegment()
 	    }
 	} else {
 	    if (makeviable) {
-		helper.makeNotesViable(getStartTime(), getEndTime());
+		helper.makeNotesViable(getStartTime(), getEndTime(), true);
 	    }
 	    if (decounterpoint) {
 		helper.deCounterpoint(getStartTime(), getEndTime());

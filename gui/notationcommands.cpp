@@ -728,7 +728,7 @@ TransformsMenuMakeNotesViableCommand::modifySegment()
 	    segment.normalizeRests(i->first, i->second);
 	}
     } else {
-	helper.makeNotesViable(getStartTime(), getEndTime());
+	helper.makeNotesViable(getStartTime(), getEndTime(), true);
 	segment.normalizeRests(getStartTime(), getEndTime());
     }
 }

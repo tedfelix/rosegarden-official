@@ -1558,19 +1558,6 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
 	}
 	if (ended) break;
 
-//	Segment::iterator nextNote = c.getNextNote();
-//	assert(nextNote != i);
-//!!!	if (nextNote == i) break; //!!! this shouldn't happen -- getNextNote should return end() at the end -- check Sets.h
-
-
-	//!!! something wrong here -- we seem to find it too easy to
-	// miss the end point and overrun to the end of the segment
-/*!!! change to chord traversal above should fix this
-	if (!s->isBeforeEndMarker(nextNote) ||
-	    (to != s->end() && (*nextNote)->getAbsoluteTime() > (*to)->getAbsoluteTime())) break;
-*/
-
-//	i = nextNote;
 	i = c.getFinalElement();
     }
     ++passes;

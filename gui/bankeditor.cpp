@@ -774,7 +774,6 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     m_programEditor->setMinimumWidth(550); //!!! bleah
 
-
     // device/bank modification
     connect(m_listView, SIGNAL(itemRenamed             (QListViewItem*,const QString&,int)),
             this,       SLOT(slotModifyDeviceOrBankName(QListViewItem*,const QString&,int)));

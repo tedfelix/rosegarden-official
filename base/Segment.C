@@ -863,7 +863,7 @@ Segment::notifyAdd(Event *e) const
 	m_clefKeyList->insert(e);
     }
 
-    for (ObserverSet::iterator i = m_observers.begin();
+    for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
 	(*i)->eventAdded(this, e);
     }
@@ -880,7 +880,7 @@ Segment::notifyRemove(Event *e) const
 	}
     }
     
-    for (ObserverSet::iterator i = m_observers.begin();
+    for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
 	(*i)->eventRemoved(this, e);
     }
@@ -890,7 +890,7 @@ Segment::notifyRemove(Event *e) const
 void
 Segment::notifyEndMarkerChange(bool shorten) const
 {
-    for (ObserverSet::iterator i = m_observers.begin();
+    for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
 	(*i)->endMarkerTimeChanged(this, shorten);
     }
