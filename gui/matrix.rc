@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="Rosegarden::Matrix" version="096">
+<kpartgui name="Rosegarden::Matrix" version="097">
   
 <MenuBar>
 

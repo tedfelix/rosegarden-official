@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="Rosegarden::MatrixTool" version="096">
+<kpartgui name="Rosegarden::MatrixTool" version="097">
 
 <Menu name="MatrixEraser">
   <Action name="select" />

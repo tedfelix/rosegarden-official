@@ -538,6 +538,7 @@ DeviceManagerDialog::slotDeleteRecordDevice()
 void
 DeviceManagerDialog::slotPlayValueChanged(int row, int col)
 {
+    if (!m_document) return; // closing
     Rosegarden::DeviceId id = getPlayDeviceIdAt(row);
     if (id == Rosegarden::Device::NO_DEVICE) return;
 
@@ -578,6 +579,7 @@ DeviceManagerDialog::slotPlayValueChanged(int row, int col)
 void
 DeviceManagerDialog::slotRecordValueChanged(int row, int col)
 {
+    if (!m_document) return; // closing
     Rosegarden::DeviceId id = getRecordDeviceIdAt(row);
     if (id == Rosegarden::Device::NO_DEVICE) return;
 

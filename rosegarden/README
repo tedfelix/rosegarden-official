@@ -1,5 +1,5 @@
 
-Rosegarden-4 v0.9.6
+Rosegarden-4 v0.9.7
 ===================
 
 Rosegarden-4 is a MIDI and audio sequencer and musical notation editor.
@@ -125,7 +125,7 @@ starting-points include:
 Authors and copyright
 ---------------------
 
-* Rosegarden-4 is Copyright 2000-2003 Guillaume Laurent, Chris Cannam
+* Rosegarden-4 is Copyright 2000-2004 Guillaume Laurent, Chris Cannam
   and Richard Bown.
 
 * The moral right of Guillaume Laurent, Chris Cannam and Richard Bown
@@ -137,7 +137,7 @@ Authors and copyright
 
 * For musical notation display Rosegarden-4 uses pixmaps derived from
   the Feta font, part of the Lilypond software (http://lilypond.org/)
-  which is Copyright 1997 - 2003 Jan Nieuwenhuizen and Han-Wen Nienhuys.
+  which is Copyright 1997 - 2004 Jan Nieuwenhuizen and Han-Wen Nienhuys.
 
 * Other major contributors include Randall Farmer, Ron Kuris, Hans
   Kieserman, and Michael McIntyre.  See AUTHORS for more details, and

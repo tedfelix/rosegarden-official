@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="MarkerEditor" version="096">
+<kpartgui name="MarkerEditor" version="097">
 
 <MenuBar>
   <Menu name="file">
