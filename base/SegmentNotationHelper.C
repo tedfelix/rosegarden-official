@@ -1245,6 +1245,8 @@ SegmentNotationHelper::unbeamAux(iterator from, iterator to)
 void
 SegmentNotationHelper::autoBeam(timeT from, timeT to, string type)
 {
+    std::cerr << "autoBeam from " << from << " to " << to << " on segment start time " << segment().getStartTime() << ", end time " << segment().getEndTime() << ", end marker " << segment().getEndMarkerTime() << std::endl;
+
     autoBeam(segment().findTime(from), segment().findTime(to), type);
 }
 
@@ -1259,6 +1261,8 @@ SegmentNotationHelper::autoBeam(iterator from, iterator to, string type)
 	cerr << "WARNING: SegmentNotationHelper::autoBeam requires Segment be in a Composition" << endl;
 	return;
     }
+
+    if (!segment().isBeforeEndMarker(from)) return;
 
     Composition *comp = segment().getComposition();
 
