@@ -21,6 +21,8 @@
 
 #include "rosegardencanvasview.h"
 
+#include "rosedebug.h"
+
 RosegardenCanvasView::RosegardenCanvasView(QScrollBar* hsb, QCanvas* canvas,
                              QWidget* parent,
                              const char* name, WFlags f)
@@ -40,6 +42,8 @@ void RosegardenCanvasView::polish()
 
 void RosegardenCanvasView::slotUpdate()
 {
+    CanvasItemGC::gc();
+
     canvas()->update();
 
     m_horizontalScrollBar->setRange(horizontalScrollBar()->minValue(),
@@ -48,4 +52,25 @@ void RosegardenCanvasView::slotUpdate()
     m_horizontalScrollBar->setSteps(horizontalScrollBar()->lineStep(),
                                     horizontalScrollBar()->pageStep());
 }
+
+void CanvasItemGC::mark(QCanvasItem* item)
+{
+    if (!item) return;
+
+    item->hide();
+    m_garbage.push_back(item);
+}
+
+void CanvasItemGC::gc()
+{
+    for(unsigned int i = 0; i < m_garbage.size(); ++i) {
+        kdDebug(KDEBUG_AREA) << "CanvasItemGC::gc() : delete "
+                             << m_garbage[i] << std::endl;
+        delete m_garbage[i];
+    }
+
+    m_garbage.clear();
+}
+
+std::vector<QCanvasItem*> CanvasItemGC::m_garbage;
 
