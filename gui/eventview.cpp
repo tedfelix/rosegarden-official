@@ -297,7 +297,7 @@ EventView::EventView(RosegardenGUIDoc *doc,
 
         setCaption(QString("%1 - Segment Track #%2 - Event List")
                    .arg(doc->getTitle())
-                   .arg(segments[0]->getTrack()));
+                   .arg(segments[0]->getTrack() + 1));
 
     } else {
 

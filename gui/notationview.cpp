@@ -321,7 +321,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     if (segments.size() == 1) {
         setCaption(QString("%1 - Segment Track #%2 - Notation")
                    .arg(doc->getTitle())
-                   .arg(segments[0]->getTrack()));
+                   .arg(segments[0]->getTrack() + 1));
     } else if (segments.size() == doc->getComposition().getNbSegments()) {
         setCaption(QString("%1 - All Segments - Notation")
                    .arg(doc->getTitle()));

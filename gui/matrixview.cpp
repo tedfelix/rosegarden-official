@@ -364,7 +364,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
         setCaption(QString("%1 - Segment Track #%2 - Matrix")
                    .arg(doc->getTitle())
-                   .arg(segments[0]->getTrack()));
+                   .arg(segments[0]->getTrack() + 1));
 
     } else if (segments.size() == comp.getNbSegments()) {
 
