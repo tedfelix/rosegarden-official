@@ -34,7 +34,7 @@ std::string XmlExportable::encode(const std::string &s0)
     size_t buflen = 0;
 
     static char multibyte[20];
-    int mblen = 0;
+    size_t mblen = 0;
 
     size_t len = s0.length();
 
