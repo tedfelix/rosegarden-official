@@ -58,6 +58,7 @@ protected:
                   DurationMap::iterator &high, 
                   DurationMap::iterator &low);
 
+    /// maps Notes to durations
     DurationMap m_durationTable;
 
     void computeNoteDurations();
