@@ -252,10 +252,13 @@ Staff::makeInvisibleLine(int y, int pitch)
     //
     StaffLine *invisibleLine = new StaffLine(canvas(), this);
     invisibleLine->setPen(white);
-//     if (pitch)
-//         invisibleLine->setPen(red);
-//     else
-//         invisibleLine->setPen(blue); // middle C
+
+#ifdef RG_STAFF_SHOW_INVISIBLE_LINES
+    if (pitch)
+        invisibleLine->setPen(red);
+    else
+        invisibleLine->setPen(blue); // middle C
+#endif
 
     invisibleLine->setPoints(0,y, m_horizLineLength,y);
     invisibleLine->setZ(-1);
