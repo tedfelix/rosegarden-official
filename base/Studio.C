@@ -138,14 +138,6 @@ Studio::getPresentationInstruments()
         // get sub list
         subList = (*it)->getPresentationInstruments();
 
-	std::cerr << "Studio::getPresentationInstruments: " << subList.size()
-		  << " instruments for device " << (*it)->getId() << std::endl;
-	for (InstrumentList::iterator iit = subList.begin();
-	     iit != subList.end(); ++iit) {
-	    std::cerr << (void *)(*iit) << std::endl;
-	}
-	
-
         // concatenate
         list.insert(list.end(), subList.begin(), subList.end());
     }
@@ -435,13 +427,6 @@ Studio::unassignAllInstruments()
         if (midiDevice)
         {
             instList = (*it)->getPresentationInstruments();
-
-	std::cerr << "Studio::unassignAllInstruments: " << instList.size()
-		  << " instruments for device " << (*it)->getId() << std::endl;
-	for (InstrumentList::iterator jt = instList.begin();
-	     jt != instList.end(); ++jt) {
-	    std::cerr << (void *)(*jt) << std::endl;
-	}
 
             for (iit = instList.begin(); iit != instList.end(); iit++)
             {

@@ -910,8 +910,8 @@ void NotationView::setupActions()
 		"select_from_start");
 
     new KAction(i18n("Select to &End"), 0, this,
-		SLOT(slotEditSelectToEnd()), actionCollection(),
 		"select_to_end");
+		SLOT(slotEditSelectToEnd()), actionCollection(),
 
     new KAction(i18n("Select Whole St&aff"), 0, this,
 		SLOT(slotEditSelectWholeStaff()), actionCollection(),
@@ -932,17 +932,19 @@ void NotationView::setupActions()
     //
     // Settings menu
     //
+    int layoutMode = m_config->readNumEntry("layoutmode", 0);
+
     KRadioAction *linearModeAction = new KRadioAction
         (i18n("&Linear Layout"), 0, this, SLOT(slotLinearMode()),
          actionCollection(), "linear_mode");
     linearModeAction->setExclusiveGroup("layoutMode");
-    if (!m_hlayout->isPageMode()) linearModeAction->setChecked(true);
+    if (layoutMode == 0) linearModeAction->setChecked(true);
 
     KRadioAction *pageModeAction = new KRadioAction
         (i18n("&Page Layout"), 0, this, SLOT(slotPageMode()),
          actionCollection(), "page_mode");
     pageModeAction->setExclusiveGroup("layoutMode");
-    if (m_hlayout->isPageMode()) pageModeAction->setChecked(true);
+    if (layoutMode == 1) pageModeAction->setChecked(true);
 
     new KToggleAction(i18n("Show Ch&ord Name Ruler"), 0, this,
                       SLOT(slotToggleChordsRuler()),
