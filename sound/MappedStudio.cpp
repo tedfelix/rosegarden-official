@@ -530,6 +530,22 @@ MappedStudio::clearTemporaries()
         } while(dIt != dead.begin());
     }
 
+    int count = 0;
+    m_runningObjectId = 0;
+    for (it = m_objects.begin(); it != m_objects.end(); ++it)
+    {
+        if ((*it)->getId() >= m_runningObjectId)
+        {
+            count++;
+            m_runningObjectId = (*it)->getId() + 1;
+        }
+    }
+
+    /*
+    std::cout << "CLEARED TEMPORARIES AND LEFT " << count << " OBJECTS - "
+              << " new running id = " << m_runningObjectId << endl;
+              */
+
 }
 
 MappedObject*

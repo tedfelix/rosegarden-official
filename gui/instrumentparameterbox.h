@@ -120,7 +120,7 @@ class InstrumentParameterPanel : public QFrame
 {
     Q_OBJECT
 public:
-    InstrumentParameterPanel(QWidget* parent);
+    InstrumentParameterPanel(RosegardenGUIDoc *doc, QWidget* parent);
 
     virtual ~InstrumentParameterPanel() {};
 
@@ -133,6 +133,7 @@ protected:
     //--------------- Data members ---------------------------------
     QLabel                          *m_instrumentLabel;
     Rosegarden::Instrument          *m_selectedInstrument;
+    RosegardenGUIDoc                *m_doc;
 };
 
 
@@ -195,8 +196,6 @@ protected:
 
     std::map<int, Rosegarden::AudioPluginDialog*> m_pluginDialogs;
 
-    Rosegarden::AudioPluginManager               *m_pluginManager;
-
 private:
 
     QPixmap                                      m_monoPixmap;
@@ -209,7 +208,7 @@ class MIDIInstrumentParameterPanel : public InstrumentParameterPanel
     Q_OBJECT
 public:
 
-    MIDIInstrumentParameterPanel(QWidget* parent);
+    MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc, QWidget* parent);
 
     virtual void setupForInstrument(Rosegarden::Instrument*);
 

@@ -502,6 +502,11 @@ void RosegardenGUIDoc::initialiseStudio()
             //
             (*it)->setMappedId(mappedId);
 
+            /*
+            cout << "SETTING MAPPED OBJECT ID = " << mappedId
+                 << " - on Instrument " << (*it)->getId() << endl;
+                 */
+
 
             // Set the instrument id against this object
             //
@@ -544,56 +549,62 @@ void RosegardenGUIDoc::initialiseStudio()
             {
                 if (plugin->isAssigned())
                 {
+                    //RG_DEBUG << "PLUGIN " << pluginNo - 1
+                             //<< " ASSIGNED on INS "
+                             //<< (*it)->getId() << endl;
+
                     // Create the plugin at the sequencer Studio
                     //
-                    Rosegarden::MappedObjectId mappedId =
+                    Rosegarden::MappedObjectId pluginMappedId =
                         Rosegarden::StudioControl::createStudioObject(
                                 Rosegarden::MappedObject::LADSPAPlugin);
 
                     // Create the back linkage from the instance to the
                     // studio id
                     //
-                    (*it)->setMappedId(mappedId);
+                    plugin->setMappedId(pluginMappedId);
 
-                    cout << "CREATING PLUGIN ID = " << mappedId << endl;
+                    //RG_DEBUG << "CREATING PLUGIN ID = " 
+                               //<< pluginMappedId << endl;
 
                     // Set the position
                     Rosegarden::StudioControl::setStudioObjectProperty
-                        (mappedId,
+                        (pluginMappedId,
                          Rosegarden::MappedObject::Position,
                          Rosegarden::MappedObjectValue(plugin->getPosition()));
 
                     // Set the id of this instrument on the plugin
                     //
                     Rosegarden::StudioControl::setStudioObjectProperty
-                        (mappedId,
+                        (pluginMappedId,
                          Rosegarden::MappedObject::Instrument,
                          (*it)->getId());
-
-                    // Set the bypass
-                    Rosegarden::StudioControl::setStudioObjectProperty
-                        (mappedId,
-                         Rosegarden::MappedLADSPAPlugin::Bypassed,
-                         Rosegarden::MappedObjectValue(plugin->isBypassed()));
 
                     // Set the plugin type id - this will set it up ready
                     // for port settings
                     Rosegarden::StudioControl::setStudioObjectProperty
-                        (mappedId,
+                        (pluginMappedId,
                          Rosegarden::MappedLADSPAPlugin::UniqueId,
                          Rosegarden::MappedObjectValue(plugin->getId()));
 
-                    unsigned int portNo = 0;
-                    Rosegarden::PluginPortInstance *port;
+                    // Set the bypass
+                    //
+                    Rosegarden::StudioControl::setStudioObjectProperty
+                        (pluginMappedId,
+                         Rosegarden::MappedLADSPAPlugin::Bypassed,
+                         Rosegarden::MappedObjectValue(plugin->isBypassed()));
 
-                    while((port = plugin->getPort(portNo++)))
+                    Rosegarden::PortInstanceIterator portIt;
+
+                    for (portIt = plugin->begin();
+                         portIt != plugin->end(); ++portIt)
                     {
                         Rosegarden::StudioControl::setStudioPluginPort
-                            (mappedId,
-                             port->id,
-                             port->value);
-                        cout << "SETTING PORT " << port->id << " to "
-                             << port->value << endl;
+                            (pluginMappedId,
+                             (*portIt)->id,
+                             (*portIt)->value);
+                        //RG_DEBUG << "SETTING PORT " << (*portIt)->id << " to "
+                                 //<< (*portIt)->value << endl;
                     }
                 }
             }
@@ -601,7 +612,7 @@ void RosegardenGUIDoc::initialiseStudio()
     }
 
     RG_DEBUG << "RosegardenGUIDoc::initialiseStudio - "
-             << "initialised studio including" << count
+             << "initialised studio including " << count
              << " audio faders" << endl;
 
 }

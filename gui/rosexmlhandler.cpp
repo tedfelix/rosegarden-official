@@ -1189,39 +1189,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 m_plugin = m_instrument->getPlugin(position);
                 m_plugin->setAssigned(true);
                 m_plugin->setBypass(bypassed);
-
-            /*
-            // Creating the Plugin creates the ports too
-            //
-            Rosegarden::MappedObjectId mappedId =
-                Rosegarden::StudioControl::createStudioObject(
-                        Rosegarden::MappedObject::LADSPAPlugin);
-            m_plugin->setMappedId(mappedId);
-            */
+                //RG_DEBUG << "SETTING PLUGIN ASSIGNED AT " << position 
+                     //<< " ON INS " << m_instrument->getId() << endl;
 
                 m_plugin->setId(id);
-
-
-            /*
-            Rosegarden::StudioControl::setStudioObjectProperty
-                (mappedId,
-                 Rosegarden::MappedObject::Instrument,
-                 m_instrument->getId());
-
-            Rosegarden::StudioControl::setStudioObjectProperty
-                (mappedId,
-                 Rosegarden::MappedObject::Position,
-                 Rosegarden::MappedObjectValue(position));
-
-            // Setting the id also sets up the plugin so that it's
-            // ready to run.
-            // 
-            Rosegarden::StudioControl::setStudioObjectProperty
-                (mappedId,
-                 Rosegarden::MappedLADSPAPlugin::UniqueId,
-                 Rosegarden::MappedObjectValue(id));
-                 */
-
             }
             else
             {
@@ -1244,16 +1215,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_plugin)
         {
-            // Set the port at the sequencer and in the AudioPluginInstance
-            //
-            /*
-            Rosegarden::StudioControl::setStudioPluginPort
-                (m_plugin->getMappedId(),
-                 portId,
-                 value);
-                 */
-
             m_plugin->addPort(portId, value);
+            //RG_DEBUG << "ADDING PORT " << portId << " VALUE = " << value << endl;
         }
 
 #endif // HAVE_LADSPA

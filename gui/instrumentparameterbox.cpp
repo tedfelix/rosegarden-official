@@ -62,7 +62,7 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
     : RosegardenParameterBox(1, Qt::Horizontal, i18n("Instrument Parameters"), parent),
       m_widgetStack(new QWidgetStack(this)),
       m_noInstrumentParameters(new QVBox(m_widgetStack)),
-      m_midiInstrumentParameters(new MIDIInstrumentParameterPanel(m_widgetStack)),
+      m_midiInstrumentParameters(new MIDIInstrumentParameterPanel(doc, m_widgetStack)),
       m_audioInstrumentParameters(new AudioInstrumentParameterPanel(doc, m_widgetStack)),
       m_selectedInstrument(0),
       m_doc(doc)
@@ -616,7 +616,7 @@ AudioInstrumentParameterPanel::slotSelectPlugin(int index)
             //
             m_pluginDialogs[key] = 
                 new Rosegarden::AudioPluginDialog(this,
-                                              m_pluginManager,
+                                              m_doc->getPluginManager(),
                                               m_selectedInstrument,
                                               index);
 
@@ -646,6 +646,9 @@ AudioInstrumentParameterPanel::slotSelectPlugin(int index)
 		    this, SLOT(slotPluginDialogDestroyed(int)));
 
             m_pluginDialogs[key]->show();
+
+            // Set modified
+            m_doc->slotDocumentModified();
         }
         else
         {
@@ -685,11 +688,12 @@ AudioInstrumentParameterPanel::slotPluginSelected(int index, int plugin)
 
             inst->setAssigned(false);
             m_audioFader->m_plugins[index]->setText(i18n("<no plugin>"));
+
         }
         else
         {
             Rosegarden::AudioPlugin *plgn = 
-                m_pluginManager->getPlugin(plugin);
+                m_doc->getPluginManager()->getPlugin(plugin);
 
             // If unassigned then create a sequencer instance of this
             // AudioPluginInstance.
@@ -697,7 +701,9 @@ AudioInstrumentParameterPanel::slotPluginSelected(int index, int plugin)
             if (inst->isAssigned())
             {
                 // unassign, destory and recreate
-                //cout << "MODIFY assigned " << inst->getMappedId() << endl;
+                cout << "MAPPED ID = " << inst->getMappedId() 
+                     << " for Instrument " << inst->getId() << endl;
+
                 RG_DEBUG << "InstrumentParameterBox::slotPluginSelected - "
                          << "MappedObjectId = "
                          << inst->getMappedId()
@@ -752,12 +758,15 @@ AudioInstrumentParameterPanel::slotPluginSelected(int index, int plugin)
             }
 
             Rosegarden::AudioPlugin *pluginClass 
-                = m_pluginManager->getPlugin(plugin);
+                = m_doc->getPluginManager()->getPlugin(plugin);
 
             if (pluginClass)
                 m_audioFader->m_plugins[index]->
                     setText(pluginClass->getLabel());
         }
+
+        // Set modified
+        m_doc->slotDocumentModified();
     }
     else
         std::cerr << "InstrumentParameterBox::slotPluginSelected - "
@@ -783,7 +792,12 @@ AudioInstrumentParameterPanel::slotPluginPortChanged(int pluginIndex,
                                 value);
                                 
         RG_DEBUG << "InstrumentParameterBox::slotPluginPortChanged - "
-                 << "setting plugin port to " << value << endl;
+                 << "setting plugin port (" << portIndex << ") to "
+                 << value << endl;
+
+        // Set modified
+        m_doc->slotDocumentModified();
+
 #endif // HAVE_LADSPA
     }
 
@@ -820,6 +834,9 @@ AudioInstrumentParameterPanel::slotBypassed(int pluginIndex, bool bp)
         // Set the bypass on the instance
         //
         inst->setBypass(bp);
+
+        // Set modified
+        m_doc->slotDocumentModified();
     }
 }
 
@@ -994,19 +1011,20 @@ MIDIInstrumentParameterPanel::slotSelectRelease(float index)
 }
 
 
-InstrumentParameterPanel::InstrumentParameterPanel(QWidget* parent)
+InstrumentParameterPanel::InstrumentParameterPanel(RosegardenGUIDoc *doc, 
+                                                   QWidget* parent)
     : QFrame(parent),
       m_instrumentLabel(new QLabel(this)),
-      m_selectedInstrument(0)
+      m_selectedInstrument(0),
+      m_doc(doc)
 {
 }
 
 
 
 AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* doc, QWidget* parent)
-    : InstrumentParameterPanel(parent),
-      m_audioFader(new AudioFaderWidget(this, "instrumentAudioFader", false)),
-      m_pluginManager(doc->getPluginManager())
+    : InstrumentParameterPanel(doc, parent),
+      m_audioFader(new AudioFaderWidget(this, "instrumentAudioFader", false))
 {
     QGridLayout *gridLayout = new QGridLayout(this, 10, 6, 5, 5);
 
@@ -1155,8 +1173,8 @@ AudioInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument* instru
         if (inst && inst->isAssigned())
         {
             Rosegarden::AudioPlugin *pluginClass 
-                = m_pluginManager->getPlugin(
-                        m_pluginManager->
+                = m_doc->getPluginManager()->getPlugin(
+                        m_doc->getPluginManager()->
                             getPositionByUniqueId(inst->getId()));
 
             if (pluginClass)
@@ -1230,8 +1248,8 @@ AudioInstrumentParameterPanel::slotSelectAudioInput(int value)
 
 
 
-MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget* parent)
-    : InstrumentParameterPanel(parent),
+MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc, QWidget* parent)
+    : InstrumentParameterPanel(doc, parent),
       m_deviceLabel(new QLabel(this)),
       m_bankValue(new KComboBox(false, this)),
       m_channelValue(new RosegardenComboBox(true, false, this)),

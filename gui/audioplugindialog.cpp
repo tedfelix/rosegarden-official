@@ -139,7 +139,7 @@ AudioPluginDialog::slotPluginSelected(int number)
 {
 
     RG_DEBUG << "AudioPluginDialog::::slotPluginSelected - "
-             << "setting up plugin in slot " << number << endl;
+             << "setting up plugin from position " << number << endl;
 
     QString caption =
 	strtoqstr(m_instrument->getName()) +
@@ -229,9 +229,8 @@ AudioPluginDialog::slotPluginSelected(int number)
                         this, SLOT(slotPluginPortChanged(float)));
 
                 m_pluginWidgets.push_back(control);
-
-
             }
+
             count++;
         }
 

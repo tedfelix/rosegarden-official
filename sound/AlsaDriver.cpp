@@ -3317,33 +3317,6 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 peakLevelLeft = 0.0f;
                 peakLevelRight = 0.0f;
 
-                // Get the volume of the audio fader and set a modifier
-                // accordingly.
-                //
-                float volume = 1.0f;
-                float pan1 = 1.0f;
-                float pan2 = 1.0f;
-
-                MappedAudioFader *fader =
-                    dynamic_cast<MappedAudioFader*>
-                        (inst->getMappedStudio()->
-                             getAudioFader((*it)->getInstrument()));
-                
-                if (fader)
-                {
-                    MappedObjectPropertyList result =
-                        fader->getPropertyList(MappedAudioFader::FaderLevel);
-                    volume = float(result[0].toFloat())/127.0;
-
-                    // do the pan
-                    result = fader->getPropertyList(MappedAudioFader::Pan);
-                    float fpan = result[0].toFloat();
-                    if (fpan < 0.0)
-                        pan2 = (fpan + 100.0) / 100.0;
-                    else
-                        pan1 = 1.0 - (fpan / 100.0);
-                }
-
                 while (samplesOut < nframes)
                 {
                     switch(bytes)
@@ -3353,8 +3326,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                                 ((short)(*(unsigned char *)samplePtr)) /
                                          _8bitSampleMax;
 
-                            _pluginBufferIn1[samplesOut] =
-                                outBytes * volume * pan1;
+                            _pluginBufferIn1[samplesOut] = outBytes;
 
                             if (fabs(outBytes) > peakLevelLeft)
                                 peakLevelLeft = fabs(outBytes);
@@ -3371,16 +3343,14 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
                             }
 
-                            _pluginBufferIn2[samplesOut] =
-                                outBytes * volume * pan2;
+                            _pluginBufferIn2[samplesOut] = outBytes;
                             break;
 
                         case 2: // for 16-bit samples
                             outBytes = (*((short*)(samplePtr))) /
                                            _16bitSampleMax;
 
-                            _pluginBufferIn1[samplesOut] =
-                                outBytes * volume * pan1;
+                            _pluginBufferIn1[samplesOut] = outBytes;
 
                             if (fabs(outBytes) > peakLevelLeft)
                                 peakLevelLeft = fabs(outBytes);
@@ -3396,8 +3366,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                                     peakLevelRight = fabs(outBytes);
 
                             }
-                            _pluginBufferIn2[samplesOut] =
-                                outBytes * volume * pan2;
+                            _pluginBufferIn2[samplesOut] = outBytes;
                             break;
 
                         case 3: // for 24-bit samples
@@ -3453,6 +3422,33 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
                 _jackPeakLevels[audioFilesProcessed * 2] = peakLevelLeft;
                 _jackPeakLevels[audioFilesProcessed * 2 + 1] = peakLevelRight;
+
+                // Do volume and pan processing now and use results after
+                // plugins
+                //
+                float volume = 1.0f;
+                float pan1 = 1.0f;
+                float pan2 = 1.0f;
+
+                MappedAudioFader *fader =
+                    dynamic_cast<MappedAudioFader*>
+                        (inst->getMappedStudio()->
+                             getAudioFader((*it)->getInstrument()));
+                
+                if (fader)
+                {
+                    MappedObjectPropertyList result =
+                        fader->getPropertyList(MappedAudioFader::FaderLevel);
+                    volume = float(result[0].toFloat())/100.0;
+
+                    // do the pan
+                    result = fader->getPropertyList(MappedAudioFader::Pan);
+                    float fpan = result[0].toFloat();
+                    if (fpan < 0.0)
+                        pan2 = (fpan + 100.0) / 100.0;
+                    else
+                        pan1 = 1.0 - (fpan / 100.0);
+                }
 
                 // Insert plugins go here
                 //
@@ -3525,8 +3521,11 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                     //
                     for (unsigned int i = 0; i < nframes; ++i)
                     {
-                        _tempOutBuffer1[i] += _pluginBufferOut1[i];
-                        _tempOutBuffer2[i] += _pluginBufferOut2[i];
+                        _tempOutBuffer1[i] += 
+                            _pluginBufferOut1[i] * volume * pan1;
+
+                        _tempOutBuffer2[i] += 
+                            _pluginBufferOut2[i] * volume * pan2;
                     }
 
                 }
@@ -3537,10 +3536,14 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 {
                     for (unsigned int i = 0; i < nframes; ++i)
                     {
-                        _tempOutBuffer1[i] += _pluginBufferIn1[i];
-                        _tempOutBuffer2[i] += _pluginBufferIn2[i];
+                        _tempOutBuffer1[i] += 
+                            _pluginBufferIn1[i] * volume * pan1;
+
+                        _tempOutBuffer2[i] += 
+                            _pluginBufferIn2[i] * volume * pan2;
                     }
                 }
+
             }
 
             audioFilesProcessed++;
