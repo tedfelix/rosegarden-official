@@ -967,7 +967,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 		// if we aren't playing or recording, consider invoking any
 		// step-by-step clients
 
-		RG_DEBUG << "m_transportStatus = " << m_transportStatus << endl;
+		SEQMAN_DEBUG << "m_transportStatus = " << m_transportStatus << endl;
 
 		if (m_transportStatus == STOPPED ||
 		    m_transportStatus == RECORDING_ARMED) {
@@ -2147,6 +2147,7 @@ bool SequenceManager::event(QEvent *e)
 
 void SequenceManager::update()
 {
+    SEQMAN_DEBUG << "SequenceManager::update()\n";
     // schedule a refresh-status check for the next event loop
     QEvent *e = new QEvent(QEvent::User);
     m_updateRequested = true;
@@ -2156,6 +2157,8 @@ void SequenceManager::update()
 
 void SequenceManager::checkRefreshStatus()
 {
+    SEQMAN_DEBUG << "SequenceManager::checkRefreshStatus()\n";
+
     bool regetSegments = false;
     
     if (m_segments.empty()) {
@@ -2174,7 +2177,7 @@ void SequenceManager::checkRefreshStatus()
 	}
     }
 
-    if (regetSegments) {
+    if (regetSegments) { // check for added and deleted segments
 	
 	SegmentSelection ss;
 	
@@ -2188,7 +2191,7 @@ void SequenceManager::checkRefreshStatus()
 
 	    if (ss.find(si->first) == ss.end()) {
 		m_segments.erase(si);
-		RG_DEBUG << "Segment deleted, updating (now have " << m_segments.size() << " segments)" << endl;
+		SEQMAN_DEBUG << "Segment deleted, updating (now have " << m_segments.size() << " segments)" << endl;
 		segmentRemoved(&m_doc->getComposition(), si->first);
 	    }
 	}
@@ -2199,7 +2202,7 @@ void SequenceManager::checkRefreshStatus()
 	    if (m_segments.find(*si) == m_segments.end()) {
 		int id = (*si)->getNewRefreshStatusId();
 		m_segments.insert(SegmentRefreshMap::value_type(*si, id));
-		RG_DEBUG << "Segment created, adding (now have " << m_segments.size() << " segments)" << endl;
+		SEQMAN_DEBUG << "Segment created, adding (now have " << m_segments.size() << " segments)" << endl;
 		segmentAdded(&m_doc->getComposition(), *si);
 		(*si)->getRefreshStatus(id).setNeedsRefresh(false);
 	    }
