@@ -116,6 +116,8 @@ void StaffRuler::makeStep(int stepValue,
                           double stepPos, double nextStepPos,
                           unsigned short nbSubsteps)
 {
+    if (stepPos == nextStepPos) return; // yes, this can happen
+
     // Make step line
     //
     QCanvasLineGroupable* stepLine = new QCanvasLineGroupable(canvas(), this);

@@ -525,7 +525,8 @@ void NotationView::setupActions()
                                   actionCollection(), "erase");
     noteAction->setExclusiveGroup("notes");
 
-    noteAction = new KRadioAction(i18n("Select"), "misc", 0,
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap("select"));
+    noteAction = new KRadioAction(i18n("Select"), icon, 0,
                                   this, SLOT(slotSelectSelected()),
                                   actionCollection(), "select");
     noteAction->setExclusiveGroup("notes");
