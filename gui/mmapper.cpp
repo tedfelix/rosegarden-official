@@ -161,6 +161,7 @@ void ControlBlockMmapper::updateSoloData(bool solo,
 
 void ControlBlockMmapper::updateTransposeValue(int transposeValue)
 {
+    SEQMAN_DEBUG << "ControlBlockMmapper::updateTransposeValue(" << transposeValue << ")" << endl;
     m_controlBlock->setTransposeValue(transposeValue);
     m_needsRefresh = true;
 }
@@ -471,13 +472,14 @@ void SegmentMmapper::dump()
 	    if (playTime + playDuration > repeatEndTime)
 		playDuration = repeatEndTime - playTime;
 
+	    playTime = playTime + m_segment->getDelay();
             eventTime = comp.getElapsedRealTime(playTime);
 
 	    // slightly quicker than calling helper.getRealSoundingDuration()
 	    duration =
 		comp.getElapsedRealTime(playTime + playDuration) - eventTime;
 
-//            duration = helper.getRealSoundingDuration(j);
+	    eventTime = eventTime + m_segment->getRealTimeDelay();
 
             try {
                 // Create mapped event in mmapped buffer
@@ -486,6 +488,11 @@ void SegmentMmapper::dump()
                                                            eventTime,
                                                            duration);
                 mE->setTrackId(track->getId());
+
+		if (m_segment->getTranspose() != 0 &&
+		    (*j)->isa(Rosegarden::Note::EventType)) {
+		    mE->setPitch(mE->getPitch() + m_segment->getTranspose());
+		}
 
                 ++bufPos;
 

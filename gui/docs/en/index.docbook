@@ -578,7 +578,9 @@
 		  segments.  You can change this to quickly quantize
 		  the start times of all their notes.  For more
 		  advanced quantization, use the Quantize function on
-		  the Segments menu.
+		  the Segments menu.  See <link
+		  linkend="quantization">Quantization</link> for more
+		  details.
 		</para>
       </listitem>
      </varlistentry>
@@ -1039,6 +1041,42 @@
 
     </sect1>
 
+    <sect1 id="quantization">
+      <title>Quantization</title>
+      <para>
+	"Quantization" is the process of repositioning notes and other
+	events so that they start or finish on exact beat divisions.
+	It is traditionally used to make an approximate performance
+	into a precise but rather mechanical-sounding one, either
+	because precision is the desired effect or for a result such
+	as making the notes clearer in notation.
+      </para>
+
+      <para>
+	The quickest way to quantize something is to do it in the main
+	window, using the Quantize menu on the <link
+	linkend="segment-view-segmentparameterbox">Segment Parameter
+	Box</link>.  If you select some segments and change the value
+	shown in the menu, the segments will immediately be quantized
+	so that all their notes start at multiples of the note
+	duration in the menu.
+      </para>
+
+      <para>
+	For more control, use the Quantize function on the Segments
+	menu of the main window, or on the Transforms menu of the
+	matrix or notation editors.  This shows you a dialog in which
+	you can select the precise quantization parameters you need,
+	and then it applies these to all of the selected segments or
+	notes.
+      </para>
+
+      <para>
+	<!-- !!! to be continued -->
+      </para>
+	
+    </sect1>
+    
     <sect1 id="matrix-view">
       <title>The Matrix editor</title>
       <para>

@@ -654,6 +654,9 @@ SegmentParameterBox::slotTransposeTextChanged(const QString &text)
     }
 
     emit documentModified();
+    
+    RG_DEBUG << "emitting transposeValueChanged(" << transposeValue << ")" << endl;
+
     emit transposeValueChanged(transposeValue);
 }
 

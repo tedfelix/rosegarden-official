@@ -422,6 +422,7 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil
 
                     if (evt->getType() == MappedEvent::MidiNote ||
                         evt->getType() == MappedEvent::MidiNoteOneShot) {
+			SEQUENCER_DEBUG << "transposing by " << m_controlBlockMmapper->getTransposeValue() << endl;
                         // transpose it first
                         evt->setPitch(evt->getPitch() + m_controlBlockMmapper->getTransposeValue());
                     }

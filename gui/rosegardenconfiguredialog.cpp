@@ -1066,9 +1066,9 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     // set the initial state
     slotJackToggled();
 
-    addTab(frame, i18n("Startup"));
-
 #endif // HAVE_LIBJACK
+
+    addTab(frame, i18n("Startup"));
 
 
     // ------------------ Record tab ---------------------
