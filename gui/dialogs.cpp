@@ -2211,4 +2211,19 @@ AudioPlayingDialog::AudioPlayingDialog(QWidget *parent,
 }
 
 
+AudioSplitDialog::AudioSplitDialog(QWidget *parent,
+                                   Rosegarden::Segment *segment,
+                                   RosegardenGUIDoc *doc):
+            KDialogBase(parent, "", true,
+                        i18n("Autosplit Audio File"), Ok|Cancel),
+            m_doc(doc),
+            m_segment(segment)
+{
+    QHBox *w = makeHBoxMainWidget();
+    QLabel *label = new QLabel(i18n("AutoSplit \"") +
+        QString(m_segment->getLabel().c_str()) + QString("\""), w);
+}
+
+
+
 

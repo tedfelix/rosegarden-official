@@ -481,6 +481,11 @@ public slots:
     void slotHarmonizeSelection();
 
     /**
+     * Tempo to Segment length
+     */
+    void slotTempoToSegmentLength();
+
+    /**
      * open a matrix view for each of the currently-selected segments
      */
     void slotEditInMatrix();

@@ -534,5 +534,20 @@ signals:
 
 };
 
+class AudioSplitDialog : public KDialogBase
+{
+    Q_OBJECT
+public:
+    AudioSplitDialog(QWidget *parent,
+                     Rosegarden::Segment *segment,
+                     RosegardenGUIDoc *doc);
+
+signals:
+
+    RosegardenGUIDoc    *m_doc;
+    Rosegarden::Segment *m_segment;
+
+};
+
 
 #endif

@@ -1,9 +1,9 @@
 0.2 tasks
 =========
 
-o Matrix Parameter Box
+o Matrix Parameter Box [SKELETON]
 
-o Event list
+o Event list [SKELETON]
 
 o Get Segment joining working
 
@@ -33,8 +33,6 @@ o "Split silence" function to automatically split up an audio segment
    into a number of segments when the amplitude falls below a given
    threshold. [MADE A START]
 
-o Set tempo event to length of audio sample
-
 o "Revert file" option
 
 o sweep selection on Matrix
@@ -59,6 +57,8 @@ o selection of ALSA recording device
 
 Completed for 0.1.7 (0.2.0)
 ===========================
+
+o Set tempo event to length of segment [DONE]
 
 o Audio VU meters [DONE]
 

@@ -37,6 +37,7 @@
 	<Action name="auto_split"/>
 	<Action name="collapse"/>
 	<Action name="harmonize_selection"/>
+        <Action name="set_tempo_to_segment_length"/>
   </Menu>
   <Menu name="Tracks">
 	<text>Trac&amp;ks</text>

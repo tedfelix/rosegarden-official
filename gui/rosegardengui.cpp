@@ -363,6 +363,10 @@ void RosegardenGUIApp::setupActions()
 		SLOT(slotHarmonizeSelection()), actionCollection(),
 		"harmonize_selection");
 
+    new KAction(i18n("Set &Tempo to Audio Segment Length"), 0, this,
+		SLOT(slotTempoToSegmentLength()), actionCollection(),
+		"set_tempo_to_segment_length");
+
     new KAction(i18n(SegmentRescaleCommand::getGlobalName()), 0, this,
 		SLOT(slotRescaleSelection()), actionCollection(),
 		"rescale");
@@ -1307,7 +1311,19 @@ void RosegardenGUIApp::slotAutoSplitSelection()
 
     for (Rosegarden::SegmentSelection::iterator i = selection.begin();
 	 i != selection.end(); ++i) {
-	command->addCommand(new SegmentAutoSplitCommand(*i));
+
+        if ((*i)->getType() == Rosegarden::Segment::Audio)
+        {
+            AudioSplitDialog *aSD = new AudioSplitDialog(this,
+                                                        (*i),
+                                                        m_doc);
+
+            if (aSD->exec() == QDialog::Accepted)
+            {
+            }
+        }
+        else
+	    command->addCommand(new SegmentAutoSplitCommand(*i));
     }
 
     m_view->slotAddCommandToHistory(command);
@@ -1329,6 +1345,61 @@ void RosegardenGUIApp::slotHarmonizeSelection()
 
     //!!! do nothing with the results yet
     delete segment;
+}
+
+void RosegardenGUIApp::slotTempoToSegmentLength()
+{
+    std::cout << "RosegardenGUIApp::slotTempoToSegmentLength" << std::endl;
+
+    if (!m_view->haveSelection()) return;
+
+    Rosegarden::SegmentSelection selection = m_view->getSelection();
+
+    // Only set for a single selection
+    //
+    if (selection.size() == 1 &&
+            (*selection.begin())->getType() == Rosegarden::Segment::Audio)
+    {
+        Rosegarden::Composition &comp = m_doc->getComposition();
+        Rosegarden::Segment *seg = *selection.begin();
+
+        Rosegarden::TimeSignature timeSig =
+            comp.getTimeSignatureAt( seg->getStartTime());
+        int beats = timeSig.getBeatsPerBar();
+
+        timeT endTime = seg->getEndTime();
+
+        if (seg->getRawEndMarkerTime())
+            endTime = seg->getEndMarkerTime();
+
+        Rosegarden::RealTime segDuration =
+            seg->getAudioEndTime() - seg->getAudioStartTime();
+
+        double beatLengthUsec =
+            double(segDuration.sec * 1000000 + segDuration.usec) /
+            double(beats);
+
+        // New tempo is a minute divided by time of beat
+        //
+        double newTempo = 60.0 * 1000000.0 / beatLengthUsec;
+
+        KMacroCommand *macro = new KMacroCommand(i18n("Set Global Tempo"));
+
+        // Remove all tempo changes in reverse order so as the index numbers
+        // don't becoming meaningless as the command gets unwound.
+        //
+        for (int i = 0; i < comp.getTempoChangeCount(); i++)
+            macro->addCommand(new RemoveTempoChangeCommand(&comp,
+                                  (comp.getTempoChangeCount() - 1 - i)));
+
+        // add tempo change at time zero
+        //
+        macro->addCommand(new AddTempoChangeCommand(&comp, 0, newTempo));
+
+        // execute
+        m_doc->getCommandHistory()->addCommand(macro);
+    }
+
 }
 
 
