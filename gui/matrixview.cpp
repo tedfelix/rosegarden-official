@@ -126,7 +126,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 	    tCanvas->setBackgroundPixmap(background);
 	}
     }
-    m_config->setGroup("Matrix Options");
+    m_config->setGroup(ConfigGroup);
 
     MATRIX_DEBUG << "MatrixView : creating staff\n";
 
@@ -379,7 +379,7 @@ MatrixView::~MatrixView()
 
 void MatrixView::slotSaveOptions()
 {        
-    m_config->setGroup("Matrix Options");
+    m_config->setGroup(ConfigGroup);
 
     m_config->writeEntry("Show Chord Name Ruler", getToggleAction("show_chords_ruler")->isChecked());
     m_config->writeEntry("Show Tempo Ruler",      getToggleAction("show_tempo_ruler")->isChecked());
@@ -390,7 +390,7 @@ void MatrixView::slotSaveOptions()
 void MatrixView::readOptions()
 {
     EditView::readOptions();
-    m_config->setGroup("Matrix Options");
+    m_config->setGroup(ConfigGroup);
 
     bool opt = false;
 
@@ -2107,3 +2107,6 @@ MatrixView::slotToggleTempoRuler()
 {
     toggleWidget(m_tempoRuler, "show_tempo_ruler");
 }
+
+const char* const MatrixView::ConfigGroup = "Matrix Options";
+

@@ -60,6 +60,7 @@
 #include "notationhlayout.h"
 #include "notationstrings.h"
 #include "notationview.h"
+#include "matrixview.h"
 #include "notestyle.h"
 #include "rosegardenguidoc.h"
 #include "rosedebug.h"
@@ -690,7 +691,7 @@ MatrixConfigurationPage::MatrixConfigurationPage(KConfig *cfg,
                                                  const char *name) :
     TabbedConfigurationPage(cfg, parent, name)
 {
-    m_cfg->setGroup("Matrix Options");
+    m_cfg->setGroup(MatrixView::ConfigGroup);
 
     QFrame *frame = new QFrame(m_tabWidget);
     QGridLayout *layout = new QGridLayout(frame,
@@ -704,7 +705,7 @@ MatrixConfigurationPage::MatrixConfigurationPage(KConfig *cfg,
 
 void MatrixConfigurationPage::apply()
 {
-    m_cfg->setGroup("Matrix Options");
+    m_cfg->setGroup(MatrixView::ConfigGroup);
 }
 
 

@@ -68,6 +68,8 @@ public:
 
     virtual ~EventView();
 
+    static const char* const ConfigGroup;
+
     virtual bool applyLayout(int staffNo = -1);
 
     virtual void refreshSegment(Rosegarden::Segment *segment,

@@ -487,7 +487,7 @@ EventView::setViewSize(QSize s)
 void
 EventView::readOptions()
 {
-    m_config->setGroup("EventList Options");
+    m_config->setGroup(ConfigGroup);
     EditViewBase::readOptions();
     m_eventFilter = m_config->readNumEntry("eventfilter", m_eventFilter);
     m_eventList->restoreLayout(m_config, LayoutConfigGroupName);
@@ -498,7 +498,7 @@ const char* const EventView::LayoutConfigGroupName = "EventList Layout";
 void
 EventView::slotSaveOptions()
 {
-    m_config->setGroup("EventList Options");
+    m_config->setGroup(ConfigGroup);
     m_config->writeEntry("eventfilter", m_eventFilter);
     m_eventList->saveLayout(m_config, LayoutConfigGroupName);
 }
@@ -707,3 +707,5 @@ EventView::slotPopupEventEditor(QListViewItem *item)
 
     }
 }
+
+const char* const EventView::ConfigGroup = "EventList Options";

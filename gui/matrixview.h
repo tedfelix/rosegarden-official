@@ -78,6 +78,8 @@ public:
 
     virtual ~MatrixView();
 
+    static const char* const ConfigGroup;
+
     virtual bool applyLayout(int staffNo = -1,
 			     Rosegarden::timeT startTime = 0,
 			     Rosegarden::timeT endTime = 0);
@@ -497,20 +499,25 @@ protected:
     QWidget *m_chordNameRuler;
     QWidget *m_tempoRuler;
 
-    class NoteSender : public QObject
-    {
-	Q_OBJECT
-	
-    public:
-	NoteSender(int i, int p) : m_insid(i), m_pitch(p) { }
-	virtual ~NoteSender();
-	
-    public slots:
-        void sendNote();
-    
-    private:
-	int m_insid, m_pitch;
-    };
 };
+
+// Commented this out - was a MatrixView inner class, but we get a warning
+// that Q_OBJECT can't be used in an inner class - gl
+//
+
+// class NoteSender : public QObject
+// {
+//     Q_OBJECT
+	
+// public:
+//     NoteSender(int i, int p) : m_insid(i), m_pitch(p) { }
+//     virtual ~NoteSender();
+	
+// public slots:
+// void sendNote();
+    
+// private:
+//     int m_insid, m_pitch;
+// };
 
 #endif
