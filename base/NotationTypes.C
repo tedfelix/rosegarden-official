@@ -792,6 +792,7 @@ TimeSignature::TimeSignature(int numerator, int denominator)
     : m_numerator(numerator), m_denominator(denominator)
 {
     if (numerator < 1 || denominator < 1) throw BadTimeSignature();
+    setInternalDurations();
 }
 
 TimeSignature::TimeSignature(const Event &e)
@@ -803,6 +804,7 @@ TimeSignature::TimeSignature(const Event &e)
     m_numerator = e.get<Int>(NumeratorPropertyName);
     m_denominator = e.get<Int>(DenominatorPropertyName);
     if (m_numerator < 1 || m_denominator < 1) throw BadTimeSignature();
+    setInternalDurations();
 }
 
 TimeSignature& TimeSignature::operator=(const TimeSignature &ts)
@@ -810,13 +812,8 @@ TimeSignature& TimeSignature::operator=(const TimeSignature &ts)
     if (&ts == this) return *this;
     m_numerator = ts.m_numerator;
     m_denominator = ts.m_denominator;
-    return *this;
-}
-
-int TimeSignature::getBarDuration() const
-{
     setInternalDurations();
-    return m_barDuration;
+    return *this;
 }
 
 Note::Type TimeSignature::getUnit() const
@@ -826,29 +823,18 @@ Note::Type TimeSignature::getUnit() const
     return Note::Semibreve - c;
 }
 
-int TimeSignature::getUnitDuration() const
-{
-    return m_crotchetTime * 4 / m_denominator;
-}
-
 bool TimeSignature::isDotted() const
 {
     // Is 3/8 dotted time?  This will report that it isn't, because of
     // the check for m_numerator > 3 -- but otherwise we'd get a false
     // positive with 3/4
 
-	// [rf] That's an acceptable answer, according to my theory book. In
-	// practice, you can say it's dotted time iff it has 6, 9, or 12 on top.
+    // [rf] That's an acceptable answer, according to my theory book. In
+    // practice, you can say it's dotted time iff it has 6, 9, or 12 on top.
 
     return (m_numerator % 3 == 0 &&
             m_numerator > 3 &&
             getBarDuration() >= Note(Note::Crotchet, true).getDuration());
-}
-
-int TimeSignature::getBeatDuration() const
-{
-    setInternalDurations();
-    return m_beatDuration;
 }
 
 Event *TimeSignature::getAsEvent(timeT absoluteTime) const
@@ -869,8 +855,6 @@ void TimeSignature::getDurationListForInterval(DurationList &dlist,
                                                int duration,
                                                int startOffset) const
 {
-    setInternalDurations();
-
     int offset = startOffset;
     int durationRemaining = duration;
 
@@ -986,7 +970,8 @@ void TimeSignature::getDurationListForBar(DurationList &dlist) const
 
 }
                
-void TimeSignature::setInternalDurations() const {
+void TimeSignature::setInternalDurations()
+{
     // "unit length," which might be the beat length or the beat-division
     // length:
     int noteLength = m_crotchetTime * 4 / m_denominator;

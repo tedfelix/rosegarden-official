@@ -64,14 +64,14 @@ public:
     iterator end();
 
     /**
-	 * Returns a columniterator referencing the first column of the
-	 * timeslice.
-	 */
+     * Returns a columniterator referencing the first column of the
+     * timeslice.
+     */
     columniterator beginColumns();
 
     /**
-	 * Returns a past-the-end columniterator.
-	 */
+     * Returns a past-the-end columniterator.
+     */
     columniterator endColumns();
 
     class iterator {

@@ -778,7 +778,7 @@ void SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
         } else {
             // find a divisor (at least 2) for the numerator
             int n = 2;
-            while (num % n != 0) ++n;
+            while (num >= n && num % n != 0) ++n;
             average = n * Note(Note::Semiquaver).getDuration();
         }
     }

@@ -555,7 +555,9 @@ public:
 
     TimeSignature() :
         m_numerator(DefaultTimeSignature.m_numerator),
-        m_denominator(DefaultTimeSignature.m_denominator) { }
+        m_denominator(DefaultTimeSignature.m_denominator) {
+	setInternalDurations();
+    }
 
     TimeSignature(int numerator, int denominator)
         /* throw (BadTimeSignature) */;
@@ -565,7 +567,9 @@ public:
     
     TimeSignature(const TimeSignature &ts) :
         m_numerator(ts.m_numerator),
-        m_denominator(ts.m_denominator) { }
+        m_denominator(ts.m_denominator) {
+	setInternalDurations();
+    }
 
     ~TimeSignature() { }
 
@@ -573,7 +577,7 @@ public:
 
     int getNumerator()    const { return m_numerator; }
     int getDenominator()  const { return m_denominator; }
-    int getBarDuration()  const;
+    int getBarDuration()  const { return m_barDuration; }
 
     // We say the "unit" of the time is the duration of the note
     // implied by the denominator.  For example, the unit of 4/4 time
@@ -591,7 +595,7 @@ public:
 
     bool isDotted() const;
 
-    int getBeatDuration() const;
+    int getBeatDuration() const { return m_beatDuration; }
     int getBeatsPerBar()  const {
         return getBarDuration() / getBeatDuration();
     }
@@ -620,11 +624,11 @@ public:
 private:
     int m_numerator;
     int m_denominator;
-	mutable int m_barDuration;
-	mutable int m_beatDuration;
-	mutable int m_beatDivisionDuration;
 
-	void setInternalDurations() const;
+    int m_barDuration;
+    int m_beatDuration;
+    int m_beatDivisionDuration;
+    void setInternalDurations();
 
     // a time & effort saving device
     static const int m_crotchetTime;
