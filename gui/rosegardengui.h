@@ -736,6 +736,11 @@ public slots:
     void slotImportStudioFromFile(const QString &file);
 
     /**
+     * Send MIDI_RESET to all MIDI devices
+     */
+    void slotResetMidiNetwork();
+    
+    /**
      * toggles the toolbar
      */
     void slotToggleToolBar();

@@ -669,6 +669,10 @@ void RosegardenGUIApp::setupActions()
 	        SLOT(slotImportStudio()),
 		actionCollection(), "load_studio");
 
+    new KAction(i18n("&Reset MIDI Network"), 0, this,
+	        SLOT(slotResetMidiNetwork()),
+		actionCollection(), "reset_midi_network");
+
     //
     // Transport menu
     //
@@ -4960,6 +4964,14 @@ RosegardenGUIApp::slotImportStudioFromFile(const QString &file)
 
     delete doc;
 }
+
+void
+RosegardenGUIApp::slotResetMidiNetwork()
+{
+    if (m_seqManager)
+        m_seqManager->preparePlayback(true);
+}
+
 
 void
 RosegardenGUIApp::slotModifyMIDIFilters()

@@ -83,6 +83,7 @@
         <Action name="save_default_studio"/>
 	<Action name="load_default_studio"/>
 	<Action name="load_studio"/>
+	<Action name="reset_midi_network"/>
   </Menu>
   <Menu name="Transport">
         <text>T&amp;ransport</text>
