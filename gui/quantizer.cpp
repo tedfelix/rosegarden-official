@@ -47,13 +47,13 @@ Quantizer::computeNoteDurations()
     m_durationTable[ThirtySecond] = m_wholeNoteDuration / 32;
     m_durationTable[SixtyFourth]  = m_wholeNoteDuration / 64;
 
-    m_durationTable[WholeDotted]        = m_durationTable[Whole] + m_durationTable[Half];
-    m_durationTable[HalfDotted]         = m_durationTable[Half] + m_durationTable[Quarter];
-    m_durationTable[QuarterDotted]      = m_durationTable[Quarter] + m_durationTable[Eighth];
-    m_durationTable[EighthDotted]       = m_durationTable[Eighth] + m_durationTable[Sixteenth];
-    m_durationTable[SixteenthDotted]    = m_durationTable[Sixteenth] + m_durationTable[ThirtySecond];
+    m_durationTable[WholeDotted]        = m_durationTable[Whole]        + m_durationTable[Half];
+    m_durationTable[HalfDotted]         = m_durationTable[Half]         + m_durationTable[Quarter];
+    m_durationTable[QuarterDotted]      = m_durationTable[Quarter]      + m_durationTable[Eighth];
+    m_durationTable[EighthDotted]       = m_durationTable[Eighth]       + m_durationTable[Sixteenth];
+    m_durationTable[SixteenthDotted]    = m_durationTable[Sixteenth]    + m_durationTable[ThirtySecond];
     m_durationTable[ThirtySecondDotted] = m_durationTable[ThirtySecond] + m_durationTable[SixtyFourth];
-    m_durationTable[SixtyFourthDotted]  = m_durationTable[SixtyFourth] + m_durationTable[SixtyFourth] / 2;
+    m_durationTable[SixtyFourthDotted]  = m_durationTable[SixtyFourth]  + m_durationTable[SixtyFourth] / 2;
 
 //     for(unsigned int i = 0; i < m_durationTable.size(); ++i) {
 //         kdDebug(KDEBUG_AREA) << "m_durationTable[" << i << "] = "
@@ -70,57 +70,18 @@ Quantizer::quantize(EventList::iterator from,
 
     while (it != to) {
 
-        Event::duration duration = quantize( (*it)->getDuration() );
-        (*it)->set<Int>("QuantizedDuration", duration);
+        quantize( (*it) );
 
         ++it;
     }
 }
 
 void
-Quantizer::quantizeToNoteTypes(EventList::iterator from,
-                               EventList::iterator to)
-{
-    EventList::iterator it = from;
-
-    while (it != to) {
-
-        Note note = quantizeToNoteType( (*it)->getDuration() );
-        (*it)->set<Int>("Notation::NoteType", note);
-
-        ++it;
-    }
-}
-
-Note
-Quantizer::quantizeToNoteType(Event::duration drt)
+Quantizer::quantize(Event *el)
 {
     Note note = Whole;
+    Event::duration drt = el->getDuration();
 
-    DurationMap::iterator high, low;
-    
-    quantize(drt, high, low);
-
-    Event::duration highDuration = *high,
-        lowDuration = *(low);
-
-    //         kdDebug(KDEBUG_AREA) << "highDuration : " << highDuration
-    //                              << " - lowDuration : " << lowDuration << "\n";
-
-    if ((highDuration - drt) > (drt - lowDuration)) {
-        note = Note(distance(m_durationTable.begin(), low));
-    } else {
-        note = Note(distance(m_durationTable.begin(), high));
-    }
-
-    //     kdDebug(KDEBUG_AREA) << "Quantized to note : " << note << "\n";
-
-    return note;
-}
-
-Event::duration
-Quantizer::quantize(Event::duration drt)
-{
     DurationMap::iterator high, low;
     
     quantize(drt, high, low);
@@ -130,19 +91,28 @@ Quantizer::quantize(Event::duration drt)
         quantizedDuration = 0;
 
     if ((highDuration - drt) > (drt - lowDuration)) {
+        note = Note(distance(m_durationTable.begin(), low));
         quantizedDuration = lowDuration;
     } else {
+        note = Note(distance(m_durationTable.begin(), high));
         quantizedDuration = highDuration;
     }
-    return quantizedDuration;
+
+//     kdDebug(KDEBUG_AREA) << "Quantized to duration : "
+//                          << quantizedDuration << " - note : " << note << "\n";
+
+    el->set<Int>("Notation::NoteType", note);
+    el->set<Int>("QuantizedDuration", quantizedDuration);
+
 }
+
 
 void
 Quantizer::quantize(Event::duration drt, DurationMap::iterator &high, 
                     DurationMap::iterator &low)
 {
 
-//     kdDebug(KDEBUG_AREA) << "quantizeToNoteType : duration " << drt << endl;
+//     kdDebug(KDEBUG_AREA) << "quantize : duration " << drt << endl;
 
     // Find which note the event's duration is closest to
     //
@@ -182,3 +152,17 @@ Quantizer::quantize(Event::duration drt, DurationMap::iterator &high,
         low = lb - 1;
     }
 }
+
+
+Event::duration
+Quantizer::noteDuration(Note note)
+{
+    if (note < SixtyFourth && note > WholeDotted) {
+        kdDebug(KDEBUG_AREA) << "Quantizer::noteDuration : note out of range : "
+                             << note << endl;
+        throw -1;
+    }
+    
+    return m_durationTable[note];
+}
+
