@@ -1341,7 +1341,7 @@ NoteInserter::handleClick(int height, const QPoint &eventPos,
     Note note(m_noteType, m_noteDots);
     TrackNotationHelper nt(m_parentView.getTrack());
 
-    doInsert(nt, (*closestNote)->getAbsoluteTime(), note, pitch);
+    doInsert(nt, (*closestNote)->getAbsoluteTime(), note, pitch, m_accidental);
 
     // TODO: be less silly
     m_parentView.redoLayout(m_parentView.getNotationElements()->begin());
