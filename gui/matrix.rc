@@ -43,6 +43,7 @@
 <Menu name="Transforms">
   <text>Trans&amp;forms</text>
   <Action name="quantize"/>
+  <Action name="rescale"/>
   <Menu name="Velocity">
     <text>&amp;Velocity</text>
     <Action name="velocity_up"/>
@@ -174,6 +175,7 @@
     <Action name="edit_cut"/>
     <Action name="edit_copy"/>
     <Action name="quantize"/>
+    <Action name="rescale"/>
     <Action name="velocity_up"/>
     <Action name="velocity_down"/>
     <Action name="set_velocities"/>

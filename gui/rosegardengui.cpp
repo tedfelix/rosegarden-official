@@ -1807,10 +1807,23 @@ void RosegardenGUIApp::slotRescaleSelection()
     //!!! this should all be in rosegardenguiview
     //!!! should it?
 
-    RescaleDialog *dialog = new RescaleDialog(m_view);
-    if (dialog->exec() != QDialog::Accepted) return;
-
     Rosegarden::SegmentSelection selection = m_view->getSelection();
+
+    Rosegarden::timeT startTime = 0, endTime = 0;
+    for (Rosegarden::SegmentSelection::iterator i = selection.begin();
+         i != selection.end(); ++i) {
+	if ((i == selection.begin()) || ((*i)->getStartTime() < startTime)) {
+	    startTime = (*i)->getStartTime();
+	}
+	if ((i == selection.begin()) || ((*i)->getEndMarkerTime() > endTime)) {
+	    endTime = (*i)->getEndMarkerTime();
+	}
+    }
+
+    RescaleDialog *dialog = new RescaleDialog(m_view, &m_doc->getComposition(),
+					      startTime, endTime - startTime,
+					      false);
+    if (dialog->exec() != QDialog::Accepted) return;
 
     KMacroCommand *command = new KMacroCommand
         (SegmentRescaleCommand::getGlobalName());
@@ -1818,8 +1831,8 @@ void RosegardenGUIApp::slotRescaleSelection()
     for (Rosegarden::SegmentSelection::iterator i = selection.begin();
          i != selection.end(); ++i) {
         command->addCommand(new SegmentRescaleCommand(*i,
-                                                      dialog->getMultiplier(),
-                                                      dialog->getDivisor()));
+						      dialog->getNewDuration(),
+                                                      endTime - startTime));
     }
 
     m_view->slotAddCommandToHistory(command);

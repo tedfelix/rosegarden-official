@@ -1085,6 +1085,84 @@ TransposeCommand::modifySegment()
 }
 
 
+RescaleCommand::RescaleCommand(EventSelection &sel,
+			       timeT newDuration,
+			       bool closeGap) :
+    BasicCommand(getGlobalName(), sel.getSegment(),
+		 sel.getStartTime(),
+		 closeGap ? sel.getSegment().getEndMarkerTime() : sel.getEndTime(),
+		 true),
+    m_selection(&sel),
+    m_oldDuration(sel.getTotalDuration()),
+    m_newDuration(newDuration),
+    m_closeGap(closeGap)
+{
+    // nothing else
+}
+
+timeT
+RescaleCommand::rescale(timeT t)
+{
+    // avoid overflows by using doubles
+    double d = t;
+    d *= m_newDuration;
+    d /= m_oldDuration;
+    d += 0.5;
+    return (timeT)d;
+}
+
+void
+RescaleCommand::modifySegment()
+{
+    if (m_oldDuration == m_newDuration) return;
+
+    timeT startTime = m_selection->getStartTime();
+    timeT diff = m_newDuration - m_oldDuration;
+    std::vector<Event *> toErase;
+    std::vector<Event *> toInsert;
+    
+    Segment &segment = m_selection->getSegment();
+
+    for (EventSelection::eventcontainer::iterator i = 
+	     m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+
+	toErase.push_back(*i);
+
+	timeT t = (*i)->getAbsoluteTime() - startTime;
+	timeT d = (*i)->getDuration();
+	t = rescale(t);
+	d = rescale(d);
+
+	toInsert.push_back(new Event(**i, startTime + t, d));
+    }
+
+    if (m_closeGap) {
+	for (Segment::iterator i = segment.findTime(startTime + m_oldDuration);
+	     i != segment.end(); ++i) {
+	    // move all events including any following the end marker
+	    toErase.push_back(*i);
+	    toInsert.push_back(new Event(**i, (*i)->getAbsoluteTime() + diff));
+	}
+    }
+
+    for (std::vector<Event *>::iterator i = toErase.begin(); i != toErase.end(); ++i) {
+	segment.eraseSingle(*i);
+    }
+
+    for (std::vector<Event *>::iterator i = toInsert.begin(); i != toInsert.end(); ++i) {
+	segment.insert(*i);
+    }
+
+    if (m_closeGap && diff > 0) {
+	segment.setEndMarkerTime(startTime +
+				 rescale(segment.getEndMarkerTime() - startTime));
+    }
+
+    segment.normalizeRests(getStartTime(), getEndTime());
+}
+
+
 MoveCommand::MoveCommand(Segment &s, timeT delta, bool useNotationTimings,
 			 EventSelection &sel) :
     BasicCommand(getGlobalName(), s,

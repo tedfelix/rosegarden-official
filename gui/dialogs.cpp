@@ -53,6 +53,7 @@
 #include "BaseProperties.h"
 #include "MidiTypes.h"
 
+#include "constants.h"
 #include "dialogs.h"
 #include "rgapplication.h"
 #include "notepixmapfactory.h"
@@ -2996,11 +2997,57 @@ QuantizeDialog::getQuantizer() const
     return m_quantizeFrame->getQuantizer();
 }
 
-RescaleDialog::RescaleDialog(QWidget *parent) :
-    KDialogBase(parent, 0, true, i18n("Rescale"), Ok | Cancel)
+RescaleDialog::RescaleDialog(QWidget *parent,
+			     Rosegarden::Composition *composition,
+			     Rosegarden::timeT startTime,
+			     Rosegarden::timeT originalDuration,
+			     bool showCloseGapOption) :
+    KDialogBase(parent, 0, true, i18n("Rescale"), User1 | Ok | Cancel)
 {
     QVBox *vbox = makeVBoxMainWidget();
 
+    m_newDuration = new RosegardenTimeWidget
+	(i18n("Duration of selection"), vbox, composition,
+	 startTime, originalDuration, true);
+
+    if (showCloseGapOption) {
+	QGroupBox *optionBox = new QGroupBox(1, Horizontal, i18n("Options"), vbox);
+	m_closeGap = new QCheckBox("Adjust times of following events accordingly",
+				   optionBox);
+	KConfig *config = kapp->config();
+	config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
+	m_closeGap->setChecked
+	    (config->readBoolEntry("rescaledialogadjusttimes", true));
+    } else {
+	m_closeGap = 0;
+    }
+
+    setButtonText(User1, i18n("Reset"));
+    connect(this, SIGNAL(user1Clicked()),
+	    m_newDuration, SLOT(slotResetToDefault()));
+}
+
+Rosegarden::timeT
+RescaleDialog::getNewDuration()
+{
+    return m_newDuration->getTime();
+}
+
+bool
+RescaleDialog::shouldCloseGap()
+{
+    if (m_closeGap) {
+	KConfig *config = kapp->config();
+	config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
+	config->writeEntry("rescaledialogadjusttimes", m_closeGap->isChecked());
+	return m_closeGap->isChecked();
+    } else {
+	return true;
+    }
+}
+	
+
+/*!!!
     QGroupBox *ratioBox = new QGroupBox
 	(1, Horizontal, i18n("Rescale ratio"), vbox);
 
@@ -3029,7 +3076,9 @@ RescaleDialog::RescaleDialog(QWidget *parent) :
     QObject::connect(toCombo, SIGNAL(activated(int)),
 		     this, SLOT(slotToChanged(int)));
 }
+*/
 
+/*
 int
 RescaleDialog::getMultiplier()
 {
@@ -3061,7 +3110,7 @@ RescaleDialog::slotToChanged(int i)
 		       arg(perTenThou/100).
 		       arg(perTenThou%100));
 }
-
+*/
 
 FileMergeDialog::FileMergeDialog(QWidget *parent,
 				 QString /*fileName*/,

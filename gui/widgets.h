@@ -516,7 +516,8 @@ public:
     RosegardenTimeWidget(QString title,
 			 QWidget *parent,
 			 Rosegarden::Composition *composition, // for bar/beat/msec
-			 Rosegarden::timeT initialTime);
+			 Rosegarden::timeT initialTime,
+			 bool editable = true);
 
     /**
      * Constructor for duration widget.  startTime is the absolute time
@@ -527,7 +528,8 @@ public:
 			 QWidget *parent,
 			 Rosegarden::Composition *composition, // for bar/beat/msec
 			 Rosegarden::timeT startTime,
-			 Rosegarden::timeT initialDuration);
+			 Rosegarden::timeT initialDuration,
+			 bool editable = true);
 
     Rosegarden::timeT getTime();
     Rosegarden::RealTime getRealTime();
@@ -558,12 +560,17 @@ private:
     QSpinBox  *m_bar;
     QSpinBox  *m_beat;
     QSpinBox  *m_fraction;
+    QLineEdit *m_barLabel;
+    QLineEdit *m_beatLabel;
+    QLineEdit *m_fractionLabel;
     QLabel    *m_timeSig;
     QSpinBox  *m_sec;
     QSpinBox  *m_msec;
+    QLineEdit *m_secLabel;
+    QLineEdit *m_msecLabel;
     QLabel    *m_tempo;
 
-    void init();
+    void init(bool editable);
     void populate();
 
     std::vector<Rosegarden::timeT> m_noteDurations;

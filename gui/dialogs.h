@@ -553,19 +553,18 @@ class RescaleDialog : public KDialogBase
     Q_OBJECT
 
 public:
-    RescaleDialog(QWidget *parent);
+    RescaleDialog(QWidget *parent,
+		  Rosegarden::Composition *composition, // for TimeWidget calculations
+		  Rosegarden::timeT startTime,
+		  Rosegarden::timeT originalDuration,
+		  bool showCloseGapOption);
 
-    int getMultiplier();
-    int getDivisor();
-
-public slots:
-    void slotFromChanged(int);
-    void slotToChanged(int);
+    Rosegarden::timeT getNewDuration();
+    bool shouldCloseGap();
 
 protected:
-    int m_from;
-    int m_to;
-    QLabel *m_percent;
+    RosegardenTimeWidget *m_newDuration;
+    QCheckBox *m_closeGap;
 };
     
 

@@ -1227,6 +1227,17 @@ SegmentRescaleCommand::~SegmentRescaleCommand()
     }
 }
 
+Rosegarden::timeT
+SegmentRescaleCommand::rescale(Rosegarden::timeT t)
+{
+    // avoid overflows by using doubles
+    double d = t;
+    d *= m_multiplier;
+    d /= m_divisor;
+    d += 0.5;
+    return (Rosegarden::timeT)d;
+}
+
 void
 SegmentRescaleCommand::execute()
 {
@@ -1248,10 +1259,12 @@ SegmentRescaleCommand::execute()
 	    timeT dt = (*i)->getAbsoluteTime() - startTime;
 	    timeT duration = (*i)->getDuration();
 	    
+	    //!!! use doubles for this calculation where necessary
+
 	    m_newSegment->insert
 		(new Event(**i,
-			   startTime + (dt * m_multiplier / m_divisor),
-			   duration * m_multiplier / m_divisor));
+			   startTime + rescale(dt),
+			   rescale(duration)));
 	}
     }
     
@@ -1261,8 +1274,7 @@ SegmentRescaleCommand::execute()
 				 m_newSegment->getEndTime());
     
     m_newSegment->setEndMarkerTime
-	(startTime + (m_segment->getEndMarkerTime() - startTime) *
-	 m_multiplier / m_divisor);
+	(startTime + rescale(m_segment->getEndMarkerTime() - startTime));
 
     m_detached = true;
 }

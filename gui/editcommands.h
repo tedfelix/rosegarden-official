@@ -374,6 +374,28 @@ private:
 };
 
 
+class RescaleCommand : public BasicCommand
+{
+public:
+    RescaleCommand(Rosegarden::EventSelection &selection,
+		   Rosegarden::timeT newDuration,
+		   bool closeGap);
+
+    static QString getGlobalName() { return i18n("Stretch or S&quash..."); }
+    
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::timeT rescale(Rosegarden::timeT);
+
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    Rosegarden::timeT m_oldDuration;
+    Rosegarden::timeT m_newDuration;
+    bool m_closeGap;
+};
+
+
 class MoveCommand : public BasicCommand
 {
 public:

@@ -447,6 +447,10 @@ void MatrixView::setupActions()
                 SLOT(slotTransformsQuantize()), actionCollection(),
                 "quantize");
 
+    new KAction(RescaleCommand::getGlobalName(), 0, this,
+		SLOT(slotRescale()), actionCollection(),
+		"rescale");
+
     new KAction(ChangeVelocityCommand::getGlobalName(10), 0,
 		Key_Up + SHIFT, this,
                 SLOT(slotVelocityUp()), actionCollection(),
@@ -960,6 +964,29 @@ void MatrixView::slotTransformsQuantize()
 			     dialog->getQuantizer()));
     }
 }
+
+void
+MatrixView::slotRescale()
+{
+    if (!m_currentEventSelection) return;
+
+    RescaleDialog *dialog = new RescaleDialog
+	(this,
+	 &getDocument()->getComposition(),
+	 m_currentEventSelection->getStartTime(),
+	 m_currentEventSelection->getEndTime() -
+	 m_currentEventSelection->getStartTime(),
+	 true);
+
+    if (dialog->exec() == QDialog::Accepted) {
+	KTmpStatusMsg msg(i18n("Rescaling..."), this);
+	addCommandToHistory(new RescaleCommand
+			    (*m_currentEventSelection,
+			     dialog->getNewDuration(),
+			     dialog->shouldCloseGap()));
+    }
+}
+
 
 void MatrixView::slotMousePressed(Rosegarden::timeT time, int pitch,
                                   QMouseEvent* e, MatrixElement* el)

@@ -259,6 +259,7 @@ public slots:
 
     /// transforms
     void slotTransformsQuantize();
+    void slotRescale();
     void slotVelocityUp();
     void slotVelocityDown();
 
@@ -367,7 +368,7 @@ public slots:
     void slotQuantizeSelection(int);
 
     /**
-     * Pop-up the velocity modificatio dialog
+     * Pop-up the velocity modification dialog
      */
     void slotSetVelocities();
 

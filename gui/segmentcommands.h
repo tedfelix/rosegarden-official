@@ -382,7 +382,7 @@ public:
     virtual void execute();
     virtual void unexecute();
     
-    static QString getGlobalName() { return i18n("&Rescale..."); }
+    static QString getGlobalName() { return i18n("Stretch or S&quash..."); }
 
 private:
     Rosegarden::Segment *m_segment;
@@ -390,6 +390,8 @@ private:
     int m_multiplier;
     int m_divisor;
     bool m_detached;
+
+    Rosegarden::timeT rescale(Rosegarden::timeT);
 };
 
 
