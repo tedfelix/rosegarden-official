@@ -334,7 +334,7 @@ Sequencer::updateSongPosition()
 */
 
 void
-Sequencer::processMidiOut(Rosegarden::MappedComposition *mappedComp,
+Sequencer::processMidiOut(Rosegarden::MappedComposition mappedComp,
                           const timeT &playLatency)
 {
   Arts::MidiEvent event;
@@ -365,15 +365,16 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition *mappedComp,
   }
 
 
-  for ( MappedComposition::iterator i = mappedComp->begin();
-                                    i != mappedComp->end(); ++i )
+  for ( MappedComposition::iterator i = mappedComp.begin();
+                                    i != mappedComp.end(); ++i )
   {
     // sort out the correct TimeStamp for playback
     assert((*i)->getAbsoluteTime() >= _playStartPosition);
 
     // add the fiddle factor for timeT to MIDI conversion in here
     midiRelativeTime = convertToMidiTime((*i)->getAbsoluteTime() -
-                                               _playStartPosition);
+                                               _playStartPosition +
+                                               playLatency);
 
 
     event.time = aggregateTime(_playStartTime,

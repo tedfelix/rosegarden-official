@@ -190,8 +190,8 @@ int main(int argc, char *argv[])
 
   while(roseSeq->getStatus() != QUIT)
   {
-    // process any pending events
-    app.processEvents(100);
+    // process any pending events (50ms of events)
+    app.processEvents(50);
 
     // Update internal clock and send pointer position
     // change event to GUI

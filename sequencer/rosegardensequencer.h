@@ -93,7 +93,7 @@ public slots:
   void notifySequencerStatus();
 
 private:
-  Rosegarden::MappedComposition fetchEvents(const Rosegarden::timeT &start,
+  Rosegarden::MappedComposition* fetchEvents(const Rosegarden::timeT &start,
                                             const Rosegarden::timeT &end);
 
   Rosegarden::Sequencer *m_sequencer;

@@ -29,6 +29,8 @@ using std::cerr;
 using std::endl;
 using std::cout;
 
+static Rosegarden::MappedComposition *mappedComp = 0;
+
 RosegardenSequencerApp::RosegardenSequencerApp():
     DCOPObject("RosegardenSequencerIface"),
     m_sequencer(0),
@@ -36,7 +38,7 @@ RosegardenSequencerApp::RosegardenSequencerApp():
     m_songPosition(0),
     m_lastFetchSongPosition(0),
     m_fetchLatency(20),
-    m_playLatency(100)
+    m_playLatency(30)
 {
   // Without DCOP we are nothing
   QCString realAppId = kapp->dcopClient()->registerAs(kapp->name(), false);
@@ -59,6 +61,9 @@ RosegardenSequencerApp::RosegardenSequencerApp():
     cerr << "RosegardenSequencer object could not be allocated";
     close();
   }
+
+  if (mappedComp == 0)
+    mappedComp = new Rosegarden::MappedComposition();
 }
 
 RosegardenSequencerApp::~RosegardenSequencerApp()
@@ -126,15 +131,13 @@ RosegardenSequencerApp::stop()
 
 // Get a slice of events from the GUI
 //
-Rosegarden::MappedComposition
+Rosegarden::MappedComposition*
 RosegardenSequencerApp::fetchEvents(const Rosegarden::timeT &start,
                                     const Rosegarden::timeT &end)
 {
   QByteArray data, replyData;
   QCString replyType;
   QDataStream arg(data, IO_WriteOnly);
-
-  Rosegarden::MappedComposition mappedComp;
 
   arg << start;
   arg << end;
@@ -147,13 +150,19 @@ RosegardenSequencerApp::fetchEvents(const Rosegarden::timeT &start,
     cerr <<
      "RosegardenSequencer::fetchEvents() - can't call RosegardenGUI client"
          << endl;
+
+    // Stop the sequencer so we can see if we can try again later
+    //
+    m_transportStatus = STOPPING;
+
   }
   else
   {
     QDataStream reply(replyData, IO_ReadOnly);
     if (replyType == "Rosegarden::MappedComposition")
     {
-      reply >> mappedComp;
+      mappedComp->clear();
+      reply >> *mappedComp;
     }
     else
     {
@@ -174,11 +183,9 @@ RosegardenSequencerApp::fetchEvents(const Rosegarden::timeT &start,
 bool
 RosegardenSequencerApp::startPlaying()
 {
-  Rosegarden::MappedComposition mappedComp;
-
   // Fetch up to m_playLatency ahead
   //
-  mappedComp = fetchEvents(m_songPosition, m_songPosition + m_playLatency);
+  //mappedComp =
   m_lastFetchSongPosition = m_songPosition + m_playLatency;
 
   // This will reset the Sequencer's internal clock
@@ -186,7 +193,9 @@ RosegardenSequencerApp::startPlaying()
   m_sequencer->initializePlayback(m_songPosition);
 
   // Send the first events (starting the clock)
-  m_sequencer->processMidiOut(&mappedComp, m_playLatency);
+  m_sequencer->processMidiOut( *fetchEvents(m_songPosition,
+                               m_songPosition + m_playLatency),
+                               m_playLatency );
 
   return true;
 }
@@ -198,14 +207,12 @@ bool
 RosegardenSequencerApp::keepPlaying()
 {
 
-  if (m_songPosition > m_lastFetchSongPosition - m_fetchLatency )
+  if (m_songPosition > ( m_lastFetchSongPosition - m_fetchLatency ) )
   {
-    Rosegarden::MappedComposition mappedComp;
-    mappedComp = fetchEvents(m_lastFetchSongPosition,
-                             m_lastFetchSongPosition + m_playLatency);
- 
     m_lastFetchSongPosition = m_lastFetchSongPosition + m_playLatency;
-    m_sequencer->processMidiOut(&mappedComp, m_playLatency);
+    m_sequencer->processMidiOut( *fetchEvents(m_lastFetchSongPosition,
+                                 m_lastFetchSongPosition + m_playLatency),
+                                 m_playLatency);
   }
 
   return true;
@@ -251,7 +258,11 @@ RosegardenSequencerApp::updateClocks()
       cerr <<
        "RosegardenSequencer::updateClocks() - can't send to RosegardenGUI client"
            << endl;
+
+      // Stop the sequencer so we can see if we can try again later
+      //
       m_transportStatus = STOPPING;
+
     }
   }
 }
@@ -273,6 +284,11 @@ RosegardenSequencerApp::notifySequencerStatus()
     cerr <<
      "RosegardenSequencer::notifySequencerStatus() - can't send to RosegardenGUI client"
          << endl;
+
+    // Stop the sequencer so we can see if we can try again later
+    //
+    m_transportStatus = STOPPING;
+
   }
 }
 

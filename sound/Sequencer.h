@@ -173,7 +173,7 @@ namespace Rosegarden
                        const Arts::TimeStamp &timeStamp);
 
     // Process MappedComposition into MIDI events and send to aRTS.
-    void processMidiOut(Rosegarden::MappedComposition *mappedComp,
+    void processMidiOut(Rosegarden::MappedComposition mappedComp,
                         const Rosegarden::timeT &playLatency);
 
     // Reset internal states ready for new playback to commence

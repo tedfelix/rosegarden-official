@@ -46,19 +46,26 @@ velocityT                 velocity;
 
 
 
+// Converts a Rosegarden Composition into a MappedComposition
+// suitable for the RosegardenSequencer to quickly iterate
+// through.  Playback Event filters etc. can go in at this
+// stage.  [rwb]
+//
 MappedComposition::MappedComposition(Rosegarden::Composition &comp,
                                      const unsigned int &sT,
                                      const unsigned int &eT):
   _startTime(sT),
   _endTime(eT)
 {
-  unsigned int eventTime;
-
   assert(_endTime >= _startTime);
     
+  unsigned int eventTime;
+
   for (Composition::iterator i = comp.begin(); i != comp.end(); i++ )
   {
-    if ( (*i)->getStartIndex() >= int(_endTime) )
+    // Skip the Track if it starts too late to be of
+    // interest to our slice.
+    if ( (*i)->getStartIndex() > int(_endTime) )
       continue;
 
     TrackPerformanceHelper helper(**i);
@@ -66,12 +73,11 @@ MappedComposition::MappedComposition(Rosegarden::Composition &comp,
     for ( Track::iterator j = (*i)->begin(); j != (*i)->end(); j++ )
     {
       // for the moment ensure we're all positive
-      //assert((*j)->getAbsoluteTime() >= 0 );
+      assert((*j)->getAbsoluteTime() >= 0 );
 
-      // Skip this event if it doesn't have pitch
-      // (check that the event has "velocity" soon as well)
+      // Skip this event if it isn't a note
       //
-      if (!(*j)->has("pitch"))
+      if (!(*j)->isa(Note::EventType))
         continue;
 
       // Find the performance duration, i.e. taking into account any
@@ -85,8 +91,14 @@ MappedComposition::MappedComposition(Rosegarden::Composition &comp,
       // get the eventTime
       eventTime = (unsigned int) (*j)->getAbsoluteTime();
 
-      // eventually filter only for the events we're interested in
-      if ( eventTime >= _startTime && eventTime <= _endTime )
+      // As events are stored chronologically we can escape if
+      // we're already beyond our event horizon for this slice.
+      //
+      if ( eventTime > _endTime )
+        break;
+
+      // Eliminate events before our required time
+      if ( eventTime >= _startTime )
       {
         // insert event
         MappedEvent *me = new MappedEvent(**j, duration);

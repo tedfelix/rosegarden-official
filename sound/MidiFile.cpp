@@ -598,7 +598,7 @@ MidiFile::convertToRosegarden()
               break;
 
             case MIDI_TIME_SIGNATURE:
-              rosegardenEvent = new Event(TimeSignature::EventType);
+              rosegardenEvent = new Event(Rosegarden::TimeSignature::EventType);
               numerator = (int) midiEvent->metaMessage()[0];
               denominator = 1 << ((int) midiEvent->metaMessage()[1]);
 
@@ -643,7 +643,7 @@ MidiFile::convertToRosegarden()
         {
           case MIDI_NOTE_ON:
             // create and populate event
-            rosegardenEvent = new Event;
+            rosegardenEvent = new Event(Rosegarden::Note::EventType);
             rosegardenEvent->setAbsoluteTime(rosegardenTime);
             rosegardenEvent->setType(Note::EventType);
             rosegardenEvent->set<Int>("pitch", midiEvent->note());
