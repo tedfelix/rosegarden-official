@@ -204,8 +204,16 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 	QString denomStr = atts.value("denominator");
 	if (denomStr) denom = denomStr.toInt();
 
+	bool common = false;
+	QString commonStr = atts.value("common");
+	if (commonStr) common = (commonStr == "true");
+
+	bool hidden = false;
+	QString hiddenStr = atts.value("hidden");
+	if (hiddenStr) hidden = (hiddenStr == "true");
+
 	m_composition.addTimeSignature
-	    (t, Rosegarden::TimeSignature(num, denom));
+	    (t, Rosegarden::TimeSignature(num, denom, common, hidden));
 
     } else if (lcName == "tempo") {
 

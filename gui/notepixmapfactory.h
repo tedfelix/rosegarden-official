@@ -201,6 +201,9 @@ protected:
     QFont m_timeSigFont;
     QFontMetrics m_timeSigFontMetrics;
 
+    QFont m_bigTimeSigFont;
+    QFontMetrics m_bigTimeSigFontMetrics;
+
     QFont m_tupledCountFont;
     QFontMetrics m_tupledCountFontMetrics;
 

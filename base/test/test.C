@@ -335,6 +335,17 @@ int main(int argc, char **argv)
         }
         cout << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")" << endl;
 
+        cout << "4/4 wacky placement..." << endl;
+        ts = TimeSignature(4,4);
+        dlist = DurationList();
+        ts.getDurationListForInterval(dlist, 160, 1280);
+        acc = 0;
+        for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
+                cout << "duration: " << *i << endl;
+                acc += *i;
+        }
+        cout << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")" << endl;
+
         cout << "Testing Segment::expandIntoTie() - expanding 384 -> 2*192\n";
 
 	Composition c;

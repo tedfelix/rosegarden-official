@@ -145,15 +145,17 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
 	m_asGivenButton = new QRadioButton
 	    (i18n("Start bar %1 here").arg(barNo + 1), groupBox);
 	m_asGivenButton->setChecked(true);
-	if (!m_atStartOfBar && m_barNo != 0) {
+	if (!m_atStartOfBar/* && m_barNo != 0*/) {
 	    m_startOfBarButton = new QRadioButton
 		(i18n("Change time from start of bar %1")
 		 .arg(m_barNo), groupBox);
 	}
+/*
 	if (!(m_atStartOfBar && m_barNo == 0)) {
 	    m_startOfCompositionButton = new QRadioButton
 		(i18n("Change time from start of composition"), groupBox);
 	}
+*/
     } else {
 	new QLabel(i18n("Time change will take effect at the start of bar %1.")
 		   .arg(barNo), groupBox);

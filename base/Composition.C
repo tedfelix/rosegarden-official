@@ -875,7 +875,17 @@ std::string Composition::toXmlString()
 		    << (*i)->get<Int>(TimeSignature::NumeratorPropertyName)
 		    << "\" denominator=\""
 		    << (*i)->get<Int>(TimeSignature::DenominatorPropertyName)
-		    << "\"/>" << endl;
+		    << "\"";
+
+	bool common = false;
+	(*i)->get<Bool>(TimeSignature::ShowAsCommonTimePropertyName, common);
+	if (common) composition << " common=\"true\"";
+
+	bool hidden = false;
+	(*i)->get<Bool>(TimeSignature::IsHiddenPropertyName, common);
+	if (hidden) composition << " hidden=\"true\"";
+
+	composition << "/>" << endl;
     }
 
     composition << endl;

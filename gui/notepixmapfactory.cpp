@@ -104,6 +104,8 @@ NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
     m_selected(false),
     m_timeSigFont("new century schoolbook", 8, QFont::Bold),
     m_timeSigFontMetrics(m_timeSigFont),
+    m_bigTimeSigFont("new century schoolbook", 12, QFont::Bold),
+    m_bigTimeSigFontMetrics(m_bigTimeSigFont),
     m_tupledCountFont("new century schoolbook", 8, QFont::Bold, true),
     m_tupledCountFontMetrics(m_tupledCountFont),
     m_textMarkFont("new century schoolbook", 8, QFont::Bold, true),
@@ -116,6 +118,8 @@ NotePixmapFactory::NotePixmapFactory(const NotePixmapFactory &npf) :
     m_selected(false),
     m_timeSigFont("new century schoolbook", 8, QFont::Bold),
     m_timeSigFontMetrics(m_timeSigFont),
+    m_bigTimeSigFont("new century schoolbook", 12, QFont::Normal),
+    m_bigTimeSigFontMetrics(m_bigTimeSigFont),
     m_tupledCountFont("new century schoolbook", 8, QFont::Bold, true),
     m_tupledCountFontMetrics(m_tupledCountFont),
     m_textMarkFont("new century schoolbook", 8, QFont::Bold, true),
@@ -158,6 +162,10 @@ NotePixmapFactory::init(std::string fontName, int size)
     // 8 => 20, 4 => 10
     m_timeSigFont.setPixelSize(size * 5 / 2);
     m_timeSigFontMetrics = QFontMetrics(m_timeSigFont);
+
+    // 8 => 34, 4 => 18
+    m_bigTimeSigFont.setPixelSize(size * 4 + 2);
+    m_bigTimeSigFontMetrics = QFontMetrics(m_bigTimeSigFont);
 
     // 8 => 12, 4 => 6
     m_tupledCountFont.setPixelSize(size * 3 / 2);
@@ -1282,29 +1290,33 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
     if (sig.isCommon()) {
 
 	QString c("c");
-	QRect r = m_timeSigFontMetrics.boundingRect(c);
+	QRect r = m_bigTimeSigFontMetrics.boundingRect(c);
 
-	createPixmapAndMask(r.width(), r.height() + 4);
+	int dy = getLineSpacing() / 4;
+	createPixmapAndMask(r.width(), r.height() + dy*2);
 
 	if (m_selected) {
 	    m_p.setPen(RosegardenGUIColours::SelectedElement);
 	}
 	
-	m_p.setFont(m_timeSigFont);
-	m_pm.setFont(m_timeSigFont);
+	m_p.setFont(m_bigTimeSigFont);
+	m_pm.setFont(m_bigTimeSigFont);
 
-	m_p.drawText(0, r.height() + 2, c);
-	m_pm.drawText(0, r.height() + 2, c);
+	m_p.drawText(0, r.height() + dy, c);
+	m_pm.drawText(0, r.height() + dy, c);
 
 	if (sig.getNumerator() == 2) { // cut common
-	    m_p.drawLine(r.width()/2 - 1, 0, r.width()/2 - 1, r.height() - 1);
-	    m_pm.drawLine(r.width()/2 - 1, 0, r.width()/2 - 1, r.height() - 1);
-	    m_p.drawLine(r.width()/2, 0, r.width()/2, r.height() - 1);
-	    m_pm.drawLine(r.width()/2, 0, r.width()/2, r.height() - 1);
+
+	    int x = r.width()*3/5 - getStemThickness();
+
+	    for (int i = 0; i < getStemThickness() * 2; ++i, ++x) {
+		m_p.drawLine(x, 0, x, r.height() + dy*2 - 1);
+		m_pm.drawLine(x, 0, x, r.height() + dy*2 - 1);
+	    }
 	}
 
 	m_p.setPen(Qt::black);
-	return makeCanvasPixmap(QPoint(0, r.height()/2));
+	return makeCanvasPixmap(QPoint(0, r.height()/2 + dy));
 
     } else {
 
