@@ -2,7 +2,7 @@
 .libs
 Makefile
 Makefile.in
-rosegardengui
+rosegarden
 *.moc.cpp
 *_skel.cpp
 *_meta_unload.cpp
