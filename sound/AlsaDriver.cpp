@@ -1566,7 +1566,7 @@ AlsaDriver::allNotesOff()
         outputDevice = getPairForMappedInstrument((*it)->getInstrument());
 	if (outputDevice.first < 0 || outputDevice.second < 0) continue;
 
-//!!! and soft synths
+//!!! and soft synths?
 
         snd_seq_ev_set_dest(&event,
                             outputDevice.first,
@@ -1699,8 +1699,7 @@ AlsaDriver::getSequencerTime()
 {
     RealTime t(0, 0);
 
-//!!!    if (m_playing)
-       t = getAlsaTime() + m_playStartPosition - m_alsaPlayStartTime;
+    t = getAlsaTime() + m_playStartPosition - m_alsaPlayStartTime;
 
 //    std::cerr << "AlsaDriver::getSequencerTime: alsa time is "
 //	      << getAlsaTime() << ", start time is " << m_alsaPlayStartTime << ", play start position is " << m_playStartPosition << endl;
@@ -2272,23 +2271,8 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 	    processSoftSynthEventOut((*i)->getInstrument(), &event, now);
 
 	} else {
-/*!!!
-	    if (now || m_playing == false) {
-
-		RealTime nowTime = getAlsaTime();
-		snd_seq_real_time_t outTime = { nowTime.sec,
-						nowTime.nsec };
-#ifdef DEBUG_ALSA
-		std::cerr << "processMidiOut[" << now << "]: rescheduled event to " << nowTime << std::endl;
-#endif
-		snd_seq_ev_schedule_real(&event, m_queue, 0, &outTime);
-		checkAlsaError(snd_seq_event_output_direct(m_midiHandle, &event),
-			       "processMidiOut(): output direct");
-	    } else {
-*/
-		checkAlsaError(snd_seq_event_output(m_midiHandle, &event),
-			       "processMidiOut(): output queued");
-//!!!	    }
+	    checkAlsaError(snd_seq_event_output(m_midiHandle, &event),
+			   "processMidiOut(): output queued");
 	}
 
         // Add note to note off stack
