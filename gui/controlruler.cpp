@@ -1294,7 +1294,7 @@ PropertyControlRuler::eventRemoved(const Rosegarden::Segment *, Rosegarden::Even
 }
 
 void
-PropertyControlRuler::endMarkerTimeChanged(const Rosegarden::Segment *s, bool shorten)
+PropertyControlRuler::endMarkerTimeChanged(const Rosegarden::Segment *s, bool)
 {
     timeT endMarkerTime = s->getEndMarkerTime();
 
@@ -1304,7 +1304,6 @@ PropertyControlRuler::endMarkerTimeChanged(const Rosegarden::Segment *s, bool sh
 
     clear();
     init();
-    
 }
 
 void
