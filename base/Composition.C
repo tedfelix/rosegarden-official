@@ -49,13 +49,28 @@ const PropertyName Composition::TempoProperty = "BeatsPerHour";
 const PropertyName Composition::TempoTimestampSecProperty = "TimestampSec";
 const PropertyName Composition::TempoTimestampUsecProperty = "TimestampUsec";
 
+RealTime::RealTime(long s, long u) :
+    sec(s), usec(u)
+{
+    if (sec == 0) {
+	while (usec <= -1000000) { usec += 1000000; --sec; }
+	while (usec >=  1000000) { usec -= 1000000; ++sec; }
+    } else if (sec < 0) {
+	while (usec <= -1000000) { usec += 1000000; --sec; }
+	while (usec > 0) { usec -= 1000000; ++sec; }
+    } else { 
+	while (usec >= 1000000) { usec -= 1000000; ++sec; }
+	while (usec < 0) { usec += 1000000; --sec; }
+    }
+}
+
 
 bool
 Composition::ReferenceSegmentEventCmp::operator()(const Event &e1,
 						  const Event &e2) const
 {
     if (e1.getAbsoluteTime() >= 0 &&
-	e1.getAbsoluteTime() >= 0) {
+	e2.getAbsoluteTime() >= 0) {
 	return e1 < e2;
     } else {
 	RealTime r1 = getTempoTimestamp(&e1);
@@ -714,9 +729,14 @@ Composition::getElapsedRealTime(timeT t) const
 	return time2RealTime(t, m_defaultTempo);
     }
 
-    return getTempoTimestamp(*i) +
+    RealTime elapsed = getTempoTimestamp(*i) +
 	time2RealTime(t - (*i)->getAbsoluteTime(),
 		      (double)((*i)->get<Int>(TempoProperty)) / 60.0);
+/*
+    cerr << "Composition::getElapsedRealTime: " << t << " -> "
+	 << elapsed << endl;
+*/
+    return elapsed;
 }
 
 timeT
@@ -729,9 +749,24 @@ Composition::getElapsedTimeForRealTime(RealTime t) const
 	return realTime2Time(t, m_defaultTempo);
     }
 
-    return (*i)->getAbsoluteTime() +
+    timeT elapsed = (*i)->getAbsoluteTime() +
 	realTime2Time(t - getTempoTimestamp(*i),
 		      (double)((*i)->get<Int>(TempoProperty)) / 60.0);
+
+    //!!! temporary calculations of error
+    static int doError = true;
+    if (doError) {
+	doError = false;
+	RealTime cfReal = getElapsedRealTime(elapsed);
+	timeT cfTimeT = getElapsedTimeForRealTime(cfReal);
+	doError = true;
+	cerr << "getElapsedTimeForRealTime: " << t << " -> "
+	     << elapsed << " (error " << (cfReal - t)
+	     << " or " << (cfTimeT - elapsed) << ", tempo "
+	     << (*i)->getAbsoluteTime() << ":"
+	     << ((double)((*i)->get<Int>(TempoProperty)) / 60.0) << ")" << endl;
+    }
+    return elapsed;
 }
 
 void
@@ -739,7 +774,8 @@ Composition::calculateTempoTimestamps() const
 {
     if (!m_tempoTimestampsNeedCalculating) return;
 
-    timeT base = 0;
+    timeT lastTimeT = 0;
+    RealTime lastRealTime;
     double tempo = m_defaultTempo;
 
 #ifdef DEBUG_TEMPO_STUFF
@@ -749,14 +785,18 @@ Composition::calculateTempoTimestamps() const
     for (ReferenceSegment::iterator i = m_tempoSegment.begin();
 	 i != m_tempoSegment.end(); ++i) {
 
-	setTempoTimestamp(*i, time2RealTime((*i)->getAbsoluteTime(), tempo));
+	RealTime myTime = lastRealTime +
+	    time2RealTime((*i)->getAbsoluteTime() - lastTimeT, tempo);
+
+	setTempoTimestamp(*i, myTime);
 
 #ifdef DEBUG_TEMPO_STUFF
 	(*i)->dump(cerr);
 #endif
 
+	lastRealTime = myTime;
+	lastTimeT = (*i)->getAbsoluteTime();
 	tempo = (double)((*i)->get<Int>(TempoProperty)) / 60.0;
-	base = (*i)->getAbsoluteTime();
     }
 
     m_tempoTimestampsNeedCalculating = false;

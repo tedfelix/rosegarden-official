@@ -23,6 +23,7 @@
 
 #include <set>
 #include <map>
+#include <iostream>
 
 #include "FastVector.h"
 
@@ -41,12 +42,7 @@ struct RealTime
     long usec;
 
     RealTime(): sec(0), usec(0) {;}
-
-    RealTime(long s, long u) :
-	sec(s), usec(u) {
-	while (usec > 1000000) { usec -= 1000000; ++sec; }
-	while (usec < 0) { usec += 1000000; --sec; }
-    }
+    RealTime(long s, long u);
 
     RealTime(const RealTime &r) :
 	sec(r.sec), usec(r.usec) { }
@@ -76,8 +72,12 @@ struct RealTime
         if (sec == r.sec && usec == r.usec) return true;
         else return false;
     }
-        
 };
+
+inline std::ostream &operator<<(std::ostream &out, const RealTime &rt) {
+    out << rt.sec << "." << rt.usec << "R";
+    return out;
+}
     
 
 typedef std::map<int, Instrument*> instrumentcontainer;
