@@ -1,0 +1,41 @@
+
+20020225 meeting notes [cc, rwb] for device/bank rework
+-------------------------------------------------------
+
+From the user perspective:
+
+ * Current bank/program dialog remains (renamed from Manage Devices
+   to something like Manage Banks, Manage Programs or Manage Presets).
+
+ * Bank/program dialog allows editing of banks and programs for each
+   device but nothing else (not adding or removing devices, not
+   renaming devices, nothing).
+
+ * New Manage Devices dialog which enumerates the devices (a list
+   of names entirely under the user's control -- user can add, remove
+   and rename) and associates each with a "Connection" (chosen from a
+   dropdown of ALSA ports) and "Channels" (All or a subset of 1-16).
+   Connection and Channels are settable in this dialog.
+
+ * The default list of Devices (when you start up a fresh install of
+   RG) contains one per ALSA port, with some dummy names and a GM map
+   on each.
+
+ * Instrument dropdown offers one entry per Device, and where a Device
+   listens on more than one channel, it offers a submenu of Instruments
+   corresponding to the channels for that Device.
+
+From the code perspective:
+
+ * Current Device classes remain, but internally become associated
+   with ALSA Port + Channel Map instead of ALSA Client.
+
+ * Current Instrument classes remain more or less unchanged.
+
+ * Devices continue to have only user-provided name and a number
+   counted up from zero -- i.e. the connection between Device and
+   Port/Channel Map is entirely reconfigurable -- how does this
+   affect saving/loading?  Save .rg files with the current config
+   for Connections in them, but permit reload regardless of whether
+   they match the current setup or not?
+
