@@ -369,10 +369,16 @@ protected slots:
      */
     void slotOnEditAudio();
 
+    /*
+     * pop-up an event list
+     */
+    void slotOnEditEventList();
+
 signals:
     void editSegmentNotation(Rosegarden::Segment*);
     void editSegmentMatrix(Rosegarden::Segment*);
     void editSegmentAudio(Rosegarden::Segment*);
+    void editSegmentEventList(Rosegarden::Segment*);
 
     void selectedSegments(const Rosegarden::SegmentSelection &);
 

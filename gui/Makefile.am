@@ -13,6 +13,7 @@ rosegarden_SOURCES = \
 	editcommands.cpp \
 	edittool.cpp \
 	editview.cpp \
+        eventview.cpp \
         instrumentlabel.cpp \
         instrumentparameterbox.cpp \
 	kstartuplogo.cpp \

@@ -66,7 +66,7 @@ using Rosegarden::timeT;
 MatrixView::MatrixView(RosegardenGUIDoc *doc,
                        std::vector<Segment *> segments,
                        QWidget *parent)
-    : EditView(doc, segments, true, parent, "matrixview"),
+    : EditView(doc, segments, 3, parent, "matrixview"),
       m_currentEventSelection(0),
       m_hlayout(&doc->getComposition()),
       m_vlayout(),
@@ -89,15 +89,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     readOptions();
 
-    QHBox *hbox = new QHBox(this);
-    QFrame *vbox = new QFrame(hbox);
-    QVBoxLayout* vboxLayout = new QVBoxLayout(vbox, 5);
-
-    m_parameterBox = new MatrixParameterBox(vbox);
-    vboxLayout->addWidget(m_parameterBox);
-    vboxLayout->addStretch();
-
-    QCanvas *tCanvas = new QCanvas(hbox);
+    QCanvas *tCanvas = new QCanvas(this);
     tCanvas->resize(width() * 2, height() * 2);
 
     kdDebug(KDEBUG_AREA) << "MatrixView : creating staff\n";
@@ -118,7 +110,10 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     m_pianoView->addChild(m_pianoKeyboard);
     m_pianoView->setFixedWidth(m_pianoView->contentsWidth());
 
-    m_grid->addWidget(m_pianoView, 2, 0);
+    m_grid->addWidget(m_pianoView, 2, 1);
+
+    m_parameterBox = new MatrixParameterBox(getCentralFrame());
+    m_grid->addWidget(m_parameterBox, 2, 0);
 
     m_snapGrid.setSnapTime(Rosegarden::SnapGrid::SnapToUnit);
 

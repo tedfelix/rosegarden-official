@@ -151,6 +151,7 @@ public slots:
     void slotEditSegmentNotation(Rosegarden::Segment*);
     void slotEditSegmentMatrix(Rosegarden::Segment*);
     void slotEditSegmentAudio(Rosegarden::Segment*);
+    void slotEditSegmentEventList(Rosegarden::Segment*);
 
     /**
      *

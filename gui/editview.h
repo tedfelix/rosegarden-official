@@ -76,12 +76,12 @@ public:
     /**
      * Create an EditView for the segments \a segments from document \a doc.
      *
-     * \arg hasTwoCols : if true, the View's grid will have two
-     * columns instead of just one
+     * \arg cols : number of columns, main column is always rightmost
+     *
      */
     EditView(RosegardenGUIDoc *doc,
              std::vector<Rosegarden::Segment *> segments,
-             bool hasTwoCols,
+             unsigned int cols,
              QWidget *parent,
              const char *name = 0);
 

@@ -55,6 +55,7 @@
 #include "Selection.h"
 #include "segmentparameterbox.h"
 #include "instrumentparameterbox.h"
+#include "eventview.h"
 
 using Rosegarden::SimpleRulerScale;
 using Rosegarden::Composition;
@@ -111,6 +112,10 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
     connect(m_trackEditor->getSegmentCanvas(),
             SIGNAL(editSegmentAudio(Rosegarden::Segment*)),
             SLOT(slotEditSegmentAudio(Rosegarden::Segment*)));
+
+    connect(m_trackEditor->getSegmentCanvas(),
+            SIGNAL(editSegmentEventList(Rosegarden::Segment*)),
+            SLOT(slotEditSegmentEventList(Rosegarden::Segment*)));
 
     // Re-emit the sendMidiController
     //
@@ -364,6 +369,35 @@ void RosegardenGUIView::slotEditSegmentAudio(Rosegarden::Segment *segment)
     QApplication::restoreOverrideCursor();
 
 }
+
+void RosegardenGUIView::slotEditSegmentEventList(Rosegarden::Segment *p)
+{
+    SetWaitCursor waitCursor;
+
+    std::vector<Rosegarden::Segment *> segmentsToEdit;
+    segmentsToEdit.push_back(p);
+
+    EventView *eventView = new EventView(getDocument(),
+                                         segmentsToEdit,
+                                         this);
+
+    // create keyboard accelerators on view
+    //
+    RosegardenGUIApp *par = dynamic_cast<RosegardenGUIApp*>(parent());
+
+    if (par)
+        par->plugAccelerators(eventView, eventView->getAccelerators());
+
+    // For sending key presses
+    //
+    /*
+    connect(eventView, SIGNAL(keyPressed(Rosegarden::MappedEvent*)),
+            this, SLOT(slotSendMappedEvent(Rosegarden::MappedEvent*)));
+            */
+
+    eventView->show();
+}
+
 
 void RosegardenGUIView::setZoomSize(double size)
 {

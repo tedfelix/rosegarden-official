@@ -46,7 +46,7 @@ const unsigned int EditView::ID_STATUS_MSG = 1;
 
 EditView::EditView(RosegardenGUIDoc *doc,
                    std::vector<Rosegarden::Segment *> segments,
-                   bool hasTwoCols,
+                   unsigned int cols,
                    QWidget *parent, const char *name) :
     KMainWindow(parent, name),
     m_viewNumber(-1),
@@ -60,11 +60,11 @@ EditView::EditView(RosegardenGUIDoc *doc,
     m_canvasView(0),
     m_centralFrame(new QFrame(this)),
     m_horizontalScrollBar(new QScrollBar(Horizontal, m_centralFrame)),
-    m_grid(new QGridLayout(m_centralFrame, 5, hasTwoCols ? 2 : 1)),
+    m_grid(new QGridLayout(m_centralFrame, 5, cols)),
     m_rulerBox(new QVBoxLayout), // added to grid later on
     m_topBarButtons(0),
     m_bottomBarButtons(0),
-    m_mainCol(hasTwoCols ? 1 : 0),
+    m_mainCol(cols - 1),
     m_compositionRefreshStatusId(doc->getComposition().getNewRefreshStatusId())
 {
     initSegmentRefreshStatusIds();

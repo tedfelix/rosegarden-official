@@ -147,7 +147,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                            std::vector<Segment *> segments,
                            QWidget *parent,
 			   bool showProgressive) :
-    EditView(doc, segments, false, parent, "notationview"),
+    EditView(doc, segments, 1, parent, "notationview"),
     m_properties(getViewLocalPropertyPrefix()),
     m_currentEventSelection(0),
     m_legatoQuantizer(new Quantizer(Quantizer::RawEventData,

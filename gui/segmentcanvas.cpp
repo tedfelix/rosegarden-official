@@ -1013,6 +1013,9 @@ void SegmentCanvas::contentsMousePressEvent(QMouseEvent* e)
 
                 m_editMenu->insertItem(i18n("Edit as Matrix"),
                                        this, SLOT(slotOnEditMatrix()));
+
+                m_editMenu->insertItem(i18n("Edit as Event List"),
+                                       this, SLOT(slotOnEditEventList()));
             }
 
             m_editMenu->exec(QCursor::pos());
@@ -1163,6 +1166,13 @@ void SegmentCanvas::slotOnEditAudio()
 {
     emit editSegmentAudio(m_currentItem->getSegment());
 }
+
+void SegmentCanvas::slotOnEditEventList()
+{
+    emit editSegmentEventList(m_currentItem->getSegment());
+}
+
+
 
 
 

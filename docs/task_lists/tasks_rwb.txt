@@ -1,6 +1,10 @@
 0.2 tasks
 =========
 
+o Matrix Parameter Box
+
+o Event list
+
 o Get Segment joining working
 
 o Audio volume faders - studio concept on sequencer
