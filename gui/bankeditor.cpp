@@ -569,7 +569,6 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_doc(doc),
     m_copyBank(Rosegarden::Device::NO_DEVICE, -1),
     m_modified(false),
-    m_keepChanges(false),
     m_keepBankList(false),
     m_deleteAll(false),
     m_lastDevice(Rosegarden::Device::NO_DEVICE),
@@ -1133,7 +1132,6 @@ BankEditorDialog::slotApply()
     addCommandToHistory(command);
 
     setModified(false);
-    setKeepChanges(true);
 }
 
 void
@@ -1161,7 +1159,6 @@ void
 BankEditorDialog::slotUpdate()
 {
     updateDialog();
-    setKeepChanges(true);
 }
 
 
@@ -1767,9 +1764,6 @@ BankEditorDialog::importFromSF2(QString filename)
 			programs,
 			overwrite);
 		addCommandToHistory(command);
-		
-		// Redraw the dialog
-		updateDialog();
 	    }
 	}
     }
@@ -1921,7 +1915,7 @@ BankEditorDialog::slotFileClose()
 void
 BankEditorDialog::closeEvent(QCloseEvent *e)
 {
-    emit closing(getKeepChanges());
+    emit closing();
     KMainWindow::closeEvent(e);
 }
 

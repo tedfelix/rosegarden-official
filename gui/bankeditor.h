@@ -221,7 +221,7 @@ public slots:
     void slotEditPaste();
 
 signals:
-    void closing(bool changesMade);
+    void closing();
 
 protected:
     virtual void closeEvent(QCloseEvent*);
@@ -248,9 +248,6 @@ protected:
     void populateDevice(QListViewItem*);
 
     void setupActions();
-
-    bool getKeepChanges() { return m_keepChanges; }
-    void setKeepChanges(bool k) { m_keepChanges = k; }
 
     //--------------- Data members ---------------------------------
     Rosegarden::Studio      *m_studio;
@@ -281,7 +278,6 @@ protected:
     MidiProgramsEditor::MidiProgramContainer     m_oldProgramList;
 
     bool                     m_modified;
-    bool                     m_keepChanges;
     bool                     m_keepBankList;
     bool                     m_deleteAll;
 
