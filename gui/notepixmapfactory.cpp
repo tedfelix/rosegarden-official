@@ -314,10 +314,10 @@ NotePixmapFactory::drawStalk(Note note,
 {
     if(stalkGoesUp) {
 
-        m_p.drawLine(m_noteBodyWidth - 1, m_generatedPixmapHeight - m_noteBodyHeight / 2 - 1,
-                     m_noteBodyWidth - 1, 0);
-        m_pm.drawLine(m_noteBodyWidth - 1, m_generatedPixmapHeight - m_noteBodyHeight / 2 - 1,
-                      m_noteBodyWidth - 1, 0);
+        m_p.drawLine(m_noteBodyWidth - 2, m_generatedPixmapHeight - m_noteBodyHeight / 2 - 1,
+                     m_noteBodyWidth - 2, 0);
+        m_pm.drawLine(m_noteBodyWidth - 2, m_generatedPixmapHeight - m_noteBodyHeight / 2 - 1,
+                      m_noteBodyWidth - 2, 0);
     } else {
 
         m_p.drawLine(0, m_noteBodyHeight / 2,
