@@ -1929,12 +1929,18 @@ NotationView::slotSetPointerPosition(timeT time, bool scroll)
         }
     }
 
-    if (scroll && haveMinCy) {
-	getCanvasView()->slotScrollHoriz(int(cx));
-	getCanvasView()->slotScrollVertToTop(minCy);
+    if (m_pageMode == LinedStaff::LinearMode) {
+	// be careful not to prevent user from scrolling up and down
+	haveMinCy = false;
     }
 
-// getCanvasView()->slotScrollHoriz(int(layoutX));
+    if (scroll) {
+	getCanvasView()->slotScrollHoriz(int(cx));
+	if (haveMinCy) {
+	    getCanvasView()->slotScrollVertToTop(minCy);
+	}
+    }
+
     updateView();
 }
 
