@@ -33,6 +33,7 @@
 #include "rosegardenguiview.h"
 #include "rosexmlhandler.h"
 #include "viewelementsmanager.h"
+#include "xmlstorableevent.h"
 #include "Element2.h"
 
 QList<RosegardenGUIView> *RosegardenGUIDoc::pViewList = 0L;
@@ -203,17 +204,30 @@ bool RosegardenGUIDoc::openDocument(const QString &filename,
 bool RosegardenGUIDoc::saveDocument(const QString &filename,
                                     const char *format /*=0*/)
 {
-    /////////////////////////////////////////////////
-    // TODO: Add your document saving code here
-    /////////////////////////////////////////////////
-
     kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::saveDocument("
                          << filename << ")" << endl;
 
+    QFile file(filename);
+    file.open(IO_WriteOnly);
+
+    QTextStream fileStream(&file);
+
+    // output XML header
+    //
+    fileStream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+               << "<!DOCTYPE rosegarden-data>\n"
+               << "<rosegarden-data>\n";
+
+    // output all elements
+    //
     for(EventList::iterator i = m_events.begin();
         i != m_events.end(); ++i) {
-        kdDebug(KDEBUG_AREA) << "Element : " << *(*i) << endl;
+        fileStream << XMLStorableEvent::toXMLString(*(*i)) << endl;
     }
+
+    // close the top-level XML tag
+    //
+    fileStream << "</rosegarden-data>\n";
 
     kdDebug(KDEBUG_AREA) << endl << "RosegardenGUIDoc::saveDocument() finished"
                          << endl;
