@@ -392,7 +392,7 @@ void MatrixView::readOptions()
 
     bool opt = false;
 
-    opt = m_config->readBoolEntry("Show Chord Name Ruler", true);
+    opt = m_config->readBoolEntry("Show Chord Name Ruler", false);
     getToggleAction("show_chords_ruler")->setChecked(opt);
     slotToggleChordsRuler();
     

@@ -1261,21 +1261,21 @@ void RosegardenGUIApp::readOptions()
     m_viewTrackLabels->setChecked(opt);
     slotToggleTrackLabels();
 
-    opt = kapp->config()->readBoolEntry("Show Segment Parameters", false);
+    opt = kapp->config()->readBoolEntry("Show Segment Parameters", true);
     m_viewSegmentParameters->setChecked(opt);
     slotToggleSegmentParameters();
 
     RG_DEBUG << "RosegardenGUIApp::readOptions() : hasKey 'Show Segment Parameters' : " << kapp->config()->hasKey("Show Segment Parameters") << endl;
 
-    opt = kapp->config()->readBoolEntry("Show Instrument Parameters", false);
+    opt = kapp->config()->readBoolEntry("Show Instrument Parameters", true);
     m_viewInstrumentParameters->setChecked(opt);
     slotToggleInstrumentParameters();
 
-    opt = kapp->config()->readBoolEntry("Show Rulers", false);
+    opt = kapp->config()->readBoolEntry("Show Rulers", true);
     m_viewRulers->setChecked(opt);
     slotToggleRulers();
 
-    opt = kapp->config()->readBoolEntry("Show Tempo Ruler", false);
+    opt = kapp->config()->readBoolEntry("Show Tempo Ruler", true);
     m_viewTempoRuler->setChecked(opt);
     slotToggleTempoRuler();
 
@@ -1283,7 +1283,7 @@ void RosegardenGUIApp::readOptions()
     m_viewChordNameRuler->setChecked(opt);
     slotToggleChordNameRuler();
 
-    opt = kapp->config()->readBoolEntry("Show Previews", false);
+    opt = kapp->config()->readBoolEntry("Show Previews", true);
     m_viewPreviews->setChecked(opt);
     slotTogglePreviews();
 
