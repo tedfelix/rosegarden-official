@@ -885,7 +885,7 @@ RosegardenGUIApp::stop()
   if (m_transportStatus == STOPPED)
   {
     setPointerPosition(0);
-    //return;
+    return;
   }
 
   QByteArray data;
@@ -932,7 +932,16 @@ RosegardenGUIApp::rewind()
     if (barNumber == (double) newBarNumber)
       newBarNumber--;
 
-  setPointerPosition(newBarNumber * m_doc->getComposition().getNbTicksPerBar());
+  if ( m_transportStatus == PLAYING )
+  {
+    sendSequencerJump(newBarNumber *
+                         m_doc->getComposition().getNbTicksPerBar());
+  }
+  else
+  {
+    setPointerPosition(newBarNumber *
+                           m_doc->getComposition().getNbTicksPerBar());
+  }
 }
 
 
@@ -951,8 +960,16 @@ RosegardenGUIApp::fastforward()
   //
   newBarNumber++;
 
-  setPointerPosition(newBarNumber * 
-                     m_doc->getComposition().getNbTicksPerBar());
+  if ( m_transportStatus == PLAYING )
+  {
+    sendSequencerJump(newBarNumber *
+                         m_doc->getComposition().getNbTicksPerBar());
+  }
+  else
+  {
+    setPointerPosition(newBarNumber * 
+                         m_doc->getComposition().getNbTicksPerBar());
+  }
 
 }
 
@@ -973,3 +990,22 @@ RosegardenGUIApp::notifySequencerStatus(const int& status)
 }
 
 
+void
+RosegardenGUIApp::sendSequencerJump(const Rosegarden::timeT &position)
+{
+  QByteArray data;
+  QDataStream streamOut(data, IO_WriteOnly);
+  streamOut << position;
+
+  if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                "jumpTo(Rosegarden::timeT)",
+                                data))
+  {
+    // failed - pop up and disable sequencer options
+    m_transportStatus = STOPPED;
+    KMessageBox::error(this, i18n("Failed to contact RosegardenSequencer"));
+  }
+
+  return;
+}

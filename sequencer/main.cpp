@@ -83,115 +83,22 @@ int main(int argc, char *argv[])
   }
 
   QObject::connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
-
-/*
-  DCOPClient *client = kapp->dcopClient();
-
-  QCString realAppId = client->registerAs(kapp->name(), false);
-    
-  // get list of registered applications from DCOP
-  //
-  QCStringList dcopApps = client->registeredApplications();
-
-  cout << "GOT " << dcopApps.count() << " INSTANCES" << endl;
-
-
-  // Number of matches of our GUI app
-  //
-  int guiAppInstances  = dcopApps.contains(QCString(ROSEGARDEN_GUI_APP_NAME));
-
-  if ( guiAppInstances == 0 )
-  {
-    cerr << "Rosegarden sequencer cannot start as \""
-         << ROSEGARDEN_GUI_APP_NAME << "\" is not running"  << endl;
-    return(1);
-  }
-
-  if ( guiAppInstances > 1 )
-  {
-    cerr << "Rosegarden sequencer cannot start as too many instances of \"" <<
-             ROSEGARDEN_GUI_APP_NAME << "\" are running." << endl;
-    return(1);
-  }
-
-  // Get the GUI App reference
-  //
-  QValueList<QCString>::Iterator guiApp = dcopApps.find(QCString(ROSEGARDEN_GUI_APP_NAME));
-
-  // Call the relevant method on the GUI interface to
-  // return the time slice of MappedEvents
-  //
-  QByteArray data, replyData;
-  QCString replyType;
-  QDataStream arg(data, IO_WriteOnly);
-  arg << 0;
-  arg << 1000;
-
-  if (!client->call(ROSEGARDEN_GUI_APP_NAME,
-                    ROSEGARDEN_GUI_IFACE_NAME,
-                    "getSequencerSlice(int, int)",
-                    data, replyType, replyData))
-  {
-    cerr << "there was some error using DCOP." << endl;
-    return(1);
-  }
-  else
-  {
-    QDataStream reply(replyData, IO_ReadOnly);
-    if (replyType == "QString")
-    {
-      QString result;
-      reply >> result;
-    }
-    else if (replyType = "Rosegarden::MappedComposition")
-    {
-      Rosegarden::MappedComposition::iterator it;
-      Rosegarden::MappedComposition mappedComp;
-       
-      reply >> mappedComp;
-
-      cout << "GOT " << mappedComp.size() << " ELEMENTS" << endl;
-
-      for (it = mappedComp.begin(); it != mappedComp.end(); ++it )
-      {
-        cout << "Pitch = " << (*it)->getPitch() << endl;
-        cout << "Time = " << (*it)->getAbsoluteTime() << endl;
-        cout << "Duration = " << (*it)->getDuration() << endl;
-        cout << "Velocity = " << (*it)->getVelocity() << endl;
-        cout << "Instrument = " << (*it)->getInstrument() << endl;
-        cout << endl;
-      }
-
-    }
-    else
-    {
-      cerr << "doIt returned an unexpected type of reply!" << endl;
-      return(1);
-    }
-  }
-
-*/
-
-/*
-  cout << "Number of items in list = " << apps.count() << endl;
-
-  for ( QValueList<QCString>::Iterator i = apps.begin();
-        i != apps.end(); ++i )
-  {
-    cout << *i << endl;
-  }
-*/
-
   //app.dcopClient()->setDefaultObject("RosegardenGUIIface");
 
+  // Started OK
+  //
   cout << "RosegardenSequencer - started OK" << endl;
 
+  // Now we can enter our specialised event loop.
+  // For each pass through we wait for some pending
+  // events.
+  //
   TransportStatus lastSeqStatus = roseSeq->getStatus();
 
   while(roseSeq->getStatus() != QUIT)
   {
     // process any pending events (50ms of events)
-    app.processEvents(50);
+    app.processEvents(10);
 
     // Update internal clock and send pointer position
     // change event to GUI

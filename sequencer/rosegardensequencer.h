@@ -77,6 +77,9 @@ public slots:
                    const Rosegarden::timeT &latency);
   virtual int stop();
 
+  // Any sudden moves
+  virtual void jumpTo(const Rosegarden::timeT &position);
+
   void setStatus(const TransportStatus &status) { m_transportStatus = status; }
   TransportStatus getStatus() { return m_transportStatus; }
    

@@ -200,7 +200,11 @@ RosegardenSequencerApp::startPlaying()
 }
 
 // Keep playing our fetched events, only top up the queued events
-// once we're within m_fetchLatency of the last fetch.
+// once we're within m_fetchLatency of the last fetch.  Make sure
+// that we're fetching *past* the end of what we've already fetched
+// and ensure that we don't duplicate events fetch unnecessarily
+// by incrementing m_lastFetchSongPosition before we do anything.
+//
 //
 bool
 RosegardenSequencerApp::keepPlaying()
@@ -208,7 +212,6 @@ RosegardenSequencerApp::keepPlaying()
 
   if (m_songPosition > ( m_lastFetchSongPosition - m_fetchLatency ) )
   {
-    m_lastFetchSongPosition = m_lastFetchSongPosition + m_playLatency;
     
 /*
     for ( Rosegarden::MappedComposition::iterator i = mappedComp->begin();
@@ -217,9 +220,10 @@ RosegardenSequencerApp::keepPlaying()
         mappedComp->erase(i);
 */
   
-    m_sequencer->processMidiOut( *fetchEvents(m_lastFetchSongPosition,
+    m_sequencer->processMidiOut( *fetchEvents(++m_lastFetchSongPosition,
                                  m_lastFetchSongPosition + m_playLatency),
                                  m_playLatency);
+    m_lastFetchSongPosition = m_lastFetchSongPosition + m_playLatency;
   }
 
   return true;
@@ -297,5 +301,21 @@ RosegardenSequencerApp::notifySequencerStatus()
     m_transportStatus = STOPPING;
 
   }
+}
+
+// Simple conglomeration of already exposed functions for
+// the moment - this may get more complex later when we
+// want this to be more efficient.
+//
+void
+RosegardenSequencerApp::jumpTo(const Rosegarden::timeT &position)
+{
+  if (position < 0)
+    return;
+
+  stop();
+  play(position, m_playLatency);
+  
+  return;
 }
 

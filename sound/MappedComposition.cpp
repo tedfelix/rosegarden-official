@@ -91,14 +91,16 @@ MappedComposition::MappedComposition(Rosegarden::Composition &comp,
       // get the eventTime
       eventTime = (unsigned int) (*j)->getAbsoluteTime();
 
+/*
       // As events are stored chronologically we can escape if
       // we're already beyond our event horizon for this slice.
       //
       if ( eventTime > _endTime )
         break;
+*/
 
       // Eliminate events before our required time
-      if ( eventTime >= _startTime )
+      if ( eventTime >= _startTime && eventTime <= _endTime)
       {
         // insert event
         MappedEvent *me = new MappedEvent(**j, duration);
