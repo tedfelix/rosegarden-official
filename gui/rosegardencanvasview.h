@@ -43,6 +43,9 @@ public slots:
     virtual void slotUpdate();
 
 protected:
+    
+    //--------------- Data members ---------------------------------
+
     QScrollBar* m_horizontalScrollBar;
 };
 
