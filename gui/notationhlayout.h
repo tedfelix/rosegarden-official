@@ -22,6 +22,43 @@
 #include "quantizer.h"
 #include "notationelement.h"
 
+
+class Scale
+{
+public:
+
+    enum KeySignature {
+        C,      // no sharps
+        G,      // 1 sharp
+        D,      // 2 sharps
+        A,      // 3 sharps
+        E,      // 4 sharps
+        B,      // 5 sharps
+        Fsharp, // 6 sharps
+        Csharp, // 7 sharps
+        F,      // 1 flat
+        Bflat,  // 2 flats
+        Eflat,  // 3 flats
+        Aflat,  // 4 flats
+        Dflat,  // 5 flats
+        Gflat,  // 6 flats
+        Cflat   // 7 flats
+    };
+
+    Scale(KeySignature keysig);
+    KeySignature key() const { return m_keySignature; }
+    bool useSharps() const { return m_useSharps; }
+    bool pitchIsInScale(unsigned int pitch) const;
+    bool pitchIsDecorated(unsigned int pitch) const { return !pitchIsInScale(pitch); }
+    bool noteIsDecorated(const NotationElement &el) const;
+
+protected:
+    KeySignature m_keySignature;
+    bool m_useSharps;
+    vector<bool> m_notes;
+};
+
+
 /**
   *@author Guillaume Laurent, Chris Cannam, Rich Bown
   */
@@ -40,6 +77,8 @@ public:
                     unsigned int barMargin,
                     unsigned int noteMargin = 2);
 
+    ~NotationHLayout();
+    
     void layout(NotationElementList::iterator from, NotationElementList::iterator to);
 
     typedef list<unsigned int> barpositions;
@@ -53,6 +92,10 @@ public:
 
     Quantizer& quantizer() { return m_quantizer; }
 
+    Scale::KeySignature currentKey() const { return m_currentScale->key(); }
+    /// the object takes ownership of the Scale
+    void setCurrentKey(Scale::KeySignature);
+
 protected:
 
     /*
@@ -64,6 +107,12 @@ protected:
 
     unsigned int barTimeAtPos(NotationElementList::iterator pos);
     void addNewBar(unsigned int barPos);
+
+    /// returns the note immediately before 'pos'
+    NotationElementList::iterator getPreviousNote(NotationElementList::iterator pos);
+
+    /// returns the current key at 'pos'
+    Scale::KeySignature getKeyAtPos(NotationElementList::iterator pos);
 
     Quantizer m_quantizer;
 
@@ -89,6 +138,7 @@ protected:
 
     barpositions m_barPositions;
 
+    Scale *m_currentScale;
 };
 
 // Looks like we don't need this at the moment but I'd rather keep it around just in case
@@ -107,41 +157,6 @@ public:
 inline bool operator<(const ElementHPos &h1, const ElementHPos &h2) { return h1.pos < h2.pos; }
 inline bool operator>(const ElementHPos &h1, const ElementHPos &h2) { return h1.pos > h2.pos; }
 inline bool operator==(const ElementHPos &h1, const ElementHPos &h2) { return h1.pos == h2.pos; }
-
-
-class Scale
-{
-public:
-
-    enum KeySignature {
-        C,      // no sharps
-        G,      // 1 sharp
-        D,      // 2 sharps
-        A,      // 3 sharps
-        E,      // 4 sharps
-        B,      // 5 sharps
-        Fsharp, // 6 sharps
-        Csharp, // 7 sharps
-        F,      // 1 flat
-        Bflat,  // 2 flats
-        Eflat,  // 3 flats
-        Aflat,  // 4 flats
-        Dflat,  // 5 flats
-        Gflat,  // 6 flats
-        Cflat   // 7 flats
-    };
-
-    Scale(KeySignature keysig);
-    bool useSharps() { return m_useSharps; }
-    bool pitchIsInScale(unsigned int pitch);
-    bool pitchIsDecorated(unsigned int pitch) { return !pitchIsInScale(pitch); }
-    bool noteIsDecorated(const NotationElement &el);
-
-protected:
-    KeySignature m_keySignature;
-    bool m_useSharps;
-    vector<bool> m_notes;
-};
 
 
 #endif

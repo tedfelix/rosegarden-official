@@ -50,7 +50,7 @@ Scale::Scale(KeySignature keysig)
 }
 
 bool
-Scale::pitchIsInScale(unsigned int pitch)
+Scale::pitchIsInScale(unsigned int pitch) const
 {
 //     kdDebug(KDEBUG_AREA) << QString("Scale::pitchIsInScale(%1)").arg(pitch) << endl;
     
@@ -70,7 +70,7 @@ Scale::pitchIsInScale(unsigned int pitch)
 }
 
 bool
-Scale::noteIsDecorated(const NotationElement &el)
+Scale::noteIsDecorated(const NotationElement &el) const
 {
     try {
         int pitch = el.event()->get<Int>("pitch");
@@ -103,12 +103,19 @@ NotationHLayout::NotationHLayout(NotationElementList& elements,
       m_previousAbsoluteTime(0),
       m_previousPos(barMargin),
       m_currentPos(barMargin),
-      m_noteWidthTable(LastNote)
+      m_noteWidthTable(LastNote),
+      m_currentScale(new Scale(Scale::C))
 {
     initNoteWidthTable();
     m_timeUnitsPerBar = m_quantizer.wholeNoteDuration();
     kdDebug(KDEBUG_AREA) << "NotationHLayout::NotationHLayout()" << endl;
 }
+
+NotationHLayout::~NotationHLayout()
+{
+    delete m_currentScale;
+}
+
 
 unsigned int
 NotationHLayout::barTimeAtPos(NotationElementList::iterator pos)
@@ -122,38 +129,74 @@ NotationHLayout::barTimeAtPos(NotationElementList::iterator pos)
     return res % m_timeUnitsPerBar;
 }
 
+NotationElementList::iterator
+NotationHLayout::getPreviousNote(NotationElementList::iterator pos)
+{
+    NotationElementList::iterator prevNote = pos;
+
+    --prevNote;
+    
+    while ((*prevNote)->event()->type() != "note" &&
+           prevNote != m_notationElements.begin()) {
+        --prevNote;
+    }
+    
+    return prevNote;
+}
+
+
+Scale::KeySignature
+NotationHLayout::getKeyAtPos(NotationElementList::iterator pos)
+{
+    while ((*pos)->event()->type() != "keychange" &&
+           pos != m_notationElements.begin()) {
+        --pos;
+    }
+
+    if (pos == m_notationElements.begin()) return Scale::C;
+
+    try {
+        Scale::KeySignature res = Scale::KeySignature((*pos)->event()->get<Int>("key"));
+        return res;
+    } catch (Event::NoData) {
+        return Scale::C;
+    }
+}
 
 void
 NotationHLayout::layout(NotationElementList::iterator from,
                         NotationElementList::iterator to)
 {
-    static Scale CScale(Scale::C); // big gory test
-    
     // Adjust current pos according to where we are in the NotationElementList
     //
     if (from == m_notationElements.begin()) {
 
+        setCurrentKey(Scale::C); // TODO add document-wide scale
+        
         m_currentPos = m_barMargin; // we are at the beginning of the elements
         m_nbTimeUnitsInCurrentBar = 0;
 
     } else {
 
-        // we're somewhere further - compute our position
+        // we're somewhere further - compute our position by looking
+        // for the previous note
 
-        NotationElementList::iterator oneBeforeFrom = from;
-        --oneBeforeFrom;
+        NotationElementList::iterator oneBeforeFrom = getPreviousNote(from);
+
         NotationElement *elementBeforeFrom = (*oneBeforeFrom);
-        // TODO : Make sure the event has a note
+
         m_quantizer.quantize(elementBeforeFrom->event());
         Note previousNote = Note(elementBeforeFrom->event()->get<Int>("Notation::NoteType"));
         m_currentPos = elementBeforeFrom->x();
         m_currentPos += m_noteWidthTable[previousNote] + Staff::noteWidth + m_noteMargin;
 
-        if (CScale.noteIsDecorated(*elementBeforeFrom)) {
-            m_currentPos += 6; // TODO
+        if (m_currentScale->noteIsDecorated(*elementBeforeFrom)) {
+            m_currentPos += Staff::accidentWidth;
         }
 
         m_nbTimeUnitsInCurrentBar = barTimeAtPos(oneBeforeFrom);
+
+        setCurrentKey(getKeyAtPos(from));
     }
     
     m_barPositions.clear();
@@ -164,6 +207,27 @@ NotationHLayout::layout(NotationElementList::iterator from,
         
         NotationElement *nel = (*it);
     
+        // Key Change
+        //
+        if (nel->event()->type() == "keychange") {
+            try {
+                Scale::KeySignature key = Scale::KeySignature(nel->event()->get<Int>("key"));
+                setCurrentKey(key);
+                nel->setX(m_currentPos);
+
+                m_currentPos += 24 + m_noteMargin; // TODO
+                m_previousPos = m_currentPos; // yes, this is correct
+
+                kdDebug(KDEBUG_AREA) << "NotationHLayout::layout() : got a keychange event - moving + 24"
+                                     << endl;
+                
+            } catch (Event::NoData) {
+                kdDebug(KDEBUG_AREA) << "NotationHLayout::layout() : got a keychange event with no key property"
+                                     << endl;
+            }
+            continue;
+        }
+
         // if (nel) is time sig change, reflect that
 
         // kdDebug(KDEBUG_AREA) << "Layout" << endl;
@@ -196,9 +260,14 @@ NotationHLayout::layout(NotationElementList::iterator from,
             m_previousPos = m_currentPos;
             m_currentPos += m_noteWidthTable[note] + Staff::noteWidth + m_noteMargin;
 
-            if (CScale.noteIsDecorated(*nel)) {
-                m_currentPos += 6; // TODO
+            if (m_currentScale->noteIsDecorated(*nel)) {
+                nel->event()->set<Int>("Notation::Accident",
+                                       m_currentScale->useSharps() ? Sharp : Flat);
+                m_currentPos += Staff::accidentWidth;
+            } else {
+                nel->event()->set<Int>("Notation::Accident", NoAccidental);
             }
+            
 
 
             // See if we've completed a bar
@@ -283,7 +352,17 @@ NotationHLayout::reset()
     m_nbTimeUnitsInCurrentBar = 0;
     m_previousNbTimeUnitsInCurrentBar = 0;
     m_barPositions.clear();
+    setCurrentKey(Scale::C);
 }
+
+void
+NotationHLayout::setCurrentKey(Scale::KeySignature key)
+{
+    delete m_currentScale;
+    m_currentScale = new Scale(key);
+}
+
+
 
 // const vector<unsigned int>&
 // NotationHLayout::splitNote(unsigned int noteLen)

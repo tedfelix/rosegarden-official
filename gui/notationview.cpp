@@ -288,8 +288,6 @@ NotationView::showElements(NotationElementList::iterator from,
                            NotationElementList::iterator to,
                            double dxoffset, double dyoffset)
 {
-    static Scale CScale(Scale::C); // big gory test
-
     kdDebug(KDEBUG_AREA) << "NotationElement::showElements()" << endl;
 
     if (from == to) return true;
@@ -302,22 +300,21 @@ NotationView::showElements(NotationElementList::iterator from,
         // process event
         //
         try {
-            Note note = Note((*it)->event()->get<Int>("Notation::NoteType"));
 
             QCanvasSimpleSprite *noteSprite = 0;
-                
+
             if ((*it)->event()->type() == "note") {
 
-                Accidental accident = NoAccidental;
+                Note note = Note((*it)->event()->get<Int>("Notation::NoteType"));
+              
+                Accidental accident;
                 
-                if (CScale.noteIsDecorated(*(*it))) {
-                    if (CScale.useSharps())
-                        accident = Sharp;
-                    else
-                        accident = Flat;
+                try {
+                    accident = Accidental((*it)->event()->get<Int>("Notation::Accident"));
+                } catch (Event::NoData) {
+                    accident = NoAccidental;
                 }
-                
-
+            
                 QCanvasPixmap notePixmap(npf.makeNotePixmap(note,
                                                             accident,
                                                             true, false));
@@ -325,8 +322,14 @@ NotationView::showElements(NotationElementList::iterator from,
 
             } else if ((*it)->event()->type() == "rest") {
 
+                Note note = Note((*it)->event()->get<Int>("Notation::NoteType"));
                 QCanvasPixmap notePixmap(npf.makeRestPixmap(note));
                 noteSprite = new QCanvasSimpleSprite(&notePixmap, canvas());
+
+            } else if ((*it)->event()->type() == "keychange") {
+
+                QCanvasPixmap clefPixmap("pixmaps/clef-treble.xpm");
+                noteSprite = new QCanvasSimpleSprite(&clefPixmap, canvas());
 
             } else {
                     
@@ -336,13 +339,15 @@ NotationView::showElements(NotationElementList::iterator from,
                 continue;
             }
                 
+            if (noteSprite) {
                 
-            noteSprite->move(dxoffset + (*it)->x(),
-                             dyoffset + (*it)->y());
-            noteSprite->show();
+                noteSprite->move(dxoffset + (*it)->x(),
+                                 dyoffset + (*it)->y());
+                noteSprite->show();
 
-            (*it)->setCanvasItem(noteSprite);
-
+                (*it)->setCanvasItem(noteSprite);
+            }
+            
         } catch (...) {
             kdDebug(KDEBUG_AREA) << "NotationElement doesn't have a 'Notation::NoteType' property"
                                  << endl;
