@@ -1,2 +1,2 @@
 #!/bin/sh
-find ./base ./gui ./sound ./sequencer -print | egrep '.([Ch]|cpp)$' | xargs perl ./admin_kde2/find-todo.pl
+find ./base ./gui ./sound ./sequencer -print | egrep '.([Ch]|cpp)$' | xargs perl ./scripts/find-todo.pl
