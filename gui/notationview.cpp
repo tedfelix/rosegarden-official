@@ -1082,27 +1082,24 @@ void NotationView::slotEditPaste()
     // Paste at cursor position
     //
 
-    double layoutX = m_staffs[m_currentStaff]->getLayoutXOfCursor();
+    NotationStaff *staff = m_staffs[m_currentStaff];
+    Segment &segment = staff->getSegment();
+    
+    double layoutX = staff->getLayoutXOfCursor();
     if (layoutX < 0) {
-	slotStatusHelpMsg(i18n("BLAT FOOP"));
+	slotStatusHelpMsg(i18n("Couldn't paste at this point"));
 	return;
     }
-    
-    NotationStaff *staff = m_staffs[m_currentStaff];
-    NotationElementList *notes = staff->getViewElementList();
-    timeT insertionTime = 0;
 
-    //!!! Slow.
+    Rosegarden::Event *timeSig, *clef, *key;
 
-    for (NotationElementList::iterator i = notes->begin();
-	 i != notes->end(); ++i) {
-	//!!! We can do better than this at finding the closest target
-	//(similarly in findClosestNote if we so desire)
+    NotationElementList::iterator i = staff->getClosestElementToLayoutX
+	(layoutX, timeSig, clef, key, false, -1);
+
+    timeT insertionTime = segment.getEndIndex();
+    if (i != staff->getViewElementList()->end()) {
 	insertionTime = (*i)->getAbsoluteTime();
-	if ((*i)->getLayoutX() >= layoutX - 4) break;
     }
-
-    Segment& segment = getStaff(m_currentStaff)->getSegment();
 
     if (m_currentEventSelection->pasteToSegment(segment, insertionTime)) {
 
@@ -1485,29 +1482,34 @@ void NotationView::slotTransformsRemoveMarks()
 
 void NotationView::slotTransformsAddTimeSignature()
 {
-    double layoutX = m_staffs[m_currentStaff]->getLayoutXOfCursor();
+    NotationStaff *staff = m_staffs[m_currentStaff];
+    double layoutX = staff->getLayoutXOfCursor();
     if (layoutX >= 0) {
 
-	//!!! slow -- merge with whatever code we use in slotEditPaste,
-	// and get current time sig a la findClosestNote
-	NotationElementList *notes =
-	    m_staffs[m_currentStaff]->getViewElementList();
-	timeT t = 0;
-	for (NotationElementList::iterator i = notes->begin();
-	     i != notes->end(); ++i) {
-	    t = (*i)->getAbsoluteTime();
-	    if ((*i)->getLayoutX() >= layoutX - 4) break;
+	Rosegarden::Event *timeSigEvt, *clefEvt, *keyEvt;
+	Segment &segment = staff->getSegment();
+
+	NotationElementList::iterator i = staff->getClosestElementToLayoutX
+	    (layoutX, timeSigEvt, clefEvt, keyEvt, false, -1);
+
+	timeT insertionTime = segment.getEndIndex();
+	if (i != staff->getViewElementList()->end()) {
+	    insertionTime = (*i)->getAbsoluteTime();
 	}
 
-	TimeSignatureDialog *dialog = new TimeSignatureDialog(this);
+	TimeSignature timeSig;
+	if (timeSigEvt) timeSig = TimeSignature(*timeSigEvt);
+
+	TimeSignatureDialog *dialog = new TimeSignatureDialog(this, timeSig);
 	if (dialog->exec() == QDialog::Accepted) {
-	    addCommandToHistory(new AddTimeSignatureCommand
-				(m_staffs[m_currentStaff]->getSegment().getComposition(),
-				 t, dialog->getTimeSignature()));
+	    addCommandToHistory
+		(new AddTimeSignatureCommand
+		 (m_staffs[m_currentStaff]->getSegment().getComposition(),
+		  insertionTime, dialog->getTimeSignature()));
 	}
 	delete dialog;
     }
-}				
+}			
 
 
 void NotationView::slotDebugDump()

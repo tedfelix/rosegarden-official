@@ -234,7 +234,7 @@ NotationHLayout::scanStaff(StaffType &staff)
 
     PRINT_ELAPSED("NotationHLayout::scanStaff: after quantize");
 
-    addNewBar(staff, barCounter, notes->begin(), 0, 0, 0, true, 0); 
+    addNewBar(staff, barCounter, notes->begin(), 0, 0, 0, true, 0, 0); 
     ++barCounter;
 
     while (barNo <= endBarNo) {
@@ -328,13 +328,15 @@ NotationHLayout::scanStaff(StaffType &staff)
             el->event()->setMaybe<Int>(MIN_WIDTH, mw);
 	}
 
+	//!!! No -- shouldn't use apparentBarDuration, should use
+	//difference between start of first evt in bar and end of last
 
         addNewBar(staff, barCounter, to,
                   getIdealBarWidth(staff, fixedWidth, baseWidth, shortest, 
                                    shortCount, totalCount, timeSignature),
                   fixedWidth, baseWidth,
                   apparentBarDuration == timeSignature.getBarDuration(),
-		  timeSigEvent);
+		  timeSigEvent, apparentBarDuration); 
 
 	++barCounter;
 	++barNo;
@@ -432,7 +434,7 @@ NotationHLayout::scanChord(NotationElementList *notes,
 timeT
 NotationHLayout::scanRest
 (NotationElementList *notes, NotationElementList::iterator &itr,
- int &fixedWidth, int &baseWidth,
+ int &, int &baseWidth,
  NotationElementList::iterator &shortest, int &shortCount)
 {
     timeT d = (*itr)->getQuantizedDuration();
@@ -463,7 +465,7 @@ void
 NotationHLayout::addNewBar(StaffType &staff,
 			   int barNo, NotationElementList::iterator i,
                            double width, int fwidth, int bwidth,
-			   bool correct, Event *timeSig)
+			   bool correct, Event *timeSig, timeT apparentDuration)
 {
     BarDataList &bdl(m_barData[&staff]);
 
@@ -473,12 +475,14 @@ NotationHLayout::addNewBar(StaffType &staff,
         bdl[s].fixedWidth = fwidth;
         bdl[s].baseWidth = bwidth;
 	bdl[s].timeSignature = timeSig;
+	bdl[s].apparentDuration = apparentDuration;
     }
 
 //    if (timeSig) kdDebug(KDEBUG_AREA) << "Adding bar with timesig" << endl;
 //    else kdDebug(KDEBUG_AREA) << "Adding bar without timesig" << endl;
 
-    bdl.push_back(BarData(barNo, i, -1, 0, 0, 0, correct, 0));
+    //!!! make more minimal bardata constructor
+    bdl.push_back(BarData(barNo, i, -1, 0, 0, 0, correct, 0, 0));
 }
 
 
@@ -509,7 +513,7 @@ NotationHLayout::fillFakeBars()
 
             list.push_front
                 (BarData
-                 (-1, staff->getViewElementList()->end(), -1, 0, 0, 0, true, 0));
+                 (-1, staff->getViewElementList()->end(), -1, 0, 0, 0, true, 0, 0));
         }
     }
     
@@ -961,10 +965,15 @@ NotationHLayout::positionRest(StaffType &staff,
     // start with the amount alloted to the whole bar, subtract that
     // reserved for fixed-width items, and take the same proportion of
     // the remainder as our duration is of the whole bar's duration.
+    // (We use the apparent duration of the bar, not the nominal time-
+    // signature duration.)
+
+    timeT barDuration = bdi->apparentDuration;
+    if (barDuration == 0) barDuration = timeSignature.getBarDuration();
 
     long delta = (((int)bdi->idealWidth - bdi->fixedWidth) *
 		  getSpacingDuration(staff, itr)) /
-        timeSignature.getBarDuration();
+	barDuration;
 
     // Situate the rest somewhat further into its allotted space.  Not
     // convinced this is the right thing to do
@@ -1013,14 +1022,19 @@ NotationHLayout::positionChord(StaffType &staff,
     // with the amount alloted to the whole bar, subtract that
     // reserved for fixed-width items, and take the same proportion of
     // the remainder as our duration is of the whole bar's duration.
+    // (We use the apparent duration of the bar, not the nominal time-
+    // signature duration.)
 
     // In case this chord has various durations in it, we choose an
     // effective duration based on the absolute time of the first
     // following event not in the chord (see getSpacingDuration)
 
+    timeT barDuration = bdi->apparentDuration;
+    if (barDuration == 0) barDuration = timeSignature.getBarDuration();
+
     long delta = (((int)bdi->idealWidth - bdi->fixedWidth) *
 		  getSpacingDuration(staff, itr)) /
-        timeSignature.getBarDuration();
+	barDuration;
 
     int noteWidth = m_npf.getNoteBodyWidth();
 

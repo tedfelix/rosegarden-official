@@ -215,7 +215,7 @@ public:
 	BasicSelectionCommand(name(), selection) { }
     virtual ~TransformsMenuCollapseRestsCommand() { }
 
-    static QString name() { return "&Collapse Rests Aggressively"; }
+    static QString name() { return "&Collapse Rests"; }
 
 protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper) {

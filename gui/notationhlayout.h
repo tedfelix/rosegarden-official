@@ -178,14 +178,16 @@ protected:
         bool needsLayout;
 	Rosegarden::Event *timeSignature; // or zero if no new one in this bar
 	int timeSigX;
+	Rosegarden::timeT apparentDuration; // may exceed nominal duration
         
         BarData(int ibarno, NotationElementList::iterator istart,
                 double ix, double iwidth, int fwidth, int bwidth,
-		bool icorrect, Rosegarden::Event *timesig) :
+		bool icorrect, Rosegarden::Event *timesig,
+		Rosegarden::timeT apparent) :
             barNo(ibarno), start(istart), x(ix), idealWidth(iwidth),
             fixedWidth(fwidth), baseWidth(bwidth), 
 	    correct(icorrect), needsLayout(true),
-	    timeSignature(timesig), timeSigX(0) { }
+	    timeSignature(timesig), timeSigX(0), apparentDuration(apparent) { }
     };
 
     typedef FastVector<BarData> BarDataList;
@@ -215,7 +217,7 @@ protected:
     void addNewBar
     (StaffType &staff, int barNo, NotationElementList::iterator start,
      double width, int fwidth, int bwidth, bool correct,
-     Rosegarden::Event *timesig);
+     Rosegarden::Event *timesig, Rosegarden::timeT apparentDuration);
 
     double getIdealBarWidth
     (StaffType &staff, int fixedWidth, int baseWidth,

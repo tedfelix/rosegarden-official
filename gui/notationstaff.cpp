@@ -159,6 +159,26 @@ NotationStaff::getClosestElementToCanvasCoords(double cx, int cy,
 					       bool notesAndRestsOnly,
 					       unsigned int proximityThreshold)
 {
+    LinedStaffCoords layoutCoords = getLayoutCoordsForCanvasCoords(cx, cy);
+
+    kdDebug(KDEBUG_AREA) << "My coords: canvas (" << cx << "," << cy
+			 << "), layout (" << layoutCoords.first << ","
+			 << layoutCoords.second << ")" << endl;
+
+    return getClosestElementToLayoutX
+	(layoutCoords.first,
+	 timeSignature, clef, key, notesAndRestsOnly, proximityThreshold);
+}
+
+
+NotationElementList::iterator
+NotationStaff::getClosestElementToLayoutX(double x,
+					  Rosegarden::Event *&timeSignature,
+					  Rosegarden::Event *&clef,
+					  Rosegarden::Event *&key,
+					  bool notesAndRestsOnly,
+					  unsigned int proximityThreshold)
+{
     START_TIMING;
 
     double minDist = 10e9, prevDist = 10e9;
@@ -166,17 +186,11 @@ NotationStaff::getClosestElementToCanvasCoords(double cx, int cy,
     NotationElementList *notes = getViewElementList();
     NotationElementList::iterator it, result;
 
-    LinedStaffCoords layoutCoords = getLayoutCoordsForCanvasCoords(cx, cy);
-
-    kdDebug(KDEBUG_AREA) << "My coords: canvas (" << cx << "," << cy
-			 << "), layout (" << layoutCoords.first << ","
-			 << layoutCoords.second << ")" << endl;
-
     // TODO: this is grossly inefficient
 
     for (it = notes->begin(); it != notes->end(); ++it) {
 
-	bool before = ((*it)->getLayoutX() < layoutCoords.first);
+	bool before = ((*it)->getLayoutX() < x);
 	
 	if (!(*it)->isNote() && !(*it)->isRest()) {
 	    if (before) {
@@ -191,7 +205,7 @@ NotationStaff::getClosestElementToCanvasCoords(double cx, int cy,
 	    if (notesAndRestsOnly) continue;
 	}
 
-	double dx = layoutCoords.first - (*it)->getLayoutX();
+	double dx = x - (*it)->getLayoutX();
 	if (dx < 0) dx = -dx;
 
 	if (dx < minDist) {
@@ -205,14 +219,14 @@ NotationStaff::getClosestElementToCanvasCoords(double cx, int cy,
     }
 
     if (proximityThreshold > 0 && minDist > proximityThreshold) {
-        kdDebug(KDEBUG_AREA) << "NotationStaff::getClosestElementToCanvasCoords() : element is too far away : "
+        kdDebug(KDEBUG_AREA) << "NotationStaff::getClosestElementToLayoutX() : element is too far away : "
                              << minDist << endl;
         return notes->end();
     }
         
-    kdDebug(KDEBUG_AREA) << "NotationStaff::getClosestElementToCanvasCoords: found element at layout " << (*result)->getLayoutX() << " (" << (*result)->getCanvasX() << "," << (*result)->getCanvasY() << ") - we're at layout " << layoutCoords.first << " (" << cx << "," << cy << ")" << endl;
+    kdDebug(KDEBUG_AREA) << "NotationStaff::getClosestElementToLayoutX: found element at layout " << (*result)->getLayoutX() << " (" << (*result)->getCanvasX() << "," << (*result)->getCanvasY() << ") - we're at layout " << x << endl;
 
-    PRINT_ELAPSED("NotationStaff::getClosestElementToCanvasCoords");
+    PRINT_ELAPSED("NotationStaff::getClosestElementToLayoutX");
 
     return result;
 }
