@@ -26,6 +26,7 @@
 #include "rosegardenguidoc.h"
 #include "rosegardengui.h"
 #include "trackseditor.h"
+#include "trackscanvas.h"
 #include "notationview.h"
 
 RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
@@ -50,7 +51,10 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     }
     
     scrollView->addChild(tracksEditor);
-    
+
+    connect(tracksEditor->canvas(), SIGNAL(editTrackPart(TrackPart*)),
+            SLOT(editTrackNotation(TrackPart*)));
+
 //     if (getDocument()) {
         
 //         m_notationView = new NotationView(getDocument(), this);
@@ -94,4 +98,16 @@ RosegardenGUIView::print(QPrinter *pPrinter)
     // TODO: add your printing code here
 
     printpainter.end();
+}
+
+void
+RosegardenGUIView::editTrackNotation(TrackPart* p)
+{
+    unsigned int trackNb = p->trackNb();
+    
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIView::editTrackNotation() : showing track " << trackNb << endl;
+
+    m_notationView = new NotationView(getDocument(), trackNb, this);
+ 
+    m_notationView->show();
 }

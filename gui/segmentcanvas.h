@@ -91,6 +91,13 @@ protected:
 
     TrackPartItem* findPartClickedOn(QPoint);
 
+protected slots:
+    /**
+    * connected to the 'Edit' item of the popup menu - re-emits
+    * editTrackPart(TrackPart*)
+    */
+    void onEdit();
+
 signals:
     void addTrackPart(TrackPart*);
     void deleteTrackPart(TrackPart*);

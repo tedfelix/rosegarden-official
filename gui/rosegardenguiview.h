@@ -30,6 +30,7 @@
 
 class RosegardenGUIDoc;
 class NotationView;
+class TrackPart;
 
 /**
  * The RosegardenGUIView class provides the view widget for the
@@ -64,6 +65,9 @@ public:
 
     /** contains the implementation for printing functionality */
     void print(QPrinter *pPrinter);
+
+public slots:
+    void editTrackNotation(TrackPart*);
 
 protected:
     NotationView* m_notationView;

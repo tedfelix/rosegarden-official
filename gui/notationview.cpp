@@ -131,7 +131,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     setCentralWidget(m_canvasView);
 
     QObject::connect(m_canvasView, SIGNAL(noteInserted(int, const QPoint&)),
-                     this, SLOT(insertNote(int, const QPoint&)));
+                     this,         SLOT  (insertNote  (int, const QPoint&)));
 
     readOptions();
 

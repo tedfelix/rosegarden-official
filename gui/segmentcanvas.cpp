@@ -89,9 +89,8 @@ TracksCanvas::TracksCanvas(int gridH, int gridV,
     m_editMenu(new QPopupMenu(this))
 {
     m_editMenu->insertItem(I18N_NOOP("Edit"),
-                           this, SIGNAL(editTrackPart(TrackPart*)));
+                           this, SLOT(onEdit()));
 }
-
 
 TracksCanvas::~TracksCanvas()
 {
@@ -242,3 +241,9 @@ TracksCanvas::addPartItem(int x, int y, unsigned int nbBars)
     return newPartItem;
 }
 
+
+void
+TracksCanvas::onEdit()
+{
+    emit editTrackPart(m_currentItem->part());
+}
