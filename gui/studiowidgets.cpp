@@ -197,7 +197,7 @@ AudioFaderWidget::setAudioChannels(int channels)
         default:
             RG_DEBUG << "AudioFaderWidget::setAudioChannels - "
                      << "unsupported channel numbers (" << channels
-                     << ")" << std::endl;
+                     << ")" << endl;
 	    return;
     }
 
