@@ -97,6 +97,15 @@ public:
      */
     void setRecordTrack(int position);
 
+    /**
+     * Precalculate the Instrument popup so we don't have to every
+     * time it appears
+     * not protected because also used by the RosegardenGUIApp
+     *
+     * @see RosegardenGUIApp#slotPopulateTrackInstrumentPopup()
+     */
+    void populateInstrumentPopup(Rosegarden::Instrument *thisTrackInstr, QPopupMenu* instrumentPopup);
+
 signals:
     // to emit what Track has been selected
     //
@@ -138,12 +147,6 @@ public slots:
     void slotLabelSelected(int position);
 
 protected:
-
-    /**
-     * Precalculate the Instrument popup so we don't have to every
-     * time it appears
-     */
-    void populateInstrumentPopup(Rosegarden::Instrument *thisTrackInstr, QPopupMenu* instrumentPopup);
 
     /**
      * Populate the track buttons themselves with Instrument information

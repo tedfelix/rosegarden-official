@@ -25,6 +25,7 @@
 #include <qregexp.h>
 #include <qlabel.h>
 #include <qinputdialog.h>
+#include <qobjectlist.h>
 
 // include files for KDE
 #include <kprocess.h>
@@ -50,6 +51,7 @@
 #include <kaction.h>
 #include <kstdaction.h>
 #include <ktip.h>
+#include <kpopupmenu.h>
 
 // application specific includes
 #include "Clipboard.h"
@@ -619,10 +621,6 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotTrackUp()),
                 actionCollection(), "select_previous_track");
 
-    new KAction(i18n("&Set Instrument..."), 0, this,
-                SLOT(slotSetTrackInstrument()),
-                actionCollection(), "set_track_instrument");
-
     new KAction(i18n("&Remap Instruments..."), 0, this,
                 SLOT(slotRemapInstruments()),
                 actionCollection(), "remap_instruments");
@@ -745,6 +743,15 @@ void RosegardenGUIApp::setupActions()
     // transport toolbar is hidden by default - TODO : this should be in options
     //
     //toolBar("Transport Toolbar")->hide();
+
+    QPopupMenu* setTrackInstrumentMenu = dynamic_cast<QPopupMenu*>(factory()->container("set_track_instrument", this));
+
+    if (setTrackInstrumentMenu) {
+        connect(setTrackInstrumentMenu, SIGNAL(aboutToShow()),
+                this, SLOT(slotPopulateTrackInstrumentPopup()));
+    } else {
+        RG_DEBUG << "RosegardenGUIApp::setupActions() : couldn't find set_track_instrument menu - check rosegardenui.rcn\n";
+    }
 }
 
 
@@ -4477,9 +4484,17 @@ RosegardenGUIApp::slotPanic()
 }
 
 void
-RosegardenGUIApp::slotSetTrackInstrument()
+RosegardenGUIApp::slotPopulateTrackInstrumentPopup()
 {
     RG_DEBUG << "RosegardenGUIApp::slotSetTrackInstrument\n";
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::Track *track = comp.getTrackById(comp.getSelectedTrack());
+
+    Rosegarden::Instrument* instrument = m_doc->getStudio().getInstrumentById(track->getInstrument());
+
+    QPopupMenu* popup = dynamic_cast<QPopupMenu*>(factory()->container("set_track_instrument", this));
+
+    m_view->getTrackEditor()->getTrackButtons()->populateInstrumentPopup(instrument, popup);
 }
 
 void

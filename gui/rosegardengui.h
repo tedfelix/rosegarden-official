@@ -669,9 +669,9 @@ public slots:
     void slotEditMarkers();
 
     /**
-     * Set instrument for selected track
+     * Not an actual action slot : populates the set_track_instrument sub menu
      */
-    void slotSetTrackInstrument();
+    void slotPopulateTrackInstrumentPopup();
 
     /**
      * Remap instruments
