@@ -134,7 +134,7 @@ void RosegardenGUIApp::initView()
     // create the main widget here that is managed by KTMainWindow's view-region and
     // connect the widget to your document to display document contents.
 
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::initView()" << endl;
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::initView()" << endl;
 
     m_view = new RosegardenGUIView(this);
     m_doc->addView(m_view);
@@ -163,7 +163,7 @@ void RosegardenGUIApp::openDocumentFile(const char* _cmdl)
 {
     slotStatusMsg(i18n("Opening file..."));
     
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::openDocumentFile("
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::openDocumentFile("
                          << _cmdl << ")" << endl;
 
     m_doc->saveIfModified();
