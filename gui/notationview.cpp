@@ -48,6 +48,7 @@
 #include "notationtool.h"
 #include "qcanvassimplesprite.h"
 #include "ktmpstatusmsg.h"
+#include "trackeditor.h"
 #include "barbuttons.h"
 
 #include "rosedebug.h"
@@ -158,7 +159,7 @@ NotationView::NotationView(RosegardenGUIView* rgView,
          this,         SLOT  (hoveredOverAbsoluteTimeChanged(unsigned int)));
 
     QObject::connect
-	(rgView, SIGNAL(setGUIPositionPointer(timeT)),
+	(rgView->getTrackEditor()->getBarButtons(), SIGNAL(setPointerPosition(timeT)),
 	 this,   SLOT  (setGUIPositionPointer(timeT)));
 
     //
