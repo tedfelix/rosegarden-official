@@ -447,16 +447,18 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool firstFetch,
                         if (firstFetch)
                         {
 
+			    Rosegarden::RealTime offset =
+				startTime - evt->getEventTime();
+
                             std::cout << "fillCompositionWithEventsUntil : "
-                                       << "adjusting event audio start marker"
-                                       << " to " << startTime << endl;
+				      << "adjusting event audio start marker"
+				      << " to " << evt->getAudioStartMarker() + offset << endl;
 
                             // Reset event timings
                             //
-                            evt->setAudioStartMarker(
-                                    evt->getAudioStartMarker() + startTime);
-                            evt->setEventTime(evt->getEventTime() + startTime);
-                            evt->setDuration(evt->getDuration() - startTime);
+                            evt->setAudioStartMarker(evt->getAudioStartMarker() + offset);
+                            evt->setEventTime(evt->getEventTime() + offset);
+                            evt->setDuration(evt->getDuration() - offset);
                         }
                         else
                         {

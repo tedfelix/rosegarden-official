@@ -2775,12 +2775,12 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                 //
                 AudioFile *aF = getAudioFile((*i)->getAudioID());
 
-		std::cout << "Creating playable audio file: start marker is " << (*i)->getAudioStartMarker() << ", event time " << adjustedEventTime << ", duration " << (*i)->getDuration() << std::endl;
+		std::cout << "Creating playable audio file: start marker is " << (*i)->getAudioStartMarker() << ", event time " << adjustedEventTime + playLatency << ", duration " << (*i)->getDuration() << std::endl;
 
                 PlayableAudioFile *audioFile =
                     new PlayableAudioFile((*i)->getInstrument(),
                                           aF,
-                                          adjustedEventTime - playLatency,
+                                          adjustedEventTime,
                                           (*i)->getAudioStartMarker(),
                                           (*i)->getDuration(),
                                           _jackBufferSize * // play buffer size
@@ -2813,8 +2813,8 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
             }
         }
 
-        // Cancel a playing audio file preview (this is predicated on Instrument
-        // and 
+        // Cancel a playing audio file preview (this is predicated on
+        // runtime segment ID and optionally start time)
         //
         if ((*i)->getType() == MappedEvent::AudioCancel)
         {

@@ -26,6 +26,7 @@
 
 #include <sys/time.h>
 
+//#define DEBUG_PLAYABLE_CONSTRUCTION 1
 //#define DEBUG_PLAYABLE 1
 
 namespace Rosegarden
@@ -53,7 +54,6 @@ PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
         m_externalRingbuffer(false),
         m_runtimeSegmentId(-1)
 {
-#define DEBUG_PLAYABLE_CONSTRUCTION
 #ifdef DEBUG_PLAYABLE_CONSTRUCTION
     std::cout << "PlayableAudioFile::PlayableAudioFile - creating " << this << std::endl;
 #endif
@@ -446,6 +446,11 @@ SoundDriver::getAudioPlayQueueNotDefunct()
 
     for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); ++it)
     {
+#ifdef DEBUG_PLAYABLE
+	std::cout << "SoundDriver::getAudioPlayQueueNotDefunct: id "
+		  << (*it)->getRuntimeSegmentId() << ", status " << (*it)->getStatus() << " (defunct is " << PlayableAudioFile::DEFUNCT << "), initialised " << (*it)->isInitialised() << std::endl;
+#endif
+
         if ((*it)->getStatus() != PlayableAudioFile::DEFUNCT) {
             rq.push_back(*it);
             if (!(*it)->isInitialised())
@@ -692,14 +697,22 @@ SoundDriver::cancelAudioFile(MappedEvent *mE)
     {
         if (mE->getRuntimeSegmentId() == -1)
         {
-            if((*it)->getInstrument() == mE->getInstrument() &&
-               (int)(*it)->getAudioFile()->getId() == mE->getAudioID())
+            if ((*it)->getInstrument() == mE->getInstrument() &&
+		(int)(*it)->getAudioFile()->getId() == mE->getAudioID())
                 (*it)->setStatus(PlayableAudioFile::DEFUNCT);
         }
         else
         {
-            if ((*it)->getRuntimeSegmentId() == mE->getRuntimeSegmentId())
+            if ((*it)->getRuntimeSegmentId() == mE->getRuntimeSegmentId() &&
+		(*it)->getStartTime() == mE->getEventTime())
                 (*it)->setStatus(PlayableAudioFile::DEFUNCT);
+	    else {
+		std::cerr << "audio file mismatch: ids "
+			  << (*it)->getRuntimeSegmentId() << " vs "
+			  << mE->getRuntimeSegmentId() << ", times "
+			  << (*it)->getStartTime() << " vs "
+			  << mE->getEventTime() << std::endl;
+	    }
         }
     }
 }
