@@ -31,6 +31,7 @@
 #include <kcmdlineargs.h>
 #include <dcopclient.h>
 #include <kmessagebox.h>
+#include <kapp.h>
 
 #include <string>
 #include <vector>
@@ -266,10 +267,20 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 
     QString errMsg;
 
+    // parse xml file
+    RosegardenProgressDialog *progressDlg =
+        new RosegardenProgressDialog(dynamic_cast<QApplication*>(kapp),
+                                     i18n("Reading file..."),
+                                     i18n("Cancel"),
+                                     100,
+                                     (QWidget*)parent());
+
     QString fileContents;
-    bool okay = readFromFile(filename, fileContents);
+    bool okay = readFromFile(filename, fileContents, progressDlg);
     if (!okay) errMsg = "Couldn't read from file";
-    else okay = xmlParse(fileContents, errMsg);
+    else okay = xmlParse(fileContents, errMsg, progressDlg);
+
+    delete progressDlg;
 
     if (!okay) {
         QString msg(i18n("Error when parsing file '%1' : \"%2\"")
@@ -290,7 +301,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 
     // We might need a progress dialog when we generate previews.
     //
-    RosegardenProgressDialog *progressDlg =
+    progressDlg =
         new RosegardenProgressDialog(dynamic_cast<QApplication*>(kapp),
                                      i18n("Generating audio previews..."),
                                      i18n("Cancel"),
@@ -538,11 +549,13 @@ void RosegardenGUIDoc::deleteViews()
 
 
 bool
-RosegardenGUIDoc::xmlParse(QString &fileContents, QString &errMsg)
+RosegardenGUIDoc::xmlParse(QString &fileContents, QString &errMsg,
+                           RosegardenProgressDialog *progress)
 {
-    // parse xml file
-    RoseXmlHandler handler(m_composition, m_studio, m_audioFileManager);
 
+    RoseXmlHandler handler(m_composition, m_studio, m_audioFileManager,
+                           fileContents.length(),
+                           dynamic_cast<Rosegarden::Progress*>(progress));
     QXmlInputSource source;
     source.setData(fileContents);
     QXmlSimpleReader reader;
@@ -576,7 +589,8 @@ RosegardenGUIDoc::writeToFile(const QString &file, const QString &text)
 }
 
 bool
-RosegardenGUIDoc::readFromFile(const QString &file, QString &text)
+RosegardenGUIDoc::readFromFile(const QString &file, QString &text,
+                               RosegardenProgressDialog *progress)
 {
     text = "";
     gzFile fd = gzopen(qstrtostr(file).c_str(), "rb");
@@ -585,6 +599,11 @@ RosegardenGUIDoc::readFromFile(const QString &file, QString &text)
     static char buffer[1000];
 
     while (gzgets(fd, buffer, 1000)) {
+
+        // Update gui
+        //
+        if (progress) progress->processEvents();
+
 	text.append(strtoqstr(std::string(buffer)));
 	if (gzeof(fd)) {
 	    gzclose(fd);

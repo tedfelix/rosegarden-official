@@ -23,6 +23,7 @@
 #include <qdatetime.h>
 #include <qstringlist.h>
 #include <qpainter.h>
+#include <qpalette.h>
 
 #include "PeakFile.h"
 #include "AudioFile.h"
@@ -527,8 +528,8 @@ PeakFile::writePeaks(Progress *progress, std::ofstream *file)
         //
         if (progress)
         {
-            progress->set((int)(double(byteCount)/
-                                double(apprxTotalBytes) * 100.0));
+            progress->setCompleted((int)(double(byteCount)/
+                                   double(apprxTotalBytes) * 100.0));
         }
 
         // The sample data pointer
@@ -635,7 +636,7 @@ PeakFile::writePeaks(Progress *progress, std::ofstream *file)
         // Keep the gui updated
         //
         if (progress)
-            progress->process();
+            progress->processEvents();
     }
 
     // set format number
@@ -834,10 +835,9 @@ PeakFile::drawPixmap(const RealTime &startTime,
 
     QPainter painter(pixmap);
 
-    pixmap->fill(Qt::black);
-    painter.setPen(Qt::white);
-    painter.setBrush(Qt::white);
-
+    pixmap->fill(Qt::white);
+    //painter.setBrush(QColorGroup::Background);
+    painter.setPen(Qt::black);
     std::string peakData;
 
     double divisor = 0.0f;

@@ -40,13 +40,14 @@ public:
     int getMax() { return m_max; }
     int getValue() { return m_value; }
 
-    // Set the progress bar value
+    // Set the progress bar value - we have to use unusual naming
+    // here to avoid clashes in future.
     //
-    virtual void set(int value) = 0;
+    virtual void setCompleted(int value) = 0;
 
     // Process GUI events
     //
-    virtual void process() = 0;
+    virtual void processEvents() = 0;
     
 protected:
     int m_max;

@@ -27,6 +27,7 @@
 #include "Event.h"
 #include "AudioFileManager.h"
 #include "Studio.h"
+#include "Progress.h"
 
 class XmlStorableEvent;
 
@@ -53,7 +54,9 @@ public:
      */
     RoseXmlHandler(Rosegarden::Composition &composition,
                    Rosegarden::Studio &studio,
-                   Rosegarden::AudioFileManager &audioFileManager);
+                   Rosegarden::AudioFileManager &audioFileManager,
+                   unsigned int inputSize,
+                   Rosegarden::Progress *progress);
 
     virtual ~RoseXmlHandler();
 
@@ -80,7 +83,6 @@ public:
 
     bool error(const QXmlParseException& exception);
     bool fatalError(const QXmlParseException& exception);
-
 
 protected:
     //--------------- Data members ---------------------------------
@@ -112,6 +114,8 @@ protected:
     Rosegarden::MidiByte    m_msb;
     Rosegarden::MidiByte    m_lsb;
     Rosegarden::Instrument *m_instrument;
+    unsigned int            m_size;
+    Rosegarden::Progress   *m_progress;
 
 };
 

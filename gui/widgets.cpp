@@ -203,7 +203,7 @@ RosegardenProgressDialog::~RosegardenProgressDialog()
 }
 
 void
-RosegardenProgressDialog::set(int value)
+RosegardenProgressDialog::setCompleted(int value)
 {
     if (value > m_max)
         m_value = m_max;
@@ -212,7 +212,7 @@ RosegardenProgressDialog::set(int value)
 }
 
 void
-RosegardenProgressDialog::process()
+RosegardenProgressDialog::processEvents()
 {
     if (m_app)
         m_app->processEvents(50);

@@ -164,12 +164,12 @@ public:
 
     // Set the progress
     //
-    virtual void set(int value);
+    virtual void setCompleted(int value);
 
     // Process some X events - gets called by the file access (say) class
     // to ensure our gui is still working.
     //
-    virtual void process();
+    virtual void processEvents();
 
 public slots:
     // Show yourself if a timer expires and we're still around.

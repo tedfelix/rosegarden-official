@@ -47,6 +47,7 @@
 class RosegardenGUIView;
 class ViewElementsManager;
 class SegmentItem;
+class RosegardenProgressDialog;
 
 /**
   * RosegardenGUIDoc provides a document object for a document-view model.
@@ -295,7 +296,8 @@ protected:
      * @return false if parsing failed
      * @see RoseXmlHandler
      */
-    bool xmlParse(QString& fileContents, QString &errMsg);
+    bool xmlParse(QString& fileContents, QString &errMsg,
+                  RosegardenProgressDialog *progress);
 
     /**
      * Write the given string to the given file, compressed.
@@ -308,7 +310,8 @@ protected:
      * uncompressing as you go.
      * @return false for failure
      */
-    bool readFromFile(const QString &fileName, QString &text);
+    bool readFromFile(const QString &fileName, QString &text,
+                      RosegardenProgressDialog *progress);
 
     /*
      * Recording might have to insert NOTE ONs and NOTE OFFs
