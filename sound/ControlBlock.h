@@ -53,31 +53,31 @@ public:
     /// ctor for sequencer - all data is read from mmapped file
     ControlBlock();
 
-    unsigned int getNbTracks() { return m_nbTracks; }
+    unsigned int getNbTracks() const { return m_nbTracks; }
     void updateTrackData(Track*);
 
     void setInstrumentForTrack(TrackId trackId, InstrumentId);
-    InstrumentId getInstrumentForTrack(TrackId trackId);
+    InstrumentId getInstrumentForTrack(TrackId trackId) const;
 
     void setTrackMuted(TrackId trackId, bool);
-    bool isTrackMuted(TrackId trackId);
+    bool isTrackMuted(TrackId trackId) const;
 
     void setInstrumentForMetronome(InstrumentId instId) { m_metronomeInfo.instrumentId = instId; }
-    InstrumentId getInstrumentForMetronome()            { return m_metronomeInfo.instrumentId; }
+    InstrumentId getInstrumentForMetronome() const      { return m_metronomeInfo.instrumentId; }
 
     void setMetronomeMuted(bool mute) { m_metronomeInfo.muted = mute; }
-    bool isMetronomeMuted()           { return m_metronomeInfo.muted; }
+    bool isMetronomeMuted() const     { return m_metronomeInfo.muted; }
 
-    bool isSolo()            { return m_solo; }
+    bool isSolo() const      { return m_solo; }
     void setSolo(bool value) { m_solo = value; }
-    TrackId getSelectedTrack()           { return m_selectedTrack; }
+    TrackId getSelectedTrack() const     { return m_selectedTrack; }
     void setSelectedTrack(TrackId track) { m_selectedTrack = track; }
 
     void setThruFilter(MidiFilter filter) { m_thruFilter = filter; }
-    MidiFilter getThruFilter() { return m_thruFilter; }
+    MidiFilter getThruFilter() const { return m_thruFilter; }
 
     void setRecordFilter(MidiFilter filter) { m_recordFilter = filter; }
-    MidiFilter getRecordFilter() { return m_recordFilter; }
+    MidiFilter getRecordFilter() const { return m_recordFilter; }
 
 protected:
     //--------------- Data members ---------------------------------

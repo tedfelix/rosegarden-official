@@ -66,6 +66,10 @@ public:
     Rosegarden::MidiFilter getRecordFilter()
         { return m_controlBlock->getRecordFilter(); }
 
+    // for transfer to SequencerMmapper
+    Rosegarden::ControlBlock *getControlBlock()
+        { return m_controlBlock; }
+
 protected:
 
     //--------------- Data members ---------------------------------

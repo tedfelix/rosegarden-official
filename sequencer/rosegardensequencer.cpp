@@ -101,6 +101,8 @@ RosegardenSequencerApp::RosegardenSequencerApp(
         close();
     }
 
+    m_sequencer->setSequencerDataBlock(m_sequencerMapper.getSequencerDataBlock());
+
     // set this here and now so we can accept async midi events
     //
     m_sequencer->record(Rosegarden::ASYNCHRONOUS_MIDI);
@@ -270,20 +272,7 @@ RosegardenSequencerApp::startPlaying()
     //
     m_sequencer->processEventsOut(m_mC, m_playLatency, false);
 
-    // tell the gui about this slice of events
-    notifyVisuals(&m_mC);
-
     return true; // !isEndOfCompReached();
-}
-
-void
-RosegardenSequencerApp::notifyVisuals(Rosegarden::MappedComposition *mC)
-{
-    Rosegarden::MappedComposition::iterator i = mC->end();
-    if (i != mC->begin()) {
-	--i;
-	m_sequencerMapper.updateVisual(*i);
-    }
 }
 
 bool
@@ -306,9 +295,6 @@ RosegardenSequencerApp::keepPlaying()
     // the Sequencer up-to-date with audio events
     //
     m_sequencer->processEventsOut(m_mC, m_playLatency, false);
-    
-    // tell the gui about this slice of events
-    notifyVisuals(&m_mC);
     
     // Ensure that the audio we're playing is the audio we should be playing
     //
@@ -497,6 +483,7 @@ RosegardenSequencerApp::processAsynchronousEvents()
 	    // will show up in play() instead.
 	    return;
 	}
+	m_sequencerMapper.setControlBlock(m_controlBlockMmapper->getControlBlock());
     }
 
     SEQUENCER_DEBUG << "processAsynchronousEvents: have " << mC->size() << " events" << endl;
@@ -760,6 +747,7 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
     //
     if (!m_controlBlockMmapper) {
 	m_controlBlockMmapper = new ControlBlockMmapper(KGlobal::dirs()->resourceDirs("tmp").first() + "/rosegarden_control_block");
+	m_sequencerMapper.setControlBlock(m_controlBlockMmapper->getControlBlock());
     }
 
     initMetaIterator();

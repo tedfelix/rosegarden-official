@@ -312,6 +312,11 @@ public:
         m_isPersistent(false),
         m_runtimeSegmentId(mE->getRuntimeSegmentId()) {}
 
+    // Construct perhaps without initialising, for placement new or equivalent
+    MappedEvent(bool initialise) {
+	if (initialise) *this = MappedEvent();
+    }
+
     // Event time
     //
     void setEventTime(const RealTime &a) { m_eventTime = a; }

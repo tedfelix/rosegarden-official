@@ -21,7 +21,7 @@
 #ifndef _SEQUENCERMAPPER_H_
 #define _SEQUENCERMAPPER_H_
 
-#include <qstring.h>
+#include "SequencerDataBlock.h"
 #include "RealTime.h"
 
 namespace Rosegarden { class MappedEvent; class MappedComposition; }
@@ -32,11 +32,37 @@ public:
     SequencerMmapper();
     ~SequencerMmapper();
     
-    void updatePositionPointer(Rosegarden::RealTime time);
-    void updateVisual(Rosegarden::MappedEvent *ev);
-    void updateRecordingBuffer(Rosegarden::MappedComposition *mC);
+    void updatePositionPointer(Rosegarden::RealTime time) {
+	m_sequencerDataBlock->setPositionPointer(time);
+    }
 
-    QString getFileName() { return m_fileName; }
+    void updateVisual(Rosegarden::MappedEvent *ev) {
+	m_sequencerDataBlock->setVisual(ev);
+    }
+
+    void updateRecordingBuffer(Rosegarden::MappedComposition *mC) {
+	m_sequencerDataBlock->addRecordedEvents(mC);
+    }
+
+    void setRecordLevel(const Rosegarden::TrackLevelInfo &info) {
+	m_sequencerDataBlock->setRecordLevel(info);
+    }
+
+    void setTrackLevel(Rosegarden::TrackId track, const Rosegarden::TrackLevelInfo &info) {
+	m_sequencerDataBlock->setTrackLevel(track, info);
+    }
+
+    void setTrackLevelsForInstrument(Rosegarden::InstrumentId id,
+				     const Rosegarden::TrackLevelInfo &info) {
+	m_sequencerDataBlock->setTrackLevelsForInstrument(id, info);
+    }
+
+    Rosegarden::SequencerDataBlock *getSequencerDataBlock() {
+	return m_sequencerDataBlock;
+    }
+    void setControlBlock(Rosegarden::ControlBlock *cb) {
+	m_sequencerDataBlock->setControlBlock(cb);
+    }
 
 protected:
     void init();
@@ -49,15 +75,7 @@ protected:
     int                   m_fd;
     void*                 m_mmappedBuffer;
     size_t                m_mmappedSize;
-    static const int      m_recordingBufferSize;
-
-    //!!! nasty -- move to another class with placement new a la ControlBlock
-    Rosegarden::RealTime    *m_positionPtrPtr;
-    int                     *m_eventIndexPtr;
-    bool                    *m_haveEventPtr;
-    Rosegarden::MappedEvent *m_eventPtr;
-    int                     *m_recordEventIndexPtr;
-    Rosegarden::MappedEvent *m_recordEventBuffer;
+    Rosegarden::SequencerDataBlock *m_sequencerDataBlock;
 };
 
 

@@ -321,6 +321,9 @@ public:
     void sendMidiClock(const RealTime &playLatency)
         { m_soundDriver->sendMidiClock(playLatency); }
 
+    void setSequencerDataBlock(SequencerDataBlock *db)
+        { m_soundDriver->setSequencerDataBlock(db); }
+
     QString getStatusLog() { return m_soundDriver->getStatusLog(); }
 
     std::vector<PlayableAudioFile*> getPlayingAudioFiles()

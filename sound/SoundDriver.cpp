@@ -400,6 +400,7 @@ SoundDriver::SoundDriver(MappedStudio *studio, const std::string &name):
     m_audioPlayLatency(0, 0),
     m_audioRecordLatency(0, 0),
     m_studio(studio),
+    m_sequencerDataBlock(0),
     m_mmcEnabled(false),
     m_mmcMaster(false),
     m_mmcId(0),           // default MMC id of 0
@@ -692,7 +693,7 @@ SoundDriver::cancelAudioFile(MappedEvent *mE)
         if (mE->getRuntimeSegmentId() == -1)
         {
             if((*it)->getInstrument() == mE->getInstrument() &&
-               (*it)->getAudioFile()->getId() == mE->getAudioID())
+               (int)(*it)->getAudioFile()->getId() == mE->getAudioID())
                 (*it)->setStatus(PlayableAudioFile::DEFUNCT);
         }
         else

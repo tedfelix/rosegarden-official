@@ -860,14 +860,14 @@ void RosegardenGUIDoc::saveSegment(QTextStream& outStream, Segment *segment, KPr
         // convert out - should do this as XmlExportable really
         // once all this code is centralised
         //
-        time.sprintf("%ld.%06ld", segment->getAudioStartTime().sec,
+        time.sprintf("%d.%06d", segment->getAudioStartTime().sec,
                      segment->getAudioStartTime().usec);
 
         outStream << "   <begin index=\""
                   << time
                   << "\"/>\n";
 
-        time.sprintf("%ld.%06ld", segment->getAudioEndTime().sec,
+        time.sprintf("%d.%06d", segment->getAudioEndTime().sec,
                      segment->getAudioEndTime().usec);
 
         outStream << "   <end index=\""

@@ -59,7 +59,7 @@ void ControlBlock::setInstrumentForTrack(TrackId trackId, InstrumentId instId)
     if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) m_trackInfo[trackId].instrumentId = instId;
 }
 
-InstrumentId ControlBlock::getInstrumentForTrack(TrackId trackId)
+InstrumentId ControlBlock::getInstrumentForTrack(TrackId trackId) const
 {
     if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) return m_trackInfo[trackId].instrumentId;
     return 0;
@@ -70,7 +70,7 @@ void ControlBlock::setTrackMuted(TrackId trackId, bool mute)
     if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) m_trackInfo[trackId].muted = mute;
 }
 
-bool ControlBlock::isTrackMuted(TrackId trackId)
+bool ControlBlock::isTrackMuted(TrackId trackId) const
 {
     if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) return m_trackInfo[trackId].muted;
     return true;

@@ -432,12 +432,10 @@ protected:
     Rosegarden::RealTime            m_lastStartTime;
 
     Rosegarden::MappedComposition   m_mC;
-    ControlBlockMmapper*            m_controlBlockMmapper;
+    ControlBlockMmapper            *m_controlBlockMmapper;
+    SequencerMmapper                m_sequencerMapper;
 
     bool                            m_isEndOfCompReached;
-
-    SequencerMmapper                m_sequencerMapper;
-    
 };
  
 #endif // _ROSEGARDEN_SEQUENCER_APP_H_

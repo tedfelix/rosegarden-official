@@ -2931,6 +2931,8 @@ RosegardenGUIApp::slotUpdatePlaybackPosition()
 	m_doc->insertRecordedAudio(position, RECORDING_AUDIO);
     }
 
+    m_view->updateMeters(mapper);
+
     if (elapsedTime >= comp.getEndMarker())
         slotStop();
 }

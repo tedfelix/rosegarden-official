@@ -42,18 +42,11 @@
 #define MREMAP_MAYMOVE 1
 #endif
 
-const int SequencerMmapper::m_recordingBufferSize = 1000; // events
-
 SequencerMmapper::SequencerMmapper():
     m_fileName(createFileName()),
     m_fd(-1),
     m_mmappedBuffer(0),
-    m_mmappedSize(sizeof(Rosegarden::RealTime) +
-		  sizeof(int) +
-		  sizeof(bool) +
-		  sizeof(Rosegarden::MappedEvent) +
-		  sizeof(int) +
-		  m_recordingBufferSize * sizeof(Rosegarden::MappedEvent))
+    m_mmappedSize(sizeof(Rosegarden::SequencerDataBlock))
 {
     // just in case
     QFile::remove(m_fileName);
@@ -98,59 +91,13 @@ SequencerMmapper::~SequencerMmapper()
 }
 
 void
-SequencerMmapper::updatePositionPointer(Rosegarden::RealTime time)
-{
-    *m_positionPtrPtr = time;
-}
-
-void
-SequencerMmapper::updateVisual(Rosegarden::MappedEvent *ev)
-{
-    static int eventIndex = 0;
-
-    *m_haveEventPtr = false; // until written
-
-    if (ev) {
-	++eventIndex;
-	*m_eventPtr = *ev;
-	*m_eventIndexPtr = eventIndex;
-	*m_haveEventPtr = true;
-    }
-}
-
-void
-SequencerMmapper::updateRecordingBuffer(Rosegarden::MappedComposition *mC)
-{
-    // ringbuffer it
-    for (Rosegarden::MappedComposition::iterator i = mC->begin();
-	 i != mC->end(); ++i) {
-	int index = *m_recordEventIndexPtr;
-	m_recordEventBuffer[index] = **i;
-	if (++index == m_recordingBufferSize) index = 0;
-	*m_recordEventIndexPtr = index;
-    }
-}
-
-void
 SequencerMmapper::init()
 {
-    SEQUENCER_DEBUG << "SequencerMmapper::initControlBlock()\n";
+    SEQUENCER_DEBUG << "SequencerMmapper::init()\n";
 
-    // adding 1 at each stage will work because the pointer arithmetic
-    // is in multiples of the size of the type of the pointer
-    m_positionPtrPtr = (Rosegarden::RealTime *)(m_mmappedBuffer);
-    m_eventIndexPtr = (int *)(m_positionPtrPtr + 1);
-    m_haveEventPtr = (bool *)(m_eventIndexPtr + 1);
-    m_eventPtr = (Rosegarden::MappedEvent *)(m_haveEventPtr + 1);
-    m_recordEventIndexPtr = (int *)(m_eventPtr + 1);
-    m_recordEventBuffer = (Rosegarden::MappedEvent *)(m_recordEventIndexPtr + 1);
+    m_sequencerDataBlock = new (m_mmappedBuffer)
+	Rosegarden::SequencerDataBlock(true);
 
-    *m_positionPtrPtr = Rosegarden::RealTime::zeroTime;
-    *m_eventIndexPtr = 0;
-    *m_recordEventIndexPtr = 0;
-
-    updatePositionPointer(Rosegarden::RealTime::zeroTime);
-    updateVisual(0);
     ::msync(m_mmappedBuffer, m_mmappedSize, MS_ASYNC);
 }
 

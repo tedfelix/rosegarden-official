@@ -2149,18 +2149,20 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
     _jackMappedEventCounter = 0;
 #endif
 
-    // If we're already inserted some audio VU meter events then
-    // don't clear them from the composition.
-    //
-    if (m_audioMeterSent == false)
-        m_recordComposition.clear();
+    m_recordComposition.clear();
+    if (!m_returnComposition.empty()) {
+	for (MappedComposition::iterator i = m_returnComposition.begin();
+	     i != m_returnComposition.end(); ++i) {
+	    m_recordComposition.insert(new MappedEvent(**i));
+	}
+	m_returnComposition.clear();
+    }
 
     if (m_recordStatus != RECORD_MIDI &&
         m_recordStatus != RECORD_AUDIO &&
         m_recordStatus != ASYNCHRONOUS_MIDI &&
         m_recordStatus != ASYNCHRONOUS_AUDIO)
     {
-        m_audioMeterSent = false; // reset this always
         return &m_recordComposition;
     }
 
@@ -2168,7 +2170,6 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
     //
     if(m_midiInputPortConnected == false)
     {
-        m_audioMeterSent = false; // reset this always
         return &m_recordComposition;
     }
 
@@ -2393,9 +2394,6 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
         }
     }
 
-    // reset this always
-    m_audioMeterSent = false;
-
     return &m_recordComposition;
 }
     
@@ -2417,6 +2415,10 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
     //
     snd_seq_ev_clear(event);
     snd_seq_ev_set_source(event, m_port);
+
+    if ((mC.begin() != mC.end()) && getSequencerDataBlock()) {
+	getSequencerDataBlock()->setVisual(*mC.begin());
+    }
 
     for (MappedComposition::iterator i = mC.begin(); i != mC.end(); ++i)
     {
@@ -2541,6 +2543,13 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                                   */
                     }
                 }
+		if (getSequencerDataBlock()) {
+		    Rosegarden::TrackLevelInfo info;
+		    info.level = (*i)->getVelocity();
+		    info.levelRight = 0;
+		    getSequencerDataBlock()->setTrackLevelsForInstrument
+			((*i)->getInstrument(), info);
+		}
                 break;
 
             case MappedEvent::MidiProgramChange:
@@ -3140,18 +3149,9 @@ AlsaDriver::processPending(const RealTime &playLatency)
 void
 AlsaDriver::insertMappedEventForReturn(MappedEvent *mE)
 {
-    // If we haven't inserted a MappedEvent yet this update period
-    // then clear down the composition and flag
-    //
-    if (m_audioMeterSent == false)
-    {
-        m_recordComposition.clear();
-        m_audioMeterSent = true;
-    }
-
     // Insert the event ready for return at the next opportunity
     //
-    m_recordComposition.insert(mE);
+    m_returnComposition.insert(mE);
 }
 
 void
@@ -3453,6 +3453,10 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
             // Turn buffer into a string
             //
+	    //!!! ghastly: string::operator+= is slow and does heap
+	    //allocation and the size of the string is bounded by the
+	    //jack buffer size * 4 anyway -- should just allocate
+	    //fixed buffer in jack buffer size change callback
             std::string buffer;
             unsigned char b1, b2;
             float inputLevelLeft = 0.0f, inputLevelRight = 0.0f;
@@ -3498,6 +3502,8 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
             {
                 // Report the input level back to the GUI every "reportPasses"
                 //
+		/*!!!
+
                 _jackMappedEvent[_jackMappedEventCounter]
                     ->setInstrument((inst)->getAudioMonitoringInstrument());
                 _jackMappedEvent[_jackMappedEventCounter]
@@ -3513,6 +3519,14 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 // return
                 if (_jackMappedEventCounter >= _jackMappedEventsMax)
                     _jackMappedEventCounter = 0;
+		*/
+		
+		if (inst->getSequencerDataBlock()) {
+		    Rosegarden::TrackLevelInfo info;
+		    info.level = (int)(inputLevelLeft * 127.0);
+		    info.levelRight = (int)(inputLevelRight * 127.0);
+		    inst->getSequencerDataBlock()->setRecordLevel(info);
+		}
             }
 
             if (inst->getRecordStatus() == RECORD_AUDIO)
@@ -3816,6 +3830,8 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
                 if (_passThroughCounter > reportPasses)
                 {
+		    /*!!!
+
                     _jackMappedEvent[_jackMappedEventCounter]
                         ->setInstrument((*it)->getInstrument());
                     _jackMappedEvent[_jackMappedEventCounter]
@@ -3834,6 +3850,16 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                     // return
                     if (_jackMappedEventCounter >= _jackMappedEventsMax)
                         _jackMappedEventCounter = 0;
+		    */
+
+		    //!!! couldn't we do this only once per process()?
+		    if (inst->getSequencerDataBlock()) {
+			Rosegarden::TrackLevelInfo info;
+			info.level = (int)(peakLevelLeft * 127.0);
+			info.levelRight = (int)(peakLevelRight * 127.0);
+			inst->getSequencerDataBlock()->setTrackLevelsForInstrument
+			    ((*it)->getInstrument(), info);
+		    }
                 }
             }
         }

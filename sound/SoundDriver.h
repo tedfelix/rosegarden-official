@@ -29,6 +29,7 @@
 #include "AudioFile.h"
 #include "MappedDevice.h"
 #include "RingBuffer.h"
+#include "SequencerDataBlock.h"
 
 // Abstract base to support SoundDrivers such as aRts and ALSA.
 //
@@ -528,6 +529,14 @@ public:
     //
     void setMIDIClockInterval(long usecs) { m_midiClockInterval = usecs; }
 
+    // Get and set the mapper which may optionally be used to
+    // store recording levels etc for communication back to the GUI.
+    // (If a subclass wants this and finds it's not there, it should
+    // simply continue without.)
+    //
+    SequencerDataBlock *getSequencerDataBlock() { return m_sequencerDataBlock; }
+    void setSequencerDataBlock(SequencerDataBlock *d) { m_sequencerDataBlock = d; }
+
 protected:
     // Helper functions to be implemented by subclasses
     //
@@ -566,8 +575,8 @@ protected:
 
     DeviceId                                    m_midiRecordDevice;
 
-    //
     MappedComposition                           m_recordComposition;
+    MappedComposition                           m_returnComposition;
     RecordStatus                                m_recordStatus;
 
 
@@ -597,6 +606,10 @@ protected:
     // Virtual studio hook
     //
     MappedStudio                *m_studio;
+
+    // Sequencer data block for communication back to GUI
+    //
+    SequencerDataBlock          *m_sequencerDataBlock;
 
     std::vector<std::string>     m_args;
 

@@ -57,6 +57,7 @@ class MultiViewCommandHistory;
 class KCommand;
 class NotationView;
 class MatrixView;
+class SequencerMapper;
 
 /**
  * The RosegardenGUIView class provides the view widget for the
@@ -139,6 +140,8 @@ public:
      * Show output levels
      */
     void showVisuals(const Rosegarden::MappedEvent *mE);
+
+    void updateMeters(SequencerMapper *mapper);
 
     /**
      * Change zoom size -- set the RulerScale's units-per-pixel to size

@@ -21,7 +21,7 @@
 #ifndef _GUI_SEQUENCERMAPPER_H_
 #define _GUI_SEQUENCERMAPPER_H_
 
-#include <qstring.h>
+#include "SequencerDataBlock.h"
 #include "RealTime.h"
 
 namespace Rosegarden { class MappedEvent; class MappedComposition; }
@@ -32,11 +32,26 @@ public:
     SequencerMapper(const QString filename);
     ~SequencerMapper();
 
-    Rosegarden::RealTime getPositionPointer() const;
-    bool getVisual(Rosegarden::MappedEvent &) const;
-    int getRecordedEvents(Rosegarden::MappedComposition &) const;
-    
-    QString getFileName() const { return m_filename; }
+    Rosegarden::RealTime getPositionPointer() const {
+	return m_sequencerDataBlock->getPositionPointer();
+    }
+
+    bool getVisual(Rosegarden::MappedEvent &ev) const {
+	return m_sequencerDataBlock->getVisual(ev);
+    }
+
+    int getRecordedEvents(Rosegarden::MappedComposition &mC) const {
+	return m_sequencerDataBlock->getRecordedEvents(mC);
+    }
+
+    bool getRecordLevel(Rosegarden::TrackLevelInfo &info) const {
+	return m_sequencerDataBlock->getRecordLevel(info);
+    }
+
+    bool getTrackLevel(Rosegarden::TrackId track,
+		       Rosegarden::TrackLevelInfo &info) const {
+	return m_sequencerDataBlock->getTrackLevel(track, info);
+    }
 
 protected:
     void map();
@@ -46,17 +61,7 @@ protected:
     size_t       m_mmappedSize;
     void*        m_mmappedBuffer;
     QString      m_filename;
-    static const int m_recordingBufferSize;
-
-    //!!! nasty -- move to another class with placement new a la ControlBlock.  plus ew ew, we're even duplicating consts with the same file in sequencer
-
-    Rosegarden::RealTime    *m_positionPtrPtr;
-    int                     *m_eventIndexPtr;
-    bool                    *m_haveEventPtr;
-    Rosegarden::MappedEvent *m_eventPtr;
-    int                     *m_recordEventIndexPtr;
-    Rosegarden::MappedEvent *m_recordEventBuffer;
-
+    Rosegarden::SequencerDataBlock *m_sequencerDataBlock;
 };
 
 

@@ -63,6 +63,7 @@
 #include "eventview.h"
 #include "dialogs.h"
 #include "sequencemanager.h"
+#include "sequencermapper.h"
 
 using Rosegarden::SimpleRulerScale;
 using Rosegarden::Composition;
@@ -905,6 +906,43 @@ void RosegardenGUIView::showVisuals(const Rosegarden::MappedEvent *mE)
 
 }
 
+void
+RosegardenGUIView::updateMeters(SequencerMapper *mapper)
+{
+    for (Rosegarden::Composition::trackcontainer::iterator i =
+	     getDocument()->getComposition().getTracks().begin();
+	 i != getDocument()->getComposition().getTracks().end(); ++i) {
+
+	Rosegarden::Track *track = i->second;
+
+	Rosegarden::TrackLevelInfo info;
+	if (!mapper->getTrackLevel(track->getId(), info)) continue; // no change
+
+	Rosegarden::Instrument *instrument =
+	    getDocument()->getStudio().getInstrumentById(track->getInstrument());
+	if (!instrument) continue;
+	
+	if (instrument->getType() == Rosegarden::Instrument::Audio) {
+
+	    if (m_instrumentParameterBox->getSelectedInstrument() &&
+		instrument->getId() ==
+		m_instrumentParameterBox->getSelectedInstrument()->getId()) {
+
+		double left = info.level / 127.0;
+		double right = info.levelRight / 127.0;
+		m_instrumentParameterBox->setAudioMeter(left, right);
+	    }
+
+	    m_trackEditor->getTrackButtons()->slotSetTrackMeter
+		((info.level + info.levelRight) / 2.0, track->getId());
+
+	} else {
+
+	    m_trackEditor->getTrackButtons()->slotSetTrackMeter
+		(info.level, track->getId());
+	}
+    }
+}    
 
 void
 RosegardenGUIView::setControl(bool value)
