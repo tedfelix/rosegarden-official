@@ -517,13 +517,9 @@ MidiFile::convertToRosegarden()
             segmentTime = midiEvent->addTime(segmentTime);
         }
 
-        // Consolidate NOTE ON and NOTE OFF events into a
-        // NOTE ON with a duration and delete the NOTE OFFs.
-        //
-        // We parse the track even if there are known to be no notes
-        // on it, so as to handle tempo and time-signature events
-        // correctly.  But we only create a segment to write it to if
-        // there are some notes to write.
+        // Consolidate NOTE ON and NOTE OFF events into a NOTE ON with
+        // a duration.  We don't delete the NOTE OFF events, just 
+        // ignore them at the next stage.
         //
         if(consolidateNoteOffEvents(i)) // returns true if notes exist
         {
@@ -673,8 +669,13 @@ MidiFile::convertToRosegarden()
             switch(midiEvent->getMessageType())
             {
             case MIDI_NOTE_ON:
-
                 if (!rosegardenSegment) break;
+
+                // A zero velocity here is a virtual "NOTE OFF"
+                // so we ignore this event
+                //
+                if (midiEvent->getVelocity() == 0)
+                    break;
 
                 // insert rests if we need them
                 //
@@ -707,8 +708,10 @@ MidiFile::convertToRosegarden()
                 }
                 break;
 
+                // We ignore any NOTE OFFs here as we've already
+                // converted NOTE ONs to have duration
+                //
             case MIDI_NOTE_OFF:
-                std::cout << "MidiFile::convertToRosegarden - MIDI_OFF should not exist here!" << endl;
                 break;
 
             case MIDI_POLY_AFTERTOUCH:
@@ -727,8 +730,10 @@ MidiFile::convertToRosegarden()
                 break;
 
             default:
-                //cout << "Can't create Rosegarden event for unknown MIDI event"
-                //<< endl;
+                // Check for META events
+                //
+                cout << "Can't create Rosegarden event for unknown MIDI event"
+                     << endl;
                 break;
             }
         }
@@ -747,9 +752,10 @@ MidiFile::convertToRosegarden()
                             rosegardenSegment->end(),
                             BaseProperties::GROUP_TYPE_BEAMED);
         }
-
     }
 
+    // Default instrument creation for the moment
+    //
     Rosegarden::Instrument *instrument =
                 new Rosegarden::Instrument(0,
                                            Rosegarden::Instrument::Midi,
@@ -1252,50 +1258,46 @@ MidiFile::write()
     return (retOK);
 }
 
+// We don't delete dead NOTE OFF events - just extract the
+// duration and store it in the NOTE ON and then ignore the
+// NOTE OFF at the next stage of the conversion.
+//
 bool
 MidiFile::consolidateNoteOffEvents(const Rosegarden::TrackId &track)
 {
-    MidiTrackIterator midiEvent, noteOffSearch;
-    bool noteOffFound;
+    MidiTrackIterator nOE, mE = m_midiComposition[track].begin();
     bool notesOnTrack = false;
+    bool noteOffFound;
 
-    for ( midiEvent = (m_midiComposition[track].begin());
-          midiEvent != (m_midiComposition[track].end());
-          ++midiEvent )
+    for(;mE != m_midiComposition[track].end(); mE++)
     {
-        if (midiEvent->getMessageType() == MIDI_NOTE_ON)
+        if (mE->getMessageType() == MIDI_NOTE_ON)
         {
-            // Flag that we've found notes on this track
+            // We've found a note - flag it
             //
             if (!notesOnTrack) notesOnTrack = true;
 
             noteOffFound = false;
 
-            for ( noteOffSearch = midiEvent;
-                  noteOffSearch != (m_midiComposition[track].end());
-                  noteOffSearch++ )
+            for (nOE = mE; nOE != (m_midiComposition[track].end()); nOE++)
             {
-                if ( ( midiEvent->getChannelNumber() ==
-                      noteOffSearch->getChannelNumber() )
-                     && ( ( noteOffSearch->getMessageType() == MIDI_NOTE_OFF ) ||
-                          ( ( noteOffSearch->getMessageType() == MIDI_NOTE_ON ) &&
-                            ( noteOffSearch->getVelocity() == 0x00 ) ) ) )
+                if ((mE->getChannelNumber() == nOE->getChannelNumber()) &&
+                    (nOE->getMessageType() == MIDI_NOTE_OFF ||
+                    (nOE->getMessageType() == MIDI_NOTE_ON &&
+                     nOE->getVelocity() == 0x00)))
                 {
-                    midiEvent->setDuration(noteOffSearch->getTime() -
-                                           midiEvent->getTime());
-                    m_midiComposition[track].erase(noteOffSearch);
+                    mE->setDuration(nOE->getTime() - mE->getTime());
+                    m_midiComposition[track].erase(nOE);
                     noteOffFound = true;
                     break;
                 }
-
             }
-            //
-            // Set Event duration to the length of the segment if no
-            // matching NOTE OFF has been found
+
+            // If no matching NOTE OFF has been found then set
+            // Event duration to length of Segment
             //
             if (noteOffFound == false)
-                midiEvent->setDuration(noteOffSearch->getTime() -
-                                       midiEvent->getTime());
+                mE->setDuration(nOE->getTime() - mE->getTime());
         }
     }
 
