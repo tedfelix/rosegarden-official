@@ -75,7 +75,7 @@ Put() {
 	kghostview $1
 
 	read -p "Do you want to publish? (y/N)" key
-	if [ "key" == "y" ]; then
+	if [ "$key" == "y" ]; then
 	    printf "Publishing \"$1\"... \t"
 	    user=$(cat /home/silvan/ZTQXP3)
 	    curl -u "$user" -T "$1" ftp://users.adelphia.net/public_html/
@@ -124,53 +124,56 @@ Sed() {
     sed s@$1@$2@g $3 > /tmp/blurfl&&mv /tmp/blurfl $3
 }
 
-case $1 in 
-    "en-web")
-    		web en
-    	;;
-    "en-pdf")
-    		pdf en
-    	;;
-    "de-web") 
-    		web de
-	;;
-    "de-pdf") 
-    		pdf de
-	;;
-    "es-web") 
-    		web es
-	;;
-    "es-pdf") 
-    		pdf es
-	;;
-    "ru-web") 
-    		web ru
-	;;
-    "ru-pdf") 
-    		pdf ru
-	;;
-    "all-web") for l in $langs; do
-                   web $l
-	       done
-        ;;
-    "all-pdf") for l in $langs; do
-    		   pdf $l
-	       done
-	;;
-    "all") 
-    		for l in $langs; do
-		    web $l
-		    pdf $l
-		done
-	;;
-    *) Usage
-    	;;
-esac
+for target in $*; do
+    case $target in 
+	"en-web")
+		    web en
+	    ;;
+	"en-pdf")
+		    pdf en
+	    ;;
+	"de-web") 
+		    web de
+	    ;;
+	"de-pdf") 
+		    pdf de
+	    ;;
+	"es-web") 
+		    web es
+	    ;;
+	"es-pdf") 
+		    pdf es
+	    ;;
+	"ru-web") 
+		    web ru
+	    ;;
+	"ru-pdf") 
+		    pdf ru
+	    ;;
+	"all-web") for l in $langs; do
+		       web $l
+		   done
+	    ;;
+	"all-pdf") for l in $langs; do
+		       pdf $l
+		   done
+	    ;;
+	"all") 
+		    for l in $langs; do
+			web $l
+			pdf $l
+		    done
+	    ;;
+	*) Usage
+	    ;;
+    esac
+done
 
 read -p "Do you want to commit?  (y/N) " key
+read -p "Enter one-line message: " message
 if [ "$key" == "y" ];then
 	echo Attempting an automatic CVS commit...
-	cvs -f commit -m "* automatic commit by $0 - \" $2 \"" '.' 
+	cvs -f commit -m "* automatic commit by $0 - \" $message \"" '.' 
 fi
     
 exit 0
