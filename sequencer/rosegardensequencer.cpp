@@ -1078,6 +1078,7 @@ RosegardenSequencerApp::createMappedObject(int type)
 int 
 RosegardenSequencerApp::destroyMappedObject(int id)
 {
+#ifdef HAVE_LADSPA
     Rosegarden::MappedLADSPAPlugin *plugin =
         dynamic_cast<Rosegarden::MappedLADSPAPlugin*>(m_studio->getObject(id));
 
@@ -1088,6 +1089,8 @@ RosegardenSequencerApp::destroyMappedObject(int id)
         m_sequencer->removePluginInstance(plugin->getInstrument(),
                                           plugin->getPosition());
     }
+#endif
+
     bool ret = m_studio->destroyObject(Rosegarden::MappedObjectId(id));
 
     if (ret)
