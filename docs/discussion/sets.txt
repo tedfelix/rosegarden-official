@@ -1,68 +1,106 @@
 
-Sets of events
-==============
+Some terminology for sets of events and notational artifacts
+============================================================
 
 Chord
 -----
 
-A set of notes that share a common starting time.
+ * A set of notes that share a common starting time.
 
-Has no explicit representation, except as a set of note events that
-have the same absoluteTime value.
+ * Has no explicit representation, except as a set of note events that
+   have the same absoluteTime value.
 
-Can be pulled out of a track using Track::getTimeSlice in
-core/Track.h, or (with more notation-related data) using the Chord
-class in rosegardengui/notationsets.h.
+ * Can be pulled out of a track using Track::getTimeSlice in
+   core/Track.h, or (with more notation-related data) using the Chord
+   class in rosegardengui/notationsets.h.
 
-Group
------
+ * In the GUI, chords should be referred to simply as chords, and
+   chord-related menu functions should appear together on a menu
+   called Chord.
 
-A series of events in a relationship that is normally represented in
-notation by using a beam, e.g. beamed groups, tuplets, grace notes.
-Not every event in the group will necessarily have to possess a beam
-when it's rendered (e.g. a rest in the middle of a beamed group, or a
-crotchet grace note).  Groups do not nest.
+Beamed Group
+------------
 
-Represented internally using GroupId (int) and GroupType (string)
-properties on the events, such that all events sharing a GroupId are
-in the same group (and should also share the same GroupType).
-Represented in XML with <group type="yyy">...</group> around the set
-of events in the group; GroupId and GroupType properties should not
-appear in the XML, and the GroupId is assigned to a group when the XML
-is parsed.
+ * A series of events in a relationship that is normally represented
+   in notation by using a beam, e.g. beamed groups, tuplets, grace
+   notes.  Not every event in the group will necessarily have to
+   possess a beam when it's rendered (e.g. a rest in the middle of a
+   beamed group, or a crotchet grace note).  Beamed groups (informally
+   just "groups") do not nest.
 
-Beamed groups can be pulled out of a track using the BeamedGroup class
-in rosegardengui/notationsets.h.  There's currently no API for
-extracting tupled or grace-note groups.
+ * Represented internally using BGroupId (int) and BGroupType (string)
+   properties on the events, such that all events sharing a BGroupId
+   are in the same group (and should also share the same BGroupType).
+   Represented in XML with <group type="yyy">...</group> around the
+   set of events in the group; BGroupId and BGroupType properties
+   should not appear in the XML, and the BGroupId is assigned to a
+   group when the XML is parsed.
+
+ * Beamed groups can be pulled out of a track using the BeamedGroup
+   class in rosegardengui/notationsets.h.  There's currently no API
+   for extracting tupled or grace-note groups.
+
+ * In the GUI, these kinds of groups should be referred to by their
+   individual names (beamed group, tuplet etc) unless there is a need
+   for a collective name, in which case Groups should do ("Remove All
+   Groups").  Menu functions relating to them should all appear
+   together on a menu called Group.
 
 Tie
 ---
 
-A connection made between two notes of the same pitch that should be
-played as if they were a single continuous note.  Observe that the
-notes don't have to adjoin in the event list, although they must
-adjoin in absolute time.  For example, one of them might be part of a
-chord and so other chord members might appear between the two.  It is
-however unambiguous to record that a note is tied with "the following
-note", because the note with which it's tied must be the next one that
-has the same pitch as it.  A note can be tied with "the following
-note" or "the preceding note" or both (or neither).
+ * A connection made between two notes of the same pitch that should
+   be played as if they were a single continuous note.  Observe that
+   the notes don't have to adjoin in the event list, although they
+   must adjoin in absolute time.  For example, one of them might be
+   part of a chord and so other chord members might appear between the
+   two.  It is however unambiguous to record that a note is tied with
+   "the following note", because the note with which it's tied must be
+   the next one that has the same pitch as it.  A note can be tied
+   with "the following note" or "the preceding note" or both (or
+   neither).
 
-We don't have a representation for ties yet, although it seems
-plausible that we could get away with boolean tied-forward and
-tied-backward properties.
+   Potentially, we could rule that a note can also be "tied" with a
+   note that is not of the same pitch (so long as it has an adjoining
+   absolute time); in this case, we have a glissando.
+
+ * We don't have a representation for ties yet, although it seems
+   plausible that we could get away with boolean tied-forward and
+   tied-backward properties.
+
+ * In the GUI, ties should be referred to as ties (unless they're
+   glissandi!), and should probably appear on the Group menu, or on
+   the same menu as slurs (see below).
+
+Indication
+----------
+
+ * Some notational indication that spans a series of events.  Unlike
+   groups, indications can nest and overlap, and do not normally
+   affect the way the events they span are drawn (although of course
+   they may affect the way the events they span are performed).
+   Examples include slurs and hairpin dynamic marks.
+
+ * We don't have a representation for indications yet, although it's
+   likely that an indication will be a distinct type of event,
+   appearing in the event list immediately before the series of events
+   it spans and with a property indicating the duration of that
+   series.
+
+ * In the GUI, these should be referred to by their individual names
+   (slur, hairpin etc) unless there is a need for a collective name
+   ("Remove All Indications").  Menu functions relating to them should
+   appear on the Group menu, unless we happen to have a Dynamic menu
+   for the hairpin function.
 
 Mark
 ----
 
-Some notational indication that spans a series of events.  Unlike
-groups, marks can nest and overlap, and do not normally affect the way
-the events they span are drawn (although of course they may affect the
-way the events they span are performed).  Examples include slurs and
-hairpin dynamic marks.
+ * A mark is not a set or relationship: it's a single item that
+   modifies a chord, such as a pause, accent or trill.
 
-We don't have a representation for marks yet, although it's likely
-that a mark will be a distinct type of event, appearing in the event
-list immediately before the series of events it spans and with a
-property indicating the duration of that series.
+ * We have no representation for marks yet.
+
+ * In the GUI, marks should be referred to as marks and should
+   appear together on a Marks menu.
 
