@@ -379,24 +379,24 @@ RosegardenGUIView::createNotationView(std::vector<Rosegarden::Segment *> segment
     //
     connect(notationView, SIGNAL(changeTempo(Rosegarden::timeT, double,
 					     TempoDialog::TempoDialogAction)),
-	    parent(), SLOT(slotChangeTempo(Rosegarden::timeT, double,
-				      TempoDialog::TempoDialogAction)));
+            RosegardenGUIApp::self(), SLOT(slotChangeTempo(Rosegarden::timeT, double,
+                                                           TempoDialog::TempoDialogAction)));
 
     connect(notationView, SIGNAL(selectTrack(int)),
             this, SLOT(slotSelectTrackSegments(int)));
 
     connect(notationView, SIGNAL(play()),
-	    parent(), SLOT(slotPlay()));
+            RosegardenGUIApp::self(), SLOT(slotPlay()));
     connect(notationView, SIGNAL(stop()),
-	    parent(), SLOT(slotStop()));
+            RosegardenGUIApp::self(), SLOT(slotStop()));
     connect(notationView, SIGNAL(fastForwardPlayback()),
-	    parent(), SLOT(slotFastforward()));
+            RosegardenGUIApp::self(), SLOT(slotFastforward()));
     connect(notationView, SIGNAL(rewindPlayback()),
-	    parent(), SLOT(slotRewind()));
+            RosegardenGUIApp::self(), SLOT(slotRewind()));
     connect(notationView, SIGNAL(fastForwardPlaybackToEnd()),
-	    parent(), SLOT(slotFastForwardToEnd()));
+            RosegardenGUIApp::self(), SLOT(slotFastForwardToEnd()));
     connect(notationView, SIGNAL(rewindPlaybackToBeginning()),
-	    parent(), SLOT(slotRewindToBeginning()));
+            RosegardenGUIApp::self(), SLOT(slotRewindToBeginning()));
     connect(notationView, SIGNAL(jumpPlaybackTo(Rosegarden::timeT)),
 	    getDocument(), SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
@@ -471,24 +471,24 @@ RosegardenGUIView::createMatrixView(std::vector<Rosegarden::Segment *> segmentsT
     //
     connect(matrixView, SIGNAL(changeTempo(Rosegarden::timeT, double,
 					   TempoDialog::TempoDialogAction)),
-	    parent(), SLOT(slotChangeTempo(Rosegarden::timeT, double,
+		    RosegardenGUIApp::self(), SLOT(slotChangeTempo(Rosegarden::timeT, double,
 				      TempoDialog::TempoDialogAction)));
 
     connect(matrixView, SIGNAL(selectTrack(int)),
             this, SLOT(slotSelectTrackSegments(int)));
 
     connect(matrixView, SIGNAL(play()),
-	    parent(), SLOT(slotPlay()));
+		    RosegardenGUIApp::self(), SLOT(slotPlay()));
     connect(matrixView, SIGNAL(stop()),
-	    parent(), SLOT(slotStop()));
+		    RosegardenGUIApp::self(), SLOT(slotStop()));
     connect(matrixView, SIGNAL(fastForwardPlayback()),
-	    parent(), SLOT(slotFastforward()));
+		    RosegardenGUIApp::self(), SLOT(slotFastforward()));
     connect(matrixView, SIGNAL(rewindPlayback()),
-	    parent(), SLOT(slotRewind()));
+		    RosegardenGUIApp::self(), SLOT(slotRewind()));
     connect(matrixView, SIGNAL(fastForwardPlaybackToEnd()),
-	    parent(), SLOT(slotFastForwardToEnd()));
+		    RosegardenGUIApp::self(), SLOT(slotFastForwardToEnd()));
     connect(matrixView, SIGNAL(rewindPlaybackToBeginning()),
-	    parent(), SLOT(slotRewindToBeginning()));
+		    RosegardenGUIApp::self(), SLOT(slotRewindToBeginning()));
     connect(matrixView, SIGNAL(jumpPlaybackTo(Rosegarden::timeT)),
 	    getDocument(), SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 

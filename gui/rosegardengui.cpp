@@ -1568,7 +1568,7 @@ void RosegardenGUIApp::slotFileOpen()
 #else
          QString::null,
 #endif
-	 "audio/x-rosegarden", this,
+	 "audio/x-rosegarden audio/x-midi audio/x-rosegarden21", this,
 	 i18n("Open File"));
     if ( url.isEmpty() ) { return; }
 
@@ -1592,7 +1592,7 @@ void RosegardenGUIApp::slotMerge()
 #else
          QString::null,
 #endif
-	 "audio/x-rosegarden", this,
+	 "audio/x-rosegarden audio/x-midi audio/x-rosegarden21", this,
 	 i18n("Open File"));
     if ( url.isEmpty() ) { return; }
 

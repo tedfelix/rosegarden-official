@@ -125,7 +125,7 @@ public:
     /**
      * open a Rosegarden file
      */
-    virtual void openFile(QString filePath) { openFile(filePath, ImportRG4); }
+    virtual void openFile(QString filePath) { openFile(filePath, ImportCheckType); }
 
     /**
      * open a file, explicitly specifying its type
