@@ -318,14 +318,28 @@ void TrackEditor::setupHorizontalHeader()
 void
 TrackEditor::setPointerPosition(timeT position)
 {
-  if (!m_pointer) return;
-/*!!!
-  canvasPosition = (m_hHeader->sectionSize(0) * position /
-		    m_timeStepsResolution );
+    if (!m_pointer) return;
 
-  m_pointer->setX(canvasPosition < 0 ? 0 : canvasPosition);
-*/
-  emit needUpdate();
+    Composition &comp = m_document->getComposition();
+    int barNo = comp.getBarNumber(position);
+    pair<timeT, timeT> times = comp.getBarRange(barNo);
+
+    kdDebug(KDEBUG_AREA) << "TrackEditor::setPointerPosition: time is " << position << endl;
+
+    int canvasPosition = m_hHeader->sectionPos(barNo);
+
+    kdDebug(KDEBUG_AREA) << "TrackEditor::setPointerPosition: canvas pos is " << canvasPosition << endl;
+
+    if (times.first != times.second) {
+	canvasPosition +=
+	    m_hHeader->sectionSize(barNo) * (position - times.first) /
+	    (times.second - times.first);
+    }
+
+    kdDebug(KDEBUG_AREA) << "TrackEditor::setPointerPosition: canvas pos is now " << canvasPosition << endl;
+
+    m_pointer->setX(canvasPosition);
+    emit needUpdate();
 }
 
 
