@@ -18,6 +18,7 @@ o Audio
    - autosplitting
    - libsoundfile support (LSFSoundFile class?)
    - exceptions and return values
+   - stereo vu meters (0dB level = 1.0f etc)
 
 o Instrument/Device naming
 

@@ -1,0 +1,188 @@
+MINI-HOWTO: Creating the Instrument and Voice definitions for Rosegarden-4
+==========================================================================
+
+
+
+Introduction
+------------
+  Document maintained by: Ryurick M. Hristev <ryurick.hristev@canterbury.ac.nz>
+
+This mini-howto explains how to create a device definition file (in
+Rosegarden speak). Please refer to the Rosegarden tutorial paying
+particular attention to sections 2.4 to 2.10:
+
+<URL:http://rosegarden.sourceforge.net/tutorial/using-rosegarden/using-rosegarden.html>
+
+The Beginner Section
+--------------------
+
+Step One: Create The Voice List
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In order to create the *.rgd (device definition file) you need first to
+know what voices are available for your MIDI device, i.e. what instruments
+your keyboard or sound card can play.
+
+The best source is probably your manual. Alternatively you may want to
+search on the Internet.
+
+Voices are organized in banks. Within banks each voice is specified by
+a MIDI program change number. Banks are designated by using two numbers:
+MSB (Most Significant Byte) and LSB (Least Significant Byte).
+
+The MSB and LSB may take each any value between 0 and 127 (thus giving a
+total of 16384 banks). The program number takes values from 0 to 127 in
+the .rgd file but these will appear as 1 to 128 when viewed in your
+manual and also when they are loaded into Rosegarden's Bank editor.
+
+The bank with MSB=0 and LSB=0 is well defined and known as GM (General Midi).
+The first voice in this bank is the "Acoustic/Grand Piano", i.e. pianoforte
+and all 128 voices are well defined.
+
+So we will tell Rosegarden about this voice somewhat like:
+  At MSB=0, LSB=0, Program=0 you find "Acoustic/Grand Piano"
+
+The MIDI devices and software cares only about numbers, the name is for
+human consumption. I.e. you will use "Acoustic/Grand Piano" and the
+computer will understand "MSB=0, LSB=0, Program=0"
+
+Rosegarden stores this information in the *.rgd file.
+
+There are several ways you can tell Rosegarden what voices are available:
+1. Use Rosegarden itself, via the Studio -> Manage MIDI Devices menu
+   However consider that only the GM bank contains already 128 voices
+   and most keyboards or sound cards may well contain in excess of 500
+   voices. So entering by hand is a very tedious process.
+2. Edit the *.rgd file directly: possible but not for the beginner
+   (more about that below)
+3. Create a list of voices and then convert it to the *.rgd format
+
+We will take here the third approach.
+
+First create a file containing the list of all voices. You can use either
+any text editor you feel comfortable with  or any spreadsheet able to export
+in CSV (Comma Separated Values) format (any spreadsheet should be able to
+do this).
+
+The format of the file is very simple:
+a. Each line contains 5 parameters. Each parameter is separated from the
+   next by either whitespace (spaces, tabs) and/or commas (only one comma
+   between fields);
+b. Empty lines are ignored;
+c. You can add comments in any (reasonable) place. Comments start with
+   the "#" character and continue to the end of line.
+
+The list of the parameters is as follows:
+1. The first one is for your reference, it will be ignored in the final
+   output. You can put whatever you like except whitespaces and commas
+   (because they are separators) and "#" because it will be taken as a
+   comment. An example of what you can put in here is the voice number,
+   in order to keep track of what you have entered;
+2. The second one is the MSB, it is a integer between 0 and 127;
+3. The third one is the LSB, it is a integer between 0 and 127;
+4. The fourth one is the program change number, it is an integer between
+   0 and 127 (remember, this is displayed as 1 to 128 in Rosegarden and
+   in your manual);
+5. And finally the last one is the voice name. This field in particular
+   may contain whitespace and/or commas but not "#";
+You can optionally add comments after the fifth parameter.
+
+Example:
+
+    # This is a comment
+       # This is another comment
+
+    # GM Bank:
+    first 0 0 1 Grand Piano   # this is the first voice from the GM bank
+    2 ,   0 0, 2 Bright Piano
+
+If you want to save yourself some time and make sure that the data entered is
+correct you may proceed as follows:
+
+* First the manual in pdf format (it is available for the Yamaha keyboards
+  from their site, other manufacturers may have it; check you CD's as well)
+* Then try to see if you can copy & paste. You can do it from xpdf if the
+  pdf allows it (sadly the Yamaha manuals don't!). Save the pastings
+  into a text file.
+* If you can't then you are down to a qute tedious process: use ps2ascii
+  to convert to text.
+* Finally edit the text to transform it into a format as described above.
+
+It is still a tedious process but maybe less so than entering all voices
+from scratch. And very likey less error-prone.
+
+For keyboards in particular: It is highly advisable to use the same
+voice names as they appear on the LCD screen of the keyboard.
+
+If you used a text processor make sure you save the file as plain text
+(ASCII); if you use a spreadsheet make sure you save in CVS format.
+
+
+Step Two: Convert To *.rgd
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The next step involves converting the text file to the *.rgd format.
+Use the provided txt2rgd.py script as follows:
+
+    txt2rgd.py <input file> <output file>
+
+E.g.:
+
+    txt2rgd.py mylist.txt  sound_card.rgd
+
+This script will try to catch some possible errors. If it does report any
+errors then correct the offending line(s) and try again.
+
+Notes:
+1. txt2rgd.py is a Python script, you need Python 2.2 (or above) installed
+   on your system.
+2. the output file is overwritten if there was a previous version.
+3. the name of the output file must end with the ".rgd" extension.
+
+
+Step Three: Verify And Adjust
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Once you have generated the *.rgd file try to load it into Rosegarden, via
+Studio -> Manage MIDI Devices -> Import Device
+
+If it loads then you are basically done. It is likely that you may see
+some bank names as "000-112". This means the the script could not find
+a suitable name for the bank (the script tries to name the banks following
+the XG scheme).
+
+You can rename that bank by double-clicking on its name. When you are done
+click on the "Export Device" button.
+
+Once you are done and satisfied consider sharing it. There may be other
+users with the same keyboard/soundcard and they shouldn't duplicate the work.
+You can mail it to one of the Rosegarden developers, to be added to the
+current library. Free software grows from community contributions.
+
+
+The Advanced Section
+--------------------
+
+The *.rgd file is in gzipped XML format. You can gunzip it then edit with
+any text or XML editor of your choice. If you are using vim then you don't
+have to gunzip it first (it figures out for itself).
+
+Some things you may want to change in the file:
+
+1. In the device tag you may change the name. E.g.:
+
+    <device id="0" name="Yamaha PSR 550" type="midi">
+
+   (leave the id at "0")
+
+2. After the device and before the first instrument tag you may add a
+   librarian tag. E.g.:
+
+    <librarian name="Joe Schmoe" email="Joe.Schmoe@somewere.on.the.net"/>
+
+3. You may want to change the bank names directly here, it's easier.
+
+Note that some chars need to be replaced with XML friendly formats.
+Check the converter_table dictionary in the txt2rgd.py script for the
+current list of special chars and their replacement strings.
+
