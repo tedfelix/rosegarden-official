@@ -190,8 +190,8 @@
         <Action name="quantize_selection"/>
 	<Action name="manage_devices"/>
 	<Action name="audio_manager"/>
-        <Action name="audio_mixer"/>
         <Action name="midi_mixer"/>
+        <Action name="audio_mixer"/>
 </ToolBar>
 
 <ToolBar name="Transport Toolbar">
