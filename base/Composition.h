@@ -36,8 +36,8 @@
 namespace Rosegarden 
 {
 
-typedef std::map<int, Instrument*> instrumentcontainer;
-typedef std::map<int, Track*> trackcontainer;
+typedef std::map<unsigned int, Instrument*> instrumentcontainer;
+typedef std::map<unsigned int, Track*> trackcontainer;
 
 typedef instrumentcontainer::iterator instrumentiterator;
 typedef trackcontainer::iterator trackiterator;
@@ -87,8 +87,9 @@ public:
     //
     //  INSTRUMENT & TRACK
 
-    Track* getTrackByIndex(const int &track) { return m_tracks[track]; }
-    Instrument* getInstrumentByIndex(const int &instr)
+    Track* getTrackByIndex(const unsigned int &track)
+            { return m_tracks[track]; }
+    Instrument* getInstrumentByIndex(const unsigned int &instr)
             { return m_instruments[instr]; }
  
     trackcontainer* getTracks() { return &m_tracks; }

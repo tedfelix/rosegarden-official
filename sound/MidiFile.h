@@ -93,7 +93,7 @@ public:
     // Conversion in and out of Rosegarden
     //
     Rosegarden::Composition* convertToRosegarden();
-    void convertToMidi(const Rosegarden::Composition &comp);
+    void convertToMidi(Rosegarden::Composition &comp); // urch, no const
 
 private:
     std::string            m_filename;

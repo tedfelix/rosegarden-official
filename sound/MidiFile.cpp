@@ -54,20 +54,20 @@ using std::ends;
 using std::ios;
 
 MidiFile::MidiFile():m_filename("unnamed.mid"),
-		     m_timingDivision(0),
-		     m_format(MIDI_FILE_NOT_LOADED),
-		     m_numberOfTracks(0),
-		     m_trackByteCount(0),
-		     m_decrementCount(false)
+                     m_timingDivision(0),
+                     m_format(MIDI_FILE_NOT_LOADED),
+                     m_numberOfTracks(0),
+                     m_trackByteCount(0),
+                     m_decrementCount(false)
 {
 }
 
 MidiFile::MidiFile(const char *fn):m_filename(fn),
-				   m_timingDivision(0),
-				   m_format(MIDI_FILE_NOT_LOADED),
-				   m_numberOfTracks(0),
-				   m_trackByteCount(0),
-				   m_decrementCount(false)
+                                   m_timingDivision(0),
+                                   m_format(MIDI_FILE_NOT_LOADED),
+                                   m_numberOfTracks(0),
+                                   m_trackByteCount(0),
+                                   m_decrementCount(false)
 {
 }
 
@@ -85,9 +85,9 @@ MidiFile::midiBytesToLong(const string& bytes)
 {
     assert(bytes.length() == 4);
     long longRet = ((long)(((MidiByte)bytes[0]) << 24)) |
-	((long)(((MidiByte)bytes[1]) << 16)) |
-	((short)(((MidiByte)bytes[2]) << 8)) |
-	((short)((MidiByte)(bytes[3])));
+        ((long)(((MidiByte)bytes[1]) << 16)) |
+        ((short)(((MidiByte)bytes[2]) << 8)) |
+        ((short)((MidiByte)(bytes[3])));
 
     return(longRet);
 }
@@ -97,7 +97,7 @@ MidiFile::midiBytesToInt(const string& bytes)
 {
     assert(bytes.length() == 2);
     int intRet = ((short)(((MidiByte)bytes[0]) << 8)) |
-	((short)(((MidiByte)bytes[1])));
+        ((short)(((MidiByte)bytes[1])));
     return(intRet);
 }
 
@@ -117,24 +117,24 @@ MidiFile::getMidiBytes(ifstream* midiFile, const unsigned int &numberOfBytes)
 
     if (m_decrementCount && (numberOfBytes > (unsigned int)m_trackByteCount))
     {
-	cerr << "Attempt to get more bytes than allowed on Track - ( " <<
-	    numberOfBytes << " > " << m_trackByteCount << " )" << endl;
-	throw(std::string("Attempt to get more bytes than allowed on Track"));
+        cerr << "Attempt to get more bytes than allowed on Track - ( " <<
+            numberOfBytes << " > " << m_trackByteCount << " )" << endl;
+        throw(std::string("Attempt to get more bytes than allowed on Track"));
     }
 
     if (midiFile->eof())
     {
-	cerr << "MIDI file EOF - got " << stringRet.length() << " bytes out of "
-	     << numberOfBytes << endl;
-	throw(std::string("MIDI EOF encountered while reading"));
+        cerr << "MIDI file EOF - got " << stringRet.length() << " bytes out of "
+             << numberOfBytes << endl;
+        throw(std::string("MIDI EOF encountered while reading"));
     }
 
     while((stringRet.length() < numberOfBytes) && midiFile->read(&fileMidiByte, 1))
     {
-	stringRet += fileMidiByte;
+        stringRet += fileMidiByte;
 #ifdef MIDI_DEBUG
-	cout << " STR = " << (int)stringRet[stringRet.length()-1] <<
-	    " - " << (int) fileMidiByte << endl;
+        cout << " STR = " << (int)stringRet[stringRet.length()-1] <<
+            " - " << (int) fileMidiByte << endl;
 #endif
     }
 
@@ -143,15 +143,15 @@ MidiFile::getMidiBytes(ifstream* midiFile, const unsigned int &numberOfBytes)
     //
     if (stringRet.length() < numberOfBytes)
     {
-	stringRet = "";
-	cerr << "Attempt to read past file end - got " << stringRet.length() <<
-	    " bytes out of " << numberOfBytes << endl;
-	throw(std::string("Attempt to read part MIDI file end"));
+        stringRet = "";
+        cerr << "Attempt to read past file end - got " << stringRet.length() <<
+            " bytes out of " << numberOfBytes << endl;
+        throw(std::string("Attempt to read part MIDI file end"));
     }
 
     // decrement the byte count
     if (m_decrementCount)
-	m_trackByteCount -= stringRet.length();
+        m_trackByteCount -= stringRet.length();
 
     return stringRet;
 }
@@ -168,20 +168,20 @@ MidiFile::getNumberFromMidiBytes(ifstream* midiFile)
 
     if(!midiFile->eof())
     {
-	midiByte = getMidiBytes(midiFile, 1)[0];
+        midiByte = getMidiBytes(midiFile, 1)[0];
 
-	longRet = midiByte;
-	if(midiByte & 0x80 )
-	{
-	    longRet &= 0x7F;
-	    do
-	    {
-		midiByte = getMidiBytes(midiFile, 1)[0];
+        longRet = midiByte;
+        if(midiByte & 0x80 )
+        {
+            longRet &= 0x7F;
+            do
+            {
+                midiByte = getMidiBytes(midiFile, 1)[0];
 
-		longRet = (longRet << 7) + (midiByte & 0x7F);
-	    }
-	    while (!midiFile->eof() && (midiByte & 0x80));
-	}
+                longRet = (longRet << 7) + (midiByte & 0x7F);
+            }
+            while (!midiFile->eof() && (midiByte & 0x80));
+        }
     }
     return longRet;
 }
@@ -200,25 +200,25 @@ MidiFile::skipToNextTrack(ifstream *midiFile)
 
     while(!midiFile->eof() && (m_decrementCount == false ))
     {
-	buffer = getMidiBytes(midiFile, 4); 
+        buffer = getMidiBytes(midiFile, 4); 
 
 #if (__GNUC__ < 3)
-	if (buffer.compare(Rosegarden::MIDI_TRACK_HEADER, 0, 4) == 0)
+        if (buffer.compare(Rosegarden::MIDI_TRACK_HEADER, 0, 4) == 0)
 #else
-	    if (buffer.compare(0, 4, Rosegarden::MIDI_TRACK_HEADER) == 0)
+            if (buffer.compare(0, 4, Rosegarden::MIDI_TRACK_HEADER) == 0)
 #endif
 
-	    {
-		m_trackByteCount = midiBytesToLong(getMidiBytes(midiFile, 4));
-		m_decrementCount = true;
-	    }
+            {
+                m_trackByteCount = midiBytesToLong(getMidiBytes(midiFile, 4));
+                m_decrementCount = true;
+            }
 
     }
 
     if ( m_trackByteCount == 0 ) // we haven't found a track
-	return(false);
+        return(false);
     else
-	return(true);
+        return(true);
 }
 
 
@@ -238,60 +238,60 @@ MidiFile::open()
 
     try
     {
-	if (*midiFile)
-	{
-	    // Parse the MIDI header first.  The first 14 bytes of the file.
-	    if (!parseHeader(getMidiBytes(midiFile, 14)))
-	    {
-		m_format = MIDI_FILE_NOT_LOADED;
-		return(false);
-	    }
+        if (*midiFile)
+        {
+            // Parse the MIDI header first.  The first 14 bytes of the file.
+            if (!parseHeader(getMidiBytes(midiFile, 14)))
+            {
+                m_format = MIDI_FILE_NOT_LOADED;
+                return(false);
+            }
 
-	    for ( unsigned int i = 0; i < m_numberOfTracks; i++ )
-	    {
+            for ( unsigned int i = 0; i < m_numberOfTracks; i++ )
+            {
 
 #ifdef MIDI_DEBUG
-		std::cout << "Parsing Track " << i << endl;
+                std::cout << "Parsing Track " << i << endl;
 #endif
 
-		if(!skipToNextTrack(midiFile))
-		{
+                if(!skipToNextTrack(midiFile))
+                {
 #ifdef MIDI_DEBUG
-		    cerr << "Couldn't find Track " << i << endl;
+                    cerr << "Couldn't find Track " << i << endl;
 #endif
-		    m_format = MIDI_FILE_NOT_LOADED;
-		    return(false);
-		}
+                    m_format = MIDI_FILE_NOT_LOADED;
+                    return(false);
+                }
 
-		// Run through the events taking them into our internal
-		// representation.
-		if (!parseTrack(midiFile, i))
-		{
+                // Run through the events taking them into our internal
+                // representation.
+                if (!parseTrack(midiFile, i))
+                {
 #ifdef MIDI_DEBUG
-		    std::cerr << "Track " << i << " parsing failed" << endl;
+                    std::cerr << "Track " << i << " parsing failed" << endl;
 #endif
-		    m_format = MIDI_FILE_NOT_LOADED;
-		    return(false);
-		}
-	    }
-	}
-	else
-	{
+                    m_format = MIDI_FILE_NOT_LOADED;
+                    return(false);
+                }
+            }
+        }
+        else
+        {
 #ifdef MIDI_DEBUG
-	    std::cerr << "MidiFile::open - \"" << _filename <<
-		"\" not recognised as a MIDI file" << endl;
+            std::cerr << "MidiFile::open - \"" << _filename <<
+                "\" not recognised as a MIDI file" << endl;
 #endif
-	    m_format = MIDI_FILE_NOT_LOADED;
-	    return(false);
-	}
+            m_format = MIDI_FILE_NOT_LOADED;
+            return(false);
+        }
 
-	// Close the file now
-	midiFile->close();
+        // Close the file now
+        midiFile->close();
     }
     catch(std::string e)
     {
-	cout << "MidiFile::open() - caught exception - " << e << endl;
-	retOK = false;
+        cout << "MidiFile::open() - caught exception - " << e << endl;
+        retOK = false;
     }
 
     return(retOK);
@@ -307,36 +307,36 @@ MidiFile::parseHeader(const string &midiHeader)
     {
 
 #ifdef MIDI_DEBUG
-	std::cerr << "MidiFile::parseHeader - header undersized" << endl;
+        std::cerr << "MidiFile::parseHeader - header undersized" << endl;
 #endif
 
-	return(false);
+        return(false);
     }
 
 #if (__GNUC__ < 3)
     if (midiHeader.compare(Rosegarden::MIDI_FILE_HEADER, 0, 4) != 0)
 #else
-	if (midiHeader.compare(0, 4, Rosegarden::MIDI_FILE_HEADER) != 0)
+        if (midiHeader.compare(0, 4, Rosegarden::MIDI_FILE_HEADER) != 0)
 #endif
 
-	{
+        {
 
 #ifdef MIDI_DEBUG
-	    std::cerr << "MidiFile::parseHeader - header not found or malformed"
-		      << endl;
+            std::cerr << "MidiFile::parseHeader - header not found or malformed"
+                      << endl;
 #endif
 
-	    return(false);
-	}
+            return(false);
+        }
 
     if(midiBytesToLong(midiHeader.substr(4,4)) != 6L)
     {
 
 #ifdef MIDI_DEBUG
-	std::cerr << "MidiFile::parseHeader - header length incorrect" << endl;
+        std::cerr << "MidiFile::parseHeader - header length incorrect" << endl;
 #endif
 
-	return(false);
+        return(false);
     }
 
     m_format = (MIDIFileFormatType) midiBytesToInt(midiHeader.substr(8,2));
@@ -347,11 +347,11 @@ MidiFile::parseHeader(const string &midiHeader)
     {
 
 #ifdef MIDI_DEBUG
-	std::cerr << "MidiFile::parseHeader - can't load sequential track file"
-		  << endl;
+        std::cerr << "MidiFile::parseHeader - can't load sequential track file"
+                  << endl;
 #endif
 
-	return(false);
+        return(false);
     }
   
 
@@ -359,7 +359,7 @@ MidiFile::parseHeader(const string &midiHeader)
     {
 
 #ifdef MIDI_DEBUG
-	std::cerr << "MidiFile::parseHeader - Uses SMPTE timing" << endl;
+        std::cerr << "MidiFile::parseHeader - Uses SMPTE timing" << endl;
 #endif
 
     }
@@ -383,75 +383,75 @@ MidiFile::parseTrack(ifstream* midiFile, const unsigned int &trackNum)
 
     while (!midiFile->eof() && ( m_trackByteCount > 0 ) )
     {
-	deltaTime = getNumberFromMidiBytes(midiFile);
+        deltaTime = getNumberFromMidiBytes(midiFile);
 
 #ifdef MIDI_DEBUG
-	std::cout << "deltaTime = " << deltaTime << endl;
+        std::cout << "deltaTime = " << deltaTime << endl;
 #endif
 
-	// Get a single byte
-	midiByte = (MidiByte) getMidiBytes(midiFile, 1)[0];
+        // Get a single byte
+        midiByte = (MidiByte) getMidiBytes(midiFile, 1)[0];
 
-	if (!(midiByte & MIDI_STATUS_BYTE_MASK))
-	{
-	    midiFile->seekg(-1, ios::cur);
-	    m_trackByteCount++;
-	}
-	else
-	    eventCode = midiByte;
+        if (!(midiByte & MIDI_STATUS_BYTE_MASK))
+        {
+            midiFile->seekg(-1, ios::cur);
+            m_trackByteCount++;
+        }
+        else
+            eventCode = midiByte;
 
-	if (eventCode == MIDI_FILE_META_EVENT)
-	{ 
-	    eventCode = getMidiBytes(midiFile,1)[0];
-	    messageLength = getNumberFromMidiBytes(midiFile);
-	    metaMessage = getMidiBytes(midiFile, messageLength);
+        if (eventCode == MIDI_FILE_META_EVENT)
+        { 
+            eventCode = getMidiBytes(midiFile,1)[0];
+            messageLength = getNumberFromMidiBytes(midiFile);
+            metaMessage = getMidiBytes(midiFile, messageLength);
 
-	    MidiEvent e(deltaTime, MIDI_FILE_META_EVENT, eventCode, metaMessage);
+            MidiEvent e(deltaTime, MIDI_FILE_META_EVENT, eventCode, metaMessage);
 
-	    m_midiComposition[trackNum].push_back(e);
-	}
-	else
-	{
+            m_midiComposition[trackNum].push_back(e);
+        }
+        else
+        {
 
-	    // We must declare the MidiEvent here as a pointer and then new it
-	    // inside the switch to keep the compiler happy.
-	    //
-	    MidiEvent *midiEvent;
+            // We must declare the MidiEvent here as a pointer and then new it
+            // inside the switch to keep the compiler happy.
+            //
+            MidiEvent *midiEvent;
 
-	    switch (eventCode & MIDI_MESSAGE_TYPE_MASK)
-	    {
-	    case MIDI_NOTE_ON:
-	    case MIDI_NOTE_OFF:
-	    case MIDI_POLY_AFTERTOUCH:
-	    case MIDI_CTRL_CHANGE:
-	    case MIDI_PITCH_BEND:
+            switch (eventCode & MIDI_MESSAGE_TYPE_MASK)
+            {
+            case MIDI_NOTE_ON:
+            case MIDI_NOTE_OFF:
+            case MIDI_POLY_AFTERTOUCH:
+            case MIDI_CTRL_CHANGE:
+            case MIDI_PITCH_BEND:
 
-		data1 = (MidiByte) getMidiBytes(midiFile, 1)[0];
-		data2 = (MidiByte) getMidiBytes(midiFile, 1)[0];
+                data1 = (MidiByte) getMidiBytes(midiFile, 1)[0];
+                data2 = (MidiByte) getMidiBytes(midiFile, 1)[0];
 
-		// create and store our event
-		midiEvent = new MidiEvent(deltaTime, eventCode, data1, data2);
-		m_midiComposition[trackNum].push_back(*midiEvent);
-		delete(midiEvent);
+                // create and store our event
+                midiEvent = new MidiEvent(deltaTime, eventCode, data1, data2);
+                m_midiComposition[trackNum].push_back(*midiEvent);
+                delete(midiEvent);
 
-		break;
+                break;
 
-	    case MIDI_PROG_CHANGE:
-	    case MIDI_CHNL_AFTERTOUCH:
-		data1 = (MidiByte) getMidiBytes(midiFile, 1)[0];
+            case MIDI_PROG_CHANGE:
+            case MIDI_CHNL_AFTERTOUCH:
+                data1 = (MidiByte) getMidiBytes(midiFile, 1)[0];
 
-		// create and store our event
-		midiEvent = new MidiEvent(deltaTime, eventCode, data1);
-		m_midiComposition[trackNum].push_back(*midiEvent);
-		delete(midiEvent);
+                // create and store our event
+                midiEvent = new MidiEvent(deltaTime, eventCode, data1);
+                m_midiComposition[trackNum].push_back(*midiEvent);
+                delete(midiEvent);
 
-		break;
+                break;
 
-	    default:
-		std::cerr << "MidiFile::parseTrack - Unsupported MIDI Event" << endl;
-		break;
-	    } 
-	}
+            default:
+                std::cerr << "MidiFile::parseTrack - Unsupported MIDI Event" << endl;
+                break;
+            } 
+        }
     }
 
     return(true);
@@ -508,70 +508,70 @@ MidiFile::convertToRosegarden()
 
     for ( unsigned int i = 0; i < m_numberOfTracks; i++ )
     {
-	segmentTime = 0;
-	notesOnTrack = false;
+        segmentTime = 0;
+        notesOnTrack = false;
         trackName = string("Imported MIDI");
 
-	// Convert the deltaTime to an absolute time since
-	// the start of the segment.  The addTime method 
-	// returns the sum of the current Midi Event delta
-	// time plus the argument.
-	//
-	for ( midiEvent = (m_midiComposition[i].begin());
-	      midiEvent != (m_midiComposition[i].end());
-	      ++midiEvent )
-	{
-	    segmentTime = midiEvent->addTime(segmentTime);
-	}
+        // Convert the deltaTime to an absolute time since
+        // the start of the segment.  The addTime method 
+        // returns the sum of the current Midi Event delta
+        // time plus the argument.
+        //
+        for ( midiEvent = (m_midiComposition[i].begin());
+              midiEvent != (m_midiComposition[i].end());
+              ++midiEvent )
+        {
+            segmentTime = midiEvent->addTime(segmentTime);
+        }
 
-	// Consolidate NOTE ON and NOTE OFF events into a
-	// NOTE ON with a duration and delete the NOTE OFFs.
-	//
-	for ( midiEvent = (m_midiComposition[i].begin());
-	      midiEvent != (m_midiComposition[i].end());
-	      ++midiEvent )
-	{
-	    if (midiEvent->messageType() == MIDI_NOTE_ON)
-	    {
-		// Flag that we've found notes on this track
+        // Consolidate NOTE ON and NOTE OFF events into a
+        // NOTE ON with a duration and delete the NOTE OFFs.
+        //
+        for ( midiEvent = (m_midiComposition[i].begin());
+              midiEvent != (m_midiComposition[i].end());
+              ++midiEvent )
+        {
+            if (midiEvent->messageType() == MIDI_NOTE_ON)
+            {
+                // Flag that we've found notes on this track
                 //
-		if (!notesOnTrack) notesOnTrack = true;
+                if (!notesOnTrack) notesOnTrack = true;
 
-		noteOffFound = false;
+                noteOffFound = false;
 
-		for ( noteOffSearch = midiEvent; 
-		      noteOffSearch != (m_midiComposition[i].end());
-		      noteOffSearch++ )
-		{
-		    if ( ( midiEvent->channelNumber() == noteOffSearch->channelNumber() )
-			 && ( ( noteOffSearch->messageType() == MIDI_NOTE_OFF ) ||
-			      ( ( noteOffSearch->messageType() == MIDI_NOTE_ON ) &&
-				( noteOffSearch->velocity() == 0x00 ) ) ) )
-		    {
-			midiEvent->duration(noteOffSearch->time() - midiEvent->time());
-			m_midiComposition[i].erase(noteOffSearch);
-			noteOffFound = true;
-			break;
-		    }
+                for ( noteOffSearch = midiEvent; 
+                      noteOffSearch != (m_midiComposition[i].end());
+                      noteOffSearch++ )
+                {
+                    if ( ( midiEvent->channelNumber() == noteOffSearch->channelNumber() )
+                         && ( ( noteOffSearch->messageType() == MIDI_NOTE_OFF ) ||
+                              ( ( noteOffSearch->messageType() == MIDI_NOTE_ON ) &&
+                                ( noteOffSearch->velocity() == 0x00 ) ) ) )
+                    {
+                        midiEvent->duration(noteOffSearch->time() - midiEvent->time());
+                        m_midiComposition[i].erase(noteOffSearch);
+                        noteOffFound = true;
+                        break;
+                    }
 
-		    // set duration to the length of the segment if not found
-		    if (noteOffFound == false)
-		    {
-			midiEvent->duration(noteOffSearch->time() - midiEvent->time());
-		    }
-		}
-	    }
-	}
+                    // set duration to the length of the segment if not found
+                    if (noteOffFound == false)
+                    {
+                        midiEvent->duration(noteOffSearch->time() - midiEvent->time());
+                    }
+                }
+            }
+        }
 
-	// We parse the track even if there are known to be no notes
-	// on it, so as to handle tempo and time-signature events
-	// correctly.  But we only create a segment to write it to if
-	// there are some notes to write.
-	
-	if (notesOnTrack) {
-	    rosegardenSegment = new Segment;
-	    rosegardenSegment->setTrack(compositionTrack);
-	    rosegardenSegment->setStartIndex(0);
+        // We parse the track even if there are known to be no notes
+        // on it, so as to handle tempo and time-signature events
+        // correctly.  But we only create a segment to write it to if
+        // there are some notes to write.
+        
+        if (notesOnTrack) {
+            rosegardenSegment = new Segment;
+            rosegardenSegment->setTrack(compositionTrack);
+            rosegardenSegment->setStartIndex(0);
 
             track = new Rosegarden::Track(compositionTrack,
                                           false,
@@ -581,210 +581,213 @@ MidiFile::convertToRosegarden()
                                           0);
 
             composition->addTrack(track);
-	    // add the Segment to the Composition and increment the
-	    // Rosegarden segment number
-	    //
-	    composition->addSegment(rosegardenSegment);
-	    compositionTrack++;
+            // add the Segment to the Composition and increment the
+            // Rosegarden segment number
+            //
+            composition->addSegment(rosegardenSegment);
+            compositionTrack++;
 
-	} else {
-	    rosegardenSegment = 0;
-	}
+        } else {
+            rosegardenSegment = 0;
+        }
 
-	// rest creation token needs to be reset here
-	//
-	endOfLastNote = 0;
+        // rest creation token needs to be reset here
+        //
+        endOfLastNote = 0;
 
-	for ( midiEvent = (m_midiComposition[i].begin());
-	      midiEvent != (m_midiComposition[i].end());
-	      ++midiEvent )
-	{
-	    // [cc] -- avoid floating-point
-	    rosegardenTime =
-		((timeT)midiEvent->time() * crotchetTime) / divisor;
-	    rosegardenDuration =
-		((timeT)midiEvent->duration() * crotchetTime) / divisor;
+        for ( midiEvent = (m_midiComposition[i].begin());
+              midiEvent != (m_midiComposition[i].end());
+              ++midiEvent )
+        {
+            // [cc] -- avoid floating-point
+            rosegardenTime =
+                ((timeT)midiEvent->time() * crotchetTime) / divisor;
+            rosegardenDuration =
+                ((timeT)midiEvent->duration() * crotchetTime) / divisor;
 
-	    if (midiEvent->isMeta())
-	    {
-		switch(midiEvent->metaEventCode())
-		{
-		case MIDI_SEQUENCE_NUMBER:
-		    break;
+            if (midiEvent->isMeta())
+            {
+                switch(midiEvent->metaEventCode())
+                {
+                case MIDI_SEQUENCE_NUMBER:
+                    break;
 
-		case MIDI_TEXT_EVENT:
-		    break;
+                case MIDI_TEXT_EVENT:
+                    break;
 
-		case MIDI_COPYRIGHT_NOTICE:
-		    break;
+                case MIDI_COPYRIGHT_NOTICE:
+                    break;
                     
-		case MIDI_TRACK_NAME:
+                case MIDI_TRACK_NAME:
                     if (rosegardenSegment)
                         track->setLabel(midiEvent->metaMessage());
-		    break;
+                    break;
 
-		case MIDI_INSTRUMENT_NAME:
-		    break;
+                case MIDI_INSTRUMENT_NAME:
+                    break;
 
-		case MIDI_LYRIC:
-		    break;
+                case MIDI_LYRIC:
+                    break;
 
-		case MIDI_TEXT_MARKER:
-		    break;
+                case MIDI_TEXT_MARKER:
+                    break;
 
-		case MIDI_CUE_POINT:
-		    break;
+                case MIDI_CUE_POINT:
+                    break;
 
-		case MIDI_CHANNEL_PREFIX:
-		    break;
+                case MIDI_CHANNEL_PREFIX:
+                    break;
 
-		case MIDI_CHANNEL_PREFIX_OR_PORT:
-		    break;
+                case MIDI_CHANNEL_PREFIX_OR_PORT:
+                    break;
 
-		case MIDI_END_OF_TRACK:
-		    if (rosegardenSegment) {
-			if (endOfLastNote < rosegardenTime) {
-			    rosegardenSegment->fillWithRests(rosegardenTime);
-			}
-		    }
+                case MIDI_END_OF_TRACK:
+                    if (rosegardenSegment) {
+                        if (endOfLastNote < rosegardenTime) {
+                            rosegardenSegment->fillWithRests(rosegardenTime);
+                        }
+                    }
 
-		    break;
+                    break;
 
-		case MIDI_SET_TEMPO:
+                case MIDI_SET_TEMPO:
 
-		{
-		    unsigned char m0 = midiEvent->metaMessage()[0];
-		    unsigned char m1 = midiEvent->metaMessage()[1];
-		    unsigned char m2 = midiEvent->metaMessage()[2];
+                    {
+                        MidiByte m0 = midiEvent->metaMessage()[0];
+                        MidiByte m1 = midiEvent->metaMessage()[1];
+                        MidiByte m2 = midiEvent->metaMessage()[2];
 
-		    long tempo = (((m0 << 8) + m1) << 8) + m2;
-		    tempo = 60000000 / tempo;
+                        long tempo = (((m0 << 8) + m1) << 8) + m2;
+                        
+                        if (tempo != 0)
+                        {
+                            tempo = 60000000 / tempo;
+                            composition->addTempo(rosegardenTime, tempo);
+                        }
+                    }
 
-		    composition->addTempo(rosegardenTime, tempo);
-		}
+                    break;
 
-		    break;
+                case MIDI_SMPTE_OFFSET:
+                    break;
 
-		case MIDI_SMPTE_OFFSET:
-		    break;
+                case MIDI_TIME_SIGNATURE:
 
-		case MIDI_TIME_SIGNATURE:
+                    numerator = (int) midiEvent->metaMessage()[0];
+                    denominator = 1 << ((int) midiEvent->metaMessage()[1]);
 
-		    numerator = (int) midiEvent->metaMessage()[0];
-		    denominator = 1 << ((int) midiEvent->metaMessage()[1]);
+                    if (numerator == 0 ) numerator = 4;
+                    if (denominator == 0 ) denominator = 4;
 
-		    if (numerator == 0 ) numerator = 4;
-		    if (denominator == 0 ) denominator = 4;
+                    composition->addTimeSignature
+                        (rosegardenTime,
+                         Rosegarden::TimeSignature(numerator, denominator));
 
-		    composition->addTimeSignature
-			(rosegardenTime,
-			 Rosegarden::TimeSignature(numerator, denominator));
+                    break;
 
-		    break;
+                case MIDI_KEY_SIGNATURE:
 
-		case MIDI_KEY_SIGNATURE:
+                    if (!rosegardenSegment) break;
 
-		    if (!rosegardenSegment) break;
+                    // get the details
+                    accidentals = (int) midiEvent->metaMessage()[0];
+                    isMinor     = (int) midiEvent->metaMessage()[1];
+                    isSharp     = accidentals < 0 ?        false  :  true;
+                    accidentals = accidentals < 0 ?  -accidentals :  accidentals;
 
-		    // get the details
-		    accidentals = (int) midiEvent->metaMessage()[0];
-		    isMinor     = (int) midiEvent->metaMessage()[1];
-		    isSharp     = accidentals < 0 ?        false  :  true;
-		    accidentals = accidentals < 0 ?  -accidentals :  accidentals;
+                    // create and insert the key event
+                    //
+                    rosegardenEvent = Rosegarden::Key
+                        (accidentals, isSharp, isMinor).getAsEvent(rosegardenTime);
+                    rosegardenSegment->insert(rosegardenEvent);
 
-		    // create and insert the key event
-		    //
-		    rosegardenEvent = Rosegarden::Key
-			(accidentals, isSharp, isMinor).getAsEvent(rosegardenTime);
-		    rosegardenSegment->insert(rosegardenEvent);
+                    break;
 
-		    break;
+                case MIDI_SEQUENCER_SPECIFIC:
+                    break;
 
-		case MIDI_SEQUENCER_SPECIFIC:
-		    break;
+                default:
+                    break;
+                } 
 
-		default:
-		    break;
-		} 
-
-	    }
+            }
 
 
-	    switch(midiEvent->messageType())
-	    {
-	    case MIDI_NOTE_ON:
+            switch(midiEvent->messageType())
+            {
+            case MIDI_NOTE_ON:
 
-		if (!rosegardenSegment) break;
+                if (!rosegardenSegment) break;
 
-		// insert rests if we need them
-		//
-		if (endOfLastNote < rosegardenTime ) {
-		    rosegardenSegment->fillWithRests(rosegardenTime);
-		}
+                // insert rests if we need them
+                //
+                if (endOfLastNote < rosegardenTime ) {
+                    rosegardenSegment->fillWithRests(rosegardenTime);
+                }
 
-		endOfLastNote = rosegardenTime + rosegardenDuration;
+                endOfLastNote = rosegardenTime + rosegardenDuration;
 
-		// create and populate event
-		rosegardenEvent = new Event(Rosegarden::Note::EventType);
-		rosegardenEvent->setAbsoluteTime(rosegardenTime);
-		rosegardenEvent->setType(Note::EventType);
-		rosegardenEvent->set<Int>(BaseProperties::PITCH, midiEvent->note());
-		rosegardenEvent->set<Int>(BaseProperties::VELOCITY, midiEvent->velocity());
-		rosegardenEvent->setDuration(rosegardenDuration);
+                // create and populate event
+                rosegardenEvent = new Event(Rosegarden::Note::EventType);
+                rosegardenEvent->setAbsoluteTime(rosegardenTime);
+                rosegardenEvent->setType(Note::EventType);
+                rosegardenEvent->set<Int>(BaseProperties::PITCH, midiEvent->note());
+                rosegardenEvent->set<Int>(BaseProperties::VELOCITY, midiEvent->velocity());
+                rosegardenEvent->setDuration(rosegardenDuration);
 
-		{
-		    // insert into Segment
-		    Segment::iterator loc =
-			rosegardenSegment->insert(rosegardenEvent);
+                {
+                    // insert into Segment
+                    Segment::iterator loc =
+                        rosegardenSegment->insert(rosegardenEvent);
 
-		    // [cc] -- a bit of an experiment
-		    SegmentNotationHelper helper(*rosegardenSegment);
-		    if (!helper.isViable(rosegardenEvent)) {
-			helper.makeNoteViable(loc);
-		    }
-		}
-		break;
+                    // [cc] -- a bit of an experiment
+                    SegmentNotationHelper helper(*rosegardenSegment);
+                    if (!helper.isViable(rosegardenEvent)) {
+                        helper.makeNoteViable(loc);
+                    }
+                }
+                break;
 
-	    case MIDI_NOTE_OFF:
-		std::cout << "MidiFile::convertToRosegarden - MIDI_OFF should not exist here!" << endl;
-		break;
+            case MIDI_NOTE_OFF:
+                std::cout << "MidiFile::convertToRosegarden - MIDI_OFF should not exist here!" << endl;
+                break;
 
-	    case MIDI_POLY_AFTERTOUCH:
-		break;
+            case MIDI_POLY_AFTERTOUCH:
+                break;
 
-	    case MIDI_CTRL_CHANGE:
-		break;
+            case MIDI_CTRL_CHANGE:
+                break;
 
-	    case MIDI_PROG_CHANGE:
-		break;
+            case MIDI_PROG_CHANGE:
+                break;
 
-	    case MIDI_CHNL_AFTERTOUCH:
-		break;
+            case MIDI_CHNL_AFTERTOUCH:
+                break;
 
-	    case MIDI_PITCH_BEND:
-		break;
+            case MIDI_PITCH_BEND:
+                break;
 
-	    default:
-		//cout << "Can't create Rosegarden event for unknown MIDI event"
-		//<< endl;
-		break;
-	    }
-	}
+            default:
+                //cout << "Can't create Rosegarden event for unknown MIDI event"
+                //<< endl;
+                break;
+            }
+        }
 
-	// [cc]
+        // [cc]
 
-	if (rosegardenSegment) {
+        if (rosegardenSegment) {
 
-	    SegmentNotationHelper helper(*rosegardenSegment);
+            SegmentNotationHelper helper(*rosegardenSegment);
 
-	    rosegardenSegment->insert
-		(helper.guessClef(rosegardenSegment->begin(),
-				  rosegardenSegment->end()).getAsEvent(0));
+            rosegardenSegment->insert
+                (helper.guessClef(rosegardenSegment->begin(),
+                                  rosegardenSegment->end()).getAsEvent(0));
 
-	    helper.autoBeam(rosegardenSegment->begin(),
-			    rosegardenSegment->end(),
-			    BaseProperties::GROUP_TYPE_BEAMED);
-	}
+            helper.autoBeam(rosegardenSegment->begin(),
+                            rosegardenSegment->end(),
+                            BaseProperties::GROUP_TYPE_BEAMED);
+        }
 
     }
 
@@ -819,7 +822,7 @@ MidiFile::convertToRosegarden()
 //
 //
 void
-MidiFile::convertToMidi(const Rosegarden::Composition &comp)
+MidiFile::convertToMidi(Rosegarden::Composition &comp)
 {
     MidiEvent *midiEvent;
     int trackNumber = 0;
@@ -831,10 +834,14 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
     // [cc] int rather than floating point
     //
     m_timingDivision = Note(Note::Crotchet).getDuration();
+    timeT crotchetDuration = Note(Note::Crotchet).getDuration();
 
+
+    // Export as this format only
+    //
     m_format = MIDI_SIMULTANEOUS_TRACK_FILE;
 
-    // Clear out anything we have stored in this object already.
+    // Clear out the store
     //
     m_midiComposition.clear();
 
@@ -842,70 +849,87 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
     // file META information - this will get written out just like
     // any other MIDI track.
     //
-    //
     midiEvent = new MidiEvent(0, MIDI_FILE_META_EVENT, MIDI_TEXT_MARKER,
-			      "Created by Rosegarden 4.0");
+                              "Created by Rosegarden 4.0");
 
     m_midiComposition[trackNumber].push_back(*midiEvent);
 
     midiEvent = new MidiEvent(0, MIDI_FILE_META_EVENT, MIDI_TEXT_MARKER,
-			      "http://rosegarden.sourceforge.net");
+                              "http://rosegarden.sourceforge.net");
 
     m_midiComposition[trackNumber].push_back(*midiEvent);
 
-    midiEvent = new MidiEvent(0, MIDI_FILE_META_EVENT, MIDI_SET_TEMPO,
-			      (int)comp.getTempo());
-
-    m_midiComposition[trackNumber].push_back(*midiEvent);
-
-    trackNumber = 1;
-
-    // Our Composition to MIDI timing factor
+    // Insert tempo events - this isn't working yet!
+    // We're inserting these events wrongly but for the moment
+    // I can't see how.
     //
+    //
+    std::pair<timeT, long> tempo;
+    for (int i = 0; i < comp.getTempoChangeCount(); i++)
+    {
+        tempo = comp.getRawTempoChange(i);
 
-    // [cc] -- avoiding floating-point
-    timeT crotchetDuration = Note(Note::Crotchet).getDuration();
+        midiEventAbsoluteTime = tempo.first * m_timingDivision
+                                 / crotchetDuration;
 
-#ifdef MIDI_DEBUG
-    cout << "TIMING DIVISION = " << _timingDivision << endl;
-    cout << "TIMING FACTOR   = " << timingFactor << endl;
-#endif 
+        long tempoValue = (long) ( tempo.second / 60.0 );
+        tempoValue = 60000000 / tempoValue;
+
+        string tempoString;
+        tempoString += (MidiByte) ( tempoValue & 0xFF0000 );
+        tempoString += (MidiByte) ( tempoValue & 0x00FF00 );
+        tempoString += (MidiByte) ( tempoValue & 0x0000FF );
+
+        midiEvent = new MidiEvent(midiEventAbsoluteTime,
+                                  MIDI_FILE_META_EVENT,
+                                  MIDI_SET_TEMPO,
+                                  tempoString);
+        //m_midiComposition[trackNumber].push_back(*midiEvent);
+    }
+
+    // first track proper
+    //
+    trackNumber++;
 
     // In pass one just insert all events including new NOTE OFFs at the right
     // absolute times.
     //
     for (Rosegarden::Composition::const_iterator trk = comp.begin();
-	 trk != comp.end(); ++trk)
+         trk != comp.end(); ++trk)
     {
-	// We use this later to get NOTE durations
-	//
-	SegmentPerformanceHelper helper(**trk);
+        // We use this later to get NOTE durations
+        //
+        SegmentPerformanceHelper helper(**trk);
 
-	{
-	    stringstream trackName;
-	    // insert a track name
-	    trackName << "Track " << trackNumber << ends;
+        {
+            stringstream trackName;
+            // insert a track name
+            trackName << "Track " << trackNumber << ends;
 
-	    midiEvent = new MidiEvent(0, MIDI_FILE_META_EVENT, MIDI_TRACK_NAME, trackName.str());
-	    m_midiComposition[trackNumber].push_front(*midiEvent);
+            midiEvent = new MidiEvent(0,
+                                      MIDI_FILE_META_EVENT,
+                                      MIDI_TRACK_NAME,
+                                      //trackName.str());
+                          comp.getTrackByIndex((*trk)->getTrack())->getLabel());
+            m_midiComposition[trackNumber].push_front(*midiEvent);
 
-	    // insert a program change
-	    midiEvent = new MidiEvent(0, MIDI_PROG_CHANGE | midiChannel, 0);
-	    m_midiComposition[trackNumber].push_front(*midiEvent);
-	}
+            // insert a program change
+            midiEvent = new MidiEvent(0, MIDI_PROG_CHANGE | midiChannel, 0);
+            m_midiComposition[trackNumber].push_front(*midiEvent);
+        }
 
  
-	for (Rosegarden::Segment::iterator el = (*trk)->begin();
-	     el != (*trk)->end(); ++el)
-	{
+        for (Rosegarden::Segment::iterator el = (*trk)->begin();
+             el != (*trk)->end(); ++el)
+        {
 
-	    if ((*el)->isa(Note::EventType))
-	    {
-		// Set delta time temporarily to absolute time for this event.
-		//
-		// [cc] -- avoiding floating-point
-		midiEventAbsoluteTime =
-		    (*el)->getAbsoluteTime() * m_timingDivision / crotchetDuration;
+            if ((*el)->isa(Note::EventType))
+            {
+                // Set delta time temporarily to absolute time for this event.
+                //
+                // [cc] -- avoiding floating-point
+                midiEventAbsoluteTime =
+                    (*el)->getAbsoluteTime() * m_timingDivision / crotchetDuration;
                 try
                 {
                     midiVelocity = (*el)->get<Int>(BaseProperties::VELOCITY);
@@ -918,50 +942,45 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
                     midiVelocity = 127;
                 }
                               
-		// insert the NOTE_ON at the appropriate channel
-		//
-		midiEvent = new MidiEvent(midiEventAbsoluteTime,
-					MIDI_NOTE_ON + midiChannel,
+                // insert the NOTE_ON at the appropriate channel
+                //
+                midiEvent = new MidiEvent(midiEventAbsoluteTime,
+                                        MIDI_NOTE_ON + midiChannel,
                                         (*el)->get<Int>(BaseProperties::PITCH),
                                         midiVelocity);
 
-		m_midiComposition[trackNumber].push_back(*midiEvent);
+                m_midiComposition[trackNumber].push_back(*midiEvent);
 
-		// Get the sounding time for the matching NOTE_OFF.
-		// We use SegmentPerformanceHelper::getSoundingDuration()
-		// to work out the tied duration of the NOTE.
-		//
-		// [cc] avoiding floating-point
-		midiEventAbsoluteTime +=
-		    helper.getSoundingDuration(el) * m_timingDivision / crotchetDuration;
+                // Get the sounding time for the matching NOTE_OFF.
+                // We use SegmentPerformanceHelper::getSoundingDuration()
+                // to work out the tied duration of the NOTE.
+                //
+                // [cc] avoiding floating-point
+                midiEventAbsoluteTime +=
+                    helper.getSoundingDuration(el) * m_timingDivision / crotchetDuration;
 
-		// insert the matching NOTE OFF
-		//
-		midiEvent = new MidiEvent(midiEventAbsoluteTime,
-					  MIDI_NOTE_OFF + midiChannel,
-					  (*el)->get<Int>(BaseProperties::PITCH),
-					  127);
+                // insert the matching NOTE OFF
+                //
+                midiEvent = new MidiEvent(midiEventAbsoluteTime,
+                                          MIDI_NOTE_OFF + midiChannel,
+                                          (*el)->get<Int>(BaseProperties::PITCH),
+                                          127);
 
-		m_midiComposition[trackNumber].push_back(*midiEvent);
+                m_midiComposition[trackNumber].push_back(*midiEvent);
 
-	    }
-	    else if ((*el)->isa(Note::EventRestType))
-	    {
-		// skip
-	    }
-	    else
-	    {  
-		// skip
-	    }
+            }
+            else if ((*el)->isa(Note::EventRestType))
+            {
+                // skip
+            }
+            else
+            {  
+                // skip
+            }
 
-	}
+        }
 
-	// rotate around to new MIDI channel
-	//midiChannel++;
-	//midiChannel %= 16;
-
-	// increment track number
-	trackNumber++;
+        trackNumber++;
     }
 
     // Setup number of tracks in the daddy object
@@ -979,27 +998,27 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
 
     for (unsigned int i = 0; i < m_numberOfTracks; i++)
     {
-	lastMidiTime = 0;
+        lastMidiTime = 0;
 
-	// First sort the list
-	//
-	m_midiComposition[i].sort();
+        // First sort the list
+        //
+        m_midiComposition[i].sort();
 
-	// insert end of track event
-	endOfSegmentTime = m_midiComposition[i].end()->time();
+        // insert end of track event
+        endOfSegmentTime = m_midiComposition[i].end()->time();
 
-	midiEvent = new MidiEvent(endOfSegmentTime, MIDI_FILE_META_EVENT,
-				  MIDI_END_OF_TRACK, "");
+        midiEvent = new MidiEvent(endOfSegmentTime, MIDI_FILE_META_EVENT,
+                                  MIDI_END_OF_TRACK, "");
 
-	m_midiComposition[i].push_back(*midiEvent);
+        m_midiComposition[i].push_back(*midiEvent);
 
-	for ( midiEventIt = (m_midiComposition[i].begin());
-	      midiEventIt != (m_midiComposition[i].end()); midiEventIt++ )
-	{
-	    midiEventAbsoluteTime = midiEventIt->time() - lastMidiTime;
-	    lastMidiTime = midiEventIt->time();
-	    midiEventIt->setTime(midiEventAbsoluteTime);
-	}
+        for ( midiEventIt = (m_midiComposition[i].begin());
+              midiEventIt != (m_midiComposition[i].end()); midiEventIt++ )
+        {
+            midiEventAbsoluteTime = midiEventIt->time() - lastMidiTime;
+            lastMidiTime = midiEventIt->time();
+            midiEventIt->setTime(midiEventAbsoluteTime);
+        }
     }
 
     return;
@@ -1067,20 +1086,20 @@ MidiFile::longToVarBuffer(std::string &buffer, const unsigned long &number)
     //
     while  ((inNumber >>= 7 ) > 0)
     {
-	outNumber <<= 8;
-	outNumber |= 0x80;
-	outNumber += (inNumber & 0x7f);
+        outNumber <<= 8;
+        outNumber |= 0x80;
+        outNumber += (inNumber & 0x7f);
     }
 
     // Now move the converted number out onto the buffer
     //
     while(true)
     {
-	buffer += (MidiByte) ( outNumber & 0xff );
-	if ( outNumber & 0x80 )
-	    outNumber >>= 8;
-	else
-	    break;
+        buffer += (MidiByte) ( outNumber & 0xff );
+        if ( outNumber & 0x80 )
+            outNumber >>= 8;
+        else
+            break;
     }
 
 }
@@ -1134,68 +1153,68 @@ MidiFile::writeTrack(std::ofstream* midiFile, const unsigned int &trackNumber)
     string trackBuffer;
 
     for ( midiEvent = (m_midiComposition[trackNumber].begin());
-	  midiEvent != (m_midiComposition[trackNumber].end()); ++midiEvent )
+          midiEvent != (m_midiComposition[trackNumber].end()); ++midiEvent )
     {
-	// Write the time to the buffer in MIDI format
-	//
-	//
-	longToVarBuffer(trackBuffer, midiEvent->time());
+        // Write the time to the buffer in MIDI format
+        //
+        //
+        longToVarBuffer(trackBuffer, midiEvent->time());
 
-	if (midiEvent->isMeta())
-	{
-	    trackBuffer += (MidiByte)MIDI_FILE_META_EVENT;
-	    trackBuffer += (MidiByte)midiEvent->metaEventCode();
+        if (midiEvent->isMeta())
+        {
+            trackBuffer += (MidiByte)MIDI_FILE_META_EVENT;
+            trackBuffer += (MidiByte)midiEvent->metaEventCode();
 
-	    // Variable length number field
-	    longToVarBuffer(trackBuffer, midiEvent->metaMessage().length());
+            // Variable length number field
+            longToVarBuffer(trackBuffer, midiEvent->metaMessage().length());
 
-	    trackBuffer += midiEvent->metaMessage();
-	}
-	else
-	{
-	    // Send the normal event code (with encoded channel information)
-	    //
-	    if ((MidiByte)midiEvent->eventCode() != eventCode)
-	    {
-		trackBuffer += (MidiByte)midiEvent->eventCode();
-		eventCode = (MidiByte)midiEvent->eventCode();
-	    }
+            trackBuffer += midiEvent->metaMessage();
+        }
+        else
+        {
+            // Send the normal event code (with encoded channel information)
+            //
+            if ((MidiByte)midiEvent->eventCode() != eventCode)
+            {
+                trackBuffer += (MidiByte)midiEvent->eventCode();
+                eventCode = (MidiByte)midiEvent->eventCode();
+            }
 
-	    // Send the relevant data
-	    //
-	    switch(midiEvent->messageType())
-	    {
-	    case MIDI_NOTE_ON:
-	    case MIDI_NOTE_OFF:
-	    case MIDI_POLY_AFTERTOUCH:
-		trackBuffer += (MidiByte)midiEvent->note();
-		trackBuffer += (MidiByte)midiEvent->velocity();
-		break;
+            // Send the relevant data
+            //
+            switch(midiEvent->messageType())
+            {
+            case MIDI_NOTE_ON:
+            case MIDI_NOTE_OFF:
+            case MIDI_POLY_AFTERTOUCH:
+                trackBuffer += (MidiByte)midiEvent->note();
+                trackBuffer += (MidiByte)midiEvent->velocity();
+                break;
 
-	    case MIDI_CTRL_CHANGE:
-		trackBuffer += (MidiByte)midiEvent->data1();
-		trackBuffer += (MidiByte)midiEvent->data2();
-		break;
+            case MIDI_CTRL_CHANGE:
+                trackBuffer += (MidiByte)midiEvent->data1();
+                trackBuffer += (MidiByte)midiEvent->data2();
+                break;
 
-	    case MIDI_PROG_CHANGE:
-		trackBuffer += (MidiByte)midiEvent->data1();
-		break;
+            case MIDI_PROG_CHANGE:
+                trackBuffer += (MidiByte)midiEvent->data1();
+                break;
 
-	    case MIDI_CHNL_AFTERTOUCH:
-		trackBuffer += (MidiByte)midiEvent->data1();
-		break;
+            case MIDI_CHNL_AFTERTOUCH:
+                trackBuffer += (MidiByte)midiEvent->data1();
+                break;
 
-	    case MIDI_PITCH_BEND:
-		trackBuffer += (MidiByte)midiEvent->data1();
-		trackBuffer += (MidiByte)midiEvent->data2();
-		break;
+            case MIDI_PITCH_BEND:
+                trackBuffer += (MidiByte)midiEvent->data1();
+                trackBuffer += (MidiByte)midiEvent->data2();
+                break;
 
-	    default:
-		std::cerr << "MidiFile::writeTrack - cannot write unsupported MIDI event"
-			  << endl;
-		break;
-	    }
-	}
+            default:
+                std::cerr << "MidiFile::writeTrack - cannot write unsupported MIDI event"
+                          << endl;
+                break;
+            }
+        }
     }
 
     // Now we write the track - First the standard header..
@@ -1225,14 +1244,14 @@ MidiFile::write()
     bool retOK = true;
 
     std::ofstream *midiFile =
-	new std::ofstream(m_filename.c_str(), ios::out | ios::binary);
+        new std::ofstream(m_filename.c_str(), ios::out | ios::binary);
 
 
     if (!(*midiFile))
     {
-	std::cerr << "MidiFile::write() - can't write file" << endl;
-	m_format = MIDI_FILE_NOT_LOADED;
-	return false;
+        std::cerr << "MidiFile::write() - can't write file" << endl;
+        m_format = MIDI_FILE_NOT_LOADED;
+        return false;
     }
 
     // Write out the Header
@@ -1243,16 +1262,16 @@ MidiFile::write()
     //
     for(unsigned int i = 0; i < m_numberOfTracks; i++ )
     {
-	if (!writeTrack(midiFile, i))
-	{
-	    retOK = false;
-	}
+        if (!writeTrack(midiFile, i))
+        {
+            retOK = false;
+        }
     }
 
     midiFile->close();
 
     if(!retOK)
-	m_format = MIDI_FILE_NOT_LOADED;
+        m_format = MIDI_FILE_NOT_LOADED;
    
     return (retOK);
 }
