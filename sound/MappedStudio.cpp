@@ -1198,9 +1198,8 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
 
                         lrdf_free_setting_values(defs);
                     }
-                }
-
 #endif // HAVE_LIBLRDF
+                }
 
                 index++;
             }
