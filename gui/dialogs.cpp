@@ -30,6 +30,7 @@
 #include <qcheckbox.h>
 #include <qgroupbox.h>
 #include <qlayout.h>
+#include <qtooltip.h>
 
 #include <klocale.h>
 #include <karrowbutton.h>
@@ -184,13 +185,13 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     }
     
     BigArrowButton *keyDown = new BigArrowButton(keyBox, Qt::LeftArrow);
-//    keyDown->setToolTip(i18n("Flatten"));
+    QToolTip::add(keyDown, i18n("Flatten"));
 
     m_keyLabel = new QLabel(i18n("Key"), keyBox);
     m_keyLabel->setAlignment(AlignVCenter | AlignHCenter);
 
     BigArrowButton *keyUp = new BigArrowButton(keyBox, Qt::RightArrow);
-//    keyUp->setToolTip(i18n("Sharpen"));
+    QToolTip::add(keyUp, i18n("Sharpen"));
 
     m_keyCombo = new QComboBox(true, nameBox);
     m_majorMinorCombo = new QComboBox(false, nameBox);
@@ -396,6 +397,7 @@ void
 KeySignatureDialog::setValid(bool valid)
 {
     m_valid = valid;
+    enableButton(Ok, m_valid);
 }
 
 std::string
