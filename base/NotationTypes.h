@@ -647,11 +647,6 @@ public:
 	       type),
 	m_dots(dots) { }
 
-#ifdef NOT_DEFINED
-    Note(const std::string &s)
-        /* throw (BadType, MalformedNoteName) */;
-#endif
-
     Note(const Note &n) : m_type(n.m_type), m_dots(n.m_dots) { }
     ~Note() { }
 
@@ -667,16 +662,6 @@ public:
         return m_dots ? getDurationAux() : (m_shortestTime * (1 << m_type));
     }
 
-    /**
-     * Get the reference name of a note, used to refer to toolbar pixmap
-     * files and suchlike.  (e.g. crotchet, dotted-demisemi).
-     * The default arguments are the values of the note on which the
-     * method is called; non-default arguments specify another note type.
-     */
-#ifdef NOT_DEFINED
-    std::string getReferenceName(bool isRest = false,
-				 Type type = -1, int dots = 0) const;
-#endif
     /**
      * Return the Note whose duration is closest to (but shorter than or
      * equal to) the given duration, permitting at most maxDots dots.

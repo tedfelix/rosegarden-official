@@ -1065,48 +1065,6 @@ const string Note::EventType = "note";
 const string Note::EventRestType = "rest";
 
 const timeT Note::m_shortestTime = basePPQ / 16;
- 
-/*!!!
-
-Note::Note(const string &n)
-    // throw (MalformedNoteName)
-    : m_type(-1), m_dots(0)
-{
-    string name(n);
-
-    unsigned int pos = name.find('-');
-    int dots = 1;
-
-    if (pos > 0 && pos < name.length() - 1) {
-        dots = atoi(name.substr(0, pos).c_str());
-        name = name.substr(pos + 1);
-        if (dots < 2)
-            throw MalformedNoteName("Non-numeric or invalid dot count in \"" +
-                                    n + "\"");
-    }
-
-    if (name.length() > 7 && name.substr(0, 7) == "dotted ") {
-        m_dots = dots;
-        name = name.substr(7);
-    } else {
-        if (dots > 1)
-            throw MalformedNoteName("Dot count without dotted tag in \"" +
-                                    n + "\"");
-    }
-
-    Type t;
-    for (t = Shortest; t <= Longest; ++t) {
-        if (name == getReferenceName(false, t) ||
-            (t < Quaver && name == (getReferenceName(false, t) + "quaver"))) {
-            m_type = t;
-            break;
-        }
-    }
-    if (m_type == -1) {
-        throw MalformedNoteName("Can't parse note name \"" + n + "\"");
-    }
-}
-*/
 
 Note& Note::operator=(const Note &n)
 {
@@ -1127,48 +1085,6 @@ timeT Note::getDurationAux() const
     return duration;
 }
 
-
-/*!!!
-
-static string addDots(int dots, string s, bool hyphenate = false)
-{
-#if (__GNUC__ < 3)
-    std::ostrstream os;
-#else
-    std::ostringstream os;
-#endif
-
-    if (dots > 1) {
-        os << dots << "-";
-    }
-    if (hyphenate) {
-#if (__GNUC__ < 3)
-        os << "dotted-" << s << std::ends;
-#else
-        os << "dotted-" << s;
-#endif
-    } else {
-#if (__GNUC__ < 3)
-        os << "dotted " << s << std::ends;
-#else
-        os << "dotted " << s;
-#endif
-    }
-    return os.str();
-}
-
-string Note::getReferenceName(bool isRest, Type type, int dots) const {
-    static const string names[] = {
-        "hemidemisemi", "demisemi", "semiquaver",
-        "quaver", "crotchet", "minim", "semibreve", "breve"
-    };
-    if (type < 0) { type = m_type; dots = m_dots; }
-    string name(names[type]);
-    if (isRest) name = "rest-" + name;
-    if (dots) return addDots(dots, name, true);
-    else return name;
-}
-*/
 
 Note Note::getNearestNote(timeT duration, int maxDots)
 {

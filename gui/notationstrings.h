@@ -66,33 +66,6 @@ public:
     static QString getShortNoteName(Rosegarden::Note note,
 				    bool plural = false, bool triplet = false);
 
-#ifdef NOT_DEFINED
-    /**
-     * Get the name of a note.  The default return values are American
-     * (e.g. quarter note, dotted sixteenth note). If the app is
-     * internationalised, you will get return names local to your
-     * region.  Note that this includes English note names-
-     * set your LC_LANG to en_GB.
-     * The default arguments are the values of the note on which the
-     * method is called; non-default arguments specify another note type.
-     */
-    static QString getNoteName(Rosegarden::Note::Type type, int dots = 0);
-
-    /**
-     * Get the short name of a note (e.g. quarter, dotted 16th).
-     */
-    static QString getShortNoteName(Rosegarden::Note::Type type, int dots = 0);
-
-    /**
-     * Get the UNTRANSLATED US name of a note (e.g. quarter, dotted sixteenth).
-     */
-    static QString getAmericanName(Note &note, bool plural = false, bool triplet = false);
-
-    /**
-     * Get the UNTRANSLATED British name of a note (e.g. crotchet, dotted minim).
-     */
-    static QString getBritishName(Note &note, bool plural = false, bool triplet = false);
-#endif
 
     /**
      * Get the UNTRANSLATED reference name of a note or rest.  This is the
