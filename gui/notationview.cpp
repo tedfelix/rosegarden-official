@@ -919,7 +919,9 @@ void NotationView::noteClicked(int height, const QPoint &eventPos)
     }
 
     if (deleteMode()) {
+
         deleteNote(closestNote);
+
     } else {
 
         //!!! still need to take accidental into account
@@ -930,9 +932,27 @@ void NotationView::noteClicked(int height, const QPoint &eventPos)
     }
 }
 
-void NotationView::deleteNote(NotationElementList::iterator closestNote)
+void NotationView::deleteNote(NotationElementList::iterator note)
 {
-    KMessageBox::sorry(0, "Not Implemented Yet");
+    bool needLayout = false;
+    
+    // is note in a chord ?
+    Rosegarden::Track &track = getTrack();
+
+    if (track.noteIsInChord((*note)->event())) {
+
+        // Simply delete the event
+        m_viewElementsManager->erase(note);
+        needLayout = true;
+
+    } else {
+
+        KMessageBox::sorry(0, "Not Implemented Yet");
+
+    }
+
+    if (needLayout)
+        redoLayout(m_notationElements->begin());
 }
 
 void NotationView::insertNote(NotationElementList::iterator closestNote, int pitch)
