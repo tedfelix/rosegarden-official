@@ -105,6 +105,7 @@ protected:
     int m_groupTupletBase;
     int m_groupTupledCount;
     int m_groupUntupledCount;
+    std::map<long, long> m_groupIdMap;
 
     bool m_foundTempo;
 

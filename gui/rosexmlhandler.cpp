@@ -114,7 +114,26 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
         m_currentEvent = new XmlStorableEvent(atts, m_currentTime);
 
-        if (m_inGroup) {
+	if (m_currentEvent->has(BEAMED_GROUP_ID)) {
+	    
+	    // remap -- we want to ensure that the segment's nextId
+	    // is always used (and incremented) in preference to the
+	    // stored id
+	    
+	    if (!m_currentSegment) {
+		m_errorString = i18n("Got grouped event outside of a segment");
+		return false;
+	    }
+	    
+	    long storedId = m_currentEvent->get<Int>(BEAMED_GROUP_ID);
+
+	    if (m_groupIdMap.find(storedId) == m_groupIdMap.end()) {
+		m_groupIdMap[storedId] = m_currentSegment->getNextId();
+	    }
+	    
+	    m_currentEvent->set<Int>(BEAMED_GROUP_ID, m_groupIdMap[storedId]);
+
+        } else if (m_inGroup) {
             m_currentEvent->set<Int>(BEAMED_GROUP_ID, m_groupId);
             m_currentEvent->set<String>(BEAMED_GROUP_TYPE, m_groupType);
 	    if (m_groupType == GROUP_TYPE_TUPLED) {
@@ -447,6 +466,8 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 	    delete m_segmentEndMarkerTime;
 	    m_segmentEndMarkerTime = new timeT(endMarkerStr.toInt());
 	}
+
+	m_groupIdMap.clear();
 
     } else if (lcName == "resync") {
 	

@@ -529,13 +529,13 @@ NotationHLayout::scanChord(NotationElementList *notes,
     AccidentalTable newAccTable(accTable);
     Accidental someAccidental = NoAccidental;
     bool barEndsInChord = false;
-//!!!    bool grace = false;
+    bool grace = false;
 
     for (unsigned int i = 0; i < chord.size(); ++i) {
 	
 	NotationElement *el = *chord[i];
 
-//!!!	if (el->isGrace()) grace = true;
+	if (el->isGrace()) grace = true;
 	
 	long pitch = 64;
 	if (!el->event()->get<Int>(PITCH, pitch)) {
@@ -579,12 +579,11 @@ NotationHLayout::scanChord(NotationElementList *notes,
 	fixedWidth += m_npf->getNoteBodyWidth();
     }
 
-/*!!!
     if (grace) {
 	fixedWidth += m_npf->getNoteBodyWidth();
 	return 0;
     }
-*/
+
     NotationElementList::iterator myShortest = chord.getShortestElement();
 
     timeT d = m_legatoQuantizer->getQuantizedDuration((*myShortest)->event());
@@ -1147,13 +1146,19 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 	    if (el->isNote()) {
 
 		timeT graceNoteOffset = 0;
-		if (justSeenGraceNote) {
-		    graceNoteOffset = (*it)->getAbsoluteTime() - graceNoteStart;
-		    justSeenGraceNote = false;
-		}
+
 		if ((*it)->isGrace()) {
-		    graceNoteStart = (*it)->getAbsoluteTime();
-		    justSeenGraceNote = true;
+
+		    if (!justSeenGraceNote) {
+			graceNoteStart = (*it)->getAbsoluteTime();
+			justSeenGraceNote = true;
+		    }
+
+		} else if (justSeenGraceNote) {
+
+		    graceNoteOffset =
+			(*it)->getAbsoluteTime() - graceNoteStart;
+		    justSeenGraceNote = false;
 		}
 
 		// This modifies "it" and "tieMap"
@@ -1349,7 +1354,7 @@ NotationHLayout::positionChord(StaffType &staff,
         int shift = (delta - 2 * noteWidth) / 5;
 	baseX += std::min(shift, (m_npf->getNoteBodyWidth() * 3 / 2));
     }
-/*!!!
+
     // Special case for grace notes (spacing not proportional to
     // duration)
 
@@ -1357,7 +1362,6 @@ NotationHLayout::positionChord(StaffType &staff,
 	baseX = unmodifiedBaseX;
 	delta = noteWidth;
     }
-*/
 
     // Find out whether the chord contains any accidentals, and if so,
     // make space, and also shift the notes' positions right somewhat.

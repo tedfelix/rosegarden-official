@@ -411,7 +411,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
         {
             outStream << "\">\n";
 
-            long currentGroup = -1;
+//!!!            long currentGroup = -1;
 	    bool inChord = false;
 	    timeT chordStart = 0, chordDuration = 0;
 	    timeT expectedTime = segment->getStartTime();
@@ -423,7 +423,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 		// with overlapping and nested groups, so we're gonna have
 		// to lose this and save the raw beamed-group properties
 		// instead.
-
+/*!!!
                 long group;
                 if ((*i)->get<Int>(BEAMED_GROUP_ID, group)) {
 
@@ -463,7 +463,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
                     outStream << "</group>\n";
                     currentGroup = -1;
                 }
-
+*/
 	        timeT absTime = (*i)->getAbsoluteTime();
 
                 Segment::iterator nextEl = i;
@@ -514,10 +514,11 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 	    if (inChord) {
 	        outStream << "</chord>\n";
 	    }
-
+/*!!!
             if (currentGroup != -1) {
                 outStream << "</group>\n";
             }
+*/
         }
 
         outStream << "</segment>\n"; //-------------------------

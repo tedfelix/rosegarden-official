@@ -405,6 +405,7 @@ GroupMenuBeamCommand::modifySegment()
 
 //!!!    SegmentNotationHelper helper(getSegment());
 
+//!!!probably lose this method unless used by autobeam?
 //    helper.makeBeamedGroup(getStartTime(), getEndTime(),
 //                           GROUP_TYPE_BEAMED);
 }
@@ -421,9 +422,19 @@ GroupMenuAutoBeamCommand::modifySegment()
 void
 GroupMenuBreakCommand::modifySegment()
 {
-    SegmentNotationHelper helper(getSegment());
+    for (EventSelection::eventcontainer::iterator i =
+	     m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
 
-    helper.unbeam(getStartTime(), getEndTime());
+	(*i)->unset(BEAMED_GROUP_ID);
+	(*i)->unset(BEAMED_GROUP_TYPE);
+    }
+
+
+//!!!    SegmentNotationHelper helper(getSegment());
+
+//!!!probably lose this method unless used by autobeam?
+//    helper.unbeam(getStartTime(), getEndTime());
 }
 
 GroupMenuGraceCommand::GroupMenuGraceCommand(Rosegarden::EventSelection &selection) :

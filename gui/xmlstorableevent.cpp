@@ -213,9 +213,14 @@ XmlStorableEvent::toXmlString(timeT expectedTime) const
 	// and BEAMED_GROUP_TYPE are converted into attributes of the
 	// group element by RosegardenGUIDoc::saveDocument.
 
+	//!!! see comment in RosegardenGUIDoc -- we do want to write
+	// these properties.  we also need to make sure the segment's
+	// id is updated appropriately when reading them so we don't
+	// repeat ids later
+/*!!!
 	if (*i == Rosegarden::BaseProperties::BEAMED_GROUP_ID ||
 	    *i == Rosegarden::BaseProperties::BEAMED_GROUP_TYPE) continue;
-
+*/
 	res += QString("<property name=\"%1\" %2=\"%3\"/>")
 	    .arg(strtoqstr(Rosegarden::XmlExportable::encode(i->getName())))
 	    .arg(strtoqstr(getPropertyTypeAsString(*i)).lower())

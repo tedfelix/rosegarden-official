@@ -45,6 +45,7 @@ Post-0.1.5-and-a-bit task list
     by user) -- make two chords instead of one.  NotationElementList is
     now sorted by pitch, which should make this easier.  Can we assign
     stem directions sensibly for chords that begin during other chords? 
+    [DONE, possibly -- fairly complicated rework of Chord/Group in progress]
 
 10. Test and debug the Paste types from Paste... dialog
 
