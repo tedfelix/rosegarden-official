@@ -68,7 +68,10 @@ class RosegardenComboBox : public QComboBox
 {
 Q_OBJECT
 public:
-RosegardenComboBox(bool reverse, QWidget *parent=0, const char *name=0):
+    RosegardenComboBox(QWidget *parent=0, const char *name=0):
+        QComboBox(parent, name), m_reverse(false) {;}
+
+    RosegardenComboBox(bool reverse, QWidget *parent=0, const char *name=0):
         QComboBox(parent, name), m_reverse(reverse) {;}
 
     RosegardenComboBox(bool reverse, bool rw,

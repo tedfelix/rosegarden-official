@@ -18,7 +18,10 @@
 */
 
 #include "studiocommands.h"
+#include "rosegardenguidoc.h"
+#include "rosedebug.h"
 
+#include "Composition.h"
 #include "Studio.h"
 #include "MidiDevice.h"
 
@@ -61,5 +64,157 @@ ModifyDeviceCommand::unexecute()
     device->replaceProgramList(m_oldProgramList);
 
 }
+
+// -------------------- ModifyDeviceMapping -----------------------
+//
+
+ModifyDeviceMappingCommand::ModifyDeviceMappingCommand(
+        RosegardenGUIDoc *doc,
+        Rosegarden::DeviceId fromDevice,
+        Rosegarden::DeviceId toDevice):
+            XKCommand(getGlobalName()),
+            m_composition(&doc->getComposition()),
+            m_studio(&doc->getStudio()),
+            m_fromDevice(fromDevice),
+            m_toDevice(toDevice)
+{
+}
+
+void
+ModifyDeviceMappingCommand::execute()
+{
+    Rosegarden::Composition::trackcontainer *tracks =
+        m_composition->getTracks();
+    Rosegarden::Composition::trackcontainer::iterator it = tracks->begin();
+    Rosegarden::Instrument *instr = 0;
+    int index = 0;
+
+    for(; it != tracks->end(); it++)
+    {
+        instr = m_studio->getInstrumentById(it->second->getInstrument());
+
+        if (instr->getDevice()->getId() == m_fromDevice)
+        {
+            // if source and target are MIDI
+            if (m_studio->getDevice(m_fromDevice)->getType() ==
+                    Rosegarden::Device::Midi &&
+                m_studio->getDevice(m_toDevice)->getType() ==
+                    Rosegarden::Device::Midi)
+            {
+                // Try to match channels on the target device
+                //
+                Rosegarden::MidiByte channel = instr->getMidiChannel();
+
+                Rosegarden::InstrumentList destList = m_studio->
+                    getDevice(m_toDevice)->getPresentationInstruments();
+
+                Rosegarden::InstrumentList::iterator dIt = destList.begin();
+
+                for (; dIt != destList.end(); dIt++)
+                {
+                    if ((*dIt)->getMidiChannel() == channel)
+                    {
+                        break;
+                    }
+                }
+
+                // Failure to match anything and there's no Instruments
+                // at all in the destination.  Skip to next source Instrument.
+                //
+                if (dIt == destList.end() || destList.size() == 0)
+                    continue;
+
+
+                RG_DEBUG << " Track " << it->first  
+                         << ", setting Instrument to "
+                         << (*dIt)->getId() << endl;
+
+                // store "to" and "from" values
+                //
+                m_mapping.push_back(
+                        std::pair<Rosegarden::InstrumentId,
+                                  Rosegarden::InstrumentId>
+                                  (it->first,
+                                   instr->getId()));
+
+                it->second->setInstrument((*dIt)->getId());
+            }
+            else
+            {
+                // assign by index numbers
+            }
+
+            Rosegarden::InstrumentList sourceList = 
+                m_studio->getDevice(m_fromDevice)->getPresentationInstruments();
+
+        }
+        index++;
+    }
+
+}
+
+void
+ModifyDeviceMappingCommand::unexecute()
+{
+    std::vector<std::pair<Rosegarden::TrackId, Rosegarden::InstrumentId> >
+        ::iterator it = m_mapping.begin();
+    Rosegarden::Track *track = 0;
+
+    for (; it != m_mapping.end(); it++)
+    {
+        track = m_composition->getTrackByIndex(it->first);
+        track->setInstrument(it->second);
+    }
+}
+
+// ----------------------- ModifyInstrumentMapping -------------------------
+//
+
+ModifyInstrumentMappingCommand::ModifyInstrumentMappingCommand(
+        RosegardenGUIDoc *doc,
+        Rosegarden::InstrumentId fromInstrument,
+        Rosegarden::InstrumentId toInstrument):
+            XKCommand(getGlobalName()),
+            m_composition(&doc->getComposition()),
+            m_studio(&doc->getStudio()),
+            m_fromInstrument(fromInstrument),
+            m_toInstrument(toInstrument)
+{
+}
+
+void
+ModifyInstrumentMappingCommand::execute()
+{
+    Rosegarden::Composition::trackcontainer *tracks =
+        m_composition->getTracks();
+    Rosegarden::Composition::trackcontainer::iterator it = tracks->begin();
+
+    for(; it != tracks->end(); it++)
+    {
+        if (it->second->getInstrument() == m_fromInstrument)
+        {
+            m_mapping.push_back(it->first);
+            it->second->setInstrument(m_toInstrument);
+        }
+    }
+
+}
+
+void
+ModifyInstrumentMappingCommand::unexecute()
+{
+    std::vector<Rosegarden::TrackId>::iterator it = m_mapping.begin();
+    Rosegarden::Track *track = 0;
+
+    for (; it != m_mapping.end(); it++)
+    {
+        track = m_composition->getTrackByIndex(*it);
+        track->setInstrument(m_fromInstrument);
+    }
+}
+
+        
+
+
 
 

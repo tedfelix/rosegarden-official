@@ -24,7 +24,9 @@
 #include "basiccommand.h"
 
 #include "Instrument.h"
+#include "Device.h"
 
+class RosegardenGUIDoc;
 namespace Rosegarden { class Studio; }
 
 class ModifyDeviceCommand : public XKCommand
@@ -52,6 +54,49 @@ protected:
     std::string                            m_oldName;
     std::vector<Rosegarden::MidiBank>      m_oldBankList;
     std::vector<Rosegarden::MidiProgram>   m_oldProgramList;
+
+};
+
+class ModifyDeviceMappingCommand : public XKCommand
+{
+public:
+    ModifyDeviceMappingCommand(RosegardenGUIDoc *doc,
+                               Rosegarden::DeviceId fromDevice,
+                               Rosegarden::DeviceId toDevice);
+
+    static QString getGlobalName() { return i18n("Modify &Device Mapping"); }
+
+    virtual void execute();
+    virtual void unexecute();
+protected:
+    Rosegarden::Composition *m_composition;
+    Rosegarden::Studio      *m_studio;
+    Rosegarden::DeviceId     m_fromDevice;
+    Rosegarden::DeviceId     m_toDevice;
+
+    std::vector<std::pair<Rosegarden::TrackId, Rosegarden::InstrumentId> >
+                             m_mapping;
+};
+
+class ModifyInstrumentMappingCommand : public XKCommand
+{
+public:
+    ModifyInstrumentMappingCommand(RosegardenGUIDoc *doc,
+                                   Rosegarden::InstrumentId fromInstrument,
+                                   Rosegarden::InstrumentId toInstrument);
+
+    static QString getGlobalName() { return i18n("Modify &Instrument Mapping"); }
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    Rosegarden::Composition *m_composition;
+    Rosegarden::Studio      *m_studio;
+    Rosegarden::InstrumentId m_fromInstrument;
+    Rosegarden::InstrumentId m_toInstrument;
+
+    std::vector<Rosegarden::TrackId> m_mapping;
 
 };
 

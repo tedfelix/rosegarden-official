@@ -30,6 +30,7 @@
 #include "Instrument.h"
 
 class RosegardenComboBox;
+class QButtonGroup;
 class QPushButton;
 class QFrame;
 class QSpinBox;
@@ -93,7 +94,6 @@ public:
     void setModified(bool value);
 
     void addCommandToHistory(KCommand *command);
-
     MultiViewCommandHistory* getCommandHistory();
 
     // Get a program
@@ -168,6 +168,9 @@ public:
 
     void populateCombo(int id);
 
+    void addCommandToHistory(KCommand *command);
+    MultiViewCommandHistory* getCommandHistory();
+
 public slots:
     void slotRemapReleased(int id);
 
@@ -181,6 +184,7 @@ protected:
     QRadioButton        *m_deviceButton;
     QRadioButton        *m_instrumentButton;
 
+    QButtonGroup        *m_buttonGroup;
     RosegardenComboBox  *m_fromCombo;
     RosegardenComboBox  *m_toCombo;
 };
