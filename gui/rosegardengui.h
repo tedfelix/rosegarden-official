@@ -517,18 +517,27 @@ public slots:
     void slotToggleMetronome();
 
 
-    /*
+    /**
      * Set and unset the loop from the transport loop button with
      * these slots.
      */
     void slotSetLoop();
     void slotUnsetLoop();
 
-    /*
+    /**
      * Toggle the track labels on the TrackEditor
-     *
      */
     void slotToggleTrackLabels();
+
+    /**
+     * Toggle the segment parameters box on the TrackEditor
+     */
+    void slotToggleSegmentParameters();
+
+    /**
+     * Toggle the instrument parameters box on the TrackEditor
+     */
+    void slotToggleInstrumentParameters();
 
     /*
      * slotSendMidiController
@@ -564,23 +573,16 @@ private:
     /**
      * KAction pointers to enable/disable actions
      */
-//     KAction* m_fileNewWindow;
-    KAction* m_fileNew;
-    KAction* m_fileOpen;
     KRecentFilesAction* m_fileOpenRecent;
-    KAction* m_fileSave;
-    KAction* m_fileSaveAs;
-    KAction* m_fileClose;
-    KAction* m_filePrint;
-    KAction* m_fileQuit;
-    KAction* m_editCut;
-    KAction* m_editCopy;
-    KAction* m_editPaste;
+
     KToggleAction* m_viewToolBar;
     KToggleAction* m_viewTracksToolBar;
     KToggleAction* m_viewStatusBar;
     KToggleAction* m_viewTransport;
     KToggleAction* m_viewTrackLabels;
+    KToggleAction* m_viewSegmentParameters;
+    KToggleAction* m_viewInstrumentParameters;
+
     KAction *m_playTransport;
     KAction *m_stopTransport;
     KAction *m_rewindTransport;

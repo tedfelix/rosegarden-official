@@ -300,6 +300,23 @@ RosegardenGUIView::slotSelectedSegments(std::vector<Rosegarden::Segment*> segmen
     m_segmentParameterBox->useSegments(segments);
 }
 
+void RosegardenGUIView::slotShowSegmentParameters(bool v)
+{
+    if (v)
+        m_segmentParameterBox->show();
+    else
+        m_segmentParameterBox->hide();
+}
+
+void RosegardenGUIView::slotShowInstrumentParameters(bool v)
+{
+    if (v)
+        m_instrumentParameterBox->show();
+    else
+        m_instrumentParameterBox->hide();
+}
+
+
 
 MultiViewCommandHistory*
 RosegardenGUIView::getCommandHistory()

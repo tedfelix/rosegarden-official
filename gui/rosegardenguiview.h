@@ -91,7 +91,7 @@ public:
     MultiViewCommandHistory* getCommandHistory();
 
     TrackEditor* getTrackEditor() { return m_trackEditor; }
-
+    
     /**
      * contains the implementation for printing functionality
      */
@@ -144,6 +144,10 @@ public slots:
     void slotSelectTrackSegments(int);
 
     void slotSelectedSegments(std::vector<Rosegarden::Segment*> segments);
+
+    void slotShowSegmentParameters(bool);
+
+    void slotShowInstrumentParameters(bool);
 
     /*
      * Commands

@@ -36,9 +36,11 @@
 	<Action name="change_time_res"/>
   </Menu>
   <Menu  name="settings"><text>&amp;Settings</text>
-         <Action name="show_tracks_toolbar" append="show_merge" />
-         <Action name="show_transport" append="show_merge" />
-         <Action name="show_tracklabels" append="show_merge" />
+         <Action name="show_tracks_toolbar"        append="show_merge" />
+         <Action name="show_transport"             append="show_merge" />
+         <Action name="show_tracklabels"           append="show_merge" />
+         <Action name="show_segment_parameters"    append="show_merge" />
+         <Action name="show_instrument_parameters" append="show_merge" />
   </Menu>
 
 </MenuBar>

@@ -128,15 +128,15 @@ void RosegardenGUIApp::setupActions()
 {
     // setup File menu
     // New Window ?
-    m_fileNew  = KStdAction::openNew (this, SLOT(slotFileNew()),     actionCollection());
-    m_fileOpen = KStdAction::open    (this, SLOT(slotFileOpen()),    actionCollection());
+    KStdAction::openNew (this, SLOT(slotFileNew()),     actionCollection());
+    KStdAction::open    (this, SLOT(slotFileOpen()),    actionCollection());
     m_fileRecent = KStdAction::openRecent(this,
                                           SLOT(slotFileOpenRecent(const KURL&)),
                                           actionCollection());
-    m_fileSave   = KStdAction::save  (this, SLOT(slotFileSave()),          actionCollection());
-    m_fileSaveAs = KStdAction::saveAs(this, SLOT(slotFileSaveAs()),        actionCollection());
-    m_fileClose  = KStdAction::close (this, SLOT(slotFileClose()),         actionCollection());
-    m_filePrint  = KStdAction::print (this, SLOT(slotFilePrint()),         actionCollection());
+    KStdAction::save  (this, SLOT(slotFileSave()),          actionCollection());
+    KStdAction::saveAs(this, SLOT(slotFileSaveAs()),        actionCollection());
+    KStdAction::close (this, SLOT(slotFileClose()),         actionCollection());
+    KStdAction::print (this, SLOT(slotFilePrint()),         actionCollection());
 
     new KAction(i18n("Import &MIDI file..."), 0, 0, this,
                 SLOT(slotImportMIDI()), actionCollection(),
@@ -150,14 +150,15 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotExportMIDI()), actionCollection(),
                 "file_export_midi");
 
-    m_fileQuit = KStdAction::quit  (this, SLOT(slotQuit()),              actionCollection());
+    KStdAction::quit  (this, SLOT(slotQuit()),              actionCollection());
 
     // setup edit menu
-    m_editCut = KStdAction::cut      (this, SLOT(slotEditCut()),        actionCollection());
-    m_editCopy = KStdAction::copy     (this, SLOT(slotEditCopy()),       actionCollection());
-    m_editPaste = KStdAction::paste    (this, SLOT(slotEditPaste()),      actionCollection());
+    KStdAction::cut      (this, SLOT(slotEditCut()),        actionCollection());
+    KStdAction::copy     (this, SLOT(slotEditCopy()),       actionCollection());
+    KStdAction::paste    (this, SLOT(slotEditPaste()),      actionCollection());
 
     // setup Settings menu
+    //
     m_viewToolBar = KStdAction::showToolbar  (this, SLOT(slotToggleToolBar()),   actionCollection());
     m_viewTracksToolBar = new KToggleAction(i18n("Show T&racks Toolbar"), 0, this,
                                             SLOT(slotToggleTracksToolBar()), actionCollection(),
@@ -165,14 +166,24 @@ void RosegardenGUIApp::setupActions()
     m_viewStatusBar = KStdAction::showStatusbar(this, SLOT(slotToggleStatusBar()), actionCollection());
 
     m_viewTransport = new KToggleAction(i18n("Show Tra&nsport"), 0, this,
-                                             SLOT(slotToggleTransport()),
-                                             actionCollection(),
-                                             "show_transport");
+                                        SLOT(slotToggleTransport()),
+                                        actionCollection(),
+                                        "show_transport");
 
     m_viewTrackLabels = new KToggleAction(i18n("Show Track &Labels"), 0, this,
                                              SLOT(slotToggleTrackLabels()),
                                              actionCollection(),
                                              "show_tracklabels");
+
+    m_viewSegmentParameters = new KToggleAction(i18n("Show Segment Parameters"), 0, this,
+                                                SLOT(slotToggleSegmentParameters()),
+                                                actionCollection(),
+                                                "show_segment_parameters");
+
+    m_viewInstrumentParameters = new KToggleAction(i18n("Show Instrument Parameters"), 0, this,
+                                                   SLOT(slotToggleInstrumentParameters()),
+                                                   actionCollection(),
+                                                   "show_instrument_parameters");
 
     KStdAction::saveOptions(this, SLOT(save_options()), actionCollection());
     KStdAction::preferences(this, SLOT(customize()),    actionCollection());
@@ -543,11 +554,15 @@ void RosegardenGUIApp::saveOptions()
 {	
     m_config->setGroup("General Options");
     m_config->writeEntry("Geometry", size());
-    m_config->writeEntry("Show Toolbar", m_viewToolBar->isChecked());
-    m_config->writeEntry("Show Tracks Toolbar", m_viewTracksToolBar->isChecked());
-    m_config->writeEntry("Show Transport", m_viewTransport->isChecked());
-    m_config->writeEntry("Show Track labels", m_viewTrackLabels->isChecked());
-    m_config->writeEntry("Show Statusbar",m_viewStatusBar->isChecked());
+    m_config->writeEntry("Show Toolbar",                 m_viewToolBar->isChecked());
+    m_config->writeEntry("Show Tracks Toolbar",          m_viewTracksToolBar->isChecked());
+    m_config->writeEntry("Show Transport",               m_viewTransport->isChecked());
+    m_config->writeEntry("Show Track labels",            m_viewTrackLabels->isChecked());
+    m_config->writeEntry("Show Statusbar",               m_viewStatusBar->isChecked());
+    m_config->writeEntry("Show Segment Parameters",      m_viewSegmentParameters->isChecked());
+    m_config->writeEntry("Show Instrument Parameters",   m_viewInstrumentParameters->isChecked());
+
+
     m_config->writeEntry("ToolBarPos", (int) toolBar("mainToolBar")->barPos());
     m_config->writeEntry("TracksToolBarPos", (int) toolBar("tracksToolBar")->barPos());
 
@@ -562,15 +577,15 @@ void RosegardenGUIApp::readOptions()
     // status bar settings
     bool viewStatusbar = m_config->readBoolEntry("Show Statusbar", true);
     m_viewStatusBar->setChecked(viewStatusbar);
-   slotToggleStatusBar();
+    slotToggleStatusBar();
 
     bool viewToolBar = m_config->readBoolEntry("Show Toolbar", true);
     m_viewToolBar->setChecked(viewToolBar);
-   slotToggleToolBar();
+    slotToggleToolBar();
 
     viewToolBar = m_config->readBoolEntry("Show Tracks Toolbar", true);
     m_viewTracksToolBar->setChecked(viewToolBar);
-   slotToggleTracksToolBar();
+    slotToggleTracksToolBar();
 
     bool viewTransport = m_config->readBoolEntry("Show Transport", true);
     m_viewTransport->setChecked(viewTransport);
@@ -579,6 +594,14 @@ void RosegardenGUIApp::readOptions()
     bool viewTrackLabels = m_config->readBoolEntry("Show Track labels", true);
     m_viewTrackLabels->setChecked(viewTrackLabels);
     slotToggleTrackLabels();
+
+    bool viewSegmentParameters = m_config->readBoolEntry("Show Segment Parameters", true);
+    m_viewSegmentParameters->setChecked(viewSegmentParameters);
+    slotToggleSegmentParameters();
+
+    bool viewInstrumentParameters = m_config->readBoolEntry("Show Instrument Parameters", true);
+    m_viewInstrumentParameters->setChecked(viewInstrumentParameters);
+    slotToggleInstrumentParameters();
 
     // bar position settings
     KToolBar::BarPosition toolBarPos;
@@ -932,7 +955,7 @@ void RosegardenGUIApp::slotToggleTransport()
 {
     KTmpStatusMsg msg(i18n("Toggle the Transport"), statusBar());
 
-    if (m_viewTransport->isChecked())
+    if (m_viewTracksToolBar->isChecked())
     {
         m_transport->show();
         m_transport->raise();
@@ -955,6 +978,15 @@ void RosegardenGUIApp::slotToggleTrackLabels()
     }
 }
 
+void RosegardenGUIApp::slotToggleSegmentParameters()
+{
+    m_view->slotShowSegmentParameters(m_viewSegmentParameters->isChecked());
+}
+
+void RosegardenGUIApp::slotToggleInstrumentParameters()
+{
+    m_view->slotShowInstrumentParameters(m_viewInstrumentParameters->isChecked());
+}
 
 
 void RosegardenGUIApp::slotToggleStatusBar()
@@ -1402,7 +1434,7 @@ void RosegardenGUIApp::exportMIDIFile(const QString &file)
 void
 RosegardenGUIApp::slotCloseTransport()
 {
-     m_viewTransport->setChecked(false);
+    m_viewTransport->setChecked(false);
 }
 
 
