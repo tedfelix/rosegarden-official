@@ -349,9 +349,7 @@ protected:
     int getBarMargin() const;
     int getPreBarMargin() const;
     int getPostBarMargin() const;
-    int getFixedItemSpacing() const {
-	return (int)((m_npf->getNoteBodyWidth() / 5) * m_spacing / 100.0);
-    }
+    int getFixedItemSpacing() const;
 
     void setNotationData(Rosegarden::Segment &segment);
 

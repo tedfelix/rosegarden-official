@@ -77,7 +77,6 @@ NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
     m_properties(properties),
     m_timePerProgressIncrement(0),
     m_staffCount(0)
-//!!!    m_showUnknowns(true)
 {
 //    NOTATION_DEBUG << "NotationHLayout::NotationHLayout()" << endl;
 }
@@ -122,9 +121,11 @@ NotationHLayout::getBarData(StaffType &staff) const
 
 
 // To find the "ideal" width of a bar, we need the sum of the minimum
-// widths of the elements in the bar, plus as much extra space as
-// would be needed if the bar was made up entirely of repetitions of
-// its shortest note.  This space is the product of the number of the
+// widths of the elements in the bar, plus some extra space.
+
+// Rather naively, we currently add as much extra space as would be
+// needed if the bar was made up entirely of repetitions of its
+// shortest note.  This space is the product of the number of the
 // bar's shortest notes that will fit in the duration of the bar and
 // the comfortable gap for each.
 
@@ -149,9 +150,31 @@ NotationHLayout::getBarData(StaffType &staff) const
 //    otherwise.  One possibility is to augment the fixedWidth with a
 //    certain proportion of the width of each note, and make that a
 //    higher proportion for very short notes than for long notes.
+//
+// -- We should never make the bar narrower than a certain minimum
+//    (dependent on the current spacing setting, as is most of the rest)
 
 //!!! The algorithm below does not implement most of these rules; it
 // can probably be improved dramatically without too much work
+
+// Arguments to this method:
+//
+// fixedWidth: is the total width of non-negotiable items such as
+// clefs, keys, and accidentals.  These are items that need a
+// particular amount of space and are not accorded extra space
+// according to their duration.
+// 
+// baseWidth: is the minimum total width of variable-width items such
+// as notes and rests.
+//
+// shortest: points to the shortest non-zero-duration event in the bar
+// (may be one event in a chord).
+// 
+// shortCount: is the number of distinct events (i.e. chords or rests)
+// of duration equal to shortest.
+//
+// totalCount: is the total number of distinct events (chords or rests,
+// or keys, clefs etc) in the bar.
 
 double NotationHLayout::getIdealBarWidth(StaffType &staff,
 					 int fixedWidth,
@@ -164,7 +187,9 @@ double NotationHLayout::getIdealBarWidth(StaffType &staff,
 {
     NOTATION_DEBUG << "NotationHLayout::getIdealBarWidth: shortCount is "
                          << shortCount << ", fixedWidth is "
-                         << fixedWidth << ", barDuration is "
+                         << fixedWidth << ", baseWidth is "
+                         << baseWidth << ", fixedWidth+baseWidth is "
+                         << fixedWidth + baseWidth << ", barDuration is "
                          << timeSignature.getBarDuration() << endl;
 
     if (shortest == staff.getViewElementList()->end()) {
@@ -199,11 +224,19 @@ double NotationHLayout::getIdealBarWidth(StaffType &staff,
 
     double w = fixedWidth + ((timeSignature.getBarDuration() * gapPer) / d);
 
-    NOTATION_DEBUG << "NotationHLayout::getIdealBarWidth: returning "
-                         << w << endl;
+    NOTATION_DEBUG << "NotationHLayout::getIdealBarWidth: calculated: "
+		   << w << endl;
 
     w *= m_spacing / 100.0;
-    if (w < (fixedWidth + baseWidth)) w = (double)(fixedWidth + baseWidth);
+
+    NOTATION_DEBUG << "NotationHLayout::getIdealBarWidth: after spacing: "
+		   << w << endl;
+
+    if (w < (fixedWidth + baseWidth)) {
+	w = (double)(fixedWidth + baseWidth);
+	NOTATION_DEBUG << "NotationHLayout::getIdealBarWidth: returning minimum: "
+		       << w << endl;
+    }
     return w;
 } 
 
@@ -305,11 +338,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
     throwIfCancelled();
 
     START_TIMING;
-/*!!!    
-    KConfig *config = kapp->config();
-    config->setGroup("Notation Options");
-    m_showUnknowns = config->readBoolEntry("showunknowns", true);
-*/
+
     Segment &segment(staff.getSegment());
     NotationElementList *notes = staff.getViewElementList();
     BarDataList &barList(getBarData(staff));
@@ -442,7 +471,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 		// partial scans don't need to look at all notes, just clefs
 		// and key changes
 
-                // !!! shouldn't have to do all this to find clef and key
+                //!!! shouldn't have to do all this to find clef and key
                 // (and I don't bother to do this in layout() -- eek)
 		leaveSizesAlone = true;
                 if (barTimes.first > endTime) allDone = true;
@@ -1292,15 +1321,15 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
             NotationElement *el = (*it);
             el->setLayoutX(x);
-//            NOTATION_DEBUG << "NotationHLayout::layout(): setting element's x to " << x << endl;
+            NOTATION_DEBUG << "NotationHLayout::layout(): setting element's x to " << x << endl;
 	    long delta = 0;
 
 	    if (timeSigToPlace && !el->event()->isa(Clef::EventType)) {
-//		NOTATION_DEBUG << "Placing timesig at " << x << endl;
+		NOTATION_DEBUG << "Placing timesig at " << x << endl;
 		bdi->second.layoutData.timeSigX = (int)x;
 		x += getFixedItemSpacing()*2 +
 		    m_npf->getTimeSigWidth(timeSignature);
-//		NOTATION_DEBUG << "and moving next elt to " << x << endl;
+		NOTATION_DEBUG << "and moving next elt to " << x << endl;
 		el->setLayoutX(x);
 		timeSigToPlace = false;
 	    }
@@ -1431,9 +1460,15 @@ NotationHLayout::positionRest(StaffType &staff,
     timeT spacingDuration = getSpacingDuration(staff, itr);
 
     long delta = (((int)bdi->second.sizeData.idealWidth -
+		       (bdi->second.sizeData.fixedWidth +
+			bdi->second.sizeData.baseWidth)) * spacingDuration) /
+	barDuration;
+    delta += (*itr)->event()->get<Int>(m_properties.MIN_WIDTH);
+/*!!!
+    long delta = (((int)bdi->second.sizeData.idealWidth -
 		        bdi->second.sizeData.fixedWidth) * spacingDuration) /
 	barDuration;
-
+*/
     rest->setLayoutAirspace(rest->getLayoutX(), delta);
 
     // Situate the rest somewhat further into its allotted space.  Not
@@ -1484,16 +1519,19 @@ NotationHLayout::getSpacingDuration(StaffType &staff,
 
     if (j != e) {
 	d = (*j)->getViewAbsoluteTime() - (*i)->getViewAbsoluteTime();
+/*!!!
 	NOTATION_DEBUG << "getSpacingDuration: stopped by elt at "
 		       << (*j)->getViewAbsoluteTime() << ", d = "
 		       << (*j)->getViewDuration() << ", type "
 		       << (*j)->event()->getType() << endl;
+*/
     }
-
+/*!!!
     NOTATION_DEBUG << "getSpacingDuration for elt at "
 		   << (*i)->getViewAbsoluteTime() << ", d = "
 		   << (*i)->getViewDuration() << ": returning "
 		   << d << endl;
+*/
     return d;
 }
 
@@ -1524,10 +1562,22 @@ NotationHLayout::positionChord(StaffType &staff,
 
     timeT barDuration = bdi->second.sizeData.actualDuration;
     if (barDuration == 0) barDuration = timeSignature.getBarDuration();
+
+    //!!! should be a proportion of idealWidth - (baseWidth + fixedWidth)
+    // plus minwidth for the chord?
+    long delta = (((int)bdi->second.sizeData.idealWidth -
+		       (bdi->second.sizeData.fixedWidth +
+			bdi->second.sizeData.baseWidth)) *
+		  getSpacingDuration(staff, chord)) /
+	barDuration;
+    delta += (*itr)->event()->get<Int>(m_properties.MIN_WIDTH);
+		  
+/*
     long delta = (((int)bdi->second.sizeData.idealWidth -
 		        bdi->second.sizeData.fixedWidth) *
 		  getSpacingDuration(staff, chord)) /
 	barDuration;
+*/
 
     int noteWidth = m_npf->getNoteBodyWidth();
 
@@ -1665,7 +1715,7 @@ NotationHLayout::positionChord(StaffType &staff,
 
     itr = chord.getFinalElement();
     if (barEndsInChord) { to = itr; ++to; }
-    if (groupId < 0) return delta;
+//!!    if (groupId < 0) return delta;
 
     return delta;
 }
@@ -1713,7 +1763,6 @@ int NotationHLayout::getMinWidth(NotationElement &e) const
 
     } else {
         NOTATION_DEBUG << "NotationHLayout::getMinWidth(): no case for event type " << e.event()->getType() << endl;
-//!!!        if (m_showUnknowns) 
 	w += 24;
     }
 
@@ -1739,12 +1788,17 @@ int NotationHLayout::getBarMargin() const
 
 int NotationHLayout::getPreBarMargin() const
 {
-    return (int)(m_npf->getBarMargin()) / 2;
+    return getBarMargin() / 2;
 }
 
 int NotationHLayout::getPostBarMargin() const
 {
     return getBarMargin() - getPreBarMargin();
+}
+
+int NotationHLayout::getFixedItemSpacing() const
+{
+    return (int)((m_npf->getNoteBodyWidth() / 5) * m_spacing / 100.0);
 }
 
 void
