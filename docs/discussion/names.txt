@@ -1,0 +1,105 @@
+
+Names of things
+===============
+
+Note-related representational innards
+-------------------------------------
+
+ : : Thing		MIDI	RG2.1notation	RG3		Other ideas
+ : : ===========================================================================
+ -A- a single note &c	Event	Item		Element		
+ : : ---------------------------------------------------------------------------
+ -B- instrument's notes	Track	ItemList	Part		
+ : : ---------------------------------------------------------------------------
+ -C- a whole piece	Song?	Stave		Composition	Piece, Workspace
+ : : ---------------------------------------------------------------------------
+ -D- set of pieces						
+ : : ---------------------------------------------------------------------------
+ -E- positional pointer		ItemList again	Iterator	Pointer, Marker
+ : : ===========================================================================
+
+Arrangement-related representational innards
+--------------------------------------------
+
+ : : Thing				Possible names
+ : : ===========================================================================
+ -A- raw hardware thing			Device
+ : : ---------------------------------------------------------------------------
+ -B- single device playback setup	Channel, Instrument
+ : : ---------------------------------------------------------------------------
+ -C- set of those			Arrangement, Environment
+ : : ===========================================================================
+
+Program breakdown
+-----------------
+
+ : : Thing		RG2.1		RG3		Other ideas
+ : : ===========================================================================
+ -A- data store				Server		Database, Datastore
+ : : ---------------------------------------------------------------------------
+ -B- GUI component			Client		View, Editor
+ : : ---------------------------------------------------------------------------
+ -C- playback server    Sequencer/Mapper  Performer	
+ : : ===========================================================================
+
+Likely GUI bits
+---------------
+
+ : : Thing			Possible names
+ : : ===========================================================================
+ -A- controller for playback	Transport, ControlPanel
+ : : ---------------------------------------------------------------------------
+ -B- piano roll view		PianoRoll, Matrix
+ : : ---------------------------------------------------------------------------
+ -C- list of raw object data	EventList, ItemList, ElementList, TextView
+ : : ---------------------------------------------------------------------------
+ -D- note/channel overview	Arrange, Environment, er, Overview
+ : : ===========================================================================
+
+Chris' preferences
+--------------
+
+ 1A: Element (Event sounds a bit MIDI-specific)
+ 1B: Part or Track, don't mind
+ 1C: Composition or Workspace
+ 1D: 
+ 1E: TrackPointer or something like that
+
+ 2A: 
+ 2B: 
+ 2C: 
+
+ 3A: Data-something
+ 3B: View? or does that sound too much like a specific programming paradigm?
+ 3C: Performer's fine
+
+ 4A: Transport, I like that
+ 4B: 
+ 4C: 
+ 4D: 
+
+Guillaume's preferences
+--------------
+
+(blank choices are those on which I agree with Chris)
+
+ 1A: Event
+ 1B: Track
+ 1C: Song (reuse MIDI terms for all 3, use namespaces to differenciate)
+ 1D: 
+ 1E: Iterator
+
+ 2A: 
+ 2B: Channel
+ 2C: Channel Set
+
+ 3A: Server
+ 3B: View
+ 3C: 
+
+ 4A: 
+ 4B: PianoRoll
+ 4C: EvenList
+ 4D: Overview, (or no name at all)
+
+
