@@ -197,8 +197,10 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
                 Rosegarden::RealTime moveTime = comp.
                     getElapsedRealTime(sliceStartElapsed - segmentStartTime);
 
+                //cout << "DURATION was   " << duration << endl;
                 startTime = startTime + moveTime;
                 duration = duration - moveTime;
+                //cout << "DURATION is now " << duration << endl;
             }
             else
             {
