@@ -44,12 +44,11 @@ Studio::Studio() :
     m_midiThruFilter(0),
     m_midiRecordFilter(0)
 {
-    // For now we'll just have a fixed number of busses (one for master,
-    // one for each submaster)
+    // We _always_ have a buss with id zero, for the master out
+    m_busses.push_back(new Buss(0));
 
-    for (int i = 0; i < 5; ++i) {
-	m_busses.push_back(new Buss(i));
-    }
+    // And we always create one audio record in
+    m_recordIns.push_back(new RecordIn());
 }
 
 Studio::~Studio()
@@ -63,6 +62,10 @@ Studio::~Studio()
 
     for (size_t i = 0; i < m_busses.size(); ++i) {
 	delete m_busses[i];
+    }
+
+    for (size_t i = 0; i < m_recordIns.size(); ++i) {
+	delete m_recordIns[i];
     }
 }
 
@@ -225,6 +228,20 @@ Studio::getBusses()
     return m_busses;
 }
 
+Buss *
+Studio::getBussById(BussId id)
+{
+    for (BussList::iterator i = m_busses.begin(); i != m_busses.end(); ++i) {
+	if ((*i)->getId() == id) return *i;
+    }
+    return 0;
+}
+
+void
+Studio::addBuss(Buss *buss)
+{
+    m_busses.push_back(buss);
+}
 
 // Clear down the devices  - the devices will clear down their
 // own Instruments.
@@ -254,6 +271,7 @@ Studio::toXmlString(const std::vector<DeviceId> &devices)
 
     studio << "<studio thrufilter=\"" << m_midiThruFilter
            << "\" recordfilter=\"" << m_midiRecordFilter
+	   << "\" audioinputpairs=\"" << m_recordIns.size()
            << "\">" << endl << endl;
 
     studio << endl;
@@ -262,11 +280,18 @@ Studio::toXmlString(const std::vector<DeviceId> &devices)
 
     // Get XML version of devices
     //
-    if (devices.empty()) { // export all devices
+    if (devices.empty()) { // export all devices and busses
+
 	for (DeviceListIterator it = m_devices.begin();
 	     it != m_devices.end(); it++) {
 	    studio << (*it)->toXmlString() << endl << endl;
 	}
+
+	for (BussList::iterator it = m_busses.begin();
+	     it != m_busses.end(); ++it) {
+	    studio << (*it)->toXmlString() << endl << endl;
+	}
+
     } else {
 	for (std::vector<DeviceId>::const_iterator di(devices.begin());
 	     di != devices.end(); ++di) {
@@ -489,6 +514,22 @@ Studio::clearMidiBanksAndPrograms()
             midiDevice->clearBankList();
         }
     }
+}
+
+void
+Studio::clearBusses()
+{
+    for (size_t i = 0; i < m_busses.size(); ++i) {
+	delete m_busses[i];
+    }
+    m_busses.clear();
+    m_busses.push_back(new Buss(0));
+
+    for (size_t i = 0; i < m_recordIns.size(); ++i) {
+	delete m_recordIns[i];
+    }
+    m_recordIns.clear();
+    m_recordIns.push_back(new RecordIn());
 }
 
 Device*

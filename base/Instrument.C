@@ -53,8 +53,8 @@ Instrument::Instrument(InstrumentId id, InstrumentType it,
     m_sendPan(false),
     m_sendVolume(false),
     m_mappedId(0),
-    m_mappedAudioInput(0),
-    m_mappedAudioOutput(std::pair<int, int>(0, 0))
+    m_audioInput(1000),
+    m_audioOutput(0)
 {
     if (it == Audio)
     {
@@ -97,8 +97,8 @@ Instrument::Instrument(InstrumentId id,
     m_sendPan(false),
     m_sendVolume(false),
     m_mappedId(0),
-    m_mappedAudioInput(0),
-    m_mappedAudioOutput(std::pair<int, int>(0, 0))
+    m_audioInput(1000),
+    m_audioOutput(0)
 {
     // Add a number of plugin place holders (unassigned)
     //
@@ -152,8 +152,8 @@ Instrument::Instrument(const Instrument &ins):
     m_sendPan(ins.sendsPan()),
     m_sendVolume(ins.sendsVolume()),
     m_mappedId(ins.getMappedId()),
-    m_mappedAudioInput(ins.getMappedAudioInput()),
-    m_mappedAudioOutput(ins.getMappedAudioOutput())
+    m_audioInput(ins.m_audioInput),
+    m_audioOutput(ins.m_audioOutput)
 {
     // Add a number of plugin place holders (unassigned)
     //
@@ -194,8 +194,8 @@ Instrument::operator=(const Instrument &ins)
     m_sendPan = ins.sendsPan();
     m_sendVolume = ins.sendsVolume();
     m_mappedId = ins.getMappedId();
-    m_mappedAudioInput = ins.getMappedAudioInput();
-    m_mappedAudioOutput = ins.getMappedAudioOutput();
+    m_audioInput = ins.m_audioInput;
+    m_audioOutput = ins.m_audioOutput;
 
     return *this;
 }
@@ -272,6 +272,30 @@ Instrument::isPercussion() const
     return m_program.getBank().isPercussion();
 }
 
+void
+Instrument::setAudioInputToBuss(BussId buss)
+{
+    m_audioInput = buss;
+}
+
+void
+Instrument::setAudioInputToRecord(int recordIn)
+{
+    m_audioInput = recordIn + 1000;
+}
+
+int
+Instrument::getAudioInput(bool &isBuss) const
+{
+    if (m_audioInput > 1000) {
+	isBuss = false;
+	return m_audioInput - 1000;
+    } else {
+	isBuss = true;
+	return m_audioInput;
+    }
+}
+
 
 // Implementation of the virtual method to output this class
 // as XML.  We don't send out the name as it's redundant in
@@ -345,8 +369,15 @@ Instrument::toXmlString()
         instrument << "            <recordLevel value=\""
                    << m_recordLevel << "\"/>" << std::endl;
 
+	bool aibuss;
+	int ai = getAudioInput(aibuss);
+
         instrument << "            <audioInput value=\""
-                   << m_mappedAudioInput << "\"/>" << std::endl;
+                   << ai << "\" type=\""
+		   << (aibuss ? "buss" : "record") << "\"/>" << std::endl;
+
+        instrument << "            <audioOutput value=\""
+                   << m_audioOutput << "\"/>" << std::endl;
 
         PluginInstanceIterator it = m_audioPlugins.begin();
         for (; it != m_audioPlugins.end(); it++)
@@ -496,16 +527,33 @@ Buss::toXmlString()
 {
     std::stringstream buss;
 
-    buss << "        <buss id=\"" << m_id << "\">" << std::endl;
-    buss << "           <pan value=\"" << m_pan << "\"/>" << std::endl;
-    buss << "           <level value=\"" << m_level << "\"/>" << std::endl;
-    buss << "        </buss>" << std::endl;
+    buss << "    <buss id=\"" << m_id << "\">" << std::endl;
+    buss << "       <pan value=\"" << (int)m_pan << "\"/>" << std::endl;
+    buss << "       <level value=\"" << m_level << "\"/>" << std::endl;
+    buss << "    </buss>" << std::endl;
 
 #if (__GNUC__ < 3)
     buss << std::ends;
 #endif
 
     return buss.str();
+}
+
+RecordIn::RecordIn() :
+    m_mappedId(0)
+{
+}
+
+RecordIn::~RecordIn()
+{
+}
+
+std::string
+RecordIn::toXmlString()
+{
+    // We don't actually save these, as they have nothing persistent
+    // in them.  The studio just remembers how many there should be.
+    return "";
 }
 
 

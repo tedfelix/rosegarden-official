@@ -566,6 +566,37 @@ void RosegardenGUIDoc::initialiseStudio()
     Rosegarden::InstrumentList::iterator it = list.begin();
     int audioCount = 0;
 
+    Rosegarden::BussList busses = m_studio.getBusses();
+    Rosegarden::RecordInList recordIns = m_studio.getRecordIns();
+
+    for (unsigned int i = 0; i < busses.size(); ++i) {
+	
+	// first one is master
+	Rosegarden::MappedObjectId mappedId =
+	    Rosegarden::StudioControl::createStudioObject(
+		Rosegarden::MappedObject::AudioBuss);
+	
+	Rosegarden::StudioControl::setStudioObjectProperty
+	    (mappedId,
+	     Rosegarden::MappedAudioBuss::Level,
+	     Rosegarden::MappedObjectValue(busses[i]->getLevel()));
+	
+	Rosegarden::StudioControl::setStudioObjectProperty
+	    (mappedId,
+	     Rosegarden::MappedAudioBuss::Pan,
+	     Rosegarden::MappedObjectValue(busses[i]->getPan()));
+	
+	busses[i]->setMappedId(mappedId);
+    }
+
+    for (unsigned int i = 0; i < recordIns.size(); ++i) {
+	
+	Rosegarden::MappedObjectId mappedId =
+	    Rosegarden::StudioControl::createStudioObject(
+		Rosegarden::MappedObject::AudioInput);
+
+	recordIns[i]->setMappedId(mappedId);
+    }
 
     for (; it != list.end(); it++)
     {
@@ -614,6 +645,41 @@ void RosegardenGUIDoc::initialiseStudio()
             Rosegarden::StudioControl::setStudioObjectProperty(mappedId,
                 Rosegarden::MappedAudioFader::Pan,
                 Rosegarden::MappedObjectValue(float((*it)->getPan())) - 100.0);
+
+	    // Set up connections: first clear any existing ones (shouldn't
+	    // be necessary, but)
+	    //
+	    Rosegarden::StudioControl::disconnectStudioObject(mappedId);
+
+	    // then handle the output connection
+	    //
+	    Rosegarden::BussId outputBuss = (*it)->getAudioOutput();
+	    if (outputBuss < busses.size()) {
+		Rosegarden::MappedObjectId bmi = busses[outputBuss]->getMappedId();
+		if (bmi > 0) {
+		    Rosegarden::StudioControl::connectStudioObjects(mappedId, bmi);
+		}
+	    }
+	    
+	    // then the input
+	    // 
+	    bool isBuss;
+	    int input = (*it)->getAudioInput(isBuss);
+	    Rosegarden::MappedObjectId rmi = 0;
+
+	    if (isBuss) {
+		if (input < busses.size()) {
+		    rmi = busses[input]->getMappedId();
+		}
+	    } else {
+		if (input < recordIns.size()) {
+		    rmi = recordIns[input]->getMappedId();
+		}
+	    }
+
+	    if (rmi > 0) {
+		Rosegarden::StudioControl::connectStudioObjects(rmi, mappedId);
+	    }
 
             audioCount++;
 
@@ -690,31 +756,6 @@ void RosegardenGUIDoc::initialiseStudio()
 #endif // HAVE_LADSPA
 
         }
-    }
-
-    if (audioCount > 0) {
-	// then we need some submasters and a master.
-	
-//!!!	KConfig* config = kapp->config();
-//	config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
-//	int submasters = config->readNumEntry("audiosubmasters", 4);
-
-	Rosegarden::BussList busses = m_studio.getBusses();
-
-	for (unsigned int i = 0; i < busses.size(); ++i) {
-
-	    // first one is master
-	    Rosegarden::MappedObjectId mappedId =
-		Rosegarden::StudioControl::createStudioObject(
-		    Rosegarden::MappedObject::AudioBuss);
-
-	    Rosegarden::StudioControl::setStudioObjectProperty
-		(mappedId,
-		 Rosegarden::MappedAudioBuss::Level,
-		 Rosegarden::MappedObjectValue(0.0)); //!!! for now.
-
-	    busses[i]->setMappedId(mappedId);
-	}
     }
 
     RG_DEBUG << "RosegardenGUIDoc::initialiseStudio - "

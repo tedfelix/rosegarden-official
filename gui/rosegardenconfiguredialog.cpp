@@ -1114,6 +1114,9 @@ SequencerConfigurationPage::SequencerConfigurationPage(
 
 #ifdef HAVE_LIBJACK
 
+    //!!! Number of audio inputs and submasters should leave here
+    //forthwith as they're now part of the Studio ...
+
     label = new QLabel(i18n("Number of stereo audio inputs:"), frame);
     m_jackInputs = new QSpinBox(frame);
 

@@ -258,6 +258,18 @@ public:
     //
     virtual int destroyMappedObject(int id);
 
+    // Connect two objects
+    //
+    virtual void connectMappedObjects(int id1, int id2);
+    
+    // Disconnect two objects
+    //
+    virtual void disconnectMappedObjects(int id1, int id2);
+
+    // Disconnect an object from everything
+    //
+    virtual void disconnectMappedObject(int id);
+
     // Sample rate
     //
     virtual unsigned int getSampleRate() const;

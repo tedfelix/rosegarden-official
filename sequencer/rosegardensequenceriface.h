@@ -265,6 +265,18 @@ public:
     //
     virtual int destroyMappedObject(int id) = 0;
 
+    // Connect two objects
+    //
+    virtual void connectMappedObjects(int id1, int id2) = 0;
+    
+    // Disconnect two objects
+    //
+    virtual void disconnectMappedObjects(int id1, int id2) = 0;
+
+    // Disconnect an object from everything
+    //
+    virtual void disconnectMappedObject(int id) = 0;
+
     // Driver sample rate
     //
     virtual unsigned int getSampleRate() const = 0;

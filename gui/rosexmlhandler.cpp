@@ -424,6 +424,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         // the file we're currently examining.
         //
         getStudio().clearMidiBanksAndPrograms();
+	getStudio().clearBusses();
+
         m_section = InStudio; // set top level section
 
         // Get and set MIDI filters
@@ -437,6 +439,16 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (recordStr)
             getStudio().setMIDIRecordFilter(recordStr.toInt());
+
+	QString inputStr = atts.value("audioinputpairs");
+	
+	if (inputStr) {
+	    int inputs = inputStr.toInt();
+	    if (inputs < 1) inputs = 1; // we simply don't permit no inputs
+	    while (getStudio().getRecordIns().size() < inputs) {
+		getStudio().addRecordIn(new Rosegarden::RecordIn());
+	    }
+	}
 
     } else if (lcName == "timesignature") {
 
@@ -1188,6 +1200,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
     } else if (lcName == "reverb") { // deprecated but we still read 'em
 
+	m_deprecation = true;
+	std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"reverb\" (now replaced by a control parameter).  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+
         if (m_section != InInstrument)
         {
             m_errorString = "Found Reverb outside Instrument";
@@ -1202,6 +1217,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
     } else if (lcName == "chorus") { // deprecated but we still read 'em
 
+	m_deprecation = true;
+	std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"chorus\" (now replaced by a control parameter).  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+
         if (m_section != InInstrument)
         {
             m_errorString = "Found Chorus outside Instrument";
@@ -1214,6 +1232,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_instrument->setControllerValue(Rosegarden::MIDI_CONTROLLER_CHORUS, value);
 
     } else if (lcName == "filter") { // deprecated but we still read 'em
+
+	m_deprecation = true;
+	std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"filter\" (now replaced by a control parameter).  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
 
         if (m_section != InInstrument)
         {
@@ -1229,6 +1250,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
     } else if (lcName == "resonance") { // deprecated but we still read 'em
 
+	m_deprecation = true;
+	std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"resonance\" (now replaced by a control parameter).  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+
         if (m_section != InInstrument)
         {
             m_errorString = "Found Resonance outside Instrument";
@@ -1243,6 +1267,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
     } else if (lcName == "attack") { // deprecated but we still read 'em
 
+	m_deprecation = true;
+	std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"attack\" (now replaced by a control parameter).  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+
         if (m_section != InInstrument)
         {
             m_errorString = "Found Attack outside Instrument";
@@ -1255,6 +1282,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_instrument->setControllerValue(Rosegarden::MIDI_CONTROLLER_ATTACK, value);
 
     } else if (lcName == "release") { // deprecated but we still read 'em
+
+	m_deprecation = true;
+	std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"release\" (now replaced by a control parameter).  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
 
         if (m_section != InInstrument)
         {
@@ -1269,22 +1299,33 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
     } else if (lcName == "pan") {
 
-        if (m_section != InInstrument)
+        if (m_section != InInstrument && m_section != InBuss)
         {
-            m_errorString = "Found Pan outside Instrument";
+            m_errorString = "Found Pan outside Instrument or Buss";
             return false;
         }
 
         Rosegarden::MidiByte value = atts.value("value").toInt();
 
-        if (m_instrument)
-        {
-            m_instrument->setPan(value);
-            m_instrument->setSendPan(true);
-        }
+	if (m_section == InInstrument) {
+	    if (m_instrument)
+	    {
+		m_instrument->setPan(value);
+		m_instrument->setSendPan(true);
+	    }
+	} else if (m_section == InBuss) {
+	    if (m_buss) {
+		m_buss->setPan(value);
+	    }
+	}
 
         // keep "velocity" so we're backwards compatible
     } else if (lcName == "velocity" || lcName == "volume") {
+
+	if (lcName == "velocity") {
+	    m_deprecation = true;
+	    std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"velocity\" for an overall MIDI instrument level (now replaced by \"volume\").  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+	}
 
         if (m_section != InInstrument)
         {
@@ -1301,6 +1342,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 		// range and we now store "level" (float dB) instead.
 		// Note that we have no such compatibility for
 		// "recordLevel", whose range has changed silently.
+		if (!m_deprecation) std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"volume\" for an audio instrument (now replaced by \"level\").  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+		m_deprecation = true;
 		m_instrument->setLevel
 		    (Rosegarden::AudioLevel::multiplier_to_dB(float(value) / 100.0));
 	    } else {
@@ -1311,16 +1354,20 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
     } else if (lcName == "level") {
 	
-        if (m_section != InInstrument ||
-	    (m_instrument &&
-	     m_instrument->getType() != Rosegarden::Instrument::Audio)) {
-            m_errorString = "Found Level outside (audio) Instrument";
+        if (m_section != InBuss &&
+	    (m_section != InInstrument ||
+	     (m_instrument &&
+	      m_instrument->getType() != Rosegarden::Instrument::Audio))) {
+            m_errorString = "Found Level outside (audio) Instrument or Buss";
             return false;
         }
 
-	if (m_instrument) {
-	    float value = atts.value("value").toFloat();
-	    m_instrument->setLevel(value);
+	float value = atts.value("value").toFloat();
+
+	if (m_section == InBuss) {
+	    if (m_buss) m_buss->setLevel(value);
+	} else {
+	    if (m_instrument) m_instrument->setLevel(value);
 	}
 
     } else if (lcName == "controlchange") {
@@ -1497,6 +1544,28 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_instrument->setMidiChannel(channel);
         }
 
+    } else if (lcName == "buss") {
+
+        if (m_section != InStudio)
+        {
+            m_errorString = "Found Buss outside Studio";
+            return false;
+        }
+
+        m_section = InBuss;
+
+        Rosegarden::BussId id = atts.value("id").toInt();
+        Rosegarden::Buss *buss = getStudio().getBussById(id);
+
+        // If we've got a buss then we use it from now on.
+        //
+        if (buss) {
+            m_buss = buss;
+        } else {
+	    m_buss = new Rosegarden::Buss(id);
+	    getStudio().addBuss(m_buss);
+	}
+
     } else if (lcName == "audiofiles") {
 
         if (m_section != NoSection)
@@ -1549,9 +1618,28 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_errorString = "Found audioInput outside Instrument";
             return false;
         }
+
         int value = atts.value("value").toInt();
 
-        if (m_instrument) m_instrument->setMappedAudioInput(value);
+	QString type = atts.value("type");
+	if (type) {
+	    if (type.lower() == "buss") {
+		if (m_instrument) m_instrument->setAudioInputToBuss(value);
+	    } else if (type.lower() == "record") {
+		if (m_instrument) m_instrument->setAudioInputToRecord(value);
+	    }
+	}
+
+    } else if (lcName == "audiooutput") {
+
+        if (m_section != InInstrument)
+        {
+            m_errorString = "Found audioOutput outside Instrument";
+            return false;
+        }
+
+        int value = atts.value("value").toInt();
+	if (m_instrument) m_instrument->setAudioOutput(value);
 
     } else if (lcName == "appearance") {
 
@@ -1700,6 +1788,12 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
     } else if (lcName == "studio") {
 
         m_section = NoSection;
+
+    } else if (lcName == "buss") {
+
+        m_section = InStudio;
+	m_buss = 0;
+
     } else if (lcName == "instrument") {
 
         m_section = InStudio;

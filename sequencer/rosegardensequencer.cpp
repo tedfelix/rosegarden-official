@@ -1379,6 +1379,32 @@ RosegardenSequencerApp::destroyMappedObject(int id)
     return(int(m_studio->destroyObject(Rosegarden::MappedObjectId(id))));
 }
 
+// Connect two objects
+//
+void
+RosegardenSequencerApp::connectMappedObjects(int id1, int id2)
+{
+    m_studio->connectObjects(Rosegarden::MappedObjectId(id1),
+			     Rosegarden::MappedObjectId(id2));
+}
+    
+// Disconnect two objects
+//
+void
+RosegardenSequencerApp::disconnectMappedObjects(int id1, int id2)
+{
+    m_studio->disconnectObjects(Rosegarden::MappedObjectId(id1),
+				Rosegarden::MappedObjectId(id2));
+}
+
+// Disconnect an object from everything
+//
+void
+RosegardenSequencerApp::disconnectMappedObject(int id)
+{
+    m_studio->disconnectObject(Rosegarden::MappedObjectId(id));
+}
+
 
 void
 RosegardenSequencerApp::clearStudio()

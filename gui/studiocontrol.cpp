@@ -1,3 +1,4 @@
+// -*- c-basic-offset: 4 -*-
 /*
     Rosegarden-4
     A sequencer and musical notation editor.
@@ -197,6 +198,73 @@ StudioControl::setStudioPluginPort(MappedObjectId pluginId,
     rgapp->sequencerSend("setMappedPort(int, unsigned long int, float)", data);
 }
 
+
+void
+StudioControl::connectStudioObjects(MappedObjectId id1,
+				    MappedObjectId id2)
+{
+    QByteArray data;
+    QCString replyType;
+    QByteArray replyData;
+    QDataStream streamOut(data, IO_WriteOnly);
+
+    streamOut << id1;
+    streamOut << id2;
+
+    if (!rgapp->sequencerCall("connectMappedObjects(int, int)",
+                              replyType, replyData, data))
+    {
+        SEQMAN_DEBUG << "connectStudioObjects - "
+                     << "failed to contact Rosegarden sequencer"
+                     << endl;
+    }
+
+    return;
+}
+
+void
+StudioControl::disconnectStudioObjects(MappedObjectId id1,
+				       MappedObjectId id2)
+{
+    QByteArray data;
+    QCString replyType;
+    QByteArray replyData;
+    QDataStream streamOut(data, IO_WriteOnly);
+
+    streamOut << id1;
+    streamOut << id2;
+
+    if (!rgapp->sequencerCall("disconnectMappedObjects(int, int)",
+                              replyType, replyData, data))
+    {
+        SEQMAN_DEBUG << "disconnectStudioObjects - "
+                     << "failed to contact Rosegarden sequencer"
+                     << endl;
+    }
+
+    return;
+}
+
+void
+StudioControl::disconnectStudioObject(MappedObjectId id)
+{
+    QByteArray data;
+    QCString replyType;
+    QByteArray replyData;
+    QDataStream streamOut(data, IO_WriteOnly);
+
+    streamOut << id;
+
+    if (!rgapp->sequencerCall("disconnectMappedObject(int)",
+                              replyType, replyData, data))
+    {
+        SEQMAN_DEBUG << "disconnectStudioObject - "
+                     << "failed to contact Rosegarden sequencer"
+                     << endl;
+    }
+
+    return;
+}
 
 void
 StudioControl::sendMappedEvent(const Rosegarden::MappedEvent &mE)

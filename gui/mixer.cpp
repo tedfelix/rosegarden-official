@@ -154,8 +154,17 @@ MixerWindow::MixerWindow(QWidget *parent,
 	    rec.m_stereoButton->setPixmap(m_stereoPixmap);
 	}
 
+	//!!! input too
+	Rosegarden::BussId bussId = (*i)->getAudioOutput();
+	if (bussId > 0) {
+	    rec.m_output->setText(i18n("Sub %1").arg(bussId));
+	} else {
+	    rec.m_output->setText(i18n("Master"));
+	}
+
 	connect(rec.m_input, SIGNAL(clicked()),
 		this, SLOT(slotRoutingButtonPressed()));
+
 	connect(rec.m_output, SIGNAL(clicked()),
 		this, SLOT(slotRoutingButtonPressed()));
 
@@ -164,6 +173,18 @@ MixerWindow::MixerWindow(QWidget *parent,
 
 	connect(rec.m_pan, SIGNAL(valueChanged(float)),
 		this, SLOT(slotPanChanged(float)));
+
+	connect(rec.m_soloButton, SIGNAL(clicked()),
+		this, SLOT(slotSoloChanged()));
+
+	connect(rec.m_muteButton, SIGNAL(clicked()),
+		this, SLOT(slotMuteChanged()));
+
+	connect(rec.m_stereoButton, SIGNAL(clicked()),
+		this, SLOT(slotChannelsChanged()));
+
+	connect(rec.m_recordButton, SIGNAL(clicked()),
+		this, SLOT(slotRecordChanged()));
 
 	m_faders[(*i)->getId()] = rec;
 	++count;
@@ -214,6 +235,9 @@ MixerWindow::MixerWindow(QWidget *parent,
 	connect(rec.m_pan, SIGNAL(valueChanged(float)),
 		this, SLOT(slotPanChanged(float)));
 
+	connect(rec.m_muteButton, SIGNAL(clicked()),
+		this, SLOT(slotMuteChanged()));
+
 	m_submasters.push_back(rec);
 	++count;
 
@@ -249,6 +273,9 @@ MixerWindow::MixerWindow(QWidget *parent,
 	connect(rec.m_fader, SIGNAL(faderChanged(float)),
 		this, SLOT(slotFaderLevelChanged(float)));
 
+	connect(rec.m_muteButton, SIGNAL(clicked()),
+		this, SLOT(slotMuteChanged()));
+
 	m_monitor = rec;
 	mainLayout->addMultiCell(new QSpacerItem(2, 0), 0, 6, col+2, col+2);
 
@@ -277,6 +304,9 @@ MixerWindow::MixerWindow(QWidget *parent,
 
 	connect(rec.m_fader, SIGNAL(faderChanged(float)),
 		this, SLOT(slotFaderLevelChanged(float)));
+
+	connect(rec.m_muteButton, SIGNAL(clicked()),
+		this, SLOT(slotMuteChanged()));
 
 	m_master = rec;
     }
@@ -342,19 +372,21 @@ MixerWindow::slotRoutingButtonPressed()
 
     QPopupMenu *menu = new QPopupMenu(this);
 
-    KConfig* config = kapp->config();
-    config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
-    int submasterCount = config->readNumEntry("audiosubmasters", 4);
+    int submasterCount = m_studio->getBusses().size() - 1;
 
     if (output) {
+
+	menu->insertItem(i18n("Master"));
 
 	for (int i = 0; i < submasterCount; ++i) {
 	    menu->insertItem(i18n("Sub %1").arg(i+1));
 	}
 
+	connect(menu, SIGNAL(activated(int)), this, SLOT(slotOutputChanged(int)));
+
     } else {
 
-	int jackAudioInputs = config->readNumEntry("audioinputs", 2);
+	int jackAudioInputs = m_studio->getRecordIns().size();
 
 	for (int i = 0; i < jackAudioInputs; ++i) {
 	    if (!stereo) {
@@ -380,19 +412,44 @@ MixerWindow::slotRoutingButtonPressed()
 	} else {
 	    menu->insertItem(i18n("Master"));
 	}
+
+	connect(menu, SIGNAL(activated(int)), this, SLOT(slotInputChanged(int)));
     }
 
     m_currentId = id;
-    connect(menu, SIGNAL(activated(int)), this, SLOT(slotRouteChanged(int)));
 
     //!!! need to popup with current item under pointer
     menu->popup(QCursor::pos());
 }
 
 void
-MixerWindow::slotRouteChanged(int i)
+MixerWindow::slotInputChanged(int i)
 {
-    //...
+    //!!!
+
+}
+
+void
+MixerWindow::slotOutputChanged(int i)
+{
+    Rosegarden::Instrument *instrument = m_studio->getInstrumentById(m_currentId);
+    if (!instrument) return;
+
+    Rosegarden::BussId bussId = instrument->getAudioOutput();
+    Rosegarden::Buss *oldBuss = m_studio->getBussById(bussId);
+    Rosegarden::Buss *newBuss = m_studio->getBussById(i);
+    if (!oldBuss || !newBuss) return;
+
+    Rosegarden::StudioControl::disconnectStudioObjects(instrument->getMappedId(),
+						       oldBuss->getMappedId());
+
+    Rosegarden::StudioControl::connectStudioObjects(instrument->getMappedId(),
+						    newBuss->getMappedId());
+
+    instrument->setAudioOutput(i);
+
+    m_faders[m_currentId].m_output->
+	setText(i > 0 ? i18n("Sub %1").arg(i) : i18n("Master"));
 }
 
 void
@@ -420,7 +477,6 @@ MixerWindow::slotSelectPlugin()
 	}
     }	    
 }
-
 
 void
 MixerWindow::slotFaderLevelChanged(float dB)
@@ -517,6 +573,30 @@ MixerWindow::slotPanChanged(float pan)
 	    instrument->setPan(Rosegarden::MidiByte(pan + 100.0));
 	}
     }
+}
+
+void
+MixerWindow::slotChannelsChanged()
+{
+    //...
+}
+
+void
+MixerWindow::slotSoloChanged()
+{
+    //...
+}
+
+void
+MixerWindow::slotMuteChanged()
+{
+    //...
+}
+
+void
+MixerWindow::slotRecordChanged()
+{
+    //...
 }
 
 void

@@ -71,6 +71,7 @@ public:
         Studio,
         AudioFader,          // connectable fader - interfaces with devices
         AudioBuss,           // connectable buss - inferfaces with faders
+	AudioInput,          // connectable record input
         AudioPluginManager,
         LADSPAPlugin,
         LADSPAPort
@@ -182,6 +183,7 @@ private:
 
 class MappedAudioFader;
 class MappedAudioBuss;
+class MappedAudioInput;
 
 // Works as a factory and virtual plug-board for all our other
 // objects whether they be MIDI or audio.
@@ -208,6 +210,7 @@ public:
 
     bool connectObjects(MappedObjectId mId1, MappedObjectId mId2);
     bool disconnectObjects(MappedObjectId mId1, MappedObjectId mId2);
+    bool disconnectObject(MappedObjectId mId);
 
     // Destroy a MappedObject by ID
     //
@@ -258,6 +261,8 @@ public:
     MappedAudioFader *getAudioFader(Rosegarden::InstrumentId id);
 
     MappedAudioBuss *getAudioBuss(int bussNumber);
+
+    MappedAudioInput *getAudioInput(int inputNumber);
 
     MappedObject* getPluginInstance(Rosegarden::InstrumentId id,
                                     int position);
@@ -434,9 +439,6 @@ public:
     // no send channels.
 
     static const MappedObjectProperty Pan;
-
-    // properties
-    //
     static const MappedObjectProperty Level;
 
     MappedAudioBuss(MappedObject *parent,
@@ -456,6 +458,27 @@ public:
 protected:
     MappedObjectValue m_level;
     MappedObjectValue m_pan;
+};
+
+class MappedAudioInput : public MappedConnectableObject
+{
+public:
+    // An input is simpler still -- no properties at all, just
+    // the connections.
+
+    MappedAudioInput(MappedObject *parent,
+                    MappedObjectId id,
+                    bool readOnly = false);
+    ~MappedAudioInput();
+
+    virtual MappedObjectPropertyList getPropertyList(
+                        const MappedObjectProperty &property);
+
+    virtual bool getProperty(const MappedObjectProperty &property,
+			     MappedObjectValue &value);
+
+    virtual void setProperty(const MappedObjectProperty &property,
+                             MappedObjectValue value);
 };
 
 #ifdef HAVE_LADSPA

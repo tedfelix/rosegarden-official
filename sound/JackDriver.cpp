@@ -211,6 +211,7 @@ JackDriver::initialise()
         AUDIT_STREAM << "JackDriver::initialiseAudio - "
                      << "JACK server not running"
                      << std::endl;
+	AUDIT_UPDATE;
         return;
     }
 
@@ -239,26 +240,7 @@ JackDriver::initialise()
     // create processing buffer(s)
     //
     m_tempOutBuffer = new sample_t[m_bufferSize];
-/*!!!
-    // Create output ports
-    //
-    for (int i = 0; i < 4; ++i) {//!!!
 
-	char namebuffer[20];
-
-	snprintf(namebuffer, 19, "submaster %d out L", i+1);
-	port = jack_port_register
-	    (m_client, namebuffer,
-	     JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
-	m_outputSubmasters.push_back(port);
-
-	snprintf(namebuffer, 19, "submaster %d out R", i+1);
-	port = jack_port_register
-	    (m_client, namebuffer,
-	     JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
-	m_outputSubmasters.push_back(port);
-    }
-*/
     AUDIT_STREAM << "JackDriver::initialiseAudio - "
                  << "creating disk thread" << std::endl;
 
@@ -553,7 +535,12 @@ JackDriver::setAudioPorts(bool faderOuts, bool submasterOuts)
     }
 
     if (submasterOuts) {
-	createSubmasterOutputs(4); //!!! for now
+	
+	// one fewer than returned here, because the master has a buss object too
+	createSubmasterOutputs
+	    (m_alsaDriver->getMappedStudio()->getObjectCount
+	     (MappedObject::AudioBuss) - 1);
+
     } else {
 	createSubmasterOutputs(0);
     }
@@ -637,6 +624,9 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     // need to keep ourselves up to date by reading and monitoring the
     // instruments).  If we have no busses, mix direct from instruments.
 
+    //!!! actually, this needs to be refined for instruments that are
+    // configured to route straight to the master -- which is now possible
+
     for (int buss = 0; buss < bussCount; ++buss) {
 
 	sample_t *submaster[2] = { 0, 0 };
@@ -684,7 +674,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	    sdb->setSubmasterLevel(buss, info);
 	}
     }
-    
+
     for (InstrumentId id = instrumentBase;
 	 id < instrumentBase + instruments; ++id) {
 	
@@ -721,6 +711,13 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 		    if (sample > peak[ch]) peak[ch] = sample;
 		    if (bussCount == 0) master[ch][i] += sample;
 		}
+	    }
+
+	    if (rb && (bussCount == 0)) {
+		// buss won't be discarding from its reader, so we need to.
+		// again, this needs to take into account instruments routed
+		// straight to master.
+		rb->skip(nframes, 1); // 1 is the buss mixer's reader (magic)
 	    }
 	}
 

@@ -70,6 +70,14 @@ public:
                                     unsigned long portId,
                                     MappedObjectValue value);
 
+    // Connection
+    //
+    static void connectStudioObjects(MappedObjectId id1,
+				     MappedObjectId id2);
+    static void disconnectStudioObjects(MappedObjectId id1,
+					MappedObjectId id2);
+    static void disconnectStudioObject(MappedObjectId id);
+
     // Send controllers and other one off MIDI events using these
     // interfaces.
     //

@@ -48,6 +48,7 @@ public:
         InSegment,
         InStudio,
         InInstrument,
+	InBuss,
         InAudioFiles,
         InPlugin,
         InAppearance
@@ -143,6 +144,7 @@ protected:
     Rosegarden::MidiByte              m_msb;
     Rosegarden::MidiByte              m_lsb;
     Rosegarden::Instrument           *m_instrument;
+    Rosegarden::Buss                 *m_buss;
     Rosegarden::AudioPluginInstance  *m_plugin;
     Rosegarden::ColourMap            *m_colourMap;
     unsigned int                      m_pluginId;

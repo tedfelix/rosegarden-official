@@ -46,9 +46,14 @@ signals:
 
 protected slots:
     void slotRoutingButtonPressed();
-    void slotRouteChanged(int);
+    void slotInputChanged(int);
+    void slotOutputChanged(int);
     void slotFaderLevelChanged(float level);
     void slotPanChanged(float value);
+    void slotChannelsChanged();
+    void slotSoloChanged();
+    void slotMuteChanged();
+    void slotRecordChanged();
     void slotSelectPlugin();
     
 protected:

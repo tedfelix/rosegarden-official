@@ -59,6 +59,8 @@ const MidiByte MidiMaxValue = 127;
 const MidiByte MidiMidValue = 64;
 const MidiByte MidiMinValue = 0;
 
+typedef unsigned int BussId;
+
 // Predeclare Device
 //
 class Device;
@@ -160,13 +162,13 @@ public:
     void setAudioChannels(unsigned int ch) { m_channel = MidiByte(ch); }
     unsigned int getAudioChannels() const { return (unsigned int)(m_channel); }
 
-    void setMappedAudioInput(int input) { m_mappedAudioInput = input; }
-    int getMappedAudioInput() const { return m_mappedAudioInput; }
+    // an audio input can be a buss or a record input
+    void setAudioInputToBuss(BussId buss);
+    void setAudioInputToRecord(int recordIn);
+    int getAudioInput(bool &isBuss) const;
 
-    void setMappedAudioOutput(std::pair<int, int> pair) 
-        { m_mappedAudioOutput = pair; }
-    std::pair<int, int> getMappedAudioOutput() const 
-        { return m_mappedAudioOutput; }
+    void setAudioOutput(BussId buss) { m_audioOutput = buss; }
+    BussId getAudioOutput() const { return m_audioOutput; }
 
     // Implementation of virtual function
     //
@@ -244,14 +246,14 @@ private:
     //
     int              m_mappedId;
 
-    // Which input terminal we're connected to - simple integer based
-    // on the number of channels this audio Instrument supports.
+    // Which input terminal we're connected to - this is a BussId
+    // if less than 1000 or a record input number (plus 1000) if >= 1000.
     //
-    int              m_mappedAudioInput;
+    int              m_audioInput;
 
-    // MappedObjectId/port pair for output connection
+    // Which buss we output to.  Zero is always the master.
     //
-    std::pair<int, int>  m_mappedAudioOutput;
+    BussId           m_audioOutput;
 
     // A static controller map that can be saved/loaded and queried along with this instrument.
     // These values are modified from the IPB - if they appear on the IPB then they are sent
@@ -261,8 +263,6 @@ private:
     StaticControllers    m_staticControllers;
 };
 
-
-typedef unsigned int BussId;
 
 class Buss : public XmlExportable
 {
@@ -288,6 +288,24 @@ private:
     BussId m_id;
     float m_level;
     MidiByte m_pan;
+    int m_mappedId;
+};
+  
+
+// audio record input of a sort that can be connected to
+
+class RecordIn : public XmlExportable
+{
+public:
+    RecordIn();
+    ~RecordIn();
+
+    int getMappedId() const { return m_mappedId; }
+    void setMappedId(int id) { m_mappedId = id; }
+
+    virtual std::string toXmlString();
+
+private:
     int m_mappedId;
 };
     

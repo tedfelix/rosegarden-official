@@ -1,0 +1,17 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+
+<kpartgui name="Rosegarden::Mixer" version="096">
+  
+<MenuBar>
+
+<Menu name="settings"><text>&amp;Settings</text>
+  <Action name="show_midi" append="show_merge" />
+  <Action name="show_audio_faders" append="show_merge" />
+  <Action name="show_audio_submasters" append="show_merge" />
+  <Action name="show_plugin_buttons" append="show_merge" />
+</Menu> 
+
+</MenuBar>
+
+</kpartgui>
+ 

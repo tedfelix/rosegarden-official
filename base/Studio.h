@@ -44,6 +44,7 @@ namespace Rosegarden
 typedef std::vector<Instrument *> InstrumentList;
 typedef std::vector<Device*> DeviceList;
 typedef std::vector<Buss *> BussList;
+typedef std::vector<RecordIn *> RecordInList;
 typedef std::vector<Device*>::iterator DeviceListIterator;
 typedef std::vector<Device*>::const_iterator DeviceListConstIterator;
 
@@ -81,6 +82,11 @@ public:
     Instrument* getInstrumentFromList(int index);
 
     BussList getBusses();
+    Buss *getBussById(BussId id);
+    void addBuss(Buss *buss);
+
+    RecordInList getRecordIns() { return m_recordIns; }
+    void addRecordIn(RecordIn *ri) { m_recordIns.push_back(ri); }
 
     // A clever method to best guess MIDI file program mappings
     // to available MIDI channels across all MidiDevices.
@@ -115,6 +121,8 @@ public:
     //
     void clearMidiBanksAndPrograms();
 
+    void clearBusses();
+    
     // Clear down
     void clear();
 
@@ -163,6 +171,9 @@ private:
     DeviceList        m_devices;
 
     BussList          m_busses;
+    RecordInList      m_recordIns;
+
+    int               m_audioInputs; // stereo pairs
 
     MidiFilter        m_midiThruFilter;
     MidiFilter        m_midiRecordFilter;

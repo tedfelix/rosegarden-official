@@ -105,7 +105,7 @@ const MappedObjectProperty MappedObject::Name = "name";
 const MappedObjectProperty MappedObject::Instrument = "instrument";
 const MappedObjectProperty MappedObject::Position = "position";
 
-const MappedObjectProperty MappedConnectableObject::ConnectionsIn = "connectonsIn";
+const MappedObjectProperty MappedConnectableObject::ConnectionsIn = "connectionsIn";
 const MappedObjectProperty MappedConnectableObject::ConnectionsOut = "connectionsOut";
 
 const MappedObjectProperty MappedAudioFader::Channels = "channels";
@@ -376,6 +376,15 @@ MappedStudio::createObject(MappedObjectType type,
         // push to the studio's child stack
         addChild(mO);
     }
+    else if (type == MappedObject::AudioInput)
+    {
+        mO = new MappedAudioInput(this,
+				 id,
+				 readOnly);
+
+        // push to the studio's child stack
+        addChild(mO);
+    }
     
 #ifdef HAVE_LADSPA
 
@@ -516,7 +525,52 @@ MappedStudio::disconnectObjects(MappedObjectId mId1, MappedObjectId mId2)
 
     return rv;
 }
- 
+
+bool
+MappedStudio::disconnectObject(MappedObjectId mId)
+{
+    pthread_mutex_lock(&_mappedObjectContainerLock);
+
+    bool rv = false;
+
+    MappedConnectableObject *obj =
+	dynamic_cast<MappedConnectableObject *>(getObject(mId));
+    
+    if (obj) {
+	while (1) {
+	    MappedObjectValueList list = 
+		obj->getConnections(MappedConnectableObject::In);
+	    std::cerr << "In connections for " << mId << ":" << std::endl;
+	    for (MappedObjectValueList::iterator i = list.begin();
+		 i != list.end(); ++i) {
+		std::cerr << *i << std::endl;
+	    }
+	    if (list.empty()) break;
+	    MappedObjectId otherId = MappedObjectId(*list.begin());
+	    disconnectObjects(otherId, mId);
+	}
+	while (1) {
+	    MappedObjectValueList list = 
+		obj->getConnections(MappedConnectableObject::Out);
+	    std::cerr << "Out connections for " << mId << ":" << std::endl;
+	    for (MappedObjectValueList::iterator i = list.begin();
+		 i != list.end(); ++i) {
+		std::cerr << *i << std::endl;
+	    }
+	    if (list.empty()) break;
+	    MappedObjectId otherId = MappedObjectId(*list.begin());
+	    disconnectObjects(mId, otherId);
+	}
+    }
+    
+    rv = true;
+
+    pthread_mutex_unlock(&_mappedObjectContainerLock);
+
+    return rv;
+}
+
+    
 
 // Clear down the whole studio
 //
@@ -746,6 +800,32 @@ MappedStudio::getAudioBuss(int bussNumber)
     return rv;
 }
 
+MappedAudioInput *
+MappedStudio::getAudioInput(int inputNumber)
+{
+    pthread_mutex_lock(&_mappedObjectContainerLock);
+
+    MappedObjectCategory &category = m_objects[AudioInput];
+    MappedAudioInput *rv = 0;
+
+    int count = 0;
+
+    for (MappedObjectCategory::iterator i = category.begin();
+	 i != category.end(); ++i) {
+	MappedAudioInput *input = dynamic_cast<MappedAudioInput *>(i->second);
+	if (input) {
+	    if (count >= inputNumber) {
+		rv = input;
+		break;
+	    }
+	    ++count;
+	}
+    }
+
+    pthread_mutex_unlock(&_mappedObjectContainerLock);
+    return rv;
+}
+
 MappedObject*
 MappedStudio::getPluginInstance(Rosegarden::InstrumentId id,
                                 int position)
@@ -858,6 +938,8 @@ void
 MappedConnectableObject::setConnections(ConnectionDirection dir,
 					MappedObjectValueList conns)
 {
+    std::cerr << getId() << ": setting connections " << dir << std::endl;
+
     if (dir == In)
         m_connectionsIn = conns;
     else
@@ -870,6 +952,8 @@ MappedConnectableObject::addConnection(ConnectionDirection dir,
 {
     MappedObjectValueList &list =
 	(dir == In ? m_connectionsIn : m_connectionsOut);
+
+    std::cerr << getId() << ": adding connection dir " << dir << ", id " << id << std::endl;
 
     for (MappedObjectValueList::iterator i = list.begin(); i != list.end(); ++i) {
 	if (*i == id) return;
@@ -885,8 +969,11 @@ MappedConnectableObject::removeConnection(ConnectionDirection dir,
     MappedObjectValueList &list =
 	(dir == In ? m_connectionsIn : m_connectionsOut);
 
+    std::cerr << getId() << ": removing connection dir " << dir << ", id " << id << std::endl;
+
     for (MappedObjectValueList::iterator i = list.begin(); i != list.end(); ++i) {
 	if (*i == id) {
+	    std::cerr << "found" << std::endl;
 	    list.erase(i);
 	    return;
 	}
@@ -920,13 +1007,6 @@ MappedAudioFader::MappedAudioFader(MappedObject *parent,
     m_pan(0),
     m_channels(channels)
 {
-    // Set default connections
-    //
-    MappedObjectValueList defaultConns;
-    defaultConns.push_back(0);
-
-    setConnections(In, defaultConns);
-    setConnections(Out, defaultConns);
 }
 
 MappedAudioFader::~MappedAudioFader()
@@ -1081,8 +1161,6 @@ MappedAudioBuss::MappedAudioBuss(MappedObject *parent,
                       readOnly),
     m_level(0)
 {
-    //!!! I'm not sure we actually need to remember what this is
-    // connected to, here
 }
 
 MappedAudioBuss::~MappedAudioBuss()
@@ -1177,6 +1255,53 @@ MappedAudioBuss::setProperty(const MappedObjectProperty &property,
 #endif
         return;
     }
+}
+
+// ---------------- MappedAudioBuss -------------------
+//
+//
+MappedAudioInput::MappedAudioInput(MappedObject *parent,
+				   MappedObjectId id,
+				   bool readOnly):
+    MappedConnectableObject(parent,
+			    "MappedAudioInput",
+			    AudioInput,
+			    id,
+			    readOnly)
+{
+}
+
+MappedAudioInput::~MappedAudioInput()
+{
+}
+
+MappedObjectPropertyList
+MappedAudioInput::getPropertyList(const MappedObjectProperty &)
+{
+    MappedObjectPropertyList list;
+    return list;
+}
+
+bool
+MappedAudioInput::getProperty(const MappedObjectProperty &,
+			     MappedObjectValue &)
+{
+#ifdef DEBUG_MAPPEDSTUDIO
+    std::cerr << "MappedAudioInput::getProperty - "
+	      << "no properties available" << std::endl;
+#endif
+    return false;
+}
+
+void
+MappedAudioInput::setProperty(const MappedObjectProperty &,
+			      MappedObjectValue )
+{
+#ifdef DEBUG_MAPPEDSTUDIO
+    std::cerr << "MappedAudioInput::setProperty - "
+	      << "no properties available" << std::endl;
+#endif
+    return;
 }
 
 
