@@ -245,7 +245,14 @@ VUMeter::paintEvent(QPaintEvent*)
 	paint.setPen(m_background);
 	paint.setBrush(m_background);
 	paint.drawRect(0, 0, width(), height());
+
         drawMeterLevel(&paint);
+
+	paint.setPen(colorGroup().background());
+	paint.drawPoint(0, 0);
+	paint.drawPoint(width()-1, 0);
+	paint.drawPoint(0, height()-1);
+	paint.drawPoint(width()-1, height()-1);
     }
     else
     {

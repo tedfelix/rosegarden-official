@@ -100,6 +100,8 @@ MixerWindow::MixerWindow(QWidget *parent,
 
 	rec.m_pan = new RosegardenRotary
 	    (mainBox, -100.0, 100.0, 1.0, 5.0, 0.0, 20);
+	rec.m_pan->setKnobColour(RosegardenGUIColours::RotaryPastelGreen);
+
 	rec.m_fader = new RosegardenFader
 	    (Rosegarden::AudioLevel::LongFader, 20, 240, mainBox);
 	rec.m_meter = new AudioVUMeter
@@ -153,8 +155,13 @@ MixerWindow::MixerWindow(QWidget *parent,
 	mainLayout->addWidget(rec.m_pan, 2, col+1, Qt::AlignLeft);
 	mainLayout->addWidget(rec.m_fader, 3, col, Qt::AlignCenter);
 	mainLayout->addWidget(rec.m_meter, 3, col+1, Qt::AlignCenter);
-	mainLayout->addWidget(rec.m_muteButton, 4, col);
-	mainLayout->addWidget(rec.m_soloButton, 4, col+1);
+
+// commented out until implemented
+//	mainLayout->addWidget(rec.m_muteButton, 4, col);
+//	mainLayout->addWidget(rec.m_soloButton, 4, col+1);
+	rec.m_muteButton->hide();
+	rec.m_soloButton->hide();
+
 	mainLayout->addWidget(rec.m_recordButton, 5, col);
 	mainLayout->addWidget(rec.m_stereoButton, 5, col+1);
 	mainLayout->addMultiCellWidget(rec.m_pluginBox, 6, 6, col, col+1);
@@ -209,6 +216,8 @@ MixerWindow::MixerWindow(QWidget *parent,
 
 	rec.m_pan = new RosegardenRotary
 	    (mainBox, -100.0, 100.0, 1.0, 5.0, 0.0, 20);
+	rec.m_pan->setKnobColour(RosegardenGUIColours::RotaryPastelBlue);
+
 	rec.m_fader = new RosegardenFader
 	    (Rosegarden::AudioLevel::LongFader, 20, 240, mainBox);
 	rec.m_meter = new AudioVUMeter
@@ -226,7 +235,9 @@ MixerWindow::MixerWindow(QWidget *parent,
 	mainLayout->addWidget(rec.m_pan, 2, col+1, Qt::AlignLeft);
 	mainLayout->addWidget(rec.m_fader, 3, col, Qt::AlignCenter);
 	mainLayout->addWidget(rec.m_meter, 3, col+1, Qt::AlignCenter);
-	mainLayout->addMultiCellWidget(rec.m_muteButton, 4, 4, col, col+1);
+
+//	mainLayout->addMultiCellWidget(rec.m_muteButton, 4, 4, col, col+1);
+	rec.m_muteButton->hide();
 
 	m_submasters.push_back(rec);
 	updateFader(count);
@@ -269,9 +280,12 @@ MixerWindow::MixerWindow(QWidget *parent,
 	mainLayout->addMultiCellWidget(idLabel, 2, 2, col, col+1, Qt::AlignCenter);
 	mainLayout->addWidget(rec.m_fader, 3, col, Qt::AlignCenter);
 	mainLayout->addWidget(rec.m_meter, 3, col+1, Qt::AlignCenter);
-	mainLayout->addMultiCellWidget(rec.m_muteButton, 4, 4, col, col+1);
+
+//	mainLayout->addMultiCellWidget(rec.m_muteButton, 4, 4, col, col+1);
+	rec.m_muteButton->hide();
 
 	m_monitor = rec;
+	updateFader(-1);
 
 	connect(rec.m_fader, SIGNAL(faderChanged(float)),
 		this, SLOT(slotFaderLevelChanged(float)));
@@ -299,7 +313,10 @@ MixerWindow::MixerWindow(QWidget *parent,
 	mainLayout->addMultiCellWidget(idLabel, 2, 2, col, col+1, Qt::AlignCenter);
 	mainLayout->addWidget(rec.m_fader, 3, col, Qt::AlignCenter);
 	mainLayout->addWidget(rec.m_meter, 3, col+1, Qt::AlignCenter);
-	mainLayout->addMultiCellWidget(rec.m_muteButton, 4, 4, col, col+1);
+
+//	mainLayout->addMultiCellWidget(rec.m_muteButton, 4, 4, col, col+1);
+	rec.m_muteButton->hide();
+	
 	mainLayout->addMultiCell(new QSpacerItem(2, 0), 0, 6, col+2, col+2);
 
 	m_master = rec;
@@ -369,9 +386,24 @@ MixerWindow::slotClose()
 void
 MixerWindow::slotUpdateInstrument(Rosegarden::InstrumentId id)
 {
+    RG_DEBUG << "MixerWindow::slotUpdateInstrument(" << id << ")" << endl;
+
+    blockSignals(true);
+
     updateFader(id);
     updateStereoButton(id);
     updateRouteButtons(id);
+    updatePluginButtons(id);
+    updateMiscButtons(id);
+
+    Rosegarden::Composition &comp = m_document->getComposition();
+    Rosegarden::TrackId recordTrackId = comp.getRecordTrack();
+    Rosegarden::Track *recordTrack = comp.getTrackById(recordTrackId);
+    if (recordTrack && recordTrack->getInstrument() == id) {
+	updateFader(-1); // sekrit code for monitor fader
+    }
+
+    blockSignals(false);
 }
 
 void
@@ -386,6 +418,10 @@ MixerWindow::slotPluginSelected(Rosegarden::InstrumentId id,
 
 	    rec.m_plugins[index]->setText(i18n("<none>"));
 
+	    rec.m_plugins[i]->setPaletteBackgroundColor
+		(kapp->palette().
+		 color(QPalette::Active, QColorGroup::Button));
+
 	} else {
 
 	    Rosegarden::AudioPlugin *pluginClass 
@@ -394,6 +430,10 @@ MixerWindow::slotPluginSelected(Rosegarden::InstrumentId id,
 	    if (pluginClass)
 		rec.m_plugins[index]->
 		    setText(pluginClass->getLabel());
+
+	    rec.m_plugins[i]->setPaletteBackgroundColor
+		(kapp->palette().
+		 color(QPalette::Active, QColorGroup::Light));
 	}
     }
 }
@@ -408,12 +448,27 @@ MixerWindow::slotPluginBypassed(Rosegarden::InstrumentId instrumentId,
 void
 MixerWindow::updateFader(int id)
 {
-    if (id >= (int)Rosegarden::AudioInstrumentBase) {
+    if (id == -1) {
+
+	Rosegarden::Composition &comp = m_document->getComposition();
+	Rosegarden::TrackId recordTrackId = comp.getRecordTrack();
+	Rosegarden::Track *recordTrack = comp.getTrackById(recordTrackId);
+	if (recordTrack) {
+	    Rosegarden::InstrumentId instrumentId = recordTrack->getInstrument();
+	    Rosegarden::Instrument *instrument = m_studio->getInstrumentById
+		(instrumentId);
+	    m_monitor.m_fader->setFader(instrument->getRecordLevel());
+	}
+	
+    } else if (id >= (int)Rosegarden::AudioInstrumentBase) {
+
 	FaderRec &rec = m_faders[id];
 	Rosegarden::Instrument *instrument = m_studio->getInstrumentById(id);
 	rec.m_fader->setFader(instrument->getLevel());
 	rec.m_pan->setPosition(instrument->getPan() - 100);
+
     } else {
+
 	FaderRec &rec = (id == 0 ? m_master : m_submasters[id-1]);
 	Rosegarden::BussList busses = m_studio->getBusses();
 	Rosegarden::Buss *buss = busses[id];
@@ -454,6 +509,14 @@ MixerWindow::updateStereoButton(int id)
 
 
 void
+MixerWindow::updateMiscButtons(int id)
+{
+    //... complications here, because the mute/solo status is actually
+    // per-track rather than per-instrument... doh.
+}
+
+
+void
 MixerWindow::updatePluginButtons(int id)
 {
     if (id >= (int)Rosegarden::AudioInstrumentBase) {
@@ -463,6 +526,7 @@ MixerWindow::updatePluginButtons(int id)
 
 	for (unsigned int i = 0; i < rec.m_plugins.size(); i++) {
 
+	    bool used = false;
 	    bool bypass = false;
 
 	    rec.m_plugins[i]->show();
@@ -480,6 +544,7 @@ MixerWindow::updatePluginButtons(int id)
 		    rec.m_plugins[i]->
 			setText(pluginClass->getLabel());
 		
+		used = true;
 		bypass = inst->isBypassed();
 
 	    } else {
@@ -498,6 +563,16 @@ MixerWindow::updatePluginButtons(int id)
 		rec.m_plugins[i]->setPaletteBackgroundColor
 		    (kapp->palette().
 		     color(QPalette::Active, QColorGroup::ButtonText));
+
+	    } else if (used) {
+
+		rec.m_plugins[i]->setPaletteForegroundColor
+		    (kapp->palette().
+		     color(QPalette::Active, QColorGroup::ButtonText));
+
+		rec.m_plugins[i]->setPaletteBackgroundColor
+		    (kapp->palette().
+		     color(QPalette::Active, QColorGroup::Light));
 
 	    } else {
 
@@ -544,8 +619,6 @@ MixerWindow::slotInputChanged()
 {
     const QObject *s = sender();
 
-    //!!! need to do equiv thing in instrument param box
-
     for (FaderMap::iterator i = m_faders.begin();
 	 i != m_faders.end(); ++i) {
 
@@ -557,8 +630,6 @@ void
 MixerWindow::slotOutputChanged()
 {
     const QObject *s = sender();
-
-    //!!! need to do equiv thing in instrument param box
 
     for (FaderMap::iterator i = m_faders.begin();
 	 i != m_faders.end(); ++i) {

@@ -182,7 +182,7 @@ public slots:
     void slotSelectAudioLevel(float dB);
     void slotSelectAudioRecordLevel(float dB);
     void slotAudioChannels(int channels);
-    void slotSelectAudioInput(int value);
+    void slotAudioRoutingChanged();
     void slotSelectPlugin(int index);
 
     // From the parameter box clicks
@@ -208,6 +208,7 @@ signals:
     void soloButton(Rosegarden::InstrumentId, bool state);
     void recordButton(Rosegarden::InstrumentId, bool state);
     void selectPlugin(QWidget *, Rosegarden::InstrumentId, int index);
+    void instrumentParametersChanged(Rosegarden::InstrumentId);
 
 protected:
     //--------------- Data members ---------------------------------

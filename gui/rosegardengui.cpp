@@ -4697,10 +4697,16 @@ RosegardenGUIApp::slotOpenMixer()
 	    this, SLOT(slotFastForwardToEnd()));
     connect(m_mixer, SIGNAL(rewindPlaybackToBeginning()),
 	    this, SLOT(slotRewindToBeginning()));
-    connect(m_mixer, SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
-	    m_instrumentParameterBox, SLOT(slotInstrumentParametersChanged(Rosegarden::InstrumentId)));
-    connect(m_instrumentParameterBox, SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
-	    m_mixer, SLOT(slotUpdateInstrument(Rosegarden::InstrumentId)));
+
+    connect(m_mixer,
+	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
+	    m_instrumentParameterBox,
+	    SLOT(slotInstrumentParametersChanged(Rosegarden::InstrumentId)));
+
+    connect(m_instrumentParameterBox,
+	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
+	    m_mixer,
+	    SLOT(slotUpdateInstrument(Rosegarden::InstrumentId)));
 
     m_mixer->show();
 }

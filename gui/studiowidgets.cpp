@@ -557,6 +557,7 @@ AudioVUMeter::AudioVUMeter(QWidget *parent,
     // This one is _not_ intended to match that for the button width
 
     m_xoff = width / 4;
+    if (m_xoff % 2 == 1) ++m_xoff;
 
     m_meter = new AudioVUMeterImpl(this, type, stereo,
 				   width - m_xoff, height - m_yoff, name);

@@ -117,10 +117,11 @@ private:
     FaderRec m_monitor;
     FaderRec m_master;
 
-    void updateFader(int id); // instrument id if large enough, master/sub otherwise
+    void updateFader(int id); // instrument id if large enough, monitor if -1, master/sub otherwise
     void updateRouteButtons(int id);
     void updateStereoButton(int id);
     void updatePluginButtons(int id);
+    void updateMiscButtons(int id);
 
     QPixmap m_monoPixmap;
     QPixmap m_stereoPixmap;
