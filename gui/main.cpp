@@ -467,9 +467,13 @@ int main(int argc, char *argv[])
 
     } else {
 
+#ifndef NO_SOUND
         app.setNoSequencerMode(!args->isSet("sequencer"));
+#else
+	app.setNoSequencerMode(true);
+#endif // NO_SOUND
 
-        rosegardengui = new RosegardenGUIApp(args->isSet("sequencer"),
+        rosegardengui = new RosegardenGUIApp(!app.noSequencerMode(),
                                              startLogo);
 
         app.setMainWidget(rosegardengui);
