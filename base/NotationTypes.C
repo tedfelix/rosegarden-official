@@ -679,7 +679,7 @@ NotationDisplayPitch::getPerformancePitchFromRG21Pitch(const Clef &clef,
  * This version by Michael McIntyre <dmmcintyr@users.sourceforge.net>
  */
 void
-NotationDisplayPitch::rawPitchToDisplayPitch(int pitch,
+NotationDisplayPitch::rawPitchToDisplayPitch(int rawpitch,
                                              const Clef &clef,
                                              const Key &key,
                                              int &height,
@@ -687,14 +687,14 @@ NotationDisplayPitch::rawPitchToDisplayPitch(int pitch,
 {
 
     // 1. Calculate the octave (for later):
-    int octave = pitch / 12;
+    int octave = rawpitch / 12;
 
     // 2. Set initial height to 0
     height = 0;
 
     // 3.  Calculate raw semitone number, yielding a value between 0 (C) and
     // 11 (B)
-    pitch  = pitch % 12;
+    int pitch  = rawpitch % 12;
 
     // 4.  Get info from the Key
     long accidentalCount = key.getAccidentalCount();
@@ -959,8 +959,8 @@ NotationDisplayPitch::rawPitchToDisplayPitch(int pitch,
     // Failsafe...  If this ever executes, there's trouble to fix...
     if (accidental == "") {
         std::cerr << "rawPitchToDisplayPitch(): error! returning null accidental for"
-                  << std::endl << "pitch: " << pitch << "  userAccidental: " << userAccidental
-                  << "  octave: " << octave << "  key: " << key.getName() << std::endl;
+                  << std::endl << "pitch: " << rawpitch << " (" << pitch << " in oct " << octave << ")  userAcc: " << userAccidental
+                  << "  clef: " << clef.getClefType() << "  key: " << key.getName() << std::endl;
     }
     
     // 6.  "Recenter" height in case it's been changed:

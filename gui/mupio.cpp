@@ -118,6 +118,14 @@ MupExporter::write()
 		writeInventedRests(str, timeSig,
 				   0, s->getStartTime() - barStart);
 	    }
+
+	    // Mup insists that every bar has the correct duration, and won't
+	    // recover if one goes wrong.  Keep careful tabs on this: it means
+	    // that for example we have to round chord durations down where
+	    // the next chord starts too soon, 
+	    //!!! we _really_ can't cope with time sig changes yet!
+
+	    timeT writtenDuration = 0;
 	    
 	    for (Segment::iterator si = s->findTime(barStart);
 		 s->isBeforeEndMarker(si) &&
@@ -128,8 +136,28 @@ MupExporter::write()
 		    str << " ";
 
 		    Rosegarden::Chord chord(*s, si, c->getNotationQuantizer());
-		    writeDuration(str, (*chord.getInitialNote())->
-				                   getNotationDuration());
+
+		    timeT absTime  = (*chord.getInitialNote())->
+			                     getNotationAbsoluteTime();
+		    timeT duration = (*chord.getInitialNote())->
+				             getNotationDuration();
+		    timeT toNext = duration;
+
+		    Segment::iterator nextElt = chord.getFinalElement();
+		    if (s->isBeforeEndMarker(++nextElt)) {
+			toNext = (*nextElt)->getNotationAbsoluteTime() - absTime;
+			if (toNext < duration) duration = toNext;
+		    }
+
+		    writeDuration(str, duration);
+		    
+		    if (toNext > duration) {
+			writeInventedRests
+			    (str, timeSig,
+			     absTime + duration - barStart, toNext - duration);
+		    }
+
+		    writtenDuration = toNext - barStart;
 
 		    for (Rosegarden::Chord::iterator chi = chord.begin();
 			 chi != chord.end(); ++chi) {
@@ -144,17 +172,23 @@ MupExporter::write()
 
 		    str << " ";
 		    writeDuration(str, (*si)->getNotationDuration());
+		    writtenDuration += (*si)->getNotationDuration();
 		    str << "r;";
 
 		} // ignore all other sorts of events for now
-
 	    }
 
+	    if (writtenDuration < timeSig.getBarDuration()) {
+		writeInventedRests(str, timeSig, writtenDuration,
+				   timeSig.getBarDuration() - writtenDuration);
+	    }
+/*!!! covered by above case
 	    if (s->getEndMarkerTime() < barEnd) {
 		writeInventedRests(str, timeSig,
 				   s->getEndMarkerTime() - barStart,
 				   barEnd - s->getEndMarkerTime());
 	    }
+*/
 
 	    str << "\n";
 	}

@@ -19,6 +19,7 @@
 */
 
 #include "XmlExportable.h"
+#include <iostream>
 
 namespace Rosegarden
 {
@@ -26,25 +27,101 @@ namespace Rosegarden
 std::string XmlExportable::encode(const std::string &s0)
 {
     std::string s1;
-    
+    std::string multibyte;
+
+    // Escape any xml special characters, and also make sure we have
+    // valid utf8 -- otherwise we won't be able to re-read the xml.
+    // Amazing how complicated this gets.
+
+    bool warned = false; // no point in warning forever for long bogus strings
+
     for (unsigned int i = 0; i < s0.length(); ++i) {
 
-	char c = s0[i];
+	unsigned char c = s0[i];
 
-	switch (c) {
-	case '&' : s1 += "&amp;";  break;
-	case '<' : s1 += "&lt;";   break;
-	case '>' : s1 += "&gt;";   break;
-        case '"' : s1 += "&quot;"; break;
-        case '\'': s1 += "&apos;"; break;
-	default:
-	    // We're exporting to utf-8, so values outside these ranges are invalid:
-	    if (c >= 32 && !(c >= 128 && c < 160)) s1 += c;
-	    // convert these special cases to plain whitespace:
-	    else if (c == 0x9 || c == 0xa || c == 0xd) s1 += ' ';
-	    break;
+	if (((c & 0xc0) == 0xc0) || !(c & 0x80)) {
+
+	    // 11xxxxxx or 0xxxxxxx: first byte of a character sequence
+
+	    if (multibyte != "") {
+
+		// does multibyte contain a valid sequence?
+		unsigned int length = 
+		    (!(multibyte[0] & 0x20)) ? 2 :
+		    (!(multibyte[0] & 0x10)) ? 3 :
+		    (!(multibyte[0] & 0x08)) ? 4 :
+		    (!(multibyte[0] & 0x04)) ? 5 : 0;
+
+		if (length == 0 || multibyte.length() == length) {
+		    s1 += multibyte;
+		} else {
+		    if (!warned) {
+			std::cerr
+			    << "WARNING: Invalid utf8 char width in string \""
+			    << s0 << "\" at index " << i << " ("
+			    << multibyte.length() << " octet"
+			    << (multibyte.length() != 1 ? "s" : "")
+			    << ", expected " << length << ")" << std::endl;
+			warned = true;
+		    }
+		    // and drop the character
+		}
+	    }
+
+	    multibyte = "";
+
+	    if (!(c & 0x80)) { // ascii
+		
+		switch (c) {
+		case '&' : s1 += "&amp;";  break;
+		case '<' : s1 += "&lt;";   break;
+		case '>' : s1 += "&gt;";   break;
+		case '"' : s1 += "&quot;"; break;
+		case '\'': s1 += "&apos;"; break;
+		case 0x9:
+		case 0xa:
+		case 0xd:
+		    // convert these special cases to plain whitespace:
+		    s1 += ' ';
+		    break;
+		default:
+		    if (c >= 32) s1 += c;
+		    else {
+			if (!warned) {
+			    std::cerr
+				<< "WARNING: Invalid utf8 octet in string \""
+				<< s0 << "\" at index " << i << " ("
+				<< (int)c << " < 32)" << std::endl;
+			}
+			warned = true;
+		    }
+		}
+
+	    } else {
+
+		// store in multibyte rather than straight to s1, so that
+		// we know we're in the middle of something (below) 
+		multibyte += c;
+	    }			
+
+	} else {
+
+	    // second or subsequent byte
+
+	    if (multibyte == "") { // ... without a first byte!
+		if (!warned) {
+		    std::cerr
+			<< "WARNING: Invalid utf8 octet sequence in string \""
+			<< s0 << "\" at index " << i << std::endl;
+		    warned = true;
+		}
+	    } else {
+		multibyte += c;
+	    }
 	}
     }
+
+    if (multibyte != "") s1 += multibyte;
 
     return s1;
 }

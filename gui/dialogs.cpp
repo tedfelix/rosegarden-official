@@ -955,19 +955,46 @@ TextEventDialog::TextEventDialog(QWidget *parent,
 
 	std::string style = m_styles[i];
 
-	std::string styleName;
-	styleName += (char)toupper(style[0]);
-	styleName += style.substr(1);
+	// if the style is in this list, we can i18n it (kludgy):
 
-	int uindex = styleName.find('_');
-	if (uindex > 0) {
-	    styleName =
-		styleName.substr(0, uindex) + " " +
-		styleName.substr(uindex + 1);
+	if (style == Text::Dynamic) {
+	    m_typeCombo->insertItem(i18n("Dynamic"));
+
+	} else if (style == Text::Direction) {
+	    m_typeCombo->insertItem(i18n("Direction"));
+
+	} else if (style == Text::LocalDirection) {
+	    m_typeCombo->insertItem(i18n("Local Direction"));
+
+	} else if (style == Text::Tempo) {
+	    m_typeCombo->insertItem(i18n("Tempo"));
+
+	} else if (style == Text::LocalTempo) {
+	    m_typeCombo->insertItem(i18n("Local Tempo"));
+
+	} else if (style == Text::Lyric) {
+	    m_typeCombo->insertItem(i18n("Lyric"));
+
+	} else if (style == Text::Annotation) {
+	    m_typeCombo->insertItem(i18n("Annotation"));
+
+	} else {
+	    // not i18n()-able
+
+	    std::string styleName;
+	    styleName += (char)toupper(style[0]);
+	    styleName += style.substr(1);
+	    
+	    int uindex = styleName.find('_');
+	    if (uindex > 0) {
+		styleName =
+		    styleName.substr(0, uindex) + " " +
+		    styleName.substr(uindex + 1);
+	    }
+	    
+	    m_typeCombo->insertItem(strtoqstr(styleName));
 	}
-
-	m_typeCombo->insertItem(strtoqstr(styleName));
-
+	
 	if (style == defaultText.getTextType()) {
 	    m_typeCombo->setCurrentItem(m_typeCombo->count() - 1);
 	}
@@ -1035,30 +1062,30 @@ void
 TextEventDialog::slotTextChanged(const QString &qtext)
 {
     std::string type(getTextType());
-    std::string text(qstrtostr(qtext));
 
+    QString qtrunc(qtext);
+    if (qtrunc.length() > 20) qtrunc = qtrunc.left(20) + "...";
+    std::string text(qstrtostr(qtrunc));
     if (text == "") text = "Sample";
-    if (text.length() > 20) {
-	text = text.substr(0, 20) + "...";
-    }
 
     Text rtext(text, type);
-    m_textExampleLabel->setPixmap(NotePixmapFactory::toQPixmap(m_notePixmapFactory->makeTextPixmap(rtext)));
+    m_textExampleLabel->setPixmap
+	(NotePixmapFactory::toQPixmap(m_notePixmapFactory->makeTextPixmap(rtext)));
 }
 
 void
 TextEventDialog::slotTypeChanged(const QString &)
 {
     std::string type(getTextType());
-    std::string text(getTextString());
 
+    QString qtrunc(m_text->text());
+    if (qtrunc.length() > 20) qtrunc = qtrunc.left(20) + "...";
+    std::string text(qstrtostr(qtrunc));
     if (text == "") text = "Sample";
-    if (text.length() > 20) {
-	text = text.substr(0, 20) + "...";
-    }
 
     Text rtext(text, type);
-    m_textExampleLabel->setPixmap(NotePixmapFactory::toQPixmap(m_notePixmapFactory->makeTextPixmap(rtext)));
+    m_textExampleLabel->setPixmap
+	(NotePixmapFactory::toQPixmap(m_notePixmapFactory->makeTextPixmap(rtext)));
 
     if (type == Text::Dynamic ||
 	type == Text::LocalDirection ||
