@@ -20,8 +20,10 @@
 
 #include <vector>
 
-/**Creates a conversion table to compute a note pixmap's y coord (relative to a staff)
-from a note's pitch :
+/**
+   
+Conversion table to compute a note pixmap's y coord
+(relative to a staff) from a note's pitch :
 
 Pitch : 0  - C
 Pitch : 1  - C#
@@ -36,18 +38,26 @@ Pitch : 9  - A
 Pitch : 10 - A#
 Pitch : 11 - B
 
-  *@author Guillaume Laurent
-  */
+This is a singleton, you can't create one directly.
+Use instance() to get the (you guessed it) instance.
+
+* @author Guillaume Laurent
+*/
 
 class PitchToHeight
 {
 public:
-    static const vector<int>& instance();
+    static PitchToHeight& instance();
+
+    int operator[](unsigned int pitch) const;
+    size_t size() { return m_pitchToHeight->size(); }
 
 protected:
-    static void createInstance(unsigned short notePixmapHeight);
+    PitchToHeight(unsigned short staffLineWidth);
 
-    static vector<int> *m_pitchToHeight;
+    vector<int> *m_pitchToHeight;
+
+    static PitchToHeight *m_instance;
 };
 
 #endif
