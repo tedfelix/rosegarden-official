@@ -67,12 +67,15 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     // Set the column names
     //
     m_fileList->addColumn(i18n("Name"));
-    m_fileList->addColumn(i18n("Duration (s)"));
+    m_fileList->addColumn(i18n("Duration"));
     m_fileList->addColumn(i18n("Envelope"));
     m_fileList->addColumn(i18n("File"));
 
+    m_fileList->setColumnAlignment(1, Qt::AlignHCenter);
+    m_fileList->setColumnAlignment(2, Qt::AlignHCenter);
+
     // a minimum width for the list box
-    m_fileList->setMinimumWidth(300);
+    //m_fileList->setMinimumWidth(300);
 
     // connect buttons
     connect(m_deleteButton, SIGNAL(released()), SLOT(slotDeleteSelected()));
@@ -116,7 +119,7 @@ AudioManagerDialog::populateFileList()
     m_fileList->setSelectionMode(QListView::Single);
 
     // for the sample file length
-    QString usecs;
+    QString msecs;
     RealTime length;
 
     for (it = m_audioFileManager->begin();
@@ -125,17 +128,24 @@ AudioManagerDialog::populateFileList()
     {
         generateEnvelopePixmap(audioPixmap, *it);
 
-        length = (*it)->getLength();
-        usecs.sprintf("%6ld", length.usec);
-
         QString label = QString((*it)->getShortFilename().c_str());
              
         // Set the label, duration, envelope pixmap and filename
         //
         AudioListItem *item = new AudioListItem(m_fileList, label,
                                                 (*it)->getId());
-        item->setText(1, QString("%1.%2").arg(length.sec).arg(usecs));
+        // Duration
+        //
+        length = (*it)->getLength();
+        msecs.sprintf("%3ld", length.usec / 1000);
+        item->setText(1, QString("%1.%2s").arg(length.sec).arg(msecs));
+
+        // Envelope pixmap
+        //
         item->setPixmap(2, *audioPixmap);
+
+        // File location
+        //
         item->setText(3, QString(
                     m_audioFileManager->
                         substituteHomeForTilde((*it)->getFilename()).c_str()));
