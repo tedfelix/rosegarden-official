@@ -24,6 +24,7 @@
 #include <qregexp.h>
 #include <qpaintdevicemetrics.h>
 #include <qpixmap.h>
+#include <qtimer.h>
 
 #include <kmessagebox.h>
 #include <kstatusbar.h>
@@ -205,6 +206,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_spacingSlider(0),
     m_fontSizeActionMenu(0),
     m_pannerDialog(new ScrollBoxDialog(this, ScrollBox::FixHeight)),
+    m_renderTimer(0),
     m_progressDisplayer(PROGRESS_NONE),
     m_progressEventFilterInstalled(false),
     m_inhibitRefresh(true),
@@ -668,6 +670,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_spacingSlider(0),
     m_fontSizeActionMenu(0),
     m_pannerDialog(0),
+    m_renderTimer(0),
     m_progressDisplayer(PROGRESS_NONE),
     m_progressEventFilterInstalled(false),
     m_inhibitRefresh(true),
@@ -783,6 +786,8 @@ NotationView::~NotationView()
     delete m_currentEventSelection;
     m_currentEventSelection = 0;
 
+    delete m_renderTimer;
+
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 	for (Segment::iterator j = m_staffs[i]->getSegment().begin();
 	     j != m_staffs[i]->getSegment().end(); ++j) {
@@ -831,7 +836,9 @@ void NotationView::positionStaffs()
     int accumulatedHeight;
     int rowsPerPage = 1;
     int legerLines = 8;
+    if (m_pageMode != LinedStaff::LinearMode) legerLines = 6;
     int rowGapPercent = (m_staffs.size() > 1 ? 40 : 10);
+    int aimFor = -1;
 
     bool done = false;
 
@@ -915,22 +922,25 @@ void NotationView::positionStaffs()
 		    done = true;
 		}
 
-	    } else if (staffPageHeight - (rowsPerPage * accumulatedHeight) >
-		       accumulatedHeight * 2 / 3) {
-
-		// we can perhaps accommodate another row, with care
-		if (legerLines > 5) --legerLines;
-		else if (rowGapPercent > 20) rowGapPercent -= 10;
-		else if (legerLines > 3) --legerLines;
-		else if (rowGapPercent > 0) rowGapPercent -= 10;
-		else { // no, we can't
-		    rowGapPercent = 0;
-		    legerLines = 8;
-		    done = true;
-		}
-
 	    } else {
-		done = true;
+
+		if (aimFor == rowsPerPage) {
+		    done = true;
+		} else {
+
+		    if (aimFor == -1) aimFor = rowsPerPage + 1;
+
+		    // we can perhaps accommodate another row, with care
+		    if (legerLines > 5) --legerLines;
+		    else if (rowGapPercent > 20) rowGapPercent -= 10;
+		    else if (legerLines > 3) --legerLines;
+		    else if (rowGapPercent > 0) rowGapPercent -= 10;
+		    else { // no, we can't
+			rowGapPercent = 0;
+			legerLines = 8;
+			done = true;
+		    }
+		}
 	    }
 	}
     }

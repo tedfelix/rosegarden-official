@@ -56,6 +56,7 @@ class NotationHLayout;
 class NotationVLayout;
 class NotationStaff;
 class ScrollBoxDialog;
+class QTimer;
 
 
 /**
@@ -844,6 +845,7 @@ protected:
     ZoomSlider<int> *m_spacingSlider;
     KActionMenu *m_fontSizeActionMenu;
     ScrollBoxDialog *m_pannerDialog;
+    QTimer *m_renderTimer;
 
     enum { PROGRESS_NONE,
            PROGRESS_BAR,

@@ -1926,9 +1926,10 @@ NotationView::slotCheckRendered(double cx0, double cx1)
 
     if (something) {
 	emit renderComplete();
-	QTimer *t = new QTimer(this);
-	connect(t, SIGNAL(timeout()), SLOT(slotRenderSomething()));
-	t->start(0, true);
+	if (m_renderTimer) delete m_renderTimer;
+	m_renderTimer = new QTimer(this);
+	connect(m_renderTimer, SIGNAL(timeout()), SLOT(slotRenderSomething()));
+	m_renderTimer->start(0, true);
     }
 
     if (m_deferredCursorMove != NoCursorMoveNeeded) doDeferredCursorMove();
@@ -1937,14 +1938,16 @@ NotationView::slotCheckRendered(double cx0, double cx1)
 void
 NotationView::slotRenderSomething()
 {
+    delete m_renderTimer;
+    m_renderTimer = 0;
     static clock_t lastWork = 0;
     
     clock_t now = clock();
     long elapsed = ((now - lastWork) * 1000 / CLOCKS_PER_SEC);
     if (elapsed < 100) {
-	QTimer *t = new QTimer(this);
-	connect(t, SIGNAL(timeout()), SLOT(slotRenderSomething()));
-	t->start(0, true);
+	m_renderTimer = new QTimer(this);
+	connect(m_renderTimer, SIGNAL(timeout()), SLOT(slotRenderSomething()));
+	m_renderTimer->start(0, true);
 	return;
     }
     lastWork = now;
@@ -1953,9 +1956,9 @@ NotationView::slotRenderSomething()
 
 	if (m_staffs[i]->doRenderWork(m_staffs[i]->getSegment().getStartTime(),
 				      m_staffs[i]->getSegment().getEndTime())) {
-	    QTimer *t = new QTimer(this);
-	    connect(t, SIGNAL(timeout()), SLOT(slotRenderSomething()));
-	    t->start(0, true);
+	    m_renderTimer = new QTimer(this);
+	    connect(m_renderTimer, SIGNAL(timeout()), SLOT(slotRenderSomething()));
+	    m_renderTimer->start(0, true);
 	    return;
 	}
     }
