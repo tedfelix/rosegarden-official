@@ -828,6 +828,9 @@ MappedAudioPluginManager::getPropertyList(const MappedObjectProperty &property)
                     list.push_back(MappedObjectProperty
                             ("%1").arg(port->getRangeHint().UpperBound));
 
+                    list.push_back(MappedObjectProperty
+                            ("%1").arg(port->getDefault()));
+
                 }
 
                 plugin = dynamic_cast<MappedLADSPAPlugin*>
@@ -1114,7 +1117,7 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
                                                 "ladspa_descriptor");
 #ifdef HAVE_LIBLRDF
     char *def_uri;
-    lrdf_defaults *defs;
+    lrdf_defaults *defs = 0;
 #endif // HAVE_LIBLRDF
 
     if (descrFn)
@@ -1134,6 +1137,12 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
                 //
                 if (LADSPA_IS_HARD_RT_CAPABLE(descriptor->Properties))
                 {
+
+#ifdef HAVE_LIBLRDF
+                    def_uri = lrdf_get_default_uri(descriptor->UniqueID);
+		    if (def_uri) defs = lrdf_get_setting_values(def_uri);
+#endif // HAVE_LIBLRDF
+
                     MappedLADSPAPlugin *plugin =
                         dynamic_cast<MappedLADSPAPlugin*>
                             (studio->createObject
@@ -1162,16 +1171,47 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
                                 descriptor->PortRangeHints[i].UpperBound);
 
                         port->setPortNumber(i);
+#ifdef HAVE_LIBLRDF
+			if (def_uri)
+			{
+                            for (int j = 0; j < defs->count; j++)
+			    {
+				/*
+                                std::cout << "PORT "
+                                          << defs->items[i].pid
+                                          << " ("
+                                          << defs->items[i].label
+                                          << ") "
+                                          << defs->items[i].value
+                                          << std::endl;
+					  */
+				if (defs->items[j].pid == ((int)i))
+				{
+				    port->setProperty(
+					    MappedLADSPAPort::Default,
+					    defs->items[j].value);
+
+				    std::cout << "PORT " << i
+					      << " default = "
+					      << defs->items[j].value
+					      << std::endl;
+				}
+			    }
+			}
+#endif // HAVE_LIBLRDF
+
                     }
 
-                    
+#ifdef HAVE_LIBLRDF
+		    if (def_uri) lrdf_free_setting_values(defs);
+#endif // HAVE_LIBLRDF
+
+		    /*
                     //plugin->setDescriptor(descriptor);
 
-#ifdef HAVE_LIBLRDF
                     // If we have liblrdf then we can go to town and also
                     // generate port defaults for this plugin
                     //
-                    def_uri = lrdf_get_default_uri(descriptor->UniqueID);
                     if (def_uri == NULL)
                     {
                         std::cout << "NO DESCRIPTOR FOR PLUGIN UID = "
@@ -1185,20 +1225,10 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
                                   lrdf_get_setting_metadata(def_uri, "title")
                                   << std::endl;
 
-                        defs = lrdf_get_setting_values(def_uri);
-                        for (int i=0; i < defs->count; i++) {
-                            std::cout << "PORT "
-                                      << defs->items[i].pid
-                                      << " ("
-                                      << defs->items[i].label
-                                      << ") "
-                                      << defs->items[i].value
-                                      << std::endl;
                         }
 
-                        lrdf_free_setting_values(defs);
                     }
-#endif // HAVE_LIBLRDF
+		    */
                 }
 
                 index++;
@@ -1537,6 +1567,7 @@ MappedLADSPAPort::getPropertyList(const MappedObjectProperty &property)
         list.push_back("rangehint");
         list.push_back("rangelower");
         list.push_back("rangeupper");
+	list.push_back("default");
     }
     else if (property == MappedLADSPAPort::Default)
     {

@@ -124,8 +124,14 @@ signals:
 
     // is the plugin being bypassed
     void bypassed(int pluginIndex, bool bp);
+    void destroyed(int index);
+
+protected slots:
+    virtual void slotClose();
 
 protected:
+    virtual void closeEvent(QCloseEvent *e);
+
     void makePluginParamsBox(QWidget*);
 
     //--------------- Data members ---------------------------------

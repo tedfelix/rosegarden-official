@@ -486,6 +486,9 @@ public:
     void setValue(MappedObjectValue value) { m_value = value; }
     MappedObjectValue getValue() const { return m_value; }
 
+    void setDefault(MappedObjectValue value) { m_default = value; }
+    MappedObjectValue getDefault() const { return m_default; }
+
     // redefine clone() here to copy across value only
     //
     virtual void clone(MappedObject *object);

@@ -77,6 +77,9 @@ public:
     static const char* const MetronomeDuration;
     static const char* const SequencerOptions;
 
+    static const char* const PluginTaxonomyFile;
+    static const char* const PluginDescriptionsFile;
+
 private:
 
 };

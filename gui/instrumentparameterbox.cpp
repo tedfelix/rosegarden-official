@@ -417,32 +417,47 @@ InstrumentParameterBox::slotUpdateAllBoxes()
 void
 AudioInstrumentParameterPanel::slotSelectPlugin(int index)
 {
-    // only create a dialog if we've got a plugin instance
-    Rosegarden::AudioPluginInstance *inst = 
-        m_selectedInstrument->getPlugin(index);
+    int key = (index << 24) + m_selectedInstrument->getId();
 
-    if (inst)
+    if (m_pluginDialogs[key] == 0)
     {
-        Rosegarden::AudioPluginDialog *aPD = 
-            new Rosegarden::AudioPluginDialog(this,
+        // only create a dialog if we've got a plugin instance
+        Rosegarden::AudioPluginInstance *inst = 
+            m_selectedInstrument->getPlugin(index);
+
+        if (inst)
+        {
+            m_pluginDialogs[key] = 
+                new Rosegarden::AudioPluginDialog(this,
                                               m_pluginManager,
                                               m_selectedInstrument,
                                               index);
 
-        connect(aPD, SIGNAL(pluginSelected(int, int)),
-                this, SLOT(slotPluginSelected(int, int)));
+            connect(m_pluginDialogs[key], SIGNAL(pluginSelected(int, int)),
+                    this, SLOT(slotPluginSelected(int, int)));
 
-        connect(aPD, SIGNAL(pluginPortChanged(int, int, float)),
-                this, SLOT(slotPluginPortChanged(int, int, float)));
+            connect(m_pluginDialogs[key],
+		    SIGNAL(pluginPortChanged(int, int, float)),
+                    this, SLOT(slotPluginPortChanged(int, int, float)));
 
-        connect(aPD, SIGNAL(bypassed(int, bool)),
-                this, SLOT(slotBypassed(int, bool)));
+            connect(m_pluginDialogs[key], SIGNAL(bypassed(int, bool)),
+                    this, SLOT(slotBypassed(int, bool)));
 
-        aPD->show();
+	    connect(m_pluginDialogs[key], SIGNAL(destroyed(int)),
+		    this, SLOT(slotPluginDialogDestroyed(int)));
+
+            m_pluginDialogs[key]->show();
+        }
+        else
+        {
+	    std::cerr << "AudioInstrumentParameterPanel::slotSelectPlugin - "
+		      << "no AudioPluginInstance found for index "
+		      << index << std::endl;
+        }
     }
     else
     {
-        cout << "NO AudioPluginInstance found for index " << index << endl;
+	m_pluginDialogs[key]->raise();
     }
 }
 
@@ -572,6 +587,14 @@ AudioInstrumentParameterPanel::slotPluginPortChanged(int pluginIndex,
 #endif // HAVE_LADSPA
     }
 
+}
+
+
+void
+AudioInstrumentParameterPanel::slotPluginDialogDestroyed(int index)
+{
+    int key = (index << 24) + m_selectedInstrument->getId();
+    m_pluginDialogs[key] = 0;
 }
 
 void

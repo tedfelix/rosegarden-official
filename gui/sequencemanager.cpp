@@ -1627,14 +1627,17 @@ SequenceManager::getSequencerPlugins(Rosegarden::AudioPluginManager *aPM)
                 Rosegarden::PluginPort::PortRange(seqPlugins[i++].toInt());
             Rosegarden::PortData lowerBound = seqPlugins[i++].toFloat();
             Rosegarden::PortData upperBound = seqPlugins[i++].toFloat();
+	    Rosegarden::PortData defaultValue = seqPlugins[i++].toFloat();
 
+	    //cout << "DEFAULT =  " << defaultValue << endl;
             //cout << "ADDED PORT = \"" << name << "\"" << endl;
             aP->addPort(id,
                         name,
                         type,
                         range,
                         lowerBound,
-                        upperBound);
+                        upperBound,
+			defaultValue);
 
         }
 

@@ -38,7 +38,11 @@ class RosegardenComboBox;
 class RosegardenGUIDoc;
 class QWidgetStack;
 
-namespace Rosegarden { class AudioPluginManager; }
+namespace Rosegarden
+{
+    class AudioPluginManager;
+    class AudioPluginDialog;
+}
 
 class AudioInstrumentParameterPanel;
 class MIDIInstrumentParameterPanel;
@@ -137,6 +141,8 @@ public slots:
     void slotPluginPortChanged(int pluginIndex, int portIndex, float value);
     void slotBypassed(int pluginIndex, bool bp);
 
+    void slotPluginDialogDestroyed(int index);
+
 protected:
     //--------------- Data members ---------------------------------
 
@@ -144,11 +150,12 @@ protected:
     QLabel             *m_audioLevelValue;
     QLabel             *m_pluginLabel;
 
-    std::vector<QPushButton*>       m_pluginButtons;
+    std::vector<QPushButton*>                     m_pluginButtons;
 
-    QSignalMapper                   *m_signalMapper;
+    QSignalMapper                                *m_signalMapper;
+    std::map<int, Rosegarden::AudioPluginDialog*> m_pluginDialogs;
 
-    Rosegarden::AudioPluginManager  *m_pluginManager;
+    Rosegarden::AudioPluginManager               *m_pluginManager;
 };
 
 class MIDIInstrumentParameterPanel : public InstrumentParameterPanel

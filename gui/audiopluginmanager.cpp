@@ -179,14 +179,16 @@ AudioPlugin::addPort(MappedObjectId id,
                      PluginPort::PortType type,
                      PluginPort::PortRange range,
                      PortData lowerBound,
-                     PortData upperBound)
+                     PortData upperBound,
+		     PortData defaultValue)
 {
     PluginPort *port = new PluginPort(id,
                                       name,
                                       type,
                                       range,
                                       lowerBound,
-                                      upperBound);
+                                      upperBound,
+				      defaultValue);
     m_ports.push_back(port);
 
 }
@@ -199,13 +201,15 @@ PluginPort::PluginPort(MappedObjectId id,
                        PluginPort::PortType type,
                        PluginPort::PortRange range,
                        PortData lowerBound,
-                       PortData upperBound):
+                       PortData upperBound,
+		       PortData defaultValue):
     m_id(id),
     m_name(name),
     m_type(type),
     m_range(range),
     m_lowerBound(lowerBound),
-    m_upperBound(upperBound)
+    m_upperBound(upperBound),
+    m_default(defaultValue)
 {
 }
 

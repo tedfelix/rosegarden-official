@@ -130,7 +130,9 @@ AudioPluginDialog::makePluginParamsBox(QWidget *parent)
 void
 AudioPluginDialog::slotPluginSelected(int number)
 {
-    QString caption = strtoqstr(m_instrument->getName()) + QString(" - ");
+    QString caption =
+	strtoqstr(m_instrument->getName()) +
+	QString(" [ %1 ] - ").arg(m_index + 1);
 
     // tell the sequencer
     emit pluginSelected(m_index, number - 1);
@@ -275,6 +277,22 @@ AudioPluginDialog::slotBypassChanged(bool bp)
     emit bypassed(m_index, bp);
 }
 
+void
+AudioPluginDialog::closeEvent(QCloseEvent *e)
+{
+    e->accept();
+    emit destroyed(m_index);
+}
+
+void
+AudioPluginDialog::slotClose()
+{
+    emit destroyed(m_index);
+    reject();
+}
+
+
+
 
 // --------------------- PluginControl -------------------------
 //
@@ -284,7 +302,7 @@ PluginControl::PluginControl(QWidget *parent,
                              PluginPort *port,
                              AudioPluginManager *aPM,
                              int index,
-                             float initialValue):
+                             float /*initialValue*/):
     QObject(parent),
     m_layout(layout),
     m_type(type),
@@ -310,6 +328,7 @@ PluginControl::PluginControl(QWidget *parent,
         // defaults
         float lowerBound = 0.0;
         float upperBound = 1.0;
+	float defaultValue = (float)(port->getDefaultValue());
 
         if (m_port->getRange() & PluginPort::Below)
             lowerBound = float(port->getLowerBound());
@@ -363,7 +382,7 @@ PluginControl::PluginControl(QWidget *parent,
 
         // Set the initial value
         //
-        float value = initialValue * m_multiplier;
+        float value = defaultValue * m_multiplier;
         if (value < lowerBound * m_multiplier)
             value = lowerBound * m_multiplier;
         else if (value > upperBound * m_multiplier)

@@ -81,7 +81,8 @@ public:
                PortType type,
                PortRange range,
                PortData lowerBound,
-               PortData upperBound);
+               PortData upperBound,
+	       PortData defaultValue);
 
     MappedObjectId getId() const { return m_id; }
     QString getName() const { return m_name; }
@@ -89,6 +90,7 @@ public:
     PortRange getRange() const { return m_range; }
     PortData getLowerBound() const { return m_lowerBound; }
     PortData getUpperBound() const { return m_upperBound; }
+    PortData getDefaultValue() const { return m_default; }
 
 protected:
 
@@ -98,6 +100,7 @@ protected:
     PortRange      m_range;
     PortData       m_lowerBound;
     PortData       m_upperBound;
+    PortData       m_default;
 };
 
 typedef std::vector<PluginPort*>::iterator PortIterator;
@@ -124,7 +127,8 @@ public:
                  PluginPort::PortType type,
                  PluginPort::PortRange range,
                  PortData lowerBound,
-                 PortData upperBound);
+                 PortData upperBound,
+		 PortData defaultVale);
 
     PortIterator begin() { return m_ports.begin(); }
     PortIterator end() { return m_ports.end(); }
