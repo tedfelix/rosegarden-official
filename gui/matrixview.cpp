@@ -2021,24 +2021,24 @@ void MatrixView::slotFilterSelection()
 {
     RG_DEBUG << "MatrixView::slotFilterSelection" << endl;
 
-    if (!m_currentEventSelection) return;
+    Segment *segment = getCurrentSegment();
+    EventSelection *existingSelection = m_currentEventSelection;
+    if (!segment || !existingSelection) return;
 
     EventFilterDialog dialog(this);
     if (dialog.exec() == QDialog::Accepted) {
         RG_DEBUG << "slotFilterSelection- accepted" << endl;
 
-	Rosegarden::Segment *tmpSeg = getCurrentSegment();
-	if (!tmpSeg) return;
-	
-        Rosegarden::EventSelection *tmpSel = new Rosegarden::EventSelection(*tmpSeg);
-	Rosegarden::Segment::iterator it = tmpSeg->findTime(tmpSeg->getStartTime());
+        EventSelection *newSelection = new EventSelection(*segment);
+        EventSelection::eventcontainer &ec =
+            existingSelection->getSegmentEvents();
+        for (EventSelection::eventcontainer::iterator i =
+             ec.begin(); i != ec.end(); ++i) {
+            if (dialog.keepEvent(*i)) newSelection->addEvent(*i);
+        }
 
-	while (it != tmpSeg->end()) {
-	    if (dialog.keepEvent(*it)) tmpSel->addEvent(*it);
-	    it++;
-	}
-    	setCurrentSelection(tmpSel);
-    } 
+        setCurrentSelection(newSelection);
+    }
 }
 
 
