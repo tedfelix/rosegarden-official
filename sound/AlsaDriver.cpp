@@ -1702,19 +1702,24 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                 continue;
         }
 
+        int error = 0;
         if (now || m_playing == false)
         {
-            /*
             RealTime nowTime = getAlsaTime();
             snd_seq_real_time_t outTime = { nowTime.sec,
                                          nowTime.usec * 1000 };
             snd_seq_ev_schedule_real(event, m_queue, 0, &outTime);
-            */
-            event->queue = SND_SEQ_QUEUE_DIRECT;
-            snd_seq_event_output_direct(m_midiHandle, event);
+            error = snd_seq_event_output_direct(m_midiHandle, event);
         }
         else
-            snd_seq_event_output(m_midiHandle, event);
+            error = snd_seq_event_output(m_midiHandle, event);
+
+        if (error < 0)
+        {
+            std::cerr << "AlsaDriver::processMidiOut - "
+                      << "failed to send ALSA event ("
+                      << error << ")" <<  std::endl;
+        }
 
         // Add note to note off stack
         //
