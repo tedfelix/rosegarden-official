@@ -22,21 +22,15 @@
 #define _VIEWELEMENT_H_
 
 #include "Event.h"
-
-#include <vector>
+#include "Track.h"
 
 namespace Rosegarden 
 {
 
-class ViewElement; // defined below
-class ViewElements : public std::vector<ViewElement*>
-{
-public:
-    ViewElements() : std::vector<ViewElement*>() {}
-    ViewElements(const ViewElements &e) : std::vector<ViewElement*>(e) {}
-    ~ViewElements();
-};
-
+/**
+ * The base class which represents an Event as an on-screen
+ * graphic item (a note, a rectangle on a piano roll)
+ */
 class ViewElement
 {
 public:
@@ -59,6 +53,14 @@ public:
 protected:
     Event *m_event;
 };
+
+class ViewElementsManagerBase
+{
+public:
+    virtual void insert(Track::iterator from, Track::iterator to) = 0;
+    virtual void erase (Track::iterator from, Track::iterator to) = 0;
+};
+
  
 }
 

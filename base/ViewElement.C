@@ -22,8 +22,6 @@
 
 namespace Rosegarden 
 {
-using std::cerr;
-using std::endl;
 
 ViewElement::ViewElement(Event *e)
     : m_event(e)
@@ -40,18 +38,6 @@ ViewElement::~ViewElement()
 }
 
 //////////////////////////////////////////////////////////////////////
-
-ViewElements::~ViewElements()
-{
-    cerr << "~ViewElements() : this : " << this << endl;
-
-    // delete content
-    for(iterator it = begin(); it != end(); ++it) {
-        cerr << "~ViewElements() : delete ViewElement" << endl;
-        delete (*it);
-    }
-
-}
 
 bool
 operator<(const ViewElement &a, const ViewElement &b)
