@@ -42,6 +42,7 @@
 #include "rosegardenguiview.h"
 #include "rosegardenguidoc.h"
 #include "resource.h"
+#include "MidiFile.h"
 
 
 RosegardenGUIApp::RosegardenGUIApp()
@@ -94,6 +95,13 @@ void RosegardenGUIApp::setupActions()
     KStdAction::saveAs(this, SLOT(fileSaveAs()),        actionCollection());
     KStdAction::close (this, SLOT(fileClose()),         actionCollection());
     KStdAction::print (this, SLOT(filePrint()),         actionCollection());
+
+    // need to get this onto the File menu
+    //
+    m_importMIDI = new KAction(i18n("Import MIDI file"), 0, 0, this,
+                               SLOT(importMIDI()), actionCollection(),
+                               "file_import_midi");
+
     KStdAction::quit  (this, SLOT(quit()),              actionCollection());
 
     // setup edit menu
@@ -715,5 +723,30 @@ RosegardenGUIApp::getSequencerSlice(const int &sliceStart, const int &sliceEnd)
                             getMappedComposition(sliceStart, sliceEnd);
 
   return *retComp;
+}
+
+
+void
+RosegardenGUIApp::importMIDI()
+{
+  Rosegarden::MidiFile *midiFile;
+
+  KURL url = KFileDialog::getOpenURL(QString::null, "*.mid", this,
+                                      i18n("Open File"));
+  if ( url.isEmpty() ) { return; }
+
+  QString tmpfile;
+  KIO::NetAccess::download( url, tmpfile );
+  midiFile = new Rosegarden::MidiFile(tmpfile.ascii());
+
+  midiFile->open();
+
+  KIO::NetAccess::removeTempFile( tmpfile );
+
+  m_doc->closeDocument();
+  m_doc->getComposition() = *(midiFile->convertToRosegarden());
+
+  initView();
+
 }
 

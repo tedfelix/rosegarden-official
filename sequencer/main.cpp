@@ -112,11 +112,13 @@ int main(int argc, char *argv[])
     return(1);
   }
 
-  // get the reference
+  // Get the GUI App reference
+  //
   QValueList<QCString>::Iterator guiApp = dcopApps.find(QCString(ROSEGARDEN_GUI_APP));
 
-  // Do a call
-
+  // Call the relevant method on the GUI interface to
+  // return the time slice of MappedEvents
+  //
   QByteArray data, replyData;
   QCString replyType;
   QDataStream arg(data, IO_WriteOnly);
@@ -134,10 +136,10 @@ int main(int argc, char *argv[])
   else
   {
     QDataStream reply(replyData, IO_ReadOnly);
-    if (replyType == "QString") {
+    if (replyType == "QString")
+    {
       QString result;
       reply >> result;
-      //print("the result is: %s",result.latin1());
     }
     else if (replyType = "Rosegarden::MappedComposition")
     {

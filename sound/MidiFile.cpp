@@ -567,10 +567,10 @@ MidiFile::convertToRosegarden()
           case MIDI_NOTE_ON:
             // create and populate event
             rosegardenEvent = new Event;
-            rosegardenEvent->setAbsoluteTime(midiEvent->time());
+            rosegardenEvent->setAbsoluteTime(midiEvent->time()/4);
             rosegardenEvent->setType(Note::EventType);
             rosegardenEvent->set<Int>("pitch", midiEvent->note());
-            rosegardenEvent->setDuration(midiEvent->duration());
+            rosegardenEvent->setDuration(midiEvent->duration()/4);
 
             // insert into Track
             rosegardenTrack->insert(rosegardenEvent);

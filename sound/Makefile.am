@@ -6,8 +6,8 @@ INCLUDES= $(all_includes) -I$(kde_includes)/arts -I../core
 lib_LTLIBRARIES = libRosegardenSequencer.la
 noinst_LTLIBRARIES = libRosegardenSound.la
 
-libRosegardenSequencer_la_SOURCES = MidiRecord.cpp MidiArts.cc MidiEvent.cpp
-libRosegardenSound_la_SOURCES = MidiFile.cpp
+libRosegardenSequencer_la_SOURCES = MidiRecord.cpp MidiArts.cc
+libRosegardenSound_la_SOURCES = MidiFile.cpp MidiEvent.cpp
 
 # the library search path. 
 libRosegardenSequencer_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -module -no-undefined

@@ -3,6 +3,10 @@
 <kpartgui name="Rosegarden" version="1">
 
 <MenuBar>
+  <Menu name="Import">
+  <text>Import</text>
+    <Action name="file_import_midi"/>
+  </Menu>
   <Menu name="Tracks">
 	<text>Tracks</text>
 	<Action name="draw"/>

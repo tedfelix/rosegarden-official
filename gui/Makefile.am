@@ -25,11 +25,10 @@ rosegardengui_SOURCES = trackscanvas.cpp \
 			rosegardenguidoc.cpp \
 			rosegardengui.cpp \
 			main.cpp \
-			rg21io.cpp \
 			rosegardenguiiface.skel \
 			trackseditoriface.skel
 
-rosegardengui_LDADD   = -lcore -lqt -lkfile -lkdeui -lkdecore -lXext -lX11 $(LIBSOCKET)
+rosegardengui_LDADD   = -lcore -lqt -lkfile -lkdeui -lkdecore -lXext -lX11 $(LIBSOCKET) -lRosegardenSound
 
 SUBDIRS = docs
 
@@ -62,7 +61,7 @@ uninstall-local:
 # kde_wallpaperdir  Where general wallpapers should go to.
 
 # set the include path for X, qt and KDE
-INCLUDES= $(all_includes) -I../core
+INCLUDES= $(all_includes) -I../core -I../sound
 # claim, which subdirectories you want to install
 # you can add here more. This one gets installed 
 bin_PROGRAMS = rosegardengui 
@@ -70,7 +69,7 @@ bin_PROGRAMS = rosegardengui
 rosegardengui_METASOURCES = AUTO
 
 # the library search path. 
-rosegardengui_LDFLAGS = $(all_libraries) $(KDE_RPATH) -L../core
+rosegardengui_LDFLAGS = $(all_libraries) $(KDE_RPATH) -L../core -L../sound
 
 # them while "make clean", use CLEANFILES
 DISTCLEANFILES = $(rosegardengui_METASOURCES)
