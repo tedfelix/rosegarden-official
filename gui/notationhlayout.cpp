@@ -594,7 +594,7 @@ NotationHLayout::layout(BarDataMap::iterator i)
 
         kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): about to enter loop" << endl;
 
-        bool haveAccidentalInThisChord = false;
+        Accidental accidentalInThisChord = NoAccidental;
 
         for (NotationElementList::iterator it = from; it != to; ++it) {
             
@@ -630,7 +630,7 @@ NotationHLayout::layout(BarDataMap::iterator i)
 
                 delta = positionNote(staff, 
                                      it, bdi, timeSignature, clef, key,
-                                     haveAccidentalInThisChord);
+                                     accidentalInThisChord);
             }
 
             x += delta;
@@ -684,7 +684,7 @@ NotationHLayout::positionNote(StaffType &staff,
                               const BarDataList::iterator &bdi,
                               const TimeSignature &timeSignature,
                               const Clef &clef, const Key &key,
-                              bool &haveAccidentalInThisChord)
+                              Accidental &accidentalInThisChord)
 {
     NotationElement *note = *itr;
 
@@ -721,7 +721,7 @@ NotationHLayout::positionNote(StaffType &staff,
     if (note->event()->get<Int>(DISPLAY_ACCIDENTAL, acc0)) {
         acc = (Accidental)acc0;
     }
-    if (acc != NoAccidental) haveAccidentalInThisChord = true;
+    if (acc != NoAccidental) accidentalInThisChord = acc;
                 
     Chord chord(*staff.getViewElementList(), itr);
     if (chord.size() < 2 || itr == chord.getFinalElement()) {
@@ -730,10 +730,11 @@ NotationHLayout::positionNote(StaffType &staff,
         // update the delta now, and add any additional accidental
         // spacing
 
-        if (haveAccidentalInThisChord) {
+        if (accidentalInThisChord != NoAccidental) {
             for (int i = 0; i < (int)chord.size(); ++i) {
                 (*chord[i])->setLayoutX
-                    ((*chord[i])->getLayoutX() + m_npf.getAccidentalWidth());
+                    ((*chord[i])->getLayoutX() +
+                     m_npf.getAccidentalWidth(accidentalInThisChord));
             }
         }
 
@@ -788,7 +789,7 @@ int NotationHLayout::getMinWidth(const NotationElement &e) const
         long accidental;
         if (e.event()->get<Int>(DISPLAY_ACCIDENTAL, accidental) &&
             ((Accidental)accidental != NoAccidental)) {
-            w += m_npf.getAccidentalWidth();
+            w += m_npf.getAccidentalWidth((Accidental)accidental);
         }
         return w;
     }
@@ -799,7 +800,7 @@ int NotationHLayout::getMinWidth(const NotationElement &e) const
 
     if (e.event()->isa(Clef::EventType)) {
 
-        w += m_npf.getClefWidth();
+        w += m_npf.getClefWidth(Clef(*e.event()));
 
     } else if (e.event()->isa(Key::EventType)) {
 

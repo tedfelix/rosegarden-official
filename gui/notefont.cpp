@@ -47,8 +47,8 @@ NoteFontMap::NoteFontMap(string name) :
     QFileInfo mapFileInfo(mapFileName);
 
     if (!mapFileInfo.isReadable()) {
-        throw MappingFileReadFailed(string("Can't open mapping file ") +
-                                    mapFileName.latin1());
+        throw MappingFileReadFailed((i18n("Can't open mapping file ") +
+                                     mapFileName).latin1());
     }
 
     QFile mapFile(mapFileName);
@@ -170,11 +170,8 @@ NoteFontMap::startElement(const QString &, const QString &,
         int noteHeight = s.toInt();
 
         s = attributes.value("x");
-        if (!s) {
-            m_errorString = i18n("x is a required attribute of when");
-            return false;
-        }
-        int x = s.toInt();
+        int x = 0;
+        if (s) x = s.toInt();
 
         s = attributes.value("y");
         if (!s) {
@@ -392,19 +389,20 @@ NoteFont::getStaffLineThickness(unsigned int &thickness) const
 }
 
 string
-NoteFont::getKey(string charName) const
+NoteFont::getKey(string charName, bool inverted) const
 {
     QString s = QString("__%1__%2__%3__")
         .arg(m_fontMap.getName().c_str())
         .arg(m_currentSize)
         .arg(charName.c_str());
+    if (inverted) s += "i";
     return s.latin1();
 }
 
 bool
 NoteFont::getPixmap(string charName, QPixmap &pixmap, bool inverted) const
 {
-    string key(getKey(charName));
+    string key(getKey(charName, inverted));
 
     PixmapMap::iterator i = m_map->find(key);
     if (i != m_map->end()) {
@@ -419,6 +417,8 @@ NoteFont::getPixmap(string charName, QPixmap &pixmap, bool inverted) const
     else  ok = m_fontMap.getInversionSrc(m_currentSize, charName, src);
     
     if (ok) {
+        cerr << "NoteFont::getPixmap: Loading \"" << src << "\"" << endl;
+
         pixmap = QPixmap(src.c_str());
         if (!pixmap.isNull()) {
             (*m_map)[key] = PixmapPair(true, pixmap);
@@ -430,6 +430,26 @@ NoteFont::getPixmap(string charName, QPixmap &pixmap, bool inverted) const
     pixmap = getBlankPixmap();
     (*m_map)[key] = PixmapPair(false, pixmap);
     return false;
+}
+
+QPixmap
+NoteFont::getPixmap(string charName, bool inverted) const
+{
+    QPixmap p;
+    (void)getPixmap(charName, p, inverted);
+    return p;
+}
+
+QCanvasPixmap
+NoteFont::getCanvasPixmap(string charName, bool inverted) const
+{
+    QPixmap p;
+    (void)getPixmap(charName, p, inverted);
+
+    int x, y;
+    (void)getHotspot(charName, x, y, inverted);
+
+    return QCanvasPixmap(p, QPoint(x, y));
 }
 
 QPixmap
@@ -472,7 +492,7 @@ NoteFont::getHotspot(string charName, int &x, int &y, bool inverted) const
     if (!ok) {
         int w, h;
         getDimensions(charName, w, h, inverted);
-        x = w/2;
+        x = 0;
         y = h/2;
     }
 
@@ -482,6 +502,15 @@ NoteFont::getHotspot(string charName, int &x, int &y, bool inverted) const
     
     return ok;
 }
+
+QPoint
+NoteFont::getHotspot(string charName, bool inverted) const
+{
+    int x, y;
+    (void)getHotspot(charName, x, y, inverted);
+    return QPoint(x, y);
+}
+
 
 namespace NoteCharacterNames {
 
@@ -509,9 +538,80 @@ const std::string EIGHTH_REST = "MUSICAL SYMBOL EIGHTH REST";
 const std::string SIXTEENTH_REST = "MUSICAL SYMBOL SIXTEENTH REST";
 const std::string THIRTY_SECOND_REST = "MUSICAL SYMBOL THIRTY-SECOND REST";
 const std::string SIXTY_FOURTH_REST = "MUSICAL SYMBOL SIXTY-FOURTH REST";
+
 const std::string DOT = "MUSICAL SYMBOL COMBINING AUGMENTATION DOT";
+
 const std::string C_CLEF = "MUSICAL SYMBOL C CLEF";
 const std::string G_CLEF = "MUSICAL SYMBOL G CLEF";
 const std::string F_CLEF = "MUSICAL SYMBOL F CLEF";
 
+const std::string UNKNOWN = "__UNKNOWN__";
+
 }
+
+
+using Rosegarden::Accidental;
+using Rosegarden::Clef;
+using Rosegarden::Note;
+
+string NoteCharacterNameLookup::getAccidentalCharName(const Accidental &a)
+{
+    switch (a) {
+    case Rosegarden::Sharp:        return NoteCharacterNames::SHARP;
+    case Rosegarden::Flat:         return NoteCharacterNames::FLAT;
+    case Rosegarden::Natural:      return NoteCharacterNames::NATURAL;
+    case Rosegarden::DoubleSharp:  return NoteCharacterNames::DOUBLE_SHARP;
+    case Rosegarden::DoubleFlat:   return NoteCharacterNames::DOUBLE_FLAT;
+    default:
+        return NoteCharacterNames::UNKNOWN;
+    }
+}
+
+string NoteCharacterNameLookup::getClefCharName(const Clef &clef)
+{
+    string clefType(clef.getClefType());
+
+    if (clefType == Clef::Bass) {
+        return NoteCharacterNames::F_CLEF;
+    } else if (clefType == Clef::Treble) {
+        return NoteCharacterNames::G_CLEF;
+    } else {
+        return NoteCharacterNames::C_CLEF;
+    }
+}
+
+string NoteCharacterNameLookup::getRestCharName(const Note::Type &type)
+{
+    switch (type) {
+    case Note::Hemidemisemiquaver:  return NoteCharacterNames::SIXTY_FOURTH_REST;
+    case Note::Demisemiquaver:      return NoteCharacterNames::THIRTY_SECOND_REST;
+    case Note::Semiquaver:          return NoteCharacterNames::SIXTEENTH_REST;
+    case Note::Quaver:              return NoteCharacterNames::EIGHTH_REST;
+    case Note::Crotchet:            return NoteCharacterNames::QUARTER_REST;
+    case Note::Minim:               return NoteCharacterNames::HALF_REST;
+    case Note::Semibreve:           return NoteCharacterNames::WHOLE_REST;
+    case Note::Breve:               return NoteCharacterNames::MULTI_REST;
+    default:
+        return NoteCharacterNames::UNKNOWN;
+    }
+}
+
+string NoteCharacterNameLookup::getFlagCharName(int flagCount)
+{
+    switch (flagCount) {
+    case 1:  return NoteCharacterNames::FLAG_1;
+    case 2:  return NoteCharacterNames::FLAG_2;
+    case 3:  return NoteCharacterNames::FLAG_3;
+    case 4:  return NoteCharacterNames::FLAG_4;
+    default: return NoteCharacterNames::UNKNOWN;
+    }
+}
+
+string NoteCharacterNameLookup::getNoteHeadCharName(const Note::Type &type)
+{
+    if (type == Note::Breve) return NoteCharacterNames::BREVE;
+    else if (type == Note::Semibreve) return NoteCharacterNames::WHOLE_NOTE;
+    else if (type >= Note::Minim) return NoteCharacterNames::VOID_NOTEHEAD;
+    else return NoteCharacterNames::NOTEHEAD_BLACK;
+}
+

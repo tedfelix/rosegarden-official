@@ -154,7 +154,8 @@ protected:
     (StaffType &staff, 
      const NotationElementList::iterator &, const BarDataList::iterator &,
      const Rosegarden::TimeSignature &, const Rosegarden::Clef &clef,
-     const Rosegarden::Key &key, bool &haveAccidentalInThisChord);
+     const Rosegarden::Key &key,
+     Rosegarden::Accidental &accidentalInThisChord);
 
     class AccidentalTable : public std::vector<Rosegarden::Accidental>
     {

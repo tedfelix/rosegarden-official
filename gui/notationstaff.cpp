@@ -392,8 +392,7 @@ QCanvasSimpleSprite *NotationStaff::makeNoteSprite(NotationElementList::iterator
 
             QCanvasPixmap notePixmap
                 (m_npf.makeNotePixmap
-                 (note, dots, accidental, shifted, tail, up, false,
-                  stemLength));
+                 (note, dots, accidental, shifted, tail, up, stemLength));
             return new QCanvasNotationSprite(*(*it), &notePixmap, canvas());
         }
 
@@ -402,7 +401,7 @@ QCanvasSimpleSprite *NotationStaff::makeNoteSprite(NotationElementList::iterator
 
         QCanvasPixmap notePixmap
             (m_npf.makeNotePixmap(note, dots, accidental,
-                                shifted, tail, up, false, stemLength));
+                                  shifted, tail, up, stemLength));
 
         return new QCanvasNotationSprite(*(*it), &notePixmap, canvas());
     }

@@ -64,9 +64,9 @@
 
 <font-hotspots>
         <hotspot name="MUSIC FLAT SIGN">
-                <when note-height="4" x="1" y="7"/>
-                <when note-height="8" x="3" y="14"/>
-                <when note-height="12" x="5" y="21"/>
+                <when note-height="4" y="7"/>
+                <when note-height="8" y="14"/>
+                <when note-height="12" y="21"/>
         </hotspot>
 </font-hotspots>
 

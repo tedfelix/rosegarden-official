@@ -28,7 +28,10 @@
 
 #include <qstring.h>
 #include <qpixmap.h>
+#include <qcanvas.h>
 #include <qxml.h>
+
+#include "NotationTypes.h"
 
 
 // Helper class for looking up information about a font
@@ -192,15 +195,28 @@ public:
     int getCurrentSize() const { return m_currentSize; }
     void setCurrentSize(int s) { m_currentSize = s; }
 
+
+
     /// Returns false + thickness=1 if not specified
     bool getStemThickness(unsigned int &thickness) const;
 
     /// Returns false + thickness=1 if not specified
     bool getStaffLineThickness(unsigned int &thickness) const;
 
+
+
     /// Returns false + blank pixmap if it can't find the right one
     bool getPixmap(std::string charName, QPixmap &pixmap,
                    bool inverted = false) const;
+
+    /// Ignores problems, returning blank pixmap if necessary
+    QPixmap getPixmap(std::string charName, bool inverted = false) const;
+
+    /// Ignores problems, returning blank canvas pixmap if necessary
+    QCanvasPixmap getCanvasPixmap
+    (std::string charName, bool inverted = false) const;
+
+
 
     /// Returns false + dimensions of blank pixmap if none found
     bool getDimensions(std::string charName, int &x, int &y,
@@ -212,16 +228,22 @@ public:
     /// Ignores problems, returning dimension of blank pixmap if necessary
     int getHeight(std::string charName) const;
 
-    /// Returns false + centre of pixmap if no hotspot explicitly specified
+
+
+    /// Returns false + centre-left of pixmap if no hotspot specified
     bool getHotspot(std::string charName, int &x, int &y,
                     bool inverted = false) const;
+
+    /// Ignores problems, returns centre-left of pixmap if necessary
+    QPoint getHotspot(std::string charName, bool inverted = false) const;
+
 
 private:
     int m_currentSize;
     NoteFontMap m_fontMap;
 
     QPixmap getBlankPixmap() const;
-    std::string getKey(std::string charName) const;
+    std::string getKey(std::string charName, bool inverted) const;
 
     typedef std::pair<bool, QPixmap> PixmapPair;
     typedef std::map<std::string, PixmapPair> PixmapMap;
@@ -233,37 +255,50 @@ private:
 
 namespace NoteCharacterNames
 {
-    extern const std::string SHARP;
-    extern const std::string FLAT;
-    extern const std::string NATURAL;
-    extern const std::string DOUBLE_SHARP;
-    extern const std::string DOUBLE_FLAT;
+extern const std::string SHARP;
+extern const std::string FLAT;
+extern const std::string NATURAL;
+extern const std::string DOUBLE_SHARP;
+extern const std::string DOUBLE_FLAT;
 
-    extern const std::string BREVE;
-    extern const std::string WHOLE_NOTE;
-    extern const std::string VOID_NOTEHEAD;
-    extern const std::string NOTEHEAD_BLACK;
+extern const std::string BREVE;
+extern const std::string WHOLE_NOTE;
+extern const std::string VOID_NOTEHEAD;
+extern const std::string NOTEHEAD_BLACK;
 
-    extern const std::string FLAG_1;
-    extern const std::string FLAG_2;
-    extern const std::string FLAG_3;
-    extern const std::string FLAG_4;
+extern const std::string FLAG_1;
+extern const std::string FLAG_2;
+extern const std::string FLAG_3;
+extern const std::string FLAG_4;
 
-    extern const std::string MULTI_REST;
-    extern const std::string WHOLE_REST;
-    extern const std::string HALF_REST;
-    extern const std::string QUARTER_REST;
-    extern const std::string EIGHTH_REST;
-    extern const std::string SIXTEENTH_REST;
-    extern const std::string THIRTY_SECOND_REST;
-    extern const std::string SIXTY_FOURTH_REST;
+extern const std::string MULTI_REST;
+extern const std::string WHOLE_REST;
+extern const std::string HALF_REST;
+extern const std::string QUARTER_REST;
+extern const std::string EIGHTH_REST;
+extern const std::string SIXTEENTH_REST;
+extern const std::string THIRTY_SECOND_REST;
+extern const std::string SIXTY_FOURTH_REST;
 
-    extern const std::string DOT;
+extern const std::string DOT;
 
-    extern const std::string C_CLEF;
-    extern const std::string G_CLEF;
-    extern const std::string F_CLEF;
+extern const std::string C_CLEF;
+extern const std::string G_CLEF;
+extern const std::string F_CLEF;
+
+extern const std::string UNKNOWN;
 }
+
+class NoteCharacterNameLookup
+{
+public:
+    static std::string getAccidentalCharName(const Rosegarden::Accidental &);
+    static std::string getClefCharName(const Rosegarden::Clef &);
+    static std::string getRestCharName(const Rosegarden::Note::Type &);
+    static std::string getFlagCharName(int flagCount);
+    static std::string getNoteHeadCharName(const Rosegarden::Note::Type &);
+};
+
 
 #endif
 

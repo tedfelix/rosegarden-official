@@ -26,133 +26,40 @@
 #include <qcanvas.h>
 
 #include "NotationTypes.h"
-#include "notepixmapfactory.h"
-
-typedef std::vector<int> ChordPitches;
-typedef std::vector<Rosegarden::Accidental> Accidentals;
-
-
-/**
- * Helper class to compute various offsets
- *
- * @see NotePixmapFactory
- */
-class NotePixmapOffsets
-{
-public:
-
-    typedef std::pair<QPoint, QPoint> stalkpoints;
-
-    NotePixmapOffsets();
-
-    void offsetsFor(Rosegarden::Note::Type,
-                    int dots,
-                    Rosegarden::Accidental,
-                    bool shifted,
-                    bool drawTail,
-                    bool stalkGoesUp,
-                    bool fixedHeight);
-    
-    const QPoint&      getBodyOffset()     { return m_bodyOffset; }
-    const QSize&       getPixmapSize()     { return m_pixmapSize; }
-    const QPoint&      getHotSpot()        { return m_hotSpot; }
-    const stalkpoints& getStalkPoints()    { return m_stalkPoints; }
-    const QPoint&      getAccidentalOffset() { return m_accidentalOffset; }
-
-    void setNoteBodySizes(QSize empty, QSize filled, QSize breve);
-    void setTailWidth(unsigned int);
-    void setStalkLength(unsigned int);
-    void setAccidentalsWidth(unsigned int sharp,
-                             unsigned int flat,
-			     unsigned int doublesharp,
-			     unsigned int doubleflat,
-                             unsigned int natural);
-    void setAccidentalHeight(unsigned int height);
-    void setDotSize(QSize size);
-    void setExtraBeamSpacing(unsigned int bs);
-
-protected:
-
-    void computePixmapSize();
-    void computeAccidentalAndStalkSize();
-    void computeBodyOffset();
-
-    QSize m_noteBodyEmptySize;
-    QSize m_noteBodyFilledSize;
-    QSize m_breveSize;
-
-    unsigned int m_tailWidth;
-    unsigned int m_sharpWidth;
-    unsigned int m_flatWidth;
-    unsigned int m_doubleSharpWidth;
-    unsigned int m_doubleFlatWidth;
-    unsigned int m_naturalWidth;
-    unsigned int m_accidentalHeight;
-    unsigned int m_stalkLength;
-    unsigned int m_extraBeamSpacing;
-
-    Rosegarden::Note::Type m_note;
-    Rosegarden::Accidental m_accidental;
-    bool m_shifted;
-    bool m_drawTail;
-    bool m_stalkGoesUp;
-    bool m_noteHasStalk;
-    int m_dots;
-
-    QPoint m_bodyOffset;
-    QPoint m_hotSpot;
-    QPoint m_accidentalOffset;
-    QSize m_bodySize;
-    QSize m_pixmapSize;
-    QSize m_accidentalStalkSize;
-    QSize m_dotSize;
-    
-    stalkpoints m_stalkPoints;
-};
+#include "notefont.h"
 
 
 /**
  * Generates QCanvasPixmaps for various notation items
  */
-class NotePixmapFactory
+
+class NotePixmapFactory : private NoteCharacterNameLookup
 {
 public:
-    NotePixmapFactory(int resolution);
+    NotePixmapFactory(int size, std::string fontName = "rg21");
     ~NotePixmapFactory();
 
-    /**
-     * Generate a pixmap for a single note
-     *
-     * @param note : note type
-     * @param drawTail : if the pixmap should have a tail or not
-     *   (useful when the tail should be collapsed with the one of a
-     *    neighboring note)
-     * @param stalkGoesUp : if the note's stalk should go up or down
-     * @param fixedHeight : true for things like toolbar buttons,
-     *   never appropriate on a real stave
-     */
     QCanvasPixmap makeNotePixmap(Rosegarden::Note::Type note,
                                  int dots,
                                  Rosegarden::Accidental accidental =
                                                      Rosegarden::NoAccidental,
                                  bool noteHeadShifted = false,
                                  bool drawTail = true,
-                                 bool stalkGoesUp = true,
-                                 bool fixedHeight = false,
+                                 bool stemGoesUp = true,
                                  int stemLength = -1);
 
     QCanvasPixmap makeBeamedNotePixmap(Rosegarden::Note::Type note,
 				       int dots,
 				       Rosegarden::Accidental accidental,
                                        bool noteHeadShifted,
-				       bool stalkGoesUp,
-				       int stalkLength,
+				       bool stemGoesUp,
+				       int stemLength,
 				       int nextTailCount,
                                        bool thisPartialTails,
                                        bool nextPartialTails,
 				       int width,
 				       double gradient);
-    
+
     QCanvasPixmap makeRestPixmap(const Rosegarden::Note &restType);
     QCanvasPixmap makeClefPixmap(const Rosegarden::Clef &clef) const;
     QCanvasPixmap makeKeyPixmap(const Rosegarden::Key &key,
@@ -161,46 +68,53 @@ public:
     QCanvasPixmap makeUnknownPixmap();
     QCanvasPixmap makeToolbarPixmap(const char *name);
 
-    int getNoteBodyHeight()    const { return m_noteBodyEmpty.height(); }
-    int getNoteBodyWidth()     const { return m_noteBodyEmpty.width(); }
-    int getBreveWidth()        const { return m_breve.width(); }
-    int getLineSpacing()       const { return getNoteBodyHeight() + 1; }
-    int getAccidentalWidth()   const { return m_accidentalSharp.width(); }
-    int getAccidentalHeight()  const { return m_accidentalSharp.height(); }
-    int getStalkLength()       const { return getNoteBodyHeight() * 11/4; }
-    int getDotWidth()          const { return m_dot.width(); }
-    int getClefWidth()         const;
-    int getBarMargin()	       const { return getNoteBodyWidth() * 2; }
+    int getNoteBodyWidth (Rosegarden::Note::Type =
+                          Rosegarden::Note::Crotchet) const;
+    int getNoteBodyHeight(Rosegarden::Note::Type =
+                          Rosegarden::Note::Crotchet) const;
 
+    int getAccidentalWidth (Rosegarden::Accidental) const;
+    int getAccidentalHeight(Rosegarden::Accidental) const;
+
+    int getLineSpacing()       const;
+    int getStalkLength()       const { return getStemLength(); } //!!!
+    int getStemLength()        const;
+    int getDotWidth()          const;
+    int getBarMargin()	       const;
+
+    int getClefWidth(const Rosegarden::Clef &clef) const;
     int getTimeSigWidth(const Rosegarden::TimeSignature &timesig) const;
-
-    int getRestWidth(const Rosegarden::Note &restType) const {
-        return (m_rests[restType.getNoteType()]->width() +
-                getDotWidth() * restType.getDots());
-    }
-
-    int getKeyWidth(const Rosegarden::Key &key) const {
-        return (key.getAccidentalCount() *
-                (getAccidentalWidth() - (key.isSharp()? 1 : 2)));
-    }
+    int getRestWidth(const Rosegarden::Note &restType) const;
+    int getKeyWidth(const Rosegarden::Key &key) const;
 
 protected:
-    QString getPixmapDirectory(int resolution);
+    QCanvasPixmap makeNotePixmapAux(Rosegarden::Note::Type note,
+                                    int dots,
+                                    Rosegarden::Accidental accidental,
+                                    bool noteHeadShifted,
+                                    bool drawTail,
+                                    bool stemGoesUp,
+                                    bool isBeamed,
+                                    int stemLength,
+                                    int nextTailCount,
+                                    bool thisPartialTails,
+                                    bool nextPartialTails,
+                                    int width,
+                                    double gradient);
 
-    const QPixmap* tailUp(Rosegarden::Note::Type note) const;
-    const QPixmap* tailDown(Rosegarden::Note::Type note) const;
+    NoteFont *m_font;
 
-    void drawStalk(Rosegarden::Note::Type note, bool drawTail, bool stalkGoesUp);
-    void drawAccidental(Rosegarden::Accidental, bool stalkGoesUp);
-    void drawDots(int dots);
+    int m_noteBodyWidth, m_noteBodyHeight;
+    int m_left, m_right, m_above, m_below;
 
-    void createPixmapAndMask(int width = -1, int height = -1);
+    void makeRoomForAccidental(Rosegarden::Accidental);
+    void drawAccidental(Rosegarden::Accidental);
+    void drawBeams(const QPoint &, bool stemGoesUp,
+                   int tailCount, int nextTailCount,
+                   bool thisPartialTails, bool nextPartialTails,
+                   int width, double gradient);
 
-    int m_resolution;
-    QString m_pixmapDirectory;
-
-    NotePixmapOffsets m_offsets;
-    unsigned int m_generatedPixmapHeight;
+    void createPixmapAndMask(int width, int height);
 
     QFont m_timeSigFont;
     QFontMetrics m_timeSigFontMetrics;
@@ -209,24 +123,6 @@ protected:
     QBitmap *m_generatedMask;
     QPainter m_p;
     QPainter m_pm;
-
-    QPixmap m_noteBodyFilled;
-    QPixmap m_noteBodyEmpty;
-    QPixmap m_breve;
-
-    QPixmap m_accidentalSharp;
-    QPixmap m_accidentalFlat;
-    QPixmap m_accidentalDoubleSharp;
-    QPixmap m_accidentalDoubleFlat;
-    QPixmap m_accidentalNatural;
-
-    QPixmap m_dot;
-
-    std::vector<QPixmap*> m_tailsUp;
-    std::vector<QPixmap*> m_tailsDown;
-    std::vector<QPixmap*> m_rests;
-
-    mutable int m_clefWidth;
 
     static QPoint m_pointZero;
 
