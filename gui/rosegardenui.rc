@@ -200,6 +200,7 @@
         <enable>
                 <Action name="file_close"/>
                 <Action name="file_print"/>
+                <Action name="file_print_preview"/>
         </enable>
 </State>
 

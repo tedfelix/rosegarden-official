@@ -477,6 +477,11 @@ public slots:
     void slotFilePrint();
 
     /**
+     * print preview 
+     */
+    void slotFilePrintPreview();
+
+    /**
      * Let the user select a MIDI file for import
      */
     void slotImportMIDI();

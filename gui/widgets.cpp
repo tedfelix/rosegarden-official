@@ -791,7 +791,7 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
     m_notationTarget = new QCheckBox
 	(i18n("Quantize for notation only (leave performance unchanged)"),
 	 quantizerBox);
-    if (!showNotationOption) m_notationTarget->hide();
+// better if we always show this, I think, and use showNotationOption to determine which pane to default to...    if (!showNotationOption) m_notationTarget->hide();
 
     QHBox *parameterBox = new QHBox(this);
     mainLayout->addWidget(parameterBox, preamble ? 1 : 0, 1);

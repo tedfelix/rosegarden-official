@@ -326,21 +326,33 @@ NotationView::slotFilePrint()
 {
     KTmpStatusMsg msg(i18n("Printing..."), this);
 
-    KPrinter printer(true, QPrinter::HighResolution);
+    SetWaitCursor waitCursor;
+    NotationView printingView(getDocument(), m_segments,
+			      (QWidget *)parent(), this);
 
-    if (printer.setup(this)) {
-
-	SetWaitCursor waitCursor;
-	NotationView printingView(getDocument(), m_segments, &printer,
-				  (QWidget *)parent(), this);
-
-	if (!printingView.isOK()) {
-	    RG_DEBUG << "RosegardenGUIView::print : operation cancelled\n";
-	    return;
-	}
-
-	printingView.print(&printer);
+    if (!printingView.isOK()) {
+	RG_DEBUG << "Print : operation cancelled\n";
+	return;
     }
+
+    printingView.print();
+}
+
+void
+NotationView::slotFilePrintPreview()
+{
+    KTmpStatusMsg msg(i18n("Previewing..."), this);
+
+    SetWaitCursor waitCursor;
+    NotationView printingView(getDocument(), m_segments,
+			      (QWidget *)parent(), this);
+
+    if (!printingView.isOK()) {
+	RG_DEBUG << "Print preview : operation cancelled\n";
+	return;
+    }
+
+    printingView.print(true);
 }
 
 

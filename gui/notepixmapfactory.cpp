@@ -294,6 +294,8 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     }
 
     QPixmap dot(m_font->getPixmap(NoteCharacterNames::DOT));
+    int dotWidth = dot.width();
+    if (dotWidth < getNoteBodyWidth()/2) dotWidth = getNoteBodyWidth()/2;
 
     if (stemLength < 0) {
 	// This should only happen if the note is unbeamed
@@ -317,7 +319,7 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
 	makeRoomForTuplingLine(params);
     }
 
-    m_right = std::max(m_right, params.m_dots * dot.width() + dot.width()/2);
+    m_right = std::max(m_right, params.m_dots * dotWidth + dotWidth/2);
     if (params.m_onLine) {
         m_above = std::max(m_above, dot.height()/2);
     }
@@ -416,7 +418,7 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
 
     if (params.m_dots > 0) {
 
-        int x = m_left + m_noteBodyWidth + dot.width()/2;
+        int x = m_left + m_noteBodyWidth + dotWidth/2;
         int y = m_above + m_noteBodyHeight/2 - dot.height()/2;
 
         if (params.m_shifted) x += m_noteBodyWidth;
@@ -425,7 +427,7 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
         for (int i = 0; i < params.m_dots; ++i) {
             m_p.drawPixmap(x, y, dot);
             m_pm.drawPixmap(x, y, *(dot.mask()));
-            x += dot.width();
+            x += dotWidth;
         }
     }
 
@@ -507,6 +509,9 @@ NotePixmapFactory::getStemLength(const NotePixmapParameters &params) const
     case 4: stemLength += nbh * 2 - nbh / 4; break;
     default: break;
     }
+    if (flagCount > 0 && !params.m_stemGoesUp) {
+	stemLength += nbh / 2;
+    }
     
     int width = 0, height = 0;
 
@@ -515,7 +520,9 @@ NotePixmapFactory::getStemLength(const NotePixmapParameters &params) const
 
 	stemLength = std::min(stemLength, height + nbh);
 
-    } else if (m_font->getDimensions(m_style->getFlagCharName(0),
+    } else if (m_font->getDimensions(m_style->getFlagCharName(1),
+				     width, height) ||
+	       m_font->getDimensions(m_style->getFlagCharName(0),
 				     width, height)) {
 
 	unsigned int flagSpace = m_noteBodyHeight;
@@ -684,10 +691,10 @@ NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
     if (legerLines % 2 == 1) {
 	if (below) {
 	    // note below staff
-	    y = m_above;
+	    y = m_above - getLegerLineThickness();
 	} else {
 	    // note above staff
-	    y = m_above + m_noteBodyHeight;
+	    y = m_above + m_noteBodyHeight + getLegerLineThickness();
 	}
     } else {
 	y = m_above + m_noteBodyHeight / 2;
@@ -815,7 +822,7 @@ NotePixmapFactory::drawFlags(int flagCount,
     if (!found) {
 
 	// Handle fonts that don't have all the flags in separate characters
-	
+
 	found = m_font->getPixmap(m_style->getFlagCharName(0),
 				  flagMap,
 				  !params.m_stemGoesUp);
@@ -825,10 +832,20 @@ NotePixmapFactory::drawFlags(int flagCount,
 	    return;
 	}
 	
+	QPixmap oneFlagMap;
+	bool foundOne = (flagCount > 1 ?
+			 m_font->getPixmap(m_style->getFlagCharName(1),
+					   oneFlagMap,
+					   !params.m_stemGoesUp) : false);
+	
 	unsigned int flagSpace = m_noteBodyHeight;
 	(void)m_font->getFlagSpacing(flagSpace);
 	
 	for (int flag = 0; flag < flagCount; ++flag) {
+
+	    // use flag_1 in preference to flag_0 for the final flag, so
+	    // as to end with a flourish
+	    if (flag == flagCount - 1 && foundOne) flagMap = oneFlagMap;
 	    
 	    int y = m_above + s1.y();
 	    if (params.m_stemGoesUp) y += flag * flagSpace;
@@ -1286,10 +1303,12 @@ NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params)
         pixmap = m_font->getPixmap(charName);
     }
     QPixmap dot = m_font->getPixmap(NoteCharacterNames::DOT);
+    int dotWidth = dot.width();
+    if (dotWidth < getNoteBodyWidth()/2) dotWidth = getNoteBodyWidth()/2;
 
     m_above = m_left = 0;
     m_below = dot.height() / 2; // for dotted shallow rests like semibreve
-    m_right = dot.width() * params.m_dots;
+    m_right = dotWidth/2 + dotWidth * params.m_dots;
     m_noteBodyWidth = pixmap.width();
     m_noteBodyHeight = pixmap.height();
 
@@ -1314,7 +1333,7 @@ NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params)
     }
 
     for (int i = 0; i < params.m_dots; ++i) {
-        int x = m_left + m_noteBodyWidth + i * dot.width();
+        int x = m_left + m_noteBodyWidth + i * dotWidth + dotWidth/2;
         m_p.drawPixmap(x, restY, dot); 
         m_pm.drawPixmap(x, restY, *(dot.mask()));
     }

@@ -106,7 +106,7 @@ public:
     /**
      * contains the implementation for printing functionality
      */
-    void print(KPrinter *pPrinter, Rosegarden::Composition*);
+    void print(Rosegarden::Composition*, bool previewOnly = false);
 
     // the following aren't slots because they're called from
     // RosegardenGUIApp

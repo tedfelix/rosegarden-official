@@ -204,7 +204,7 @@ RosegardenGUIView::getDocument() const
     return theApp->getDocument();
 }
 
-void RosegardenGUIView::print(KPrinter *printer, Composition* p)
+void RosegardenGUIView::print(Composition* p, bool previewOnly)
 {
     SetWaitCursor waitCursor;
 
@@ -223,7 +223,8 @@ void RosegardenGUIView::print(KPrinter *printer, Composition* p)
 
     NotationView *notationView = new NotationView(getDocument(),
                                                   segmentsToEdit,
-                                                  printer, this);
+                                                  this,
+						  (NotationView *)0);
 
     if (!notationView->isOK()) {
 	RG_DEBUG << "RosegardenGUIView::print : operation cancelled\n";
@@ -231,12 +232,7 @@ void RosegardenGUIView::print(KPrinter *printer, Composition* p)
 	return;
     }
     
-    // For debug - show what's going to be printed
-//    notationView->show();
-//    kapp->processEvents();
-    // For debug - end
-
-    notationView->print(printer);
+    notationView->print(previewOnly);
 
     delete notationView;
 }
@@ -363,7 +359,7 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
     }
 
     NotationView *notationView =
-	new NotationView(getDocument(), segmentsToEdit, this);
+	new NotationView(getDocument(), segmentsToEdit, this, true);
 
     if (!notationView->isOK()) {
 	RG_DEBUG << "slotEditSegmentNotation : operation cancelled\n";

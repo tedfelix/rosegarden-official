@@ -622,7 +622,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 //
 NotationView::NotationView(RosegardenGUIDoc *doc,
                            std::vector<Segment *> segments,
-                           KPrinter *printer,
 			   QWidget *parent,
 			   NotationView *referenceView)
     : EditView(doc, segments, 1, 0, "printview"),
@@ -694,22 +693,9 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     setBackgroundMode(PaletteBase);
     m_config->setGroup(NotationView::ConfigGroup);
 
-//!!!    QPaintDeviceMetrics pdm(printer);
-
     QCanvas *tCanvas = new QCanvas(this);
     tCanvas->resize(width() * 2, height() * 2);//!!! 
-/*!!!
-    RG_DEBUG << "Print area size : "
-             << pdm.width() << ", " << pdm.height()
-             << " - printer resolution : " << printer->resolution() << "\n";
 
-    unsigned int printSizePt = m_config->readUnsignedNumEntry("printingnotesize", 6);
-    double printSizePx = printSizePt * (double)printer->resolution() / 72.0;
-    double scaleFactor = printSizePx / (double)m_fontSize; 
-
-    tCanvas->resize(int(pdm.width()  / scaleFactor),
-		    int(pdm.height() / scaleFactor));
-*/
     setCanvasView(new NotationCanvasView(*this, tCanvas, getCentralFrame()));
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
@@ -1120,6 +1106,8 @@ void NotationView::readOptions()
 void NotationView::setupActions()
 {
     KStdAction::print(this, SLOT(slotFilePrint()), actionCollection());
+    KStdAction::printPreview(this, SLOT(slotFilePrintPreview()),
+			     actionCollection());
 
     EditViewBase::setupActions("notation.rc");
     EditView::setupActions();
@@ -2523,7 +2511,7 @@ void NotationView::updateView()
     canvas()->update();
 }
 
-void NotationView::print(KPrinter* printer)
+void NotationView::print(bool previewOnly)
 {
     if (m_staffs.size() == 0) {
         KMessageBox::error(0, "Nothing to print");
@@ -2531,9 +2519,6 @@ void NotationView::print(KPrinter* printer)
     }
 
     // We need to be in multi-page mode at this point
-
-//!!!    double printSizePx = m_printSize * (double)printer->resolution() / 72.0;
-//!!!    double scaleFactor = printSizePx / (double)m_fontSize;
 
     int pageWidth = getPageWidth();
     int pageHeight = getPageHeight();
@@ -2545,15 +2530,27 @@ void NotationView::print(KPrinter* printer)
 	int pageCount = m_staffs[i]->getPageCount();
 	if (pageCount > maxPageCount) maxPageCount = pageCount;
     }
+
+    KPrinter printer(true, QPrinter::HighResolution);
+
+    printer.setPageSelection(KPrinter::ApplicationSide);
+    printer.setMinMax(1, maxPageCount + 1);
+
+    if (previewOnly) printer.setPreviewOnly(true);
+    else if (!printer.setup((QWidget *)parent())) return;
     
-    QPaintDeviceMetrics pdm(printer); //!!!
-    QPainter printpainter(printer);
-//!!!    printpainter.scale(scaleFactor, scaleFactor);
+    QPaintDeviceMetrics pdm(&printer);
+    QPainter printpainter(&printer);
     printpainter.scale((double)pdm.width()  / (double)pageWidth,
 		       (double)pdm.height() / (double)pageHeight);
-//!!!    printpainter.translate(0, -topMargin);
 
-    for (int page = 0; page < maxPageCount; ++page) {
+    QValueList<int> pages = printer.pageList();
+
+    for (QValueList<int>::Iterator pli = pages.begin();
+	 pli != pages.end(); ++pli) {
+	
+	int page = *pli - 1;
+	if (page < 0 || page >= maxPageCount) continue;
 
 	QRect pageRect(20 + pageWidth * page, topMargin, pageWidth, pageHeight);
 
@@ -2566,7 +2563,7 @@ void NotationView::print(KPrinter* printer)
 
         printpainter.translate(-pageWidth, 0);
 
-	printer->newPage();
+	printer.newPage();
     }
 }
 

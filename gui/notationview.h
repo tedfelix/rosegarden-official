@@ -79,10 +79,10 @@ class NotationView : public EditView,
     Q_OBJECT
 
 public:
-    NotationView(RosegardenGUIDoc *doc,
-                 std::vector<Rosegarden::Segment *> segments,
-                 QWidget *parent,
-                 bool showProgressive = true); // update during initial render?
+    explicit NotationView(RosegardenGUIDoc *doc,
+			  std::vector<Rosegarden::Segment *> segments,
+			  QWidget *parent,
+			  bool showProgressive); // update during initial render?
 
     /**
      * Constructor for printing only.  If parent is provided, a
@@ -90,11 +90,10 @@ public:
      * NotationView is provided, the fonts and other settings used
      * for printing will be taken from that view.
      */
-    NotationView(RosegardenGUIDoc *doc,
-                 std::vector<Rosegarden::Segment *> segments,
-                 KPrinter*,
-                 QWidget *parent,
-		 NotationView *referenceView = 0);
+    explicit NotationView(RosegardenGUIDoc *doc,
+			  std::vector<Rosegarden::Segment *> segments,
+			  QWidget *parent,
+			  NotationView *referenceView);
 
     ~NotationView();
 
@@ -260,10 +259,8 @@ public:
      * To print optimally use slotFilePrint, which will create
      * another NotationView with the optimal settings and call print
      * on that.
-     *
-     * @see NotationCanvasView#print
      */
-    virtual void print(KPrinter*);
+    virtual void print(bool previewOnly = false);
 
 public slots:
 
@@ -273,6 +270,13 @@ public slots:
      * segments, font etc as this view and asking it to print.
      */
     void slotFilePrint();
+
+    /**
+     * Preview the current set of segments, by creating another
+     * NotationView with the printing configuration but the same
+     * segments, font etc as this view and asking it to preview.
+     */
+    void slotFilePrintPreview();
 
     /**
      * put the marked text/object into the clipboard and remove it

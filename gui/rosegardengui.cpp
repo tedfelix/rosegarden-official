@@ -253,6 +253,7 @@ void RosegardenGUIApp::setupActions()
     KStdAction::saveAs(this, SLOT(slotFileSaveAs()),        actionCollection());
     KStdAction::close (this, SLOT(slotFileClose()),         actionCollection());
     KStdAction::print (this, SLOT(slotFilePrint()),         actionCollection());
+    KStdAction::printPreview (this, SLOT(slotFilePrintPreview()),         actionCollection());
 
     new KAction(i18n("Re&vert"), 0, 0, this,
                 SLOT(slotRevertToSaved()), actionCollection(),
@@ -1599,11 +1600,19 @@ void RosegardenGUIApp::slotFilePrint()
 
     KTmpStatusMsg msg(i18n("Printing..."), this);
 
-    KPrinter printer(true, QPrinter::HighResolution);
+    m_view->print(&m_doc->getComposition());
+}
 
-    if (printer.setup(this)) {
-        m_view->print(&printer, &m_doc->getComposition());
+void RosegardenGUIApp::slotFilePrintPreview()
+{
+    if (m_doc->getComposition().getNbSegments() == 0) {
+        KMessageBox::sorry(0, "Please create some tracks first (until we implement menu state management)");
+        return;
     }
+
+    KTmpStatusMsg msg(i18n("Previewing..."), this);
+
+    m_view->print(&m_doc->getComposition(), true);
 }
 
 void RosegardenGUIApp::slotQuit()

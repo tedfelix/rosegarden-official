@@ -19,7 +19,7 @@
 </font-requirements>
 
 <font-sizes>
-	<font-scale font-height="4.0" beam-thickness="0.5" staff-line-thickness="0.1" stem-thickness="0.1" border-x="0" border-y="0"/>
+	<font-scale font-height="4.0" beam-thickness="0.5" staff-line-thickness="0.1" stem-thickness="0.1" border-x="0" border-y="0" flag-spacing="0.8"/>
 </font-sizes>
 
 <font-symbol-map>
@@ -111,7 +111,7 @@
 		<scaled y="1.98"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL G CLEF">
-		<scaled y="4.5"/>
+		<scaled y="4.47"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL F CLEF">
 		<scaled y="0.95"/>
