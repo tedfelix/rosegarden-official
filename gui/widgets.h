@@ -343,6 +343,9 @@ public:
 signals:
     void valueChanged(float);
 
+protected slots:
+    void slotFloatTimeout();
+
 protected:
     virtual void paintEvent(QPaintEvent *e);
     virtual void mousePressEvent(QMouseEvent *e);
@@ -367,6 +370,8 @@ protected:
     QColor               m_knobColour;
 
     RosegardenTextFloat *m_float;
+
+    QTimer              *m_floatTimer;
 };
 
 namespace Rosegarden { class Quantizer; }

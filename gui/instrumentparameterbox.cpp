@@ -178,14 +178,13 @@ InstrumentParameterBox::setMute(bool value)
     }
 }
 
+/*
+ * Set the record state of the audio instrument parameter panel
+ */
 void
 InstrumentParameterBox::setRecord(bool value)
 {
-    if (m_selectedInstrument &&
-            m_selectedInstrument->getType() == Rosegarden::Instrument::Audio)
-    {
-        m_audioInstrumentParameters->slotSetRecord(value);
-    }
+    m_audioInstrumentParameters->slotSetRecord(value);
 }
 
 void
@@ -982,8 +981,14 @@ AudioInstrumentParameterPanel::slotRecord()
 {
     RG_DEBUG << "AudioInstrumentParameterPanel::slotRecord - " 
              << " isOn = " <<  m_audioFader->m_soloButton->isOn() << endl;
-    emit recordButton(m_selectedInstrument->getId(),
-                      m_audioFader->m_soloButton->isOn());
+
+    // At the moment we can't turn a recording button off
+    //
+    if (!m_audioFader->m_recordButton->isOn())
+        m_audioFader->m_recordButton->setOn(true);
+    else
+        emit recordButton(m_selectedInstrument->getId(),
+                          m_audioFader->m_recordButton->isOn());
 }
 
 void
@@ -1135,22 +1140,22 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget* parent)
     //
 
     // light blue
-    m_volumeRotary->setKnobColour(QColor(205, 212, 255));
+    m_volumeRotary->setKnobColour(RosegardenGUIColours::RotaryPastelBlue);
 
     // light red
-    m_panRotary->setKnobColour(QColor(255, 168, 169));
+    m_panRotary->setKnobColour(RosegardenGUIColours::RotaryPastelRed);
 
     // light green
-    m_chorusRotary->setKnobColour(QColor(231, 255, 223));
-    m_reverbRotary->setKnobColour(QColor(231, 255, 223));
+    m_chorusRotary->setKnobColour(RosegardenGUIColours::RotaryPastelGreen);
+    m_reverbRotary->setKnobColour(RosegardenGUIColours::RotaryPastelGreen);
 
     // light orange
-    m_highPassRotary->setKnobColour(QColor(255, 233, 208));
-    m_resonanceRotary->setKnobColour(QColor(255, 233, 208));
+    m_highPassRotary->setKnobColour(RosegardenGUIColours::RotaryPastelOrange);
+    m_resonanceRotary->setKnobColour(RosegardenGUIColours::RotaryPastelOrange);
 
     // light yellow
-    m_attackRotary->setKnobColour(QColor(249, 255, 208));
-    m_releaseRotary->setKnobColour(QColor(249, 255, 208));
+    m_attackRotary->setKnobColour(RosegardenGUIColours::RotaryPastelYellow);
+    m_releaseRotary->setKnobColour(RosegardenGUIColours::RotaryPastelYellow);
 
     QGridLayout *gridLayout = new QGridLayout(this, 12, 3, 8, 1);
 

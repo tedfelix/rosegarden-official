@@ -103,6 +103,12 @@ namespace RosegardenGUIColours
 
     extern const QColor RotaryFloatBackground;
     extern const QColor RotaryFloatForeground;
+
+    extern const QColor RotaryPastelBlue;
+    extern const QColor RotaryPastelRed;
+    extern const QColor RotaryPastelGreen;
+    extern const QColor RotaryPastelOrange;
+    extern const QColor RotaryPastelYellow;
 }
 
 #endif

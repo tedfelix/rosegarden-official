@@ -30,6 +30,7 @@
 
 #include "Instrument.h"
 #include "studiowidgets.h"
+#include "colours.h"
 
 
 // ---------------- AudioFaderWidget ------------------
@@ -87,6 +88,9 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
     QToolTip::add(m_pan,
                   i18n("Set the audio pan position in the stereo field"));
 
+    // same as the knob colour on the MIDI pan
+    m_pan->setKnobColour(RosegardenGUIColours::RotaryPastelGreen);
+
     m_stereoButton = new QPushButton(this);
     m_stereoButton->setPixmap(m_monoPixmap); // default is mono
     m_stereoButton->setFixedSize(24, 24);
@@ -117,6 +121,7 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
     QLabel *inputLabel = new QLabel(i18n("Audio Input"), this);
     m_audioInput = new RosegardenComboBox(this);
 
+    QLabel *panLabel = new QLabel(i18n("Pan"), this);
     //QLabel *outputLabel = new QLabel(i18n("Audio Output"), this);
     //m_audioOutput = new RosegardenComboBox(this);
     
@@ -154,13 +159,16 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
         grid->addMultiCellWidget(m_vuMeter,     0, 8, 2, 2, AlignCenter);
         grid->addMultiCellWidget(m_fader,       0, 8, 3, 3, AlignCenter);
 
-        grid->addWidget(m_pan,                  1, 4, AlignCenter);
+        //grid->addWidget(m_pan,                  1, 4, AlignCenter);
 
         grid->addWidget(m_muteButton,           2, 4, AlignCenter);
         grid->addWidget(m_soloButton,           3, 4, AlignCenter);
 
         grid->addWidget(m_recordButton,         4, 4, AlignCenter);
         grid->addWidget(m_stereoButton,         5, 4, AlignCenter);
+
+        grid->addMultiCellWidget(panLabel,      8, 8, 0, 1, AlignCenter);
+        grid->addMultiCellWidget(m_pan,         8, 8, 2, 4, AlignCenter);
 
         grid->addWidget(inputLabel,             9, 0, AlignCenter);
         grid->addMultiCellWidget(m_audioInput,  9, 9, 1, 4, AlignCenter);

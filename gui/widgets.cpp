@@ -495,17 +495,28 @@ RosegardenRotary::RosegardenRotary(QWidget *parent,
     m_buttonPressed(false),
     m_lastY(0),
     m_lastX(0),
-    m_knobColour(0, 0, 0)
+    m_knobColour(0, 0, 0),
+    m_floatTimer(new QTimer())
 {
     QToolTip::add(this,
                  "Click and drag up and down or left and right to modify");
     setFixedSize(size, size);
+
+    // connect timer
+    connect(m_floatTimer, SIGNAL(timeout()), this, SLOT(slotFloatTimeout()));
 
     m_float = new RosegardenTextFloat(this);
     m_float->hide();
 
     // set the initial position
     drawPosition();
+
+}
+
+void
+RosegardenRotary::slotFloatTimeout()
+{
+    m_float->hide();
 }
 
 
@@ -642,6 +653,29 @@ RosegardenRotary::wheelEvent(QWheelEvent *e)
 
     drawPosition();
 
+    // draw on the float text
+    m_float->setText(QString("%1").arg(m_position));
+
+    // Reposition - we need to sum the relative positions up to the
+    // topLevel or dialog to please move().
+    //
+    QWidget *par = parentWidget();
+    QPoint totalPos = this->pos();
+
+    while (par->parentWidget() && !par->isTopLevel() && !par->isDialog())
+    {
+        totalPos += par->pos();
+        par = par->parentWidget();
+    }
+    // Move just top/right of the rotary
+    //
+    m_float->move(totalPos + QPoint(width() + 2, -height()/2));
+    m_float->show();
+
+    // one shot, 500ms
+    m_floatTimer->start(500, true);
+
+    // set it to show for a timeout value
     emit valueChanged(m_position);
 }
 

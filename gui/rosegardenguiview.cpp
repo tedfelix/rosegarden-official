@@ -1080,7 +1080,7 @@ RosegardenGUIView::slotSetRecord(Rosegarden::InstrumentId id, bool value)
 
     for (it = tracks.begin(); it != tracks.end(); ++it)
     {
-        if (comp.getRecordTrack() == id)
+        if (comp.getSelectedTrack() == (*it).second->getId())
         {
             m_trackEditor->getTrackButtons()->
                 setRecordTrack((*it).second->getPosition());

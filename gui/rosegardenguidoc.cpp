@@ -1659,7 +1659,9 @@ RosegardenGUIDoc::slotNewRecordButton()
         RosegardenGUIView *w;
         for(w=m_viewList.first(); w!=0; w=m_viewList.next())
         {
-            w->slotSetRecord(recordInstr->getId(), true);
+            w->slotSetRecord(recordInstr->getId(), 
+                    (m_composition.getRecordTrack() == 
+                     m_composition.getSelectedTrack()));
         }
     }
 

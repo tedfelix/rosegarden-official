@@ -99,6 +99,12 @@ namespace RosegardenGUIColours
     const QColor RotaryFloatBackground = Qt::cyan;
     const QColor RotaryFloatForeground = Qt::black;
 
+    const QColor RotaryPastelBlue = QColor(205, 212, 255);
+    const QColor RotaryPastelRed = QColor(255, 168, 169);
+    const QColor RotaryPastelGreen = QColor(231, 255, 223);
+    const QColor RotaryPastelOrange = QColor(255, 233, 208);
+    const QColor RotaryPastelYellow = QColor(249, 255, 208);
+
 }
 
 

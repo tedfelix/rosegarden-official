@@ -582,6 +582,9 @@ TrackButtons::slotUpdateTracks()
 void
 TrackButtons::slotSetRecordTrack(int position)
 {
+    // change selected track
+    //emit trackSelected(position);
+
     setRecordTrack(position);
     emit newRecordButton();
 }
