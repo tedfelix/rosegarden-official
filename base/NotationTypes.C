@@ -38,11 +38,70 @@ const string Clef::Bass = "bass";
 
 const Clef Clef::DefaultClef = Clef("treble");
 
+Clef::Clef(const Event &e)
+    throw (Event::NoData, Event::BadType, BadClefName)
+{
+    if (e.getType() != EventType) {
+        throw Event::BadType();
+    }
+    std::string s = e.get<String>(ClefPropertyName);
+    if (s != Treble && s != Tenor && s != Alto && s != Bass) {
+        throw BadClefName();
+    }
+    m_clef = s;
+}        
+
+Clef::Clef(const std::string &s)
+    throw (BadClefName)
+{
+    if (s != Treble && s != Tenor && s != Alto && s != Bass) {
+        throw BadClefName();
+    }
+    m_clef = s;
+}
+
 const string Key::EventType = "keychange";
 const string Key::KeyPropertyName = "key";
 const Key Key::DefaultKey = Key("C major");
 
 Key::KeyDetailMap Key::m_keyDetailMap = Key::KeyDetailMap();
+
+Key::Key(const Event &e)
+    throw (Event::NoData, Event::BadType, BadKeyName) :
+    m_accidentalHeights(0)
+{
+    checkMap();
+    if (e.getType() != EventType) {
+        throw Event::BadType();
+    }
+    m_name = e.get<String>(KeyPropertyName);
+    if (m_keyDetailMap.find(m_name) == m_keyDetailMap.end()) {
+        throw BadKeyName();
+    }
+}
+
+Key::Key(const std::string &name)
+    throw (BadKeyName)
+    : m_name(name), m_accidentalHeights(0)
+{
+    checkMap();
+    if (m_keyDetailMap.find(m_name) == m_keyDetailMap.end()) {
+        throw BadKeyName();
+    }
+}    
+
+std::vector<Key> Key::getKeys(bool minor)
+{
+    checkMap();
+    std::vector<Key> result;
+    for (KeyDetailMap::const_iterator i = m_keyDetailMap.begin();
+         i != m_keyDetailMap.end(); ++i) {
+        if ((*i).second.m_minor == minor) {
+            result.push_back(Key((*i).first));
+        }
+    }
+    return result;
+}
 
 vector<int> Key::getAccidentalHeights(const Clef &clef) const {
     // staff positions of accidentals

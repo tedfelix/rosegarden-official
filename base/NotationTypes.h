@@ -46,26 +46,10 @@ public:
     static const std::string Bass;
 
     Clef() : m_clef(DefaultClef.m_clef) { }
-
-    Clef(const Event &e) throw (Event::NoData, Event::BadType, BadClefName) {
-        if (e.getType() != EventType) {
-            throw Event::BadType();
-        }
-        std::string s = e.get<String>(ClefPropertyName);
-        if (s != Treble && s != Tenor && s != Alto && s != Bass) {
-            throw BadClefName();
-        }
-        m_clef = s;
-    }        
-
-    Clef(const std::string &s) throw (BadClefName) {
-        if (s != Treble && s != Tenor && s != Alto && s != Bass) {
-            throw BadClefName();
-        }
-        m_clef = s;
-    }
-
+    Clef(const Event &e) throw (Event::NoData, Event::BadType, BadClefName);
+    Clef(const std::string &s) throw (BadClefName);
     Clef(const Clef &c) : m_clef(c.m_clef) { }
+
     Clef &operator=(const Clef &c) {
         if (this != &c) m_clef = c.m_clef;
         return *this;
@@ -108,29 +92,8 @@ public:
     struct BadKeyName { };
 
     Key() : m_name(DefaultKey.m_name), m_accidentalHeights(0) { checkMap(); }
-  
-    Key(const Event &e)
-        throw (Event::NoData, Event::BadType, BadKeyName) :
-        m_accidentalHeights(0) {
-        checkMap();
-        if (e.getType() != EventType) {
-            throw Event::BadType();
-        }
-        m_name = e.get<String>(KeyPropertyName);
-        if (m_keyDetailMap.find(m_name) == m_keyDetailMap.end()) {
-            throw BadKeyName();
-        }
-    }
-
-    Key(const std::string &name)
-        throw (BadKeyName)
-        : m_name(name), m_accidentalHeights(0) {
-        checkMap();
-        if (m_keyDetailMap.find(m_name) == m_keyDetailMap.end()) {
-            throw BadKeyName();
-        }
-    }    
-
+    Key(const Event &e) throw (Event::NoData, Event::BadType, BadKeyName);
+    Key(const std::string &name) throw (BadKeyName);
     Key(const Key &kc) : m_name(kc.m_name), m_accidentalHeights(0) { }
     virtual ~Key() { delete m_accidentalHeights; }
 
@@ -173,17 +136,7 @@ public:
         return e;
     }
 
-    static std::vector<Key> getKeys(bool minor = false) {
-        checkMap();
-        std::vector<Key> result;
-        for (KeyDetailMap::const_iterator i = m_keyDetailMap.begin();
-             i != m_keyDetailMap.end(); ++i) {
-            if ((*i).second.m_minor == minor) {
-                result.push_back(Key((*i).first));
-            }
-        }
-        return result;
-    }
+    static std::vector<Key> getKeys(bool minor = false);
 
 private:
     std::string m_name;
@@ -219,7 +172,8 @@ private:
         }
     };
 
-    typedef std::hash_map<std::string, KeyDetails, hashstring, eqstring> KeyDetailMap;
+    typedef std::hash_map<std::string, KeyDetails, hashstring, eqstring>
+        KeyDetailMap;
     static KeyDetailMap m_keyDetailMap;
     static void checkMap();
     void checkAccidentalHeights() const;
