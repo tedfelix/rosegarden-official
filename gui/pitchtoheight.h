@@ -23,18 +23,18 @@
 /**Creates a conversion table to compute a note pixmap's y coord (relative to a staff)
 from a note's pitch :
 
-Pitch : 0  - 40 - C
-Pitch : 1  - 40 - C#
-Pitch : 2  - 36 - D
-Pitch : 3  - 36 - D#
-Pitch : 4  - 32 - E
-Pitch : 5  - 28 - F
-Pitch : 6  - 28 - F#
-Pitch : 7  - 24 - G
-Pitch : 8  - 24 - G#
-Pitch : 9  - 20 - A
-Pitch : 10 - 20 - A#
-Pitch : 11 - 16 - B
+Pitch : 0  - C
+Pitch : 1  - C#
+Pitch : 2  - D
+Pitch : 3  - D#
+Pitch : 4  - E
+Pitch : 5  - F
+Pitch : 6  - F#
+Pitch : 7  - G
+Pitch : 8  - G#
+Pitch : 9  - A
+Pitch : 10 - A#
+Pitch : 11 - B
 
   *@author Guillaume Laurent
   */

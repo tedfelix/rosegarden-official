@@ -72,6 +72,8 @@ QCanvasItemGroup::setVisible(bool yes)
 void
 QCanvasItemGroup::setSelected(bool yes)
 {
+    QCanvasItem::setSelected(yes);
+
     QCanvasItemList::Iterator i;
     for(i = m_items.begin(); i != m_items.end(); ++i)
         (*i)->setVisible(yes);
@@ -80,6 +82,8 @@ QCanvasItemGroup::setSelected(bool yes)
 void
 QCanvasItemGroup::setEnabled(bool yes)
 {
+    QCanvasItem::setEnabled(yes);
+
     QCanvasItemList::Iterator i;
     for(i = m_items.begin(); i != m_items.end(); ++i)
         (*i)->setEnabled(yes);
@@ -88,6 +92,8 @@ QCanvasItemGroup::setEnabled(bool yes)
 void
 QCanvasItemGroup::setActive(bool yes)
 {
+    QCanvasItem::setActive(yes);
+
     QCanvasItemList::Iterator i;
     for(i = m_items.begin(); i != m_items.end(); ++i)
         (*i)->setActive(yes);

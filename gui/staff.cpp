@@ -41,7 +41,7 @@ Staff::Staff(QCanvas *canvas)
 
             QCanvasLineGroupable *staffLine = new QCanvasLineGroupable(canvas, this);
 
-            int y = l * (noteHeight + 1);
+            int y = l * lineWidth;
 
             staffLine->setPoints(0,y, len,y);
             staffLine->moveBy(0,14);
@@ -55,7 +55,7 @@ Staff::Staff(QCanvas *canvas)
 
     clef = new QCanvasSpriteGroupable(clefPixmap, canvas, this);
 
-    clef->moveBy(0, 7*noteHeight + noteHeight / 2 + 2);
+    clef->moveBy(0, 7*noteHeight + noteHeight / 2);
 
     // horizontal lines
     //
@@ -63,10 +63,10 @@ Staff::Staff(QCanvas *canvas)
 
             QCanvasLineGroupable *staffLine = new QCanvasLineGroupable(canvas, this);
 
-            int y = l * (noteHeight + 1) + (7 * noteHeight);
+            int y = l * lineWidth;
 
             staffLine->setPoints(0,y, len,y);
-            staffLine->moveBy(0,14);
+            staffLine->moveBy(0,14 + (6 * lineWidth));
         }
 
 
@@ -74,7 +74,7 @@ Staff::Staff(QCanvas *canvas)
     //
     QCanvasLineGroupable *staffVertLine = new QCanvasLineGroupable(canvas, this);
 
-    int vertLineHeight = 11 * (noteHeight + 1) - noteHeight / 2 - 2;
+    int vertLineHeight = 11 * lineWidth - lineWidth / 2 - 4;
 
     staffVertLine->setPoints(0,14,
                              0, vertLineHeight + 14);
@@ -88,12 +88,13 @@ Staff::Staff(QCanvas *canvas)
 
 
     //setActive(false); // don't react to mousePress events
-    setActive(true);
+    setActive(false);
 
 }
 
 
 const unsigned int Staff::noteHeight = 8;
+const unsigned int Staff::lineWidth = noteHeight + 1;
 const unsigned int Staff::noteWidth = 9;
 const unsigned int Staff::stalkLen = noteHeight * 7/2 - 6;
 const unsigned int Staff::nbLines = 5;

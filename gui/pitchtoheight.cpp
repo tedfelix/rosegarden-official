@@ -17,36 +17,38 @@
 
 #include "pitchtoheight.h"
 
-PitchToHeight::PitchToHeight(unsigned short notePixmapHeight)
+PitchToHeight::PitchToHeight(unsigned short staffLineWidth)
   : vector<int>(12)
 {
-  for(unsigned int note = 0, pitch = 0; pitch < size(); ++pitch)
-    {
-      int height = - (
-		      ((note - 2) * (notePixmapHeight / 2))
-		      -
-		      (notePixmapHeight * 4)
-		      );
+    int height = 12 + 5 * staffLineWidth,
+        offset = 0;
 
-      (*this)[pitch] = height;
+    for(unsigned int note = 0, pitch = 0; pitch < size(); ++pitch)
+        {
+            (*this)[pitch] = height;
 
-      if(pitch != 4 && // E
-	 pitch != 11) // B
-	{
-	  (*this)[++pitch] = height;
-	}
+            if(pitch != 4 && // E
+               pitch != 11) // B
+                {
+                    (*this)[++pitch] = height;
+                }
 
-      if(pitch == 1 ||
-	 pitch == 3 ||
-	 pitch == 4 ||
-	 pitch == 6 ||
-	 pitch == 8 ||
-	 pitch == 10)
-	++note;
-    }
+            if(pitch == 1 ||
+               pitch == 3 ||
+               pitch == 4 ||
+               pitch == 6 ||
+               pitch == 8 ||
+               pitch == 10) {
+                ++note;
+                if(pitch == 1 || pitch == 4 || pitch == 8) ++offset;
+                else if(pitch == 3 || pitch == 6) --offset;
+            }
+	
+            height -= staffLineWidth / 2 + offset;
+        }
 
-//   for(unsigned int pitch = 0; pitch < size(); ++pitch)
-//     cout << "Pitch : " << pitch << " - " << (*this)[pitch]
-// 	 << endl;
+    for(unsigned int pitch = 0; pitch < size(); ++pitch)
+        cout << "Pitch : " << pitch << " - " << (*this)[pitch]
+             << endl;
 
 }

@@ -66,7 +66,7 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
 
     QCanvasPixmapArray *notePixmap = new QCanvasPixmapArray("pixmaps/note-bodyfilled.xpm");
 
-    PitchToHeight pitchToHeight(Staff::noteHeight + 1);
+    PitchToHeight pitchToHeight(Staff::lineWidth);
     for(unsigned int i = 0; i < pitchToHeight.size(); ++i) {
         QCanvasSprite *note = new QCanvasSprite(notePixmap, canvas());
         note->move(20,14);
@@ -82,7 +82,7 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
 
 
     NotePixmapFactory npf;
-
+#if 0
     for(unsigned int i = 0; i < 7; ++i) {
 
 
@@ -125,7 +125,7 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
         noteSprite->move(50 + i * 20, 150);
 
     }
-
+#endif
 
 }
 
