@@ -1443,7 +1443,7 @@ JackDriver::flushAudio()
 void
 JackDriver::kickAudio()
 {
-#ifdef DEBUG_JACK_DRIVER
+#ifdef DEBUG_JACK_PROCESS
     std::cerr << "JackDriver::kickAudio" << std::endl;
 #endif
 

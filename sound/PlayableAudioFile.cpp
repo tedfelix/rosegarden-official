@@ -640,13 +640,13 @@ PlayableAudioFile::updateBuffers()
 
 	    float ratio = float(sourceSampleRate) / float(m_targetSampleRate);
 
-	    if (m_targetSampleRate > sourceSampleRate) {
+	    if (ratio < 1.0) {
 		for (size_t i = frames; i > 0; --i) {
 		    size_t j = size_t((i-1) * ratio);
 		    if (j >= fileFrames) j = fileFrames - 1;
 		    buffer[i-1] = buffer[j];
 		}
-	    } else {
+	    } else { // ratio >= 1.0
 		for (size_t i = 0; i < frames; ++i) {
 		    size_t j = size_t(i * ratio);
 		    if (j >= fileFrames) j = fileFrames - 1;
