@@ -1633,31 +1633,19 @@ void NotationView::slotPageMode()
     setPageMode(true);
 }
 
-void NotationView::slotLabelChords()
+void NotationView::slotToggleChordsRuler()
 {
     if (m_hlayout->isPageMode()) return;
-    m_chordNamesVisible = !m_chordNamesVisible;
-
-    if (!m_chordNamesVisible) {
-	m_chordNameRuler->hide();
-    } else {
-	m_chordNameRuler->show();
-    }
+    toggleWidget(m_chordNameRuler, "show_chords_ruler");
 }
 
-void NotationView::slotShowTempos()
+void NotationView::slotToggleTempoRuler()
 {
     if (m_hlayout->isPageMode()) return;
-    m_temposVisible = !m_temposVisible;
-
-    if (!m_temposVisible) {
-	m_tempoRuler->hide();
-    } else {
-	m_tempoRuler->show();
-    }
+    toggleWidget(m_tempoRuler, "show_tempo_ruler");
 }
 
-void NotationView::slotShowAnnotations()
+void NotationView::slotToggleAnnotations()
 {
     m_annotationsVisible = !m_annotationsVisible;
     slotUpdateAnnotationsStatus();

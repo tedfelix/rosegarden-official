@@ -261,10 +261,10 @@
   <Action name="show_clefs_toolbar"        append="show_merge" />
   <Action name="show_transport_toolbar"    append="show_merge" />
   <Action name="show_font_toolbar"         append="show_merge" />
-  <Separator append="show_merge" />
-  <Action name="label_chords"         append="show_merge" />
-  <Action name="display_tempo_changes"         append="show_merge" />
-  <Action name="show_annotations"         append="show_merge" />
+  <Separator                               append="show_merge" />
+  <Action name="show_chords_ruler"         append="show_merge" />
+  <Action name="show_tempo_ruler"          append="show_merge" />
+  <Action name="show_annotations"          append="show_merge" />
 </Menu> 
 
 </MenuBar>

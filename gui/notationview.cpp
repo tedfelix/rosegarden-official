@@ -180,8 +180,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                                   m_legatoQuantizer, m_properties, this)),
     m_chordNameRuler(0),
     m_tempoRuler(0),
-    m_chordNamesVisible(false),
-    m_temposVisible(false),
     m_annotationsVisible(false),
     m_selectDefaultNote(0),
     m_fontCombo(0),
@@ -268,14 +266,12 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	(m_hlayout, 0, 20.0, 20, getCentralFrame());
     addRuler(m_chordNameRuler);
     if (showProgressive) m_chordNameRuler->show();
-    m_chordNamesVisible = true;
 
     m_tempoRuler = new TempoRuler
 	(m_hlayout, &doc->getComposition(),
 	 20.0, 20, false, getCentralFrame());
     addRuler(m_tempoRuler);
     m_tempoRuler->hide();
-    m_temposVisible = false;
 
     // All toolbars should be created before this is called
     setAutoSaveSettings("NotationView", true);
@@ -472,8 +468,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                                   m_legatoQuantizer, m_properties, this)),
     m_chordNameRuler(0),
     m_tempoRuler(0),
-    m_chordNamesVisible(false),
-    m_temposVisible(false),
     m_annotationsVisible(false),
     m_selectDefaultNote(0),
     m_fontCombo(0),
@@ -727,8 +721,8 @@ void NotationView::slotSaveOptions()
 {
     m_config->setGroup("Notation Options");
 
-    m_config->writeEntry("Show Chord Name Ruler", m_chordNamesVisible);
-    m_config->writeEntry("Show Tempo Ruler", m_temposVisible);
+    m_config->writeEntry("Show Chord Name Ruler", getToggleAction("show_chords_ruler")->isChecked());
+    m_config->writeEntry("Show Tempo Ruler",      getToggleAction("show_tempo_ruler")->isChecked());
     m_config->writeEntry("Show Annotations", m_annotationsVisible);
 
     m_config->sync();
@@ -750,21 +744,18 @@ void NotationView::readOptions()
     bool opt;
 
     opt = m_config->readBoolEntry("Show Chord Name Ruler", true);
-    if (opt) m_chordNameRuler->show();
-    else m_chordNameRuler->hide();
-    m_chordNamesVisible = opt;
-    getToggleAction("label_chords")->setChecked(opt);
+    getToggleAction("show_chords_ruler")->setChecked(opt);
+    slotToggleChordsRuler();
 
     opt = m_config->readBoolEntry("Show Tempo Ruler", false);
-    if (opt) m_tempoRuler->show();
-    else m_tempoRuler->hide();
-    m_temposVisible = opt;
-    getToggleAction("display_tempo_changes")->setChecked(opt);
+    getToggleAction("show_tempo_ruler")->setChecked(opt);
+    slotToggleTempoRuler();
 
     opt = m_config->readBoolEntry("Show Annotations", true);
     m_annotationsVisible = opt;
     getToggleAction("show_annotations")->setChecked(opt);
-    slotUpdateAnnotationsStatus();
+    //slotUpdateAnnotationsStatus();
+    slotToggleAnnotations();
 }
 
 void NotationView::setupActions()
@@ -1043,7 +1034,9 @@ void NotationView::setupActions()
     KStdAction::copy    (this, SLOT(slotEditCopy()),       actionCollection());
     KStdAction::paste   (this, SLOT(slotEditPaste()),      actionCollection());
 
-    // View menu
+    //
+    // Settings menu
+    //
     KRadioAction *linearModeAction = new KRadioAction
         (i18n("&Linear Layout"), 0, this, SLOT(slotLinearMode()),
          actionCollection(), "linear_mode");
@@ -1056,22 +1049,24 @@ void NotationView::setupActions()
     pageModeAction->setExclusiveGroup("layoutMode");
     if (m_hlayout->isPageMode()) pageModeAction->setChecked(true);
 
-    (new KToggleAction
-     (i18n("Show Ch&ord Name Ruler"), 0, this, SLOT(slotLabelChords()),
-      actionCollection(), "label_chords"))->setChecked(true);
+    new KToggleAction(i18n("Show Ch&ord Name Ruler"), 0, this,
+                      SLOT(slotToggleChordsRuler()),
+                      actionCollection(), "show_chords_ruler");
 
-    (new KToggleAction
-     (i18n("Show &Annotations"), 0, this, SLOT(slotShowAnnotations()),
-      actionCollection(), "show_annotations"))->setChecked(true);
+    new KToggleAction(i18n("Show &Tempo Ruler"), 0, this,
+                      SLOT(slotToggleTempoRuler()),
+                      actionCollection(), "show_tempo_ruler");
 
-    new KToggleAction
-	(i18n("Show &Tempo Ruler"), 0, this, SLOT(slotShowTempos()),
-	 actionCollection(), "display_tempo_changes");
+    new KToggleAction(i18n("Show &Annotations"), 0, this,
+                      SLOT(slotToggleAnnotations()),
+                      actionCollection(), "show_annotations");
 
     new KAction(i18n("Open L&yric Editor"), 0, this, SLOT(slotEditLyrics()),
 		actionCollection(), "lyric_editor");
 
-    // setup Group menu
+    //
+    // Group menu
+    //
     new KAction(i18n(GroupMenuBeamCommand::getGlobalName()), 0, this,
                 SLOT(slotGroupBeam()), actionCollection(), "beam");
 
@@ -1269,10 +1264,9 @@ void NotationView::setupActions()
 
         icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap(actionsToolbars[i][3])));
 
-        KToggleAction* toolbarAction = new KToggleAction
-            (i18n(actionsToolbars[i][0]), icon, 0,
-             this, actionsToolbars[i][1],
-             actionCollection(), actionsToolbars[i][2]);
+        new KToggleAction(i18n(actionsToolbars[i][0]), icon, 0,
+                          this, actionsToolbars[i][1],
+                          actionCollection(), actionsToolbars[i][2]);
     }
 
     new KAction(i18n("Cursor &Back"), 0, Key_Left, this,
@@ -1569,8 +1563,8 @@ NotationView::setPageMode(bool pageMode)
     } else {
 	if (m_topBarButtons) m_topBarButtons->show();
 	if (m_bottomBarButtons) m_bottomBarButtons->show();
-	if (m_chordNameRuler && m_chordNamesVisible) m_chordNameRuler->show();
-	if (m_tempoRuler && m_temposVisible) m_tempoRuler->show();
+	if (m_chordNameRuler && getToggleAction("show_chords_ruler")->isChecked()) m_chordNameRuler->show();
+	if (m_tempoRuler && getToggleAction("show_tempo_ruler")->isChecked()) m_tempoRuler->show();
     }
 
     int pageWidth = getPageWidth();
@@ -2031,8 +2025,7 @@ void NotationView::print(KPrinter* printer)
 
     unsigned int pageNum = 1;
 
-    unsigned int canvasWidth = getCanvasView()->canvas()->width(),
-        canvasHeight =  getCanvasView()->canvas()->height();
+    unsigned int canvasWidth = getCanvasView()->canvas()->width();
 
     QWMatrix scale;
 

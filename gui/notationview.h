@@ -338,9 +338,9 @@ public slots:
     /// view menu
     void slotLinearMode();
     void slotPageMode();
-    void slotLabelChords();
-    void slotShowTempos();
-    void slotShowAnnotations();
+    void slotToggleChordsRuler();
+    void slotToggleTempoRuler();
+    void slotToggleAnnotations();
     void slotEditLyrics();
 
     /// group slots
@@ -732,8 +732,6 @@ protected:
 
     ChordNameRuler *m_chordNameRuler;
     QWidget *m_tempoRuler;
-    bool m_chordNamesVisible;
-    bool m_temposVisible;
     bool m_annotationsVisible;
     
     std::vector<int> m_legatoDurations;
