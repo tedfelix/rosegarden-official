@@ -14,3 +14,5 @@ acinclude.m4
 aclocal.m4
 configure
 configure.in
+autom4te.cache
+stamp-h1
