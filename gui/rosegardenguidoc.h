@@ -42,12 +42,15 @@
 #include "Studio.h"
 #include "Configuration.h"
 #include "MappedDevice.h"
+#include "MappedStudio.h"
 
 // forward declaration of the RosegardenGUI classes
 class RosegardenGUIView;
 class ViewElementsManager;
 class SegmentItem;
 class RosegardenProgressDialog;
+
+namespace Rosegarden { class AudioPluginManager; }
 
 /**
   * RosegardenGUIDoc provides a document object for a document-view model.
@@ -75,6 +78,7 @@ public:
      */
     RosegardenGUIDoc(QWidget *parent,
                      bool useSequencer = true,
+                     Rosegarden::AudioPluginManager *audioPluginManager = 0,
                      const char *name=0);
 
     /**
@@ -287,7 +291,6 @@ public:
         { m_audioPlayLatency = latency; }
         */
 
-
 public slots:
     /**
      * calls repaint() on all views connected to the document object
@@ -423,6 +426,10 @@ private:
     // by a subordinate.
     //
     bool m_progressDialogDead;
+
+    // AudioPluginManager - sequencer and local plugin management
+    //
+    Rosegarden::AudioPluginManager *m_pluginManager;
 
 };
 

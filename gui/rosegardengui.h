@@ -27,22 +27,19 @@
 #include <config.h>
 #endif
 
-// include files for Qt
 #include <qstrlist.h>
 #include <qcursor.h>
 
-// include files for KDE 
 #include <kapp.h>
 #include <kmainwindow.h>
 #include <kaccel.h>
 
+#include "audiopluginmanager.h"
+#include "dialogs.h"
 #include "rosegardendcop.h"
 #include "rosegardenguiiface.h"
 #include "segmentcanvas.h"
-#include "dialogs.h"
 
-// the sequencer interface
-//
 #include "Sound.h"
 #include "MappedEvent.h"
 #include "MappedStudio.h"
@@ -888,6 +885,8 @@ private:
     Rosegarden::timeT m_storedLoopEnd;
 
     bool m_useSequencer;
+
+    Rosegarden::AudioPluginManager m_pluginManager;
 
 };
 

@@ -88,6 +88,7 @@ using namespace Rosegarden::BaseProperties;
 
 RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
                                    bool useSequencer,
+                                   Rosegarden::AudioPluginManager *pluginManager,
                                    const char *name)
     : QObject(parent, name),
       m_recordSegment(0), m_endOfLastRecordedNote(0),
@@ -95,7 +96,9 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
       m_clipboard(new Rosegarden::Clipboard),
       m_startUpSync(true),
       m_useSequencer(useSequencer),
-      m_progressDialogDead(false)
+      m_progressDialogDead(false),
+      m_pluginManager(pluginManager)
+
 {
     // Try to tell the sequencer that we're alive only if the
     // sequencer hasn't already forced us to sync
@@ -1556,5 +1559,6 @@ RosegardenGUIDoc::getAudioRecordLatency()
         return (result.getRealTime());
     }
 }
+
 
 

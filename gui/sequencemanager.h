@@ -50,6 +50,7 @@ class QTimer;
 namespace Rosegarden
 {
 
+class AudioPluginManager;
 class RosegardenTransportDialog;
 
 
@@ -145,6 +146,18 @@ public:
     void setMappedProperty(Rosegarden::MappedObjectId id,
                            const Rosegarden::MappedObjectProperty &property,
                            Rosegarden::MappedObjectValue value);
+
+
+    // Get a property list back from the MappedStudio at the sequencer
+    //
+    QValueVector<QString> getSequencerPropertyList(
+                       Rosegarden::MappedObjectId id,
+                       const Rosegarden::MappedObjectProperty &property);
+
+    // Get the plugins that are available at the sequencer and
+    // put them in the local pluginmanager
+    //
+    void getSequencerPlugins(Rosegarden::AudioPluginManager *);
 
 public slots:
     // Empty the m_clearToSend flag

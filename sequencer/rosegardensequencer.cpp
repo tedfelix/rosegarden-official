@@ -1023,9 +1023,23 @@ RosegardenSequencerApp::getMappedObjectId(int type)
 
 QValueVector<QString>
 RosegardenSequencerApp::getPropertyList(unsigned int id,
-                                       const QString &property)
+                                        const QString &property)
 {
     QValueVector<QString> propertyList;
+
+    Rosegarden::MappedObject *object =
+        m_studio.getObject(id);
+
+    if (object)
+    {
+        Rosegarden::MappedObjectPropertyList::iterator it = 
+            object->getPropertyList().begin();
+
+        for (; it != object->getPropertyList().end(); it++)
+        {
+            propertyList.push_back(it->first);
+        }
+    }
 
     return propertyList;
 }

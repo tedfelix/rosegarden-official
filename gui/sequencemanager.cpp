@@ -28,6 +28,7 @@
 #include <klocale.h>
 #include <kconfig.h>
 
+#include "audiopluginmanager.h"
 #include "ktmpstatusmsg.h"
 #include "rosestrings.h"
 #include "rosegardenguidoc.h"
@@ -1615,6 +1616,45 @@ SequenceManager::setMappedProperty(
         throw(i18n("Failed to contact Rosegarden sequencer"));
     }
 }
+
+void
+SequenceManager::getSequencerPlugins(Rosegarden::AudioPluginManager *aPM)
+{
+}
+
+QValueVector<QString>
+SequenceManager::getSequencerPropertyList(MappedObjectId id,
+                                          const MappedObjectProperty &property)
+{
+    QValueVector<QString> list;
+
+    QByteArray data;
+    QCString replyType;
+    QByteArray replyData;
+    QDataStream streamOut(data, IO_WriteOnly);
+
+    streamOut << id;
+    streamOut << property;
+
+    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                  "getPropertyList()",
+                                  data, replyType, replyData))
+    {
+        SEQMAN_DEBUG << "RosegardenGUIDoc::getSequencerPropertyList - "
+                     << "failed to contact Rosegarden sequencer"
+                     << endl;
+    }
+    else
+    {
+        QDataStream streamIn(replyData, IO_ReadOnly);
+        streamIn >> list;
+    }
+
+    return list;
+}
+
+
 
 
 }

@@ -148,8 +148,14 @@ PluginManager::loadPlugin(const std::string &path)
 
             if (data)
             {
-                m_plugins.push_back(
-                        new LADSPAPlugin(data, m_runningId++, path));
+                // The sequencer is only interested in plugins that 
+                // will be able to run in real time.
+                //
+                if (LADSPA_IS_HARD_RT_CAPABLE(data->Properties))
+                {
+                    m_plugins.push_back(
+                            new LADSPAPlugin(data, m_runningId++, path));
+                }
                 index++;
             }
         }

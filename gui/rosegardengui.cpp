@@ -132,6 +132,10 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
     //
     (void)m_seqManager->getSoundDriverStatus();
 
+    // Get the plugins available at the sequencer
+    //
+    m_seqManager->getSequencerPlugins(&m_pluginManager);
+
     connect(m_doc, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
             this,   SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
@@ -515,7 +519,7 @@ void RosegardenGUIApp::initStatusBar()
 
 void RosegardenGUIApp::initDocument()
 {
-    m_doc = new RosegardenGUIDoc(this, m_useSequencer);
+    m_doc = new RosegardenGUIDoc(this, m_useSequencer, &m_pluginManager);
     m_doc->newDocument();
     m_doc->getCommandHistory()->attachView(actionCollection());
     connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),

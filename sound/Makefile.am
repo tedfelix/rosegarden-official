@@ -1,7 +1,7 @@
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
 # over stated path
-INCLUDES= $(all_includes) -I$(kde_includes)/arts -I$(top_srcdir)/base
+INCLUDES= $(all_includes) -I$(kde_includes)/arts -I$(top_srcdir)/gui -I$(top_srcdir)/base
 
 
 COMPILE_FIRST = libRosegardenSound
