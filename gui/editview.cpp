@@ -556,12 +556,14 @@ EditView::getPitchFromNoteInsertAction(QString name,
 
 	    modify = 1;
 	    accidental = Rosegarden::Accidentals::Sharp;
+//!!! should be DoubleSharp if there's a sharp already in key
 	    name = name.left(name.length()-6);
 
 	} else if (name.right(5) == "_flat") {
 
 	    modify = -1;
 	    accidental = Rosegarden::Accidentals::Flat;
+//!!! should be DoubleFlat if there's a flat already in key
 	    name = name.left(name.length()-5);
 	}
 
