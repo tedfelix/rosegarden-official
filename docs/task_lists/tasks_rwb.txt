@@ -1,11 +1,14 @@
 0.2 TO-DO for rwb
 -----------------
-updated 27.04.2002
+updated 29.04.2002
 
 Immediate work:
 
 o KDE3 bug fixes
 
+  - track height [DONE]
+  - record button colour
+  - track button update
 
 o selection of ALSA recording device
 

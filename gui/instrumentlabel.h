@@ -44,6 +44,8 @@ public:
 
     QPoint getPressPosition() const { return m_pressPosition; }
 
+    bool isSelected() const { return m_selected; }
+
 public slots:
     void slotChangeToInstrumentList();
     void setLabelHighlight(bool value);
@@ -73,6 +75,7 @@ private:
     QPoint m_pressPosition;
     QString m_alternativeLabel;
 
+    bool m_selected;
 
 };
 

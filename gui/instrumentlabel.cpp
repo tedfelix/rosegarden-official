@@ -25,7 +25,8 @@ InstrumentLabel::InstrumentLabel(const QString & text,
                                  QWidget *parent, const char *name):
     QLabel(text, parent, name),
     m_position(position), m_pressPosition(0, 0),
-    m_alternativeLabel("")
+    m_alternativeLabel(""),
+    m_selected(false)
 {
     m_pressTimer = new QTimer();
 
@@ -82,6 +83,8 @@ InstrumentLabel::slotChangeToInstrumentList()
 void
 InstrumentLabel::setLabelHighlight(bool value)
 {
+    m_selected = value;
+
     if (value)
         setBackgroundMode(PaletteBase);
     else

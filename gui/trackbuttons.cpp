@@ -417,16 +417,24 @@ void
 TrackButtons::slotLabelSelected(int position)
 {
     std::vector<TrackLabel *>::iterator tlpIt;
+    bool changed;
 
     for (tlpIt = m_trackLabels.begin();
          tlpIt != m_trackLabels.end();
          tlpIt++)
     {
-        
         if ((*tlpIt)->getPosition() != position)
+        {
+            changed = (*tlpIt)->isSelected();
             (*tlpIt)->setLabelHighlight(false);
+        }
         else
+        {
             (*tlpIt)->setLabelHighlight(true);
+            changed = true;
+        }
+
+        if (changed) (*tlpIt)->update();
     }
 
     std::vector<InstrumentLabel *>::iterator it;
@@ -436,9 +444,17 @@ TrackButtons::slotLabelSelected(int position)
          it++)
     {
         if ((*it)->getPosition() != position)
+        {
+            changed = (*it)->isSelected();
             (*it)->setLabelHighlight(false);
+        }
         else
+        {
             (*it)->setLabelHighlight(true);
+            changed = true;
+        }
+
+        if (changed) (*it)->update();
     }
 
     // Propagate this message upstairs
@@ -748,7 +764,6 @@ TrackButtons::changeInstrumentLabel(Rosegarden::InstrumentId id, QString label)
             m_instrumentLabels[i]->slotSetAlternativeLabel(label);
     }
 }
-
 
 
 
