@@ -56,10 +56,10 @@ TempoColour::getColour(double tempo)
     // Adjusted about default tempo of 120bpm - we can play around
     // with this algorithm
     //
-    double adjusted = 120.0 - tempo;
+    double adjusted = (tempo - 120.0);
     h = h + int(adjusted);
 
-   return QColor(h, s, v, QColor::Hsv);
+    return QColor(h, s, v, QColor::Hsv);
 }
 
 
