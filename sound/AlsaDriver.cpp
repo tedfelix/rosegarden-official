@@ -4917,12 +4917,16 @@ AlsaDriver::getPlayingAudioFiles()
     std::vector<PlayableAudioFile*> retVect;
     std::vector<PlayableAudioFile*>::const_iterator it;
 
+#ifdef HAVE_LIBJACK
+
     pthread_mutex_lock(&_diskThreadLock);
 
     for (it = m_playingAudioFiles.begin(); 
          it != m_playingAudioFiles.end(); ++it) retVect.push_back(*it);
 
     pthread_mutex_unlock(&_diskThreadLock);
+
+#endif // HAVE_LIBJACK
 
     return retVect;
 }
