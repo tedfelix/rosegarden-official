@@ -381,6 +381,8 @@ MatrixSelector::MatrixSelector(MatrixView* view)
       m_currentStaff(0),
       m_clickedElement(0)
 {
+    connect(m_parentView, SIGNAL(usedSelection()),
+            this,         SLOT(hideSelection()));
 }
 
 void MatrixSelector::handleLeftButtonPress(Rosegarden::timeT,
@@ -537,7 +539,7 @@ EventSelection* MatrixSelector::getSelection()
         
         if ((matrixRect = dynamic_cast<QCanvasMatrixRectangle*>(item))) {
 
-            if (!rect.contains(int(item->x()), int(item->y()), true)) {
+            if (!rect.contains(matrixRect->rect(), true)) {
 
                 kdDebug(KDEBUG_AREA) << "MatrixSelector::getSelection Skipping item not really in selection rect\n";
                 kdDebug(KDEBUG_AREA) << "MatrixSelector::getSelection Rect: x,y: " << rect.x() << ","
