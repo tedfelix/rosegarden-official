@@ -893,30 +893,36 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 		m_doc->syncDevices();
 	    }
 
-            if ((*i)->getType() == Rosegarden::MappedEvent::SystemXRuns
-                    && !boolShowingWarning)
+            if (m_transportStatus == PLAYING ||
+                m_transportStatus == RECORDING_MIDI ||
+                m_transportStatus == RECORDING_AUDIO)
             {
-                boolShowingWarning = true;
+                if ((*i)->getType() == Rosegarden::MappedEvent::SystemXRuns
+                        && !boolShowingWarning)
+                {
+                    boolShowingWarning = true;
 
-                KMessageBox::information(
-                    dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
-                    i18n("JACK Audio subsystem is losing resolution."));
+                    KMessageBox::information(
+                        dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
+                        i18n("JACK Audio subsystem is losing resolution."));
 
-                boolShowingWarning = false;
-            }
+                    boolShowingWarning = false;
+                }
 
-            if ((*i)->getType() == Rosegarden::MappedEvent::SystemJackDied)
-            {
-                // Something horrible has happened to JACK or we got
-                // bumped out of the graph.  Either way stop playback.
-                //
-                stopping();
+                
+                if ((*i)->getType() == Rosegarden::MappedEvent::SystemJackDied)
+                {
+                    // Something horrible has happened to JACK or we got
+                    // bumped out of the graph.  Either way stop playback.
+                    //
+                    stopping();
 
-                KMessageBox::error(
-                    dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
-                    i18n("JACK Audio subsystem has died or it has stopped Rosegarden from processing audio.\nPlease restart Rosegarden to continue working with audio.\nQuitting other running applications may improve Rosegarden's performance."));
-            }
-	}
+                    KMessageBox::error(
+                        dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
+                        i18n("JACK Audio subsystem has died or it has stopped Rosegarden from processing audio.\nPlease restart Rosegarden to continue working with audio.\nQuitting other running applications may improve Rosegarden's performance."));
+                }
+	    }
+        }
     }
     
     // if we aren't playing or recording, consider invoking any
