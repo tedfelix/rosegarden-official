@@ -90,6 +90,8 @@ AudioThread::run()
     pthread_attr_t attr;
     pthread_attr_init(&attr);
 
+/* experimental option:
+
     int priority = getPriority();
 
     if (priority > 0) {
@@ -108,6 +110,7 @@ AudioThread::run()
 		      << priority << " on new thread" << std::endl;
 	}
     }
+*/
 
     pthread_create(&m_thread, &attr, staticThreadRun, this);
 

@@ -196,6 +196,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_insertionTime(0),
     m_deferredCursorMove(NoCursorMoveNeeded),
     m_currentAccidental(Rosegarden::Accidentals::NoAccidental),
+    m_lastNoteAction("crotchet"),
     m_fontName(NoteFontFactory::getDefaultFontName()),
     m_fontSize(NoteFontFactory::getDefaultSize(m_fontName)),
     m_pageMode(LinedStaff::LinearMode),
@@ -528,6 +529,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_insertionTime(0),
     m_deferredCursorMove(NoCursorMoveNeeded),
     m_currentAccidental(Rosegarden::Accidentals::NoAccidental),
+    m_lastNoteAction("crotchet"),
     m_fontName(NoteFontFactory::getDefaultFontName()),
     m_fontSize(NoteFontFactory::getDefaultSize(m_fontName)),
     m_pageMode(LinedStaff::LinearMode),
@@ -1218,6 +1220,10 @@ void NotationView::setupActions()
 
     actionCollection()->insert(styleActionMenu);
 
+    KActionMenu *ornamentActionMenu =
+	new KActionMenu(i18n("Use Ornament"), this, "ornament_actionmenu");
+
+
 
     new KAction
 	(i18n("Insert Rest"), Key_P, this, SLOT(slotInsertRest()),
@@ -1320,7 +1326,7 @@ void NotationView::setupActions()
 
 
     icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("text")));
-    noteAction = new KRadioAction(i18n("&Text"), icon, 0, this,
+    noteAction = new KRadioAction(i18n("&Text"), icon, Key_F7, this,
                                   SLOT(slotText()),
                                   actionCollection(), "text");
     noteAction->setExclusiveGroup("notes");
@@ -1425,7 +1431,7 @@ void NotationView::setupActions()
         (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
         ("group-beam")));
 
-    new KAction(GroupMenuBeamCommand::getGlobalName(), icon, 0, this,
+    new KAction(GroupMenuBeamCommand::getGlobalName(), icon, Key_B + CTRL, this,
                 SLOT(slotGroupBeam()), actionCollection(), "beam");
 
     new KAction(GroupMenuAutoBeamCommand::getGlobalName(), 0, this,
@@ -1435,21 +1441,21 @@ void NotationView::setupActions()
         (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
         ("group-unbeam")));
 
-    new KAction(GroupMenuBreakCommand::getGlobalName(), icon, 0, this,
+    new KAction(GroupMenuBreakCommand::getGlobalName(), icon, Key_U + CTRL, this,
                 SLOT(slotGroupBreak()), actionCollection(), "break_group");
     
     icon = QIconSet
         (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
         ("group-simple-tuplet")));
 
-    new KAction(GroupMenuTupletCommand::getGlobalName(true), icon, 0, this,
+    new KAction(GroupMenuTupletCommand::getGlobalName(true), icon, Key_R + CTRL, this,
 		SLOT(slotGroupSimpleTuplet()), actionCollection(), "simple_tuplet");
 
     icon = QIconSet
         (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
         ("group-tuplet")));
 
-    new KAction(GroupMenuTupletCommand::getGlobalName(false), icon, 0, this,
+    new KAction(GroupMenuTupletCommand::getGlobalName(false), icon, Key_T + CTRL, this,
 		SLOT(slotGroupGeneralTuplet()), actionCollection(), "tuplet");
 
     new KAction(GroupMenuUnTupletCommand::getGlobalName(), 0, this,
@@ -1482,7 +1488,7 @@ void NotationView::setupActions()
         ("group-slur")));
 
     new KAction(GroupMenuAddIndicationCommand::getGlobalName
-                (Rosegarden::Indication::Slur), icon, 0, this,
+                (Rosegarden::Indication::Slur), icon, Key_ParenRight, this,
                 SLOT(slotGroupSlur()), actionCollection(), "slur");
 
     new KAction(GroupMenuAddIndicationCommand::getGlobalName
@@ -1502,7 +1508,7 @@ void NotationView::setupActions()
         ("group-crescendo")));
 
     new KAction(GroupMenuAddIndicationCommand::getGlobalName
-                (Rosegarden::Indication::Crescendo), icon, 0, this,
+                (Rosegarden::Indication::Crescendo), icon, Key_Less, this,
                 SLOT(slotGroupCrescendo()), actionCollection(), "crescendo");
 
     icon = QIconSet
@@ -1510,7 +1516,7 @@ void NotationView::setupActions()
         ("group-decrescendo")));
 
     new KAction(GroupMenuAddIndicationCommand::getGlobalName
-                (Rosegarden::Indication::Decrescendo), icon, 0, this,
+                (Rosegarden::Indication::Decrescendo), icon, Key_Greater, this,
                 SLOT(slotGroupDecrescendo()), actionCollection(), "decrescendo");
 
     new KAction(GroupMenuAddIndicationCommand::getGlobalName
@@ -1540,7 +1546,7 @@ void NotationView::setupActions()
 		SLOT(slotGroupMakeChord()), actionCollection(), "make_chord");
 
     // setup Transforms menu
-    new KAction(TransformsMenuNormalizeRestsCommand::getGlobalName(), 0, this,
+    new KAction(TransformsMenuNormalizeRestsCommand::getGlobalName(), Key_N + CTRL, this,
                 SLOT(slotTransformsNormalizeRests()), actionCollection(),
                 "normalize_rests");
 
@@ -1556,7 +1562,7 @@ void NotationView::setupActions()
         (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
         ("transforms-tie")));
 
-    new KAction(TransformsMenuTieNotesCommand::getGlobalName(), icon, 0, this,
+    new KAction(TransformsMenuTieNotesCommand::getGlobalName(), icon, Key_AsciiTilde, this,
                 SLOT(slotTransformsTieNotes()), actionCollection(),
                 "tie_notes");
 
@@ -1652,7 +1658,7 @@ void NotationView::setupActions()
         (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
         ("quantize")));
 
-    new KAction(EventQuantizeCommand::getGlobalName(), icon, 0, this,
+    new KAction(EventQuantizeCommand::getGlobalName(), icon, Key_Equal, this,
                 SLOT(slotTransformsQuantize()), actionCollection(),
                 "quantize");
 

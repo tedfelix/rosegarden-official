@@ -153,6 +153,7 @@
     <Action name="use_ornament"/>
     <Action name="remove_ornament"/>
     <Action name="make_ornament"/>
+  <Action name="ornament_actionmenu"/>
   </Menu>
 
 <Menu name="Transforms">
@@ -570,6 +571,7 @@
     <Action name="grace"/>
 <!--    <Action name="ungrace"/> -->
     <Action name="slur"/>
+  <Action name="phrasing_slur"/>
     <Action name="crescendo"/>
     <Action name="decrescendo"/>
 <!--  <Action name="glissando"/> -->
@@ -622,6 +624,7 @@
     <Action name="quantize"/>
     <Action name="interpret"/>
     <Action name="fix_quantization"/>
+    <Action name="remove_quantization"/>
     <Action name="transpose_up"/>
     <Action name="transpose_down"/>
     <Action name="transpose_up_octave"/>

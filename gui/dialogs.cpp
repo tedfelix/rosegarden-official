@@ -737,12 +737,16 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
 	if (defaultUnitType > maxUnitType) defaultUnitType = maxUnitType;
     }
 
-    QGrid *timingGrid = new QGrid(3, QGrid::Horizontal, timingBox);
+    QFrame *timingFrame = new QFrame(timingBox);
+    QGridLayout *timingLayout = new QGridLayout(timingFrame, 3, 3, 5, 5);
 
-    new QLabel(i18n("Play "), timingGrid);
-    m_untupledCombo = new KComboBox(timingGrid);
+    timingLayout->addWidget(new QLabel(i18n("Play "), timingFrame), 0, 0);
 
-    m_unitCombo = new KComboBox(timingGrid);
+    m_untupledCombo = new KComboBox(timingFrame);
+    timingLayout->addWidget(m_untupledCombo, 0, 1);
+
+    m_unitCombo = new KComboBox(timingFrame);
+    timingLayout->addWidget(m_unitCombo, 0, 2);
 
     for (Note::Type t = Note::Shortest; t <= Note::Longest; ++t) {
 	Note note(t);
@@ -756,17 +760,26 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
 	    m_unitCombo->setCurrentItem(m_unitCombo->count() - 1);
 	}
     }
+
+    timingLayout->addWidget(new QLabel(i18n("in the time of  "), timingFrame), 1, 0);
+
+    m_tupledCombo = new KComboBox(timingFrame);
+    timingLayout->addWidget(m_tupledCombo, 1, 1);
+
+    m_hasTimingAlready = new QCheckBox
+	(i18n("Timing is already correct: update display only"), timingFrame);
+    m_hasTimingAlready->setChecked(false);
+    timingLayout->addMultiCellWidget(m_hasTimingAlready, 2, 2, 0, 2);
+
+    connect(m_hasTimingAlready, SIGNAL(clicked()), this, SLOT(slotHasTimingChanged()));
     
     updateUntupledCombo();
-
-    new QLabel(i18n("in the time of  "), timingGrid);
-    m_tupledCombo = new KComboBox(timingGrid);
     updateTupledCombo();
 
-    QGroupBox *timingDisplayBox = new QGroupBox
+    m_timingDisplayBox = new QGroupBox
 	(1, Horizontal, i18n("Timing calculations"), vbox);
 
-    QGrid *timingDisplayGrid = new QGrid(3, QGrid::Horizontal, timingDisplayBox);
+    QGrid *timingDisplayGrid = new QGrid(3, QGrid::Horizontal, m_timingDisplayBox);
 
     if (maxDuration > 0) {
 
@@ -826,6 +839,14 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
 		     this, SLOT(slotTupledChanged(const QString &)));
 }
 
+void
+TupletDialog::slotHasTimingChanged()
+{
+    updateUntupledCombo();
+    updateTupledCombo();
+    m_timingDisplayBox->setEnabled(!m_hasTimingAlready->isChecked());
+}
+
 Note::Type
 TupletDialog::getUnitType() const
 {
@@ -850,6 +871,11 @@ TupletDialog::getTupledCount() const
     else return count;
 }
 
+bool
+TupletDialog::hasTimingAlready() const
+{
+    return m_hasTimingAlready->isChecked();
+}
 
 
 void
@@ -865,7 +891,11 @@ TupletDialog::updateUntupledCombo()
     int maxValue = 12;
 
     if (m_maxDuration) {
-	maxValue = m_maxDuration / Note(getUnitType()).getDuration();
+	if (m_hasTimingAlready->isChecked()) {
+	    maxValue = (m_maxDuration * 3) / (Note(getUnitType()).getDuration() * 2);
+	} else {
+	    maxValue = m_maxDuration / Note(getUnitType()).getDuration();
+	}
     }
 
     QString previousText = m_untupledCombo->currentText();

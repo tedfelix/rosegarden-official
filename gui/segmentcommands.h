@@ -910,4 +910,45 @@ protected:
 };
 
 
+class SetTriggerSegmentDefaultTimeAdjustCommand : public KNamedCommand
+{
+public:
+    SetTriggerSegmentDefaultTimeAdjustCommand(Rosegarden::Composition *composition,
+					      Rosegarden::TriggerSegmentId id,
+					      std::string newDefaultTimeAdjust);
+    virtual ~SetTriggerSegmentDefaultTimeAdjustCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    Rosegarden::Composition *m_composition;
+    Rosegarden::TriggerSegmentId m_id;
+    std::string m_newDefaultTimeAdjust;
+    std::string m_oldDefaultTimeAdjust;
+};
+
+
+class SetTriggerSegmentDefaultRetuneCommand : public KNamedCommand
+{
+public:
+    SetTriggerSegmentDefaultRetuneCommand(Rosegarden::Composition *composition,
+					  Rosegarden::TriggerSegmentId id,
+					  bool newDefaultRetune);
+    virtual ~SetTriggerSegmentDefaultRetuneCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    Rosegarden::Composition *m_composition;
+    Rosegarden::TriggerSegmentId m_id;
+    bool m_newDefaultRetune;
+    bool m_oldDefaultRetune;
+    bool m_haveOldDefaultRetune;
+};
+
+    
+
+
 #endif  // _SEGMENTCOMMANDS_H_

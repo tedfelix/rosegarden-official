@@ -314,22 +314,23 @@ void Composition::setSegmentStartTime(Segment *segment, timeT startTime)
     m_segments.insert(segment);    
 }
 
-TriggerSegmentId
+TriggerSegmentRec *
 Composition::addTriggerSegment(Segment *s, int pitch, int velocity)
 {
     TriggerSegmentId id = m_nextTriggerSegmentId;
-    addTriggerSegment(s, id, pitch, velocity);
-    return id;
+    return addTriggerSegment(s, id, pitch, velocity);
 }
 
-void
+TriggerSegmentRec *
 Composition::addTriggerSegment(Segment *s, TriggerSegmentId id, int pitch, int velocity)
 {
     TriggerSegmentRec *rec = getTriggerSegmentRec(id);
-    if (rec) return;
-    m_triggerSegments.insert(new TriggerSegmentRec(id, s, pitch, velocity));
+    if (rec) return 0;
+    rec = new TriggerSegmentRec(id, s, pitch, velocity);
+    m_triggerSegments.insert(rec);
     s->setComposition(this);
     if (m_nextTriggerSegmentId <= id) m_nextTriggerSegmentId = id + 1;
+    return rec;
 }
 
 void

@@ -205,11 +205,13 @@ public:
     Rosegarden::Note::Type getUnitType() const;
     int getUntupledCount() const;
     int getTupledCount() const;
+    bool hasTimingAlready() const;
 
 public slots:
     void slotUnitChanged(const QString &);
     void slotUntupledChanged(const QString &);
     void slotTupledChanged(const QString &);
+    void slotHasTimingChanged();
 
 protected:
 
@@ -223,6 +225,9 @@ protected:
     KComboBox *m_untupledCombo;
     KComboBox *m_tupledCombo;
 
+    QCheckBox *m_hasTimingAlready;
+
+    QGroupBox *m_timingDisplayBox;
     QLabel *m_selectionDurationDisplay;
     QLabel *m_untupledDurationCalculationDisplay;
     QLabel *m_untupledDurationDisplay;

@@ -619,12 +619,14 @@ GroupMenuUnGraceCommand::modifySegment()
 GroupMenuTupletCommand::GroupMenuTupletCommand(Rosegarden::Segment &segment,
 					       timeT startTime,
 					       timeT unit,
-					       int untupled, int tupled) :
+					       int untupled, int tupled,
+					       bool hasTimingAlready) :
     BasicCommand(getGlobalName((untupled == 3) && (tupled == 2)),
 		 segment, startTime, startTime + (unit * untupled)),
     m_unit(unit),
     m_untupled(untupled),
-    m_tupled(tupled)
+    m_tupled(tupled),
+    m_hasTimingAlready(hasTimingAlready)
 {
     // nothing else
 }
@@ -632,8 +634,30 @@ GroupMenuTupletCommand::GroupMenuTupletCommand(Rosegarden::Segment &segment,
 void
 GroupMenuTupletCommand::modifySegment()
 {
-    SegmentNotationHelper helper(getSegment());
-    helper.makeTupletGroup(getStartTime(), m_untupled, m_tupled, m_unit);
+    if (m_hasTimingAlready) {
+
+	int groupId = getSegment().getNextId();
+
+	for (Segment::iterator i = getSegment().findTime(getStartTime());
+	     getSegment().isBeforeEndMarker(i); ++i) {
+
+	    if ((*i)->getNotationAbsoluteTime() >=
+		getStartTime() + (m_unit * m_tupled)) break;
+
+	    Event *e = *i;
+
+	    e->set<Int>(BEAMED_GROUP_ID, groupId);
+	    e->set<String>(BEAMED_GROUP_TYPE, GROUP_TYPE_TUPLED);
+	    
+	    e->set<Int>(BEAMED_GROUP_TUPLET_BASE, m_unit);
+	    e->set<Int>(BEAMED_GROUP_TUPLED_COUNT, m_tupled);
+	    e->set<Int>(BEAMED_GROUP_UNTUPLED_COUNT, m_untupled);
+	}
+
+    } else {
+	SegmentNotationHelper helper(getSegment());
+	helper.makeTupletGroup(getStartTime(), m_untupled, m_tupled, m_unit);
+    }
 }
 
 
@@ -649,7 +673,6 @@ GroupMenuUnTupletCommand::modifySegment()
 	(*i)->unset(BEAMED_GROUP_TUPLET_BASE);
 	(*i)->unset(BEAMED_GROUP_TUPLED_COUNT);
 	(*i)->unset(BEAMED_GROUP_UNTUPLED_COUNT);
-//!!!	(*i)->unset(TUPLET_NOMINAL_DURATION);
     }
 }
 

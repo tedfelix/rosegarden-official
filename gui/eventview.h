@@ -144,6 +144,8 @@ protected slots:
     void slotEditTriggerName();
     void slotEditTriggerPitch();
     void slotEditTriggerVelocity();
+    void slotTriggerTimeAdjustChanged(int);
+    void slotTriggerRetuneChanged();
 
 protected:
 

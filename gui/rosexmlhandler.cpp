@@ -802,15 +802,24 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 	QString triggerIdStr = atts.value("triggerid");
 	QString triggerPitchStr = atts.value("triggerbasepitch");
 	QString triggerVelocityStr = atts.value("triggerbasevelocity");
+	QString triggerRetuneStr = atts.value("triggerretune");
+	QString triggerAdjustTimeStr = atts.value("triggeradjusttimes");
 
 	if (triggerIdStr) {
 	    int pitch = -1;
 	    if (triggerPitchStr) pitch = triggerPitchStr.toInt();
 	    int velocity = -1;
 	    if (triggerVelocityStr) velocity = triggerVelocityStr.toInt();
-	    getComposition().addTriggerSegment(m_currentSegment,
-					       triggerIdStr.toInt(),
-					       pitch, velocity);
+	    Rosegarden::TriggerSegmentRec *rec =
+		getComposition().addTriggerSegment(m_currentSegment,
+						   triggerIdStr.toInt(),
+						   pitch, velocity);
+	    if (rec) {
+		if (triggerRetuneStr)
+		    rec->setDefaultRetune(triggerRetuneStr.lower() == "true");
+		if (triggerAdjustTimeStr)
+		    rec->setDefaultTimeAdjust(qstrtostr(triggerAdjustTimeStr));
+	    }
 	    m_currentSegment->setStartTimeDataMember(startTime);
 	} else {
 	    getComposition().addSegment(m_currentSegment);

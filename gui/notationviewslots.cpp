@@ -787,6 +787,7 @@ void NotationView::slotGroupTuplet(bool simple)
     int tupled = 2;
     int untupled = 3;
     Segment *segment = 0;
+    bool hasTimingAlready = false;
 
     if (m_currentEventSelection) {
 
@@ -803,6 +804,7 @@ void NotationView::slotGroupTuplet(bool simple)
             unit = Rosegarden::Note(dialog.getUnitType()).getDuration();
             tupled = dialog.getTupledCount();
             untupled = dialog.getUntupledCount();
+	    hasTimingAlready = dialog.hasTimingAlready();
         }
 
         segment = &m_currentEventSelection->getSegment();
@@ -830,13 +832,14 @@ void NotationView::slotGroupTuplet(bool simple)
             unit = Rosegarden::Note(dialog.getUnitType()).getDuration();
             tupled = dialog.getTupledCount();
             untupled = dialog.getUntupledCount();
+	    hasTimingAlready = dialog.hasTimingAlready();
         }
 
         segment = &m_staffs[m_currentStaff]->getSegment();
     }
 
     addCommandToHistory(new GroupMenuTupletCommand
-                        (*segment, t, unit, untupled, tupled));
+                        (*segment, t, unit, untupled, tupled, hasTimingAlready));
 }
 
 void NotationView::slotGroupUnTuplet()
@@ -1392,7 +1395,8 @@ NotationView::slotMakeOrnament()
     EventSelection::eventcontainer &ec =
 	m_currentEventSelection->getSegmentEvents();
 
-    int basePitch;
+    int basePitch = -1;
+    int baseVelocity = -1;
     NoteStyle *style = NoteStyleFactory::getStyle(NoteStyleFactory::DefaultStyle);
 
     for (EventSelection::eventcontainer::iterator i =
@@ -1402,7 +1406,12 @@ NotationView::slotMakeOrnament()
 		basePitch = (*i)->get<Rosegarden::Int>
 		    (Rosegarden::BaseProperties::PITCH);
 		style = NoteStyleFactory::getStyleForEvent(*i);
-		break;
+		if (baseVelocity != -1) break;
+	    }
+	    if ((*i)->has(Rosegarden::BaseProperties::VELOCITY)) {
+		baseVelocity = (*i)->get<Rosegarden::Int>
+		    (Rosegarden::BaseProperties::VELOCITY);
+		if (basePitch != -1) break;
 	    }
 	}
     }
@@ -1442,11 +1451,11 @@ NotationView::slotMakeOrnament()
 			 name, basePitch));
 
     command->addCommand(new InsertTriggerNoteCommand
-			(segment, absTime, note, basePitch, 100,
+			(segment, absTime, note, basePitch, baseVelocity,
 			 style->getName(),
 			 getDocument()->getComposition().getNextTriggerSegmentId(),
-			 true, //!!!
-			 Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH, //!!!
+			 true,
+			 Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH,
 			 Rosegarden::Marks::NoMark)); //!!!
 
     addCommandToHistory(command);

@@ -289,10 +289,10 @@ public:
 
     /**
      * Add a new trigger Segment with a given base pitch and base
-     * velocity, and return its ID.  If pitch or velocity is -1, it will
-     * be taken from the first note event in the segment
+     * velocity, and return its record.  If pitch or velocity is -1,
+     * it will be taken from the first note event in the segment
      */
-    TriggerSegmentId addTriggerSegment(Segment *, int pitch = -1, int velocity = -1);
+    TriggerSegmentRec *addTriggerSegment(Segment *, int pitch = -1, int velocity = -1);
 
     /**
      * Delete a trigger Segment.
@@ -328,11 +328,11 @@ public:
 
     /**
      * Add a new trigger Segment with a given ID and base pitch and
-     * velocity.  Fails silently if the ID is already in use.  This is
-     * intended for use from file load or from undo/redo.
+     * velocity.  Fails and returns 0 if the ID is already in use.
+     * This is intended for use from file load or from undo/redo.
      */
-    void addTriggerSegment(Segment *, TriggerSegmentId,
-			   int basePitch = -1, int baseVelocity = -1);
+    TriggerSegmentRec *addTriggerSegment(Segment *, TriggerSegmentId,
+					 int basePitch = -1, int baseVelocity = -1);
 
     /**
      * Get the ID of the next trigger segment that will be inserted.

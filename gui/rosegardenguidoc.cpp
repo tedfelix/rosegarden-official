@@ -894,8 +894,12 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
          ci != m_composition.getTriggerSegments().end(); ++ci) {
 
 	QString triggerAtts = QString
-	    ("triggerid=\"%1\" triggerbasepitch=\"%2\" triggerbasevelocity=\"%3\"")
-	    .arg((*ci)->getId()).arg((*ci)->getBasePitch()).arg((*ci)->getBaseVelocity());
+	    ("triggerid=\"%1\" triggerbasepitch=\"%2\" triggerbasevelocity=\"%3\" triggerretune=\"%4\" triggeradjusttimes=\"%5\" ")
+	    .arg((*ci)->getId())
+	    .arg((*ci)->getBasePitch())
+	    .arg((*ci)->getBaseVelocity())
+	    .arg((*ci)->getDefaultRetune())
+	    .arg(strtoqstr((*ci)->getDefaultTimeAdjust()));
 
 	Segment *segment = (*ci)->getSegment();
         saveSegment(outStream, segment, progress, totalEvents, triggerAtts);

@@ -174,8 +174,9 @@ public:
         // Audio subsystem failed to mix busses fast enough
         FailureBussMixUnderrun   = 4,
         // Audio subsystem failed to mix instruments fast enough
-        FailureMixUnderrun       = 5
-
+        FailureMixUnderrun       = 5,
+	// Using a timer that has too low a resolution (e.g. 100Hz system timer)
+	WarningImpreciseTimer    = 6
     } FailureCode;	
 
     MappedEvent(): m_trackId(0),

@@ -755,7 +755,9 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
         startTime = gaps[gi].first;
 	duration = gaps[gi].second;
 
-	fillWithRests(startTime, startTime + duration);
+	if (duration >= Note(Note::Shortest).getDuration()) {
+	    fillWithRests(startTime, startTime + duration);
+	}
     }
 }
 

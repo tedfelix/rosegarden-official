@@ -259,10 +259,11 @@ public:
     GroupMenuTupletCommand(Rosegarden::Segment &segment,
 			   Rosegarden::timeT startTime,
 			   Rosegarden::timeT unit,
-			   int untupled = 3, int tupled = 2);
+			   int untupled = 3, int tupled = 2,
+			   bool groupHasTimingAlready = false);
 
     static QString getGlobalName(bool simple = true) {
-	if (simple) return i18n("&Simple Tuplet");
+	if (simple) return i18n("&Simple Triplet");
 	else return i18n("&Tuplet...");
     }
 
@@ -273,6 +274,7 @@ private:
     Rosegarden::timeT m_unit;
     int m_untupled;
     int m_tupled;
+    bool m_hasTimingAlready;
 };
 
 

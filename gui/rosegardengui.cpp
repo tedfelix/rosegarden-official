@@ -581,7 +581,7 @@ void RosegardenGUIApp::setupActions()
     action->setExclusiveGroup("segmenttools");
 
     icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/join.xpm"));
-    action = new KRadioAction(i18n("&Join"), icon, Key_F7,
+    action = new KRadioAction(i18n("&Join"), icon, 0/* Key_F7 */,
                               this, SLOT(slotJoinSelected()),
                               actionCollection(), "join");
     action->setExclusiveGroup("segmenttools");

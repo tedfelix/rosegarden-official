@@ -326,7 +326,13 @@ AlsaDriver::getAutoTimer()
 	 i != m_timers.end(); ++i) {
 	if (i->sclas != SND_TIMER_SCLASS_NONE) continue;
 	if (i->clas == SND_TIMER_CLASS_GLOBAL) {
-	    if (i->device == SND_TIMER_GLOBAL_SYSTEM) return i->name;
+	    if (i->device == SND_TIMER_GLOBAL_SYSTEM) {
+		long hz = 1000000000 / i->resolution;
+		if (hz < 900) {
+		    reportFailure(Rosegarden::MappedEvent::WarningImpreciseTimer);
+		}
+		return i->name;
+	    }
 	}
     }
 
@@ -1080,7 +1086,7 @@ AlsaDriver::setCurrentTimer(QString timer)
 	    if (m_timers[i].clas == SND_TIMER_CLASS_GLOBAL &&
 		m_timers[i].device == SND_TIMER_GLOBAL_SYSTEM) {
 		long hz = 1000000000 / m_timers[i].resolution;
-		if (hz < 990) {
+		if (hz < 900) {
 		    audit << "    WARNING: using system timer with only "
 			  << hz << "Hz resolution!" << std::endl;
 		}

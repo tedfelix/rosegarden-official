@@ -23,6 +23,7 @@
 #define _TRIGGER_SEGMENT_H_
 
 #include <set>
+#include <string>
 
 namespace Rosegarden
 {
@@ -51,6 +52,12 @@ public:
     int getBaseVelocity() const { return m_baseVelocity; }
     void setBaseVelocity(int baseVelocity) { m_baseVelocity = baseVelocity; }
 
+    std::string getDefaultTimeAdjust() const { return m_defaultTimeAdjust; }
+    void setDefaultTimeAdjust(std::string a) { m_defaultTimeAdjust = a; }
+    
+    bool getDefaultRetune() const { return m_defaultRetune; }
+    void setDefaultRetune(bool r) { m_defaultRetune = r; }
+
     SegmentRuntimeIdSet &getReferences() { return m_references; }
     const SegmentRuntimeIdSet &getReferences() const { return m_references; }
 
@@ -59,7 +66,8 @@ public:
 protected:
     friend class Composition;
     TriggerSegmentRec(TriggerSegmentId id, Segment *segment,
-		      int basePitch = -1, int baseVelocity = -1);
+		      int basePitch = -1, int baseVelocity = -1,
+		      std::string defaultTimeAdjust = "", bool defaultRetune = true);
 
     void setReferences(const SegmentRuntimeIdSet &s) { m_references = s; }
 
@@ -71,6 +79,8 @@ protected:
     Segment             *m_segment;
     int                  m_basePitch;
     int                  m_baseVelocity;
+    std::string          m_defaultTimeAdjust;
+    bool                 m_defaultRetune;
     SegmentRuntimeIdSet  m_references;
 };
   

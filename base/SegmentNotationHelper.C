@@ -1316,7 +1316,6 @@ SegmentNotationHelper::makeTupletGroup(timeT t, int untupled, int tupled,
 	e->set<Int>(BEAMED_GROUP_TUPLET_BASE, unit);
 	e->set<Int>(BEAMED_GROUP_TUPLED_COUNT, tupled);
 	e->set<Int>(BEAMED_GROUP_UNTUPLED_COUNT, untupled);
-//!!!	e->unset(TUPLET_NOMINAL_DURATION); // should be non-persistent anyway
 
 	toInsert.push_back(e);
 	toErase.push_back(i);

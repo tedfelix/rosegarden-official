@@ -1002,6 +1002,13 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                         m_reportTimer->start(5000, true);
                     }
 		}
+	    } else {
+		if ((*i)->getType() == MappedEvent::SystemFailure) {
+
+		    if ((*i)->getData1() == MappedEvent::WarningImpreciseTimer) {
+			//!!! think of something to say here
+		    }
+		}
 	    }
         }
     }

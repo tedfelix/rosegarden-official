@@ -36,12 +36,20 @@ TriggerSegmentRec::~TriggerSegmentRec()
 TriggerSegmentRec::TriggerSegmentRec(TriggerSegmentId id,
 				     Segment *segment,
 				     int basePitch,
-				     int baseVelocity) :
+				     int baseVelocity,
+				     std::string timeAdjust, 
+				     bool retune) :
     m_id(id),
     m_segment(segment),
     m_basePitch(basePitch),
-    m_baseVelocity(baseVelocity)
+    m_baseVelocity(baseVelocity),
+    m_defaultTimeAdjust(timeAdjust),
+    m_defaultRetune(retune)
 {
+    if (m_defaultTimeAdjust == "") {
+	m_defaultTimeAdjust = BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH;
+    }
+
     calculateBases();
     updateReferences();
 }
@@ -51,7 +59,9 @@ TriggerSegmentRec::TriggerSegmentRec(const TriggerSegmentRec &rec) :
     m_segment(rec.m_segment),
     m_basePitch(rec.m_basePitch),
     m_baseVelocity(rec.m_baseVelocity),
-    m_references(rec.m_references)
+    m_references(rec.m_references),
+    m_defaultTimeAdjust(rec.m_defaultTimeAdjust),
+    m_defaultRetune(rec.m_defaultRetune)
 {
     // nothing else
 }

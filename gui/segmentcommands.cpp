@@ -2384,7 +2384,9 @@ AddTriggerSegmentCommand::execute()
     } else {
 	m_segment = new Rosegarden::Segment();
 	m_segment->setEndMarkerTime(m_duration);
-	m_id = m_composition->addTriggerSegment(m_segment, m_basePitch, m_baseVelocity);
+	Rosegarden::TriggerSegmentRec *rec = m_composition->addTriggerSegment
+	    (m_segment, m_basePitch, m_baseVelocity);
+	if (rec) m_id = rec->getId();
     }
     m_detached = false;
 }
@@ -2501,7 +2503,9 @@ PasteToTriggerSegmentCommand::execute()
 	
 	m_segment->setLabel(qstrtostr(m_label));
 
-	m_id = m_composition->addTriggerSegment(m_segment, m_basePitch, m_baseVelocity);
+	Rosegarden::TriggerSegmentRec *rec = 
+	    m_composition->addTriggerSegment(m_segment, m_basePitch, m_baseVelocity);
+	if (rec) m_id = rec->getId();
     }
 
     m_composition->getTriggerSegmentRec(m_id)->updateReferences();
@@ -2588,5 +2592,82 @@ SetTriggerSegmentBaseVelocityCommand::unexecute()
     Rosegarden::TriggerSegmentRec *rec = m_composition->getTriggerSegmentRec(m_id);
     if (!rec) return;
     rec->setBaseVelocity(m_oldVelocity);
+}
+
+
+SetTriggerSegmentDefaultTimeAdjustCommand::SetTriggerSegmentDefaultTimeAdjustCommand(Rosegarden::Composition *composition,
+										     Rosegarden::TriggerSegmentId id,
+										     std::string newDefaultTimeAdjust) :
+    KNamedCommand(i18n("Set Default Time Adjust")),
+    m_composition(composition),
+    m_id(id),
+    m_newDefaultTimeAdjust(newDefaultTimeAdjust),
+    m_oldDefaultTimeAdjust("")
+{
+    // nothing
+}
+
+SetTriggerSegmentDefaultTimeAdjustCommand::~SetTriggerSegmentDefaultTimeAdjustCommand()
+{
+    // nothing
+}
+
+void
+SetTriggerSegmentDefaultTimeAdjustCommand::execute()
+{
+    Rosegarden::TriggerSegmentRec *rec = m_composition->getTriggerSegmentRec(m_id);
+    if (!rec) return;
+    if (m_oldDefaultTimeAdjust == "") {
+	m_oldDefaultTimeAdjust = rec->getDefaultTimeAdjust();
+    }
+    rec->setDefaultTimeAdjust(m_newDefaultTimeAdjust);
+}
+
+void
+SetTriggerSegmentDefaultTimeAdjustCommand::unexecute()
+{
+    Rosegarden::TriggerSegmentRec *rec = m_composition->getTriggerSegmentRec(m_id);
+    if (!rec) return;
+    rec->setDefaultTimeAdjust(m_oldDefaultTimeAdjust);
+}
+
+
+
+
+SetTriggerSegmentDefaultRetuneCommand::SetTriggerSegmentDefaultRetuneCommand(Rosegarden::Composition *composition,
+									     Rosegarden::TriggerSegmentId id,
+									     bool newDefaultRetune) :
+    KNamedCommand(i18n("Set Default Retune")),
+    m_composition(composition),
+    m_id(id),
+    m_newDefaultRetune(newDefaultRetune),
+    m_oldDefaultRetune(false),
+    m_haveOldDefaultRetune(false)
+{
+    // nothing
+}
+
+SetTriggerSegmentDefaultRetuneCommand::~SetTriggerSegmentDefaultRetuneCommand()
+{
+    // nothing
+}
+
+void
+SetTriggerSegmentDefaultRetuneCommand::execute()
+{
+    Rosegarden::TriggerSegmentRec *rec = m_composition->getTriggerSegmentRec(m_id);
+    if (!rec) return;
+    if (!m_haveOldDefaultRetune) {
+	m_oldDefaultRetune = rec->getDefaultRetune();
+    }
+    rec->setDefaultRetune(m_newDefaultRetune);
+}
+
+void
+SetTriggerSegmentDefaultRetuneCommand::unexecute()
+{
+    Rosegarden::TriggerSegmentRec *rec = m_composition->getTriggerSegmentRec(m_id);
+    if (!rec) return;
+    rec->setDefaultRetune(m_oldDefaultRetune);
 }
 

@@ -236,7 +236,7 @@ EventView::EventView(RosegardenGUIDoc *doc,
 	    (1, Horizontal, i18n("Triggered Segment Properties"), getCentralWidget());
 	
 	QFrame *frame = new QFrame(groupBox);
-	QGridLayout *layout = new QGridLayout(frame, 3, 3, 5, 5);
+	QGridLayout *layout = new QGridLayout(frame, 5, 3, 5, 5);
 
 	layout->addWidget(new QLabel(i18n("Label:  "), frame), 0, 0);
 	QString label = strtoqstr(segments[0]->getLabel());
@@ -260,6 +260,33 @@ EventView::EventView(RosegardenGUIDoc *doc,
 	editButton = new QPushButton(i18n("..."), frame);
 	layout->addWidget(editButton, 2, 2);
 	connect(editButton, SIGNAL(clicked()), this, SLOT(slotEditTriggerVelocity()));
+
+	layout->addWidget(new QLabel(i18n("Default timing:  "), frame), 3, 0);
+	
+	KComboBox *adjust = new KComboBox(frame);
+	layout->addMultiCellWidget(adjust, 3, 3, 1, 2);
+	adjust->insertItem(i18n("As stored"));
+	adjust->insertItem(i18n("Truncate if longer than note"));
+	adjust->insertItem(i18n("End at same time as note")); 
+	adjust->insertItem(i18n("Stretch or squash segment to note duration"));
+
+	std::string timing = rec->getDefaultTimeAdjust();
+	if (timing == Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_NONE) {
+	    adjust->setCurrentItem(0);
+	} else if (timing == Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH) {
+	    adjust->setCurrentItem(3);
+	} else if (timing == Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_START) {
+	    adjust->setCurrentItem(1);
+	} else if (timing == Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_END) {
+	    adjust->setCurrentItem(2);
+	}
+
+	connect(adjust, SIGNAL(activated(int)), this, SLOT(slotTriggerTimeAdjustChanged(int)));
+	    
+	QCheckBox *retune = new QCheckBox(i18n("Adjust pitch to trigger note by default"), frame);
+	retune->setChecked(rec->getDefaultRetune());
+	connect(retune, SIGNAL(clicked()), this, SLOT(slotTriggerRetuneChanged()));
+	layout->addMultiCellWidget(retune, 4, 4, 1, 2);
 
 	m_grid->addWidget(groupBox, 2, 2);
 	
@@ -756,6 +783,50 @@ EventView::slotEditTriggerVelocity()
 			    (&getDocument()->getComposition(), id, dlg->getVelocity()));
 	m_triggerVelocity->setText(QString("%1").arg(dlg->getVelocity()));
     }
+}
+
+void
+EventView::slotTriggerTimeAdjustChanged(int option)
+{
+    std::string adjust = Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH;
+
+    switch(option) {
+
+    case  0:
+	adjust = Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_NONE;
+	break;
+    case  1:
+	adjust = Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_START;
+	break;
+    case  2:
+	adjust = Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_END;
+	break;
+    case  3:
+	adjust = Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH;
+	break;
+
+    default: break;
+    }
+    
+    int id = m_segments[0]->getComposition()->getTriggerSegmentId(m_segments[0]);
+
+    Rosegarden::TriggerSegmentRec *rec =
+	m_segments[0]->getComposition()->getTriggerSegmentRec(id);
+
+    addCommandToHistory(new SetTriggerSegmentDefaultTimeAdjustCommand
+			(&getDocument()->getComposition(), id, adjust));
+}
+
+void
+EventView::slotTriggerRetuneChanged()
+{
+    int id = m_segments[0]->getComposition()->getTriggerSegmentId(m_segments[0]);
+
+    Rosegarden::TriggerSegmentRec *rec =
+	m_segments[0]->getComposition()->getTriggerSegmentRec(id);
+
+    addCommandToHistory(new SetTriggerSegmentDefaultRetuneCommand
+			(&getDocument()->getComposition(), id, !rec->getDefaultRetune()));
 }
 
 void
