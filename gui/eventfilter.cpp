@@ -405,7 +405,7 @@ EventFilterDialog::initDialog()
     
     // Force a sync with the checkboxes in the event that they were read false
     // from kconfig data.
-    slotWheelCheckBoxToggle(0);
+    slotNoteCheckBoxToggle(0);
     slotControllerCheckBoxToggle(0);
     slotWheelCheckBoxToggle(0);
 } // end initDialog

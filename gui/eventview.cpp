@@ -30,6 +30,8 @@
 #include <ktmpstatusmsg.h>
 #include <kstdaction.h> 
 #include <kaction.h>
+#include <kglobal.h>
+#include <kstddirs.h>
 
 #include <qvbox.h>
 #include <qlayout.h>
@@ -38,6 +40,7 @@
 #include <qcheckbox.h>
 #include <qbuttongroup.h>
 #include <qpopupmenu.h>
+#include <qiconset.h>
 
 #include <klistview.h>
 
@@ -783,20 +786,29 @@ void
 EventView::setupActions()
 {
     EditViewBase::setupActions("eventlist.rc");
-
-    new KAction(i18n("&Delete"), Key_Delete, this,
-                SLOT(slotEditDelete()), actionCollection(),
-                "delete");
-
-    new KAction(i18n("&Insert Event"), Key_I, this,
+    
+    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+    QIconSet icon(QPixmap(pixmapDir + "/toolbar/event-insert.xpm"));
+    
+    new KAction(i18n("&Insert Event"), icon, Key_I, this,
                 SLOT(slotEditInsert()), actionCollection(),
                 "insert");
 
-    new KAction(i18n("&Edit Event"), Key_E, this,
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/event-delete.xpm"));
+    
+    new KAction(i18n("&Delete Event"), icon, Key_Delete, this,
+                SLOT(slotEditDelete()), actionCollection(),
+                "delete");
+    
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/event-edit.xpm"));
+
+    new KAction(i18n("&Edit Event"), icon, Key_E, this,
                 SLOT(slotEditEvent()), actionCollection(),
                 "edit_simple");
+    
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/event-edit-advanced.xpm"));
 
-    new KAction(i18n("&Advanced Event Editor"), Key_A, this,
+    new KAction(i18n("&Advanced Event Editor"), icon, Key_A, this,
                 SLOT(slotEditEventAdvanced()), actionCollection(),
                 "edit_advanced");
 
