@@ -80,13 +80,13 @@ void
 Quantizer::quantize(Event *el)
 {
     Note note = Whole;
-    Event::duration drt = el->timeDuration();
+    Event::timeT drt = el->duration();
 
     DurationMap::iterator high, low;
     
     quantize(drt, high, low);
 
-    Event::duration highDuration = *high,
+    Event::timeT highDuration = *high,
         lowDuration = *(low),
         quantizedDuration = 0;
 
@@ -108,7 +108,7 @@ Quantizer::quantize(Event *el)
 
 
 void
-Quantizer::quantize(Event::duration drt, DurationMap::iterator &high, 
+Quantizer::quantize(Event::timeT drt, DurationMap::iterator &high, 
                     DurationMap::iterator &low)
 {
 
@@ -154,7 +154,7 @@ Quantizer::quantize(Event::duration drt, DurationMap::iterator &high,
 }
 
 
-Event::duration
+Event::timeT
 Quantizer::noteDuration(Note note)
 {
     if (note < SixtyFourth && note > WholeDotted) {

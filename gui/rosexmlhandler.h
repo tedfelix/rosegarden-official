@@ -53,7 +53,11 @@ public:
 
 protected:
     EventList &m_events;
-    EventList *m_currentGroup;
+
+    Event::timeT m_currentTime;
+
+    Event::timeT m_groupDuration;
+    bool m_inGroup;
 };
 
 #endif

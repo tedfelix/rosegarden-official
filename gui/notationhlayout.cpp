@@ -32,6 +32,8 @@ NotationHLayout::NotationHLayout(NotationElementList& elements,
       m_noteMargin(noteMargin),
       m_nbTimeUnitsInCurrentBar(0),
       m_previousNbTimeUnitsInCurrentBar(0),
+      m_previousAbsoluteTime(0),
+      m_previousPos(barMargin),
       m_currentPos(barMargin),
       m_noteWidthTable(LastNote)
 {
@@ -59,8 +61,10 @@ NotationHLayout::layout(NotationElementList::iterator from, NotationElementList:
     // Adjust current pos according to where we are in the NotationElementList
     //
     if (from == m_notationElements.begin()) {
+
         m_currentPos = m_barMargin; // we are at the beginning of the elements
         m_nbTimeUnitsInCurrentBar = 0;
+
     } else {
 
         NotationElementList::iterator oneBeforeFrom = from;
@@ -86,74 +90,65 @@ NotationHLayout::layout(NotationElementList::iterator from, NotationElementList:
 
         // kdDebug(KDEBUG_AREA) << "Layout" << endl;
 
-        if (nel->isGroup()) {
-            //
-            // layout group
-            //
-            kdDebug(KDEBUG_AREA) << "NotationHLayout::layout() : layout group" << endl;
-            layoutGroup(nel);
-
-        } else {
-            //
-            // layout single event
-            //
-            m_quantizer.quantize(nel->event());
+        //
+        // layout event
+        //
+        m_quantizer.quantize(nel->event());
         
-            // kdDebug(KDEBUG_AREA) << "Quantized" << endl;
+        // kdDebug(KDEBUG_AREA) << "Quantized" << endl;
 
-            // Add note to current bar
-            m_previousNbTimeUnitsInCurrentBar = m_nbTimeUnitsInCurrentBar;
-            m_nbTimeUnitsInCurrentBar += nel->event()->get<Int>("QuantizedDuration");
+        // Add note to current bar
+        m_previousNbTimeUnitsInCurrentBar = m_nbTimeUnitsInCurrentBar;
+        m_nbTimeUnitsInCurrentBar += nel->event()->get<Int>("QuantizedDuration");
+
+        if (nel->absoluteTime() > m_previousAbsoluteTime ||
+            nel->absoluteTime() == 0) {
+
+            kdDebug(KDEBUG_AREA) << "NotationHLayout::layout() : moving from "
+                                 << m_previousAbsoluteTime
+                                 << " to " << nel->absoluteTime()
+                                 << endl;
 
             nel->setX(m_currentPos);
 
-            Note note = Note(nel->event()->get<Int>("Notation::NoteType")); // check the property is here ?
+            // check the property is here ?
+            Note note = Note(nel->event()->get<Int>("Notation::NoteType"));
 
             // Move current pos to next note
+            m_previousPos = m_currentPos;
             m_currentPos += m_noteWidthTable[note] + Staff::noteWidth + m_noteMargin;
+
 
             // See if we've completed a bar
             //
             if (m_nbTimeUnitsInCurrentBar > m_timeUnitsPerBar) {
-                kdDebug(KDEBUG_AREA) << "Bar has wrong length" << endl;
+                kdDebug(KDEBUG_AREA) << "NotationHLayout::layout() : Bar has wrong length" << endl;
                 // TODO
             } else if (m_nbTimeUnitsInCurrentBar == m_timeUnitsPerBar) {
                 m_nbTimeUnitsInCurrentBar = 0;
                 addNewBar(m_currentPos + m_noteMargin);
                 m_currentPos += 2 * m_noteMargin + Staff::noteWidth;
             }
+
+
+        } else {
+            
+            kdDebug(KDEBUG_AREA) << "NotationHLayout::layout() : staying at "
+                                 << m_previousAbsoluteTime
+                                 << endl;
+
+            nel->setX(m_previousPos);
+
+            if (nel->absoluteTime() < m_previousAbsoluteTime) {
+                kdDebug(KDEBUG_AREA) << "NotationHLayout::layout() : sanity problem - event absolute time is before previous event's time" << endl;
+            }
+            
         }
-    }
-    
-}
-
-void
-NotationHLayout::layoutGroup(NotationElement *groupElement)
-{
-    groupElement->setX(m_currentPos);
-
-    kdDebug(KDEBUG_AREA) << "NotationHLayout::layoutGroup() : layout group to pos "
-                         << m_currentPos << endl;
-
-    NotationElementList *group = groupElement->group();
-
-    for (NotationElementList::iterator it = group->begin();
-         it != group->end(); ++it) {
         
-        NotationElement *el = (*it);
 
-        m_quantizer.quantize(el->event());
-        el->setX(m_currentPos);
+        m_previousAbsoluteTime = nel->absoluteTime();
+
     }
-
-    kdDebug(KDEBUG_AREA) << "NotationHLayout::layoutGroup() : group after hlayout "
-                         << endl << *group << endl;
-
-    NotationElement *firstNoteOfGroup = (*group->begin());
-
-    Note note = Note(firstNoteOfGroup->event()->get<Int>("Notation::NoteType"));
-    m_currentPos += m_noteWidthTable[note] + Staff::noteWidth + m_noteMargin;
-
 }
 
 

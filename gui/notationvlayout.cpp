@@ -27,19 +27,7 @@ void
 NotationVLayout::layout(NotationElement *el)
 {
 
-    if (el->isGroup()) {
-
-        kdDebug(KDEBUG_AREA) << "NotationVLayout::layout : processing group" << endl;
-
-        // layout the group
-        NotationElementList *group = el->group();
-
-        for (NotationElementList::iterator i = group->begin();
-             i != group->end();
-             ++i)
-            layout(*i);
-
-    } else if (el->isRest()) {
+    if (el->isRest()) {
 
         el->setY(m_staff.pitchYOffset(17));
         // all rest pixmaps are sized so that they will be correctly

@@ -19,7 +19,7 @@
 
 #include "rosedebug.h"
 
-Event::duration
+Event::timeT
 XMLStorableEvent::noteName2Duration(const QString &nn)
 {
     if (m_noteName2DurationMap.empty())
@@ -90,7 +90,7 @@ XMLStorableEvent::XMLStorableEvent(const QXmlAttributes &attributes)
         } else if (attrName == "duration") {
 
             bool isNumeric = true;
-            Event::duration d = attrVal.toUInt(&isNumeric);
+            Event::timeT d = attrVal.toUInt(&isNumeric);
             if (!isNumeric) {
                 // It may be one of the accepted strings : breve, semibreve...
                 // whole, half-note, ...

@@ -55,7 +55,6 @@ public:
 
 protected:
 
-    void layoutGroup(NotationElement *groupElement);
     /*
      * Breaks down a note which doesn't fit in a bar into shorter notes - disabled for now
      */
@@ -79,6 +78,8 @@ protected:
 
     unsigned int m_nbTimeUnitsInCurrentBar;
     unsigned int m_previousNbTimeUnitsInCurrentBar;
+    unsigned int m_previousAbsoluteTime;
+    double m_previousPos;
     double m_currentPos;
 
     typedef vector<unsigned int> NoteWidthTable;

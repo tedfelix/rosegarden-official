@@ -30,21 +30,13 @@ NotationElement::NotationElement(Event *event)
     : ViewElement(event),
       m_x(0),
       m_y(0),
-      m_group(0),
       m_canvasItem(0)
 {
-    if (isGroup() && event->group()) {
-        EventList *g = event->group();
-        
-        m_group = ViewElementsManager::notationElementList(g->begin(),
-                                                           g->end());
-    }
 }
 
 NotationElement::~NotationElement()
 {
     // de-register from "observer"
-    delete m_group;
     delete m_canvasItem;
 }
 
@@ -54,38 +46,12 @@ NotationElement::isRest() const
     return event()->type() == "rest";
 }
 
-bool
-NotationElement::isGroup() const
-{
-    return event()->type() == "group";
-}
-
-void
-NotationElement::setGroup(NotationElementList *group)
-{
-    if (isGroup())
-        delete m_group;
-
-    event()->setType("group");
-
-    m_group = group;
-}
-
-
 void
 NotationElement::setCanvasItem(QCanvasItem *e)
 {
     delete m_canvasItem;
     m_canvasItem = e;
 }
-
-bool operator<(const NotationElement &e1, const NotationElement &e2)
-{
-//     kdDebug(KDEBUG_AREA) << "operator<(e1.m_x = "
-//                          << e1.m_x << ", e2.m_x = " << e2.m_x << ")" << endl;
-    return e1.m_x < e2.m_x;
-}
-
 
 //////////////////////////////////////////////////////////////////////
 
@@ -99,14 +65,8 @@ NotationElementList::~NotationElementList()
 #ifndef NDEBUG
 kdbgstream& operator<<(kdbgstream &dbg, NotationElement &e)
 {
-    if (e.isGroup()) {
-        dbg << "Group NotationElement {" << endl;
-        dbg << *(e.group());
-        dbg << "} End Group NotationElement" << endl;
-    } else {
-        dbg << "NotationElement - x : " << e.x() << " - y : " << e.y();
-        e.event()->dump(cerr);
-    }
+    dbg << "NotationElement - x : " << e.x() << " - y : " << e.y();
+    e.event()->dump(cerr);
 
     return dbg;
 }

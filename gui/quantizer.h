@@ -47,14 +47,14 @@ public:
     unsigned int wholeNoteDuration()           { return m_wholeNoteDuration; }
     void  setWholeNoteDuration(unsigned int d);
 
-    Event::duration noteDuration(Note note);
+    Event::timeT noteDuration(Note note);
 
 protected:
 
     typedef vector<unsigned int> DurationMap;
 
     /// actual quantizer
-    void quantize(Event::duration drt,
+    void quantize(Event::timeT duration,
                   DurationMap::iterator &high, 
                   DurationMap::iterator &low);
 

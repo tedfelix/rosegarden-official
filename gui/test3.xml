@@ -6,7 +6,10 @@
 
 	<event type="note" duration="whole" pitch="10" name="B"/>
 
+	<Group>
 	<event type="note" duration="whole" pitch="7" name="C"/>
+	<event type="note" duration="whole" pitch="12" name="C2"/>
+	</Group>
 
 </Track>
 </rosegarden-data>

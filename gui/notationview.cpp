@@ -229,53 +229,42 @@ NotationView::showElements(NotationElementList::iterator from,
 
     for(NotationElementList::iterator it = from; it != to; ++it) {
 
-        if ((*it)->isGroup()) {
-            //
-            // process group first
-            //
-            NotationElementList *group = (*it)->group();
+        //
+        // process event
+        //
+        try {
+            Note note = Note((*it)->event()->get<Int>("Notation::NoteType"));
 
-            showElements(group->begin(), group->end(),
-                         dxoffset, dyoffset);
-        } else {
-
-            //
-            // process single element
-            //
-            try {
-                Note note = Note((*it)->event()->get<Int>("Notation::NoteType"));
-
-                QCanvasSimpleSprite *noteSprite = 0;
+            QCanvasSimpleSprite *noteSprite = 0;
                 
-                if ((*it)->event()->type() == "note") {
+            if ((*it)->event()->type() == "note") {
 
-                    QCanvasPixmap notePixmap(npf.makeNotePixmap(note, true, true));
-                    noteSprite = new QCanvasSimpleSprite(&notePixmap, canvas());
+                QCanvasPixmap notePixmap(npf.makeNotePixmap(note, true, true));
+                noteSprite = new QCanvasSimpleSprite(&notePixmap, canvas());
 
-                } else if ((*it)->event()->type() == "rest") {
+            } else if ((*it)->event()->type() == "rest") {
 
-                    QCanvasPixmap notePixmap(npf.makeRestPixmap(note));
-                    noteSprite = new QCanvasSimpleSprite(&notePixmap, canvas());
+                QCanvasPixmap notePixmap(npf.makeRestPixmap(note));
+                noteSprite = new QCanvasSimpleSprite(&notePixmap, canvas());
 
-                } else {
+            } else {
                     
-                    kdDebug(KDEBUG_AREA) << "NotationElement type is neither a note nor a rest - type is "
-                                         << (*it)->event()->type()
-                                         << endl;
-                    continue;
-                }
-                
-                
-                noteSprite->move(dxoffset + (*it)->x(),
-                                 dyoffset + (*it)->y());
-                noteSprite->show();
-
-                (*it)->setCanvasItem(noteSprite);
-
-            } catch (...) {
-                kdDebug(KDEBUG_AREA) << "NotationElement doesn't have a 'Notation::NoteType' property"
+                kdDebug(KDEBUG_AREA) << "NotationElement type is neither a note nor a rest - type is "
+                                     << (*it)->event()->type()
                                      << endl;
+                continue;
             }
+                
+                
+            noteSprite->move(dxoffset + (*it)->x(),
+                             dyoffset + (*it)->y());
+            noteSprite->show();
+
+            (*it)->setCanvasItem(noteSprite);
+
+        } catch (...) {
+            kdDebug(KDEBUG_AREA) << "NotationElement doesn't have a 'Notation::NoteType' property"
+                                 << endl;
         }
     }
 
@@ -552,13 +541,12 @@ NotationView::insertNote(int pitch, QMouseEvent *e)
             kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : insert over rest is not implemented yet"
                                  << endl;
 
-        } else if ((*closestNote)->isGroup()) {
-
-            // just add it to group
-            (*closestNote)->group()->insert(newNotationElement);
-
         } else {
 
+            kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : insert over note is not implemented yet"
+                                 << endl;
+
+#if 0 // BIG TODO
             // create a new group and its supporting element
             NotationElementList *newGroup = new NotationElementList();
             NotationElement *newGroupElement = new NotationElement(new Event("", "group"));
@@ -579,6 +567,7 @@ NotationView::insertNote(int pitch, QMouseEvent *e)
             // and insert the supporting element for the new group
             m_notationElements->erase(closestNote);
             m_notationElements->insert(newGroupElement);
+#endif
         }
         
 

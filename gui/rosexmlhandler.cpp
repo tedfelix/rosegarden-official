@@ -21,7 +21,9 @@
 
 RoseXmlHandler::RoseXmlHandler(EventList &events)
     : m_events(events),
-      m_currentGroup(0)
+      m_currentTime(0),
+      m_groupDuration(0),
+      m_inGroup(false)
 {
 }
 
@@ -47,19 +49,28 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         // set to some state which says it's ok to parse the rest
     } else if (lcName == "event") {
 
-        if (m_currentGroup)
-            m_currentGroup->push_back(new XMLStorableEvent(atts));
-        else
-            m_events.push_back(new XMLStorableEvent(atts));
+        XMLStorableEvent *newEvent = new XMLStorableEvent(atts);
+        newEvent->setAbsoluteTime(m_currentTime);
+        
+        if (!m_inGroup) {
+
+            m_currentTime += newEvent->duration();
+
+        } else if (m_groupDuration == 0 &&
+                   newEvent->duration() != 0) {
+            // the group duration is the duration of the 1st element
+            // with a non-null duration, or 0.
+
+            m_groupDuration = newEvent->duration();
+        }
+        
+        m_events.push_back(newEvent);
 
     } else if (lcName == "track") {
         // TODO
     } else if (lcName == "group") {
 
-        Event *group = new Event;
-        group->setType("group");
-        group->setGroup(m_currentGroup = new EventList);
-        m_events.push_back(group);
+        m_inGroup = true;
         
     } else {
         kdDebug(KDEBUG_AREA) << "Don't know how to parse this : " << qName << endl;
@@ -75,7 +86,9 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
     QString lcName = qName.lower();
 
     if (lcName == "group") {
-        m_currentGroup = 0;
+        m_currentTime += m_groupDuration;
+        m_inGroup = false;
+        m_groupDuration = 0;
     }
 
     return true;
