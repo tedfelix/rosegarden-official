@@ -663,6 +663,11 @@ public slots:
     void slotToggleTransport();
 
     /**
+     * toggles the tools toolbar
+     */
+    void slotToggleToolsToolBar();
+
+    /**
      * toggles the tracks toolbar
      */
     void slotToggleTracksToolBar();
@@ -1022,6 +1027,7 @@ private:
     KRecentFilesAction* m_fileOpenRecent;
 
     KToggleAction* m_viewToolBar;
+    KToggleAction* m_viewToolsToolBar;
     KToggleAction* m_viewTracksToolBar;
     KToggleAction* m_viewEditorsToolBar;
     KToggleAction* m_viewZoomToolBar;

@@ -291,7 +291,11 @@ void RosegardenGUIApp::setupActions()
     //
     m_viewToolBar = KStdAction::showToolbar  (this, SLOT(slotToggleToolBar()),   actionCollection());
 
-    m_viewTracksToolBar = new KToggleAction(i18n("Show T&ools Toolbar"), 0, this,
+    m_viewToolsToolBar = new KToggleAction(i18n("Show T&ools Toolbar"), 0, this,
+                                            SLOT(slotToggleToolsToolBar()), actionCollection(),
+                                            "show_tools_toolbar");
+    
+    m_viewTracksToolBar = new KToggleAction(i18n("Show Trac&ks Toolbar"), 0, this,
                                             SLOT(slotToggleTracksToolBar()), actionCollection(),
                                             "show_tracks_toolbar");
 
@@ -1075,7 +1079,8 @@ void RosegardenGUIApp::readOptions()
     //
     m_viewStatusBar       ->setChecked(!statusBar()                ->isHidden());
     m_viewToolBar         ->setChecked(!toolBar()                  ->isHidden());
-    m_viewTracksToolBar   ->setChecked(!toolBar("Tools Toolbar")   ->isHidden());
+    m_viewToolsToolBar    ->setChecked(!toolBar("Tools Toolbar")   ->isHidden());
+    m_viewTracksToolBar   ->setChecked(!toolBar("Tracks Toolbar")  ->isHidden());
     m_viewEditorsToolBar  ->setChecked(!toolBar("Editors Toolbar")  ->isHidden());
     m_viewTransportToolBar->setChecked(!toolBar("Transport Toolbar")->isHidden());
     m_viewZoomToolBar     ->setChecked(!toolBar("Zoom Toolbar")     ->isHidden());
@@ -1779,15 +1784,26 @@ void RosegardenGUIApp::slotToggleToolBar()
         toolBar("mainToolBar")->hide();
 }
 
+void RosegardenGUIApp::slotToggleToolsToolBar()
+{
+    KTmpStatusMsg msg(i18n("Toggle the tools toolbar..."), this);
+
+    if (m_viewToolsToolBar->isChecked())
+        toolBar("Tools Toolbar")->show();
+    else
+        toolBar("Tools Toolbar")->hide();
+}
+
 void RosegardenGUIApp::slotToggleTracksToolBar()
 {
     KTmpStatusMsg msg(i18n("Toggle the tracks toolbar..."), this);
 
     if (m_viewTracksToolBar->isChecked())
-        toolBar("Tools Toolbar")->show();
+        toolBar("Tracks Toolbar")->show();
     else
-        toolBar("Tools Toolbar")->hide();
+        toolBar("Tracks Toolbar")->hide();
 }
+
 
 void RosegardenGUIApp::slotToggleEditorsToolBar()
 {

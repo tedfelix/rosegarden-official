@@ -93,6 +93,7 @@
         <!-- <Action name="join"/> -->
   </Menu>
   <Menu  name="settings">
+         <Action name="show_tools_toolbar"         append="show_merge" />
          <Action name="show_tracks_toolbar"        append="show_merge" />
          <Action name="show_editors_toolbar"       append="show_merge" />
          <Action name="show_transport_toolbar"     append="show_merge" />
