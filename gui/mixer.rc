@@ -31,7 +31,7 @@
   </Menu>
 
   <Menu name="Submasters">
-    <text>Number of &amp;Submasters</text>
+    <text>&amp;Number of Submasters</text>
     <Action name="submasters_0"/>
     <Action name="submasters_2"/>
     <Action name="submasters_4"/>

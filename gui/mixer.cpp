@@ -91,6 +91,18 @@ MixerWindow::MixerWindow(QWidget *parent,
 		SIGNAL(fastForwardPlaybackToEnd()), actionCollection(),
 		"playback_pointer_end");
 
+    new KToggleAction(i18n("Show &Faders"), 0, this,
+		      SLOT(slotShowFaders()), actionCollection(),
+		      "show_audio_faders");
+
+    new KToggleAction(i18n("Show &Submasters"), 0, this,
+		      SLOT(slotShowSubmasters()), actionCollection(),
+		      "show_audio_submasters");
+
+    new KToggleAction(i18n("Show &Plugin Buttons"), 0, this,
+		      SLOT(slotShowPluginButtons()), actionCollection(),
+		      "show_plugin_buttons");
+
     KRadioAction *action = 0;
 
     for (int i = 1; i <= 16; i *= 2) {
@@ -1007,3 +1019,22 @@ MixerWindow::slotSetSubmasterCountFromAction()
 
     populate();
 }
+
+void
+MixerWindow::slotShowFaders()
+{
+    //...
+}
+
+void
+MixerWindow::slotShowSubmasters()
+{
+    //...
+}
+
+void
+MixerWindow::slotShowPluginButtons()
+{
+    //...
+}
+

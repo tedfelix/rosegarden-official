@@ -76,6 +76,10 @@ protected slots:
     void slotSetInputCountFromAction();
     void slotSetSubmasterCountFromAction();
 
+    void slotShowFaders();
+    void slotShowSubmasters();
+    void slotShowPluginButtons();
+
 protected:
     virtual void closeEvent(QCloseEvent *);
 
