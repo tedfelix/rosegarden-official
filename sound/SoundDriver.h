@@ -262,6 +262,10 @@ public:
                                             unsigned long portNumber,
                                             float value) = 0;
 
+    // Poll for new clients (for new Devices/Instruments)
+    //
+    virtual bool checkForNewClients() = 0;
+
     // Mapped Instruments
     //
     void setMappedInstrument(MappedInstrument *mI);
@@ -360,6 +364,13 @@ public:
     //
     void setArgs(const std::vector<std::string> &args) { m_args = args; }
 
+    // Modify MIDI record device
+    //
+    void setMidiRecordDevice(Rosegarden::DeviceId id)
+        { m_midiRecordDevice = id; }
+    Rosegarden::DeviceId getMIDIRecordDevice() const 
+        { return m_midiRecordDevice; }
+
 protected:
     // Helper functions to be implemented by subclasses
     //
@@ -385,14 +396,17 @@ protected:
     std::map<unsigned int, MappedEvent*>        m_noteOnMap;
     NoteOffQueue                                m_noteOffQueue;
 
-    // This is our driver's own list of MappedInstruments.
+    // This is our driver's own list of MappedInstruments and MappedDevices.  
+    // These are uncoupled at this level - the Instruments and Devices float
+    // free and only index each other - the Devices hold information only like
+    // name, id and if the device is duplex capable.
+    //
     //
     std::vector<MappedInstrument*>              m_instruments;
+    std::vector<MappedDevice*>                  m_devices;
+    Rosegarden::DeviceId                        m_midiRecordDevice;
 
-    // List of device names by DeviceId
     //
-    std::vector<std::string>                    m_deviceName;
-
     MappedComposition                           m_recordComposition;
     RecordStatus                                m_recordStatus;
 

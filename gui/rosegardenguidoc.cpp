@@ -1085,64 +1085,36 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
     QDataStream reply(replyData, IO_ReadOnly);
 
     if (replyType == "Rosegarden::MappedDevice")
-    {
-        /*
-        SEQMAN_DEBUG  << "RosegardenGUIDoc::getMappedDevice() - "
-                      << "got Rosegarden::MappedDevice" << endl;
-                      */
-
         // unfurl
         reply >> mD;
-    }
     else
-    {
-        /*
-        SEQMAN_DEBUG  << "RosegardenGUIDoc::getMappedDevice() - "
-                      << "didn't get MappedDevice " 
-                      << id << endl;
-                      */
         return;
-    }
-
-    /*
-    SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice() - "
-                 << "check if we've got this device already" << endl;
-                 */
 
     // See if we've got this device already
     //
     Rosegarden::Device *device = m_studio.getDevice(id);
-    Rosegarden::Instrument::InstrumentType type;
-
-    /*
-    SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice() - device = "
-                 << device << endl;
-                 */
 
     if (mD->size() == 0)
     {
         SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice() - "
-                     << "0 instrument found" << endl;
+                     << "no instruments found" << endl;
         return;
     }
-    
 
     if(device == 0 && (*(mD->begin())))
     {
-        type = (*(mD->begin()))->getType();
-
-        if (type  == Rosegarden::Instrument::Midi)
+        if (mD->getType() == Rosegarden::Device::Midi)
         {
-            device = new Rosegarden::MidiDevice(id, "MIDI device");
+            device = new Rosegarden::MidiDevice(id, mD->getName());
             m_studio.addDevice(device);
 
             SEQMAN_DEBUG  << "RosegardenGUIDoc::getMappedDevice - "
                           << "adding MIDI Device \""
                           << device->getName() << "\"\n";
         }
-        else if (type  == Rosegarden::Instrument::Audio)
+        else if (mD->getType() == Rosegarden::Device::Audio)
         {
-            device = new Rosegarden::AudioDevice(id, "Audio device");
+            device = new Rosegarden::AudioDevice(id, mD->getName());
             m_studio.addDevice(device);
 
             SEQMAN_DEBUG  << "RosegardenGUIDoc::getMappedDevice - "
@@ -1152,7 +1124,10 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
         else
         {
             SEQMAN_DEBUG  << "RosegardenGUIDoc::getMappedDevice - "
-                          << "unknown device\n";
+                          << "unknown device - \"" << mD->getName()
+                          << "\" (type = "
+                          << mD->getType() << ")\n";
+            return;
         }
     }
 

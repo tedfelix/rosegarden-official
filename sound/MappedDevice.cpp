@@ -27,7 +27,22 @@ namespace Rosegarden
 {
 
 MappedDevice::MappedDevice():
-    std::vector<Rosegarden::MappedInstrument*>()
+    std::vector<Rosegarden::MappedInstrument*>(),
+    m_id(0),
+    m_type(Rosegarden::Device::Midi),
+    m_name("MappedDevice default name"),
+    m_duplex(false)
+{
+}
+
+MappedDevice::MappedDevice(Rosegarden::DeviceId id,
+                           Rosegarden::Device::DeviceType type,
+                           const std::string &name, bool duplex):
+    std::vector<Rosegarden::MappedInstrument*>(),
+    m_id(id),
+    m_type(type),
+    m_name(name),
+    m_duplex(duplex)
 {
 }
 
@@ -43,6 +58,10 @@ MappedDevice::MappedDevice(const MappedDevice &mD):
     for (MappedDeviceConstIterator it = mD.begin(); it != mD.end(); it++)
         this->push_back(new MappedInstrument(*it));
 
+    m_id = mD.getId();
+    m_type = mD.getType();
+    m_name = mD.getName();
+    m_duplex = mD.getDuplex();
 }
 
 void
@@ -73,6 +92,11 @@ MappedDevice::operator=(const MappedDevice &mD)
     for (MappedDeviceConstIterator it = mD.begin(); it != mD.end(); it++)
         this->push_back(new MappedInstrument(*it));
 
+    m_id = mD.getId();
+    m_type = mD.getType();
+    m_name = mD.getName();
+    m_duplex = mD.getDuplex();
+
     return *this;
 }
 
@@ -102,6 +126,19 @@ operator>>(QDataStream &dS, MappedDevice *mD)
 
         instruments--;
     }
+
+    // Name and duplex state
+    //
+    unsigned int duplex;
+    int dType;
+    dS >> id;
+    dS >> dType;
+    dS >> name;
+    dS >> duplex;
+    mD->setId(id);
+    mD->setType(Rosegarden::Device::DeviceType(dType));
+    mD->setName(std::string(name.data()));
+    mD->setDuplex(bool(duplex));
 
     if (instruments)
     {
@@ -139,6 +176,19 @@ operator>>(QDataStream &dS, MappedDevice &mD)
         instruments--;
     }
 
+    // Name and duplex state
+    //
+    unsigned int duplex;
+    int dType;
+    dS >> id;
+    dS >> dType;
+    dS >> name;
+    dS >> duplex;
+    mD.setId(id);
+    mD.setType(Rosegarden::Device::DeviceType(dType));
+    mD.setName(std::string(name.data()));
+    mD.setDuplex(bool(duplex));
+
     if (instruments)
     {
         std::cerr << "MappedDevice::operator>> - "
@@ -162,6 +212,13 @@ operator<<(QDataStream &dS, MappedDevice *mD)
         dS << (unsigned int)(*it)->getDevice();
     }
 
+    // ID, name and duplex state
+    //
+    dS << (unsigned int)(mD->getId());
+    dS << (int)(mD->getType());
+    dS << QString(mD->getName().c_str());
+    dS << (unsigned int)(mD->getDuplex());
+
     return dS;
 }
 
@@ -178,6 +235,13 @@ operator<<(QDataStream &dS, const MappedDevice &mD)
         dS << QString((*it)->getName().c_str());
         dS << (unsigned int)(*it)->getDevice();
     }
+
+    // ID, name and duplex state
+    //
+    dS << (unsigned int)(mD.getId());
+    dS << (int)(mD.getType());
+    dS << QString(mD.getName().c_str());
+    dS << (unsigned int)(mD.getDuplex());
 
     return dS;
 }

@@ -41,6 +41,9 @@ class MappedDevice : public std::vector<Rosegarden::MappedInstrument*>
 {
 public:
     MappedDevice();
+    MappedDevice(Rosegarden::DeviceId id,
+                 Rosegarden::Device::DeviceType type,
+                 const std::string &name, bool duplex);
     MappedDevice(const MappedDevice &mD);
     ~MappedDevice();
  
@@ -56,7 +59,24 @@ public:
     friend QDataStream& operator>>(QDataStream &dS, MappedDevice &mD);
     friend QDataStream& operator<<(QDataStream &dS, const MappedDevice &mD);
 
-private:
+    bool getDuplex() const { return m_duplex; }
+    void setDuplex(bool duplex) { m_duplex = duplex; }
+
+    std::string getName() const { return m_name; }
+    void setName(const std::string &name) { m_name = name; }
+
+    Rosegarden::DeviceId getId() const { return m_id; }
+    void setId(Rosegarden::DeviceId id) { m_id = id; }
+
+    Rosegarden::Device::DeviceType getType() const { return m_type; }
+    void setType(Rosegarden::Device::DeviceType type) { m_type = type; }
+
+protected:
+
+    Rosegarden::DeviceId            m_id;
+    Rosegarden::Device::DeviceType  m_type;
+    std::string                     m_name;
+    bool                            m_duplex;
 
 };
 
@@ -66,10 +86,7 @@ typedef std::vector<Rosegarden::MappedInstrument*>::const_iterator
 typedef std::vector<Rosegarden::MappedInstrument*>::iterator
     MappedDeviceIterator;
 
-
-
-
-
 }
 
 #endif // _MAPPEDDEVICE_H_
+

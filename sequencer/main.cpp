@@ -140,6 +140,7 @@ int main(int argc, char *argv[])
     // sleep time is 5000 microseconds
     //
     const int sequencerSleep = 5000;
+    int newClientCheck = 0;
     //int sendAliveCount = 0;
 
     while(roseSeq && roseSeq->getStatus() != QUIT)
@@ -290,6 +291,28 @@ int main(int argc, char *argv[])
         {
             roseSeq->updateClocks(roseSeq->clearToSend());
         }
+        else // we can check for new client connections if we're mainly
+             // quiescent (i.e. not playing or recording)
+        {
+            // Loop counter
+            //
+            newClientCheck += sequencerSleep;
+
+            // This figure works out to about 5 seconds after everything
+            // else in the loop is factored in.
+            //
+            if (newClientCheck > 1250000)
+            {
+                if (roseSeq->checkForNewClients())
+                {
+                    // Tell the gui to synchronise Instruments
+                    //
+                }
+                
+                //SEQUENCER_DEBUG << "checking for new clients" << endl;
+                newClientCheck = 0;
+            }
+        }
 
         // Pause for breath while we're gnashing this loop (5 milliseconds)
         //
@@ -298,6 +321,7 @@ int main(int argc, char *argv[])
         // parameters sent down from the GUI.
         //
         usleep(sequencerSleep);
+
 
         /*
         // While we're sending the "alive" signal

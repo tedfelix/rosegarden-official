@@ -252,6 +252,8 @@ public:
                                             int position,
                                             unsigned long portNumber,
                                             float value);
+    virtual bool checkForNewClients();
+
 #ifdef HAVE_LADSPA
 
     LADSPAPluginInstance* getPlugin(InstrumentId id, int position);

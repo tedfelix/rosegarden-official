@@ -297,6 +297,11 @@ public:
     //
     void initialiseStudio();
 
+    // Check for new targets - we do this occasionally and never when
+    // we're playing or recording.
+    //
+    bool checkForNewClients();
+
 private:
 
     // get events whilst handling loop

@@ -83,6 +83,8 @@ public:
                                             unsigned long portNumber,
                                             float value) {;}
 
+    virtual bool checkForNewClients() { return false; }
+
 protected:
     virtual void processMidiOut(const MappedComposition & /*mC*/,
                                 const RealTime & /*playLatency*/,

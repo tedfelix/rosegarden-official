@@ -236,6 +236,13 @@ public:
         { m_soundDriver->
             setPluginInstancePortValue(id, position, portNumber, value); }
 
+    // Check to see if there are any new Devices/Instruments for 
+    // us to see.
+    //
+    bool checkForNewClients()
+        { return m_soundDriver->checkForNewClients(); }
+
+
 protected:
 
     SoundDriver                                *m_soundDriver;

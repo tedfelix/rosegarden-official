@@ -1130,9 +1130,11 @@ RosegardenSequencerApp::setMappedPort(int pluginId,
 
 }
 
-
-
-
+bool
+RosegardenSequencerApp::checkForNewClients()
+{
+    return m_sequencer->checkForNewClients();
+}
 
 
 

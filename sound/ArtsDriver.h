@@ -109,6 +109,8 @@ public:
                                             unsigned long /*portNumber*/,
                                             float /*value*/) {;}
 
+    virtual bool checkForNewClients() { return false; }
+
 protected:
     virtual void generateInstruments();
     virtual void processAudioQueue(const RealTime &playLatency,

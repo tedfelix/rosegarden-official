@@ -275,8 +275,8 @@ AlsaDriver::generateInstruments()
     snd_seq_client_info_set_client(cinfo, -1);
 
     m_instruments.clear();
+    m_devices.clear();
     m_alsaPorts.clear();
-
 
     std::cout << std::endl << "  ALSA Client information:"
               << std::endl << std::endl;
@@ -369,6 +369,7 @@ AlsaDriver::generateInstruments()
                             false);
 
                 std::cout << std::endl;
+
             }
         }
     }
@@ -425,6 +426,15 @@ AlsaDriver::generateInstruments()
 
         m_audioRunningId++;
     }
+
+    // Create audio device
+    //
+    MappedDevice *device =
+                    new MappedDevice(m_deviceRunningId,
+                                     Rosegarden::Device::Audio,
+                                     "JACK audio",
+                                     true);
+    m_devices.push_back(device);
 
 #endif
 
@@ -495,8 +505,6 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
 
         m_alsaPorts.push_back(alsaInstr);
 
-
-
         for (int channel = 0; channel < 16; channel++)
         {
             // Create MappedInstrument for export to GUI
@@ -514,6 +522,12 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
             m_instruments.push_back(instr);
         }
 
+        MappedDevice *device =
+                new MappedDevice(m_deviceRunningId,
+                                 Rosegarden::Device::Midi,
+                                 name,
+                                 duplex);
+        m_devices.push_back(device);
     }
 
     // Store these numbers for next time through
@@ -3038,6 +3052,12 @@ AlsaDriver::appendToAudioFile(const std::string &buffer)
 
 #endif
 
+
+bool
+AlsaDriver::checkForNewClients()
+{
+    return false;
+}
 
 
 }

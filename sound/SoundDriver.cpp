@@ -149,6 +149,7 @@ SoundDriver::SoundDriver(MappedStudio *studio, const std::string &name):
     m_playStartPosition(0, 0),
     m_startPlayback(false),
     m_playing(false),
+    m_midiRecordDevice(0),
     m_recordStatus(ASYNCHRONOUS_MIDI),
     m_midiRunningId(MidiInstrumentBase),
     m_audioRunningId(AudioInstrumentBase),
@@ -258,6 +259,25 @@ SoundDriver::getMappedDevice(DeviceId id)
         if ((*it)->getDevice() == id)
             retDevice.push_back(*it);
     }
+
+    std::vector<MappedDevice*>::iterator dIt = m_devices.begin();
+    for (; dIt != m_devices.end(); dIt++)
+    {
+        if ((*dIt)->getId() == id)
+        {
+            retDevice.setId(id);
+            retDevice.setName((*dIt)->getName());
+            retDevice.setType((*dIt)->getType());
+            retDevice.setDuplex((*dIt)->getDuplex());
+            break;
+        }
+    }
+
+    std::cout << "SoundDriver::getMappedDevice - "
+              << "name = \"" << retDevice.getName() 
+              << "\" type = " << retDevice.getType()
+              << std::endl;
+         
 
     return retDevice;
 }
