@@ -181,7 +181,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     //
     stateChanged("new_file");
     stateChanged("have_segments",    KXMLGUIClient::StateReverse);
-    stateChanged("segment_selected", KXMLGUIClient::StateReverse);
+    stateChanged("have_selection",   KXMLGUIClient::StateReverse);
     slotTestClipboard();
 
     // Check for lack of MIDI devices and disable Studio options accordingly
@@ -267,6 +267,10 @@ void RosegardenGUIApp::setupActions()
     m_viewTracksToolBar = new KToggleAction(i18n("Show T&racks Toolbar"), 0, this,
                                             SLOT(slotToggleTracksToolBar()), actionCollection(),
                                             "show_tracks_toolbar");
+
+    m_viewEditorsToolBar = new KToggleAction(i18n("Show &Editors Toolbar"), 0, this,
+                                            SLOT(slotToggleEditorsToolBar()), actionCollection(),
+                                            "show_editors_toolbar");
 
     m_viewTransportToolBar = new KToggleAction(i18n("Show Trans&port Toolbar"), 0, this,
                                             SLOT(slotToggleTransportToolBar()), actionCollection(),
@@ -452,15 +456,18 @@ void RosegardenGUIApp::setupActions()
 		SLOT(slotEdit()), actionCollection(),
 		"edit_default");
 
-    new KAction(i18n("Open in Matri&x Editor"), 0, this,
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/matrix.xpm"));
+    new KAction(i18n("Open in Matri&x Editor"), icon, 0, this,
 		SLOT(slotEditInMatrix()), actionCollection(),
 		"edit_matrix");
 
-    new KAction(i18n("Open in &Notation Editor"), 0, this,
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/notation.xpm"));
+    new KAction(i18n("Open in &Notation Editor"), icon, 0, this,
 		SLOT(slotEditAsNotation()), actionCollection(),
 		"edit_notation");
 
-    new KAction(i18n("Open in &Event List Editor"), 0, this,
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/eventlist.xpm"));
+    new KAction(i18n("Open in &Event List Editor"), icon, 0, this,
 		SLOT(slotEditInEventList()), actionCollection(),
 		"edit_event_list");
 
@@ -888,6 +895,7 @@ void RosegardenGUIApp::readOptions()
     m_viewStatusBar       ->setChecked(!statusBar()                ->isHidden());
     m_viewToolBar         ->setChecked(!toolBar()                  ->isHidden());
     m_viewTracksToolBar   ->setChecked(!toolBar("tracksToolBar")   ->isHidden());
+    m_viewEditorsToolBar   ->setChecked(!toolBar("editorsToolBar")   ->isHidden());
     m_viewTransportToolBar->setChecked(!toolBar("transportToolBar")->isHidden());
     m_viewZoomToolBar     ->setChecked(!toolBar("zoomToolBar")     ->isHidden());
 
@@ -1549,6 +1557,16 @@ void RosegardenGUIApp::slotToggleTracksToolBar()
         toolBar("tracksToolBar")->show();
     else
         toolBar("tracksToolBar")->hide();
+}
+
+void RosegardenGUIApp::slotToggleEditorsToolBar()
+{
+    KTmpStatusMsg msg(i18n("Toggle the editor toolbar..."), this);
+
+    if (m_viewEditorsToolBar->isChecked())
+        toolBar("editorsToolBar")->show();
+    else
+        toolBar("editorsToolBar")->hide();
 }
 
 void RosegardenGUIApp::slotToggleTransportToolBar()

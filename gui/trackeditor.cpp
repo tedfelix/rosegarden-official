@@ -411,14 +411,14 @@ void TrackEditor::paintEvent(QPaintEvent* e)
 
         if (composition.getNbSegments() == 0) {
             emit stateChange("have_segments", true); // no segments : reverse state
-            emit stateChange("segment_selected", true); // no segments : reverse state
+            emit stateChange("have_selection", true); // no segments : reverse state
         }
         else {
             emit stateChange("have_segments", false);
             if (m_segmentCanvas->haveSelection())
-                emit stateChange("segment_selected", false);
+                emit stateChange("have_selection", false);
             else
-                emit stateChange("segment_selected", true); // no selection : reverse state
+                emit stateChange("have_selection", true); // no selection : reverse state
         }
 
         setCompositionModified(false);

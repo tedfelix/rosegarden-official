@@ -375,6 +375,7 @@ public slots:
     void slotTransposeDownOctave();
     void slotTransformsQuantize();
     void slotTransformsFixSmoothing();
+    void slotTransformsInterpret();
 
     void slotSetStyleFromAction();
     void slotInsertNoteFromAction();

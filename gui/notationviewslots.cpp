@@ -1075,6 +1075,18 @@ void NotationView::slotTransformsFixSmoothing()
 			(*m_currentEventSelection, m_legatoQuantizer));
 }
 
+void NotationView::slotTransformsInterpret()
+{
+    //!!! dialog
+
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Interpreting selection..."), this);
+    addCommandToHistory(new TransformsMenuInterpretCommand
+			(*m_currentEventSelection, m_legatoQuantizer,
+			 TransformsMenuInterpretCommand::Articulate));
+}
+    
+
 void NotationView::slotAddSlashes()
 {
     const QObject *s = sender();

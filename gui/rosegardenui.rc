@@ -84,6 +84,7 @@
   </Menu>
   <Menu  name="settings"><text>&amp;Settings</text>
          <Action name="show_tracks_toolbar"        append="show_merge" />
+         <Action name="show_editors_toolbar"       append="show_merge" />
          <Action name="show_transport_toolbar"     append="show_merge" />
          <Action name="show_zoom_toolbar"          append="show_merge" />
   <Separator append="show_merge" />
@@ -108,6 +109,12 @@
 	<Action name="erase"/>
         <Action name="split"/>
         <Action name="join"/>
+</ToolBar>
+
+<ToolBar name="editorsToolBar">
+	<Action name="edit_matrix"/>
+	<Action name="edit_notation"/>
+	<Action name="edit_event_list"/>
 </ToolBar>
 
 <ToolBar name="transportToolBar">
@@ -159,13 +166,17 @@
       	<Action name="edit_cut"/>
       	<Action name="edit_copy"/>
       	<Action name="delete"/>
+      	<Action name="edit_default"/>
       	<Action name="edit_matrix"/>
       	<Action name="edit_notation"/>
+      	<Action name="edit_event_list"/>
 	<Action name="quantize_selection"/>
 <!-- 	<Action name="harmonize_selection"/> -->
 	<Action name="rescale"/>
 	<Action name="auto_split"/>
 	<Action name="collapse"/>
+        <Action name="set_tempo_to_segment_length"/>
+        <Action name="repeats_to_real_copies"/>
      </enable>
 </State>
 

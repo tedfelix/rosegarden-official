@@ -602,4 +602,55 @@ private:
 };
 
 
+class TransformsMenuInterpretCommand : public BasicSelectionCommand
+{
+public:
+    // bit masks: pass an OR of these to the constructor
+    static const int NoInterpretation;
+    static const int GuessDirections;    // allegro, rit, pause &c: kinda bogus
+    static const int ApplyTextDynamics;  // mp, ff
+    static const int ApplyHairpins;      // self-evident
+    static const int StressBeats;        // stress bar/beat boundaries
+    static const int Articulate;         // slurs, marks, legato etc
+    static const int AllInterpretations; // all of the above
+
+    TransformsMenuInterpretCommand(Rosegarden::EventSelection &selection,
+				   Rosegarden::Quantizer *quantizer,
+				   int interpretations) :
+	BasicSelectionCommand(getGlobalName(), selection, true),
+	m_selection(&selection),
+	m_quantizer(quantizer),
+	m_interpretations(interpretations) { }
+
+    virtual ~TransformsMenuInterpretCommand();
+
+    //!!! might be nice to get a name based on the interpretations
+    // applied as well
+    static QString getGlobalName() { return "&Interpret..."; }
+    
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    Rosegarden::Quantizer *m_quantizer;
+    int m_interpretations;
+
+    typedef std::map<Rosegarden::timeT,
+		     Rosegarden::Indication *> IndicationMap;
+    IndicationMap m_indications;
+
+    void guessDirections();
+    void applyTextDynamics();
+    void applyHairpins();
+    void stressBeats();
+    void articulate(); // must be applied last
+
+    // test if the event is within an indication of the given type, return
+    // an iterator pointing to that indication if so
+    IndicationMap::iterator findEnclosingIndication(Rosegarden::Event *,
+						    std::string type);
+};
+
+
 #endif

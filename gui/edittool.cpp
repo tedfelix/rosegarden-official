@@ -102,7 +102,15 @@ void EditTool::handleMousePress(Rosegarden::timeT time,
     switch (e->button()) {
 
     case Qt::LeftButton:
-        handleLeftButtonPress(time, height, staffNo, e, el);
+        if (e->type() == QEvent::MouseButtonDblClick) {
+	    RG_DEBUG << "EditTool::handleMousePress: it's a double-click"
+		     << endl;
+            handleMouseDoubleClick(time, height, staffNo, e, el);
+	} else {
+	    RG_DEBUG << "EditTool::handleMousePress: it's a single-click"
+		     << endl;
+	    handleLeftButtonPress(time, height, staffNo, e, el);
+	}
         break;
 
     case Qt::RightButton:

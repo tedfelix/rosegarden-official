@@ -614,6 +614,11 @@ public slots:
     void slotToggleTracksToolBar();
 
     /**
+     * toggles the editors toolbar
+     */
+    void slotToggleEditorsToolBar();
+
+    /**
      * toggles the transport toolbar
      */
     void slotToggleTransportToolBar();
@@ -927,6 +932,7 @@ private:
 
     KToggleAction* m_viewToolBar;
     KToggleAction* m_viewTracksToolBar;
+    KToggleAction* m_viewEditorsToolBar;
     KToggleAction* m_viewZoomToolBar;
     KToggleAction* m_viewStatusBar;
     KToggleAction* m_viewTransport;

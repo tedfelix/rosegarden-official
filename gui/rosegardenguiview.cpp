@@ -710,7 +710,7 @@ void RosegardenGUIView::slotSetSelectedSegments(
     // update the segment parameter box
     m_segmentParameterBox->useSegments(segments);
 
-    emit stateChange("segment_selected", false);
+    emit stateChange("have_selection", false);
 }
 
 void RosegardenGUIView::slotSelectAllSegments()
@@ -764,7 +764,7 @@ void RosegardenGUIView::slotSelectAllSegments()
     //!!! similarly, how to set no selected track?
     //comp.setSelectedTrack(trackId);
 
-    emit stateChange("segment_selected", false);
+    emit stateChange("have_selection", false);
 
     // inform
     emit segmentsSelected(segments);

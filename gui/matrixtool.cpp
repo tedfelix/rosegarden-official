@@ -366,6 +366,8 @@ void MatrixSelector::handleMidButtonPress(Rosegarden::timeT time,
                                           QMouseEvent* e,
                                           Rosegarden::ViewElement *element)
 {
+    m_clickedElement = 0; // should be used for left-button clicks only
+
     // Don't allow overlapping elements on the same channel
     if (dynamic_cast<MatrixElement*>(element)) return;
 

@@ -48,6 +48,7 @@ using Rosegarden::Bool;
 using Rosegarden::String;
 using Rosegarden::Accidental;
 using Rosegarden::Accidentals::NoAccidental;
+using Rosegarden::Marks;
 using Rosegarden::Indication;
 using Rosegarden::NotationDisplayPitch;
 using Rosegarden::EventSelection;
@@ -1041,4 +1042,262 @@ TransformsMenuFixSmoothingCommand::modifySegment()
 	 segment->findTime(m_selection->getEndTime()));
 }
 
+
+
+const int TransformsMenuInterpretCommand::NoInterpretation      = 0;
+const int TransformsMenuInterpretCommand::GuessDirections	= (1<<0);
+const int TransformsMenuInterpretCommand::ApplyTextDynamics	= (1<<1);
+const int TransformsMenuInterpretCommand::ApplyHairpins		= (1<<2);
+const int TransformsMenuInterpretCommand::StressBeats		= (1<<3);
+const int TransformsMenuInterpretCommand::Articulate		= (1<<4);
+const int TransformsMenuInterpretCommand::AllInterpretations	= (1<<5) - 1;
+
+TransformsMenuInterpretCommand::~TransformsMenuInterpretCommand()
+{
+    for (IndicationMap::iterator i = m_indications.begin();
+	 i != m_indications.end(); ++i) {
+	delete i->second;
+    }
+}
+
+void
+TransformsMenuInterpretCommand::modifySegment()
+{
+    // Of all the interpretations, Articulate is the only one that
+    // changes event times or durations.  This means we must apply it
+    // last, as the selection cannot be used after it's been applied,
+    // because the events in the selection will have been recreated
+    // with their new timings.
+    
+    // The default velocity for new notes is 100, and the range is
+    // 0-127 (in practice this seems to be roughly logarithmic rather
+    // than linear, though perhaps that's an illusion).
+
+    // We should only apply interpretation to those events actually
+    // selected, but when applying things like hairpins and text
+    // dynamics we need to take into account all dynamics that may
+    // cover our events even if they're not selected or are not within
+    // the time range of the selection at all.  So first we'd better
+    // find all the likely indications, starting at (for the sake of
+    // argument) three bars before the start of the selection:
+
+    Segment &segment(getSegment());
+    
+    timeT t = m_selection->getStartTime();
+    for (int i = 0; i < 3; ++i) t = segment.getBarStartForTime(t);
+
+    Segment::iterator itr = segment.findTime(t);
+
+    while (itr != segment.end()) {
+	timeT eventTime = (*itr)->getAbsoluteTime();
+	if (eventTime > m_selection->getEndTime()) break;
+	if ((*itr)->isa(Indication::EventType)) {
+	    m_indications[eventTime] = new Rosegarden::Indication(**itr);
+	}
+	++itr;
+    }
+
+    if (m_interpretations & GuessDirections) guessDirections();
+    if (m_interpretations & ApplyTextDynamics) applyTextDynamics();
+    if (m_interpretations & ApplyHairpins) applyHairpins();
+    if (m_interpretations & StressBeats) stressBeats();
+    if (m_interpretations & Articulate) articulate();
+
+    //!!! Finally, in future we should extend this to allow
+    // indications on one segment (e.g. top line of piano staff) to
+    // affect another (e.g. bottom line).  All together now: "Even
+    // Rosegarden 2.1 could do that!"
+}
+
+void
+TransformsMenuInterpretCommand::guessDirections()
+{
+    //...
+}
+
+void
+TransformsMenuInterpretCommand::applyTextDynamics()
+{
+    //...
+}
+
+void
+TransformsMenuInterpretCommand::applyHairpins()
+{
+    //...
+}
+
+void
+TransformsMenuInterpretCommand::stressBeats()
+{
+    //...
+}
+
+void
+TransformsMenuInterpretCommand::articulate()
+{
+    // Basic articulations:
+    //
+    // -- Anything marked tenuto or within a slur gets 100% of its
+    //    nominal duration (that's what we need the quantizer for,
+    //    to get the display nominal duration), and its velocity
+    //    is unchanged.
+    // 
+    // -- Anything marked marcato gets 60%, or 70% if slurred (!),
+    //    and gets an extra 15% of velocity.
+    //
+    // -- Anything marked staccato gets 55%, or 70% if slurred,
+    //    and unchanged velocity.
+    //
+    // -- Anything marked staccatissimo gets 30%, or 50% if slurred (!),
+    //    and loses 5% of velocity.
+    // 
+    // -- Anything marked sforzando gains 25% of velocity.
+    // 
+    // -- Anything marked with an accent gains 20% of velocity.
+    // 
+    // -- Anything marked rinforzando gains 15% of velocity and has
+    //    its full duration.  Guess we really need to use some proper
+    //    controllers here.
+    // 
+    // -- Anything marked down-bow gains 5% of velocity, anything
+    //    marked up-bow loses 5%.
+    // 
+    // -- Anything unmarked and unslurred, or marked tenuto and
+    //    slurred, gets 90% of duration.
+
+    std::vector<Event *> toErase;
+    std::vector<Event *> toInsert;
+
+    for (EventSelection::eventcontainer::iterator itr =
+	     m_selection->getSegmentEvents().begin();
+	 itr != m_selection->getSegmentEvents().end(); ++itr) {
+
+	Event *e = (*itr);
+	if (!e->isa(Note::EventType)) continue;
+
+	// the things that affect duration
+	bool staccato = false;
+	bool staccatissimo = false;
+	bool marcato = false;
+	bool tenuto = false;
+	bool rinforzando = false;
+	bool slurred = false;
+
+	int velocityChange = 0;
+	
+	long marks = 0;
+	if (e->get<Int>(MARK_COUNT, marks)) {
+	    for (int i = 0; i < marks; ++i) {
+		std::string mark = "";
+		if (e->get<String>(getMarkPropertyName(i), mark)) {
+
+		    if (mark == Marks::Accent) {
+			velocityChange += 20;
+		    } else if (mark == Marks::Tenuto) {
+			tenuto = true;
+		    } else if (mark == Marks::Staccato) {
+			staccato = true;
+		    } else if (mark == Marks::Staccatissimo) {
+			staccatissimo = true;
+			velocityChange -= 5;
+		    } else if (mark == Marks::Marcato) {
+			marcato = true;
+			velocityChange += 15;
+		    } else if (mark == Marks::Sforzando) {
+			velocityChange += 25;
+		    } else if (mark == Marks::Rinforzando) {
+			rinforzando = true;
+			velocityChange += 15;
+		    } else if (mark == Marks::DownBow) {
+			velocityChange += 5;
+		    } else if (mark == Marks::UpBow) {
+			velocityChange -= 5;
+		    }
+		}
+	    }
+	}
+
+	IndicationMap::iterator inditr =
+	    findEnclosingIndication(e, Indication::Slur);
+
+	if (inditr != m_indications.end()) slurred = true;
+
+	int durationChange = 0;
+	
+	if (slurred) {
+	    if (tenuto) durationChange = -10;
+	    else if (marcato || staccato) durationChange = -30;
+	    else if (staccatissimo) durationChange = -50;
+	    else durationChange = 0;
+	} else {
+	    if (tenuto) durationChange = 0;
+	    else if (marcato) durationChange = -40;
+	    else if (staccato) durationChange = -45;
+	    else if (staccatissimo) durationChange = -70;
+	    else if (rinforzando) durationChange = 0;
+	    else durationChange = -10;
+	}
+
+	NOTATION_DEBUG << "TransformsMenuInterpretCommand::modifySegment: For note at " << e->getAbsoluteTime() << ", velocityChange is " << velocityChange << " and durationChange is " << durationChange << endl;
+
+	long velocity = 100;
+	e->get<Int>(VELOCITY, velocity);
+	velocity += velocity * velocityChange / 100;
+	if (velocity < 0) velocity = 0;
+	if (velocity > 127) velocity > 127;
+	e->set<Int>(VELOCITY, velocity);
+
+	if (durationChange != 0) { 
+
+	    //!!! deal with tuplets
+	    //!!! mark this event so that we don't misquantize or
+	    // misdisplay because the duration has changed
+
+	    timeT duration = m_quantizer->getQuantizedDuration(e);
+	    duration += duration * durationChange / 100;
+
+	    Event *newEvent = new Event(*e, e->getAbsoluteTime(), duration);
+	    toInsert.push_back(newEvent);
+	    toErase.push_back(e);
+	}
+    }
+
+    Segment &s(getSegment());
+    
+    for (unsigned int j = 0; j < toErase.size(); ++j) {
+	Segment::iterator jtr(s.findSingle(toErase[j]));
+	s.erase(jtr);
+    }
+	       
+    for (unsigned int j = 0; j < toInsert.size(); ++j) {
+	s.insert(toInsert[j]);
+    }
+}
+
+TransformsMenuInterpretCommand::IndicationMap::iterator
+TransformsMenuInterpretCommand::findEnclosingIndication(Event *e,
+							std::string type)
+{
+    // a bit slow, but let's wait and see whether it's a bottleneck
+    // before we worry about that
+
+    timeT t = e->getAbsoluteTime();
+    IndicationMap::iterator itr = m_indications.lower_bound(t);
+
+    while (1) {
+	if (itr != m_indications.end()) {
+
+	    if (itr->second->getIndicationType() == type &&
+		itr->first <= t &&
+		itr->first + itr->second->getIndicationDuration() > t) {
+		return itr;
+	    }
+	}
+	if (itr == m_indications.begin()) break;
+	--itr;
+    }
+
+    return m_indications.end();
+}
 

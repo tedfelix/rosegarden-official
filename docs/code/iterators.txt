@@ -171,7 +171,7 @@ EventSelection):
 
 because the erase will not only invalidate the Segment iterator i but
 also cause the Event at *ci to be deleted from the EventSelection,
-this invalidating the EventSelection::eventcontainer iterator ci as
+thus invalidating the EventSelection::eventcontainer iterator ci as
 well.  Most of the same tricks can be used to work around this, though
 not all.
 

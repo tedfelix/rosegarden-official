@@ -1175,6 +1175,10 @@ void NotationView::setupActions()
 		this, SLOT(slotTransformsFixSmoothing()), actionCollection(),
                 "fix_smoothing");
 
+    new KAction(i18n(TransformsMenuInterpretCommand::getGlobalName()), 0,
+		this, SLOT(slotTransformsInterpret()), actionCollection(),
+		"interpret");
+
     new KAction(i18n("&Dump selected events to stderr"), 0, this,
 		SLOT(slotDebugDump()), actionCollection(), "debug_dump");
 

@@ -112,6 +112,8 @@
   <Action name="quantize"/>
   <Action name="fix_smoothing"/>
   <Separator/>
+  <Action name="interpret"/>
+  <Separator/>
   <Menu name="Transpose">
   <text>Trans&amp;pose</text>
   <Action name="transpose_up"/>
