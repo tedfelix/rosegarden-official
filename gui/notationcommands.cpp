@@ -25,6 +25,7 @@
 #include "NotationTypes.h"
 #include "Selection.h"
 #include "SegmentNotationHelper.h"
+#include "SegmentMatrixHelper.h"
 #include "BaseProperties.h"
 #include "Clipboard.h"
 #include "notationproperties.h"
@@ -62,7 +63,9 @@ using std::endl;
 NoteInsertionCommand::NoteInsertionCommand(Segment &segment, timeT time,
                                            timeT endTime, Note note, int pitch,
                                            Accidental accidental,
-					   bool autoBeam) :
+					   bool autoBeam,
+					   bool matrixType,
+					   NoteStyleName noteStyle) :
     BasicCommand("Insert Note", segment,
 		 (autoBeam ? segment.getBarStartForTime(time) : time),
 		 (autoBeam ? segment.getBarEndForTime(endTime) : endTime)),
@@ -71,6 +74,8 @@ NoteInsertionCommand::NoteInsertionCommand(Segment &segment, timeT time,
     m_pitch(pitch),
     m_accidental(accidental),
     m_autoBeam(autoBeam),
+    m_matrixType(matrixType),
+    m_noteStyle(noteStyle),
     m_lastInsertedEvent(0)
 {
     // nothing
@@ -103,7 +108,24 @@ NoteInsertionCommand::modifySegment()
 	++i;
     }
 
-    i = helper.insertNote(m_insertionTime, m_note, m_pitch, m_accidental);
+    //!!! in order to apply noteStyle without base/ having to know
+    // about it, we're going to have to discover _all_ the notes that
+    // the helper just inserted... oh screw.
+
+    if (m_matrixType) {
+
+	Event *e = new Event
+	    (Note::EventType, m_insertionTime, m_note.getDuration());
+	e->set<Int>(PITCH, m_pitch);
+	if (m_accidental != Rosegarden::Accidentals::NoAccidental) {
+	    e->set<String>(ACCIDENTAL, m_accidental);
+	}
+	i = Rosegarden::SegmentMatrixHelper(segment).insertNote(e);
+
+    } else {
+	i = helper.insertNote(m_insertionTime, m_note, m_pitch, m_accidental);
+    }
+
     if (i != segment.end()) m_lastInsertedEvent = *i;
 
     if (m_autoBeam) {
@@ -135,7 +157,8 @@ NoteInsertionCommand::modifySegment()
 
 RestInsertionCommand::RestInsertionCommand(Segment &segment, timeT time,
                                            timeT endTime, Note note) :
-    NoteInsertionCommand(segment, time, endTime, note, 0, NoAccidental, false)
+    NoteInsertionCommand(segment, time, endTime, note, 0, NoAccidental,
+			 false, false, NoteStyleFactory::DefaultStyle)
 {
     setName("Insert Rest");
 }
@@ -687,11 +710,7 @@ TransformsMenuRestoreStemsCommand::modifySegment()
 QString
 TransformsMenuChangeStyleCommand::getGlobalName(NoteStyleName style)
 {
-    if (style == StandardNoteStyleNames::Cross) {
-	return "C&ross";
-    } else {
-	return "&" + strtoqstr(style) + "";
-    }
+    return strtoqstr(style);
 }
 
 
@@ -704,7 +723,7 @@ TransformsMenuChangeStyleCommand::modifySegment()
 	 i != m_selection->getSegmentEvents().end(); ++i) {
 
 	if ((*i)->isa(Note::EventType)) {
-	    if (m_style == StandardNoteStyleNames::Classical) {
+	    if (m_style == NoteStyleFactory::DefaultStyle) {
 		(*i)->unset(NotationProperties::NOTE_STYLE);
 	    } else {
 		(*i)->set<Rosegarden::String>

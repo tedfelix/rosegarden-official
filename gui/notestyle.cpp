@@ -70,29 +70,8 @@ private:
 };
 
 
-namespace StandardNoteStyleNames
-{
-    const NoteStyleName Classical = "Classical";
-    const NoteStyleName Cross = "Cross";
-    const NoteStyleName Triangle = "Triangle";
-    const NoteStyleName Mensural = "Mensural";
 
-    std::vector<NoteStyleName> getStandardStyles() {
-
-	static NoteStyleName a[] = {
-	    Classical, Cross, Triangle, Mensural
-	};
-
-	static std::vector<NoteStyleName> v;
-	if (v.size() == 0) {
-	    for (unsigned int i = 0; i < sizeof(a)/sizeof(a[0]); ++i)
-		v.push_back(a[i]);
-	}
-	return v;
-    }
-
-}
-
+const NoteStyleName NoteStyleFactory::DefaultStyle = "Classical";
 
 std::vector<NoteStyleName>
 NoteStyleFactory::getAvailableStyleNames()
@@ -109,14 +88,21 @@ NoteStyleFactory::getAvailableStyleNames()
 
     dir.setFilter(QDir::Files | QDir::Readable);
     QStringList files = dir.entryList();
+    bool foundDefault = false;
 
     for (QStringList::Iterator i = files.begin(); i != files.end(); ++i) {
 	if ((*i).length() > 4 && (*i).right(4) == ".xml") {
 	    QFileInfo fileInfo(QString("%1/%2").arg(styleDir).arg(*i));
 	    if (fileInfo.exists() && fileInfo.isReadable()) {
-		names.push_back(qstrtostr((*i).left((*i).length()-4)));
+		std::string styleName = qstrtostr((*i).left((*i).length()-4));
+		if (styleName == DefaultStyle) foundDefault = true;
+		names.push_back(styleName);
 	    }
 	}
+    }
+
+    if (!foundDefault) {
+	kdDebug(KDEBUG_AREA) << "NoteStyleFactory::getAvailableStyleNames: WARNING: Default style name \"" << DefaultStyle << "\" not found" << endl;
     }
 
     return names;
@@ -153,7 +139,7 @@ NoteStyleFactory::getStyleForEvent(Rosegarden::Event *event)
     if (event->get<String>(NotationProperties::NOTE_STYLE, styleName)) {
 	return getStyle(styleName);
     } else {
-	return getStyle(StandardNoteStyleNames::Classical);
+	return getStyle(DefaultStyle);
     }
 }
 
@@ -439,12 +425,12 @@ NoteStyle::setBaseStyle(NoteStyleName name)
 	m_baseStyle = NoteStyleFactory::getStyle(name);
 	if (m_baseStyle == this) m_baseStyle = 0;
     } catch (NoteStyleFactory::StyleUnavailable u) {
-	if (name != StandardNoteStyleNames::Classical) {
+	if (name != NoteStyleFactory::DefaultStyle) {
 	    kdDebug(KDEBUG_AREA)
 		<< "NoteStyle::setBaseStyle: Base style "
 		<< name << " not available, defaulting to "
-		<< StandardNoteStyleNames::Classical << endl;
-	    setBaseStyle(StandardNoteStyleNames::Classical);
+		<< NoteStyleFactory::DefaultStyle << endl;
+	    setBaseStyle(NoteStyleFactory::DefaultStyle);
 	} else {
 	    kdDebug(KDEBUG_AREA)
 		<< "NoteStyle::setBaseStyle: Base style "

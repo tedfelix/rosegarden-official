@@ -1,4 +1,57 @@
 
+20020729 task list
+==================
+
+ 1. Lyrics.  And a bouncing ball to track them with during playback.
+
+ 2. Better-calculated progress bars in notation view
+
+ 3. User docs / help
+
+ 4. "Make Notes Viable" (inc. across bar lines)
+
+ 5. Tempo up/down by 1bpm from-this-point keyboard accelerators?
+
+ 6. Tempo ruler usefulness: double-click to edit, click to select then
+    up/down to edit?
+
+ 7. Why tempo ruler no timesigs?
+ 
+ 8. Move notes by a small distance in time in the notation view
+
+ 9. Staff connect above/below (bracketing)
+
+10. Bar styles such as double, repeat
+
+11. Derive velocities from dynamics
+
+12. Make Rename Track a command
+
+13. Text in MIDI files into document config dialog
+
+14. Fix tuplets, plenty of bugs
+
+15. Likewise grace notes
+
+16. Test & debug paste types
+
+17. NormalizeRestsCommand extents?  (See item 14 in following list)
+
+18. Harmonizer
+
+19. Note styles: numeric note heads, fingerings as marks, etc
+
+20. GUI for note styles
+
+21. Really well-organised menus
+
+22. Some notation view menu actions into editing toolbars
+
+23. Show/hide annotations
+
+24. Thoroughly scan all following task lists to find more stuff to do...
+
+
 Post-0.1.5-and-a-bit task list
 ==============================
 
@@ -231,20 +284,20 @@ Post-0.1.5-and-a-bit task list
 
     b. Default size [DONE, needs tidying]
 
-    c. Default smoothing
+    c. Default smoothing [DONE]
 
-    d. Default stretch
+    d. Default stretch [DONE]
 
     e. Follow playback (perhaps this should be on a playback page
        along with similar options for other views)
 
-    f. Insert notes notation-style (with ties) or matrix-style?
+    f. Insert notes notation-style (with ties) or matrix-style? [DONE]
 
-    g. Auto-beam on insert
+    g. Auto-beam on insert [DONE]
 
-    h. Collapse rests after erase
+    h. Collapse rests after erase [DONE]
     
-    i. Default style
+    i. Default style [DONE except for wiring the damn thing up in insert code]
 
 37. Add Show/Hide Annotations; make it easier to edit an annotation,
     and possible to move and resize them
@@ -259,7 +312,7 @@ Post-0.1.5-and-a-bit task list
     durations in a property other than the event's basic duration, too.
     -- update: not sure this will work, modifying an event's absolute
     time at performance time seems like a bad idea; perhaps better go
-    for other approach (storing performance time/duration)
+    for other approach (storing performance time/duration) [DONE kinda]
 
 
 Post-0.1.4 task list

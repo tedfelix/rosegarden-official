@@ -57,7 +57,7 @@ using namespace Rosegarden::Accidentals;
 
 using namespace Rosegarden::BaseProperties;
 
-std::vector<double> NotationHLayout::m_availableSpacings;
+std::vector<int> NotationHLayout::m_availableSpacings;
 
 
 NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
@@ -67,7 +67,7 @@ NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
     m_totalWidth(0.),
     m_pageMode(false),
     m_pageWidth(0.),
-    m_spacing(1.0),
+    m_spacing(100),
     m_npf(npf),
     m_legatoQuantizer(legatoQuantizer),
     m_properties(properties),
@@ -82,17 +82,17 @@ NotationHLayout::~NotationHLayout()
     // empty
 }
 
-std::vector<double>
+std::vector<int>
 NotationHLayout::getAvailableSpacings()
 {
     if (m_availableSpacings.size() == 0) {
-        m_availableSpacings.push_back(0.3);
-        m_availableSpacings.push_back(0.6);
-        m_availableSpacings.push_back(0.85);
-        m_availableSpacings.push_back(1.0);
-        m_availableSpacings.push_back(1.3);
-        m_availableSpacings.push_back(1.7);
-        m_availableSpacings.push_back(2.2);
+        m_availableSpacings.push_back(30);
+        m_availableSpacings.push_back(60);
+        m_availableSpacings.push_back(85);
+        m_availableSpacings.push_back(100);
+        m_availableSpacings.push_back(130);
+        m_availableSpacings.push_back(170);
+        m_availableSpacings.push_back(220);
     }
     return m_availableSpacings;
 }
@@ -197,7 +197,7 @@ double NotationHLayout::getIdealBarWidth(StaffType &staff,
     kdDebug(KDEBUG_AREA) << "NotationHLayout::getIdealBarWidth: returning "
                          << w << endl;
 
-    w *= m_spacing;
+    w *= m_spacing / 100.0;
     if (w < (fixedWidth + baseWidth)) w = (double)(fixedWidth + baseWidth);
     return w;
 } 
@@ -468,7 +468,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 
 	if (m_progressDlg && (endTime > startTime)) {
 	    m_progressDlg->setCompleted
-		((barTimes.second - startTime) * 95 / (endTime - startTime));
+		((barTimes.second - startTime) * 50 / (endTime - startTime));
 	    m_progressDlg->processEvents();
 	    if (m_progressDlg->wasCancelled()) {
 		throw std::string("Action cancelled");
@@ -1568,7 +1568,7 @@ int NotationHLayout::getComfortableGap(Note::Type type) const
 
 int NotationHLayout::getBarMargin() const
 {
-    return (int)(m_npf->getBarMargin() * m_spacing);
+    return (int)(m_npf->getBarMargin() * m_spacing / 100.0);
 }
 
 int NotationHLayout::getPreBarMargin() const

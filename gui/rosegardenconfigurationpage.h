@@ -35,6 +35,7 @@ class RosegardenGUIDoc;
 class QTabWidget;
 class QLineEdit;
 class QPushButton;
+class QRadioButton;
 class QLabel;
 
 namespace Rosegarden
@@ -187,6 +188,13 @@ protected:
     QLabel *m_fontCopyrightLabel;
     QLabel *m_fontMappedByLabel;
     QLabel *m_fontTypeLabel;
+    QComboBox *m_spacing;
+    QComboBox *m_smoothing;
+    QRadioButton *m_colourQuantize;
+    QComboBox *m_noteStyle;
+    QComboBox *m_insertType;
+    QRadioButton *m_autoBeam;
+    QRadioButton *m_collapseRests;
 
     void populateSizeCombo(QComboBox *combo, std::string font, int dfltSize);
 };

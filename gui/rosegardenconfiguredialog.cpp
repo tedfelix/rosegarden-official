@@ -32,6 +32,7 @@
 #include <qlabel.h>
 #include <kfiledialog.h>
 #include <qpushbutton.h>
+#include <qradiobutton.h>
 #include <qlineedit.h>
 
 #include <klocale.h>
@@ -41,6 +42,8 @@
 #include "rosestrings.h"
 #include "rosegardenconfiguredialog.h"
 #include "rosegardenconfigurationpage.h"
+#include "notationhlayout.h"
+#include "notestyle.h"
 #include "rosegardenguidoc.h"
 #include "Composition.h"
 #include "Configuration.h"
@@ -130,22 +133,23 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
 
     frame = new QFrame(m_tabWidget);
     layout = new QGridLayout(frame,
-                             2, 3, // nbrow, nbcol
+                             1, 3, // nbrow, nbcol
                              10, 5);
 
-    layout->addWidget(new QLabel(i18n("External Audio Editor:"), frame),
+    layout->addWidget(new QLabel(i18n("External audio editor"), frame),
                       0, 0);
 
     QString externalAudioEditor = m_cfg->readEntry("externalaudioeditor",
                                                    "audacity");
 
     m_externalAudioEditorPath = new QLineEdit(externalAudioEditor, frame);
-    layout->addMultiCellWidget(m_externalAudioEditorPath, 1, 1, 1, 2);
+    m_externalAudioEditorPath->setMinimumWidth(200);
+    layout->addWidget(m_externalAudioEditorPath, 0, 1);
     
     QPushButton *changePathButton =
         new QPushButton(i18n("Choose..."), frame);
 
-    layout->addWidget(changePathButton, 1, 3);
+    layout->addWidget(changePathButton, 0, 2);
     connect(changePathButton, SIGNAL(released()), SLOT(slotFileDialog()));
 
 
@@ -290,6 +294,121 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     layout->addWidget(m_multiStaffSize, 3, 1);
 
     addTab(frame, i18n("Font"));
+
+    frame = new QFrame(m_tabWidget);
+    layout = new QGridLayout(frame, 3, 2, 10, 5);
+
+    layout->addWidget(new QLabel(i18n("Default spacing"), frame), 0, 0);
+    
+    m_spacing = new QComboBox(frame);
+    m_spacing->setEditable(false);
+
+    std::vector<int> s = NotationHLayout::getAvailableSpacings();
+    int defaultSpacing = m_cfg->readNumEntry("spacing", 100);
+
+    for (std::vector<int>::iterator i = s.begin(); i != s.end(); ++i) {
+
+	QString text("%1 %");
+	if (*i == 100) text = "%1 % (normal)";
+        m_spacing->insertItem(text.arg(*i));
+
+	if (*i == defaultSpacing) {
+	    m_spacing->setCurrentItem(m_spacing->count() - 1);
+	}
+    }
+
+    layout->addWidget(m_spacing, 0, 1);
+
+    layout->addWidget(new QLabel(i18n("Default smoothing"), frame), 1, 0);
+    
+    m_smoothing = new QComboBox(frame);
+    m_smoothing->setEditable(false);
+
+    Note::Type defaultSmoothing =
+	m_cfg->readNumEntry("smoothing", Note::Shortest);
+
+    NotePixmapFactory npf;
+    for (Note::Type type = Note::Shortest; type <= Note::Longest; ++type) {
+	Note note(type);
+	QPixmap pmap = npf.makeToolbarPixmap
+	    (strtoqstr((std::string("menu-") + note.getReferenceName())));
+	m_smoothing->insertItem(pmap, strtoqstr(note.getEnglishName()));
+	if (defaultSmoothing == type) {
+	    m_smoothing->setCurrentItem(m_smoothing->count() - 1);
+	}
+    }
+
+    layout->addWidget(m_smoothing, 1, 1);
+    
+    m_colourQuantize = new QRadioButton
+	(i18n("Show smoothed notes in a different colour"), frame);
+    bool defaultColourQuantize = m_cfg->readBoolEntry("colourquantize", true);
+    m_colourQuantize->setChecked(defaultColourQuantize);
+
+//    layout->addMultiCellWidget(m_colourQuantize,
+//			       2, 2, // fromRow, toRow,
+//			       0, 1); // fromCol, toCol
+    layout->addWidget(m_colourQuantize, 2, 1);
+    
+    addTab(frame, i18n("Layout"));
+
+    frame = new QFrame(m_tabWidget);
+    layout = new QGridLayout(frame, 4, 2, 10, 5);
+
+    layout->addWidget
+	(new QLabel(i18n("Default note style for new notes"), frame), 0, 0);
+
+    m_noteStyle = new QComboBox(frame);
+    m_noteStyle->setEditable(false);
+
+    QString defaultStyle =
+	m_cfg->readEntry("style", strtoqstr(NoteStyleFactory::DefaultStyle));
+    std::vector<NoteStyleName> styles
+	(NoteStyleFactory::getAvailableStyleNames());
+    
+    for (std::vector<NoteStyleName>::iterator i = styles.begin();
+	 i != styles.end(); ++i) {
+
+	QString styleQName(strtoqstr(*i));
+	m_noteStyle->insertItem(styleQName);
+	if (styleQName == defaultStyle) {
+	    m_noteStyle->setCurrentItem(m_noteStyle->count() - 1);
+	}
+    }
+
+    layout->addWidget(m_noteStyle, 0, 1);
+
+    layout->addWidget
+	(new QLabel(i18n("When inserting notes..."), frame), 1, 0);
+
+    int defaultInsertType = m_cfg->readNumEntry("inserttype", 0);
+
+    m_insertType = new QComboBox(frame);
+    m_insertType->setEditable(false);
+    m_insertType->insertItem
+	(i18n("Split notes into ties to make durations match"));
+    m_insertType->insertItem(i18n("Ignore existing durations"));
+    m_insertType->setCurrentItem(defaultInsertType);
+
+    layout->addWidget(m_insertType, 1, 1);
+
+    bool autoBeam = m_cfg->readBoolEntry("autobeam", true);
+
+    m_autoBeam = new QRadioButton
+	(i18n("Auto-beam on insert when appropriate"), frame);
+    m_autoBeam->setChecked(autoBeam);
+//    layout->addMultiCellWidget(m_autoBeam, 2, 2, 0, 1);
+    layout->addWidget(m_autoBeam, 2, 1);
+
+    bool collapse = m_cfg->readBoolEntry("collapse", false);
+
+    m_collapseRests = new QRadioButton
+	(i18n("Collapse rests after erase"), frame);
+    m_collapseRests->setChecked(collapse);
+//    layout->addMultiCellWidget(m_collapseRests, 3, 3, 0, 1);
+    layout->addWidget(m_collapseRests, 3, 1);
+
+    addTab(frame, i18n("Editing"));
 }
 
 void
@@ -349,6 +468,16 @@ NotationConfigurationPage::apply()
     m_cfg->writeEntry("multistaffnotesize",
 		      m_multiStaffSize->currentText().toUInt());
 
+    std::vector<int> s = NotationHLayout::getAvailableSpacings();
+    m_cfg->writeEntry("spacing", s[m_spacing->currentItem()]);
+
+    m_cfg->writeEntry("smoothing",
+		      m_smoothing->currentItem() + Note::Shortest);
+    m_cfg->writeEntry("colourquantize", m_colourQuantize->isChecked());
+    m_cfg->writeEntry("style", m_noteStyle->currentText());
+    m_cfg->writeEntry("inserttype", m_insertType->currentItem());
+    m_cfg->writeEntry("autobeam", m_autoBeam->isChecked());
+    m_cfg->writeEntry("collapse", m_collapseRests->isChecked());
 }
 
 
@@ -562,7 +691,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
 				 .arg(doc->getComposition().getNbTracks()),
 				 frame), 2, 1);
 
-    layout->addWidget(new QLabel(i18n("Copyright:"), frame), 3, 0);
+    layout->addWidget(new QLabel(i18n("Copyright"), frame), 3, 0);
     m_copyright = new QLineEdit
 	(strtoqstr(doc->getComposition().getCopyrightNote()), frame);
     m_copyright->setMinimumWidth(300);
@@ -596,7 +725,7 @@ AudioConfigurationPage::AudioConfigurationPage(RosegardenGUIDoc *doc,
     QFrame *frame = new QFrame(m_tabWidget);
     QGridLayout *layout = new QGridLayout(frame, 1, 4,
                                           10, 5);
-    layout->addWidget(new QLabel(i18n("Audio file path:"), frame), 0, 0);
+    layout->addWidget(new QLabel(i18n("Audio file path"), frame), 0, 0);
     m_path = new QLineEdit(QString(afm.getAudioPath().c_str()), frame);
     m_path->setMinimumWidth(200);
     layout->addMultiCellWidget(m_path, 0, 1, 0, 2);

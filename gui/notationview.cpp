@@ -199,7 +199,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	 NotePixmapFactory::getDefaultSize(m_fontName));
 
     setupActions();
-    initFontToolbar(m_legatoQuantizer->getUnit());
+    initFontToolbar();
     initStatusBar();
     
     setBackgroundMode(PaletteBase);
@@ -209,11 +209,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     
     setCanvasView(new NotationCanvasView(*this, m_horizontalScrollBar,
                                          tCanvas, getCentralFrame()));
-
-    //
-    // Window appearance (options, title...)
-    //
-    readOptions();
 
     if (segments.size() == 1) {
         setCaption(QString("%1 - Segment Track #%2")
@@ -251,6 +246,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_bottomBarButtons = new BarButtons(&m_hlayout, 20.0, 25,
                                         true, getCentralFrame());
     setBottomBarButtons(m_bottomBarButtons);
+
+    readOptions();
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new NotationStaff(canvas(), segments[i], i,
@@ -474,6 +471,9 @@ void NotationView::slotSaveOptions()
     m_config->writeEntry("Show Font Toolbar",        getToggleAction("show_font_toolbar")->isChecked());
     m_config->writeEntry("Show Accidentals Toolbar", getToggleAction("show_accidentals_toolbar")->isChecked());
 
+    m_config->writeEntry("Show Chord Name Ruler", m_chordNamesVisible);
+    m_config->writeEntry("Show Tempo Ruler", m_temposVisible);
+
     toolBar("notesToolBar")->saveSettings(m_config, "Notation Options notesToolBar");
     toolBar("restsToolBar")->saveSettings(m_config, "Notation Options restsToolBar");
     toolBar("clefsToolBar")->saveSettings(m_config, "Notation Options clefsToolBar");
@@ -503,6 +503,22 @@ void NotationView::readOptions()
     opt = m_config->readBoolEntry("Show Font Toolbar", true);
     getToggleAction("show_font_toolbar")->setChecked(opt);
     toggleNamedToolBar("fontToolBar", &opt);
+
+    opt = m_config->readBoolEntry("Show Accidentals Toolbar", true);
+    getToggleAction("show_accidentals_toolbar")->setChecked(opt);
+    toggleNamedToolBar("accidentalsToolBar", &opt);
+
+    opt = m_config->readBoolEntry("Show Chord Name Ruler", true);
+    if (opt) m_chordNameRuler->show();
+    else m_chordNameRuler->hide();
+    m_chordNamesVisible = opt;
+    getToggleAction("label_chords")->setChecked(opt);
+
+    opt = m_config->readBoolEntry("Show Tempo Ruler", false);
+    if (opt) m_tempoRuler->show();
+    else m_tempoRuler->hide();
+    m_temposVisible = opt;
+    getToggleAction("display_tempo_changes")->setChecked(opt);
 
     opt = m_config->readBoolEntry("Show Accidentals Toolbar", true);
     getToggleAction("show_accidentals_toolbar")->setChecked(opt);
@@ -800,30 +816,6 @@ void NotationView::setupActions()
                 SLOT(slotTransformsRestoreStems()), actionCollection(),
                 "restore_stems");
 
-    new KAction(i18n(TransformsMenuChangeStyleCommand::getGlobalName
-		(StandardNoteStyleNames::Classical)),
-		0, this,
-		SLOT(slotTransformsClassicalStyle()), actionCollection(),
-		"style_classical");
-
-    new KAction(i18n(TransformsMenuChangeStyleCommand::getGlobalName
-		(StandardNoteStyleNames::Cross)),
-		0, this,
-		SLOT(slotTransformsCrossStyle()), actionCollection(),
-		"style_x");
-
-    new KAction(i18n(TransformsMenuChangeStyleCommand::getGlobalName
-		(StandardNoteStyleNames::Mensural)),
-		0, this,
-		SLOT(slotTransformsMensuralStyle()), actionCollection(),
-		"style_mensural");
-
-    new KAction(i18n(TransformsMenuChangeStyleCommand::getGlobalName
-		(StandardNoteStyleNames::Triangle)),
-		0, this,
-		SLOT(slotTransformsTriangleStyle()), actionCollection(),
-		"style_triangle");
-
     new KAction(i18n(TransformsMenuTransposeCommand::getGlobalName(1)), 0,
 		Key_Up, this,
                 SLOT(slotTransformsTransposeUp()), actionCollection(),
@@ -1036,12 +1028,9 @@ NotationView::getStaff(const Segment &segment)
     return 0;
 }
 
-void NotationView::initFontToolbar(int legatoUnit)
+void NotationView::initFontToolbar()
 {
     KToolBar *fontToolbar = toolBar("fontToolBar");
-
-    kdDebug(KDEBUG_AREA) << "NotationView::initFontToolbar: legatoUnit is "
-                         << legatoUnit << endl;
     
     if (!fontToolbar) {
         kdDebug(KDEBUG_AREA)
@@ -1091,26 +1080,42 @@ void NotationView::initFontToolbar(int legatoUnit)
 
     new QLabel(i18n("  Spacing:  "), fontToolbar);
 
-    std::vector<double> spacings = NotationHLayout::getAvailableSpacings();
-    m_spacingSlider = new ZoomSlider<double>
-        (spacings, 1.0, QSlider::Horizontal, fontToolbar);
+    KConfig *config = kapp->config();
+    config->setGroup("Notation Options");
+    int defaultSpacing = config->readNumEntry("spacing", 100);
+
+    std::vector<int> spacings = NotationHLayout::getAvailableSpacings();
+    m_spacingSlider = new ZoomSlider<int>
+        (spacings, defaultSpacing, QSlider::Horizontal, fontToolbar);
     connect(m_spacingSlider, SIGNAL(valueChanged(int)),
             this, SLOT(slotChangeSpacing(int)));
+    m_hlayout.setSpacing(defaultSpacing);
 
     new QLabel(i18n("  Smoothing:  "), fontToolbar);
 
+    Note::Type defaultSmoothingType = 
+	config->readNumEntry("smoothing", Note::Shortest);
+    timeT defaultSmoothing = Note(defaultSmoothingType).getDuration();
+
     if (m_legatoDurations.size() == 0) {
         for (int type = Note::Shortest; type <= Note::Longest; ++type) {
-            m_legatoDurations.push_back
-                ((int)(Note(type).getDuration()));
+            m_legatoDurations.push_back((int)(Note(type).getDuration()));
         }
     }
     QSlider *m_smoothingSlider = new ZoomSlider<int>
-        (m_legatoDurations, legatoUnit, QSlider::Horizontal, fontToolbar);
+        (m_legatoDurations, defaultSmoothing,
+	 QSlider::Horizontal, fontToolbar);
     connect(m_smoothingSlider, SIGNAL(valueChanged(int)),
             this, SLOT(slotChangeLegato(int)));
 
-    slotChangeFont(m_fontName, m_fontSize);
+    Rosegarden::Quantizer q(Rosegarden::Quantizer::RawEventData,
+			    getViewLocalPropertyPrefix() + "Q",
+			    Rosegarden::Quantizer::LegatoQuantize,
+			    defaultSmoothing);
+    *m_legatoQuantizer = q;
+
+//    slotChangeLegato(defaultSmoothingType);
+//    slotChangeFont(m_fontName, m_fontSize);
 }
 
 void NotationView::initStatusBar()

@@ -77,7 +77,7 @@ NotationView::slotTestClipboard()
 void
 NotationView::slotChangeSpacing(int n)
 {
-    std::vector<double> spacings = m_hlayout.getAvailableSpacings();
+    std::vector<int> spacings = m_hlayout.getAvailableSpacings();
     if (n >= (int)spacings.size()) n = spacings.size() - 1;
     m_hlayout.setSpacing(spacings[n]);
 
@@ -182,8 +182,6 @@ NotationView::slotChangeFontSizeFromIndex(int n)
 void
 NotationView::slotChangeFont(std::string newName, int newSize)
 {
-    kdDebug(KDEBUG_AREA) << "NotationView::changeResolution(" << newSize << ")\n";
-
     if (newName == m_fontName && newSize == m_fontSize) return;
 
     NotePixmapFactory* npf = 0;
@@ -715,46 +713,6 @@ void NotationView::slotSetStyleFromAction()
 	KMessageBox::sorry
 	    (this, QString(i18n("Unknown style action %1").arg(name)));
     }
-}
-
-void NotationView::slotTransformsClassicalStyle()
-{
-    if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Changing to Classical style..."), statusBar());
-
-    addCommandToHistory(new TransformsMenuChangeStyleCommand
-                        (StandardNoteStyleNames::Classical,
-			 *m_currentEventSelection));
-}
-
-void NotationView::slotTransformsCrossStyle()
-{
-    if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Changing to Cross style..."), statusBar());
-
-    addCommandToHistory(new TransformsMenuChangeStyleCommand
-                        (StandardNoteStyleNames::Cross,
-			 *m_currentEventSelection));
-}
-
-void NotationView::slotTransformsTriangleStyle()
-{
-    if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Changing to Triangle style..."), statusBar());
-
-    addCommandToHistory(new TransformsMenuChangeStyleCommand
-                        (StandardNoteStyleNames::Triangle,
-			 *m_currentEventSelection));
-}
-
-void NotationView::slotTransformsMensuralStyle()
-{
-    if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Changing to Mensural style..."), statusBar());
-
-    addCommandToHistory(new TransformsMenuChangeStyleCommand
-                        (StandardNoteStyleNames::Mensural,
-			 *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsTranspose()

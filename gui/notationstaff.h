@@ -323,6 +323,7 @@ protected:
     Rosegarden::Quantizer *m_legatoQuantizer;
     const NotationProperties &m_properties;
     RosegardenProgressDialog *m_progressDlg;
+    bool m_colourQuantize;
 };
 
 #endif

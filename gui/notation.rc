@@ -60,13 +60,6 @@ etc
 
 <Menu name="Notes">
 <text>&amp;Notes</text>
-  <Menu name="Style">
-    <text>Note &amp;Style</text>
-    <Action name="style_classical"/>
-    <Action name="style_x"/>
-    <Action name="style_triangle"/>
-    <Action name="style_mensural"/>
-  </Menu>
   <Action name="note_style_actionmenu"/>
   <Menu name="Stems">
     <text>S&amp;tem Direction</text>
@@ -329,10 +322,6 @@ etc
 
 <State name="have_rests_in_selection">
   <enable>
-    <Action name="style_classical"/>
-    <Action name="style_x"/>
-    <Action name="style_triangle"/>
-    <Action name="style_mensural"/>
     <Action name="note_style_actionmenu"/>
     <Action name="remove_marks"/>
     <Action name="add_pause"/>
@@ -363,10 +352,6 @@ etc
     <Action name="slashes_3"/>
     <Action name="slashes_4"/>
     <Action name="slashes_5"/>
-    <Action name="style_classical"/>
-    <Action name="style_x"/>
-    <Action name="style_triangle"/>
-    <Action name="style_mensural"/>
     <Action name="note_style_actionmenu"/>
     <Action name="remove_marks"/>
     <Action name="add_accent"/>

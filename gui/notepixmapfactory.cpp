@@ -151,8 +151,7 @@ void
 NotePixmapFactory::init(std::string fontName, int size)
 {
     try {
-	m_style = NoteStyleFactory::getStyle
-	    (StandardNoteStyleNames::Classical);
+	m_style = NoteStyleFactory::getStyle(NoteStyleFactory::DefaultStyle);
     } catch (NoteStyleFactory::StyleUnavailable u) {
 	KMessageBox::error(0, i18n(strtoqstr(u.reason)));
 	throw;

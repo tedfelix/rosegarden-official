@@ -108,14 +108,14 @@ public:
     virtual double getPageWidth() { return m_pageWidth; }
 
     /**
-     * Gets the current spacing factor (1.0 == "normal" spacing)
+     * Gets the current spacing factor (100 == "normal" spacing)
      */
-    double getSpacing() const { return m_spacing; }
+    int getSpacing() const { return m_spacing; }
 
     /**
-     * Sets the current spacing factor (1.0 == "normal" spacing)
+     * Sets the current spacing factor (100 == "normal" spacing)
      */
-    void setSpacing(double spacing) { m_spacing = spacing; }
+    void setSpacing(int spacing) { m_spacing = spacing; }
 
     /**
      * Gets the range of "standard" spacing factors (you can
@@ -123,7 +123,7 @@ public:
      * have a standard list for GUI use).  The only guaranteed
      * property of the returned list is that 1.0 will be in it.
      */
-    static std::vector<double> getAvailableSpacings();
+    static std::vector<int> getAvailableSpacings();
 
     /**
      * Returns the total length of all elements once layout is done
@@ -351,7 +351,7 @@ protected:
     int getPreBarMargin() const;
     int getPostBarMargin() const;
     int getFixedItemSpacing() const {
-	return (int)((m_npf->getNoteBodyWidth() / 5) * m_spacing);
+	return (int)((m_npf->getNoteBodyWidth() / 5) * m_spacing / 100.0);
     }
 
     //--------------- Data members ---------------------------------
@@ -364,10 +364,10 @@ protected:
     double m_totalWidth;
     bool m_pageMode;
     double m_pageWidth;
-    double m_spacing;
+    int m_spacing;
     NotePixmapFactory *m_npf;
 
-    static std::vector<double> m_availableSpacings;
+    static std::vector<int> m_availableSpacings;
 
     Rosegarden::Quantizer *m_legatoQuantizer;
     const NotationProperties &m_properties;

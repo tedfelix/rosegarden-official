@@ -68,25 +68,11 @@ struct NoteStyleNameHash {
 };
 
 
-namespace StandardNoteStyleNames
-{
-    extern const NoteStyleName Classical;
-    extern const NoteStyleName Cross;
-    extern const NoteStyleName Triangle;
-    extern const NoteStyleName Mensural;
-
-    /**
-     * Get the predefined note head styles (i.e. the ones listed
-     * above) in their defined order.
-     */
-    extern std::vector<NoteStyleName> getStandardStyles();
-}
-
-
 class NoteStyleFactory
 {
 public:
     static std::vector<NoteStyleName> getAvailableStyleNames();
+    static const NoteStyleName DefaultStyle;
 
     static NoteStyle *getStyle(NoteStyleName name);
     static NoteStyle *getStyleForEvent(Rosegarden::Event *event);

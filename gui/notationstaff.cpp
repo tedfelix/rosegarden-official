@@ -23,6 +23,8 @@
 
 #include <kmessagebox.h>
 #include <klocale.h>
+#include <kapp.h>
+#include <kconfig.h>
 
 #include "notationstaff.h"
 #include "qcanvassimplesprite.h"
@@ -82,6 +84,10 @@ NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment, int id,
     m_progressDlg(0)
 {
     changeFont(fontName, resolution);
+    
+    KConfig *config = kapp->config();
+    config->setGroup("Notation Options");
+    m_colourQuantize = config->readBoolEntry("colourquantize", true);
 }
 
 NotationStaff::~NotationStaff()
@@ -650,7 +656,8 @@ NotationStaff::renderSingleElement(NotationElement *elt,
     static NotePixmapParameters restParams(Note::Crotchet, 0);
 
     try {
-	m_notePixmapFactory->setNoteStyle(NoteStyleFactory::getStyleForEvent(elt->event()));
+	m_notePixmapFactory->setNoteStyle
+	    (NoteStyleFactory::getStyleForEvent(elt->event()));
 
     } catch (NoteStyleFactory::StyleUnavailable u) {
 
@@ -863,7 +870,7 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
     (void)(elt->event()->get<Int>(m_properties.SLASHES, slashes));
 
     bool quantized = false;
-    if (!elt->isTuplet()) {
+    if (m_colourQuantize && !elt->isTuplet()) {
 	timeT absTime =
 	    m_legatoQuantizer->getQuantizedAbsoluteTime(elt->event());
 	timeT duration =

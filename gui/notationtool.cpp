@@ -27,6 +27,8 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kaction.h>
+#include <kapp.h>
+#include <kconfig.h>
 
 #include "Event.h"
 #include "Segment.h"
@@ -164,11 +166,18 @@ NoteInserter::NoteInserter(NotationView* view)
 {
     QIconSet icon;
 
+    KConfig *config = kapp->config();
+    config->setGroup("Notation Options");
+    m_autoBeam = config->readBoolEntry("autobeam", true);
+    m_matrixInsertType = (config->readNumEntry("inserttype", 0) > 0);
+    m_defaultStyle = config->readEntry
+	("style", strtoqstr(NoteStyleFactory::DefaultStyle));
+
     KToggleAction *autoBeamAction =
 	new KToggleAction(i18n("Auto-Beam when appropriate"), 0, this,
 			  SLOT(slotToggleAutoBeam()), actionCollection(),
 			  "toggle_auto_beam");
-    autoBeamAction->setChecked(true);
+    autoBeamAction->setChecked(m_autoBeam);
 
     for (unsigned int i = 0; i < 6; ++i) {
 
@@ -446,7 +455,10 @@ NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
     NoteInsertionCommand *insertionCommand =
 	new NoteInsertionCommand
         (segment, time, endTime, note, pitch, accidental,
-	 m_autoBeam && !m_tupletMode);
+	 m_autoBeam && !m_tupletMode,
+	 m_matrixInsertType,
+	 m_defaultStyle);
+
     KCommand *activeCommand = insertionCommand;
 
     if (m_tupletMode) {
@@ -796,6 +808,10 @@ NotationEraser::NotationEraser(NotationView* view)
     : NotationTool("NotationEraser", view),
       m_collapseRest(false)
 {
+    KConfig *config = kapp->config();
+    config->setGroup("Notation Options");
+    m_collapseRest = config->readBoolEntry("collapse", false);
+
     new KToggleAction(i18n("Collapse rests after erase"), 0, this,
                       SLOT(slotToggleRestCollapse()), actionCollection(),
                       "toggle_rest_collapse");

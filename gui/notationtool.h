@@ -27,6 +27,7 @@
 
 #include "edittool.h"
 #include "notationelement.h"
+#include "notestyle.h"
 
 class QCanvasRectangle;
 
@@ -204,6 +205,8 @@ protected:
     Rosegarden::Note::Type m_noteType;
     unsigned int m_noteDots;
     bool m_autoBeam;
+    bool m_matrixInsertType;
+    NoteStyleName m_defaultStyle;
     bool m_tupletMode;
 
     bool m_clickHappened;

@@ -37,7 +37,9 @@ public:
 			 Rosegarden::Note note,
 			 int pitch,
 			 Rosegarden::Accidental accidental,
-			 bool autoBeam);
+			 bool autoBeam,
+			 bool matrixType,
+			 NoteStyleName noteStyle);
     virtual ~NoteInsertionCommand();
 
     Rosegarden::Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
@@ -50,6 +52,8 @@ protected:
     int m_pitch;
     Rosegarden::Accidental m_accidental;
     bool m_autoBeam;
+    bool m_matrixType;
+    NoteStyleName m_noteStyle;
 
     Rosegarden::Event *m_lastInsertedEvent;
 };

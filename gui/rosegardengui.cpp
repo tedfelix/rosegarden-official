@@ -755,7 +755,7 @@ void RosegardenGUIApp::readOptions()
     m_viewTracksToolBar->setChecked(opt);
     slotToggleTracksToolBar();
 
-    opt = m_config->readBoolEntry("Show Transport", false);
+    opt = m_config->readBoolEntry("Show Transport", true);
     m_viewTransport->setChecked(opt);
     slotToggleTransport();
 

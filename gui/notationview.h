@@ -300,10 +300,6 @@ public slots:
     void slotTransformsStemsUp();
     void slotTransformsStemsDown();
     void slotTransformsRestoreStems();
-    void slotTransformsClassicalStyle();
-    void slotTransformsCrossStyle();
-    void slotTransformsTriangleStyle();
-    void slotTransformsMensuralStyle();
     void slotTransformsTranspose();
     void slotTransformsTransposeUp();
     void slotTransformsTransposeUpOctave();
@@ -441,7 +437,7 @@ public slots:
     void slotChangeFontSizeFromIndex(int n);
 
     /// Changes the hlayout spacing of the staffs on the view
-    void slotChangeSpacing(int newSpacing);
+    void slotChangeSpacing(int newSpacingIndex);
 
     /// Changes the display quantization of the staffs on the view
     void slotChangeLegato(int newLegatoIndex);
@@ -536,7 +532,7 @@ protected:
     /**
      * setup the "zoom" toolbar
      */
-    void initFontToolbar(int legatoUnit);
+    void initFontToolbar();
 
     /**
      * Helper function to toggle a toolbar given its name
@@ -659,7 +655,7 @@ protected:
 
     QComboBox *m_fontCombo;
     ZoomSlider<int> *m_fontSizeSlider;
-    ZoomSlider<double> *m_spacingSlider;
+    ZoomSlider<int> *m_spacingSlider;
     ZoomSlider<int> *m_smoothingSlider;
     KActionMenu *m_fontSizeActionMenu;
 

@@ -412,52 +412,75 @@
 	  editor, but it is primarily a sequencer and editor for
 	  performed music.  And in performance, of course, the times
 	  and durations of notes are rarely as precise as they are on
-	  a printed score.  This means that Rosegarden often has to do
-	  a lot of rounding (for which we loosely use the term
-	  quantization) of the basic note times and durations when
-	  attempting to make meaningful notes to show in the notation
-	  editor.  This initial quantization is normally done only for
-	  notation display: it doesn't affect the notes that play, or
-	  edit in other views such as the matrix.
+	  a printed score.
+        </para>
+
+        <para>
+          This means that Rosegarden often has to do a lot of rounding
+          of the basic note times and durations when attempting to
+          make meaningful notes to show in the notation editor.  This
+          is a type of quantization, but we refer to this quantization
+          that's carried out solely for the purposes of notation
+          display as "smoothing".  Smoothing doesn't affect the notes
+          that play, or that you edit in other views such as the
+          matrix.  The smoothing algorithm is also rather specialised
+          (and some might say relatively ineffectual) because it tries
+          to avoid doing any real damage: for example, a note that is
+          apparently a little "too short", followed by a short rest,
+          will often be rounded up to fill the rest, but the same
+          note followed by a short note instead will be left as it is.
 	</para>
 
 	<para>
-	  You can see which
-	  notes have required quantization (either of start time or
-	  duration) because they are shown in green on the score.  It
-	  is also possible to increase the quantization level in various
-	  ways:
+	  You can see which notes have required smoothing (either of
+	  start time or duration) because they are shown in green on
+	  the score, unless you have switched this behaviour off in
+	  the Rosegarden configuration dialog.
 	</para>
+
+	<para>
+	  The default smoothing level is fairly timid, and you may
+	  find that it still leaves the music in a fairly
+	  unintelligible state, with notes that should be chords
+	  displayed as overlapping individual notes, with notes
+	  truncated and followed by tiny rests, and so on --
+	  particularly if you're editing music that was recorded live.
+	  If so, you have two options:
+        </para>
 
 	<variablelist>
 
 	  <varlistentry>
-	    <term>Smoothing</term>
+	    <term>Increase the smoothing level</term>
 	    <listitem>
 	      <para>
-		Smoothing is a mechanism by which Rosegarden tries to
-		make sensible guesses about the intended durations of
-		notes, with the sole aim of making them look better in
-		score notation.  For example, a note that is
-		apparently a little "too short", followed by a short
-		rest, will often be rounded up to fill the rest -- but
-		the same note followed by a short note instead will
-		be left as it is.
-	      </para>
-	      <para>
 		You can increase the level of smoothing with the
-		smoothing slider on the layout toolbar.  Smoothing
-		does not affect the underlying notes, only the display.
+		smoothing slider on the layout toolbar or the
+		Smoothing submenu options on the View menu.  The
+		default is the minimum smoothing level, which never
+		rounds a note's duration by more than the length of
+		the shortest possible note (a hemidemisemiquaver).
 	      </para>
 	    </listitem>
 	  </varlistentry>
 
 	  <varlistentry>
-	    <term>Selective quantization</term>
+	    <term>Do some real quantization</term>
 	    <listitem>
 	      <para>
-		If you really do want to quantize the underlying
-		notes, you can use the <!-- !!!link linkend="commands-nv-transforms-quantize" -->Quantize<!-- /link --> menu function, which operates on a selection of notes (see <!-- !!! link linkend="nv-selection" -->Selection<!-- /link -->).
+	        The alternative is to quantize the underlying notes,
+	        giving you more flexibility and power over the
+	        rounding that is used, but meaning that the notes you
+	        hear (and edit in the matrix editor) will acquire a
+	        perhaps undesirable precision.  To do so, you can use
+	        the <!-- !!!link
+	        linkend="commands-nv-transforms-quantize"
+	        -->Quantize<!-- /link --> menu function, which
+	        operates on a selection of notes (see <!-- !!! link
+	        linkend="nv-selection" -->Selection<!-- /link -->).  The
+		notation editor will also pick up on any changes in  
+		quantization made using the Quantize dropdown on the
+		main window or the matrix editor.
 	      </para>
 	    </listitem>
 	  </varlistentry>
