@@ -80,7 +80,7 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
     {
         // default number of Tracks
         //
-        tracks = 10;
+        tracks = 64;
 
         // Create the Tracks on the Composition
         //
@@ -120,10 +120,10 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     canvas->setBackgroundColor(RosegardenGUIColours::SegmentCanvas);
 
     int trackLabelWidth = 156;
-    int trackLabelOffset = 0;//!!!3;
+//     int trackLabelOffset = 0;//!!!3;
 
     int barButtonsHeight = 25;
-    int barButtonsOffset = 0;//!!!2;
+//     int barButtonsOffset = 0;//!!!2;
 
     //
     // Top Bar Buttons
