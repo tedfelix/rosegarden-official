@@ -284,9 +284,6 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 					 100,
 					 (QWidget*)parent());
 
-        connect(progressDlg, SIGNAL(destroyedProgressDialog()),
-                SLOT(slotProgressDialogDead()));
-
 	okay = xmlParse(fileContents, errMsg, progressDlg);
 
         if (m_progressDialogDead == false)

@@ -175,6 +175,10 @@ public:
     std::string substituteHomeForTilde(const std::string &path);
     std::string substituteTildeForHome(const std::string &path);
 
+    // Show entries for debug purposes
+    //
+    void print(); 
+
 private:
     std::string getFileInPath(const std::string &file);
 

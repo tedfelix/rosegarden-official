@@ -32,6 +32,7 @@
 #include "AudioDevice.h"
 #include "Instrument.h"
 #include "widgets.h"
+#include "dialogs.h"
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -425,8 +426,11 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
                 if(getAudioFileManager().fileExists(audioFileId) == false)
                 {
-                    m_errorString = i18n("Cannot find audio file reference");
-                    return false;
+                    // We don't report an error as this audio file might've
+                    // been excluded deliberately as we could't actually
+                    // find the audio file itself.
+                    //
+                    return true;
                 }
 
                 // Create an Audio segment and add its reference
@@ -501,9 +505,9 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
                                          qstrtostr(file),
                                          id.toInt()) == false)
         {
-            QString message = i18n("Couldn't find audio file \"") 
-                              + file + QString("\"");
-
+            // Destroy the progress dialog - nasty but for the moment
+            // there's no way around it.
+            //
             if (m_progress)
             {
                 m_progress->destroy();
@@ -512,15 +516,43 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
                 m_doc->progressDialogDead();
             }
 
-            int find  = 
-                KMessageBox::questionYesNo((RosegardenGUIApp *)m_doc->parent(),
-                                            message);
+            // Create a locate file dialog - give it the file name
+            // and the AudioFileManager path that we've already
+            // tried.  If we manually locate the file then we reset
+            // the audiofilepath to the new value and see if this
+            // helps us locate the rest of the files.
+            //
 
-            if (find == KMessageBox::Yes)
-                cout << "YES" << endl;
+            QString newFilename = "";
+            QString newPath = "";
 
-            m_errorString = i18n("Couldn't find audio file " + file);
-            return false;
+            do
+            {
+
+                FileLocateDialog *fL =
+                    new FileLocateDialog((RosegardenGUIApp *)m_doc->parent(),
+                        file,
+                        QString(getAudioFileManager().getAudioPath().c_str()));
+
+                if(fL->exec() == QDialog::Accepted)
+                {
+                    newFilename = fL->getFilename();
+                    newPath = fL->getDirectory();
+                }
+                else
+                {
+                    // just skip the file
+                    break;
+                }
+
+            } while(getAudioFileManager().insertFile(qstrtostr(label),
+                                            qstrtostr(newFilename),
+                                            id.toInt()) == false);
+
+            if (newPath != "")
+                getAudioFileManager().setAudioPath(qstrtostr(newPath));
+
+            getAudioFileManager().print();
         }
         
     } else if (lcName == "audiopath") {

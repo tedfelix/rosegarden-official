@@ -712,6 +712,26 @@ AudioFileManager::drawHighlightedPreview(unsigned int id,
 }
 
 
+void
+AudioFileManager::print()
+{
+    std::cout << "AudioFileManager - " << m_audioFiles.size() << " entr";
+
+    if (m_audioFiles.size() == 1)
+        std::cout << "y";
+    else
+        std::cout << "ies";
+
+    std::cout << std::endl << std::endl;
+
+    std::vector<AudioFile*>::iterator it;
+    for (it = m_audioFiles.begin(); it != m_audioFiles.end(); it++)
+    {
+        std::cout << (*it)->getId() << " : " << (*it)->getName()
+                  << " : \"" << (*it)->getFilename() << "\"" << std::endl;
+    }
+}
+
 }
 
 

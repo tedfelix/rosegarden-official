@@ -49,6 +49,7 @@
 
 #include <klocale.h>
 #include <karrowbutton.h>
+#include <kfiledialog.h>
 
 using Rosegarden::TimeSignature;
 using Rosegarden::Note;
@@ -2136,4 +2137,62 @@ RescaleDialog::slotToChanged(int i)
 		       arg(perTenThou/100).
 		       arg(perTenThou%100));
 }
+
+FileLocateDialog::FileLocateDialog(QWidget *parent,
+                                   const QString &file,
+                                   const QString &path):
+    KDialogBase(parent, "", true,
+                i18n("Locate audio file"),
+                User1|User2,
+                Ok,
+                false,
+                i18n("&Skip"),
+                i18n("&Locate")),
+                m_file(file),
+                m_path(path)
+{
+    QHBox *w = makeHBoxMainWidget();
+    QString label =
+        i18n("Can't find file \"") + m_file + QString("\".\n") +
+        i18n("Would you like to try and locate this file or skip it?");
+
+    QLabel *labelW = new QLabel(label, w);
+    labelW->setAlignment(Qt::AlignHCenter);
+    labelW->setMinimumHeight(100);
+}
+
+
+// Locate a file
+//
+void
+FileLocateDialog::slotUser2()
+{
+    // Create a file dialog and set the filter to the filename
+    //
+    KFileDialog *fileDlg = new KFileDialog(m_path, m_file, (QWidget *)this,
+                                           "", true);
+
+    if (fileDlg->exec() == QDialog::Accepted)
+    {
+        // We've found it - set the path and filename
+        //
+        m_path = fileDlg->baseURL().path();
+        m_file = fileDlg->selectedFile();
+
+        // Accept
+        accept();
+    }
+    else
+        reject();
+}
+
+// Skip this file
+//
+void
+FileLocateDialog::slotUser1()
+{
+    reject();
+}
+
+
 

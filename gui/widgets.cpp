@@ -252,6 +252,7 @@ RosegardenProgressDialog::slotShowMyself()
 void
 RosegardenProgressDialog::destroy()
 {
+    QApplication::restoreOverrideCursor();
     close();
 }
 

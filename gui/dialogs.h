@@ -499,6 +499,29 @@ protected:
     QLabel *m_percent;
 };
     
+
+// Locate a file
+//
+class FileLocateDialog : public KDialogBase
+{
+    Q_OBJECT
+
+public:
+    FileLocateDialog(QWidget *parent,
+                     const QString &file,
+                     const QString &path);
+
+    QString getDirectory() { return m_path; }
+    QString getFilename() { return m_file; }
+
+protected:
+    virtual void slotUser1();
+    virtual void slotUser2();
+
+    QString m_file;
+    QString m_path;
+
+};
   
 
 #endif
