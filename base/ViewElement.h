@@ -200,7 +200,7 @@ ViewElementList<T>::findTime(timeT time) const
 }
 
 template <class T>
-ViewElementList<T>::iterator
+typename ViewElementList<T>::iterator
 ViewElementList<T>::findNearestTime(timeT t) const
 {
     iterator i = findTime(t);

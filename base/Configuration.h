@@ -57,7 +57,7 @@ public:
      */
     template <PropertyType P>
     typename PropertyDefn<P>::basic_type get(const PropertyName &name,
-                                             PropertyDefn<P>::basic_type defaultVal) const;
+                                             typename PropertyDefn<P>::basic_type defaultVal) const;
 
     /**
      * regulat get()
@@ -106,7 +106,7 @@ Configuration::set(const PropertyName &name,
 template <PropertyType P>
 typename PropertyDefn<P>::basic_type
 Configuration::get(const PropertyName &name,
-                   PropertyDefn<P>::basic_type defaultVal) const
+                   typename PropertyDefn<P>::basic_type defaultVal) const
 
 {
     const_iterator i = find(name);
