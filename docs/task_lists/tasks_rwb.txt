@@ -10,8 +10,6 @@ o horizontal zoom would be really useful
 
 o sweep selection on Matrix
 
-o quantize to only quantize
-
 Other pending tasks:
 
 o ALSA audio
@@ -128,6 +126,8 @@ Completed POST 0.1.4
 - segment movement is broken? [FIXED]
 
 - commandExecuted signal for tempo dialog [gl FIXED]
+
+- quantize to only quantize [cc DONE]
 
 
 

@@ -726,6 +726,29 @@ void SegmentCanvas::slotSetFineGrain(bool value)
     m_fineGrain = value;
 }
 
+
+// Find a SegmentItem for a given Segment
+//
+SegmentItem*
+SegmentCanvas::getSegmentItem(Rosegarden::Segment *segment)
+{
+    QCanvasItemList itemList = canvas()->allItems();
+    QCanvasItemList::Iterator it;
+
+    for (it = itemList.begin(); it != itemList.end(); ++it)
+    {
+        SegmentItem* segItem = dynamic_cast<SegmentItem*>(*it);
+        
+         if (segItem)
+         { 
+             if (segItem->getSegment() == segment)
+                 return segItem;
+         }
+    }
+
+    return 0;
+}
+
 //////////////////////////////////////////////////////////////////////
 //                 Segment Tools
 //////////////////////////////////////////////////////////////////////
@@ -1000,7 +1023,10 @@ bool SegmentResizer::cursorIsCloseEnoughToEdge(SegmentItem* p, QMouseEvent* e)
 //////////////////////////////
 
 SegmentSelector::SegmentSelector(SegmentCanvas *c, RosegardenGUIDoc *d)
-    : SegmentTool(c, d), m_segmentAddMode(false), m_segmentCopyMode(false)
+    : SegmentTool(c, d),
+      m_segmentAddMode(false),
+      m_segmentCopyMode(false),
+      m_segmentQuickCopyDone(false)
 
 {
     kdDebug(KDEBUG_AREA) << "SegmentSelector()\n";
@@ -1100,21 +1126,6 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent * /*e*/)
 {
     if (!m_currentItem) return;
 
-    if (m_segmentCopyMode)
-    {
-	//std::cout << "Segment quick copy mode not implemented" << std::endl;
-	SegmentCopyCommand *command =
-            new SegmentCopyCommand(m_currentItem->getSegment());
-
-        addCommandToHistory(command);
-	return;
-
-        m_currentItem = m_canvas->addSegmentItem(command->getCopy());
-    
-        m_canvas->slotUpdate();
-
-    }
-
     if (m_currentItem->isSelected())
     {
 	SegmentItemList::iterator it;
@@ -1138,6 +1149,13 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent * /*e*/)
 	m_canvas->canvas()->update();
     }
     
+    // if we've just finished a quick copy then drop the Z level back
+    if (m_segmentQuickCopyDone)
+    {
+        m_segmentQuickCopyDone = false;
+        m_currentItem->setZ(2);
+    }
+
     m_currentItem = 0;
 }
 
@@ -1149,10 +1167,67 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 {
     if (!m_currentItem) return;
 
-    if (m_segmentCopyMode)
+    if (m_segmentCopyMode && !m_segmentQuickCopyDone)
     {
-	std::cout << "Segment quick copy mode not implemented" << std::endl;
-	return;
+	SegmentCopyCommand *command =
+            new SegmentCopyCommand(m_currentItem->getSegment());
+        // addCommand to generate the new Segment
+        //
+        addCommandToHistory(command);
+
+        Rosegarden::Segment *newSegment = command->getCopy();
+
+
+        // Get the duration - set to a minimum if we can't find it
+        //
+        timeT duration = m_currentItem->getDuration();
+        if (duration == 0)
+        {
+            
+            if (m_canvas->grid().getSnapTime(e->pos().x()))
+                duration = m_canvas->grid().getSnapTime(e->pos().x());
+            else
+                duration = Note(Note::Shortest).getDuration();
+
+        }
+
+        newSegment->setDuration(duration);
+
+        // update label
+        std::string copyLabel = m_currentItem->getSegment()->getLabel();
+        copyLabel += std::string(" (copied)");
+        newSegment->setLabel(copyLabel);
+
+        // Just check that a SegmentItem hasn't been created for us -
+        // today I'm paranoid.
+        //
+        SegmentItem *newItem = m_canvas->getSegmentItem(newSegment);
+
+        // Ok, it hasn't
+        //
+        if(newItem == 0)
+        {
+            newItem = m_canvas->addSegmentItem(m_currentItem->getTrack(),
+                                               m_currentItem->getStartTime(),
+                                               duration);
+            newItem->setSegment(newSegment);
+        }
+
+        // Clear current selections (obviously don't want this for
+        // multiple copy)
+        //
+        clearSelected();
+
+        // Now swap and raise to change the Segment we're carrying
+        //
+        m_currentItem = newItem;
+        m_currentItem->setZ(3); // bring it to the top
+        slotSelectSegmentItem(newItem);
+
+        // Update and flag
+        //
+        m_canvas->slotUpdate();
+        m_segmentQuickCopyDone = true;
     }
 
     m_canvas->setSnapGrain(true);
@@ -1176,6 +1251,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 	m_canvas->canvas()->update();
     }
 }
+
 
 //////////////////////////////
 //

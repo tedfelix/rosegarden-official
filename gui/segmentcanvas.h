@@ -271,6 +271,12 @@ public:
      */
     void updateAllSegmentItems();
 
+    /*
+     * get a SegmentItem for a Segment
+     */
+    SegmentItem* getSegmentItem(Rosegarden::Segment *segment);
+
+
 public slots:
 
     /// Set the current segment editing tool
@@ -494,6 +500,7 @@ private:
     bool m_segmentAddMode;
     bool m_segmentCopyMode;
     QPoint m_clickPoint;
+    bool m_segmentQuickCopyDone;
 };
 
 
