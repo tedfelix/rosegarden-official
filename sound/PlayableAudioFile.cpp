@@ -46,17 +46,19 @@ PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
     m_file(0),
     m_audioFile(audioFile),
     m_instrumentId(instrumentId),
-    m_ringBufferThreshold(0),
+//    m_ringBufferThreshold(0),
     m_targetChannels(targetChannels),
     m_targetSampleRate(targetSampleRate),
     m_initialised(false),
     m_runtimeSegmentId(-1),
     m_smallFileIndex(0),
     m_smallFileSize(smallFileSize),
-    m_isSmallFile(false)
+    m_isSmallFile(false),
+    m_workBuffer(0),
+    m_workBufferSize(0)
 {
 #ifdef DEBUG_PLAYABLE
-    std::cout << "PlayableAudioFile::PlayableAudioFile - creating " << this << std::endl;
+    std::cerr << "PlayableAudioFile::PlayableAudioFile - creating " << this << std::endl;
 #endif
     initialise(bufferSize);
 }
@@ -72,30 +74,58 @@ PlayableAudioFile::initialise(size_t bufferSize)
     //simultaneously.  We could perhaps restore that feature.
 
 #ifdef DEBUG_PLAYABLE
-    std::cout << "PlayableAudioFile::initialise() " << this << std::endl;
+    std::cerr << "PlayableAudioFile::initialise() " << this << std::endl;
 #endif
 
-    m_file = new std::ifstream(m_audioFile->getFilename().c_str(),
-                               std::ios::in | std::ios::binary);
+    SmallFileMap::iterator smfi = m_smallFileCache.find(m_audioFile);
 
+    if (smfi != m_smallFileCache.end()) {
 
-    //!!! need to catch this
+#ifdef DEBUG_PLAYABLE
+	std::cerr << "PlayableAudioFile::initialise: Found file in small file cache" << std::endl;
+#endif
 
-    //!!! I sometimes see this being thrown for a file that's been
-    //played many many times already in this composition. Are we
-    //leaking fds?
-    if (!*m_file)
-        throw(std::string("PlayableAudioFile - can't open file"));
+	++(smfi->second.first);
+	m_isSmallFile = true;
+	m_file = 0;
+
+    } else {
+
+	m_file = new std::ifstream(m_audioFile->getFilename().c_str(),
+				   std::ios::in | std::ios::binary);
+
+	//!!! need to catch this
+
+	//!!! I sometimes see this being thrown for a file that's been
+	//played many many times already in this composition. Are we
+	//leaking fds?
+	if (!*m_file)
+	    throw(std::string("PlayableAudioFile - can't open file"));
+    }
+
+    if (m_file && m_audioFile->getSize() <= m_smallFileSize) {
+	
+#ifdef DEBUG_PLAYABLE
+	std::cerr << "PlayableAudioFile::initialise: Adding file to small file cache" << std::endl;
+#endif
+
+	m_audioFile->scanTo(m_file, RealTime::zeroTime);
+	std::string contents = m_audioFile->getSampleFrames
+	    (m_file,
+	     m_audioFile->getSize() / m_audioFile->getBytesPerFrame());
+	m_smallFileCache[m_audioFile] = SmallFileData(1, contents);
+	m_isSmallFile = true;
+    }
 
     // Scan to the beginning of the data chunk we need
     //
 #ifdef DEBUG_PLAYABLE
-    std::cout << "PlayableAudioFile::initialise - scanning to " << m_startIndex << std::endl;
+    std::cerr << "PlayableAudioFile::initialise - scanning to " << m_startIndex << std::endl;
 #endif
     scanTo(m_startIndex);
 
 #ifdef DEBUG_PLAYABLE
-    std::cout << "PlayableAudioFile::initialise: buffer size is " << bufferSize << " frames, file size is " << m_audioFile->getSize() << std::endl;
+    std::cerr << "PlayableAudioFile::initialise: buffer size is " << bufferSize << " frames, file size is " << m_audioFile->getSize() << std::endl;
 #endif
 
     if (m_targetChannels <= 0) m_targetChannels = m_audioFile->getChannels();
@@ -106,13 +136,13 @@ PlayableAudioFile::initialise(size_t bufferSize)
     }
     
 #ifdef DEBUG_PLAYABLE
-    std::cout << "PlayableAudioFile: created " << bufferSize << "-sample ring buffer" << std::endl;
+    std::cerr << "PlayableAudioFile: created " << bufferSize << "-sample ring buffer" << std::endl;
 #endif
 
-//!!!    m_ringBufferThreshold = 
+//    m_ringBufferThreshold = 
 //	(double(rand()) * bufferSize) / (double(RAND_MAX) * 4)
 //	+ (bufferSize / 10);
-    m_ringBufferThreshold = bufferSize / 4;
+//!!!    m_ringBufferThreshold = bufferSize / 4;
 
     m_initialised = true;
 }
@@ -133,15 +163,17 @@ PlayableAudioFile::~PlayableAudioFile()
 	if (i != m_smallFileCache.end()) {
 	    if (--(i->second.first) == 0) {
 #ifdef DEBUG_PLAYABLE
-		std::cout << "PlayableAudioFile::~PlayableAudioFile: Removing file with no other references from small file cache" << std::endl;
+		std::cerr << "PlayableAudioFile::~PlayableAudioFile: Removing file with no other references from small file cache" << std::endl;
 #endif
 		m_smallFileCache.erase(i);
 	    }
 	}
     }
 
+    delete[] m_workBuffer;
+
 #ifdef DEBUG_PLAYABLE
-    std::cout << "PlayableAudioFile::~PlayableAudioFile - destroying - " << this << std::endl;
+    std::cerr << "PlayableAudioFile::~PlayableAudioFile - destroying - " << this << std::endl;
 #endif
 }
 
@@ -174,7 +206,7 @@ bool
 PlayableAudioFile::scanTo(const RealTime &time)
 {
 #ifdef DEBUG_PLAYABLE
-    std::cout << "PlayableAudioFile::scanTo(" << time << ")" << std::endl;
+    std::cerr << "PlayableAudioFile::scanTo(" << time << ")" << std::endl;
 #endif
     m_fileEnded = false; // until we know otherwise -- this flag is an
 			 // optimisation, not a reliable record
@@ -233,6 +265,7 @@ PlayableAudioFile::getSample(int channel)
 void
 PlayableAudioFile::checkSmallFileCache()
 {    
+    return;//!!!
     if (m_isSmallFile) return; // already done this
 
     SmallFileMap::iterator smfi = m_smallFileCache.find(m_audioFile);
@@ -240,7 +273,7 @@ PlayableAudioFile::checkSmallFileCache()
     if (smfi != m_smallFileCache.end()) {
 
 #ifdef DEBUG_PLAYABLE
-	std::cout << "PlayableAudioFile::checkSmallFileCache: Found file in small file cache" << std::endl;
+	std::cerr << "PlayableAudioFile::checkSmallFileCache: Found file in small file cache" << std::endl;
 #endif
 
 	++(smfi->second.first);
@@ -249,7 +282,7 @@ PlayableAudioFile::checkSmallFileCache()
     } else if (m_audioFile->getSize() <= m_smallFileSize) {
 
 #ifdef DEBUG_PLAYABLE
-	std::cout << "PlayableAudioFile::checkSmallFileCache: Adding file to small file cache" << std::endl;
+	std::cerr << "PlayableAudioFile::checkSmallFileCache: Adding file to small file cache" << std::endl;
 #endif
 
 	m_audioFile->scanTo(m_file, RealTime::zeroTime);
@@ -271,7 +304,7 @@ PlayableAudioFile::fillBuffers()
     }
 
 #ifdef DEBUG_PLAYABLE
-    std::cout << "PlayableAudioFile::fillRingBuffer() [async] -- scanning to " << m_startIndex << std::endl;
+    std::cerr << "PlayableAudioFile::fillRingBuffer() [async] -- scanning to " << m_startIndex << std::endl;
 #endif
 
     checkSmallFileCache();
@@ -317,12 +350,13 @@ PlayableAudioFile::fillBuffers(const RealTime &currentTime)
     checkSmallFileCache();
 
 #ifdef DEBUG_PLAYABLE
-    std::cout << "PlayableAudioFile::fillRingBuffer(" << currentTime << ") -- my start time is " << m_startTime << std::endl;
+    std::cerr << "PlayableAudioFile::fillRingBuffer(" << currentTime << ") -- my start time is " << m_startTime << std::endl;
 #endif
 
     // We don't bother doing this if we're so far ahead of the audio
     // file's start time that the first data would be after the end of
-    // the buffer less the buffer threshold.
+    // the buffer
+//!!! less the buffer threshold.
 
     //!!! merge in some of the isBufferable code
 
@@ -351,7 +385,7 @@ PlayableAudioFile::fillBuffers(const RealTime &currentTime)
 	    return false;
 	} else {
 #ifdef DEBUG_PLAYABLE
-	    std::cout << "PlayableAudioFile::fillRingBuffer: zeroing " << gapFrames << " samples" << std::endl;
+	    std::cerr << "PlayableAudioFile::fillRingBuffer: zeroing " << gapFrames << " samples" << std::endl;
 #endif
 
 	    for (int ch = 0; ch < m_targetChannels; ++ch) {
@@ -369,7 +403,7 @@ PlayableAudioFile::fillBuffers(const RealTime &currentTime)
 	if (gap + m_startIndex >= m_duration) return false;
 
 #ifdef DEBUG_PLAYABLE
-	    std::cout << "PlayableAudioFile::fillRingBuffer: scanning to " << m_startIndex + gap << std::endl;
+	    std::cerr << "PlayableAudioFile::fillRingBuffer: scanning to " << m_startIndex + gap << std::endl;
 #endif
 	
 	// skip to the right point in the file before writing from there
@@ -389,7 +423,7 @@ PlayableAudioFile::updateBuffers()
 
     if (m_fileEnded) {
 #ifdef DEBUG_PLAYABLE
-	std::cout << "PlayableAudioFile::updateBuffers: at end of file already" << std::endl;
+	std::cerr << "PlayableAudioFile::updateBuffers: at end of file already" << std::endl;
 #endif
 	return;
     }
@@ -404,14 +438,14 @@ PlayableAudioFile::updateBuffers()
 //!!!    if (frames < m_ringBufferThreshold) {
     if (frames == 0) {
 #ifdef DEBUG_PLAYABLE
-	std::cout << "PlayableAudioFile::updateBuffers: " << frames << " == 0, ignoring" << std::endl;
-//	std::cout << "PlayableAudioFile::updateBuffers: " << frames << " < " << m_ringBufferThreshold << ", ignoring" << std::endl;
+	std::cerr << "PlayableAudioFile::updateBuffers: " << frames << " == 0, ignoring" << std::endl;
+//	std::cerr << "PlayableAudioFile::updateBuffers: " << frames << " < " << m_ringBufferThreshold << ", ignoring" << std::endl;
 	return;
 #endif
     }
 
 #ifdef DEBUG_PLAYABLE
-    std::cout << "PlayableAudioFile::updateBuffers: want " << frames << " samples" << std::endl;
+    std::cerr << "PlayableAudioFile::updateBuffers: want " << frames << " frames" << std::endl;
 #endif
 
     int sourceChannels = m_audioFile->getChannels();
@@ -426,50 +460,84 @@ PlayableAudioFile::updateBuffers()
 			    float(m_targetSampleRate));
     }
 
-    std::string data; //!!! here be hidden heap allocation and slowness
+    const unsigned char *ubuf = 0;
 
     if (m_isSmallFile) {
 
 	size_t bytes = m_audioFile->getBytesPerFrame() * fileFrames;
 	std::string &source = m_smallFileCache[m_audioFile].second;
 	
+#ifdef DEBUG_PLAYABLE
+	std::cerr << "PlayableAudioFile::updateBuffers: looking for "
+		  << bytes << " bytes from small file cache" << std::endl;
+#endif
+
 	if (m_smallFileIndex >= source.size()) {
+	    bytes = 0;
 	    m_fileEnded = true;
 	} else {
 	    if (m_smallFileIndex + bytes >= source.size()) {
 		bytes = source.size() - m_smallFileIndex;
 		m_fileEnded = true;
 	    }
-	    if (bytes > 0) {
-		data = source.substr(m_smallFileIndex, bytes);
-	    }
+	    ubuf = (const unsigned char *)source.c_str()
+		+ m_smallFileIndex;
+//		data = source.substr(m_smallFileIndex, bytes);
+		
 	    m_smallFileIndex += bytes;
 	}
+	fileFrames = bytes / m_audioFile->getBytesPerFrame();
 
     } else {
 
 	// get the frames
+
+	m_fileBuffer = "";
+
 	try {
-	    data = m_audioFile->getSampleFrames(m_file, fileFrames);
+#ifdef DEBUG_PLAYABLE
+	    std::cerr << "PlayableAudioFile::updateBuffers: asking file for "
+		      << fileFrames << " frames" << std::endl;
+#endif
+	    m_fileBuffer = m_audioFile->getSampleFrames(m_file, fileFrames);
 	} catch (std::string e) {
 	    // most likely we've run out of data in the file -
 	    // we can live with this - just write out what we
 	    // have got.
 #ifdef DEBUG_PLAYABLE
-	    std::cout << "PlayableAudioFile::updateBuffers - "
+	    std::cerr << "PlayableAudioFile::updateBuffers - "
 		      << e << std::endl;
-	    std::cout << "PlayableAudioFile::updateBuffers: got " << data.size() << " bytes" << std::endl;
+	    std::cerr << "PlayableAudioFile::updateBuffers: got " << m_fileBuffer.size() << " bytes" << std::endl;
 #endif
 
 	    m_fileEnded = true;
 	}
+
+	// update frames to the number we actually managed to read
+	fileFrames = m_fileBuffer.size() / m_audioFile->getBytesPerFrame();
+	ubuf = (const unsigned char *)m_fileBuffer.c_str();
     }
 
-    // update frames to the number we actually managed to read
-    fileFrames = data.size() / m_audioFile->getBytesPerFrame();
+    if (!ubuf) {
+#ifdef DEBUG_PLAYABLE
+	std::cerr << "PlayableAudioFile::updateBuffers: nothing left to write"  << std::endl;
+#endif
+	return;
+    } else {
+#ifdef DEBUG_PLAYABLE
+	std::cerr << "PlayableAudioFile::updateBuffers: actually retrieved " << fileFrames << " frames" << std::endl;
+#endif
+    }	
 
-    float *buffer = new float[std::max(frames, fileFrames)]; 
-    const unsigned char *ubuf = (const unsigned char *)data.c_str();
+//!!!    float *buffer = new float[std::max(frames, fileFrames)]; 
+    if (std::max(frames, fileFrames) > m_workBufferSize) {
+	delete[] m_workBuffer;
+	m_workBufferSize = std::max(frames, fileFrames);
+	m_workBuffer = new sample_t[m_workBufferSize];
+    }
+    sample_t *buffer = m_workBuffer;
+    
+//    const unsigned char *ubuf = (const unsigned char *)data.c_str();
 
     //!!! How come this code isn't in WAVAudioFile?
 
@@ -572,8 +640,6 @@ PlayableAudioFile::updateBuffers()
 	    m_ringBuffers[ch]->zero(frames);
 	}
     }
-    
-    delete buffer;
 }
 
 
@@ -674,7 +740,7 @@ RecordableAudioFile::buffer(const sample_t *data, int channel, size_t frames)
     }
 
 #ifdef DEBUG_RECORDABLE
-    std::cout << "RecordableAudioFile::buffer: buffering " << frames << " frames on channel " << channel << std::endl;
+    std::cerr << "RecordableAudioFile::buffer: buffering " << frames << " frames on channel " << channel << std::endl;
 #endif
     
     m_ringBuffers[channel]->write(data, frames);
@@ -694,7 +760,7 @@ RecordableAudioFile::write()
     for (unsigned int ch = 0; ch < m_audioFile->getChannels(); ++ch) {
 	size_t available = m_ringBuffers[ch]->getReadSpace();
 #ifdef DEBUG_RECORDABLE
-	std::cout << "RecordableAudioFile::write: " << available << " frames available to write on channel " << ch << std::endl;
+	std::cerr << "RecordableAudioFile::write: " << available << " frames available to write on channel " << ch << std::endl;
 #endif
 	if (ch == 0 || available < s) s = available;
     }
@@ -717,7 +783,7 @@ RecordableAudioFile::write()
     }
 
 #ifdef DEBUG_RECORDABLE
-    std::cout << "RecordableAudioFile::write: writing " << sbuf.length() << " bytes to file" << std::endl;
+    std::cerr << "RecordableAudioFile::write: writing " << sbuf.length() << " bytes to file" << std::endl;
 #endif
 
     m_audioFile->appendSamples(sbuf);

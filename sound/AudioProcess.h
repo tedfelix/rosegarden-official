@@ -101,7 +101,7 @@ public:
 protected:
     static void *threadRun(void *arg);
 
-    void processBlocks(bool forceFill);
+    void processBlocks(bool forceFill, bool &waitingForFiles);
 
     int canProcessBlocks(InstrumentId id, PlayableAudioFileList &,
 			 bool forceFill);

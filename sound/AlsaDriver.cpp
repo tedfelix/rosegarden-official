@@ -2552,7 +2552,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 	    m_jackDriver->prebufferAudio();
 	}
 	if (m_queueRunning) {
-	    m_jackDriver->kickAudio();
+//!!!	    m_jackDriver->kickAudio();
 	}
     }
 #endif

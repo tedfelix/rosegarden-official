@@ -427,7 +427,8 @@ AudioMixer::fillBuffers(const RealTime &currentTime)
     std::cerr << "AudioMixer::fillBuffers(" << currentTime <<")" << std::endl;
 #endif
 
-    processBlocks(true);
+    bool discard;
+    processBlocks(true, discard);
 
     releaseLock();
 }
@@ -467,8 +468,9 @@ static inline void denormalKill(float *buffer, int size)
 }
 
 void
-AudioMixer::processBlocks(bool forceFill)
+AudioMixer::processBlocks(bool forceFill, bool &waitingForFiles)
 {
+    waitingForFiles = false;
     if (m_bufferMap[0].buffers.size() < 2) return; // no master set up yet
 
     InstrumentId instrumentBase;
@@ -512,8 +514,21 @@ AudioMixer::processBlocks(bool forceFill)
 
 	if (m_bufferMap[id].empty) {
 	    blocksHere = canProcessEmptyBlocks(id);
+
+#ifdef DEBUG_MIXER
+	    if (m_driver->isPlaying()) {
+		if (id == 1000) std::cerr << "AudioMixer::processBlocks(" << id << "): can process " << blocksHere << " empty blocks" << std::endl;
+	    }
+#endif
+
 	} else {
 	    blocksHere = canProcessBlocks(id, files[id], forceFill);
+
+#ifdef DEBUG_MIXER
+	    if (m_driver->isPlaying()) {
+		if (id == 1000) std::cerr << "AudioMixer::processBlocks(" << id << "): can process " << blocksHere << " blocks" << std::endl;
+	    }
+#endif
 	}
 
 	if (id == instrumentBase || blocksHere < minBlocks) {
@@ -522,6 +537,7 @@ AudioMixer::processBlocks(bool forceFill)
     }
 
     if (minBlocks == 0) {
+	waitingForFiles = true;
 	return;
     }
 
@@ -588,6 +604,11 @@ AudioMixer::processBlocks(bool forceFill)
 	}
     }
 
+#ifdef DEBUG_MIXER
+    if (m_driver->isPlaying()) {
+	std::cerr << "AudioMixer::processBlocks: planning to do " << minBlocks << " blocks" << std::endl;
+    }
+#endif
     // Call the processBlock methods to process individual instruments,
     // and mix in to the submasters and master as we go along.
 
@@ -828,6 +849,10 @@ AudioMixer::canProcessBlocks(InstrumentId id,
 
 	    size_t frames = (*it)->getSampleFramesAvailable();
 
+#ifdef DEBUG_MIXER
+	    if (id == 1000) std::cerr << "AudioMixer::canProcessBlock(" << id <<"): playing audio file has " << frames << " frames available" << std::endl;
+#endif
+
 	    if ((*it)->isFullyBuffered() && frames < m_blockSize) {
 		frames = m_blockSize;
 	    }
@@ -1043,8 +1068,9 @@ AudioMixer::kick(bool wantLock)
     if (wantLock) getLock();
 
 //    Rosegarden::Profiler profiler("AudioMixer::kick");
-
-    processBlocks(false);
+    
+    bool discard;
+    processBlocks(false, discard);
     m_fileReader->signal();
     m_fileReader->updateDefunctStatuses();
 
@@ -1063,9 +1089,17 @@ AudioMixer::threadRun(void *arg)
     inst->getLock();
 
     while (1) {
+
+	bool waitingForFiles = false;
+
 	if (inst->m_driver->areClocksRunning()) {
-	    inst->kick(false);
+	    inst->processBlocks(false, waitingForFiles);
+	    inst->m_fileReader->signal();
+	    inst->m_fileReader->updateDefunctStatuses();
+//	    inst->kick(false, waitingForFiles);
 	}
+
+//	if (waitingForFiles) continue;
 
 	RealTime t = inst->m_driver->getAudioMixBufferLength();
 	t = t / 2;
@@ -1259,6 +1293,9 @@ AudioFileReader::kick(bool wantLock)
 
 	if (file->getStatus() == PlayableAudioFile::PLAYING) {
 
+#ifdef DEBUG_READER
+	    std::cerr << "AudioFileReader::kick: found a PLAYING file to update" << std::endl;
+#endif
 	    file->updateBuffers();
 
 	} else if (file->getStatus() == PlayableAudioFile::READY) {
@@ -1292,7 +1329,8 @@ AudioFileReader::threadRun(void *arg)
 
     while (1) {
 
-	if (!inst->kick(false)) {
+	inst->kick(false);
+//	if (!inst->kick(false)) {
 
 	    RealTime t = inst->m_driver->getAudioReadBufferLength();
 	    t = t / 2;
@@ -1305,7 +1343,7 @@ AudioFileReader::threadRun(void *arg)
 	    timeout.tv_sec = t.sec;
 	    timeout.tv_nsec = t.nsec;
 	    pthread_cond_timedwait(&inst->m_condition, &inst->m_lock, &timeout);
-	}
+//	}
     }
 
     inst->releaseLock();

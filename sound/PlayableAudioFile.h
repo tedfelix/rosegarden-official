@@ -211,7 +211,7 @@ protected:
     //
     InstrumentId          m_instrumentId;
 
-    size_t                m_ringBufferThreshold;
+//!!!    size_t                m_ringBufferThreshold;
     int                   m_targetChannels;
     int                   m_targetSampleRate;
 
@@ -232,6 +232,10 @@ protected:
     size_t                m_smallFileIndex;
     size_t                m_smallFileSize;
     bool                  m_isSmallFile;
+
+    std::string           m_fileBuffer;
+    sample_t             *m_workBuffer;
+    size_t                m_workBufferSize;
 
     std::vector<RingBuffer<sample_t> *> m_ringBuffers; // one per channel
 
