@@ -1316,7 +1316,7 @@ RosegardenGUIApp::getValidWriteFile(const QString &descriptiveExtension,
     // Append extension if we don't have one
     //
     if (!extension.isEmpty()) {
-	QRegExp rgFile(extension + "$");
+	static QRegExp rgFile("\\..{1,4}$");
 	if (rgFile.match(name) == -1) {
 	    name += extension;
 	}
