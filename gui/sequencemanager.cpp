@@ -118,6 +118,8 @@ public:
 
     QString getSegmentFileName(Segment*);
 
+    void cleanup();
+
 protected:
     bool segmentModified(Segment*);
     void segmentAdded(Segment*);
@@ -151,6 +153,8 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
     m_compositionRefreshStatusId(m_doc->getComposition().getNewRefreshStatusId()),
     m_updateRequested(true)
 {
+    m_mmapper->cleanup();
+
     m_countdownDialog = new CountdownDialog(dynamic_cast<QWidget*>
                                 (m_doc->parent())->parentWidget());
     // Connect this for use later
@@ -165,13 +169,7 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
 
 SequenceManager::~SequenceManager()
 {
-    SEQMAN_DEBUG << "SequenceManager::~SequenceManager()\n";
-
-    QByteArray data;
-    kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                             ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                             "closeAllSegments()", data);
-    
+    SEQMAN_DEBUG << "SequenceManager::~SequenceManager()\n";   
     delete m_mmapper;
 }
 
@@ -1745,18 +1743,7 @@ void SequenceManager::resetCompositionMmapper()
 CompositionMmapper::CompositionMmapper(RosegardenGUIDoc *doc)
     : m_doc(doc)
 {
-    //
-    // Clean up possible left-overs
-    //
-    QString tmpPath = KGlobal::dirs()->resourceDirs("tmp").first();
-
-    QDir segmentsDir(tmpPath, "segment_*");
-    for (unsigned int i = 0; i < segmentsDir.count(); ++i) {
-        QString segmentName = tmpPath + '/' + segmentsDir[i];
-        SEQMAN_DEBUG << "CompositionMmapper : cleaning up " << segmentName << endl;
-        QFile::remove(segmentName);
-    }
-
+    SEQMAN_DEBUG << "CompositionMmapper() - doc = " << doc << endl;
     Composition &comp = m_doc->getComposition();
 
     for (Composition::iterator it = comp.begin(); it != comp.end(); it++) {
@@ -1776,9 +1763,37 @@ CompositionMmapper::~CompositionMmapper()
 {
     SEQMAN_DEBUG << "~CompositionMmapper()\n";
 
+    //
+    // Clean up possible left-overs
+    //
+    cleanup();
+
     for(segmentmmapers::iterator i = m_segmentMmappers.begin();
         i != m_segmentMmappers.end(); ++i)
         delete i->second;
+}
+
+void CompositionMmapper::cleanup()
+{
+    QByteArray data;
+
+    // In case the sequencer is still running, mapping some segments
+    //
+    kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
+                             ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                             "closeAllSegments()", data);
+
+    // Erase all 'segment_*' files
+    //
+    QString tmpPath = KGlobal::dirs()->resourceDirs("tmp").first();
+
+    QDir segmentsDir(tmpPath, "segment_*");
+    for (unsigned int i = 0; i < segmentsDir.count(); ++i) {
+        QString segmentName = tmpPath + '/' + segmentsDir[i];
+        SEQMAN_DEBUG << "CompositionMmapper : cleaning up " << segmentName << endl;
+        QFile::remove(segmentName);
+    }
+    
 }
 
 
@@ -2045,45 +2060,47 @@ void SegmentMmapper::dump()
 
     unsigned int nbEvents = 0;
 
+    repeatCount = 0; // disable repeat, this doesn't work - GL.
+
     for (int repeatNo = 0; repeatNo <= repeatCount; ++repeatNo) {
 
-    for (Segment::iterator j = m_segment->begin();
-         j != m_segment->end(); ++j) {
+        for (Segment::iterator j = m_segment->begin();
+             j != m_segment->end(); ++j) {
 
-        if ((*j)->isa(Rosegarden::Note::EventRestType)) continue;
+            if ((*j)->isa(Rosegarden::Note::EventRestType)) continue;
 
-        timeT playTime =
-            helper.getSoundingAbsoluteTime(j) + repeatNo * segmentDuration;
-	    if (playTime >= repeatEndTime) break;
+            timeT playTime =
+                helper.getSoundingAbsoluteTime(j) + repeatNo * segmentDuration;
+            if (playTime >= repeatEndTime) break;
 
-        eventTime = comp.getElapsedRealTime(playTime);
+            eventTime = comp.getElapsedRealTime(playTime);
 
-        duration = helper.getRealSoundingDuration(j);
+            duration = helper.getRealSoundingDuration(j);
 
-	    // No duration and we're a note?  Probably in a tied
-	    // series, but not as first note
-	    //
-	    if (duration == Rosegarden::RealTime(0, 0) &&
-		(*j)->isa(Rosegarden::Note::EventType))
-		continue;
+            // No duration and we're a note?  Probably in a tied
+            // series, but not as first note
+            //
+            if (duration == Rosegarden::RealTime(0, 0) &&
+                (*j)->isa(Rosegarden::Note::EventType))
+                continue;
 	    
-        try {
-            // Create mapped event
-            MappedEvent mE(track->getInstrument(),
-                           **j,
-                           eventTime,
-                           duration);
-            // dump it on stream
-//             SEQMAN_DEBUG << "SegmentMmapper::dump - event "
-//                          << nbEvents++ << " at "
-//                          << stream.device()->at() << endl;
-            stream << mE;
-//             SEQMAN_DEBUG << "SegmentMmapper::dump - now at "
-//                          << stream.device()->at() << endl;
-        } catch(...) {
-            SEQMAN_DEBUG << "SegmentMmapper::dump - caught exception while trying to create MappedEvent\n";
+            try {
+                // Create mapped event
+                MappedEvent mE(track->getInstrument(),
+                               **j,
+                               eventTime,
+                               duration);
+                // dump it on stream
+                //             SEQMAN_DEBUG << "SegmentMmapper::dump - event "
+                //                          << nbEvents++ << " at "
+                //                          << stream.device()->at() << endl;
+                stream << mE;
+                //             SEQMAN_DEBUG << "SegmentMmapper::dump - now at "
+                //                          << stream.device()->at() << endl;
+            } catch(...) {
+                SEQMAN_DEBUG << "SegmentMmapper::dump - caught exception while trying to create MappedEvent\n";
+            }
         }
-	}
     }
 
     if (byteArray.size() > 0) {
