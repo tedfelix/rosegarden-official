@@ -34,10 +34,10 @@ public:
     Staff(QCanvas*, Clef clef = Treble);
 
     /**
-     * Returns the Y offset at which a note with pitch 'pitch'
+     * Returns the Y offset at which a note with pitch 'p'
      * should be displayed on this staff
      */
-    int pitchYOffset(unsigned int pitch) const;
+    int pitchYOffset(unsigned int p) const;
 
     static const unsigned int noteHeight;
     static const unsigned int noteWidth;
