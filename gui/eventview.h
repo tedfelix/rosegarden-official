@@ -79,6 +79,10 @@ public:
     void setSegment(Rosegarden::Segment *segment) { m_segment = segment; }
     Rosegarden::Segment* getSegment() { return m_segment; }
 
+    // Reimplement so that we can sort numerically
+    //
+    virtual int compare(QListViewItem *i, int col, bool ascending) const;
+
 protected:
 
     Rosegarden::Segment *m_segment;

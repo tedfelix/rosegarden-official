@@ -388,7 +388,7 @@ EventView::setButtonsToFilter()
 void
 EventView::slotPopupEventEditor(QListViewItem *item)
 {
-    Rosegarden::Composition &comp = m_doc->getComposition();
+    //Rosegarden::Composition &comp = m_doc->getComposition();
 
     EventViewItem *eItem = dynamic_cast<EventViewItem*>(item);
 
@@ -399,7 +399,7 @@ EventView::slotPopupEventEditor(QListViewItem *item)
         Rosegarden::Segment::iterator it = eItem->getSegment()->
             findTime(eItem->text(0).toInt());
 
-        while (it != eItem->getSegment()->end())
+        do
         {
             // if types don't match then return
             if ((*it)->getType() != std::string(eItem->text(2).data()))
@@ -416,24 +416,42 @@ EventView::slotPopupEventEditor(QListViewItem *item)
 
             if((*it)->isa(Rosegarden::Note::EventType))
             {
-                // check pitch and velocity
-                break;
+                // check pitch
+	        if ((*it)->has(BaseProperties::PITCH) &&
+                   ((*it)->get<Int>(BaseProperties::PITCH)
+                        == eItem->text(3).toInt()))
+                    break;
             }
 
 
-            it++;
             if ((*it)->getAbsoluteTime() > eItem->text(0).toInt())
             {
                 std::cerr << "EventView::slotPopupEventEditor - "
                           << "couldn't find event" << std::endl;
                 return;
             }
+
         }
+        while (++it != eItem->getSegment()->end());
 
-        cout << "FOUND " << eItem->text(2) << " at " << eItem->text(0)
-             << endl;
-
+        EventEditDialog *eED = new EventEditDialog(this,
+                                                   **it);
+        eED->show();
     }
+}
+
+
+// Reimplementation of sort for numeric columns - taking the
+// right hand argument from the left is equivalent to the
+// the QString compare().
+//
+int
+EventViewItem::compare(QListViewItem *i, int col, bool ascending) const
+{
+    if (col == 2) // event type
+        return key(col, ascending).compare(i->key(col, ascending));
+    else          // numeric comparison
+        return key(col, ascending).toInt() - i->key(col, ascending).toInt();
 }
 
 
