@@ -677,7 +677,7 @@ int
 Composition::addTempo(timeT time, double tempo)
 {
     Event *tempoEvent = new Event(TempoEventType, time);
-    tempoEvent->set<Int>(TempoProperty, (long)(tempo * 60));
+    tempoEvent->set<Int>(TempoProperty, (long)(tempo * 60 + 0.001));
 
     ReferenceSegment::iterator i = m_tempoSegment.insert(tempoEvent);
 

@@ -241,8 +241,14 @@ TempoRuler::paintEvent(QPaintEvent* e)
 
 	    double tempo = m_composition->getTempoAt(time);
 	    long bpm = long(tempo);
+	    long frac = long(tempo * 100 + 0.001) - 100 * bpm;
 
-	    QString tempoString = QString("%1").arg(bpm);
+	    QString tempoString;
+	    if (frac) {
+		tempoString = QString("%1.%2").arg(bpm).arg(frac);
+	    } else {
+		tempoString = QString("%1").arg(bpm);
+	    }
 	    if (tempo == prevTempo) {
 		if (m_small) continue;
 		tempoString = "=";
