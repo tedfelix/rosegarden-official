@@ -1190,6 +1190,10 @@ NotationHLayout::positionRest(StaffType &staff,
                               const TimeSignature &timeSignature)
 {
     NotationElement *rest = *itr;
+    if (m_legatoQuantizer->getQuantizedDuration((*itr)->event()) == 0) {
+	// this rest won't appear at all, so don't allot it any space
+	return 0;
+    }
 
     // To work out how much space to allot a rest, as for a note,
     // start with the amount alloted to the whole bar, subtract that
@@ -1201,7 +1205,8 @@ NotationHLayout::positionRest(StaffType &staff,
     timeT barDuration = bdi->second.sizeData.actualDuration;
     if (barDuration == 0) barDuration = timeSignature.getBarDuration();
 
-    long delta = (((int)bdi->second.sizeData.idealWidth - bdi->second.sizeData.fixedWidth) *
+    long delta = (((int)bdi->second.sizeData.idealWidth -
+		        bdi->second.sizeData.fixedWidth) *
 		  getSpacingDuration(staff, itr)) /
 	barDuration;
     rest->setLayoutAirspace(rest->getLayoutX(), delta);

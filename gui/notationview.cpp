@@ -1473,7 +1473,7 @@ void NotationView::slotGroupAutoBeam()
     KTmpStatusMsg msg(i18n("Auto-beaming selection..."), statusBar());
 
     addCommandToHistory(new GroupMenuAutoBeamCommand
-                        (*m_currentEventSelection));
+                        (*m_currentEventSelection, m_legatoQuantizer));
 }
 
 void NotationView::slotGroupSimpleTuplet()

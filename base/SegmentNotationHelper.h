@@ -48,8 +48,9 @@ public:
     /**
      * Return the duration of an event "as displayed".  This is
      * the legato-quantized duration, with compensation for tuplets.
+     * If a quantizer is supplied, use it.
      */
-    timeT getNotationDuration(Event *e);
+    timeT getNotationDuration(Event *e, const Quantizer *q = 0);
 
     
     /**
@@ -374,8 +375,10 @@ public:
      * from and the end of the bar containing to up into sensible
      * beamed groups and give each group the right group properties
      * using makeBeamedGroup.  Requires segment to be in a composition.
+     * If quantizer is present, use it to establish the note values.
      */
-    void autoBeam(timeT from, timeT to, std::string type);
+    void autoBeam(timeT from, timeT to, std::string type,
+		  const Quantizer *q = 0);
 
     /**
      * Divide the notes between the start of the bar containing
@@ -383,7 +386,8 @@ public:
      * beamed groups and give each group the right group properties
      * using makeBeamedGroup.  Requires segment to be in a composition.
      */
-    void autoBeam(iterator from, iterator to, std::string type);
+    void autoBeam(iterator from, iterator to, std::string type,
+		  const Quantizer *q = 0);
 
 
     /**
@@ -499,10 +503,11 @@ protected:
     /// for use by autoBeam
 
     void autoBeamBar(iterator from, iterator to, TimeSignature timesig,
-                     std::string type);
+                     std::string type, const Quantizer *quantizer);
 
     void autoBeamBar(iterator from, iterator to, timeT average,
-                     timeT minimum, timeT maximum, std::string type);
+                     timeT minimum, timeT maximum, std::string type,
+		     const Quantizer *quantizer);
 
     /// used by autoBeamAux (duplicate of private method in Segment)
     bool hasEffectiveDuration(iterator i);

@@ -80,7 +80,7 @@ Post-0.1.5-and-a-bit task list
     taken a certain amount of time to run (e.g. notationview et al
     add a timer callback in addCommandToHistory)
 
-21. Implement view-local properties in NotationElement
+21. Implement view-local properties in NotationElement [DONE but see 23]
 
 22. Event dialog really needs to be scrollable or something
 
@@ -118,7 +118,9 @@ Post-0.1.5-and-a-bit task list
 
 24. Oops.. since I "fixed" the ChordNameRuler so it's not all squashed
     up, I've lost the other rulers in the notation view completely.
-    Revert and fix correctly.
+    Revert and fix correctly. [DONE]
+
+25. Work out why inter1.mid renders incorrectly in notation
 
 
 Post-0.1.4 task list

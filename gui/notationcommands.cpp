@@ -385,7 +385,7 @@ GroupMenuAutoBeamCommand::modifySegment()
     SegmentNotationHelper helper(getSegment());
 
     helper.autoBeam(getBeginTime(), getEndTime(),
-                    GROUP_TYPE_BEAMED);
+                    GROUP_TYPE_BEAMED, m_quantizer);
 }
 
 GroupMenuTupletCommand::GroupMenuTupletCommand(Rosegarden::Segment &segment,

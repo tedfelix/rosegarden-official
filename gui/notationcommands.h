@@ -200,13 +200,16 @@ protected:
 class GroupMenuAutoBeamCommand : public BasicSelectionCommand
 {
 public:
-    GroupMenuAutoBeamCommand(Rosegarden::EventSelection &selection) :
-	BasicSelectionCommand(getGlobalName(), selection) { }
+    GroupMenuAutoBeamCommand(Rosegarden::EventSelection &selection,
+			     Rosegarden::Quantizer *quantizer) :
+	BasicSelectionCommand(getGlobalName(), selection),
+	m_quantizer(quantizer) { }
 
     static QString getGlobalName() { return "&Auto-Beam"; }
 
 protected:
     virtual void modifySegment();
+    Rosegarden::Quantizer *m_quantizer;
 };
 
 

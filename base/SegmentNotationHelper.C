@@ -71,11 +71,13 @@ SegmentNotationHelper::getNotationAbsoluteTime(Event *e)
 
 
 timeT
-SegmentNotationHelper::getNotationDuration(Event *e)
+SegmentNotationHelper::getNotationDuration(Event *e, const Quantizer *q)
 {
+    const Quantizer &quantizer = (q ? *q : legatoQuantizer());
+
     if (e->has(TUPLET_NOMINAL_DURATION)) {
 
-	return legatoQuantizer().quantizeDuration
+	return quantizer.quantizeDuration
 	    (e->get<Int>(TUPLET_NOMINAL_DURATION));
 
     } else if (e->has(BEAMED_GROUP_TUPLET_BASE)) {
@@ -91,12 +93,12 @@ SegmentNotationHelper::getNotationDuration(Event *e)
 	int ucount = e->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT);
 	assert(tcount != 0);
 	timeT nominalDuration = (e->getDuration() / tcount) * ucount;
-	nominalDuration = legatoQuantizer().quantizeDuration(nominalDuration);
+	nominalDuration = quantizer.quantizeDuration(nominalDuration);
 	e->setMaybe<Int>(TUPLET_NOMINAL_DURATION, nominalDuration);
 	return nominalDuration;
 
     } else {
-	return legatoQuantizer().getQuantizedDuration(e);
+	return quantizer.getQuantizedDuration(e);
     }
 }
 
@@ -901,12 +903,43 @@ SegmentNotationHelper::deleteNote(Event *e, bool collapseRest)
     iterator i = segment().findSingle(e);
     if (i == end()) return;
 
+    // If any notes start at the same time as this one but end first,
+    // or start after this one starts but before it ends, then we go
+    // for the delete-event-and-normalize-rests option.  Otherwise
+    // (the notationally simpler case) we go for the
+    // replace-note-by-rest option.  We still lose in the case where
+    // another note starts before this one, overlaps it, but then also
+    // ends before it does -- but I think we can live with that.
+    
+    iterator j = i;
+    timeT endTime = (*i)->getAbsoluteTime() + (*i)->getDuration();
+
+    while (j != end() && (*j)->getAbsoluteTime() < endTime) {
+	
+	bool complicatedOverlap = false;
+
+	if ((*j)->getAbsoluteTime() != (*i)->getAbsoluteTime()) {
+	    complicatedOverlap = true;
+	} else if (((*j)->getAbsoluteTime() + (*j)->getDuration()) < endTime) {
+	    complicatedOverlap = true;
+	}
+
+	if (complicatedOverlap) {
+	    timeT startTime = (*i)->getAbsoluteTime();
+	    segment().erase(i);
+	    segment().normalizeRests(startTime, endTime);
+	    return;
+	}
+
+	++j;
+    }	
+
     if (noteIsInChord(e)) {
 
 	erase(i);
 
     } else {
-	
+
 	// replace with a rest
 	Event *newRest = new Event(Note::EventRestType,
 				   e->getAbsoluteTime(), e->getDuration());
@@ -919,7 +952,7 @@ SegmentNotationHelper::deleteNote(Event *e, bool collapseRest)
             collapseIfValid(newRest, dummy);
         }
 
-    }
+//!!!    }
 }
 
 bool
@@ -1085,13 +1118,16 @@ SegmentNotationHelper::unbeamAux(iterator from, iterator to)
 */
 
 void
-SegmentNotationHelper::autoBeam(timeT from, timeT to, string type)
+SegmentNotationHelper::autoBeam(timeT from, timeT to, string type,
+				const Quantizer *quantizer)
 {
-    autoBeam(segment().findTime(from), segment().findTime(to), type);
+    autoBeam(segment().findTime(from), segment().findTime(to), type,
+	     quantizer);
 }
 
 void
-SegmentNotationHelper::autoBeam(iterator from, iterator to, string type)
+SegmentNotationHelper::autoBeam(iterator from, iterator to, string type,
+				const Quantizer *quantizer)
 {
     // This can only manage whole bars at a time, and it will split
     // the from-to range out to encompass the whole bars in which they
@@ -1110,7 +1146,8 @@ SegmentNotationHelper::autoBeam(iterator from, iterator to, string type)
 	TimeSignature timeSig =
 	    segment().getComposition()->getTimeSignatureAt(t);
 
-	autoBeamBar(barStart, barEnd, timeSig, type);
+	autoBeamBar(barStart, barEnd, timeSig, type,
+		    (quantizer ? quantizer : &legatoQuantizer()));
 	
 	if (barEnd == end() ||
 	    (to != end() &&
@@ -1136,7 +1173,8 @@ SegmentNotationHelper::autoBeam(iterator from, iterator to, string type)
 
 void
 SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
-				   TimeSignature tsig, string type)
+				   TimeSignature tsig, string type,
+				   const Quantizer *quantizer)
 {
     int num = tsig.getNumerator();
     int denom = tsig.getDenominator();
@@ -1171,14 +1209,15 @@ SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
     if (minimum == 0) minimum = average / 2;
     if (denom > 4) average /= 2;
 
-    autoBeamBar(from, to, average, minimum, average * 4, type);
+    autoBeamBar(from, to, average, minimum, average * 4, type, quantizer);
 }
 
 
 void
 SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
 				   timeT average, timeT minimum,
-				   timeT maximum, string type)
+				   timeT maximum, string type,
+				   const Quantizer *quantizer)
 {
     timeT accumulator = 0;
     timeT crotchet    = Note(Note::Crotchet).getDuration();
@@ -1188,7 +1227,7 @@ SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
 
         // only look at one note in each chord, and at rests
         if (!hasEffectiveDuration(i)) continue;
-        timeT idur = getNotationDuration(*i);
+        timeT idur = getNotationDuration(*i, quantizer);
 
 	if (accumulator % average == 0 &&  // "beamable duration" threshold
 	    idur < crotchet) {
@@ -1218,7 +1257,7 @@ SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
 	    for (iterator j = i; j != to; ++j) {
 
 		if (!hasEffectiveDuration(j)) continue;
-                timeT jdur = getNotationDuration(*j);
+                timeT jdur = getNotationDuration(*j, quantizer);
 
 		if ((*j)->isa(Note::EventType)) {
 		    if (jdur < crotchet) ++beamable;
@@ -1242,7 +1281,8 @@ SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
 		// reached the maximum length of beamed group, we have
 		// more than 4 semis or quavers, we're at the end of
 		// our run, the next chord is longer than the current
-		// one, or there's a rest ahead.
+		// one, or there's a rest ahead (whose quantized 
+		// duration is non-zero, if we have a quantizer here).
 
 		iterator jnext(j);
 
@@ -1251,8 +1291,10 @@ SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
 		    || (++jnext == to)     
 		    || ((*j    )->isa(Note::EventType) &&
 			(*jnext)->isa(Note::EventType) &&
-			getNotationDuration(*jnext) > jdur)
-		    || ((*jnext)->isa(Note::EventRestType))) {
+			getNotationDuration(*jnext, quantizer) > jdur)
+		    || ((*jnext)->isa(Note::EventRestType) &&
+			(!quantizer ||
+			 (quantizer->getQuantizedDuration(*jnext) > 0)))) {
 
 		    if (k != end() && beamable >= 2) {
 

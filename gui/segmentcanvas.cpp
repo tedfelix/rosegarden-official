@@ -944,7 +944,7 @@ void SegmentCanvas::setShowPreviews(bool previews)
     }
 
     m_showPreviews = previews;
-    canvas()->update();
+    slotUpdate();
 }
 
 
