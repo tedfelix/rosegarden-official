@@ -303,13 +303,13 @@ DataBlockFile::DataBlockFile(DataBlockRepository::blockid id)
       m_file(m_fileName),
       m_cleared(false)
 {
-    std::cerr << "DataBlockFile " << m_fileName.latin1() << std::endl;
+//     std::cerr << "DataBlockFile " << m_fileName.latin1() << std::endl;
 }
 
 DataBlockFile::~DataBlockFile()
 {
     if (m_cleared) {
-        std::cerr << "~DataBlockFile : removing " << m_fileName.latin1() << std::endl;
+//         std::cerr << "~DataBlockFile : removing " << m_fileName.latin1() << std::endl;
         QFile::remove(m_fileName);
     }
     
@@ -322,7 +322,7 @@ bool DataBlockFile::exists()
 
 void DataBlockFile::setData(const std::string& s)
 {
-    std::cerr << "DataBlockFile::setData() : setting data to " << m_fileName << std::endl;
+//     std::cerr << "DataBlockFile::setData() : setting data to " << m_fileName << std::endl;
     prepareToWrite();
 
     QDataStream stream(&m_file);
@@ -336,7 +336,7 @@ std::string DataBlockFile::getData()
     prepareToRead();
 
     QDataStream stream(&m_file);
-    std::cerr << "DataBlockFile::getData() : file size = " << m_file.size() << std::endl;
+//     std::cerr << "DataBlockFile::getData() : file size = " << m_file.size() << std::endl;
     char* tmp = new char[m_file.size()];
     stream.readRawBytes(tmp, m_file.size());
     std::string res(tmp, m_file.size());

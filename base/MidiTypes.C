@@ -254,7 +254,7 @@ SystemExclusive::getAsEvent(timeT absoluteTime) const
     Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
     std::string hex(toHex(m_rawData));
     e->set<String>(DATABLOCK, hex);
-    std::cerr << "SystemExclusive::getAsEvent: hex is " << hex << std::endl;
+//     std::cerr << "SystemExclusive::getAsEvent: hex is " << hex << std::endl;
     return e;
 }
 
