@@ -19,30 +19,31 @@
     COPYING included with this distribution for more information.
 */
 
-#include <qframe.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qcombobox.h>
+#include <string>
+#include <vector>
 
-#ifndef _SEGMENTPARAMETERBOX_H_
-#define _SEGMENTPARAMETERBOX_H_
+#include "Event.h"
 
-class SegmentParameterBox : public QFrame
+
+// Convenient way of sharing possible quantization values across clients
+//
+
+#ifndef _QUANTIZEVALUES_H_
+#define _QUANTIZEVALUES_H_
+
+typedef std::vector<std::pair<Rosegarden::timeT, std::string> > QuantizeList;
+typedef std::vector<std::pair<Rosegarden::timeT, std::string> >::iterator QuantizeListIterator;
+
+class QuantizeValues : public QuantizeList
 {
-Q_OBJECT
-
 public:
-    SegmentParameterBox(QWidget *parent=0, const char *name=0, WFlags f=0);
-    ~SegmentParameterBox();
+
+    QuantizeValues();
+    virtual ~QuantizeValues() {;}
 
 private:
-    void initBox();
-
-    QLabel    *m_repeatValue;
-    QComboBox *m_quantizeValue;
-    QComboBox *m_transposeValue;
-    QComboBox *m_delayValue;
 };
 
+#endif // _QUANTIZEVALUES_H_
 
-#endif // _SEGMENTPARAMETERBOX_H_
+

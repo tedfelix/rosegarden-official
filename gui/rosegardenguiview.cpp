@@ -75,6 +75,10 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     //
     m_segmentParameterBox = new SegmentParameterBox(vbox);
     m_instrumentParameterBox = new InstrumentParameterBox(vbox);
+
+    // fudge to get everything aligned properly
+    QLabel *spacer = new QLabel(vbox);
+    spacer->setMinimumHeight(100);
     
     // Construct the trackEditor first so we can then
     // query it for placement information
