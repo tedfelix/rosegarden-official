@@ -1920,5 +1920,7 @@ NotationView::slotCheckRendered(double cx0, double cx1)
 
 	staff->checkRendered(t0, t1);
     }
+
+    doDeferredCursorMove();
 }
 

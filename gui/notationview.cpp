@@ -621,6 +621,9 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_rawNoteRuler->repaint();
     m_inhibitRefresh = false;
 
+    slotCheckRendered(0, getCanvasView()->visibleWidth());
+    getCanvasView()->repaintContents();
+
     setConfigDialogPageIndex(1);
     setOutOfCtor();
     setupControllerTabs();
@@ -2676,7 +2679,7 @@ void NotationView::refreshSegment(Segment *segment,
     removeProgressEventFilter();
 
     Event::dumpStats(std::cerr);
-    doDeferredCursorMove();
+//!!!    doDeferredCursorMove();
     slotSetPointerPosition(getDocument()->getComposition().getPosition(), false);
 
     if (m_currentEventSelection &&
