@@ -418,7 +418,7 @@ MixerWindow::slotPluginSelected(Rosegarden::InstrumentId id,
 
 	    rec.m_plugins[index]->setText(i18n("<none>"));
 
-	    rec.m_plugins[i]->setPaletteBackgroundColor
+	    rec.m_plugins[index]->setPaletteBackgroundColor
 		(kapp->palette().
 		 color(QPalette::Active, QColorGroup::Button));
 
@@ -431,7 +431,7 @@ MixerWindow::slotPluginSelected(Rosegarden::InstrumentId id,
 		rec.m_plugins[index]->
 		    setText(pluginClass->getLabel());
 
-	    rec.m_plugins[i]->setPaletteBackgroundColor
+	    rec.m_plugins[index]->setPaletteBackgroundColor
 		(kapp->palette().
 		 color(QPalette::Active, QColorGroup::Light));
 	}
