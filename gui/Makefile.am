@@ -1,7 +1,7 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 bin_PROGRAMS = rosegardengui
 rosegardengui_SOURCES = staff.cpp qcanvasspritegroupable.cpp qcanvaslinegroupable.cpp qcanvasitemgroup.cpp qcanvasgroupableitem.cpp pitchtoheight.cpp notepixmapfactory.cpp chord.cpp rosegardenguiview.cpp rosegardenguidoc.cpp rosegardengui.cpp main.cpp 
-rosegardengui_LDADD   =  -lkfile -lkdeui -lkdecore -lqt -lXext -lX11 $(LIBSOCKET)
+rosegardengui_LDADD   = -Lcore -lcore -lkfile -lkdeui -lkdecore -lqt -lXext -lX11 $(LIBSOCKET)
 
 SUBDIRS = docs 
 
