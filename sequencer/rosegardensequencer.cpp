@@ -35,8 +35,8 @@ RosegardenSequencerApp::RosegardenSequencerApp():
     m_transportStatus(STOPPED),
     m_songPosition(0),
     m_lastFetchSongPosition(0),
-    m_fetchLatency(100),
-    m_playLatency(400)
+    m_fetchLatency(20),
+    m_playLatency(100)
 {
   // Without DCOP we are nothing
   QCString realAppId = kapp->dcopClient()->registerAs(kapp->name(), false);
@@ -70,6 +70,9 @@ void
 RosegardenSequencerApp::quit()
 {
   close();
+
+  // and break out of the loop next time around
+  m_transportStatus = QUIT;
 }
 
 
@@ -91,11 +94,11 @@ RosegardenSequencerApp::play(const Rosegarden::timeT &position,
   // play state to "STARTING_TO_PLAY" which is then caught in
   // the main event loop
   //
-
   m_songPosition = position;
   m_transportStatus = STARTING_TO_PLAY;
+  m_playLatency = latency;
 
-  // simple for the moment
+  // keep it simple
   return true;
 }
 
@@ -148,13 +151,6 @@ RosegardenSequencerApp::fetchEvents(const Rosegarden::timeT &start,
   else
   {
     QDataStream reply(replyData, IO_ReadOnly);
-/*
-    if (replyType == "QString")
-    {
-      QString result;
-      reply >> result;
-    }
-    else*/
     if (replyType == "Rosegarden::MappedComposition")
     {
       reply >> mappedComp;
@@ -223,19 +219,26 @@ RosegardenSequencerApp::updateClocks()
   QCString replyType;
   QDataStream arg(data, IO_WriteOnly);
 
-  m_songPosition = m_sequencer->getSequencerTime();
-  arg << m_songPosition;
-
-  cout << "SONG POSITION = " << m_songPosition << endl;
-  if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
-                                ROSEGARDEN_GUI_IFACE_NAME,
-                                "setPointerPosition(int)",
-                                data, replyType, replyData))
+  // Sequencer time is a subset of MIDI time so GUI song
+  // position won't be updating every pass through a tight
+  // loop.
+  //
+  if (m_sequencer->getSequencerTime() != m_songPosition)
   {
-    cerr <<
-     "RosegardenSequencer::fetchEvents() - can't call RosegardenGUI client"
-         << endl;
-    m_transportStatus = STOPPING;
+    m_songPosition = m_sequencer->getSequencerTime();
+    arg << m_songPosition;
+
+    cout << "updateClocks() - m_songPosition = " << m_songPosition << endl;
+    if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
+                                  ROSEGARDEN_GUI_IFACE_NAME,
+                                  "setPointerPosition(int)",
+                                  data, replyType, replyData))
+    {
+      cerr <<
+       "RosegardenSequencer::updateClocks() - can't call RosegardenGUI client"
+           << endl;
+      m_transportStatus = STOPPING;
+    }
   }
 }
 
@@ -254,7 +257,7 @@ RosegardenSequencerApp::notifySequencerStatus()
                                 data, replyType, replyData))
   {
     cerr <<
-     "RosegardenSequencer::fetchEvents() - can't call RosegardenGUI client"
+     "RosegardenSequencer::notifySequencerStatus() - can't call RosegardenGUI client"
          << endl;
   }
 }

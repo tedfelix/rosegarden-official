@@ -188,15 +188,14 @@ int main(int argc, char *argv[])
 
   TransportStatus lastSeqStatus = roseSeq->getStatus();
 
-  while(true)
+  while(roseSeq->getStatus() != QUIT)
   {
     // process any pending events
-    app.processEvents();
+    app.processEvents(100);
 
     // Update internal clock and send pointer position
     // change event to GUI
-    if (roseSeq->getStatus() == PLAYING ||
-        roseSeq->getStatus() == STARTING_TO_PLAY )
+    if (roseSeq->getStatus() == PLAYING)
       roseSeq->updateClocks();
 
     if(roseSeq)
@@ -207,6 +206,7 @@ int main(int argc, char *argv[])
           if (!roseSeq->startPlaying())
           {
             // send result failed and stop Sequencer
+            roseSeq->setStatus(STOPPING);
           }
           else
           {
@@ -219,6 +219,7 @@ int main(int argc, char *argv[])
           {
             // there's a problem or the piece has finished
             // so stop playing
+            roseSeq->setStatus(STOPPING);
           }
           break;
 

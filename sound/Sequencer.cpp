@@ -356,6 +356,15 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition *mappedComp,
   unsigned int midiRelativeTime;
   unsigned int midiRelativeStopTime;
 
+
+  // get current port time at start of playback
+  if (_startPlayback)
+  {
+    _playStartTime = _midiPlayPort.time();
+    _startPlayback = false;
+    _playing = true;
+  }
+
   for ( MappedComposition::iterator i = mappedComp->begin();
                                     i != mappedComp->end(); ++i )
   {
@@ -366,13 +375,6 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition *mappedComp,
     midiRelativeTime = convertToMidiTime((*i)->getAbsoluteTime() -
                                                _playStartPosition);
 
-    // get current port time at start of playback
-    if (_startPlayback)
-    {
-      _playStartTime = _midiPlayPort.time();
-      _startPlayback = false;
-      _playing = true;
-    }
 
     event.time = aggregateTime(_playStartTime,
                                convertToArtsTimeStamp(midiRelativeTime));
@@ -419,7 +421,9 @@ Sequencer::processNotesOff(unsigned int midiTime)
     // If there's a pregnant NOTE OFF around then send it
     if ((*i)->getMidiTime() <= midiTime)
     {
-      event.time = _midiPlayPort.time();
+      //event.time = _midiPlayPort.time();
+      event.time = aggregateTime(_playStartTime,
+                              convertToArtsTimeStamp((*i)->getMidiTime()));
       event.command.data1 = (*i)->getPitch();
       event.command.data2 = 127;
       event.command.status = Arts::mcsNoteOff | channel;

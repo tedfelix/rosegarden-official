@@ -878,7 +878,7 @@ RosegardenGUIApp::play()
   //
   QDataStream streamOut(data, IO_WriteOnly);
   streamOut << m_doc->getComposition().getPosition();
-  streamOut << 200;  // default latency
+  streamOut << 50;  // default latency
 
   // Send Play to the Sequencer
   if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
@@ -934,7 +934,6 @@ RosegardenGUIApp::stop()
                                 replyType, replyData))
   {
     // failed - pop up and disable sequencer options
-    m_transportStatus = STOPPED;
     KMessageBox::error(this,
       i18n("Failed to contact RosegardenSequencer"));
   }
@@ -945,16 +944,12 @@ RosegardenGUIApp::stop()
     int result;
     streamIn >> result;
 
-    if (result)
-    {
-      // completed successfully 
-      m_transportStatus = STOPPED;
-    }
-    else
+    if (!result)
     {
       KMessageBox::error(this, i18n("Failed to stop playback"));
     }
   }
+  m_transportStatus = STOPPED;
 }
 
 // Jump to previous bar
