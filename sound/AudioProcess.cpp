@@ -758,7 +758,7 @@ AudioInstrumentMixer::resetAllPlugins()
 
 	    if (instance) {
 		instance->deactivate();
-		instance->setIdealChannelCount(m_sampleRate, channels);
+		instance->setIdealChannelCount(channels);
 		instance->activate();
 	    }
 	}
@@ -1226,7 +1226,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
 		  << " inputs, " << plugin->getAudioOutputCount() << " outputs" << std::endl;
 #endif
 
-	plugin->run();
+	plugin->run(bufferTime);
 
 	ch = 0;
 

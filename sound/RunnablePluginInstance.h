@@ -26,6 +26,9 @@
 #include <qstring.h>
 #include <vector>
 
+#include "RealTime.h"
+#include <alsa/seq_event.h>
+
 namespace Rosegarden
 {
 
@@ -57,7 +60,12 @@ public:
     virtual void activate() = 0;
     virtual void deactivate() = 0;
 
-    virtual void run() = 0;
+    /**
+     * Run for one block, starting at the given time.  The start time
+     * may be of interest to synths etc that may have queued events
+     * waiting.  Other plugins can ignore it.
+     */
+    virtual void run(const RealTime &blockStartTime) = 0;
     
     virtual size_t getBufferSize() = 0;
 
@@ -69,11 +77,12 @@ public:
 
     virtual void setPortValue(unsigned int port, float value) = 0;
 
+    virtual void sendEvent(const RealTime &eventTime, snd_seq_event_t *event) { }
+
     virtual bool isBypassed() const = 0;
     virtual void setBypassed(bool value) = 0;
 
-    virtual void setIdealChannelCount(unsigned long sampleRate,
-				      int channels) = 0; // may re-instantiate
+    virtual void setIdealChannelCount(int channels) = 0; // may re-instantiate
 
     void setFactory(PluginFactory *f) { m_factory = f; } // ew
 

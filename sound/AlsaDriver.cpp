@@ -573,7 +573,7 @@ AlsaDriver::generateInstruments()
 
     if (m_driverStatus & AUDIO_OK)
     {
-        for (int i = 0; i < 32; ++i)
+        for (int i = 0; i < 16; ++i)
         {
             sprintf(number, " #%d", i + 1);
             std::string name = "Synth plugin" + std::string(number);
@@ -591,7 +591,7 @@ AlsaDriver::generateInstruments()
         MappedDevice *device =
                         new MappedDevice(ssiDeviceId,
                                          Device::SoftSynth,
-                                         "Synth plugins",
+                                         "Synth plugin",
                                          "Soft synth connection");
         m_devices.push_back(device);
     }

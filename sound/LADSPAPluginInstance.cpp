@@ -36,7 +36,7 @@ LADSPAPluginInstance::LADSPAPluginInstance(PluginFactory *factory,
 					   QString identifier,
                                            int position,
 					   unsigned long sampleRate,
-					   size_t bufferSize,
+					   size_t blockSize,
 					   int idealChannelCount,
                                            const LADSPA_Descriptor* descriptor) :
     RunnablePluginInstance(factory, identifier),
@@ -44,7 +44,8 @@ LADSPAPluginInstance::LADSPAPluginInstance(PluginFactory *factory,
     m_position(position),
     m_instanceCount(0),
     m_descriptor(descriptor),
-    m_bufferSize(bufferSize),
+    m_blockSize(blockSize),
+    m_sampleRate(sampleRate),
     m_bypassed(false)
 {
     init(idealChannelCount);
@@ -53,10 +54,10 @@ LADSPAPluginInstance::LADSPAPluginInstance(PluginFactory *factory,
     m_outputBuffers = new sample_t*[m_instanceCount * m_audioPortsOut.size()];
 
     for (size_t i = 0; i < m_instanceCount * m_audioPortsIn.size(); ++i) {
-	m_inputBuffers[i] = new sample_t[bufferSize];
+	m_inputBuffers[i] = new sample_t[blockSize];
     }
     for (size_t i = 0; i < m_instanceCount * m_audioPortsOut.size(); ++i) {
-	m_outputBuffers[i] = new sample_t[bufferSize];
+	m_outputBuffers[i] = new sample_t[blockSize];
     }
 
     m_ownBuffers = true;
@@ -70,7 +71,7 @@ LADSPAPluginInstance::LADSPAPluginInstance(PluginFactory *factory,
 					   QString identifier,
                                            int position,
 					   unsigned long sampleRate,
-					   size_t bufferSize,
+					   size_t blockSize,
 					   sample_t **inputBuffers,
 					   sample_t **outputBuffers,
                                            const LADSPA_Descriptor* descriptor) :
@@ -79,10 +80,11 @@ LADSPAPluginInstance::LADSPAPluginInstance(PluginFactory *factory,
     m_position(position),
     m_instanceCount(0),
     m_descriptor(descriptor),
-    m_bufferSize(bufferSize),
+    m_blockSize(blockSize),
     m_inputBuffers(inputBuffers),
     m_outputBuffers(outputBuffers),
     m_ownBuffers(false),
+    m_sampleRate(sampleRate),
     m_bypassed(false)
 {
     init();
@@ -137,7 +139,7 @@ LADSPAPluginInstance::init(int idealChannelCount)
 }
 
 void
-LADSPAPluginInstance::setIdealChannelCount(unsigned long sampleRate, int channels)
+LADSPAPluginInstance::setIdealChannelCount(int channels)
 {
     if (m_audioPortsIn.size() != 1) return;
     if (channels == m_instanceCount) return;
@@ -146,7 +148,7 @@ LADSPAPluginInstance::setIdealChannelCount(unsigned long sampleRate, int channel
 
     cleanup();
     m_instanceCount = channels;
-    instantiate(sampleRate);
+    instantiate(m_sampleRate);
     if (isOK()) connectPorts();
 }
 
@@ -276,13 +278,13 @@ LADSPAPluginInstance::setPortValue(unsigned int portNumber, float value)
 }
 
 void
-LADSPAPluginInstance::run()
+LADSPAPluginInstance::run(const RealTime &)
 {
     if (!m_descriptor || !m_descriptor->run) return;
 
     for (std::vector<LADSPA_Handle>::iterator hi = m_instanceHandles.begin();
 	 hi != m_instanceHandles.end(); ++hi) {
-        m_descriptor->run(*hi, m_bufferSize);
+        m_descriptor->run(*hi, m_blockSize);
     }
 }
 

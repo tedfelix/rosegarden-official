@@ -31,20 +31,24 @@
 namespace Rosegarden
 {
 
+#define EVENT_BUFFER_SIZE 1023
+
 DSSIPluginInstance::DSSIPluginInstance(PluginFactory *factory,
 				       Rosegarden::InstrumentId instrument,
 				       QString identifier,
 				       int position,
 				       unsigned long sampleRate,
-				       size_t bufferSize,
+				       size_t blockSize,
 				       int idealChannelCount,
 				       const DSSI_Descriptor* descriptor) :
     RunnablePluginInstance(factory, identifier),
     m_instrument(instrument),
     m_position(position),
     m_descriptor(descriptor),
-    m_bufferSize(bufferSize),
+    m_eventBuffer(EVENT_BUFFER_SIZE),
+    m_blockSize(blockSize),
     m_idealChannelCount(idealChannelCount),
+    m_sampleRate(sampleRate),
     m_bypassed(false)
 {
     init();
@@ -53,10 +57,10 @@ DSSIPluginInstance::DSSIPluginInstance(PluginFactory *factory,
     m_outputBuffers = new sample_t*[m_outputBufferCount];
 
     for (size_t i = 0; i < m_audioPortsIn.size(); ++i) {
-	m_inputBuffers[i] = new sample_t[bufferSize];
+	m_inputBuffers[i] = new sample_t[blockSize];
     }
     for (size_t i = 0; i < m_outputBufferCount; ++i) {
-	m_outputBuffers[i] = new sample_t[bufferSize];
+	m_outputBuffers[i] = new sample_t[blockSize];
     }
 
     m_ownBuffers = true;
@@ -70,7 +74,7 @@ DSSIPluginInstance::DSSIPluginInstance(PluginFactory *factory,
 				       QString identifier,
 				       int position,
 				       unsigned long sampleRate,
-				       size_t bufferSize,
+				       size_t blockSize,
 				       sample_t **inputBuffers,
 				       sample_t **outputBuffers,
 				       const DSSI_Descriptor* descriptor) :
@@ -78,11 +82,13 @@ DSSIPluginInstance::DSSIPluginInstance(PluginFactory *factory,
     m_instrument(instrument),
     m_position(position),
     m_descriptor(descriptor),
-    m_bufferSize(bufferSize),
+    m_eventBuffer(EVENT_BUFFER_SIZE),
+    m_blockSize(blockSize),
     m_inputBuffers(inputBuffers),
     m_outputBuffers(outputBuffers),
     m_ownBuffers(false),
     m_idealChannelCount(0),
+    m_sampleRate(sampleRate),
     m_bypassed(false)
 {
     init();
@@ -132,7 +138,7 @@ DSSIPluginInstance::init()
 }
 
 void
-DSSIPluginInstance::setIdealChannelCount(unsigned long sampleRate, int channels)
+DSSIPluginInstance::setIdealChannelCount(int channels)
 {
     if (channels == m_idealChannelCount) return;
     m_idealChannelCount = channels;
@@ -148,7 +154,7 @@ DSSIPluginInstance::setIdealChannelCount(unsigned long sampleRate, int channels)
 	m_outputBuffers = new sample_t*[m_outputBufferCount];
 
 	for (size_t i = 0; i < m_outputBufferCount; ++i) {
-	    m_outputBuffers[i] = new sample_t[m_bufferSize];
+	    m_outputBuffers[i] = new sample_t[m_blockSize];
 	}
     }
 }
@@ -267,16 +273,45 @@ DSSIPluginInstance::setPortValue(unsigned int portNumber, float value)
 }
 
 void
-DSSIPluginInstance::run()
+DSSIPluginInstance::sendEvent(const RealTime &eventTime, snd_seq_event_t *event)
 {
-    if (!m_descriptor || !m_descriptor->LADSPA_Plugin->run) return;
-    m_descriptor->LADSPA_Plugin->run(m_instanceHandle, m_bufferSize);
+    snd_seq_event_t ev(*event);
+    ev.time.time.tv_sec = eventTime.sec;
+    ev.time.time.tv_nsec = eventTime.nsec;
+    m_eventBuffer.write(&ev, 1);
+}
+
+void
+DSSIPluginInstance::run(const RealTime &blockTime)
+{
+    if (!m_descriptor || !m_descriptor->run_synth) return;
+    
+    static snd_seq_event_t localEventBuffer[EVENT_BUFFER_SIZE];
+    int evCount = 0;
+
+    while (m_eventBuffer.getReadSpace() > 0) {
+
+	snd_seq_event_t *ev = localEventBuffer + evCount;
+	*ev = m_eventBuffer.peek();
+
+	RealTime evTime(ev->time.time.tv_sec, ev->time.time.tv_nsec);
+	int frameOffset = RealTime::realTime2Frame(evTime - blockTime, m_sampleRate);
+	if (frameOffset >= int(m_blockSize)) break;
+	if (frameOffset < 0) frameOffset = 0;
+
+	ev->time.tick = frameOffset;
+	m_eventBuffer.skip(1);
+	if (++evCount >= EVENT_BUFFER_SIZE) break;
+    }
+
+    m_descriptor->run_synth(m_instanceHandle, m_blockSize,
+			    localEventBuffer, evCount);
 
     if (m_idealChannelCount < m_audioPortsOut.size()) {
 	if (m_idealChannelCount == 1) {
 	    // mix down to mono
 	    for (size_t ch = 1; ch < m_audioPortsOut.size(); ++ch) {
-		for (size_t i = 0; i < m_bufferSize; ++i) {
+		for (size_t i = 0; i < m_blockSize; ++i) {
 		    m_outputBuffers[0][i] += m_outputBuffers[ch][i];
 		}
 	    }
@@ -285,7 +320,7 @@ DSSIPluginInstance::run()
 	// duplicate
 	for (size_t ch = m_audioPortsOut.size(); ch < m_idealChannelCount; ++ch) {
 	    size_t sch = (ch - m_audioPortsOut.size()) % m_audioPortsOut.size();
-	    for (size_t i = 0; i < m_bufferSize; ++i) {
+	    for (size_t i = 0; i < m_blockSize; ++i) {
 		m_outputBuffers[ch][i] = m_outputBuffers[sch][i];
 	    }
 	}

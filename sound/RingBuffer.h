@@ -101,6 +101,14 @@ public:
     T readOne(int R = 0);
 
     /**
+     * Read one sample from the buffer, if available, without
+     * advancing the read pointer -- i.e. a subsequent read() or
+     * skip() will be necessary to empty the buffer.  Returns zero if
+     * no sample was available.
+     */
+    T peek(int R = 0) const;
+
+    /**
      * Pretend to read n samples from the buffer, for reader R,
      * without actually returning them (i.e. discard the next n
      * samples).  Returns the number of samples actually available for
@@ -250,9 +258,26 @@ template <typename T, int N>
 T
 RingBuffer<T, N>::readOne(int R)
 {
-    if (m_writer == m_readers[R]) return 0;
+    if (m_writer == m_readers[R]) {
+	T t;
+	memset(&t, 0, sizeof(T));
+	return t;
+    }
     T value = m_buffer[m_readers[R]];
     if (++m_readers[R] == m_size) m_readers[R] = 0;
+    return value;
+}
+
+template <typename T, int N>
+T
+RingBuffer<T, N>::peek(int R) const
+{
+    if (m_writer == m_readers[R]) {
+	T t;
+	memset(&t, 0, sizeof(T));
+	return t;
+    }
+    T value = m_buffer[m_readers[R]];
     return value;
 }
 

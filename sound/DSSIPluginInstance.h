@@ -31,6 +31,7 @@
 #ifdef HAVE_DSSI
 
 #include <dssi.h>
+#include "RingBuffer.h"
 #include "RunnablePluginInstance.h"
 
 namespace Rosegarden
@@ -47,14 +48,12 @@ public:
     virtual QString getIdentifier() const { return m_identifier; }
     int getPosition() const { return m_position; }
 
-    // Set control ports
-    //
-    virtual void setPortValue(unsigned int portNumber, float value);
+    virtual void run(const RealTime &);
 
-    // RunnablePluginInstance API
-    //
-    virtual void run();
-    virtual size_t getBufferSize() { return m_bufferSize; }
+    virtual void setPortValue(unsigned int portNumber, float value);
+    virtual void sendEvent(const RealTime &eventTime, snd_seq_event_t *event);
+
+    virtual size_t getBufferSize() { return m_blockSize; }
     virtual size_t getAudioInputCount() { return m_audioPortsIn.size(); }
     virtual size_t getAudioOutputCount() { return m_idealChannelCount; }
     virtual sample_t **getAudioInputBuffers() { return m_inputBuffers; }
@@ -66,8 +65,7 @@ public:
     virtual bool isBypassed() const { return m_bypassed; }
     virtual void setBypassed(bool bypassed) { m_bypassed = bypassed; }
 
-    virtual void setIdealChannelCount(unsigned long sampleRate,
-				      int channels); // may re-instantiate
+    virtual void setIdealChannelCount(int channels); // may re-instantiate
 
 protected:
     // To be constructed only by DSSIPluginFactory
@@ -80,7 +78,7 @@ protected:
 		       QString identifier,
 		       int position,
 		       unsigned long sampleRate,
-		       size_t bufferSize,
+		       size_t blockSize,
 		       int idealChannelCount,
 		       const DSSI_Descriptor* descriptor);
     
@@ -91,7 +89,7 @@ protected:
 		       QString identifier,
 		       int position,
 		       unsigned long sampleRate,
-		       size_t bufferSize,
+		       size_t blockSize,
 		       sample_t **inputBuffers,
 		       sample_t **outputBuffers,
 		       const DSSI_Descriptor* descriptor);
@@ -115,12 +113,15 @@ protected:
     std::vector<int>          m_audioPortsIn;
     std::vector<int>          m_audioPortsOut;
 
-    size_t                    m_bufferSize;
+    RingBuffer<snd_seq_event_t> m_eventBuffer;
+
+    size_t                    m_blockSize;
     sample_t                **m_inputBuffers;
     sample_t                **m_outputBuffers;
     bool                      m_ownBuffers;
     int                       m_idealChannelCount;
     int                       m_outputBufferCount;
+    size_t                    m_sampleRate;
     
     bool                      m_bypassed;
 };

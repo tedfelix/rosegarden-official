@@ -51,14 +51,11 @@ public:
     virtual QString getIdentifier() const { return m_identifier; }
     int getPosition() const { return m_position; }
 
-    // Set control ports
-    //
+    virtual void run(const RealTime &rt);
+
     virtual void setPortValue(unsigned int portNumber, float value);
 
-    // RunnablePluginInstance API
-    //
-    virtual void run();
-    virtual size_t getBufferSize() { return m_bufferSize; }
+    virtual size_t getBufferSize() { return m_blockSize; }
     virtual size_t getAudioInputCount() { return m_instanceCount * m_audioPortsIn.size(); }
     virtual size_t getAudioOutputCount() { return m_instanceCount * m_audioPortsOut.size(); }
     virtual sample_t **getAudioInputBuffers() { return m_inputBuffers; }
@@ -70,8 +67,7 @@ public:
     virtual bool isBypassed() const { return m_bypassed; }
     virtual void setBypassed(bool bypassed) { m_bypassed = bypassed; }
 
-    virtual void setIdealChannelCount(unsigned long sampleRate,
-				      int channels); // may re-instantiate
+    virtual void setIdealChannelCount(int channels); // may re-instantiate
 
 protected:
     // To be constructed only by LADSPAPluginFactory
@@ -84,7 +80,7 @@ protected:
 			 QString identifier,
                          int position,
 			 unsigned long sampleRate,
-			 size_t bufferSize,
+			 size_t blockSize,
 			 int idealChannelCount,
                          const LADSPA_Descriptor* descriptor);
 
@@ -95,7 +91,7 @@ protected:
 			 QString identifier,
                          int position,
 			 unsigned long sampleRate,
-			 size_t bufferSize,
+			 size_t blockSize,
 			 sample_t **inputBuffers,
 			 sample_t **outputBuffers,
                          const LADSPA_Descriptor* descriptor);
@@ -120,10 +116,11 @@ protected:
     std::vector<int>          m_audioPortsIn;
     std::vector<int>          m_audioPortsOut;
 
-    size_t                    m_bufferSize;
+    size_t                    m_blockSize;
     sample_t                **m_inputBuffers;
     sample_t                **m_outputBuffers;
     bool                      m_ownBuffers;
+    size_t                    m_sampleRate;
     
     bool                      m_bypassed;
 };
