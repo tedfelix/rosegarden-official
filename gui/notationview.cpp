@@ -752,7 +752,6 @@ void NotationView::setViewSize(QSize s)
 /*!!!
 =======
 
->>>>>>> 1.254
 void NotationView::showBars(int staffNo)
 {
     NotationStaff &staff = *m_staffs[staffNo];
