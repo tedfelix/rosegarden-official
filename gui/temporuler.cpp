@@ -118,7 +118,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	double x = m_rulerScale->getXForTime(time) + m_currentXOffset;
 	paint.drawLine(x, height() - 4, x, height());
 
-	x -= bounds.width() / 2;
+	if (x > bounds.width() / 2) x -= bounds.width() / 2;
 	paint.drawText(x, textY, tempoString);
     }
 }
