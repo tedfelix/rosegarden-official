@@ -1143,14 +1143,14 @@ MatrixView::slotQuantizeSelection(int q)
 void
 MatrixView::initActionsToolbar()
 {
-    MATRIX_DEBUG << "MatrixView::initActionsToolbar" << std::endl;
+    MATRIX_DEBUG << "MatrixView::initActionsToolbar" << endl;
 
     KToolBar *actionsToolbar = toolBar("actionsToolBar");
 
     if (!actionsToolbar)
     {
         MATRIX_DEBUG << "MatrixView::initActionsToolbar - "
-                     << "tool bar not found" << std::endl;
+                     << "tool bar not found" << endl;
         return;
     }
 
@@ -1255,14 +1255,14 @@ MatrixView::initActionsToolbar()
 void
 MatrixView::initZoomToolbar()
 {
-    MATRIX_DEBUG << "MatrixView::initZoomToolbar" << std::endl;
+    MATRIX_DEBUG << "MatrixView::initZoomToolbar" << endl;
 
     KToolBar *zoomToolbar = toolBar("zoomToolBar");
 
     if (!zoomToolbar)
     {
         MATRIX_DEBUG << "MatrixView::initZoomToolbar - "
-                     << "tool bar not found" << std::endl;
+                     << "tool bar not found" << endl;
         return;
     }
 
