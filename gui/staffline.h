@@ -28,10 +28,8 @@
 class StaffLine : public QCanvasLineGroupable
 {
 public:
-    StaffLine(QCanvas *c, QCanvasItemGroup *g)
-        : QCanvasLineGroupable(c, g), m_pitch(0)
-    {}
-
+    StaffLine(QCanvas *c, QCanvasItemGroup *g);
+ 
     /**
      * sets the pitch this staff line corresponds to (e.g. the pitch
      * of a natural note which would be on this line)
@@ -41,9 +39,15 @@ public:
     /// returns the pitch this staff line corresponds to
     int associatedPitch() const { return m_pitch; }
 
-protected:
+    /**
+     * "highlight" the line (set its pen to red)
+     */
+    void setHighlighted(bool);
 
+protected:
     int m_pitch;
+
+    QPen m_normalPen;
 };
 
 #endif

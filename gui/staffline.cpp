@@ -15,4 +15,33 @@
  *                                                                         *
  ***************************************************************************/
 
-/* Nothing here - this class is completely inlined at the moment */
+#include "staffline.h"
+
+#include "rosedebug.h"
+
+StaffLine::StaffLine(QCanvas *c, QCanvasItemGroup *g)
+    : QCanvasLineGroupable(c, g),
+      m_pitch(0)
+{
+}
+
+void
+StaffLine::setHighlighted(bool highlighted)
+{
+//     kdDebug(KDEBUG_AREA) << "StaffLine::setHighlighted("
+//                          << highlighted << ")\n";
+
+    if (highlighted) {
+
+        m_normalPen = pen();
+        QPen newPen = m_normalPen;
+        newPen.setColor(red);
+        setPen(newPen);
+
+    } else {
+
+        setPen(m_normalPen);
+
+    }
+}
+
