@@ -324,3 +324,22 @@ RosegardenGUIDoc::xmlParse(QFile &file)
 
     return ok;
 }
+
+
+void
+RosegardenGUIDoc::createNewTrack(unsigned int trackNb, unsigned int nbBars,
+                                 unsigned int startAt)
+{
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewTrack(trackNb : "
+                         << trackNb << ", startAt : "
+                         << startAt << ", nbBars : " << nbBars
+                         << endl;
+
+    qDebug("RosegardenGUIDoc::createNewTrack(trackNb : %d, startAt : %d, nbBars : %d)",
+           trackNb, startAt, nbBars);
+
+    Track *newTrack = new Track(nbBars, startAt);
+    
+    m_composition.addTrack(newTrack, trackNb);
+}
+

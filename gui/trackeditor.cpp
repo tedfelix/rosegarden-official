@@ -164,14 +164,21 @@ void
 TracksEditor::addTrackPart(TrackPart *p)
 {
     // find track nb for part
-
+    //
     QCanvasRectangle *r = p->canvasPartItem();
     int trackNb = m_vHeader->sectionAt(static_cast<int>(r->y()));
     p->setTrackNb(trackNb);
+
     kdDebug(KDEBUG_AREA) << QString("TracksEditor::addTrackPart() : track nb is %1 at %2")
         .arg(trackNb).arg(r->y()) << endl;
 
     m_trackParts.push_back(p);
+
+    unsigned int startAt = m_hHeader->sectionAt(static_cast<int>(r->x()));
+
+    kdDebug(KDEBUG_AREA) << "TracksEditor::addTrackPart() emitting createNewTrack signal" << endl;
+
+    emit createNewTrack(trackNb, p->length(), startAt);
 }
 
 void

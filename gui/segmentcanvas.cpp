@@ -143,9 +143,6 @@ TracksCanvas::contentsMousePressEvent(QMouseEvent* e)
             int gx = m_grid.snapX(e->pos().x()),
                 gy = m_grid.snapY(e->pos().y());
 
-            //         qDebug("Creating new rect. at %d, %d - h = %d, v = %d",
-            //                gx, gy, m_grid.hstep(), m_grid.vstep());
-
             m_currentItem = new TrackPartItem(gx, gy,
                                               m_grid.hstep(),
                                               m_grid.vstep(),
@@ -176,13 +173,15 @@ void TracksCanvas::contentsMouseReleaseEvent(QMouseEvent*)
     if (!m_currentItem) return;
 
     if (m_currentItem->width() == 0) {
-        qDebug("rect deleted");
+        kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMouseReleaseEvent() : rect deleted"
+                             << endl;
         // delete m_currentItem; - TODO emit signal
     }
 
     if (m_newRect) {
 
         TrackPart *newPart = new TrackPart(m_currentItem, gridHStep());
+
         emit addTrackPart(newPart);
 
     } else {

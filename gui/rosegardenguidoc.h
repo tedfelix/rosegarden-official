@@ -118,6 +118,10 @@ public slots:
      */
     void slotUpdateAllViews(RosegardenGUIView *sender);
 
+    void createNewTrack(unsigned int trackNb,
+                        unsigned int nbBars,
+                        unsigned int startAt);
+
 protected:
     bool xmlParse(QFile &file);
     // bool xmlParseElement(const QDomElement &elmnt);

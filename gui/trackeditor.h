@@ -65,6 +65,9 @@ protected slots:
 
 signals:
     void needUpdate();
+    void createNewTrack(unsigned int trackNb,
+                        unsigned int nbBars,
+                        unsigned int startAt);
 
 protected:
 

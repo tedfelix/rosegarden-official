@@ -55,6 +55,9 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     connect(tracksEditor->canvas(), SIGNAL(editTrackPart(TrackPart*)),
             SLOT(editTrackNotation(TrackPart*)));
 
+    connect(tracksEditor,  SIGNAL(createNewTrack(unsigned int, unsigned int, unsigned int)),
+            getDocument(), SLOT  (createNewTrack(unsigned int, unsigned int, unsigned int)));
+
 //     if (getDocument()) {
         
 //         m_notationView = new NotationView(getDocument(), this);
