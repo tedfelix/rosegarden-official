@@ -25,6 +25,31 @@
 #include <vector>
 #include <qcanvas.h>
 
+#include "qcanvasitemgroup.h"
+
+class QCanvasRectangleGroupable;
+class QCanvasLineGroupable;
+
+class PositionCursor : public QObject, public QCanvasItemGroup
+{
+    Q_OBJECT
+
+public:
+    PositionCursor(QCanvas*, QObject* parent = 0);
+
+public slots:
+    void setPosition(unsigned int pos);
+
+signals:
+    void positionChange(unsigned int pos);
+
+protected:
+    QCanvasRectangleGroupable* m_grip;
+    QCanvasLineGroupable* m_line;
+};
+
+//////////////////////////////////////////////////////////////////////
+
 /**
  * The StaffRuler is a ruler shown above the staff in the Notation
  * window.
@@ -45,8 +70,8 @@ public:
     /// Re-create all the steps and substeps
     void update();
 
-    void setCursorPosition(unsigned int pos) { m_cursorLine->setX(pos); }
-    unsigned int getCursorPosition() const   { return int(m_cursorLine->x()); }
+    void setCursorPosition(unsigned int pos) { m_cursor->setPosition(pos); }
+    unsigned int getCursorPosition() const   { return int(m_cursor->x()); }
     
 
 protected:
@@ -76,7 +101,7 @@ protected:
         m_subStepLineHeight;
 
     QCanvasLine* m_mainLine;
-    QCanvasLine* m_cursorLine;
+    PositionCursor* m_cursor;
 
     Steps m_steps;
     

@@ -1,7 +1,8 @@
-#include <staffruler.h>
+#include "staffruler.h"
 
+#include "qcanvaslinegroupable.h"
+#include "qcanvasrectanglegroupable.h"
 
-//////////////////////////////////////////////////////////////////////
 
 StaffRuler::StepElement::StepElement(QCanvasLine* l, QCanvasText* t)
     : stepLine(l), label(t)
@@ -37,7 +38,7 @@ StaffRuler::StaffRuler(int xPos, int yPos, QCanvas* c)
       m_stepLineHeight(10),
       m_subStepLineHeight(5),
       m_mainLine(new QCanvasLine(m_canvas)),
-      m_cursorLine(new QCanvasLine(m_canvas))
+      m_cursor(new PositionCursor(m_canvas, m_canvas))
 {
     QCanvasRectangle *rulerBackground = new QCanvasRectangle(0, 0,
                                                              m_canvas->width(), m_yPos, 
@@ -51,10 +52,8 @@ StaffRuler::StaffRuler(int xPos, int yPos, QCanvas* c)
 
     m_mainLine->setPoints(0, m_yPos, m_canvas->width(), m_yPos);
     
-    m_cursorLine->setPoints(0, 0, 0, m_canvas->height());
-    
     m_mainLine->show();
-    m_cursorLine->show();
+    m_cursor->show();
 }
 
 void StaffRuler::clearSteps()
@@ -140,5 +139,26 @@ void StaffRuler::makeStep(int stepValue,
     label->show();
 
     m_stepElements.push_back(stepEl);
+}
+
+//////////////////////////////////////////////////////////////////////
+
+PositionCursor::PositionCursor(QCanvas* c, QObject* parent)
+    : QObject(parent),
+      QCanvasItemGroup(c),
+      m_grip(new QCanvasRectangleGroupable(c, this)),
+      m_line(new QCanvasLineGroupable(c, this))
+{
+    m_grip->setX(-5);
+    m_grip->setY(20);
+    m_grip->setSize(11, 10);
+    m_grip->setBrush(magenta);
+    m_line->setPoints(0, 0, 0, canvas()->height());
+    m_line->setPen(magenta);
+}
+
+void PositionCursor::setPosition(unsigned int pos)
+{
+    setX(pos);
 }
 
