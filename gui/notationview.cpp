@@ -268,7 +268,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     for (unsigned int i = 0; i < tracks.size(); ++i) {
         m_staffs.push_back(new NotationStaff(canvas(), tracks[i], i,
                                              m_fontName, m_fontSize));
-        m_staffs[i]->move(20, m_staffs[i]->getStaffHeight() * i + 40);
+        m_staffs[i]->move(20, m_staffs[i]->getStaffHeight() * i + 45);
         m_staffs[i]->show();
     }
     m_currentStaff = 0;
