@@ -976,7 +976,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
                 emit selectedSegments(getSelectedSegments());
             }
         }
-        return NoFollow;
+        return FollowHorizontal | FollowVertical;
     }
 
     m_canvas->setCursor(Qt::sizeAllCursor);
