@@ -229,5 +229,42 @@ private:
 };
 
 
+/// A selection of Unicode character names for symbols in a note font
+
+class NoteCharNames
+{
+public:
+    static const std::string SHARP;
+    static const std::string FLAT;
+    static const std::string NATURAL;
+    static const std::string DOUBLE_SHARP;
+    static const std::string DOUBLE_FLAT;
+
+    static const std::string BREVE;
+    static const std::string WHOLE_NOTE;
+    static const std::string VOID_NOTEHEAD;
+    static const std::string NOTEHEAD_BLACK;
+
+    static const std::string FLAG_1;
+    static const std::string FLAG_2;
+    static const std::string FLAG_3;
+    static const std::string FLAG_4;
+
+    static const std::string MULTI_REST;
+    static const std::string WHOLE_REST;
+    static const std::string HALF_REST;
+    static const std::string QUARTER_REST;
+    static const std::string EIGHTH_REST;
+    static const std::string SIXTEENTH_REST;
+    static const std::string THIRTY_SECOND_REST;
+    static const std::string SIXTY_FOURTH_REST;
+
+    static const std::string DOT;
+
+    static const std::string C_CLEF;
+    static const std::string G_CLEF;
+    static const std::string F_CLEF;
+};
+
 #endif
 
