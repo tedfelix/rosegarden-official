@@ -683,7 +683,7 @@ AudioRouteMenu::slotShowMenu()
 	menu->setItemParameter(i, i);
     }
 
-    int itemHeight = menu->itemHeight(0) + 4;
+    int itemHeight = menu->itemHeight(0) + 2;
     QPoint pos = QCursor::pos();
     
     pos.rx() -= 10;

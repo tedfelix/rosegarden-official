@@ -92,6 +92,9 @@ MixerWindow::MixerWindow(QWidget *parent,
 					  AudioRouteMenu::Out,
 					  AudioRouteMenu::Compact);
 
+	rec.m_input->getWidget()->setMaximumWidth(45);
+	rec.m_output->getWidget()->setMaximumWidth(45);
+
 	rec.m_pan = new RosegardenRotary
 	    (mainBox, -100.0, 100.0, 1.0, 5.0, 0.0, 20);
 	rec.m_fader = new RosegardenFader
@@ -131,6 +134,7 @@ MixerWindow::MixerWindow(QWidget *parent,
 	for (int p = 0; p < 5; ++p) {
 	    QPushButton *plugin = new QPushButton(rec.m_pluginBox);
 	    plugin->setText(i18n("<none>"));
+	    plugin->setMaximumWidth(45);
 	    QToolTip::add(plugin, i18n("Audio plugin button"));
 	    rec.m_plugins.push_back(plugin);
 	    connect(plugin, SIGNAL(clicked()),
