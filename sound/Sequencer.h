@@ -47,7 +47,6 @@
 
 #include "MappedComposition.h"
 #include "Midi.h"
-#include "MidiRecord.h"
 #include "MidiEvent.h"
 #include "AudioFile.h"
 #include "SoundDriver.h"

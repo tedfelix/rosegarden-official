@@ -406,6 +406,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
                 //
                 m_currentSegment = new Segment(Rosegarden::Segment::Audio);
                 m_currentSegment->setAudioFileID(audioFileID);
+                m_currentSegment->setStartTime(startTime);
             }
             else
             {

@@ -505,6 +505,12 @@ AudioFile::getPreview(const RealTime &resolution)
 
     // Read sample data at given resolution and push the results
     // onto the result vector.
+  
+    // We need sinc interpolation:
+    //
+    //   sinc(x)
+    //      returns sin(pi*x)/(pi*x) at all points of array x.
+
     do
     {
         meanValue = 0.0f; // reset
@@ -533,7 +539,7 @@ AudioFile::getPreview(const RealTime &resolution)
                 default:
                     std::cerr << "AudioFile::getPreview - "
                               << "unsupported bit depth of "
-                              << m_bytesPerSample * 8
+                              << m_bitsPerSample
                               << std::endl;
                     break;
             }
@@ -541,7 +547,8 @@ AudioFile::getPreview(const RealTime &resolution)
 
         meanValue /= ((float)m_channels);
 
-        // store
+        // store - only one value per whole sample frame
+        //preview.push_back(sinc(meanValue));
         preview.push_back(meanValue);
     }
     while(scanForward(previewFile, resolution));

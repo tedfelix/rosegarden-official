@@ -37,6 +37,8 @@ using std::endl;
 namespace Rosegarden
 {
 
+static const int previewWidth = 100;
+
 AudioManagerDialog::AudioManagerDialog(QWidget *parent,
                                        AudioFileManager *aFM):
     KDialogBase(parent, "", false,
@@ -84,7 +86,7 @@ AudioManagerDialog::populateFileList()
     QListBoxPixmap *listBoxPixmap;
 
     // create pixmap of given size
-    QPixmap *audioPixmap = new QPixmap(80, 20);
+    QPixmap *audioPixmap = new QPixmap(previewWidth, 20);
 
     // clear file list and disable associated action buttons
     m_fileList->clear();
@@ -286,12 +288,15 @@ AudioManagerDialog::closeEvent(QCloseEvent *e)
 void
 AudioManagerDialog::generateEnvelopePixmap(QPixmap *pixmap, AudioFile *aF)
 {
+    //std::cout << "SAMPLE LENGTH = " << aF->getLength() << std::endl;
     // clear and paint on it
     pixmap->fill(Qt::blue);
     QPainter audioPainter(pixmap);
 
-    std::cout << "SAMPLE LENGTH = " << aF->getLength() << std::endl;
-    //std::vector<float> values = aF->getPreview(aF->);
+    std::vector<float> values = m_audioFileManager->getPreview(aF->getId(),
+                                                               RealTime(0, 0),
+                                                               aF->getLength(),
+                                                               previewWidth);
 }
 
 

@@ -40,6 +40,7 @@
 #include <fstream>
 #include <string>
 
+#include <math.h>
 
 namespace Rosegarden
 {
@@ -74,6 +75,8 @@ protected:
     void putBytes(std::ofstream *file,
                   const std::string outputString);
 
+    // sinc of input value
+    float sinc(float value) { return sin(M_PI * value)/ M_PI * value; }
 
 };
 

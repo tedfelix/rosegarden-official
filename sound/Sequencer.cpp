@@ -26,10 +26,18 @@
 
 #include "config.h"
 
+// If we're configured for NO_SOUND then use the DummyDriver
+// otherwise if we're configured for ALSA use that, otherwise
+// default to the Arts driver.
+//
+#ifdef NO_SOUND
+#include "DummyDriver.h"
+#else
 #ifdef HAVE_ALSA
 #include "AlsaDriver.h"
 #else
 #include "ArtsDriver.h"
+#endif
 #endif
 
 namespace Rosegarden
@@ -45,10 +53,14 @@ using std::endl;
 //
 Sequencer::Sequencer()
 {
+#ifdef NO_SOUND
+    m_soundDriver = new DummyDriver();
+#else
 #ifdef HAVE_ALSA
     m_soundDriver = new AlsaDriver();
 #else
     m_soundDriver = new ArtsDriver();
+#endif
 #endif
 
     m_soundDriver->initialiseMidi();
