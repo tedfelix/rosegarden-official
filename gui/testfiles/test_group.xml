@@ -14,7 +14,12 @@
         <event type="note" duration="quaver" pitch="64"/>
         <event type="note" duration="semiquaver" pitch="64"/>
         <event type="note" duration="semiquaver" pitch="64"/>
+        <event type="timesignature" numerator="6" denominator="8"/>
+        <event type="clefchange" clef="tenor"/>
+        <event type="note" duration="quaver" pitch="62"/>
+        <event type="note" duration="quaver" pitch="63"/>
         </group>
+        <event type="clefchange" clef="treble"/>
         <group type="beamed">
         <event type="note" duration="semiquaver" pitch="64"/>
         <event type="note" duration="quaver" pitch="65"/>

@@ -166,9 +166,23 @@ NotationHLayout::preparse(NotationElementList::iterator from,
         } else if (el->event()->isa(TimeSignature::EventType)) {
 
             if (nbTimeUnitsInCurrentBar > 0) {
-                // need to insert the bar line _before_ this event
+                // need to insert the bar line before this event...
                 nbTimeUnitsInCurrentBar = 0;
-                addNewBar(it, absoluteTime, -1,
+
+                // ...and also before any preceding clef or key events
+                NotationElementList::iterator it0(it), it1(it);
+                while (it0 == it ||
+                       (*it0)->event()->isa(Clef::EventType) ||
+                       (*it0)->event()->isa(Key::EventType)) {
+                    it1 = it0;
+                    // this shouldn't happen, as we've checked there
+                    // are already some time units in the bar, but
+                    // it's better to be safe than sorry:
+                    if (it0 == m_notationElements.begin()) break;
+                    --it0;
+                }
+
+                addNewBar(it1, absoluteTime, -1,
                           getIdealBarWidth(fixedWidth, shortest, npf,
                                            shortCount, timeSignature),
                           fixedWidth, true, true);
