@@ -1,6 +1,8 @@
 Current Task list
 ======================================
 
+- optimize segment overlap shading
+
 - guitar chord display
 
 - fix toolbar pos. saving - ALMOST DONE - toolbar visibility is not saved in notation view.
