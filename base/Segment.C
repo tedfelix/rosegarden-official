@@ -235,10 +235,14 @@ Segment::setEndMarkerTime(timeT t)
     } else {
 
 	timeT endTime = getEndTime();
-	bool shorten = (t < getEndMarkerTime());
+	timeT oldEndMarker = getEndMarkerTime();
+	bool shorten = (t < oldEndMarker);
 
 	if (t > endTime) {
 	    fillWithRests(endTime, t);
+	    if (oldEndMarker < endTime) {
+	        updateRefreshStatuses(oldEndMarker, t);
+	    }
 	} else {
 	    // only need to do this if we aren't inserting or
 	    // deleting any actual events
