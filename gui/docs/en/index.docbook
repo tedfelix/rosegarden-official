@@ -32,12 +32,12 @@
     </authorgroup>
 
     <copyright>
-      <year>2002</year>
+      <year>2002-2003</year>
       <holder>Richard Bown, Chris Cannam, Guillaume Laurent</holder>
     </copyright>
 
-    <date>2002-07-04</date>
-    <releaseinfo>0.8.0</releaseinfo>
+    <date>2003-04-26</date>
+    <releaseinfo>0.9</releaseinfo>
 
     <abstract>
       <para>
@@ -163,6 +163,9 @@
       <title>Revision History</title>
       <para>
 	<itemizedlist>
+	  <listitem><para>
+	      0.9 &ndash; April 2003: many notation improvements, improved bank editor, audio enhancements and refinements, translations
+	  </para></listitem>
 	  <listitem><para>
 	      0.8.5 &ndash; December 2002: bank editor, MIDI filters, panic button
 	  </para></listitem>
@@ -559,6 +562,97 @@
 
 	</para>
       </sect2>
+
+      <sect2 id="studio-device-editor">
+	<title>The MIDI Device Manager</title>
+
+        <para>
+        <screenshot>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="rg-devicemanager.png" format="PNG"/>
+              </imageobject>
+              <textobject>
+                <phrase>&rosegarden;'s MIDI Device Manager dialog</phrase>
+              </textobject>
+          </mediaobject>
+        </screenshot>
+        </para>
+
+	<para>
+        Rosegarden provides a basic set of MIDI Devices that portray what 
+        it's found on your system at start up and then aims to provide
+        sensible default connections for these devices.  The MIDI Device
+        Manager allows the user to modify connections of devices and also
+        what direction the devices send their information.  By adding a 
+        new "Play" device in this dialog you provide a new target for any
+        of your MIDI tracks to talk to.  If this device is connected to an
+        external synth then this is where your MIDI events will go when
+        you play to an Instrument on this device.
+        </para>
+
+      </sect2>
+
+      <sect2 id="studio-bank-editor">
+	<title>The MIDI Banks and Programs Editor</title>
+
+        <para>
+        <screenshot>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="rg-bankeditor.png" format="PNG"/>
+              </imageobject>
+              <textobject>
+                <phrase>&rosegarden;'s MIDI Banks and Programs Editor</phrase>
+              </textobject>
+          </mediaobject>
+        </screenshot>
+        </para>
+
+	<para>
+        This dialog allow you to attach banks of programs (names for
+        MIDI instrument voices) to your MIDI devices.  Basically this
+        means that you can identify the names of sounds on MIDI devices
+        by a meaningful name rather than having to remember MIDI numbers.
+        Attaching banks of programs in this manner makes it possible for
+        users to share these banks of mappings through a library of
+        Rosegarden devices files.
+        </para>
+
+        <para>
+        If you MIDI device has no current .rgd file available for
+        immediate loading then you can use this editor to create
+        a new bank (mapping the names to the program numbers for
+         yourself).
+        </para>
+
+      </sect2>
+
+      <sect2 id="studio-midi-filters">
+	<title>MIDI Filters dialog</title>
+
+        <para>
+        <screenshot>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="rg-midifilter.png" format="PNG"/>
+              </imageobject>
+              <textobject>
+                <phrase>&rosegarden;'s MIDI Banks and Programs Editor</phrase>
+              </textobject>
+          </mediaobject>
+        </screenshot>
+        </para>
+
+	<para>
+        Using this dialog you can decide which MIDI events Rosegarden will
+        ignore or accept either when forwarding event (MIDI THRU) or simply
+        recording them.  Use the check boxes on this dialog to tell Rosegarden
+        which type of MIDI events you don't want to receive.
+        </para>
+
+      </sect2>
+
     </sect1>
 
     <sect1 id="matrix-view">
@@ -3439,7 +3533,7 @@
 	<listitem>
 	  <para>
 
-	    Rosegarden-4 is Copyright 2000-2002 Guillaume Laurent,
+	    Rosegarden-4 is Copyright 2000-2003 Guillaume Laurent,
 	    Chris Cannam and Richard Bown.  The moral rights of
 	    Guillaume Laurent, Chris Cannam and Richard Bown to be
 	    identified as the authors of this work have been asserted.
@@ -3492,7 +3586,7 @@
     </para>
 
     <para>
-      Documentation copyright 2002 Chris Cannam, Richard Bown, Guillaume Laurent
+      Documentation copyright 2002-2003 Chris Cannam, Richard Bown, Guillaume Laurent
     </para>
 <!--
     <para>

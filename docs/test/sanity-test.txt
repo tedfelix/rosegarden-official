@@ -61,6 +61,11 @@ Environment Details
 
   JACK version (if used)       :
 
+  QT version                   :
+
+  KDE version                  :
+
+  gcc version                  :
 
 Tests
 =====
@@ -129,11 +134,66 @@ you should seem some audio files in there.
 7. Transport
 ------------
 
+7.1 Play
+Hitting play on an empty composition should start the playback pointer
+advancing from left to right.  The segment canvas will page automatically
+when the pointer nears the end of the page view.
+
+7.2. Stop
+Hitting stop should stop either playback or recording.  Hitting stop
+twice in succession will stop recording and return the pointer to the
+beginning of the composition.
+
+7.3 Fast forward
+When either stopped or playing the fast forward button will advance
+the pointer by one bar.
+
+7.4 Rewind
+When either stopped or playing the fast forward button will rewind
+the pointer by one bar.
+
+
 8. Banks and Programs Editor
 ----------------------------
 
 9. Audio Manager Dialog
 -----------------------
+
+9.1 Add an audio file
+Open the Audio Manager Dialog.  Add an audio file - you should be
+able to insert any WAV file and a visible waveform preview of this
+file should be shown in the file list (if the directory where the
+audio file is located is writeable - otherwise "no preview available"
+will be shown).
+ 
+
+9.2 Remove an audio file
+Select an audio file (add from previous step) in the Audio Manager Dialog
+and select "Remove Audio File".  You will be asked if you're sure you want
+to remove this file and any associated segments.  Confirm this and the file
+should disappear from the Audio Manager dialog and from the Composition
+if it's been inserted anywhere.
+
+9.3 Play Preview
+If you have JACK running and you select an audio file (or segment thereof)
+in the Audio Manager Dialog then you'll be able hear an audible preview of
+the file by hitting "Play Preview".  You should be able to cancel this
+preview at any time by using the dialog that pops up.
+
+9.4 Rename Audio File
+You should be able to apply a new name to this audio file.
+
+9.5 Insert Audio File into Composition
+Select an audio file or segment thereof in the Audio Manager dialog.
+Selecting "Insert into Composition" should insert this audio segment
+into the Composition on a new audio track at the bottom of the composition.
+You might need to scroll down the segment canvas to see this new segment.
+
+
+9.6 Export Audio 
+Allows the user to export a segment of audio as a WAV file.  Choose
+an audio segment (child element in Audio Manager dialog) and select
+"export".
 
 10. Audio
 ---------
@@ -141,14 +201,43 @@ you should seem some audio files in there.
 11. MIDI
 --------
 
+11.1 Basic MIDI I/O
+Using either an external MIDI keyboard or using a virtual MIDI keyboard
+(such as "vkeybd") ensure that Rosegarden is connected to it - go to the
+Settings->Configure Rosegarden->Sequencer->Recording - select the desired
+MIDI input from the "MIDI Record Device" list and hit OK.  Now ensure
+that the transport is visible (Settings->Show Transport) and expand the
+bottom tag to show additional controls.  Now hitting a key on your MIDI
+input device should present MIDI data to Rosegarden which will be shown
+on the "IN" section of the event monitor.  Rosegarden will then route
+this MIDI event to the currently selected Instrument (see the currently
+selected track) and back through the "OUT" section of the event monitor.
+
+11.2 Recording
+Select a Track which is assigned to any MIDI Instrument.  Selecting MIDI
+tracks automatically changes record track to the current selection.  Hit
+the record button on the transport.  You will get an N-bar count-in
+(count-in bars are selected in the Configuration Dialog->General->Behaviour
+ ->Number of count-in bars.  Remember if you're starting recording from bar
+1 then the count-in will take the pointer back before the visible part of the
+composition.  Play some MIDI notes into the recording Segment - when you hit
+the Stop button a Segment will be created that has extents of the first and
+last MIDI events recorded.
+
+
 12. Printing
 ------------
 
 13. Import
 ----------
 
+13.1 Import a MIDI File
+
+
 14. Export
 ----------
+
+14.1 Export a MIDI File
 
 14.1 [Lilypond]
 Test:

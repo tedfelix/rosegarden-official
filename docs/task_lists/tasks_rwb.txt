@@ -8,36 +8,20 @@ o MTC/MMC - transport awareness
   - MMC control can't yet be tested at my end [CAN WAIT - LOW PRIORITY]
 
 o Audio
-   - new fader widget [DONE]
-   - recording stereo WAVs [DONE]
-   - audio connection management [FIRST PASS DONE]
    - hardcoded format segment values [BETTER but not finished]
-   - panning [DONE]
-   - plugin bypass [DONE but a couple of bugs]
    - BWF format writing/reading
    - multithreading
    - autosplitting
    - libsoundfile support (LSFSoundFile class?)
    - MP3/OGG support
    - exceptions and return values
-   - stereo vu meters (0dB level = 1.0f etc) [HALF DONE]
-   - jack process tidy up (Bob Ham inspired) [DONE]
-   - notify disk space available on audio path [DONE]
-   - countdown dialog for audio recording [DONE]
    - check disk space on audio record start [ALMOST DONE]
-
-   - plugins matching stereo/mono instruments [FIXED]
-   - seperate audio level sends for stereo monitoring [DONE]
    - improve Audio VU meter
    - get record fader level working at sequencer
-
-   - get Studio reapplying working / fix bugs
-   - fix audio drag and drop
-
+   - fix audio drag and drop [NEVER WORKED - GET WORKING in 0.9.5]
    - make outofspace.rg sound like something reasonable
 
 o Audio busses and routing
-   - n jack input routes [DONE]
    - multiple audio record arm [HALF DONE - for 0.9.5]
 
 o Audio looping (doesn't work)
@@ -59,6 +43,21 @@ o Multiple Document Interface - at least internally capable
 
 Fixed for next release
 ----------------------
+
+o Audio 
+   - new fader widget [DONE]
+   - recording stereo WAVs [DONE]
+   - audio connection management [FIRST PASS DONE]
+   - panning [DONE]
+   - jack process tidy up (Bob Ham inspired) [DONE]
+   - notify disk space available on audio path [DONE]
+   - countdown dialog for audio recording [DONE]
+   - plugin bypass [DONE]
+   - plugins matching stereo/mono instruments [FIXED]
+   - seperate audio level sends for stereo monitoring [DONE]
+   - get Studio reapplying working / fix bugs [DONE]
+   - stereo vu meters (0dB level = 1.0f etc) [DONE]
+   - n jack input routes [DONE]
 
 o ALSA client detection bug on laptop - going from no clients
   to one client causes big loop of death.  Appear that alive()
