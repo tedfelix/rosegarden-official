@@ -40,13 +40,13 @@ Tie
 
 A connection made between two notes of the same pitch that should be
 played as if they were a single continuous note.  Observe that the
-notes don't have to be adjoining in an event list.  For example, one
-of them might be part of a chord and so other chord members might
-appear between the two.  It is however unambiguous to record that a
-note is tied with "the following note", because the note with which
-it's tied must be the next one that has the same pitch as it.  A note
-can be tied with "the following note" or "the preceding note" or both
-(or neither).
+notes don't have to adjoin in the event list, although they must
+adjoin in absolute time.  For example, one of them might be part of a
+chord and so other chord members might appear between the two.  It is
+however unambiguous to record that a note is tied with "the following
+note", because the note with which it's tied must be the next one that
+has the same pitch as it.  A note can be tied with "the following
+note" or "the preceding note" or both (or neither).
 
 We don't have a representation for ties yet, although it seems
 plausible that we could get away with boolean tied-forward and
