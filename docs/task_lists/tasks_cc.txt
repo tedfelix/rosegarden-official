@@ -215,6 +215,10 @@ Post-0.1.5-and-a-bit task list
 35a. Also add something like "Auto Split" that splits segments on
      empty bars, clef changes or time sig changes
 
+35a.i. And have a dialog with options: split after (n) bars of
+    silence? after time sig change? after clef change? after key
+    change?
+
 35b. And perhaps a "collapse" option
 
 36. Add configuration parameters for notation:

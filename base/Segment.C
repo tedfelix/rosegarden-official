@@ -42,9 +42,10 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
     std::multiset<Event*, Event::EventCmp>(),
     m_composition(0),
     m_startTime(startTime),
+    m_endMarkerTime(0),
+    m_endTime(startTime),
     m_track(0),
     m_type(segmentType),
-    m_endMarkerTime(0),
     m_id(0),
     m_audioFileID(0),
     m_audioStartTime(0, 0),
@@ -61,11 +62,12 @@ Segment::Segment(const Segment &segment):
     std::multiset<Event*, Event::EventCmp>(),
     m_composition(0), // Composition should decide what's in it and what's not
     m_startTime(segment.getStartTime()),
+    m_endMarkerTime(segment.m_endMarkerTime ?
+		    new timeT(*segment.m_endMarkerTime) : 0),
+    m_endTime(segment.getEndTime()),
     m_track(segment.getTrack()),
     m_type(segment.getType()),
     m_label(segment.getLabel()),
-    m_endMarkerTime(segment.m_endMarkerTime ?
-		    new timeT(*segment.m_endMarkerTime) : 0),
     m_id(0),
     m_audioFileID(segment.getAudioFileID()),
     m_audioStartTime(segment.getAudioStartTime()),
@@ -129,6 +131,10 @@ Segment::getEndMarkerTime() const
 timeT
 Segment::getEndTime() const
 {
+    return m_endTime;
+}
+
+/*!!!
     //!!! This isn't strictly the right thing, is it?  It should be
     // the end time of the event that ends last, not the one that
     // starts last.  Perhaps store this in m_endTime and update with
@@ -140,6 +146,7 @@ Segment::getEndTime() const
 
     return (*i)->getAbsoluteTime() + (*i)->getDuration();
 }
+*/
 
 void
 Segment::setStartTime(timeT t)
@@ -244,20 +251,6 @@ Segment::clearEndMarker()
 
 
 void
-Segment::erase(iterator pos)
-{
-    Event *e = *pos;
-
-    assert(e);
-
-    std::multiset<Event*, Event::EventCmp>::erase(pos);
-    notifyRemove(e);
-    updateRefreshStatuses(e->getAbsoluteTime(),
-			  e->getAbsoluteTime() + e->getDuration());
-    delete e;
-}
-
-void
 Segment::updateRefreshStatuses(timeT startTime, timeT endTime)
 {
     for(unsigned int i = 0; i < m_refreshStatusArray.size(); ++i)
@@ -270,14 +263,22 @@ Segment::insert(Event *e)
 {
     assert(e);
 
-    if (e->getAbsoluteTime() < m_startTime ||
+    timeT t0 = e->getAbsoluteTime();
+    timeT t1 = t0 + e->getDuration();
+
+    if (t0 < m_startTime ||
 	begin() == end() ||
-	(*begin())->getAbsoluteTime() > e->getAbsoluteTime()) {
+	(*begin())->getAbsoluteTime() > t0) {
 
 	Composition *c = m_composition;
 	if (c) c->detachSegment(this); // sets m_composition to 0
-	m_startTime = e->getAbsoluteTime();
+	m_startTime = t0;
 	if (c) c->addSegment(this);
+    }
+
+    if (t1 > m_endTime ||
+	begin() == end()) {
+	m_endTime = t1;
     }
 
     iterator i = std::multiset<Event*, Event::EventCmp>::insert(e);
@@ -289,11 +290,47 @@ Segment::insert(Event *e)
 
 
 void
+Segment::updateEndTime()
+{
+    m_endTime = m_startTime;
+    for (iterator i = begin(); i != end(); ++i) {
+	timeT t = (*i)->getAbsoluteTime() + (*i)->getDuration();
+	if (t > m_endTime) m_endTime = t;
+    }
+}
+
+
+void
+Segment::erase(iterator pos)
+{
+    Event *e = *pos;
+
+    assert(e);
+
+    timeT t0 = e->getAbsoluteTime();
+    timeT t1 = t0 + e->getDuration();
+
+    std::multiset<Event*, Event::EventCmp>::erase(pos);
+    notifyRemove(e);
+    updateRefreshStatuses(t0, t1);
+
+    if (t0 == m_startTime && begin() != end()) {
+	m_startTime = (*begin())->getAbsoluteTime();
+    }
+    if (t1 == m_endTime) {
+	updateEndTime();
+    }
+
+    delete e;
+}
+
+
+void
 Segment::erase(iterator from, iterator to)
 {
     timeT startTime = 0, endTime = 0;
     if (from != end()) startTime = (*from)->getAbsoluteTime();
-    if (to != end()) endTime = (*to)->getAbsoluteTime();
+    if (to != end()) endTime = (*to)->getAbsoluteTime() + (*to)->getDuration();
 
     // Not very efficient, but without an observer event for
     // multiple erase we can't do any better.
@@ -315,6 +352,14 @@ Segment::erase(iterator from, iterator to)
     }
     
     std::multiset<Event*, Event::EventCmp>::erase(from, to);
+
+    if (startTime == m_startTime && begin() != end()) {
+	m_startTime = (*begin())->getAbsoluteTime();
+    }
+
+    if (endTime == m_endTime) {
+	updateEndTime();
+    }
 
     updateRefreshStatuses(startTime, endTime);
 }

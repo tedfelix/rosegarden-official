@@ -498,11 +498,15 @@ public:
 private:
     Composition *m_composition; // owns me, if it exists
 
-    timeT m_startTime;
+    timeT  m_startTime;
+    timeT *m_endMarkerTime;     // points to end time, or null if none
+    timeT  m_endTime;
+
+    void updateEndTime();       // called after erase of item at end
+
     TrackId m_track;
     SegmentType m_type;         // identifies Segment type
     std::string m_label;        // segment label
-    timeT *m_endMarkerTime;     // points to end time, or null if none
 
     mutable int m_id; // not id of Segment, but a value for return by getNextId
 

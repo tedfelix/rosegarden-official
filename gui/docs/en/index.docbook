@@ -1,105 +1,63 @@
-<!DOCTYPE book PUBLIC  "-//KDE//DTD DocBook V3.1-Based Variant V1.0//EN" [
- <!ENTITY rosegardengui  "<application>rosegardengui</application>">
- <!ENTITY % addindex "IGNORE">
- <![ %addindex; [ <!ENTITY kdedocindex SYSTEM "docindex.docbook"> ]]>
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd" [
+  <!ENTITY rosegarden "<application>Rosegarden</application>">
+  <!ENTITY % English "INCLUDE" > <!-- change language only here -->
+  <!ENTITY % addindex "IGNORE">
+
+
 ]>
-<!-- kdoctemplate v0.8 October 1 1999 -->
-
-<!--
-This template was designed by: David Rugge davidrugge@mindspring.com
-with lots of help from: Eric Bischoff ebisch@cybercable.tm.fr
-and Frederik Fouvry fouvry@sfs.nphil.uni-tuebingen.de
-of the KDE DocBook team.
-
-You may freely use this template for writing any sort of KDE documentation.
-If you have any changes or improvements, please let us know.
-
-In the future, we may want to change from SGML-based DocBook to XML-based
-DocBook. To make this change easier, please be careful :
-- in XML, the case of the <tags> and attributes is relevant ;
-- also, quote all attributes.
-
-Please don't forget to remove all these comments in your final documentation,
-thanks ;-).
--->
-
-<!-- ---------------------------------------------------------------- -->
 
 <!-- The language must be changed in the <book> tag for translations. -->
 
-<book id="rosegardengui" lang="en">
+<book id="rosegarden" lang="en">
 
 <!-- This header contains all of the meta-information for the document such
 as Authors, publish date, the abstract, and Keywords -->
 
 <bookinfo>
-
-<title>The RosegardenGUI Handbook</title>
-
+<title>The Rosegarden Handbook</title>
 <authorgroup>
 <author>
-<firstname></firstname>
-<othername></othername>
-<surname>Guillaume Laurent, Chris Cannam, Rich Bown</surname>
+<firstname>Richard</firstname>
+<surname>Bown</surname>
 </author>
+<author>
+<firstname>Chris</firstname>
+<surname>Cannam</surname>
+</author>
+<author>
+<firstname>Guillaume</firstname>
+<surname>Laurent</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 
-<!-- This is a set of Keywords for indexing by search engines.
-Please at least include KDE, the KDE package it is in, the name
- of your application, and a few relevant keywords. -->
+<copyright>
+<year>2002</year>
+<holder>Richard Bown, Chris Cannam, Guillaume Laurent</holder>
+</copyright>
 
-<keywordset>
-<keyword>KDE</keyword>
-<keyword>RosegardenGUI</keyword>
-</keywordset>
-
-<!-- Date and version information of the documentation
-Don't forget to include this last date and this last revision number, we
-need them for translation coordination !
-Please respect the format of the date (DD/MM/YYYY) and of the version
-(Major.minor.lesser), it could be used by automation scripts -->
-
-<date>Mon Jun 19 23:41:03 CEST 2000</date>
-<releaseinfo>0.1</releaseinfo>
-
-<!-- Brief revision history.
-Unlike the preceeding information, this is not mandatory.
-Try to keep this section brief.
-This is the history of the *documentation* (the history of the *application*
-goes to the introduction), but nothing prevents you from using the same
-release numbers for both the application the documentation. 
--->
-
-<revhistory>
-<revision>
-<revnumber></revnumber>
-<date></date>
-<authorinitials></authorinitials>
-<revremark>Cleaned up a few typos.
-</revremark>
-</revision>
-<revision>
-<revnumber>0.1
-</revnumber>
-<date>Mon Jun 19 23:41:03 CEST 2000</date>
-<authorinitials></authorinitials>
-<revremark>Initial release.
-</revremark>
-</revision>
-</revhistory>
-
-<!-- Abstract about this handbook -->
+<date>2002-07-04</date>
+<releaseinfo>0.1.7</releaseinfo>
 
 <abstract>
-<para>
-This Handbook describes <application>RosegardenGUI</application> Version 0.1
-<application>RosegardenGUI</application>
-</para>
+<para>Rosegarden is a MIDI and audio sequencer and musical notation editor.  This Handbook describes how to use it.</para>
 </abstract>
+
+<keywordset>
+<keyword>Rosegarden</keyword>
+<keyword>sequencer</keyword>
+<keyword>MIDI</keyword>
+<keyword>audio</keyword>
+<keyword>music</keyword>
+<keyword>notation</keyword>
+<keyword>score</keyword>
+<keyword>KDE</keyword>
+</keywordset>
 
 </bookinfo>
 
-<!-- The contents of the documentation beginS here.  Label
+<!-- The contents of the documentation begins here.  Label
 each chapter so with the id attribute. This is necessary for two reasons: it
 allows you to easily reference the chapter from other chapters of your
 document, and if there is no ID, the name of the generated HTML files will vary
@@ -117,14 +75,14 @@ report problems, and a brief revision history of the app. Basically a long
 version of the abstract. -->
 
 <para>
-The complete user manual to <application>RosegardenGUI</application>, version 0.1
+The complete user manual to <application>Rosegarden</application>, version 0.1
 </para>
 
 <!-- Note that the revhistory tags apply to the documentation version and not to
 the app version. That is why we use an ItemizedList here. -->
 
-<sect1 id="rosegardengui-revhistory">
-<title>RosegardenGUI Revision History</title>
+<sect1 id="rosegarden-revhistory">
+<title>Rosegarden Revision History</title>
 <para>
 <itemizedlist>
 <listitem><para>
@@ -138,13 +96,13 @@ the app version. That is why we use an ItemizedList here. -->
 <chapter id="installation">
 <title>Installation</title>
 
-<sect1 id="getting-rosegardengui">
-<title>How to obtain RosegardenGUI</title>
+<sect1 id="getting-rosegarden">
+<title>How to obtain Rosegarden</title>
 
 <para>
-<application>RosegardenGUI</application> is part of the KDE project
+<application>Rosegarden</application> is part of the KDE project
 <ulink url="http://www.kde.org">http://www.kde.org</ulink>.
-<application>RosegardenGUI</application> can be found on
+<application>Rosegarden</application> can be found on
 <ulink url="ftp://ftp.kde.org/pub/kde/">ftp://ftp.kde.org/pub/kde/</ulink>, the
 main ftp site of the KDE project. </para>
 </sect1>
@@ -164,15 +122,15 @@ information here.
 -->
 
 <para>
-In order to successfully use <application>RosegardenGUI</application>, you need KDE 1.1. Foobar.lib is required
-in order to support the advanced <application>RosegardenGUI</application> features. <application>RosegardenGUI</application> uses about 5 megs of
+In order to successfully use <application>Rosegarden</application>, you need KDE 1.1. Foobar.lib is required
+in order to support the advanced <application>Rosegarden</application> features. <application>Rosegarden</application> uses about 5 megs of
 memory to run, but this may vary depending on your platform and
 configuration.
 </para>
 
 <para>
-All required libraries as well as <application>RosegardenGUI</application> itself can be found
-on <ulink url="ftp://ftp.kapp.org"> The <application>RosegardenGUI</application> home page</ulink>.
+All required libraries as well as <application>Rosegarden</application> itself can be found
+on <ulink url="ftp://ftp.kapp.org"> The <application>Rosegarden</application> home page</ulink>.
 </para>
 
 </sect1>
@@ -181,8 +139,8 @@ on <ulink url="ftp://ftp.kapp.org"> The <application>RosegardenGUI</application>
 <title>Compilation and installation</title>
 
 <para>
-In order to compile and install RosegardenGUI on your system, type the following in the base
-directory of the RosegardenGUI distribution:
+In order to compile and install Rosegarden on your system, type the following in the base
+directory of the Rosegarden distribution:
 <screen width="40">
 <prompt>%</prompt> <userinput>./configure</userinput>
 <prompt>%</prompt> <userinput>make</userinput>
@@ -190,7 +148,7 @@ directory of the RosegardenGUI distribution:
 </screen>
 </para>
 
-<para>Since RosegardenGUI uses autoconf and automake you should have not trouble compiling it.
+<para>Since Rosegarden uses autoconf and automake you should have not trouble compiling it.
 Should you run into problems please report them to the author at <ulink url="mailto:glaurent@telegraph-road.org, cannam@all-day-breakfast.com, bownie@bownie.com"> Guillaume Laurent, Chris Cannam, Rich Bown</ulink>.</para>
 
 </sect1>
@@ -199,14 +157,14 @@ Should you run into problems please report them to the author at <ulink url="mai
 <title>Configuration</title>
 
 <para>Don't forget to tell your system to start the <filename>dtd</filename>
-dicer-toaster daemon first, or RosegardenGUI won't work !</para>
+dicer-toaster daemon first, or Rosegarden won't work !</para>
 
 </sect1>
 
 </chapter>
 
 <chapter id="using-kapp">
-<title>Using RosegardenGUI</title>
+<title>Using Rosegarden</title>
 
 <!-- This chapter should tell the user how to use your app. You should use as
 many sections (Chapter, Sect1, Sect3, etc...) as is necessary to fully document
@@ -218,19 +176,26 @@ your application. -->
 patent issues. -->
 
 <screenshot>
-<screeninfo>Here's a screenshot of <application>RosegardenGUI</application></screeninfo>
-<graphic fileref="screenshot.png" format="png"></graphic>
+<mediaobject>
+<imageobject>
+<imagedata fileref="example.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>An example image</phrase>
+</textobject>
+</mediaobject>
 </screenshot>
+
 </para>
 
 
 <sect1 id="kapp-features">
-<title>More RosegardenGUI features</title>
+<title>More Rosegarden features</title>
 
 <para>It slices! It dices! and it comes with a free toaster!</para>
 <para>
-The Squiggle Tool <guiicon><inlinegraphic fileref="squiggle.png" format="png"></inlinegraphic></guiicon> is used to draw squiggly lines all
-over the <application>RosegardenGUI</application> main window. It's not a bug, it's a feature!
+The Squiggle Tool <guiicon><inlinemediaobject><imageobject><imagedata fileref="squiggle.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> is used to draw squiggly lines all
+over the <application>Rosegarden</application> main window. It's not a bug, it's a feature!
 </para>
 
 </sect1>
@@ -248,7 +213,7 @@ or menu bars. -->
 <para></para>
 
 <sect1 id="kapp-mainwindow">
-<title>The main RosegardenGUI window</title>
+<title>The main Rosegarden window</title>
 <para></para>
 
 <sect2>
@@ -283,7 +248,7 @@ or menu bars. -->
 <guimenu>File</guimenu>
 <guimenuitem>Quit</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Quits <application>RosegardenGUI</application></action></para></listitem>
+<listitem><para><action>Quits &rosegarden;</action></para></listitem>
 </varlistentry>
 </variablelist>
 </para>
@@ -293,14 +258,14 @@ or menu bars. -->
 </chapter>
 
 <chapter id="developers">
-<title>Developer's Guide to RosegardenGUI</title>
+<title>Developer's Guide to Rosegarden</title>
 
 <!-- (OPTIONAL) A Programming/Scripting reference chapter should be
 used for apps that use plugins or that provide their own scripting hooks
 and/or development libraries. -->
 
 <para>
-Programming <application>RosegardenGUI</application> plugins is a joy to behold. Just read through the next
+Programming <application>Rosegarden</application> plugins is a joy to behold. Just read through the next
 66 pages of API's to learn how!
 </para>
 
@@ -318,24 +283,22 @@ taken from that reference and shortened a bit for readability. -->
 </refname>
 <refpurpose>remove a list of children from a parent widget's managed list.
 </refpurpose>
-<indexterm id="ix-1007-unmanagechildren-1"><primary>widgets</primary><secondary>removing</secondary></indexterm>
-<indexterm id="ix-1007-unmanagechildren-2"><primary>XtUnmanageChildren</primary></indexterm>
 </refnamediv>
 <refsynopsisdiv>
 <refsynopsisdivinfo>
 <date>4 March 1996</date>
 </refsynopsisdivinfo>
 <synopsis>
-void XtUnmanageChildren(<replaceable parameter>children</replaceable>, <replaceable parameter>num_children</replaceable>)
-    WidgetList <replaceable parameter>children</replaceable>;
-    Cardinal <replaceable parameter>num_children</replaceable>;
+void XtUnmanageChildren(<replaceable>children</replaceable>, <replaceable>num_children</replaceable>)
+    WidgetList <replaceable>children</replaceable>;
+    Cardinal <replaceable>num_children</replaceable>;
 </synopsis>
 
 <refsect2 id="r2-1007-unmanagechildren-1">
 <title>Inputs</title>
 <variablelist>
 <varlistentry>
-<term><replaceable parameter>children</replaceable>
+<term><replaceable>children</replaceable>
 </term>
 <listitem>
 <para>Specifies an array of child widgets. Each child must be of
@@ -344,10 +307,10 @@ class RectObj or any subclass thereof.
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><replaceable parameter>num_children</replaceable>
+<term><replaceable>num_children</replaceable>
 </term>
 <listitem>
-<para>Specifies the number of elements in <replaceable parameter>children</replaceable>.
+<para>Specifies the number of elements in <replaceable>children</replaceable>.
 </para>
 </listitem>
 </varlistentry>
@@ -363,7 +326,7 @@ The widgets will disappear from the screen, and (depending
 on its parent) may no longer have screen space allocated for
 them.
 </para>
-<para>Each of the widgets in the <replaceable parameter>children</replaceable> array must have
+<para>Each of the widgets in the <replaceable>children</replaceable> array must have
 the same parent.
 </para>
 <para>See the &ldquo;Algorithm&rdquo; section below for full details of the
@@ -452,7 +415,7 @@ application work. -->
 <qandaset>
 <qandaentry>
 <question>
-<para>My Mouse doesn't work. How do I quit <application>RosegardenGUI</application>?</para>
+<para>My Mouse doesn't work. How do I quit <application>Rosegarden</application>?</para>
 </question>
 <answer>
 <para>You silly goose! Check out the <link linkend="commands">Commands
@@ -481,7 +444,7 @@ distribution. -->
 <title>Credits and License</title>
 
 <para>
-<application>RosegardenGUI</application>
+<application>Rosegarden</application>
 </para>
 <para>
 Program copyright 1997 John Q. Hacker <email>jqh@kde.org</email>
@@ -520,5 +483,6 @@ This program is licensed under the terms of the
 </para>
 </chapter>
 
-<![ %addindex; [ &kdedocindex; ]]>
+
+&documentation.index; 
 </book>

@@ -1,0 +1,90 @@
+Subject: Re: menus: combining .rc and explicit runtime-generation?
+From: Simon Hausmann <hausmann@kde.org>
+Date: Wed, 3 Jul 2002 18:20:56 +0200
+To: Chris Cannam <cc@accucard.com>
+CC: Guillaume Laurent <glaurent@telegraph-road.org>
+
+(sorry for the delay)
+
+On Tue, Jul 02, 2002 at 05:24:50PM +0100, Chris Cannam wrote:
+
+> The problem is this: I have a KMainWindow containing a set of menus
+> that are currently created entirely from an XML .rc file using
+> createGUI.  But I want to attach a new submenu to one of them after
+> it's been created, containing a set of options calculated when the
+> window is first opened (things like display quantization levels or
+> notation styles, the set of which is not known when the .rc file is
+> written but only when the application is actually started).
+> 
+> Although I know how to add things to Qt menus, I can't work out how
+> to get hold of the Qt menu that corresponds to a given menu in the
+> XML file; the Qt QMenuData API appears to use numeric IDs exclusively,
+> and I can't even see a way to iterate through the contents of a menu
+> bar.  Let's say I know that the menu I want to add the options to
+> is called "Style" in the XML file and that it's a submenu of "Notes";
+> how do I get from there to a menu ID or a QPopupMenu object?
+
+
+There are basically two ways to accomplish dynamic menu entries.
+
+One approach is to make use of the KActionMenu class. It represents
+a menu that you have full control over (accessible through the
+popupMenu() method) . That action inserted into menus or toolbars
+will result in the creation of a sub-menu.
+
+If you want to dynamically insert/remove menu items to/from a menu
+(or in general: actions into/from a container widget like a menu or
+a toolbar for example) which also contains 'static' items (as in
+defined in your .rc file) or items from other GUI components then
+you can make use of the actionlist feature. It works like this:
+
+(example)
+...
+    <Menu name="bookmarks"><text>&amp;Bookmarks</text>
+        <Action name="add_bookmark" />
+        <Action name="edit_bookmarks" />
+        <Separator />
+        <ActionList name="bookmarks" />
+        ... (can be other actions or or anything else)
+    </Menu>
+...
+
+As you can see the menu consists of static items which you always
+want to exist and a list of dynamic items. The ActionList tag acts
+as placeholder where a list of actions can be inserted/removed at
+run-time. Two methods can be used for that:
+
+void plugActionList( const QString &actionListName, 
+                     const QPtrList<KAction> &actions );
+
+void unplugActionList( const QString &actionListName );
+
+(both are members of the KXMLGUIClient class which KMainWindow
+inherits from)
+
+Note that the name of an action list is global to the .rc file. This
+way you can do fill multiple placeholders with one call:
+
+...
+    <Menu name="foo">
+        ...
+        <ActionList name="blubb" />
+        ...
+    </Menu>
+
+    ...
+
+    <StatusBar>
+        <ActionList name="blubb" />
+    </StatusBar>
+...
+
+plugActionList( "blubb", listOfActions ); will fill in both in one
+run. Analoguous unplugActionList( "blubb" ); will revert that.
+
+Does that solve your problem? :)
+
+
+Simon
+
+

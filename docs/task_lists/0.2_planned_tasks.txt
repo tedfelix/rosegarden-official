@@ -1,5 +1,18 @@
+
+
 Rosegarden 0.2 Roadmap
 ======================
+
+   "0.2 is the one where friendly potential-users join in trying
+    to use it and then complain about everything, 0.6ish is
+    where much of the help text and stuff has somehow magically
+    appeared and possibly where we first release binaries,
+    somewhere 0.2-0.7 has decent working printing support, and
+    0.9 (which comes out quite shortly before the 1.0 freeze)
+    feels like 1.0 to us but crashes when anyone else tries
+    to use it."
+
+
 updated: 25.04.2002 [rwb]
 
 The purpose of the 0.2 release is to get the target audience of

@@ -451,6 +451,17 @@ public slots:
     void slotQuantizeSelection();
 
     /**
+     * Rescale the selected segments by a factor requested from
+     * the user
+     */
+    void slotRescaleSelection();
+
+    /**
+     * Split the selected segments on silences (or new timesig, etc)
+     */
+    void slotAutoSplitSelection();
+
+    /**
      * Produce a harmony segment from the selected segments
      */
     void slotHarmonizeSelection();

@@ -1,0 +1,35 @@
+Date: Thu, 11 Jul 2002 11:16:18 +0100
+From: Chris Cannam <cannam@all-day-breakfast.com>
+To: rosegarden-devel@lists.sourceforge.net
+
+
+We seem to have a bit of a profusion of file-opening methods in
+RosegardenGUIApp and thereabouts: there's openDocumentFile which
+opens an RG4 file from the local filesystem only, used by main
+and performAutoload; importMIDIFile, importRG21File and openFile
+which open local files of various types (openFile is nearly, but
+not quite, a duplicate of openDocumentFile with more warnings),
+and which are exposed through DCOP; and openURL, which can open
+a remote file and which delegates to one of the previous three
+when it's downloaded it and decided what type it is.  Then there
+are the three slots, which wrapper some of the above with file
+dialogs.
+
+The File dialog's slotFileOpen uses openURL, which means despite
+only filtering for RG4 files it can actually open RG21 and MIDI
+files as well, and can open files from remote hosts.  The RG21
+and MIDI file import slots use the import{RG21,MIDI}File methods
+plus an extra bit of code to explicitly enable remote downloads.
+The command-line argument can only be a local RG4 file (something
+I find rather annoying), the autoload file has to be local
+(reasonably enough), and the DCOP interface can load any of the
+three file types but only from local files (which doesn't seem
+right) and only if you know the type of the file already (which
+does seem tolerable to me).
+
+And finally none of the above, except for openDocumentFile, ever
+asks the user whether to save the previous document.
+
+There's got to be some scope for simplifying all this, surely?
+
+

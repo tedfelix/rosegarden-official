@@ -490,8 +490,9 @@ SegmentSplitCommand::unexecute()
 
 
 SegmentAutoSplitCommand::SegmentAutoSplitCommand(Segment *segment) :
-    XKCommand("Auto-Split Segment"),
+    XKCommand(getGlobalName()),
     m_segment(segment),
+    m_composition(segment->getComposition()),
     m_detached(false)
 {
 }
@@ -524,15 +525,15 @@ SegmentAutoSplitCommand::execute()
 
     Rosegarden::Clef clef;
     Rosegarden::Key key;
-    timeT lastSoundTime = m_segment->getStartTime();
-    timeT lastSplitTime = m_segment->getStartTime() - 1;
-    Composition *comp = m_segment->getComposition();
+    timeT segmentStart = m_segment->getStartTime();
+    timeT lastSoundTime = segmentStart;
+    timeT lastSplitTime = segmentStart - 1;
 
     for (Segment::iterator i = m_segment->begin();
 	 m_segment->isBeforeEndMarker(i); ++i) {
 	
 	timeT myTime = (*i)->getAbsoluteTime();
-	int barNo = comp->getBarNumber(myTime);
+	int barNo = m_composition->getBarNumber(myTime);
 
 	if ((*i)->isa(Rosegarden::Clef::EventType)) {
 	    clef = Rosegarden::Clef(**i);
@@ -544,25 +545,40 @@ SegmentAutoSplitCommand::execute()
 
 	bool newTimeSig = false;
 	Rosegarden::TimeSignature tsig =
-	    comp->getTimeSignatureInBar(barNo, newTimeSig);
-
+	    m_composition->getTimeSignatureInBar(barNo, newTimeSig);
+	
 	if (newTimeSig) {
 
-	    splitPoints.push_back(AutoSplitPoint(myTime, lastSoundTime,
-						 clef, key));
-	    lastSplitTime = myTime;
+	    // If there's a new time sig in this bar and we haven't
+	    // already made a split in this bar, make one
+
+	    if (splitPoints.size() == 0 ||
+		m_composition->getBarNumber
+		(splitPoints[splitPoints.size()-1].time) < barNo) {
+
+		splitPoints.push_back(AutoSplitPoint(myTime, lastSoundTime,
+						     clef, key));
+		lastSoundTime = lastSplitTime = myTime;
+	    }
 
 	} else if ((*i)->isa(Rosegarden::Note::EventRestType)) {
+
+	    // Otherwise never start a subsegment on a rest
 	    
 	    continue;
 
 	} else {
 
-	    int lastSoundBarNo = comp->getBarNumber(lastSoundTime);
+	    // When we meet a non-rest event, start a new split
+	    // if an entire bar has passed since the last one
+
+	    int lastSoundBarNo = m_composition->getBarNumber(lastSoundTime);
 
 	    if (lastSoundBarNo < barNo - 1 ||
 		(lastSoundBarNo == barNo - 1 &&
-		 comp->getBarStartForTime(lastSoundTime) == lastSoundTime)) {
+		 m_composition->getBarStartForTime(lastSoundTime) ==
+		 lastSoundTime &&
+		 lastSoundTime > segmentStart)) {
 
 		splitPoints.push_back(AutoSplitPoint(myTime, lastSoundTime,
 						     clef, key));
@@ -573,15 +589,47 @@ SegmentAutoSplitCommand::execute()
 	lastSoundTime = std::max(lastSoundTime, myTime + (*i)->getDuration());
     }
 	
+    for (unsigned int split = 0; split <= splitPoints.size(); ++split) {
 
-    //!!! now do something with it
+	Segment *newSegment = new Segment();
+	newSegment->setTrack(m_segment->getTrack());
+	newSegment->setLabel(m_segment->getLabel());
+
+	timeT startTime = segmentStart;
+	if (split > 0) {
+	    startTime = splitPoints[split-1].time;
+	    newSegment->insert(splitPoints[split-1].clef.getAsEvent(startTime));
+	    newSegment->insert(splitPoints[split-1].key.getAsEvent(startTime));
+	}
+
+	Segment::iterator i = m_segment->findTime(startTime);
+
+	while (m_segment->isBeforeEndMarker(i)) {
+	    timeT t = (*i)->getAbsoluteTime();
+	    if (split < splitPoints.size() &&
+		t >= splitPoints[split].lastSoundTime) break;
+	    newSegment->insert(new Event(**i));
+	    ++i;
+	}
+
+	m_newSegments.push_back(newSegment);
+    }
+	    
+    m_composition->detachSegment(m_segment);
+    for (unsigned int i = 0; i < m_newSegments.size(); ++i) {
+	m_composition->addSegment(m_newSegments[i]);
+    }
+    m_detached = true;
 }
 
 void
 SegmentAutoSplitCommand::unexecute()
 {
-    //!!! implement (by just detaching the new segments and restoring
-    // the old one)
+    for (unsigned int i = 0; i < m_newSegments.size(); ++i) {
+	m_composition->detachSegment(m_newSegments[i]);
+    }
+    m_composition->addSegment(m_segment);
+    m_detached = false;
 }
 
 

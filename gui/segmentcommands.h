@@ -230,8 +230,11 @@ public:
     virtual void execute();
     virtual void unexecute();
     
+    static QString getGlobalName() { return "&Auto-Split"; }
+
 private:
     Rosegarden::Segment *m_segment;
+    Rosegarden::Composition *m_composition;
     std::vector<Rosegarden::Segment *> m_newSegments;
     bool m_detached;
 };

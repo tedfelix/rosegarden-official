@@ -356,6 +356,14 @@ void RosegardenGUIApp::setupActions()
 		SLOT(slotHarmonizeSelection()), actionCollection(),
 		"harmonize_selection");
 
+    new KAction(i18n("&Rescale..."), 0, this,
+		SLOT(slotRescaleSelection()), actionCollection(),
+		"rescale");
+
+    new KAction(SegmentAutoSplitCommand::getGlobalName(), 0, this,
+		SLOT(slotAutoSplitSelection()), actionCollection(),
+		"auto_split");
+
     new KAction(i18n("Open in Matri&x Editor"), 0, this,
 		SLOT(slotEditInMatrix()), actionCollection(),
 		"edit_matrix");
@@ -1161,6 +1169,52 @@ void RosegardenGUIApp::slotQuantizeSelection()
 	command->addCommand(new EventQuantizeCommand
 			    (**i, (*i)->getStartTime(), (*i)->getEndTime(),
 			     dialog->getQuantizer()));
+    }
+
+    m_view->slotAddCommandToHistory(command);
+}
+
+void RosegardenGUIApp::slotRescaleSelection()
+{
+    if (!m_view->haveSelection()) return;
+
+    //!!! this should all be in rosegardenguiview
+/*!!! or should it?
+
+    RescaleDialog *dialog = new RescaleDialog(m_view);
+    if (dialog->exec() != QDialog::Accepted) return;
+
+    Rosegarden::SegmentSelection selection = m_view->getSelection();
+    
+    KMacroCommand *command = new KMacroCommand
+	(SegmentRescaleCommand::getGlobalName());
+
+    for (Rosegarden::SegmentSelection::iterator i = selection.begin();
+	 i != selection.end(); ++i) {
+	command->addCommand(new SegmentRescaleCommand
+                            (*i, dialog->getMultiplier(),
+			          dialog->getDivisor());
+    }
+
+    m_view->slotAddCommandToHistory(command);
+*/
+}
+
+void RosegardenGUIApp::slotAutoSplitSelection()
+{
+    if (!m_view->haveSelection()) return;
+
+    //!!! this should all be in rosegardenguiview
+    //!!! or should it?
+
+    Rosegarden::SegmentSelection selection = m_view->getSelection();
+    
+    KMacroCommand *command = new KMacroCommand
+	(SegmentAutoSplitCommand::getGlobalName());
+
+    for (Rosegarden::SegmentSelection::iterator i = selection.begin();
+	 i != selection.end(); ++i) {
+	command->addCommand(new SegmentAutoSplitCommand(*i));
     }
 
     m_view->slotAddCommandToHistory(command);

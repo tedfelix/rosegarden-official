@@ -1,0 +1,100 @@
+
+ 1. begin() and end() continue to return the multiset's begin and
+    end, i.e. those of the underlying storage, not necessarily
+    matching the conceptual start and end markers.  Anything else is
+    too complicated to implement unless we make Segment no longer
+    inherit from multiset but instead delegate to it.
+
+ 2. likewise, setStartTime, setEndTime, getStartTime and getEndTime
+    continue to operate as they do now, with one exception as noted
+    in 6 below.
+
+ 3. we introduce set/getStartMarkerTime, set/getEndMarkerTime; the
+    setters extend the segment with rests if setting to a point
+    outside the segment's current extent.
+
+ 4. we also introduce getStartMarker and getEndMarker which return
+    iterators.
+
+ 5. we also introduce isBeforeEndMarker and isAfterStartMarker which
+    take iterator arguments, in an attempt to discourage people from
+    writing things like "while (i != getEndMarker()) { ... ++i; }"
+    which will never terminate if i is already after the end marker.
+
+ 6. because we now have two methods that can change the start time
+    of the segment and we don't really want to add another analogue
+    of Composition::setSegmentStartTimeAndTrack, we reverse a
+    decision we took way back in January and give setStartTime,
+    setStartMarkerTime and setTrack the power to remove and re-
+    insert the segment from the composition that contains it, so as
+    to maintain the composition's ordering by magic.  See this thread:
+
+http://www.geocrawler.com/mail/thread.php3?subject=%5BRosegarden-devel%5D+So+what+about+that+new+release+%3F&offset=25&list=16004
+
+    in which we rejected this solution last time around, for
+    reasons that are no longer particularly compelling (e.g. it'd
+    require a non-destructive erase method to take segments out of
+    the composition, but we have one of those now anyway).
+
+and of course
+
+ 7. we update all the existing drawing and playback code to use the
+    start and end markers instead of the begin and end.
+
+We have a bit of a naming issue as well, don't we?  We use "start"
+in some places and "begin" in others.  We're not even consistent
+about which word is used for what: for example Segment::getStartTime
+vs EventSelection::getBeginTime and BasicCommand::getBeginTime.  I
+actually prefer "start time" to "begin time" so maybe I'll just
+change the EventSelection and BasicCommand methods and we can
+continue to live with the rest of the inconsistency.
+
+[...] 
+
+I forgot a couple of things, and one of them is one of the most
+contentious:
+
+ 2a. we abolish setDuration and getDuration, because of a lack of
+     clarity about what exactly duration means (intuitively we'd
+     probably expect it to refer to end marker, but consistently
+     the name suggests it should refer to the underlying storage).
+     We don't actually call these very often anyway, and it's not
+     likely to be onerous to pick the right one of set/getEndTime/
+     set/getEndMarkerTime instead.
+
+If we really cared enough I suppose we could keep getDuration to
+get the duration of underlying storage, possibly adding
+getMarkerDuration as well.  I'm certainly open to persuasion
+about the duration methods.
+
+And the other thing I forgot: I referred to setEndTime in point
+2 and in 2b above, but it doesn't actually exist at the moment.
+I'm proposing adding that method as well as setEndMarkerTime.
+Shortening the segment with setEndTime really would clip and
+throw away the leftover events.
+
+Also, setStartTime moves the start marker time as well as all
+the events (or does it?), and setEndTime resets the end marker
+time (or does it?).  And the start and end marker default to
+the start and end of storage; and both of them are automatically
+clipped by the start and end markers of the composition.
+
+So, summary of start/end-related methods:
+
+  begin, end -- return iterators at ends of storage
+  getStartTime, getEndTime -- return times at ends of storage
+  setStartTime -- move all events & start marker forward or back
+  setEndTime -- truncate or extend segment
+
+  getStartMarker, getEndMarker -- return iterators at marker points
+  getStartMarkerTime, getEndMarkerTime -- times at marker points
+  setStartMarkerTime, setEndMarkerTime -- likewise
+  isAfterStartMarker, isBeforeEndMarker -- limits tests
+
+Finally, because we'd have setStartTime et al magically
+updating the composition, there'd no longer be any need for
+getFirstEventTime and recalculateStartTime: instead the act of
+inserting an event before the current start time would update
+the stored start time appropriately.  Oh, the thrills.
+
+
