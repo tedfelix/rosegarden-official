@@ -79,9 +79,20 @@ int NotationHLayout::getIdealBarWidth(int fixedWidth,
                                       int shortCount,
                                       const TimeSignature &timeSignature) const
 {
-    if (shortest == m_notationElements.end()) return fixedWidth;
+    kdDebug(KDEBUG_AREA) << "NotationHLayout::getIdealBarWidth: shortCount is "
+                         << shortCount << ", fixedWidth is "
+                         << fixedWidth << ", barDuration is "
+                         << timeSignature.getBarDuration() << endl;
+
+    if (shortest == m_notationElements.end()) {
+        kdDebug(KDEBUG_AREA) << "First trivial return" << endl;
+        return fixedWidth;
+    }
     int d = (*shortest)->event()->getDuration();
-    if (d == 0) return fixedWidth;
+    if (d == 0) {
+        kdDebug(KDEBUG_AREA) << "Second trivial return" << endl;
+        return fixedWidth;
+    }
 
     int smin = getMinWidth(npf, **shortest);
     if (!(*shortest)->event()->get<Int>(P_NOTE_DOTS)) { //!!! double-dot?
@@ -96,11 +107,7 @@ int NotationHLayout::getIdealBarWidth(int fixedWidth,
         getComfortableGap(npf, (*shortest)->event()->get<Int>(P_NOTE_TYPE)) +
         smin;
 
-    kdDebug(KDEBUG_AREA) << "NotationHLayout::getIdealBarWidth: d is "
-                         << d << ", shortCount is " << shortCount
-                         << ", gapPer is " << gapPer << ", fixedWidth is "
-                         << fixedWidth << ", barDuration is "
-                         << timeSignature.getBarDuration() << endl;
+    kdDebug(KDEBUG_AREA) << "d is " << d << ", gapPer is " << gapPer << endl;
 
     int w = fixedWidth + timeSignature.getBarDuration() * gapPer / d;
 
@@ -243,6 +250,10 @@ NotationHLayout::preparse(NotationElementList::iterator from,
                 int d = el->event()->get<Int>(P_QUANTIZED_DURATION); 
                 nbTimeUnitsInCurrentBar += d;
 
+                kdDebug(KDEBUG_AREA) << "Quantized duration is " << d
+                                     << ", current bar now "
+                                     << nbTimeUnitsInCurrentBar << endl;
+
                 int sd = 0;
                 if (shortest == m_notationElements.end() ||
                     d <= (sd = (*shortest)->event()->get<Int>
@@ -268,7 +279,7 @@ NotationHLayout::preparse(NotationElementList::iterator from,
         }
     }
 
-    if (nbTimeUnitsInCurrentBar > 0) {
+    if (startNewBar || nbTimeUnitsInCurrentBar > 0) {
         addNewBar(it, absoluteTime, -1,
                   getIdealBarWidth(fixedWidth, shortest, npf,
                                    shortCount, timeSignature),
@@ -447,16 +458,16 @@ NotationHLayout::layout()
                 // fixed-width items, and take the same proportion
                 // of the remainder as our duration is of the
                 // whole bar's duration.
-                
+ 
                 delta = ((bpi->idealWidth - bpi->fixedWidth) *
                          el->event()->getDuration()) /
                     //!!! not right for partial bar?
                     timeSignature.getBarDuration();
 
-//                 kdDebug(KDEBUG_AREA) << "Rest idealWidth : "
-//                                      << bpi->idealWidth
-//                                      << " - fixedWidth : "
-//                                      << bpi->fixedWidth << endl;
+                 kdDebug(KDEBUG_AREA) << "Rest idealWidth : "
+                                      << bpi->idealWidth
+                                      << " - fixedWidth : "
+                                      << bpi->fixedWidth << endl;
 
 
             } else if (el->isNote()) {
