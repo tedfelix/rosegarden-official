@@ -124,7 +124,7 @@ void RosegardenCanvasView::slotScrollHorizSmallSteps(int hpos)
         hbar->setValue(0);
 
     } else if ((diff = int(hpos - (contentsX() + 
-				   visibleWidth() * 0.8))) > 0) {
+				   visibleWidth() * 0.90))) > 0) {
 
 	// moving off the right hand side of the view   
 
@@ -135,7 +135,7 @@ void RosegardenCanvasView::slotScrollHorizSmallSteps(int hpos)
 	hbar->setValue(hbar->value() + delta);
 
     } else if ((diff = int(hpos - (contentsX() +
-				   visibleWidth() * 0.1))) < 0) {
+				   visibleWidth() * 0.10))) < 0) {
 	// moving off the left
 
 	int delta = -diff / 6;
@@ -200,7 +200,7 @@ void RosegardenCanvasView::slotScrollVertSmallSteps(int vpos)
         vbar->setValue(0);
 
     } else if ((diff = int(vpos - (contentsY() + 
-				   visibleHeight() * 0.8))) > 0) {
+				   visibleHeight() * 0.90))) > 0) {
 
 	// moving off up
 
@@ -211,7 +211,7 @@ void RosegardenCanvasView::slotScrollVertSmallSteps(int vpos)
 	vbar->setValue(vbar->value() + diff);
 
     } else if ((diff = int(vpos - (contentsY() +
-				   visibleHeight() * 0.1))) < 0) {
+				   visibleHeight() * 0.10))) < 0) {
 
 	// moving off down
 

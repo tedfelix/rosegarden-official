@@ -1559,8 +1559,14 @@ TimeSignature::TimeSignature(const Event &e)
     }
     m_numerator = 4;
     m_denominator = 4;
-    e.get<Int>(NumeratorPropertyName, m_numerator);
-    e.get<Int>(DenominatorPropertyName, m_denominator);
+
+    if (e.has(NumeratorPropertyName)) {
+	m_numerator = e.get<Int>(NumeratorPropertyName);
+    }
+
+    if (e.has(DenominatorPropertyName)) {
+	m_numerator = e.get<Int>(DenominatorPropertyName);
+    }
 
     m_common = false;
     e.get<Bool>(ShowAsCommonTimePropertyName, m_common);
