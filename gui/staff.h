@@ -26,8 +26,11 @@
   */
 
 class Staff : public QCanvasItemGroup  {
-public: 
-    Staff(QCanvas*);
+public:
+    enum Clef { Treble, Bass, Alto, Tenor };
+    
+    Staff(QCanvas*, Clef clef = Treble);
+
     static const unsigned int noteHeight;
     static const unsigned int noteWidth;
     static const unsigned int lineWidth;

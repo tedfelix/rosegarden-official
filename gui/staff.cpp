@@ -20,16 +20,33 @@
 #include "qcanvasspritegroupable.h"
 
 
-Staff::Staff(QCanvas *canvas)
+Staff::Staff(QCanvas *canvas, Staff::Clef clef)
     : QCanvasItemGroup(canvas)
 {
 
-    // treble
-    //
-
     // clef
-    QCanvasPixmapArray *clefPixmap = new QCanvasPixmapArray("pixmaps/clef-treble.xpm");
+    //
+    QCanvasPixmapArray *clefPixmap;
+    
+    if (clef == Treble) {
+        
+        clefPixmap = new QCanvasPixmapArray("pixmaps/clef-treble.xpm");
 
+    } else if (clef == Bass) {
+
+        clefPixmap = new QCanvasPixmapArray("pixmaps/clef-bass.xpm");
+
+    } else if (clef == Alto) {
+
+        clefPixmap = new QCanvasPixmapArray("pixmaps/clef-alto.xpm");
+
+    } else if (clef == Tenor) {
+        
+        clefPixmap = new QCanvasPixmapArray("pixmaps/clef-tenor.xpm");
+
+    }
+    
+    
     QCanvasSpriteGroupable *clef = new QCanvasSpriteGroupable(clefPixmap, canvas, this);
 
     // horizontal lines
@@ -47,34 +64,11 @@ Staff::Staff(QCanvas *canvas)
             staffLine->moveBy(0,linesOffset);
         }
 
-    // bass
-    //
-
-    // clef
-    clefPixmap = new QCanvasPixmapArray("pixmaps/clef-bass.xpm");
-
-    clef = new QCanvasSpriteGroupable(clefPixmap, canvas, this);
-
-    clef->moveBy(0, 7*noteHeight + noteHeight / 2);
-
-    // horizontal lines
-    //
-    for(unsigned int l = 0; l < nbLines; ++l) {
-
-            QCanvasLineGroupable *staffLine = new QCanvasLineGroupable(canvas, this);
-
-            int y = l * lineWidth;
-
-            staffLine->setPoints(0,y, len,y);
-            staffLine->moveBy(0,linesOffset + (6 * lineWidth));
-        }
-
-
-    // Add vertical lines
+    // Add vertical line
     //
     QCanvasLineGroupable *staffVertLine = new QCanvasLineGroupable(canvas, this);
 
-    int vertLineHeight = 11 * lineWidth - lineWidth / 2 - 4;
+    int vertLineHeight = nbLines * lineWidth - lineWidth / 2 - 4;
 
     staffVertLine->setPoints(0,linesOffset,
                              0,vertLineHeight + linesOffset);
