@@ -329,6 +329,23 @@ private:
 };
 
 
+class Text
+{
+public:
+    static const std::string EventType;
+    static const int EventSubOrdering;
+    static const PropertyName TextPropertyName;
+
+    Text(const std::string &text);
+    ~Text();
+
+    /// Returned event is on heap; caller takes responsibility for ownership
+    Event *getAsEvent(timeT absoluteTime) const;
+
+private:
+    std::string m_text;
+};
+
 
 /**
 

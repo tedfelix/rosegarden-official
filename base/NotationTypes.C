@@ -427,6 +427,37 @@ Indication::getAsEvent(timeT absoluteTime) const
 
 
 //////////////////////////////////////////////////////////////////////
+// Text
+//////////////////////////////////////////////////////////////////////
+
+const std::string Text::EventType = "text";
+const int Text::EventSubOrdering = -9;
+const PropertyName Text::TextPropertyName = "text";
+
+Text::Text(const std::string &s) :
+    m_text(s)
+{
+    // nothing else
+}
+
+Text::~Text()
+{ 
+    // nothing
+}
+
+Event *
+Text::getAsEvent(timeT absoluteTime) const
+{
+    Event *e = new Event(EventType);
+    e->set<String>(TextPropertyName, m_text);
+    e->setAbsoluteTime(absoluteTime);
+    e->setSubOrdering(EventSubOrdering);
+    return e;
+}
+
+
+
+//////////////////////////////////////////////////////////////////////
 // NotationDisplayPitch
 //////////////////////////////////////////////////////////////////////
 

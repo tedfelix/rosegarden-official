@@ -24,11 +24,13 @@
 
 #include <qhbox.h>
 #include <qheader.h>
+#include "FastVector.h"
 #include "rosegardenguidoc.h"
 
 namespace Rosegarden {
     class RulerScale;
 }
+class LoopRuler;
 
 
 class BarButtons : public QHBox
@@ -45,6 +47,12 @@ public:
                WFlags f=0);
 
     ~BarButtons();
+
+    /**
+     * Re-read the bar widths from the RulerScale and adjust the
+     * button sizes accordingly
+     */
+    void recalculate();
 
 signals:
     // Passed through from LoopRuler
@@ -75,14 +83,21 @@ public slots:
     void setLoopingMode(bool value);
 
 private:
-    void drawButtons();
+    void drawButtons(bool recalc);
+    QWidget *makeBar(int number);
 
     bool m_invert;
     int m_barHeight;
+    int m_loopRulerHeight;
     int m_offset;
 
     RosegardenGUIDoc *m_doc;
     Rosegarden::RulerScale *m_rulerScale;
+
+    int m_firstBar;
+    QWidget *m_hButtonBar;
+    LoopRuler *m_loopRuler;
+    FastVector<QWidget *> m_buttons;
 };
 
 

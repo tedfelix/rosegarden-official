@@ -43,8 +43,11 @@ BarButtons::BarButtons(RosegardenGUIDoc* doc,
     QHBox(parent, name),
     m_invert(invert),
     m_barHeight(barHeight),
+    m_loopRulerHeight(8),
     m_doc(doc),
-    m_rulerScale(rulerScale)
+    m_rulerScale(rulerScale),
+    m_firstBar(0),
+    m_hButtonBar(0)
 {
     m_offset = 4;
 
@@ -52,18 +55,6 @@ BarButtons::BarButtons(RosegardenGUIDoc* doc,
     setMaximumHeight(m_barHeight);
 
     setFrameStyle(Plain);
-
-    drawButtons();
-}
-
-BarButtons::~BarButtons()
-{
-}
-
-void
-BarButtons::drawButtons()
-{
-    if (!m_doc) return;
 
     // Create a horizontal spacing label to jog everything
     // up with the main SegmentCanvas
@@ -73,18 +64,13 @@ BarButtons::drawButtons()
     label->setMinimumWidth(m_offset);
     label->setMaximumWidth(m_offset);
 
-    int loopBarHeight = 8; // the height of the loop bar
-    QVBox *bar;
-
     // Create a vertical box for the loopBar and the bar buttons
     //
     QVBox *buttonBar = new QVBox(this);
     buttonBar->setSpacing(0);
 
-    QHBox *hButtonBar = 0;
-
     if (m_invert) {
-	hButtonBar = new QHBox(buttonBar);
+	m_hButtonBar = new QHBox(buttonBar);
     }
 
     // Loop ruler works its bar spacing out from the scale just
@@ -92,35 +78,49 @@ BarButtons::drawButtons()
     // signals passing back through the outside world.
     //
     //
-    LoopRuler *loopRuler = new LoopRuler(m_doc,
-                                         m_rulerScale,
-                                         loopBarHeight,
-					 m_invert,
-                                         buttonBar);
+    m_loopRuler = new LoopRuler
+	(m_doc, m_rulerScale, m_loopRulerHeight, m_invert, buttonBar);
 
-    connect(loopRuler, SIGNAL(setPointerPosition(Rosegarden::timeT)),
+    connect(m_loopRuler, SIGNAL(setPointerPosition(Rosegarden::timeT)),
             this,      SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
-    connect(loopRuler, SIGNAL(setPlayPosition(Rosegarden::timeT)),
+    connect(m_loopRuler, SIGNAL(setPlayPosition(Rosegarden::timeT)),
             this,      SLOT(slotSetPlayPosition(Rosegarden::timeT)));
 
-    connect(loopRuler, SIGNAL(setLoop(Rosegarden::timeT, Rosegarden::timeT)),
+    connect(m_loopRuler, SIGNAL(setLoop(Rosegarden::timeT, Rosegarden::timeT)),
             this,      SLOT(slotSetLoop(Rosegarden::timeT, Rosegarden::timeT)));
 
     connect(this,      SIGNAL(signalSetLoopingMode(bool)),
-            loopRuler, SLOT(setLoopingMode(bool)));
+            m_loopRuler, SLOT(setLoopingMode(bool)));
 
     connect(this,      SIGNAL(signalSetLoopMarker(Rosegarden::timeT, Rosegarden::timeT)),
-            loopRuler, SLOT(setLoopMarker(Rosegarden::timeT, Rosegarden::timeT)));
+            m_loopRuler, SLOT(setLoopMarker(Rosegarden::timeT, Rosegarden::timeT)));
 
     if (!m_invert) {
-	hButtonBar = new QHBox(buttonBar);
+	m_hButtonBar = new QHBox(buttonBar);
     }
+
+    drawButtons(true);
+}
+
+BarButtons::~BarButtons()
+{
+}
+
+void
+BarButtons::drawButtons(bool recalc)
+{
+    if (!m_doc) return;
+
+    for (int i = 0; i < m_buttons.size(); ++i) delete m_buttons[i];
+    m_buttons.clear();
 
     int firstBar = m_rulerScale->getFirstVisibleBar(),
 	 lastBar = m_rulerScale->getLastVisibleBar();
-    int x = (int)m_rulerScale->getBarPosition(firstBar);
+    m_firstBar = firstBar;
 
+
+/*
     kdDebug(KDEBUG_AREA) << "BarButtons::drawButtons: firstBar " << firstBar
 			 << ", lastBar " << lastBar << ", x " << x << std::endl;
 
@@ -128,11 +128,59 @@ BarButtons::drawButtons()
     for (int j = firstBar; j <= lastBar; ++j) {
 	kdDebug(KDEBUG_AREA) << j << ":" << m_rulerScale->getBarPosition(j) << endl;
     }
-
-    for (int i = firstBar; i <= lastBar; i++)
+*/
+    for (int i = firstBar; i <= lastBar; ++i)
     {
-        bar = new QVBox(hButtonBar);
-        bar->setSpacing(0);
+
+//        label->setMinimumHeight(m_barHeight - m_loopRulerHeight - 4);
+//        label->setMaximumHeight(m_barHeight - m_loopRulerHeight - 4);
+
+	m_buttons.push_back(makeBar(i));
+    }
+
+    if (recalc) recalculate();
+}
+
+QWidget *
+BarButtons::makeBar(int n)
+{
+    QVBox *bar = new QVBox(m_hButtonBar);
+    bar->setSpacing(0);
+
+    // attempt a style
+    //
+    bar->setFrameStyle(StyledPanel);
+    bar->setFrameShape(StyledPanel);
+    bar->setFrameShadow(Raised);
+    
+    QLabel *label = new QLabel(bar);
+    label->setText(QString("%1").arg(n));
+    label->setAlignment(AlignLeft|AlignVCenter);
+    label->setIndent(4);
+
+    return bar;
+}
+
+void
+BarButtons::recalculate()
+{
+    int firstBar = m_rulerScale->getFirstVisibleBar(),
+	 lastBar = m_rulerScale->getLastVisibleBar();
+
+    if (m_firstBar != firstBar) drawButtons(false);
+
+    int x = (int)m_rulerScale->getBarPosition(firstBar);
+
+//        label->setMinimumHeight(m_barHeight - m_loopRulerHeight - 4);
+//        label->setMaximumHeight(m_barHeight - m_loopRulerHeight - 4);
+
+    for (int i = firstBar; i <= lastBar; ++i) {
+
+	if (i + firstBar >= m_buttons.size()) {
+	    m_buttons.push_back(makeBar(i));
+	}
+
+	QWidget *bar = m_buttons[i - firstBar];
 
 	// The (i < lastBar) case resynchronises against the absolute
 	// bar position at each stage so as to avoid gradually increasing
@@ -150,27 +198,11 @@ BarButtons::drawButtons()
 			     << ", width " << width << ", x " << x << std::endl;
 
 
-	if (width == 0) continue;
-
-	bar->setMinimumSize(width, m_barHeight - loopBarHeight - 2);
-	bar->setMaximumSize(width, m_barHeight - loopBarHeight - 2);
-
-        // attempt a style
-        //
-        bar->setFrameStyle(StyledPanel);
-        bar->setFrameShape(StyledPanel);
-        bar->setFrameShadow(Raised);
-
-        label = new QLabel(bar);
-        label->setText(QString("%1").arg(i));
-        label->setAlignment(AlignLeft|AlignVCenter);
-        label->setIndent(4);
-
-        label->setMinimumHeight(m_barHeight - loopBarHeight - 4);
-        label->setMaximumHeight(m_barHeight - loopBarHeight - 4);
+//	if (width == 0) continue;
+	bar->setMinimumSize(width, m_barHeight - m_loopRulerHeight);
+	bar->setMaximumSize(width, m_barHeight - m_loopRulerHeight);
     }
 }
-
 
 void
 BarButtons::setLoopingMode(bool value)

@@ -567,6 +567,16 @@ MidiFile::convertToRosegarden()
                     break;
 
                 case MIDI_TEXT_EVENT:
+                    if (rosegardenSegment)
+		    {
+			//!!! actually we want to load text events even if
+			// no notes in track -- perhaps create lyric segment
+			std::string text = (*midiEvent)->getMetaMessage();
+			rosegardenEvent =
+			    Rosegarden::Text(text).getAsEvent(rosegardenTime);
+			rosegardenSegment->insert(rosegardenEvent);
+		    }
+			
                     break;
 
                 case MIDI_COPYRIGHT_NOTICE:
