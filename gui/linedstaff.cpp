@@ -506,7 +506,7 @@ LinedStaff<T>::insertBar(double layoutX, double width, bool isCorrect,
 	    double dx = width / beats;
 
             // ensure minimum useful scaling
-            while (dx > 0.0 && dx < 3.0) dx += dx;
+            while (dx > 0.0 && dx < 2.0) dx += dx;
 
 	    for (int beat = 1; beat < beats; ++beat) {
 

@@ -119,6 +119,17 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     m_grid->addWidget(m_pianoView, 2, 1);
 
     m_parameterBox = new MatrixParameterBox(getCentralFrame());
+
+    // Set the instrument we're using on this segment
+    //
+    Rosegarden::Track *track = m_document->getComposition().getTrackByIndex(
+            m_staffs[0]->getSegment().getTrack());
+
+    Rosegarden::Instrument *instr = m_document->getStudio().
+        getInstrumentById(track->getInstrument());
+
+    if (instr) m_parameterBox->useInstrument(instr);
+
     m_grid->addWidget(m_parameterBox, 2, 0);
 
     connect(m_parameterBox,
@@ -245,12 +256,10 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
                    .arg(segments.size()));
     }
 
-    // Scroll view to half way so we get a better chance of seeing something 
+    // Scroll view to half way up and warp to pointer position
     //
-    /* - can't use for the moment until the scroll/closing crash is sorted
-    m_canvasView->setContentsPos(0, m_canvasView->contentsHeight()/2 -
-                                     m_canvasView->visibleHeight()/2);
-    */
+    m_canvasView->center(0, m_canvasView->contentsHeight()/2);
+    slotSetPointerPosition(doc->getComposition().getPosition());
 
 #ifdef RGKDE3
     stateChanged("have_selection", KXMLGUIClient::StateReverse);

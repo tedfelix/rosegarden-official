@@ -24,9 +24,11 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpixmap.h>
+#include <qcheckbox.h>
 
 #include "SnapGrid.h"
 
+#include "instrumentparameterbox.h"
 #include "matrixparameterbox.h"
 #include "notepixmapfactory.h"
 #include "rosestrings.h"
@@ -42,7 +44,7 @@ using Rosegarden::Note;
 
 
 MatrixParameterBox::MatrixParameterBox(QWidget *parent):
-    RosegardenParameterBox(i18n("Parameters "), parent),
+    QFrame(parent),
     m_quantizations(
             Rosegarden::StandardQuantization::getStandardQuantizations())
 {
@@ -58,13 +60,19 @@ MatrixParameterBox::~MatrixParameterBox()
 void
 MatrixParameterBox::initBox()
 {
-    QFont font(getFont());
+    QFont boldFont;
+    boldFont.setPointSize(int(boldFont.pointSize() * 9.5 / 10.0 + 0.5));
+    boldFont.setBold(true);
+
+    QFont plainFont;
+    plainFont.setPointSize(plainFont.pointSize() * 9 / 10);
+    QFont font = plainFont;
 
     QFontMetrics fontMetrics(font);
     // magic numbers: 13 is the height of the menu pixmaps, 10 is just 10
     int comboHeight = std::max(fontMetrics.height(), 13) + 10;
 
-    QGridLayout *gridLayout = new QGridLayout(this, 20, 2, 8, 1);
+    QGridLayout *gridLayout = new QGridLayout(this, 20, 3, 8, 1);
 
     QLabel *quantizeLabel  = new QLabel(i18n("Quantize positions"), this);
     quantizeLabel->setFont(font);
@@ -171,14 +179,14 @@ MatrixParameterBox::initBox()
     connect(m_snapGridCombo, SIGNAL(propagate(int)),
             this, SLOT(slotSetSnap(int)));
 
+    m_instrumentParameterBox = new InstrumentParameterBox(this);
+
     // Insert everything
-    gridLayout->addRowSpacing(0, 8);
-    gridLayout->addWidget(quantizeLabel, 1, 0, AlignLeft|AlignTop);
-    gridLayout->addWidget(m_quantizeCombo, 1, 1, AlignTop);
-    gridLayout->addWidget(snapGridLabel, 2, 0, AlignLeft|AlignTop);
-    gridLayout->addWidget(m_snapGridCombo, 2, 1, AlignTop);
-
-
+    gridLayout->addMultiCellWidget(m_instrumentParameterBox, 0, 7, 0, 2);
+    gridLayout->addWidget(quantizeLabel, 10, 0, AlignLeft|AlignTop);
+    gridLayout->addWidget(m_quantizeCombo, 10, 2, AlignTop);
+    gridLayout->addWidget(snapGridLabel, 11, 0, AlignLeft|AlignTop);
+    gridLayout->addWidget(m_snapGridCombo, 11, 2, AlignTop);
 }
 
 
@@ -219,6 +227,13 @@ void
 MatrixParameterBox::slotSetSnap(int s)
 {
     emit modifySnapTime(m_snapValues[s]);
+}
+
+
+void
+MatrixParameterBox::useInstrument(Rosegarden::Instrument *instrument)
+{
+    m_instrumentParameterBox->useInstrument(instrument);
 }
 
 
