@@ -236,20 +236,22 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 	    // 
 	    if (playTime >= seekEndTime) break;
 
+            // Continue if the time falls before the slice (can happen
+	    // through rounding error etc).  Use absolute times here!
+            // RealTimes again give us rounding problems that can drop
+            // events.
+	    // 
+            if (playTime < sliceStartElapsed)
+                continue;
+
+            // Escape if we're beyond the slice
+	    // 
+            if (playTime >= sliceEndElapsed)
+                break;
+
 	    // Convert to real-time
 	    // 
             eventTime = comp.getElapsedRealTime(playTime);
-
-            // Continue if the time falls before the slice (can happen
-	    // through rounding error etc)
-	    // 
-	    if (eventTime < m_mC.getStartTime())
-		continue;
-
-            // Escape if we're beyond the slice (again, can happen)
-	    // 
-            if (eventTime >= m_mC.getEndTime())
-                break;
 
 	    // Add any performance delay.  Note that simply adding
 	    // comp.getElapsedRealTime((*it)->getDelay()) would fail to

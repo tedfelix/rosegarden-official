@@ -8,4 +8,4 @@
 
 make -f Makefile.cvs
 
-CXXFLAGS="-g3 -gstabs+ -fexceptions" ./configure --enable-debug --with-exceptions=YES --with-alsa
+CXXFLAGS="-g3 -gstabs+ -fexceptions" ./configure --enable-debug --with-exceptions=YES --with-alsa=yes

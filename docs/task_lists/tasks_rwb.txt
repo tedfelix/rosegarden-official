@@ -1,6 +1,6 @@
 0.2 TO-DO for rwb
 -----------------
-updated 15.04.2002
+updated 17.04.2002
 
 Currently looking at:
 
@@ -17,23 +17,8 @@ o ALSA:
   - start-up bug [FIXED?]
   - metronome broken with ALSA? [NO - just wasn't implemented - NOW FIXED]
   - MIDI THRU to current selected instrument [DONE]
-  - Instrument label on InstrumentParameterBox
+  - Instrument label on InstrumentParameterBox [DONE]
   - ALL Synth instruments have the same channel occasionally!
-
-o MappedDevice transmission is breaking occasionally
-  [HOPEFULLY FIXED in MappedDevice itself]
-
-o Multiple devices with multiple bank/programs
-  [DONE]
-
-o Recording Segment doesn't appear anymore
-  [FIXED - typo]
-
-o Recording Segment ghost is left - extends wrong side
-  [FIXED]
-
-o Instrument naming on InstrumentButtons
-  [DONE]
 
 o Looping marker set from file load/top level - Looping
   set from Clients - Looping BUG crashing sequencer
@@ -46,12 +31,6 @@ o Playing Audio files broken - get seeking working
 o Split/Join
 
 o Segment start and end markers
-
-o bigger position pointer
-  [DONE]
-
-o trackbuttons and segmentcanvas tied scrolling
-  [DONE]
 
 o Segment paramters and modifiers - looping of Segments, quantisation
   [GETTING THERE]
@@ -89,9 +68,31 @@ Completed POST 0.1.4
 
 - Latency dialog [DONE]
 
-o Sequencer's getMappedComposition for sync and async is
+- Sequencer's getMappedComposition for sync and async is
   suddenly bombing out post aRts/ALSA split
   [DONE]
+
+- Recording Segment doesn't appear anymore
+  [FIXED - typo]
+
+- Recording Segment ghost is left - extends wrong side
+  [FIXED]
+
+- Instrument naming on InstrumentButtons
+  [DONE]
+
+- MappedDevice transmission is breaking occasionally
+  [HOPEFULLY FIXED in MappedDevice itself]
+
+- Multiple devices with multiple bank/programs
+  [DONE]
+
+- bigger position pointer
+  [DONE]
+
+- trackbuttons and segmentcanvas tied scrolling
+  [DONE]
+
 
 --
 

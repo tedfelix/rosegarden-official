@@ -36,7 +36,7 @@ namespace Rosegarden
 {
 
 AlsaDriver::AlsaDriver():
-    SoundDriver(std::string("ALSA ") + std::string(SND_LIB_VERSION_STR)),
+    SoundDriver(std::string("alsa-lib version ") + std::string(SND_LIB_VERSION_STR)),
     m_client(-1),
     m_port(-1),
     m_queue(-1),

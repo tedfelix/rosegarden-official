@@ -507,7 +507,7 @@ TrackEditor::slotSetPointerPosition(Rosegarden::timeT position)
     if (distance < 0.0) distance = -distance;
     if (distance >= 1.0) {
 
-	m_pointer->setX(canvasPosition - 2);
+	m_pointer->setX(canvasPosition - 1);
         slotScrollHoriz((int)canvasPosition);
 	emit needUpdate();
     }
