@@ -4,7 +4,7 @@
     Rosegarden-4 v0.1
     A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2001
+    This program is Copyright 2000-2002
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -21,8 +21,8 @@
 
 // This file is Copyright 2002 Randall Farmer <rfarme@simons-rock.edu>
 
-#ifndef _COMPOSITIONADAPTER_H_
-#define _COMPOSITIONADAPTER_H_
+#ifndef _COMPOSITION_TIMESLICE_ADAPTER_H_
+#define _COMPOSITION_TIMESLICE_ADAPTER_H_
 
 #include <list>
 #include <utility>
@@ -38,27 +38,28 @@ class Event;
 class Composition;
 
 /**
- * CompositionAdapter makes a Composition act like a sorted list of
- * all the events in a timeslice. Unlike with Segment, you can only
- * iterate from begin() to end() -- there's no random access or
+ * CompositionTimeSliceAdapter makes a Composition act like a sorted
+ * list of all the events in a timeslice. Unlike with Segment, you can
+ * only iterate from begin() to end() -- there's no random access or
  * decrement.
- *
- * There's also a columniterator child class that organizes the
- * Composition into columns.
  */
 
-class CompositionAdapter
+class CompositionTimeSliceAdapter
 {
 public:
     class iterator;
+
+/*!!!
     typedef std::list<Event *> Column;
     class columniterator;
+*/
 
-    CompositionAdapter(Composition* c, timeT begin = -1, timeT end = -1) :
+    CompositionTimeSliceAdapter(Composition* c,
+				timeT begin = -1, timeT end = -1) :
 	m_composition(c),
 	m_begin(begin),
 	m_end(end) { };
-    ~CompositionAdapter() { };
+    ~CompositionTimeSliceAdapter() { };
 
     iterator begin();
     iterator end();
@@ -67,15 +68,18 @@ public:
      * Returns a columniterator referencing the first column of the
      * timeslice.
      */
+/*!!!
     columniterator beginColumns();
-
+*/
     /**
      * Returns a past-the-end columniterator.
      */
+/*!!!
     columniterator endColumns();
+*/
 
     class iterator {
-	friend class CompositionAdapter;
+	friend class CompositionTimeSliceAdapter;
     public:
 	iterator() : m_curEvent(0) { };
 	~iterator() { };

@@ -141,27 +141,47 @@ public:
     unsigned int getNbSegments() const { return m_segments.size(); }
 
     /**
-     * Add a new segment and return an iterator pointing to it
+     * Add a new Segment and return an iterator pointing to it
      * The inserted Segment is owned by the Composition object
      */
     iterator addSegment(Segment*);
 
     /**
-     * Delete the segment pointed to by the specified iterator
+     * Delete the Segment pointed to by the specified iterator
      *
-     * NOTE: The segment is deleted from the composition and
+     * NOTE: The Segment is deleted from the Composition and
      * destroyed
      */
     void deleteSegment(iterator);
 
     /**
-     * Delete the segment if it is part of the Composition
-     * \return true if the segment was found and deleted
+     * Delete the Segment if it is part of the Composition
+     * \return true if the Segment was found and deleted
      *
-     * NOTE: The segment is deleted from the composition and
+     * NOTE: The Segment is deleted from the composition and
      * destroyed
      */
     bool deleteSegment(Segment*);
+
+    /**
+     * Set the formal starting time of the Segment.  You should
+     * normally use this in preference to Segment::setStartIndex
+     * because it correctly updates the location of the Segment
+     * in the Composition's container (whose ordering depends on
+     * the start index).
+     * \return false if the Segment was not found
+     */
+    bool setSegmentStartIndex(Segment *, timeT);
+
+    /**
+     * Set the track number the given Segment is associated with.
+     * You should normally use this in preference to Segment::setTrack
+     * because it correctly updates the location of the Segment
+     * in the Composition's container (whose ordering depends on
+     * the track number).
+     * \return false if the Segment was not found
+     */
+    bool setSegmentTrack(Segment *, unsigned int);
 
 
 
@@ -353,7 +373,6 @@ public:
     }
 
 
-
     /**
      * Get the current playback position.
      */
@@ -363,6 +382,8 @@ public:
      * Set the current playback position.
      */
     void setPosition(timeT position);
+
+
 
     /////////////
     //

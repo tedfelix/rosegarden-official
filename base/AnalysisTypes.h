@@ -36,7 +36,7 @@ using std::multimap;
 
 class Segment;
 class Event;
-class CompositionAdapter;
+class CompositionTimeSliceAdapter;
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -49,11 +49,11 @@ public:
     Key getKeyForEvent(Event *e, Segment &s);
     /**
      * Inserts in the Segment labels for all of the chords found in
-     * the timeslice in the CompositionAdapter. See
+     * the timeslice in the CompositionTimeSliceAdapter. See
      * TransformsMenuLabelChordsCommand::modifySegment() in
      * notationcommands.cpp
      */
-    void labelChords(CompositionAdapter &c, Segment &s);
+    void labelChords(CompositionTimeSliceAdapter &c, Segment &s);
 };
 
 ///////////////////////////////////////////////////////////////////////////
@@ -79,11 +79,11 @@ const ChordType
  * AnalysisHelper::labelChords() for an example.
  */
 
-class Chord {
+class ChordLabel {
 public:
-    Chord();
-    Chord(Key key, int mask, int bass);
-    Chord(ChordType type, int rootPitch, int inversion = 0) :
+    ChordLabel();
+    ChordLabel(Key key, int mask, int bass);
+    ChordLabel(ChordType type, int rootPitch, int inversion = 0) :
         m_data(type, rootPitch, inversion) { };
     std::string getName(Key key);
     bool isValid();

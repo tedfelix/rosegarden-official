@@ -29,7 +29,7 @@
 #include "Event.h"
 #include "Segment.h"
 #include "NotationTypes.h"
-#include "CompositionAdapter.h"
+#include "CompositionTimeSliceAdapter.h"
 #include "BaseProperties.h"
 
 namespace Rosegarden {
@@ -65,12 +65,12 @@ AnalysisHelper::getKeyForEvent(Event *e, Segment &s) {
 }
 
 void
-AnalysisHelper::labelChords(CompositionAdapter &c, Segment &s) {
+AnalysisHelper::labelChords(CompositionTimeSliceAdapter &c, Segment &s) {
 
     Key key = getKeyForEvent(*c.begin(), s);
 
     // no increment (the inner loop does the incrementing)
-    for (CompositionAdapter::iterator i = c.begin(); i != c.end();  ) {
+    for (CompositionTimeSliceAdapter::iterator i = c.begin(); i != c.end();  ) {
 
         // Examine all notes starting at the same time as this one.
         //  1. keep the current key in key
@@ -95,7 +95,7 @@ AnalysisHelper::labelChords(CompositionAdapter &c, Segment &s) {
 
         if (mask==0) continue;
 
-        Chord ch(key, mask, bass);
+	ChordLabel ch(key, mask, bass);
 
         if (ch.isValid()) {
             // label the chord (but, of course, there aren't text-indication
@@ -112,13 +112,13 @@ AnalysisHelper::labelChords(CompositionAdapter &c, Segment &s) {
 ///////////////////////////////////////////////////////////////////////////
 
 
-Chord::ChordMap Chord::m_chordMap;
+ChordLabel::ChordMap ChordLabel::m_chordMap;
 
-Chord::Chord() {
+ChordLabel::ChordLabel() {
     checkMap();
 }
 
-Chord::Chord(Key key, int mask, int bass) :
+ChordLabel::ChordLabel(Key key, int mask, int bass) :
     m_data() {
 
     checkMap();
@@ -158,19 +158,19 @@ Chord::Chord(Key key, int mask, int bass) :
 }
 
 std::string
-Chord::getName(Key key) {
+ChordLabel::getName(Key key) {
     return NotationDisplayPitch(m_data.m_rootPitch, Clef(), key)
         .getAsString(Clef(), key, false) + m_data.m_type;
     //			+ (m_data.m_inversion>0 ? " in first inversion" : "");
 }
 
 bool
-Chord::isValid() {
+ChordLabel::isValid() {
     return m_data.m_type != ChordTypes::NoChord;
 }
 
 void
-Chord::checkMap() {
+ChordLabel::checkMap() {
     if (!m_chordMap.empty()) return;
 
     const ChordType basicChordTypes[8] =

@@ -22,7 +22,7 @@
 #include "notationview.h"
 #include "rosegardenguidoc.h"
 
-#include "CompositionAdapter.h"
+#include "CompositionTimeSliceAdapter.h"
 #include "AnalysisTypes.h"
 
 #include "BaseProperties.h"
@@ -34,7 +34,7 @@
 
 using Rosegarden::Segment;
 using Rosegarden::SegmentNotationHelper;
-using Rosegarden::CompositionAdapter;
+using Rosegarden::CompositionTimeSliceAdapter;
 using Rosegarden::AnalysisHelper;
 using Rosegarden::Event;
 using Rosegarden::timeT;
@@ -332,8 +332,9 @@ TransformsMenuLabelChordsCommand::modifySegment(SegmentNotationHelper &helper)
     if (m_selection->getSegmentEvents().empty()) return;
 
     AnalysisHelper ah;
-    CompositionAdapter ca(helper.segment().getComposition(),
-                          m_selection->getBeginTime(), m_selection->getEndTime());
+    CompositionTimeSliceAdapter ca
+	(helper.segment().getComposition(),
+	 m_selection->getBeginTime(), m_selection->getEndTime());
 
     ah.labelChords(ca, helper.segment());
 }

@@ -462,26 +462,32 @@ RosegardenGUIDoc::createNewSegment(SegmentItem *p, int track)
     kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewSegment() startBar = " 
 			 << startBar << ", barCount = " << barCount << endl;
 
-    timeT startIndex = m_composition.getBarRange(startBar, false).first;
-    timeT duration = m_composition.getBarRange(startBar + barCount, false).first -
+    timeT startIndex =
+	m_composition.getBarRange(startBar, false).first;
+
+    timeT duration =
+	m_composition.getBarRange(startBar + barCount, false).first -
 	startIndex;
 
     kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewSegment() startIndex = " 
 			 << startIndex << ", duration = " << duration << endl;
 
+    // We can safely call this here because the segment is not in
+    // its composition yet
+    // 
     newSegment->setStartIndex(startIndex);
 
-    // Now we can add the segment to the composition, because its start index
-    // has been set
+    // Now we can add the segment to the right place in the composition
     //
     m_composition.addSegment(newSegment);
 
     // And we can set its duration, because it's been added to the
-    // Composition
+    // composition
     //
     newSegment->setDuration(duration);
 
     // store ptr to new segment in segment part item
+    //
     p->setSegment(newSegment);
 
     setModified();

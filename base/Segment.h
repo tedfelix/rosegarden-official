@@ -58,21 +58,37 @@ class Composition;
 class Segment : public std::multiset<Event*, Event::EventCmp>
 {
 public:
+    /**
+     * Construct a Segment with a given formal starting time.
+     */
     Segment(timeT startIdx = 0);
     virtual ~Segment();
-    
-    timeT getStartIndex() const { return m_startIdx; }
-    void  setStartIndex(timeT i);
 
     /**
-     * Returns the effective duration of the segment, i.e. the time
-     * at which the final event ends relative to the start time of
-     * the segment.
+     * Get the formal starting time of the Segment.  This is not
+     * necessarily the same as the time of the first event in it.
+     */
+    timeT getStartIndex() const { return m_startIdx; }
+
+    /**
+     * Set the formal starting time of the Segment.  It is usually
+     * VERY DANGEROUS to call this on a Segment that has been stored
+     * in a Composition, because the Composition uses the start index
+     * as a part of the ordering for Segments and if the index changes
+     * the ordering may break.  If your Segment is already in a
+     * Composition, use Composition::setSegmentStartIndex instead.
+     */
+    void setStartIndex(timeT i);
+
+    /**
+     * Return the effective duration of the segment.  This is the
+     * time at which the final event ends relative to the start time
+     * of the segment.
      */
     timeT getDuration() const;
 
     /**
-     * Ensures that the duration of the segment reaches the given
+     * Ensure that the duration of the segment reaches the given
      * time, by filling it with suitable rests if it needs
      * lengthening.
      * 
@@ -83,12 +99,28 @@ public:
      * a score it's vital that the filling rests are present, so
      * in practice setDuration should always be used.
      */
-    void  setDuration(timeT);
+    void setDuration(timeT);
 
+    /**
+     * Return the end time of the Segment.  This is the end time of
+     * the final event.
+     */
     timeT getEndIndex() const { return m_startIdx + getDuration(); }
 
-    unsigned int getTrack() const         { return m_track; }
-    void         setTrack(unsigned int i) { m_track = i; }
+    /**
+     * Get the track number this Segment is associated with.
+     */
+    unsigned int getTrack() const { return m_track; }
+
+    /**
+     * Set the track number this Segment is associated with.  It is
+     * usually VERY DANGEROUS to call this on a Segment that has been
+     * stored in a Composition, because the Composition uses the track
+     * number as part of the ordering for Segments and if the number
+     * changes the ordering may break.  If your Segment is already in a
+     * Composition, use Composition::setSegmentTrack instead.
+     */
+    void setTrack(unsigned int i) { m_track = i; }
 
     /**
      * Note that a Segment does not have to be in a Composition;

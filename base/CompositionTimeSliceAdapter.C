@@ -4,7 +4,7 @@
   Rosegarden-4 v0.1
   A sequencer and musical notation editor.
 
-  This program is Copyright 2000-2001
+  This program is Copyright 2000-2002
   Guillaume Laurent   <glaurent@telegraph-road.org>,
   Chris Cannam        <cannam@all-day-breakfast.com>,
   Richard Bown        <bownie@bownie.com>
@@ -26,7 +26,7 @@
 #include <list>
 #include <utility>
 
-#include "CompositionAdapter.h"
+#include "CompositionTimeSliceAdapter.h"
 #include "Segment.h"
 #include "Composition.h"
 
@@ -35,8 +35,8 @@ namespace Rosegarden {
 using std::list;
 using std::pair;
 
-CompositionAdapter::iterator
-CompositionAdapter::begin() {
+CompositionTimeSliceAdapter::iterator
+CompositionTimeSliceAdapter::begin() {
     iterator i;
 
     // Fill m_positionList with segment pointers and segment::iterators.
@@ -64,13 +64,13 @@ CompositionAdapter::begin() {
     return i;
 }
 
-CompositionAdapter::iterator
-CompositionAdapter::end() {
+CompositionTimeSliceAdapter::iterator
+CompositionTimeSliceAdapter::end() {
     return iterator();
 }
 
-CompositionAdapter::iterator&
-CompositionAdapter::iterator::operator++() {
+CompositionTimeSliceAdapter::iterator&
+CompositionTimeSliceAdapter::iterator::operator++() {
     if (m_positionList.empty()) {
         // We're done.
         m_curEvent = 0;
@@ -112,17 +112,17 @@ CompositionAdapter::iterator::operator++() {
 }
 
 bool
-CompositionAdapter::iterator::operator!=(const iterator& other) {
+CompositionTimeSliceAdapter::iterator::operator!=(const iterator& other) {
     return m_curEvent != other.m_curEvent;
 }
 
 Event*
-CompositionAdapter::iterator::operator*() {
+CompositionTimeSliceAdapter::iterator::operator*() {
     return m_curEvent;
 }
 
 Event*
-CompositionAdapter::iterator::operator->() {
+CompositionTimeSliceAdapter::iterator::operator->() {
     return m_curEvent;
 }
 

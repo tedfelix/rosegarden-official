@@ -306,6 +306,30 @@ Composition::deleteSegment(Segment *p)
     return true;
 }
 
+bool
+Composition::setSegmentStartIndex(Segment *s, timeT t)
+{
+    iterator i = find(begin(), end(), s);
+    if (i == end()) return false;
+
+    m_segments.erase(i);
+    s->setStartIndex(t);
+    m_segments.insert(s);
+    return true;
+}
+
+bool
+Composition::setSegmentTrack(Segment *s, unsigned int track)
+{
+    iterator i = find(begin(), end(), s);
+    if (i == end()) return false;
+
+    m_segments.erase(i);
+    s->setTrack(track);
+    m_segments.insert(s);
+    return true;
+}
+
 timeT
 Composition::getDuration() const
 {

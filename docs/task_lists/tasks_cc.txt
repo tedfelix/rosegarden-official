@@ -64,7 +64,7 @@ Post-0.1.1 task list
 
 16. Fix staff ruler so it's owned by the staff (and works in page mode);
     fix bar-at-end-of-row in page mode; switch to doubles instead of
-    ints in notationhlayout x-coord calculations 
+    ints in notationhlayout x-coord calculations [DONE]
 
 17. Fix storage for bars, time sigs, tempo events in Composition
     (new Segment-a-like as per email) [DONE]
@@ -73,9 +73,9 @@ Post-0.1.1 task list
 
 19. XML files to use absoluteTime attribute instead of resync element;
     add an offset attribute giving time between end of last event and
-    start of this one; make XML output actually use them
+    start of this one; make XML output actually use them [DONE, I think]
 
-20. Fix ties, which are currently not appearing every time they should
+20. Fix ties, which are currently not appearing every time they should [DONE]
 
 21. Do start index thing in Segment:
 

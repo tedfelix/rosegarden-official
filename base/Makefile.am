@@ -10,7 +10,7 @@ INCLUDES= $(all_includes)
 libbase_la_SOURCES = AnalysisTypes.C \
 	             BaseProperties.C \
 		     Composition.C \
-		     CompositionAdapter.C \
+		     CompositionTimeSliceAdapter.C \
 		     Equation.C \
 		     Event.C \
                      Instrument.C \
