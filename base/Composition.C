@@ -37,13 +37,13 @@ const PropertyName Composition::TempoProperty = "BeatsPerHour";
 
 
 Composition::Composition() :
+    m_recordTrack(0),
     m_referenceSegment(0),
     m_barCount(0),
     m_position(0),
     m_currentTempo(120.0),
     m_defaultTempo(120.0),
-    m_barPositionsNeedCalculating(true),
-    m_recordTrack(0)
+    m_barPositionsNeedCalculating(true)
 {
     // nothing
 }

@@ -279,6 +279,7 @@ TrackButtons::setRecordTrack(int recordTrack)
     if (m_lastID != recordTrack && m_lastID != -1)
     {
        m_recordButtonGroup->find(m_lastID)->unsetPalette();
+       m_recordButtonGroup->find(m_lastID)->setDown(false);
     }
 
     m_doc->getComposition().setRecordTrack(recordTrack);

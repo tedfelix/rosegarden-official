@@ -42,10 +42,15 @@
 #include "Event.h"
 #include "BaseProperties.h"
 #include "SegmentNotationHelper.h"
+#include "Composition.h"
 
 QList<RosegardenGUIView> *RosegardenGUIDoc::pViewList = 0L;
 
 using Rosegarden::Composition;
+using Rosegarden::Track;
+using Rosegarden::Instrument;
+using Rosegarden::trackiterator;
+using Rosegarden::instrumentiterator;
 using Rosegarden::Segment;
 using Rosegarden::SegmentNotationHelper;
 using Rosegarden::Event;
@@ -270,6 +275,28 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 	}
     }
     fileStream << "</reference-segment>" << endl;
+
+    fileStream << endl;
+
+    // output Tracks and Instruments
+    for (trackiterator tit = m_composition.getTracks().begin();
+                       tit != m_composition.getTracks().end();
+                       tit++ )
+    {
+        fileStream << QString((*tit).second.toXmlString().c_str()) << endl;
+    }
+
+    fileStream << endl;
+
+    for (instrumentiterator iit = m_composition.getInstruments().begin();
+                            iit != m_composition.getInstruments().end();
+                            iit++ )
+    {
+        fileStream << QString((*iit).second.toXmlString().c_str()) << endl;
+    }   
+
+
+    fileStream << endl;
 
     // output all elements
     //

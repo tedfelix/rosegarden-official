@@ -27,6 +27,7 @@
 #ifndef _TRACK_H_
 #define _TRACK_H_
 
+#include "XmlObject.h"
 #include <string>
 
 // A Track contains information pertaining to a graphical
@@ -43,7 +44,7 @@
 namespace Rosegarden
 {
 
-class Track
+class Track : public XmlObject
 {
 
 public:
@@ -68,6 +69,10 @@ public:
     void setPosition(const int &position) { m_position = position; }
     void setLabel(const string &label) { m_label = label; }
     void setInstrument(const int &instrument) { m_instrument = instrument; }
+
+    // Implementation of virtual
+    //
+    virtual string toXmlString();
 
 private:
 

@@ -22,6 +22,7 @@
 #ifndef _INSTRUMENT_H_
 #define _INSTRUMENT_H_
 
+#include "XmlObject.h"
 #include <string>
 
 // An Instrument connects a Track (which itself contains
@@ -33,7 +34,7 @@
 namespace Rosegarden
 {
 
-class Instrument
+class Instrument : public XmlObject
 {
 public:
     enum InstrumentType { Midi, Audio };
@@ -55,6 +56,10 @@ public:
 
     void setMidiChannel(const int &mC) { m_midiChannel = mC; }
     void setMidiTranspose(const int &mT) { m_midiTranspose = mT; }
+
+    // Implementation of virtual function
+    //
+    virtual string toXmlString();
 
 private:
 

@@ -20,6 +20,7 @@
 */
 
 #include "Instrument.h"
+#include <sstream>
 
 namespace Rosegarden
 {
@@ -43,6 +44,24 @@ Instrument::Instrument(const int &id,
 Instrument::~Instrument()
 {
 }
+
+// Implementation of the virtual method to output this class
+// as XML
+//
+//
+string
+Instrument::toXmlString()
+{
+    stringstream instrument;
+
+    instrument << "<instrument id=\"";
+    instrument << m_id;
+    instrument << "\"/>";
+
+    return instrument.str();
+
+}
+
 
 }
 

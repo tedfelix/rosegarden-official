@@ -19,53 +19,36 @@
     COPYING included with this distribution for more information.
 */
 
-#include "Track.h"
-#include <sstream>
+#ifndef _XMLOBJECT_H_
+#define _XMLOBJECT_H_
+
+#include <string>
+
+// [rwb]
+//
+//   Abstract base class that forces all derived classes
+//   to implement the virtual toXmlString object.
+//
+//   Yes, this is similar to  the XmlStoreableEvent class
+//   in gui/ but with hopes to be more general so that any
+//   classes in base/ can go ahead and implement it.
+//
+//
 
 namespace Rosegarden
 {
 
-Track::Track():
-   m_id(0),
-   m_muted(false),
-   m_type(Midi),
-   m_label("untitled"),
-   m_position(0),
-   m_instrument(0)
+class XmlObject
 {
-}
+public:
+    XmlObject() {;}
+    virtual ~XmlObject() {;}
 
-Track::Track(const int &id, const bool &muted, 
-             const TrackType &tt, const string &label,
-             const int &position, const int &instrument):
-   m_id(id),
-   m_muted(muted),
-   m_type(tt),
-   m_label(label),
-   m_position(position),
-   m_instrument(instrument)
-{
-}
-   
-
-Track::~Track()
-{
-}
-
-string
-Track::toXmlString()
-{
-    stringstream track;
-
-    track << "<track id=\"";
-    track << m_id;
-    track << "\"/>";
-
-    return track.str();
+    virtual string toXmlString() = 0;
+private:
+};
 
 }
 
-
-}
-
+#endif // _XMLOBJECT_H_
 

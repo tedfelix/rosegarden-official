@@ -32,6 +32,12 @@
 namespace Rosegarden 
 {
     
+typedef std::map<int, Instrument> instrumentcontainer;
+typedef std::map<int, Track> trackcontainer;
+
+typedef instrumentcontainer::iterator instrumentiterator;
+typedef trackcontainer::iterator trackiterator;
+
 /**
  * Composition contains a complete representation of a piece of music.
  * It is a container for multiple Segments, as well as any associated
@@ -56,12 +62,6 @@ public:
     static const PropertyName TempoProperty; // stored in beats per hour
 
     typedef std::set<Segment*, Segment::SegmentCmp> segmentcontainer;
-
-    typedef std::map<int, Instrument> instrumentcontainer;
-    typedef std::map<int, Track> trackcontainer;
-
-    typedef instrumentcontainer::iterator instrumentiterator;
-    typedef trackcontainer::iterator trackiterator;
 
     typedef segmentcontainer::iterator iterator;
     typedef segmentcontainer::const_iterator const_iterator;
