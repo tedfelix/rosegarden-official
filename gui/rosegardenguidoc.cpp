@@ -100,7 +100,6 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
       m_clipboard(new Rosegarden::Clipboard),
       m_startUpSync(true),
       m_useSequencer(useSequencer),
-      m_progressDialogDead(false),
       m_pluginManager(pluginManager)
 
 {
@@ -294,14 +293,9 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 	RosegardenProgressDialog progressDlg(i18n("Reading file..."),
                                              100,
                                              (QWidget*)parent());
-        progressDlg.show();
 
 	okay = xmlParse(fileContents, errMsg, &progressDlg);
 
-//         if (m_progressDialogDead == false)
-// 	    delete progressDlg;
-//         else
-//             m_progressDialogDead = false;
     }
 
     if (!okay) {
@@ -323,34 +317,23 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 
     // We might need a progress dialog when we generate previews.
     //
-    RosegardenProgressDialog *progressDlg =
-        new RosegardenProgressDialog(i18n("Generating audio previews..."),
-                                     100,
-                                     (QWidget*)parent());
-    progressDlg->show();
-
+    RosegardenProgressDialog progressDlg(i18n("Generating audio previews..."),
+                                         100,
+                                         (QWidget*)parent());
     try
     {
         // generate any audio previews after loading the files
         m_audioFileManager.
-            generatePreviews(dynamic_cast<Rosegarden::Progress*>(progressDlg));
+            generatePreviews(dynamic_cast<Rosegarden::Progress*>(&progressDlg));
     }
     catch(std::string e)
     {
-        delete progressDlg;
-        progressDlg = 0;
-        RosegardenGUIApp *win=(RosegardenGUIApp *) parent();
-        KMessageBox::error(win, strtoqstr(e));
+        KMessageBox::error(0, strtoqstr(e));
     }
 
     // Initialise MIDI controllers
     //
     initialiseControllers();
-
-    // Get rid of it - if the operation above has been quick enough
-    // then we never see this dialog anyway.
-    //
-    if (progressDlg) delete progressDlg;
 
     return true;
 }
@@ -1377,26 +1360,19 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::AudioFileId /*id*/)
 
     // Create a progress dialog
     //
-    RosegardenProgressDialog *progressDlg =
-        new RosegardenProgressDialog(i18n("Generating audio preview..."),
-                                     100/*,
-                                          (QWidget*)parent()*/);
+    RosegardenProgressDialog progressDlg(i18n("Generating audio preview..."),
+                                         100, (QWidget*)parent());
 
     try
     {
         m_audioFileManager.generatePreview(
-                dynamic_cast<Rosegarden::Progress*>(progressDlg),
+                dynamic_cast<Rosegarden::Progress*>(&progressDlg),
                 newAudioFile->getId());
     }
     catch(std::string e)
     {
-        delete progressDlg;
-        progressDlg = 0;
-        RosegardenGUIApp *win=(RosegardenGUIApp *) parent();
-        KMessageBox::error(win, strtoqstr(e));
+        KMessageBox::error(0, strtoqstr(e));
     }
-
-    if (progressDlg) delete progressDlg;
 
     // something in the record segment (that's why it was added
     // to the composition)
@@ -1441,14 +1417,6 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::AudioFileId /*id*/)
     // clear down
     m_recordSegment = 0;
 
-}
-
-
-
-void
-RosegardenGUIDoc::progressDialogDead()
-{
-    m_progressDialogDead = true;
 }
 
 void

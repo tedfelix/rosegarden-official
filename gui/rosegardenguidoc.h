@@ -261,12 +261,6 @@ public:
      */
     std::string createNewAudioFile();
 
-    // Clunky way of telling whether a progress dialog has been closed
-    // by a subordinate function (RoseXmlParser for example).
-    //
-    void progressDialogDead();
-
-
     // Audio play and record latencies direct from the sequencer
     //
     Rosegarden::RealTime getAudioPlayLatency();
@@ -432,11 +426,6 @@ private:
     // Do we start the sequencer? (from command line argument)
     //
     bool m_useSequencer;
-
-    // Clunky way of telling if the progress dialog has been closed
-    // by a subordinate.
-    //
-    bool m_progressDialogDead;
 
     // AudioPluginManager - sequencer and local plugin management
     //
