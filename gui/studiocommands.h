@@ -148,12 +148,14 @@ public:
     CreateOrDeleteDeviceCommand(Rosegarden::Studio *studio,
 				std::string name,
 				Rosegarden::Device::DeviceType type,
-				Rosegarden::MidiDevice::DeviceDirection direction) :
+				Rosegarden::MidiDevice::DeviceDirection direction,
+				std::string connection) :
 	KNamedCommand(getGlobalName(false)),
 	m_studio(studio),
 	m_name(name),
 	m_type(type),
 	m_direction(direction),
+	m_connection(connection),
 	m_deviceId(Rosegarden::Device::NO_DEVICE),
 	m_deviceCreated(false) { }
 
@@ -173,6 +175,7 @@ protected:
     std::string m_name;
     Rosegarden::Device::DeviceType m_type;
     Rosegarden::MidiDevice::DeviceDirection m_direction;
+    std::string m_connection;
     Rosegarden::DeviceId m_deviceId;
     bool m_deviceCreated;
 };

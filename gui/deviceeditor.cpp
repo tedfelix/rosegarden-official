@@ -257,10 +257,8 @@ DeviceEditorDialog::slotApply()
 	command->addCommand(new CreateOrDeleteDeviceCommand(m_studio, ids[i]));
     }
     
-    // create the new devices, and rename all the rest, because we
-    // haven't bothered to record which ones have changed -- the extra
-    // renaming doesn't matter much as it doesn't involve a trip to
-    // the sequencer (unlike create and delete)
+    // create the new devices, and rename and/or set connections for
+    // any others that have changed
 
     for (int i = 0; i < m_table->numRows(); ++i) {
 	int deviceId = getDeviceIdAt(i);
@@ -271,18 +269,32 @@ DeviceEditorDialog::slotApply()
 				Rosegarden::Device::Midi,
 				m_table->text(i, DIRECTION_COL) == "Play" ?
 				Rosegarden::MidiDevice::Play :
-				Rosegarden::MidiDevice::Record));
+				Rosegarden::MidiDevice::Record,
+				qstrtostr(m_table->text(i, CONNECTION_COL))));
 	} else { // existing device
-	    command->addCommand(new RenameDeviceCommand
-			       (m_studio,
-				deviceId,
-				qstrtostr(m_table->text(i, LABEL_COL))));
+	    Rosegarden::Device *device = m_studio->getDevice(deviceId);
+	    if (!device) {
+		std::cerr <<
+		    "WARNING: DeviceEditorDialog::slotApply(): device at row "
+			  << i << " (id " << deviceId
+			  << ") claims not to be new, but isn't in the studio"
+			  << std::endl;
+	    } else {
+		std::string name = qstrtostr(m_table->text(i, LABEL_COL));
+		std::string conn = qstrtostr(m_table->text(i, CONNECTION_COL));
+		if (device->getName() != name) {
+		    command->addCommand(new RenameDeviceCommand
+					(m_studio, deviceId, name));
+		}
+		if (device->getConnection() != conn) {
+		    command->addCommand(new ReconnectDeviceCommand
+					(m_studio, deviceId, conn));
+		}
+	    }
 	}
     }
 
     m_document->getCommandHistory()->addCommand(command);
-
-    //!!! Set connections!
 
     setModified(false);
 }
@@ -300,7 +312,7 @@ DeviceEditorDialog::getDeviceIdAt(int row) // -1 for new device w/o an id yet
     int id = -1;
 
     if (number && number != "") {
-	id = number.toInt();
+	id = number.toInt() - 1; // displayed device numbers are 1-based
     }
 
     return id;

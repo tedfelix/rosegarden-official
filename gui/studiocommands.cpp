@@ -290,6 +290,7 @@ CreateOrDeleteDeviceCommand::CreateOrDeleteDeviceCommand(Rosegarden::Studio *stu
 	Rosegarden::MidiDevice *md =
 	    dynamic_cast<Rosegarden::MidiDevice *>(device);
 	if (md) m_direction = md->getDirection();
+	m_connection = device->getConnection();
     } else {
 	RG_DEBUG << "CreateOrDeleteDeviceCommand: No such device as " 
 		 << m_deviceId << endl;
@@ -307,35 +308,60 @@ CreateOrDeleteDeviceCommand::execute()
 	// don't want to do this again on undo even if it fails -- only on redo
 	m_deviceCreated = true;
 
-	QByteArray data;
-	QByteArray replyData;
-	QCString replyType;
-	QDataStream arg(data, IO_WriteOnly);
+	{
+	    QByteArray data;
+	    QByteArray replyData;
+	    QCString replyType;
+	    QDataStream arg(data, IO_WriteOnly);
 
-	arg << (int)m_type;
-	arg << (unsigned int)m_direction;
+	    arg << (int)m_type;
+	    arg << (unsigned int)m_direction;
 
-	if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-				      ROSEGARDEN_SEQUENCER_IFACE_NAME,
-				      "addDevice(int, unsigned int)",
-				      data, replyType, replyData, false) ||
-	    replyType != "unsigned int") { 
+	    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+					  ROSEGARDEN_SEQUENCER_IFACE_NAME,
+					  "addDevice(int, unsigned int)",
+					  data, replyType, replyData, false) ||
+		replyType != "unsigned int") { 
+		SEQMAN_DEBUG << "CreateDeviceCommand::execute - "
+			     << "failure in sequencer addDevice" << endl;
+		return;
+	    }
+
+	    QDataStream reply(replyData, IO_ReadOnly);
+	    reply >> m_deviceId;
+
+	    if (m_deviceId == Rosegarden::Device::NO_DEVICE) {
+		SEQMAN_DEBUG << "CreateDeviceCommand::execute - "
+			     << "sequencer addDevice failed" << endl;
+		return;
+	    }
+
 	    SEQMAN_DEBUG << "CreateDeviceCommand::execute - "
-			 << "failure in sequencer addDevice" << endl;
-	    return;
+			 << " added device " << m_deviceId << endl;
 	}
 
-	QDataStream reply(replyData, IO_ReadOnly);
-	reply >> m_deviceId;
+	{
+	    QByteArray data;
+	    QByteArray replyData;
+	    QCString replyType;
+	    QDataStream arg(data, IO_WriteOnly);
 
-	if (m_deviceId == Rosegarden::Device::NO_DEVICE) {
+	    arg << (unsigned int)m_deviceId;
+	    arg << strtoqstr(m_connection);
+
+	    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+					  ROSEGARDEN_SEQUENCER_IFACE_NAME,
+					  "setConnection(unsigned int, QString)",
+					  data, replyType, replyData, false)) {
+		SEQMAN_DEBUG << "CreateDeviceCommand::execute - "
+			     << "failure in sequencer setConnection" << endl;
+		return;
+	    }
+
 	    SEQMAN_DEBUG << "CreateDeviceCommand::execute - "
-			 << "sequencer addDevice failed" << endl;
-	    return;
+			 << " reconnected device " << m_deviceId
+			 << " to " << m_connection << endl;
 	}
-
-	SEQMAN_DEBUG << "CreateDeviceCommand::execute - "
-		     << " added device " << m_deviceId << endl;
 
 	// Add the device to the Studio now, so that we can name it --
 	// otherwise the name will be lost
