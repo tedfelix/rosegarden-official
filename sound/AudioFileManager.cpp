@@ -37,14 +37,14 @@ AudioFileManager::~AudioFileManager()
 // Create a new AudioFile with unique ID and label
 //
 int
-AudioFileManager::addFile(const std::string &name,
-                          const std::string &fileName)
+AudioFileManager::insertFile(const std::string &name,
+                             const std::string &fileName)
 {
     unsigned int id = getFirstUnusedID();
 
     AudioFile *aF = new AudioFile(id, name, fileName);
 
-    // if we don't recognise the file then don't add it
+    // if we don't recognise the file then don't insert it
     //
     if (aF->open() == false)
     {
@@ -100,9 +100,9 @@ AudioFileManager::getFirstUnusedID()
 }
 
 bool
-AudioFileManager::addFile(const std::string &name,
-                          const std::string &fileName,
-                          const unsigned int &id)
+AudioFileManager::insertFile(const std::string &name,
+                             const std::string &fileName,
+                             const unsigned int &id)
 {
     // make sure we don't have one hanging around already
     removeFile(id);
@@ -119,6 +119,41 @@ AudioFileManager::addFile(const std::string &name,
     m_audioFiles.push_back(aF);
     return true;
 }
+
+// Add a given path to our sample search path
+//
+void
+AudioFileManager::addSearchPath(const std::string &path)
+{
+    std::string hPath = path;
+
+    // add a trailing / if we don't have one
+    //
+    if (hPath[hPath.size() - 1] != '/')
+        hPath += std::string("/");
+
+    cout << "PATH = " << hPath << endl;
+
+    m_audioSearchPath.push_back(hPath);
+}
+
+
+// See if we can find a given file in our search path
+// return the first occurence of a match or the empty
+// string if no match.
+//
+std::string
+AudioFileManager::getFileInPath(const std::string &file)
+{
+    std::vector<std::string>::iterator it;
+    for (it = m_audioSearchPath.begin();
+         it != m_audioSearchPath.end();
+         it++)
+    {
+    }
+    return string("");
+}
+
 
 
 

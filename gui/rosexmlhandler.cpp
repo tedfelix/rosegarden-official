@@ -50,6 +50,7 @@ RoseXmlHandler::RoseXmlHandler(Composition &composition,
       m_chordDuration(0),
       m_inChord(false),
       m_inGroup(false),
+      m_inComposition(false),
       m_groupId(0),
       m_foundTempo(false)
 {
@@ -159,6 +160,12 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
     } else if (lcName == "timesignature") {
 
+        if (m_inComposition == false)
+        {
+            m_errorString = i18n("TimeSignature object found outside Composition");
+            return false;
+        }
+
 	timeT t = 0;
 	QString timeStr = atts.value("time");
 	if (timeStr) t = timeStr.toInt();
@@ -187,6 +194,13 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 	m_composition.addRawTempo(t, bph);
 
     } else if (lcName == "instrument") {
+
+        if (m_inComposition == false)
+        {
+            m_errorString = i18n("Instrument object found outside Composition");
+            return false;
+        }
+
         int id = -1;
         string name;
         Rosegarden::Instrument::InstrumentType it;
@@ -254,8 +268,17 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
         m_composition.setDefaultTempo(tempo);
         
+        // set the composition flag
+        m_inComposition = true;
 
     } else if (lcName == "track") {
+
+        if (m_inComposition == false)
+        {
+            m_errorString = i18n("Track object found outside Composition");
+            return false;
+        }
+
         int id = -1;
         int position = -1;
         int instrument = -1;
@@ -335,6 +358,54 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 	int numTime = time.toInt(&isNumeric);
 	if (isNumeric) m_currentTime = numTime;
 
+    } else if (lcName == "audio") {
+
+        if (m_inComposition == false)
+        {
+            m_errorString = i18n("Audio object found outside Composition");
+            return false;
+        }
+
+	QString id(atts.value("id"));
+        QString file(atts.value("file"));
+        QString label(atts.value("label"));
+
+        if (id.isEmpty() || file.isEmpty() || label.isEmpty())
+        {
+            m_errorString = i18n("Audio object has empty parameters");
+            return false;
+        }
+
+        // attempt to insert file into AudioFileManager
+        // (this checks the integrity of the file at the
+        // same time)
+        //
+        if(m_audioFileManager.insertFile(string(label.data()),
+                                         string(file.data()),
+                                         id.toInt()) == false)
+        {
+            m_errorString = i18n("Couldn't find audio file " + file);
+            return false;
+        }
+        
+    } else if (lcName == "audiopath") {
+
+        if (m_inComposition == false)
+        {
+            m_errorString = i18n("Audiopath object found outside Composition");
+            return false;
+        }
+
+        QString search(atts.value("search"));
+
+        if (search.isEmpty())
+        {
+            m_errorString = i18n("Audiopath has no search parameter");
+            return false;
+        }
+
+        m_audioFileManager.addSearchPath(string(search.data()));
+
     } else {
         kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : Don't know how to parse this : " << qName << endl;
     }
@@ -375,6 +446,8 @@ RoseXmlHandler::endElement(const QString& /*namespaceURI*/,
     } else if (lcName == "bar-segment" || lcName == "tempo-segment") {
 	
 	m_currentSegment = 0;
+    } else if (lcName == "composition") {
+        m_inComposition = false;
     }
 
     return true;

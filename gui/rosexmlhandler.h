@@ -83,6 +83,7 @@ protected:
 
     bool m_inChord;
     bool m_inGroup;
+    bool m_inComposition;
     std::string m_groupType;
     int m_groupId;
     int m_groupTupledLength;

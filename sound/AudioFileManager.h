@@ -53,21 +53,28 @@ public:
     // first allocated id for it.
     // 
     //
-    int addFile(const std::string &name, const std::string &fileName);
+    int insertFile(const std::string &name, const std::string &fileName);
 
     // And insert an AudioFile and specify an id
     //
-    bool addFile(const std::string &name, const std::string &fileName,
-                 const unsigned int &id);
+    bool insertFile(const std::string &name, const std::string &fileName,
+                    const unsigned int &id);
 
     // Remove a file from the AudioManager by id
     //
     bool removeFile(const unsigned int &id);
 
+    // Add a directory to the search path
+    //
+    void addSearchPath(const std::string &path);
+
 private:
+    std::string getFileInPath(const std::string &file);
+
     unsigned int getFirstUnusedID();
 
-    vector<AudioFile*> m_audioFiles;
+    std::vector<AudioFile*> m_audioFiles;
+    std::vector<std::string> m_audioSearchPath;
 
 };
 
