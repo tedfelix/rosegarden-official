@@ -407,61 +407,90 @@ void
 Sequencer::processEventsOut(Rosegarden::MappedComposition mC,
                             const Rosegarden::RealTime &playLatency)
 {
-    processAudioOut(mC, playLatency);
-    processMidiOut(mC, playLatency);
-}
-
-void
-Sequencer::processAudioOut(Rosegarden::MappedComposition mC,
-                          const Rosegarden::RealTime &playLatency)
-{
-    // Queue up any events that are pending and connect them
+    // Queue up any audio events that are pending and connect them
     // to the relevant audio out object
     //
     for (MappedComposition::iterator i = mC.begin(); i != mC.end(); ++i)
     {
         if ((*i)->getType() == MappedEvent::Audio)
         {
-            std::cout << "processAudioOut() - got audio event" << std::endl;
+            std::cout << "processAudioOut() - queuing Audio event" << std::endl;
             m_audioFilePlayer->queueAudio((*i)->getAudioID(),
                                           (*i)->getStartIndex(),
                                           (*i)->getDuration());
         }
     }
 
+    processMidiOut(mC, playLatency);
+}
+
+void
+Sequencer::processAudioQueue()
+{
+
     // Now check queue for events that need playing
     std::vector<PlayableAudioFile*>::iterator it;
     RealTime currentTime = getSequencerTime();
 
-    for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); it++)
+    for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); ++it)
     {
         if ((*it)->getStartTime() >= currentTime &&
             (*it)->getStatus() == PlayableAudioFile::Idle)
         {
             (*it)->getAudioObject().start();
-            connect((*it)->getAudioObject(), "left", m_amanPlay, "left");
-            connect((*it)->getAudioObject(), "right", m_amanPlay, "right");
+
+            Arts::connect((*it)->getAudioObject(), "left",
+                          m_amanPlay, "left");
+            Arts::connect((*it)->getAudioObject(), "right",
+                          m_amanPlay, "right");
+
             (*it)->setStatus(PlayableAudioFile::Playing);
         }
 
         if (currentTime >= (*it)->getEndTime() &&
             (*it)->getStatus() == PlayableAudioFile::Playing)
         {
-            disconnect((*it)->getAudioObject(), "left", m_amanPlay, "left");
-            disconnect((*it)->getAudioObject(), "right", m_amanPlay, "right");
+
+            // stopping and disconnecting the objects appears
+            // to be a _bad_ move.  For the moment just kill 'em.
+/*
             (*it)->getAudioObject().stop();
+
+            Arts::disconnect((*it)->getAudioObject(), "left",
+                             m_amanPlay, "left");
+            Arts::disconnect((*it)->getAudioObject(), "right",
+                             m_amanPlay, "right");
+*/
+
             (*it)->setStatus(PlayableAudioFile::Defunct);
         }
     }
 
-    // finally remove all defunct objects
-    for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); ++it)
-    {
-        if ((*it)->getStatus() == PlayableAudioFile::Defunct)
+    // Finally remove all defunct objects treadinf carefully around
+    // the iterators.
+    //
+    int defunctEvents;
+
+    do
+    { 
+        for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); ++it)
         {
-            m_audioPlayQueue.erase(it);
+            if ((*it)->getStatus() == PlayableAudioFile::Defunct)
+            {
+                delete(*it);
+                m_audioPlayQueue.erase(it);
+                break;
+            }
         }
+
+        defunctEvents = 0;
+
+        for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); ++it)
+            if ((*it)->getStatus() == PlayableAudioFile::Defunct)
+               defunctEvents++;
     }
+    while(defunctEvents);
+
 }
 
 void
@@ -672,6 +701,11 @@ Sequencer::initialisePlayback(const Rosegarden::RealTime &position)
     m_playStartTime.sec = 0;
     m_playStartTime.usec = 0;
     m_playStartPosition = position;
+
+    // reset the wav player object
+    //
+    m_amanPlay.stop();
+    m_amanPlay.start();
 }
 
 // Used when looping or jumping to a particular part of the piece
@@ -769,8 +803,6 @@ Sequencer::queueAudioFile(AudioFile *audioFile,
                                                      m_soundServer);
     m_audioPlayQueue.push_back(newAF);
 
-    cout << "CREATING NEW AUDIO FILE FOR PLAYING - SIZE = "
-         << m_audioPlayQueue.size() << endl;
 }
 
 

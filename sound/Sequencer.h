@@ -103,6 +103,13 @@ public:
 private:
 };
 
+
+// PlayableAudioFile is queued on the m_audioPlayQueue and
+// played by processAudioQueue() in Sequencer.  State changes
+// through playback and it's finally discarded when done.
+//
+//
+//
 class PlayableAudioFile
 {
 public:
@@ -218,11 +225,15 @@ public:
     void processEventsOut(Rosegarden::MappedComposition mC,
                           const Rosegarden::RealTime &playLatency);
 
-    // Play an audio file
+    // Queue up an audio file
     //
     void queueAudioFile(Rosegarden::AudioFile *audioFile,
                         const Rosegarden::RealTime &startTime,
                         const Rosegarden::RealTime &duration);
+
+    // Process the audio queue
+    //
+    void processAudioQueue();
 
     // Initialise internal states ready for new playback to commence
     //
@@ -270,9 +281,6 @@ private:
     //
     void initialiseMidi();
     void initialiseAudio();
-
-    void processAudioOut(Rosegarden::MappedComposition mC,
-                        const Rosegarden::RealTime &playLatency);
 
     void processMidiOut(Rosegarden::MappedComposition mC,
                         const Rosegarden::RealTime &playLatency);

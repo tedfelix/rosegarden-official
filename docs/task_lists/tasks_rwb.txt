@@ -9,7 +9,7 @@ o Audio. [IN PROGESS]
   Audio Segments [DONE]
   Audio playing proof of concept [DONE]
   Audio recording proof of concept [ALMOST DONE]
-  Sequencing of plain Audio files [IN PROGRESS]
+  Sequencing of plain Audio files [DONE]
 
 o Segment level Undo/Redo [cc - IN PROGRESS?]
 

@@ -243,6 +243,8 @@ RosegardenSequencerApp::startPlaying()
         delete mC;
     }
 
+    m_sequencer->processAudioQueue();
+
     return true;
 }
 
@@ -270,6 +272,8 @@ RosegardenSequencerApp::keepPlaying()
 
         m_lastFetchSongPosition = m_lastFetchSongPosition + m_readAhead;
     }
+
+    m_sequencer->processAudioQueue();
 
     return true;
 }
