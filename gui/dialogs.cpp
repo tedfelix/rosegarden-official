@@ -2700,8 +2700,8 @@ EventParameterDialog::slotPatternSelected(int value)
             break;
 
         case 1:
-            m_value1Label->setText(i18n("Max Value"));
-            m_value2Label->setText(i18n("Min Value"));
+            m_value1Label->setText(i18n("Start Value"));
+            m_value2Label->setText(i18n("End Value"));
             m_value1Label->show();
             m_value1Combo->show();
             m_value2Label->show();
@@ -2709,8 +2709,8 @@ EventParameterDialog::slotPatternSelected(int value)
             break;
 
         case 2:
-            m_value1Label->setText(i18n("Max Value"));
-            m_value2Label->setText(i18n("Min Value"));
+            m_value1Label->setText(i18n("Start Value"));
+            m_value2Label->setText(i18n("End Value"));
             m_value1Label->show();
             m_value1Combo->show();
             m_value2Label->show();
@@ -2718,8 +2718,8 @@ EventParameterDialog::slotPatternSelected(int value)
             break;
 
         case 3:
-            m_value1Label->setText(i18n("Max Value"));
-            m_value2Label->setText(i18n("Min Value"));
+            m_value1Label->setText(i18n("End Value"));
+            m_value2Label->setText(i18n("Start Value"));
             m_value1Label->show();
             m_value1Combo->show();
             m_value2Label->show();
@@ -2727,8 +2727,8 @@ EventParameterDialog::slotPatternSelected(int value)
             break;
 
         case 4:
-            m_value1Label->setText(i18n("Max Value"));
-            m_value2Label->setText(i18n("Min Value"));
+            m_value1Label->setText(i18n("First Value"));
+            m_value2Label->setText(i18n("Second Value"));
             m_value1Label->show();
             m_value1Combo->show();
             m_value2Label->show();

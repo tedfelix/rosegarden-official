@@ -566,17 +566,64 @@ SelectionPropertyCommand::modifySegment()
     EventSelection::eventcontainer::iterator i =
         m_selection->getSegmentEvents().begin();
 
+    int count = 0;
+
+    Rosegarden::timeT endTime = 0;
+    Rosegarden::timeT startTime = 0;
+
+    // Get start and end times
+    //
     for (;i != m_selection->getSegmentEvents().end(); ++i)
     {
-        if ((*i)->has(m_property))
+        if ((*i)->getAbsoluteTime() < startTime)
+            startTime = (*i)->getAbsoluteTime();
+        
+        if ((*i)->getAbsoluteTime() > endTime)
+            endTime = (*i)->getAbsoluteTime();
+    }
+
+    double step = double(m_value1 - m_value2) / double(endTime - startTime);
+    double lowStep = double(m_value2) / double(endTime - startTime);
+
+    for (i = m_selection->getSegmentEvents().begin();
+         i != m_selection->getSegmentEvents().end(); ++i)
+    {
+        if (m_pattern == Rosegarden::Flat)
+            (*i)->set<Rosegarden::Int>(m_property, m_value1);
+        else if (m_pattern == Rosegarden::Alternating)
         {
-            m_oldValues.push_back((*i)->get<Int>(m_property));
-        }
-        else
+            if (count % 2 == 0)
+                (*i)->set<Rosegarden::Int>(m_property, m_value1);
+            else
+                (*i)->set<Rosegarden::Int>(m_property, m_value2);
+
+        } else if (m_pattern == Rosegarden::Crescendo)
         {
-            m_oldValues.push_back(-1);
+
+            (*i)->set<Rosegarden::Int>(m_property,
+                                       m_value2 +
+                                       int(step * (*i)->getAbsoluteTime()));
+        } else if (m_pattern == Rosegarden::Diminuendo)
+        {
+            (*i)->set<Rosegarden::Int>(m_property,
+                                       m_value1 -
+                                       int(step * (*i)->getAbsoluteTime()));
+        } else if (m_pattern == Rosegarden::Ringing)
+        {
+            if (count % 2 == 0)
+                (*i)->set<Rosegarden::Int>
+                    (m_property,
+                     m_value1 - int(step * (*i)->getAbsoluteTime()));
+            else
+            {
+                int value = m_value2 - int(lowStep * (*i)->getAbsoluteTime());
+                if (value < 0) value = 0;
+
+                (*i)->set<Rosegarden::Int>(m_property, value);
+            }
         }
-        (*i)->set<Rosegarden::Int>(m_property, m_value1);
+
+        count++;
     }
 }
 

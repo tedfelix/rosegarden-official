@@ -273,8 +273,6 @@ private:
     int                         m_value1;
     int                         m_value2;
 
-    std::vector<int>            m_oldValues;
-
 };
 
 class EventUnquantizeCommand : public BasicCommand

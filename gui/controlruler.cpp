@@ -164,7 +164,7 @@ ControlBox::ControlBox(QString label,
                        QWidget *parent,
                        const char *name):
         QWidget(parent, name),
-        m_label(label + i18n(" control box")),
+        m_label(label),
         m_width(width),
         m_height(height)
 {
