@@ -25,9 +25,11 @@ tupled group are consistent with the stored durations.  For this
 reason, Rosegarden 4 stores the effective duration of each tuplet, and
 records the nominal duration separately in an event property.
 
-A side-effect of our choice of base unit of time (6 units == 1
-hemidemisemiquaver, see units.txt) is that the effective durations of
-triplets can be stored exactly in integers.  Other tuplets are less
-fortunate; for the moment we're prepared to simply put up with the
-loss of precision implicit in trying to represent tuplets in this way.
+(The effective duration is not necessarily exact, although for
+triplets it will be.  Our base unit of time was originally 6 units to
+1 hemidemisemiquaver, which meant triplets were the only tuplets that
+could be guaranteed an exact representation; it's since been increased
+to 60 units to the hemidemi, giving various other sorts of tuplets a
+good chance of exactness, and at least a "good enough" approximation
+for the listener.)
 

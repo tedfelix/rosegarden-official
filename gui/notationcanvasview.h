@@ -155,7 +155,7 @@ protected:
 
     int m_lastYPosNearStaff;
 
-    unsigned int m_staffLineThreshold; //!!! better name please
+    unsigned int m_staffLineThreshold; 
 
     NotationStaff *m_currentStaff;
     int m_currentHeight;

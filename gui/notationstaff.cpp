@@ -236,9 +236,6 @@ string
 NotationStaff::getNoteNameAtCanvasCoords(double x, int y,
 					 Rosegarden::Accidental acc) const
 {
-//!!! getting wrong results for clef here -- changes within staff
-// not being taken into account properly?
-
     Rosegarden::Clef clef;
     Rosegarden::Key key;
     getClefAndKeyAtCanvasCoords(x, y, clef, key);
@@ -485,11 +482,7 @@ NotationStaff::elementShiftedOnly(NotationElementList::iterator i)
 	    break;
 	}
     }
-/*!!!
-    kdDebug(KDEBUG_AREA)
-	<< "elementShiftedOnly: elt at " << (*i)->getAbsoluteTime() <<
-	", ok is " << ok << endl;
-*/
+
     return ok;
 }
 
@@ -595,7 +588,7 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 		    (m_npf->makeSlurPixmap(length, dy, above));
 		    
 	    } else {
-		//!!!
+		//...
 	    }
 
 	} else {

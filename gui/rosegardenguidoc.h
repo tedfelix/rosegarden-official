@@ -201,30 +201,22 @@ public slots:
      */
     void slotUpdateAllViews(RosegardenGUIView *sender);
 
-    /**
-     * Create a new segment according to the data in the specified
-     * SegmentItem, and set the segment's track to \a track
-     */
-//!!!    void createNewSegment(Rosegarden::timeT time,
-//                          Rosegarden::timeT duration,
-//                          Rosegarden::TrackId track);
-
     /*
      * Add a SegmentItem to the Canvas - does nothing if the
      * SegmentItem already exists for this Segment
      *
      **/
-    void addSegmentItem(Rosegarden::Segment *segment);
+//!!!    void addSegmentItem(Rosegarden::Segment *segment);
 
     /*
      * Remove a SegmentItem from the Canvas
      **/
-    void deleteSegmentItem(Rosegarden::Segment *segment);
+//!!!    void deleteSegmentItem(Rosegarden::Segment *segment);
 
     /**
      * Populate a SegmentItem with new Segment details
      */
-    void updateSegmentItem(Rosegarden::Segment *segment);
+//!!!    void updateSegmentItem(Rosegarden::Segment *segment);
 
     void documentModified();
     void documentRestored();

@@ -182,18 +182,10 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
             SIGNAL(editSegmentAudio(Rosegarden::Segment*)),
             SLOT(editSegmentAudio(Rosegarden::Segment*)));
 
-/*!!!
-    connect(m_trackEditor, SIGNAL(createNewSegment(Rosegarden::timeT,
-                                                  Rosegarden::timeT,
-                                                  Rosegarden::TrackId)),
-            getDocument(), SLOT  (createNewSegment(Rosegarden::timeT,
-                                                   Rosegarden::timeT,
-                                                   Rosegarden::TrackId)));
-*/
-
     connect(m_trackEditor,  SIGNAL(scrollHorizTo(int)),
             SLOT(scrollTrackEditorHoriz(int)));
 
+//!!! to go
     connect(m_trackEditor,
             SIGNAL(splitSegment(Rosegarden::Segment*, Rosegarden::timeT)),
             doc,
@@ -395,6 +387,7 @@ void RosegardenGUIView::selectTrackSegments(int trackId)
     m_trackEditor->getSegmentCanvas()->selectSegments(segments);
 }
 
+/*!!!
 
 // Insert a newly created Segment (usually recorded) into
 // the view - create a SegmentItem for it
@@ -413,6 +406,7 @@ void RosegardenGUIView::updateSegmentItem(Rosegarden::Segment* segment)
 {
     m_trackEditor->updateSegmentItem(segment);
 }
+*/
 
 // Show a segment as it records
 //

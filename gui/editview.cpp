@@ -219,6 +219,10 @@ void EditView::slotCommandExecuted(KCommand *command)
 					  basicCommand->getEndTime());
     } else {
 	//!!! deal with other command superclasses from segmentcommands.h
+	// (non-basic-partial-segment-commands -> refresh whole segment;
+	// segment-commands -> redraw ruler if only segment, redraw all
+	// otherwise I fear;
+	// time-and-tempo-commands -> redraw all? hmm)
 	kdDebug(KDEBUG_AREA)
 	    << "Warning: EditView::slotCommandExecuted:\n"
 	    << "KCommand is not a BasicCommand, don't know how to refresh"

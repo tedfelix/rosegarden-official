@@ -84,9 +84,6 @@ public:
      * any tempo changes occurring during the event at i.
      */
     RealTime getRealSoundingDuration(iterator i);
-
-private:
-    timeT getDurationWithTupling(Event *e);
 };
 
 }

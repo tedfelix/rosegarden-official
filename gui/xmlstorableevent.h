@@ -62,14 +62,6 @@ public:
      * If expectedTime == 0, include an absoluteTime attribute instead.
      */
     QString toXmlString(Rosegarden::timeT expectedTime = 0) const;
-
-    /**
-     * Get the XML string representing the specified Event.  If the
-     * absolute time of the event differs from the given absolute
-     * time, include the difference between the two as a timeOffset
-     * attribute.
-     */
-//!!!    static QString toXmlString(const Event&, timeT expectedTime = 0);
 };
 
 #endif

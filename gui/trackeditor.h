@@ -85,12 +85,7 @@ public:
     /**
      * Add a new segment - DCOP interface
      */
-    //!!! can the DCOP and the slot not be the same method? this is most confusing
-    virtual void addSegment(int track, int start, unsigned int nbTimeSteps) {
-	addSegment(Rosegarden::TrackId(track),
-		   Rosegarden::timeT(start),
-		   Rosegarden::timeT(nbTimeSteps));
-    }
+    virtual void addSegment(int track, int start, unsigned int duration);
 
     /**
      * Manage command history
@@ -117,12 +112,12 @@ public slots:
      *
      */
     //!!! go?
-    void addSegmentItem(Rosegarden::Segment *segment);
+//!!!    void addSegmentItem(Rosegarden::Segment *segment);
 
     /*
      * Delete a SegmentItem
      */
-    void deleteSegmentItem(Rosegarden::Segment *segment);
+//!!!    void deleteSegmentItem(Rosegarden::Segment *segment);
 
     /**
      * Show a Segment as it records
@@ -133,7 +128,7 @@ public slots:
      * Resync a SegmentItem to reflect its Segment
      **/
 //!!! go
-    void updateSegmentItem(Rosegarden::Segment *segment);
+//!!!    void updateSegmentItem(Rosegarden::Segment *segment);
 
     /*
      * Destroys same
@@ -155,13 +150,16 @@ public slots:
 protected slots:
     void segmentOrderChanged(int section, int fromIdx, int toIdx);
 
-    void addSegment(Rosegarden::TrackId track,
-                    Rosegarden::timeT time,
-                    Rosegarden::timeT duration);
+    void slotAddSegment(Rosegarden::TrackId track,
+			Rosegarden::timeT time,
+			Rosegarden::timeT duration);
 
     void deleteSegment(Rosegarden::Segment *);
     void updateSegmentDuration(Rosegarden::Segment *,
 			       Rosegarden::timeT);
+    void updateSegmentTimes(Rosegarden::Segment *,
+			    Rosegarden::timeT,
+			    Rosegarden::timeT);
     void updateSegmentTrackAndStartTime(Rosegarden::Segment *,
 					Rosegarden::TrackId,
 					Rosegarden::timeT);
@@ -185,20 +183,7 @@ signals:
      */
     void scrollHorizTo(int);
 
-    /**
-     * Emitted when a new segment is created by the user
-     * \a item is the SegmentItem representing the segment on the SegmentCanvas
-     * \a instrument is the instrument for the segment
-     *
-     * It is up to the slot to create the new Segment, to insert it in the
-     * Composition and to set its instrument.
-     *
-     * @see RosegardenGUIDoc::createNewSegment()
-     */
-//!!!    void createNewSegment(Rosegarden::timeT,
-//                          Rosegarden::timeT,
-//                          Rosegarden::TrackId);
-
+    //!!! to go
     void splitSegment(Rosegarden::Segment*, Rosegarden::timeT);
 
 protected:

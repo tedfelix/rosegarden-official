@@ -159,8 +159,8 @@ NotationView::NotationView(RosegardenGUIView* rgView,
          this,         SLOT  (hoveredOverAbsoluteTimeChanged(unsigned int)));
 
     QObject::connect
-	(rgView, SIGNAL(setGUIPositionPointer(timeT)),
-	 this,   SLOT  (setGUIPositionPointer(timeT)));
+	(rgView, SIGNAL(setGUIPositionPointer(Rosegarden::timeT)),
+	 this,   SLOT  (setGUIPositionPointer(Rosegarden::timeT)));
 
     //
     // Window appearance (options, title...)
@@ -977,14 +977,6 @@ bool NotationView::applyLayout(int staffNo)
             m_lastFinishingStaff = i;
         }
     }
-/*!!!
-    if (firstStartingStaff != -1) {
-	m_rulerScale.setFirstStartingStaff(m_staffs[firstStartingStaff]);
-    }
-    if (m_lastFinishingStaff != -1) {
-	m_rulerScale.setLastFinishingStaff(m_staffs[m_lastFinishingStaff]);
-    }
-*/
 
     readjustCanvasSize();
     if (m_topBarButtons) m_topBarButtons->update();
@@ -1602,23 +1594,33 @@ void NotationView::slotDebugDump()
 }
 
 
-// Code required to work out where to put the pointer
-// (i.e. where is the nearest note) and also if indeed
-// it should be currently shown at all for this view
-// (is it within scope)
-//!!! No consideration of scope yet
-//!!! Should be a staff task?
-// 
 void
-NotationView::setPositionPointer(int position)
+NotationView::setGUIPositionPointer(timeT time)
 {
-/*!!! omit for now
+    Rosegarden::Composition &comp = m_document->getComposition();
+    int barNo = comp.getBarNumber(time);
+
+    if (barNo < m_hlayout->getFirstVisibleBar() ||
+	barNo > m_hlayout->getLastVisibleBar()) {
+	if (m_pointer->visible()) {
+	    m_pointer->hide();
+	    update();
+	}
+	return;
+    }
+
+    double x = m_hlayout->getXForTime(time);
+
+    if (!m_pointer->visible() || (int)m_pointer->x() != (int)x) {
+	m_pointer->show();
+	m_pointer->setX(x);
+	update();
+    }
+
+    /*    
+
     if (m_lastFinishingStaff < 0 ||
         unsigned(m_lastFinishingStaff) >= m_staffs.size()) return;
-
-    Rosegarden::Composition &comp = m_document->getComposition();
-
-    int barNo = comp.getBarNumber(position);
     std::pair<timeT, timeT> times = comp.getBarRangeForTime(position);
 
     double canvasPosition = m_hlayout->getTotalWidth();
@@ -1646,7 +1648,7 @@ NotationView::setPositionPointer(int position)
 
     m_pointer->setX(canvasPosition + 20);
     update();
-*/
+    */
 }
 
 //////////////////////////////////////////////////////////////////////

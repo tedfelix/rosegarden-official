@@ -67,8 +67,33 @@ private:
     int                      m_track;
     Rosegarden::timeT        m_startTime;
     Rosegarden::timeT        m_duration;
-
 };
+
+
+/**
+ * SegmentRecordCommand pretends to insert a Segment that is actually
+ * already in the Composition (the currently-being-recorded one).  It's
+ * used at the end of recording, to ensure that GUI updates happen
+ * correctly, and it provides the ability to undo recording.  (The
+ * unexecute does remove the segment, it doesn't just pretend to.)
+ */
+class SegmentRecordCommand : public KCommand,
+			     public SegmentCommand
+{
+public:
+    SegmentRecordCommand(Rosegarden::Segment *segment);
+    virtual ~SegmentRecordCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+    virtual void getSegments(SegmentSet &);
+
+private:
+    Rosegarden::Composition *m_composition;
+    Rosegarden::Segment *m_segment;
+};
+
 
 class SegmentMoveCommand : public KCommand,
                            public SegmentCommand
@@ -76,7 +101,6 @@ class SegmentMoveCommand : public KCommand,
 public:
     SegmentMoveCommand(Rosegarden::Segment *segment);
     virtual ~SegmentMoveCommand();
-
 
     virtual void execute();
     virtual void unexecute();

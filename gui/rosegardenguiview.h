@@ -118,17 +118,17 @@ public:
      * A newly recorded Segment has to be added to the view
      *
      */
-    void createSegmentItem(Rosegarden::Segment* segment);
+//!!!    void createSegmentItem(Rosegarden::Segment* segment);
 
     /*
      * Destroy a SegmentItem
      */
-    void deleteSegmentItem(Rosegarden::Segment* segment);
+//!!!    void deleteSegmentItem(Rosegarden::Segment* segment);
 
     /*
      * Update a SegmentItem to reflect changes in the Segment
      */
-    void updateSegmentItem(Rosegarden::Segment* segment);
+//!!!    void updateSegmentItem(Rosegarden::Segment* segment);
 
     /**
      * Show a Segment as it records - remove the SegmentItem

@@ -64,7 +64,7 @@ public:
     // Overrides virtual release event and sends upwards
     // along with Label id - a bit like a QButtonGroup
     //
-    virtual void mouseReleaseEvent(QMouseEvent *mE)
+    virtual void mouseReleaseEvent(QMouseEvent *)
     {
         if (m_selected)
             setLabelHighlight(false);
@@ -74,7 +74,7 @@ public:
         emit released(m_trackNum);
     }
 
-    virtual void mouseDoubleClickEvent(QMouseEvent *mE)
+    virtual void mouseDoubleClickEvent(QMouseEvent *)
     {
         // Highlight this label alone and cheat using
         // the released signal

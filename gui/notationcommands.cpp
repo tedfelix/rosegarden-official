@@ -135,7 +135,7 @@ ClefInsertionCommand::modifySegment()
 
 KeyInsertionCommand::KeyInsertionCommand(Segment &segment, timeT time,
 					 Rosegarden::Key key) :
-    BasicCommand("Insert Key", segment, time, time + 1),
+    BasicCommand(name(&key), segment, time, time + 1),
     m_key(key),
     m_lastInsertedEvent(0)
 {

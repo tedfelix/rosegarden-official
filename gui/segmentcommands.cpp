@@ -104,16 +104,10 @@ SegmentInsertCommand::execute()
         m_segment->setStartTime(m_startTime);
 	m_composition->addSegment(m_segment);
         m_segment->setDuration(m_duration);
-
-        // Add the SegmentItem to the canvas (does nothing
-        // if the SegmentItem already exists)
-        //
-//!!!        m_document->addSegmentItem(m_segment);
     }
     else
     {
         m_composition->addSegment(m_segment);
-//!!!        m_document->addSegmentItem(m_segment);
     }
     
 }
@@ -121,8 +115,44 @@ SegmentInsertCommand::execute()
 void
 SegmentInsertCommand::unexecute()
 {
-//!!!    m_document->deleteSegmentItem(m_segment);
     m_composition->detachSegment(m_segment);
+}
+
+// --------- Record Segment --------
+//
+
+SegmentRecordCommand::SegmentRecordCommand(Rosegarden::Segment *s) :
+    KCommand("Record"),
+    m_composition(s->getComposition()),
+    m_segment(s)
+{
+}
+
+SegmentRecordCommand::~SegmentRecordCommand()
+{
+    if (!m_segment->getComposition()) {
+	delete m_segment;
+    }
+}
+
+void
+SegmentRecordCommand::execute()
+{
+    if (!m_segment->getComposition()) {
+	m_composition->addSegment(m_segment);
+    }
+}
+
+void
+SegmentRecordCommand::unexecute()
+{
+    m_composition->detachSegment(m_segment);
+}
+
+void
+SegmentRecordCommand::getSegments(SegmentSet &segments)
+{
+    segments.insert(m_segment);
 }
 
 // --------- Move Segment --------

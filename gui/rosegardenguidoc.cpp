@@ -455,35 +455,9 @@ RosegardenGUIDoc::readFromFile(const QString &file, QString &text)
     // gzgets only returns false on error
     return false;
 }    
-    
+
 /*!!!
-void
-RosegardenGUIDoc::createNewSegment(Rosegarden::timeT time,
-                                   Rosegarden::timeT duration,
-                                   Rosegarden::TrackId track)
-{
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewSegment()\n";
-
-    // Create Segment and SegmentItem through the Command interface
-    //
-    SegmentInsertCommand *segmentInsert =
-        new SegmentInsertCommand(this,
-                                 track,
-                                 time,
-                                 duration);
-
-    // Into the undo/redo command history which executes()
-    // the command and creates the Segment
-    //
-    getCommandHistory()->addCommand(segmentInsert);
-
-    // Now we can safely access the Segment
-    //p->setSegment(segmentInsert->getSegment());
-
-    setModified();
-}
-*/
-
+    
 // Delete a SegmentItem from the SegmentCanvas
 //
 void
@@ -530,6 +504,7 @@ RosegardenGUIDoc::addSegmentItem(Rosegarden::Segment *segment)
     }
 }
 
+*/
 
 
 // Take a MappedComposition from the Sequencer and turn it into an
@@ -635,7 +610,8 @@ RosegardenGUIDoc::stopRecordingMidi()
         for(w=pViewList->first(); w!=0; w=pViewList->next())
         {
             w->deleteRecordingSegmentItem();
-            w->createSegmentItem(m_recordSegment);
+	    m_commandHistory.addCommand
+		(new SegmentRecordCommand(m_recordSegment));
         }
     }
 
@@ -723,6 +699,7 @@ RosegardenGUIDoc::setLoopMarker(Rosegarden::timeT startLoop,
 // Split a Segment into two pieces preserving key, time sig and
 // clef in the new Segment
 //
+//!!! make into command thingy
 void
 RosegardenGUIDoc::splitSegment(Rosegarden::Segment *segment,
                                Rosegarden::timeT splitTime)
@@ -813,12 +790,12 @@ RosegardenGUIDoc::splitSegment(Rosegarden::Segment *segment,
     //
     segment->erase(segment->findTime(splitTime), segment->end());
     segment->setDuration(splitTime - segment->getStartTime());
-    updateSegmentItem(segment);
+//!!!    updateSegmentItem(segment);
 
     // Ensure new Segment size in correct and insert a new
     // SegmentItem
     rhSegment->setDuration(endTime - splitTime);
-    addSegmentItem(rhSegment);
+//!!!    addSegmentItem(rhSegment);
 
     slotUpdateAllViews(0);
 

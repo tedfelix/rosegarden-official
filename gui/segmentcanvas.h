@@ -325,10 +325,12 @@ signals:
     void updateSegmentDuration(Rosegarden::Segment *,
 			       Rosegarden::timeT duration);
 
-    /*
-     * Split a Segment - send it to the doc
+    /**
+     * Emitted when a Segment's start time and duration have changed
      */
-    void splitSegment(Rosegarden::Segment *, Rosegarden::timeT);
+    void updateSegmentTimes(Rosegarden::Segment *,
+			    Rosegarden::timeT startTime,
+			    Rosegarden::timeT duration);
 
     /**
      * Emitted when a Segment is moved to a different start time
@@ -337,6 +339,11 @@ signals:
     void updateSegmentTrackAndStartTime(Rosegarden::Segment *,
 					Rosegarden::TrackId track,
 					Rosegarden::timeT startTime);
+
+    /*
+     * Split a Segment - send it to the doc
+     */
+    void splitSegment(Rosegarden::Segment *, Rosegarden::timeT);
 
     void editSegmentNotation(Rosegarden::Segment*);
     void editSegmentMatrix(Rosegarden::Segment*);
@@ -464,7 +471,7 @@ public:
 
 signals:
     void deleteSegment(Rosegarden::Segment*);
-    void updateSegmentDuration(Rosegarden::Segment*, Rosegarden::timeT);
+    void updateSegmentTimes(Rosegarden::Segment*, Rosegarden::timeT, Rosegarden::timeT);
 
 protected:
     bool cursorIsCloseEnoughToEdge(SegmentItem*, QMouseEvent*);

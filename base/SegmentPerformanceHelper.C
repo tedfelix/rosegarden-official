@@ -98,42 +98,10 @@ SegmentPerformanceHelper::getSoundingDuration(iterator i)
 }
 
 
-timeT
-SegmentPerformanceHelper::getDurationWithTupling(Event *e)
-{
-    timeT d = e->getDuration();
+// In theory we can do better with tuplets, because real time has
+// finer precision than timeT time.  With a timeT resolution of 960ppq
+// however the difference is probably not audible
 
-/* No, we're now storing the performance duration as the event's
-   primary duration.  This is fine for triplets (as our base duration
-   is divisible by 3) but may not be suitable for other tuplets where
-   our performer's resolution is higher than the Rosegarden base
-   resolution.  In such a case, this method could use the tupling data
-   and the event's nominal-duration property to calculate a more
-   precise duration for the performer than the Rosegarden units will
-   permit, but to do so we'd have to know the performer's resolution
-   and the point at which this method is currently called (when
-   creating a MappedEvent) is not a point at which we know that.
-
-    long tupledLength;
-    if (e->get<Int>(BEAMED_GROUP_TUPLED_LENGTH, tupledLength)) {
-
-	long untupledLength;
-	if (e->get<Int>(BEAMED_GROUP_UNTUPLED_LENGTH, untupledLength)) {
-	    return (d * tupledLength) / untupledLength;
-	} else {
-	    cerr << "SegmentPerformanceHelper::getDurationWithTupling: WARNING: "
-		 << "Found tupled length without untupled length property"
-		 << endl;
-	}
-    }
-*/
-
-    return d;
-}
-
-
-//!!! Refine this -- in theory we can do better with tuplets, because
-//real time has finer precision than timeT time
 RealTime
 SegmentPerformanceHelper::getRealAbsoluteTime(iterator i) 
 {
@@ -142,10 +110,13 @@ SegmentPerformanceHelper::getRealAbsoluteTime(iterator i)
 }
 
 
-//!!! Refine this -- in theory we can do better with tuplets, because
-//real time has finer precision than timeT time.  Perhaps adding
-//some abstime->realtime conversion methods that accept double args
-//to Composition might be useful
+// In theory we can do better with tuplets, because real time has
+// finer precision than timeT time.  With a timeT resolution of 960ppq
+// however the difference is probably not audible
+// 
+// (If we did want to do this, it'd help to have abstime->realtime
+// conversion methods that accept double args in Composition)
+
 RealTime
 SegmentPerformanceHelper::getRealSoundingDuration(iterator i)
 {

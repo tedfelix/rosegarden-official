@@ -803,8 +803,8 @@ SegmentResizer::SegmentResizer(SegmentCanvas *c)
     connect(this, SIGNAL(deleteSegment(Rosegarden::Segment*)),
             c,    SIGNAL(deleteSegment(Rosegarden::Segment*)));
 
-    connect(this, SIGNAL(updateSegmentDuration(Rosegarden::Segment*, Rosegarden::timeT)),
-            c,    SIGNAL(updateSegmentDuration(Rosegarden::Segment*, Rosegarden::timeT)));
+    connect(this, SIGNAL(updateSegmentTimes(Rosegarden::Segment*, Rosegarden::timeT, Rosegarden::timeT)),
+            c,    SIGNAL(updateSegmentTimes(Rosegarden::Segment*, Rosegarden::timeT, Rosegarden::timeT)));
 
     kdDebug(KDEBUG_AREA) << "SegmentResizer()\n";
 }
@@ -822,8 +822,12 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
 {
     if (!m_currentItem) return;
     m_currentItem->normalize();
-    emit updateSegmentDuration(m_currentItem->getSegment(),
-			       m_currentItem->getDuration());
+
+    // normalisation may mean start time has changed as well as duration
+    emit updateSegmentTimes(m_currentItem->getSegment(),
+			    m_currentItem->getStartTime(),
+			    m_currentItem->getDuration());
+
     m_currentItem = 0;
 }
 

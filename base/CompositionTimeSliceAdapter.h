@@ -49,11 +49,6 @@ class CompositionTimeSliceAdapter
 public:
     class iterator;
 
-/*!!!
-    typedef std::list<Event *> Column;
-    class columniterator;
-*/
-
     CompositionTimeSliceAdapter(Composition* c,
 				timeT begin = -1, timeT end = -1) :
 	m_composition(c),
@@ -63,20 +58,6 @@ public:
 
     iterator begin();
     iterator end();
-
-    /**
-     * Returns a columniterator referencing the first column of the
-     * timeslice.
-     */
-/*!!!
-    columniterator beginColumns();
-*/
-    /**
-     * Returns a past-the-end columniterator.
-     */
-/*!!!
-    columniterator endColumns();
-*/
 
     class iterator {
 	friend class CompositionTimeSliceAdapter;

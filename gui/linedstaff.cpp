@@ -354,31 +354,27 @@ LinedStaff<T>::sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout)
     for (int barNo = layout.getFirstVisibleBarOnStaff(*this);
 	 barNo <= lastBar; ++barNo) {
 
-//        if (layout.isBarLineVisible(*this, i)) {
+	double x = layout.getBarPosition(barNo);
 
-            double x = layout.getBarPosition(barNo);
+	if (!haveXLeft) {
+	    xleft = x;
+	    haveXLeft = true;
+	}
 
-	    //!!! should be unnecessary now? can set outside of loop?
-            if (!haveXLeft /* && layout.isBarLineVisible(*this, i)*/) {
-                xleft = x;
-                haveXLeft = true;
-            }
-
-	    double timeSigX = 0;
-            Rosegarden::Event *timeSig =
-                layout.getTimeSignaturePosition(*this, barNo, timeSigX);
-
-            if (timeSig && barNo < lastBar) {
-		currentTimeSignature = Rosegarden::TimeSignature(*timeSig);
-                insertTimeSignature(timeSigX, currentTimeSignature);
-            }
-
-            insertBar(x,
-		      ((barNo == lastBar) ? 0 :
-		       (layout.getBarPosition(barNo + 1) - x)),
-		      layout.isBarCorrectOnStaff(*this, barNo - 1),
-		      currentTimeSignature);
-//        }
+	double timeSigX = 0;
+	Rosegarden::Event *timeSig =
+	    layout.getTimeSignaturePosition(*this, barNo, timeSigX);
+	
+	if (timeSig && barNo < lastBar) {
+	    currentTimeSignature = Rosegarden::TimeSignature(*timeSig);
+	    insertTimeSignature(timeSigX, currentTimeSignature);
+	}
+	
+	insertBar(x,
+		  ((barNo == lastBar) ? 0 :
+		   (layout.getBarPosition(barNo + 1) - x)),
+		  layout.isBarCorrectOnStaff(*this, barNo - 1),
+		  currentTimeSignature);
     }
 
     m_startLayoutX = xleft;

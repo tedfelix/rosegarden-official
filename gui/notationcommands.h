@@ -92,8 +92,12 @@ public:
 			Rosegarden::Key key);
     virtual ~KeyInsertionCommand();
 
-    static QString name() {
-	return "Add &Key Change...";
+    static QString name(Rosegarden::Key *key = 0) {
+	if (key) {
+	    return QString("Add &Key ") + key->getName().c_str() + "...";
+	} else {
+	    return "Add &Key Change...";
+	}
     }
 
     Rosegarden::Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
