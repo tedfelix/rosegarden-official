@@ -591,7 +591,11 @@ int main(int argc, char *argv[])
             sfxLoadProcess << soundFontPath;
             RG_DEBUG << "Starting sfxload : " << sfxLoadPath << " " << soundFontPath << endl;
             sfxLoadProcess.start();
-            sfxLoadProcess.wait();
+
+            // Not in KDE 3.1
+            //sfxLoadProcess.wait();
+            while(sfxLoadProcess.isRunning());
+
             if (!sfxLoadProcess.normalExit()) {
                 KMessageBox::error(rosegardengui,
                                    QString(i18n("Failed to load soundfont %1")).arg(soundFontPath));
