@@ -665,12 +665,14 @@ TrackButtons::populateInstrumentPopup()
 	std::string pname((*it)->getProgramName());
         Rosegarden::DeviceId devId = (*it)->getDevice()->getId();
 
+        /*
         RG_DEBUG << "TrackButtons::populateInstrumentPopup - inst. name : '"
                  << iname.c_str()
                  << "' - prog. name : '" << pname << "' - devId : " << devId
                  << " - device name : '" << (*it)->getDevice()->getName().c_str()
                  << "' - dev. addr : " << (*it)->getDevice()
                  << endl;
+                 */
 
 	if (devId != currentDevId) {
             // this is another device, create a new submenu for it

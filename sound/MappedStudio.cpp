@@ -1191,10 +1191,12 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
 					    MappedLADSPAPort::Default,
 					    defs->items[j].value);
 
+                                    /*
 				    std::cout << "PORT " << i
 					      << " default = "
 					      << defs->items[j].value
 					      << std::endl;
+                                              */
 				}
 			    }
 			}

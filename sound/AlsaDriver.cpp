@@ -271,6 +271,16 @@ AlsaDriver::generateInstruments()
     snd_seq_client_info_alloca(&cinfo);
     snd_seq_client_info_set_client(cinfo, -1);
 
+    // Reset these before each Device/Instrument hunt
+    //
+    m_deviceRunningId = 0;
+    m_addedMetronome = false;
+    m_audioRunningId = Rosegarden::AudioInstrumentBase;
+    m_midiRunningId = Rosegarden::MidiInstrumentBase;
+    m_currentPair  = std::pair<int, int>(-1, -1);
+
+    // Clear these
+    //
     m_instruments.clear();
     m_devices.clear();
     m_alsaPorts.clear();
@@ -3141,13 +3151,13 @@ AlsaDriver::checkForNewClients()
         }
     }
 
-    // Have we got a different numbe of clients than we had before?
+    // Have we got a different number of clients than we had before?
     //
     if (oldClientCount != currentClientCount)
     {
         /*
-        cout << "CLIENT COUNT    = " << clientCount << endl;
-        cout << "EXISTING CLIENT = " << existingClients << endl;
+        std::cout << "NEW CLIENT COUNT = " << currentClientCount << endl;
+        std::cout << "OLD CLIENT COUNT = " << oldClientCount << endl;
         */
 
         generateInstruments();

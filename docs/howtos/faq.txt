@@ -323,6 +323,41 @@ And then select the Timidity Instruments from the dropdown.  You may
 need to fiddle with the priorities or buffer sizes with Timidity to
 get properly synchronized output.
 
+Any more clues on how to get iiwusynth working with soundfonts?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+(by Chris)
+
+Ok, here's a general intro to using iiwusynth.
+
+Make sure you get a fairly recent version (0.2.x rather than
+0.0.x).  Then find a soundfont: a reasonable GM example is
+Musica Theoria 2, available as mustheory2.sf2 from the
+Collections area of <URL:http://www.hammersound.net/>, although it's
+large and it's packed using some stupid Windows-only format
+(common problem -- a few of the soundfonts on there are only
+ zipped, though, so have a look around).  Then run up iiwusynth
+with
+
+  iiwusynth -m alsa_seq mustheory2.sf2
+
+If you're relatively short on CPU power, also give it "-R no"
+to turn off reverb and you'll get a bit more polyphony before
+it breaks up.  (If you're _very_ short on CPU power, forget it.)
+
+And then run Rosegarden, perhaps checking to make sure there
+are no spare rosegardensequencer processes hanging around from
+before you started iiwusynth (basically the synth needs to be
+started before the rosegardensequencer).
+
+You should find that one of the devices (16 instruments) is
+labelled "IIWU Synth", with a GM patch map.
+
+Timidity can also be used as an ALSA soft-synth with soundfonts.
+In my experience it takes rather more CPU power than iiwusynth
+for rather lower-quality output, though I'm sure these things
+vary a lot depending on how the soundfont is made.
+
 
 How do I select an Instrument?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
