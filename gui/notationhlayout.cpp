@@ -74,7 +74,7 @@ NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
     m_progressDlg(0),
     m_staffCount(0)
 {
-//    kdDebug(KDEBUG_AREA) << "NotationHLayout::NotationHLayout()" << endl;
+//    kdDebug(KDEBUG_AREA_NOTATION) << "NotationHLayout::NotationHLayout()" << endl;
 }
 
 NotationHLayout::~NotationHLayout()
@@ -157,13 +157,13 @@ double NotationHLayout::getIdealBarWidth(StaffType &staff,
 					 const TimeSignature &timeSignature)
     const
 {
-    kdDebug(KDEBUG_AREA) << "NotationHLayout::getIdealBarWidth: shortCount is "
+    kdDebug(KDEBUG_AREA_NOTATION) << "NotationHLayout::getIdealBarWidth: shortCount is "
                          << shortCount << ", fixedWidth is "
                          << fixedWidth << ", barDuration is "
                          << timeSignature.getBarDuration() << endl;
 
     if (shortest == staff.getViewElementList()->end()) {
-        kdDebug(KDEBUG_AREA) << "First trivial return" << endl;
+        kdDebug(KDEBUG_AREA_NOTATION) << "First trivial return" << endl;
         return fixedWidth;
     }
 
@@ -172,7 +172,7 @@ double NotationHLayout::getIdealBarWidth(StaffType &staff,
 	((*shortest)->event());
 
     if (d == 0) {
-        kdDebug(KDEBUG_AREA) << "Second trivial return" << endl;
+        kdDebug(KDEBUG_AREA_NOTATION) << "Second trivial return" << endl;
         return fixedWidth;
     }
 
@@ -190,11 +190,11 @@ double NotationHLayout::getIdealBarWidth(StaffType &staff,
 			  (m_properties.NOTE_TYPE)) +
         smin;
 
-    kdDebug(KDEBUG_AREA) << "d is " << d << ", gapPer is " << gapPer << endl;
+    kdDebug(KDEBUG_AREA_NOTATION) << "d is " << d << ", gapPer is " << gapPer << endl;
 
     double w = fixedWidth + ((timeSignature.getBarDuration() * gapPer) / d);
 
-    kdDebug(KDEBUG_AREA) << "NotationHLayout::getIdealBarWidth: returning "
+    kdDebug(KDEBUG_AREA_NOTATION) << "NotationHLayout::getIdealBarWidth: returning "
                          << w << endl;
 
     w *= m_spacing / 100.0;
@@ -322,7 +322,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 	m_npf->getNoteBodyWidth() * 2 +
 	m_npf->getTextWidth(Rosegarden::Text(name,Rosegarden::Text::StaffName));
 
-    kdDebug(KDEBUG_AREA) << "NotationHLayout::scanStaff: full scan " << isFullScan << ", times " << startTime << "->" << endTime << ", bars " << barNo << "->" << endBarNo << ", staff name \"" << segment.getLabel() << "\", width " << m_staffNameWidths[&staff] << endl;
+    kdDebug(KDEBUG_AREA_NOTATION) << "NotationHLayout::scanStaff: full scan " << isFullScan << ", times " << startTime << "->" << endTime << ", bars " << barNo << "->" << endBarNo << ", staff name \"" << segment.getLabel() << "\", width " << m_staffNameWidths[&staff] << endl;
 
     legatoQuantize(segment);
 
@@ -372,7 +372,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 	    continue;
 	}
 
-	kdDebug(KDEBUG_AREA) << "NotationHLayout::scanStaff: bar " << barNo << ", from " << barTimes.first << ", to " << barTimes.second << " (end " << segment.getEndMarkerTime() << "); from is at " << (from == notes->end() ? -1 : (*from)->getAbsoluteTime()) << ", to is at " << (to == notes->end() ? -1 : (*to)->getAbsoluteTime()) << endl;
+	kdDebug(KDEBUG_AREA_NOTATION) << "NotationHLayout::scanStaff: bar " << barNo << ", from " << barTimes.first << ", to " << barTimes.second << " (end " << segment.getEndMarkerTime() << "); from is at " << (from == notes->end() ? -1 : (*from)->getAbsoluteTime()) << ", to is at " << (to == notes->end() ? -1 : (*to)->getAbsoluteTime()) << endl;
 
         NotationElementList::iterator shortest = notes->end();
         int shortCount = 0;
@@ -392,7 +392,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 
             if (el->event()->isa(Clef::EventType)) {
 
-//		kdDebug(KDEBUG_AREA) << "Found clef" << endl;
+//		kdDebug(KDEBUG_AREA_NOTATION) << "Found clef" << endl;
 
                 fixedWidth += mw;
                 clef = Clef(*el->event());
@@ -403,7 +403,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 
             } else if (el->event()->isa(Key::EventType)) {
 
-//		kdDebug(KDEBUG_AREA) << "Found key" << endl;
+//		kdDebug(KDEBUG_AREA_NOTATION) << "Found key" << endl;
 
                 fixedWidth += mw;
                 key = Key(*el->event());
@@ -439,13 +439,13 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 
 	    } else if (el->event()->isa(Indication::EventType)) {
 
-//		kdDebug(KDEBUG_AREA) << "Found indication" << endl;
+//		kdDebug(KDEBUG_AREA_NOTATION) << "Found indication" << endl;
 
 		mw = 0;
 
 	    } else {
 		
-		kdDebug(KDEBUG_AREA) << "Found something I don't know about (type is " << el->event()->getType() << ")" << endl;
+		kdDebug(KDEBUG_AREA_NOTATION) << "Found something I don't know about (type is " << el->event()->getType() << ")" << endl;
 		fixedWidth += mw;
 	    }
 
@@ -460,7 +460,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 	    double idealWidth = 
 		getIdealBarWidth(staff, fixedWidth, baseWidth, shortest,
 				 shortCount, totalCount, timeSignature);
-	    kdDebug(KDEBUG_AREA) << "Ideal bar width: " << idealWidth << endl;
+	    kdDebug(KDEBUG_AREA_NOTATION) << "Ideal bar width: " << idealWidth << endl;
 	
 	    setBarSizeData(staff, barNo, idealWidth, fixedWidth, baseWidth,
 			   actualBarEnd - barTimes.first);
@@ -500,7 +500,7 @@ NotationHLayout::setBarBasicData(StaffType &staff,
 				 bool correct,
 				 Rosegarden::Event *timeSig)
 {
-    kdDebug(KDEBUG_AREA) << "setBarBasicData for " << barNo << endl;
+    kdDebug(KDEBUG_AREA_NOTATION) << "setBarBasicData for " << barNo << endl;
 
     BarDataList &bdl(m_barData[&staff]);
 
@@ -528,7 +528,7 @@ NotationHLayout::setBarSizeData(StaffType &staff,
 				int baseWidth,
 				Rosegarden::timeT actualDuration)
 {
-    kdDebug(KDEBUG_AREA) << "setBarSizeData for " << barNo << endl;
+    kdDebug(KDEBUG_AREA_NOTATION) << "setBarSizeData for " << barNo << endl;
 
     BarDataList &bdl(m_barData[&staff]);
 
@@ -571,7 +571,7 @@ NotationHLayout::scanChord(NotationElementList *notes,
 	
 	long pitch = 64;
 	if (!el->event()->get<Int>(PITCH, pitch)) {
-	    kdDebug(KDEBUG_AREA) <<
+	    kdDebug(KDEBUG_AREA_NOTATION) <<
 		"WARNING: NotationHLayout::scanChord: couldn't get pitch for element, using default pitch of " << pitch << endl;
 	}
 
@@ -728,7 +728,7 @@ NotationHLayout::reconcileBarsLinear()
 	    maxWidth = m_pageWidth;
 	}
 
-	kdDebug(KDEBUG_AREA) << "Setting bar position for bar " << barNo
+	kdDebug(KDEBUG_AREA_NOTATION) << "Setting bar position for bar " << barNo
 			     << " to " << m_totalWidth << endl;
 
 	m_barPositions[barNo] = m_totalWidth;
@@ -793,7 +793,7 @@ NotationHLayout::reconcileBarsPage()
     double pageWidthSoFar = maxStaffNameWidth;
     m_totalWidth = maxStaffNameWidth + getPreBarMargin();
 
-    kdDebug(KDEBUG_AREA) << "NotationHLayout::reconcileBarsPage: pageWidthSoFar is " << pageWidthSoFar << endl;
+    kdDebug(KDEBUG_AREA_NOTATION) << "NotationHLayout::reconcileBarsPage: pageWidthSoFar is " << pageWidthSoFar << endl;
 
     for (;;) {
 	
@@ -816,7 +816,7 @@ NotationHLayout::reconcileBarsPage()
 	double nextPageWidth = pageWidthSoFar + maxWidth;
 	double nextStretchFactor = m_pageWidth / nextPageWidth;
 
-	kdDebug(KDEBUG_AREA) << "barNo is " << barNo << ", maxWidth " << maxWidth << ", nextPageWidth " << nextPageWidth << ", nextStretchFactor " << nextStretchFactor << ", m_pageWidth " << m_pageWidth << endl;
+	kdDebug(KDEBUG_AREA_NOTATION) << "barNo is " << barNo << ", maxWidth " << maxWidth << ", nextPageWidth " << nextPageWidth << ", nextStretchFactor " << nextStretchFactor << ", m_pageWidth " << m_pageWidth << endl;
 
 	// We have to have at least one bar per row
 	
@@ -986,7 +986,7 @@ NotationHLayout::AccidentalTable::getDisplayAccidental(Accidental accidental,
         accidental = m_key.getAccidentalAtHeight(height, m_clef);
     }
 
-//    kdDebug(KDEBUG_AREA) << "accidental = " << accidental << ", stored accidental at height " << height << " is " << (*this)[height] << endl;
+//    kdDebug(KDEBUG_AREA_NOTATION) << "accidental = " << accidental << ", stored accidental at height " << height << " is " << (*this)[height] << endl;
 
     if (m_accidentals[height] != NoAccidental) {
 
@@ -1015,7 +1015,7 @@ NotationHLayout::AccidentalTable::update(Accidental accidental, int height)
         accidental = m_key.getAccidentalAtHeight(height, m_clef);
     }
 
-//    kdDebug(KDEBUG_AREA) << "updating height" << height << " from " << (*this)[height] << " to " << accidental << endl;
+//    kdDebug(KDEBUG_AREA_NOTATION) << "updating height" << height << " from " << (*this)[height] << " to " << accidental << endl;
 
 
     //!!! again, we can't properly deal with the difficult case where
@@ -1098,7 +1098,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
     bool haveSimpleOffset = false;
     double simpleOffset = 0;
 
-    kdDebug(KDEBUG_AREA) << "NotationHLayout::layout: full layout " << isFullLayout << ", times " << startTime << "->" << endTime << endl;
+    kdDebug(KDEBUG_AREA_NOTATION) << "NotationHLayout::layout: full layout " << isFullLayout << ", times " << startTime << "->" << endTime << endl;
 
     double x = 0, barX = 0;
     TieMap tieMap;
@@ -1110,7 +1110,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
     for (BarPositionList::iterator bpi = m_barPositions.begin();
 	 bpi != m_barPositions.end(); ++bpi) {
 
-	kdDebug(KDEBUG_AREA) << "NotationHLayout::looking for bar "
+	kdDebug(KDEBUG_AREA_NOTATION) << "NotationHLayout::looking for bar "
 			     << bpi->first << endl;
 	int barNo = bpi->first;
 
@@ -1121,7 +1121,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
         NotationElementList::iterator from = bdi->second.basicData.start;
         NotationElementList::iterator to;
 
-        kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): starting bar " << barNo << ", x = " << barX << ", width = " << bdi->second.sizeData.idealWidth << ", time = " << (from == notes->end() ? -1 : (*from)->getAbsoluteTime()) << endl;
+        kdDebug(KDEBUG_AREA_NOTATION) << "NotationHLayout::layout(): starting bar " << barNo << ", x = " << barX << ", width = " << bdi->second.sizeData.idealWidth << ", time = " << (from == notes->end() ? -1 : (*from)->getAbsoluteTime()) << endl;
 
         BarDataList::iterator nbdi(bdi);
         if (++nbdi == barList.end()) {
@@ -1131,10 +1131,10 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
         }
 
         if (from == notes->end()) {
-            kdDebug(KDEBUG_AREA) << "Start is end" << endl;
+            kdDebug(KDEBUG_AREA_NOTATION) << "Start is end" << endl;
         }
         if (from == to) {
-            kdDebug(KDEBUG_AREA) << "Start is to" << endl;
+            kdDebug(KDEBUG_AREA_NOTATION) << "Start is to" << endl;
         }
 
         if (!isFullLayout &&
@@ -1142,7 +1142,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 	     (*from)->event()->getAbsoluteTime() > endTime)) {
 
 	    //!!! don't seem to be getting here when we should
-	    kdDebug(KDEBUG_AREA) << "Shifting elements only" << endl;
+	    kdDebug(KDEBUG_AREA_NOTATION) << "Shifting elements only" << endl;
 
             // Find how far to move everything if necessary
             if (!haveSimpleOffset) {
@@ -1183,27 +1183,27 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
             //!!! clef and key may not be right
             // need a better way to find them than keeping track through the
             // whole staff
-            kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): bar " << " has needsLayout false" << endl;
+            kdDebug(KDEBUG_AREA_NOTATION) << "NotationHLayout::layout(): bar " << " has needsLayout false" << endl;
             continue;
         }
 
         if (timeSigToPlace) {
-	    kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): there's a time sig in this bar" << endl;
+	    kdDebug(KDEBUG_AREA_NOTATION) << "NotationHLayout::layout(): there's a time sig in this bar" << endl;
 	}
 
         for (NotationElementList::iterator it = from; it != to; ++it) {
 
             NotationElement *el = (*it);
             el->setLayoutX(x);
-//            kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): setting element's x to " << x << endl;
+//            kdDebug(KDEBUG_AREA_NOTATION) << "NotationHLayout::layout(): setting element's x to " << x << endl;
 	    long delta;
 
 	    if (timeSigToPlace && !el->event()->isa(Clef::EventType)) {
-//		kdDebug(KDEBUG_AREA) << "Placing timesig at " << x << endl;
+//		kdDebug(KDEBUG_AREA_NOTATION) << "Placing timesig at " << x << endl;
 		bdi->second.layoutData.timeSigX = (int)x;
 		x += getFixedItemSpacing()*2 +
 		    m_npf->getTimeSigWidth(timeSignature);
-//		kdDebug(KDEBUG_AREA) << "and moving next elt to " << x << endl;
+//		kdDebug(KDEBUG_AREA_NOTATION) << "and moving next elt to " << x << endl;
 		el->setLayoutX(x);
 		timeSigToPlace = false;
 	    }
@@ -1222,14 +1222,14 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 		
 		delta = el->event()->get<Int>(m_properties.MIN_WIDTH);
 		el->setLayoutAirspace(x, delta);
-//		kdDebug(KDEBUG_AREA) << "Found clef" << endl;
+//		kdDebug(KDEBUG_AREA_NOTATION) << "Found clef" << endl;
 		clef = Clef(*el->event());
 
 	    } else if (el->event()->isa(Key::EventType)) {
 
 		delta = el->event()->get<Int>(m_properties.MIN_WIDTH);
 		el->setLayoutAirspace(x, delta);
-//		kdDebug(KDEBUG_AREA) << "Found key" << endl;
+//		kdDebug(KDEBUG_AREA_NOTATION) << "Found key" << endl;
 		key = Key(*el->event());
 
 	    } else {
@@ -1251,9 +1251,9 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 		// doesn't work, nothing will
 
 		long groupId = el->event()->get<Int>(BEAMED_GROUP_ID);
-		kdDebug(KDEBUG_AREA) << "group id: " << groupId << endl;
+		kdDebug(KDEBUG_AREA_NOTATION) << "group id: " << groupId << endl;
 		if (m_groupsExtant.find(groupId) == m_groupsExtant.end()) {
-		    kdDebug(KDEBUG_AREA) << "(new group)" << endl;
+		    kdDebug(KDEBUG_AREA_NOTATION) << "(new group)" << endl;
 		    m_groupsExtant[groupId] =
 			new NotationGroup(*staff.getViewElementList(),
 					  m_legatoQuantizer,
@@ -1585,7 +1585,7 @@ int NotationHLayout::getMinWidth(NotationElement &e) const
 	w = 0;
 
     } else {
-        kdDebug(KDEBUG_AREA) << "NotationHLayout::getMinWidth(): no case for event type " << e.event()->getType() << endl;
+        kdDebug(KDEBUG_AREA_NOTATION) << "NotationHLayout::getMinWidth(): no case for event type " << e.event()->getType() << endl;
         w += 24;
     }
 

@@ -135,7 +135,7 @@ NotationStaff::insertTimeSignature(double layoutX,
 void
 NotationStaff::deleteTimeSignatures()
 {
-    kdDebug(KDEBUG_AREA) << "NotationStaff::deleteTimeSignatures()\n";
+    kdDebug(KDEBUG_AREA_NOTATION) << "NotationStaff::deleteTimeSignatures()\n";
     
     for (SpriteSet::iterator i = m_timeSigs.begin();
 	 i != m_timeSigs.end(); ++i) {
@@ -245,12 +245,12 @@ NotationStaff::getClosestElementToLayoutX(double x,
     }
 
     if (proximityThreshold > 0 && minDist > proximityThreshold) {
-        kdDebug(KDEBUG_AREA) << "NotationStaff::getClosestElementToLayoutX() : element is too far away : "
+        kdDebug(KDEBUG_AREA_NOTATION) << "NotationStaff::getClosestElementToLayoutX() : element is too far away : "
                              << minDist << endl;
         return notes->end();
     }
         
-    kdDebug(KDEBUG_AREA) << "NotationStaff::getClosestElementToLayoutX: found element at layout " << (*result)->getLayoutX() << " (" << (*result)->getCanvasX() << "," << (*result)->getCanvasY() << ") - we're at layout " << x << endl;
+    kdDebug(KDEBUG_AREA_NOTATION) << "NotationStaff::getClosestElementToLayoutX: found element at layout " << (*result)->getLayoutX() << " (" << (*result)->getCanvasX() << "," << (*result)->getCanvasY() << ") - we're at layout " << x << endl;
 
     PRINT_ELAPSED("NotationStaff::getClosestElementToLayoutX");
 
@@ -321,7 +321,7 @@ void
 NotationStaff::renderElements(NotationElementList::iterator from,
 			      NotationElementList::iterator to)
 {
-    kdDebug(KDEBUG_AREA) << "NotationStaff " << this << "::renderElements()" << endl;
+    kdDebug(KDEBUG_AREA_NOTATION) << "NotationStaff " << this << "::renderElements()" << endl;
     START_TIMING;
     if (m_progressDlg) {
 	m_progressDlg->setLabelText
@@ -352,7 +352,7 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 	bool selected = false;
 	(void)((*it)->event()->get<Bool>(m_properties.SELECTED, selected));
 
-//	kdDebug(KDEBUG_AREA) << "Rendering at " << (*it)->getAbsoluteTime()
+//	kdDebug(KDEBUG_AREA_NOTATION) << "Rendering at " << (*it)->getAbsoluteTime()
 //			     << " (selected = " << selected << ")" << endl;
 
 	renderSingleElement(*it, (nextIt == to ? 0 : *nextIt),
@@ -372,7 +372,7 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 	}
     }
 
-    kdDebug(KDEBUG_AREA) << "NotationStaff::renderElements: "
+    kdDebug(KDEBUG_AREA_NOTATION) << "NotationStaff::renderElements: "
 			 << elementCount << " elements rendered" << endl;
 
     PRINT_ELAPSED("NotationStaff::renderElements");
@@ -381,7 +381,7 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 void
 NotationStaff::positionElements(timeT from, timeT to)
 {
-    kdDebug(KDEBUG_AREA) << "NotationStaff " << this << "::positionElements()"
+    kdDebug(KDEBUG_AREA_NOTATION) << "NotationStaff " << this << "::positionElements()"
                          << from << " -> " << to << "\n";
     START_TIMING;
     if (m_progressDlg) {
@@ -491,7 +491,7 @@ NotationStaff::positionElements(timeT from, timeT to)
 	}
     }
 
-    kdDebug(KDEBUG_AREA) << "NotationStaff::positionElements: "
+    kdDebug(KDEBUG_AREA_NOTATION) << "NotationStaff::positionElements: "
 			 << elementsPositioned << " elements positioned, "
 			 << elementsRendered << " elements re-rendered"
 			 << endl;
@@ -587,7 +587,7 @@ NotationStaff::elementNotMoved(NotationElement *elt)
 
 
 //    if (!ok) {
-//	kdDebug(KDEBUG_AREA)
+//	kdDebug(KDEBUG_AREA_NOTATION)
 //	    << "elementNotMoved: elt at " << elt->getAbsoluteTime() <<
 //	    ", ok is " << ok << endl;
 //	std::cerr << "(cf " << (int)(elt->getCanvasX()) << " vs "
@@ -609,7 +609,7 @@ NotationStaff::elementNotMovedInY(NotationElement *elt)
     bool ok = (int)(elt->getCanvasY()) == (int)(coords.second);
 
 //     if (!ok) {
-// 	kdDebug(KDEBUG_AREA)
+// 	kdDebug(KDEBUG_AREA_NOTATION)
 // 	    << "elementNotMovedInY: elt at " << elt->getAbsoluteTime() <<
 // 	    ", ok is " << ok << endl;
 // 	std::cerr << "(cf " << (int)(elt->getCanvasY()) << " vs "
@@ -648,7 +648,7 @@ NotationStaff::elementShiftedOnly(NotationElementList::iterator i)
     }
 
     if (!ok) {
-	kdDebug(KDEBUG_AREA) 
+	kdDebug(KDEBUG_AREA_NOTATION) 
 	    << "elementShiftedOnly: elt at " << (*i)->getAbsoluteTime()
 	    << ", ok is " << ok << endl;
     }
@@ -670,7 +670,7 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 
     } catch (NoteStyleFactory::StyleUnavailable u) {
 
-	kdDebug(KDEBUG_AREA)
+	kdDebug(KDEBUG_AREA_NOTATION)
 	    << "WARNING: Note style unavailable: " << u.reason << endl;
 
 	static bool warned = false;
@@ -732,7 +732,7 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 		    (m_notePixmapFactory->makeRestPixmap(restParams));
 
 	    } else {
-		kdDebug(KDEBUG_AREA) << "Omitting too-short rest" << endl;
+		kdDebug(KDEBUG_AREA_NOTATION) << "Omitting too-short rest" << endl;
 	    }
 
 	} else if (elt->event()->isa(Clef::EventType)) {
@@ -815,7 +815,7 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 		    
 	    } else {
 
-		kdDebug(KDEBUG_AREA)
+		kdDebug(KDEBUG_AREA_NOTATION)
 		    << "Unrecognised indicationType " << indicationType << endl;
 		pixmap = new QCanvasPixmap
 		    (m_notePixmapFactory->makeUnknownPixmap());
@@ -823,7 +823,7 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 
 	} else {
                     
-	    kdDebug(KDEBUG_AREA)
+	    kdDebug(KDEBUG_AREA_NOTATION)
 		<< "NotationElement of unrecognised type "
 		<< elt->event()->getType() << endl;
 	    pixmap = new QCanvasPixmap
@@ -847,10 +847,10 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 	    elt->removeCanvasItem();
 	}
 	
-//	kdDebug(KDEBUG_AREA) << "NotationStaff::renderSingleElement: Setting selected at " << elt->getAbsoluteTime() << " to " << selected << endl;
+//	kdDebug(KDEBUG_AREA_NOTATION) << "NotationStaff::renderSingleElement: Setting selected at " << elt->getAbsoluteTime() << " to " << selected << endl;
             
     } catch (...) {
-	kdDebug(KDEBUG_AREA) << "Event lacks the proper properties: "
+	kdDebug(KDEBUG_AREA_NOTATION) << "Event lacks the proper properties: "
 			     << (*elt->event())
 			     << endl;
     }

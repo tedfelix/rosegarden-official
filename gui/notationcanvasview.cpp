@@ -142,7 +142,7 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
 
 void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 {
-    kdDebug(KDEBUG_AREA) << "NotationCanvasView::contentsMousePressEvent() - btn : "
+    kdDebug(KDEBUG_AREA_NOTATION) << "NotationCanvasView::contentsMousePressEvent() - btn : "
                          << e->button() << " - state : " << e->state()
                          << endl;
 
@@ -211,7 +211,7 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
     if (staff)
         staffNo = staff->getId();
     else
-        kdDebug(KDEBUG_AREA) << "NotationCanvasView::contentsMousePressEvent() : big problem - couldn't find staff for staff line\n";
+        kdDebug(KDEBUG_AREA_NOTATION) << "NotationCanvasView::contentsMousePressEvent() : big problem - couldn't find staff for staff line\n";
 
 
     if (sprite)
@@ -223,7 +223,7 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 
 void NotationCanvasView::contentsMouseDoubleClickEvent(QMouseEvent* e)
 {
-    kdDebug(KDEBUG_AREA) << "NotationCanvasView::contentsMouseDoubleClickEvent()\n";
+    kdDebug(KDEBUG_AREA_NOTATION) << "NotationCanvasView::contentsMouseDoubleClickEvent()\n";
   
     contentsMousePressEvent(e);
 }
@@ -240,7 +240,7 @@ NotationCanvasView::processActiveItems(QMouseEvent* e,
 
         QCanvasItem *item = *it;
         if (item->active() && !pressedItem) {
-            kdDebug(KDEBUG_AREA) << "mousepress : got active item\n";
+            kdDebug(KDEBUG_AREA_NOTATION) << "mousepress : got active item\n";
             pressedItem = item;
         }
     }
@@ -256,7 +256,7 @@ NotationCanvasView::handleMousePress(int height,
                                      QMouseEvent *e,
                                      NotationElement *el)
 {
-    kdDebug(KDEBUG_AREA) << "NotationCanvasView::handleMousePress() at height "
+    kdDebug(KDEBUG_AREA_NOTATION) << "NotationCanvasView::handleMousePress() at height "
                          << height << endl;
 
     emit itemPressed(height, staffNo, e, el);
@@ -302,7 +302,7 @@ NotationCanvasView::setHeightMarkerHeight(QMouseEvent *e)
     int height = staff->getHeightAtCanvasY(e->y());
     int lineY = staff->getCanvasYForHeight(height, e->y());
 
-//    kdDebug(KDEBUG_AREA) << "NotationCanvasView::setHeightMarkerHeight: "
+//    kdDebug(KDEBUG_AREA_NOTATION) << "NotationCanvasView::setHeightMarkerHeight: "
 //			 << e->y() << " snapped to line -> " << lineY
 //			 << " (height " << height << ")" << endl;
 

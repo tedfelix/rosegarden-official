@@ -185,7 +185,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_toolBox = new NotationToolBox(this);
 
     assert(segments.size() > 0);
-    kdDebug(KDEBUG_AREA) << "NotationView ctor" << endl;
+    kdDebug(KDEBUG_AREA_NOTATION) << "NotationView ctor" << endl;
 
     KConfig *config = kapp->config();
     config->setGroup("Notation Options");
@@ -375,7 +375,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
 NotationView::~NotationView()
 {
-    kdDebug(KDEBUG_AREA) << "-> ~NotationView()\n";
+    kdDebug(KDEBUG_AREA_NOTATION) << "-> ~NotationView()\n";
 
     if (m_documentDestroyed) return;
 
@@ -394,7 +394,7 @@ NotationView::~NotationView()
     for (it = allItems.begin(); it != allItems.end(); ++it) delete *it;
     // delete canvas();
 
-    kdDebug(KDEBUG_AREA) << "<- ~NotationView()\n";
+    kdDebug(KDEBUG_AREA_NOTATION) << "<- ~NotationView()\n";
 }
     
 void
@@ -1035,7 +1035,7 @@ void NotationView::initFontToolbar()
     KToolBar *fontToolbar = toolBar("fontToolBar");
     
     if (!fontToolbar) {
-        kdDebug(KDEBUG_AREA)
+        kdDebug(KDEBUG_AREA_NOTATION)
             << "NotationView::initFontToolbar() : font toolbar not found\n";
         return;
     }
@@ -1514,7 +1514,7 @@ void NotationView::refreshSegment(Segment *segment,
 	    endi = notes->findTime(barEndTime);
 	}
 
-        kdDebug(KDEBUG_AREA) << "NotationView::refreshSegment: "
+        kdDebug(KDEBUG_AREA_NOTATION) << "NotationView::refreshSegment: "
                              << "start = " << startTime << ", end = " << endTime << ", barStart = " << barStartTime << ", barEnd = " << barEndTime << endl;
 
         if (thisStaff) {
@@ -1606,7 +1606,7 @@ void NotationView::slotNoteAction()
     if (noteAct != m_noteActionDataMap->end())
         setCurrentSelectedNote(*noteAct);
     else
-        kdDebug(KDEBUG_AREA) << "NotationView::slotNoteAction() : couldn't find NoteActionData named '"
+        kdDebug(KDEBUG_AREA_NOTATION) << "NotationView::slotNoteAction() : couldn't find NoteActionData named '"
                              << sigSender->name() << "'\n";
 }
     

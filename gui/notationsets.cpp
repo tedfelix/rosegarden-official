@@ -166,7 +166,7 @@ public:
             return ((*a)->event()->get<Int>(PITCH) <
                     (*b)->event()->get<Int>(PITCH));
         } catch (Event::NoData) {
-            kdDebug(KDEBUG_AREA) << "Bad karma: PitchGreater failed to find one or both pitches" << endl;
+            kdDebug(KDEBUG_AREA_NOTATION) << "Bad karma: PitchGreater failed to find one or both pitches" << endl;
             return false;
         }
     }
@@ -190,19 +190,19 @@ Chord::Chord(const NotationElementList &nel, NELIterator i,
     }
 
 /*!!! this should all be removed ultimately
-//    kdDebug(KDEBUG_AREA) << "Chord::Chord: pitches are:" << endl;
+//    kdDebug(KDEBUG_AREA_NOTATION) << "Chord::Chord: pitches are:" << endl;
     int prevPitch = -999;
     for (unsigned int i = 0; i < size(); ++i) {
         try {
 	    int pitch = (*(*this)[i])->event()->get<Int>(PITCH);
-//            kdDebug(KDEBUG_AREA) << i << ": " << pitch << endl;
+//            kdDebug(KDEBUG_AREA_NOTATION) << i << ": " << pitch << endl;
 	    if (pitch < prevPitch) {
 		cerr << "ERROR: Pitch less than previous pitch (" << pitch
 		     << " < " << prevPitch << ")" << endl;
 		throw(1);
 	    }
 	} catch (Event::NoData) {
-            kdDebug(KDEBUG_AREA) << i << ": no pitch property" << endl;
+            kdDebug(KDEBUG_AREA_NOTATION) << i << ": no pitch property" << endl;
         }
     }
 */
@@ -351,7 +351,7 @@ bool Chord::isNoteHeadShifted(const NELIterator &itr) const
     }
 
     if (i == size()) {
-        kdDebug(KDEBUG_AREA) << "Chord::isNoteHeadShifted: Warning: Unable to find note head " << (*itr) << endl;
+        kdDebug(KDEBUG_AREA_NOTATION) << "Chord::isNoteHeadShifted: Warning: Unable to find note head " << (*itr) << endl;
         return false;
     }
 
@@ -425,12 +425,12 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
     initialise();
 
     /*
-    kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: id is " << m_groupNo << endl;
+    kdDebug(KDEBUG_AREA_NOTATION) << "NotationGroup::NotationGroup: id is " << m_groupNo << endl;
     i = getInitialElement(); 
     while (i != getList().end()) {
         long gid = -1;
         (*i)->event()->get<Int>(BEAMED_GROUP_ID, gid);
-        kdDebug(KDEBUG_AREA) << "Found element with group id "
+        kdDebug(KDEBUG_AREA_NOTATION) << "Found element with group id "
                              << gid << endl;
         if (i == getFinalElement()) break;
         ++i;
@@ -482,7 +482,7 @@ NotationGroup::sample(const NELIterator &i)
     }
     if (m_userSamples) m_final = i;
 
-//    kdDebug(KDEBUG_AREA) << "NotationGroup::sample: element at " << (*i)->getAbsoluteTime() << endl;
+//    kdDebug(KDEBUG_AREA_NOTATION) << "NotationGroup::sample: element at " << (*i)->getAbsoluteTime() << endl;
 
     try {
 	std::string t = (*i)->event()->get<String>(BEAMED_GROUP_TYPE);
@@ -494,10 +494,10 @@ NotationGroup::sample(const NELIterator &i)
 	} else if (t == GROUP_TYPE_GRACE) {
 	    m_type = Grace;
 	} else {
-	    kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: Warning: Unknown GroupType \"" << t << "\", defaulting to Beamed" << endl;
+	    kdDebug(KDEBUG_AREA_NOTATION) << "NotationGroup::NotationGroup: Warning: Unknown GroupType \"" << t << "\", defaulting to Beamed" << endl;
 	}
     } catch (Rosegarden::Event::NoData) {
-	kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: Warning: No GroupType in grouped element, defaulting to Beamed" << endl;
+	kdDebug(KDEBUG_AREA_NOTATION) << "NotationGroup::NotationGroup: Warning: No GroupType in grouped element, defaulting to Beamed" << endl;
     }
 
     long n;
@@ -505,11 +505,11 @@ NotationGroup::sample(const NELIterator &i)
     if (m_groupNo == -1) {
 	m_groupNo = n;
     } else if (n != m_groupNo) {
-	kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: Warning: Rejecting sample() for event with group id " << n << " (mine is " << m_groupNo << ")" << endl;
+	kdDebug(KDEBUG_AREA_NOTATION) << "NotationGroup::NotationGroup: Warning: Rejecting sample() for event with group id " << n << " (mine is " << m_groupNo << ")" << endl;
 	return false;
     }
 
-    kdDebug(KDEBUG_AREA) << "NotationGroup::sample: group id is " << m_groupNo << endl;
+    kdDebug(KDEBUG_AREA_NOTATION) << "NotationGroup::sample: group id is " << m_groupNo << endl;
 
     NotationSet::sample(i);
 
@@ -675,8 +675,8 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     long shortestNoteType = Note::Quaver;
     if (!(*getShortestElement())->event()->get<Int>(m_properties.NOTE_TYPE,
                                                     shortestNoteType)) {
-        kdDebug(KDEBUG_AREA) << "NotationGroup::calculateBeam: WARNING: Shortest element has no note-type; should this be possible?" << endl;
-	kdDebug(KDEBUG_AREA) << "(Event dump follows)" << endl;
+        kdDebug(KDEBUG_AREA_NOTATION) << "NotationGroup::calculateBeam: WARNING: Shortest element has no note-type; should this be possible?" << endl;
+	kdDebug(KDEBUG_AREA_NOTATION) << "(Event dump follows)" << endl;
 	(*getShortestElement())->event()->dump(std::cerr);
     }
     int nh = staff.getNotePixmapFactory(m_type == Grace).getNoteBodyHeight();
@@ -693,7 +693,7 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     }  
 
 /*
-    kdDebug(KDEBUG_AREA) << "NotationGroup::calculateBeam: beam data:" << endl
+    kdDebug(KDEBUG_AREA_NOTATION) << "NotationGroup::calculateBeam: beam data:" << endl
                          << "gradient: " << beam.gradient << endl
                          << "startY: " << beam.startY << endl
                          << "aboveNotes: " << beam.aboveNotes << endl
@@ -706,7 +706,7 @@ NotationGroup::calculateBeam(NotationStaff &staff)
 void
 NotationGroup::applyBeam(NotationStaff &staff)
 {
-//    kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam, group no is " << m_groupNo << endl;
+//    kdDebug(KDEBUG_AREA_NOTATION) << "NotationGroup::applyBeam, group no is " << m_groupNo << endl;
 
     Beam beam(calculateBeam(staff));
     if (!beam.necessary) {
@@ -717,7 +717,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
 	return;
     }
 
-//    kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam: Beam is necessary" << endl;
+//    kdDebug(KDEBUG_AREA_NOTATION) << "NotationGroup::applyBeam: Beam is necessary" << endl;
 
     NELIterator initialNote(getInitialNote()),
 	          finalNote(  getFinalNote());
@@ -748,7 +748,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
     NELIterator prev = getList().end(), prevprev = getList().end();
     double gradient = (double)beam.gradient / 100.0;
 
-    kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam starting for group "<< this << endl;
+    kdDebug(KDEBUG_AREA_NOTATION) << "NotationGroup::applyBeam starting for group "<< this << endl;
 
     for (NELIterator i = getInitialNote(); i != getList().end(); ++i) {
 
@@ -761,7 +761,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
 			m_properties, m_clef, m_key);
 	    unsigned int j;
 
-            kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam: Found chord" << endl;
+            kdDebug(KDEBUG_AREA_NOTATION) << "NotationGroup::applyBeam: Found chord" << endl;
 
 	    for (j = 0; j < chord.size(); ++j) {
 		NotationElement *el = (*chord[j]);
@@ -885,11 +885,11 @@ NotationGroup::applyBeam(NotationStaff &staff)
 void 
 NotationGroup::applyTuplingLine(NotationStaff &staff)
 {
-//    kdDebug(KDEBUG_AREA) << "NotationGroup::applyTuplingLine, group no is " << m_groupNo << ", group type is " << m_type << endl;
+//    kdDebug(KDEBUG_AREA_NOTATION) << "NotationGroup::applyTuplingLine, group no is " << m_groupNo << ", group type is " << m_type << endl;
 
     if (m_type != Tupled) return;
 
-//    kdDebug(KDEBUG_AREA) << "NotationGroup::applyTuplingLine: line is necessary" << endl;
+//    kdDebug(KDEBUG_AREA_NOTATION) << "NotationGroup::applyTuplingLine: line is necessary" << endl;
 
     Beam beam(calculateBeam(staff));
 
@@ -908,7 +908,7 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
     if (!(*initialNoteOrRest)->isRest()) initialNoteOrRest = initialNote;
     if (initialNoteOrRest == staff.getViewElementList()->end()) return;
 
-    kdDebug(KDEBUG_AREA) << "NotationGroup::applyTuplingLine: first element is " << ((*initialNoteOrRest)->isNote() ? "Note" : "Non-Note") << ", last is " << ((*finalElement)->isNote() ? "Note" : "Non-Note") << endl;
+    kdDebug(KDEBUG_AREA_NOTATION) << "NotationGroup::applyTuplingLine: first element is " << ((*initialNoteOrRest)->isNote() ? "Note" : "Non-Note") << ", last is " << ((*finalElement)->isNote() ? "Note" : "Non-Note") << endl;
 
     int initialX = (int)(*initialNoteOrRest)->getLayoutX();
     int   finalX = (int)(*finalElement)->getLayoutX();
