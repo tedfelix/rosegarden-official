@@ -1,0 +1,106 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+  <!--#include virtual="/head.html" -->
+  <body>
+
+    <!--#include virtual="/title.html" -->
+    <!--#include virtual="/nav.html" -->
+    <!--#include virtual="/getting/subnav.html" -->
+    <!--#include virtual="/subleft.html" -->
+    <!--#include virtual="/subright.html" -->
+
+    <div id="maincontainer">
+    <div id="main">
+	<br>
+
+    <h2>Hardware and System Requirements</h2>
+
+    <p>Rosegarden is a multi-purpose application whose hardware
+    requirements differ markedly depending on what you're using it
+    for.  Editing, playing and recording MIDI and editing score are
+    less resource-hungry than recording or playing audio.  The use of
+    multiple audio plugins or soft-synths will especially impact
+    system performance.  </p>
+
+    <h3>System hardware</h3>
+
+	<p>As this is a Linux application, the first requirement is
+	for a PC capable of running Linux.  (It is possible to run
+	Linux on Mac and some other systems, but we have no
+	information about using Rosegarden in that environment.)
+
+    <p>The recommended minimum hardware for MIDI use is a
+    400MHz system with 64MB of memory.  With an 800MHz system with
+    256MB of memory you should have enough power to sequence MIDI and
+    audio with score editing and a small number of audio plugins.</p>
+
+	<p>More serious audio use will require more power: in
+	particular, it's absolutely vital to ensure you have enough
+	memory to keep all necessary audio components (synths,
+	plugins, Rosegarden sequencer process) in memory at once
+	&ndash; currently 256MB is really a bare minimum, as Rosegarden
+	is a fairly memory-hungry application.</p>
+
+    <h3>Audio hardware</h3>
+
+	<p>Rosegarden requires and uses the <a
+	href="http://www.alsa-project.org/">ALSA</a> sound drivers to
+	drive your soundcard.  The Rosegarden project itself has no
+	control over whether a card is supported or not: it depends
+	entirely on whether the card has ALSA support.  To find out
+	whether your hardware will work with ALSA, look it up in the
+	<a href="http://www.alsa-project.org/alsa-doc/">ALSA Soundcard
+	Matrix</a>.
+
+    <p>
+    Of course, if you're using an external MIDI device (sound module
+    or keyboard) you'll also need the appropriate leads and
+    cables.</p>
+
+	<p>For help setting up your home studio for easy audio and
+	MIDI recording, consult <a href="http://www.linuxmusician.com/index.php?option=displaypage&Itemid=51&op=page">Bownie's DIY Guide to Recording</a>.
+    </p>
+
+    <h3>Software</h3>
+
+    <p>Rosegarden runs on Linux, so you'll certainly need that.</p>
+
+    <p>For its user interface Rosegarden uses the KDE 3 libraries, so
+    you will need <a href="http://www.kde.org/">KDE</a> 3.x with <a
+    href="http://www.trolltech.com/">Qt</a> 3. You don't actually need
+    to use the KDE desktop, you just need the library packages
+    installed on your system.</p>
+
+    <p>Rosegarden requires the <a
+    href="http://www.alsa-project.org">ALSA</a> sound drivers for
+    audio and MIDI support, and you will need the <a
+    href="http://jackit.sf.net/">JACK audio server</a> if you want to
+    do audio sequencing, although it isn't necessary for MIDI.</p>
+
+
+    <p>
+    Please also consult the <a href="faq.html">FAQ</a> for more information.
+    </p>
+
+    <h3>Building from source code</h3>
+    
+    <p>In order to build Rosegarden-4, you will need a Unix-like
+    operating system (most obviously Linux), the gcc-2.9x or 3.x C++
+    compiler, <a href="http://www.kde.org/">KDE</a> 3.x with <a
+    href="http://www.trolltech.com/">Qt</a>3.  See the <a
+    href="faq.html">FAQ</a> for solutions to a few build and
+    installation problems.  You may also wish to build with <a
+    href="http://www.alsa-project.org/">ALSA</a> 0.9 or better for
+    sound, <a href="http://jackit.sourceforge.net">JACK</a> (Jack
+    Audio Connection Kit) for audio, and <a
+    href="http://www.ladspa.org">LADSPA</a> (Linux Audio Developer's
+    Simple Plugin API), for audio plugins.</p>
+
+    </div>
+    </div>
+
+  </body>
+</html> 
+

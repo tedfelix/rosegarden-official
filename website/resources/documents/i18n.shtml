@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+  <!--#include virtual="/head.html" -->
+  <body>
+
+    <!--#include virtual="/title.html" -->
+    <!--#include virtual="/nav.html" -->
+    <!--#include virtual="/resources/subnav.html" -->
+    <!--#include virtual="/subleft.html" -->
+    <!--#include virtual="/subright.html" -->
+
+    <div id="maincontainer">
+
+    <div id="main">
+	<br>
+
+    <!-- INSERT FAQ HERE! -->
+<!-- Do not edit! Automatically generated from ./../../../howtos/i18n.txt by txt2html.pl -->
+
+<h2>Rosegarden-4 Translation mini-HOWTO</h2>
+<div class="toc3">1. &nbsp;<a href="#toc1">For Users</a></div>
+<div class="toc3">2. &nbsp;<a href="#toc2">For Translators</a></div>
+<div class="toc3">3. &nbsp;<a href="#toc3">For Developers</a></div>
+<div class="toc4">3.1. &nbsp;<a href="#toc4">Writing code</a></div>
+<div class="toc4">3.2. &nbsp;<a href="#toc5">Maintaining the translation files</a></div>
+<div class="toc4">3.3. &nbsp;<a href="#toc6">Overview of KDE translation system</a></div>
+
+
+
+<p>Document maintained by: Hans Kieserman &lt;hkieserman at mail dot com&gt;
+</p>
+<div class="oddcontent"><a name="toc1"></a><h3>1. &nbsp;For Users</h3>
+
+<p>A list of supported languages is available at our website.  This list
+ is currently empty, but at least French, Russian, and British English
+ are in progress.  Please make your wishes known on the mailing list if
+ you can translate musical or technical terminology, or need a
+ translated version of RG.
+</p>
+<p>After you confirm that we support your language, the following three
+ steps will get you started with Rosegarden-4 in your native language:
+</p><ol>
+<li>Install Rosegarden-4.  If you have KDE running in your language
+   already, that's all you need.  Otherwise, you also need to make sure
+   kdebase, kde-i18n-&lt;languageCode&gt;, locales, and locales-&lt;languageCode&gt;
+   are installed.
+
+</li><P><li>Set your locale to the language you require. For Mandrake/KDE
+   users, this is accomplished with KDE menu/Control
+   Center/Personalization/Country&amp;Language.  Otherwise this can be done
+   manually in your favorite shell by setting the environment variable
+   KDE_LANG to your language/locale code of choice.  Example: In the
+   Bash shell, type "export KDE_LANG=fr" (no quotes) to use RG in the
+   French language.
+
+</li><P><li>Start Rosegarden-4.
+</ol>
+<p>It's that easy!
+</p>
+<p>Problems with the translations or contributions should be sent to
+ rosegarden-devel@lists.sourceforge.net .
+</p>
+</div><div class="evencontent"><a name="toc2"></a><h3>2. &nbsp;For Translators</h3>
+
+<p>Open your language file and start translating!  The KDE project has a
+ tool called KBabel which helps manage translated strings, but any text
+ editor that supports UTF-8 is fine.  It is also rumored that the iconv
+ tool is usable for converting to UTF-8 from whatever your editor
+ supports.
+</p>
+<p>When you are ready to submit your translations, send new files or CVS
+ diffs to the mailing list.  We encourage you to release early and
+ often.
+</p>
+<p>If no translation yet exists for your language, make a copy of the
+ file po/rosegarden.pot.  Name the copied file languageCode.po, where
+ languageCode is the ISO locale code for your language.
+</p>
+<p>For example, the code for Russian is "ru" (no quotes), so the Russian
+ translation should be found in ru.po.  A locale-specific example is
+ en_GB.po, which is British English.
+</p>
+<p>The rosegarden.pot file is available from CVS, or on the web at
+ <A HREF="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/rosegarden/po/">http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/rosegarden/po/</A>.
+</p>
+<p>Discussion regarding translations is handled for the moment on
+ rosegarden-devel@lists.sourceforge.net, although a translation-only
+ list may be opened if there is enough traffic.
+</p>
+</div><div class="oddcontent"><a name="toc3"></a><h3>3. &nbsp;For Developers</h3>
+
+<p>A few quick notes:
+</p>
+<p>Please note that the base/ directory does not use QString, and so
+ cannot be translated with the KDE tools.  If you think a string needs
+ to be there that absolutely must be translated, the mailing list is
+ the best place to work this out.
+</p>
+<p>Unfortunately, someone has made the decision that American English be
+ the default language for KDE apps, so all internal strings should
+ originate in American English.  (I believe setting one's environment
+ to en_US is a no-op? Please correct me if I'm wrong- it may just be
+ the case that my default environment of en_US doesn't allow any en_US
+ po translations.)
+</p>
+<p>Finally, after adding a new language, don't forget to re-run make -f
+ Makefile.cvs and configure to let the Makefiles know about it.
+</p>
+</div><div class="evencontent"><a name="toc4"></a><h4>3.1. &nbsp;Writing code</h4>
+
+<p>The only thing you really need to know is to wrap all strings that
+ need to be translated with the i18n() function, for example,
+ i18n("Open File").
+</p>
+<p>However, please read the following- it will save work in the long run.
+</p><ul>
+<li>There is a version of the i18n method with two arguments.  The
+   first arg is an explanation of exactly what the second arg is used
+   for, which helps translators understand ambiguous cases.  (Only the
+   second arg is translated.) For example, "View" in English may be
+   used as a verb or noun, which are translated differently in
+   different languages.
+
+</li><P><li>All languages do not have the same rules about word order.  Using
+   the Qstring::arg() method allows easy re-ordering for translation
+   purposes.
+
+<p>  BAD: msg = i18n("Loading file ") + filename
+
+<p>  GOOD: msg = i18n("Loading file %1").arg(filename)
+
+<p>  PROBABLY WON'T WORK AT ALL: msg = i18n("Loading " + filename + " for import")
+
+</li><P><li>arg() should also be used for non-translated strings (proper
+   names, etc) or frequently-changing strings such as version numbers.
+</ul>
+<p>More tricks available at
+</p>
+<p><A HREF="http://developer.kde.org/documentation/library/kdeqt/kde3arch/kde-i18n-howto.html">http://developer.kde.org/documentation/library/kdeqt/kde3arch/kde-i18n-howto.html</A>
+ <A HREF="http://i18n.kde.org">http://i18n.kde.org</A>
+ <A HREF="http://i18n.kde.org/translation-howto/dictionaries.php">http://i18n.kde.org/translation-howto/dictionaries.php</A>
+</p>
+</div><div class="oddcontent"><a name="toc5"></a><h4>3.2. &nbsp;Maintaining the translation files</h4>
+
+<p>Every once in a while, the main rosegarden.pot file should be updated
+ from the latest source files with the commands
+</p><pre>
+  $ make -f admin/Makefile.common package-messages
+  $ make
+</pre>
+<p>Similarly, language files can be "merged" to include new diffs using
+</p><pre>
+  $ make -f admin/Makefile.common package-merge POFILES=po/*.po PACKAGE=po/rosegarden
+</pre>
+<p>If the changes are large or it has been a long time since the last
+ update, announce on the mailing list to get the legions involved in
+ updating all translated files.
+</p>
+<p>Note: The above "make" commands require the file kde.pot to be in
+ $KDEDIR/include/kde.pot, so if you get an error use "locate kde.pot"
+ to find it and then set KDEDIR appropriately.
+</p>
+</div><div class="evencontent"><a name="toc6"></a><h4>3.3. &nbsp;Overview of KDE translation system</h4>
+
+<p>The above "make" commands find all of the i18n strings in the codebase
+ and put them in the reference file po/rosegarden.pot.  One .pot file
+ is created per executable, so there's also one for the sequencer,
+ which is not used at the moment- if we ever decide to translate that
+ as well, we'll need to manage the po/ directory a bit differently
+ because the language files will crash into each other.
+</p>
+<p>This file should be checked in occasionally, along with the merged
+ translated language files.
+</p>
+<p>At runtime, the system looks in the
+ $KDEDIR/share/locale/$KDE_LANG/LC_MESSAGES/rosegarden.mo file for
+ strings that match the arguments to i18n and replaces them with the
+ translated versions if available.  See the developer.kde.org link
+ above for repercussions with respect to translating #defines, etc.
+</p>
+<p>[[[
+</p>
+<p>ToDo/Unclear points:
+ CVS instructions for translators
+ Special handling of British/American note naming (does this happen in any other language?)
+</p>
+<p>]]]
+</p>
+<p></p>
+
+</div>
+
+    </div>
+
+  </body>
+</html> 
+

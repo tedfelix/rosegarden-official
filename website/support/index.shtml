@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <!--#include virtual="/head.html" -->
+  <body>
+
+    <!--#include virtual="/title.html" -->
+    <!--#include virtual="/nav.html" -->
+    <!--#include virtual="/support/subnav.html" -->
+    <!--#include virtual="/subleft.html" -->
+    <!--#include virtual="/subright.html" -->
+
+    <div id="maincontainer">
+      <div id="main">
+	<br>	
+	<h2>Support</h2>
+	
+	<p>If you need assistance in installing, using or optimising
+	Rosegarden, or with other software that works with it, there
+	are several places you can turn.</p>
+
+	<h3>Community</h3>
+
+	<p>Rosegarden has an active developer and user community, and
+	there are also numerous resources available for Linux audio
+	and music software users in general.</p>
+
+	<ul><li><a href="/support/lists/">Rosegarden mailing lists</a>
+	&ndash; your first port of call for discussion about
+	Rosegarden.</li>
+
+	<li><a
+	href="http://www.linuxdj.com/audio/lad/subscribelau.php3">Linux
+	Audio Users</a> and <a
+	href="http://www.linuxdj.com/audio/lad/subscribelad.php3">Linux
+	Audio Developers</a> mailing lists.</li>
+
+	<li><a href="http://www.linuxmusician.com/">Linux
+	Musician</a>, a fledgling community magazine website featuring
+	interviews, tutorials etc., and also inviting your
+	contribution.</li> </ul>
+
+	<h3>Installation and development in the UK</h3>
+
+	<p>Rosegarden and Linux audio in general make a tremendously
+	attractive proposition for education and small studio
+	environments.</p>
+
+	<p>Fervent Software, sponsors of the Rosegarden
+	project, offer <a href="/support/bespoke/">consultancy and
+	dedicated support</a> &ndash; ideal if you're interested but
+	you're not quite sure what your best options are or where to
+	start.</p>
+
+	<h3>Personal support</h3>
+
+	<p>Commercial support is also available in the UK on a
+	personal basis from Fervent Software and the Rosegarden
+	development team.  <a href="/support/personal/">More
+	information here.</a></p>
+
+      </div>
+    </div>
+
+  </body>
+</html> 
+

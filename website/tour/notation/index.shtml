@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+  <!--#include virtual="/head.html" -->
+  <body>
+
+    <!--#include virtual="/title.html" -->
+    <!--#include virtual="/nav.html" -->
+    <!--#include virtual="/tour/subnav.html" -->
+    <!--#include virtual="/subleft.html" -->
+    <!--#include virtual="/subright.html" -->
+
+    <div id="maincontainer">
+    <div id="main">
+    <br>
+
+    <h2>Tour 3: Notation</h2>
+
+    <p>Rosegarden includes a powerful notation editor &ndash;
+    essential if score is your preferred way to compose, or just to
+    give you a different view on your work.</p>
+
+    <p>You can edit notation at the same time as any of the other
+    standard editing windows, and Rosegarden unobtrusively keeps
+    everything up-to-date for you.</p>
+
+    <br>
+    <div align="center"><img style="max-width: 100%" src="score-edit.png"/></div>
+    <br>
+
+    <p>Unlike other MIDI sequencers, Rosegarden really knows about
+    notation, storing details of the musical structure and
+    presentation far in excess of what can be described in MIDI.  And
+    Rosegarden can even tidy up recorded notation using a powerful
+    heuristic notation quantizer, without losing the original
+    performance timings.</p>
+
+    <p>And you can prepare printed scores, editing and previewing in a
+    clear multi-page layout.</p>
+
+    <br>
+    <div align="center"><img style="max-width: 100%" src="score-page.png"/></div>
+    <br>
+
+    <p>Rosegarden can of course print directly,
+    what-you-see-is-what-you-get &ndash; or, for some of the highest
+    quality typesetting anywhere, export straight to the <a
+    href="http://www.lilypond.org/">LilyPond</a> system.</p>
+
+    <br>
+    <div align="center"><img style="max-width: 100%" src="lilypond-output.png"/></div>
+    <br>
+
+    <p><b>Next: <a href="/tour/audio/">Audio</a></b></p>
+
+    </div>
+    </div>
+
+  </body>
+</html> 
+

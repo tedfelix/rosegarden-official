@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <!--#include virtual="/head.html" -->
+  <body>
+
+    <!--#include virtual="/title.html" -->
+    <!--#include virtual="/nav.html" -->
+    <!--#include virtual="/subleft.html" -->
+    <!--#include virtual="/subright.html" -->
+
+    <div id="maincontainer">
+    <div id="main">
+
+      <h2>What is Rosegarden?</h2>
+
+      <p><i>"the closest native equivalent to
+      Cubase<small>&reg;</small> for Linux" &ndash; <a
+      href="http://www.soundonsound.com/sos/Feb03/articles/linuxaudio.asp"
+      target="_new">Sound on Sound</a></i></p>
+      
+      <p>Rosegarden is a professional <b>audio and MIDI sequencer</b>,
+      <b>score editor</b>, and general-purpose <b>music composition
+      and editing environment</b>.</p><p>Rosegarden is an
+      easy-to-learn, attractive application that runs on Linux, ideal
+      for composers, musicians, music students, and small studio or
+      home recording environments.  It is currently in a beta release
+      phase, in preparation for a full 1.0 release later in the year.</p>
+
+      <p><a href="tour/">Take our tour</a> &ndash; and see what Rosegarden can
+      do for you!</p>
+
+      <div align="center" style="margin:1em" valign="center">
+      <a href="/tour/">
+      <img src="/images/rg4-0.9.5-thumb.png" border="0" vspace="20"
+      alt="Rosegarden screenshot" width="307" height="230"/>
+      </a>
+      </div>
+
+      </div>
+    </div>
+
+  </body>
+</html> 
+

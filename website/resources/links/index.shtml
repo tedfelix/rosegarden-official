@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+  <!--#include virtual="/head.html" -->
+  <body>
+
+    <!--#include virtual="/title.html" -->
+    <!--#include virtual="/nav.html" -->
+    <!--#include virtual="/resources/subnav.html" -->
+
+        <div class="rightbox">
+        <div align="center">
+        <a href="http://www.linuxdj.com/audio/lad/" target="_blank"><img src="/images/ladbutton.gif" width="90" height="31" vspace="5" alt="LAD" border="0"/></a>
+        <a href="http://www.linuxmusician.com" target="_blank"><img src="/images/lmbutton.png" width="90" vspace="5" alt="Linux Musician" border="0"/></a><br/>
+        <a href="http://www.linux-sound.org" target="_blank"><img src="/images/lsmbutton.png" width="88" height="28" vspace="5" alt="Linux Sound and Midi Pages" border="0"/></a><br/>
+        <a href="http://ccrma-www.stanford.edu/planetccrma/software/" target="_blank"><img src="/images/ccrmabutton.png" width="90" height="23" border="0" alt="Planet CCRMA at Stanford" vspace="5"/></a><br/>
+        <a href="http://www.djcj.org/LAU/guide/" target="_blank"><img src="/images/logo-lau.gif" width="79" height="55" alt="Linux Audio User's Guide" border="0" vspace="5"/></a><br/>
+        </div></div>
+
+    <!--#include virtual="/subleft.html" -->
+    <!--#include virtual="/subright.html" -->
+
+    <div id="maincontainer">
+    <div id="main">
+    <br>
+
+      <h2>Links</h2>
+
+      <p> Here are some links to composers using Rosegarden, and to
+      other products, projects and individuals who have helped us out
+      in some way, or to whom we simply would like to give a Thank
+      You.  </p>
+
+      <h3>Composers who use Rosegarden</h3>
+
+      <p> If you'd like us to link to you here, <a
+      href="authors.html">please get in touch!</a> </p>
+
+      <ul>
+      <li><a href="http://www.geocities.co.jp/MusicHall-Horn/1821/">Miki's page</a> with music made using Rosegarden (as well as some great photos of Hong Kong).</li>
+      <li><a href="http://studio.telaneos.com/">Eric's Studio</a> and some
+      music recorded with Rosegarden and other Linux audio software.
+      </li>
+      <li><a href="http://www.dooglio.net/Music/">R. Douglas Barbieri's Music Page</a>, "Music to Game By", soundtracks and more.
+      <li>Your music here! <a href="authors.html">Get in touch!</a></li>
+      </ul>
+
+      <h3>Related Sound Software</h3>
+
+      <p>
+      <a href="http://www.alsa-project.org">ALSA - Advanced Linux Sound Architecture</a> - drivers for your soundcards.
+      </p>
+
+      <p>
+      <a href="http://jackit.sourceforge.net">JACK - JACK Audio Connection Kit</a> - an excellent low latency audio server used by Rosegarden-4.
+      </p>
+
+      <p>
+      <a href="http://www.plugin.org.uk">Steve Harris's plugin.org.uk</a>
+      - LADPSA plugins and lots of lovely little JACK apps that make your
+      Rosegarden (and JACK related) experience more pleasant.
+      </p>
+
+      <p>
+      <a href="http://www.fluidsynth.org">Fluidsynth</a> - a soundfont
+      based softsynth for Linux.  Works as a MIDI target for Rosegarden-4.
+      </p>
+
+      <p> <a href="http://qsynth.sourceforge.net/">qsynth</a> - a nice
+      GUI for Fluidsynth.</p>
+
+      <p> <a href="http://qjackctl.sourceforge.net/">qjackctl</a> - a
+      nice GUI for JACK, from the same author as qsynth.</p>
+
+      <p>
+      <a href="http://hydrogen.sourceforge.net/">Hydrogen</a> - another
+      softsynth and pattern based drum machine that can also be used as
+      a MIDI target (i.e. MIDI controllable) from Rosegarden-4.
+      </p>
+
+      <p> <a href="http://www.lilypond.org/">LilyPond</a> - a high
+      quality score typesetting system.  Rosegarden-4 can write LilyPond
+      files, and also uses fonts from the LilyPond project for screen
+      display.  </p>
+
+
+      <br/>
+
+      <h3>Development Tools We Use</h3>
+
+      <p>
+      Rosegarden-4 uses and endorses the following development
+      tools:
+      </p>
+
+      <p>
+      <a href="http://distcc.samba.org">distcc</a> - distributed
+      compilation tool.  For speeding up our builds we use and
+      recommend this tool to allow us to distribute compilation
+      across two or more machines (i.e. a laptop and a desktop).
+      <b>distcc</b> can be set up in no time and if like us you're
+      continuously and repeatedly building lots of code it'll save 
+      you <i>hours</i> if not <i>days</i> of waiting around for
+      compiles to finish.  Also check out
+      <a href="http://ccache.samba.org">ccache</a>.
+      </p>
+
+      <p>
+      <a href="http://developer.kde.org/~sewardj/">Valgrind</a> - a
+      memory debugging tool incorporating the excellent <b>cachegrind</b>
+      profiling tool.   Easy and quick to implement involving no
+      recompilation of the target source - simply run inline with
+      your program and generates masses of statistics.  Use <b>cachegrind</b>
+      with the excellent visualisation tool
+      <a href="http://kcachegrind.sourceforge.net/">kcachegrind</a>.
+      </p>
+
+
+    </div>
+
+  </body>
+</html> 
+

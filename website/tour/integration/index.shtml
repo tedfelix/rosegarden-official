@@ -1,0 +1,26 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <!--#include virtual="/head.html" -->
+  <body>
+
+    <!--#include virtual="/title.html" -->
+    <!--#include virtual="/nav.html" -->
+    <!--#include virtual="/tour/subnav.html" -->
+    <!--#include virtual="/subleft.html" -->
+    <!--#include virtual="/subright.html" -->
+
+    <div id="maincontainer">
+      <div id="main">
+	<br>
+	<h2>Tour 7: Integration</h2>
+
+	<p>(JACK etc)</p>
+	
+	    <p><b>Next: <a href="/tour/">Back to the start</a></b></p>
+
+      </div>
+    </div>
+
+  </body>
+</html> 
+

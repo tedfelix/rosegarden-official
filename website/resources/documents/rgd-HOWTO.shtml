@@ -1,0 +1,235 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+  <!--#include virtual="/head.html" -->
+  <body>
+
+    <!--#include virtual="/title.html" -->
+    <!--#include virtual="/nav.html" -->
+    <!--#include virtual="/resources/subnav.html" -->
+    <!--#include virtual="/subleft.html" -->
+    <!--#include virtual="/subright.html" -->
+
+    <div id="maincontainer">
+    <div id="main">
+      <br>
+
+    <!-- INSERT FAQ HERE! -->
+<!-- Do not edit! Automatically generated from ./../../../howtos/rgd-HOWTO.txt by txt2html.pl -->
+
+<h2>mini-HOWTO: Creating the Instrument and Voice definitions for Rosegarden-4</h2>
+<div class="toc3">1. &nbsp;<a href="#toc1">Introduction</a></div>
+<div class="toc3">2. &nbsp;<a href="#toc2">The Beginner Section</a></div>
+<div class="toc4">2.1. &nbsp;<a href="#toc3">Step One: Create The Voice List</a></div>
+<div class="toc4">2.2. &nbsp;<a href="#toc4">Step Two: Convert To *.rgd</a></div>
+<div class="toc4">2.3. &nbsp;<a href="#toc5">Step Three: Verify And Adjust</a></div>
+<div class="toc3">3. &nbsp;<a href="#toc6">The Advanced Section</a></div>
+
+
+
+<p>Document maintained by: Ryurick M. Hristev &lt;ryurick dot hristev at canterbury dot ac dot nz&gt;
+</p>
+<div class="oddcontent"><a name="toc1"></a><h3>1. &nbsp;Introduction</h3>
+
+<p>This mini-howto explains how to create a device definition file (in
+ Rosegarden speak). Please refer to the Rosegarden tutorial paying
+ particular attention to sections 2.4 to 2.10:
+</p>
+<p><A HREF="http://rosegarden.sourceforge.net/tutorial/using-rosegarden/using-rosegarden.html">http://rosegarden.sourceforge.net/tutorial/using-rosegarden/using-rosegarden.html</A>
+</p>
+</div><div class="evencontent"><a name="toc2"></a><h3>2. &nbsp;The Beginner Section</h3>
+
+</div><div class="oddcontent"><a name="toc3"></a><h4>2.1. &nbsp;Step One: Create The Voice List</h4>
+
+<p>In order to create the *.rgd (device definition file) you need first to
+ know what voices are available for your MIDI device, i.e. what instruments
+ your keyboard or sound card can play.
+</p>
+<p>The best source is probably your manual. Alternatively you may want to
+ search on the Internet.
+</p>
+<p>Voices are organized in banks. Within banks each voice is specified by
+ a MIDI program change number. Banks are designated by using two numbers:
+ MSB (Most Significant Byte) and LSB (Least Significant Byte).
+</p>
+<p>The MSB and LSB may take each any value between 0 and 127 (thus giving a
+ total of 16384 banks). The program number takes values from 0 to 127 in
+ the .rgd file but these will appear as 1 to 128 when viewed in your
+ manual and also when they are loaded into Rosegarden's Bank editor.
+</p>
+<p>The bank with MSB=0 and LSB=0 is well defined and known as GM (General Midi).
+ The first voice in this bank is the "Acoustic/Grand Piano", i.e. pianoforte
+ and all 128 voices are well defined.
+</p>
+<p>So we will tell Rosegarden about this voice somewhat like:
+</p><ul>
+<li>At MSB=0, LSB=0, Program=0 you find "Acoustic/Grand Piano"
+</ul>
+<p>The MIDI devices and software cares only about numbers, the name is for
+ human consumption. I.e. you will use "Acoustic/Grand Piano" and the
+ computer will understand "MSB=0, LSB=0, Program=0"
+</p>
+<p>Rosegarden stores this information in the *.rgd file.
+</p>
+<p>There are several ways you can tell Rosegarden what voices are available:
+</p><ol>
+<li>Use Rosegarden itself, via the Studio -&gt; Manage MIDI Devices menu
+     However consider that only the GM bank contains already 128 voices
+     and most keyboards or sound cards may well contain in excess of 500
+     voices. So entering by hand is a very tedious process.
+
+</li><P><li>Edit the *.rgd file directly: possible but not for the beginner
+     (more about that below)
+
+</li><P><li>Create a list of voices and then convert it to the *.rgd format
+</ol>
+<p>We will take here the third approach.
+</p>
+<p>First create a file containing the list of all voices. You can use either
+ any text editor you feel comfortable with  or any spreadsheet able to export
+ in CSV (Comma Separated Values) format (any spreadsheet should be able to
+ do this).
+</p>
+<p>The format of the file is very simple:
+</p><ol type='a'>
+<li>Each line contains 5 parameters. Each parameter is separated from the
+     next by either whitespace (spaces, tabs) and/or commas (only one comma
+     between fields);
+
+</li><P><li>Empty lines are ignored;
+
+</li><P><li>You can add comments in any (reasonable) place. Comments start with
+     the "#" character and continue to the end of line.
+</ol>
+<p>The list of the parameters is as follows:
+</p><ol>
+<li>The first one is for your reference, it will be ignored in the final
+     output. You can put whatever you like except whitespaces and commas
+     (because they are separators) and "#" because it will be taken as a
+     comment. An example of what you can put in here is the voice number,
+     in order to keep track of what you have entered;
+
+</li><P><li>The second one is the MSB, it is a integer between 0 and 127;
+
+</li><P><li>The third one is the LSB, it is a integer between 0 and 127;
+
+</li><P><li>The fourth one is the program change number, it is an integer between
+     0 and 127 (remember, this is displayed as 1 to 128 in Rosegarden and
+     in your manual);
+
+</li><P><li>And finally the last one is the voice name. This field in particular
+     may contain whitespace and/or commas but not "#";
+</ol>
+<p>You can optionally add comments after the fifth parameter.
+</p>
+<p>Example:
+</p><pre>
+    # This is a comment
+       # This is another comment
+
+    # GM Bank:
+    first 0 0 1 Grand Piano   # this is the first voice from the GM bank
+    2 ,   0 0, 2 Bright Piano
+</pre>
+<p>If you want to save yourself some time and make sure that the data entered is
+ correct you may proceed as follows:
+</p><ul>
+<li>First obtain the manual in pdf format (it is available for the
+    Yamaha keyboards from their site, other manufacturers may have it;
+    check your CDs as well)
+
+</li><P><li>Then try to see if you can copy &amp; paste. You can do it from xpdf if the
+    pdf allows it (sadly the Yamaha manuals don't!). Save the pastings
+    into a text file.
+
+</li><P><li>If you can't then you are down to a qute tedious process: use ps2ascii
+    to convert to text.
+
+</li><P><li>Finally edit the text to transform it into a format as described above.
+</ul>
+<p>It is still a tedious process but maybe less so than entering all voices
+ from scratch. And very likey less error-prone.
+</p>
+<p>For keyboards in particular: It is highly advisable to use the same
+ voice names as they appear on the LCD screen of the keyboard.
+</p>
+<p>If you used a text processor make sure you save the file as plain text
+ (ASCII); if you use a spreadsheet make sure you save in CVS format.
+</p>
+</div><div class="evencontent"><a name="toc4"></a><h4>2.2. &nbsp;Step Two: Convert To *.rgd</h4>
+
+<p>The next step involves converting the text file to the *.rgd format.
+ Use the provided txt2rgd.py script (in the docs/howtos directory of
+ the Rosegarden source distribution, or from
+ <A HREF="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/rosegarden/docs/howtos/txt2rgd.py">http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/rosegarden/docs/howtos/txt2rgd.py</A>) as follows:
+</p><pre>
+    txt2rgd.py &lt;input file&gt; &lt;output file&gt;
+</pre>
+<p>E.g.:
+</p><pre>
+    txt2rgd.py mylist.txt  sound_card.rgd
+</pre>
+<p>This script will try to catch some possible errors. If it does report any
+ errors then correct the offending line(s) and try again.
+</p>
+<p>Notes:
+</p><ol>
+<li>txt2rgd.py is a Python script, you need Python 2.2 (or above) installed
+     on your system.
+
+</li><P><li>the output file is overwritten if there was a previous version.
+
+</li><P><li>the name of the output file must end with the ".rgd" extension.
+</ol>
+</div><div class="oddcontent"><a name="toc5"></a><h4>2.3. &nbsp;Step Three: Verify And Adjust</h4>
+
+<p>Once you have generated the *.rgd file try to load it into Rosegarden, via
+ Studio -&gt; Manage MIDI Devices -&gt; Import Device
+</p>
+<p>If it loads then you are basically done. It is likely that you may see
+ some bank names as "000-112". This means the the script could not find
+ a suitable name for the bank (the script tries to name the banks following
+ the XG scheme).
+</p>
+<p>You can rename that bank by double-clicking on its name. When you are done
+ click on the "Export Device" button.
+</p>
+<p>Once you are done and satisfied consider sharing it. There may be other
+ users with the same keyboard/soundcard and they shouldn't duplicate the work.
+ You can mail it to one of the Rosegarden developers, to be added to the
+ current library. Free software grows from community contributions.
+</p>
+</div><div class="evencontent"><a name="toc6"></a><h3>3. &nbsp;The Advanced Section</h3>
+
+<p>The *.rgd file is in gzipped XML format. You can gunzip it then edit with
+ any text or XML editor of your choice. If you are using vim then you don't
+ have to gunzip it first (it figures out for itself).
+</p>
+<p>Some things you may want to change in the file:
+</p><ul>
+<li>In the device tag you may change the name. E.g.:
+</ul><pre>
+     &lt;device id="0" name="Yamaha PSR 550" type="midi"&gt;
+
+   (leave the id at "0")
+</pre><ul>
+<li>After the device and before the first instrument tag you may add a
+    librarian tag. E.g.:
+</ul><pre>
+     &lt;librarian name="Joe Schmoe" email="Joe.Schmoe@somewere.on.the.net"/&gt;
+</pre><ul>
+<li>You may want to change the bank names directly here, it's easier.
+</ul>
+<p>Note that some chars need to be replaced with XML friendly formats.
+ Check the converter_table dictionary in the txt2rgd.py script for the
+ current list of special chars and their replacement strings.
+</p>
+<p></p>
+
+</div>
+
+    </div>
+
+  </body>
+</html> 
+

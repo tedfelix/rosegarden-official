@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+  <!--#include virtual="/head.html" -->
+  <body>
+
+    <!--#include virtual="/title.html" -->
+    <!--#include virtual="/nav.html" -->
+    <!--#include virtual="/subleft.html" -->
+
+    <div id="maincontainer">
+    <div id="main">
+
+    <h2>Rosegarden at the Linux Expo 2003</h2>
+
+    <p><i>London, 8th and 9th October 2003</i></p>
+
+    <p>Rosegarden had a corner in the .ORG Village of the Linux Expo,
+    where we set up a few noisy bits of kit, gave a few demos, played
+    some tea-time medleys, talked to a lot of people and did some
+    useful testing toward the 0.9.2 release.</p>
+
+    <p>Some photos -- click on the thumbnails for 800x600 images:</p>
+
+	<table border="0">
+
+    <tr><td align="center"><a href="linuxexpo2003/small/p1000220.jpg"><img src="linuxexpo2003/thumbs/p1000220.png" border=0></a></td><td>Richard Bown setting up</td></tr>
+
+    <tr><td align="center"><a href="linuxexpo2003/small/p1000225.jpg"><img src="linuxexpo2003/thumbs/p1000225.png" border=0></a></td><td>The general melee.  Richard Bown is at the back, with John Littler of <a href="http://www.mstation.org">mstation.org</a> seated just in front of him.</td></tr>
+
+    <tr><td align="center"><a href="linuxexpo2003/small/p1000229.jpg"><img src="linuxexpo2003/thumbs/p1000229.png" border=0></a></td><td>Chris Cannam on a break</td></tr>
+
+    <tr><td align="center"><a href="linuxexpo2003/small/p1000227.jpg"><img src="linuxexpo2003/thumbs/p1000227.png" border=0></a></td><td>Richard Hillesley of Linux User magazine</td></tr>
+
+    <tr><td align="center"><a href="linuxexpo2003/small/p1000230.jpg"><img src="linuxexpo2003/thumbs/p1000230.png" border=0></a></td><td>Richard Bown</td></tr>
+
+    <tr><td align="center"><a href="linuxexpo2003/small/p1000243.jpg"><img src="linuxexpo2003/thumbs/p1000243.png" border=0></a></td><td>Richard Bown with Steve Harris of plugin.org.uk and JAMin fame</td></tr>
+	
+	</table>
+
+
+    </div>
+    </div>
+
+  </body>
+</html> 
+

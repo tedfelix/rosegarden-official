@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <!--#include virtual="/head.html" -->
+  <body>
+
+    <!--#include virtual="/title.html" -->
+    <!--#include virtual="/nav.html" -->
+    <!--#include virtual="/getting/subnav.html" -->
+    <!--#include virtual="/subleft.html" -->
+    <!--#include virtual="/subright.html" -->
+
+    <div id="maincontainer">
+    <div id="main">
+
+    <br>
+    <h2>How to get Rosegarden</h2>
+
+    <h3>Coming soon: Buy it boxed!</h3>
+
+    <p>Rosegarden will reach 1.0 this summer, and then we intend to
+    make box sets available.  (We're old-fashioned like that, and
+    we've had quite a bit of interest in the prospect.)</p>
+
+    <p>The box will
+    include Rosegarden binary packages for the major Linux
+    distributions, as well as a bootable version that you can run
+    direct from CD, plus plenty of other goodies including a number of
+    other audio applications and plugins and a Windows VST adapter.
+    With a printed manual and support included, this box set should
+    be pretty exciting value.</p>
+
+    <p>What's more, because Rosegarden will always be Free Software
+    licensed under the GNU General Public License, you can depend
+    on the same friendly licensing as always and the right to enjoy
+    your software without intrusive activation schemes or other
+    annoyances.  We see users as allies, not enemies.</p>
+
+    <h2>Downloads</h2>
+
+	<p><i>Note: please read the <a
+	href="/getting/requirements/">Hardware and System Requirements
+	page</a> to find out whether Rosegarden will work on your
+	system.</i></p>
+
+    <h3>Source code</h3>
+
+    <ul><li><a href="http://sourceforge.net/"><img align="right"
+src="http://sourceforge.net/sflogo.php?group_id=4932&type=1"
+width="88" height="31" border="0" alt="SourceForge.net Logo"/></a><a
+href="http://sourceforge.net/project/showfiles.php?group_id=4932&release_id=209304">Rosegarden
+release 0.9.6 sources</a>, 12th January 2004, for download from the
+SourceForge page.</li>
+
+	    <li><a href="http://sourceforge.net/cvs/?group_id=4932">Rosegarden
+CVS</a> from the SourceForge repository; this is the latest
+bleeding-edge, work-in-progress and might not build or run but will
+have all the latest features as discussed on the rosegarden-devel
+mailing list.</li></ul>
+
+    <h3>Binary packages</h3>
+
+    <p>These are available are all maintained by other people, so it
+    may take a short while before they are brought up-to-date with
+    each new release of Rosegarden and there's no guarantee of their
+    completeness.  Please take a moment to check whether you are
+    really getting the latest release (currently Rosegarden-0.9.6)
+    before you download a binary package.</p>
+
+<h3>Rosegarden for Mandrake</h3>
+
+<ul><li><a
+href="http://rpm.nyvalls.se/">Rosegarden for Mandrake</a>, one of Thac's amazing list of audio and music application RPMs -- click through according to your version of Mandrake and scroll down to find Rosegarden.</li>
+</ul>
+
+<p>Apparently there's also an RPM in the Mandrake Cooker bleeding-edge
+package repository.</p>
+
+<h3>Rosegarden for SuSE</h3>
+
+<p>We don't know of any source of up-to-date SuSE packages of
+Rosegarden.  SuSE have included Rosegarden in their last two
+distributions, but neither of the packages worked very well.
+
+<p>We recommend building from source on SuSE: two of the three core
+Rosegarden developers use SuSE and you should be able to compile
+Rosegarden out of the box on SuSE 8.2 or 9.0.
+
+<h3>Rosegarden for RedHat</h3>
+
+<ul><li><a href="http://www-ccrma.stanford.edu/planetccrma/software/soundapps.html#rosegarden">Rosegarden for RedHat 7.3, 8.0, and 9.0</a> from
+<a href="http://www-ccrma.stanford.edu/planetccrma/software/">Planet CCRMA</a>.
+<br><br>
+
+Planet CCRMA is a well-maintained and easy to use distribution of
+audio and sound applications for RedHat, which can install everything
+you need semi-automatically.  If you want to set up an audio
+workstation on RedHat, your best bet is to install the Planet CCRMA
+system: read the documentation on the Planet site, and go from there.</ul>
+
+<p>If you want to run Rosegarden on RedHat but you don't want to use
+Planet CCRMA, you're probably on your own.  It's a difficult
+distribution to run much modern audio software on, because it doesn't
+include the ALSA 0.9.x sound drivers.</p>
+
+<h3>Rosegarden for Debian</h3>
+
+<ul><li>
+Rosegarden is available as part of
+<a href="http://packages.debian.org/unstable/sound/rosegarden4">Debian unstable</a>, thanks to Enrique Robledo Arnuncio.
+</li></ul>
+
+<h3>Rosegarden for your distribution</h3>
+
+<p>Several distributions are now including versions of Rosegarden, if
+not in the base distribution then in an extended package repository.
+For example, Mandrake, SuSE, Debian and the Russian language ALT Linux
+all make Rosegarden packages available to their users.</p>
+
+<p>If we're not packaged as part of your favourite distribution then
+please get in touch with your distribution manufacturer and ask why
+not!  If you've made an RPM or package for any distribution then
+please let us know so that we can link it here.</p>
+
+<br>
+
+<hr>
+
+<h3>"X11 Rosegarden" 2.1 releases</h3>
+
+<p>Before the current Rosegarden project, there was another
+Rosegarden: a now rather antique program, simpler, less powerful but
+also less resource-hungry.  We're calling it "X11 Rosegarden" here, to
+distinguish it from the newer Rosegarden.  It was originally written
+for Silicon Graphics IRIX machines, and then ported to Linux and other
+Unix variants.  If you're interested, you can still get it in source
+code form right here.
+
+<UL>
+
+<LI>"X11 Rosegarden" 2.1 patchlevel 4 <A HREF="http://www.cannam.demon.co.uk/rosegarden/distribution/rosegarden-2.1pl4.tar.gz">sources via http</a> (573K).
+
+<LI>"X11 Rosegarden" 2.1 patchlevel 3 <A HREF="http://www.cannam.demon.co.uk/rosegarden/distribution/rosegarden-2.1pl3.tar.gz">sources via http</a> (570K), and <a href="http://www.cannam.demon.co.uk/rosegarden/distribution/rosegarden-2.1pl2pl3.patch.gz">patch from 2.1 patchlevel 2 to patchlevel 3</a> (7K).
+
+<LI>"X11 Rosegarden" 2.1 patchlevel 3 for Linux, <A HREF="http://www.cannam.demon.co.uk/rosegarden/distribution/rosegarden-2.1pl3-i686-pc-linux-gnu.tar.gz">binaries via http</a> (379K).  Built on a Debian 2.2 system.
+
+<LI>Torsten Duwe's patch to make "X11 Rosegarden" 2.1 use the OSS 
+/dev/sequencer2 API, <A
+HREF="http://www.cannam.demon.co.uk/rosegarden/distribution/rosegarden-2.1-2.2u0.patch.gz">via http
+only</a> (24K). This patch also includes some of the fixes in 2.1pl2.  It should be
+applied to the original 2.1 sources; it will not apply correctly to
+2.1pl2 or pl3.
+<!--
+<LI>"X11 Rosegarden" 2.1 for ELF-format Linux system, 
+<A HREF="ftp://ftp.cs.bath.ac.uk/pub/dream/ROSE/rosegarden-2.1-i586-pc-linux-gnu.tar.gz">
+binaries via ftp</A> or <A HREF="http://www.cannam.demon.co.uk/rosegarden/distribution/rosegarden-2.1-i586-pc-linux-gnu.tar.gz">via http</a> (354K).
+Built with a 2.0.18 kernel and XFree86 3.1.2 libraries.
+-->
+<LI>"X11 Rosegarden" 2.1 for SGI IRIX 6.2, <A
+HREF="ftp://ftp.cs.bath.ac.uk/pub/dream/ROSE/rosegarden-2.1-mips-sgi-irix6.2.tar.gz">
+binaries via ftp</A> or <A
+HREF="http://www.cannam.demon.co.uk/rosegarden/distribution/rosegarden-2.1-mips-sgi-irix6.2.tar.gz">via
+http</A> (501K). This distribution lacks the Petal filter scripting
+language, because the SGI machine I have access to doesn't have new
+enough Tcl/TclMIDI components to build it.
+
+<LI>"X11 Rosegarden" 2.1 for OpenVMS Vax or Alpha, <A
+HREF="http://www.cannam.demon.co.uk/rosegarden/distribution/rosegarden-21.zip">binaries via http in the UK</a> (3.6Mb) -- ported by Patrick Moreau.
+
+<LI>"X11 Rosegarden" 2.1
+<A HREF="ftp://ftp.cs.bath.ac.uk/pub/dream/ROSE/rosegarden-2.1-sources.tar.gz">sources via ftp</A> or <A HREF="http://www.cannam.demon.co.uk/rosegarden/distribution/rosegarden-2.1-sources.tar.gz">via http</A> (553K).
+
+
+</UL>
+
+    </div>
+    </div>
+
+  </body>
+</html> 
+

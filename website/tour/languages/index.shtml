@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+  <!--#include virtual="/head.html" -->
+  <body>
+
+    <!--#include virtual="/title.html" -->
+    <!--#include virtual="/nav.html" -->
+    <!--#include virtual="/tour/subnav.html" -->
+    <!--#include virtual="/subleft.html" -->
+    <!--#include virtual="/subright.html" -->
+
+    <div id="maincontainer">
+    <div id="main">
+    <br>
+
+    <h2>Tour 6: Language support</h2>
+
+    <p>Rosegarden is an international project with contributors all
+    over the world, and one way that people can contribute is by
+    providing and maintaining translations of the GUI into other
+    languages than its original English.</p>
+
+    <br>
+    <div align="center"><img src="languages.png"/></div>
+    <br>
+
+    <p>Rosegarden is available in nine languages so far, as well as
+    American and British English.  And it's all thanks to the hard
+    work of...</p>
+
+    <p>Alexandre Prokoudine &ndash; Russian<br>
+    Pedro Lopez-Cabanillas &ndash; Spanish<br>
+    J&ouml;rg Schumann &ndash; German<br>
+    Kevin Donnelly &ndash; Welsh<br>
+    Didier Burli &ndash; French<br>
+    Daniele Medri &ndash; Italian<br>
+    Stefan Asserh&auml;ll &ndash; Swedish<br>
+    Hasso Tepper &ndash; Estonian<br>
+
+    <p>Is your language on that list?  If not, perhaps you or somebody
+    you know might be able to maintain a translation.</p>
+
+    <p><b>Next: <a href="/tour/integration/">Integration</a></b></p>
+
+    </div>
+    </div>
+
+  </body>
+</html> 
+

@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+  <!--#include virtual="/head.html" -->
+  <body>
+
+    <!--#include virtual="/title.html" -->
+    <!--#include virtual="/nav.html" -->
+    <!--#include virtual="/tour/subnav.html" -->
+    <!--#include virtual="/subleft.html" -->
+    <!--#include virtual="/subright.html" -->
+
+    <div id="maincontainer">
+    <div id="main">
+    <br>
+
+    <h2>Tour 4: Audio</h2>
+
+    <p>It's easy to mix audio clips with the rest of your composition:
+    you can even drag-and-drop audio files from the KDE desktop
+    straight onto the main window, and arranging audio tracks is just
+    like arranging MIDI ones.  Move, snap, resize, zoom, repeat, and
+    let Rosegarden's sample-accurate audio engine do the hard
+    work.</p>
+
+    <br>
+    <div align="center"><img style="max-width: 100%" src="audio-overview.png"/></div>
+    <br>
+    
+    <p>There's a capable but straightforward audio mixer window to
+    adjust levels and audio routing.  You can have as many audio
+    tracks as your hardware will support, and route them through up to
+    eight submaster groups with five insert effect slots per
+    track.</p>
+
+    <br>
+    <div align="center"><img style="max-width: 100%" src="plugin.png"/></div>
+    <br>
+
+    <p>Rosegarden uses the Linux standard LADSPA plugin API, so it
+    supports hundreds of existing free plugins &ndash; and for those
+    with an engineering bent, the open and easy-to-learn plugin
+    standard makes it a fun platform for studying signal processing
+    and developing new effects.</p>
+    
+    <p><b>Next: <a href="/tour/languages/">Language support</a></b></p>
+
+    </div>
+    </div>
+
+  </body>
+</html> 
+

@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+  <!--#include virtual="/head.html" -->
+  <body>
+
+    <!--#include virtual="/title.html" -->
+    <!--#include virtual="/nav.html" -->
+    <!--#include virtual="/support/subnav.html" -->
+    <!--#include virtual="/subleft.html" -->
+    <!--#include virtual="/subright.html" -->
+
+    <div id="maincontainer">
+    <div id="main">
+
+    <br>
+    <h2>Mailing lists</h2>
+
+    <p>Much discussion about using, developing and generally living
+    with Rosegarden goes on in our two mailing lists.  </p>
+
+    <ul><li>For any discussion about installing or using Rosegarden or
+    about music made with Rosegarden, please use the <a
+    href="http://lists.sourceforge.net/lists/listinfo/rosegarden-user">rosegarden-user
+    mailing list</a>.  Check out the <a
+    href="http://sourceforge.net/mailarchive/forum.php?forum_id=11769">rosegarden-user
+    archives</a> too.  If you're concerned about a problem you're
+    having with Rosegarden, make sure you check the <a
+    href="/support/faq/">Frequently Asked Questions</a> page as well.</li>
+
+    <li>If you're a developer interested in finding out more about the
+    development of our project and perhaps even joining in, the <a
+    href="http://lists.sourceforge.net/lists/listinfo/rosegarden-devel">rosegarden-devel
+    mailing list</a> is for you.  There's usually some lively
+    discussion going on.
+    </li></ul>
+
+    </div>
+
+  </body>
+</html> 
+

@@ -1,0 +1,647 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+  <!--#include virtual="/head.html" -->
+  <body>
+
+    <!--#include virtual="/title.html" -->
+    <!--#include virtual="/nav.html" -->
+    <!--#include virtual="/resources/subnav.html" -->
+    <!--#include virtual="/subleft.html" -->
+    <!--#include virtual="/subright.html" -->
+    <!--#include virtual="/subright.html" -->
+
+    <div id="maincontainer">
+    <div id="main">
+    <br>
+<!-- Do not edit! Automatically generated from ./../../../howtos/faq.txt by txt2html.pl -->
+
+<h2>Frequently Asked Questions</h2>
+<div class="toc3">1. &nbsp;<a href="#toc1">General questions</a></div>
+<div class="toc4">1.1. &nbsp;<a href="#toc2">The web page says it's a KDE application.  Can I run it under GNOME/WindowMaker etc?</a></div>
+<div class="toc4">1.2. &nbsp;<a href="#toc3">What are the hardware requirements like?</a></div>
+<div class="toc4">1.3. &nbsp;<a href="#toc4">Does it support my soundcard?</a></div>
+<div class="toc4">1.4. &nbsp;<a href="#toc5">Does it support my language?</a></div>
+<div class="toc4">1.5. &nbsp;<a href="#toc6">Rosegarden apparently saves in a binary format, where can I find the format definition ?</a></div>
+<div class="toc3">2. &nbsp;<a href="#toc7">Compilation or installation problems</a></div>
+<div class="toc4">2.1. &nbsp;<a href="#toc8">Can I build for KDE2 instead of KDE3?</a></div>
+<div class="toc4">2.2. &nbsp;<a href="#toc9">macro `AM_PATH_ALSA' not found in library</a></div>
+<div class="toc4">2.3. &nbsp;<a href="#toc10">arts/artsmidi.idl not found</a></div>
+<div class="toc4">2.4. &nbsp;<a href="#toc11">"Cannot convert a null image" and other errors at startup</a></div>
+<div class="toc4">2.5. &nbsp;<a href="#toc12">Rosegarden hangs on the splash screen at startup</a></div>
+<div class="toc4">2.6. &nbsp;<a href="#toc13">Rosegarden is crashing at startup</a></div>
+<div class="toc4">2.7. &nbsp;<a href="#toc14">How to get a stack trace for a crash</a></div>
+<div class="toc4">2.8. &nbsp;<a href="#toc15">Crash at startup with LADSPA plugins enabled</a></div>
+<div class="toc4">2.9. &nbsp;<a href="#toc16">I'm having trouble building with Mandrake 8.2</a></div>
+<div class="toc4">2.10. &nbsp;<a href="#toc17">I'm having trouble with a missing 'gzgets' function</a></div>
+<div class="toc4">2.11. &nbsp;<a href="#toc18">Can't build MidiArts.h</a></div>
+<div class="toc4">2.12. &nbsp;<a href="#toc19">I'm using RedHat 7.3, what packages do I need?</a></div>
+<div class="toc4">2.13. &nbsp;<a href="#toc20">ladspa.h: No such file or directory</a></div>
+<div class="toc3">3. &nbsp;<a href="#toc21">The Composition View</a></div>
+<div class="toc4">3.1. &nbsp;<a href="#toc22">How do I set a loop?</a></div>
+<div class="toc4">3.2. &nbsp;<a href="#toc23">How do I view the track labels?</a></div>
+<div class="toc4">3.3. &nbsp;<a href="#toc24">How do I change the instrument for a track?</a></div>
+<div class="toc3">4. &nbsp;<a href="#toc25">Notation and Matrix editing</a></div>
+<div class="toc4">4.1. &nbsp;<a href="#toc26">Can I get more than one staff at once in the notation editor?</a></div>
+<div class="toc4">4.2. &nbsp;<a href="#toc27">How do I do something like a two-staff piano part?</a></div>
+<div class="toc4">4.3. &nbsp;<a href="#toc28">Can I edit all the segments at once in the matrix editor?</a></div>
+<div class="toc4">4.4. &nbsp;<a href="#toc29">Notation rendering is rather slow</a></div>
+<div class="toc3">5. &nbsp;<a href="#toc30">Playback and recording</a></div>
+<div class="toc4">5.1. &nbsp;<a href="#toc31">aRts?  ALSA?  Huh?</a></div>
+<div class="toc4">5.2. &nbsp;<a href="#toc32">My soundcard has no built-in MIDI synth and I have no external MIDI devices.  How can I get sound?</a></div>
+<div class="toc4">5.3. &nbsp;<a href="#toc33">How do I use an ALSA soft synth, such as iiwusynth or Timidity?</a></div>
+<div class="toc4">5.4. &nbsp;<a href="#toc34">How do I select an Instrument?</a></div>
+<div class="toc4">5.5. &nbsp;<a href="#toc35">I'm using ALSA and I've selected a synth Instrument but I don't hear any sound</a></div>
+<div class="toc4">5.6. &nbsp;<a href="#toc36">I've followed all your instructions but I still don't hear any sound</a></div>
+<div class="toc4">5.7. &nbsp;<a href="#toc37">Playback is only happening once every second</a></div>
+<div class="toc4">5.8. &nbsp;<a href="#toc38">What if I see Rosegarden itself in the client list when I start the sequencer?</a></div>
+<div class="toc4">5.9. &nbsp;<a href="#toc39">How do I get audio to work?</a></div>
+<div class="toc4">5.10. &nbsp;<a href="#toc40">Why are the program names wrong in my MIDI file?</a></div>
+<div class="toc3">6. &nbsp;<a href="#toc41">Improving Performance</a></div>
+<div class="toc4">6.1. &nbsp;<a href="#toc42">I get drop outs or xruns with JACK.  How do I improve performance?</a></div>
+
+
+
+<p>As there still not a great deal of user documentation provided for
+ Rosegarden-4, this FAQ includes a number of bits of useful information
+ that would normally (and will in the future) be found there instead.
+</p>
+<div class="oddcontent"><a name="toc1"></a><h3>1. &nbsp;General questions</h3>
+
+</div><div class="evencontent"><a name="toc2"></a><h4>1.1. &nbsp;The web page says it's a KDE application.  Can I run it under GNOME/WindowMaker etc?</h4>
+
+<p>Yes, completely.  You can run Rosegarden under any window manager you
+ like.  We build for KDE because we like developing for KDE as it
+ lets us get a job done.  You can run the resulting application 
+ under any graphical environment you like with no change in
+ functionality.
+</p>
+</div><div class="oddcontent"><a name="toc3"></a><h4>1.2. &nbsp;What are the hardware requirements like?</h4>
+
+<p>Reasonably demanding, because of the mixture of graphical and
+ interactive GUI stuff with precisely timed audio stuff.  You can do
+ simple editing in piano-roll or score on a 400MHz PIII or Celeron with
+ 64MB of memory, but to be honest you're unlikely to have got that far
+ because you probably need more memory than that just to compile the
+ thing in the first place.
+</p>
+<p>An 800MHz machine with 256MB should do very nicely for MIDI and score
+ plus a few tracks of audio (my laptop has that spec, and I both use
+ and develop Rosegarden-4 on it).  If you want to use soft synths,
+ you'll probably want more CPU power; I find the sound on my laptop
+ starts showing glitches with more than about four tracks played
+ through a high-quality orchestral sample-based soft synth.
+</p>
+</div><div class="evencontent"><a name="toc4"></a><h4>1.3. &nbsp;Does it support my soundcard?</h4>
+
+<p>We don't deal with the soundcard directly, so we can't answer that.
+ We use the ALSA drivers where possible, so see the ALSA project's card
+ matrix (<A HREF="http://www.alsa-project.org/">http://www.alsa-project.org/</A>).  Also see the notes on
+ ALSA and aRts below.
+</p>
+</div><div class="oddcontent"><a name="toc5"></a><h4>1.4. &nbsp;Does it support my language?</h4>
+
+<p>Translations are included for Russian, German and Spanish, with French
+ in progress.  If you can translate musical or technical documentation
+ (no programming required), please let us know!  See
+ docs/howtos/i18n.txt in CVS if you are interested in the technical
+ aspects of translation.
+</p>
+</div><div class="evencontent"><a name="toc6"></a><h4>1.5. &nbsp;Rosegarden apparently saves in a binary format, where can I find the format definition ?</h4>
+
+<p>Actually it's just gzipped XML.
+</p>
+<p>gzip has a bit of trouble with gzipped files that don't end in .gz, so the
+ easy way to have a look is to use
+</p><pre>
+	gunzip -c somefile.rg &gt; somefile.xml
+</pre>
+</div><div class="oddcontent"><a name="toc7"></a><h3>2. &nbsp;Compilation or installation problems</h3>
+
+</div><div class="evencontent"><a name="toc8"></a><h4>2.1. &nbsp;Can I build for KDE2 instead of KDE3?</h4>
+
+<p>This is no longer possible.
+</p>
+</div><div class="oddcontent"><a name="toc9"></a><h4>2.2. &nbsp;macro `AM_PATH_ALSA' not found in library</h4>
+
+<p>This can happen only when building from CVS. It means you're missing
+ the 'alsa.m4' file (usually in /usr/share/aclocal) which is normally
+ part of libalsa (look for a libalsa2-devel package for your
+ distribution). This causes the 'configure' file to be misconstructed
+ because the 'aclocal.m4' file won't be properly generated.
+</p>
+<p>If you can't install libalsa, you can still compile Rosegarden by
+ pre-building the aclocal.m4 file yourself, like this :
+</p><pre>
+  $ aclocal -I .
+</pre>
+<p>(that's what the 'ac_include_me_if_no_alsa.m4' file is for.)
+</p>
+<p>Then restart make -f Makefile.cvs. You will still see the error
+ message, but the 'configure' file will be properly generated.
+</p>
+</div><div class="evencontent"><a name="toc10"></a><h4>2.3. &nbsp;arts/artsmidi.idl not found</h4>
+
+<p>You may be missing the kdemultimedia package (and associated -devel
+ package, if appropriate to your distribution).  Note that you need
+ this even if you're building --with-alsa.
+</p>
+</div><div class="oddcontent"><a name="toc11"></a><h4>2.4. &nbsp;"Cannot convert a null image" and other errors at startup</h4>
+
+<p>If you're getting a stream of errors of this sort followed by a crash
+ at startup, with Rosegarden-4 0.1.6 or earlier, then you probably
+ haven't run "make install", or it didn't complete successfully, or it
+ installed into a non-standard place which you need to add to your
+ KDEDIRS environment variable before you can start it correctly.
+</p>
+</div><div class="evencontent"><a name="toc12"></a><h4>2.5. &nbsp;Rosegarden hangs on the splash screen at startup</h4>
+
+<p>When built with optimisation using the gcc-3.3.1 compiler included
+ with SuSE 9.0, Rosegarden may hang on startup displaying the
+ "Enumerating plugins" message on the splash screen.  This is caused by
+ a compiler bug.
+</p>
+<p>To fix this, configure with
+</p><pre>
+  $ CXXFLAGS='-fno-gcse' ./configure
+</pre>
+<p>to disable the particular optimisation that is causing the problem.
+</p>
+<p>Note that this also affects the Rosegarden-4 0.9.1 package shipped
+ with the distribution itself; SuSE 9.0 is therefore the second SuSE
+ release in a row to include a version of Rosegarden that doesn't work
+ because of a compiler bug.  (See "Playback is only happening once
+ every second" below for details of the SuSE 8.2 bug.)
+</p>
+</div><div class="oddcontent"><a name="toc13"></a><h4>2.6. &nbsp;Rosegarden is crashing at startup</h4>
+
+<p>Try running up the sequencer by itself first to see if it's a problem
+ with that or the main part of the program.  Run:
+</p><pre>
+  $ rosegardensequencer
+</pre>
+<p>And you should get a few lines of output finishing with:
+</p><pre>
+  RosegardenSequencer - started OK
+</pre>
+<p>If the sequencer is alright then try to start the main application
+ with the command line switch "--nosequencer".  If that fails, see next
+ question on how to obtain a stack trace, which you should provide as
+ part of any bug report you submit.
+</p>
+</div><div class="evencontent"><a name="toc14"></a><h4>2.7. &nbsp;How to get a stack trace for a crash</h4>
+
+<p>First export the environment variable KDE_DEBUG as follows (in bash):
+</p><pre>
+  $ export KDE_DEBUG=1
+</pre>
+<p>Start rosegarden from the command line, and reproduce the crash.  You
+ should now have a core file in your current directory. The core file
+ is either named "core" or "core.&lt;number&gt;". Run gdb :
+</p><pre>
+  $ gdb rosegarden &lt;core_file&gt;
+</pre>
+<p>Then once you get the gdb prompt, use the command 'where' to get the
+ stack trace, and mail to the authors or to the Rosegarden development
+ mailing list, or include in a bug report.
+</p>
+</div><div class="oddcontent"><a name="toc15"></a><h4>2.8. &nbsp;Crash at startup with LADSPA plugins enabled</h4>
+
+<p>If you find that Rosegarden segfaults immediately upon startup, and if
+ when you run rosegardensequencer by itself as mentioned earlier in
+ this FAQ you get the following output:
+</p><pre>
+  rosegardensequencer: created plugin manager
+  MappedAudioPluginManager::discoverPlugins - discovering plugins
+  Segmentation fault
+</pre>
+<p>and if you have the Steve W. Harris LADSPA plugins (swh-plugins)
+ installed, and have Rosegarden compiled with JACK and LADSPA support,
+ then you may have hit Weird Plugin Startup Crash Bug That We Don't
+ Understand #421.
+</p>
+<p>Check to see if you have the sfftw2 package for your distro installed.
+ The versions of swh-plugins provided by some distros appear to require
+ sfftw2 instead of fftw2 for some reason, but do not specify it as a
+ dependency, resulting in a broken set of plugins.  If you find that
+ installing sfftw2 fixes the problem, you might also want to submit a
+ bug report to the maintainer of your distro's swh-plugins package.
+</p>
+</div><div class="evencontent"><a name="toc16"></a><h4>2.9. &nbsp;I'm having trouble building with Mandrake 8.2</h4>
+
+<p>Aren't we all?  Mandrake 8.2 appears to have a badly broken default
+ development environment.  The necessary tweaks to make your system
+ build Rosegarden correctly are involved and lengthy and probably
+ best left to Mandrake themselves to explain.  All in all if it doesn't
+ work out of the box for you then it's probably best if you just forgot
+ about Mandrake 8.2 altogether and try either 8.1 or a later version.
+</p>
+</div><div class="oddcontent"><a name="toc17"></a><h4>2.10. &nbsp;I'm having trouble with a missing 'gzgets' function</h4>
+
+<p>This is a zlib function normally defined in zlib.h.  We've had reports
+ about this error from people using Slackware or Gentoo.  It turned out
+ that these distribs install more than one version of the zlib header,
+ the older one not having this function.
+</p>
+<p>Our configure script actually checks that you have gzgets in your zlib
+ library, so if the configure succeeds, you definitely have the right
+ version somewhere -- the compiler is just picking up the wrong header.
+ Simply making sure the compiler picks up the right one by either
+ removing the old one or adding a
+ '--with-extra-includes=/the/path/to/the/right/zlib.h' to your
+ ./configure parameters should work.
+</p>
+</div><div class="evencontent"><a name="toc18"></a><h4>2.11. &nbsp;Can't build MidiArts.h</h4>
+
+<p>If the build fails with something like:
+</p><pre>
+  In file included from ArtsDriver.h:30,
+                   from Sequencer.cpp:40:
+                   MidiRecord.h:25:22: MidiArts.h: No such file or directory
+                   make<CODE>2</CODE>: *** <CODE>Sequencer.lo</CODE> Error 1
+</pre>
+<p>then you've come across our aRts build dependency problem.
+ Until we get around to fixing it the workaround is to:
+</p><pre>
+  $ ( cd sound ; make MidiArts.h )
+</pre>
+<p>and then continue with the build as normal.
+</p>
+</div><div class="oddcontent"><a name="toc19"></a><h4>2.12. &nbsp;I'm using RedHat 7.3, what packages do I need?</h4>
+
+<p>This is most often asked by someone who's also using GNOME and hasn't
+ built a KDE application before, in which case the answer is that you
+ need the kdelibs, kdemultimedia and arts packages (yes, you currently
+ need the arts package for trivial reasons even if you aren't building
+ aRts support), plus the -dev versions of all of those.
+</p>
+<p>Note that at the time of writing RedHat don't ship ALSA 0.9.x, so if
+ you want to build on a RedHat system with ALSA support you have to
+ upgrade rather than using the ALSA packages they supply.
+</p>
+</div><div class="evencontent"><a name="toc20"></a><h4>2.13. &nbsp;ladspa.h: No such file or directory</h4>
+
+<p>This is a known build problem that we haven't been able to fix.  You
+ don't have LADSPA installed, so we shouldn't try to compile against
+ it, but we can't get automake to behave, and it's doing the wrong
+ thing.
+</p>
+<p>Your two possible remedies are to configure --with-ladspa=no or to
+ scrounge up a ladspa.h from somewhere.  Many distros have a ladspa
+ package, which will include this header.
+</p>
+</div><div class="oddcontent"><a name="toc21"></a><h3>3. &nbsp;The Composition View</h3>
+
+</div><div class="evencontent"><a name="toc22"></a><h4>3.1. &nbsp;How do I set a loop?</h4>
+
+<p>While holding down Shift and and the left mouse button sweep out a loop
+ region in the ruler at the top or bottom of the main composition window.  
+ The loop icon in the transport will become enabled and playback will 
+ always occur within this loop until you disable it.  You can disable
+ the loop by clicking on the loop icon or shift+left clicking in either
+ loop ruler.
+</p>
+</div><div class="oddcontent"><a name="toc23"></a><h4>3.2. &nbsp;How do I view the track labels?</h4>
+
+<p>On the main window go to Settings-&gt;View Track Labels
+</p>
+</div><div class="evencontent"><a name="toc24"></a><h4>3.3. &nbsp;How do I change the instrument for a track?</h4>
+
+<p>Click and hold the left mouse button on the track/instrument label.
+ A pop-up will appear from which you can choose a new instrument for
+ the track.
+</p>
+</div><div class="oddcontent"><a name="toc25"></a><h3>4. &nbsp;Notation and Matrix editing</h3>
+
+</div><div class="evencontent"><a name="toc26"></a><h4>4.1. &nbsp;Can I get more than one staff at once in the notation editor?</h4>
+
+<p>The <I>Open in Notation Editor</I> option on the main view's <I>Segments</I>
+ menu will open all the currently-selected segments together in a
+ single editor.  So to open them all, first use the <I>Edit</I> menu's
+ <I>Select All Segments</I> option, then this one.  (You can also edit a
+ subset of segments by selecting them with shift-click on the main
+ view, then using <I>Open in Notation Editor</I>.)
+</p>
+</div><div class="oddcontent"><a name="toc27"></a><h4>4.2. &nbsp;How do I do something like a two-staff piano part?</h4>
+
+<p>There are various angles to this question, and there's not (yet) any
+ one perfect answer.
+</p>
+<p>One thing you can't do is make the notation view use more than one
+ staff for a single segment based on the pitches or other properties of
+ the notes (it's a possibility under consideration, but not likely in
+ the near future).  So you have to split the segment onto multiple
+ tracks, and then open a multi-segment notation editor (see the
+ question above this one).
+</p>
+<p>Versions 0.9 and later include a split-by-pitch function (finally!) 
+ which you can use to divide a segment into two parts.
+</p>
+<p>You can also select events within a certain pitch range in the Matrix
+ view: you can shift-click on a key in the piano keyboard to select all
+ the notes of that pitch, and you can shift-click and drag to select a
+ range of pitches.  The notes are added to any existing selection, so
+ if you want a clean new selection, clear any old one first (by
+ clicking in space with the select tool on the matrix or just hitting
+ Esc).
+</p>
+</div><div class="evencontent"><a name="toc28"></a><h4>4.3. &nbsp;Can I edit all the segments at once in the matrix editor?</h4>
+
+<p>No.  A matrix editor shows a single segment only.
+</p>
+</div><div class="oddcontent"><a name="toc29"></a><h4>4.4. &nbsp;Notation rendering is rather slow</h4>
+
+<p>Yes, it can be.  Unlike most other notation applications (including
+ Rosegarden 2.1), we render the full length of each segment to a canvas
+ when the notation editor starts, instead of rendering sections at a
+ time when it scrolls.  This means scrolling should be smooth and quick
+ but the initial rendering phase relatively slow.  This can be a
+ problem for long segments, although for other practical reasons you're
+ probably better off dividing long pieces into more manageable segments
+ anyway.
+</p>
+<p>You can speed things up somewhat by switching to the RG21 font, which
+ doesn't look as nice but is easier to draw (though there's not yet any
+ way to make it the default, so you have to wait until the rendering
+ has happened before you can switch to it -- oops).  You can also make
+ scrolling smoother by switching off the chord-label ruler.
+</p>
+<p>There is a particular problem with Qt 2.3.0 and anti-aliased fonts: if
+ you're using Qt 2.3.0 and have anti-aliased fonts enabled, rendering
+ performance can be dramatically slower than it should be -- even if
+ you aren't actually using any anti-aliased fonts in Rosegarden.  See
+ the Rosegarden-4 README for more details, and consider switching off
+ anti-aliasing or upgrading to Qt 3 (i.e. KDE 3).
+</p>
+</div><div class="evencontent"><a name="toc30"></a><h3>5. &nbsp;Playback and recording</h3>
+
+</div><div class="oddcontent"><a name="toc31"></a><h4>5.1. &nbsp;aRts?  ALSA?  Huh?</h4>
+
+<p>Right, it's like this.  Rosegarden-4 can be built without any sound
+ support ("configure --disable-sound"), with ALSA support (the default
+ configure option), or with aRts support ("configure --with-arts").
+ You have to choose one option when you run configure: you can't
+ currently have more than one compiled in.
+</p>
+<p>ALSA (<A HREF="http://www.alsa-project.org/">http://www.alsa-project.org/</A>) is the standard sound system
+ in Linux 2.5+, and is available for installation on earlier versions
+ of Linux.  (Some distributions also include it as an optional
+ package.)  Rosegarden-4 supports ALSA version 0.9.0 (<I>not</I> 0.5.x),
+ with which it can play to outboard MIDI synths, onboard soundcard MIDI
+ synths, and ALSA soft-synths, and can record from outboard MIDI
+ devices.  Setup is easier than with aRts, at least once ALSA is
+ installed.  For audio support with ALSA, you will also need to obtain
+ and use JACK (<A HREF="http://jackit.sourceforge.net/">http://jackit.sourceforge.net/</A>).
+</p>
+<p>aRts (<A HREF="http://www.arts-project.org/">http://www.arts-project.org/</A>) is the standard KDE sound
+ server.  In theory, it supports audio, MIDI soft synths and outboard
+ MIDI devices.  In practice the only way you're likely to get good
+ performance from Rosegarden using aRts is if you have a small number
+ of outboard hardware MIDI synths and they're all you want to use.
+ aRts will not drive your soundcard's onboard MIDI synth, the standard
+ soft synths sound ghastly, and audio/MIDI synchronisation doesn't work
+ yet.  On the plus side, aRts has a potentially sophisticated
+ soft-synth architecture if you want to develop your own synths, and it
+ may be possible to use it on systems other than Linux.
+</p>
+<p>We strongly recommend you use ALSA unless you already know you prefer
+ aRts or you simply can't get ALSA for your platform.  Every
+ Rosegarden-4 feature that works with aRts also works with ALSA, and
+ then some.
+</p>
+</div><div class="evencontent"><a name="toc32"></a><h4>5.2. &nbsp;My soundcard has no built-in MIDI synth and I have no external MIDI devices.  How can I get sound?</h4>
+
+<p>You need a soft synth!  See the next question.
+</p>
+</div><div class="oddcontent"><a name="toc33"></a><h4>5.3. &nbsp;How do I use an ALSA soft synth, such as iiwusynth or Timidity?</h4>
+
+<p>Well first, here's how to get iiwusynth working with a soundfont.
+ Make sure you have a fairly recent version of iiwusynth (0.2.x rather
+ than 0.0.x) -- see <A HREF="http://www.iiwu.org/iiwusynth/">http://www.iiwu.org/iiwusynth/</A>.  Then find a
+ soundfont: one reasonable GM example is Musica Theoria 2, available as
+ mustheory2.sf2 from the Collections area of
+ <A HREF="http://www.hammersound.net/">http://www.hammersound.net/</A>, although it's large and it's packed
+ using some stupid Windows-only format (common problem -- a few of the
+ soundfonts on there are only zipped, though, so have a look around).
+</p>
+<p>Then run up iiwusynth with
+</p><pre>
+  $ iiwusynth -m alsa_seq ./mustheory2.sf2
+</pre>
+<p>or equivalent for whichever soundfont you want to use.
+</p>
+<p>If you're relatively short on CPU power, also give it "-R no" to turn
+ off reverb and you'll get a bit more polyphony before it breaks up.
+ (If you're <I>very</I> short on CPU power, forget it.)  You may find you
+ have to run it as root or else the pitch goes awry, particularly on
+ laptops with variable-speed CPUs.
+</p>
+<p>And then run Rosegarden, perhaps checking to make sure there
+ are no spare rosegardensequencer processes hanging around from
+ before you started iiwusynth (basically the synth needs to be
+ started before the rosegardensequencer).
+</p>
+<p>Then you should find that one of the devices (16 instruments) is
+ labelled "IIWU Synth", with a GM patch map.  To set a track to one of
+ the soft-synth instruments, click and hold on the track label at the
+ left of the track until the instrument menu appears and select the
+ instrument on there.  (If you have no other MIDI devices at all, then
+ the soft-synth should be the default device.)
+</p>
+<p>You can also use Timidity as an ALSA soft-synth with soundfonts.  Run
+ it in ALSA input mode:
+</p><pre>
+  $ timidity -iA
+</pre>
+<p>In my experience it takes rather more CPU power than iiwusynth for
+ rather lower-quality output, though I'm sure these things vary a lot
+ depending on how the soundfont is made.
+</p>
+</div><div class="evencontent"><a name="toc34"></a><h4>5.4. &nbsp;How do I select an Instrument?</h4>
+
+<p>You can check which Instrument is selected for your Track by making sure
+ that Settings-&gt;Show Track Labels is unchecked.  You can change Instrument
+ for a Track by clicking and holding on the Track/Instrument label.  A
+ pop up menu will appear from which you can select a different output
+ Instrument.  Rosegarden automatically assigns the first available synth
+ device on your soundcard for its default output Instrument when importing
+ MIDI files.
+</p>
+</div><div class="oddcontent"><a name="toc35"></a><h4>5.5. &nbsp;I'm using ALSA and I've selected a synth Instrument but I don't hear any sound</h4>
+
+<p>If you're hearing silence with a Synth device (say "Emuk10k1 Port 0" or
+ "OPL 3") then make sure you've loaded a soundfont for your soundcard.
+ To load soundfonts use the "sfxload" utility.  For example the Creative
+ SBLive! soundcard comes with a set of standard soundfonts (2gmgsmt.sf2,
+ 4gmgsmt.sf2, 8mbgmsfx.sf2) and you can load the 8MB soundfont as follows:
+</p><pre>
+  $ sfxload 8mbgmsfx.sf2
+</pre>
+<p>For more fun with soundfonts including how to create them for yourself
+ have a look at the Smurf/Swami project: <A HREF="http://swami.sourceforge.net/">http://swami.sourceforge.net/</A>.
+</p>
+<p>The other classic problem for new users of ALSA is that the mixer
+ settings are either zero or muted.  Run alsamixer and check that your
+ levels are okay and unmuted.  (Muting is displayed and changed
+ separately from the levels themselves: you can be on 100% but still
+ muted.)
+</p>
+</div><div class="evencontent"><a name="toc36"></a><h4>5.6. &nbsp;I've followed all your instructions but I still don't hear any sound</h4>
+
+<p>If you've done everything we've suggested above then you can check
+ what devices the sequencer is seeing by running the Rosegarden 
+ sequencer up by itself.  Try:
+</p><pre>
+  $ rosegardensequencer
+</pre>
+<p>and examine the output of the screen.  The output for JACK and ALSA
+ for an SBLive! should look something like this:
+</p><pre>
+  rosegardensequencer: created plugin manager
+  MappedAudioPluginManager::discoverPlugins - discovering plugins
+  Rosegarden 4-0.9 - AlsaDriver - alsa-lib version 0.9.3
+  AlsaDriver::jackSampleRate - sample rate changed to 44100
+  AlsaDriver::createJackInputPorts - adding input port 1
+  AlsaDriver::createJackInputPorts - adding input port 2
+  AlsaDriver::createJackInputPorts - getting ports
+  AlsaDriver::createJackInputPorts - found 2 JACK physical inputs
+  AlsaDriver::createJackInputPorts - connecting from "alsa_pcm:capture_1" to "rosegarden:in_1"
+  AlsaDriver::createJackInputPorts - connecting from "alsa_pcm:capture_2" to "rosegarden:in_2"
+  AlsaDriver::initialiseAudio - JACK sample rate = 44100Hz
+  AlsaDriver::initialiseAudio - added output port 1 (left)
+  AlsaDriver::initialiseAudio - added output port 2 (right)
+  AlsaDriver::initialiseAudio - found 2 JACK physical outputs
+  AlsaDriver::initialiseAudio - connecting from "rosegarden:out_1" to "alsa_pcm:playback_1"
+  AlsaDriver::initialiseAudio - connecting from "rosegarden:out_1" to "alsa_pcm:playback_2"
+  AlsaDriver::initialiseAudio - JACK playback latency  0.092879R
+  AlsaDriver::initialiseAudio - JACK record latency  0.046439R
+  AlsaDriver::initialiseAudio - initialised JACK audio subsystem
+
+  ALSA Client information:
+
+    64,0 - (Rawmidi 0 - EMU10K1 MPU-401 (UART), EMU10K1 MPU-401 (UART))                 (DUPLEX) <CODE>ctype 2, ptype 2, cap 127</CODE>
+    65,0 - (Emu10k1 WaveTable, Emu10k1 Port 0)          (WRITE ONLY) <CODE>ctype 2, ptype 2078, cap 66</CODE>
+    65,1 - (Emu10k1 WaveTable, Emu10k1 Port 1)          (WRITE ONLY) <CODE>ctype 2, ptype 2078, cap 66</CODE>
+    65,2 - (Emu10k1 WaveTable, Emu10k1 Port 2)          (WRITE ONLY) <CODE>ctype 2, ptype 2078, cap 66</CODE>
+    65,3 - (Emu10k1 WaveTable, Emu10k1 Port 3)          (WRITE ONLY) <CODE>ctype 2, ptype 2078, cap 66</CODE>
+
+  Creating device 0 in Play mode for connection 65:0 Emu10k1 Port 0 (write)
+  Default device name for this device is MIDI soundcard synth
+  Creating device 1 in Play mode for connection 65:1 Emu10k1 Port 1 (write)
+  Default device name for this device is MIDI soundcard synth 2
+  Creating device 2 in Play mode for connection 65:2 Emu10k1 Port 2 (write)
+  Default device name for this device is MIDI soundcard synth 3
+  Creating device 3 in Play mode for connection 65:3 Emu10k1 Port 3 (write)
+  Default device name for this device is MIDI soundcard synth 4
+  Creating device 4 in Play mode for connection 64:0 Rawmidi 0 - EMU10K1 MPU-401 (UART) (duplex)
+  Default device name for this device is MIDI external device
+  Creating device 5 in Record mode for connection 64:0 Rawmidi 0 - EMU10K1 MPU-401 (UART) (duplex)
+  Default device name for this device is MIDI hardware input device
+  Record client set to (64, 0)
+
+  AlsaDriver::initialiseMidi -  initialised MIDI subsystem
+
+  rosegardensequencer: RosegardenSequencer - started OK
+</pre>
+<p>Note the ALSA device list shows the external MIDI port and the
+ wavetable on-board synth devices.  If you're using a soft synth, you
+ should see it here too.  All of these will be available in the
+ drop-down Instrument list inside Rosegarden.
+</p>
+<p>If you're using a recent version of Rosegarden-4 (0.9 or greater) then
+ you can also access this sequencer status information by using the
+ application itself.  Go to:
+</p><pre>
+  Settings-&gt;Configure Rosegarden-&gt;Sequencer-&gt;General-&gt;Show detailed status
+</pre>
+</div><div class="oddcontent"><a name="toc37"></a><h4>5.7. &nbsp;Playback is only happening once every second</h4>
+
+<p>When built with optimisation using the gcc-3.3-pre compiler included
+ with SuSE 8.2, Rosegarden-4 0.9.1 and earlier will incorrectly play
+ all notes on one-second boundaries -- all notes happening during a
+ second are played at once at the end of the second.  (More recent
+ versions of Rosegarden will play correctly, but the transport window
+ will still only update once per second.)
+</p>
+<p>To fix this, configure with
+</p><pre>
+  $ CXXFLAGS='-O0' ./configure
+</pre>
+<p>to disable optimisation (a pity, but that's life).
+</p>
+<p>Note that this also affects the Rosegarden-4 0.8.5 package shipped
+ included with the distribution itself.  Obviously nobody actually
+ tested it.  (They also forgot to include the help file, icon etc --
+ it's not a very well-made package.)
+</p>
+</div><div class="evencontent"><a name="toc38"></a><h4>5.8. &nbsp;What if I see Rosegarden itself in the client list when I start the sequencer?</h4>
+
+<p>Then you've probably got an old version of rosegardensequencer hanging
+ around.  That can happen when Rosegarden exits abnormally or perhaps
+ when there was a problem with the JACK server.  If you're having problems
+ getting Rosegarden to play or record then close it down (and JACK too if
+ you're running it) and look for any instances of rosegarden,
+ rosegardensequencer or lt-rosegardensequencer in the process table.
+</p><pre>
+  $ ps -ef|grep rosegarden
+</pre>
+<p>Kill any instances of rosegarden, rosegardensequencer or lt-rosegardensequencer
+ that are still hanging around and try to restart Rosegarden.
+</p>
+</div><div class="oddcontent"><a name="toc39"></a><h4>5.9. &nbsp;How do I get audio to work?</h4>
+
+<p>If you're using ALSA, then you need to obtain and install JACK
+ (<A HREF="http://jackit.sourceforge.net/">http://jackit.sourceforge.net/</A>) and run jackd before starting
+ the Rosegarden sequencer.  If you give jackd the -v option, it will
+ report when Rosegarden succeeds in connecting to it.
+</p>
+<p>Unfortunately getting the right combination of magic incantations to
+ make JACK work is not always easy.  Good values for an SBLive and
+ indeed on the built-in via868 on my Acer laptop as follows:
+</p><pre>
+  $ jackd -d alsa -d hw -r 44100 -p 2048 -n 2
+</pre>
+<p>This will usually ensure that I don't get any xruns (JACK being
+ unable to process audio in time) and provide reasonable latency.
+ The '-r 44100' option sets the sample rate for the JACK server
+ which will in turn define the rate at which WAV audio files will
+ be recorded.  This is important if you want to transfer any of
+ the WAVs directly to CD - 44100Hz (44.1KHz) is the sample rate
+ that audio CDs work at.
+</p>
+</div><div class="evencontent"><a name="toc40"></a><h4>5.10. &nbsp;Why are the program names wrong in my MIDI file?</h4>
+
+<p>Rosegarden uses a Studio layer to map your MIDI file's Program Change
+ information into meaningful instrument labels.  The default Studio has
+ support for General Midi (GM) patch names.  If you want the Program
+ Change numbers to map to a different, non-GM device (a different
+ soundcard or synth) then you can do this mapping in the Bank Editor
+ dialog (Studio-&gt;Manage Banks and Programs).  Once you've made changes
+ in your current Rosegarden file you can save it off and replace your
+ autoload.rg file so that all your subsequent sessions in Rosegarden
+ utilise your specialised Studio settings.
+</p>
+<p>It will eventually be possible to share and merge these sections of
+ the Studio so that new users won't have to manually replicate the
+ work to create these patch files.  It is hoped that Studio library
+ will then allow new users to quickly create their own particular
+ Studio device settings with the minimum of work on their part.
+</p>
+</div><div class="oddcontent"><a name="toc41"></a><h3>6. &nbsp;Improving Performance</h3>
+
+</div><div class="evencontent"><a name="toc42"></a><h4>6.1. &nbsp;I get drop outs or xruns with JACK.  How do I improve performance?</h4>
+
+<p>The short answer to this is with care and with some luck.  There are
+ various recipes for improving JACK performance.  Some are more labour
+ intensive than others.  Ask on the rosegarden-user and rosegarden-devel
+ lists for the latest advice and also keep an eye on jackit-devel for
+ more JACK tips.
+</p>
+
+</div>
+
+    </div>
+
+  </body>
+</html> 
+
