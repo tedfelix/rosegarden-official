@@ -287,17 +287,17 @@ void RosegardenGUIApp::setupActions()
                               actionCollection(), "join");
     action->setExclusiveGroup("segmenttools");
 
-    new KAction(i18n("Add Tracks..."), 
+    new KAction(i18n("&Add Tracks..."), 
                 0,
                 this, SLOT(slotAddTracks()),
                 actionCollection(), "add_tracks");
 
-    new KAction(i18n("Select Next Track"),
+    new KAction(i18n("Select &Next Track"),
                 Key_Down, 
                 this, SLOT(slotTrackDown()),
                 actionCollection(), "select_next_track");
 
-    new KAction(i18n("Select Previous Track"),
+    new KAction(i18n("Select &Previous Track"),
                 Key_Up, 
                 this, SLOT(slotTrackUp()),
                 actionCollection(), "select_previous_track");
