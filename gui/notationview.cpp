@@ -145,7 +145,8 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     m_vlayout(0),
     m_currentSelectedNoteIsRest(false),
     m_currentSelectedNoteType(Note::QuarterNote),
-    m_currentSelectedNoteDotted(false)
+    m_currentSelectedNoteDotted(false),
+    m_selectDefaultNote(0)
 {
 
     kdDebug(KDEBUG_AREA) << "NotationView ctor" << endl;
@@ -200,7 +201,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
         KMessageBox::sorry(0, "Couldn't apply layout");
     }
 
-    slotQuarter();
+    m_selectDefaultNote->activate();
 }
 
 NotationView::~NotationView()
@@ -287,6 +288,8 @@ NotationView::setupActions()
                                   SLOT(slotQuarter()),
                                   actionCollection(), "quarter" );
     noteAction->setExclusiveGroup("notes");
+
+    m_selectDefaultNote = noteAction; // quarter is the default selected note
 
     // 8th
     icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap

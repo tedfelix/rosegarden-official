@@ -240,6 +240,8 @@ protected:
     bool m_currentSelectedNoteIsRest;
     Rosegarden::Note::Type m_currentSelectedNoteType;
     bool m_currentSelectedNoteDotted;
+
+    KAction* m_selectDefaultNote;
 };
 
 #endif
