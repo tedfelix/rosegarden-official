@@ -151,11 +151,16 @@ about Mandrake 8.2 altogether and try either 8.1 or a later version.
 I'm having trouble with a missing 'gzgets' function
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This is a zlib function normally defined in zlib.h. We've had reports
-about this error from people using Slackware or Gentoo. It turned out
-that these distribs install two versions of zlib, the older one not
-having this function. Simply making sure the compiler picks up the
-right one by either removing the old one or adding a
+This is a zlib function normally defined in zlib.h.  We've had reports
+about this error from people using Slackware or Gentoo.  It turned out
+that these distribs install more than one version of the zlib header,
+the older one not having this function.
+
+Our configure script actually checks that you have gzgets in your zlib
+library, so if the configure succeeds, you definitely have the right
+version somewhere -- the compiler is just picking up the wrong header.
+Simply making sure the compiler picks up the right one by either
+removing the old one or adding a
 '--with-extra-includes=/the/path/to/the/right/zlib.h' to your
 ./configure parameters should work.
 
