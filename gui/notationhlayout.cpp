@@ -246,7 +246,7 @@ NotationHLayout::legatoQuantize(Segment &segment)
 	    int ucount = (*i)->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT);
 	    assert(tcount != 0);
 
-	    //!!! shouldn't this be "/ ucount * tcount" ?
+	    // nominal duration is longer than actual (sounding) duration
 	    timeT nominalDuration = ((*i)->getDuration() / tcount) * ucount;
 
 	    duration = m_legatoQuantizer->quantizeDuration(nominalDuration);

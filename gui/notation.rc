@@ -107,7 +107,7 @@
   <Action name="tie_notes"/>
   <Action name="untie_notes"/>
   <Action name="make_notes_viable"/>
-  <Action name="normalize_counterpoint"/>
+  <Action name="de_counterpoint"/>
   <Separator/>
   <Action name="quantize"/>
   <Action name="fix_smoothing"/>

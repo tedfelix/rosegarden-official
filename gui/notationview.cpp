@@ -1142,9 +1142,9 @@ void NotationView::setupActions()
 		SLOT(slotTransformsMakeNotesViable()), actionCollection(),
 		"make_notes_viable");
 
-    new KAction(i18n(TransformsMenuNormalizeCounterpointCommand::getGlobalName()), 0, this,
-		SLOT(slotTransformsNormalizeCounterpoint()), actionCollection(),
-		"normalize_counterpoint");
+    new KAction(i18n(TransformsMenuDeCounterpointCommand::getGlobalName()), 0, this,
+		SLOT(slotTransformsDeCounterpoint()), actionCollection(),
+		"de_counterpoint");
 
     new KAction(i18n(TransformsMenuChangeStemsCommand::getGlobalName(true)), 0,Key_Up + CTRL, this,
                 SLOT(slotTransformsStemsUp()), actionCollection(),

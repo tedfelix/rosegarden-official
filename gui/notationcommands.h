@@ -417,14 +417,14 @@ private:
 };
      
 
-class TransformsMenuNormalizeCounterpointCommand : public BasicSelectionCommand
+class TransformsMenuDeCounterpointCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuNormalizeCounterpointCommand(Rosegarden::EventSelection &selection) :
+    TransformsMenuDeCounterpointCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection) { }
 
-    static QString getGlobalName() { return "Normalize &Counterpoint"; }
+    static QString getGlobalName() { return "De-&Counterpoint"; }
 
 protected:
     virtual void modifySegment();

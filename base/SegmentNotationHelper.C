@@ -547,7 +547,6 @@ SegmentNotationHelper::makeNoteViable(iterator i, bool splitAtBars)
 
     // Behaviour differs from TimeSignature::getDurationListForInterval
 
-
     timeT acc = 0;
     timeT required = (*i)->getDuration();
 
@@ -563,6 +562,8 @@ SegmentNotationHelper::makeNoteViable(iterator i, bool splitAtBars)
         else dl.push_back(component);
         acc += component;
     }
+
+    if (acc == required) return i; // event is already of the correct duration
     
     Event *e = new Event(*(*i));
 

@@ -709,12 +709,66 @@ TransformsMenuMakeNotesViableCommand::modifySegment()
 
 	i = j;
     }
+
+// oh no, shouldn't be necessary
+//    segment.normalizeRests
+//	(m_selection->getStartTime(), m_selection->getEndTime());
 }
 
 void
-TransformsMenuNormalizeCounterpointCommand::modifySegment()
+TransformsMenuDeCounterpointCommand::modifySegment()
 {
-    assert(0); //!!! implement
+    // How this should work: scan through the selection and, for each
+    // note "n" found, if the next following note "m" not at the same
+    // absolute time as n starts before n ends, then split n at m-n.
+
+    // Is it reasonable to impose that m should also be in the
+    // selection?  Probably.
+
+    Segment &segment(getSegment());
+    SegmentNotationHelper helper(segment);
+
+    //!!! move to SegmentNotationHelper?
+
+    for (EventSelection::eventcontainer::iterator i =
+	     m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ) {
+
+	// again, we have to use the j-iterator trick to increment i
+	// (which will have been erased by a split).
+
+	EventSelection::eventcontainer::iterator j = i;
+	++j;
+
+	Segment::iterator si = segment.findSingle(*i);
+	Segment::iterator sj = si;
+	if (si == segment.end()) { // shouldn't happen, but
+	    i = j;
+	    continue;
+	}
+	timeT ti = (*si)->getAbsoluteTime();
+
+	// find next note at a different time but also in selection
+	while (sj != segment.end() &&
+	       ((*sj)->getAbsoluteTime() == ti ||
+		!m_selection->contains(*sj))) ++sj;
+
+	if (sj == segment.end()) break; // no split, no more notes
+	timeT tj = (*sj)->getAbsoluteTime();
+
+	if (tj - ti < (*si)->getDuration()) {
+	    // split
+	    Event *e1 = new Event(**si, ti, tj - ti);
+	    Event *e2 = new Event(**si, tj, (*si)->getDuration() - (tj - ti));
+	    e1->set<Bool>(TIED_FORWARD, true);
+	    e2->set<Bool>(TIED_BACKWARD, true);
+	    segment.insert(e1);
+	    segment.insert(e2);
+	    segment.erase(si);
+	}
+
+	i = j;
+    }
 }
 
 

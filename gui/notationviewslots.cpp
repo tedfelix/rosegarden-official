@@ -912,12 +912,12 @@ void NotationView::slotTransformsMakeNotesViable()
                         (*m_currentEventSelection));
 }
 
-void NotationView::slotTransformsNormalizeCounterpoint()
+void NotationView::slotTransformsDeCounterpoint()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Normalizing counterpoint..."), this);
+    KTmpStatusMsg msg(i18n("Removing counterpoint..."), this);
 
-    addCommandToHistory(new TransformsMenuNormalizeCounterpointCommand
+    addCommandToHistory(new TransformsMenuDeCounterpointCommand
                         (*m_currentEventSelection));
 }
 
