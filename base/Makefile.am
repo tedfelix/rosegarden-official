@@ -20,6 +20,7 @@ libbase_la_SOURCES = AnalysisTypes.C \
 		     Quantizer.C \
 		     RealTime.C \
 		     Segment.C \
+		     SegmentMatrixHelper.C \
 		     SegmentNotationHelper.C \
 		     SegmentPerformanceHelper.C \
                      Track.C \
