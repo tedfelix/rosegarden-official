@@ -41,7 +41,7 @@ class StaffRuler;
 class PositionCursor;
 class ActiveItem;
 class BasicCommand;
-class KCommandHistory;
+class MultiViewCommandHistory;
 
 /**
  * NotationView is a view for one or more Staff objects, each of
@@ -131,19 +131,17 @@ public:
     int findClosestStaff(double y);
 
     /**
-     * redo the layout after something changes.  default is all staffs
+     * redo the layout of any affected views after something changes.
+     * default is all staffs
      */
-    void redoLayout(int staffNo = -1, Rosegarden::timeT startTime = 0,
-                    Rosegarden::timeT endTime = -1); // -1 => end of staff
+    static void redoLayout(Rosegarden::Segment *segment = 0,
+			   Rosegarden::timeT startTime = 0,
+			   Rosegarden::timeT endTime = -1); // -1 => end
 
     /**
-     * redo the layout after an editing command.  default is all staffs
+     * get the document's global command history
      */
-    void redoLayout(BasicCommand *command,
-		    int staffNo = -1, Rosegarden::timeT startTime = 0,
-                    Rosegarden::timeT endTime = -1); // -1 => end of staff
-
-    KCommandHistory *getCommandHistory() { return m_commandHistory; }
+    MultiViewCommandHistory *getCommandHistory();
 
 
 public slots:
@@ -543,19 +541,12 @@ protected:
 
     KAction* m_selectDefaultNote;
 
-    //!!! This should probably be global to a composition
-    //(rosegardenguiview, I guess) rather than specific to a
-    //notationview -- but it's easier to test like this, and besides,
-    //I'm not sure what the structure should be
-    KCommandHistory *m_commandHistory;
-
     QCanvasLine *m_pointer;
 
     typedef std::set<NotationView *> NotationViewSet;
     static NotationViewSet m_viewsExtant;
 
-    void redoLayoutAdvised(BasicCommand *,
-			   Rosegarden::Segment *segment,
+    void redoLayoutAdvised(Rosegarden::Segment *segment,
 			   Rosegarden::timeT startTime,
 			   Rosegarden::timeT endTime); // -1 => end of staff
 };

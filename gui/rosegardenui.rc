@@ -8,21 +8,24 @@
     <Action name="file_export_midi" append="new_merge" />
     <Action name="file_import_rg21" append="new_merge" />
   </Menu>
+  <Menu name="View">
+	<text>&amp;View</text>
+	<Action name="edit_all_tracks"/>
+  </Menu>
   <Menu name="Tracks">
-	<text>&amp;Tracks</text>
+	<text>&amp;Tools</text>
 	<Action name="move"/>
 	<Action name="draw"/>
 	<Action name="erase"/>
 	<Action name="resize"/>
-	<Action name="change_time_res"/>
-	<Action name="edit_all_tracks"/>
   </Menu>
-  <Menu name="T&amp;ransport">
-        <text>Transport</text>
+  <Menu name="Transport">
+        <text>T&amp;ransport</text>
         <Action name="play"/> 
         <Action name="stop"/> 
         <Action name="fast_forward"/> 
         <Action name="rewind"/> 
+	<Action name="change_time_res"/>
   </Menu>
   <Menu  name="settings"><text>&amp;Settings</text>
          <Action name="show_tracks_toolbar" append="show_merge" />

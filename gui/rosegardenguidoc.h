@@ -33,6 +33,7 @@
 #include <qxml.h>
 
 #include "Composition.h"
+#include "multiviewcommandhistory.h"
 
 // forward declaration of the RosegardenGUI classes
 class RosegardenGUIView;
@@ -146,6 +147,13 @@ public:
     const QString &getTitle() const;
 
     /**
+     * returns the global command history
+     */
+    MultiViewCommandHistory *getCommandHistory() {
+	return &m_commandHistory;
+    }
+
+    /**
      * deletes the document views
      */
     void deleteViews();
@@ -213,6 +221,7 @@ private:
      */
     Rosegarden::Composition m_composition;
 
+    MultiViewCommandHistory m_commandHistory;
 };
 
 #endif // ROSEGARDENGUIDOC_H

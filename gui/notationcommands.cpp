@@ -29,16 +29,17 @@ using Rosegarden::Segment;
 using Rosegarden::SegmentNotationHelper;
 using Rosegarden::Event;
 using Rosegarden::timeT;
+using Rosegarden::Note;
+using Rosegarden::Accidental;
+using Rosegarden::NoAccidental;
 
 using std::cerr;
 using std::endl;
 
 
-BasicCommand::BasicCommand(const QString &name,
-			   NotationView *view, Segment &segment,
+BasicCommand::BasicCommand(const QString &name, Segment &segment,
 			   timeT begin, timeT end) :
     KCommand(name),
-    m_view(view),
     m_segment(segment),
     m_savedEvents(begin),
     m_endTime(end)
@@ -60,18 +61,17 @@ BasicCommand::beginExecute()
 	m_savedEvents.insert(new Event(**i));
     }
 
-    m_view->getDocument()->setModified();
+    //!!! handle through command history stuff
+//    m_view->getDocument()->setModified();
 }
 
 void
 BasicCommand::finishExecute()
 {
-    //!!! We're still missing the equivalent of "emit usedSelection()"
-    // from here
-
-    m_view->redoLayout(this, m_view->getStaff(m_segment)->getId(),
-		       m_savedEvents.getStartIndex(),
-		       getRelayoutEndTime());
+    //!!! we could do this a lot more elegantly with a signal
+    NotationView::redoLayout(&m_segment,
+			     m_savedEvents.getStartIndex(),
+			     getRelayoutEndTime());
 }
 
 void
@@ -105,10 +105,8 @@ BasicCommand::unexecute()
 }
     
 BasicSelectionCommand::BasicSelectionCommand(const QString &name,
-					     NotationView *view,
 					     EventSelection &selection) :
     BasicCommand(name,
-		 view,
 		 selection.getSegment(),
 		 selection.getBeginTime(),
 		 selection.getEndTime())
@@ -121,3 +119,52 @@ BasicSelectionCommand::~BasicSelectionCommand()
     // nothing
 }
 
+
+NoteInsertionCommand::NoteInsertionCommand(const QString &name,
+					   Segment &segment, timeT time,
+                                           timeT endTime, Note note, int pitch,
+                                           Accidental accidental) :
+    BasicCommand(name, segment, time, endTime),
+    m_note(note),
+    m_pitch(pitch),
+    m_accidental(accidental),
+    m_lastInsertedEvent(0)
+{
+    // nothing
+}
+
+NoteInsertionCommand::~NoteInsertionCommand()
+{
+    // nothing
+}
+
+void
+NoteInsertionCommand::modifySegment(SegmentNotationHelper &helper)
+{
+    Segment::iterator i =
+        helper.insertNote(getBeginTime(), m_note, m_pitch, m_accidental);
+    if (i != helper.segment().end()) m_lastInsertedEvent = *i;
+}
+
+
+RestInsertionCommand::RestInsertionCommand(const QString &name,
+					   Segment &segment, timeT time,
+                                           timeT endTime, Note note) :
+    NoteInsertionCommand(name, segment, time, endTime,
+                         note, 0, NoAccidental)
+{
+    // nothing
+}
+
+RestInsertionCommand::~RestInsertionCommand()
+{
+    // nothing
+}
+
+void
+RestInsertionCommand::modifySegment(SegmentNotationHelper &helper)
+{
+    Segment::iterator i =
+        helper.insertRest(getBeginTime(), m_note);
+    if (i != helper.segment().end()) m_lastInsertedEvent = *i;
+}

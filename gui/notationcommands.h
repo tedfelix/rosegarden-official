@@ -26,16 +26,18 @@
 #include <kcommand.h>
 #include <klocale.h>
 
-class NotationView;
 class EventSelection;
 
-// Implementation of Command that handles undo on a single Segment by
-// brute-force (saving the affected area of the Segment and then
-// restoring it if necessary).  This class implements execute() and
-// unexecute(); you should normally put the code you would otherwise
-// have put in execute() into modifySegment() instead, although you
-// can choose to override execute() so long as you call beginExecute()
-// at the start of your implementation and finishExecute() at the end.
+/**
+ * Command that handles undo on a single Segment by brute-force,
+ * saving the affected area of the Segment before the execute() and
+ * then restoring it on unexecute().  Subclass this with your own
+ * implementation.
+ *
+ * This class implements execute() and unexecute(); in order to create
+ * a working subclass, you should normally put the code you would
+ * otherwise have put in execute() into modifySegment().
+ */
 
 class BasicCommand : public KCommand
 {
@@ -52,10 +54,8 @@ public:
     Rosegarden::timeT getEndTime() { return m_endTime; }
     virtual Rosegarden::timeT getRelayoutEndTime() { return getEndTime(); }
 
-    NotationView *getView() { return m_view; }
-
 protected:
-    BasicCommand(const QString &name, NotationView *view,
+    BasicCommand(const QString &name,
 		 Rosegarden::Segment &segment,
 		 Rosegarden::timeT begin, Rosegarden::timeT end);
 
@@ -66,14 +66,16 @@ protected:
 
 private:
     void deleteSavedEvents();
-    NotationView *m_view;
     Rosegarden::Segment &m_segment;
     Rosegarden::Segment m_savedEvents;
     Rosegarden::timeT m_endTime;
 };
 
-// Implementation of Command that handles undo and redo by
-// brute-force, based on the extents of an EventSelection
+
+/**
+ * Subclass of BasicCommand that manages the brute-force undo and redo
+ * extends based on a given selection.
+ */
 
 class BasicSelectionCommand : public BasicCommand
 {
@@ -81,16 +83,58 @@ public:
     virtual ~BasicSelectionCommand();
 
 protected:
-    BasicSelectionCommand(const QString &name, NotationView *view,
-			  EventSelection &selection);
+    BasicSelectionCommand(const QString &name, EventSelection &selection);
 };
+
+
+// Insertion commands
+
+class NoteInsertionCommand : public BasicCommand
+{
+public:
+    NoteInsertionCommand(const QString &name,
+			 Rosegarden::Segment &segment,
+			 Rosegarden::timeT time,
+			 Rosegarden::timeT endTime,
+			 Rosegarden::Note note,
+			 int pitch,
+			 Rosegarden::Accidental accidental);
+    virtual ~NoteInsertionCommand();
+
+    Rosegarden::Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
+
+protected:
+    virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
+
+    Rosegarden::Note m_note;
+    int m_pitch;
+    Rosegarden::Accidental m_accidental;
+    Rosegarden::Event *m_lastInsertedEvent;
+};
+
+class RestInsertionCommand : public NoteInsertionCommand
+{
+public:
+    RestInsertionCommand(const QString &name,
+			 Rosegarden::Segment &segment,
+			 Rosegarden::timeT time,
+			 Rosegarden::timeT endTime,
+			 Rosegarden::Note note);
+    virtual ~RestInsertionCommand();
+
+protected:
+    virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
+};
+
+
+// Group menu commands
 
 
 class GroupMenuBeamCommand : public BasicSelectionCommand
 {
 public:
-    GroupMenuBeamCommand(NotationView *view, EventSelection &selection) :
-	BasicSelectionCommand(name(), view, selection) { }
+    GroupMenuBeamCommand(EventSelection &selection) :
+	BasicSelectionCommand(name(), selection) { }
     virtual ~GroupMenuBeamCommand() { }
 
     static QString name() { return i18n("Beam Group"); }
@@ -106,8 +150,8 @@ protected:
 class GroupMenuAutoBeamCommand : public BasicSelectionCommand
 {
 public:
-    GroupMenuAutoBeamCommand(NotationView *view, EventSelection &selection) :
-	BasicSelectionCommand(name(), view, selection) { }
+    GroupMenuAutoBeamCommand(EventSelection &selection) :
+	BasicSelectionCommand(name(), selection) { }
     virtual ~GroupMenuAutoBeamCommand() { }
 
     static QString name() { return i18n("Auto-Beam Group"); }
@@ -123,8 +167,8 @@ protected:
 class GroupMenuBreakCommand : public BasicSelectionCommand
 {
 public:
-    GroupMenuBreakCommand(NotationView *view, EventSelection &selection) :
-	BasicSelectionCommand(name(), view, selection) { }
+    GroupMenuBreakCommand(EventSelection &selection) :
+	BasicSelectionCommand(name(), selection) { }
     virtual ~GroupMenuBreakCommand() { }
 
     static QString name() { return i18n("Break Group"); }
@@ -136,12 +180,15 @@ protected:
 };
 
 
+
+// Transforms menu commands
+
+
 class TransformsMenuNormalizeRestsCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuNormalizeRestsCommand(NotationView *view,
-					EventSelection &selection) :
-	BasicSelectionCommand(name(), view, selection) { }
+    TransformsMenuNormalizeRestsCommand(EventSelection &selection) :
+	BasicSelectionCommand(name(), selection) { }
     virtual ~TransformsMenuNormalizeRestsCommand() { }
 
     static QString name() { return i18n("Normalize Rests"); }
@@ -156,9 +203,8 @@ protected:
 class TransformsMenuCollapseRestsCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuCollapseRestsCommand(NotationView *view,
-					EventSelection &selection) :
-	BasicSelectionCommand(name(), view, selection) { }
+    TransformsMenuCollapseRestsCommand(EventSelection &selection) :
+	BasicSelectionCommand(name(), selection) { }
     virtual ~TransformsMenuCollapseRestsCommand() { }
 
     static QString name() { return i18n("Collapse Rests Aggressively"); }

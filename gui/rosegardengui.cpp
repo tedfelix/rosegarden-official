@@ -290,11 +290,10 @@ void RosegardenGUIApp::setupActions()
 
 void RosegardenGUIApp::initStatusBar()
 {
-    ///////////////////////////////////////////////////////////////////
-    // STATUSBAR
-    // TODO: add your own items you need for displaying current
-    // application status.
-    statusBar()->insertItem(KTmpStatusMsg::getDefaultMsg(), KTmpStatusMsg::getDefaultId());
+    statusBar()->insertItem(KTmpStatusMsg::getDefaultMsg(),
+			    KTmpStatusMsg::getDefaultId(), 1);
+    statusBar()->setItemAlignment(KTmpStatusMsg::getDefaultId(), 
+				  AlignLeft | AlignVCenter);
 }
 
 void RosegardenGUIApp::initDocument()

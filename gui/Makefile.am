@@ -6,6 +6,7 @@ rosegarden_SOURCES = \
 	eventselection.cpp \
 	ktmpstatusmsg.cpp \
 	main.cpp \
+	multiviewcommandhistory.cpp \
 	notationcanvasview.cpp \
 	notationcommands.cpp \
 	notationelement.cpp \

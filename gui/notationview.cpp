@@ -56,6 +56,7 @@
 #include "staffline.h"
 #include "staffruler.h"
 #include "notationcommands.h"
+#include "multiviewcommandhistory.h"
 
 using Rosegarden::Event;
 using Rosegarden::Int;
@@ -200,6 +201,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
 NotationView::~NotationView()
 {
     m_viewsExtant.erase(this);
+    getCommandHistory()->detachView(actionCollection());
 
     kdDebug(KDEBUG_AREA) << "-> ~NotationView()\n";
 
@@ -436,8 +438,7 @@ void NotationView::setupActions()
     KStdAction::close (this, SLOT(closeWindow()),          actionCollection());
 
     // setup edit menu
-
-    m_commandHistory = new KCommandHistory(actionCollection());
+    getCommandHistory()->attachView(actionCollection());
 
 //    KStdAction::undo    (this, SLOT(slotEditUndo()),       actionCollection());
 //    KStdAction::redo    (this, SLOT(slotEditRedo()),       actionCollection());
@@ -618,7 +619,6 @@ void NotationView::initFontToolbar(int legatoUnit)
 void NotationView::initStatusBar()
 {
     KStatusBar* sb = statusBar();
-    //QHBox *box = new QHBox(sb);
     
     m_currentNotePixmap       = new QLabel(sb);
     m_hoveredOverNoteName     = new QLabel(sb);
@@ -628,20 +628,21 @@ void NotationView::initStatusBar()
     m_hoveredOverNoteName->setMinimumWidth(32);
     m_hoveredOverAbsoluteTime->setMinimumWidth(80);
 
-    //m_currentNotePixmap->setFrameStyle(QFrame::NoFrame);
-    //m_hoveredOverNoteName->setFrameStyle(QFrame::NoFrame);
-    //m_hoveredOverAbsoluteTime->setFrameStyle(QFrame::NoFrame);
-
     sb->addWidget(m_hoveredOverAbsoluteTime);
     sb->addWidget(m_hoveredOverNoteName);
     sb->addWidget(m_currentNotePixmap);
-    //sb->addWidget(box);
 
     sb->insertItem(KTmpStatusMsg::getDefaultMsg(),
                    KTmpStatusMsg::getDefaultId(), 1);
-    sb->setItemAlignment(KTmpStatusMsg::getDefaultId(), AlignLeft);
+    sb->setItemAlignment(KTmpStatusMsg::getDefaultId(), 
+			 AlignLeft | AlignVCenter);
 }
 
+MultiViewCommandHistory *
+NotationView::getCommandHistory()
+{
+    return getDocument()->getCommandHistory();
+}
 
 //!!! This should probably be unnecessary here and done in
 //NotationStaff instead (it should be intelligent enough to query the
@@ -970,7 +971,7 @@ void NotationView::slotEditCut()
 
     emit usedSelection();
 
-    redoLayout(getStaff(m_currentEventSelection->getSegment())->getId(),
+    redoLayout(&m_currentEventSelection->getSegment(),
                m_currentEventSelection->getBeginTime(),
                m_currentEventSelection->getEndTime());
 
@@ -1022,7 +1023,7 @@ void NotationView::slotEditPaste()
 
     if (m_currentEventSelection->pasteToSegment(segment, time)) {
 
-        redoLayout(staffNo,
+        redoLayout(&segment,
                    0,
                    time + m_currentEventSelection->getTotalDuration() + 1);
 
@@ -1100,8 +1101,8 @@ void NotationView::slotGroupBeam()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Beaming group..."), statusBar());
 
-    m_commandHistory->addCommand(new GroupMenuBeamCommand
-				 (this, *m_currentEventSelection));
+    getCommandHistory()->addCommand(new GroupMenuBeamCommand
+				    (*m_currentEventSelection));
 }
 
 void NotationView::slotGroupAutoBeam()
@@ -1109,8 +1110,8 @@ void NotationView::slotGroupAutoBeam()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Auto-beaming selection..."), statusBar());
 
-    m_commandHistory->addCommand(new GroupMenuAutoBeamCommand
-				 (this, *m_currentEventSelection));
+    getCommandHistory()->addCommand(new GroupMenuAutoBeamCommand
+				    (*m_currentEventSelection));
 }
 
 void NotationView::slotGroupBreak()
@@ -1118,8 +1119,8 @@ void NotationView::slotGroupBreak()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Breaking groups..."), statusBar());
 
-    m_commandHistory->addCommand(new GroupMenuBreakCommand
-				 (this, *m_currentEventSelection));
+    getCommandHistory()->addCommand(new GroupMenuBreakCommand
+				    (*m_currentEventSelection));
 }
 
  
@@ -1132,8 +1133,8 @@ void NotationView::slotTransformsNormalizeRests()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Normalizing rests..."), statusBar());
 
-    m_commandHistory->addCommand(new TransformsMenuNormalizeRestsCommand
-				 (this, *m_currentEventSelection));
+    getCommandHistory()->addCommand(new TransformsMenuNormalizeRestsCommand
+				    (*m_currentEventSelection));
 }
 
 void NotationView::slotTransformsCollapseRests()
@@ -1143,8 +1144,8 @@ void NotationView::slotTransformsCollapseRests()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Collapsing rests..."), statusBar());
 
-    m_commandHistory->addCommand(new TransformsMenuCollapseRestsCommand
-				 (this, *m_currentEventSelection));
+    getCommandHistory()->addCommand(new TransformsMenuCollapseRestsCommand
+				    (*m_currentEventSelection));
 }
   
 
@@ -1631,35 +1632,19 @@ NotationView::findClosestNote(double eventX, Event *&timeSignature,
 }
 
 
-void NotationView::redoLayout(int staffNo, timeT startTime, timeT endTime)
+void NotationView::redoLayout(Segment *segment, timeT startTime, timeT endTime)
 {
-    Segment *segment = 0;
-    if (staffNo >= 0) segment = &m_staffs[staffNo]->getSegment();
     for (NotationViewSet::iterator i = m_viewsExtant.begin();
          i != m_viewsExtant.end(); ++i) {
-        (*i)->redoLayoutAdvised(0, segment, startTime, endTime);
+        (*i)->redoLayoutAdvised(segment, startTime, endTime);
     }
 }
 
-void NotationView::redoLayout(BasicCommand *command,
-			      int staffNo, timeT startTime, timeT endTime)
-{
-    Segment *segment = 0;
-    if (staffNo >= 0) segment = &m_staffs[staffNo]->getSegment();
-    for (NotationViewSet::iterator i = m_viewsExtant.begin();
-         i != m_viewsExtant.end(); ++i) {
-        (*i)->redoLayoutAdvised(command, segment, startTime, endTime);
-    }
-}
 
-void NotationView::redoLayoutAdvised(BasicCommand *command,
-				     Segment *segment,
+void NotationView::redoLayoutAdvised(Segment *segment,
 				     timeT startTime, timeT endTime)
 {
-    if (command && (command->getView() != this)) {
-	m_commandHistory->addCommand(command, false);
-    }
-
+    emit usedSelection(); //!!! hardly right
     if (segment == 0) applyLayout();
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
