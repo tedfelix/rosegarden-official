@@ -33,6 +33,7 @@
 #include "studiowidgets.h"
 #include "colours.h"
 #include "constants.h"
+#include "rosedebug.h"
 
 // ---------------- AudioFaderWidget ------------------
 //
@@ -194,9 +195,9 @@ AudioFaderWidget::setAudioChannels(int channels)
             m_isStereo = true;
             break;
         default:
-            std::cerr << "AudioFaderWidget::setAudioChannels - "
-                      << "unsupported channel numbers (" << channels
-                      << ")" << std::endl;
+            RG_DEBUG << "AudioFaderWidget::setAudioChannels - "
+                     << "unsupported channel numbers (" << channels
+                     << ")" << std::endl;
 	    return;
     }
 

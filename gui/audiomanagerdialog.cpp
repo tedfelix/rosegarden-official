@@ -44,8 +44,6 @@
 
 #include "rosedebug.h"
 
-using std::cout;
-using std::cerr;
 using std::endl;
 
 namespace Rosegarden

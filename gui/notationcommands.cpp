@@ -59,7 +59,6 @@ using Rosegarden::EventSelection;
 using namespace Rosegarden::BaseProperties;
 
 using std::string;
-using std::cerr;
 using std::endl;
 
 

@@ -133,8 +133,10 @@ Staff::eventRemoved(const Segment *t, Event *e)
         return;
     }
 
+    /*
     std::cerr << "Event at " << e->getAbsoluteTime() << ", type " << e->getType()
 	      << " not found in Staff" << std::endl;
+              */
 }
 
 void
@@ -170,8 +172,10 @@ void
 Staff::segmentDeleted(const Segment *s)
 {
     assert(s == &m_segment);
+    /*
     std::cerr << "WARNING: Staff notified of segment deletion: this is probably a bug "
 	      << "(staff should have been deleted before segment)" << std::endl;
+              */
 }
 
 void

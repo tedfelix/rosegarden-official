@@ -320,7 +320,7 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
     SetWaitCursor waitCursor;
     std::vector<Rosegarden::Segment *> segmentsToEdit;
 
-    std::cerr << "\n\n\n\nRosegardenGUIView::slotEditSegmentNotation: p is " << p << std::endl;
+    RG_DEBUG << "\n\n\n\nRosegardenGUIView::slotEditSegmentNotation: p is " << p << std::endl;
 
     // The logic here is: If we're calling for this operation to
     // happen on a particular segment, then open that segment and if
@@ -566,7 +566,7 @@ void RosegardenGUIView::slotEditSegmentAudio(Rosegarden::Segment *segment)
 
     if (application.isEmpty())
     {
-        std::cerr << "RosegardenGUIView::slotEditSegmentAudio() - "
+        RG_DEBUG << "RosegardenGUIView::slotEditSegmentAudio() - "
                   << "external editor \"" << application.data()
                   << "\" not found" << std::endl;
         return;
@@ -575,7 +575,7 @@ void RosegardenGUIView::slotEditSegmentAudio(Rosegarden::Segment *segment)
     QFileInfo *appInfo = new QFileInfo(application);
     if (appInfo->exists() == false || appInfo->isExecutable() == false)
     {
-        std::cerr << "RosegardenGUIView::slotEditSegmentAudio() - "
+        RG_DEBUG << "RosegardenGUIView::slotEditSegmentAudio() - "
                   << "can't execute \"" << application << "\""
                   << std::endl;
         return;
@@ -585,7 +585,7 @@ void RosegardenGUIView::slotEditSegmentAudio(Rosegarden::Segment *segment)
                                     getAudioFile(segment->getAudioFileId());
     if (aF == 0)
     {
-        std::cerr << "RosegardenGUIView::slotEditSegmentAudio() - "
+        RG_DEBUG << "RosegardenGUIView::slotEditSegmentAudio() - "
                   << "can't find audio file" << std::endl;
         return;
     }
@@ -604,7 +604,7 @@ void RosegardenGUIView::slotEditSegmentAudio(Rosegarden::Segment *segment)
     //
     if (!process->start())
     {
-        std::cerr << "RosegardenGUIView::slotEditSegmentAudio() - "
+        RG_DEBUG << "RosegardenGUIView::slotEditSegmentAudio() - "
                   << "can't start external editor" << std::endl;
     }
 

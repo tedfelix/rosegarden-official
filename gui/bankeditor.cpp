@@ -1588,6 +1588,8 @@ BankEditorDialog::getMidiDevice(Rosegarden::DeviceId id)
     Rosegarden::Device *device = m_studio->getDevice(id);
     Rosegarden::MidiDevice *midiDevice =
 	dynamic_cast<Rosegarden::MidiDevice *>(device);
+
+    /*
     if (device) {
 	if (!midiDevice) {
 	    std::cerr << "ERROR: BankEditorDialog::getMidiDevice: device "
@@ -1598,6 +1600,8 @@ BankEditorDialog::getMidiDevice(Rosegarden::DeviceId id)
 	    << "ERROR: BankEditorDialog::getMidiDevice: no such device as "
 	    << id << std::endl;
     }
+    */
+
     return midiDevice;
 }
 

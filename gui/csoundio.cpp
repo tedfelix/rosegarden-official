@@ -62,7 +62,7 @@ CsoundExporter::write()
 {
     std::ofstream str(m_fileName.c_str(), std::ios::out);
     if (!str) {
-        std::cerr << "CsoundExporter::write() - can't write file" << std::endl;
+        //std::cerr << "CsoundExporter::write() - can't write file" << std::endl;
         return false;
     }
 

@@ -414,9 +414,9 @@ AudioInstrumentParameterPanel::slotSelectPlugin(int index)
         }
         else
         {
-	    std::cerr << "AudioInstrumentParameterPanel::slotSelectPlugin - "
-		      << "no AudioPluginInstance found for index "
-		      << index << std::endl;
+            RG_DEBUG << "AudioInstrumentParameterPanel::slotSelectPlugin - "
+		     << "no AudioPluginInstance found for index "
+		     << index << std::endl;
         }
     }
     else
@@ -531,8 +531,8 @@ AudioInstrumentParameterPanel::slotPluginSelected(int index, int plugin)
         m_doc->slotDocumentModified();
     }
     else
-        std::cerr << "InstrumentParameterBox::slotPluginSelected - "
-                  << "got index of unknown plugin!" << std::endl;
+        RG_DEBUG << "InstrumentParameterBox::slotPluginSelected - "
+                 << "got index of unknown plugin!" << std::endl;
 }
 
 void
@@ -1124,8 +1124,8 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     MidiDevice *md = dynamic_cast<MidiDevice*>
 	(instrument->getDevice());
     if (!md) {
-	std::cerr << "WARNING: MIDIInstrumentParameterPanel::setupForInstrument: No MidiDevice for Instrument "
-		  << instrument->getId() << std::endl;
+	RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::setupForInstrument: No MidiDevice for Instrument "
+	  << instrument->getId() << std::endl;
 	return;
     }
 
@@ -1227,8 +1227,8 @@ MIDIInstrumentParameterPanel::populateBankList()
     MidiDevice *md = dynamic_cast<MidiDevice*>
 	(m_selectedInstrument->getDevice());
     if (!md) {
-	std::cerr << "WARNING: MIDIInstrumentParameterPanel::populateBankList: No MidiDevice for Instrument "
-		  << m_selectedInstrument->getId() << std::endl;
+	RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::populateBankList: No MidiDevice for Instrument "
+                 << m_selectedInstrument->getId() << std::endl;
 	return;
     }
 
@@ -1327,8 +1327,8 @@ MIDIInstrumentParameterPanel::populateProgramList()
     MidiDevice *md = dynamic_cast<MidiDevice*>
 	(m_selectedInstrument->getDevice());
     if (!md) {
-	std::cerr << "WARNING: MIDIInstrumentParameterPanel::populateProgramList: No MidiDevice for Instrument "
-		  << m_selectedInstrument->getId() << std::endl;
+	RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::populateProgramList: No MidiDevice for Instrument "
+                 << m_selectedInstrument->getId() << std::endl;
 	return;
     }
 
@@ -1367,7 +1367,7 @@ MIDIInstrumentParameterPanel::populateVariationList()
     MidiDevice *md = dynamic_cast<MidiDevice*>
 	(m_selectedInstrument->getDevice());
     if (!md) {
-	std::cerr << "WARNING: MIDIInstrumentParameterPanel::populateVariationList: No MidiDevice for Instrument "
+	RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::populateVariationList: No MidiDevice for Instrument "
 		  << m_selectedInstrument->getId() << std::endl;
 	return;
     }
@@ -1588,7 +1588,7 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
     MidiDevice *md = dynamic_cast<MidiDevice*>
 	(m_selectedInstrument->getDevice());
     if (!md) {
-	std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotSelectBank: No MidiDevice for Instrument "
+	RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::slotSelectBank: No MidiDevice for Instrument "
 		  << m_selectedInstrument->getId() << std::endl;
 	return;
     }
@@ -1635,13 +1635,13 @@ MIDIInstrumentParameterPanel::slotSelectVariation(int index)
     MidiDevice *md = dynamic_cast<MidiDevice*>
 	(m_selectedInstrument->getDevice());
     if (!md) {
-	std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotSelectVariation: No MidiDevice for Instrument "
+	RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::slotSelectVariation: No MidiDevice for Instrument "
 		  << m_selectedInstrument->getId() << std::endl;
 	return;
     }
 
     if (index < 0 || index > m_variations.size()) {
-	std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotSelectVariation: index " << index << " out of range" << std::endl;
+	RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::slotSelectVariation: index " << index << " out of range" << std::endl;
 	return;
     }
 
@@ -1665,7 +1665,7 @@ MIDIInstrumentParameterPanel::sendBankAndProgram()
     MidiDevice *md = dynamic_cast<MidiDevice*>
 	(m_selectedInstrument->getDevice());
     if (!md) {
-	std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotSelectBank: No MidiDevice for Instrument "
+	RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::slotSelectBank: No MidiDevice for Instrument "
 		  << m_selectedInstrument->getId() << std::endl;
 	return;
     }

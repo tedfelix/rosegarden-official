@@ -47,6 +47,8 @@
 #include <cmath>
 #endif
 
+#define DEBUG_ALSA 1
+
 // This driver implements MIDI in and out via the ALSA (www.alsa-project.org)
 // sequencer interface.
 //
@@ -86,15 +88,14 @@
 //
 //
 
-using std::cout;
 using std::cerr;
 using std::endl;
 
 
 static std::string _audit;
 
-// I was going to prevent output to cout if NDEBUG was set, but actually
-// it's probably a good idea to continue to send to cout as well -- it
+// I was going to prevent output to std::cout if NDEBUG was set, but actually
+// it's probably a good idea to continue to send to std::cout as well -- it
 // shouldn't even get noticed unless someone's actually trying to debug,
 // and it's necessary if the sequencer crashes altogether (because the
 // status button in the GUI won't work if the sequencer's crashed).
@@ -108,7 +109,7 @@ static std::string _audit;
 #else
 #define AUDIT_UPDATE _auditStream << std::ends; \
                      std::string _auditChunk = _auditStream.str(); \
-                     _audit += _auditChunk; std::cout << _auditChunk;
+                     _audit += _auditChunk; std::cerr << _auditChunk;
 #endif
 #else
 #include <sstream>
@@ -117,7 +118,7 @@ static std::string _audit;
 #define AUDIT_UPDATE _audit += _auditStream.str();
 #else
 #define AUDIT_UPDATE std::string _auditChunk = _auditStream.str(); \
-                     _audit += _auditChunk; std::cout << _auditChunk;
+                     _audit += _auditChunk; std::cerr << _auditChunk;
 #endif
 #endif
 
@@ -252,35 +253,43 @@ AlsaDriver::~AlsaDriver()
     if (_threadJackClosing == false && m_audioClient)
     {
         _threadJackClosing = true;
-        std::cout << "AlsaDriver::~AlsaDriver - closing JACK client"
+        std::cerr << "AlsaDriver::~AlsaDriver - closing JACK client"
                   << std::endl;
 
         if (jack_deactivate(m_audioClient))
         {
+#ifdef DEBUG_ALSA
             std::cerr << "AlsaDriver::~AlsaDriver - deactivation failed"
                       << std::endl;
+#endif
         }
 
         for (unsigned int i = 0; i < m_jackInputPorts.size(); ++i)
         {
             if (jack_port_unregister(m_audioClient, m_jackInputPorts[i]))
             {
+#ifdef DEBUG_ALSA
                 std::cerr << "AlsaDriver::~AlsaDriver - "
                           << "can't unregister input port " << i + 1
                           << std::endl;
+#endif
             }
         }
 
         if (jack_port_unregister(m_audioClient, m_jackOutputPortLeft))
         {
+#ifdef DEBUG_ALSA
             std::cerr << "AlsaDriver::~AlsaDriver - "
                       << "can't unregister output port left" << std::endl;
+#endif
         }
 
         if (jack_port_unregister(m_audioClient, m_jackOutputPortRight))
         {
+#ifdef DEBUG_ALSA
             std::cerr << "AlsaDriver::~AlsaDriver - "
                       << "can't unregister output port right" << std::endl;
+#endif
         }
                 
         jack_client_close(m_audioClient);
@@ -320,8 +329,10 @@ AlsaDriver::getSystemInfo()
 
     if ((err = snd_seq_system_info(m_midiHandle, sysinfo)) < 0)
     {
+#ifdef DEBUG_ALSA
         std::cerr << "System info error: " <<  snd_strerror(err)
                   << std::endl;
+#endif
         exit(EXIT_FAILURE);
     }
 
@@ -348,27 +359,31 @@ AlsaDriver::showQueueStatus(int queue)
             if (err == -ENOENT)
                 continue;
 
+#ifdef DEBUG_ALSA
             std::cerr << "Client " << idx << " info error: "
                       << snd_strerror(err) << std::endl;
+#endif
             exit(EXIT_FAILURE);
         }
 
-        std::cout << "Queue " << snd_seq_queue_status_get_queue(status)
+#ifdef DEBUG_ALSA
+        std::cerr << "Queue " << snd_seq_queue_status_get_queue(status)
                   << std::endl;
 
-        std::cout << "Tick       = "
+        std::cerr << "Tick       = "
                   << snd_seq_queue_status_get_tick_time(status)
                   << std::endl;
 
-        std::cout << "Realtime   = "
+        std::cerr << "Realtime   = "
                   << snd_seq_queue_status_get_real_time(status)->tv_sec
                   << "."
                   << snd_seq_queue_status_get_real_time(status)->tv_nsec
                   << std::endl;
 
-        std::cout << "Flags      = 0x"
+        std::cerr << "Flags      = 0x"
                   << snd_seq_queue_status_get_status(status)
                   << std::endl;
+#endif
     }
 
 }
@@ -540,7 +555,7 @@ AlsaDriver::generateInstruments()
     for (; it != m_alsaPorts.end(); it++)
     {
         /*
-        cout << "installing device " << (*it)->m_name
+        std::cout << "installing device " << (*it)->m_name
              << " client = " << (*it)->m_client
              << " port = " << (*it)->m_port << endl;
              */
@@ -548,7 +563,11 @@ AlsaDriver::generateInstruments()
 	if ((*it)->isWriteable()) {
 	    MappedDevice *device = createMidiDevice(*it, MidiDevice::Play);
 	    if (!device) {
+#ifdef DEBUG_ALSA
 		std::cerr << "WARNING: Failed to create play device" << std::endl;
+#else
+                ;
+#endif
 	    } else {
 		addInstrumentsForDevice(device);
 		m_devices.push_back(device);
@@ -557,7 +576,11 @@ AlsaDriver::generateInstruments()
 	if ((*it)->isReadable()) {
 	    MappedDevice *device = createMidiDevice(*it, MidiDevice::Record);
 	    if (!device) {
+#ifdef DEBUG_ALSA
 		std::cerr << "WARNING: Failed to create record device" << std::endl;
+#else
+                ;
+#endif
 	    } else {
 		m_devices.push_back(device);
 	    }
@@ -597,7 +620,7 @@ AlsaDriver::generateInstruments()
                                    m_audioRunningId);
 
             /*
-            std::cout  << "AlsaDriver::generateInstruments - "
+            std::cerr  << "AlsaDriver::generateInstruments - "
                        << "added audio fader (id=" << m_audioRunningId
                        << ")" << std::endl;
                        */
@@ -830,7 +853,11 @@ AlsaDriver::addDevice(Device::DeviceType type,
 
 	MappedDevice *device = createMidiDevice(0, direction);
 	if (!device) {
+#ifdef DEBUG_ALSA
 	    std::cerr << "WARNING: Device creation failed" << std::endl;
+#else
+            ;
+#endif
 	} else {
 	    addInstrumentsForDevice(device);
 	    m_devices.push_back(device);
@@ -1007,8 +1034,10 @@ AlsaDriver::initialiseMidi()
     if((m_queue = snd_seq_alloc_named_queue(m_midiHandle,
                                                 "Rosegarden queue")) < 0)
     {
+#ifdef DEBUG_ALSA
         std::cerr << "AlsaDriver::initialiseMidi - can't allocate queue"
                   << std::endl;
+#endif
         return;
     }
 
@@ -1018,8 +1047,10 @@ AlsaDriver::initialiseMidi()
     snd_seq_set_client_name(m_midiHandle, "Rosegarden sequencer");
     if((m_client = snd_seq_client_id(m_midiHandle)) < 0)
     {
+#ifdef DEBUG_ALSA
         std::cerr << "AlsaDriver::initialiseMidi - can't create client"
                   << std::endl;
+#endif
         return;
     }
 
@@ -1035,8 +1066,10 @@ AlsaDriver::initialiseMidi()
                                         SND_SEQ_PORT_TYPE_APPLICATION);
     if (m_port < 0)
     {
+#ifdef DEBUG_ALSA
         std::cerr << "AlsaDriver::initialiseMidi - can't create port"
                   << std::endl;
+#endif
         return;
     }
 
@@ -1095,10 +1128,12 @@ AlsaDriver::initialiseMidi()
 
     if (snd_seq_subscribe_port(m_midiHandle, subs) < 0)
     {
+#ifdef DEBUG_ALSA
         std::cerr << "AlsaDriver::initialiseMidi - "
                   << "can't subscribe input client:port "
 		  << sender.client << ":" << sender.port
                   << std::endl;
+#endif
         // Not the end of the world if this fails but we
         // have to flag it internally.
         //
@@ -1113,9 +1148,11 @@ AlsaDriver::initialiseMidi()
         snd_seq_set_client_pool_input(m_midiHandle, 2000) < 0 ||
         snd_seq_set_client_pool_output_room(m_midiHandle, 2000) < 0)
     {
+#ifdef DEBUG_ALSA
         std::cerr << "AlsaDriver::initialiseMidi - "
                   << "can't modify pool parameters"
                   << std::endl;
+#endif
         return;
     }
 
@@ -1128,9 +1165,11 @@ AlsaDriver::initialiseMidi()
     // Start the timer
     if ((result = snd_seq_start_queue(m_midiHandle, m_queue, NULL)) < 0)
     {
+#ifdef DEBUG_ALSA
         std::cerr << "AlsaDriver::initialiseMidi - couldn't start queue - "
                   << snd_strerror(result)
                   << std::endl;
+#endif
         exit(EXIT_FAILURE);
     }
 
@@ -1515,7 +1554,10 @@ void
 AlsaDriver::initialisePlayback(const RealTime &position,
                                const RealTime &playLatency)
 {
-    std::cout << "AlsaDriver - initialisePlayback" << std::endl;
+#ifdef DEBUG_ALSA
+    std::cerr << "AlsaDriver - initialisePlayback" << std::endl;
+#endif
+
     m_alsaPlayStartTime = getAlsaTime();
     m_playStartPosition = position;
     m_startPlayback = true;
@@ -1535,7 +1577,7 @@ AlsaDriver::initialisePlayback(const RealTime &position,
             alsaClockSent = alsaClockSent - RealTime(0, m_midiClockInterval);
 
         /*
-        cout << "START ADJUST FROM " << m_alsaPlayStartTime
+        std::cout << "START ADJUST FROM " << m_alsaPlayStartTime
              << " to " << alsaClockSent << endl;
              */
 
@@ -1751,8 +1793,10 @@ AlsaDriver::allNotesOff()
 
         if (error < 0)
         {
+#ifdef DEBUG_ALSA
 	    std::cerr << "AlsaDriver::allNotesOff - "
                       << "can't send event" << std::endl;
+#endif
         }
 
         delete(*it);
@@ -1761,7 +1805,7 @@ AlsaDriver::allNotesOff()
     m_noteOffQueue.erase(m_noteOffQueue.begin(), m_noteOffQueue.end());
 
     /*
-    std::cout << "AlsaDriver::allNotesOff - "
+    std::cerr << "AlsaDriver::allNotesOff - "
               << " queue size = " << m_noteOffQueue.size() << std::endl;
               */
 
@@ -1815,7 +1859,7 @@ AlsaDriver::processNotesOff(const RealTime &time)
     snd_seq_drain_output(m_midiHandle);
 
     /*
-      std::cout << "AlsaDriver::processNotesOff - "
+      std::cerr << "AlsaDriver::processNotesOff - "
       << " queue size = " << m_noteOffQueue.size() << std::endl;
     */
 }
@@ -1888,8 +1932,10 @@ AlsaDriver::getAlsaTime()
 
     if (snd_seq_get_queue_status(m_midiHandle, m_queue, status) < 0)
     {
+#ifdef DEBUG_ALSA
         std::cerr << "AlsaDriver::getSequencerTime - can't get queue status"
                   << std::endl;
+#endif
         return sequencerTime;
     }
 
@@ -2088,10 +2134,12 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
                    for (unsigned int i = 0; i < event->data.ext.len; ++i)
                        data += *(ptr++);
 
+#ifdef DEBUG_ALSA
                    if ((MidiByte)(data[0]) == MIDI_SYSEX_RT)
                    {
-                       cout << "REALTIME SYSEX" << endl;
+                       std::cerr << "REALTIME SYSEX" << endl;
                    }
+#endif
 
                    MappedEvent *mE = new MappedEvent();
                    mE->setType(MappedEvent::MidiSystemExclusive);
@@ -2109,29 +2157,37 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
 
             case SND_SEQ_EVENT_CLOCK:
                /*
-               std::cout << "AlsaDriver::getMappedComposition - "
+               std::cerr << "AlsaDriver::getMappedComposition - "
                          << "got realtime MIDI clock" << std::endl;
                          */
                break;
 
             case SND_SEQ_EVENT_START:
-               std::cout << "AlsaDriver::getMappedComposition - "
+#ifdef DEBUG_ALSA
+               std::cerr << "AlsaDriver::getMappedComposition - "
                          << "START" << std::endl;
+#endif
                break;
 
             case SND_SEQ_EVENT_CONTINUE:
-               std::cout << "AlsaDriver::getMappedComposition - "
+#ifdef DEBUG_ALSA
+               std::cerr << "AlsaDriver::getMappedComposition - "
                          << "CONTINUE" << std::endl;
+#endif
                break;
 
             case SND_SEQ_EVENT_STOP:
-               std::cout << "AlsaDriver::getMappedComposition - "
+#ifdef DEBUG_ALSA
+               std::cerr << "AlsaDriver::getMappedComposition - "
                          << "STOP" << std::endl;
+#endif
                break;
 
             case SND_SEQ_EVENT_SONGPOS:
-               std::cout << "AlsaDriver::getMappedComposition - "
+#ifdef DEBUG_ALSA
+               std::cerr << "AlsaDriver::getMappedComposition - "
                          << "SONG POSITION" << std::endl;
+#endif
                break;
 
                // these cases are handled by slotCheckForNewClients
@@ -2142,9 +2198,11 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
 
             case SND_SEQ_EVENT_TICK:
             default:
+#ifdef DEBUG_ALSA
                std::cerr << "AlsaDriver::getMappedComposition - "
                          << "got unhandled MIDI event type from ALSA sequencer"
                          << "(" << int(event->type) << ")" << std::endl;
+#endif
                break;
 
 
@@ -2205,13 +2263,13 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                             outputDevice.second);
 
         /*
-        cout << "INSTRUMENT = " << (*i)->getInstrument() << endl;
+        std::cout << "INSTRUMENT = " << (*i)->getInstrument() << endl;
 
-        cout << "TIME = " << time.tv_sec << " : " << time.tv_nsec * 1000
+        std::cout << "TIME = " << time.tv_sec << " : " << time.tv_nsec * 1000
               << endl;
 
 
-        cout << "EVENT to " << (int)event->dest.client
+        std::cout << "EVENT to " << (int)event->dest.client
                   << " : " 
                   << (int)event->dest.port << endl;
         */
@@ -2227,8 +2285,10 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
             channel = instrument->getChannel();
         else
         {
+#ifdef DEBUG_ALSA
             std::cerr << "processMidiOut() - couldn't get Instrument for Event"
                       << std::endl;
+#endif
             channel = 0;
         }
 
@@ -2278,7 +2338,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                                             eventDuration);
 
                         /*
-                        std::cout << "NOTE OUT : pitch = " 
+                        std::cerr << "NOTE OUT : pitch = " 
                                   << int((*i)->getPitch())
                                   << ", velocity = "
                                   << int((*i)->getVelocity())
@@ -2364,9 +2424,11 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 
             default:
             case MappedEvent::InvalidMappedEvent:
+#ifdef DEBUG_ALSA
                 std::cerr << "AlsaDriver::processMidiOut - "
                           << "skipping unrecognised or invalid MappedEvent type"
                           << std::endl;
+#endif
                 continue;
         }
 
@@ -2382,12 +2444,14 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
         else
             error = snd_seq_event_output(m_midiHandle, event);
 
+#ifdef DEBUG_ALSA
         if (error < 0)
         {
             std::cerr << "AlsaDriver::processMidiOut - "
                       << "failed to send ALSA event ("
                       << error << ")" <<  std::endl;
         }
+#endif
 
         // Add note to note off stack
         //
@@ -2500,15 +2564,17 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                     //
                     if(audioFile->scanTo(audioFile->getStartIndex()) == false)
                     {
+#ifdef DEBUG_ALSA
                         std::cerr << "AlsaDriver::processEventsOut - "
                                   << "skipping audio file" << std::endl;
+#endif
                         delete audioFile;
                         continue;
                     }
                 }
 
                 /*
-                cout << "QUEUEING AUDIO - FILE ID = " << (*i)->getAudioID()
+                   std::cerr << "QUEUEING AUDIO - FILE ID = " << (*i)->getAudioID()
                      << " for " << adjustedEventTime - playLatency
                      << endl;
                      */
@@ -2516,6 +2582,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
             }
             else
             {
+#ifdef DEBUG_ALSA
                 std::cerr << "AlsaDriver::processEventsOut - "
                           << "can't find audio file reference" 
                           << std::endl;
@@ -2523,6 +2590,9 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                 std::cerr << "AlsaDriver::processEventsOut - "
                           << "try reloading the current Rosegarden file"
                           << std::endl;
+#else 
+                ;
+#endif
             }
         }
 
@@ -2539,16 +2609,20 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
             if ((*i)->getData1())
             {
                 m_midiClockEnabled = true;
-                std::cout << "AlsaDriver::processEventsOut - "
+#ifdef DEBUG_ALSA
+                std::cerr << "AlsaDriver::processEventsOut - "
                           << "Rosegarden MIDI CLOCK ENABLED"
                           << std::endl;
+#endif
             }
             else
             {
                 m_midiClockEnabled = false;
-                std::cout << "AlsaDriver::processEventsOut - "
+#ifdef DEBUG_ALSA
+                std::cerr << "AlsaDriver::processEventsOut - "
                           << "Rosegarden MIDI CLOCK DISABLED"
                           << std::endl;
+#endif
             }
         }
 
@@ -2565,23 +2639,29 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                 case 2:
                     _jackTransportMaster = true;
                     _jackTransportEnabled = true;
-                    std::cout << "AlsaDriver::processEventsOut - "
+#ifdef DEBUG_ALSA
+                    std::cerr << "AlsaDriver::processEventsOut - "
                               << "Rosegarden is JACK Transport MASTER"
                               << std::endl;
+#endif
                     break;
 
                 case 1:
                     _jackTransportEnabled = true;
-                    std::cout << "AlsaDriver::processEventsOut - "
+#ifdef DEBUG_ALSA
+                    std::cerr << "AlsaDriver::processEventsOut - "
                               << "Rosegarden is JACK Transport SLAVE"
                               << std::endl;
+#endif
                     break;
 
                 case 0:
                 default:
-                    std::cout << "AlsaDriver::processEventsOut - "
+#ifdef DEBUG_ALSA
+                    std::cerr << "AlsaDriver::processEventsOut - "
                               << "Rosegarden JACK Transport DISABLED"
                               << std::endl;
+#endif
                     break;
             }
         }
@@ -2596,25 +2676,31 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
             switch ((int)(*i)->getData1())
             {
                 case 2:
-                    std::cout << "AlsaDriver::processEventsOut - "
+#ifdef DEBUG_ALSA
+                    std::cerr << "AlsaDriver::processEventsOut - "
                               << "Rosegarden is MMC MASTER"
                               << std::endl;
+#endif
                     m_mmcMaster = true;
                     m_mmcEnabled = true;
                     break;
 
                 case 1:
                     m_mmcEnabled = true;
-                    std::cout << "AlsaDriver::processEventsOut - "
+#ifdef DEBUG_ALSA
+                    std::cerr << "AlsaDriver::processEventsOut - "
                               << "Rosegarden is MMC SLAVE"
                               << std::endl;
+#endif
                     break;
 
                 case 0:
                 default:
-                    std::cout << "AlsaDriver::processEventsOut - "
+#ifdef DEBUG_ALSA
+                    std::cerr << "AlsaDriver::processEventsOut - "
                               << "Rosegarden MMC Transport DISABLED"
                               << std::endl;
+#endif
                     break;
             }
         }
@@ -2633,9 +2719,11 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
             if (recordDevice == Device::ALL_DEVICES)
             {
                 /* set all record devices */
-                std::cout << "AlsaDriver::processEventsOut - "
+#ifdef DEBUG_ALSA
+                std::cerr << "AlsaDriver::processEventsOut - "
                           << "set all record devices - not implemented"
                           << std::endl;
+#endif
 
                 /*
 		MappedDeviceList::iterator it = m_devices.begin();
@@ -2644,12 +2732,12 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 
                 for (; it != m_devices.end(); ++it)
                 {
-                    cout << "DEVICE = " << (*it)->getName() << " - DIR = "
+                    std::cout << "DEVICE = " << (*it)->getName() << " - DIR = "
                          << (*it)->getDirection() << endl;
                     // ignore ports we can't connect to
                     if ((*it)->getDirection() == MidiDevice::WriteOnly) continue;
 
-                    cout << "PORTS = " << ports.size() << endl;
+                    std::cout << "PORTS = " << ports.size() << endl;
                     ports = (*it)->getPorts();
                     for (pIt = ports.begin(); pIt != ports.end(); ++pIt)
                     {
@@ -2671,9 +2759,12 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 #ifdef HAVE_LIBJACK
             createJackInputPorts((unsigned int)(*i)->getData1(), true);
 #else
+
+#ifdef DEBUG_ALSA
             std::cerr << "AlsaDriver::processEventsOut - "
                       << "MappedEvent::SystemAudioInputs - no audio subsystem"
                       << std::endl;
+#endif
 #endif
         }
     }
@@ -2708,8 +2799,11 @@ AlsaDriver::record(RecordStatus recordStatus)
         }
 
 #else
+
+#ifdef DEBUG_ALSA
         std::cerr << "AlsaDriver::record - can't record audio without JACK"
                   << std::endl;
+#endif
 #endif
 
     }
@@ -2722,11 +2816,13 @@ AlsaDriver::record(RecordStatus recordStatus)
     {
         m_recordStatus = ASYNCHRONOUS_AUDIO;
     }
+#ifdef DEBUG_ALSA
     else
     {
         std::cerr << "ArtsDriver::record - unsupported recording mode"
                   << std::endl;
     }
+#endif
 
     return true;
 }
@@ -2780,10 +2876,12 @@ AlsaDriver::getPairForMappedInstrument(InstrumentId id)
 	    return i->second;
 	}
     }
+#ifdef DEBUG_ALSA
     else
     {
 	cerr << "WARNING: AlsaDriver::getPairForMappedInstrument: couldn't find instrument for id " << id << ", falling through" << endl;
     }
+#endif
 
     return ClientPortPair(-1, -1);
 }
@@ -2855,7 +2953,10 @@ AlsaDriver::setPluginInstance(InstrumentId id,
                               int position)
 {
 #ifdef HAVE_LADSPA
-    std::cout << "AlsaDriver::setPluginInstance id = " << pluginId << std::endl;
+
+#ifdef DEBUG_ALSA
+    std::cerr << "AlsaDriver::setPluginInstance id = " << pluginId << std::endl;
+#endif
 
     // first shut down any running instance
     removePluginInstance(id, position);
@@ -2871,8 +2972,10 @@ AlsaDriver::setPluginInstance(InstrumentId id,
         m_pluginInstances.push_back(instance);
 
         // activate and connect
-        std::cout << "AlsaDriver::setPluginInstance - "
+#ifdef DEBUG_ALSA
+        std::cerr << "AlsaDriver::setPluginInstance - "
                   << "activate and connect plugin" << std::endl;
+#endif
 
         // create a new instance
         //
@@ -2892,9 +2995,12 @@ AlsaDriver::setPluginInstance(InstrumentId id,
         //
         instance->activate();
     }
+
+#ifdef DEBUG_ALSA
     else
         std::cerr << "AlsaDriver::setPluginInstance - "
                   << "can't initialise plugin descriptor" << std::endl;
+#endif
 
 #endif // HAVE_LADSPA
 
@@ -2905,7 +3011,10 @@ void
 AlsaDriver::removePluginInstance(InstrumentId id, int position)
 {
 #ifdef HAVE_LADSPA
-    std::cout << "AlsaDriver::removePluginInstance" << std::endl;
+
+#ifdef DEBUG_ALSA
+    std::cerr << "AlsaDriver::removePluginInstance" << std::endl;
+#endif
 
     PluginIterator it = m_pluginInstances.begin();
     for (; it != m_pluginInstances.end(); ++it)
@@ -2938,7 +3047,10 @@ void
 AlsaDriver::removePluginInstances()
 {
 #ifdef HAVE_LADSPA
-    std::cout << "AlsaDriver::removePluginInstances" << std::endl;
+
+#ifdef DEBUG_ALSA
+    std::cerr << "AlsaDriver::removePluginInstances" << std::endl;
+#endif
 
     PluginIterator it = m_pluginInstances.begin();
 
@@ -2963,9 +3075,7 @@ AlsaDriver::setPluginInstancePortValue(InstrumentId id,
 {
 #ifdef HAVE_LADSPA
 
-    /*
-    std::cout << "AlsaDriver::setPluginInstancePortValue" << std::endl;
-    */
+    //std::cerr << "AlsaDriver::setPluginInstancePortValue" << std::endl;
 
     PluginIterator it = m_pluginInstances.begin();
     for (; it != m_pluginInstances.end(); ++it)
@@ -3134,7 +3244,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
             }
 
             /*
-            std::cout << "AlsaDriver::jackProcess - recording samples"
+            std::cerr << "AlsaDriver::jackProcess - recording samples"
                       << std::endl;
                       */
 
@@ -3286,7 +3396,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                                                   ((double)(_jackSampleRate))));
 
                     /*
-                    std::cout << "RATE MISMATCH : will fetch "
+                    std::cerr << "RATE MISMATCH : will fetch "
                                << fetchFrames << " frames" << std::endl;
                                */
                 }
@@ -3303,8 +3413,10 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                     // We've run out of samples in the PlayableAudioFile
                     // - throw it away
                     //
+#ifdef DEBUG_ALSA
                     std::cerr << "jackProcess - EXCEPTION \"" << es << "\""
                               << std::endl;
+#endif
                 }
 
                 // If we can't fetch everything then we must be at
@@ -3437,8 +3549,10 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
                         case 3: // for 24-bit samples
                         default:
+#ifdef DEBUG_ALSA
                             std::cerr << "jackProcess() - sample size "
                                       << "not supported" << std::endl;
+#endif
                             break;
                     }
                     
@@ -3470,7 +3584,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                         if (samplePtr - origSamplePtr > int(samples.length()))
                         {
                             /*
-                            cout << "FINAL FRAME BREAKING - "
+                            std::cout << "FINAL FRAME BREAKING - "
                                  << "calc = " << samplesOut * bytes * channels
                                  << " : samples = " << samples.length()
                                  << endl;
@@ -3480,7 +3594,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                         /*
                         else
                         {
-                            cout << "FINAL FRAME OUT" << endl;
+                            std::cout << "FINAL FRAME OUT" << endl;
                         }
                         */
                     }
@@ -3530,7 +3644,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 if (list.size())
                 {
                     /*
-                    cout << "GOT " << list.size() << " PLUGINS" << endl;
+                    std::cout << "GOT " << list.size() << " PLUGINS" << endl;
                     int c = 0;
                     */
 
@@ -3541,7 +3655,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                         //
                         if ((*pIt)->isBypassed())
                         {
-                            //cout << "BYPASSING " << c << endl;
+                            //std::cout << "BYPASSING " << c << endl;
                             for (unsigned int i = 0; i < nframes; ++i)
                             {
                                 _pluginBufferOut1[i] = _pluginBufferIn1[i];
@@ -3552,7 +3666,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                         {
                             (*pIt)->run(_jackBufferSize);
                             /*
-                            cout << "RUN = " << c++ << " : "
+                            std::cout << "RUN = " << c++ << " : "
                                  << "LASPA ID = " << (*pIt)->getLADSPAId()
                                  << " : POS = " << (*pIt)->getPosition() 
                                  << endl;
@@ -3657,7 +3771,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                     */
 
                     /*
-                    cout << "UNPROC INSTRUMENT = " << (*it)->getInstrument()
+                    std::cout << "UNPROC INSTRUMENT = " << (*it)->getInstrument()
                          << " : POS = " << (*it)->getPosition()
                          << endl;
                          */
@@ -3812,8 +3926,11 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 int
 AlsaDriver::jackBufferSize(jack_nframes_t nframes, void *)
 {
-    std::cout << "AlsaDriver::jackBufferSize - buffer size changed to "
+#ifdef DEBUG_ALSA
+    std::cerr << "AlsaDriver::jackBufferSize - buffer size changed to "
               << nframes << std::endl;
+#endif 
+
     _jackBufferSize = nframes;
 
     // Recreate our temporary mix buffers to the new size
@@ -3842,8 +3959,10 @@ AlsaDriver::jackBufferSize(jack_nframes_t nframes, void *)
 int
 AlsaDriver::jackSampleRate(jack_nframes_t nframes, void *)
 {
-    std::cout << "AlsaDriver::jackSampleRate - sample rate changed to "
+#ifdef DEBUG_ALSA
+    std::cerr << "AlsaDriver::jackSampleRate - sample rate changed to "
                << nframes << std::endl;
+#endif
     _jackSampleRate = nframes;
 
     return 0;
@@ -3852,7 +3971,9 @@ AlsaDriver::jackSampleRate(jack_nframes_t nframes, void *)
 void
 AlsaDriver::jackShutdown(void * /*arg*/)
 {
-    std::cout << "AlsaDriver::jackShutdown() - received" << std::endl;
+#ifdef DEBUG_ALSA
+    std::cerr << "AlsaDriver::jackShutdown() - received" << std::endl;
+#endif
 
     // Old restart code can be abandoned
     //
@@ -3866,7 +3987,7 @@ AlsaDriver::jackShutdown(void * /*arg*/)
 
         // And then restart Audio
         //
-        std::cout << "AlsaDriver::jackShutdown() - received, " 
+        std::cerr << "AlsaDriver::jackShutdown() - received, " 
                   << "restarting..." << std::endl;
 
         inst->initialiseAudio();
@@ -3877,12 +3998,14 @@ AlsaDriver::jackShutdown(void * /*arg*/)
 void
 AlsaDriver::shutdownAudio()
 {
-    std::cout << "AlsaDriver::shutdownAudio - JACK shutdown callback"
+#ifdef DEBUG_ALSA
+    std::cerr << "AlsaDriver::shutdownAudio - JACK shutdown callback"
               << std::endl;
+#endif
     /*
     if (m_audioClient)
     {
-        std::cout << "AlsaDriver::shutdownAudio - "
+        std::cerr << "AlsaDriver::shutdownAudio - "
                   << "shutting down JACK client" << std::endl;
         jack_deactivate(m_audioClient);
         m_audioClient = 0;
@@ -3899,14 +4022,16 @@ AlsaDriver::shutdownAudio()
 int
 AlsaDriver::jackGraphOrder(void *)
 {
-    //std::cout << "AlsaDriver::jackGraphOrder" << std::endl;
+    //std::cerr << "AlsaDriver::jackGraphOrder" << std::endl;
     return 0;
 }
 
 int
 AlsaDriver::jackXRun(void *)
 {
-    std::cout << "AlsaDriver::jackXRun" << std::endl;
+#ifdef DEBUG_ALSA
+    std::cerr << "AlsaDriver::jackXRun" << std::endl;
+#endif
     return 0;
 }
 
@@ -3921,8 +4046,10 @@ AlsaDriver::createAudioFile(const std::string &fileName)
         return false;
 
 
-    cout << "AlsaDriver::createAudioFile - creating \"" 
+#ifdef DEBUG_ALSA
+    std::cout << "AlsaDriver::createAudioFile - creating \"" 
          << fileName << "\"" << std::endl;
+#endif
 
     MappedAudioFader *fader =
         dynamic_cast<MappedAudioFader*>
@@ -3933,7 +4060,7 @@ AlsaDriver::createAudioFile(const std::string &fileName)
         int channels = fader->
             getPropertyList(MappedAudioFader::Channels)[0].toInt();
 
-        //cout << "GOT CHANNELS FROM FADER = " << channels << endl;
+        //std::cout << "GOT CHANNELS FROM FADER = " << channels << endl;
 
         // we use JACK_DEFAULT_AUDIO_TYPE for all ports currently so
         // we're recording 32 bit float MONO audio.
@@ -4011,7 +4138,7 @@ AlsaDriver::sendJACKTransportState()
     {
         if (m_looping)
         {
-            //cout << "LOOPING (frame = " << info.position << ")" << endl;
+            //std::cout << "LOOPING (frame = " << info.position << ")" << endl;
             //info.state = JackTransportLooping;
             info.loop_start = getJACKFrame(m_loopStartTime);
             info.loop_end = getJACKFrame(m_loopEndTime);
@@ -4021,7 +4148,7 @@ AlsaDriver::sendJACKTransportState()
         }
         else
         {
-            //cout << "PLAYING (frame = " << info.position << ")" << endl;
+            //std::cout << "PLAYING (frame = " << info.position << ")" << endl;
             //info.state = JackTransportRolling;
             info.valid = jack_transport_bits_t(JackTransportPosition |
                                                JackTransportState);
@@ -4029,7 +4156,7 @@ AlsaDriver::sendJACKTransportState()
     }
     else
     {
-        //cout << "STOPPED (frame = " << info.position << ")" << endl;
+        //std::cout << "STOPPED (frame = " << info.position << ")" << endl;
         //info.state = JackTransportStopped;
         info.valid = jack_transport_bits_t(JackTransportPosition |
                                            JackTransportState);
@@ -4173,7 +4300,11 @@ AlsaDriver::checkForNewClients()
 	    if (needRecordDevice) {
 		MappedDevice *device = createMidiDevice(*i, MidiDevice::Record);
 		if (!device) {
+#ifdef DEBUG_ALSA
 		    std::cerr << "WARNING: Failed to create record device" << std::endl;
+#else 
+                    ;
+#endif
 		} else {
 		    AUDIT_STREAM << "(Created new record device " << device->getId() << ")" << std::endl;
 		    addInstrumentsForDevice(device);
@@ -4184,7 +4315,11 @@ AlsaDriver::checkForNewClients()
 	    if (needPlayDevice) {
 		MappedDevice *device = createMidiDevice(*i, MidiDevice::Play);
 		if (!device) {
+#ifdef DEBUG_ALSA
 		    std::cerr << "WARNING: Failed to create play device" << std::endl;
+#else
+                    ;
+#endif
 		} else {
 		    AUDIT_STREAM << "(Created new play device " << device->getId() << ")" << std::endl;
 		    addInstrumentsForDevice(device);
@@ -4209,8 +4344,10 @@ AlsaDriver::setPluginInstanceBypass(InstrumentId id,
                                     int position,
                                     bool value)
 {
-    std::cout << "AlsaDriver::setPluginInstanceBypass - "
+#ifdef DEBUG_ALSA
+    std::cerr << "AlsaDriver::setPluginInstanceBypass - "
               << value << std::endl;
+#endif
 
 #ifdef HAVE_LADSPA
 
@@ -4346,12 +4483,14 @@ AlsaDriver::unsetRecordDevices()
 
         int error = snd_seq_unsubscribe_port(m_midiHandle, dSubs);
 
+#ifdef DEBUG_ALSA
         if (error < 0)
         {
             std::cerr << "AlsaDriver::unsetRecordDevices - "
                       << "can't unsubscribe record port" << std::endl;
 
         }
+#endif
 
         snd_seq_query_subscribe_set_index(qSubs,
                 snd_seq_query_subscribe_get_index(qSubs) + 1);
@@ -4437,8 +4576,10 @@ AlsaDriver::sendMMC(MidiByte deviceArg,
             }
             catch(...)
             {
+#ifdef DEBUG_ALSA
                 std::cerr << "AlsaDriver::sendMMC - "
                           << "couldn't create MMC message" << std::endl;
+#endif
                 return;
             }
 
@@ -4499,12 +4640,14 @@ AlsaDriver::sendSystemDirect(MidiByte command, const std::string &args)
 
             int error = snd_seq_event_output_direct(m_midiHandle, &event);
 
+#ifdef DEBUG_ALSA
             if (error < 0)
             {
                 std::cerr << "AlsaDriver::sendSystemDirect - "
                           << "can't send event (" << int(command) << ")"
                           << std::endl;
             }
+#endif
         }
     }
 
@@ -4568,6 +4711,7 @@ AlsaDriver::sendSystemQueued(MidiByte command,
 
             int error = snd_seq_event_output(m_midiHandle, &event);
 
+#ifdef DEBUG_ALSA
             if (error < 0)
             {
                 std::cerr << "AlsaDriver::sendSystemQueued - "
@@ -4575,6 +4719,7 @@ AlsaDriver::sendSystemQueued(MidiByte command,
                           << " - error = (" << error << ")"
                           << std::endl;
             }
+#endif
         }
     }
 
@@ -4603,7 +4748,7 @@ AlsaDriver::sendMidiClock(const RealTime &playLatency)
     {
         m_midiClockSendTime = getAlsaTime() + playLatency;
         /*
-        cout << "INITIAL ALSA TIME = " << m_midiClockSendTime << endl;
+        std::cout << "INITIAL ALSA TIME = " << m_midiClockSendTime << endl;
         */
     }
 
@@ -4614,7 +4759,7 @@ AlsaDriver::sendMidiClock(const RealTime &playLatency)
         (m_midiClockSendTime - RealTime(0, 100000)))
     {
         /*
-        cout << "SENDING " << numTicks
+        std::cout << "SENDING " << numTicks
              << " CLOCK TICKS @ " << m_midiClockSendTime << endl;
              */
 

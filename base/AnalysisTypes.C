@@ -132,7 +132,7 @@ AnalysisHelper::labelChords(CompositionTimeSliceAdapter &c, Segment &s,
 
 	    if (ch.isValid())
 	    {
-            std::cerr << ch.getName(key) << " at time " << time << std::endl;
+            //std::cerr << ch.getName(key) << " at time " << time << std::endl;
 		
 		Text text(ch.getName(key), Text::ChordName);
 		s.insert(text.getAsEvent(time));
@@ -405,7 +405,6 @@ AnalysisHelper::makeHarmonyGuessList(CompositionTimeSliceAdapter &c,
                           smallerGuess.end(),
                           cp_less());
 
-#define GIVE_HARMONYGUESS_DETAILS
 #ifdef  GIVE_HARMONYGUESS_DETAILS
         std::cerr << "Time: " << time << std::endl;
 

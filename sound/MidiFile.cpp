@@ -40,7 +40,7 @@
 #include "Studio.h"
 #include "MidiTypes.h"
 
-#define MIDI_DEBUG 1
+//#define MIDI_DEBUG 1
 
 #if (__GNUC__ < 3)
 #include <strstream>
@@ -58,7 +58,7 @@ using std::string;
 using std::ifstream;
 using std::stringstream;
 using std::cerr;
-using std::cout;
+using std::std::cerr;
 using std::endl;
 using std::ends;
 using std::ios;
@@ -104,8 +104,10 @@ long
 MidiFile::midiBytesToLong(const string& bytes)
 {
     if (bytes.length() != 4) {
-	cerr << "WARNING: Wrong length for long data (" << bytes.length()
+#ifdef MIDI_DEBUG
+        std::cerr << "WARNING: Wrong length for long data (" << bytes.length()
 	     << ", should be 4)" << endl;
+#endif
 	throw (Exception("Wrong length for long data in MIDI stream"));
     }
 
@@ -121,8 +123,10 @@ int
 MidiFile::midiBytesToInt(const string& bytes)
 {
     if (bytes.length() != 2) {
-	cerr << "WARNING: Wrong length for int data (" << bytes.length()
+#ifdef MIDI_DEBUG
+        std::cerr << "WARNING: Wrong length for int data (" << bytes.length()
 	     << ", should be 2)" << endl;
+#endif
 	throw (Exception("Wrong length for int data in MIDI stream"));
     }
 
@@ -148,11 +152,13 @@ MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
 
     if (m_decrementCount && (numberOfBytes > (unsigned long)m_trackByteCount))
     {
-        cerr << "Attempt to get more bytes than allowed on Track - ( "
+#ifdef MIDI_DEBUG
+        std::cerr << "Attempt to get more bytes than allowed on Track - ( "
              << numberOfBytes
              << " > "
              << m_trackByteCount
              << " )" << endl;
+#endif
 
 	//!!! Investigate -- I'm seeing this on new-notation-quantization
 	// branch: load glazunov.rg, run Interpret on first segment, export
@@ -163,9 +169,11 @@ MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
 
     if (midiFile->eof())
     {
-        cerr << "MIDI file EOF - got "
+#ifdef MIDI_DEBUG
+        std::cerr << "MIDI file EOF - got "
              << stringRet.length() << " bytes out of "
              << numberOfBytes << endl;
+#endif
 
         throw(Exception("MIDI EOF encountered while reading"));
 
@@ -183,9 +191,11 @@ MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
     if (stringRet.length() < numberOfBytes)
     {
         stringRet = "";
+#ifdef MIDI_DEBUG
         cerr << "Attempt to read past file end - got "
              << stringRet.length() << " bytes out of "
              << numberOfBytes << endl;
+#endif
 
         throw(Exception("Attempt to read past MIDI file end"));
 
@@ -288,7 +298,9 @@ MidiFile::open()
     bool retOK = true;
     m_error = "";
 
-    cout << "MidiFile::open() : fileName = " << m_fileName.c_str() << endl;
+#ifdef MIDI_DEBUG
+    std::cerr << "MidiFile::open() : fileName = " << m_fileName.c_str() << endl;
+#endif
 
     // Open the file
     ifstream *midiFile = new ifstream(m_fileName.c_str(), ios::in | ios::binary);
@@ -320,26 +332,30 @@ MidiFile::open()
             {
 
 #ifdef MIDI_DEBUG
-                std::cout << "Parsing Track " << j << endl;
+                std::std::cerr << "Parsing Track " << j << endl;
 #endif
 
                 if(!skipToNextTrack(midiFile))
                 {
+#ifdef MIDI_DEBUG
                     cerr << "Couldn't find Track " << j << endl;
+#endif
 		    m_error = "File corrupted or in non-standard format?";
                     m_format = MIDI_FILE_NOT_LOADED;
                     return(false);
                 }
 
 #ifdef MIDI_DEBUG
-		std::cout << "Track has " << m_trackByteCount << " bytes" << std::endl;
+		std::std::cerr << "Track has " << m_trackByteCount << " bytes" << std::endl;
 #endif
 
                 // Run through the events taking them into our internal
                 // representation.
                 if (!parseTrack(midiFile, i))
                 {
+#ifdef MIDI_DEBUG
                     std::cerr << "Track " << j << " parsing failed" << endl;
+#endif
 		    m_error = "File corrupted or in non-standard format?";
                     m_format = MIDI_FILE_NOT_LOADED;
                     return(false);
@@ -362,8 +378,10 @@ MidiFile::open()
     }
     catch(Exception e)
     {
-        cout << "MidiFile::open() - caught exception - "
+#ifdef MIDI_DEBUG
+        std::cerr << "MidiFile::open() - caught exception - "
 	     << e.getMessage() << endl;
+#endif
 	m_error = e.getMessage();
         retOK = false;
     }
@@ -379,7 +397,9 @@ MidiFile::parseHeader(const string &midiHeader)
 {
     if (midiHeader.size() < 14)
     {
+#ifdef MIDI_DEBUG
         std::cerr << "MidiFile::parseHeader() - file header undersized" << endl;
+#endif
         return(false);
     }
 
@@ -390,17 +410,21 @@ MidiFile::parseHeader(const string &midiHeader)
 #endif
 
         {
+#ifdef MIDI_DEBUG
             std::cerr << "MidiFile::parseHeader()"
                       << "- file header not found or malformed"
                       << endl;
+#endif
             return(false);
         }
 
     if (midiBytesToLong(midiHeader.substr(4,4)) != 6L)
     {
+#ifdef MIDI_DEBUG
         std::cerr << "MidiFile::parseHeader()"
                   << " - header length incorrect"
                   << endl;
+#endif
         return(false);
     }
 
@@ -410,19 +434,23 @@ MidiFile::parseHeader(const string &midiHeader)
 
     if ( m_format == MIDI_SEQUENTIAL_TRACK_FILE )
     {
+#ifdef MIDI_DEBUG
         std::cerr << "MidiFile::parseHeader()"
                   << "- can't load sequential track file"
                   << endl;
+#endif
         return(false);
     }
   
 
+#ifdef MIDI_DEBUG
     if ( m_timingDivision < 0 )
     {
         std::cerr << "MidiFile::parseHeader()"
                   << " - file uses SMPTE timing"
                   << endl;
     }
+#endif
 
     return(true); 
 }
@@ -469,8 +497,10 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
     while (!midiFile->eof() && ( m_trackByteCount > 0 ) )
     {
 	if (eventCode < 0x80) {
+#ifdef MIDI_DEBUG
 	    cerr << "WARNING: Invalid event code " << eventCode
 		 << " in MIDI file" << endl;
+#endif
 	    throw (Exception("Invalid event code found"));
 	}
 
@@ -545,7 +575,7 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
                 midiEvent = new MidiEvent(deltaTime, eventCode, data1, data2);
 
                 /*
-		std::cout << "MIDI event for channel " << channel << " (track "
+		std::std::cerr << "MIDI event for channel " << channel << " (track "
 			  << trackNum << ")" << std::endl;
 		midiEvent->print();
                           */
@@ -580,9 +610,11 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
                 if (MidiByte(metaMessage[metaMessage.length() - 1]) !=
                         MIDI_END_OF_EXCLUSIVE)
                 {
+#ifdef MIDI_DEBUG
                     std::cerr << "MidiFile::parseTrack() - "
                               << "malformed or unsupported SysEx type"
                               << std::endl;
+#endif
                     continue;
                 }
 
@@ -598,14 +630,18 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
                 break;
 
             case MIDI_END_OF_EXCLUSIVE:
+#ifdef MIDI_DEBUG
                 std::cerr << "MidiFile::parseTrack() - "
                           << "Found a stray MIDI_END_OF_EXCLUSIVE" << std::endl;
+#endif
                 break;
 
             default:
+#ifdef MIDI_DEBUG
                 std::cerr << "MidiFile::parseTrack()" 
                           << " - Unsupported MIDI Event Code:  "
                           << (int)eventCode << endl;
+#endif
                 break;
             } 
         }
@@ -677,9 +713,10 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
     //
     m_studio->unassignAllInstruments();
 
-    cout << "NUMBER OF TRACKS = " << m_numberOfTracks << endl;
-
-    cout << "MIDI COMP SIZE = " << m_midiComposition.size() << endl;
+#ifdef MIDI_DEBUG
+    std::cerr << "NUMBER OF TRACKS = " << m_numberOfTracks << endl;
+    std::cerr << "MIDI COMP SIZE = " << m_midiComposition.size() << endl;
+#endif
 
     for (TrackId i = 0; i < m_numberOfTracks; i++ )
     {
@@ -840,9 +877,11 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 
                     catch(...)
                     {
+#ifdef MIDI_DEBUG
                         std::cerr << "MidiFile::convertToRosegarden - "
                                   << " badly formed key signature"
                                   << std::endl;
+#endif
                         break;
                     }
                     rosegardenSegment->insert(rosegardenEvent);
@@ -857,9 +896,11 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                 case MIDI_SEQUENCER_SPECIFIC:
                 case MIDI_SMPTE_OFFSET:
                 default:
+#ifdef MIDI_DEBUG
                     std::cerr << "MidiFile::convertToRosegarden - "
                               << "unsupported META event code "
 			      << (int)((*midiEvent)->getMetaEventCode()) << endl;
+#endif
                     break;
                 } 
 
@@ -1052,9 +1093,11 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                 break;
 
             default:
+#ifdef MIDI_DEBUG
                 std::cerr << "MidiFile::convertToRosegarden - "
                           << "Unsupported event code = " 
                           << (int)(*midiEvent)->getMessageType() << std::endl;
+#endif
                 break;
             }
         }
@@ -1561,19 +1604,27 @@ MidiFile::convertToMidi(Composition &comp)
 		    }
 
 		} catch (MIDIValueOutOfRange r) {
+#ifdef MIDI_DEBUG
 		    std::cerr << "MIDI value out of range at "
 			      << (*el)->getAbsoluteTime() << std::endl;
+#endif
 		} catch (Event::NoData d) {
+#ifdef MIDI_DEBUG
 		    std::cerr << "Caught Event::NoData at "
 			      << (*el)->getAbsoluteTime() << ", message is:"
 			      << std::endl << d.getMessage() << std::endl;
+#endif
 		} catch (Event::BadType b) {
+#ifdef MIDI_DEBUG
 		    std::cerr << "Caught Event::BadType at "
 			      << (*el)->getAbsoluteTime() << ", message is:"
 			      << std::endl << b.getMessage() << std::endl;
+#endif
 		} catch (SystemExclusive::BadEncoding e) {
+#ifdef MIDI_DEBUG
 		    std::cerr << "Caught bad SysEx encoding at "
 			      << (*el)->getAbsoluteTime() << std::endl;
+#endif
 		}
 
 		if (segmentMidiDuration > 0) {
@@ -1836,9 +1887,11 @@ MidiFile::writeTrack(std::ofstream* midiFile, TrackId trackNumber)
                 break;
 
             default:
+#ifdef MIDI_DEBUG
                 std::cerr << "MidiFile::writeTrack()" 
                           << " - cannot write unsupported MIDI event"
                           << endl;
+#endif
                 break;
             }
         }
@@ -1882,7 +1935,9 @@ MidiFile::write()
 
     if (!(*midiFile))
     {
+#ifdef MIDI_DEBUG
         std::cerr << "MidiFile::write() - can't write file" << endl;
+#endif
         m_format = MIDI_FILE_NOT_LOADED;
         return false;
     }

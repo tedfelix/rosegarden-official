@@ -604,7 +604,7 @@ void NoteInserter::slotToggleDot()
     actionName.replace(QRegExp("-"), "_");
     KAction *action = m_parentView->actionCollection()->action(actionName);
     if (!action) {
-	std::cerr << "WARNING: No such action as " << actionName << std::endl;
+	NOTATION_DEBUG << "WARNING: No such action as " << actionName << std::endl;
     } else {
 	action->activate();
     }
@@ -632,7 +632,7 @@ void NoteInserter::slotRestsSelected()
     actionName.replace(QRegExp("-"), "_");
     KAction *action = m_parentView->actionCollection()->action(actionName);
     if (!action) {
-	std::cerr << "WARNING: No such action as " << actionName << std::endl;
+	NOTATION_DEBUG << "WARNING: No such action as " << actionName << std::endl;
     } else {
 	action->activate();
     }
@@ -730,7 +730,7 @@ void RestInserter::slotToggleDot()
     actionName.replace(QRegExp("-"), "_");
     KAction *action = m_parentView->actionCollection()->action(actionName);
     if (!action) {
-	std::cerr << "WARNING: No such action as " << actionName << std::endl;
+	NOTATION_DEBUG << "WARNING: No such action as " << actionName << std::endl;
     } else {
 	action->activate();
     }

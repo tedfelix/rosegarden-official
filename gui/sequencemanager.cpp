@@ -1026,8 +1026,8 @@ SequenceManager::preparePlayback()
         }
         else
         {
-            std::cerr << "SequenceManager::preparePlayback - "
-                      << "unrecognised instrument type" << std::endl;
+            RG_DEBUG << "SequenceManager::preparePlayback - "
+                     << "unrecognised instrument type" << std::endl;
         }
 
 

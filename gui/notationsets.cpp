@@ -46,6 +46,7 @@ using Rosegarden::Equation;
 using Rosegarden::Quantizer;
 using Rosegarden::timeT;
 
+using std::cerr;
 using namespace Rosegarden::BaseProperties;
 
 
@@ -170,7 +171,7 @@ NotationChord::isNoteHeadShifted(const Iterator &itr) const
     }
 
     if (i == size()) {
-        std::cerr << "NotationChord::isNoteHeadShifted: Warning: Unable to find note head " << getAsEvent(itr) << std::endl;
+        NOTATION_DEBUG << "NotationChord::isNoteHeadShifted: Warning: Unable to find note head " << getAsEvent(itr) << std::endl;
         return false;
     }
 
@@ -586,7 +587,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
     NOTATION_DEBUG << "Coverage:" << endl;
     int i = 0;
     for (NELIterator i = getInitialElement(); i != getContainer().end(); ++i) {
-	(*i)->event()->dump(std::cerr);
+	(*i)->event()->dump(NOTATION_DEBUG);
 	if (i == getFinalElement()) break;
     }
     {

@@ -172,7 +172,7 @@ RawNoteRuler::buildForest(Segment *s,
 	std::pair<timeT, timeT> iex = getExtents(i);
 
 #ifdef DEBUG_RAW_NOTE_RULER
-	std::cerr << "buildForest: event at " << (*i)->getAbsoluteTime() << ", extents " << iex.first << "->" << iex.second << std::endl;
+	RG_DEBUG << "buildForest: event at " << (*i)->getAbsoluteTime() << ", extents " << iex.first << "->" << iex.second << std::endl;
 #endif
 	
 	if (iex.first == iex.second) { ++i; continue; }
@@ -185,7 +185,7 @@ RawNoteRuler::buildForest(Segment *s,
 	i = s->findTime(iex.second);
 
 #ifdef DEBUG_RAW_NOTE_RULER
-	std::cerr << "findTime " << iex.second << " returned iterator at " << (i == s->end() ? -1 : (*i)->getAbsoluteTime()) << std::endl;
+	RG_DEBUG << "findTime " << iex.second << " returned iterator at " << (i == s->end() ? -1 : (*i)->getAbsoluteTime()) << std::endl;
 #endif
     }
 }
@@ -195,15 +195,15 @@ RawNoteRuler::dumpSubtree(EventTreeNode *node, int depth)
 {
     if (!node) return;
 #ifdef DEBUG_RAW_NOTE_RULER
-    for (int i = 0; i < depth; ++i) std::cerr << "  ";
-    if (depth > 0) std::cerr << "->";
-    std::cerr << (*node->node)->getAbsoluteTime() << ","
+    for (int i = 0; i < depth; ++i) RG_DEBUG << "  ";
+    if (depth > 0) RG_DEBUG << "->";
+    RG_DEBUG << (*node->node)->getAbsoluteTime() << ","
 	      << (*node->node)->getDuration() << " [";
     long pitch = 0;
     if ((*node->node)->get<Int>(PITCH, pitch)) {
-	std::cerr << pitch << "]" << std::endl;
+	RG_DEBUG << pitch << "]" << std::endl;
     } else {
-	std::cerr << "no-pitch]" << std::endl;
+	RG_DEBUG << "no-pitch]" << std::endl;
     }
     for (EventTreeNode::NodeList::iterator i = node->children.begin();
 	 i != node->children.end(); ++i) {
@@ -216,15 +216,15 @@ void
 RawNoteRuler::dumpForest(EventTreeNode::NodeList *forest)
 {
 #ifdef DEBUG_RAW_NOTE_RULER
-    std::cerr << "\nFOREST:\n" << std::endl;
+    RG_DEBUG << "\nFOREST:\n" << std::endl;
 
     for (unsigned int i = 0; i < forest->size(); ++i) {
 
-	std::cerr << "\nTREE " << i << ":\n" << std::endl;
+	RG_DEBUG << "\nTREE " << i << ":\n" << std::endl;
 	dumpSubtree((*forest)[i], 0);
     }
 
-    std::cerr << std::endl;
+    RG_DEBUG << std::endl;
 #endif
 }
 

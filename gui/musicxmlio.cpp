@@ -32,6 +32,7 @@
 #include "Instrument.h"
 
 #include "notationstrings.h"
+#include "rosedebug.h"
 
 #include <iostream>
 #include <fstream>
@@ -226,7 +227,7 @@ MusicXmlExporter::write() {
 
     std::ofstream str(m_fileName.c_str(), std::ios::out);
     if (!str) {
-        std::cerr << "MusicXmlExporter::write() - can't write file " << m_fileName << std::endl;
+        RG_DEBUG << "MusicXmlExporter::write() - can't write file " << m_fileName << std::endl;
         return false;
     }
 

@@ -1334,7 +1334,7 @@ void NotationView::slotDebugDump()
         for (EventSelection::eventcontainer::iterator i =
                  ec.begin();
              i != ec.end(); ++i) {
-            std::cerr << "\n" << n++ << " [" << (*i) << "]" << std::endl;
+            NOTATION_DEBUG << "\n" << n++ << " [" << (*i) << "]" << std::endl;
             (*i)->dump(std::cerr);
         }
     }

@@ -601,7 +601,7 @@ NotationStaff::elementNotMoved(NotationElement *elt)
 	NOTATION_DEBUG
 	    << "elementNotMoved: elt at " << elt->getViewAbsoluteTime() <<
 	    ", ok is " << ok << endl;
-	std::cerr << "(cf " << (int)(elt->getCanvasX()) << " vs "
+	NOTATION_DEBUG << "(cf " << (int)(elt->getCanvasX()) << " vs "
 		  << (int)(coords.first) << ", "
 		  << (int)(elt->getCanvasY()) << " vs "
 		  << (int)(coords.second) << ")" << std::endl;
@@ -627,7 +627,7 @@ NotationStaff::elementNotMovedInY(NotationElement *elt)
 // 	NOTATION_DEBUG
 // 	    << "elementNotMovedInY: elt at " << elt->getAbsoluteTime() <<
 // 	    ", ok is " << ok << endl;
-// 	std::cerr << "(cf " << (int)(elt->getCanvasY()) << " vs "
+// 	NOTATION_DEBUG << "(cf " << (int)(elt->getCanvasY()) << " vs "
 // 		  << (int)(coords.second) << ")" << std::endl;
 //     }
     return ok;

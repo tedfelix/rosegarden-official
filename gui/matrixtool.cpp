@@ -42,8 +42,6 @@ using Rosegarden::SnapGrid;
 using Rosegarden::Event;
 using Rosegarden::Note;
 using Rosegarden::timeT;
-using std::cout;
-using std::cerr;
 using std::endl;
 
 //////////////////////////////////////////////////////////////////////

@@ -1065,12 +1065,12 @@ void NotationView::setOneToolbar(const char *actionName,
 {
     KToggleAction *action = getToggleAction(actionName);
     if (!action) {
-	std::cerr << "WARNING: No such action as " << actionName << std::endl;
+	NOTATION_DEBUG << "WARNING: No such action as " << actionName << std::endl;
 	return;
     }
     QWidget *toolbar = toolBar(toolbarName);
     if (!toolbar) {
-	std::cerr << "WARNING: No such toolbar as " << toolbarName << std::endl;
+	NOTATION_DEBUG << "WARNING: No such toolbar as " << toolbarName << std::endl;
 	return;
     }
     action->setChecked(!toolbar->isHidden());

@@ -20,6 +20,7 @@
 */
 
 #include "pixmapfunctions.h"
+#include "rosedebug.h"
 
 #include <qimage.h>
 #include <iostream>
@@ -97,7 +98,7 @@ PixmapFunctions::colourPixmap(const QPixmap &map, int hue, int minValue)
 
             if (oldHue >= 0) {
                 if (!warned) {
-                    std::cerr << "PixmapFunctions::recolour: Not a greyscale pixmap "
+                    RG_DEBUG << "PixmapFunctions::recolour: Not a greyscale pixmap "
 			      << "(found rgb value " << pixel.red() << ","
 			      << pixel.green() << "," << pixel.blue() 
 			      << "), hoping for the best" << std::endl;

@@ -68,6 +68,8 @@
 #include "colours.h"
 #include "rosegardendcop.h"
 
+#include "rosedebug.h"
+
 using Rosegarden::Int;
 using Rosegarden::RealTimeT;
 using Rosegarden::Bool;
@@ -2132,7 +2134,7 @@ SimpleEventEditDialog::getEvent() const
             }
             catch(Rosegarden::Event::NoData)
             {
-                std::cerr << "SimpleEventEditDialog::getEvent - "
+                RG_DEBUG  << "SimpleEventEditDialog::getEvent - "
                           << "can't create Controller event" << std::endl;
             }
 
@@ -2150,8 +2152,8 @@ SimpleEventEditDialog::getEvent() const
             }
             catch(Rosegarden::Event::NoData)
             {
-                std::cerr << "SimpleEventEditDialog::getEvent - "
-                          << "can't create KeyPressure event" << std::endl;
+                RG_DEBUG << "SimpleEventEditDialog::getEvent - "
+                         << "can't create KeyPressure event" << std::endl;
             }
 
             event.set<Int>(Rosegarden::KeyPressure::PITCH, data1);
@@ -2203,8 +2205,8 @@ SimpleEventEditDialog::getEvent() const
             }
             catch(Rosegarden::Event::NoData)
             {
-                std::cerr << "SimpleEventEditDialog::getEvent - "
-                          << "can't create PitchBend event" << std::endl;
+                RG_DEBUG << "SimpleEventEditDialog::getEvent - "
+                         << "can't create PitchBend event" << std::endl;
             }
             break;
 
@@ -3155,17 +3157,17 @@ AudioSplitDialog::drawPreview()
 
         if ( startY < 0 )
         {
-            std::cerr << "AudioSplitDialog::AudioSplitDialog - "
-                      << "startY - out of negative range"
-                      << std::endl;
+            RG_DEBUG << "AudioSplitDialog::AudioSplitDialog - "
+                     << "startY - out of negative range"
+                     << std::endl;
             startY = 0;
         }
 
         if (endY < 0)
         {
-            std::cerr << "AudioSplitDialog::AudioSplitDialog - "
-                      << "endY - out of negative range"
-                      << std::endl;
+            RG_DEBUG << "AudioSplitDialog::AudioSplitDialog - "
+                     << "endY - out of negative range"
+                     << std::endl;
             endY = 0;
         }
 
@@ -3304,7 +3306,6 @@ AudioSplitDialog::drawSplits(int threshold)
         {
             //(*pIt)->setVisible(false);
             delete (*pIt);
-            //cout << "X = " << (*pIt)->x() << endl;
         }
         m_previewBoxes.erase(m_previewBoxes.begin(), m_previewBoxes.end());
         m_canvas->update();
@@ -3557,8 +3558,8 @@ EventParameterDialog::slotPatternSelected(int value)
             break;
 
         default:
-            std::cerr << "EventParameterDialog::slotPatternSelected - "
-                      << "unrecognised pattern number" << std::endl;
+            RG_DEBUG << "EventParameterDialog::slotPatternSelected - "
+                     << "unrecognised pattern number" << std::endl;
             break;
     }
 

@@ -1577,7 +1577,7 @@ void AddTracksCommand::unexecute()
             m_composition->detachTrack(track);
         }
         else
-            std::cerr<< "AddTracksCommand::unexecute - "
+            RG_DEBUG<< "AddTracksCommand::unexecute - "
                      << "can't deatch track at position " << i << std::endl;
     }
 
@@ -1654,8 +1654,8 @@ void DeleteTracksCommand::execute()
             m_oldTracks.push_back(track);
             if (m_composition->detachTrack(track) == false)
             {
-                std::cerr << "DeleteTracksCommand::execute - "
-                          << "can't detach track" << std::endl;
+                RG_DEBUG << "DeleteTracksCommand::execute - "
+                         << "can't detach track" << std::endl;
             }
         }
     }

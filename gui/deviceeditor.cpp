@@ -289,11 +289,13 @@ DeviceEditorDialog::slotApply()
 	} else { // existing device
 	    Rosegarden::Device *device = m_studio->getDevice(deviceId);
 	    if (!device) {
+                /*
 		std::cerr <<
 		    "WARNING: DeviceEditorDialog::slotApply(): device at row "
 			  << i << " (id " << deviceId
 			  << ") claims not to be new, but isn't in the studio"
 			  << std::endl;
+                          */
 	    } else {
 		std::string name = qstrtostr(m_table->text(i, LABEL_COL));
 		std::string conn = qstrtostr(m_table->text(i, CONNECTION_COL));

@@ -54,7 +54,6 @@
 
 
 #include <iostream>
-using std::cerr;
 using std::endl;
 
 
@@ -847,7 +846,7 @@ NotePixmapFactory::drawFlags(int flagCount,
 				  !params.m_stemGoesUp);
 	
 	if (!found) {
-	    std::cerr << "Warning: NotePixmapFactory::drawFlags: No way to draw note with " << flagCount << " flags in this font!?" << std::endl;
+	   NOTATION_DEBUG << "Warning: NotePixmapFactory::drawFlags: No way to draw note with " << flagCount << " flags in this font!?" << std::endl;
 	    return;
 	}
 	

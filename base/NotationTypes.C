@@ -1013,11 +1013,13 @@ Pitch::rawPitchToDisplayPitch(int rawpitch,
     }
 
     // Failsafe...  If this ever executes, there's trouble to fix...
+    /*
     if (accidental == "") {
         std::cerr << "rawPitchToDisplayPitch(): error! returning null accidental for"
                   << std::endl << "pitch: " << rawpitch << " (" << pitch << " in oct " << octave << ")  userAcc: " << userAccidental
                   << "  clef: " << clef.getClefType() << "  key: " << key.getName() << std::endl;
     }
+    */
     
     // 6.  "Recenter" height in case it's been changed:
     height = ((height + 2) % 7) - 2;

@@ -42,7 +42,6 @@ using std::string;
 using std::map;
 using std::set;
 using std::cout;
-using std::cerr;
 using std::endl;
 
 NoteFontMap::NoteFontMap(string name) :

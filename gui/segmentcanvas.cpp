@@ -206,8 +206,8 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
     //
     if (m_channels == 0)
     {
-        std::cerr << "SegmentAudioPreview::drawShape - m_channels == 0 "
-                  << "problem with audio file" <<std::endl;
+        RG_DEBUG << "SegmentAudioPreview::drawShape - m_channels == 0 "
+                 << "problem with audio file" <<std::endl;
         return;
     }
 
