@@ -1,4 +1,5 @@
 make -f Makefile.cvs
 
 #CXX=/usr/lib/distcc/g++ CXXFLAGS="-O0 -g3 -Wall" ./configure --enable-debug --prefix=/opt/kde3.2
-CXX=/usr/lib/distcc/g++ CXXFLAGS="-O3 -march=pentium3 -mmmx -mfpmath=sse -fomit-frame-pointer -Wall" ./configure --disable-debug --prefix=/opt/kde3.2
+#CXX=/usr/lib/distcc/g++ CXXFLAGS="-O3 -march=pentium3 -mmmx -mfpmath=sse -fomit-frame-pointer -Wall" ./configure --disable-debug --prefix=/opt/kde3.2
+CXX=/usr/lib/distcc/g++ CXXFLAGS="-g -O2 -march=pentium3 -mmmx -mfpmath=sse -Wall" ./configure --disable-debug --prefix=/opt/kde3.2
