@@ -49,9 +49,11 @@ protected:
     bool parse();
     bool parseClef();
     bool parseChordItem();
+    bool parseRest();
     void closeTrackOrComposition();
 
     long convertRG21Pitch(long rg21pitch, int nodeModifier);
+    Rosegarden::timeT convertRG21Duration(QStringList::Iterator&);
 
     QFile m_file;
     QTextStream *m_stream;

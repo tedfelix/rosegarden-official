@@ -75,32 +75,10 @@ bool RG21Loader::parseClef()
 
 bool RG21Loader::parseChordItem()
 {
-    using Rosegarden::Note;
-    using Rosegarden::timeT;
-
     if (m_tokens.count() < 4) return false;
-
-    QString durationString = m_tokens[0].lower();
-    QStringList::Iterator i = m_tokens.begin(); 
-    ++i;
-    
-    if (durationString == "dotted") {
-        durationString += ' ';
-        durationString += m_tokens[1].lower();
-        ++i;
-    }
-    
-    Rosegarden::timeT duration = 0;
-
-    try {
-        Note n(durationString.latin1());
-        duration = n.getDuration();
-    } catch (Note::BadType b) {
-        kdDebug(KDEBUG_AREA) << "RG21Loader::parseChordItem: Bad duration: "
-                             << durationString << endl;
-        return false;
-    }
-
+   
+    QStringList::Iterator i = m_tokens.begin();
+    Rosegarden::timeT duration = convertRG21Duration(i);
 
     // get chord mod flags and nb of notes
     int chordMods = (*i).toInt(); ++i;
@@ -114,7 +92,7 @@ bool RG21Loader::parseChordItem()
         int noteMods = (*i).toInt();
         pitch = convertRG21Pitch(pitch, noteMods);
 
-        Event *noteEvent = new Event(Note::EventType);
+        Event *noteEvent = new Event(Rosegarden::Note::EventType);
         noteEvent->setDuration(duration);
         noteEvent->setAbsoluteTime(m_currentTrackTime);
         noteEvent->set<Int>("pitch", pitch);
@@ -130,6 +108,48 @@ bool RG21Loader::parseChordItem()
     return true;
 }
 
+bool RG21Loader::parseRest()
+{
+    if (m_tokens.count() < 2) return false;
+   
+    QStringList::Iterator i = m_tokens.begin();
+    Rosegarden::timeT duration = convertRG21Duration(i);
+    
+    Event *restEvent = new Event(Rosegarden::Note::EventRestType);
+    restEvent->setDuration(duration);
+    restEvent->setAbsoluteTime(m_currentTrackTime);
+    m_currentTrack->insert(restEvent);
+    m_currentTrackTime += duration;
+
+    return true;
+}
+
+Rosegarden::timeT RG21Loader::convertRG21Duration(QStringList::Iterator& i)
+{
+    QString durationString = (*i).lower();
+    ++i;
+    
+    if (durationString == "dotted") {
+        durationString += ' ';
+        durationString += (*i).lower();
+        ++i;
+    }
+
+    try {
+
+        Rosegarden::Note n(durationString.latin1());
+        return n.getDuration();
+
+    } catch (Rosegarden::Note::BadType b) {
+
+        kdDebug(KDEBUG_AREA) << "RG21Loader::convertRG21Duration: Bad duration: "
+                             << durationString << endl;
+        return 0;
+    }
+
+}
+
+
 void RG21Loader::closeTrackOrComposition()
 {
     if (m_currentTrack) {
@@ -142,6 +162,7 @@ void RG21Loader::closeTrackOrComposition()
     }
 }
 
+/// snarfed from RG21 sources
 long RG21Loader::convertRG21Pitch(long pitch, int noteModifier)
 {
   long rtn = 0;
@@ -214,6 +235,13 @@ bool RG21Loader::parse()
 
             m_tokens.remove(m_tokens.begin()); // get rid of 1st token ':'
             parseChordItem();
+
+        } else if (firstToken == "Rest") { // rest
+            // read next line
+            m_currentLine = m_stream->readLine();
+            m_currentLine = m_currentLine.simplifyWhiteSpace();
+            m_tokens = QStringList::split(' ', m_currentLine);
+            parseRest();
 
         } else if (firstToken == "End") {
 
