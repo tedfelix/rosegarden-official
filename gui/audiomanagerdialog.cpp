@@ -1022,8 +1022,7 @@ AudioManagerDialog::addFile(const KURL& kurl)
         CurrentProgressDialog::freeze();
 
         QString errorString =
-            i18n("Can't add File.  WAV file body invalid.\n\"") +
-            strtoqstr(e) + "\"";
+            i18n("Can't add File.  ") + strtoqstr(e);
         KMessageBox::sorry(this, errorString);
         return false;
     }

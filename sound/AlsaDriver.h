@@ -331,6 +331,8 @@ private:
     static int  jackGraphOrder(void *);
     static int  jackXRun(void *);
 
+    static void* jackDiskThread(void *arg);
+
     jack_client_t               *m_audioClient;
     std::vector<jack_port_t*>    m_jackInputPorts;
     jack_port_t                 *m_jackOutputPortLeft;

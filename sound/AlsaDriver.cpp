@@ -164,6 +164,9 @@ static const int reportPasses = 5;
 static const int     _jackPeakLevelsMax = 200;
 static float         _jackPeakLevels[_jackPeakLevelsMax];
 
+pthread_mutex_t      _diskThreadLock = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t       _dataReady = PTHREAD_COND_INITIALIZER;
+
 #endif
 
 static bool              _threadJackClosing;
@@ -4812,6 +4815,24 @@ AlsaDriver::getStatusLog()
 {
     return QString::fromUtf8(_audit.c_str());
 }
+
+
+#ifdef HAVE_LIBJACK
+// Disk thread for audio i/o
+//
+// This thread ensures that all i/o ringbuffers are full for reading
+// or empty (as they can be) on writing.  Frees up the main process
+// thread for processing audio from memory only.
+//
+
+void *
+AlsaDriver::jackDiskThread(void *arg)
+{
+    return 0;
+}
+
+
+#endif // HAVE_LIBJACK
 
 }
 

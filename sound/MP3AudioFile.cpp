@@ -103,22 +103,44 @@ MP3AudioFile::parseHeader()
     if (m_inFile == 0)
         return;
 
+    // store size conveniently
+    m_fileSize = m_fileInfo->size();
+
+    if (m_fileSize == 0)
+    {
+        std::string mess = std::string("\"")+ m_fileName +
+            std::string("\" is empty - invalid MP3 file");
+        throw(mess);
+    }
+
     // seek to beginning
     m_inFile->seekg(0, std::ios::beg);
 
-    // get the header string
+    // get some header information
     //
-    std::string hS = getBytes(256);
-    int headerLength = 0;
+    const int bufferLength = 3096;
+    std::string hS = getBytes(bufferLength);
+    bool foundMP3 = false;
 
-    if (hS.substr(0, 3) == MP3_TAG) 
-        headerLength = 127;
-    else if (hS.substr(0, 4) == std::string("RIFF"))
-        headerLength = 20; // guess for the moment
-    else
+    for (unsigned int i = 0; i < hS.length() - 1; ++i)
     {
-        headerLength = 10;
+         if ((hS[i] & 0xff) == 0xff && (hS[i+1] & 0xe0) == 0xe0)
+         {
+             foundMP3 = true;
+             break;
+         }
     }
+    
+    if (foundMP3 == false || hS.length() < bufferLength)
+    {
+        std::string mess = std::string("\"")+ m_fileName +
+            std::string("\" doesn't appear to be a valid MP3 file");
+        throw(mess);
+    }
+
+    // guess most likely values - these are reset during decoding
+    m_channels = 2;
+    m_sampleRate = 44100;
 
     mad_synth synth;
     mad_frame frame;
