@@ -87,7 +87,7 @@ SoundFile::getLittleEndianFromInteger(unsigned int value, unsigned int length)
 
     do
     {
-        r += (unsigned char)((value >> (8 * r.length())) & 0xff);
+        r += (unsigned char)((long)((value >> (8 * r.length())) & 0xff));
     }
     while (r.length() < length);
 

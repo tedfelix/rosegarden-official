@@ -1408,16 +1408,11 @@ AlsaDriver::record(const RecordStatus& recordStatus)
     }
     else if (recordStatus == RECORD_AUDIO)
     {
-        /*
-        std::cerr << "ArtsDriver::record - RECORDING AUDIO"
-                  << std::endl;
-                  */
-
 #ifdef HAVE_JACK
         createAudioFile("temp.wav");
         m_recordStatus = RECORD_AUDIO;
 #else
-	std::cerr << "ArtsDriver::record - can't record audio without JACK"
+	std::cerr << "AlsaDriver::record - can't record audio without JACK"
 		  << std::endl;
 #endif
 
@@ -1599,7 +1594,8 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
             {
                 b2 = (unsigned char)((long)(inputBuffer[i] * _16bitSampleMax)& 0xff);
                 b1 = (unsigned char)((long)(inputBuffer[i] * _16bitSampleMax) >> 8);
-                buffer += b1 + b2;
+                buffer += b2;
+                buffer += b1;
             }
 
             // append the sample string
@@ -1945,11 +1941,14 @@ AlsaDriver::createAudioFile(const std::string &fileName)
     cout << "AlsaDriver::createAudioFile - creating \"" 
          << fileName << "\"" << std::endl;
 
+    // we use JACK_DEFAULT_AUDIO_TYPE for all ports currently so
+    // we're recording 32 bit float MONO audio.
+    //
     _recordFile = new AudioFile(fileName,
                                  WAV,
-                                 2,                    // channels
-                                 _jackSampleRate,
-                                 10,                   // bytes per second
+                                 1,                    // channels
+                                 _jackSampleRate,      // bits per second
+                                 _jackSampleRate/16,   // bytes per second
                                  2,                    // bytes per sample
                                  16);                  // bits per sample
 
