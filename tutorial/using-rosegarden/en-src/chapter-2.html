@@ -5,7 +5,7 @@
 	<TITLE></TITLE>
 	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Linux)">
 	<META NAME="CREATED" CONTENT="20040613;311200">
-	<META NAME="CHANGED" CONTENT="20040622;21011800">
+	<META NAME="CHANGED" CONTENT="20040625;22171500">
 	<STYLE>
 	<!--
 		A:link { color: #ba2c2c }
@@ -15,6 +15,28 @@
 </HEAD>
 <BODY LANG="en-US" LINK="#ba2c2c" VLINK="#ba2c2c" BGCOLOR="#ffffff" DIR="LTR">
 <H1>A First Look</H1>
+<H2>Before You Begin</H2>
+<P>Before you start Rosegarden, you might want to make sure your
+configuration is in order.  Many users have found that Rosegarden was
+unable to produce any sound out of the box.</P>
+<P>If you are interested in working with MIDI, you should consider a
+few questions.  Do you have a MIDI keyboard attached to your
+computer?  Does your soundcard have an internal synth?  Do you have
+it working correctly?  Are you going to have to run a software synth
+such as QSynth?  Can you play MIDI files (<B>.mid)</B><SPAN STYLE="font-weight: medium">?</SPAN>
+ If you don't know the answers to these questions, you might want to
+turn to <A HREF="http://chapter-9.html/">&quot;MIDI Primer&quot;</A>
+and familiarize yourself with these basics.</P>
+<P> If you play to use Rosegarden as an audio sequencer, you might do
+well to turn to <A HREF="http://chapter-7.html/">&quot;Starting and
+Routing Audio Through JACK&quot;</A> to learn about starting the JACK
+audio server, and getting it to cooperate with any software synths
+you wish to run. The audio server must be running before you start
+Rosegarden in order for Rosegarden's audio features to be enabled.</P>
+<P>After working through the material in these two appendices, you
+should be  ready to come back here and get started in earnest.</P>
+<P>Or, of course, you can jump in headlong, fire this thing up, and
+take it for a spin.</P>
 <H2><A NAME="2_1"></A>The Main Window</H2>
 <P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
 Let's begin by starting Rosegarden, and having a look at the main
@@ -25,18 +47,14 @@ A Rosegarden document is called a composition. The main window is
 primarily dedicated to editing at the composition level, so most of
 these tools affect your document in a broad way. This is where you
 name tracks and assign instruments to them, create and manipulate
-segments, and watch a broad overview of playback.  (I will explain
+segments, and watch a broad overview of playback. (I will explain
 these concepts in more detail later on.) This is also where you
-configure segment parameters such as label and color.  Tempo and time
+configure segment parameters such as label and color. Tempo and time
 signature settings exist a composition level, and they may be edited
 here in the main window using the tempo ruler.</P>
 <P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
 <IMG SRC="../pixmaps/main-screenshot.png" NAME="Graphic4" ALIGN=BOTTOM WIDTH=463 HEIGHT=295 BORDER=0></P>
-<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-<BR><BR>
-</P>
-<H2 ALIGN=LEFT STYLE="border: none; padding: 0in"><A NAME="2_2"></A>Special
-Toolbars</H2>
+<H2><A NAME="2_2"></A>Special Toolbars</H2>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">One of
 the first things you might notice about Rosegarden is that there are
 several toolbars at the top of the main window. In addition to the
@@ -75,16 +93,16 @@ magnification of the Segment Canvas:</P>
 <IMG SRC="../pixmaps/using-rosegarden_html_47dd4a5.png" NAME="Graphic29" ALIGN=BOTTOM WIDTH=259 HEIGHT=26 BORDER=0>
 </P>
 <H2>The Tracklist</H2>
-<P>Rosegarden is a track-based sequencer.  Each entry in the
-tracklist is a separate track that can have individualized settings
-for several different parameters.  Each track has a label and an
-output assignment, and can be used to record, play, and manipulate
-either MIDI or audio data, but never both.</P>
+<P>Rosegarden is a track-based sequencer. Each entry in the tracklist
+is a separate track that can have individualized settings for several
+different parameters. Each track has a label and an output
+assignment, and can be used to record, play, and manipulate either
+MIDI or audio data, but never both.</P>
 <H3>Connection vs. Name</H3>
 <P STYLE="margin-bottom: 0.2in">The tracklist can be configured to
 display either the name you've assigned to the track, or the name of
 the device and channel to which it is connected. Toggle this behavior
-with <B>Settings -&gt; Show Track Labels</B>.  I will explain more
+with <B>Settings -&gt; Show Track Labels</B>. I will explain more
 about these connections later on, after I have described the Studio.</P>
 <P STYLE="margin-bottom: 0.2in">Here we see how connections are
 displayed on the tracklist.</P>
@@ -93,11 +111,11 @@ displayed on the tracklist.</P>
 <P ALIGN=LEFT STYLE="margin-bottom: 0.2in">Here we see the labels.
 One track has not yet had a name assigned, so it remains
 &quot;&lt;untitled&gt;&quot;.</P>
-<P ALIGN=LEFT STYLE="margin-bottom: 0.2in">Each track has two LEDs. 
-The blue one is the track mute.  If the blue LED is glowing, the
-track will be heard during playback.  All of the blue LEDs can be
-turned on or off all at once with <B>Tracks -&gt; Mute All </B><SPAN STYLE="font-weight: medium">and
-</SPAN><B>-&gt; /Un-Mute All</B><SPAN STYLE="font-weight: medium">.</SPAN></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0.2in">Each track has two LEDs.
+The blue one is the track mute. If the blue LED is glowing, the track
+will be heard during playback. All of the blue LEDs can be turned on
+or off all at once with <B>Tracks -&gt; Mute All </B>and <B>-&gt;
+/Un-Mute All</B>.</P>
 <P ALIGN=LEFT STYLE="margin-bottom: 0.2in">The red LED lights up to
 indicate that the affected track is armed as the destination for
 recording operations.</P>
@@ -120,7 +138,7 @@ allowing you to enter a new name.</P>
 <P>The tools on the Tracks Toolbar 
 <IMG SRC="../pixmaps/using-rosegarden_html_m7a769b12.png" NAME="Graphic9" ALIGN=BOTTOM WIDTH=125 HEIGHT=27 BORDER=0>
 can be used to move tracks up and down, to delete them, or to create
-new tracks.  It is not possible to copy an entire track.</P>
+new tracks. It is not possible to copy an entire track.</P>
 <H2 STYLE="border: none; padding: 0in"><A NAME="2_3"></A>Segments and
 Segment Parameters</H2>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Rosegarden
@@ -193,21 +211,20 @@ This can also merge events from several different tracks into a
 single segment. The events will combine, and merge onto a segment on
 whichever track is currently active. Obviously, you may not merge
 MIDI and audio into the same segment.</P>
-<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal; font-weight: medium">
-Split by Pitch</P>
+<H4>Split by Pitch</H4>
 <P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal; font-weight: medium">
 If you have a segment where the treble and bass parts are jumbled
-together, you might wish to split this at middle C or thereabouts. 
-You can use <B>Segments -&gt; Split and Join -&gt; Split by Pitch</B><SPAN STYLE="font-weight: medium">
+together, you might wish to split this at middle C or thereabouts.
+You can use <B>Segments -&gt; Split and Join -&gt; Split by Pitch</B>
 and then make your selections for split point, clef handling, etc.
-from the resulting dialog.  By default, this feature attempts to
-split the segment intelligently, so that you can hopefully avoid
-winding up with treble notes in the bass part, and bass notes in the
-treble part.</SPAN></P>
-<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal; font-weight: medium">
+from the resulting dialog. By default, this feature attempts to split
+the segment intelligently, so that you can hopefully avoid winding up
+with treble notes in the bass part, and bass notes in the treble
+part.</P>
+<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
 <IMG SRC="../pixmaps/main-split-by-pitch.png" NAME="Graphic8" ALIGN=BOTTOM WIDTH=207 HEIGHT=229 BORDER=0></P>
 <P>Once split, the two segments will overlap exactly on the same
-track.  It is impossible to select a segment that lies completely
+track. It is impossible to select a segment that lies completely
 underneath another segment, so it is probably a good idea to move one
 of the two halves into a different track.</P>
 <H3>Segment Previews</H3>

@@ -18,92 +18,26 @@ A { text-decoration: none }
 </HEAD>
 <BODY BGCOLOR="#ffffff" TEXT="#000000" LINK="#0000ff" VLINK="#0000ff" ALINK="#0000ff">
 <A HREF="index.html">Contents</A>
-<A HREF="chapter-6.html">Previous</A>
-<A HREF="chapter-8.html">Next</A>
+<A HREF="chapter-9.html">Previous</A>
+<A HREF="chapter-99.html">Next</A>
 <HR>
-<H1>8 <A NAME="6"></A>You Don't Know JACK</H1>
-<P>In order to make use of Rosegarden's audio features, you will need to
- run JACK.</P>
-<P>JACK is short for the Jack Audio Connection Kit. This marvel is at
- the heart of Linux audio, and it allows for a level of interoperability
- between applications that's undreamt of in the world of proprietary
- software. JACK is a flexible audio server that allows its client
- applications to share the audio hardware seamlessly, regardless of the
- sound driver used, and to share a common transport. It is geared toward
- the audio professional who wants to get the lowest possible latency and
- the best possible performance out of his or her hardware. The good news
- is that regular dumb kids like me can sometimes get this to work too.
- :)</P>
-<P>I want everyone to know up front that I am not a Linux audio hacker.
- I don't know how to get the ultimate low latency performance out of my
- equipment, and I can't tell you how to take advantage of any of JACK's
- more exotic capabilities. If I can run as many JACK applications as I
- want, and play as many streams of audio as I want without dropouts and
- distortions, I feel like I have accomplished enough. After a great deal
- of frustration, I finally achieved an acceptable plateau of
- understanding, and I'm staying put. You will have to turn to some other
- source if you wish to be lead beyond the level of understanding I have
- attained.</P>
-<P>Most notably, I am running all of this stuff as a regular user. I
- added the low latency and pre-emptive patches to my kernel, turned on
- &quot;capabilities&quot; and then after I booted, I realized I had no idea what
- to<B> do</B> with any of that stuff. I still don't. I finally just
- booted my old, reliable kernel and decided not to bother. It gets me
- by, but I don't get the kind of performance most people demand.</P>
-<H2><A NAME="8_1">8.1 Starting and Tweaking JACK</A></H2>
-<P>The simplest way to control your JACK server is to use<B> qjackctl</B>
-. It takes a lot of the sting out of the process, and presents you with
- a nice interface to show you how things are going. It is, of course,
- not a part of Rosegarden, and you will need to install it separately.</P>
-<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="78" NAME="Graphic1"
-SRC="../pixmaps/qjackctl-overview.png" WIDTH="393"></P>
-<H3><A NAME="8_1_1">8.1.1 The Evil XRUN</A></H3>
-<P ALIGN="LEFT" STYLE="font-weight: medium">In the above example, you
- see what it's generally supposed to look like. Sometimes getting it to
- play nice is no mean feat. Notice in particular that most elusive of
- conditions: I have no xruns!</P>
-<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
-HEIGHT="69" NAME="Graphic3" SRC="../pixmaps/JACK-no-xruns.png" WIDTH="112"></P>
-<P ALIGN="LEFT" STYLE="font-weight: medium">You don't want to see
- anything else show up in this portion of qjackctl's display. These
- &quot;xruns&quot; are JACK's way of telling you that it isn't happy. They cause
- audio dropouts and bad performance. Your goal in tweaking JACK is to
- achieve the lowest latency possible while preventing xruns.</P>
-<P ALIGN="LEFT" STYLE="font-weight: medium">At the other extreme, I have
- intentionally started JACK with parameters I know to deliver poor
- results, and I have taxed the system by running too many things at
- once, playing too many big audio files at the same time, and so forth.
- I produced this hideous outcome in short order:</P>
-<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
-HEIGHT="64" NAME="Graphic4" SRC="../pixmaps/JACK-know-xruns.png" WIDTH="113"></P>
-<P ALIGN="LEFT" STYLE="font-weight: medium">You never want to see this
- much red. Seeing any red at all is really unacceptable.</P>
-<H3><A NAME="8_1_2">8.1.2 Configuring the JACK Server</A></H3>
-<P ALIGN="LEFT" STYLE="font-weight: medium">To change how your JACK
- server is configured, use the<B> Setup</B> button. Here you can see the
- settings that finally worked for me with my SB Live!. These settings
- are pure magic. I've run JACK for days on end without a single xrun
- ever. I hope they work as well for you. If not, I'm afraid the best
- thing for you do is play with the &quot;Frames/Period&quot;, &quot;Sample Rate&quot; and
- &quot;Periods/Buffer&quot; settings. Start JACK with the<B> Start</B>
-<!--SPAN STYLE="font-weight: medium"-->
- button, see
- how things go, and then stop it and come back to play with these
- settings some more until you find the most acceptable combination.
- Watch the &quot;Latency:&quot; figure in the bottom corner. You want to keep this
- as low as possible. If you have high latency here, then any software
- synths that play through JACK will have horrible playback problems.</P>
-<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="211" NAME="Graphic2"
-SRC="../pixmaps/qjackctl-silvan.png" WIDTH="290"></P>
-<P ALIGN="LEFT" STYLE="font-weight: medium">If you were running
- Rosegarden before starting JACK, you'll need to close Rosegarden and
- restart it in order to make its audio features available. I will cover
- Rosegarden's audio features in depth in the next chapter. For now we
- are only concerned with how to get Rosegarden to cooperate with other
- JACK-enabled applications.</P>
-<H2><A NAME="8_2">8.2 Using Rosegarden with QSynth</A></H2>
-<H2><A NAME="8_3">8.3 Using Rosegarden with Hydrogen</A></H2>
-<H2><A NAME="8_4">8.4 Using Rosegarden with ZynAddSubFX</A></H2>
+<H1><A NAME="15">15 Mastering</A></H1>
+<P>This chapter will eventually deal with the vagaries of putting audio
+ and MIDI streams together and mixing them down into a finished .wav
+ file.</P>
+<P>I don't expect to get to this until last. In the meantime, I offer
+ the following quick and dirty information:</P>
+<P>You can master in one of two ways. One is to set up a dedicated
+ mastering track and play everything while having Rosegarden record
+ itself. You can use Rosegarden's internal MIDI and audio mixers to help
+ make this job easier.</P>
+<P>The more flexible way is to route Rosegarden's JACK outputs into
+ something else, like JAMin or Ardour. JAMin looks like a promising tool
+ here, but I haven't really explored it.</P>
+<P>
+<BR>
+<BR></P>
+<P>Anyway, all in due time I'm afraid.</P>
 <P>
 <BR>
 <BR></P>
@@ -115,7 +49,7 @@ SRC="../pixmaps/qjackctl-silvan.png" WIDTH="290"></P>
 <BR></P>
 <HR>
 <A HREF="index.html">Contents</A>
-<A HREF="chapter-6.html">Previous</A>
-<A HREF="chapter-8.html">Next</A>
+<A HREF="chapter-9.html">Previous</A>
+<A HREF="chapter-99.html">Next</A>
 </BODY>
 </HTML>

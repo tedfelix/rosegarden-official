@@ -19,9 +19,10 @@ A { text-decoration: none }
 <BODY BGCOLOR="#ffffff" TEXT="#000000" LINK="#0000ff" VLINK="#0000ff" ALINK="#0000ff">
 <A HREF="index.html">Contents</A>
 <A HREF="chapter-8.html">Previous</A>
-<A HREF="chapter-99.html">Next</A>
+<A HREF="chapter-7.html">Next</A>
 <HR>
-<H1><A NAME="10">10 Appendix A: MIDI Primer</A></H1>
+<H1><A NAME="9">9 Appendix A:</A></H1>
+<H1><A NAME="10">10 MIDI Primer</A></H1>
 <P>MIDI stands for Musical Instrument Digital Interface. It is a simple
  serial protocol that electronic instruments and computers can use to
  talk to each other. MIDI-capable instruments vary enormously in their
@@ -52,24 +53,25 @@ A { text-decoration: none }
  piano through the orchestra into synthesized and ethnic sounds. These
  simulated instruments are called either &quot;programs&quot; or &quot;patches.&quot;</P>
 <P>In the most common MIDI standard, General MIDI (GM), instruments must
- be able to play using any of 128 different programs. Music written to
+ be able to play using any of 127 different programs. Music written to
  be performed on one GM instrument should sound similar on any other.
  The GM specification dictates that channel 10 will play drum sounds,
  and it defines a standard arrangement of keys on the keyboard to
  represent different drums.</P>
 <H2><A NAME="10_3">10.3 Banks</A></H2>
 <P>Beyond the GM standard, many instruments have banks of additional
- programs. The MIDI specification allows for a monumental number of
- different banks, but most instruments arrange banks in two common ways.
- The two most common standards for this expansion of GM are called GS
- (Roland) and XG (Yamaha.) The usual General MIDI programs are in the
- first bank, and the extra programs are found in additional banks. Each
- bank has a unique identifying number using a combination of two
- parameters. They are Least Significant Byte (LSB) and Most Significant
- Byte (MSB). The standard GM bank on every GM-compliant synth has an
- LSB/MSB address of 0 0.</P>
+ programs. Each bank can contain an additional 127 programs. The MIDI
+ specification allows for a monumental number of different banks, but
+ most instruments arrange banks in two common ways. The two most common
+ standards for this expansion of GM are called GS (Roland) and XG
+ (Yamaha.) The usual General MIDI programs are in the first bank, and
+ the extra programs are found in additional banks. Each bank has a
+ unique identifying number using a combination of two parameters. They
+ are Least Significant Byte (LSB) and Most Significant Byte (MSB). The
+ standard GM bank on every GM-compliant synth has an LSB/MSB address of
+ 0 0.</P>
 <H2><A NAME="10_4">10.4 Controllers</A></H2>
-<P>MIDI allows for 128 controllers. These controllers typically work at
+<P>MIDI allows for 127 controllers. These controllers typically work at
  a channel level, and are used to control things such as pan (how far to
  the left or right the sound will play), volume (the overall maximum
  volume for the channel), pitch bend (used to simulate guitar and
@@ -78,7 +80,7 @@ A { text-decoration: none }
  hall) and sustain (causes the note to keep playing unhampered until the
  sound finally dies away, like the sustain pedal on a piano). There is
  enormous variability in this area, and you will find some equipment
- that ignores them all, while other instruments will use nearly all 128
+ that ignores them all, while other instruments will use nearly all 127
  of them. You will need to know what kind of controllers your equipment
  (or software synth) supports if you are to configure Rosegarden to make
  use of them, though it does come out of the box aware of a very limited
@@ -128,11 +130,105 @@ You need to understand and be aware of the capabilities of whatever
  capabilities are. Documentation for used MIDI equipment can frequently
  be found online. Of course, when all else fails, you're left with trial
  and error.</P>
-<H1><A NAME="11">11 Appendix B: Common Problems</A></H1>
-<H2><A NAME="11_1">11.1 I Can't Hear Anything!</A></H2>
-<H2><A NAME="11_2">11.2 How Do I Control My SB Live!'s Ridiculous
+<H1>11 <A NAME="6"></A>Appendix B:</H1>
+<H1><A NAME="12">12 Starting and Routing Audio Through JACK</A></H1>
+<P>In order to make use of Rosegarden's audio features, you will need to
+ run JACK.</P>
+<P>JACK is short for the Jack Audio Connection Kit. JACK is a flexible
+ audio server that allows its client applications to share the audio
+ hardware seamlessly, and to share a common transport. It provides
+ flexible mechanisms for routing inputs and outputs to and from client
+ applications using a jack-and-cable metaphor. It is geared toward the
+ audio professional who wants to get the lowest possible latency and the
+ best possible performance out of his or her hardware, but normal humans
+ can sometimes coax it into working without too arduous an ordeal.</P>
+<P>I want everyone to know up front that I am not a Linux audio hacker.
+ I don't know how to get the ultimate low latency performance out of my
+ equipment, and I can't tell you how to take advantage of any of JACK's
+ more exotic capabilities. If I can run as many JACK applications as I
+ want, and play as many streams of audio as I want without dropouts and
+ distortions, I feel like I have accomplished enough. After a great deal
+ of frustration, I finally achieved an acceptable plateau of
+ understanding, and I'm staying put. You will have to turn to some other
+ source if you wish to be lead beyond the level of understanding I have
+ attained.</P>
+<P>Most notably, I am running all of these things as a regular user. I
+ patched and compile a kernel, but after I booted it, I was unable to
+ obtain any better performance than what I had been able to achieve as a
+ user. That makes me a total failure as a Linux audio hacker, and I
+ freely admit that.</P>
+<H2><A NAME="12_1">12.1 Starting and Tweaking JACK</A></H2>
+<P>The simplest way to control your JACK server is to use<B> qjackctl</B>
+. It takes a lot of the sting out of the process, and presents you with
+ a nice interface to show you how things are going. It is, of course,
+ not a part of Rosegarden, and you will need to install it separately.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="78" NAME="Graphic1"
+SRC="../pixmaps/qjackctl-overview.png" WIDTH="393"></P>
+<H3><A NAME="12_1_1">12.1.1 The Evil XRUN</A></H3>
+<P ALIGN="LEFT" STYLE="font-weight: medium">In the above example, you
+ see what it's generally supposed to look like. Sometimes getting it to
+ play nice is no mean feat. Notice in particular that most elusive of
+ conditions: I have no xruns!</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="69" NAME="Graphic3"
+SRC="../pixmaps/JACK-no-xruns.png" WIDTH="112"></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">You don't want to see
+ anything else show up in this portion of qjackctl's display. These
+ &quot;xruns&quot; are JACK's way of telling you that it isn't happy. They cause
+ audio dropouts and bad performance. They will make Rosegarden whine
+ constantly about how your &quot;audio subsystem is losing resolution.&quot; Your
+ goal in tweaking JACK is to achieve the lowest latency possible while
+ preventing xruns.</P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">At the other extreme, I have
+ intentionally started JACK with parameters I know to deliver poor
+ results, and I have taxed the system by running too many things at
+ once, playing too many big audio files at the same time, and so forth.
+ I produced this hideous outcome in short order:</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="64" NAME="Graphic4"
+SRC="../pixmaps/JACK-know-xruns.png" WIDTH="113"></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">You never want to see this
+ much red. Seeing any red at all is really unacceptable.</P>
+<H3><A NAME="12_1_2">12.1.2 Configuring the JACK Server</A></H3>
+<P ALIGN="LEFT" STYLE="font-weight: medium">To change how your JACK
+ server is configured, use the<B> Setup</B> button. Here you can see the
+ settings that finally worked for me with my SB Live!. These settings
+ are pure magic. I've run JACK for days on end without a single xrun
+ ever. I hope they work as well for you. If not, I'm afraid the best
+ thing for you do is play with the &quot;Frames/Period&quot;, &quot;Sample Rate&quot; and
+ &quot;Periods/Buffer&quot; settings. Start JACK with the<B> Start</B> button, see
+ how things go, and then stop it and come back to play with these
+ settings some more until you find the most acceptable combination.
+ Watch the &quot;Latency:&quot; figure in the bottom corner. You want to keep this
+ as low as possible. If you have high latency here, then any software
+ synths that play through JACK will have horrible playback problems.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="211" NAME="Graphic2"
+SRC="../pixmaps/qjackctl-silvan.png" WIDTH="290"></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">If you were running
+ Rosegarden before starting JACK, you'll need to close Rosegarden and
+ restart it in order to make its audio features available. I will cover
+ Rosegarden's audio features in depth in the next chapter. For now we
+ are only concerned with how to get Rosegarden to cooperate with other
+ JACK-enabled applications.</P>
+<H2><A NAME="12_2">12.2 Using Rosegarden with QSynth</A></H2>
+<P>Many Rosegarden users find themselves without any way to play MIDI in
+ Linux. Many soundcards have Windows drivers that provide a MIDI
+ emulation layer transparently, and they are never even aware that their
+ hardware has no built-in capability to play MIDI. When I made the move
+ to Linux myself, my Sound Blaster PCI 128 (ens1371) was a shining
+ example of just such a card. I had no idea that its on-board synth was
+ actually just the Windows driver. Many cheap integrated audio solutions
+ such as those found on inexpensive motherboards and laptops fall into
+ the same category.</P>
+<P>Fortunately, there's a simple remedy to all of these problems, and
+ its name is QSynth. QSynth provides convenient controls for configuring
+ and adjusting various parameters, including a soundfont manager,</P>
+<H2><A NAME="12_3">12.3 Using Rosegarden with Hydrogen</A></H2>
+<H2><A NAME="12_4">12.4 Using Rosegarden with ZynAddSubFX</A></H2>
+<H1><A NAME="13">13 Appendix C:</A></H1>
+<H1><A NAME="14">14 Common Problems</A></H1>
+<H2><A NAME="14_1">14.1 I Can't Hear Anything!</A></H2>
+<H2><A NAME="14_2">14.2 How Do I Control My SB Live!'s Ridiculous
  Mixer?!</A></H2>
-<H2><A NAME="11_3">11.3 My Sofware Synths Sound Horrible through JACK!</A>
+<H2><A NAME="14_3">14.3 My Sofware Synths Sound Horrible through JACK!</A>
 </H2>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
 <BR>
@@ -140,6 +236,6 @@ You need to understand and be aware of the capabilities of whatever
 <HR>
 <A HREF="index.html">Contents</A>
 <A HREF="chapter-8.html">Previous</A>
-<A HREF="chapter-99.html">Next</A>
+<A HREF="chapter-7.html">Next</A>
 </BODY>
 </HTML>

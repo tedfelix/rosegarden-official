@@ -26,40 +26,137 @@ A { text-decoration: none }
  your own needs, you might be wondering just how to make use of all
  those programs and controllers you set up. As I have mentioned in
  various other places, program changes and controllers in MIDI work on a
- channel level. That means they work on a track level within Rosegarden.
- On the audio side of the aisle, Rosegarden divides audio support into
- 16 channels as well, and channel-specific settings such as volume
- levels and plugins can be configured at the track and channel level as
- well.</P>
-<H2><A NAME="4_1">4.1 JACK Track or MIDI Track?</A></H2>
-<P>When starting with a new track, or reconfiguring an existing one, the
- first decision you need to make is whether the track will be used for
- audio or MIDI. Regardless of whether you are displaying connections or
- track labels, you begin by clicking the mouse cursor in this area, and
- holding a moment until a menu appears.</P>
+ channel level. In Rosegarden, these channel-level assignments are
+ encapsulated within &quot;instruments&quot; contained within each &quot;device&quot; that
+ can be assigned to any number of different tracks.</P>
+<H2><A NAME="4_1">4.1 &quot;Instruments&quot;</A></H2>
+<P>Rosegarden has yet another layer of abstraction between you and your
+ MIDI equipment, called the &quot;instrument.&quot; Every &quot;device&quot; has 16
+ &quot;instruments&quot; numbered #1 through #16. When working with MIDI playback
+ devices, each of these &quot;instruments&quot; encapsulates a MIDI output channel
+ (the same channel as the number of the &quot;instrument&quot; by default,
+ although this relationship is not fixed), a bank/program/variation
+ assignment, and any initial controllers you wish to affect the
+ associated channel. These &quot;instruments&quot; allow you to assemble up to 16
+ collections of programs/controllers per device and assign these
+ combinations to any number of tracks.</P>
+<P>When working with audio and synth plugins, these &quot;instruments&quot; serve
+ the same purpose as MIDI channels, allowing you to configure up to 16
+ different combinations of LADSPA plugins, volume and pan settings, and
+ so forth, and then apply these combinations to any number of different
+ tracks.</P>
+<H2><A NAME="4_2">4.2 Routing a Track to a &quot;Device&quot; and &quot;Instrument&quot;</A></H2>
+<P>The first step in the assignment process is to route a track to a
+ particular &quot;device.&quot; The &quot;device&quot; you use will determine whether you
+ can play audio or MIDI data on this track. In order to make this device
+ assignment, begin by clicking the mouse cursor in this area, and
+ holding a moment until a context menu appears.</P>
 <P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="51" NAME="Graphic3" SRC="../pixmaps/click-and-hold.png"
 WIDTH="231"></P>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
- You should be presented with a series of nested menus that allow you to
- choose the MIDI (or JACK) device and channel for the track. Let's have
- a look at MIDI first:</P>
+ You should be presented with a series of two menus that allow you to
+ choose first the &quot;device&quot; and then the &quot;instrument&quot; for this track.</P>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
- This first layer of the menu tree allows you to route this track's
- output to a particular device. In this case, I chose to route it to my
- Roland Sound Canvas.</P>
+ In this case, I chose to route it to my &quot;Roland SC-33&quot; device, which is
+ ultimately connected through my Rosegarden studio to play through ALSA
+ port 64:0, and thus the Roland Sound Canvas I have plugged into the box
+ physically attached to my computer.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ Then I assigned it to that device's &quot;instrument&quot; #6. Prior to taking
+ this snapshot, I had already configured this &quot;instrument&quot; to play using
+ the &quot;Piano 1&quot; program with the &quot;Instrument Parameters&quot; box (more on
+ that in a bit), and so that name appeared in parenthesis in the second
+ menu.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ Notice also that &quot;instrument&quot; #10 has (D) in parenthesis, indicating
+ that this &quot;instrument&quot; is normally used for playing drums. (Whether it
+ actually plays drums depends on the capabilities of the MIDI equipment
+ or software synth represented by this &quot;device,&quot; and probably depends on
+ this &quot;instrument&quot; continuing to remain at the default channel
+ assignment of 10.) In this example, I arranged beforehand for this
+ &quot;instrument&quot; to play using the &quot;Power&quot; drum kit.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ The remaining &quot;instruments&quot; are not assigned to anything in particular
+ yet, and on most General MIDI -compliant equipment (or software synths)
+ these &quot;instruments&quot; will probably play using a factory default piano
+ program, with volume and other controllers set to neutral default
+ values.</P>
 <P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="215" NAME="Graphic4" SRC="../pixmaps/select-midi.png"
 WIDTH="253"></P>
-<P>Leaving the menu selection on &quot;Roland SC-33&quot; a moment caused the menu
- on the far right to appear. By selecting &quot;Roland SC-33 #6 (Piano 1)&quot;
- from this final list, I assigned this track to the same channel and
- instrument parameters settings already in use by another track. I could
- just as easily have assigned it to a channel that had not yet been
- assigned elsewhere, and could have then used the Instrument Parameters
- box to select a program change. I will discuss this last idea a bit
- later.</P>
-<H3><A NAME="4_1_1">4.1.1 What Do Those Black Boxes Mean?</A></H3>
+<H2><A NAME="4_3">4.3 MIDI Instrument Parameters</A></H2>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Now that the
+ track has been throuth a MIDI output &quot;device&quot; and &quot;instrument,&quot; and is
+ therefore a MIDI track, the<B> Instrument Parameters</B> box will
+ display controls similar to these.</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="235" NAME="Graphic2" SRC="../pixmaps/instrument-parameters-midi-ins.png"
+WIDTH="260"></P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">They allow
+ you to reassign the channel for this &quot;instrument,&quot; and to dial in a
+ program. In this case, you can see Roland's variation system in action.
+ The program is set to &quot;20. Churg Org. 1&quot; and the variation to &quot;17.
+ Church Org. 3&quot; so this &quot;instrument,&quot; and any tracks routed through it,
+ will play using a pipe organ sound that isn't part of the basic set of
+ General MIDI programs.</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">If you want
+ to select a GS-style drum kit, your<B> Instrument Parameters</B> box
+ should look something like this:</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="191" NAME="Graphic6" SRC="../pixmaps/instrument-parameters-midi.png"
+WIDTH="213"></P>
+<H2><A NAME="4_4">4.4 Synth Plugin Tracks</A></H2>
+<P>[Waiting for this bleeding edge new feature to settle into something
+ stable before I mention it in any detail... See rosegarden-devel for
+ more detalis. Basically, these use plugins to play MIDI using JACK for
+ audio output. They're hybrids, allowing you to create sound with a
+ synth plugin and then layer LADSPA plugins on top to alter the sound.
+ They take MIDI segments, but their instrument parameters are more like
+ those of audio tracks, and they can't be assigned to use programs in
+ the same fashion as conventional MIDI tracks; rather each synth plugin
+ has its own mechanism to allow it to be dialed to use whatever it's
+ capable of doing. More or less. More to follow.]</P>
+<H2><A NAME="4_5">4.5 JACK Tracks</A></H2>
+<P>If you want to use a track for audio, you'll need to make it a JACK
+ track by routing it to the &quot;JACK Audio&quot; device. (If you do not have a
+ &quot;JACK Audio&quot; device available, please ensure that your JACK server is
+ running. If you have problems with this, see &quot;Starting and Routing
+ Audio Through JACK&quot; later on in this guide.)</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="284" NAME="Graphic5" SRC="../pixmaps/select-jack.png"
+WIDTH="252"></P>
+<H2><A NAME="4_6">4.6 JACK Instrument Parameters</A></H2>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">JACK
+ &quot;instruments&quot; have different controls available in the<B> Instrument
+ Parameters</B> box.. They allow you to control the routing of the audio
+ [In: Out: I have no clue what these are actually good for. This is what
+ I mean by &quot;routing of the audio.&quot;], and to add layers of plugins. There
+ are redundant Mute, Solo and Record toggles, as well as volume sliders
+ for left and right</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">stereo
+ channels, and a mono/stereo toggle. (<IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="24"
+NAME="Graphic8" SRC="../pixmaps/audio-mono.png" WIDTH="24"> <IMG ALIGN="BOTTOM" BORDER="0"
+HEIGHT="25" NAME="Graphic9" SRC="../pixmaps/audio-stereo.png" WIDTH="24">).</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="282" NAME="Graphic7" SRC="../pixmaps/instrument-parameters-audio.png"
+WIDTH="258"></P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">If you wish
+ to assign LADSPA plugins to the track, you may use one of the &quot;&lt;no
+ plugin&gt;&quot; buttons to summon a dialog similar to this one. You can narrow
+ in on what you want using the<B> Category:</B> selector, and then dial
+ in a particular plugin with the<B> Plugin:</B> selector. As you dial
+ through these, the knobs in the bottom half of this dialog box will
+ change to reflect the controls that are available for this particular
+ plugin; ranging from one knob to a screen full of them. You can layer
+ up to five plugins for each &quot;instrument&quot; in the &quot;JACK Audio&quot; device,
+ hardware allowing. Some plugins are particularly expensive in their use
+ of your system's resources, so using too many may cause performance
+ problems.</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="278" NAME="Graphic1" SRC="../pixmaps/JACK-plugins.png"
+WIDTH="360"></P>
+<H2><A NAME="4_7">4.7 What Do Those Black Boxes Mean?</A></H2>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">The column
  of small boxes to the left of the channel provide a concise way of
  showing information about the status of these connections. In the
@@ -69,27 +166,28 @@ WIDTH="253"></P>
  These boxes convey the following information:</P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><IMG ALIGN="BOTTOM"
 BORDER="0" HEIGHT="15" NAME="Graphic38" SRC="../pixmaps/using-rosegarden_html_72a37f4e.png"
-WIDTH="14"> This instrument or device isn't very useful to you right
+WIDTH="14"> This &quot;instrument&quot; or &quot;device&quot; isn't very useful to you right
  now. It is is<B> not in use</B> by a track, and it is<B> not connected</B>
  to any active output path.</P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><IMG ALIGN="BOTTOM"
 BORDER="0" HEIGHT="12" NAME="Graphic79" SRC="../pixmaps/using-rosegarden_html_3dc467bd.png"
-WIDTH="15"> This instrument or device could provide a valid output path,
- and all you need to do from here is attach it to a track and begin
- making use of it. It<B> is connected</B> to an active output path, but
- it is<B> not being used</B> by any track.</P>
+WIDTH="15"> This &quot;instrument&quot; or &quot;device&quot; could provide a valid output
+ path, and all you need to do from here is attach it to a track and
+ begin making use of it. It<B> is connected</B> to an active output
+ path, but it is<B> not being used</B> by any track.</P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><IMG ALIGN="BOTTOM"
 BORDER="0" HEIGHT="15" NAME="Graphic81" SRC="../pixmaps/using-rosegarden_html_1e7e4e7a.png"
-WIDTH="14"> A track or tracks are connected to this device, but this is
- not currently a valid output path, and the events on any tracks that
- are connected don't have anywhere to go. This instrument or device is<B>
- in use</B> by a track, but is<B> not connected</B> to an active output
- path.</P>
+WIDTH="14"> A track or tracks are connected to this &quot;device,&quot; but this
+ is not currently a valid output path, and the events on any tracks that
+ are routed through this &quot;device&quot; don't have anywhere to go. This
+ &quot;instrument&quot; or &quot;device&quot; is<B> in use</B> by a track, but is<B> not
+ connected</B> to an active output path.</P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><IMG ALIGN="BOTTOM"
 BORDER="0" HEIGHT="16" NAME="Graphic80" SRC="../pixmaps/using-rosegarden_html_e634bf.png"
-WIDTH="14"> This instrument or device provides a valid output path, and
- that path is in use by at least one track. It<B> has a valid connection</B>
- to an output path, and that connection is<B> in use</B> by a track.</P>
+WIDTH="14"> This &quot;instrument&quot; or &quot;device&quot; provides a valid output path,
+ and that path is in use by at least one track. It<B> has a valid
+ connection</B> to an output path, and that connection is<B> in use</B>
+ by a track.</P>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  In addition, the instrument in use by the current track will have an
  extra black outline around either a black filled or black outlined box,
@@ -97,69 +195,14 @@ WIDTH="14"> This instrument or device provides a valid output path, and
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="18" NAME="Graphic82" SRC="../pixmaps/using-rosegarden_html_500c240c.png"
 WIDTH="18"> The active track is connected to an output that is<B> also
- connected</B>. If you play this track, you can expect the device you've
- hooked up to make some noise.</P>
+ connected</B>. If you play this track, you can expect the &quot;device&quot;
+ you've hooked up to make some noise.</P>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="18" NAME="Graphic83" SRC="../pixmaps/using-rosegarden_html_5204c333.png"
 WIDTH="18"> The active track is connected to an output that is<B> not
  connected</B>. This track, on the other hand, won't make any noise
- until you assign a different device to it or turn on the device that
+ until you assign a different &quot;device&quot; to it or enable the &quot;device&quot; that
  isn't currently working.</P>
-<H2 ALIGN="LEFT"><A NAME="4_2">4.2 MIDI Instrument Parameters</A></H2>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Now that the
- track has been assigned to a MIDI output device, and is therefore a
- MIDI track, the<B> Instrument Parameters</B> box will display controls
- similar to these.</P>
-<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
- <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="165" NAME="Graphic2" SRC="../pixmaps/instrument-parameters-midi-ins.png"
-WIDTH="190"></P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">They allow
- you to reassign the channel for this track, and to dial in a program.
- In this case, you can see Roland's variation system in action. The
- program is set to &quot;20. Churg Org. 1&quot; and the variation to &quot;17. Church
- Org. 3&quot; so this track will play using a pipe organ sound that isn't
- part of the basic set of General MIDI programs.</P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">If you want
- to select a GS-style drum kit, your<B> Instrument Parameters</B>
-<!--SPAN STYLE="font-weight: medium"-->
- box
- should look something like this:</P>
-<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
- <IMG ALIGN="TEXTTOP" BORDER="0" HEIGHT="155" NAME="Graphic6" SRC="../pixmaps/instrument-parameters-midi.png"
-WIDTH="173"></P>
-<H2><A NAME="4_3">4.3 Creating a JACK Track</A></H2>
-<P>If you want to use a track for audio, you'll need to make it a JACK
- track. The idea is exactly the same as a MIDI track, except you will
- only have one device to choose from, and it is called &quot;JACK Audio.&quot; (If
- you do not have a &quot;JACK Audio&quot; device available, please ensure that
- your JACK server is running. If you have problems with this, see &quot;You
- Don't Know JACK&quot; later on in this guide.)</P>
-<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
- <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="284" NAME="Graphic5" SRC="../pixmaps/select-jack.png"
-WIDTH="252"></P>
-<H2><A NAME="4_4">4.4 JACK Instrument Parameters</A></H2>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Audio tracks
- have different controls available in the<B> Instrument Parameters</B>
-<!--SPAN STYLE="font-weight: medium"-->
-
- box.. They allow you to control the routing of the audio, and to add
- layers of plugins. There are redundant Mute, Solo and Record toggles,
- as well as volume sliders for left and right</P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">stereo
- channels, and a mono/stereo toggle. (<IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="24"
-NAME="Graphic8" SRC="../pixmaps/audio-mono.png" WIDTH="24"> <IMG ALIGN="BOTTOM" BORDER="0"
-HEIGHT="25" NAME="Graphic9" SRC="../pixmaps/audio-stereo.png" WIDTH="24">).</P>
-<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
- <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="282" NAME="Graphic7" SRC="../pixmaps/instrument-parameters-audio.png"
-WIDTH="258"></P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">If you wish
- to assign plugins to the track, you may use one of the &quot;&lt;no plugin&gt;&quot;
- buttons to summon a dialog similar to this one. These controls will
- vary considerably from plugin to plugin. I will cover plugins in more
- depth later on, in &quot;You Don't Know JACK.&quot;</P>
-<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
- <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="210" NAME="Graphic1" SRC="../pixmaps/JACK-plugins.png"
-WIDTH="298"></P>
 <H1><A NAME="5">5 Recording Basics</A></H1>
 <P STYLE="margin-bottom: 0.2in">There are three different ways to record
  with Rosegarden. If you come from a MIDI background, the most obvious
@@ -173,6 +216,20 @@ WIDTH="298"></P>
  the main window.</P>
 <H2><A NAME="5_1">5.1 Recording MIDI</A></H2>
 <H2><A NAME="5_2">5.2 Recording Audio</A></H2>
+<P>
+<BR>
+<BR></P>
+<P>boneyard:</P>
+<P>
+<BR>
+<BR></P>
+<P> If you route the track to a MIDI device, (including the &quot;Synth
+ plugin&quot; device, if available), then the track will become a MIDI track,
+ and it can only be used to play MIDI segments. If you drag an audio
+ segment onto this track by mistake, the audio will not play.
+ Conversely, if you route a track to the &quot;JACK Audio&quot; device, it will
+ become an audio track, and it will not play any MIDI segments you
+ happen to drag here by mistake.</P>
 <HR>
 <A HREF="index.html">Contents</A>
 <A HREF="chapter-3.html">Previous</A>

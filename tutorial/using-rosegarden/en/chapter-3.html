@@ -64,9 +64,7 @@ A { text-decoration: none }
 <H2><A NAME="3_2">3.2 Describing the Capabilities of the Equipment</A></H2>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">The first
  step in this process is to open the main Studio dialog.<B> Composition
- -&gt; Studio -&gt; Manage MIDI Devices...</B>
-<!--SPAN STYLE="font-weight: medium"-->
-</P>
+ -&gt; Studio -&gt; Manage MIDI Devices...</B></P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  or by clicking on the <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="24" NAME="Graphic5"
 SRC="../pixmaps/studio-icon.png" WIDTH="31"> icon.</P>
@@ -95,7 +93,7 @@ WIDTH="469"></P>
  virtual jack, and you need to plug Rosegarden into it. Whether real or
  imaginary, these &quot;jacks&quot; come from ALSA, and they are more properly
  known as &quot;ports.&quot;</P>
-<P> ALSA assigns numbers to ports in three ranges. 64: means it is an
+<P>ALSA assigns numbers to ports in three ranges. 64: means it is an
  external MIDI port, which might be connected to a MIDI keyboard, sound
  module, or other noise producing gadget through some sort of cable. 65:
  means it is a virtual port with an internal synth such as the Sound
@@ -117,28 +115,26 @@ WIDTH="469"></P>
  the like. As record devices are rather less complicated, I will mention
  them first. With a record device, you have no capabilities to describe.
  The only thing Rosegarden can do is read data from it, or not. You may
- name these if you wish, but the<B> Record devices</B>
-<!--SPAN STYLE="font-weight: medium"-->
- section of this
+ name these if you wish, but the<B> Record devices</B> section of this
  dialog is the only place where you will see the names, and I never
- bother to name mine. Rosegarden cannot yet manage multiple simultaneous
- MIDI inputs. For example, if you have two external MIDI interfaces and
- two keyboards, you will only be able to record from one of them at a
- time. If you have more than one, you will need to mark one of them as
- [x] Current. This device will be used for all MIDI recording operations
- until you specify otherwise by coming back to this dialog.</P>
+ bother to name mine.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+ [Multiple inputs in testing, TBA]</P>
 <H3><A NAME="3_2_3">3.2.3 <B>Play Devices</B></A></H3>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  Play devices are where all the fun, and all the complexity is. They can
  be MIDI keyboards, sound modules, software synths, samplers, and pretty
  well anything else that can take MIDI input, such as KAMix.</P>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
- Let us assume for example you have a Roland SC-33 hooked up to your
- computer. It can receive on 16 channels, and it is capable of playing
- your notes using any of 300-odd instruments. It responds to several
- different controllers. In order to control these features from
- Rosegarden, you must tell Rosegarden about them, so it can add them to
- its virtual model of your equipment.</P>
+ Let us assume for example you have a Roland SC-33 sound module hooked
+ up to your computer. It can receive on 16 channels, and it is capable
+ of playing your notes using any of 300-odd different sounds. It
+ responds to a variety of controllers. In order to control these
+ features from Rosegarden, you must tell Rosegarden about them, so it
+ can add them to its virtual model of your equipment.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ (For more discussion of banks, programs and controllers, see the<A HREF="http://chapter-9.html/">
+ MIDI Primer</A> in Appendix A.</P>
 <H3><A NAME="3_2_4">3.2.4 The Bank Editor</A></H3>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  To load or create sets of program or controller descriptions, click on
@@ -165,39 +161,28 @@ WIDTH="469"></P>
  <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="340" NAME="Graphic4" SRC="../pixmaps/studio-bank-editor.png"
 WIDTH="356"></P>
 <H4><A NAME="3_2_4_1">3.2.4.1 Loading a Stock Set of Programs</A></H4>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-<!--SPAN STYLE="font-weight: medium"-->
-If you're
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">If you're
  lucky, the growing Rosegarden Library already contains a set of bank
  and program definitions to suit your hardware. To try your luck, click
- the<B> Import...</B> button. <FONT SIZE="3">You will initially be
- presented with a list of<B> .rgd</B> files from the Library, which was
- installed along with Rosegarden itself, but you can, of course, browse
- to other locations. You can import banks from both regular Rosegarden
+ the<B> Import...</B> button. You will initially be presented with a
+ list of<B> .rgd</B> files from the Library, which was installed along
+ with Rosegarden itself, but you can, of course, browse to other
+ locations. You can import banks from both regular Rosegarden
  Composition (<B>.rg)</B> files, and from Rosegarden Definition (<B>
 .rgd)</B> files. If you don't find anything suitable, you will probably
- have to start from scratch, as I will explain later on.</FONT></P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><FONT SIZE="3">
-Stepping back, let us assume for a moment that my &quot;Soft Synth 2&quot; is
- either QSynth or it's really an SB Live!. The quick and dirty way to
- fill up this list of programs is to load them directly from the
- soundfont, from the</FONT>
-<!--SPAN STYLE="font-weight: medium"-->
-<B> .sf2</B>
-<!--SPAN STYLE="font-weight: medium"-->
- file. Simply set the &quot;Filter:&quot;
- to &quot;Soundfont&quot; and browse to the location of the soundfont you've
- loaded into your synth.</P>
+ have to start from scratch, as I will explain later on.</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Stepping
+ back, let us assume for a moment that my &quot;Soft Synth 2&quot; is either
+ QSynth or it's really an SB Live!. The quick and dirty way to fill up
+ this list of programs is to load them directly from the soundfont, from
+ the<B> .sf2</B> file. Simply set the &quot;Filter:&quot; to &quot;Soundfont&quot; and
+ browse to the location of the soundfont you've loaded into your synth.</P>
 <P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="211" NAME="Graphic9" SRC="../pixmaps/studio-import-soundfont.png"
 WIDTH="356"></P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-<!--SPAN STYLE="font-weight: medium"-->
-Regardless
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Regardless
  of your selection, after you have chosen to import programs from a
- file, After you've selected an<B> .rgd, .rg,</B>
-<!--SPAN STYLE="font-weight: medium"-->
- or<B> .sf2</B> file
+ file, After you've selected an<B> .rgd, .rg,</B> or<B> .sf2</B> file
  from somewhere, you'll be presented with a dialog like this:</P>
 <P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="124" NAME="Graphic8" SRC="../pixmaps/studio-import-options.png"
@@ -269,13 +254,11 @@ SRC="../pixmaps/studio-variations.png" WIDTH="261"></P>
  new bank, and then dial its LSB and MSB values back down to 0 0 (or
  wherever they need to be for your implementation) and enter the names
  of drum kits as programs.</P>
-<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="47" NAME="Graphic7" SRC="../pixmaps/studio-percussion-box.png"
 WIDTH="227"></P>
 <H4><A NAME="3_2_5_6">3.2.5.6 Send in Your Device Descriptions</A></H4>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-
-<!--SPAN STYLE="font-weight: medium"-->
  Once you've defined the names for your program changes, you can save
  the device definition to disk with the<B> Export...</B> button.</P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">If you think
@@ -299,14 +282,11 @@ WIDTH="227"></P>
 SRC="../pixmaps/control-events.png" WIDTH="345"></P>
 <P ALIGN="LEFT">If your equipment can't use any of these controllers,
  you probably want to delete them. If there are controllers missing, you
- can add them one by one. Use the<B> Add</B>
-<!--SPAN STYLE="font-weight: medium"-->
- button. This will create a
+ can add them one by one. Use the<B> Add</B> button. This will create a
  new entry using default values. Double click it, and you should be
  presented with a dialog similar to this one.</P>
-<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
-HEIGHT="228" NAME="Graphic10" SRC="../pixmaps/studio-controller-editor.png" WIDTH="273">
-</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="228" NAME="Graphic10"
+SRC="../pixmaps/studio-controller-editor.png" WIDTH="273"></P>
 <P ALIGN="LEFT" STYLE="font-weight: medium">Most of these parameters
  should be obvious to you based on the particular needs of the equipment
  you're describing, but the last two bear special mention. The<B> Color:</B>
@@ -344,9 +324,7 @@ SRC="../pixmaps/document-properties.png" WIDTH="339"></P>
 <P>Rosegarden can colorize segments and controllers. Custom colors are
  defined here.</P>
 <H2>3.5 <A NAME="2_5_5"></A>Saving Your Studio as the Default</H2>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-<!--SPAN STYLE="font-weight: medium"-->
-Now that
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Now that
  you've gotten your studio configured, you'll want to make it your
  default, so that you can avoid having to go through this entire ordeal
  every time you start a new composition.</P>
@@ -360,7 +338,7 @@ Composition -&gt; Studio -&gt; Save Current Document as Default Studio</B>
  means any segments, track labels, instrument assignments, etc. that you
  have in the current document will be saved, and will subsequently be
  loaded each time you create a new document.</P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
 <BR>
 <BR></P>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">

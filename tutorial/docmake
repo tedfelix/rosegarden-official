@@ -104,6 +104,8 @@ case $1 in
 		pdf en
 		web de
 		pdf de
+	        Put using-rosegarden/en/using-rosegarden.pdf
+		Put using-rosegarden/de/arbeiten-mit-rosegarden.pdf
 	;;
     *) Usage
     	;;
