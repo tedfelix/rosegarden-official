@@ -68,9 +68,12 @@ public:
     struct NoData { };
     struct BadType { };
 
-    Event() : m_data(new EventData()) { }
-    Event(const std::string &type) : m_data(new EventData(type)) { }
-    Event(const Event &e) { share(e); }
+    Event() :
+	m_data(new EventData()), m_viewElementRefCount(0) { }
+    Event(const std::string &type) :
+	m_data(new EventData(type)), m_viewElementRefCount(0) { }
+    Event(const Event &e) :
+	m_viewElementRefCount(0) { share(e); }
     ~Event() { lose(); }
 
     Event &operator=(const Event &e) {
@@ -169,12 +172,12 @@ public:
     void dump(std::ostream&) const {}
 #endif
 
-    bool hasViewElement() const { return m_data->m_viewElementRefCount != 0; }
+    bool hasViewElement() const { return m_viewElementRefCount != 0; }
 
 protected:
     // these are for ViewElement only
-    void viewElementRef()   { ++m_data->m_viewElementRefCount; }
-    void viewElementUnRef() { --m_data->m_viewElementRefCount; }
+    void viewElementRef()   { ++m_viewElementRefCount; }
+    void viewElementUnRef() { --m_viewElementRefCount; }
 
 private:
     struct EventData
@@ -190,8 +193,6 @@ private:
 	timeT m_absoluteTime;
 	int m_subOrdering;
 
-	unsigned int m_viewElementRefCount;
-
 	typedef std::hash_map<PropertyName, PropertyStoreBase*,
 			      PropertyNameHash, PropertyNamesEqual> PropertyMap;
 	typedef PropertyMap::value_type PropertyPair;
@@ -203,10 +204,10 @@ private:
     };	
 
     EventData *m_data;
+    unsigned int m_viewElementRefCount;
 
     void share(const Event &e) {
 	m_data = e.m_data;
-    cout << "Event::share: raising m_refCount from " << m_data->m_refCount << endl;
 	m_data->m_refCount++;
     }
 
@@ -215,7 +216,7 @@ private:
     }
 
     void lose() {
-    cout << "Event::lose: lowering m_refCount from " << m_data->m_refCount << endl;
+	m_viewElementRefCount = 0;
 	if (--m_data->m_refCount == 0) delete m_data;
     }
 };

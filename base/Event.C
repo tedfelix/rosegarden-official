@@ -32,8 +32,7 @@ Event::EventData::EventData() :
     m_refCount(1),
     m_duration(0),
     m_absoluteTime(0),
-    m_subOrdering(0),
-    m_viewElementRefCount(0)
+    m_subOrdering(0)
 {
     // empty
 }
@@ -43,8 +42,7 @@ Event::EventData::EventData(const std::string &type) :
     m_type(type),
     m_duration(0),
     m_absoluteTime(0),
-    m_subOrdering(0),
-    m_viewElementRefCount(0)
+    m_subOrdering(0)
 {
     // empty
 }
@@ -58,7 +56,6 @@ Event::EventData *Event::EventData::unshare()
     newData->m_duration = m_duration;
     newData->m_absoluteTime = m_absoluteTime;
     newData->m_subOrdering = m_subOrdering;
-    newData->m_viewElementRefCount = m_viewElementRefCount;
 
     for (PropertyMap::const_iterator i = m_properties.begin();
          i != m_properties.end(); ++i) {
