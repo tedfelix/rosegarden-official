@@ -35,6 +35,9 @@ typedef KNamedCommand XKCommand;
 typedef KCommand XKCommand;
 #endif
 
+/**
+ * Base class for commands from the SegmentParameterBox
+ */
 class SegmentCommand : public XKCommand
 {
 public:
@@ -46,6 +49,9 @@ protected:
     segmentlist m_segments;
 };
 
+/**
+ * Repeat segment command from the SegmentParameterBox
+ */
 class SegmentCommandRepeat : public SegmentCommand
 {
 public:
@@ -59,6 +65,22 @@ protected:
     bool m_repeatState;
 };
 
+class SegmentCommandChangeTransposeValue : public SegmentCommand
+{
+public:
+    SegmentCommandChangeTransposeValue(const std::vector<Rosegarden::Segment*>&,
+                                       int transposeValue);
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    int m_transposeValue;
+    std::vector<int> m_savedValues;
+};
+
+
+////////////////////////////////////////////////////////////
 
 class SegmentEraseCommand : public XKCommand
 {

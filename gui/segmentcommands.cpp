@@ -65,6 +65,45 @@ void SegmentCommandRepeat::unexecute()
         (*it)->setRepeating(!m_repeatState);
 }
 
+SegmentCommandChangeTransposeValue::SegmentCommandChangeTransposeValue(const std::vector<Rosegarden::Segment*>& segments,
+                                                                     int transposeValue)
+    : SegmentCommand(i18n("Transpose Segments"), segments),
+      m_transposeValue(transposeValue)
+{
+    kdDebug(KDEBUG_AREA) << "SegmentCommandChangeTransposeValue : nb segments : " << m_segments.size()
+                         << endl;
+
+}
+
+
+void SegmentCommandChangeTransposeValue::execute()
+{
+    segmentlist::iterator it;
+
+    for (it = m_segments.begin(); it != m_segments.end(); ++it) {
+        kdDebug(KDEBUG_AREA) << "SegmentCommandChangeTransposeValue::execute : saving " << (*it)->getTranspose()
+                             << endl;
+
+        m_savedValues.push_back((*it)->getTranspose());
+        (*it)->setTranspose(m_transposeValue);
+    }
+}
+
+void SegmentCommandChangeTransposeValue::unexecute()
+{
+    segmentlist::iterator it = m_segments.begin();
+    std::vector<int>::iterator itV = m_savedValues.begin();
+    
+    for (; it != m_segments.end() && itV != m_savedValues.end();
+         ++it, ++itV) {
+        kdDebug(KDEBUG_AREA) << "SegmentCommandChangeTransposeValue::unexecute : restoring " << (*itV)
+                             << endl;
+        
+        (*it)->setTranspose((*itV));
+    }
+}
+
+
 // --------- Erase Segment --------
 //
 SegmentEraseCommand::SegmentEraseCommand(Segment *segment) :

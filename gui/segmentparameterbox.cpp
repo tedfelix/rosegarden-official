@@ -484,14 +484,17 @@ SegmentParameterBox::slotQuantizeSelected(int qLevel)
 void
 SegmentParameterBox::slotTransposeTextChanged(const QString &text)
 {
-    if (text.isEmpty())
+    if (text.isEmpty() || m_segments.size() == 0)
         return;
 
     int transposeValue = text.toInt();
 
-    std::vector<Rosegarden::Segment*>::iterator it;
-    for (it = m_segments.begin(); it != m_segments.end(); it++)
-        (*it)->setTranspose(transposeValue);
+    addCommandToHistory(new SegmentCommandChangeTransposeValue(m_segments,
+                                                               transposeValue));
+
+//     std::vector<Rosegarden::Segment*>::iterator it;
+//     for (it = m_segments.begin(); it != m_segments.end(); it++)
+//         (*it)->setTranspose(transposeValue);
 
 }
 
