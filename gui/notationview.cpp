@@ -311,26 +311,49 @@ NotationView::~NotationView()
 
 void NotationView::positionStaffs()
 {
-    vector<int> staffHeights;
-    int totalHeight = 0;
+    Rosegarden::TrackId minTrack = 0, maxTrack = 0;
+    typedef std::map<Rosegarden::TrackId, int> TrackIntMap;
+    TrackIntMap trackHeights;
+    TrackIntMap trackCoords;
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-        staffHeights.push_back(m_staffs[i]->getHeightOfRow());
-        totalHeight += staffHeights[i];
+
+	int height = m_staffs[i]->getHeightOfRow();
+	Rosegarden::TrackId track = m_staffs[i]->getSegment().getTrack();
+
+	TrackIntMap::iterator hi = trackHeights.find(track);
+	if (hi == trackHeights.end()) {
+	    trackHeights.insert(TrackIntMap::value_type(track, height));
+	} else if (height > hi->second) {
+	    hi->second = height;
+	}
+	
+	if (track < minTrack || minTrack == 0) {
+	    minTrack = track;
+	}
+	if (track > maxTrack) {
+	    maxTrack = track;
+	}
     }
 
-    int h = 0;
+    int accumulatedHeight = 0;
+    for (Rosegarden::TrackId i = minTrack; i <= maxTrack; ++i) {
+	TrackIntMap::iterator hi = trackHeights.find(i);
+	if (hi != trackHeights.end()) {
+	    trackCoords[i] = accumulatedHeight;
+	    accumulatedHeight += hi->second;
+	}
+    }
+
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-        m_staffs[i]->setRowSpacing(totalHeight + staffHeights[i] / 7);
-        if (i < m_staffs.size() - 1) {
-            m_staffs[i]->setConnectingLineLength(staffHeights[i]);
+	Rosegarden::TrackId track = m_staffs[i]->getSegment().getTrack();
+        m_staffs[i]->setRowSpacing(accumulatedHeight + trackHeights[track] / 7);
+        if (track < maxTrack) {
+            m_staffs[i]->setConnectingLineLength(trackHeights[track]);
         }
         
-//!!!        m_staffs[i]->setX(20);
         m_staffs[i]->setX(0);
-        m_staffs[i]->setY(h);
-
-        h += staffHeights[i];
+	m_staffs[i]->setY(trackCoords[track]);
     }
 }    
 
