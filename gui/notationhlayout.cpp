@@ -984,6 +984,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 	    (from == notes->end() ||
 	     (*from)->event()->getAbsoluteTime() > endTime)) {
 
+	    //!!! don't seem to be getting here when we should
 	    kdDebug(KDEBUG_AREA) << "Shifting elements only" << endl;
 
             // Find how far to move everything if necessary
@@ -1012,13 +1013,6 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
             continue;
         }
 
-/*!!!
-	x = barX;
-	x += getPreBarMargin();
-        bdi->second.layoutData.x = x;
-        x += getPostBarMargin();
-	barX += bdi->second.sizeData.idealWidth;
-*/
 	bdi->second.layoutData.x = barX;
 	x = barX + getPostBarMargin();
 
@@ -1123,10 +1117,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
         bdi->second.layoutData.needsLayout = false;
     }
-/*!!!
-    if (!isFullLayout && haveSimpleOffset) m_totalWidth += simpleOffset;
-    else if (x > m_totalWidth) m_totalWidth = x;
-*/
+
     PRINT_ELAPSED("NotationHLayout::layout");
 }
 
@@ -1458,18 +1449,6 @@ NotationHLayout::getFirstVisibleBarOnStaff(StaffType &staff)
     BarDataList &bdl(getBarData(staff));
     if (bdl.begin() == bdl.end()) return 0;
     return bdl.begin()->first;
-
-//!!!    return m_firstBarMap[&staff];
-
-    //!!! use m_fakeBarCountMap
-
-/*!!!
-    BarDataList &bdl(getBarData(staff));
-    for (int i = 0; i < bdl.size(); ++i) {
-	if (!bdl[i].basicData.fake) return i;
-    }
-    return -1;
-*/
 }
 
 int
@@ -1478,7 +1457,6 @@ NotationHLayout::getLastVisibleBar()
     int bar = -1;
     for (BarDataMap::iterator i = m_barData.begin();
 	 i != m_barData.end(); ++i) {
-//	int barHere = i->second.size()/* - 1*/; // last visible bar_line_
 	int barHere = getLastVisibleBarOnStaff(*i->first);
 	if (barHere > bar) bar = barHere;
     }
@@ -1492,12 +1470,6 @@ NotationHLayout::getLastVisibleBarOnStaff(StaffType &staff)
     if (bdl.begin() == bdl.end()) return 0;
     BarDataList::iterator i(bdl.end());
     return ((--i)->first) + 1; // last visible bar_line_
-
-/*!!!
-    BarDataList &bdl(getBarData(staff));
-    return bdl.size() + m_firstBarMap[&staff]; // last visible bar_line_
-*/
-//    return bdl.size() /*- 1*/; // last visible bar_line_
 }
 
 double
