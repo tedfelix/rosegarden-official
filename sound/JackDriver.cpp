@@ -720,14 +720,14 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 						  position.frame_rate));
 		}
 	    } else if (m_alsaDriver->areClocksRunning()) {
-		jackProcessRecord(nframes, 0, 0); // for monitoring
-
 		if (!m_haveAsyncAudioEvent) {
 #ifdef DEBUG_JACK_PROCESS
 		    std::cerr << "JackDriver::jackProcess: no interesting async events" << std::endl;
 #endif
-		    return jackProcessEmpty(nframes);
+		    // do this before record monitor, otherwise we lost monitor out
+		    jackProcessEmpty(nframes);
 		}
+		return jackProcessRecord(nframes, 0, 0); // for monitoring
 	    } else {
 		return jackProcessEmpty(nframes);
 	    }
@@ -756,14 +756,15 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 #ifdef DEBUG_JACK_PROCESS
 	    std::cerr << "JackDriver::jackProcess: not playing" << std::endl;
 #endif
-	    jackProcessRecord(nframes, 0, 0); // for monitoring
-
 	    if (!m_haveAsyncAudioEvent) {
 #ifdef DEBUG_JACK_PROCESS
 		std::cerr << "JackDriver::jackProcess: no interesting async events" << std::endl;
 #endif
-		return jackProcessEmpty(nframes);
+		// do this before record monitor, otherwise we lost monitor out
+		jackProcessEmpty(nframes);
 	    }
+
+	    return jackProcessRecord(nframes, 0, 0); // for monitoring
 	}
     }
 
