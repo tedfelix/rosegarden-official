@@ -1,32 +1,38 @@
-How to make a new release
+How to Make a New Release
+=========================
+Updated: 3rd October 2002
 
-Main steps :
+Main steps
+==========
 
-1. Tag the CVS tree
+1. Get a fresh set of source from CVS
 
-2. build a tarball
+2. Build the Tarball
 
-3. make the tarball available on SourceForge
+3. Verify the Tarball and get release notes from developers
+
+4. Make the tarball available on SourceForge
+
+5. Tag the CVS tree
+
+6. Announce the release once the Tarball has become available
 
 
-Detailed steps :
+1. Get a fresh set of course from CVS
+-------------------------------------
 
-1. Tag the CVS tree
+Development tree versions often get clogged up with extraneous
+files that we don't want to ship.  Get the source fresh from CVS
+to avoid shipping these files.
 
-From the top-level 'rosegarden' directory :
-cvs tag <RELEASE_NAME> .
 
-Note that release names can't contain dots. For instance :
+2. Building the tarball
+-----------------------
 
-cvs tag RELEASE_0_1 .
+These steps are automated in the 'make_distrib' shell-script but
+it's advised that you do them manually to reduce the risk of error.
 
-2. Bulding the tarball
-
-These steps are automated in the 'make_distrib' shell-script which is
-on the top level directory. You'll need to customise it so it
-generates the tarball in the right place.
-
-Here are the steps detailed :
+The detailed steps are:
 
 From the top level source dir :
 
@@ -73,9 +79,18 @@ IMPORTANT : just in case, make sure the various binaries
 ('gui/rosegarden', 'sequencer/rosegardensequencer') aren't included in
 the final tarball.
 
-3. making the tarball available on SourceForge
+3. Verify the Tarball and get release notes from developers
+-----------------------------------------------------------
 
-This is the rather non-trivial step.
+Upload the tarball to a handy webserver and tell the developers
+to download it and try it out.  Also get them to supply you with
+a list of what they've done to this release so you can build the
+release note.
+
+4. Make the tarball available on SourceForge
+--------------------------------------------
+
+Steps are folllows:
 
 - copy the tarball to ftp://upload.sf.net/incoming/ (anon-ftp)
 - log on to SourceForge
@@ -93,4 +108,28 @@ This is the rather non-trivial step.
   to do with the project, and this whole system suck quite a bit).
 
 That's it, the file will be effectively available within the next few
-hours.
+hours (or sometimes within a couple of minutes).
+
+5. Tag the CVS tree
+-------------------
+
+From the top-level 'rosegarden' directory :
+cvs tag <RELEASE_NAME> .
+
+Note that release names can't contain dots. For instance :
+
+cvs tag RELEASE_4_8_0 .
+
+
+6. Announce the release once the Tarball has become available
+-------------------------------------------------------------
+
+Send out the release announcement to as many people as you can
+think of:
+
+o rg-devel and rg-user list
+o Linux Audio Developers, Linux Audio Announce, Linux Audio Users
+o Alsa Developers
+o Freshmeat
+o apps.kde.com
+
