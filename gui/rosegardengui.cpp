@@ -97,8 +97,11 @@ RosegardenGUIApp::RosegardenGUIApp()
 RosegardenGUIApp::~RosegardenGUIApp()
 {
     kdDebug(KDEBUG_AREA) << "~RosegardenGUIApp()\n";
-    m_sequencerProcess->blockSignals(true);
-    delete m_sequencerProcess;
+
+    if (m_sequencerProcess) {
+        m_sequencerProcess->blockSignals(true);
+        delete m_sequencerProcess;
+    }
 }
 
 
