@@ -87,11 +87,12 @@ signals:
     void setLoop(Rosegarden::timeT, Rosegarden::timeT);
 
 private:
-    void drawBarSections(QPainter*);
+    void drawBarSections(QPainter*, bool rightwards = true);
     void drawLoopMarker(QPainter*);  // between loop positions
 
     int m_height;
     bool m_invert;
+    int m_lastXPaint;
 
     RosegardenGUIDoc       *m_doc;
     Rosegarden::RulerScale *m_rulerScale;

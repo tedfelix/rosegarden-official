@@ -38,6 +38,7 @@ LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
     : QWidget(parent, name),
       m_height(height),
       m_invert(invert),
+      m_lastXPaint(0),
       m_doc(doc),
       m_rulerScale(rulerScale),
       m_grid(rulerScale),
@@ -56,72 +57,99 @@ LoopRuler::~LoopRuler()
 {
 }
 
-void LoopRuler::paintEvent(QPaintEvent* /*e*/)
+void LoopRuler::paintEvent(QPaintEvent* e)
 {
     QPainter paint(this);
     //paint.setClipRegion(e->region());
     //paint.setClipRect(e->rect().normalize());
 
     paint.setBrush(colorGroup().foreground());
-    drawBarSections(&paint);
+    drawBarSections(&paint, (e->rect().x() > m_lastXPaint));
     drawLoopMarker(&paint);
+
+    m_lastXPaint = e->rect().x();
 }
 
-void LoopRuler::drawBarSections(QPainter* paint)
+void LoopRuler::drawBarSections(QPainter* paint, bool rightwards)
 {
-//     kdDebug(KDEBUG_AREA) << "LoopRuler::drawBarSections BEGIN\n";
-
     if (!m_doc) return;
 
     int firstBar = m_rulerScale->getFirstVisibleBar(),
-	 lastBar = m_rulerScale->getLastVisibleBar();
-    double x = m_rulerScale->getBarPosition(firstBar);
+        lastBar = m_rulerScale->getLastVisibleBar();
 
     paint->setPen(RosegardenGUIColours::LoopRulerForeground);
 
     QRect clipRect = visibleRect(); //paint->clipRegion().boundingRect();
-    
-    for (int i = firstBar; i <= lastBar; ++i)
-    {
-        double width = m_rulerScale->getBarWidth(i);
 
-        if (x >= clipRect.x() &&
-            x <= (clipRect.x() + width + clipRect.width())) {
+    if (rightwards) {
+        
+        double x = m_rulerScale->getBarPosition(firstBar);
+        for (int i = firstBar; i <= lastBar; ++i) {
+            double width = m_rulerScale->getBarWidth(i);
 
-//             kdDebug(KDEBUG_AREA) << "LoopRuler::drawBarSections Drawing x = "
-//                                  << x << std::endl;
-
-            if (m_invert) {
-                paint->drawLine((int)x, 0, (int)x, 5 * m_height / 7);
-            } else {
-                paint->drawLine((int)x, 2 * m_height / 7, (int)x, m_height);
-            }
-
-            double beatAccumulator = 0;
-	
-            for (beatAccumulator  = m_rulerScale->getBeatWidth(i);
-                 beatAccumulator < width;
-                 beatAccumulator += m_rulerScale->getBeatWidth(i)) {
+            if (x >= clipRect.x() &&
+                x <= (clipRect.x() + width + clipRect.width())) {
 
                 if (m_invert) {
-                    paint->drawLine((int)(x + beatAccumulator), 0,
-                                    (int)(x + beatAccumulator), 2 * m_height / 7);
+                    paint->drawLine((int)x, 0, (int)x, 5 * m_height / 7);
                 } else {
-                    paint->drawLine((int)(x + beatAccumulator), 5 * m_height / 7,
-                                    (int)(x + beatAccumulator), m_height);
+                    paint->drawLine((int)x, 2 * m_height / 7, (int)x, m_height);
                 }
+
+                double beatAccumulator = m_rulerScale->getBeatWidth(i);
+                double inc = beatAccumulator;
+
+                for (; beatAccumulator < width; beatAccumulator += inc) {
+
+                    if (m_invert) {
+                        paint->drawLine((int)(x + beatAccumulator), 0,
+                                        (int)(x + beatAccumulator), 2 * m_height / 7);
+                    } else {
+                        paint->drawLine((int)(x + beatAccumulator), 5 * m_height / 7,
+                                        (int)(x + beatAccumulator), m_height);
+                    }
+                }
+
             }
-        } else {
-//             kdDebug(KDEBUG_AREA) << "LoopRuler::drawBarSections : Skipping x = "
-//                                  << x << std::endl;
+        
+            x += width;
+        
         }
+    } else { // draw leftwards
+        double x = m_rulerScale->getBarPosition(lastBar);
 
+        for (int i = lastBar; i >= firstBar; --i) {
+            double width = m_rulerScale->getBarWidth(i);
+
+            if (x >= clipRect.x() &&
+                x <= (clipRect.x() + width + clipRect.width())) {
+
+                if (m_invert) {
+                    paint->drawLine((int)x, 0, (int)x, 5 * m_height / 7);
+                } else {
+                    paint->drawLine((int)x, 2 * m_height / 7, (int)x, m_height);
+                }
+
+                double beatAccumulator = width - m_rulerScale->getBeatWidth(i);
+                double dec = m_rulerScale->getBeatWidth(i);
+
+                for (; beatAccumulator >= dec; beatAccumulator -= dec) {
+
+                    if (m_invert) {
+                        paint->drawLine((int)(x - beatAccumulator), 0,
+                                        (int)(x - beatAccumulator), 2 * m_height / 7);
+                    } else {
+                        paint->drawLine((int)(x - beatAccumulator), 5 * m_height / 7,
+                                        (int)(x - beatAccumulator), m_height);
+                    }
+                }
+
+            }
         
-        x += width;
+            x -= width;
         
+        }
     }
-
-//     kdDebug(KDEBUG_AREA) << "LoopRuler::drawBarSections END\n";
 }
 
 void
