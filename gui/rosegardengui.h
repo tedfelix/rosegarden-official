@@ -477,13 +477,6 @@ public slots:
 
 
     /**
-     * Convenience function for sending positional updates to the
-     * sequencer if we're ffwding, rwding or just jumping about on the
-     * Composition.
-     */
-    void sendSequencerJump(const Rosegarden::RealTime &position);
-
-    /**
      * Called when the sequencer auxiliary process exits
      */
     void sequencerExited(KProcess*);

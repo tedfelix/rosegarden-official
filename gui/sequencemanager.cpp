@@ -284,7 +284,7 @@ SequenceManager::play()
     {
         // failed - pop up and disable sequencer options
         m_transportStatus = STOPPED;
-        throw(string("Failed to contact Rosegarden sequencer"));
+        throw(i18n("Playback failed to contact Rosegarden sequencer"));
     }
     else
     {
@@ -301,7 +301,7 @@ SequenceManager::play()
         else
         {
             m_transportStatus = STOPPED;
-            throw(string("Failed to start playback"));
+            throw(i18n("Failed to start playback"));
         }
     }
 }
@@ -332,7 +332,7 @@ SequenceManager::stop()
                                   "stop()", data))
     {
         // failed - pop up and disable sequencer options
-        throw(string("Failed to contact Rosegarden sequencer"));
+        throw(i18n("Failed to contact Rosegarden sequencer"));
     }
 
     // always untoggle the play button at this stage
@@ -426,7 +426,7 @@ SequenceManager::sendSequencerJump(const Rosegarden::RealTime &time)
     {
       // failed - pop up and disable sequencer options
       m_transportStatus = STOPPED;
-      throw(string("Failed to contact Rosegarden sequencer"));
+      throw(i18n("Failed to contact Rosegarden sequencer"));
     }
 
     return;
@@ -561,7 +561,7 @@ SequenceManager::record()
     {
         // failed - pop up and disable sequencer options
         m_transportStatus = STOPPED;
-        throw(string("Failed to contact Rosegarden sequencer"));
+        throw(i18n("Failed to contact Rosegarden sequencer"));
     }
     else
     {
@@ -578,7 +578,7 @@ SequenceManager::record()
         else
         {
             m_transportStatus = STOPPED;
-            throw(string("Failed to start recording"));
+            throw(i18n("Failed to start recording"));
         }
     }
 
@@ -704,7 +704,7 @@ SequenceManager::setLoop(const timeT &lhs, const timeT &rhs)
                  "setLoop(long int, long int, long int, long int)", data))
     {
         // failed - pop up and disable sequencer options
-        throw(string("Failed to contact Rosegarden sequencer"));
+        throw(i18n("Failed to contact Rosegarden sequencer"));
     }
 }
 
@@ -721,7 +721,7 @@ SequenceManager::checkSoundSystemStatus()
                                   data, replyType, replyData))
     {
         // failed - pop up and disable sequencer options
-        throw(string("Failed to contact Rosegarden sequencer"));
+        throw(i18n("Failed to contact Rosegarden sequencer"));
     }
     else
     {
@@ -737,16 +737,16 @@ SequenceManager::checkSoundSystemStatus()
                 break;
 
             case Rosegarden::MIDI_SUBSYS_OK:
-                throw(string("Audio subsystem has failed to initialise"));
+                throw(i18n("Audio subsystem has failed to initialise"));
                 break;
 
             case Rosegarden::AUDIO_SUBSYS_OK:
-                throw(string("MIDI subsystem has failed to initialise"));
+                throw(i18n("MIDI subsystem has failed to initialise"));
                 break;
                 
             case Rosegarden::NO_SEQUENCE_SUBSYS:
             default:
-                throw(string("MIDI and Audio subsystems have failed to initialise"));
+                throw(i18n("MIDI and Audio subsystems have failed to initialise"));
                 break;
         }
     }

@@ -1222,7 +1222,15 @@ void RosegardenGUIApp::setPointerPosition(timeT t)
             t = comp.getEndMarker();
         }
 
-        sendSequencerJump(comp.getElapsedRealTime(t));
+        try
+        {
+            m_seqManager->sendSequencerJump(comp.getElapsedRealTime(t));
+        }
+        catch(QString s)
+        {
+            KMessageBox::error(this, s);
+        }
+
         return;
     }
 
@@ -1611,11 +1619,6 @@ void RosegardenGUIApp::notifySequencerStatus(const int& status)
 }
 
 
-void RosegardenGUIApp::sendSequencerJump(const Rosegarden::RealTime &time)
-{
-    m_seqManager->sendSequencerJump(time);
-}
-
 // Called when we want to start recording from the GUI.
 // This method tells the sequencer to start recording and
 // from then on the sequencer returns MappedCompositions
@@ -1628,14 +1631,28 @@ RosegardenGUIApp::record()
     if (!m_sequencerProcess && !launchSequencer())
                 return;
 
-    m_seqManager->record();
+    try
+    {
+        m_seqManager->record();
+    }
+    catch(QString s)
+    {
+        KMessageBox::error(this, s);
+    }
 }
 
 
 void
 RosegardenGUIApp::setLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
 {
-    m_seqManager->setLoop(lhs, rhs);
+    try
+    {
+        m_seqManager->setLoop(lhs, rhs);
+    }
+    catch(QString s)
+    {
+        KMessageBox::error(this, s);
+    }
 }
 
 void RosegardenGUIApp::play()
@@ -1643,14 +1660,29 @@ void RosegardenGUIApp::play()
     if (!m_sequencerProcess && !launchSequencer())
                 return;
 
-    m_seqManager->play();
+    try
+    {
+        m_seqManager->play();
+    }
+    catch(QString s)
+    {
+        KMessageBox::error(this, s);
+    }
+
 }
 
 // Send stop request to Sequencer if playing, else
 // return to start of segment
 void RosegardenGUIApp::stop()
 {
-    m_seqManager->stop();
+    try
+    {
+        m_seqManager->stop();
+    }
+    catch(QString s)
+    {
+        KMessageBox::error(this, s);
+    }
 }
 
 // Jump to previous bar
