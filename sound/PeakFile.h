@@ -48,6 +48,9 @@ namespace Rosegarden
 class AudioFile;
 class Progress;
 
+
+typedef std::pair<RealTime, RealTime> SplitPointPair;
+
 class PeakFile : public SoundFile
 {
 public:
@@ -93,6 +96,12 @@ public:
     //
     bool scanToPeak(int peak);
     bool scanForward(int numberOfPeaks);
+
+    // Find threshold crossing points
+    //
+    std::vector<SplitPointPair> getSplitPoints(const RealTime &startIndex,
+                                               const RealTime &endIndex,
+                                               int threshold);
 
 protected:
     // Write the peak header and the peaks themselves

@@ -206,48 +206,6 @@ PeakFileManager::generatePeaks(AudioFile *audioFile,
 
 }
 
-/*
-// Generate a QPixmap to a given resolution - this function
-// makes full use of the peak files of course to render
-// a pixmap quickly for a given resolution.
-//
-//
-void
-PeakFileManager::drawPreview(AudioFile *audioFile,
-                             const RealTime &startIndex,
-                             const RealTime &endIndex,
-                             QPixmap *pixmap)
-{
-    if (audioFile->getType() == WAV)
-    {
-        PeakFile *peakFile = getPeakFile(audioFile);
-
-        try
-        {
-            peakFile->open();
-            peakFile->drawPixmap(startIndex,
-                                 endIndex,
-                                 pixmap);
-        }
-        catch(std::string e)
-        {
-            std::cout << "PeakFileManager::getPreview "
-                      << "\"" << e << "\"" << std::endl;
-        }
-    }
-    else if (audioFile->getType() == BWF)
-    {
-        // write the file out and incorporate the peak chunk
-    }
-    else
-    {
-        std::cerr << "PeakFileManager::getPreview - unsupported file type"
-                  << std::endl;
-    }
-        
-}
-*/
-
 std::vector<float>
 PeakFileManager::getPreview(AudioFile *audioFile,
                             const RealTime &startIndex,
@@ -307,45 +265,23 @@ PeakFileManager::clear()
 }
 
 
-/*
-void
-PeakFileManager::drawHighlightedPreview(AudioFile *audioFile,
-                                        const RealTime &startIndex,
-                                        const RealTime &endIndex,
-                                        const RealTime &startHighlight,
-                                        const RealTime &endHighlight,
-                                        QPixmap *pixmap)
+std::vector<SplitPointPair>
+PeakFileManager::getSplitPoints(AudioFile *audioFile,
+                                const RealTime &startIndex,
+                                const RealTime &endIndex,
+                                int threshold)
 {
-    if (audioFile->getType() == WAV)
-    {
-        PeakFile *peakFile = getPeakFile(audioFile);
+    PeakFile *peakFile = getPeakFile(audioFile);
 
-        try
-        {
-            peakFile->open();
-            peakFile->drawHighlightedPixmap(startIndex,
-                                            endIndex,
-                                            startHighlight,
-                                            endHighlight,
-                                            pixmap);
-        }
-        catch(std::string e)
-        {
-            std::cout << "PeakFileManager::getPreview "
-                      << "\"" << e << "\"" << std::endl;
-        }
-    }
-    else if (audioFile->getType() == BWF)
-    {
-        // write the file out and incorporate the peak chunk
-    }
-    else
-    {
-        std::cerr << "PeakFileManager::getPreview - unsupported file type"
-                  << std::endl;
-    }
+    if (peakFile == 0) return std::vector<SplitPointPair>();
+
+    return peakFile->getSplitPoints(startIndex,
+                                    endIndex,
+                                    threshold);
+
 }
-*/
+
+
 
 
 }

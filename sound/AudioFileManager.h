@@ -27,6 +27,7 @@
 #include "AudioFile.h"
 #include "XmlExportable.h"
 #include "PeakFileManager.h"
+#include "PeakFile.h"
 
 
 #ifndef _AUDIOFILEMANAGER_H_
@@ -62,31 +63,31 @@ public:
     // Create an audio file from an absolute path - we use this interface
     // to add an actual file.
     //
-    unsigned int addFile(const std::string &filePath);
+    AudioFileId addFile(const std::string &filePath);
 
     // Insert an audio file into the AudioFileManager and get the
     // first allocated id for it.  Used from the RG file as we already
     // have both name and filename/path.
     //
-    unsigned int insertFile(const std::string &name,
-                            const std::string &fileName);
+    AudioFileId insertFile(const std::string &name,
+                           const std::string &fileName);
 
     // And insert an AudioFile and specify an id
     //
     bool insertFile(const std::string &name, const std::string &fileName,
-                    unsigned int id);
+                    AudioFileId id);
 
     // Remove a file from the AudioManager by id
     //
-    bool removeFile(unsigned int id);
+    bool removeFile(AudioFileId id);
 
     // does a specific file id exist?
     //
-    bool fileExists(unsigned int id);
+    bool fileExists(AudioFileId id);
 
     // get audio file by id
     //
-    AudioFile* getAudioFile(unsigned int id);
+    AudioFile* getAudioFile(AudioFileId id);
 
     // Get the list of files
     //
@@ -130,7 +131,7 @@ public:
 
     // Generate for a single audio file
     //
-    bool generatePreview(Progress *progress, unsigned int id);
+    bool generatePreview(Progress *progress, AudioFileId id);
 
     // Get a preview for an AudioFile adjusted to Segment start and
     // end parameters (assuming they fall within boundaries).
@@ -138,14 +139,14 @@ public:
     // We can get back a set of values (floats) or a Pixmap if we 
     // supply the details.
     //
-    std::vector<float> getPreview(unsigned int id,       // audio file id
+    std::vector<float> getPreview(AudioFileId id,
                                   const RealTime &startIndex, 
                                   const RealTime &endIndex,
                                   int width);
 
     // Draw a fixed size (fixed by QPixmap) preview of an audio file
     //
-    void drawPreview(unsigned int id,             // audio file id
+    void drawPreview(AudioFileId id,
                      const RealTime &startIndex, 
                      const RealTime &endIndex,
                      QPixmap *pixmap);
@@ -153,7 +154,7 @@ public:
     // Usually used to show how an audio Segment makes up part of
     // an audio file.
     //
-    void drawHighlightedPreview(unsigned int it,
+    void drawHighlightedPreview(AudioFileId it,
                                 const RealTime &startIndex,
                                 const RealTime &endIndex,
                                 const RealTime &highlightStart,
@@ -179,10 +180,17 @@ public:
     //
     void print(); 
 
+    // Get a split point vector from a peak file
+    //
+    std::vector<SplitPointPair> getSplitPoints(AudioFileId id,
+                                               const RealTime &startIndex,
+                                               const RealTime &endIndex,
+                                               int threshold);
+
 private:
     std::string getFileInPath(const std::string &file);
 
-    unsigned int getFirstUnusedID();
+    AudioFileId getFirstUnusedID();
 
     std::vector<AudioFile*>                       m_audioFiles;
     std::string                                   m_audioPath;

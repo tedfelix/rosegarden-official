@@ -33,6 +33,7 @@
 #include <vector>
 
 
+#include "PeakFile.h"
 
 #ifndef _PEAKFILEMANAGER_H_
 #define _PEAKFILEMANAGER_H_
@@ -42,7 +43,6 @@ namespace Rosegarden
 
 class AudioFile;
 class RealTime;
-class PeakFile;
 class Progress;
 
 
@@ -73,23 +73,6 @@ public:
                        Progress *progress,
                        unsigned short updatePercentage);
 
-    /*
-    // Generate a QPixmap 
-    //
-    void drawPreview(AudioFile *audioFile,
-                     const RealTime &startIndex,
-                     const RealTime &endIndex,
-                     QPixmap *pixmap);
-
-    // Get a vector of floats as the preview
-    void drawHighlightedPreview(AudioFile *audioFile,
-                                const RealTime &startIndex,
-                                const RealTime &endIndex,
-                                const RealTime &startHighlight,
-                                const RealTime &endHighlight,
-                                QPixmap *pixmap);
-                                */
-
     // Get a vector of floats as the preview
     //
     std::vector<float> getPreview(AudioFile *audioFile,
@@ -102,6 +85,12 @@ public:
     //
     void clear();
                     
+    // Get split points for a peak file
+    //
+    std::vector<SplitPointPair> getSplitPoints(AudioFile *audioFile,
+                                               const RealTime &startIndex,
+                                               const RealTime &endIndex,
+                                               int threshold);
 protected:
 
     // Add and remove from our PeakFile cache

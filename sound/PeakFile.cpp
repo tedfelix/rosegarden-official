@@ -439,10 +439,11 @@ PeakFile::scanForward(int numberOfPeaks)
     // Ensure we re-read the input buffer
     m_loseBuffer = true;
 
-    /*
     if (m_inFile->eof())
+    {
+        m_inFile->clear();
         return false;
-        */
+    }
 
     return true;
 }
@@ -477,7 +478,7 @@ PeakFile::writePeaks(Progress *progress,
     unsigned int apprxTotalBytes = m_audioFile->getSize();
     unsigned int byteCount = 0;
 
-    for (unsigned int i = 0; i < channels; i++)
+    for (int i = 0; i < channels; i++)
         channelPeaks.push_back(std::pair<int, int>());
 
     // clear down info
@@ -739,5 +740,63 @@ PeakFile::getPeak(const RealTime &time)
     return (frames / double(m_blockSize));
 }
 
+// Get pairs of split points for areas that exceed a percentage
+// threshold
+//
+std::vector<SplitPointPair> 
+PeakFile::getSplitPoints(const RealTime &startIndex,
+                         const RealTime &endIndex,
+                         int threshold)
+{
+    std::vector<SplitPointPair> points;
+    std::string peakData;
+
+    scanToPeak(0);
+
+    float divisor = 0.0f;
+    switch(m_format)
+    {
+        case 1:
+            divisor = SAMPLE_MAX_8BIT;
+            break;
+
+        case 2:
+            divisor = SAMPLE_MAX_16BIT;
+            break;
+
+        default:
+            return points;
+    }
+
+    for (int i = 0; i < m_numberOfPeaks; i++)
+    {
+        try
+        {
+            peakData = getBytes(m_inFile, m_format * m_pointsPerValue);
+        }
+        catch (std::string e)
+        {
+            break;
+        }
+
+        if (peakData.length() == (unsigned int)(m_format *
+                                                m_pointsPerValue))
+        {
+            int peakValue =
+                getIntegerFromLittleEndian(peakData.substr(0, m_format));
+
+            float value = float(peakValue) / divisor;
+
+        }
+
+        if (!scanForward(1)) // forward one peak
+            break;
+    }
+
+    return points;
+}
+
 
 }
+
+

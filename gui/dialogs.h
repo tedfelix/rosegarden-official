@@ -543,12 +543,26 @@ public:
                      Rosegarden::Segment *segment,
                      RosegardenGUIDoc *doc);
 
-signals:
+    // Draw an audio preview over the segment and draw
+    // the potential splits along it.
+    //
+    void drawPreview();
+    void drawSplits(int threshold);
 
+public slots:
+    void slotThresholdChanged(int);
+
+protected:
     RosegardenGUIDoc    *m_doc;
     Rosegarden::Segment *m_segment;
+    QCanvas             *m_canvas;
     QCanvasView         *m_canvasView;
-    QSpinBox            *m_sensitivitySpin;
+    QSpinBox            *m_thresholdSpin;
+
+    int                  m_canvasWidth;
+    int                  m_canvasHeight;
+    int                  m_previewWidth;
+    int                  m_previewHeight;
 
 };
 

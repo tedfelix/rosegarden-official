@@ -452,13 +452,6 @@ RIFFAudioFile::writeFormatChunk()
 
 
 
-std::vector<std::pair<RealTime, RealTime> >
-RIFFAudioFile::getSplitPoints(unsigned int threshold)
-{
-}
-
-
-
 
 }
 

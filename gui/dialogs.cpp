@@ -2215,9 +2215,13 @@ AudioSplitDialog::AudioSplitDialog(QWidget *parent,
                                    Rosegarden::Segment *segment,
                                    RosegardenGUIDoc *doc):
             KDialogBase(parent, "", true,
-                        i18n("Autosplit Audio File"), Ok|Cancel),
+                        i18n("Autosplit Audio Segment"), Ok|Cancel),
             m_doc(doc),
-            m_segment(segment)
+            m_segment(segment),
+            m_canvasWidth(450),
+            m_canvasHeight(170),
+            m_previewWidth(400),
+            m_previewHeight(150)
 {
     if (!segment || segment->getType() != Rosegarden::Segment::Audio)
         reject();
@@ -2227,41 +2231,68 @@ AudioSplitDialog::AudioSplitDialog(QWidget *parent,
     new QLabel(i18n("AutoSplit Segment \"") +
         QString(m_segment->getLabel().c_str()) + QString("\""), w);
 
-    int width = 400;
-    int height = 150;
+    m_canvas = new QCanvas(w);
+    m_canvas->resize(m_canvasWidth, m_canvasHeight);
+    m_canvasView = new QCanvasView(m_canvas, w);
 
-    QCanvas *canvas = new QCanvas(w);
-    canvas->resize(width, height);
-
-    m_canvasView = new QCanvasView(canvas, w);
-    m_canvasView->resize(width, height);
-
-    canvas->update();
+    m_canvasView->setHScrollBarMode(QScrollView::AlwaysOff);
+    m_canvasView->setVScrollBarMode(QScrollView::AlwaysOff);
 
     QHBox *hbox = new QHBox(w);
-    new QLabel(i18n("Sensitivity %"), hbox);
-    m_sensitivitySpin = new QSpinBox(hbox);
-    m_sensitivitySpin->setValue(1);
+    new QLabel(i18n("Threshold %"), hbox);
+    m_thresholdSpin = new QSpinBox(hbox);
+    connect(m_thresholdSpin, SIGNAL(valueChanged(int)),
+            SLOT(slotThresholdChanged(int)));
 
-    Rosegarden::Composition &comp = m_doc->getComposition();
+    // Set thresholds
+    //
+    int threshold = 1;
+    m_thresholdSpin->setValue(threshold);
+    drawPreview();
+    drawSplits(1);
+
+}
+
+void 
+AudioSplitDialog::drawPreview()
+{
+    // Delete everything on the canvas
+    //
+    QCanvasItemList list = m_canvas->allItems();
+    for (QCanvasItemList::Iterator it = list.begin(); it != list.end(); it++)
+        delete *it;
+
+
+    // Draw a bounding box
+    //
+    QCanvasRectangle *rect = new QCanvasRectangle(m_canvas);
+    rect->setSize(m_canvasWidth - 4, m_canvasHeight - 4);
+    rect->setX(2);
+    rect->setY(2);
+    rect->setPen(Qt::black);
+    rect->setBrush(Qt::white);
+    rect->setVisible(true);
+
+    // Get preview in vector form
+    //
     Rosegarden::AudioFileManager &aFM = m_doc->getAudioFileManager();
-
-    //QCanvasRectangle *rect = new QCanvasRectangle(canvas);
-    //rect->setSize(width, height);
+    int channels = aFM.getAudioFile(m_segment->getAudioFileId())->getChannels();
 
     std::vector<float> values =
-        aFM.getPreview(segment->getAudioFileId(),
-                       segment->getAudioStartTime(),
-                       segment->getAudioEndTime(),
-                       width);
+        aFM.getPreview(m_segment->getAudioFileId(),
+                       m_segment->getAudioStartTime(),
+                       m_segment->getAudioEndTime(),
+                       m_previewWidth);
 
-    int halfHeight = height / 2;
+    // Draw it
+    //
+    int startX = (m_canvasWidth - m_previewWidth) / 2;
+    int halfHeight = m_canvasHeight / 2;
     float h1, h2;
     std::vector<float>::iterator it = values.begin();
 
-    int channels = aFM.getAudioFile(segment->getAudioFileId())->getChannels();
 
-    for (int i = 0; i < width; i++)
+    for (int i = 0; i < m_previewWidth; i++)
     {
         if (channels == 1)
         {
@@ -2275,8 +2306,8 @@ AudioSplitDialog::AudioSplitDialog(QWidget *parent,
         }
 
 
-        int startY = halfHeight + int(h1 * float(halfHeight));
-        int endY = halfHeight - int(h2 * float(halfHeight));
+        int startY = halfHeight + int(h1 * float(m_previewHeight / 2));
+        int endY = halfHeight - int(h2 * float(m_previewHeight / 2));
 
         if ( startY < 0 )
         {
@@ -2294,10 +2325,10 @@ AudioSplitDialog::AudioSplitDialog(QWidget *parent,
             endY = 0;
         }
 
-        QCanvasLine *line = new QCanvasLine(canvas);
-        line->setPoints(i,
+        QCanvasLine *line = new QCanvasLine(m_canvas);
+        line->setPoints(startX + i,
                         startY,
-                        i,
+                        startX + i,
                         endY);
         line->setPen(Qt::black);
         line->setBrush(Qt::black);
@@ -2305,9 +2336,42 @@ AudioSplitDialog::AudioSplitDialog(QWidget *parent,
 
     }
 
-
+    m_canvas->update();
 }
 
+// Retreive and display split points on the envelope
+//
+void
+AudioSplitDialog::drawSplits(int threshold)
+{
+    Rosegarden::AudioFileManager &aFM = m_doc->getAudioFileManager();
+    std::vector<Rosegarden::SplitPointPair> splitPoints =
+        aFM.getSplitPoints(m_segment->getAudioFileId(),
+                           m_segment->getAudioStartTime(),
+                           m_segment->getAudioEndTime(),
+                           threshold);
+
+    std::vector<Rosegarden::SplitPointPair>::iterator it;
+
+    int i = 0;
+    for (it = splitPoints.begin(); it != splitPoints.end(); it++)
+    {
+        std::cout << "SPLIT " << i++ << std::endl;
+        std::cout << "START = " << it->first << std::endl;
+        std::cout << "END   = " << it->second << std::endl << std::endl; 
+    }
+
+    m_canvas->update();
+}
+
+
+// When we've got a value change redisplay the split positions
+//
+void
+AudioSplitDialog::slotThresholdChanged(int threshold)
+{
+    drawSplits(threshold);
+}
 
 
 

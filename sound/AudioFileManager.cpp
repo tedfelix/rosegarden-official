@@ -60,10 +60,10 @@ AudioFileManager::~AudioFileManager()
 
 // Add a file from an absolute path
 //
-unsigned int
+AudioFileId
 AudioFileManager::addFile(const std::string &filePath)
 {
-    unsigned int id = getFirstUnusedID();
+    AudioFileId id = getFirstUnusedID();
 
     WAVAudioFile *aF = new WAVAudioFile(id,
                                         getShortFilename(filePath),
@@ -121,7 +121,7 @@ AudioFileManager::getDirectory(const std::string &path)
 // Create a new AudioFile with unique ID and label - insert from
 // our RG4 file
 //
-unsigned int
+AudioFileId
 AudioFileManager::insertFile(const std::string &name,
                              const std::string &fileName)
 {
@@ -138,7 +138,7 @@ AudioFileManager::insertFile(const std::string &name,
     if (foundFileName == "")
         return false;
 
-    unsigned int id = getFirstUnusedID();
+    AudioFileId id = getFirstUnusedID();
 
     WAVAudioFile *aF = new WAVAudioFile(id, name, foundFileName);
 
@@ -152,12 +152,12 @@ AudioFileManager::insertFile(const std::string &name,
     }
     m_audioFiles.push_back(aF);
 
-    return (unsigned int)id;
+    return id;
 }
 
 
 bool
-AudioFileManager::removeFile(unsigned int id)
+AudioFileManager::removeFile(AudioFileId id)
 {
     std::vector<AudioFile*>::iterator it;
 
@@ -176,10 +176,10 @@ AudioFileManager::removeFile(unsigned int id)
     return false;
 }
 
-unsigned int
+AudioFileId
 AudioFileManager::getFirstUnusedID()
 {
-    unsigned int rI = 0;
+    AudioFileId rI = 0;
 
     if (m_audioFiles.size() == 0) return rI;
 
@@ -201,7 +201,7 @@ AudioFileManager::getFirstUnusedID()
 bool
 AudioFileManager::insertFile(const std::string &name,
                              const std::string &fileName,
-                             unsigned int id)
+                             AudioFileId id)
 {
     // first try to expany any beginning tilde
     std::string foundFileName = substituteTildeForHome(fileName);
@@ -322,7 +322,7 @@ AudioFileManager::getFileInPath(const std::string &file)
 // Does a specific file id exist on the manager?
 //
 bool
-AudioFileManager::fileExists(unsigned int id)
+AudioFileManager::fileExists(AudioFileId id)
 {
     std::vector<AudioFile*>::iterator it;
 
@@ -358,7 +358,7 @@ AudioFileManager::clear()
 std::string
 AudioFileManager::createRecordingAudioFile()
 {
-    unsigned int newId = getFirstUnusedID();
+    AudioFileId newId = getFirstUnusedID();
     int audioFileNumber = 0;
 
     // search for used RG-AUDIO files in the record directory
@@ -559,7 +559,7 @@ AudioFileManager::generatePreviews(Progress *progress)
 //
 bool
 AudioFileManager::generatePreview(Progress *progress,
-                                  unsigned int id)
+                                  AudioFileId id)
 {
     AudioFile *audioFile = getAudioFile(id);
     
@@ -573,7 +573,7 @@ AudioFileManager::generatePreview(Progress *progress,
 }
 
 AudioFile*
-AudioFileManager::getAudioFile(unsigned int id)
+AudioFileManager::getAudioFile(AudioFileId id)
 {
     std::vector<AudioFile*>::iterator it;
 
@@ -588,7 +588,7 @@ AudioFileManager::getAudioFile(unsigned int id)
 }
 
 std::vector<float>
-AudioFileManager::getPreview(unsigned int id,
+AudioFileManager::getPreview(AudioFileId id,
                              const RealTime &startIndex,
                              const RealTime &endIndex,
                              int width)
@@ -606,7 +606,7 @@ AudioFileManager::getPreview(unsigned int id,
 }
 
 void
-AudioFileManager::drawPreview(unsigned int id,
+AudioFileManager::drawPreview(AudioFileId id,
                               const RealTime &startIndex,
                               const RealTime &endIndex,
                               QPixmap *pixmap)
@@ -654,7 +654,7 @@ AudioFileManager::drawPreview(unsigned int id,
 }
 
 void
-AudioFileManager::drawHighlightedPreview(unsigned int id,
+AudioFileManager::drawHighlightedPreview(AudioFileId id,
                                          const RealTime &startIndex,
                                          const RealTime &endIndex,
                                          const RealTime &highlightStart,
@@ -732,6 +732,22 @@ AudioFileManager::print()
         std::cout << (*it)->getId() << " : " << (*it)->getName()
                   << " : \"" << (*it)->getFilename() << "\"" << std::endl;
     }
+}
+
+std::vector<SplitPointPair>
+AudioFileManager::getSplitPoints(AudioFileId id,
+                                 const RealTime &startIndex,
+                                 const RealTime &endIndex,
+                                 int threshold)
+{
+    AudioFile *audioFile = getAudioFile(id);
+
+    if (audioFile == 0) return std::vector<SplitPointPair>();
+
+    return m_peakManager.getSplitPoints(audioFile,
+                                        startIndex,
+                                        endIndex,
+                                        threshold);
 }
 
 }
