@@ -102,10 +102,13 @@ operator<<(QDataStream &dS, const MappedComposition &mC)
 QDataStream& 
 operator>>(QDataStream &dS, MappedComposition *mC)
 {
-    int sliceSize, type;
+    int sliceSize;
+
+    // our conversion types
     Rosegarden::RealTime absTime, duration, audioStartMarker;
     MidiByte data1, data2;
     InstrumentId instrument;
+    int type;
 
     dS >> sliceSize;
 
@@ -146,10 +149,13 @@ operator>>(QDataStream &dS, MappedComposition *mC)
 QDataStream& 
 operator>>(QDataStream &dS, MappedComposition &mC)
 {
-    int sliceSize, type;
+    int sliceSize;
+
+    // our conversion types
     Rosegarden::RealTime absTime, duration, audioStartMarker;
     MidiByte data1, data2;
     InstrumentId instrument;
+    int type;
 
     dS >> sliceSize;
 

@@ -946,7 +946,8 @@ SequenceManager::preparePlayback()
 {
     Rosegarden::Studio &studio = m_doc->getStudio();
     Rosegarden::InstrumentList list = studio.getInstruments();
-    Rosegarden::MappedComposition mC;
+
+    m_mC.clear();
     Rosegarden::MappedEvent *mE;
 
     // Send the MappedInstruments (minimal Instrument information
@@ -978,13 +979,13 @@ SequenceManager::preparePlayback()
                 mE = new MappedEvent((*it)->getID(),
                                      Rosegarden::MappedEvent::MidiController,
                                      (*it)->getMSB());
-                mC.insert(mE);
+                m_mC.insert(mE);
 
                 mE = new MappedEvent((*it)->getID(),
                                      Rosegarden::MappedEvent::MidiController,
                                      32,
                                      (*it)->getLSB());
-                mC.insert(mE);
+                m_mC.insert(mE);
             }
 
             if ((*it)->sendsProgramChange())
@@ -992,38 +993,52 @@ SequenceManager::preparePlayback()
                 mE = new MappedEvent((*it)->getID(),
                                      Rosegarden::MappedEvent::MidiProgramChange,
                                      (*it)->getProgramChange());
+                /*
+                mE = new MappedEvent((Rosegarden::InstrumentId)0,
 
-                mC.insert(mE);
+                                     Rosegarden::MappedEvent::MidiProgramChange,
+                                     (Rosegarden::MidiByte)10,
+                                     (Rosegarden::MidiByte)0,
+                                     Rosegarden::RealTime(10,0),
+                                     Rosegarden::RealTime(0,0),
+                                     Rosegarden::RealTime(0,0));
+                                     */
+
+                m_mC.insert(mE);
             }
         }
     }
 
     // Send the MappedComposition if it's got anything in it
-    if (mC.size() > 0)
+    if (m_mC.size() > 0)
     {
         QByteArray data;
         QDataStream streamOut(data, IO_WriteOnly);
+        QCString replyType;
+        QByteArray replyData;
 
-        MappedComposition::iterator it = mC.begin();
+        MappedComposition::iterator it = m_mC.begin();
 
         // scan output MappedComposition
-        for (; it != mC.end(); it++)
+        for (; it != m_mC.end(); it++)
         {
-            cout << "PC TYPE = " << (int)(*it)->getType() << endl;
-            cout << "PC ID = " << (int)(*it)->getInstrument() << endl;
+            cout << "PC TYPE = " << (*it)->getType() << endl;
+            cout << "PC ID = " << (*it)->getInstrument() << endl;
             cout << "PC PC = " << (int)(*it)->getPitch() << endl;
         }
 
-        streamOut << mC;
+        streamOut << m_mC;
 
-        if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
+        if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
                                       ROSEGARDEN_SEQUENCER_IFACE_NAME,
-          "processSequencerSlice(Rosegarden::MappedComposition)", data))
+          "processSequencerSlice(Rosegarden::MappedComposition)", data,
+          replyType, replyData))
         {
             throw(i18n("Failed to contact Rosegarden sequencer"));
         }
     }
 
+    return m_mC;
 }
 
 

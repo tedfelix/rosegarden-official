@@ -100,7 +100,7 @@ public:
     MappedEvent(InstrumentId id,
                 MappedEventType type,
                 MidiByte pitch,
-                MidiByte &velocity,
+                MidiByte velocity,
                 const RealTime &absTime,
                 const RealTime &duration,
                 const RealTime &audioStartMarker):

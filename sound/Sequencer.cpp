@@ -991,9 +991,13 @@ Sequencer::immediateProcessEventsOut(Rosegarden::MappedComposition &mC)
 
     for (; it != mC.end(); it++)
     {
-        cout << "SEQ TYPE = " << (*it)->getType()  << endl;
-        cout << "SEQ INST = " << (*it)->getInstrument() << endl;
-        cout << "SEQ PC = " << (int)(*it)->getPitch() << endl;
+        cout << "SEQ INST = " << (int)(*it)->getInstrument() << endl;
+        cout << "SEQ TYPE = " << (int)(*it)->getType()  << endl;
+        cout << "SEQ D1 = " << (int)(*it)->getData1() << endl;
+        cout << "SEQ D2 = " << (int)(*it)->getData2() << endl;
+        cout << "SEQ TIME = " << (*it)->getEventTime() << endl;
+        cout << "SEQ DUR = " << (*it)->getDuration() << endl;
+        cout << "SEQ AUD = " << (*it)->getAudioStartMarker() << endl;
     }
 
 }

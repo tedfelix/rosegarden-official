@@ -85,7 +85,7 @@ public:
     //
     void checkSoundSystemStatus();
 
-    // Send prgoram changes and align Instrument lists before playback
+    // Send program changes and align Instrument lists before playback
     // starts.
     //
     void preparePlayback();
