@@ -45,14 +45,14 @@ signals:
      *
      * \a noteName contains the MIDI name of the corresponding note
      */
-    void hoveredOverNoteChanged(const QString &noteName);
+    void hoveredOverKeyChanged(unsigned int y);
 
 protected:
-    // ActiveItem interface
+
 //     virtual void mousePressEvent       (QMouseEvent*);
 //     virtual void mouseReleaseEvent     (QMouseEvent*);
 //     virtual void mouseDoubleClickEvent (QMouseEvent*);
-//     virtual void mouseMoveEvent        (QMouseEvent*);
+    virtual void mouseMoveEvent        (QMouseEvent*);
 
     virtual void paintEvent(QPaintEvent*);
 

@@ -36,6 +36,7 @@ PianoKeyboard::PianoKeyboard(QSize keySize, QWidget *parent,
       m_nbKeys(88)
 {
     computeKeyPos();
+    setMouseTracking(true);
 }
 
 QSize PianoKeyboard::sizeHint() const
@@ -54,15 +55,16 @@ void PianoKeyboard::computeKeyPos()
     unsigned const int smallWhiteKeyHeight = 14,
         whiteKeyHeight = 18;
     
-    unsigned int y = 4;
+    int y = -5;
 
-    unsigned int posInOctave = 1,
+    unsigned int posInOctave = 0,
         keyHeight = smallWhiteKeyHeight;
 
     for(unsigned int i = 0; i < m_nbKeys; ++i) {
-        posInOctave = i % 7;
+        posInOctave = (i + 3) % 7;
 
-        m_whiteKeyPos.push_back(y);
+        if (y >= 0)
+            m_whiteKeyPos.push_back(y);
 
         if (posInOctave == 0)
             m_labelKeyPos.push_back(y + (keyHeight * 3 / 4));
@@ -97,6 +99,12 @@ void PianoKeyboard::computeKeyPos()
     
 }
 
+void PianoKeyboard::mouseMoveEvent(QMouseEvent* e)
+{
+    emit hoveredOverKeyChanged(e->y());
+}
+
+
 void PianoKeyboard::paintEvent(QPaintEvent*)
 {
     static QFont pFont("helvetica", 8);
@@ -111,7 +119,7 @@ void PianoKeyboard::paintEvent(QPaintEvent*)
 
     for(unsigned int i = 0; i < m_labelKeyPos.size(); ++i)
         paint.drawText(m_blackKeySize.width(), m_labelKeyPos[i],
-                       QString(i18n("C %1")).arg(i));
+                       QString(i18n("C %1")).arg(m_labelKeyPos.size() - i - 2));
 
     paint.setBrush(colorGroup().foreground());
 
