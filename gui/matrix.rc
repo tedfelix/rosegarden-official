@@ -89,6 +89,12 @@
   <Action name="insert_note_actionmenu"/>
 </Menu>
 
+<Menu  name="settings"><text>&amp;Settings</text>
+  <Action name="show_chords_ruler"         append="show_merge" />
+  <Action name="show_tempo_ruler"          append="show_merge" />
+</Menu> 
+
+
 </MenuBar>
 
 <ToolBar name="toolsToolBar">

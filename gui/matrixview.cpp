@@ -358,7 +358,9 @@ MatrixView::~MatrixView()
 void MatrixView::slotSaveOptions()
 {        
     m_config->setGroup("Matrix Options");
-    // no options to save at the moment
+
+    m_config->writeEntry("Show Chord Name Ruler", getToggleAction("show_chords_ruler")->isChecked());
+    m_config->writeEntry("Show Tempo Ruler",      getToggleAction("show_tempo_ruler")->isChecked());
 
     m_config->sync();
 }
@@ -367,7 +369,16 @@ void MatrixView::readOptions()
 {
     EditView::readOptions();
     m_config->setGroup("Matrix Options");
-    // no options to read at the moment
+
+    bool opt = false;
+
+    opt = m_config->readBoolEntry("Show Chord Name Ruler", true);
+    getToggleAction("show_chords_ruler")->setChecked(opt);
+    slotToggleChordsRuler();
+    
+    opt = m_config->readBoolEntry("Show Tempo Ruler", false);
+    getToggleAction("show_tempo_ruler")->setChecked(opt);
+    slotToggleTempoRuler();
 }
 
 void MatrixView::setupActions()
@@ -589,6 +600,18 @@ void MatrixView::setupActions()
 
     //!!! need slotInsertNoteFromAction() after notationviewslots.cpp
     createInsertPitchActionMenu();
+
+    //
+    // Settings menu
+    //
+    new KToggleAction(i18n("Show Ch&ord Name Ruler"), 0, this,
+                      SLOT(slotToggleChordsRuler()),
+                      actionCollection(), "show_chords_ruler");
+
+    new KToggleAction(i18n("Show &Tempo Ruler"), 0, this,
+                      SLOT(slotToggleTempoRuler()),
+                      actionCollection(), "show_tempo_ruler");
+
 
     createGUI(getRCFileName());
 
@@ -1947,3 +1970,14 @@ MatrixView::slotDocumentDestroyed()
     m_documentDestroyed = true;
 }
 
+void
+MatrixView::slotToggleChordsRuler()
+{
+    toggleWidget(m_chordNameRuler, "show_chords_ruler");
+}
+
+void
+MatrixView::slotToggleTempoRuler()
+{
+    toggleWidget(m_tempoRuler, "show_tempo_ruler");
+}

@@ -233,6 +233,11 @@ public slots:
     void slotVelocityUp();
     void slotVelocityDown();
 
+    /// settings
+    void slotToggleChordsRuler();
+    void slotToggleTempoRuler();
+
+    /// cursor moves
     void slotJumpCursorToPlayback();
     void slotJumpPlaybackToCursor();
 
