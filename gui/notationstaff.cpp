@@ -331,26 +331,42 @@ void NotationStaff::getClefAndKeyAtX(int myx, Clef &clef,
     }
 }
 
-
-bool NotationStaff::showElements()
+void
+NotationStaff::renderElements()
 {
-    NotationElementList *notes = getViewElementList();
-    return showElements(notes->begin(), notes->end(), false);
+    renderElements(getViewElementList()->begin(), getViewElementList()->end());
 }
 
-bool NotationStaff::showElements(NotationElementList::iterator from,
-				 NotationElementList::iterator to,
-				 bool positionOnly)
+void
+NotationStaff::renderElements(NotationElementList::iterator from,
+			      NotationElementList::iterator to)
 {
-    return showElements(from, to, positionOnly ? PositionRefresh : FullRefresh);
-}
+    kdDebug(KDEBUG_AREA) << "NotationStaff::renderElements()" << endl;
 
-bool NotationStaff::showElements(NotationElementList::iterator from,
-				 NotationElementList::iterator to,
-				 RefreshType refresh,
-				 const EventSelection *selection)
+    START_TIMING;
+
+    Clef currentClef; // default is okay to start with
+
+    for (NotationElementList::iterator it = from; it != to; ++it) {
+
+	if ((*it)->event()->isa(Clef::EventType)) {
+	    currentClef = Clef(*(*it)->event());
+	}
+
+	bool selected = false;
+	(void)((*it)->event()->get<Bool>(SELECTED, selected));
+
+	renderSingleElement(*it, currentClef, selected);
+    }
+
+    PRINT_ELAPSED("NotationStaff::renderElements");
+}	
+
+
+void
+NotationStaff::positionElements()
 {
-    kdDebug(KDEBUG_AREA) << "NotationStaff::showElements()" << endl;
+    kdDebug(KDEBUG_AREA) << "NotationStaff::positionElements()" << endl;
 
     START_TIMING;
 
@@ -362,198 +378,173 @@ bool NotationStaff::showElements(NotationElementList::iterator from,
 
     NotationElementList::iterator end = getViewElementList()->end();
 
-    for (NotationElementList::iterator it = from; it != end; ++it) {
+    for (NotationElementList::iterator it = getViewElementList()->begin();
+	 it != end; ++it) {
 
 	if ((*it)->event()->isa(Clef::EventType)) {
+
 	    currentClef = Clef(*(*it)->event());
 	    m_clefChanges.push_back(ClefChange((*it)->getLayoutX(),
 					       currentClef));
-	}
 
-	if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
+	} else if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
+
 	    currentKey = Rosegarden::Key(*(*it)->event());
 	    m_keyChanges.push_back(KeyChange((*it)->getLayoutX(),
 					     currentKey));
 	}
 
-	bool needNewSprite = true;
-	bool needBlueSprite = false;
+	bool selected = false;
+	(void)((*it)->event()->get<Bool>(SELECTED, selected));
 
-	switch (refresh) {
+	bool needNewSprite = (selected != (*it)->isSelected());
 
-	case FullRefresh:
-	    break;
+	if ((*it)->getCanvasItem() && (*it)->isNote()) {
 
-	case PositionRefresh: 
-	    if ((*it)->canvasItem()) {
+	    // If the event is a beamed or tied-forward note, then we
+	    // might need a new sprite if the distance from this note
+	    // to the next has changed (because the beam or tie is
+	    // part of the note's sprite).
 
-		// We can't only reposition if the event is a beamed
-		// or tied-forward note, because changing the position
-		// normally requires changing the beam or tie's length
-		// and/or angle as well
+	    bool spanning = false;
+	    (void)((*it)->event()->get<Bool>(BEAMED, spanning));
+	    if (!spanning)
+		(void)((*it)->event()->get<Bool>(TIED_FORWARD, spanning));
+	    
+	    if (spanning) {
 
-		if ((*it)->isNote()) {
-                
-		    bool spanning = false;
-		    (void)((*it)->event()->get<Bool>(BEAMED, spanning));
-		    if (!spanning)
-			(void)((*it)->event()->get<Bool>
-			       (TIED_FORWARD, spanning));
-		    if (!spanning) needNewSprite = false;
+		int myCanvasX = (*it)->getCanvasItem()->x();
+		NotationElementList::iterator scooter(it);
+		++scooter;
 
-		} else {
-		    needNewSprite = false;
-		}
-	    }
-	    break;
-
-	case SelectionRefresh:
-	    if ((*it)->canvasItem()) {
-
-		bool selected = false;
-		(void)((*it)->event()->get<Bool>(SELECTED, selected));
-
-		bool inNewSelection =
-		    selection && selection->contains((*it)->event());
-
-		if (selected != inNewSelection) {
-		    needNewSprite = true;
-		    if (inNewSelection) {
-			(*it)->event()->set<Bool>(SELECTED, true);
-		    } else {
-			(*it)->event()->unset(SELECTED);
+		if (scooter != end && (*scooter)->getCanvasItem()) {
+		    int nextCanvasX = (*scooter)->getCanvasItem()->x();
+		    if ((nextCanvasX - myCanvasX) !=
+			((*scooter)->getLayoutX() - (*it)->getLayoutX())) {
+			needNewSprite = true;
 		    }
-		} else {
-		    needNewSprite = false;
 		}
 	    }
-	    break;
-        }
-
-	if (!needNewSprite) {
-	    (*it)->reposition(x(), y());
-	    continue;
 	}
 
-	(void)((*it)->event()->get<Bool>(SELECTED, needBlueSprite));
-
-	if (needBlueSprite) {
-	    m_npf->setSelected(true);
+	if (needNewSprite) {
+	    renderSingleElement(*it, currentClef, selected);
 	} else {
-	    m_npf->setSelected(false);
-	}
-
-        try {
-
-            QCanvasPixmap *pixmap = 0;
-            QCanvasSimpleSprite *sprite = 0;
-
-//	    kdDebug(KDEBUG_AREA) << "\nNotationStaff::showElements: Event is:" << endl;
-//	    (*it)->event()->dump(std::cerr);
-
-            if ((*it)->isNote()) {
-
-                sprite = makeNoteSprite(it);
-
-            } else if ((*it)->isRest()) {
-
-		timeT duration = (*it)->event()->get<Int>
-		    (Rosegarden::Quantizer::LegatoDurationProperty);
-
-		if (duration > 0) {
-		    Note::Type note = (*it)->event()->get<Int>(NOTE_TYPE);
-		    int dots = (*it)->event()->get<Int>(NOTE_DOTS);
-		    pixmap = new QCanvasPixmap
-			(m_npf->makeRestPixmap(Note(note, dots)));
-		} else {
-		    kdDebug(KDEBUG_AREA) << "Omitting too-short rest" << endl;
-		}
-
-            } else if ((*it)->event()->isa(Clef::EventType)) {
-
-                pixmap = new QCanvasPixmap
-                    (m_npf->makeClefPixmap(Rosegarden::Clef(*(*it)->event())));
-
-            } else if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
-
-                pixmap = new QCanvasPixmap
-                    (m_npf->makeKeyPixmap
-		     (Rosegarden::Key(*(*it)->event()), currentClef));
-
-            } else {
-                    
-                kdDebug(KDEBUG_AREA)
-                    << "NotationElement of unrecognised type "
-                    << (*it)->event()->getType() << endl;
-                pixmap = new QCanvasPixmap(m_npf->makeUnknownPixmap());
-            }
-
-            if (!sprite && pixmap) {
-                sprite = new QCanvasNotationSprite(*(*it), pixmap, canvas());
-            }
-
-            // Show the sprite
-            //
-            if (sprite) {
-                (*it)->setCanvasItem(sprite, x(), y());
-		if (needBlueSprite) sprite->setZ(2);
-		else sprite->setZ(0);
-                sprite->show();
-            } else {
-		(*it)->removeCanvasItem();
-	    }
-            
-        } catch (...) {
-            kdDebug(KDEBUG_AREA) << "Event lacks the proper properties: "
-				 << (*(*it)->event())
-                                 << endl;
-        }
-
-        if (it == to && refresh == FullRefresh) {
-	    refresh = PositionRefresh; // from now on
+	    (*it)->reposition(x(), y());
 	}
     }
 
-    kdDebug(KDEBUG_AREA) << "NotationStaff::showElements() exiting" << endl;
-
-    PRINT_ELAPSED("NotationStaff::showElements");
-    return true;
+    PRINT_ELAPSED("NotationStaff::positionElements");
 }
 
 
-QCanvasSimpleSprite *NotationStaff::makeNoteSprite(NotationElementList::iterator it)
+void
+NotationStaff::renderSingleElement(NotationElement *elt,
+				   const Rosegarden::Clef &currentClef,
+				   bool selected)
+{
+    try {
+
+	QCanvasPixmap *pixmap = 0;
+	QCanvasSimpleSprite *sprite = 0;
+
+	m_npf->setSelected(selected);
+	elt->setSelected(selected);
+
+	if (elt->isNote()) {
+
+	    sprite = makeNoteSprite(elt);
+
+	} else if (elt->isRest()) {
+
+	    timeT duration = elt->event()->get<Int>
+		(Rosegarden::Quantizer::LegatoDurationProperty);
+
+	    if (duration > 0) {
+		Note::Type note = elt->event()->get<Int>(NOTE_TYPE);
+		int dots = elt->event()->get<Int>(NOTE_DOTS);
+		pixmap = new QCanvasPixmap
+		    (m_npf->makeRestPixmap(Note(note, dots)));
+	    } else {
+		kdDebug(KDEBUG_AREA) << "Omitting too-short rest" << endl;
+	    }
+
+	} else if (elt->event()->isa(Clef::EventType)) {
+
+	    pixmap = new QCanvasPixmap
+		(m_npf->makeClefPixmap(Rosegarden::Clef(*elt->event())));
+
+	} else if (elt->event()->isa(Rosegarden::Key::EventType)) {
+
+	    pixmap = new QCanvasPixmap
+		(m_npf->makeKeyPixmap
+		 (Rosegarden::Key(*elt->event()), currentClef));
+
+	} else {
+                    
+	    kdDebug(KDEBUG_AREA)
+		<< "NotationElement of unrecognised type "
+		<< elt->event()->getType() << endl;
+	    pixmap = new QCanvasPixmap(m_npf->makeUnknownPixmap());
+	}
+
+	if (!sprite && pixmap) {
+	    sprite = new QCanvasNotationSprite(*elt, pixmap, canvas());
+	}
+
+	// Show the sprite
+	//
+	if (sprite) {
+	    elt->setCanvasItem(sprite, x(), y());
+	    sprite->setZ(selected ? 2 : 0);
+	    sprite->show();
+	} else {
+	    elt->removeCanvasItem();
+	}
+            
+    } catch (...) {
+	kdDebug(KDEBUG_AREA) << "Event lacks the proper properties: "
+			     << (*elt->event())
+			     << endl;
+    }
+
+    elt->reposition(x(), y());
+}
+
+QCanvasSimpleSprite *
+NotationStaff::makeNoteSprite(NotationElement *elt)
 {
     static NotePixmapParameters params(Note::Crotchet, 0);
 
-    Note::Type note = (*it)->event()->get<Int>(NOTE_TYPE);
-    int dots = (*it)->event()->get<Int>(NOTE_DOTS);
+    Note::Type note = elt->event()->get<Int>(NOTE_TYPE);
+    int dots = elt->event()->get<Int>(NOTE_DOTS);
 
     Accidental accidental = NoAccidental;
 
     long acc;
-    if ((*it)->event()->get<Int>(DISPLAY_ACCIDENTAL, acc)) {
+    if (elt->event()->get<Int>(DISPLAY_ACCIDENTAL, acc)) {
         accidental = Accidental(acc);
     }
 
     bool up = true;
-    (void)((*it)->event()->get<Bool>(STEM_UP, up));
+    (void)(elt->event()->get<Bool>(STEM_UP, up));
 
     bool flag = true;
-    (void)((*it)->event()->get<Bool>(DRAW_FLAG, flag));
+    (void)(elt->event()->get<Bool>(DRAW_FLAG, flag));
 
     bool beamed = false;
-    (void)((*it)->event()->get<Bool>(BEAMED, beamed));
+    (void)(elt->event()->get<Bool>(BEAMED, beamed));
 
     bool shifted = false;
-    (void)((*it)->event()->get<Bool>(NOTE_HEAD_SHIFTED, shifted));
+    (void)(elt->event()->get<Bool>(NOTE_HEAD_SHIFTED, shifted));
 
     long stemLength = m_npf->getNoteBodyHeight();
-    (void)((*it)->event()->get<Int>(UNBEAMED_STEM_LENGTH, stemLength));
+    (void)(elt->event()->get<Int>(UNBEAMED_STEM_LENGTH, stemLength));
     
     long heightOnStaff = 0;
     int legerLines = 0;
 
-    (void)((*it)->event()->get<Int>(HEIGHT_ON_STAFF, heightOnStaff));
+    (void)(elt->event()->get<Int>(HEIGHT_ON_STAFF, heightOnStaff));
     if (heightOnStaff < 0) {
         legerLines = heightOnStaff;
     } else if (heightOnStaff > 8) {
@@ -571,7 +562,7 @@ QCanvasSimpleSprite *NotationStaff::makeNoteSprite(NotationElementList::iterator
     params.setIsOnLine(heightOnStaff % 2 == 0);
 
     long tieLength;
-    (void)((*it)->event()->get<Int>(TIE_LENGTH, tieLength));
+    (void)(elt->event()->get<Int>(TIE_LENGTH, tieLength));
     if (tieLength > 0) {
         params.setTied(true);
         params.setTieLength(tieLength);
@@ -581,24 +572,24 @@ QCanvasSimpleSprite *NotationStaff::makeNoteSprite(NotationElementList::iterator
 
     if (beamed) {
 
-        if ((*it)->event()->get<Bool>(BEAM_PRIMARY_NOTE)) {
+        if (elt->event()->get<Bool>(BEAM_PRIMARY_NOTE)) {
 
-            int myY = (*it)->event()->get<Int>(BEAM_MY_Y);
+            int myY = elt->event()->get<Int>(BEAM_MY_Y);
 
-            stemLength = myY - (int)(*it)->getLayoutY();
+            stemLength = myY - (int)elt->getLayoutY();
             if (stemLength < 0) stemLength = -stemLength;
 
             int nextBeamCount =
-                (*it)->event()->get<Int>(BEAM_NEXT_BEAM_COUNT);
+                elt->event()->get<Int>(BEAM_NEXT_BEAM_COUNT);
             int width =
-                (*it)->event()->get<Int>(BEAM_SECTION_WIDTH);
+                elt->event()->get<Int>(BEAM_SECTION_WIDTH);
             int gradient =
-                (*it)->event()->get<Int>(BEAM_GRADIENT);
+                elt->event()->get<Int>(BEAM_GRADIENT);
 
             bool thisPartialBeams(false), nextPartialBeams(false);
-            (void)(*it)->event()->get<Bool>
+            (void)elt->event()->get<Bool>
                 (BEAM_THIS_PART_BEAMS, thisPartialBeams);
-            (void)(*it)->event()->get<Bool>
+            (void)elt->event()->get<Bool>
                 (BEAM_NEXT_PART_BEAMS, nextPartialBeams);
 
             params.setNextBeamCount(nextBeamCount);
@@ -614,18 +605,18 @@ QCanvasSimpleSprite *NotationStaff::makeNoteSprite(NotationElementList::iterator
     
     params.setTupledCount(0);
     long tuplingLineY = 0;
-    bool tupled = ((*it)->event()->get<Int>(TUPLING_LINE_MY_Y, tuplingLineY));
+    bool tupled = (elt->event()->get<Int>(TUPLING_LINE_MY_Y, tuplingLineY));
 
     if (tupled) {
 	int tuplingLineWidth =
-	    (*it)->event()->get<Int>(TUPLING_LINE_WIDTH);
+	    elt->event()->get<Int>(TUPLING_LINE_WIDTH);
 	double tuplingLineGradient =
-	    (double)((*it)->event()->get<Int>(TUPLING_LINE_GRADIENT)) / 100.0;
+	    (double)(elt->event()->get<Int>(TUPLING_LINE_GRADIENT)) / 100.0;
 
 	long tupledCount;
-	if ((*it)->event()->get<Int>(BEAMED_GROUP_TUPLED_COUNT, tupledCount)) {
+	if (elt->event()->get<Int>(BEAMED_GROUP_TUPLED_COUNT, tupledCount)) {
 	    params.setTupledCount(tupledCount);
-	    params.setTuplingLineY(tuplingLineY - (int)(*it)->getLayoutY());
+	    params.setTuplingLineY(tuplingLineY - (int)elt->getLayoutY());
 	    params.setTuplingLineWidth(tuplingLineWidth);
 	    params.setTuplingLineGradient(tuplingLineGradient);
 	}
@@ -633,41 +624,7 @@ QCanvasSimpleSprite *NotationStaff::makeNoteSprite(NotationElementList::iterator
 
     params.setStemLength(stemLength);
     QCanvasPixmap notePixmap(m_npf->makeNotePixmap(params));
-    return new QCanvasNotationSprite(*(*it),
+    return new QCanvasNotationSprite(*elt,
                                      new QCanvasPixmap(notePixmap), canvas());
 }
-
-bool NotationStaff::clearSelection()
-{
-    if (m_haveSelection) {
-	NotationElementList *notes = getViewElementList();
-	bool shown = showElements(notes->begin(), notes->end(),
-				  SelectionRefresh, 0);
-	m_haveSelection = false;
-	return shown;
-    } else return true;
-}
-
-bool NotationStaff::showSelection(const EventSelection *selection)
-{
-    NotationElementList *notes = getViewElementList();
-    bool shown;
-
-    if (!selection) {
-	shown = showElements
-	    (notes->begin(), notes->end(), SelectionRefresh, 0);
-	m_haveSelection = false;
-	return shown;
-    }
-
-    const Segment *segment = &(selection->getSegment());
-    if (segment != &getSegment()) return false;
-
-    shown = showElements
-	(notes->begin(), notes->end(), SelectionRefresh, selection);
-
-    if (shown) m_haveSelection = true;
-    return shown;
-}
-
 

@@ -23,11 +23,13 @@
 
 #include "Segment.h"
 #include "SegmentNotationHelper.h"
+#include "notationproperties.h"
 
 #include "rosedebug.h"
 
 using Rosegarden::timeT;
 using Rosegarden::Event;
+using Rosegarden::Bool;
 using Rosegarden::Segment;
 using Rosegarden::SegmentNotationHelper;
 
@@ -140,5 +142,24 @@ void EventSelection::updateBeginEndTime() const
 
     kdDebug(KDEBUG_AREA) << "EventSelection::updateBeginEndTime() : begin : "
                          << m_beginTime << ", end : " << m_endTime << endl;
+}
+
+void
+EventSelection::recordSelectionOnSegment()
+{
+    removeSelectionFromSegment();
+    for (eventcontainer::iterator i = m_segmentEvents.begin();
+	 i != m_segmentEvents.end(); ++i) {
+	(*i)->set<Bool>(NotationProperties::SELECTED, true);
+    }
+}
+
+void
+EventSelection::removeSelectionFromSegment()
+{ 
+    for (Segment::iterator i = m_originalSegment.begin();
+	 i != m_originalSegment.end(); ++i) {
+	(*i)->unset(NotationProperties::SELECTED);
+    }
 }
 

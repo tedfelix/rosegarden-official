@@ -104,3 +104,15 @@ NotationElement::reposition(double dxoffset, double dyoffset)
     m_canvasItem->move(m_x + dxoffset, m_y + dyoffset);
 }
 
+bool
+NotationElement::isSelected()
+{
+    return m_canvasItem ?  m_canvasItem->selected() : false;
+}
+
+void
+NotationElement::setSelected(bool selected)
+{
+    if (m_canvasItem) m_canvasItem->setSelected(selected);
+}
+

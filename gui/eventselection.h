@@ -89,6 +89,18 @@ public:
 
     const Rosegarden::Segment &getSegment() const { return m_originalSegment; }
     Rosegarden::Segment &getSegment()             { return m_originalSegment; }
+
+    /**
+     * Set the SELECTED property on all selected events in the
+     * segment, and unset from all non-selected events.
+     */
+    void recordSelectionOnSegment();
+
+    /**
+     * Unset the SELECTED property from all events in the segment
+     * that are in this selection.
+     */
+    void removeSelectionFromSegment();
     
 private:
     EventSelection(const EventSelection&);

@@ -107,8 +107,11 @@ public:
      */
     void reposition(double dxoffset, double dyoffset);
 
+    bool isSelected();
+    void setSelected(bool selected);
+
     /// Returns the associated canvas item
-    QCanvasItem* canvasItem() { return m_canvasItem; }
+    QCanvasItem* getCanvasItem() { return m_canvasItem; }
 
 protected:
     double m_x;

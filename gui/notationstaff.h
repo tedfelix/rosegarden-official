@@ -116,7 +116,7 @@ public:
 	return getLineSpacing() * nbLegerLines;
     }
  
-   /**
+    /**
      * Return the id of the staff
      * This will be passed to the NotationTools
      * so they know on which staff a mouse event occurred
@@ -126,15 +126,52 @@ public:
      */
     unsigned int getId() { return m_id; }
 
-    bool showElements();
 
-    bool showElements(NotationElementList::iterator from,
-		      NotationElementList::iterator to,
-		      bool positionOnly = false);
+    /**
+     * Generate or re-generate sprites for all the elements between
+     * from and to.  Call this when you've just created a staff and
+     * done the layout on it, and now you want to draw it; or when
+     * you've just made a change, in which case you can specify the
+     * extents of the change in the from and to parameters.
+     * 
+     * This method does not reposition any elements outside the given
+     * range -- so after any edit that may change the visible extents
+     * of a range, you will then need to call positionElements for the
+     * changed range and the entire remainder of the staff.
+     */
+    void renderElements(NotationElementList::iterator from,
+			NotationElementList::iterator to);
 
-    bool showSelection(const EventSelection *selection);
-    bool clearSelection();
 
+    /**
+     * Call renderElements(from, to) on the whole staff.
+     */
+    void renderElements();
+
+    /**
+     *
+     * Assign suitable coordinates to all the elements on the staff,
+     * based entirely on the layout X and Y coordinates they were
+     * given by the horizontal and vertical layout processes.
+     *
+     * This is necessary because the sprites that are being positioned
+     * may have been created either after the layout process completed
+     * (by renderElements) or before (by the previous renderElements
+     * call, if the sprites are unchanged but have moved) -- so
+     * neither the layout nor renderElements can authoritatively set
+     * their final positions.  Also, this operates on the entire staff
+     * so that it can update its record of key and clef changes during
+     * the course of the staff, which is needed to support the
+     * getClefAndKeyAtX() method.
+     *
+     * This method also updates the selected-ness of elements on the 
+     * staff (i.e. it turns the selected ones blue and the unselected
+     * ones black).  As a result -- and for other implementation
+     * details -- it may actually re-generate some sprites.
+     *
+     * Call this after renderElements, or after changing the selection.
+     */
+    void positionElements();
 
     /**
      * Insert a bar line at x-coordinate \a barPos.
@@ -187,15 +224,19 @@ public:
 protected:
 
     enum RefreshType { FullRefresh, PositionRefresh, SelectionRefresh };
-    bool showElements(NotationElementList::iterator from,
-		      NotationElementList::iterator to,
-		      RefreshType, const EventSelection *selection = 0);
+
+    /** 
+     * Assign a suitable sprite to the given element (the clef is
+     * needed in case it's a key event, in which case we need to judge
+     * the correct pitch for the key)
+     */
+    void renderSingleElement(NotationElement *, const Rosegarden::Clef &,
+			     bool selected);
 
     /**
-     * Return a QCanvasSimpleSprite representing the NotationElement
-     * pointed to by the given iterator
+     * Return a QCanvasSimpleSprite representing the given note event
      */
-    QCanvasSimpleSprite* makeNoteSprite(NotationElementList::iterator);
+    QCanvasSimpleSprite *makeNoteSprite(NotationElement *);
 
     int m_id;
 

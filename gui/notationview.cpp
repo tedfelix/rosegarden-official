@@ -189,7 +189,8 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     if (!layoutApplied) KMessageBox::sorry(0, "Couldn't apply layout");
     else {
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-            m_staffs[i]->showElements();
+            m_staffs[i]->renderElements();
+	    m_staffs[i]->positionElements();
             showBars(i);
         }
     }
@@ -709,10 +710,7 @@ NotationView::changeStretch(int n)
     applyLayout();
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-        NotationElementList *notes = m_staffs[i]->getViewElementList();
-        NotationElementList::iterator starti = notes->begin();
-        NotationElementList::iterator endi = notes->end();
-        m_staffs[i]->showElements(starti, endi, true);
+        m_staffs[i]->positionElements();
         showBars(i);
     }
 
@@ -731,10 +729,7 @@ void NotationView::changeLegato(int n)
     applyLayout();
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-        NotationElementList *notes = m_staffs[i]->getViewElementList();
-        NotationElementList::iterator starti = notes->begin();
-        NotationElementList::iterator endi = notes->end();
-        m_staffs[i]->showElements(starti, endi);
+        m_staffs[i]->positionElements();
         showBars(i);
     }
 
@@ -824,8 +819,8 @@ NotationView::changeFont(string newName, int newSize)
     if (!layoutApplied) KMessageBox::sorry(0, "Couldn't apply layout");
     else {
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-            m_staffs[i]->showElements();
-            m_staffs[i]->show();
+            m_staffs[i]->renderElements();
+            m_staffs[i]->positionElements();
             showBars(i);
         }
     }
@@ -896,14 +891,19 @@ void NotationView::setCurrentSelectedNote(const char *pixmapName,
 
 void NotationView::setCurrentSelection(EventSelection* s)
 {
-    if (m_currentEventSelection && s != m_currentEventSelection) {
-        getStaff(m_currentEventSelection->getSegment())->showSelection(0);
+    if (s && m_currentEventSelection &&
+	s->getSegment() != m_currentEventSelection->getSegment()) {
+	m_currentEventSelection->removeSelectionFromSegment();
+	getStaff(m_currentEventSelection->getSegment())->positionElements();
     }
 
     delete m_currentEventSelection;
     m_currentEventSelection = s;
 
-    if (s) getStaff(s->getSegment())->showSelection(s);
+    if (s) {
+	s->recordSelectionOnSegment();
+        getStaff(s->getSegment())->positionElements();
+    }
 
     canvas()->update();
 }
@@ -1718,7 +1718,10 @@ void NotationView::redoLayoutAdvised(Segment *segment,
             endi = notes->findTime(barEndTime);
         }
 
-        m_staffs[i]->showElements(starti, endi, !thisStaff);
+	if (thisStaff) {
+	    m_staffs[i]->renderElements(starti, endi);
+	}
+	m_staffs[i]->positionElements();
         showBars(i);
     }
 
