@@ -138,8 +138,9 @@ TempoRuler::paintEvent(QPaintEvent* e)
     double prevTempo = 0.0;
     long prevBpm = 0;
 
-    typedef std::map<timeT, bool> TimePoints;
-    int tempoChangeHere = 1, timeSigChangeHere = 2;
+    typedef std::map<timeT, int> TimePoints;
+    int tempoChangeHere = 1;
+    int timeSigChangeHere = 2;
     TimePoints timePoints;
 
     for (int tempoNo = m_composition->getTempoChangeNumberAt(from) + 1;
@@ -150,7 +151,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	     (m_composition->getRawTempoChange(tempoNo).first,
 	      tempoChangeHere));
     }
-	
+
     for (int sigNo = m_composition->getTimeSignatureNumberAt(from) + 1;
 	 sigNo <= m_composition->getTimeSignatureNumberAt(to); ++sigNo) {
 
@@ -218,15 +219,19 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	    QRect numBounds = m_fontMetrics.boundingRect(numStr);
 	    QRect denBounds = m_fontMetrics.boundingRect(denStr);
 
+	    int margin = (m_height - (numBounds.height() +
+				      denBounds.height())) / 2;
+
 	    paint.setFont(m_boldFont);
 	    paint.drawText(static_cast<int>(x - numBounds.width()/2),
-			   numBounds.height(), numStr);
+			   margin + numBounds.height(), numStr);
 	    paint.drawText(static_cast<int>(x - denBounds.width()/2),
-			   numBounds.height() + denBounds.height(), denStr);
+			   margin + numBounds.height() + denBounds.height(),
+			   denStr);
 	}
 
 	if (i->second & tempoChangeHere) { 
-	
+
 	    double tempo = m_composition->getTempoAt(time);
 	    long bpm = long(tempo);
 

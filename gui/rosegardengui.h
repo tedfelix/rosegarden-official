@@ -638,6 +638,11 @@ public slots:
     void slotEditAsNotation();
 
     /**
+     * open a tempo/timesig edit view
+     */
+    void slotEditTempos();
+
+    /**
      * Edit the tempo - called from a Transport signal
      */
     void slotEditTempo();

@@ -104,19 +104,24 @@ public:
     
 
 TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
+					 Rosegarden::Composition *composition,
+					 Rosegarden::timeT insertionTime,
 					 Rosegarden::TimeSignature sig,
-					 int barNo, bool atStartOfBar,
+					 bool timeEditable,
 					 QString explanatoryText) :
     KDialogBase(parent, 0, true, i18n("Time Signature"), Ok | Cancel),
+    m_composition(composition),
     m_timeSignature(sig),
+    m_time(insertionTime),
+    m_numLabel(0),
+    m_denomLabel(0),
     m_explanatoryLabel(0),
     m_commonTimeButton(0),
     m_hideSignatureButton(0),
     m_normalizeRestsButton(0),
     m_asGivenButton(0),
     m_startOfBarButton(0),
-    m_barNo(barNo),
-    m_atStartOfBar(atStartOfBar)
+    m_timeEditor(0)
 {
     static QFont *timeSigFont = 0;
 
@@ -158,54 +163,83 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
     QObject::connect(denomDown, SIGNAL(clicked()), this, SLOT(slotDenomDown()));
     QObject::connect(denomUp,   SIGNAL(clicked()), this, SLOT(slotDenomUp()));
 
-    groupBox = new QButtonGroup(1, Horizontal, i18n("Scope"), vbox);
+    if (timeEditable) {
 
-    if (!m_atStartOfBar) {
+	m_timeEditor = new RosegardenTimeWidget
+	    (i18n("Time where signature takes effect"),
+	     vbox,
+	     composition,
+	     m_time,
+	     true);
 
-	// let's forget about start-of-composition for the moment
-	QString scopeText;
-	if (m_barNo != 0 || !m_atStartOfBar) {
-	    if (m_atStartOfBar) {
-		scopeText = QString
-		    (i18n("Insertion point is at start of bar %1."))
-		    .arg(m_barNo + 1);
+	m_asGivenButton = 0;
+	m_startOfBarButton = 0;
+
+    } else {
+
+	m_timeEditor = 0;
+
+	groupBox = new QButtonGroup(1, Horizontal, i18n("Scope"), vbox);
+	
+	int barNo = composition->getBarNumber(m_time);
+	bool atStartOfBar = (m_time == composition->getBarStart(barNo));
+
+	if (!atStartOfBar) {
+
+	    QString scopeText;
+
+	    if (barNo != 0 || !atStartOfBar) {
+		if (atStartOfBar) {
+		    scopeText = QString
+			(i18n("Insertion point is at start of bar %1."))
+			.arg(barNo + 1);
+		} else {
+		    scopeText = QString
+			(i18n("Insertion point is in the middle of bar %1."))
+		    .arg(barNo + 1);
+		}
 	    } else {
 		scopeText = QString
-		    (i18n("Insertion point is in the middle of bar %1."))
-		    .arg(m_barNo + 1);
+		    (i18n("Insertion point is at start of composition."));
+	    }
+	
+	    new QLabel(scopeText, groupBox);
+	    m_asGivenButton = new QRadioButton
+		(i18n("Start bar %1 here").arg(barNo + 2), groupBox);
+
+	    if (!atStartOfBar) {
+		m_startOfBarButton = new QRadioButton
+		    (i18n("Change time from start of bar %1")
+		     .arg(barNo + 1), groupBox);
+		m_startOfBarButton->setChecked(true);
+	    } else {
+		m_asGivenButton->setChecked(true);
 	    }
 	} else {
-	    scopeText = QString
-		(i18n("Insertion point is at start of composition."));
+	    new QLabel(i18n("Time change will take effect at the start of bar %1.")
+		       .arg(barNo + 1), groupBox);
 	}
-	
-	new QLabel(scopeText, groupBox);
-	m_asGivenButton = new QRadioButton
-	    (i18n("Start bar %1 here").arg(m_barNo + 2), groupBox);
-
-	if (!m_atStartOfBar) {
-	    m_startOfBarButton = new QRadioButton
-		(i18n("Change time from start of bar %1")
-		 .arg(m_barNo + 1), groupBox);
-	    m_startOfBarButton->setChecked(true);
-	} else {
-	    m_asGivenButton->setChecked(true);
-	}
-    } else {
-	new QLabel(i18n("Time change will take effect at the start of bar %1.")
-		   .arg(barNo + 1), groupBox);
     }
 
     groupBox = new QGroupBox(1, Horizontal, i18n("Options"), vbox);
+    KConfig *config = kapp->config();
+    config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
+
     m_hideSignatureButton = new QCheckBox
-	(i18n("Make the new time signature hidden"), groupBox);
-    m_hideSignatureButton->setChecked(false);
+	(i18n("Make the time signature hidden"), groupBox);
+    m_hideSignatureButton->setChecked
+	(config->readBoolEntry("timesigdialogmakehidden", true));
+
     m_commonTimeButton = new QCheckBox
 	(i18n("Show as common time"), groupBox);
-    m_commonTimeButton->setChecked(true);
+    m_commonTimeButton->setChecked
+	(config->readBoolEntry("timesigdialogshowcommon", true));
+
     m_normalizeRestsButton = new QCheckBox
 	(i18n("Normalize subsequent rests"), groupBox);
-    m_normalizeRestsButton->setChecked(true);
+    m_normalizeRestsButton->setChecked
+	(config->readBoolEntry("timesigdialognormalize", true));
+
     QObject::connect(m_hideSignatureButton, SIGNAL(clicked()), this,
 		     SLOT(slotUpdateCommonTimeButton()));
     slotUpdateCommonTimeButton();
@@ -215,6 +249,13 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
 Rosegarden::TimeSignature
 TimeSignatureDialog::getTimeSignature() const
 {
+    KConfig *config = kapp->config();
+    config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
+
+    config->writeEntry("timesigdialogmakehidden", m_hideSignatureButton->isChecked());
+    config->writeEntry("timesigdialogshowcommon", m_commonTimeButton->isChecked());
+    config->writeEntry("timesigdialognormalize", m_normalizeRestsButton->isChecked());
+
     TimeSignature ts(m_timeSignature.getNumerator(),
 		     m_timeSignature.getDenominator(),
 		     (m_commonTimeButton &&
@@ -291,16 +332,19 @@ TimeSignatureDialog::slotUpdateCommonTimeButton()
     m_commonTimeButton->setEnabled(false);
 }
 
-
-TimeSignatureDialog::Location
-TimeSignatureDialog::getLocation() const
+Rosegarden::timeT
+TimeSignatureDialog::getTime() const
 {
-    if (m_asGivenButton && m_asGivenButton->isChecked()) {
-	return AsGiven;
+    if (m_timeEditor) {
+	return m_timeEditor->getTime();
+    } else if (m_asGivenButton && m_asGivenButton->isChecked()) {
+	return m_time;
     } else if (m_startOfBarButton && m_startOfBarButton->isChecked()) {
-	return StartOfBar;
+	int barNo = m_composition->getBarNumber(m_time);
+	return m_composition->getBarStart(barNo);
+    } else {
+	return m_time;
     }
-    return AsGiven;
 }
 
 bool
@@ -449,7 +493,8 @@ KeySignatureDialog::slotKeyUp()
     try {
 	m_key = Rosegarden::Key(ac, sharp, m_key.isMinor());
 	setValid(true);
-    } catch (Rosegarden::Key::BadKeySpec) {
+    } catch (Rosegarden::Key::BadKeySpec s) {
+	std::cerr << s.getMessage() << std::endl;
 	setValid(false);
     }
 
@@ -474,7 +519,8 @@ KeySignatureDialog::slotKeyDown()
     try {
 	m_key = Rosegarden::Key(ac, sharp, m_key.isMinor());
 	setValid(true);
-    } catch (Rosegarden::Key::BadKeySpec) {
+    } catch (Rosegarden::Key::BadKeySpec s) {
+	std::cerr << s.getMessage() << std::endl;
 	setValid(false);
     }
 
@@ -562,7 +608,8 @@ KeySignatureDialog::slotKeyNameChanged(const QString &s)
 	if (space > 0) name = name.substr(0, space);
 	m_keyCombo->setEditText(strtoqstr(name));
 
-    } catch (Rosegarden::Key::BadKeyName) {
+    } catch (Rosegarden::Key::BadKeyName s) {
+	std::cerr << s.getMessage() << std::endl;
 	setValid(false);
     }
 
@@ -579,7 +626,8 @@ KeySignatureDialog::slotMajorMinorChanged(const QString &s)
     try {
 	m_key = Rosegarden::Key(name);
 	setValid(true);
-    } catch (Rosegarden::Key::BadKeyName) {
+    } catch (Rosegarden::Key::BadKeyName s) {
+	std::cerr << s.getMessage() << std::endl;
 	setValid(false);
     }
 
@@ -2521,7 +2569,8 @@ private:
 
 
 
-TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc):
+TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
+			 bool timeEditable):
     KDialogBase(parent, 0, true, i18n("Insert Tempo Change"), Ok | Cancel),
     m_doc(doc),
     m_tempoTime(0),
@@ -2548,6 +2597,16 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc):
     m_tempoBeatLabel = new QLabel(tempoBox);
     m_tempoBeat = new QLabel(tempoBox);
     m_tempoBeatsPerMinute = new QLabel(tempoBox);
+
+    m_timeEditor = 0;
+
+    if (timeEditable) {
+	m_timeEditor = new RosegardenTimeWidget
+	    (i18n("Time of tempo change"),
+	     vbox, &m_doc->getComposition(), 0, true);
+	populateTempo();
+	return;
+    }
 
     // Scope Box
     QButtonGroup *scopeBox = new QButtonGroup(1, Horizontal,
@@ -2586,13 +2645,13 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc):
     new QLabel(scopeBox);
 
     connect(m_tempoChangeHere, SIGNAL(clicked()),
-            SLOT(slotActionChanged()));
+	    SLOT(slotActionChanged()));
     connect(m_tempoChangeBefore, SIGNAL(clicked()),
-            SLOT(slotActionChanged()));
+	    SLOT(slotActionChanged()));
     connect(m_tempoChangeStartOfBar, SIGNAL(clicked()),
-            SLOT(slotActionChanged()));
+	    SLOT(slotActionChanged()));
     connect(m_tempoChangeGlobal, SIGNAL(clicked()),
-            SLOT(slotActionChanged()));
+	    SLOT(slotActionChanged()));
 
     m_tempoChangeHere->setChecked(true);
 
@@ -2631,6 +2690,11 @@ TempoDialog::populateTempo()
     m_tempoValueSpinBox->setSpecialValueText(tempoString);
 
     updateBeatLabels(tempo);
+
+    if (m_timeEditor) {
+	m_timeEditor->slotSetTime(m_tempoTime);
+	return;
+    }
 
     Rosegarden::RealTime tempoTime = comp.getElapsedRealTime(m_tempoTime);
     QString milliSeconds;
@@ -2713,17 +2777,20 @@ TempoDialog::updateBeatLabels(double tempo)
 	m_tempoBeat->hide();
 	m_tempoBeatsPerMinute->hide();
     } else {
-	m_tempoBeatLabel->setText(" (");
+//	m_tempoBeatLabel->setText(" (");
+	m_tempoBeatLabel->setText("  ");
 
 	timeT error = 0;
 	m_tempoBeat->setPixmap(NotePixmapFactory::toQPixmap
 			       (NotePixmapFactory::makeNoteMenuPixmap(beat, error)));
+	m_tempoBeat->setMaximumWidth(25);
 	if (error) m_tempoBeat->setPixmap(NotePixmapFactory::toQPixmap
 					  (NotePixmapFactory::makeToolbarPixmap
 					   ("menu-no-note")));
 
 	m_tempoBeatsPerMinute->setText
-	    (QString("= %1 )").arg
+//	    (QString("= %1 )").arg
+	    (QString("= %1 ").arg
 	     (int(tempo * Note(Note::Crotchet).getDuration() / beat)));
 	m_tempoBeatLabel->show();
 	m_tempoBeat->show();
@@ -2756,22 +2823,31 @@ TempoDialog::slotOk()
     if ((int)tempoDouble != m_tempoValueSpinBox->value())
         tempoDouble = m_tempoValueSpinBox->value();
 
-    TempoDialogAction action = AddTempo;
+    if (m_timeEditor) {
 
-    if (m_tempoChangeBefore->isChecked()) {
-	action = ReplaceTempo;
-    } else if (m_tempoChangeStartOfBar->isChecked()) {
-	action = AddTempoAtBarStart;
-    } else if (m_tempoChangeGlobal->isChecked()) {
-	action = GlobalTempo;
-	if (m_defaultBox->isChecked()) {
-	    action = GlobalTempoWithDefault;
+	emit changeTempo(m_timeEditor->getTime(),
+			 tempoDouble,
+			 AddTempo);
+
+    } else {
+
+	TempoDialogAction action = AddTempo;
+
+	if (m_tempoChangeBefore->isChecked()) {
+	    action = ReplaceTempo;
+	} else if (m_tempoChangeStartOfBar->isChecked()) {
+	    action = AddTempoAtBarStart;
+	} else if (m_tempoChangeGlobal->isChecked()) {
+	    action = GlobalTempo;
+	    if (m_defaultBox->isChecked()) {
+		action = GlobalTempoWithDefault;
+	    }
 	}
+	
+	emit changeTempo(m_tempoTime,
+			 tempoDouble,
+			 action);
     }
-
-    emit changeTempo(m_tempoTime,
-                     tempoDouble,
-                     action);
 
     KDialogBase::slotOk();
 }

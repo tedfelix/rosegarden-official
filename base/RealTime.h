@@ -84,6 +84,8 @@ struct RealTime
     //
     double operator/(const RealTime &r) const;
 
+    std::string toString() const;
+
     static const RealTime zeroTime;
 };
 

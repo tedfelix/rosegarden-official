@@ -127,7 +127,7 @@ void EditViewBase::readOptions()
     getToggleAction("options_show_toolbar")->setChecked(!toolBar()->isHidden());
 }
 
-void EditViewBase::setupActions(QString rcFileName)
+void EditViewBase::setupActions(QString rcFileName, bool haveClipboard)
 {
     setRCFileName(rcFileName);
 
@@ -153,9 +153,11 @@ void EditViewBase::setupActions(QString rcFileName)
     // File menu
     KStdAction::close (this, SLOT(slotCloseWindow()),      actionCollection());
 
-    KStdAction::cut     (this, SLOT(slotEditCut()),        actionCollection());
-    KStdAction::copy    (this, SLOT(slotEditCopy()),       actionCollection());
-    KStdAction::paste   (this, SLOT(slotEditPaste()),      actionCollection());
+    if (haveClipboard) {
+	KStdAction::cut     (this, SLOT(slotEditCut()),    actionCollection());
+	KStdAction::copy    (this, SLOT(slotEditCopy()),   actionCollection());
+	KStdAction::paste   (this, SLOT(slotEditPaste()),  actionCollection());
+    }
 
     new KToolBarPopupAction(i18n("Und&o"),
                             "undo",

@@ -138,7 +138,7 @@ PlayList::PlayList(QWidget *parent, const char *name)
     m_barLayout->addStretch();
 
 
-    m_openButton    ->setText(i18n("Open"));
+    m_openButton    ->setText(i18n("Add..."));
     m_playButton    ->setText(i18n("Play"));
     m_moveUpButton  ->setText(i18n("Move Up"));
     m_moveDownButton->setText(i18n("Move Down"));

@@ -105,6 +105,7 @@ rosegarden_SOURCES = \
         studiowidgets.cpp \
 	tempocolour.cpp \
 	temporuler.cpp \
+	tempoview.cpp \
 	textruler.cpp \
         trackbuttons.cpp \
 	trackeditor.cpp \
@@ -244,6 +245,7 @@ rcdir = $(kde_datadir)/rosegarden
 rc_DATA = bankeditor.rc \
         controleditor.rc \
 	eventlist.rc \
+	tempoview.rc \
         devicemanager.rc \
 	matrix.rc \
 	notationeraser.rc \

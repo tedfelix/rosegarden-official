@@ -558,6 +558,9 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotEditTimeSignature()),
                 actionCollection(), "add_time_signature");
 
+    new KAction(i18n("Open Tempo and Time Signature Editor"), 0, this,
+		SLOT(slotEditTempos()), actionCollection(), "edit_tempos");
+    
     //
     // Edit menu
     //
@@ -579,7 +582,7 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotChangeCompositionLength()),
                 actionCollection(), "change_composition_length");
 
-    new KAction(i18n("Edit Markers..."), 0, this,
+    new KAction(i18n("Edit Mar&kers..."), 0, this,
                 SLOT(slotEditMarkers()),
                 actionCollection(), "edit_markers");
 
@@ -676,14 +679,12 @@ void RosegardenGUIApp::setupActions()
                 actionCollection(), "delete_track");
 
     icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/move_track_down.xpm"));
-    new KAction(i18n("Move Track &Down"), icon,
-                0,
+    new KAction(i18n("Move Track &Down"), icon, SHIFT + Key_Down,
                 this, SLOT(slotMoveTrackDown()),
                 actionCollection(), "move_track_down");
 
     icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/move_track_up.xpm"));
-    new KAction(i18n("Move Track &Up"), icon,
-                0,
+    new KAction(i18n("Move Track &Up"), icon, SHIFT + Key_Up,
                 this, SLOT(slotMoveTrackUp()),
                 actionCollection(), "move_track_up");
 
@@ -704,7 +705,7 @@ void RosegardenGUIApp::setupActions()
     //
     // Studio menu
     //
-    new KAction(i18n("Manage MIDI Devices..."), 0, this,
+    new KAction(i18n("Manage MIDI &Devices..."), 0, this,
                 SLOT(slotManageMIDIDevices()),
                 actionCollection(), "manage_devices");
 
@@ -724,7 +725,7 @@ void RosegardenGUIApp::setupActions()
 	        SLOT(slotImportDefaultStudio()),
 		actionCollection(), "load_default_studio");
 
-    new KAction(i18n("&Import Studio from File..."), 0, this,
+    new KAction(i18n("Im&port Studio from File..."), 0, this,
 	        SLOT(slotImportStudio()),
 		actionCollection(), "load_studio");
 
@@ -2186,6 +2187,11 @@ void RosegardenGUIApp::slotEditInMatrix()
 void RosegardenGUIApp::slotEditInEventList()
 {
     m_view->slotEditSegmentEventList(0);
+}
+
+void RosegardenGUIApp::slotEditTempos()
+{
+    m_view->slotEditTempos();
 }
 
 void RosegardenGUIApp::slotToggleToolBar()
@@ -4051,19 +4057,14 @@ void RosegardenGUIApp::slotEditTimeSignature(QWidget *parent)
     Rosegarden::Composition &composition(m_doc->getComposition());
 
     Rosegarden::timeT time = composition.getPosition();
-    int barNo = composition.getBarNumber(time);
-    bool atStartOfBar = (time == composition.getBarStart(barNo));
     Rosegarden::TimeSignature sig = composition.getTimeSignatureAt(time);
 
     TimeSignatureDialog *dialog = new TimeSignatureDialog
-        (parent, sig, barNo, atStartOfBar);
+        (parent, &composition, time, sig);
 
     if (dialog->exec() == QDialog::Accepted) {
 
-        TimeSignatureDialog::Location location = dialog->getLocation();
-        if (location == TimeSignatureDialog::StartOfBar) {
-            time = composition.getBarStartForTime(time);
-        }
+	time = dialog->getTime();
 
         if (dialog->shouldNormalizeRests()) {
             m_doc->getCommandHistory()->addCommand
@@ -4123,9 +4124,6 @@ RosegardenGUIApp::slotChangeTempo(Rosegarden::timeT time,
     }
     else if (action == TempoDialog::ReplaceTempo)
     {
-        //!!! I'm sure this should be unnecessary, as tempo changes
-        // should replace if you just insert at the same time anyway
-
         int index = comp.getTempoChangeNumberAt(time);
 
         // if there's no previous tempo change then just set globally

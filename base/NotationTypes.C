@@ -374,8 +374,9 @@ Key::Key(int accidentalCount, bool isSharp, bool isMinor) :
     for (KeyDetailMap::const_iterator i = m_keyDetailMap.begin();
          i != m_keyDetailMap.end(); ++i) {
         if ((*i).second.m_sharpCount == accidentalCount &&
-            (*i).second.m_sharps == isSharp &&
-            (*i).second.m_minor == isMinor) {
+            (*i).second.m_minor == isMinor &&
+	    ((*i).second.m_sharps == isSharp ||
+	     (*i).second.m_sharpCount == 0)) {
             m_name = (*i).first;
             return;
         }

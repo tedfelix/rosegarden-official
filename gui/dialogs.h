@@ -65,18 +65,16 @@ class TimeSignatureDialog : public KDialogBase
 
 public:
     TimeSignatureDialog(QWidget *parent,
+			Rosegarden::Composition *composition,
+			Rosegarden::timeT insertionTime,
 			Rosegarden::TimeSignature defaultSig =
-			Rosegarden::TimeSignature::DefaultTimeSignature,
-			int barNo = 0, bool atStartOfBar = true,
+			    Rosegarden::TimeSignature::DefaultTimeSignature,
+			bool timeEditable = false,
 			QString explanatoryText = 0);
 
     Rosegarden::TimeSignature getTimeSignature() const;
 
-    enum Location {
-	AsGiven, StartOfBar
-    };
-
-    Location getLocation() const;
+    Rosegarden::timeT getTime() const;
     bool shouldNormalizeRests() const;
 
 public slots:
@@ -87,10 +85,12 @@ public slots:
     void slotUpdateCommonTimeButton();
 
 protected:
-
     //--------------- Data members ---------------------------------
 
+    Rosegarden::Composition *m_composition;
     Rosegarden::TimeSignature m_timeSignature;
+    Rosegarden::timeT m_time;
+
     QLabel *m_numLabel;
     QLabel *m_denomLabel;
     QLabel *m_explanatoryLabel;
@@ -98,11 +98,11 @@ protected:
     QCheckBox *m_commonTimeButton;
     QCheckBox *m_hideSignatureButton;
     QCheckBox *m_normalizeRestsButton;
+
     QRadioButton *m_asGivenButton;
     QRadioButton *m_startOfBarButton;
 
-    int m_barNo;
-    bool m_atStartOfBar;
+    RosegardenTimeWidget *m_timeEditor;
 };
 
 
@@ -441,7 +441,8 @@ public:
         GlobalTempoWithDefault
     } TempoDialogAction;
 
-    TempoDialog(QWidget *parent, RosegardenGUIDoc *doc);
+    TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
+		bool timeEditable = false);
     ~TempoDialog();
 
     // Set the position at which we're checking the tempo
@@ -466,25 +467,27 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    RosegardenGUIDoc   *m_doc;
-    Rosegarden::timeT   m_tempoTime;
-    double              m_tempoValue;
-    RosegardenSpinBox  *m_tempoValueSpinBox;
+    RosegardenGUIDoc     *m_doc;
+    Rosegarden::timeT     m_tempoTime;
+    double                m_tempoValue;
+    RosegardenSpinBox    *m_tempoValueSpinBox;
 
-    QLabel	       *m_tempoBeatLabel;
-    QLabel	       *m_tempoBeat;
-    QLabel	       *m_tempoBeatsPerMinute;
+    QLabel	         *m_tempoBeatLabel;
+    QLabel	         *m_tempoBeat;
+    QLabel	         *m_tempoBeatsPerMinute;
 
-    QLabel             *m_tempoTimeLabel;
-    QLabel             *m_tempoBarLabel;
-    QLabel             *m_tempoStatusLabel;
+    RosegardenTimeWidget *m_timeEditor;
+
+    QLabel               *m_tempoTimeLabel;
+    QLabel               *m_tempoBarLabel;
+    QLabel               *m_tempoStatusLabel;
     
-    QRadioButton       *m_tempoChangeHere;
-    QRadioButton       *m_tempoChangeBefore;
-    QLabel	       *m_tempoChangeBeforeAt;
-    QRadioButton       *m_tempoChangeStartOfBar;
-    QRadioButton       *m_tempoChangeGlobal;
-    QCheckBox          *m_defaultBox;
+    QRadioButton         *m_tempoChangeHere;
+    QRadioButton         *m_tempoChangeBefore;
+    QLabel	         *m_tempoChangeBeforeAt;
+    QRadioButton         *m_tempoChangeStartOfBar;
+    QRadioButton         *m_tempoChangeGlobal;
+    QCheckBox            *m_defaultBox;
 };
 
 

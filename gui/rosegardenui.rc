@@ -34,6 +34,8 @@
         <Separator/>
         <Action name="add_tempo"/>
         <Action name="add_time_signature"/>
+	<Action name="edit_tempos"/>
+        <Separator/>
         <Action name="change_composition_length"/>
         <Action name="edit_markers"/>
         <Separator/>

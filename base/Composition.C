@@ -736,6 +736,7 @@ Composition::removeTempoChange(int n)
     m_tempoSegment.erase(m_tempoSegment[n]);
     m_tempoTimestampsNeedCalculating = true;
     updateRefreshStatuses();
+    notifyTempoChanged();
 }
 
 

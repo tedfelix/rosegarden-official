@@ -138,14 +138,29 @@ protected:
 int
 EventViewItem::compare(QListViewItem *i, int col, bool ascending) const
 {
-    if (col == 2) // event type
-        return key(col, ascending).compare(i->key(col, ascending));
-    else          // numeric comparison
+    EventViewItem *ei = dynamic_cast<EventViewItem *>(i);
+    if (!ei) return QListViewItem::compare(i, col, ascending);
+
+    if (col == 0) { // time
+	Rosegarden::Event &e1 = *m_event;
+	Rosegarden::Event &e2 = *ei->m_event;
+	if (e2 < e1) return 1;
+	else if (e1 < e2) return -1;
+	else return 0;
+    } else if (col == 2) { // type
+	if (key(col, ascending).compare(i->key(col, ascending)) == 0) {
+	    return compare(i, 0, ascending);
+	} else {
+	    return key(col, ascending).compare(i->key(col, ascending));
+	}
+    } else {               // numeric comparison
         return key(col, ascending).toInt() - i->key(col, ascending).toInt();
+    }
 }
 
 
 ////////////////////////////////////////////////////////////////////////
+
 
 int
 EventView::m_lastSetEventFilter = -1;
@@ -280,6 +295,9 @@ EventView::applyLayout(int /*staffNo*/)
     // Ok, recreate list
     //
     m_eventList->clear();
+
+    m_config->setGroup(ConfigGroup);
+    int timeMode = m_config->readNumEntry("timemode", 0);
 
     for (unsigned int i = 0; i < m_segments.size(); i++)
     {
@@ -425,13 +443,17 @@ EventView::applyLayout(int /*staffNo*/)
 	    if ((*it)->getDuration() > 0 ||
 		(*it)->isa(Rosegarden::Note::EventType) ||
 		(*it)->isa(Rosegarden::Note::EventRestType)) {
-		durationStr = QString("%1  ").arg((*it)->getDuration());
+		durationStr = makeDurationString(eventTime,
+						 (*it)->getDuration(),
+						 timeMode);
 	    }
+
+	    QString timeStr = makeTimeString(eventTime, timeMode);
 
             new EventViewItem(m_segments[i],
 			      *it,
                               m_eventList,
-                              QString("%1  ").arg(eventTime),
+			      timeStr,
 			      durationStr,
                               strtoqstr((*it)->getType()),
                               pitchStr,
@@ -451,6 +473,7 @@ EventView::applyLayout(int /*staffNo*/)
             new QListViewItem(m_eventList, i18n("<no events>"));
 
         m_eventList->setSelectionMode(QListView::NoSelection);
+	stateChanged("have_selection", KXMLGUIClient::StateReverse);
     }
     else
     {
@@ -459,6 +482,8 @@ EventView::applyLayout(int /*staffNo*/)
         // If no selection then select the first event
         if (m_listSelection.size() == 0)
             m_listSelection.push_back(0);
+
+	stateChanged("have_selection", KXMLGUIClient::StateNoReverse);
     }
 
     // Set a selection from a range of indexes
@@ -484,6 +509,77 @@ EventView::applyLayout(int /*staffNo*/)
     m_deletedEvents.clear();
 
     return true;
+}
+
+QString
+EventView::makeTimeString(Rosegarden::timeT time, int timeMode)
+{
+    switch (timeMode) {
+
+    case 0: // musical time
+    {
+	int bar, beat, fraction, remainder;
+	getDocument()->getComposition().getMusicalTimeForAbsoluteTime
+	    (time, bar, beat, fraction, remainder);
+	++bar;
+	return QString("%1%2%3-%4%5-%6%7-%8%9   ")
+	    .arg(bar/100)
+	    .arg((bar%100)/10)
+	    .arg(bar%10)
+	    .arg(beat/10)
+	    .arg(beat%10)
+	    .arg(fraction/10)
+	    .arg(fraction%10)
+	    .arg(remainder/10)
+	    .arg(remainder%10);
+    }
+
+    case 1: // real time
+    {
+	Rosegarden::RealTime rt =
+	    getDocument()->getComposition().getElapsedRealTime(time);
+	return QString("%1  ").arg(rt.toString().c_str());
+    }
+
+    default:
+	return QString("%1  ").arg(time);
+    }
+}
+
+QString
+EventView::makeDurationString(Rosegarden::timeT time,
+			      Rosegarden::timeT duration, int timeMode)
+{
+    switch (timeMode) {
+
+    case 0: // musical time
+    {
+	int bar, beat, fraction, remainder;
+	getDocument()->getComposition().getMusicalTimeForDuration
+	    (time, duration, bar, beat, fraction, remainder);
+	return QString("%1%2%3-%4%5-%6%7-%8%9   ")
+	    .arg(bar/100)
+	    .arg((bar%100)/10)
+	    .arg(bar%10)
+	    .arg(beat/10)
+	    .arg(beat%10)
+	    .arg(fraction/10)
+	    .arg(fraction%10)
+	    .arg(remainder/10)
+	    .arg(remainder%10);
+    }
+
+    case 1: // real time
+    {
+	Rosegarden::RealTime rt =
+	    getDocument()->getComposition().getRealTimeDifference
+	    (time, time + duration);
+	return QString("%1  ").arg(rt.toString().c_str());
+    }
+
+    default:
+	return QString("%1  ").arg(duration);
+    }
 }
 
 void
@@ -890,6 +986,35 @@ EventView::setupActions()
 		SLOT(slotClearSelection()), actionCollection(),
 		"clear_selection");
 
+    m_config->setGroup(ConfigGroup);
+    int timeMode = m_config->readNumEntry("timemode", 0);
+
+    KRadioAction *action;
+
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/time-musical.xpm"));
+
+    action = new KRadioAction(i18n("&Musical Times"), icon, 0, this,
+			      SLOT(slotMusicalTime()),
+			      actionCollection(), "time_musical");
+    action->setExclusiveGroup("timeMode");
+    if (timeMode == 0) action->setChecked(true);
+
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/time-real.xpm"));
+
+    action = new KRadioAction(i18n("&Real Times"), icon, 0, this,
+			      SLOT(slotRealTime()),
+			      actionCollection(), "time_real");
+    action->setExclusiveGroup("timeMode");
+    if (timeMode == 1) action->setChecked(true);
+
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/time-raw.xpm"));
+
+    action = new KRadioAction(i18n("Ra&w Times"), icon, 0, this,
+			      SLOT(slotRawTime()),
+			      actionCollection(), "time_raw");
+    action->setExclusiveGroup("timeMode");
+    if (timeMode == 2) action->setChecked(true);
+
     createGUI(getRCFileName());
 }
 
@@ -1127,6 +1252,30 @@ EventView::setButtonsToFilter()
     } else {
 	m_otherCheckBox->setChecked(false);
     }
+}
+
+void
+EventView::slotMusicalTime()
+{
+    m_config->setGroup(ConfigGroup);
+    m_config->writeEntry("timemode", 0);
+    applyLayout();
+}
+
+void
+EventView::slotRealTime()
+{
+    m_config->setGroup(ConfigGroup);
+    m_config->writeEntry("timemode", 1);
+    applyLayout();
+}
+
+void
+EventView::slotRawTime()
+{
+    m_config->setGroup(ConfigGroup);
+    m_config->writeEntry("timemode", 2);
+    applyLayout();
 }
 
 void

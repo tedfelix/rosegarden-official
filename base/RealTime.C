@@ -21,6 +21,13 @@
 
 #include <iostream>
 
+#if (__GNUC__ < 3)
+#include <strstream>
+#define stringstream strstream
+#else
+#include <sstream>
+#endif
+
 #include "RealTime.h"
 
 namespace Rosegarden {
@@ -63,6 +70,22 @@ std::ostream &operator<<(std::ostream &out, const RealTime &rt)
     
     out << u << "R";
     return out;
+}
+
+std::string
+RealTime::toString() const
+{
+    std::stringstream out;
+    out << *this;
+    
+#if (__GNUC__ < 3)
+    out << std::ends;
+#endif
+
+    std::string s = out.str();
+
+    // remove trailing R
+    return s.substr(0, s.length() - 1);
 }
 
 RealTime

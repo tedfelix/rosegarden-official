@@ -241,7 +241,7 @@ protected:
     /**
      * create menus and toolbars
      */
-    virtual void setupActions(QString rcFileName);
+    virtual void setupActions(QString rcFileName, bool haveClipboard = true);
 
     /**
      * setup status bar

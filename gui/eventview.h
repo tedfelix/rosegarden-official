@@ -86,7 +86,7 @@ public:
     virtual QSize getViewSize(); 
     virtual void setViewSize(QSize);
 
-    // Set the button states to the current fileter positions
+    // Set the button states to the current filter positions
     //
     void setButtonsToFilter();
 
@@ -110,6 +110,10 @@ public slots:
     void slotFilterSelection();
     void slotSelectAll();
     void slotClearSelection();
+
+    void slotMusicalTime();
+    void slotRealTime();
+    void slotRawTime();
 
     // Show RMB menu
     //
@@ -136,6 +140,9 @@ protected slots:
 protected:
 
     virtual void readOptions();
+    QString makeTimeString(Rosegarden::timeT time, int timeMode);
+    QString makeDurationString(Rosegarden::timeT time,
+			       Rosegarden::timeT duration, int timeMode);
 
     //--------------- Data members ---------------------------------
     KListView   *m_eventList;

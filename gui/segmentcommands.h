@@ -456,6 +456,31 @@ public:
 };
 
 
+class RemoveTimeSignatureCommand : public KNamedCommand
+{
+public:
+    RemoveTimeSignatureCommand(Rosegarden::Composition *composition,
+			       int index):
+	KNamedCommand(getGlobalName()),
+        m_composition(composition),
+        m_timeSigIndex(index),
+        m_oldTime(0),
+        m_oldTimeSignature() { }
+
+    virtual ~RemoveTimeSignatureCommand() {}
+
+    static QString getGlobalName() { return i18n("Remove &Time Signature Change..."); }
+
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+    Rosegarden::Composition  *m_composition;
+    int                       m_timeSigIndex;
+    Rosegarden::timeT         m_oldTime;
+    Rosegarden::TimeSignature m_oldTimeSignature;
+};    
+
 
 class ModifyDefaultTempoCommand : public KNamedCommand
 {

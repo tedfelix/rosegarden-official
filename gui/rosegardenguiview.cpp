@@ -62,6 +62,7 @@
 #include "dialogs.h"
 #include "sequencemanager.h"
 #include "sequencermapper.h"
+#include "tempoview.h"
 
 using Rosegarden::SimpleRulerScale;
 using Rosegarden::Composition;
@@ -252,6 +253,21 @@ Rosegarden::SegmentSelection
 RosegardenGUIView::getSelection()
 {
     return m_trackEditor->getSegmentCanvas()->getSelectedSegments();
+}
+
+void
+RosegardenGUIView::slotEditTempos()
+{
+    TempoView *tempoView = new TempoView(getDocument(), this);
+
+    connect(tempoView,
+            SIGNAL(changeTempo(Rosegarden::timeT,
+                               double, TempoDialog::TempoDialogAction)),
+	    RosegardenGUIApp::self(),
+            SLOT(slotChangeTempo(Rosegarden::timeT,
+                                 double, TempoDialog::TempoDialogAction)));
+
+    tempoView->show();
 }
 
 void RosegardenGUIView::slotEditSegment(Rosegarden::Segment* segment)

@@ -1445,6 +1445,30 @@ AddTimeSignatureAndNormalizeCommand::~AddTimeSignatureAndNormalizeCommand()
     // well, nothing really
 }
 
+void
+RemoveTimeSignatureCommand::execute()
+{
+    if (m_timeSigIndex >= 0)
+    {
+        std::pair<timeT, Rosegarden::TimeSignature> data = 
+            m_composition->getTimeSignatureChange(m_timeSigIndex);
+
+        // store
+        m_oldTime = data.first;
+        m_oldTimeSignature = data.second;
+    }
+
+    // do we need to (re)store the index number?
+    //
+    m_composition->removeTimeSignature(m_timeSigIndex);
+
+}
+
+void
+RemoveTimeSignatureCommand::unexecute()
+{
+    m_composition->addTimeSignature(m_oldTime, m_oldTimeSignature);
+}
 
 AddTempoChangeCommand::~AddTempoChangeCommand()
 {
