@@ -22,7 +22,8 @@
 #ifndef _EVENTVIEW_H_
 #define _EVENTVIEW_H_
 
-// Event view list
+// Event view list - allow filtering by loads of different event types
+// and allow access to the event editor dialog.
 //
 //
 
@@ -46,10 +47,11 @@ class EventView : public EditViewBase
     {
         None           = 0x0000,
         Note           = 0x0001,
-        Text           = 0x0002,
-        SysEx          = 0x0004,
-        Controller     = 0x0008,
-        ProgramChange  = 0x0010
+        Rest           = 0x0002,
+        Text           = 0x0004,
+        SysEx          = 0x0008,
+        Controller     = 0x0010,
+        ProgramChange  = 0x0020
     };
 
 public:
@@ -84,6 +86,7 @@ public slots:
     void slotControllerFilter(bool);
     void slotSysExFilter(bool);
     void slotTextFilter(bool);
+    void slotRestFilter(bool);
 
 protected:
 
@@ -99,6 +102,7 @@ protected:
     QPushButton *m_sysExFilter;
     QPushButton *m_programFilter;
     QPushButton *m_controllerFilter;
+    QPushButton *m_restFilter;
 
 };
 

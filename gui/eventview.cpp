@@ -30,6 +30,7 @@
 #include <qlayout.h>
 #include <qlistview.h>
 #include <qpushbutton.h>
+#include <qlabel.h>
 
 #include "eventview.h"
 #include "rosegardenguidoc.h"
@@ -45,17 +46,23 @@ EventView::EventView(RosegardenGUIDoc *doc,
                      std::vector<Rosegarden::Segment *> segments,
                      QWidget *parent):
     EditViewBase(doc, segments, 2, parent, "eventview"),
-    m_eventFilter(Note|Text|SysEx|Controller|ProgramChange)
+    m_eventFilter(Note|Text|SysEx|Controller|ProgramChange|Rest)
 {
 
     readOptions();
 
     QVBox *filterBox = new QVBox(getCentralFrame());
     m_grid->addWidget(filterBox, 2, 0);
+    filterBox->setSpacing(5);
+
+    QLabel *label = new QLabel(i18n("Filters"), filterBox);
+    label->setAlignment(Qt::AlignHCenter);
+    label->setFixedHeight(20);
 
     // define some note filtering buttons
     //
-    m_noteFilter = new QPushButton(i18n("Note"), filterBox);
+    m_noteFilter = new QPushButton(i18n("Notes"), filterBox);
+    m_restFilter = new QPushButton(i18n("Rests"), filterBox);
     m_programFilter = new QPushButton(i18n("Program Change"), filterBox);
     m_controllerFilter = new QPushButton(i18n("Controller"), filterBox);
     m_sysExFilter = new QPushButton(i18n("Systerm Exclusive"), filterBox);
@@ -80,6 +87,10 @@ EventView::EventView(RosegardenGUIDoc *doc,
     m_textFilter->setToggleButton(true);
     connect(m_textFilter, SIGNAL(toggled(bool)),
             SLOT(slotTextFilter(bool)));
+
+    m_restFilter->setToggleButton(true);
+    connect(m_restFilter, SIGNAL(toggled(bool)),
+            SLOT(slotRestFilter(bool)));
 
     m_eventList = new QListView(getCentralFrame());
     m_grid->addWidget(m_eventList, 2, 1);
@@ -130,6 +141,16 @@ EventView::applyLayout(int /*staffNo*/)
             QString velyStr;
             QString pitchStr;
 
+            // Event filters
+            //
+            if((*it)->isa(Rosegarden::Note::EventRestType) &&
+               !(m_eventFilter & Rest))
+                continue;
+
+            if((*it)->isa(Rosegarden::Note::EventType) &&
+               !(m_eventFilter & Note))
+                continue;
+
             try
             {
                 pitchStr = QString("%1").
@@ -152,6 +173,20 @@ EventView::applyLayout(int /*staffNo*/)
 
         }
     }
+
+
+    if (m_eventList->childCount() == 0)
+    {
+        if (m_segments.size())
+            new QListViewItem(m_eventList,
+                          i18n("<no events at this filter level>"));
+        else
+            new QListViewItem(m_eventList, i18n("<no events>"));
+
+        m_eventList->setSelectionMode(QListView::NoSelection);
+    }
+    else
+        m_eventList->setSelectionMode(QListView::Single);
 
     return true;
 }
@@ -223,7 +258,6 @@ EventView::slotNoteFilter(bool value)
         m_eventFilter ^= EventView::Note;
 
     applyLayout(0);
-    setButtonsToFilter();
 }
 
 
@@ -236,7 +270,6 @@ EventView::slotProgramFilter(bool value)
         m_eventFilter ^= EventView::ProgramChange;
 
     applyLayout(0);
-    setButtonsToFilter();
 }
 
 void
@@ -248,7 +281,6 @@ EventView::slotControllerFilter(bool value)
         m_eventFilter ^= EventView::Controller;
 
     applyLayout(0);
-    setButtonsToFilter();
 }
 
 
@@ -261,7 +293,6 @@ EventView::slotSysExFilter(bool value)
         m_eventFilter ^= EventView::SysEx;
 
     applyLayout(0);
-    setButtonsToFilter();
 }
 
 void
@@ -273,7 +304,17 @@ EventView::slotTextFilter(bool value)
         m_eventFilter ^= EventView::Text;
 
     applyLayout(0);
-    setButtonsToFilter();
+}
+
+void
+EventView::slotRestFilter(bool value)
+{
+    if (value)
+        m_eventFilter |= EventView::Rest;
+    else
+        m_eventFilter ^= EventView::Rest;
+
+    applyLayout(0);
 }
 
 
@@ -281,29 +322,34 @@ void
 EventView::setButtonsToFilter()
 {
     if (m_eventFilter & Note)
-        m_noteFilter->setDown(true);
+        m_noteFilter->setOn(true);
     else
-        m_noteFilter->setDown(false);
+        m_noteFilter->setOn(false);
 
     if (m_eventFilter & ProgramChange)
-        m_programFilter->setDown(true);
+        m_programFilter->setOn(true);
     else
-        m_programFilter->setDown(false);
+        m_programFilter->setOn(false);
 
     if (m_eventFilter & Controller)
-        m_controllerFilter->setDown(true);
+        m_controllerFilter->setOn(true);
     else
-        m_controllerFilter->setDown(false);
+        m_controllerFilter->setOn(false);
 
     if (m_eventFilter & SysEx)
-        m_sysExFilter->setDown(true);
+        m_sysExFilter->setOn(true);
     else
-        m_sysExFilter->setDown(false);
+        m_sysExFilter->setOn(false);
 
     if (m_eventFilter & Text)
-        m_textFilter->setDown(true);
+        m_textFilter->setOn(true);
     else
-        m_textFilter->setDown(false);
+        m_textFilter->setOn(false);
+
+    if (m_eventFilter & Rest)
+        m_restFilter->setOn(true);
+    else
+        m_restFilter->setOn(false);
 
 }
 
