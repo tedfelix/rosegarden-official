@@ -27,6 +27,9 @@
 
 namespace Rosegarden 
 {
+
+typedef std::vector<int> DurationList;
+
     
 enum Accidental {
     NoAccidental, Sharp, Flat, Natural, DoubleSharp, DoubleFlat
@@ -328,7 +331,7 @@ public:
 	return (m_type >= Crotchet) ? 0 : (Crotchet - m_type);
     }
     int  getDuration()  const {
-	// may be able to tighten this up a bit so it can remain inline
+	//!!! may be able to tighten this up a bit so it can remain inline
 	int duration = m_shortestTime * (1 << m_type);
 	int extra = duration / 2;
 	for (int dots = m_dots; dots > 0; --dots) {
@@ -336,9 +339,6 @@ public:
 	    extra /= 2;
 	}
 	return duration;
-
-//        return (m_dotted ? m_dottedShortestTime : m_shortestTime) *
-//            (1 << m_type);
     }
 
     // these default to whatever I am:
@@ -347,21 +347,14 @@ public:
     std::string getShortName(Type type = -1, int dots = 0)    const;
 
     static Note getNearestNote(int duration, int maxDots = 2);
-    static std::vector<int> getNoteDurationList(int start, int duration,
-						const TimeSignature &ts);
   
 private:
     Type m_type;
-//    bool m_dotted;
     int m_dots;
-    static void makeTimeListSub(int time, bool dottedTime,
-                                std::vector<int> &timeList);
 
-    // a time & effort saving device
+    // a time & effort saving device; if changing this, change
+    // TimeSignature::m_crotchetTime etc too
     static const int m_shortestTime;
-//    static const int m_dottedShortestTime;
-    static const int m_crotchetTime;
-    static const int m_dottedCrotchetTime;
 };
 
 
@@ -398,7 +391,6 @@ public:
     // of the time signature gives the number of units per bar.
 
     Note::Type getUnit()  const;
-
     int getUnitDuration() const { return 6 * (64 / m_denominator); }
 
     // The "beat" of the time depends on whether the signature implies
@@ -410,11 +402,30 @@ public:
     bool isDotted() const;
 
     int getBeatDuration() const;
-
-    int getBeatsPerBar() const {
+    int getBeatsPerBar()  const {
         return getBarDuration() / getBeatDuration();
     }
 
+/*
+    static DurationList getNoteDurationList(int start, int duration,
+                                            const TimeSignature &ts);
+*/
+
+    // get the "optimal" list of rest durations to make up a bar of
+    // this time signature
+
+    void getDurationListForBar(DurationList &dlist) const;
+
+    // get the "optimal" list of rest durations to make up a time
+    // interval of the given total duration, starting at the given
+    // offset after the start of a bar
+
+    void getDurationListForInterval(DurationList &dlist,
+                                    int intervalDuration,
+                                    int startOffset = 0) const;
+
+
+#ifdef NOT_DEFINED
     typedef std::list<Event*> EventsSet;
 
     /**
@@ -426,10 +437,21 @@ public:
      * The caller should delete the returned list
      */
     EventsSet* getBarAsRests(int startTime) const;
+#endif
 
 private:
     int m_numerator;
     int m_denominator;
+
+    void getDurationListForShortInterval(DurationList &dlist,
+                                         int intervalDuration,
+                                         int startOffset = 0) const;
+
+    void getDurationListAux(DurationList &dlist, int duration) const;
+
+    // a time & effort saving device
+    static const int m_crotchetTime;
+    static const int m_dottedCrotchetTime;
 };
  
 }

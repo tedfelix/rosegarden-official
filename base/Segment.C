@@ -80,6 +80,30 @@ void Track::setNbTimeSteps(unsigned int nbTimeSteps)
         --lastEl;
         unsigned int newElTime = (*lastEl)->getAbsoluteTime() + (*lastEl)->getDuration();
 
+        //!!! This is still not correct.  Although the "startOffset"
+        // argument to TimeSignature::getDurationListForInterval() may
+        // be an offset from the start of the whole piece (i.e. it's
+        // allowed to be arbitrarily large), it will only be
+        // meaningful if there are no time signature changes duration
+        // the period of the offset, which in this case means no time
+        // signature changes in the whole piece so far...  We should
+        // be using the elapsed time since the start of the last bar,
+        // instead of using newElTime here.
+
+        DurationList dlist;
+        signatureAtEnd.getDurationListForInterval
+            (dlist, nbTimeSteps - currentNbTimeSteps, newElTime);
+
+        Event::timeT acc = newElTime;
+        for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
+            Event *e = new Event("rest");
+            e->setDuration(*i);
+            e->setAbsoluteTime(acc);
+            acc += *i;
+        }
+
+#ifdef NOT_DEFINED
+
         TimeSignature::EventsSet *eventsToAdd = signatureAtEnd.getTimeIntervalAsRests(newElTime, nbTimeSteps - currentNbTimeSteps);
 
         for (TimeSignature::EventsSet::iterator i = eventsToAdd->begin();
@@ -97,6 +121,8 @@ void Track::setNbTimeSteps(unsigned int nbTimeSteps)
 
         delete eventsToAdd;
         
+#endif
+
     } else { // shrink
 
         // NOT IMPLEMENTED YET : move an internal marker

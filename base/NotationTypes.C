@@ -367,8 +367,6 @@ const string Note::NotePropertyName = "duration";
 
 const int Note::m_shortestTime       = 6;
 //const int Note::m_dottedShortestTime = 9;
-const int Note::m_crotchetTime       = 96;
-const int Note::m_dottedCrotchetTime = 144;
 
 Note::Note(Type type, int dots) throw (BadType, TooManyDots) :
     m_type(type), m_dots(dots)
@@ -463,108 +461,8 @@ Note Note::getNearestNote(int duration, int maxDots)
     }
 
     return Note(tag, maxDots); //???
-
-/*
-    int d = m_shortestTime;
-    Note n(Longest, maxDots);
-
-    //!!! too short -- reconsider?
-    if (duration < d) return Note(Shortest);
-
-    for (int tag = Shortest + 1; tag <= Longest + 1; ++tag) {
-        if (d + d/2 > duration) {
-	    n = Note(tag-1); break;
-        }
-
-	//???
-
-        if (d*2 > duration) {
-	    n = Note(tag-1, true); break;
-        }
-        d *= 2;
-    }
-
-    //!!! too long -- should subdivide
-//    n = Note(Longest, true);
-#ifndef NDEBUG
-    cout << "Note::getNearestNote(): duration " << duration
-	 << ", returning note (" << n.getNoteType() << ", " << n.getDots()
-	 << ") (duration is " << n.getDuration() << ")" << endl;
-#endif
-    return n;
-*/
 }
 
-
-// Derived from RG2's MidiMakeRestList in editor/src/MidiIn.c.
-
-// Create a list of durations, totalling (as close as possible) the
-// given duration, such that each is an exact note duration and the
-// notes are the proper sort for the time signature.  start is the
-// elapsed duration since the beginning of the bar (or of the last
-// beat); for use independent of a particular bar, pass zero.
-
-// Currently uses no note-durations longer than a dotted-crotchet; for
-// general use in /2 time, this is a defect
-
-vector<int> Note::getNoteDurationList(int start, int duration,
-                                      const TimeSignature &ts)
-{
-    int toNextBeat;
-    int beatDuration = ts.getBeatDuration();
-    vector<int> v;
-
-    toNextBeat = beatDuration - (start % beatDuration);
-               
-    if (toNextBeat > duration) {
-        makeTimeListSub(duration, ts.isDotted(), v);
-    } else {
-        // first fill up to the next crotchet (or, in 6/8 or some
-        // other such time, the next dotted crotchet); then fill in
-        // crotchet or dotted-crotchet leaps until the end of the
-        // section needing filling
-        makeTimeListSub(toNextBeat, ts.isDotted(), v);
-        makeTimeListSub(duration - toNextBeat, ts.isDotted(), v);
-    }
-
-    return v;
-}
-
-
-// Derived from RG2's MidiMakeRestListSub in editor/src/MidiIn.c.
-
-void Note::makeTimeListSub(int t, bool dotted, vector<int> &v)
-    // (we append to v, it's expected to have stuff in it already)
-{
-    assert(t >= 0);
-
-    if (t < m_shortestTime) return;
-    int current;
-
-    if ((current = (dotted ? m_dottedCrotchetTime : m_crotchetTime)) <= t) {
-        v.push_back(current);
-        makeTimeListSub(t - current, dotted, v);
-        return;
-    }
-               
-    current = m_shortestTime;
-    for (int tag = Shortest + 1; tag <= Crotchet; ++tag) {
-        int next = Note(tag).getDuration();
-        if (next > t) {
-            v.push_back(current);
-            makeTimeListSub(t - current, dotted, v);
-            return;
-        }
-        current = next;
-    }
-               
-    // should only be reached in dotted time for lengths between
-    // crotchet and dotted crotchet:
-
-    current = m_crotchetTime;
-    v.push_back(current);
-    makeTimeListSub(t - current, dotted, v);
-}
 
 const string TimeSignature::EventType = "timesignature";
 const string TimeSignature::NumeratorPropertyName = "numerator";
@@ -580,7 +478,7 @@ TimeSignature::TimeSignature()
 TimeSignature::TimeSignature(int numerator, int denominator) throw (BadTimeSignature)
     : m_numerator(numerator), m_denominator(denominator)
 {
-        //!!! check, and throw BadTimeSignature if appropriate
+    if (numerator < 1 || denominator < 1) throw BadTimeSignature();
 }
 
 TimeSignature::TimeSignature(const Event &e)
@@ -591,7 +489,7 @@ TimeSignature::TimeSignature(const Event &e)
     }
     m_numerator = e.get<Int>(NumeratorPropertyName);
     m_denominator = e.get<Int>(DenominatorPropertyName);
-    //!!! check, and throw BadTimeSignature if appropriate
+    if (m_numerator < 1 || m_denominator < 1) throw BadTimeSignature();
 }
 
 TimeSignature::TimeSignature(const TimeSignature &ts)
@@ -634,6 +532,135 @@ int TimeSignature::getBeatDuration() const
     }
 }
 
+
+void TimeSignature::getDurationListForBar(DurationList &dlist) const
+{
+    // mostly just a bunch of special-cases, for now
+
+    if (m_numerator < 3) {
+        // A single long rest should be okay for all the common 2/x
+        // timesigs, probably even tolerable for freaks like 2/1
+        dlist.push_back(getBarDuration());
+        return;
+    }
+
+    if (m_numerator == 4 && m_denominator > 1) {
+        dlist.push_back(getBarDuration() / 2);
+        dlist.push_back(getBarDuration() / 2);
+        return;
+    }
+
+    for (int i = 0; i < getBeatsPerBar(); ++i) {
+        dlist.push_back(getBeatDuration());
+    }
+}
+
+
+void TimeSignature::getDurationListForInterval(DurationList &dlist,
+                                               int duration,
+                                               int startOffset) const
+{
+    // We need to do this in three parts: (1) if the startOffset isn't
+    // at the start of a bar, fill up the interval from it to the
+    // start of the next bar using the "short interval" algorithm.
+    // (2) fill up with "optimal bar-length rests" as far as
+    // possible. (3) fill any remainder using the "short interval"
+    // algorithm.
+
+    int toNextBar;
+    int barDuration = getBarDuration();
+    int acc = 0;
+
+    toNextBar = barDuration - (startOffset % barDuration);
+
+    if (toNextBar > 0 && toNextBar < barDuration) {
+        getDurationListForShortInterval(dlist, toNextBar, startOffset);
+        acc = toNextBar;
+    }
+
+    while (duration - acc >= barDuration) {
+        getDurationListForBar(dlist);
+        acc += barDuration;
+    }
+    
+    if (duration > acc) {
+        getDurationListForShortInterval(dlist, duration - acc, 0);
+    }
+}
+
+
+// Derived from RG2's MidiMakeRestList in editor/src/MidiIn.c.
+
+// Create a list of durations, totalling (as close as possible) the
+// given duration, such that each is an exact note duration and the
+// notes are the proper sort for the time signature.  start is the
+// elapsed duration since the beginning of the bar (or of the last
+// beat); for use independent of a particular bar, pass zero.
+
+// Currently uses no note-durations longer than a dotted-crotchet; for
+// general use in /2 time, this is a defect
+
+void TimeSignature::getDurationListForShortInterval(DurationList &dlist,
+                                                    int duration,
+                                                    int startOffset) const
+{
+    int toNextBeat;
+    int beatDuration = getBeatDuration();
+
+    toNextBeat = beatDuration - (startOffset % beatDuration);
+               
+    if (toNextBeat > duration) {
+        getDurationListAux(dlist, duration);
+    } else {
+        // first fill up to the next crotchet (or, in 6/8 or some
+        // other such time, the next dotted crotchet); then fill in
+        // crotchet or dotted-crotchet leaps until the end of the
+        // section needing filling
+        getDurationListAux(dlist, toNextBeat);
+        getDurationListAux(dlist, duration - toNextBeat);
+    }
+}
+
+
+// Derived from RG2's MidiMakeRestListSub in editor/src/MidiIn.c.
+
+void TimeSignature::getDurationListAux(DurationList &dlist, int t) const
+    // (we append to dlist, it's expected to have stuff in it already)
+{
+    assert(t >= 0);
+    int shortestTime = Note(Note::Shortest).getDuration();
+
+    if (t < shortestTime) return;
+    int current;
+
+    if ((current = (isDotted() ? m_dottedCrotchetTime : m_crotchetTime)) <= t) {
+        dlist.push_back(current);
+        getDurationListAux(dlist, t - current);
+        return;
+    }
+               
+    current = shortestTime;
+    for (int tag = Note::Shortest + 1; tag <= Note::Crotchet; ++tag) {
+        int next = Note(tag).getDuration();
+        if (next > t) {
+            dlist.push_back(current);
+            getDurationListAux(dlist, t - current);
+            return;
+        }
+        current = next;
+    }
+               
+    // should only be reached in dotted time for lengths between
+    // crotchet and dotted crotchet:
+
+    current = m_crotchetTime;
+    dlist.push_back(current);
+    getDurationListAux(dlist, t - current);
+}
+
+
+#ifdef NOT_DEFINED
+
 TimeSignature::EventsSet*
 TimeSignature::getTimeIntervalAsRests(int startTime,
                                       int duration) const
@@ -660,6 +687,11 @@ TimeSignature::getBarAsRests(int startTime) const
 {
     return getTimeIntervalAsRests(startTime, getBarDuration());
 }
+
+#endif
+
+const int TimeSignature::m_crotchetTime       = 96;
+const int TimeSignature::m_dottedCrotchetTime = 144;
 
 
 } // close namespace

@@ -26,6 +26,7 @@ distclean:	clean
 Property.o: Property.h
 Event.o: Event.h Property.h
 ViewElement.o: ViewElement.h Event.h Property.h
-Track.o: Track.h Event.h Property.h
+Track.o: Track.h Event.h Property.h NotationTypes.h
 Composition.o: Composition.h Track.h Event.h Property.h MappedEvent.h
+NotationTypes.o: NotationTypes.h Event.h Property.h
 Equation.o: Equation.h
