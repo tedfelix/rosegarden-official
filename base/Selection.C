@@ -30,6 +30,7 @@ EventSelection::EventSelection(Segment& t) :
     m_endTime(0),
     m_haveRealStartTime(false)
 {
+    t.addObserver(this);
 }
 
 EventSelection::EventSelection(Segment& t, timeT beginTime, timeT endTime) :
@@ -38,6 +39,8 @@ EventSelection::EventSelection(Segment& t, timeT beginTime, timeT endTime) :
     m_endTime(0),
     m_haveRealStartTime(false)
 {
+    t.addObserver(this);
+
     Segment::iterator i = t.findTime(beginTime);
     Segment::iterator j = t.findTime(endTime);
 
@@ -54,6 +57,7 @@ EventSelection::EventSelection(Segment& t, timeT beginTime, timeT endTime) :
 
 EventSelection::~EventSelection()
 {
+    m_originalSegment.removeObserver(this);
 }
 
 void EventSelection::addEvent(Event *e)

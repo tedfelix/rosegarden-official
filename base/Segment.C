@@ -85,6 +85,11 @@ Segment::Segment(const Segment &segment):
 
 Segment::~Segment()
 {
+    if (m_observers.size() > 0) {
+	cerr << "Warning: Segment::~Segment() with " << m_observers.size()
+	     << " observers still extant" << endl;
+    }
+
     // delete content
     for (iterator it = begin(); it != end(); ++it) delete (*it);
 
