@@ -514,6 +514,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
                 // clunktastic
                 m_doc->progressDialogDead();
+                m_progress = 0;
             }
 
             // Create a locate file dialog - give it the file name
@@ -639,9 +640,11 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
         // convert both times independently and then set duration
         // according to difference.
+        /*
         timeT absStart =
             getComposition().getElapsedTimeForRealTime(
                     m_currentSegment->getAudioStartTime());
+                    */
 
         timeT absEnd = getComposition().getElapsedTimeForRealTime(markerTime);
 	m_currentSegment->setEndTime(absEnd);

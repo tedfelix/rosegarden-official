@@ -1,9 +1,6 @@
 0.2 tasks
 =========
 
-o Audio file playing feedback - async events and how to
-  operate outside the ALSA timing loop
-
 o Get Segment joining working
 
 o Audio volume faders - studio concept on sequencer
@@ -29,8 +26,6 @@ o "Split silence" function to automatically split up an audio segment
 
 o Set tempo event to length of audio sample
 
-o Audio VU meters
-
 o "Revert file" option
 
 o sweep selection on Matrix
@@ -55,6 +50,13 @@ o selection of ALSA recording device
 
 Completed for 0.1.7 (0.2.0)
 ===========================
+
+o Audio VU meters [DONE]
+
+o Audio file playing feedback - async events and how to
+  operate outside the ALSA timing loop [DONE]
+
+o Very cool audio vu meters show real time audio signal
 
 o Fix/Complete repeating Segments [DONE]
 
