@@ -287,7 +287,9 @@ Element2::setFromString(const string &name, string value)
 // Std
 #include <list>
 
-typedef list<Element2*> ElementList;
+// see rosegarden/docs/discussion/names.txt
+typedef Element2 Event;
+typedef list<Event*> EventList;
 
 
 #endif
