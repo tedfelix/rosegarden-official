@@ -92,8 +92,13 @@ Sequencer::initialiseMidi()
 
     if (m_midiRecordPort.isNull())
     {
-        cerr << "RosegardenSequencer - Can't create aRTS MidiRecorder" << endl;
-        return;
+        cerr << "RosegardenSequencer - Can't create aRTS MidiRecorder"
+             << endl << endl;
+        cerr << "Most likely this is because you've not updated your "
+             << "~/.mcopc file yet." << endl
+             << "Please look in :" << endl
+             << "  rosegarden/docs/howtos/artsd-mcop-notes" << endl << endl;
+        exit(1);
     }
 
     m_midiPlayClient = m_midiManager.addClient(Arts::mcdPlay,
