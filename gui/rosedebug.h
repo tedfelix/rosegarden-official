@@ -25,7 +25,7 @@
 #include <iostream>
 #include <kdebug.h>
 
-namespace Rosegarden { class Event; }
+namespace Rosegarden { class Event; class Track; }
 
 #define KDEBUG_AREA 1010
 
@@ -37,6 +37,9 @@ operator<<(kdbgstream&, const std::string&);
 kdbgstream&
 operator<<(kdbgstream&, const Rosegarden::Event&);
 
+kdbgstream&
+operator<<(kdbgstream&, const Rosegarden::Track&);
+
 #else
 
 inline kndbgstream&
@@ -44,6 +47,9 @@ operator<<(kndbgstream &s, const std::string&) { return s; }
 
 inline kndbgstream&
 operator<<(kndbgstream &s, const Rosegarden::Event&) { return s; }
+
+kdbgstream&
+operator<<(kdbgstream&, const Rosegarden::Track&) { return s; }
 
 #endif
 

@@ -21,6 +21,8 @@
 #include "rosedebug.h"
 
 #include "Event.h"
+#include "Track.h"
+
 
 kdbgstream&
 operator<<(kdbgstream &dbg, const std::string &s)
@@ -44,10 +46,31 @@ operator<<(kdbgstream &dbg, const Rosegarden::Event &e)
 //             << ((*i).second)->unparse() << '\n';
 //     }
 
-    e.dump(std::cerr);
+//     e.dump(std::cerr);
     
     return dbg;
 }
+
+kdbgstream&
+operator<<(kdbgstream &dbg, const Rosegarden::Track &t)
+{
+    dbg << "Track for instrument " << t.getInstrument()
+        << " starting at " << t.getStartIndex() << endl;
+
+    for(Rosegarden::Track::const_iterator i = t.begin();
+        i != t.end(); ++i) {
+        if (!(*i)) {
+            dbg << "WARNING : skipping null event ptr\n";
+            continue;
+        }
+
+        dbg << "Dumping Event : \n";
+        dbg << *(*i) << endl;
+    }
+
+    return dbg;
+}
+
 
 #ifdef NOT_DEFINED
 
