@@ -859,32 +859,42 @@ AudioManagerDialog::addFile(const KURL& kurl)
     }
 
     try
-        {
-            id = m_doc->getAudioFileManager().addFile(std::string(newFilePath.data()));
-        }
+    {
+        id = m_doc->
+            getAudioFileManager().addFile(std::string(newFilePath.data()));
+    }
     catch(std::string e)
-        {
-            // clear down progress dialog
-            delete progressDlg;
-            progressDlg = 0;
+    {
+        // clear down progress dialog
+        delete progressDlg;
+        progressDlg = 0;
 
-            QString errorString =
-                i18n("Can't add File.  WAV file body invalid.\n\"") +
-                QString(e.c_str()) + "\"";
-            KMessageBox::sorry(this, errorString);
-        }
+        QString errorString =
+            i18n("Can't add File.  WAV file body invalid.\n\"") +
+            QString(e.c_str()) + "\"";
+        KMessageBox::sorry(this, errorString);
+        return false;
+    }
+    catch(QString e)
+    {
+        delete progressDlg;
+        progressDlg = 0;
+        KMessageBox::sorry(this, e);
+        return false;
+    }
 
     try
-        {
-            m_doc->getAudioFileManager().generatePreview(
-                                                         dynamic_cast<Progress*>(progressDlg), id);
-        }
+    {
+        m_doc->getAudioFileManager().
+            generatePreview(dynamic_cast<Progress*>(progressDlg), id);
+    }
     catch(std::string e)
-        {
-            delete progressDlg;
-            progressDlg = 0;
-            KMessageBox::error(this, QString(e.c_str()));
-        }
+    {
+        delete progressDlg;
+        progressDlg = 0;
+        KMessageBox::error(this, QString(e.c_str()));
+        return false;
+    }
 
     if (progressDlg) delete progressDlg;
 

@@ -28,27 +28,27 @@
 #include "RIFFAudioFile.h"
 
 
-#ifndef _WAVAUDIOFILE_H_
-#define _WAVAUDIOFILE_H_
+#ifndef _BWFAUDIOFILE_H_
+#define _BWFAUDIOFILE_H_
 
 namespace Rosegarden
 {
 
-class WAVAudioFile : public RIFFAudioFile
+class BWFAudioFile : public RIFFAudioFile
 {
 public:
-    WAVAudioFile(const unsigned int &id,
+    BWFAudioFile(const unsigned int &id,
                  const std::string &name,
                  const std::string &fileName);
 
-    WAVAudioFile(const std::string &fileName,
+    BWFAudioFile(const std::string &fileName,
                   unsigned int channels,
                   unsigned int sampleRate,
                   unsigned int bytesPerSecond,
                   unsigned int bytesPerSample,
                   unsigned int bitsPerSample);
 
-    ~WAVAudioFile();
+    ~BWFAudioFile();
 
     // Override these methods for the WAV
     //
@@ -81,4 +81,4 @@ protected:
 }
 
 
-#endif // _WAVAUDIOFILE_H_
+#endif // _BWFUDIOFILE_H_

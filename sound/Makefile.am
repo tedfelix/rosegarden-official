@@ -12,6 +12,7 @@ COMPILE_FIRST = libRosegardenSound
 noinst_LTLIBRARIES = libRosegardenSound.la
 libRosegardenSound_la_SOURCES = AudioFile.cpp \
                                 AudioFileManager.cpp \
+                                BWFAudioFile.cpp \
                                 MidiFile.cpp \
                                 MidiEvent.cpp \
                                 MappedDevice.cpp \

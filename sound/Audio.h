@@ -32,7 +32,9 @@ namespace Rosegarden
 const std::string AUDIO_RIFF_ID = "RIFF";
 const std::string AUDIO_WAVE_ID = "WAVE";
 const std::string AUDIO_FORMAT_ID = "fmt ";   // Always four bytes
-const std::string AUDIO_BWF_PEAK_ID = "levl"; 
+
+const std::string AUDIO_BWF_ID = "bext";       // BWF chunk id
+const std::string AUDIO_BWF_PEAK_ID = "levl";  // BWF peak chunk id
 
 
 

@@ -20,7 +20,7 @@
 */
 
 #include "Audio.h"
-#include "WAVAudioFile.h"
+#include "BWFAudioFile.h"
 #include "RealTime.h"
 #include "Sound.h"
 
@@ -34,7 +34,7 @@ using std::endl;
 namespace Rosegarden
 {
 
-WAVAudioFile::WAVAudioFile(const unsigned int &id,
+BWFAudioFile::BWFAudioFile(const unsigned int &id,
                            const std::string &name,
                            const std::string &fileName):
     RIFFAudioFile(id, name, fileName)
@@ -43,7 +43,7 @@ WAVAudioFile::WAVAudioFile(const unsigned int &id,
 
 }
 
-WAVAudioFile::WAVAudioFile(const std::string &fileName,
+BWFAudioFile::BWFAudioFile(const std::string &fileName,
                            unsigned int channels = 1,
                            unsigned int sampleRate = 48000,
                            unsigned int bytesPerSecond = 6000,
@@ -59,12 +59,12 @@ WAVAudioFile::WAVAudioFile(const std::string &fileName,
     m_channels = channels;
 }
 
-WAVAudioFile::~WAVAudioFile()
+BWFAudioFile::~BWFAudioFile()
 {
 }
 
 bool
-WAVAudioFile::open()
+BWFAudioFile::open()
 {
     // if already open
     if (m_inFile && (*m_inFile))
@@ -103,7 +103,7 @@ WAVAudioFile::open()
 // totals when we close().
 //
 bool
-WAVAudioFile::write()
+BWFAudioFile::write()
 {
     // close if we're open
     if (m_outFile)
@@ -127,7 +127,7 @@ WAVAudioFile::write()
 }
 
 void
-WAVAudioFile::close()
+BWFAudioFile::close()
 {
     if (m_outFile == 0)
         return;
@@ -156,7 +156,7 @@ WAVAudioFile::close()
 // Set the AudioFile meta data according to WAV file format specification.
 //
 void
-WAVAudioFile::parseHeader()
+BWFAudioFile::parseHeader()
 {
     // Read the format chunk and populate the file data.  A plain WAV
     // file only has this chunk.  Exceptions tumble through.
@@ -166,7 +166,7 @@ WAVAudioFile::parseHeader()
 }
 
 std::streampos
-WAVAudioFile::getDataOffset()
+BWFAudioFile::getDataOffset()
 {
     return 0;
 }

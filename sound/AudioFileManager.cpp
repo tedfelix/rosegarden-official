@@ -33,12 +33,15 @@
 #endif
 
 #include <kapp.h>
+#include <klocale.h>
+
 #include <qpixmap.h>
 #include <qpainter.h>
 
 #include "AudioFile.h"
 #include "AudioFileManager.h"
 #include "WAVAudioFile.h"
+#include "BWFAudioFile.h"
 #include "Progress.h"
 
 
@@ -63,18 +66,38 @@ AudioFileManager::~AudioFileManager()
 AudioFileId
 AudioFileManager::addFile(const std::string &filePath)
 {
+    QString ext =
+        QString(filePath.substr(filePath.length() - 3, 3).c_str()).lower();
+
+    if (ext != "wav")
+    {
+        throw(i18n("Unsupported audio file format"));
+    }
+
+    // identify file type
+    AudioFileType subType = RIFFAudioFile::identifySubType(filePath);
+
+    // prepare for audio file
+    AudioFile *aF = 0;
     AudioFileId id = getFirstUnusedID();
 
-    WAVAudioFile *aF = new WAVAudioFile(id,
-                                        getShortFilename(filePath),
-                                        filePath);
+    if (subType == BWF)
+    {
+        std::cout << "FOUND BWF" << std::endl;
+        aF = new BWFAudioFile(id, getShortFilename(filePath), filePath);
+    }
+    else if (subType == WAV)
+    {
+        aF = new WAVAudioFile(id, getShortFilename(filePath), filePath);
+    }
 
+    // Add file type on extension
     try
     { 
         if (aF->open() == false)
         {
             delete aF;
-            throw(std::string("AudioFileManager::addFile - can't open file"));
+            throw(i18n("Can't open audiofile"));
         }
     }
     catch(std::string e)

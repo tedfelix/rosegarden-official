@@ -112,6 +112,10 @@ public:
     virtual unsigned int getBytesPerFrame() { return m_bytesPerSample; }
     unsigned int getBytesPerSecond() { return m_bytesPerSecond; }
 
+    // Allow easy identification of wav file type
+    //
+    static AudioFileType identifySubType(const std::string &filename);
+
 protected:
     //virtual void parseHeader(const std::string &header);
     //virtual void parseBody();

@@ -460,6 +460,59 @@ RIFFAudioFile::writeFormatChunk()
 }
 
 
+AudioFileType
+RIFFAudioFile::identifySubType(const std::string &filename)
+{
+    std::ifstream *testFile =
+        new std::ifstream(filename.c_str(), std::ios::in | std::ios::binary);
+
+    if (!(*testFile))
+        return UNKNOWN;
+
+    std::string hS;
+    unsigned int numberOfBytes = 36;
+    char *bytes = new char[numberOfBytes];
+
+    testFile->read(bytes, numberOfBytes);
+    for (unsigned int i = 0; i < numberOfBytes; i++)
+        hS += (unsigned char)bytes[i];
+
+    AudioFileType type = UNKNOWN;
+
+    // Test for BWF first because it's an extension of a plain WAV
+    //
+#if (__GNUC__ < 3)
+    if (hS.compare(Rosegarden::AUDIO_RIFF_ID, 0, 4) == 0 &&
+        hS.compare(Rosegarden::AUDIO_WAVE_ID, 8, 4) == 0 &&
+        hS.compare(Rosegarden::AUDIO_BWF_ID, 12, 4) == 0)
+#else
+    if (hS.compare(0, 4, Rosegarden::AUDIO_RIFF_ID) == 0 &&
+        hS.compare(8, 4, Rosegarden::AUDIO_WAVE_ID) == 0 &&
+        hS.compare(12, 4, Rosegarden::AUDIO_BWF_ID) == 0)
+#endif
+    {
+        type = BWF;
+    }
+    // Now for a WAV
+#if (__GNUC__ < 3)
+    else if (hS.compare(Rosegarden::AUDIO_RIFF_ID, 0, 4) == 0 &&
+             hS.compare(Rosegarden::AUDIO_WAVE_ID, 8, 4) == 0)
+#else
+    else if (hS.compare(0, 4, Rosegarden::AUDIO_RIFF_ID) == 0 &&
+             hS.compare(8, 4, Rosegarden::AUDIO_WAVE_ID) == 0)
+#endif
+    {
+        type = WAV;
+    }
+    else
+        type = UNKNOWN;
+
+    testFile->close();
+    delete [] bytes;
+
+    return type;
+}
+
 
 
 }
