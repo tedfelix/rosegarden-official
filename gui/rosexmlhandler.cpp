@@ -42,7 +42,6 @@ using namespace Rosegarden::BaseProperties;
 RoseXmlHandler::RoseXmlHandler(Composition &composition)
     : m_composition(composition),
       m_currentSegment(0),
-      m_currentReferenceSegment(0),
       m_currentEvent(0),
       m_currentTime(0),
       m_chordDuration(0),
@@ -347,9 +346,6 @@ RoseXmlHandler::endElement(const QString& /*namespaceURI*/,
         if (m_currentSegment && m_currentEvent) {
             m_currentSegment->insert(m_currentEvent);
             m_currentEvent = 0;
-	} else if (m_currentReferenceSegment && m_currentEvent) {
-            m_currentReferenceSegment->insert(m_currentEvent);
-            m_currentEvent = 0;
         } else if (!m_currentSegment && m_currentEvent) {
             m_errorString = i18n("Got event outside of a Segment");
             return false;
@@ -372,7 +368,6 @@ RoseXmlHandler::endElement(const QString& /*namespaceURI*/,
     } else if (lcName == "bar-segment" || lcName == "tempo-segment") {
 	
 	m_currentSegment = 0;
-	m_currentReferenceSegment = 0;
     }
 
     return true;

@@ -401,6 +401,8 @@ LinedStaff<T>::insertBar(int layoutX, bool isCorrect)
             (getCanvasXForLayoutX(layoutX) + i, getCanvasYForTopLine(row));
 
 	if (elementsInSpaces()) {
+	    kdDebug(KDEBUG_AREA) << "elementsInSpaces true, shifting line"
+				 << endl;
 	    line->moveBy(0, -getLineSpacing()/2);
 	}
 
@@ -424,6 +426,8 @@ LinedStaff<T>::insertBar(int layoutX, bool isCorrect)
                  getCanvasYForTopLine(row));
 
 	    if (elementsInSpaces()) {
+	    kdDebug(KDEBUG_AREA) << "elementsInSpaces true, shifting connecting line"
+				 << endl;
 		line->moveBy(0, -getLineSpacing()/2);
 	    }
 
