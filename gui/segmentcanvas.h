@@ -187,11 +187,18 @@ protected:
     virtual void wheelEvent(QWheelEvent*);
 
 protected slots:
+
     /**
-     * connected to the 'Edit' item of the RMB popup menu - re-emits
-     * editSegment(Segment*)
+     * connected to the 'Edit as Score' items of the RMB popup menu -
+     * re-emits editSegmentNotation(Segment*)
      */
-    void onEdit();
+    void onEditNotation();
+
+    /**
+     * connected to the 'Edit as PianoRoll' items of the RMB popup
+     * menu - re-emits editSegmentMatrix(Segment*)
+     */
+    void onEditMatrix();
 
 signals:
     /**
@@ -217,7 +224,8 @@ signals:
      */
     void updateSegmentInstrumentAndStartIndex(SegmentItem*);
 
-    void editSegment(Rosegarden::Segment*);
+    void editSegmentNotation(Rosegarden::Segment*);
+    void editSegmentMatrix(Rosegarden::Segment*);
 
 private:
     ToolType m_toolType;

@@ -130,8 +130,11 @@ SegmentCanvas::SegmentCanvas(int gridH, int gridV,
     SegmentItem::setWidthToDurationRatio(m_grid.hstep());
     SegmentItem::setItemHeight(m_grid.vstep());
 
-    m_editMenu->insertItem(I18N_NOOP("Edit as Score"),
-                           this, SLOT(onEdit()));
+    m_editMenu->insertItem(i18n("Edit as Score"),
+                           this, SLOT(onEditNotation()));
+
+    m_editMenu->insertItem(i18n("Edit as Piano Roll"),
+                           this, SLOT(onEditMatrix()));
 }
 
 SegmentCanvas::~SegmentCanvas()
@@ -214,7 +217,8 @@ void SegmentCanvas::contentsMouseDoubleClickEvent(QMouseEvent* e)
 
     if (item) {
         m_currentItem = item;
-        emit editSegment(m_currentItem->getSegment());
+        // TODO : edit style should be user configurable
+        emit editSegmentNotation(m_currentItem->getSegment());
     }
 }
 
@@ -260,10 +264,14 @@ SegmentCanvas::addPartItem(int x, int y, unsigned int nbBars)
 }
 
 
-void
-SegmentCanvas::onEdit()
+void SegmentCanvas::onEditNotation()
 {
-    emit editSegment(m_currentItem->getSegment());
+    emit editSegmentNotation(m_currentItem->getSegment());
+}
+
+void SegmentCanvas::onEditMatrix()
+{
+    emit editSegmentMatrix(m_currentItem->getSegment());
 }
 
 

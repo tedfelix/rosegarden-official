@@ -221,7 +221,7 @@ NotationView::~NotationView()
     QCanvasItemList::Iterator it;
 
     for (it = allItems.begin(); it != allItems.end(); ++it) delete *it;
-    delete canvas();
+    // delete canvas();
 
     kdDebug(KDEBUG_AREA) << "<- ~NotationView()\n";
 }

@@ -33,10 +33,13 @@
 #include "trackeditor.h"
 #include "segmentcanvas.h"
 #include "notationview.h"
+#include "matrixview.h"
+
 
 RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     : QVBox(parent),
-      m_notationView(0)
+      m_notationView(0),
+      m_matrixView(0)
 {
     QScrollView *scrollView = new QScrollView(this);
     
@@ -57,8 +60,11 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     
     scrollView->addChild(tracksEditor);
 
-    connect(tracksEditor->canvas(), SIGNAL(editSegment(Rosegarden::Segment*)),
+    connect(tracksEditor->canvas(), SIGNAL(editSegmentNotation(Rosegarden::Segment*)),
             SLOT(editSegmentNotation(Rosegarden::Segment*)));
+
+    connect(tracksEditor->canvas(), SIGNAL(editSegmentMatrix(Rosegarden::Segment*)),
+            SLOT(editSegmentMatrix(Rosegarden::Segment*)));
 
     connect(tracksEditor,  SIGNAL(createNewSegment(SegmentItem*,int)),
             getDocument(), SLOT  (createNewSegment(SegmentItem*,int)));
@@ -145,6 +151,16 @@ RosegardenGUIView::editSegmentNotation(Rosegarden::Segment* p)
 
     m_notationView = new NotationView(getDocument(), segmentsToEdit, this);
     m_notationView->show();
+}
+
+void
+RosegardenGUIView::editSegmentMatrix(Rosegarden::Segment* p)
+{
+    std::vector<Rosegarden::Segment *> segmentsToEdit;
+    segmentsToEdit.push_back(p);
+
+    m_matrixView = new MatrixView(getDocument(), segmentsToEdit, this);
+    m_matrixView->show();
 }
 
 void

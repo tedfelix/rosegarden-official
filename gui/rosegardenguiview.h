@@ -37,6 +37,7 @@ namespace Rosegarden { class Composition; }
 
 class RosegardenGUIDoc;
 class NotationView;
+class MatrixView;
 class TrackEditor;
 
 /**
@@ -118,6 +119,7 @@ public:
     
 public slots:
     void editSegmentNotation(Rosegarden::Segment*);
+    void editSegmentMatrix(Rosegarden::Segment*);
 
 signals:
     void setTool(SegmentCanvas::ToolType);
@@ -125,6 +127,7 @@ signals:
 
 protected:
     NotationView* m_notationView;
+    MatrixView* m_matrixView;
 
 };
 
