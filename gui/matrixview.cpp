@@ -121,35 +121,35 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     QObject::connect
         (getCanvasView(), SIGNAL(activeItemPressed(QMouseEvent*, QCanvasItem*)),
-         this,         SLOT  (activeItemPressed(QMouseEvent*, QCanvasItem*)));
+         this,            SLOT  (activeItemPressed(QMouseEvent*, QCanvasItem*)));
 
     QObject::connect
         (getCanvasView(), SIGNAL(mousePressed(Rosegarden::timeT, int, QMouseEvent*, MatrixElement*)),
-         this,         SLOT  (slotMousePressed(Rosegarden::timeT, int, QMouseEvent*, MatrixElement*)));
+         this,            SLOT  (slotMousePressed(Rosegarden::timeT, int, QMouseEvent*, MatrixElement*)));
 
     QObject::connect
         (getCanvasView(), SIGNAL(mouseMoved(Rosegarden::timeT, QMouseEvent*)),
-         this,         SLOT  (slotMouseMoved(Rosegarden::timeT, QMouseEvent*)));
+         this,            SLOT  (slotMouseMoved(Rosegarden::timeT, QMouseEvent*)));
 
     QObject::connect
         (getCanvasView(), SIGNAL(mouseReleased(Rosegarden::timeT, QMouseEvent*)),
-         this,         SLOT  (slotMouseReleased(Rosegarden::timeT, QMouseEvent*)));
+         this,            SLOT  (slotMouseReleased(Rosegarden::timeT, QMouseEvent*)));
 
     QObject::connect
         (getCanvasView(), SIGNAL(hoveredOverNoteChanged(const QString&)),
-         this,         SLOT  (slotHoveredOverNoteChanged(const QString&)));
+         this,            SLOT  (slotHoveredOverNoteChanged(const QString&)));
 
     QObject::connect
         (m_pianoKeyboard, SIGNAL(hoveredOverKeyChanged(unsigned int)),
-         this,      SLOT  (slotHoveredOverKeyChanged(unsigned int)));
+         this,            SLOT  (slotHoveredOverKeyChanged(unsigned int)));
 
     QObject::connect
         (m_pianoKeyboard, SIGNAL(keyPressed(unsigned int, bool)),
-         this,      SLOT  (slotKeyPressed(unsigned int, bool)));
+         this,            SLOT  (slotKeyPressed(unsigned int, bool)));
 
     QObject::connect
         (getCanvasView(), SIGNAL(hoveredOverAbsoluteTimeChanged(unsigned int)),
-         this,         SLOT  (slotHoveredOverAbsoluteTimeChanged(unsigned int)));
+         this,            SLOT  (slotHoveredOverAbsoluteTimeChanged(unsigned int)));
 
     QObject::connect
 	(doc, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
@@ -223,6 +223,22 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
 MatrixView::~MatrixView()
 {
+    // This looks silly but the reason is that on destruction of the
+    // MatrixCanvasView, setCanvas() is called (this is in
+    // ~QCanvasView so we can't do anything about it). This calls
+    // QCanvasView::updateContentsSize(), which in turn updates the
+    // view's scrollbars, hence calling QScrollBar::setValue(), and
+    // sending the QSCrollbar::valueChanged() signal. But we have a
+    // slot connected to that signal
+    // (MatrixView::slotVerticalScrollPianoKeyboard), which scrolls
+    // the pianoView. However at this stage the pianoView has already
+    // been deleted, so a likely outcome is a crash.
+    //
+    // A solution is to zero out m_pianoView here, and to check if
+    // it's non null in slotVerticalScrollPianoKeyboard.
+    //
+    m_pianoView = 0;
+
     // Delete remaining canvas items.
     QCanvasItemList allItems = canvas()->allItems();
     QCanvasItemList::Iterator it;
@@ -611,7 +627,8 @@ void MatrixView::slotKeyPressed(unsigned int y, bool repeating)
 
 void MatrixView::slotVerticalScrollPianoKeyboard(int y)
 {
-    m_pianoView->setContentsPos(0, y);
+    if (m_pianoView) // check that the piano view still exists (see dtor)
+        m_pianoView->setContentsPos(0, y);
 }
 
 void MatrixView::closeWindow()
