@@ -23,8 +23,15 @@
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <dcopclient.h>
+#include <strstream>
+#include <iostream>
 
 #include "rosegardensequencer.h"
+#include <MappedEvent.h>
+
+// the name of our rosegarden gui application
+//
+#define ROSEGARDEN_GUI_APP "rosegardengui"
 
 static const char *description = I18N_NOOP("RosegardenSequencer");
     
@@ -79,6 +86,94 @@ int main(int argc, char *argv[])
 
   QCString realAppId = client->registerAs(kapp->name());
     
+  // get list of registered applications from DCOP
+  //
+  QCStringList dcopApps = client->registeredApplications();
+
+  // Number of matches of our GUI app
+  //
+  int guiAppInstances  = dcopApps.contains(QCString(ROSEGARDEN_GUI_APP));
+
+  if ( guiAppInstances == 0 )
+  {
+    cerr << "Rosegarden sequencer cannot start as \""
+         << ROSEGARDEN_GUI_APP << "\" is not running"  << endl;
+    return(1);
+  }
+
+  if ( guiAppInstances > 1 )
+  {
+    cerr << "Rosegarden sequencer cannot start as too many instances of \"" <<
+             ROSEGARDEN_GUI_APP << "\" are running." << endl;
+    return(1);
+  }
+
+  // get the reference
+  QValueList<QCString>::Iterator guiApp = dcopApps.find(QCString(ROSEGARDEN_GUI_APP));
+
+  // Do a call
+
+  QByteArray data, replyData;
+  QCString replyType;
+  QDataStream arg(data, IO_WriteOnly);
+  arg << 5;
+  arg << 1000;
+
+  if (!client->call(ROSEGARDEN_GUI_APP,
+                    "RosegardenGUIIface",
+                    "getSequencerSlice(int, int)",
+                    data, replyType, replyData))
+  {
+    cerr << "there was some error using DCOP." << endl;
+    return(1);
+  }
+  else
+  {
+    QDataStream reply(replyData, IO_ReadOnly);
+    if (replyType == "QString") {
+      QString result;
+      reply >> result;
+      //print("the result is: %s",result.latin1());
+    }
+    else if (replyType = "Rosegarden::MappedComposition")
+    {
+      cerr << "YOWZER" << endl;
+
+      Rosegarden::MappedComposition::iterator i;
+      Rosegarden::MappedComposition mappedComp;
+       
+      reply >> mappedComp;
+
+/*
+      strstream thing;
+      thing << (void *)mappedComp.begin() << " : " << (void *)mappedComp.end() << ends;
+      cout << thing << endl;
+ 
+
+      for (i = mappedComp.begin(); i != mappedComp.end(); ++i )
+      {
+        cout << "MappedComposition instrument = " << (*i)->instrument() << endl;
+      }
+*/
+
+      
+    }
+    else
+    {
+      cerr << "doIt returned an unexpected type of reply!" << endl;
+      return(1);
+    }
+  }
+/*
+  cout << "Number of items in list = " << apps.count() << endl;
+
+  for ( QValueList<QCString>::Iterator i = apps.begin();
+        i != apps.end(); ++i )
+  {
+    cout << *i << endl;
+  }
+*/
+
   //app.dcopClient()->setDefaultObject("RosegardenGUIIface");
 
   return app.exec();

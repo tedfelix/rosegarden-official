@@ -53,15 +53,12 @@ public:
   ~RosegardenSequencerApp();
 
 protected:
-  void readOptions();
 
 public slots:
-  //void midiFileOpen();
   virtual void quit();
     
 private:
-  /** the configuration object of the application */
-  KConfig* m_config;
+
 };
  
 #endif // _ROSEGARDEN_SEQUENCER_H_
