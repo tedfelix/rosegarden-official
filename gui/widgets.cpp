@@ -259,6 +259,11 @@ RosegardenProgressDialog::slotSetOperationName(QString name)
 //              << name << ") visible : " << isVisible() << endl;
     
     setLabel(name);
+    // Little trick stolen from QProgressDialog
+    // increase resize only, never shrink
+    int w = QMAX( isVisible() ? width() : 0, sizeHint().width() );
+    int h = QMAX( isVisible() ? height() : 0, sizeHint().height() );
+    resize( w, h );
 }
 
 void RosegardenProgressDialog::slotCancel()
