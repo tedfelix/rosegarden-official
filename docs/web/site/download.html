@@ -23,18 +23,41 @@
     <div id="main">
 
 
-<H3>Rosegarden-4 releases</H3>
+<H3>Rosegarden-4 for RedHat</H3>
 
-<p>We currently only make
-distributions available in source code form.
+<p>
+The latest Rosegarden-4 release is available as a
+<a href="http://ccrma-www.stanford.edu/planetccrma/software/soundapps.html#SECTION000241300000000000000">RedHat RPM</a> from
+<a href="http://ccrma-www.stanford.edu/planetccrma/software/">Planet CCRMA</a>.
+</p>
 
+<p>
+To initially install Rosegarden-4, a PlanetCCRMA user needs only to type:<br>
+<pre>
+apt-get update
+apt-get install rosegarden
+</pre>
+</p>
 
-<ul><li>Rosegarden-4 release 0.8, 4 October 2002: <a href="http://sourceforge.net/project/showfiles.php?group_id=4932">get the sources</a> from the SourceForge page.</li></ul>
+<h3>Rosegarden-4 for Debian</h3>
 
-<p>Rosegarden-4 is also included in the Debian unstable ("sid")
-distribution, with the package name <code><a href="http://packages.debian.org/unstable/sound/rosegarden4.html">rosegarden4</a></code> (thanks to Enrique
-Robledo Arnuncio).
+<p>
+Rosegarden-4 is available as a package from
+<a href="http://packages.debian.org/unstable/sound/rosegarden4.html">Debian Unstable</a>
+(thanks to Enrique Robledo Arnuncio).
 
+</p>
+
+<h3>Rosegarden-4 for your distribution</h3>
+
+<p>
+Rosegarden-4 should hopefully be included as part of the next SuSE release
+(8.2) but we're notably still missing from Mandrake.  If we're not packaged
+as part of your favourite distribution then please get in touch with
+your distribution manufacturer and ask why not!  If you've made an RPM or
+package for any distribution then please let us know so that we can link it
+here.
+</p>
 <div class="donate">If you'd like to support Rosegarden-4 but you aren't a developer, another way to contribute is with a financial donation.<div class="paypal"><form action="https://www.paypal.com/cgi-bin/webscr" method="post">
 <input type="hidden" name="cmd" value="_xclick">
 <input type="hidden" name="business" value="cannam@all-day-breakfast.com">
@@ -46,36 +69,30 @@ Robledo Arnuncio).
 </form></div>A professional sequencer costs
     hundreds of pounds.  We haven't written one yet, but we aren't asking for hundreds of pounds either.  Twenty quid or so would be great.<br><div align="right">Thanks!</div></div>
 
-<p>If you've created another binary package, please get in touch with
-one of the <a href="authors.html">authors</a> so we can link it up
-here.
+<h3>Rosegarden-4 source code</h3>
+
+<p>
+If you can't find a package to suit your system them you can
+still build Rosegarden-4 from source code.  The latest release is
+shown below:
+
+<ul><li>Rosegarden-4 release 0.8, 4 October 2002: <a href="http://sourceforge.net/project/showfiles.php?group_id=4932">get the sources</a> from the SourceForge page.</li></ul>
+
 
 <p>You can also obtain the most recent source code (which might not
 work) directly from the <a
 href="http://sourceforge.net/cvs/?group_id=4932">CVS repository</a>.
-
-<p>In order to build Rosegarden-4, you will need a Unix-like operating
-system, the gcc-2.9x or 3.x C++ compiler, <a href="http://www.kde.org/">KDE</a> 2.2 with <a href="http://www.trolltech.com/">Qt</a>2 or KDE3
-wth Qt3.  See the <a
-href="faq.html">FAQ</a> for solutions to a few build and installation
-problems.
-
-<p>Other related software Rosegarden relies on (not essential - you can build without it) :
-<ul>
-<li><a href="http://www.alsa-project.org/">Alsa</a> 0.9 or better
-	  (<b>highly recommended</b> - much better sound rendering than with KDE's aRts), but your distribution most likely
-	  carries it already, except RedHat which as of 8.0 still ships Alsa 0.5)</li>
-
-<li><a href="http://jackit.sourceforge.net">JACK</a>, (Jack Audio Connection Kit) for audio.</li>
-
-<li><a href="http://www.ladspa.org">LADSPA</a>, (Linux Audio Developer's Simple Plugin API), for audio plugins.</li>
-
-</ul>
-
-<p>The SourceForge site also contains <a
+The SourceForge site also contains <a
 href="http://rosegarden.sourceforge.net/code_doc">some code
 documentation</a> and <a
 href="http://sourceforge.net/mail/?group_id=4932">a mailing-list</a>.
+</p>
+
+<p>
+See the <a href="requirements.html">requirements page</a> for details
+on how to build the source code.
+</p>
+
 
 <hr>
 

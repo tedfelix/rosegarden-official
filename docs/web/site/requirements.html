@@ -18,8 +18,7 @@
         &nbsp;&nbsp;<a href="index.html">home</a><br>
         &nbsp;&nbsp;<a href="pictures.html">pictures</a><br>
         &nbsp;&nbsp;<a href="requirements.hml">requirements</a><br>
-        &nbsp;&nbsp;<a href="schools.hml">schools</a><br>
-        &nbsp;&nbsp;<a href="authors.html">authors</a><br>
+        &nbsp;&nbsp;<a href="demos.html">demonstrations</a><br>
         &nbsp;&nbsp;<a href="history.html">history</a><br>
         &nbsp;&nbsp;<a href="development.html">development</a><br>
         &nbsp;&nbsp;<a href="faq.html">faq</a><br>
@@ -32,28 +31,40 @@
 
     <div id="main">
 
-    <h3>Requirements</h3>
+    <h3>Hardware requirements</h3>
 
     <p>
-    Rosegarden is a MIDI and audio sequencer and notation editor.  System
-    requirements for editing, playing and recording MIDI are usually much
-    lower than those for use with audio.  Use of audio plugins especially
-    will impact on your system performance.  Bear this information in mind
-    when specifying your machine.
+    Rosegarden-4 is a MIDI and audio sequencer and notation editor and
+    its system requirements differ according to what task you're using
+    it for.  Editing, playing and recording MIDI is a less resource hungry
+    mode of operation than recording or playing audio.  The use of multiple
+    audio plugins will especially impact system performance and its worth
+    bearing yout projected usage in mind when specifying your machine.
     </p>
 
     <p>
-    Minimum system requirements for running Rosegarden for mainly MIDI
-    use with simple editing and playback/recording is a 400MHz system
-    with 64MB of memory.  Recommended system is an 800MHz system with
-    256MB of memory - with this setup you should have enough power to
+    For a PC, minimum hardware requirements for running Rosegarden-4 for
+    mainly MIDI use with simple editing and playback/recording is a 400MHz
+    system with 64MB of memory.  A recommended system is an 800MHz system
+    with 256MB of memory - with this setup you should have enough power to
     sequence MIDI and audio with a number of audio plugins.
     </p>
     
+
+    <h3>Software requirements</h3>
+
     <p>
     If you want to hear sound from your system then you will also need
     to configure a soundcard supported by the
     <a href="http://www.alsa-project.org" target="_blank">ALSA project</a>.
+    </p>
+    
+    <p>
+    Audio support is provided by the 
+    <a href="http://jackit.sourceforge.net">JACK</a> sound server.
+    </p>
+
+    <p>
     If you're using an external MIDI device (sound module or keyboard)
     then you'll also need the appropriate leads and cables.  For help
     setting up your home studio for easy audio and MIDI recording then
@@ -64,6 +75,26 @@
     <p>
     Please also consult the <a href="faq.html">FAQ</a> for more information.
     </p>
+
+    <h3>Building from source code</h3>
+    
+    <p>In order to build Rosegarden-4, you will need a Unix-like operating
+    system, the gcc-2.9x or 3.x C++ compiler, <a href="http://www.kde.org/">KDE</a> 2.2 with <a href="http://www.trolltech.com/">Qt</a>2 or KDE3
+    wth Qt3.  See the <a
+    href="faq.html">FAQ</a> for solutions to a few build and installation
+    problems.
+
+    <p>Other related software Rosegarden relies on (not essential - you can build without it) :
+    <ul>
+    <li><a href="http://www.alsa-project.org/">Alsa</a> 0.9 or better
+          (<b>highly recommended</b> - much better sound rendering than with KDE's aRts), but your distribution most likely
+          carries it already, except RedHat which as of 8.0 still ships Alsa 0.5)</li>
+    
+    <li><a href="http://jackit.sourceforge.net">JACK</a>, (Jack Audio Connection Kit) for audio.</li>
+
+    <li><a href="http://www.ladspa.org">LADSPA</a>, (Linux Audio Developer's Simple Plugin API), for audio plugins.</li>
+
+    </ul>
 
     </div>
 
