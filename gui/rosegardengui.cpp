@@ -109,6 +109,7 @@
 #include "midifilter.h"
 #include "controleditor.h"
 #include "markereditor.h"
+#include "triggermanager.h"
 #include "studiocommands.h"
 #include "rgapplication.h"
 #include "playlist.h"
@@ -701,6 +702,10 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotRepeatingSegments()),
                 actionCollection(), "repeats_to_real_copies");
 
+    new KAction(i18n("Manage Tri&ggered Segments"), 0, 
+                this, SLOT(slotManageTriggerSegments()),
+                actionCollection(), "manage_trigger_segments");
+
     new KAction(i18n("Set &Tempo to Audio Segment Duration"), 0, this,
                 SLOT(slotTempoToSegmentLength()), actionCollection(),
                 "set_tempo_to_segment_length");
@@ -1203,6 +1208,8 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     if (m_seqManager) // when we're called at startup, the seq. man. isn't created yet
         m_seqManager->setDocument(m_doc);
 
+    if (m_markerEditor) m_markerEditor->setDocument(m_doc);
+    if (m_triggerSegmentManager) m_triggerSegmentManager->setDocument(m_doc);
 
     m_segmentParameterBox->setDocument(m_doc);
     m_instrumentParameterBox->setDocument(m_doc);
@@ -1243,7 +1250,6 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
 
     // finally recreate the main view
     //
-    //delete m_view;
     initView();
 
     m_doc->syncDevices();
@@ -1263,10 +1269,6 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     // Do not reset instrument prog. changes after all.
 //     if (m_seqManager)
 //         m_seqManager->preparePlayback(true);
-
-    // same for the Marker Editor
-    //
-    if (m_markerEditor) m_markerEditor->setDocument(m_doc);
 
     Rosegarden::Composition &comp = m_doc->getComposition();
 
@@ -5260,6 +5262,34 @@ RosegardenGUIApp::slotEditBanks(Rosegarden::DeviceId device)
             m_view, SLOT(slotSynchroniseWithComposition()));
  
     m_bankEditor->show();
+}
+
+void
+RosegardenGUIApp::slotManageTriggerSegments()
+{
+    if (m_triggerSegmentManager) {
+	m_triggerSegmentManager->raise();
+	return;
+    }
+
+    m_triggerSegmentManager = new TriggerSegmentManager(this, m_doc);
+
+    connect(m_triggerSegmentManager, SIGNAL(closing()),
+            SLOT(slotTriggerManagerClosed()));
+
+    connect(m_triggerSegmentManager, SIGNAL(editTriggerSegment(int)),
+	    m_view, SLOT(slotEditTriggerSegment(int)));
+    
+    m_triggerSegmentManager->show();
+}
+
+
+void
+RosegardenGUIApp::slotTriggerManagerClosed()
+{
+    RG_DEBUG << "RosegardenGUIApp::slotTriggerManagerClosed" << endl;
+
+    m_triggerSegmentManager = 0;
 }
 
 void

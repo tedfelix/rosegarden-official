@@ -190,7 +190,8 @@ Composition::Composition() :
     m_loopStart(0),
     m_loopEnd(0),
     m_playMetronome(false),
-    m_recordMetronome(true)
+    m_recordMetronome(true),
+    m_nextTriggerSegmentId(0)
 {
     // nothing else
 }
@@ -312,6 +313,106 @@ void Composition::setSegmentStartTime(Segment *segment, timeT startTime)
     m_segments.insert(segment);    
 }
 
+Composition::TriggerSegmentId
+Composition::addTriggerSegment(Segment *s, int pitch)
+{
+    TriggerSegmentId id = m_nextTriggerSegmentId;
+    addTriggerSegment(s, pitch, id);
+    return id;
+}
+
+void
+Composition::addTriggerSegment(Segment *s, int pitch, TriggerSegmentId id)
+{
+    if (m_triggerSegments.find(id) != m_triggerSegments.end()) return;
+    TriggerSegmentRec rec;
+    rec.pitch = pitch;
+    rec.segment = s;
+    m_triggerSegments[id] = rec;
+    s->setComposition(this);
+    if (m_nextTriggerSegmentId <= id) m_nextTriggerSegmentId = id + 1;
+}
+
+void
+Composition::deleteTriggerSegment(TriggerSegmentId id)
+{
+    if (m_triggerSegments.find(id) == m_triggerSegments.end()) return;
+    m_triggerSegments[id].segment->setComposition(0);
+    delete m_triggerSegments[id].segment;
+    m_triggerSegments.erase(id);
+}
+
+void
+Composition::detachTriggerSegment(TriggerSegmentId id)
+{
+    if (m_triggerSegments.find(id) == m_triggerSegments.end()) return;
+    m_triggerSegments[id].segment->setComposition(0);
+    m_triggerSegments.erase(id);
+}
+
+void
+Composition::clearTriggerSegments()
+{
+    for (triggersegmentcontaineriterator i = m_triggerSegments.begin();
+	 i != m_triggerSegments.end(); ++i) delete i->second.segment;
+    m_triggerSegments.clear();
+}
+
+int
+Composition::getTriggerSegmentId(Segment *s)
+{
+    for (triggersegmentcontaineriterator i = m_triggerSegments.begin();
+	 i != m_triggerSegments.end(); ++i) {
+	if (i->second.segment == s) return i->first;
+    }
+    return -1;
+}
+
+Segment *
+Composition::getTriggerSegment(TriggerSegmentId id)
+{
+    if (m_triggerSegments.find(id) == m_triggerSegments.end()) return 0;
+    return m_triggerSegments[id].segment;
+}    
+
+int
+Composition::getTriggerSegmentBasePitch(TriggerSegmentId id)
+{
+    if (m_triggerSegments.find(id) == m_triggerSegments.end()) return 0;
+    return m_triggerSegments[id].pitch;
+}    
+
+void
+Composition::setTriggerSegmentBasePitch(TriggerSegmentId id, int basePitch)
+{
+    if (m_triggerSegments.find(id) == m_triggerSegments.end()) return;
+    m_triggerSegments[id].pitch = basePitch;
+}    
+
+Composition::TriggerSegmentRec
+Composition::getTriggerSegmentRec(TriggerSegmentId id)
+{
+    if (m_triggerSegments.find(id) == m_triggerSegments.end()) {
+	TriggerSegmentRec rec;
+	rec.pitch = 0;
+	rec.segment = 0;
+	return rec;
+    }
+    return m_triggerSegments[id];
+}    
+
+Composition::TriggerSegmentId
+Composition::getNextTriggerSegmentId() const
+{
+    return m_nextTriggerSegmentId;
+}
+
+void
+Composition::setNextTriggerSegmentId(TriggerSegmentId id)
+{
+    m_nextTriggerSegmentId = id;
+}
+
 timeT
 Composition::getDuration() const
 {
@@ -355,6 +456,7 @@ Composition::clear()
 
     clearTracks();
     clearMarkers();
+    clearTriggerSegments();
 
     m_timeSigSegment.clear();
     m_tempoSegment.clear();
@@ -1209,6 +1311,7 @@ std::string Composition::toXmlString()
     composition << "\" selected=\"" << m_selectedTrack;
     composition << "\" playmetronome=\"" << m_playMetronome;
     composition << "\" recordmetronome=\"" << m_recordMetronome;
+    composition << "\" nexttriggerid=\"" << m_nextTriggerSegmentId;
     composition << "\">" << endl << endl;
 
     composition << endl;

@@ -20,8 +20,8 @@
 */
 
 
-#ifndef _MARKEREDITOR_H_
-#define _MARKEREDITOR_H_
+#ifndef _TRIGGEREDITOR_H_
+#define _TRIGGEREDITOR_H_
 
 #include <kmainwindow.h>
 #include <klistview.h>
@@ -32,8 +32,8 @@
 #include <qlineedit.h>
 #include <qspinbox.h>
 
-#include "Composition.h"
 #include "timewidget.h"
+
 
 class RosegardenGUIDoc;
 class KCommand;
@@ -41,41 +41,14 @@ class MultiViewCommandHistory;
 class QLabel;
 class QAccel;
 
-class MarkerModifyDialog : public KDialogBase
-{
-    Q_OBJECT
-public:
-    MarkerModifyDialog(QWidget *parent,
-		       Rosegarden::Composition *composition,
-                       int time,
-                       const QString &name,
-                       const QString &des);
-
-    QString getName() const { return m_nameEdit->text(); }
-    QString getDescription() const { return m_desEdit->text(); }
-    int getTime() const { return m_timeEdit->getTime(); }
-    int getOriginalTime() const { return m_originalTime; }
-
-protected:
-    RosegardenGUIDoc             *m_doc;
-
-    RosegardenTimeWidget         *m_timeEdit;
-    QLineEdit                    *m_nameEdit;
-    QLineEdit                    *m_desEdit;
-
-    int                           m_originalTime;
-};
-
-
-
-class MarkerEditorDialog : public KMainWindow
+class TriggerSegmentManager : public KMainWindow
 {
     Q_OBJECT
 
 public:
-    MarkerEditorDialog(QWidget *parent,
-                       RosegardenGUIDoc *doc);
-    ~MarkerEditorDialog();
+    TriggerSegmentManager(QWidget *parent,
+			  RosegardenGUIDoc *doc);
+    ~TriggerSegmentManager();
 
     void initDialog();
 
@@ -88,9 +61,6 @@ public:
     // reset the document
     void setDocument(RosegardenGUIDoc *doc);
 
-    // update pointer position
-    void updatePosition();
-
     QAccel* getAccelerators() { return m_accelerators; }
 
 public slots:
@@ -102,31 +72,27 @@ public slots:
     void slotClose();
     void slotEdit(QListViewItem *);
     void slotItemClicked(QListViewItem *);
+    void slotPasteAsNew();
 
     void slotMusicalTime();
     void slotRealTime();
     void slotRawTime();
 
 signals:
+    void editTriggerSegment(int);
     void closing();
-    void jumpToMarker(Rosegarden::timeT);
 
 protected:
     virtual void closeEvent(QCloseEvent *);
 
     void setupActions();
-    QString makeTimeString(Rosegarden::timeT time, int timeMode);
+    QString makeDurationString(Rosegarden::timeT startTime,
+			       Rosegarden::timeT duration, int timeMode);
 
     //--------------- Data members ---------------------------------
     RosegardenGUIDoc        *m_doc;
 
-    QLabel                  *m_absoluteTime;
-    QLabel                  *m_realTime;
-    QLabel                  *m_barTime;
-
     QPushButton             *m_closeButton;
-
-
     QPushButton             *m_addButton;
     QPushButton             *m_deleteButton;
     QPushButton             *m_deleteAllButton;
@@ -135,10 +101,10 @@ protected:
 
     bool                     m_modified;
 
-    static const char* const MarkerEditorConfigGroup;
+    static const char* const TriggerManagerConfigGroup;
 
     QAccel *m_accelerators;
 };
 
-#endif // _MARKEREDITOR_H_
+#endif // _TRIGGEREDITOR_H_
 

@@ -47,6 +47,9 @@
   <Action name="add_time_signature"/>
   <Action name="add_clef"/>
   <Action name="add_key_signature"/>
+  <Separator/>
+  <Action name="set_segment_start"/>
+  <Action name="set_segment_duration"/>
 </Menu>
 
 <Menu name="Group">
@@ -65,6 +68,7 @@
 <!--  <Action name="ungrace"/> -->
   <Separator/>
   <Action name="slur"/>
+  <Action name="phrasing_slur"/>
 <!--  <Action name="glissando"/> -->
   <Action name="crescendo"/>
   <Action name="decrescendo"/>
@@ -125,6 +129,7 @@
     <Action name="add_fingering_3"/>
     <Action name="add_fingering_4"/>
     <Action name="add_fingering_5"/>
+    <Action name="add_fingering_plus"/>
     <Action name="add_fingering_mark"/>
     </Menu>
     <Separator/>
@@ -144,6 +149,9 @@
     <Action name="add_down-bow"/>
     <Separator/>
     <Action name="add_text_mark"/>
+    <Separator/>
+    <Action name="use_ornament"/>
+    <Action name="make_ornament"/>
   </Menu>
 
 <Menu name="Transforms">
@@ -583,6 +591,7 @@
     <Action name="add_fingering_3"/>
     <Action name="add_fingering_4"/>
     <Action name="add_fingering_5"/>
+    <Action name="add_fingering_plus"/>
     <Action name="add_fingering_mark"/>
     <Action name="add_accent"/>
     <Action name="add_tenuto"/>
@@ -597,6 +606,8 @@
     <Action name="add_up-bow"/>
     <Action name="add_down-bow"/>
     <Action name="add_text_mark"/>
+    <Action name="make_ornament"/>
+    <Action name="use_ornament"/>
     <Action name="collapse_notes"/>
     <Action name="tie_notes"/>
     <Action name="untie_notes"/>

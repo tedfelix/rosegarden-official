@@ -277,7 +277,8 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
 		std::string indicationType =
 		    el->event()->get<String>(Indication::IndicationTypePropertyName);
 
-		if (indicationType == Indication::Slur) {
+		if (indicationType == Indication::Slur ||
+		    indicationType == Indication::PhrasingSlur) {
 		    getSlurList(staff).push_back(i);
 		}
 
@@ -322,8 +323,6 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 {
 
     NotationElementList::iterator scooter = i;
-
-//!!!    timeT slurDuration = (*i)->event()->get<Int>(Indication::IndicationDurationPropertyName);
 
     timeT slurDuration = (*i)->event()->getDuration();
     if (slurDuration == 0) {

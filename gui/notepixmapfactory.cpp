@@ -212,6 +212,7 @@ NotePixmapParameters::NotePixmapParameters(Note::Type noteType,
     m_selected(false),
     m_highlighted(false),
     m_quantized(false),
+    m_trigger(false),
     m_onLine(false),
     m_safeVertDistance(0),
     m_beamed(false),
@@ -260,6 +261,8 @@ NotePixmapParameters::getNormalMarks() const
 	if (*mi == Rosegarden::Marks::Pause ||
 	    *mi == Rosegarden::Marks::UpBow ||
 	    *mi == Rosegarden::Marks::DownBow ||
+	    *mi == Rosegarden::Marks::Trill ||
+	    *mi == Rosegarden::Marks::Turn ||
 	    Rosegarden::Marks::isFingeringMark(*mi)) continue;
 	
 	marks.push_back(*mi);
@@ -279,7 +282,6 @@ NotePixmapParameters::getAboveMarks() const
 	 mi != m_marks.end(); ++mi) {
 
 	if (Rosegarden::Marks::isFingeringMark(*mi)) {
-
 	    marks.push_back(*mi);
 	}
     }
@@ -289,7 +291,9 @@ NotePixmapParameters::getAboveMarks() const
 
 	if (*mi == Rosegarden::Marks::Pause ||
 	    *mi == Rosegarden::Marks::UpBow ||
-	    *mi == Rosegarden::Marks::DownBow) {
+	    *mi == Rosegarden::Marks::DownBow ||
+	    *mi == Rosegarden::Marks::Trill ||
+	    *mi == Rosegarden::Marks::Turn) {
 	    marks.push_back(*mi);
 	}
     }
@@ -681,6 +685,12 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
 	    (charName,
 	     RosegardenGUIColours::QuantizedNoteHue,
 	     RosegardenGUIColours::QuantizedNoteMinValue,
+	     charType, inverted);
+    } else if (params.m_trigger) {
+	body = m_font->getCharacterColoured
+	    (charName,
+	     RosegardenGUIColours::TriggerNoteHue,
+	     RosegardenGUIColours::TriggerNoteMinValue,
 	     charType, inverted);
     } else {
 	body = m_font->getCharacter
@@ -2192,7 +2202,7 @@ NotePixmapFactory::drawHairpinAux(int length, bool isCrescendo,
 }
 
 QCanvasPixmap*
-NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
+NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above, bool phrasing)
 {
     Rosegarden::Profiler profiler("NotePixmapFactory::makeSlurPixmap");
 
@@ -2202,7 +2212,7 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
     bool smooth = m_font->isSmooth() && getNoteBodyHeight() > 5;
     QPoint hotspot;
     if (length < getNoteBodyWidth()*2) length = getNoteBodyWidth()*2;
-    drawSlurAux(length, dy, above, smooth, false, hotspot, 0, 0, 0);
+    drawSlurAux(length, dy, above, smooth, phrasing, hotspot, 0, 0, 0);
 
     m_p->end();
 
@@ -2232,14 +2242,14 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
 }
 
 void
-NotePixmapFactory::drawSlur(int length, int dy, bool above,
+NotePixmapFactory::drawSlur(int length, int dy, bool above, bool phrasing,
 			    QPainter &painter, int x, int y)
 {
     Rosegarden::Profiler profiler("NotePixmapFactory::drawSlur");
     QPoint hotspot;
     m_inPrinterMethod = true;
     if (length < getNoteBodyWidth()*2) length = getNoteBodyWidth()*2;
-    drawSlurAux(length, dy, above, false, false, hotspot, &painter, x, y);
+    drawSlurAux(length, dy, above, false, phrasing, hotspot, &painter, x, y);
     m_inPrinterMethod = false;
 }
 

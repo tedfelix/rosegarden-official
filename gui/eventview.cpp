@@ -54,6 +54,8 @@
 #include "matrixtool.h"
 #include "rosedebug.h"
 #include "eventcommands.h"
+#include "segmentcommands.h"
+#include "widgets.h"
 
 #include "Segment.h"
 #include "SegmentPerformanceHelper.h"
@@ -177,6 +179,17 @@ EventView::EventView(RosegardenGUIDoc *doc,
 		  ProgramChange | PitchBend | Indication | Other),
     m_menu(0)
 {
+    m_isTriggerSegment = false;
+    m_triggerBasePitch = 0;
+
+    if (!segments.empty()) {
+	Rosegarden::Segment *s = *segments.begin();
+	if (s->getComposition()) {
+	    int id = s->getComposition()->getTriggerSegmentId(s);
+	    if (id >= 0) m_isTriggerSegment = true;
+	}
+    }
+
     if (m_lastSetEventFilter < 0) m_lastSetEventFilter = m_eventFilter;
     else m_eventFilter = m_lastSetEventFilter;
 
@@ -211,7 +224,22 @@ EventView::EventView(RosegardenGUIDoc *doc,
 
     m_grid->addWidget(m_eventList, 2, 1);
 
-    if (segments.size() == 1) {
+    if (m_isTriggerSegment) {
+
+	int id = segments[0]->getComposition()->getTriggerSegmentId(segments[0]);
+	int basePitch = segments[0]->getComposition()->getTriggerSegmentBasePitch(id);
+	
+	m_triggerBasePitch = new RosegardenPitchChooser
+	    (i18n("Base Pitch"), getCentralWidget(), basePitch);
+	connect(m_triggerBasePitch, SIGNAL(pitchChanged(int)),
+		this, SLOT(slotTriggerPitchChanged(int)));
+	m_grid->addWidget(m_triggerBasePitch, 2, 2);
+	
+	setCaption(QString("%1 - Triggered Segment: %2")
+		   .arg(doc->getTitle())
+		   .arg(strtoqstr(segments[0]->getLabel())));
+
+    } else if (segments.size() == 1) {
 
         setCaption(QString("%1 - Segment Track #%2 - Event List")
                    .arg(doc->getTitle())
@@ -633,6 +661,14 @@ EventView::updateView()
 }
 
 void
+EventView::slotTriggerPitchChanged(int pitch)
+{
+    int id = m_segments[0]->getComposition()->getTriggerSegmentId(m_segments[0]);
+    addCommandToHistory(new SetTriggerSegmentBasePitchCommand
+			(&getDocument()->getComposition(), id, pitch));
+}
+
+void
 EventView::slotEditCut()
 {
     QPtrList<QListViewItem> selection = m_eventList->selectedItems();
@@ -1047,6 +1083,13 @@ EventView::setupActions()
     action->setExclusiveGroup("timeMode");
     if (timeMode == 2) action->setChecked(true);
 
+    if (m_isTriggerSegment) {
+	KAction *action = actionCollection()->action("open_in_matrix");
+	if (action) delete action;
+	action = actionCollection()->action("open_in_notation");
+	if (action) delete action;
+    }
+
     createGUI(getRCFileName());
 }
 
@@ -1104,6 +1147,13 @@ EventView::slotSaveOptions()
     m_config->setGroup(ConfigGroup);
     m_config->writeEntry("eventfilter", m_eventFilter);
     m_eventList->saveLayout(m_config, LayoutConfigGroupName);
+}
+
+Rosegarden::Segment *
+EventView::getCurrentSegment()
+{
+    if (m_segments.empty()) return 0;
+    else return *m_segments.begin();
 }
 
 void 
@@ -1314,6 +1364,8 @@ void
 EventView::slotPopupEventEditor(QListViewItem *item)
 {
     EventViewItem *eItem = dynamic_cast<EventViewItem*>(item);
+
+    //!!! trigger events
 
     if (eItem)
     {

@@ -41,6 +41,7 @@ class QListViewItem;
 class QPushButton;
 class QCheckBox;
 class QButtonGroup;
+class RosegardenPitchChooser;
 
 class EventView : public EditViewBase, public Rosegarden::SegmentObserver
 {
@@ -133,9 +134,12 @@ public slots:
     virtual void endMarkerTimeChanged(const Rosegarden::Segment *, bool) { }
     virtual void segmentDeleted(const Rosegarden::Segment *) { }
 
-protected slots:
+signals:
+    void editTriggerSegment(int);
 
+protected slots:
     virtual void slotSaveOptions();
+    void slotTriggerPitchChanged(int);
 
 protected:
 
@@ -144,8 +148,13 @@ protected:
     QString makeTimeString(Rosegarden::timeT time, int timeMode);
     QString makeDurationString(Rosegarden::timeT time,
 			       Rosegarden::timeT duration, int timeMode);
+    virtual Rosegarden::Segment *getCurrentSegment();
 
     //--------------- Data members ---------------------------------
+
+    bool         m_isTriggerSegment;
+    RosegardenPitchChooser *m_triggerBasePitch;
+
     KListView   *m_eventList;
     int          m_eventFilter;
 

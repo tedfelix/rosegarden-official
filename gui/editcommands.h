@@ -24,8 +24,10 @@
 
 
 #include "basiccommand.h"
+#include "notestyle.h"
 
 #include "Quantizer.h"
+#include "Composition.h"
 #include <klocale.h>
 
 namespace Rosegarden {
@@ -45,7 +47,6 @@ namespace Rosegarden {
         DecrescendoPattern,   // decreasing from velocity 1 to velocity 2.
         RingingPattern        // between velocity 1 and 2, dying away.
     } PropertyPattern;
-
 }
 
 
@@ -147,6 +148,7 @@ protected:
     Rosegarden::Clipboard *m_clipboard;
     Rosegarden::timeT m_pasteTime;
     std::vector<Rosegarden::Segment *> m_addedSegments;
+    bool m_detached;
 };
 
 
@@ -553,5 +555,88 @@ protected:
     std::string                  m_oldDescription;
 
 };
+
+
+class SetTriggerCommand : public BasicSelectionCommand
+{
+public:
+    SetTriggerCommand(Rosegarden::EventSelection &selection,
+		      Rosegarden::Composition::TriggerSegmentId triggerSegmentId,
+		      bool notesOnly,
+		      bool retune,
+		      bool adjustDuration,
+		      QString name = 0) :
+	BasicSelectionCommand(name ? name : getGlobalName(), selection, true),
+	m_selection(&selection),
+	m_triggerSegmentId(triggerSegmentId),
+	m_notesOnly(notesOnly),
+	m_retune(retune),
+	m_adjustDuration(adjustDuration)
+    { }
+
+    static QString getGlobalName() {
+	return i18n("Tri&gger Segment");
+    }
+
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    Rosegarden::Composition::TriggerSegmentId m_triggerSegmentId;
+    bool m_notesOnly;
+    bool m_retune;
+    bool m_adjustDuration;
+};
+
+
+class ClearTriggersCommand : public BasicSelectionCommand
+{
+public:
+    ClearTriggersCommand(Rosegarden::EventSelection &selection,
+			 QString name = 0) :
+	BasicSelectionCommand(name ? name : getGlobalName(), selection, true),
+	m_selection(&selection)
+    { }
+
+    static QString getGlobalName() {
+	return i18n("&Clear Triggers");
+    }
+
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+};
+
+
+class InsertTriggerNoteCommand : public BasicCommand
+{
+public:
+    InsertTriggerNoteCommand(Rosegarden::Segment &,
+			     Rosegarden::timeT time,
+			     Rosegarden::Note note,
+			     int pitch,
+			     int velocity,
+			     NoteStyleName noteStyle,
+			     Rosegarden::Composition::TriggerSegmentId id,
+			     bool retune,
+			     bool adjustDuration);
+    virtual ~InsertTriggerNoteCommand();
+
+protected:
+    virtual void modifySegment();
+
+    Rosegarden::timeT m_time;
+    Rosegarden::Note m_note;
+    int m_pitch;
+    int m_velocity;
+    NoteStyleName m_noteStyle;
+    Rosegarden::Composition::TriggerSegmentId m_id;
+    bool m_retune;
+    bool m_adjustDuration;
+};
+
 
 #endif

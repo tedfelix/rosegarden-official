@@ -543,10 +543,10 @@ public:
     static const std::string EventType;
     static const int EventSubOrdering;
     static const PropertyName IndicationTypePropertyName;
-//    static const PropertyName IndicationDurationPropertyName;
     typedef Exception BadIndicationName;
 
     static const std::string Slur;
+    static const std::string PhrasingSlur;
     static const std::string Crescendo;
     static const std::string Decrescendo;
     static const std::string Glissando;

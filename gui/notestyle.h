@@ -59,7 +59,6 @@ private:
 class NoteStyle
 {
 public:
-    NoteStyle() : m_baseStyle(0) { }
     virtual ~NoteStyle();
 
     typedef std::string NoteHeadShape;
@@ -77,6 +76,8 @@ public:
 
     enum HFixPoint { Normal, Central, Reversed };
     enum VFixPoint { Near, Middle, Far };
+
+    NoteStyleName getName() const { return m_name; }
 
     NoteHeadShape getShape     (Rosegarden::Note::Type);
     bool          isFilled     (Rosegarden::Note::Type);
@@ -135,8 +136,13 @@ protected:
 
     NoteDescriptionMap m_notes;
     NoteStyle *m_baseStyle;
+    NoteStyleName m_name;
 
     void checkDescription(Rosegarden::Note::Type type);
+
+protected: // for use by NoteStyleFileReader
+    NoteStyle(NoteStyleName name) : m_baseStyle(0), m_name(name) { }
+    friend class NoteStyleFileReader;
 };
 
 

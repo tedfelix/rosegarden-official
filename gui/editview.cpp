@@ -1061,17 +1061,13 @@ EditView::createInsertPitchActionMenu()
 
 int
 EditView::getPitchFromNoteInsertAction(QString name,
-				       Rosegarden::Accidental &accidental)
+				       Rosegarden::Accidental &accidental,
+				       const Rosegarden::Clef &clef,
+				       const Rosegarden::Key &key)
 {
     using namespace Rosegarden::Accidentals;
 
     accidental = NoAccidental;
-
-    Rosegarden::Key key;
-    Rosegarden::Clef clef;
-
-    //!!! need to be able to get clef & key -- how?
-    //!!! modify to use Pitch class
 
     if (name.left(7) == "insert_") {
 
@@ -1112,30 +1108,9 @@ EditView::getPitchFromNoteInsertAction(QString name,
 	    scalePitch = 0;
 	}
 
-	//!!! needs testing before we remove old stuff
 	Rosegarden::Pitch pitch
-	    (scalePitch, 5 + octave + clef.getOctave(), key, accidental);
+	    (scalePitch, 4 + octave + clef.getOctave(), key, accidental);
 	return pitch.getPerformancePitch();
-
-/*!!!
-	int pitch =
-	    key.getTonicPitch() + 60 + 12*(octave + clef.getOctave()) + modify;
-
-	static int scale[] = { 0, 2, 4, 5, 7, 9, 11 };
-	pitch += scale[scalePitch];
-*/
-/*!!!
-	if (accidental != NoAccidental) {
-	    Rosegarden::NotationDisplayPitch ndp(pitch, clef, key);
-	    int height = ndp.getHeightOnStaff();
-	    Rosegarden::Accidental defaultAcc = key.getAccidentalAtHeight(height, clef);
-	    if ((defaultAcc == Sharp || defaultAcc == Flat) &&
-		defaultAcc != accidental) accidental = Natural;
-	    else if (defaultAcc == Sharp) accidental = DoubleSharp;
-	    else                          accidental = DoubleFlat;
-	}
-*/
-//!!!	return pitch;
 
     } else {
 

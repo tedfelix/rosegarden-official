@@ -31,15 +31,14 @@ rosegarden_SOURCES = \
         hydrogenio.cpp \
 	importdevicedialog.cpp \
         instrumentparameterbox.cpp \
-	kstartuplogo.cpp \
 	kde32_ktabwidget.cpp \
 	kde32_ktabbar.cpp \
+	kstartuplogo.cpp \
 	ktmpstatusmsg.cpp \
         lilypondio.cpp \
         linedstaff.cpp \
         loopruler.cpp \
 	main.cpp \
-	mmapper.cpp \
         markereditor.cpp \
 	matrixcanvasview.cpp \
 	matrixcommands.cpp \
@@ -53,6 +52,7 @@ rosegarden_SOURCES = \
         midifilter.cpp \
         midipitchlabel.cpp \
 	mixer.cpp \
+	mmapper.cpp \
 	multiviewcommandhistory.cpp \
 	mupio.cpp \
         musicxmlio.cpp \
@@ -111,11 +111,13 @@ rosegarden_SOURCES = \
 	temporuler.cpp \
 	tempoview.cpp \
 	textruler.cpp \
+	timewidget.cpp \
         trackbuttons.cpp \
 	trackeditor.cpp \
         trackheader.cpp \
         tracklabel.cpp \
 	trackseditoriface.skel \
+	triggermanager.cpp \
         velocitycolour.cpp \
         vumeter.cpp \
         widgets.cpp \
@@ -260,27 +262,28 @@ DISTCLEANFILES = $(rosegarden_METASOURCES)
 rcdir = $(kde_datadir)/rosegarden
 rc_DATA = audiomanager.rc \
         bankeditor.rc \
+	clefinserter.rc \
         controleditor.rc \
-	eventlist.rc \
-	tempoview.rc \
         devicemanager.rc \
+	eventlist.rc \
         markereditor.rc \
 	matrix.rc \
-        matrixselector.rc \
         matrixeraser.rc \
         matrixresizer.rc \
         matrixmover.rc \
         matrixpainter.rc \
+        matrixselector.rc \
         midimixer.rc \
 	mixer.rc \
-	notationeraser.rc \
 	notation.rc \
+	notationeraser.rc \
 	notationselector.rc \
 	noteinserter.rc \
 	restinserter.rc \
+	rosegardenui.rc \
+	tempoview.rc \
 	textinserter.rc \
-	clefinserter.rc \
-	rosegardenui.rc
+	triggermanager.rc
 
 # make messages.po. Move this one to ../po/ and "make merge" in po
 # the -x is for skipping messages already translated in kdelibs

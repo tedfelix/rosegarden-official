@@ -460,6 +460,8 @@ RosegardenGUIView::createNotationView(std::vector<Rosegarden::Segment *> segment
 	    this, SLOT(slotEditTempos(Rosegarden::timeT)));
     connect(notationView, SIGNAL(editMetadata(QString)),
 	    this, SLOT(slotEditMetadata(QString)));
+    connect(notationView, SIGNAL(editTriggerSegment(int)),
+	    this, SLOT(slotEditTriggerSegment(int)));
     connect(notationView, SIGNAL(staffLabelChanged(Rosegarden::TrackId, QString)),
 	    this, SLOT(slotChangeTrackLabel(Rosegarden::TrackId, QString)));
 
@@ -567,6 +569,8 @@ RosegardenGUIView::createMatrixView(std::vector<Rosegarden::Segment *> segmentsT
 	    this, SLOT(slotEditSegmentsMatrix(std::vector<Rosegarden::Segment *>)));
     connect(matrixView, SIGNAL(openInEventList(std::vector<Rosegarden::Segment *>)),
 	    this, SLOT(slotEditSegmentsEventList(std::vector<Rosegarden::Segment *>)));
+    connect(matrixView, SIGNAL(editTriggerSegment(int)),
+	    this, SLOT(slotEditTriggerSegment(int)));
 
     Rosegarden::SequenceManager *sM = getDocument()->getSequenceManager();
 
@@ -645,6 +649,8 @@ void RosegardenGUIView::slotEditSegmentsEventList(std::vector<Rosegarden::Segmen
 	    this, SLOT(slotEditSegmentsMatrix(std::vector<Rosegarden::Segment *>)));
     connect(eventView, SIGNAL(openInEventList(std::vector<Rosegarden::Segment *>)),
 	    this, SLOT(slotEditSegmentsEventList(std::vector<Rosegarden::Segment *>)));
+    connect(eventView, SIGNAL(editTriggerSegment(int)),
+	    this, SLOT(slotEditTriggerSegment(int)));
 
     // create keyboard accelerators on view
     //
@@ -655,6 +661,23 @@ void RosegardenGUIView::slotEditSegmentsEventList(std::vector<Rosegarden::Segmen
     }
 
     eventView->show();
+}
+
+void RosegardenGUIView::slotEditTriggerSegment(int id)
+{
+    SetWaitCursor waitCursor;
+
+    std::vector<Rosegarden::Segment *> segmentsToEdit;
+
+    Rosegarden::Segment *s = getDocument()->getComposition().getTriggerSegment(id);
+
+    if (s) {
+	segmentsToEdit.push_back(s);
+    } else {
+	return;
+    }
+
+    slotEditSegmentsEventList(segmentsToEdit);
 }
 
 void RosegardenGUIView::slotSegmentAutoSplit(Rosegarden::Segment *segment)

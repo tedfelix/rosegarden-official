@@ -220,6 +220,8 @@ signals:
 
     void stepByStepTargetRequested(QObject *);
 
+    void editTriggerSegment(int);
+
 public slots:
 
     /**

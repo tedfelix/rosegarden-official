@@ -514,7 +514,7 @@ protected:
     /**
      * Save one segment to the given text stream
      */
-    void saveSegment(QTextStream&, Rosegarden::Segment*, KProgress* = 0, int totalNbOfEvents = 0);
+    void saveSegment(QTextStream&, Rosegarden::Segment*, KProgress* = 0, int totalNbOfEvents = 0, QString extraAttributes = 0);
 
     //--------------- Data members ---------------------------------
 

@@ -224,6 +224,16 @@ public slots:
     virtual void slotOpenInNotation();
     virtual void slotOpenInEventList();
     
+    /**
+     * Set the start time of the current segment
+     */
+    void slotSetSegmentStartTime();
+
+    /**
+     * Set the duration of the current segment
+     */
+    void slotSetSegmentDuration();
+
 protected:
 
     virtual void paintEvent(QPaintEvent* e);
@@ -265,6 +275,11 @@ protected:
      * setup status bar
      */
     virtual void initStatusBar() = 0;
+
+    /**
+     * Abstract method to get current segment
+     */
+    virtual Rosegarden::Segment *getCurrentSegment() = 0;
     
 protected slots:
     /**

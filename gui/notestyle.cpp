@@ -524,7 +524,7 @@ NoteStyle::setStemFixPoints(Note::Type note, HFixPoint hfix, VFixPoint vfix)
 
 
 NoteStyleFileReader::NoteStyleFileReader(std::string name) :
-    m_style(new NoteStyle),
+    m_style(new NoteStyle(name)),
     m_haveNote(false)
 {
     QString styleDirectory =

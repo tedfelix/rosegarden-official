@@ -38,6 +38,7 @@ class ConfigureDialogBase : public KDialogBase
     Q_OBJECT
 public:
     ConfigureDialogBase(QWidget *parent=0,
+			QString label = 0,
                         const char *name=0);
     virtual ~ConfigureDialogBase();
 

@@ -1037,8 +1037,12 @@ void MatrixView::slotEraseSelected()
 void MatrixView::slotSelectSelected()
 {
     EditTool* selector = m_toolBox->getTool(MatrixSelector::ToolName);
+
     connect(selector, SIGNAL(gotSelection()),
             this, SLOT(slotNewSelection()));
+
+    connect(selector, SIGNAL(editTriggerSegment(int)),
+            this, SIGNAL(editTriggerSegment(int)));
 
     setTool(selector);
 }
@@ -1486,12 +1490,17 @@ void MatrixView::slotInsertNoteFromAction()
 
     Segment &segment = *getCurrentSegment();
     int pitch = 0;
+
     Rosegarden::Accidental accidental = 
 	Rosegarden::Accidentals::NoAccidental;
 
+    Rosegarden::timeT time(getInsertionTime());
+    Rosegarden::Key key = segment.getKeyAtTime(time);
+    Rosegarden::Clef clef = segment.getClefAtTime(time);
+
     try {
 
-	pitch = getPitchFromNoteInsertAction(name, accidental);
+	pitch = getPitchFromNoteInsertAction(name, accidental, clef, key);
 
     } catch (...) {
 	
@@ -1507,7 +1516,6 @@ void MatrixView::slotInsertNoteFromAction()
     Rosegarden::Event modelEvent(Rosegarden::Note::EventType, 0, 1);
     modelEvent.set<Rosegarden::Int>(Rosegarden::BaseProperties::PITCH, pitch);
     modelEvent.set<Rosegarden::String>(Rosegarden::BaseProperties::ACCIDENTAL, accidental);
-    Rosegarden::timeT time(getInsertionTime());
     Rosegarden::timeT endTime(time + m_snapGrid->getSnapTime(time));
 
     MatrixInsertionCommand* command = 

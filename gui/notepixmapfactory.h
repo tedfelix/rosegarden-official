@@ -63,6 +63,7 @@ public:
     void setSelected(bool selected)       { m_selected         = selected;  }
     void setHighlighted(bool highlighted) { m_highlighted      = highlighted;}
     void setQuantized(bool quantized)     { m_quantized        = quantized; }
+    void setTrigger(bool trigger)         { m_trigger          = trigger;   }
     void setIsOnLine(bool isOnLine)       { m_onLine           = isOnLine;  }
     void setSafeVertDistance(int safe)    { m_safeVertDistance = safe;      }
 
@@ -112,6 +113,7 @@ private:
     bool    m_selected;
     bool    m_highlighted;
     bool    m_quantized;
+    bool    m_trigger;
     bool    m_onLine;
     int     m_safeVertDistance;
 
@@ -168,7 +170,7 @@ public:
 				 bool cancellation = false);
     QCanvasPixmap* makeTimeSigPixmap(const Rosegarden::TimeSignature& sig);
     QCanvasPixmap* makeHairpinPixmap(int length, bool isCrescendo);
-    QCanvasPixmap* makeSlurPixmap(int length, int dy, bool above);
+    QCanvasPixmap* makeSlurPixmap(int length, int dy, bool above, bool phrasing);
     QCanvasPixmap* makeOttavaPixmap(int length, int octavesUp);
     QCanvasPixmap* makeUnknownPixmap();
     QCanvasPixmap* makeTextPixmap(const Rosegarden::Text &text);
@@ -181,7 +183,7 @@ public:
 		  QPainter &painter, int x, int y);
     void drawHairpin(int length, bool isCrescendo,
 		     QPainter &painter, int x, int y);
-    void drawSlur(int length, int dy, bool above,
+    void drawSlur(int length, int dy, bool above, bool phrasing,
 		  QPainter &painter, int x, int y);
     void drawOttava(int length, int octavesUp,
 		    QPainter &painter, int x, int y);

@@ -364,6 +364,13 @@ TempoView::makeInitialSelection(Rosegarden::timeT time)
     }
 }
 
+Rosegarden::Segment *
+TempoView::getCurrentSegment()
+{
+    if (m_segments.empty()) return 0;
+    else return *m_segments.begin();
+}
+
 QString
 TempoView::makeTimeString(Rosegarden::timeT time, int timeMode)
 {

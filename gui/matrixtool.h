@@ -233,6 +233,7 @@ public slots:
 
 signals:
     void gotSelection(); // inform that we've got a new selection
+    void editTriggerSegment(int);
     
 protected:
     MatrixSelector(MatrixView*);

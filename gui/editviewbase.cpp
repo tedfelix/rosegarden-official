@@ -46,6 +46,7 @@
 #include "barbuttons.h"
 #include "Clipboard.h"
 #include "sequencemanager.h"
+#include "segmentcommands.h"
 
 #include "rosedebug.h"
 
@@ -223,6 +224,14 @@ void EditViewBase::setupActions(QString rcFileName, bool haveClipboard)
     new KAction(i18n("Open in &Event List Editor"), icon, 0, this,
                 SLOT(slotOpenInEventList()), actionCollection(),
                 "open_in_event_list");
+
+    new KAction(i18n("Set Segment Start Time..."), 0, this,
+		SLOT(slotSetSegmentStartTime()), actionCollection(),
+		"set_segment_start");
+
+    new KAction(i18n("Set Segment Duration..."), 0, this,
+		SLOT(slotSetSegmentDuration()), actionCollection(),
+		"set_segment_duration");
 
     // add undo and redo to edit menu and toolbar
     getCommandHistory()->attachView(actionCollection());
@@ -622,6 +631,57 @@ EditViewBase::slotStateChanged(const QString& s,
                                bool noReverse)
 {
     stateChanged(s, noReverse ? KXMLGUIClient::StateNoReverse : KXMLGUIClient::StateReverse);
+}
+
+
+void
+EditViewBase::slotSetSegmentStartTime()
+{
+    Rosegarden::Segment *s = getCurrentSegment();
+    if (!s) return;
+
+    TimeDialog dialog(this, i18n("Segment Start Time"),
+		      &getDocument()->getComposition(),
+		      s->getStartTime());
+
+    if (dialog.exec() == QDialog::Accepted) {
+
+	SegmentReconfigureCommand *command =
+	    new SegmentReconfigureCommand(i18n("Set Segment Start Time"));
+	
+	command->addSegment
+	    (s, dialog.getTime(),
+	     s->getEndMarkerTime() - s->getStartTime() + dialog.getTime(),
+	     s->getTrack());
+
+        addCommandToHistory(command);
+    }
+}
+
+
+void
+EditViewBase::slotSetSegmentDuration()
+{
+    Rosegarden::Segment *s = getCurrentSegment();
+    if (!s) return;
+
+    TimeDialog dialog(this, i18n("Segment Duration"),
+		      &getDocument()->getComposition(),
+		      s->getStartTime(),
+		      s->getEndMarkerTime() - s->getStartTime());
+
+    if (dialog.exec() == QDialog::Accepted) {
+	
+	SegmentReconfigureCommand *command =
+	    new SegmentReconfigureCommand(i18n("Set Segment Duration"));
+	
+	command->addSegment
+	    (s, s->getStartTime(),
+	     s->getStartTime() + dialog.getTime(),
+	     s->getTrack());
+
+        addCommandToHistory(command);
+    }
 }
 
 

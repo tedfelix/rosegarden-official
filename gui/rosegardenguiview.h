@@ -162,6 +162,7 @@ public slots:
     void slotEditSegmentsMatrix(std::vector<Rosegarden::Segment*>);
     void slotEditSegmentEventList(Rosegarden::Segment*);
     void slotEditSegmentsEventList(std::vector<Rosegarden::Segment*>);
+    void slotEditTriggerSegment(int);
     void slotEditSegmentAudio(Rosegarden::Segment*);
     void slotSegmentAutoSplit(Rosegarden::Segment*);
     void slotEditRepeat(Rosegarden::Segment*, Rosegarden::timeT);

@@ -1480,6 +1480,10 @@ void NotationView::setupActions()
                 (Rosegarden::Indication::Slur), icon, 0, this,
                 SLOT(slotGroupSlur()), actionCollection(), "slur");
 
+    new KAction(GroupMenuAddIndicationCommand::getGlobalName
+                (Rosegarden::Indication::PhrasingSlur), 0, 0, this,
+                SLOT(slotGroupPhrasingSlur()), actionCollection(), "phrasing_slur");
+
     icon = QIconSet
         (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
         ("group-glissando")));
@@ -1708,6 +1712,10 @@ void NotationView::setupActions()
                 SLOT(slotMarksAddFingeringMarkFromAction()), actionCollection(),
                 "add_fingering_5");
 
+    new KAction(MarksMenuAddFingeringMarkCommand::getGlobalName("+"), 0, Key_9 + ALT, this,
+                SLOT(slotMarksAddFingeringMarkFromAction()), actionCollection(),
+                "add_fingering_plus");
+
     new KAction(MarksMenuAddFingeringMarkCommand::getGlobalName(), 0, 0, this,
                 SLOT(slotMarksAddFingeringMark()), actionCollection(),
                 "add_fingering_mark");
@@ -1719,6 +1727,14 @@ void NotationView::setupActions()
     new KAction(MarksMenuRemoveFingeringMarksCommand::getGlobalName(), 0, this,
                 SLOT(slotMarksRemoveFingeringMarks()), actionCollection(),
                 "remove_fingering_marks");
+
+    new KAction(i18n("Make &Ornament..."), 0, this,
+		SLOT(slotMakeOrnament()), actionCollection(),
+		"make_ornament");
+
+    new KAction(i18n("&Use Ornament..."), 0, this,
+		SLOT(slotUseOrnament()), actionCollection(),
+		"use_ornament");
 
     static QString slashTitles[] = {
 	i18n("&None"), "&1", "&2", "&3", "&4", "&5"
@@ -2953,7 +2969,7 @@ NotationView::updateThumbnails(bool complete)
 	if (m_composer) m_composer->hide();
 	if (m_copyright) m_copyright->hide();
 
-	for (int page = 0; page < maxPageCount; ++page) {
+	for (size_t page = 0; page < maxPageCount; ++page) {
 
 	    bool havePageNumber = ((m_pageNumbers.size() > page) &&
 				   (m_pageNumbers[page] != 0));

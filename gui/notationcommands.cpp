@@ -756,6 +756,8 @@ GroupMenuAddIndicationCommand::getGlobalName(std::string indicationType)
 {
     if (indicationType == Rosegarden::Indication::Slur) {
 	return i18n("Add S&lur");
+    } else if (indicationType == Rosegarden::Indication::PhrasingSlur) {
+	return i18n("Add &Phrasing Slur");
     } else if (indicationType == Rosegarden::Indication::QuindicesimaUp) {
 	return i18n("Add Double-Octave Up");
     } else if (indicationType == Rosegarden::Indication::OttavaUp) {

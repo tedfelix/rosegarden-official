@@ -104,6 +104,10 @@ const std::string GROUP_TYPE_BEAMED		 = "beamed";
 const std::string GROUP_TYPE_TUPLED		 = "tupled";
 const std::string GROUP_TYPE_GRACE		 = "grace";
 
+const PropertyName TRIGGER_SEGMENT_ID            = "triggersegmentid";
+const PropertyName TRIGGER_SEGMENT_RETUNE        = "triggersegmentretune";
+const PropertyName TRIGGER_SEGMENT_ADJUST_DURATION = "triggersegmentadjustduration";
+
 }
 
 }

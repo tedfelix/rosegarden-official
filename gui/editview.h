@@ -327,7 +327,9 @@ protected:
      * returns any specified accidental through the reference arg.
      */
     int getPitchFromNoteInsertAction(QString actionName,
-				     Rosegarden::Accidental &acc);
+				     Rosegarden::Accidental &acc,
+				     const Rosegarden::Clef &clef,
+				     const Rosegarden::Key &key);
 
     /**
      * Abstract method to get the view size
@@ -353,11 +355,6 @@ protected:
      */ 
     virtual Rosegarden::timeT getInsertionTime(Rosegarden::Clef &clef,
 					       Rosegarden::Key &key);
-
-    /**
-     * Abstract method to get current segment
-     */
-    virtual Rosegarden::Segment *getCurrentSegment() = 0;
 
     /**
      * Abstract method to get current staff (the returned staff will be

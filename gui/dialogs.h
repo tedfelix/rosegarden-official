@@ -906,4 +906,29 @@ protected:
 };
 
 
+class MakeOrnamentDialog : public KDialogBase
+{
+public:
+    MakeOrnamentDialog(QWidget *parent, QString defaultName, int defaultBasePitch);
+    
+    QString getName() const;
+    int getBasePitch() const;
+
+protected:
+    QLineEdit *m_name;
+    RosegardenPitchChooser *m_pitch;
+};
+
+
+class UseOrnamentDialog : public KDialogBase
+{
+public:
+    UseOrnamentDialog(QWidget *parent);
+    
+
+protected:
+
+};
+
+
 #endif

@@ -108,6 +108,8 @@ protected:
                    const QString& fileName);
 
     virtual size_t computeMmappedSize();
+    
+    virtual size_t addMmappedSize(Rosegarden::Segment *);
 
     /// actual setup, must be called after ctor, calls virtual methods
     virtual void init();
@@ -123,6 +125,11 @@ protected:
 
     /// dump all segment data in the file
     virtual void dump();
+
+    void mergeTriggerSegment(Rosegarden::Segment **target,
+			     Rosegarden::Event *trigger,
+			     Rosegarden::timeT performanceDuration,
+			     Rosegarden::Composition::TriggerSegmentRec &rec);
 
     //--------------- Data members ---------------------------------
     RosegardenGUIDoc* m_doc;

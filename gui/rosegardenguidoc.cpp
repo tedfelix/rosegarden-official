@@ -865,9 +865,16 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 	totalEvents += (*segitr)->size();
     }
 
+    for (Composition::triggersegmentcontaineriterator ci =
+	     m_composition.getTriggerSegments().begin();
+         ci != m_composition.getTriggerSegments().end(); ++ci) {
+	totalEvents += ci->second.segment->size();
+    }
+
     // output all elements
     //
     // Iterate on segments
+
     for (Composition::iterator segitr = m_composition.begin();
          segitr != m_composition.end(); ++segitr) {
 
@@ -875,6 +882,21 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 
         saveSegment(outStream, segment, progress, totalEvents);
 
+    }
+
+    // Put a break in the file
+    //
+    outStream << endl << endl;
+
+    for (Composition::triggersegmentcontaineriterator ci =
+	     m_composition.getTriggerSegments().begin();
+         ci != m_composition.getTriggerSegments().end(); ++ci) {
+
+	QString triggerAtts = QString("triggerid=\"%1\" triggerbasepitch=\"%2\"")
+	    .arg(ci->first).arg(ci->second.pitch);
+
+	Segment *segment = ci->second.segment;
+        saveSegment(outStream, segment, progress, totalEvents, triggerAtts);
     }
 
     // Put a break in the file
@@ -948,7 +970,7 @@ bool RosegardenGUIDoc::exportStudio(const QString& filename,
     return true;
 }
 
-void RosegardenGUIDoc::saveSegment(QTextStream& outStream, Segment *segment, KProgress* progress, int totalEvents)
+void RosegardenGUIDoc::saveSegment(QTextStream& outStream, Segment *segment, KProgress* progress, int totalEvents, QString extraAttributes)
 {
     QString time;
 
@@ -957,6 +979,8 @@ void RosegardenGUIDoc::saveSegment(QTextStream& outStream, Segment *segment, KPr
     outStream << QString("<segment track=\"%1\" start=\"%2\" ") 
         .arg(segment->getTrack())
         .arg(segment->getStartTime());
+
+    if (extraAttributes) outStream << extraAttributes << " ";
 
     outStream << "label=\"" <<
         strtoqstr(Rosegarden::XmlExportable::encode(segment->getLabel()));

@@ -926,12 +926,14 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 
 		int length, y1;
 
-		if (indicationType == Indication::Slur &&
+		if ((indicationType == Indication::Slur ||
+		     indicationType == Indication::PhrasingSlur) &&
 		    indicationEnd != getViewElementList()->begin()) {
 		    --indicationEnd;
 		}
 
-		if (indicationType != Indication::Slur &&
+		if ((indicationType != Indication::Slur &&
+		     indicationType != Indication::PhrasingSlur) &&
 		    indicationEnd != getViewElementList()->begin() &&
 		    (indicationEnd == getViewElementList()->end() ||
 		     indicationEndTime ==
@@ -983,7 +985,8 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 			    (length, indicationType == Indication::Crescendo);
 		    }
 		    
-		} else if (indicationType == Indication::Slur) {
+		} else if (indicationType == Indication::Slur ||
+			   indicationType == Indication::PhrasingSlur) {
 		    
 		    bool above = true;
 		    long dy = 0;
@@ -1002,11 +1005,14 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 						   policy);
 			    m_notePixmapFactory->drawSlur
 				(length, dy, above,
+				 indicationType == Indication::PhrasingSlur,
 				 *m_printPainter, int(coords.first), coords.second);
 			    m_printPainter->restore();
 			}
 		    } else {
-			pixmap = m_notePixmapFactory->makeSlurPixmap(length, dy, above);
+			pixmap = m_notePixmapFactory->makeSlurPixmap
+			    (length, dy, above,
+			     indicationType == Indication::PhrasingSlur);
 		    }
 		    
 		} else {
@@ -1271,6 +1277,10 @@ NotationStaff::renderNote(Rosegarden::ViewElementList::iterator &vli)
 	     elt->getViewDuration()     != elt->event()->getDuration());
     }
     params.setQuantized(quantized);
+
+    bool trigger = false;
+    if (elt->event()->has(TRIGGER_SEGMENT_ID)) trigger = true;
+    params.setTrigger(trigger);
 
     params.setNoteType(note);
     params.setDots(dots);

@@ -557,6 +557,15 @@ void MatrixSelector::handleMouseDoubleClick(Rosegarden::timeT ,
 
     if (m_clickedElement) {
 
+	if (m_clickedElement->event()->isa(Rosegarden::Note::EventType) &&
+	    m_clickedElement->event()->has(Rosegarden::BaseProperties::TRIGGER_SEGMENT_ID)) {
+	    
+	    int id = m_clickedElement->event()->get<Rosegarden::Int>
+		(Rosegarden::BaseProperties::TRIGGER_SEGMENT_ID);
+	    emit editTriggerSegment(id);
+	    return;
+	}
+
 	EventEditDialog dialog(m_mParentView, *m_clickedElement->event(), true);
 
 	if (dialog.exec() == QDialog::Accepted &&

@@ -36,6 +36,7 @@
 #include "ControlBlock.h"
 #include "MappedEvent.h"
 #include "SegmentPerformanceHelper.h"
+#include "BaseProperties.h"
 
 #include "rosestrings.h"
 #include "rosegardenguidoc.h"
@@ -53,6 +54,9 @@ using Rosegarden::Segment;
 using Rosegarden::Composition;
 using Rosegarden::MappedEvent;
 using Rosegarden::timeT;
+using Rosegarden::Int;
+using Rosegarden::Bool;
+using Rosegarden::BaseProperties;
 
 ControlBlockMmapper::ControlBlockMmapper(RosegardenGUIDoc* doc)
     : m_doc(doc),
@@ -257,6 +261,13 @@ size_t SegmentMmapper::computeMmappedSize()
 }
 
 
+size_t SegmentMmapper::addMmappedSize(Segment *s)
+{
+    int repeatCount = getSegmentRepeatCount();
+    return m_mmappedSize + (repeatCount + 1) * s->size() * sizeof(MappedEvent);
+}
+
+
 SegmentMmapper::~SegmentMmapper()
 {
     SEQMAN_DEBUG << "~SegmentMmapper : " << this
@@ -447,57 +458,132 @@ void SegmentMmapper::dump()
 
     for (int repeatNo = 0; repeatNo <= repeatCount; ++repeatNo) {
 
+	Segment *triggered = 0;
+	Segment::iterator *i = 0;
+
         for (Segment::iterator j = m_segment->begin();
-             j != m_segment->end(); ++j) {
+	     j != m_segment->end() || (i && *i != triggered->end()); ) {
 
-            // Skip rests
-            //
-            if ((*j)->isa(Rosegarden::Note::EventRestType)) continue;
+	    bool usingi = false;
+	    Segment::iterator *k = &j;
 
-            timeT playTime =
-                helper.getSoundingAbsoluteTime(j) + repeatNo * segmentDuration;
-            if (playTime >= repeatEndTime) break;
+	    if (i && *i != triggered->end() &&
+		(j == m_segment->end() ||
+		 (**i)->getAbsoluteTime() < (*j)->getAbsoluteTime())) {
+		k = i;
+		usingi = true;
+	    }
 
-	    timeT playDuration = helper.getSoundingDuration(j);
+	    if (!usingi) { // don't permit nested triggered segments
 
-            // No duration and we're a note?  Probably in a tied
-            // series, but not as first note
-            //
-            if (playDuration == 0 && (*j)->isa(Rosegarden::Note::EventType))
-                continue;
-                
-	    if (playTime + playDuration > repeatEndTime)
-		playDuration = repeatEndTime - playTime;
+		long triggerId = -1;
+		(**k)->get<Int>(Rosegarden::BaseProperties::TRIGGER_SEGMENT_ID,
+				triggerId);
 
-	    playTime = playTime + m_segment->getDelay();
-            eventTime = comp.getElapsedRealTime(playTime);
+		RG_DEBUG << "SegmentMmapper::dump: triggerId " << triggerId
+			 << " for event at time " << (**k)->getAbsoluteTime() << endl;
 
-	    // slightly quicker than calling helper.getRealSoundingDuration()
-	    duration =
-		comp.getElapsedRealTime(playTime + playDuration) - eventTime;
+		if (triggerId >= 0) {
 
-	    eventTime = eventTime + m_segment->getRealTimeDelay();
+		    Rosegarden::Composition::TriggerSegmentRec rec =
+			comp.getTriggerSegmentRec(triggerId);
 
-            try {
-                // Create mapped event in mmapped buffer
-                MappedEvent *mE = new (bufPos) MappedEvent(0, // the instrument will be extracted from the ControlBlock by the sequencer
-                                                           **j,
-                                                           eventTime,
-                                                           duration);
-                mE->setTrackId(track->getId());
+		    if (rec.segment) {
+			Rosegarden::timeT performanceDuration =
+			    helper.getSoundingDuration(j);
+			if (performanceDuration > 0) {
+			    mergeTriggerSegment(&triggered, *j,
+						performanceDuration, rec);
+			    size_t sz = addMmappedSize(rec.segment);
+			    size_t offset = bufPos - m_mmappedEventBuffer;
+			    setFileSize(sz);
+			    remap(sz);
+			    bufPos = m_mmappedEventBuffer + offset;
+			}
+		    }
 
-		if (m_segment->getTranspose() != 0 &&
-		    (*j)->isa(Rosegarden::Note::EventType)) {
-		    mE->setPitch(mE->getPitch() + m_segment->getTranspose());
+		    if (triggered) {
+			if (i) delete i;
+			i = new Segment::iterator
+			    (triggered->findTime((*j)->getAbsoluteTime()));
+		    }
+
+		    // Use the next triggered event (presumably the
+		    // first of the current triggered segment) instead
+		    // of the one that triggered it
+
+		    ++j; // whatever happens, we don't want to write this one
+
+		    if (i && *i != triggered->end() &&
+			(j == m_segment->end() ||
+			 ((**i)->getAbsoluteTime() < (*j)->getAbsoluteTime()))) {
+			k = i;
+			usingi = true;
+		    } else {
+			// no joy at all
+			continue; 
+		    }
 		}
+	    }
 
-                ++bufPos;
+	    // Ignore rests
+	    //
+            if (!(**k)->isa(Rosegarden::Note::EventRestType)) {
 
-            } catch(...) {
-                SEQMAN_DEBUG << "SegmentMmapper::dump - caught exception while trying to create MappedEvent\n";
-            }
+		timeT playTime =
+		    helper.getSoundingAbsoluteTime(*k) + repeatNo * segmentDuration;
+		if (playTime >= repeatEndTime) break;
+
+		timeT playDuration = helper.getSoundingDuration(*k);
+
+		// Ignore notes without duration -- they're probably in a tied
+		// series but not as first note
+		//
+		if (playDuration > 0 || !(**k)->isa(Rosegarden::Note::EventType)) {
+                
+		    if (playTime + playDuration > repeatEndTime)
+			playDuration = repeatEndTime - playTime;
+
+		    playTime = playTime + m_segment->getDelay();
+		    eventTime = comp.getElapsedRealTime(playTime);
+
+		    // slightly quicker than calling helper.getRealSoundingDuration()
+		    duration =
+			comp.getElapsedRealTime(playTime + playDuration) - eventTime;
+
+		    eventTime = eventTime + m_segment->getRealTimeDelay();
+
+		    try {
+			// Create mapped event in mmapped buffer.  The
+			// instrument will be extracted from the ControlBlock
+			// by the sequencer, so we set it to zero here.
+			MappedEvent *mE = new (bufPos)
+			    MappedEvent(0,
+					***k, // three stars! what an accolade
+					eventTime,
+					duration);
+			mE->setTrackId(track->getId());
+
+			if (m_segment->getTranspose() != 0 &&
+			    (**k)->isa(Rosegarden::Note::EventType)) {
+			    mE->setPitch(mE->getPitch() + m_segment->getTranspose());
+			}
+
+			RG_DEBUG << "Wrote pitch " << int(mE->getPitch()) << " from " << (i == k ? "i" : "j") << " at " << bufPos-m_mmappedEventBuffer << endl;
+
+			++bufPos;
+
+		    } catch(...) {
+			SEQMAN_DEBUG << "SegmentMmapper::dump - caught exception while trying to create MappedEvent\n";
+		    }
+		}
+	    }
+	
+	    ++*k; // increment either i or j, whichever one we just used
         }
-        
+
+	delete i;
+	delete triggered;
     }
 
     // Store the number of events at the start of the shared memory region
@@ -525,6 +611,79 @@ unsigned int SegmentMmapper::getSegmentRepeatCount()
 
     return repeatCount;
 }
+
+void
+SegmentMmapper::mergeTriggerSegment(Rosegarden::Segment **target,
+				    Rosegarden::Event *trigger,
+				    Rosegarden::timeT evDuration,
+				    Rosegarden::Composition::TriggerSegmentRec &rec)
+{
+    if (!rec.segment || rec.segment->empty()) return;
+    if (!*target) *target = new Rosegarden::Segment;
+
+    Rosegarden::timeT evTime = trigger->getAbsoluteTime();
+    Rosegarden::timeT trStart = rec.segment->getStartTime();
+    Rosegarden::timeT trEnd = rec.segment->getEndMarkerTime();
+    Rosegarden::timeT trDuration = trEnd - trStart;
+    if (trDuration == 0) return;
+
+    bool retune = false;
+    bool adjustDuration = false;
+
+    trigger->get<Bool>
+	(BaseProperties::TRIGGER_SEGMENT_RETUNE, retune);
+    
+    trigger->get<Bool>
+	(BaseProperties::TRIGGER_SEGMENT_ADJUST_DURATION, adjustDuration);
+
+    long evPitch = rec.pitch;
+    (void)trigger->get<Int>(BaseProperties::PITCH, evPitch);
+    int pitchDiff = evPitch - rec.pitch;
+
+    // Velocity: if the trigger event has velocity 100, the triggered
+    // segment will be reproduced with its original velocity.
+    // Otherwise it will be adjusted accordingly
+    long evVelocity = 100;
+    (void)trigger->get<Int>(BaseProperties::VELOCITY, evVelocity);
+    int veloDiff = evVelocity - 100;
+
+    for (Segment::iterator i = rec.segment->begin(); i != rec.segment->end(); ++i) {
+	
+	Rosegarden::timeT t = (*i)->getAbsoluteTime() - trStart;
+	Rosegarden::timeT d = (*i)->getDuration();
+
+	RG_DEBUG << "pre-adjust:  t = " << t << ", d = " << d << ", trStart " << trStart << ", evTime " << evTime << ", evDuration " << evDuration << ", trDuration " << trDuration << endl;
+
+	if (adjustDuration) {
+	    t = t * evDuration / trDuration;
+	    d = d * evDuration / trDuration;
+	}
+
+	t += evTime;
+
+	RG_DEBUG << "post-adjust: t = " << t << ", d = " << d << endl;
+
+	Rosegarden::Event *newEvent = new Rosegarden::Event(**i, t, d);
+
+	if (retune && newEvent->has(BaseProperties::PITCH)) {
+	    int pitch = newEvent->get<Int>(BaseProperties::PITCH) + pitchDiff;
+	    if (pitch > 127) pitch = 127;
+	    if (pitch < 0) pitch = 0;
+	    RG_DEBUG << "retune to pitch " << pitch << " (diff " << pitchDiff << ")" << endl;
+	    newEvent->set<Int>(BaseProperties::PITCH, pitch);
+	}
+
+	if (newEvent->has(BaseProperties::VELOCITY)) {
+	    int velocity = newEvent->get<Int>(BaseProperties::VELOCITY) + veloDiff;
+	    if (velocity > 127) velocity = 127;
+	    if (velocity < 0) velocity = 0;
+	    newEvent->set<Int>(BaseProperties::VELOCITY, velocity);
+	}
+
+	(*target)->insert(newEvent);
+    }
+}
+    
 
 //----------------------------------------
 

@@ -17,6 +17,9 @@
   <Separator/>
   <Action name="add_tempo"/>
   <Action name="add_time_signature"/>
+  <Separator/>
+  <Action name="set_segment_start"/>
+  <Action name="set_segment_duration"/>
 </Menu>
 
 <Menu name="View">

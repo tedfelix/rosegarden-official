@@ -649,6 +649,7 @@ const PropertyName Indication::IndicationTypePropertyName = "indicationtype";
 static const PropertyName IndicationDurationPropertyName = "indicationduration";//!!!
 
 const std::string Indication::Slur = "slur";
+const std::string Indication::PhrasingSlur = "phrasingslur";
 const std::string Indication::Crescendo = "crescendo";
 const std::string Indication::Decrescendo = "decrescendo";
 const std::string Indication::Glissando = "glissando";
@@ -668,7 +669,6 @@ Indication::Indication(const Event &e)
     }
     m_indicationType = s;
 
-    //!!!
     m_duration = e.getDuration();
     if (m_duration == 0) {
 	m_duration = e.get<Int>(IndicationDurationPropertyName); // obsolete property
@@ -711,8 +711,11 @@ bool
 Indication::isValid(const std::string &s) const
 {
     return
-	(s == Slur || s == Crescendo || s == Decrescendo || s == Glissando ||
-	 s == QuindicesimaUp || s == OttavaUp || s == OttavaDown || s == QuindicesimaDown);
+	(s == Slur || s == PhrasingSlur ||
+	 s == Crescendo || s == Decrescendo ||
+	 s == Glissando ||
+	 s == QuindicesimaUp || s == OttavaUp ||
+	 s == OttavaDown || s == QuindicesimaDown);
 }
 
 

@@ -601,7 +601,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                getComposition().setPlayMetronome(false);
         }
 
-        QString recMetStr = atts.value("playmetronome");
+        QString recMetStr = atts.value("recordmetronome");
         if (recMetStr)
         {
             if (recMetStr.toInt())
@@ -609,6 +609,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             else
                getComposition().setRecordMetronome(false);
         }
+
+	QString nextTriggerIdStr = atts.value("nexttriggerid");
+	if (nextTriggerIdStr) {
+	    getComposition().setNextTriggerSegmentId(nextTriggerIdStr.toInt());
+	}
 
 	QString copyrightStr = atts.value("copyright");
 	if (copyrightStr)
@@ -793,8 +798,21 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         }
 
 	m_currentTime = startTime;
-        getComposition().addSegment(m_currentSegment);
-        getComposition().setSegmentStartTime(m_currentSegment, startTime);
+
+	QString triggerIdStr = atts.value("triggerid");
+	QString triggerPitchStr = atts.value("triggerbasepitch");
+
+	if (triggerIdStr) {
+	    int pitch = 64;
+	    if (triggerPitchStr) pitch = triggerPitchStr.toInt();
+	    getComposition().addTriggerSegment(m_currentSegment,
+					       pitch,
+					       triggerIdStr.toInt());
+	    m_currentSegment->setStartTimeDataMember(startTime);
+	} else {
+	    getComposition().addSegment(m_currentSegment);
+	    getComposition().setSegmentStartTime(m_currentSegment, startTime);
+	}
 
 	QString endMarkerStr = atts.value("endmarker");
 	if (endMarkerStr) {

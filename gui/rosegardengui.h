@@ -72,6 +72,7 @@ namespace Rosegarden
 class RosegardenProgressBar;
 class ControlEditorDialog;
 class MarkerEditorDialog;
+class TriggerSegmentManager;
 class PlayListDialog;
 class SegmentParameterBox;
 class InstrumentParameterBox;
@@ -1123,6 +1124,11 @@ public slots:
     void slotPlayListPlay(QString url);
 
     /**
+     * View the trigger segments manager
+     */
+    void slotManageTriggerSegments();
+
+    /**
      * View the audio file manager - and some associated actions
      */
     void slotAudioManager();
@@ -1184,6 +1190,11 @@ public slots:
      * when MarkerEditor is being closed
      */
     void slotMarkerEditorClosed();
+
+    /**
+     * when TriggerManager is being closed
+     */
+    void slotTriggerManagerClosed();
 
     /**
      * when AudioManagerDialog is being closed
@@ -1329,6 +1340,7 @@ private:
     MidiMixerWindow       *m_midiMixer;
     BankEditorDialog      *m_bankEditor;
     MarkerEditorDialog    *m_markerEditor;
+    TriggerSegmentManager *m_triggerSegmentManager;
     std::set<ControlEditorDialog *> m_controlEditors;
     std::map<int, Rosegarden::AudioPluginDialog*> m_pluginDialogs;
 

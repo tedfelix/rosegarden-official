@@ -68,6 +68,7 @@
         <Action name="split_by_pitch"/>
         <Action name="join_segments"/>
         <Action name="repeats_to_real_copies"/>
+        <Action name="manage_trigger_segments"/>
         <Separator/>
         <Action name="set_tempo_to_segment_length"/>
       <Action name="audio_manager"/>

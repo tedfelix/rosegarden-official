@@ -875,6 +875,12 @@ void NotationView::slotGroupSlur()
     slotAddIndication(Rosegarden::Indication::Slur, i18n("slur"));
 } 
 
+void NotationView::slotGroupPhrasingSlur()
+{
+    KTmpStatusMsg msg(i18n("Adding phrasing slur..."), this);
+    slotAddIndication(Rosegarden::Indication::PhrasingSlur, i18n("phrasing slur"));
+} 
+
 void NotationView::slotGroupGlissando()
 {
     KTmpStatusMsg msg(i18n("Adding glissando..."), this);
@@ -1088,10 +1094,14 @@ void NotationView::slotInsertNoteFromAction()
     int pitch = 0;
     Rosegarden::Accidental accidental =
         Rosegarden::Accidentals::NoAccidental;
-               
+
+    Rosegarden::timeT time(getInsertionTime());
+    Rosegarden::Key key = segment.getKeyAtTime(time);
+    Rosegarden::Clef clef = segment.getClefAtTime(time);
+
     try {
 
-        pitch = getPitchFromNoteInsertAction(name, accidental);
+        pitch = getPitchFromNoteInsertAction(name, accidental, clef, key);
 
     } catch (...) {
         
@@ -1104,8 +1114,7 @@ void NotationView::slotInsertNoteFromAction()
         
     NOTATION_DEBUG << "Inserting note at pitch " << pitch << endl;
     
-    noteInserter->insertNote(segment, getInsertionTime(), pitch,
-                             accidental);
+    noteInserter->insertNote(segment, time, pitch, accidental);
 }
 
 void NotationView::slotInsertRest()
@@ -1339,7 +1348,10 @@ void NotationView::slotMarksAddFingeringMarkFromAction()
     QString name = s->name();
 
     if (name.left(14) == "add_fingering_") {
+
 	QString fingering = name.right(name.length() - 14);
+
+	if (fingering == "plus") fingering = "+";
 
 	if (m_currentEventSelection) {
 	    addCommandToHistory(new MarksMenuAddFingeringMarkCommand
@@ -1361,6 +1373,92 @@ void NotationView::slotMarksRemoveFingeringMarks()
         addCommandToHistory(new MarksMenuRemoveFingeringMarksCommand
                             (*m_currentEventSelection));
 }
+
+
+void
+NotationView::slotMakeOrnament()
+{
+    if (!m_currentEventSelection) return;
+
+    EventSelection::eventcontainer &ec =
+	m_currentEventSelection->getSegmentEvents();
+
+    int basePitch;
+    NoteStyle *style = NoteStyleFactory::getStyle(NoteStyleFactory::DefaultStyle);
+
+    for (EventSelection::eventcontainer::iterator i =
+	     ec.begin(); i != ec.end(); ++i) {
+	if ((*i)->isa(Rosegarden::Note::EventType)) {
+	    if ((*i)->has(Rosegarden::BaseProperties::PITCH)) {
+		basePitch = (*i)->get<Rosegarden::Int>
+		    (Rosegarden::BaseProperties::PITCH);
+		style = NoteStyleFactory::getStyleForEvent(*i);
+		break;
+	    }
+	}
+    }
+
+    NotationStaff *staff = m_staffs[m_currentStaff];
+    Segment &segment = staff->getSegment();
+    
+    Rosegarden::timeT absTime = m_currentEventSelection->getStartTime();
+    Rosegarden::timeT duration = m_currentEventSelection->getTotalDuration();
+    Rosegarden::Note note(Rosegarden::Note::getNearestNote(duration));
+
+    Rosegarden::Track *track =
+	segment.getComposition()->getTrackById(segment.getTrack());
+    QString name;
+    int barNo = segment.getComposition()->getBarNumber(absTime);
+    if (track) {
+	name = QString("Ornament track %1 bar %2").arg(track->getPosition() + 1).arg(barNo + 1);
+    } else {
+	name = QString("Ornament bar %1").arg(barNo + 1);
+    }
+
+    MakeOrnamentDialog dialog(this, name, basePitch);
+    if (dialog.exec() != QDialog::Accepted) return;
+    
+    name = dialog.getName();
+    basePitch = dialog.getBasePitch();
+
+    KMacroCommand *command = new KMacroCommand(i18n("Make Ornament"));
+
+    command->addCommand(new CutCommand
+			(*m_currentEventSelection,
+			 getDocument()->getClipboard()));
+
+    command->addCommand(new PasteToTriggerSegmentCommand
+			(&getDocument()->getComposition(), 
+			 getDocument()->getClipboard(),
+			 name, basePitch));
+
+    command->addCommand(new InsertTriggerNoteCommand
+			(segment, absTime, note, basePitch, 100,
+			 style->getName(),
+			 getDocument()->getComposition().getNextTriggerSegmentId(),
+			 true, //!!!
+			 true)); //!!!
+
+    addCommandToHistory(command);
+}
+
+void
+NotationView::slotUseOrnament()
+{
+    // Take an existing note and match an ornament to it.
+    
+    if (!m_currentEventSelection) return;
+    
+//!!! dialog
+    
+    addCommandToHistory(new SetTriggerCommand(*m_currentEventSelection,
+					      0, //!!!
+					      true,
+					      true,
+					      true,
+					      i18n("Use Ornament")));
+}
+
 
 void NotationView::slotEditAddClef()
 {
@@ -1508,6 +1606,14 @@ void NotationView::slotEditElement(NotationStaff *staff,
 	    }
 
 	    return;
+
+	} else if (element->isNote() &&
+		   element->event()->has(Rosegarden::BaseProperties::TRIGGER_SEGMENT_ID)) {
+	    
+	    int id = element->event()->get<Rosegarden::Int>
+		(Rosegarden::BaseProperties::TRIGGER_SEGMENT_ID);
+	    emit editTriggerSegment(id);
+	    return;
 	}
     }
 
@@ -1581,7 +1687,7 @@ NotationView::slotSetPointerPosition(timeT time, bool scroll)
     }
 
     if (scroll && haveMinCy) {
-	getCanvasView()->slotScrollHoriz(cx);
+	getCanvasView()->slotScrollHoriz(int(cx));
 	getCanvasView()->slotScrollVertToTop(minCy);
     }
 
@@ -1796,12 +1902,10 @@ NotationView::doDeferredCursorMove()
         staff->setInsertCursorPosition(*m_hlayout, t);
 
         if (type == CursorMoveAndMakeVisible) {
-//!!!            getCanvasView()->slotScrollHoriz(int(staff->getCanvasXForLayoutX
-//						 (m_hlayout->getXForTime(t))));
 	    double cx;
 	    int cy;
 	    staff->getInsertCursorPosition(cx, cy);
-	    getCanvasView()->slotScrollHoriz(cx);
+	    getCanvasView()->slotScrollHoriz(int(cx));
 	    getCanvasView()->slotScrollVertSmallSteps(cy);
         }
 

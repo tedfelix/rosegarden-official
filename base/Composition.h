@@ -66,10 +66,17 @@ public:
 
     typedef std::map<TrackId, Track*> trackcontainer;
     typedef trackcontainer::iterator trackiterator;
+    typedef trackcontainer::const_iterator trackconstiterator;
 
     typedef std::vector<Marker*> markercontainer;
-    typedef std::vector<Marker*>::iterator markeriterator;
-    typedef std::vector<Marker*>::const_iterator markerconstiterator;
+    typedef markercontainer::iterator markeriterator;
+    typedef markercontainer::const_iterator markerconstiterator;
+
+    typedef unsigned int TriggerSegmentId;
+    struct TriggerSegmentRec { int pitch; Segment *segment; };
+    typedef std::map<TriggerSegmentId, TriggerSegmentRec> triggersegmentcontainer;
+    typedef triggersegmentcontainer::iterator triggersegmentcontaineriterator;
+    typedef triggersegmentcontainer::const_iterator triggersegmentcontainerconstiterator;
 
     Composition();
     virtual ~Composition();
@@ -104,6 +111,7 @@ public:
     //////
     //
     //  INSTRUMENT & TRACK
+
     Track* getTrackById(TrackId track);
 
     Track* getTrackByPosition(int position);
@@ -272,6 +280,79 @@ public:
      */
     bool weakDetachSegment(Segment*);
 
+
+    //////
+    //
+    //  TRIGGER SEGMENTS
+
+    triggersegmentcontainer &getTriggerSegments() { return m_triggerSegments; }
+    const triggersegmentcontainer &getTriggerSegments() const { return m_triggerSegments; }
+
+    /**
+     * Add a new trigger Segment with a given base pitch, and return
+     * its ID.
+     */
+    TriggerSegmentId addTriggerSegment(Segment *, int pitch);
+
+    /**
+     * Delete a trigger Segment.
+     */
+    void deleteTriggerSegment(TriggerSegmentId);
+
+    /**
+     * Detach a trigger Segment from the Composition.
+     */
+    void detachTriggerSegment(TriggerSegmentId);
+
+    /**
+     * Delete all trigger Segments.
+     */
+    void clearTriggerSegments();
+    
+    /**
+     * Return the TriggerSegmentId for the given Segment, or -1 if it is
+     * not a trigger Segment.
+     */
+    int getTriggerSegmentId(Segment *);
+    
+    /**
+     * Return the Segment for a given TriggerSegmentId
+     */
+    Segment *getTriggerSegment(TriggerSegmentId);
+
+    /**
+     * Return the base pitch for a given TriggerSegmentId
+     */
+    int getTriggerSegmentBasePitch(TriggerSegmentId);
+
+    /**
+     * Set the base pitch for a given TriggerSegmentId
+     */
+    void setTriggerSegmentBasePitch(TriggerSegmentId, int basePitch);
+
+    /**
+     * Return the Segment and base pitch for a given TriggerSegmentId
+     */
+    TriggerSegmentRec getTriggerSegmentRec(TriggerSegmentId);
+
+    /**
+     * Add a new trigger Segment with a given base pitch and ID.
+     * Fails silently if the ID is already in use.  This is intended
+     * for use from file load or from undo/redo.
+     */
+    void addTriggerSegment(Segment *, int pitch, TriggerSegmentId);
+
+    /**
+     * Get the ID of the next trigger segment that will be inserted.
+     */
+    TriggerSegmentId getNextTriggerSegmentId() const;
+
+    /**
+     * Specify the next trigger ID.  This is intended for use from file
+     * load only.  Do not use this function unless you know what you're
+     * doing.
+     */
+    void setNextTriggerSegmentId(TriggerSegmentId);
 
 
     //////
@@ -630,6 +711,7 @@ public:
     ColourMap& getGeneralColourMap() { return m_generalColourMap; }
     void setGeneralColourMap(Rosegarden::ColourMap &newmap);
 
+
     //////
     //
     // QUANTIZERS
@@ -711,6 +793,7 @@ protected:
     void checkSelectedAndRecordTracks();
     TrackId getClosestValidTrackId(TrackId id) const;
     
+
     //--------------- Data members ---------------------------------
     //
     trackcontainer                    m_tracks;
@@ -832,6 +915,11 @@ protected:
     // User defined markers in the composition
     //
     markercontainer                   m_markers;
+
+    // Trigger segments (unsorted segments fired by events elsewhere)
+    //
+    triggersegmentcontainer           m_triggerSegments;
+    TriggerSegmentId                  m_nextTriggerSegmentId;
  
     ColourMap                         m_segmentColourMap;
     ColourMap                         m_generalColourMap;

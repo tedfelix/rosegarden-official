@@ -71,6 +71,7 @@
 #include "rosegardendcop.h"
 #include "instrumentparameterbox.h"
 #include "sequencemanager.h" // for metronomeChanged()
+#include "timewidget.h"
 
 #include "rosedebug.h"
 
@@ -4725,5 +4726,35 @@ ExportDeviceDialog::getExportType()
 {
     if (m_exportAll->isChecked()) return ExportAll;
     else return ExportOne;
+}
+
+
+MakeOrnamentDialog::MakeOrnamentDialog(QWidget *parent, QString defaultName,
+				       int defaultBasePitch) :
+    KDialogBase(parent, "makeornamentdialog", true, i18n("Make Ornament"),
+		Ok | Cancel, Ok)
+{
+    QVBox *vbox = makeVBoxMainWidget();
+    QGroupBox *nameBox = new QGroupBox(2, Vertical, i18n("Name"), vbox);
+
+    QLabel *label = new QLabel(i18n("The name is used to identify both the ornament\nand the triggered segment that stores\nthe ornament's notes."), nameBox);
+
+    QHBox *hbox = new QHBox(nameBox);
+    new QLabel(i18n("Name:  "), hbox);
+    m_name = new QLineEdit(defaultName, hbox);
+
+    m_pitch = new RosegardenPitchChooser(i18n("Base pitch"), vbox, defaultBasePitch);
+}
+
+QString
+MakeOrnamentDialog::getName() const
+{
+    return m_name->text();
+}
+
+int
+MakeOrnamentDialog::getBasePitch() const
+{
+    return m_pitch->getPitch();
 }
 

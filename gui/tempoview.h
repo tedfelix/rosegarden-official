@@ -124,6 +124,7 @@ protected:
     virtual void readOptions();
     void makeInitialSelection(Rosegarden::timeT);
     QString makeTimeString(Rosegarden::timeT time, int timeMode);
+    virtual Rosegarden::Segment *getCurrentSegment();
 
     //--------------- Data members ---------------------------------
     KListView   *m_list;

@@ -423,6 +423,7 @@ public slots:
     void slotGroupGrace();
     void slotGroupUnGrace();
     void slotGroupSlur();
+    void slotGroupPhrasingSlur();
     void slotGroupGlissando();
     void slotGroupCrescendo();
     void slotGroupDecrescendo();
@@ -471,6 +472,8 @@ public slots:
     void slotMarksAddFingeringMarkFromAction();
     void slotMarksRemoveMarks();
     void slotMarksRemoveFingeringMarks();
+    void slotMakeOrnament();
+    void slotUseOrnament();
 
     void slotAddSlashes();
 
@@ -698,6 +701,8 @@ signals:
     void editTimeSignature(Rosegarden::timeT);
 
     void editMetadata(QString);
+
+    void editTriggerSegment(int);
 
     void staffLabelChanged(Rosegarden::TrackId id, QString label);
 

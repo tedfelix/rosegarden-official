@@ -28,6 +28,7 @@
 #include "NotationTypes.h"
 #include "Selection.h"
 #include "SegmentNotationHelper.h"
+#include "SegmentMatrixHelper.h"
 #include "BaseProperties.h"
 #include "Clipboard.h"
 #include "Profiler.h"
@@ -258,23 +259,24 @@ PasteSegmentsCommand::PasteSegmentsCommand(Rosegarden::Composition *composition,
     KNamedCommand(getGlobalName()),
     m_composition(composition),
     m_clipboard(clipboard),
-    m_pasteTime(pasteTime)
+    m_pasteTime(pasteTime),
+    m_detached(false)
 {
     // nothing else
 }
 
 PasteSegmentsCommand::~PasteSegmentsCommand()
 {
-    for (unsigned int i = 0; i < m_addedSegments.size(); ++i) {
-	delete m_addedSegments[i];
+    if (m_detached) {
+	for (unsigned int i = 0; i < m_addedSegments.size(); ++i) {
+	    delete m_addedSegments[i];
+	}
     }
 }
 
 void
 PasteSegmentsCommand::execute()
 {
-    if (m_clipboard->isEmpty()) return;
-
     if (m_addedSegments.size() > 0) {
 	// been here before
 	for (unsigned int i = 0; i < m_addedSegments.size(); ++i) {
@@ -283,6 +285,8 @@ PasteSegmentsCommand::execute()
 	}
 	return;
     }
+
+    if (m_clipboard->isEmpty()) return;
 
     // We want to paste such that the earliest Segment starts at
     // m_pasteTime and the others start at the same times relative
@@ -301,7 +305,7 @@ PasteSegmentsCommand::execute()
             trackOffset = (*i)->getTrack();
 	}
 
-        if ((*i)->getEndTime() > latestEndTime)
+        if ((*i)->getEndMarkerTime() > latestEndTime)
             latestEndTime = (*i)->getEndMarkerTime();
     }
 
@@ -323,7 +327,7 @@ PasteSegmentsCommand::execute()
         segment->setTrack(newTrackId);
         m_composition->addSegment(segment);
 	if (m_clipboard->isPartial()) segment->normalizeRests(segment->getStartTime(),
-							      segment->getEndTime());
+							      segment->getEndMarkerTime());
 	m_addedSegments.push_back(segment);
     }
 
@@ -331,6 +335,8 @@ PasteSegmentsCommand::execute()
     m_composition->setPosition(latestEndTime 
                                + m_pasteTime 
                                - earliestStartTime);
+    
+    m_detached = false;
 }
 
 void
@@ -339,6 +345,7 @@ PasteSegmentsCommand::unexecute()
     for (unsigned int i = 0; i < m_addedSegments.size(); ++i) {
 	m_composition->detachSegment(m_addedSegments[i]);
     }
+    m_detached = true;
 }
     
 
@@ -1574,4 +1581,85 @@ ModifyMarkerCommand::unexecute()
     }
 }
 
+
+void
+SetTriggerCommand::modifySegment()
+{
+    EventSelection::eventcontainer::iterator i;
+
+    for (i  = m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+
+	if (!m_notesOnly || (*i)->isa(Note::EventType)) {
+	    (*i)->set<Int>(TRIGGER_SEGMENT_ID, m_triggerSegmentId);
+	    (*i)->set<Rosegarden::Bool>(TRIGGER_SEGMENT_RETUNE, m_retune);
+	    (*i)->set<Rosegarden::Bool>(TRIGGER_SEGMENT_ADJUST_DURATION, m_adjustDuration);
+	}
+    }
+}
+
+void
+ClearTriggersCommand::modifySegment()
+{
+    EventSelection::eventcontainer::iterator i;
+
+    for (i  = m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+
+	(*i)->unset(TRIGGER_SEGMENT_ID);
+	(*i)->unset(TRIGGER_SEGMENT_RETUNE);
+	(*i)->unset(TRIGGER_SEGMENT_ADJUST_DURATION);
+    }
+}
+
+
+InsertTriggerNoteCommand::InsertTriggerNoteCommand(Rosegarden::Segment &segment,
+						   Rosegarden::timeT time,
+						   Rosegarden::Note note,
+						   int pitch,
+						   int velocity,
+						   NoteStyleName noteStyle,
+						   Rosegarden::Composition::TriggerSegmentId id,
+						   bool retune,
+						   bool adjustDuration) :
+    BasicCommand(i18n("Insert Trigger Note"), segment,
+		 time, time + note.getDuration()),
+    m_time(time),
+    m_note(note),
+    m_pitch(pitch),
+    m_velocity(velocity),
+    m_noteStyle(noteStyle),
+    m_id(id),
+    m_retune(retune),
+    m_adjustDuration(adjustDuration)
+{
+    // nothing
+}
+
+InsertTriggerNoteCommand::~InsertTriggerNoteCommand()
+{
+    // nothing
+}
+
+void
+InsertTriggerNoteCommand::modifySegment()
+{
+    // Insert via a model event, so as to apply the note style.
+    // This is a subset of the work done by NoteInsertionCommand
+    
+    Event *e = new Event(Note::EventType, m_time, m_note.getDuration());
+
+    e->set<Int>(PITCH, m_pitch);
+    e->set<Int>(VELOCITY, m_velocity);
+
+    if (m_noteStyle != NoteStyleFactory::DefaultStyle) {
+	e->set<String>(NotationProperties::NOTE_STYLE, m_noteStyle);
+    }
+
+    e->set<Int>(TRIGGER_SEGMENT_ID, m_id);
+    e->set<Rosegarden::Bool>(TRIGGER_SEGMENT_RETUNE, m_retune);
+    e->set<Rosegarden::Bool>(TRIGGER_SEGMENT_ADJUST_DURATION, m_adjustDuration);
+
+    (void)Rosegarden::SegmentMatrixHelper(getSegment()).insertNote(e);
+}
 

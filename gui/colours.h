@@ -100,6 +100,8 @@ namespace RosegardenGUIColours
     extern const int HighlightedElementMinValue;
     extern const int QuantizedNoteHue;
     extern const int QuantizedNoteMinValue;
+    extern const int TriggerNoteHue;
+    extern const int TriggerNoteMinValue;
 
     extern const QColor TextAnnotationBackground;
 

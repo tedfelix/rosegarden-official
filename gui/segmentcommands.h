@@ -769,4 +769,93 @@ protected:
 };
 
 
+// Trigger Segment commands.  These are the commands that create
+// and manage the triggered segments themselves.  See editcommands.h
+// for SetTriggerCommand and ClearTriggersCommand which manipulate
+// the events that do the triggering.
+
+class AddTriggerSegmentCommand : public KNamedCommand
+{
+public:
+    AddTriggerSegmentCommand(RosegardenGUIDoc *doc,
+			     Rosegarden::timeT duration, // start time always 0
+			     int basePitch);
+    virtual ~AddTriggerSegmentCommand();
+
+    Rosegarden::Composition::TriggerSegmentId getId() const; // after invocation
+
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+    Rosegarden::Composition *m_composition;
+    Rosegarden::timeT m_duration;
+    int m_basePitch;
+    Rosegarden::Composition::TriggerSegmentId m_id;
+    Rosegarden::Segment *m_segment;
+    bool m_detached;
+};
+
+
+class DeleteTriggerSegmentCommand : public KNamedCommand
+{
+public:
+    DeleteTriggerSegmentCommand(RosegardenGUIDoc *doc,
+				Rosegarden::Composition::TriggerSegmentId);
+    virtual ~DeleteTriggerSegmentCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+    Rosegarden::Composition *m_composition;
+    Rosegarden::Composition::TriggerSegmentId m_id;
+    Rosegarden::Segment *m_segment;
+    bool m_detached;
+};
+
+
+class PasteToTriggerSegmentCommand : public KNamedCommand
+{
+public:
+    /// If basePitch is -1, the first pitch in the selection will be used
+    PasteToTriggerSegmentCommand(Rosegarden::Composition *composition,
+				 Rosegarden::Clipboard *clipboard,
+				 QString label,
+				 int basePitch);
+    virtual ~PasteToTriggerSegmentCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    Rosegarden::Composition *m_composition;
+    Rosegarden::Clipboard *m_clipboard;
+    QString m_label;
+    int m_basePitch;
+    Rosegarden::Segment *m_segment;
+    Rosegarden::Composition::TriggerSegmentId m_id;
+    bool m_detached;
+};
+
+
+class SetTriggerSegmentBasePitchCommand : public KNamedCommand
+{
+public:
+    SetTriggerSegmentBasePitchCommand(Rosegarden::Composition *composition,
+				      Rosegarden::Composition::TriggerSegmentId id,
+				      int newPitch);
+    virtual ~SetTriggerSegmentBasePitchCommand();
+    
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    Rosegarden::Composition *m_composition;
+    Rosegarden::Composition::TriggerSegmentId m_id;
+    int m_newPitch;
+    int m_oldPitch;
+};
+
+
 #endif  // _SEGMENTCOMMANDS_H_

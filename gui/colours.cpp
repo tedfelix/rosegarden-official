@@ -93,6 +93,8 @@ namespace RosegardenGUIColours
     const int HighlightedElementMinValue = 220;
     const int QuantizedNoteHue = 69;
     const int QuantizedNoteMinValue = 140;
+    const int TriggerNoteHue = 4;
+    const int TriggerNoteMinValue = 140;
 
     const QColor TextAnnotationBackground = QColor(255, 255, 180);
 

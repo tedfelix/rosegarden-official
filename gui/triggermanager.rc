@@ -1,11 +1,15 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="MarkerEditor" version="098">
+<kpartgui name="TriggerManager" version="098">
 
 <MenuBar>
 
   <Menu name="file">
     <Action name="file_close_discard"/>
+  </Menu>
+
+  <Menu name="edit">
+    <Action name="paste_to_trigger_segment"/>
   </Menu>
 
   <Menu name="view"><text>&amp;View</text>
@@ -27,10 +31,9 @@
   <Action name="time_raw"/>
 </ToolBar>
 
-<State name="on_control_item">
+<State name="have_clipboard_single_segment">
      <enable>
-        <Action name="edit_insert"/>
-        <Action name="edit_delete"/>
+        <Action name="paste_to_trigger_segment"/>
      </enable>
 </State>
 

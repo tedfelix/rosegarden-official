@@ -399,6 +399,7 @@ MarkerEditorDialog::setupActions()
                             KStdAction::stdName(KStdAction::Redo));
 
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+    kapp->config()->setGroup(MarkerEditorConfigGroup);
     int timeMode = kapp->config()->readNumEntry("timemode", 0);
 
     KRadioAction *action;

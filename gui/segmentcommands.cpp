@@ -30,6 +30,7 @@
 #include "BaseProperties.h"
 #include "Composition.h"
 #include "PeakFile.h"
+#include "Clipboard.h"
 #include "Sets.h"
 
 using Rosegarden::Composition;
@@ -2291,5 +2292,197 @@ SegmentColourMapCommand::unexecute()
 {
     m_doc->getComposition().setSegmentColourMap(m_oldMap);
     m_doc->slotDocColoursChanged();
+}
+
+
+AddTriggerSegmentCommand::AddTriggerSegmentCommand(RosegardenGUIDoc *doc,
+						   Rosegarden::timeT duration,
+						   int basePitch) :
+    KNamedCommand(i18n("Add Triggered Segment")),
+    m_composition(&doc->getComposition()),
+    m_duration(duration),
+    m_basePitch(basePitch),
+    m_id(0),
+    m_segment(0),
+    m_detached(false)
+{
+    // nothing else
+}
+
+AddTriggerSegmentCommand::~AddTriggerSegmentCommand()
+{
+    if (m_detached) delete m_segment;
+}
+
+Rosegarden::Composition::TriggerSegmentId
+AddTriggerSegmentCommand::getId() const
+{
+    return m_id;
+}
+
+void
+AddTriggerSegmentCommand::execute()
+{
+    if (m_segment) {
+	m_composition->addTriggerSegment(m_segment, m_basePitch, m_id);
+    } else {
+	m_segment = new Rosegarden::Segment();
+	m_segment->setEndMarkerTime(m_duration);
+	m_id = m_composition->addTriggerSegment(m_segment, m_basePitch);
+    }
+    m_detached = false;
+}
+
+void
+AddTriggerSegmentCommand::unexecute()
+{
+    if (m_segment) m_composition->detachTriggerSegment(m_id);
+    m_detached = true;
+}
+
+
+DeleteTriggerSegmentCommand::DeleteTriggerSegmentCommand(RosegardenGUIDoc *doc,
+							 Rosegarden::Composition::TriggerSegmentId id) :
+    KNamedCommand(i18n("Delete Triggered Segment")),
+    m_composition(&doc->getComposition()),
+    m_id(id),
+    m_segment(0),
+    m_detached(true)
+{
+    // nothing else
+}
+
+DeleteTriggerSegmentCommand::~DeleteTriggerSegmentCommand()
+{
+    if (m_detached) delete m_segment;
+}
+
+void
+DeleteTriggerSegmentCommand::execute()
+{
+    m_segment = m_composition->getTriggerSegment(m_id);
+    m_composition->detachTriggerSegment(m_id);
+    m_detached = true;
+}
+
+void
+DeleteTriggerSegmentCommand::unexecute()
+{
+    if (m_segment) m_composition->addTriggerSegment(m_segment, m_id);
+    m_detached = false;
+}
+
+
+PasteToTriggerSegmentCommand::PasteToTriggerSegmentCommand(Rosegarden::Composition *composition,
+							   Rosegarden::Clipboard *clipboard,
+							   QString label,
+							   int basePitch) :
+    KNamedCommand(i18n("Paste as New Triggered Segment")),
+    m_composition(composition),
+    m_clipboard(clipboard),
+    m_label(label),
+    m_basePitch(basePitch),
+    m_segment(0),
+    m_detached(false)
+{
+    // nothing else
+}
+
+PasteToTriggerSegmentCommand::~PasteToTriggerSegmentCommand()
+{
+    if (m_detached) delete m_segment;
+}
+
+void
+PasteToTriggerSegmentCommand::execute()
+{
+    if (m_segment) {
+
+	m_composition->addTriggerSegment(m_segment, m_basePitch, m_id);
+
+    } else {
+	
+	if (m_clipboard->isEmpty()) return;
+	
+	m_segment = new Rosegarden::Segment();
+	
+	timeT earliestStartTime = 0;
+	timeT latestEndTime = 0;
+	
+	for (Rosegarden::Clipboard::iterator i = m_clipboard->begin();
+	     i != m_clipboard->end(); ++i) {
+
+	    if (i == m_clipboard->begin() ||
+		(*i)->getStartTime() < earliestStartTime) {
+		earliestStartTime = (*i)->getStartTime();
+	    }
+
+	    if ((*i)->getEndMarkerTime() > latestEndTime)
+		latestEndTime = (*i)->getEndMarkerTime();
+	}
+
+	for (Rosegarden::Clipboard::iterator i = m_clipboard->begin();
+	     i != m_clipboard->end(); ++i) {
+	    
+	    for (Rosegarden::Segment::iterator si = (*i)->begin();
+		 (*i)->isBeforeEndMarker(si); ++si) {
+		if (!(*si)->isa(Rosegarden::Note::EventRestType)) {
+		    if (m_basePitch == -1 &&
+			(*si)->has(Rosegarden::BaseProperties::PITCH)) {
+			m_basePitch = (*si)->get<Rosegarden::Int>
+			    (Rosegarden::BaseProperties::PITCH);
+		    }
+		    m_segment->insert
+			(new Event(**si, 
+				   (*si)->getAbsoluteTime() - earliestStartTime));
+		}
+	    }
+	}
+	
+	m_segment->setLabel(qstrtostr(m_label));
+
+	m_id = m_composition->addTriggerSegment(m_segment, m_basePitch);
+    }
+    
+    m_detached = false;
+}
+
+void
+PasteToTriggerSegmentCommand::unexecute()
+{
+    if (m_segment) m_composition->detachTriggerSegment(m_id);
+    m_detached = true;
+}
+    
+
+SetTriggerSegmentBasePitchCommand::SetTriggerSegmentBasePitchCommand(Rosegarden::Composition *composition,
+								     Rosegarden::Composition::TriggerSegmentId id,
+								     int newPitch) :
+    KNamedCommand(i18n("Set Base Pitch")),
+    m_composition(composition),
+    m_id(id),
+    m_newPitch(newPitch),
+    m_oldPitch(-1)
+{
+    // nothing
+}
+
+SetTriggerSegmentBasePitchCommand::~SetTriggerSegmentBasePitchCommand()
+{
+    // nothing
+}
+
+void
+SetTriggerSegmentBasePitchCommand::execute()
+{
+    if (m_oldPitch == -1)
+	m_oldPitch = m_composition->getTriggerSegmentBasePitch(m_id);
+    m_composition->setTriggerSegmentBasePitch(m_id, m_newPitch);
+}
+
+void
+SetTriggerSegmentBasePitchCommand::unexecute()
+{
+    m_composition->setTriggerSegmentBasePitch(m_id, m_oldPitch);
 }
 

@@ -431,7 +431,8 @@ public:
     virtual QSize sizeHint() const;
 
 signals:
-    void pitchChanged(int);
+    void pitchDragged(int);
+    void pitchChanged(int); // mouse release
     void preview(int);
 
 public slots:
@@ -482,78 +483,6 @@ protected:
     QLabel *m_pitchLabel;
 };
 
-
-namespace Rosegarden { class Composition; }
-
-class RosegardenTimeWidget : public QGroupBox
-{
-    Q_OBJECT
-public:
-    /**
-     * Constructor for absolute time widget
-     */
-    RosegardenTimeWidget(QString title,
-			 QWidget *parent,
-			 Rosegarden::Composition *composition, // for bar/beat/msec
-			 Rosegarden::timeT initialTime,
-			 bool editable = true);
-
-    /**
-     * Constructor for duration widget.  startTime is the absolute time
-     * at which this duration begins, necessary so that we can show the
-     * correct real-time (based on tempo at startTime) etc.
-     */
-    RosegardenTimeWidget(QString title,
-			 QWidget *parent,
-			 Rosegarden::Composition *composition, // for bar/beat/msec
-			 Rosegarden::timeT startTime,
-			 Rosegarden::timeT initialDuration,
-			 bool editable = true);
-
-    Rosegarden::timeT getTime();
-    Rosegarden::RealTime getRealTime();
-
-signals:
-    void timeChanged(Rosegarden::timeT);
-    void realTimeChanged(Rosegarden::RealTime);
-
-public slots:
-    void slotSetTime(Rosegarden::timeT);
-    void slotSetRealTime(Rosegarden::RealTime);
-    void slotResetToDefault();
-
-    void slotNoteChanged(int);
-    void slotTimeTChanged(int);
-    void slotBarBeatOrFractionChanged(int);
-    void slotSecOrMSecChanged(int);
-
-private:
-    Rosegarden::Composition *m_composition;
-    bool m_isDuration;
-    Rosegarden::timeT m_time;
-    Rosegarden::timeT m_startTime;
-    Rosegarden::timeT m_defaultTime;
-
-    QComboBox *m_note;
-    QSpinBox  *m_timeT;
-    QSpinBox  *m_bar;
-    QSpinBox  *m_beat;
-    QSpinBox  *m_fraction;
-    QLineEdit *m_barLabel;
-    QLineEdit *m_beatLabel;
-    QLineEdit *m_fractionLabel;
-    QLabel    *m_timeSig;
-    QSpinBox  *m_sec;
-    QSpinBox  *m_msec;
-    QLineEdit *m_secLabel;
-    QLineEdit *m_msecLabel;
-    QLabel    *m_tempo;
-
-    void init(bool editable);
-    void populate();
-
-    std::vector<Rosegarden::timeT> m_noteDurations;
-};
     
 #endif // _WIDGETS_H_
 

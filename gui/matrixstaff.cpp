@@ -109,7 +109,9 @@ void MatrixStaff::positionElement(Rosegarden::ViewElement* vel)
 
     if (selection && selection->contains(el->event()))
         el->setColour(RosegardenGUIColours::SelectedElement);
-    else
+    else if (el->event()->has(Rosegarden::BaseProperties::TRIGGER_SEGMENT_ID))
+	el->setColour(Qt::gray);
+    else 
         el->setColour(DefaultVelocityColour::getInstance()->getColour(velocity));
 
     el->setCanvasX(coords.first);
