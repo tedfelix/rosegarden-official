@@ -247,6 +247,8 @@ protected:
      */
     virtual void setViewSize(QSize) = 0;
 
+    virtual QCanvasView* getCanvasView();
+    virtual void setCanvasView(QCanvasView *cv);
 
     //--------------- Data members ---------------------------------
 
@@ -260,8 +262,6 @@ protected:
 
     ActiveItem* m_activeItem;
 
-    virtual QCanvasView *getCanvasView() { return m_canvasView; }
-    virtual void setCanvasView(QCanvasView *cv);
     QCanvasView *m_canvasView;
 
     QFrame      *m_centralFrame;

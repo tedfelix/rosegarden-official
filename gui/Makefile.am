@@ -35,6 +35,7 @@ rosegarden_SOURCES = \
 	notationview.cpp \
 	notationvlayout.cpp \
 	notefont.cpp \
+	pianokeyboard.cpp \
 	notepixmapfactory.cpp \
 	qcanvasgroupableitem.cpp \
 	qcanvassimplesprite.cpp \

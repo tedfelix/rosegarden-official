@@ -447,6 +447,8 @@ protected:
      */
     void setHLayout(NotationHLayout*);
 
+    virtual NotationCanvasView* getCanvasView();
+
     //--------------- Data members ---------------------------------
 
     /// The current selection of Events (for cut/copy/paste)
@@ -502,9 +504,6 @@ protected:
 
     KAction* m_selectDefaultNote;
 
-    virtual NotationCanvasView *getCanvasView() {
-	return static_cast<NotationCanvasView *>(m_canvasView);
-    }
 };
 
 #endif

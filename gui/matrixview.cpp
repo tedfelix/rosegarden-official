@@ -57,6 +57,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
                        QWidget *parent)
     : EditView(doc, segments, parent),
       m_currentEventSelection(0),
+      m_pianoKeyboard(0),
       m_hlayout(new MatrixHLayout(&doc->getComposition())),
       m_vlayout(new MatrixVLayout),
       m_hoveredOverAbsoluteTime(0),
@@ -293,6 +294,12 @@ void MatrixView::update()
 {
     canvas()->update();
 }
+
+MatrixCanvasView* MatrixView::getCanvasView()
+{
+    return static_cast<MatrixCanvasView *>(m_canvasView);
+}
+
 
 void MatrixView::setCurrentSelection(EventSelection* s)
 {

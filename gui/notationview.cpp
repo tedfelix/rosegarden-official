@@ -1087,6 +1087,11 @@ void NotationView::setHLayout(NotationHLayout* l)
     m_hlayout = l;
 }
 
+NotationCanvasView* NotationView::getCanvasView()
+{
+    return static_cast<NotationCanvasView *>(m_canvasView);
+}
+
 //////////////////////////////////////////////////////////////////////
 //                    Slots
 //////////////////////////////////////////////////////////////////////

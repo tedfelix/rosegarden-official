@@ -41,6 +41,7 @@ class MatrixCanvasView;
 class MatrixHLayout;
 class MatrixVLayout;
 class EventSelection;
+class PianoKeyboard;
 
 class QMouseEvent;
 
@@ -179,12 +180,16 @@ protected:
      */
     virtual void setViewSize(QSize);
 
+    virtual MatrixCanvasView *getCanvasView();
+
     //--------------- Data members ---------------------------------
 
     /// The current selection of Events (for cut/copy/paste)
     EventSelection* m_currentEventSelection;
 
     std::vector<MatrixStaff*> m_staffs;
+
+    PianoKeyboard* m_pianoKeyboard;
     
     MatrixHLayout* m_hlayout;
     MatrixVLayout* m_vlayout;
@@ -193,9 +198,6 @@ protected:
     QLabel* m_hoveredOverAbsoluteTime;
     QLabel* m_hoveredOverNoteName;
 
-    virtual MatrixCanvasView *getCanvasView() {
-	return static_cast<MatrixCanvasView *>(m_canvasView);
-    }
 };
 
 #endif
