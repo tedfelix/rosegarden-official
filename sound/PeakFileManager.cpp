@@ -172,8 +172,15 @@ PeakFileManager::generatePeaks(AudioFile *audioFile,
     {
         PeakFile *peakFile = getPeakFile(audioFile);
 
-        // just write out a peak file
-        peakFile->write(progress, updatePercentage);
+        // Just write out a peak file
+        //
+        if(peakFile->write(progress, updatePercentage) == false)
+        {
+            std::string rS = std::string("Can't write peak file for \"") +
+                             audioFile->getFilename() +
+                             std::string("\" - no preview generated");
+            throw(rS);
+        }
 
         // close writes out important things
         peakFile->close();

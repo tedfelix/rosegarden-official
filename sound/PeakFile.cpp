@@ -184,10 +184,10 @@ bool
 PeakFile::write(Progress *progress, unsigned short undatePercentage)
 {
     if (m_outFile)
-        {
-            m_outFile->close();
-            delete m_outFile; 
-        }
+    {
+        m_outFile->close();
+        delete m_outFile; 
+    }
 
     // Attempt to open AudioFile so that we can extract sample data
     // for preview file generation

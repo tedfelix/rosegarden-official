@@ -297,14 +297,24 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
                                      100,
                                      (QWidget*)parent());
 
-    // generate any audio previews after loading the files
-    m_audioFileManager.
-        generatePreviews(dynamic_cast<Rosegarden::Progress*>(progressDlg));
+    try
+    {
+        // generate any audio previews after loading the files
+        m_audioFileManager.
+            generatePreviews(dynamic_cast<Rosegarden::Progress*>(progressDlg));
+    }
+    catch(std::string e)
+    {
+        delete progressDlg;
+        progressDlg = 0;
+        RosegardenGUIApp *win=(RosegardenGUIApp *) parent();
+        KMessageBox::error(win, QString(e.c_str()));
+    }
 
     // Get rid of it - if the operation above has been quick enough
     // then we never see this dialog anyway.
     //
-    delete progressDlg;
+    if (progressDlg) delete progressDlg;
 
     return true;
 }
@@ -1198,11 +1208,21 @@ RosegardenGUIDoc::stopRecordingAudio()
                                      100,
                                      (QWidget*)parent());
 
-    m_audioFileManager.generatePreview(
-            dynamic_cast<Rosegarden::Progress*>(progressDlg),
-            newAudioFile->getId());
+    try
+    {
+        m_audioFileManager.generatePreview(
+                dynamic_cast<Rosegarden::Progress*>(progressDlg),
+                newAudioFile->getId());
+    }
+    catch(std::string e)
+    {
+        delete progressDlg;
+        progressDlg = 0;
+        RosegardenGUIApp *win=(RosegardenGUIApp *) parent();
+        KMessageBox::error(win, QString(e.c_str()));
+    }
 
-    delete progressDlg;
+    if (progressDlg) delete progressDlg;
 
     // update views
     slotUpdateAllViews(0);

@@ -249,9 +249,6 @@ AudioManagerDialog::slotAdd()
         try
         {
             id = m_audioFileManager->addFile(std::string(newFilePath.data()));
-            m_maxLength = RealTime(0, 0); // reset to force recalculate
-            m_audioFileManager->generatePreview(
-                    dynamic_cast<Progress*>(progressDlg), id);
         }
         catch(std::string e)
         {
@@ -261,7 +258,22 @@ AudioManagerDialog::slotAdd()
             KMessageBox::sorry(this, errorString);
         }
 
-        delete progressDlg;
+        m_maxLength = RealTime(0, 0); // reset to force recalculate
+
+        try
+        {
+            m_audioFileManager->generatePreview(
+                    dynamic_cast<Progress*>(progressDlg), id);
+        }
+        catch(std::string e)
+        {
+            delete progressDlg;
+            progressDlg = 0;
+            KMessageBox::error(this, QString(e.c_str()));
+        }
+
+        if (progressDlg) delete progressDlg;
+
         populateFileList();
 
     }
