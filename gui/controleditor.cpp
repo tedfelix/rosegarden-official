@@ -96,10 +96,7 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
     m_deleteButton = new QPushButton(i18n("Delete"), btnBox);
 
     m_closeButton = new QPushButton(i18n("Close"), btnBox);
-/*
-    m_copyButton = new QPushButton(i18n("Copy"), btnBox);
-    m_pasteButton = new QPushButton(i18n("Paste"), btnBox);
-*/
+
     QToolTip::add(m_addButton,
                   i18n("Add a Control Parameter to the Studio"));
 
@@ -108,22 +105,12 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
 
     QToolTip::add(m_closeButton,
                   i18n("Close the Control Parameter editor"));
-/*
-    QToolTip::add(m_copyButton,
-                  i18n("Copy a Control Parameter"));
 
-    QToolTip::add(m_pasteButton,
-                  i18n("Paste a Control Parameter"));
-*/
     layout->addStretch(10);
     layout->addWidget(m_addButton);
     layout->addWidget(m_deleteButton);
     layout->addSpacing(30);
-/*
-    layout->addWidget(m_copyButton);
-    layout->addWidget(m_pasteButton);
-    layout->addSpacing(15);
-*/
+
     layout->addWidget(m_closeButton);
     layout->addSpacing(5);
 
@@ -132,17 +119,6 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
 
     connect(m_deleteButton, SIGNAL(released()),
             SLOT(slotDelete()));
-
-/*
-    connect(m_closeButton, SIGNAL(released()),
-            SLOT(slotClose()));
-
-    connect(m_copyButton, SIGNAL(released()),
-            SLOT(slotEditCopy()));
-
-    connect(m_pasteButton, SIGNAL(released()),
-            SLOT(slotEditPaste()));
-*/
 
     setupActions();
 
@@ -316,10 +292,6 @@ ControlEditorDialog::setupActions()
     m_closeButton->setText(close->text());
     connect(m_closeButton, SIGNAL(released()), this, SLOT(slotClose()));
 
-/*
-    KStdAction::copy   (this, SLOT(slotEditCopy()),     actionCollection());
-    KStdAction::paste  (this, SLOT(slotEditPaste()),    actionCollection());
-*/
     // some adjustments
     new KToolBarPopupAction(i18n("Und&o"),
                             "undo",

@@ -168,6 +168,8 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
 
     connect(document, SIGNAL(devicesResyncd()), this, SLOT(slotDevicesResyncd()));
 
+    m_noConnectionString = i18n("No connection");
+
     slotDevicesResyncd();
 
     setMinimumHeight(400);
@@ -208,12 +210,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
                             KStdAccel::shortcut(KStdAccel::Redo),
                             actionCollection(),
                             KStdAction::stdName(KStdAction::Redo));
-    /*
-    new KToolBarPopupAction(i18n("&New"), "filenew",
-			    KStdAccel::shortcut(KStdAccel::New),
-			    this, SLOT(fileNew()),
-			    actionCollection(), "new");
-    */
+
     createGUI("devicemanager.rc");
 
     m_document->getCommandHistory()->attachView(actionCollection());
@@ -243,7 +240,6 @@ DeviceManagerDialog::slotClose()
 	m_document = 0;
     }
 
-//!!!???    delete this;
     close();
 }    
 
@@ -262,42 +258,6 @@ void
 DeviceManagerDialog::populate()
 {
     Rosegarden::DeviceList *devices = m_studio->getDevices();
-
-/* no, doesn't work for device renames
-
-    // If everything is as it was last time around, then do no more
-    bool changed = false;
-    size_t playCount = 0, recordCount = 0;
-    for (Rosegarden::DeviceList::iterator it = devices->begin();
-	 it != devices->end(); ++it) {
-	if ((*it)->getType() == Rosegarden::Device::Midi) {
-	    Rosegarden::MidiDevice *md =
-		dynamic_cast<Rosegarden::MidiDevice *>(*it);
-	    if (md) {
-		if (md->getDirection() == Rosegarden::MidiDevice::Play) {
-		    if (playCount >= m_playDevices.size() ||
-			m_playDevices[playCount]->getName() != md->getName() ||
-			m_playDevices[playCount]->getConnection() != md->getConnection()) {
-			changed = true;
-			break;
-		    }
-		    ++playCount;
-		} else {
-		    if (recordCount >= m_recordDevices.size() ||
-			m_recordDevices[recordCount]->getName() != md->getName() ||
-			m_recordDevices[recordCount]->getConnection() != md->getConnection()) {
-			changed = true;
-			break;
-		    }
-		    ++recordCount;
-		}
-	    }
-	}
-    }
-    if (!changed &&
-	playCount == m_playDevices.size() &&
-	recordCount == m_recordDevices.size()) return;
-*/
 
     KConfig *config = kapp->config();
     config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
@@ -421,7 +381,7 @@ DeviceManagerDialog::makeConnectionList(unsigned int direction,
 
     if (!rgapp->sequencerCall("getConnections(int, unsigned int)", replyType, replyData, data)) {
 	RG_DEBUG << "DeviceManagerDialog: can't call Sequencer" << endl;
-	list.append(i18n("No connection"));
+	list.append(m_noConnectionString);
 	return;
     }
 
@@ -600,6 +560,7 @@ DeviceManagerDialog::slotPlayValueChanged(int row, int col)
     case PLAY_CONNECTION_COL:
     {
 	std::string connection = qstrtostr(m_playTable->text(row, col));
+	if (connection == qstrtostr(m_noConnectionString)) connection = "";
 	if (device->getConnection() != connection) {
 	    m_document->getCommandHistory()->addCommand
 		(new ReconnectDeviceCommand(m_studio, id, connection));

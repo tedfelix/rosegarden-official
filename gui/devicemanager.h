@@ -100,6 +100,7 @@ private:
     Rosegarden::DeviceId getPlayDeviceIdAt(int row); // NO_DEVICE = not found
     Rosegarden::DeviceId getRecordDeviceIdAt(int row); // NO_DEVICE = not found
 
+    QString m_noConnectionString;
     static const char* const DeviceManagerConfigGroup;
 };
 

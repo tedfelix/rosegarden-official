@@ -1068,6 +1068,13 @@ AudioManagerDialog::closeEvent(QCloseEvent *e)
     KDialogBase::closeEvent(e);
 }
 
+void 
+AudioManagerDialog::slotClose()
+{
+    emit closing();
+    delete this;
+}
+
 void
 AudioManagerDialog::setAudioSubsystemStatus(bool ok)
 {

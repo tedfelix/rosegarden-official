@@ -124,6 +124,8 @@ public slots:
     //
     void slotCancelPlayingAudioFile();
 
+    void slotClose();
+
 signals:
 
     // Control signals so we can tell the sequencer about our changes
