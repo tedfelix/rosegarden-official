@@ -18,6 +18,7 @@
     COPYING included with this distribution for more information.
 */
 
+#include <cmath>
 #include "RulerScale.h"
 #include "Composition.h"
 
@@ -112,7 +113,7 @@ RulerScale::getTimeForX(double x) const
 	timeT barDuration = barRange.second - barRange.first;
 	x -= getBarPosition(n);
 
-	return barRange.first + (timeT)((x * barDuration) / barWidth);
+	return barRange.first + (timeT)nearbyint(((double)(x * barDuration) / barWidth));
     }
 }
 
@@ -217,7 +218,7 @@ SimpleRulerScale::getBarForX(double x) const
 timeT
 SimpleRulerScale::getTimeForX(double x) const
 {
-    timeT t = (timeT)((x - m_origin) * m_ratio);
+    timeT t = (timeT)(nearbyint((double)(x - m_origin) * m_ratio));
 
     int firstBar = getFirstVisibleBar();
     if (firstBar != 0) {

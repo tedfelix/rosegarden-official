@@ -122,11 +122,8 @@ SnapGrid::snapTime(timeT time, SnapDirection direction) const
 
     if (direction == SnapLeft) return left;
     else if (direction == SnapRight) return right;
-    else if ((offset - rounded) > (rounded + snapTime - offset)) {
-	return right;
-    } else {
-	return left;
-    }
+    else if ((offset - rounded) > (rounded + snapTime - offset)) return right;
+    else return left;
 }
 
 }

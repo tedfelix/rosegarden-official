@@ -247,21 +247,21 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
     //
     if (track >= TrackId(m_doc->getComposition().getNbTracks())) return;
 
-    timeT time = m_canvas->grid().snapX(e->pos().x(), SnapGrid::SnapLeft);
-    timeT duration = m_canvas->grid().getSnapTime(double(e->pos().x()));
+    timeT time = int(nearbyint(m_canvas->grid().snapX(e->pos().x(), SnapGrid::SnapLeft)));
+    timeT duration = int(nearbyint(m_canvas->grid().getSnapTime(double(e->pos().x()))));
     if (duration == 0) duration = Note(Note::Shortest).getDuration();
 
     QRect tmpRect;
-    tmpRect.setX(int(m_canvas->grid().getRulerScale()->getXForTime(time)));
+    tmpRect.setX(int(nearbyint(m_canvas->grid().getRulerScale()->getXForTime(time))));
     tmpRect.setY(m_canvas->grid().getYBinCoordinate(trackPosition));
     tmpRect.setHeight(m_canvas->grid().getYSnap());
-    tmpRect.setWidth(int(m_canvas->grid().getRulerScale()->getWidthForDuration(time, duration)));
+    tmpRect.setWidth(int(nearbyint(m_canvas->grid().getRulerScale()->getWidthForDuration(time, duration))));
 
     m_canvas->setTmpRect(tmpRect);
     m_newRect = true;
     m_origPos = e->pos();
 
-    updateOnTmpRect(tmpRect);
+    m_canvas->updateContents(tmpRect);
 }
 
 void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
@@ -274,9 +274,8 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
         
         int trackPosition = m_canvas->grid().getYBin(tmpRect.y());
         Rosegarden::Track *track = m_doc->getComposition().getTrackByPosition(trackPosition);
-        timeT startTime = m_canvas->grid().getRulerScale()->getTimeForX(tmpRect.x()),
-            endTime = m_canvas->grid().getRulerScale()->getTimeForX(tmpRect.x() + tmpRect.width());
-        
+        timeT startTime = int(nearbyint(m_canvas->grid().getRulerScale()->getTimeForX(tmpRect.x()))),
+              endTime = int(nearbyint(m_canvas->grid().getRulerScale()->getTimeForX(tmpRect.x() + tmpRect.width())));
 
         SegmentInsertCommand *command =
             new SegmentInsertCommand(m_doc, track->getId(),
@@ -300,7 +299,7 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
         m_canvas->getModel()->setSelected(item);
         m_canvas->getModel()->signalSelection();
         m_canvas->setTmpRect(QRect());
-        updateOnTmpRect(tmpRect);
+        m_canvas->updateContents(tmpRect);
 
     } else {
 
@@ -320,13 +319,13 @@ int SegmentPencil::handleMouseMove(QMouseEvent *e)
     SnapGrid::SnapDirection direction = SnapGrid::SnapRight;
     if (e->pos().x() <= m_origPos.x()) direction = SnapGrid::SnapLeft;
 
-    timeT snap = m_canvas->grid().getSnapTime(double(e->pos().x()));
+    timeT snap = int(nearbyint(m_canvas->grid().getSnapTime(double(e->pos().x()))));
     if (snap == 0) snap = Note(Note::Shortest).getDuration();
 
-    timeT time = m_canvas->grid().snapX(e->pos().x(), direction);
+    timeT time = int(nearbyint(m_canvas->grid().snapX(e->pos().x(), direction)));
 
-    timeT startTime = m_canvas->grid().getRulerScale()->getTimeForX(tmpRect.x()),
-        endTime = m_canvas->grid().getRulerScale()->getTimeForX(tmpRect.right());
+    timeT startTime = int(nearbyint(m_canvas->grid().getRulerScale()->getTimeForX(tmpRect.x())));
+    timeT endTime = int(nearbyint(m_canvas->grid().getRulerScale()->getTimeForX(tmpRect.x()+tmpRect.width())));
 
     if (direction == SnapGrid::SnapRight) {
         
@@ -340,7 +339,7 @@ int SegmentPencil::handleMouseMove(QMouseEvent *e)
             }
         }
 
-        int w = int(m_canvas->grid().getRulerScale()->getWidthForDuration(startTime, time - startTime));
+        int w = int(nearbyint(m_canvas->grid().getRulerScale()->getWidthForDuration(startTime, time - startTime)));
         tmpRect.setWidth(w);
 
     } else { // SnapGrid::SnapLeft
@@ -351,16 +350,8 @@ int SegmentPencil::handleMouseMove(QMouseEvent *e)
     }
 
     m_canvas->setTmpRect(tmpRect);
-    updateOnTmpRect(oldTmpRect | tmpRect);
+    m_canvas->updateContents(oldTmpRect | tmpRect);
     return RosegardenCanvasView::FollowHorizontal;
-}
-
-void SegmentPencil::updateOnTmpRect(QRect tmpRect)
-{
-    if (tmpRect.x() > 2)
-        tmpRect.setX(tmpRect.x() - 2);
-    tmpRect.setWidth(tmpRect.width() + 2);
-    m_canvas->updateContents(tmpRect);
 }
 
 

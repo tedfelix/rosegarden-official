@@ -138,8 +138,6 @@ protected slots:
 protected:
     SegmentPencil(CompositionView*, RosegardenGUIDoc*);
 
-    void updateOnTmpRect(QRect);
-
     //--------------- Data members ---------------------------------
 
     bool m_newRect;
