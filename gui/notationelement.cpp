@@ -190,6 +190,7 @@ public:
         }
     }
 };
+    
 
 Chord::Chord(const NotationElementList &nel, NELIterator i,
              bool quantized) :
@@ -200,33 +201,18 @@ Chord::Chord(const NotationElementList &nel, NELIterator i,
     m_longest(nel.end())
 {
     if (i == nel.end()) return;
-    Event::timeT myTime = (*i)->getAbsoluteTime();
+
+    NotationElementList::IteratorPair pair
+        (nel.findContainingSet<TimeComparator>(i));
+
     long d;
     int maxDuration = 0;
-    int minDuration = 1e6;
+    int minDuration = 1000000;
 
-    // first scan back to find an element not in the chord, and leave
-    // i pointing at the element after it, i.e. the first one that is
-    // in the chord
-
-    NELIterator j(i);
-    for (;;) {
-        i = j;
-        if (i == nel.begin()) break;
-        --j;
-        if (!((*j)->isNote() && (*j)->getAbsoluteTime() == myTime)) {
-            break;
-        }
-    }
-        
+    i = pair.first;
     m_initial = i;
-
-    // A chord can only contain notes; anything else having the same
-    // time as this is probably a bogoid of some nature.  We succeed
-    // trivially for the first element, if there is one & it's a note
     
-    while (i != nel.end() && (*i)->isNote() &&
-           (*i)->getAbsoluteTime() == myTime) {
+    while (i != pair.second) {
 
         if (quantized) {
             bool done = (*i)->event()->get<Int>(P_QUANTIZED_DURATION, d);

@@ -119,6 +119,10 @@ public:
     iterator findPrevious(const string &type, iterator i);
     iterator findNext(const string &type, iterator i);
 
+    typedef pair<iterator,iterator> IteratorPair;
+    template <class Compare>
+    IteratorPair findContainingSet(iterator i, Compare c = Compare()) const;
+
     // Discovers whether this note is in a chord at some position
     // other than at the end, i.e. it is true if you could construct a
     // Chord object (see below) from the passed iterator and the
@@ -129,6 +133,37 @@ public:
 private:
     Quantizer m_quantizer;
 };
+
+template <class Compare>
+NotationElementList::IteratorPair
+NotationElementList::findContainingSet
+(NotationElementList::iterator i, Compare c) const
+{
+    IteratorPair ipair(end(), end());
+    if (i == end()) return ipair;
+
+    // first scan back to find an element not in the desired set, and
+    // leave i pointing to the one after it
+
+    iterator j(i);
+
+    for (;;) {
+        if (i == begin()) break;
+        --j;
+        if (!c(i, j)) break;
+        i = j;
+    }
+
+    ipair.first = i;
+
+    j = i;
+    while (j != end() && c(i,j)) {
+        ++j;
+    }
+
+    ipair.second = j;
+    return ipair;
+}
 
 #ifndef NDEBUG
 kdbgstream& operator<<(kdbgstream&, NotationElementList&);
@@ -176,6 +211,15 @@ public:
     }
 
 private:
+    class TimeComparator {
+    public:
+        bool operator()(const NotationElementList::iterator &a,
+                        const NotationElementList::iterator &b) {
+            return ((*a)->isNote() && (*b)->isNote() &&
+                    ((*a)->getAbsoluteTime() == (*b)->getAbsoluteTime()));
+        }
+    };
+
     const NotationElementList &m_nel;
     NELIterator m_initial, m_final, m_shortest, m_longest;
 };
