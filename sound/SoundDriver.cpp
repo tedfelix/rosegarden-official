@@ -165,6 +165,10 @@ SoundDriver::SoundDriver(MappedStudio *studio, const std::string &name):
     m_midiClockSendTime(Rosegarden::RealTime(0, 0)),
     m_midiSongPositionPointer(0)
 {
+    // Do some preallocating of the audio vectors to improve RT performance
+    //
+    m_audioPlayQueue.reserve(100);
+    m_audioPlayThreadQueue.reserve(100);
 }
 
 
@@ -291,6 +295,31 @@ SoundDriver::clearAudioPlayQueue()
         delete (*it);
 
     m_audioPlayQueue.erase(m_audioPlayQueue.begin(), m_audioPlayQueue.end());
+}
+
+// Not sure if we need this yet - too hungover and too close to 0.9 to
+// start getting involved in complicated stuff.
+//
+void
+SoundDriver::clearDefunctFromAudioPlayQueue()
+{
+    std::vector<PlayableAudioFile*>::iterator it;
+    std::vector<std::vector<PlayableAudioFile*>::iterator> dList;
+
+    for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); ++it)
+    {
+        if ((*it)->getStatus() == PlayableAudioFile::DEFUNCT)
+            dList.push_back(it);
+    }
+
+    std::vector<std::vector<PlayableAudioFile*>::iterator>::iterator dLit;
+
+    for (dLit = dList.begin(); dLit != dList.end(); ++dLit)
+        m_audioPlayQueue.erase(*dLit);
+
+    if (dList.size())
+        cout << "REMOVED " << dList.size() << " DEFUNCT AUDIO FILES" << endl;
+
 }
 
 bool

@@ -36,6 +36,7 @@
 #include "audiopluginmanager.h"
 #include "widgets.h"
 #include "rosestrings.h"
+#include "colours.h"
 
 #include "rosedebug.h"
 
@@ -365,6 +366,8 @@ PluginControl::PluginControl(QWidget *parent,
                                       step * 10.0,
                                       initialValue, // initial
                                       30);          // size
+
+        m_dial->setKnobColour(RosegardenGUIColours::RotaryPlugin);
 
         //m_dial->setPosition(defaultValue);
         //emit valueChanged(defaultValue);

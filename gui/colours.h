@@ -109,6 +109,8 @@ namespace RosegardenGUIColours
     extern const QColor RotaryPastelGreen;
     extern const QColor RotaryPastelOrange;
     extern const QColor RotaryPastelYellow;
+
+    extern const QColor RotaryPlugin;
 }
 
 #endif

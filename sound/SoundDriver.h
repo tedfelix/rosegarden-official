@@ -337,6 +337,10 @@ public:
     //
     void clearAudioPlayQueue();
 
+    // Does what it says it does
+    //
+    void clearDefunctFromAudioPlayQueue();
+
     // Handle audio file references
     //
     void clearAudioFiles();

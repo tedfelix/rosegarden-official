@@ -143,7 +143,8 @@ operator>>(QDataStream &dS, MappedComposition &mC)
     return dS;
 }
 
-// Move the start time of this MappedComposition and all its events
+// Move the start time of this MappedComposition and all its events.
+// Actually - we have a special case for audio events at the moment..
 //
 //
 void
@@ -151,8 +152,13 @@ MappedComposition::moveStartTime(const Rosegarden::RealTime &mT)
 {
     MappedCompositionIterator it;
 
-    for (it = this->begin(); it != this->end(); it++)
-        (*it)->setEventTime((*it)->getEventTime() + mT);
+    for (it = this->begin(); it != this->end(); ++it)
+    {
+        //cout << "START TIME FROM " << (*it)->getEventTime();
+        if ((*it)->getType() != MappedEvent::Audio)
+            (*it)->setEventTime((*it)->getEventTime() + mT);
+        //cout << " TO " << (*it)->getEventTime() << endl;
+    }
 
     m_startTime = m_startTime + mT;
     m_endTime = m_endTime + mT;

@@ -1682,6 +1682,17 @@ AlsaDriver::resetPlayback(const RealTime &position, const RealTime &latency)
             (*i)->setRealTime(m_playStartPosition);
         }
     }
+
+#ifdef HAVE_LIBJACK
+
+    // Clear down all playing audio files
+    //
+    std::vector<PlayableAudioFile*>::iterator it;
+
+    for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); ++it)
+        (*it)->setStatus(PlayableAudioFile::DEFUNCT);
+
+#endif
 }
 
 
@@ -1834,6 +1845,10 @@ AlsaDriver::processAudioQueue(const RealTime &playLatency, bool now)
              catch(...) {;}
         }
     }
+
+    // Clear any defunct files from the queue
+    //
+    //clearDefunctFromAudioPlayQueue();
 
 }
 
@@ -2458,6 +2473,11 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                     }
                 }
 
+                /*
+                cout << "QUEUEING AUDIO - FILE ID = " << (*i)->getAudioID()
+                     << " for " << adjustedEventTime - playLatency
+                     << endl;
+                     */
                 queueAudio(audioFile);
             }
             else
@@ -3410,6 +3430,8 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
                     if ((*it)->getStatus() == PlayableAudioFile::DEFUNCT)
                     {
+                        //inst->clearDefunctFromAudioPlayQueue();
+
                         if (samplePtr - origSamplePtr > int(samples.length()))
                         {
                             /*

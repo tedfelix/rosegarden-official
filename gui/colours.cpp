@@ -105,6 +105,8 @@ namespace RosegardenGUIColours
     const QColor RotaryPastelOrange = QColor(255, 233, 208);
     const QColor RotaryPastelYellow = QColor(249, 255, 208);
 
+    const QColor RotaryPlugin = QColor(185, 255, 248);
+
 }
 
 
