@@ -35,6 +35,9 @@
 #include "ArtsDriver.h"
 #include "Midi.h"
 
+using std::cerr;
+using std::cout;
+using std::endl;
 
 namespace Rosegarden
 {
@@ -53,7 +56,7 @@ ArtsDriver::ArtsDriver():
 
     if (m_soundServer.isNull())
     {
-        cerr << "ArtsDriver - can't find aRts SoundServer - " <<
+	    cerr << "ArtsDriver - can't find aRts SoundServer - " <<
                 "ensure that artsd is running!" << endl;
         m_driverStatus = NO_DRIVER;
         return;

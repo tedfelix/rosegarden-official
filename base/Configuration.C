@@ -63,7 +63,7 @@ Configuration::~Configuration()
 std::string
 Configuration::toXmlString()
 {
-    stringstream config;
+    std::stringstream config;
 
     config << std::endl;
     config << "<configuration>" << std::endl;
