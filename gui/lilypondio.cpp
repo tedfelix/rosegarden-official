@@ -365,9 +365,9 @@ LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp) {
 
 // return a string of tabs, used to make it easier to change the horizontal
 // layout of export if sections need to be added/moved
-std::string LilypondExporter::indent(int columns) {
+std::string LilypondExporter::indent(const int &column) {
     std::string outStr = "";
-    for (int c = 1; c <= columns; c++) {
+    for (int c = 1; c <= column; c++) {
         outStr += "    ";
     }
     return outStr;

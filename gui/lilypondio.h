@@ -76,7 +76,7 @@ protected:
     std::string protectIllegalChars(std::string inStr);
 
     // return a string full of column tabs
-    std::string indent(int column);
+    std::string indent(const int &column);
                   
 
  private:
