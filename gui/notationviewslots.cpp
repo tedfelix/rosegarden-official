@@ -2253,38 +2253,37 @@ NotationView::slotToggleTracking()
 //----------------------------------------
 void NotationView::slotNoAccidental()
 {
-    m_currentAccidental = Rosegarden::Accidentals::NoAccidental;
-    emit changeAccidental(Rosegarden::Accidentals::NoAccidental);
+    emit changeAccidental(Rosegarden::Accidentals::NoAccidental, false);
+}
+
+void NotationView::slotFollowAccidental()
+{
+    emit changeAccidental(Rosegarden::Accidentals::NoAccidental, true);
 }
 
 void NotationView::slotSharp()
 {
-    m_currentAccidental = Rosegarden::Accidentals::Sharp;
-    emit changeAccidental(Rosegarden::Accidentals::Sharp);
+    emit changeAccidental(Rosegarden::Accidentals::Sharp, false);
 }
 
 void NotationView::slotFlat()
 {
-    m_currentAccidental = Rosegarden::Accidentals::Flat;
-    emit changeAccidental(Rosegarden::Accidentals::Flat);
+    emit changeAccidental(Rosegarden::Accidentals::Flat, false);
 }
 
 void NotationView::slotNatural()
 {
-    m_currentAccidental = Rosegarden::Accidentals::Natural;
-    emit changeAccidental(Rosegarden::Accidentals::Natural);
+    emit changeAccidental(Rosegarden::Accidentals::Natural, false);
 }
 
 void NotationView::slotDoubleSharp()
 {
-    m_currentAccidental = Rosegarden::Accidentals::DoubleSharp;
-    emit changeAccidental(Rosegarden::Accidentals::DoubleSharp);
+    emit changeAccidental(Rosegarden::Accidentals::DoubleSharp, false);
 }
 
 void NotationView::slotDoubleFlat()
 {
-    m_currentAccidental = Rosegarden::Accidentals::DoubleFlat;
-    emit changeAccidental(Rosegarden::Accidentals::DoubleFlat);
+    emit changeAccidental(Rosegarden::Accidentals::DoubleFlat, false);
 }
 
 

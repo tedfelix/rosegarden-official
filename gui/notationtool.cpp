@@ -164,7 +164,8 @@ NoteInserter::NoteInserter(NotationView* view)
       m_noteDots(0),
       m_autoBeam(true),
       m_accidental(Rosegarden::Accidentals::NoAccidental),
-      m_lastAccidental(Rosegarden::Accidentals::NoAccidental)
+      m_lastAccidental(Rosegarden::Accidentals::NoAccidental),
+      m_followAccidental(false)
 {
     QIconSet icon;
 
@@ -220,8 +221,8 @@ NoteInserter::NoteInserter(NotationView* view)
 
     createMenu("noteinserter.rc");
 
-    connect(m_parentView, SIGNAL(changeAccidental(Rosegarden::Accidental)),
-            this,         SLOT(slotSetAccidental(Rosegarden::Accidental)));
+    connect(m_parentView, SIGNAL(changeAccidental(Rosegarden::Accidental, bool)),
+            this,         SLOT(slotSetAccidental(Rosegarden::Accidental, bool)));
 }
 
 NoteInserter::NoteInserter(const QString& menuName, NotationView* view)
@@ -231,10 +232,11 @@ NoteInserter::NoteInserter(const QString& menuName, NotationView* view)
       m_autoBeam(false),
       m_clickHappened(false),
       m_accidental(Rosegarden::Accidentals::NoAccidental),
-      m_lastAccidental(Rosegarden::Accidentals::NoAccidental)
+      m_lastAccidental(Rosegarden::Accidentals::NoAccidental),
+      m_followAccidental(false)
 {
-    connect(m_parentView, SIGNAL(changeAccidental(Rosegarden::Accidental)),
-            this,         SLOT(slotSetAccidental(Rosegarden::Accidental)));
+    connect(m_parentView, SIGNAL(changeAccidental(Rosegarden::Accidental, bool)),
+            this,         SLOT(slotSetAccidental(Rosegarden::Accidental, bool)));
 }
 
 NoteInserter::~NoteInserter()
@@ -298,7 +300,8 @@ NoteInserter::handleMouseRelease(Rosegarden::timeT,
 
     Event *lastInsertedEvent = doAddCommand
 	(segment, m_clickTime, endTime, note, m_clickPitch,
-	 m_accidental == Rosegarden::Accidentals::NoAccidental ?
+	 (m_accidental == Rosegarden::Accidentals::NoAccidental &&
+	  m_followAccidental) ?
 	    m_lastAccidental : m_accidental);
 
     if (lastInsertedEvent) {
@@ -409,7 +412,8 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
     // as of the previous note found at this height -- iff such a note
     // is found more recently than the last key signature.
 
-    if (m_accidental == Rosegarden::Accidentals::NoAccidental) {
+    if (m_accidental == Rosegarden::Accidentals::NoAccidental &&
+	m_followAccidental) {
 	Rosegarden::Segment &segment = staff->getSegment();
 	m_lastAccidental = m_accidental;
 	Segment::iterator i = segment.findNearestTime(time);
@@ -613,39 +617,23 @@ void NoteInserter::slotSetDots(unsigned int dots)
     if (dotsAction) dotsAction->setChecked(dots > 0);
 }
 
-void NoteInserter::slotSetAccidental(Rosegarden::Accidental accidental)
+void NoteInserter::slotSetAccidental(Rosegarden::Accidental accidental,
+				     bool follow)
 {
     NOTATION_DEBUG << "NoteInserter::setAccidental: accidental is "
 			 << accidental << endl;
     m_accidental = accidental;
-}
-
-void NoteInserter::slotSetAccidentalSync(Rosegarden::Accidental accidental)
-{
-    NOTATION_DEBUG << "NoteInserter::setAccidentalSync: accidental is "
-			 << accidental << endl;
-    slotSetAccidental(accidental);
-
-    int i;
-    for (i = 0; i < 6; ++i) {
-	if (accidental == m_actionsAccidental[i][4]) break;
-    }
-    if (i == 6) return;
-
-    // Get the parent view toolbar in sync - check the corresponding action
-    KAction* action = actionCollection()->action(m_actionsAccidental[i][2]);
-
-    KToggleAction* tAction = 0;
-    
-    if ((tAction = dynamic_cast<KToggleAction*>(action)))
-        tAction->setChecked(true);
-    else
-        KMessageBox::error(0, "NoteInserter::setAccidentalSync : couldn't find action");
+    m_followAccidental = follow;
 }
 
 void NoteInserter::slotNoAccidental()
 {
     m_parentView->actionCollection()->action("no_accidental")->activate();
+}
+
+void NoteInserter::slotFollowAccidental()
+{
+    m_parentView->actionCollection()->action("follow_accidental")->activate();
 }
 
 void NoteInserter::slotSharp()
@@ -715,20 +703,22 @@ void NoteInserter::slotRestsSelected()
     }
 }
 
-const char* NoteInserter::m_actionsAccidental[][5] = 
+const char* NoteInserter::m_actionsAccidental[][4] = 
     {
         { "No accidental",  "1slotNoAccidental()",  "no_accidental",
-          "accidental-none", Rosegarden::Accidentals::NoAccidental.c_str() },
+          "accidental-none" },
+        { "Follow accidental",  "1slotFollowAccidental()",  "follow_accidental",
+          "accidental-follow" },
         { "Sharp",          "1slotSharp()",         "sharp_accidental",
-          "accidental-sharp", Rosegarden::Accidentals::Sharp.c_str() },
+          "accidental-sharp" },
         { "Flat",           "1slotFlat()",          "flat_accidental",
-          "accidental-flat", Rosegarden::Accidentals::Flat.c_str() },
+          "accidental-flat" },
         { "Natural",        "1slotNatural()",       "natural_accidental",
-          "accidental-natural", Rosegarden::Accidentals::Natural.c_str() },
+          "accidental-natural" },
         { "Double sharp",   "1slotDoubleSharp()",   "double_sharp_accidental",
-          "accidental-doublesharp", Rosegarden::Accidentals::DoubleSharp.c_str() },
+          "accidental-doublesharp" },
         { "Double flat",    "1slotDoubleFlat()",    "double_flat_accidental",
-          "accidental-doubleflat", Rosegarden::Accidentals::DoubleFlat.c_str() }
+          "accidental-doubleflat" }
     };
 
 //------------------------------

@@ -12,6 +12,7 @@
   <Action name="toggle_dot" />
   <Separator/>
   <Action name="no_accidental" />
+  <Action name="follow_accidental" />
   <Action name="sharp_accidental" />
   <Action name="flat_accidental" />
   <Action name="natural_accidental" />

@@ -319,6 +319,7 @@
       <Menu noMerge="1" name="Accidentals">
 	    <text>&amp;Accidentals</text>
 	    <Action name="no_accidental" />
+	    <Action name="follow_accidental" />
 	    <Action name="sharp_accidental" />
 	    <Action name="flat_accidental" />
 	    <Action name="natural_accidental" />
@@ -510,6 +511,7 @@
   <text>Accidentals Toolbar</text>
 
   <Action name="no_accidental" />
+  <Action name="follow_accidental" />
   <Action name="sharp_accidental" />
   <Action name="flat_accidental" />
   <Action name="natural_accidental" />

@@ -369,6 +369,7 @@ public slots:
 
     /// accidental switch slots
     void slotNoAccidental();
+    void slotFollowAccidental();
     void slotSharp();
     void slotFlat();
     void slotNatural();
@@ -696,7 +697,7 @@ signals:
     /**
      * Emitted when a new accidental has been choosen by the user
      */
-    void changeAccidental(Rosegarden::Accidental);
+    void changeAccidental(Rosegarden::Accidental, bool follow);
 
     /**
      * Emitted when the selection has been cut or copied
@@ -918,7 +919,6 @@ protected:
     DeferredCursorMoveType m_deferredCursorMove;
     double m_deferredCursorScrollToX;
 
-    Rosegarden::Accidental m_currentAccidental;
     QString m_lastNoteAction;
 
     std::string m_fontName;

@@ -161,13 +161,7 @@ public slots:
     void slotSetDots(unsigned int dots);
  
     /// Set the accidental for the notes which will be inserted
-    void slotSetAccidental(Rosegarden::Accidental);
-
-    /**
-     * Set the accidental for the notes which will be inserted
-     * and put the parent view toolbar in sync
-     */
-    void slotSetAccidentalSync(Rosegarden::Accidental);
+    void slotSetAccidental(Rosegarden::Accidental, bool follow);
 
 protected:
     NoteInserter(NotationView*);
@@ -194,6 +188,7 @@ protected:
 protected slots:
     // RMB menu slots
     void slotNoAccidental();
+    void slotFollowAccidental();
     void slotSharp();
     void slotFlat();
     void slotNatural();
@@ -224,8 +219,9 @@ protected:
 
     Rosegarden::Accidental m_accidental;
     Rosegarden::Accidental m_lastAccidental;
+    bool m_followAccidental;
 
-    static const char* m_actionsAccidental[][5];
+    static const char* m_actionsAccidental[][4];
 };
 
 /**
