@@ -1,6 +1,6 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 
-SUBDIRS = po core gui sound
+SUBDIRS = po core sound gui
 
 EXTRA_DIST = rosegardengui.kdevprj AUTHORS COPYING ChangeLog INSTALL README TODO rosegardengui.lsm 
 
