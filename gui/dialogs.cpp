@@ -4333,15 +4333,13 @@ ManageMetronomeDialog::slotPreviewPitch(int pitch)
     
     if (inst)
     {
-	Rosegarden::MappedEvent *mE = 
-	    new Rosegarden::MappedEvent
-	    (inst->getId(),
-	     Rosegarden::MappedEvent::MidiNoteOneShot,
-	     pitch,
-	     Rosegarden::MidiMaxValue,
-	     Rosegarden::RealTime::zeroTime,
-	     Rosegarden::RealTime(0, 10000),
-	     Rosegarden::RealTime::zeroTime);
+	Rosegarden::MappedEvent mE(inst->getId(),
+                                   Rosegarden::MappedEvent::MidiNoteOneShot,
+                                   pitch,
+                                   Rosegarden::MidiMaxValue,
+                                   Rosegarden::RealTime::zeroTime,
+                                   Rosegarden::RealTime(0, 10000),
+                                   Rosegarden::RealTime::zeroTime);
 
 	Rosegarden::StudioControl::sendMappedEvent(mE);
     }

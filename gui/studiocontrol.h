@@ -72,7 +72,7 @@ public:
     // Send controllers and other one off MIDI events using these
     // interfaces.
     //
-    static void sendMappedEvent(Rosegarden::MappedEvent *mE);
+    static void sendMappedEvent(const Rosegarden::MappedEvent& mE);
     static void sendMappedComposition(const Rosegarden::MappedComposition &mC);
 
     // MappedInstrument

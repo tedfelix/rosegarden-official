@@ -1214,7 +1214,6 @@ SequencerConfigurationPage::apply()
     }
     */
 
-    Rosegarden::MappedEvent *mE;
     unsigned int device = 0;
 
     if (m_devices.size())
@@ -1222,12 +1221,11 @@ SequencerConfigurationPage::apply()
         device = m_devices[m_recordDevice->currentItem()];
 
         // send the selected device to the sequencer
-        mE= new Rosegarden::MappedEvent(
-                    Rosegarden::MidiInstrumentBase, // InstrumentId
-                    Rosegarden::MappedEvent::SystemRecordDevice,
-                    Rosegarden::MidiByte(device));
+        Rosegarden::MappedEvent mEdevice(Rosegarden::MidiInstrumentBase, // InstrumentId
+                                   Rosegarden::MappedEvent::SystemRecordDevice,
+                                   Rosegarden::MidiByte(device));
 
-        Rosegarden::StudioControl::sendMappedEvent(mE);
+        Rosegarden::StudioControl::sendMappedEvent(mEdevice);
     }
 
     m_cfg->writeEntry("midirecorddevice", device);
@@ -1251,12 +1249,11 @@ SequencerConfigurationPage::apply()
     //
     m_cfg->writeEntry("audiorecordminutes", m_audioRecordMinutes->value());
 
-    mE = new Rosegarden::MappedEvent(
-                Rosegarden::MidiInstrumentBase, // InstrumentId
-                Rosegarden::MappedEvent::SystemAudioInputs,
-                Rosegarden::MidiByte(m_jackInputs->value()));
+    Rosegarden::MappedEvent mEjackInputs(Rosegarden::MidiInstrumentBase, // InstrumentId
+                                         Rosegarden::MappedEvent::SystemAudioInputs,
+                                         Rosegarden::MidiByte(m_jackInputs->value()));
 
-    Rosegarden::StudioControl::sendMappedEvent(mE);
+    Rosegarden::StudioControl::sendMappedEvent(mEjackInputs);
 
 
 
@@ -1293,12 +1290,11 @@ SequencerConfigurationPage::apply()
 
     // Now send it
     //
-    mE = new Rosegarden::MappedEvent(
-             Rosegarden::MidiInstrumentBase, // InstrumentId
-             Rosegarden::MappedEvent::SystemJackTransport,
-             Rosegarden::MidiByte(jackValue));
+    Rosegarden::MappedEvent mEjackValue(Rosegarden::MidiInstrumentBase, // InstrumentId
+                                        Rosegarden::MappedEvent::SystemJackTransport,
+                                        Rosegarden::MidiByte(jackValue));
  
-    Rosegarden::StudioControl::sendMappedEvent(mE);
+    Rosegarden::StudioControl::sendMappedEvent(mEjackValue);
 #endif // HAVE_LIBJACK
 
     // Now write the MMC entry
@@ -1335,12 +1331,11 @@ SequencerConfigurationPage::apply()
 
     // Now send it
     //
-    mE = new Rosegarden::MappedEvent(
-                Rosegarden::MidiInstrumentBase, // InstrumentId
-                Rosegarden::MappedEvent::SystemMMCTransport,
-                Rosegarden::MidiByte(mmcValue));
+    Rosegarden::MappedEvent mEmccValue(Rosegarden::MidiInstrumentBase, // InstrumentId
+                                       Rosegarden::MappedEvent::SystemMMCTransport,
+                                       Rosegarden::MidiByte(mmcValue));
 
-    Rosegarden::StudioControl::sendMappedEvent(mE);
+    Rosegarden::StudioControl::sendMappedEvent(mEmccValue);
 
 
     // ------------- MIDI Clock and System messages ------------
@@ -1350,12 +1345,11 @@ SequencerConfigurationPage::apply()
 
     // Now send it
     //
-    mE = new Rosegarden::MappedEvent(
-                Rosegarden::MidiInstrumentBase, // InstrumentId
-                Rosegarden::MappedEvent::SystemMIDIClock,
-                Rosegarden::MidiByte(midiClock));
+    Rosegarden::MappedEvent mEMIDIClock(Rosegarden::MidiInstrumentBase, // InstrumentId
+                                        Rosegarden::MappedEvent::SystemMIDIClock,
+                                        Rosegarden::MidiByte(midiClock));
 
-    Rosegarden::StudioControl::sendMappedEvent(mE);
+    Rosegarden::StudioControl::sendMappedEvent(mEMIDIClock);
 }
 
 // ---

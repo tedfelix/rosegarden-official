@@ -199,10 +199,15 @@ StudioControl::setStudioPluginPort(MappedObjectId pluginId,
 
 
 void
-StudioControl::sendMappedEvent(Rosegarden::MappedEvent *mE)
+StudioControl::sendMappedEvent(const Rosegarden::MappedEvent &mE)
 {
+    static Rosegarden::MappedEvent mEs;
+    
+    mEs = mE; // just in case the passed mapped event has dubious
+              // origins and taking its address isn't safe
+    
     Rosegarden::MappedComposition mC;
-    mC.insert(mE);
+    mC.insert(&mEs);
     StudioControl::sendMappedComposition(mC);
 }
 

@@ -1810,25 +1810,23 @@ MIDIInstrumentParameterPanel::sendBankAndProgram()
 
         // Send the bank select message before any PC message
         //
-        Rosegarden::MappedEvent *mE = 
-            new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-				     Rosegarden::MappedEvent::MidiController,
-				     Rosegarden::MIDI_CONTROLLER_BANK_MSB,
-				     m_selectedInstrument->getMSB());
-        Rosegarden::StudioControl::sendMappedEvent(mE);
+        Rosegarden::MappedEvent mEMSB(m_selectedInstrument->getId(), 
+                                      Rosegarden::MappedEvent::MidiController,
+                                      Rosegarden::MIDI_CONTROLLER_BANK_MSB,
+                                      m_selectedInstrument->getMSB());
+        Rosegarden::StudioControl::sendMappedEvent(mEMSB);
 
-        mE = new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-				     Rosegarden::MappedEvent::MidiController,
-				     Rosegarden::MIDI_CONTROLLER_BANK_LSB,
-				     m_selectedInstrument->getLSB());
-        Rosegarden::StudioControl::sendMappedEvent(mE);
+        Rosegarden::MappedEvent mELSB(m_selectedInstrument->getId(), 
+                                      Rosegarden::MappedEvent::MidiController,
+                                      Rosegarden::MIDI_CONTROLLER_BANK_LSB,
+                                      m_selectedInstrument->getLSB());
+        Rosegarden::StudioControl::sendMappedEvent(mELSB);
     }
 
-    Rosegarden::MappedEvent *mE = 
-     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                 Rosegarden::MappedEvent::MidiProgramChange,
-                                 m_selectedInstrument->getProgramChange(),
-                                 (Rosegarden::MidiByte)0);
+    Rosegarden::MappedEvent mE(m_selectedInstrument->getId(), 
+                               Rosegarden::MappedEvent::MidiProgramChange,
+                               m_selectedInstrument->getProgramChange(),
+                               (Rosegarden::MidiByte)0);
 
     // Send the controller change
     //
@@ -1888,11 +1886,10 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
         return;
     }
 
-    Rosegarden::MappedEvent *mE = 
-     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                 Rosegarden::MappedEvent::MidiController,
-                                 (Rosegarden::MidiByte)controllerNumber,
-                                 (Rosegarden::MidiByte)value);
+    Rosegarden::MappedEvent mE(m_selectedInstrument->getId(), 
+                               Rosegarden::MappedEvent::MidiController,
+                               (Rosegarden::MidiByte)controllerNumber,
+                               (Rosegarden::MidiByte)value);
     Rosegarden::StudioControl::sendMappedEvent(mE);
 
     emit updateAllBoxes();
