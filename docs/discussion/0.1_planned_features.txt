@@ -21,7 +21,7 @@ Features for release 0.1
 - sort the source files in rosegardengui a bit better (core/,
   gui/main/, gui/notation/, gui/trackedit)
 
-- do a global core/rosegardengui Makefile
+- do a global core + rosegardengui Makefile
 
 - basic MIDI record and playback infrastructure through aRts (RB - 18.06.01)
 
