@@ -131,6 +131,14 @@ public:
     bool isShiftDown() { return m_shiftDown; }
     bool isControlDown() { return m_controlDown; }
 
+signals:
+    /**
+     * Tell the main view that the track being edited is the
+     * current selected track
+     * This is used by #slotToggleSolo
+     */
+    void selectTrack(int);
+
 public slots:
     /**
      * close window
@@ -187,7 +195,7 @@ public slots:
      */
     virtual void slotTestClipboard();
 
-    virtual void slotPlaySolo();
+    virtual void slotToggleSolo();
 
 protected:
 

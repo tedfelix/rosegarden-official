@@ -426,7 +426,20 @@ EditViewBase::slotTestClipboard()
 }
 
 void
-EditViewBase::slotPlaySolo()
+EditViewBase::slotToggleSolo()
 {
+    RG_DEBUG << "EditViewBase::slotToggleSolo()\n";
+
+    if(getDocument()->getComposition().isSolo()) {
+
+        getDocument()->getComposition().setSolo(false);
+
+    } else {
+
+        emit selectTrack(m_segments[0]->getTrack());
+        getDocument()->getComposition().setSolo(true);
+
+    }
+    
 }
  
