@@ -1120,13 +1120,9 @@ SequenceManager::preparePlayback(bool forceProgramChanges)
             }
 
         }
-/*!!! ??? send fader & buss levels? or do we send them routinely anyway?
         else if ((*it)->getType() == Instrument::Audio)
         {
-            Rosegarden::StudioControl::setStudioObjectProperty(
-                    (*it)->getId(), "value", (*it)->getVolume());
         }
-*/
         else
         {
             RG_DEBUG << "SequenceManager::preparePlayback - "

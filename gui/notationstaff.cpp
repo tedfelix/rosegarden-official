@@ -1446,6 +1446,10 @@ NotationStaff::checkRendered(timeT from, timeT to)
 {
     if (!m_ready) return false;
     Rosegarden::Composition *composition = getSegment().getComposition();
+    if (!composition) {
+	NOTATION_DEBUG << "NotationStaff::checkRendered: warning: segment has no composition -- is my paint event late?" << endl;
+	return;
+    }
 
 //    NOTATION_DEBUG << "NotationStaff::checkRendered: " << from << " -> " << to << endl;
 
