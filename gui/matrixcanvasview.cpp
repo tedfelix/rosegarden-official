@@ -52,8 +52,8 @@ MatrixCanvasView::~MatrixCanvasView()
 
 void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 {
-    // store initial snap
-    m_lastSnap = m_snapGrid.getSnapTime(e->x());
+    if (m_snapGrid.getSnapTime(e->x()))
+        m_lastSnap = m_snapGrid.getSnapTime(e->x());
 
     updateGridSnap(e);
 
@@ -107,8 +107,8 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 
 void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
 {
-    // store initial snap
-    m_lastSnap = m_snapGrid.getSnapTime(e->x());
+    if (m_snapGrid.getSnapTime(e->x()))
+        m_lastSnap = m_snapGrid.getSnapTime(e->x());
 
     updateGridSnap(e);
 

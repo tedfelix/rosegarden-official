@@ -446,6 +446,18 @@ void MatrixSelector::handleLeftButtonPress(Rosegarden::timeT time,
 
     m_currentStaff = m_mParentView->getStaff(staffNo);
 
+    // Do the merge selection thing
+    //
+    delete m_selectionToMerge; // you can safely delete 0, you know?
+    const Rosegarden::EventSelection *selectionToMerge = 0;
+    if (e->state() && m_mParentView->isShiftDown())
+        selectionToMerge = m_mParentView->getCurrentSelection();
+
+    m_selectionToMerge =
+        (selectionToMerge ? new EventSelection(*selectionToMerge) : 0);
+
+    // Now the rest of the element stuff
+    //
     m_clickedElement = dynamic_cast<MatrixElement*>(element);
 
     if (m_clickedElement)
@@ -485,9 +497,13 @@ void MatrixSelector::handleLeftButtonPress(Rosegarden::timeT time,
         m_selectionRect->show();
         m_updateRect = true;
 
-        // clear existing selection
-        m_mParentView->setCurrentSelection(0, false);
-        m_mParentView->canvas()->update();
+        // Clear existing selection if we're not merging
+        //
+        if (m_selectionToMerge)
+        {
+            m_mParentView->setCurrentSelection(0, false);
+            m_mParentView->canvas()->update();
+        }
     }
 
     //m_parentView->setCursorPosition(p.x());
