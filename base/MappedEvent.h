@@ -34,12 +34,33 @@
 namespace Rosegarden
 {
 
-class MappedEvent : public Event
+typedef unsigned int instrumentT;
+
+class MappedEvent
 {
 public:
-  MappedEvent() : Event() {;}
-  MappedEvent(const Event &e):Event(e) {;}
+  MappedEvent() {;}
+  MappedEvent(const Event &e): _pitch(e.get<Int>("pitch")),
+                              _absoluteTime(e.getAbsoluteTime()),
+                              _duration(e.getDuration()) {;}
+
+  MappedEvent(const int &pitch, const timeT &absTime, const timeT &duration,
+              const instrumentT &instrument):
+                              _pitch(pitch),
+                              _absoluteTime(absTime),
+                              _duration(duration),
+                              _instrument(instrument) {;}
   ~MappedEvent() {;}
+
+  void setInstrument(const instrumentT &i) { _instrument = i; }
+  void setDuration(const timeT &d) { _duration = d; }
+  void setAbsoluteTime(const timeT &a) { _absoluteTime = a; }
+  void setPitch(const int &p) { _pitch = p; }
+
+  instrumentT getInstrument() const { return _instrument; }
+  timeT getDuration() const { return _duration; }
+  timeT getAbsoluteTime() const { return _absoluteTime; }
+  int   getPitch() const { return _pitch; }
 
   struct MappedEventCmp
   {
@@ -49,39 +70,14 @@ public:
     }
   };
 
-  const unsigned int instrument() const { return _instrument; }
-  void instrument(const unsigned int &instrument) { _instrument = instrument; }
+  friend bool operator<(const MappedEvent &a, const MappedEvent &b);
 
 private:
-  unsigned int _instrument;
 
-};
-
-class MappedComposition : public std::multiset<MappedEvent *,
-                                      MappedEvent::MappedEventCmp>
-{
-public:
-  MappedComposition():_startTime(0), _endTime(0) {;}
-  MappedComposition(const unsigned int &sT, const unsigned int &eT):
-             _startTime(sT), _endTime(eT) {;}
-  ~MappedComposition() {;}
-
-  const unsigned int beginTime() const { return _startTime; }
-  const unsigned int endTime() const { return _endTime; }
-
-  // This section is used for serialising this class over DCOP
-  //
-  //
-  friend QDataStream& operator<<(QDataStream &dS, const MappedComposition &mC);
-
-  friend QDataStream& operator>>(QDataStream &dS, MappedComposition &mC);
-
-private:
-  unsigned int _startTime;
-  unsigned int _endTime;
-
-  QDataStream _conversion;
-
+  int _pitch;
+  timeT _absoluteTime;
+  timeT _duration;
+  instrumentT _instrument;
 
 };
 

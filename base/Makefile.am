@@ -5,4 +5,4 @@ libcore_la_LDFLAGS = $(all_libraries)
 
 INCLUDES= $(all_includes)
 
-libcore_la_SOURCES = Property.C Event.C ViewElement.C Track.C Composition.C NotationTypes.C Equation.C Quantizer.C MappedEvent.C
+libcore_la_SOURCES = Property.C Event.C ViewElement.C Track.C Composition.C NotationTypes.C Equation.C Quantizer.C MappedEvent.C MappedComposition.C

@@ -18,58 +18,17 @@
     COPYING included with this distribution for more information.
 */
 
-#include <qdatastream.h>
 #include "MappedEvent.h"
 
 namespace Rosegarden
 {
 
-// turn a MappedComposition into a data stream
-//
-QDataStream&
-operator<<(QDataStream &dS, const MappedComposition &mC)
+bool
+operator<(const MappedEvent &a, const MappedEvent &b)
 {
-  
-  QCString retString = "thing";
-  dS << retString;
-
-/*
-  for ( it = mC.begin(); it != mC.end(); ++it )
-  {
-    cerr << "ELEMENT" << endl;
-  }
-*/
-
-
-  cerr << "operator<<" << retString << endl;
-
-  return dS;
+    return a.getAbsoluteTime() < b.getAbsoluteTime();
 }
 
-// turn a data stream into a MappedComposition
-//
-QDataStream& 
-operator>>(QDataStream &dS, MappedComposition &mC)
-{
-  QCString retString;
-
-  dS >> retString;
-
-  cout << retString << endl;
-/*
-  while (!dS.atEnd())
-  {
-    dS >> retString;
-    cerr << "operator>>" << retString << endl;
-  }
-    
-
-  //cerr << "PrintableData = " << dS.isPrintableData() << endl;
-*/
-
-  return dS;
-}
 
 }
-
 

@@ -24,7 +24,7 @@
 #include <set>
 
 #include "Track.h"
-#include "MappedEvent.h"
+#include "MappedComposition.h"
 
 namespace Rosegarden 
 {

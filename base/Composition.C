@@ -125,7 +125,12 @@ Composition::getMappedComposition(const unsigned int &sliceStart,
     for ( Track::iterator j = (*i)->begin(); j != (*i)->end(); ++j )
     {
       // for the moment ensure we're all positive
-      assert((*j)->getAbsoluteTime() >= 0 );
+      //assert((*j)->getAbsoluteTime() >= 0 );
+
+      // skip this event if it doesn't have pitch
+      //
+      if (!(*j)->has("pitch"))
+        continue;
 
       // get the eventTime
       eventTime = (unsigned int) (*j)->getAbsoluteTime();
@@ -135,7 +140,7 @@ Composition::getMappedComposition(const unsigned int &sliceStart,
       {
         // insert event
         MappedEvent *me = new MappedEvent(**j);
-        me->instrument((*i)->getInstrument());
+        me->setInstrument((*i)->getInstrument());
         returnSlice->insert(me);
       }
     }
