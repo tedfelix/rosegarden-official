@@ -3219,7 +3219,7 @@ void RosegardenGUIApp::slotTrackUp()
     // If the track exists
     if (track)
     {
-       comp.setSelectedTrack(pos - 1);
+       comp.setSelectedTrack(track->getId());
        m_view->slotSelectTrackSegments(comp.getSelectedTrack());
     }
 
@@ -3249,7 +3249,7 @@ void RosegardenGUIApp::slotTrackDown()
     // If the track exists
     if (track)
     {
-       comp.setSelectedTrack(pos + 1);
+       comp.setSelectedTrack(track->getId());
        m_view->slotSelectTrackSegments(comp.getSelectedTrack());
     }
 
