@@ -84,7 +84,6 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     m_canvasView(new NotationCanvasView(new QCanvas(width() * 2,
                                                     height() * 2),
                                         this)),
-    m_notePixmapFactory(resolution),
     m_toolbarNotePixmapFactory(5),
     m_hlayout(0),
     m_vlayout(0),
@@ -137,18 +136,16 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
 		   .arg(tracks.size()));
     }
 
-    NotePixmapFactory *npf;
-
     for (unsigned int i = 0; i < tracks.size(); ++i) {
 	m_staffs.push_back(new NotationStaff(canvas(), tracks[i], resolution));
 	m_staffs[i]->move(20, m_staffs[i]->getStaffHeight() * i + 15);
 	m_staffs[i]->show();
-	npf = &m_staffs[i]->getNotePixmapFactory();
     }
     m_currentStaff = 0;
 
+    m_notePixmapFactory = new NotePixmapFactory(resolution);
     m_vlayout = new NotationVLayout();
-    m_hlayout = new NotationHLayout(*npf);
+    m_hlayout = new NotationHLayout(*m_notePixmapFactory);
 
     // Position pointer
     //
@@ -484,6 +481,33 @@ bool NotationView::showBars(int staffNo)
     }
 
     return true;
+}
+
+
+void
+NotationView::changeResolution(int newResolution)
+{
+    delete m_notePixmapFactory;
+    m_notePixmapFactory = new NotePixmapFactory(newResolution);
+
+    delete m_hlayout;
+    m_hlayout = new NotationHLayout(*m_notePixmapFactory);
+
+    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+        m_staffs[i]->move(0, 0);
+        m_staffs[i]->changeResolution(newResolution);
+        m_staffs[i]->move(20, m_staffs[i]->getStaffHeight() * i + 15);
+    }
+
+    bool layoutApplied = applyLayout();
+    if (!layoutApplied) KMessageBox::sorry(0, "Couldn't apply layout");
+    else {
+	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+	    m_staffs[i]->showElements();
+            m_staffs[i]->show();
+	    showBars(i);
+        }
+    }
 }
 
 
@@ -893,6 +917,8 @@ void NotationView::slotTrebleClef()
     m_currentNotePixmap->setPixmap
         (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-treble"));
     setTool(new ClefInserter(Clef::Treble, *this));
+    
+    changeResolution(5);
 }
 
 void NotationView::slotTenorClef()
@@ -900,6 +926,8 @@ void NotationView::slotTenorClef()
     m_currentNotePixmap->setPixmap
         (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-tenor"));
     setTool(new ClefInserter(Clef::Tenor, *this));
+
+    changeResolution(7);
 }
 
 void NotationView::slotAltoClef()
@@ -907,6 +935,8 @@ void NotationView::slotAltoClef()
     m_currentNotePixmap->setPixmap
         (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-alto"));
     setTool(new ClefInserter(Clef::Alto, *this));
+
+    changeResolution(11);
 }
 
 void NotationView::slotBassClef()
@@ -914,6 +944,8 @@ void NotationView::slotBassClef()
     m_currentNotePixmap->setPixmap
         (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-bass"));
     setTool(new ClefInserter(Clef::Bass, *this));
+
+    changeResolution(13);
 }
 
 

@@ -36,7 +36,7 @@
 class NotePixmapFactory : private NoteCharacterNameLookup
 {
 public:
-    NotePixmapFactory(int size, std::string fontName = "rg21");
+    NotePixmapFactory(int size, std::string fontName = "feta");
     ~NotePixmapFactory();
 
     QCanvasPixmap makeNotePixmap(Rosegarden::Note::Type note,

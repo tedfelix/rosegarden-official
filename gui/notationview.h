@@ -64,6 +64,9 @@ public:
     const RosegardenGUIDoc *getDocument() const { return m_document; }
     RosegardenGUIDoc *getDocument() { return m_document; }
 
+    /// Changes the resolution of the staffs on the view
+    void changeResolution(int newResolution);
+
     /// Calls all the relevant preparse and layout methods
     virtual bool applyLayout(int staffNo = -1);
 
@@ -348,7 +351,7 @@ protected:
 
     std::vector<NotationStaff *> m_staffs;
 
-    NotePixmapFactory m_notePixmapFactory;
+    NotePixmapFactory *m_notePixmapFactory;
     NotePixmapFactory m_toolbarNotePixmapFactory;
     
     NotationHLayout* m_hlayout;

@@ -55,7 +55,15 @@ public:
     // worked even through a const reference, but most of its drawing
     // methods are necessarily non-const because it stores so much
     // state internally
-    NotePixmapFactory& getNotePixmapFactory() { return m_npf; }
+    NotePixmapFactory& getNotePixmapFactory() { return *m_npf; }
+
+    /**
+     * Changes the resolution of the note pixmap factory and the
+     * staff lines, etc; can't change resolution of the actual layout
+     * or pixmaps on the staff, the notation view should do that
+     */
+    void changeResolution(int newResolution);
+
 
     /**
      * Return the Y coordinate of specified line
@@ -74,7 +82,7 @@ public:
      *
      * The bar line is in the middle of the margin
      */
-    unsigned int getBarMargin() const { return m_npf.getBarMargin(); }
+    unsigned int getBarMargin() const { return m_npf->getBarMargin(); }
 
     /**
      * Return the total height of a staff
@@ -135,8 +143,7 @@ protected:
     barlines m_staffLines;
 
     QCanvasLineGroupable *m_initialBarA, *m_initialBarB;
-
-    NotePixmapFactory m_npf;
+    NotePixmapFactory *m_npf;
 };
 
 #endif

@@ -56,13 +56,30 @@ NotationStaff::NotationStaff(QCanvas *canvas, Track *track, int resolution) :
     QCanvasItemGroup(canvas),
     m_barLineHeight(0),
     m_horizLineLength(0),
-    m_resolution(resolution),
-    m_npf(resolution)
+    m_initialBarA(0),
+    m_initialBarB(0),
+    m_npf(0)
 {
-    // horizontal lines
-
     int w = canvas->width();
     m_horizLineLength = w - 20;
+    changeResolution(resolution);
+    setActive(false);  // don't react to mousePress events
+}
+
+NotationStaff::~NotationStaff()
+{
+    // TODO : this causes a crash on quit - don't know why
+//     for (barlines::iterator i = m_barLines.begin(); i != m_barLines.end(); ++i)
+//         delete (*i);
+}
+
+void
+NotationStaff::changeResolution(int newResolution) 
+{
+    m_resolution = newResolution;
+
+    delete m_npf;
+    m_npf = new NotePixmapFactory(newResolution);
 
     // Pitch is represented with the MIDI pitch scale; NotationTypes.h
     // contains methods to convert this to and from staff-height
@@ -77,12 +94,15 @@ NotationStaff::NotationStaff(QCanvas *canvas, Track *track, int resolution) :
     // For a staff at height h, m = (8-h)/2.  Therefore the y-coord of
     // a staff at height h is (8-h)/2 * lineWidth + linesOffset
 
-    // Let's just make the regular staff lines for now, not the leger
-    // lines...
+    int h;
+    for (int h = 0; h < m_staffLines.size(); ++h) {
+        delete m_staffLines[h];
+    }
+    m_staffLines.clear();
 
     for (int h = 0; h <= 8; ++h) {
 
-        StaffLine *line = new StaffLine(canvas, this, h);
+        StaffLine *line = new StaffLine(canvas(), this, h);
         int y = yCoordOfHeight(h);
         line->setPoints(0, y, m_horizLineLength, y);
 
@@ -92,40 +112,35 @@ NotationStaff::NotationStaff(QCanvas *canvas, Track *track, int resolution) :
             line->setZ(-1);
         }
 
+        line->show();
         m_staffLines.push_back(line);
     }
 
-    m_barLineHeight = (nbLines - 1) * m_npf.getLineSpacing();
+    m_barLineHeight = (nbLines - 1) * m_npf->getLineSpacing();
+
+    delete m_initialBarA;
+    delete m_initialBarB;
 
     // First line - thick
     //
     QPen pen(black, 3);
     pen.setCapStyle(Qt::SquareCap);
-    m_initialBarA = new QCanvasLineGroupable(canvas, this);
+    m_initialBarA = new QCanvasLineGroupable(canvas(), this);
     m_initialBarA->setPen(pen);
     m_initialBarA->setPoints(0, linesOffset + 1,
                              0, m_barLineHeight + linesOffset - 1);
     
     // Second line - thin
     //
-    m_initialBarB = new QCanvasLineGroupable(canvas, this);
+    m_initialBarB = new QCanvasLineGroupable(canvas(), this);
     m_initialBarB->setPoints(4, linesOffset,
                              4, m_barLineHeight + linesOffset);
-
-    setActive(false);  // don't react to mousePress events
-}
-
-NotationStaff::~NotationStaff()
-{
-    // TODO : this causes a crash on quit - don't know why
-//     for (barlines::iterator i = m_barLines.begin(); i != m_barLines.end(); ++i)
-//         delete (*i);
-}
+}    
 
 int NotationStaff::yCoordOfHeight(int h) const
 {
     // 0 is bottom staff-line, 8 is top one
-    int y = ((8 - h) * m_npf.getLineSpacing()) / 2 +
+    int y = ((8 - h) * m_npf->getLineSpacing()) / 2 +
         linesOffset + ((h % 2 == 1) ? 1 : 0);
     return y;
 }
@@ -267,21 +282,21 @@ bool NotationStaff::showElements(NotationElementList::iterator from,
                     (*it)->event()->get<Int>(Rosegarden::Note::NoteDots);
 
                 QCanvasPixmap notePixmap
-                    (m_npf.makeRestPixmap(Note(note, dots)));
+                    (m_npf->makeRestPixmap(Note(note, dots)));
                 sprite = new
                     QCanvasNotationSprite(*(*it), &notePixmap, canvas());
 
             } else if ((*it)->event()->isa(Clef::EventType)) {
 
 		currentClef = Clef(*(*it)->event());
-                QCanvasPixmap clefPixmap(m_npf.makeClefPixmap(currentClef));
+                QCanvasPixmap clefPixmap(m_npf->makeClefPixmap(currentClef));
                 sprite = new
                     QCanvasNotationSprite(*(*it), &clefPixmap, canvas());
 
             } else if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
 
                 QCanvasPixmap keyPixmap
-                    (m_npf.makeKeyPixmap
+                    (m_npf->makeKeyPixmap
                      (Rosegarden::Key((*it)->event()->get<String>
                                       (Rosegarden::Key::KeyPropertyName)),
                       currentClef));
@@ -291,7 +306,7 @@ bool NotationStaff::showElements(NotationElementList::iterator from,
             } else if ((*it)->event()->isa(TimeSignature::EventType)) {
 
                 QCanvasPixmap timeSigPixmap
-                    (m_npf.makeTimeSigPixmap(TimeSignature(*(*it)->event())));
+                    (m_npf->makeTimeSigPixmap(TimeSignature(*(*it)->event())));
                 sprite = new
                     QCanvasNotationSprite(*(*it), &timeSigPixmap, canvas());
 
@@ -300,7 +315,7 @@ bool NotationStaff::showElements(NotationElementList::iterator from,
                 kdDebug(KDEBUG_AREA)
                     << "NotationElement of unrecognised type "
                     << (*it)->event()->getType() << endl;
-                QCanvasPixmap unknownPixmap(m_npf.makeUnknownPixmap());
+                QCanvasPixmap unknownPixmap(m_npf->makeUnknownPixmap());
                 sprite = new
                     QCanvasNotationSprite(*(*it), &unknownPixmap, canvas());
             }
@@ -352,7 +367,7 @@ QCanvasSimpleSprite *NotationStaff::makeNoteSprite(NotationElementList::iterator
     bool shifted = false;
     (void)((*it)->event()->get<Bool>(NOTE_HEAD_SHIFTED, shifted));
 
-    long stemLength = m_npf.getNoteBodyHeight();
+    long stemLength = m_npf->getNoteBodyHeight();
     (void)((*it)->event()->get<Int>
            (UNBEAMED_STEM_LENGTH, stemLength));
 
@@ -382,7 +397,7 @@ QCanvasSimpleSprite *NotationStaff::makeNoteSprite(NotationElementList::iterator
                 (BEAM_NEXT_PART_TAILS, nextPartialTails);
 
             QCanvasPixmap notePixmap
-                (m_npf.makeBeamedNotePixmap
+                (m_npf->makeBeamedNotePixmap
                  (note, dots, accidental, shifted, up, stemLength,
                   nextTailCount, thisPartialTails, nextPartialTails,
                   width, (double)gradient / 100.0));
@@ -391,7 +406,7 @@ QCanvasSimpleSprite *NotationStaff::makeNoteSprite(NotationElementList::iterator
         } else {
 
             QCanvasPixmap notePixmap
-                (m_npf.makeNotePixmap
+                (m_npf->makeNotePixmap
                  (note, dots, accidental, shifted, tail, up, stemLength));
             return new QCanvasNotationSprite(*(*it), &notePixmap, canvas());
         }
@@ -400,7 +415,7 @@ QCanvasSimpleSprite *NotationStaff::makeNoteSprite(NotationElementList::iterator
     } else {
 
         QCanvasPixmap notePixmap
-            (m_npf.makeNotePixmap(note, dots, accidental,
+            (m_npf->makeNotePixmap(note, dots, accidental,
                                   shifted, tail, up, stemLength));
 
         return new QCanvasNotationSprite(*(*it), &notePixmap, canvas());
