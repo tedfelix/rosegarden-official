@@ -172,32 +172,13 @@ protected:
     bool addFile(const KURL& kurl);
     bool isSelectedTrackAudio();
     void selectFileListItemNoSignal(QListViewItem*);
-    void enableButtons();
+    void updateActionState(bool haveSelection);
 
     virtual void closeEvent(QCloseEvent *);
 
     //--------------- Data members ---------------------------------
 
     KListView        *m_fileList;
-    QPushButton      *m_addButton;
-    QPushButton      *m_deleteButton;
-    QPushButton      *m_playButton;
-    QPushButton      *m_renameButton;
-    QPushButton      *m_insertButton;
-    QPushButton      *m_deleteAllButton;
-    QPushButton      *m_exportButton;
-    QPushButton      *m_distributeMidiButton;
-
-
-    KAction          *m_addAction;
-    KAction          *m_deleteAction;
-    KAction          *m_playAction;
-    KAction          *m_renameAction;
-    KAction          *m_insertAction;
-    KAction          *m_deleteAllAction;
-    KAction          *m_exportAction;
-    KAction          *m_distributeMidiAction;
-
     RosegardenGUIDoc *m_doc;
 
     QAccel           *m_accelerators;

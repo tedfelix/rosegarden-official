@@ -1014,13 +1014,13 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
 	}
     }
 
-    for (unsigned int i = 0; i <= 200; i += 20) {
+    for (int i = -100; i <= 200; i += 20) {
 	m_swingCombo->insertItem(i == 0 ? i18n("None") : QString("%1%").arg(i));
 	if (i == defaultSwing)
 	    m_swingCombo->setCurrentItem(m_swingCombo->count()-1);
     }
 
-    for (unsigned int i = 10; i <= 100; i += 10) {
+    for (int i = 10; i <= 100; i += 10) {
 	m_iterativeCombo->insertItem(i == 100 ? i18n("Full quantize") :
 				     QString("%1%").arg(i));
 	if (i == defaultIterate)
@@ -1074,6 +1074,7 @@ RosegardenQuantizeParameters::getQuantizer() const
 
     int swing = m_swingCombo->currentItem();
     swing *= 20;
+    swing -= 100;
     
     int iterate = m_iterativeCombo->currentItem();
     iterate *= 10;
