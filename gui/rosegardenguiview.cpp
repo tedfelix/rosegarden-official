@@ -194,9 +194,6 @@ void RosegardenGUIView::print(KPrinter *pPrinter, Composition* p)
 {
     SetWaitCursor waitCursor;
 
-    QPainter printpainter;
-    printpainter.begin(pPrinter);
-
     std::vector<Rosegarden::Segment *> segmentsToEdit;
 
     for (Composition::iterator i = p->begin(); i != p->end(); ++i) {
@@ -210,12 +207,19 @@ void RosegardenGUIView::print(KPrinter *pPrinter, Composition* p)
 	return;
     }
 
-    NotationView *notationView =
-	new NotationView(getDocument(), segmentsToEdit, this, false);
-    notationView->setPageMode(true);
+    NotationView *notationView = new NotationView(getDocument(),
+                                                  segmentsToEdit);
+    notationView->show();
+    kapp->processEvents();
+
+    QPainter printpainter;
+    printpainter.begin(pPrinter);
+
     notationView->print(&printpainter);
 
     printpainter.end();
+
+    delete notationView;
 }
 
 void RosegardenGUIView::selectTool(SegmentCanvas::ToolType tool)
