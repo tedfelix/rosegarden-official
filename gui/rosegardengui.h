@@ -884,7 +884,7 @@ public slots:
     /**
      * Document modified
      */
-    void slotDocumentModified();
+    void slotDocumentModified(bool modified = true);
 
 
     /**

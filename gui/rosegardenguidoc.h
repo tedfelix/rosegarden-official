@@ -32,8 +32,6 @@
 #include <qlist.h>
 #include <qxml.h>
 
-#include <ctime> // for clock_t
-
 #include "rosegardendcop.h"
 #include "rosegardengui.h"
 
@@ -121,6 +119,11 @@ public:
     bool saveIfModified();	
 
     /**
+     * sets the autosave interval in minutes
+     */
+    void setAutoSavePeriod(unsigned int minutes);
+
+    /**
      * deletes the document's contents
      */
     void deleteContents();
@@ -146,11 +149,6 @@ public:
      */	
     bool saveDocument(const QString &filename, const char *format=0,
 		      bool autosave = false);
-
-    /**
-     * saves the document to a suitably-named backup file
-     */
-    void autosave();
 
     /**
      *   sets the path to the file connected with the document
@@ -332,6 +330,11 @@ public slots:
     void slotDocumentModified();
     void slotDocumentRestored();
 
+    /**
+     * saves the document to a suitably-named backup file
+     */
+    void slotAutoSave();
+
     void slotSetPointerPosition(Rosegarden::timeT t) { setPointerPosition(t); }
     void slotSetPlayPosition(Rosegarden::timeT t) { setPlayPosition(t); }
     void slotSetLoop(Rosegarden::timeT s, Rosegarden::timeT e) {setLoop(s,e);}
@@ -343,9 +346,9 @@ public slots:
 
 signals:
     /**
-     * Emitted when document is modified
+     * Emitted when document is modified or saved
      */
-    void documentModified();
+    void documentModified(bool);
 
     void pointerPositionChanged(Rosegarden::timeT);
     void playPositionChanged(Rosegarden::timeT);
@@ -386,7 +389,19 @@ protected:
      *
      */
     void convertToSinglePoint(Rosegarden::Segment *segment);
- 	
+
+    /**
+     * Set the "auto saved" status of the document
+     * Doc. modification sets it to false, autosaving
+     * sets it to true
+     */ 
+    void setAutoSaved(bool s) { m_autoSaved = s; }
+
+    /**
+     * Returns whether the document should be auto-saved
+     */
+    bool isAutoSaved() { return m_autoSaved; }
+
 public:	
     /**
      * the list of the views currently connected to the document
@@ -402,9 +417,9 @@ private:
     bool m_modified;
 
     /**
-     * when the document was last saved or autosaved
+     * the autosaved status of the current document
      */
-    clock_t m_lastSaved;
+    bool m_autoSaved;
 
     /**
      * the title of the current document
@@ -456,6 +471,7 @@ private:
     //
     Rosegarden::AudioPluginManager *m_pluginManager;
 
+    QTimer* m_autoSaveTimer;
 };
 
 #endif // ROSEGARDENGUIDOC_H

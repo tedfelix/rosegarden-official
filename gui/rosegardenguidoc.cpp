@@ -25,6 +25,7 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qwidget.h>
+#include <qtimer.h>
 
 // include files for KDE
 #include <klocale.h>
@@ -95,12 +96,13 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
                                    const char *name)
     : QObject(parent, name),
       m_modified(false),
-      m_lastSaved(clock()),
+      m_autoSaved(false),
       m_recordSegment(0), m_endOfLastRecordedNote(0),
       m_commandHistory(new MultiViewCommandHistory()),
       m_clipboard(new Rosegarden::Clipboard),
       m_startUpSync(true),
-      m_pluginManager(pluginManager)
+      m_pluginManager(pluginManager),
+      m_autoSaveTimer(new QTimer(this))
 
 {
     // Try to tell the sequencer that we're alive only if the
@@ -121,6 +123,15 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
     connect(m_commandHistory, SIGNAL(documentRestored()),
 	    this, SLOT(slotDocumentRestored()));
 
+    // Start autosave timer
+    connect(m_autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
+
+    KConfig* config = kapp->config();
+    config->setGroup("General Options");
+    unsigned int autosaveMinutes =
+	config->readUnsignedNumEntry("autosaveinterval", 20);
+
+    setAutoSavePeriod(autosaveMinutes);
 }
 
 RosegardenGUIDoc::~RosegardenGUIDoc()
@@ -181,33 +192,55 @@ void RosegardenGUIDoc::setModified(bool m)
 
 void RosegardenGUIDoc::slotDocumentModified()
 {
-    clock_t now = clock();
-    KConfig* config = kapp->config();
-    config->setGroup("General Options");
-    unsigned int autosaveMinutes =
-	config->readUnsignedNumEntry("autosaveinterval", 5);
-
-    if (((now - m_lastSaved) * 1000 / CLOCKS_PER_SEC) > 60 * autosaveMinutes) {
-	autosave();
-    }
-
 //    RG_DEBUG << "RosegardenGUIDoc::slotDocumentModified()" << endl;
     setModified(true);
-    emit documentModified();
+    setAutoSaved(false);
+    emit documentModified(true);
 }
 
 void RosegardenGUIDoc::slotDocumentRestored()
 {
-    RG_DEBUG << "RosegardenGUIDoc::slotDocumentRestored()" << endl;
+    RG_DEBUG << "RosegardenGUIDoc::slotDocumentRestored()\n";
     setModified(false);
 }
+
+void RosegardenGUIDoc::slotAutoSave()
+{
+//     RG_DEBUG << "RosegardenGUIDoc::slotAutoSave()\n" << endl;
+
+    if (isAutoSaved()) {
+//         RG_DEBUG << "RosegardenGUIDoc::slotAutoSave() - doc already autosaved\n";
+        return;
+    }
+    
+    QString filename = getAbsFilePath();
+    if (filename.isEmpty())
+        filename = QDir::currentDirPath() + "/" + getTitle();
+
+    QString autoSaveFileName = kapp->tempSaveName(filename);
+
+    RG_DEBUG << "RosegardenGUIDoc::slotAutoSave() - doc modified - saving '"
+             << filename << "' as "
+             << autoSaveFileName << endl;
+
+    saveDocument(autoSaveFileName, 0, true);
+}
+
+void RosegardenGUIDoc::setAutoSavePeriod(unsigned int minutes)
+{
+    m_autoSaveTimer->stop();
+
+    if (minutes > 0)
+        m_autoSaveTimer->start(minutes /* * 60 */ * 1000);
+}
+
 
 bool RosegardenGUIDoc::saveIfModified()
 {
     RG_DEBUG << "RosegardenGUIDoc::saveIfModified()" << endl;
     bool completed=true;
 
-    if (m_modified) {
+    if (isModified()) {
         RosegardenGUIApp *win=(RosegardenGUIApp *) parent();
         int want_save = KMessageBox::warningYesNoCancel(win,
                                                         i18n("The current file has been modified.\n"
@@ -218,7 +251,7 @@ bool RosegardenGUIDoc::saveIfModified()
         switch(want_save)
             {
             case KMessageBox::Yes:
-                if (m_title == i18n("Untitled")) {
+                if (getTitle() == i18n("Untitled")) {
                     win->fileSaveAs();
                 } else {
                     saveDocument(getAbsFilePath());
@@ -254,9 +287,9 @@ void RosegardenGUIDoc::closeDocument()
 
 bool RosegardenGUIDoc::newDocument()
 {
-    m_modified = false;
-    m_absFilePath = QString::null;
-    m_title = i18n("Untitled");
+    setModified(false);
+    setAbsFilePath(QString::null);
+    setTitle(i18n("Untitled"));
 
     m_commandHistory->clear();
 
@@ -278,7 +311,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     newDocument();
 
     QFileInfo fileInfo(filename);
-    m_title=fileInfo.fileName();
+    setTitle(fileInfo.fileName());
 
     // Check if file readable with fileInfo ?
     if (!fileInfo.isReadable() || fileInfo.isDir()) {
@@ -296,7 +329,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
                                          (QWidget*)parent());
     progressDlg.setMinimumDuration(500);
     progressDlg.setAutoReset(true); // we're re-using it for the preview generation
-    m_absFilePath = fileInfo.absFilePath();	
+    setAbsFilePath(fileInfo.absFilePath());	
 
     QString errMsg;
     QString fileContents;
@@ -555,18 +588,14 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     RG_DEBUG << endl << "RosegardenGUIDoc::saveDocument() finished\n";
 
     if (!autosave) {
-	m_modified = false;
+        emit documentModified(false);
+	setModified(false);
 	m_commandHistory->documentSaved();
     }
-    m_lastSaved = clock();
-    return true;
-}
 
-void RosegardenGUIDoc::autosave()
-{
-    QString filename = getAbsFilePath();
-    filename += "~";
-    saveDocument(filename, 0, true);
+    setAutoSaved(true);
+
+    return true;
 }
 
 void RosegardenGUIDoc::deleteContents()

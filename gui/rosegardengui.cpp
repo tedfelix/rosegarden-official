@@ -172,8 +172,8 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     connect(m_doc, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
             this,   SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
-    connect(m_doc, SIGNAL(documentModified()),
-            this,   SLOT(slotDocumentModified()));
+    connect(m_doc, SIGNAL(documentModified(bool)),
+            this,   SLOT(slotDocumentModified(bool)));
 
     connect(m_doc, SIGNAL(loopChanged(Rosegarden::timeT, Rosegarden::timeT)),
             this,  SLOT(slotSetLoop(Rosegarden::timeT, Rosegarden::timeT)));
@@ -833,7 +833,34 @@ void RosegardenGUIApp::openFile(const QString& filePath)
     m_doc->closeDocument();
     slotEnableTransport(false);
 
-    if (m_doc->openDocument(filePath)) {
+
+    // Check for an autosaved file to recover
+    QString effectiveFilePath = filePath;
+    bool canRecover = false;
+    QString autoSaveFileName = kapp->checkRecoverFile(filePath, canRecover);
+  	
+    if (canRecover) {
+        // First check if the auto-save file is more recent than the doc
+        QFileInfo docFileInfo(filePath), autoSaveFileInfo(autoSaveFileName);
+
+        if (docFileInfo.lastModified() < autoSaveFileInfo.lastModified()) {
+            RG_DEBUG << "RosegardenGUIApp::openFile : found a more recent autosave file\n";
+
+            // It is, so ask the user if he wants to use the autosave file
+            int reply = KMessageBox::questionYesNo(this,
+                                                   i18n("An auto-save file for this document has been found\nDo you want to open it instead ?"));
+
+            if (reply == KMessageBox::Yes)
+                // open the autosave file instead
+                effectiveFilePath = autoSaveFileName;
+            else
+                canRecover = false;
+
+        } else
+            canRecover = false;
+    }
+
+    if (m_doc->openDocument(effectiveFilePath)) {
 
         initView();
         
@@ -849,7 +876,17 @@ void RosegardenGUIApp::openFile(const QString& filePath)
         //
         m_doc->setLoop(comp.getLoopStart(), comp.getLoopEnd());
 
-        m_doc->setModified(false);
+        if (canRecover) {
+            // Mark the document as modified,
+            // set the "regular" filepath and name (not those of the autosaved doc)
+            // and remove the autosave
+            //
+            m_doc->slotDocumentModified();
+            QFileInfo info(filePath);
+            m_doc->setAbsFilePath(info.absFilePath());
+            m_doc->setTitle(info.fileName());
+        } else
+            m_doc->setModified(false);
 
     } else {
         // Create a new document
@@ -994,7 +1031,6 @@ void RosegardenGUIApp::readProperties(KConfig* _cfg)
                 QFileInfo info(filename);
                 m_doc->setAbsFilePath(info.absFilePath());
                 m_doc->setTitle(info.fileName());
-                QFile::remove(tempname);
             }
         } else {
             if (!filename.isEmpty()) {
@@ -3123,9 +3159,10 @@ RosegardenGUIApp::slotChangeTempo(Rosegarden::timeT time,
 }
 
 void
-RosegardenGUIApp::slotDocumentModified()
+RosegardenGUIApp::slotDocumentModified(bool m)
 {
-    stateChanged("file_modified");
+    RG_DEBUG << "RosegardenGUIApp::slotDocumentModified(" << m << ")\n";
+    slotStateChanged("file_modified", !m);
 }
 
 void
