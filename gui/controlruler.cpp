@@ -431,7 +431,7 @@ void ControlItem::handleMouseMove(QMouseEvent*, int /*deltaX*/, int deltaY)
 
 void ControlItem::handleMouseWheel(QWheelEvent *)
 {
-    RG_DEBUG << "ControlItem::handleMouseWheel - got wheel event" << endl;
+//     RG_DEBUG << "ControlItem::handleMouseWheel - got wheel event" << endl;
 }
 
 void ControlItem::setSelected(bool s)
@@ -921,7 +921,7 @@ void ControlRuler::contentsMouseMoveEvent(QMouseEvent* e)
 //            ElementAdapter* adapter = item->getElementAdapter();
 
             // set value to highest in selection
-            if (item->getValue() > value)
+            if (item->getValue() >= value)
             {
                 value = item->getValue();
                 m_numberFloat->setText(QString("%1").arg(value));
@@ -1040,9 +1040,6 @@ long ControlRuler::heightToValue(int h)
     val *= getMaxItemValue();
     val /= (ItemHeightRange);
     val = std::min(val, long(getMaxItemValue()));
-
-     RG_DEBUG << "ControlRuler::heightToValue : height = " << h << " - val = " << val << endl;
-
     return val;
 }
 
@@ -1417,11 +1414,6 @@ void PropertyControlRuler::contentsContextMenuEvent(QContextMenuEvent* e)
              << haveItems << endl;
 
     emit stateChange("have_note_events_in_segment", haveItems);
-
-    // TODO : figure out why we have to do this (the stateChange doesn't seem to work)
-    //
-//     m_parentEditView->actionCollection()->action("draw_property_line")->setEnabled(haveItems);
-    // apparently a KDE 3.3beta2 bug
 
     ControlRuler::contentsContextMenuEvent(e);
 }
