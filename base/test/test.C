@@ -145,6 +145,8 @@ int main(int argc, char **argv)
              << (et-st)*10 << "ms\n";
 
         return 0;
+#else
+        cout << "Skipping test speed of Event\n";
 #endif
 
 #ifdef NOT_DEFINED
@@ -178,12 +180,12 @@ int main(int argc, char **argv)
         TimeSignature ts(2,4);
         DurationList dlist;
         ts.getDurationListForInterval
-            (dlist, 1206,
-             ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
+                (dlist, 1206,
+                 ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
         int acc = 0;
         for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
-            cout << "duration: " << *i << endl;
-            acc += *i;
+                cout << "duration: " << *i << endl;
+                acc += *i;
         }
         cout << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")" << endl;
 
@@ -191,12 +193,12 @@ int main(int argc, char **argv)
         ts = TimeSignature(6,8);
         dlist = DurationList();
         ts.getDurationListForInterval
-            (dlist, 1206,
-             ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
+                (dlist, 1206,
+                 ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
         acc = 0;
         for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
-            cout << "duration: " << *i << endl;
-            acc += *i;
+                cout << "duration: " << *i << endl;
+                acc += *i;
         }
         cout << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")" << endl;
 
@@ -204,12 +206,12 @@ int main(int argc, char **argv)
         ts = TimeSignature(3,4);
         dlist = DurationList();
         ts.getDurationListForInterval
-            (dlist, 1206,
-             ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
+                (dlist, 1206,
+                 ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
         acc = 0;
         for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
-            cout << "duration: " << *i << endl;
-            acc += *i;
+                cout << "duration: " << *i << endl;
+                acc += *i;
         }
         cout << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")" << endl;
 
@@ -217,12 +219,12 @@ int main(int argc, char **argv)
         ts = TimeSignature(4,4);
         dlist = DurationList();
         ts.getDurationListForInterval
-            (dlist, 1206,
-             ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
+                (dlist, 1206,
+                 ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
         acc = 0;
         for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
-            cout << "duration: " << *i << endl;
-            acc += *i;
+                cout << "duration: " << *i << endl;
+                acc += *i;
         }
         cout << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")" << endl;
 
@@ -230,12 +232,12 @@ int main(int argc, char **argv)
         ts = TimeSignature(3,8);
         dlist = DurationList();
         ts.getDurationListForInterval
-            (dlist, 1206,
-             ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
+                (dlist, 1206,
+                 ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
         acc = 0;
         for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
-            cout << "duration: " << *i << endl;
-            acc += *i;
+                cout << "duration: " << *i << endl;
+                acc += *i;
         }
         cout << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")" << endl;
 };
