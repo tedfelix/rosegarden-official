@@ -163,11 +163,10 @@ operator<<(QDataStream &dS, MappedEvent *mE)
     dS << (unsigned int)mE->getDuration().usec;
     dS << (unsigned int)mE->getAudioStartMarker().sec;
     dS << (unsigned int)mE->getAudioStartMarker().usec;
-
     dS << (unsigned int)mE->getDataBlock().length();
 
-    for (unsigned int i = 0; mE->getDataBlock().length(); i++)
-        dS << (unsigned int)mE->getDataBlock()[i];
+    for (unsigned int i = 0; i < mE->getDataBlock().length(); i++)
+        dS << (unsigned int)(mE->getDataBlock()[i]);
 
     return dS;
 }
@@ -185,11 +184,10 @@ operator<<(QDataStream &dS, MappedEvent &mE)
     dS << (unsigned int)mE.getDuration().usec;
     dS << (unsigned int)mE.getAudioStartMarker().sec;
     dS << (unsigned int)mE.getAudioStartMarker().usec;
-
     dS << (unsigned int)mE.getDataBlock().length();
 
-    for (unsigned int i = 0; mE.getDataBlock().length(); i++)
-        dS << (unsigned int)mE.getDataBlock()[i];
+    for (unsigned int i = 0; i < mE.getDataBlock().length(); i++)
+        dS << (unsigned int)(mE.getDataBlock()[i]);
 
     return dS;
 }
@@ -197,11 +195,11 @@ operator<<(QDataStream &dS, MappedEvent &mE)
 QDataStream&
 operator>>(QDataStream &dS, MappedEvent *mE)
 {
-    unsigned int instrument, type, data1, data2, dataElement;
+    unsigned int instrument, type, data1, data2;
     long eventTimeSec, eventTimeUsec, durationSec, durationUsec,
          audioSec, audioUsec;
-    std::string dataBlock;
-    unsigned int dataLength;
+    std::string dataBlock("");
+    unsigned int dataLength, dataElement;
 
     dS >> instrument;
     dS >> type;
@@ -213,12 +211,12 @@ operator>>(QDataStream &dS, MappedEvent *mE)
     dS >> durationUsec;
     dS >> audioSec;
     dS >> audioUsec;
-
     dS >> dataLength;
-    for (unsigned int i = 0; dataLength; i++)
+
+    for (unsigned int i = 0; i < dataLength; i++)
     {
         dS >> dataElement;
-        dataBlock += (unsigned char)dataElement;
+        dataBlock += (char)dataElement;
     }
 
     mE->setInstrument((InstrumentId)instrument);
@@ -236,11 +234,11 @@ operator>>(QDataStream &dS, MappedEvent *mE)
 QDataStream&
 operator>>(QDataStream &dS, MappedEvent &mE)
 {
-    unsigned int instrument, type, data1, data2, dataElement;
+    unsigned int instrument, type, data1, data2;
     long eventTimeSec, eventTimeUsec, durationSec, durationUsec,
          audioSec, audioUsec;
-    std::string dataBlock;
-    unsigned int dataLength;
+    std::string dataBlock("");
+    unsigned int dataLength, dataElement;
          
     dS >> instrument;
     dS >> type;
@@ -252,12 +250,12 @@ operator>>(QDataStream &dS, MappedEvent &mE)
     dS >> durationUsec;
     dS >> audioSec;
     dS >> audioUsec;
-
     dS >> dataLength;
-    for (unsigned int i = 0; dataLength; i++)
+
+    for (unsigned int i = 0; i < dataLength; i++)
     {
         dS >> dataElement;
-        dataBlock += (unsigned char)dataElement;
+        dataBlock += dataElement;
     }
 
     mE.setInstrument((InstrumentId)instrument);
@@ -274,4 +272,5 @@ operator>>(QDataStream &dS, MappedEvent &mE)
 
 
 }
+
 

@@ -610,6 +610,13 @@ RosegardenTransportDialog::setMidiInLabel(const Rosegarden::MappedEvent *mE)
             }
             break;
 
+        case MappedEvent::MidiSystemExclusive:
+            {
+                InDisplay->setText(i18n("SYS EXCLSVE"));
+            }
+            break;
+
+
         default:  // do nothing
             return;
     }
@@ -673,6 +680,12 @@ RosegardenTransportDialog::setMidiOutLabel(const Rosegarden::MappedEvent *mE)
         case MappedEvent::MidiChannelPressure:
             {
                 OutDisplay->setText(i18n("PRESSURE"));
+            }
+            break;
+
+        case MappedEvent::MidiSystemExclusive:
+            {
+                OutDisplay->setText(i18n("SYS EXCLSVE"));
             }
             break;
 

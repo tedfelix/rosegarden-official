@@ -121,7 +121,7 @@ EventView::EventView(RosegardenGUIDoc *doc,
                      std::vector<Rosegarden::Segment *> segments,
                      QWidget *parent):
     EditViewBase(doc, segments, 2, parent, "eventview"),
-    m_eventFilter(Note|Text|SysEx|Controller|ProgramChange|PitchBend),
+    m_eventFilter(Note|Text|SystemExclusive|Controller|ProgramChange|PitchBend),
     m_doc(doc)
 {
 
@@ -149,6 +149,8 @@ EventView::EventView(RosegardenGUIDoc *doc,
     m_sysExCheckBox = new QCheckBox(i18n("System Exclusive"), m_filterGroup);
     m_textCheckBox = new QCheckBox(i18n("Text"), m_filterGroup);
     m_restCheckBox = new QCheckBox(i18n("Rest"), m_filterGroup);
+    m_keyPressureCheckBox = new QCheckBox(i18n("Key Pressure"), m_filterGroup);
+    m_channelPressureCheckBox = new QCheckBox(i18n("Channel Pressure"), m_filterGroup);
 
     // Connect up
     //
@@ -196,6 +198,16 @@ EventView::~EventView()
 bool
 EventView::applyLayout(int /*staffNo*/)
 {
+    // Remember list position if we've selected something
+    //
+    /*
+    QListViewItem previousItem;
+    if (m_eventList->selectedItem())
+        previousTime = *(m_eventList->selectedItem());
+        */
+
+    // Ok, recreate list
+    //
     m_eventList->clear();
 
     for (unsigned int i = 0; i < m_segments.size(); i++)
@@ -226,6 +238,22 @@ EventView::applyLayout(int /*staffNo*/)
 
             if((*it)->isa(Rosegarden::PitchBend::EventType) &&
                !(m_eventFilter & PitchBend))
+                continue;
+
+            if((*it)->isa(Rosegarden::SystemExclusive::EventType) &&
+               !(m_eventFilter & SystemExclusive)) 
+                continue;
+
+            if((*it)->isa(Rosegarden::ProgramChange::EventType) &&
+               !(m_eventFilter & ProgramChange)) 
+                continue;
+
+            if((*it)->isa(Rosegarden::ChannelPressure::EventType) &&
+               !(m_eventFilter & ChannelPressure)) 
+                continue;
+
+            if((*it)->isa(Rosegarden::KeyPressure::EventType) &&
+               !(m_eventFilter & KeyPressure)) 
                 continue;
 
 	    // avoid debug stuff going to stderr if no properties found
@@ -279,6 +307,8 @@ EventView::applyLayout(int /*staffNo*/)
                               velyStr,
 			      data1Str,
 			      data2Str);
+
+            //previewItem = *(m_eventList.lastItem());
         }
     }
 
@@ -386,27 +416,35 @@ EventView::slotModifyFilter(int button)
                 break;
 
             case 1:
-                m_eventFilter |= EventView::Rest;
-                break;
-
-            case 2:
-                m_eventFilter |= EventView::PitchBend;
-                break;
-
-            case 3:
                 m_eventFilter |= EventView::ProgramChange;
                 break;
 
-            case 4:
+            case 2:
                 m_eventFilter |= EventView::Controller;
                 break;
 
+            case 3:
+                m_eventFilter |= EventView::PitchBend;
+                break;
+
+            case 4:
+                m_eventFilter |= EventView::SystemExclusive;
+                break;
+
             case 5:
-                m_eventFilter |= EventView::SysEx;
+                m_eventFilter |= EventView::Text;
                 break;
 
             case 6:
-                m_eventFilter |= EventView::Text;
+                m_eventFilter |= EventView::Rest;
+                break;
+
+            case 7:
+                m_eventFilter |= EventView::KeyPressure;
+                break;
+
+            case 8:
+                m_eventFilter |= EventView::ChannelPressure;
                 break;
 
             default:
@@ -423,27 +461,35 @@ EventView::slotModifyFilter(int button)
                 break;
 
             case 1:
-                m_eventFilter ^= EventView::Rest;
-                break;
-
-            case 2:
-                m_eventFilter ^= EventView::PitchBend;
-                break;
-
-            case 3:
                 m_eventFilter ^= EventView::ProgramChange;
                 break;
 
-            case 4:
+            case 2:
                 m_eventFilter ^= EventView::Controller;
                 break;
 
+            case 3:
+                m_eventFilter ^= EventView::PitchBend;
+                break;
+
+            case 4:
+                m_eventFilter ^= EventView::SystemExclusive;
+                break;
+
             case 5:
-                m_eventFilter ^= EventView::SysEx;
+                m_eventFilter ^= EventView::Text;
                 break;
 
             case 6:
-                m_eventFilter ^= EventView::Text;
+                m_eventFilter ^= EventView::Rest;
+                break;
+
+            case 7:
+                m_eventFilter ^= EventView::KeyPressure;
+                break;
+
+            case 8:
+                m_eventFilter ^= EventView::ChannelPressure;
                 break;
 
             default:
@@ -473,7 +519,7 @@ EventView::setButtonsToFilter()
     else
         m_controllerCheckBox->setChecked(false);
 
-    if (m_eventFilter & SysEx)
+    if (m_eventFilter & SystemExclusive)
         m_sysExCheckBox->setChecked(true);
     else
         m_sysExCheckBox->setChecked(false);
@@ -493,6 +539,15 @@ EventView::setButtonsToFilter()
     else
         m_pitchBendCheckBox->setChecked(false);
 
+    if (m_eventFilter & ChannelPressure)
+        m_channelPressureCheckBox->setChecked(true);
+    else
+        m_channelPressureCheckBox->setChecked(false);
+
+    if (m_eventFilter & KeyPressure)
+        m_keyPressureCheckBox->setChecked(true);
+    else
+        m_keyPressureCheckBox->setChecked(false);
 }
 
 void

@@ -168,6 +168,8 @@ public:
     static const std::string EventType;
     static const int EventSubOrdering;
 
+    static const PropertyName DATABLOCK;
+
     SystemExclusive();
     ~SystemExclusive();
 

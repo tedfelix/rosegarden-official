@@ -47,14 +47,16 @@ class EventView : public EditViewBase
     //
     enum EventFilter
     {
-        None           = 0x0000,
-        Note           = 0x0001,
-        Rest           = 0x0002,
-        Text           = 0x0004,
-        SysEx          = 0x0008,
-        Controller     = 0x0010,
-        ProgramChange  = 0x0020,
-        PitchBend      = 0x0040
+        None               = 0x0000,
+        Note               = 0x0001,
+        Rest               = 0x0002,
+        Text               = 0x0004,
+        SystemExclusive    = 0x0008,
+        Controller         = 0x0010,
+        ProgramChange      = 0x0020,
+        PitchBend          = 0x0040,
+        ChannelPressure    = 0x0080,
+        KeyPressure        = 0x0100
     };
 
 public:
@@ -112,6 +114,8 @@ protected:
     QCheckBox      *m_controllerCheckBox;
     QCheckBox      *m_restCheckBox;
     QCheckBox      *m_pitchBendCheckBox;
+    QCheckBox      *m_keyPressureCheckBox;
+    QCheckBox      *m_channelPressureCheckBox;
 
     RosegardenGUIDoc *m_doc;
     static const char* const LayoutConfigGroupName;

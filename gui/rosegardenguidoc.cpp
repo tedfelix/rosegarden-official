@@ -76,6 +76,9 @@ using Rosegarden::SegmentNotationHelper;
 using Rosegarden::Event;
 using Rosegarden::PitchBend;
 using Rosegarden::Controller;
+using Rosegarden::SystemExclusive;
+using Rosegarden::ChannelPressure;
+using Rosegarden::KeyPressure;
 using Rosegarden::Int;
 using Rosegarden::String;
 using Rosegarden::timeT;
@@ -734,9 +737,10 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
                    break;
 
                 case Rosegarden::MappedEvent::MidiSystemExclusive:
-                   std::cerr << "RosegardenGUIDoc::insertRecordedMidi() - "
-                             << "got System Exclusive (unsupported)"
-                             << std::endl;
+                   rEvent = new Event(Rosegarden::SystemExclusive::EventType,
+                                      absTime);
+                   rEvent->set<String>(SystemExclusive::DATABLOCK,
+                                       (*i)->getDataBlock());
                    break;
 
 

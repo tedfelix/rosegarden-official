@@ -178,6 +178,8 @@ ProgramChange::getAsEvent(timeT absoluteTime) const
 const std::string SystemExclusive::EventType = "systemexclusive";
 const int SystemExclusive::EventSubOrdering = -70;
 
+const PropertyName SystemExclusive::DATABLOCK = "datablock";
+
 SystemExclusive::SystemExclusive()
 {
 }

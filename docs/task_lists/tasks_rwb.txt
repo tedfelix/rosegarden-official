@@ -52,8 +52,10 @@ o Matrix view auto scrolling
 o Complete segment edit shortcuts (click/copy/multiple segment drag)
 
 
-Ideas for later on
-------------------
+Post 0.2
+========
+
+o realtime MIDI filtering - what events are forwarded
 
 o Audio noise eliminator - recording
 
@@ -62,8 +64,8 @@ o Segment colouring
 o selection of ALSA recording device
 
 
-Completed for 0.1.7 (0.2.0)
-===========================
+Completed for 0.2.0
+===================
 
 o admin directories and INSTALL scripts should tally [DONE]
 
