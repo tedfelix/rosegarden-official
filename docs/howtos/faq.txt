@@ -65,20 +65,7 @@ Compilation or installation problems
 Can I build for KDE2 instead of KDE3?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The short answer is Yes but you have to ensure the correct "admin"
-directory is present in the top-level directory.   In CVS and in
-the more recent tar balls there are three admin directories:
-
-  rosegarden/admin
-  rosegarden/admin_kde2
-  rosegarden/admin_kde3
-
-The admin and admin_kde3 directories should be identical and hence we
-build Rosegarden for KDE3 by default.  If you want to build for KDE2
-then follow the instructions in the INSTALL file - basically you've
-got to remove the existing admin/ directory, copy the admin_kde2/ to
-admin/ and then run "make -f Makefile.cvs" in the top level before
-configuring and then building.
+This is no longer possible.
 
 macro `AM_PATH_ALSA' not found in library
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
