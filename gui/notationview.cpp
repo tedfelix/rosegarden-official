@@ -115,10 +115,18 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
 
     readOptions();
 
-//    setCaption(QString("%1 - Track Instrument #%2")
-//               .arg(doc->getTitle())
-//               .arg(t->getInstrument()));
-    setCaption("FIXME");
+    if (tracks.size() == 1) {
+	setCaption(QString("%1 - Track Instrument #%2")
+		   .arg(doc->getTitle())
+		   .arg(tracks[0]->getInstrument()));
+    } else if (tracks.size() == doc->getComposition().getNbTracks()) {
+	setCaption(QString("%1 - All Tracks")
+		   .arg(doc->getTitle()));
+    } else {
+	setCaption(QString("%1 - %2-Track Partial View")
+		   .arg(doc->getTitle())
+		   .arg(tracks.size()));
+    }
 
     for (unsigned int i = 0; i < tracks.size(); ++i) {
 	m_staffs.push_back(new Staff(canvas(), tracks[i], resolution));

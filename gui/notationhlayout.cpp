@@ -180,7 +180,6 @@ NotationHLayout::preparse(Staff &staff)
     AccidentalTable accTable(key, clef), newAccTable(accTable);
 
     barList.clear();
-    int fixedWidth = staff.getBarMargin();
 
     Track::iterator refStart = timeRef->findTime(t.getStartIndex());
     Track::iterator refEnd = timeRef->findTime(t.getEndIndex() + 1); //!!!
@@ -206,6 +205,7 @@ NotationHLayout::preparse(Staff &staff)
         NotationElementList::iterator shortest = notes->end();
         int shortCount = 0;
         int totalCount = 0;
+	int fixedWidth = staff.getBarMargin();
 
         for (NotationElementList::iterator it = from; it != to; ++it) {
         

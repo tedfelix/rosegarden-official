@@ -3,60 +3,100 @@
 <rosegarden-data>
 <track instrument="0" start="0">
 	<event type="clefchange">
-		<property name="clef" string="treble"/>
-	</event>
-        <event type="note" duration="minim">
-		<property name="pitch" int="64"/>
-	</event>
-</track>
-<track instrument="1" start="384">
-	<event type="clefchange">
 		<property name="clef" string="alto"/>
 	</event>
-        <event type="note" duration="minim">
+        <event type="note" duration="crotchet">
+		<property name="pitch" int="60"/>
+	</event>
+        <event type="note" duration="crotchet">
+		<property name="pitch" int="62"/>
+	</event>
+        <event type="note" duration="crotchet">
 		<property name="pitch" int="64"/>
 	</event>
-</track>
-<track instrument="2" start="768">
-	<event type="clefchange">
-		<property name="clef" string="tenor"/>
+        <event type="note" duration="crotchet">
+		<property name="pitch" int="65"/>
 	</event>
-        <event type="note" duration="minim">
+        <event type="note" duration="crotchet">
+		<property name="pitch" int="67"/>
+	</event>
+        <event type="note" duration="crotchet">
+		<property name="pitch" int="69"/>
+	</event>
+        <event type="note" duration="crotchet">
+		<property name="pitch" int="71"/>
+	</event>
+        <event type="note" duration="crotchet">
+		<property name="pitch" int="72"/>
+	</event>
+        <event type="note" duration="crotchet">
+		<property name="pitch" int="74"/>
+	</event>
+        <event type="note" duration="crotchet">
+		<property name="pitch" int="76"/>
+	</event>
+        <event type="note" duration="crotchet">
+		<property name="pitch" int="77"/>
+	</event>
+        <event type="note" duration="crotchet">
+		<property name="pitch" int="79"/>
+	</event>
+        <event type="note" duration="crotchet">
+		<property name="pitch" int="81"/>
+	</event>
+        <event type="note" duration="crotchet">
+		<property name="pitch" int="83"/>
+	</event>
+        <event type="note" duration="crotchet">
+		<property name="pitch" int="84"/>
+	</event>
+	<event type="keychange">
+		<property name="key" string="E major"/>
+	</event>
+        <event type="note" duration="crotchet">
+		<property name="pitch" int="60"/>
+	</event>
+        <event type="note" duration="crotchet">
+		<property name="pitch" int="62"/>
+	</event>
+        <event type="note" duration="crotchet">
 		<property name="pitch" int="64"/>
 	</event>
-</track>
-<track instrument="3" start="1152">
-	<event type="clefchange">
-		<property name="clef" string="bass"/>
+        <event type="note" duration="crotchet">
+		<property name="pitch" int="65"/>
 	</event>
-        <event type="note" duration="minim">
-		<property name="pitch" int="64"/>
+        <event type="note" duration="crotchet">
+		<property name="pitch" int="67"/>
 	</event>
-</track>
-<track instrument="4" start="1536">
-	<event type="clefchange">
-		<property name="clef" string="treble"/>
+        <event type="note" duration="crotchet">
+		<property name="pitch" int="69"/>
 	</event>
-        <event type="note" duration="minim">
-		<property name="pitch" int="64"/>
+        <event type="note" duration="crotchet">
+		<property name="pitch" int="71"/>
 	</event>
-	<event type="clefchange">
-		<property name="clef" string="alto"/>
+        <event type="note" duration="crotchet">
+		<property name="pitch" int="72"/>
 	</event>
-        <event type="note" duration="minim">
-		<property name="pitch" int="64"/>
+        <event type="note" duration="crotchet">
+		<property name="pitch" int="74"/>
 	</event>
-	<event type="clefchange">
-		<property name="clef" string="tenor"/>
+        <event type="note" duration="crotchet">
+		<property name="pitch" int="76"/>
 	</event>
-        <event type="note" duration="minim">
-		<property name="pitch" int="64"/>
+        <event type="note" duration="crotchet">
+		<property name="pitch" int="77"/>
 	</event>
-	<event type="clefchange">
-		<property name="clef" string="bass"/>
+        <event type="note" duration="crotchet">
+		<property name="pitch" int="79"/>
 	</event>
-        <event type="note" duration="minim">
-		<property name="pitch" int="64"/>
+        <event type="note" duration="crotchet">
+		<property name="pitch" int="81"/>
+	</event>
+        <event type="note" duration="crotchet">
+		<property name="pitch" int="83"/>
+	</event>
+        <event type="note" duration="crotchet">
+		<property name="pitch" int="84"/>
 	</event>
 </track>
 </rosegarden-data>

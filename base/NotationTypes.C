@@ -428,7 +428,9 @@ NotationDisplayPitch::rawPitchToDisplayPitch(int pitch,
     }
 
     // 3. Transpose up or down for the clef
+
     height -= 7 * clef.getOctave();
+    height += clef.getPitchOffset();
 }
 
 void
@@ -441,6 +443,8 @@ NotationDisplayPitch::displayPitchToRawPitch(int height,
     int octave = 5;
 
     // 1. Get pitch and correct octave
+
+    height -= clef.getPitchOffset();
 
     while (height < 0) { octave -= 1; height += 7; }
     while (height > 7) { octave += 1; height -= 7; }
