@@ -76,6 +76,7 @@
 #include "zoomslider.h"
 #include "audiomanagerdialog.h"
 #include "widgets.h"
+#include "temporuler.h"
 
 //!!! ditch these when harmonize() moves out
 #include "CompositionTimeSliceAdapter.h"
@@ -2492,6 +2493,11 @@ void RosegardenGUIApp::slotEditTimeSignature(QWidget *parent)
 void RosegardenGUIApp::slotChangeZoom(int)
 {
     m_view->setZoomSize(m_zoomSlider->getCurrentSize());
+
+    // this updates the pointer position after a zoom change
+    if (m_view)
+        m_view->getTrackEditor()->slotSetPointerPosition(
+                m_doc->getComposition().getPosition());
 }
 
 
@@ -2585,6 +2591,12 @@ RosegardenGUIApp::slotChangeTempo(Rosegarden::timeT time,
     {
         kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotChangeTempo() - "
                              << "unrecognised tempo command" << endl;
+    }
+
+    if (m_view && m_view->getTrackEditor()->getTempoRuler())
+    {
+        m_view->getTrackEditor()->getTempoRuler()->repaint();
+        m_view->getTrackEditor()->getTempoRuler()->update();
     }
 
 }
