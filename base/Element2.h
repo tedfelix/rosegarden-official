@@ -318,13 +318,19 @@ Element2::get(const string &name) const
         PropertyStoreBase *sb = (*i).second;
         if (sb->getType() == P) return ((PropertyStore<P> *)sb)->getData();
         else {
-            cerr << "Error: Element: Attempt to get property \"" << name
+#ifndef NDEBUG
+            cerr << "Element2::get() Error: Attempt to get property \"" << name
                  << "\" as " << PropertyDefn<P>::name() <<", actual type is "
                  << sb->getTypeName() << endl;
+#endif
             throw BadType();
         }
 	    
     } else {
+#ifndef NDEBUG
+        cerr << "Element2::get() Error: Attempt to get property \"" << name
+             << "\" which doesn't exist for this element" << endl;
+#endif
         throw NoData();
     }
 }

@@ -166,15 +166,19 @@ void
 Element2::dump(ostream& out) const
 {
 #ifndef NDEBUG
-    out << "Event type : " << m_type;
-    if (m_package.length()) out << " - package : " << m_package;
-    out << endl;
-    out << "\tProperties : " << endl;
+    if (m_package.length()) {
+        out << "Event type : " << m_type << " - package : "
+            << m_package << '\n';
+    } else {    
+        out << "Event type : " << m_type.c_str() << '\n';
+    }
+
+    out << "\tDuration : " << m_duration << "\n\tProperties : \n";
 
     for (PropertyMap::const_iterator i = m_properties.begin();
          i != m_properties.end(); ++i) {
         out << "\t\t" << (*i).first << '\t'
-            << *((*i).second) << endl;
+            << *((*i).second) << '\n';
     }
 #endif
 }
