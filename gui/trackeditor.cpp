@@ -220,18 +220,17 @@ TracksEditor::resizeTrack(Rosegarden::Track *p)
 bool
 TracksEditor::moveTrack(int /*section*/, int /*fromIdx*/, int /*toIdx*/)
 {
-    kdDebug(KDEBUG_AREA) << "TracksEditor::moveTrack() : not implemented\n";
+    QCanvasItemList itemList = canvas()->canvas()->allItems();
+    QCanvasItemList::Iterator it;
 
-//     // just reset every part's Y coordinate
-//     for (std::list<TrackPart*>::iterator iter = m_trackParts.begin();
-//          iter != m_trackParts.end(); ++iter) {
-//         TrackPart* p = *iter;
-//         int trackSection = p->trackNb();
-//         QCanvasRectangle *r = p->canvasPartItem();
-//         r->setY(m_vHeader->sectionPos(trackSection));
-//     }
-
-    return true;
+    for (it = itemList.begin(); it != itemList.end(); ++it) {
+        QCanvasItem *item = *it;
+        TrackPartItem *trackItem = dynamic_cast<TrackPartItem*>(item);
+        
+        if (trackItem) {
+            trackItem->setY(m_vHeader->sectionPos(trackItem->getInstrument()));
+        }
+    }
 }
 
 void
