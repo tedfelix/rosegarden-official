@@ -57,6 +57,37 @@ Track::~Track()
         delete (*it);
 }
 
+
+void Track::setStartIndex(timeT idx)
+{
+    int idxDiff = idx - m_startIdx;
+
+    // reset the time of all events
+    for (iterator i = begin(); i != end(); ++i)
+        (*i)->addAbsoluteTime(idxDiff);
+        
+    m_startIdx = idx;
+}
+
+static bool isTimeSig(const Event* e)
+{
+    return e->isa(TimeSignature::EventType);
+}
+
+
+TimeSignature Track::getTimeSigAtEnd() const
+{
+    static TimeSignature defaultSig44(4,4);
+
+    const_reverse_iterator sig = std::find_if(rbegin(), rend(), isTimeSig);
+
+    if (sig != rend() ||
+        ((*sig) && (*sig)->isa(TimeSignature::EventType)))
+        return TimeSignature(*(*sig));
+
+    return defaultSig44;
+}
+
 unsigned int Track::getNbTimeSteps() const
 {
     const_iterator lastEl = end();
@@ -135,34 +166,24 @@ void Track::setNbTimeSteps(unsigned int nbTimeSteps)
     
 }
 
-void Track::setStartIndex(timeT idx)
+void Track::erase(iterator pos)
 {
-    int idxDiff = idx - m_startIdx;
-
-    // reset the time of all events
-    for (iterator i = begin(); i != end(); ++i)
-        (*i)->addAbsoluteTime(idxDiff);
-        
-    m_startIdx = idx;
+    delete *pos;
+    std::multiset<Event*, Event::EventCmp>::erase(pos);
 }
 
-static bool isTimeSig(const Event* e)
+void Track::erase(iterator from, iterator to)
 {
-    return e->isa(TimeSignature::EventType);
+    for(Track::iterator i = from; i != to; ++i)
+        delete *i;
+    
+    std::multiset<Event*, Event::EventCmp>::erase(from, to);
 }
 
-
-TimeSignature Track::getTimeSigAtEnd() const
+size_t Track::erase(Event* e)
 {
-    static TimeSignature defaultSig44(4,4);
-
-    const_reverse_iterator sig = std::find_if(rbegin(), rend(), isTimeSig);
-
-    if (sig != rend() ||
-        ((*sig) && (*sig)->isa(TimeSignature::EventType)))
-        return TimeSignature(*(*sig));
-
-    return defaultSig44;
+    delete e;
+    return std::multiset<Event*, Event::EventCmp>::erase(e);
 }
 
 int Track::getNextGroupId() const

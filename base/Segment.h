@@ -60,6 +60,13 @@ public:
     void         setNbTimeSteps(unsigned int);
 
     /**
+     * deletes the Event
+     */
+    void erase(iterator pos);
+    void erase(iterator from, iterator to);
+    size_t erase(Event*);
+
+    /**
      * Returns an event group id
      * The id is guaranteed to be unique within the track
      */
