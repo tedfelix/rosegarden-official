@@ -90,11 +90,8 @@ EventSelection::~EventSelection()
 
 bool EventSelection::contains(Event *e) const
 {
-    for (eventcontainer::const_iterator i = m_trackEvents.begin(); 
-	 i != m_trackEvents.end(); ++i) {
-	if ((*i) == e) return true;
-    }
-    return false;
+    return std::find(m_trackEvents.begin(),
+                     m_trackEvents.end(), e) != m_trackEvents.end();
 }
 
 void EventSelection::cut()
