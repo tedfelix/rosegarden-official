@@ -65,8 +65,6 @@ unsigned int Track::getNbTimeSteps() const
 
 void Track::setNbTimeSteps(unsigned int nbTimeSteps)
 {
-    TimeSignature &signatureAtEnd = getTimeSigAtEnd();
-
     unsigned int currentNbTimeSteps = getNbTimeSteps();
 
     cerr << "Track::setNbBars() : current = " << currentNbTimeSteps
@@ -75,6 +73,11 @@ void Track::setNbTimeSteps(unsigned int nbTimeSteps)
     if (nbTimeSteps == currentNbTimeSteps) return; // nothing to do
     
     if (nbTimeSteps > currentNbTimeSteps) { // fill up with rests
+
+        TimeSignature signatureAtEnd = getTimeSigAtEnd();
+
+        cerr << "Found time sig at end : " << signatureAtEnd.getNumerator()
+             << "/" << signatureAtEnd.getDenominator() << endl;
         
         iterator lastEl = end();
         --lastEl;
@@ -138,12 +141,23 @@ void Track::setStartIndex(unsigned int idx)
     m_startIdx = idx;
 }
 
-TimeSignature& Track::getTimeSigAtEnd() const
+static bool isTimeSig(const Event* e)
 {
-    // temporary dummy implementation
-    static TimeSignature sig44(4,4);
+    return e->isa(TimeSignature::EventType);
+}
 
-    return sig44;
+
+TimeSignature Track::getTimeSigAtEnd() const
+{
+    static TimeSignature defaultSig44(4,4);
+
+    const_reverse_iterator sig = std::find_if(rbegin(), rend(), isTimeSig);
+
+    if (sig != rend() ||
+        ((*sig) && (*sig)->isa(TimeSignature::EventType)))
+        return TimeSignature(*(*sig));
+
+    return defaultSig44;
 }
 
  
