@@ -518,7 +518,7 @@ SequenceManager::play()
 
     // make sure we toggle the play button
     // 
-    m_transport->PlayButton->setOn(true);
+    m_transport->PlayButton()->setOn(true);
 
     // write the start position argument to the outgoing stream
     //
@@ -621,8 +621,8 @@ SequenceManager::stopping()
     if (m_transportStatus == RECORDING_ARMED)
     {
         m_transportStatus = STOPPED;
-        m_transport->RecordButton->setOn(false);
-        m_transport->MetronomeButton->
+        m_transport->RecordButton()->setOn(false);
+        m_transport->MetronomeButton()->
             setOn(m_doc->getComposition().usePlayMetronome());
         return;
     }
@@ -656,13 +656,13 @@ SequenceManager::stop()
     if (m_transportStatus == RECORDING_MIDI ||
         m_transportStatus == RECORDING_AUDIO)
     {
-        m_transport->RecordButton->setOn(false);
-        m_transport->MetronomeButton->
+        m_transport->RecordButton()->setOn(false);
+        m_transport->MetronomeButton()->
             setOn(m_doc->getComposition().usePlayMetronome());
     }
 
     // Now playback
-    m_transport->PlayButton->setOn(false);
+    m_transport->PlayButton()->setOn(false);
 
     // "call" the sequencer with a stop so we get a synchronous
     // response - then we can fiddle about with the audio file
@@ -706,7 +706,7 @@ SequenceManager::stop()
 
     // always untoggle the play button at this stage
     //
-    m_transport->PlayButton->setOn(false);
+    m_transport->PlayButton()->setOn(false);
     std::cout << "SequenceManager::stop() - stopped playing" << std::endl;
 
     // ok, we're stopped
@@ -848,7 +848,7 @@ SequenceManager::record(bool toggled)
 
         if (!instr || instr->getType() == Rosegarden::Instrument::Audio)
         {
-            m_transport->RecordButton->setOn(false);
+            m_transport->RecordButton()->setOn(false);
             throw(i18n("Audio subsystem is not available - can't record audio"));
         }
     }
@@ -862,8 +862,8 @@ SequenceManager::record(bool toggled)
             m_transportStatus = STOPPED;
 
             // Toggle the buttons
-            m_transport->MetronomeButton->setOn(comp.usePlayMetronome());
-            m_transport->RecordButton->setOn(false);
+            m_transport->MetronomeButton()->setOn(comp.usePlayMetronome());
+            m_transport->RecordButton()->setOn(false);
 
             return;
         }
@@ -875,8 +875,8 @@ SequenceManager::record(bool toggled)
             m_transportStatus = RECORDING_ARMED;
 
             // Toggle the buttons
-            m_transport->MetronomeButton->setOn(comp.useRecordMetronome());
-            m_transport->RecordButton->setOn(true);
+            m_transport->MetronomeButton()->setOn(comp.useRecordMetronome());
+            m_transport->RecordButton()->setOn(true);
 
             return;
         }
@@ -917,7 +917,7 @@ SequenceManager::record(bool toggled)
         //
         if (studio.getInstrumentById(inst) == 0)
         {
-            m_transport->RecordButton->setDown(false);
+            m_transport->RecordButton()->setDown(false);
             throw(i18n("No Record instrument selected"));
         }
 
@@ -926,7 +926,7 @@ SequenceManager::record(bool toggled)
         checkSoundDriverStatus();
 
         // toggle the Metronome button if it's in use
-        m_transport->MetronomeButton->setOn(comp.useRecordMetronome());
+        m_transport->MetronomeButton()->setOn(comp.useRecordMetronome());
 
         // If we are looping then jump to start of loop and start recording,
         // if we're not take off the number of count-in bars and start 
@@ -974,8 +974,8 @@ SequenceManager::record(bool toggled)
         }
 
         // set the buttons
-        m_transport->RecordButton->setOn(true);
-        m_transport->PlayButton->setOn(true);
+        m_transport->RecordButton()->setOn(true);
+        m_transport->PlayButton()->setOn(true);
 
         // write the start position argument to the outgoing stream
         //

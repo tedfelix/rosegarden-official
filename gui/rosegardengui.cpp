@@ -563,8 +563,7 @@ void RosegardenGUIApp::setupActions()
     // buttons and keyboard accelerators
     //
     m_transport =
-        new Rosegarden::RosegardenTransportDialog(0, "",
-                                                  WType_TopLevel|WStyle_StaysOnTop|WStyle_NoBorder);
+        new Rosegarden::RosegardenTransportDialog(this);
     plugAccelerators(m_transport, m_transport->getAccelerators());
 
     // create main gui
@@ -591,7 +590,7 @@ void RosegardenGUIApp::setupActions()
     
     m_actionsSetup = true;
 
-    // transport toolbar is hidden by default
+    // transport toolbar is hidden by default - TODO : this should be in options
     //
     toolBar("transportToolBar")->hide();
 }
@@ -732,10 +731,10 @@ void RosegardenGUIApp::initView()
     m_transport->raise();
 
     // set the play metronome button
-    m_transport->MetronomeButton->setOn(comp.usePlayMetronome());
+    m_transport->MetronomeButton()->setOn(comp.usePlayMetronome());
 
     // Set the solo button
-    m_transport->SoloButton->setOn(comp.isSolo());
+    m_transport->SoloButton()->setOn(comp.isSolo());
 
     // set the highlighted track
     m_view->selectTrack(comp.getSelectedTrack());
@@ -941,7 +940,7 @@ void RosegardenGUIApp::readOptions()
     m_viewStatusBar       ->setChecked(!statusBar()                ->isHidden());
     m_viewToolBar         ->setChecked(!toolBar()                  ->isHidden());
     m_viewTracksToolBar   ->setChecked(!toolBar("tracksToolBar")   ->isHidden());
-    m_viewEditorsToolBar   ->setChecked(!toolBar("editorsToolBar")   ->isHidden());
+    m_viewEditorsToolBar  ->setChecked(!toolBar("editorsToolBar")  ->isHidden());
     m_viewTransportToolBar->setChecked(!toolBar("transportToolBar")->isHidden());
     m_viewZoomToolBar     ->setChecked(!toolBar("zoomToolBar")     ->isHidden());
 
@@ -2540,7 +2539,7 @@ RosegardenGUIApp::slotToggleMetronome()
         else
             comp.setRecordMetronome(true);
 
-        m_transport->MetronomeButton->setOn(comp.useRecordMetronome());
+        m_transport->MetronomeButton()->setOn(comp.useRecordMetronome());
     }
     else
     {
@@ -2549,7 +2548,7 @@ RosegardenGUIApp::slotToggleMetronome()
         else
             comp.setPlayMetronome(true);
 
-        m_transport->MetronomeButton->setOn(comp.usePlayMetronome());
+        m_transport->MetronomeButton()->setOn(comp.usePlayMetronome());
     }
 }
 
@@ -2734,9 +2733,9 @@ RosegardenGUIApp::slotSetLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
 
         // toggle the loop button
         if (lhs != rhs)
-            m_transport->LoopButton->setOn(true);
+            m_transport->LoopButton()->setOn(true);
         else
-            m_transport->LoopButton->setOn(false);
+            m_transport->LoopButton()->setOn(false);
 
     }
     catch(QString s)
@@ -2902,7 +2901,7 @@ void RosegardenGUIApp::slotToggleSolo()
 {
     RG_DEBUG << "RosegardenGUIApp::slotToggleSolo\n";
 
-    m_doc->getComposition().setSolo(m_transport->SoloButton->isOn());
+    m_doc->getComposition().setSolo(m_transport->SoloButton()->isOn());
     m_doc->setModified();
 }
 
@@ -3230,56 +3229,56 @@ RosegardenGUIApp::plugAccelerators(QWidget *widget, QAccel *acc)
 
     if (transport)
     {
-        connect(transport->PlayButton,
+        connect(transport->PlayButton(),
                 SIGNAL(clicked()),
                 this,
                 SLOT(slotPlay()));
 
-        connect(transport->StopButton,
+        connect(transport->StopButton(),
                 SIGNAL(clicked()),
                 this,
                 SLOT(slotStop()));
              
-        connect(transport->FfwdButton,
+        connect(transport->FfwdButton(),
                 SIGNAL(clicked()),
                 SLOT(slotFastforward()));
             
-        connect(transport->RewindButton,
+        connect(transport->RewindButton(),
                 SIGNAL(clicked()),
                 this,
                 SLOT(slotRewind()));
 
-        connect(transport->RecordButton,
+        connect(transport->RecordButton(),
                 SIGNAL(clicked()),
                 this,
                 SLOT(slotRecord()));
 
-        connect(transport->RewindEndButton,
+        connect(transport->RewindEndButton(),
                 SIGNAL(clicked()),
                 this,
                 SLOT(slotRewindToBeginning()));
 
-        connect(transport->FfwdEndButton,
+        connect(transport->FfwdEndButton(),
                 SIGNAL(clicked()),
                 this,
                 SLOT(slotFastForwardToEnd()));
 
-        connect(transport->MetronomeButton,
+        connect(transport->MetronomeButton(),
                 SIGNAL(clicked()),
                 this,
                 SLOT(slotToggleMetronome()));
             
-        connect(transport->SoloButton,
+        connect(transport->SoloButton(),
                 SIGNAL(clicked()),
                 this,
                 SLOT(slotToggleSolo()));
             
-        connect(transport->TimeDisplayButton,
+        connect(transport->TimeDisplayButton(),
                 SIGNAL(clicked()),
                 this,
                 SLOT(slotRefreshTimeDisplay()));
 
-        connect(transport->ToEndButton,
+        connect(transport->ToEndButton(),
                 SIGNAL(clicked()),
                 SLOT(slotRefreshTimeDisplay()));
     }

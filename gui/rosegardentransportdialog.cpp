@@ -19,21 +19,22 @@
     COPYING included with this distribution for more information.
 */
 
-#include "rosestrings.h"
 #include "rosegardentransportdialog.h"
-#include "MidiPitchLabel.h"
-#include <kglobal.h>
-#include <kstddirs.h>
-#include <klocale.h>
-
-#include <iostream>
 
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qspinbox.h>
 #include <qlineedit.h>
 #include <qtimer.h>
+#include <qlayout.h>
 
+#include <kglobal.h>
+#include <kstddirs.h>
+#include <klocale.h>
+
+#include "MidiPitchLabel.h"
+
+#include "rosestrings.h"
 #include "widgets.h"
 
 namespace Rosegarden
@@ -42,7 +43,8 @@ namespace Rosegarden
 RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
                                                      const char *name,
                                                      WFlags flags):
-    RosegardenTransport(parent, name/*, flags*/),
+    KDialog(parent, name, flags),
+    m_transport(0),
     m_lastTenHours(0),
     m_lastUnitHours(0),
     m_lastTenMinutes(0),
@@ -60,36 +62,40 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     m_framesPerSecond(24),
     m_bitsPerFrame(80)
 {
-    setWFlags(flags);
+//     QHBox *b = new QHBox(this);
+    m_transport = new RosegardenTransport(this);
+//     b->setFixedSize(m_transport->sizeHint());
+
+    setCaption(i18n("Transport"));
 
     resetFonts();
 
     // set the LCD frame background to black
     //
-    LCDBoxFrame->setBackgroundColor(Qt::black);
+    m_transport->LCDBoxFrame->setBackgroundColor(Qt::black);
 
     // set all the pixmap backgrounds to black to avoid
     // flickering when we update
     //
-    TenThousandthsPixmap->setBackgroundColor(Qt::black);
-    ThousandthsPixmap->setBackgroundColor(Qt::black);
-    HundredthsPixmap->setBackgroundColor(Qt::black);
-    TenthsPixmap->setBackgroundColor(Qt::black);
-    UnitSecondsPixmap->setBackgroundColor(Qt::black);
-    TenSecondsPixmap->setBackgroundColor(Qt::black);
-    UnitMinutesPixmap->setBackgroundColor(Qt::black);
-    TenMinutesPixmap->setBackgroundColor(Qt::black);
-    UnitHoursPixmap->setBackgroundColor(Qt::black);
-    TenHoursPixmap->setBackgroundColor(Qt::black);
-    NegativePixmap->setBackgroundColor(Qt::black);
+    m_transport->TenThousandthsPixmap->setBackgroundColor(Qt::black);
+    m_transport->ThousandthsPixmap->setBackgroundColor(Qt::black);
+    m_transport->HundredthsPixmap->setBackgroundColor(Qt::black);
+    m_transport->TenthsPixmap->setBackgroundColor(Qt::black);
+    m_transport->UnitSecondsPixmap->setBackgroundColor(Qt::black);
+    m_transport->TenSecondsPixmap->setBackgroundColor(Qt::black);
+    m_transport->UnitMinutesPixmap->setBackgroundColor(Qt::black);
+    m_transport->TenMinutesPixmap->setBackgroundColor(Qt::black);
+    m_transport->UnitHoursPixmap->setBackgroundColor(Qt::black);
+    m_transport->TenHoursPixmap->setBackgroundColor(Qt::black);
+    m_transport->NegativePixmap->setBackgroundColor(Qt::black);
  
     // unset the negative sign to begin with
-    NegativePixmap->clear();
+    m_transport->NegativePixmap->clear();
 
     // Set our toggle buttons
     //
-    PlayButton->setToggleButton(true);
-    RecordButton->setToggleButton(true);
+    m_transport->PlayButton->setToggleButton(true);
+    m_transport->RecordButton->setToggleButton(true);
 
     // read only tempo
     //
@@ -97,8 +103,8 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
 
     // fix and hold the size of the dialog
     //
-    setMinimumSize(width(), height());
-    setMaximumSize(width(), height());
+    setMinimumSize(m_transport->width(), m_transport->height());
+    setMaximumSize(m_transport->width(), m_transport->height());
 
     loadPixmaps();
 
@@ -112,28 +118,28 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     connect(m_midiOutTimer, SIGNAL(timeout()),
             SLOT(slotClearMidiOutLabel()));
 
-    TimeDisplayLabel->hide();
-    ToEndLabel->hide();
+    m_transport->TimeDisplayLabel->hide();
+    m_transport->ToEndLabel->hide();
 
-    connect(TimeDisplayButton, SIGNAL(released()),
+    connect(m_transport->TimeDisplayButton, SIGNAL(released()),
 	    SLOT(slotChangeTimeDisplay()));
 
-    connect(ToEndButton, SIGNAL(released()),
+    connect(m_transport->ToEndButton, SIGNAL(released()),
 	    SLOT(slotChangeToEnd()));
 
-    connect(LoopButton, SIGNAL(released()),
+    connect(m_transport->LoopButton, SIGNAL(released()),
             SLOT(slotLoopButtonReleased()));
 
-    connect(PanelOpenButton, SIGNAL(released()),
+    connect(m_transport->PanelOpenButton, SIGNAL(released()),
 	    SLOT(slotPanelOpenButtonReleased()));
 
-    connect(PanelCloseButton, SIGNAL(released()),
+    connect(m_transport->PanelCloseButton, SIGNAL(released()),
 	    SLOT(slotPanelCloseButtonReleased()));
 
-    connect(PanicButton, SIGNAL(released()), SIGNAL(panic()));
+    connect(m_transport->PanicButton, SIGNAL(released()), SIGNAL(panic()));
 
-    m_panelOpen = *PanelOpenButton->pixmap();
-    m_panelClosed = *PanelCloseButton->pixmap();
+    m_panelOpen = *m_transport->PanelOpenButton->pixmap();
+    m_panelClosed = *m_transport->PanelCloseButton->pixmap();
 
     // clear labels
     //
@@ -142,17 +148,17 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
 
     // and by default we close the lower panel
     //
-    int rfh = RecordingFrame->height();
-    RecordingFrame->hide();
+    int rfh = m_transport->RecordingFrame->height();
+    m_transport->RecordingFrame->hide();
     setFixedSize(width(), height() - rfh);
-    PanelOpenButton->setOn(false);
-    PanelOpenButton->setPixmap(m_panelClosed);
+    m_transport->PanelOpenButton->setOn(false);
+    m_transport->PanelOpenButton->setPixmap(m_panelClosed);
 
     // and since by default we show real time (not SMPTE), by default
     // we hide the small colon pixmaps
     //
-    SecondColonPixmap->hide();
-    HundredthColonPixmap->hide();
+    m_transport->SecondColonPixmap->hide();
+    m_transport->HundredthColonPixmap->hide();
 
     // We have to specify these settings in this class (copied
     // from rosegardentransport.cpp) as we're using a specialised
@@ -164,25 +170,25 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     QPalette pal;
     pal.setColor(QColorGroup::Foreground, QColor(192, 216, 255));
 
-    TempoDisplay->setPalette(pal);
-    TempoDisplay->setAlignment(int(QLabel::AlignVCenter | QLabel::AlignRight));
+    m_transport->TempoDisplay->setPalette(pal);
+    m_transport->TempoDisplay->setAlignment(int(QLabel::AlignVCenter | QLabel::AlignRight));
 
-    TimeSigDisplay->setPalette(pal);
-    TimeSigDisplay->setAlignment(int(QLabel::AlignVCenter | QLabel::AlignRight));
+    m_transport->TimeSigDisplay->setPalette(pal);
+    m_transport->TimeSigDisplay->setAlignment(int(QLabel::AlignVCenter | QLabel::AlignRight));
 
-    QFont localFont(  OutDisplay->font() );
+    QFont localFont(m_transport->OutDisplay->font() );
     localFont.setFamily( "lucida" );
     localFont.setBold( TRUE );
 
-    TempoDisplay->setFont( localFont );
-    TimeSigDisplay->setFont( localFont );
+    m_transport->TempoDisplay->setFont( localFont );
+    m_transport->TimeSigDisplay->setFont( localFont );
 
     // Now the reason why we have to do the above fiddling
-    connect(TempoDisplay, SIGNAL(doubleClicked()),
+    connect(m_transport->TempoDisplay, SIGNAL(doubleClicked()),
             this, SLOT(slotEditTempo()));
 
     // Now the reason why we have to do the above fiddling
-    connect(TimeSigDisplay, SIGNAL(doubleClicked()),
+    connect(m_transport->TimeSigDisplay, SIGNAL(doubleClicked()),
             this, SLOT(slotEditTimeSignature()));
 
     // accelerator object
@@ -223,18 +229,18 @@ RosegardenTransportDialog::loadPixmaps()
 void
 RosegardenTransportDialog::resetFonts()
 {
-    resetFont(TimeSigLabel);
-    resetFont(TimeSigDisplay);
-    resetFont(TempoLabel);
-    resetFont(TempoDisplay);
-    resetFont(DivisionLabel);
-    resetFont(DivisionDisplay);
-    resetFont(InLabel);
-    resetFont(InDisplay);
-    resetFont(OutLabel);
-    resetFont(OutDisplay);
-    resetFont(ToEndLabel);
-    resetFont(TimeDisplayLabel);
+    resetFont(m_transport->TimeSigLabel);
+    resetFont(m_transport->TimeSigDisplay);
+    resetFont(m_transport->TempoLabel);
+    resetFont(m_transport->TempoDisplay);
+    resetFont(m_transport->DivisionLabel);
+    resetFont(m_transport->DivisionDisplay);
+    resetFont(m_transport->InLabel);
+    resetFont(m_transport->InDisplay);
+    resetFont(m_transport->OutLabel);
+    resetFont(m_transport->OutDisplay);
+    resetFont(m_transport->ToEndLabel);
+    resetFont(m_transport->TimeDisplayLabel);
 }
 
 void
@@ -266,19 +272,19 @@ RosegardenTransportDialog::slotChangeTimeDisplay()
 {
     switch (m_currentMode) {
     case RealMode:
-	TimeDisplayLabel->setText("SMPTE");
-	TimeDisplayLabel->show();
+	m_transport->TimeDisplayLabel->setText("SMPTE");
+	m_transport->TimeDisplayLabel->show();
 	m_currentMode = SMPTEMode;
 	break;
 
     case SMPTEMode:
-	TimeDisplayLabel->setText("BAR");
-	TimeDisplayLabel->show();
+	m_transport->TimeDisplayLabel->setText("BAR");
+	m_transport->TimeDisplayLabel->show();
 	m_currentMode = BarMode;
 	break;
 
     case BarMode:
-	TimeDisplayLabel->hide();
+	m_transport->TimeDisplayLabel->hide();
 	m_currentMode = RealMode;
 	break;
     }
@@ -287,17 +293,17 @@ RosegardenTransportDialog::slotChangeTimeDisplay()
 void
 RosegardenTransportDialog::slotChangeToEnd()
 {
-    if (ToEndButton->isOn()) {
-	ToEndLabel->show();
+    if (m_transport->ToEndButton->isOn()) {
+	m_transport->ToEndLabel->show();
     } else {
-	ToEndLabel->hide();
+	m_transport->ToEndLabel->hide();
     }
 }
 
 bool
 RosegardenTransportDialog::isShowingTimeToEnd()
 {
-    return ToEndButton->isOn();
+    return m_transport->ToEndButton->isOn();
 }
 
 void
@@ -306,9 +312,9 @@ RosegardenTransportDialog::displayRealTime(const Rosegarden::RealTime &rt)
     Rosegarden::RealTime st = rt;
 
     if (m_lastMode != RealMode) {
-	HourColonPixmap->show();
-	SecondColonPixmap->hide();
-	HundredthColonPixmap->hide();
+	m_transport->HourColonPixmap->show();
+	m_transport->SecondColonPixmap->hide();
+	m_transport->HundredthColonPixmap->hide();
 	m_lastMode = RealMode;
     }
 
@@ -318,14 +324,14 @@ RosegardenTransportDialog::displayRealTime(const Rosegarden::RealTime &rt)
     {
         st = Rosegarden::RealTime(0,0) - st;
         if (!m_lastNegative) {
-	    NegativePixmap->setPixmap(m_lcdNegative);
+	    m_transport->NegativePixmap->setPixmap(m_lcdNegative);
 	    m_lastNegative = true;
 	}
     }
     else // don't show the flag
     {
 	if (m_lastNegative) {
-	    NegativePixmap->clear();
+	    m_transport->NegativePixmap->clear();
 	    m_lastNegative = false;
 	}
     }
@@ -353,9 +359,9 @@ RosegardenTransportDialog::displaySMPTETime(const Rosegarden::RealTime &rt)
     Rosegarden::RealTime st = rt;
 
     if (m_lastMode != SMPTEMode) {
-	HourColonPixmap->show();
-	SecondColonPixmap->show();
-	HundredthColonPixmap->show();
+	m_transport->HourColonPixmap->show();
+	m_transport->SecondColonPixmap->show();
+	m_transport->HundredthColonPixmap->show();
 	m_lastMode = SMPTEMode;
     }
 
@@ -365,14 +371,14 @@ RosegardenTransportDialog::displaySMPTETime(const Rosegarden::RealTime &rt)
     {
         st = Rosegarden::RealTime(0,0) - st;
         if (!m_lastNegative) {
-	    NegativePixmap->setPixmap(m_lcdNegative);
+	    m_transport->NegativePixmap->setPixmap(m_lcdNegative);
 	    m_lastNegative = true;
 	}
     }
     else // don't show the flag
     {
 	if (m_lastNegative) {
-	    NegativePixmap->clear();
+	    m_transport->NegativePixmap->clear();
 	    m_lastNegative = false;
 	}
     }
@@ -403,9 +409,9 @@ void
 RosegardenTransportDialog::displayBarTime(int bar, int beat, int unit)
 {
     if (m_lastMode != BarMode) {
-	HourColonPixmap->hide();
-	SecondColonPixmap->hide();
-	HundredthColonPixmap->hide();
+	m_transport->HourColonPixmap->hide();
+	m_transport->SecondColonPixmap->hide();
+	m_transport->HundredthColonPixmap->hide();
 	m_lastMode = BarMode;
     }
 
@@ -415,14 +421,14 @@ RosegardenTransportDialog::displayBarTime(int bar, int beat, int unit)
     {
         bar = -bar;
         if (!m_lastNegative) {
-	    NegativePixmap->setPixmap(m_lcdNegative);
+	    m_transport->NegativePixmap->setPixmap(m_lcdNegative);
 	    m_lastNegative = true;
 	}
     }
     else // don't show the flag
     {
 	if (m_lastNegative) {
-	    NegativePixmap->clear();
+	    m_transport->NegativePixmap->clear();
 	    m_lastNegative = false;
 	}
     }
@@ -473,71 +479,71 @@ RosegardenTransportDialog::updateTimeDisplay()
 {
     if (m_tenThousandths != m_lastTenThousandths)
     {
-	if (m_tenThousandths < 0) TenThousandthsPixmap->clear();
-        else TenThousandthsPixmap->setPixmap(m_lcdList[m_tenThousandths]);
+	if (m_tenThousandths < 0) m_transport->TenThousandthsPixmap->clear();
+        else m_transport->TenThousandthsPixmap->setPixmap(m_lcdList[m_tenThousandths]);
         m_lastTenThousandths = m_tenThousandths;
     }
 
     if (m_thousandths != m_lastThousandths)
     {
-	if (m_thousandths < 0) ThousandthsPixmap->clear();
-	else ThousandthsPixmap->setPixmap(m_lcdList[m_thousandths]);
+	if (m_thousandths < 0) m_transport->ThousandthsPixmap->clear();
+	else m_transport->ThousandthsPixmap->setPixmap(m_lcdList[m_thousandths]);
         m_lastThousandths = m_thousandths;
     }
 
     if (m_hundreths != m_lastHundreths)
     {
-	if (m_hundreths < 0) HundredthsPixmap->clear();
-        else HundredthsPixmap->setPixmap(m_lcdList[m_hundreths]);
+	if (m_hundreths < 0) m_transport->HundredthsPixmap->clear();
+        else m_transport->HundredthsPixmap->setPixmap(m_lcdList[m_hundreths]);
         m_lastHundreths = m_hundreths;
     }
 
     if (m_tenths != m_lastTenths)
     {
-	if (m_tenths < 0) TenthsPixmap->clear();
-        else TenthsPixmap->setPixmap(m_lcdList[m_tenths]);
+	if (m_tenths < 0) m_transport->TenthsPixmap->clear();
+        else m_transport->TenthsPixmap->setPixmap(m_lcdList[m_tenths]);
         m_lastTenths = m_tenths;
     }
 
     if (m_unitSeconds != m_lastUnitSeconds)
     {
-	if (m_unitSeconds < 0) UnitSecondsPixmap->clear();
-        else UnitSecondsPixmap->setPixmap(m_lcdList[m_unitSeconds]);
+	if (m_unitSeconds < 0) m_transport->UnitSecondsPixmap->clear();
+        else m_transport->UnitSecondsPixmap->setPixmap(m_lcdList[m_unitSeconds]);
         m_lastUnitSeconds = m_unitSeconds;
     }
  
     if (m_tenSeconds != m_lastTenSeconds)
     {
-	if (m_tenSeconds < 0) TenSecondsPixmap->clear();
-        else TenSecondsPixmap->setPixmap(m_lcdList[m_tenSeconds]);
+	if (m_tenSeconds < 0) m_transport->TenSecondsPixmap->clear();
+        else m_transport->TenSecondsPixmap->setPixmap(m_lcdList[m_tenSeconds]);
         m_lastTenSeconds = m_tenSeconds;
     }
 
     if (m_unitMinutes != m_lastUnitMinutes)
     {
-        if (m_unitMinutes < 0) UnitMinutesPixmap->clear();
-        else UnitMinutesPixmap->setPixmap(m_lcdList[m_unitMinutes]);
+        if (m_unitMinutes < 0) m_transport->UnitMinutesPixmap->clear();
+        else m_transport->UnitMinutesPixmap->setPixmap(m_lcdList[m_unitMinutes]);
         m_lastUnitMinutes = m_unitMinutes;
     }
 
     if (m_tenMinutes != m_lastTenMinutes)
     {
-        if (m_tenMinutes < 0) TenMinutesPixmap->clear();
-        else TenMinutesPixmap->setPixmap(m_lcdList[m_tenMinutes]);
+        if (m_tenMinutes < 0) m_transport->TenMinutesPixmap->clear();
+        else m_transport->TenMinutesPixmap->setPixmap(m_lcdList[m_tenMinutes]);
         m_lastTenMinutes = m_tenMinutes;
     }
 
     if (m_unitHours != m_lastUnitHours)
     {
-        if (m_unitHours < 0) UnitHoursPixmap->clear();
-        else UnitHoursPixmap->setPixmap(m_lcdList[m_unitHours]);
+        if (m_unitHours < 0) m_transport->UnitHoursPixmap->clear();
+        else m_transport->UnitHoursPixmap->setPixmap(m_lcdList[m_unitHours]);
         m_lastUnitHours = m_unitHours;
     }
 
     if (m_tenHours != m_lastTenHours)
     {
-        if (m_tenHours < 0) TenHoursPixmap->clear();
-        else TenHoursPixmap->setPixmap(m_lcdList[m_tenHours]);
+        if (m_tenHours < 0) m_transport->TenHoursPixmap->clear();
+        else m_transport->TenHoursPixmap->setPixmap(m_lcdList[m_tenHours]);
         m_lastTenHours = m_tenHours;
     }
 }
@@ -551,7 +557,7 @@ RosegardenTransportDialog::setTempo(const double &tempo)
     QString tempoString;
     tempoString.sprintf("%4.3f", tempo);
 
-    TempoDisplay->setText(tempoString);
+    m_transport->TempoDisplay->setText(tempoString);
 }
 
 void
@@ -565,7 +571,7 @@ RosegardenTransportDialog::setTimeSignature(const Rosegarden::TimeSignature &tim
 
     QString timeSigString;
     timeSigString.sprintf("%d/%d", numerator, denominator);
-    TimeSigDisplay->setText(timeSigString);
+    m_transport->TimeSigDisplay->setText(timeSigString);
 }
 
 
@@ -586,38 +592,38 @@ RosegardenTransportDialog::setMidiInLabel(const Rosegarden::MappedEvent *mE)
                 if (mE->getVelocity() == 0) return;
 
                 MidiPitchLabel *mPL = new MidiPitchLabel(mE->getPitch());
-                InDisplay->setText(mPL->getQString() +
-		       QString("  %1").arg(mE->getVelocity()));
+                m_transport->InDisplay->setText(mPL->getQString() +
+                                                QString("  %1").arg(mE->getVelocity()));
             }
             break;
 
         case MappedEvent::MidiPitchBend:
             {
-                InDisplay->setText(i18n("PITCH WHEEL"));
+                m_transport->InDisplay->setText(i18n("PITCH WHEEL"));
             }
             break;
 
         case MappedEvent::MidiController:
             {
-                InDisplay->setText(i18n("CONTROLLER"));
+                m_transport->InDisplay->setText(i18n("CONTROLLER"));
             }
             break;
         case MappedEvent::MidiProgramChange:
             {
-                InDisplay->setText(i18n("PROG CHNGE"));
+                m_transport->InDisplay->setText(i18n("PROG CHNGE"));
             }
             break;
 
         case MappedEvent::MidiKeyPressure:
         case MappedEvent::MidiChannelPressure:
             {
-                InDisplay->setText(i18n("PRESSURE"));
+                m_transport->InDisplay->setText(i18n("PRESSURE"));
             }
             break;
 
         case MappedEvent::MidiSystemExclusive:
             {
-                InDisplay->setText(i18n("SYS EXCLSVE"));
+                m_transport->InDisplay->setText(i18n("SYS EXCLSVE"));
             }
             break;
 
@@ -642,7 +648,7 @@ RosegardenTransportDialog::setMidiInLabel(const Rosegarden::MappedEvent *mE)
 void
 RosegardenTransportDialog::slotClearMidiInLabel()
 {
-    InDisplay->setText(i18n(QString("NO EVENTS")));
+    m_transport->InDisplay->setText(i18n(QString("NO EVENTS")));
 }
 
 
@@ -659,38 +665,38 @@ RosegardenTransportDialog::setMidiOutLabel(const Rosegarden::MappedEvent *mE)
         case MappedEvent::MidiNoteOneShot:
             {
                 MidiPitchLabel *mPL = new MidiPitchLabel(mE->getPitch());
-                OutDisplay->setText(mPL->getQString() +
-		       QString("  %1").arg(mE->getVelocity()));
+                m_transport->OutDisplay->setText(mPL->getQString() +
+                                                 QString("  %1").arg(mE->getVelocity()));
             }
             break;
 
         case MappedEvent::MidiPitchBend:
             {
-                OutDisplay->setText(i18n("PITCH WHEEL"));
+                m_transport->OutDisplay->setText(i18n("PITCH WHEEL"));
             }
             break;
 
         case MappedEvent::MidiController:
             {
-                OutDisplay->setText(i18n("CONTROLLER"));
+                m_transport->OutDisplay->setText(i18n("CONTROLLER"));
             }
             break;
         case MappedEvent::MidiProgramChange:
             {
-                OutDisplay->setText(i18n("PROG CHNGE"));
+                m_transport->OutDisplay->setText(i18n("PROG CHNGE"));
             }
             break;
 
         case MappedEvent::MidiKeyPressure:
         case MappedEvent::MidiChannelPressure:
             {
-                OutDisplay->setText(i18n("PRESSURE"));
+                m_transport->OutDisplay->setText(i18n("PRESSURE"));
             }
             break;
 
         case MappedEvent::MidiSystemExclusive:
             {
-                OutDisplay->setText(i18n("SYS EXCLSVE"));
+                m_transport->OutDisplay->setText(i18n("SYS EXCLSVE"));
             }
             break;
 
@@ -714,7 +720,7 @@ RosegardenTransportDialog::setMidiOutLabel(const Rosegarden::MappedEvent *mE)
 void
 RosegardenTransportDialog::slotClearMidiOutLabel()
 {
-    OutDisplay->setText(i18n(QString("NO EVENTS")));
+    m_transport->OutDisplay->setText(i18n(QString("NO EVENTS")));
 }
 
 void
@@ -727,7 +733,7 @@ RosegardenTransportDialog::closeEvent (QCloseEvent * e)
 void
 RosegardenTransportDialog::slotLoopButtonReleased()
 {
-    if (LoopButton->isOn())
+    if (m_transport->LoopButton->isOn())
     {
         emit setLoop();
     }
@@ -740,29 +746,29 @@ RosegardenTransportDialog::slotLoopButtonReleased()
 void
 RosegardenTransportDialog::slotPanelOpenButtonReleased()
 {
-    int rfh = RecordingFrame->height();
+    int rfh = m_transport->RecordingFrame->height();
 
-    if (RecordingFrame->isVisible()) {
-	RecordingFrame->hide();
+    if (m_transport->RecordingFrame->isVisible()) {
+	m_transport->RecordingFrame->hide();
 	setFixedSize(width(), height() - rfh);
-	PanelOpenButton->setPixmap(m_panelClosed);
+	m_transport->PanelOpenButton->setPixmap(m_panelClosed);
     } else {
 	setFixedSize(width(), height() + rfh);
-	RecordingFrame->show();
-	PanelOpenButton->setPixmap(m_panelOpen);
+	m_transport->RecordingFrame->show();
+	m_transport->PanelOpenButton->setPixmap(m_panelOpen);
     }
 }
 
 void
 RosegardenTransportDialog::slotPanelCloseButtonReleased()
 {
-    int rfh = RecordingFrame->height();
+    int rfh = m_transport->RecordingFrame->height();
 
-    if (RecordingFrame->isVisible()) {
-	RecordingFrame->hide();
+    if (m_transport->RecordingFrame->isVisible()) {
+	m_transport->RecordingFrame->hide();
 	setFixedSize(width(), height() - rfh);
-	PanelOpenButton->setOn(false);
-	PanelOpenButton->setPixmap(m_panelClosed);
+	m_transport->PanelOpenButton->setOn(false);
+	m_transport->PanelOpenButton->setPixmap(m_panelClosed);
     }
 }
 
@@ -770,7 +776,7 @@ RosegardenTransportDialog::slotPanelCloseButtonReleased()
 bool 
 RosegardenTransportDialog::isExpanded()
 {
-    return (RecordingFrame->isVisible());
+    return (m_transport->RecordingFrame->isVisible());
 }
 
 void

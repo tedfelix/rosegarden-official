@@ -22,6 +22,8 @@
 #ifndef _ROSEGARDENTRANSPORTDIALOG_H_
 #define _ROSEGARDENTRANSPORTDIALOG_H_
 
+#include <map>
+
 #include <qpixmap.h>
 #include <qtimer.h>
 #include <qaccel.h>
@@ -30,12 +32,12 @@
 #include "Composition.h" // for RealTime
 #include "MappedEvent.h"
 
-#include <map>
+#include <kdialog.h>
 
 namespace Rosegarden
 {
 
-class RosegardenTransportDialog : public RosegardenTransport
+class RosegardenTransportDialog : public KDialog 
 {
 Q_OBJECT
 public:
@@ -69,6 +71,20 @@ public:
     // Return the accelerator object
     //
     QAccel* getAccelerators() { return m_accelerators; }
+
+    // RosegardenTransport member accessors
+    QPushButton* MetronomeButton()   { return m_transport->MetronomeButton; }
+    QPushButton* SoloButton()        { return m_transport->SoloButton; }
+    QPushButton* LoopButton()        { return m_transport->LoopButton; }
+    QPushButton* PlayButton()        { return m_transport->PlayButton; }
+    QPushButton* StopButton()        { return m_transport->StopButton; }
+    QPushButton* FfwdButton()        { return m_transport->FfwdButton; }
+    QPushButton* RewindButton()      { return m_transport->RewindButton; }
+    QPushButton* RecordButton()      { return m_transport->RecordButton; }
+    QPushButton* RewindEndButton()   { return m_transport->RewindEndButton; }
+    QPushButton* FfwdEndButton()     { return m_transport->FfwdEndButton; }
+    QPushButton* TimeDisplayButton() { return m_transport->TimeDisplayButton; }
+    QPushButton* ToEndButton()       { return m_transport->ToEndButton; }
 
 protected:
     virtual void closeEvent(QCloseEvent * e);
@@ -111,6 +127,8 @@ private:
     void resetFont(QWidget *);
 
     //--------------- Data members ---------------------------------
+
+    RosegardenTransport* m_transport;
 
     std::map<int, QPixmap> m_lcdList;
     QPixmap m_lcdNegative;
