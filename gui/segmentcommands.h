@@ -217,6 +217,7 @@ private:
     Rosegarden::Segment *m_segment;
     Rosegarden::Segment *m_newSegment;
     Rosegarden::timeT m_splitTime;
+    Rosegarden::timeT *m_previousEndMarkerTime;
     bool m_detached;
 };
 
@@ -237,8 +238,6 @@ private:
     Rosegarden::Composition *m_composition;
     std::vector<Rosegarden::Segment *> m_newSegments;
     bool m_detached;
-
-    bool isBarEmpty(int barNo);
 };
 
 

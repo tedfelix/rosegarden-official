@@ -8,8 +8,14 @@
   <text>&amp;View</text>
 <Action name="debug_dump"/>
 <Separator/>
+  <Menu name="Font">
+    <text>Note &amp;Font</text>
+    <ActionList name="note_fonts"/>
+  </Menu>
+<Separator/>
   <Action name="linear_mode"/>
   <Action name="page_mode"/>
+
 <!-- Stuff from font/layout toolbar, e.g...
   <Separator/>
   <Menu name="Font">

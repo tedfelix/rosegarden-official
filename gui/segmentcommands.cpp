@@ -373,6 +373,7 @@ SegmentSplitCommand::SegmentSplitCommand(Segment *segment,
     m_segment(segment),
     m_newSegment(0),
     m_splitTime(splitTime),
+    m_previousEndMarkerTime(0),
     m_detached(false)
 {
 }
@@ -382,6 +383,7 @@ SegmentSplitCommand::~SegmentSplitCommand()
     if (m_detached) {
 	delete m_newSegment;
     }
+    delete m_previousEndMarkerTime;
 }
 
 void
@@ -443,22 +445,14 @@ SegmentSplitCommand::execute()
 
     // Resize left hand Segment
     //
-    //!!! should we be dividing any events that are extant during the
-    // split?
-    m_segment->erase(m_segment->findTime(m_splitTime), m_segment->end());
-    m_segment->setEndMarkerTime(m_splitTime);
-
-    // Look for a final rest and shrink it
-//!!! lose, rework
-    Segment::iterator it = m_segment->end();
-
-    if (it != m_segment->begin() &&
-	(*(--it))->isa(Rosegarden::Note::EventRestType)) {
-	Event *e = new Event(**it, (*it)->getAbsoluteTime(),
-			     m_splitTime - (*it)->getAbsoluteTime());
-	m_segment->erase(it);
-	m_segment->insert(e);
+    const timeT *emt = m_segment->getRawEndMarkerTime();
+    if (emt) {
+	m_previousEndMarkerTime = new timeT(*emt);
+    } else {
+	m_previousEndMarkerTime = 0;
     }
+
+    m_segment->setEndMarkerTime(m_splitTime);
 
     if (!m_newSegment->getComposition()) {
 	m_segment->getComposition()->addSegment(m_newSegment);
@@ -470,6 +464,7 @@ SegmentSplitCommand::execute()
 void
 SegmentSplitCommand::unexecute()
 {
+/*!!!
     if (m_segment->getEndTime() < m_newSegment->getStartTime()) {
 	m_segment->fillWithRests(m_newSegment->getStartTime());
     }
@@ -480,6 +475,15 @@ SegmentSplitCommand::unexecute()
     }
 
     m_segment->clearEndMarker();
+*/
+    if (m_previousEndMarkerTime) {
+	m_segment->setEndMarkerTime(*m_previousEndMarkerTime);
+	delete m_previousEndMarkerTime;
+	m_previousEndMarkerTime = 0;
+    } else {
+	m_segment->clearEndMarker();
+    }
+
     m_segment->getComposition()->detachSegment(m_newSegment);
     m_detached = true;
 }
@@ -518,8 +522,6 @@ void
 SegmentAutoSplitCommand::execute()
 {
     std::vector<AutoSplitPoint> splitPoints;
-
-//!!! WORK IN BARS, USE isBarEmpty
 
     Rosegarden::Clef clef;
     Rosegarden::Key key;
@@ -631,18 +633,6 @@ SegmentAutoSplitCommand::unexecute()
     }
     m_composition->addSegment(m_segment);
     m_detached = false;
-}
-
-bool
-SegmentAutoSplitCommand::isBarEmpty(int barNo)
-{
-    std::pair<timeT, timeT> barRange = m_composition->getBarRange(barNo);
-    Segment::iterator i = m_segment->findTime(barRange.first);
-    Segment::iterator j = m_segment->findTime(barRange.second);
-    while (i != j && i != m_segment->end()) {
-	if (!(*i)->isa(Rosegarden::Note::EventRestType)) return false;
-    }
-    return true;
 }
 
 

@@ -46,8 +46,6 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
     m_width(-1),
     m_composition(composition),
     m_rulerScale(rulerScale),
-//!!!    m_font("helvetica", 10),
-//!!!    m_boldFont("helvetica", 10, QFont::Bold),
     m_fontMetrics(m_boldFont)
 {
     m_font.setPointSize(11);

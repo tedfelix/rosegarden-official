@@ -215,14 +215,14 @@ public:
      * as an extent test in code such as
      * 
      *  while (segment.isBeforeEndMarker(my_iterator)) {
-     *      //...
+     *      // ...
      *      ++my_iterator;
      *  }
      *
      * It is not generally safe to write
      *
      *  while (my_iterator != segment.getEndMarker()) {
-     *      //...
+     *      // ...
      *      ++my_iterator;
      *  }
      * 

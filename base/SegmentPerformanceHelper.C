@@ -58,7 +58,6 @@ SegmentPerformanceHelper::getTiedNotes(iterator i)
 
     for (;;) {
 	while (++i != end() && !(*i)->isa(Note::EventType));
-//!!!        i = segment().findContiguousNext(i);
         if (i == end()) return c;
 
         e = *i;

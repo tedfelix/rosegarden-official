@@ -1384,20 +1384,6 @@ bool SegmentPencil::handleMouseMove(QMouseEvent *e)
 			 m_currentItem->getStartTime(), timeT(0));
     }
 
-/*!!!
-    timeT duration = time - m_currentItem->getStartTime();
-
-    if ((duration >= 0 && duration <  snap) ||
-	(duration <  0 && duration > -snap)) {
-	duration = (duration < 0 ? -snap : snap);
-    }
-
-    if (direction == SnapGrid::SnapLeft) {
-	duration += std::max(m_currentItem->getDuration(), timeT(0));
-    }
-
-    m_currentItem->setEndTime(m_currentItem->getStartTime() + duration);
-*/
     m_currentItem->setEndTime(time);
 
     m_canvas->slotUpdate();

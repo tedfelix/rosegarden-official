@@ -146,7 +146,7 @@ Quantizer::NoteQuantizer::quantize(int unit, int maxDots,
 
     //!!! We probably shouldn't quantize tuplets
 
-    duration = UnitQuantizer().quantize(unit, maxDots, duration, 0, false);
+//!!!???    duration = UnitQuantizer().quantize(unit, maxDots, duration, 0, false);
     Note shortNote = Note::getNearestNote(duration, maxDots);
 
     timeT shortTime = shortNote.getDuration();
@@ -180,11 +180,12 @@ Quantizer::NoteQuantizer::quantize(int unit, int maxDots,
 
     timeT longTime = longNote.getDuration();
 
-    //!!! we should prefer to round up to a note with fewer dots rather
-    // than down to one with more, if the distances are about the same
+    // we should prefer to round up to a note with fewer dots rather
+    // than down to one with more
 
     if (shortTime < unit || 
-	(longTime - duration < duration - shortTime)) {
+	((longNote.getDots() + 1) * (longTime - duration) <
+	 (shortNote.getDots() + 1) * (duration - shortTime))) {
 //	cerr << "returning(3) " << longTime << std::endl;
 	return longTime;
     } else {

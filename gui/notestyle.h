@@ -131,7 +131,9 @@ public:
     int           getFlagCount (Rosegarden::Note::Type);
     int           getSlashCount(Rosegarden::Note::Type);
 
-    CharName getNoteHeadCharName(Rosegarden::Note::Type);
+    typedef std::pair<CharName, bool> CharNameRec; // bool is "inverted"
+    CharNameRec getNoteHeadCharName(Rosegarden::Note::Type);
+
     CharName getRestCharName(Rosegarden::Note::Type);
     CharName getFlagCharName(int flagCount);
     CharName getAccidentalCharName(const Rosegarden::Accidental &);

@@ -526,7 +526,6 @@ MidiFile::convertToRosegarden()
 
     // precalculate the timing factor
     //
-
     // [cc] -- attempt to avoid floating-point rounding errors
     timeT crotchetTime = Note(Note::Crotchet).getDuration();
     int divisor = m_timingDivision ? m_timingDivision : crotchetTime;
@@ -537,6 +536,11 @@ MidiFile::convertToRosegarden()
     // Clear down the assigned Instruments we already have
     //
     m_studio->unassignAllInstruments();
+
+    // In case we have text events with no notes on the same track
+    //
+    Segment *textSegment = new Segment;
+    textSegment->setLabel("Text Events");
 
     for (Rosegarden::TrackId i = 0; i < m_numberOfTracks; i++ )
     {
@@ -558,7 +562,7 @@ MidiFile::convertToRosegarden()
         // Consolidate NOTE ON and NOTE OFF events into a NOTE ON with
         // a duration. 
         //
-        if(consolidateNoteOffEvents(i)) // returns true if some notes exist
+        if (consolidateNoteOffEvents(i)) // returns true if some notes exist
         {
             rosegardenSegment = new Segment;
             rosegardenSegment->setTrack(compTrack);
@@ -607,21 +611,22 @@ MidiFile::convertToRosegarden()
                     break;
 
                 case MIDI_TEXT_EVENT:
-                    if (rosegardenSegment)
 		    {
-			//!!! actually we want to load text events even if
-			// no notes in track -- perhaps create lyric segment
 			std::string text = (*midiEvent)->getMetaMessage();
 			rosegardenEvent =
 			    Rosegarden::Text(text).getAsEvent(rosegardenTime);
-			rosegardenSegment->insert(rosegardenEvent);
+			if (rosegardenSegment) {
+			    rosegardenSegment->insert(rosegardenEvent);
+			} else {
+			    textSegment->insert(rosegardenEvent);
+			}
 		    }
 			
                     break;
 
                 case MIDI_COPYRIGHT_NOTICE:
                     composition->setCopyrightNote((*midiEvent)->
-                                                            getMetaMessage());
+						  getMetaMessage());
                     break;
                     
                 case MIDI_TRACK_NAME:
@@ -739,19 +744,7 @@ MidiFile::convertToRosegarden()
                                           (*midiEvent)->getPitch());
                 rosegardenEvent->set<Int>(BaseProperties::VELOCITY,
                                           (*midiEvent)->getVelocity());
-
-                {
-                    // insert into Segment
-                    Segment::iterator loc =
-                        rosegardenSegment->insert(rosegardenEvent);
-
-                    // [cc] -- a bit of an experiment
-//!!! probably do want this, but
-//                    SegmentNotationHelper helper(*rosegardenSegment);
-//                    if (!helper.isViable(rosegardenEvent)) {
-//                        helper.makeNoteViable(loc);
-//                    }
-                }
+		rosegardenSegment->insert(rosegardenEvent);
                 break;
 
                 // We ignore any NOTE OFFs here as we've already
@@ -821,6 +814,27 @@ MidiFile::convertToRosegarden()
 	composition->addTimeSignature(0, timeSig);
     }
 
+    // if we have a text segment, there must have been some text events
+    // on note-free segments -- insert the text segment (it has a pretty
+    // obvious name)
+//!!! Nah, do something more sensible with the text events -- it's not like we can really view them from here anyway
+    delete textSegment;
+/*!!!
+    if (!textSegment->empty()) {
+
+	textSegment->setTrack(compTrack);
+
+	track = new Rosegarden::Track(compTrack,        // id
+				      compInstrument,   // instrument
+				      compTrack,        // position
+				      trackName,        // name
+				      true);            // muted
+
+	composition->addTrack(track);
+	composition->addSegment(textSegment);
+    }
+*/
+
     for (Composition::iterator i = composition->begin();
 	 i != composition->end(); ++i)
     {
@@ -830,7 +844,14 @@ MidiFile::convertToRosegarden()
 	rosegardenSegment->insert
 	    (helper.guessClef(rosegardenSegment->begin(),
 			      rosegardenSegment->end()).getAsEvent(0));
-
+/*!!! was useful for text segment only
+	if (composition->getBarNumber(rosegardenSegment->getEndTime()) ==
+	    composition->getBarNumber(rosegardenSegment->getStartTime())) {
+	    rosegardenSegment->fillWithRests
+		(composition->getBarEndForTime
+		 (rosegardenSegment->getEndTime() + 1));
+	}
+*/
 	rosegardenSegment->normalizeRests
 	    (rosegardenSegment->getStartTime(),
 	     rosegardenSegment->getEndTime());

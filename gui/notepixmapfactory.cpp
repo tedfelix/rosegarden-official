@@ -508,24 +508,31 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     }
 
     QPixmap body;
-    CharName charName(m_style->getNoteHeadCharName(params.m_noteType));
+    NoteStyle::CharNameRec charNameRec
+	(m_style->getNoteHeadCharName(params.m_noteType));
+    CharName charName = charNameRec.first;
+    bool inverted = charNameRec.second;
+
     if (m_selected || params.m_selected) {
 	body = m_font->getColouredPixmap
 	    (charName,
 	     RosegardenGUIColours::SelectedElementHue,
-	     RosegardenGUIColours::SelectedElementMinValue);
+	     RosegardenGUIColours::SelectedElementMinValue,
+	     inverted);
     } else if (params.m_highlighted) {
 	body = m_font->getColouredPixmap
 	    (charName,
 	     RosegardenGUIColours::HighlightedElementHue,
-	     RosegardenGUIColours::HighlightedElementMinValue);
+	     RosegardenGUIColours::HighlightedElementMinValue,
+	     inverted);
     } else if (params.m_quantized) {
 	body = m_font->getColouredPixmap
 	    (charName,
 	     RosegardenGUIColours::QuantizedNoteHue,
-	     RosegardenGUIColours::QuantizedNoteMinValue);
+	     RosegardenGUIColours::QuantizedNoteMinValue,
+	     inverted);
     } else {
-	body = m_font->getPixmap(charName);
+	body = m_font->getPixmap(charName, inverted);
     }
 
     QPoint bodyLocation(m_left - m_origin.x(), m_above - m_origin.y());
@@ -1766,12 +1773,12 @@ NotePixmapFactory::m_pointZero;
 
 int NotePixmapFactory::getNoteBodyWidth(Note::Type type)
     const {
-    return m_font->getWidth(m_style->getNoteHeadCharName(type)) -2*m_origin.x();
+    return m_font->getWidth(m_style->getNoteHeadCharName(type).first) -2*m_origin.x();
 }
 
 int NotePixmapFactory::getNoteBodyHeight(Note::Type type)
     const {
-    return m_font->getHeight(m_style->getNoteHeadCharName(type)) -2*m_origin.y();
+    return m_font->getHeight(m_style->getNoteHeadCharName(type).first) -2*m_origin.y();
 }
 
 int NotePixmapFactory::getLineSpacing() const {

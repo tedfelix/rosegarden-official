@@ -255,7 +255,7 @@ NoteStyle::getStemFixPoints(Note::Type type,
  
 
 
-CharName
+NoteStyle::CharNameRec
 NoteStyle::getNoteHeadCharName(Note::Type type)
 {
     NoteDescriptionMap::iterator i = m_notes.find(type);
@@ -264,64 +264,69 @@ NoteStyle::getNoteHeadCharName(Note::Type type)
 	kdDebug(KDEBUG_AREA) 
 	    << "WARNING: NoteStyle::getNoteHeadCharName: No definition for note type "
 	    << type << ", defaulting to NOTEHEAD_BLACK" << endl;
-	return NoteCharacterNames::NOTEHEAD_BLACK;
+	return CharNameRec(NoteCharacterNames::NOTEHEAD_BLACK, false);
     }
 
     const NoteDescription &desc(i->second);
+    CharName name = NoteCharacterNames::UNKNOWN;
+    bool inverted = false;
 
     if (desc.shape == AngledOval) {
 
-	return desc.filled ? NoteCharacterNames::NOTEHEAD_BLACK
+	name = desc.filled ? NoteCharacterNames::NOTEHEAD_BLACK
 	                   : NoteCharacterNames::VOID_NOTEHEAD;
 
     } else if (desc.shape == LevelOval) {
 
-	return desc.filled ? NoteCharacterNames::UNKNOWN //!!!
+	name = desc.filled ? NoteCharacterNames::UNKNOWN //!!!
 	                   : NoteCharacterNames::WHOLE_NOTE;
 	
     } else if (desc.shape == Breve) {
 
-	return desc.filled ? NoteCharacterNames::UNKNOWN //!!!
+	name = desc.filled ? NoteCharacterNames::UNKNOWN //!!!
 	                   : NoteCharacterNames::BREVE;
 	
     } else if (desc.shape == Cross) {
 
-	return desc.filled ? NoteCharacterNames::X_NOTEHEAD
+	name = desc.filled ? NoteCharacterNames::X_NOTEHEAD
 	                   : NoteCharacterNames::CIRCLE_X_NOTEHEAD;
 
     } else if (desc.shape == TriangleUp) {
 
-	return desc.filled ? NoteCharacterNames::TRIANGLE_NOTEHEAD_UP_BLACK
+	name = desc.filled ? NoteCharacterNames::TRIANGLE_NOTEHEAD_UP_BLACK
                            : NoteCharacterNames::TRIANGLE_NOTEHEAD_UP_WHITE;
 
     } else if (desc.shape == TriangleDown) {
 
-	kdDebug(KDEBUG_AREA) << "WARNING: NoteStyle::getNoteHeadCharName: TriangleDown not yet implemented" << endl;
-	return NoteCharacterNames::UNKNOWN; //!!!
+	name = desc.filled ? NoteCharacterNames::TRIANGLE_NOTEHEAD_UP_BLACK
+                           : NoteCharacterNames::TRIANGLE_NOTEHEAD_UP_WHITE;
+	inverted = true;
 
     } else if (desc.shape == Diamond) {
 
-	return desc.filled ? NoteCharacterNames::SEMIBREVIS_BLACK
+	name = desc.filled ? NoteCharacterNames::SEMIBREVIS_BLACK
  	                   : NoteCharacterNames::SEMIBREVIS_WHITE;
 
     } else if (desc.shape == Rectangle) {
 
-	kdDebug(KDEBUG_AREA) << "WARNING: NoteStyle::getNoteHeadCharName: Rectangle not yet implemented" << endl;
-	return NoteCharacterNames::UNKNOWN; //!!!
+	name = desc.filled ? NoteCharacterNames::SQUARE_NOTEHEAD_BLACK
+                           : NoteCharacterNames::SQUARE_NOTEHEAD_WHITE;
 	
     } else if (desc.shape == Number) {
 
 	kdDebug(KDEBUG_AREA) << "WARNING: NoteStyle::getNoteHeadCharName: Number not yet implemented" << endl;
-	return NoteCharacterNames::UNKNOWN; //!!!
+	name = NoteCharacterNames::UNKNOWN; //!!!
 
     } else if (desc.shape == CustomCharName) {
 	
-	return desc.charName;
+	name = desc.charName;
 
     } else {
 
-	return NoteCharacterNames::UNKNOWN;
+	name = NoteCharacterNames::UNKNOWN;
     }
+
+    return CharNameRec(name, inverted);
 }
 
 CharName

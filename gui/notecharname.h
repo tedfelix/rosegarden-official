@@ -50,6 +50,8 @@ extern const CharName SEMIBREVIS_WHITE;
 extern const CharName SEMIBREVIS_BLACK;
 extern const CharName TRIANGLE_NOTEHEAD_UP_WHITE;
 extern const CharName TRIANGLE_NOTEHEAD_UP_BLACK;
+extern const CharName SQUARE_NOTEHEAD_WHITE;
+extern const CharName SQUARE_NOTEHEAD_BLACK;
 
 extern const CharName FLAG_1;
 extern const CharName FLAG_2;
