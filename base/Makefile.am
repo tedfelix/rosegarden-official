@@ -19,6 +19,7 @@ libbase_la_SOURCES = AnalysisTypes.C \
 		     Event.C \
 		     Exception.C \
                      Instrument.C \
+                     Lock.C \
                      MidiDevice.C \
                      MidiTypes.C \
 		     NotationTypes.C \

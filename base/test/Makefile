@@ -10,7 +10,7 @@ INCPATH  = -I..
 
 SRCS	:= test.C
 
-default: test
+default: test thread
 
 clean:
 	rm -f test test.o
@@ -20,6 +20,10 @@ clean:
 
 test: test.o
 	$(CC) $< $(LIBBASE) -o $@
+
+thread: thread.o
+	$(CC) $< $(LIBBASE) -o $@ -lpthread
+
 ###test: test.o ../Property.o ../Event.o ../NotationTypes.o ../Track.o ../Quantizer.o
 ###	$(CC) $< $(LIBBASE) -o $@
 
