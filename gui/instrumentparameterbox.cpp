@@ -23,7 +23,7 @@
 #include <cstdio>
 
 #include <klocale.h>
-
+#include <kapp.h>
 
 #include <qdial.h>
 #include <qlayout.h>
@@ -588,6 +588,22 @@ AudioInstrumentParameterPanel::slotBypassed(int pluginIndex, bool bp)
              Rosegarden::MappedLADSPAPlugin::Bypassed,
              Rosegarden::MappedObjectValue(bp));
 #endif // HAVE_LADSPA
+
+        // Set the bypass colour on the plugin button
+        if (bp)
+        {
+            m_pluginButtons[pluginIndex]->setPaletteForegroundColor(kapp->palette().color(QPalette::Active, QColorGroup::Button));
+            m_pluginButtons[pluginIndex]->setPaletteBackgroundColor(kapp->palette().color(QPalette::Active, QColorGroup::ButtonText));
+        }
+        else
+        {
+            m_pluginButtons[pluginIndex]->setPaletteForegroundColor(kapp->palette().color(QPalette::Active, QColorGroup::ButtonText));
+            m_pluginButtons[pluginIndex]->setPaletteBackgroundColor(kapp->palette().color(QPalette::Active, QColorGroup::Button));
+        }
+
+        // Set the bypass on the instance
+        //
+        inst->setBypass(bp);
     }
 }
 

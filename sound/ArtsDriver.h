@@ -109,6 +109,10 @@ public:
                                             unsigned long /*portNumber*/,
                                             float /*value*/) {;}
 
+    virtual void setPluginInstanceBypass(InstrumentId /*id*/,
+                                         int /*position*/,
+                                         bool /*value*/) {;}
+
     virtual bool checkForNewClients() { return false; }
 
 protected:

@@ -233,8 +233,13 @@ public:
                                     int position,
                                     unsigned long portNumber,
                                     float value)
-        { m_soundDriver->
+       { m_soundDriver->
             setPluginInstancePortValue(id, position, portNumber, value); }
+
+    void setPluginInstanceBypass(InstrumentId id,
+                                 int position,
+                                 bool value)
+       { m_soundDriver->setPluginInstanceBypass(id, position, value); }
 
     // Check to see if there are any new Devices/Instruments for 
     // us to see.

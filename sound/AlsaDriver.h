@@ -252,6 +252,11 @@ public:
                                             int position,
                                             unsigned long portNumber,
                                             float value);
+
+    virtual void setPluginInstanceBypass(InstrumentId id,
+                                         int position,
+                                         bool value);
+
     virtual bool checkForNewClients();
 
 #ifdef HAVE_LADSPA

@@ -2248,7 +2248,7 @@ AlsaDriver::getUnprocessedPlugins()
     PluginIterator it = m_pluginInstances.begin();
     for (; it != m_pluginInstances.end(); it++)
     {
-        if (!(*it)->hasBeenProcessed())
+        if (!(*it)->hasBeenProcessed() && !(*it)->isBypassed())
             list.push_back(*it);
     }
     return list;
@@ -2698,26 +2698,36 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 PluginInstances list =
                     inst->getInstrumentPlugins((*it)->getInstrument());
 
+
                 if (list.size())
                 {
+                    //cout << "GOT " << list.size() << " PLUGINS" << endl;
+
+                    int c = 0;
+
                     PluginIterator pIt = list.begin();
                     for (; pIt != list.end(); pIt++)
                     {
-                        // bypass
+                        // Bypass
+                        //
                         if ((*pIt)->isBypassed())
                         {
-                            cout << "BYPASSING" << endl;
-                            continue;
+                            for (unsigned int i = 0; i < nframes; i++)
+                            {
+                                _pluginBufferOut1[i] = _pluginBufferIn1[i];
+                                _pluginBufferOut2[i] = _pluginBufferIn2[i];
+                            }
                         }
-
-                        /*
-                        cout << "PROCESSING PLUGIN INST = "
-                             << (*pIt)->getInstrument()
-                             << " : POSITION = "
-                             << (*pIt)->getPosition() << endl;
-                             */
-
-                        (*pIt)->run(_jackBufferSize);
+                        else
+                        {
+                            (*pIt)->run(_jackBufferSize);
+                            /*
+                            cout << "RUN = " << c++ << " : "
+                                 << "LASPA ID = " << (*pIt)->getLADSPAId()
+                                 << " : POS = " << (*pIt)->getPosition() 
+                                 << endl;
+                                 */
+                        }
 
                         // Now mix the signal
                         //
@@ -2785,13 +2795,6 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 PluginIterator it = list.begin();
                 for (; it != list.end(); it++)
                 {
-                    // bypass
-                    if ((*it)->isBypassed())
-                    {
-                        cout << "UNRUN BYPASS" << endl;
-                        continue;
-                    }
-
                     float volume = 1.0f;
     
                     Rosegarden::MappedAudioFader *fader =
@@ -3162,6 +3165,28 @@ AlsaDriver::checkForNewClients()
     }
 
     return false;
+}
+
+void
+AlsaDriver::setPluginInstanceBypass(InstrumentId id,
+                                    int position,
+                                    bool value)
+{
+    std::cout << "AlsaDriver::setPluginInstanceBypass - "
+              << value << std::endl;
+
+#ifdef HAVE_LADSPA
+
+    PluginIterator it = m_pluginInstances.begin();
+    for (; it != m_pluginInstances.end(); it++)
+    {
+        if ((*it)->getInstrument() == id &&
+            (*it)->getPosition() == position)
+        {
+            (*it)->setBypassed(value);
+        }
+    }
+#endif // HAVE_LADSPA
 }
 
 

@@ -72,16 +72,21 @@ public:
 
     // Plugin instance management
     //
-    virtual void setPluginInstance(InstrumentId id,
-                                   unsigned long pluginId,
-                                   int position) {;}
+    virtual void setPluginInstance(InstrumentId /*id*/,
+                                   unsigned long /*pluginId*/,
+                                   int /*position*/) {;}
 
-    virtual void removePluginInstance(InstrumentId id, int position) {;}
+    virtual void removePluginInstance(InstrumentId /*id*/,
+                                      int /*position*/) {;}
 
-    virtual void setPluginInstancePortValue(InstrumentId id,
-                                            int position,
-                                            unsigned long portNumber,
-                                            float value) {;}
+    virtual void setPluginInstancePortValue(InstrumentId /*id*/,
+                                            int /*position*/,
+                                            unsigned long /*portNumber*/,
+                                            float /*value*/) {;}
+
+    virtual void setPluginInstanceBypass(InstrumentId /*id*/,
+                                         int /*position*/,
+                                         bool /*value*/) {;}
 
     virtual bool checkForNewClients() { return false; }
 

@@ -1376,6 +1376,13 @@ MappedLADSPAPlugin::setProperty(const MappedObjectProperty &property,
         m_bypassed = bool(value);
         std::cout << "MappedLADSPAPlugin::setProperty - "
                   << "setting bypassed to " << m_bypassed << std::endl;
+
+        MappedStudio *studio =
+            dynamic_cast<MappedStudio*>(getParent()->getParent());
+
+        studio->getSequencer()->setPluginInstanceBypass(m_instrument,
+                                                        m_position,
+                                                        m_bypassed);
     }
 }
 

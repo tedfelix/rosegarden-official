@@ -262,6 +262,10 @@ public:
                                             unsigned long portNumber,
                                             float value) = 0;
 
+    virtual void setPluginInstanceBypass(InstrumentId id,
+                                         int position,
+                                         bool value) = 0;
+
     // Poll for new clients (for new Devices/Instruments)
     //
     virtual bool checkForNewClients() = 0;

@@ -92,10 +92,10 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     AudioPluginInstance *inst = instrument->getPlugin(index);
     if (inst)
     {
+	m_bypass->setChecked(inst->isBypassed());
+
         if (inst->isAssigned())
         {
-	    m_bypass->setChecked(inst->isBypassed());
-
             // Get the position from the unique id (add one for the first
             // null entry).
             //
@@ -121,9 +121,9 @@ AudioPluginDialog::makePluginParamsBox(QWidget *parent)
     //m_pluginParamsBox->hide();
 
     m_gridLayout = new QGridLayout(m_pluginParamsBox,
-                                   1, // rows (will expand)
-                                   10 // columns
-                                   );
+                                   1,   // rows (will expand)
+                                   10,  // columns
+                                   5); // margin
 
 }
 

@@ -2494,6 +2494,12 @@ RosegardenGUIApp::slotRecord()
    if (!m_sequencerProcess && !launchSequencer())
         return;
 
+    if (m_seqManager->getTransportStatus() == RECORDING_MIDI ||
+        m_seqManager->getTransportStatus() == RECORDING_AUDIO)
+    {
+        slotStop();
+    }
+
     try
     {
         m_seqManager->record(false);
