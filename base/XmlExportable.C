@@ -1,3 +1,4 @@
+// -*- c-basic-offset: 4 -*-
 /*
     Rosegarden-4
     A sequencer and musical notation editor.
@@ -36,7 +37,10 @@ std::string XmlExportable::encode(const std::string &s0)
 	case '>' : s1 += "&gt;";   break;
         case '"' : s1 += "&quot;"; break;
         case '\'': s1 += "&apos;"; break;
-	default  : s1 += c;        break;
+	default:
+	    // We're exporting to utf-8, so values outside these ranges are invalid:
+	    if (c >= 32 && !(c >= 128 && c < 160)) s1 += c;
+	    break;
 	}
     }
 
