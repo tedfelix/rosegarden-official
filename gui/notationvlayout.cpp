@@ -202,9 +202,9 @@ NotationVLayout::scanStaff(StaffType &staffBase, timeT, timeT)
 		if (type == Text::Dynamic ||
 		    type == Text::LocalDirection ||
 		    type == Text::UnspecifiedType) {
-		    el->setLayoutY(staff.getLayoutYForHeight(-8));
+		    el->setLayoutY(staff.getLayoutYForHeight(-7));
 		} else if (type == Text::Lyric) {
-		    el->setLayoutY(staff.getLayoutYForHeight(-14));
+		    el->setLayoutY(staff.getLayoutYForHeight(-13));
 		} else {
 		    el->setLayoutY(staff.getLayoutYForHeight(22));
 		}
