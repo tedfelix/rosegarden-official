@@ -43,9 +43,11 @@ Use instance() to get the (you guessed it) instance.
 
 * @author Guillaume Laurent
 */
+class Staff;
 
 class PitchToHeight
 {
+    friend class Staff;
 public:
     static PitchToHeight& instance();
 

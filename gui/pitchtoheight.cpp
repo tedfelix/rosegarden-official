@@ -50,7 +50,11 @@ PitchToHeight::PitchToHeight(unsigned short staffLineWidth)
                pitch == 10) {
                 ++note;
                 if(pitch == 1 || pitch == 4 || pitch == 8) ++offset;
-                else if(pitch == 3 || pitch == 6) --offset;
+                else if(pitch == 3 || pitch == 6) {
+                    --offset;
+                    if (pitch == 6) ++offset;
+                }
+
             }
 	
             height -= staffLineWidth / 2 + offset;
