@@ -138,7 +138,7 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
             SLOT(slotEditSegmentEventList(Rosegarden::Segment*)));
 
     connect(m_trackEditor,
-            SIGNAL(droppedURI(QString)),
+            SIGNAL(droppedDocument(QString)),
             parent,
             SLOT(slotOpenDroppedURL(QString)));
 
