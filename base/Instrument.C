@@ -60,8 +60,8 @@ Instrument::Instrument(InstrumentId id, InstrumentType it,
     m_sendPan(false),
     m_sendVelocity(false),
     m_mappedId(0),
-    m_mappedAudioInput(-1),
-    m_mappedAudioOutput(std::pair<int, int>(-1, -1))
+    m_mappedAudioInput(0),
+    m_mappedAudioOutput(std::pair<int, int>(0, 0))
 {
     if (it == Audio)
     {
@@ -112,8 +112,8 @@ Instrument::Instrument(InstrumentId id,
     m_sendPan(false),
     m_sendVelocity(false),
     m_mappedId(0),
-    m_mappedAudioInput(-1),
-    m_mappedAudioOutput(std::pair<int, int>(-1, -1))
+    m_mappedAudioInput(0),
+    m_mappedAudioOutput(std::pair<int, int>(0, 0))
 {
     // Add a number of plugin place holders (unassigned)
     //

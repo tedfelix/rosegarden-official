@@ -911,6 +911,12 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     newDocument->syncDevices();
     newDocument->clearModifiedStatus();
 
+    // Ensure the sequencer knows about any audio files
+    // we've loaded as part of the new Composition
+    //
+    m_doc->prepareAudio();
+
+
     emit documentChanged(newDocument);
 }
 
@@ -1008,11 +1014,6 @@ void RosegardenGUIApp::openFile(const QString& filePath)
     if (newDoc->openDocument(effectiveFilePath)) {
 
         setDocument(newDoc);
-
-        // Ensure the sequencer knows about any audio files
-        // we've loaded as part of the new Composition
-        //
-        m_doc->prepareAudio();
 
         Rosegarden::Composition &comp = m_doc->getComposition();
 

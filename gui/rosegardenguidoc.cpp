@@ -558,18 +558,20 @@ void RosegardenGUIDoc::initialiseStudio()
                     //
                     (*it)->setMappedId(mappedId);
 
-                    // Set the id of this instrument on the plugin
-                    //
-                    Rosegarden::StudioControl::setStudioObjectProperty
-                        (mappedId,
-                         Rosegarden::MappedObject::Instrument,
-                         (*it)->getId());
+                    cout << "CREATING PLUGIN ID = " << mappedId << endl;
 
                     // Set the position
                     Rosegarden::StudioControl::setStudioObjectProperty
                         (mappedId,
                          Rosegarden::MappedObject::Position,
                          Rosegarden::MappedObjectValue(plugin->getPosition()));
+
+                    // Set the id of this instrument on the plugin
+                    //
+                    Rosegarden::StudioControl::setStudioObjectProperty
+                        (mappedId,
+                         Rosegarden::MappedObject::Instrument,
+                         (*it)->getId());
 
                     // Set the bypass
                     Rosegarden::StudioControl::setStudioObjectProperty
@@ -590,9 +592,11 @@ void RosegardenGUIDoc::initialiseStudio()
                     while((port = plugin->getPort(portNo++)))
                     {
                         Rosegarden::StudioControl::setStudioPluginPort
-                            (plugin->getMappedId(),
+                            (mappedId,
                              port->id,
                              port->value);
+                        cout << "SETTING PORT " << port->id << " to "
+                             << port->value << endl;
                     }
                 }
             }
