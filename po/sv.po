@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sv\n"
 "POT-Creation-Date: 2004-12-05 13:31+0100\n"
-"PO-Revision-Date: 2004-07-23 20:16+0200\n"
+"PO-Revision-Date: 2004-12-06 19:10+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@comhem.se>\n"
 "Language-Team: Svenska <sv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Report-Msgid-Bugs-To: \n"
-"X-Generator: KBabel 1.9\n"
+"X-Generator: KBabel 1.10\n"
 
 #: audiocommands.h:57
 msgid "Distribute Audio Segments over MIDI"
@@ -126,8 +126,7 @@ msgstr "Markera en eller flera ljudfiler"
 msgid ""
 "This will unload all audio files and remove their associated segments.  Are "
 "you sure?"
-msgstr ""
-"Det här stänger alla ljudfiler och tillhörande ljudsegment. Är du säker?"
+msgstr "Det här stänger alla ljudfiler och tillhörande ljudsegment. Är du säker?"
 
 #: audiomanagerdialog.cpp:844
 msgid ""
@@ -247,7 +246,7 @@ msgstr "<ingen insticksmodul>"
 
 #: audioplugindialog.cpp:385
 msgid "This plugin has too many controls to edit here."
-msgstr ""
+msgstr "Insticksprogrammet har för många komponenter att redigera här."
 
 #: audioplugindialog.cpp:396
 msgid "Id: %1"
@@ -272,9 +271,8 @@ msgstr "Program:  "
 #: audioplugindialog.cpp:474 audioplugindialog.cpp:484
 #: audioplugindialog.cpp:659 audioplugindialog.cpp:667
 #: audioplugindialog.cpp:697
-#, fuzzy
 msgid "<none selected>"
-msgstr "<ingen enhet>"
+msgstr "<inget markerat>"
 
 #: audiopluginoscgui.cpp:476
 msgid "Rosegarden Plugin"
@@ -417,17 +415,14 @@ msgid "Export..."
 msgstr "Exportera..."
 
 #: bankeditor.cpp:763
-msgid ""
-"Import Bank and Program data from a Rosegarden file to the current Device"
-msgstr ""
-"Importera bank- och programdata från Rosegarden-fil till nuvarande enhet"
+msgid "Import Bank and Program data from a Rosegarden file to the current Device"
+msgstr "Importera bank- och programdata från Rosegarden-fil till nuvarande enhet"
 
 #: bankeditor.cpp:765
 msgid ""
 "Export all Device and Bank information to a Rosegarden format  interchange "
 "file"
-msgstr ""
-"Exportera all bank- och programdata till utbytesfil med Rosegarden-format"
+msgstr "Exportera all bank- och programdata till utbytesfil med Rosegarden-format"
 
 #: bankeditor.cpp:775
 msgid "Copy all Program names from current Bank to clipboard"
@@ -505,8 +500,7 @@ msgstr "Enhet eller instrument"
 
 #: bankeditor.cpp:2090
 msgid "Remap Tracks by all Instruments on a Device or by single Instrument"
-msgstr ""
-"Mappa om spår för alla instrument till en enhet eller ett enstaka instrument"
+msgstr "Mappa om spår för alla instrument till en enhet eller ett enstaka instrument"
 
 #: bankeditor.cpp:2091 deviceeditor.cpp:61 devicemanager.cpp:88
 #: devicemanager.cpp:140 dialogs.cpp:4394
@@ -810,8 +804,7 @@ msgstr ""
 
 #: devicemanager.cpp:114
 msgid "Export Bank and Controller data to a Rosegarden interchange file"
-msgstr ""
-"Exportera bank- och styrenhetsdata till utbytesfil med Rosegarden-format"
+msgstr "Exportera bank- och styrenhetsdata till utbytesfil med Rosegarden-format"
 
 #: devicemanager.cpp:116
 msgid "View and edit Banks and Programs for the selected device"
@@ -897,7 +890,7 @@ msgstr "Dölj taktartssignaturen"
 
 #: dialogs.cpp:238
 msgid "Make subsequent bar lines hidden"
-msgstr ""
+msgstr "Dölj efterföljande taktlinjer"
 
 #: dialogs.cpp:243
 msgid "Show as common time"
@@ -1072,14 +1065,12 @@ msgid "Example"
 msgstr "Exempel"
 
 #: dialogs.cpp:1282
-#, fuzzy
 msgid "Advanced Event Edit"
-msgstr "&Avancerad händelseeditor"
+msgstr "Avancerad händelseredigering"
 
 #: dialogs.cpp:1282
-#, fuzzy
 msgid "Advanced Event Viewer"
-msgstr "&Avancerad händelseeditor"
+msgstr "Avancerad händelsevisning"
 
 #: dialogs.cpp:1300
 msgid "Intrinsics"
@@ -1421,23 +1412,20 @@ msgid "Transpose into appropriate octave"
 msgstr "Transponera till lämplig oktav"
 
 #: dialogs.cpp:3182
-#, fuzzy
 msgid "%1 down an octave"
-msgstr "Ner en oktav"
+msgstr "%1 ner en oktav"
 
 #: dialogs.cpp:3183
-#, fuzzy
 msgid "%1 down two octaves"
-msgstr "Ner en oktav"
+msgstr "%1 ner två oktaver"
 
 #: dialogs.cpp:3184
-#, fuzzy
 msgid "%1 up an octave"
-msgstr "Upp en oktav"
+msgstr "%1 upp en oktav"
 
 #: dialogs.cpp:3185
 msgid "%1 up two octaves"
-msgstr ""
+msgstr "%1 upp två oktaver"
 
 #: dialogs.cpp:3190
 msgid "Treble"
@@ -2115,13 +2103,12 @@ msgid "&Clear Triggers"
 msgstr "&Rensa utlösare"
 
 #: editcommands.h:683
-#, fuzzy
 msgid "&Set Note Type"
-msgstr "&Infoga not"
+msgstr "&Ange typ av not"
 
 #: editcommands.h:706
 msgid "&Add Dot"
-msgstr ""
+msgstr "&Lägg till punkt"
 
 #: editview.cpp:730 rosegardengui.cpp:795
 msgid "Jog &Left"
@@ -2574,17 +2561,16 @@ msgid "Open in Expert Event Editor"
 msgstr "Öppna i experthändelseeditor"
 
 #: eventview.cpp:1654
-#, fuzzy
 msgid "%1 - Triggered Segment: %2"
-msgstr "Lägg till ett utlösande segment"
+msgstr "%1 - utlösande segment: %2"
 
 #: eventview.cpp:1661
 msgid "%1 - Segment Track #%2 - Event List"
-msgstr ""
+msgstr "%1 - segment spår nummer %2 - händelselista"
 
 #: eventview.cpp:1667
 msgid "%1 - %2 Segments - Event List"
-msgstr ""
+msgstr "%1 - %2 segment - händelselista"
 
 #: hydrogenio.cpp:311
 msgid " imported from Hydrogen "
@@ -2678,29 +2664,32 @@ msgid "Choose..."
 msgstr "Välj..."
 
 #: kde32_kfontrequester.cpp:105
-#, fuzzy
 msgid "Click to select a font"
-msgstr "Byt till markeringsverktyg"
+msgstr "Klicka för att välja ett teckensnitt"
 
 #: kde32_kfontrequester.cpp:112
 msgid "Preview of the selected font"
-msgstr ""
+msgstr "Förhandsgranskning av markerat teckensnitt"
 
 #: kde32_kfontrequester.cpp:114
 msgid ""
 "This is a preview of the selected font. You can change it by clicking the "
 "\"Choose...\" button."
 msgstr ""
+"Det här är en förhandsgranskning av markerat teckensnitt. Du kan ändra "
+"den genom att klicka på \"Välj...\"."
 
 #: kde32_kfontrequester.cpp:120
 msgid "Preview of the \"%1\" font"
-msgstr ""
+msgstr "Förhandsgranskning av teckensnittet \"%1\""
 
 #: kde32_kfontrequester.cpp:122
 msgid ""
 "This is a preview of the \"%1\" font. You can change it by clicking the "
 "\"Choose...\" button."
 msgstr ""
+"Det här är en förhandsgranskning av teckensnittet \"%1\". Du kan ändra "
+"den genom att klicka på \"Välj...\"."
 
 #: kde32_ktabbar.cpp:209
 msgid "Close this tab"
@@ -2733,6 +2722,12 @@ msgid ""
 "In the meantime, you will probably need to make manual adjustments to the "
 "file you've just exported."
 msgstr ""
+"Du stötte på ett fel i harmonisk upplösning någonstans under åtgärden. "
+"Du kan vilja spara en kopia av din nuvarande komposition och skicka den till "
+"dmmcintyr@users.sourceforge.net med e-post för analys.\n"
+"\n"
+"Under tiden måste du troligen göra manuella justeringar i filen du just "
+"har exporterat."
 
 #: lilypondio.cpp:1343
 msgid "warning: overlong bar truncated here"
@@ -2954,9 +2949,8 @@ msgid "Original designs for rotary controllers"
 msgstr "Ursprunglig design för vridknappar"
 
 #: main.cpp:439
-#, fuzzy
 msgid "Japanese translation"
-msgstr "Översättning till italienska"
+msgstr "Översättning till japanska"
 
 #: main.cpp:441 _translatorinfo.cpp:1
 msgid ""
@@ -3317,9 +3311,8 @@ msgid "Show &Tempo Ruler"
 msgstr "Visa &tempolinjal"
 
 #: matrixview.cpp:1046 notationview.cpp:2742
-#, fuzzy
 msgid "  1 event selected "
-msgstr "Inga segment utan ljud markerade"
+msgstr "  1 händelse markerad "
 
 #: matrixview.cpp:1049 notationview.cpp:2745
 msgid "  No selection "
@@ -3404,7 +3397,7 @@ msgid " Quantize: "
 msgstr " Kvantisera: "
 
 #: matrixview.cpp:2034 rosegardengui.cpp:4803
-#, fuzzy, c-format
+#, c-format
 msgid "%1%"
 msgstr "%1 %"
 
@@ -3430,20 +3423,19 @@ msgstr "Ta bort utlösare"
 
 #: matrixview.cpp:2476
 msgid "%1 - Segment Track #%2 - Matrix"
-msgstr ""
+msgstr "%1 - segment spår nummer %2 - matris"
 
 #: matrixview.cpp:2482
 msgid "%1 - All Segments - Matrix"
-msgstr ""
+msgstr "%1 - alla segment - matris"
 
 #: matrixview.cpp:2487
 msgid "%1 - %2 Segments - Matrix "
-msgstr ""
+msgstr "%1 - %2 segment - matris "
 
 #: matrixview.cpp:2542
-#, fuzzy
 msgid "Can't insert note: No grid duration selected"
-msgstr "Kan inte infoga not: Ingen notlängd vald"
+msgstr "Kan inte infoga not: Ingen rutnätslängd vald"
 
 #: matrixview.cpp:2592 notationviewslots.cpp:80
 msgid " Chord"
@@ -4225,9 +4217,8 @@ msgid "No accidental"
 msgstr "Inga tillfälliga förtecken"
 
 #: notationview.cpp:1343
-#, fuzzy
 msgid "Follow previous accidental"
-msgstr "Tvingar tillfälliga förtecken..."
+msgstr "Följ föregående tillfälliga förtecken"
 
 #: notationview.cpp:1344
 msgid "Sharp"
@@ -4414,14 +4405,12 @@ msgid "Make &Visible"
 msgstr "Gör &synlig"
 
 #: notationview.cpp:2059
-#, fuzzy
 msgid "Toggle Dot"
-msgstr "helnot"
+msgstr "Växla punkt"
 
 #: notationview.cpp:2063 notationview.cpp:2067
-#, fuzzy
 msgid "Add Dot"
-msgstr "Lägg till %1"
+msgstr "Lägg till punkt"
 
 #: notationview.cpp:2119
 msgid "%1 pixel"
@@ -4477,17 +4466,15 @@ msgstr "paus"
 
 #: notationview.cpp:3601
 msgid "%1 - Segment Track #%2 - Notation"
-msgstr ""
+msgstr "%1 - segment spår nummer %2 - notskrift"
 
 #: notationview.cpp:3607
-#, fuzzy
 msgid "%1 - All Segments - Notation"
-msgstr "Längd för ljudsegment"
+msgstr "%1 - alla segment - notskrift"
 
 #: notationview.cpp:3612
-#, fuzzy
 msgid "%1 - %2 Segments - Notation"
-msgstr "Längd för segment"
+msgstr "%1 - %2 segment - notskrift"
 
 #: notationviewslots.cpp:78
 msgid " Triplet Chord"
@@ -4734,9 +4721,8 @@ msgid "No rest duration selected"
 msgstr "Ingen pauslängd vald"
 
 #: notationviewslots.cpp:1307
-#, fuzzy
 msgid "No note or rest duration selected"
-msgstr "Ingen pauslängd vald"
+msgstr "Ingen not- eller pauslängd vald"
 
 #: notationviewslots.cpp:1317 notationviewslots.cpp:1327
 #: notationviewslots.cpp:1337 notationviewslots.cpp:1347
@@ -4762,14 +4748,12 @@ msgid "Interpreting selection..."
 msgstr "Tolkar markering..."
 
 #: notationviewslots.cpp:1445
-#, fuzzy
 msgid "Setting note durations..."
-msgstr "Ställ in längd för segment..."
+msgstr "Ställer in längd för noter..."
 
 #: notationviewslots.cpp:1452 notationviewslots.cpp:1459
-#, fuzzy
 msgid "Adding dot..."
-msgstr "Lägger till oktav..."
+msgstr "Lägger till punkt..."
 
 #: notationviewslots.cpp:1481
 msgid "Text: "
@@ -4874,10 +4858,8 @@ msgid "global element must precede note elements"
 msgstr "globala element måste vara innan notelement"
 
 #: notestyle.cpp:628
-msgid ""
-"global and note elements may have shape or charname attribute, but not both"
-msgstr ""
-"globala och notelement kan ha egenskapen form eller teckennamn, men inte båda"
+msgid "global and note elements may have shape or charname attribute, but not both"
+msgstr "globala och notelement kan ha egenskapen form eller teckennamn, men inte båda"
 
 #: playlist.cpp:82 rosegardenconfiguredialog.cpp:1859
 msgid "Title"
@@ -5038,14 +5020,12 @@ msgid "Font size for printing (pt)"
 msgstr "Teckenstorlek för utskrift (punkter)"
 
 #: rosegardenconfiguredialog.cpp:358
-#, fuzzy
 msgid "Text font"
-msgstr "Text: "
+msgstr "Textteckensnitt"
 
 #: rosegardenconfiguredialog.cpp:361
-#, fuzzy
 msgid "Time Signature font"
-msgstr "Taktartssignatur"
+msgstr "Teckensnitt för taktartssignatur"
 
 #: rosegardenconfiguredialog.cpp:369
 msgid "Origin:"
@@ -5490,24 +5470,20 @@ msgid "%1 minutes %2.%3%4 seconds (%5 units, %6 measures)"
 msgstr "%1 minuter %2.%3%4 sekunder (%5 enheter, %6 takter)"
 
 #: rosegardenconfiguredialog.cpp:1855
-#, fuzzy
 msgid "Copyright"
-msgstr "Copyright:"
+msgstr "Copyright"
 
 #: rosegardenconfiguredialog.cpp:1857
-#, fuzzy
 msgid "Composer"
-msgstr "Färg"
+msgstr "Kompositör"
 
 #: rosegardenconfiguredialog.cpp:1861
-#, fuzzy
 msgid "Subtitle"
-msgstr "<namnlös>"
+msgstr "Underrubrik"
 
 #: rosegardenconfiguredialog.cpp:1863
-#, fuzzy
 msgid "Arranger"
-msgstr "Triangel"
+msgstr "Arrangör"
 
 #: rosegardenconfiguredialog.cpp:1892
 msgid "Add New Property"
@@ -5747,9 +5723,8 @@ msgid "Play&list"
 msgstr "Spel&lista"
 
 #: rosegardengui.cpp:538
-#, fuzzy
 msgid "Rosegarden Online &Tutorial"
-msgstr "Rosegarden insticksmodul"
+msgstr "Rosegarden hand&ledning"
 
 #: rosegardengui.cpp:576
 msgid "Show Trac&ks Toolbar"
@@ -5964,9 +5939,8 @@ msgstr ""
 "Vill du öppna den istället?"
 
 #: rosegardengui.cpp:1683
-#, fuzzy
 msgid "Example Files"
-msgstr "Exempel"
+msgstr "Exempelfiler"
 
 #: rosegardengui.cpp:1883
 msgid "Opening a new application window..."
@@ -6186,16 +6160,14 @@ msgid "Starting jackd..."
 msgstr "Startar jackd..."
 
 #: rosegardengui.cpp:3978
-#, fuzzy
 msgid ""
 "The Rosegarden sequencer process has exited unexpectedly.  Sound and "
 "recording will no longer be available for this session.\n"
 "Please exit and restart Rosegarden to restore sound capability."
 msgstr ""
-"Rosegardens sequencer kunde inte startas, alltså är ljud och inspelning inte "
-"tillgängliga för den här sessionen.\n"
-"För hjälp med riktig inställning av ljud och MIDI, besök http://"
-"rosegardenmusic.com."
+"Rosegardens sequencer-process har oväntat avslutats. Ljud och inspelning "
+"är inte längre tillgängliga för den här sessionen.\n"
+"Avsluta och starta om Rosegarden för att återställa ljudfunktion."
 
 #: rosegardengui.cpp:3982
 msgid ""
@@ -6289,7 +6261,7 @@ msgstr "Spellista"
 
 #: rosegardengui.cpp:6214
 msgid "http://www.rosegardenmusic.com/resources/tutorial/using_en.shtml"
-msgstr ""
+msgstr "http://www.rosegardenmusic.com/resources/tutorial/using_en.shtml"
 
 #: rosegardengui.cpp:6291
 msgid "Queueing MIDI panic events for tranmission..."
@@ -6304,8 +6276,7 @@ msgid "Saving current document as default studio..."
 msgstr "Sparar nuvarande dokument som standardstudio..."
 
 #: rosegardengui.cpp:6385
-msgid ""
-"Are you sure you want to import your default studio and lose the current one?"
+msgid "Are you sure you want to import your default studio and lose the current one?"
 msgstr ""
 "Är du säker på att du vill importera din standardstudio och låta den "
 "nuvarande gå förlorad?"
@@ -6650,9 +6621,8 @@ msgid "Fade out"
 msgstr "Tona ut"
 
 #: segmentparameterbox.cpp:173 segmentparameterbox.cpp:180
-#, fuzzy
 msgid " ms"
-msgstr "%1 ms"
+msgstr " ms"
 
 #: segmentparameterbox.cpp:275 segmentparameterbox.cpp:603
 msgid "%1 ms"
@@ -6683,7 +6653,6 @@ msgstr ""
 "Att avsluta andra program som kör kan förbättra Rosegardens prestanda."
 
 #: sequencemanager.cpp:1022 sequencemanager.cpp:1125
-#, fuzzy
 msgid ""
 "The JACK Audio subsystem has stopped Rosegarden from processing audio, "
 "probably because of a processing overload.\n"
@@ -6691,23 +6660,22 @@ msgid ""
 "remain.\n"
 "Quitting other running applications may improve Rosegarden's performance."
 msgstr ""
-"JACK-delsystemet för ljud har avbrutits eller stoppar Rosegarden från att "
-"behandla ljud.\n"
-"Starta om Rosegarden för att fortsätta arbeta med ljud.\n"
+"JACK-delsystemet för ljud har stoppat Rosegarden från att behandla ljud, "
+"troligen på grund av en överbelastning.\n"
+"Ett försök att starta om ljudtjänsten har gjorts, men vissa problem kan "
+"vara kvar.\n"
 "Att avsluta andra program som kör kan förbättra Rosegardens prestanda."
 
 #: sequencemanager.cpp:1033
-msgid ""
-"Run out of processor power for real-time audio processing.  Cannot continue."
-msgstr ""
+msgid "Run out of processor power for real-time audio processing.  Cannot continue."
+msgstr "Slut på processorkraft för ljudbehandling i realtid. Kan inte fortsätta."
 
 #: sequencemanager.cpp:1061
 msgid "JACK Audio subsystem is losing sample frames."
 msgstr "JACK-ljudsystemet förlorar samplade ramar."
 
 #: sequencemanager.cpp:1079
-msgid ""
-"Failed to read audio data from disc in time to service the audio subsystem."
+msgid "Failed to read audio data from disc in time to service the audio subsystem."
 msgstr ""
 "Misslyckades läsa ljuddata snabbt från till disk för att hantera "
 "ljudsystemet."
@@ -6721,7 +6689,6 @@ msgstr ""
 "ljudsystemet."
 
 #: sequencemanager.cpp:1087
-#, fuzzy
 msgid "The audio mixing subsystem is failing to keep up."
 msgstr "Ljudsystemet klarar inte av att hänga med."
 
@@ -6806,23 +6773,20 @@ msgid "Set the audio pan position in the stereo field"
 msgstr "Ställ in ljudets panoreringsposition i stereofältet"
 
 #: studiowidgets.cpp:1062
-#, fuzzy
 msgid "Open synth plugin's native editor"
-msgstr "Öppna i m&atriseditor"
+msgstr "Öppna i synt-insticksmodulens egen editor"
 
 #: studiowidgets.cpp:1063
 msgid "Mono or Stereo Instrument"
 msgstr "Mono- eller stereoinstrument"
 
 #: studiowidgets.cpp:1064
-#, fuzzy
 msgid "Record level"
-msgstr "Inspelningsenheter"
+msgstr "Inspelningsnivå"
 
 #: studiowidgets.cpp:1065
-#, fuzzy
 msgid "Playback level"
-msgstr "Uppspelningsenheter"
+msgstr "Uppspelningsnivå"
 
 #: studiowidgets.cpp:1073
 msgid "In:"
@@ -7005,8 +6969,7 @@ msgstr ""
 "använda Konqueror istället."
 
 #: tracklabel.cpp:54
-msgid ""
-"Click and hold with left mouse button to assign this Track to an Instrument."
+msgid "Click and hold with left mouse button to assign this Track to an Instrument."
 msgstr ""
 "Klicka och håll nere vänster musknapp för att tilldela spåret till ett "
 "instrument."
@@ -7051,8 +7014,7 @@ msgstr "%1 på %2 spår"
 msgid ""
 "This will remove all triggered segments from the whole composition.  Are you "
 "sure?"
-msgstr ""
-"Det här tar bort alla utlösande segment från hela kompositionen. Är du säker?"
+msgstr "Det här tar bort alla utlösande segment från hela kompositionen. Är du säker?"
 
 #: triggermanager.cpp:341
 msgid "Remove all triggered segments"
@@ -7083,6 +7045,8 @@ msgid ""
 "Click and drag up and down or left and right to modify.\n"
 "Double click to edit value directly."
 msgstr ""
+"Klicka och dra uppåt och neråt eller vänster och höger för att ändra.\n"
+"Dubbelklicka för att direkt redigera värdet."
 
 #: widgets.cpp:724
 msgid "Select a new value"
@@ -7630,6 +7594,15 @@ msgid ""
 "&nbsp;&nbsp;* adjust that instrument's output channel, program, bank, and\n"
 "controllers via the instrument parameters box\n"
 msgstr ""
+"<p>För att anpassa ett spår så att det spelas med ett visst "
+"instrument:</p>\n"
+"&nbsp;&nbsp;* klicka på spårrubriken och håll knappen nere ett "
+"ögonblick<br>\n"
+"&nbsp;&nbsp;* välj en utmatningsenhet<br>\n"
+"&nbsp;&nbsp;* välj en av enhetens tillgängliga instrument (nummer 1 - "
+"16)<br>\n"
+"&nbsp;&nbsp;* justera instrumentets utdatakanal, program, bank och\n"
+"styrenheter via rutan med instrumentparametrar\n"
 
 #: tips.cpp:12
 msgid ""
@@ -7656,6 +7629,10 @@ msgid ""
 "<b>Composition -> Studio -> Save Current Document as Default Studio</b>.</"
 "p>\n"
 msgstr ""
+"<p>\n"
+"Du kan spara det nuvarande dokumentet som standardstudio genom\n"
+"att använda <b>Komposition -> Studio -> Spara nuvarande dokumentet som "
+"standardstudio</b>.</p>\n"
 
 #: tips.cpp:27
 msgid ""
@@ -7735,7 +7712,6 @@ msgstr ""
 "finare kontroll?</p>\n"
 
 #: tips.cpp:63
-#, fuzzy
 msgid ""
 "<p>...that you can hold down the Shift key while repositioning or resizing "
 "events in the\n"
@@ -7743,7 +7719,7 @@ msgid ""
 "</p>\n"
 msgstr ""
 "<p>...att du kan hålla nere skifttangenten medan du flyttar omkring\n"
-"segment på segmentduken för att undvika \"låsningseffekten\" och utöva "
+"händelser i matrisvyn för att undvika \"låsningseffekten\" och utöva "
 "finare kontroll?</p>\n"
 
 #: tips.cpp:68
@@ -7772,16 +7748,15 @@ msgstr ""
 "p>.\n"
 
 #: tips.cpp:79
-#, fuzzy
 msgid ""
 "<p>...that if you use the quantizer from within the notation view, you can "
 "tell it to quantize only the timing used for notation -- making it possible "
 "to have good looking notation <b>and</b> a human MIDI performance?</p>\n"
 msgstr ""
-"<p>...att om du använder kvantiseringen inne i notskriftsvyn, kan den endast "
-"kvantisera tiden som används för notskriften, vilket gör det möjligt att ha "
-"notskrift som ser bra ut <b>och</b> ett fullständigt mänskligt MIDI-"
-"framförande?</p>\n"
+"<p>...att om du använder kvantiseringen inne i notskriftsvyn, kan du tala "
+"om för den att endast kvantisera tiden som används för notskriften, "
+"vilket gör det möjligt att ha notskrift som ser bra ut <b>och</b> ett "
+"fullständigt mänskligt MIDI-framförande?</p>\n"
 
 #: tips.cpp:83
 msgid ""
@@ -7793,7 +7768,6 @@ msgstr ""
 "i rutan med segmentparametrar i huvudfönstret?</p>\n"
 
 #: tips.cpp:88
-#, fuzzy
 msgid ""
 "<p>...that the number of tracks in new documents is based on the contents "
 "of\n"
@@ -7806,14 +7780,14 @@ msgid ""
 "Document as Default\n"
 "Studio</b> to make this your new default.</p>\n"
 msgstr ""
-"<p>...att antalet spår i nya dokument är baserade på innehållet i din\n"
-".rg-fil som laddas automatiskt?\n"
-"\n"
+"<p>...att antalet spår i nya dokument är baserade på innehållet i filen\n"
+"autoload.rg som laddas automatiskt?\n"
 "Vare sig du föredrar att börja med tre spår eller 43, skapa ett dokument\n"
-"som innehåller önskat antal spår, plus alla andra inställningar av studio- "
-"eller dokumentegenskaper\n"
-"som du vill anpassa, och använd <b>Studio -> Spara nuvarande dokument som\n"
-"standardstudio</b> för att göra det till nytt standarddokument.</p>\n"
+"som innehåller önskat antal spår, plus alla andra inställningar av "
+"studio- eller dokumentegenskaper som\n"
+"du vill ställa in, och använd <b>Komposition -> Studio -> Spara "
+"nuvarande dokument\n"
+"som standardstudio</b> för att göra det till nytt standarddokument.</p>\n"
 
 #: tips.cpp:98
 msgid ""
@@ -7835,7 +7809,6 @@ msgstr ""
 "redigeringsfönstret du föredrar under fliken <b>Beteende</b>.</p>\n"
 
 #: tips.cpp:107
-#, fuzzy
 msgid ""
 "<p>...that Rosegarden is being developed as a community effort with\n"
 "contributions from around the world?<br><br>\n"
@@ -7843,10 +7816,11 @@ msgid ""
 "contributors\n"
 "from the US, Spain, Germany, Russia, Slovenia, and elsewhere... </p>\n"
 msgstr ""
-"<p>...att Rosegarden utvecklas med insatser av en gemenskap och\n"
+"<p>...att Rosegarden utvecklas med insatser av en gemenskap\n"
 "med bidrag från hela världen?<br><br>\n"
 "Huvudutvecklarna bor i Storbritannien och Frankrike, och bidrag har\n"
-"kommit från Förenta Staterna, Tyskland, Ryssland, med mera...</p>\n"
+"kommit från Förenta Staterna, Spanien, Tyskland, Ryssland, Slovenien med "
+"mera...</p>\n"
 
 #: tips.cpp:114
 msgid ""
@@ -7945,6 +7919,10 @@ msgid ""
 "and velocity rulers in order to bring the item you wish to adjust into\n"
 "focus.</p>\n"
 msgstr ""
+"<p>... om du har fler än en not eller styrenhetshändelse samtidigt, kan\n"
+"du använda tangenterna [ och ] för att flytta runt följden av händelseri "
+"styrenheten och på\n"
+"hastighetslinjalerna för att få objektet som du vill justera i fokus.</p>\n"
 
 #: tips.cpp:161
 msgid ""
@@ -7955,6 +7933,13 @@ msgid ""
 "countdown showing you how much time you have remaining.  In order to extend\n"
 "this, use <b>Composition -> Change Composition Duration</b></p>\n"
 msgstr ""
+"<p>En komposition i Rosegarden är inte oändlig, och expanderas inte "
+"automatiskt\n"
+"om du försöker infoga händelser efter dess slut. Under inspelning ser du "
+"en\n"
+"nerräkning som talar om för dig hur mycket tid som återstår. För att "
+"utöka tiden\n"
+"använd <b>Komposition -> Ändra kompositionens längd</b>.</p>\n"
 
 #: tips.cpp:168
 msgid ""
@@ -7962,6 +7947,8 @@ msgid ""
 "the\n"
 "matrix allows you to edit their performance duration.</p>\n"
 msgstr ""
+"<p>Notskriftsvyn visar noter med deras visningslängd, medan\n"
+"matrisen låter dig redigera deras längd vid framförandet.</p>\n"
 
 #: tips.cpp:173
 msgid ""
@@ -7975,6 +7962,14 @@ msgid ""
 "their performance\n"
 "durations to something less mechanical.</p>\n"
 msgstr ""
+"<p>Om du arbetar med ett mänskligt framförande och behöver lägga till "
+"ytterligare\n"
+"några noter, ljuder de nya noterna under hela den skrivna längden. För "
+"att infoga\n"
+"de nya noterna i ett mänskligt framförande, markera dem och använd "
+"därefter <b>Justera -> Noter -> \n"
+"Tolka</b> i notskriftsvyn för att tolka eventuella markeringar och justera\n"
+"deras längd vid framförandet till något mindre mekaniskt.</p>\n"
 
 #: fonts.cpp:1
 msgid "Feta Pixmaps"
@@ -8042,8 +8037,7 @@ msgstr "Maestro"
 
 #: fonts.cpp:22
 msgid "Maestro is part of Finale, but other fonts use the same mappings."
-msgstr ""
-"Maestro är en del av Finale, men andra teckensnitt använder samma mappning."
+msgstr "Maestro är en del av Finale, men andra teckensnitt använder samma mappning."
 
 #: fonts.cpp:23 fonts.cpp:33
 msgid "Copyright Coda Inc"
@@ -8055,8 +8049,7 @@ msgstr "Opus"
 
 #: fonts.cpp:27
 msgid "Opus is part of Sibelius, but other fonts may use the same mappings."
-msgstr ""
-"Opus är en del av Sibelius, men andra teckensnitt kan använda samma mappning."
+msgstr "Opus är en del av Sibelius, men andra teckensnitt kan använda samma mappning."
 
 #: fonts.cpp:31
 msgid "Petrucci"
@@ -8064,8 +8057,7 @@ msgstr "Petrucci"
 
 #: fonts.cpp:32
 msgid "Petrucci is part of Finale, but other fonts use the same mappings."
-msgstr ""
-"Petrucci är en del av Finale, men andra teckensnitt använder samma mappning."
+msgstr "Petrucci är en del av Finale, men andra teckensnitt använder samma mappning."
 
 #: fonts.cpp:36
 msgid "RG21"
@@ -8131,98 +8123,3 @@ msgstr "Mensural"
 msgid "Triangle"
 msgstr "Triangel"
 
-#, fuzzy
-#~ msgid "Set Tempo"
-#~ msgstr "Ställ in övergripande tempo"
-
-#, fuzzy
-#~ msgid "Modify Tempo"
-#~ msgstr "Ändra not"
-
-#, fuzzy
-#~ msgid "Tempo at time"
-#~ msgstr "Tempo   "
-
-#, fuzzy
-#~ msgid "is currently"
-#~ msgstr "Nuvarande"
-
-#~ msgid "Default timing:  "
-#~ msgstr "Standardtid:  "
-
-#~ msgid "Adjust pitch to trigger note by default"
-#~ msgstr "Justera normalt tonhöjd till utlösande ton"
-
-#~ msgid "Minutes of audio recording:"
-#~ msgstr "Minuter ljudinspelning:"
-
-#, fuzzy
-#~ msgid "The Opus font is part of Sibelius."
-#~ msgstr "Notskriftsteckensnittet Steinberg är en del av Cubase."
-
-#~ msgid "Sync, and offer timebase master"
-#~ msgstr "Synkronisera, och erbjud tidbasmaster"
-
-#~ msgid "Show Tip of the &Day"
-#~ msgstr "Visa &dagens tips"
-
-#~ msgid "&Quantize Notes"
-#~ msgstr "&Kvantisera noter"
-
-#~ msgid ""
-#~ "ERROR: Event in chord at %1 has no HEIGHT_ON_STAFF property!\n"
-#~ "This is a bug (the program would previously have crashed by now)"
-#~ msgstr ""
-#~ "FEL: Händelsen i ackordet vid %1 har ingen egenskap HEIGHT_ON_STAFF.\n"
-#~ "Det är ett programfel (tidigare skulle programmet redan ha kraschat)."
-
-#~ msgid ""
-#~ "<p>...to assign a track to a new instrument, right-click on the track "
-#~ "label.  You'll be presented with a menu listing the available MIDI and "
-#~ "audio devices, where you can select an instrument on one of those devices."
-#~ "</p>\n"
-#~ msgstr ""
-#~ "<p>...för att tilldela ett spår till ett nytt instrument, högerklicka på "
-#~ "spårrubriken. Då visas en meny som anger tillgängliga MIDI- och "
-#~ "ljudenheter, där du kan välja ett instrument från en av enheterna.</p>\n"
-
-#~ msgid ""
-#~ "<p>...that you can create a default studio by copying any<br>\n"
-#~ ".rg or .rgd file to\n"
-#~ "<b>~/.kde/share/apps/rosegarden/autoload.rg?</b><br><br>\n"
-#~ "You can also save the current document as an autoload.rg file by using\n"
-#~ "<b>Studio -> Save Current Document as Default Studio</b>.</p>\n"
-#~ msgstr ""
-#~ "<p>...att du kan skapa en standardstudio genom att<br>\n"
-#~ "kopiera en .rg- eller .rgd-fil till\n"
-#~ "<b>~/.kde/share/apps/rosegarden/autoload.rg?</b><br><br>\n"
-#~ "Du kan också spara nuvarande dokument som en automatiskt laddad .rg-fil "
-#~ "med\n"
-#~ "<b>Studio -> Spara nuvarande dokument som standardstudio</b>.</p>\n"
-
-#~ msgid ""
-#~ "<p>...that you can toggle all the rulers, instrument parameters, and "
-#~ "several\n"
-#~ "other options simultaneously with <b>Settings -> Toggle All of the Above</"
-#~ "b>?</p>\n"
-#~ msgstr ""
-#~ "<p>...att du kan växla alla linjaler, instrumentparametrar och flera\n"
-#~ "andra alternativ samtidigt med <b>Inställningar -> Växla alla ovan</b>? </"
-#~ "p>\n"
-
-#~ msgid ""
-#~ "<p>...that you can change various parameters controlling how Rosegarden\n"
-#~ "handles Lilypond export with <b>Settings -> Configure Rosegarden -> "
-#~ "Notation\n"
-#~ "-> Lilypond?</p>\n"
-#~ msgstr ""
-#~ "<p>...att du kan ändra diverse parametrar som styr hur Rosegarden\n"
-#~ "hanterar export till Lilypond med <b>Inställningar -> Anpassa\n"
-#~ "Rosegarden -> Notskrift -> Lilypond</b>?</p>\n"
-
-#~ msgid ""
-#~ "_n:   1 event selected \n"
-#~ "  %n events selected "
-#~ msgstr ""
-#~ "  1 händelse markerad \n"
-#~ "  %n händelser markerade "
