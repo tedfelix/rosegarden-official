@@ -31,22 +31,22 @@
 #include "Instrument.h"
 #include <string>
 
-// A Track contains information pertaining to a graphical
-// track on the sequencer.  This class is basically an
-// abstract concept (not an abstract class) which has no
-// dependency upon a specific system or sound hardware.
-// A Track is owned by a Composition and enhances its
-// relationships with Segments.   A Segment can only
-// exist on a Track.
-//
-//
-//
 
 namespace Rosegarden
 {
 
 typedef unsigned int TrackId;
 
+/**
+ * A Track contains information pertaining to a graphical
+ * track on the sequencer.  This class is basically an
+ * abstract concept (not an abstract class) which has no
+ * dependency upon a specific system or sound hardware.
+ * A Track is owned by a Composition and enhances its
+ * relationships with Segments.   A Segment can only
+ * exist on a Track.
+ *
+ */
 class Track : public XmlExportable
 {
 
