@@ -64,6 +64,7 @@ using namespace Rosegarden::Accidentals;
 using namespace Rosegarden::BaseProperties;
 
 std::vector<int> NotationHLayout::m_availableSpacings;
+std::vector<int> NotationHLayout::m_availableProportions;
 
 
 NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
@@ -75,6 +76,7 @@ NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
     m_pageMode(false),
     m_pageWidth(0.),
     m_spacing(100),
+    m_proportion(40),
     m_npf(npf),
     m_notationQuantizer(c->getNotationQuantizer()),
     m_properties(properties),
@@ -89,7 +91,7 @@ NotationHLayout::~NotationHLayout()
     // empty
 }
 
-std::vector<int>
+std::vector<int> 
 NotationHLayout::getAvailableSpacings()
 {
     if (m_availableSpacings.size() == 0) {
@@ -102,6 +104,20 @@ NotationHLayout::getAvailableSpacings()
         m_availableSpacings.push_back(220);
     }
     return m_availableSpacings;
+}
+
+std::vector<int> 
+NotationHLayout::getAvailableProportions()
+{
+    if (m_availableProportions.size() == 0) {
+        m_availableProportions.push_back(0);
+        m_availableProportions.push_back(20);
+        m_availableProportions.push_back(40);
+        m_availableProportions.push_back(60);
+        m_availableProportions.push_back(80);
+        m_availableProportions.push_back(100);
+    }
+    return m_availableProportions;
 }
 
 NotationHLayout::BarDataList &
@@ -1562,9 +1578,26 @@ NotationHLayout::getLayoutWidth(Rosegarden::ViewElement &ve) const
 	} else {
 	    bw = m_npf->getRestWidth(Note(noteType, dots));
 	}
-
+/*
+	double multipliers[8][] = {
+	    { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 },
+	    { 0.4, 0.6, 0.8, 1.0, 1.4, 2.0, 2.7, 4.0 },
+	    { 0.2, 0.2, 0.5, 0.9, 1.5, 3.0, 4.5, 7.0 },
+	    { 0.2, 0.2, 0.5, 0.9, 1.5, 3.0, 4.5, 7.0 },
+	    { 0.2, 0.2, 0.5, 0.9, 1.5, 3.0, 4.5, 7.0 },
+	    { 0.2, 0.2, 0.5, 0.9, 1.5, 3.0, 4.5, 7.0 },
+	};
+*/
 	double gap = 0;
 
+	// disregard dots here
+	timeT duration = Note(noteType).getDuration();
+
+	gap = duration * m_proportion * m_npf->getNoteBodyWidth() / Note(Note::Quaver).getDuration() / 100;
+	
+	NOTATION_DEBUG << "duration " << duration << ", proportion " << m_proportion << ", gap is " << gap << endl;
+
+/*!!!
 	//!!! This is where we plug in different spacings...
 	switch (noteType) {
 	case Note::Hemidemisemiquaver:
@@ -1576,7 +1609,7 @@ NotationHLayout::getLayoutWidth(Rosegarden::ViewElement &ve) const
 	case Note::Semibreve:          gap = bw * 9 / 2; break;
 	case Note::Breve:              gap = bw * 7;     break;
 	}
-
+*/
 	return bw + m_spacing * gap / 100;
 
     } else {

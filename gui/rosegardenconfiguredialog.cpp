@@ -412,7 +412,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     addTab(frame, i18n("Font"));
 
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame, 5, 2, 10, 5);
+    layout = new QGridLayout(frame, 6, 2, 10, 5);
 
     layout->addWidget(new QLabel(i18n("Default layout mode"), frame), 0, 0);
 
@@ -447,18 +447,41 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     }
 
     layout->addWidget(m_spacing, 1, 1);
+    
+    layout->addWidget(new QLabel(i18n("Default proportion"), frame), 2, 0);
+
+    m_proportion = new KComboBox(frame);
+    m_proportion->setEditable(false);
+
+    s = NotationHLayout::getAvailableProportions();
+    int defaultProportion = m_cfg->readNumEntry("proportion", 40);
+
+    for (std::vector<int>::iterator i = s.begin(); i != s.end(); ++i) {
+
+        QString text = QString("%1 %").arg(*i);
+        if (*i == 40) text = "40 % (normal)";
+        else if (*i == 0) text = i18n("None");
+        else if (*i == 100) text = i18n("Full");
+        m_proportion->insertItem(text);
+
+        if (*i == defaultProportion) {
+            m_proportion->setCurrentItem(m_proportion->count() - 1);
+        }
+    }
+
+    layout->addWidget(m_proportion, 2, 1);
 
     m_showUnknowns = new QCheckBox
         (i18n("Show non-notation events as question marks"), frame);
     bool defaultShowUnknowns = m_cfg->readBoolEntry("showunknowns", false);
     m_showUnknowns->setChecked(defaultShowUnknowns);
-    layout->addWidget(m_showUnknowns, 2, 1);
+    layout->addWidget(m_showUnknowns, 3, 1);
 
     m_colourQuantize = new QCheckBox
         (i18n("Show notation-quantized notes in a different colour"), frame);
     bool defaultColourQuantize = m_cfg->readBoolEntry("colourquantize", false);
     m_colourQuantize->setChecked(defaultColourQuantize);
-    layout->addWidget(m_colourQuantize, 3, 1);
+    layout->addWidget(m_colourQuantize, 4, 1);
 
     addTab(frame, i18n("Layout"));
 
@@ -625,6 +648,9 @@ NotationConfigurationPage::apply()
 
     std::vector<int> s = NotationHLayout::getAvailableSpacings();
     m_cfg->writeEntry("spacing", s[m_spacing->currentItem()]);
+
+    s = NotationHLayout::getAvailableProportions();
+    m_cfg->writeEntry("proportion", s[m_proportion->currentItem()]);
 
     m_cfg->writeEntry("layoutmode", m_layoutMode->currentItem());
     m_cfg->writeEntry("colourquantize", m_colourQuantize->isChecked());

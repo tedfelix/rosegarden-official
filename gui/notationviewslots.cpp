@@ -150,7 +150,60 @@ NotationView::slotChangeSpacing(int spacing)
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 	m_staffs[i]->markChanged();
-//!!!        m_staffs[i]->positionAllElements();
+    }
+
+    updateView();
+}
+
+
+void
+NotationView::slotChangeProportionFromIndex(int n)
+{
+    std::vector<int> proportions = m_hlayout->getAvailableProportions();
+    if (n >= (int)proportions.size()) n = proportions.size() - 1;
+    slotChangeProportion(proportions[n]);
+}
+
+void
+NotationView::slotChangeProportionFromAction()
+{
+    const QObject *s = sender();
+    QString name = s->name();
+
+    if (name.left(11) == "proportion_") {
+        int proportion = name.right(name.length() - 11).toInt();
+
+        if (proportion > 0) slotChangeProportion(proportion);
+
+    } else {
+        KMessageBox::sorry
+            (this, QString(i18n("Unknown proportion action %1").arg(name)));
+    }
+}
+
+void
+NotationView::slotChangeProportion(int proportion)
+{
+    if (m_hlayout->getProportion() == proportion) return;
+
+    m_hlayout->setProportion(proportion);
+    
+//    m_proportionSlider->setSize(proportion);
+
+    KToggleAction *action = dynamic_cast<KToggleAction *>
+        (actionCollection()->action(QString("proportion_%1").arg(proportion)));
+    if (action) action->setChecked(true);
+    else {
+	std::cerr
+            << "WARNING: Expected action \"proportion_" << proportion
+            << "\" to be a KToggleAction, but it isn't (or doesn't exist)"
+            << std::endl;
+    }
+
+    applyLayout();
+
+    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+	m_staffs[i]->markChanged();
     }
 
     updateView();
@@ -314,8 +367,6 @@ NotationView::slotChangeFont(std::string newName, int newSize)
     else {
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 	    m_staffs[i]->markChanged();
-//!!!            m_staffs[i]->renderAllElements();
-//!!!            m_staffs[i]->positionAllElements();
         }
     }
 

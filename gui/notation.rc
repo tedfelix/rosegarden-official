@@ -13,6 +13,7 @@
   <Action name="note_font_actionmenu"/>
   <Action name="note_font_size_actionmenu"/>
   <Action name="stretch_actionmenu"/>
+  <Action name="proportion_actionmenu"/>
 <Separator/>
   <Action name="linear_mode"/>
   <Action name="continuous_page_mode"/>

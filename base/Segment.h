@@ -304,6 +304,11 @@ public:
     void erase(iterator from, iterator to);
 
     /**
+     * Clear the segment.
+     */
+    void clear() { erase(begin(), end()); }
+
+    /**
      * Looks up an Event and if it finds it, erases it.
      * @return true if the event was found and erased, false otherwise.
      */

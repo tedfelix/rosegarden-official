@@ -580,6 +580,15 @@ public slots:
     /// Changes the hlayout spacing of the staffs on the view
     void slotChangeSpacingFromAction();
 
+    /// Changes the hlayout proportion of the staffs on the view
+    void slotChangeProportion(int newProportion);
+
+    /// Changes the hlayout proportion of the staffs on the view
+    void slotChangeProportionFromIndex(int newProportionIndex);
+
+    /// Changes the hlayout proportion of the staffs on the view
+    void slotChangeProportionFromAction();
+
     /// Note-on received asynchronously -- consider step-by-step editing
     void slotInsertableNoteOnReceived(int pitch);
 

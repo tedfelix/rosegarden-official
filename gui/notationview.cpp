@@ -1180,7 +1180,7 @@ void NotationView::setupActions()
 
     
     KActionMenu *spacingActionMenu =
-	new KActionMenu(i18n("Spa&cing"), this, "stretch_actionmenu");
+	new KActionMenu(i18n("S&pacing"), this, "stretch_actionmenu");
 
     int defaultSpacing = m_hlayout->getSpacing();
     std::vector<int> spacings = NotationHLayout::getAvailableSpacings();
@@ -1200,6 +1200,32 @@ void NotationView::setupActions()
     }
 
     actionCollection()->insert(spacingActionMenu);
+    
+    KActionMenu *proportionActionMenu =
+	new KActionMenu(i18n("Note P&roportion"), this, "proportion_actionmenu");
+
+    int defaultProportion = m_hlayout->getProportion();
+    std::vector<int> proportions = NotationHLayout::getAvailableProportions();
+
+    for (std::vector<int>::iterator i = proportions.begin();
+	 i != proportions.end(); ++i) {
+	
+	QString name = QString("%1%").arg(*i);
+	if (*i == 0) name = i18n("None");
+	else if (*i == 100) name = i18n("Full");
+
+	KToggleAction *proportionAction =
+	    new KToggleAction
+	    (name, 0, this,
+	     SLOT(slotChangeProportionFromAction()),
+	     actionCollection(), QString("proportion_%1").arg(*i));
+
+	proportionAction->setExclusiveGroup("proportion");
+	proportionAction->setChecked(*i == defaultProportion);
+	proportionActionMenu->insert(proportionAction);
+    }
+
+    actionCollection()->insert(proportionActionMenu);
 
     KActionMenu *styleActionMenu =
 	new KActionMenu(i18n("Note &Style"), this, "note_style_actionmenu");

@@ -120,24 +120,33 @@ public:
     void setSpacing(int spacing) { m_spacing = spacing; }
 
     /**
-     * Gets the current proportionality (100 == spaces proportional to
-     * durations, 0 == equal spacings)
-     */
-    int getProportionality() const { return m_proportionality; }
-
-    /**
-     * Sets the current proportionality (100 == spaces proportional to
-     * durations, 0 == equal spacings)
-     */
-    void setProportionality(int proportionality) { m_proportionality = proportionality; }
-
-    /**
      * Gets the range of "standard" spacing factors (you can
      * setSpacing() to anything you want, but it makes sense to
      * have a standard list for GUI use).  The only guaranteed
-     * property of the returned list is that 1.0 will be in it.
+     * property of the returned list is that 100 will be in it.
      */
     static std::vector<int> getAvailableSpacings();
+
+    /**
+     * Gets the current proportion (100 == spaces proportional to
+     * durations, 0 == equal spacings)
+     */
+    int getProportion() const { return m_proportion; }
+
+    /**
+     * Sets the current proportion (100 == spaces proportional to
+     * durations, 0 == equal spacings)
+     */
+    void setProportion(int proportion) { m_proportion = proportion; }
+
+    /**
+     * Gets the range of "standard" proportion factors (you can
+     * setProportion() to anything you want, but it makes sense to
+     * have a standard list for GUI use).  The only guaranteed
+     * property of the returned list is that 0, 100, and whatever the
+     * default proportion is will be in it.
+     */
+    static std::vector<int> getAvailableProportions();
 
     /**
      * Returns the total length of all elements once layout is done
@@ -379,10 +388,11 @@ protected:
     bool m_pageMode;
     double m_pageWidth;
     int m_spacing;
-    int m_proportionality;
+    int m_proportion;
     NotePixmapFactory *m_npf;
 
     static std::vector<int> m_availableSpacings;
+    static std::vector<int> m_availableProportions;
 
     const Rosegarden::Quantizer *m_notationQuantizer;
     const NotationProperties &m_properties;

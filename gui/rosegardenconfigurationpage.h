@@ -240,6 +240,7 @@ protected:
     QLabel *m_fontTypeLabel;
     QComboBox *m_layoutMode;
     QComboBox *m_spacing;
+    QComboBox *m_proportion;
     QCheckBox *m_colourQuantize;
     QCheckBox *m_showUnknowns;
     QComboBox *m_noteStyle;
