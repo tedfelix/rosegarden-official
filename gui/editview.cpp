@@ -60,6 +60,7 @@ const unsigned int EditView::CONTROLS_ROW         = 0;
 const unsigned int EditView::RULERS_ROW           = CONTROLS_ROW + 1;
 const unsigned int EditView::TOPBARBUTTONS_ROW    = RULERS_ROW + 1;
 const unsigned int EditView::CANVASVIEW_ROW       = TOPBARBUTTONS_ROW + 1;
+const unsigned int EditView::CONTROLRULER_ROW     = CANVASVIEW_ROW + 1;
 
 EditView::EditView(RosegardenGUIDoc *doc,
                    std::vector<Rosegarden::Segment *> segments,
@@ -75,14 +76,15 @@ EditView::EditView(RosegardenGUIDoc *doc,
     m_topBarButtons(0),
     m_bottomBarButtons(0),
     m_controlRuler(0),
-    m_controlRulers(new QTabWidget(getBottomWidget() /*getCentralFrame()*/))
+    m_controlRulers(new QTabWidget(getBottomWidget() /*getCentralFrame()*/ ))
 {
     (dynamic_cast<QBoxLayout*>(m_bottomBox->layout()))->setDirection(QBoxLayout::BottomToTop);
 
     m_grid->addLayout(m_rulerBox, RULERS_ROW, m_mainCol);
     m_grid->addMultiCellLayout(m_controlBox, CONTROLS_ROW, CONTROLS_ROW, 0, 1);
     m_controlBox->setAlignment(AlignRight);
-
+    m_grid->addWidget(m_controlRulers, CONTROLRULER_ROW, 2);
+    
     m_controlRulers->hide();
     m_controlRulers->setTabPosition(QTabWidget::Bottom);
 }

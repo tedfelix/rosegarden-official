@@ -347,6 +347,7 @@ protected:
     static const unsigned int CONTROLS_ROW;
     static const unsigned int TOPBARBUTTONS_ROW;
     static const unsigned int CANVASVIEW_ROW;
+    static const unsigned int CONTROLRULER_ROW;
 };
 
 #endif
