@@ -573,15 +573,16 @@ SequenceManager::stop()
     // Toggle off the buttons - first record
     //
     if ((m_transportStatus == RECORDING_MIDI ||
-         m_transportStatus == RECORDING_AUDIO) &&
-         m_transport->RecordButton->state() == QButton::On)
+         m_transportStatus == RECORDING_AUDIO))
     {
-        m_transport->RecordButton->setOn(false);
-    }
+        if (m_transport->RecordButton->state() == QButton::On)
+            m_transport->RecordButton->setOn(false);
 
-    // Metronome
-    if (m_transport->MetronomeButton->state() == QButton::On)
-        m_transport->MetronomeButton->setOn(false);
+        // Metronome
+        //
+        if (m_transport->MetronomeButton->state() == QButton::On)
+            m_transport->MetronomeButton->setOn(false);
+    }
 
     // Now playback
     m_transport->PlayButton->setOn(false);
