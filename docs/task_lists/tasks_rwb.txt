@@ -8,8 +8,6 @@ o Playing Audio files
   o synchronisation with MIDI [SITUATION IMPROVED]
   o clearing down handles without crashing aRTS [STILL BUGGY]
 
-o Sequencer memory leak
-
 o SoundFile file reading debacle
 
 o Looping at the origin - Looping bug?
@@ -19,8 +17,6 @@ o End of loop flyback sends duplicate copies of start of loop events
 o bar and loop ruler bar widths for partial bars
 
 o tidy up getSequencerSlice and MappedEvent [MappedEvent DONE]
-
-o Metronome [PENDING getBarRange fix]
 
 
 ==
@@ -53,6 +49,10 @@ o MIDI CC, PC and sysex handling
 
 Recently completed/fixed
 ------------------------
+
+- Metronome [DONE - but doesn't yet work for negative bars]
+
+- Sequencer memory leak [DONE - note off Events not being deleted]
 
 - rg file saving is still broken for some trivial cases (Segments wrong size)
     [FIXED with recent segmentcanvas changes]

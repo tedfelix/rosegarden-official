@@ -525,38 +525,44 @@ Sequencer::processMidiOut(const Rosegarden::MappedComposition &mC,
 
     for (MappedComposition::iterator i = mC.begin(); i != mC.end(); ++i)
     {
-        // sort out the correct TimeStamp for playback
+        // Sanity check
         assert((*i)->getEventTime() >= m_playStartPosition);
 
-
-        // check the type we're processing
+        // Check that we're processing the right type
+        //
         if ((*i)->getType() != MappedEvent::Internal)
             continue;
 
-        // add the fiddle factor for RealTime to MIDI conversion in here
+        // Relative to start of the piece including play latency
+        //
         midiRelativeTime = (*i)->getEventTime() - m_playStartPosition +
             playLatency;
 
+        // Add the aRTS play start time
+        //
         event.time = aggregateTime(m_artsPlayStartTime,
                   Arts::TimeStamp(midiRelativeTime.sec, midiRelativeTime.usec));
 
+        // Use the duration to find out when it ends
+        //
         midiRelativeStopTime = midiRelativeTime + (*i)->getDuration();
     
-        // load the command structure
+        // Load the command structure
+        //
         event.command.status = Arts::mcsNoteOn | channel;
         event.command.data1 = (*i)->getPitch();     // pitch
         event.command.data2 = (*i)->getVelocity();  // velocity
 
-        // Here's a little check to test out timing - if
-        // the event TimeStamp is later than current time
-        // then we've missed an event - so flag it
+        // Here's a little check to test out timing - I don't think it reports
+        // correctly at the moment
         //
         Arts::TimeStamp now = m_midiPlayPort.time();
 
         int secAhead = event.time.sec - now.sec;
         int uSecAhead = event.time.usec - now.usec;
 
-        // Adjust for this
+        // Adjust for negative
+        //
         if (uSecAhead < 0) 
         {
             uSecAhead += 1000000;
@@ -589,7 +595,8 @@ Sequencer::processMidiOut(const Rosegarden::MappedComposition &mC,
              << usecFromStart << "ms" << endl;
 #endif
 
-        // and log it on the Note OFF stack
+        // Log the Event onto the Note OFF stack
+        //
         NoteOffEvent *noteOffEvent =
             new NoteOffEvent(midiRelativeStopTime,
                      (Rosegarden::MidiByte)event.command.data1,
@@ -625,6 +632,8 @@ Sequencer::processMidiOut(const Rosegarden::MappedComposition &mC,
 }
 
 
+// Process any pending NOTE OFFs on the queue
+//
 void
 Sequencer::processNotesOff(const Rosegarden::RealTime &midiTime)
 {
@@ -632,9 +641,8 @@ Sequencer::processNotesOff(const Rosegarden::RealTime &midiTime)
     MidiByte channel = 0;
     Rosegarden::RealTime noteOff;
 
-    // process any pending NOTE OFFs
-    for ( NoteOffQueue::iterator i = m_noteOffQueue.begin();
-          i != m_noteOffQueue.end(); ++i )
+    for (NoteOffQueue::iterator i = m_noteOffQueue.begin();
+          i != m_noteOffQueue.end(); ++i)
 
     {
         // If there's a pregnant NOTE OFF around then send it
@@ -652,8 +660,9 @@ Sequencer::processNotesOff(const Rosegarden::RealTime &midiTime)
             event.command.status = Arts::mcsNoteOff | channel;
             m_midiPlayPort.processEvent(event);
 
-            // Remove the note from the queue
+            // Delete and remove the note from the queue
             //
+            delete(*i);
             m_noteOffQueue.erase(i);
         }
     }
@@ -673,8 +682,8 @@ Sequencer::allNotesOff()
     MidiByte channel = 0;
     Rosegarden::RealTime noteOff;
 
-    for ( NoteOffQueue::iterator i = m_noteOffQueue.begin();
-          i != m_noteOffQueue.end(); ++i )
+    for (NoteOffQueue::iterator i = m_noteOffQueue.begin();
+          i != m_noteOffQueue.end(); ++i)
     {
         // Rather long way around of converting these two
         //
@@ -687,8 +696,9 @@ Sequencer::allNotesOff()
         event.command.status = Arts::mcsNoteOff | channel;
         m_midiPlayPort.processEvent(event);
 
-        // Erase the event
+        // Clear the event
         //
+        delete(*i);
         m_noteOffQueue.erase(i);
     }
 }
