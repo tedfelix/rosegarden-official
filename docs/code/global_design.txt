@@ -97,6 +97,14 @@ The base directory also contains various music-related helper classes:
     storage is required.  But the class of a stored event is always
     simply Event.
 
+    The NotationTypes classes also define important constants for the
+    names of common properties in Events.  For example, the Note class
+    contains Note::EventType, which is the type of a note Event, and
+    Note::EventRestType, the type of a rest Event; and Key contains
+    Key::EventType, the type of a key change Event, KeyPropertyName,
+    the name of the property that defines the key change, and a set
+    of the valid strings for key changes.
+
  -- SegmentNotationHelper and SegmentPerformanceHelper do tasks that
     may be useful to notation-type code and performer code
     respectively.  For example, SegmentNotationHelper is used to
