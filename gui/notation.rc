@@ -1,0 +1,28 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+
+<kpartgui name="Rosegarden::Notation" version="1">
+
+<MenuBar>
+<Menu noMerge="1" name="Notes">
+  <text>Notes</text>
+  <Action name="whole_note" />
+  <Action name="half" />
+  <Action name="quarter" />
+  <Action name="8th" />
+  <Action name="16th" />
+  <Action name="32nd" />
+  <Action name="64th" />
+</Menu>
+</MenuBar>
+
+<ToolBar fullWidth="true" name="notesToolBar" newline="true">
+  <Action name="whole_note" />
+  <Action name="half" />
+  <Action name="quarter" />
+  <Action name="8th" />
+  <Action name="16th" />
+  <Action name="32nd" />
+  <Action name="64th" />
+</ToolBar>
+
+</kpartgui>
