@@ -315,6 +315,18 @@ PasteEventsCommand::PasteEventsCommand(Rosegarden::Segment &segment,
     }
 }
 
+PasteEventsCommand::PasteEventsCommand(Rosegarden::Segment &segment,
+				       Rosegarden::Clipboard *clipboard,
+				       Rosegarden::timeT pasteTime,
+				       Rosegarden::timeT pasteEndTime,
+				       PasteType pasteType) :
+    BasicCommand(getGlobalName(), segment, pasteTime, pasteEndTime),
+    m_relayoutEndTime(getEndTime()),
+    m_clipboard(clipboard),
+    m_pasteType(pasteType)
+{
+}
+
 PasteEventsCommand::PasteTypeMap
 PasteEventsCommand::getPasteTypes()
 {
@@ -340,7 +352,15 @@ PasteEventsCommand::getEffectiveEndTime(Rosegarden::Segment &segment,
 					Rosegarden::Clipboard *clipboard,
 					Rosegarden::timeT pasteTime)
 {
-    if (!clipboard->isSingleSegment()) return pasteTime;
+    if (!clipboard->isSingleSegment()) {
+	RG_DEBUG << "PasteEventsCommand::getEffectiveEndTime: not single segment" << endl;
+	return pasteTime;
+    }
+
+    RG_DEBUG << "PasteEventsCommand::getEffectiveEndTime: clipboard "
+	     << clipboard->getSingleSegment()->getStartTime()
+	     << " -> "
+	     << clipboard->getSingleSegment()->getEndTime() << endl;
     
     timeT d = clipboard->getSingleSegment()->getEndTime() -
  	      clipboard->getSingleSegment()->getStartTime();
@@ -1296,7 +1316,15 @@ MoveAcrossSegmentsCommand::MoveAcrossSegmentsCommand(Rosegarden::Segment &firstS
     m_clipboard(new Rosegarden::Clipboard())
 {
     addCommand(new CutCommand(selection, m_clipboard));
-    addCommand(new PasteEventsCommand(secondSegment, m_clipboard, newStartTime,
+
+    timeT newEndTime = newStartTime + selection.getEndTime() - selection.getStartTime();
+    Segment::iterator i = secondSegment.findTime(newEndTime);
+    if (i == secondSegment.end()) newEndTime = secondSegment.getEndTime();
+    else newEndTime = (*i)->getAbsoluteTime();
+
+    addCommand(new PasteEventsCommand(secondSegment, m_clipboard,
+				      newStartTime,
+				      newEndTime,
 				      notation ?
 				      PasteEventsCommand::NoteOverlay :
 				      PasteEventsCommand::MatrixOverlay));

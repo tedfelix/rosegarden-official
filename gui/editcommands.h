@@ -165,9 +165,28 @@ public:
     typedef std::map<PasteType, QString> PasteTypeMap;
     static PasteTypeMap getPasteTypes(); // type, descrip
 
+    /**
+     * Construct a Paste command from a clipboard that already contains
+     * the events to be pasted.
+     */
     PasteEventsCommand(Rosegarden::Segment &segment,
 		       Rosegarden::Clipboard *clipboard,
 		       Rosegarden::timeT pasteTime,
+		       PasteType pasteType);
+
+    /**
+     * Construct a Paste command from a clipboard that will contain
+     * the events to be pasted by the time the Paste command is
+     * executed, but might not do so yet.  This is necessary if the
+     * Paste command is to follow another clipboard-based command
+     * in a KMacroCommand sequence.  pasteEndTime must supply the
+     * latest time in the destination segment that may be modified
+     * by the paste.
+     */
+    PasteEventsCommand(Rosegarden::Segment &segment,
+		       Rosegarden::Clipboard *clipboard,
+		       Rosegarden::timeT pasteTime,
+		       Rosegarden::timeT pasteEndTime,
 		       PasteType pasteType);
 
     static QString getGlobalName() { return i18n("&Paste"); }
