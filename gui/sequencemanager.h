@@ -191,7 +191,6 @@ public:
     CountdownDialog* getCountdownDialog() { return m_countdownDialog; }
 
     //---- mmap() related stuff -----
-    void dumpCompositionToFileSet(const QString& path);
     void resetCompositionMmapper();
 
     void segmentAdded(const Composition *c, Segment *s);

@@ -146,7 +146,7 @@ ControlBlockMmapper::~ControlBlockMmapper()
 
 QString ControlBlockMmapper::createFileName()
 {
-    return KGlobal::dirs()->resourceDirs("tmp").first() + "/control_block";
+    return KGlobal::dirs()->resourceDirs("tmp").first() + "/rosegarden_control_block";
 }
 
 void ControlBlockMmapper::refresh()
@@ -1819,69 +1819,6 @@ SequenceManager::setTemporarySequencerSliceSize(const RealTime& time)
 //     }
 }
 
-void SequenceManager::dumpCompositionToFileSet(const QString& path)
-{
-    int i = 0;
-
-    Composition &comp = m_doc->getComposition();
-
-    Rosegarden::RealTime eventTime;
-    Rosegarden::RealTime duration;
-    Rosegarden::Track *track = 0;
-
-    for (Composition::iterator it = comp.begin(); it != comp.end(); it++) {
-
-        QString fileName = QString ("%1/segment_%2").arg(path).arg(i++);
-        QFile segmentFile(fileName);
-        segmentFile.open(IO_WriteOnly);
-        QDataStream stream(&segmentFile);
-
-        track = comp.getTrackById((*it)->getTrack());
-
-        // check to see if track actually exists
-        //
-        if (track == 0)
-            continue;
-
-	timeT segmentStartTime = (*it)->getStartTime();
-	timeT segmentEndTime = (*it)->getEndMarkerTime();
-	timeT segmentDuration = segmentEndTime - segmentStartTime;
-
-        SegmentPerformanceHelper helper(**it);
-
-	int repeatNo = 0;
-       
-//         if (segmentDuration != 0)
-//             repeatNo = (seekStartTime - segmentStartTime) / segmentDuration;
-//         else
-//             repeatNo = 0;
-
-        for (Segment::iterator j = (*it)->begin(); j != (*it)->end(); ++j) {
-
-	    timeT playTime =
-		helper.getSoundingAbsoluteTime(j) + repeatNo * segmentDuration;
-
-            eventTime = comp.getElapsedRealTime(playTime);
-
-	    duration = helper.getRealSoundingDuration(j);
-
-            try {
-            // Create mapped event
-            MappedEvent mE(track->getInstrument(),
-                           **j,
-                           eventTime,
-                           duration);
-            // dump it on stream
-            stream << mE;
-            } catch(...) {
-                // nothing
-            }
-        }
-        
-    }
-
-}
-
 void SequenceManager::resetCompositionMmapper()
 {
     delete m_compositionMmapper;
@@ -2228,10 +2165,12 @@ void SegmentMmapper::dump()
 	    
             try {
                 // Create mapped event
-                MappedEvent mE(track->getInstrument(), // track->getId()
+                MappedEvent mE(0, // the instrument will be extracted from the ControlBlock by the sequencer
                                **j,
                                eventTime,
                                duration);
+                mE.setTrackId(track->getId());
+
                 // dump it on stream
                 //             SEQMAN_DEBUG << "SegmentMmapper::dump - event "
                 //                          << nbEvents++ << " at "

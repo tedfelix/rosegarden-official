@@ -30,6 +30,7 @@ MappedEvent::MappedEvent(InstrumentId id,
                          const Event &e,
                          const RealTime &eventTime,
                          const RealTime &duration):
+       m_trackId(0),
        m_instrument(id),
        m_type(MidiNote),
        m_data1(0),
@@ -125,6 +126,7 @@ MappedEvent::operator=(const MappedEvent &mE)
 {
     if (&mE == this) return *this;
 
+    m_trackId = mE.getTrackId();
     m_instrument = mE.getInstrument();
     m_type = mE.getType();
     m_data1 = mE.getData1();
@@ -142,6 +144,7 @@ const size_t MappedEvent::streamedSize = 11 * sizeof(unsigned int);
 QDataStream&
 operator<<(QDataStream &dS, MappedEvent *mE)
 {
+    dS << (unsigned int)mE->getTrackId();
     dS << (unsigned int)mE->getInstrument();
     dS << (unsigned int)mE->getType();
     dS << (unsigned int)mE->getData1();
@@ -163,6 +166,7 @@ operator<<(QDataStream &dS, MappedEvent *mE)
 QDataStream&
 operator<<(QDataStream &dS, const MappedEvent &mE)
 {
+    dS << (unsigned int)mE.getTrackId();
     dS << (unsigned int)mE.getInstrument();
     dS << (unsigned int)mE.getType();
     dS << (unsigned int)mE.getData1();
@@ -184,12 +188,13 @@ operator<<(QDataStream &dS, const MappedEvent &mE)
 QDataStream&
 operator>>(QDataStream &dS, MappedEvent *mE)
 {
-    unsigned int instrument, type, data1, data2;
+    unsigned int trackId, instrument, type, data1, data2;
     long eventTimeSec, eventTimeUsec, durationSec, durationUsec,
          audioSec, audioUsec;
     std::string dataBlock("");
     unsigned int dataLength, dataElement;
 
+    dS >> trackId;
     dS >> instrument;
     dS >> type;
     dS >> data1;
@@ -208,6 +213,7 @@ operator>>(QDataStream &dS, MappedEvent *mE)
         dataBlock += (char)dataElement;
     }
 
+    mE->setTrackId((TrackId)trackId);
     mE->setInstrument((InstrumentId)instrument);
     mE->setType((MappedEvent::MappedEventType)type);
     mE->setData1((MidiByte)data1);
@@ -223,12 +229,13 @@ operator>>(QDataStream &dS, MappedEvent *mE)
 QDataStream&
 operator>>(QDataStream &dS, MappedEvent &mE)
 {
-    unsigned int instrument, type, data1, data2;
+    unsigned int trackId, instrument, type, data1, data2;
     long eventTimeSec, eventTimeUsec, durationSec, durationUsec,
          audioSec, audioUsec;
     std::string dataBlock("");
     unsigned int dataLength, dataElement;
          
+    dS >> trackId;
     dS >> instrument;
     dS >> type;
     dS >> data1;
@@ -247,6 +254,7 @@ operator>>(QDataStream &dS, MappedEvent &mE)
         dataBlock += dataElement;
     }
 
+    mE.setTrackId((TrackId)trackId);
     mE.setInstrument((InstrumentId)instrument);
     mE.setType((MappedEvent::MappedEventType)type);
     mE.setData1((MidiByte)data1);

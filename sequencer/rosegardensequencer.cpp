@@ -598,12 +598,13 @@ bool MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(Rosegarden::Map
             Rosegarden::MappedEvent *evt = new Rosegarden::MappedEvent(*(*iter));
 
             if (evt->getEventTime() < endTime) {
-                // evt->setInstrument(m_controlBlockMmapper->getInstrumentForTrack(evt->getInstrument()));
+                evt->setInstrument(m_controlBlockMmapper->getInstrumentForTrack(evt->getTrackId()));
 
                 SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : " << endTime
                                 << " inserting evt from segment #"
                                 << i
-                                << " : inst: " << evt->getInstrument()
+                                << " : trackId: " << evt->getTrackId()
+                                << " - inst: " << evt->getInstrument()
                                 << " - type: " << evt->getType()
                                 << " - time: " << evt->getEventTime()
                                 << " - duration: " << evt->getDuration()
@@ -1331,7 +1332,7 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
         mmapSegment(m_segmentFilesPath + "/" + segmentsDir[i]);
     }
 
-    m_controlBlockMmapper = new ControlBlockMmapper(KGlobal::dirs()->resourceDirs("tmp").first() + "/control_block");
+    m_controlBlockMmapper = new ControlBlockMmapper(KGlobal::dirs()->resourceDirs("tmp").first() + "/rosegarden_control_block");
 
     initMetaIterator();
 

@@ -106,7 +106,8 @@ public:
 
     } MappedEventType;
 
-    MappedEvent(): m_instrument(0),
+    MappedEvent(): m_trackId(0),
+                   m_instrument(0),
                    m_type(MidiNote),
                    m_data1(0),
                    m_data2(0),
@@ -134,6 +135,7 @@ public:
                 MidiByte velocity,
                 const RealTime &absTime,
                 const RealTime &duration):
+        m_trackId(0),
         m_instrument(id),
         m_type(MidiNote),
         m_data1(pitch),
@@ -153,6 +155,7 @@ public:
                 const RealTime &absTime,
                 const RealTime &duration,
                 const RealTime &audioStartMarker):
+        m_trackId(0),
         m_instrument(id),
         m_type(type),
         m_data1(pitch),
@@ -170,6 +173,7 @@ public:
                 const RealTime &eventTime,
                 const RealTime &duration,
                 const RealTime &audioStartMarker):
+         m_trackId(0),
          m_instrument(id),
          m_type(Audio),
          m_data1(audioID),
@@ -187,6 +191,7 @@ public:
                 MappedEventType type,
                 MidiByte data1,
                 MidiByte data2):
+         m_trackId(0),
          m_instrument(id),
          m_type(type),
          m_data1(data1),
@@ -200,6 +205,7 @@ public:
     MappedEvent(InstrumentId id,
                 MappedEventType type,
                 MidiByte data1):
+        m_trackId(0),
         m_instrument(id),
         m_type(type),
         m_data1(data1),
@@ -214,6 +220,7 @@ public:
     //
     MappedEvent(InstrumentId id,
                 MappedEventType type):
+        m_trackId(0),
         m_instrument(id),
         m_type(type),
         m_data1(0),
@@ -228,6 +235,7 @@ public:
     //
     // Fix for 674731 by Pedro Lopez-Cabanillas (20030531)
     MappedEvent(const MappedEvent &mE):
+        m_trackId(mE.getTrackId()),
         m_instrument(mE.getInstrument()),
         m_type(mE.getType()),
         m_data1(mE.getData1()),
@@ -240,6 +248,7 @@ public:
     // Copy from pointer
     // Fix for 674731 by Pedro Lopez-Cabanillas (20030531)
     MappedEvent(MappedEvent *mE):
+        m_trackId(mE->getTrackId()),
         m_instrument(mE->getInstrument()),
         m_type(mE->getType()),
         m_data1(mE->getData1()),
@@ -265,6 +274,10 @@ public:
     // Instrument
     void setInstrument(InstrumentId id) { m_instrument = id; }
     InstrumentId getInstrument() const { return m_instrument; }
+
+    // Track
+    void setTrackId(TrackId id) { m_trackId = id; }
+    TrackId getTrackId() const { return m_trackId; }
 
     MidiByte getPitch() const { return m_data1; }
 
@@ -341,6 +354,7 @@ public:
     static const size_t streamedSize;
 
 private:
+    TrackId          m_trackId;
     InstrumentId     m_instrument;
     MappedEventType  m_type;
     MidiByte         m_data1;
