@@ -41,8 +41,8 @@ main(int argc, char **argv)
   // Create a Rosegarden MIDI file
   //
   //Rosegarden::MidiFile *midiFile = new Rosegarden::MidiFile("glazunov.mid");
-  //Rosegarden::MidiFile *midiFile = new Rosegarden::MidiFile("Kathzy.mid");
-  Rosegarden::MidiFile *midiFile = new Rosegarden::MidiFile("outfile.mid");
+  Rosegarden::MidiFile *midiFile = new Rosegarden::MidiFile("Kathzy.mid");
+  //Rosegarden::MidiFile *midiFile = new Rosegarden::MidiFile("outfile.mid");
 
   // open the MIDI file
   midiFile->open();

@@ -120,7 +120,8 @@ namespace Rosegarden
     const unsigned int getNumberFromMidiBytes(std::ifstream* midiFile);
     const std::string getMidiBytes(std::ifstream* midiFile, const unsigned int &bytes);
     bool skipToNextTrack(std::ifstream *midiFile);
-    void intToHexMidiBytes(std::ofstream* midiFile, int number);
+    void intToMidiBytes(std::ofstream* midiFile, int number);
+    void longToMidiBytes(std::ofstream* midiFile, const unsigned long &number);
 
   };
 

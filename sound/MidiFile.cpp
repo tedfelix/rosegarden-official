@@ -859,18 +859,39 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
 // write out to the MidiFile.
 //
 void
-MidiFile::intToHexMidiBytes(std::ofstream* midiFile, int number)
+MidiFile::intToMidiBytes(std::ofstream* midiFile, int number)
 {
   MidiByte upper;
   MidiByte lower;
 
-  upper = ( (number & 0xF000) << 24 ) + ( (number & 0x0F00) << 16 );
-  lower = ( (number & 0xF0) << 8 ) + (number & 0x0F);
+  upper = (number & 0xFF00) >> 8;
+  lower = (number & 0x00FF);
 
   *midiFile << (MidiByte) upper;
   *midiFile << (MidiByte) lower;
 
+} 
+
+void
+MidiFile::longToMidiBytes(std::ofstream* midiFile, const unsigned long &number)
+{
+  MidiByte upper1;
+  MidiByte lower1;
+  MidiByte upper2;
+  MidiByte lower2;
+
+  upper1 = (number & 0xff000000) >> 24;
+  lower1 = (number & 0x00ff0000) >> 16;
+  upper2 = (number & 0x0000ff00) >> 8;
+  lower2 = (number & 0x000000ff);
+
+  *midiFile << (MidiByte) upper1;
+  *midiFile << (MidiByte) lower1;
+  *midiFile << (MidiByte) upper2;
+  *midiFile << (MidiByte) lower2;
+
 }
+ 
 
 // Write out the MIDI file header
 //
@@ -896,11 +917,11 @@ MidiFile::writeHeader(std::ofstream* midiFile)
   // Number of Tracks we're writing and add one for
   // a first Data track.
   //
-  intToHexMidiBytes(midiFile, _numberOfTracks + 1);
+  intToMidiBytes(midiFile, _numberOfTracks + 1);
 
   // Timing Division
   //
-  intToHexMidiBytes(midiFile, _timingDivision);
+  intToMidiBytes(midiFile, _timingDivision);
 
   return(true);
 }
@@ -910,7 +931,10 @@ MidiFile::writeHeader(std::ofstream* midiFile)
 bool
 MidiFile::writeTrack(std::ofstream* midiFile, const unsigned int &trackNumber)
 {
-  *midiFile << MIDI_TRACK_HEADER.c_str();
+  // We write into the trackBuffer, then write it out to the
+  // file with accompanying length field.
+  //
+  string trackBuffer;
 
   // get the length of the track in bytes and write it out
   //*midiFile << (MidiByte) _midiComposition[trackNumber];
@@ -924,70 +948,19 @@ MidiFile::writeTrack(std::ofstream* midiFile, const unsigned int &trackNumber)
   {
     if (midiEvent->isMeta())
     {
-      switch(midiEvent->metaMessageType())
-      {
-        case MIDI_SEQUENCE_NUMBER:
-          break;
-
-        case MIDI_TEXT_EVENT:
-          break;
-
-        case MIDI_COPYRIGHT_NOTICE:
-          break;
-
-        case MIDI_TRACK_NAME:
-          break;
-
-        case MIDI_INSTRUMENT_NAME:
-          break;
-
-        case MIDI_LYRIC:
-          break;
-
-        case MIDI_TEXT_MARKER:
-          break;
-
-        case MIDI_CUE_POINT:
-          break;
-
-        case MIDI_CHANNEL_PREFIX:
-          break;
-
-        case MIDI_CHANNEL_PREFIX_OR_PORT:
-          break;
-
-        case MIDI_END_OF_TRACK:
-          break;
-
-        case MIDI_SET_TEMPO:
-          break;
-
-        case MIDI_SMPTE_OFFSET:
-          break;
-
-        case MIDI_TIME_SIGNATURE:
-          break;
-
-        case MIDI_KEY_SIGNATURE:
-          break;
-
-        case MIDI_SEQUENCER_SPECIFIC:
-          break;
-
-        default:
-          break;
-      }
+      trackBuffer += (MidiByte)MIDI_FILE_META_EVENT;
+      //trackBuffer += (Meta Event Code);
+      //trackBuffer += (Number of message bytes);
+      //trackBuffer += (Message bytes);
     }
 
     switch(midiEvent->messageType())
     {
       case MIDI_NOTE_ON:
-        break;
-
       case MIDI_NOTE_OFF:
-        break;
-
       case MIDI_POLY_AFTERTOUCH:
+        trackBuffer += (MidiByte)midiEvent->note();
+        trackBuffer += (MidiByte)midiEvent->velocity();
         break;
 
       case MIDI_CTRL_CHANGE:
@@ -1005,8 +978,19 @@ MidiFile::writeTrack(std::ofstream* midiFile, const unsigned int &trackNumber)
       default:
         break;
     }
-    
   }
+
+  // Now we write the track - First the header..
+  //
+  *midiFile << MIDI_TRACK_HEADER.c_str();
+
+  // ..length of buffer..
+  //
+  longToMidiBytes(midiFile, (long)trackBuffer.length());
+
+  // ..then the buffer itself..
+  //
+  *midiFile << trackBuffer.c_str();
 
   return(true);
 }

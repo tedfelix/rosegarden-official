@@ -32,7 +32,9 @@ References in round brackets are to 0.1_planned_features.txt.
  6. Ensuring MIDI file conversions are correct (read MIDI,
     save as RG, plays OK) [ DONE ]
 
- 7. Tightening up Sequencer loop - make playback more efficient
+ 7. Tightening up Sequencer loop - make playback more efficient [DONE]
+
+ 8. Ensuring that Tempo is used correctly throughout Editor and Sequencer.
 
 
 Bugs
