@@ -17,5 +17,5 @@ make -f Makefile.cvs
 
 #CXXFLAGS="-g -Wall -fexceptions" ./configure --enable-debug --with-alsa --with-jack --with-ladspa --with-qt-dir=/usr/lib/qt3 --prefix=/opt/kde3
 
-CXXFLAGS="-gstabs+3 -Wall -O0" ./configure --enable-debug=full
+CC=distcc CXX=distcc CXXFLAGS="-gstabs+3 -Wall -O0" ./configure --enable-debug=full
 
