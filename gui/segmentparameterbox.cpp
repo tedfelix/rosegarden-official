@@ -531,29 +531,20 @@ SegmentParameterBox::populateBoxFromSegments()
 
     switch(transposed)
     {
+	// setCurrentItem works with QStrings
+	// 2nd arg of "true" means "add if necessary"
         case All:
-            {
-                bool setValue = false;
-
-                for (int i = 0; i < m_transposeValue->count(); i++)
-                {
-                    if (m_transposeValue->text(i).toInt() == transposeLevel)
-                    {
-                        m_transposeValue->setCurrentItem(i);
-                        setValue = true;
-                    }
-                }
-                
-                if (!setValue)
-                    m_transposeValue->
-                        setEditText(QString("%1").arg(transposeLevel));
-            }
+            m_transposeValue->
+		setCurrentItem(QString("%1").arg(transposeLevel),true);
             break;
 
         case Some:
+            m_transposeValue->setCurrentItem(QString(""),true);
+	    break;
+
         case None:
         default:
-            m_transposeValue->setEditText("");
+            m_transposeValue->setCurrentItem("0");
             break;
     }
 
@@ -564,24 +555,28 @@ SegmentParameterBox::populateBoxFromSegments()
     switch(delayed)
     {
         case All:
-
-	    if (delayLevel > 0) {
-
+	    if (delayLevel >= 0) {
 		Rosegarden::timeT error = 0;
-		QString label = NotationStrings::makeNoteMenuLabel(delayLevel, true, error);
-		m_delayValue->setEditText(label);
+		QString label = NotationStrings::makeNoteMenuLabel(delayLevel,
+								   true,
+								   error);
+		m_delayValue->setCurrentItem(label,true);
 
 	    } else if (delayLevel < 0) {
 
-		m_delayValue->setEditText(i18n("%1 ms").arg(-delayLevel));
+		m_delayValue->setCurrentItem(i18n("%1 ms").arg(-delayLevel),
+					     true);
 	    }
 
             break;
 
         case Some:
+            m_delayValue->setCurrentItem("",true);
+            break;
+
         case None:
         default:
-            m_delayValue->setEditText("");
+            m_delayValue->setCurrentItem(0);
             break;
     }
 
