@@ -119,6 +119,7 @@
 #include "instrumentparameterbox.h"
 #include "audioplugindialog.h"
 #include "audiosynthmanager.h"
+#include "PluginIdentifier.h"
 
 #ifdef HAVE_LIBJACK
 #include <jack/jack.h>
@@ -5747,9 +5748,9 @@ RosegardenGUIApp::slotShowPluginDialog(QWidget *parent,
 	    SLOT(slotPluginProgramChanged(Rosegarden::InstrumentId, int, QString)));
     
     connect(dialog,
-	    SIGNAL(pluginConfigurationChanged(Rosegarden::InstrumentId, int, QString, QString)),
+	    SIGNAL(pluginConfigurationChanged(Rosegarden::InstrumentId, int, bool, QString, QString)),
 	    this,
-	    SLOT(slotPluginConfigurationChanged(Rosegarden::InstrumentId, int, QString, QString)));
+	    SLOT(slotPluginConfigurationChanged(Rosegarden::InstrumentId, int, bool, QString, QString)));
     
     connect(dialog,
 	    SIGNAL(showPluginGUI(Rosegarden::InstrumentId, int)),
@@ -5873,6 +5874,10 @@ RosegardenGUIApp::slotPluginSelected(Rosegarden::InstrumentId instrumentId,
 
     //!!! much code duplicated here from RosegardenGUIDoc::initialiseStudio
     
+    inst->setConfigurationValue
+	(Rosegarden::PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY,
+	 m_doc->getAudioFileManager().getAudioPath());
+
     // Set opaque string configuration data (e.g. for DSSI plugin)
     //
     Rosegarden::MappedObjectPropertyList config;
@@ -6070,6 +6075,7 @@ RosegardenGUIApp::slotPluginBypassed(Rosegarden::InstrumentId instrumentId,
 void
 RosegardenGUIApp::slotPluginConfigurationChanged(Rosegarden::InstrumentId instrumentId,
 						 int index,
+						 bool global,
 						 QString key,
 						 QString value)
 {
@@ -6078,8 +6084,46 @@ RosegardenGUIApp::slotPluginConfigurationChanged(Rosegarden::InstrumentId instru
     
     Rosegarden::AudioPluginInstance *inst = instrument->getPlugin(index);
 
-    if (inst)
-    {
+    if (global && inst) {
+
+	// Set the same configuration on other plugins in the same
+	// instance group
+
+	Rosegarden::AudioPlugin *pl =
+	    m_pluginManager->getPluginByIdentifier(inst->getIdentifier());
+
+	if (pl && pl->isGrouped()) {
+
+	    Rosegarden::InstrumentList il =
+		m_doc->getStudio().getAllInstruments();
+
+	    for (Rosegarden::InstrumentList::iterator i = il.begin();
+		 i != il.end(); ++i) {
+
+		for (Rosegarden::PluginInstanceIterator pli =
+			 (*i)->beginPlugins();
+		     pli != (*i)->endPlugins(); ++pli) {
+
+		    if (*pli && (*pli)->isAssigned() &&
+			(*pli)->getIdentifier() == inst->getIdentifier() &&
+			(*pli) != inst) {
+
+			slotPluginConfigurationChanged
+			    ((*i)->getId(), (*pli)->getPosition(),
+			     false, key, value);
+
+#ifdef HAVE_LIBLO
+			m_pluginGUIManager->updateConfiguration
+			    ((*i)->getId(), (*pli)->getPosition(), key);
+#endif
+		    }
+		}
+	    }
+	}
+    }
+
+    if (inst) {
+
 	inst->setConfigurationValue(qstrtostr(key), qstrtostr(value));
 
 	Rosegarden::MappedObjectPropertyList config;

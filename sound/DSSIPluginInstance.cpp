@@ -23,6 +23,7 @@
 #include <cassert>
 
 #include "DSSIPluginInstance.h"
+#include "PluginIdentifier.h"
 
 
 #ifdef HAVE_DSSI
@@ -665,6 +666,10 @@ DSSIPluginInstance::configure(QString key,
 			      QString value)
 {
     if (!m_descriptor || !m_descriptor->configure) return QString();
+
+    if (key == PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY) {
+	key = DSSI_PROJECT_DIRECTORY_KEY;
+    }
     
 #ifdef DEBUG_DSSI
     std::cerr << "DSSIPluginInstance::configure(" << key << "," << value << ")" << std::endl;
@@ -673,6 +678,13 @@ DSSIPluginInstance::configure(QString key,
     char *message = m_descriptor->configure(m_instanceHandle, key.data(), value.data());
 
     QString qm;
+
+    // Ignore return values from reserved key configuration calls such
+    // as project directory
+    if (key.startsWith(DSSI_RESERVED_CONFIGURE_PREFIX)) {
+	return qm;
+    }
+    
     if (message) {
 	if (m_descriptor->LADSPA_Plugin && m_descriptor->LADSPA_Plugin->Label) {
 	    qm = QString(m_descriptor->LADSPA_Plugin->Label) + ": ";
@@ -680,6 +692,7 @@ DSSIPluginInstance::configure(QString key,
 	qm = qm + message;
 	free(message);
     }
+
     return qm;
 }
 

@@ -41,6 +41,8 @@ public:
 
     static bool areIdentifiersSimilar(QString id1, QString id2);
 
+    // Not strictly related to identifiers
+    static QString RESERVED_PROJECT_DIRECTORY_KEY;
 };
 
 }

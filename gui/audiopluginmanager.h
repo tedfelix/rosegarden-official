@@ -69,6 +69,7 @@ public:
                 const QString &author,
                 const QString &copyright,
 		bool isSynth,
+		bool isGrouped,
 		const QString &category);
 
     QString getIdentifier() const { return m_identifier; }
@@ -79,6 +80,7 @@ public:
     QString getAuthor() const { return m_author; }
     QString getCopyright() const { return m_copyright; }
     bool isSynth() const { return m_isSynth; }
+    bool isGrouped() const { return m_isGrouped; }
     QString getCategory() const { return m_category; }
 
     void addPort(int number,
@@ -105,6 +107,7 @@ protected:
     QString                    m_author;
     QString                    m_copyright;
     bool                       m_isSynth;
+    bool                       m_isGrouped;
     QString                    m_category;
 
     // our ports and associated hints
@@ -129,6 +132,7 @@ public:
                            const QString &author,
                            const QString &copyright,
 			   bool isSynth,
+			   bool isGrouped,
 			   const QString &category);
 
     bool removePlugin(const QString &identifier);

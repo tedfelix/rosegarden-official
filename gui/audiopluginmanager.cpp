@@ -54,6 +54,7 @@ AudioPluginManager::addPlugin(const QString &identifier,
                               const QString &author,
                               const QString &copyright,
 			      bool isSynth,
+			      bool isGrouped,
 			      const QString &category)
 {
     AudioPlugin *newPlugin = new AudioPlugin(identifier,
@@ -63,6 +64,7 @@ AudioPluginManager::addPlugin(const QString &identifier,
                                              author,
                                              copyright,
 					     isSynth,
+					     isGrouped,
 					     category);
     m_plugins.push_back(newPlugin);
 
@@ -198,6 +200,7 @@ AudioPlugin::AudioPlugin(const QString &identifier,
                          const QString &author,
                          const QString &copyright,
 			 bool isSynth,
+			 bool isGrouped,
 			 const QString &category):
     m_identifier(identifier),
     m_name(name),
@@ -206,6 +209,7 @@ AudioPlugin::AudioPlugin(const QString &identifier,
     m_author(author),
     m_copyright(copyright),
     m_isSynth(isSynth),
+    m_isGrouped(isGrouped),
     m_category(category),
     m_colour(Qt::darkRed)
 {

@@ -800,6 +800,7 @@ AudioPluginDialog::slotPaste()
 	     i != clipboard->m_configuration.end(); ++i) {
 	    emit pluginConfigurationChanged(m_instrument->getId(),
 					    m_index,
+					    false,
 					    strtoqstr(i->first),
 					    strtoqstr(i->second));
 	}

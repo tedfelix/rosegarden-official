@@ -800,6 +800,10 @@ void RosegardenGUIDoc::initialiseStudio()
                          Rosegarden::MappedPluginSlot::Identifier,
                          plugin->getIdentifier().c_str());
 
+		    plugin->setConfigurationValue
+			(Rosegarden::PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY,
+			 getAudioFileManager().getAudioPath());
+
 		    // Set opaque string configuration data (e.g. for DSSI plugin)
 		    //
 		    Rosegarden::MappedObjectPropertyList config;

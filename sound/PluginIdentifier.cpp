@@ -60,5 +60,8 @@ PluginIdentifier::areIdentifiersSimilar(QString id1, QString id2)
     return similar;
 }
 
+QString
+PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY = "__ROSEGARDEN__:__RESERVED__:ProjectDirectoryKey";
+
 }
 

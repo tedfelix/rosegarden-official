@@ -1370,6 +1370,7 @@ SequenceManager::getSequencerPlugins(AudioPluginManager *aPM)
         QString author = seqPlugins[i++];
         QString copyright = seqPlugins[i++];
 	bool isSynth = ((seqPlugins[i++]).lower() == "true");
+	bool isGrouped = ((seqPlugins[i++]).lower() == "true");
         QString category = seqPlugins[i++];
         unsigned int portCount = seqPlugins[i++].toInt();
 
@@ -1382,6 +1383,7 @@ SequenceManager::getSequencerPlugins(AudioPluginManager *aPM)
                                          author,
                                          copyright,
 					 isSynth,
+					 isGrouped,
 					 category);
 
         for (unsigned int j = 0; j < portCount; j++)

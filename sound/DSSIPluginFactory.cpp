@@ -67,6 +67,7 @@ DSSIPluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
 	list.push_back(descriptor->Maker);
 	list.push_back(descriptor->Copyright);
 	list.push_back((ddesc->run_synth || ddesc->run_multiple_synths) ? "true" : "false");
+	list.push_back(ddesc->run_multiple_synths ? "true" : "false");
 	list.push_back(m_taxonomy[descriptor->UniqueID]);
 	list.push_back(QString("%1").arg(descriptor->PortCount));
 

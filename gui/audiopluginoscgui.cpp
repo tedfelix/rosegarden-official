@@ -24,6 +24,7 @@
 #ifdef HAVE_LIBLO
 
 #include <lo/lo.h>
+#include <dssi.h>
 #include <iostream>
 
 #include "PluginIdentifier.h"
@@ -337,6 +338,30 @@ AudioPluginOSCGUIManager::updatePort(InstrumentId instrument, int position,
 
     m_guis[instrument][position]->sendPortValue(port, porti->value);
 }
+
+void
+AudioPluginOSCGUIManager::updateConfiguration(InstrumentId instrument, int position,
+					      QString key)
+{
+    RG_DEBUG << "AudioPluginOSCGUIManager::updateConfiguration(" << instrument << ","
+	     << position <<  "," << key << ")" << endl;
+
+    if (m_guis.find(instrument) == m_guis.end() ||
+	m_guis[instrument].find(position) == m_guis[instrument].end()) return;
+
+    Instrument *i = m_studio->getInstrumentById(instrument);
+    if (!i) return;
+
+    AudioPluginInstance *pluginInstance = i->getPlugin(position);
+    if (!pluginInstance) return;
+
+    QString value = strtoqstr(pluginInstance->getConfigurationValue(key));
+
+    RG_DEBUG << "AudioPluginOSCGUIManager::updatePort(" << instrument << ","
+	     << position <<  "," << key << "): value " << value << endl;
+
+    m_guis[instrument][position]->sendConfiguration(key, value);
+}
    
 QString
 AudioPluginOSCGUIManager::getOSCUrl(InstrumentId instrument, int position,
@@ -584,7 +609,18 @@ AudioPluginOSCGUIManager::dispatch()
 	    for (AudioPluginInstance::ConfigMap::const_iterator i =
 		     pluginInstance->getConfiguration().begin();
 		 i != pluginInstance->getConfiguration().end(); ++i) {
-		gui->sendConfiguration(strtoqstr(i->first), strtoqstr(i->second));
+
+		QString key = strtoqstr(i->first);
+		QString value = strtoqstr(i->second);
+
+		if (key == Rosegarden::PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY) {
+		    key = DSSI_PROJECT_DIRECTORY_KEY;
+		}
+
+		RG_DEBUG << "update: configuration: " << key << " -> "
+			 << value << endl;
+
+		gui->sendConfiguration(key, value);
 	    }
 		
 	    unsigned long rv = Rosegarden::StudioControl::getPluginProgram
@@ -624,10 +660,19 @@ AudioPluginOSCGUIManager::dispatch()
 	    }
 	    QString value = &arg->s;
 
+	    if (key.startsWith(DSSI_RESERVED_CONFIGURE_PREFIX) || 
+		key == Rosegarden::PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY) {
+		RG_DEBUG << "AudioPluginOSCGUIManager: illegal reserved configure call from gui: " << key << " -> " << value << endl;
+		goto done;
+	    }
+		
+
 	    RG_DEBUG << "AudioPluginOSCGUIManager: configure(" << key << "," << value
 		     << ")" << endl;
 
-	    m_app->slotPluginConfigurationChanged(instrument, position, key, value);
+	    m_app->slotPluginConfigurationChanged(instrument, position,
+						  key.startsWith(DSSI_GLOBAL_CONFIGURE_PREFIX),
+						  key, value);
 
 	} else if (method == "midi") {
 

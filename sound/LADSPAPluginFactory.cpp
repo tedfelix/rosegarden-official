@@ -81,6 +81,7 @@ LADSPAPluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
 	list.push_back(descriptor->Maker);
 	list.push_back(descriptor->Copyright);
 	list.push_back("false"); // is synth
+	list.push_back("false"); // is grouped
 	
 	if (m_taxonomy.find(descriptor->UniqueID) != m_taxonomy.end() &&
 	    m_taxonomy[descriptor->UniqueID] != "") {

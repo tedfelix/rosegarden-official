@@ -92,6 +92,8 @@ public:
 
     void updateProgram(Rosegarden::InstrumentId id, int position);
     void updatePort(Rosegarden::InstrumentId id, int position, int port);
+    void updateConfiguration(Rosegarden::InstrumentId id, int position,
+			     QString key);
 
     QString getOSCUrl(Rosegarden::InstrumentId instrument, int position,
 		      QString identifier);
