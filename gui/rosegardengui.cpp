@@ -233,12 +233,12 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 
     // Plugin manager
     //
-    emit startupStatusMessage(i18n("Initialising plugin manager..."));
+    emit startupStatusMessage(i18n("Initializing plugin manager..."));
     m_pluginManager = new Rosegarden::AudioPluginManager();
 
     // call inits to invoke all other construction parts
     //
-    emit startupStatusMessage(i18n("Initialising view..."));
+    emit startupStatusMessage(i18n("Initializing view..."));
     initStatusBar();
     setupActions();
     iFaceDelayedInit(this);
