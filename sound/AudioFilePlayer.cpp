@@ -65,6 +65,14 @@ AudioFilePlayer::clear()
 }
 
 
+bool
+AudioFilePlayer::playAudio(const int &id, const RealTime startIndex,
+                           const RealTime duration)
+{
+    return true;
+}
+
+
 
 }
 

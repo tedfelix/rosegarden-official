@@ -30,7 +30,8 @@ MappedEvent::MappedEvent(const Event &e,
                          const Rosegarden::RealTime &duration):
        m_pitch(e.get<Int>(BaseProperties::PITCH)),
        m_absoluteTime(absoluteTime),
-       m_duration(duration)
+       m_duration(duration),
+       m_isAudio(false)
 {
     // Attempt to get a velocity - if it fails then
     // set the velocity to default maximum (127)

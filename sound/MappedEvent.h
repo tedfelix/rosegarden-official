@@ -29,6 +29,11 @@
 // NOTE: for the moment until the Composition handles it we're hard
 // coding the velocity components of all MappedEvents to maximum (127)
 //
+//
+// MappedEvents also code playback of audio samples - if the
+// m_isAudio flag is set by the GUI then the sequencer will
+// attempt to map the Pitch (m_pitch) to the audio id.
+//
 
 #include "Composition.h" // for Rosegarden::RealTime
 #include "Event.h"
@@ -48,7 +53,8 @@ public:
                    m_absoluteTime(0, 0),
                    m_duration(0, 0),
                    m_velocity(0),
-                   m_track(0) {;}
+                   m_track(0),
+                   m_isAudio(false) {;}
 
     // Our main constructors used to convert from Events -
     // note that we put in place default velocities at this
@@ -68,7 +74,8 @@ public:
         m_absoluteTime(absTime),
         m_duration(duration),
         m_velocity(velocity),
-        m_track(track) {;}
+        m_track(track),
+        m_isAudio(false) {;}
     ~MappedEvent() {;}
 
     void setPitch(const int &p) { m_pitch = p; }
@@ -82,6 +89,18 @@ public:
     Rosegarden::RealTime getDuration() const { return m_duration; }
     velocityT getVelocity() const { return m_velocity; }
     trackT getTrack() const { return m_track; }
+
+    // Audio MappedEvent methods
+    //
+    void setStartIndex(const Rosegarden::RealTime sI)
+        { m_absoluteTime = sI; }
+    Rosegarden::RealTime getStartIndex() const { return m_absoluteTime; }
+
+    void setAudioID(const int &id) { m_pitch = id; }
+    int getAudioID() const { return m_pitch; }
+
+    bool isAudio() const { return m_isAudio; }
+    void isAudio(const bool &value) { m_isAudio = value; }
 
     struct MappedEventCmp
     {
@@ -100,6 +119,7 @@ private:
     Rosegarden::RealTime     m_duration;
     velocityT                m_velocity;
     trackT                   m_track;
+    bool                     m_isAudio;
 
 };
 

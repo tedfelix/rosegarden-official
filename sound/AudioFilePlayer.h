@@ -28,6 +28,7 @@
 //
 
 #include "AudioFile.h"
+#include "RealTime.h"
 #include <string>
 #include <vector>
 
@@ -52,6 +53,12 @@ public:
     // Empty all the files and clear down all the handles
     //
     void clear();
+
+    // Play an audio sample
+    //
+    bool playAudio(const int &id, const RealTime startIndex,
+                   const RealTime duration);
+
     
 private:
 
