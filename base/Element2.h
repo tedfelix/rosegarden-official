@@ -386,6 +386,7 @@ public:
     Event*       event()       { return m_event; }
 
     Event::timeT absoluteTime() const { return event()->absoluteTime(); }
+    void setAbsoluteTime(Event::timeT d)     { event()->setAbsoluteTime(d); }
 
     void  dump(ostream&) const;
 
