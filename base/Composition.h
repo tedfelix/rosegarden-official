@@ -729,7 +729,6 @@ protected:
 
     RefreshStatusArray<RefreshStatus> m_refreshStatusArray;
     bool                              m_needsRefresh;
-    TrackId                           m_highestTrackId;
 
     ColourMap                         m_segmentColourMap;
 };
