@@ -150,11 +150,11 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     trackButtonsView->setFrameStyle(Plain);
     trackButtons->setFrameStyle(Plain);
 
-    connect((QObject *)trackButtons, SIGNAL(trackSelected(int)),
-                                     SLOT(selectTrackSegments(int)));
+    connect(trackButtons, SIGNAL(trackSelected(int)),
+            this,         SLOT(selectTrackSegments(int)));
 
     connect(this,         SIGNAL(signalSetSelectAdd(bool)), 
-            trackEditor, SLOT(setSelectAdd(bool)));
+            trackEditor,  SLOT(setSelectAdd(bool)));
             
     connect(this,         SIGNAL(signalSetSelectCopy(bool)), 
             trackEditor, SLOT(setSelectCopy(bool)));

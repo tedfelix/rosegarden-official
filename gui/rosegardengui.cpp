@@ -397,8 +397,8 @@ void RosegardenGUIApp::initView()
 
     // Connect up this signal so that we can force tool mode
     // changes from the view
-    connect((QObject *)m_view, SIGNAL(activateTool(SegmentCanvas::ToolType)),
-                               SLOT(activateTool(SegmentCanvas::ToolType)));
+    connect(m_view, SIGNAL(activateTool(SegmentCanvas::ToolType)),
+            this,   SLOT(activateTool(SegmentCanvas::ToolType)));
 
     connect(m_view, SIGNAL(setGUIPositionPointer(Rosegarden::timeT)),
             this,   SLOT(setPointerPosition(Rosegarden::timeT)));
@@ -939,6 +939,8 @@ void RosegardenGUIApp::statusHelpMsg(const QString &text)
 
 void RosegardenGUIApp::pointerSelected()
 {
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::pointerSelected\n";
+             
     m_view->pointerSelected();
 }
 
