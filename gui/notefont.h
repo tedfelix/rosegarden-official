@@ -366,6 +366,8 @@ extern const CharName DOT;
 extern const CharName ACCENT;
 extern const CharName TENUTO;
 extern const CharName STACCATO;
+extern const CharName STACCATISSIMO;
+extern const CharName MARCATO;
 extern const CharName FERMATA;
 extern const CharName TRILL;
 extern const CharName TURN;

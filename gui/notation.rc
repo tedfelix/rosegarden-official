@@ -135,11 +135,15 @@ etc
     <Action name="add_accent"/>
     <Action name="add_tenuto"/>
     <Action name="add_staccato"/>
+    <Action name="add_staccatissimo"/>
+    <Action name="add_marcato"/>
     <Action name="add_text_sf"/>
     <Action name="add_text_rf"/>
+    <Separator/>
     <Action name="add_trill"/>
     <Action name="add_turn"/>
     <Action name="add_pause"/>
+    <Separator/>
     <Action name="add_up-bow"/>
     <Action name="add_down-bow"/>
     <Separator/>

@@ -102,6 +102,8 @@ namespace Marks
     extern const Mark Accent;         // ">"
     extern const Mark Tenuto;         // "-"  ("legato" in RG2.1)
     extern const Mark Staccato;       // "."
+    extern const Mark Staccatissimo;  // "'"
+    extern const Mark Marcato;        // "^"
     extern const Mark Sforzando;      // "sf"
     extern const Mark Rinforzando;    // "rf"
     extern const Mark Trill;          // "tr"

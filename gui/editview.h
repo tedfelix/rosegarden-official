@@ -303,7 +303,6 @@ protected:
     unsigned int m_compositionRefreshStatusId;
 
     QAccel      *m_accelerators;
-
 };
 
 #endif

@@ -787,6 +787,8 @@ const CharName DOT = "MUSICAL SYMBOL COMBINING AUGMENTATION DOT";
 const CharName ACCENT = "MUSICAL SYMBOL COMBINING ACCENT";
 const CharName TENUTO = "MUSICAL SYMBOL COMBINING TENUTO";
 const CharName STACCATO = "MUSICAL SYMBOL COMBINING STACCATO";
+const CharName STACCATISSIMO = "MUSICAL SYMBOL COMBINING STACCATISSIMO";
+const CharName MARCATO = "MUSICAL SYMBOL COMBINING MARCATO";
 const CharName FERMATA = "MUSICAL SYMBOL FERMATA";
 const CharName TRILL = "MUSICAL SYMBOL TR";
 const CharName TURN = "MUSICAL SYMBOL TURN";
@@ -824,6 +826,8 @@ CharName NoteCharacterNameLookup::getMarkCharName(Mark mark)
     if      (mark == Marks::Accent)    return NoteCharacterNames::ACCENT;
     else if (mark == Marks::Tenuto)    return NoteCharacterNames::TENUTO;
     else if (mark == Marks::Staccato)  return NoteCharacterNames::STACCATO;
+    else if (mark == Marks::Staccatissimo) return NoteCharacterNames::STACCATISSIMO;
+    else if (mark == Marks::Marcato)   return NoteCharacterNames::MARCATO;
     else if (mark == Marks::Trill)     return NoteCharacterNames::TRILL;
     else if (mark == Marks::Turn)      return NoteCharacterNames::TURN;
     else if (mark == Marks::Pause)     return NoteCharacterNames::FERMATA;

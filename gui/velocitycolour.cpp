@@ -34,10 +34,10 @@ VelocityColour::VelocityColour(const QColor &loud,
         m_loudColour(loud),
         m_mediumColour(medium),
         m_quietColor(quiet),
-        m_maxValue(maxValue),
         m_loudKnee(loudKnee),
         m_mediumKnee(mediumKnee),
         m_quietKnee(quietKnee),
+        m_maxValue(maxValue),
         m_mixedColour(QColor(0, 0, 0)), // black as default
         m_multiplyFactor(1000)
 {

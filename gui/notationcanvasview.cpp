@@ -30,7 +30,6 @@
 #include "rosestrings.h"
 #include "rosedebug.h"
 
-using namespace NotationProperties;
 
 NotationCanvasView::NotationCanvasView(const LinedStaffManager<NotationElement> &staffmgr,
                                        QScrollBar *horizBar,
@@ -191,8 +190,8 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 			       // we're happy to end up with just any note
 
 		long eventHeight = 0;
-		if (el.event()->get<Rosegarden::Int>(HEIGHT_ON_STAFF,
-						     eventHeight)
+		if (el.event()->get<Rosegarden::Int>
+		    (NotationProperties::HEIGHT_ON_STAFF, eventHeight)
 		    && eventHeight == clickHeight) break;
 
             } else { // it's not a note, so we don't care about the pitch

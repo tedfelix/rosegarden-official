@@ -153,6 +153,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                            vector<Segment *> segments,
                            QWidget *parent) :
     EditView(doc, segments, false, parent, "notationview"),
+    m_viewLocalPropertyPrefix(makeViewLocalPropertyPrefix()),
+    m_properties(m_viewLocalPropertyPrefix),
     m_currentEventSelection(0),
     m_currentNotePixmap(0),
     m_hoveredOverNoteName(0),
@@ -162,8 +164,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_fontName(NotePixmapFactory::getDefaultFont()),
     m_fontSize(NotePixmapFactory::getDefaultSize(m_fontName)),
     m_notePixmapFactory(new NotePixmapFactory(m_fontName, m_fontSize)),
-    m_hlayout(&doc->getComposition(), m_notePixmapFactory),
-    m_vlayout(&doc->getComposition()),
+    m_hlayout(&doc->getComposition(), m_notePixmapFactory, m_properties),
+    m_vlayout(&doc->getComposition(), m_properties),
     m_topBarButtons(0),
     m_bottomBarButtons(0),
     m_tupletMode(false),
@@ -208,7 +210,9 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                    .arg(doc->getTitle())
                    .arg(segments.size()));
     }
-
+    
+    show();
+    kapp->processEvents();
 
     m_topBarButtons = new BarButtons(&m_hlayout, 25,
                                      false, getCentralFrame());
@@ -232,13 +236,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_bottomBarButtons = new BarButtons(&m_hlayout, 25,
                                         true, getCentralFrame());
     setBottomBarButtons(m_bottomBarButtons);
-    
-    show();
-    kapp->processEvents();
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new NotationStaff(canvas(), segments[i], i,
-                                             false, width() - 50,
+					     m_properties, false, width() - 50,
                                              m_fontName, m_fontSize));
     }
 
@@ -313,6 +314,10 @@ NotationView::~NotationView()
     saveOptions();
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+	for (Segment::iterator j = m_staffs[i]->getSegment().begin();
+	     j != m_staffs[i]->getSegment().end(); ++j) {
+	    removeViewLocalProperties(*j);
+	}
         delete m_staffs[i]; // this will erase all "notes" canvas items
     }
 
@@ -325,6 +330,36 @@ NotationView::~NotationView()
 
     kdDebug(KDEBUG_AREA) << "<- ~NotationView()\n";
 }
+    
+
+std::set<int>
+NotationView::m_viewNumberPool;
+
+std::string
+NotationView::makeViewLocalPropertyPrefix()
+{
+    static char buffer[100];
+    int i = 0;
+    while (m_viewNumberPool.find(i) != m_viewNumberPool.end()) ++i;
+    m_viewNumberPool.insert(i);
+    sprintf(buffer, "View%d::", i);
+    return buffer;
+}
+
+void
+NotationView::removeViewLocalProperties(Rosegarden::Event *e)
+{
+    //!!! Terribly inefficient
+    Event::PropertyNames names(e->getPropertyNames());
+    for (Event::PropertyNames::iterator i = names.begin();
+	 i != names.end(); ++i) {
+	if (i->getName().substr(0, m_viewLocalPropertyPrefix.size()) ==
+	    m_viewLocalPropertyPrefix) {
+	    e->unset(*i);
+	}
+    }
+}
+    
 
 void NotationView::positionStaffs()
 {
@@ -440,7 +475,8 @@ void NotationView::setupActions()
             { "Double flat",    "1slotDoubleFlat()",    "double_flat_accidental",  "accidental-doubleflat" }
         };
 
-    for (unsigned int i = 0; i < 6; ++i) {
+    for (unsigned int i = 0;
+	 i < sizeof(actionsAccidental)/sizeof(actionsAccidental[0]); ++i) {
 
         icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
                         (actionsAccidental[i][3]));
@@ -631,19 +667,24 @@ void NotationView::setupActions()
 		SLOT(slotDebugDump()), actionCollection(), "debug_dump");
 
     static const Mark marks[] = 
-    { Accent, Tenuto, Staccato, Sforzando, Rinforzando,
+    { Accent, Tenuto, Staccato, Staccatissimo, Marcato, Sforzando, Rinforzando,
       Trill, Turn, Pause, UpBow, DownBow };
+    //!!! could do with using sender() for these just as for notes & rests
     static const char *markSlots[] = 
     { "1slotMarksAddAccent()",      "1slotMarksAddTenuto()",
-      "1slotMarksAddStaccato()",    "1slotMarksAddSforzando()",
+      "1slotMarksAddStaccato()",    "1slotMarksAddStaccatissimo()",
+      "1slotMarksAddMarcato()",     "1slotMarksAddSforzando()",
       "1slotMarksAddRinforzando()", "1slotMarksAddTrill()",
       "1slotMarksAddTurn()",        "1slotMarksAddPause()",
       "1slotMarksAddUpBow()",       "1slotMarksAddDownBow()" };
 
-    for (unsigned int i = 0; i < 10; ++i) {
-        new KAction(MarksMenuAddMarkCommand::getGlobalName(marks[i]), 0, this,
-                    markSlots[i], actionCollection(),
-                    QString("add_%1").arg(strtoqstr(marks[i])));
+    for (unsigned int i = 0; i < sizeof(marks)/sizeof(marks[0]); ++i) {
+        new KAction
+	    (MarksMenuAddMarkCommand::getGlobalName(marks[i]),
+	     m_toolbarNotePixmapFactory.makeToolbarPixmap
+	     (string(marks[i]).c_str()),
+	     0, this, markSlots[i], actionCollection(),
+	     QString("add_%1").arg(strtoqstr(marks[i])));
     }
 
     new KAction(MarksMenuAddTextMarkCommand::getGlobalName(), 0, this,
@@ -682,7 +723,8 @@ void NotationView::setupActions()
             { "Show &Layout Toolbar",         "1slotToggleFontToolBar()",        "show_font_toolbar",       "palette-font" }
         };
 
-    for (unsigned int i = 0; i < 5; ++i) {
+    for (unsigned int i = 0;
+	 i < sizeof(actionsToolbars)/sizeof(actionsToolbars[0]); ++i) {
 
         icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap(actionsToolbars[i][3]));
 
@@ -1665,6 +1707,20 @@ void NotationView::slotMarksAddStaccato()
     if (m_currentEventSelection)
         addCommandToHistory(new MarksMenuAddMarkCommand
                             (Staccato, *m_currentEventSelection));
+}
+
+void NotationView::slotMarksAddStaccatissimo()
+{
+    if (m_currentEventSelection)
+        addCommandToHistory(new MarksMenuAddMarkCommand
+                            (Staccatissimo, *m_currentEventSelection));
+}
+
+void NotationView::slotMarksAddMarcato()
+{
+    if (m_currentEventSelection)
+        addCommandToHistory(new MarksMenuAddMarkCommand
+                            (Marcato, *m_currentEventSelection));
 }
 
 void NotationView::slotMarksAddSforzando()

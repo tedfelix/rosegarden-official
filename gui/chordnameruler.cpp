@@ -58,7 +58,9 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
     m_composition(composition),
     m_font("helvetica", 12),
     m_boldFont("helvetica", 12, QFont::Bold),
-    m_fontMetrics(m_boldFont)
+    m_fontMetrics(m_boldFont),
+    TEXT_FORMAL_X("TextFormalX"),
+    TEXT_ACTUAL_X("TextActualX")
 {
     setBackgroundColor(RosegardenGUIColours::ChordNameRulerBackground);
 }
@@ -147,14 +149,14 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
 	}
 
 	double x = m_rulerScale->getXForTime((*i)->getAbsoluteTime());
-	(*i)->set<Int>(NotationProperties::TEXT_FORMAL_X, (long)x);
+	(*i)->set<Int>(TEXT_FORMAL_X, (long)x);
 
 	QRect textBounds = m_fontMetrics.boundingRect(strtoqstr(text));
 	int width = textBounds.width();
 
 	x -= width / 2;
 	if (prevX >= x - 3) x = prevX + 3;
-	(*i)->set<Int>(NotationProperties::TEXT_ACTUAL_X, (long)x);
+	(*i)->set<Int>(TEXT_ACTUAL_X, (long)x);
 	prevX = x + width;
     }
 
@@ -164,10 +166,10 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
 	std::string text((*i)->get<String>(Text::TextPropertyName));
 	std::string type((*i)->get<String>(Text::TextTypePropertyName));
 
-	if (!(*i)->has(NotationProperties::TEXT_FORMAL_X)) continue;
+	if (!(*i)->has(TEXT_FORMAL_X)) continue;
 
-	long formalX = (*i)->get<Int>(NotationProperties::TEXT_FORMAL_X);
-	long actualX = (*i)->get<Int>(NotationProperties::TEXT_ACTUAL_X);
+	long formalX = (*i)->get<Int>(TEXT_FORMAL_X);
+	long actualX = (*i)->get<Int>(TEXT_ACTUAL_X);
 
 	formalX += m_currentXOffset;
 	actualX += m_currentXOffset;

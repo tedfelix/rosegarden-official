@@ -193,14 +193,14 @@ public:
      * Writes beam data into each note in the group.  Notes'
      * layout x coordinates must already have been set.
      */
-    void applyBeam(NotationStaff &);
+    void applyBeam(NotationStaff &, const NotationProperties &properties);
 
     /**
      * Writes tupling line data into each note in the group. 
      * Notes' layout x coordinates must already have been set.
      * Does nothing if this is not a tupled group.
      */
-    void applyTuplingLine(NotationStaff &);
+    void applyTuplingLine(NotationStaff &, const NotationProperties &properties);
 
     virtual bool contains(const NELIterator &) const;
 

@@ -28,6 +28,8 @@
 #include "FastVector.h"
 
 class NotationStaff;
+class NotationProperties;
+
 
 /**
  * Vertical notation layout
@@ -38,7 +40,8 @@ class NotationStaff;
 class NotationVLayout : public Rosegarden::VerticalLayoutEngine<NotationElement>
 {
 public:
-    NotationVLayout(Rosegarden::Composition *c);
+    NotationVLayout(Rosegarden::Composition *c,
+		    const NotationProperties &properties);
     virtual ~NotationVLayout();
 
     /**
@@ -82,6 +85,7 @@ private:
     SlurList &getSlurList(StaffType &);
 
     Rosegarden::Composition *m_composition;
+    const NotationProperties &m_properties;
 };
 
 #endif

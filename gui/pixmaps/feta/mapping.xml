@@ -63,6 +63,10 @@
 	<symbol name="MUSICAL SYMBOL COMBINING ACCENT" src="scripts-sforzato"/>
 	<symbol name="MUSICAL SYMBOL COMBINING TENUTO" src="scripts-tenuto"/>
 	<symbol name="MUSICAL SYMBOL COMBINING STACCATO" src="scripts-staccato"/>
+	<symbol name="MUSICAL SYMBOL COMBINING STACCATISSIMO"
+                src="scripts-ustaccatissimo" inversion-src="scripts-dstaccatissimo"/>
+	<symbol name="MUSICAL SYMBOL COMBINING MARCATO"
+                src="scripts-umarcato" inversion-src="scripts-dmarcato"/>
 	<symbol name="MUSICAL SYMBOL FERMATA"
 	        src="scripts-ufermata" inversion-src="scripts-dfermata"/>
 	<symbol name="MUSICAL SYMBOL TR" src="scripts-trill"/>
@@ -70,7 +74,7 @@
 	<symbol name="MUSICAL SYMBOL COMBINING UP BOW" src="scripts-upbow"/>
 	<symbol name="MUSICAL SYMBOL COMBINING DOWN BOW" src="scripts-downbow"/>
         <!-- Unicode (and Lilypond) just have a single G clef, they
-             don't distinguish between alto and tenor.  We'd have to
+             don't distinguish between alto and tenor.  We'll have to
              use the same clef with an offset. -->
         <symbol name="MUSICAL SYMBOL C CLEF" src="clefs-C"/>
         <symbol name="MUSICAL SYMBOL G CLEF" src="clefs-G"/>

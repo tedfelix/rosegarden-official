@@ -32,6 +32,8 @@
 
 #include <vector>
 
+class NotationProperties;
+
 
 /**
  * Horizontal notation layout
@@ -42,7 +44,8 @@
 class NotationHLayout : public Rosegarden::HorizontalLayoutEngine<NotationElement>
 {
 public:
-    NotationHLayout(Rosegarden::Composition *c, NotePixmapFactory *npf);
+    NotationHLayout(Rosegarden::Composition *c, NotePixmapFactory *npf,
+		    const NotationProperties &properties);
     virtual ~NotationHLayout();
 
     void setNotePixmapFactory(NotePixmapFactory *npf) {
@@ -347,6 +350,8 @@ protected:
     NotePixmapFactory *m_npf;
 
     static std::vector<double> m_availableSpacings;
+
+    const NotationProperties &m_properties;
 };
 
 #endif

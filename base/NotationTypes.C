@@ -65,6 +65,8 @@ namespace Marks
     const Mark Accent = "accent";
     const Mark Tenuto = "tenuto";
     const Mark Staccato = "staccato";
+    const Mark Staccatissimo = "staccatissimo";
+    const Mark Marcato = "marcato";
     const Mark Sforzando = getTextMark("sf");
     const Mark Rinforzando = getTextMark("rf");
     const Mark Trill = "trill";

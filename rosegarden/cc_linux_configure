@@ -13,5 +13,7 @@ make -f Makefile.cvs
 #CXXFLAGS="-g -Wall -fexceptions" ./configure --enable-debug --with-qt-dir=/opt/kde2/qt-2.3.0 --prefix=/opt/kde2
 
 #CXXFLAGS="-DNDEBUG -fexceptions" ./configure --disable-debug --with-alsa --with-qt-dir=/opt/kde-2.2.1/qt-2.3.0 --prefix=/opt/kde-2.2.1
-CXXFLAGS="-g -Wall -fexceptions" ./configure --enable-debug --with-alsa --with-qt-dir=/opt/kde-2.2.1/qt-2.3.0 --prefix=/opt/kde-2.2.1
+#CXXFLAGS="-g -Wall -fexceptions" ./configure --enable-debug --with-alsa --with-qt-dir=/opt/kde-2.2.1/qt-2.3.0 --prefix=/opt/kde-2.2.1
+
+CXXFLAGS="-g -Wall -fexceptions" ./configure --enable-debug --with-alsa --with-qt-dir=/usr/lib/qt3 --prefix=/opt/kde3
 

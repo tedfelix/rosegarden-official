@@ -25,6 +25,8 @@
 
 #include <qwidget.h>
 
+#include "PropertyName.h"
+
 namespace Rosegarden {
     class RulerScale;
     class Composition;
@@ -79,6 +81,9 @@ private:
     QFont m_font;
     QFont m_boldFont;
     QFontMetrics m_fontMetrics;
+
+    const Rosegarden::PropertyName TEXT_FORMAL_X;
+    const Rosegarden::PropertyName TEXT_ACTUAL_X;
 };
 
 #endif // _LOOPRULER_H_

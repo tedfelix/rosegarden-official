@@ -51,10 +51,12 @@ using Rosegarden::Indication;
 using Rosegarden::timeT;
 
 using namespace Rosegarden::BaseProperties;
-using namespace NotationProperties;
 
-NotationVLayout::NotationVLayout(Rosegarden::Composition *c) :
-    m_composition(c)
+
+NotationVLayout::NotationVLayout(Rosegarden::Composition *c,
+				 const NotationProperties &properties) :
+    m_composition(c),
+    m_properties(properties)
 {
     // empty
 }
@@ -130,7 +132,8 @@ NotationVLayout::scanStaff(StaffType &staffBase, timeT, timeT)
 
             std::vector<int> h;
             for (unsigned int j = 0; j < chord.size(); ++j) {
-                h.push_back((*chord[j])->event()->get<Int>(HEIGHT_ON_STAFF));
+                h.push_back((*chord[j])->event()->get<Int>
+			    (m_properties.HEIGHT_ON_STAFF));
             }
 	    bool stemmed = chord.hasStem();
             bool stemUp = chord.hasStemUp();
@@ -150,20 +153,24 @@ NotationVLayout::scanStaff(StaffType &staffBase, timeT, timeT)
 		// notationhlayout after notationvlayout)... or else
 		// introduce two separate properties (beamed stem up
 		// and non-beamed stem up)
-                el->event()->setMaybe<Bool>(STEM_UP, stemUp);
+                el->event()->setMaybe<Bool>
+		    (m_properties.STEM_UP, stemUp);
 
 		bool primary =
 		    ((stemmed && stemUp) ? (j == 0) : (j == chord.size()-1));
-                el->event()->setMaybe<Bool>(CHORD_PRIMARY_NOTE, primary);
+                el->event()->setMaybe<Bool>
+		    (m_properties.CHORD_PRIMARY_NOTE, primary);
 
-                el->event()->setMaybe<Bool>(NOTE_HEAD_SHIFTED,
-                                            chord.isNoteHeadShifted(chord[j]));
+                el->event()->setMaybe<Bool>
+		    (m_properties.NOTE_HEAD_SHIFTED,
+		     chord.isNoteHeadShifted(chord[j]));
 
-                el->event()->setMaybe<Bool>(NEEDS_EXTRA_SHIFT_SPACE,
-                                            hasNoteHeadShifted && !stemUp);
+                el->event()->setMaybe<Bool>
+		    (m_properties.NEEDS_EXTRA_SHIFT_SPACE,
+		     hasNoteHeadShifted && !stemUp);
 
-                el->event()->setMaybe<Bool>(DRAW_FLAG,
-                                            j == flaggedNote);
+                el->event()->setMaybe<Bool>
+		    (m_properties.DRAW_FLAG, j == flaggedNote);
 
                 int stemLength = -1;
                 if (j != flaggedNote) {
@@ -173,8 +180,8 @@ NotationVLayout::scanStaff(StaffType &staffBase, timeT, timeT)
 //                    kdDebug(KDEBUG_AREA) << "Setting stem length to "
 //                                         << stemLength << endl;
                 }
-                el->event()->setMaybe<Int>(UNBEAMED_STEM_LENGTH,
-                                           stemLength);
+                el->event()->setMaybe<Int>
+		    (m_properties.UNBEAMED_STEM_LENGTH, stemLength);
             }
 
             i = chord.getFinalElement();
@@ -283,18 +290,18 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 
 	if ((*scooter)->isNote()) {
 
-	    int h = (*scooter)->event()->get<Int>(HEIGHT_ON_STAFF);
+	    int h = (*scooter)->event()->get<Int>(m_properties.HEIGHT_ON_STAFF);
 
 	    bool stemUp = (h <= 4);
-	    (*scooter)->event()->get<Bool>(STEM_UP, stemUp);
+	    (*scooter)->event()->get<Bool>(m_properties.STEM_UP, stemUp);
 	    
 	    bool beamed = false;
-	    (*scooter)->event()->get<Bool>(BEAMED, beamed);
+	    (*scooter)->event()->get<Bool>(m_properties.BEAMED, beamed);
 	    
 	    bool primary = false;
 
 	    if ((*scooter)->event()->get<Bool>
-		(CHORD_PRIMARY_NOTE, primary) && primary) {
+		(m_properties.CHORD_PRIMARY_NOTE, primary) && primary) {
 
 		Chord chord(*(staff.getViewElementList()), scooter,
 			    getQuantizer());
@@ -350,7 +357,8 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 	(above ? &stemUpNotes : &stemDownNotes);
 
     for (unsigned int wsi = 0; wsi < wrongStemNotes->size(); ++wsi) {
-	(*wrongStemNotes)[wsi]->setMaybe<Bool>(STEM_UP, !above);
+	(*wrongStemNotes)[wsi]->setMaybe<Bool>
+	    (m_properties.STEM_UP, !above);
     }
 
     // now choose the actual y-coord of the slur based on the side
@@ -388,9 +396,9 @@ NotationVLayout::positionSlur(NotationStaff &staff,
     if (length > diff*3) length -= diff/2;
     startX += diff;
 
-    (*i)->event()->setMaybe<Bool>(SLUR_ABOVE, above);
-    (*i)->event()->setMaybe<Int>(SLUR_Y_DELTA, dy);
-    (*i)->event()->setMaybe<Int>(SLUR_LENGTH, length);
+    (*i)->event()->setMaybe<Bool>(m_properties.SLUR_ABOVE, above);
+    (*i)->event()->setMaybe<Int>(m_properties.SLUR_Y_DELTA, dy);
+    (*i)->event()->setMaybe<Int>(m_properties.SLUR_LENGTH, length);
     (*i)->setLayoutX(startX);
     (*i)->setLayoutY(y0);
 }

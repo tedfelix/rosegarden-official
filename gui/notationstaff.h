@@ -29,6 +29,8 @@
 #include "linedstaff.h"
 
 class QCanvasSimpleSprite;
+class NotationProperties;
+
 
 /**
  * The Staff is a repository for information about the notation
@@ -50,6 +52,7 @@ public:
      * \a id is the id of the staff in the NotationView
      */
     NotationStaff(QCanvas *, Rosegarden::Segment *, int id,
+		  const NotationProperties &properties,
 		  bool pageMode, double pageWidth,
                   std::string fontName, int resolution);
     virtual ~NotationStaff();
@@ -306,6 +309,7 @@ protected:
     NotePixmapFactory *m_npf;
     QCanvasSimpleSprite *m_previewSprite;
     QCanvasSimpleSprite *m_staffName;
+    const NotationProperties &m_properties;
 };
 
 #endif

@@ -32,6 +32,7 @@
 #include "notationvlayout.h"
 #include "notationcanvasview.h"
 #include "notationstaff.h"
+#include "notationproperties.h"
 #include "zoomslider.h"
 #include "NotationTypes.h"
 
@@ -70,6 +71,11 @@ public:
                  std::vector<Rosegarden::Segment *> segments,
                  QWidget *parent);
     ~NotationView();
+
+    /**
+     * Return the view-local PropertyName definitions for this view
+     */
+    const NotationProperties &getProperties();
 
     /// Return the number of staffs
     int getStaffCount() { return m_staffs.size(); }
@@ -291,6 +297,8 @@ public slots:
     void slotMarksAddAccent();
     void slotMarksAddTenuto();
     void slotMarksAddStaccato();
+    void slotMarksAddStaccatissimo();
+    void slotMarksAddMarcato();
     void slotMarksAddSforzando();
     void slotMarksAddRinforzando();
     void slotMarksAddTrill();
@@ -499,7 +507,14 @@ protected:
     Rosegarden::timeT getInsertionTime(Rosegarden::Event *&clefEvt,
 				       Rosegarden::Event *&keyEvt);
 
+    static std::set<int> m_viewNumberPool;
+    static std::string makeViewLocalPropertyPrefix();
+    void removeViewLocalProperties(Rosegarden::Event *);
+
     //--------------- Data members ---------------------------------
+
+    std::string m_viewLocalPropertyPrefix;
+    NotationProperties m_properties;
 
     /// The current selection of Events (for cut/copy/paste)
     Rosegarden::EventSelection* m_currentEventSelection;

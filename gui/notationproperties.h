@@ -33,43 +33,47 @@
  * notationproperties.cpp as well...
  */
 
-namespace NotationProperties
+class NotationProperties
 {
+public:
+    NotationProperties(const std::string &prefix);
 
-extern const Rosegarden::PropertyName HEIGHT_ON_STAFF;
-extern const Rosegarden::PropertyName MIN_WIDTH;
-extern const Rosegarden::PropertyName CALCULATED_ACCIDENTAL;
-extern const Rosegarden::PropertyName DISPLAY_ACCIDENTAL;
-extern const Rosegarden::PropertyName STEM_UP;
-extern const Rosegarden::PropertyName UNBEAMED_STEM_LENGTH;
-extern const Rosegarden::PropertyName DRAW_FLAG;
-extern const Rosegarden::PropertyName NOTE_HEAD_SHIFTED;
-extern const Rosegarden::PropertyName NEEDS_EXTRA_SHIFT_SPACE;
-extern const Rosegarden::PropertyName CHORD_PRIMARY_NOTE;
-extern const Rosegarden::PropertyName TIE_LENGTH;
-extern const Rosegarden::PropertyName SLUR_ABOVE;
-extern const Rosegarden::PropertyName SLUR_Y_DELTA;
-extern const Rosegarden::PropertyName SLUR_LENGTH;
+    // These are only of interest to notation views, but are the
+    // same across all notation views
+    //!!! should even these be view-local? probably
 
-// Set in applyBeam in notationsets.cpp:
+    static const Rosegarden::PropertyName HEIGHT_ON_STAFF;
+    static const Rosegarden::PropertyName STEM_UP;
+    static const Rosegarden::PropertyName BEAMED;
 
-extern const Rosegarden::PropertyName BEAMED;
-extern const Rosegarden::PropertyName BEAM_GRADIENT;
-extern const Rosegarden::PropertyName BEAM_SECTION_WIDTH;
-extern const Rosegarden::PropertyName BEAM_NEXT_BEAM_COUNT;
-extern const Rosegarden::PropertyName BEAM_NEXT_PART_BEAMS;
-extern const Rosegarden::PropertyName BEAM_THIS_PART_BEAMS;
-extern const Rosegarden::PropertyName BEAM_MY_Y;
-extern const Rosegarden::PropertyName TUPLING_LINE_MY_Y;
-extern const Rosegarden::PropertyName TUPLING_LINE_WIDTH;
-extern const Rosegarden::PropertyName TUPLING_LINE_GRADIENT;
+    // The rest are, or may be, view-local
 
-// Set in chordnameruler.cpp:
+    const Rosegarden::PropertyName MIN_WIDTH;
+    const Rosegarden::PropertyName CALCULATED_ACCIDENTAL;
+    const Rosegarden::PropertyName DISPLAY_ACCIDENTAL;
+    const Rosegarden::PropertyName UNBEAMED_STEM_LENGTH;
+    const Rosegarden::PropertyName DRAW_FLAG;
+    const Rosegarden::PropertyName NOTE_HEAD_SHIFTED;
+    const Rosegarden::PropertyName NEEDS_EXTRA_SHIFT_SPACE;
+    const Rosegarden::PropertyName CHORD_PRIMARY_NOTE;
+    const Rosegarden::PropertyName TIE_LENGTH;
+    const Rosegarden::PropertyName SLUR_ABOVE;
+    const Rosegarden::PropertyName SLUR_Y_DELTA;
+    const Rosegarden::PropertyName SLUR_LENGTH;
 
-extern const Rosegarden::PropertyName TEXT_FORMAL_X;
-extern const Rosegarden::PropertyName TEXT_ACTUAL_X;
+    // Set in applyBeam in notationsets.cpp:
 
-}
+    const Rosegarden::PropertyName BEAM_GRADIENT;
+    const Rosegarden::PropertyName BEAM_SECTION_WIDTH;
+    const Rosegarden::PropertyName BEAM_NEXT_BEAM_COUNT;
+    const Rosegarden::PropertyName BEAM_NEXT_PART_BEAMS;
+    const Rosegarden::PropertyName BEAM_THIS_PART_BEAMS;
+    const Rosegarden::PropertyName BEAM_MY_Y;
+    const Rosegarden::PropertyName TUPLING_LINE_MY_Y;
+    const Rosegarden::PropertyName TUPLING_LINE_WIDTH;
+    const Rosegarden::PropertyName TUPLING_LINE_GRADIENT;
+
+};
 
 #endif
 

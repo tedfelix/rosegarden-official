@@ -21,40 +21,39 @@
 
 #include "notationproperties.h"
 
-namespace NotationProperties
+const Rosegarden::PropertyName NotationProperties::HEIGHT_ON_STAFF = "HeightOnStaff";
+const Rosegarden::PropertyName NotationProperties::STEM_UP	      = "NoteStemUp";
+const Rosegarden::PropertyName NotationProperties::BEAMED	      = "Beamed";
+
+NotationProperties::NotationProperties(const std::string &prefix) :
+
+    MIN_WIDTH			(prefix + "MinWidth"),
+
+    CALCULATED_ACCIDENTAL	(prefix + "NoteCalculatedAccidental"),
+    DISPLAY_ACCIDENTAL		(prefix + "NoteDisplayAccidental"),
+    UNBEAMED_STEM_LENGTH	(prefix + "UnbeamedStemLength"),
+    DRAW_FLAG			(prefix + "NoteDrawFlag"),
+    NOTE_HEAD_SHIFTED		(prefix + "NoteHeadShifted"),
+    NEEDS_EXTRA_SHIFT_SPACE	(prefix + "NeedsExtraShiftSpace"),
+    CHORD_PRIMARY_NOTE		(prefix + "ChordPrimaryNote"),
+    TIE_LENGTH			(prefix + "TieLength"),
+    SLUR_ABOVE			(prefix + "SlurAbove"),
+    SLUR_Y_DELTA		(prefix + "SlurYDelta"),
+    SLUR_LENGTH			(prefix + "SlurLength"),
+
+    BEAM_GRADIENT		(prefix + "BeamGradient"),
+    BEAM_SECTION_WIDTH		(prefix + "BeamSectionWidth"),
+    BEAM_NEXT_BEAM_COUNT	(prefix + "BeamNextBeamCount"),
+    BEAM_NEXT_PART_BEAMS	(prefix + "BeamNextPartBeams"),
+    BEAM_THIS_PART_BEAMS	(prefix + "BeamThisPartBeams"),
+    BEAM_MY_Y			(prefix + "BeamMyY"),
+
+    TUPLING_LINE_MY_Y		(prefix + "TuplingLineMyY"),
+    TUPLING_LINE_WIDTH		(prefix + "TuplingLineWidth"),
+    TUPLING_LINE_GRADIENT	(prefix + "TuplingLineGradient")
+
 {
-
-const Rosegarden::PropertyName HEIGHT_ON_STAFF      = "HeightOnStaff";
-const Rosegarden::PropertyName MIN_WIDTH            = "MinWidth";
-
-const Rosegarden::PropertyName CALCULATED_ACCIDENTAL = "NoteCalculatedAccidental";
-const Rosegarden::PropertyName DISPLAY_ACCIDENTAL   = "NoteDisplayAccidental";
-const Rosegarden::PropertyName STEM_UP              = "NoteStemUp";
-const Rosegarden::PropertyName UNBEAMED_STEM_LENGTH = "UnbeamedStemLength";
-const Rosegarden::PropertyName DRAW_FLAG            = "NoteDrawFlag";
-const Rosegarden::PropertyName NOTE_HEAD_SHIFTED    = "NoteHeadShifted";
-const Rosegarden::PropertyName NEEDS_EXTRA_SHIFT_SPACE = "NeedsExtraShiftSpace";
-const Rosegarden::PropertyName CHORD_PRIMARY_NOTE   = "ChordPrimaryNote";
-const Rosegarden::PropertyName TIE_LENGTH           = "TieLength";
-const Rosegarden::PropertyName SLUR_ABOVE	    = "SlurAbove";
-const Rosegarden::PropertyName SLUR_Y_DELTA	    = "SlurYDelta";
-const Rosegarden::PropertyName SLUR_LENGTH          = "SlurLength";
-
-const Rosegarden::PropertyName BEAMED               = "Beamed";
-const Rosegarden::PropertyName BEAM_GRADIENT        = "BeamGradient";
-const Rosegarden::PropertyName BEAM_SECTION_WIDTH   = "BeamSectionWidth";
-const Rosegarden::PropertyName BEAM_NEXT_BEAM_COUNT = "BeamNextBeamCount";
-const Rosegarden::PropertyName BEAM_NEXT_PART_BEAMS = "BeamNextPartBeams";
-const Rosegarden::PropertyName BEAM_THIS_PART_BEAMS = "BeamThisPartBeams";
-const Rosegarden::PropertyName BEAM_MY_Y            = "BeamMyY";
-
-const Rosegarden::PropertyName TUPLING_LINE_MY_Y    = "TuplingLineMyY";
-const Rosegarden::PropertyName TUPLING_LINE_WIDTH   = "TuplingLineWidth";
-const Rosegarden::PropertyName TUPLING_LINE_GRADIENT= "TuplingLineGradient";
-
-const Rosegarden::PropertyName TEXT_FORMAL_X	    = "TextFormalX";
-const Rosegarden::PropertyName TEXT_ACTUAL_X	    = "TextActualX";
-
+    // nothing else
 }
 
 

@@ -55,18 +55,19 @@ using Rosegarden::Accidental;
 using namespace Rosegarden::Accidentals;
 
 using namespace Rosegarden::BaseProperties;
-using namespace NotationProperties;
 
 std::vector<double> NotationHLayout::m_availableSpacings;
 
 
-NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf) :
+NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
+				 const NotationProperties &properties) :
     Rosegarden::HorizontalLayoutEngine<NotationElement>(c),
     m_totalWidth(0.),
     m_pageMode(false),
     m_pageWidth(0.),
     m_spacing(1.0),
-    m_npf(npf)
+    m_npf(npf),
+    m_properties(properties)
 {
 //    kdDebug(KDEBUG_AREA) << "NotationHLayout::NotationHLayout()" << endl;
 }
@@ -399,7 +400,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 	    }
 
 	    actualBarEnd = el->getAbsoluteTime() + el->getDuration();
-            el->event()->setMaybe<Int>(MIN_WIDTH, mw);
+            el->event()->setMaybe<Int>(m_properties.MIN_WIDTH, mw);
 	}
 
 	if (actualBarEnd == barTimes.first) actualBarEnd = barTimes.second;
@@ -520,8 +521,8 @@ NotationHLayout::scanChord(NotationElementList *notes,
 	int h = p.getHeightOnStaff();
 	Accidental acc = p.getAccidental();
 
-	el->event()->setMaybe<Int>(HEIGHT_ON_STAFF, h);
-	el->event()->setMaybe<String>(CALCULATED_ACCIDENTAL, acc);
+	el->event()->setMaybe<Int>(NotationProperties::HEIGHT_ON_STAFF, h);
+	el->event()->setMaybe<String>(m_properties.CALCULATED_ACCIDENTAL, acc);
 
 	// update display acc for note according to the accTable
 	// (accidentals in force when the last chord ended) and update
@@ -531,7 +532,7 @@ NotationHLayout::scanChord(NotationElementList *notes,
 	// this one)
                     
 	Accidental dacc = accTable.getDisplayAccidental(acc, h);
-	el->event()->setMaybe<String>(DISPLAY_ACCIDENTAL, dacc);
+	el->event()->setMaybe<String>(m_properties.DISPLAY_ACCIDENTAL, dacc);
 	if (someAccidental == NoAccidental) someAccidental = dacc;
 
 	newAccTable.update(acc, h);
@@ -1108,20 +1109,20 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
 	    } else if (el->event()->isa(Clef::EventType)) {
 		
-		delta = el->event()->get<Int>(MIN_WIDTH);
+		delta = el->event()->get<Int>(m_properties.MIN_WIDTH);
 		el->setLayoutAirspace(x, delta);
 //		kdDebug(KDEBUG_AREA) << "Found clef" << endl;
 		clef = Clef(*el->event());
 
 	    } else if (el->event()->isa(Key::EventType)) {
 
-		delta = el->event()->get<Int>(MIN_WIDTH);
+		delta = el->event()->get<Int>(m_properties.MIN_WIDTH);
 		el->setLayoutAirspace(x, delta);
 //		kdDebug(KDEBUG_AREA) << "Found key" << endl;
 		key = Key(*el->event());
 
 	    } else {
-		delta = el->event()->get<Int>(MIN_WIDTH);
+		delta = el->event()->get<Int>(m_properties.MIN_WIDTH);
 		el->setLayoutAirspace(x, delta);
 	    }
 
@@ -1143,8 +1144,8 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 			dynamic_cast<NotationStaff &>(staff);
 		    NotationGroup group(*staff.getViewElementList(), it,
 					getQuantizer(), clef, key);
-		    group.applyBeam(notationStaff);
-		    group.applyTuplingLine(notationStaff);
+		    group.applyBeam(notationStaff, m_properties);
+		    group.applyTuplingLine(notationStaff, m_properties);
 		}
 	    }
 
@@ -1276,7 +1277,7 @@ NotationHLayout::positionChord(StaffType &staff,
 	if (!note->isNote()) continue;
 
 	Accidental acc = NoAccidental;
-	if (note->event()->get<String>(DISPLAY_ACCIDENTAL, acc) &&
+	if (note->event()->get<String>(m_properties.DISPLAY_ACCIDENTAL, acc) &&
 	    acc != NoAccidental) {
             accWidth = std::max(accWidth, m_npf->getAccidentalWidth(acc));
 	}
@@ -1320,10 +1321,10 @@ NotationHLayout::positionChord(StaffType &staff,
 
 	int pitch = note->event()->get<Int>(PITCH);
 	if (tiedForwards) {
-	    note->event()->setMaybe<Int>(TIE_LENGTH, 0);
+	    note->event()->setMaybe<Int>(m_properties.TIE_LENGTH, 0);
 	    tieMap[pitch] = chord[i];
 	} else {
-	    note->event()->unset(TIE_LENGTH);
+	    note->event()->unset(m_properties.TIE_LENGTH);
 	}
 
 	if (tiedBack) {
@@ -1337,7 +1338,7 @@ NotationHLayout::positionChord(StaffType &staff,
 		    note->getAbsoluteTime()) {
 		    
 		    (*otherItr)->event()->setMaybe<Int>
-			(TIE_LENGTH,
+			(m_properties.TIE_LENGTH,
 			 (int)(baseX - (*otherItr)->getLayoutX()));
 		    
 		} else {
@@ -1357,7 +1358,7 @@ NotationHLayout::positionChord(StaffType &staff,
 	NotationElementList::iterator subItr = chord[i];
 	if (subItr == to) barEndsInChord = true;
 	(*subItr)->setLayoutX(baseX);
-	if (groupId < 0) (*chord[i])->event()->unset(BEAMED);
+	if (groupId < 0) (*chord[i])->event()->unset(m_properties.BEAMED);
 	else (*chord[i])->event()->set<Int>(BEAMED_GROUP_ID, groupId);
     }
 
