@@ -1563,7 +1563,7 @@ MetronomeConfigurationPage::MetronomeConfigurationPage(RosegardenGUIDoc *doc,
     : TabbedConfigurationPage(doc, parent, name)
 {
     QFrame *frame = new QFrame(m_tabWidget);
-    QGridLayout *layout = new QGridLayout(frame, 3, 2,
+    QGridLayout *layout = new QGridLayout(frame, 5, 2,
                                           10, 5);
 
     Configuration &config = m_doc->getConfiguration();
@@ -1589,7 +1589,7 @@ MetronomeConfigurationPage::MetronomeConfigurationPage(RosegardenGUIDoc *doc,
         }
     }
 
-    layout->addWidget(new QLabel(i18n("Metronome channel"), frame), 1, 0);
+    layout->addWidget(new QLabel(i18n("Metronome Channel"), frame), 1, 0);
     m_metronomeChannel = new QSpinBox(frame);
     m_metronomeChannel->setMinValue(1);
     m_metronomeChannel->setMaxValue(16);

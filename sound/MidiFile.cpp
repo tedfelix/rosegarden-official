@@ -208,7 +208,7 @@ MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
     // update a progress dialog if we have one
     //
     bytesGot += numberOfBytes;
-    if (bytesGot > 500) {
+    if (bytesGot > 1000) {
 
         emit setProgress((int)(double(midiFile->tellg())/
                                 double(m_fileSize) * 20.0));

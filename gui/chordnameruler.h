@@ -88,7 +88,8 @@ public:
 
     void setMinimumWidth(int width) { m_width = width; }
 
-    void recalculate();
+    void recalculate(Rosegarden::timeT from = 0,
+		     Rosegarden::timeT to = 0);
 
 public slots:
     void slotScrollHoriz(int x);

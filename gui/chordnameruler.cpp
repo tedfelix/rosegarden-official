@@ -179,7 +179,7 @@ ChordNameRuler::sizeHint() const
 	m_rulerScale->getBarPosition(m_rulerScale->getLastVisibleBar()) +
 	m_rulerScale->getBarWidth(m_rulerScale->getLastVisibleBar());
 
-    RG_DEBUG << "Returning chord-label ruler width as " << width << endl;
+    NOTATION_DEBUG << "Returning chord-label ruler width as " << width << endl;
 
     QSize res(std::max(int(width), m_width), m_height);
 
@@ -195,13 +195,15 @@ ChordNameRuler::minimumSizeHint() const
 }
 
 void
-ChordNameRuler::recalculate()
+ChordNameRuler::recalculate(timeT from, timeT to)
 {
     Rosegarden::Profiler profiler("ChordNameRuler::recalculate", true);
-    RG_DEBUG << "ChordNameRuler[" << this << "]::recalculate" << endl;
+    NOTATION_DEBUG << "ChordNameRuler[" << this << "]::recalculate" << endl;
 
     bool regetSegments = false;
-    bool needRecalc = false;
+
+    enum RecalcLevel { RecalcNone, RecalcVisible, RecalcWhole };
+    RecalcLevel level = RecalcNone;
 
     if (m_segments.empty()) {
 
@@ -247,8 +249,8 @@ ChordNameRuler::recalculate()
 
 	    if (ss.find(si->first) == ss.end()) {
 		m_segments.erase(si);
-		needRecalc = true;
-		RG_DEBUG << "Segment deleted, updating (now have " << m_segments.size() << " segments)" << endl;
+		level = RecalcWhole;
+		NOTATION_DEBUG << "Segment deleted, updating (now have " << m_segments.size() << " segments)" << endl;
 	    }
 	}
 
@@ -258,32 +260,63 @@ ChordNameRuler::recalculate()
 	    if (m_segments.find(*si) == m_segments.end()) {
 		m_segments.insert(SegmentRefreshMap::value_type
 				  (*si, (*si)->getNewRefreshStatusId()));
-		needRecalc = true;
-		RG_DEBUG << "Segment created, adding (now have " << m_segments.size() << " segments)" << endl;
+		level = RecalcWhole;
+		NOTATION_DEBUG << "Segment created, adding (now have " << m_segments.size() << " segments)" << endl;
 	    }
 	}
 
 	if (m_currentSegment &&
 	    ss.find(m_currentSegment) == ss.end()) {
 	    m_currentSegment = 0;
-	    needRecalc = true;
+	    level = RecalcWhole;
 	}
     }	    
 
+    if (!m_chordSegment) m_chordSegment = new Segment();
+    if (m_segments.empty()) return;
+
+    Rosegarden::SegmentRefreshStatus overallStatus;
+    overallStatus.setNeedsRefresh(false);
+
     for (SegmentRefreshMap::iterator i = m_segments.begin();
 	 i != m_segments.end(); ++i) {
-	if (i->first->getRefreshStatus(i->second).needsRefresh()) {
-	    needRecalc = true;
-	    i->first->getRefreshStatus(i->second).setNeedsRefresh(false);
+	Rosegarden::SegmentRefreshStatus &status =
+	    i->first->getRefreshStatus(i->second);
+	if (status.needsRefresh()) {
+	    overallStatus.push(status.from(), status.to());
 	}
     }
 
-    if (!needRecalc) return;
+    // We now have the overall area affected by these changes, across
+    // all segments.  If it's entirely within our displayed area, just
+    // recalculate the displayed area; if it overlaps, calculate
+    // everything; if it's entirely without, calculate nothing.
 
-    if (m_chordSegment) m_chordSegment->clear();
-    else m_chordSegment = new Segment();
-    
-    if (m_segments.empty()) return;
+    if (level == RecalcNone) {
+	if (from == to) {
+	    NOTATION_DEBUG << "ChordNameRuler::recalculate: from==to, recalculating all" << endl;
+	    level = RecalcWhole;
+	} else if (overallStatus.from() == overallStatus.to()) {
+	    NOTATION_DEBUG << "ChordNameRuler::recalculate: overallStatus.from==overallStatus.to, ignoring" << endl;
+	    level = RecalcNone;
+	} else if (overallStatus.from() >= from && overallStatus.to() <= to) {
+	    NOTATION_DEBUG << "ChordNameRuler::recalculate: change is " << overallStatus.from() << "->" << overallStatus.to() << ", I show " << from << "->" << to << ", recalculating visible area" << endl;
+	    level = RecalcVisible;
+	} else if (overallStatus.from() >= to || overallStatus.to() <= from) {
+	    NOTATION_DEBUG << "ChordNameRuler::recalculate: change is " << overallStatus.from() << "->" << overallStatus.to() << ", I show " << from << "->" << to << ", ignoring" << endl;
+	    level = RecalcNone;
+	} else {
+	    NOTATION_DEBUG << "ChordNameRuler::recalculate: change is " << overallStatus.from() << "->" << overallStatus.to() << ", I show " << from << "->" << to << ", recalculating whole" << endl;
+	    level = RecalcWhole;
+	}
+    }
+
+    if (level == RecalcNone) return;
+
+    for (SegmentRefreshMap::iterator i = m_segments.begin();
+	 i != m_segments.end(); ++i) {
+	i->first->getRefreshStatus(i->second).setNeedsRefresh(false);
+    }
 
     if (!m_currentSegment) { //!!! arbitrary, must do better
 	//!!! need a segment starting at zero or so with a clef and key in it!
@@ -307,23 +340,37 @@ ChordNameRuler::recalculate()
 	if (!clefKeySegment) return;
     }
 */    
-    timeT clefKeyTime = m_currentSegment->getStartTime();
+
+    if (level == RecalcWhole) {
+
+	m_chordSegment->clear();
+	
+	timeT clefKeyTime = m_currentSegment->getStartTime();
 	//(from < m_currentSegment->getStartTime() ?
 	//	        m_currentSegment->getStartTime() : from);
 
-    Rosegarden::Clef clef = m_currentSegment->getClefAtTime(clefKeyTime);
-    m_chordSegment->insert(clef.getAsEvent(-1));
+	Rosegarden::Clef clef = m_currentSegment->getClefAtTime(clefKeyTime);
+	m_chordSegment->insert(clef.getAsEvent(-1));
     
-    Rosegarden::Key key = m_currentSegment->getKeyAtTime(clefKeyTime);
-    m_chordSegment->insert(key.getAsEvent(-1));
+	Rosegarden::Key key = m_currentSegment->getKeyAtTime(clefKeyTime);
+	m_chordSegment->insert(key.getAsEvent(-1));
+
+	from = 0;
+	to = 0;
+
+    } else {
+	Segment::iterator i = m_chordSegment->findTime(from);
+	Segment::iterator j = m_chordSegment->findTime(to);
+	m_chordSegment->erase(i, j);
+    }
 
     SegmentSelection selection;
     for (SegmentRefreshMap::iterator si = m_segments.begin(); si != m_segments.end();
 	 ++si) {
 	selection.insert(si->first);
     }
-    CompositionTimeSliceAdapter adapter(m_composition, &selection);
-    
+
+    CompositionTimeSliceAdapter adapter(m_composition, &selection, from, to);
     AnalysisHelper helper;
     helper.labelChords(adapter, *m_chordSegment, m_composition->getNotationQuantizer());
 }
@@ -336,10 +383,6 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
     NOTATION_DEBUG << "*** Chord Name Ruler: paintEvent" << endl;
 
     Rosegarden::Profiler profiler1("ChordNameRuler::paintEvent (whole)", true);
-
-    recalculate();
-
-    Rosegarden::Profiler profiler2("ChordNameRuler::paintEvent (body)", true);
 
     if (!m_chordSegment) return;
 
@@ -355,6 +398,10 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
 	(clipRect.x() - m_currentXOffset - m_xorigin - 50);
     timeT   to = m_rulerScale->getTimeForX
 	(clipRect.x() + clipRect.width() - m_currentXOffset - m_xorigin + 50);
+
+    recalculate(from, to);
+
+    Rosegarden::Profiler profiler2("ChordNameRuler::paintEvent (paint)", true);
 
     QRect boundsForHeight = m_fontMetrics.boundingRect("^j|lM");
     int fontHeight = boundsForHeight.height();

@@ -1499,7 +1499,7 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
     // Set percentage done
     //
     if ((m_totalElements > m_elementsSoFar) &&
-	(++m_elementsSoFar % 100 == 0)) {
+	(++m_elementsSoFar % 300 == 0)) {
 
         emit setProgress(int(double(m_elementsSoFar) / double(m_totalElements) * 100.0));
         kapp->processEvents();
