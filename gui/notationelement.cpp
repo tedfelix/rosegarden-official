@@ -70,24 +70,6 @@ NotationElement::getEffectiveY() throw (NoCanvasItem)
         throw NoCanvasItem();
 }
 
-void
-NotationElement::setNote(Note note)
-{
-    event()->setDuration(note.getDuration());
-    event()->setMaybe<Int>(Rosegarden::Note::NoteType, note.getNoteType());
-    event()->setMaybe<Int>(Rosegarden::Note::NoteDots, note.getDots());
-}
-
-Note
-NotationElement::getNote() const
-{
-    Note::Type ntype = event()->get<Int>(Rosegarden::Note::NoteType);
-    long dots = 0;;
-    event()->get<Int>(Rosegarden::Note::NoteDots, dots);
-    return Note(ntype, dots);
-}
-
-
 bool
 NotationElement::isRest() const
 {

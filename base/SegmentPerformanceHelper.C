@@ -2,7 +2,7 @@
 
 
 #include "TrackPerformanceHelper.h"
-#include "TrackNotationHelper.h" //!!! for tupled stuff; should move from TrackNotationHelper to somewhere more global
+#include "BaseProperties.h"
 #include <iostream>
 
 namespace Rosegarden 
@@ -10,6 +10,8 @@ namespace Rosegarden
 using std::cerr;
 using std::endl;
 using std::string;
+
+using namespace BaseProperties;
 
 TrackPerformanceHelper::~TrackPerformanceHelper() { }
 
@@ -23,8 +25,8 @@ TrackPerformanceHelper::getSoundingDuration(iterator i)
     if (d == 0 || !e->isa(Note::EventType)) return d;
 
     bool tiedBack = false, tiedForward = false;
-    e->get<Bool>(Note::TiedBackwardPropertyName, tiedBack);
-    e->get<Bool>(Note:: TiedForwardPropertyName, tiedForward);
+    e->get<Bool>(TIED_BACKWARD, tiedBack);
+    e->get<Bool>(TIED_FORWARD, tiedForward);
 
     if (tiedBack) return 0;
     else if (!tiedForward) return d;
@@ -48,11 +50,11 @@ TrackPerformanceHelper::getSoundingDuration(iterator i)
         else if (t2 < t + d || !e->has("pitch") ||
                  e->get<Int>("pitch") != pitch) continue;
 
-        if (!e->get<Bool>(Note::TiedBackwardPropertyName, tiedBack) ||
+        if (!e->get<Bool>(TIED_BACKWARD, tiedBack) ||
             !tiedBack) break;
 
         d += getDurationWithTupling(e);
-        if (!e->get<Bool>(Note::TiedForwardPropertyName, tiedForward) ||
+        if (!e->get<Bool>(TIED_FORWARD, tiedForward) ||
             !tiedForward) return d;
     }
 
@@ -64,14 +66,22 @@ timeT TrackPerformanceHelper::getDurationWithTupling(Event *e)
 {
     timeT d = e->getDuration();
 
+/*!!! No, we're now storing the performance duration as the event's
+  primary duration.  This is fine for triplets (as our base duration
+  is divisible by 3) but may not be suitable for other tuplets where
+  our performer's resolution is higher than the Rosegarden base
+  resolution.  In such a case, this method could use the tupling data
+  and the event's nominal-duration property to calculate a more
+  precise duration for the performer than the Rosegarden units will
+  permit, but to do so we'd have to know the performer's resolution
+  and the point at which this method is currently called (when
+  creating a MappedEvent) is not a point at which we know that.
+
     long tupledLength;
-    if (e->get<Int>(TrackNotationHelper::BeamedGroupTupledLengthPropertyName,
-		    tupledLength)) {
+    if (e->get<Int>(BEAMED_GROUP_TUPLED_LENGTH, tupledLength)) {
 
 	long untupledLength;
-	if (e->get<Int>
-	    (TrackNotationHelper::BeamedGroupUntupledLengthPropertyName,
-	     untupledLength)) {
+	if (e->get<Int>(BEAMED_GROUP_UNTUPLED_LENGTH, untupledLength)) {
 	    return (d * tupledLength) / untupledLength;
 	} else {
 	    cerr << "TrackPerformanceHelper::getDurationWithTupling: WARNING: "
@@ -79,6 +89,7 @@ timeT TrackPerformanceHelper::getDurationWithTupling(Event *e)
 		 << endl;
 	}
     }
+*/
 
     return d;
 }

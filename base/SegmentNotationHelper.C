@@ -4,6 +4,7 @@
 #include "TrackNotationHelper.h"
 #include "NotationTypes.h"
 #include "Quantizer.h"
+#include "BaseProperties.h"
 
 #include <iostream>
 #include <algorithm>
@@ -17,11 +18,8 @@ using std::endl;
 using std::string;
 using std::list;
 
-const PropertyName TrackNotationHelper::BeamedGroupIdPropertyName   = "BGroupId";
-const PropertyName TrackNotationHelper::BeamedGroupTypePropertyName = "BGroupType";
-const PropertyName TrackNotationHelper::BeamedGroupTupledLengthPropertyName = "BGroupTupledLength";
-const PropertyName TrackNotationHelper::BeamedGroupTupledCountPropertyName = "BGroupTupledCount";
-const PropertyName TrackNotationHelper::BeamedGroupUntupledLengthPropertyName = "BGroupUntupledLength";
+using namespace BaseProperties;
+
 
 TrackNotationHelper::~TrackNotationHelper() { }
 
@@ -109,12 +107,12 @@ Track::iterator TrackNotationHelper::expandIntoTie(iterator from, iterator to, t
     timeT baseTime = (*from)->getAbsoluteTime();
 
     long firstGroupId = -1;
-    (*from)->get<Int>(BeamedGroupIdPropertyName, firstGroupId);
+    (*from)->get<Int>(BEAMED_GROUP_ID, firstGroupId);
 
     long nextGroupId = -1;
     iterator ni(to);
     if (ni != end() && ++ni != end()) {
-	(*ni)->get<Int>(BeamedGroupIdPropertyName, nextGroupId);
+	(*ni)->get<Int>(BEAMED_GROUP_ID, nextGroupId);
     }
 
     iterator last = end();
@@ -160,8 +158,8 @@ Track::iterator TrackNotationHelper::expandIntoTie(iterator from, iterator to, t
 	    // (which is good).  set up the relationship between
 	    // the original (now shorter) event and the new one.
 
-  	      ev->set<Bool>(Note::TiedBackwardPropertyName, true);
-	    (*i)->set<Bool>(Note:: TiedForwardPropertyName, true);
+  	      ev->set<Bool>(TIED_BACKWARD, true);
+	    (*i)->set<Bool>(TIED_FORWARD, true);
 	}
 
 	// we may also need to change some group information: if
@@ -178,8 +176,8 @@ Track::iterator TrackNotationHelper::expandIntoTie(iterator from, iterator to, t
 	//exact division where tuplets are present.
 
 	if (firstGroupId != -1 && nextGroupId != firstGroupId) {
-	    ev->unset(BeamedGroupIdPropertyName);
-	    ev->unset(BeamedGroupTypePropertyName);
+	    ev->unset(BEAMED_GROUP_ID);
+	    ev->unset(BEAMED_GROUP_TYPE);
 	}
 
 	quantizer().unquantize(ev);
@@ -274,23 +272,23 @@ void TrackNotationHelper::makeNoteViable(iterator i)
     quantizer().unquantize(e);
 
     bool lastTiedForward;
-    e->get<Bool>(Note::TiedForwardPropertyName, lastTiedForward);
+    e->get<Bool>(TIED_FORWARD, lastTiedForward);
 
-    e->set<Bool>(Note::TiedForwardPropertyName, true);
+    e->set<Bool>(TIED_FORWARD, true);
     erase(i);
 
     for (DurationList::iterator i = dl.begin(); i != dl.end(); ++i) {
 
         DurationList::iterator j(i);
         if (++j == dl.end() && !lastTiedForward) {
-            e->unset(Note::TiedForwardPropertyName);
+            e->unset(TIED_FORWARD);
         }
 
         e->setDuration(*i);
         insert(new Event(*e));
         e->addAbsoluteTime(*i);
 
-        e->set<Bool>(Note::TiedBackwardPropertyName, true);
+        e->set<Bool>(TIED_BACKWARD, true);
     }
 
     delete e;
@@ -469,7 +467,7 @@ void TrackNotationHelper::insertSomething(iterator i, int duration, int pitch,
 	    i = insertSingleSomething(i, existingDuration, pitch, isRest,
                                       tiedBack, acc);
 
-	    if (!isRest) (*i)->set<Bool>(Note::TiedForwardPropertyName, true);
+	    if (!isRest) (*i)->set<Bool>(TIED_FORWARD, true);
 
             i = track().findTime((*i)->getAbsoluteTime() + existingDuration);
 
@@ -516,7 +514,7 @@ TrackNotationHelper::insertSingleSomething(iterator i, int duration,
     }
 
     if (tiedBack && !isRest) {
-        e->set<Bool>(Note::TiedBackwardPropertyName, true);
+        e->set<Bool>(TIED_BACKWARD, true);
     }
 
     if (eraseI) erase(i);
@@ -532,15 +530,15 @@ TrackNotationHelper::setInsertedNoteGroup(Event *e, iterator i)
     iterator j = track().findContiguousPrevious(i);
     if (j == end()) return;
 
-    if ((*i)->has(BeamedGroupIdPropertyName) &&
-        (*j)->has(BeamedGroupIdPropertyName) &&
-        (*i)->get<Int>(BeamedGroupIdPropertyName) ==
-        (*j)->get<Int>(BeamedGroupIdPropertyName)) {
+    if ((*i)->has(BEAMED_GROUP_ID) &&
+        (*j)->has(BEAMED_GROUP_ID) &&
+        (*i)->get<Int>(BEAMED_GROUP_ID) ==
+        (*j)->get<Int>(BEAMED_GROUP_ID)) {
 
-        e->setMaybe<Int>(BeamedGroupIdPropertyName,
-                         (*i)->get<Int>(BeamedGroupIdPropertyName));
-        e->set<String>(BeamedGroupTypePropertyName,
-                       (*i)->get<String>(BeamedGroupTypePropertyName));
+        e->setMaybe<Int>(BEAMED_GROUP_ID,
+                         (*i)->get<Int>(BEAMED_GROUP_ID));
+        e->set<String>(BEAMED_GROUP_TYPE,
+                       (*i)->get<String>(BEAMED_GROUP_TYPE));
     }
 }
 
@@ -627,8 +625,8 @@ TrackNotationHelper::makeBeamedGroup(iterator from, iterator to, string type)
     if (to != end()) to = track().findTime((*to)->getAbsoluteTime());
 
     for (iterator i = from; i != to; ++i) {
-        (*i)->setMaybe<Int>(BeamedGroupIdPropertyName, groupId);
-        (*i)->set<String>(BeamedGroupTypePropertyName, type);
+        (*i)->setMaybe<Int>(BEAMED_GROUP_ID, groupId);
+        (*i)->set<String>(BEAMED_GROUP_TYPE, type);
     }
 }
 
@@ -965,8 +963,8 @@ TrackNotationHelper::quantize()
 
 	    timeT duration = (*i)->get<Int>(Quantizer::LegatoDurationProperty);
 	    Note n(Note::getNearestNote(duration));
-	    (*i)->setMaybe<Int>(Note::NoteType, n.getNoteType());
-	    (*i)->setMaybe<Int>(Note::NoteDots, n.getDots());
+	    (*i)->setMaybe<Int>(NOTE_TYPE, n.getNoteType());
+	    (*i)->setMaybe<Int>(NOTE_DOTS, n.getDots());
 	}
     }
 }

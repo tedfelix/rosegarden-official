@@ -23,6 +23,7 @@
 #include "rosexmlhandler.h"
 #include "xmlstorableevent.h"
 #include "TrackNotationHelper.h"
+#include "BaseProperties.h"
 
 #include <klocale.h>
 
@@ -31,6 +32,9 @@ using Rosegarden::Int;
 using Rosegarden::String;
 using Rosegarden::Track;
 using Rosegarden::TrackNotationHelper;
+
+using namespace Rosegarden::BaseProperties;
+
 
 RoseXmlHandler::RoseXmlHandler(Composition &composition)
     : m_composition(composition),
@@ -123,20 +127,15 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         m_currentEvent->setAbsoluteTime(m_currentTime);
 
         if (m_inGroup) {
-            m_currentEvent->setMaybe<Int>
-                (TrackNotationHelper::BeamedGroupIdPropertyName, m_groupId);
-            m_currentEvent->set<String>
-                (TrackNotationHelper::BeamedGroupTypePropertyName, m_groupType);
+            m_currentEvent->setMaybe<Int>(BEAMED_GROUP_ID, m_groupId);
+            m_currentEvent->set<String>(BEAMED_GROUP_TYPE, m_groupType);
 	    if (m_groupType == "tupled") { //!!!
 		m_currentEvent->set<Int>
-		    (TrackNotationHelper::BeamedGroupTupledLengthPropertyName,
-		     m_groupTupledLength);
+		    (BEAMED_GROUP_TUPLED_LENGTH, m_groupTupledLength);
 		m_currentEvent->set<Int>
-		    (TrackNotationHelper::BeamedGroupTupledCountPropertyName,
-		     m_groupTupledCount);
+		    (BEAMED_GROUP_TUPLED_COUNT, m_groupTupledCount);
 		m_currentEvent->set<Int>
-		    (TrackNotationHelper::BeamedGroupUntupledLengthPropertyName,
-		     m_groupUntupledLength);
+		    (BEAMED_GROUP_UNTUPLED_LENGTH, m_groupUntupledLength);
 	    }
         }
         
@@ -182,8 +181,6 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 	    m_groupTupledLength = atts.value("length").toInt();
 	    m_groupTupledCount = atts.value("count").toInt();
 	    m_groupUntupledLength = atts.value("untupled").toInt();
-
-	    //!!! Deal with tupled notes' absolute times as in rg21io.cpp
 	}
 
     } else if (lcName == "property") {

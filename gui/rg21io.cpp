@@ -26,6 +26,7 @@
 #include "TrackNotationHelper.h"
 #include "Composition.h"
 #include "NotationTypes.h"
+#include "BaseProperties.h"
 
 #include "rg21io.h"
 #include "rosedebug.h"
@@ -35,6 +36,7 @@ using Rosegarden::Track;
 using Rosegarden::TrackNotationHelper;
 using Rosegarden::Int;
 using Rosegarden::String;
+using Rosegarden::Bool;
 using Rosegarden::Clef;
 using Rosegarden::Accidental;
 using Rosegarden::Sharp;
@@ -42,6 +44,9 @@ using Rosegarden::Flat;
 using Rosegarden::Natural;
 using Rosegarden::NoAccidental;
 using Rosegarden::Note;
+using Rosegarden::timeT;
+
+using namespace Rosegarden::BaseProperties;
 
 RG21Loader::RG21Loader(const QString& fileName)
     : m_file(fileName),
@@ -52,6 +57,7 @@ RG21Loader::RG21Loader(const QString& fileName)
       m_currentTrackNb(0),
       m_currentClef(Clef::Treble),
       m_inGroup(false),
+      m_tieStatus(0),
       m_nbStaves(0)
 {
 
@@ -102,7 +108,7 @@ bool RG21Loader::parseChordItem()
     if (m_tokens.count() < 4) return false;
    
     QStringList::Iterator i = m_tokens.begin();
-    Rosegarden::timeT duration = convertRG21Duration(i);
+    timeT duration = convertRG21Duration(i);
 
     // get chord mod flags and nb of notes
     int chordMods = (*i).toInt(); ++i;
@@ -121,31 +127,24 @@ bool RG21Loader::parseChordItem()
         noteEvent->setAbsoluteTime(m_currentTrackTime);
         noteEvent->set<Int>("pitch", pitch);
 
+	if (m_tieStatus == 1) {
+	    noteEvent->set<Bool>(TIED_FORWARD, true);
+	} else if (m_tieStatus == 2) {
+	    noteEvent->set<Bool>(TIED_BACKWARD, true);
+	}	    
+
 //         kdDebug(KDEBUG_AREA) << "RG21Loader::parseChordItem() : insert note pitch " << pitch
 //                              << " at time " << m_currentTrackTime << endl;
 
-        if (m_inGroup) {
-
-            noteEvent->setMaybe<Int>
-                (TrackNotationHelper::BeamedGroupIdPropertyName, m_groupId);
-            noteEvent->setMaybe<String>
-                (TrackNotationHelper::BeamedGroupTypePropertyName, m_groupType);
-	    if (m_groupType == "tupled") { //!!! Should be converting to a property value, but there is no property value for this yet (see notationsets.cpp and TrackNotationHelper.C)
-		noteEvent->setMaybe<Int>
-		    (TrackNotationHelper::BeamedGroupTupledLengthPropertyName,
-		     m_groupTupledLength);
-		noteEvent->setMaybe<Int>
-		    (TrackNotationHelper::BeamedGroupTupledCountPropertyName,
-		     m_groupTupledCount);
-	    }
-        }
+	setGroupProperties(noteEvent);
         
         m_currentTrack->insert(noteEvent);
-	m_groupUntupledLength += duration;
     }
 
     m_currentTrackTime += duration;
-
+    if (m_tieStatus == 2) m_tieStatus = 0;
+    else if (m_tieStatus == 1) m_tieStatus = 2;
+    
     return true;
 }
 
@@ -154,16 +153,36 @@ bool RG21Loader::parseRest()
     if (m_tokens.count() < 2) return false;
    
     QStringList::Iterator i = m_tokens.begin();
-    Rosegarden::timeT duration = convertRG21Duration(i);
+    timeT duration = convertRG21Duration(i);
     
     Event *restEvent = new Event(Rosegarden::Note::EventRestType);
     restEvent->setDuration(duration);
     restEvent->setAbsoluteTime(m_currentTrackTime);
+
+    setGroupProperties(restEvent);
+
     m_currentTrack->insert(restEvent);
     m_currentTrackTime += duration;
 
     return true;
 }
+
+void RG21Loader::setGroupProperties(Event *e)
+{
+    if (m_inGroup) {
+
+	e->setMaybe<Int>(BEAMED_GROUP_ID, m_groupId);
+	e->setMaybe<String>(BEAMED_GROUP_TYPE, m_groupType);
+
+	if (m_groupType == "tupled") { //!!! Should be converting to a property value, but there is no property value for this yet (see notationsets.cpp and TrackNotationHelper.C)
+	    e->setMaybe<Int>(BEAMED_GROUP_TUPLED_LENGTH, m_groupTupledLength);
+	    e->setMaybe<Int>(BEAMED_GROUP_TUPLED_COUNT, m_groupTupledCount);
+	}
+
+	m_groupUntupledLength += e->getDuration();
+    }
+}
+           
 
 bool RG21Loader::parseGroupStart()
 {
@@ -196,7 +215,34 @@ bool RG21Loader::parseGroupStart()
 
 bool RG21Loader::parseMarkStart()
 {
-    // not handled yet
+    unsigned int markId = m_tokens[2].toUInt();
+    std::string markType = m_tokens[3].lower().latin1();
+
+    kdDebug(KDEBUG_AREA) << "Mark start: type is \"" << markType << "\"" << endl;
+
+    if (markType == "tie") {
+	if (m_tieStatus != 0) {
+	    kdDebug(KDEBUG_AREA)
+		<< "RG21Loader:: parseMarkStart: WARNING: Found tie within "
+		<< "tie, ignoring" << endl;
+	    return true;
+	}
+	// m_tieStatus = 1;
+
+	Track::iterator i = m_currentTrack->end();
+	if (i != m_currentTrack->begin()) {
+	    --i;
+	    timeT t = (*i)->getAbsoluteTime();
+	    while ((*i)->getAbsoluteTime() == t) {
+		(*i)->set<Bool>(TIED_FORWARD, true);
+		if (i == m_currentTrack->begin()) break;
+		--i;
+	    }
+	}
+	m_tieStatus = 2;
+    }
+
+    // other marks not handled yet
     return true;
 }
 
@@ -207,23 +253,25 @@ void RG21Loader::closeMark()
 void RG21Loader::closeGroup()
 {
     if (m_groupType == "tupled") {
+
 	Track::iterator i = m_currentTrack->end();
+	Track::iterator final = i;
+
 	if (i != m_currentTrack->begin()) {
 
 	    --i;
+	    if (final == m_currentTrack->end()) final = i;
 	    long groupId;
 
-	    while ((*i)->get<Int>(TrackNotationHelper::BeamedGroupIdPropertyName,
-				  groupId) &&
+	    while ((*i)->get<Int>(BEAMED_GROUP_ID, groupId) &&
 		   groupId == m_groupId) {
 
 		(*i)->setMaybe<Int>
-		    (TrackNotationHelper::BeamedGroupUntupledLengthPropertyName,
-		     m_groupUntupledLength);
+		    (BEAMED_GROUP_UNTUPLED_LENGTH, m_groupUntupledLength);
 
-		Rosegarden::timeT offset =
-		    (*i)->getAbsoluteTime() - m_groupStartTime;
-		Rosegarden::timeT intended =
+		timeT duration = (*i)->getDuration();
+		timeT offset = (*i)->getAbsoluteTime() - m_groupStartTime;
+		timeT intended =
 		    (offset * m_groupTupledLength) / m_groupUntupledLength;
 		
 		kdDebug(KDEBUG_AREA)
@@ -237,9 +285,10 @@ void RG21Loader::closeGroup()
 		    << ", new absolute time = " <<
 		    ((*i)->getAbsoluteTime() + intended - offset) << endl;
 
-		(*i)->setDuration((*i)->getDuration() * m_groupTupledLength /
+		(*i)->setDuration(duration * m_groupTupledLength /
 				  m_groupUntupledLength);
 		(*i)->addAbsoluteTime(intended - offset);
+		(*i)->set<Int>(TUPLET_NOMINAL_DURATION, duration);
 
 		if (i == m_currentTrack->begin()) break;
 		--i;
@@ -247,13 +296,18 @@ void RG21Loader::closeGroup()
 	}
 
 	m_currentTrackTime = m_groupStartTime + m_groupTupledLength;
+	if (final != m_currentTrack->end()) {
+	    //!!! problematic if the final note is actually a chord
+	    (*final)->setDuration(m_currentTrackTime -
+				  (*final)->getAbsoluteTime());
+	}
     }
 
     m_inGroup = false;
 }
 
 
-Rosegarden::timeT RG21Loader::convertRG21Duration(QStringList::Iterator& i)
+timeT RG21Loader::convertRG21Duration(QStringList::Iterator& i)
 {
     QString durationString = (*i).lower();
     ++i;

@@ -82,12 +82,8 @@ public:
      * shortest note duration), and note quantization with up to
      * "maxDots" dots per note.
      */
-    Quantizer(int unit = -1, int maxDots = 2) :
-	m_unit(unit), m_maxDots(maxDots) {
-	if (unit < 0) setUnit(Note(Note::Shortest));
-    }
-
-    ~Quantizer() { }
+    Quantizer(int unit = -1, int maxDots = 2);
+    ~Quantizer();
 
     static const PropertyName AbsoluteTimeProperty;
     static const PropertyName DurationProperty;
@@ -182,6 +178,7 @@ protected:
     class SingleQuantizer {
     public:
 	virtual ~SingleQuantizer();
+	virtual timeT getDuration(Event *event) const;
 	virtual timeT quantize(int unit, int maxDots, timeT duration,
 			       timeT followingRestDuration) const = 0;
     };
@@ -196,11 +193,12 @@ protected:
     class NoteQuantizer : public SingleQuantizer {
     public:
 	virtual ~NoteQuantizer();
+	virtual timeT getDuration(Event *event) const;
 	virtual timeT quantize(int unit, int maxDots, timeT duration,
 			       timeT followingRestDuration) const;
     };
 
-    class LegatoQuantizer : public SingleQuantizer {
+    class LegatoQuantizer : public NoteQuantizer {
     public:
 	virtual ~LegatoQuantizer();
 	virtual timeT quantize(int unit, int maxDots, timeT duration,

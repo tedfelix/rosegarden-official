@@ -40,6 +40,7 @@
 #include "rosexmlhandler.h"
 #include "xmlstorableevent.h"
 #include "Event.h"
+#include "BaseProperties.h"
 #include "TrackNotationHelper.h"
 
 QList<RosegardenGUIView> *RosegardenGUIDoc::pViewList = 0L;
@@ -50,6 +51,8 @@ using Rosegarden::TrackNotationHelper;
 using Rosegarden::Event;
 using Rosegarden::Int;
 using Rosegarden::String;
+
+using namespace Rosegarden::BaseProperties;
 
 
 RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent, const char *name)
@@ -266,20 +269,20 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
              i != (*trks)->end(); ++i) {
 
             long group;
-            if ((*i)->get<Int>(TrackNotationHelper::BeamedGroupIdPropertyName, group)) {
+            if ((*i)->get<Int>(BEAMED_GROUP_ID, group)) {
                 if (group != currentGroup) {
                     if (currentGroup != -1) fileStream << "</group>" << endl;
-                    std::string type = (*i)->get<String>
-                        (TrackNotationHelper::BeamedGroupTypePropertyName);
+                    std::string type = (*i)->get<String>(BEAMED_GROUP_TYPE);
                     fileStream << "<group type=\"" << type.c_str() << "\"";
 		    if (type == "tupled") { //!!!
-			fileStream << " length=\"" << (*i)->get<Int>
-			    (TrackNotationHelper::BeamedGroupTupledLengthPropertyName)
-				   << "\" untupled=\"" << (*i)->get<Int>
-			    (TrackNotationHelper::BeamedGroupUntupledLengthPropertyName)
-				   << "\" count=\"" << (*i)->get<Int>
-			    (TrackNotationHelper::BeamedGroupTupledCountPropertyName)
-				   << "\"";
+			fileStream
+			    << " length=\""
+			    << (*i)->get<Int>(BEAMED_GROUP_TUPLED_LENGTH)
+			    << "\" untupled=\""
+			    << (*i)->get<Int>(BEAMED_GROUP_UNTUPLED_LENGTH)
+			    << "\" count=\""
+			    << (*i)->get<Int>(BEAMED_GROUP_TUPLED_COUNT)
+			    << "\"";
 		    }
 			    
 		    fileStream << ">" << endl;

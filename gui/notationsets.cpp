@@ -21,11 +21,11 @@
 
 #include "notationsets.h"
 #include "notationproperties.h"
+#include "BaseProperties.h"
 #include "rosedebug.h"
 #include "notationstaff.h"
 #include "Equation.h"
 #include "Track.h"
-#include "TrackNotationHelper.h"
 #include "Quantizer.h"
 
 #include <cstring>
@@ -38,11 +38,11 @@ using Rosegarden::Clef;
 using Rosegarden::Key;
 using Rosegarden::Note;
 using Rosegarden::Track;
-using Rosegarden::TrackNotationHelper;
 using Rosegarden::Equation;
 using Rosegarden::Quantizer;
 using Rosegarden::timeT;
 
+using namespace Rosegarden::BaseProperties;
 using namespace NotationProperties;
 
 NotationSet::NotationSet(const NotationElementList &nel, NELIterator i) :
@@ -305,15 +305,14 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
     m_type(Beamed)
 {
     if (!(*i)->event()->get<Rosegarden::Int>
-        (TrackNotationHelper::BeamedGroupIdPropertyName, m_groupNo)) m_groupNo = -1;
+        (BEAMED_GROUP_ID, m_groupNo)) m_groupNo = -1;
 
     initialise();
     
     if ((i = getInitialElement()) != getList().end()) {
 
         try {
-            std::string t = (*i)->event()->get<String>
-                (TrackNotationHelper::BeamedGroupTypePropertyName);
+            std::string t = (*i)->event()->get<String>(BEAMED_GROUP_TYPE);
             if (strcasecmp(t.c_str(), "beamed")) {
                 m_type = Beamed;
             } else if (strcasecmp(t.c_str(), "tupled")) {
@@ -332,7 +331,7 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
     i = getInitialElement(); 
     while (i != getList().end()) {
         long gid = -1;
-        (*i)->event()->get<Int>(TrackNotationHelper::BeamedGroupIdPropertyName, gid);
+        (*i)->event()->get<Int>(BEAMED_GROUP_ID, gid);
         kdDebug(KDEBUG_AREA) << "Found element with group id "
                              << gid << endl;
         if (i == getFinalElement()) break;
@@ -348,7 +347,7 @@ bool NotationGroup::test(const NELIterator &i)
 {
     long n;
     return ((*i)->event()->get<Rosegarden::Int>
-            (TrackNotationHelper::BeamedGroupIdPropertyName, n) && n == m_groupNo);
+            (BEAMED_GROUP_ID, n) && n == m_groupNo);
 }
 
 void
@@ -499,7 +498,7 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     using std::max;
     using std::min;
     long shortestNoteType = Note::Quaver;
-    if (!(*getShortestElement())->event()->get<Int>(Rosegarden::Note::NoteType,
+    if (!(*getShortestElement())->event()->get<Int>(NOTE_TYPE,
                                                     shortestNoteType)) {
         kdDebug(KDEBUG_AREA) << "NotationGroup::calculateBeam: WARNING: Shortest element has no note-type; should this be possible?" << endl;
     }
@@ -555,8 +554,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
     //   slight complication here: a beamed group in which the very
     //   first chord is shorter than the following one.  Here the first
     //   chord needs to know it's the first, or else it can't draw the
-    //   part-beams immediately to its right correctly.  We won't deal
-    //   with this case just yet...)
+    //   part-beams immediately to its right correctly.)
     //
     // For the rest of the notes in the chord, we just need to
     // indicate that they aren't part of the beam-drawing process and
@@ -582,9 +580,6 @@ NotationGroup::applyBeam(NotationStaff &staff)
 		el->event()->setMaybe<Bool>(BEAM_PRIMARY_NOTE, false);
 	    }
 
-//	    if (beam.aboveNotes) j = 0;
-//	    else j = chord.size() - 1;
-	    // let's try this the other way around for the moment
 	    if (!beam.aboveNotes) j = 0;
 	    else j = chord.size() - 1;
 
@@ -614,7 +609,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
             // the next iteration.
 
             int beamCount = Note(el->event()->get<Int>
-                                 (Rosegarden::Note::NoteType)).getFlagCount();
+                                 (NOTE_TYPE)).getFlagCount();
 
 	    if (prev != getList().end()) {
 
@@ -629,7 +624,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
 		    (BEAM_NEXT_BEAM_COUNT, beamCount);
 
                 int prevBeamCount = Note(prevEl->event()->get<Int>
-                                         (Rosegarden::Note::NoteType)).getFlagCount();
+                                         (NOTE_TYPE)).getFlagCount();
                 if (beamCount >= prevBeamCount) {
                     prevEl->event()->setMaybe<Bool>
                         (BEAM_THIS_PART_BEAMS, false);
@@ -668,8 +663,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
         // middle of a chord (slightly pathological, but it happens
         // easily enough).  So let's check the group id too:
         long gid = -1;
-        if (!(*i)->event()->get<Int>
-            (TrackNotationHelper::BeamedGroupIdPropertyName, gid)
+        if (!(*i)->event()->get<Int>(BEAMED_GROUP_ID, gid)
             || gid != m_groupNo) break;
     }
 }

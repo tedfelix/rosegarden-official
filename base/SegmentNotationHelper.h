@@ -35,18 +35,6 @@ public:
     virtual ~TrackNotationHelper();
 
 
-    // Note that these should be non-persistent properties, because
-    // the code that writes out XML converts them to
-    // <group>...</group> instead of writing them as explicit
-    // properties of the events:
-    
-    static const PropertyName BeamedGroupIdPropertyName;
-    static const PropertyName BeamedGroupTypePropertyName;
-    static const PropertyName BeamedGroupTupledLengthPropertyName;
-    static const PropertyName BeamedGroupTupledCountPropertyName;
-    static const PropertyName BeamedGroupUntupledLengthPropertyName;
-
-
     /**
      * Checks whether it's reasonable to expand (split) a single event
      * of duration a+b into two events of durations a and b, for some

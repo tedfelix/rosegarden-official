@@ -23,6 +23,7 @@
 #include "notationstaff.h"
 #include "rosedebug.h"
 #include "NotationTypes.h"
+#include "BaseProperties.h"
 #include "notepixmapfactory.h"
 #include "notationproperties.h"
 #include "notationsets.h"
@@ -43,6 +44,7 @@ using Rosegarden::Key;
 using Rosegarden::TimeSignature;
 using Rosegarden::Note;
 
+using namespace Rosegarden::BaseProperties;
 using namespace NotationProperties;
 
 NotationVLayout::NotationVLayout()
@@ -76,7 +78,7 @@ NotationVLayout::scanStaff(StaffType &staffBase)
             // aligned with the line above the middle line; the rest
             // are aligned with the middle line
 
-            int noteType = el->event()->get<Int>(Note::NoteType);
+            int noteType = el->event()->get<Int>(NOTE_TYPE);
             if (noteType > Note::Minim) {
                 el->setLayoutY(staff.yCoordOfHeight(6));
             } else {

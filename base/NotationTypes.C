@@ -221,7 +221,7 @@ vector<int> Key::getAccidentalHeights(const Clef &clef) const
     checkAccidentalHeights();
     vector<int> v(*m_accidentalHeights);
     for (unsigned int i = 0; i < v.size(); ++i) {
-        v[i] += clef.getPitchOffset(); //!!! changed from += 20010930 cc
+        v[i] += clef.getPitchOffset();
     }
     return v;
 }
@@ -550,12 +550,6 @@ Accidental NotationDisplayPitch::getAccidentalByName(const string &s)
 
 const string Note::EventType = "note";
 const string Note::EventRestType = "rest";
-
-const PropertyName Note::NoteType = "NoteType";
-const PropertyName Note::NoteDots = "NoteDots";
-
-const PropertyName Note::TiedBackwardPropertyName = "TiedBackward";
-const PropertyName Note::TiedForwardPropertyName  = "TiedForward";
 
 const int Note::m_shortestTime       = 6;
 //const int Note::m_dottedShortestTime = 9;

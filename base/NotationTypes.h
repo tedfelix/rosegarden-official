@@ -346,12 +346,6 @@ public:
     static const std::string EventType;
     static const std::string EventRestType;
 
-    static const PropertyName NoteType;
-    static const PropertyName NoteDots;
-
-    static const PropertyName TiedBackwardPropertyName;
-    static const PropertyName TiedForwardPropertyName;
-
     typedef int Type; // not an enum, too much arithmetic at stake
 
     struct BadType {

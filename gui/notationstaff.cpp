@@ -26,6 +26,7 @@
 #include "qcanvassimplesprite.h"
 #include "notationproperties.h"
 #include "notationview.h" // for EventSelection
+#include "BaseProperties.h"
 
 #include "rosedebug.h"
 
@@ -49,6 +50,7 @@ using Rosegarden::Accidental;
 using Rosegarden::TimeSignature;
 using Rosegarden::PropertyName;
 
+using namespace Rosegarden::BaseProperties;
 using namespace NotationProperties;
 
 const int NotationStaff::nbLines      = 5;
@@ -373,7 +375,7 @@ bool NotationStaff::showElements(NotationElementList::iterator from,
 		    (void)((*it)->event()->get<Bool>(BEAMED, spanning));
 		    if (!spanning)
 			(void)((*it)->event()->get<Bool>
-			       (Note::TiedForwardPropertyName, spanning));
+			       (TIED_FORWARD, spanning));
 		    if (!spanning) needNewSprite = false;
 
 		} else {
@@ -436,10 +438,8 @@ bool NotationStaff::showElements(NotationElementList::iterator from,
 		    (Rosegarden::Quantizer::LegatoDurationProperty);
 
 		if (duration > 0) {
-		    Note::Type note =
-			(*it)->event()->get<Int>(Rosegarden::Note::NoteType);
-		    int dots =
-			(*it)->event()->get<Int>(Rosegarden::Note::NoteDots);
+		    Note::Type note = (*it)->event()->get<Int>(NOTE_TYPE);
+		    int dots = (*it)->event()->get<Int>(NOTE_DOTS);
 		    pixmap = new QCanvasPixmap
 			(m_npf->makeRestPixmap(Note(note, dots)));
 		} else {
@@ -502,8 +502,8 @@ QCanvasSimpleSprite *NotationStaff::makeNoteSprite(NotationElementList::iterator
 {
     static NotePixmapParameters params(Note::Crotchet, 0);
 
-    Note::Type note = (*it)->event()->get<Int>(Rosegarden::Note::NoteType);
-    int dots = (*it)->event()->get<Int>(Rosegarden::Note::NoteDots);
+    Note::Type note = (*it)->event()->get<Int>(NOTE_TYPE);
+    int dots = (*it)->event()->get<Int>(NOTE_DOTS);
 
     Accidental accidental = NoAccidental;
 
@@ -608,12 +608,21 @@ bool NotationStaff::clearSelection()
 
 bool NotationStaff::showSelection(const EventSelection *selection)
 {
+    NotationElementList *notes = getViewElementList();
+    bool shown;
+
+    if (!selection) {
+	shown = showElements
+	    (notes->begin(), notes->end(), SelectionRefresh, 0);
+	m_haveSelection = false;
+	return shown;
+    }
+
     const Track *track = &(selection->getTrack());
     if (track != &getTrack()) return false;
 
-    NotationElementList *notes = getViewElementList();
-    bool shown = showElements(notes->begin(), notes->end(), SelectionRefresh,
-			      selection);
+    shown = showElements
+	(notes->begin(), notes->end(), SelectionRefresh, selection);
 
     if (shown) m_haveSelection = true;
     return shown;

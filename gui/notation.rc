@@ -4,6 +4,29 @@
 
 <MenuBar>
 
+<!-- I like this better than putting them in Settings, but...
+<Menu name="View">
+  <text>&amp;View</text>
+  <Menu name="Toolbars">
+  <text>&amp;Toolbars</text>
+  <Action name="show_notes_toolbar"        />
+  <Action name="show_rests_toolbar"        />
+  <Action name="show_dotted_notes_toolbar" />
+  <Action name="show_dotted_rests_toolbar" />
+  <Action name="show_accidentals_toolbar"  />
+  <Action name="show_clefs_toolbar"        />
+  </Menu>
+</Menu>
+-->
+
+<Menu name="Tools">
+  <text>&amp;Tools</text>
+
+<Action name="erase"/>
+<Action name="select"/>
+
+<Separator/>
+
 <Menu noMerge="1" name="Notes">
   <text>&amp;Notes</text>
   <Action name="breve" />
@@ -60,6 +83,8 @@
   <Action name="bass_clef" />
 </Menu>
 
+</Menu>
+
 <Menu name="Group">
   <text>&amp;Group</text>
   <Action name="beam"/>
@@ -76,7 +101,7 @@
 </Menu>
 
 <Menu name="Transforms">
-  <text>&amp;Transforms</text>
+  <text>Trans&amp;forms</text>
   <Action name="transpose"/>
   <Action name="invert"/>
   <Action name="retrograde"/>
@@ -93,6 +118,11 @@
 </Menu>
 
 </MenuBar>
+
+<ToolBar name="toolsToolBar">
+  <Action name="erase" />
+  <Action name="select" />
+</ToolBar>
 
 <ToolBar name="notesToolBar" newline="true">
   <Action name="breve" />
@@ -155,11 +185,6 @@
   <Action name="show_dotted_rests_toolbar" />
   <Action name="show_accidentals_toolbar"  />
   <Action name="show_clefs_toolbar"        />
-</ToolBar>
-
-<ToolBar name="mainToolBar">
-  <Action name="erase" />
-  <Action name="select" />
 </ToolBar>
 
 <ToolBar name="fontToolBar">

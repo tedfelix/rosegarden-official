@@ -623,6 +623,9 @@ NotationView::ZoomSlider<T>::reinitialise(const vector<T> &sizes, T size)
 void NotationView::initFontToolbar(int legatoUnit)
 {
     KToolBar *fontToolbar = toolBar("fontToolBar");
+
+    kdDebug(KDEBUG_AREA) << "NotationView::initFontToolbar: legatoUnit is "
+			 << legatoUnit << endl;
     
     if (!fontToolbar) {
         kdDebug(KDEBUG_AREA)
@@ -2037,12 +2040,7 @@ EventSelection* NotationSelector::getSelection()
 void NotationSelector::setViewCurrentSelection()
 {
     EventSelection* selection = getSelection();
-
-    //!!! Actually, shouldn't we clear the parent's selection if we've
-    // just dragged an invalid selection?  Highly counterintuitive otherwise
-
-    if (selection)
-        m_parentView.setCurrentSelection(selection);
+    m_parentView.setCurrentSelection(selection);
 }
 
 //------------------------------

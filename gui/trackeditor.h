@@ -89,23 +89,12 @@ public:
     void setupTracks();
 
     /**
-     * Returns the horizontal resolution of the grid in MIDI timesteps
-     */
-//!!!    unsigned int getTimeStepsResolution() const;
-
-    /**
      * Add a new track - DCOP interface
      */
     virtual void addTrack(int instrument, int start, unsigned int nbTimeSteps);
 
 
 public slots:
-    /**
-     * Sets the horizontal resolution of the grid in MIDI timesteps
-     * (default is 384 - a whole note)
-     */
-//!!!    void setTimeStepsResolution(unsigned int);
-    
     /**
      * Set the position pointer during playback
      */
@@ -149,8 +138,6 @@ protected:
     TracksCanvas *m_tracksCanvas;
     QHeader *m_hHeader;
     Rosegarden::TrackHeader *m_vHeader;
-
-//!!!    unsigned int m_timeStepsResolution;
 
     QCanvasLine *m_pointer;
 };

@@ -252,14 +252,12 @@ NotationCanvasView::posIsTooFarFromStaff(const QPoint &pos)
     
 }
 
-//??? ew... can't be doing this here can we? don't have the right info
-
 QString NotationCanvasView::getNoteNameForLine(const StaffLine *line,
 					       int x)
 {
     int h = line->getHeight();
 
-    //!!! TODO -- take clef & key into account, and then accidental
+    //!!! Need to take currently-selected accidental into account
 
     const NotationStaff *staff =
 	dynamic_cast<const NotationStaff *>(line->group());

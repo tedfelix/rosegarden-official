@@ -110,8 +110,6 @@ public:
     void clear();
 
 
-    //!!! The following four functions are currently entirely untested
-
     /**
      * Return the number of the bar that starts at or contains time t
      */
@@ -136,12 +134,6 @@ public:
      */
     std::pair<timeT, timeT> getBarRange(int n, bool truncate = false);
 
-
-    //!!! these should go, as the results they return are entirely
-    // arbitrary -- but they're used in transport code, so we need to
-    // convert the transport to use the bar start and end instead
-//    unsigned int getNbTicksPerBar() const { return m_nbTicksPerBar; }
-//    void setNbTicksPerBar(unsigned int n) { m_nbTicksPerBar = n; }
 
     // Some set<> API delegation
     iterator       begin()       { return m_tracks.begin(); }
@@ -179,7 +171,6 @@ protected:
 
     Quantizer m_quantizer;
 
-//!!!    unsigned int m_nbTicksPerBar; //!!! must lose this
     double m_tempo;
 
     timeT m_position;

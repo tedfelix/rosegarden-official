@@ -239,7 +239,7 @@ Composition::getBarStart(timeT t)
     calculateBarPositions();
 
     Track::iterator i = m_timeReference.findTime(t);
-    if (i != m_timeReference.begin() && i == m_timeReference.end()) --i;
+    if (i != m_timeReference.begin()) --i;
     if (i == m_timeReference.end()) return 0;
 
     return (*i)->getAbsoluteTime();

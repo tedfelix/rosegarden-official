@@ -81,12 +81,6 @@ public:
      */
     void setLayoutY(double y) { m_y = y; }
 
-    /// Sets the associated event's note type, note dottedness, and duration
-    void setNote(Rosegarden::Note);
-
-    /// Returns a Note corresponding to the state of the associated event
-    Rosegarden::Note getNote() const;
-
     /// Returns true if the wrapped event is a rest
     bool isRest() const;
 

@@ -211,10 +211,10 @@ Staff<T>::eventAdded(const Track *t, Event *e)
 
     //!!! [Note to self: Lose this eventually]
 
-    if (findEvent(e) == m_viewElementList->end()) {
+//expt    if (findEvent(e) == m_viewElementList->end()) {
         T *el = new T(e);
         m_viewElementList->insert(el);
-    }
+//expt    }
 }
 
 template <class T>

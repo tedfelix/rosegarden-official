@@ -69,6 +69,8 @@ protected:
     void closeMark();
     void closeTrackOrComposition();
 
+    void setGroupProperties(Rosegarden::Event *);
+
     long convertRG21Pitch(long rg21pitch, int nodeModifier);
     Rosegarden::timeT convertRG21Duration(QStringList::Iterator&);
 
@@ -91,6 +93,8 @@ protected:
     int m_groupTupledLength;
     int m_groupTupledCount;
     int m_groupUntupledLength;
+
+    int m_tieStatus; // 0 -> none, 1 -> tie started, 2 -> seen one note
 
     QString m_currentLine;
     QString m_currentStaffName;

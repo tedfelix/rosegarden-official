@@ -22,6 +22,7 @@
 #include "Track.h"
 #include "NotationTypes.h"
 #include "Quantizer.h"
+#include "BaseProperties.h"
 
 #include <iostream>
 #include <algorithm>
@@ -459,8 +460,8 @@ Track::getNoteTiedWith(Event *note, bool forwards) const
     bool tied = false;
 
     if (!note->get<Bool>(forwards ?
-                         Note::TiedForwardPropertyName :
-                         Note::TiedBackwardPropertyName, tied) || !tied) {
+			 BaseProperties::TIED_FORWARD :
+                         BaseProperties::TIED_BACKWARD, tied) || !tied) {
         return end();
     }
 
@@ -486,8 +487,8 @@ Track::getNoteTiedWith(Event *note, bool forwards) const
         }
         
         if (!(*i)->get<Bool>(forwards ?
-                             Note::TiedBackwardPropertyName :
-                             Note::TiedForwardPropertyName, tied) || !tied) {
+                             BaseProperties::TIED_BACKWARD :
+                             BaseProperties::TIED_FORWARD, tied) || !tied) {
             continue;
         }
 

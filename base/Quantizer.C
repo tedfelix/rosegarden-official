@@ -21,6 +21,7 @@
 */
 
 #include "Quantizer.h"
+#include "BaseProperties.h"
 
 #include <iostream>
 
@@ -31,10 +32,27 @@ const PropertyName Quantizer::DurationProperty	   = "QuantizedDuration";
 const PropertyName Quantizer::NoteDurationProperty = "QuantizedNoteDuration";
 const PropertyName Quantizer::LegatoDurationProperty = "QuantizedLegatoDuration";
 
+Quantizer::Quantizer(int unit, int maxDots) :
+    m_unit(unit), m_maxDots(maxDots)
+{
+    if (unit < 0) setUnit(Note(Note::Shortest));
+}
+
+Quantizer::~Quantizer()
+{
+    // nothing
+}
+
 Quantizer::SingleQuantizer::~SingleQuantizer() { }
 Quantizer::UnitQuantizer::~UnitQuantizer() { }
 Quantizer::NoteQuantizer::~NoteQuantizer() { }
 Quantizer::LegatoQuantizer::~LegatoQuantizer() { }
+
+timeT
+Quantizer::SingleQuantizer::getDuration(Event *e) const
+{
+    return e->getDuration();
+}
 
 timeT
 Quantizer::UnitQuantizer::quantize(int unit, int, timeT duration, timeT) const
@@ -100,6 +118,17 @@ Quantizer::NoteQuantizer::quantize(int unit, int maxDots,
 };
 
 timeT
+Quantizer::NoteQuantizer::getDuration(Event *e) const
+{
+    long nominalDuration;
+    if (e->get<Int>(BaseProperties::TUPLET_NOMINAL_DURATION, nominalDuration)) {
+	return nominalDuration;
+    } else {
+	return e->getDuration();
+    }
+}
+
+timeT
 Quantizer::LegatoQuantizer::quantize(int unit, int maxDots, timeT duration,
 				     timeT followingRestDuration) const
 {
@@ -136,7 +165,7 @@ Quantizer::quantize(Track::iterator from, Track::iterator to,
     for ( ; from != to; ++from) {
 
 	timeT absoluteTime   = (*from)->getAbsoluteTime();
-	timeT duration	     = (*from)->getDuration();
+	timeT duration	     = dq.getDuration(*from);
 	timeT qDuration	     = 0;
 
 	// wacky legato-stylee big-unit quantization doesn't interest us here;
@@ -172,13 +201,7 @@ Quantizer::quantize(Track::iterator from, Track::iterator to,
 
 		qDuration = dq.quantize(m_unit, m_maxDots, duration, 0);
 	    }
-	} else continue;//!!!
-
-
-	//!!! should skip this for non-note/rest events, but can't
-	//while we still have the next two methods working the way
-	//they do -- really want to drop per-Event quantization
-	//altogether, because it's inconsistent
+	} else continue;
 
 	(*from)->setMaybe<Int>(AbsoluteTimeProperty, qAbsoluteTime);
 	(*from)->setMaybe<Int>(durationProperty, qDuration);

@@ -23,6 +23,7 @@
 #include "notationstaff.h"
 #include "rosedebug.h"
 #include "NotationTypes.h"
+#include "BaseProperties.h"
 #include "notepixmapfactory.h"
 #include "notationproperties.h"
 #include "notationsets.h"
@@ -48,6 +49,7 @@ using Rosegarden::TimeSignature;
 using Rosegarden::timeT;
 using Rosegarden::Quantizer;
 
+using namespace Rosegarden::BaseProperties;
 using namespace NotationProperties;
 
 std::vector<double> NotationHLayout::m_availableSpacings;
@@ -158,7 +160,7 @@ int NotationHLayout::getIdealBarWidth(StaffType &staff,
     }
 
     int smin = getMinWidth(**shortest);
-    if (!(*shortest)->event()->get<Int>(Rosegarden::Note::NoteDots)) {
+    if (!(*shortest)->event()->get<Int>(NOTE_DOTS)) {
         smin += m_npf.getDotWidth()/2;
     }
 
@@ -167,7 +169,7 @@ int NotationHLayout::getIdealBarWidth(StaffType &staff,
     if (shortCount < 3) smin -= 3 - shortCount;
 
     int gapPer = 
-        getComfortableGap((*shortest)->event()->get<Int>(Rosegarden::Note::NoteType)) +
+        getComfortableGap((*shortest)->event()->get<Int>(NOTE_TYPE)) +
         smin;
 
     kdDebug(KDEBUG_AREA) << "d is " << d << ", gapPer is " << gapPer << endl;
@@ -736,8 +738,8 @@ NotationHLayout::positionRest(StaffType &,
     // convinced this is the right thing to do
 
     int baseWidth = m_npf.getRestWidth
-	(Note(rest->event()->get<Int>(Note::NoteType),
-	      rest->event()->get<Int>(Note::NoteDots)));
+	(Note(rest->event()->get<Int>(NOTE_TYPE),
+	      rest->event()->get<Int>(NOTE_DOTS)));
 
     if (delta > 2 * baseWidth) {
         int shift = (delta - 2 * baseWidth) / 4;
@@ -788,8 +790,8 @@ NotationHLayout::positionNote(StaffType &staff,
     bool tiedForwards = false;
     bool tiedBack = false;
 
-    note->event()->get<Bool>(Note::TiedForwardPropertyName,  tiedForwards);
-    note->event()->get<Bool>(Note::TiedBackwardPropertyName, tiedBack);
+    note->event()->get<Bool>(TIED_FORWARD,  tiedForwards);
+    note->event()->get<Bool>(TIED_BACKWARD, tiedBack);
 
     int pitch = note->event()->get<Int>("pitch");
     if (tiedForwards) tieMap[pitch] = itr;
@@ -871,8 +873,7 @@ NotationHLayout::positionNote(StaffType &staff,
     // in the final chord of the group have been processed.)
 
     long groupNo = -1;
-    (void)note->event()->get<Int>
-        (TrackNotationHelper::BeamedGroupIdPropertyName, groupNo);
+    (void)note->event()->get<Int>(BEAMED_GROUP_ID, groupNo);
     if (groupNo == -1) return delta;
 
     long nextGroupNo = -1;
@@ -883,8 +884,7 @@ NotationHLayout::positionNote(StaffType &staff,
     NotationStaff &notationStaff = dynamic_cast<NotationStaff &>(staff);
 
     if (it0 == staff.getViewElementList()->end() ||
-        (!(*it0)->event()->get<Int>
-         (TrackNotationHelper::BeamedGroupIdPropertyName, nextGroupNo) ||
+        (!(*it0)->event()->get<Int>(BEAMED_GROUP_ID, nextGroupNo) ||
          nextGroupNo != groupNo)) {
 
         NotationGroup group(*staff.getViewElementList(), itr, clef, key);
@@ -901,11 +901,11 @@ int NotationHLayout::getMinWidth(NotationElement &e) const
 
     if (e.isNote()) {
 
-        long noteType = e.event()->get<Int>(Note::NoteType, noteType);
+        long noteType = e.event()->get<Int>(NOTE_TYPE, noteType);
         w += m_npf.getNoteBodyWidth(noteType);
 
         long dots;
-        if (e.event()->get<Int>(Rosegarden::Note::NoteDots, dots)) {
+        if (e.event()->get<Int>(NOTE_DOTS, dots)) {
             w += m_npf.getDotWidth() * dots;
         }
 
@@ -913,8 +913,8 @@ int NotationHLayout::getMinWidth(NotationElement &e) const
 
     } else if (e.isRest()) {
 
-        w += m_npf.getRestWidth(Note(e.event()->get<Int>(Note::NoteType),
-                                     e.event()->get<Int>(Note::NoteDots)));
+        w += m_npf.getRestWidth(Note(e.event()->get<Int>(NOTE_TYPE),
+                                     e.event()->get<Int>(NOTE_DOTS)));
 
         return w;
     }
