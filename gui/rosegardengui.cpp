@@ -2007,7 +2007,7 @@ RosegardenGUIApp::getValidWriteFile(QString descriptiveExtension,
         QString saveFileName=m_doc->getAbsFilePath();
         // Show filename without the old extension
         int dotLoc=saveFileName.findRev('.');
-        if (dotLoc > int(saveFileName.length() - 4)) {
+        if (dotLoc >= int(saveFileName.length() - 4)) {
             saveFileName=saveFileName.left(dotLoc);
         }
         saveFileDialog.setSelection(saveFileName);
