@@ -689,9 +689,12 @@ AudioPluginOSCGUI::getGUIFilePath(QString identifier)
 
     for (int k = 0; k <= nsuffixes; ++k) {
 
-	for (QFileInfoList::const_iterator i = list->begin(); i != list->end(); ++i) {
+	QFileInfoListIterator i(*list);
+	QFileInfo *info;
 
-	    const QFileInfo *info = *i;
+	while ((info = i.current()) != 0  ) {
+
+	    ++i;
 
 	    if (info->isFile() && info->isExecutable() &&
 		info->fileName().left(label.length()) == label &&
