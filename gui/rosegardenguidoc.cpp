@@ -40,11 +40,13 @@
 #include "viewelementsmanager.h"
 #include "xmlstorableevent.h"
 #include "Event.h"
+#include "TrackNotationHelper.h"
 
 QList<RosegardenGUIView> *RosegardenGUIDoc::pViewList = 0L;
 
 using Rosegarden::Composition;
 using Rosegarden::Track;
+using Rosegarden::TrackNotationHelper;
 using Rosegarden::Event;
 using Rosegarden::Int;
 using Rosegarden::String;
@@ -250,11 +252,11 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
              i != (*trks)->end(); ++i) {
 
             long group;
-            if ((*i)->get<Int>(Track::BeamedGroupIdPropertyName, group)) {
+            if ((*i)->get<Int>(TrackNotationHelper::BeamedGroupIdPropertyName, group)) {
                 if (group != currentGroup) {
                     if (currentGroup != -1) fileStream << "</group>" << endl;
                     std::string type = (*i)->get<String>
-                        (Track::BeamedGroupTypePropertyName);
+                        (TrackNotationHelper::BeamedGroupTypePropertyName);
                     fileStream << "<group type=\""
                                << type.c_str() << "\">" << endl;
                     currentGroup = group;

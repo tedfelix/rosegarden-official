@@ -26,6 +26,7 @@
 #include "notationproperties.h"
 #include "notationsets.h"
 #include "Quantizer.h"
+#include "TrackNotationHelper.h"
 
 using Rosegarden::Note;
 using Rosegarden::Int;
@@ -41,6 +42,7 @@ using Rosegarden::Flat;
 using Rosegarden::Natural;
 using Rosegarden::Note;
 using Rosegarden::Track;
+using Rosegarden::TrackNotationHelper;
 using Rosegarden::TimeSignature;
 using Rosegarden::timeT;
 using Rosegarden::Quantizer;
@@ -527,7 +529,7 @@ NotationHLayout::layout()
 
                 long groupNo = -1;
 
-                if (el->event()->get<Int>(Track::BeamedGroupIdPropertyName,
+                if (el->event()->get<Int>(TrackNotationHelper::BeamedGroupIdPropertyName,
                                           groupNo) &&
                     groupNo != pGroupNo) {
                     kdDebug(KDEBUG_AREA) << "NotationHLayout::layout: entering group " << groupNo << endl;
@@ -540,7 +542,7 @@ NotationHLayout::layout()
                 if (groupNo > -1 &&
                     (it0 == m_notationElements.end() ||
                      (!(*it0)->event()->get<Int>
-                      (Track::BeamedGroupIdPropertyName, nextGroupNo) ||
+                      (TrackNotationHelper::BeamedGroupIdPropertyName, nextGroupNo) ||
                       nextGroupNo != groupNo))) {
                     kdDebug(KDEBUG_AREA) << "NotationHLayout::layout: about to leave group " << groupNo << ", time to do the sums" << endl;
                 

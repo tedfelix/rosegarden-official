@@ -22,6 +22,7 @@
 
 #include "Event.h"
 #include "Track.h"
+#include "TrackNotationHelper.h"
 #include "Composition.h"
 #include "NotationTypes.h"
 
@@ -30,6 +31,7 @@
 
 using Rosegarden::Event;
 using Rosegarden::Track;
+using Rosegarden::TrackNotationHelper;
 using Rosegarden::Int;
 using Rosegarden::String;
 using Rosegarden::Clef;
@@ -142,9 +144,9 @@ bool RG21Loader::parseChordItem()
 
         if (m_inGroup) {
             noteEvent->set<Int>
-                (Track::BeamedGroupIdPropertyName, m_groupId);
+                (TrackNotationHelper::BeamedGroupIdPropertyName, m_groupId);
             noteEvent->set<String>
-                (Track::BeamedGroupTypePropertyName, m_groupType);
+                (TrackNotationHelper::BeamedGroupTypePropertyName, m_groupType);
         }
         
 
@@ -179,7 +181,7 @@ bool RG21Loader::parseGroupStart()
 
     if (m_groupType == "beamed") {
 
-        m_groupId = m_currentTrack->getNextGroupId();
+        m_groupId = m_currentTrack->getNextId();
         
     } else if (m_groupType == "tupled") {
         unsigned int nbTuples = m_tokens[1].toUInt();

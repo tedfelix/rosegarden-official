@@ -22,7 +22,7 @@
 #define _VIEWELEMENT_H_
 
 #include "Event.h"
-#include "Track.h"
+//#include "Track.h"
 
 namespace Rosegarden 
 {
@@ -54,12 +54,12 @@ protected:
     Event *m_event;
 };
 
-class ViewElementsManagerBase
-{
-public:
-    virtual void insert(Track::iterator from, Track::iterator to) = 0;
-    virtual void erase (Track::iterator from, Track::iterator to) = 0;
-};
+//class ViewElementsManagerBase
+//{
+//public:
+//    virtual void insert(Track::iterator from, Track::iterator to) = 0;
+//    virtual void erase (Track::iterator from, Track::iterator to) = 0;
+//};
 
  
 }

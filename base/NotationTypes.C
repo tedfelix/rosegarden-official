@@ -578,8 +578,8 @@ Note Note::getNearestNote(int duration, int maxDots)
     int d(duration / m_shortestTime);
     while (d > 0) { ++tag; d /= 2; }
 
-    cout << "Note::getNearestNote: duration " << duration <<
-	" leading to tag " << tag << endl;
+//    cout << "Note::getNearestNote: duration " << duration <<
+//	" leading to tag " << tag << endl;
     if (tag < Shortest) return Note(Shortest);
 
     int prospective = Note(tag, 0).getDuration();
@@ -592,7 +592,7 @@ Note Note::getNearestNote(int duration, int maxDots)
 	if (prospective > duration) return Note(tag, dots);
 	extra /= 2;
 	++dots;
-	cout << "added another dot okay" << endl;
+//	cout << "added another dot okay" << endl;
     }
 
     cout << "doh! ran out of dots" << endl;

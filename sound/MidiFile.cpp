@@ -25,6 +25,7 @@
 #include "MidiFile.h"
 #include "Track.h"
 #include "NotationTypes.h"
+#include "TrackNotationHelper.h" //cc
 
 namespace Rosegarden
 {
@@ -484,6 +485,7 @@ MidiFile::convertToRosegarden()
       rosegardenTrack = new Track;
       rosegardenTrack->setInstrument(compositionTrack);
       rosegardenTrack->setStartIndex(0);
+      TrackNotationHelper notationTrack(*rosegardenTrack); //cc
 
       // add the Track to the Composition and increment the
       // Rosegarden track number
@@ -618,10 +620,10 @@ MidiFile::convertToRosegarden()
             {
               // insert into Track
               Track::iterator loc = rosegardenTrack->insert(rosegardenEvent);
-            
+
               // cc -- a bit of an experiment
-              if (!rosegardenTrack->isViable(rosegardenEvent)) {
-                 rosegardenTrack->makeNoteViable(loc);
+              if (!notationTrack.isViable(rosegardenEvent)) {
+                   notationTrack.makeNoteViable(loc);
               }
             }
 
@@ -654,9 +656,9 @@ MidiFile::convertToRosegarden()
 
       // cc
       rosegardenTrack->calculateBarPositions();
-      rosegardenTrack->autoBeam(rosegardenTrack->begin(),
-				rosegardenTrack->end(),
-				"beamed"); // probably shouldn't be hardcoded!
+      notationTrack.autoBeam(rosegardenTrack->begin(),
+                             rosegardenTrack->end(),
+                             "beamed"); // probably shouldn't be hardcoded!
     }
   }
 
@@ -676,6 +678,19 @@ MidiFile::convertToRosegarden()
 void
 MidiFile::convertToMidi(const Rosegarden::Composition &comp)
 {
+    // NB.  Instead of just using Event::getDuration to get the
+    // duration of an event, use TrackPerformanceHelper::getSoundingDuration,
+    // somewhat like the way TrackNotationHelper is used in the method
+    // above... (i.e. construct the PerformanceTrack on the
+    // stack and let it be discarded after you've finished with
+    // it, all it is is a bunch of methods).
+    //
+    // Advantage of using getSoundingDuration: it takes care of ties
+    // for you.  If it returns zero for a note event, discard the event.
+    // Of course, so far it hasn't been tested.
+    // 
+    // --cc
+
   return;
 }
 

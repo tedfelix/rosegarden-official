@@ -88,7 +88,6 @@ public:
 
 
 protected:
-
     Rosegarden::Track    &m_track;
     NotationElementList* m_notationElements;
 

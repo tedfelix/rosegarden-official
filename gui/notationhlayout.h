@@ -24,6 +24,7 @@
 #include "layoutengine.h"
 #include "notationelement.h"
 #include "staff.h"
+#include "Track.h"
 
 /**
   *@author Guillaume Laurent, Chris Cannam, Rich Bown

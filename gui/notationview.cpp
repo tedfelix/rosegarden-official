@@ -44,6 +44,7 @@
 #include "rosedebug.h"
 
 #include "NotationTypes.h"
+#include "TrackNotationHelper.h"
 #include "Quantizer.h"
 
 using Rosegarden::Event;
@@ -53,6 +54,7 @@ using Rosegarden::String;
 using Rosegarden::NoAccidental;
 using Rosegarden::Note;
 using Rosegarden::Track;
+using Rosegarden::TrackNotationHelper;
 using Rosegarden::Clef;
 using Rosegarden::Key;
 using Rosegarden::Accidental;
@@ -899,44 +901,17 @@ void NotationView::noteClicked(int height, const QPoint &eventPos,
 void NotationView::deleteNote(NotationElement* element)
 {
     bool needLayout = false;
+    TrackNotationHelper nt(getTrack());
 
     if (element->isNote()) {
         
-	getTrack().deleteNote(element->event());
+	nt.deleteNote(element->event());
 	needLayout = true;
 
-	/*!!!
-
-        if (track.noteIsInChord(element->event())) {
-
-            // Simply delete the event
-            m_viewElementsManager->getTrack().eraseSingle(element->event());
-            needLayout = true;
-
-        } else {
-            // replace with a rest
-            Event *newRest = new Event;
-            newRest->setType("rest");
-            newRest->setDuration(element->getDuration());
-            newRest->setAbsoluteTime(element->getAbsoluteTime());
-
-            m_viewElementsManager->getTrack().eraseSingle(element->event());
-            m_viewElementsManager->getTrack().insert(newRest);
-        
-            needLayout = true;
-        }
-
-	*/
-    
     } else if (element->isRest()) {
 
-	getTrack().deleteRest(element->event());
+	nt.deleteRest(element->event());
 	needLayout = true;
-
-	/*!!!
-        m_viewElementsManager->tryCollapse(element);
-        needLayout = true;
-	*/
 
     } else {
         // we don't know what it is
@@ -959,85 +934,17 @@ void NotationView::insertNote(NotationElementList::iterator closestNote,
     //
     getDocument()->setModified();
 
-    //!!! experimental:
-
     Note note(m_currentSelectedNoteType, m_currentSelectedNoteDotted ? 1 : 0);
+    TrackNotationHelper nt(getTrack());
 
     if (m_currentSelectedNoteIsRest) {
-	getTrack().insertRest
-	    ((*closestNote)->event()->getAbsoluteTime(), note);
+	nt.insertRest((*closestNote)->event()->getAbsoluteTime(), note);
     } else {
-	getTrack().insertNote
-	    ((*closestNote)->event()->getAbsoluteTime(), note, pitch);
+	nt.insertNote((*closestNote)->event()->getAbsoluteTime(), note, pitch);
     }
 
     redoLayout(m_notationElements->begin()); // for now
     return;
-	
-
-    // create new event
-    //
-    Event *insertedEvent = 0;
-    NotationElement *newNotationElement = 0;
-    initNewEvent(insertedEvent, newNotationElement, pitch);
-
-
-    NotationElementList::iterator redoLayoutStart = closestNote;
-    
-    if ((*closestNote)->isRest()) {
-
-        // replace rest (or part of it) with note
-        //
-
-        kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : replacing rest with note"
-                             << endl;
-
-        if (!replaceRestWithNote(closestNote, newNotationElement, timesig))
-            return;
-        else
-            --redoLayoutStart;
-            
-    } else { // it's a note : chord it
-
-        //!!! This is wrong when inserting rests, of course -- sort it out
-
-        // if closest note has the same pitch as the one we're
-        // inserting, bail out
-        if ( (*closestNote)->event()->get<Int>("pitch") == pitch ) {
-            kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : note is of same pitch - no insert\n";
-            delete insertedEvent;
-            delete newNotationElement;
-            return;
-        }
-
-        kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : insert over note - absoluteTime = "
-                             << (*closestNote)->getAbsoluteTime()
-                             << endl;
-
-
-        //
-        // Chording a note of a different time
-        //
-        chordEvent(closestNote, insertedEvent, newNotationElement);
-
-        newNotationElement->setAbsoluteTime((*closestNote)->getAbsoluteTime());
-
-	//!!! should do this if we're between two events in the same
-	//group, as well
-        setupGroup(closestNote, newNotationElement);
-
-        kdDebug(KDEBUG_AREA) << "new event is: " << (*newNotationElement) << endl;
-
-	//!!! wholly wrong -- leaks notation element -- rework later
-        m_viewElementsManager->getTrack().insert(newNotationElement->event());
-            
-    }
-
-    //     kdDebug(KDEBUG_AREA) << "NotationView::insertNote() : Elements before relayout : "
-    //                          << endl << *m_notationElements << endl;
-
-    redoLayout(redoLayoutStart);
-    
 }
 
 
@@ -1108,103 +1015,6 @@ NotationView::findClosestNote(double eventX, Event *&timeSignature,
     return res;
 }
 
-void NotationView::initNewEvent(Event*& newEvent,
-                                NotationElement*& newElement,
-                                int pitch)
-{
-    newEvent = new Event;
-
-    if (m_currentSelectedNoteIsRest) {
-        newEvent->setType("rest");
-    } else {
-        newEvent->setType(Note::EventType);
-        newEvent->set<Int>("pitch", pitch);
-    }
-
-    newElement = new NotationElement(newEvent);
-    newElement->setNote(Note(m_currentSelectedNoteType,
-                             m_currentSelectedNoteDotted ? 1 : 0));
-
-    //newNotationElement->event()->setMaybe<String>("Name", "INSERTED_NOTE");
-}
-
-void NotationView::chordEvent(NotationElementList::iterator closestNote,
-                              Rosegarden::Event* insertedEvent,
-                              NotationElement* newNotationElement)
-{
-    Rosegarden::Event* closestEvent = (*closestNote)->event();
-
-    if (closestEvent->getDuration() != insertedEvent->getDuration()) {
-
-        // Try expanding either the inserted event or the events
-        // in the track, or alter inserted note's duration as last
-        // resort
-        Rosegarden::Track &track = getTrack();
-
-        if (closestEvent->getDuration() < insertedEvent->getDuration()) {
-            // new note is being chorded with notes which are shorter
-            // shorten its duration to same one as other notes
-
-            //                 Rosegarden::Track::iterator lastInsertedEvent;
-                
-            //                 if (track.expandAndInsertEvent(insertedEvent,
-            //                                                 closestEvent->getDuration(),
-            //                                                 lastInsertedEvent)) {
-                    
-            //                     // put a NotationElement around the newly created event
-
-            //                     m_viewElementsManager->insert(*lastInsertedEvent);
-                    
-            //                 } else {
-            // force the new note to be of the same length as the existing one
-            newNotationElement->setNote((*closestNote)->getNote());
-            //                 }
-                
-        } else if (closestEvent->getDuration() > insertedEvent->getDuration()) {
-
-            Rosegarden::Track::iterator start, end, newEnd;
-            track.getTimeSlice((*closestNote)->event()->getAbsoluteTime(),
-                               start, end);
-
-            // new note is being chorded with notes which are longer
-            // for the moment, do the same as in other case
-	    if (track.isExpandValid
-		(track.getQuantizer().getNoteQuantizedDuration(*start),
-		 insertedEvent->getDuration())) {
-
-		track.expandIntoTie(start, end,
-                                    insertedEvent->getDuration());
-//!!!                                    newEnd);
-
-                // put NotationElements around the newly created events
-//!!!                ++newEnd; // insertNewEvents works on a [from,to[ range
-                // and we need to wrap this last event
-//!!!                m_viewElementsManager->insertNewEvents(start, newEnd);
-
-            } else {
-                // expansion is not possible, so force the inserted note
-                // to the duration of the one already present
-                newNotationElement->setNote((*closestNote)->getNote());
-            }
-
-        }
-    }
-}
-
-void NotationView::setupGroup(NotationElementList::iterator closestNote,
-                              NotationElement* newNotationElement)
-{
-    long groupNo = 0;
-    if ((*closestNote)->event()->get<Int>(Track::BeamedGroupIdPropertyName,
-                                          groupNo)) {
-
-        newNotationElement->event()->setMaybe<Int>(Track::BeamedGroupIdPropertyName, groupNo);
-
-        newNotationElement->event()->setMaybe<String>(Track::BeamedGroupTypePropertyName,
-                                                      (*closestNote)->event()->get<String>
-                                                      (Track::BeamedGroupTypePropertyName));
-    }
-}
 
 void NotationView::redoLayout(NotationElementList::iterator from)
 {
@@ -1254,64 +1064,6 @@ void NotationView::readjustCanvasWidth()
     }
     
 
-}
-
-
-bool NotationView::replaceRestWithNote(NotationElementList::iterator rest,
-                                       NotationElement *newNote,
-				       Event *timesig)
-{
-    // if the new note's duration is longer than the rest it's
-    // supposed to replace, set it to the rest's duration
-    //
-    if ((*rest)->getDuration() < newNote->getDuration()) {
-
-        newNote->setNote(Note::getNearestNote((*rest)->getDuration()));
-    }
-
-    bool newNoteIsSameDurationAsRest = (*rest)->getDuration() == newNote->getDuration();
-
-    // set new note absolute time to the one of the rest it's replacing
-    //
-    newNote->setAbsoluteTime((*rest)->getAbsoluteTime());
-
-    if (!newNoteIsSameDurationAsRest) { // we need to insert shorter rests
-
-        Rosegarden::DurationList dl;
-	TimeSignature timeSignature = timesig ? TimeSignature(*timesig) :
-  	    TimeSignature::DefaultTimeSignature;
-	timeSignature.getDurationListForInterval
-            (dl, (*rest)->getDuration() - newNote->getDuration(),
-	     (*rest)->getAbsoluteTime() + newNote->getDuration() -
-	     (timesig ? timesig->getAbsoluteTime() : 0));
-
-	//  RestSplitter splitter((*rest)->getDuration(),
-	//                              newNote->getDuration());
-
-        timeT restAbsoluteTime = newNote->getAbsoluteTime() + newNote->getDuration();
-    
-        //  while(timeT bit = splitter.nextBit()) {
-        for (unsigned int i = 0; i < dl.size(); ++i) {
-  	    int duration = dl[i];
-            kdDebug(KDEBUG_AREA) << "Inserting rest of duration " << duration
-                                 << " at time " << restAbsoluteTime << endl;
-
-            Event *newRest = new Event;
-            newRest->setType("rest");
-            newRest->setDuration(duration);
-            newRest->setAbsoluteTime(restAbsoluteTime);
-            newRest->setMaybe<String>("Name", "INSERTED_REST");
-            restAbsoluteTime += duration;
-
-            m_viewElementsManager->getTrack().insert(newRest);
-        }
-    }
-
-    //!!! wholly wrong -- leaks notation element -- rework later
-    m_viewElementsManager->getTrack().insert(newNote->event());
-    m_viewElementsManager->getTrack().eraseSingle((*rest)->event());
-
-    return true;
 }
 
 void

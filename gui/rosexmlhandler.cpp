@@ -21,6 +21,7 @@
 #include "rosedebug.h"
 #include "rosexmlhandler.h"
 #include "xmlstorableevent.h"
+#include "TrackNotationHelper.h"
 
 #include <klocale.h>
 
@@ -28,6 +29,7 @@ using Rosegarden::Composition;
 using Rosegarden::Int;
 using Rosegarden::String;
 using Rosegarden::Track;
+using Rosegarden::TrackNotationHelper;
 
 RoseXmlHandler::RoseXmlHandler(Composition &composition)
     : m_composition(composition),
@@ -109,9 +111,9 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
         if (m_inGroup) {
             m_currentEvent->setMaybe<Int>
-                (Track::BeamedGroupIdPropertyName, m_groupId);
+                (TrackNotationHelper::BeamedGroupIdPropertyName, m_groupId);
             m_currentEvent->setMaybe<String>
-                (Track::BeamedGroupTypePropertyName, m_groupType);
+                (TrackNotationHelper::BeamedGroupTypePropertyName, m_groupType);
         }
         
         if (!m_inChord) {
@@ -142,7 +144,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         }
         
         m_inGroup = true;
-        m_groupId = m_currentTrack->getNextGroupId();
+        m_groupId = m_currentTrack->getNextId();
         m_groupType = atts.value("type");
 
     } else if (lcName == "property") {
