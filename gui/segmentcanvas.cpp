@@ -375,6 +375,32 @@ SegmentCanvas::setSelectCopy(const bool &value)
 }
 
 
+int
+SegmentCanvas::SnapGrid::snappedSegmentSizeX(int x) const
+{
+    //!!! just as for snapX below
+    int division = m_hstep;
+    int base = x / division * division;
+    if (x - base <= division / 2) return base;
+    else return base + division;
+}
+
+int 
+SegmentCanvas::SnapGrid::snapX(int x) const
+{
+//    return x / m_hdiv * m_hdiv; //!!! the following seems to me more responsive for dragging new segments:
+    int division = m_hdiv;
+    int base = x / division * division;
+    if (x - base <= division / 2) return base;
+    else return base + division;
+}
+
+int
+SegmentCanvas::SnapGrid::snapY(int y) const
+{
+    return y / m_vstep * m_vstep;
+}
+
 
 
 
@@ -497,8 +523,13 @@ void SegmentPencil::handleMouseMove(QMouseEvent *e)
 {
     if (m_currentItem) {
 
-	m_currentItem->setSize(m_canvas->grid().snapX(e->pos().x()) - m_currentItem->rect().x(),
-                               m_currentItem->height());
+	int width = m_canvas->grid().snapX(e->pos().x()) -
+	    m_currentItem->rect().x();
+	if ((width >= 0) && (width < SegmentItem::getBarResolution())) {
+	    width = SegmentItem::getBarResolution(); // cc
+	}
+
+	m_currentItem->setSize(width, m_currentItem->height());
 	m_canvas->canvas()->update();
     }
 }
