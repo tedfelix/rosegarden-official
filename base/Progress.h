@@ -48,6 +48,10 @@ public:
     // Process GUI events
     //
     virtual void processEvents() = 0;
+
+    // Kill this progress instance
+    //
+    virtual void destroy() = 0;
     
 protected:
     int m_max;

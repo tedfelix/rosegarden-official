@@ -23,11 +23,13 @@
 #define ROSEXMLHANDLER_H
 
 #include <qxml.h>
+
 #include "Composition.h"
 #include "Event.h"
 #include "AudioFileManager.h"
 #include "Studio.h"
 #include "Progress.h"
+#include "rosegardenguidoc.h"
 
 class XmlStorableEvent;
 
@@ -52,9 +54,7 @@ public:
      * Construct a new RoseXmlHandler which will put the data extracted
      * from the XML file into the specified composition
      */
-    RoseXmlHandler(Rosegarden::Composition &composition,
-                   Rosegarden::Studio &studio,
-                   Rosegarden::AudioFileManager &audioFileManager,
+    RoseXmlHandler(RosegardenGUIDoc *doc,
                    unsigned int elementCount,
                    Rosegarden::Progress *progress);
 
@@ -85,13 +85,21 @@ public:
     bool fatalError(const QXmlParseException& exception);
 
 protected:
+
+    // just for convenience
+    //
+    Rosegarden::Composition& getComposition()
+        { return m_doc->getComposition(); }
+    Rosegarden::Studio& getStudio()
+        { return m_doc->getStudio(); }
+    Rosegarden::AudioFileManager& getAudioFileManager()
+        { return m_doc->getAudioFileManager(); }
+                                         
     //--------------- Data members ---------------------------------
 
-    Rosegarden::Composition &m_composition;
-    Rosegarden::Studio &m_studio;
-    Rosegarden::AudioFileManager &m_audioFileManager;
+    RosegardenGUIDoc    *m_doc;
     Rosegarden::Segment *m_currentSegment;
-    XmlStorableEvent *m_currentEvent;
+    XmlStorableEvent    *m_currentEvent;
 
     Rosegarden::timeT m_currentTime;
     Rosegarden::timeT m_chordDuration;
@@ -119,7 +127,6 @@ protected:
     unsigned int            m_totalElements;
     unsigned int            m_elementsSoFar;
     Rosegarden::Progress   *m_progress;
-
 };
 
 #endif

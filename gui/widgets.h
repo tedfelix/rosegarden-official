@@ -169,6 +169,10 @@ public:
     //
     virtual void processEvents();
 
+    // Destroy
+    //
+    virtual void destroy();
+
 public slots:
     // After a timeout, judge whether we should show ourselves yet
     // and do so if so.

@@ -22,6 +22,7 @@
 #include "rosestrings.h"
 #include "rosedebug.h"
 #include "rosexmlhandler.h"
+#include "rosegardengui.h"
 #include "xmlstorableevent.h"
 #include "SegmentNotationHelper.h"
 #include "BaseProperties.h"
@@ -33,6 +34,8 @@
 #include "widgets.h"
 
 #include <klocale.h>
+#include <kmessagebox.h>
+
 #include <qtextstream.h>
 
 using Rosegarden::Composition;
@@ -49,14 +52,10 @@ using Rosegarden::DeviceListIterator;
 using namespace Rosegarden::BaseProperties;
 
 
-RoseXmlHandler::RoseXmlHandler(Composition &composition,
-                               Studio &studio,
-                               Rosegarden::AudioFileManager &audioFileManager,
+RoseXmlHandler::RoseXmlHandler(RosegardenGUIDoc *doc,
                                unsigned int elementCount,
                                Rosegarden::Progress *progress)
-    : m_composition(composition),
-      m_studio(studio),
-      m_audioFileManager(audioFileManager),
+    : m_doc(doc),
       m_currentSegment(0),
       m_currentEvent(0),
       m_currentTime(0),
@@ -85,12 +84,12 @@ RoseXmlHandler::~RoseXmlHandler()
 bool
 RoseXmlHandler::startDocument()
 {
-    m_composition.clearTracks();
+    getComposition().clearTracks();
 
     // and the loop
     //
-    m_composition.setLoopStart(0);
-    m_composition.setLoopEnd(0);
+    getComposition().setLoopStart(0);
+    getComposition().setLoopEnd(0);
 
     // reset state
     return true;
@@ -212,7 +211,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         // the file we're currently examining.
         //
         //
-        m_studio.clearMidiBanksAndPrograms();
+        getStudio().clearMidiBanksAndPrograms();
         m_section = InStudio; // set top level section
 
     } else if (lcName == "timesignature") {
@@ -243,7 +242,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 	QString hiddenStr = atts.value("hidden");
 	if (hiddenStr) hidden = (hiddenStr == "true");
 
-	m_composition.addTimeSignature
+	getComposition().addTimeSignature
 	    (t, Rosegarden::TimeSignature(num, denom, common, hidden));
 
     } else if (lcName == "tempo") {
@@ -256,7 +255,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 	QString bphStr = atts.value("bph");
 	if (bphStr) bph = bphStr.toInt();
 
-	m_composition.addRawTempo(t, bph);
+	getComposition().addRawTempo(t, bph);
 
     } else if (lcName == "composition") {
 
@@ -278,7 +277,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             recordTrack = recordStr.toInt();
         }
 
-        m_composition.setRecordTrack(recordTrack);
+        getComposition().setRecordTrack(recordTrack);
 
         // Get and ste the position pointer
         //
@@ -288,7 +287,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             position = positionStr.toInt();
         }
 
-        m_composition.setPosition(position);
+        getComposition().setPosition(position);
 
 
         // Get and (eventually) set the tempo
@@ -299,7 +298,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             tempo = tempoStr.toDouble();
         }
 
-        m_composition.setDefaultTempo(tempo);
+        getComposition().setDefaultTempo(tempo);
         
         // set the composition flag
         m_inComposition = true;
@@ -315,8 +314,8 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             int loopStart = loopStartStr.toInt();
             int loopEnd = loopEndStr.toInt();
 
-            m_composition.setLoopStart(loopStart);
-            m_composition.setLoopEnd(loopEnd);
+            getComposition().setLoopStart(loopStart);
+            getComposition().setLoopEnd(loopEnd);
         }
 
         QString selectedTrackStr = atts.value("selected");
@@ -326,22 +325,22 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             Rosegarden::TrackId selectedTrack =
                 (Rosegarden::TrackId)selectedTrackStr.toInt();
 
-            m_composition.setSelectedTrack(selectedTrack);
+            getComposition().setSelectedTrack(selectedTrack);
         }
 
         QString soloTrackStr = atts.value("solo");
         if (soloTrackStr)
         {
             if (soloTrackStr.toInt() == 1)
-                m_composition.setSolo(true);
+                getComposition().setSolo(true);
             else
-                m_composition.setSolo(false);
+                getComposition().setSolo(false);
         }
 
 	QString copyrightStr = atts.value("copyright");
 	if (copyrightStr)
 	{
-	    m_composition.setCopyrightNote(qstrtostr(copyrightStr));
+	    getComposition().setCopyrightNote(qstrtostr(copyrightStr));
 	}
 
     } else if (lcName == "track") {
@@ -391,7 +390,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
                                                          position,
                                                          label,
                                                          muted);
-        m_composition.addTrack(track);
+        getComposition().addTrack(track);
 
 
     } else if (lcName == "segment") {
@@ -424,7 +423,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
                 // check this file id exists on the AudioFileManager
 
-                if(m_audioFileManager.fileExists(audioFileId) == false)
+                if(getAudioFileManager().fileExists(audioFileId) == false)
                 {
                     m_errorString = i18n("Cannot find audio file reference");
                     return false;
@@ -459,7 +458,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         m_currentSegment->setTrack(track);
         m_currentSegment->setStartTime(startTime);
 	m_currentTime = startTime;
-        m_composition.addSegment(m_currentSegment);
+        getComposition().addSegment(m_currentSegment);
 
 	QString endMarkerStr = atts.value("endmarker");
 	if (endMarkerStr) {
@@ -498,10 +497,28 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         // (this checks the integrity of the file at the
         // same time)
         //
-        if(m_audioFileManager.insertFile(qstrtostr(label),
+        if(getAudioFileManager().insertFile(qstrtostr(label),
                                          qstrtostr(file),
                                          id.toInt()) == false)
         {
+            QString message = i18n("Couldn't find audio file \"") 
+                              + file + QString("\"");
+
+            if (m_progress)
+            {
+                m_progress->destroy();
+
+                // clunktastic
+                m_doc->progressDialogDead();
+            }
+
+            int find  = 
+                KMessageBox::questionYesNo((RosegardenGUIApp *)m_doc->parent(),
+                                            message);
+
+            if (find == KMessageBox::Yes)
+                cout << "YES" << endl;
+
             m_errorString = i18n("Couldn't find audio file " + file);
             return false;
         }
@@ -522,7 +539,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             return false;
         }
 
-        m_audioFileManager.setAudioPath(qstrtostr(search));
+        getAudioFileManager().setAudioPath(qstrtostr(search));
 
     } else if (lcName == "audiolastaddpath") {
         if (m_section != InAudio)
@@ -538,7 +555,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             m_errorString = i18n("AudioLastAddPath has no value");
         }
 
-        m_audioFileManager.setLastAddPath(qstrtostr(path));
+        getAudioFileManager().setLastAddPath(qstrtostr(path));
 
     } else if (lcName == "begin") {
         float marker = atts.value("index").toFloat();
@@ -591,10 +608,10 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         // convert both times independently and then set duration
         // according to difference.
         timeT absStart =
-            m_composition.getElapsedTimeForRealTime(
+            getComposition().getElapsedTimeForRealTime(
                     m_currentSegment->getAudioStartTime());
 
-        timeT absEnd = m_composition.getElapsedTimeForRealTime(markerTime);
+        timeT absEnd = getComposition().getElapsedTimeForRealTime(markerTime);
 	m_currentSegment->setEndTime(absEnd);
 
     } else if (lcName == "device") {
@@ -617,7 +634,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
         if (type == "midi" || type == "audio")
         {
-            m_device = m_studio.getDevice(id);
+            m_device = getStudio().getDevice(id);
         }
         else
         {
@@ -796,7 +813,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         // Try and match an Instrument in the file with one in
         // our studio
         //
-        Rosegarden::Instrument *instrument = m_studio.getInstrumentById(id);
+        Rosegarden::Instrument *instrument = getStudio().getInstrumentById(id);
 
         // If we've got an instrument and the types match then
         // we use it from now on.
@@ -942,7 +959,7 @@ bool
 RoseXmlHandler::endDocument()
 {
   if (m_foundTempo == false)
-    m_composition.setDefaultTempo(120.0);
+    getComposition().setDefaultTempo(120.0);
 
   return true;
 }

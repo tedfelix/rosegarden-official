@@ -197,7 +197,7 @@ RosegardenProgressDialog::RosegardenProgressDialog(
 
     // set the cursor
     QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
-    setCursor(QCursor(Qt::waitCursor));
+    //setCursor(QCursor(Qt::waitCursor));
 }
 
 RosegardenProgressDialog::~RosegardenProgressDialog()
@@ -248,3 +248,10 @@ RosegardenProgressDialog::slotShowMyself()
     //QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
     //setCursor(QCursor(Qt::waitCursor));
 }
+
+void
+RosegardenProgressDialog::destroy()
+{
+    close();
+}
+

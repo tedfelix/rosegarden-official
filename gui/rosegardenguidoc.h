@@ -259,6 +259,12 @@ public:
      */
     std::string createNewAudioFile();
 
+    // Clunky way of telling whether a progress dialog has been closed
+    // by a subordinate function (RoseXmlParser for example).
+    //
+    void progressDialogDead();
+
+
 public slots:
     /**
      * calls repaint() on all views connected to the document object
@@ -274,6 +280,7 @@ public slots:
     void slotSetPointerPosition(Rosegarden::timeT t) { setPointerPosition(t); }
     void slotSetPlayPosition(Rosegarden::timeT t) { setPlayPosition(t); }
     void slotSetLoop(Rosegarden::timeT s, Rosegarden::timeT e) {setLoop(s,e);}
+
 
 signals:
     /**
@@ -384,6 +391,11 @@ private:
     // Do we start the sequencer? (from command line argument)
     //
     bool m_useSequencer;
+
+    // Clunky way of telling if the progress dialog has been closed
+    // by a subordinate.
+    //
+    bool m_progressDialogDead;
 };
 
 #endif // ROSEGARDENGUIDOC_H

@@ -170,13 +170,13 @@ then some.  The only reason aRts is the default configure option is
 that we wrote the aRts driver before the ALSA driver.
 
 
-Can I use an ALSA soft synth, such as iiwusynth?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Can I use an ALSA soft synth, such as iiwusynth or Timidity?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Yep.  Make sure you're running iiwusynth in the alsa-seq mode and make
+Yep.  Make sure you're running the soft synth in the alsa-seq mode and make
 sure you run it up _before_ you run up Rosegarden.  They you should get
-iiwusynth channels available in the Instrument dropdowns (click and hold
-on the Track labels).
+iiwusynth or Timidity channels available in the Instrument dropdowns (click
+and hold on the Track labels).
 
 Start up iiwusynth something like this:
 
@@ -185,6 +185,14 @@ Start up iiwusynth something like this:
 Then start Rosegarden and assign some Tracks to the "Synth input port"
 Instrument.  By default RG will choose the onboard synth first so
 you'll have to manually reassign these Tracks.
+
+For Timidity use the -iA switch:
+
+  $ timidity -iA
+
+And then select the Timidity Instruments from the dropdown.  You may
+need to fiddle with the priorities or buffer sizes with Timidity to
+get properly synchronized output.
 
 
 How do I select an Instrument?

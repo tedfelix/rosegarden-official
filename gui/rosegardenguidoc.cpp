@@ -88,7 +88,8 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
       m_commandHistory(new MultiViewCommandHistory()),
       m_clipboard(new Rosegarden::Clipboard),
       m_startUpSync(true),
-      m_useSequencer(useSequencer)
+      m_useSequencer(useSequencer),
+      m_progressDialogDead(false)
 {
     // Try to tell the sequencer that we're alive only if the
     // sequencer hasn't already forced us to sync
@@ -107,6 +108,7 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
 
     connect(m_commandHistory, SIGNAL(documentRestored()),
 	    this, SLOT(slotDocumentRestored()));
+
 }
 
 RosegardenGUIDoc::~RosegardenGUIDoc()
@@ -282,9 +284,15 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 					 100,
 					 (QWidget*)parent());
 
+        connect(progressDlg, SIGNAL(destroyedProgressDialog()),
+                SLOT(slotProgressDialogDead()));
+
 	okay = xmlParse(fileContents, errMsg, progressDlg);
 
-	delete progressDlg;
+        if (m_progressDialogDead == false)
+	    delete progressDlg;
+        else
+            m_progressDialogDead = false;
     }
 
     if (!okay) {
@@ -577,8 +585,7 @@ RosegardenGUIDoc::xmlParse(QString &fileContents, QString &errMsg,
 	}
     }
 
-    RoseXmlHandler handler(m_composition, m_studio, m_audioFileManager,
-                           elementCount,
+    RoseXmlHandler handler(this, elementCount,
                            dynamic_cast<Rosegarden::Progress*>(progress));
     QXmlInputSource source;
     source.setData(fileContents);
@@ -1331,5 +1338,11 @@ RosegardenGUIDoc::stopRecordingAudio()
         return;
     }
 
+}
+
+void
+RosegardenGUIDoc::progressDialogDead()
+{
+    m_progressDialogDead = true;
 }
 
