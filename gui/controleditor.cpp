@@ -182,7 +182,7 @@ ControlEditorDialog::slotUpdate()
                                         QString("%1").arg((*it)->getMin()),
                                         QString("%1").arg((*it)->getMax()),
                                         QString("%1").arg((*it)->getDefault()),
-                                        QString("%1").arg((*it)->getColour()));
+                                        QString("%1").arg((*it)->getColourIndex()));
 
         m_listView->insertItem(item);
     }
@@ -554,7 +554,7 @@ void
 ControlParameterEditDialog::slotColourChanged(int value)
 {
     RG_DEBUG << "ControlParameterEditDialog::slotColourChanged" << endl;
-    m_dialogControl.setColour(value);
+    m_dialogControl.setColourIndex(value);
 }
 
 

@@ -578,6 +578,10 @@ public:
     ColourMap& getSegmentColourMap() { return m_segmentColourMap; }
     void setSegmentColourMap(Rosegarden::ColourMap &newmap);
 
+    // General colourmap for non-segments
+    //
+    ColourMap& getGeneralColourMap() { return m_generalColourMap; }
+    void setGeneralColourMap(Rosegarden::ColourMap &newmap);
 
     //////
     //
@@ -782,6 +786,7 @@ protected:
     markercontainer                   m_markers;
  
     ColourMap                         m_segmentColourMap;
+    ColourMap                         m_generalColourMap;
 };
 
 

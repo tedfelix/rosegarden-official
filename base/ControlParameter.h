@@ -41,7 +41,7 @@ public:
                      int max = 127,
                      int def = 0,
                      MidiByte controllerValue = 0,
-                     int colour = 0,
+                     unsigned int colour = 0,
                      int ipbPositon = -1);
 
     ControlParameter(const ControlParameter &control);
@@ -57,7 +57,7 @@ public:
 
     MidiByte getControllerValue() const { return m_controllerValue; }
 
-    int getColour() const { return m_colour; }
+    unsigned int getColourIndex() const { return m_colourIndex; }
 
     int getIPBPosition() const { return m_ipbPosition; }
 
@@ -71,7 +71,7 @@ public:
 
     void setControllerValue(MidiByte con) { m_controllerValue = con; }
 
-    void setColour(int colour) { m_colour = colour; }
+    void setColourIndex(unsigned int colour) { m_colourIndex = colour; }
 
     void setIPBPosition(int position) { m_ipbPosition = position; }
 
@@ -93,7 +93,7 @@ protected:
 
     MidiByte       m_controllerValue;
 
-    int            m_colour;
+    unsigned int   m_colourIndex;
 
     int            m_ipbPosition; // position on Instrument Parameter Box
 

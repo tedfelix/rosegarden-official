@@ -1114,7 +1114,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         QString max = atts.value("max");
         QString def = atts.value("default");
         QString conVal = atts.value("controllervalue");
-        QString colour = atts.value("colour");
+        QString colour = atts.value("colourindex");
         QString ipbPosition = atts.value("ipbposition");
 
         Rosegarden::ControlParameter *con = 
@@ -1465,6 +1465,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             if (mapName == "segmentmap")
             {
                 m_colourMap = &m_doc->getComposition().getSegmentColourMap();
+            }
+            else
+            if (mapName == "generalmap")
+            {
+                m_colourMap = &m_doc->getComposition().getGeneralColourMap();
             }
             else
             { // This will change later once we get more of the Appearance code sorted out

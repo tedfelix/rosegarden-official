@@ -1419,6 +1419,14 @@ Composition::setSegmentColourMap(Rosegarden::ColourMap &newmap)
     updateRefreshStatuses();
 }
 
+void
+Composition::setGeneralColourMap(Rosegarden::ColourMap &newmap)
+{
+    m_generalColourMap = newmap;
+
+    updateRefreshStatuses();
+}
+
 
 
 
