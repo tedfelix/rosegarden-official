@@ -1,11 +1,10 @@
-
 Rosegarden-4 v0.1.x
-=================
+===================
 
-Rosegarden-4 is a new sequencer and musical notation editor
-application.  This is an early release of the application, intended
-for potential developers and other interested parties.  It is not an
-application that is usable by real users yet.
+Rosegarden-4 is a MIDI and audio sequencer and musical notation editor.
+This is an early release of the application mainly intended for potential
+developers and other interested parties.  It is not yet really stable
+enough for use by end users but it might prove to be of some interest.
 
 Note that Rosegarden-4 is largely not based on Rosegarden-2.1 code and
 is not yet a solution for people who find Rosegarden-2.1 in any way
@@ -16,8 +15,9 @@ more limiting.
 Build requirements
 ------------------
 
-The big requirement is KDE.  This program depends on KDE 2.2
-(including the kdemultimedia package), which itself requires Qt 2.3.1.
+The big requirement is KDE.  This program depends on KDE 2.2 (including
+the kdemultimedia package) and we now also have support for KDE3 - please
+look in the INSTALL file for notes on how to build for KDE3.
 
 Our code should compile with gcc-2.95 or gcc-3.0, although you may
 find that KDE 2.2 won't easily compile with the latter.
