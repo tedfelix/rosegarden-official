@@ -26,6 +26,7 @@
 #include "Track.h"
 #include "Event.h"
 #include "NotationTypes.h"
+#include <MappedComposition.h>
 
 namespace Rosegarden
 {
@@ -375,7 +376,7 @@ Sequencer::processMidiOut(Rosegarden::Composition *composition)
 
     // load the command structure
     event.command.status = Arts::mcsNoteOn | channel;
-    event.command.data1 = (*i)->get<Int>("pitch");   // pitch
+    event.command.data1 = (*i)->getPitch();   // pitch
     event.command.data2 = 127;  // hardcode velocity
 
     // if a NOTE ON
