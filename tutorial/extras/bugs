@@ -1,0 +1,22 @@
+select several segments in several tracks.  move them.  hit "undo move
+segments" and only some of the segments move back, with the abandoned
+segements no longer highlighted.  It gets out of synch at that
+point, and the segments have to be put back in order manually.
+
+file -> revert does not work
+
+feature request:  solo button for transport in matrix and notation editors
+
+notation editor:  Start with a short segment in, say, the middle of a track.
+Open in Notation Editor.  Fiddle with Smoothing slider, then use Transforms >
+Fix Smoothed Values.  Now the start of the segment has grown all the way to
+the start of the composition.  The empty measures to the left do not get
+padded with rests in the current view, nor if the Notation Editor is
+re-loaded.  Not sure if this last is WAD or not.
+
+
+notation editor:  select two segments.  edit as notation.  only one of them
+renders correctly, and it's a big mess...
+
+notation editor: text -> annotation...  shows text in black/yellow in dialog,
+but no text appears in notation window.  Bug?  Feature?
