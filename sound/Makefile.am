@@ -13,6 +13,7 @@ libRosegardenSound_la_SOURCES = AudioFile.cpp \
                                 AudioFileManager.cpp \
                                 MidiFile.cpp \
                                 MidiEvent.cpp \
+                                MappedDevice.cpp \
                                 MappedEvent.cpp \
                                 MappedComposition.cpp \
                                 MappedInstrument.cpp \

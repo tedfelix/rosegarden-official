@@ -96,6 +96,9 @@ Post-0.1.4 task list
     as per discussion on mailing list:
     http://www.geocrawler.com/mail/thread.php3?subject=a+question%2C+was+Re%3A+%5BRosegarden-devel%5D+0.2+roadmap+-+some+thoughts&list=16004
 
+23. Final bar in a notation staff doesn't seem to resize correctly
+    when things are inserted into it
+
 20020301 task list (based on outstanding items from post-0.1.3 list below)
 ==================
 
