@@ -41,7 +41,6 @@ EditView::EditView(RosegardenGUIDoc *doc,
       m_document(doc),
       m_tool(0),
       m_toolBox(0)
-
 {
 }
 

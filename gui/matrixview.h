@@ -307,6 +307,8 @@ public:
     virtual void positionElements(Rosegarden::timeT from = -1,
 				  Rosegarden::timeT to = -1);
 
+    virtual void positionElement(MatrixElement*);
+
 private:
     double m_scaleFactor;
 };
@@ -434,7 +436,7 @@ public:
 
 protected:
 
-    virtual EditTool* createTool(const QString& toolName) = 0;
+    virtual EditTool* createTool(const QString& toolName);
 
     //--------------- Data members ---------------------------------
 

@@ -63,8 +63,8 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
     eventTimePitch(e, evTime, evPitch);
 
     
-    kdDebug(KDEBUG_AREA) << "MatrixCanvasView::contentsMousePressEvent() at time "
-                         << evTime << ", pitch " << evPitch << endl;
+    kdDebug(KDEBUG_AREA) << "MatrixCanvasView::contentsMousePressEvent() at pitch "
+                         << evPitch << ", time " << evTime << endl;
 
     //     QCanvasItemList itemList = canvas()->collisions(e->pos());
     //     QCanvasItemList::Iterator it;
@@ -75,7 +75,7 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
         
     //     }
 
-    emit itemPressed(evTime, evPitch, e, 0);
+    emit itemPressed(evPitch, evTime, e, 0);
     
 }
 
@@ -150,6 +150,8 @@ void MatrixVLayout::scanStaff(MatrixVLayout::StaffType& staffBase)
         int pitch = el->event()->get<Rosegarden::Int>(PITCH);
 
 	int y = staff.getLayoutYForHeight(pitch) - staff.getElementHeight();
+
+        kdDebug(KDEBUG_AREA) << "VLayout : Layout y = " << y << " for pitch " << pitch << endl;
 
         el->setLayoutY(y);
         el->setHeight(staff.getElementHeight());
@@ -332,18 +334,22 @@ MatrixStaff::positionElements(timeT from, timeT to)
     if (to >= 0) endAt = mel->findTime(to);
 
     for (MatrixElementList::iterator i = beginAt; i != endAt; ++i) {
-	
-	LinedStaffCoords coords = getCanvasCoordsForLayoutCoords
-	    ((*i)->getLayoutX(), (*i)->getLayoutY());
-
-	(*i)->setCanvas(m_canvas);
-	(*i)->setCanvasX(coords.first);
-	(*i)->setCanvasY((double)coords.second);
+	positionElement(*i);
     }
 }
 
-timeT
-MatrixStaff::getTimeForCanvasX(double x)
+void MatrixStaff::positionElement(MatrixElement* el)
+{
+    LinedStaffCoords coords = getCanvasCoordsForLayoutCoords(el->getLayoutX(),
+                                                             int(el->getLayoutY()));
+
+    el->setCanvas(m_canvas);
+    el->setCanvasX(coords.first);
+    el->setCanvasY((double)coords.second);
+}
+
+
+timeT MatrixStaff::getTimeForCanvasX(double x)
 {
     double layoutX = x - m_x;
     return (timeT)(layoutX / m_scaleFactor);
@@ -359,6 +365,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
       m_hlayout(new MatrixHLayout),
       m_vlayout(new MatrixVLayout)
 {
+    m_toolBox = new MatrixToolBox(this);
+
     setupActions();
 
     QCanvas *tCanvas = new QCanvas(100, 100);
@@ -460,7 +468,7 @@ void MatrixView::setupActions()
 
     createGUI("matrix.rc");
 
-    //slotPaintSelected();
+    slotPaintSelected();
 }
 
 void MatrixView::initStatusBar()
@@ -495,7 +503,7 @@ bool MatrixView::applyLayout(int /*staffNo*/)
         }
     }
 
-    readjustViewSize(QSize(maxWidth, maxHeight));
+    readjustViewSize(QSize(int(maxWidth), int(maxHeight)));
     
     return true;
 }
@@ -624,7 +632,7 @@ MatrixPainter::MatrixPainter(MatrixView* parent)
 void MatrixPainter::handleLeftButtonPress(int pitch,
                                           Rosegarden::timeT time,
                                           int staffNo,
-                                          QMouseEvent *event,
+                                          QMouseEvent*,
                                           Rosegarden::ViewElement*)
 {
     using Rosegarden::Note;
@@ -637,13 +645,19 @@ void MatrixPainter::handleLeftButtonPress(int pitch,
     Event* el = newNote.getAsNoteEvent(pitch, time);
 
     m_currentElement = new MatrixElement(el);
+
     m_currentStaff = m_mParentView->getStaff(staffNo);
 
     int y = m_currentStaff->getLayoutYForHeight(pitch) - m_currentStaff->getElementHeight();
 
+        kdDebug(KDEBUG_AREA) << "Painter : Layout y = " << y << " for pitch " << pitch << endl;
+
     m_currentElement->setLayoutY(y);
+    m_currentElement->setLayoutX(time * m_currentStaff->getTimeScaleFactor());
     m_currentElement->setHeight(m_currentStaff->getElementHeight());
-    
+
+    m_currentStaff->positionElement(m_currentElement);
+    m_mParentView->canvas()->update();
 }
 
 void MatrixPainter::handleMouseMove(QMouseEvent*)
