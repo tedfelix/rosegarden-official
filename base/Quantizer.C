@@ -387,66 +387,30 @@ Quantizer::unquantize(Event *e) const
 }
 
 
-std::vector<Quantizer::StandardQuantization>
-Quantizer::getStandardQuantizations()
+std::vector<StandardQuantization>
+StandardQuantization::getStandardQuantizations()
 {
     std::vector<StandardQuantization> v;
     char buf[100];
 
-    for (int i = 1; i <= 64; i *= 2) {
+    for (Note::Type nt = Note::Semibreve; nt >= Note::Shortest; --nt) {
 
-	int j1 = (i > 8 ? 1 : 0);
-	for (int j = 0; j <= j1; ++j) {
+	int i1 = (nt < Note::Quaver ? 1 : 0);
+	for (int i = 0; i <= i1; ++i) {
 
-	    int divisor = i;
-	    if (j == 1) divisor = divisor * 3 / 2;
+	    string noteName = Note(nt).getReferenceName();
+	    if (i) noteName = string("3-") + noteName;
 	    
-	    timeT unit = Note(Note::Semibreve).getDuration() / divisor;
-	    Note note(Note::getNearestNote(unit));
-
+	    int divisor = (1 << (Note::Semibreve - nt));
+	    if (i) divisor = divisor * 3 / 2;
 	    sprintf(buf, "1/%d", divisor);
 
-	    v.push_back
-		(StandardQuantization
-		 (Quantizer::UnitQuantize, unit, 2, buf,
-		  (note.getDuration() == unit ? note.getEnglishName() : "")));
+	    timeT unit = Note(Note::Semibreve).getDuration() / divisor;
+	    
+	    v.push_back(StandardQuantization(Quantizer::UnitQuantize,
+					     unit, 2, buf, noteName));
 	}
     }
-	    
-
-/*!!!
-    for (Note::Type nt = Note::Breve; nt >= Note::Hemidemisemiquaver; --nt) {
-
-	Note note(nt);
-	timeT unit = note.getDuration();
-	
-	sprintf(buf, "1/%ld", Note(Note::Semibreve).getDuration() / unit);
-	if (nt == Note::Breve) sprintf(buf, "2/1");
-	
-	v.push_back
-	    (StandardQuantization(Quantizer::UnitQuantize, note.getDuration(),
-				  2, buf, note.getEnglishName()));
-	
-	if (nt < Note::Quaver && nt > Note::Hemidemisemiquaver) {
-	    // include dotted durations as well
-	    
-	    note = Note(nt, 1);
-	    unit = note.getDuration();
-	
-	    sprintf(buf, "1/%ld", Note(Note::Semibreve).getDuration() / unit);
-	    
-	    v.push_back
-		(StandardQuantization(Quantizer::UnitQuantize,
-				      note.getDuration(),
-				      2, buf, note.getEnglishName()));
-	}
-    }
-    
-    v.push_back
-	(StandardQuantization(Quantizer::UnitQuantize,
-			      Note(Note::Semibreve).getDuration() / 96,
-			      2, "1/96", ""));
-*/
 
     return v;
 }

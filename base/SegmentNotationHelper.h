@@ -372,6 +372,9 @@ public:
 
     
 protected:
+    const Quantizer &basicQuantizer();
+    const Quantizer &noteQuantizer();
+    const Quantizer &legatoQuantizer();
 
     /**
      * Collapse multiple consecutive rests into one, in preparation

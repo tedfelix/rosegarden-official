@@ -32,9 +32,9 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent,
                                          const char *name,
                                          WFlags f) :
     QFrame(parent, name, f),
-    m_standardQuantizations(Rosegarden::Quantizer::getStandardQuantizations())
+    m_standardQuantizations(Rosegarden::StandardQuantization::getStandardQuantizations())
 {
-    setFixedSize(120, 120);
+    setFixedSize(136, 120);
     initBox();
 }
 
@@ -50,12 +50,20 @@ SegmentParameterBox::~SegmentParameterBox()
 void
 SegmentParameterBox::initBox()
 {
-    int comboWidth = 48;
+    int comboWidth = 64;
     int comboHeight = 20;
 
     // font
-    QFont font ("lucidasanstypewriter", 8);
-    font.setPixelSize(10);
+//    QFont font ("lucidasanstypewriter", 8);
+//    font.setPixelSize(10);
+
+    // bit experimental --cc
+    QFont plainFont;
+    plainFont.setPixelSize(10);
+
+    QFont boldFont;
+    boldFont.setPixelSize(11);
+    boldFont.setBold(true);
 
     QGridLayout *gridLayout = new QGridLayout(this, 2, 2, 5, 1);
 
@@ -65,7 +73,7 @@ SegmentParameterBox::initBox()
     QLabel *delayLabel = new QLabel("Delay", this);
 
     m_repeatValue = new RosegardenTristateCheckBox(this);
-    m_repeatValue->setFont(font);
+    m_repeatValue->setFont(plainFont);
     m_repeatValue->setFixedHeight(comboHeight);
 
     // handle state changes
@@ -73,27 +81,26 @@ SegmentParameterBox::initBox()
 
     // motif style read-only combo
     m_quantizeValue = new RosegardenComboBox(false, this);
-
-    m_quantizeValue->setFont(font);
-    m_quantizeValue->setFixedSize(comboWidth + 24, 28);
+    m_quantizeValue->setFont(plainFont);
+    m_quantizeValue->setFixedSize(comboWidth, comboHeight);
 
     // motif style read-only combo
     m_transposeValue = new RosegardenComboBox(true, this);
-    m_transposeValue->setFont(font);
+    m_transposeValue->setFont(plainFont);
     m_transposeValue->setFixedSize(comboWidth, comboHeight);
 
     // motif style read-only combo
     m_delayValue = new RosegardenComboBox(true, this);
-    m_delayValue->setFont(font);
+    m_delayValue->setFont(plainFont);
     m_delayValue->setFixedSize(comboWidth, comboHeight);
 
-    repeatLabel->setFont(font);
-    quantizeLabel->setFont(font);
-    transposeLabel->setFont(font);
-    delayLabel->setFont(font);
+    repeatLabel->setFont(plainFont);
+    quantizeLabel->setFont(plainFont);
+    transposeLabel->setFont(plainFont);
+    delayLabel->setFont(plainFont);
 
     QLabel *title = new QLabel("Segment Parameters", this);
-    title->setFont(font);
+    title->setFont(boldFont);
     title->setFixedHeight(comboHeight);
 
     gridLayout->addMultiCellWidget(title, 0, 0, 0, 1, AlignLeft);
@@ -113,15 +120,14 @@ SegmentParameterBox::initBox()
     // populate the quantize combo
     //
     NotePixmapFactory npf;
-    QPixmap noMap = npf.makeToolbarPixmap("no-note");
+    QPixmap noMap = npf.makeToolbarPixmap("menu-no-note");
 
     for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
 	std::string noteName = m_standardQuantizations[i].noteName;
 	QString qname = m_standardQuantizations[i].name.c_str();
 	QPixmap pmap = noMap;
 	if (noteName != "") {
-	    if (noteName == "hemidemisemiquaver") noteName = "hemidemisemi";
-	    else if (noteName == "demisemiquaver") noteName = "demisemi";
+	    noteName = "menu-" + noteName;
 	    pmap = npf.makeToolbarPixmap(noteName.c_str());
 	}
 	m_quantizeValue->insertItem(pmap, qname);

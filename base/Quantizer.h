@@ -29,6 +29,8 @@
 
 namespace Rosegarden {
 
+struct StandardQuantization;
+
 /**
    The Quantizer class rounds the starting times and durations of note
    and rest events according to one of a set of possible criteria.
@@ -39,22 +41,6 @@ class Quantizer
 public:
     static const std::string DefaultPropertyNamePrefix;
     enum QuantizationType { UnitQuantize, NoteQuantize, LegatoQuantize };
-
-    struct StandardQuantization {
-	QuantizationType type;
-	timeT		 unit;
-	int		 maxDots;
-	std::string	 name;
-	std::string	 noteName;  // empty string if none
-
-	StandardQuantization(QuantizationType _type,
-			     timeT _unit, int _maxDots,
-			     std::string _name,
-			     std::string _noteName) :
-	    type(_type), unit(_unit), maxDots(_maxDots),
-	    name(_name), noteName(_noteName) { }
-    };
-
 
     /**
      * Construct a quantizer programmed to do a single sort of
@@ -238,8 +224,6 @@ public:
      */
     void unquantize(Event *el) const;
 
-    static std::vector<StandardQuantization> getStandardQuantizations();
-
 protected:
     class SingleQuantizer {
     public:
@@ -284,6 +268,23 @@ protected:
 
     PropertyName m_absoluteTimeProperty;
     PropertyName m_durationProperty;
+};
+
+struct StandardQuantization {
+    Quantizer::QuantizationType type;
+    timeT			unit;
+    int				maxDots;
+    std::string			name;
+    std::string			noteName;  // empty string if none
+    
+    StandardQuantization(Quantizer::QuantizationType _type,
+			 timeT _unit, int _maxDots,
+			 std::string _name,
+			 std::string _noteName) :
+	type(_type), unit(_unit), maxDots(_maxDots),
+	name(_name), noteName(_noteName) { }
+
+    static std::vector<StandardQuantization> getStandardQuantizations();
 };
 
 }

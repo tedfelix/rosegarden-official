@@ -81,17 +81,39 @@ SegmentPerformanceHelper::getTiedNotes(iterator i)
 
 
 timeT
+SegmentPerformanceHelper::getSoundingAbsoluteTime(iterator i)
+{
+    if (!segment().hasPerformanceQuantization()) {
+	return (*i)->getAbsoluteTime();
+    } else {
+	return segment().getPerformanceQuantizer().getQuantizedAbsoluteTime(*i);
+    }
+}
+
+
+timeT
 SegmentPerformanceHelper::getSoundingDuration(iterator i)
 {
+    bool shouldQuantize = segment().hasPerformanceQuantization();
+    const Quantizer &quantizer = segment().getPerformanceQuantizer();
+
     if (!(*i)->has(TIED_FORWARD) && !(*i)->has(TIED_BACKWARD)) {
-	return (*i)->getDuration();
+	if (!shouldQuantize) {
+	    return (*i)->getDuration();
+	} else {
+	    return quantizer.getQuantizedDuration(*i);
+	}
     }
 
     iteratorcontainer c(getTiedNotes(i));
     timeT d = 0;
 
     for (iteratorcontainer::iterator ci = c.begin(); ci != c.end(); ++ci) {
-	d += (**ci)->getDuration();
+	if (!shouldQuantize) {
+	    d += (**ci)->getDuration();
+	} else {
+	    d += quantizer.getQuantizedDuration(**ci);
+	}
     }
 
     return d;
@@ -106,7 +128,7 @@ RealTime
 SegmentPerformanceHelper::getRealAbsoluteTime(iterator i) 
 {
     return segment().getComposition()->getElapsedRealTime
-	((*i)->getAbsoluteTime());
+	(getSoundingAbsoluteTime(i));
 }
 
 
@@ -121,8 +143,8 @@ RealTime
 SegmentPerformanceHelper::getRealSoundingDuration(iterator i)
 {
     return segment().getComposition()->getRealTimeDifference
-	((*i)->getAbsoluteTime(),
-	 (*i)->getAbsoluteTime() + getSoundingDuration(i));
+	(getSoundingAbsoluteTime(i),
+	 getSoundingAbsoluteTime(i) + getSoundingDuration(i));
 }
 
 

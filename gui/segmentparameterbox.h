@@ -131,7 +131,7 @@ private:
 
     std::vector<Rosegarden::Segment*> m_segments;
 
-    std::vector<Rosegarden::Quantizer::StandardQuantization>
+    std::vector<Rosegarden::StandardQuantization>
     m_standardQuantizations;
 };
 

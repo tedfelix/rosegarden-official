@@ -24,6 +24,7 @@
 #include "Quantizer.h"
 #include "BaseProperties.h"
 #include "Composition.h"
+#include "Quantizer.h"
 
 #include <iostream>
 #include <algorithm>
@@ -47,7 +48,9 @@ Segment::Segment(SegmentType segmentType, timeT startIdx) :
     m_audioFileID(0),
     m_audioStartIdx(0),
     m_audioEndIdx(0),
-    m_repeating(false)
+    m_repeating(false),
+    m_performanceQuantizer(new Quantizer("PerformanceQ")),
+    m_quantize(false)
 {
     // nothing
 }
@@ -56,6 +59,8 @@ Segment::~Segment()
 {
     // delete content
     for (iterator it = begin(); it != end(); ++it) delete (*it);
+
+    delete m_performanceQuantizer;
 }
 
 
@@ -457,6 +462,38 @@ Segment::getNoteTiedWith(Event *note, bool forwards) const
     return end();
 }
 
+void
+Segment::setPerformanceQuantization(bool quantize)
+{
+    m_quantize = quantize;
+}
+
+bool
+Segment::hasPerformanceQuantization() const
+{
+    return m_quantize;
+}
+
+void
+Segment::setPerformanceQuantizeLevel(const StandardQuantization &q)
+{
+    Quantizer newQ(q, "PerformanceQ");
+    *m_performanceQuantizer = newQ;
+
+    // may be quicker just to unquantize everything and let the
+    // SegmentPerformanceHelper's calls to Quantizer::getQuantizedDuration
+    // etc quantize on demand
+
+    m_performanceQuantizer->quantize(begin(), end());
+}
+
+const Quantizer &
+Segment::getPerformanceQuantizer() const
+{
+    return *m_performanceQuantizer;
+}
+
+
 void Segment::notifyAdd(Event *e) const
 {
     for (ObserverSet::iterator i = m_observers.begin();
@@ -476,21 +513,6 @@ void Segment::notifyRemove(Event *e) const
 
 
 SegmentHelper::~SegmentHelper() { }
-
-const Quantizer &
-SegmentHelper::basicQuantizer() {
-    return *(segment().getComposition()->getBasicQuantizer());
-}
-
-const Quantizer &
-SegmentHelper::noteQuantizer() {
-    return *(segment().getComposition()->getNoteQuantizer());
-}
-
-const Quantizer &
-SegmentHelper::legatoQuantizer() {
-    return *(segment().getComposition()->getLegatoQuantizer());
-}
 
  
 }

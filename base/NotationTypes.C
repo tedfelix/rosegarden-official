@@ -822,7 +822,7 @@ timeT Note::getDurationAux() const
 }
 
 
-static string addDots(int dots, string s)
+static string addDots(int dots, string s, bool hyphenate = false)
 {
 #if (__GNUC__ < 3)
     std::ostrstream os;
@@ -833,7 +833,11 @@ static string addDots(int dots, string s)
     if (dots > 1) {
         os << dots << "-";
     }
-    os << "dotted " << s;
+    if (hyphenate) {
+	os << "dotted-" << s;
+    } else {
+	os << "dotted " << s;
+    }
     return os.str();
 }
 
@@ -868,11 +872,23 @@ string Note::getShortName(Type type, int dots) const {
     else return names[type];
 }
 
+string Note::getReferenceName(bool isRest, Type type, int dots) const {
+    static const string names[] = {
+        "hemidemisemi", "demisemi", "semiquaver", "quaver", "crotchet",
+        "minim", "semibreve", "breve"
+    };
+    if (type < 0) { type = m_type; dots = m_dots; }
+    string name(names[type]);
+    if (isRest) name = "rest-" + name;
+    if (dots) return addDots(dots, name, true);
+    else return name;
+}
 
-Note Note::getNearestNote(int duration, int maxDots)
+
+Note Note::getNearestNote(timeT duration, int maxDots)
 {
     int tag = Shortest - 1;
-    int d(duration / m_shortestTime);
+    timeT d(duration / m_shortestTime);
     while (d > 0) { ++tag; d /= 2; }
 
 //    cout << "Note::getNearestNote: duration " << duration <<
@@ -880,9 +896,9 @@ Note Note::getNearestNote(int duration, int maxDots)
     if (tag < Shortest) return Note(Shortest);
     if (tag > Longest)  return Note(Longest, maxDots);
 
-    int prospective = Note(tag, 0).getDuration();
+    timeT prospective = Note(tag, 0).getDuration();
     int dots = 0;
-    int extra = prospective / 2;
+    timeT extra = prospective / 2;
 
     while (dots <= maxDots &&
            dots <= tag) { // avoid TooManyDots exception from Note ctor

@@ -615,6 +615,12 @@ public:
         Longest             = 7;
 
 
+    /**
+     * Create a Note object of the given type, representing a
+     * particular sort of duration.  Note objects are strictly
+     * durational; they don't represent pitch, and may be as
+     * relevant to rests as actual notes.
+     */
     Note(Type type, int dots = 0) /* throw (BadType, TooManyDots) */ :
     m_type(type), m_dots(dots) {
         
@@ -637,7 +643,8 @@ public:
         // probably going to cause mayhem -- might be happier just
         // setting m_dots back to m_type if it's found to be larger
 
-        if (m_dots > m_type) throw TooManyDots();
+//!!! nah, I think we're okay with this now
+//        if (m_dots > m_type) throw TooManyDots();
     }
 
     Note(const std::string &s)
@@ -656,16 +663,48 @@ public:
 	return (m_type >= Crotchet) ? 0 : (Crotchet - m_type);
     }
 
+    /**
+     * Return the duration of this note type.
+     */
     timeT getDuration()  const {
         return m_dots ? getDurationAux() : (m_shortestTime * (1 << m_type));
     }
 
-    // these default to whatever I am:
-    std::string getEnglishName (Type type = -1, int dots = 0) const;
-    std::string getAmericanName(Type type = -1, int dots = 0) const;
-    std::string getShortName   (Type type = -1, int dots = 0) const;
+    /**
+     * Get the English name of a note (e.g. crotchet, dotted semiquaver).
+     * The default arguments are the values of the note on which the
+     * method is called; non-default arguments specify another note type.
+     */
+    std::string getEnglishName(Type type = -1, int dots = 0) const;
 
-    static Note getNearestNote(int duration, int maxDots = 2);
+    /**
+     * Get the US name of a note (e.g. quarter note, dotted sixteenth note).
+     * The default arguments are the values of the note on which the
+     * method is called; non-default arguments specify another note type.
+     */
+    std::string getAmericanName(Type type = -1, int dots = 0) const;
+
+    /**
+     * Get the short US name of a note (e.g. quarter, dotted 16th).
+     * The default arguments are the values of the note on which the
+     * method is called; non-default arguments specify another note type.
+     */
+    std::string getShortName(Type type = -1, int dots = 0) const;
+
+    /**
+     * Get the reference name of a note, used to refer to toolbar pixmap
+     * files and suchlike.  (e.g. crotchet, dotted-demisemi).
+     * The default arguments are the values of the note on which the
+     * method is called; non-default arguments specify another note type.
+     */
+    std::string getReferenceName(bool isRest = false,
+				 Type type = -1, int dots = 0) const;
+
+    /**
+     * Return the Note whose duration is closest to (but shorter than or
+     * equal to) the given duration, permitting at most maxDots dots.
+     */
+    static Note getNearestNote(timeT duration, int maxDots = 2);
 
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsNoteEvent(timeT absoluteTime, int pitch) const;

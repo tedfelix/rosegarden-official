@@ -306,23 +306,23 @@ void NotationView::setupActions()
     //
     // Notes
     //
-    static const char* actionsNote[][4] = 
-        {   // i18n,     slotName,         action name,     pixmap
-            { "Breve",   "1slotBreve()",   "breve",         "breve" },
-            { "Whole",   "1slotWhole()",   "whole_note",    "semibreve" },
-            { "Half",    "1slotHalf()",    "half",          "minim" },
-            { "Quarter", "1slotQuarter()", "quarter",       "crotchet" },
-            { "8th",     "1slot8th()",     "8th",           "quaver" },
-            { "16th",    "1slot16th()",    "16th",          "semiquaver" },
-            { "32nd",    "1slot32nd()",    "32nd",          "demisemi" },
-            { "64th",    "1slot64th()",    "64th",          "hemidemisemi" }
+    static const char* actionsNote[][3] = 
+        {   // i18n,     slotName,         action name,     
+            { "Breve",   "1slotBreve()",   "breve" },
+            { "Whole",   "1slotWhole()",   "whole_note" },
+            { "Half",    "1slotHalf()",    "half" },
+            { "Quarter", "1slotQuarter()", "quarter" },
+            { "8th",     "1slot8th()",     "8th" },
+            { "16th",    "1slot16th()",    "16th" },
+            { "32nd",    "1slot32nd()",    "32nd" },
+            { "64th",    "1slot64th()",    "64th" }
         };
    
     for (unsigned int i = 0, noteType = Note::Longest;
          i < 8; ++i, --noteType) {
 
         icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
-                        (actionsNote[i][3]));
+			(Note(noteType).getReferenceName().c_str()));
         noteAction = new KRadioAction(i18n(actionsNote[i][0]), icon, 0, this,
                                       actionsNote[i][1],
                                       actionCollection(), actionsNote[i][2]);
@@ -336,23 +336,23 @@ void NotationView::setupActions()
     //
     // Dotted Notes
     //
-    static const char* actionsDottedNote[][4] = 
+    static const char* actionsDottedNote[][3] = 
         {
-            { "Dotted Breve",   "1slotDottedBreve()",   "dotted_breve",      "dotted-breve" },
-            { "Dotted Whole",   "1slotDottedWhole()",   "dotted_whole_note", "dotted-semibreve" },
-            { "Dotted Half",    "1slotDottedHalf()",    "dotted_half",       "dotted-minim" },
-            { "Dotted Quarter", "1slotDottedQuarter()", "dotted_quarter",    "dotted-crotchet" },
-            { "Dotted 8th",     "1slotDotted8th()",     "dotted_8th",        "dotted-quaver" },
-            { "Dotted 16th",    "1slotDotted16th()",    "dotted_16th",       "dotted-semiquaver" },
-            { "Dotted 32nd",    "1slotDotted32nd()",    "dotted_32nd",       "dotted-demisemi" },
-            { "Dotted 64th",    "1slotDotted64th()",    "dotted_64th",       "dotted-hemidemisemi" }
+            { "Dotted Breve",   "1slotDottedBreve()",   "dotted_breve" },
+            { "Dotted Whole",   "1slotDottedWhole()",   "dotted_whole_note" },
+            { "Dotted Half",    "1slotDottedHalf()",    "dotted_half" },
+            { "Dotted Quarter", "1slotDottedQuarter()", "dotted_quarter" },
+            { "Dotted 8th",     "1slotDotted8th()",     "dotted_8th" },
+            { "Dotted 16th",    "1slotDotted16th()",    "dotted_16th" },
+            { "Dotted 32nd",    "1slotDotted32nd()",    "dotted_32nd" },
+            { "Dotted 64th",    "1slotDotted64th()",    "dotted_64th" }
         };
 
     for (unsigned int i = 0, noteType = Note::Longest;
          i < 8; ++i, --noteType) {
 
         icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
-                        (actionsDottedNote[i][3]));
+			(Note(noteType, 1).getReferenceName().c_str()));
         noteAction = new KRadioAction(i18n(actionsDottedNote[i][0]), icon, 0, this,
                                       actionsDottedNote[i][1],
                                       actionCollection(), actionsDottedNote[i][2]);
@@ -363,23 +363,23 @@ void NotationView::setupActions()
     //
     // Rests
     //
-    static const char* actionsRest[][4] = 
+    static const char* actionsRest[][3] = 
         {
-            { "Breve Rest",   "1slotRBreve()",   "breve_rest",      "rest-breve" },
-            { "Whole Rest",   "1slotRWhole()",   "whole_note_rest", "rest-semibreve" },
-            { "Half Rest",    "1slotRHalf()",    "half_rest",       "rest-minim" },
-            { "Quarter Rest", "1slotRQuarter()", "quarter_rest",    "rest-crotchet" },
-            { "8th Rest",     "1slotR8th()",     "8th_rest",        "rest-quaver" },
-            { "16th Rest",    "1slotR16th()",    "16th_rest",       "rest-semiquaver" },
-            { "32nd Rest",    "1slotR32nd()",    "32nd_rest",       "rest-demisemi" },
-            { "64th Rest",    "1slotR64th()",    "64th_rest",       "rest-hemidemisemi" }
+            { "Breve Rest",   "1slotRBreve()",   "breve_rest" },
+            { "Whole Rest",   "1slotRWhole()",   "whole_note_rest" },
+            { "Half Rest",    "1slotRHalf()",    "half_rest" },
+            { "Quarter Rest", "1slotRQuarter()", "quarter_rest" },
+            { "8th Rest",     "1slotR8th()",     "8th_rest" },
+            { "16th Rest",    "1slotR16th()",    "16th_rest" },
+            { "32nd Rest",    "1slotR32nd()",    "32nd_rest" },
+            { "64th Rest",    "1slotR64th()",    "64th_rest" }
         };
 
     for (unsigned int i = 0, noteType = Note::Longest;
          i < 8; ++i, --noteType) {
 
         icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
-                        (actionsRest[i][3]));
+			(Note(noteType).getReferenceName(true)).c_str());
         noteAction = new KRadioAction(i18n(actionsRest[i][0]), icon, 0, this,
                                       actionsRest[i][1],
                                       actionCollection(), actionsRest[i][2]);
@@ -390,23 +390,23 @@ void NotationView::setupActions()
     //
     // Dotted Rests
     //
-    static const char* actionsDottedRest[][4] = 
+    static const char* actionsDottedRest[][3] = 
         {
-            { "Dotted Breve Rest",   "1slotDottedRBreve()",   "dotted_breve_rest",      "dotted-rest-breve" },
-            { "Dotted Whole Rest",   "1slotDottedRWhole()",   "dotted_whole_note_rest", "dotted-rest-semibreve" },
-            { "Dotted Half Rest",    "1slotDottedRHalf()",    "dotted_half_rest",       "dotted-rest-minim" },
-            { "Dotted Quarter Rest", "1slotDottedRQuarter()", "dotted_quarter_rest",    "dotted-rest-crotchet" },
-            { "Dotted 8th Rest",     "1slotDottedR8th()",     "dotted_8th_rest",        "dotted-rest-quaver" },
-            { "Dotted 16th Rest",    "1slotDottedR16th()",    "dotted_16th_rest",       "dotted-rest-semiquaver" },
-            { "Dotted 32nd Rest",    "1slotDottedR32nd()",    "dotted_32nd_rest",       "dotted-rest-demisemi" },
-            { "Dotted 64th Rest",    "1slotDottedR64th()",    "dotted_64th_rest",       "dotted-rest-hemidemisemi" }
+            { "Dotted Breve Rest",   "1slotDottedRBreve()",   "dotted_breve_rest" },
+            { "Dotted Whole Rest",   "1slotDottedRWhole()",   "dotted_whole_note_rest" },
+            { "Dotted Half Rest",    "1slotDottedRHalf()",    "dotted_half_rest" },
+            { "Dotted Quarter Rest", "1slotDottedRQuarter()", "dotted_quarter_rest" },
+            { "Dotted 8th Rest",     "1slotDottedR8th()",     "dotted_8th_rest" },
+            { "Dotted 16th Rest",    "1slotDottedR16th()",    "dotted_16th_rest" },
+            { "Dotted 32nd Rest",    "1slotDottedR32nd()",    "dotted_32nd_rest" },
+            { "Dotted 64th Rest",    "1slotDottedR64th()",    "dotted_64th_rest" }
         };
 
     for (unsigned int i = 0, noteType = Note::Longest;
          i < 8 && noteType > 0; ++i, --noteType) {
 
         icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
-                        (actionsDottedRest[i][3]));
+			(Note(noteType, 1).getReferenceName(true)).c_str());
         noteAction = new KRadioAction(i18n(actionsDottedRest[i][0]), icon, 0, this,
                                       actionsDottedRest[i][1],
                                       actionCollection(), actionsDottedRest[i][2]);
@@ -848,7 +848,7 @@ void
 NotationView::slotChangeFont(const QString &newName)
 {
     kdDebug(KDEBUG_AREA) << "changeFont: " << newName << endl;
-    slotChangeFont(std::string(newName.latin1()));
+    slotChangeFont(string(newName.latin1()));
 }
 
 

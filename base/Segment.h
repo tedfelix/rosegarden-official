@@ -29,6 +29,7 @@
 #include "Event.h"
 #include "NotationTypes.h"
 
+
 namespace Rosegarden 
 {
 
@@ -52,8 +53,9 @@ namespace Rosegarden
  */
 
 class SegmentObserver;
-class Quantizer;
 class Composition;
+class Quantizer;
+struct StandardQuantization;
 
 class Segment : public std::multiset<Event*, Event::EventCmp>
 {
@@ -374,6 +376,14 @@ public:
     bool isRepeating() const { return m_repeating; }
     void setRepeating(bool value) { m_repeating = value; }
 
+    // Quantization parameters
+    //
+    void setPerformanceQuantization(bool quantize);
+    bool hasPerformanceQuantization() const;
+
+    void setPerformanceQuantizeLevel(const StandardQuantization &);
+    const Quantizer &getPerformanceQuantizer() const;
+
 private:
     timeT m_startIdx;
     unsigned int m_track;
@@ -400,6 +410,8 @@ private:
     timeT m_audioEndIdx;        // how far into m_audioFileID our Segment ends
 
     bool m_repeating;           // is this segment repeating?
+    Quantizer *m_performanceQuantizer;
+    bool m_quantize;
 };
 
 
@@ -426,10 +438,6 @@ protected:
     typedef Segment::iterator iterator;
 
     Segment &segment() { return m_segment; }
-
-    const Quantizer &basicQuantizer();
-    const Quantizer &noteQuantizer();
-    const Quantizer &legatoQuantizer();
 
     Segment::iterator begin() { return segment().begin(); }
     Segment::iterator end()   { return segment().end();   }

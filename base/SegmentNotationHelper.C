@@ -43,6 +43,22 @@ using namespace BaseProperties;
 SegmentNotationHelper::~SegmentNotationHelper() { }
 
 
+const Quantizer &
+SegmentNotationHelper::basicQuantizer() {
+    return *(segment().getComposition()->getBasicQuantizer());
+}
+
+const Quantizer &
+SegmentNotationHelper::noteQuantizer() {
+    return *(segment().getComposition()->getNoteQuantizer());
+}
+
+const Quantizer &
+SegmentNotationHelper::legatoQuantizer() {
+    return *(segment().getComposition()->getLegatoQuantizer());
+}
+
+
 Segment::iterator
 SegmentNotationHelper::getNextAdjacentNote(iterator i,
 					   bool matchPitch,
