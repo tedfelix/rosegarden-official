@@ -1,9 +1,31 @@
-How to get the Rosegarden Sequencer working
-===========================================
+How to get the Rosegarden Sequencer working with aRts
+=====================================================
 
                                              Modified: 18.9.2001
                                                        Richard Bown
                                                        (bownie@bownie.com)
+						       15.10.2003: warning
+						       Chris Cannam
+
+WARNING
+-------
+
+This document is out of date.  Although in principle the information
+in it is still correct -- that is, it does still describe how to use
+Rosegarden with aRts -- it is misleading, because we no longer
+recommend the use of aRts with Rosegarden at all.
+
+If you are using Linux, you should be using Rosegarden with the ALSA
+sequencer interface for MIDI I/O and JACK for audio.  The default
+configure options for Rosegarden assume that you want to use ALSA and
+JACK instead of aRts, and should work smoothly if you have ALSA
+installed correctly.
+
+If you are using a system other than Linux, aRts is probably your only
+option, so this document may still be of interest.  Be aware that aRts
+support is not the default configure option and is rarely tested and
+not guaranteed to work especially well, although we would like to know
+about it if you find that it doesn't work at all.
 
 
 Introduction

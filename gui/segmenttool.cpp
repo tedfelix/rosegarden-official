@@ -149,6 +149,7 @@ SegmentTool::handleRightButtonPress(QMouseEvent *e)
     }
     
     showMenu();
+    m_currentItem = 0;
 }
 
 void

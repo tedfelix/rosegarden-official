@@ -401,6 +401,7 @@ public:
     RosegardenQuantizeParameters(QWidget *parent,
 				 QuantizerType defaultQuantizer,
 				 bool showNotationOption,
+				 bool showAdvancedButton,
 				 QString configCategory,
 				 QString preamble = 0);
     
@@ -414,13 +415,18 @@ public:
     bool shouldDeCounterpoint() const { return m_deCounterpoint; }
     bool shouldMakeViable() const { return m_makeViable; }
 
+    void showAdvanced(bool show);
+
 public slots:
     void slotTypeChanged(int);
+    void slotAdvancedChanged();
 
 protected:
     QString m_configCategory;
 
     std::vector<Rosegarden::timeT> m_standardQuantizations;
+
+    QGridLayout *m_mainLayout;
 
     KComboBox *m_typeCombo;
 
@@ -433,8 +439,10 @@ protected:
     KComboBox *m_notationUnitCombo;
     KComboBox *m_simplicityCombo;
     KComboBox *m_maxTuplet;
-    QCheckBox *m_articulate;
 
+    QPushButton *m_advancedButton;
+    QGroupBox *m_postProcessingBox;
+    QCheckBox *m_articulate;
     QCheckBox *m_makeViable;
     QCheckBox *m_deCounterpoint;
     QCheckBox *m_rebeam;

@@ -765,6 +765,7 @@ RosegardenRotary::setPosition(float position)
 RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
 							   QuantizerType defaultQuantizer,
 							   bool showNotationOption,
+							   bool showAdvancedButton,
 							   QString configCategory,
 							   QString preamble) :
     QFrame(parent),
@@ -772,32 +773,37 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
     m_standardQuantizations
         (Rosegarden::BasicQuantizer::getStandardQuantizations())
 {
-    QGridLayout *mainLayout = new QGridLayout(this, preamble ? 3 : 2, 2, 10, 5);
+    m_mainLayout = new QGridLayout(this, preamble ? 3 : 4, 2, 10, 5);
 
+    int zero = 0;
     if (preamble) {
 	QLabel *label = new QLabel(preamble, this);
 	label->setAlignment(Qt::WordBreak);
-	mainLayout->addMultiCellWidget(label, 0, 0, 0, 1);
+	m_mainLayout->addMultiCellWidget(label, 0, 0, 0, 1);
+	zero = 1;
     }
 
     QGroupBox *quantizerBox = new QGroupBox
-	(1, Horizontal, i18n("Quantizer type"), this);
-    mainLayout->addWidget(quantizerBox, preamble ? 1 : 0, 0);
+	(1, Horizontal, i18n("Quantizer"), this);
+
+    m_mainLayout->addWidget(quantizerBox, zero, 0);
     QFrame *typeFrame = new QFrame(quantizerBox);
 
-    QGridLayout *layout = new QGridLayout(typeFrame, 1, 1, 5, 3);
+    QGridLayout *layout = new QGridLayout(typeFrame, 2, 2, 5, 3);
+    layout->addWidget(new QLabel(i18n("Quantizer type:"), typeFrame), 0, 0);
     m_typeCombo = new KComboBox(typeFrame);
     m_typeCombo->insertItem(i18n("Grid quantizer"));
     m_typeCombo->insertItem(i18n("Heuristic notation quantizer"));
-    layout->addWidget(m_typeCombo, 0, 0);
+    layout->addWidget(m_typeCombo, 0, 1);
 
     m_notationTarget = new QCheckBox
 	(i18n("Quantize for notation only (leave performance unchanged)"),
-	 quantizerBox);
+	 typeFrame);
+    layout->addMultiCellWidget(m_notationTarget, 1, 1, 0, 1);
     if (!showNotationOption) m_notationTarget->hide();
 
     QHBox *parameterBox = new QHBox(this);
-    mainLayout->addWidget(parameterBox, preamble ? 1 : 0, 1);
+    m_mainLayout->addWidget(parameterBox, zero + 1, 0);
 
     m_notationBox = new QGroupBox
 	(1, Horizontal, i18n("Notation parameters"), parameterBox);
@@ -827,7 +833,7 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
     m_maxTuplet->insertItem(i18n("None"));
     m_maxTuplet->insertItem(i18n("2-in-the-time-of-3"));
     m_maxTuplet->insertItem(i18n("Triplet"));
-/*!!!
+/*
     m_maxTuplet->insertItem(i18n("4-Tuplet"));
     m_maxTuplet->insertItem(i18n("5-Tuplet"));
     m_maxTuplet->insertItem(i18n("6-Tuplet"));
@@ -851,27 +857,41 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
 	(i18n("Quantize durations as well as start times"), gridFrame);
     layout->addMultiCellWidget(m_durationCheckBox, 1, 1, 0, 1);
 
-    QGroupBox *postProcessingBox = new QGroupBox
+    m_postProcessingBox = new QGroupBox
 	(1, Horizontal, i18n("After quantization"), this);
-    mainLayout->addMultiCellWidget(postProcessingBox,
-				   preamble ? 2 : 1,
-				   preamble ? 2 : 1,
-				   0, 1);
-    QFrame *postFrame = new QFrame(postProcessingBox);
 
-    layout = new QGridLayout(postFrame, 2, 2, 5, 3);
-    m_makeViable = new QCheckBox(i18n("Tie notes at barlines etc"), postFrame);
-    m_deCounterpoint = new QCheckBox(i18n("Split-and-tie overlapping chords"), postFrame);
+    if (preamble) {
+	m_mainLayout->addMultiCellWidget(m_postProcessingBox,
+				       zero, zero + 1,
+				       1, 1);
+    } else {
+	m_mainLayout->addWidget(m_postProcessingBox, zero + 3, 0);
+    }
+
+    bool advanced = true;
+    m_advancedButton = 0;
+    if (showAdvancedButton) {
+	m_advancedButton =
+	    new QPushButton(i18n("Show advanced options"), this);
+	m_mainLayout->addWidget(m_advancedButton, zero + 2, 0, Qt::AlignLeft);
+	QObject::connect(m_advancedButton, SIGNAL(clicked()),
+			 this, SLOT(slotAdvancedChanged()));
+    }
+
+    QFrame *postFrame = new QFrame(m_postProcessingBox);
+
+    layout = new QGridLayout(postFrame, 4, 1, 5, 3);
     m_rebeam = new QCheckBox(i18n("Re-beam"), postFrame);
     m_articulate = new QCheckBox
 	(i18n("Add articulations (staccato, tenuto, slurs)"), postFrame);
+    m_makeViable = new QCheckBox(i18n("Tie notes at barlines etc"), postFrame);
+    m_deCounterpoint = new QCheckBox(i18n("Split-and-tie overlapping chords"), postFrame);
 
-    layout->addWidget(m_makeViable, 0, 1);
-    layout->addWidget(m_deCounterpoint, 1, 1);
-    layout->addWidget(m_rebeam, 1, 0);
-    layout->addWidget(m_articulate, 0, 0);
+    layout->addWidget(m_rebeam, 0, 0);
+    layout->addWidget(m_articulate, 1, 0);
+    layout->addWidget(m_makeViable, 2, 0);
+    layout->addWidget(m_deCounterpoint, 3, 0);
     
-
     NotePixmapFactory npf;
     QPixmap noMap =
 	NotePixmapFactory::toQPixmap(npf.makeToolbarPixmap("menu-no-note"));
@@ -905,11 +925,15 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
 	m_rebeam->setChecked
 	    (config->readBoolEntry("quantizerebeam", true));
 	m_makeViable->setChecked
-	    (config->readBoolEntry("quantizemakeviable", false));
+	    (config->readBoolEntry("quantizemakeviable",
+				   defaultQuantizer == Notation));
 	m_deCounterpoint->setChecked
-	    (config->readBoolEntry("quantizedecounterpoint", false));
+	    (config->readBoolEntry("quantizedecounterpoint",
+				   defaultQuantizer == Notation));
 	m_articulate->setChecked
 	    (config->readBoolEntry("quantizearticulate", true));
+	if (showAdvancedButton) 
+	    advanced = config->readBoolEntry("quantizeshowadvanced", false);
     } else {
 	defaultType = (defaultQuantizer == Notation) ? 2 : 0;
 	m_notationTarget->setChecked(defaultQuantizer == Notation);
@@ -917,9 +941,16 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
 	m_simplicityCombo->setCurrentItem(2);
 	m_maxTuplet->setCurrentItem(2);
 	m_rebeam->setChecked(true);
-	m_makeViable->setChecked(false);
-	m_deCounterpoint->setChecked(false);
+	m_makeViable->setChecked(defaultQuantizer == Notation);
+	m_deCounterpoint->setChecked(defaultQuantizer == Notation);
 	m_articulate->setChecked(true);
+	if (showAdvancedButton) advanced = false;
+    }
+
+    if (!showAdvancedButton || advanced) {
+	m_postProcessingBox->show();
+    } else {
+	m_postProcessingBox->hide();
     }
 
     for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
@@ -963,7 +994,6 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
 
     connect(m_typeCombo, SIGNAL(activated(int)), SLOT(slotTypeChanged(int)));
 }
-
 
 Rosegarden::Quantizer *
 RosegardenQuantizeParameters::getQuantizer() const
@@ -1035,7 +1065,32 @@ RosegardenQuantizeParameters::getQuantizer() const
 
     return quantizer;
 }
-	
+
+void
+RosegardenQuantizeParameters::slotAdvancedChanged()
+{
+    if (m_postProcessingBox->isVisible()) {
+	if (m_advancedButton)
+	    m_advancedButton->setText(i18n("Show Advanced Options"));
+	m_postProcessingBox->hide();
+    } else {
+	if (m_advancedButton)
+	    m_advancedButton->setText(i18n("Hide Advanced Options"));
+	m_postProcessingBox->show();
+    }
+    adjustSize();
+}
+
+void
+RosegardenQuantizeParameters::showAdvanced(bool show)
+{
+    if (show) {
+	m_postProcessingBox->show();
+    } else {
+	m_postProcessingBox->hide();
+    }
+    adjustSize();
+}
 
 void
 RosegardenQuantizeParameters::slotTypeChanged(int index)

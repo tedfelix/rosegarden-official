@@ -550,7 +550,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 
     m_quantizeFrame = new RosegardenQuantizeParameters
         (m_tabWidget, RosegardenQuantizeParameters::Notation,
-	 false, "Notation Options", preamble);
+	 false, false, "Notation Options", preamble);
 
     addTab(m_quantizeFrame, i18n("Quantize"));
 

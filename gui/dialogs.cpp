@@ -2847,14 +2847,19 @@ ClefDialog::redrawClefPixmap()
 
 
 QuantizeDialog::QuantizeDialog(QWidget *parent, bool inNotation) :
-    KDialogBase(parent, 0, true, i18n("Quantize"), Ok | Cancel)
+    KDialogBase(parent, 0, true, i18n("Quantize"), Ok | Cancel | User1)
 {
     QVBox *vbox = makeVBoxMainWidget();
 
     m_quantizeFrame =
 	new RosegardenQuantizeParameters
 	(vbox, inNotation ? RosegardenQuantizeParameters::Notation :
-	                    RosegardenQuantizeParameters::Grid, true, 0);
+	                    RosegardenQuantizeParameters::Grid,
+	 true, false, 0);
+
+    setButtonText(User1, i18n("Advanced"));
+    connect(this, SIGNAL(user1Clicked()),
+	    m_quantizeFrame, SLOT(slotAdvancedChanged()));
 }
 
 Quantizer *
@@ -4294,8 +4299,6 @@ ManageMetronomeDialog::slotApply()
 void
 ManageMetronomeDialog::slotPreviewPitch(int pitch)
 {
-    RG_DEBUG << "ManageMetronomeDialog::slotPreviewPitch: pitch " << pitch << endl;
-
     Rosegarden::DeviceList *devices = m_doc->getStudio().getDevices();
     Rosegarden::DeviceListConstIterator it;
     int count = 0;
@@ -4326,8 +4329,6 @@ ManageMetronomeDialog::slotPreviewPitch(int pitch)
     
     if (inst)
     {
-    RG_DEBUG << "ManageMetronomeDialog::slotPreviewPitch: instrument " << inst->getId() << endl;
-
 	Rosegarden::MappedEvent *mE = 
 	    new Rosegarden::MappedEvent
 	    (inst->getId(),
