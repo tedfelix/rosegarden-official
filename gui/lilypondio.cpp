@@ -121,8 +121,8 @@ LilypondExporter::handleEndingEvents(eventendlist &eventsInProgress, Segment::it
         // This assumes all deferred events are indications
         long indicationDuration = 0;
         (*k)->get<Int>(Indication::IndicationDurationPropertyName, indicationDuration);
-        if ((*k)->getAbsoluteTime() + indicationDuration <=
-            (*j)->getAbsoluteTime() + (*j)->getDuration()) {
+        if ((*k)->getNotationAbsoluteTime() + indicationDuration <=
+            (*j)->getNotationAbsoluteTime() + (*j)->getDuration()) {
             if ((*k)->isa(Indication::EventType)) {
                 std::string whichIndication((*k)->get<String>
                         (Indication::IndicationTypePropertyName));
@@ -728,7 +728,7 @@ LilypondExporter::write() {
                 // We need to deal with absolute time if we don't have 
                 // "complete" lines of music and/or nonoverlapping events
                 // i.e. chords etc.
-                timeT absoluteTime = (*j)->getAbsoluteTime();
+                timeT absoluteTime = (*j)->getNotationAbsoluteTime();
 
                 // new bar
                 if (j == (*i)->begin() ||
