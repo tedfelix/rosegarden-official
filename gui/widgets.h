@@ -288,5 +288,28 @@ protected:
 };
 
 
+class RosegardenRotary : public QWidget
+{
+    Q_OBJECT
+public:
+    RosegardenRotary(QWidget *parent,
+                     float minValue,
+                     float maxValue,
+                     float step);
+
+signals:
+    void valueChanged(float);
+
+protected:
+    virtual void paintEvent(QPaintEvent *e);
+    virtual void mousePressEvent(QMouseEvent *e);
+    virtual void mouseReleaseEvent(QMouseEvent *e);
+    virtual void mouseMoveEvent(QMouseEvent *e);
+
+    float m_minValue;
+    float m_maxValue;
+    float m_step;
+};
+
 
 #endif // _WIDGETS_H_

@@ -393,3 +393,43 @@ PluginButton::mouseReleaseEvent(QMouseEvent *e)
     setDown(false);
 }
 
+// ------------------ RosegardenRotary -----------------
+//
+//
+
+RosegardenRotary::RosegardenRotary(QWidget *parent,
+                                   float minValue,
+                                   float maxValue,
+                                   float step):
+    QWidget(parent),
+    m_minValue(minValue),
+    m_maxValue(maxValue),
+    m_step(step)
+{
+    
+}
+
+
+void
+RosegardenRotary::paintEvent(QPaintEvent *e)
+{
+}
+
+
+void
+RosegardenRotary::mousePressEvent(QMouseEvent *e)
+{
+}
+
+void
+RosegardenRotary::mouseReleaseEvent(QMouseEvent *e)
+{
+}
+
+void
+RosegardenRotary::mouseMoveEvent(QMouseEvent *e)
+{
+}
+
+
+

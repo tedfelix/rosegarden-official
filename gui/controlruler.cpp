@@ -137,9 +137,10 @@ ControlRuler::paintEvent(QPaintEvent* e)
 
             if ((x * getHScaleFactor()) > (clipRect.x() + clipRect.width())) break;
 
+            // include fiddle factor (+2)
             int width = 
                 int(m_rulerScale->getXForTime((*it)->getAbsoluteTime() +
-                                              (*it)->getDuration()))
+                                              (*it)->getDuration()) + 2)
                     + m_currentXOffset + int(m_xorigin) - x;
 
             int value = (*it)->get<Rosegarden::Int>(m_propertyName);

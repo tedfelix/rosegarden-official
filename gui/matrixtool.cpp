@@ -285,12 +285,15 @@ MatrixPainter::MatrixPainter(QString name, MatrixView* parent)
 void MatrixPainter::handleLeftButtonPress(Rosegarden::timeT time,
                                           int pitch,
                                           int staffNo,
-                                          QMouseEvent *e,
+                                          QMouseEvent *inE,
                                           Rosegarden::ViewElement *element)
 {
     MATRIX_DEBUG << "MatrixPainter::handleLeftButtonPress : pitch = "
                          << pitch << ", time : " << time << endl;
 
+    QPoint p = m_mParentView->getInverseWorldMatrix().map(inE->pos());
+    QMouseEvent *e =
+        new QMouseEvent(inE->type(), p, inE->button(), inE->state());
 
     // Don't create an overlapping event on the same note on the same channel
     if (dynamic_cast<MatrixElement*>(element)) return;
@@ -314,13 +317,15 @@ void MatrixPainter::handleLeftButtonPress(Rosegarden::timeT time,
     m_currentElement->setHeight(m_currentStaff->getElementHeight());
 
     double width = el->getDuration() * m_currentStaff->getTimeScaleFactor();
-    m_currentElement->setWidth(int(width));
+    m_currentElement->setWidth(int(width) + 2); // fiddle factor
 
     m_currentStaff->positionElement(m_currentElement);
     m_mParentView->update();
 
     // preview
     m_mParentView->playNote(el);
+
+    delete e;
 }
 
 bool MatrixPainter::handleMouseMove(Rosegarden::timeT time,
@@ -343,7 +348,7 @@ bool MatrixPainter::handleMouseMove(Rosegarden::timeT time,
     // ensure we don't have a zero width preview
     if (width == 0) width = initialWidth;
 
-    m_currentElement->setWidth(int(width));
+    m_currentElement->setWidth(int(width) + 2); // fiddle factor
     
     if (pitch != m_currentElement->event()->get<Rosegarden::Int>(PITCH)) {
 	m_currentElement->event()->set<Rosegarden::Int>(PITCH, pitch);

@@ -153,6 +153,15 @@ public:
 
     double getXbyInverseWorldMatrix(double value)
         { return m_canvasView->inverseWorldMatrix().m11() * value; }
+
+    /*
+     * Get world matrices
+     */
+    const QWMatrix & getWorldMatrix () const
+        { return m_canvasView->worldMatrix(); }
+    const QWMatrix & getInverseWorldMatrix () const
+        { return m_canvasView->inverseWorldMatrix(); }
+
     /*
      * Repaint the control rulers
      *

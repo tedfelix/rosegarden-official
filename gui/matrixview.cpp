@@ -72,6 +72,8 @@ using Rosegarden::Segment;
 using Rosegarden::EventSelection;
 using Rosegarden::timeT;
 
+static double xorigin = 0.0;
+
 //----------------------------------------------------------------------
 
 MatrixView::MatrixView(RosegardenGUIDoc *doc,
@@ -236,7 +238,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
         }
     }
 
-    BarButtons *topBarButtons = new BarButtons(&m_hlayout, 0, 25,
+    BarButtons *topBarButtons = new BarButtons(&m_hlayout, int(xorigin), 25,
                                                false, getCentralFrame());
     setTopBarButtons(topBarButtons);
 
@@ -1315,7 +1317,7 @@ MatrixView::slotChangeHorizontalZoom(int)
     Rosegarden::timeT length = m_segments[0]->getEndTime() -
                                m_segments[0]->getStartTime();
 
-    int newWidth = getXbyInverseWorldMatrix(int(m_hlayout.getXForTime(length)));
+    int newWidth = getXbyInverseWorldMatrix(m_hlayout.getXForTime(length));
     setViewSize(QSize(newWidth, getViewSize().height()));
     applyLayout();
 
@@ -1338,7 +1340,7 @@ MatrixView::addControlRuler(const Rosegarden::PropertyName &property)
 	                                      m_segments[0],
                                               property,
                                               m_staffs[0]->getVelocityColour(),
-                                              0,
+                                              xorigin,
                                               height,
                                               getCentralFrame());
 
@@ -1416,6 +1418,7 @@ MatrixView::readjustCanvasSize()
 
     // now get the EditView to do the biz
     readjustViewSize(QSize(int(maxWidth), maxHeight));
+    repaintRulers();
 }
 
 

@@ -14,13 +14,19 @@ o Make RG a jack mixer (transport, control client)
 
 o JACK connection management - stereo, panning
 
-o Repeating segments and composition end marker
-
 o AudioManager and AudioFile commands
 
 o Matrix Hypereditor [HALF COMPLETED]
 
-o Matrix width bug
+o Matrix width bug [HALF COMPLETED]
+
+o Matrix position of events at high zoom levels [FIXED with fiddel factor]
+
+o Matrix pointer width
+
+o Chorus and Reverb MIDI controls
+
+o Drum bank selects and different MIDI drums
 
 o Fix segment audio drag and drop
 
@@ -40,6 +46,8 @@ o MIDI export broken for key sig and SysExs
 
 Post 0.2
 ========
+
+o Repeating segments and composition end marker [DONE]
 
 o Splitting Segments isn't clearing out the original [DONE - event list bug]
 
