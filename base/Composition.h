@@ -23,9 +23,12 @@
 #define _COMPOSITION_H_
 
 #include <set>
+#include <map>
 
 #include "Segment.h"
 #include "Quantizer.h"
+#include "Instrument.h"
+#include "Track.h"
 
 namespace Rosegarden 
 {
@@ -54,6 +57,9 @@ public:
     static const PropertyName TempoProperty; // stored in beats per hour
 
     typedef std::set<Segment*, Segment::SegmentCmp> segmentcontainer;
+
+    typedef std::map<int, Instrument> instrumentcontainer;
+    typedef std::map<int, Track> trackcontainer;
 
     typedef segmentcontainer::iterator iterator;
     typedef segmentcontainer::const_iterator const_iterator;
@@ -214,7 +220,9 @@ public:
     virtual void eventRemoved(const Segment *, Event *);
 
 protected:
+    trackcontainer *m_tracks;
     segmentcontainer m_segments;
+    instrumentcontainer *m_instruments;
 
     /// Contains time signature and new-bar events.
     mutable Segment m_referenceSegment;
@@ -235,6 +243,7 @@ protected:
 private:
     Composition(const Composition &);
     Composition &operator=(const Composition &);
+
 };
 
 }

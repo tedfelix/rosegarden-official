@@ -113,6 +113,11 @@ TrackEditor::init(unsigned int nbSegments, unsigned int nbBars)
                                       *canvas, this);
 
     grid->addWidget(m_segmentsCanvas, 1,1);
+
+    // And then for the moment we hide the track header
+    //
+    m_vHeader->hide();
+
     connect(this, SIGNAL(needUpdate()),
             m_segmentsCanvas, SLOT(update()));
 
@@ -134,6 +139,7 @@ TrackEditor::init(unsigned int nbSegments, unsigned int nbBars)
     m_pointer->setPoints(0, 0, 0, canvas->height());
     m_pointer->setZ(10);
     m_pointer->show();
+
 
 }
 

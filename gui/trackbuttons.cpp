@@ -1,4 +1,4 @@
-// -*- c-basic-offset: 4 -*-
+
 
 /*
     Rosegarden-4 v0.1
@@ -36,11 +36,20 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
     assert(vHeader != 0);
     assert(hHeader != 0);
 
+    // Number of tracks on our view
+    //
     m_tracks = vHeader->count();
-    //m_offset = vHeader->offset();
-    //m_offset = 19;
-    m_offset = vHeader->sectionPos(1) - 7;
+
+    // The pixel offset from the top minus a fiddle factor
+    //
+    m_offset = vHeader->sectionPos(1) - 3;
+ 
+    // The height of the cells
+    //
     m_cellSize = vHeader->sectionSize(0);
+
+    // Now draw the buttons and labels
+    //
     drawButtons();
 }
 
@@ -71,10 +80,19 @@ TrackButtons::~TrackButtons()
 void
 TrackButtons::drawButtons()
 {
-    int gap = 8;
-    setSpacing(gap);
+    // The buttonGap sets up the sizes of the buttons
+    //
+    int buttonGap = 8;
 
-    // Create a gap at the top of the layout widget
+    // The borderGap sets the gaps between elements
+    //
+    int borderGap = 1;
+
+    // Set the spacing between vertical elements
+    //
+    setSpacing(borderGap);
+
+    // Create a buttonGap at the top of the layout widget
     //
     QLabel *label = new QLabel(this);
     label->setText(QString(""));
@@ -88,24 +106,45 @@ TrackButtons::drawButtons()
     QPushButton *mute;
     QPushButton *record;
 
-
+    // Create an exclusive buttongroup for record
+    //
     m_recordButtonGroup = new QButtonGroup();
     m_recordButtonGroup->setExclusive(true);
 
+    // Create a buttongroup for muting
+    //
     m_muteButtonGroup = new QButtonGroup();
     m_muteButtonGroup->setExclusive(false);
 
-    // Populate the widget to our current
-    // hardcoded number of tracks
+    // Populate the widgets
     //
     for (int i = 0; i < m_tracks; i++)
     {
+        // Create a horizontal box for each track
+        //
         track = new QHBox(this);
-        track->setMinimumWidth(40);
+        track->setMinimumSize(120, m_cellSize - borderGap);
+        track->setMaximumSize(120, m_cellSize - borderGap);
+
+        // Try a style for the box
+        //
+        track->setFrameStyle(StyledPanel);
+        track->setFrameShape(StyledPanel);
+        track->setFrameShadow(Raised);
+
+        // Create buttons
         mute = new QPushButton(track);
         record = new QPushButton(track);
 
-        // insert the button into the group
+        // Create a label
+        //
+        label = new QLabel(track);
+        label->setText(QString("Track %1").arg(i));
+        label->setMinimumSize(80, m_cellSize - buttonGap);
+        label->setMaximumSize(80, m_cellSize - buttonGap);
+        label->setIndent(7);
+
+        // Insert the buttons into groups
         //
         m_recordButtonGroup->insert(record, i);
         m_muteButtonGroup->insert(mute, i);
@@ -116,18 +155,30 @@ TrackButtons::drawButtons()
         mute->setText("M");
         record->setText("R"); 
 
-        mute->setMinimumWidth(m_cellSize - gap);
-        mute->setMaximumWidth(m_cellSize - gap);
+        mute->setMinimumSize(m_cellSize - buttonGap, m_cellSize - buttonGap);
+        mute->setMaximumSize(m_cellSize - buttonGap, m_cellSize - buttonGap);
 
-        record->setMinimumWidth(m_cellSize - gap);
-        record->setMaximumWidth(m_cellSize - gap);
+        record->setMinimumSize(m_cellSize - buttonGap, m_cellSize - buttonGap);
+        record->setMaximumSize(m_cellSize - buttonGap, m_cellSize - buttonGap);
 
-        mute->setMinimumHeight(m_cellSize - gap);
-        mute->setMaximumHeight(m_cellSize - gap);
-
-        record->setMinimumHeight(m_cellSize - gap);
-        record->setMaximumHeight(m_cellSize - gap);
+/*
+        label = new QLabel(this);
+        label->setText(QString(""));
+        label->setBackgroundMode(PaletteDark);
+        label->setMinimumHeight(1);
+        label->setMaximumHeight(1);
+*/
+        
     }
+
+    // Create a blank label at the bottom just to keep
+    // the scrolling in step
+    //
+    label = new QLabel(this);
+    label->setText(QString(""));
+    label->setMinimumHeight(40);
+    label->setMaximumHeight(40);
+
 }
 
 

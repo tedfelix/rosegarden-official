@@ -81,6 +81,8 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     //
     buttonsView->setHScrollBarMode(QScrollView::AlwaysOff);
     buttonsView->setVScrollBarMode(QScrollView::AlwaysOff);
+    buttonsView->setMinimumWidth(125);
+    buttonsView->setMaximumWidth(125);
 
     QScrollView *scrollView = new QScrollView(topBox);
 
