@@ -844,12 +844,6 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    break;
 	}
 
-	//!!! for notes, this really needs to happen after all the other duration calculations below
-	if (absTime + duration > barEnd) {
-	    overlong = true;
-	    duration = barEnd - absTime;
-	}
-
 	// First test whether we're entering or leaving a group,
 	// before we consider how to write the event itself
 
@@ -914,6 +908,17 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 		    groupType = "";
 		}
 	    }
+
+	    try {
+		// tuplet compensation, etc
+		Note::Type type = (*i)->get<Int>(NOTE_TYPE);
+		int dots = (*i)->get<Int>(NOTE_DOTS);
+		duration = Note(type, dots).getDuration();
+	    } catch (Rosegarden::Exception e) { // no properties
+		std::cerr
+		    << "WARNING: LilypondExporter::writeBar: incomplete note properties: "
+		    << e.getMessage() << std::endl;
+	    }
 	}
 
 	if ((*i)->has(skipProperty)) {
@@ -922,27 +927,26 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    continue;
 	}
 
+	timeT toNext = barEnd - absTime;
+	if (groupId >= 0 && groupType == GROUP_TYPE_TUPLED &&
+	    tupletRatio.second != 0) {
+	    toNext = toNext * tupletRatio.second / tupletRatio.first;
+	}
+	if (duration > toNext) {
+	    overlong = true;
+	    duration = toNext;
+	}
+
 	if ((*i)->isa(Note::EventType)) {
 
 	    Rosegarden::Chord chord(*s, i, m_composition->getNotationQuantizer());
 	    Rosegarden::Event *e = *chord.getInitialNote();
 	    bool tiedForward = false;
-	    
-	    try {
-		// tuplet compensation, etc
-		Note::Type type = e->get<Int>(NOTE_TYPE);
-		int dots = e->get<Int>(NOTE_DOTS);
-		duration = Note(type, dots).getDuration();
-	    } catch (Rosegarden::Exception e) { // no properties
-		std::cerr
-		    << "WARNING: LilypondExporter::writeBar: incomplete note properties: "
-		    << e.getMessage() << std::endl;
-	    }
 
 	    // Examine the following event, and truncate our duration
 	    // if we overlap it.
 
-	    timeT toNext = duration;
+	    toNext = duration;
 	    Segment::iterator nextElt = chord.getFinalElement();
 
 	    if (s->isBeforeEndMarker(++nextElt)) {
@@ -959,14 +963,11 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 
 	    if (s->isBeforeEndMarker(nextElt)) {
 		toNext = (*nextElt)->getNotationAbsoluteTime() - absTime;
-		if (toNext < duration) {
-		    duration = toNext;
-		    if (groupId >= 0 && groupType == GROUP_TYPE_TUPLED &&
-			tupletRatio.second != 0) {
-			duration = duration * tupletRatio.second /
-			    tupletRatio.first;
-		    }
+		if (groupId >= 0 && groupType == GROUP_TYPE_TUPLED &&
+		    tupletRatio.second != 0) {
+		    toNext = toNext * tupletRatio.second / tupletRatio.first;
 		}
+		if (toNext < duration) duration = toNext;
 	    }
 
 	    if (e->has(STEM_UP) && e->isPersistent<Bool>(STEM_UP)) {
