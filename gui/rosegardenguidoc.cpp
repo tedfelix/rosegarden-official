@@ -81,7 +81,7 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
                                    const char *name)
     : QObject(parent, name),
       m_recordSegment(0), m_endOfLastRecordedNote(0),
-      m_commandHistory(0),
+      m_commandHistory(new MultiViewCommandHistory()),
       m_clipboard(new Rosegarden::Clipboard),
       m_startUpSync(true),
       m_useSequencer(useSequencer)
@@ -97,6 +97,12 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
     }
 
     pViewList->setAutoDelete(true);
+
+    connect(m_commandHistory, SIGNAL(commandExecuted(KCommand *)),
+	    this, SLOT(slotDocumentModified()));
+
+    connect(m_commandHistory, SIGNAL(documentRestored()),
+	    this, SLOT(slotDocumentRestored()));
 }
 
 RosegardenGUIDoc::~RosegardenGUIDoc()
@@ -217,13 +223,7 @@ bool RosegardenGUIDoc::newDocument()
     m_absFilePath=QString::null;
     m_title=i18n("Untitled");
 
-    m_commandHistory = new MultiViewCommandHistory();
-
-    connect(m_commandHistory, SIGNAL(commandExecuted(KCommand *)),
-	    this, SLOT(slotDocumentModified()));
-
-    connect(m_commandHistory, SIGNAL(documentRestored()),
-	    this, SLOT(slotDocumentRestored()));
+    m_commandHistory->clear();
 
     return true;
 }
@@ -442,8 +442,7 @@ void RosegardenGUIDoc::deleteContents()
 
     deleteViews();
 
-    delete m_commandHistory;
-    m_commandHistory = 0;
+    m_commandHistory->clear();
 
     m_composition.clear();
     m_audioFileManager.clear();

@@ -477,6 +477,8 @@ void RosegardenGUIApp::initDocument()
     m_doc = new RosegardenGUIDoc(this, m_useSequencer);
     m_doc->newDocument();
     m_doc->getCommandHistory()->attachView(actionCollection());
+//    connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted(KCommand *)),
+//	    SLOT(slotCommandExecuted(KCommand *)));
 }
 
 void RosegardenGUIApp::initView()
@@ -877,7 +879,6 @@ void RosegardenGUIApp::slotFileNew()
     if (makeNew) {
 
         m_doc->newDocument();
-	m_doc->getCommandHistory()->attachView(actionCollection());
 
         QString caption=kapp->caption();	
         setCaption(caption+": "+m_doc->getTitle());
@@ -998,7 +999,6 @@ void RosegardenGUIApp::slotFileClose()
     m_doc->closeDocument();
 
     m_doc->newDocument();
-    m_doc->getCommandHistory()->attachView(actionCollection());
 
     initView();
 
@@ -1288,7 +1288,6 @@ void RosegardenGUIApp::importMIDIFile(const QString &file)
     m_doc->closeDocument();
 
     m_doc->newDocument();
-    m_doc->getCommandHistory()->attachView(actionCollection());
 
     SetWaitCursor waitCursor;
 
@@ -1336,7 +1335,6 @@ void RosegardenGUIApp::importRG21File(const QString &file)
 
     m_doc->closeDocument();
     m_doc->newDocument();
-    m_doc->getCommandHistory()->attachView(actionCollection());
     Rosegarden::Composition *tmpComp = rg21Loader.getComposition();
 
     m_doc->getComposition().swap(*tmpComp);
