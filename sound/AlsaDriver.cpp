@@ -1662,7 +1662,7 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now)
 	NoteOffEvent *ev = *m_noteOffQueue.begin();
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
-	std::cerr << "AlsaDriver::processNotesOff(" << time << "): found event at " << ev->getRealTime() << std::endl;
+	std::cerr << "AlsaDriver::processNotesOff(" << time << "): found event at " << ev->getRealTime() << ", instr " << ev->getInstrument() << ", channel " << int(ev->getChannel()) << ", pitch " << int(ev->getPitch()) << std::endl;
 #endif
 
 	bool isSoftSynth = (ev->getInstrument() >= SoftSynthInstrumentBase);
@@ -2428,8 +2428,8 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 	}
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
-	std::cerr << "processMidiOut: m_queueRunning " << m_queueRunning
-		  << ", now " << now << std::endl;
+//	std::cerr << "processMidiOut: m_queueRunning " << m_queueRunning
+//		  << ", now " << now << std::endl;
 #endif
 	checkAlsaError(snd_seq_drain_output(m_midiHandle), "processMidiOut(): draining");
     }

@@ -764,7 +764,11 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 		jackProcessEmpty(nframes);
 	    }
 
-	    return jackProcessRecord(nframes, 0, 0); // for monitoring
+	    int rv = jackProcessRecord(nframes, 0, 0); // for monitoring
+
+	    if (!m_haveAsyncAudioEvent) {
+		return rv;
+	    }
 	}
     }
 
