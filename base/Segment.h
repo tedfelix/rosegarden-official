@@ -97,6 +97,9 @@ public:
     };
 
 protected:
+
+    static bool checkExpansionValid(timeT maxDuration, timeT minDuration);
+
     timeT m_startIdx;
     unsigned int m_instrument;
 

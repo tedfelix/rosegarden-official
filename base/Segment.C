@@ -161,26 +161,21 @@ TimeSignature Track::getTimeSigAtEnd() const
     return defaultSig44;
 }
 
-bool Track::expandIntoGroup(iterator from, iterator to,
-                            timeT baseDuration)
-{
-    timeT absTime = (*from)->getAbsoluteTime();
-    
-    for(; from != to; ++from) {
-
-        // check that they're all at the same time
-        if ((*from)->getAbsoluteTime() != absTime) return false;
-
-        expandIntoGroup(from, baseDuration);
-    }
-
-    return true;
-}
-
 bool Track::expandIntoGroup(iterator i,
                             timeT baseDuration)
 {
-    timeT eventDuration = (*i)->getDuration();
+    if (i == end()) return false;
+
+    iterator i2 = i;
+    ++i2;
+    
+    return expandIntoGroup(i, i2, baseDuration);
+}
+
+bool Track::expandIntoGroup(iterator from, iterator to,
+                            timeT baseDuration)
+{
+    timeT eventDuration = (*from)->getDuration();
 
     if (baseDuration == eventDuration) return true;
 
@@ -197,40 +192,49 @@ bool Track::expandIntoGroup(iterator i,
 
     // Check if we can perform the operation
     //
-    if ((maxDuration == (2 * minDuration)) ||
-        (maxDuration == (4 * minDuration)) ||
-        (maxDuration == (4 * minDuration / 3))) {
-
-        // set the initial event's duration to base
-        (*i)->setDuration(minDuration);
-
-        // Add 2nd event
-        Event* ev = new Event((*i)->getType());
-        ev->setDuration(maxDuration - minDuration);
-        ev->setAbsoluteTime((*i)->getAbsoluteTime() + minDuration);
+    if (checkExpansionValid(maxDuration, minDuration)) {
 
         long gid = 0;
 
         // if the initial event has a group id, set the new event to it,
         // otherwise fetch the track's next group id
         //
-        if (!(*i)->get<Int>("GroupNo", gid))
+        if (!(*from)->get<Int>("GroupNo", gid))
             gid = getNextGroupId();
-        
-        ev->set<Int>("GroupNo", gid);
-            
-        insert(ev);
 
+        for(iterator i = from; i != to; ++i) {
+            // set the initial event's duration to base
+            (*i)->setDuration(minDuration);
+
+            // Add 2nd event
+            Event* ev = new Event((*i)->getType());
+            ev->setDuration(maxDuration - minDuration);
+            ev->setAbsoluteTime((*i)->getAbsoluteTime() + minDuration);       
+            ev->set<Int>("GroupNo", gid);
+            
+            insert(ev);
+        }
+    
         return true;
 
-    } else
+    } else { // expansion is not possible
+        
         return false;
+    }
+
 
 }
 
 int Track::getNextGroupId() const
 {
     return m_groupId++;
+}
+
+bool Track::checkExpansionValid(timeT maxDuration, timeT minDuration)
+{
+    return ((maxDuration == (2 * minDuration)) ||
+            (maxDuration == (4 * minDuration)) ||
+            (maxDuration == (4 * minDuration / 3)));
 }
 
  
