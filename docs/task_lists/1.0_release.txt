@@ -1,16 +1,17 @@
-Features for 1.0 - updated 2004025
+Features for 1.0 - updated 20040226
 -----------------------------------
 
 - request: notation segment expanding itself as you enter
-           notes past the end of it
+           notes past the end of it [or at least resizing the segment
+           explicitly from within the editor]
 
 - punch in record [cc]
 
 - matrix view 
   o double/half speed of selection 
-  o force legato
+  o force legato [this should be a quantizer]
 
-- multiple document interface (switcheable buffers, loading while playing) [rwb]
+- multiple document interface (switchable buffers, loading while playing) [rwb]
 
 - fix lilypond lyric duration bug [dmm]
 
@@ -18,11 +19,13 @@ Features for 1.0 - updated 2004025
 
 - Tempo ruler in main window: need control-ruler-like interface,
   ideally from control-ruler code.  This one is a lot more important
-  than we've given it credit for so far, I think.
+  than we've given it credit for so far, I think.  [We now have a
+  tempo event editor, so this has become less critical than it was]
 
 - native printing
+  o it's too slow
   o adding fluff and nicities to printed staves
-  o getting mapping working for feta TT [DONE]
+  o getting mapping working for feta TT [DONE] * needs to be slightly larger
 
 - notation
   o staff connections above/below (bracketing)
