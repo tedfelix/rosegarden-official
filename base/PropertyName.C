@@ -20,6 +20,8 @@
     COPYING included with this distribution for more information.
 */
 
+#include <iostream>
+
 #include "PropertyName.h"
 #include "Exception.h"
 
@@ -58,8 +60,8 @@ string PropertyName::getName() const
 
     // dump some informative data, even if we aren't in debug mode,
     // because this really shouldn't be happening
-    std::cerr << "ERROR: PropertyName::getName: value corrupted!" << endl;
-    std::cerr << "PropertyName's internal value is " << m_value << endl;
+    std::cerr << "ERROR: PropertyName::getName: value corrupted!\n";
+    std::cerr << "PropertyName's internal value is " << m_value << std::endl;
     std::cerr << "Reverse interns are ";
     i = m_internsReversed->begin();
     if (i == m_internsReversed->end()) std::cerr << "(none)";
