@@ -260,7 +260,7 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 	 accBarMode == 1 ? Rosegarden::AccidentalTable::BarResetCautionary :
 	 Rosegarden::AccidentalTable::BarResetExplicit);
 
-    bool showInvisibles = config->readBoolEntry("showInvisibles", true);
+    bool showInvisibles = config->readBoolEntry("showinvisibles", true);
 
     if (barResetType != Rosegarden::AccidentalTable::BarResetNone) {
 	//!!! very crude and expensive way of making sure we see the

@@ -49,7 +49,7 @@ public:
 
     static const char* const ConfigGroup;
 
-    enum TimeDisplayMode { RealMode, SMPTEMode, BarMode };
+    enum TimeDisplayMode { RealMode, SMPTEMode, BarMode, BarMetronomeMode, FrameMode };
 
     TimeDisplayMode getCurrentMode() { return m_currentMode; }
     bool isShowingTimeToEnd();
@@ -57,6 +57,7 @@ public:
 
     void displayRealTime(const Rosegarden::RealTime &rt);
     void displaySMPTETime(const Rosegarden::RealTime &rt);
+    void displayFrameTime(const Rosegarden::RealTime &rt);
     void displayBarTime(int bar, int beat, int unit);
 
     void setTempo(const double &tempo);
@@ -112,6 +113,9 @@ public slots:
 
     void slotEditTempo();
     void slotEditTimeSignature();
+
+    void slotSetBackground(QColor);
+    void slotResetBackground();
 
 signals:
     void closed();
@@ -172,6 +176,7 @@ private:
 
     QTimer *m_midiInTimer;
     QTimer *m_midiOutTimer;
+    QTimer *m_clearMetronomeTimer;
 
     QPixmap m_panelOpen;
     QPixmap m_panelClosed;
@@ -180,6 +185,12 @@ private:
 
     QAccel *m_accelerators;
     bool    m_isExpanded;
+
+    bool m_haveOriginalBackground;
+    bool m_isBackgroundSet;
+    QColor m_originalBackground;
+
+    int m_sampleRate;
 };
 
 }

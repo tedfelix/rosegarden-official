@@ -28,6 +28,7 @@
 #include <qlineedit.h>
 #include <qtimer.h>
 #include <qlayout.h>
+#include <qobjectlist.h>
 
 #include <kglobal.h>
 #include <kstddirs.h>
@@ -37,6 +38,7 @@
 #include "rosestrings.h"
 #include "widgets.h"
 #include "rosedebug.h"
+#include "rgapplication.h"
 
 namespace Rosegarden
 {
@@ -66,7 +68,10 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     m_denominator(0),
     m_framesPerSecond(24),
     m_bitsPerFrame(80),
-    m_isExpanded(false)
+    m_isExpanded(false),
+    m_haveOriginalBackground(false),
+    m_isBackgroundSet(false),
+    m_sampleRate(0)
 {
 //     QHBox *b = new QHBox(this);
     m_transport = new RosegardenTransport(this);
@@ -117,12 +122,16 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     // Create Midi label timers
     m_midiInTimer = new QTimer(this);
     m_midiOutTimer = new QTimer(this);
+    m_clearMetronomeTimer = new QTimer(this);
 
     connect(m_midiInTimer, SIGNAL(timeout()),
             SLOT(slotClearMidiInLabel()));
 
     connect(m_midiOutTimer, SIGNAL(timeout()),
             SLOT(slotClearMidiOutLabel()));
+
+    connect(m_clearMetronomeTimer, SIGNAL(timeout()),
+	    SLOT(slotResetBackground()));
 
     m_transport->TimeDisplayLabel->hide();
     m_transport->ToEndLabel->hide();
@@ -278,22 +287,67 @@ RosegardenTransportDialog::getSMPTEResolution(int &framesPerSecond,
 void
 RosegardenTransportDialog::slotChangeTimeDisplay()
 {
+    if (m_sampleRate == 0) {
+
+	QCString replyType;
+	QByteArray replyData;
+	m_sampleRate = 0;
+
+	if (rgapp->sequencerCall("getSampleRate()", replyType, replyData)) {
+	    QDataStream streamIn(replyData, IO_ReadOnly);
+	    unsigned int result;
+	    streamIn >> result;
+	    m_sampleRate = result;
+	} else {
+	    m_sampleRate = -1;
+	}
+    }
+
     switch (m_currentMode) {
+
     case RealMode:
-	m_transport->TimeDisplayLabel->setText("SMPTE");
-	m_transport->TimeDisplayLabel->show();
-	m_currentMode = SMPTEMode;
+	if (m_sampleRate > 0) m_currentMode = FrameMode;
+	else m_currentMode = BarMode;
+	break;
+
+    case FrameMode: m_currentMode = BarMode; break;
+
+    case SMPTEMode: m_currentMode = BarMode; break;
+
+    case BarMode: m_currentMode = BarMetronomeMode; break;
+
+    case BarMetronomeMode: m_currentMode = RealMode; break;
+    }
+
+    switch (m_currentMode) {
+
+    case RealMode:
+	m_clearMetronomeTimer->stop();
+	m_transport->TimeDisplayLabel->hide();
 	break;
 
     case SMPTEMode:
-	m_transport->TimeDisplayLabel->setText("BAR");
+	m_clearMetronomeTimer->stop();
+	m_transport->TimeDisplayLabel->setText("SMPTE");
 	m_transport->TimeDisplayLabel->show();
-	m_currentMode = BarMode;
 	break;
 
     case BarMode:
-	m_transport->TimeDisplayLabel->hide();
-	m_currentMode = RealMode;
+	m_clearMetronomeTimer->stop();
+	m_transport->TimeDisplayLabel->setText("BAR");
+	m_transport->TimeDisplayLabel->show();
+	break;
+
+    case BarMetronomeMode:
+	m_clearMetronomeTimer->start(1700, FALSE);
+	m_transport->TimeDisplayLabel->setText("MET");
+	m_transport->TimeDisplayLabel->show();
+	break;
+
+    case FrameMode:
+	m_clearMetronomeTimer->stop();
+	m_transport->TimeDisplayLabel->setText(QString("%1").arg(m_sampleRate));
+	m_transport->TimeDisplayLabel->show();
 	break;
     }
 }
@@ -319,8 +373,11 @@ RosegardenTransportDialog::displayRealTime(const Rosegarden::RealTime &rt)
 {
     Rosegarden::RealTime st = rt;
 
+    slotResetBackground();
+
     if (m_lastMode != RealMode) {
 	m_transport->HourColonPixmap->show();
+	m_transport->MinuteColonPixmap->show();
 	m_transport->SecondColonPixmap->hide();
 	m_transport->HundredthColonPixmap->hide();
 	m_lastMode = RealMode;
@@ -362,12 +419,64 @@ RosegardenTransportDialog::displayRealTime(const Rosegarden::RealTime &rt)
 }
 
 void
+RosegardenTransportDialog::displayFrameTime(const Rosegarden::RealTime &rt)
+{
+    Rosegarden::RealTime st = rt;
+
+    slotResetBackground();
+
+    if (m_lastMode != FrameMode) {
+	m_transport->HourColonPixmap->hide();
+	m_transport->MinuteColonPixmap->hide();
+	m_transport->SecondColonPixmap->hide();
+	m_transport->HundredthColonPixmap->hide();
+	m_lastMode = FrameMode;
+    }
+
+    // If time is negative then reverse the time and set the minus flag
+    //
+    if (st < Rosegarden::RealTime::zeroTime)
+    {
+        st = Rosegarden::RealTime::zeroTime - st;
+        if (!m_lastNegative) {
+	    m_transport->NegativePixmap->setPixmap(m_lcdNegative);
+	    m_lastNegative = true;
+	}
+    }
+    else // don't show the flag
+    {
+	if (m_lastNegative) {
+	    m_transport->NegativePixmap->clear();
+	    m_lastNegative = false;
+	}
+    }
+         
+    long frame = Rosegarden::RealTime::realTime2Frame(st, m_sampleRate);
+
+    m_tenThousandths = frame % 10; frame /= 10;
+    m_thousandths = frame % 10; frame /= 10;
+    m_hundreths = frame % 10; frame /= 10;
+    m_tenths = frame % 10; frame /= 10;
+    m_unitSeconds = frame % 10; frame /= 10;
+    m_tenSeconds = frame % 10; frame /= 10;
+    m_unitMinutes = frame % 10; frame /= 10;
+    m_tenMinutes = frame % 10; frame /= 10;
+    m_unitHours = frame % 10; frame /= 10;
+    m_tenHours = frame % 10; frame /= 10;
+    
+    updateTimeDisplay();
+}
+
+void
 RosegardenTransportDialog::displaySMPTETime(const Rosegarden::RealTime &rt)
 {
     Rosegarden::RealTime st = rt;
 
+    slotResetBackground();
+
     if (m_lastMode != SMPTEMode) {
 	m_transport->HourColonPixmap->show();
+	m_transport->MinuteColonPixmap->show();
 	m_transport->SecondColonPixmap->show();
 	m_transport->HundredthColonPixmap->show();
 	m_lastMode = SMPTEMode;
@@ -418,6 +527,7 @@ RosegardenTransportDialog::displayBarTime(int bar, int beat, int unit)
 {
     if (m_lastMode != BarMode) {
 	m_transport->HourColonPixmap->hide();
+	m_transport->MinuteColonPixmap->show();
 	m_transport->SecondColonPixmap->hide();
 	m_transport->HundredthColonPixmap->hide();
 	m_lastMode = BarMode;
@@ -439,6 +549,16 @@ RosegardenTransportDialog::displayBarTime(int bar, int beat, int unit)
 	    m_transport->NegativePixmap->clear();
 	    m_lastNegative = false;
 	}
+    }
+
+    if (m_currentMode == BarMetronomeMode && unit < 2) {
+	if (beat == 1) {
+	    slotSetBackground(Qt::red);
+	} else {
+	    slotSetBackground(Qt::cyan);
+	}
+    } else {
+	slotResetBackground();
     }
 
     m_tenThousandths = ( unit ) % 10;
@@ -670,6 +790,9 @@ void
 RosegardenTransportDialog::slotClearMidiInLabel()
 {
     m_transport->InDisplay->setText(i18n(QString("NO EVENTS")));
+
+    // also, just to be sure:
+    slotResetBackground();
 }
 
 
@@ -813,6 +936,49 @@ void
 RosegardenTransportDialog::slotEditTimeSignature()
 {
     emit editTimeSignature(this);
+}
+
+void
+RosegardenTransportDialog::slotSetBackground(QColor c)
+{
+    if (!m_haveOriginalBackground) {
+	m_originalBackground = m_transport->LCDBoxFrame->paletteBackgroundColor();
+	m_haveOriginalBackground = true;
+    }
+
+    m_transport->LCDBoxFrame->setPaletteBackgroundColor(c);
+    m_transport->NegativePixmap->setPaletteBackgroundColor(c);
+    m_transport->TenHoursPixmap->setPaletteBackgroundColor(c);
+    m_transport->UnitHoursPixmap->setPaletteBackgroundColor(c);
+    m_transport->TimeDisplayLabel->setPaletteBackgroundColor(c);
+
+/* this is a bit more thorough, but too slow and flickery:
+
+    const QObjectList *children = m_transport->LCDBoxFrame->children();
+    QObjectListIt it(*children);
+    QObject *obj;
+
+    while ((obj = it.current()) != 0) {
+
+	QWidget *w = dynamic_cast<QWidget *>(obj);
+	if (w) {
+	    w->setPaletteBackgroundColor(c);
+	}
+        ++it;
+    }
+
+*/
+
+    m_isBackgroundSet = true;
+}
+
+void
+RosegardenTransportDialog::slotResetBackground()
+{
+    if (m_isBackgroundSet) {
+	slotSetBackground(m_originalBackground);
+    }
+    m_isBackgroundSet = false;
 }
 
 const char* const RosegardenTransportDialog::ConfigGroup = "Transport Controls";

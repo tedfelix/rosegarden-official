@@ -178,7 +178,7 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
             SIGNAL(changeInstrumentLabel(Rosegarden::InstrumentId, QString)),
             this,
             SLOT(slotChangeInstrumentLabel(Rosegarden::InstrumentId, QString)));
-
+/*
     connect(m_instrumentParameterBox,
             SIGNAL(setMute(Rosegarden::InstrumentId, bool)),
             this,
@@ -193,7 +193,7 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
             SIGNAL(setRecord(Rosegarden::InstrumentId, bool)),
             this,
             SLOT(slotSetRecord(Rosegarden::InstrumentId, bool)));
-
+*/
     if (doc) {
         m_trackEditor->setupSegments();
 	connect(doc, SIGNAL(recordingSegmentUpdated(Rosegarden::Segment *,
@@ -966,6 +966,7 @@ void RosegardenGUIView::slotUpdateInstrumentParameterBox(int id)
 
     // Then do this instrument/track fiddling
     //
+/*
     if (track && instrument &&
             instrument->getType() == Rosegarden::Instrument::Audio)
     {
@@ -980,7 +981,7 @@ void RosegardenGUIView::slotUpdateInstrumentParameterBox(int id)
         m_instrumentParameterBox->setSolo(
                 comp.isSolo() && (track->getId() == comp.getSelectedTrack()));
     }
-
+*/
     emit checkTrackAssignments();
 }
 
@@ -1449,7 +1450,7 @@ RosegardenGUIView::slotSetMuteButton(Rosegarden::TrackId track, bool value)
     m_trackEditor->getTrackButtons()->setMuteButton(track, value);
     Rosegarden::Track *trackObj = getDocument()->
         getComposition().getTrackById(track);
-
+/*
     // to fix 739544
     if (m_instrumentParameterBox->getSelectedInstrument() &&
         m_instrumentParameterBox->getSelectedInstrument()->getId() ==
@@ -1457,7 +1458,7 @@ RosegardenGUIView::slotSetMuteButton(Rosegarden::TrackId track, bool value)
     {
         m_instrumentParameterBox->setMute(value);
     }
-
+*/
     // set the value in the composition
     trackObj->setMuted(value);
 
@@ -1490,11 +1491,11 @@ RosegardenGUIView::slotSetRecord(Rosegarden::InstrumentId id, bool value)
     RG_DEBUG << "RosegardenGUIView::slotSetRecord - "
              << "id = " << id
              << ",value = " << value << endl;
-
+/*
     // IPB
     //
     m_instrumentParameterBox->setRecord(value);
-
+*/
     Rosegarden::Composition &comp = getDocument()->getComposition();
     Rosegarden::Composition::trackcontainer &tracks = comp.getTracks();
     Rosegarden::Composition::trackiterator it;

@@ -869,7 +869,7 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 	if (m_printPainter) return;
 	KConfig *config = kapp->config();
 	config->setGroup("Notation Options");
-	bool showInvisibles = config->readBoolEntry("showInvisibles", true);
+	bool showInvisibles = config->readBoolEntry("showinvisibles", true);
 	if (!showInvisibles) return;
     }
 

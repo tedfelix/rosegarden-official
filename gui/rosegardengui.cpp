@@ -3521,26 +3521,34 @@ void RosegardenGUIApp::slotSetPointerPosition(timeT t)
 
     // and the time
     //
-    if (m_transport->getCurrentMode() ==
-        Rosegarden::RosegardenTransportDialog::BarMode) {
+    Rosegarden::RosegardenTransportDialog::TimeDisplayMode mode =
+	m_transport->getCurrentMode();
+    
+    if (mode == Rosegarden::RosegardenTransportDialog::BarMode ||
+	mode == Rosegarden::RosegardenTransportDialog::BarMetronomeMode) {
 
         slotDisplayBarTime(t);
 
     } else {
+
         Rosegarden::RealTime rT(comp.getElapsedRealTime(t));
 
         if (m_transport->isShowingTimeToEnd()) {
             rT = rT - comp.getElapsedRealTime(comp.getDuration());
         }
 
-        if (m_transport->getCurrentMode() ==
-            Rosegarden::RosegardenTransportDialog::RealMode) {
+        if (mode == Rosegarden::RosegardenTransportDialog::RealMode) {
 
             m_transport->displayRealTime(rT);
 
-        } else {
+        } else if (mode == Rosegarden::RosegardenTransportDialog::SMPTEMode) {
+
             m_transport->displaySMPTETime(rT);
-        }
+
+        } else {
+	    
+	    m_transport->displayFrameTime(rT);
+	}
     }
 
     // Update position on the marker editor if it's available

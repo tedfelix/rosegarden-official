@@ -192,9 +192,9 @@ public:
 
     static QString getGlobalName(bool down) {
 	if (down) {
-	    return i18n("Add Sustain Pedal &Press");
+	    return i18n("Add Pedal &Press");
 	} else {
-	    return i18n("Add Sustain Pedal &Release");
+	    return i18n("Add Pedal &Release");
 	}
     }
 
@@ -887,6 +887,24 @@ protected:
 
 private:
     Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+};
+
+class SetVisibilityCommand : public BasicSelectionCommand
+{
+public:
+    SetVisibilityCommand(Rosegarden::EventSelection &selection, bool visible) :
+	BasicSelectionCommand(getGlobalName(), selection, true),
+	m_selection(&selection),
+	m_visible(visible) { }
+
+    static QString getGlobalName() { return i18n("Set Visibility"); }
+
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    bool m_visible;
 };
 
 #endif

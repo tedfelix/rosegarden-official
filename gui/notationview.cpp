@@ -1978,6 +1978,14 @@ void NotationView::setupActions()
 		SLOT(slotFinePositionRestore()), actionCollection(),
 		"fine_position_restore");
 
+    new KAction(i18n("Make &Invisible"), 0, this,
+		SLOT(slotMakeInvisible()), actionCollection(),
+		"make_invisible");
+
+    new KAction(i18n("Make &Visible"), 0, this,
+		SLOT(slotMakeVisible()), actionCollection(),
+		"make_visible");
+
     createGUI(getRCFileName(), false);
 }
 
@@ -2718,14 +2726,12 @@ void NotationView::playNote(Rosegarden::Segment &s, int pitch, int velocity)
 
     if (velocity < 0) velocity = Rosegarden::MidiMaxValue;
 
-    // Send out note of half second duration
-    //
     Rosegarden::MappedEvent mE(ins->getId(),
                                Rosegarden::MappedEvent::MidiNoteOneShot,
                                pitch,
                                velocity,
                                Rosegarden::RealTime::zeroTime,
-                               Rosegarden::RealTime(0, 500000000),
+                               Rosegarden::RealTime(0, 250000000),
                                Rosegarden::RealTime::zeroTime);
 
     Rosegarden::StudioControl::sendMappedEvent(mE);

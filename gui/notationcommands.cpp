@@ -1993,4 +1993,21 @@ ResetDisplacementsCommand::modifySegment()
 }
 
 
+void
+SetVisibilityCommand::modifySegment()
+{
+    EventSelection::eventcontainer::iterator i;
+
+    for (i  = m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+
+	if (m_visible) {
+	    (*i)->unset(INVISIBLE);
+	} else {
+	    (*i)->set<Bool>(INVISIBLE, true);
+	}
+    }
+}
+
+
 		

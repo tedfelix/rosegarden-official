@@ -162,7 +162,7 @@ feature.<br><br>
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>...that the transport window can display bar-and-beat time (musical time) and 24-fps SMPTE frames as well as real time?  Just click on the small button at the extreme top left of the window.</p>
+<p>...that the transport window can display musical time, sample frame count, and a visual metronome as well as real time?  Just click on the small button at the extreme top left of the window.</p>
 </html>
 </tip>
 <tip category="Rosegarden|General">

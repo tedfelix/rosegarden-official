@@ -710,6 +710,21 @@ void NotationView::slotFinePositionRestore()
     addCommandToHistory(new ResetDisplacementsCommand(*m_currentEventSelection));
 }
 
+void NotationView::slotMakeVisible()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Making visible..."), this);
+
+    addCommandToHistory(new SetVisibilityCommand(*m_currentEventSelection, true));
+}
+
+void NotationView::slotMakeInvisible()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Making invisible..."), this);
+
+    addCommandToHistory(new SetVisibilityCommand(*m_currentEventSelection, false));
+}
 
 void NotationView::slotToggleToolsToolBar()
 {

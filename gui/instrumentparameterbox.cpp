@@ -112,6 +112,9 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
 	    this,
 	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)));
 
+/* Removed mute, solo and record buttons from audio IPB for symmetry
+   with MIDI IPB and to save space
+
     connect(m_audioInstrumentParameters,
             SIGNAL(muteButton(Rosegarden::InstrumentId, bool)),
             this, 
@@ -126,7 +129,7 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
             SIGNAL(recordButton(Rosegarden::InstrumentId, bool)),
             this,
             SIGNAL(setRecord(Rosegarden::InstrumentId, bool)));
-
+*/
     connect(m_audioInstrumentParameters,
 	    SIGNAL(selectPlugin(QWidget *, Rosegarden::InstrumentId, int)),
 	    this,
@@ -236,6 +239,7 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
     
 }
 
+/*
 void
 InstrumentParameterBox::setMute(bool value)
 {
@@ -246,10 +250,12 @@ InstrumentParameterBox::setMute(bool value)
         m_audioInstrumentParameters->slotSetMute(value);
     }
 }
+*/
 
 /*
  * Set the record state of the audio instrument parameter panel
  */
+/*
 void
 InstrumentParameterBox::setRecord(bool value)
 {
@@ -271,7 +277,7 @@ InstrumentParameterBox::setSolo(bool value)
         m_audioInstrumentParameters->slotSetSolo(value);
     }
 }
-
+*/
     
 
 void
@@ -373,6 +379,8 @@ AudioInstrumentParameterPanel::slotSelectAudioRecordLevel(float dB)
     }
 }
 
+/*
+
 void 
 AudioInstrumentParameterPanel::slotSetMute(bool value)
 {
@@ -416,7 +424,7 @@ AudioInstrumentParameterPanel::slotSetRecord(bool value)
     m_audioFader->m_recordButton->setOn(value);
     emit instrumentParametersChanged(m_selectedInstrument->getId());
 }
-
+*/
 
 void
 AudioInstrumentParameterPanel::slotPluginSelected(Rosegarden::InstrumentId instrumentId,
@@ -590,7 +598,7 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* d
 
     connect(m_audioFader->m_recordFader, SIGNAL(faderChanged(float)),
             this, SLOT(slotSelectAudioRecordLevel(float)));
-
+/*
     connect(m_audioFader->m_muteButton, SIGNAL(clicked()),
             this, SLOT(slotMute()));
 
@@ -599,7 +607,7 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* d
 
     connect(m_audioFader->m_recordButton, SIGNAL(clicked()),
             this, SLOT(slotRecord()));
-
+*/
     connect(m_audioFader->m_pan, SIGNAL(valueChanged(float)),
             this, SLOT(slotSetPan(float)));
 
@@ -623,6 +631,7 @@ AudioInstrumentParameterPanel::slotSynthGUIButtonClicked()
 			Rosegarden::Instrument::SYNTH_PLUGIN_POSITION);
 }
 */
+/*
 void
 AudioInstrumentParameterPanel::slotMute()
 {
@@ -658,7 +667,7 @@ AudioInstrumentParameterPanel::slotRecord()
         m_audioFader->m_recordButton->setOn(true);
     }
 }
-
+*/
 void
 AudioInstrumentParameterPanel::slotSetPan(float pan)
 {

@@ -295,10 +295,11 @@ public:
 
     RosegardenFader           *m_fader;
     RosegardenFader           *m_recordFader;
-
+/*
     QPushButton               *m_muteButton;
     QPushButton               *m_soloButton;
     QPushButton               *m_recordButton;
+*/
     RosegardenRotary          *m_pan;
 
     QPixmap                    m_monoPixmap;

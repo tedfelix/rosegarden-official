@@ -495,6 +495,9 @@ public slots:
     void slotFinePositionDown();
     void slotFinePositionRestore();
 
+    void slotMakeVisible();
+    void slotMakeInvisible();
+
     void slotDebugDump();
 
     /// Canvas actions slots

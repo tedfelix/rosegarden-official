@@ -257,6 +257,11 @@
 	        <Action name="jog_left"/>
 	        <Action name="jog_right"/>
 	</Menu>
+	<Menu name="visibility">
+		<text>&amp;Visibility</text>
+		<Action name="make_invisible"/>
+		<Action name="make_visible"/>
+	</Menu>
 </Menu>
 
 <Menu name="Tools">
