@@ -593,7 +593,8 @@ SegmentAutoSplitCommand::execute()
 
 	Segment *newSegment = new Segment();
 	newSegment->setTrack(m_segment->getTrack());
-	newSegment->setLabel(m_segment->getLabel());
+	newSegment->setLabel(m_segment->getLabel() + " " +
+			     qstrtostr(i18n("(part)")));
 
 	timeT startTime = segmentStart;
 	if (split > 0) {
@@ -642,6 +643,72 @@ SegmentAutoSplitCommand::isBarEmpty(int barNo)
 	if (!(*i)->isa(Rosegarden::Note::EventRestType)) return false;
     }
     return true;
+}
+
+
+SegmentRescaleCommand::SegmentRescaleCommand(Segment *s,
+					     int multiplier,
+					     int divisor) :
+    XKCommand(getGlobalName()),
+    m_segment(s),
+    m_newSegment(0),
+    m_multiplier(multiplier),
+    m_divisor(divisor),
+    m_detached(false)
+{
+    // nothing
+}
+
+SegmentRescaleCommand::~SegmentRescaleCommand()
+{
+    if (m_detached) {
+	delete m_segment;
+    } else {
+	delete m_newSegment;
+    }
+}
+
+void
+SegmentRescaleCommand::execute()
+{
+    timeT startTime = m_segment->getStartTime();
+    m_newSegment = new Segment();
+    m_newSegment->setTrack(m_segment->getTrack());
+    m_newSegment->setLabel(m_segment->getLabel() + " " +
+			   qstrtostr(i18n("(rescaled)")));
+
+    for (Segment::iterator i = m_segment->begin();
+	 m_segment->isBeforeEndMarker(i); ++i) {
+
+	if ((*i)->isa(Rosegarden::Note::EventRestType)) continue;
+
+	timeT dt = (*i)->getAbsoluteTime() - startTime;
+	timeT duration = (*i)->getDuration();
+
+	m_newSegment->insert
+	    (new Event(**i,
+		       startTime + (dt * m_multiplier / m_divisor),
+		       duration * m_multiplier / m_divisor));
+    }
+
+    m_segment->getComposition()->addSegment(m_newSegment);
+    m_segment->getComposition()->detachSegment(m_segment);
+    m_newSegment->normalizeRests(m_newSegment->getStartTime(),
+				 m_newSegment->getEndTime());
+
+    m_newSegment->setEndMarkerTime
+	(startTime + (m_segment->getEndMarkerTime() - startTime) *
+	 m_multiplier / m_divisor);
+
+    m_detached = true;
+}
+
+void
+SegmentRescaleCommand::unexecute()
+{
+    m_newSegment->getComposition()->addSegment(m_segment);
+    m_newSegment->getComposition()->detachSegment(m_newSegment);
+    m_detached = false;
 }
 
 

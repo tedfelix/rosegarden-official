@@ -174,7 +174,8 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 
     QFrame *subFrame = new QFrame(frame);
     QGridLayout *subLayout = new QGridLayout(subFrame,
-					     4, 2); // nbrow, nbcol
+					     4, 2, // nbrow, nbcol
+					     12, 2);
 
     subLayout->addWidget(new QLabel(i18n("Origin:"), subFrame), 0, 0);
     subLayout->addWidget(new QLabel(i18n("Copyright:"), subFrame), 1, 0);
@@ -371,6 +372,7 @@ AudioConfigurationPage::AudioConfigurationPage(RosegardenGUIDoc *doc,
                                           10, 5);
     layout->addWidget(new QLabel(i18n("Audio file path:"), frame), 0, 0);
     m_path = new QLineEdit(QString(afm.getAudioPath().c_str()), frame);
+    m_path->setMinimumWidth(200);
     layout->addWidget(m_path, 0, 1);
     
     m_changePathButton =

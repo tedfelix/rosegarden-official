@@ -357,11 +357,11 @@ void RosegardenGUIApp::setupActions()
 		SLOT(slotHarmonizeSelection()), actionCollection(),
 		"harmonize_selection");
 
-    new KAction(i18n("&Rescale..."), 0, this,
+    new KAction(i18n(SegmentRescaleCommand::getGlobalName()), 0, this,
 		SLOT(slotRescaleSelection()), actionCollection(),
 		"rescale");
 
-    new KAction(SegmentAutoSplitCommand::getGlobalName(), 0, this,
+    new KAction(i18n(SegmentAutoSplitCommand::getGlobalName()), 0, this,
 		SLOT(slotAutoSplitSelection()), actionCollection(),
 		"auto_split");
 
@@ -373,10 +373,15 @@ void RosegardenGUIApp::setupActions()
 		SLOT(slotEditAsNotation()), actionCollection(),
 		"edit_notation");
 
-    new KAction(AddTempoChangeCommand::getGlobalName(),
+    new KAction(i18n(AddTempoChangeCommand::getGlobalName()),
                 0,
                 this, SLOT(slotEditTempo()),
                 actionCollection(), "add_tempo");
+
+    new KAction(i18n(AddTimeSignatureCommand::getGlobalName()),
+		0,
+		this, SLOT(slotEditTimeSignature()),
+		actionCollection(), "add_time_signature");
 
     new KAction(i18n("Edit Document P&roperties..."), 0, this,
                 SLOT(slotEditDocumentProperties()),
@@ -1180,23 +1185,24 @@ void RosegardenGUIApp::slotRescaleSelection()
     if (!m_view->haveSelection()) return;
 
     //!!! this should all be in rosegardenguiview
+    //!!! should it?
 
     RescaleDialog *dialog = new RescaleDialog(m_view);
     if (dialog->exec() != QDialog::Accepted) return;
 
     Rosegarden::SegmentSelection selection = m_view->getSelection();
-    /*!!!
+
     KMacroCommand *command = new KMacroCommand
 	(SegmentRescaleCommand::getGlobalName());
 
     for (Rosegarden::SegmentSelection::iterator i = selection.begin();
 	 i != selection.end(); ++i) {
-	command->addCommand(new SegmentRescaleCommand
-                            (*i, dialog->getMultiplier(),
-			          dialog->getDivisor());
+	command->addCommand(new SegmentRescaleCommand(*i,
+						      dialog->getMultiplier(),
+						      dialog->getDivisor()));
     }
+
     m_view->slotAddCommandToHistory(command);
-    */
 }
 
 void RosegardenGUIApp::slotAutoSplitSelection()

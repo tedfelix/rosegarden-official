@@ -331,7 +331,7 @@ void MatrixView::setupActions()
                                   actionCollection(), "resize");
     toolAction->setExclusiveGroup("tools");
 
-    new KAction(EventQuantizeCommand::getGlobalName(), 0, this,
+    new KAction(i18n(EventQuantizeCommand::getGlobalName()), 0, this,
                 SLOT(slotTransformsQuantize()), actionCollection(),
                 "quantize");
 

@@ -242,6 +242,28 @@ private:
 };
 
 
+class SegmentRescaleCommand : public XKCommand
+{
+public:
+    SegmentRescaleCommand(Rosegarden::Segment *segment,
+			  int multiplier,
+			  int divisor);
+    virtual ~SegmentRescaleCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+    
+    static QString getGlobalName() { return "&Rescale..."; }
+
+private:
+    Rosegarden::Segment *m_segment;
+    Rosegarden::Segment *m_newSegment;
+    int m_multiplier;
+    int m_divisor;
+    bool m_detached;
+};
+
+
 class SegmentChangeQuantizationCommand : public XKCommand
 {
 public:

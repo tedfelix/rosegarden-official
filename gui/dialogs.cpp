@@ -2081,15 +2081,17 @@ RescaleDialog::RescaleDialog(QWidget *parent) :
 
     NotePixmapFactory npf;
 
-    for (Note::Type t = Note::Shortest; t <= Note::Longest; ++t) {
-	Note note(t);
-	QPixmap pmap = npf.makeToolbarPixmap
-	    (strtoqstr((std::string("menu-") + note.getReferenceName())));
-	fromCombo->insertItem(pmap, strtoqstr(note.getEnglishName()));
-	toCombo->insertItem(pmap, strtoqstr(note.getEnglishName()));
-	if (t == Note::Crotchet) {
-	    fromCombo->setCurrentItem(fromCombo->count() - 1);
-	    toCombo->setCurrentItem(toCombo->count() - 1);
+    for (Note::Type t = Note::Shortest + 1; t < Note::Longest; ++t) {
+	for (int dots = 0; dots <= 1; ++dots) {
+	    Note note(t, dots);
+	    QPixmap pmap = npf.makeToolbarPixmap
+		(strtoqstr((std::string("menu-") + note.getReferenceName())));
+	    fromCombo->insertItem(pmap, strtoqstr(note.getEnglishName()));
+	    toCombo->insertItem(pmap, strtoqstr(note.getEnglishName()));
+	    if (t == Note::Crotchet && dots == 0) {
+		fromCombo->setCurrentItem(fromCombo->count() - 1);
+		toCombo->setCurrentItem(toCombo->count() - 1);
+	    }
 	}
     }
 
@@ -2103,36 +2105,34 @@ RescaleDialog::RescaleDialog(QWidget *parent) :
 int
 RescaleDialog::getMultiplier()
 {
-    return 1; //!!!
+    return (int)m_to.getDuration();
 }
 
 int
 RescaleDialog::getDivisor()
 {
-    return 1; //!!!
+    return (int)m_from.getDuration();
+}
+
+static Note getNoteForIndex(int index)
+{
+    for (Note::Type t = Note::Shortest + 1; t < Note::Longest; ++t) {
+	for (int dots = 0; dots <= 1; ++dots) {
+	    if (index-- == 0) return Note(t, dots);
+	}
+    }
+    return Note(Note::Crotchet);
 }
 
 void
 RescaleDialog::slotFromChanged(int i)
 {
-    Note::Type t = Note::Shortest;
-    while (t <= Note::Longest) {
-	if (i-- == 0) break;
-	++t;
-    }
-    assert(t <= Note::Longest);
-    m_from = Note(t);
+    m_from = getNoteForIndex(i);
 }
 
 void
 RescaleDialog::slotToChanged(int i)
 {
-    Note::Type t = Note::Shortest;
-    while (t <= Note::Longest) {
-	if (i-- == 0) break;
-	++t;
-    }
-    assert(t <= Note::Longest);
-    m_to = Note(t);
+    m_to = getNoteForIndex(i);
 }
 
