@@ -913,6 +913,14 @@ Segment::notifySourceDeletion() const
 }
 
 
+void
+Segment::setColourIndex(const unsigned int input)
+{
+    m_colourIndex = input;
+    updateRefreshStatuses(getStartTime(), getEndTime());
+    if (m_composition) m_composition->updateRefreshStatuses();
+}
+
 
 SegmentHelper::~SegmentHelper() { }
 

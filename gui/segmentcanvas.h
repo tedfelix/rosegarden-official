@@ -213,9 +213,6 @@ public:
 
     Rosegarden::SnapGrid &grid() { return m_grid; }
 
-    /// Return the brush used by all SegmentItem objects (normally, solid blue)
-    const QBrush& brush()  const { return m_brush; }
-
     /// Return the pen used by all SegmentItem objects
     const QPen& pen()      const { return m_pen; }
 
@@ -252,16 +249,6 @@ public:
     SegmentItem* findSegmentClickedOn(QPoint);
 
     SegmentRepeatRectangle* findRepeatClickedOn(QPoint);
-
-    /**
-     * get the highlight brush from the canvas
-     */
-    QBrush getHighlightBrush() const { return m_highlightBrush; }
-
-    /**
-     * Get the normal segment brush
-     */
-    QBrush getSegmentBrush() const { return m_brush; }
 
     SegmentToolBox* getToolBox() { return m_toolBox; }
     
@@ -378,8 +365,6 @@ protected:
 
     SegmentSplitLine *m_splitLine;
 
-    QBrush m_brush;
-    QBrush m_highlightBrush;
     QPen m_pen;
 
     bool m_fineGrain;

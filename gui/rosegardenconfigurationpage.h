@@ -22,6 +22,10 @@
 #ifndef _ROSEGARDENCONFIGUREPAGE_H_
 #define _ROSEGARDENCONFIGUREPAGE_H_
 
+#include <map>
+#include <utility>
+#include <vector>
+
 #include <qspinbox.h>
 #include <qcombobox.h>
 #include <qcheckbox.h>
@@ -29,11 +33,16 @@
 #include <qlineedit.h>
 
 #include <klocale.h>
+#include <kcolordialog.h>
+#include <kcolorbutton.h>
 
 #include <string>
 
+#include "ColourMap.h"
 #include "Device.h"
 #include "config.h"
+#include "widgets.h"
+#include "colourwidgets.h"
 
 class RosegardenGUIDoc;
 class QTabWidget;
@@ -42,8 +51,9 @@ class QPushButton;
 class QRadioButton;
 class QLabel;
 class QCheckBox;
-class KListView;
 class RosegardenQuantizeParameters;
+class KListView;
+class QTable;
 
 namespace Rosegarden
 {
@@ -390,6 +400,41 @@ protected:
 };
 
 /**
+ * Colour Configuration Page
+ *
+ * (document-wide settings)
+ */
+class ColourConfigurationPage : public TabbedConfigurationPage
+{
+    Q_OBJECT
+public:
+    ColourConfigurationPage(RosegardenGUIDoc *doc,
+                            QWidget *parent=0, const char *name=0);
+    virtual void apply();
+
+    void populate_table();
+
+    static QString iconLabel() { return i18n("Colour"); }
+    static QString title()     { return i18n("Colour Settings"); }
+
+signals:
+    void docColoursChanged();
+
+protected slots:
+    void slotAddNew();
+    void slotDelete();
+    void slotTextChanged(unsigned int, QString);
+    void slotColourChanged(unsigned int, QColor);
+
+protected:
+    RosegardenColourTable *m_colourtable;
+
+    ColourMap m_map;
+    RosegardenColourTable::ColourList m_listmap;
+
+};
+
+/**
  * Metronome Configuration page
  *
  * (document-wide settings)
@@ -414,7 +459,6 @@ protected:
     QSpinBox*  m_defaultMetronomePitch;
 
 };
-
 
 // -----------  SequencerConfigurationage -----------------
 //

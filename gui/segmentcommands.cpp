@@ -2070,3 +2070,66 @@ SegmentLabelCommand::unexecute()
 }
 
 
+// Alter colour
+
+SegmentColourCommand::SegmentColourCommand(
+        const Rosegarden::SegmentSelection &segments,
+        const unsigned int index):
+    KNamedCommand(i18n("Change Segment Colour")),
+    m_newColourIndex(index)
+{
+    for (Rosegarden::SegmentSelection::iterator i = segments.begin(); i != segments.end(); ++i) 
+        m_segments.push_back(*i);
+}
+
+SegmentColourCommand::~SegmentColourCommand()
+{
+}
+
+void
+SegmentColourCommand::execute()
+{
+    for (unsigned int i = 0; i < m_segments.size(); ++i)
+    {
+        m_oldColourIndexes.push_back(m_segments[i]->getColourIndex());
+        m_segments[i]->setColourIndex(m_newColourIndex);
+    }
+}
+
+void
+SegmentColourCommand::unexecute()
+{
+    for (unsigned int i = 0; i < m_segments.size(); ++i)
+        m_segments[i]->setColourIndex(m_oldColourIndexes[i]);
+}
+
+// Alter ColourMap
+SegmentColourMapCommand::SegmentColourMapCommand(
+              RosegardenGUIDoc      *doc,
+        const Rosegarden::ColourMap &map):
+    KNamedCommand(i18n("Change Segment Colour Map")),
+    m_doc(doc),
+    m_oldMap(m_doc->getComposition().getSegmentColourMap()),
+    m_newMap(map)
+{
+
+}
+
+SegmentColourMapCommand::~SegmentColourMapCommand()
+{
+}
+
+void
+SegmentColourMapCommand::execute()
+{
+    m_doc->getComposition().setSegmentColourMap(m_newMap);
+    m_doc->slotDocColoursChanged();
+}
+
+void
+SegmentColourMapCommand::unexecute()
+{
+    m_doc->getComposition().setSegmentColourMap(m_oldMap);
+    m_doc->slotDocColoursChanged();
+}
+

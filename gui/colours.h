@@ -39,14 +39,10 @@ namespace RosegardenGUIColours
 
     extern const QColor SegmentCanvas;
     extern const QColor SegmentBorder;
-    extern const QColor SegmentBlock;
-    extern const QColor SegmentHighlightBlock;
-    extern const QColor SegmentIntersectBlock;
 
     extern const QColor RecordingSegmentBlock;
     extern const QColor RecordingSegmentBorder;
 
-    extern const QColor RepeatSegmentBlock;
     extern const QColor RepeatSegmentBorder;
 
     extern const QColor SegmentAudioPreview;
@@ -60,6 +56,8 @@ namespace RosegardenGUIColours
     extern const QColor LoopRulerBackground;
     extern const QColor LoopRulerForeground;
     extern const QColor LoopHighlight;
+
+    extern const QColor TempoBase;
 
     extern const QColor TextRulerBackground;
     extern const QColor TextRulerForeground;
@@ -113,8 +111,8 @@ namespace RosegardenGUIColours
 
     extern const QColor RotaryPlugin;
 
-    Rosegarden::Colour convertColour(QColor input);
-    QColor convertColour(Rosegarden::Colour input);
+    Rosegarden::Colour convertColour(const QColor &input);
+    QColor convertColour(const Rosegarden::Colour &input);
 
 }
 

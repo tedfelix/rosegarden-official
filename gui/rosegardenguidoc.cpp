@@ -2106,4 +2106,13 @@ RosegardenGUIDoc::getClipboard()
     return app->getClipboard();
 }
 
+void RosegardenGUIDoc::slotDocColoursChanged()
+{
+    RG_DEBUG << "RosegardenGUIDoc::slotDocColoursChanged()\n";
+    // XXX: WE NEED TO UPDATE THE WHOLE TRACK DISPLAY HERE 
+    //      (AS THE SEGMENT COLOUR MAP HAS CHANGED)
+    //      I can't get it to work (ARGH) - MH
+    emit docColoursChanged();
+}
+
 const unsigned int RosegardenGUIDoc::MinNbOfTracks = 64;

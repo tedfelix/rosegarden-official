@@ -31,6 +31,7 @@
 #include "Quantizer.h"
 #include "NotationTypes.h"
 
+#include "colours.h"
 #include "notepixmapfactory.h"
 #include "segmentcommands.h"
 #include "rosestrings.h"
@@ -60,6 +61,7 @@ SegmentParameterBox::~SegmentParameterBox()
     delete m_quantizeValue;
     delete m_transposeValue;
     delete m_delayValue;
+    delete m_colourValue;
 }
 
 void
@@ -71,13 +73,14 @@ SegmentParameterBox::initBox()
     // magic numbers: 13 is the height of the menu pixmaps, 10 is just 10
     int comboHeight = std::max(fontMetrics.height(), 13) + 10;
 
-    QGridLayout *gridLayout = new QGridLayout(this, 5, 2, 8, 1);
+    QGridLayout *gridLayout = new QGridLayout(this, 6, 2, 8, 1);
 
     QLabel *label = new QLabel(i18n("Label"), this);
     QLabel *repeatLabel    = new QLabel(i18n("Repeat"), this);
     QLabel *quantizeLabel  = new QLabel(i18n("Quantize"), this);
     QLabel *transposeLabel = new QLabel(i18n("Transpose"), this);
     QLabel *delayLabel     = new QLabel(i18n("Delay"), this);
+    QLabel *colourLabel    = new QLabel(i18n("Colour"), this);
 
     // HBox for label
     //
@@ -133,16 +136,32 @@ SegmentParameterBox::initBox()
     // handle delay combo changes
     connect(m_delayValue, SIGNAL(activated(int)),
             SLOT(slotDelaySelected(int)));
-    //
+
+    // Detect when the document colours are updated
+    connect (m_view->getDocument(), SIGNAL(docColoursChanged()),
+             this, SLOT(slotDocColoursChanged()));
+
     // handle text changes for delay
     connect(m_delayValue, SIGNAL(textChanged(const QString&)),
             SLOT(slotDelayTextChanged(const QString &)));
+
+    // set up combo box for colours
+    m_colourValue = new KComboBox(false, this);
+    m_colourValue->setFont(font);
+    m_colourValue->setFixedHeight(comboHeight);
+
+    // handle colour combo changes
+    connect(m_colourValue, SIGNAL(activated(int)),
+            SLOT(slotColourSelected(int)));
+
+
 
     label->setFont(font);
     repeatLabel->setFont(font);
     quantizeLabel->setFont(font);
     transposeLabel->setFont(font);
     delayLabel->setFont(font);
+    colourLabel->setFont(font);
 
     gridLayout->addRowSpacing(0, 8);
 
@@ -160,6 +179,9 @@ SegmentParameterBox::initBox()
 
     gridLayout->addWidget(delayLabel,   5, 0, AlignLeft);
     gridLayout->addWidget(m_delayValue, 5, 1);
+
+    gridLayout->addWidget(colourLabel,   6, 0, AlignLeft);
+    gridLayout->addWidget(m_colourValue, 6, 1);
 
     // populate the quantize combo
     //
@@ -220,6 +242,9 @@ SegmentParameterBox::initBox()
     // set delay blank initially
     m_delayValue->setCurrentItem(-1);
 
+    // populate m_colourValue
+    slotDocColoursChanged();
+
 }
 
 void
@@ -239,6 +264,31 @@ SegmentParameterBox::useSegments(const Rosegarden::SegmentSelection &segments)
     std::copy(segments.begin(), segments.end(), m_segments.begin());
 
     populateBoxFromSegments();
+}
+
+void
+SegmentParameterBox::slotDocColoursChanged()
+{
+    m_colourValue->clear();
+    m_colourList.clear();
+    // Populate it from composition.m_segmentColourMap
+    Rosegarden::ColourMap temp = m_view->getDocument()->getComposition().getSegmentColourMap();
+
+    unsigned int i=0;
+
+    for (Rosegarden::RCMap::const_iterator it=temp.begin(); it != temp.end(); ++it)
+    {
+        QPixmap colour(15,15);
+        colour.fill(RosegardenGUIColours::convertColour(it->second.first));
+        if (it->second.second == std::string(""))
+            m_colourValue->insertItem(colour, i18n("Default Colour"), i);
+        else
+            m_colourValue->insertItem(colour, strtoqstr(it->second.second), i);
+        m_colourList[it->first] = i;
+        ++i;
+    }
+
+    m_colourValue->setCurrentItem(0);
 }
 
 void SegmentParameterBox::update()
@@ -261,6 +311,8 @@ SegmentParameterBox::populateBoxFromSegments()
     Tristate quantized = NotApplicable;
     Tristate transposed = NotApplicable;
     Tristate delayed = NotApplicable;
+    Tristate diffcolours = NotApplicable;
+    unsigned int myCol = 0;
 
     Rosegarden::timeT qntzLevel = 0;
     // At the moment we have no negative delay, so we use negative
@@ -280,6 +332,7 @@ SegmentParameterBox::populateBoxFromSegments()
 	if (quantized == NotApplicable) quantized = None;
 	if (transposed == NotApplicable) transposed = None;
 	if (delayed == NotApplicable) delayed = None;
+	if (diffcolours == NotApplicable) diffcolours = None;
 
         // Set label to "*" when multiple labels don't match
         //
@@ -379,6 +432,18 @@ SegmentParameterBox::populateBoxFromSegments()
         {
             if (delayed == All)
                 delayed = Some;
+        }
+
+        // Colour
+
+        if (it == m_segments.begin())
+        {
+            myCol = (*it)->getColourIndex();
+        }
+        else
+        {
+            if (myCol != (*it)->getColourIndex());
+                diffcolours = All;
         }
 
     }
@@ -493,6 +558,27 @@ SegmentParameterBox::populateBoxFromSegments()
     m_delayValue->setEnabled(delayed != NotApplicable);
 
     m_delayValue->blockSignals(false);
+
+    switch(diffcolours)
+    {
+        case None:
+            if (m_colourList.find(myCol) != m_colourList.end())
+                m_colourValue->setCurrentItem(m_colourList[myCol]);
+            else
+                m_colourValue->setCurrentItem(0);
+            break;
+
+
+        case All:
+        case NotApplicable:
+        default:
+            m_colourValue->setCurrentItem(0);
+            break;
+
+    }
+
+    m_colourValue->setEnabled(diffcolours != NotApplicable);
+
 }
 
 void SegmentParameterBox::slotRepeatPressed()
@@ -626,6 +712,32 @@ SegmentParameterBox::slotDelaySelected(int value)
 	slotDelayTimeChanged(-(m_realTimeDelays[value - m_delays.size()]));
     }
 } 
+
+void
+SegmentParameterBox::slotColourSelected(int value)
+{
+    unsigned int temp;
+
+    RosegardenColourTable::ColourList::const_iterator pos = m_colourList.find(value);
+
+    if (pos != m_colourList.end())
+        temp = pos->first;
+    else // Somehow we are trying to set a colour which doesn't exist
+        temp = 0;
+
+    Rosegarden::SegmentSelection segments;
+    std::vector<Rosegarden::Segment*>::iterator it;
+
+    for (it = m_segments.begin(); it != m_segments.end(); ++it)
+    {
+       segments.insert(*it);
+    }
+
+    SegmentColourCommand *command = new SegmentColourCommand(segments, temp);
+
+    addCommandToHistory(command);
+
+}
 
 MultiViewCommandHistory*
 SegmentParameterBox::getCommandHistory()

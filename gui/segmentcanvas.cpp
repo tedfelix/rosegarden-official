@@ -33,6 +33,8 @@
 #include <kapp.h>
 #include <kconfig.h>
 
+#include "Colour.h"
+#include "ColourMap.h"
 #include "Composition.h"
 #include "NotationTypes.h"
 #include "BaseProperties.h"
@@ -54,13 +56,17 @@ using Rosegarden::RulerScale;
 using Rosegarden::SnapGrid;
 using Rosegarden::TrackId;
 using Rosegarden::timeT;
+using Rosegarden::Colour;
+using Rosegarden::ColourMap;
+using Rosegarden::getCombinationColour;
 
 class SegmentRepeatRectangle : public QCanvasRectangle
 {
 public:
     SegmentRepeatRectangle(QCanvas *,
 			   Rosegarden::Segment *,
-                           SnapGrid *);
+                           SnapGrid *,
+               RosegardenGUIDoc *);
 
     void setRepeatInterval(unsigned int i) { m_repeatInterval = i; }
 
@@ -75,17 +81,20 @@ protected:
     Rosegarden::Segment *m_segment;
     unsigned int m_repeatInterval;
     SnapGrid    *m_snapGrid;
+    RosegardenGUIDoc *m_doc;
 };
 
 SegmentRepeatRectangle::SegmentRepeatRectangle(QCanvas *canvas,
 					       Rosegarden::Segment *segment,
-                                               SnapGrid *snapGrid)
+                                               SnapGrid *snapGrid, 
+                           RosegardenGUIDoc    *doc)
     : QCanvasRectangle(canvas),
       m_segment(segment),
       m_repeatInterval(0),
-      m_snapGrid(snapGrid)
+      m_snapGrid(snapGrid),
+      m_doc(doc)
 {
-    setBrush(RosegardenGUIColours::RepeatSegmentBlock);
+    setBrush(RosegardenGUIColours::convertColour(m_doc->getComposition().getSegmentColourMap().getColourByIndex(m_segment->getColourIndex())).light(150));
     setPen(RosegardenGUIColours::RepeatSegmentBorder);
 }
 
@@ -113,7 +122,7 @@ void SegmentRepeatRectangle::drawShape(QPainter& painter)
     int rWidth = int(m_snapGrid->getRulerScale()->
 		     getXForTime(m_repeatInterval));
 
-    painter.setBrush(RosegardenGUIColours::RepeatSegmentBlock);
+    setBrush(RosegardenGUIColours::convertColour(m_doc->getComposition().getSegmentColourMap().getColourByIndex(m_segment->getColourIndex())).light(150));
     painter.setPen(RosegardenGUIColours::RepeatSegmentBorder);
 
     while (pos < width + rWidth)
@@ -513,9 +522,19 @@ void SegmentItem::drawShape(QPainter& painter)
     QCanvasItemList items = canvas()->allItems();
 
     painter.save();
-    painter.setBrush(RosegardenGUIColours::SegmentIntersectBlock);
-    
+
+    bool colourset = false;
+
     for (QCanvasItemList::Iterator it=items.begin(); it!=items.end(); ++it) {
+
+        if (!colourset)
+        {
+            if (m_segment)
+                painter.setBrush(RosegardenGUIColours::convertColour(m_doc->getComposition().getSegmentColourMap().getColourByIndex(m_segment->getColourIndex())).dark(125));
+            else
+                painter.setBrush(RosegardenGUIColours::convertColour(m_doc->getComposition().getSegmentColourMap().getColourByIndex(0)).dark(125));
+            colourset = true;
+        }
 
         if ((*it) == this) continue; // skip ourselves
 
@@ -577,6 +596,13 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
 {
     canvas()->setChanged(rect());
 
+    // Get our segment colour
+    QColor brush;
+    if (m_segment)
+        brush = RosegardenGUIColours::convertColour(m_doc->getComposition().getSegmentColourMap().getColourByIndex(m_segment->getColourIndex()));
+    else
+        brush = RosegardenGUIColours::convertColour(m_doc->getComposition().getSegmentColourMap().getColourByIndex(0));
+
     // Compute repeat rectangle if any
     //
     if (m_segment && inheritFromSegment) {
@@ -588,11 +614,13 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
         m_label = strtoqstr(m_segment->getLabel());
 
 	if (m_segment->isRepeating()) {
-
             if (!m_repeatRectangle)
                 m_repeatRectangle = new SegmentRepeatRectangle(canvas(),
 							       getSegment(),
-                                                               m_snapGrid);
+                                                               m_snapGrid, m_doc);
+
+        // Set the colour for the repeat rectangle
+        m_repeatRectangle->setBrush(brush.light(150));
 
 	    timeT repeatStart = m_endTime;
 	    timeT repeatEnd = m_segment->getRepeatEndTime();
@@ -621,6 +649,12 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
     //
     setX(m_snapGrid->getRulerScale()->getXForTime(m_startTime));
     setY(m_snapGrid->getYBinCoordinate(m_trackPosition));
+
+    // Set our segment brush colour
+    if (m_selected)
+        setBrush(brush.dark(200));
+    else
+        setBrush(brush);
 
     int h = m_snapGrid->getYSnap();
     double w = m_snapGrid->getRulerScale()->getWidthForDuration
@@ -758,8 +792,6 @@ SegmentCanvas::SegmentCanvas(RosegardenGUIDoc *doc,
     m_currentItem(0),
     m_recordingSegment(0),
     m_splitLine(0),
-    m_brush(RosegardenGUIColours::SegmentBlock),
-    m_highlightBrush(RosegardenGUIColours::SegmentHighlightBlock),
     m_pen(RosegardenGUIColours::SegmentBorder),
     m_fineGrain(false),
     m_showPreviews(true),
@@ -1051,7 +1083,7 @@ SegmentCanvas::addSegmentItem(TrackId track, timeT startTime, timeT endTime)
 	(track, startTime, endTime, m_showPreviews, &m_grid, canvas(), m_doc);
 
     newItem->setPen(m_pen);
-    newItem->setBrush(m_brush);
+    newItem->setBrush(RosegardenGUIColours::convertColour(m_doc->getComposition().getSegmentColourMap().getColourByIndex(0)));
     newItem->setVisible(true);     
     newItem->setZ(1);           // Segment at Z=1, Pointer at Z=10 [rwb]
 
@@ -1065,7 +1097,7 @@ SegmentCanvas::addSegmentItem(Segment *segment)
 	(segment, m_showPreviews, &m_grid, canvas(), m_doc);
 
     newItem->setPen(m_pen);
-    newItem->setBrush(m_brush);
+    newItem->setBrush(RosegardenGUIColours::convertColour(m_doc->getComposition().getSegmentColourMap().getColourByIndex(segment->getColourIndex())));
     newItem->setVisible(true);     
     newItem->setZ(1);           // Segment at Z=1, Pointer at Z=10 [rwb]
 

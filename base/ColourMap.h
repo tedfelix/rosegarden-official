@@ -31,10 +31,10 @@
 #ifndef _BASE_COLOURMAP_H_
 #define _BASE_COLOURMAP_H_
 
-// These is the default default colour
-#define COLOUR_DEF_R 230
-#define COLOUR_DEF_B 230
-#define COLOUR_DEF_G 230
+// These are the default, default colour
+#define COLOUR_DEF_R 197
+#define COLOUR_DEF_B 125 
+#define COLOUR_DEF_G 211
 
 namespace Rosegarden 
 {
@@ -105,6 +105,8 @@ public:
      */
     bool swapItems(unsigned int item_1, unsigned int item_2);
 
+//    void replace(ColourMap &input);
+
     /**
      * This returns a const iterator pointing to m_map.begin()
      */
@@ -114,6 +116,10 @@ public:
      * This returns a const iterator pointing to m_map.end()
      */
     RCMap::const_iterator end();
+
+    ColourMap& operator=(const ColourMap& input);
+
+    int size() const;
 
 private:
     RCMap m_map;

@@ -586,6 +586,9 @@ public:
     static const std::string TempoEventType; 
     static const PropertyName TempoProperty; // stored in beats per hour
 
+    // Colour stuff
+    ColourMap& getSegmentColourMap() { return m_segmentColourMap; }
+    void setSegmentColourMap(Rosegarden::ColourMap &newmap);
 
     //////
     //

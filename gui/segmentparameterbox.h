@@ -31,6 +31,7 @@
 
 #include "Quantizer.h"
 #include "Selection.h"
+#include "colourwidgets.h"
 #include "widgets.h"
 
 
@@ -87,10 +88,14 @@ public slots:
 
     void slotEditSegmentLabel();
 
+    void slotColourSelected(int);
+    void slotDocColoursChanged();
+
     virtual void update();
 
 signals:
     void documentModified();
+    void canvasModified();
 
 protected:
     void initBox();
@@ -102,11 +107,13 @@ protected:
     KComboBox                  *m_quantizeValue;
     RosegardenComboBox         *m_transposeValue;
     RosegardenComboBox         *m_delayValue;
+    KComboBox                  *m_colourValue;
 
     std::vector<Rosegarden::Segment*> m_segments;
     std::vector<Rosegarden::timeT> m_standardQuantizations;
     std::vector<Rosegarden::timeT> m_delays;
     std::vector<int> m_realTimeDelays;
+    RosegardenColourTable::ColourList  m_colourList;
 
     RosegardenGUIView          *m_view;
 

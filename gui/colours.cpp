@@ -28,14 +28,10 @@ namespace RosegardenGUIColours
     const QColor ActiveRecordTrack = Qt::red;
 
     const QColor SegmentCanvas = QColor(230, 230, 230);
-    const QColor SegmentBlock = QColor(197, 211, 125);
     const QColor SegmentBorder = Qt::black;
-    const QColor SegmentHighlightBlock = QColor(98, 102, 78);
-    const QColor SegmentIntersectBlock = SegmentBlock.dark(150);
     const QColor RecordingSegmentBlock = QColor(255, 182, 193);
     const QColor RecordingSegmentBorder = Qt::black;
 
-    const QColor RepeatSegmentBlock = QColor(238, 238, 205);
     const QColor RepeatSegmentBorder = QColor(130, 133, 170);
 
     const QColor SegmentAudioPreview = QColor(39, 71, 22);
@@ -49,7 +45,9 @@ namespace RosegardenGUIColours
     const QColor LoopRulerBackground = QColor(120, 120, 120);
     const QColor LoopRulerForeground = Qt::white;
     const QColor LoopHighlight = Qt::white;
-  
+
+    const QColor TempoBase = QColor(197, 211, 125);
+
     //const QColor TextRulerBackground = QColor(60, 205, 230, QColor::Hsv);
 //    const QColor TextRulerBackground = QColor(120, 90, 238, QColor::Hsv);
 //    const QColor TextRulerBackground = QColor(210, 220, 140);
@@ -108,7 +106,7 @@ namespace RosegardenGUIColours
     const QColor RotaryPlugin = QColor(185, 255, 248);
 
 Rosegarden::Colour
-convertColour (const QColor& input)
+convertColour (const QColor &input)
 {
 	int r,g,b;
 	input.rgb(&r, &g, &b);

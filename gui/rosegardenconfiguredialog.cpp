@@ -45,6 +45,8 @@
 #include <qtooltip.h>
 #include <qvbox.h>
 #include <qstringlist.h>
+#include <qtable.h>
+#include <qheader.h>
 
 #include <kcombobox.h>
 #include <klistview.h>
@@ -52,8 +54,10 @@
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kprocess.h>
+#include <kcolordialog.h>
 
 #include "constants.h"
+#include "colours.h"
 #include "rosestrings.h"
 #include "rosegardenconfiguredialog.h"
 #include "rosegardenconfigurationpage.h"
@@ -73,8 +77,10 @@
 #include "editcommands.h"
 #include "studiocontrol.h"
 #include "widgets.h"
+#include "colourwidgets.h"
 #include "audiopluginmanager.h"
 #include "diskspace.h"
+#include "segmentcommands.h"
 
 namespace Rosegarden
 {
@@ -910,6 +916,7 @@ void LatencyConfigurationPage::slotPlaybackChanged(int value)
 
 }
 
+
 // -------------------  SequencerConfigurationPage ---------------------
 //
 
@@ -1690,6 +1697,102 @@ AudioConfigurationPage::apply()
     }
 }
 
+ColourConfigurationPage::ColourConfigurationPage(RosegardenGUIDoc *doc,
+                                                 QWidget *parent,
+                                                 const char *name)
+    : TabbedConfigurationPage(doc, parent, name)
+{
+    QFrame *frame = new QFrame(m_tabWidget);
+    QGridLayout *layout = new QGridLayout(frame, 2, 2,
+                                          10, 5);
+
+    m_map = m_doc->getComposition().getSegmentColourMap();
+
+    m_colourtable = new RosegardenColourTable(frame, m_map, m_listmap);
+
+    layout->addMultiCellWidget(m_colourtable, 0, 0, 0, 1);
+
+    QPushButton* addColourButton = new QPushButton(i18n("Add New Colour"),
+                                                   frame);
+    layout->addWidget(addColourButton, 1, 0, Qt::AlignHCenter);
+
+    QPushButton* deleteColourButton = new QPushButton(i18n("Delete Colour"),
+                                                      frame);
+    layout->addWidget(deleteColourButton, 1, 1, Qt::AlignHCenter);
+
+    connect(addColourButton, SIGNAL(clicked()),
+            this, SLOT(slotAddNew()));
+
+    connect(deleteColourButton, SIGNAL(clicked()),
+            this, SLOT(slotDelete()));
+
+    connect(this,  SIGNAL(docColoursChanged()),
+            m_doc, SLOT(slotDocColoursChanged()));
+
+    connect(m_colourtable, SIGNAL(entryTextChanged(unsigned int, QString)),
+            this,  SLOT(slotTextChanged(unsigned int, QString)));
+
+    connect(m_colourtable, SIGNAL(entryColourChanged(unsigned int, QColor)),
+            this,  SLOT(slotColourChanged(unsigned int, QColor)));
+
+    addTab(frame, i18n("Colour Map"));
+
+}
+
+void
+ColourConfigurationPage::slotTextChanged(unsigned int index, QString string)
+{
+    m_map.modifyNameByIndex(m_listmap[index], string.ascii());
+    m_colourtable->populate_table(m_map, m_listmap);
+}
+
+void
+ColourConfigurationPage::slotColourChanged(unsigned int index, QColor color)
+{
+    m_map.modifyColourByIndex(m_listmap[index], RosegardenGUIColours::convertColour(color));
+    m_colourtable->populate_table(m_map, m_listmap);
+}
+
+void
+ColourConfigurationPage::apply()
+{
+    SegmentColourMapCommand *command = new SegmentColourMapCommand(m_doc, m_map);
+    m_doc->getCommandHistory()->addCommand(command);
+    emit docColoursChanged();
+}
+
+void
+ColourConfigurationPage::slotAddNew()
+{
+    QColor temp;
+
+    KColorDialog box(this, "", true);
+
+    int result = box.getColor( temp );
+
+    if (result == KColorDialog::Accepted)
+    {
+        Rosegarden::Colour temp2 = RosegardenGUIColours::convertColour(temp);
+        m_map.addItem(temp2, i18n("New").ascii());
+        m_colourtable->populate_table(m_map, m_listmap);
+    }
+
+}
+
+void
+ColourConfigurationPage::slotDelete()
+{
+    QTableSelection temp = m_colourtable->selection(0);
+
+    if ((!temp.isActive()) || (temp.topRow()==0))
+        return;
+
+    unsigned int toDel = temp.topRow();
+
+    m_map.deleteItemByIndex(m_listmap[toDel]);
+    m_colourtable->populate_table(m_map, m_listmap);
+
+}
 
 //------------------------------------------------------------
 
@@ -1834,6 +1937,17 @@ DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
                          loadIcon(AudioConfigurationPage::iconName()));
     vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
     page = new AudioConfigurationPage(doc, pageWidget);
+    vlay->addWidget(page);
+    page->setPageIndex(pageIndex(pageWidget));
+    m_configurationPages.push_back(page);
+
+    // Colour Page
+    pageWidget = addPage(ColourConfigurationPage::iconLabel(),
+                         ColourConfigurationPage::title(),
+                         loadIcon(ColourConfigurationPage::iconName()));
+
+    vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
+    page = new ColourConfigurationPage(doc, pageWidget);
     vlay->addWidget(page);
     page->setPageIndex(pageIndex(pageWidget));
     m_configurationPages.push_back(page);

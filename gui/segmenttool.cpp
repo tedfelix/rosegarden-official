@@ -26,6 +26,7 @@
 
 #include "segmenttool.h"
 
+#include "Colour.h"
 #include "SnapGrid.h"
 #include "NotationTypes.h"
 
@@ -41,6 +42,7 @@ using Rosegarden::timeT;
 using Rosegarden::SnapGrid;
 using Rosegarden::Note;
 using Rosegarden::SegmentSelection;
+using RosegardenGUIColours::convertColour;
 
 //////////////////////////////////////////////////////////////////////
 //                 Segment Tools
@@ -656,7 +658,9 @@ SegmentSelector::clearSelected()
          it++)
     {
         it->second->disconnect(this);
-        it->second->setSelected(false, m_canvas->getSegmentBrush());
+        it->second->setSelected(false, 
+          convertColour(m_doc->getComposition().getSegmentColourMap()
+                        .getColourByIndex(it->second->getSegment()->getColourIndex())));
     }
 
     // now clear the selection
@@ -787,7 +791,9 @@ SegmentSelector::slotSelectSegmentItem(SegmentItem *selectedItem)
     // If we're selecting a Segment through this method
     // then don't set the m_currentItem
     //
-    selectedItem->setSelected(true, m_canvas->getHighlightBrush());
+    selectedItem->setSelected(true, 
+        convertColour(m_doc->getComposition().getSegmentColourMap()
+        .getColourByIndex(selectedItem->getSegment()->getColourIndex())).dark(200));
     addToSelection(selectedItem);
     m_canvas->canvas()->update();
 }
@@ -967,7 +973,10 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
                 {
                     removeFromSelection(*oIt);
                     m_canvas->getSegmentItem(*oIt)->
-                        setSelected(false, m_canvas->getSegmentBrush());
+                        setSelected(false, convertColour(
+                            m_doc->getComposition().getSegmentColourMap().
+                            getColourByIndex(m_canvas->getSegmentItem(*oIt)
+                            ->getSegment()->getColourIndex())));
                 }
             }
 

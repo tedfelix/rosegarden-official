@@ -1322,7 +1322,13 @@ Composition::isMarkerAtPosition(Rosegarden::timeT time) const
     return false;
 }
 
+void
+Composition::setSegmentColourMap(Rosegarden::ColourMap &newmap)
+{
+    m_segmentColourMap = newmap;
 
+    updateRefreshStatuses();
+}
 
 
 

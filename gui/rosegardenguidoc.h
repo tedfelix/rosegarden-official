@@ -419,6 +419,8 @@ public slots:
     //
     void slotNewRecordButton();
 
+    void slotDocColoursChanged();
+
 signals:
     /**
      * Emitted when document is modified or saved
@@ -428,6 +430,7 @@ signals:
     void pointerPositionChanged(Rosegarden::timeT);
     void playPositionChanged(Rosegarden::timeT);
     void loopChanged(Rosegarden::timeT, Rosegarden::timeT);
+    void docColoursChanged();
 
 protected:
     /**

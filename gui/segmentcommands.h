@@ -32,6 +32,7 @@
 #include "rosegardenguidoc.h"
 #include "AudioFileManager.h"
 #include "Selection.h"
+#include "basiccommand.h"
 
 /**
  * Base class for commands from the SegmentParameterBox
@@ -657,7 +658,6 @@ private:
     bool m_executed;
 };
 
-
 class SegmentLabelCommand : public KNamedCommand
 {
 public:
@@ -676,5 +676,44 @@ protected:
     std::vector<QString>               m_labels;
     QString                            m_newLabel;
 };
+
+
+class SegmentColourCommand : public KNamedCommand
+{
+public:
+    SegmentColourCommand(const Rosegarden::SegmentSelection &segments,
+                         const unsigned int index);
+    virtual ~SegmentColourCommand();
+
+    static QString getGlobalName()
+        { return i18n("Change Segment Colour..."); }
+
+    virtual void execute();
+    virtual void unexecute();
+protected:
+
+    std::vector<Rosegarden::Segment*>     m_segments;
+    std::vector<unsigned int>             m_oldColourIndexes;
+    unsigned int                          m_newColourIndex;
+};
+
+class SegmentColourMapCommand : public KNamedCommand
+{
+public:
+    SegmentColourMapCommand(      RosegardenGUIDoc*      doc,
+                            const Rosegarden::ColourMap& map);
+    virtual ~SegmentColourMapCommand();
+
+    static QString getGlobalName()
+        { return i18n("Change Segment Colour Map..."); }
+
+    virtual void execute();
+    virtual void unexecute();
+protected:
+    RosegardenGUIDoc *                m_doc;
+    Rosegarden::ColourMap             m_oldMap;
+    Rosegarden::ColourMap             m_newMap;
+};
+
 
 #endif  // _SEGMENTCOMMANDS_H_

@@ -197,4 +197,19 @@ ColourMap::end()
     return ret;
 }
 
+ColourMap&
+ColourMap::operator=(const ColourMap& input)
+{
+    if (this != &input)
+        m_map = input.m_map;
+
+    return *this;
+}
+
+int
+ColourMap::size() const
+{
+    return m_map.size();
+}
+
 }
