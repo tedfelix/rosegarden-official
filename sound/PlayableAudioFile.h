@@ -136,6 +136,10 @@ public:
     //
     bool isFullyBuffered() const { return m_isSmallFile || m_fileEnded; }
 
+    // Stop playing this file.
+    // 
+    void cancel() { m_fileEnded = true; }
+
     // Segment id that allows us to crosscheck against playing audio
     // segments.
     //

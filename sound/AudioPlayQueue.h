@@ -56,6 +56,7 @@ public:
 	bool operator()(const PlayableAudioFile *, const PlayableAudioFile *) const;
     };
     typedef std::set<PlayableAudioFile *, FileTimeCmp> FileSet;
+    typedef std::list<PlayableAudioFile *> FileList;
 
     /**
      * Add a file to the queue.  AudioPlayQueue takes ownership of the
@@ -119,6 +120,12 @@ public:
     const FileSet &getAllScheduledFiles() const;
 
     /**
+     * Return a (shared reference to an) ordered set of all files on
+     * the unscheduled queue.
+     */
+    const FileList &getAllUnscheduledFiles() const;
+
+    /**
      * Get an approximate (but always pessimistic) estimate of the
      * number of ring buffers required for the current queue -- that
      * is, the maximum possible number of audio channels playing at
@@ -136,7 +143,6 @@ private:
     typedef std::vector<ReverseFileMap> InstrumentReverseFileMap;
     InstrumentReverseFileMap m_instrumentIndex;
 
-    typedef std::list<PlayableAudioFile *> FileList;
     FileList m_unscheduled;
 
     typedef std::map<int, size_t> FileCountMap;

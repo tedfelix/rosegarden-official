@@ -2739,14 +2739,14 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
         //
         if ((*i)->getType() == MappedEvent::AudioCancel)
         {
-	    if (m_jackDriver) {
-		m_jackDriver->getAudioQueueLocks();
-	    }
-//!!!            cancelAudioFile(*i);
+//!!!	    if (m_jackDriver) {
+//		m_jackDriver->getAudioQueueLocks();
+//	    }
+            cancelAudioFile(*i);
 //!!!	    m_audioQueue->erase(*i);
-	    if (m_jackDriver) {
-		m_jackDriver->releaseAudioQueueLocks();
-	    }
+//!!!	    if (m_jackDriver) {
+//		m_jackDriver->releaseAudioQueueLocks();
+//	    }
         }
 
 #endif // HAVE_LIBJACK

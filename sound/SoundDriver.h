@@ -311,8 +311,6 @@ public:
     void clearAudioFiles();
     bool addAudioFile(const std::string &fileName, unsigned int id);
     bool removeAudioFile(unsigned int id);
-    void rationalisePlayingAudio(const std::vector<MappedEvent> &list,
-				 const RealTime &playtime);
                     
     void initialiseAudioQueue(const std::vector<MappedEvent> &audioEvents);
     void clearAudioQueue();

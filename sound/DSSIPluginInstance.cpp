@@ -460,16 +460,20 @@ DSSIPluginInstance::activate()
     m_eventBuffer.reset();
     m_descriptor->LADSPA_Plugin->activate(m_instanceHandle);
 
-    if (m_descriptor->get_program && m_descriptor->select_program) {
+    // We don't re-select the program when activating, unless no
+    // program has yet been selected at all.
 
-	if (!m_program) {
+    if (!m_program) {
+
+	if (m_descriptor->get_program && m_descriptor->select_program) {
+
 	    const DSSI_Program_Descriptor *programDescriptor;
 	    if ((programDescriptor = m_descriptor->get_program(m_instanceHandle, 0))) {
 		m_program = QString("%1. %2").arg(1).arg(programDescriptor->Name);
 	    }
-	}
 
-	if (m_program) selectProgram(m_program);
+	    if (m_program) selectProgram(m_program);
+	}
     }
 }
 

@@ -1719,7 +1719,19 @@ AudioFileReader::kick(bool wantLock)
     
     for (AudioPlayQueue::FileSet::iterator fi = playing.begin();
 	 fi != playing.end(); ++fi) {
-	if ((*fi)->updateBuffers()) someFilled = true;
+
+	if (!(*fi)->isBuffered()) {
+	    // fillBuffers has not been called on this file.  This
+	    // happens when a file is unmuted during playback.  The
+	    // results are unpredictable because we can no longer
+	    // synchronise with the correct JACK callback slice at
+	    // this point, but this is better than allowing the file
+	    // to update from its start as would otherwise happen.
+	    (*fi)->fillBuffers(now);
+	    someFilled = true;
+	} else {
+	    if ((*fi)->updateBuffers()) someFilled = true;
+	}
     }
   
     if (wantLock) releaseLock();

@@ -127,11 +127,6 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &events)
 	    int bufferFrames = RealTime::realTime2Frame
 		(bufferLength, getSampleRate());
 
-	    //!!! previously in AlsaDriver we had a test here to ensure the
-	    // buffer length was at least the JACK buffer size -- otherwise
-	    // we'd get into terrible trouble -- but buffer lengths are
-	    // going to go from here anyway?
-
 	    PlayableAudioFile *paf =
 		new PlayableAudioFile(i->getInstrument(),
 				      audioFile,
@@ -195,6 +190,30 @@ SoundDriver::clearAudioQueue()
     AudioPlayQueue *oldQueue = m_audioQueue;
     m_audioQueue = newQueue;
     m_audioQueueScavenger.claim(oldQueue);
+}
+void
+SoundDriver::cancelAudioFile(MappedEvent *mE)
+{
+    std::cout << "SoundDriver::cancelAudioFile" << std::endl;
+
+    // For now we only permit cancelling unscheduled files.
+
+    const AudioPlayQueue::FileList &files = m_audioQueue->getAllUnscheduledFiles();
+    for (AudioPlayQueue::FileList::const_iterator fi = files.begin();
+	 fi != files.end(); ++fi) {
+	PlayableAudioFile *file = *fi;
+	if (mE->getRuntimeSegmentId() == -1) {
+	    if (file->getInstrument() == mE->getInstrument() &&
+		int(file->getAudioFile()->getId() == mE->getAudioID())) {
+		file->cancel();
+	    }
+	} else {
+	    if (file->getRuntimeSegmentId() == mE->getRuntimeSegmentId() &&
+		file->getStartTime() == mE->getEventTime()) {
+		file->cancel();
+	    }
+	}
+    }
 }
 
 const AudioPlayQueue *
@@ -335,62 +354,6 @@ SoundDriver::clearAudioFiles()
     m_audioFiles.erase(m_audioFiles.begin(), m_audioFiles.end());
 }
 
-
-// Close down any playing audio files - we can manipulate the
-// live play stack as we're only changing state.  Switch on
-// segment id first and then drop to instrument/audio file.
-//
-void
-SoundDriver::cancelAudioFile(MappedEvent *mE)
-{
-    std::cout << "SoundDriver::cancelAudioFile" << std::endl;
-
-
-/*!!!
-
-    std::list<PlayableAudioFile *>::iterator it;
-
-    pthread_mutex_lock(&_audioQueueLock);
-
-    for (it = m_audioPlayQueue.begin();
-         it != m_audioPlayQueue.end();
-         it++)
-    {
-        if (mE->getRuntimeSegmentId() == -1)
-        {
-            if ((*it)->getInstrument() == mE->getInstrument() &&
-		(int)(*it)->getAudioFile()->getId() == mE->getAudioID())
-                (*it)->setStatus(PlayableAudioFile::DEFUNCT);
-        }
-        else
-        {
-            if ((*it)->getRuntimeSegmentId() == mE->getRuntimeSegmentId() &&
-		(*it)->getStartTime() == mE->getEventTime()) {
-#ifdef DEBUG_PLAYABLE
-		std::cerr << "audio file match: ids "
-			  << (*it)->getRuntimeSegmentId() << " vs "
-			  << mE->getRuntimeSegmentId() << ", times "
-			  << (*it)->getStartTime() << " vs "
-			  << mE->getEventTime() << ", status "
-			  << (*it)->getStatus() << std::endl;
-#endif
-                (*it)->setStatus(PlayableAudioFile::DEFUNCT);
-	    } else {
-#ifdef DEBUG_PLAYABLE
-		std::cerr << "audio file mismatch: ids "
-			  << (*it)->getRuntimeSegmentId() << " vs "
-			  << mE->getRuntimeSegmentId() << ", times "
-			  << (*it)->getStartTime() << " vs "
-			  << mE->getEventTime() << std::endl;
-#endif
-	    }
-        }
-    }
-
-    pthread_mutex_unlock(&_audioQueueLock);
-*/
-}
-
 void
 SoundDriver::sleep(const RealTime &rt)
 {
@@ -400,107 +363,6 @@ SoundDriver::sleep(const RealTime &rt)
 
     unsigned long usec = rt.sec * 1000000 + rt.usec();
     usleep(usec);
-}
-
-void
-SoundDriver::rationalisePlayingAudio(const std::vector<MappedEvent> &segmentAudio,
-				     const RealTime &playtime)
-{
-/*!!!
-    pthread_mutex_lock(&_audioQueueLock);
-
-    // The mixer already ensures that anything on the queue gets
-    // played and anything not on the queue doesn't.  We just need to
-    // find out what's on the queue.  Furthermore, we should only
-    // enqueue new files from this method if they are actually
-    // supposed to have started already, because this method is only
-    // intended to trap cases like unmuting in the middle of a file;
-    // any actual expected situation will be handled by the normal
-    // audio event route.
-
-    std::list<PlayableAudioFile *> &driverAudio = m_audioPlayQueue;
-    MappedComposition mC;
-
-    // Check for playing audio that shouldn't be
-    for (std::list<PlayableAudioFile *>::const_iterator i = driverAudio.begin();
-	 i != driverAudio.end(); ++i) {
-
-	if ((*i)->getStatus() == PlayableAudioFile::DEFUNCT) continue;
-	if ((*i)->getDuration() <= getAudioReadBufferLength()) continue;
-
-	bool found = false;
-
-	for (std::vector<MappedEvent>::const_iterator si = segmentAudio.begin();
-	     si != segmentAudio.end(); ++si) {
-	    if (si->getRuntimeSegmentId() == (*i)->getRuntimeSegmentId() &&
-		si->getInstrument() == (*i)->getInstrument() &&
-		si->getEventTime() == (*i)->getStartTime()) {
-		found = true;
-		break;
-	    }
-	}
-
-	if (!found) {
-
-            // We've found an audio segment that shouldn't be playing - stop it
-            // through the normal channels.  Send a cancel event to the driver.
-            //
-            MappedEvent mE;
-            mE.setType(MappedEvent::AudioCancel);
-            mE.setRuntimeSegmentId((*i)->getRuntimeSegmentId());
-	    mE.setEventTime((*i)->getStartTime());
-
-            std::cout << "SoundDriver::rationalisePlayingAudio - " 
-                      << "stopping audio segment = " << (*i)->getRuntimeSegmentId() 
-                      << std::endl;
-
-	    mC.insert(new MappedEvent(mE));
-	}
-    }
-
-    // Check for audio that should be playing but isn't
-
-    for (std::vector<MappedEvent>::const_iterator si = segmentAudio.begin();
-	 si != segmentAudio.end(); ++si) {
-
-	if (playtime < si->getEventTime()) continue;
-	if (si->getDuration() <= getAudioReadBufferLength()) continue;
-
-	bool found = false;
-
-	for (std::list<PlayableAudioFile *>::const_iterator i = driverAudio.begin();
-	     i != driverAudio.end(); ++i) {
-
-	    if (si->getRuntimeSegmentId() == (*i)->getRuntimeSegmentId() &&
-		si->getInstrument() == (*i)->getInstrument() &&
-		si->getEventTime() == (*i)->getStartTime()) {
-		found = true;
-		break;
-	    }
-	}
-
-	if (!found) {
-
-            // There's an audio event that should be playing but isn't,
-            // so start it
-            //
-//            MappedEvent mE(m_metaIterator->
-//                    getAudioSegment(si->getRuntimeSegmentId()));
-
-            std::cout << "SoundDriver::rationalisePlayingAudio - " 
-                      << "starting audio segment = " << mE.getRuntimeSegmentId()
-                      << std::endl;
-
-	    mC.insert(new MappedEvent(*si));
-	}
-    }
-
-    pthread_mutex_unlock(&_audioQueueLock);
-
-    if (!mC.empty()) {
-	processEventsOut(mC, false);
-    }
-*/
 }
 	
 

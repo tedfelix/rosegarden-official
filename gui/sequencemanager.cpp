@@ -1074,11 +1074,11 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 			switch ((*i)->getData1()) {
 			    
 			case MappedEvent::FailureDiscUnderrun:
-			    message = i18n("Cannot read from disc fast enough to service the audio subsystem.\nConsider increasing the disc read buffer size in the sequencer configuration.");
+			    message = i18n("Failed to read audio data from disc in time to service the audio subsystem.");
 			    break;
 
 			case MappedEvent::FailureDiscOverrun:
-			    message = i18n("Cannot write to disc fast enough to service the audio subsystem.\nConsider increasing the disc write buffer size in the sequencer configuration.");
+			    message = i18n("Failed to write audio data to disc fast enough to service the audio subsystem.");
 			    break;
 
 			case MappedEvent::FailureBussMixUnderrun:

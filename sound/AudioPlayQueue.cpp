@@ -446,6 +446,15 @@ AudioPlayQueue::getAllScheduledFiles() const
     return m_files;
 }
 
+const AudioPlayQueue::FileList &
+AudioPlayQueue::getAllUnscheduledFiles() const
+{
+#ifdef DEBUG_AUDIO_PLAY_QUEUE
+    std::cerr << "AudioPlayQueue[" << this << "]::getAllUnscheduledFiles: have " << m_unscheduled.size() << " files" << std::endl;
+#endif
+    return m_unscheduled;
+}
+
 
 }
 
