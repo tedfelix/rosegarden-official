@@ -26,7 +26,7 @@
 #include <iostream>
 #include <kdebug.h>
 
-namespace Rosegarden { class Event; class Segment; }
+namespace Rosegarden { class Event; class Segment; class RealTime; }
 
 #define KDEBUG_AREA                 200000
 #define KDEBUG_AREA_NOTATION        200001
@@ -51,6 +51,9 @@ operator<<(kdbgstream&, const Rosegarden::Event&);
 kdbgstream&
 operator<<(kdbgstream&, const Rosegarden::Segment&);
 
+kdbgstream&
+operator<<(kdbgstream&, const Rosegarden::RealTime&);
+
 #else
 
 inline kndbgstream&
@@ -61,6 +64,9 @@ operator<<(kndbgstream &s, const Rosegarden::Event&) { return s; }
 
 inline kndbgstream&
 operator<<(kndbgstream &s, const Rosegarden::Segment&) { return s; }
+
+inline kdbgstream&
+operator<<(kdbgstream&, const Rosegarden::RealTime&) { return s; }
 
 #endif
 

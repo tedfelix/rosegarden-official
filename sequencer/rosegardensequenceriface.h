@@ -249,7 +249,7 @@ public:
     // Set the sequencer slice size temporarily (only for the length)
     // of the new slice before reverting.
     //
-    virtual void setTemporarySliceSize(long timeSec, long timeUSec) = 0;
+//     virtual void setTemporarySliceSize(long timeSec, long timeUSec) = 0;
 
     // Allow the GUI to tell the sequence the duration of a quarter
     // note when the TEMPO changes - this is to allow the sequencer
@@ -260,6 +260,18 @@ public:
     // Return a (potentially lengthy) human-readable status log
     //
     virtual QString getStatusLog() = 0;
+
+    // Debug stuff, to check MmappedSegment::iterator
+    virtual void dumpFirstSegment() = 0;
+
+    /// Remap a segment while playing
+    virtual void remapSegment(const QString& filename) = 0;
+    /// Add a segment while playing
+    virtual void addSegment(const QString& filename) = 0;
+    /// Delete a segment while playing
+    virtual void deleteSegment(const QString& filename) = 0;
+    /// Close all mmapped segments
+    virtual void closeAllSegments() = 0;
 };
 
 #endif // _ROSEGARDENSEQUENCERIFACE_H_

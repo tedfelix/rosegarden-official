@@ -52,6 +52,8 @@ class NotationQuantizer;
  * destruction.  When Segments are removed, it will also delete them.
  */
 
+class CompositionObserver;
+
 class Composition : public XmlExportable
 {
 public:
@@ -254,6 +256,22 @@ public:
      * has been detached from the Composition in this way.
      */
     bool detachSegment(Segment*);
+
+    /**
+     * Add a new Segment which has been "weakly detached"
+     *
+     * Like addSegment(), but doesn't send the segmentAdded signal
+     * nor updating refresh statuses
+     */
+    iterator weakAddSegment(Segment*);
+
+    /**
+     * Detach a segment which you're going to re-add (with weakAddSegment)
+     * later.
+     * Like detachSegment(), but without sending the segmentDeleted signal
+     * nor updating refresh statuses.
+     */
+    bool weakDetachSegment(Segment*);
 
 
 
@@ -610,6 +628,10 @@ public:
     }
 
 
+    void    addObserver(CompositionObserver *obs) { m_observers.push_back(obs); }
+    void removeObserver(CompositionObserver *obs) { m_observers.remove(obs); }
+
+
 protected:
 
     static const PropertyName NoAbsoluteTimeProperty;
@@ -717,6 +739,13 @@ protected:
     RealTime time2RealTime(timeT time, double tempo) const;
     timeT realTime2Time(RealTime rtime, double tempo) const;
 
+    typedef std::list<CompositionObserver *> ObserverSet;
+    ObserverSet m_observers;
+    void notifySegmentAdded(Segment *) const;
+    void notifySegmentRemoved(Segment *) const;
+    void notifyEndMarkerChange(bool shorten) const;
+    void notifySourceDeletion() const;
+
     BasicQuantizer                   *m_basicQuantizer;
     NotationQuantizer                *m_notationQuantizer;
 
@@ -745,12 +774,38 @@ protected:
 
     RefreshStatusArray<RefreshStatus> m_refreshStatusArray;
 
-    ColourMap                         m_segmentColourMap;
-
     // User defined markers in the composition
     //
     markercontainer                   m_markers;
+ 
+    ColourMap                         m_segmentColourMap;
+};
 
+
+class CompositionObserver
+{
+public:
+    /**
+     * Called after the segment has been added to the composition
+     */
+    virtual void segmentAdded(const Composition *, Segment *) = 0;
+
+    /**
+     * Called after the segment has been removed from the segment,
+     * and just before it is deleted
+     */
+    virtual void segmentRemoved(const Composition *, Segment *) = 0;
+
+    /**
+     * Called after the composition's end marker time has been
+     * changed
+     */
+    virtual void endMarkerTimeChanged(const Composition *, bool shorten) = 0;
+
+    /**
+     * Called from the composition dtor
+     */
+    virtual void compositionDeleted(const Composition *) = 0;
 };
 
 }

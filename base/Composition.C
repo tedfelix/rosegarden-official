@@ -222,6 +222,7 @@ Composition::Composition() :
 
 Composition::~Composition()
 {
+    notifySourceDeletion();
     clear();
     delete m_basicQuantizer;
     delete m_notationQuantizer;
@@ -229,6 +230,19 @@ Composition::~Composition()
 
 Composition::iterator
 Composition::addSegment(Segment *segment)
+{
+    iterator res = weakAddSegment(segment);
+
+    if (res != end()) {
+        updateRefreshStatuses();
+	notifySegmentAdded(segment);
+    }
+    
+    return res;
+}
+
+Composition::iterator
+Composition::weakAddSegment(Segment *segment)
 {
     cerr << "Composition::addSegment: segment is " << segment
 	      << ", with track " << segment->getTrack() << " and start index "
@@ -243,8 +257,6 @@ Composition::addSegment(Segment *segment)
     cerr << "Composition::addSegment: added segment, now have "
 	      << m_segments.size() << " segments" << endl;
 
-    updateRefreshStatuses();
-
     return res;
 }
 
@@ -256,32 +268,44 @@ Composition::deleteSegment(Composition::iterator i)
     Segment *p = (*i);
     p->setComposition(0);
 
-    delete p;
     m_segments.erase(i);
+    notifySegmentRemoved(p);
+    delete p;
 
     updateRefreshStatuses();
 }
 
 bool
-Composition::deleteSegment(Segment *p)
+Composition::deleteSegment(Segment *segment)
 {
-    iterator i = find(begin(), end(), p);
+    iterator i = find(begin(), end(), segment);
     if (i == end()) return false;
-    
+
     deleteSegment(i);
     return true;
 }
 
 bool
-Composition::detachSegment(Segment *p)
+Composition::detachSegment(Segment *segment)
 {
-    iterator i = find(begin(), end(), p);
+    bool res = weakDetachSegment(segment);
+
+    if (res) {
+        notifySegmentRemoved(segment);
+        updateRefreshStatuses();
+    }
+
+    return res;
+}
+
+bool
+Composition::weakDetachSegment(Segment *segment)
+{
+    iterator i = find(begin(), end(), segment);
     if (i == end()) return false;
     
-    p->setComposition(0);
+    segment->setComposition(0);
     m_segments.erase(i);
-
-    updateRefreshStatuses();
 
     return true;
 }
@@ -347,22 +371,21 @@ Composition::setStartMarker(const timeT &sM)
 void
 Composition::setEndMarker(const timeT &eM)
 {
+    bool shorten = (eM < m_endMarker);
     m_endMarker = eM;
     updateRefreshStatuses();
+    notifyEndMarkerChange(shorten);
 }
 
 void
 Composition::clear()
 {
-    for (segmentcontainer::iterator i = m_segments.begin();
-        i != m_segments.end(); ++i) {
-	(*i)->setComposition(0);
-        delete (*i);
+    while (m_segments.size() > 0) {
+	deleteSegment(begin());
     }
-    
+
     clearTracks();
 
-    m_segments.erase(begin(), end());
     m_timeSigSegment.clear();
     m_tempoSegment.clear();
     m_loopStart = 0;
@@ -1204,6 +1227,46 @@ Composition::getNewTrackId() const
 {
     if (m_tracks.size() == 0) return 0;
     return m_tracks.size();
+}
+
+
+void
+Composition::notifySegmentAdded(Segment *s) const
+{
+    for (ObserverSet::const_iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->segmentAdded(this, s);
+    }
+}
+
+ 
+void
+Composition::notifySegmentRemoved(Segment *s) const
+{
+    for (ObserverSet::const_iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->segmentRemoved(this, s);
+    }
+}
+ 
+
+void
+Composition::notifyEndMarkerChange(bool shorten) const
+{
+    for (ObserverSet::const_iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->endMarkerTimeChanged(this, shorten);
+    }
+}
+
+
+void
+Composition::notifySourceDeletion() const
+{
+    for (ObserverSet::const_iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->compositionDeleted(this);
+    }
 }
 
 

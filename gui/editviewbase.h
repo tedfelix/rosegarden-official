@@ -243,8 +243,11 @@ protected slots:
     virtual void slotUpdateToolbars();
     
 protected:
+    // tell the document's sequence manager that all segments are modified
+    void remapAllSegments();
+
     QFrame* getCentralFrame() { return m_centralFrame; }
-        
+
     void initSegmentRefreshStatusIds();
 
     bool isCompositionModified();

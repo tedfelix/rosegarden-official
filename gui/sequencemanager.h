@@ -57,8 +57,10 @@ namespace Rosegarden
 
 class AudioPluginManager;
 class RosegardenTransportDialog;
+class SegmentMmapper;
+class CompositionMmapper;
 
-class SequenceManager : public QObject
+class SequenceManager : public QObject, public CompositionObserver
 {
     Q_OBJECT
 public:
@@ -193,10 +195,23 @@ public:
 
     CountdownDialog* getCountdownDialog() { return m_countdownDialog; }
 
+    //---- mmap() related stuff -----
+    void dumpCompositionToFileSet(const QString& path);
+    void resetCompositionMmapper();
+
+    void segmentModified(Segment* s);
+
+    // CompositionObserver methods
+    virtual void segmentAdded(const Composition *, Segment *);
+    virtual void segmentRemoved(const Composition *, Segment *);
+    virtual void endMarkerTimeChanged(const Composition *, bool) { }
+    virtual void compositionDeleted(const Composition *) { }
+    
 public slots:
     // Empty the m_clearToSend flag
     //
     //void slotClearToSendElapsed();
+
 signals:
     void setProgress(int);
     void incrementProgress(int);
@@ -212,6 +227,7 @@ protected slots:
 protected:
     Rosegarden::MappedComposition m_mC;
     RosegardenGUIDoc *m_doc;
+    CompositionMmapper *m_mmapper;
 
     // statuses
     TransportStatus m_transportStatus;

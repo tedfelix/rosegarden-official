@@ -337,6 +337,9 @@ public:
     void setPersistent(bool value) { m_isPersistent = value; }
     bool isPersistent() const { return m_isPersistent; }
 
+    /// Size of a MappedEvent in a stream
+    static const size_t streamedSize;
+
 private:
     InstrumentId     m_instrument;
     MappedEventType  m_type;

@@ -24,7 +24,7 @@
 
 #include "Event.h"
 #include "Segment.h"
-
+#include "RealTime.h"
 
 kdbgstream&
 operator<<(kdbgstream &dbg, const std::string &s)
@@ -70,6 +70,13 @@ operator<<(kdbgstream &dbg, const Rosegarden::Segment &t)
         dbg << *(*i) << endl;
     }
 
+    return dbg;
+}
+
+kdbgstream&
+operator<<(kdbgstream &dbg, const Rosegarden::RealTime &t)
+{
+    dbg << "sec : " << t.sec << ", usec : " << t.usec;
     return dbg;
 }
 

@@ -59,9 +59,14 @@ class KRecentFilesAction;
 // forward declaration of the RosegardenGUI classes
 class RosegardenGUIDoc;
 class RosegardenGUIView;
+class MmappedSegment;
+class MmappedSegmentsMetaIterator;
 
 namespace Rosegarden { class MappedInstrument; }
 
+/**
+ * The sequencer application
+ */
 class RosegardenSequencerApp : public KMainWindow,
                                virtual public RosegardenSequencerIface
 {
@@ -246,7 +251,15 @@ public:
 
     // Temporarily set slice size (for length of this slice)
     //
-    virtual void setTemporarySliceSize(long timeSec, long timeUSec);
+//     virtual void setTemporarySliceSize(long timeSec, long timeUSec);
+
+    // Debug stuff, to check MmappedSegment::iterator
+    virtual void dumpFirstSegment();
+
+    virtual void remapSegment(const QString& filename);
+    virtual void addSegment(const QString& filename);
+    virtual void deleteSegment(const QString& filename);
+    virtual void closeAllSegments();
 
     // Set Quarter note length
     //
@@ -330,7 +343,9 @@ public slots:
 
     // Reset slice size (dynamic slice sizing) - timeout
     //
-    void slotRevertSliceSize();
+//    void slotRevertSliceSize();
+
+    typedef std::map<QString, MmappedSegment*> mmappedsegments;
 
 protected:
 
@@ -346,6 +361,12 @@ protected:
     Rosegarden::MappedComposition* getSlice(const Rosegarden::RealTime &start,
                                             const Rosegarden::RealTime &end,
                                             bool firstFetch);
+
+    // mmap-related stuff
+    MmappedSegment* mmapSegment(const QString&);
+    void cleanupMmapData();
+    void initMetaIterator();
+
 
     Rosegarden::Sequencer *m_sequencer;
     TransportStatus m_transportStatus;
@@ -410,6 +431,13 @@ protected:
     // Timer to check for new clients
     //
     QTimer                   *m_newClientTimer;
+
+    // mmap segments
+    //
+    QString m_segmentFilesPath;
+    mmappedsegments m_mmappedSegments;
+    MmappedSegmentsMetaIterator* m_metaIterator;
+    Rosegarden::RealTime m_lastStartTime;
 };
  
 #endif // _ROSEGARDEN_SEQUENCER_APP_H_

@@ -137,6 +137,8 @@ MappedEvent::operator=(const MappedEvent &mE)
     return *this;
 }
 
+const size_t MappedEvent::streamedSize = 11 * sizeof(unsigned int);
+
 QDataStream&
 operator<<(QDataStream &dS, MappedEvent *mE)
 {

@@ -43,6 +43,7 @@
 #include "ktmpstatusmsg.h"
 #include "barbuttons.h"
 #include "Clipboard.h"
+#include "sequencemanager.h"
 
 #include "rosedebug.h"
 
@@ -243,6 +244,8 @@ void EditViewBase::paintEvent(QPaintEvent* e)
     int segmentsToUpdate = 0;
     Rosegarden::Segment *singleSegment = 0;
 
+    Rosegarden::SequenceManager* seqManager = getDocument()->getSequenceManager();
+
     for (unsigned int i = 0; i < m_segments.size(); ++i) {
 
         Rosegarden::Segment* segment = m_segments[i];
@@ -255,6 +258,8 @@ void EditViewBase::paintEvent(QPaintEvent* e)
             // if composition is also modified, relayout everything
             refreshSegment(0);
 	    segmentsToUpdate = 0;
+            remapAllSegments();
+
 	    break;
             
         } else if (refreshStatus.needsRefresh()) {
@@ -273,6 +278,12 @@ void EditViewBase::paintEvent(QPaintEvent* e)
 
             refreshStatus.setNeedsRefresh(false);
             m_needUpdate = true;
+
+            // update mmap()ed file for segmentsToUpdate
+	    //!!! hang on, this'll mean many updates if there are many edit views
+	    // open and none at all if there are none -- won't it?  That won't do
+            if (seqManager)
+                seqManager->segmentModified(segment);
         }
     }
 
@@ -291,7 +302,28 @@ void EditViewBase::paintEvent(QPaintEvent* e)
     setCompositionModified(false);
 }
 
-MultiViewCommandHistory *EditViewBase::getCommandHistory()
+void EditViewBase::remapAllSegments()
+{
+    Rosegarden::SequenceManager* seqManager = getDocument()->getSequenceManager();
+
+    if (!seqManager) return;
+
+    for (unsigned int i = 0; i < m_segments.size(); ++i) {
+
+        Rosegarden::Segment* segment = m_segments[i];
+        unsigned int refreshStatusId = m_segmentsRefreshStatusIds[i];
+        Rosegarden::SegmentRefreshStatus &refreshStatus =
+	    segment->getRefreshStatus(refreshStatusId);
+        
+        if (refreshStatus.needsRefresh()) {
+            seqManager->segmentModified(segment);
+        }
+    }
+}
+
+
+
+MultiViewCommandHistory* EditViewBase::getCommandHistory()
 {
     return getDocument()->getCommandHistory();
 }
