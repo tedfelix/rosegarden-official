@@ -512,6 +512,16 @@ const std::string Text::LocalDirection	= "local_direction";
 const std::string Text::Tempo		= "tempo";
 const std::string Text::LocalTempo	= "local_tempo";
 
+Text::Text(const Event &e)
+{
+    if (e.getType() != EventType) {
+        throw Event::BadType();
+    }
+
+    m_text = e.get<String>(TextPropertyName);
+    m_type = e.get<String>(TextTypePropertyName);
+}
+
 Text::Text(const std::string &s, const std::string &type) :
     m_text(s),
     m_type(type)

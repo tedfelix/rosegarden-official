@@ -146,6 +146,7 @@ public:
     QCanvasPixmap makeToolbarPixmap(const char *name);
     QCanvasPixmap makeKeyDisplayPixmap(const Rosegarden::Key &key,
 				       const Rosegarden::Clef &clef);
+    QCanvasPixmap makeTextPixmap(const Rosegarden::Text &text);
 
     int getNoteBodyWidth (Rosegarden::Note::Type =
                           Rosegarden::Note::Crotchet) const;

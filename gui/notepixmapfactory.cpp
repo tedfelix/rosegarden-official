@@ -1373,7 +1373,6 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
     }
 }
 
-
 int NotePixmapFactory::getTimeSigWidth(const TimeSignature &sig) const
 {
     if (sig.isCommon()) {
@@ -1398,6 +1397,74 @@ int NotePixmapFactory::getTimeSigWidth(const TimeSignature &sig) const
 	return width;
     }
 }
+
+QCanvasPixmap
+NotePixmapFactory::makeTextPixmap(const Rosegarden::Text &text)
+{
+    QString s(text.getText().c_str());
+    std::string type(text.getTextType());
+
+    //!!! Calls for big optimisation -- move all the font construction
+    //code out into a separate init() method called the first time we
+    //reach here, and keep 'em in a map or array
+
+    /*
+     * Text types:
+     *
+     * UnspecifiedType:    Nothing known, use small roman
+     * ChordName:	   Not normally shown in score, use small roman
+     * KeyName:		   Not normally shown in score, use small roman
+     * Lyric:		   Small roman, below staff and dynamic texts
+     * Dynamic:		   Small italic, below staff
+     * Direction:	   Large roman, above staff (by barline?)
+     * LocalDirection:	   Small bold italic, below staff (by barline?)
+     * Tempo:		   Large bold roman, above staff
+     * LocalTempo:	   Small bold roman, above staff
+     */
+
+    int weight = QFont::Normal;
+    bool italic = false;
+    bool large = false;
+
+    if (type == Rosegarden::Text::Tempo ||
+	type == Rosegarden::Text::LocalTempo ||
+	type == Rosegarden::Text::LocalDirection) {
+	weight = QFont::Bold;
+    }
+
+    if (type == Rosegarden::Text::Dynamic ||
+	type == Rosegarden::Text::LocalDirection) {
+	italic = true;
+    }
+
+    if (type == Rosegarden::Text::Direction ||
+	type == Rosegarden::Text::Tempo) {
+	large = true;
+    }
+
+    QFont textFont
+	("new century schoolbook", (large ? 16 : 12), weight, italic);
+
+    if (large) textFont.setPixelSize(getLineSpacing() * 2);
+    else textFont.setPixelSize(getLineSpacing() * 5 / 3);
+
+    QFontMetrics textMetrics(textFont);
+    QRect r = textMetrics.boundingRect(s);
+
+    createPixmapAndMask(r.width() + 4, r.height() * 2);
+    
+    if (m_selected) m_p.setPen(RosegardenGUIColours::SelectedElement);
+
+    m_p.setFont(textFont);
+    m_pm.setFont(textFont);
+
+    m_p.drawText(2, r.height(), s);
+    m_pm.drawText(2, r.height(), s);
+
+    m_p.setPen(Qt::black);
+    return makeCanvasPixmap(QPoint(2, 0));
+}
+    
 
 void
 NotePixmapFactory::createPixmapAndMask(int width, int height)

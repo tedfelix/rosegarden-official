@@ -826,6 +826,10 @@ QSize NotationView::getViewSize()
 
 void NotationView::setViewSize(QSize s)
 {
+    kdDebug(KDEBUG_AREA) << "NotationView::setViewSize: resizing canvas from "
+			 << canvas()->width() << "x" << canvas()->height()
+			 << " to " << s.width() << "x" << s.height() << endl;
+
     canvas()->resize(s.width(), s.height());
 }
 

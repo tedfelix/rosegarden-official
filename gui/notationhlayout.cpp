@@ -42,6 +42,7 @@ using Rosegarden::Clef;
 using Rosegarden::Key;
 using Rosegarden::Note;
 using Rosegarden::Indication;
+using Rosegarden::Text;
 using Rosegarden::Segment;
 using Rosegarden::Composition;
 using Rosegarden::SegmentNotationHelper;
@@ -1464,7 +1465,8 @@ int NotationHLayout::getMinWidth(NotationElement &e) const
 
         w += m_npf->getKeyWidth(Key(*e.event()));
 
-    } else if (e.event()->isa(Indication::EventType)) {
+    } else if (e.event()->isa(Indication::EventType) ||
+	       e.event()->isa(Text::EventType)) {
 
 	w = 0;
 

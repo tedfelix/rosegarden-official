@@ -45,6 +45,7 @@ using Rosegarden::Clef;
 using Rosegarden::Key;
 using Rosegarden::TimeSignature;
 using Rosegarden::Note;
+using Rosegarden::Text;
 using Rosegarden::Indication;
 using Rosegarden::timeT;
 
@@ -192,6 +193,21 @@ NotationVLayout::scanStaff(StaffType &staffBase, timeT, timeT)
             } else if (el->event()->isa(Key::EventType)) {
 
                 el->setLayoutY(staff.getLayoutYForHeight(12));
+
+	    } else if (el->event()->isa(Text::EventType)) {
+
+		std::string type =
+		    el->event()->get<String>(Text::TextTypePropertyName);
+
+		if (type == Text::Dynamic ||
+		    type == Text::LocalDirection ||
+		    type == Text::UnspecifiedType) {
+		    el->setLayoutY(staff.getLayoutYForHeight(-8));
+		} else if (type == Text::Lyric) {
+		    el->setLayoutY(staff.getLayoutYForHeight(-14));
+		} else {
+		    el->setLayoutY(staff.getLayoutYForHeight(22));
+		}
 
             } else if (el->event()->isa(Indication::EventType)) {
 

@@ -468,9 +468,14 @@ public:
     static const std::string Tempo;
     static const std::string LocalTempo;
 
+    Text(const Event &e)
+	/* throw (Event::NoData, Event::BadType) */;
     Text(const std::string &text,
 	 const std::string &textType = UnspecifiedType);
     ~Text();
+
+    std::string getText() const { return m_text; }
+    std::string getTextType() const { return m_type; }
 
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsEvent(timeT absoluteTime) const;

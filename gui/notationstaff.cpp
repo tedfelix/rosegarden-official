@@ -618,6 +618,11 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 		(m_npf->makeKeyPixmap
 		 (Rosegarden::Key(*elt->event()), currentClef));
 
+	} else if (elt->event()->isa(Rosegarden::Text::EventType)) {
+
+	    pixmap = new QCanvasPixmap
+		(m_npf->makeTextPixmap(Rosegarden::Text(*elt->event())));
+
 	} else if (elt->event()->isa(Indication::EventType)) {
 
 	    timeT indicationDuration =
