@@ -74,25 +74,21 @@ Staff::Staff(QCanvas *canvas, Track *track, int resolution) :
         m_staffLines.push_back(line);
     }
 
-    // Add vertical lines
-    //
-    QCanvasLineGroupable *staffVertLine =
-        new QCanvasLineGroupable(canvas, this);
-
     m_barLineHeight = (nbLines - 1) * m_npf.getLineSpacing();
 
     // First line - thick
     //
     QPen pen(black, 3);
     pen.setCapStyle(Qt::SquareCap);
-    staffVertLine->setPen(pen);
-    staffVertLine->setPoints(0, linesOffset + 1,
+    m_initialBarA = new QCanvasLineGroupable(canvas, this);
+    m_initialBarA->setPen(pen);
+    m_initialBarA->setPoints(0, linesOffset + 1,
                              0, m_barLineHeight + linesOffset - 1);
-
+    
     // Second line - thin
     //
-    staffVertLine = new QCanvasLineGroupable(canvas, this);
-    staffVertLine->setPoints(4, linesOffset,
+    m_initialBarB = new QCanvasLineGroupable(canvas, this);
+    m_initialBarB->setPoints(4, linesOffset,
                              4, m_barLineHeight + linesOffset);
 
     setActive(false);  // don't react to mousePress events
@@ -172,7 +168,7 @@ void Staff::deleteBars()
 
     m_barLines.clear();
 }
-
+/*
 void Staff::setLinesLength(unsigned int length)
 {
     for (barlines::iterator i = m_staffLines.begin();
@@ -183,6 +179,29 @@ void Staff::setLinesLength(unsigned int length)
         (*i)->setPoints(startPt.x(), startPt.y(),
                         startPt.x() + length, startPt.y());
     }
+}
+*/
+void Staff::setLines(double xfrom, double xto)
+{
+    for (barlines::iterator i = m_staffLines.begin();
+         i != m_staffLines.end(); ++i) {
+
+        QPoint p = (*i)->startPoint();
+        (*i)->setPoints(xfrom - 4, p.y(), xto, p.y());
+
+/*
+        QPoint startPt = (*i)->startPoint();
+        
+        (*i)->setPoints(startPt.x(), startPt.y(),
+                        startPt.x() + length, startPt.y());
+*/
+    }
+
+    QPoint sp = m_initialBarA->startPoint();
+    QPoint ep = m_initialBarA->endPoint();
+
+    m_initialBarA->setPoints(xfrom - 4, sp.y(), xfrom - 4, ep.y());
+    m_initialBarB->setPoints(xfrom, sp.y(), xfrom, ep.y());
 }
 
 const int Staff::nbLines = 5;

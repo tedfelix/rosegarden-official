@@ -100,6 +100,16 @@ public:
 
     /**
      * Returns an iterator onto the reference track, pointing to the
+     * next bar or time signature event after (or at) the absolute
+     * time given.  Returns end() of reference track if there are no
+     * bar or time signature events after this time.
+     *
+     * Do not call this unless the track is in a Composition.
+     */
+    iterator findBarAfter(timeT) const;
+
+    /**
+     * Returns an iterator onto the reference track, pointing to the
      * last time signature before (or at) the absolute time given.
      * Returns end() of reference track if there was no time signature
      * before this time.

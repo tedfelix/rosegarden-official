@@ -126,7 +126,8 @@ public:
     /**
      * Set the length of the staff lines
      */
-    void setLinesLength(unsigned int);
+//    void setLinesLength(unsigned int);
+    void setLines(double xfrom, double xto);
 
     static const int nbLines;        // number of main lines on the staff
     static const int linesOffset;    // from top of canvas to top line (bad!)
@@ -138,6 +139,8 @@ protected:
 
     barlines m_barLines;
     barlines m_staffLines;
+
+    QCanvasLineGroupable *m_initialBarA, *m_initialBarB;
 
     NotePixmapFactory m_npf;
     ViewElementsManager m_manager;

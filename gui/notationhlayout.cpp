@@ -184,9 +184,9 @@ NotationHLayout::scanStaff(Staff &staff)
 
     barList.clear();
 
-    Track::iterator refStart = timeRef->findTime(t.getStartIndex());
-    Track::iterator refEnd = timeRef->findTime(t.getEndIndex() + 1); //!!!
-
+    Track::iterator refStart = t.findBarAt(t.getStartIndex());
+    Track::iterator refEnd = t.findBarAfter(t.getEndIndex());
+    
     int barNo = 0;
     addNewBar(staff, barNo, notes->begin(), 0, 0, true); 
     ++barNo;
@@ -464,6 +464,39 @@ NotationHLayout::reconcileBars()
 
 	++barNo;
     }
+
+    
+    Track &refTrack = *(m_barData.begin()->first->getViewElementsManager()->getTrack().getReferenceTrack());
+    kdDebug(KDEBUG_AREA)
+        << "NotationHLayout::reconcileBars: Reference track has "
+        << refTrack.size() << " items";
+
+    int in = 1;
+    for (Track::iterator it = refTrack.begin(); it != refTrack.end(); ++it) {
+        const Event &e(**it);
+        e.dump(std::cout);
+//        kdDebug(KDEBUG_AREA) << e << endl;
+//        kdDebug(KDEBUG_AREA).operator<<(e).operator<<(endl);
+    }
+
+    int sn = 1;
+
+    for (i = m_barData.begin(); i != m_barData.end(); ++i) {
+
+        BarDataList &list = i->second;
+
+        kdDebug(KDEBUG_AREA)
+            << "NotationHLayout::reconcileBars: Staff " << sn
+            << ": " << list.size() << " bars" << endl;
+
+        for (int j = 0; j < list.size(); ++j) {
+            kdDebug(KDEBUG_AREA)
+                << "Bar " << j << ": number " << list[j].barNo
+                << ", idealWidth " << list[j].idealWidth << ", correct "
+                << list[j].correct << endl;
+        }
+    }
+
 
     PRINT_ELAPSED("NotationHLayout::reconcileBars");
 }	
@@ -849,7 +882,7 @@ unsigned int
 NotationHLayout::getBarLineCount(Staff &staff)
 {
     int c = getBarData(staff).size();
-    return (c == 0 ? c : c - 1);
+    return c;
 }
 
 double

@@ -95,7 +95,9 @@ timeT Track::getDuration() const
     const_iterator lastEl = end();
     if (lastEl == begin()) return 0;
     --lastEl;
-    return ((*lastEl)->getAbsoluteTime() + (*lastEl)->getDuration());
+    return (*lastEl)->getAbsoluteTime() +
+           (*lastEl)->getDuration() -
+           getStartIndex();
 }
 
 
@@ -286,6 +288,14 @@ Track::iterator Track::findBarAt(timeT t) const
     iterator i = ref->findTime(t);
     if (i != ref->begin() &&
 	(i == ref->end() || (*i)->getAbsoluteTime() > t)) --i;
+    return i;
+}
+
+
+Track::iterator Track::findBarAfter(timeT t) const
+{
+    const Track *ref = getReferenceTrack();
+    iterator i = ref->findTime(t);
     return i;
 }
 

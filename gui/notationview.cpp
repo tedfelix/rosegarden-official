@@ -1238,13 +1238,29 @@ void NotationView::readjustCanvasWidth()
                              << totalWidth << endl;
 
         canvas()->resize(int(totalWidth) + 50, canvas()->height());
-
-	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	    m_staffs[i]->setLinesLength(canvas()->width() - 20);
-	}
     }
-    
 
+    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+
+        double xleft = 0, xright = totalWidth;
+
+        Staff &staff = *m_staffs[i];
+        int barCount = m_hlayout->getBarLineCount(staff);
+        
+        for (unsigned int j = 0; j < barCount; ++j) {
+            if (m_hlayout->isBarLineVisible(staff, j)) {
+                xleft = m_hlayout->getBarLineX(staff, j);
+                break;
+            }
+        }
+        
+        if (barCount > 0) {
+            xright = m_hlayout->getBarLineX(staff, barCount - 1);
+        }
+        
+        staff.setLines(xleft, xright);
+//	    staff.setLinesLength(canvas()->width() - 20);
+    }
 }
 
 void
