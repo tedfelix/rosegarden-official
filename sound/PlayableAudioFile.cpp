@@ -80,6 +80,10 @@ PlayableAudioFile::initialise(size_t bufferSize)
 
 
     //!!! need to catch this
+
+    //!!! I sometimes see this being thrown for a file that's been
+    //played many many times already in this composition. Are we
+    //leaking fds?
     if (!*m_file)
         throw(std::string("PlayableAudioFile - can't open file"));
 

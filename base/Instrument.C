@@ -173,7 +173,7 @@ Instrument::Instrument(const Instrument &ins):
     }
 }
 
-Instrument
+Instrument &
 Instrument::operator=(const Instrument &ins)
 {
     if (&ins == this) return *this;
@@ -479,6 +479,34 @@ Instrument::getControllerValue(MidiByte controller) const
 }
 
 
+Buss::Buss(BussId id) :
+    m_id(id),
+    m_level(0.0),
+    m_pan(MidiMidValue),
+    m_mappedId(0)
+{
+}
+
+Buss::~Buss()
+{
+}
+
+std::string
+Buss::toXmlString()
+{
+    std::stringstream buss;
+
+    buss << "        <buss id=\"" << m_id << "\">" << std::endl;
+    buss << "           <pan value=\"" << m_pan << "\"/>" << std::endl;
+    buss << "           <level value=\"" << m_level << "\"/>" << std::endl;
+    buss << "        </buss>" << std::endl;
+
+#if (__GNUC__ < 3)
+    buss << std::ends;
+#endif
+
+    return buss.str();
+}
 
 
 }

@@ -23,6 +23,7 @@
 #include "rosegardenguidoc.h"
 #include "sequencermapper.h"
 #include "rosedebug.h"
+#include "studiocontrol.h"
 
 #include "Studio.h"
 #include "AudioLevel.h"
@@ -62,27 +63,50 @@ MixerWindow::MixerWindow(QWidget *parent,
 	 i != instruments.end(); ++i) {
 	
 	if ((*i)->getType() == Rosegarden::Instrument::Audio) {
+
 	    AudioFaderWidget *fader = 
 		new AudioFaderWidget(mainBox, AudioFaderWidget::FaderStrip,
 				     QString("%1").arg(count));
+
+	    connect(fader->m_fader, SIGNAL(faderChanged(float)),
+		    this, SLOT(slotFaderLevelChanged(float)));
+
 	    mainLayout->addWidget(fader);
 	    m_faders[(*i)->getId()] = fader;
 	    ++count;
 	}
     }
     
-    for (int i = 0; i < 4; ++i) {
+    Rosegarden::BussList busses = m_studio->getBusses();
+    
+    count = 1;
+    for (Rosegarden::BussList::iterator i = busses.begin();
+	 i != busses.end(); ++i) {
+
+	if (i == busses.begin()) continue; // that one's the master
+
 	AudioFaderWidget *fader = 
 	    new AudioFaderWidget(mainBox, AudioFaderWidget::FaderStrip,
-				 QString("sub%1").arg(i+1), false);
+				 QString("sub%1").arg(count), false);
+
+	connect(fader->m_fader, SIGNAL(faderChanged(float)),
+		this, SLOT(slotFaderLevelChanged(float)));
+
 	mainLayout->addWidget(fader);
 	m_submasters.push_back(fader);
+	++count;
     }
 
-    AudioFaderWidget *fader = 
-	new AudioFaderWidget(mainBox, AudioFaderWidget::FaderStrip, "M", false);
-    mainLayout->addWidget(fader);
-    m_master = fader;
+    if (busses.size() > 0) {
+	AudioFaderWidget *fader = 
+	    new AudioFaderWidget
+	    (mainBox, AudioFaderWidget::FaderStrip, "M", false);
+	connect(fader->m_fader, SIGNAL(faderChanged(float)),
+		this, SLOT(slotFaderLevelChanged(float)));
+
+	mainLayout->addWidget(fader);
+	m_master = fader;
+    }
 }
 
 MixerWindow::~MixerWindow()
@@ -92,8 +116,55 @@ MixerWindow::~MixerWindow()
 
 
 void
-MixerWindow::slotFaderLevelChanged()
+MixerWindow::slotFaderLevelChanged(float dB)
 {
+    const QObject *s = sender();
+
+    Rosegarden::BussList busses = m_studio->getBusses();
+    
+    if (s == m_master->m_fader) {
+
+	if (busses.size() > 0) {
+	    Rosegarden::StudioControl::setStudioObjectProperty
+		(Rosegarden::MappedObjectId((*busses.begin())->getMappedId()),
+		 Rosegarden::MappedAudioBuss::Level,
+		 Rosegarden::MappedObjectValue(dB));
+	}
+
+	return;
+    } 
+
+    int index = 1;
+
+    for (FaderVector::iterator i = m_submasters.begin();
+	 i != m_submasters.end(); ++i) {
+
+	if (s == (*i)->m_fader) {
+	    if (busses.size() > index) {
+		Rosegarden::StudioControl::setStudioObjectProperty
+		    (Rosegarden::MappedObjectId(busses[index]->getMappedId()),
+		     Rosegarden::MappedAudioBuss::Level,
+		     Rosegarden::MappedObjectValue(dB));
+	    }
+
+	    return;
+	}
+
+	++index;
+    }
+
+    for (FaderMap::iterator i = m_faders.begin();
+	 i != m_faders.end(); ++i) {
+	
+	if (s == i->second->m_fader) {
+	    Rosegarden::StudioControl::setStudioObjectProperty
+		(Rosegarden::MappedObjectId
+		 (m_studio->getInstrumentById(i->first)->getMappedId()),
+		 Rosegarden::MappedAudioFader::FaderLevel,
+		 Rosegarden::MappedObjectValue(dB));
+	}
+    }	    
+
 }
 
 void

@@ -366,6 +366,7 @@ AudioMixer::generateBuffers()
 
     m_submasterCount =
 	m_driver->getMappedStudio()->getObjectCount(MappedStudio::AudioBuss);
+    if (m_submasterCount > 0) --m_submasterCount; // buss zero is master
 
     for (InstrumentId id = 1; id < 1 + m_submasterCount; ++id) {
 
@@ -500,6 +501,10 @@ AudioMixer::processBlocks(bool forceFill)
 	}
     }
 
+    if (minBlocks == 0) {
+	return;
+    }
+
     for (InstrumentId id = instrumentBase;
 	 id < instrumentBase + instrumentCount; ++id) {
 
@@ -518,6 +523,39 @@ AudioMixer::processBlocks(bool forceFill)
 
     if (minBlocks == 0) {
 	return;
+    }
+
+    for (InstrumentId id = 0; id <= m_submasterCount; ++id) {
+	
+	MappedAudioBuss *buss =
+	    m_driver->getMappedStudio()->getAudioBuss(id);
+
+	if (!buss) {
+
+	    std::cerr << "WARNING: No audio buss found for buss no "
+		      << id << std::endl;
+
+	    m_bufferMap[id].gainLeft  = 0.0;
+	    m_bufferMap[id].gainRight = 0.0;
+	    m_bufferMap[id].volume    = 0.0;
+	} else {
+	    	    
+	    float level = 0.0;
+	    (void)buss->getProperty(MappedAudioBuss::Level, level);
+
+	    float volume = AudioLevel::dB_to_multiplier(level);
+
+	    float pan = 0.0;
+//!!!	    (void)fader->getProperty(MappedAudioFader::Pan, pan);
+
+	    m_bufferMap[id].gainLeft = 
+		volume * ((pan > 0.0) ? (1.0 - (pan / 100.0)) : 1.0);
+
+	    m_bufferMap[id].gainRight =
+		volume * ((pan < 0.0) ? ((pan + 100.0) / 100.0) : 1.0);
+	    
+	    m_bufferMap[id].volume = volume;
+	}
     }
 
     for (InstrumentId id = instrumentBase;
@@ -548,8 +586,6 @@ AudioMixer::processBlocks(bool forceFill)
 	    
 	    m_bufferMap[id].volume = volume;
 	}
-
-	if (m_bufferMap[id].volume == 0.0) m_bufferMap[id].empty = true;
     }
 
     // Call the processBlock methods to process individual instruments,
@@ -574,31 +610,68 @@ AudioMixer::processBlocks(bool forceFill)
 	    }
 	}
 
+	bool first = true;
+
 	for (WorkBufferMap::iterator wi = m_submasterWorkBuffers.begin();
 	     wi != m_submasterWorkBuffers.end(); ++wi) {
 
-	    //!!! volume, pan
-
 	    InstrumentId id = wi->first;
-	    BufferSet &s = wi->second;
+	    BufferSet &workset = wi->second;
+	    BufferRec &rec = m_bufferMap[id];
 
-	    m_bufferMap[id].buffers[0]->write(s[0], m_blockSize);
-	    m_bufferMap[id].buffers[1]->write(s[1], m_blockSize);
+	    for (int ch = 0; ch < 2; ++ch) {
+		
+		// Write submaster ringbuffer
 
-	    if (wi == m_submasterWorkBuffers.begin()) {
-		memcpy(m_processBuffers[0], s[0], m_blockSize * sizeof(sample_t));
-		memcpy(m_processBuffers[1], s[1], m_blockSize * sizeof(sample_t));
-	    } else {
-		for (int i = 0; i < m_blockSize; ++i) {
-		    m_processBuffers[0][i] += s[0][i];
-		    m_processBuffers[1][i] += s[1][i];
+		float gain = ((ch == 0) ? rec.gainLeft : rec.gainRight);
+
+		if (gain == 0.0) {
+
+		    rec.buffers[ch]->zero(m_blockSize);
+
+		    if (first) {
+			memset(m_processBuffers[ch], 0,
+			       m_blockSize * sizeof(sample_t));
+		    }
+
+		} else {
+
+		    for (size_t i = 0; i < m_blockSize; ++i) {
+			workset[ch][i] *= gain;
+		    }
+		    
+		    rec.buffers[ch]->write(workset[ch], m_blockSize);
+
+		    // Accumulate into master buffers
+
+		    if (first) {
+			memcpy(m_processBuffers[ch], workset[ch],
+			       m_blockSize * sizeof(sample_t));
+		    } else {
+			for (size_t i = 0; i < m_blockSize; ++i) {
+			    m_processBuffers[ch][i] += workset[ch][i];
+			}
+		    }
 		}
 	    }
+
+	    first = false;
 	}
 
-	// master
-	m_bufferMap[0].buffers[0]->write(m_processBuffers[0], m_blockSize);
-	m_bufferMap[0].buffers[1]->write(m_processBuffers[1], m_blockSize);
+	// Write master ringbuffer
+
+	BufferRec &rec = m_bufferMap[0];
+
+	for (int ch = 0; ch < 2; ++ch) {
+	    
+	    float gain = ((ch == 0) ? rec.gainLeft : rec.gainRight);
+
+	    for (size_t i = 0; i < m_blockSize; ++i) {
+		m_processBuffers[ch][i] *= gain;
+	    }
+
+	    rec.buffers[ch]->write(m_processBuffers[ch], m_blockSize);
+	}
     }
 }
 
@@ -915,7 +988,7 @@ AudioMixer::processBlock(InstrumentId id, PlayableAudioFileList &audioQueue)
 		// handle volume and pan
 		m_processBuffers[ch][i] *= gain;
 
-		if (allZeros && m_processBuffers[ch][i] != 0.0)
+		if (allZeros && (m_processBuffers[ch][i] != 0.0))
 		    allZeros = false;
 	    }
 		

@@ -696,6 +696,7 @@ MappedStudio::getAudioBuss(int bussNumber)
 		rv = buss;
 		break;
 	    }
+	    ++count;
 	}
     }
 

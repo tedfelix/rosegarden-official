@@ -320,11 +320,6 @@ AudioInstrumentParameterPanel::slotSetRecord(bool value)
                        this, SLOT(slotSelectAudioLevel(float)));
 
             m_audioFader->m_fader->
-//                setFader(m_selectedInstrument->getRecordLevel());
-//		setFader(Rosegarden::AudioLevel::dB_to_fader
-//			 (m_selectedInstrument->getRecordLevel(),
-//			  127,
-//			  Rosegarden::AudioLevel::ShortFader));
 		setFader(m_selectedInstrument->getRecordLevel());
 
             //cout << "SETTING VISIBLE FADER RECORD LEVEL = " << 
@@ -332,7 +327,6 @@ AudioInstrumentParameterPanel::slotSetRecord(bool value)
 
             connect(m_audioFader->m_fader, SIGNAL(faderChanged(float)),
                     this, SLOT(slotSelectAudioLevel(float)));
-
             // Set the prepend text on the audio fader
 //!!!            m_audioFader->m_fader->setPrependText(i18n("Record level = "));
         }
@@ -349,11 +343,6 @@ AudioInstrumentParameterPanel::slotSetRecord(bool value)
 
             // set the fader value to the playback value
             m_audioFader->m_fader->
-//                setFader(m_selectedInstrument->getVolume());
-//		setFader(Rosegarden::AudioLevel::dB_to_fader
-//			 (m_selectedInstrument->getLevel(),
-//			  127,
-//			  Rosegarden::AudioLevel::ShortFader));
 		setFader(m_selectedInstrument->getLevel());
 
             //cout << "SETTING VISIBLE FADER LEVEL = " << 
@@ -753,9 +742,6 @@ AudioInstrumentParameterPanel::slotRecord()
             // set the fader value to the record value
             m_audioFader->m_fader->
                 setFader
-//		(Rosegarden::AudioLevel::dB_to_fader
-//		 (m_selectedInstrument->getRecordLevel(),
-//		  127, Rosegarden::AudioLevel::ShortFader));
 		(m_selectedInstrument->getRecordLevel());
         }
 
@@ -803,18 +789,11 @@ AudioInstrumentParameterPanel::setAudioMeter(float dBleft, float dBright)
     std::cerr << "AudioInstrumentParameterPanel::setAudioMeter: (" << dBleft
 	      << "," << dBright << ")" << std::endl;
     
-//    double ch1 = (double)Rosegarden::AudioLevel::dB_to_fader
-//	(dBleft, 127, Rosegarden::AudioLevel::ShortFader);
-
     if (m_selectedInstrument)
     {
         if (m_selectedInstrument->getAudioChannels() == 1) {
-//            m_audioFader->m_vuMeter->setLevel(ch1 / 127.0);
 	    m_audioFader->m_vuMeter->setLevel(dBleft);
 	} else {
-//	    double ch2 = (double)Rosegarden::AudioLevel::dB_to_fader
-//		(dBright, 127, Rosegarden::AudioLevel::ShortFader);
-//            m_audioFader->m_vuMeter->setLevel(ch1 / 127.0, ch2 / 127.0);
 	    m_audioFader->m_vuMeter->setLevel(dBleft, dBright);
 	}
     }

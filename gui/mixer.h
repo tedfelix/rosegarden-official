@@ -44,7 +44,7 @@ signals:
     void closing();
 
 protected slots:
-    void slotFaderLevelChanged();
+    void slotFaderLevelChanged(float level);
     
 protected:
     virtual void closeEvent(QCloseEvent *);

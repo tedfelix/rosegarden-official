@@ -677,27 +677,27 @@ void RosegardenGUIDoc::initialiseStudio()
     }
 
     if (audioCount > 0) {
-	// then we need some submasters.
+	// then we need some submasters and a master.
 	
-	KConfig* config = kapp->config();
-	config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
-	int submasters = config->readNumEntry("audiosubmasters", 4);
+//!!!	KConfig* config = kapp->config();
+//	config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
+//	int submasters = config->readNumEntry("audiosubmasters", 4);
 
-	for (int i = 0; i < submasters; ++i) {
-	    
-	    //!!! We will need Studio objects on the GUI side to
-	    // represent these too.
+	Rosegarden::BussList busses = m_studio.getBusses();
 
-            Rosegarden::MappedObjectId mappedId =
-                Rosegarden::StudioControl::createStudioObject(
-                        Rosegarden::MappedObject::AudioBuss);
+	for (unsigned int i = 0; i < busses.size(); ++i) {
 
-            // Set the level
-            //
-            Rosegarden::StudioControl::setStudioObjectProperty(mappedId,
-                Rosegarden::MappedAudioFader::FaderLevel,
-	        Rosegarden::MappedObjectValue(0.0)); //!!! for now.
+	    // first one is master
+	    Rosegarden::MappedObjectId mappedId =
+		Rosegarden::StudioControl::createStudioObject(
+		    Rosegarden::MappedObject::AudioBuss);
 
+	    Rosegarden::StudioControl::setStudioObjectProperty
+		(mappedId,
+		 Rosegarden::MappedAudioBuss::Level,
+		 Rosegarden::MappedObjectValue(0.0)); //!!! for now.
+
+	    busses[i]->setMappedId(mappedId);
 	}
     }
 

@@ -40,10 +40,16 @@ using std::endl;
 namespace Rosegarden
 {
 
-Studio::Studio():
+Studio::Studio() :
     m_midiThruFilter(0),
     m_midiRecordFilter(0)
 {
+    // For now we'll just have a fixed number of busses (one for master,
+    // one for each submaster)
+
+    for (int i = 0; i < 5; ++i) {
+	m_busses.push_back(new Buss(i));
+    }
 }
 
 Studio::~Studio()
@@ -54,6 +60,10 @@ Studio::~Studio()
         delete(*dIt);
 
     m_devices.clear();
+
+    for (size_t i = 0; i < m_busses.size(); ++i) {
+	delete m_busses[i];
+    }
 }
 
 void
@@ -209,6 +219,11 @@ Studio::getInstrumentFromList(int index)
 
 }
 
+BussList
+Studio::getBusses()
+{
+    return m_busses;
+}
 
 
 // Clear down the devices  - the devices will clear down their

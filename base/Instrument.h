@@ -83,14 +83,14 @@ public:
     // Copy constructor and assignment
     //
     Instrument(const Instrument &);
-    Instrument operator=(const Instrument &);
+    Instrument &operator=(const Instrument &);
 
     ~Instrument();
 
     std::string getName() const { return m_name; }
     std::string getPresentationName() const;
 
-    void setId(int id) { m_id = id; }
+    void setId(InstrumentId id) { m_id = id; }
     InstrumentId getId() const { return m_id; }
 
     void setName(const std::string &name) { m_name = name; }
@@ -260,6 +260,37 @@ private:
     //
     StaticControllers    m_staticControllers;
 };
+
+
+typedef unsigned int BussId;
+
+class Buss : public XmlExportable
+{
+public:
+    Buss(BussId id);
+    ~Buss();
+
+    void setId(BussId id) { m_id = id; }
+    BussId getId() const { return m_id; }
+
+    void setLevel(float dB) { m_level = dB; }
+    float getLevel() const { return m_level; }
+    
+    void setPan(MidiByte pan) { m_pan = pan; }
+    MidiByte getPan() const { return m_pan; }
+
+    int getMappedId() const { return m_mappedId; }
+    void setMappedId(int id) { m_mappedId = id; }
+
+    virtual std::string toXmlString();
+
+private:
+    BussId m_id;
+    float m_level;
+    MidiByte m_pan;
+    int m_mappedId;
+};
+    
 
 }
 

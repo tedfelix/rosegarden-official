@@ -436,6 +436,7 @@ public:
     // what the purpose of the buss is.  At the moment we just have a
     // 1-1 relationship between busses and submasters, and no send
     // channels.
+    //!!! this should have pan too
 
     // properties
     //

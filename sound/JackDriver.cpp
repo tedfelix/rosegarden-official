@@ -224,7 +224,7 @@ JackDriver::initialise()
 	     JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
 	m_outputSubmasters.push_back(port);
     }
-	
+
     InstrumentId instrumentBase;
     int instruments;
     m_alsaDriver->getAudioInstrumentNumbers(instrumentBase, instruments);
@@ -670,7 +670,8 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	    id = instrumentBase;
 	}
 
-	bool dormant = m_mixer->isInstrumentDormant(id);
+	bool dormant = false;
+	if (id >= instrumentBase) dormant = m_mixer->isInstrumentDormant(id);
 
 	sample_t *left = 0;
 	sample_t *right = 0;
@@ -691,7 +692,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 		    (jack_port_get_buffer(m_outputSubmasters[(id - 1) * 2 + 1],
 					  nframes));
 	    } else { // instrument
-		if (m_outputInstruments.size() >= id - instrumentBase) {
+		if (m_outputInstruments.size() > id - instrumentBase) {
 		    left = static_cast<sample_t *>
 			(jack_port_get_buffer(m_outputInstruments
 					      [(id - instrumentBase) * 2],
@@ -751,7 +752,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	    }
 	}	    
 
-	if (sdb) {
+	if (sdb && (left || right)) {
 	    Rosegarden::LevelInfo info;
 	    info.level = AudioLevel::multiplier_to_fader
 		(peakLeft, 127, AudioLevel::LongFader);
