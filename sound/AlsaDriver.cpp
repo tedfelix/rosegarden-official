@@ -1255,45 +1255,10 @@ AlsaDriver::initialisePlayback(const RealTime &position)
 
     // now that we restart the queue at each play, the origin is always zero
     m_alsaPlayStartTime = RealTime::zeroTime;
-
     m_playStartPosition = position;
 
     m_startPlayback = true;
 
-    // If the clock is enabled then adjust for the MIDI Clock to 
-    // synchronise the sequencer with the clock.
-    //
-    if (m_midiClockEnabled)
-    {
-        // Last clock sent should always be ahead of current
-        // ALSA time - adjust for latency and find nearest
-        // clock for start time.
-        //
-        RealTime alsaClockSent = m_midiClockSendTime;
-
-        while (alsaClockSent > m_alsaPlayStartTime)
-            alsaClockSent = alsaClockSent - m_midiClockInterval;
-
-        /*
-        std::cout << "START ADJUST FROM " << m_alsaPlayStartTime
-             << " to " << alsaClockSent << endl;
-             */
-
-        m_alsaPlayStartTime = alsaClockSent;
-
-        if (position == RealTime::zeroTime)
-            sendSystemQueued(SND_SEQ_EVENT_START, "",
-                             m_alsaPlayStartTime);
-        else
-            sendSystemQueued(SND_SEQ_EVENT_CONTINUE, "",
-                             m_alsaPlayStartTime);
-
-    }
-
-    if (isMMCMaster())
-    {
-        sendMMC(127, MIDI_MMC_PLAY, true, "");
-    }
 }
 
 
@@ -2183,6 +2148,42 @@ AlsaDriver::startClocks()
 	_debug_jack_frame_count = m_jackDriver->getFramesProcessed();
     }
 #endif
+
+    // If the clock is enabled then adjust for the MIDI Clock to 
+    // synchronise the sequencer with the clock.
+    //
+    if (m_midiClockEnabled)
+    {
+        // Last clock sent should always be ahead of current
+        // ALSA time - adjust for latency and find nearest
+        // clock for start time.
+        //
+        m_midiClockSendTime = RealTime::zeroTime;
+        RealTime alsaClockSent = m_midiClockSendTime;
+
+        while (alsaClockSent > m_alsaPlayStartTime)
+            alsaClockSent = alsaClockSent - m_midiClockInterval;
+
+        /*
+        std::cout << "START ADJUST FROM " << m_alsaPlayStartTime
+             << " to " << alsaClockSent << endl;
+             */
+
+        m_alsaPlayStartTime = alsaClockSent;
+
+        if (m_playStartPosition == RealTime::zeroTime)
+            sendSystemQueued(SND_SEQ_EVENT_START, "",
+                             m_alsaPlayStartTime);
+        else
+            sendSystemQueued(SND_SEQ_EVENT_CONTINUE, "",
+                             m_alsaPlayStartTime);
+
+    }
+
+    if (isMMCMaster())
+    {
+        sendMMC(127, MIDI_MMC_PLAY, true, "");
+    }
 
     // process pending MIDI events
     snd_seq_drain_output(m_midiHandle);
@@ -3331,7 +3332,7 @@ AlsaDriver::sendMidiClock()
     // Get the number of ticks in (say) two seconds
     //
     unsigned int numTicks =
-        (unsigned int)(RealTime(10, 0) / m_midiClockInterval);
+        (unsigned int)(RealTime(2, 0) / m_midiClockInterval);
 
     // First time through set the clock send time - this will also
     // ensure we send the first batch of clock events
@@ -3363,6 +3364,12 @@ AlsaDriver::sendMidiClock()
             m_midiClockSendTime = m_midiClockSendTime + m_midiClockInterval;
         }
     }
+    /*
+    else
+        std::cout << "NOT SENDING" << 
+            "MIDI CLOCK SEND = " << m_midiClockSendTime
+            << ", ALSA TIME = " << getAlsaTime() << std::endl;
+            */
 
     // If we're playing then send the song position pointer.
     //
