@@ -5,95 +5,52 @@
 	<TITLE></TITLE>
 	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Linux)">
 	<META NAME="CREATED" CONTENT="20040613;311700">
-	<META NAME="CHANGED" CONTENT="20040620;16092400">
+	<META NAME="CHANGED" CONTENT="20040623;19200100">
 </HEAD>
 <BODY LANG="en-US" DIR="LTR">
-<H1>Managing Instrument Assignments and Controllers</H1>
-<P>UNDER CONSTRUCTION. This is going to cover instrument assignment
-issues in some detail, including a discussion about how to deal with 
-</P>
-<UL>
-	<LI><P>synths where all you want to use are numbers</P>
-	<LI><P>GM</P>
-	<LI><P>GS instruments/variations</P>
-	<LI><P>GS drums</P>
-	<LI><P>other bank/program/variation stuff</P>
-</UL>
-<P>Coming in the next update...</P>
-<P>For now, this chapter is just a boneyard.</P>
-<P><BR><BR>
-</P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">If you
-have selected a MIDI segment, you will see something similar to this.
-The exact controls available will depend on how you have your Studio
-configured, and which MIDI output device is assigned to this
-particular track. They allow you to control the instrument
-assignment, and to adjust any controllers you have configured for
-this device.</P>
-<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-<IMG SRC="../pixmaps/instrument-parameters-midi.png" NAME="Graphic6" ALIGN=BOTTOM WIDTH=257 HEIGHT=230 BORDER=0></P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">If you
-have selected an audio segment, then these controls are available.
-They allow you to control the routing of the audio, and to add layers
-of plugins. There are redundant Mute, Solo and Record toggles, as
-well as volume sliders for left and right</P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">stereo
-channels, and a mono/stereo toggle. (<IMG SRC="../pixmaps/audio-mono.png" NAME="Graphic8" ALIGN=BOTTOM WIDTH=24 HEIGHT=24 BORDER=0>
-<IMG SRC="../pixmaps/audio-stereo.png" NAME="Graphic9" ALIGN=BOTTOM WIDTH=24 HEIGHT=25 BORDER=0>).</P>
-<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-<IMG SRC="../pixmaps/instrument-parameters-audio.png" NAME="Graphic7" ALIGN=BOTTOM WIDTH=258 HEIGHT=282 BORDER=0></P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><BR><BR>
-</P>
-<P STYLE="margin-bottom: 0.2in">Now that you've configured your
-Studio, you're probably eager to create some segments that contain
-something interesting. In this chapter, I discuss different ways of
-recording live performances with Rosegarden. My focus for the moment
-still lies with manipulating data on the main window.</P>
-<H2><BR><BR>
-</H2>
-<H3>Connecting a Track</H3>
-<P STYLE="margin-bottom: 0.2in">Before you record, you might need to
-assign and output device to the selected track. If you're recording
-MIDI, then any MIDI device will do. Rosegarden cannot yet handle
-multiple, concurrent MIDI inputs, so the input you wish to use for
-recording should already have been connected while you were setting
-up your Studio. (See <A HREF="http://chapter-3.html/">Chapter 3</A>
-for more details.) If you're recording audio, you'll need to tell
-Rosegarden that the currently selected track should contain audio
-segments. Do this by directing its connection to one of the Jack
-channels.</P>
-<P STYLE="border: none; padding: 0in"><BR><BR>
-</P>
-<P STYLE="border: none; padding: 0in; font-style: normal"><FONT FACE="Arial">Click
-on one of the track labels and hold the button down for a moment.</FONT></P>
+<H1>Managing &quot;Instrument Parameters&quot;</H1>
+<P>Now that you understand have configured your default studio to
+suit your own needs, you might be wondering just how to make use of
+all those programs and controllers you set up. As I have mentioned in
+various other places, program changes and controllers in MIDI work on
+a channel level. That means they work on a track level within
+Rosegarden. On the audio side of the aisle, Rosegarden divides audio
+support into 16 channels as well, and channel-specific settings such
+as volume levels and plugins can be configured at the track and
+channel level as well.</P>
+<H2>JACK Track or MIDI Track?</H2>
+<P>When starting with a new track, or reconfiguring an existing one,
+the first decision you need to make is whether the track will be used
+for audio or MIDI. Regardless of whether you are displaying
+connections or track labels, you begin by clicking the mouse cursor
+in this area, and holding a moment until a menu appears.</P>
 <P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
 <IMG SRC="../pixmaps/click-and-hold.png" NAME="Graphic3" ALIGN=BOTTOM WIDTH=231 HEIGHT=51 BORDER=0></P>
 <P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
 You should be presented with a series of nested menus that allow you
-to choose the MIDI (or Jack) device and channel for the track.</P>
+to choose the MIDI (or JACK) device and channel for the track.  Let's
+have a look at MIDI first:</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ This first layer of the menu tree allows you to route this track's
+output to a particular device.  In this case, I chose to route it to
+my Roland Sound Canvas.</P>
 <P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-<IMG SRC="../pixmaps/select-midi.png" NAME="Graphic4" ALIGN=BOTTOM WIDTH=382 HEIGHT=325 BORDER=0>
+<IMG SRC="../pixmaps/select-midi.png" NAME="Graphic4" ALIGN=BOTTOM WIDTH=253 HEIGHT=215 BORDER=0>
 </P>
-<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-<IMG SRC="../pixmaps/select-jack.png" NAME="Graphic5" ALIGN=BOTTOM WIDTH=305 HEIGHT=345 BORDER=0></P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><BR><BR>
-</P>
-<H3 STYLE="border: none; padding: 0in">What Do Those Black Boxes
-Mean?</H3>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">While
-it's not immediately relevant to our discussion of recording, this is
-a convenient place to talk about the odd little boxes you might have
-noticed in the menus above.</P>
+<P>Leaving the menu selection on &quot;Roland SC-33&quot; a moment
+caused the menu on the far right to appear.  By selecting &quot;Roland
+SC-33 #6 (Piano 1)&quot; from this final list, I assigned this track
+to the same channel and instrument parameters settings already in use
+by another track.  I could just as easily have assigned it to a
+channel that had not yet been assigned elsewhere, and could have then
+used the Instrument Parameters box to select a program change.  I
+will discuss this last idea a bit later.</P>
+<H3>What Do Those Black Boxes Mean?</H3>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">The
 column of small boxes to the left of the channel provide a concise
 way of showing information about the status of these connections. In
 the examples above, you might have noticed that they were in several
-different states. That's because I have connections configured in my
-Studio for devices that aren't currently available, because the
-associated softsynths aren't running, and because some of my external
-MIDI, and some of my Jack channels weren't assigned to anything. (See
-<A HREF="http://chapter-7.html/">Chapter 7</A> for more information
-about running softsynths in conjunction with Rosegarden.)</P>
+different states.</P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
 These boxes convey the following information:</P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><IMG SRC="../pixmaps/using-rosegarden_html_72a37f4e.png" NAME="Graphic38" ALIGN=BOTTOM WIDTH=14 HEIGHT=15 BORDER=0>
@@ -133,28 +90,67 @@ The active track is connected to an output that is <B>not connected</B>.
 This track, on the other hand, won't make any noise until you assign
 a different device to it or turn on the device that isn't currently
 working.</P>
-<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-<BR><BR>
-</P>
-<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-BONEYARD:</P>
-<H2>Recording MIDI</H2>
-<P STYLE="margin-bottom: 0.2in">Now that your track is assigned...</P>
-<P STYLE="margin-bottom: 0.2in">Out of time. You hit the record
-button. You get one measure of count-in, then a red segment starts to
-appear. If you set it up right, you got stuff in there. If not, you
-got a lot of empty nothing.</P>
-<P STYLE="margin-bottom: 0.2in"><BR><BR>
-</P>
-<H2>Three Ways to Record</H2>
+<H2 ALIGN=LEFT>MIDI Instrument Parameters</H2>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Now that
+the track has been assigned to a MIDI output device, and is therefore
+a MIDI track, the <B>Instrument Parameters</B> box will display
+controls similar to these.</P>
+<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<IMG SRC="../pixmaps/instrument-parameters-midi-ins.png" NAME="Graphic2" ALIGN=BOTTOM WIDTH=190 HEIGHT=165 BORDER=0></P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">They
+allow you to reassign the channel for this track, and to dial in a
+program.  In this case, you can see Roland's variation system in
+action.  The program is set to &quot;20. Churg Org. 1&quot; and the
+variation to &quot;17. Church Org. 3&quot; so this track will play
+using a pipe organ sound that isn't part of the basic set of General
+MIDI programs.</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">If you
+want to select a GS-style drum kit, your <B>Instrument Parameters</B><SPAN STYLE="font-weight: medium">
+box should look something like this:</SPAN></P>
+<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<IMG SRC="../pixmaps/instrument-parameters-midi.png" NAME="Graphic6" ALIGN=TEXTTOP WIDTH=173 HEIGHT=155 BORDER=0></P>
+<H2>Creating a JACK Track</H2>
+<P>If you want to use a track for audio, you'll need to make it a
+JACK track.  The idea is exactly the same as a MIDI track, except you
+will only have one device to choose from, and it is called &quot;JACK
+Audio.&quot;  (If you do not have a &quot;JACK Audio&quot; device
+available, please ensure that your JACK server is running.  If you
+have problems with this, see &quot;You Don't Know JACK&quot; later on
+in this guide.)</P>
+<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<IMG SRC="../pixmaps/select-jack.png" NAME="Graphic5" ALIGN=BOTTOM WIDTH=252 HEIGHT=284 BORDER=0></P>
+<H2>JACK Instrument Parameters</H2>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Audio
+tracks have different controls available in the <B>Instrument
+Parameters</B><SPAN STYLE="font-weight: medium"> box.</SPAN>. They
+allow you to control the routing of the audio, and to add layers of
+plugins. There are redundant Mute, Solo and Record toggles, as well
+as volume sliders for left and right</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">stereo
+channels, and a mono/stereo toggle. (<IMG SRC="../pixmaps/audio-mono.png" NAME="Graphic8" ALIGN=BOTTOM WIDTH=24 HEIGHT=24 BORDER=0>
+<IMG SRC="../pixmaps/audio-stereo.png" NAME="Graphic9" ALIGN=BOTTOM WIDTH=24 HEIGHT=25 BORDER=0>).</P>
+<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<IMG SRC="../pixmaps/instrument-parameters-audio.png" NAME="Graphic7" ALIGN=BOTTOM WIDTH=258 HEIGHT=282 BORDER=0></P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">If you
+wish to assign plugins to the track, you may use one of the &quot;&lt;no
+plugin&gt;&quot; buttons to summon a dialog similar to this one. 
+These controls will vary considerably from plugin to plugin.  I will
+cover plugins in more depth later on, in &quot;You Don't Know JACK.&quot;</P>
+<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<IMG SRC="../pixmaps/JACK-plugins.png" NAME="Graphic1" ALIGN=BOTTOM WIDTH=298 HEIGHT=210 BORDER=0></P>
+<H1>Recording Basics</H1>
 <P STYLE="margin-bottom: 0.2in">There are three different ways to
 record with Rosegarden. If you come from a MIDI background, the most
 obvious thing to do is plug in your MIDI keyboard and hit the record
 button to record a MIDI segment in the currently-selected track. If
-audio is your aim, you'll want to plug something into an input port
-on your soundcard, set your mixer recording source and get to work.
-On the other hand, if you have all the keyboard skill of a paraplegic
-chipmunk, like I do, you might be more interested in the step
-recording feature described in chapter 7.</P>
+audio is your aim, you'll want to set your mixer recording source and
+get to work. On the other hand, if you have all the keyboard skill of
+a paraplegic chipmunk, like I do, you might be more interested in
+step recording.</P>
+<P STYLE="margin-bottom: 0.2in">I will cover step recording later on.
+ For now my focus is on recording operations that can be performed
+from the main window.</P>
+<H2>Recording MIDI</H2>
+<H2>Recording Audio</H2>
 </BODY>
 </HTML>

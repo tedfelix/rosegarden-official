@@ -66,6 +66,23 @@ Sed() {
     sed s@$1@$2@g $3 > /tmp/blurfl&&mv /tmp/blurfl $3
 }
 
+Put() {
+    if [ `whoami` == "silvan" ]; then
+
+	    echo Publishing...
+    
+	    user=$(cat /home/silvan/ZTQXP3)
+
+	    curl -u "$user" -T "$1" ftp://users.adelphia.net/public_html/
+
+	    if [ $? ]; then
+		echo File \"$1\" uploaded successfully.
+	    else
+		echo Upload of file \"$1\" failed.
+	    fi
+    fi 
+}
+
 
 case $1 in 
     "en-web")
@@ -73,9 +90,11 @@ case $1 in
     	;;
     "en-pdf")
     		pdf en
+	        Put using-rosegarden/en/using-rosegarden.pdf
     	;;
     "de-web") 
     		web de
+		Put using-rosegarden/de/arbeiten-mit-rosegarden.pdf
 	;;
     "de-pdf") 
     		pdf de

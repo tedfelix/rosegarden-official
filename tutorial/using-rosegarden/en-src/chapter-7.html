@@ -5,12 +5,13 @@
 	<TITLE></TITLE>
 	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Linux)">
 	<META NAME="CREATED" CONTENT="20040613;312000">
-	<META NAME="CHANGED" CONTENT="20040620;16120800">
+	<META NAME="CHANGED" CONTENT="20040623;20211600">
 </HEAD>
 <BODY LANG="en-US" DIR="LTR">
 <H1><A NAME="6"></A>You Don't Know JACK</H1>
 <P>In order to make use of Rosegarden's audio features, you will need
-to run JACK.</P>
+to run JACK. 
+</P>
 <P>JACK is short for the &ldquo;Jack Audio Connection Kit.&rdquo;
 This marvel is at the heart of Linux audio, and it allows for a level
 of interoperability between applications that's undreamt of in the
@@ -19,45 +20,76 @@ allows its client applications to share the audio hardware
 seamlessly, regardless of the sound driver used, and to share a
 common transport.  It is geared toward the audio professional who
 wants to get the lowest possible latency and the best possible
-performance out of his or her hardware.  The good news is that it
-works even if you're not a serious audio professional, and are too
-stupid to understand most of the concepts involved.  Like me.  :)</P>
-<H2>Starting and tweaking JACK</H2>
+performance out of his or her hardware.  The good news is that
+regular dumb kids like me can sometimes get this to work too.  :)</P>
+<P>I want everyone to know up front that I am not a Linux audio
+hacker.  I don't know how to get the ultimate low latency performance
+out of my equipment, and I can't tell you how to take advantage of
+any of JACK's more exotic capabilities.  If I can run as many JACK
+applications as I want, and play as many streams of audio as I want
+without dropouts and distortions,  I feel like I have accomplished
+enough.  After a great deal of frustration, I finally achieved an
+acceptable plateau of understanding, and I'm staying put.  You will
+have to turn to some other source if you wish to be lead beyond the
+level of understanding I have attained.</P>
+<P>Most notably, I am running all of this stuff as a regular user.  I
+added the low latency and pre-emptive patches to my kernel, turned on
+&quot;capabilities&quot; and then after I booted, I realized I had no
+idea what to <B>do</B> with any of that stuff.  I still don't.  I
+finally just booted my old, reliable kernel and decided not to
+bother.  It gets me by, but I don't get the kind of performance most
+people demand.</P>
+<H2>Starting and Tweaking JACK</H2>
 <P>The simplest way to control your JACK server is to use <B>qjackctl</B>.
 It takes a lot of the sting out of the process, and presents you with
 a nice interface to show you how things are going. It is, of course,
 not a part of Rosegarden, and you will need to install it separately.</P>
 <P ALIGN=CENTER><IMG SRC="../pixmaps/qjackctl-overview.png" NAME="Graphic1" ALIGN=BOTTOM WIDTH=393 HEIGHT=78 BORDER=0></P>
+<H3>The Evil XRUN</H3>
 <P ALIGN=LEFT STYLE="font-weight: medium">In the above example, you
-see what it's <B>supposed</B> to look like. Sometimes getting it to
-play nice is no mean feat. Notice in particular that I am showing 0
-(0) where the xruns are reported. xruns are JACK's way of telling you
-that it isn't happy. They cause audio dropouts and bad performance.
-Your goal in tweaking JACK is to achieve the lowest latency possible
-while preventing xruns.</P>
+see what it's generally supposed to look like. Sometimes getting it
+to play nice is no mean feat. Notice in particular that most elusive
+of conditions:  I have no xruns!</P>
+<P ALIGN=CENTER STYLE="font-weight: medium"><IMG SRC="../pixmaps/JACK-no-xruns.png" NAME="Graphic3" ALIGN=BOTTOM WIDTH=112 HEIGHT=69 BORDER=0></P>
+<P ALIGN=LEFT STYLE="font-weight: medium">You don't want to see
+anything else show up in this portion of qjackctl's display.  These
+&quot;xruns&quot; are JACK's way of telling you that it isn't happy.
+They cause audio dropouts and bad performance. Your goal in tweaking
+JACK is to achieve the lowest latency possible while preventing
+xruns.</P>
+<P ALIGN=LEFT STYLE="font-weight: medium">At the other extreme, I
+have intentionally started JACK with parameters I know to deliver
+poor results, and I have taxed the system by running too many things
+at once, playing too many big audio files at the same time, and so
+forth.  I produced this hideous outcome in short order:</P>
+<P ALIGN=CENTER STYLE="font-weight: medium"><IMG SRC="../pixmaps/JACK-know-xruns.png" NAME="Graphic4" ALIGN=BOTTOM WIDTH=113 HEIGHT=64 BORDER=0></P>
+<P ALIGN=LEFT STYLE="font-weight: medium">You never want to see this
+much red.  Seeing any red at all is really unacceptable.</P>
+<H3>Configuring the JACK Server</H3>
 <P ALIGN=LEFT STYLE="font-weight: medium">To change how your JACK
 server is configured, use the <B>Setup</B> button. Here you can see
-the settings that finally worked for me with my SB Live!. It's
-notable that I am running JACK strictly as a user, without real-time
-capabilities enabled. If you run JACK with real time turned on,
-you'll have to run qjackctl, JACK, and Rosegarden as root, or else
-you'll have to run a capabilities-enabled kernel so that you can run
-them with root privleges as your user.</P>
-<P ALIGN=LEFT STYLE="font-weight: medium"><I>I think. Actually, I
-don't know. If this is wrong, please correct me.</I></P>
+the settings that finally worked for me with my SB Live!.  These
+settings are pure magic.  I've run JACK for days on end without a
+single xrun ever.  I hope they work as well for you.  If not, I'm
+afraid the best thing for you do is play with the &quot;Frames/Period&quot;,
+&quot;Sample Rate&quot; and &quot;Periods/Buffer&quot; settings. 
+Start JACK with the <B>Start</B><SPAN STYLE="font-weight: medium">
+button, see how things go, and then stop it and come back to play
+with these settings some more</SPAN> until you find the most
+acceptable combination.  Watch the &quot;Latency:&quot; figure in the
+bottom corner.  You want to keep this as low as possible.  If you
+have high latency here, then any software synths that play through
+JACK will have horrible playback problems.</P>
 <P ALIGN=CENTER><IMG SRC="../pixmaps/qjackctl-silvan.png" NAME="Graphic2" ALIGN=BOTTOM WIDTH=290 HEIGHT=211 BORDER=0></P>
 <P ALIGN=LEFT STYLE="font-weight: medium">If you were running
 Rosegarden before starting JACK, you'll need to close Rosegarden and
 restart it in order to make its audio features available. I will
-cover the actual use of Rosegarden's features in Chapter 8. For now
-we are only concerned with how to get Rosegarden to cooperate with
-other JACK-enabled applications.</P>
-<H2>Using Rosegarden with a JACK-enabled Soft Synth</H2>
-<P>Now that JACK is running and Rosegarden has hopefully set up some
-default JACK connections for you, you can take advantage of
-Rosegarden's ability to record and play audio.</P>
-<P ALIGN=LEFT><BR><BR>
-</P>
+cover Rosegarden's audio features in depth in the next chapter.  For
+now we are only concerned with how to get Rosegarden to cooperate
+with other JACK-enabled applications.</P>
+<H2>Using Rosegarden with QSynth</H2>
+<H2>Using Rosegarden with Hydrogen</H2>
+<H2>Using Rosegarden with ZynAddSubFX</H2>
 <P><BR><BR>
 </P>
 <P><BR><BR>

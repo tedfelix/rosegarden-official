@@ -25,19 +25,18 @@ A { text-decoration: none }
 <H2>2.1 <A NAME="2_1"></A>The Main Window</H2>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  Let's begin by starting Rosegarden, and having a look at the main
- window. This is where you get an overall view of your composition, and
- control a number of settings and parameters.</P>
+ window. This is where you get an overall view of your work, and control
+ a number of settings and parameters.</P>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  A Rosegarden document is called a composition. The main window is
- primarily about editing at the composition level, so most of these
- tools affect your document in a broad way. This is where you name and
- assign instruments to tracks, create and manipulate segments, and watch
- a broad overview of playback. This is also where you configure segment
- parameters such as label and color. While it might be more intuitive
- for you as a composer to change tempo and time signature settings from
- within a notation view, these settings actually exist at a composition
- level, and they may be edited here in the main window using the tempo
- ruler.</P>
+ primarily dedicated to editing at the composition level, so most of
+ these tools affect your document in a broad way. This is where you name
+ tracks and assign instruments to them, create and manipulate segments,
+ and watch a broad overview of playback. (I will explain these concepts
+ in more detail later on.) This is also where you configure segment
+ parameters such as label and color. Tempo and time signature settings
+ exist a composition level, and they may be edited here in the main
+ window using the tempo ruler.</P>
 <P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="295" NAME="Graphic4" SRC="../pixmaps/main-screenshot.png"
 WIDTH="463"></P>
@@ -79,37 +78,82 @@ WIDTH="125"></P>
  <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="27" NAME="Graphic5" SRC="../pixmaps/editor-mixer-toolbar.png"
 WIDTH="208"></P>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
- At the end of it all is the Zoom Slider:</P>
+ At the end of it all is the Zoom Slider, which is used to change the
+ magnification of the Segment Canvas:</P>
 <P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="26" NAME="Graphic29" SRC="../pixmaps/using-rosegarden_html_47dd4a5.png"
 WIDTH="259"></P>
-<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
-<I> TIP: If your Zoom Slider is cut off by a toolbar, try dragging it
- within your toolbar palette until it's the last item on the right. This
- is a known issue, but seems to be a greater QT/KDE problem, and there's
- not much the Rosegarden developers can do to avoid it. Luckily, it's
- very easy to remedy, and your toolbar settings will be remembered the
- next time you start Rosegarden.</I></P>
-<H2 STYLE="border: none; padding: 0in">2.3 <A NAME="2_3"></A>Segments
- and Parameters</H2>
+<H2><A NAME="2_3">2.3 The Tracklist</A></H2>
+<P>Rosegarden is a track-based sequencer. Each entry in the tracklist is
+ a separate track that can have individualized settings for several
+ different parameters. Each track has a label and an output assignment,
+ and can be used to record, play, and manipulate either MIDI or audio
+ data, but never both.</P>
+<H3><A NAME="2_3_1">2.3.1 Connection vs. Name</A></H3>
+<P STYLE="margin-bottom: 0.2in">The tracklist can be configured to
+ display either the name you've assigned to the track, or the name of
+ the device and channel to which it is connected. Toggle this behavior
+ with<B> Settings -&gt; Show Track Labels</B>. I will explain more about
+ these connections later on, after I have described the Studio.</P>
+<P STYLE="margin-bottom: 0.2in">Here we see how connections are
+ displayed on the tracklist.</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in"><IMG ALIGN="BOTTOM" BORDER="0"
+HEIGHT="48" NAME="Graphic3" SRC="../pixmaps/track-list-connections.png" WIDTH="229">
+</P>
+<H3><A NAME="2_3_2">2.3.2 Track LEDs</A></H3>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in">Here we see the labels. One
+ track has not yet had a name assigned, so it remains &quot;&lt;untitled&gt;&quot;.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in">Each track has two LEDs.
+ The blue one is the track mute. If the blue LED is glowing, the track
+ will be heard during playback. All of the blue LEDs can be turned on or
+ off all at once with<B> Tracks -&gt; Mute All</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ and<B> -&gt; /Un-Mute All</B>
+<!--SPAN STYLE="font-weight: medium"-->
+
+.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in">The red LED lights up to
+ indicate that the affected track is armed as the destination for
+ recording operations.</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in"><IMG ALIGN="BOTTOM" BORDER="0"
+HEIGHT="49" NAME="Graphic10" SRC="../pixmaps/track-list-names.png" WIDTH="231"></P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<BR>
+<BR></P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<I> TIP: The mute LEDs can also be used to control which tracks are
+ included when exporting the composition into another format. Muted
+ tracks will typically be ignored during export, though this varies
+ slightly by the export method chosen.</I></P>
+<H3>2.3.3 <A NAME="2_6_4"></A>Changing the Track Name</H3>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">To change
+ the track name, double click on the label. A dialog should appear,
+ allowing you to enter a new name.</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="112" NAME="Graphic43" SRC="../pixmaps/using-rosegarden_html_m3266770c.png"
+WIDTH="393"></P>
+<H3><A NAME="2_3_4">2.3.4 Adding, Removing, Moving Tracks</A></H3>
+<P>The tools on the Tracks Toolbar <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="27"
+NAME="Graphic9" SRC="../pixmaps/using-rosegarden_html_m7a769b12.png" WIDTH="125">
+ can be used to move tracks up and down, to delete them, or to create
+ new tracks. It is not possible to copy an entire track.</P>
+<H2 STYLE="border: none; padding: 0in">2.4 <A NAME="2_3"></A>Segments
+ and Segment Parameters</H2>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Rosegarden
  compositions are made up of segments, and editing at the composition
- level involves dragging them around and rearranging them. Segments are
- a universal container that may hold either MIDI events or audio data.
- Segments are rather similar to layers in an image editing program such
- as the GIMP. They can be cut, pasted, split, re-combined, overlapped
- and pretty much rearranged at will, and are very flexible. While there
- are understandably some differences in the way these two types of
- segments behave, they can be manipulated in almost exactly the same way
- within the composition. The only real limitation is that audio segments
- and MIDI segments cannot both play in the same track.</P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Unless you
- began with an imported MIDI file, your segment canvas will be empty,
- and many of the features I wish to demonstrate will be disabled.</P>
-<H3><A NAME="2_3_1">2.3.1 Creating a New Segment</A></H3>
+ level involves dragging them around and rearranging them within tracks.
+ Segments are a universal container that may hold either MIDI events or
+ audio data. Segments are rather similar to layers in an image editing
+ program such as the GIMP. They can be cut, pasted, split, re-combined,
+ overlapped and pretty much rearranged at will, and are very flexible.
+ While there are understandably some differences in the way audio and
+ MIDI segments behave, they can be manipulated in almost exactly the
+ same way within the composition. The only real limitation is that audio
+ segments and MIDI segments cannot both play in the same track.</P>
+<H3><A NAME="2_4_1">2.4.1 Creating a New Segment</A></H3>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
- You can begin recording (audio or MIDI) to create one, but I'll get
- into that a bit later. For now, why not draw one from scratch?</P>
+ You can begin recording (audio or MIDI) to create a segment, but I'll
+ get into that a bit later. For now, why not draw one from scratch?</P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  Use the <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="26" NAME="Graphic65" SRC="../pixmaps/using-rosegarden_html_4c452e31.png"
 WIDTH="27"> cursor to create a new segment. Click and drag it out to the
@@ -120,7 +164,7 @@ WIDTH="521"></P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">You can now
  edit it by way of the matrix or notation views, which we will address
  later. For now, let's go ahead and play with the segment.</P>
-<H3><A NAME="2_3_2">2.3.2 Moving and Copying</A></H3>
+<H3><A NAME="2_4_2">2.4.2 Moving and Copying</A></H3>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  Use the <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="24" NAME="Graphic67" SRC="../pixmaps/using-rosegarden_html_5b745bd6.png"
 WIDTH="26"> cursor to select a segment:</P>
@@ -137,6 +181,7 @@ WIDTH="440"></P>
 <P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="121" NAME="Graphic71" SRC="../pixmaps/using-rosegarden_html_m5ec59c8b.png"
 WIDTH="461"></P>
+<H3><A NAME="2_4_3">2.4.3 Splitting and Joining</A></H3>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal; font-weight: medium">
  Use the <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="26" NAME="Graphic72" SRC="../pixmaps/using-rosegarden_html_79e4c412.png"
 WIDTH="25"> cursor to split one of the segments, then switch to the <IMG ALIGN="BOTTOM"
@@ -162,7 +207,26 @@ WIDTH="451"></P>
  segment. The events will combine, and merge onto a segment on whichever
  track is currently active. Obviously, you may not merge MIDI and audio
  into the same segment.</P>
-<H3><A NAME="2_3_3">2.3.3 Segment Previews</A></H3>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal; font-weight: medium">
+ Split by Pitch</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal; font-weight: medium">
+ If you have a segment where the treble and bass parts are jumbled
+ together, you might wish to split this at middle C or thereabouts. You
+ can use<B> Segments -&gt; Split and Join -&gt; Split by Pitch</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ and then
+ make your selections for split point, clef handling, etc. from the
+ resulting dialog. By default, this feature attempts to split the
+ segment intelligently, so that you can hopefully avoid winding up with
+ treble notes in the bass part, and bass notes in the treble part.</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal; font-weight: medium">
+ <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="229" NAME="Graphic8" SRC="../pixmaps/main-split-by-pitch.png"
+WIDTH="207"></P>
+<P>Once split, the two segments will overlap exactly on the same track.
+ It is impossible to select a segment that lies completely underneath
+ another segment, so it is probably a good idea to move one of the two
+ halves into a different track.</P>
+<H3><A NAME="2_4_4">2.4.4 Segment Previews</A></H3>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  You can get some sense of what that bit of music is like just by
  looking at the segment display, which is a useful visual aid when
@@ -173,7 +237,7 @@ WIDTH="451"></P>
 <P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; text-decoration: none">
  <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="143" NAME="Graphic1" SRC="../pixmaps/segment-previews.png"
 WIDTH="240"></P>
-<H3><A NAME="2_3_4">2.3.4 Segment Parameters</A></H3>
+<H3><A NAME="2_4_5">2.4.5 Segment Parameters</A></H3>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">After you
  have created a segment, you can edit various parameters from the<B>
  Segment Parameters</B> box to the left:</P>
@@ -186,81 +250,32 @@ WIDTH="312"></P>
  colors are entirely user-configurable, and these defaults are only
  suggestions. I'll explain how to configure custom colors later on, in
  the Studio chapter.</P>
-<H3><A NAME="2_3_5">2.3.5 Repeats</A></H3>
+<H3><A NAME="2_4_6">2.4.6 Repeats</A></H3>
 <P>Every segment can be made to repeat. It will keep repeating until the
  end of the document, or until another segment is encountered in the
  track; whichever comes first. These are displayed between repeat signs
  ( |: :| ) in the notation editor.</P>
 <P>You can turn all repeats into copies at once with<B> Segments -&gt; Turn
- Repeats into Copies</B>
-<!--SPAN STYLE="font-weight: medium"-->
-, or you can turn individual repeats into copies
+ Repeats into Copies</B>, or you can turn individual repeats into copies
  by double clicking on the light colored repeat rectangles.</P>
-<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
-HEIGHT="84" NAME="Graphic7" SRC="../pixmaps/segment-repeats-copies.png" WIDTH="223">
-</P>
-<H3><A NAME="2_3_6">2.3.6 Segment Quantizer</A></H3>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="84" NAME="Graphic7"
+SRC="../pixmaps/segment-repeats-copies.png" WIDTH="223"></P>
+<H3><A NAME="2_4_7">2.4.7 Segment Quantizer</A></H3>
 <P>Changing the setting in this box will immediately quantize all notes
  in this segment to the selected grid position. It will move the start
  times forward or back to align them with the next closest beat at the
  desired resolution. It will not change note durations in any way.</P>
-<H3><A NAME="2_3_7">2.3.7 Transposing Instruments</A></H3>
+<H3><A NAME="2_4_8">2.4.8 Transposing Instruments</A></H3>
 <P>If you wish to write notation for transposing instruments, you can
- dial a transposition setting into the<B> Transpose</B>
-<!--SPAN STYLE="font-weight: medium"-->
- box. This will
+ dial a transposition setting into the<B> Transpose</B> box. This will
  cause the part to sound in a different range from written. A typical Bb
  trumpet part, for example, should have -2 here. I'll cover this subject
  in more depth later on, in the Notation chapter.</P>
-<H3><A NAME="2_3_8">2.3.8 Delay</A></H3>
-<P>The<B> Delay</B>
-<!--SPAN STYLE="font-weight: medium"-->
- setting allows you to knock the timing of a segment
+<H3><A NAME="2_4_9">2.4.9 Delay</A></H3>
+<P>The<B> Delay</B> setting allows you to knock the timing of a segment
  out of sync on purpose. This can be useful in various ways, and it's
  especially amusing for transforming a nicely performed MIDI file into a
  simulation of a middle school band concert.</P>
-<H2><A NAME="2_4">2.4 The Tracklist</A></H2>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">The
- tracklist allows you to give your tracks a name, and provides the
- mechanism for routing output to particular output devices and channels.</P>
-<H3><A NAME="2_4_1">2.4.1 Connection vs. Name</A></H3>
-<P STYLE="margin-bottom: 0.2in">The tracklist can be configured to
- display either the name you've assigned to the track, or the name of
- the connection. Toggle this behavior with<B> Settings -&gt; Show Track
- Labels</B>.</P>
-<P STYLE="margin-bottom: 0.2in">Here we see how connections are
- displayed on the tracklist. I'll get into much more detail in the next
- chapter.</P>
-<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in"><IMG ALIGN="BOTTOM" BORDER="0"
-HEIGHT="48" NAME="Graphic3" SRC="../pixmaps/track-list-connections.png" WIDTH="229">
-</P>
-<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in">
-<BR>
-<BR></P>
-<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in">Here we see the labels. One
- track that not yet had a name assigned. Notice the state of the LEDs.
- The blue LED controls the mute state of the track, and the red LED
- indicates that this track is the current destination for recording
- operations.</P>
-<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in"><IMG ALIGN="BOTTOM" BORDER="0"
-HEIGHT="49" NAME="Graphic10" SRC="../pixmaps/track-list-names.png" WIDTH="231"></P>
-<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-<BR>
-<BR></P>
-<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-<I> TIP: The mute LEDs can also be used to control which tracks are
- included when exporting the composition into another format. Muted
- tracks will typically be ignored during export, though this varies
- slightly by the export method chosen.</I></P>
-<H3>2.4.2 <A NAME="2_6_4"></A>Changing the Track Name</H3>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">To change
- the track name, double click on the label. A dialog should appear,
- allowing you to enter a new name.</P>
-<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-
-<!--SPAN STYLE="font-weight: medium"-->
- <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="112" NAME="Graphic43" SRC="../pixmaps/using-rosegarden_html_m3266770c.png"
-WIDTH="393"></P>
 <H2><A NAME="2_5">2.5 Getting Around in the Composition</A></H2>
 <P STYLE="font-weight: medium">If you've been following along thus far,
  you don't actually have anything useful to play. This is nevertheless
@@ -340,9 +355,7 @@ SRC="../pixmaps/tempo-add.png" WIDTH="384"></P>
 WIDTH="24"> icon, and you'll be presented with a dialog like:</P>
 <P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="282" NAME="Graphic15"
 SRC="../pixmaps/tempo-time-dialog.png" WIDTH="383"></P>
-<P ALIGN="LEFT">You can display the time signature as
-<!--SPAN STYLE="font-weight: medium"-->
- cut or common
+<P ALIGN="LEFT">You can display the time signature as cut or common
  time, and make the time signature hidden. You should probably always
  leave &quot;Correct the durations of the following measures&quot; checked unless
  you have a good reason to do otherwise.</P>
