@@ -563,8 +563,8 @@ TrackButtons::slotUpdateTracks()
 		trackLabel->setText(strtoqstr(track->getLabel()));
             }
             
-            RG_DEBUG << "TrackButtons::slotUpdateTracks - set button mapping at pos "
-                     << i << " to track id " << track->getId() << endl;
+//             RG_DEBUG << "TrackButtons::slotUpdateTracks - set button mapping at pos "
+//                      << i << " to track id " << track->getId() << endl;
 	    setButtonMapping(m_trackLabels[i], track->getId());
 	}
     }
