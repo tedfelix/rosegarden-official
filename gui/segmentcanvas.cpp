@@ -275,6 +275,63 @@ void SegmentCanvas::slotSetTool(ToolType t)
     }
 }
 
+void SegmentCanvas::updateAllSegmentItems()
+{
+    // store the segments we currently show here to speed up
+    // determining if new segments were added to the composition
+    // 
+    std::vector<Segment*> currentSegments;
+    bool foundOneSegmentDeleted = false;
+
+    QCanvasItemList l = canvas()->allItems();
+    
+    for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
+        SegmentItem *item = dynamic_cast<SegmentItem*>(*it);
+        if (item) {
+            Segment* segment = item->getSegment();
+
+            if (!segment->getComposition()) { // this segment has been deleted
+                delete item;
+                foundOneSegmentDeleted = true;
+            }
+            else {
+                item->recalculateRectangle(true);
+                currentSegments.push_back(segment);
+            }
+        }
+    }
+
+    unsigned int nbSegmentsInComposition = m_doc->getComposition().getNbSegments();
+    unsigned int nbCurrentSegments = currentSegments.size();
+    
+    if ((nbSegmentsInComposition != nbCurrentSegments) ||
+        (foundOneSegmentDeleted))
+        // if the composition and the segment canvas have the same
+        // number of segments, but one of them got deleted they can't
+        // be all the same segments, so we also have to look
+        {
+            using Rosegarden::Composition;
+
+            // check all composition's segments if there's a SegmentItem for it
+            //
+            const Composition::segmentcontainer& compositionSegments = m_doc->getComposition().getSegments();
+            for(Composition::segmentcontainer::const_iterator i = compositionSegments.begin();
+                i != compositionSegments.end(); ++i) {
+
+                Segment* seg = (*i);
+
+                if (std::find(currentSegments.begin(), currentSegments.end(), seg) == currentSegments.end()) {
+                    // found one - update
+                    addSegmentItem(seg);
+                }
+
+            }
+
+        }
+
+    slotUpdate();
+}
+
 void SegmentCanvas::updateSegmentItem(Segment *segment)
 {
     SegmentItem *item = findSegmentItem(segment);

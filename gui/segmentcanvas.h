@@ -227,7 +227,7 @@ public:
      */
     QBrush getHighlightBrush() const { return m_highlightBrush; }
 
-    /*
+    /**
      * Get the normal segment brush
      */
     QBrush getSegmentBrush() const { return m_brush; }
@@ -243,7 +243,7 @@ public:
      */
     void setSnapGrain(bool fine);
 
-    /*
+    /**
      * Show a preview of the Segment we're recording
      */
     void showRecordingSegmentItem(Rosegarden::TrackId track,
@@ -256,6 +256,13 @@ public:
     //
     std::vector<Rosegarden::Segment*> getSelectedSegments();
     void clearSelected();
+
+    /**
+     * For all segment items, check that the Segment is still linked
+     * to a Composition.
+     * Also scans the composition for new segments
+     */
+    void updateAllSegmentItems();
 
 public slots:
 
