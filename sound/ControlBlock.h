@@ -33,6 +33,7 @@ namespace Rosegarden
  */
 struct TrackInfo 
 {
+    bool deleted;
     bool muted;
     InstrumentId instrumentId;
 };
@@ -48,12 +49,12 @@ class ControlBlock
 {
 public:
     /// ctor for GUI
-    ControlBlock(unsigned int nbTracks);
+    ControlBlock(unsigned int maxTrackId);
 
     /// ctor for sequencer - all data is read from mmapped file
     ControlBlock();
 
-    unsigned int getNbTracks() const { return m_nbTracks; }
+    unsigned int getMaxTrackId() const { return m_maxTrackId; }
     void updateTrackData(Track*);
 
     void setInstrumentForTrack(TrackId trackId, InstrumentId);
@@ -61,6 +62,12 @@ public:
 
     void setTrackMuted(TrackId trackId, bool);
     bool isTrackMuted(TrackId trackId) const;
+
+    void setTrackDeleted(TrackId trackId, bool);
+    bool isTrackDeleted(TrackId trackId) const;
+    
+    bool isInstrumentMuted(InstrumentId instrumentId) const;
+    bool isInstrumentUnused(InstrumentId instrumentId) const;
 
     void setInstrumentForMetronome(InstrumentId instId) { m_metronomeInfo.instrumentId = instId; }
     InstrumentId getInstrumentForMetronome() const      { return m_metronomeInfo.instrumentId; }
@@ -82,7 +89,7 @@ public:
 protected:
     //--------------- Data members ---------------------------------
     // PUT ONLY PLAIN DATA HERE - NO POINTERS EVER
-    int m_nbTracks;
+    int m_maxTrackId;
     bool m_solo;
     MidiFilter m_thruFilter;
     MidiFilter m_recordFilter;

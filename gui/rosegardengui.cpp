@@ -262,7 +262,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     if (m_useSequencer) {
 
 #ifdef HAVE_LIBJACK
-#define OFFER_JACK_START_OPTION 1
+//#define OFFER_JACK_START_OPTION 1
 #ifdef OFFER_JACK_START_OPTION
         // First we check if jackd is running allready
 
@@ -1159,7 +1159,10 @@ void RosegardenGUIApp::initStatusBar()
                                   AlignLeft | AlignVCenter);
 
     m_progressBar = new RosegardenProgressBar(100, true, statusBar());
-    m_progressBar->setMinimumWidth(100);
+//    m_progressBar->setMinimumWidth(100);
+    m_progressBar->setFixedWidth(60);
+    m_progressBar->setFixedHeight(18);
+    m_progressBar->setTextEnabled(false);
     statusBar()->addWidget(m_progressBar);
 }
 
@@ -3567,6 +3570,8 @@ RosegardenGUIApp::mergeFile(QString filePath, ImportType type)
 void
 RosegardenGUIApp::slotUpdatePlaybackPosition()
 {
+    static int callbackCount = 0;
+
     // Either sequencer mappper or the sequence manager could be missing at
     // this point.
     //
@@ -3609,8 +3614,70 @@ RosegardenGUIApp::slotUpdatePlaybackPosition()
 
     m_view->updateMeters(mapper);
 
+    if (++callbackCount == 60) {
+	slotUpdateCPUMeter(true);
+	callbackCount = 0;
+    }
+
     if (elapsedTime >= comp.getEndMarker())
         slotStop();
+}
+
+void
+RosegardenGUIApp::slotUpdateCPUMeter(bool playing)
+{
+    static std::ifstream *statstream = 0;
+    static bool modified = false;
+    static unsigned long lastBusy = 0, lastIdle = 0;
+
+    if (playing) {
+
+	if (!statstream) {
+	    statstream = new std::ifstream("/proc/stat", std::ios::in);
+	}
+
+	if (!statstream || !*statstream) return;
+	statstream->seekg(0, std::ios::beg);
+
+	std::string cpu;
+	unsigned long user, nice, sys, idle;
+	*statstream >> cpu;
+	*statstream >> user;
+	*statstream >> nice;
+	*statstream >> sys;
+	*statstream >> idle;
+
+	unsigned long busy = user + nice + sys;
+	unsigned long count = 0;
+
+	if (lastBusy > 0) {
+	    unsigned long bd = busy - lastBusy;
+	    unsigned long id = idle - lastIdle;
+	    if (bd + id > 0) count = bd * 100 / (bd + id);
+	    if (count > 100) count = 100;
+	}
+
+	lastBusy = busy;
+	lastIdle = idle;
+
+	if (m_progressBar) {
+	    if (!modified) {
+		m_progressBar->setTextEnabled(true);
+		m_progressBar->setFormat("CPU");
+	    }
+	    m_progressBar->setProgress(count);
+	}
+
+	modified = true;
+
+    } else if (modified) {
+	if (m_progressBar) {
+	    m_progressBar->setTextEnabled(false);
+	    m_progressBar->setFormat("%p%");
+	    m_progressBar->setProgress(0);
+	}
+	modified = false;
+    }
 }
 
 void
@@ -3628,6 +3695,8 @@ RosegardenGUIApp::slotUpdateMonitoring()
 
     if (m_midiMixer && m_midiMixer->isVisible())
         m_midiMixer->updateMonitorMeter(mapper);
+
+    slotUpdateCPUMeter(false);
 }
 
 void RosegardenGUIApp::slotSetPointerPosition(timeT t)
@@ -5522,14 +5591,6 @@ RosegardenGUIApp::slotOpenMidiMixer()
     connect(this, SIGNAL(documentAboutToChange()),
             m_midiMixer, SLOT(close()));
 
-    /*
-    connect(m_midiMixer, SIGNAL(selectPlugin(QWidget *, Rosegarden::InstrumentId, int)),
-	    this, SLOT(slotShowPluginDialog(QWidget *, Rosegarden::InstrumentId, int)));
-
-    connect(m_view, SIGNAL(checkTrackAssignments()),
-	    m_midiMixer, SLOT(slotTrackAssignmentsChanged()));
-            */
-
     connect(m_midiMixer, SIGNAL(play()),
 	    this, SLOT(slotPlay()));
     connect(m_midiMixer, SIGNAL(stop()),
@@ -5711,12 +5772,19 @@ RosegardenGUIApp::slotShowPluginDialog(QWidget *parent,
 	return;
     }
 
-    Rosegarden::Instrument *instrument = m_doc->getStudio().
-        getInstrumentById(instrumentId);
+    Rosegarden::PluginContainer *container = 0;
+
+    container = m_doc->getStudio().getInstrumentById(instrumentId);
+    if (!container) container = m_doc->getStudio().getBussById(instrumentId);
+    if (!container) {
+	RG_DEBUG << "RosegardenGUIApp::slotShowPluginDialog - "
+		 << "no instrument or buss of id " << instrumentId << endl;
+	return;
+    }    
     
     // only create a dialog if we've got a plugin instance
     Rosegarden::AudioPluginInstance *inst = 
-	instrument->getPlugin(index);
+	container->getPlugin(index);
 
     if (!inst) {
 	RG_DEBUG << "RosegardenGUIApp::slotShowPluginDialog - "
@@ -5733,7 +5801,7 @@ RosegardenGUIApp::slotShowPluginDialog(QWidget *parent,
 #ifdef HAVE_LIBLO
 					  m_pluginGUIManager,
 #endif
-					  instrument,
+					  container,
 					  index);
 
     // Plug the new dialog into the standard keyboard accelerators so
@@ -5801,11 +5869,18 @@ RosegardenGUIApp::slotPluginSelected(Rosegarden::InstrumentId instrumentId,
     // It's assumed that ports etc will already have been set up on
     // the AudioPluginInstance before this is invoked.
 
-    Rosegarden::Instrument *instrument = m_doc->getStudio().
-        getInstrumentById(instrumentId);
+    Rosegarden::PluginContainer *container = 0;
+
+    container = m_doc->getStudio().getInstrumentById(instrumentId);
+    if (!container) container = m_doc->getStudio().getBussById(instrumentId);
+    if (!container) {
+	RG_DEBUG << "RosegardenGUIApp::slotPluginSelected - "
+		 << "no instrument or buss of id " << instrumentId << endl;
+	return;
+    }    
     
     Rosegarden::AudioPluginInstance *inst = 
-        instrument->getPlugin(index);
+	container->getPlugin(index);
 
     if (!inst) {
         RG_DEBUG << "RosegardenGUIApp::slotPluginSelected - "
@@ -5951,10 +6026,17 @@ RosegardenGUIApp::slotPluginPortChanged(Rosegarden::InstrumentId instrumentId,
 					int portIndex,
 					float value)
 {
-    Rosegarden::Instrument *instrument = m_doc->getStudio().
-        getInstrumentById(instrumentId);
+    Rosegarden::PluginContainer *container = 0;
+
+    container = m_doc->getStudio().getInstrumentById(instrumentId);
+    if (!container) container = m_doc->getStudio().getBussById(instrumentId);
+    if (!container) {
+	RG_DEBUG << "RosegardenGUIApp::slotPluginPortChanged - "
+		 << "no instrument or buss of id " << instrumentId << endl;
+	return;
+    }    
     
-    Rosegarden::AudioPluginInstance *inst = instrument->getPlugin(pluginIndex);
+    Rosegarden::AudioPluginInstance *inst = container->getPlugin(pluginIndex);
 
     if (inst)
     {
@@ -6003,10 +6085,17 @@ RosegardenGUIApp::slotPluginProgramChanged(Rosegarden::InstrumentId instrumentId
 					   int pluginIndex,
 					   QString program)
 {
-    Rosegarden::Instrument *instrument = m_doc->getStudio().
-        getInstrumentById(instrumentId);
+    Rosegarden::PluginContainer *container = 0;
+
+    container = m_doc->getStudio().getInstrumentById(instrumentId);
+    if (!container) container = m_doc->getStudio().getBussById(instrumentId);
+    if (!container) {
+	RG_DEBUG << "RosegardenGUIApp::slotPluginProgramChanged - "
+		 << "no instrument or buss of id " << instrumentId << endl;
+	return;
+    }    
     
-    Rosegarden::AudioPluginInstance *inst = instrument->getPlugin(pluginIndex);
+    Rosegarden::AudioPluginInstance *inst = container->getPlugin(pluginIndex);
 
     if (inst)
     {
@@ -6058,10 +6147,17 @@ void
 RosegardenGUIApp::slotPluginBypassed(Rosegarden::InstrumentId instrumentId,
 				     int pluginIndex, bool bp)
 {
-    Rosegarden::Instrument *instrument = m_doc->getStudio().
-        getInstrumentById(instrumentId);
+    Rosegarden::PluginContainer *container = 0;
+
+    container = m_doc->getStudio().getInstrumentById(instrumentId);
+    if (!container) container = m_doc->getStudio().getBussById(instrumentId);
+    if (!container) {
+	RG_DEBUG << "RosegardenGUIApp::slotPluginBypassed - "
+		 << "no instrument or buss of id " << instrumentId << endl;
+	return;
+    }    
     
-    Rosegarden::AudioPluginInstance *inst = instrument->getPlugin(pluginIndex);
+    Rosegarden::AudioPluginInstance *inst = container->getPlugin(pluginIndex);
 
     if (inst)
     {
@@ -6088,10 +6184,17 @@ RosegardenGUIApp::slotPluginConfigurationChanged(Rosegarden::InstrumentId instru
 						 QString key,
 						 QString value)
 {
-    Rosegarden::Instrument *instrument = m_doc->getStudio().
-        getInstrumentById(instrumentId);
+    Rosegarden::PluginContainer *container = 0;
+
+    container = m_doc->getStudio().getInstrumentById(instrumentId);
+    if (!container) container = m_doc->getStudio().getBussById(instrumentId);
+    if (!container) {
+	RG_DEBUG << "RosegardenGUIApp::slotPluginConfigurationChanged - "
+		 << "no instrument or buss of id " << instrumentId << endl;
+	return;
+    }    
     
-    Rosegarden::AudioPluginInstance *inst = instrument->getPlugin(index);
+    Rosegarden::AudioPluginInstance *inst = container->getPlugin(index);
 
     if (global && inst) {
 
@@ -6220,7 +6323,8 @@ RosegardenGUIApp::slotPlayListClosed()
 void
 RosegardenGUIApp::slotTutorial()
 {
-    QString tutorialURL = i18n("http://www.rosegardenmusic.com/resources/tutorial/using_en.shtml");
+    //    QString tutorialURL = i18n("http://www.rosegardenmusic.com/resources/tutorial/using_en.shtml");
+    QString tutorialURL = i18n("file://usr/share/doc/using-rosegarden/en/chapter-0.html");
     kapp->invokeBrowser(tutorialURL);
 }
 

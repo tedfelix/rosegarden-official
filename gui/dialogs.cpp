@@ -4435,6 +4435,7 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
 
     layout->addWidget(new QLabel(i18n("Resolution"), frame), 0, 0);
     m_metronomeResolution = new KComboBox(frame);
+    m_metronomeResolution->insertItem(i18n("None"));
     m_metronomeResolution->insertItem(i18n("Bars only"));
     m_metronomeResolution->insertItem(i18n("Bars and beats"));
     m_metronomeResolution->insertItem(i18n("Bars, beats, and divisions"));
@@ -4576,11 +4577,11 @@ ManageMetronomeDialog::populate(int deviceIndex)
 	slotInstrumentChanged(position);
 
         m_metronomePitch->slotSetPitch(metronome->getPitch());
-	m_metronomeResolution->setCurrentItem(metronome->getDepth() - 1);
+	m_metronomeResolution->setCurrentItem(metronome->getDepth());
         m_metronomeBarVely->setValue(metronome->getBarVelocity());
         m_metronomeBeatVely->setValue(metronome->getBeatVelocity());
         m_metronomeSubBeatVely->setValue(metronome->getSubBeatVelocity());
-	slotResolutionChanged(metronome->getDepth() - 1);
+	slotResolutionChanged(metronome->getDepth());
     }
 }
 
@@ -4702,7 +4703,7 @@ ManageMetronomeDialog::slotApply()
             Rosegarden::MidiByte(m_metronomePitch->getPitch()));
 
     metronome.setDepth(
-	    m_metronomeResolution->currentItem() + 1);
+	    m_metronomeResolution->currentItem());
 
     metronome.setBarVelocity(
             Rosegarden::MidiByte(m_metronomeBarVely->value()));

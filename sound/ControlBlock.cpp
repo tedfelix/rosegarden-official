@@ -28,8 +28,8 @@
 namespace Rosegarden
 {
 
-ControlBlock::ControlBlock(unsigned int nbTracks)
-    : m_nbTracks(nbTracks),
+ControlBlock::ControlBlock(unsigned int maxTrackId)
+    : m_maxTrackId(maxTrackId),
       m_solo(false),
       m_thruFilter(0),
       m_recordFilter(0),
@@ -37,7 +37,11 @@ ControlBlock::ControlBlock(unsigned int nbTracks)
 {
     m_metronomeInfo.muted = true;
     m_metronomeInfo.instrumentId = 0;
-    memset(m_trackInfo, 0, sizeof(m_trackInfo));
+    for (unsigned int i = 0; i < CONTROLBLOCK_MAX_NB_TRACKS; ++i) {
+	m_trackInfo[i].muted = true;
+	m_trackInfo[i].deleted = true;
+	m_trackInfo[i].instrumentId = 0;
+    }
 }
 
 ControlBlock::ControlBlock()
@@ -51,6 +55,8 @@ void ControlBlock::updateTrackData(Track* t)
     if (t) {
         setInstrumentForTrack(t->getId(), t->getInstrument());
         setTrackMuted(t->getId(), t->isMuted());
+	setTrackDeleted(t->getId(), false);
+	if (t->getId() > m_maxTrackId) m_maxTrackId = t->getId();
     }
 }
 
@@ -73,6 +79,35 @@ void ControlBlock::setTrackMuted(TrackId trackId, bool mute)
 bool ControlBlock::isTrackMuted(TrackId trackId) const
 {
     if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) return m_trackInfo[trackId].muted;
+    return true;
+}
+
+void ControlBlock::setTrackDeleted(TrackId trackId, bool deleted)
+{
+    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) m_trackInfo[trackId].deleted = deleted;
+}
+
+bool ControlBlock::isTrackDeleted(TrackId trackId) const
+{
+    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) return m_trackInfo[trackId].deleted;
+    return true;
+}
+
+bool ControlBlock::isInstrumentMuted(InstrumentId instrumentId) const
+{
+    for (unsigned int i = 0; i <= m_maxTrackId; ++i) {
+	if (m_trackInfo[i].instrumentId == instrumentId &&
+	    !m_trackInfo[i].deleted && !m_trackInfo[i].muted) return false;
+    }
+    return true;
+}
+
+bool ControlBlock::isInstrumentUnused(InstrumentId instrumentId) const
+{
+    for (unsigned int i = 0; i <= m_maxTrackId; ++i) {
+	if (m_trackInfo[i].instrumentId == instrumentId &&
+	    !m_trackInfo[i].deleted) return false;
+    }
     return true;
 }
 

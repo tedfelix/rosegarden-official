@@ -1596,21 +1596,19 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
     } else if (lcName == "plugin" || lcName == "synth") {
 
-        if (m_section != InInstrument)
-        {
-	    if (m_section == InBuss) {
-		m_instrument = 0;
-		// and continue, effectively ignoring the plugin
-	    } else {
-		m_errorString = "Found Plugin outside Instrument";
-		return false;
-	    }
+	Rosegarden::PluginContainer *container = 0;
+
+        if (m_section == InInstrument) container = m_instrument;
+        else if (m_section == InBuss) container = m_buss;
+        else {
+            m_errorString = "Found Plugin outside Instrument or Buss";
+            return false;
         }
 
-        // Despite being InInstrument we might not actually have a valid
-        // one.
+        // Despite being InInstrument or InBuss we might not actually
+        // have a valid one.
         //
-        if (m_instrument)
+        if (container)
         {
             // Get the details
 	    int position;
@@ -1654,10 +1652,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             //
             if (plugin)
             {
-                m_plugin = m_instrument->getPlugin(position);
+                m_plugin = container->getPlugin(position);
 		if (!m_plugin) {
-		    RG_DEBUG << "WARNING: RoseXmlHandler: instrument "
-			     << m_instrument->getId() << " has no plugin position "
+		    RG_DEBUG << "WARNING: RoseXmlHandler: instrument/buss "
+			     << container->getId() << " has no plugin position "
 			     << position << endl;
 		} else {
 		    m_plugin->setAssigned(true);

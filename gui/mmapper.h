@@ -58,6 +58,7 @@ public:
     
     QString getFileName() { return m_fileName; }
     void updateTrackData(Rosegarden::Track*);
+    void setTrackDeleted(Rosegarden::TrackId);
     void updateMetronomeData(Rosegarden::InstrumentId instId);
     void updateMetronomeForPlayback();
     void updateMetronomeForRecord();

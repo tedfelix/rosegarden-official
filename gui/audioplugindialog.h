@@ -126,10 +126,10 @@ public:
 #ifdef HAVE_LIBLO
 		      AudioPluginOSCGUIManager *aGM,
 #endif
-                      Instrument *instrument,
+                      PluginContainer *instrument,
                       int index);
 
-    Instrument* getInstrument() const { return m_instrument; }
+    PluginContainer* getPluginContainer() const { return m_pluginContainer; }
 
     QAccel* getAccelerators() { return m_accelerators; }
 
@@ -184,8 +184,8 @@ protected:
 #ifdef HAVE_LIBLO
     AudioPluginOSCGUIManager *m_pluginGUIManager;
 #endif
-    Instrument          *m_instrument;
-    InstrumentId         m_instrumentId;
+    PluginContainer     *m_pluginContainer;
+    InstrumentId         m_containerId;
 
     QFrame		*m_pluginParamsBox;
     QWidget             *m_pluginCategoryBox;

@@ -60,6 +60,10 @@ void Profiles::accumulate(const char* id, clock_t time, RealTime rt)
     ++pair.first;
     pair.second.first += time;
     pair.second.second = pair.second.second + rt;
+
+    TimePair &timePair(m_lastCalls[id]);
+    timePair.first = time;
+    timePair.second = rt;
 #endif
 }
 
@@ -95,6 +99,11 @@ void Profiles::dump()
 	     << (m_profiles[*i].second.second / m_profiles[*i].first)
 	     << "/call"
 	     << endl;
+
+	cerr << "-> " << *i << ": last:  CPU: "
+	     << int((m_lastCalls[*i].first * 1000.0) / CLOCKS_PER_SEC) << "ms, "
+	     << "   real: "
+	     << m_lastCalls[*i].second << endl;
     }
 
     cerr << "Profiles::dump() finished\n";

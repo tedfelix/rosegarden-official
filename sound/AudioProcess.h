@@ -92,7 +92,7 @@ public:
 
     virtual ~AudioBussMixer();
 
-    void kick(bool wantLock = true);
+    void kick(bool wantLock = true, bool signalInstrumentMixer = true);
     
     /**
      * Prebuffer.  This should be called only when the transport is
@@ -173,6 +173,10 @@ class AudioFileWriter;
 class AudioInstrumentMixer : public AudioThread
 {
 public:
+    typedef std::vector<RunnablePluginInstance *> PluginList;
+    typedef std::map<InstrumentId, PluginList> PluginMap;
+    typedef std::map<InstrumentId, RunnablePluginInstance *> SynthPluginMap;
+
     AudioInstrumentMixer(SoundDriver *driver,
 			 AudioFileReader *fileReader,
 			 unsigned int sampleRate,
@@ -187,21 +191,34 @@ public:
     void setPlugin(InstrumentId id, int position, QString identifier);
     void removePlugin(InstrumentId id, int position);
     void removeAllPlugins();
+
     void setPluginPortValue(InstrumentId id, int position,
 			    unsigned int port, float value);
     float getPluginPortValue(InstrumentId id, int position,
 			     unsigned int port);
+
     void setPluginBypass(InstrumentId, int position, bool bypass);
+
     QStringList getPluginPrograms(InstrumentId, int);
     QString getPluginProgram(InstrumentId, int);
     QString getPluginProgram(InstrumentId, int, int, int);
     unsigned long getPluginProgram(InstrumentId, int, QString);
     void setPluginProgram(InstrumentId, int, QString);
+
     QString configurePlugin(InstrumentId, int, QString, QString);
+
     void resetAllPlugins();
     void destroyAllPlugins();
 
     RunnablePluginInstance *getSynthPlugin(InstrumentId id) { return m_synths[id]; }
+
+    /**
+     * Return the plugins intended for a particular buss.  (By coincidence,
+     * this will also work for instruments, but it's not to be relied on.)
+     * It's purely by historical accident that the instrument mixer happens
+     * to hold buss plugins as well -- this could do with being refactored.
+     */
+    PluginList &getBussPlugins(unsigned int bussId) { return m_plugins[bussId]; }
 
     /**
      * Return the total of the plugin latencies for a given instrument
@@ -256,6 +273,9 @@ public:
     /// For call from MappedStudio.  Pan is in range -100.0 -> 100.0
     void setInstrumentLevels(InstrumentId instrument, float dB, float pan);
 
+    /// For call regularly from anywhere in a non-RT thread
+    void updateInstrumentMuteStates();
+
 protected:
     virtual void threadRun();
 
@@ -273,9 +293,6 @@ protected:
     // The plugin data structures will all be pre-sized and so of
     // fixed size during normal run time; this will allow us to add
     // and edit plugins without locking.
-    typedef std::vector<RunnablePluginInstance *> PluginList;
-    typedef std::map<InstrumentId, PluginList> PluginMap;
-    typedef std::map<InstrumentId, RunnablePluginInstance *> SynthPluginMap;
     RunnablePluginInstance *getPluginInstance(InstrumentId, int);
     PluginMap m_plugins;
     SynthPluginMap m_synths;
@@ -288,7 +305,8 @@ protected:
     {
 	BufferRec() : empty(true), dormant(true), zeroFrames(0),
 		      filledTo(RealTime::zeroTime), channels(2),
-		      buffers(), gainLeft(0.0), gainRight(0.0), volume(0.0) { }
+		      buffers(), gainLeft(0.0), gainRight(0.0), volume(0.0),
+		      muted(false) { }
 	~BufferRec();
 
 	bool empty;
@@ -302,6 +320,7 @@ protected:
 	float gainLeft;
 	float gainRight;
 	float volume;
+	bool muted;
     };
 
     typedef std::map<InstrumentId, BufferRec> BufferMap;

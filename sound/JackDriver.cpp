@@ -35,6 +35,7 @@
 //#define DEBUG_JACK_DRIVER 1
 //#define DEBUG_JACK_TRANSPORT 1
 //#define DEBUG_JACK_PROCESS 1
+//#define DEBUG_JACK_XRUN 1
 
 namespace Rosegarden
 {
@@ -219,7 +220,6 @@ JackDriver::initialise(bool reinitialise)
     jack_set_buffer_size_callback(m_client, jackBufferSize, this);
     jack_set_sample_rate_callback(m_client, jackSampleRate, this);
     jack_on_shutdown(m_client, jackShutdown, this);
-    jack_set_graph_order_callback(m_client, jackGraphOrder, this);
     jack_set_xrun_callback(m_client, jackXRun, this);
     jack_set_sync_callback(m_client, jackSyncCallback, this);
 
@@ -703,6 +703,12 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	return jackProcessEmpty(nframes);
     }
 
+    if (m_alsaDriver->areClocksRunning()) {
+	m_alsaDriver->checkTimerSync(m_framesProcessed);
+    } else {
+	m_alsaDriver->checkTimerSync(0);
+    }
+
     bool lowLatencyMode = m_alsaDriver->getLowLatencyMode();
     bool clocksRunning = m_alsaDriver->areClocksRunning();
     bool playing = m_alsaDriver->isPlaying();
@@ -710,6 +716,10 @@ JackDriver::jackProcess(jack_nframes_t nframes)
  
 #ifdef DEBUG_JACK_PROCESS
     Rosegarden::Profiler profiler("jackProcess", true);
+#else
+#ifdef DEBUG_JACK_XRUN
+    Rosegarden::Profiler profiler("jackProcess", false);
+#endif
 #endif
 
     if (lowLatencyMode) {
@@ -726,7 +736,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 		}
 		if (m_bussMixer->getBussCount() > 0) {
 		    if (m_bussMixer->tryLock() == 0) {
-			m_bussMixer->kick(false);
+			m_bussMixer->kick(false, false);
 			m_bussMixer->releaseLock();
 //#ifdef DEBUG_JACK_PROCESS
 		    } else {
@@ -738,13 +748,17 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	}
     }
 
-    if (jack_cpu_load(m_client) > 98.0) {
+    if (jack_cpu_load(m_client) > 97.0) {
 	reportFailure(Rosegarden::MappedEvent::FailureCPUOverload);
 	return jackProcessEmpty(nframes);
     }
 
 #ifdef DEBUG_JACK_PROCESS
     Rosegarden::Profiler profiler2("jackProcess post mix", true);
+#else
+#ifdef DEBUG_JACK_XRUN
+    Rosegarden::Profiler profiler2("jackProcess post mix", false);
+#endif
 #endif
 
     SequencerDataBlock *sdb = m_alsaDriver->getSequencerDataBlock();
@@ -785,6 +799,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 
 		int rv = jackProcessRecord(nframes, 0, 0, clocksRunning); // for monitoring
 		doneRecord = true;
+		
 		if (!asyncAudio) {
 		    return rv;
 		}
@@ -830,12 +845,21 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	    }
 
 	    int rv = jackProcessRecord(nframes, 0, 0, clocksRunning); // for monitoring
+	    doneRecord = true;
 
 	    if (!asyncAudio) {
 		return rv;
 	    }
 	}
     }
+
+#ifdef DEBUG_JACK_PROCESS
+    Rosegarden::Profiler profiler3("jackProcess post transport", true);
+#else
+#ifdef DEBUG_JACK_XRUN
+    Rosegarden::Profiler profiler3("jackProcess post transport", false);
+#endif
+#endif
 
     InstrumentId audioInstrumentBase;
     int audioInstruments;
@@ -1146,6 +1170,14 @@ JackDriver::jackProcessRecord(jack_nframes_t nframes,
 			      sample_t *sourceBufferRight,
 			      bool clocksRunning)
 {
+#ifdef DEBUG_JACK_PROCESS
+    Rosegarden::Profiler profiler("jackProcessRecord", true);
+#else
+#ifdef DEBUG_JACK_XRUN
+    Rosegarden::Profiler profiler("jackProcessRecord", false);
+#endif
+#endif
+
     SequencerDataBlock *sdb = m_alsaDriver->getSequencerDataBlock();
     bool wroteSomething = false;
     sample_t peakLeft = 0.0, peakRight = 0.0;
@@ -1313,6 +1345,8 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
 {
     JackDriver *inst = (JackDriver *)arg;
     if (!inst) return true; // or rather, return "huh?"
+
+    inst->m_alsaDriver->checkTimerSync(0); // reset, as not processing
 
     if (!inst->m_jackTransportEnabled) return true; // ignore
 
@@ -1587,6 +1621,11 @@ JackDriver::jackShutdown(void *arg)
               << "informing GUI" << std::endl;
 #endif
 
+#ifdef DEBUG_JACK_XRUN
+    std::cerr << "JackDriver::jackShutdown" << std::endl;
+    Rosegarden::Profiles::getInstance()->dump();
+#endif
+
     JackDriver *inst = static_cast<JackDriver*>(arg);
     inst->m_ok = false;
     inst->m_kickedOutAt = time(0);
@@ -1594,19 +1633,15 @@ JackDriver::jackShutdown(void *arg)
 }
 
 int
-JackDriver::jackGraphOrder(void *)
-{
-#ifdef DEBUG_JACK_DRIVER
-    std::cerr << "JackDriver::jackGraphOrder" << std::endl;
-#endif
-    return 0;
-}
-
-int
 JackDriver::jackXRun(void *arg)
 {
 #ifdef DEBUG_JACK_DRIVER
     std::cerr << "JackDriver::jackXRun" << std::endl;
+#endif
+
+#ifdef DEBUG_JACK_XRUN
+    std::cerr << "JackDriver::jackXRun" << std::endl;
+    Rosegarden::Profiles::getInstance()->dump();
 #endif
 
     // Report to GUI
@@ -1619,6 +1654,7 @@ JackDriver::jackXRun(void *arg)
 
 
 void
+
 JackDriver::restoreIfRestorable()
 {
     if (m_kickedOutAt == 0) return;
@@ -1626,8 +1662,6 @@ JackDriver::restoreIfRestorable()
     if (m_client) {
         jack_client_close(m_client);
 	std::cerr << "closed client" << std::endl;
-	if (m_instrumentMixer) m_instrumentMixer->resetAllPlugins();
-	std::cerr << "reset plugins" << std::endl;
 	m_client = 0;
     }
     
@@ -1635,6 +1669,9 @@ JackDriver::restoreIfRestorable()
 
     if (now < m_kickedOutAt || now >= m_kickedOutAt + 3) {
     
+	if (m_instrumentMixer) m_instrumentMixer->resetAllPlugins();
+	std::cerr << "reset plugins" << std::endl;
+
 	initialise(true);
 	
 	if (m_ok) {
@@ -1717,6 +1754,10 @@ void
 JackDriver::updateAudioData()
 {
     if (!m_ok || !m_client) return;
+
+#ifdef DEBUG_JACK_DRIVER
+    std::cerr << "JackDriver::updateAudioData starting" << std::endl;
+#endif
 
     MappedAudioBuss *mbuss =
 	m_alsaDriver->getMappedStudio()->getAudioBuss(0);
@@ -1846,6 +1887,7 @@ JackDriver::updateAudioData()
 	}
     }
 
+    m_maxInstrumentLatency = maxLatency;
     m_directMasterAudioInstruments = directMasterAudioInstruments;
     m_directMasterSynthInstruments = directMasterSynthInstruments;
     m_maxInstrumentLatency = maxLatency;
@@ -1859,6 +1901,7 @@ JackDriver::updateAudioData()
     }
 
     m_bussMixer->updateInstrumentConnections();
+    m_instrumentMixer->updateInstrumentMuteStates();
 
     if (m_bussMixer->getBussCount() == 0 || m_alsaDriver->getLowLatencyMode()) {
 	if (m_bussMixer->running()) {
@@ -1879,6 +1922,10 @@ JackDriver::updateAudioData()
 	    m_instrumentMixer->run();
 	}
     }
+
+#ifdef DEBUG_JACK_DRIVER
+    std::cerr << "JackDriver::updateAudioData exiting" << std::endl;
+#endif
 }
 
 void

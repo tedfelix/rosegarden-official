@@ -201,6 +201,10 @@ DSSIPluginInstance::init()
 size_t
 DSSIPluginInstance::getLatency()
 {
+#ifdef DEBUG_DSSI
+    std::cerr << "DSSIPluginInstance::getLatency(): m_latencyPort " << m_latencyPort << ", m_run " << m_run << std::endl;
+#endif
+
     if (m_latencyPort) {
 	if (!m_run) run(RealTime::zeroTime);
 	return (size_t)(*m_latencyPort + 0.1);
@@ -538,6 +542,10 @@ DSSIPluginInstance::selectProgramAux(QString program, bool backupPortValues)
     m_descriptor->select_program(m_instanceHandle, bankNo, programNo);
     pthread_mutex_unlock(&m_processLock);
 
+#ifdef DEBUG_DSSI
+    std::cerr << "DSSIPluginInstance::selectProgram(" << program << "): made select_program(" << bankNo << "," << programNo << " call" << std::endl;
+#endif
+
     if (backupPortValues) {
 	for (size_t i = 0; i < m_backupControlPortsIn.size(); ++i) {
 	    m_backupControlPortsIn[i] = *m_controlPortsIn[i].second;
@@ -758,6 +766,10 @@ DSSIPluginInstance::handleController(snd_seq_event_t *ev)
 {
     int controller = ev->data.control.param;
 
+#ifdef DEBUG_DSSI_PROCESS
+    std::cerr << "DSSIPluginInstance::handleController " << controller << std::endl;
+#endif
+
     if (controller == 0) { // bank select MSB
 	
 	m_pending.msb = ev->data.control.value;
@@ -785,12 +797,17 @@ DSSIPluginInstance::run(const RealTime &blockTime)
     static snd_seq_event_t localEventBuffer[EVENT_BUFFER_SIZE];
     int evCount = 0;
 
-    if (pthread_mutex_trylock(&m_processLock) != 0) {
-	for (size_t ch = 0; ch < m_audioPortsOut.size(); ++ch) {
-	    memset(m_outputBuffers[ch], 0, m_blockSize * sizeof(sample_t));
+    bool needLock = false;
+    if (m_descriptor->select_program) needLock = true;
+
+    if (needLock) {
+	if (pthread_mutex_trylock(&m_processLock) != 0) {
+	    for (size_t ch = 0; ch < m_audioPortsOut.size(); ++ch) {
+		memset(m_outputBuffers[ch], 0, m_blockSize * sizeof(sample_t));
+	    }
+	    return;
 	}
-	return;
-    }	
+    }
 
     if (m_grouped) {
 	runGrouped(blockTime);
@@ -807,7 +824,7 @@ DSSIPluginInstance::run(const RealTime &blockTime)
 	    }
 	}
 	m_run = true;
-	pthread_mutex_unlock(&m_processLock);
+	if (needLock) pthread_mutex_unlock(&m_processLock);
 	return;
     }
 
@@ -860,10 +877,20 @@ DSSIPluginInstance::run(const RealTime &blockTime)
     }
 
     if (m_pending.program >= 0 && m_descriptor->select_program) {
+
 	int program = m_pending.program;
 	int bank = m_pending.lsb + 128 * m_pending.msb;
+
+#ifdef DEBUG_DSSI
+    std::cerr << "DSSIPluginInstance::run: making select_program(" << bank << "," << program << " call" << std::endl;
+#endif
+
 	m_pending.lsb = m_pending.msb = m_pending.program = -1;
 	m_descriptor->select_program(m_instanceHandle, bank, program);
+
+#ifdef DEBUG_DSSI
+    std::cerr << "DSSIPluginInstance::run: made select_program(" << bank << "," << program << " call" << std::endl;
+#endif
     }
 
 #ifdef DEBUG_DSSI_PROCESS
@@ -882,7 +909,7 @@ DSSIPluginInstance::run(const RealTime &blockTime)
 #endif
 
  done:
-    pthread_mutex_unlock(&m_processLock);
+    if (needLock) pthread_mutex_unlock(&m_processLock);
 
     if (m_idealChannelCount < m_audioPortsOut.size()) {
 	if (m_idealChannelCount == 1) {

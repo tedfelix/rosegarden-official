@@ -250,7 +250,6 @@ MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
     //
     bytesGot += numberOfBytes;
     if (bytesGot % 2000 == 0) {
-
         emit setProgress((int)(double(midiFile->tellg())/
 			       double(m_fileSize) * 20.0));
         kapp->processEvents(50);

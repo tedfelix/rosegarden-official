@@ -48,6 +48,7 @@
 #include <qregexp.h>
 #include <pthread.h>
 
+
 //#define DEBUG_ALSA 1
 //#define DEBUG_PROCESS_MIDI_OUT 1
 
@@ -89,7 +90,11 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
     ,m_jackDriver(0)
 #endif
     ,m_queueRunning(false)
-    ,m_portCheckNeeded(false)
+    ,m_portCheckNeeded(false),
+    m_doTimerChecks(false),
+    m_firstTimerCheck(true),
+    m_timerRatio(0),
+    m_timerRatioCalculated(false)
 
 {
     Audit audit;
@@ -311,14 +316,52 @@ AlsaDriver::generateTimerList()
 
 
 std::string
-AlsaDriver::getAutoTimer()
+AlsaDriver::getAutoTimer(bool &wantTimerChecks)
 {
-    // Look for the apparent best-choice timer
+    // Look for the apparent best-choice timer.
 
     if (m_timers.empty()) return "";
 
+    // The system RTC timer ought to be good, but it doesn't look like
+    // a very safe choice -- we've seen some system lockups apparently
+    // connected with use of this timer on 2.6 kernels.  So we avoid
+    // that unless the alternative is a 100Hz system timer.
+
+    // Looks like our most reliable options for timers are, in order:
+    // 
+    // 1. System timer if at 1000Hz, with timer checks (i.e. automatic
+    //    drift correction against PCM frame count).  Only available
+    //    when JACK is running.
+    // 
+    // 2. PCM playback timer currently in use by JACK (no drift, but
+    //    suffers from jitter).
+    // 
+    // 3. System timer if at 1000Hz.
+    // 
+    // 4. System RTC timer.
+    // 
+    // 5. System timer.
+
+    wantTimerChecks = false; // for most options
+
 #ifdef HAVE_LIBJACK
     if (m_jackDriver) {
+
+	// use system timer with timer checks if at 1000Hz or more
+
+	for (std::vector<AlsaTimerInfo>::iterator i = m_timers.begin();
+	     i != m_timers.end(); ++i) {
+	    if (i->sclas != SND_TIMER_SCLASS_NONE) continue;
+	    if (i->clas == SND_TIMER_CLASS_GLOBAL) {
+		if (i->device == SND_TIMER_GLOBAL_SYSTEM) {
+		    long hz = 1000000000 / i->resolution;
+		    if (hz > 900) {
+			wantTimerChecks = true;
+		        return i->name;
+		    }
+		}
+	    }
+	}
 
 	// look for the first PCM playback timer; that's all we know
 	// about for now (until JACK becomes able to tell us which PCM
@@ -332,8 +375,22 @@ AlsaDriver::getAutoTimer()
     }
 #endif
 
-    // look for the system RTC timer if available, system timer
-    // otherwise
+    // look for a system timer with a frequency of 1000Hz or more
+
+    for (std::vector<AlsaTimerInfo>::iterator i = m_timers.begin();
+	 i != m_timers.end(); ++i) {
+	if (i->sclas != SND_TIMER_SCLASS_NONE) continue;
+	if (i->clas == SND_TIMER_CLASS_GLOBAL) {
+	    if (i->device == SND_TIMER_GLOBAL_SYSTEM) {
+		long hz = 1000000000 / i->resolution;
+		if (hz > 900) {
+		    return i->name;
+		}
+	    }
+	}
+    }
+
+    // look for the system RTC timer if available
 
     for (std::vector<AlsaTimerInfo>::iterator i = m_timers.begin();
 	 i != m_timers.end(); ++i) {
@@ -343,23 +400,26 @@ AlsaDriver::getAutoTimer()
 	}
     }
 
+    // next look for slow, unpopular 100Hz 2.4 system timer
+
     for (std::vector<AlsaTimerInfo>::iterator i = m_timers.begin();
 	 i != m_timers.end(); ++i) {
 	if (i->sclas != SND_TIMER_SCLASS_NONE) continue;
 	if (i->clas == SND_TIMER_CLASS_GLOBAL) {
 	    if (i->device == SND_TIMER_GLOBAL_SYSTEM) {
-		long hz = 1000000000 / i->resolution;
-		if (hz < 900) {
-		    reportFailure(Rosegarden::MappedEvent::WarningImpreciseTimer);
-		}
+		reportFailure(Rosegarden::MappedEvent::WarningImpreciseTimer);
 		return i->name;
 	    }
 	}
     }
 
+    // falling back to something that almost certainly won't work,
+    // if for any reason all of the above failed
+
     return m_timers.begin()->name;
 }
-    
+
+
 
 void
 AlsaDriver::generatePortList(AlsaPortList *newPorts)
@@ -1077,6 +1137,86 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
 		 << std::endl;
 }
 
+
+void
+AlsaDriver::checkTimerSync(size_t frames)
+{
+    if (!m_doTimerChecks) return;
+
+#ifdef HAVE_LIBJACK
+    if (!m_jackDriver || !m_queueRunning || frames == 0) {
+	m_firstTimerCheck = true;
+	return;
+    }
+
+    static RealTime startAlsaTime;
+    static size_t startJackFrames = 0;
+    static size_t lastJackFrames = 0;
+
+    size_t nowJackFrames = m_jackDriver->getFramesProcessed();
+    RealTime nowAlsaTime = getAlsaTime();
+    
+    if (m_firstTimerCheck ||
+	(nowJackFrames <= lastJackFrames) ||
+	(nowAlsaTime <= startAlsaTime)) {
+
+	startAlsaTime = nowAlsaTime;
+	startJackFrames = nowJackFrames;
+	lastJackFrames = nowJackFrames;
+
+	m_firstTimerCheck = false;
+	return;
+    }
+
+    RealTime jackDiff = RealTime::frame2RealTime
+	(nowJackFrames - startJackFrames,
+	 m_jackDriver->getSampleRate());
+    
+    RealTime alsaDiff = nowAlsaTime - startAlsaTime;
+
+    if (alsaDiff > RealTime(10, 0)) {
+
+#ifdef DEBUG_ALSA
+        if (!m_playing) {
+	    std::cout << "\nALSA:" << startAlsaTime << "\t->" << nowAlsaTime << "\nJACK: " << startJackFrames << "\t\t-> " << nowJackFrames << std::endl;
+	    std::cout << "ALSA diff:  " << alsaDiff << "\nJACK diff:  " << jackDiff << std::endl;
+	}
+#endif
+
+	double ratio = (jackDiff - alsaDiff) / alsaDiff;
+
+	if (fabs(ratio) > 0.1) {
+#ifdef DEBUG_ALSA
+	    if (!m_playing) {
+		std::cout << "Ignoring excessive ratio " << ratio
+			  << ", hoping for a more likely result next time"
+			  << std::endl;
+	    }
+#endif
+	} else if (fabs(ratio) > 0.000001) {
+
+#ifdef DEBUG_ALSA
+	    if (alsaDiff > RealTime::zeroTime && jackDiff > RealTime::zeroTime) {
+	        if (!m_playing) {
+		    if (jackDiff < alsaDiff) {
+  		        std::cout << "<<<< ALSA timer is faster by " << 100.0 * ((alsaDiff - jackDiff) / alsaDiff) << "% (1/" << int(1.0/ratio) << ")" << std::endl;
+		    } else {
+		        std::cout << ">>>> JACK timer is faster by " << 100.0 * ((jackDiff - alsaDiff) / alsaDiff) << "% (1/" << int(1.0/ratio) << ")" << std::endl;
+		    }
+		}
+	    }
+#endif
+
+	    m_timerRatio = ratio;
+	    m_timerRatioCalculated = true;
+	}
+
+	m_firstTimerCheck = true;
+    }
+#endif
+}
+    
+
 unsigned int
 AlsaDriver::getTimers()
 {
@@ -1108,9 +1248,12 @@ AlsaDriver::setCurrentTimer(QString timer)
     std::string name(timer.data());
 
     if (name == AUTO_TIMER_NAME) {
-	name = getAutoTimer();
+	name = getAutoTimer(m_doTimerChecks);
+    } else {
+        m_doTimerChecks = false;
     }
-
+    m_timerRatioCalculated = false;
+   
     // Stop and restart the queue around the timer change.  We don't
     // call stopClocks/startClocks here because they do the wrong
     // thing if we're currently playing and on the JACK transport.
@@ -1148,8 +1291,13 @@ AlsaDriver::setCurrentTimer(QString timer)
 	    snd_seq_queue_timer_set_id(timer, timerid);
 	    snd_seq_set_queue_timer(m_midiHandle, m_queue, timer);
 
-	    audit << "    Current timer set to \"" << name << "\""
-			 << std::endl;
+	    if (m_doTimerChecks) {
+		audit << "    Current timer set to \"" << name << "\" with timer checks"
+		      << std::endl;
+	    } else {
+		audit << "    Current timer set to \"" << name << "\""
+		      << std::endl;
+	    }		
 
 	    if (m_timers[i].clas == SND_TIMER_CLASS_GLOBAL &&
 		m_timers[i].device == SND_TIMER_GLOBAL_SYSTEM) {
@@ -1171,6 +1319,8 @@ AlsaDriver::setCurrentTimer(QString timer)
     checkAlsaError(snd_seq_continue_queue(m_midiHandle, m_queue, NULL), "checkAlsaError(): continue queue");
     checkAlsaError(snd_seq_drain_output(m_midiHandle), "setCurrentTimer(): draining output to continue queue");
     m_queueRunning = true;
+
+    m_firstTimerCheck = true;
 }
 
 void
@@ -3866,6 +4016,41 @@ AlsaDriver::runTasks()
 	    m_jackDriver->restoreIfRestorable();
 	}
     }
+
+    if (m_doTimerChecks && m_timerRatioCalculated) {
+
+	double ratio = m_timerRatio;
+	m_timerRatioCalculated = false;
+
+	snd_seq_queue_tempo_t *q_ptr;
+	snd_seq_queue_tempo_alloca(&q_ptr);
+
+	snd_seq_get_queue_tempo(m_midiHandle, m_queue, q_ptr);
+
+	unsigned int t_skew = snd_seq_queue_tempo_get_skew(q_ptr);
+	unsigned int t_base = snd_seq_queue_tempo_get_skew_base(q_ptr);
+	
+	if (!m_playing) {
+	    std::cerr << "Skew: " << t_skew << "/" << t_base;
+	}
+	
+	unsigned int newSkew = t_skew + (unsigned int)(t_skew * ratio);
+	
+	if (newSkew != t_skew) {
+	    if (!m_playing) {
+		std::cerr << " changed to " << newSkew << endl;
+	    }
+	    snd_seq_queue_tempo_set_skew(q_ptr, newSkew);
+	    snd_seq_set_queue_tempo( m_midiHandle, m_queue, q_ptr);
+	} else {
+	    if (!m_playing) {
+		std::cerr << endl;
+	    }
+	}
+
+	m_firstTimerCheck = true;
+    }
+
 #endif
 }
 

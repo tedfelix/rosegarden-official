@@ -35,7 +35,86 @@
 namespace Rosegarden
 {
 
-const unsigned int Instrument::PLUGIN_COUNT = 5;
+const unsigned int PluginContainer::PLUGIN_COUNT = 5;
+
+PluginContainer::PluginContainer(bool havePlugins)
+{
+    if (havePlugins) {
+        // Add a number of plugin place holders (unassigned)
+        for (unsigned int i = 0; i < PLUGIN_COUNT; i++)
+            addPlugin(new AudioPluginInstance(i));
+    }
+}
+
+PluginContainer::~PluginContainer()
+{
+    clearPlugins();
+}
+
+void
+PluginContainer::addPlugin(AudioPluginInstance *instance)
+{
+    m_audioPlugins.push_back(instance);
+}
+
+bool
+PluginContainer::removePlugin(unsigned int position)
+{
+    PluginInstanceIterator it = m_audioPlugins.begin();
+
+    for (; it != m_audioPlugins.end(); it++)
+    {
+        if ((*it)->getPosition() == position)
+        {
+            delete (*it);
+            m_audioPlugins.erase(it);
+            return true;
+        }
+
+    }
+
+    return false;
+}
+
+void
+PluginContainer::clearPlugins()
+{
+    PluginInstanceIterator it = m_audioPlugins.begin();
+    for (; it != m_audioPlugins.end(); it++)
+        delete (*it);
+
+    m_audioPlugins.erase(m_audioPlugins.begin(), m_audioPlugins.end());
+}
+
+void 
+PluginContainer::emptyPlugins()
+{
+    PluginInstanceIterator it = m_audioPlugins.begin();
+    for (; it != m_audioPlugins.end(); it++)
+    {
+        (*it)->setAssigned(false);
+        (*it)->setBypass(false);
+        (*it)->clearPorts();
+    }
+}
+
+
+// Get an instance for an index
+//
+AudioPluginInstance*
+PluginContainer::getPlugin(unsigned int position)
+{
+    PluginInstanceIterator it = m_audioPlugins.begin();
+    for (; it != m_audioPlugins.end(); it++)
+    {
+        if ((*it)->getPosition() == position)
+            return *it;
+    }
+
+    return 0;
+}
+
+
 const unsigned int Instrument::SYNTH_PLUGIN_POSITION = 999;
 
 
@@ -43,6 +122,7 @@ Instrument::Instrument(InstrumentId id,
 		       InstrumentType it,
                        const std::string &name,
                        Device *device):
+    PluginContainer(it == Audio || it == SoftSynth),
     m_id(id),
     m_name(name),
     m_type(it),
@@ -64,11 +144,6 @@ Instrument::Instrument(InstrumentId id,
 {
     if (it == Audio || it == SoftSynth)
     {
-        // Add a number of plugin place holders (unassigned)
-        //
-        for (unsigned int i = 0; i < PLUGIN_COUNT; i++)
-            addPlugin(new AudioPluginInstance(i));
-
         // In an audio instrument we use the m_channel attribute to
         // hold the number of audio channels this Instrument uses -
         // not the MIDI channel number.  Default is 2 (stereo).
@@ -90,6 +165,7 @@ Instrument::Instrument(InstrumentId id,
                        const std::string &name,
                        MidiByte channel,
                        Device *device):
+    PluginContainer(it == Audio || it == SoftSynth),
     m_id(id),
     m_name(name),
     m_type(it),
@@ -113,11 +189,6 @@ Instrument::Instrument(InstrumentId id,
     //
     if (it == Audio || it == SoftSynth)
     {
-        // Add a number of plugin place holders (unassigned)
-        //
-        for (unsigned int i = 0; i < PLUGIN_COUNT; i++)
-            addPlugin(new AudioPluginInstance(i));
-
         // In an audio instrument we use the m_channel attribute to
         // hold the number of audio channels this Instrument uses -
         // not the MIDI channel number.  Default is 2 (stereo).
@@ -148,6 +219,7 @@ Instrument::Instrument(InstrumentId id,
 
 Instrument::Instrument(const Instrument &ins):
     XmlExportable(),
+    PluginContainer(ins.getType() == Audio || ins.getType() == SoftSynth),
     m_id(ins.getId()),
     m_name(ins.getName()),
     m_type(ins.getType()),
@@ -168,15 +240,8 @@ Instrument::Instrument(const Instrument &ins):
     m_audioInputChannel(ins.m_audioInputChannel),
     m_audioOutput(ins.m_audioOutput)
 {
-    // Add a number of plugin place holders (unassigned)
-    //
     if (ins.getType() == Audio || ins.getType() == SoftSynth)
     {
-        // Add a number of plugin place holders (unassigned)
-        //
-        for (unsigned int i = 0; i < PLUGIN_COUNT; i++)
-            addPlugin(new AudioPluginInstance(i));
-
         // In an audio instrument we use the m_channel attribute to
         // hold the number of audio channels this Instrument uses -
         // not the MIDI channel number.  Default is 2 (stereo).
@@ -445,69 +510,6 @@ Instrument::getProgramName() const
 }
 
 void
-Instrument::addPlugin(AudioPluginInstance *instance)
-{
-    m_audioPlugins.push_back(instance);
-}
-
-bool
-Instrument::removePlugin(unsigned int position)
-{
-    PluginInstanceIterator it = m_audioPlugins.begin();
-
-    for (; it != m_audioPlugins.end(); it++)
-    {
-        if ((*it)->getPosition() == position)
-        {
-            delete (*it);
-            m_audioPlugins.erase(it);
-            return true;
-        }
-
-    }
-
-    return false;
-}
-
-void
-Instrument::clearPlugins()
-{
-    PluginInstanceIterator it = m_audioPlugins.begin();
-    for (; it != m_audioPlugins.end(); it++)
-        delete (*it);
-
-    m_audioPlugins.erase(m_audioPlugins.begin(), m_audioPlugins.end());
-}
-
-void 
-Instrument::emptyPlugins()
-{
-    PluginInstanceIterator it = m_audioPlugins.begin();
-    for (; it != m_audioPlugins.end(); it++)
-    {
-        (*it)->setAssigned(false);
-        (*it)->setBypass(false);
-        (*it)->clearPorts();
-    }
-}
-
-
-// Get an instance for an index
-//
-AudioPluginInstance*
-Instrument::getPlugin(unsigned int position)
-{
-    PluginInstanceIterator it = m_audioPlugins.begin();
-    for (; it != m_audioPlugins.end(); it++)
-    {
-        if ((*it)->getPosition() == position)
-            return *it;
-    }
-
-    return 0;
-}
-
-void
 Instrument::setControllerValue(MidiByte controller, MidiByte value)
 {
     for (StaticControllerIterator it = m_staticControllers.begin();
@@ -540,6 +542,7 @@ Instrument::getControllerValue(MidiByte controller) const
 
 
 Buss::Buss(BussId id) :
+    PluginContainer(true),
     m_id(id),
     m_level(0.0),
     m_pan(100),
@@ -559,6 +562,12 @@ Buss::toXmlString()
     buss << "    <buss id=\"" << m_id << "\">" << std::endl;
     buss << "       <pan value=\"" << (int)m_pan << "\"/>" << std::endl;
     buss << "       <level value=\"" << m_level << "\"/>" << std::endl;
+
+    PluginInstanceIterator it = m_audioPlugins.begin();
+    for (; it != m_audioPlugins.end(); it++) {
+	buss << (*it)->toXmlString();
+    }
+
     buss << "    </buss>" << std::endl;
 
 #if (__GNUC__ < 3)
@@ -566,6 +575,14 @@ Buss::toXmlString()
 #endif
 
     return buss.str();
+}
+
+std::string
+Buss::getName() const
+{
+    char buffer[20];
+    sprintf(buffer, "Submaster %d", m_id);
+    return buffer;
 }
 
 RecordIn::RecordIn() :

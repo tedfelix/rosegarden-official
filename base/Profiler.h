@@ -57,7 +57,9 @@ protected:
     typedef std::pair<clock_t, RealTime> TimePair;
     typedef std::pair<int, TimePair> ProfilePair;
     typedef std::map<const char *, ProfilePair> ProfileMap;
+    typedef std::map<const char *, TimePair> LastCallMap;
     ProfileMap m_profiles;
+    LastCallMap m_lastCalls;
 
     static Profiles* m_instance;
 };

@@ -1282,7 +1282,6 @@ void PropertyControlRuler::staffDeleted(const Rosegarden::Staff *)
     m_staff = 0;
 }
 
-
 void
 PropertyControlRuler::eventAdded(const Rosegarden::Segment *, Rosegarden::Event *e)
 {

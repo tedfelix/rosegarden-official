@@ -58,6 +58,7 @@
 #include "eventcommands.h"
 #include "segmentcommands.h"
 #include "widgets.h"
+#include "midipitchlabel.h"
 
 #include "Segment.h"
 #include "SegmentPerformanceHelper.h"
@@ -438,8 +439,9 @@ EventView::applyLayout(int /*staffNo*/)
 	    // avoid debug stuff going to stderr if no properties found
 
 	    if ((*it)->has(Rosegarden::BaseProperties::PITCH)) {
-		pitchStr = QString("%1  ").
-                    arg((*it)->get<Int>(Rosegarden::BaseProperties::PITCH));
+		int p = (*it)->get<Int>(Rosegarden::BaseProperties::PITCH);
+		pitchStr = QString("%1 %2  ")
+		    .arg(p).arg(Rosegarden::MidiPitchLabel(p).getQString());
 	    } else if ((*it)->isa(Rosegarden::Note::EventType)) {
 		pitchStr = "<not set>";
 	    }

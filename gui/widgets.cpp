@@ -121,7 +121,7 @@ RosegardenParameterBox::RosegardenParameterBox(QString label,
 void RosegardenParameterBox::init()
 {
     QFont plainFont;
-    plainFont.setPointSize(plainFont.pointSize() * 9 / 10);
+    plainFont.setPointSize(plainFont.pointSize() * 95 / 100);
     plainFont.setBold(false);
     m_font = plainFont;
 

@@ -27,6 +27,7 @@
 #include <kconfig.h>
 #include <kstddirs.h>
 #include <kmessagebox.h>
+#include <kstartuplogo.h>
 
 #include <sys/time.h>
 
@@ -886,7 +887,7 @@ punchin:
             m_transportStatus = STOPPED;
 
             if (recordType == STARTING_TO_RECORD_AUDIO) {
-                throw(Exception("Couldn't start recording audio.  Ensure your audio record path is valid\nin Document Properties (Composition -> Edit Document Properties -> Audio)"));
+                throw(Exception("Couldn't start recording audio.\nPlease set a valid file path in the Document Properties\n(Composition menu -> Edit Document Properties -> Audio)."));
             } else {
                 throw(Exception("Couldn't start recording MIDI"));
             }
@@ -1019,7 +1020,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
 			KMessageBox::error(
 			    dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
-			    i18n("JACK Audio subsystem has died or it has stopped Rosegarden from processing audio.\nPlease restart Rosegarden to continue working with audio.\nQuitting other running applications may improve Rosegarden's performance."));
+			    i18n("The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.\nPlease restart Rosegarden to continue working with audio.\nQuitting other running applications may improve Rosegarden's performance."));
 
 		    } else if ((*i)->getData1() == MappedEvent::FailureJackRestart) {
 
@@ -1029,7 +1030,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
 		    } else if ((*i)->getData1() == MappedEvent::FailureCPUOverload) {
 
-//#define REPORT_CPU_OVERLOAD 1
+#define REPORT_CPU_OVERLOAD 1
 #ifdef REPORT_CPU_OVERLOAD
 
 			stopping();
@@ -1055,7 +1056,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 		    
 		    if ((*i)->getData1() == MappedEvent::FailureXRuns) {
 
-#define REPORT_XRUNS 1
+//#define REPORT_XRUNS 1
 #ifdef REPORT_XRUNS
 
 			struct timeval tv;
@@ -1103,7 +1104,17 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 			}
 
 			m_shownOverrunWarning = true;
+
+#ifdef REPORT_XRUNS
 			KMessageBox::information(0, message);
+#else
+			if ((*i)->getData1() == MappedEvent::FailureDiscOverrun) {
+			    // the error you can't hear
+			    KMessageBox::information(0, message);
+			} else {
+			    std::cerr << message << std::endl;
+			}
+#endif
 		    }
 
                     // Turn off the report flag and set off a one-shot
@@ -1116,13 +1127,15 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                     }
 		}
 	    } else {
+		KStartupLogo::hideIfStillThere();
+
 		if ((*i)->getType() == MappedEvent::SystemFailure) {
 
 		    if ((*i)->getData1() == MappedEvent::FailureJackRestartFailed) {
 
 			KMessageBox::error(
 			    dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
-			    i18n("JACK Audio subsystem has died or it has stopped Rosegarden from processing audio.\nPlease restart Rosegarden to continue working with audio.\nQuitting other running applications may improve Rosegarden's performance."));
+			    i18n("The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.\nPlease restart Rosegarden to continue working with audio.\nQuitting other running applications may improve Rosegarden's performance."));
 
 		    } else if ((*i)->getData1() == MappedEvent::FailureJackRestart) {
 
@@ -1915,6 +1928,11 @@ void SequenceManager::trackChanged(const Composition *, Track* t)
 	QByteArray data;
         rgapp->sequencerSend("remapTracks()", data);
     }
+}
+
+void SequenceManager::trackDeleted(const Composition *, TrackId t)
+{
+    m_controlBlockMmapper->setTrackDeleted(t);
 }
 
 void SequenceManager::metronomeChanged(InstrumentId id,

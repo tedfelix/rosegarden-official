@@ -61,7 +61,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
 #ifdef HAVE_LIBLO
 				     AudioPluginOSCGUIManager *aGM,
 #endif
-                                     Instrument *instrument,
+                                     PluginContainer *pluginContainer,
                                      int index):
     KDialogBase(parent, "", false, i18n("Audio Plugin"),
 #ifdef HAVE_LIBLO
@@ -73,8 +73,8 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
 #ifdef HAVE_LIBLO
     m_pluginGUIManager(aGM),
 #endif
-    m_instrument(instrument),
-    m_instrumentId(instrument->getId()),
+    m_pluginContainer(pluginContainer),
+    m_containerId(pluginContainer->getId()),
     m_programLabel(0),
     m_index(index),
     m_generating(true),
@@ -167,7 +167,7 @@ AudioPluginDialog::slotDetails()
 void
 AudioPluginDialog::slotShowGUI()
 {
-    emit showPluginGUI(m_instrumentId, m_index);
+    emit showPluginGUI(m_containerId, m_index);
     m_guiShown = true;
 
     //!!! need to get notification of when a plugin gui exits from the
@@ -177,7 +177,7 @@ AudioPluginDialog::slotShowGUI()
 void
 AudioPluginDialog::populatePluginCategoryList()
 {
-    AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
+    AudioPluginInstance *inst = m_pluginContainer->getPlugin(m_index);
     std::set<QString> categories;
     QString currentCategory;
 
@@ -244,7 +244,7 @@ AudioPluginDialog::populatePluginList()
     }
 
     // Check for plugin and setup as required
-    AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
+    AudioPluginInstance *inst = m_pluginContainer->getPlugin(m_index);
     if (inst) m_bypass->setChecked(inst->isBypassed());
 
     // Use this temporary map to ensure that the plugins are sorted
@@ -332,7 +332,7 @@ AudioPluginDialog::slotPluginSelected(int i)
     bool guiWasShown = m_guiShown;
 
     if (m_guiShown) {
-	emit stopPluginGUI(m_instrumentId, m_index);
+	emit stopPluginGUI(m_containerId, m_index);
 	m_guiShown = false;
     }
 
@@ -342,7 +342,7 @@ AudioPluginDialog::slotPluginSelected(int i)
              << "setting up plugin from position " << number << " at menu item " << i << endl;
 
     QString caption =
-	strtoqstr(m_instrument->getName()) +
+	strtoqstr(m_pluginContainer->getName()) +
 	QString(" [ %1 ] - ").arg(m_index + 1);
 
     if (number == 0)
@@ -387,7 +387,7 @@ AudioPluginDialog::slotPluginSelected(int i)
 	    1, 1, 0, m_gridLayout->numCols()-1, Qt::AlignCenter);
     }
 
-    AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
+    AudioPluginInstance *inst = m_pluginContainer->getPlugin(m_index);
     if (!inst) return;
 
     if (plugin)
@@ -458,7 +458,7 @@ AudioPluginDialog::slotPluginSelected(int i)
     setFixedSize(minimumSizeHint());
 
     // tell the sequencer
-    emit pluginSelected(m_instrumentId, m_index, number - 1);
+    emit pluginSelected(m_containerId, m_index, number - 1);
 
     if (plugin) {
 
@@ -522,12 +522,12 @@ AudioPluginDialog::slotPluginSelected(int i)
     }
 
     if (guiWasShown) {
-	emit showPluginGUI(m_instrumentId, m_index);
+	emit showPluginGUI(m_containerId, m_index);
 	m_guiShown = true;
     }
 
 #ifdef HAVE_LIBLO
-    bool gui = m_pluginGUIManager->hasGUI(m_instrumentId, m_index);
+    bool gui = m_pluginGUIManager->hasGUI(m_containerId, m_index);
     actionButton(Details)->setEnabled(gui);
 #endif
     
@@ -564,10 +564,10 @@ AudioPluginDialog::slotPluginPortChanged(float value)
     if (!control) return;
 
     // store the new value
-    AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
+    AudioPluginInstance *inst = m_pluginContainer->getPlugin(m_index);
     inst->getPort(control->getIndex())->value = value;
 
-    emit pluginPortChanged(m_instrumentId,
+    emit pluginPortChanged(m_containerId,
 			   m_index, control->getIndex(), value);
 }
 
@@ -575,13 +575,13 @@ void
 AudioPluginDialog::slotPluginProgramChanged(const QString &value)
 {
     // store the new value
-    AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
+    AudioPluginInstance *inst = m_pluginContainer->getPlugin(m_index);
 
     if (m_programCombo && value == m_programCombo->text(0)) { // "<none set>"
 	inst->setProgram("");
     } else {
 	inst->setProgram(qstrtostr(value));
-	emit pluginProgramChanged(m_instrumentId, m_index, value);
+	emit pluginProgramChanged(m_containerId, m_index, value);
     }
 }
 
@@ -601,7 +601,7 @@ AudioPluginDialog::updatePlugin(int number)
 void
 AudioPluginDialog::updatePluginPortControl(int port)
 {        
-    AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
+    AudioPluginInstance *inst = m_pluginContainer->getPlugin(m_index);
     if (inst) {
 	PluginPortInstance *pti = inst->getPort(port);
 	if (pti) {
@@ -619,7 +619,7 @@ AudioPluginDialog::updatePluginPortControl(int port)
 void
 AudioPluginDialog::updatePluginProgramControl()
 {
-    AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
+    AudioPluginInstance *inst = m_pluginContainer->getPlugin(m_index);
     if (inst) {
 	std::string program = inst->getProgram();
 	if (m_programCombo) {
@@ -642,7 +642,7 @@ AudioPluginDialog::updatePluginProgramList()
 {
     if (!m_programLabel) return;
 
-    AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
+    AudioPluginInstance *inst = m_pluginContainer->getPlugin(m_index);
     if (!inst) return;
 
     if (!m_programCombo) {
@@ -708,25 +708,25 @@ AudioPluginDialog::updatePluginProgramList()
 void
 AudioPluginDialog::slotBypassChanged(bool bp)
 {
-    AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
+    AudioPluginInstance *inst = m_pluginContainer->getPlugin(m_index);
 
     if (inst)
         inst->setBypass(bp);
 
-    emit bypassed(m_instrumentId, m_index, bp);
+    emit bypassed(m_containerId, m_index, bp);
 }
 
 void
 AudioPluginDialog::closeEvent(QCloseEvent *e)
 {
     e->accept();
-    emit destroyed(m_instrumentId, m_index);
+    emit destroyed(m_containerId, m_index);
 }
 
 void
 AudioPluginDialog::slotClose()
 {
-    emit destroyed(m_instrumentId, m_index);
+    emit destroyed(m_containerId, m_index);
     reject();
 }
 
@@ -743,7 +743,7 @@ AudioPluginDialog::slotCopy()
 
         clipboard->m_pluginNumber = number;
 
-	AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
+	AudioPluginInstance *inst = m_pluginContainer->getPlugin(m_index);
 	if (inst) {
 	    clipboard->m_configuration = inst->getConfiguration();
 	} else {
@@ -802,7 +802,7 @@ AudioPluginDialog::slotPaste()
 	for (std::map<std::string, std::string>::const_iterator i =
 		 clipboard->m_configuration.begin();
 	     i != clipboard->m_configuration.end(); ++i) {
-	    emit pluginConfigurationChanged(m_instrumentId,
+	    emit pluginConfigurationChanged(m_containerId,
 					    m_index,
 					    false,
 					    strtoqstr(i->first),
@@ -834,7 +834,7 @@ AudioPluginDialog::slotPaste()
 void
 AudioPluginDialog::slotDefault()
 {
-    AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
+    AudioPluginInstance *inst = m_pluginContainer->getPlugin(m_index);
     if (!inst) return;
 
     int i = m_pluginList->currentItem();

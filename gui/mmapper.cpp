@@ -120,6 +120,11 @@ void ControlBlockMmapper::updateTrackData(Track *t)
     m_controlBlock->updateTrackData(t);
 }
 
+void ControlBlockMmapper::setTrackDeleted(Rosegarden::TrackId t)
+{
+    m_controlBlock->setTrackDeleted(t, true);
+}
+
 void ControlBlockMmapper::updateMidiFilters(Rosegarden::MidiFilter thruFilter,
 					    Rosegarden::MidiFilter recordFilter)
 {
@@ -168,7 +173,7 @@ void ControlBlockMmapper::initControlBlock()
 {
     SEQMAN_DEBUG << "ControlBlockMmapper::initControlBlock()\n";
 
-    m_controlBlock = new (m_mmappedBuffer) ControlBlock(m_doc->getComposition().getNbTracks());
+    m_controlBlock = new (m_mmappedBuffer) ControlBlock(m_doc->getComposition().getMaxTrackId());
 
     Composition& comp = m_doc->getComposition();
     
@@ -952,25 +957,27 @@ MetronomeMmapper::MetronomeMmapper(RosegardenGUIDoc* doc)
     Rosegarden::timeT t = c.getBarStart(-20); // somewhat arbitrary
     int depth = m_metronome->getDepth();
 
-    while (t < c.getEndMarker()) {
+    if (depth > 0) {
+	while (t < c.getEndMarker()) {
 
-        Rosegarden::TimeSignature sig = c.getTimeSignatureAt(t);
-	Rosegarden::timeT barDuration = sig.getBarDuration();
-        std::vector<int> divisions;
-        if (depth > 0) sig.getDivisions(depth - 1, divisions);
-        int ticks = 1;
-        
-        for (int i = -1; i < (int)divisions.size(); ++i) {
-            if (i >= 0) ticks *= divisions[i];
-        
-            for (int tick = 0; tick < ticks; ++tick) {
-                if (i >= 0 && (tick % divisions[i] == 0)) continue;
-                Rosegarden::timeT tickTime = t + (tick * barDuration) / ticks;
-                m_ticks.push_back(Tick(tickTime, i+1));
-            }
-        }
-        
-        t = c.getBarEndForTime(t);
+	    Rosegarden::TimeSignature sig = c.getTimeSignatureAt(t);
+	    Rosegarden::timeT barDuration = sig.getBarDuration();
+	    std::vector<int> divisions;
+	    if (depth > 0) sig.getDivisions(depth - 1, divisions);
+	    int ticks = 1;
+	    
+	    for (int i = -1; i < (int)divisions.size(); ++i) {
+		if (i >= 0) ticks *= divisions[i];
+		
+		for (int tick = 0; tick < ticks; ++tick) {
+		    if (i >= 0 && (tick % divisions[i] == 0)) continue;
+		    Rosegarden::timeT tickTime = t + (tick * barDuration) / ticks;
+		    m_ticks.push_back(Tick(tickTime, i+1));
+		}
+	    }
+	    
+	    t = c.getBarEndForTime(t);
+	}
     }
     
     KConfig *config = kapp->config();

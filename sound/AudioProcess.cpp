@@ -48,6 +48,22 @@
 namespace Rosegarden
 {
 
+/* Branch-free optimizer-resistant denormal killer courtesy of Simon
+   Jenkins on LAD: */
+
+static inline float flushToZero(volatile float f)
+{
+   f += 9.8607615E-32f;
+   return f - 9.8607615E-32f;
+}
+
+static inline void denormalKill(float *buffer, int size)
+{
+    for (int i = 0; i < size; ++i) {
+	buffer[i] = flushToZero(buffer[i]);
+    }
+}
+
 AudioThread::AudioThread(std::string name,
 			 SoundDriver *driver,
 			 unsigned int sampleRate) :
@@ -289,6 +305,8 @@ AudioBussMixer::BufferRec::~BufferRec()
 void
 AudioBussMixer::generateBuffers()
 {
+    // Not RT safe
+
 #ifdef DEBUG_BUSS_MIXER
     std::cerr << "AudioBussMixer::generateBuffers" << std::endl;
 #endif
@@ -347,6 +365,8 @@ AudioBussMixer::generateBuffers()
 void
 AudioBussMixer::fillBuffers(const RealTime &currentTime)
 {
+    // Not RT safe
+
 #ifdef DEBUG_BUSS_MIXER
     std::cerr << "AudioBussMixer::fillBuffers" << std::endl;
 #endif
@@ -358,6 +378,8 @@ AudioBussMixer::fillBuffers(const RealTime &currentTime)
 void
 AudioBussMixer::emptyBuffers()
 {
+    // Not RT safe
+
     getLock();
 
 #ifdef DEBUG_BUSS_MIXER
@@ -381,8 +403,10 @@ AudioBussMixer::emptyBuffers()
 }
     
 void
-AudioBussMixer::kick(bool wantLock)
+AudioBussMixer::kick(bool wantLock, bool signalInstrumentMixer)
 {
+    // Needs to be RT safe if wantLock is not specified
+
     if (wantLock) getLock();
 
 #ifdef DEBUG_BUSS_MIXER
@@ -394,15 +418,19 @@ AudioBussMixer::kick(bool wantLock)
 #ifdef DEBUG_BUSS_MIXER
     std::cerr << "AudioBussMixer::kick: processed" << std::endl;
 #endif
-
-    m_instrumentMixer->signal();
     
     if (wantLock) releaseLock();
+
+    if (signalInstrumentMixer) {
+	m_instrumentMixer->signal();
+    }
 }
 	    	    
 void
 AudioBussMixer::setBussLevels(int bussId, float dB, float pan)
 {
+    // No requirement to be RT safe
+
     if (bussId == 0) return; // master
     int buss = bussId - 1;
 
@@ -417,6 +445,8 @@ AudioBussMixer::setBussLevels(int bussId, float dB, float pan)
 void
 AudioBussMixer::updateInstrumentConnections()
 {
+    // Not RT safe
+
     if (m_bussCount == 0) generateBuffers();
 
     InstrumentId audioInstrumentBase;
@@ -468,14 +498,14 @@ AudioBussMixer::updateInstrumentConnections()
 void
 AudioBussMixer::processBlocks()
 {
+    // Needs to be RT safe
+
     if (m_bussCount == 0) return;
 
 #ifdef DEBUG_BUSS_MIXER
     if (m_driver->isPlaying())
 	std::cerr << "AudioBussMixer::processBlocks" << std::endl;
 #endif
-
-    static std::vector<bool> processedInstruments;
 
     InstrumentId audioInstrumentBase;
     int audioInstruments;
@@ -485,9 +515,8 @@ AudioBussMixer::processBlocks()
     int synthInstruments;
     m_driver->getSoftSynthInstrumentNumbers(synthInstrumentBase, synthInstruments);
 
-    while (int(processedInstruments.size()) < audioInstruments + synthInstruments) {
-	processedInstruments.push_back(false);
-    }
+    bool *processedInstruments = (bool *)alloca
+	((audioInstruments + synthInstruments) * sizeof(bool));
 
     for (int i = 0; i < audioInstruments + synthInstruments; ++i) {
 	processedInstruments[i] = false;
@@ -608,6 +637,62 @@ AudioBussMixer::processBlocks()
 			if (rb) rb->readAdding(m_processBuffers[ch],
 					       m_blockSize,
 					       1);
+		    }
+		}
+	    }
+
+	    if (m_instrumentMixer) {
+		AudioInstrumentMixer::PluginList &plugins =
+		    m_instrumentMixer->getBussPlugins(buss + 1);
+
+		// This will have to do for now!
+		if (!plugins.empty()) dormant = false;
+
+		for (AudioInstrumentMixer::PluginList::iterator pli =
+			 plugins.begin(); pli != plugins.end(); ++pli) {
+
+		    RunnablePluginInstance *plugin = *pli;
+		    if (!plugin || plugin->isBypassed()) continue;
+
+		    unsigned int ch = 0;
+
+		    while (ch < plugin->getAudioInputCount()) {
+			if (ch < 2) {
+			    memcpy(plugin->getAudioInputBuffers()[ch],
+				   m_processBuffers[ch],
+				   m_blockSize * sizeof(sample_t));
+			} else {
+			    memset(plugin->getAudioInputBuffers()[ch], 0,
+				   m_blockSize * sizeof(sample_t));
+			}
+			++ch;
+		    }
+
+#ifdef DEBUG_BUSS_MIXER
+		    std::cerr << "Running buss plugin with " << plugin->getAudioInputCount()
+			      << " inputs, " << plugin->getAudioOutputCount() << " outputs" << std::endl;
+#endif
+
+		    // We don't currently maintain a record of our
+		    // frame time in the buss mixer.  This will screw
+		    // up any plugin that requires a good frame count:
+		    // at the moment that only means DSSI effects
+		    // plugins using run_multiple_synths, which would
+		    // be an unusual although plausible combination
+		    plugin->run(RealTime::zeroTime);
+
+		    ch = 0;
+
+		    while (ch < 2 && ch < plugin->getAudioOutputCount()) {
+
+			denormalKill(plugin->getAudioOutputBuffers()[ch],
+				     m_blockSize);
+
+			memcpy(m_processBuffers[ch],
+			       plugin->getAudioOutputBuffers()[ch],
+			       m_blockSize * sizeof(sample_t));
+			
+			++ch;
 		    }
 		}
 	    }
@@ -751,6 +836,8 @@ AudioInstrumentMixer::BufferRec::~BufferRec()
 void
 AudioInstrumentMixer::setPlugin(InstrumentId id, int position, QString identifier)
 {
+    // Not RT safe
+
     std::cerr << "AudioInstrumentMixer::setPlugin(" << id << ", " << position << ", " << identifier << ")" << std::endl;
 
     int channels = 2;
@@ -774,6 +861,9 @@ AudioInstrumentMixer::setPlugin(InstrumentId id, int position, QString identifie
 	    delete instance;
 	    instance = 0;
 	}
+    } else {
+	std::cerr << "AudioInstrumentMixer::setPlugin: No factory for identifier "
+		  << identifier << std::endl;
     }
 
     RunnablePluginInstance *oldInstance = 0;
@@ -786,9 +876,17 @@ AudioInstrumentMixer::setPlugin(InstrumentId id, int position, QString identifie
     } else {
 
 	PluginList &list = m_plugins[id];
-	if (position < (int)list.size()) {
+
+	if (position < Instrument::PLUGIN_COUNT) {
+	    while (position >= (int)list.size()) {
+		list.push_back(0);
+	    }
 	    oldInstance = list[position];
 	    list[position] = instance;
+	} else {
+	    std::cerr << "AudioInstrumentMixer::setPlugin: No position "
+		      << position << " for instrument " << id << std::endl;
+	    delete instance;
 	}
     }
 
@@ -800,6 +898,8 @@ AudioInstrumentMixer::setPlugin(InstrumentId id, int position, QString identifie
 void 
 AudioInstrumentMixer::removePlugin(InstrumentId id, int position)
 {
+    // Not RT safe
+
     RunnablePluginInstance *oldInstance = 0;
 
     if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
@@ -826,6 +926,8 @@ AudioInstrumentMixer::removePlugin(InstrumentId id, int position)
 void
 AudioInstrumentMixer::removeAllPlugins()
 {
+    // Not RT safe
+
     for (SynthPluginMap::iterator i = m_synths.begin();
 	 i != m_synths.end(); ++i) {
 	if (i->second) {
@@ -852,6 +954,8 @@ AudioInstrumentMixer::removeAllPlugins()
 RunnablePluginInstance *
 AudioInstrumentMixer::getPluginInstance(InstrumentId id, int position)
 {
+    // Not RT safe
+
     if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
 	return m_synths[id];
     } else {
@@ -866,10 +970,11 @@ void
 AudioInstrumentMixer::setPluginPortValue(InstrumentId id, int position,
 					 unsigned int port, float value)
 {
+    // Not RT safe
+
     RunnablePluginInstance *instance = getPluginInstance(id, position);
 
     if (instance) {
-	std::cerr << "Setting plugin port " << port << " to value " << value << std::endl;
 	instance->setPortValue(port, value);
     }
 }
@@ -878,6 +983,8 @@ float
 AudioInstrumentMixer::getPluginPortValue(InstrumentId id, int position,
 					 unsigned int port)
 {
+    // Not RT safe
+
     RunnablePluginInstance *instance = getPluginInstance(id, position);
 
     if (instance) {
@@ -890,6 +997,8 @@ AudioInstrumentMixer::getPluginPortValue(InstrumentId id, int position,
 void
 AudioInstrumentMixer::setPluginBypass(InstrumentId id, int position, bool bypass)
 {
+    // Not RT safe
+
     RunnablePluginInstance *instance = getPluginInstance(id, position);
     if (instance) instance->setBypassed(bypass);
 }
@@ -897,6 +1006,8 @@ AudioInstrumentMixer::setPluginBypass(InstrumentId id, int position, bool bypass
 QStringList
 AudioInstrumentMixer::getPluginPrograms(InstrumentId id, int position)
 {
+    // Not RT safe
+
     QStringList programs;
     RunnablePluginInstance *instance = getPluginInstance(id, position);
     if (instance) programs = instance->getPrograms();
@@ -906,6 +1017,8 @@ AudioInstrumentMixer::getPluginPrograms(InstrumentId id, int position)
 QString
 AudioInstrumentMixer::getPluginProgram(InstrumentId id, int position)
 {
+    // Not RT safe
+
     QString program;
     RunnablePluginInstance *instance = getPluginInstance(id, position);
     if (instance) program = instance->getCurrentProgram();
@@ -916,6 +1029,8 @@ QString
 AudioInstrumentMixer::getPluginProgram(InstrumentId id, int position, int bank,
 				       int program)
 {
+    // Not RT safe
+
     QString programName;
     RunnablePluginInstance *instance = getPluginInstance(id, position);
     if (instance) programName = instance->getProgram(bank, program);
@@ -925,6 +1040,8 @@ AudioInstrumentMixer::getPluginProgram(InstrumentId id, int position, int bank,
 unsigned long
 AudioInstrumentMixer::getPluginProgram(InstrumentId id, int position, QString name)
 {
+    // Not RT safe
+
     unsigned long program = 0; 
     RunnablePluginInstance *instance = getPluginInstance(id, position);
     if (instance) program = instance->getProgram(name);
@@ -934,6 +1051,8 @@ AudioInstrumentMixer::getPluginProgram(InstrumentId id, int position, QString na
 void
 AudioInstrumentMixer::setPluginProgram(InstrumentId id, int position, QString program)
 {
+    // Not RT safe
+
     RunnablePluginInstance *instance = getPluginInstance(id, position);
     if (instance) instance->selectProgram(program);
 }
@@ -941,6 +1060,8 @@ AudioInstrumentMixer::setPluginProgram(InstrumentId id, int position, QString pr
 QString
 AudioInstrumentMixer::configurePlugin(InstrumentId id, int position, QString key, QString value)
 {
+    // Not RT safe
+
     RunnablePluginInstance *instance = getPluginInstance(id, position);
     if (instance) return instance->configure(key, value);
     return QString();
@@ -949,12 +1070,15 @@ AudioInstrumentMixer::configurePlugin(InstrumentId id, int position, QString key
 void
 AudioInstrumentMixer::resetAllPlugins()
 {
+    // Not RT safe
+
     // lock required here to protect against calling
     // activate/deactivate at the same time as run()
 
-    getLock();
-
     std::cerr << "AudioInstrumentMixer::resetAllPlugins!" << std::endl;
+
+    getLock();
+    if (m_bussMixer) m_bussMixer->getLock();
 
     for (SynthPluginMap::iterator j = m_synths.begin();
 	 j != m_synths.end(); ++j) {
@@ -996,13 +1120,17 @@ AudioInstrumentMixer::resetAllPlugins()
 	}
     }
 
+    if (m_bussMixer) m_bussMixer->releaseLock();
     releaseLock();
 }
 
 void
 AudioInstrumentMixer::destroyAllPlugins()
 {
+    // Not RT safe
+
     getLock();
+    if (m_bussMixer) m_bussMixer->getLock();
 
     // Delete immediately, as we're probably exiting here -- don't use
     // the scavenger.
@@ -1033,12 +1161,15 @@ AudioInstrumentMixer::destroyAllPlugins()
     // and tell the driver to get rid of anything already scavenged.
     m_driver->scavengePlugins();
 
+    if (m_bussMixer) m_bussMixer->releaseLock();
     releaseLock();
 }
 
 size_t
 AudioInstrumentMixer::getPluginLatency(unsigned int id)
 {
+    // Not RT safe
+
     size_t latency = 0;
 
     RunnablePluginInstance *synth = m_synths[id];
@@ -1056,6 +1187,8 @@ AudioInstrumentMixer::getPluginLatency(unsigned int id)
 void
 AudioInstrumentMixer::generateBuffers()
 {
+    // Not RT safe
+
     InstrumentId audioInstrumentBase;
     int audioInstruments;
     m_driver->getAudioInstrumentNumbers(audioInstrumentBase, audioInstruments);
@@ -1139,6 +1272,16 @@ AudioInstrumentMixer::generateBuffers()
 	setInstrumentLevels(id, level, pan);
     }
 
+    // Make room for up to 16 busses here, to avoid reshuffling later
+    int busses = 16;
+    if (m_bussMixer) busses = std::max(busses, m_bussMixer->getBussCount());
+    for (int i = 0; i < busses; ++i) {
+	PluginList &list = m_plugins[i + 1];
+	while (list.size() < Instrument::PLUGIN_COUNT) {
+	    list.push_back(0);
+	}
+    }
+
     while (m_processBuffers.size() > maxChannels) {
 	std::vector<sample_t *>::iterator bi = m_processBuffers.end();
 	--bi;
@@ -1153,6 +1296,8 @@ AudioInstrumentMixer::generateBuffers()
 void
 AudioInstrumentMixer::fillBuffers(const RealTime &currentTime)
 {
+    // Not RT safe
+
     emptyBuffers(currentTime);
 
     getLock();
@@ -1170,6 +1315,8 @@ AudioInstrumentMixer::fillBuffers(const RealTime &currentTime)
 void
 AudioInstrumentMixer::emptyBuffers(RealTime currentTime)
 {
+    // Not RT safe
+
     getLock();
 
 #ifdef DEBUG_MIXER
@@ -1193,6 +1340,7 @@ AudioInstrumentMixer::emptyBuffers(RealTime currentTime)
 	else id = synthInstrumentBase + (i - audioInstruments);
 
 	m_bufferMap[id].dormant = true;
+	m_bufferMap[id].muted = false;
 	m_bufferMap[id].zeroFrames = 0;
 	m_bufferMap[id].filledTo = currentTime;
 
@@ -1204,25 +1352,11 @@ AudioInstrumentMixer::emptyBuffers(RealTime currentTime)
     releaseLock();
 }
 
-/* Branch-free optimizer-resistant denormal killer courtesy of Simon
-   Jenkins on LAD: */
-
-static inline float flushToZero(volatile float f)
-{
-   f += 9.8607615E-32f;
-   return f - 9.8607615E-32f;
-}
-
-static inline void denormalKill(float *buffer, int size)
-{
-    for (int i = 0; i < size; ++i) {
-	buffer[i] = flushToZero(buffer[i]);
-    }
-}
-
 void
 AudioInstrumentMixer::setInstrumentLevels(InstrumentId id, float dB, float pan)
 {
+    // No requirement to be RT safe
+
     BufferRec &rec = m_bufferMap[id];
     
     float volume = AudioLevel::dB_to_multiplier(dB);
@@ -1233,8 +1367,34 @@ AudioInstrumentMixer::setInstrumentLevels(InstrumentId id, float dB, float pan)
 }
 
 void
+AudioInstrumentMixer::updateInstrumentMuteStates()
+{
+    SequencerDataBlock *sdb = m_driver->getSequencerDataBlock();
+    if (sdb) {
+	ControlBlock *cb = sdb->getControlBlock();
+	if (cb) {
+
+	    for (BufferMap::iterator i = m_bufferMap.begin();
+		 i != m_bufferMap.end(); ++i) {
+
+		InstrumentId id = i->first;
+		BufferRec &rec = i->second;
+ 
+		if (id >= SoftSynthInstrumentBase) {
+		    rec.muted = cb->isInstrumentMuted(id);
+		} else {
+		    rec.muted = cb->isInstrumentUnused(id);
+		}
+	    }
+	}
+    }
+}
+
+void
 AudioInstrumentMixer::processBlocks(bool &readSomething)
 {
+    // Needs to be RT safe
+
 #ifdef DEBUG_MIXER
     if (m_driver->isPlaying())
 	std::cerr << "AudioInstrumentMixer::processBlocks" << std::endl;
@@ -1249,17 +1409,33 @@ AudioInstrumentMixer::processBlocks(bool &readSomething)
 
 	InstrumentId id = i->first;
 	BufferRec &rec = i->second;
-	bool empty;
 
-	if (id >= SoftSynthInstrumentBase) empty = (m_synths[id] == 0);
-	else empty = !queue->haveFilesForInstrument(id);
+	// This "muted" flag actually only strictly means muted when
+	// applied to synth instruments.  For audio instruments it's
+	// only true if the instrument is not in use at all (see
+	// updateInstrumentMuteStates above).  It's not safe to base
+	// the empty calculation on muted state for audio tracks,
+	// because that causes buffering problems when the mute is
+	// toggled for an audio track while it's playing a file.
 
-	if (empty) {
-	    for (PluginList::iterator j = m_plugins[id].begin();
-		 j != m_plugins[id].end(); ++j) {
-		if (*j != 0) {
-		    empty = false;
-		    break;
+	bool empty = false;
+
+	if (rec.muted) {
+	    empty = true;
+	} else {
+	    if (id >= SoftSynthInstrumentBase) {
+		empty = (!m_synths[id] || m_synths[id]->isBypassed());
+	    } else {
+		empty = !queue->haveFilesForInstrument(id);
+	    }
+
+	    if (empty) {
+		for (PluginList::iterator j = m_plugins[id].begin();
+		     j != m_plugins[id].end(); ++j) {
+		    if (*j != 0) {
+			empty = false;
+			break;
+		    }
 		}
 	    }
 	}
@@ -1307,6 +1483,7 @@ AudioInstrumentMixer::processBlocks(bool &readSomething)
 	    BufferRec &rec = i->second;
 
 	    if (rec.empty) {
+		rec.dormant = true;
 		continue;
 	    }
 
@@ -1327,67 +1504,14 @@ AudioInstrumentMixer::processBlocks(bool &readSomething)
 }
 
 
-void
-AudioInstrumentMixer::processEmptyBlocks(InstrumentId id)
-{
-#ifdef DEBUG_MIXER
-    if (m_driver->isPlaying()) {
-	if (id == 1000) std::cerr << "AudioInstrumentMixer::processEmptyBlocks(" << id << ")" << std::endl;
-    }
-#endif
-  
-//    Rosegarden::Profiler profiler("processEmptyBlocks", true);
-
-    BufferRec &rec = m_bufferMap[id];
-    unsigned int channels = rec.buffers.size();
-    if (channels > m_processBuffers.size()) channels = m_processBuffers.size();
-    if (channels == 0) return; // buffers just haven't been set up yet
-
-    unsigned int targetChannels = channels;
-    if (targetChannels < 2) targetChannels = 2; // fill at least two buffers
-
-    size_t minWriteSpace = 0;
-    for (unsigned int ch = 0; ch < targetChannels; ++ch) {
-	size_t thisWriteSpace = rec.buffers[ch]->getWriteSpace();
-	if (ch == 0 || thisWriteSpace < minWriteSpace) {
-	    minWriteSpace = thisWriteSpace;
-	    if (minWriteSpace < m_blockSize) {
-#ifdef DEBUG_MIXER
-		if (m_driver->isPlaying()) {
-		    if (id == 1000) std::cerr << "AudioInstrumentMixer::processEmptyBlocks(" << id << "): only " << minWriteSpace << " write space on channel " << ch << " for block size " << m_blockSize << std::endl;
-		}
-#endif
-		return;
-	    }
-	}
-    }
-
-    // unlike processBlock, we can really fill this one up here (at
-    // least to the nearest block multiple, just to make things easier
-    // to understand) because it's so cheap
-
-    size_t toWrite = (minWriteSpace / m_blockSize) * m_blockSize;
-
-    rec.zeroFrames += toWrite;
-    bool dormant = true;
-                
-    for (unsigned int ch = 0; ch < targetChannels; ++ch) {
-	rec.buffers[ch]->zero(toWrite);
-	if (rec.buffers[ch]->getReadSpace() > rec.zeroFrames) dormant = false;
-    }
-
-    rec.dormant = dormant;
-    rec.filledTo = rec.filledTo +
-	RealTime::frame2RealTime(toWrite, m_sampleRate);
-}
-	    
-
 bool
 AudioInstrumentMixer::processBlock(InstrumentId id,
 				   PlayableAudioFile **playing,
 				   size_t playCount,
 				   bool &readSomething)
 {
+    // Needs to be RT safe
+
 //    Rosegarden::Profiler profiler("processBlock", true);
 
     BufferRec &rec = m_bufferMap[id];
@@ -1705,6 +1829,8 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
 void
 AudioInstrumentMixer::kick(bool wantLock)
 {
+    // Needs to be RT safe if wantLock is not specified
+
     if (wantLock) getLock();
 
     bool readSomething = false;

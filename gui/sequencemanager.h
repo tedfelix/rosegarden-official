@@ -189,6 +189,7 @@ public:
     virtual void segmentTrackChanged       (const Composition*, Segment *, TrackId id);
     virtual void endMarkerTimeChanged      (const Composition*, bool shorten);
     virtual void trackChanged              (const Composition*, Track*);
+    virtual void trackDeleted              (const Composition*, TrackId);
     virtual void timeSignatureChanged      (const Composition*);
     virtual void metronomeChanged          (const Composition*);
     virtual void soloChanged               (const Composition*, bool solo, TrackId selectedTrack);

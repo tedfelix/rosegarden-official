@@ -876,6 +876,7 @@ protected:
     void notifySegmentTrackChanged(Segment *s, TrackId id) const;
     void notifyEndMarkerChange(bool shorten) const;
     void notifyTrackChanged(Track*) const;
+    void notifyTrackDeleted(TrackId) const;
     void notifyMetronomeChanged() const;
     void notifyTimeSignatureChanged() const;
     void notifySoloChanged() const;
@@ -985,6 +986,11 @@ public:
      * Called when a track is changed (instrument id, muted status...)
      */
     virtual void trackChanged(const Composition *, Track*) { }
+
+    /**
+     * Called when a track has been deleted
+     */
+    virtual void trackDeleted(const Composition *, TrackId) { }
 
     /**
      * Called when some time signature has changed

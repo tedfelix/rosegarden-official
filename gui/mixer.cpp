@@ -474,6 +474,18 @@ AudioMixerWindow::populate()
 
 	QToolTip::add(rec.m_muteButton, i18n("Mute"));
 
+        rec.m_pluginBox = new QVBox(m_mainBox);
+	
+        for (int p = 0; p < 5; ++p) {
+            QPushButton *plugin = new QPushButton(rec.m_pluginBox, "pluginButton");
+            plugin->setText(i18n("<none>"));
+            plugin->setMaximumWidth(45);
+            QToolTip::add(plugin, i18n("Audio plugin button"));
+            rec.m_plugins.push_back(plugin);
+            connect(plugin, SIGNAL(clicked()),
+                    this, SLOT(slotSelectPlugin()));
+        }
+
 	QLabel *idLabel = new QLabel(i18n("Sub %1").arg(count), m_mainBox, "subMaster");
 	idLabel->setFont(boldFont);
 
@@ -489,8 +501,13 @@ AudioMixerWindow::populate()
 //	mainLayout->addMultiCellWidget(rec.m_muteButton, 4, 4, col, col+1);
 	rec.m_muteButton->hide();
 
+	if (rec.m_pluginBox) {
+	    mainLayout->addMultiCellWidget(rec.m_pluginBox, 6, 6, col, col+1);
+	}
+
 	m_submasters.push_back(rec);
 	updateFader(count);
+	updatePluginButtons(count);
 
 	connect(rec.m_fader, SIGNAL(faderChanged(float)),
 		this, SLOT(slotFaderLevelChanged(float)));
@@ -586,13 +603,14 @@ AudioMixerWindow::populate()
 		this, SLOT(slotMuteChanged()));
     }
 
+    m_mainBox->show();
+
     slotUpdateFaderVisibility();
     slotUpdateSynthFaderVisibility();
     slotUpdateSubmasterVisibility();
     slotUpdatePluginButtonVisibility();
 
     adjustSize();
-    m_mainBox->show();
 }
 
 bool
@@ -692,13 +710,51 @@ AudioMixerWindow::slotPluginSelected(Rosegarden::InstrumentId id,
             rec.m_plugins[index]->setPaletteForegroundColor(Qt::white);
 	    rec.m_plugins[index]->setPaletteBackgroundColor(pluginBgColour);
 	}
+    } else if (id > 0 && id <= m_submasters.size()) {
+
+	FaderRec &rec = m_submasters[id-1];
+	if (!rec.m_populated || !rec.m_pluginBox) return;
+	if (index >= rec.m_plugins.size()) return;
+
+	if (plugin == -1) {
+
+	    rec.m_plugins[index]->setText(i18n("<none>"));
+            QToolTip::add(rec.m_plugins[index], i18n("<no plugin>"));
+
+	    rec.m_plugins[index]->setPaletteBackgroundColor
+		(kapp->palette().
+		 color(QPalette::Active, QColorGroup::Button));
+
+	} else {
+
+	    Rosegarden::AudioPlugin *pluginClass 
+		= m_document->getPluginManager()->getPlugin(plugin);
+
+            QColor pluginBgColour =
+                kapp->palette().color(QPalette::Active, QColorGroup::Light);
+
+	    if (pluginClass)
+            {
+		rec.m_plugins[index]->
+		    setText(pluginClass->getLabel());
+                QToolTip::add(rec.m_plugins[index], pluginClass->getLabel());
+
+                pluginBgColour = pluginClass->getColour();
+            }
+
+
+            rec.m_plugins[index]->setPaletteForegroundColor(Qt::white);
+	    rec.m_plugins[index]->setPaletteBackgroundColor(pluginBgColour);
+	}
     }
 }
 
 void
 AudioMixerWindow::slotPluginBypassed(Rosegarden::InstrumentId instrumentId,
-				int , bool )
+				     int , bool )
 {
+    RG_DEBUG << "AudioMixerWindow::slotPluginBypassed(" << instrumentId << ")" << endl;
+
     updatePluginButtons(instrumentId);
 }
 
@@ -780,22 +836,37 @@ AudioMixerWindow::updateMiscButtons(int )
 void
 AudioMixerWindow::updatePluginButtons(int id)
 {
+    FaderRec *rec = 0;
+    Rosegarden::PluginContainer *container = 0;
+
     if (id >= (int)Rosegarden::AudioInstrumentBase) {
 
-	FaderRec &rec = m_faders[id];
-	if (!rec.m_populated || !rec.m_pluginBox) return;
-	Rosegarden::Instrument *instrument = m_studio->getInstrumentById(id);
+	container = m_studio->getInstrumentById(id);
+	rec = &m_faders[id];
+	if (!rec->m_populated || !rec->m_pluginBox) return;
 
-	for (unsigned int i = 0; i < rec.m_plugins.size(); i++) {
+    } else {
+
+	Rosegarden::BussList busses = m_studio->getBusses();
+	if (busses.size() > id) {
+	    container = busses[id];
+	}
+	rec = &m_submasters[id-1];
+	if (!rec->m_populated || !rec->m_pluginBox) return;
+    }
+
+    if (rec && container) {
+
+	for (unsigned int i = 0; i < rec->m_plugins.size(); i++) {
 
 	    bool used = false;
 	    bool bypass = false;
             QColor pluginBgColour = 
                 kapp->palette().color(QPalette::Active, QColorGroup::Light);
 
-	    rec.m_plugins[i]->show();
+	    rec->m_plugins[i]->show();
 
-	    Rosegarden::AudioPluginInstance *inst = instrument->getPlugin(i);
+	    Rosegarden::AudioPluginInstance *inst = container->getPlugin(i);
 
 	    if (inst && inst->isAssigned()) {
 
@@ -806,8 +877,8 @@ AudioMixerWindow::updatePluginButtons(int id)
 
 		if (pluginClass)
                 {
-		    rec.m_plugins[i]->setText(pluginClass->getLabel());
-                    QToolTip::add(rec.m_plugins[i], pluginClass->getLabel());
+		    rec->m_plugins[i]->setText(pluginClass->getLabel());
+                    QToolTip::add(rec->m_plugins[i], pluginClass->getLabel());
 
                     pluginBgColour = pluginClass->getColour();
                 }
@@ -817,35 +888,35 @@ AudioMixerWindow::updatePluginButtons(int id)
 
 	    } else {
 
-		rec.m_plugins[i]->setText(i18n("<none>"));
-                QToolTip::add(rec.m_plugins[i], i18n("<no plugin>"));
+		rec->m_plugins[i]->setText(i18n("<none>"));
+                QToolTip::add(rec->m_plugins[i], i18n("<no plugin>"));
 
 		if (inst) bypass = inst->isBypassed();
 	    }
 
 	    if (bypass) {
 		
-		rec.m_plugins[i]->setPaletteForegroundColor
+		rec->m_plugins[i]->setPaletteForegroundColor
 		    (kapp->palette().
 		     color(QPalette::Active, QColorGroup::Button));
 
-		rec.m_plugins[i]->setPaletteBackgroundColor
+		rec->m_plugins[i]->setPaletteBackgroundColor
 		    (kapp->palette().
 		     color(QPalette::Active, QColorGroup::ButtonText));
 
 	    } else if (used) {
 
-		rec.m_plugins[i]->setPaletteForegroundColor(Qt::white);
-		rec.m_plugins[i]->setPaletteBackgroundColor(pluginBgColour);
+		rec->m_plugins[i]->setPaletteForegroundColor(Qt::white);
+		rec->m_plugins[i]->setPaletteBackgroundColor(pluginBgColour);
 
 
 	    } else {
 
-		rec.m_plugins[i]->setPaletteForegroundColor
+		rec->m_plugins[i]->setPaletteForegroundColor
 		    (kapp->palette().
 		     color(QPalette::Active, QColorGroup::ButtonText));
 
-		rec.m_plugins[i]->setPaletteBackgroundColor
+		rec->m_plugins[i]->setPaletteBackgroundColor
 		    (kapp->palette().
 		     color(QPalette::Active, QColorGroup::Button));
 	    }
@@ -857,8 +928,6 @@ void
 AudioMixerWindow::slotSelectPlugin()
 {
     const QObject *s = sender();
-
-    // no plugins anywhere except instruments yet
 
     for (FaderMap::iterator i = m_faders.begin();
 	 i != m_faders.end(); ++i) {
@@ -877,7 +946,31 @@ AudioMixerWindow::slotSelectPlugin()
 
 	    ++index;
 	}
-    }	    
+    }
+
+
+    int b = 1;
+
+    for (FaderVector::iterator i = m_submasters.begin();
+	 i != m_submasters.end(); ++i) {
+	
+	int index = 0;
+	if (!i->m_populated || !i->m_pluginBox) continue;
+
+	for (std::vector<QPushButton *>::iterator pli = i->m_plugins.begin();
+	     pli != i->m_plugins.end(); ++pli) {
+
+	    if (*pli == s) {
+
+		emit selectPlugin(this, b, index);
+		return;
+	    }
+
+	    ++index;
+	}
+	
+	++b;
+    }
 }
 
 void
@@ -1288,21 +1381,24 @@ AudioMixerWindow::slotToggleFaders()
 void
 AudioMixerWindow::slotUpdateFaderVisibility()
 {
+    bool d = !(m_studio->getMixerDisplayOptions() & MIXER_OMIT_FADERS);
+
     KToggleAction *action = dynamic_cast<KToggleAction *>
         (actionCollection()->action("show_audio_faders"));
-    if (!action) return;
+    if (action) {
+	action->setChecked(d);
+    }
 
-    action->setChecked(!(m_studio->getMixerDisplayOptions() &
-			 MIXER_OMIT_FADERS));
+    RG_DEBUG << "AudioMixerWindow::slotUpdateFaderVisibility: visiblility is " << d << " (options " << m_studio->getMixerDisplayOptions() << ")" << endl;
 
     for (FaderMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
 	if (i->first < Rosegarden::SoftSynthInstrumentBase) {
 	    FaderRec rec = i->second;
-	    rec.setVisible(action->isChecked());
+	    rec.setVisible(d);
 	}
     }
 
-    toggleNamedWidgets(action->isChecked(), "audioIdLabel");
+    toggleNamedWidgets(d, "audioIdLabel");
 
     adjustSize();
 }

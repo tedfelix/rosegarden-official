@@ -197,9 +197,20 @@ fi
 
 dnl set -fno-gcse if using gcc; it's just too risky -- too many builds
 dnl ruined by optimization bugs already
-if test "$GCC" = yes; then
-  CXXFLAGS="$CXXFLAGS -fno-gcse"
-fi
+#if test "$GCC" = yes; then
+#  CXXFLAGS="$CXXFLAGS -fno-gcse"
+#fi
+
+AC_MSG_CHECKING(for PTHREAD_MUTEX_RECURSIVE)
+AC_TRY_COMPILE([ #include <pthread.h>], [
+	pthread_mutexattr_t attr;
+	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+], [
+	AC_MSG_RESULT(ok)
+        AC_DEFINE(HAVE_PTHREAD_MUTEX_RECURSIVE, 1, [Define if you have PTHREAD_MUTEX_RECURSIVE instead of PTHREAD_MUTEX_RECURSIVE_NP])
+], [
+	AC_MSG_RESULT(no)
+])
 
 AC_MSG_CHECKING(for PTHREAD_MUTEX_RECURSIVE)
 AC_TRY_COMPILE([ #include <pthread.h>], [

@@ -1249,6 +1249,11 @@ public slots:
     void slotUpdatePlaybackPosition();
 
     /**
+     * Update the CPU level meter
+     */
+    void slotUpdateCPUMeter(bool playing);
+
+    /**
      * Update the monitor levels from the sequencer mmapped file when not playing
      * (slotUpdatePlaybackPosition does this among other things when playing)
      */

@@ -93,7 +93,8 @@ GUIPalette::GUIPalette()
     m_defaultsMap[LevelMeterOrange] = QColor(255, 165, 0);
     m_defaultsMap[LevelMeterRed] = QColor(200, 0, 0);
 
-    m_defaultsMap[LevelMeterSolidGreen] = QColor(0, 140, 0);
+//    m_defaultsMap[LevelMeterSolidGreen] = QColor(0, 140, 0);
+    m_defaultsMap[LevelMeterSolidGreen] = QColor(84, 177, 248); // blue!
     m_defaultsMap[LevelMeterSolidOrange] = QColor(220, 120, 0);
     m_defaultsMap[LevelMeterSolidRed] = QColor(255, 50, 50);
 

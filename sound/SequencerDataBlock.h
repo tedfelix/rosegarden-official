@@ -90,6 +90,7 @@ public:
     void setMasterLevel(const LevelInfo &);
 
     void setControlBlock(ControlBlock *cb) { m_controlBlock = cb; }
+    ControlBlock *getControlBlock() { return m_controlBlock; }
 
     // Reset the temporaries on (for example) GUI restart
     //

@@ -1204,6 +1204,7 @@ void Composition::deleteTrack(Rosegarden::TrackId track)
         m_tracks.erase(titerator);
         checkSelectedAndRecordTracks();
         updateRefreshStatuses();
+	notifyTrackDeleted(track);
     }
     
 }
@@ -1525,6 +1526,15 @@ Composition::notifyTrackChanged(Track *t) const
     for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
 	(*i)->trackChanged(this, t);
+    }
+}
+
+void
+Composition::notifyTrackDeleted(TrackId t) const
+{
+    for (ObserverSet::const_iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->trackDeleted(this, t);
     }
 }
 

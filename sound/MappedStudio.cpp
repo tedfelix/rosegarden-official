@@ -32,6 +32,28 @@
 
 static pthread_mutex_t _mappedObjectContainerLock;
 
+#ifdef DEBUG_MAPPEDSTUDIO
+static int _approxLockCount = 0;
+#endif
+
+static inline void getLock(const char *file, int line)
+{
+#ifdef DEBUG_MAPPEDSTUDIO
+    std::cerr << "Acquiring MappedStudio container lock at " << file << ":" << line << ": count " << _approxLockCount++ << std::endl;
+#endif
+    pthread_mutex_lock(&_mappedObjectContainerLock);
+}
+
+static inline void releaseLock(const char *file, int line)
+{
+    pthread_mutex_unlock(&_mappedObjectContainerLock);
+#ifdef DEBUG_MAPPEDSTUDIO
+    std::cerr << "Released container lock at " << file << ":" << line << ": count " << --_approxLockCount << std::endl;
+#endif
+}
+
+#define GET_LOCK getLock(__FILE__,__LINE__)
+#define RELEASE_LOCK releaseLock(__FILE__,__LINE__)
 
 // These stream functions are stolen and adapted from Qt3 qvaluevector.h
 //
@@ -305,7 +327,7 @@ MappedStudio::~MappedStudio()
 MappedObject*
 MappedStudio::createObject(MappedObjectType type)
 {
-    pthread_mutex_lock(&_mappedObjectContainerLock);
+    GET_LOCK;
 
     MappedObject *mO = 0;
 
@@ -320,7 +342,7 @@ MappedStudio::createObject(MappedObjectType type)
     //
     if (mO) m_runningObjectId++;
 
-    pthread_mutex_unlock(&_mappedObjectContainerLock);
+    RELEASE_LOCK;
     return mO;
 }
 
@@ -328,11 +350,11 @@ MappedObject*
 MappedStudio::createObject(MappedObjectType type,
                            MappedObjectId id)
 {
-    pthread_mutex_lock(&_mappedObjectContainerLock);
+    GET_LOCK;
 
     // fail if the object already exists and it's not zero
     if (id != 0 && getObjectById(id)) {
-	pthread_mutex_unlock(&_mappedObjectContainerLock);
+	RELEASE_LOCK;
 	return 0;
     }
 
@@ -383,7 +405,7 @@ MappedStudio::createObject(MappedObjectType type,
         m_objects[type][id] = mO;
     }
 
-    pthread_mutex_unlock(&_mappedObjectContainerLock);
+    RELEASE_LOCK;
 
     return mO;
 }
@@ -393,12 +415,12 @@ MappedStudio::getObjectOfType(MappedObjectType type)
 {
     MappedObject *rv = 0;
 
-    pthread_mutex_lock(&_mappedObjectContainerLock);
+    GET_LOCK;
 
     MappedObjectCategory &category = m_objects[type];
     if (!category.empty()) rv = category.begin()->second;
 
-    pthread_mutex_unlock(&_mappedObjectContainerLock);
+    RELEASE_LOCK;
 
     return rv;
 }
@@ -408,7 +430,7 @@ MappedStudio::getObjectsOfType(MappedObjectType type)
 {
     std::vector<MappedObject *> rv;
 
-    pthread_mutex_lock(&_mappedObjectContainerLock);
+    GET_LOCK;
 
     MappedObjectCategory &category = m_objects[type];
 
@@ -417,7 +439,7 @@ MappedStudio::getObjectsOfType(MappedObjectType type)
 	rv.push_back(i->second);
     }
 
-    pthread_mutex_unlock(&_mappedObjectContainerLock);
+    RELEASE_LOCK;
 
     return rv;
 }
@@ -427,12 +449,12 @@ MappedStudio::getObjectCount(MappedObjectType type)
 {
     unsigned int count = 0;
 
-    pthread_mutex_lock(&_mappedObjectContainerLock);
+    GET_LOCK;
 
     MappedObjectCategory &category = m_objects[type];
     count = category.size();
 
-    pthread_mutex_unlock(&_mappedObjectContainerLock);
+    RELEASE_LOCK;
 
     return count;
 }
@@ -441,7 +463,7 @@ MappedStudio::getObjectCount(MappedObjectType type)
 bool
 MappedStudio::destroyObject(MappedObjectId id)
 {
-    pthread_mutex_lock(&_mappedObjectContainerLock);
+    GET_LOCK;
 
     MappedObject *obj = getObjectById(id);
 
@@ -452,7 +474,7 @@ MappedStudio::destroyObject(MappedObjectId id)
 	rv = true;
     }
 
-    pthread_mutex_unlock(&_mappedObjectContainerLock);
+    RELEASE_LOCK;
 
     return rv;
 }
@@ -460,7 +482,7 @@ MappedStudio::destroyObject(MappedObjectId id)
 bool
 MappedStudio::connectObjects(MappedObjectId mId1, MappedObjectId mId2)
 {
-    pthread_mutex_lock(&_mappedObjectContainerLock);
+    GET_LOCK;
 
     bool rv = false;
 
@@ -476,7 +498,7 @@ MappedStudio::connectObjects(MappedObjectId mId1, MappedObjectId mId2)
 	rv = true;
     }
 
-    pthread_mutex_unlock(&_mappedObjectContainerLock);
+    RELEASE_LOCK;
 
     return rv;
 }
@@ -484,7 +506,7 @@ MappedStudio::connectObjects(MappedObjectId mId1, MappedObjectId mId2)
 bool
 MappedStudio::disconnectObjects(MappedObjectId mId1, MappedObjectId mId2)
 {
-    pthread_mutex_lock(&_mappedObjectContainerLock);
+    GET_LOCK;
 
     bool rv = false;
 
@@ -500,7 +522,7 @@ MappedStudio::disconnectObjects(MappedObjectId mId1, MappedObjectId mId2)
 	rv = true;
     }
 
-    pthread_mutex_unlock(&_mappedObjectContainerLock);
+    RELEASE_LOCK;
 
     return rv;
 }
@@ -508,7 +530,7 @@ MappedStudio::disconnectObjects(MappedObjectId mId1, MappedObjectId mId2)
 bool
 MappedStudio::disconnectObject(MappedObjectId mId)
 {
-    pthread_mutex_lock(&_mappedObjectContainerLock);
+    GET_LOCK;
 
     bool rv = false;
 
@@ -534,7 +556,7 @@ MappedStudio::disconnectObject(MappedObjectId mId)
     
     rv = true;
 
-    pthread_mutex_unlock(&_mappedObjectContainerLock);
+    RELEASE_LOCK;
 
     return rv;
 }
@@ -546,7 +568,7 @@ MappedStudio::disconnectObject(MappedObjectId mId)
 void
 MappedStudio::clear()
 {
-    pthread_mutex_lock(&_mappedObjectContainerLock);
+    GET_LOCK;
 
     for (MappedObjectMap::iterator i = m_objects.begin();
 	 i != m_objects.end(); ++i) {
@@ -563,7 +585,7 @@ MappedStudio::clear()
     // reset running object id
     m_runningObjectId = 1;
 
-    pthread_mutex_unlock(&_mappedObjectContainerLock);
+    RELEASE_LOCK;
 }
 
 bool
@@ -571,7 +593,7 @@ MappedStudio::clearObject(MappedObjectId id)
 {
     bool rv = false;
 
-    pthread_mutex_lock(&_mappedObjectContainerLock);
+    GET_LOCK;
 
     for (MappedObjectMap::iterator i = m_objects.begin();
 	 i != m_objects.end(); ++i) {
@@ -591,7 +613,7 @@ MappedStudio::clearObject(MappedObjectId id)
 	}
     }
 
-    pthread_mutex_unlock(&_mappedObjectContainerLock);
+    RELEASE_LOCK;
 
     return rv;
 }
@@ -620,7 +642,7 @@ MappedStudio::getProperty(const MappedObjectProperty &,
 MappedObject*
 MappedStudio::getObjectById(MappedObjectId id)
 {
-    pthread_mutex_lock(&_mappedObjectContainerLock);
+    GET_LOCK;
     MappedObject *rv = 0;
 
     for (MappedObjectMap::iterator i = m_objects.begin();
@@ -633,14 +655,14 @@ MappedStudio::getObjectById(MappedObjectId id)
 	}
     }
 
-    pthread_mutex_unlock(&_mappedObjectContainerLock);
+    RELEASE_LOCK;
     return rv;
 }
 
 MappedObject*
 MappedStudio::getObjectByIdAndType(MappedObjectId id, MappedObjectType type)
 {
-    pthread_mutex_lock(&_mappedObjectContainerLock);
+    GET_LOCK;
     MappedObject *rv = 0;
 
     MappedObjectCategory &category = m_objects[type];
@@ -649,7 +671,7 @@ MappedStudio::getObjectByIdAndType(MappedObjectId id, MappedObjectType type)
 	rv = i->second;
     }
 
-    pthread_mutex_unlock(&_mappedObjectContainerLock);
+    RELEASE_LOCK;
     return rv;
 }
 
@@ -662,7 +684,7 @@ MappedStudio::getFirst(MappedObjectType type)
 MappedObject*
 MappedStudio::getNext(MappedObject *object)
 {
-    pthread_mutex_lock(&_mappedObjectContainerLock);
+    GET_LOCK;
 
     MappedObjectCategory &category = m_objects[object->getType()];
 
@@ -678,7 +700,7 @@ MappedStudio::getNext(MappedObject *object)
 	}
     }
     
-    pthread_mutex_unlock(&_mappedObjectContainerLock);
+    RELEASE_LOCK;
     return rv;
 }
 
@@ -695,7 +717,7 @@ MappedStudio::setProperty(const MappedObjectProperty &property,
 MappedAudioFader *
 MappedStudio::getAudioFader(Rosegarden::InstrumentId id)
 {
-    pthread_mutex_lock(&_mappedObjectContainerLock);
+    GET_LOCK;
 
     MappedObjectCategory &category = m_objects[AudioFader];
     MappedAudioFader *rv = 0;
@@ -709,14 +731,14 @@ MappedStudio::getAudioFader(Rosegarden::InstrumentId id)
 	}
     }
 
-    pthread_mutex_unlock(&_mappedObjectContainerLock);
+    RELEASE_LOCK;
     return rv;
 }
 
 MappedAudioBuss *
 MappedStudio::getAudioBuss(int bussNumber)
 {
-    pthread_mutex_lock(&_mappedObjectContainerLock);
+    GET_LOCK;
 
     MappedObjectCategory &category = m_objects[AudioBuss];
     MappedAudioBuss *rv = 0;
@@ -730,14 +752,14 @@ MappedStudio::getAudioBuss(int bussNumber)
 	}
     }
 
-    pthread_mutex_unlock(&_mappedObjectContainerLock);
+    RELEASE_LOCK;
     return rv;
 }
 
 MappedAudioInput *
 MappedStudio::getAudioInput(int inputNumber)
 {
-    pthread_mutex_lock(&_mappedObjectContainerLock);
+    GET_LOCK;
 
     MappedObjectCategory &category = m_objects[AudioInput];
     MappedAudioInput *rv = 0;
@@ -751,7 +773,7 @@ MappedStudio::getAudioInput(int inputNumber)
 	}
     }
 
-    pthread_mutex_unlock(&_mappedObjectContainerLock);
+    RELEASE_LOCK;
     return rv;
 }
 
@@ -1145,7 +1167,7 @@ MappedAudioBuss::getInstruments()
 {
     std::vector<InstrumentId> rv;
 
-    pthread_mutex_lock(&_mappedObjectContainerLock);
+    GET_LOCK;
 
     MappedObject *studioObject = getParent();
     while (!dynamic_cast<MappedStudio *>(studioObject))
@@ -1167,7 +1189,7 @@ MappedAudioBuss::getInstruments()
 	}
     }
     
-    pthread_mutex_unlock(&_mappedObjectContainerLock);
+    RELEASE_LOCK;
 
     return rv;
 }

@@ -333,13 +333,16 @@ public:
 					       int &ssInstrumentCount) {
 	ssInstrumentBase = SoftSynthInstrumentBase;
 #ifdef HAVE_DSSI
-	ssInstrumentCount = 16;
+	ssInstrumentCount = 24;
 #else
 	ssInstrumentCount = 0;
 #endif
     }
 
     virtual QString getStatusLog();
+
+    // To be called regularly from JACK driver when idle
+    void checkTimerSync(size_t frames);
 
     virtual void runTasks();
 
@@ -362,7 +365,7 @@ protected:
     virtual void generateInstruments();
 
     virtual void generateTimerList();
-    virtual std::string getAutoTimer();
+    virtual std::string getAutoTimer(bool &wantTimerChecks);
 
     void addInstrumentsForDevice(MappedDevice *device);
     MappedDevice *createMidiDevice(AlsaPortDescription *,
@@ -450,6 +453,11 @@ private:
     bool m_queueRunning;
     
     bool m_portCheckNeeded;
+    
+    bool m_doTimerChecks;
+    bool m_firstTimerCheck;
+    double m_timerRatio;
+    bool m_timerRatioCalculated;
 };
 
 }

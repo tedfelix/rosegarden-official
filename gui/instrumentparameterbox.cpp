@@ -757,6 +757,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
 void
 MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
 {
+    RG_DEBUG << "MIDIInstrumentParameterPanel::setupForInstrument" << endl;
     MidiDevice *md = dynamic_cast<MidiDevice*>
 	(instrument->getDevice());
     if (!md) {
@@ -1013,7 +1014,7 @@ MIDIInstrumentParameterPanel::setRotaryToValue(int controller, int value)
     {
         if (it->first == controller)
         {
-            it->second.first->setPosition(float(value));
+	    it->second.first->setPosition(float(value));
             return;
         }
     }

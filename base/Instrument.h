@@ -66,10 +66,38 @@ typedef unsigned int BussId;
 //
 class Device;
 
-class Instrument : public XmlExportable
+class PluginContainer
 {
 public:
     static const unsigned int PLUGIN_COUNT; // for non-synth plugins
+
+    PluginInstanceIterator beginPlugins() { return m_audioPlugins.begin(); }
+    PluginInstanceIterator endPlugins() { return m_audioPlugins.end(); }
+
+    // Plugin management
+    //
+    void addPlugin(AudioPluginInstance *instance);
+    bool removePlugin(unsigned int position);
+    void clearPlugins();
+    void emptyPlugins(); // empty the plugins but don't clear them down
+
+    // Get a plugin for this container
+    //
+    AudioPluginInstance* getPlugin(unsigned int position);
+
+    virtual unsigned int getId() const = 0;
+    virtual std::string getName() const = 0;
+
+protected:
+    PluginContainer(bool havePlugins);
+    virtual ~PluginContainer();
+
+    std::vector<AudioPluginInstance*> m_audioPlugins;
+};
+
+class Instrument : public XmlExportable, public PluginContainer
+{
+public:
     static const unsigned int SYNTH_PLUGIN_POSITION;
 
     enum InstrumentType { Midi, Audio, SoftSynth };
@@ -93,7 +121,7 @@ public:
 
     ~Instrument();
 
-    std::string getName() const { return m_name; }
+    virtual std::string getName() const { return m_name; }
     std::string getPresentationName() const;
 
     void setId(InstrumentId id) { m_id = id; }
@@ -189,20 +217,6 @@ public:
     //
     std::string getProgramName() const;
 
-    PluginInstanceIterator beginPlugins() { return m_audioPlugins.begin(); }
-    PluginInstanceIterator endPlugins() { return m_audioPlugins.end(); }
-
-    // Plugin management
-    //
-    void addPlugin(AudioPluginInstance *instance);
-    bool removePlugin(unsigned int position);
-    void clearPlugins();
-    void emptyPlugins(); // empty the plugins but don't clear them down
-
-    // Get a plugin for this instrument
-    //
-    AudioPluginInstance* getPlugin(unsigned int position);
-
     // MappedId management - should typedef this type once
     // we have the energy to shake this all out.
     //
@@ -243,9 +257,6 @@ private:
     bool             m_sendPan;
     bool             m_sendVolume;
 
-    // Where we hold the audio plugins for this instrument
-    std::vector<AudioPluginInstance*>     m_audioPlugins;
-
     // Instruments are directly related to faders for volume
     // control.  Here we can store the remote fader id.
     //
@@ -271,7 +282,7 @@ private:
 };
 
 
-class Buss : public XmlExportable
+class Buss : public XmlExportable, public PluginContainer
 {
 public:
     Buss(BussId id);
@@ -290,6 +301,7 @@ public:
     void setMappedId(int id) { m_mappedId = id; }
 
     virtual std::string toXmlString();
+    virtual std::string getName() const;
 
 private:
     BussId m_id;

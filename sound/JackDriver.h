@@ -200,7 +200,6 @@ protected:
     static int   jackBufferSize(jack_nframes_t nframes, void *arg);
     static int   jackSampleRate(jack_nframes_t nframes, void *arg);
     static void  jackShutdown(void *arg);
-    static int   jackGraphOrder(void *);
     static int   jackXRun(void *);
 
     // static JACK transport callbacks

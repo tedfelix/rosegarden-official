@@ -627,6 +627,8 @@ void RosegardenGUIDoc::initialiseStudio()
     Rosegarden::MappedObjectPropertyList properties;
     Rosegarden::MappedObjectValueList values;
 
+    std::vector<Rosegarden::PluginContainer *> pluginContainers;
+
     for (unsigned int i = 0; i < busses.size(); ++i) {
 	
 	// first one is master
@@ -648,6 +650,8 @@ void RosegardenGUIDoc::initialiseStudio()
 	values.push_back(Rosegarden::MappedObjectValue(busses[i]->getPan()) - 100.0);
 	
 	busses[i]->setMappedId(mappedId);
+
+	pluginContainers.push_back(busses[i]);
     }
 
     for (unsigned int i = 0; i < recordIns.size(); ++i) {
@@ -755,99 +759,105 @@ void RosegardenGUIDoc::initialiseStudio()
 		Rosegarden::StudioControl::connectStudioObjects(rmi, mappedId);
 	    }
 
+	    pluginContainers.push_back(*it);
+
             audioCount++;
+	}
+    }
 
-            // Initialise all the plugins for this Instrument
+    for (std::vector<Rosegarden::PluginContainer *>::iterator pci = 
+	     pluginContainers.begin(); pci != pluginContainers.end(); ++pci) {
 
-	    for (Rosegarden::PluginInstanceIterator pli = (*it)->beginPlugins();
-		 pli != (*it)->endPlugins(); ++pli) {
+	// Initialise all the plugins for this Instrument or Buss
 
-		Rosegarden::AudioPluginInstance *plugin = *pli;
+	for (Rosegarden::PluginInstanceIterator pli = (*pci)->beginPlugins();
+	     pli != (*pci)->endPlugins(); ++pli) {
 
-                if (plugin->isAssigned())
-                {
-                    // Create the plugin slot at the sequencer Studio
-                    //
-                    Rosegarden::MappedObjectId pluginMappedId =
-                        Rosegarden::StudioControl::createStudioObject(
-                                Rosegarden::MappedObject::PluginSlot);
+	    Rosegarden::AudioPluginInstance *plugin = *pli;
 
-                    // Create the back linkage from the instance to the
-                    // studio id
-                    //
-                    plugin->setMappedId(pluginMappedId);
-
-                    //RG_DEBUG << "CREATING PLUGIN ID = " 
-                               //<< pluginMappedId << endl;
-
-                    // Set the position
+	    if (plugin->isAssigned())
+	    {
+		// Create the plugin slot at the sequencer Studio
+		//
+		Rosegarden::MappedObjectId pluginMappedId =
+		    Rosegarden::StudioControl::createStudioObject(
+			Rosegarden::MappedObject::PluginSlot);
+		
+		// Create the back linkage from the instance to the
+		// studio id
+		//
+		plugin->setMappedId(pluginMappedId);
+		
+		//RG_DEBUG << "CREATING PLUGIN ID = " 
+		//<< pluginMappedId << endl;
+		
+		// Set the position
+		Rosegarden::StudioControl::setStudioObjectProperty
+		    (pluginMappedId,
+		     Rosegarden::MappedObject::Position,
+		     Rosegarden::MappedObjectValue(plugin->getPosition()));
+		
+		// Set the id of this instrument or buss on the plugin
+		//
+		Rosegarden::StudioControl::setStudioObjectProperty
+		    (pluginMappedId,
+		     Rosegarden::MappedObject::Instrument,
+		     (*pci)->getId());
+		
+		// Set the plugin type id - this will set it up ready
+		// for the rest of the settings.  String value, so can't
+		// go in the main property list.
+		//
+		Rosegarden::StudioControl::setStudioObjectProperty
+		    (pluginMappedId,
+		     Rosegarden::MappedPluginSlot::Identifier,
+		     plugin->getIdentifier().c_str());
+		
+		plugin->setConfigurationValue
+		    (qstrtostr(Rosegarden::PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY),
+		     getAudioFileManager().getAudioPath());
+		
+		// Set opaque string configuration data (e.g. for DSSI plugin)
+		//
+		Rosegarden::MappedObjectPropertyList config;
+		for (Rosegarden::AudioPluginInstance::ConfigMap::const_iterator
+			 i = plugin->getConfiguration().begin();
+		     i != plugin->getConfiguration().end(); ++i) {
+		    config.push_back(strtoqstr(i->first));
+		    config.push_back(strtoqstr(i->second));
+		}
+		
+		Rosegarden::StudioControl::setStudioObjectPropertyList
+		    (pluginMappedId,
+		     Rosegarden::MappedPluginSlot::Configuration,
+		     config);
+		
+		// Set the bypass
+		//
+		ids.push_back(pluginMappedId);
+		properties.push_back(Rosegarden::MappedPluginSlot::Bypassed);
+		values.push_back(Rosegarden::MappedObjectValue(plugin->isBypassed()));
+		
+		// Set the program
+		//
+		if (plugin->getProgram() != "") {
 		    Rosegarden::StudioControl::setStudioObjectProperty
 			(pluginMappedId,
-			 Rosegarden::MappedObject::Position,
-			 Rosegarden::MappedObjectValue(plugin->getPosition()));
-
-                    // Set the id of this instrument on the plugin
-                    //
-		    Rosegarden::StudioControl::setStudioObjectProperty
+			 Rosegarden::MappedPluginSlot::Program,
+			 strtoqstr(plugin->getProgram()));
+		}
+		
+		// Set all the port values
+		// 
+		Rosegarden::PortInstanceIterator portIt;
+		
+		for (portIt = plugin->begin();
+		     portIt != plugin->end(); ++portIt)
+		{
+		    Rosegarden::StudioControl::setStudioPluginPort
 			(pluginMappedId,
-			 Rosegarden::MappedObject::Instrument,
-			 (*it)->getId());
-
-                    // Set the plugin type id - this will set it up ready
-                    // for the rest of the settings.  String value, so can't
-		    // go in the main property list.
-		    //
-		    Rosegarden::StudioControl::setStudioObjectProperty
-                        (pluginMappedId,
-                         Rosegarden::MappedPluginSlot::Identifier,
-                         plugin->getIdentifier().c_str());
-
-		    plugin->setConfigurationValue
-			(qstrtostr(Rosegarden::PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY),
-			 getAudioFileManager().getAudioPath());
-
-		    // Set opaque string configuration data (e.g. for DSSI plugin)
-		    //
-		    Rosegarden::MappedObjectPropertyList config;
-		    for (Rosegarden::AudioPluginInstance::ConfigMap::const_iterator
-			     i = plugin->getConfiguration().begin();
-			 i != plugin->getConfiguration().end(); ++i) {
-			config.push_back(strtoqstr(i->first));
-			config.push_back(strtoqstr(i->second));
-		    }
-
-		    Rosegarden::StudioControl::setStudioObjectPropertyList
-			(pluginMappedId,
-			 Rosegarden::MappedPluginSlot::Configuration,
-			 config);
-
-                    // Set the bypass
-                    //
-                    ids.push_back(pluginMappedId);
-		    properties.push_back(Rosegarden::MappedPluginSlot::Bypassed);
-		    values.push_back(Rosegarden::MappedObjectValue(plugin->isBypassed()));
-
-                    // Set the program
-                    //
-		    if (plugin->getProgram() != "") {
-			Rosegarden::StudioControl::setStudioObjectProperty
-			    (pluginMappedId,
-			     Rosegarden::MappedPluginSlot::Program,
-			     strtoqstr(plugin->getProgram()));
-		    }
-
-		    // Set all the port values
-		    // 
-                    Rosegarden::PortInstanceIterator portIt;
-
-                    for (portIt = plugin->begin();
-                         portIt != plugin->end(); ++portIt)
-                    {
-                        Rosegarden::StudioControl::setStudioPluginPort
-                            (pluginMappedId,
-                             (*portIt)->number,
-                             (*portIt)->value);
-                    }
+			 (*portIt)->number,
+			 (*portIt)->value);
                 }
             }
         }
