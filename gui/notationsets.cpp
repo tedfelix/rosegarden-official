@@ -24,6 +24,7 @@
 #include "staff.h"
 #include "Equation.h"
 #include "Track.h"
+#include "Quantizer.h"
 
 #include <cstring>
 
@@ -36,6 +37,7 @@ using Rosegarden::Key;
 using Rosegarden::Note;
 using Rosegarden::Track;
 using Rosegarden::Equation;
+using Rosegarden::Quantizer;
 using Rosegarden::timeT;
 
 NotationSet::NotationSet(const NotationElementList &nel,
@@ -115,12 +117,12 @@ NotationSet::durationOf(const NELIterator &i, bool quantized)
 {
     if (quantized) {
         long d;
-        bool done = (*i)->event()->get<Int>(P_QUANTIZED_DURATION, d);
+        bool done = (*i)->event()->get<Int>(Quantizer::NoteDurationProperty, d);
         if (done) {
             return d;
         } else {
-            Quantizer().quantize((*i)->event());
-            return (*i)->event()->get<Int>(P_QUANTIZED_DURATION);
+            Quantizer().quantizeByNote((*i)->event());
+            return (*i)->event()->get<Int>(Quantizer::NoteDurationProperty);
         }
     } else {
         return (*i)->event()->getDuration();

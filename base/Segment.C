@@ -19,6 +19,9 @@
 
 #include "Track.h"
 #include "NotationTypes.h"
+#include "Quantizer.h"
+
+#include <iostream>
 
 namespace Rosegarden 
 {
@@ -168,6 +171,95 @@ void Track::setNbTimeSteps(unsigned int nbTimeSteps)
     }
     
 }
+
+
+void Track::calculateBarPositions()
+{
+    TimeSignature timeSignature;
+    Quantizer quantizer;
+
+    m_barPositions.clear();
+
+    bool startNewBar(true);
+    bool barCorrect(true);
+
+    timeT absoluteTime = 0;
+    timeT thisBarTime = 0;
+
+    iterator i(begin());
+
+    for (; i != end(); ++i) {
+
+        Event *e = *i;
+        absoluteTime = e->getAbsoluteTime();
+
+        if (startNewBar) addNewBar(i, true, barCorrect);
+        startNewBar = false;
+
+        if (e->isa(TimeSignature::EventType)) {
+
+            if (thisBarTime > 0) {
+
+                thisBarTime = 0;
+
+                // insert the bar line before this event, and also
+                // before any preceding clef or key events
+
+                iterator i0(i), i1(i);
+                while (i0 == i ||
+                       (*i0)->isa(Clef::EventType) ||
+                       (*i1)->isa( Key::EventType)) {
+                    i1 = i0;
+                    if (i0 == begin()) break; // shouldn't happen anyway
+                    --i0;
+                }
+                
+                addNewBar(i1, true, true);
+            }
+
+            timeSignature = TimeSignature(*e);
+
+        } else if (e->isa(Note::EventType) || e->isa(Note::EventRestType)) {
+
+            bool hasDuration = true;
+
+            quantizer.quantizeByNote(e);
+
+            if (e->isa(Note::EventType)) {
+                iterator i0(i);
+                if (++i0 != end() &&
+                    (*i0)->getAbsoluteTime() == e->getAbsoluteTime()) {
+                    hasDuration = false;
+                }
+            }
+
+            if (hasDuration) {
+
+                // either we're not in a chord or the chord is about
+                // to end: update the time accordingly
+
+                long d = e->get<Int>(Quantizer::NoteDurationProperty);
+                thisBarTime += d;
+
+                cerr << "Track: Quantized duration is " << d
+                     << ", current bar now "
+                     << thisBarTime << endl;
+            }
+
+            timeT barDuration = timeSignature.getBarDuration();
+            if (thisBarTime >= barDuration) {
+                barCorrect = (thisBarTime == barDuration);
+                thisBarTime = 0;
+                startNewBar = true;
+            }
+        }
+    }
+
+    if (startNewBar || thisBarTime > 0) {
+        addNewBar(i, false, thisBarTime == timeSignature.getBarDuration());
+    }
+}
+
 
 void Track::erase(iterator pos)
 {
@@ -429,13 +521,18 @@ bool Track::expandIntoTie(iterator from, iterator to,
             ev->setDuration(maxDuration - minDuration);
             ev->setAbsoluteTime((*i)->getAbsoluteTime() + minDuration);       
 
-            // if the first event was already tied forward, the second
-            // one will now be marked as tied forward (which is good).
-            // set up the relationship between the original (now
-            // shorter) event and the new one.
+            // we only want to tie Note events:
 
-              ev->set<Bool>(Note::TiedBackwardPropertyName, true);
-            (*i)->set<Bool>(Note:: TiedForwardPropertyName, true);
+            if ((*i)->isa(Note::EventType)) {
+
+                // if the first event was already tied forward, the
+                // second one will now be marked as tied forward
+                // (which is good).  set up the relationship between
+                // the original (now shorter) event and the new one.
+
+                    ev->set<Bool>(Note::TiedBackwardPropertyName, true);
+                  (*i)->set<Bool>(Note:: TiedForwardPropertyName, true);
+            }
 
             // we may also need to change some group information: if
             // the first event is in a beamed group but the event
@@ -502,13 +599,18 @@ bool Track::expandAndInsertEvent(Event *baseEvent, timeT baseDuration,
         ev->setDuration(maxDuration - minDuration);
         ev->setAbsoluteTime(baseTime + minDuration);       
 
-        // if the first event was already tied forward, the second
-        // one will now be marked as tied forward (which is good).
-        // set up the relationship between the original (now
-        // shorter) event and the new one.
+        // we only want to tie Note events:
+
+        if (baseEvent->isa(Note::EventType)) {
+
+            // if the first event was already tied forward, the second
+            // one will now be marked as tied forward (which is good).
+            // set up the relationship between the original (now
+            // shorter) event and the new one.
         
-               ev->set<Bool>(Note::TiedBackwardPropertyName, true);
-        baseEvent->set<Bool>(Note:: TiedForwardPropertyName, true);
+                   ev->set<Bool>(Note::TiedBackwardPropertyName, true);
+            baseEvent->set<Bool>(Note:: TiedForwardPropertyName, true);
+        }
 
         // we won't bother with the group tests that we do in
         // expandIntoTie, because there is no "following" event to

@@ -40,10 +40,24 @@ public:
           unsigned int stepsPerBar = 384);
     ~Track();
 
+    
+    struct BarPosition
+    {
+        iterator start;       // i.e. event following barline
+        bool fixed;           // user-supplied new-bar or timesig event?
+        bool correct;         // false if preceding bar has incorrect duration
+        
+        BarPosition(iterator istart, bool ifixed, bool icorrect) :
+            start(istart), fixed(ifixed), correct(icorrect) { }
+    };
+
+    typedef std::vector<BarPosition> BarPositionList;
+
+
     // Note that these should be non-persistent properties, because
     // the code that writes out XML converts them to
     // <group>...</group> instead of writing them as explicit
-    // properties of the events
+    // properties of the events:
     
     static const std::string BeamedGroupIdPropertyName;
     static const std::string BeamedGroupTypePropertyName;
@@ -58,6 +72,19 @@ public:
 
     unsigned int getNbTimeSteps() const;
     void         setNbTimeSteps(unsigned int);
+
+    /**
+     * calculate suitable positions for the bar lines, taking into
+     * account any changes of time signature during the piece. 
+     * the results can be retrieved with getBarPositions()
+     */
+    void calculateBarPositions();
+
+    /**
+     * returns the set of bar positions calculated by the last call to
+     * calculateBarPositions().  No guarantee these are still valid.
+     */
+    const BarPositionList &getBarPositions() const { return m_barPositions; }
 
     /**
      * deletes the Event
@@ -114,7 +141,7 @@ public:
     iterator findContiguousPrevious(iterator);
 
     /**
-     * Returns true if both Events can be collapsed
+     * Returns true if both Events can be collapsed (into a single one)
      */
     bool canCollapse(iterator, iterator);
     
@@ -125,7 +152,7 @@ public:
     int getNextGroupId() const;
 
     /**
-     * Expands events in the [from, to[ interval into 
+     * Expands (splits) events in the [from, to[ interval into 
      * tied events of duration baseDuration + events of duration R,
      * with R being equal to the events' initial duration minus baseDuration
      *
@@ -138,7 +165,7 @@ public:
                        timeT baseDuration, iterator& lastInsertedEvent);
 
     /**
-     * Expands the event pointed by i into an event of duration
+     * Expands (splits) the event pointed by i into an event of duration
      * baseDuration + an event of duration R, with R being equal to the
      * event's initial duration minus baseDuration
      *
@@ -194,10 +221,15 @@ protected:
 
     static bool checkExpansionValid(timeT maxDuration, timeT minDuration);
 
+    void addNewBar(iterator start, bool fixed, bool correct) {
+        m_barPositions.push_back(BarPosition(start, fixed, correct));
+    }
+
     timeT m_startIdx;
     unsigned int m_instrument;
 
     mutable int m_groupId;
+    BarPositionList m_barPositions;
 };
 
 }

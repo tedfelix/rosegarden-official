@@ -22,7 +22,7 @@
 #define NOTATIONHLAYOUT_H
 
 #include "layoutengine.h"
-#include "quantizer.h"
+//#include "quantizer.h"
 #include "notationelement.h"
 #include "staff.h"
 
@@ -89,7 +89,6 @@ protected:
     NotationElementList::iterator getPreviousNote(NotationElementList::iterator pos);
 
     Staff &m_staff;
-    Quantizer m_quantizer;
     NotationElementList& m_notationElements;
 
     unsigned int m_barMargin;

@@ -25,7 +25,7 @@
 // the notation module, but that need not necessarily be saved with
 // the file
 
-#define  P_QUANTIZED_DURATION    "QuantizedDuration"
+////#define  P_QUANTIZED_DURATION    "QuantizedDuration"
 
 // #define  P_NOTE_TYPE             "NoteType"
 // #define  P_NOTE_DOTS             "NoteDots"

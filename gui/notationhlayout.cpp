@@ -25,6 +25,7 @@
 #include "notepixmapfactory.h"
 #include "notationproperties.h"
 #include "notationsets.h"
+#include "Quantizer.h"
 
 using Rosegarden::Note;
 using Rosegarden::Int;
@@ -42,6 +43,7 @@ using Rosegarden::Note;
 using Rosegarden::Track;
 using Rosegarden::TimeSignature;
 using Rosegarden::timeT;
+using Rosegarden::Quantizer;
 
 
 NotationHLayout::NotationHLayout(Staff &staff, //!!! maybe not needed, just trying to build up consistent interfaces for h & v layout
@@ -145,6 +147,7 @@ NotationHLayout::preparse(NotationElementList::iterator from,
     int shortCount = 0;
     NotationElementList::iterator it = from;
     timeT absoluteTime = 0;
+    Quantizer quantizer;
 
     for ( ; it != to; ++it) {
         
@@ -167,7 +170,8 @@ NotationHLayout::preparse(NotationElementList::iterator from,
         }
         startNewBar = false;
 
-        if (el->isNote() || el->isRest()) m_quantizer.quantize(el->event());
+        if (el->isNote() || el->isRest())
+            quantizer.quantizeByNote(el->event());
         int mw = getMinWidth(npf, *el);
 
         if (el->event()->isa(Clef::EventType)) {
@@ -287,7 +291,8 @@ NotationHLayout::preparse(NotationElementList::iterator from,
                 // either we're not in a chord or the chord is about
                 // to end: update the time accordingly
 
-                int d = el->event()->get<Int>(P_QUANTIZED_DURATION); 
+//                int d = el->event()->get<Int>(P_QUANTIZED_DURATION); 
+                int d = el->event()->get<Int>(Quantizer::NoteDurationProperty);
                 nbTimeUnitsInCurrentBar += d;
 
                 kdDebug(KDEBUG_AREA) << "Quantized duration is " << d
@@ -297,7 +302,8 @@ NotationHLayout::preparse(NotationElementList::iterator from,
                 int sd = 0;
                 if (shortest == m_notationElements.end() ||
                     d <= (sd = (*shortest)->event()->get<Int>
-                          (P_QUANTIZED_DURATION))) {
+//                          (P_QUANTIZED_DURATION))) {
+                          (Quantizer::NoteDurationProperty))) {
                     if (d == sd) ++shortCount;
                     else {
                         kdDebug(KDEBUG_AREA) << "New shortest! Duration is " << d << " (at " << nbTimeUnitsInCurrentBar << " time units)"<< endl;

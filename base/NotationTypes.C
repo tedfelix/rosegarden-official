@@ -479,24 +479,7 @@ const string Note::TiedForwardPropertyName  = "TiedForward";
 
 const int Note::m_shortestTime       = 6;
 //const int Note::m_dottedShortestTime = 9;
-
-// Note::Note(Type type, int dots)
-//     // throw (BadType, TooManyDots)
-//     : m_type(type), m_dots(dots)
-// {
-//     //!!! having exceptions here may really bugger up compiler
-//     // optimisations for simple uses of Note (e.g. "int d =
-//     // Note(Crotchet, true).getDuration()"):
-//     if (m_type < Shortest || m_type > Longest) throw BadType();
-    
-//     // We don't permit dotted hemis, double-dotted demis etc
-//     // because we can't represent notes short enough to make up
-//     // the rest of the beat (as we have no notes shorter than a
-//     // hemi).  And if we got to double-dotted hemis, triple-dotted
-//     // demis etc, we couldn't even represent their durations in
-//     // our duration units
-//     //!!!    if (m_dots > m_type) throw TooManyDots();
-// }
+ 
 
 Note::Note(const string &n)
     // throw (BadType, MalformedNoteName)
@@ -620,7 +603,7 @@ Note Note::getNearestNote(int duration, int maxDots)
     int dots = 0;
     int extra = prospective / 2;
 
-    while (dots < maxDots &&
+    while (dots <= maxDots &&
            dots <= tag) { // avoid TooManyDots exception from Note ctor
 	prospective += extra;
 	if (prospective > duration) return Note(tag, dots);

@@ -23,7 +23,6 @@
 
 #include <set>
 #include "ViewElement.h"
-#include "quantizer.h"
 #include "NotationTypes.h"
 
 class QCanvasItem;
@@ -131,7 +130,6 @@ public:
     iterator findSingle(NotationElement*);
 
 private:
-    Quantizer m_quantizer;
 };
 
 #ifndef NDEBUG
