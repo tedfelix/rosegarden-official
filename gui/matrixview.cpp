@@ -927,21 +927,26 @@ MatrixInsertionCommand::~MatrixInsertionCommand()
 void
 MatrixInsertionCommand::modifySegment()
 {
+    kdDebug(KDEBUG_AREA) << "MatrixInsertionCommand::modifySegment()\n";
+
     Rosegarden::SegmentMatrixHelper helper(getSegment());
 
-    if (m_firstModify) 
+    if (m_firstModify) {
         m_staff->setWrapAddedEvents(false); // this makes insertion not to create a new MatrixElement
-    else
+        m_firstModify = false;
+    } else
         m_staff->setWrapAddedEvents(true);
 
     helper.insertNote(m_event);
     m_staff->setWrapAddedEvents(true);
 
-    if (m_firstModify) {
-        // copy event
-        m_event = new Event(*m_event);
-        m_firstModify = false;
-    }
+    // We need to make a copy of the event each time
+    // because if we're called again it means the insertion has been
+    // undone, and therefore the inserted event has been deleted
+    // This copy is made so that we still have a valid event
+    // to insert if we're called again.
+    //
+    m_event = new Event(*m_event);
     
 }
 
