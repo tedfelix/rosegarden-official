@@ -586,9 +586,18 @@ Segment::iterator
 SegmentNotationHelper::insertNote(timeT absoluteTime, Note note, int pitch,
 				  Accidental explicitAccidental)
 {
-//    iterator i, j;
-//    segment().getTimeSlice(absoluteTime, i, j);
+    Event *e = new Event(Note::EventType, absoluteTime, note.getDuration());
+    e->set<Int>(PITCH, pitch);
+    e->set<String>(ACCIDENTAL, explicitAccidental);
+    iterator i = insertNote(e);
+    delete e;
+    return i;
+}
 
+Segment::iterator
+SegmentNotationHelper::insertNote(Event *modelEvent)
+{
+    timeT absoluteTime = modelEvent->getAbsoluteTime();
     iterator i = segment().findNearestTime(absoluteTime);
 
     // If our insertion time doesn't match up precisely with any
@@ -601,7 +610,7 @@ SegmentNotationHelper::insertNote(timeT absoluteTime, Note note, int pitch,
 	i = splitIntoTie(i, absoluteTime - (*i)->getAbsoluteTime());
     }
 
-    timeT duration(note.getDuration());
+    timeT duration = modelEvent->getDuration();
 
     if (i != end() && (*i)->has(BEAMED_GROUP_TUPLET_BASE)) {
 	duration = duration * (*i)->get<Int>(BEAMED_GROUP_TUPLED_COUNT) /
@@ -610,8 +619,7 @@ SegmentNotationHelper::insertNote(timeT absoluteTime, Note note, int pitch,
 
     //!!! Deal with end-of-bar issues!
 
-    return insertSomething(i, duration, pitch, false, false,
-			   explicitAccidental);
+    return insertSomething(i, duration, modelEvent, false);
 }
 
 
@@ -630,8 +638,12 @@ SegmentNotationHelper::insertRest(timeT absoluteTime, Note note)
 	    (*i)->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT);
     }
 
-    return insertSomething(i, duration, 0, true, false,
-			   Accidentals::NoAccidental);
+    Event *modelEvent = new Event(Note::EventRestType, absoluteTime,
+				  note.getDuration());
+
+    i = insertSomething(i, duration, modelEvent, false);
+    delete modelEvent;
+    return i;
 }
 
 
@@ -660,9 +672,8 @@ SegmentNotationHelper::collapseRestsForInsert(iterator i,
 
 
 Segment::iterator
-SegmentNotationHelper::insertSomething(iterator i, int duration, int pitch,
-				       bool isRest, bool tiedBack,
-				       Accidental acc)
+SegmentNotationHelper::insertSomething(iterator i, int duration,
+				       Event *modelEvent, bool tiedBack)
 {
     // Rules:
     // 
@@ -684,8 +695,7 @@ SegmentNotationHelper::insertSomething(iterator i, int duration, int pitch,
     while (i != end() && (*i)->getDuration() == 0) ++i;
 
     if (i == end()) {
-	return insertSingleSomething
-	    (i, duration, pitch, isRest, tiedBack, acc);
+	return insertSingleSomething(i, duration, modelEvent, tiedBack);
     }
 
     // If there's a rest at the insertion position, merge it with any
@@ -708,8 +718,7 @@ SegmentNotationHelper::insertSomething(iterator i, int duration, int pitch,
 
 	cerr << "Durations match; doing simple insert" << endl;
 
-	return insertSingleSomething
-	    (i, duration, pitch, isRest, tiedBack, acc);
+	return insertSingleSomething(i, duration, modelEvent, tiedBack);
 
     } else if (duration < existingDuration) {
 
@@ -742,8 +751,7 @@ SegmentNotationHelper::insertSomething(iterator i, int duration, int pitch,
 	    }
 	}
 
-	return insertSingleSomething(i, duration, pitch, isRest, tiedBack,
-				     acc);
+	return insertSingleSomething(i, duration, modelEvent, tiedBack);
 
     } else { // duration > existingDuration
 
@@ -777,31 +785,27 @@ SegmentNotationHelper::insertSomething(iterator i, int duration, int pitch,
 
 	    cerr << "Need to split new note" << endl;
 
-	    i = insertSingleSomething(i, existingDuration, pitch, isRest,
-                                      tiedBack, acc);
+	    i = insertSingleSomething
+		(i, existingDuration, modelEvent, tiedBack);
 
-	    if (!isRest) (*i)->set<Bool>(TIED_FORWARD, true);
+	    if (modelEvent->isa(Note::EventType))
+		(*i)->set<Bool>(TIED_FORWARD, true);
 
             i = segment().findTime((*i)->getAbsoluteTime() + existingDuration);
 
 	    return insertSomething
-		(i, duration - existingDuration, pitch, isRest, true, acc);
+		(i, duration - existingDuration, modelEvent, true);
 
 	} else {
-
 	    cerr << "No need to split new note" << endl;
-
-	    return insertSingleSomething(i, duration, pitch, isRest,
-					 tiedBack, acc);
+	    return insertSingleSomething(i, duration, modelEvent, tiedBack);
 	}
     }
 }
 
 Segment::iterator
 SegmentNotationHelper::insertSingleSomething(iterator i, int duration,
-					     int pitch, bool isRest,
-					     bool tiedBack,
-					     Accidental acc)
+					     Event *modelEvent, bool tiedBack)
 {
     timeT time;
     bool eraseI = false;
@@ -811,22 +815,15 @@ SegmentNotationHelper::insertSingleSomething(iterator i, int duration,
 	time = segment().getEndTime();
     } else {
 	time = (*i)->getAbsoluteTime();
-	if (isRest || (*i)->isa(Note::EventRestType)) eraseI = true;
+	if (modelEvent->isa(Note::EventRestType) ||
+	    (*i)->isa(Note::EventRestType)) eraseI = true;
     }
 
-    Event *e = new Event(isRest ? Note::EventRestType : Note::EventType,
-			 time, effectiveDuration);
-
-    if (!isRest) {
-        e->set<Int>(PITCH, pitch);
-        if (acc != Accidentals::NoAccidental) {
-            e->set<String>(ACCIDENTAL, acc);
-        }
-    }
+    Event *e = new Event(*modelEvent, time, effectiveDuration);
 
     setInsertedNoteGroup(e, i);
 
-    if (tiedBack && !isRest) {
+    if (tiedBack && e->isa(Note::EventType)) {
         e->set<Bool>(TIED_BACKWARD, true);
     }
 
@@ -842,10 +839,14 @@ SegmentNotationHelper::setInsertedNoteGroup(Event *e, iterator i)
     // two notes in the same group, but that's quite wrong-headed: we
     // want to place it in the same group as any existing note at the
     // same time, or else the nearest note thereafter if there are no
-    // rests in between.  The exception is for tupled groups, where
-    // we don't care whether an event is a note or not
+    // rests, or "subsequent" notes, in between.  The exception is for
+    // tupled groups, where we don't care whether an event is a note
+    // or not
+
+    timeT myEndTime = e->getAbsoluteTime() + e->getDuration();
 
     while (i != end()) {
+
 	if ((*i)->has(BEAMED_GROUP_ID)) {
 
 	    string type = (*i)->get<String>(BEAMED_GROUP_TYPE);
@@ -872,7 +873,8 @@ SegmentNotationHelper::setInsertedNoteGroup(Event *e, iterator i)
 
 	    return;
 
-	} else if ((*i)->isa(Note::EventRestType)) return;
+	} else if ((*i)->isa(Note::EventRestType) ||
+		   (*i)->getAbsoluteTime() >= myEndTime) return;
 
 	++i;
     }

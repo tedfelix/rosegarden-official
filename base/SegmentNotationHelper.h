@@ -227,6 +227,22 @@ public:
 			Accidental explicitAccidental);
 
     /**
+     * Inserts a note, doing all the clever split/merge stuff as
+     * appropriate.  Requires segment to be in a composition.  Returns
+     * iterator pointing to last event inserted (there may be more
+     * than one, as note may have had to be split)
+     *
+     * This method will only work correctly if there is a note or
+     * rest event already starting at the model event's absoluteTime.
+     *
+     * Passing a model event has the advantage over the previous
+     * method of allowing additional properties to be supplied.  The
+     * model event will be copied but not itself used; the caller
+     * continues to own it and should release it after return.
+     */
+    iterator insertNote(Event *modelEvent);
+
+    /**
      * Inserts a rest, doing all the clever split/merge stuff as
      * appropriate.  Requires segment to be in a composition.  
      * Returns iterator pointing to last event inserted (there
@@ -483,13 +499,12 @@ protected:
 
 
     /// for use by insertNote and insertRest
-    iterator insertSomething(iterator position, int duration, int pitch,
-			     bool isRest, bool tiedBack,
-			     Accidental explicitAcc);
+    iterator insertSomething(iterator position, int duration,
+			     Event *modelEvent, bool tiedBack);
 
     /// for use by insertSomething
-    iterator insertSingleSomething(iterator position, int duration, int pitch,
-				   bool isRest, bool tiedBack, Accidental);
+    iterator insertSingleSomething(iterator position, int duration,
+				   Event *modelEvent, bool tiedBack);
 
     /// for use by insertSingleSomething
     void setInsertedNoteGroup(Event *e, iterator i);

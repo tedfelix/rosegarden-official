@@ -112,18 +112,25 @@ NoteInsertionCommand::modifySegment()
     // about it, we're going to have to discover _all_ the notes that
     // the helper just inserted... oh screw.
 
+    Event *e = new Event
+	(Note::EventType, m_insertionTime, m_note.getDuration());
+
+    e->set<Int>(PITCH, m_pitch);
+
+    if (m_accidental != Rosegarden::Accidentals::NoAccidental) {
+	e->set<String>(ACCIDENTAL, m_accidental);
+    }
+
+    if (m_noteStyle != NoteStyleFactory::DefaultStyle) {
+	e->set<String>(NotationProperties::NOTE_STYLE, m_noteStyle);
+    }
+
     if (m_matrixType) {
-
-	Event *e = new Event
-	    (Note::EventType, m_insertionTime, m_note.getDuration());
-	e->set<Int>(PITCH, m_pitch);
-	if (m_accidental != Rosegarden::Accidentals::NoAccidental) {
-	    e->set<String>(ACCIDENTAL, m_accidental);
-	}
 	i = Rosegarden::SegmentMatrixHelper(segment).insertNote(e);
-
     } else {
-	i = helper.insertNote(m_insertionTime, m_note, m_pitch, m_accidental);
+	i = helper.insertNote(e);
+	// e is just a model for SegmentNotationHelper::insertNote
+	delete e;
     }
 
     if (i != segment.end()) m_lastInsertedEvent = *i;
