@@ -1,0 +1,15 @@
+Installing ALSA 0.9.0beta12 on a Mandrake 8.1 system
+----------------------------------------------------
+rwb 08.04.2002
+
+Get the packages: driver, lib and utils.
+Make and install - careful if you've already got aRts installed
+as the new version alsa libs when installed in the default 
+paths will overwrite the old libs.  Upversioned.
+
+There is the "Mandrake devfs problem" as documented in this link:
+
+http://www.mail-archive.com/alsa-user@lists.sourceforge.net/msg02737.html
+
+Switching off devfs support in your lilo or grub boot menu should
+fix this.
