@@ -19,6 +19,8 @@
     COPYING included with this distribution for more information.
 */
 
+#include <qapplication.h>
+
 #include <kstatusbar.h>
 #include <klocale.h>
 
@@ -29,12 +31,14 @@ KTmpStatusMsg::KTmpStatusMsg(const QString& msg, KStatusBar* bar, int id)
       m_id(id)
 {
     m_statusBar->changeItem(msg, m_id);
+    qApp->processEvents(500);
 }
 
 KTmpStatusMsg::~KTmpStatusMsg()
 {
     m_statusBar->clear();
     m_statusBar->changeItem(m_defaultMsg, m_id);
+    qApp->processEvents(500);
 }
 
 
