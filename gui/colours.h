@@ -21,6 +21,7 @@
 #ifndef _COLOURS_H_
 #define _COLOURS_H_
 
+#include "Colour.h"
 #include <qcolor.h>
 
 /**
@@ -111,6 +112,10 @@ namespace RosegardenGUIColours
     extern const QColor RotaryPastelYellow;
 
     extern const QColor RotaryPlugin;
+
+    Rosegarden::RColour convertColour(QColor input);
+    QColor convertColour(Rosegarden::RColour input);
+
 }
 
 #endif

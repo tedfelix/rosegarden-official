@@ -107,6 +107,20 @@ namespace RosegardenGUIColours
 
     const QColor RotaryPlugin = QColor(185, 255, 248);
 
+Rosegarden::RColour
+convertColour (const QColor& input)
+{
+	int r,g,b;
+	input.rgb(&r, &g, &b);
+	return Rosegarden::RColour(r,g,b);
+}
+
+QColor
+convertColour(const Rosegarden::RColour& input)
+{
+	return QColor(input.getRed(), input.getGreen(), input.getBlue());
+}
+
 }
 
 

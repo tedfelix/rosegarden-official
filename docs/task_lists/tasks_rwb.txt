@@ -1,6 +1,10 @@
 0.9.5 tasks
 ===========
 
+o Process management
+  - killing older copies of the sequencer and children
+  - starting and managing JACK if requested in configure options
+
 o MTC/MMC - transport awareness
   - we're now sending Midi RealTime sequencer control messages
     and adding infrastructure for real time clock messages
