@@ -443,6 +443,11 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
 	return;
     }
 
+    if (segmentsToEdit.empty()) {
+	KMessageBox::sorry(this, i18n("No non-audio segments selected"));
+	return;
+    }
+
     MatrixView *matrixView = new MatrixView(getDocument(),
                                             segmentsToEdit,
                                             this);
@@ -520,6 +525,11 @@ void RosegardenGUIView::slotEditSegmentEventList(Rosegarden::Segment *p)
 	     i != selection.end(); ++i) {
 	    slotEditSegmentEventList(*i);
 	}
+	return;
+    }
+
+    if (segmentsToEdit.empty()) {
+	KMessageBox::sorry(this, i18n("No non-audio segments selected"));
 	return;
     }
 
