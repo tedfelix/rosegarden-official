@@ -114,8 +114,25 @@ protected slots:
     void updateTrackInstrumentAndStartIndex(TrackItem*);
 
 signals:
+    /**
+     * Emitted when the represented data changed and the TracksCanvas
+     * needs to update itself
+     *
+     * @see TracksCanvas::update()
+     */
     void needUpdate();
-    void createNewTrack(TrackItem*);
+
+    /**
+     * Emitted when a new track is created by the user
+     * \a item is the TrackItem representing the track on the TracksCanvas
+     * \a instrument is the instrument for the track
+     *
+     * It is up to the slot to create the new Track, to insert it in the
+     * Composition and to set its instrument.
+     *
+     * @see RosegardenGUIDoc::createNewTrack()
+     */
+    void createNewTrack(TrackItem* item, int instrument);
 
 protected:
 

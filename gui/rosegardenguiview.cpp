@@ -60,8 +60,8 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     connect(tracksEditor->canvas(), SIGNAL(editTrackSmall(Rosegarden::Track*)),
             SLOT(editTrackNotationSmall(Rosegarden::Track*)));
 
-    connect(tracksEditor,  SIGNAL(createNewTrack(TrackItem*)),
-            getDocument(), SLOT  (createNewTrack(TrackItem*)));
+    connect(tracksEditor,  SIGNAL(createNewTrack(TrackItem*,int)),
+            getDocument(), SLOT  (createNewTrack(TrackItem*,int)));
 
     connect(this,                   SIGNAL(setTool(TracksCanvas::ToolType)),
             tracksEditor->canvas(), SLOT(setTool(TracksCanvas::ToolType)));

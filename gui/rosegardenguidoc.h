@@ -167,9 +167,9 @@ public slots:
 
     /**
      * Create a new track according to the data in the specified
-     * TrackItem
+     * TrackItem, and set the track's instrument to \a instrument
      */
-    void createNewTrack(TrackItem*);
+    void createNewTrack(TrackItem*, int instrument);
 
 protected:
 

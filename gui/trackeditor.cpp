@@ -212,12 +212,11 @@ void TracksEditor::trackOrderChanged(int section, int fromIdx, int toIdx)
 void
 TracksEditor::addTrack(TrackItem *p)
 {
-    emit createNewTrack(p);
-
-    // find instrument for part
+    // first find instrument for part, as it is used for indexing
     //
     int instrument = m_vHeader->sectionAt(static_cast<int>(p->y()));
-    p->setInstrument(instrument);
+
+    emit createNewTrack(p, instrument);
 
     kdDebug(KDEBUG_AREA) << QString("TracksEditor::addTrack() : track instr is %1 at y=%2")
         .arg(instrument).arg(p->y())

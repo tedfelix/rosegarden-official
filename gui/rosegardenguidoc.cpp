@@ -351,15 +351,19 @@ RosegardenGUIDoc::xmlParse(QFile &file, QString &errMsg)
 
 
 void
-RosegardenGUIDoc::createNewTrack(TrackItem *p)
+RosegardenGUIDoc::createNewTrack(TrackItem *p, int instrument)
 {
     kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewTrack(item : "
                          << p << ")\n";
 
     Track *newTrack = new Track(p->getItemNbTimeSteps(), p->getStartIndex());
+    newTrack->setInstrument(instrument);
 
     // store ptr to new track in track part item
     p->setTrack(newTrack);
+
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewTrack() new track = "
+                         << newTrack << endl;
     
     m_composition.addTrack(newTrack);
 
