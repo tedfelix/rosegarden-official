@@ -1838,7 +1838,7 @@ SegmentNotationHelper::splitPreservingPerformanceTimes(Event *e, timeT q1)
     e2->setNotationDuration(qd - q1);
 
     e1->set<Bool>(TIED_FORWARD, true);
-    e1->set<Bool>(TIED_BACKWARD, true);
+    e2->set<Bool>(TIED_BACKWARD, true);
 
     return std::pair<Event *, Event *>(e1, e2);
 }
