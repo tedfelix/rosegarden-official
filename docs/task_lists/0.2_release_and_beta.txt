@@ -1,0 +1,50 @@
+0.2, beta and beyond
+====================
+
+[25th July 2002]
+
+The plan is to have two releases of RG - the first tentatively booked for the
+9th August will be 0.2 and have all major functionality required of a 
+reasonable sequencer, from our perspective these tasks are:
+
+o Audio completed - perhaps some LADSPA plugins but certainly audio volume
+  and basic audio effects (split, combine audio segments, fade in and fade
+  out)
+
+o Supported extra MIDI events (CC, PC, SysEx still outstanding) and some
+  form of representation on screen
+
+o Matrix view completion - sweep selection, quantisation and instrument
+  parameter style box for matrix events, fixing insertion and outstanding
+  bugs
+
+o Recording toggle rather than recording start just starting
+
+o Event list - Spacey might get involved, he might not, in the meantime 
+  knocking up a putative event list with a QFileView is pretty simple and
+  we could use the existing Event editor for modifying parameters.
+  Basic filtering on Event list for Event type.
+
+o Automatic RG file backups ('n' copies of old file)
+
+Looking at 0.2_planned_tasks this list seems to tie-in quite well.  At a 
+push I think this is probably acheivable - this will all be at a push of
+course!
+
+Ok, so that's up to the 9th - that will be the basic feature set we need.
+From the 9th until the end of the month it's going to be polishing and
+tweaking these features and generally cutting out the bugs, using,
+recording, editing and starting to work with the whole thing to make sure
+it's of high enough quality and sane enough to actually use.  Then a feature
+freeze at the end of August until the end of September during that time we
+should polish further and encourage more testing and feedback towards an
+official beta release.  Bug fixes only and more polishing until we're happy
+enough to release sometime in September - possibly call this release 0.8 or
+less depending on our level of happiness with it.  Considering that
+sequencer-wise there's still potentially a load to do we should make
+this call closer to the time.
+
+So, hopefully by the end of Sept most of the RG code will be ready enough
+for a good user release/beta.
+
+
