@@ -26,7 +26,7 @@ using std::endl;
 using std::cout;
 using Rosegarden::MappedEvent;
 
-#define DEBUG_META_ITERATOR 1
+//#define DEBUG_META_ITERATOR 1
 
 MmappedSegment::MmappedSegment(const QString filename)
     : m_fd(-1),
@@ -350,7 +350,9 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool firstFetch,
                                                             const Rosegarden::RealTime& startTime,
                                                             const Rosegarden::RealTime& endTime)
 {
+#ifdef DEBUG_META_ITERATOR
     SEQUENCER_DEBUG << "fillCompositionWithEventsUntil " << endTime << endl;
+#endif
 
     m_currentTime = endTime;
 
