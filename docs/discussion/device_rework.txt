@@ -102,6 +102,17 @@ be available to external processes for automation through DCOP.
  2. Implement DCOP-based reconnection API -- should in theory be
  pretty trivial... shouldn't it?
 
+    * Change names so as to make it clearer that the default name for
+      each MIDI Device is indeed only a default (the port name probably
+      shouldn't really be part of the name, but should be appended by
+      querying the Connection for the Device).  I think we need a very
+      simple Connection structure that contains only a string (connection
+      name): we query the driver to find out which connection a given
+      device has, and to find out the list of all connections (this is
+      what should happen on sync()), and to actually connect a device to
+      a connection.  Un-re-connectable drivers would just refuse the
+      latter function (and report that they're un-re-connectable).
+ 
  3. Then worry about channel groups.  I'm very vague on this still.
 
  4. ???

@@ -388,7 +388,7 @@ AlsaDriver::generateInstruments()
                         snd_seq_port_info_get_client(pinfo));
 #else
 		char clientId[20];
-		sprintf(clientId, "%d:%d ",
+		sprintf(clientId, "MIDI Device at %d:%d ",
 			snd_seq_port_info_get_client(pinfo),
 			snd_seq_port_info_get_port(pinfo));
 #endif
