@@ -42,6 +42,10 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
+// use this flag to cheat when setting up new devices
+//
+bool _newBank = false;
+
 BankEditorDialog::BankEditorDialog(QWidget *parent,
                                    Rosegarden::Studio *studio):
     KDialogBase(parent, "", true, i18n("Manage Banks and Programs..."),
@@ -108,12 +112,18 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_msb->setMaxValue(127);
     gridLayout->addWidget(m_msb, 1, 5, AlignRight);
 
+    connect(m_msb, SIGNAL(valueChanged(int)),
+            this, SLOT(slotNewMSB(int)));
+
     gridLayout->addWidget(new QLabel(i18n("LSB Value"), m_mainFrame),
                           2, 4, AlignRight);
     m_lsb = new QSpinBox(m_mainFrame);
     m_lsb->setMinValue(0);
     m_lsb->setMaxValue(127);
     gridLayout->addWidget(m_lsb, 2, 5, AlignRight);
+
+    connect(m_lsb, SIGNAL(valueChanged(int)),
+            this, SLOT(slotNewLSB(int)));
 
     /*
     gridLayout->addWidget(new QLabel(i18n("Manage Banks:"), frame),
@@ -197,14 +207,12 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     enableButtonOK(false);
     enableButtonApply(false);
 
-    /*
     // modification
     connect(m_deviceCombo, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotModifyDeviceName(const QString&)));
 
     connect(m_bankCombo, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotModifyBankName(const QString&)));
-            */
 
     connect(m_addBank, SIGNAL(released()),
             this, SLOT(slotAddBank()));
@@ -251,14 +259,6 @@ BankEditorDialog::slotPopulateDeviceBank(int deviceNo, int bank)
 void
 BankEditorDialog::slotPopulateDevice(int devNo)
 {
-    /*
-    disconnect(m_deviceCombo, SIGNAL(textChanged(const QString&)),
-               this, SLOT(slotModifyDeviceName(const QString&)));
-
-    disconnect(m_bankCombo, SIGNAL(textChanged(const QString&)),
-               this, SLOT(slotModifyBankName(const QString&)));
-               */
-
     if (m_modified)
     {
         // then ask if we want to apply the changes
@@ -283,15 +283,6 @@ BankEditorDialog::slotPopulateDevice(int devNo)
 
     slotPopulateDeviceBank(devNo, 0);
 
-    /*
-
-    connect(m_deviceCombo, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotModifyDeviceName(const QString&)));
-
-    connect(m_bankCombo, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotModifyBankName(const QString&)));
-            */
-
 }
 
 
@@ -300,16 +291,11 @@ BankEditorDialog::slotPopulateDevice(int devNo)
 void
 BankEditorDialog::slotPopulateBank(int bank)
 {
+    //cout << "SLOT POPULATE BANK" << endl;
+    _newBank = true;
+
     Rosegarden::MidiDevice *device =
         getMidiDevice(m_deviceCombo->currentItem());
-
-    /*
-    disconnect(m_deviceCombo, SIGNAL(textChanged(const QString&)),
-               this, SLOT(slotModifyDeviceName(const QString&)));
-
-    disconnect(m_bankCombo, SIGNAL(textChanged(const QString&)),
-               this, SLOT(slotModifyBankName(const QString&)));
-    */
 
     if (device)
     {
@@ -340,13 +326,7 @@ BankEditorDialog::slotPopulateBank(int bank)
 
     }
 
-    /*
-    connect(m_deviceCombo, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotModifyDeviceName(const QString&)));
-
-    connect(m_bankCombo, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotModifyBankName(const QString&)));
-            */
+    _newBank = false;
 
 }
 
@@ -381,6 +361,8 @@ BankEditorDialog::slotApply()
 void
 BankEditorDialog::slotAddBank()
 {
+    _newBank = true;
+
     Rosegarden::MidiDevice *device =
         getMidiDevice(m_deviceCombo->currentItem());
 
@@ -400,11 +382,15 @@ BankEditorDialog::slotAddBank()
                                m_bankCombo->count());
     }
 
+    _newBank = false;
+
 }
 
 void
 BankEditorDialog::slotDeleteBank()
 {
+    _newBank = true;
+
     Rosegarden::MidiDevice *device =
         getMidiDevice(m_deviceCombo->currentItem());
 
@@ -413,11 +399,15 @@ BankEditorDialog::slotDeleteBank()
         slotPopulateDevice(m_deviceCombo->currentItem());
     }
 
+    _newBank = false;
+
 }
 
 void
 BankEditorDialog::slotDeleteAllBanks()
 {
+    _newBank = true;
+
     Rosegarden::MidiDevice *device =
         getMidiDevice(m_deviceCombo->currentItem());
 
@@ -427,6 +417,8 @@ BankEditorDialog::slotDeleteAllBanks()
         device->clearBankList();
         slotPopulateDevice(m_deviceCombo->currentItem());
     }
+
+    _newBank = false;
 
 }
 
@@ -456,6 +448,8 @@ BankEditorDialog::getMidiDevice(int number)
     return dynamic_cast<Rosegarden::MidiDevice*>(*it);
 }
 
+// Try to find a unique MSB/LSB pair for a new bank
+//
 std::pair<int, int>
 BankEditorDialog::getFirstFreeBank(int devNo)
 {
@@ -466,33 +460,13 @@ BankEditorDialog::getFirstFreeBank(int devNo)
 
     if (device)
     {
-
-        std::vector<Rosegarden::MidiBank>::iterator it;
-        std::vector<int> allMSB;
-        std::vector<int> allLSB;
-
-        for (it = m_bankList.begin(); it != m_bankList.end(); it++)
-        {
-            allMSB.push_back(it->msb);
-            allLSB.push_back(it->lsb);
-        }
-
         do
         {
             lsb = 0;
-
-            while(std::find(allLSB.begin(), allLSB.end(), lsb) != allLSB.end()
-                  && lsb < 128)
+            while(banklistContains(msb, lsb) && lsb < 128)
                 lsb++;
         }
         while (lsb == 128 && msb++);
-
-        /*
-        while(std::find(allMSB.begin(), allMSB.end(), msb) != allMSB.end()
-              && msb < 128)
-            msb++;
-            */
-
     }
 
     return std::pair<int, int>(msb, lsb);
@@ -503,6 +477,14 @@ BankEditorDialog::getFirstFreeBank(int devNo)
 void
 BankEditorDialog::slotModifyBankName(const QString &label)
 {
+    /*
+    const QObject *s = sender();
+    const QComboBox *comboBox = dynamic_cast<const QComboBox*>(s);
+    if (comboBox) return;
+    */
+
+    if (_newBank) return;
+
     m_bankList[m_bankCombo->currentItem()].name = qstrtostr(label);
     m_bankCombo->changeItem(label, m_bankCombo->currentItem());
 
@@ -512,8 +494,14 @@ BankEditorDialog::slotModifyBankName(const QString &label)
 void
 BankEditorDialog::slotModifyDeviceName(const QString &label)
 {
-    m_deviceCombo->changeItem(label, m_deviceCombo->currentItem());
+    /*
+    const QObject *s = sender();
+    const QComboBox *comboBox = dynamic_cast<const QComboBox*>(s);
+    if (comboBox) return;
+    */
 
+
+    m_deviceCombo->changeItem(label, m_deviceCombo->currentItem());
     setModified(true);
 }
 
@@ -528,13 +516,11 @@ BankEditorDialog::setModified(bool value)
         enableButtonOK(true);
         enableButtonApply(true);
     }
-    /*
     else
     {
         enableButtonOK(false);
         enableButtonApply(false);
     }
-    */
 
     m_modified = value;
 }
@@ -542,9 +528,117 @@ BankEditorDialog::setModified(bool value)
 void
 BankEditorDialog::slotProgramChanged(const QString &program, int id)
 {
-    cout << "PROGRAM (" << id << ") = \"" << program << "\"" << endl;
-    m_programList[id].name = qstrtostr(program);
-    setModified(true);
+    //cout << "PROGRAM (" << id << ") = \"" << program << "\"" << endl;
+    if (qstrtostr(program) != m_programList[id].name)
+    {
+        m_programList[id].name = qstrtostr(program);
+        setModified(true);
+    }
+}
+
+void
+BankEditorDialog::slotNewMSB(int value)
+{
+    if (_newBank == false)
+    {
+        disconnect(m_msb, SIGNAL(valueChanged(int)),
+                   this, SLOT(slotNewMSB(int)));
+
+        int msb;
+
+        try
+        {
+            msb = ensureUniqueMSB(value, value >
+                             m_bankList[m_bankCombo->currentItem()].msb);
+        }
+        catch(bool)
+        {
+            msb = m_bankList[m_bankCombo->currentItem()].msb;
+        }
+
+        m_msb->setValue(msb);
+        m_bankList[m_bankCombo->currentItem()].msb = msb;
+
+        connect(m_msb, SIGNAL(valueChanged(int)),
+                this, SLOT(slotNewMSB(int)));
+
+        setModified(true);
+    }
+
+}
+
+void
+BankEditorDialog::slotNewLSB(int value)
+{
+    if (_newBank == false)
+    {
+        disconnect(m_lsb, SIGNAL(valueChanged(int)),
+                   this, SLOT(slotNewLSB(int)));
+
+        int lsb;
+
+        try
+        {
+            lsb = ensureUniqueLSB(value, value >
+                         m_bankList[m_bankCombo->currentItem()].lsb);
+        }
+        catch(bool)
+        {
+            lsb = m_bankList[m_bankCombo->currentItem()].lsb;
+        }
+
+        m_lsb->setValue(lsb);
+        m_bankList[m_bankCombo->currentItem()].lsb = lsb;
+
+        connect(m_lsb, SIGNAL(valueChanged(int)),
+                this, SLOT(slotNewLSB(int)));
+
+        setModified(true);
+    }
+}
+
+int
+BankEditorDialog::ensureUniqueMSB(int msb, bool ascending)
+{
+    int newMSB = msb;
+    while (banklistContains(newMSB, m_lsb->value())
+           && newMSB < 128
+           && newMSB > -1)
+        if (ascending) newMSB++;
+        else newMSB--;
+
+   if (newMSB == -1 || newMSB == 128)
+       throw bool(false);
+
+    return newMSB;
+}
+
+int
+BankEditorDialog::ensureUniqueLSB(int lsb, bool ascending)
+{
+    int newLSB = lsb;
+    while (banklistContains(m_msb->value(), newLSB)
+           && newLSB < 128
+           && newLSB > -1)
+        if (ascending) newLSB++;
+        else newLSB--;
+
+   if (newLSB == -1 || newLSB == 128)
+       throw bool(false);
+
+    return newLSB;
+}
+
+bool
+BankEditorDialog::banklistContains(int msb, int lsb)
+{
+    std::vector<Rosegarden::MidiBank>::iterator it;
+
+    for (it = m_bankList.begin(); it != m_bankList.end(); it++)
+        if (it->msb == msb && it->lsb == lsb)
+            return true;
+
+    return false;
 }
 
 
@@ -562,6 +656,7 @@ ProgramLine::ProgramLine(QWidget *parent, int id):
 void
 ProgramLine::slotNewText(const QString &label)
 {
+    if (_newBank == false)
     emit newText(label, m_id);
 }
 

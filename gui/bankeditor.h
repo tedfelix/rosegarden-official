@@ -70,6 +70,13 @@ public:
 
     std::pair<int, int> getFirstFreeBank(int device);
 
+    int ensureUniqueMSB(int msb, bool ascending);
+    int ensureUniqueLSB(int lsb, bool ascending);
+
+    // Does the banklist contain this combination already?
+    //
+    bool banklistContains(int msb, int lsb);
+
     void setModified(bool value);
 
 public slots:
@@ -88,6 +95,11 @@ public slots:
     void slotModifyDeviceName(const QString&);
 
     void slotProgramChanged(const QString&, int);
+
+    // Check that any new MSB/LSB combination is unique for this device
+    //
+    void slotNewMSB(int value);
+    void slotNewLSB(int value);
 
 protected:
     // Get a MidiDevice from an index number

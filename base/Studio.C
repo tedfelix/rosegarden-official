@@ -370,7 +370,7 @@ Studio::unassignAllInstruments()
                     (*iit)->setSendPan(false);
                     (*iit)->setSendVelocity(false);
                     (*iit)->setPan(MidiMidValue);
-                    (*iit)->setVelocity(MidiMaxValue);
+                    (*iit)->setVelocity(100);
 
                 }
             }
