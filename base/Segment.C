@@ -108,12 +108,12 @@ Segment::Segment(const Segment &segment):
 
 Segment::~Segment()
 {
-    notifySourceDeletion();
-
     if (m_observers.size() > 0) {
 	cerr << "Warning: Segment::~Segment() with " << m_observers.size()
 	     << " observers still extant" << endl;
     }
+
+    notifySourceDeletion();
 
     if (m_composition) m_composition->detachSegment(this);
 

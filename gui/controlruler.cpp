@@ -1215,7 +1215,9 @@ PropertyControlRuler::~PropertyControlRuler()
 {
     if (m_staff) {
         m_staff->removeObserver(this);
-        m_staff->getSegment().removeObserver(this);
+    }
+    if (m_segment) {
+        m_segment->removeObserver(this);
     }
     
 }
