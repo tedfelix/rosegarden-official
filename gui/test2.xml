@@ -3,13 +3,12 @@
 <rosegarden-data>
 <Track>
 	<event duration="whole" pitch="4"/>
-	<event duration="half" pitch="6"/>
-	<event duration="half" pitch="6"/>
-	<event duration="quarter" pitch="7"/>
-	<event duration="quarter" pitch="7"/>
-	<event duration="quarter" pitch="7"/>
+	<event duration="quarter" pitch="4"/>
+	<event duration="whole" pitch="6"/>
+	<event duration="quarter" pitch="6"/>
+	<event duration="whole" pitch="7"/>
 	<event duration="quarter" pitch="7"/>
 	<event duration="whole" pitch="8"/>
-	<event duration="whole" pitch="8"/>
+	<event duration="quarter" pitch="8"/>
 </Track>
 </rosegarden-data>
