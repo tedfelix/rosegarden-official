@@ -64,10 +64,10 @@ case $AUTOMAKE_STRING in
     echo "*** KDE requires automake 1.5"
     exit 1
     ;;
-  automake*1.5* | automake*1.5-* | automake*1.6.* | automake*1.7* ) : ;;
+  automake*1.5* | automake*1.5-* | automake*1.6.* | automake*1.7* |  automake*1.8* ) : ;;
   "" )
     echo "*** AUTOMAKE NOT FOUND!."
-    echo "*** KDE requires automake 1.5"
+    echo "*** Rosegarden requires automake 1.5 or higher (up through 1.8)"
     exit 1
     ;;
   unsermake* ) :
@@ -76,7 +76,7 @@ case $AUTOMAKE_STRING in
     ;;
   * )
     echo "*** YOU'RE USING $AUTOMAKE_STRING."
-    echo "*** KDE requires automake 1.5"
+    echo "*** Rosegarden requires automake 1.5 or higher (up through 1.8)"
     exit 1
     ;;
 esac
