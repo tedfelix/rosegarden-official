@@ -276,11 +276,13 @@ Clef::Clef(const Event &e) :
 	return;
     }
 
-    std::string s = e.get<String>(ClefPropertyName);
+    std::string s;
+    e.get<String>(ClefPropertyName, s);
+
     if (s != Treble && s != Tenor && s != Alto && s != Bass) {
 	std::cerr << BadClefName("No such clef as \"" + s + "\"").getMessage()
 		  << std::endl;
-	return;
+	    return;
     }
 
     long octaveOffset = 0;
@@ -313,7 +315,8 @@ bool Clef::isValid(const Event &e)
 {
     if (e.getType() != EventType) return false;
 
-    std::string s = e.get<String>(ClefPropertyName);
+    std::string s;
+    e.get<String>(ClefPropertyName, s);
     if (s != Treble && s != Tenor && s != Alto && s != Bass) return false;
 
     return true;
@@ -388,7 +391,7 @@ Key::Key() :
 
 
 Key::Key(const Event &e) :
-    m_name(DefaultKey.m_name),
+    m_name(""),
     m_accidentalHeights(0)
 {
     checkMap();
@@ -398,7 +401,7 @@ Key::Key(const Event &e) :
 		  << std::endl;
 	return;
     }
-    m_name = e.get<String>(KeyPropertyName);
+    e.get<String>(KeyPropertyName, m_name);
     if (m_keyDetailMap.find(m_name) == m_keyDetailMap.end()) {
 	std::cerr << BadKeyName
 	    ("No such key as \"" + m_name + "\"").getMessage() << std::endl;
@@ -497,7 +500,8 @@ Key& Key::operator=(const Key &kc)
 bool Key::isValid(const Event &e)
 {
     if (e.getType() != EventType) return false;
-    std::string name = e.get<String>(KeyPropertyName);
+    std::string name;
+    e.get<String>(KeyPropertyName, name);
     if (m_keyDetailMap.find(name) == m_keyDetailMap.end()) return false;
     return true;
 }
@@ -675,7 +679,8 @@ Indication::Indication(const Event &e)
     if (e.getType() != EventType) {
         throw Event::BadType("Indication model event", EventType, e.getType());
     }
-    std::string s = e.get<String>(IndicationTypePropertyName);
+    std::string s;
+    e.get<String>(IndicationTypePropertyName, s);
     if (!isValid(s)) {
         throw BadIndicationName("No such indication as \"" + s + "\"");
     }
@@ -683,7 +688,7 @@ Indication::Indication(const Event &e)
 
     m_duration = e.getDuration();
     if (m_duration == 0) {
-	m_duration = e.get<Int>(IndicationDurationPropertyName); // obsolete property
+	e.get<Int>(IndicationDurationPropertyName, m_duration); // obsolete property
     }
 }
 
@@ -760,8 +765,11 @@ Text::Text(const Event &e)
         throw Event::BadType("Text model event", EventType, e.getType());
     }
 
-    m_text = e.get<String>(TextPropertyName);
-    m_type = e.get<String>(TextTypePropertyName);
+    m_text = "";
+    m_type = Text::UnspecifiedType;
+
+    e.get<String>(TextPropertyName, m_text);
+    e.get<String>(TextTypePropertyName, m_type);
 }
 
 Text::Text(const std::string &s, const std::string &type) :
@@ -1549,8 +1557,10 @@ TimeSignature::TimeSignature(const Event &e)
     if (e.getType() != EventType) {
         throw Event::BadType("TimeSignature model event", EventType, e.getType());
     }
-    m_numerator = e.get<Int>(NumeratorPropertyName);
-    m_denominator = e.get<Int>(DenominatorPropertyName);
+    m_numerator = 4;
+    m_denominator = 4;
+    e.get<Int>(NumeratorPropertyName, m_numerator);
+    e.get<Int>(DenominatorPropertyName, m_denominator);
 
     m_common = false;
     e.get<Bool>(ShowAsCommonTimePropertyName, m_common);

@@ -26,7 +26,10 @@ namespace Rosegarden
 {
 
 static MidiByte getByte(const Event &e, const PropertyName &name) {
-    long value = e.get<Int>(name);
+    long value = -1;
+    try {
+	value = e.get<Int>(name);
+    } catch (...) { }
     if (value < 0 || value > 255) throw MIDIValueOutOfRange(name.getName());
     return MidiByte(value);
 }
@@ -240,7 +243,8 @@ SystemExclusive::SystemExclusive(const Event &e)
     if (e.getType() != EventType) {
         throw Event::BadType("SystemExclusive model event", EventType, e.getType());
     }
-    std::string datablock = e.get<String>(DATABLOCK);
+    std::string datablock;
+    e.get<String>(DATABLOCK, datablock);
     m_rawData = toRaw(datablock);
 }
 

@@ -359,9 +359,13 @@ AnalysisHelper::makeHarmonyGuessList(CompositionTimeSliceAdapter &c,
         {
 	    if ((*i)->isa(Note::EventType))
             {
-                int pitch = (*i)->get<Int>(BaseProperties::PITCH);
-                delta[pitch % 12] += 1 << int(emphasis);
-                ++noteCount;
+		try {
+		    int pitch = (*i)->get<Int>(BaseProperties::PITCH);
+		    delta[pitch % 12] += 1 << int(emphasis);
+		    ++noteCount;
+		} catch (...) {
+		    std::cerr << "No pitch for note at " << time << "!" << std::endl;
+		}
             }
         }
 
@@ -1043,14 +1047,18 @@ AnalysisHelper::guessKey(CompositionTimeSliceAdapter &c)
         // Skip any other non-notes
         if (!(*i)->isa(Note::EventType)) continue;
 
-        // Get pitch, metric strength of this event
-        int pitch = (*i)->get<Int>(BaseProperties::PITCH)%12;
-        int emphasis =
-            1 << timeSig.getEmphasisForTime((*i)->getAbsoluteTime() - timeSigTime);
+	try {
+	    // Get pitch, metric strength of this event
+	    int pitch = (*i)->get<Int>(BaseProperties::PITCH)%12;
+	    int emphasis =
+		1 << timeSig.getEmphasisForTime((*i)->getAbsoluteTime() - timeSigTime);
+	    
+	    // Count notes
+	    weightedNoteCount[pitch] += emphasis;
 
-        // Count notes
-        weightedNoteCount[pitch] += emphasis;
-
+	} catch (...) {
+	    std::cerr << "No pitch for note at " << time << "!" << std::endl;
+	}
     }
 
     // 2. Figure out what key best fits the distribution of emphasis.
