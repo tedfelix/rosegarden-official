@@ -38,7 +38,7 @@ class NotationView : public KMainWindow
     Q_OBJECT
 public:
 
-    NotationView(RosegardenGUIDoc* doc);
+    NotationView(RosegardenGUIDoc* doc, QWidget *parent);
     ~NotationView();
 
     const RosegardenGUIDoc *getDocument() const { return m_document; }

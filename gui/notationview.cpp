@@ -40,8 +40,8 @@
 
 #include "rosedebug.h"
 
-NotationView::NotationView(RosegardenGUIDoc* doc)
-    : KMainWindow(0),
+NotationView::NotationView(RosegardenGUIDoc* doc, QWidget *parent)
+    : KMainWindow(parent),
       m_config(kapp->config()),
       m_document(doc),
       m_canvasView(new QCanvasView(new QCanvas(width() * 2,
@@ -62,6 +62,8 @@ NotationView::NotationView(RosegardenGUIDoc* doc)
     setBackgroundMode(PaletteBase);
 
     setCentralWidget(m_canvasView);
+
+    readOptions();
 
     if (doc) {
         setCaption(doc->getTitle());
@@ -108,7 +110,8 @@ NotationView::NotationView(RosegardenGUIDoc* doc)
 
 NotationView::~NotationView()
 {
-    
+    kdDebug(KDEBUG_AREA) << "-> ~NotationView()\n";
+
     // Delete canvas items.
     QCanvasItemList allItems = canvas()->allItems();
     QCanvasItemList::Iterator it;
@@ -119,6 +122,10 @@ NotationView::~NotationView()
     delete canvas();
     delete m_hlayout;
     delete m_vlayout;
+
+    saveOptions();
+
+    kdDebug(KDEBUG_AREA) << "<- ~NotationView()\n";
 }
 
 void
