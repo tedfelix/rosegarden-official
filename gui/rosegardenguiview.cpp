@@ -426,7 +426,7 @@ void RosegardenGUIView::deleteRecordingSegmentItem()
 void RosegardenGUIView::setLoopMarker(Rosegarden::timeT startLoop,
                                       Rosegarden::timeT endLoop)
 {
-    m_barButtons->slotSetLoopMarker(startLoop, endLoop);
+    m_trackEditor->getBarButtons()->slotSetLoopMarker(startLoop, endLoop);
 }
 
 
@@ -435,7 +435,7 @@ void RosegardenGUIView::setLoopMarker(Rosegarden::timeT startLoop,
 void RosegardenGUIView::showVisuals(const Rosegarden::MappedEvent *mE)
 {
     double value = ((double)mE->getVelocity()) / 127.0;
-    m_trackButtons->setTrackMeter(value, mE->getTrack());
+    m_trackEditor->getTrackButtons()->setTrackMeter(value, mE->getTrack());
 }
 
 
@@ -449,7 +449,7 @@ void
 RosegardenGUIView::setShift(const bool &value)
 {
     m_trackEditor->setSelectAdd(value);
-    m_barButtons->setLoopingMode(value);
+    m_trackEditor->getBarButtons()->setLoopingMode(value);
     m_trackEditor->setFineGrain(value);
 } 
 

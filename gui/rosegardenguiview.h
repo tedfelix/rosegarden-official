@@ -39,8 +39,6 @@ class QScrollView;
 class RosegardenGUIDoc;
 class TrackEditor;
 class KPrinter;
-class BarButtons;
-class TrackButtons;
 
 /**
  * The RosegardenGUIView class provides the view widget for the
@@ -183,9 +181,6 @@ protected:
     Rosegarden::RulerScale   *m_rulerScale;
     QScrollView              *m_trackEditorScrollView;
     TrackEditor              *m_trackEditor;
-    BarButtons               *m_barButtons;
-    TrackButtons             *m_trackButtons;
-
 };
 
 #endif // ROSEGARDENGUIVIEW_H
