@@ -76,6 +76,7 @@
 #include "sequencemanager.h"
 #include "kstartuplogo.h"
 #include "AudioPluginInstance.h"
+#include "notationcommands.h" // for normalize rests
 
 
 using Rosegarden::Composition;
@@ -1409,13 +1410,19 @@ RosegardenGUIDoc::stopRecordingMidi()
 	command->addCommand
 	    (new EventQuantizeCommand
 	     (*m_recordSegment,
-	      m_recordSegment->getComposition()
-	      ->getBarStartForTime(m_recordSegment->getStartTime()),
-	      m_recordSegment->getComposition()
-	      ->getBarEndForTime(m_recordSegment->getEndTime()),
+	      m_recordSegment->getStartTime(),
+	      m_recordSegment->getEndTime(),
 	      "Notation Options",
 	      true));
 
+	command->addCommand
+	    (new TransformsMenuNormalizeRestsCommand
+	     (*m_recordSegment,
+	      m_recordSegment->getComposition()->getBarStartForTime
+	      (m_recordSegment->getStartTime()),
+	      m_recordSegment->getComposition()->getBarEndForTime
+	      (m_recordSegment->getEndTime())));
+	
 	command->addCommand
 	    (new SegmentRecordCommand
 	     (m_recordSegment));
