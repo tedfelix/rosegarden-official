@@ -60,7 +60,7 @@
 <Menu name="Transforms">
   <text>Ad&amp;just</text>
    <Menu name="quantize_notes">
-	 <text>&amp;Quantize Notes</text>
+	 <text>&amp;Quantize</text>
    	 <Action name="quantize"/>
 	 <Action name="repeat_quantize"/>
 	 <Action name="legatoize"/>

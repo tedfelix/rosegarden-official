@@ -126,6 +126,9 @@
       having to use RG for MIDI routing and being unable to use RG
       for audio routing.
 
+    * Uh, Pedro implemented this multiport recording but we can't
+      actually split the results can we?
+
     Troubleshooting
     ===============
 
@@ -143,44 +146,57 @@
     Still to do
     ===========
 
-    * Recording
- 
-    * Instrument parameter boxes
- 
-    * Rest of quantization section
-
     * Control rulers
+
+    * Controller editing
 
     * Event list
 
-    * Audio mixer
+    * Audio mixer and routing (inc making audio connections with JACK)
 
     * MIDI mixer
 
     * Plugins
 
+    * Synth plugins and native GUIs
+ 
     * Tempo / timesig editor
 
     * Triggered segments
 
-    * Matrix Quantize combo (there's a section for it, currently empty)
+    * Split by Pitch
 
-    * Synth plugins and native GUIs
- 
+    * Document properties
+
     * Add images for the tools (move, split &c) when describing them
+
+    * Add images for transport buttons in transport section
 
     * Update notation menu references
 
     * Add new notation stuff
 
+    * Config dialog
+
     * Make sure the guimenuitem etc tags are being used for all menu refs
 
+    * Give keyboard shortcuts for menu functions?
+
     * Go through again changing Rosegarden -> &rosegarden; and double-hyphen ->
-      &ndash; or &mdash;
+      &ndash; or &mdash; and review any uses of "the ... function" to see
+      if these words are redundant
 
     * Troubleshooter
 
+    * Check !!! items
+
     * Fill gaps in revision history
+
+    * Consistent capitalisation: Instrument Parameter Box or instrument
+      parameter box?  Audio Mixer or audio mixer?  Device or device?
+
+    * Finally, review the structure again and adjust the <chapter>/<sect*>
+      for balance
 
 -->
 
@@ -194,12 +210,12 @@
     <title>The Rosegarden Handbook</title>
     <authorgroup>
       <author>
-	<firstname>Richard</firstname>
-	<surname>Bown</surname>
-      </author>
-      <author>
 	<firstname>Chris</firstname>
 	<surname>Cannam</surname>
+      </author>
+      <author>
+	<firstname>Richard</firstname>
+	<surname>Bown</surname>
       </author>
       <author>
 	<firstname>Guillaume</firstname>
@@ -210,7 +226,7 @@
 
     <copyright>
       <year>2002-2004</year>
-      <holder>Richard Bown, Chris Cannam, Guillaume Laurent</holder>
+      <holder>Chris Cannam, Richard Bown, Guillaume Laurent</holder>
     </copyright>
 
     <date>2004-08-04</date>
@@ -283,7 +299,9 @@
 
     <para>
     This handbook summarises the capabilities of &rosegarden; and
-    provides a reference for some of the concepts involved.  If you
+    provides a reference for some of the concepts involved.  It's
+    designed to make sense either read in order or used as a reference
+    to the concepts and functions available in Rosegarden.  If you
     would like to read a tutorial as well, <ulink
     url="http://www.rosegardenmusic.com/resources/tutorial/using_en.shtml">you
     can find one here</ulink>.</para>
@@ -588,7 +606,8 @@
       </para>
 
       <para>
-	If you are intending to record from a MIDI device or audio
+	If you are intending to <link
+	linkend="recording">record</link> from a MIDI device or audio
 	input, you don't need to create a new segment to record into
 	first -- each separate recording always goes into a new
 	segment, created automatically during recording.
@@ -730,205 +749,6 @@
 	</para>
       </sect2>
     </sect1>
-
-    <sect1 id="segment-view-segmentparameterbox">
-      <title>The Segment Parameter Box</title>
-
-      <para>
-	<screenshot>
-	  <mediaobject>
-	    <imageobject>
-	      <imagedata fileref="rg-segmentparameterbox.png" format="PNG"/>
-      </imageobject>
-	<textobject>
-	  <phrase>&rosegarden;'s segment parameter box</phrase>
-	</textobject>
-      </mediaobject>
-      </screenshot>
-      </para>
-
-      <para>
-	The segment parameter box allows you to modify some aspects of the
-	selected segments.  If a single segment is currently selected, its
-	parameters will be shown in the segment parameter box and can be
-	edited there.  If several segments are selected, the parameter box
-	will only show the current values where they are the same for all
-	of the selected segments -- but you can still edit them, and your
-	changes will apply to the whole selection.
-
-	<variablelist>
-	  <varlistentry>
-	    <term>Label</term>
-	    <listitem>
-	      <para>Shows the label of the selected segment (or segments, if
-		they all have the same label).  Click the "..." button to edit
-		the label.</para>
-	    </listitem>
-	  </varlistentry>
-	  
-	  <varlistentry>
-	    <term>Repeat</term>
-	    <listitem>
-	      <para>Switches repeat on or off for the selected segments.  A
-		repeating segment will repeat until the start of the following
-		segment on the same track, or until the end of the composition
-		if there is no following segment.</para>
-
-	      <para>The repeated parts of a repeating segment are shown on
-		the main canvas in a fainter colour than the original segment.
-		You can turn them into real editable copies of the original
-		segment either by using
-	<menuchoice>
-	  <guimenu lang="en">Segments</guimenu>
-	  <guimenuitem>Turn Repeats into Copies</guimenuitem>
-	</menuchoice>, or simply by double-clicking on the
-		individual repeating blocks.</para>
-	    </listitem>
-	  </varlistentry>
-
-	  <varlistentry>
-	    <term>Quantize</term>
-	    <listitem>
-	      <para>
-		Shows the quantization setting for the selected
-		segments.  You can change this to quickly quantize
-		the start times of all their notes.  For more
-		advanced quantization, use <menuchoice>
-	  <guimenu lang="en">Segments</guimenu>
-	  <guimenuitem>Quantize...</guimenuitem>
-	</menuchoice>.  See <link
-		  linkend="quantization">Quantization</link> for more
-		details.
-	      </para>
-	    </listitem>
-	  </varlistentry>
-
-	  <varlistentry>
-	    <term>Transpose</term>
-	    <listitem>
-	      <para>Shows the transposition (in semitones) currently applied
-		to the selected segments.  This transposition is applied when
-		the segment is played, and is not shown in the notes displayed
-		in the matrix, notation or event list editors.  You can use
-		this to quickly change the pitch of part or all of a composition.</para>
-	    </listitem>
-	  </varlistentry>
-
-	  <varlistentry>
-	    <term>Delay</term>
-	    <listitem>
-	      <para>Shows the delay currently in effect on the selected
-		segments.  You can set a delay here in order to cause an entire
-		segment to play later than written.  This delay is applied when
-		the segment is played, and is not shown in the notes displayed
-		in the matrix, notation or event list editors.
-	      </para>
-	      <para>
-		You can set a delay either in musical time (by
-		choosing a note duration from the delay dropdown),
-		in which time the exact delay will depend on the
-		tempo, or in real time (by choosing a time in
-		milliseconds from the dropdown).
-	      </para>
-	    </listitem>
-	  </varlistentry>
-
-	  <varlistentry>
-	    <term>Colour</term>
-	    <listitem>
-	      <para>Shows the colour being used for the display of the
-		selected segments.  You can choose another colour from the
-		dropdown, or choose the "Add New Colour" option if you want a
-		colour not in the dropdown.
-	      </para>
-	      <para>
-		You can also manage and rename colours using
-<menuchoice>
-	  <guimenu lang="en">Composition</guimenu>
-	  <guimenuitem>Edit Document Properties...</guimenuitem>
-	</menuchoice>
-		(then choose the Colour page on the document properties
-		dialog).  The modified colour palette will be saved
-		with the composition in the Rosegarden file.
-		<screenshot>
-		  <mediaobject>
-		    <imageobject>
-		      <imagedata fileref="rg-colours.png" format="PNG"/>
-	      </imageobject>
-		<textobject>
-		  <phrase>&rosegarden;'s colour manager</phrase>
-		</textobject>
-	      </mediaobject>
-	      </screenshot>
-	      </para>
-	    </listitem>
-	  </varlistentry>
-	  
-	</variablelist>
-      </para>
-    </sect1>
-
-    <sect1 id="recording">
-      <title>Recording</title>
-      <para>
-	
-      </para>
-    </sect1>
-
-    <sect1 id="segment-view-instrumentparameterbox">
-      <title>The Instrument Parameter Box</title>
-      <para>
-      </para>
-
-      <sect2 id="segment-view-instrumentparameterbox-midi">
-	<title>MIDI Instrument Parameters</title>
-      <para>
-	<screenshot>
-	  <mediaobject>
-	    <imageobject>
-	      <imagedata fileref="rg-ipb-midi.png" format="PNG"/>
-      </imageobject>
-	<textobject>
-	  <phrase>&rosegarden;'s instrument parameter box for a MIDI instrument</phrase>
-	</textobject>
-      </mediaobject>
-      </screenshot>
-      </para>
-      </sect2>
-
-      <sect2 id="segment-view-instrumentparameterbox-synth">
-	<title>Synth Plugin Instrument Parameters</title>
-      <para>
-	<screenshot>
-	  <mediaobject>
-	    <imageobject>
-	      <imagedata fileref="rg-ipb-synth.png" format="PNG"/>
-      </imageobject>
-	<textobject>
-	  <phrase>&rosegarden;'s instrument parameter box for a synth plugin instrument</phrase>
-	</textobject>
-      </mediaobject>
-      </screenshot>
-      </para>
-      </sect2>
-
-      <sect2 id="segment-view-instrumentparameterbox-audio">
-	<title>Audio Instrument Parameters</title>
-      <para>
-	<screenshot>
-	  <mediaobject>
-	    <imageobject>
-	      <imagedata fileref="rg-ipb-audio.png" format="PNG"/>
-      </imageobject>
-	<textobject>
-	  <phrase>&rosegarden;'s instrument parameter box for an audio instrument</phrase>
-	</textobject>
-      </mediaobject>
-      </screenshot>
-      </para>
-      </sect2>
-
-    </sect1>
   </chapter>
 
   <chapter id="transport">
@@ -938,10 +758,11 @@
       &rosegarden; sweeps a playback pointer across
       the tracks from left to right playing the contents of the
       segments as it crosses them.  The pointer's position on the
-      screen is tracked and controlled by a dialog called the
+      screen is tracked and controlled by a window called the
       Transport.
     </para>
     
+    <sect1 id="transport-overview"><title>Overview</title>
     <para>
       <screenshot>
         <mediaobject>
@@ -949,7 +770,7 @@
             <imagedata fileref="rg-transport.png" format="PNG"/>
     </imageobject>
       <textobject>
-	<phrase>&rosegarden;'s Transport dialog</phrase>
+	<phrase>&rosegarden;'s Transport window</phrase>
       </textobject>
     </mediaobject>
     </screenshot>
@@ -975,13 +796,79 @@
       it or jump to beginning or end of composition.
     </para>
 
-    <para> Additional controls and a &MIDI; event display are hidden
+    <para>Additional controls and a &MIDI; event display are hidden
       on the bottom flap on the transport, which can be toggled on or
       off using the arrow button next to it at the left.  Also on this
       extra portion there are buttons for recording, setting loops,
       soloing individual tracks, turning on or off the metronome, and
       silencing your MIDI devices (panic button).  </para>
 
+    </sect1>
+    <sect1 id="recording">
+      <title>Recording</title>
+      <para>
+	To record a new segment into a track, first make sure the
+	right track is selected for recording by selecting the red
+	LED-style button on the track label, and then use the
+	Transport's record control.  This has the effect of both
+	starting the transport (thus playing the existing composition)
+	and recording into the appropriate track.  Currently only a
+	single track at a time may be active for recording.
+      </para>
+      <para>
+	Alternatively you can use punch-in record to separate the acts
+	of starting the transport and entering record mode.  Punch-in
+	record is toggled with the Space bar.  You can press Space
+	while playing a composition to switch instantly between
+	playback and recording without stopping the transport, or you
+	can use Space to arm for recording when the transport is
+	stopped, so that a subsequent Play will in fact record as
+	well.  (The latter is handy when using an <link
+	linkend="transport-external">external transport</link>.)
+      </para>
+      <para>
+	If the record track is assigned to a MIDI instrument, then
+	recording will take place from all of the MIDI devices that
+	are selected for recording in the <link
+	linkend="studio-device-editor">MIDI device manager</link>.
+      </para>
+      <para>
+	If the record track is assigned to an audio instrument,
+	recording will be from the input currently selected for that
+	instrument in the <link
+	linkend="segment-view-instrumentparameterbox">instrument
+	parameter box</link>.  This will either be an external audio
+	input or an audio submaster or master (for performing
+	mixdowns).  If it's an external input, it will by default
+	record from your soundcard's first available physical record
+	in.  You may wish to use <!-- !!! link
+	linkend="studio-audio-routing" --> a JACK connection tool to
+	connect some other JACK audio application to the input instead.
+      </para>
+    </sect1>
+
+    <sect1 id="transport-external">
+      <title>External transports</title>
+      <para>
+	Rosegarden supports the JACK transport mechanism for
+	synchronising its transport with other JACK applications.
+	To activate it, go to 
+	<menuchoice>
+	  <guimenu lang="en">Settings</guimenu>
+	  <guimenuitem>Configure Rosegarden...</guimenuitem>
+	</menuchoice>
+	and in the Sequencer page's Synchronisation tab, select "Sync"
+	from the JACK transport mode menu.</para>
+
+      <para>When the JACK transport is in use, all of the applications
+      that are subscribed to it share a common transport control, and
+      you can start, stop, and move the transport from any one of
+      them.</para>
+
+      <para>Many Linux audio applications support JACK transport:
+      consult their documentation for details of whether and
+      how.</para>
+    </sect1>
   </chapter>
 
   <chapter id="studio">
@@ -1005,13 +892,13 @@
 	    <term>Device</term>
 	    <listitem>
 	      <para>A <quote>device</quote>, as far as Rosegarden is
-		concerned, is simply something capable of producing
-		sounds.  This may be a MIDI synth or an audio device.
-		MIDI devices do not necessarily correspond directly to
-		physical MIDI ports: they are just things with names
-		that you can refer to, expected to work in particular
-		ways.  Configuration information such as MIDI patch
-		maps can be attached to devices.
+	      concerned, is simply something capable of producing
+	      sounds.  This may be a MIDI or audio device.  MIDI
+	      devices do not necessarily correspond directly to
+	      physical MIDI ports: they are just things with names
+	      that you can refer to, expected to work in particular
+	      ways.  Configuration information such as MIDI patch maps
+	      can be attached to devices.
 	      </para>
 	    </listitem>
 	  </varlistentry>
@@ -1037,11 +924,12 @@
 	    <term>Connection</term>
 	    <listitem>
 	      <para>While a MIDI device is simply a name and a
-		collection of configuration information, the
-		<quote>connection</quote> specifies which MIDI port it
-		is physically attached to.  This can be configured in
-		the Manage MIDI Devices dialog.  (Audio devices do not
-		have connections in the same way.)
+	      collection of configuration information, the
+	      <quote>connection</quote> specifies which MIDI port it
+	      is physically attached to.  This can be configured in
+	      the <link linkend="studio-device-editor">MIDI device
+	      manager</link>.  (Audio and synth plugin devices do not
+	      have connections in the same way.)
 	      </para>
 	    </listitem>
 	  </varlistentry>
@@ -1280,7 +1168,112 @@
 
       </para>
     </sect2>
+    </sect1>
 
+    <sect1 id="studio-audio-routing">
+      <title>Audio Routing</title>
+      <para>
+	Any Rosegarden track assigned to an audio or synth plugin
+	instrument becomes part of Rosegarden's audio routing
+	architecture.  There are 16 audio instruments and 16 synth
+	plugin instruments, and each of these has a set of adjustable
+	parameters including fader level, pan, effects and so on.
+	These are generally configurable in the <link
+	linkend="segment-view-instrumentparameterbox">Instrument
+	Parameter Box</link> or <link
+	linkend="studio-audio-mixer">audio mixer</link>.  Each audio
+	instrument also has an input connection, and both audio and
+	synth plugin instruments have an output connection.
+      </para>
+      
+      <para>An instrument's input connection defines where Rosegarden
+      will read audio data from when recording to this instrument.
+      The most usual setting would be to one of Rosegarden's external
+      audio inputs, the number of which is configurable in the <link
+      linkend="studio-audio-mixer">audio mixer</link>.  These
+      correspond to JACK audio ports exposed by Rosegarden, to which
+      you can connect outputs from any other JACK audio application or
+      soundcard capture ports using an external JACK router
+      application such as <ulink
+      url="http://qjackctl.sf.net/">QJackCtl</ulink>.  You can also
+      set an instrument's audio input to the output of one of
+      Rosegarden's built-in audio submasters or master output for
+      mixdowns.
+      </para>
+      <para>An instrument's output connection defines where the audio
+      goes when played.  Instruments default to sending their audio to
+      Rosegarden's master output, which is another (stereo pair of)
+      external JACK port(s) that can then be connected up using the
+      same external JACK router.  However, Rosegarden also supports up
+      to eight internal submaster busses, to which you can send
+      instrument outputs instead so as to group instruments into
+      related categories.  You can control the number and routing of
+      these in the <link linkend="studio-audio-mixer">audio
+      mixer</link>.
+      </para>
+      <para>
+	Rosegarden currently supports effects using a set of pre-fader
+	insert effects slots for each audio instrument.  You cannot
+	yet assign effects to the submaster busses, and Rosegarden
+	does not yet support send effects, although you can obtain
+	similar results using an external JACK effects and mixing
+	architecture.
+      </para>
+      <para>Some further details of audio routing configuration,
+      mixing, and effects are discussed in the <link
+      linkend="studio-audio-mixer">audio mixer</link>, <link
+      linkend="segment-view-instrumentparameterbox">instrument
+      parameter box</link> and <link
+      linkend="studio-plugins">plugins</link> sections.</para>
+    </sect1>
+
+    <sect1 id="studio-audio-mixer">
+      <title>The Audio Mixer</title>
+      <para>
+	<screenshot>
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="rg-audiomixer.png" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	      <phrase>&rosegarden;'s Audio Mixer</phrase>
+	    </textobject>
+          </mediaobject>
+        </screenshot>
+      </para>
+      
+    </sect1>
+
+    <sect1 id="studio-midi-mixer">
+      <title>The MIDI Mixer</title>
+      <para>
+	<screenshot>
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="rg-midimixer.png" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	      <phrase>&rosegarden;'s MIDI Mixer</phrase>
+	    </textobject>
+          </mediaobject>
+        </screenshot>
+      </para>
+    </sect1>
+
+    <sect1 id="studio-plugins">
+      <title>Plugins</title>
+      <para>
+	<screenshot>
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="rg-plugin-dialog.png" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	      <phrase>A &rosegarden; Plugin Dialog</phrase>
+	    </textobject>
+          </mediaobject>
+        </screenshot>
+      </para>
     </sect1>
 
     <sect1 id="studio-metronome">
@@ -1367,6 +1360,288 @@
 
   </chapter>
 
+
+  <chapter id="segment-instrument-parameters">
+    <title>Segment and Instrument Parameters</title>
+
+    <sect1 id="segment-view-segmentparameterbox">
+      <title>The Segment Parameter Box</title>
+
+      <para>
+	<screenshot>
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="rg-segmentparameterbox.png" format="PNG"/>
+      </imageobject>
+	<textobject>
+	  <phrase>&rosegarden;'s segment parameter box</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+      </para>
+
+      <para>
+	The segment parameter box lives at the left side of the Rosegarden main window.  (If you can't see it, try using 	<menuchoice>
+	  <guimenu lang="en">Settings</guimenu>
+	  <guimenuitem>Show Segment and Instrument Parameters</guimenuitem>
+	</menuchoice>.)
+ It allows you to modify some aspects of the
+	selected segments.</para><para>If a single segment is currently selected, its
+	parameters will be shown in the segment parameter box and can be
+	edited there.  If several segments are selected, the parameter box
+	will only show the current values where they are the same for all
+	of the selected segments -- but you can still edit them, and your
+	changes will apply to the whole selection.
+
+	<variablelist>
+	  <varlistentry>
+	    <term>Label</term>
+	    <listitem>
+	      <para>Shows the label of the selected segment (or segments, if
+		they all have the same label).  Click the "..." button to edit
+		the label.</para>
+	    </listitem>
+	  </varlistentry>
+	  
+	  <varlistentry>
+	    <term>Repeat</term>
+	    <listitem>
+	      <para>Switches repeat on or off for the selected segments.  A
+		repeating segment will repeat until the start of the following
+		segment on the same track, or until the end of the composition
+		if there is no following segment.</para>
+
+	      <para>The repeated parts of a repeating segment are shown on
+		the main canvas in a fainter colour than the original segment.
+		You can turn them into real editable copies of the original
+		segment either by using
+	<menuchoice>
+	  <guimenu lang="en">Segments</guimenu>
+	  <guimenuitem>Turn Repeats into Copies</guimenuitem>
+	</menuchoice>, or simply by double-clicking on the
+		individual repeating blocks.</para>
+	    </listitem>
+	  </varlistentry>
+
+	  <varlistentry>
+	    <term>Quantize</term>
+	    <listitem>
+	      <para>
+		Shows the quantization setting for the selected
+		segments.  You can change this to quickly quantize
+		the start times of all their notes.  For more
+		advanced quantization, use <menuchoice>
+	  <guimenu lang="en">Segments</guimenu>
+	  <guimenuitem>Quantize...</guimenuitem>
+	</menuchoice>.  See <link
+		  linkend="quantization">Quantization</link> for more
+		details.
+	      </para>
+	    </listitem>
+	  </varlistentry>
+
+	  <varlistentry>
+	    <term>Transpose</term>
+	    <listitem>
+	      <para>Shows the transposition (in semitones) currently applied
+		to the selected segments.  This transposition is applied when
+		the segment is played, and is not shown in the notes displayed
+		in the matrix, notation or event list editors.  You can use
+		this to quickly change the pitch of part or all of a composition.</para>
+	    </listitem>
+	  </varlistentry>
+
+	  <varlistentry>
+	    <term>Delay</term>
+	    <listitem>
+	      <para>Shows the delay currently in effect on the selected
+		segments.  You can set a delay here in order to cause an entire
+		segment to play later than written.  This delay is applied when
+		the segment is played, and is not shown in the notes displayed
+		in the matrix, notation or event list editors.
+	      </para>
+	      <para>
+		You can set a delay either in musical time (by
+		choosing a note duration from the delay dropdown),
+		in which time the exact delay will depend on the
+		tempo, or in real time (by choosing a time in
+		milliseconds from the dropdown).
+	      </para>
+	    </listitem>
+	  </varlistentry>
+
+	  <varlistentry>
+	    <term>Colour</term>
+	    <listitem>
+	      <para>Shows the colour being used for the display of the
+		selected segments.  You can choose another colour from the
+		dropdown, or choose the "Add New Colour" option if you want a
+		colour not in the dropdown.
+	      </para>
+	      <para>
+		You can also manage and rename colours using
+<menuchoice>
+	  <guimenu lang="en">Composition</guimenu>
+	  <guimenuitem>Edit Document Properties...</guimenuitem>
+	</menuchoice>
+		(then choose the Colour page on the document properties
+		dialog).  The modified colour palette will be saved
+		with the composition in the Rosegarden file.
+		<screenshot>
+		  <mediaobject>
+		    <imageobject>
+		      <imagedata fileref="rg-colours.png" format="PNG"/>
+	      </imageobject>
+		<textobject>
+		  <phrase>&rosegarden;'s colour manager</phrase>
+		</textobject>
+	      </mediaobject>
+	      </screenshot>
+	      </para>
+	    </listitem>
+	  </varlistentry>
+	  
+	</variablelist>
+      </para>
+    </sect1>
+
+    <sect1 id="segment-view-instrumentparameterbox">
+      <title>The Instrument Parameter Box</title>
+      <para>
+	The instrument parameter box can be found at the lower left of
+	the Rosegarden main window, below the <link
+	linkend="segment-view-segmentparameterbox">Segment Parameter
+	Box</link>.  (If you can't see it, try using
+	<menuchoice> <guimenu lang="en">Settings</guimenu>
+	<guimenuitem>Show Segment and Instrument
+	Parameters</guimenuitem> </menuchoice>.)</para>
+
+      <para>It shows you
+	which instrument is assigned to the current selected track,
+	and contains all of the editable controls for that instrument.
+	Remember that because any number of tracks can be assigned to
+	the same instrument, the settings in this box may affect more
+	than one track at a time.</para>
+
+      <para>The layout and contents of the instrument
+	parameter box depend on the type of instrument: MIDI, audio,
+	or synth plugin.
+      </para>
+
+      <sect2 id="segment-view-instrumentparameterbox-midi">
+	<title>MIDI Instrument Parameters</title>
+      <para>
+	<screenshot>
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="rg-ipb-midi.png" format="PNG"/>
+      </imageobject>
+	<textobject>
+	  <phrase>&rosegarden;'s instrument parameter box for a MIDI instrument</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+      </para>
+	<para>When you select a track assigned to a MIDI instrument,
+	the instrument parameter box shows MIDI parameters.
+	</para>
+	<para>At the top, this box
+	shows the name of the instrument and the connection that its
+	device is using.
+	</para>
+	<para>Below that, you can see and edit the MIDI
+	channel number and the <link linkend="studio-bank-editor">bank
+	and program</link> settings that should be sent to the
+	instrument at the start of playback (including a "percussion"
+	toggle that controls whether only percussion programs should
+	be offered in these settings).</para>
+
+	<para>Finally this box shows you the <!-- !!! link
+	linkend="studio-device-controllers" --> controllers available
+	for this device (those for a General MIDI device are shown
+	above).  Any settings you make here will be sent to this
+	instrument's channel at the start of playback.</para>
+      </sect2>
+
+      <sect2 id="segment-view-instrumentparameterbox-audio">
+	<title>Audio Instrument Parameters</title>
+      <para>
+	<screenshot>
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="rg-ipb-audio.png" format="PNG"/>
+      </imageobject>
+	<textobject>
+	  <phrase>&rosegarden;'s instrument parameter box for an audio instrument</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+      </para>
+	<para>
+	  When you select an audio track, the instrument parameter
+	  box shows audio parameters.
+	</para>
+	<para>
+	  The box has two main faders, one with a blue surround for
+	  playback level and the other with a red surround for the
+	  record level when recording to this instrument.  Between
+	  them is a playback level meter.
+	</para>
+	<para>The two menus at the top of the box are used to select
+	the input and output <!-- !!! link --> audio routing for this
+	instrument.  Below them you can select whether the instrument
+	is mono or stereo, and the pan setting for position in the
+	stereo field.  (Audio instruments are always ultimately
+	stereo, because the pan setting is always applied.  But if you
+	set the instrument to mono, it will reduce any audio data and
+	effect outputs to mono before applying pan.)
+	  </para>
+	<para>The column of five buttons at lower left are the effects
+	slots.  Click on them to select and activate plugin effects
+	for this audio instrument, and to control them using the <!--
+	!!! link -->plugin editor dialog.  These are insert effects,
+	applied in order from top to bottom before the fader and pan.
+	</para>
+      </sect2>
+
+      <sect2 id="segment-view-instrumentparameterbox-synth">
+	<title>Synth Plugin Instrument Parameters</title>
+      <para>
+	<screenshot>
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="rg-ipb-synth.png" format="PNG"/>
+      </imageobject>
+	<textobject>
+	  <phrase>&rosegarden;'s instrument parameter box for a synth plugin instrument</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+      </para>
+	<para>When you select a track assigned to a synth plugin
+	instrument, the instrument parameter box shows synth
+	parameters.  You will notice that although a synth plugin
+	track uses segments with MIDI data in them, in terms of
+	control and routing it behaves more like an audio track.
+	</para>
+	<para>The most important control here is the button at top
+	left (saying Xsynth in the above picture) which shows the name
+	of the synth plugin in use for this instrument.  Click this to
+	select a particular synth and control it in the standard
+	Rosegarden <!-- !!! link --> plugin editor dialog.  Once
+	you've selected a plugin, you may also be able to click the
+	Editor button below it in order to open a dedicated GUI editor
+	for the particular plugin (if the plugin has one).
+	</para>
+	<para>The remaining controls here are the same as for audio
+	instruments: the playback fader, playback level, output
+	routing, mono/stereo and pan settings and effects slots are
+	all exactly the same.</para>
+      </sect2>
+
+    </sect1>
+  </chapter>
+
   <chapter id="quantization">
     <title>Quantization</title>
     <para>
@@ -1379,16 +1654,6 @@
     </para>
 
     <para>
-      <screenshot>
-	<mediaobject>
-	  <imageobject>
-	    <imagedata fileref="rg-gridquantizer.png" format="PNG"/>
-    </imageobject>
-      <textobject>
-	<phrase>&rosegarden;'s quantize dialog</phrase>
-      </textobject>
-    </mediaobject>
-    </screenshot>
       For general quantization, use
       	<menuchoice>
 	  <guimenu lang="en">Segments</guimenu>
@@ -1402,20 +1667,154 @@
       in matrix or notation editors.  This shows you a dialog in which
       you can select the precise quantization parameters you need, and
       then it applies these to all of the selected segments or notes.
+      (You can also quickly reach this dialog by pressing the "="
+      key.)
     </para>
 
     <para>
-      <!-- !!! to be continued -->
+      <screenshot>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="rg-gridquantizer.png" format="PNG"/>
+    </imageobject>
+      <textobject>
+	<phrase>&rosegarden;'s quantize dialog</phrase>
+      </textobject>
+    </mediaobject>
+    </screenshot>
     </para>
 
     <para>
-      A quicker way to quantize something simply is to do it in the
-      main window, using the <guimenuitem>Quantize</guimenuitem> menu on the <link
-      linkend="segment-view-segmentparameterbox">Segment Parameter
-      Box</link>.  If you select some segments and change the value
-      shown in the menu, the segments will immediately be
+      The quantize dialog offers a selection of quantizers, each with
+      its own set of parameters.  The quantizers available are:
+    </para>
+    <variablelist>
+
+      <varlistentry>
+	<term>Grid quantizer</term>
+	<listitem>
+	  <para>The grid quantizer moves the start times of notes so
+	  that they start at the nearest point on some grid (defined
+	  by various parameters of the quantizer).  Thus notes that
+	  initially vary slightly in start time will be aligned by the
+	  quantizer, making for a more precise and mechanical
+	  performance.
+	  </para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>Legato quantizer</term>
+	<listitem>
+	  <para>The legato quantizer carries out a simple grid
+	  quantization, and also adjusts the note durations so as to
+	  remove any gaps between notes by extending each note so as
+	  to (at least) continue until the start of the following one.
+	  You can also obtain this legato effect without the
+	  accompanying grid quantization using the
+	<menuchoice>
+	  <guimenu lang="en">Adjust</guimenu>
+	  <guimenuitem>Quantize</guimenuitem>
+	  <guimenuitem>Legato</guimenuitem>
+	</menuchoice> function in the Matrix editor.
+	  </para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>Heuristic notation quantizer</term>
+	<listitem>
+	  <para>The notation quantizer attempts to adjust note start
+	  times and durations so as to produce readable notation.  See
+	  <link linkend="nv-quantization">Notation from performance
+	  data</link> for a description of this quantizer and its
+	  uses.</para>
+	</listitem>
+      </varlistentry>
+
+    </variablelist>
+
+    <para>The grid quantizer has the following adjustable parameters:</para>
+    <variablelist>
+
+      <varlistentry>
+	<term>Base grid unit</term>
+	<listitem>
+	  <para>This is the size of the grid used for quantization.
+	  </para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>Swing</term>
+	<listitem>
+	  <para>This is a percentage figure which adjusts the degree
+	  by which alternate beats are quantized "late".</para>
+	  <para>If set to
+	  None (the default), quantization will be to an even grid
+	  spaced according to the base grid unit.</para>
+	  <para>If set to 100%,
+	  every second grid line will be placed two-thirds of the distance
+	  between the previous and next ones, instead of only half.
+	  This will result in notes being quantized to the first and
+	  third triplets of a swing beat.
+	  </para>
+	  <para>Other settings will produce proportionately varying degrees of
+	  swinginess.  You can also set this parameter to negative
+	  figures (for alternate beats to start early) or to figures
+	  greater than 100%.</para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>Iterative amount</term>
+	<listitem>
+	  <para>The default behaviour of the grid quantizer is to move
+	  each note exactly onto its nearest grid line.  But if you
+	  set the iterative amount to something less than 100% (the
+	  "Full quantize" default), each note will only be moved that
+	  percentage of the distance toward its nearest grid line,
+	  resulting in a nearly-but-not-quite quantized effect.</para>
+	  <para>This quantizer may be applied repeatedly so as to try
+	  out gradually increasing degrees of quantization, hence the
+	  name "iterative".  Use 
+	<menuchoice>
+	  <guimenu lang="en">Adjust</guimenu>
+	  <guimenuitem>Quantize</guimenuitem>
+	  <guimenuitem>Repeat Last Quantize</guimenuitem>
+	</menuchoice> in the Matrix editor to do so.
+	  </para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>Quantize durations as well as start times</term>
+	<listitem>
+	  <para>If this option is enabled, the quantizer will quantize
+	  the notes' end times to the same grid as their start times.
+	  </para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>The quantize dialog also has an optional Advanced section
+      containing further options for 
+	  <link linkend="nv-quantization">notation quantization</link>.
+    </para>
+    
+    <para>
+      Another simple way to apply a grid quantizer is to do it in the
+      main window, using the <guimenuitem>Quantize</guimenuitem> menu
+      on the <link linkend="segment-view-segmentparameterbox">Segment
+      Parameter Box</link>.  If you select some segments and change
+      the value shown in the menu, the segments will immediately be
       grid-quantized to the resolution shown in the menu.
     </para>
+
+    <para>
+      Finally, there is also a <link
+      linkend="matrix-grid-quantize">quantize control</link> in the matrix
+      view.</para>
     
   </chapter>
   
@@ -1443,6 +1842,38 @@
       configure Rosegarden to make the matrix editor the default
       editor available when you double-click on a segment.
     </para>
+
+    <sect1 id="matrix-grid-quantize">
+      <title>The Grid and Quantize controls</title>
+      <para>
+	The matrix view contains Grid and Quantize menus in its main
+	toolbar.
+      </para>
+      <para>The Grid menu controls the size of the visible grid in the
+      background of the matrix view, as well as the time resolution
+      used when entering and moving notes.  After you set it to a
+      particular time value, the normal note insertion and drag
+      operations will then snap automatically to grid points spaced at
+      that time width.  You can override the snap-to-grid effect
+      temporarily by holding down Shift during editing, or you can
+      disable it by setting the Grid menu to None.
+      </para>
+      <para>The Quantize menu works rather differently.  Rather than
+      controlling the behaviour of other editing tools, it actually
+      performs an action.  When you change the value in this menu, the
+      selected notes -- or the whole segment if nothing is selected
+      -- will immediately be quantized using a grid quantizer of the
+      chosen resolution.
+      </para>
+      <para>The Quantize menu also shows you continuously what
+      resolution the current segment or selection is quantized to.
+      For example, if you select a set of notes that start on
+      consecutive quarter-note beats, the Quantize menu will update
+      itself to show 1/4, as this is the coarsest resolution
+      consistent with the existing quantization of the current
+      selection.
+      </para>
+    </sect1>
 
     <sect1 id="matrix-insertion">
       <title>Inserting notes</title>
@@ -1572,13 +2003,6 @@
       </sect2>
     </sect1>
 
-    <sect1 id="matrix-quantize">
-      <title>The Quantize control</title>
-      <para>
-	<!-- !!! -->
-      </para>
-    </sect1>
-
     <sect1 id="matrix-selection">
       <title>Selecting notes</title> <para>To select notes in the
 	matrix editor, switch to the Select (arrow) tool and then
@@ -1621,12 +2045,6 @@
       </para>
     </sect1>
 
-    <sect1 id="matrix-view-options">
-      <title>Configuring the matrix view</title>
-      <para>
-	<!-- zoom, rulers etc -->
-      </para>
-    </sect1>
   </chapter>
 
   <chapter id="notation-view">
@@ -2933,6 +3351,34 @@
 	  <variablelist>
 
 	    <varlistentry>
+	      <term>Re-beam</term>
+	      <listitem>
+		<para>
+		  Causes the notes to be re-beamed into groups
+		  appropriately after quantization.  This is usually
+		  desirable.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry>
+	      <term>Add articulations (staccato, tenuto,
+		slurs)</term>
+	      <listitem>
+		<para>
+		  Causes the quantizer to attempt to identify, based
+		  on the durations of individual and consecutive
+		  notes, which notes should be notated with staccato
+		  marks (for notes that fall significantly short of
+		  the following note, but not apparently short
+		  enough to merit a rest), tenuto (for notes that
+		  almost or just overlap the following note) and
+		  slurs (for series of notes that meet or overlap).
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry>
 	      <term>Tie notes at barlines etc</term>
 	      <listitem>
 		<para>Causes any notes that are still found after
@@ -2967,34 +3413,6 @@
 		  it changes the number of note events, which is
 		  undesirable when using &rosegarden; partly or
 		  principally as a MIDI sequencer.
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-	    <varlistentry>
-	      <term>Re-beam</term>
-	      <listitem>
-		<para>
-		  Causes the notes to be re-beamed into groups
-		  appropriately after quantization.  This is usually
-		  desirable.
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-	    <varlistentry>
-	      <term>Add articulations (staccato, tenuto,
-		slurs)</term>
-	      <listitem>
-		<para>
-		  Causes the quantizer to attempt to identify, based
-		  on the durations of individual and consecutive
-		  notes, which notes should be notated with staccato
-		  marks (for notes that fall significantly short of
-		  the following note, but not apparently short
-		  enough to merit a rest), tenuto (for notes that
-		  almost or just overlap the following note) and
-		  slurs (for series of notes that meet or overlap).
 		</para>
 	      </listitem>
 	    </varlistentry>

@@ -1333,20 +1333,23 @@ SequencerConfigurationPage::SequencerConfigurationPage(
 
     m_jackTransport->insertItem(i18n("Ignore JACK transport"));
     m_jackTransport->insertItem(i18n("Sync"));
+/*!!! Removed as not yet implemented
     m_jackTransport->insertItem(i18n("Sync, and offer timebase master"));
+*/
 
     bool jackMaster = m_cfg->readBoolEntry("jackmaster", false);
     bool jackTransport = m_cfg->readBoolEntry("jacktransport", false);
-
+/*!!!
     if (jackMaster && jackTransport)
         m_jackTransport->setCurrentItem(2);
     else 
     {
+*/
         if (jackTransport)
             m_jackTransport->setCurrentItem(1);
         else
             m_jackTransport->setCurrentItem(0);
-    }
+//!!!    }
 
     /*
     // MMC Transport
