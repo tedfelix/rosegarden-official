@@ -355,9 +355,6 @@ Composition::getDuration() const
 
 	timeT segmentTotal = (*i)->getEndIndex();
 
-        std::cerr << "Composition::getDuration() : segmentTotal = "
-                  << segmentTotal << std::endl;
-
         if (segmentTotal > maxDuration) {
             maxDuration = segmentTotal;
         }
@@ -438,8 +435,6 @@ Composition::calculateBarPositions() const
     }    
 
     timeT duration = getDuration();
-    std::cerr << "Composition::calculateBarPositions : duration = "
-              << duration << std::endl;
 
     if (sections.size() == 0 || sections[sections.size()-1] != duration) {
 	sections.push_back(duration);
@@ -448,15 +443,6 @@ Composition::calculateBarPositions() const
 
     int barNo = 0;
 
-
-    std::cerr << "Composition::calculateBarPositions : sections.size = "
-              << sections.size() << std::endl;
-
-    for (int s = 0; s < sections.size(); ++s) {
-        std::cerr << "sections[" << s << "] = "
-                  << sections[s] << std::endl;
-    }
-    
     for (int s = 0; s < sections.size() - 1; ++s) {
 
 	timeT start = sections[s], finish = sections[s+1];
