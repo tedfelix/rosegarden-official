@@ -157,6 +157,13 @@ public slots:
     void slotScrollHorizSmallSteps(int hpos);
 
     /**
+     * Scroll vertically to make the given position somewhat
+     * nearer to visible, scrolling by only "a small distance"
+     * at a time
+     */
+    void slotScrollVertSmallSteps(int vpos);
+
+    /**
      * Add given number of tracks
      */
     void slotAddTracks(unsigned int nbTracks, Rosegarden::InstrumentId id);

@@ -290,8 +290,11 @@ TrackEditor::init(QWidget* rosegardenguiview)
             rosegardenguiview,
             SLOT(slotSelectedSegments(const Rosegarden::SegmentSelection &)));
 
-    connect(m_segmentCanvas, SIGNAL(scrollTo(int)),
+    connect(m_segmentCanvas, SIGNAL(hScrollTo(int)),
 	    this, SLOT(slotScrollHorizSmallSteps(int)));
+
+    connect(m_segmentCanvas, SIGNAL(vScrollTo(int)),
+	    this, SLOT(slotScrollVertSmallSteps(int)));
 
     connect(getCommandHistory(), SIGNAL(commandExecuted()),
 	    this, SLOT(update()));
@@ -597,6 +600,32 @@ void TrackEditor::slotScrollHorizSmallSteps(int hpos)
     }
 }
 
+void TrackEditor::slotScrollVertSmallSteps(int vpos)
+{
+    QScrollView* scrollView = getSegmentCanvas();
+    QScrollBar* vbar = scrollView->verticalScrollBar();
+
+    int diff = 0;
+
+    if (vpos == 0) {
+	
+	// returning to zero
+        vbar->setValue(0);
+
+    } else if ((diff = int(vpos - (scrollView->contentsY() + 
+				   scrollView->visibleHeight() * 0.9))) > 0) {
+
+	// moving off up
+	vbar->setValue(vbar->value() + diff);
+
+    } else if ((diff = int(vpos - (scrollView->contentsY() +
+				   scrollView->visibleHeight() * 0.1))) < 0) {
+
+	// moving off down
+	vbar->setValue(vbar->value() + diff);
+
+    }
+}
 
 // Show a Segment as its being recorded
 //
