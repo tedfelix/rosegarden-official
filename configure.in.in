@@ -62,7 +62,7 @@ fi
 
 dnl append RDKDE3 flag if we've found KDE3
 if test $kde_qtver = 3; then
-  KDE_CXXFLAGS="-DRGKDE3 $KDE_CXXFLAGS"
+  CXXFLAGS="-DRGKDE3 $CXXFLAGS"
 fi
 
 dnl test for sound support at all
