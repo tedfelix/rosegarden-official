@@ -61,5 +61,17 @@ Track::getNbBars() const
 
     return nbBars;
 }
+
+void
+Track::setStartIndex(unsigned int idx)
+{
+    int idxDiff = idx - m_startIdx;
+
+    // reset the time of all events
+    for (iterator i = begin(); i != end(); ++i)
+        (*i)->addAbsoluteTime(idxDiff);
+        
+    m_startIdx = idx;
+}
  
 }

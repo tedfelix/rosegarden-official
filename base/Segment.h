@@ -37,7 +37,7 @@ public:
     ~Track();
 
     unsigned int getStartIndex() const         { return m_startIdx; }
-    void         setStartIndex(unsigned int i) { m_startIdx = i; }
+    void         setStartIndex(unsigned int i);
 
     unsigned int getInstrument() const         { return m_instrument; }
     void         setInstrument(unsigned int i) { m_instrument = i; }
