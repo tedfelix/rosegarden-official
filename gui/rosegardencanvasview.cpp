@@ -133,7 +133,8 @@ void RosegardenCanvasView::doAutoScroll()
     }
     if ( dx || dy ) {
         scrollBy(dx,dy);
-        m_minDeltaScroll *= 1.1;
+        m_minDeltaScroll *= 1.08;
+	if (m_minDeltaScroll > 60) m_minDeltaScroll = 60;
     } else {
         stopAutoScroll();
     }
@@ -141,7 +142,7 @@ void RosegardenCanvasView::doAutoScroll()
 
 
 const int RosegardenCanvasView::DefaultSmoothScrollTimeInterval = 20;
-const int RosegardenCanvasView::DefaultMinDeltaScroll = 2;
+const int RosegardenCanvasView::DefaultMinDeltaScroll = 1;
 
 bool RosegardenCanvasView::isTimeForSmoothScroll()
 {
