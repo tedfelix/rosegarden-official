@@ -109,6 +109,36 @@ NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
     m_textMarkFont("new century schoolbook", 8, QFont::Bold, true),
     m_textMarkFontMetrics(m_textMarkFont)
 {
+    init(fontName, size);
+}
+
+NotePixmapFactory::NotePixmapFactory(const NotePixmapFactory &npf) :
+    m_selected(false),
+    m_timeSigFont("new century schoolbook", 8, QFont::Bold),
+    m_timeSigFontMetrics(m_timeSigFont),
+    m_tupledCountFont("new century schoolbook", 8, QFont::Bold, true),
+    m_tupledCountFontMetrics(m_tupledCountFont),
+    m_textMarkFont("new century schoolbook", 8, QFont::Bold, true),
+    m_textMarkFontMetrics(m_textMarkFont)
+{
+    init(npf.m_font->getNoteFontMap().getName(),
+	 npf.m_font->getCurrentSize());
+}
+
+NotePixmapFactory &
+NotePixmapFactory::operator=(const NotePixmapFactory &npf)
+{
+    if (&npf != this) {
+	delete m_font;
+	init(npf.m_font->getNoteFontMap().getName(),
+	     npf.m_font->getCurrentSize());
+    }
+    return *this;
+}
+
+void
+NotePixmapFactory::init(std::string fontName, int size)
+{
     if (fontName == "") fontName = NotePixmapFactory::getDefaultFont();
     if (size < 0) size = NotePixmapFactory::getDefaultSize(fontName);
 

@@ -447,13 +447,6 @@ protected:
      */
     void setNotePixmapFactory(NotePixmapFactory*);
 
-    /**
-     * Set the horizontal layout
-     *
-     * The previous layout is deleted
-     */
-    void setHLayout(NotationHLayout*);
-
     virtual NotationCanvasView* getCanvasView();
 
     //--------------- Data members ---------------------------------
@@ -482,8 +475,8 @@ protected:
     NotePixmapFactory *m_notePixmapFactory;
     NotePixmapFactory m_toolbarNotePixmapFactory;
     
-    NotationHLayout* m_hlayout;
-    NotationVLayout* m_vlayout;
+    NotationHLayout m_hlayout;
+    NotationVLayout m_vlayout;
 
     BarButtons *m_topBarButtons;
     BarButtons *m_bottomBarButtons;

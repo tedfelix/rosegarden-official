@@ -32,6 +32,8 @@
 #include "editview.h"
 #include "matrixcanvasview.h"
 #include "matrixelement.h"
+#include "matrixhlayout.h"
+#include "matrixvlayout.h"
 
 namespace Rosegarden { 
     class Segment;
@@ -41,8 +43,6 @@ namespace Rosegarden {
 class RosegardenGUIDoc;
 class MatrixStaff;
 class MatrixCanvasView;
-class MatrixHLayout;
-class MatrixVLayout;
 class PianoKeyboard;
 
 class QMouseEvent;
@@ -199,8 +199,8 @@ protected:
 
     std::vector<MatrixStaff*> m_staffs;
 
-    MatrixHLayout* m_hlayout;
-    MatrixVLayout* m_vlayout;
+    MatrixHLayout m_hlayout;
+    MatrixVLayout m_vlayout;
 
     // Status bar elements
     QLabel* m_hoveredOverAbsoluteTime;

@@ -42,8 +42,12 @@
 class NotationHLayout : public Rosegarden::HorizontalLayoutEngine<NotationElement>
 {
 public:
-    NotationHLayout(Rosegarden::Composition *c, NotePixmapFactory &npf);
+    NotationHLayout(Rosegarden::Composition *c, NotePixmapFactory *npf);
     virtual ~NotationHLayout();
+
+    void setNotePixmapFactory(NotePixmapFactory *npf) {
+	m_npf = npf;
+    }
 
     /**
      * Precomputes layout data for a single staff.  The resulting data
@@ -297,7 +301,7 @@ protected:
     int getPreBarMargin() const;
     int getPostBarMargin() const;
     int getFixedItemSpacing() const {
-	return (int)((m_npf.getNoteBodyWidth() / 5) * m_spacing);
+	return (int)((m_npf->getNoteBodyWidth() / 5) * m_spacing);
     }
 
     const Rosegarden::Quantizer *getQuantizer() const;
@@ -311,7 +315,7 @@ protected:
     bool m_pageMode;
     double m_pageWidth;
     double m_spacing;
-    NotePixmapFactory &m_npf;
+    NotePixmapFactory *m_npf;
 
     static std::vector<double> m_availableSpacings;
 };

@@ -73,7 +73,7 @@ static int src;
 static int abms;
 static int abc;
 
-NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory &npf) :
+NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf) :
     Rosegarden::HorizontalLayoutEngine<NotationElement>(c),
     m_totalWidth(0.),
     m_pageMode(false),
@@ -189,7 +189,7 @@ double NotationHLayout::getIdealBarWidth(StaffType &staff,
 
     int smin = getMinWidth(**shortest);
     if (!(*shortest)->event()->get<Int>(NOTE_DOTS)) {
-        smin += m_npf.getDotWidth()/2;
+        smin += m_npf->getDotWidth()/2;
     }
 
     /* if there aren't many of the shortest notes, we don't want to
@@ -324,7 +324,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 	if (newTimeSig) {
 	    timeSigEvent = timeSignature.getAsEvent(barTimes.first);
 	    fixedWidth += getFixedItemSpacing() +
-		m_npf.getTimeSigWidth(timeSignature);
+		m_npf->getTimeSigWidth(timeSignature);
 	}
 
         for (NotationElementList::iterator itr = from; itr != to; ++itr) {
@@ -521,11 +521,11 @@ NotationHLayout::scanChord(NotationElementList *notes,
     accTable.copyFrom(newAccTable);
 
     if (someAccidental != NoAccidental) {
-	fixedWidth += m_npf.getAccidentalWidth(someAccidental);
+	fixedWidth += m_npf->getAccidentalWidth(someAccidental);
     }
 
     if (chord.hasNoteHeadShifted()) {
-	fixedWidth += m_npf.getNoteBodyWidth();
+	fixedWidth += m_npf->getNoteBodyWidth();
     }
 
     NotationElementList::iterator myShortest = chord.getShortestElement();
@@ -1091,7 +1091,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 //		kdDebug(KDEBUG_AREA) << "Placing timesig at " << x << endl;
 		bdi->timeSigX = (int)x;
 		x += getFixedItemSpacing() +
-		    m_npf.getTimeSigWidth(timeSignature);
+		    m_npf->getTimeSigWidth(timeSignature);
 //		kdDebug(KDEBUG_AREA) << "and moving next elt to " << x << endl;
 		el->setLayoutX(x);
 		timeSigToPlace = false;
@@ -1165,7 +1165,7 @@ NotationHLayout::positionRest(StaffType &staff,
     // Situate the rest somewhat further into its allotted space.  Not
     // convinced this is the right thing to do
 
-    int baseWidth = m_npf.getRestWidth
+    int baseWidth = m_npf->getRestWidth
 	(Note(rest->event()->get<Int>(NOTE_TYPE),
 	      rest->event()->get<Int>(NOTE_DOTS)));
 
@@ -1226,7 +1226,7 @@ NotationHLayout::positionChord(StaffType &staff,
 		  getSpacingDuration(staff, itr)) /
 	barDuration;
 
-    int noteWidth = m_npf.getNoteBodyWidth();
+    int noteWidth = m_npf->getNoteBodyWidth();
 
     // If the chord's allowed a lot of space, situate it somewhat
     // further into its allotted space.  Not convinced this is always
@@ -1235,7 +1235,7 @@ NotationHLayout::positionChord(StaffType &staff,
     double unmodifiedBaseX = baseX;
     if (delta > 2 * noteWidth) {
         int shift = (delta - 2 * noteWidth) / 5;
-	baseX += std::min(shift, (m_npf.getNoteBodyWidth() * 3 / 2));
+	baseX += std::min(shift, (m_npf->getNoteBodyWidth() * 3 / 2));
     }
 
     // Find out whether the chord contains any accidentals, and if so,
@@ -1258,7 +1258,7 @@ NotationHLayout::positionChord(StaffType &staff,
 	Accidental acc = NoAccidental;
 	if (note->event()->get<String>(DISPLAY_ACCIDENTAL, acc) &&
 	    acc != NoAccidental) {
-            accWidth = std::max(accWidth, m_npf.getAccidentalWidth(acc));
+            accWidth = std::max(accWidth, m_npf->getAccidentalWidth(acc));
 	}
 
 	if (groupId != -2) {
@@ -1376,7 +1376,7 @@ int NotationHLayout::getMinWidth(NotationElement &e) const
 
 	clock_t c = clock();
 
-        w += m_npf.getNoteBodyWidth(noteType);
+        w += m_npf->getNoteBodyWidth(noteType);
 
 	++nwc;
 	nwms += (clock() - c) * 1000 / CLOCKS_PER_SEC;
@@ -1384,7 +1384,7 @@ int NotationHLayout::getMinWidth(NotationElement &e) const
 
         long dots;
         if (e.event()->get<Int>(NOTE_DOTS, dots)) {
-            w += m_npf.getDotWidth() * dots;
+            w += m_npf->getDotWidth() * dots;
         }
 
         return w;
@@ -1393,7 +1393,7 @@ int NotationHLayout::getMinWidth(NotationElement &e) const
 
 	clock_t c = clock();
 
-        w += m_npf.getRestWidth(Note(e.event()->get<Int>(NOTE_TYPE),
+        w += m_npf->getRestWidth(Note(e.event()->get<Int>(NOTE_TYPE),
                                      e.event()->get<Int>(NOTE_DOTS)));
 
 	++rwc;
@@ -1406,11 +1406,11 @@ int NotationHLayout::getMinWidth(NotationElement &e) const
 
     if (e.event()->isa(Clef::EventType)) {
 
-        w += m_npf.getClefWidth(Clef(*e.event()));
+        w += m_npf->getClefWidth(Clef(*e.event()));
 
     } else if (e.event()->isa(Key::EventType)) {
 
-        w += m_npf.getKeyWidth(Key(*e.event()));
+        w += m_npf->getKeyWidth(Key(*e.event()));
 
     } else if (e.event()->isa(Indication::EventType)) {
 
@@ -1426,7 +1426,7 @@ int NotationHLayout::getMinWidth(NotationElement &e) const
 
 int NotationHLayout::getComfortableGap(Note::Type type) const
 {
-    int bw = m_npf.getNoteBodyWidth();
+    int bw = m_npf->getNoteBodyWidth();
     if (type < Note::Quaver) return 1;
     else if (type == Note::Quaver) return (bw / 2);
     else if (type == Note::Crotchet) return (bw * 3) / 2;
@@ -1438,12 +1438,12 @@ int NotationHLayout::getComfortableGap(Note::Type type) const
 
 int NotationHLayout::getBarMargin() const
 {
-    return (int)(m_npf.getBarMargin() * m_spacing);
+    return (int)(m_npf->getBarMargin() * m_spacing);
 }
 
 int NotationHLayout::getPreBarMargin() const
 {
-    return (int)(m_npf.getBarMargin()) / 2;
+    return (int)(m_npf->getBarMargin()) / 2;
 }
 
 int NotationHLayout::getPostBarMargin() const

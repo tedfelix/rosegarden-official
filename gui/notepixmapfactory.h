@@ -119,6 +119,8 @@ class NotePixmapFactory : private NoteCharacterNameLookup
 {
 public:
     NotePixmapFactory(std::string fontName = "", int size = -1);
+    NotePixmapFactory(const NotePixmapFactory &);
+    NotePixmapFactory &operator=(const NotePixmapFactory &);
     ~NotePixmapFactory();
 
     static std::set<std::string> getAvailableFontNames();
@@ -168,6 +170,8 @@ public:
     static void dumpStats(std::ostream &);
 
 protected:
+    void init(std::string fontName, int size);
+
     void makeRoomForAccidental(Rosegarden::Accidental);
     void drawAccidental(Rosegarden::Accidental);
 
@@ -209,10 +213,6 @@ protected:
     QPainter m_pm;
 
     static QPoint m_pointZero;
-
-private:
-    NotePixmapFactory(const NotePixmapFactory &);
-    NotePixmapFactory &operator=(const NotePixmapFactory &);
 };
 
 

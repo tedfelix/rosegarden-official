@@ -73,6 +73,9 @@ public slots:
 
     void slotLoopButtonReleased();
 
+    void slotPanelOpenButtonReleased();
+    void slotPanelCloseButtonReleased();
+
 signals:
     void closed();
 

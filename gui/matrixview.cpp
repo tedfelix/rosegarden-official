@@ -60,8 +60,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
                        QWidget *parent)
     : EditView(doc, segments, true, parent),
       m_currentEventSelection(0),
-      m_hlayout(new MatrixHLayout(&doc->getComposition())),
-      m_vlayout(new MatrixVLayout),
+      m_hlayout(&doc->getComposition()),
+      m_vlayout(),
       m_hoveredOverAbsoluteTime(0),
       m_hoveredOverNoteName(0),
       m_previousEvPitch(0)
@@ -153,7 +153,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
         }
     }
 
-    BarButtons *topBarButtons = new BarButtons(m_hlayout, 25,
+    BarButtons *topBarButtons = new BarButtons(&m_hlayout, 25,
                                                false, getCentralFrame());
     setTopBarButtons(topBarButtons);
 
@@ -165,7 +165,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     topBarButtons->getLoopRuler()->setBackgroundColor
 	(RosegardenGUIColours::InsertCursorRuler);
 
-    BarButtons *bottomBarButtons = new BarButtons(m_hlayout, 25,
+    BarButtons *bottomBarButtons = new BarButtons(&m_hlayout, 25,
                                                   true, getCentralFrame());
     bottomBarButtons->connectRulerToDocPointer(doc);
     setBottomBarButtons(bottomBarButtons);
@@ -173,9 +173,6 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
 MatrixView::~MatrixView()
 {
-    delete m_hlayout;
-    delete m_vlayout;
-
     // Delete remaining canvas items.
     QCanvasItemList allItems = canvas()->allItems();
     QCanvasItemList::Iterator it;
@@ -264,21 +261,21 @@ void MatrixView::initStatusBar()
 
 bool MatrixView::applyLayout(int /*staffNo*/)
 {
-    m_hlayout->reset();
-    m_vlayout->reset();
+    m_hlayout.reset();
+    m_vlayout.reset();
         
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-        m_hlayout->scanStaff(*m_staffs[i]);
-        m_vlayout->scanStaff(*m_staffs[i]);
+        m_hlayout.scanStaff(*m_staffs[i]);
+        m_vlayout.scanStaff(*m_staffs[i]);
     }
 
-    m_hlayout->finishLayout();
-    m_vlayout->finishLayout();
+    m_hlayout.finishLayout();
+    m_vlayout.finishLayout();
 
     double maxWidth = 0.0, maxHeight = 0.0;
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-        m_staffs[i]->sizeStaff(*m_hlayout);
+        m_staffs[i]->sizeStaff(m_hlayout);
 
         if (m_staffs[i]->getX() + m_staffs[i]->getTotalWidth() > maxWidth) {
             maxWidth = m_staffs[i]->getX() + m_staffs[i]->getTotalWidth();
@@ -438,11 +435,11 @@ MatrixView::slotSetPointerPosition(timeT time)
     Rosegarden::Composition &comp = m_document->getComposition();
     int barNo = comp.getBarNumber(time);
 
-    if (barNo < m_hlayout->getFirstVisibleBarOnStaff(*m_staffs[0]) ||
-        barNo > m_hlayout-> getLastVisibleBarOnStaff(*m_staffs[0])) {
+    if (barNo < m_hlayout.getFirstVisibleBarOnStaff(*m_staffs[0]) ||
+        barNo > m_hlayout. getLastVisibleBarOnStaff(*m_staffs[0])) {
         m_staffs[0]->hidePointer();
     } else {
-        m_staffs[0]->setPointerPosition(*m_hlayout, time);
+        m_staffs[0]->setPointerPosition(m_hlayout, time);
     }
 
     update();
@@ -454,7 +451,7 @@ MatrixView::slotSetInsertCursorPosition(timeT time)
     //!!! For now.  Probably unlike slotSetPointerPosition this one
     // should snap to the nearest event.
 
-    m_staffs[0]->setInsertCursorPosition(*m_hlayout, time);
+    m_staffs[0]->setInsertCursorPosition(m_hlayout, time);
     update();
 }
 
@@ -498,7 +495,7 @@ void MatrixView::slotEditPaste()
     KTmpStatusMsg msg(i18n("Inserting clipboard contents..."), statusBar());
 
     double ix = m_staffs[0]->getLayoutXOfInsertCursor();
-    timeT time = m_hlayout->getTimeForX(ix);
+    timeT time = m_hlayout.getTimeForX(ix);
     
     PasteCommand *command = new PasteCommand
 	(m_staffs[0]->getSegment(), m_document->getClipboard(), time,

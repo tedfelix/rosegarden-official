@@ -115,6 +115,12 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     connect(LoopButton, SIGNAL(released()),
             SLOT(slotLoopButtonReleased()));
 
+    connect(PanelOpenButton, SIGNAL(released()),
+	    SLOT(slotPanelOpenButtonReleased()));
+
+    connect(PanelCloseButton, SIGNAL(released()),
+	    SLOT(slotPanelCloseButtonReleased()));
+
     // clear labels
     //
     slotClearMidiInLabel();
@@ -499,6 +505,18 @@ RosegardenTransportDialog::slotLoopButtonReleased()
     {
         emit unsetLoop();
     }
+}
+
+void
+RosegardenTransportDialog::slotPanelOpenButtonReleased()
+{
+    RecordingFrame->show();
+}
+
+void
+RosegardenTransportDialog::slotPanelCloseButtonReleased()
+{
+    RecordingFrame->hide();
 }
 
 

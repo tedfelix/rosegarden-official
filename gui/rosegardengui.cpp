@@ -159,17 +159,17 @@ void RosegardenGUIApp::setupActions()
 
     // setup Settings menu
     m_viewToolBar = KStdAction::showToolbar  (this, SLOT(slotToggleToolBar()),   actionCollection());
-    m_viewTracksToolBar = new KToggleAction(i18n("Show Tracks Toolbar"), 0, this,
+    m_viewTracksToolBar = new KToggleAction(i18n("Show T&racks Toolbar"), 0, this,
                                             SLOT(slotToggleTracksToolBar()), actionCollection(),
                                             "show_tracks_toolbar");
     m_viewStatusBar = KStdAction::showStatusbar(this, SLOT(slotToggleStatusBar()), actionCollection());
 
-    m_viewTransport = new KToggleAction(i18n("Show Transport"), 0, this,
+    m_viewTransport = new KToggleAction(i18n("Show Tra&nsport"), 0, this,
                                              SLOT(slotToggleTransport()),
                                              actionCollection(),
                                              "show_transport");
 
-    m_viewTrackLabels = new KToggleAction(i18n("Show Track labels"), 0, this,
+    m_viewTrackLabels = new KToggleAction(i18n("Show Track &Labels"), 0, this,
                                              SLOT(slotToggleTrackLabels()),
                                              actionCollection(),
                                              "show_tracklabels");

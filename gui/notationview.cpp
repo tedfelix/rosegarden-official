@@ -104,9 +104,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_fontName(NotePixmapFactory::getDefaultFont()),
     m_fontSize(NotePixmapFactory::getDefaultSize(m_fontName)),
     m_notePixmapFactory(new NotePixmapFactory(m_fontName, m_fontSize)),
-    m_hlayout(new NotationHLayout(&doc->getComposition(),
-				  *m_notePixmapFactory)),
-    m_vlayout(new NotationVLayout(&doc->getComposition())),
+    m_hlayout(&doc->getComposition(), m_notePixmapFactory),
+    m_vlayout(&doc->getComposition()),
     m_topBarButtons(0),
     m_bottomBarButtons(0),
     m_fontSizeSlider(0),
@@ -201,7 +200,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     }
 
 
-    m_topBarButtons = new BarButtons(m_hlayout, 25,
+    m_topBarButtons = new BarButtons(&m_hlayout, 25,
                                      false, getCentralFrame());
     setTopBarButtons(m_topBarButtons);
 
@@ -214,12 +213,12 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	(RosegardenGUIColours::InsertCursorRuler);
 
     m_chordNameRuler = new ChordNameRuler
-	(m_hlayout, &doc->getComposition(), 20, getCentralFrame());
+	(&m_hlayout, &doc->getComposition(), 20, getCentralFrame());
     addRuler(m_chordNameRuler);
     m_chordNameRuler->hide();
     m_chordNamesVisible = false;
 
-    m_bottomBarButtons = new BarButtons(m_hlayout, 25,
+    m_bottomBarButtons = new BarButtons(&m_hlayout, 25,
                                         true, getCentralFrame());
     setBottomBarButtons(m_bottomBarButtons);
 
@@ -233,9 +232,6 @@ NotationView::~NotationView()
     kdDebug(KDEBUG_AREA) << "-> ~NotationView()\n";
 
     saveOptions();
-
-    delete m_hlayout;
-    delete m_vlayout;
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         delete m_staffs[i]; // this will erase all "notes" canvas items
@@ -817,9 +813,9 @@ void NotationView::setViewSize(QSize s)
 void
 NotationView::slotChangeStretch(int n)
 {
-    vector<double> spacings = m_hlayout->getAvailableSpacings();
+    vector<double> spacings = m_hlayout.getAvailableSpacings();
     if (n >= (int)spacings.size()) n = spacings.size() - 1;
-    m_hlayout->setSpacing(spacings[n]);
+    m_hlayout.setSpacing(spacings[n]);
 
     applyLayout();
 
@@ -905,10 +901,7 @@ NotationView::slotChangeFont(string newName, int newSize)
         m_fontSizeSlider->reinitialise(sizes, m_fontSize);
     }
 
-    double spacing = m_hlayout->getSpacing();
-    setHLayout(new NotationHLayout(&m_document->getComposition(),
-				   *m_notePixmapFactory));
-    m_hlayout->setSpacing(spacing);
+    m_hlayout.setNotePixmapFactory(m_notePixmapFactory);
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         m_staffs[i]->changeFont(m_fontName, m_fontSize);
@@ -942,8 +935,8 @@ NotationView::setPageMode(bool pageMode)
 	if (m_chordNameRuler && m_chordNamesVisible) m_chordNameRuler->show();
     }
 
-    m_hlayout->setPageMode(pageMode);
-    m_hlayout->setPageWidth(width() - 50);
+    m_hlayout.setPageMode(pageMode);
+    m_hlayout.setPageWidth(width() - 50);
     
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         m_staffs[i]->setPageMode(pageMode);
@@ -972,15 +965,15 @@ bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
 
         if (staffNo >= 0 && (int)i != staffNo) continue;
 
-        m_hlayout->resetStaff(*m_staffs[i], startTime, endTime);
-        m_vlayout->resetStaff(*m_staffs[i], startTime, endTime);
+        m_hlayout.resetStaff(*m_staffs[i], startTime, endTime);
+        m_vlayout.resetStaff(*m_staffs[i], startTime, endTime);
 
-        m_hlayout->scanStaff(*m_staffs[i], startTime, endTime);
-        m_vlayout->scanStaff(*m_staffs[i], startTime, endTime);
+        m_hlayout.scanStaff(*m_staffs[i], startTime, endTime);
+        m_vlayout.scanStaff(*m_staffs[i], startTime, endTime);
     }
 
-    m_hlayout->finishLayout(startTime, endTime);
-    m_vlayout->finishLayout(startTime, endTime);
+    m_hlayout.finishLayout(startTime, endTime);
+    m_vlayout.finishLayout(startTime, endTime);
 
     // find the last finishing staff for future use
 
@@ -1082,15 +1075,6 @@ void NotationView::setNotePixmapFactory(NotePixmapFactory* f)
     m_notePixmapFactory = f;
 }
 
-void NotationView::setHLayout(NotationHLayout* l)
-{
-    if (m_hlayout) {
-        l->setPageMode(m_hlayout->getPageMode());
-        l->setPageWidth(m_hlayout->getPageWidth());
-    }
-    delete m_hlayout;
-    m_hlayout = l;
-}
 
 NotationCanvasView* NotationView::getCanvasView()
 {
@@ -1702,11 +1686,11 @@ NotationView::slotSetPointerPosition(timeT time)
     int barNo = comp.getBarNumber(time);
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	if (barNo < m_hlayout->getFirstVisibleBarOnStaff(*m_staffs[i]) ||
-	    barNo > m_hlayout-> getLastVisibleBarOnStaff(*m_staffs[i])) {
+	if (barNo < m_hlayout.getFirstVisibleBarOnStaff(*m_staffs[i]) ||
+	    barNo > m_hlayout. getLastVisibleBarOnStaff(*m_staffs[i])) {
 	    m_staffs[i]->hidePointer();
 	} else {
-	    m_staffs[i]->setPointerPosition(*m_hlayout, time);
+	    m_staffs[i]->setPointerPosition(m_hlayout, time);
 	}
     }
 
@@ -1719,7 +1703,7 @@ NotationView::slotSetInsertCursorPosition(timeT time)
     //!!! For now.  Probably unlike slotSetPointerPosition this one
     // should snap to the nearest event.
 
-    m_staffs[m_currentStaff]->setInsertCursorPosition(*m_hlayout, time);
+    m_staffs[m_currentStaff]->setInsertCursorPosition(m_hlayout, time);
     update();
 }
 
@@ -2044,7 +2028,7 @@ void NotationView::slotPageMode()
 
 void NotationView::slotLabelChords()
 {
-    if (m_hlayout->getPageMode()) return;
+    if (m_hlayout.getPageMode()) return;
     m_chordNamesVisible = !m_chordNamesVisible;
 
     if (!m_chordNamesVisible) {
@@ -2215,7 +2199,7 @@ void NotationView::readjustCanvasSize()
 
         NotationStaff &staff = *m_staffs[i];
 
-        staff.sizeStaff(*m_hlayout);
+        staff.sizeStaff(m_hlayout);
 
         if (staff.getTotalWidth() + staff.getX() > maxWidth) {
             maxWidth = staff.getTotalWidth() + staff.getX() + 1;
