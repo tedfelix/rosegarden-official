@@ -68,9 +68,6 @@ Sed() {
 }
 
 Put() {
-#    echo "disabled for testing purposes, remember?"
-#    exit 1
-
     if [ `whoami` == "silvan" ]; then
 
 	    printf "Publishing \"$1\"... \t"
@@ -88,6 +85,21 @@ Put() {
     fi 
 }
 
+# broken -- don't use yet
+Debork () {
+    echo "Deborking the PDF.  Doo dah, doo dah, this will take a loooong time...."
+    dir=`dirname  $1`
+    name=`basename $1`
+    echo change to $dir
+    echo cd $dir
+    echo Convert PDF to PS
+    echo pdf2ps $name
+    echo Convert PS back to PDF
+    echo ps2pdf $name
+    echo Whee.  Are you still awake?
+}
+
+dopdf=false
 
 case $1 in 
     "en-web")
@@ -95,27 +107,34 @@ case $1 in
     	;;
     "en-pdf")
     		pdf en
-	        Put using-rosegarden/en/using-rosegarden.pdf
+	        dopdf=true
     	;;
     "de-web") 
     		web de
-		Put using-rosegarden/de/arbeiten-mit-rosegarden.pdf
 	;;
     "de-pdf") 
     		pdf de
 	;;
-    "all") 
-    		web en
-		pdf en
-#		web de
-#		pdf de
-	        Put using-rosegarden/en/using-rosegarden.pdf
+    "put")
+#		Debork using-rosegarden/en/using-rosegarden.pdf
+#	        Put using-rosegarden/en/using-rosegarden.pdf
 #		Put using-rosegarden/de/arbeiten-mit-rosegarden.pdf
 		echo Attempting an automatic CVS commit...
 	        cvs -f commit -m "* automatic commit by $0 - \" $2 \"" '.' 
+    	;;	
+    "all") 
+    		web en
+		pdf en
+		dopdf=true
+#		web de
+#		pdf de
 	;;
     *) Usage
     	;;
 esac
+
+if [ dopdf ]; then
+    echo "Remember to fix the PDFs manually with xpdf and then run \"docmake put\" to upload..."
+fi
 
 exit 0
