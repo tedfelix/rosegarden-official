@@ -1,5 +1,5 @@
 
-Rosegarden-4 v0.2.0
+Rosegarden-4 v0.8.0
 ===================
 
 Rosegarden-4 is a MIDI and audio sequencer and musical notation editor.
@@ -32,13 +32,8 @@ If you obtained the source code from the SourceForge CVS repository:
   source code for a description of how to compile code from CVS.
 
   You may wish to run one of the developers' configure scripts such as
-  "gl_configure"; you will first need to change the Qt and KDE2 install
-  paths in the script according to your setup.  The most important
-  thing in the script is
-
-    CXXFLAGS="-g3 -gstabs+ -fexceptions"
-
-  before the call to "configure", as we use exceptions in the code.
+  "gl_configure"; you will first need to change the Qt and KDE install
+  paths in the script according to your setup.
 
   After configuring, run "make" and, if the compile succeeds, "make
   install".  (The pixmaps need to be installed to the global KDE
@@ -86,7 +81,7 @@ Notes for developers
 
 We are actively seeking developers who are interested in coding new
 parts of the application, adding features, and fixing bugs.  See
-docs/task_lists/0.2_planned_tasks.txt for some idea of the things
+the files in docs/task_lists/ for some idea of the things
 we're already thinking about doing for the next developer release.
 Good ideas are also welcome.
 
