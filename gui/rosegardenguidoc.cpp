@@ -39,16 +39,13 @@
 QList<RosegardenGUIView> *RosegardenGUIDoc::pViewList = 0L;
 
 RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent, const char *name)
-    : QObject(parent, name),
-      m_viewElementsManager(0)
+    : QObject(parent, name)
 {
     if(!pViewList) {
         pViewList = new QList<RosegardenGUIView>();
     }
 
     pViewList->setAutoDelete(true);
-
-    m_viewElementsManager = new ViewElementsManager(m_composition);
 }
 
 RosegardenGUIDoc::~RosegardenGUIDoc()
@@ -196,8 +193,6 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
         return false;
     }
 
-    m_viewElementsManager = new ViewElementsManager(m_composition);
-
     kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::openDocument() end - "
                          << "m_composition : " << &m_composition
                          << " - m_composition->getNbTracks() : "
@@ -286,9 +281,6 @@ void RosegardenGUIDoc::deleteContents()
     deleteViews();
 
     m_composition.clear();
-
-    delete m_viewElementsManager;
-    m_viewElementsManager = 0;
 }
 
 void RosegardenGUIDoc::deleteViews()

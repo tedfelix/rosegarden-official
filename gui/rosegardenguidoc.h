@@ -109,9 +109,6 @@ public:
     unsigned int getNbTracks() const { return m_composition.getNbTracks(); }
     unsigned int getNbBars()   const { return m_composition.getNbBars(); }
 
-    ViewElementsManager*       getViewElementsManager()       { return m_viewElementsManager; }
-    const ViewElementsManager* getViewElementsManager() const { return m_viewElementsManager; }
-
 public slots:
 
     /** calls repaint() on all views connected to the document object
@@ -143,8 +140,6 @@ private:
      * the document
      */
     Composition m_composition;
-
-    ViewElementsManager *m_viewElementsManager;
 
 };
 
