@@ -43,7 +43,7 @@ Q_OBJECT
 public:
     RosegardenTransportDialog(QWidget *parent=0,
                               const char *name=0,
-                              WFlags flags = Qt::WStyle_StaysOnTop |
+                              WFlags flags = /*Qt::WStyle_StaysOnTop |*/
                                              Qt::WStyle_NormalBorder);
     ~RosegardenTransportDialog();
 

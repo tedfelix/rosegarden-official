@@ -1006,9 +1006,11 @@ RosegardenGUIView::updateMeters(SequencerMapper *mapper)
 	// Eech.  If we have a mixer and this is an audio instrument, then
 	// our mixer has already used up the "is new?" token.
         //
-	if (instrument->getType() != Rosegarden::Instrument::Audio) {
+        /*
+	if (instrument->getType() == Rosegarden::Instrument::Audio) {
 	    if (!isNew) continue;
 	}
+        */
 
         // Don't send a 0 to any meters
         //

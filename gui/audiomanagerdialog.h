@@ -46,6 +46,7 @@ class KURL;
 class QPushButton;
 class QPixmap;
 class QAccel;
+class QTimer;
 class KListView;
 
 namespace Rosegarden
@@ -158,6 +159,7 @@ signals:
     void closing();
 protected slots:
     void slotDropped(QDropEvent*, QListViewItem*);
+    void slotCancelPlayingAudio();
 
 protected:
     bool addFile(const KURL& kurl);
@@ -184,6 +186,7 @@ protected:
 
     Rosegarden::AudioFileId  m_playingAudioFile;
     AudioPlayingDialog      *m_audioPlayingDialog;
+    QTimer                  *m_playTimer;
 
     static const char* const m_listViewLayoutName;
     static const int         m_maxPreviewWidth;

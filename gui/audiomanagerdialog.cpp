@@ -26,6 +26,7 @@
 #include <qvbuttongroup.h>
 #include <qpainter.h>
 #include <qpixmap.h>
+#include <qtimer.h>
 
 #include <kurl.h>
 #include <kapplication.h>
@@ -166,6 +167,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     m_doc(doc),
     m_playingAudioFile(0),
     m_audioPlayingDialog(0),
+    m_playTimer(new QTimer(this)),
     m_audiblePreview(true)
 {
     setWFlags(WDestructiveClose);
@@ -270,6 +272,8 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 
     setInitialSize(configDialogSize(AudioManagerDialogConfigGroup));
 
+    connect(m_playTimer, SIGNAL(timeout()), 
+            this, SLOT(slotCancelPlayingAudio()));
 }
 
 AudioManagerDialog::~AudioManagerDialog()
@@ -682,15 +686,31 @@ AudioManagerDialog::slotPlayPreview()
     m_audioPlayingDialog =
         new AudioPlayingDialog(this, QString(audioFile->getFilename().c_str()));
 
+    // Setup timer to pop down dialog after file has completed
+    //
+    int msecs = item->getDuration().sec * 1000 +
+                item->getDuration().nsec / 1000000;
+    m_playTimer->start(msecs, true); // single shot
+
     // just execute
     //
     if (m_audioPlayingDialog->exec() == QDialog::Rejected)
-        emit cancelPlayingAudioFile(m_playingAudioFile);
+       emit cancelPlayingAudioFile(m_playingAudioFile);
 
     delete m_audioPlayingDialog;
     m_audioPlayingDialog = 0;
 
+    m_playTimer->stop();
+
 }
+
+void
+AudioManagerDialog::slotCancelPlayingAudio()
+{
+    delete m_audioPlayingDialog;
+    m_playTimer->stop();
+}
+
 
 // Add a file to the audio file manager - allow previews and
 // enforce file types.

@@ -46,7 +46,7 @@ namespace Rosegarden
 RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
                                                      const char *name,
                                                      WFlags flags):
-    KDockMainWindow(0, name, flags),
+    KDockMainWindow(parent, name, flags | WType_Dialog | WDestructiveClose),
     m_transport(0),
     m_lastTenHours(0),
     m_lastUnitHours(0),
