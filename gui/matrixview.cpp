@@ -91,23 +91,23 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     QObject::connect
         (getCanvasView(), SIGNAL(mousePressed(Rosegarden::timeT, int, QMouseEvent*, MatrixElement*)),
-         this,         SLOT  (mousePressed(Rosegarden::timeT, int, QMouseEvent*, MatrixElement*)));
+         this,         SLOT  (slotMousePressed(Rosegarden::timeT, int, QMouseEvent*, MatrixElement*)));
 
     QObject::connect
         (getCanvasView(), SIGNAL(mouseMoved(Rosegarden::timeT, QMouseEvent*)),
-         this,         SLOT  (mouseMoved(Rosegarden::timeT, QMouseEvent*)));
+         this,         SLOT  (slotMouseMoved(Rosegarden::timeT, QMouseEvent*)));
 
     QObject::connect
         (getCanvasView(), SIGNAL(mouseReleased(Rosegarden::timeT, QMouseEvent*)),
-         this,         SLOT  (mouseReleased(Rosegarden::timeT, QMouseEvent*)));
+         this,         SLOT  (slotMouseReleased(Rosegarden::timeT, QMouseEvent*)));
 
     QObject::connect
         (getCanvasView(), SIGNAL(hoveredOverNoteChanged(const QString&)),
-         this,         SLOT  (hoveredOverNoteChanged(const QString&)));
+         this,         SLOT  (slotHoveredOverNoteChanged(const QString&)));
 
     QObject::connect
         (getCanvasView(), SIGNAL(hoveredOverAbsoluteTimeChanged(unsigned int)),
-         this,         SLOT  (hoveredOverAbsoluteTimeChanged(unsigned int)));
+         this,         SLOT  (slotHoveredOverAbsoluteTimeChanged(unsigned int)));
 
 
     kdDebug(KDEBUG_AREA) << "MatrixView : applying layout\n";
@@ -323,7 +323,7 @@ void MatrixView::slotSelectSelected()
     setTool(selector);
 }
 
-void MatrixView::mousePressed(Rosegarden::timeT time, int pitch,
+void MatrixView::slotMousePressed(Rosegarden::timeT time, int pitch,
                               QMouseEvent* e, MatrixElement* el)
 {
     kdDebug(KDEBUG_AREA) << "MatrixView::mousePressed at pitch "
@@ -332,7 +332,7 @@ void MatrixView::mousePressed(Rosegarden::timeT time, int pitch,
     m_tool->handleMousePress(time, pitch, 0, e, el);
 }
 
-void MatrixView::mouseMoved(Rosegarden::timeT time, QMouseEvent* e)
+void MatrixView::slotMouseMoved(Rosegarden::timeT time, QMouseEvent* e)
 {
     if (activeItem()) {
         activeItem()->handleMouseMove(e);
@@ -342,7 +342,7 @@ void MatrixView::mouseMoved(Rosegarden::timeT time, QMouseEvent* e)
         m_tool->handleMouseMove(time, 0, e);
 }
 
-void MatrixView::mouseReleased(Rosegarden::timeT time, QMouseEvent* e)
+void MatrixView::slotMouseReleased(Rosegarden::timeT time, QMouseEvent* e)
 {
     if (activeItem()) {
         activeItem()->handleMouseRelease(e);
@@ -353,13 +353,13 @@ void MatrixView::mouseReleased(Rosegarden::timeT time, QMouseEvent* e)
 }
 
 void
-MatrixView::hoveredOverNoteChanged(const QString &noteName)
+MatrixView::slotHoveredOverNoteChanged(const QString &noteName)
 {
     m_hoveredOverNoteName->setText(QString(" ") + noteName);
 }
 
 void
-MatrixView::hoveredOverAbsoluteTimeChanged(unsigned int time)
+MatrixView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
 {
     timeT t = time;
     Rosegarden::RealTime rt =

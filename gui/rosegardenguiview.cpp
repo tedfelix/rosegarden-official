@@ -144,7 +144,7 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
 //     trackButtonsView->setFrameStyle(Plain);
 
 //     connect(m_trackButtons, SIGNAL(trackSelected(int)),
-//             this,         SLOT(selectTrackSegments(int)));
+//             this,         SLOT(slotSelectTrackSegments(int)));
 
 //     // turn off the scrollbars on the track buttons and set width
 //     //
@@ -172,18 +172,18 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
 
     connect(m_trackEditor->getSegmentCanvas(),
             SIGNAL(editSegmentNotation(Rosegarden::Segment*)),
-            SLOT(editSegmentNotation(Rosegarden::Segment*)));
+            SLOT(slotEditSegmentNotation(Rosegarden::Segment*)));
 
     connect(m_trackEditor->getSegmentCanvas(),
             SIGNAL(editSegmentMatrix(Rosegarden::Segment*)),
-            SLOT(editSegmentMatrix(Rosegarden::Segment*)));
+            SLOT(slotEditSegmentMatrix(Rosegarden::Segment*)));
 
     connect(m_trackEditor->getSegmentCanvas(),
             SIGNAL(editSegmentAudio(Rosegarden::Segment*)),
-            SLOT(editSegmentAudio(Rosegarden::Segment*)));
+            SLOT(slotEditSegmentAudio(Rosegarden::Segment*)));
 
     connect(m_trackEditor,  SIGNAL(scrollHorizTo(int)),
-            SLOT(scrollTrackEditorHoriz(int)));
+            SLOT(slotScrollTrackEditorHoriz(int)));
 
     // Re-emit signals from the loop ruler
     //
@@ -224,32 +224,32 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     connect(m_trackEditor->getTopBarButtons()->getLoopRuler(),
             SIGNAL(setPointerPosition(Rosegarden::timeT)),
             parent,
-            SLOT(setPointerPosition(Rosegarden::timeT)));
+            SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
     connect(m_trackEditor->getTopBarButtons()->getLoopRuler(),
             SIGNAL(setPlayPosition(Rosegarden::timeT)),
             parent,
-            SLOT(setPlayPosition(Rosegarden::timeT)));
+            SLOT(slotSetPlayPosition(Rosegarden::timeT)));
 
     connect(m_trackEditor->getTopBarButtons()->getLoopRuler(),
             SIGNAL(setLoop(Rosegarden::timeT, Rosegarden::timeT)),
             parent,
-            SLOT(setLoop(Rosegarden::timeT, Rosegarden::timeT)));
+            SLOT(slotSetLoop(Rosegarden::timeT, Rosegarden::timeT)));
 
     connect(m_trackEditor->getBottomBarButtons()->getLoopRuler(),
             SIGNAL(setPointerPosition(Rosegarden::timeT)),
             parent,
-            SLOT(setPointerPosition(Rosegarden::timeT)));
+            SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
     connect(m_trackEditor->getBottomBarButtons()->getLoopRuler(),
             SIGNAL(setPlayPosition(Rosegarden::timeT)),
             parent,
-            SLOT(setPlayPosition(Rosegarden::timeT)));
+            SLOT(slotSetPlayPosition(Rosegarden::timeT)));
 
     connect(m_trackEditor->getBottomBarButtons()->getLoopRuler(),
             SIGNAL(setLoop(Rosegarden::timeT, Rosegarden::timeT)),
             parent,
-            SLOT(setLoop(Rosegarden::timeT, Rosegarden::timeT)));
+            SLOT(slotSetLoop(Rosegarden::timeT, Rosegarden::timeT)));
 
 
     if (doc)
@@ -304,11 +304,11 @@ void RosegardenGUIView::print(KPrinter *pPrinter, Rosegarden::Composition* p)
 
 void RosegardenGUIView::selectTool(SegmentCanvas::ToolType tool)
 {
-    m_trackEditor->getSegmentCanvas()->setTool(tool);
+    m_trackEditor->getSegmentCanvas()->slotSetTool(tool);
 }
 
 
-void RosegardenGUIView::editSegmentNotation(Rosegarden::Segment* p)
+void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
 {
     std::vector<Rosegarden::Segment *> segmentsToEdit;
     segmentsToEdit.push_back(p);
@@ -317,7 +317,7 @@ void RosegardenGUIView::editSegmentNotation(Rosegarden::Segment* p)
     notationView->show();
 }
 
-void RosegardenGUIView::editSegmentMatrix(Rosegarden::Segment* p)
+void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
 {
     std::vector<Rosegarden::Segment *> segmentsToEdit;
     segmentsToEdit.push_back(p);
@@ -326,16 +326,16 @@ void RosegardenGUIView::editSegmentMatrix(Rosegarden::Segment* p)
     matrixView->show();
 }
 
-void RosegardenGUIView::editSegmentAudio(Rosegarden::Segment* p)
+void RosegardenGUIView::slotEditSegmentAudio(Rosegarden::Segment* p)
 {
-    std::cout << "RosegardenGUIView::editSegmentAudio() - got segment" << endl;
+    std::cout << "RosegardenGUIView::slotEditSegmentAudio() - got segment" << endl;
 }
 
 
 // This scrolling model pages the SegmentCanvas across the screen
 //
 //
-void RosegardenGUIView::scrollTrackEditorHoriz(int hpos)
+void RosegardenGUIView::slotScrollTrackEditorHoriz(int hpos)
 {
     QScrollView* scrollView = m_trackEditor->getSegmentCanvas();
     
@@ -381,7 +381,7 @@ void RosegardenGUIView::editAllTracks(Rosegarden::Composition* p)
 
 void RosegardenGUIView::setPointerPosition(const Rosegarden::timeT &position)
 {
-    m_trackEditor->setPointerPosition(position);
+    m_trackEditor->slotSetPointerPosition(position);
 }
 
 // Highlight all the Segments on a Track because the Track has been selected
@@ -389,7 +389,7 @@ void RosegardenGUIView::setPointerPosition(const Rosegarden::timeT &position)
 // these tracks.
 //
 //
-void RosegardenGUIView::selectTrackSegments(int trackId)
+void RosegardenGUIView::slotSelectTrackSegments(int trackId)
 {
     // Send this signal to the GUI to activate the correct tool
     // on the toolbar so that we have a SegmentSelector object
@@ -410,19 +410,19 @@ void RosegardenGUIView::selectTrackSegments(int trackId)
     // Send the segment list even if it's empty as we
     // use that to clear any current selection
     //
-    m_trackEditor->getSegmentCanvas()->selectSegments(segments);
+    m_trackEditor->getSegmentCanvas()->slotSelectSegments(segments);
 }
 
 // Show a segment as it records
 //
 void RosegardenGUIView::showRecordingSegmentItem(Rosegarden::Segment* segment)
 {
-    m_trackEditor->updateRecordingSegmentItem(segment);
+    m_trackEditor->slotUpdateRecordingSegmentItem(segment);
 }
 
 void RosegardenGUIView::deleteRecordingSegmentItem()
 {
-    m_trackEditor->deleteRecordingSegmentItem();
+    m_trackEditor->slotDeleteRecordingSegmentItem();
 }
 
 
@@ -433,8 +433,8 @@ void RosegardenGUIView::deleteRecordingSegmentItem()
 void RosegardenGUIView::setLoopMarker(Rosegarden::timeT startLoop,
                                       Rosegarden::timeT endLoop)
 {
-    m_trackEditor->getTopBarButtons()->getLoopRuler()->setLoopMarker(startLoop,
-                                                                     endLoop);
+    m_trackEditor->getTopBarButtons()->getLoopRuler()->slotSetLoopMarker
+	(startLoop, endLoop);
 }
 
 
@@ -443,22 +443,23 @@ void RosegardenGUIView::setLoopMarker(Rosegarden::timeT startLoop,
 void RosegardenGUIView::showVisuals(const Rosegarden::MappedEvent *mE)
 {
     double value = ((double)mE->getVelocity()) / 127.0;
-    m_trackEditor->getTrackButtons()->setTrackMeter(value, mE->getTrack());
+    m_trackEditor->getTrackButtons()->slotSetTrackMeter(value, mE->getTrack());
 }
 
 
 void
 RosegardenGUIView::setControl(const bool &value)
 {
-    m_trackEditor->setSelectCopy(value);
+    m_trackEditor->slotSetSelectCopy(value);
 }
 
 void
 RosegardenGUIView::setShift(const bool &value)
 {
-    m_trackEditor->setSelectAdd(value);
-    m_trackEditor->getTopBarButtons()->getLoopRuler()->setLoopingMode(value);
-    m_trackEditor->setFineGrain(value);
+    m_trackEditor->slotSetSelectAdd(value);
+    m_trackEditor->getTopBarButtons()->getLoopRuler()->
+	slotSetLoopingMode(value);
+    m_trackEditor->slotSetFineGrain(value);
 } 
 
 

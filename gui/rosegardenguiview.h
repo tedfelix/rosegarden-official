@@ -132,9 +132,9 @@ public:
     void showVisuals(const Rosegarden::MappedEvent *mE);
     
 public slots:
-    void editSegmentNotation(Rosegarden::Segment*);
-    void editSegmentMatrix(Rosegarden::Segment*);
-    void editSegmentAudio(Rosegarden::Segment*);
+    void slotEditSegmentNotation(Rosegarden::Segment*);
+    void slotEditSegmentMatrix(Rosegarden::Segment*);
+    void slotEditSegmentAudio(Rosegarden::Segment*);
 
     /**
      * Scroll the TrackEditor horizontally to the specified
@@ -142,12 +142,12 @@ public slots:
      *
      * @see TrackEditor#scrollHorizTo(int)
      */
-    void scrollTrackEditorHoriz(int hpos);
+    void slotScrollTrackEditorHoriz(int hpos);
 
     // Called by signal from Track selection routine to highlight
     // all available Segments on a Track
     //
-    void selectTrackSegments(int);
+    void slotSelectTrackSegments(int);
 
 signals:
     // Signals to tell the main GUI and any other views to

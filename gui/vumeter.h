@@ -54,8 +54,8 @@ protected:
     virtual void meterStop() = 0;
 
 private slots:
-    void reduceLevel();
-    void stopShowingPeak();
+    void slotReduceLevel();
+    void slotStopShowingPeak();
 
 protected:
     int         m_originalHeight;

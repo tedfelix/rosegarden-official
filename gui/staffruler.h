@@ -62,8 +62,10 @@ public:
     virtual void handleMouseMove(QMouseEvent*);
     virtual void handleMouseRelease(QMouseEvent*);
 
+    void setPosition(int pos) { slotSetPosition(pos); }
+
 public slots:
-    void setPosition(int pos);
+    void slotSetPosition(int pos);
 
 signals:
     void positionChange(int pos);
@@ -119,7 +121,7 @@ public:
     /// Re-create all the steps and substeps
     void update();
 
-    void setCursorPosition(unsigned int pos) { m_cursor->setPosition(pos); }
+    void setCursorPosition(unsigned int pos) { m_cursor->slotSetPosition(pos); }
     unsigned int getCursorPosition() const   { return int(m_cursor->x());  }
     
     PositionCursor* getCursor() { return m_cursor; }

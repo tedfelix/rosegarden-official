@@ -99,26 +99,28 @@ public:
 
 public slots:
 
+//!!! I suspect most of these of never actually being used as slots, only as plain methods
+
     /**
      * Receive notification from the command history that a
      * command has happened
      */
-    void commandExecuted(KCommand *);
+    void slotCommandExecuted(KCommand *);
 
     /**
      * Set the position pointer during playback
      */
-    void setPointerPosition(Rosegarden::timeT position);
+    void slotSetPointerPosition(Rosegarden::timeT position);
 
     /**
      * Show a Segment as it records
      */
-    void updateRecordingSegmentItem(Rosegarden::Segment *segment);
+    void slotUpdateRecordingSegmentItem(Rosegarden::Segment *segment);
 
     /*
      * Destroys same
      */
-    void deleteRecordingSegmentItem();
+    void slotDeleteRecordingSegmentItem();
 
     /**
      * c.f. what we have in rosegardenguiview.h
@@ -127,9 +129,9 @@ public slots:
      * the SegmentCanvas.
      *
      */
-    void setSelectAdd(bool value);
-    void setSelectCopy(bool value);
-    void setFineGrain(bool value);
+    void slotSetSelectAdd(bool value);
+    void slotSetSelectCopy(bool value);
+    void slotSetFineGrain(bool value);
 
 
 protected slots:

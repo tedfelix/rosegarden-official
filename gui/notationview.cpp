@@ -136,31 +136,31 @@ NotationView::NotationView(RosegardenGUIView* rgView,
     //
     QObject::connect
         (getCanvasView(), SIGNAL(itemPressed(int, int, QMouseEvent*, NotationElement*)),
-         this,         SLOT  (itemPressed(int, int, QMouseEvent*, NotationElement*)));
+         this,         SLOT  (slotItemPressed(int, int, QMouseEvent*, NotationElement*)));
 
     QObject::connect
         (getCanvasView(), SIGNAL(activeItemPressed(QMouseEvent*, QCanvasItem*)),
-         this,         SLOT  (activeItemPressed(QMouseEvent*, QCanvasItem*)));
+         this,         SLOT  (slotActiveItemPressed(QMouseEvent*, QCanvasItem*)));
 
     QObject::connect
         (getCanvasView(), SIGNAL(mouseMoved(QMouseEvent*)),
-         this,         SLOT  (mouseMoved(QMouseEvent*)));
+         this,         SLOT  (slotMouseMoved(QMouseEvent*)));
 
     QObject::connect
         (getCanvasView(), SIGNAL(mouseReleased(QMouseEvent*)),
-         this,         SLOT  (mouseReleased(QMouseEvent*)));
+         this,         SLOT  (slotMouseReleased(QMouseEvent*)));
 
     QObject::connect
         (getCanvasView(), SIGNAL(hoveredOverNoteChanged(const QString&)),
-         this,         SLOT  (hoveredOverNoteChanged(const QString&)));
+         this,         SLOT  (slotHoveredOverNoteChanged(const QString&)));
 
     QObject::connect
         (getCanvasView(), SIGNAL(hoveredOverAbsoluteTimeChanged(unsigned int)),
-         this,         SLOT  (hoveredOverAbsoluteTimeChanged(unsigned int)));
+         this,         SLOT  (slotHoveredOverAbsoluteTimeChanged(unsigned int)));
 
     QObject::connect
 	(rgView, SIGNAL(setGUIPositionPointer(Rosegarden::timeT)),
-	 this,   SLOT  (setGUIPositionPointer(Rosegarden::timeT)));
+	 this,   SLOT  (slotSetGUIPositionPointer(Rosegarden::timeT)));
 
     //
     // Window appearance (options, title...)
@@ -735,7 +735,7 @@ void NotationView::initFontToolbar(int legatoUnit)
     }
 
     connect(fontCombo, SIGNAL(activated(const QString &)),
-            this,        SLOT(changeFont(const QString &)));
+            this,        SLOT(slotChangeFont(const QString &)));
 
     new QLabel(i18n("  Size:  "), fontToolbar);
 
@@ -743,7 +743,7 @@ void NotationView::initFontToolbar(int legatoUnit)
     m_fontSizeSlider = new ZoomSlider<int>
         (sizes, m_fontSize, QSlider::Horizontal, fontToolbar);
     connect(m_fontSizeSlider, SIGNAL(valueChanged(int)),
-            this, SLOT(changeFontSizeFromIndex(int)));
+            this, SLOT(slotChangeFontSizeFromIndex(int)));
 
     new QLabel(i18n("  Spacing:  "), fontToolbar);
 
@@ -751,7 +751,7 @@ void NotationView::initFontToolbar(int legatoUnit)
     QSlider *stretchSlider = new ZoomSlider<double>
         (spacings, 1.0, QSlider::Horizontal, fontToolbar);
     connect(stretchSlider, SIGNAL(valueChanged(int)),
-            this, SLOT(changeStretch(int)));
+            this, SLOT(slotChangeStretch(int)));
 
     new QLabel(i18n("  Legato:  "), fontToolbar);
 
@@ -764,7 +764,7 @@ void NotationView::initFontToolbar(int legatoUnit)
     QSlider *quantizeSlider = new ZoomSlider<int>
         (m_legatoDurations, legatoUnit, QSlider::Horizontal, fontToolbar);
     connect(quantizeSlider, SIGNAL(valueChanged(int)),
-            this, SLOT(changeLegato(int)));
+            this, SLOT(slotChangeLegato(int)));
 }
 
 void NotationView::initStatusBar()
@@ -800,7 +800,7 @@ void NotationView::setViewSize(QSize s)
 }
 
 void
-NotationView::changeStretch(int n)
+NotationView::slotChangeStretch(int n)
 {
     vector<double> spacings = m_hlayout->getAvailableSpacings();
     if (n >= (int)spacings.size()) n = spacings.size() - 1;
@@ -815,7 +815,7 @@ NotationView::changeStretch(int n)
     update();
 }
 
-void NotationView::changeLegato(int n)
+void NotationView::slotChangeLegato(int n)
 {
     if (n >= (int)m_legatoDurations.size())
         n = m_legatoDurations.size() - 1;
@@ -835,38 +835,38 @@ void NotationView::changeLegato(int n)
 
 
 void
-NotationView::changeFont(const QString &newName)
+NotationView::slotChangeFont(const QString &newName)
 {
     kdDebug(KDEBUG_AREA) << "changeFont: " << newName << endl;
-    changeFont(std::string(newName.latin1()));
+    slotChangeFont(std::string(newName.latin1()));
 }
 
 
 void
-NotationView::changeFont(string newName)
+NotationView::slotChangeFont(string newName)
 {
-    changeFont(newName, NotePixmapFactory::getDefaultSize(newName));
+    slotChangeFont(newName, NotePixmapFactory::getDefaultSize(newName));
 }
 
 
 void
-NotationView::changeFontSize(int newSize)
+NotationView::slotChangeFontSize(int newSize)
 {
-    changeFont(m_fontName, newSize);
+    slotChangeFont(m_fontName, newSize);
 }
 
 
 void
-NotationView::changeFontSizeFromIndex(int n)
+NotationView::slotChangeFontSizeFromIndex(int n)
 {
     vector<int> sizes = NotePixmapFactory::getAvailableSizes(m_fontName);
     if (n >= (int)sizes.size()) n = sizes.size()-1;
-    changeFont(m_fontName, sizes[n]);
+    slotChangeFont(m_fontName, sizes[n]);
 }
 
 
 void
-NotationView::changeFont(string newName, int newSize)
+NotationView::slotChangeFont(string newName, int newSize)
 {
     kdDebug(KDEBUG_AREA) << "NotationView::changeResolution(" << newSize << ")\n";
 
@@ -1012,8 +1012,8 @@ void NotationView::setCurrentSelectedNote(const char *pixmapName,
     else
         inserter = dynamic_cast<NoteInserter*>(m_toolBox->getTool(NoteInserter::ToolName));
 
-    inserter->setNote(n);
-    inserter->setDots(dots);
+    inserter->slotSetNote(n);
+    inserter->slotSetDots(dots);
 
     setTool(inserter);
 
@@ -1633,7 +1633,7 @@ void NotationView::slotDebugDump()
 
 
 void
-NotationView::setGUIPositionPointer(timeT time)
+NotationView::slotSetGUIPositionPointer(timeT time)
 {
     Rosegarden::Composition &comp = m_document->getComposition();
     int barNo = comp.getBarNumber(time);
@@ -1975,11 +1975,11 @@ void NotationView::slotPageMode()
 
 //----------------------------------------------------------------------
 
-void NotationView::itemPressed(int height, int staffNo,
+void NotationView::slotItemPressed(int height, int staffNo,
                                QMouseEvent* e,
                                NotationElement* el)
 {
-    kdDebug(KDEBUG_AREA) << "NotationView::itemPressed(height = "
+    kdDebug(KDEBUG_AREA) << "NotationView::slotItemPressed(height = "
                          << height << ", staffNo = " << staffNo
                          << ")\n";
 
@@ -2023,7 +2023,7 @@ void NotationView::itemPressed(int height, int staffNo,
     
 }
 
-void NotationView::mouseMoved(QMouseEvent *e)
+void NotationView::slotMouseMoved(QMouseEvent *e)
 {
     if (activeItem()) {
         activeItem()->handleMouseMove(e);
@@ -2034,7 +2034,7 @@ void NotationView::mouseMoved(QMouseEvent *e)
                                 e);
 }
 
-void NotationView::mouseReleased(QMouseEvent *e)
+void NotationView::slotMouseReleased(QMouseEvent *e)
 {
     if (activeItem()) {
         activeItem()->handleMouseRelease(e);
@@ -2153,13 +2153,13 @@ void NotationView::readjustCanvasSize()
 }
 
 void
-NotationView::hoveredOverNoteChanged(const QString &noteName)
+NotationView::slotHoveredOverNoteChanged(const QString &noteName)
 {
     m_hoveredOverNoteName->setText(QString(" ") + noteName);
 }
 
 void
-NotationView::hoveredOverAbsoluteTimeChanged(unsigned int time)
+NotationView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
 {
     timeT t = time;
     Rosegarden::RealTime rt =

@@ -337,7 +337,7 @@ void MatrixPainter::handleMouseRelease(Rosegarden::timeT,
 
 }
 
-void MatrixPainter::setResolution(Rosegarden::Note::Type note)
+void MatrixPainter::slotSetResolution(Rosegarden::Note::Type note)
 {
     m_resolution = note;
 }
@@ -382,7 +382,7 @@ MatrixSelector::MatrixSelector(MatrixView* view)
       m_clickedElement(0)
 {
     connect(m_parentView, SIGNAL(usedSelection()),
-            this,         SLOT(hideSelection()));
+            this,         SLOT(slotHideSelection()));
 }
 
 void MatrixSelector::handleLeftButtonPress(Rosegarden::timeT,
@@ -492,7 +492,7 @@ void MatrixSelector::stow()
 }
 
 
-void MatrixSelector::hideSelection()
+void MatrixSelector::slotHideSelection()
 {
     if (!m_selectionRect) return;
     m_selectionRect->hide();

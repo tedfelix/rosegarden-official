@@ -173,20 +173,19 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     // Connect horiz. scrollbar
     //
     connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
-            m_topBarButtons, SLOT(scrollHoriz(int)));
+            m_topBarButtons, SLOT(slotScrollHoriz(int)));
     connect(m_horizontalScrollBar, SIGNAL(sliderMoved(int)),
-            m_topBarButtons, SLOT(scrollHoriz(int)));
+            m_topBarButtons, SLOT(slotScrollHoriz(int)));
 
     connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
-            m_bottomBarButtons, SLOT(scrollHoriz(int)));
+            m_bottomBarButtons, SLOT(slotScrollHoriz(int)));
     connect(m_horizontalScrollBar, SIGNAL(sliderMoved(int)),
-            m_bottomBarButtons, SLOT(scrollHoriz(int)));
+            m_bottomBarButtons, SLOT(slotScrollHoriz(int)));
 
     connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
             m_segmentCanvas->horizontalScrollBar(), SIGNAL(valueChanged(int)));
     connect(m_horizontalScrollBar, SIGNAL(sliderMoved(int)),
             m_segmentCanvas->horizontalScrollBar(), SIGNAL(sliderMoved(int)));
-
 
     connect(this, SIGNAL(needUpdate()),
             m_segmentCanvas, SLOT(update()));
@@ -211,7 +210,7 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
 
     QObject::connect
 	(getCommandHistory(), SIGNAL(commandExecuted(KCommand *)),
-	 this,		      SLOT  (commandExecuted(KCommand *)));
+	 this,		      SLOT(slotCommandExecuted(KCommand *)));
 
     // create the position pointer
     m_pointer = new QCanvasLine(canvas);
@@ -269,7 +268,7 @@ TrackEditor::setupSegments()
     }
 }
 
-void TrackEditor::commandExecuted(KCommand *command)
+void TrackEditor::slotCommandExecuted(KCommand *command)
 {
     kdDebug(KDEBUG_AREA) << "TrackEditor::commandExecuted" << endl;
 
@@ -381,7 +380,7 @@ void TrackEditor::clear()
 
 // Move the position pointer
 void
-TrackEditor::setPointerPosition(Rosegarden::timeT position)
+TrackEditor::slotSetPointerPosition(Rosegarden::timeT position)
 {
 
 //    kdDebug(KDEBUG_AREA) << "TrackEditor::setPointerPosition: time is " << position << endl;
@@ -400,28 +399,28 @@ TrackEditor::setPointerPosition(Rosegarden::timeT position)
 }
 
 void
-TrackEditor::setSelectAdd(bool value)
+TrackEditor::slotSetSelectAdd(bool value)
 {
-    m_segmentCanvas->setSelectAdd(value);
+    m_segmentCanvas->slotSetSelectAdd(value);
 }
 
 void
-TrackEditor::setSelectCopy(bool value)
+TrackEditor::slotSetSelectCopy(bool value)
 {
-     m_segmentCanvas->setSelectCopy(value);
+     m_segmentCanvas->slotSetSelectCopy(value);
 }
 
 void
-TrackEditor::setFineGrain(bool value)
+TrackEditor::slotSetFineGrain(bool value)
 {
-     m_segmentCanvas->setFineGrain(value);
+     m_segmentCanvas->slotSetFineGrain(value);
 }
 
 
 // Show a Segment as it's being recorded
 //
 void
-TrackEditor::updateRecordingSegmentItem(Rosegarden::Segment *segment)
+TrackEditor::slotUpdateRecordingSegmentItem(Rosegarden::Segment *segment)
 {
     Composition &comp = m_document->getComposition();
     int y = segment->getTrack() * getTrackCellHeight();
@@ -443,7 +442,7 @@ TrackEditor::updateRecordingSegmentItem(Rosegarden::Segment *segment)
 }
 
 void
-TrackEditor::deleteRecordingSegmentItem()
+TrackEditor::slotDeleteRecordingSegmentItem()
 {
     m_segmentCanvas->deleteRecordingSegmentItem();
     emit needUpdate();

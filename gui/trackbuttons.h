@@ -75,11 +75,11 @@ public slots:
     // We use these to set the Track and Composition
     // objects with our returned values
     //
-    void setRecordTrack(int id);
-    void toggleMutedTrack(int mutedTrack);
-    void labelSelected(int id);
-    void renameTrack(QString newName, int trackNum);
-    void setTrackMeter(double value, int trackNum);
+    void slotSetRecordTrack(int id);
+    void slotToggleMutedTrack(int mutedTrack);
+    void slotLabelSelected(int id);
+    void slotRenameTrack(QString newName, int trackNum);
+    void slotSetTrackMeter(double value, int trackNum);
 
 
 private:

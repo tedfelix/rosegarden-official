@@ -80,8 +80,8 @@ public slots:
     virtual void documentSaved();
 
 protected slots:
-    void undo();
-    void redo();
+    void slotUndo();
+    void slotRedo();
     void slotUndoAboutToShow();
     void slotUndoActivated(int);
     void slotRedoAboutToShow();

@@ -117,10 +117,10 @@ public:
 				Rosegarden::Event *event);
 
     /// Changes the font of the staffs on the view
-    void changeFont(std::string newFont);
+    void slotChangeFont(std::string newFont);
 
     /// Changes the font and font size of the staffs on the view
-    void changeFont(std::string newFont, int newSize);
+    void slotChangeFont(std::string newFont, int newSize);
     
     /// Switches between page- and linear- layout mode
     void setPageMode(bool pageMode);
@@ -312,10 +312,10 @@ public slots:
      * Called when a mouse press occurred on a notation element
      * or somewhere on a staff
      */
-    void itemPressed(int height, int staffNo, QMouseEvent*, NotationElement*);
+    void slotItemPressed(int height, int staffNo, QMouseEvent*, NotationElement*);
 
-    void mouseMoved(QMouseEvent*);
-    void mouseReleased(QMouseEvent*);
+    void slotMouseMoved(QMouseEvent*);
+    void slotMouseReleased(QMouseEvent*);
 
     /**
      * Called when the mouse cursor moves over a different height on
@@ -323,7 +323,7 @@ public slots:
      *
      * @see NotationCanvasView#hoveredOverNoteChange()
      */
-    void hoveredOverNoteChanged(const QString&);
+    void slotHoveredOverNoteChanged(const QString&);
 
     /**
      * Called when the mouse cursor moves over a note which is at a
@@ -331,25 +331,25 @@ public slots:
      *
      * @see NotationCanvasView#hoveredOverAbsoluteTimeChange()
      */
-    void hoveredOverAbsoluteTimeChanged(unsigned int);
+    void slotHoveredOverAbsoluteTimeChanged(unsigned int);
 
     /// Set the time pointer position during playback
-    void setGUIPositionPointer(Rosegarden::timeT position);
+    void slotSetGUIPositionPointer(Rosegarden::timeT position);
 
     /// Changes the font of the staffs on the view
-    void changeFont(const QString &newFont);
+    void slotChangeFont(const QString &newFont);
 
     /// Changes the font size of the staffs on the view
-    void changeFontSize(int newSize);
+    void slotChangeFontSize(int newSize);
 
     /// Changes the font size of the staffs on the view to the nth size in the available size list
-    void changeFontSizeFromIndex(int n);
+    void slotChangeFontSizeFromIndex(int n);
 
     /// Changes the hlayout stretch of the staffs on the view
-    void changeStretch(int newStretch);
+    void slotChangeStretch(int newStretch);
 
     /// Changes the display quantization of the staffs on the view
-    void changeLegato(int newLegatoIndex);
+    void slotChangeLegato(int newLegatoIndex);
 
 signals:
     /**

@@ -171,14 +171,14 @@ TrackButtons::drawButtons()
         trackLabel->setIndent(7);
 
         connect(trackLabel, SIGNAL(renameTrack(QString, int)),
-                            SLOT(renameTrack(QString, int)));
+                            SLOT(slotRenameTrack(QString, int)));
 
         // Store the TrackLabel pointer
         //
         m_trackLabels.push_back(trackLabel);
 
         connect(trackLabel, SIGNAL(released(int)),
-                SLOT(labelSelected(int)));
+                SLOT(slotLabelSelected(int)));
 
         // Insert the buttons into groups
         //
@@ -206,7 +206,7 @@ TrackButtons::drawButtons()
         //
         if (m_doc->getComposition().getRecordTrack() == i)
         {
-            setRecordTrack(i);
+            slotSetRecordTrack(i);
             record->setDown(true);
         }
 
@@ -216,10 +216,10 @@ TrackButtons::drawButtons()
     m_layout->addStretch(20);
 
     connect(m_recordButtonGroup, SIGNAL(released(int)),
-            this, SLOT(setRecordTrack(int)));
+            this, SLOT(slotSetRecordTrack(int)));
 
     connect(m_muteButtonGroup, SIGNAL(released(int)),
-            this, SLOT(toggleMutedTrack(int)));
+            this, SLOT(slotToggleMutedTrack(int)));
 
 }
 
@@ -262,7 +262,7 @@ TrackButtons::mutedTracks()
 //
 //
 void
-TrackButtons::toggleMutedTrack(int mutedTrack)
+TrackButtons::slotToggleMutedTrack(int mutedTrack)
 {
     if (mutedTrack < 0 || mutedTrack > m_tracks )
         return;
@@ -281,7 +281,7 @@ TrackButtons::toggleMutedTrack(int mutedTrack)
 //
 //
 void
-TrackButtons::setRecordTrack(int recordTrack)
+TrackButtons::slotSetRecordTrack(int recordTrack)
 {
     if (recordTrack < 0 || recordTrack > m_tracks )
         return;
@@ -303,7 +303,7 @@ TrackButtons::setRecordTrack(int recordTrack)
 // Connected to the released(int) callback of the TrackLabels
 //
 void
-TrackButtons::labelSelected(int trackNum)
+TrackButtons::slotLabelSelected(int trackNum)
 {
     std::vector<TrackLabel *>::iterator tlpIt;
 
@@ -346,7 +346,7 @@ TrackButtons::getHighLightedTracks()
 }
 
 void
-TrackButtons::renameTrack(QString newName, int trackNum)
+TrackButtons::slotRenameTrack(QString newName, int trackNum)
 {
     Rosegarden::Track *track = m_doc->getComposition().getTrackByIndex(trackNum);
     track->setLabel(std::string(newName.data()));
@@ -365,7 +365,7 @@ TrackButtons::renameTrack(QString newName, int trackNum)
 
 
 void
-TrackButtons::setTrackMeter(double value, int trackNum)
+TrackButtons::slotSetTrackMeter(double value, int trackNum)
 {
     std::vector<TrackVUMeter*>::iterator it = m_trackMeters.begin();
     

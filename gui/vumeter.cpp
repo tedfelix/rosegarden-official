@@ -47,10 +47,10 @@ VUMeter::VUMeter(QWidget *parent,
     setMaximumSize(width, m_originalHeight);
 
     connect(&m_fallTimer, SIGNAL(timeout()),
-            this,         SLOT(reduceLevel()));
+            this,         SLOT(slotReduceLevel()));
 
     connect(&m_peakTimer, SIGNAL(timeout()),
-            this,         SLOT(stopShowingPeak()));
+            this,         SLOT(slotStopShowingPeak()));
 
 
     // Set up the colours - first the low band (green -> orange)
@@ -214,7 +214,7 @@ VUMeter::drawMeterLevel(QPainter* paint)
 // Level range 0 - 100
 //
 void
-VUMeter::reduceLevel()
+VUMeter::slotReduceLevel()
 {
     if (m_level > 0)
         m_level -= m_levelStep;
@@ -235,7 +235,7 @@ VUMeter::reduceLevel()
 
 
 void
-VUMeter::stopShowingPeak()
+VUMeter::slotStopShowingPeak()
 {
     m_showPeakLevel = false;
     m_peakLevel = 0;

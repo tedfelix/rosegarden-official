@@ -182,7 +182,7 @@ void EditView::setTool(EditTool* tool)
 //                    Slots
 //////////////////////////////////////////////////////////////////////
 
-void EditView::closeWindow()
+void EditView::slotCloseWindow()
 {
     close();
 }
@@ -286,7 +286,7 @@ void EditView::slotStatusHelpMsg(const QString &text)
     statusBar()->message(text, 2000);
 }
 
-void EditView::activeItemPressed(QMouseEvent* e,
+void EditView::slotActiveItemPressed(QMouseEvent* e,
                                  QCanvasItem* item)
 {
     if (!item) return;

@@ -117,11 +117,11 @@ public slots:
      * Called when a mouse press occurred on a matrix element
      * or somewhere on the staff
      */
-    void mousePressed(Rosegarden::timeT time, int pitch,
+    void slotMousePressed(Rosegarden::timeT time, int pitch,
                       QMouseEvent*, MatrixElement*);
 
-    void mouseMoved(Rosegarden::timeT time, QMouseEvent*);
-    void mouseReleased(Rosegarden::timeT time, QMouseEvent*);
+    void slotMouseMoved(Rosegarden::timeT time, QMouseEvent*);
+    void slotMouseReleased(Rosegarden::timeT time, QMouseEvent*);
 
     /**
      * Called when the mouse cursor moves over a different height on
@@ -129,7 +129,7 @@ public slots:
      *
      * @see MatrixCanvasView#hoveredOverNoteChange()
      */
-    void hoveredOverNoteChanged(const QString&);
+    void slotHoveredOverNoteChanged(const QString&);
 
     /**
      * Called when the mouse cursor moves over a note which is at a
@@ -137,7 +137,7 @@ public slots:
      *
      * @see MatrixCanvasView#hoveredOverNoteChange()
      */
-    void hoveredOverAbsoluteTimeChanged(unsigned int);
+    void slotHoveredOverAbsoluteTimeChanged(unsigned int);
 
 protected:
 

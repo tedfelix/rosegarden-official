@@ -98,24 +98,24 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     m_midiOutTimer = new QTimer(this);
 
     connect(m_midiInTimer, SIGNAL(timeout()),
-            SLOT(clearMidiInLabel()));
+            SLOT(slotClearMidiInLabel()));
 
     connect(m_midiOutTimer, SIGNAL(timeout()),
-            SLOT(clearMidiOutLabel()));
+            SLOT(slotClearMidiOutLabel()));
 
     TimeDisplayLabel->hide();
     ToEndLabel->hide();
 
     connect(TimeDisplayButton, SIGNAL(released()),
-	    SLOT(changeTimeDisplay()));
+	    SLOT(slotChangeTimeDisplay()));
 
     connect(ToEndButton, SIGNAL(released()),
-	    SLOT(changeToEnd()));
+	    SLOT(slotChangeToEnd()));
 
     // clear labels
     //
-    clearMidiInLabel();
-    clearMidiOutLabel();
+    slotClearMidiInLabel();
+    slotClearMidiOutLabel();
 }
 
 RosegardenTransportDialog::~RosegardenTransportDialog()
@@ -174,7 +174,7 @@ RosegardenTransportDialog::resetFont(QWidget *w)
 }
 
 void
-RosegardenTransportDialog::changeTimeDisplay()
+RosegardenTransportDialog::slotChangeTimeDisplay()
 {
     if (TimeDisplayButton->isOn()) {
 	TimeDisplayLabel->show();
@@ -184,7 +184,7 @@ RosegardenTransportDialog::changeTimeDisplay()
 }
 
 void
-RosegardenTransportDialog::changeToEnd()
+RosegardenTransportDialog::slotChangeToEnd()
 {
     if (ToEndButton->isOn()) {
 	ToEndLabel->show();
@@ -442,7 +442,7 @@ RosegardenTransportDialog::setMidiInLabel(const Rosegarden::MappedEvent *mE)
 // Clear the MIDI in label - used as timer callback
 //
 void
-RosegardenTransportDialog::clearMidiInLabel()
+RosegardenTransportDialog::slotClearMidiInLabel()
 {
     InDisplay->setText(i18n(QString("NO EVENTS")));
 }
@@ -473,7 +473,7 @@ RosegardenTransportDialog::setMidiOutLabel(const Rosegarden::MappedEvent *mE)
 // Clear the outgoing MIDI label
 //
 void
-RosegardenTransportDialog::clearMidiOutLabel()
+RosegardenTransportDialog::slotClearMidiOutLabel()
 {
     OutDisplay->setText(i18n(QString("NO EVENTS")));
 }

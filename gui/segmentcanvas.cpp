@@ -212,15 +212,15 @@ SegmentCanvas::~SegmentCanvas()
 }
 
 void
-SegmentCanvas::update()
+SegmentCanvas::slotUpdate()
 {
     canvas()->update();
 }
 
 void
-SegmentCanvas::setTool(ToolType t)
+SegmentCanvas::slotSetTool(ToolType t)
 {
-    kdDebug(KDEBUG_AREA) << "SegmentCanvas::setTool(" << t << ")"
+    kdDebug(KDEBUG_AREA) << "SegmentCanvas::slotSetTool(" << t << ")"
                          << this << "\n";
 
     if (m_tool)
@@ -252,7 +252,7 @@ SegmentCanvas::setTool(ToolType t)
         break;
 
     default:
-        KMessageBox::error(0, QString("SegmentCanvas::setTool() : unknown tool id %1").arg(t));
+        KMessageBox::error(0, QString("SegmentCanvas::slotSetTool() : unknown tool id %1").arg(t));
     }
 }
 
@@ -333,16 +333,16 @@ void SegmentCanvas::contentsMousePressEvent(QMouseEvent* e)
             {
                 m_editMenu->clear();
                 m_editMenu->insertItem(i18n("Edit Audio"),
-                                       this, SLOT(onEditAudio()));
+                                       this, SLOT(slotOnEditAudio()));
             }
             else
             {
                 m_editMenu->clear();
                 m_editMenu->insertItem(i18n("Edit as Notation"),
-                                       this, SLOT(onEditNotation()));
+                                       this, SLOT(slotOnEditNotation()));
 
                 m_editMenu->insertItem(i18n("Edit as Matrix"),
-                                       this, SLOT(onEditMatrix()));
+                                       this, SLOT(slotOnEditMatrix()));
             }
 
             m_editMenu->exec(QCursor::pos());
@@ -392,7 +392,7 @@ void SegmentCanvas::clear()
 // Show the split line. This is where we perform Segment splits.
 //
 void
-SegmentCanvas::showSplitLine(int x, int y)
+SegmentCanvas::slotShowSplitLine(int x, int y)
 {
     if (m_splitLine == 0)
         m_splitLine = new SegmentSplitLine(x, y,
@@ -402,16 +402,16 @@ SegmentCanvas::showSplitLine(int x, int y)
     else
         m_splitLine->moveLine(x, y);
 
-    update();
+    slotUpdate();
 }
 
 // Hide the split line
 //
 void
-SegmentCanvas::hideSplitLine()
+SegmentCanvas::slotHideSplitLine()
 {
     m_splitLine->hideLine();
-    update();
+    slotUpdate();
 }
 
 
@@ -475,17 +475,17 @@ SegmentCanvas::deleteRecordingSegmentItem()
 
 
 
-void SegmentCanvas::onEditNotation()
+void SegmentCanvas::slotOnEditNotation()
 {
     emit editSegmentNotation(m_currentItem->getSegment());
 }
 
-void SegmentCanvas::onEditMatrix()
+void SegmentCanvas::slotOnEditMatrix()
 {
     emit editSegmentMatrix(m_currentItem->getSegment());
 }
 
-void SegmentCanvas::onEditAudio()
+void SegmentCanvas::slotOnEditAudio()
 {
     emit editSegmentAudio(m_currentItem->getSegment());
 }
@@ -497,7 +497,7 @@ void SegmentCanvas::onEditAudio()
 //
 //
 void
-SegmentCanvas::selectSegments(std::list<Rosegarden::Segment*> segments)
+SegmentCanvas::slotSelectSegments(std::list<Rosegarden::Segment*> segments)
 {
     SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(m_tool);
 
@@ -518,7 +518,7 @@ SegmentCanvas::selectSegments(std::list<Rosegarden::Segment*> segments)
 
                 if (dynamic_cast<SegmentItem*>(*it)->getSegment() == (*segIt)) {
 
-                    selTool->selectSegmentItem(dynamic_cast<SegmentItem*>(*it));
+                    selTool->slotSelectSegmentItem(dynamic_cast<SegmentItem*>(*it));
                 }
             }
         }
@@ -531,7 +531,7 @@ SegmentCanvas::selectSegments(std::list<Rosegarden::Segment*> segments)
 //
 //
 void
-SegmentCanvas::setSelectAdd(const bool &value)
+SegmentCanvas::slotSetSelectAdd(const bool &value)
 {
     SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(m_tool);
 
@@ -548,7 +548,7 @@ SegmentCanvas::setSelectAdd(const bool &value)
 //
 //
 void
-SegmentCanvas::setSelectCopy(const bool &value)
+SegmentCanvas::slotSetSelectCopy(const bool &value)
 {
     SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(m_tool);
 
@@ -570,7 +570,7 @@ SegmentCanvas::setSnapGrain(bool fine)
 
 
 void
-SegmentCanvas::setFineGrain(bool value)
+SegmentCanvas::slotSetFineGrain(bool value)
 {
     m_fineGrain = value;
 }
@@ -892,7 +892,7 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
     {
         m_currentItem = item;
         m_clickPoint = e->pos();
-        selectSegmentItem(m_currentItem);
+       slotSelectSegmentItem(m_currentItem);
         emit changeSegmentTrackAndStartTime(m_currentItem->getSegment(),
 					    m_currentItem->getTrack(),
 					    m_currentItem->getStartTime());
@@ -901,7 +901,7 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 }
 
 void
-SegmentSelector::selectSegmentItem(SegmentItem *selectedItem)
+SegmentSelector::slotSelectSegmentItem(SegmentItem *selectedItem)
 {
     // If we're selecting a Segment through this method
     // then don't set the m_currentItem
@@ -1044,7 +1044,7 @@ SegmentSplitter::handleMouseButtonRelease(QMouseEvent *e)
  
     // Reinstate the cursor
     m_canvas->setCursor(Qt::splitHCursor);
-    m_canvas->hideSplitLine();
+    m_canvas->slotHideSplitLine();
 }
 
 
@@ -1061,7 +1061,7 @@ SegmentSplitter::handleMouseMove(QMouseEvent *e)
     else
     {
         m_canvas->setCursor(Qt::splitHCursor);
-        m_canvas->hideSplitLine();
+        m_canvas->slotHideSplitLine();
     }
 }
 
@@ -1082,7 +1082,7 @@ SegmentSplitter::drawSplitLine(QMouseEvent *e)
     //
     int y = m_canvas->grid().snapY(e->pos().y());
 
-    m_canvas->showSplitLine(x, y);
+    m_canvas->slotShowSplitLine(x, y);
 }
 
 

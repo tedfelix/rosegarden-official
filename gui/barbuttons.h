@@ -51,7 +51,7 @@ public:
     void setMinimumWidth(int width);
 
 public slots:
-    void scrollHoriz(int x);
+    void slotScrollHoriz(int x);
 
 private:
     //--------------- Data members ---------------------------------

@@ -155,6 +155,35 @@ public:
      */
     bool getSoundSystemStatus();
 
+    /**
+     * Equivalents of the GUI slots, for DCOP use
+     */
+    virtual void fileNew()    { slotFileNew(); }
+    virtual void fileSave()   { slotFileSave(); }
+    virtual void fileSaveAs() { slotFileSaveAs(); }
+    virtual void fileClose()  { slotFileClose(); }
+    virtual void quit()       { slotQuit(); }
+
+    /**
+     * Set the song position pointer - we use longs so that
+     * this method is directly accesible from the sequencer
+     * (longs are required over DCOP)
+     */
+    virtual void setPointerPosition(const long &posSec, const long &posUSec);
+
+    /**
+     * Start the sequencer auxiliary process
+     * (built in the 'sequencer' directory)
+     *
+     * @see slotSequencerExited()
+     */
+    bool launchSequencer();
+    
+    /**
+     * Set the sequencer status - pass through DCOP as an int
+     */
+    virtual void notifySequencerStatus(const int &status);
+
 protected:
 
     /**
@@ -205,7 +234,7 @@ protected:
     /**
      * queryClose is called by KTMainWindow on each closeEvent of a
      * window. Against the default implementation (only returns true),
-     * this calles saveModified() on the document object to ask if the
+     * this calls saveModified() on the document object to ask if the
      * document shall be saved if Modified; on cancel the closeEvent
      * is rejected.
      *
@@ -263,60 +292,60 @@ public slots:
      * open a new application window by creating a new instance of
      * RosegardenGUIApp
      */
-    void fileNewWindow();
+    void slotFileNewWindow();
 
     /**
      * clears the document in the actual view to reuse it as the new
      * document
      */
-    virtual void fileNew();
+    void slotFileNew();
 
     /**
      * open a file and load it into the document
      */
-    void fileOpen();
+    void slotFileOpen();
 
     /**
      * opens a file from the recent files menu
      */
-    void fileOpenRecent(const KURL&);
+    void slotFileOpenRecent(const KURL&);
 
     /**
      * save a document
      */
-    virtual void fileSave();
+    void slotFileSave();
 
     /**
      * save a document by a new filename
      */
-    void fileSaveAs();
+    void slotFileSaveAs();
 
     /**
      * asks for saving if the file is modified, then closes the actual
      * file and window
      */
-    virtual void fileClose();
+    void slotFileClose();
 
     /**
      * print the actual file
      */
-    void filePrint();
+    void slotFilePrint();
 
     /**
      * Let the user select a MIDI file for import
      */
-    void importMIDI();
+    void slotImportMIDI();
 
     /**
      * Let the user select a Rosegarden 2.1 file for import 
      */
-    void importRG21();
+    void slotImportRG21();
 
 
     /**
      * Let the user enter a MIDI file to export to
      */
-    void exportMIDI();
+    void slotExportMIDI();
 
     /**
      * closes all open windows by calling close() on each memberList
@@ -324,43 +353,43 @@ public slots:
      * queryClose() returns false because the user canceled the
      * saveModified() dialog, the closing breaks.
      */
-    virtual void quit();
+    void slotQuit();
     
     /**
      * put the marked text/object into the clipboard and remove * it
      * from the document
      */
-    void editCut();
+    void slotEditCut();
 
     /**
      * put the marked text/object into the clipboard
      */
-    void editCopy();
+    void slotEditCopy();
 
     /**
      * paste the clipboard into the document
      */
-    void editPaste();
+    void slotEditPaste();
 
     /**
      * toggles the toolbar
      */
-    void toggleToolBar();
+    void slotToggleToolBar();
 
     /**
      * toggles the transport window
      */
-    void toggleTransport();
+    void slotToggleTransport();
 
     /**
      * toggles the tracks toolbar
      */
-    void toggleTracksToolBar();
+    void slotToggleTracksToolBar();
 
     /**
      * toggles the statusbar
      */
-    void toggleStatusBar();
+    void slotToggleStatusBar();
 
     /**
      * changes the statusbar contents for the standard label
@@ -368,7 +397,7 @@ public slots:
      *
      * @param text the text that is displayed in the statusbar
      */
-    void statusMsg(const QString &text);
+    void slotStatusMsg(const QString &text);
 
     /**
      * changes the status message of the whole statusbar for two
@@ -378,130 +407,114 @@ public slots:
      *
      * @param text the text that is displayed in the statusbar
      */
-    void statusHelpMsg(const QString &text);
+    void slotStatusHelpMsg(const QString &text);
 
     /**
      * segment select tool
      */
-    void pointerSelected();
+    void slotPointerSelected();
 
     /**
      * segment eraser tool is selected
      */
-    void eraseSelected();
+    void slotEraseSelected();
     
     /**
      * segment draw tool is selected
      */
-    void drawSelected();
+    void slotDrawSelected();
     
     /**
      * segment move tool is selected
      */
-    void moveSelected();
+    void slotMoveSelected();
 
     /**
      * segment resize tool is selected
      */
-    void resizeSelected();
+    void slotResizeSelected();
 
     /*
      * Segment join tool
      *
      */
-    void joinSelected();
+    void slotJoinSelected();
 
     /*
      * Segment split tool
      *
      */
-    void splitSelected();
+    void slotSplitSelected();
 
     /**
      * change the resolution of the segment display
      */
-    void changeTimeResolution();
+    void slotChangeTimeResolution();
 
     /**
      * edit all tracks at once
      */
-    void editAllTracks();
+    void slotEditAllTracks();
 
     /**
-     * Set the song position pointer - we use longs so that
-     * this method is directly accesible from the sequencer
-     * (longs are required over DCOP)
+     * Set the song position pointer
      */
-    void setPointerPosition(Rosegarden::RealTime time);
-    void setPointerPosition(const long &posSec, const long &posUSec);
+    void slotSetPointerPosition(Rosegarden::RealTime time);
 
     /**
      * Set the pointer position and start playing (from LoopRuler)
      */
-    void setPlayPosition(Rosegarden::timeT position);
+    void slotSetPlayPosition(Rosegarden::timeT position);
 
     /**
      * Set a loop
      */
-    void setLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs);
+    void slotSetLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs);
 
     /**
      * timeT version of the same
      */
-    void setPointerPosition(Rosegarden::timeT t);
+    void slotSetPointerPosition(Rosegarden::timeT t);
 
 
     /**
      * Update the transport with the bar, beat and unit times for
      * a given timeT
      */
-    void displayBarTime(Rosegarden::timeT t);
+    void slotDisplayBarTime(Rosegarden::timeT t);
 
 
     /**
      * Transport controls
      */
-    void play();
-    void stop();
-    void rewind();
-    void fastforward();
-    void record();
-    void rewindToBeginning();
-    void fastForwardToEnd();
-    void refreshTimeDisplay();
-
-    /**
-     * Set the sequencer status - pass through DCOP as an int
-     */
-    void notifySequencerStatus(const int &status);
+    void slotPlay();
+    void slotStop();
+    void slotRewind();
+    void slotFastforward();
+    void slotRecord();
+    void slotRewindToBeginning();
+    void slotFastForwardToEnd();
+    void slotRefreshTimeDisplay();
 
 
     /**
      * Called when the sequencer auxiliary process exits
      */
-    void sequencerExited(KProcess*);
-
-    /**
-     * Start the sequencer auxiliary process
-     * (built in the 'sequencer' directory)
-     *
-     * @see sequencerExited()
-     */
-    bool launchSequencer();
+    void slotSequencerExited(KProcess*);
 
     // When the transport closes 
     //
-    void closeTransport();
+    void slotCloseTransport();
 
     // Put the GUI into a given ToolType edit mode
     //
-    void activateTool(SegmentCanvas::ToolType tt);
+    void slotActivateTool(SegmentCanvas::ToolType tt);
 
     /**
      * Toggles either the play or record metronome according
      * to Transport status
      */
-    void toggleMetronome();
+    void slotToggleMetronome();
 
 private:
 

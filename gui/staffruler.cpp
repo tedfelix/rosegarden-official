@@ -264,7 +264,7 @@ PositionCursor::PositionCursor(int gripHeight, QCanvas* c, QObject* parent)
     setActive(true);
 }
 
-void PositionCursor::setPosition(int pos)
+void PositionCursor::slotSetPosition(int pos)
 {
     // stealthly readjust length in case the canvas has changed height
     m_line->setPoints(0, 0, 0, canvas()->height());
@@ -280,15 +280,15 @@ void PositionCursor::handleMousePress(QMouseEvent*)
 void PositionCursor::handleMouseMove(QMouseEvent* e)
 {
     if (e->x() > getMinPosition())
-        setPosition(e->x());
+       slotSetPosition(e->x());
     else
-        setPosition(getMinPosition());
+       slotSetPosition(getMinPosition());
 }
 
 void PositionCursor::handleMouseRelease(QMouseEvent* e)
 {
     if (e->x() > getMinPosition())
-        setPosition(e->x());
+       slotSetPosition(e->x());
 
     emit positionChange(getPosition());
 }
@@ -298,7 +298,7 @@ void PositionCursor::setMinPosition(int p)
     m_minPos = p;
 
     if (getPosition() < getMinPosition())
-        setPosition(getMinPosition());
+       slotSetPosition(getMinPosition());
 }
 
 void PositionCursor::setGripHeight(int p)

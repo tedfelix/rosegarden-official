@@ -64,8 +64,8 @@ public:
     void setMinimumWidth(int width) { m_width = width; }
 
 public slots:
-    void setLoopingMode(bool value);
-    void setLoopMarker(Rosegarden::timeT startLoop, Rosegarden::timeT endLoop);
+    void slotSetLoopingMode(bool value);
+    void slotSetLoopMarker(Rosegarden::timeT startLoop, Rosegarden::timeT endLoop);
 
 protected:
     // ActiveItem interface

@@ -90,11 +90,11 @@ RosegardenGUIApp::RosegardenGUIApp()
     //
     connect((QObject*)m_seqManager,
              SIGNAL(setPointerPosition(Rosegarden::RealTime)),
-             SLOT(setPointerPosition(Rosegarden::RealTime)));
+             SLOT(slotSetPointerPosition(Rosegarden::RealTime)));
 
     connect((QObject*)m_seqManager,
             SIGNAL(setPointerPosition(Rosegarden::timeT)),
-            SLOT(setPointerPosition(Rosegarden::timeT)));
+            SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
     readOptions();
 
@@ -126,44 +126,44 @@ void RosegardenGUIApp::setupActions()
 {
     // setup File menu
     // New Window ?
-    m_fileNew  = KStdAction::openNew (this, SLOT(fileNew()),     actionCollection());
-    m_fileOpen = KStdAction::open    (this, SLOT(fileOpen()),    actionCollection());
+    m_fileNew  = KStdAction::openNew (this, SLOT(slotFileNew()),     actionCollection());
+    m_fileOpen = KStdAction::open    (this, SLOT(slotFileOpen()),    actionCollection());
     m_fileRecent = KStdAction::openRecent(this,
-                                          SLOT(fileOpenRecent(const KURL&)),
+                                          SLOT(slotFileOpenRecent(const KURL&)),
                                           actionCollection());
-    m_fileSave   = KStdAction::save  (this, SLOT(fileSave()),          actionCollection());
-    m_fileSaveAs = KStdAction::saveAs(this, SLOT(fileSaveAs()),        actionCollection());
-    m_fileClose  = KStdAction::close (this, SLOT(fileClose()),         actionCollection());
-    m_filePrint  = KStdAction::print (this, SLOT(filePrint()),         actionCollection());
+    m_fileSave   = KStdAction::save  (this, SLOT(slotFileSave()),          actionCollection());
+    m_fileSaveAs = KStdAction::saveAs(this, SLOT(slotFileSaveAs()),        actionCollection());
+    m_fileClose  = KStdAction::close (this, SLOT(slotFileClose()),         actionCollection());
+    m_filePrint  = KStdAction::print (this, SLOT(slotFilePrint()),         actionCollection());
 
     new KAction(i18n("Import &MIDI file..."), 0, 0, this,
-                SLOT(importMIDI()), actionCollection(),
+                SLOT(slotImportMIDI()), actionCollection(),
                 "file_import_midi");
 
     new KAction(i18n("Import &Rosegarden 2.1 file..."), 0, 0, this,
-                SLOT(importRG21()), actionCollection(),
+                SLOT(slotImportRG21()), actionCollection(),
                 "file_import_rg21");
 
     new KAction(i18n("Export as &MIDI file..."), 0, 0, this,
-                SLOT(exportMIDI()), actionCollection(),
+                SLOT(slotExportMIDI()), actionCollection(),
                 "file_export_midi");
 
-    m_fileQuit = KStdAction::quit  (this, SLOT(quit()),              actionCollection());
+    m_fileQuit = KStdAction::quit  (this, SLOT(slotQuit()),              actionCollection());
 
     // setup edit menu
-    m_editCut = KStdAction::cut      (this, SLOT(editCut()),        actionCollection());
-    m_editCopy = KStdAction::copy     (this, SLOT(editCopy()),       actionCollection());
-    m_editPaste = KStdAction::paste    (this, SLOT(editPaste()),      actionCollection());
+    m_editCut = KStdAction::cut      (this, SLOT(slotEditCut()),        actionCollection());
+    m_editCopy = KStdAction::copy     (this, SLOT(slotEditCopy()),       actionCollection());
+    m_editPaste = KStdAction::paste    (this, SLOT(slotEditPaste()),      actionCollection());
 
     // setup Settings menu
-    m_viewToolBar = KStdAction::showToolbar  (this, SLOT(toggleToolBar()),   actionCollection());
+    m_viewToolBar = KStdAction::showToolbar  (this, SLOT(slotToggleToolBar()),   actionCollection());
     m_viewTracksToolBar = new KToggleAction(i18n("Show Tracks Toolbar..."), 0, this,
-                                            SLOT(toggleTracksToolBar()), actionCollection(),
+                                            SLOT(slotToggleTracksToolBar()), actionCollection(),
                                             "show_tracks_toolbar");
-    m_viewStatusBar = KStdAction::showStatusbar(this, SLOT(toggleStatusBar()), actionCollection());
+    m_viewStatusBar = KStdAction::showStatusbar(this, SLOT(slotToggleStatusBar()), actionCollection());
 
     m_viewTransport = new KToggleAction(i18n("Show Transport"), 0, this,
-                                             SLOT(toggleTransport()),
+                                             SLOT(slotToggleTransport()),
                                              actionCollection(),
                                              "show_transport");
 
@@ -183,44 +183,44 @@ void RosegardenGUIApp::setupActions()
     // TODO : add some shortcuts here
     action = new KRadioAction(i18n("&Select"), icon,
                               0,
-                              this, SLOT(pointerSelected()),
+                              this, SLOT(slotPointerSelected()),
                               actionCollection(), "select");
 
     action->setExclusiveGroup("segmenttools");
                              
     action = new KRadioAction(i18n("&Erase"), "eraser",
                               0,
-                              this, SLOT(eraseSelected()),
+                              this, SLOT(slotEraseSelected()),
                               actionCollection(), "erase");
     action->setExclusiveGroup("segmenttools");
 
     action = new KRadioAction(i18n("&Draw"), "pencil",
                               0,
-                              this, SLOT(drawSelected()),
+                              this, SLOT(slotDrawSelected()),
                               actionCollection(), "draw");
     action->setExclusiveGroup("segmenttools");
 
     action = new KRadioAction(i18n("&Move"), "move",
                               0,
-                              this, SLOT(moveSelected()),
+                              this, SLOT(slotMoveSelected()),
                               actionCollection(), "move");
     action->setExclusiveGroup("segmenttools");
 
     action = new KRadioAction(i18n("&Resize"), "misc", // TODO : find a better icon
                               0,
-                              this, SLOT(resizeSelected()),
+                              this, SLOT(slotResizeSelected()),
                               actionCollection(), "resize");
     action->setExclusiveGroup("segmenttools");
 
     action = new KRadioAction(i18n("&Split"), "wizard",
                               0,
-                              this, SLOT(splitSelected()),
+                              this, SLOT(slotSplitSelected()),
                               actionCollection(), "split");
     action->setExclusiveGroup("segmenttools");
 
     action = new KRadioAction(i18n("&Join"), "wizard",
                               0,
-                              this, SLOT(joinSelected()),
+                              this, SLOT(slotJoinSelected()),
                               actionCollection(), "join");
     action->setExclusiveGroup("segmenttools");
 
@@ -231,7 +231,7 @@ void RosegardenGUIApp::setupActions()
 
     new KAction(i18n("&Score Editor"),
                 0,
-                this, SLOT(editAllTracks()),
+                this, SLOT(slotEditAllTracks()),
                 actionCollection(), "edit_all_tracks");
 
     // Transport controls [rwb]
@@ -241,40 +241,40 @@ void RosegardenGUIApp::setupActions()
     // 0 (insert) and Enter for Play and Stop 
     //
     m_playTransport = new KAction(i18n("&Play"), 0, Key_Enter, this,
-                                  SLOT(play()), actionCollection(),
+                                  SLOT(slotPlay()), actionCollection(),
                                   "play");
     m_playTransport->setGroup("transportcontrols");
 
     m_stopTransport = new KAction(i18n("&Stop"), 0, Key_Insert, this,
-                                  SLOT(stop()), actionCollection(),
+                                  SLOT(slotStop()), actionCollection(),
                                   "stop");
     m_stopTransport->setGroup("transportcontrols");
 
     m_ffwdTransport = new KAction(i18n("&Fast Forward"), 0, Key_PageDown,
                                   this,
-                                  SLOT(fastforward()), actionCollection(),
+                                  SLOT(slotFastforward()), actionCollection(),
                                   "fast_forward");
     m_ffwdTransport->setGroup("transportcontrols");
 
     m_rewindTransport = new KAction(i18n("Re&wind"), 0, Key_End, this,
-                                  SLOT(rewind()), actionCollection(),
+                                  SLOT(slotRewind()), actionCollection(),
                                   "rewind");
     m_rewindTransport->setGroup("transportcontrols");
 
     m_recordTransport = new KAction(i18n("&Record"), 0, Key_End, this,
-                                  SLOT(record()), actionCollection(),
+                                  SLOT(slotRecord()), actionCollection(),
                                   "record");
 
     m_recordTransport->setGroup("transportcontrols");
 
     m_rewindEndTransport = new KAction(i18n("Rewind to Beginning"), 0, 0, this,
-                                  SLOT(rewindToBeginning()), actionCollection(),
+                                  SLOT(slotRewindToBeginning()), actionCollection(),
                                   "rewindtobeginning");
 
     m_rewindEndTransport->setGroup("transportcontrols");
 
     m_ffwdEndTransport = new KAction(i18n("Fast Forward to End"), 0, 0, this,
-                                  SLOT(fastForwardToEnd()), actionCollection(),
+                                  SLOT(slotFastForwardToEnd()), actionCollection(),
                                    "fastforwardtoend");
 
     m_ffwdEndTransport->setGroup("transportcontrols");
@@ -300,71 +300,71 @@ void RosegardenGUIApp::setupActions()
 
     connect((QObject *) m_transport->PlayButton,
              SIGNAL(released()),
-             SLOT(play()));
+             SLOT(slotPlay()));
 
     a->connectItem(a->insertItem(Key_Enter),
                    this,
-                   SLOT(play()));
+                   SLOT(slotPlay()));
 
     connect((QObject *) m_transport->StopButton,
              SIGNAL(released()),
-             SLOT(stop()));
+             SLOT(slotStop()));
              
     a->connectItem(a->insertItem(Key_Insert),
                    this,
-                   SLOT(stop()));
+                   SLOT(slotStop()));
 
     connect((QObject *) m_transport->FfwdButton,
              SIGNAL(released()),
-             SLOT(fastforward()));
+             SLOT(slotFastforward()));
             
     a->connectItem(a->insertItem(Key_PageDown),
                    this,
-                   SLOT(fastforward()));
+                   SLOT(slotFastforward()));
 
     connect((QObject *) m_transport->RewindButton,
              SIGNAL(released()),
-             SLOT(rewind()));
+             SLOT(slotRewind()));
 
     a->connectItem(a->insertItem(Key_End),
                    this,
-                   SLOT(rewind()));
+                   SLOT(slotRewind()));
 
     connect((QObject *) m_transport->RecordButton,
              SIGNAL(released()),
-             SLOT(record()));
+             SLOT(slotRecord()));
 
     a->connectItem(a->insertItem(Key_Space),
                    this,
-                   SLOT(record()));
+                   SLOT(slotRecord()));
 
     connect((QObject *) m_transport->RewindEndButton,
              SIGNAL(released()),
-             SLOT(rewindToBeginning()));
+             SLOT(slotRewindToBeginning()));
 
 
     connect((QObject *) m_transport->FfwdEndButton,
              SIGNAL(released()),
-             SLOT(fastForwardToEnd()));
+             SLOT(slotFastForwardToEnd()));
 
     connect((QObject *)m_transport->MetronomeButton,
             SIGNAL(released()),
-            SLOT(toggleMetronome()));
+            SLOT(slotToggleMetronome()));
             
     connect((QObject *) m_transport->TimeDisplayButton,
              SIGNAL(released()),
-             SLOT(refreshTimeDisplay()));
+             SLOT(slotRefreshTimeDisplay()));
 
     connect((QObject *) m_transport->ToEndButton,
              SIGNAL(released()),
-             SLOT(refreshTimeDisplay()));
+             SLOT(slotRefreshTimeDisplay()));
 
     createGUI("rosegardenui.rc");
 
     // Ensure that the checkbox is unchecked if the dialog
     // is closed
     connect((QObject *)m_transport, SIGNAL(closed()),
-                                    SLOT(closeTransport()));
+                                    SLOT(slotCloseTransport()));
 
 }
 
@@ -410,16 +410,16 @@ void RosegardenGUIApp::initView()
     // Connect up this signal so that we can force tool mode
     // changes from the view
     connect(m_view, SIGNAL(activateTool(SegmentCanvas::ToolType)),
-            this,   SLOT(activateTool(SegmentCanvas::ToolType)));
+            this,   SLOT(slotActivateTool(SegmentCanvas::ToolType)));
 
     connect(m_view, SIGNAL(setGUIPositionPointer(Rosegarden::timeT)),
-            this,   SLOT(setPointerPosition(Rosegarden::timeT)));
+            this,   SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
     connect(m_view, SIGNAL(setGUIPlayPosition(Rosegarden::timeT)),
-            this,   SLOT(setPlayPosition(Rosegarden::timeT)));
+            this,   SLOT(slotSetPlayPosition(Rosegarden::timeT)));
 
     connect(m_view, SIGNAL(setGUILoop(Rosegarden::timeT, Rosegarden::timeT)),
-            this,   SLOT(setLoop(Rosegarden::timeT, Rosegarden::timeT)));
+            this,   SLOT(slotSetLoop(Rosegarden::timeT, Rosegarden::timeT)));
 
     m_doc->addView(m_view);
     setCentralWidget(m_view);
@@ -427,8 +427,8 @@ void RosegardenGUIApp::initView()
 
     // set the pointer position
     //
-    setPointerPosition(comp.getElapsedRealTime(
-                        m_doc->getComposition().getPosition()));
+    slotSetPointerPosition
+	(comp.getElapsedRealTime(m_doc->getComposition().getPosition()));
 
     // set the tempo in the transport
     //
@@ -503,7 +503,7 @@ void RosegardenGUIApp::openFile(const QString& url)
     // Stop if playing
     //
     if (m_seqManager->getTransportStatus() == PLAYING)
-      stop();
+      slotStop();
 
     m_doc->closeDocument();
     m_doc->openDocument(u->path());
@@ -520,7 +520,7 @@ void RosegardenGUIApp::openFile(const QString& url)
     // Set any loaded loop at the Composition and
     // on the marker on SegmentCanvas and clients
     //
-    setLoop(comp.getLoopStart(), comp.getLoopEnd());
+    slotSetLoop(comp.getLoopStart(), comp.getLoopEnd());
     m_doc->setLoopMarker(comp.getLoopStart(), comp.getLoopEnd());
 
 
@@ -554,19 +554,19 @@ void RosegardenGUIApp::readOptions()
     // status bar settings
     bool viewStatusbar = m_config->readBoolEntry("Show Statusbar", true);
     m_viewStatusBar->setChecked(viewStatusbar);
-    toggleStatusBar();
+   slotToggleStatusBar();
 
     bool viewToolBar = m_config->readBoolEntry("Show Toolbar", true);
     m_viewToolBar->setChecked(viewToolBar);
-    toggleToolBar();
+   slotToggleToolBar();
 
     viewToolBar = m_config->readBoolEntry("Show Tracks Toolbar", true);
     m_viewTracksToolBar->setChecked(viewToolBar);
-    toggleTracksToolBar();
+   slotToggleTracksToolBar();
 
     bool viewTransport = m_config->readBoolEntry("Show Transport", true);
     m_viewTransport->setChecked(viewTransport);
-    toggleTransport();
+   slotToggleTransport();
 
     // bar position settings
     KToolBar::BarPosition toolBarPos;
@@ -672,7 +672,7 @@ bool RosegardenGUIApp::queryExit()
 
 // Not connected to anything at the moment
 //
-void RosegardenGUIApp::fileNewWindow()
+void RosegardenGUIApp::slotFileNewWindow()
 {
     KTmpStatusMsg msg(i18n("Opening a new application window..."), statusBar());
 	
@@ -680,9 +680,9 @@ void RosegardenGUIApp::fileNewWindow()
     new_window->show();
 }
 
-void RosegardenGUIApp::fileNew()
+void RosegardenGUIApp::slotFileNew()
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::fileNew()\n";
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotFileNew()\n";
 
     KTmpStatusMsg msg(i18n("Creating new document..."), statusBar());
 
@@ -757,9 +757,9 @@ void RosegardenGUIApp::openURL(const KURL& url)
     actionCollection()->action("move")->activate();
 }
 
-void RosegardenGUIApp::fileOpen()
+void RosegardenGUIApp::slotFileOpen()
 {
-    statusHelpMsg(i18n("Opening file..."));
+    slotStatusHelpMsg(i18n("Opening file..."));
 
     KURL url = KFileDialog::getOpenURL(QString::null, "*.rg", this,
                                        i18n("Open File"));
@@ -768,7 +768,7 @@ void RosegardenGUIApp::fileOpen()
     openURL(url);
 }
 
-void RosegardenGUIApp::fileOpenRecent(const KURL &url)
+void RosegardenGUIApp::slotFileOpenRecent(const KURL &url)
 {
     KTmpStatusMsg msg(i18n("Opening file..."), statusBar());
 	
@@ -786,19 +786,19 @@ void RosegardenGUIApp::fileOpenRecent(const KURL &url)
     openURL(url);
 }
 
-void RosegardenGUIApp::fileSave()
+void RosegardenGUIApp::slotFileSave()
 {
     if (!m_doc || !m_doc->isModified()) return;
 
     KTmpStatusMsg msg(i18n("Saving file..."), statusBar());
 
     if (!m_doc->getAbsFilePath())
-        fileSaveAs();
+       slotFileSaveAs();
     else
         m_doc->saveDocument(m_doc->getAbsFilePath());
 }
 
-void RosegardenGUIApp::fileSaveAs()
+void RosegardenGUIApp::slotFileSaveAs()
 {
     if (!m_doc) return;
 
@@ -818,9 +818,9 @@ void RosegardenGUIApp::fileSaveAs()
     }
 }
 
-void RosegardenGUIApp::fileClose()
+void RosegardenGUIApp::slotFileClose()
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::fileClose()" << endl;
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotFileClose()" << endl;
     
     if (!m_doc) return;
 
@@ -839,10 +839,10 @@ void RosegardenGUIApp::fileClose()
     actionCollection()->action("move")->activate();
     actionCollection()->action("draw")->activate();
 
-    //close();
+    close();
 }
 
-void RosegardenGUIApp::filePrint()
+void RosegardenGUIApp::slotFilePrint()
 {
     if (m_doc->getComposition().getNbSegments() == 0) {
         KMessageBox::sorry(0, "Please create some tracks first (until we implement menu state management)");
@@ -860,14 +860,14 @@ void RosegardenGUIApp::filePrint()
     }
 }
 
-void RosegardenGUIApp::quit()
+void RosegardenGUIApp::slotQuit()
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::quit()" << endl;
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotQuit()" << endl;
     
-    statusMsg(i18n("Exiting..."));
+    slotStatusMsg(i18n("Exiting..."));
     saveOptions();
     // close the first window, the list makes the next one the first again.
-    // This ensures that queryClose() is called on each window to ask for closing
+    // This ensures thatslotQueryClose() is called on each window to ask for closing
     KMainWindow* w;
     if (memberList) {
 
@@ -881,22 +881,22 @@ void RosegardenGUIApp::quit()
     }	
 }
 
-void RosegardenGUIApp::editCut()
+void RosegardenGUIApp::slotEditCut()
 {
     KTmpStatusMsg msg(i18n("Cutting selection..."), statusBar());
 }
 
-void RosegardenGUIApp::editCopy()
+void RosegardenGUIApp::slotEditCopy()
 {
     KTmpStatusMsg msg(i18n("Copying selection to clipboard..."), statusBar());
 }
 
-void RosegardenGUIApp::editPaste()
+void RosegardenGUIApp::slotEditPaste()
 {
     KTmpStatusMsg msg(i18n("Inserting clipboard contents..."), statusBar());
 }
 
-void RosegardenGUIApp::toggleToolBar()
+void RosegardenGUIApp::slotToggleToolBar()
 {
     KTmpStatusMsg msg(i18n("Toggle the toolbar..."), statusBar());
 
@@ -906,7 +906,7 @@ void RosegardenGUIApp::toggleToolBar()
         toolBar("mainToolBar")->hide();
 }
 
-void RosegardenGUIApp::toggleTracksToolBar()
+void RosegardenGUIApp::slotToggleTracksToolBar()
 {
     KTmpStatusMsg msg(i18n("Toggle the tracks toolbar..."), statusBar());
 
@@ -916,7 +916,7 @@ void RosegardenGUIApp::toggleTracksToolBar()
         toolBar("tracksToolBar")->hide();
 }
 
-void RosegardenGUIApp::toggleTransport()
+void RosegardenGUIApp::slotToggleTransport()
 {
     KTmpStatusMsg msg(i18n("Toggle the Transport"), statusBar());
 
@@ -929,7 +929,7 @@ void RosegardenGUIApp::toggleTransport()
         m_transport->hide();
 }
 
-void RosegardenGUIApp::toggleStatusBar()
+void RosegardenGUIApp::slotToggleStatusBar()
 {
     KTmpStatusMsg msg(i18n("Toggle the statusbar..."), statusBar());
 
@@ -940,7 +940,7 @@ void RosegardenGUIApp::toggleStatusBar()
 }
 
 
-void RosegardenGUIApp::statusMsg(const QString &text)
+void RosegardenGUIApp::slotStatusMsg(const QString &text)
 {
     ///////////////////////////////////////////////////////////////////
     // change status message permanently
@@ -949,44 +949,44 @@ void RosegardenGUIApp::statusMsg(const QString &text)
 }
 
 
-void RosegardenGUIApp::statusHelpMsg(const QString &text)
+void RosegardenGUIApp::slotStatusHelpMsg(const QString &text)
 {
     ///////////////////////////////////////////////////////////////////
     // change status message of whole statusbar temporary (text, msec)
     statusBar()->message(text, 2000);
 }
 
-void RosegardenGUIApp::pointerSelected()
+void RosegardenGUIApp::slotPointerSelected()
 {
     m_view->selectTool(SegmentCanvas::Selector);
 }
 
-void RosegardenGUIApp::eraseSelected()
+void RosegardenGUIApp::slotEraseSelected()
 {
     m_view->selectTool(SegmentCanvas::Eraser);
 }
 
-void RosegardenGUIApp::drawSelected()
+void RosegardenGUIApp::slotDrawSelected()
 {
     m_view->selectTool(SegmentCanvas::Pencil);
 }
 
-void RosegardenGUIApp::moveSelected()
+void RosegardenGUIApp::slotMoveSelected()
 {
     m_view->selectTool(SegmentCanvas::Mover);
 }
 
-void RosegardenGUIApp::resizeSelected()
+void RosegardenGUIApp::slotResizeSelected()
 {
     m_view->selectTool(SegmentCanvas::Resizer);
 }
 
-void RosegardenGUIApp::joinSelected()
+void RosegardenGUIApp::slotJoinSelected()
 {
     m_view->selectTool(SegmentCanvas::Joiner);
 }
 
-void RosegardenGUIApp::splitSelected()
+void RosegardenGUIApp::slotSplitSelected()
 {
     m_view->selectTool(SegmentCanvas::Splitter);
 }
@@ -1038,7 +1038,7 @@ void GetTimeResDialog::setInitialTimeRes(unsigned int v)
 
 
 
-void RosegardenGUIApp::changeTimeResolution()
+void RosegardenGUIApp::slotChangeTimeResolution()
 {
     GetTimeResDialog *dialog = new GetTimeResDialog(this);
     
@@ -1053,7 +1053,7 @@ void RosegardenGUIApp::changeTimeResolution()
 }
 
 
-void RosegardenGUIApp::importMIDI()
+void RosegardenGUIApp::slotImportMIDI()
 {
     KURL url = KFileDialog::getOpenURL(QString::null, "*.mid", this,
                                      i18n("Open MIDI File"));
@@ -1087,7 +1087,7 @@ void RosegardenGUIApp::importMIDIFile(const QString &file)
     // Stop if playing
     //
     if (m_seqManager->getTransportStatus() == PLAYING)
-        stop();
+        slotStop();
 
     m_doc->closeDocument();
 
@@ -1106,7 +1106,7 @@ void RosegardenGUIApp::importMIDIFile(const QString &file)
     initView();
 }
 
-void RosegardenGUIApp::importRG21()
+void RosegardenGUIApp::slotImportRG21()
 {
     KURL url = KFileDialog::getOpenURL(QString::null, "*.rose", this,
                                        i18n("Open Rosegarden 2.1 File"));
@@ -1118,7 +1118,7 @@ void RosegardenGUIApp::importRG21()
     // Stop if playing
     //
     if (m_seqManager->getTransportStatus() == PLAYING)
-        stop();
+        slotStop();
     
     importRG21File(tmpfile);
 
@@ -1168,7 +1168,7 @@ void RosegardenGUIApp::setPointerPosition(const long &posSec,
 
     if (elapsedTime >= comp.getEndMarker())
     {
-        stop();
+        slotStop();
         rT = Rosegarden::RealTime(0, 0);
         elapsedTime = 0;
     }
@@ -1189,7 +1189,7 @@ void RosegardenGUIApp::setPointerPosition(const long &posSec,
     //
     if (m_transport->isShowingBarTime()) {
 
-	displayBarTime(elapsedTime);
+	slotDisplayBarTime(elapsedTime);
 
     } else {
 
@@ -1202,13 +1202,13 @@ void RosegardenGUIApp::setPointerPosition(const long &posSec,
 }
 
 void
-RosegardenGUIApp::setPointerPosition(Rosegarden::RealTime time)
+RosegardenGUIApp::slotSetPointerPosition(Rosegarden::RealTime time)
 {
     setPointerPosition(time.sec, time.usec);
 }
 
 
-void RosegardenGUIApp::setPointerPosition(timeT t)
+void RosegardenGUIApp::slotSetPointerPosition(timeT t)
 {
     Rosegarden::Composition &comp = m_doc->getComposition();
 
@@ -1218,7 +1218,7 @@ void RosegardenGUIApp::setPointerPosition(timeT t)
     {
         if (t >= comp.getEndMarker())
         {
-            stop();
+            slotStop();
             t = comp.getEndMarker();
         }
 
@@ -1253,7 +1253,7 @@ void RosegardenGUIApp::setPointerPosition(timeT t)
     //
     if (m_transport->isShowingBarTime()) {
 
-	displayBarTime(t);
+	slotDisplayBarTime(t);
 
     } else {
 
@@ -1267,7 +1267,7 @@ void RosegardenGUIApp::setPointerPosition(timeT t)
     }
 }
 
-void RosegardenGUIApp::displayBarTime(timeT t)
+void RosegardenGUIApp::slotDisplayBarTime(timeT t)
 {
     Rosegarden::Composition &comp = m_doc->getComposition();
 
@@ -1290,14 +1290,14 @@ void RosegardenGUIApp::displayBarTime(timeT t)
 }
 
 
-void RosegardenGUIApp::refreshTimeDisplay()
+void RosegardenGUIApp::slotRefreshTimeDisplay()
 {
-    setPointerPosition(m_doc->getComposition().getPosition());
+    slotSetPointerPosition(m_doc->getComposition().getPosition());
 }
 
 
 
-void RosegardenGUIApp::editAllTracks()
+void RosegardenGUIApp::slotEditAllTracks()
 {
     m_view->editAllTracks(&m_doc->getComposition());
 }
@@ -1324,7 +1324,7 @@ bool RosegardenGUIApp::launchSequencer()
     (*m_sequencerProcess) << "rosegardensequencer";
 
     connect(m_sequencerProcess, SIGNAL(processExited(KProcess*)),
-            this, SLOT(sequencerExited(KProcess*)));
+            this, SLOT(slotSequencerExited(KProcess*)));
 
     bool res = m_sequencerProcess->start();
     
@@ -1337,7 +1337,7 @@ bool RosegardenGUIApp::launchSequencer()
     return res;
 }
 
-void RosegardenGUIApp::sequencerExited(KProcess*)
+void RosegardenGUIApp::slotSequencerExited(KProcess*)
 {
     kdDebug(KDEBUG_AREA) << "Sequencer exited\n";
 
@@ -1347,7 +1347,7 @@ void RosegardenGUIApp::sequencerExited(KProcess*)
 }
 
 
-void RosegardenGUIApp::exportMIDI()
+void RosegardenGUIApp::slotExportMIDI()
 {
     KTmpStatusMsg msg(i18n("Exporting to MIDI file..."), statusBar());
 
@@ -1413,7 +1413,7 @@ void RosegardenGUIApp::exportMIDIFile(const QString &file)
 
 // Uncheck the transport window check box
 void
-RosegardenGUIApp::closeTransport()
+RosegardenGUIApp::slotCloseTransport()
 {
      m_viewTransport->setChecked(false);
 }
@@ -1428,7 +1428,7 @@ RosegardenGUIApp::closeTransport()
 //
 //
 void
-RosegardenGUIApp::activateTool(SegmentCanvas::ToolType tt)
+RosegardenGUIApp::slotActivateTool(SegmentCanvas::ToolType tt)
 {
     switch(tt)
     {
@@ -1509,7 +1509,7 @@ RosegardenGUIApp::showVisuals(Rosegarden::MappedComposition *mC)
 // the current transport status
 //
 void
-RosegardenGUIApp::toggleMetronome()
+RosegardenGUIApp::slotToggleMetronome()
 {
     Rosegarden::Composition &comp = m_doc->getComposition();
 
@@ -1565,14 +1565,14 @@ RosegardenGUIApp::getSequencerSlice(long sliceStartSec, long sliceStartUsec,
 
 
 void
-RosegardenGUIApp::rewindToBeginning()
+RosegardenGUIApp::slotRewindToBeginning()
 {
     m_seqManager->rewindToBeginning();
 }
 
 
 void
-RosegardenGUIApp::fastForwardToEnd()
+RosegardenGUIApp::slotFastForwardToEnd()
 {
     m_seqManager->fastForwardToEnd();
 }
@@ -1581,7 +1581,7 @@ RosegardenGUIApp::fastForwardToEnd()
 // to set position and start playing
 //
 void
-RosegardenGUIApp::setPlayPosition(Rosegarden::timeT time)
+RosegardenGUIApp::slotSetPlayPosition(Rosegarden::timeT time)
 {
     m_seqManager->setPlayStartTime(time);
 }
@@ -1626,7 +1626,7 @@ void RosegardenGUIApp::notifySequencerStatus(const int& status)
 // also called via DCOP
 //
 void
-RosegardenGUIApp::record()
+RosegardenGUIApp::slotRecord()
 {
     if (!m_sequencerProcess && !launchSequencer())
                 return;
@@ -1643,7 +1643,7 @@ RosegardenGUIApp::record()
 
 
 void
-RosegardenGUIApp::setLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
+RosegardenGUIApp::slotSetLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
 {
     try
     {
@@ -1655,7 +1655,7 @@ RosegardenGUIApp::setLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
     }
 }
 
-void RosegardenGUIApp::play()
+void RosegardenGUIApp::slotPlay()
 {
     if (!m_sequencerProcess && !launchSequencer())
                 return;
@@ -1673,7 +1673,7 @@ void RosegardenGUIApp::play()
 
 // Send stop request to Sequencer if playing, else
 // return to start of segment
-void RosegardenGUIApp::stop()
+void RosegardenGUIApp::slotStop()
 {
     try
     {
@@ -1687,7 +1687,7 @@ void RosegardenGUIApp::stop()
 
 // Jump to previous bar
 //
-void RosegardenGUIApp::rewind()
+void RosegardenGUIApp::slotRewind()
 {
     m_seqManager->rewind();
 }
@@ -1695,7 +1695,7 @@ void RosegardenGUIApp::rewind()
 
 // Jump to next bar
 //
-void RosegardenGUIApp::fastforward()
+void RosegardenGUIApp::slotFastforward()
 {
     m_seqManager->fastforward();
 }

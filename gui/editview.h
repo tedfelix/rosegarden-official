@@ -108,7 +108,7 @@ public slots:
     /**
      * close window
      */
-    virtual void closeWindow();
+    virtual void slotCloseWindow();
 
     /**
      * put the indicationed text/object into the clipboard and remove * it
@@ -165,7 +165,7 @@ public slots:
      * @see ActiveItem
      * @see QCanvasItem#setActive
      */
-    virtual void activeItemPressed(QMouseEvent*, QCanvasItem*);
+    virtual void slotActiveItemPressed(QMouseEvent*, QCanvasItem*);
 
 protected:
 

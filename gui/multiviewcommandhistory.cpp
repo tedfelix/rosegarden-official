@@ -68,7 +68,7 @@ MultiViewCommandHistory::attachView(KActionCollection *collection)
 	 "undo",
 	 KStdAccel::key(KStdAccel::Undo),
 	 this,
-	 SLOT(undo()),
+	 SLOT(slotUndo()),
 	 collection,
 	 KStdAction::stdName(KStdAction::Undo));
 
@@ -89,7 +89,7 @@ MultiViewCommandHistory::attachView(KActionCollection *collection)
 	 "redo",
 	 KStdAccel::key(KStdAccel::Redo),
 	 this,
-	 SLOT(redo()),
+	 SLOT(slotRedo()),
 	 collection,
 	 KStdAction::stdName(KStdAction::Redo));
     
@@ -140,7 +140,7 @@ MultiViewCommandHistory::addCommand(KCommand *command, bool execute)
 }
 
 void
-MultiViewCommandHistory::undo()
+MultiViewCommandHistory::slotUndo()
 {
     if (m_undoStack.empty()) return;
 
@@ -158,7 +158,7 @@ MultiViewCommandHistory::undo()
 }
 
 void
-MultiViewCommandHistory::redo()
+MultiViewCommandHistory::slotRedo()
 {
     if (m_redoStack.empty()) return;
 
@@ -239,13 +239,13 @@ MultiViewCommandHistory::clearStack(CommandStack &stack)
 void
 MultiViewCommandHistory::slotUndoActivated(int pos)
 {
-    for (int i = 0 ; i <= pos; ++i) undo();
+    for (int i = 0 ; i <= pos; ++i)slotUndo();
 }
 
 void
 MultiViewCommandHistory::slotRedoActivated(int pos)
 {
-    for (int i = 0 ; i <= pos; ++i) redo();
+    for (int i = 0 ; i <= pos; ++i)slotRedo();
 }
 
 void

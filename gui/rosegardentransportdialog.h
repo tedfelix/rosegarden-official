@@ -62,14 +62,14 @@ public slots:
 
     // These two slots are activated by QTimers
     //
-    void clearMidiInLabel();
-    void clearMidiOutLabel();
+    void slotClearMidiInLabel();
+    void slotClearMidiOutLabel();
 
     // These just change the little labels that say what
     // mode we're in, nothing else
     //
-    void changeTimeDisplay();
-    void changeToEnd();
+    void slotChangeTimeDisplay();
+    void slotChangeToEnd();
 
 signals:
     void closed();

@@ -71,10 +71,10 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent, const char *name)
     pViewList->setAutoDelete(true);
 
     connect(&m_commandHistory, SIGNAL(commandExecuted(KCommand *)),
-	    this, SLOT(documentModified()));
+	    this, SLOT(slotDocumentModified()));
 
     connect(&m_commandHistory, SIGNAL(documentRestored()),
-	    this, SLOT(documentRestored()));
+	    this, SLOT(slotDocumentRestored()));
 }
 
 RosegardenGUIDoc::~RosegardenGUIDoc()
@@ -125,15 +125,15 @@ void RosegardenGUIDoc::slotUpdateAllViews(RosegardenGUIView *sender)
 
 }
 
-void RosegardenGUIDoc::documentModified()
+void RosegardenGUIDoc::slotDocumentModified()
 {
-//    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::documentModified()" << endl;
+//    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::slotDocumentModified()" << endl;
     setModified(true);
 }
 
-void RosegardenGUIDoc::documentRestored()
+void RosegardenGUIDoc::slotDocumentRestored()
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::documentRestored()" << endl;
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::slotDocumentRestored()" << endl;
     setModified(false);
 }
 

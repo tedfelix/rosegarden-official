@@ -184,7 +184,7 @@ NoteInserter::NoteInserter(NotationView* view)
     createMenu("noteinserter.rc");
 
     connect(m_parentView, SIGNAL(changeAccidental(Rosegarden::Accidental)),
-            this,         SLOT(setAccidental(Rosegarden::Accidental)));
+            this,         SLOT(slotSetAccidental(Rosegarden::Accidental)));
 }
 
 NoteInserter::NoteInserter(const QString& menuName, NotationView* view)
@@ -194,7 +194,7 @@ NoteInserter::NoteInserter(const QString& menuName, NotationView* view)
       m_accidental(Accidentals::NoAccidental)
 {
     connect(m_parentView, SIGNAL(changeAccidental(Rosegarden::Accidental)),
-            this,         SLOT(setAccidental(Rosegarden::Accidental)));
+            this,         SLOT(slotSetAccidental(Rosegarden::Accidental)));
 
 }
 
@@ -270,28 +270,28 @@ NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
     return command->getLastInsertedEvent();
 } 
 
-void NoteInserter::setNote(Rosegarden::Note::Type nt)
+void NoteInserter::slotSetNote(Rosegarden::Note::Type nt)
 {
     m_noteType = nt;
 }
 
-void NoteInserter::setDots(unsigned int dots)
+void NoteInserter::slotSetDots(unsigned int dots)
 {
     m_noteDots = dots;
 }
 
-void NoteInserter::setAccidental(Rosegarden::Accidental accidental)
+void NoteInserter::slotSetAccidental(Rosegarden::Accidental accidental)
 {
     kdDebug(KDEBUG_AREA) << "NoteInserter::setAccidental: accidental is "
 			 << accidental << endl;
     m_accidental = accidental;
 }
 
-void NoteInserter::setAccidentalSync(Rosegarden::Accidental accidental)
+void NoteInserter::slotSetAccidentalSync(Rosegarden::Accidental accidental)
 {
     kdDebug(KDEBUG_AREA) << "NoteInserter::setAccidentalSync: accidental is "
 			 << accidental << endl;
-    setAccidental(accidental);
+    slotSetAccidental(accidental);
 
     int i;
     for (i = 0; i < 6; ++i) {
@@ -445,7 +445,7 @@ NotationEraser::NotationEraser(NotationView* view)
       m_collapseRest(false)
 {
     new KToggleAction(i18n("Collapse rests after erase"), 0, this,
-                      SLOT(toggleRestCollapse()), actionCollection(),
+                      SLOT(slotToggleRestCollapse()), actionCollection(),
                       "toggle_rest_collapse");
 
     QIconSet icon
@@ -486,7 +486,7 @@ void NotationEraser::handleLeftButtonPress(Rosegarden::timeT,
     m_nParentView->addCommandToHistory(command);
 }
 
-void NotationEraser::toggleRestCollapse()
+void NotationEraser::slotToggleRestCollapse()
 {
     m_collapseRest = !m_collapseRest;
 }
@@ -513,7 +513,7 @@ NotationSelector::NotationSelector(NotationView* view)
       m_clickedElement(0)
 {
     connect(m_parentView, SIGNAL(usedSelection()),
-            this,         SLOT(hideSelection()));
+            this,         SLOT(slotHideSelection()));
 
     QIconSet icon
 	(m_nParentView->getToolbarNotePixmapFactory()->
@@ -634,7 +634,7 @@ void NotationSelector::stow()
 }
 
 
-void NotationSelector::hideSelection()
+void NotationSelector::slotHideSelection()
 {
     if (!m_selectionRect) return;
     m_selectionRect->hide();

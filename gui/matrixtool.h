@@ -100,7 +100,7 @@ public slots:
      * Set the shortest note which can be "painted"
      * on the matrix
      */
-    void setResolution(Rosegarden::Note::Type);
+    void slotSetResolution(Rosegarden::Note::Type);
 
 protected:
     MatrixPainter(MatrixView*);
@@ -196,7 +196,7 @@ public slots:
      * Should be called after a cut or a copy has been
      * performed
      */
-    void hideSelection();
+    void slotHideSelection();
     
 protected:
     MatrixSelector(MatrixView*);

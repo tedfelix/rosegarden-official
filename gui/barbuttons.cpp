@@ -103,7 +103,7 @@ BarButtons::BarButtons(RosegardenGUIDoc* doc,
 }
 
 
-void BarButtons::scrollHoriz(int x)
+void BarButtons::slotScrollHoriz(int x)
 {
     m_loopRuler->scrollHoriz(x);
     m_hButtonBar->scrollHoriz(x);

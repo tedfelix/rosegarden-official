@@ -249,31 +249,31 @@ public:
 
 public slots:
     /// Set the current segment editing tool
-    void setTool(SegmentCanvas::ToolType);
+    void slotSetTool(SegmentCanvas::ToolType);
 
     /// Update the SegmentCanvas after a change of content
-    virtual void update();
+    virtual void slotUpdate();
 
     // This method only operates if we're of the "Selector"
     // tool type - it's called from the View to enable it
     // to automatically set the selection of Segments (say
     // by Track).
     //
-    void selectSegments(std::list<Rosegarden::Segment*> segment);
+    void slotSelectSegments(std::list<Rosegarden::Segment*> segment);
 
     // These are sent from the top level app when it gets key
     // depresses relating to selection add (usually SHIFT) and
     // selection copy (usually CONTROL)
     //
-    void setSelectAdd(const bool &value);
-    void setSelectCopy(const bool &value);
+    void slotSetSelectAdd(const bool &value);
+    void slotSetSelectCopy(const bool &value);
 
-    void setFineGrain(bool value);
+    void slotSetFineGrain(bool value);
 
     // Show and hige the splitting line on a Segment
     //
-    void showSplitLine(int x, int y);
-    void hideSplitLine();
+    void slotShowSplitLine(int x, int y);
+    void slotHideSplitLine();
 
 protected:
     virtual void contentsMousePressEvent(QMouseEvent*);
@@ -285,20 +285,20 @@ protected slots:
 
     /**
      * connected to the 'Edit as Notation' items of the RMB popup menu -
-     * re-emits editSegmentNotation(Segment*)
+     * re-emits slotEditSegmentNotation(Segment*)
      */
-    void onEditNotation();
+    void slotOnEditNotation();
 
     /**
      * connected to the 'Edit as Matrix' items of the RMB popup
-     * menu - re-emits editSegmentMatrix(Segment*)
+     * menu - re-emits slotEditSegmentMatrix(Segment*)
      */
-    void onEditMatrix();
+    void slotOnEditMatrix();
 
     /**
      * connected to the 'Edit Audio' item of the RMB popup
      */
-    void onEditAudio();
+    void slotOnEditAudio();
 
 signals:
     /**
@@ -503,7 +503,7 @@ public:
     void setSegmentCopy(const bool &value) { m_segmentCopyMode = value; }
 
 public slots:
-    void selectSegmentItem(SegmentItem *selectedItem);
+    void slotSelectSegmentItem(SegmentItem *selectedItem);
 
 signals:
     void changeSegmentTrackAndStartTime(Rosegarden::Segment *,

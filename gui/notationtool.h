@@ -133,19 +133,19 @@ public:
 
 public slots:
     /// Set the type of note (quaver, breve...) which will be inserted
-    void setNote(Rosegarden::Note::Type);
+    void slotSetNote(Rosegarden::Note::Type);
 
     /// Set the nb of dots the inserted note will have
-    void setDots(unsigned int dots);
+    void slotSetDots(unsigned int dots);
  
     /// Set the accidental for the notes which will be inserted
-    void setAccidental(Rosegarden::Accidental);
+    void slotSetAccidental(Rosegarden::Accidental);
 
     /**
      * Set the accidental for the notes which will be inserted
      * and put the parent view toolbar in sync
      */
-    void setAccidentalSync(Rosegarden::Accidental);
+    void slotSetAccidentalSync(Rosegarden::Accidental);
 
 protected:
     NoteInserter(NotationView*);
@@ -254,7 +254,7 @@ public:
     static const QString ToolName;
 
 public slots:
-    void toggleRestCollapse();
+    void slotToggleRestCollapse();
     
     void slotInsertSelected();
     void slotSelectSelected();
@@ -329,7 +329,7 @@ public slots:
      * Should be called after a cut or a copy has been
      * performed
      */
-    void hideSelection();
+    void slotHideSelection();
     
     void slotInsertSelected();
     void slotEraseSelected();

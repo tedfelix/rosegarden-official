@@ -191,15 +191,15 @@ public:
 
 public slots:
     /**
-     * calls repaint() on all views connected to the document object
+     * callsslotRepaint() on all views connected to the document object
      * and is called by the view by which the document has been
      * changed.  As this view normally repaints itself, it is excluded
      * from the paintEvent.
      */
     void slotUpdateAllViews(RosegardenGUIView *sender);
 
-    void documentModified();
-    void documentRestored();
+    void slotDocumentModified();
+    void slotDocumentRestored();
 
 signals:
 //!!!???    void setGUIPointerPosition(Rosegarden::timeT);
