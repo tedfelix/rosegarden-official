@@ -79,8 +79,8 @@ PeakFile::open()
     }
     catch(std::string s)
     {
-        std::cerr << "PeakFile::open - EXCEPTION \"" << s << "\""
-                  << std::endl;
+        cerr << "PeakFile::open - EXCEPTION \"" << s << "\""
+             << endl;
         return false;
     }
     
@@ -146,31 +146,31 @@ PeakFile::parseHeader()
 void
 PeakFile::printStats()
 {
-    std::cout << std::endl;
-    std::cout << "STATS for PeakFile \"" << m_fileName << "\"" << std::endl
-              << "-----" << std::endl << std::endl;
+    cout << endl;
+    cout << "STATS for PeakFile \"" << m_fileName << "\"" << endl
+         << "-----" << endl << endl;
 
-    std::cout << "  VERSION = " << m_version << std::endl
-              << "  FORMAT  = " << m_format << std::endl
-              << "  BYTES/VALUE = " << m_pointsPerValue << std::endl
-              << "  BLOCKSIZE   = " << m_blockSize << std::endl
-              << "  CHANNELS    = " << m_channels << std::endl
-              << "  PEAK FRAMES = " << m_numberOfPeaks << std::endl
-              << "  PEAK OF PKS = " << m_positionPeakOfPeaks << std::endl
-              << std::endl;
+    cout << "  VERSION = " << m_version << endl
+         << "  FORMAT  = " << m_format << endl
+         << "  BYTES/VALUE = " << m_pointsPerValue << endl
+         << "  BLOCKSIZE   = " << m_blockSize << endl
+         << "  CHANNELS    = " << m_channels << endl
+         << "  PEAK FRAMES = " << m_numberOfPeaks << endl
+         << "  PEAK OF PKS = " << m_positionPeakOfPeaks << endl
+         << endl;
 
-    std::cout << "DATE" << std::endl
-              << "----" << std::endl << std::endl
-              << "  YEAR    = " << m_modificationTime.date().year() << std::endl
-              << "  MONTH   = " << m_modificationTime.date().month()<< std::endl
-              << "  DAY     = " << m_modificationTime.date().day() << std::endl
-              << "  HOUR    = " << m_modificationTime.time().hour() << std::endl
-              << "  MINUTE  = " << m_modificationTime.time().minute()
-              << std::endl
-              << "  SECOND  = " << m_modificationTime.time().second()
-              << std::endl
-              << "  MSEC    = " << m_modificationTime.time().msec()
-              << std::endl << std::endl;
+    cout << "DATE" << endl
+         << "----" << endl << endl
+         << "  YEAR    = " << m_modificationTime.date().year() << endl
+         << "  MONTH   = " << m_modificationTime.date().month()<< endl
+         << "  DAY     = " << m_modificationTime.date().day() << endl
+         << "  HOUR    = " << m_modificationTime.time().hour() << endl
+         << "  MINUTE  = " << m_modificationTime.time().minute()
+         << endl
+         << "  SECOND  = " << m_modificationTime.time().second()
+         << endl
+         << "  MSEC    = " << m_modificationTime.time().msec()
+         << endl << endl;
 }
 
 bool
@@ -183,16 +183,16 @@ bool
 PeakFile::write(unsigned short undatePercentage)
 {
     if (m_outFile)
-    {
-        m_outFile->close();
-        delete m_outFile; 
-    }
+        {
+            m_outFile->close();
+            delete m_outFile; 
+        }
 
     // Attempt to open AudioFile so that we can extract sample data
     // for preview file generation
     //
     if (!m_audioFile->open())
-      return false;
+        return false;
 
     // create and test that we've made it
     m_outFile = new std::ofstream(m_fileName.c_str(),
@@ -217,11 +217,11 @@ PeakFile::close()
     // Close any input file handle
     //
     if (m_inFile && m_inFile->is_open())
-    {
-        m_inFile->close();
-        delete m_inFile;
-        m_inFile = 0;
-    }
+        {
+            m_inFile->close();
+            delete m_inFile;
+            m_inFile = 0;
+        }
 
     if (m_outFile == 0)
         return;
@@ -263,13 +263,13 @@ PeakFile::close()
 
     QString fDate;
     fDate.sprintf("%04d:%02d:%02d:%02d:%02d:%02d:%03d",
-                    m_modificationTime.date().year(),
-                    m_modificationTime.date().month(),
-                    m_modificationTime.date().day(),
-                    m_modificationTime.time().hour(),
-                    m_modificationTime.time().minute(),
-                    m_modificationTime.time().second(),
-                    m_modificationTime.time().msec());
+                  m_modificationTime.date().year(),
+                  m_modificationTime.date().month(),
+                  m_modificationTime.date().day(),
+                  m_modificationTime.time().hour(),
+                  m_modificationTime.time().minute(),
+                  m_modificationTime.time().second(),
+                  m_modificationTime.time().msec());
 
     std::string dateString(fDate.data());
 
@@ -444,7 +444,7 @@ PeakFile::writePeaks(std::ofstream *file)
 {
     if(!file || !(*file)) return;
 
-    std::cout << "PeakFile::writePeaks - calculating peaks" << std::endl;
+    cout << "PeakFile::writePeaks - calculating peaks" << endl;
 
 
     // Scan to beginning of data
@@ -501,9 +501,9 @@ PeakFile::writePeaks(std::ofstream *file)
         }
         catch (std::string e)
         {
-            std::cerr << "PeakFile::writePeaks - \"" << e << "\"" 
-                      << std::endl
-                      << "PeakFile::writePeaks - leaving last block" << std::endl;
+            cerr << "PeakFile::writePeaks - \"" << e << "\"" 
+                      << endl
+                      << "PeakFile::writePeaks - leaving last block" << endl;
             break;
         }
 
@@ -562,7 +562,7 @@ PeakFile::writePeaks(std::ofstream *file)
                 {
                     //cout << "SAMPLE = " << (int)sampleValue << endl;
                     if (showCount++ < 10)
-                        std::cout << "SAMPLES = " << sampleValue << endl;
+                        cout << "SAMPLES = " << sampleValue << endl;
 
                     // Store maximum for this block
                     //
@@ -593,8 +593,8 @@ PeakFile::writePeaks(std::ofstream *file)
         //
         for (unsigned int i = 0; i < m_audioFile->getChannels(); i++)
         {
-            //std::cout << "PeakFile::writePeaks - "
-                      //<< "writing peak data out" << std::endl;
+            //cout << "PeakFile::writePeaks - "
+                      //<< "writing peak data out" << endl;
 
             cout << "WRITING HI VALUE = " << channelPeaks[i].first << endl;
             putBytes(file, getLittleEndianFromInteger(channelPeaks[i].first,
@@ -620,8 +620,8 @@ PeakFile::writePeaks(std::ofstream *file)
     // set format number
     m_format = bytes;
 
-    std::cout << "PeakFile::writePeaks - "
-              << "completed peaks" << std::endl;
+    cout << "PeakFile::writePeaks - "
+              << "completed peaks" << endl;
 
 }
 
@@ -666,14 +666,14 @@ PeakFile::getPreview(const RealTime &startIndex,
 
     std::string peakData;
 
-    std::cout << "PeakFile::getPreview - getting preview for \""
-              << m_audioFile->getFilename() << "\"" << std::endl;
+    cout << "PeakFile::getPreview - getting preview for \""
+              << m_audioFile->getFilename() << "\"" << endl;
 
     // Walk through the peak values 
     //
     /*
-    std::cout << "START = " << startPeak << std::endl;
-    std::cout << "END   = " << endPeak << std::endl;
+    cout << "START = " << startPeak << endl;
+    cout << "END   = " << endPeak << endl;
     */
 
     float divisor = 0.0f;
@@ -688,9 +688,9 @@ PeakFile::getPreview(const RealTime &startIndex,
             break;
 
         default:
-            std::cerr << "PeakFile::getPreview - "
+            cerr << "PeakFile::getPreview - "
                       << "unsupported peak length format (" << m_format << ")"
-                      << std::endl;
+                      << endl;
             return ret;
     }
 
@@ -723,8 +723,8 @@ PeakFile::getPreview(const RealTime &startIndex,
                 // Problem with the get - probably an EOF
                 // return the results so far.
                 //
-                std::cout << "PeakFile::getPreview - \"" << e << "\"\n"
-                          << std::endl;
+                cout << "PeakFile::getPreview - \"" << e << "\"\n"
+                          << endl;
                 return ret;
             }
 
@@ -756,9 +756,9 @@ PeakFile::getPreview(const RealTime &startIndex,
                 // We didn't get the whole peak block - return what
                 // we've got so far
                 //
-                std::cerr << "PeakFile::getPreview - "
+                cerr << "PeakFile::getPreview - "
                           << "failed to get complete peak block"
-                          << std::endl;
+                          << endl;
                 return ret;
             }
         }
@@ -790,7 +790,7 @@ PeakFile::drawPixmap(const RealTime &startTime,
                      const RealTime &endTime,
                      QPixmap *pixmap)
 {
-    std::cout << "PeakFile::drawPixmap" << std::endl;
+    cout << "PeakFile::drawPixmap" << endl;
 
     double startPeak = getPeak(startTime);
     double endPeak = getPeak(endTime);
@@ -831,8 +831,8 @@ PeakFile::drawPixmap(const RealTime &startTime,
             break;
 
         default:
-            std::cerr << "PeakFile::getPreview - unsupported peak length format"
-                      << std::endl;
+            cerr << "PeakFile::getPreview - unsupported peak length format"
+                      << endl;
             return;
     }
 
@@ -858,7 +858,7 @@ PeakFile::drawPixmap(const RealTime &startTime,
             }
             catch(std::string e)
             {
-                cout << "PeakFile::drawPixmap - \"" << e << "\"" << std::endl;
+                cout << "PeakFile::drawPixmap - \"" << e << "\"" << endl;
             }
 
             if (peakData.length() == m_format * m_pointsPerValue)
@@ -889,9 +889,9 @@ PeakFile::drawPixmap(const RealTime &startTime,
                 // We didn't get the whole peak block - return what
                 // we've got so far
                 //
-                std::cerr << "PeakFile::getPreview - "
-                          << "failed to get complete peak block"
-                          << std::endl;
+                cerr << "PeakFile::getPreview - "
+                     << "failed to get complete peak block"
+                     << endl;
             }
         }
 
@@ -917,7 +917,4 @@ PeakFile::getPeak(const RealTime &time)
 }
 
 
-};
-
-
-
+}
