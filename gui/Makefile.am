@@ -166,7 +166,8 @@ install-data-local:
 	$(INSTALL_DATA) $(srcdir)/pixmaps/transport/*.xpm  $(kde_datadir)/$(data_dirname)/pixmaps/transport
 	$(INSTALL_DATA) $(srcdir)/pixmaps/splash.png       $(kde_datadir)/$(data_dirname)/pixmaps
 	$(INSTALL_DATA) $(srcdir)/testfiles/autoload.rg    $(kde_datadir)/$(data_dirname)
-	$(INSTALL_DATA) $(srcdir)/library/*.rgd    $(kde_datadir)/$(data_dirname)/library
+	$(INSTALL_DATA) $(srcdir)/library/*.rgd            $(kde_datadir)/$(data_dirname)/library
+	$(INSTALL_DATA) $(srcdir)/docs/en/tips             $(kde_datadir)/$(data_dirname)
 	perl -ne 'print "$$1\n" if /#define VERSION "(.*?)"/;' $(top_builddir)/config.h > $(DESTDIR)$(kde_datadir)/$(data_dirname)/version.txt
 
 
