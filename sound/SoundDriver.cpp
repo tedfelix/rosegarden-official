@@ -318,7 +318,7 @@ SoundDriver::clearDefunctFromAudioPlayQueue()
         m_audioPlayQueue.erase(*dLit);
 
     if (dList.size())
-        cout << "REMOVED " << dList.size() << " DEFUNCT AUDIO FILES" << endl;
+        std::cout << "REMOVED " << dList.size() << " DEFUNCT AUDIO FILES" << std::endl;
 
 }
 
