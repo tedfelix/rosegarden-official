@@ -176,7 +176,7 @@ RosegardenGUIView::getDocument() const
     return theApp->getDocument();
 }
 
-void RosegardenGUIView::print(KPrinter *pPrinter, Composition* p)
+void RosegardenGUIView::print(KPrinter *printer, Composition* p)
 {
     SetWaitCursor waitCursor;
 
@@ -195,16 +195,13 @@ void RosegardenGUIView::print(KPrinter *pPrinter, Composition* p)
 
     NotationView *notationView = new NotationView(getDocument(),
                                                   segmentsToEdit,
-                                                  pPrinter);
+                                                  printer);
+    // For debug
     notationView->show();
     kapp->processEvents();
+    // For debug - end
 
-    QPainter printpainter;
-    printpainter.begin(pPrinter);
-
-    notationView->print(&printpainter);
-
-    printpainter.end();
+    notationView->print(printer);
 
     delete notationView;
 }

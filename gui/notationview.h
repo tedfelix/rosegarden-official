@@ -219,7 +219,7 @@ public:
      *
      * @see NotationCanvasView#print
      */
-    virtual void print(QPainter*);
+    virtual void print(KPrinter*);
 
 public slots:
 

@@ -1965,11 +1965,78 @@ void NotationView::updateView()
     canvas()->update();
 }
 
-void NotationView::print(QPainter* printpainter)
+void NotationView::print(KPrinter* printer)
 {
-    getCanvasView()->print(printpainter);
-}
+    if (m_staffs.size() == 0) {
+        KMessageBox::error(0, "Nothing to print");
+        return;
+    }
+    
 
+    QPaintDeviceMetrics pdm(printer);
+
+    unsigned int pageHeight = pdm.height(),
+        staffRowSpacing = m_staffs[0]->getRowSpacing();
+
+    RG_DEBUG << "Page height : " << pageHeight << endl;
+
+    if (staffRowSpacing > pageHeight) {
+        KMessageBox::error(0, "Too many staffs - Don't know how to print that yet");
+        return;
+    }
+
+    unsigned int nbStaffRowsPerPage = pageHeight / staffRowSpacing;
+    int printSliceHeight = staffRowSpacing * nbStaffRowsPerPage;
+
+    NotationStaff* lastStaff = m_staffs[getStaffCount() - 1];
+
+    int printY = 0,
+        fullHeight = lastStaff->getTotalHeight() + lastStaff->getY();
+    
+    QPainter printpainter(printer);
+
+    QWMatrix translator;
+    
+    RG_DEBUG << "Printing total height " << fullHeight
+             << ", nbStaffRowsPerPage = " << nbStaffRowsPerPage
+             << ", printSliceHeight = " << printSliceHeight
+             << endl;
+
+    unsigned int pageNum = 1;
+
+    unsigned int canvasWidth = getCanvasView()->canvas()->width(),
+        canvasHeight =  getCanvasView()->canvas()->height();
+
+    // Stuff text items for debugging
+//     for (int y = 0; y < canvasHeight; y += 10) {
+//         QCanvasText* t = new QCanvasText(QString("y = %1").arg(y),
+//                                          getCanvasView()->canvas());
+//         t->setY(y);
+//         t->show();
+//     }
+
+//     getCanvasView()->canvas()->update();
+    // end of stuffing
+
+    while (printY < fullHeight) {
+
+        RG_DEBUG << "Printing from " << printY << " to "
+                 << printY + printSliceHeight
+                 << endl;
+
+        getCanvasView()->canvas()->drawArea(QRect(0, printY,
+                                                  canvasWidth, printSliceHeight),
+                                            &printpainter);
+
+        printpainter.translate(0, -printSliceHeight);
+
+        printY += printSliceHeight;
+        ++pageNum;
+
+        if (printY < fullHeight) printer->newPage();
+    }
+
+}
 
 void NotationView::refreshSegment(Segment *segment,
 				  timeT startTime, timeT endTime)
