@@ -850,17 +850,15 @@ Composition::realTime2Time(RealTime rt, double tempo) const
 RealTime
 Composition::getTempoTimestamp(const Event *e) 
 {
-    long sec = 0, usec = 0;
-    e->get<Int>(TempoTimestampSecProperty, sec);
-    e->get<Int>(TempoTimestampUsecProperty, usec);
-    return RealTime(sec, usec);
+    RealTime res;
+    e->get<RealTimeT>(TempoTimestampSecProperty, res);
+    return res;
 }
 
 void
 Composition::setTempoTimestamp(Event *e, RealTime t)
 {
-    e->setMaybe<Int>(TempoTimestampSecProperty, t.sec);
-    e->setMaybe<Int>(TempoTimestampUsecProperty, t.usec);
+    e->setMaybe<RealTimeT>(TempoTimestampSecProperty, t);
 }
 
 void
