@@ -70,7 +70,7 @@ public slots:
     void slotValueChanged(int value);
 
 signals:
-    void valueChanged(float value);
+    void valueChanged(int index, float value);
 
 protected:
 
@@ -99,12 +99,12 @@ public:
                       int index);
 
 public slots:
-    void slotPluginSelected(int);
-    void slotPluginPortChanged(float value);
+    void slotPluginSelected(int index);
+    void slotPluginPortChanged(int pluginIndex, float value);
 
 signals:
-    void pluginSelected(int index, int plugin);
-    void pluginPortChanged(int index, float value);
+    void pluginSelected(int pluginIndex, int plugin);
+    void pluginPortChanged(int pluginIndex, int portIndex, float value);
 
     // is this plugin being bypassed?
     void bypassed(bool);

@@ -2115,7 +2115,11 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                              getObject((*it)->getInstrument()));
                 
                 if (fader)
-                    volume = float(fader->getLevel())/127.0;
+                {
+                    MappedObjectPropertyList result =
+                        fader->getPropertyList(MappedAudioFader::FaderLevel);
+                    volume = float(result[0].toInt())/127.0;
+                }
 
                 while (samplesOut < nframes)
                 {

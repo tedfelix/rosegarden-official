@@ -27,7 +27,7 @@
 namespace Rosegarden
 {
 
-static MappedObjectId
+MappedObjectId
 StudioControl::createStudioObject(MappedObject::MappedObjectType type)
 {
     Rosegarden::MappedObjectId value = -1;
@@ -56,7 +56,7 @@ StudioControl::createStudioObject(MappedObject::MappedObjectType type)
     return value;
 }
 
-static bool
+bool
 StudioControl::destroyStudioObject(MappedObjectId id)
 {
     int value = 0;
@@ -85,7 +85,7 @@ StudioControl::destroyStudioObject(MappedObjectId id)
     return bool(value);
 }
 
-static MappedObjectPropertyList
+MappedObjectPropertyList
 StudioControl::getStudioObjectProperty(MappedObjectId id,
                         const MappedObjectProperty &property)
 {
@@ -117,7 +117,7 @@ StudioControl::getStudioObjectProperty(MappedObjectId id,
     return list;
 }
 
-static bool
+bool
 StudioControl::setStudioObjectProperty(MappedObjectId id,
                         const MappedObjectProperty &property,
                         MappedObjectValue value)
@@ -134,7 +134,7 @@ StudioControl::setStudioObjectProperty(MappedObjectId id,
     if (!kapp->dcopClient()->
             send(ROSEGARDEN_SEQUENCER_APP_NAME,
                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                 "setMappedProperty(unsigned int, QString, int)",
+                 "setMappedProperty(int, QString, float)",
                  data))
     {
         SEQMAN_DEBUG << "setStudioObjectProperty - "

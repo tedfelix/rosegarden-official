@@ -103,18 +103,42 @@ public:
     std::string getName() { return m_name; }
     void setName(const std::string &name) { m_name= name; }
 
+    // Get and set properties
+    //
     virtual MappedObjectPropertyList
         getPropertyList(const MappedObjectProperty &property) = 0;
+
+    virtual void setProperty(const MappedObjectProperty &property,
+                             MappedObjectValue value) = 0;
+
+    // Accepts a MappedObject* which to clone the current object into.
+    // All children of the passed MappedObject are free'd and new children
+    // created as part of the clone process.  This operation turns readonly
+    // objects into real objects.
+    //
+    // For the moment we allow this method to be overwritten so that
+    // in the case of child (end of line) classes we can implement
+    // attribute copying easily.
+    //
+    virtual void clone(MappedObject *object);
 
     // Ownership
     //
     MappedObject* getParent() { return m_parent; }
     void setParent(MappedObject *parent) { m_parent = parent; }
 
+    // Get a list of child ids - get a list of a certain type
+    //
+    MappedObjectPropertyList getChildren();
+    MappedObjectPropertyList getChildren(MappedObjectType type);
+
+    // Child management
+    //
     void addChild(MappedObject *mO);
     void removeChild(MappedObject *mO);
+    void clearChildren();
 
-    std::vector<MappedObject*> getChildren() { return m_children; }
+    std::vector<MappedObject*> getChildObjects() { return m_children; }
 
     bool isReadOnly() const { return m_readOnly; }
 
@@ -188,6 +212,9 @@ public:
     virtual MappedObjectPropertyList getPropertyList(
             const MappedObjectProperty &property);
 
+    virtual void setProperty(const MappedObjectProperty &property,
+                             MappedObjectValue value);
+
     // Return the object vector
     //
     //std::vector<MappedObject*>* getObjects() const { return &m_objects; }
@@ -243,12 +270,18 @@ public:
 
     ~MappedAudioFader() {;}
 
+    /*
     // level
     MappedObjectValue getLevel();
     void setLevel(MappedObjectValue param);
+    */
 
     virtual MappedObjectPropertyList getPropertyList(
                         const MappedObjectProperty &property);
+
+    virtual void setProperty(const MappedObjectProperty &property,
+                             MappedObjectValue value);
+
 
 protected:
 
@@ -268,6 +301,7 @@ public:
     static const MappedObjectProperty Author;
     static const MappedObjectProperty Copyright;
     static const MappedObjectProperty PortCount;
+    static const MappedObjectProperty Ports;
 
     MappedLADSPAPlugin(MappedObject *parent,
                        MappedObjectId id,
@@ -288,6 +322,9 @@ public:
 
     virtual MappedObjectPropertyList getPropertyList(
                         const MappedObjectProperty &property);
+
+    virtual void setProperty(const MappedObjectProperty &property,
+                             MappedObjectValue value);
 
     unsigned long getUniqueId() const { return m_uniqueId;}
     std::string getLabel() const { return m_label; }
@@ -318,6 +355,7 @@ public:
     static const MappedObjectProperty RangeHint;
     static const MappedObjectProperty RangeLower;
     static const MappedObjectProperty RangeUpper;
+    static const MappedObjectProperty Value;
 
     MappedLADSPAPort(MappedObject *parent,
                      MappedObjectId id,
@@ -325,6 +363,9 @@ public:
 
     virtual MappedObjectPropertyList getPropertyList(
                         const MappedObjectProperty &property);
+
+    virtual void setProperty(const MappedObjectProperty &property,
+                             MappedObjectValue value);
 
     void setPortName(const std::string &name) { m_portName = name; }
     std::string getPortName() const { return m_portName; }
@@ -341,10 +382,16 @@ public:
         { m_portDescriptor = pD; }
     LADSPA_PortDescriptor getDescriptor() const { return m_portDescriptor; }
 
+    // redefine clone() here to copy across value only
+    //
+    virtual void clone(MappedObject *object);
+
 protected:
     std::string           m_portName;
     LADSPA_PortRangeHint  m_portRangeHint;
     LADSPA_PortDescriptor m_portDescriptor;
+
+    MappedObjectValue     m_value;
 
 };
 
@@ -374,6 +421,9 @@ public:
     //
     virtual MappedObjectPropertyList getPropertyList(
             const MappedObjectProperty &property);
+
+    virtual void setProperty(const MappedObjectProperty &property,
+                             MappedObjectValue value);
 
     // Get a list of plugins and create MappedObjects out of them
     //

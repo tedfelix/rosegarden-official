@@ -34,7 +34,7 @@ namespace Rosegarden
 
 typedef int          MappedObjectId;
 typedef QString      MappedObjectProperty;
-typedef int          MappedObjectValue;
+typedef float        MappedObjectValue;
 
 typedef QValueVector<MappedObjectProperty> MappedObjectPropertyList;
 

@@ -191,8 +191,8 @@ AudioPluginDialog::slotPluginSelected(int number)
                                       m_pluginManager,
                                       count);
 
-                connect(control, SIGNAL(valueChanged(float)),
-                        this, SLOT(slotPluginPortChanged(float)));
+                connect(control, SIGNAL(valueChanged(int, float)),
+                        this, SLOT(slotPluginPortChanged(int, float)));
                 control->show();
 
                 height += control->height();
@@ -221,9 +221,9 @@ AudioPluginDialog::slotPluginSelected(int number)
 }
 
 void
-AudioPluginDialog::slotPluginPortChanged(float value)
+AudioPluginDialog::slotPluginPortChanged(int pluginIndex, float value)
 {
-    emit pluginPortChanged(m_index, value);
+    emit pluginPortChanged(m_index, pluginIndex, value);
 }
 
 
@@ -308,7 +308,7 @@ PluginControl::PluginControl(QWidget *parent,
 void
 PluginControl::slotValueChanged(int value)
 {
-    emit valueChanged((float(value))/m_multiplier);
+    emit valueChanged(m_index, (float(value))/m_multiplier);
 }
 
 void

@@ -195,7 +195,7 @@ public:
     // Set a MappedObject 
     virtual void setMappedProperty(int id,
                                    const QString &property,
-                                   int value);
+                                   float value);
 
     // Get a MappedObject for a type
     //

@@ -701,8 +701,8 @@ InstrumentParameterBox::slotSelectPlugin(int /*index*/) // no index 4 moment
     connect(aPD, SIGNAL(pluginSelected(int, int)),
             this, SLOT(slotPluginSelected(int, int)));
 
-    connect(aPD, SIGNAL(pluginPortChanged(int, float)),
-            this, SLOT(slotPluginPortChanged(int, float)));
+    connect(aPD, SIGNAL(pluginPortChanged(int, int, float)),
+            this, SLOT(slotPluginPortChanged(int, int, float)));
 
     aPD->show();
 
@@ -757,6 +757,11 @@ InstrumentParameterBox::slotPluginSelected(int index, int plugin)
                 // is assigned
                 inst->setMappedId(newId);
                 inst->setAssigned(true);
+
+                Rosegarden::StudioControl::setStudioObjectProperty
+                    (newId,
+                     Rosegarden::MappedLADSPAPlugin::UniqueId,
+                     0);
             }
 
 
@@ -779,10 +784,51 @@ InstrumentParameterBox::slotPluginSelected(int index, int plugin)
 }
 
 void
-InstrumentParameterBox::slotPluginPortChanged(int index, float value)
+InstrumentParameterBox::slotPluginPortChanged(int pluginIndex,
+                                              int portIndex,
+                                              float value)
 {
     std::cout << "InstrumentParameterBox::slotPluginPortChanged - "
               << "value = " << value << std::endl;
+
+    Rosegarden::AudioPluginInstance *inst = 
+        m_selectedInstrument->getPlugin(pluginIndex);
+
+    if (inst)
+    {
+        cout << "PLUGIN ID = " << inst->getMappedId() << endl;
+        // get the list of ports
+        //
+        Rosegarden::MappedObjectPropertyList
+            list = Rosegarden::StudioControl::
+                getStudioObjectProperty(inst->getMappedId(),
+                                        Rosegarden::MappedLADSPAPlugin::Ports);
+
+        cout << "COUNT = "  << list.size() << endl;
+
+        if (portIndex > (int(list.size() - 1)))
+        {
+            std::cerr << "InstrumentParameterBox::slotPluginPortChanged - "
+                      << "got port out of range on plugin" << std::endl;
+            return;
+        }
+
+        std::cout << "InstrumentParameterBox::slotPluginPortChanged - "
+                  << "setting plugin port to " << value << std::endl;
+
+        Rosegarden::StudioControl::setStudioObjectProperty
+            (list[portIndex].toInt(),
+             Rosegarden::MappedLADSPAPort::Value,
+             value);
+
+        /*
+        MappedObjectPropertyList::iterator it = list.begin();
+        for (; it != list.end(); it++)
+        {
+        }
+        */
+    }
+
 }
 
 
