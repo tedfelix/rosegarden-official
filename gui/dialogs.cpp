@@ -2872,21 +2872,7 @@ SplitByPitchDialog::SplitByPitchDialog(QWidget *parent) :
 
     QGridLayout *layout = new QGridLayout(frame, 4, 3, 10, 5);
 
-/*!!!
-    layout->addWidget(new QLabel(i18n("Starting split pitch:  "), frame), 0, 0);
-    m_pitch = new QSpinBox(frame);
-    m_pitch->setMinValue(0);
-    m_pitch->setMaxValue(127);
-    m_pitch->setValue(60);
-    connect(m_pitch, SIGNAL(valueChanged(int)), SLOT(slotPitchChanged(int)));
-    layout->addWidget(m_pitch, 0, 1);
-
-    Rosegarden::MidiPitchLabel pl(60);
-    m_pitchLabel = new QLabel(pl.getQString(), frame);
-    layout->addWidget(m_pitchLabel, 0, 2);
-*/
-
-    m_pitch = new RosegardenPitchChooser(i18n("Pitch"), frame, 60);
+    m_pitch = new RosegardenPitchChooser(i18n("Starting split pitch"), frame, 60);
     layout->addMultiCellWidget(m_pitch, 0, 0, 0, 2, Qt::AlignHCenter);
     
     m_range = new QCheckBox(i18n("Range up and down to follow music"), frame);

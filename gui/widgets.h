@@ -463,7 +463,7 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent *e);
     virtual void wheelEvent(QWheelEvent *e);
 
-    void calculatePixmap() const;
+    void calculatePixmap(bool useSharps) const;
 
     mutable QPixmap m_pixmap;
 

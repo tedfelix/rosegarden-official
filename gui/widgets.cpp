@@ -1108,7 +1108,7 @@ RosegardenPitchDragLabel::RosegardenPitchDragLabel(QWidget *parent,
     m_clicked(false),
     m_npf(new NotePixmapFactory())
 {
-    calculatePixmap();
+    calculatePixmap(true);
 }
 
 RosegardenPitchDragLabel::~RosegardenPitchDragLabel()
@@ -1119,9 +1119,10 @@ RosegardenPitchDragLabel::~RosegardenPitchDragLabel()
 void
 RosegardenPitchDragLabel::slotSetPitch(int p)
 {
+    bool up = (p > m_pitch);
     if (m_pitch == p) return;
     m_pitch = p;
-    calculatePixmap();
+    calculatePixmap(up);
     emit pitchChanged(m_pitch);
     paintEvent(0);
 }
@@ -1140,15 +1141,19 @@ void
 RosegardenPitchDragLabel::mouseMoveEvent(QMouseEvent *e)
 {
     if (m_clicked) {
+
 	int y = e->y();
 	int diff = y - m_clickedY;
-	int pitchDiff = diff * 3 / m_npf->getLineSpacing();
+	int pitchDiff = diff * 4 / m_npf->getLineSpacing();
+
 	int newPitch = m_clickedPitch - pitchDiff;
 	if (newPitch < 0) newPitch = 0;
 	if (newPitch > 127) newPitch = 127;
+
 	if (m_pitch != newPitch) {
+	    bool up = (newPitch > m_pitch);
 	    m_pitch = newPitch;
-	    calculatePixmap();
+	    calculatePixmap(up);
 	    emit pitchChanged(m_pitch);
 	    paintEvent(0);
 	}
@@ -1168,14 +1173,14 @@ RosegardenPitchDragLabel::wheelEvent(QWheelEvent *e)
     if (e->delta() > 0) {
 	if (m_pitch < 127) {
 	    ++m_pitch;
-	    calculatePixmap();
+	    calculatePixmap(true);
 	    emit pitchChanged(m_pitch);
 	    paintEvent(0);
 	}
     } else {
 	if (m_pitch > 0) {
 	    --m_pitch;
-	    calculatePixmap();
+	    calculatePixmap(false);
 	    emit pitchChanged(m_pitch);
 	    paintEvent(0);
 	}
@@ -1183,44 +1188,51 @@ RosegardenPitchDragLabel::wheelEvent(QWheelEvent *e)
 }
 
 void
-RosegardenPitchDragLabel::paintEvent(QPaintEvent *e)
+RosegardenPitchDragLabel::paintEvent(QPaintEvent *)
 {
-    std::cerr << "RosegardenPitchDragLabel::paintEvent(" << e << ")" << std::endl;
-
     QPainter paint(this);
     paint.fillRect(0, 0, width(), height(), paint.backgroundColor());
-    paint.drawPixmap(width()/2 - m_pixmap.width()/2,
-		     height()/2 - m_pixmap.height()/2, m_pixmap);
+
+    int x = width()/2 - m_pixmap.width()/2;
+    if (x < 0) x = 0;
+
+    int y = height()/2 - m_pixmap.height()/2;
+    if (y < 0) y = 0;
+
+    paint.drawPixmap(x, y, m_pixmap);
+
+		     
 }
 
 QSize
 RosegardenPitchDragLabel::sizeHint() const
 {
-    return QSize(150, 150);
+    return QSize(150, 135);
 }
 
 void
-RosegardenPitchDragLabel::calculatePixmap() const
+RosegardenPitchDragLabel::calculatePixmap(bool useSharps) const
 {
     std::string clefType = Rosegarden::Clef::Treble;
     int octaveOffset = 0;
-    
-    if (m_pitch > 100) {
+
+    if (m_pitch > 94) {
 	octaveOffset = 2;
-    } else if (m_pitch > 80) {
+    } else if (m_pitch > 82) {
 	octaveOffset = 1;
     } else if (m_pitch < 60) {
 	clefType = Rosegarden::Clef::Bass;
-	if (m_pitch < 20) {
+	if (m_pitch < 24) {
 	    octaveOffset = -2;
-	} else if (m_pitch < 40) {
+	} else if (m_pitch < 36) {
 	    octaveOffset = -1;
 	}
     }
 
     QCanvasPixmap *pmap = m_npf->makePitchDisplayPixmap
 	(m_pitch,
-	 Rosegarden::Clef(clefType, octaveOffset));
+	 Rosegarden::Clef(clefType, octaveOffset),
+	 useSharps);
 
     m_pixmap = *pmap;
 
@@ -1230,24 +1242,23 @@ RosegardenPitchDragLabel::calculatePixmap() const
 RosegardenPitchChooser::RosegardenPitchChooser(QString title,
 					       QWidget *parent,
 					       int defaultPitch) :
-    QGroupBox(parent, title)
+    QGroupBox(1, Horizontal, title, parent)
 {
-    QGridLayout *layout = new QGridLayout(this, 2, 3, 5, 5);
-
     m_pitchDragLabel = new RosegardenPitchDragLabel(this, defaultPitch);
-    layout->addMultiCellWidget(m_pitchDragLabel, 0, 0, 0, 1);
 
-    m_pitch = new QSpinBox(this);
+    QHBox *hbox = new QHBox(this);
+    hbox->setSpacing(6);
+
+    new QLabel(i18n("Pitch:"), hbox);
+
+    m_pitch = new QSpinBox(hbox);
     m_pitch->setMinValue(0);
     m_pitch->setMaxValue(127);
     m_pitch->setValue(defaultPitch);
 
     Rosegarden::MidiPitchLabel pl(defaultPitch);
-    m_pitchLabel = new QLabel(pl.getQString(), this);
+    m_pitchLabel = new QLabel(pl.getQString(), hbox);
     m_pitchLabel->setMinimumWidth(40);
-
-    layout->addWidget(m_pitch, 1, 1);
-    layout->addWidget(m_pitchLabel, 1, 2);
 
     connect(m_pitch, SIGNAL(valueChanged(int)),
 	    this, SLOT(slotSetPitch(int)));

@@ -161,7 +161,8 @@ public:
 				     Rosegarden::timeT &errorReturn);
 
     QCanvasPixmap* makePitchDisplayPixmap(int pitch,
-					  const Rosegarden::Clef &clef);
+					  const Rosegarden::Clef &clef,
+					  bool useSharps);
     QCanvasPixmap* makeClefDisplayPixmap(const Rosegarden::Clef &clef);
     QCanvasPixmap* makeKeyDisplayPixmap(const Rosegarden::Key &key,
 				       const Rosegarden::Clef &clef);

@@ -93,7 +93,7 @@ AnalysisHelper::labelChords(CompositionTimeSliceAdapter &c, Segment &s)
     //!!!
     NotationQuantizer *quantizer = new NotationQuantizer();
 
-    Profiler profiler("AnalysisHelper::labelChords");
+    Profiler profiler("AnalysisHelper::labelChords", true);
 
     for (CompositionTimeSliceAdapter::iterator i = c.begin(); i != c.end(); ++i) {
 

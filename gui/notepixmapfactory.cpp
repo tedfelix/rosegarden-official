@@ -1441,16 +1441,17 @@ NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef)
 }
 
 QCanvasPixmap*
-NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef)
+NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
+					  bool useSharps)
 {
     Rosegarden::Pitch pitch(p);
-    Rosegarden::Accidental accidental(pitch.getAccidental(true));
+    Rosegarden::Accidental accidental(pitch.getAccidental(useSharps));
     NotePixmapParameters params(Rosegarden::Note::Crotchet, 0, accidental);
 
     QCanvasPixmap* clefPixmap = makeClefPixmap(clef);
 
     int lw = getLineSpacing();
-    int width = getClefWidth(Rosegarden::Clef::Bass) + 9 * getNoteBodyWidth();
+    int width = getClefWidth(Rosegarden::Clef::Bass) + 10 * getNoteBodyWidth();
 
     int h = pitch.getHeightOnStaff(clef, Rosegarden::Key());
     params.setStemGoesUp(h <= 4);
@@ -1465,22 +1466,13 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef)
 
     QCanvasPixmap *notePixmap = makeNotePixmap(params);
 
-    int pixmapHeight = lw * 10 + 1;
+    int pixmapHeight = lw * 12 + 1;
     int yoffset = lw * 3;
-    if (h > 8) {
-	if (h > 16) {
-	    pixmapHeight += 8 * lw;
-	    yoffset += 8 * lw;
-	} else {
-	    pixmapHeight += 4 * lw;
-	    yoffset += 4 * lw;
-	}
-    } else if (h < 0) {
-	if (h < -8) {
-	    pixmapHeight += 8 * lw;
-	} else {
-	    pixmapHeight += 4 * lw;
-	}
+    if (h > 10) {
+	pixmapHeight += 6 * lw;
+	yoffset += 6 * lw;
+    } else if (h < -4) {
+	pixmapHeight += 6 * lw;
     }
 
     createPixmapAndMask(width, pixmapHeight);
@@ -1500,8 +1492,8 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef)
 
     for (h = 0; h <= 8; h += 2) {
         y = yoffset + ((8 - h) * lw) / 2;
-	m_p.drawLine(x/2, y, m_generatedPixmap->width() - x/2 - 1, y);
-	m_pm.drawLine(x/2, y, m_generatedPixmap->width() - x/2 - 1, y);
+	m_p.drawLine(x/2, y, m_generatedPixmap->width() - x/2, y);
+	m_pm.drawLine(x/2, y, m_generatedPixmap->width() - x/2, y);
     }
 
     delete clefPixmap;
