@@ -246,9 +246,11 @@ RawNoteRuler::drawNode(QPainter &paint, DefaultVelocityColour &vc,
     int depth = node->getDepth();
     int above = node->getChildrenAboveOrBelow(false);
     int below = node->getChildrenAboveOrBelow(true);
-    
+
+#ifdef DEBUG_RAW_NOTE_RULER
     NOTATION_DEBUG << "RawNoteRuler::drawNode: children above: "
 		   << above << ", below: " << below << endl;
+#endif
 
     int toFit = depth;
 
@@ -285,9 +287,11 @@ RawNoteRuler::drawNode(QPainter &paint, DefaultVelocityColour &vc,
     
     q0 += m_currentXOffset + m_xorigin;
     q1 += m_currentXOffset + m_xorigin;
-    
+
+#ifdef DEBUG_RAW_NOTE_RULER
     NOTATION_DEBUG << "RawNoteRuler: (" << int(start) << "," << myOrigin
 		   << ") -> (" << int(end) << "," << myOrigin << ")" << endl;
+#endif
     
     int qi0 = int(q0);
     int ui0 = int(u0);
@@ -299,8 +303,10 @@ RawNoteRuler::drawNode(QPainter &paint, DefaultVelocityColour &vc,
     int iy = int(myOrigin);
     int ih = int(heightPer);
 
+#ifdef DEBUG_RAW_NOTE_RULER
     NOTATION_DEBUG << "RawNoteRuler: height " << height << ", heightPer "
 		   << heightPer << ", iy " << iy << endl;
+#endif
     
     paint.setPen(colour);
     paint.setBrush(colour);
@@ -397,7 +403,9 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
 
     DefaultVelocityColour vc;
 
+#ifdef DEBUG_RAW_NOTE_RULER
     NOTATION_DEBUG << "RawNoteRuler: from is " << from << ", to is " << to << endl;
+#endif
 
     Segment::iterator i = m_segment->findNearestTime(from);
     if (i == m_segment->end()) i = m_segment->begin();

@@ -233,7 +233,8 @@ public:
 
     /**
      * Overridden from Rosegarden::Staff<T>.
-     * We want to avoid wrapping really short rests
+     * We want to avoid wrapping things like controller events, if
+     * our showUnknowns preference is off
      */
     virtual bool wrapEvent(Rosegarden::Event *);
 

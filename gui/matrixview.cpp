@@ -1359,7 +1359,7 @@ bool MatrixView::canPreviewAnotherNote()
     clock_t now = clock();
     ++sinceLastCutOff;
 
-    if (((now - lastCutOff) / CLOCKS_PER_SEC) >= 1) {
+    if ((((now - lastCutOff) * 1000) / CLOCKS_PER_SEC) >= 1) {
 	sinceLastCutOff = 0;
 	lastCutOff = now;
     } else {

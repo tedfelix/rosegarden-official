@@ -85,6 +85,11 @@ NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
     m_colourQuantize(true),
     m_showUnknowns(true)
 {
+    KConfig *config = kapp->config();
+    config->setGroup("Notation Options");
+    m_colourQuantize = config->readBoolEntry("colourquantize", true);
+    // Shouldn't change this one during the lifetime of the staff, really:
+    m_showUnknowns = config->readBoolEntry("showunknowns", true);
     changeFont(fontName, resolution);
 }
 
@@ -323,11 +328,6 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 {
     NOTATION_DEBUG << "NotationStaff " << this << "::renderElements()" << endl;
     START_TIMING;
-    
-    KConfig *config = kapp->config();
-    config->setGroup("Notation Options");
-    m_colourQuantize = config->readBoolEntry("colourquantize", true);
-    m_showUnknowns = config->readBoolEntry("showunknowns", true);
 
     emit setOperationName(i18n("Rendering staff %1...").arg(getId() + 1));
     emit setProgress(0);
@@ -381,11 +381,6 @@ NotationStaff::positionElements(timeT from, timeT to)
     NOTATION_DEBUG << "NotationStaff " << this << "::positionElements()"
                          << from << " -> " << to << "\n";
     START_TIMING;
-
-    KConfig *config = kapp->config();
-    config->setGroup("Notation Options");
-    m_colourQuantize = config->readBoolEntry("colourquantize", true);
-    m_showUnknowns = config->readBoolEntry("showunknowns", true);
 
     emit setOperationName(i18n("Positioning staff %1...").arg(getId() + 1));
     emit setProgress(0);
@@ -1109,6 +1104,18 @@ NotationStaff::clearPreviewNote()
 bool
 NotationStaff::wrapEvent(Rosegarden::Event *e)
 {
+    if (!m_showUnknowns) {
+	std::string etype = e->getType();
+	if (etype != Rosegarden::Note::EventType &&
+	    etype != Rosegarden::Note::EventRestType &&
+	    etype != Rosegarden::Clef::EventType &&
+	    etype != Rosegarden::Key::EventType &&
+	    etype != Rosegarden::Indication::EventType &&
+	    etype != Rosegarden::Text::EventType) {
+	    return false;
+	}
+    }
+
     return Rosegarden::Staff<NotationElement>::wrapEvent(e);
 }
 

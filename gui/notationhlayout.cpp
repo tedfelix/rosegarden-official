@@ -76,8 +76,8 @@ NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
     m_notationQuantizer(c->getNotationQuantizer()),
     m_properties(properties),
     m_timePerProgressIncrement(0),
-    m_staffCount(0),
-    m_showUnknowns(true)
+    m_staffCount(0)
+//!!!    m_showUnknowns(true)
 {
 //    NOTATION_DEBUG << "NotationHLayout::NotationHLayout()" << endl;
 }
@@ -305,11 +305,11 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
     throwIfCancelled();
 
     START_TIMING;
-    
+/*!!!    
     KConfig *config = kapp->config();
     config->setGroup("Notation Options");
     m_showUnknowns = config->readBoolEntry("showunknowns", true);
-
+*/
     Segment &segment(staff.getSegment());
     NotationElementList *notes = staff.getViewElementList();
     BarDataList &barList(getBarData(staff));
@@ -1713,7 +1713,8 @@ int NotationHLayout::getMinWidth(NotationElement &e) const
 
     } else {
         NOTATION_DEBUG << "NotationHLayout::getMinWidth(): no case for event type " << e.event()->getType() << endl;
-        if (m_showUnknowns) w += 24;
+//!!!        if (m_showUnknowns) 
+	w += 24;
     }
 
     return w;

@@ -1843,9 +1843,10 @@ bool NotationView::canPreviewAnotherNote()
     clock_t now = clock();
     ++sinceLastCutOff;
 
-    if (((now - lastCutOff) / CLOCKS_PER_SEC) >= 1) {
+    if ((((now - lastCutOff) * 1000) / CLOCKS_PER_SEC) >= 1) {
 	sinceLastCutOff = 0;
 	lastCutOff = now;
+	NOTATION_DEBUG << "NotationView::canPreviewAnotherNote: reset" << endl;
     } else {
 	if (sinceLastCutOff >= 20) {
 	    // don't permit more than 20 notes per second, to avoid
@@ -1853,6 +1854,7 @@ bool NotationView::canPreviewAnotherNote()
 	    NOTATION_DEBUG << "Rejecting preview (too busy)" << endl;
 	    return false;
 	}
+	NOTATION_DEBUG << "NotationView::canPreviewAnotherNote: ok" << endl;
     }
 
     return true;
