@@ -1569,6 +1569,8 @@ void RosegardenGUIApp::setupFileDialogSpeedbar()
 
     if (!hasSetExamplesItem) {
         
+	unsigned int n = config->readUnsignedNumEntry("Number of Entries", 0);
+
         config->writeEntry("Description_0", i18n("Example Files"));
         config->writeEntry("IconGroup_0", 4);
         config->writeEntry("Icon_0", "folder");
@@ -1577,6 +1579,7 @@ void RosegardenGUIApp::setupFileDialogSpeedbar()
 	RG_DEBUG << "wrote url " << config->readEntry("URL_0") << endl;
 
         config->writeEntry("Examples Set", true);
+	config->writeEntry("Number of Entries", n + 1);
     }
     
 }
