@@ -115,6 +115,9 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     connect(this,                   SIGNAL(setPositionPointer(int)),
             tracksEditor,           SLOT(setPointerPosition(int)));
 
+    connect(this, SIGNAL(selectSegments(list<Rosegarden::Segment*>)),
+            tracksEditor->canvas(), SLOT(selectSegments(list<Rosegarden::Segment*>)));
+
     if (doc)
         tracksEditor->setupSegments();
 
@@ -261,9 +264,30 @@ void RosegardenGUIView::setPointerPosition(const int &position)
 }
 
 // Highlight all the Segments on a Track because the Track has been selected
+// We have to ensure we create a Selector object before we can highlight
+// these tracks.
 //
 //
 void RosegardenGUIView::selectTrackSegments(int trackId)
 {
-    std::cout << "HIGHLIGHT TRACK SEGMENTS on TRACK " << trackId << endl;
+    // Send this signal to the GUI to activate the correct tool
+    // on the toolbar so that we have a SegmentSelector object
+    // to write the Segments into
+    //
+    emit activateTool(SegmentCanvas::Selector);
+
+    list<Rosegarden::Segment*> segments;
+
+    for (Rosegarden::Composition::iterator i =
+              getDocument()->getComposition().begin();
+         i != getDocument()->getComposition().end(); i++)
+    {
+        if ((*i)->getTrack() == (unsigned int) trackId)
+            segments.push_back(*i);
+    }
+
+    // It we matched any on the current track then/ select them
+    //
+    if (segments.size() > 0)
+      emit selectSegments(segments);
 }

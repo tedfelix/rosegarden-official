@@ -104,23 +104,13 @@ unsigned int SegmentItem::widthToNbBars(unsigned int width)
     return width * m_barResolution / m_widthToDurationRatio;
 }
 
-// Set this SegmentItem as selected/highlighted
+// Set this SegmentItem as selected/highlighted - we send
+// in the QBrush we need at the same time
 //
 void
-SegmentItem::setSelected(const bool &select, const QBrush &highlightBrush)
+SegmentItem::setSelected(const bool &select, const QBrush &brush)
 {
-    if (select)
-    {
-        // need to update 
-        setBrush(highlightBrush);
-
-        std::cout << "SegmentItem::setSelected() - SELECTED" << endl;
-    }
-    else // unselect
-    {
-        std::cout << "SegmentItem::setSelected() - UNSELECTED" << endl;
-    }
-
+    setBrush(brush);
     m_selected = select;
 }
 
@@ -303,6 +293,42 @@ void SegmentCanvas::onEditMatrix()
 {
     emit editSegmentMatrix(m_currentItem->getSegment());
 }
+
+
+// Select a SegmentItem on the canvas according to a
+// passed Segment pointer
+//
+//
+void
+SegmentCanvas::selectSegments(list<Rosegarden::Segment*> segments)
+{
+    if (m_toolType != Selector)
+      return;
+
+    list<Rosegarden::Segment*>::iterator segIt;
+    QCanvasItemList list = canvas()->allItems();
+    QCanvasItemList::Iterator it;
+
+    // clear any SegmentItems currently selected
+    //
+    dynamic_cast<SegmentSelector*>(m_tool)->clearSelected();
+
+    for (it = list.begin(); it != list.end(); ++it)
+    {
+        if ((*it)->rtti() == 5) // urgh, hard-coded real time id
+        {
+            for (segIt = segments.begin(); segIt != segments.end(); segIt++)
+            {
+                if(dynamic_cast<SegmentItem*>(*it)->getSegment() == (*segIt))
+                {
+                    dynamic_cast<SegmentSelector*>(m_tool)->selectSegmentItem
+                                  (dynamic_cast<SegmentItem*>(*it));
+                }
+            }
+        }
+    }
+}
+
 
 
 //////////////////////////////////////////////////////////////////////
@@ -578,6 +604,37 @@ SegmentSelector::SegmentSelector(SegmentCanvas *c)
             c,    SIGNAL(updateSegmentTrackAndStartIndex(SegmentItem*)));
 }
 
+SegmentSelector::~SegmentSelector()
+{
+    clearSelected();
+}
+
+void
+SegmentSelector::clearSelected()
+{
+    // For the moment only clear all selected from the list
+    //
+    list<SegmentItem*>::iterator it;
+    for (it = m_selectedItems.begin();
+         it != m_selectedItems.end();
+         it++)
+    {
+        (*it)->setSelected(false, m_canvas->getSegmentBrush());
+    }
+
+    // now clear the list
+    //
+    m_selectedItems.clear();
+
+    // clear the current item
+    //
+    m_currentItem = 0;
+
+    // send update
+    //
+    m_canvas->canvas()->update();
+}
+
 void
 SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 {
@@ -586,37 +643,39 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
     if (item)
         m_currentItem = item;
 
-    // Only add to the list if we've got SHIFT held down
-
-    // For the moment only clear all selected from the list
+    // Only add to the list if we've got SHIFT held down -
+    // for the moment we just clear everything
     //
-    list<SegmentItem*>::iterator it;
-    for (it = m_selectedItems.begin();
-         it != m_selectedItems.end();
-         it++)
-    {
-        (*it)->setSelected(false, m_canvas->getHighlightBrush());
-    }
+    clearSelected();
 
-    // now clear the list
+}
+
+void
+SegmentSelector::selectSegmentItem(SegmentItem *selectedItem)
+{
+    // If we're selecting a Segment through this method
+    // then don't set the m_currentItem
     //
-    m_selectedItems.clear();
+    selectedItem->setSelected(true, m_canvas->getHighlightBrush());
+    m_selectedItems.push_back(selectedItem);
+    m_canvas->canvas()->update();
 }
 
 
 void
 SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 {
+    // If we've set a m_currentItem then that means we've
+    // clicked on it, now we released we highlight it.
+    //
     if (m_currentItem)
     {
+        selectSegmentItem(m_currentItem);
         emit updateSegmentTrackAndStartIndex(m_currentItem);
-        m_currentItem->setSelected(true, m_canvas->getHighlightBrush());
-        m_selectedItems.push_back(m_currentItem);
     }
 
     m_currentItem = 0;
 }
-
 
 // In Select mode we implement movement on the Segment
 // as movement _of_ the Segment - as with SegmentMover
@@ -625,9 +684,15 @@ void
 SegmentSelector::handleMouseMove(QMouseEvent *e)
 {
     if (m_currentItem) {
-        m_currentItem->setX(m_canvas->grid().snapX(e->pos().x()));
-        m_currentItem->setY(m_canvas->grid().snapY(e->pos().y()));
-        m_canvas->canvas()->update();
+
+        // Only allow movement if this Segment is already selected
+        //
+        if (m_currentItem->isSelected())
+        {
+            m_currentItem->setX(m_canvas->grid().snapX(e->pos().x()));
+            m_currentItem->setY(m_canvas->grid().snapY(e->pos().y()));
+            m_canvas->canvas()->update();
+        }
     }
 }
 

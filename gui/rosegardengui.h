@@ -38,6 +38,7 @@
 #include "rosegardendcop.h"
 #include "rosegardenguiiface.h"
 #include "rosegardentransportdialog.h"
+#include "segmentcanvas.h"
 
 // the sequencer interface
 //
@@ -443,6 +444,11 @@ public slots:
     // When the transport closes 
     //
     void closeTransport();
+
+    // Put the GUI into a given ToolType edit mode
+    //
+    void activateTool(SegmentCanvas::ToolType tt);
+
 
 private:
 

@@ -28,6 +28,7 @@
 
 // include files for Qt
 #include <qvbox.h>
+#include <list>
 
 #include "segmentcanvas.h" // needed for SegmentCanvas::ToolType
 
@@ -143,6 +144,9 @@ public slots:
 signals:
     void setTool(SegmentCanvas::ToolType);
     void setPositionPointer(int);
+    void activateTool(SegmentCanvas::ToolType);
+    void selectSegments(list<Rosegarden::Segment*>);
+
 
 protected:
     //--------------- Data members ---------------------------------

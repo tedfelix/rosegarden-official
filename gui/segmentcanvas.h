@@ -45,6 +45,9 @@ public:
      * The item will be at coordinates \a x, \a y, representing a time
      * segment of \a nbSteps time steps.
      */
+
+    static const int SegmentItemRTTI = 1001;
+
     SegmentItem(int x, int y, int nbSteps, QCanvas* canvas);
 
     /// Return the nb of bars the item represents
@@ -92,6 +95,8 @@ public:
     //
     bool const isSelected() { return m_selected; }
     void setSelected(const bool &select, const QBrush &highlightBrush);
+
+    virtual int rtti() { return SegmentItemRTTI; }
     
 protected:
 
@@ -188,6 +193,10 @@ public:
      */
     QBrush getHighlightBrush() const { return m_highlightBrush; }
 
+    /*
+     * Get the normal segment brush
+     */
+    QBrush getSegmentBrush() const { return m_brush; }
 
 public slots:
     /// Set the current segment edition tool
@@ -195,6 +204,13 @@ public slots:
 
     /// Update the SegmentCanvas after a change of content
     virtual void update();
+
+    // This method only operates if we're of the "Selector"
+    // tool type - it's called from the View to enable it
+    // to automatically set the selection of Segments (say
+    // by Track).
+    //
+    void selectSegments(list<Rosegarden::Segment*> segment);
 
 protected:
     virtual void contentsMousePressEvent(QMouseEvent*);
@@ -368,15 +384,25 @@ class SegmentSelector : public SegmentTool
     Q_OBJECT
 public:
     SegmentSelector(SegmentCanvas*);
+    virtual ~SegmentSelector();
 
     virtual void handleMouseButtonPress(QMouseEvent*);
     virtual void handleMouseButtonRelease(QMouseEvent*);
     virtual void handleMouseMove(QMouseEvent*);
 
+    // Clear all Segments in our list and on the view
+    //
+    void clearSelected();
+
+public slots:
+    void selectSegmentItem(SegmentItem *selectedItem);
+
 signals:
     void updateSegmentTrackAndStartIndex(SegmentItem*);
 
+
 private:
+
     list<SegmentItem*> m_selectedItems;
 
 };

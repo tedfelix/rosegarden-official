@@ -259,7 +259,7 @@ void RosegardenGUIApp::setupActions()
     m_rewindEndTransport->setGroup("transportcontrols");
 
     m_ffwdEndTransport = new KAction(i18n("Fast Forward to End"), 0, 0, this,
-                                  SLOT(fastforwardtoEnd()), actionCollection(),
+                                  SLOT(fastForwardToEnd()), actionCollection(),
                                    "fastforwardtoend");
 
     m_ffwdEndTransport->setGroup("transportcontrols");
@@ -379,6 +379,12 @@ void RosegardenGUIApp::initView()
     kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::initView()" << endl;
 
     m_view = new RosegardenGUIView(this);
+
+    // Connect up this signal so that we can force tool mode
+    // changes from the view
+    connect((QObject *)m_view, SIGNAL(activateTool(SegmentCanvas::ToolType)),
+                               SLOT(activateTool(SegmentCanvas::ToolType)));
+
     m_doc->addView(m_view);
     setCentralWidget(m_view);
     setCaption(m_doc->getTitle());
@@ -1740,6 +1746,30 @@ RosegardenGUIApp::fastForwardToEnd()
     }
 }
 
-// Double stop always does the trick
+
+// We use this slot to active a tool mode on the GUI
+// automatically from a layer below the top level.
+// For example when we select a Track and want to
+// therefore select all the Segments on that Track
+// automatically we must cross in Selector mode and
+// populate the SegmentSelector with the relevant
+// Segments
+//
+//
+void
+RosegardenGUIApp::activateTool(SegmentCanvas::ToolType tt)
+{
+    switch(tt)
+    {
+         case SegmentCanvas::Selector:
+             actionCollection()->action("select")->activate();
+             break;
+
+         default:
+             break;
+    }
+}
+
+
 
 
