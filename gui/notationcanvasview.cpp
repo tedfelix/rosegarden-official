@@ -191,6 +191,18 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 
 	NotationElement &el = sprite->getNotationElement();
 
+	// #957364 (Notation: Hard to select upper note in chords of
+	// seconds) -- adjust x-coord for shifted note head
+
+	double cx = el.getCanvasX();
+	int nbw = staff->getNotePixmapFactory(false).getNoteBodyWidth();
+	bool shifted = false;
+
+	if (el.event()->get<Rosegarden::Bool>
+	    (staff->getProperties().NOTE_HEAD_SHIFTED, shifted) && shifted) {
+	    cx += nbw;
+	}
+
 	if (el.isNote() && haveClickHeight) {
 	    long eventHeight = 0;
 	    if (el.event()->get<Rosegarden::Int>
@@ -199,14 +211,12 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 		if (eventHeight == clickHeight) {
 
 		    if (!clickedNote &&
-			e->x() >= el.getCanvasX() &&
-			e->x() <= el.getCanvasX() +
-			staff->getNotePixmapFactory(false).getNoteBodyWidth()) {
+			e->x() >= cx &&
+			e->x() <= cx + nbw) {
 			clickedNote = &el;
 		    } else if (!clickedVagueNote &&
-			       e->x() >= el.getCanvasX() - 2 &&
-			       e->x() <= el.getCanvasX() +
-			       staff->getNotePixmapFactory(false).getNoteBodyWidth() + 2) {
+			       e->x() >= cx - 2 &&
+			       e->x() <= cx + nbw + 2) {
 			clickedVagueNote = &el;
 		    }
 
