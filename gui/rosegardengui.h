@@ -37,7 +37,7 @@
 
 #include "rosegardendcop.h"
 #include "rosegardenguiiface.h"
-#include "rosegardentransport.h"
+#include "rosegardentransportdialog.h"
 
 // the sequencer interface
 //
@@ -470,7 +470,7 @@ private:
 
     // transport dialog pointer
     //
-    RosegardenTransport *m_transport;
+    Rosegarden::RosegardenTransportDialog *m_transport;
 };
  
 #endif // ROSEGARDENGUI_H

@@ -24,7 +24,6 @@
 #include <qprinter.h>
 #include <qpainter.h>
 #include <qdragobject.h>
-#include <qlcdnumber.h>
 
 // include files for KDE
 #include <kstdaccel.h>
@@ -51,6 +50,7 @@
 #include "rosegardendcop.h"
 #include "ktmpstatusmsg.h"
 #include "TrackPerformanceHelper.h"
+#include "NotationTypes.h"
 
 #define ID_STATUS_MSG 1
 
@@ -230,15 +230,8 @@ void RosegardenGUIApp::setupActions()
 
     // create the Transport GUI and add the callbacks
     //
-    m_transport = new RosegardenTransport(this);
-
-    // set the style - Outline, Filled, Flat
-    //
-    m_transport->TimeDisplay->setSegmentStyle(QLCDNumber::Filled);
-
-    //  toggling
-    //
-    m_transport->PlayButton->setToggleButton(true);
+    m_transport = new Rosegarden::RosegardenTransportDialog(this, "",
+                Rosegarden::Note(Rosegarden::Note::Crotchet).getDuration());
 
     connect((QObject *) m_transport->PlayButton,
              SIGNAL(released()),
@@ -256,6 +249,12 @@ void RosegardenGUIApp::setupActions()
              SIGNAL(released()),
              SLOT(rewind()));
 
+    // Ensure that the checkbox is unchecked if the dialog
+    // is destroyed.
+    //
+    connect((QObject *)m_transport, SIGNAL(destroyed),
+            (QObject *)m_viewTransport, SLOT(setChecked(false)));
+                
     createGUI("rosegardenui.rc");
 }
 
@@ -1011,7 +1010,7 @@ void RosegardenGUIApp::setPointerPosition(const int &position)
 
   // and the time (well, position for the moment)
   //
-  m_transport->TimeDisplay->display(position);
+  m_transport->displayTime(position);
 }
 
 void RosegardenGUIApp::play()
@@ -1045,6 +1044,10 @@ void RosegardenGUIApp::play()
     cout << "RosegardenGUIApp::play() - playing at tempo " << 
                 m_doc->getComposition().getTempo() << endl;
   }
+
+  // set the tempo in the transport HERE for the moment
+  //
+  m_transport->setTempo(m_doc->getComposition().getTempo());
 
   // The arguments we send to the sequencer
   //
