@@ -464,6 +464,8 @@ SequenceManager::record(bool toggled)
     KConfig* config = kapp->config();
     config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
 
+    bool punchIn = false; // are we punching in?
+
     // Rather clumsy additional check for audio subsys when we start
     // recording - once we enforce audio subsystems then this will
     // become redundant.
@@ -506,15 +508,20 @@ SequenceManager::record(bool toggled)
         if (m_transportStatus == RECORDING_MIDI ||
             m_transportStatus == RECORDING_AUDIO) {
             SEQMAN_DEBUG << "SequenceManager::record - stop recording and keep playing\n";
+            punchIn = true;
+            goto punchin;
             return;
         }
 
         if (m_transportStatus == PLAYING) {
             SEQMAN_DEBUG << "SequenceManager::record - punch in recording\n";
-            return;
+            punchIn = true;
+            goto punchin;
         }
 
     } else {
+
+punchin:
         // if already recording then stop
         //
         if (m_transportStatus == RECORDING_MIDI ||
@@ -555,7 +562,7 @@ SequenceManager::record(bool toggled)
         if(comp.isLooping())
             m_doc->setPointerPosition(comp.getLoopStart());
         else {
-            if (m_transportStatus != RECORDING_ARMED) {
+            if (m_transportStatus != RECORDING_ARMED && punchIn == false) {
                 int startBar = comp.getBarNumber(comp.getPosition());
                 startBar -= config->readUnsignedNumEntry("countinbars", 2);
                 m_doc->setPointerPosition(comp.getBarRange(startBar).first);

@@ -529,6 +529,26 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
 {
     TransportStatus localRecordMode = (TransportStatus) recordMode;
 
+    // punch in recording
+    if (m_transportStatus == PLAYING)
+    {
+        if (localRecordMode = STARTING_TO_RECORD_MIDI)
+        {
+            if(m_sequencer->record(Rosegarden::RECORD_MIDI) == false)
+            {
+                stop();
+                return 0;
+            }
+
+            m_transportStatus = RECORDING_MIDI;
+            return 1;
+        }
+        else if (localRecordMode == STARTING_TO_RECORD_AUDIO)
+        {
+            // do something
+        }
+    }
+
     // For audio recording we need to retrieve the input ports
     // we're connected to from the Studio.
     //
