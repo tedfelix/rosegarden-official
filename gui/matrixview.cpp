@@ -500,10 +500,6 @@ QSize MatrixView::getViewSize()
 
 void MatrixView::setViewSize(QSize s)
 {
-    MATRIX_DEBUG << "MatrixView::setViewSize(w = "
-                 << s.width() << ", h = "
-                 << s.height() << endl;
-
     canvas()->resize(s.width(), s.height());
     getCanvasView()->resizeContents(s.width(), s.height());
 }
@@ -1365,37 +1361,31 @@ void
 MatrixView::slotChangeHorizontalZoom(int)
 {
 #ifdef RGKDE3
-//     double duration44 = Rosegarden::TimeSignature(4,4).getBarDuration();
-    double value = m_hZoomSlider->getCurrentSize();
-//     m_zoomLabel->setText(i18n("%1%").arg(duration44/value));
-    m_zoomLabel->setText(i18n("%1%").arg(value*100.0));
+
+    double zoomValue = m_hZoomSlider->getCurrentSize();
+
+    m_zoomLabel->setText(i18n("%1%").arg(zoomValue*100.0));
 
     MATRIX_DEBUG << "MatrixView::slotChangeHorizontalZoom() : zoom factor = "
-                 << value << endl;
+                 << zoomValue << endl;
 
     // Set zoom matrix
     //
     QWMatrix zoomMatrix;
-    zoomMatrix.scale(value, 1.0);
+    zoomMatrix.scale(zoomValue, 1.0);
     m_canvasView->setWorldMatrix(zoomMatrix);
 
     BarButtons* barButtons = dynamic_cast<BarButtons*>(m_topBarButtons);
-    if (barButtons) barButtons->setHScaleFactor(value);
+    if (barButtons) barButtons->setHScaleFactor(zoomValue);
 
     barButtons = dynamic_cast<BarButtons*>(m_bottomBarButtons);
-    if (barButtons) barButtons->setHScaleFactor(value);
+    if (barButtons) barButtons->setHScaleFactor(zoomValue);
 
     for (unsigned int i = 0; i < m_controlRulers.size(); ++i)
     {
-        m_controlRulers[i].first->setHScaleFactor(value);
+        m_controlRulers[i].first->setHScaleFactor(zoomValue);
         m_controlRulers[i].first->repaint();
     }
-
-//     for (unsigned int i = 0; i < m_staffs.size(); ++i)
-//     {
-//         m_staffs[i]->setTimeScaleFactor(1.0/m_hZoomSlider->getCurrentSize());
-//         m_staffs[i]->sizeStaff(m_hlayout);
-//     }
 
     if (m_topBarButtons) m_topBarButtons->update();
     if (m_bottomBarButtons) m_bottomBarButtons->update();
@@ -1409,16 +1399,16 @@ MatrixView::slotChangeHorizontalZoom(int)
     int startX = int(m_hlayout.getXForTime(m_segments[0]->getStartTime()));
 
     int newWidth = int(getXbyWorldMatrix(endX - startX));
-    MATRIX_DEBUG << "current width : "
-                 << getViewSize().width()
-                 << " change to : "
-                 << newWidth
-                 << " (not xformed : " << endX - startX
-                 << endl;
 
-    readjustViewSize(QSize(newWidth, getViewSize().height()), true);
+    // We DO NOT resize the canvas(), only the area it's displaying on
+    //
+    getCanvasView()->resizeContents(newWidth, getViewSize().height());
 
-//     applyLayout();
+    // This forces a refresh of the h. scrollbar, even if the canvas width
+    // hasn't changed
+    //
+    getCanvasView()->polish();
+
 #endif
 }
 
@@ -1551,4 +1541,3 @@ MatrixView::slotSetVelocities()
                              dialog->getValue2()));
     }
 }
-
