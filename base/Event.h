@@ -130,6 +130,24 @@ public:
     PropertyNames getPersistentPropertyNames() const;
     PropertyNames getNonPersistentPropertyNames() const;
 
+    struct EventCmp
+    {
+        bool operator()(const Event *e1, const Event *e2) const
+        {
+            return *e1 < *e2;
+        }
+    };
+
+    static bool compareEvent2Time(const Event *e, Event::timeT t)
+    {
+        return e->getAbsoluteTime() < t;
+    }
+
+    static bool compareTime2Event(Event::timeT t, const Event *e)
+    {
+        return t <  e->getAbsoluteTime();
+    }
+
     size_t getStorageSize() const; // for debugging and inspection purposes
 
 #ifndef NDEBUG
@@ -306,15 +324,6 @@ Event::setFromString(const std::string &name, std::string value, bool persistent
 
 
 //////////////////////////////////////////////////////////////////////
-
-class EventCmp
-{
-public:
-    bool operator()(const Event *e1, const Event *e2) const
-    {
-        return *e1 < *e2;
-    }
-};
 
 }
 
