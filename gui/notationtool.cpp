@@ -1200,7 +1200,7 @@ EventSelection* NotationSelector::getSelection()
         m_selectionRect->height() <  3) return 0;
 
     double middleY = m_selectionRect->y() + m_selectionRect->height()/2;
-    NotationStaff *staff = m_nParentView->getStaffForCanvasY(int(middleY));
+    NotationStaff *staff = dynamic_cast<NotationStaff*>(m_nParentView->getStaffForCanvasY(int(middleY)));
 
     if (!staff) return 0;
     Segment& originalSegment = staff->getSegment();
