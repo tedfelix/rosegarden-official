@@ -414,7 +414,9 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
 
                 PortDirection direction;
 
-                if (capability & SND_SEQ_PORT_CAP_DUPLEX)
+                if ((capability & SND_SEQ_PORT_CAP_DUPLEX) ||
+                    ((capability & SND_SEQ_PORT_CAP_WRITE) &&
+                     (capability & SND_SEQ_PORT_CAP_READ)))
                 {
                     direction = Duplex;
                     audit << "\t\t\t(DUPLEX)";
