@@ -605,10 +605,9 @@ MidiFile::convertToRosegarden()
               if (numerator == 0 ) numerator = 4;
               if (denominator == 0 ) denominator = 4;
 
-              rosegardenEvent->set<Int>("numerator", numerator);
-              rosegardenEvent->set<Int>("denominator", denominator);
-              rosegardenEvent->setAbsoluteTime(rosegardenTime);
-              rosegardenTrack->insert(rosegardenEvent); 
+              rosegardenEvent = Rosegarden::TimeSignature
+                  (numerator, denominator).getAsEvent(rosegardenTime);
+              rosegardenTrack->insert(rosegardenEvent);
 
               break;
 
@@ -688,10 +687,16 @@ MidiFile::convertToRosegarden()
       }
 
       // cc
+
+      rosegardenTrack->insert
+          (notationTrack.guessClef
+           (rosegardenTrack->begin(), rosegardenTrack->end()).getAsEvent(0));
+
       rosegardenTrack->calculateBarPositions();
-      notationTrack.autoBeam(rosegardenTrack->begin(),
-                             rosegardenTrack->end(),
-                             "beamed"); // probably shouldn't be hardcoded!
+
+      notationTrack.autoBeam
+          (rosegardenTrack->begin(), rosegardenTrack->end(),
+           "beamed"); // probably shouldn't be hardcoded!
     }
   }
 

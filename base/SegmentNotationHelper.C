@@ -820,6 +820,35 @@ void TrackNotationHelper::autoBeamAux(iterator from, iterator to,
     }
 }
 
+
+// based on Rosegarden 2.1's GuessItemListClef in editor/src/MidiIn.c
+
+Clef TrackNotationHelper::guessClef(iterator from, iterator to)
+{
+    long totalHeight;
+    int noteCount;
+
+    // just the defaults:
+    Clef clef;
+    Key key;
+
+    for (iterator i = from; i != to; ++i) {
+        if ((*i)->isa(Note::EventType)) {
+            ++noteCount;
+            NotationDisplayPitch p((*i)->get<Int>("pitch"), clef, key);
+            totalHeight += p.getHeightOnStaff();
+        }
+    }
+
+    if    (noteCount == 0) return Clef(Clef::Treble);
+
+    int average = totalHeight / noteCount;
+
+    if      (average < -6) return Clef(Clef::Bass);
+    else if (average < -3) return Clef(Clef::Tenor);
+    else if (average <  1) return Clef(Clef::Alto);
+    else                   return Clef(Clef::Treble);
 }
 
+}
 

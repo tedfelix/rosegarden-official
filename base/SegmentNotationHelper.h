@@ -195,6 +195,14 @@ public:
      */
     void autoBeam(iterator from, iterator to, std::string type);
 
+
+    /**
+     * Guess which clef a section of music is supposed to be in,
+     * ignoring any clef events actually found in the section.
+     */
+    Clef guessClef(iterator from, iterator to);
+    
+
 private:
 
     /**
