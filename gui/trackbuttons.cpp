@@ -32,9 +32,11 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
                            QWidget* parent,
                            Rosegarden::TrackHeader *vHeader,
                            QHeader *hHeader,
+                           const int &trackLabelWidth,
                            const char* name,
                            WFlags):
-   QVBox(parent, name), m_doc(doc), m_lastID(-1)
+   QVBox(parent, name), m_doc(doc), m_lastID(-1),
+   m_trackLabelWidth(trackLabelWidth)
 {
     assert(vHeader != 0);
     assert(hHeader != 0);
@@ -43,9 +45,10 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
     //
     m_tracks = vHeader->count();
 
-    // The pixel offset from the top minus a fiddle factor
+    // The pixel offset from the top - just to overcome
+    // the borders
     //
-    m_offset = vHeader->sectionPos(1) - 3;
+    m_offset = 4;
  
     // The height of the cells
     //
@@ -55,25 +58,6 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
     //
     drawButtons();
 }
-
-TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
-                           QWidget* parent,
-                           const char* name,
-                           WFlags):
-   QVBox(parent, name), m_doc(doc), m_tracks(0), m_offset(0), m_cellSize(0),
-   m_lastID(-1)
-{
-    drawButtons();
-}
-
-TrackButtons::TrackButtons(QWidget* parent,
-                           const char* name,
-                           WFlags):
-   QVBox(parent, name), m_doc(0), m_tracks(0), m_offset(0), m_cellSize(0),
-   m_lastID(-1)
-{
-}
-
 
 TrackButtons::~TrackButtons()
 {
@@ -130,8 +114,8 @@ TrackButtons::drawButtons()
         // Create a horizontal box for each track
         //
         track = new QHBox(this);
-        track->setMinimumSize(120, m_cellSize - borderGap);
-        track->setMaximumSize(120, m_cellSize - borderGap);
+        track->setMinimumSize(m_trackLabelWidth, m_cellSize - borderGap);
+        track->setMaximumSize(m_trackLabelWidth, m_cellSize - borderGap);
 
         // Try a style for the box
         //

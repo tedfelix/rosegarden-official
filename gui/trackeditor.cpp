@@ -140,9 +140,10 @@ TrackEditor::init(unsigned int nbTracks, unsigned int nbBars)
 
     grid->addWidget(m_segmentsCanvas, 1,1);
 
-    // And then for the moment we hide the track header
+    // Hide both headers - we use these for measurement and not show!
     //
     m_vHeader->hide();
+    m_hHeader->hide();
 
     connect(this, SIGNAL(needUpdate()),
             m_segmentsCanvas, SLOT(update()));

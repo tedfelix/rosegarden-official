@@ -64,6 +64,59 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
         kdDebug(KDEBUG_AREA) << "RosegardenGUIView() : no doc\n";
         tracksEditor = new TrackEditor(12, 50, this);
     }
+
+    // --------------- create the bar buttons ----------------
+    //
+    // We create the barbuttons and the man segmentview/trackeditor
+    // in a vertical layout box.
+    //
+    //
+
+    // Set a track label width for both specialised track and
+    // bar buttons widgets to use.
+    //
+    int trackLabelWidth = 130;
+
+    QVBox       *topBox = new QVBox(this);
+    QHBox       *topSplit = new QHBox(topBox);
+
+    topBox->setSpacing(0);
+    topBox->setMargin(0);
+    topSplit->setMinimumHeight(tracksEditor->getVHeader()->sectionSize(0));
+    topSplit->setMaximumHeight(tracksEditor->getVHeader()->sectionSize(0));
+    topSplit->setSpacing(0);
+    topSplit->setMargin(0);
+    topSplit->setFrameStyle(Plain);
+
+    QLabel *label = new QLabel(topSplit);
+    label->setMinimumWidth(trackLabelWidth);
+    label->setMaximumWidth(trackLabelWidth);
+    label->setMinimumHeight(tracksEditor->getVHeader()->sectionSize(0));
+    label->setMaximumHeight(tracksEditor->getVHeader()->sectionSize(0));
+
+    QScrollView *barButtonsView = new QScrollView(topSplit);
+
+    BarButtons *barButtons = new BarButtons(doc,
+                                            barButtonsView,
+                                            tracksEditor->getVHeader(),
+                                            tracksEditor->getHHeader());
+
+    barButtonsView->setHScrollBarMode(QScrollView::AlwaysOff);
+    barButtonsView->setVScrollBarMode(QScrollView::AlwaysOff);
+
+    // set a plain frame for the scrollview
+    //
+    barButtonsView->setFrameStyle(Plain);
+    barButtons->setFrameStyle(Plain);
+
+    barButtonsView->
+        setMinimumHeight(tracksEditor->getVHeader()->sectionSize(0));
+    barButtonsView->
+        setMaximumHeight(tracksEditor->getVHeader()->sectionSize(0));
+
+    barButtonsView->addChild(barButtons);
+
+
     
     // Construct the top level horizontal box and drop the
     // button box (TrackButtons) and the main ScrollView
@@ -71,17 +124,20 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     // get around to specialising the QHeader properly.
     //
     //
-    QHBox *topBox = new QHBox(this);
+    QHBox *mainPane = new QHBox(topBox);
 
     // --------------- create the track buttons ----------------
     //
     //
-    QScrollView *trackButtonsView = new QScrollView(topBox);
+    QScrollView *trackButtonsView = new QScrollView(mainPane);
     TrackButtons *trackButtons = new TrackButtons(doc,
                                                   trackButtonsView,
                                                   tracksEditor->getVHeader(),
-                                                  tracksEditor->getHHeader());
+                                                  tracksEditor->getHHeader(),
+                                                  trackLabelWidth);
     trackButtonsView->addChild(trackButtons);
+    trackButtonsView->setFrameStyle(Plain);
+    trackButtons->setFrameStyle(Plain);
 
     connect((QObject *)trackButtons, SIGNAL(trackSelected(int)),
                                      SLOT(selectTrackSegments(int)));
@@ -96,45 +152,25 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     //
     trackButtonsView->setHScrollBarMode(QScrollView::AlwaysOff);
     trackButtonsView->setVScrollBarMode(QScrollView::AlwaysOff);
-    trackButtonsView->setMinimumWidth(125);
-    trackButtonsView->setMaximumWidth(125);
+    trackButtonsView->setMinimumWidth(trackLabelWidth);
+    trackButtonsView->setMaximumWidth(trackLabelWidth);
 
-    // --------------- create the bar buttons ----------------
-    //
-    // We create the barbuttons and the man segmentview/trackeditor
-    // in a vertical layout box.
-    //
-    //
-/*
-    QVBox       *rhsPane = new QVBox(topBox);
-
-    QScrollView *barButtonsView = new QScrollView(rhsPane);
-
-    BarButtons *barButtons = new BarButtons(doc,
-                                            barButtonsView,
-                                            tracksEditor->getVHeader(),
-                                            tracksEditor->getHHeader());
-
-    barButtonsView->setHScrollBarMode(QScrollView::AlwaysOff);
-    barButtonsView->setVScrollBarMode(QScrollView::AlwaysOff);
-
-    barButtonsView->
-        setMinimumHeight(tracksEditor->getVHeader()->sectionSize(0));
-    barButtonsView->
-        setMaximumHeight(tracksEditor->getVHeader()->sectionSize(0));
-
-    barButtonsView->addChild(barButtons);
-*/
    
     // --------------- create the scrollview ----------------
     //
     //
-    m_trackEditorScrollView = new QScrollView(topBox); // rhspane
+    m_trackEditorScrollView = new QScrollView(mainPane); // on the rhs
 
     // Now link up the vertical scrollbar to the track buttons
+    // and the bar buttons
     //
     connect(m_trackEditorScrollView, SIGNAL(contentsMoving(int, int)),
             trackButtonsView,        SLOT(setContentsPos(int, int)));
+
+    connect(m_trackEditorScrollView, SIGNAL(contentsMoving(int, int)),
+            barButtonsView,          SLOT(setContentsPos(int, int)));
+
+
 
     m_trackEditorScrollView->addChild(tracksEditor);
 

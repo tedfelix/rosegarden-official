@@ -217,6 +217,11 @@ void SegmentCanvas::contentsMousePressEvent(QMouseEvent* e)
 {
     if (e->button() == LeftButton) { // delegate event handling to tool
 
+        // ensure that we have a valid tool
+        //
+        if (!m_tool)
+          setTool(m_toolType);
+
         if (m_tool)
             m_tool->handleMouseButtonPress(e);
 

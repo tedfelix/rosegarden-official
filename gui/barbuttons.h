@@ -40,16 +40,6 @@ public:
                const char* name = 0,
                WFlags f=0);
 
-    BarButtons(RosegardenGUIDoc* doc,
-               QWidget* parent = 0,
-               const char* name = 0,
-               WFlags f=0);
-
-
-    BarButtons(QWidget* parent = 0,
-               const char* name = 0,
-               WFlags f=0);
-
     ~BarButtons();
 
 private:
@@ -58,6 +48,7 @@ private:
     int m_bars;
     int m_cellHeight;
     int m_cellWidth;
+    int m_offset;
     
 };
 

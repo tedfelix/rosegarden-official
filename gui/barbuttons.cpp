@@ -20,7 +20,8 @@
 */
 
 #include "barbuttons.h"
-#include "qvbox.h"
+#include <qvbox.h>
+#include <qlabel.h>
 
 
 BarButtons::BarButtons(RosegardenGUIDoc* doc,
@@ -28,33 +29,19 @@ BarButtons::BarButtons(RosegardenGUIDoc* doc,
                        QHeader *vHeader,
                        QHeader *hHeader,
                        const char* name,
-                       WFlags f): QHBox(parent, name)
+                       WFlags f):
+    QHBox(parent, name)
 {
    m_cellHeight = vHeader->sectionSize(0);
    m_cellWidth = hHeader->sectionSize(0);
    m_bars = hHeader->count();
 
-   cout << "CELL HEIGHT = " << m_cellHeight << endl;
+   m_offset = 4;
+
    setMinimumHeight(m_cellHeight);
    setMaximumHeight(m_cellHeight);
 
    drawButtons();
-}
-
-BarButtons::BarButtons(RosegardenGUIDoc* doc,
-                       QWidget* parent,
-                       const char* name,
-                       WFlags f): QHBox(parent, name)
-{
-   drawButtons();
-}
-
-
-
-BarButtons::BarButtons(QWidget* parent,
-                       const char* name,
-                       WFlags f) : QHBox(parent, name)
-{
 }
 
 BarButtons::~BarButtons()
@@ -65,13 +52,40 @@ void
 BarButtons::drawButtons()
 {
 
+    // Create a horizontal spacing label to jog everything
+    // up with the main SegmentCanvas
+    //
+    QLabel *label = new QLabel(this);
+    label->setText(QString(""));
+    label->setMinimumWidth(m_offset);
+    label->setMaximumWidth(m_offset);
+
+    int loopBarHeight = 8; // the height of the loop bar
     QVBox *bar;
+
+    // Create a vertical box for the loopBar and the bar buttons
+    //
+    QVBox *buttonBar = new QVBox(this);
+    buttonBar->setMinimumSize(m_cellWidth * m_bars, m_cellHeight);
+    buttonBar->setMaximumSize(m_cellWidth * m_bars, m_cellHeight);
+
+    // The loop bar is where we're going to be defining our loops
+    //
+    QLabel *loopBar = new QLabel(buttonBar);
+    loopBar->setMinimumSize(m_cellWidth * m_bars, loopBarHeight);
+    loopBar->setMaximumSize(m_cellWidth * m_bars, loopBarHeight);
+
+    // Need another horizontal layout box - makes a bit of a 
+    // mockery of what this class is derived from!
+    //
+    QHBox *hButtonBar = new QHBox(buttonBar);
 
     for (int i = 0; i < m_bars; i++)
     {
-        bar = new QVBox(this);
-        bar->setMinimumSize(m_cellWidth, 20);
-        bar->setMaximumSize(m_cellWidth, 20);
+        bar = new QVBox(hButtonBar);
+        bar->setSpacing(0);
+        bar->setMinimumSize(m_cellWidth, m_cellHeight - loopBarHeight);
+        bar->setMaximumSize(m_cellWidth, m_cellHeight - loopBarHeight);
 
         // attempt a style
         //
@@ -79,8 +93,13 @@ BarButtons::drawButtons()
         bar->setFrameShape(StyledPanel);
         bar->setFrameShadow(Raised);
 
+        label = new QLabel(bar);
+        label->setText(QString("%1").arg(i));
+        label->setAlignment(AlignLeft|AlignVCenter);
+        label->setIndent(4);
+        label->setMinimumHeight(m_cellHeight - loopBarHeight - 2);
+        label->setMaximumHeight(m_cellHeight - loopBarHeight - 2);
 
-        
     }
 
 }

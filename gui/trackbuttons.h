@@ -51,15 +51,10 @@ public:
                  QWidget* parent = 0,
                  Rosegarden::TrackHeader* trackHeader = 0,
                  QHeader *hHeader = 0,
+                 const int &trackLabelWidth = 0,
                  const char* name = 0,
                  WFlags f=0);
 
-    TrackButtons(RosegardenGUIDoc* doc,
-                 QWidget* parent = 0,
-                 const char* name = 0,
-                 WFlags f=0);
-
-    TrackButtons(QWidget* parent = 0, const char* name = 0, WFlags f=0);
     ~TrackButtons();
 
     // Return the track selected for recording
@@ -110,6 +105,7 @@ private:
     int m_offset;
     int m_cellSize;
     int m_lastID;
+    int m_trackLabelWidth;
 
 };
 
