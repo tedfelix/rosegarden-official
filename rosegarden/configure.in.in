@@ -105,3 +105,63 @@ fi
 if test "$with_ladspa" = "yes"; then
   AC_DEFINE(HAVE_LADSPA, 1, [Define if you have LADSPA])
 fi
+
+###################
+# Try to be a bit more clever with kde dirs :
+# If we can find a common base between kde_includes and
+# kde_libraries, (e.g. /opt/kde/include, /opt/kde/lib => /opt/kde)
+# then set our prefix to that.
+
+dir1=$kde_includes
+dir2=$kde_libraries
+
+lengthDir1=`expr length ${dir1}`
+lengthDir2=`expr length ${dir2}`
+
+if test $lengthDir1 -gt $lengthDir2
+then
+    endLength=${lengthDir2}
+else
+    endLength=${lengthDir1}
+fi
+
+# remove termination character
+endLength=`expr $endLength - 1`
+
+count=0
+matchDir=""
+while test ${count} -ne ${endLength}  -a \
+       "${dir1:${count}:1}" = "${dir2:${count}:1}"
+do
+    lastChar=${dir1:${count}:1}
+    matchDir="${matchDir}${lastChar}"
+    count=`expr ${count} + 1`
+done
+
+
+# Check directory exists and if it doesn't back up until we
+# find a slash
+#
+if test ! -d $matchDir
+then
+   # remove up to last slash
+   count=`expr length ${matchDir} - 1`
+
+   while test ${count} -gt 0 -a "${matchDir:${count}:1}" != "/"
+   do
+       count=`expr $count - 1`
+   done
+   matchDir=${matchDir:0:${count}}
+fi
+
+# append a slash if we're missing one
+if test "${lastChar}" != '/'
+then
+    matchDir="${matchDir}/"
+fi
+
+if test $prefix = "/usr/local/kde"
+then
+    prefix=$matchDir
+fi
+
