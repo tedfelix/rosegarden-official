@@ -25,6 +25,7 @@
 #include "LayoutEngine.h"
 #include "Staff.h"
 #include "notationelement.h"
+#include "FastVector.h"
 
 /**
  * Vertical notation layout
@@ -43,23 +44,31 @@ public:
     /**
      * Resets internal data stores for all staffs
      */
-    virtual void reset() { }
+    virtual void reset();
 
     /**
      * Resets internal data stores for a specific staff
      */
-    virtual void resetStaff(StaffType &) { }
+    virtual void resetStaff(StaffType &);
 
     /**
      * Lay out a single staff.
      */
-    virtual void scanStaff(StaffType &staff);
+    virtual void scanStaff(StaffType &);
 
     /**
      * Do any layout dependent on more than one staff.  As it
-     * happens, we have none.
+     * happens, we have none, but we do have some layout that
+     * depends on the final results from the horizontal layout
+     * (for slurs), so we should do that here
      */
-    virtual void finishLayout() { }
+    virtual void finishLayout();
+
+private:
+    typedef FastVector<NotationElementList::iterator> SlurList;
+    typedef std::map<StaffType *, SlurList> SlurListMap;
+    SlurListMap m_slurs;
+    SlurList &getSlurList(StaffType &);
 };
 
 #endif

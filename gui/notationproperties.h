@@ -45,14 +45,17 @@ extern const Rosegarden::PropertyName UNBEAMED_STEM_LENGTH;
 extern const Rosegarden::PropertyName DRAW_FLAG;
 extern const Rosegarden::PropertyName NOTE_HEAD_SHIFTED;
 extern const Rosegarden::PropertyName NEEDS_EXTRA_SHIFT_SPACE;
-extern const Rosegarden::PropertyName NOTE_NAME;
+extern const Rosegarden::PropertyName CHORD_PRIMARY_NOTE;
+//!!!extern const Rosegarden::PropertyName NOTE_NAME;
 extern const Rosegarden::PropertyName TIE_LENGTH;
+extern const Rosegarden::PropertyName SLUR_ABOVE;
+extern const Rosegarden::PropertyName SLUR_Y_DELTA;
+extern const Rosegarden::PropertyName SLUR_LENGTH;
 extern const Rosegarden::PropertyName SELECTED;
 
 // Set in applyBeam in notationsets.cpp:
 
 extern const Rosegarden::PropertyName BEAMED;
-extern const Rosegarden::PropertyName BEAM_PRIMARY_NOTE;
 extern const Rosegarden::PropertyName BEAM_GRADIENT;
 extern const Rosegarden::PropertyName BEAM_SECTION_WIDTH;
 extern const Rosegarden::PropertyName BEAM_NEXT_BEAM_COUNT;

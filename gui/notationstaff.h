@@ -22,12 +22,12 @@
 #ifndef STAFF_H
 #define STAFF_H
 
-#include <vector>
 #include <string>
 
 #include "qcanvasgroupableitem.h"
 #include "notepixmapfactory.h"
 #include "notationelement.h"
+#include "FastVector.h"
 
 #include "Staff.h"
 
@@ -248,10 +248,10 @@ protected:
     SpriteSet m_timeSigs;
 
     typedef std::pair<int, Rosegarden::Clef> ClefChange;
-    std::vector<ClefChange> m_clefChanges;
+    FastVector<ClefChange> m_clefChanges;
 
     typedef std::pair<int, Rosegarden::Key> KeyChange;
-    std::vector<KeyChange> m_keyChanges;
+    FastVector<KeyChange> m_keyChanges;
 
     QCanvasLineGroupable *m_initialBarA, *m_initialBarB;
     NotePixmapFactory *m_npf;

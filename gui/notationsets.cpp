@@ -558,8 +558,9 @@ NotationGroup::applyBeam(NotationStaff &staff)
     int initialX = (int)(*initialNote)->getLayoutX();
 
     // For each chord in the group, we nominate the note head furthest
-    // from the beam as the one that "owns" the stem and the section
-    // of beam up to the following chord.  For this note, we need to:
+    // from the beam as the primary note, the one that "owns" the stem
+    // and the section of beam up to the following chord.  For this
+    // note, we need to:
     // 
     // * Set the start height, start x-coord and gradient of the beam
     //   (we can't set the stem length for this note directly, because
@@ -594,10 +595,10 @@ NotationGroup::applyBeam(NotationStaff &staff)
 		el->event()->setMaybe<Bool>(STEM_UP, beam.aboveNotes);
 		el->event()->setMaybe<Bool>(DRAW_FLAG, false);
 		el->event()->setMaybe<Bool>(BEAMED, true);
-		el->event()->setMaybe<Bool>(BEAM_PRIMARY_NOTE, false);
+		el->event()->setMaybe<Bool>(CHORD_PRIMARY_NOTE, false);
 	    }
 
-	    if (!beam.aboveNotes) j = 0;
+	    if (beam.aboveNotes) j = 0;
 	    else j = chord.size() - 1;
 
 	    NotationElement *el = (*chord[j]);
@@ -659,7 +660,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
                 el->event()->setMaybe<Bool>(BEAM_THIS_PART_BEAMS, true);
             }
 
-	    el->event()->setMaybe<Bool>(BEAM_PRIMARY_NOTE, true);
+	    el->event()->setMaybe<Bool>(CHORD_PRIMARY_NOTE, true);
 
 	    el->event()->setMaybe<Int>(BEAM_MY_Y, myY);
 	    el->event()->setMaybe<Int>(BEAM_GRADIENT, beam.gradient);

@@ -738,7 +738,7 @@ void
 NotePixmapFactory::drawTie(bool above, int length) 
 {
     int tieThickness = getStaffLineThickness() * 2;
-    int tieCurve = m_font->getCurrentSize() / 2;
+    int tieCurve = m_font->getCurrentSize() * 2 / 3;
     int height = tieCurve + tieThickness;
     int x = m_left + m_noteBodyWidth /*!!! / 2*/;
     int y = (above ? m_above - height - tieCurve/2 :
@@ -915,9 +915,6 @@ NotePixmapFactory::makeKeyPixmap(const Key &key, const Clef &clef)
 QCanvasPixmap
 NotePixmapFactory::makeHairpinPixmap(int length, bool isCrescendo)
 {
-    // hairpin height should be about notebodyheight when the width is
-    // notebodywidth*2 or less, and shouldn't exceed notebodyheight*2
-
     int nbh = getNoteBodyHeight();
     int nbw = getNoteBodyWidth();
 
@@ -948,38 +945,74 @@ NotePixmapFactory::makeHairpinPixmap(int length, bool isCrescendo)
     return makeCanvasPixmap(QPoint(0, height/2));
 }
 
-QCanvasItem *
-NotePixmapFactory::makeSlur(QCanvas *canvas, int length, int dy, bool above)
+QCanvasPixmap
+NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
 {
+//    kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeSlurPixmap: length = " << length << ", dy = " << dy << ", above = " << above << endl;
+
+    int thickness = getStaffLineThickness() * 2;
     if (length < getNoteBodyWidth() * 2) length = getNoteBodyWidth() * 2;
 
     Q3PointArray a(4);
 
     int nbh = getNoteBodyHeight();
 
+    int offset = (int)(((double)nbh /
+			(double)(getNoteBodyWidth() * 15)) * length) + nbh;
+    if (offset < nbh)   offset = nbh;
+    if (offset > nbh*2) offset = nbh*2;
+
+/*
     int offset = nbh * 2;
     if (dy < nbh / 2) {
 	offset = nbh;
     } else if (dy < nbh * 5) {
 	offset = nbh*3 / 2;
     }
-
-    int maximum;
+*/
+    int maximum, height, hotspotY;
 
     if (above) {
 	maximum = std::min(0, dy) - offset;
+	height = (dy < 0 ? -dy : dy) + offset;
+	hotspotY = (dy < 0 ? height : offset);
     } else {
 	maximum = std::max(0, dy) + offset;
+	height = (dy < 0 ? -dy : dy) + offset;
+	hotspotY = (dy < 0 ? -dy : 0);
     }
 
-    a.setPoint(0, 0, 0);
-    a.setPoint(1, length/5, maximum);
-    a.setPoint(2, length - length/5 - 1, maximum);
-    a.setPoint(3, length-1, dy);
+//    kdDebug(KDEBUG_AREA) << "Pixmap dimensions: " << length << "x" << height << endl;
 
-    QCanvasSpline *slur = new QCanvasSpline(canvas);
-    slur->setControlPoints(a, false);
-    return slur;
+    createPixmapAndMask(length, height + thickness - 1);
+
+    for (int i = 0; i < thickness; ++i) {
+
+	a.setPoint(0, 0, hotspotY);
+	a.setPoint(1, length/5, hotspotY + maximum);
+	a.setPoint(2, length - length/5 - 1, hotspotY + maximum);
+	a.setPoint(3, length-1, hotspotY + dy);
+
+	Q3PointArray polyPoints(a.cubicBezier());
+/*
+	kdDebug(KDEBUG_AREA) << "i = " << i << ", points are:" << endl;
+	for (unsigned int j = 0; j < polyPoints.count(); ++j) {
+	    kdDebug(KDEBUG_AREA) << polyPoints.point(j).x() << "," <<
+		polyPoints.point(j).y() << endl;
+	}
+*/
+	m_p.drawPolyline(polyPoints);
+	m_pm.drawPolyline(polyPoints);
+
+	if (above) ++maximum;
+	else --maximum;
+    }
+
+    return makeCanvasPixmap(QPoint(0, hotspotY));
+
+//    QCanvasSpline *slur = new QCanvasSpline(canvas);
+//    slur->setControlPoints(a, false);
+//    return slur;
 }
 
 QCanvasPixmap

@@ -121,6 +121,8 @@ class Chord : public NotationSet,
               public std::vector<NotationElementList::iterator>
 {
 public:
+    /* You need to provide the clef and key if the notes
+       making up your chord lack HEIGHT_ON_STAFF properties */
     Chord(const NotationElementList &nel, NELIterator elementInChord,
           const Rosegarden::Clef &clef = Rosegarden::Clef::DefaultClef,
           const Rosegarden::Key &key = Rosegarden::Key::DefaultKey);

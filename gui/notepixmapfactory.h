@@ -126,8 +126,7 @@ public:
 				const Rosegarden::Clef &clef);
     QCanvasPixmap makeTimeSigPixmap(const Rosegarden::TimeSignature& sig);
     QCanvasPixmap makeHairpinPixmap(int length, bool isCrescendo);
-    QCanvasItem  *makeSlur(QCanvas *canvas,
-			   int length, int dy, bool above); // caller owns rtn
+    QCanvasPixmap makeSlurPixmap(int length, int dy, bool above);
     QCanvasPixmap makeUnknownPixmap();
     QCanvasPixmap makeToolbarPixmap(const char *name);
 

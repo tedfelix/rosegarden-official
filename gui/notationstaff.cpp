@@ -441,6 +441,8 @@ NotationStaff::positionElements()
 		}
 		*/
 	    }
+	} else if ((*it)->event()->isa(Mark::EventType)) {
+	    needNewSprite = true;
 	}
 
 	if (needNewSprite) {
@@ -507,7 +509,7 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 
 	    timeT markDuration =
 		elt->event()->get<Int>(Mark::MarkDurationPropertyName);
-	    NotationElementList::iterator it =
+	    NotationElementList::iterator markEnd =
 		getViewElementList()->findTime(elt->getAbsoluteTime() +
 					       markDuration);
 
@@ -517,19 +519,19 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 	    int length, y1;
 
 	    if (markType == Mark::Slur &&
-		it != getViewElementList()->begin()) {
-		--it;
+		markEnd != getViewElementList()->begin()) {
+		--markEnd;
 	    }
 
-	    if (it != getViewElementList()->end()) {
-		length = (*it)->getLayoutX() - elt->getLayoutX();
-		y1 = (*it)->getLayoutY();
+	    if (markEnd != getViewElementList()->end()) {
+		length = (*markEnd)->getLayoutX() - elt->getLayoutX();
+		y1 = (*markEnd)->getLayoutY();
 	    } else {
 		//!!! imperfect
-		--it;
-		length = (*it)->getLayoutX() + m_npf->getNoteBodyWidth() * 3
-		    - elt->getLayoutX();
-		y1 = (*it)->getLayoutY();
+		--markEnd;
+		length = (*markEnd)->getLayoutX() +
+		    m_npf->getNoteBodyWidth() * 3 - elt->getLayoutX();
+		y1 = (*markEnd)->getLayoutY();
 	    }
 
 	    if (length < m_npf->getNoteBodyWidth()) {
@@ -548,20 +550,53 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 
 	    } else if (markType == Mark::Slur) {
 
+		bool above = true;
+		long dy = 0;
+		long length = 10;
+		
+		elt->event()->get<Bool>(SLUR_ABOVE, above);
+		elt->event()->get<Int>(SLUR_Y_DELTA, dy);
+		elt->event()->get<Int>(SLUR_LENGTH, length);
+
+		int diff = m_npf->getNoteBodyWidth() / 2;
+		if (length > diff*2) length -= diff;
+		elt->setLayoutX(elt->getLayoutX() + diff);
+		
+
+/*
 		int cy = yCoordOfHeight(4);
 		int y0 = elt->getLayoutY();
 		bool above = ((cy - y0) + (cy - y1) > 0);
+		
+		for (it = getViewElementList()->findTime(elt->getAbsoluteTime());
+		     it != getViewElementList()->end() &&
+			 !(*it)->isNote() && !(*it)->isRest(); ++it);
+		
+		int diff = 1;
 
-		elt->setLayoutX
-		    (elt->getLayoutX() + m_npf->getNoteBodyWidth()/2 + 1);
+		if (it != getViewElementList()->end()) {
+
+		    diff += (*it)->getLayoutX() - elt->getLayoutX();
+		    elt->setLayoutY((*it)->getLayoutY());
+		    y0 = elt->getLayoutY();
+		}
+
+		if (length > diff * 2) length -= diff;
+		diff += m_npf->getNoteBodyWidth()/2;
+		elt->setLayoutX(elt->getLayoutX() + diff);
 
 		elt->setLayoutY
 		    (above ?
 		     (elt->getLayoutY() - m_npf->getNoteBodyHeight()*3/2) :
 		     (elt->getLayoutY() + m_npf->getNoteBodyHeight()*3/2));
 
-		canvasItem = m_npf->makeSlur
-		    (canvas(), length, y1 - y0, above);
+		int dy = (y1 - y0) * 4 / 5;
+*/
+		pixmap = new QCanvasPixmap
+		    (m_npf->makeSlurPixmap(length, dy, above));
+		    
+//		canvasItem = m_npf->makeSlur
+//		    (canvas(), length, y1 - y0, above);
 
 	    } else {
 		//!!!
@@ -662,7 +697,7 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
 
     if (beamed) {
 
-        if (elt->event()->get<Bool>(BEAM_PRIMARY_NOTE)) {
+        if (elt->event()->get<Bool>(CHORD_PRIMARY_NOTE)) {
 
             int myY = elt->event()->get<Int>(BEAM_MY_Y);
 

@@ -45,6 +45,7 @@ using Rosegarden::Key;
 using Rosegarden::TimeSignature;
 using Rosegarden::Note;
 using Rosegarden::Mark;
+using Rosegarden::timeT;
 
 using namespace Rosegarden::BaseProperties;
 using namespace NotationProperties;
@@ -57,6 +58,29 @@ NotationVLayout::NotationVLayout()
 NotationVLayout::~NotationVLayout()
 {
     // empty
+}
+
+NotationVLayout::SlurList &
+NotationVLayout::getSlurList(StaffType &staff)
+{
+    SlurListMap::iterator i = m_slurs.find(&staff);
+    if (i == m_slurs.end()) {
+	m_slurs[&staff] = SlurList();
+    }
+
+    return m_slurs[&staff];
+}
+
+void
+NotationVLayout::reset()
+{
+    m_slurs.clear();
+}
+
+void
+NotationVLayout::resetStaff(StaffType &staff)
+{
+    getSlurList(staff).clear();
 }
 
 void
@@ -115,6 +139,9 @@ NotationVLayout::scanStaff(StaffType &staffBase)
 		// and non-beamed stem up)
                 el->event()->setMaybe<Bool>(STEM_UP, stemUp);
 
+		bool primary = (stemUp ? (j == 0) : (j == chord.size()-1));
+                el->event()->setMaybe<Bool>(CHORD_PRIMARY_NOTE, primary);
+
                 el->event()->setMaybe<Bool>(NOTE_HEAD_SHIFTED,
                                             chord.isNoteHeadShifted(chord[j]));
 
@@ -170,30 +197,125 @@ NotationVLayout::scanStaff(StaffType &staffBase)
 
 		std::string markType =
 		    el->event()->get<String>(Mark::MarkTypePropertyName);
-		
-		if (markType == Mark::Crescendo ||
-		    markType == Mark::Decrescendo) {
-		    
-		    el->setLayoutY(staff.yCoordOfHeight(-9)); //!!! refine
 
-		} else if (markType == Mark::Slur) {
-
-		    int height = 8;
-		    NotationElementList::iterator scooter = i;
-		    while (!(*scooter)->event()->isa(Note::EventType)) {
-			++scooter;
-		    }
-		    if ((*scooter)->event()->isa(Note::EventType)) {
-			height = (*scooter)->event()->get<Int>(HEIGHT_ON_STAFF);
-		    }
-
-		    el->setLayoutY(staff.yCoordOfHeight(height));
-
-		} else {
-		    //!!! complain
+		if (markType == Mark::Slur) {
+		    getSlurList(staff).push_back(i);
 		}
+
+		el->setLayoutY(staff.yCoordOfHeight(-9));
 	    }
         }
     }
 }
+
+void
+NotationVLayout::finishLayout()
+{
+    for (SlurListMap::iterator mi = m_slurs.begin();
+	 mi != m_slurs.end(); ++mi) {
+
+	for (SlurList::iterator si = mi->second.begin();
+	     si != mi->second.end(); ++si) {
+
+	    NotationElementList::iterator i = *si;
+	    NotationElementList::iterator scooter = i;
+	    NotationStaff &staff = dynamic_cast<NotationStaff &>(*(mi->first));
+
+	    // We always position the slur based on the notes' positional
+	    // properties, never the other way around.  So we need to know
+	    // which direction the tails are going in, particularly if
+	    // there are beams involved.  (It'd be nice to be flexible
+	    // enough to be able to change the tail directions if they
+	    // were not particularly important and there was a slur to
+	    // accommodate in a difficult position, but I think that's an
+	    // uncommon case.)
+
+	    timeT slurDuration =
+		(*i)->event()->get<Int>(Mark::MarkDurationPropertyName);
+	    timeT endTime = (*i)->getAbsoluteTime() + slurDuration;
+
+	    bool haveStart = false;
+	    int startHeight = 4, endHeight = startHeight;
+	    int startX = (*i)->getLayoutX(), endX = startX + 10;
+	    bool startStemUp = false, endStemUp = false;
+	    bool beamAbove = false, beamBelow = false;
+
+	    while (scooter != staff.getViewElementList()->end()) {
+
+		if ((*scooter)->getAbsoluteTime() >= endTime) break;
+
+		if ((*scooter)->isNote()) {
+
+		    bool primary = false;
+
+		    if ((*scooter)->event()->get<Bool>(CHORD_PRIMARY_NOTE, primary)
+			&& primary) {
+
+			int h = (*scooter)->event()->get<Int>(HEIGHT_ON_STAFF);
+
+			bool stemUp = (h <= 4);
+			(*scooter)->event()->get<Bool>(STEM_UP, stemUp);
+
+			bool beamed = false;
+			(*scooter)->event()->get<Bool>(BEAMED, beamed);
+
+			if (beamed) {
+			    if (stemUp) beamAbove = true;
+			    else beamBelow = true;
+			}
+
+			if (!haveStart) {
+			    startX = (*scooter)->getLayoutX();
+			    startHeight = h;
+			    startStemUp = stemUp;
+			    haveStart = true;
+			}
+
+			endX = (*scooter)->getLayoutX();
+			endHeight = h;
+			endStemUp = stemUp;
+		    }
+		}
+
+		++scooter;
+	    }
+
+	    bool above = true;
+	    if (startStemUp == endStemUp) {
+		above = !startStemUp;
+	    } else if (beamBelow) {
+		above = true;
+	    } else if (beamAbove) {
+		above = false;
+	    } else {
+		above = (startHeight + endHeight <= 8);
+	    }
+
+	    if (above) {
+		startHeight += 3;
+		endHeight += 3;
+	    } else {
+		startHeight -= 3;
+		endHeight -= 3;
+	    }
+
+	    int y0 = staff.yCoordOfHeight(startHeight),
+		y1 = staff.yCoordOfHeight(endHeight);
+
+	    int dy = y1 - y0;
+	    if (above) {
+		if (dy > 0) dy = dy * 3 / 4;
+	    } else {
+		if (dy < 0) dy = dy * 3 / 4;
+	    }
+
+	    (*i)->event()->set<Bool>(SLUR_ABOVE, above);
+	    (*i)->event()->set<Int>(SLUR_Y_DELTA, (y1 - y0) * 3 / 4);
+	    (*i)->event()->set<Int>(SLUR_LENGTH, (endX - startX));
+	    (*i)->setLayoutX(startX);
+	    (*i)->setLayoutY(y0);
+	}
+    }
+}
+
 

@@ -324,14 +324,10 @@ NotationHLayout::scanStaff(StaffType &staff)
                     int h = p.getHeightOnStaff();
                     Accidental acc = p.getAccidental();
 
-                    el->event()->setMaybe<Int>
-                        (HEIGHT_ON_STAFF, h);
-
-                    el->event()->setMaybe<Int>
-                        (CALCULATED_ACCIDENTAL, acc);
-
-                    el->event()->setMaybe<String>
-                        (NOTE_NAME, p.getAsString(clef, key));
+                    el->event()->setMaybe<Int>(HEIGHT_ON_STAFF, h);
+                    el->event()->setMaybe<Int>(CALCULATED_ACCIDENTAL, acc);
+//!!!                    el->event()->setMaybe<String>
+//                        (NOTE_NAME, p.getAsString(clef, key));
 
                     // update display acc for note according to the
                     // accTable (accidentals in force when the last
