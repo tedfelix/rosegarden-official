@@ -1100,9 +1100,10 @@ void NotationView::slotEditPaste()
     Event *tsig = 0, *clef = 0, *key = 0;
 
     int staffNo = 0; // TODO : how to select on which staff we're pasting ?
-    
+
+    //!!! No damn use
     NotationElementList::iterator closestNote =
-        findClosestNote(getCursorPosition(),
+        findClosestNote(getCursorPosition(), 50, //!!! random number, first row
                         tsig, clef, key, staffNo);
 
     if (closestNote == getStaff(staffNo)->getViewElementList()->end()) {
@@ -1827,6 +1828,19 @@ NotationView::getYSnappedToLine(int y) const
     return staff->getYOfHeight(staff->getHeightAtY(y), y) + staff->y();
 }
 
+void
+NotationView::getBarExtents(int x, int y, 
+			    int &rx, int &ry, int &rw, int &rh) const
+{
+    NotationStaff *staff = getStaffAtY(y);
+    if (!staff) return;
+    QRect extents = staff->getBarExtents(x, y);
+    rx = extents.x();
+    ry = extents.y();
+    rw = extents.width();
+    rh = extents.height();
+}
+
 string
 NotationView::getNoteNameAtCoordinates(int x, int y) const
 {
@@ -1849,7 +1863,8 @@ NotationView::getNoteNameAtCoordinates(int x, int y) const
 
 
 NotationElementList::iterator
-NotationView::findClosestNote(double eventX, Event *&timeSignature,
+NotationView::findClosestNote(double eventX, double eventY,
+			      Event *&timeSignature,
                               Event *&clef, Event *&key, int staffNo,
                               unsigned int proximityThreshold)
 {
@@ -1889,24 +1904,32 @@ NotationView::findClosestNote(double eventX, Event *&timeSignature,
             continue;
         }
 
-        double dist;
+        double xdist, ydist;
         
         if ( (*it)->getEffectiveX() >= eventX )
-            dist = (*it)->getEffectiveX() - eventX;
+            xdist = (*it)->getEffectiveX() - eventX;
         else
-            dist = eventX - (*it)->getEffectiveX();
+            xdist = eventX - (*it)->getEffectiveX();
+        
+        if ( (*it)->getEffectiveY() >= eventY )
+            ydist = (*it)->getEffectiveY() - eventY;
+        else
+            ydist = eventY - (*it)->getEffectiveY();
 
-        if (dist < minDist) {
+	// bit of a hack to get the correct row in page layout:
+	if (ydist > m_staffs[staffNo]->getStaffHeight()/2) continue;
+
+        if (xdist < minDist) {
             kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : minDist was "
-                                 << minDist << " now = " << dist << endl;
-            minDist = dist;
+                                 << minDist << " now = " << xdist << endl;
+            minDist = xdist;
             res = it;
         }
         
         // not sure about this
-        if (dist > prevDist) break; // we can stop right now
+        if (xdist > prevDist) break; // we can stop right now
 
-        prevDist = dist;
+        prevDist = xdist;
     }
 
     if (minDist > proximityThreshold) {

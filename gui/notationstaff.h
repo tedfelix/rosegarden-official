@@ -216,13 +216,6 @@ public:
     void insertBar(unsigned int barPos, bool correct);
 
     /**
-     * Return a rectangle describing the full width and height of the
-     * bar containing the given x-cooordinate.  Used for setting a
-     * selection to the scope of a full bar.
-     */
-    QRect getBarExtents(unsigned int x);
-
-    /**
      * Insert time signature at x-coordinate \a x.
      */
     void insertTimeSignature(unsigned int x,
@@ -250,6 +243,13 @@ public:
     void setLines(double xfrom, double xto, bool resizeCanvas = false);
 
     int getHeightAtY(int y) const;
+
+    /**
+     * Return a rectangle describing the full width and height of the
+     * bar containing the given cooordinates.  Used for setting a
+     * selection to the scope of a full bar.
+     */
+    QRect getBarExtents(int x, int y);
 
     void getClefAndKeyAt(int x, int y,
 			 Rosegarden::Clef &clef, Rosegarden::Key &key) const;

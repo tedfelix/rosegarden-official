@@ -463,15 +463,20 @@ void NotationStaff::insertBar(unsigned int barPos, bool correct)
     }
 }
 
-//!!! Can't work with page mode
 QRect
-NotationStaff::getBarExtents(unsigned int myx)
+NotationStaff::getBarExtents(int cx, int cy)
 {
-    QRect rect(x(), y(), 0, getStaffHeight());
+    int row = getRowForY(cy - y());
+    int topY = getTopOfStaffForRow(row);
+    QRect rect(x(), topY, 0, getStaffHeight());
 
     for (unsigned int i = 1; i < m_barLines.size(); ++i) {
 
-	if (m_barLines[i].second->x() <= myx) continue;
+	//!!! fix this -- we're stuffed by connecting lines as well
+	// as anything else
+
+	if (getRowForY(m_barLines[i].second->y() - y()) != row) continue;
+	if (m_barLines[i].second->x() <= cx) continue;
 	
 	rect.setX(m_barLines[i-1].second->x());
 	rect.setWidth(m_barLines[i].second->x() - m_barLines[i-1].second->x());

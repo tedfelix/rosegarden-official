@@ -178,15 +178,7 @@ public:
     virtual int getYSnappedToLine(int y) const;
 
     virtual void getBarExtents(int x, int y, 
-			       int &rx, int &ry, int &rw, int &rh) const {
-	NotationStaff *staff = getStaffAtY(y);
-	if (!staff) return;
-	QRect extents = staff->getBarExtents(x);
-	rx = extents.x();
-	ry = extents.y();
-	rw = extents.width();
-	rh = extents.height();
-    }
+			       int &rx, int &ry, int &rw, int &rh) const;
 
     virtual std::string getNoteNameAtCoordinates(int x, int y) const;	
     
@@ -476,13 +468,13 @@ protected:
     void updateRuler();
 
     /**
-     * find the NotationElement which X coord is closest to x
+     * find the NotationElement whose coords are closest to (x,y)
      *
-     * If the closest event is further than \a proximityThreshold,
-     * (in pixels), end() is returned;
+     * If the closest event is further than \a proximityThreshold
+     * horizontally away from (x,y), in pixels, end() is returned;
      */
-    //!!! Need x and y
     NotationElementList::iterator findClosestNote(double x,
+						  double y,
                                                   Rosegarden::Event *&timeSignature,
                                                   Rosegarden::Event *&clef,
                                                   Rosegarden::Event *&key,

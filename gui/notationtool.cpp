@@ -299,7 +299,7 @@ NoteInserter::handleLeftButtonPress(int height, int staffNo,
     //!!! wrong in page mode
 
     NotationElementList::iterator closestNote =
-        m_parentView->findClosestNote(e->x(), tsig, clef, key, staffNo);
+        m_parentView->findClosestNote(e->x(), e->y(), tsig, clef, key, staffNo);
 
     //!!! Could be nicer! Likewise the other inserters.
 
@@ -490,7 +490,7 @@ void ClefInserter::handleLeftButtonPress(int, int staffNo,
 
     NotationElementList::iterator closestNote =
         m_parentView->findClosestNote
-        (e->x(), tsig, clef, key, staffNo, 100);
+        (e->x(), e->y(), tsig, clef, key, staffNo, 100);
 
     if (closestNote ==
         m_parentView->getStaff(staffNo)->getViewElementList()->end()) {
@@ -595,7 +595,7 @@ void NotationSelector::handleMouseDblClick(int, int staffNo,
     NotationStaff *staff = m_parentView->getStaff(staffNo);
     if (!staff) return;
 
-    QRect rect = staff->getBarExtents(e->x());
+    QRect rect = staff->getBarExtents(e->x(), e->y());
 
     m_selectionRect->setX(rect.x() + 1);
     m_selectionRect->setY(rect.y());
@@ -785,7 +785,9 @@ void NotationSelectionPaster::handleLeftButtonPress(int, int staffNo,
     Event *tsig = 0, *clef = 0, *key = 0;
 
     NotationElementList::iterator closestNote =
-        m_parentView->findClosestNote(eventPos.x(), tsig, clef, key, staffNo);
+        m_parentView->findClosestNote(eventPos.x(),
+				      eventPos.y(),
+				      tsig, clef, key, staffNo);
 
     if (closestNote ==
         m_parentView->getStaff(staffNo)->getViewElementList()->end()) {
