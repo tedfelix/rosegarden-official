@@ -32,7 +32,6 @@
 TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
                            QWidget* parent,
                            Rosegarden::TrackHeader *vHeader,
-                           QHeader *hHeader,
                            const int &trackLabelWidth,
                            const char* name,
                            WFlags):
@@ -40,11 +39,10 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
    m_trackLabelWidth(trackLabelWidth)
 {
     assert(vHeader != 0);
-    assert(hHeader != 0);
 
     // Number of tracks on our view
     //
-    m_tracks = vHeader->count();
+    m_tracks = doc->getNbTracks();
 
     // The pixel offset from the top - just to overcome
     // the borders

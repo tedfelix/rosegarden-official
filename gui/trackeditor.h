@@ -38,6 +38,8 @@ namespace Rosegarden { class Segment; class RulerScale; }
 class SegmentItem;
 class SegmentCanvas;
 class RosegardenGUIDoc;
+class BarButtons;
+
 
 /**
  * Global widget for segment edition.
@@ -211,6 +213,7 @@ protected:
 
     RosegardenGUIDoc        *m_document;
     Rosegarden::RulerScale  *m_rulerScale;
+    BarButtons              *m_barButtons;
     SegmentCanvas           *m_segmentCanvas;
     QHeader                 *m_hHeader;
     Rosegarden::TrackHeader *m_vHeader;

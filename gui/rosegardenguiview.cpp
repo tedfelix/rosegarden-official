@@ -98,27 +98,29 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     label->setMinimumHeight(m_trackEditor->getVHeader()->sectionSize(0));
     label->setMaximumHeight(m_trackEditor->getVHeader()->sectionSize(0));
 
-    QScrollView *barButtonsView = new QScrollView(topSplit);
+//     QScrollView *barButtonsView = new QScrollView(topSplit);
 
-    barButtonsView->setHScrollBarMode(QScrollView::AlwaysOff);
-    barButtonsView->setVScrollBarMode(QScrollView::AlwaysOff);
+//     barButtonsView->setHScrollBarMode(QScrollView::AlwaysOff);
+//     barButtonsView->setVScrollBarMode(QScrollView::AlwaysOff);
 
-    m_barButtons = new BarButtons
-        (doc,
-         m_rulerScale,
-         m_trackEditor->getVHeader()->sectionSize(0),
-	 false, 
-         barButtonsView);
+//     m_barButtons = new BarButtons
+//         (doc,
+//          m_rulerScale,
+//          m_trackEditor->getVHeader()->sectionSize(0),
+// 	 false, 
+//          m_trackEditor->getSegmentCanvas());
+//     m_barButtons->setGeometry(0,0, m_trackEditor->getSegmentCanvas()->viewport()->width(),
+//                               20);
 
     // set a plain frame for the scrollview
-    barButtonsView->setFrameStyle(Plain);
+//     barButtonsView->setFrameStyle(Plain);
 
-    barButtonsView->
-        setMinimumHeight(m_trackEditor->getVHeader()->sectionSize(0));
-    barButtonsView->
-        setMaximumHeight(m_trackEditor->getVHeader()->sectionSize(0));
+//     barButtonsView->
+//         setMinimumHeight(m_trackEditor->getVHeader()->sectionSize(0));
+//     barButtonsView->
+//         setMaximumHeight(m_trackEditor->getVHeader()->sectionSize(0));
 
-    barButtonsView->addChild(m_barButtons);
+//     barButtonsView->addChild(m_barButtons);
 
     // Construct the top level horizontal box and drop the
     // button box (TrackButtons) and the main ScrollView
@@ -134,7 +136,6 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     QScrollView *trackButtonsView = new QScrollView(mainPane);
     m_trackButtons = new TrackButtons(doc, trackButtonsView,
                                       m_trackEditor->getVHeader(),
-                                      m_trackEditor->getHHeader(),
                                       trackLabelWidth);
 
     trackButtonsView->addChild(m_trackButtons);
@@ -162,8 +163,8 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     connect(m_trackEditorScrollView, SIGNAL(contentsMoving(int, int)),
             trackButtonsView,        SLOT(setContentsPos(int, int)));
 
-    connect(m_trackEditorScrollView, SIGNAL(contentsMoving(int, int)),
-            barButtonsView,          SLOT(setContentsPos(int, int)));
+//     connect(m_trackEditorScrollView, SIGNAL(contentsMoving(int, int)),
+//             barButtonsView,          SLOT(setContentsPos(int, int)));
 
     m_trackEditorScrollView->addChild(m_trackEditor);
 

@@ -20,24 +20,26 @@
 */
 
 #include <algorithm>
-#include <kcommand.h>
-
-#include "trackeditor.h"
-#include "segmentcanvas.h"
-#include "rosegardenguidoc.h"
-#include "RulerScale.h"
-#include "Track.h"
-#include "colours.h"
-#include "NotationTypes.h"
-#include "multiviewcommandhistory.h"
-#include "segmentcommands.h"
-
-#include "rosedebug.h"
 
 #include <qlayout.h>
 #include <qcanvas.h>
 
+#include <kcommand.h>
 #include <kmessagebox.h>
+
+#include "RulerScale.h"
+#include "Track.h"
+#include "NotationTypes.h"
+
+#include "trackeditor.h"
+#include "segmentcanvas.h"
+#include "rosegardenguidoc.h"
+#include "colours.h"
+#include "multiviewcommandhistory.h"
+#include "segmentcommands.h"
+#include "barbuttons.h"
+
+#include "rosedebug.h"
 
 using Rosegarden::Composition;
 using Rosegarden::RulerScale;
@@ -53,6 +55,7 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
     DCOPObject("TrackEditorIface"),
     m_document(doc),
     m_rulerScale(rulerScale),
+    m_barButtons(0),
     m_segmentCanvas(0),
     m_hHeader(0),
     m_vHeader(0)
@@ -104,9 +107,15 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
 
     setupHorizontalHeader(firstBar, lastBar);
 
-    grid->addWidget(m_hHeader, 0, 1);
+    m_barButtons = new BarButtons(m_document,
+                                  m_rulerScale,
+                                  30, // getVHeader()->sectionSize(0)
+                                  false, 
+                                  this);
+
+    grid->addWidget(m_barButtons, 0, 1);
     grid->addWidget(m_vHeader =
-         new Rosegarden::TrackHeader(nbTracks, this), 1, 0);
+                    new Rosegarden::TrackHeader(nbTracks, this), 1, 0);
     m_vHeader->setOrientation(Qt::Vertical);
 
     // set up vert. header
@@ -118,8 +127,8 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     m_vHeader->setMinimumWidth(100);
     m_vHeader->setResizeEnabled(false);
 
-    QObject::connect(m_vHeader, SIGNAL(indexChange(int,int,int)),
-                     this, SLOT(segmentOrderChanged(int,int,int)));
+//     QObject::connect(m_vHeader, SIGNAL(indexChange(int,int,int)),
+//                      this, SLOT(segmentOrderChanged(int,int,int)));
 
     QCanvas *canvas = new QCanvas(this);
 
