@@ -1979,7 +1979,7 @@ void
 NotationView::paintEvent(QPaintEvent *e)
 {
     NOTATION_DEBUG << "NotationView::paintEvent: m_hlayout->isPageMode() returns " << m_hlayout->isPageMode() << endl;
-    if (m_hlayout->isPageMode()) {
+    if (m_pageMode == LinedStaff::ContinuousPageMode) {
 	int diff = int(getPageWidth() - m_hlayout->getPageWidth());
 	NOTATION_DEBUG << "NotationView::paintEvent: diff is " << diff <<endl;
 	if (diff < -10 || diff > 10) {
