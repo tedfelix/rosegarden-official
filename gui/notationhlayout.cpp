@@ -245,8 +245,14 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
     //have recorded any accidentals in the previous bar for the
     //desirable BarResetCautionary/BarResetNaturals accidental table
     //modes
-    Rosegarden::AccidentalTable accTable
-	(key, clef, Rosegarden::AccidentalTable::OctavesCautionary);
+    
+    Rosegarden::AccidentalTable::OctaveType octaveType = 
+	Rosegarden::AccidentalTable::OctavesCautionary;
+
+    Rosegarden::AccidentalTable::BarResetType barResetType =
+	Rosegarden::AccidentalTable::BarResetCautionary;
+
+    Rosegarden::AccidentalTable accTable(key, clef, octaveType, barResetType);
 
     for (int barNo = startBarNo; barNo <= endBarNo; ++barNo) {
 
@@ -341,10 +347,6 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 				       getLayoutWidth(*el, key)));
 		
                 clef = Clef(*el->event());
-
-                // Probably not strictly the right thing to do
-                // here, but I hope it'll do well enough in practice
-//                accTable = Rosegarden::AccidentalTable(key, clef);
 		accTable.newClef(clef);
 
             } else if (el->event()->isa(Rosegarden::Key::EventType)) {
@@ -355,7 +357,8 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 
                 key = Rosegarden::Key(*el->event());
 
-                accTable = Rosegarden::AccidentalTable(key, clef);
+                accTable = Rosegarden::AccidentalTable
+		    (key, clef, octaveType, barResetType);
 
 	    } else if (el->event()->isa(Text::EventType)) {
 
@@ -669,13 +672,24 @@ NotationHLayout::preSquishBar(int barNo)
 
 	BarDataList &bdl = mi->second;
 	BarDataList::iterator bdli = bdl.find(barNo);
+
 	if (bdli != bdl.end()) {
+
 	    haveSomething = true;
 	    ChunkList &cl(bdli->second.chunks);
 	    timeT aggregateTime = 0;
+
 	    for (ChunkList::iterator cli = cl.begin(); cli != cl.end(); ++cli) {
-		columns[ChunkLocation(aggregateTime, cli->subordering)].
-		    push_back(&(*cli));
+
+		// Subordering is typically zero for notes, positive
+		// for rests and negative for other stuff.  We want to
+		// handle notes and rests together, but not the others.
+
+		int subordering = cli->subordering;
+		if (subordering > 0) subordering = 0;
+
+		columns[ChunkLocation(aggregateTime, subordering)].push_back(&(*cli));
+
 		aggregateTime += cli->duration;
 	    }
 	}
@@ -695,10 +709,17 @@ NotationHLayout::preSquishBar(int barNo)
     double prevRate = 0.0;
     float maxStretchy = 0.0;
 
+    NOTATION_DEBUG << "NotationHLayout::preSquishBar(" << barNo << "): have "
+		   << columns.size() << " columns" << endl;
+
     for (ColumnMap::iterator i = columns.begin(); i != columns.end(); ++i) {
 
 	timeT time = i->first.time;
 	ChunkRefList &list = i->second;
+
+	NOTATION_DEBUG << "NotationHLayout::preSquishBar: "
+		       << "column at " << time << " : " << i->first.subordering << endl;
+
 
 	double minRate = -1.0;
 	float totalFixed = 0.0;
@@ -707,11 +728,17 @@ NotationHLayout::preSquishBar(int barNo)
 	for (ChunkRefList::iterator j = list.begin(); j != list.end(); ++j) {
 	    if ((*j)->stretchy > 0.0) {
 		double rate = (*j)->duration / (*j)->stretchy; // time per px
+		NOTATION_DEBUG << "NotationHLayout::preSquishBar: rate " << rate << endl;
 		if (minRate < 0.0 || rate < minRate) minRate = rate;
+	    } else {
+		NOTATION_DEBUG << "NotationHLayout::preSquishBar: not stretchy" << endl;
 	    }
+		
 	    maxStretchy = std::max(maxStretchy, (*j)->stretchy);
 	    totalFixed = std::max(totalFixed, (*j)->fixed);
 	}
+
+	NOTATION_DEBUG << "NotationHLayout::preSquishBar: minRate " << minRate << ", maxStretchy " << maxStretchy << ", totalFixed " << totalFixed << endl;
 
 	// we have the rate from this point, but we want to assign
 	// these elements an x coord based on the rate and distance
@@ -722,7 +749,7 @@ NotationHLayout::preSquishBar(int barNo)
 	if (prevRate > 0.0) x += (time - prevTime) / prevRate;
 	
 	for (ChunkRefList::iterator j = list.begin(); j != list.end(); ++j) {
-//	    NOTATION_DEBUG << "Setting x for time " << time << " to " << x << " in chunk at " << *j << endl;
+	    NOTATION_DEBUG << "Setting x for time " << time << " to " << x << " in chunk at " << *j << endl;
 	    (*j)->x = x;
 	}
 	
@@ -746,6 +773,8 @@ NotationHLayout::preSquishBar(int barNo)
 
 	    bdli->second.sizeData.reconciledWidth =
 		bdli->second.sizeData.idealWidth;
+
+	    bdli->second.layoutData.needsLayout = true;
 	}
     }
 }
@@ -787,7 +816,9 @@ NotationHLayout::reconcileBarsLinear()
 
     // Ensure that concurrent bars on all staffs have the same width,
     // which for now we make the maximum width required for this bar
-    // on any staff.
+    // on any staff.  These days getStaffWithWidestBar actually does
+    // most of the work in its call to preSquishBar, but this function
+    // still sets the bar line positions etc.
 
     int barNo = getFirstVisibleBar();
 
@@ -1040,15 +1071,6 @@ NotationHLayout::finishLayout(timeT startTime, timeT endTime)
     m_barPositions.clear();
 
     bool isFullLayout = (startTime == endTime);
-/*!!!
-    if (isFullLayout) {
-	startTime = 0;
-	endTime = getComposition()->getDuration();
-    }
-    int startBar = getComposition()->getBarNumber(startTime);
-    int   endBar = getComposition()->getBarNumber(endTime);
-    for (int barNo = startBar; barNo <= endBar; ++barNo) preSquishBar(barNo);
-*/
     if (m_pageMode && (m_pageWidth > 0.1)) reconcileBarsPage();
     else reconcileBarsLinear();
 
@@ -1198,6 +1220,8 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 		bdi->second.sizeData.idealWidth;
 	}
 
+	NOTATION_DEBUG << "have " << chunks.size() << " chunks, reconciledWidth " << bdi->second.sizeData.reconciledWidth << ", idealWidth " << bdi->second.sizeData.idealWidth << ", ratio " << reconcileRatio << endl;
+
 	double offset = getPostBarMargin();
 	double delta = 0;
 
@@ -1210,10 +1234,10 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 	    NOTATION_DEBUG << "element is a " << el->event()->getType() << endl;
 
 	    if (chunkitr != chunks.end()) {
-//		NOTATION_DEBUG << "barX is " << barX << ", reconcileRatio is " << reconcileRatio << " (" << bdi->second.sizeData.reconciledWidth << "/" << bdi->second.sizeData.idealWidth << ") , chunk's x is " << (*chunkitr).x << ", chunk is at " << &(*chunkitr) << endl;
+		NOTATION_DEBUG << "new chunk: addr " << &(*chunkitr) << " duration=" << (*chunkitr).duration << " subordering=" << (*chunkitr).subordering << " fixed=" << (*chunkitr).fixed << " stretchy=" << (*chunkitr).stretchy << " x=" << (*chunkitr).x << endl;
 		x = barX + offset + reconcileRatio * (*chunkitr).x;
 		fixed = (*chunkitr).fixed;
-//		NOTATION_DEBUG << " x is " << x << ", fixed is " << fixed << endl;
+		NOTATION_DEBUG << "adjusted x is " << x << endl;
 		ChunkList::iterator chunkscooter(chunkitr);
 		if (++chunkscooter != chunks.end()) {
 		    delta = (*chunkscooter).x - (*chunkitr).x;
@@ -1530,7 +1554,7 @@ NotationHLayout::getLayoutWidth(Rosegarden::ViewElement &ve,
 
 	double gap = m_npf->getNoteBodyWidth(noteType) * multiplier;
 
-	NOTATION_DEBUG << "note type " << noteType << ", dots " << dots << ", multiplier " << multiplier << ", gap " << gap << endl;
+	NOTATION_DEBUG << "note type " << noteType << ", isNote " << e.isNote() << ", dots " << dots << ", multiplier " << multiplier << ", gap " << gap << ", result " << (bw + gap * m_spacing / 100.0) << endl;
 
 	gap = gap * m_spacing / 100.0;
 	return bw + gap;

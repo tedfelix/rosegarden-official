@@ -2191,8 +2191,6 @@ NotationView::getHLayout()
 void
 NotationView::paintEvent(QPaintEvent *e)
 {
-    NOTATION_DEBUG << "NotationView::paintEvent: m_hlayout->isPageMode() returns " << m_hlayout->isPageMode() << endl;
-
     m_inPaintEvent = true;
 
     // This is duplicated here from EditViewBase, because (a) we need
@@ -2219,15 +2217,24 @@ NotationView::paintEvent(QPaintEvent *e)
 	}
     }
 
-    // relayout if the window width changes significantly in continuous page mode
+    int topMargin = 0, leftMargin = 0;
+    getPageMargins(topMargin, leftMargin);
+
     if (m_pageMode == LinedStaff::ContinuousPageMode) {
-	int topMargin = 0, leftMargin = 0;
-	getPageMargins(topMargin, leftMargin);
+	// relayout if the window width changes significantly in continuous page mode
 	int diff = int(getPageWidth() - leftMargin*2 - m_hlayout->getPageWidth());
-	NOTATION_DEBUG << "NotationView::paintEvent: diff is " << diff <<endl;
 	if (diff < -10 || diff > 10) {
 	    setPageMode(m_pageMode);
 	    refreshSegment(0, 0, 0);
+	}
+	
+    } else if (m_pageMode == LinedStaff::LinearMode) {
+	// resize canvas again if the window height has changed significantly
+	if (getCanvasView() && getCanvasView()->canvas()) {
+	    int diff = int(getPageHeight() - getCanvasView()->canvas()->height());
+	    if (diff > 10) {
+		readjustCanvasSize();
+	    }
 	}
     }
 
@@ -2255,6 +2262,8 @@ NotationView::paintEvent(QPaintEvent *e)
 	    slotInsertableNoteEventReceived(notes[i].first, notes[i].second, true);
 	}
     }
+
+    slotSetOperationNameAndStatus(i18n("  Ready."));
 }
 
 bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
@@ -2863,7 +2872,7 @@ void NotationView::refreshSegment(Segment *segment,
     }
 
     setMenuStates();
-
+    slotSetOperationNameAndStatus(i18n("  Ready."));
     NOTATION_DEBUG << "*** " << endl;
 }
 
@@ -2971,13 +2980,9 @@ void NotationView::readjustCanvasSize()
 	    maxHeight = pageHeight + topMargin*2;
     }
 
-//    if (maxWidth  < getPageWidth()) maxWidth  = getPageWidth();
-//    if (maxHeight < getPageHeight() + topMargin*2)
-//	maxHeight = getPageHeight() + topMargin*2;
-
     // now get the EditView to do the biz
     readjustViewSize(QSize(int(maxWidth), maxHeight), true);
-//		     m_pageMode != LinedStaff::LinearMode);
+
     UPDATE_PROGRESS(2);
 
     if (m_pannerDialog) {
