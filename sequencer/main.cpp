@@ -141,11 +141,9 @@ int main(int argc, char *argv[])
     signal(SIGHUP, signalHandler);
     signal(SIGQUIT, signalHandler);
 
-    // sleep time is 5000 microseconds
+    // Sleep time for sequencer main loop
     //
     const int sequencerSleep = 5000;
-    int newClientCheck = 0;
-    //int sendAliveCount = 0;
 
     while(roseSeq && roseSeq->getStatus() != QUIT)
     {
@@ -288,40 +286,11 @@ int main(int argc, char *argv[])
         // this call just before the sleep period deliberately
         // to catch this process. [rwb 7/02]
         //
+        // Also attempt to send the MIDI clock at this point.
         //
-        if (roseSeq->getStatus() == PLAYING ||
-            roseSeq->getStatus() == RECORDING_MIDI ||
-            roseSeq->getStatus() == RECORDING_AUDIO)
-        {
-            roseSeq->updateClocks(roseSeq->clearToSend());
-        }
-        else // we can check for new client connections if we're mainly
-             // quiescent (i.e. not playing or recording)
-        {
-            // Loop counter
-            //
-            newClientCheck += sequencerSleep;
+        roseSeq->updateClocks(roseSeq->clearToSend());
 
-            // Check for new clients every few seconds
-            //
-            if (newClientCheck > 750000)
-            {
-                if (roseSeq->checkForNewClients())
-                {
-                    // Tell the gui to synchronise Instruments
-                    //
-                    SEQUENCER_DEBUG << "client list changed" << endl;
-                }
-                
-                newClientCheck = 0;
-            }
-        }
-
-        // Pause for breath while we're gnashing this loop (5 milliseconds)
-        //
-        // See the notes above the loop regarding getting the sequencer
-        // to throttle - this could be done automatically or within
-        // parameters sent down from the GUI.
+        // Pause for breath while we're gnashing this loop
         //
         usleep(sequencerSleep);
 

@@ -279,6 +279,10 @@ public:
     //
     virtual void setRecordDevice(Rosegarden::DeviceId id) = 0;
 
+    // Send the MIDI clock
+    //
+    virtual void sendMidiClock() = 0;
+
     // Mapped Instruments
     //
     void setMappedInstrument(MappedInstrument *mI);
@@ -399,10 +403,9 @@ public:
     int getMMCId() const { return ((int)(m_mmcId)); }
     void setMMCId(int id) { m_mmcId = (Rosegarden::MidiByte)(id); }
 
-    // Quarter note length
+    // Set MIDI clock interval
     //
-    void setQuarterNoteLength(const Rosegarden::RealTime &length)
-        { m_quarterNoteLength = length; }
+    void setMIDIClockInterval(long usecs) { m_midiClockInterval = usecs; }
 
 protected:
     // Helper functions to be implemented by subclasses
@@ -483,9 +486,10 @@ protected:
     bool                         m_mmcMaster;
     Rosegarden::MidiByte         m_mmcId;      // device id
 
-    // Quarter note length
+    // MIDI clock interval - microseconds
     //
-    RealTime                     m_quarterNoteLength;
+    long                         m_midiClockInterval;
+    Rosegarden::RealTime         m_midiClockSendTime;
 
 };
 

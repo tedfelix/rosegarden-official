@@ -267,10 +267,14 @@ public:
     void setMasterMMC(bool mmc) { m_soundDriver->setMasterMMC(mmc); }
     bool isMMCMaster() const { return m_soundDriver->isMMCMaster(); }
 
-    // Set the quarter note length for MIDI clock generation purposes
+    // Set the time between MIDI clocks
     //
-    void setQuarterNoteLength(const RealTime &length)
-        { m_soundDriver->setQuarterNoteLength(length); }
+    void setMIDIClockInterval(long interval)
+        { m_soundDriver->setMIDIClockInterval(interval); }
+
+    // Send the MIDI clock now
+    //
+    void sendMidiClock() { m_soundDriver->sendMidiClock(); }
 
 protected:
 

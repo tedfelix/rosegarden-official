@@ -30,6 +30,7 @@
 #include <alsa/asoundlib.h>
 #include <alsa/seq_event.h>
 #include <alsa/version.h>
+#include <alsa/seq.h>
 
 #include "AlsaDriver.h"
 #include "AlsaPort.h"
@@ -931,6 +932,14 @@ AlsaDriver::stopPlayback()
     allNotesOff();
     m_playing = false;
 
+    // Flush the output and input queues
+    //
+    snd_seq_remove_events_t *info;
+    snd_seq_remove_events_alloca(&info);
+    snd_seq_remove_events_set_condition(info, SND_SEQ_REMOVE_INPUT|
+                                              SND_SEQ_REMOVE_OUTPUT);
+    snd_seq_remove_events(m_midiHandle, info);
+
     // Send system stop to duplex MIDI devices
     //
     sendSystemDirect(SND_SEQ_EVENT_STOP);
@@ -1436,6 +1445,12 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
                std::cout << "AlsaDriver::getMappedComposition - "
                          << "SONG POSITION" << std::endl;
                break;
+
+               // these cases are handled by slotCheckForNewClients
+               //
+            case SND_SEQ_EVENT_PORT_SUBSCRIBED:
+            case SND_SEQ_EVENT_PORT_UNSUBSCRIBED:
+                   break;
 
             case SND_SEQ_EVENT_TICK:
             default:
@@ -3270,7 +3285,6 @@ AlsaDriver::sendMMC(Rosegarden::MidiByte deviceId,
 void
 AlsaDriver::sendSystemDirect(MidiByte command)
 {
-
     snd_seq_addr_t sender, dest;
     sender.client = m_client;
     sender.port = m_port;
@@ -3303,6 +3317,87 @@ AlsaDriver::sendSystemDirect(MidiByte command)
                           << "can't send event (" << int(command) << ")"
                           << std::endl;
             }
+        }
+    }
+}
+
+
+void
+AlsaDriver::sendSystemQueued(Rosegarden::MidiByte command,
+                             const Rosegarden::RealTime &time)
+{
+    snd_seq_addr_t sender, dest;
+    sender.client = m_client;
+    sender.port = m_port;
+    snd_seq_real_time_t sendTime = { time.sec, time.usec * 1000 };
+
+
+    std::vector<AlsaPort*>::iterator it = m_alsaPorts.begin();
+    for (; it != m_alsaPorts.end(); ++it)
+    {
+        // One message per duplex device
+        //
+        if ((*it)->m_port == 0 && (*it)->m_duplex)
+        {
+            snd_seq_event_t event;
+            memset(&event, 0, sizeof(&event));
+
+            // Set destination and sender
+            dest.client = (*it)->m_client;
+            dest.port = (*it)->m_port;
+        
+            event.dest = dest;
+            event.source = sender;
+
+            // Schedule the command
+            //
+            event.type = command;
+            snd_seq_ev_schedule_real(&event, m_queue, 0, &sendTime);
+
+            int error = snd_seq_event_output(m_midiHandle, &event);
+
+            if (error < 0)
+            {
+                std::cerr << "AlsaDriver::sendSystemDirect - "
+                          << "can't send event (" << int(command) << ")"
+                          << std::endl;
+            }
+        }
+    }
+}
+
+
+
+
+// Send the MIDI clock signal now
+//
+void
+AlsaDriver::sendMidiClock()
+{
+    // Get the number of ticks in (say) two seconds
+    //
+    unsigned int numTicks =
+        (unsigned int)(Rosegarden::RealTime(2, 0)/
+                       Rosegarden::RealTime(0, m_midiClockInterval * 1000));
+
+    // First time through set the clock send time - this will also
+    // ensure we send the first batch of clock events
+    //
+    if (m_midiClockSendTime == Rosegarden::RealTime(0, 0))
+        m_midiClockSendTime = getAlsaTime();
+
+    // If we're within twenty milliseconds of running out of clock
+    // then send a batch of clock signals.
+    //
+    if (getAlsaTime() > (m_midiClockSendTime - Rosegarden::RealTime(0, 20000)))
+    {
+        for (unsigned int i = 0; i < numTicks; i++)
+        {
+            sendSystemQueued(SND_SEQ_EVENT_CLOCK, m_midiClockSendTime);
+
+            // increment send time
+            m_midiClockSendTime = m_midiClockSendTime +
+                Rosegarden::RealTime(0, m_midiClockInterval * 1000);
         }
     }
 }

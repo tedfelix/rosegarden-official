@@ -718,13 +718,13 @@ void RosegardenGUIApp::initView()
 
     slotEnableTransport(true);
 
-    // set the tempo in the transport
-    //
-    m_transport->setTempo(comp.getTempo());
-
     // and the time signature
     //
     m_transport->setTimeSignature(comp.getTimeSignatureAt(comp.getPosition()));
+
+    // set the tempo in the transport
+    //
+    m_transport->setTempo(comp.getTempo());
 
     // bring the transport to the front 
     //
@@ -2131,11 +2131,11 @@ void RosegardenGUIApp::slotSetPointerPosition(timeT t)
 	return;
     }
 
-    // and the tempo
-    m_transport->setTempo(comp.getTempoAt(t));
-
     // and the time sig
     m_transport->setTimeSignature(comp.getTimeSignatureAt(t));
+
+    // and the tempo
+    m_transport->setTempo(comp.getTempoAt(t));
 
     // and the time
     //

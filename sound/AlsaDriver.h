@@ -129,6 +129,9 @@ public:
     //
     virtual void setRecordDevice(Rosegarden::DeviceId id);
 
+    // Send the MIDI clock
+    //
+    virtual void sendMidiClock();
 
     // ----------------------- End of Virtuals ----------------------
 
@@ -139,9 +142,14 @@ public:
                  bool isCommand,
                  const std::string &data);
 
-    // Send a System RealTime message
+    // Send a System message straight away
     //
     void sendSystemDirect(Rosegarden::MidiByte command);
+
+    // Schedule a System message
+    //
+    void sendSystemQueued(Rosegarden::MidiByte command,
+                          const Rosegarden::RealTime &time);
 
 #ifdef HAVE_LADSPA
 

@@ -161,7 +161,8 @@ SoundDriver::SoundDriver(MappedStudio *studio, const std::string &name):
     m_mmcEnabled(false),
     m_mmcMaster(false),
     m_mmcId(0),           // default MMC id of 0
-    m_quarterNoteLength(Rosegarden::RealTime(0, 0))
+    m_midiClockInterval(0),
+    m_midiClockSendTime(Rosegarden::RealTime(0, 0))
 {
 }
 

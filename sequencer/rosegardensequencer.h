@@ -311,13 +311,19 @@ public:
     //
     void initialiseStudio();
 
-    // Check for new targets - we do this occasionally and never when
-    // we're playing or recording.
-    //
-    bool checkForNewClients();
-
 public slots:
+
+    // Check for new clients - on timeout
+    //
+    void slotCheckForNewClients();
+
+    // Reset slice size (dynamic slice sizing) - timeout
+    //
     void slotRevertSliceSize();
+
+    // Send the MIDI clock signal now - on timeout
+    //
+    void slotSendMidiClock();
 
 protected:
 
@@ -398,6 +404,14 @@ protected:
     //
     Rosegarden::RealTime      m_oldSliceSize;
     QTimer                   *m_sliceTimer;
+
+    // MIDI Clock timer - issue a clock signal every timeout
+    //
+    QTimer                   *m_midiClockTimer;
+
+    // Timer to check for new clients
+    //
+    QTimer                   *m_newClientTimer;
 };
  
 #endif // _ROSEGARDEN_SEQUENCER_APP_H_

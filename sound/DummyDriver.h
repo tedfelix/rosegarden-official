@@ -95,6 +95,8 @@ public:
 
     virtual void setRecordDevice(Rosegarden::DeviceId /*id*/) {;}
 
+    virtual void sendMidiClock() {;}
+
 protected:
     virtual void processMidiOut(const MappedComposition & /*mC*/,
                                 const RealTime & /*playLatency*/,

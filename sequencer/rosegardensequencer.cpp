@@ -93,8 +93,24 @@ RosegardenSequencerApp::RosegardenSequencerApp(
     //
     m_sequencer->record(Rosegarden::ASYNCHRONOUS_MIDI);
 
+    // Setup the slice timer
+    //
     m_sliceTimer = new QTimer(this);
     connect(m_sliceTimer, SIGNAL(timeout()), this, SLOT(slotRevertSliceSize()));
+
+    // Connect the MIDI clock timer but don't start it yet
+    //
+    m_midiClockTimer = new QTimer(this);
+    connect(m_midiClockTimer, SIGNAL(timeout()),
+            this, SLOT(slotSendMidiClock()));
+
+    // Check for new clients every so often
+    //
+    m_newClientTimer = new QTimer(this);
+    connect(m_newClientTimer, SIGNAL(timeout()),
+            this, SLOT(slotCheckForNewClients()));
+
+    m_newClientTimer->start(3000); // every 3 seconds
 }
 
 RosegardenSequencerApp::~RosegardenSequencerApp()
@@ -363,6 +379,17 @@ RosegardenSequencerApp::keepPlaying()
 void
 RosegardenSequencerApp::updateClocks(bool clearToSend)
 {
+    // Attempt to send MIDI clock 
+    //
+    slotSendMidiClock();
+
+    // If we're not playing etc. then that's all we need to do
+
+    if (m_transportStatus != PLAYING &&
+        m_transportStatus != RECORDING_MIDI &&
+        m_transportStatus != RECORDING_AUDIO)
+        return;
+
     QByteArray data, replyData;
     QCString replyType;
     QDataStream arg(data, IO_WriteOnly);
@@ -1134,10 +1161,20 @@ RosegardenSequencerApp::setMappedPort(int pluginId,
 
 }
 
-bool
-RosegardenSequencerApp::checkForNewClients()
+void
+RosegardenSequencerApp::slotCheckForNewClients()
 {
-    return m_sequencer->checkForNewClients();
+    // Don't do this check if any of these conditions hold
+    //
+    if (m_transportStatus == PLAYING ||
+        m_transportStatus == RECORDING_MIDI ||
+        m_transportStatus == RECORDING_AUDIO)
+        return;
+
+    if (m_sequencer->checkForNewClients())
+    {
+        SEQUENCER_DEBUG << "client list changed" << endl;
+    }
 }
 
 
@@ -1202,9 +1239,35 @@ RosegardenSequencerApp::setQuarterNoteLength(long timeSec, long timeUSec)
     Rosegarden::RealTime quarterNoteLength =
         Rosegarden::RealTime(timeSec, timeUSec);
 
-    SEQUENCER_DEBUG << "quarter note length changed" << endl;
+    long msecs =
+        long((double(timeSec) * 1000.0 + double(timeUSec)/1000.0) / 24.0);
 
-    m_sequencer->setQuarterNoteLength(quarterNoteLength);
+    SEQUENCER_DEBUG << "sending MIDI clock every " << msecs << endl;
+    m_sequencer->setMIDIClockInterval(msecs);
+
+    /*
+    // Timer interval is in milliseconds - turn into 24ppq
+    //
+    */
+
+
+    /*
+    if (m_midiClockTimer->isActive())
+    {
+        m_midiClockTimer->changeInterval(msecs);
+    }
+    else
+    {
+        m_midiClockTimer->start(msecs);
+    }
+    */
+
+}
+
+void
+RosegardenSequencerApp::slotSendMidiClock()
+{
+    m_sequencer->sendMidiClock();
 }
 
 

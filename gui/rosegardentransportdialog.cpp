@@ -20,6 +20,7 @@
 */
 
 #include "rosegardentransportdialog.h"
+#include "studiocontrol.h"
 
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -59,6 +60,8 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     m_lastMode(RealMode),
     m_currentMode(RealMode),
     m_tempo(0),
+    m_numerator(0),
+    m_denominator(0),
     m_framesPerSecond(24),
     m_bitsPerFrame(80)
 {
@@ -558,6 +561,17 @@ RosegardenTransportDialog::setTempo(const double &tempo)
     tempoString.sprintf("%4.3f", tempo);
 
     m_transport->TempoDisplay->setText(tempoString);
+
+    // Send the quarter note length to the sequencer - shouldn't
+    // really hang this off here but at least it's a single point
+    // where the tempo should always be consistent.  Quarter Note
+    // Length is sent (MIDI CLOCK) at 24ppqn.
+    //
+    double qnD = 60.0/tempo * 4.0/m_denominator;
+    Rosegarden::RealTime qnTime =
+        Rosegarden::RealTime(long(qnD), long(qnD * 1000000.0) - long(qnD));
+
+    StudioControl::sendQuarterNoteLength(qnTime);
 }
 
 void

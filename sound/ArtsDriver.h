@@ -120,6 +120,8 @@ public:
 
     virtual void setRecordDevice(Rosegarden::DeviceId /*id*/) {;}
 
+    virtual void sendMidiClock() {;}
+
 protected:
     virtual void generateInstruments();
     virtual void processAudioQueue(const RealTime &playLatency,
