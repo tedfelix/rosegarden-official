@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
   QByteArray data, replyData;
   QCString replyType;
   QDataStream arg(data, IO_WriteOnly);
-  arg << 5;
+  arg << 0;
   arg << 1000;
 
   if (!client->call(ROSEGARDEN_GUI_APP,
@@ -146,9 +146,16 @@ int main(int argc, char *argv[])
        
       reply >> mappedComp;
 
+      cout << "GOT " << mappedComp.size() << " ELEMENTS" << endl;
+
       for (it = mappedComp.begin(); it != mappedComp.end(); ++it )
       {
-        cout << "MappedComposition instrument = " << (*it)->getInstrument() << endl;
+        cout << "Pitch = " << (*it)->getPitch() << endl;
+        cout << "Time = " << (*it)->getAbsoluteTime() << endl;
+        cout << "Duration = " << (*it)->getDuration() << endl;
+        cout << "Velocity = " << (*it)->getVelocity() << endl;
+        cout << "Instrument = " << (*it)->getInstrument() << endl;
+        cout << endl;
       }
 
     }
