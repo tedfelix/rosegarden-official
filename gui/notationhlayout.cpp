@@ -15,6 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qcolor.h>
+
 #include "staff.h"
 #include "notationhlayout.h"
 #include "rosedebug.h"
@@ -57,11 +59,6 @@ NotationHLayout::layout(NotationElement *el)
     m_nbTimeUnitsInCurrentBar += el->event()->get<Int>("QuantizedDuration");
 
     el->setX(m_currentPos);
-
-    // Store note position
-    //
-//     m_lastElementPos = ElementHPos(m_currentPos, it);
-//     m_notePositions.push_back(m_lastElementPos);
 
     Note note = Note(el->event()->get<Int>("Notation::NoteType")); // check the property is here ?
 
@@ -151,24 +148,41 @@ NotationHLayout::barPositions() const
     return m_barPositions;
 }
 
+bool compareNoteElement(NotationElement *el1, NotationElement *el2)
+{
+    kdDebug(KDEBUG_AREA) << "compareNoteElement : el1->x : " << el1->x()
+                         << "(item : " << el1->canvasItem()->x()
+                         << ") - el2->x : "<< el2->x() << endl;
+
+    // Nifty trick to show what items we're comparing with
+    //
+//     QCanvas *canvas = el1->canvasItem()->canvas();
+    
+//     QCanvasLine *mark = new QCanvasLine(canvas);
+//     mark->setPoints(el1->canvasItem()->x(), 0, el1->canvasItem()->x(), el1->x());
+//     mark->show();
+
+    return el1->canvasItem()->x() < el2->x();
+}
+
+
 NotationElementList::iterator
 NotationHLayout::insertNote(NotationElement *el)
 {
 //     ElementHPos elementPos(xPos);
     
-//     vector<ElementHPos>::iterator insertPoint = lower_bound(m_notePositions.begin(),
-//                                                             m_notePositions.end(),
-//                                                             elementPos);
+    kdDebug(KDEBUG_AREA) << "insertNote : approx. x : " << el->x() << endl;
 
     NotationElementList::iterator insertPoint = lower_bound(m_notationElements.begin(),
                                                             m_notationElements.end(),
-                                                            el);
+                                                            el, compareNoteElement);
     
     if (insertPoint != m_notationElements.end()) {
 
-        ++insertPoint;
         // readjust horizontal position of inserted element
         el->setX((*insertPoint)->x());
+
+        kdDebug(KDEBUG_AREA) << "insertNote : adjusted x : " << el->x() << endl;
         
         // TODO
         // reapply layout on all following notes
@@ -178,6 +192,9 @@ NotationHLayout::insertNote(NotationElement *el)
     } else {
         --insertPoint;
         el->setX((*insertPoint)->x() + Staff::noteWidth + m_noteMargin);
+
+        kdDebug(KDEBUG_AREA) << "insertNote : adjusted x : " << el->x() << endl;
+
         return m_notationElements.end();
     }
 

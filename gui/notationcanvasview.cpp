@@ -66,7 +66,7 @@ NotationCanvasView::contentsMousePressEvent (QMouseEvent *e)
         kdDebug(KDEBUG_AREA) << "mousepress : on a staff Line - insert note - staff pitch :"
                              << staffLine->associatedPitch() << endl;
         insertNote(staffLine, e);
-        staffLine->setPen(blue);
+        // staffLine->setPen(blue); - debug feedback to confirm which line what clicked on
         
         return;
     }

@@ -229,7 +229,8 @@ NotationView::showElements(NotationElementList::iterator from,
         noteSprite->move(dxoffset + (*it)->x(),
                          dyoffset + (*it)->y());
         noteSprite->show();
-        
+
+        (*it)->setCanvasItem(noteSprite);
     }
 
 
@@ -441,26 +442,36 @@ NotationView::slot64th()
 void
 NotationView::insertNote(int pitch, QMouseEvent *e)
 {
-    // create new event and notation element, lay it out, insert it
+    // create new event
+    //
     Event *insertedEvent = new Event;
 
+    // set its duration and pitch
+    //
     insertedEvent->setDuration(m_hlayout->quantizer().noteDuration(m_currentSelectedNote));
     insertedEvent->set<Int>("pitch", pitch);
 
+    // Create associated notationElement and set its note type
+    //
     NotationElement *notationElement = new NotationElement(insertedEvent);
 
     notationElement->event()->set<Int>("Notation::NoteType", m_currentSelectedNote);
 
+    // give a "fake" X coord to the notation element (where the click was received)
     notationElement->setX(e->x());
+    // the horiz. layout will readjust X and tell where to insert the event
     NotationElementList::iterator insertPosition = m_hlayout->insertNote(notationElement);
 
     m_notationElements->insert(insertPosition, notationElement);
 
+    // TODO : insert insertedEvent too
+
     (*m_vlayout)(notationElement);
     // (*m_hlayout)(notationElement);
 
-    //showElements(insertPosition, insertPosition, m_currentStaff);
-    showElements(m_notationElements->begin(), m_notationElements->end(), m_currentStaff);
+    // TODO : m_currentStaff should be updated by the mouse click 
+
+    showElements(--insertPosition, m_notationElements->end(), m_currentStaff);
 }
 
 

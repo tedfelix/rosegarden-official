@@ -26,7 +26,7 @@ NotationVLayout::NotationVLayout(Staff &s)
 void
 NotationVLayout::layout(NotationElement *el)
 {
-    unsigned int pitch = el->event()->get<Int>("pitch");
+    int pitch = el->event()->get<Int>("pitch");
 
 //     kdDebug(KDEBUG_AREA) << "pitch : " << pitch
 //                          << " - height : " << m_pitchToHeight[pitch]
@@ -35,4 +35,5 @@ NotationVLayout::layout(NotationElement *el)
 //                          << endl;
 
     el->setY(m_staff.pitchYOffset(pitch));
+    kdDebug(KDEBUG_AREA) << "NotationVLayout::layout : pitch : " << pitch << " - y : " << el->y() << endl;
 }
