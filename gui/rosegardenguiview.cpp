@@ -443,10 +443,10 @@ RosegardenGUIView::createNotationView(std::vector<Rosegarden::Segment *> segment
 
     Rosegarden::SequenceManager *sM = getDocument()->getSequenceManager();
 
-    connect(sM, SIGNAL(insertableNoteOnReceived(int)),
-	    notationView, SLOT(slotInsertableNoteOnReceived(int)));
-    connect(sM, SIGNAL(insertableNoteOffReceived(int)),
-	    notationView, SLOT(slotInsertableNoteOffReceived(int)));
+    connect(sM, SIGNAL(insertableNoteOnReceived(int, int)),
+	    notationView, SLOT(slotInsertableNoteOnReceived(int, int)));
+    connect(sM, SIGNAL(insertableNoteOffReceived(int, int)),
+	    notationView, SLOT(slotInsertableNoteOffReceived(int, int)));
 
     connect(notationView, SIGNAL(stepByStepTargetRequested(QObject *)),
 	    this, SIGNAL(stepByStepTargetRequested(QObject *)));
@@ -548,10 +548,10 @@ RosegardenGUIView::createMatrixView(std::vector<Rosegarden::Segment *> segmentsT
 
     Rosegarden::SequenceManager *sM = getDocument()->getSequenceManager();
 
-    connect(sM, SIGNAL(insertableNoteOnReceived(int)),
-	    matrixView, SLOT(slotInsertableNoteOnReceived(int)));
-    connect(sM, SIGNAL(insertableNoteOffReceived(int)),
-	    matrixView, SLOT(slotInsertableNoteOffReceived(int)));
+    connect(sM, SIGNAL(insertableNoteOnReceived(int, int)),
+	    matrixView, SLOT(slotInsertableNoteOnReceived(int, int)));
+    connect(sM, SIGNAL(insertableNoteOffReceived(int, int)),
+	    matrixView, SLOT(slotInsertableNoteOffReceived(int, int)));
 
     connect(matrixView, SIGNAL(stepByStepTargetRequested(QObject *)),
 	    this, SIGNAL(stepByStepTargetRequested(QObject *)));

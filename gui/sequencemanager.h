@@ -225,8 +225,8 @@ signals:
     void setProgress(int);
     void incrementProgress(int);
 
-    void insertableNoteOnReceived(int pitch);
-    void insertableNoteOffReceived(int pitch);
+    void insertableNoteOnReceived(int pitch, int velocity);
+    void insertableNoteOffReceived(int pitch, int velocity);
     
 protected slots:
     void slotCountdownCancelled();

@@ -727,11 +727,6 @@ NotePixmapFactory::makeRoomForAccidental(Accidental a, int shift, bool extra)
 
     m_left += ac.getWidth() + (m_noteBodyWidth/4 - m_borderX);
 
-    // This modifier for shift won't be quite correct if a chord has
-    // more than one sort of accidental (e.g. flats _and_ sharps),
-    // because they aren't all the same width.  But we can live with
-    // that for now.
-
     if (shift > 0) {
 	if (extra) {
 	    // The extra flag indicates that the first shift is to get
@@ -741,7 +736,26 @@ NotePixmapFactory::makeRoomForAccidental(Accidental a, int shift, bool extra)
 	    --shift;
 	    m_left += m_noteBodyWidth - m_noteBodyWidth/5;
 	}
-	m_left += shift * (ac.getWidth() - ah.x());
+	if (shift > 0) {
+	    // The amount we shift for each accidental is the greater
+	    // of the probable shift for that accidental and the
+	    // probable shift for a sharp, on the assumption (usually
+	    // true in classical notation) that the sharp is the
+	    // widest accidental and that we may have other
+	    // accidentals possibly including sharps on other notes in
+	    // this chord that we can't know about here.
+	    int step = ac.getWidth() - ah.x();
+	    if (a != Rosegarden::Accidentals::Sharp) {
+		NoteCharacter acSharp
+		    (m_font->getCharacter(m_style->getAccidentalCharName
+					  (Rosegarden::Accidentals::Sharp)));
+		QPoint ahSharp
+		    (m_font->getHotspot(m_style->getAccidentalCharName
+					(Rosegarden::Accidentals::Sharp)));
+		step = std::max(step, acSharp.getWidth() - ahSharp.x());
+	    }
+	    m_left += shift * step;
+	}
     }
 
     int above = ah.y() - m_noteBodyHeight/2;

@@ -807,11 +807,9 @@ punchin:
 }
 
 
-// Process unexpected MIDI events at the GUI - send them to the Transport
-// or to a MIDI mixer for display purposes only.  Useful feature to enable
-// the musician to prove to herself quickly that the MIDI input is still
-// working.
-//
+// Process unexpected MIDI events at the GUI - send them to the
+// Transport, or to a MIDI mixer for display purposes, or to an editor
+// for use in step recording.
 //
 void
 SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
@@ -896,9 +894,9 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 	{
 	    if ((*i)->getType() == Rosegarden::MappedEvent::MidiNote) {
 		if ((*i)->getVelocity() == 0) {
-		    emit insertableNoteOffReceived((*i)->getPitch());
+		    emit insertableNoteOffReceived((*i)->getPitch(), (*i)->getVelocity());
 		} else {
-		    emit insertableNoteOnReceived((*i)->getPitch());
+		    emit insertableNoteOnReceived((*i)->getPitch(), (*i)->getVelocity());
 		}
 	    }
 	}

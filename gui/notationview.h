@@ -605,13 +605,13 @@ public slots:
     void slotChangeProportionFromAction();
 
     /// Note-on received asynchronously -- consider step-by-step editing
-    void slotInsertableNoteOnReceived(int pitch);
+    void slotInsertableNoteOnReceived(int pitch, int velocity);
 
     /// Note-off received asynchronously -- consider step-by-step editing
-    void slotInsertableNoteOffReceived(int pitch);
+    void slotInsertableNoteOffReceived(int pitch, int velocity);
 
     /// Note-on or note-off received asynchronously -- as above
-    void slotInsertableNoteEventReceived(int pitch, bool noteOn);
+    void slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn);
 
     /// A timer set when a note-on event was received has elapsed
     void slotInsertableTimerElapsed();

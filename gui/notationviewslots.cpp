@@ -2092,8 +2092,9 @@ NotationView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
     m_hoveredOverAbsoluteTime->setText(message);
 }
 
+// Ignore velocity for the moment -- we need the option to use or ignore it
 void
-NotationView::slotInsertableNoteEventReceived(int pitch, bool noteOn)
+NotationView::slotInsertableNoteEventReceived(int pitch, int, bool noteOn)
 {
     KToggleAction *action = dynamic_cast<KToggleAction *>
 	(actionCollection()->action("toggle_step_by_step"));
@@ -2111,7 +2112,7 @@ NotationView::slotInsertableNoteEventReceived(int pitch, bool noteOn)
         return;
     }
 
-    KTmpStatusMsg msg(i18n("Inserting note"), this);
+//    KTmpStatusMsg msg(i18n("Inserting note"), this);
 
     // We need to ensure that multiple notes hit at once come out as
     // chords, without imposing the interpretation that overlapping
@@ -2155,17 +2156,17 @@ NotationView::slotInsertableNoteEventReceived(int pitch, bool noteOn)
 }
 
 void
-NotationView::slotInsertableNoteOnReceived(int pitch)
+NotationView::slotInsertableNoteOnReceived(int pitch, int velocity)
 {
     NOTATION_DEBUG << "NotationView::slotInsertableNoteOnReceived: " << pitch << endl;
-    slotInsertableNoteEventReceived(pitch, true);
+    slotInsertableNoteEventReceived(pitch, velocity, true);
 }
 
 void
-NotationView::slotInsertableNoteOffReceived(int pitch)
+NotationView::slotInsertableNoteOffReceived(int pitch, int velocity)
 {
     NOTATION_DEBUG << "NotationView::slotInsertableNoteOffReceived: " << pitch << endl;
-    slotInsertableNoteEventReceived(pitch, false);
+    slotInsertableNoteEventReceived(pitch, velocity, false);
 }
 
 void

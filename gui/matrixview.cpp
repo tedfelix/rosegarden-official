@@ -2233,8 +2233,9 @@ MatrixView::slotToggleTempoRuler()
     toggleWidget(m_tempoRuler, "show_tempo_ruler");
 }
 
+// Ignore velocity for the moment -- we need the option to use or ignore it
 void
-MatrixView::slotInsertableNoteEventReceived(int pitch, bool noteOn)
+MatrixView::slotInsertableNoteEventReceived(int pitch, int, bool noteOn)
 {
     if (!noteOn) return;
 
@@ -2272,17 +2273,17 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, bool noteOn)
 }
 
 void
-MatrixView::slotInsertableNoteOnReceived(int pitch)
+MatrixView::slotInsertableNoteOnReceived(int pitch, int velocity)
 {
     MATRIX_DEBUG << "MatrixView::slotInsertableNoteOnReceived: " << pitch << endl;
-    slotInsertableNoteEventReceived(pitch, true);
+    slotInsertableNoteEventReceived(pitch, velocity, true);
 }
 
 void
-MatrixView::slotInsertableNoteOffReceived(int pitch)
+MatrixView::slotInsertableNoteOffReceived(int pitch, int velocity)
 {
     MATRIX_DEBUG << "MatrixView::slotInsertableNoteOffReceived: " << pitch << endl;
-    slotInsertableNoteEventReceived(pitch, false);
+    slotInsertableNoteEventReceived(pitch, velocity, false);
 }
 
 void

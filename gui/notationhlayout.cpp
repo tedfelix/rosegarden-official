@@ -520,13 +520,11 @@ NotationHLayout::scanChord(NotationElementList *notes,
     if (someAccidental != NoAccidental) {
 	bool extraShift = false;
 	int shift = chord.getMaxAccidentalShift(extraShift);
-	extraWidth += m_npf->getAccidentalWidth(someAccidental, shift, extraShift);
-/*
-	extraWidth +=
-	    m_npf->getAccidentalWidth(someAccidental) +
-	    m_npf->getAccidentalWidth(Rosegarden::Accidentals::Sharp) *
-	    chord.getMaxAccidentalShift();
-*/
+	int e = m_npf->getAccidentalWidth(someAccidental, shift, extraShift);
+	if (someAccidental != Sharp) {
+	    e = std::max(e, m_npf->getAccidentalWidth(Sharp, shift, extraShift));
+	}
+	extraWidth += e;
     }
 
     float layoutExtra = 0;

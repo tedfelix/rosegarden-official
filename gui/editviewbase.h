@@ -336,6 +336,10 @@ protected:
     unsigned int m_compositionRefreshStatusId;
     bool         m_needUpdate;
 
+    QPaintEvent *m_pendingPaintEvent;
+    bool         m_havePendingPaintEvent;
+    bool         m_inPaintEvent;
+
     QAccel      *m_accelerators;
 
     int          m_configDialogPageIndex;
