@@ -1,4 +1,6 @@
 
+default: libcore.a
+
 all:	test speedtrial libcore.a
 
 CC	:= g++
