@@ -266,7 +266,7 @@ AudioBussMixer::generateBuffers()
 	for (unsigned int ch = 0; ch < 2; ++ch) {
 	    RingBuffer<sample_t> *rb = new RingBuffer<sample_t>(bufferSamples);
 	    if (!rb->mlock()) {
-		std::cerr << "WARNING: AudioBussMixer::generateBuffers: couldn't lock ring buffer into real memory, performance may be impaired" << std::endl;
+//		std::cerr << "WARNING: AudioBussMixer::generateBuffers: couldn't lock ring buffer into real memory, performance may be impaired" << std::endl;
 	    }
 	    rec.buffers.push_back(rb);
 	}
@@ -810,7 +810,7 @@ AudioInstrumentMixer::generateBuffers()
 		new RingBuffer<sample_t, 2>(bufferSamples);
 
 	    if (!rb->mlock()) {
-		std::cerr << "WARNING: AudioInstrumentMixer::generateBuffers: couldn't lock ring buffer into real memory, performance may be impaired" << std::endl;
+//		std::cerr << "WARNING: AudioInstrumentMixer::generateBuffers: couldn't lock ring buffer into real memory, performance may be impaired" << std::endl;
 	    }
 	    rec.buffers.push_back(rb);
 	}	    

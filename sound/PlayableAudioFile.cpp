@@ -531,6 +531,9 @@ PlayableAudioFile::updateBuffers()
 		      << fileFrames << " frames" << std::endl;
 #endif
 	    m_fileBuffer = m_audioFile->getSampleFrames(m_file, fileFrames);
+#ifdef DEBUG_PLAYABLE
+	    std::cerr << "PlayableAudioFile::updateBuffers: got " << m_fileBuffer.size() << " bytes" << std::endl;
+#endif
 	} catch (std::string e) {
 	    // most likely we've run out of data in the file -
 	    // we can live with this - just write out what we
@@ -538,7 +541,6 @@ PlayableAudioFile::updateBuffers()
 #ifdef DEBUG_PLAYABLE
 	    std::cerr << "PlayableAudioFile::updateBuffers - "
 		      << e << std::endl;
-	    std::cerr << "PlayableAudioFile::updateBuffers: got " << m_fileBuffer.size() << " bytes" << std::endl;
 #endif
 
 	    m_fileEnded = true;
@@ -590,7 +592,7 @@ PlayableAudioFile::updateBuffers()
 
 	if (!reduceToMono || ch == 0) {
 	    if (ch >= m_targetChannels) break;
-	    memset(buffer, 0, frames * sizeof(sample_t));
+	    memset(buffer, 0, fileFrames * sizeof(sample_t));
 	}
 
 	switch (getBitsPerSample()) {
@@ -640,17 +642,17 @@ PlayableAudioFile::updateBuffers()
 
 	    float ratio = float(sourceSampleRate) / float(m_targetSampleRate);
 
-	    if (ratio < 1.0) {
-		for (size_t i = frames; i > 0; --i) {
-		    size_t j = size_t((i-1) * ratio);
-		    if (j >= fileFrames) j = fileFrames - 1;
-		    buffer[i-1] = buffer[j];
-		}
-	    } else { // ratio >= 1.0
+	    if (ratio >= 1.0) { // e.g. file 48KHz -> jack 44.1KHz
 		for (size_t i = 0; i < frames; ++i) {
 		    size_t j = size_t(i * ratio);
 		    if (j >= fileFrames) j = fileFrames - 1;
 		    buffer[i] = buffer[j];
+		}
+	    } else { // e.g. file 44.1KHz -> jack 48KHz
+		for (size_t i = frames; i > 0; --i) {
+		    size_t j = size_t((i-1) * ratio);
+		    if (j >= fileFrames) j = fileFrames - 1;
+		    buffer[i-1] = buffer[j];
 		}
 	    }
 	}

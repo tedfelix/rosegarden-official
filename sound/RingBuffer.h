@@ -134,7 +134,7 @@ template <typename T, int N>
 RingBuffer<T, N>::RingBuffer(size_t n) :
     m_buffer(new T[n]),
     m_writer(0),
-    m_size(n),
+    m_size(n + 1),
     m_mlocked(false)
 {
     for (int i = 0; i < N; ++i) m_readers[i] = 0;
@@ -153,7 +153,7 @@ template <typename T, int N>
 size_t
 RingBuffer<T, N>::getSize() const
 {
-    return m_size;
+    return m_size - 1;
 }
 
 template <typename T, int N>
