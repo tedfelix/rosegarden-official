@@ -25,7 +25,7 @@
 
 #ifdef HAVE_LADSPA
 
-#define DEBUG_LADSPA 1
+//#define DEBUG_LADSPA 1
 
 namespace Rosegarden
 {
@@ -197,7 +197,9 @@ LADSPAPluginInstance::setIdealChannelCount(size_t channels)
 
 LADSPAPluginInstance::~LADSPAPluginInstance()
 {
+#ifdef DEBUG_LADSPA
     std::cerr << "LADSPAPluginInstance::~LADSPAPluginInstance" << std::endl;
+#endif
 
     if (m_instanceHandles.size() != 0) { // "isOK()"
 	deactivate();

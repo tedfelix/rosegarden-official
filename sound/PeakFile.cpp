@@ -36,7 +36,7 @@ using std::cerr;
 using std::endl;
 
 //#define DEBUG_PEAKFILE 1
-#define DEBUG_PEAKFILE_CACHE 1
+//#define DEBUG_PEAKFILE_CACHE 1
 
 namespace Rosegarden
 {
@@ -656,7 +656,7 @@ PeakFile::getPreview(const RealTime &startTime,
                      int width,
                      bool showMinima)
 {
-#define DEBUG_PREVIEW_SIZE
+//#define DEBUG_PREVIEW_SIZE
 #ifdef DEBUG_PREVIEW_SIZE
     std::cout << "PeakFile::getPreview - "
               << "startTime = " << startTime
