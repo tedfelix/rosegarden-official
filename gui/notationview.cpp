@@ -1596,22 +1596,18 @@ void NotationView::setupActions()
 
     icon = QIconSet
         (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-        ("group-octave-up")));
+        ("group-ottava")));
 
     new KAction(GroupMenuAddIndicationCommand::getGlobalName
                 (Rosegarden::Indication::OttavaUp), icon, 0, this,
                 SLOT(slotGroupOctaveUp()), actionCollection(), "octave_up");
 
-    icon = QIconSet
-        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-        ("group-octave-down")));
-
     new KAction(GroupMenuAddIndicationCommand::getGlobalName
-                (Rosegarden::Indication::OttavaDown), icon, 0, this,
+                (Rosegarden::Indication::OttavaDown), 0, 0, this,
                 SLOT(slotGroupOctaveDown()), actionCollection(), "octave_down");
 
     new KAction(GroupMenuAddIndicationCommand::getGlobalName
-                (Rosegarden::Indication::QuindicesimaDown), icon, 0, this,
+                (Rosegarden::Indication::QuindicesimaDown), 0, 0, this,
                 SLOT(slotGroupOctave2Down()), actionCollection(), "octave_2down");
 
     icon = QIconSet

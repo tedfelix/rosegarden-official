@@ -1207,6 +1207,17 @@ SegmentMergeCommand::execute()
 
 	for (unsigned int i = 1; i < m_oldSegments.size(); ++i) {
 
+	    // ensure we remove clefs or keys that just continue the
+	    // same clef or key as we were in in the previous segment
+
+	    bool usingOldClef = true;
+	    Rosegarden::Clef clef = m_newSegment->getClefAtTime
+		(m_oldSegments[i]->getStartTime());
+
+	    bool usingOldKey = true;
+	    Rosegarden::Key key = m_newSegment->getKeyAtTime
+		(m_oldSegments[i]->getStartTime());
+
 	    if (m_oldSegments[i]->getStartTime() >
 		m_newSegment->getEndMarkerTime()) {
 		m_newSegment->setEndMarkerTime
@@ -1215,6 +1226,23 @@ SegmentMergeCommand::execute()
 
 	    for (Segment::iterator si = m_oldSegments[i]->begin();
 		 m_oldSegments[i]->isBeforeEndMarker(si); ++si) {
+
+		if (usingOldClef && (*si)->isa(Rosegarden::Clef::EventType)) {
+		    try {
+			Rosegarden::Clef newClef(**si);
+			usingOldClef = false;
+			if (newClef == clef) continue;
+		    } catch (...) { }
+		}
+
+		if (usingOldKey && (*si)->isa(Rosegarden::Key::EventType)) {
+		    try {
+			Rosegarden::Key newKey(**si);
+			usingOldKey = false;
+			if (newKey == key) continue;
+		    } catch (...) { }
+		}
+
 		m_newSegment->insert(new Event(**si));
 	    }
 

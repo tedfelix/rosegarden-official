@@ -2952,6 +2952,9 @@ int NotePixmapFactory::getKeyWidth(const Rosegarden::Key &key,
     int w = m_font->getWidth(charName);
     int hx = m_font->getHotspot(charName).x();
 
+    // naturals need more space:
+    if (cancellation) w += w/4;
+
     return w/4 + (key.getAccidentalCount() * (w - hx));
 }
 

@@ -455,7 +455,6 @@
   <Action name="decrescendo"/>
   <Separator/>
   <Action name="octave_up"/>
-  <Action name="octave_down"/>
 </ToolBar>
 
 <ToolBar name="Meta Toolbar" newline="true" hidden="true">
