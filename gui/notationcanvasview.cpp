@@ -50,7 +50,6 @@ void
 NotationCanvasView::contentsMouseReleaseEvent(QMouseEvent *e)
 {
     emit mouseRelease(e);
-    canvas()->update();
 }
 
 void
