@@ -56,6 +56,7 @@ StaffRuler::StaffRuler(int xPos, int yPos,
 {
     m_greyBackground->setX(0);
     m_greyBackground->setY(m_yPos);
+    m_greyBackground->setZ(-1);
     m_greyBackground->setSize(canvas()->width(), m_thickness);
 
     m_whiteBackground->setX(0);
@@ -71,11 +72,12 @@ StaffRuler::StaffRuler(int xPos, int yPos,
     m_whiteBackground->setBrush(white);
     m_whiteBackground->setPen(white);
     m_whiteBackground->show();
-    m_whiteBackground->setZ(-1);
+    m_whiteBackground->setZ(-2);
 
     m_mainLine->setPoints(0, m_mainLinePos,
                           canvas()->width(), m_mainLinePos);
     //m_mainLine->setPen(red); // DEBUG
+    m_mainLine->setZ(1);
 
     m_mainLine->show();
     m_cursor->show();
@@ -116,10 +118,6 @@ void StaffRuler::update()
     }
 
     m_cursor->setMinPosition(int(m_steps[0].first) + m_xPos);
-
-//     m_mainLine->setPoints
-// 	(m_xPos, m_yPos,
-// 	 m_xPos + int(m_steps[m_steps.size() - 1].first) + 10, m_yPos);
 
     setActive(true); // set steps active
 }
@@ -185,7 +183,7 @@ void StaffRuler::resize()
 {
     m_greyBackground->setSize(canvas()->width(), m_greyBackground->height());
     m_whiteBackground->setSize(canvas()->width(), m_whiteBackground->height());
-    m_mainLine->setPoints(0, m_yPos, canvas()->width(), m_yPos);
+    m_mainLine->setPoints(0, m_mainLinePos + m_yPos, canvas()->width(), m_mainLinePos + m_yPos);
 }
 
 void StaffRuler::setYPos(int ypos)
