@@ -50,6 +50,9 @@ public:
     MappedComposition(const Rosegarden::RealTime &sT,
                       const Rosegarden::RealTime &eT):
         m_startTime(sT), m_endTime(eT) {;}
+
+    MappedComposition(const MappedComposition &mC);
+
     ~MappedComposition();
 
     const Rosegarden::RealTime getStartTime() const { return m_startTime; }
@@ -68,9 +71,10 @@ public:
     // This section is used for serialising this class over DCOP
     //
     //
+    friend QDataStream& operator>>(QDataStream &dS, MappedComposition *mC);
+    friend QDataStream& operator<<(QDataStream &dS, MappedComposition *mC);
     friend QDataStream& operator>>(QDataStream &dS, MappedComposition &mC);
-    friend QDataStream& operator<<(QDataStream &dS,
-                                   const MappedComposition &mC);
+    friend QDataStream& operator<<(QDataStream &dS, const MappedComposition &mC);
 
     // Clear out
     void clear();

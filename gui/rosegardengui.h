@@ -129,7 +129,7 @@ public:
      * The Sequencer calls this method to get a MappedCompositon
      * full of MappedEvents for it to play.
      */
-    Rosegarden::MappedComposition
+    const Rosegarden::MappedComposition&
             getSequencerSlice(long sliceStartSec, long sliceStartUSec,
                               long sliceEndSec, long sliceEndUSec);
 
@@ -249,7 +249,7 @@ protected:
      * Sequencer) to the GUI so as to get visual representation
      * of the events/sounds going out
      */
-    void showVisuals(const Rosegarden::MappedComposition &mC);
+    void showVisuals(Rosegarden::MappedComposition *mC);
 
     /*
      * place clicktrack events into the global MappedComposition

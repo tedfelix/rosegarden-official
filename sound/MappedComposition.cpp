@@ -37,9 +37,44 @@ MappedComposition::~MappedComposition()
     clear();
 }
 
+// copy constructor
+MappedComposition::MappedComposition(const MappedComposition &mC):
+  std::multiset<MappedEvent *, MappedEvent::MappedEventCmp>()
+{
+    clear();
+
+    // deep copy
+    for (MappedCompositionIterator it = mC.begin(); it != mC.end(); it++)
+        this->insert(new MappedEvent(**it));
+
+}
 
 // Turn a MappedComposition into a QDataStream
 //
+QDataStream&
+operator<<(QDataStream &dS, MappedComposition *mC)
+{
+    dS << mC->size();
+
+    for (MappedCompositionIterator it = mC->begin(); it != mC->end(); ++it )
+    {
+	dS << (*it)->getPitch();
+	dS << (*it)->getEventTime().sec;
+	dS << (*it)->getEventTime().usec;
+	dS << (*it)->getDuration().sec;
+	dS << (*it)->getDuration().usec;
+	dS << (*it)->getAudioStartMarker().sec;
+	dS << (*it)->getAudioStartMarker().usec;
+	dS << (*it)->getVelocity();
+	dS << (*it)->getInstrument();
+        dS << (*it)->getTrack();
+        dS << (*it)->getType();
+    }
+
+    return dS;
+}
+
+
 QDataStream&
 operator<<(QDataStream &dS, const MappedComposition &mC)
 {
@@ -66,6 +101,46 @@ operator<<(QDataStream &dS, const MappedComposition &mC)
 
 // Turn a QDataStream into a MappedComposition
 //
+QDataStream& 
+operator>>(QDataStream &dS, MappedComposition *mC)
+{
+    int sliceSize, pitch, type, instrument, track, velocity;
+    Rosegarden::RealTime absTime, duration, audioStartMarker;
+
+    dS >> sliceSize;
+
+    while (!dS.atEnd() && sliceSize)
+    {
+	dS >> pitch;
+        dS >> absTime.sec;
+	dS >> absTime.usec;
+	dS >> duration.sec;
+	dS >> duration.usec;
+	dS >> audioStartMarker.sec;
+	dS >> audioStartMarker.usec;
+	dS >> velocity;
+	dS >> instrument;
+        dS >> track;
+        dS >> type;
+
+	mC->insert(new MappedEvent(pitch,
+                                   absTime, duration, audioStartMarker,
+                                   velocity, instrument, track,
+                                   (MappedEvent::MappedEventType)type));
+
+	sliceSize--;
+
+    }
+
+    if (sliceSize)
+    {
+	cerr << "operator>> - wrong number of events received" << endl;
+    }
+    
+
+    return dS;
+}
+
 QDataStream& 
 operator>>(QDataStream &dS, MappedComposition &mC)
 {

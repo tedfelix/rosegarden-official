@@ -240,13 +240,13 @@ SequenceManager::play()
     {
         comp.setDefaultTempo(120.0);
 
-        cout << "RosegardenGUIApp::play()"
+        cout << "SequenceManager::play()"
              << " - setting Tempo to Default value of 120.000"
              << endl;
     }
     else
     {
-        cout << "RosegardenGUIApp::play() - starting to play"
+        cout << "SequenceManager::play() - starting to play"
              <<  endl;
     }
 
@@ -348,11 +348,11 @@ SequenceManager::stop()
         if (m_transport->RecordButton->state() == QButton::On)
             m_transport->RecordButton->toggle();
 
-        cout << "RosegardenGUIApp::stop() - stopped recording" << endl;
+        cout << "SequenceManager::stop() - stopped recording" << endl;
     }
     else
     {
-        cout << "RosegardenGUIApp::stop() - stopped playing" << endl;
+        cout << "SequenceManager::stop() - stopped playing" << endl;
     }
 
     // ok, we're stopped
@@ -484,16 +484,18 @@ SequenceManager::record()
     {
         case Rosegarden::Track::Midi:
             recordType = STARTING_TO_RECORD_MIDI;
-            cout << "RosegardenGUIApp::record() - starting to record MIDI" << endl;
+            cout << "SequenceManager::record() - starting to record MIDI"
+                 << endl;
             break;
 
         case Rosegarden::Track::Audio:
             recordType = STARTING_TO_RECORD_AUDIO;
-            cout << "RosegardenGUIApp::record() - starting to record Audio" << endl;
+            cout << "SequenceManager::record() - starting to record Audio"
+                 << endl;
             break;
 
         default:
-            cout << "RosegardenGUIApp::record() - unrecognised track type" << endl;
+            cout << "SequenceManager::record() - unrecognised track type" << endl;
             return;
             break;
     }
@@ -513,13 +515,13 @@ SequenceManager::record()
     if (comp.getTempo() == 0)
     {
         cout <<
-         "RosegardenGUIApp::play() - setting Tempo to Default value of 120.000"
+         "SequenceManager::play() - setting Tempo to Default value of 120.000"
           << endl;
         comp.setDefaultTempo(120.0);
     }
     else
     {
-        cout << "RosegardenGUIApp::record() - starting to record" << endl;
+        cout << "SequenceManager::record() - starting to record" << endl;
     }
 
     // set the tempo in the transport
@@ -635,7 +637,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC)
 void
 SequenceManager::rewindToBeginning()
 {
-    cout << "RosegardenGUIApp::rewindToBeginning()" << endl;
+    cout << "SequenceManager::rewindToBeginning()" << endl;
     emit setPointerPosition(0);
 }
 
@@ -643,7 +645,7 @@ SequenceManager::rewindToBeginning()
 void
 SequenceManager::fastForwardToEnd()
 {
-    cout << "RosegardenGUIApp::fastForwardToEnd()" << endl;
+    cout << "SequenceManager::fastForwardToEnd()" << endl;
 
     Composition &comp = m_doc->getComposition();
     RealTime jumpTo = comp.getElapsedRealTime(comp.getDuration());

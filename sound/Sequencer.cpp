@@ -472,7 +472,7 @@ Sequencer::processAudioQueue()
         }
     }
 
-    // Finally remove all defunct objects treadinf carefully around
+    // Finally remove all defunct objects treading carefully around
     // the iterators.
     //
     int defunctEvents;
@@ -757,7 +757,7 @@ Sequencer::getSequencerTime()
 // Events or Audio
 //
 //
-MappedComposition
+MappedComposition*
 Sequencer::getMappedComposition(const Rosegarden::RealTime &playLatency)
 {
     // clear out our global segment
@@ -770,7 +770,7 @@ Sequencer::getMappedComposition(const Rosegarden::RealTime &playLatency)
         m_recordStatus != RECORD_AUDIO &&
         m_recordStatus != ASYNCHRONOUS_MIDI &&
         m_recordStatus != ASYNCHRONOUS_AUDIO) 
-        return m_recordComposition;
+        return &m_recordComposition;
 
     std::vector<Arts::MidiEvent>::iterator midiQueueIt;
     std::vector<Arts::MidiEvent> *midiQueue;
@@ -794,7 +794,7 @@ Sequencer::getMappedComposition(const Rosegarden::RealTime &playLatency)
     //
     delete midiQueue;
 
-    return m_recordComposition;
+    return &m_recordComposition;
 
 }
 

@@ -1480,11 +1480,11 @@ RosegardenGUIApp::keyReleaseEvent(QKeyEvent *event)
 // feedback at the GUI
 //
 void
-RosegardenGUIApp::showVisuals(const Rosegarden::MappedComposition &mC)
+RosegardenGUIApp::showVisuals(Rosegarden::MappedComposition *mC)
 {
     Rosegarden::MappedComposition::iterator it;
 
-    for (it = mC.begin(); it != mC.end(); ++it )
+    for (it = mC->begin(); it != mC->end(); ++it )
     {
         if ((*it)->getType() == Rosegarden::MappedEvent::Internal)
         {
@@ -1539,7 +1539,7 @@ RosegardenGUIApp::toggleMetronome()
 // It's a request to get the next slice of events for the
 // Sequencer to play.
 //
-Rosegarden::MappedComposition
+const Rosegarden::MappedComposition&
 RosegardenGUIApp::getSequencerSlice(long sliceStartSec, long sliceStartUsec,
                                     long sliceEndSec, long sliceEndUsec)
 {
@@ -1550,7 +1550,7 @@ RosegardenGUIApp::getSequencerSlice(long sliceStartSec, long sliceStartUsec,
     Rosegarden::MappedComposition *mC =
         m_seqManager->getSequencerSlice(startTime, endTime);
 
-    showVisuals(*mC);
+    showVisuals(mC);
 
     return *mC;
 }

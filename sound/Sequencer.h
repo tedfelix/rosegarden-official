@@ -216,7 +216,7 @@ public:
     // Wrap any recorded MIDI into a MappedComposition and return it
     //
     //
-    MappedComposition getMappedComposition(const Rosegarden::RealTime &pL);
+    MappedComposition* getMappedComposition(const Rosegarden::RealTime &pL);
 
     // Process MappedComposition into MIDI and Audio events and send
     // to aRTS

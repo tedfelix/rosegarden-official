@@ -186,8 +186,8 @@ RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
                     "getSequencerSlice(long int, long int, long int, long int)",
                                   data, replyType, replyData, true))
     {
-        cerr <<
-            "RosegardenSequencer::getSlice() - can't call RosegardenGUI client"
+        cerr << "RosegardenSequencer::getSlice()"
+             << " - can't call RosegardenGUI client"
              << endl;
 
         // Stop the sequencer so we can see if we can try again later
@@ -201,7 +201,7 @@ RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
         QDataStream reply(replyData, IO_ReadOnly);
         if (replyType == "Rosegarden::MappedComposition")
         {
-            reply >> *mC;
+            reply >> mC;
         }
         else
         {
@@ -319,16 +319,14 @@ RosegardenSequencerApp::updateClocks()
     arg << newPosition.sec;
     arg << newPosition.usec;
     
-    //std::cerr << "updateClocks() - m_songPosition = " << m_songPosition.sec << "s " << m_songPosition.usec << "us" << endl;
-
     if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                       ROSEGARDEN_GUI_IFACE_NAME,
                       "setPointerPosition(long int, long int)",
                       data))
     {
-        cerr <<
-        "RosegardenSequencer::updateClocks() - can't send to RosegardenGUI client"
-         << endl;
+        cerr << "RosegardenSequencer::updateClocks()"
+             << " - can't send to RosegardenGUI client"
+             << endl;
 
         // Stop the sequencer so we can see if we can try again later
         //
