@@ -235,7 +235,12 @@ bool
 Segment::isBeforeEndMarker(iterator i) const
 { 
     if (i == end()) return false;
-    return ((*i)->getAbsoluteTime() < getEndMarkerTime());
+
+    timeT absTime = (*i)->getAbsoluteTime();
+    timeT endTime = getEndMarkerTime();
+
+    return ((absTime <  endTime) ||
+	    (absTime == endTime && (*i)->getDuration() == 0));
 }
 
 void
@@ -518,6 +523,8 @@ Segment::normalizeRests(timeT startTime, timeT endTime, bool permitQuantize)
 //    cerr << "Segment::normalizeRests " << startTime << " -> "
 //	 << endTime << endl;
 
+    timeT segmentEndTime = m_endTime;
+
     iterator ia = findNearestTime(startTime);
     if (ia == end()) ia = begin();
     if (ia == end()) { // the segment is empty
@@ -549,6 +556,13 @@ Segment::normalizeRests(timeT startTime, timeT endTime, bool permitQuantize)
     for (iterator i = ia, j = i; i != ib && i != end(); i = j) {
 	++j;
 	if ((*i)->isa(Note::EventRestType)) erase(i);
+    }
+
+    // It's possible we've just removed all the events between here
+    // and the end of the segment, if they were all rests.  Check.
+
+    if (endTime < segmentEndTime && m_endTime < segmentEndTime) {
+	endTime = segmentEndTime;
     }
 
     // Second stage: find the gaps that need to be filled with
