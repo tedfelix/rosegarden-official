@@ -430,6 +430,9 @@ protected:
 
 private:
     Rosegarden::timeT rescale(Rosegarden::timeT);
+    Rosegarden::timeT getAffectedEndTime(Rosegarden::EventSelection &selection,
+					 Rosegarden::timeT newDuration,
+					 bool closeGap);
 
     Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     Rosegarden::timeT m_oldDuration;

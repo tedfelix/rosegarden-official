@@ -1286,7 +1286,7 @@ RescaleCommand::RescaleCommand(EventSelection &sel,
 			       bool closeGap) :
     BasicCommand(getGlobalName(), sel.getSegment(),
 		 sel.getStartTime(),
-		 closeGap ? sel.getSegment().getEndMarkerTime() : sel.getEndTime(),
+		 getAffectedEndTime(sel, newDuration, closeGap),
 		 true),
     m_selection(&sel),
     m_oldDuration(sel.getTotalDuration()),
@@ -1294,6 +1294,25 @@ RescaleCommand::RescaleCommand(EventSelection &sel,
     m_closeGap(closeGap)
 {
     // nothing else
+}
+
+timeT
+RescaleCommand::getAffectedEndTime(EventSelection &sel,
+				   timeT newDuration,
+				   bool closeGap)
+{
+    timeT preScaleEnd = sel.getEndTime();
+    if (closeGap) preScaleEnd = sel.getSegment().getEndMarkerTime();
+
+    // dupe of rescale(), but we can't use that here as the m_
+    // variables may not have been set
+    double d = preScaleEnd;
+    d *= newDuration;
+    d /= sel.getTotalDuration();
+    d += 0.5;
+    timeT postScaleEnd = (timeT)d;
+    
+    return std::max(preScaleEnd, postScaleEnd);
 }
 
 timeT
