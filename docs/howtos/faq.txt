@@ -49,6 +49,11 @@ matrix (<URL:http://www.alsa-project.org/>).  Also see the notes on
 ALSA and aRts below.
 
 
+Does it support my language?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Partial translations are available for French and Russian.  If you can translate musical or technical documentation, please let us know!  See docs/howtos/i18n.txt in CVS if you are interested in the technical aspects of translation.
+
 
 Compilation or installation problems
 ------------------------------------
