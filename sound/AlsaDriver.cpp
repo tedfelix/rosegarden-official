@@ -684,9 +684,30 @@ AlsaDriver::addDevice(Device::DeviceType type,
 }
 
 void
-AlsaDriver::removeDevice(DeviceId /*id*/)
+AlsaDriver::removeDevice(DeviceId id)
 {
-    //!!!
+    for (MappedDeviceList::iterator i = m_devices.begin();
+	 i != m_devices.end(); ++i) {
+	
+	if ((*i)->getId() == id) {
+	    delete *i;
+	    m_devices.erase(i);
+	}
+    }
+
+    for (MappedInstrumentList::iterator i = m_instruments.begin();
+	 i != m_instruments.end(); ++i) {
+	
+	if ((*i)->getDevice() == id) {
+	    delete *i;
+	    m_instruments.erase(i);
+	}
+    }
+
+    MappedEvent *mE =
+	new MappedEvent(0, MappedEvent::SystemUpdateInstruments,
+			0, 0);
+    insertMappedEventForReturn(mE);
 }
 
 ClientPortPair

@@ -244,15 +244,22 @@ DeviceEditorDialog::slotApply()
 {
     KMacroCommand *command = new KMacroCommand("Edit Devices");
     
-    // first delete deleted devices
+    // first delete deleted devices, in reverse order of id (so that
+    // if we undo this command we'll get the original ids back... probably)
+
+    std::vector<Rosegarden::DeviceId> ids;
 
     for (Rosegarden::DeviceListIterator i = m_devices.begin();
 	 i != m_devices.end(); ++i) {
-
 	if (m_deletedDevices.find((*i)->getId()) != m_deletedDevices.end()) {
-	    command->addCommand(new DeleteDeviceCommand(m_studio,
-						       (*i)->getId()));
+	    ids.push_back((*i)->getId());
 	}
+    }
+
+    std::sort(ids.begin(), ids.end());
+
+    for (int i = ids.size()-1; i >= 0; ++i) {
+	command->addCommand(new CreateOrDeleteDeviceCommand(m_studio, ids[i]));
     }
     
     // create the new devices, and rename all the rest, because we
@@ -263,7 +270,7 @@ DeviceEditorDialog::slotApply()
     for (int i = 0; i < m_table->numRows(); ++i) {
 	int deviceId = getDeviceIdAt(i);
 	if (deviceId < 0) { // new device
-	    command->addCommand(new CreateDeviceCommand
+	    command->addCommand(new CreateOrDeleteDeviceCommand
 			       (m_studio,
 				qstrtostr(m_table->text(i, LABEL_COL)),
 				Rosegarden::Device::Midi,

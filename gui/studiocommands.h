@@ -137,51 +137,42 @@ protected:
     Rosegarden::Studio *m_studio;
     Rosegarden::DeviceId m_deviceId;
     std::string m_name;
+    std::string m_oldName;
 };
 
 
-class DeleteDeviceCommand : public KNamedCommand
+class CreateOrDeleteDeviceCommand : public KNamedCommand
 {
 public:
-    DeleteDeviceCommand(Rosegarden::Studio *studio,
-			Rosegarden::DeviceId deviceId) :
-	KNamedCommand(getGlobalName()),
-	m_studio(studio),
-	m_deviceId(deviceId) { }
-    
-    static QString getGlobalName() { return i18n("Delete Device"); }
-    
-    virtual void execute();
-    virtual void unexecute();
-    
-protected:
-    Rosegarden::Studio *m_studio;
-    Rosegarden::DeviceId m_deviceId;
-};
-
-
-class CreateDeviceCommand : public KNamedCommand
-{
-public:
-    CreateDeviceCommand(Rosegarden::Studio *studio,
-			std::string name,
-			Rosegarden::Device::DeviceType type,
-			Rosegarden::MidiDevice::DeviceDirection direction) :
-	KNamedCommand(getGlobalName()),
+    // Creation constructor
+    CreateOrDeleteDeviceCommand(Rosegarden::Studio *studio,
+				std::string name,
+				Rosegarden::Device::DeviceType type,
+				Rosegarden::MidiDevice::DeviceDirection direction) :
+	KNamedCommand(getGlobalName(false)),
 	m_studio(studio),
 	m_name(name),
 	m_type(type),
-	m_direction(direction) { }
+	m_direction(direction),
+	m_deviceId(Rosegarden::Device::NO_DEVICE) { }
+
+    // Deletion constructor
+    CreateOrDeleteDeviceCommand(Rosegarden::Studio *studio,
+				Rosegarden::DeviceId deviceId);
     
-    static QString getGlobalName() { return i18n("Create Device"); }
+    static QString getGlobalName(bool deletion) {
+	return (deletion ? i18n("Delete Device") : i18n("Create Device")); 
+    }
     
     virtual void execute();
-    virtual void unexecute();
+    virtual void unexecute() { execute(); }
     
 protected:
+    
     Rosegarden::Studio *m_studio;
     std::string m_name;
     Rosegarden::Device::DeviceType m_type;
     Rosegarden::MidiDevice::DeviceDirection m_direction;
+    Rosegarden::DeviceId m_deviceId;
 };
 

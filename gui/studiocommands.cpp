@@ -26,6 +26,11 @@
 #include "Studio.h"
 #include "MidiDevice.h"
 
+#include <dcopclient.h>
+#include <kapp.h>
+#include <qtextstream.h>
+
+
 ModifyDeviceCommand::ModifyDeviceCommand(
         Rosegarden::Studio *studio,
         int device,
@@ -248,40 +253,112 @@ ModifyInstrumentMappingCommand::unexecute()
     }
 }
 
-        
-void
-CreateDeviceCommand::execute()
-{
-    //!!! implement
-}
-
-void
-CreateDeviceCommand::unexecute()
-{
-    //!!! implement
-}
-
-void
-DeleteDeviceCommand::unexecute()
-{
-    //!!! implement
-}
-        
-void
-DeleteDeviceCommand::execute()
-{
-    //!!! implement
-}
-        
+       
 void
 RenameDeviceCommand::execute()
 {
-    //!!! implement
+    Rosegarden::MidiDevice *device = m_studio->getMidiDevice(m_deviceId);
+    if (device) {
+	if (m_oldName == "") m_oldName = device->getName();
+	device->setName(m_name);
+    }
 }
 
 void
 RenameDeviceCommand::unexecute()
 {
-    //!!! implement
+    Rosegarden::MidiDevice *device = m_studio->getMidiDevice(m_deviceId);
+    if (device) {
+	device->setName(m_oldName);
+    }
+}
+
+CreateOrDeleteDeviceCommand::CreateOrDeleteDeviceCommand(Rosegarden::Studio *studio,
+							 Rosegarden::DeviceId id) :
+    KNamedCommand(getGlobalName(true)),
+    m_studio(studio),
+    m_deviceId(id)
+{
+    Rosegarden::Device *device = m_studio->getDevice(m_deviceId);
+
+    if (device) {
+	m_name = device->getName();
+	m_type = device->getType();
+	m_direction = Rosegarden::MidiDevice::Play;
+	Rosegarden::MidiDevice *md =
+	    dynamic_cast<Rosegarden::MidiDevice *>(device);
+	if (md) m_direction = md->getDirection();
+    } else {
+	//!!! uh-oh
+    }
+}
+
+    
+void
+CreateOrDeleteDeviceCommand::execute()
+{
+    if (m_deviceId == Rosegarden::Device::NO_DEVICE) {
+
+	// Create
+
+	QByteArray data;
+	QByteArray replyData;
+	QCString replyType;
+	QDataStream arg(data, IO_WriteOnly);
+
+	arg << (int)m_type;
+	arg << (unsigned int)m_direction;
+
+	if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+				      ROSEGARDEN_SEQUENCER_IFACE_NAME,
+				      "addDevice(int, unsigned int)",
+				      data, replyType, replyData, false) ||
+	    replyType != "unsigned int") { 
+	    SEQMAN_DEBUG << "CreateDeviceCommand::execute - "
+			 << "failure in sequencer addDevice" << endl;
+	    return;
+	}
+
+	QDataStream reply(replyData, IO_ReadOnly);
+	reply >> m_deviceId;
+
+	if (m_deviceId == Rosegarden::Device::NO_DEVICE) {
+	    SEQMAN_DEBUG << "CreateDeviceCommand::execute - "
+			 << "sequencer addDevice failed" << endl;
+	    //!!! oh dear, we probably shouldn't key off m_deviceId to decide
+	    // whether to do create or delete next time, then
+	    return;
+	}
+
+	SEQMAN_DEBUG << "CreateDeviceCommand::execute - "
+		     << " added device " << m_deviceId << endl;
+
+    } else {
+
+	// Delete
+
+	QByteArray data;
+	QByteArray replyData;
+	QCString replyType;
+	QDataStream arg(data, IO_WriteOnly);
+
+	if (m_deviceId == Rosegarden::Device::NO_DEVICE) return;
+
+	arg << (int)m_deviceId;
+
+	if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+				      ROSEGARDEN_SEQUENCER_IFACE_NAME,
+				      "removeDevice(unsigned int)",
+				      data, replyType, replyData, false)) {
+	    SEQMAN_DEBUG << "CreateDeviceCommand::execute - "
+			 << "failure in sequencer addDevice" << endl;
+	    return;
+	}
+
+	SEQMAN_DEBUG << "CreateDeviceCommand::unexecute - "
+		     << " removed device " << m_deviceId << endl;
+
+	m_deviceId = Rosegarden::Device::NO_DEVICE;
+    }
 }
 

@@ -293,7 +293,7 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
     // it takes us.
     //
     MidiDevice::DeviceDirection direction = MidiDevice::Play;
-    bool foundDuplex = false, foundWriteOnly = false;
+    bool foundWriteOnly = false;
 
     for (it = m_devices.begin(); it != m_devices.end(); it++)
     {
@@ -305,11 +305,7 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
                 case MidiDevice::Play:
                     foundWriteOnly = true;
                     break;
-/*!!!
-                case MidiDevice::Duplex:
-                    foundDuplex = true;
-                    break;
-*/
+
                 default:
                     break;
             }
@@ -317,7 +313,6 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
     }
 
     if (foundWriteOnly) direction = MidiDevice::Play;
-//    else if (foundDuplex) direction = MidiDevice::Duplex;
 
     // Pass one - search through all MIDI instruments looking for
     // a match that we can re-use.  i.e. if we have a matching 
