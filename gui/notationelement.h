@@ -21,7 +21,7 @@
 #ifndef NOTATIONELEMENT_H
 #define NOTATIONELEMENT_H
 
-#include <multiset.h>
+#include <set>
 #include "ViewElement.h"
 #include "quantizer.h"
 #include "NotationTypes.h"
@@ -121,6 +121,12 @@ public:
 
     iterator findPrevious(const std::string &type, iterator i);
     iterator findNext(const std::string &type, iterator i);
+
+    /**
+     * Returns an iterator pointing to that specific element,
+     * end() otherwise
+     */
+    iterator findSingle(NotationElement*);
 
 private:
     Quantizer m_quantizer;

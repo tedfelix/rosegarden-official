@@ -76,16 +76,16 @@ void
 NotationElement::setNote(Note note)
 {
     event()->setDuration(note.getDuration());
-    event()->setMaybe<Int>(P_NOTE_TYPE, note.getNoteType());
-    event()->setMaybe<Int>(P_NOTE_DOTS, note.getDots());
+    event()->setMaybe<Int>(Rosegarden::Note::NoteType, note.getNoteType());
+    event()->setMaybe<Int>(Rosegarden::Note::NoteDots, note.getDots());
 }
 
 Note
 NotationElement::getNote() const
 {
-    Note::Type ntype = event()->get<Int>(P_NOTE_TYPE);
+    Note::Type ntype = event()->get<Int>(Rosegarden::Note::NoteType);
     long dots = 0;;
-    event()->get<Int>(P_NOTE_DOTS, dots);
+    event()->get<Int>(Rosegarden::Note::NoteDots, dots);
     return Note(ntype, dots);
 }
 
@@ -143,26 +143,13 @@ NotationElementList::erase(NotationElementList::iterator from,
 void
 NotationElementList::eraseSingle(NotationElement* el)
 {
-    std::pair<iterator, iterator> interval = equal_range(el);
+    iterator elPos = findSingle(el);
 
-    kdDebug(KDEBUG_AREA) << "NotationElementList::erase() : distance = "
-                         << distance(interval.first, interval.second)
-                         << endl;
+    if (elPos != end()) {
+        
+        erase(elPos);
 
-    bool foundIt = false;
-    
-    for(iterator i = interval.first; i != interval.second; ++i) {
-        if (*i == el) {
-            kdDebug(KDEBUG_AREA) << "NotationElementList::eraseSingle() : found element "
-                                 << el << " - event : " << el->event() << endl;
-
-            foundIt = true;
-            erase(i);
-            break;
-        }
-    }
-
-    if (!foundIt) {
+    } else {
         
         kdDebug(KDEBUG_AREA) << "NotationElementList::eraseSingle() : couldn't find element "
                              << *el << endl;
@@ -193,6 +180,26 @@ NotationElementList::findNext(const std::string &type, iterator i)
     for (++i; i != end() && !(*i)->event()->isa(type); ++i);
     return i;
 }
+
+NotationElementList::iterator
+NotationElementList::findSingle(NotationElement* el)
+{
+    iterator res = end();
+
+    std::pair<iterator, iterator> interval = equal_range(el);
+
+    bool foundIt = false;
+    
+    for(iterator i = interval.first; i != interval.second; ++i) {
+        if (*i == el) {
+            res = i;
+            break;
+        }
+    }
+
+    return res;
+}
+
 
 #ifndef NDEBUG
 kdbgstream& operator<<(kdbgstream &dbg, NotationElement &e)
