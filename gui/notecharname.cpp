@@ -86,6 +86,19 @@ const CharName C_CLEF = "MUSICAL SYMBOL C CLEF";
 const CharName G_CLEF = "MUSICAL SYMBOL G CLEF";
 const CharName F_CLEF = "MUSICAL SYMBOL F CLEF";
 
+const CharName COMMON_TIME = "MUSICAL SYMBOL COMMON TIME";
+const CharName CUT_TIME = "MUSICAL SYMBOL CUT TIME";
+const CharName DIGIT_ZERO = "DIGIT ZERO";
+const CharName DIGIT_ONE = "DIGIT ONE";
+const CharName DIGIT_TWO = "DIGIT TWO";
+const CharName DIGIT_THREE = "DIGIT THREE";
+const CharName DIGIT_FOUR = "DIGIT FOUR";
+const CharName DIGIT_FIVE = "DIGIT FIVE";
+const CharName DIGIT_SIX = "DIGIT SIX";
+const CharName DIGIT_SEVEN = "DIGIT SEVEN";
+const CharName DIGIT_EIGHT = "DIGIT EIGHT";
+const CharName DIGIT_NINE = "DIGIT NINE";
+
 const CharName UNKNOWN = "__UNKNOWN__";
 
 }

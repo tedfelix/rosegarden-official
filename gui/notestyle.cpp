@@ -415,10 +415,28 @@ CharName
 NoteStyle::getFlagCharName(int flagCount)
 {
     switch (flagCount) {
-    case 1:  return NoteCharacterNames::FLAG_1;
-    case 2:  return NoteCharacterNames::FLAG_2;
-    case 3:  return NoteCharacterNames::FLAG_3;
-    case 4:  return NoteCharacterNames::FLAG_4;
+    case  1: return NoteCharacterNames::FLAG_1;
+    case  2: return NoteCharacterNames::FLAG_2;
+    case  3: return NoteCharacterNames::FLAG_3;
+    case  4: return NoteCharacterNames::FLAG_4;
+    default: return NoteCharacterNames::UNKNOWN;
+    }
+}
+
+CharName
+NoteStyle::getTimeSignatureDigitName(int digit)
+{
+    switch (digit) {
+    case  0: return NoteCharacterNames::DIGIT_ZERO;
+    case  1: return NoteCharacterNames::DIGIT_ONE;
+    case  2: return NoteCharacterNames::DIGIT_TWO;
+    case  3: return NoteCharacterNames::DIGIT_THREE;
+    case  4: return NoteCharacterNames::DIGIT_FOUR;
+    case  5: return NoteCharacterNames::DIGIT_FIVE;
+    case  6: return NoteCharacterNames::DIGIT_SIX;
+    case  7: return NoteCharacterNames::DIGIT_SEVEN;
+    case  8: return NoteCharacterNames::DIGIT_EIGHT;
+    case  9: return NoteCharacterNames::DIGIT_NINE;
     default: return NoteCharacterNames::UNKNOWN;
     }
 }

@@ -93,6 +93,7 @@ public:
     CharName getAccidentalCharName(const Rosegarden::Accidental &);
     CharName getMarkCharName(const Rosegarden::Mark &);
     CharName getClefCharName(const Rosegarden::Clef &);
+    CharName getTimeSignatureDigitName(int digit);
 
     void setBaseStyle (NoteStyleName name);
     void setShape     (Rosegarden::Note::Type, NoteHeadShape);

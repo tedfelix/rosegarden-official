@@ -1,13 +1,23 @@
-Rosegarden-4 v0.9
-=================
+
+Rosegarden-4 v0.9.5
+===================
 
 Rosegarden-4 is a MIDI and audio sequencer and musical notation editor.
-This is an pre-beta release of the application mainly intended for 
-adventurous end users, developers and other interested parties.  It is
-not yet really stable enough to even call beta quality so please bear
-this in mind and keep an eye on the FAQ for known problems and workarounds:
 
-  http://www.all-day-breakfast.com/rosegarden
+This is an beta release, containing nearly all of the features
+expected for 1.0 but without all of the correctness and stability.
+
+Please keep an eye on the FAQ for known problems and workarounds:
+
+  http://www.all-day-breakfast.com/rosegarden/faq.html
+
+When you find bugs, first check whether a newer version of Rosegarden
+has been released yet; if not, please check whether your bug has
+already been reported on the bug tracker:
+
+  http://sourceforge.net/tracker/?group_id=4932&atid=104932
+
+and if it hasn't, please report it there!
 
 
 Build requirements
@@ -18,13 +28,16 @@ development libraries (you don't need the whole KDE environment).
 
 Our code compiles with gcc-3.x.
 
+For MIDI support on Linux, you need ALSA 0.9.x or 1.0; for audio you
+also need JACK 0.77 or newer.
+
 
 Compiling from source
 ---------------------
 
 If you obtained the source code from the SourceForge CVS repository:
 
-  just grab one of the developers' configure scripts such as
+  grab one of the developers' configure scripts such as
   "gl_configure", edit it to your needs (you will most likely first
   need to change the Qt and KDE install paths in the script according
   to your setup), and run it. It will setup your source tree so you'll
@@ -57,22 +70,56 @@ then you'll have to append it to your KDEDIRS variable. For instance :
 KDEDIRS=/usr:/home/glaurent/rosegarden
 
 
-Running the application
------------------------
-Just run the "rosegarden" application (found in the KDE bin directory
-after installation, and also in the gui/ directory of the source tree).
-The sequencer process is started automatically when the gui is started,
-provided it has been correctly installed (by "make install") in the
-global KDE directories.  If you have any problems running the application
-then consult the FAQ:
+Running Rosegarden
+------------------
 
-http://www.all-day-breakfast.com/rosegarden
+Just run the "rosegarden" application (found in the KDE bin directory
+after installation, and also in the gui/ directory of the source
+tree).  The sequencer process is started automatically when the gui is
+started, provided it has been correctly installed (by "make install")
+in the global KDE directories.  If you have any problems running the
+application, consult the FAQ:
+
+  http://www.all-day-breakfast.com/rosegarden
 
 or if that doesn't answer your question then use the rosegarden-user
 mailing list on Sourceforge.
 
-You can also "make uninstall" to uninstall the application if you
-decide it's a waste of your time.
+You can also "make uninstall" if you decide it's a waste of your time.
+
+
+About scalable notation fonts
+-----------------------------
+
+Rosegarden-4 now supports scalable fonts for rendering notation as
+well as the "built-in" pixmap shapes.  Using scalable fonts can
+provide you with better-quality display in more different sizes on
+screen, but the main advantage is significantly improved print
+quality.  To use this feature, your Linux installation must have font
+support based on Xft-2.1.0 and fontconfig.
+
+A copy of the Lilypond feta.ttf font is included in the distribution
+(but not installed by default).  If you want to use it, you need to
+install it in your system in the same way as any other TrueType font;
+consult your Linux distribution documentation for details.  Once
+installed, Rosegarden-4 should find it automatically on startup and
+make it available in the notation font menu under the name "Feta
+scalable".  (The font called "Feta" is always the non-scalable
+built-in pixmap font.)
+
+Rosegarden also includes font mapping files which allow it to
+recognise and use some other common fonts, if they are installed:
+currently Adobe Sonata (which costs money, but looks quite nice);
+Xinfonia (a free but incomplete font from xemo.org); Maestro/Petrucci
+(the fonts supplied with Finale -- the Finale licence may not permit
+using those fonts with other applications, but there are other more
+permissively licenced fonts that are compatible with them that can be
+used, such as Fughetta); Opus/Inkpen (the fonts used by Sibelius --
+again, it is probably not legitimate to use those actual fonts, but
+there may be others with compatible encodings); and Steinberg Notation
+(used by Cubase, and the same caveats probably apply).  Most of these
+mappings are rather experimental: some glyphs may be missing and the
+sizes and positions may look rather odd.
 
 
 Notes for developers
@@ -124,15 +171,16 @@ Authors and copyright
 
 * For musical notation display Rosegarden-4 uses pixmaps derived from
   the Feta font, part of the Lilypond software (http://lilypond.org/)
-  which is Copyright 1997 - 2001 Jan Nieuwenhuizen and Han-Wen Nienhuys.
+  which is Copyright 1997 - 2003 Jan Nieuwenhuizen and Han-Wen Nienhuys.
 
 * Other major contributors include Randall Farmer, Ron Kuris, Hans
   Kieserman, and Michael McIntyre.  See AUTHORS for more details, and
   the individual source files for copyright attributions.
 
 * The Rosegarden splash-screen image is from a 1900 postcard of Thornden
-  Park at Syracuse University, Syracuse, NY, used with thanks to the
-  staff of Syracuse University.
+  Park at Syracuse University, Syracuse, NY.  It is probably out of
+  copyright, but is nonetheless used with permission from and thanks to
+  the staff of Syracuse University.
 
 Rosegarden-4 is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -279,6 +279,14 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     m_left = m_right = m_origin.x();
     m_above = m_below = m_origin.y();
 
+    // allow a little more, just in case of oversized noteheads
+/*!!! no -- this is done further down
+    m_above += getStaffLineThickness();
+    m_below += getStaffLineThickness();
+    m_left  += getStemThickness();
+    m_right += getStemThickness();
+*/
+
     m_noteBodyWidth  = getNoteBodyWidth(params.m_noteType);
     m_noteBodyHeight = getNoteBodyHeight(params.m_noteType);
 
@@ -350,8 +358,8 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     // (same as the gap between staff lines), but here we want to know
     // if the pixmap itself is taller than that
     int actualNoteBodyHeight = m_font->getHeight
-	(m_style->getNoteHeadCharName(params.m_noteType).first)
-	- 2*m_origin.y();
+	(m_style->getNoteHeadCharName(params.m_noteType).first);
+//	- 2*m_origin.y();
     if (actualNoteBodyHeight > m_noteBodyHeight) {
 	m_below = std::max(m_below, actualNoteBodyHeight - m_noteBodyHeight);
     }
@@ -876,7 +884,7 @@ NotePixmapFactory::drawFlags(int flagCount,
 	    
 	    PixmapFunctions::drawPixmapMasked(*m_generatedPixmap,
 					      *m_generatedMask,
-					      m_left + s1.x() - m_origin.x(),
+					      m_left + s1.x(),
 					      y,
 					      flagMap);
 	    
@@ -889,8 +897,8 @@ NotePixmapFactory::drawFlags(int flagCount,
 	int y = m_above + s1.y();
 	if (!params.m_stemGoesUp) y -= flagMap.height();
 	
-	m_p.drawPixmap(m_left + s1.x() - m_origin.x(), y, flagMap);
-	m_pm.drawPixmap(m_left + s1.x() - m_origin.x(), y, *(flagMap.mask()));
+	m_p.drawPixmap(m_left + s1.x(), y, flagMap);
+	m_pm.drawPixmap(m_left + s1.x(), y, *(flagMap.mask()));
     }
 }
 
@@ -1854,6 +1862,15 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
 {
     if (sig.isCommon()) {
 
+	QPixmap map;
+	if (m_font->getPixmap(NoteCharacterNames::COMMON_TIME, map)) {
+	    //!!! selected
+	    createPixmapAndMask(map.width(), map.height());
+	    m_p.drawPixmap(0, 0, map);
+	    m_pm.drawPixmap(0, 0, map);
+	    return makeCanvasPixmap(QPoint(0, map.height()/2));
+	}
+
 	QString c("c");
 	QRect r = m_bigTimeSigFontMetrics.boundingRect(c);
 
@@ -1892,6 +1909,45 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
 
 	numS.setNum(numerator);
 	denomS.setNum(denominator);
+
+	QPixmap map;
+	if (m_font->getPixmap(m_style->getTimeSignatureDigitName(0), map)) {
+
+	    // if the 0 digit exists, we assume 1-9 also all exist
+	    // and all have the same width
+
+	    int numW = map.width() * numS.length();
+	    int denomW = map.width() * denomS.length();
+
+	    int width = std::max(numW, denomW);
+	    int height = getLineSpacing() * 4 - getStaffLineThickness();
+
+	    createPixmapAndMask(width, height);
+
+	    //!!! selected
+
+	    for (unsigned int i = 0; i < numS.length(); ++i) {
+		int x = width - (width - numW) / 2 - (i + 1) * map.width();
+		int y = height/4 - (map.height()/2);
+		QPixmap charMap = m_font->getPixmap
+		    (m_style->getTimeSignatureDigitName(numerator % 10));
+		m_p.drawPixmap(x, y, charMap);
+		m_pm.drawPixmap(x, y, *(charMap.mask()));
+		numerator /= 10;
+	    }
+
+	    for (unsigned int i = 0; i < denomS.length(); ++i) {
+		int x = width - (width - numW) / 2 - (i + 1) * map.width();
+		int y = height/2 + height/4 - (map.height()/2);
+		QPixmap charMap = m_font->getPixmap
+		    (m_style->getTimeSignatureDigitName(denominator % 10));
+		m_p.drawPixmap(x, y, charMap);
+		m_pm.drawPixmap(x, y, *(charMap.mask()));
+		denominator /= 10;
+	    }
+
+	    return makeCanvasPixmap(QPoint(0, height/2));
+	}
 
 	QRect numR = m_timeSigFontMetrics.boundingRect(numS);
 	QRect denomR = m_timeSigFontMetrics.boundingRect(denomS);

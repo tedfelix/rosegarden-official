@@ -87,6 +87,19 @@ extern const CharName C_CLEF;
 extern const CharName G_CLEF;
 extern const CharName F_CLEF;
 
+extern const CharName COMMON_TIME;
+extern const CharName CUT_TIME;
+extern const CharName DIGIT_ZERO;
+extern const CharName DIGIT_ONE;
+extern const CharName DIGIT_TWO;
+extern const CharName DIGIT_THREE;
+extern const CharName DIGIT_FOUR;
+extern const CharName DIGIT_FIVE;
+extern const CharName DIGIT_SIX;
+extern const CharName DIGIT_SEVEN;
+extern const CharName DIGIT_EIGHT;
+extern const CharName DIGIT_NINE;
+
 extern const CharName UNKNOWN;
 }
 

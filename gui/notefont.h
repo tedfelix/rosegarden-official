@@ -41,7 +41,14 @@ typedef std::pair<QString, int> SystemFontSpec;
 class SystemFont
 {
 public:
-    virtual QPixmap renderChar(CharName charName, int glyph, int code) = 0;
+    enum Strategy {
+	PreferGlyphs, PreferCodes, OnlyGlyphs, OnlyCodes
+    };
+
+    virtual QPixmap renderChar(CharName charName,
+			       int glyph, int code,
+			       Strategy strategy,
+			       bool &success) = 0;
 
     static SystemFont *loadSystemFont(const SystemFontSpec &spec);
 };
@@ -69,7 +76,6 @@ public:
     std::string getCopyright() const { return m_copyright; }
     std::string getMappedBy() const { return m_mappedBy; }
     std::string getType() const { return m_type; }
-    bool shouldAutocrop() const { return m_autocrop; }
     bool isSmooth() const { return m_smooth; }
 
     std::set<int> getSizes() const;
@@ -89,12 +95,14 @@ public:
     bool getInversionSrc(int size, CharName charName, std::string &src) const;
 
     SystemFont *getSystemFont(int size, CharName charName, int &charBase) const;
+    SystemFont::Strategy getStrategy(int size, CharName charName) const;
     bool getCode(int size, CharName charName, int &code) const;
     bool getInversionCode(int size, CharName charName, int &code) const;
     bool getGlyph(int size, CharName charName, int &glyph) const;
     bool getInversionGlyph(int size, CharName charName, int &glyph) const;
 
-    bool getHotspot(int size, CharName charName, int &x, int &y) const;
+    bool getHotspot(int size, CharName charName, int width, int height,
+		    int &x, int &y) const;
 
     // Xml handler methods:
 
@@ -178,7 +186,7 @@ private:
 	    m_scaled = ScaledPoint(x, y);
 	}
 
-        bool getHotspot(int size, int &x, int &y) const;
+        bool getHotspot(int size, int width, int height, int &x, int &y) const;
 
     private:
         DataMap m_data;
@@ -302,7 +310,6 @@ private:
     std::string m_copyright;
     std::string m_mappedBy;
     std::string m_type;
-    bool m_autocrop;
     bool m_smooth;
 
     typedef std::map<CharName, SymbolData> SymbolDataMap;
@@ -315,8 +322,12 @@ private:
     SizeDataMap m_sizes;
 
     typedef std::map<int, QString> SystemFontNameMap;
-    typedef std::map<SystemFontSpec, SystemFont *> SystemFontMap;
     SystemFontNameMap m_systemFontNames;
+
+    typedef std::map<int, SystemFont::Strategy> SystemFontStrategyMap;
+    SystemFontStrategyMap m_systemFontStrategies;
+
+    typedef std::map<SystemFontSpec, SystemFont *> SystemFontMap;
     mutable SystemFontMap m_systemFontCache;
 
     typedef std::map<int, int> CharBaseMap;

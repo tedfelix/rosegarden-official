@@ -54,7 +54,6 @@ using std::endl;
 
 NoteFontMap::NoteFontMap(string name) :
     m_name(name),
-    m_autocrop(false),
     m_smooth(false),
     m_characterDestination(0),
     m_hotspotCharName(""),
@@ -170,7 +169,9 @@ NoteFontMap::startElement(const QString &, const QString &,
         if (s) m_type = qstrtostr(s);
 
 	s = attributes.value("autocrop");
-	if (s) m_autocrop = (s.lower() == "yes" || s.lower() == "true");
+	if (s) {
+	    cerr << "Warning: autocrop attribute in note font mapping file is no longer supported\n(all fonts are now always autocropped)" << endl;
+	}
 
         s = attributes.value("smooth");
         if (s) m_smooth = (s.lower() == "true");
@@ -566,6 +567,23 @@ NoteFontMap::startElement(const QString &, const QString &,
 	    return false;
 	}	    
 
+	QString s = attributes.value("strategy").lower();
+	SystemFont::Strategy strategy = SystemFont::PreferGlyphs;
+	
+	if (s) {
+	    if (s == "prefer-glyphs") strategy = SystemFont::PreferGlyphs;
+	    else if (s == "prefer-codes") strategy = SystemFont::PreferCodes;
+	    else if (s == "only-glyphs") strategy = SystemFont::OnlyGlyphs;
+	    else if (s == "only-codes") strategy = SystemFont::OnlyCodes;
+	    else {
+		cerr << "Warning: Unknown strategy value " << s
+		     << " (known values are prefer-glyphs, prefer-codes,"
+		     << " only-glyphs, only-codes)" << endl;
+	    }
+	}
+
+	m_systemFontStrategies[n] = strategy;
+
     } else {
 
     }
@@ -731,6 +749,24 @@ NoteFontMap::getSystemFont(int size, CharName charName, int &charBase)
     return font;
 }
 
+SystemFont::Strategy
+NoteFontMap::getStrategy(int, CharName charName)
+    const
+{
+    SymbolDataMap::const_iterator i = m_data.find(charName);
+    if (i == m_data.end()) return SystemFont::PreferGlyphs;
+
+    int fontId = i->second.getFontId();
+    SystemFontStrategyMap::const_iterator si =
+	m_systemFontStrategies.find(fontId);
+
+    if (si != m_systemFontStrategies.end()) {
+	return si->second;
+    }
+
+    return SystemFont::PreferGlyphs;
+}
+
 bool
 NoteFontMap::getCode(int, CharName charName, int &code) const
 {
@@ -836,25 +872,30 @@ NoteFontMap::getBorderThickness(int size,
 }
 
 bool
-NoteFontMap::getHotspot(int size, CharName charName, int &x, int &y) const
+NoteFontMap::getHotspot(int size, CharName charName, int width, int height,
+			int &x, int &y) const
 {
     HotspotDataMap::const_iterator i = m_hotspots.find(charName);
     if (i == m_hotspots.end()) return false;
-    return i->second.getHotspot(size, x, y);
+    return i->second.getHotspot(size, width, height, x, y);
 }
 
 bool
-NoteFontMap::HotspotData::getHotspot(int size, int &x, int &y) const
+NoteFontMap::HotspotData::getHotspot(int size, int width, int height,
+				     int &x, int &y) const
 {
     DataMap::const_iterator i = m_data.find(size);
     if (i == m_data.end()) {
 	x = 0;
-	if (m_scaled.first  >= 0) x = toSize(size, m_scaled.first,  false);
-	if (m_scaled.second >= 0) {
-	    y = toSize(size, m_scaled.second, false);
-	    return true;
+	if (m_scaled.first  >= 0) {
+	    x = toSize(width, m_scaled.first,  false);
 	}
-	else return false;
+	if (m_scaled.second >= 0) {
+	    y = toSize(height, m_scaled.second, false);
+	    return true;
+	} else {
+	    return false;
+	}
     }
     x = i->second.first;
     y = i->second.second;
@@ -868,8 +909,8 @@ NoteFontMap::dump() const
 
     cout << "Font data:\nName: " << getName() << "\nOrigin: " << getOrigin()
          << "\nCopyright: " << getCopyright() << "\nMapped by: "
-         << getMappedBy() << "\nType: " << getType() << "\nAutocrop: "
-	 << shouldAutocrop() << "\nSmooth: " << isSmooth() << endl;
+         << getMappedBy() << "\nType: " << getType()
+	 << "\nSmooth: " << isSmooth() << endl;
 
     set<int> sizes = getSizes();
     set<CharName> names = getCharNames();
@@ -942,7 +983,7 @@ NoteFontMap::dump() const
                 cout << "Inversion glyph: " << c << endl;
             }
             
-            if (getHotspot(*sizei, *namei, x, y)) {
+            if (getHotspot(*sizei, *namei, 1, 1, x, y)) {
                 cout << "Hot spot: (" << x << "," << y << ")" << endl;
             }
         }
@@ -1186,13 +1227,26 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
 	    pixmap = *m_blankPixmap;
 	    return false;
 	}
-	
+
+	SystemFont::Strategy strategy =
+	    m_fontMap.getStrategy(m_size, charName);
+
+	bool success;
 	found = new QPixmap(systemFont->renderChar(charName,
 						   glyph,
-						   code + charBase));
-	add(charName, inverted, found);
-	pixmap = *found;
-	return true;
+						   code + charBase,
+						   strategy,
+						   success));
+	
+	if (success) {
+	    add(charName, inverted, found);
+	    pixmap = *found;
+	    return true;
+	} else {
+	    add(charName, inverted, 0);
+	    pixmap = *m_blankPixmap;
+	    return false;
+	}	    
     }
 
     add(charName, inverted, 0);
@@ -1310,17 +1364,17 @@ NoteFont::getHeight(CharName charName) const
 bool
 NoteFont::getHotspot(CharName charName, int &x, int &y, bool inverted) const
 {
-    bool ok = m_fontMap.getHotspot(m_size, charName, x, y);
+    int w, h;
+    getDimensions(charName, w, h, inverted);
+    bool ok = m_fontMap.getHotspot(m_size, charName, w, h, x, y);
 
     if (!ok) {
-        int w, h;
-        getDimensions(charName, w, h, inverted);
         x = 0;
         y = h/2;
     }
 
     if (inverted) {
-        y = getHeight(charName) - y;
+        y = h - y;
     }
     
     return ok;
@@ -1467,35 +1521,34 @@ public:
     SystemFontQt(QFont &font) : m_font(font) { }
     virtual ~SystemFontQt() { }
 
-    virtual QPixmap renderChar(CharName charName, int glyph, int code);
+    virtual QPixmap renderChar(CharName charName, int glyph, int code,
+			       Strategy strategy, bool &success);
 
 private:
     QFont m_font;
 };
 
 QPixmap
-SystemFontQt::renderChar(CharName charName, int glyph, int code)
+SystemFontQt::renderChar(CharName charName, int glyph, int code,
+			 Strategy strategy, bool &success)
 {
+    success = false;
+
+    if (strategy == OnlyGlyphs) {
+	NOTATION_DEBUG << "SystemFontQt::renderChar: OnlyGlyphs strategy not supported by Qt renderer, can't render character " << charName.getName() << " (glyph " << glyph << ")" << endl;
+	return QPixmap();
+    }
+
     if (code < 0) {
-	NOTATION_DEBUG << "SystemFontQt::renderChar: Can't render using Qt with only glyph value (" << glyph << "), need a code point" << endl;
+	NOTATION_DEBUG << "SystemFontQt::renderChar: Can't render using Qt with only glyph value (" << glyph << ") for character " << charName.getName() << ", need a code point" << endl;
 	return QPixmap();
     }
 
     QFontMetrics metrics(m_font);
     QChar qc(code);
-//!!!    QRect bounding = metrics.boundingRect(qc);
 
     QPixmap map;
-
-/*!!! non-autocrop no longer supported
-    if (autocrop) {
-	map = QPixmap(bounding.width(), bounding.height() + 1);
-    } else {
-*/
-	map = QPixmap(metrics.width(qc), metrics.height());
-/*
-    }
-*/
+    map = QPixmap(metrics.width(qc), metrics.height());
     
     map.fill();
     QPainter painter;
@@ -1507,16 +1560,12 @@ SystemFontQt::renderChar(CharName charName, int glyph, int code)
 		   << code << " for " << charName.getName()
 		   << " using QFont" << endl;
 
-/*!!!    
-    if (autocrop) {
-	painter.drawText(-bounding.left(), -bounding.top(), qc);
-    } else {
-*/
-	painter.drawText(0, metrics.ascent(), qc);
-//!!!    }
+    painter.drawText(0, metrics.ascent(), qc);
     
     painter.end();
     map.setMask(PixmapFunctions::generateMask(map, Qt::white.rgb()));
+
+    success = true;
     return map;
 }
 
@@ -1529,7 +1578,8 @@ public:
     SystemFontXft(Display *dpy, XftFont *font) : m_dpy(dpy), m_font(font) { }
     virtual ~SystemFontXft() { if (m_font) XftFontClose(m_dpy, m_font); }
     
-    virtual QPixmap renderChar(CharName charName, int glyph, int code);
+    virtual QPixmap renderChar(CharName charName, int glyph, int code,
+			       Strategy strategy, bool &success);
 
 private:
     Display *m_dpy;
@@ -1537,23 +1587,55 @@ private:
 };
 
 QPixmap
-SystemFontXft::renderChar(CharName charName, int glyph, int code)
+SystemFontXft::renderChar(CharName charName, int glyph, int code,
+			  Strategy strategy, bool &success)
 {
+    success = false;
+
     if (glyph < 0 && code < 0) {
-	NOTATION_DEBUG << "SystemFontXft::renderChar: Have neither glyph nor code point, can't render" << endl;
+	NOTATION_DEBUG << "SystemFontXft::renderChar: Have neither glyph nor code point for character " << charName.getName() << ", can't render" << endl;
+	return QPixmap();
+    }
+
+    if (code < 0 && strategy == OnlyCodes) {
+	NOTATION_DEBUG << "SystemFontXft::renderChar: strategy is OnlyCodes but no code point provided for character " << charName.getName() << " (glyph is " << glyph << ")" << endl;
+	return QPixmap();
+    }
+
+    if (glyph < 0 && strategy == OnlyGlyphs) {
+	NOTATION_DEBUG << "SystemFontXft::renderChar: strategy is OnlyGlyphs but no glyph index provided for character " << charName.getName() << " (code is " << code << ")" << endl;
 	return QPixmap();
     }
 
     XGlyphInfo extents;
 
-    if (glyph >= 0) {
+    bool useGlyph = true;
+    if (glyph < 0 || (strategy == PreferCodes && code >= 0)) useGlyph = false;
+    if (glyph >= 0 && useGlyph == false && !XftCharExists(m_dpy, m_font, code)) {
+	NOTATION_DEBUG << "SystemFontXft::renderChar: code " << code << " is preferred for character " << charName.getName() << ", but it doesn't exist in font!  Falling back to glyph " << glyph << endl;
+	useGlyph = true;
+    }
+
+    if (useGlyph) {
 	FT_UInt ui(glyph);
 	XftGlyphExtents(m_dpy, m_font, &ui, 1, &extents);
+	if (extents.width == 0 || extents.height == 0) {
+	    NOTATION_DEBUG
+		<< "SystemFontXft::renderChar: zero extents for character "
+		<< charName.getName() << " (glyph " << glyph << ")" << endl;
+	    return QPixmap();
+	}
     } else {
 	FcChar32 char32(code);
 	XftTextExtents32(m_dpy, m_font, &char32, 1, &extents);
+	if (extents.width == 0 || extents.height == 0) {
+	    NOTATION_DEBUG
+		<< "SystemFontXft::renderChar: zero extents for character "
+		<< charName.getName() << " (code " << code << ")" << endl;
+	    return QPixmap();
+	}
     }
-
+ 
     QPixmap map(extents.width, extents.height);
     map.fill();
 
@@ -1576,7 +1658,7 @@ SystemFontXft::renderChar(CharName charName, int glyph, int code)
     col.color.alpha = 0xffff;
     col.pixel = pen.pixel();
 
-    if (glyph >= 0) {
+    if (useGlyph) {
 	NOTATION_DEBUG << "NoteFont: drawing raw character glyph "
 		       << glyph << " for " << charName.getName()
 		       << " using Xft" << endl;
@@ -1593,6 +1675,7 @@ SystemFontXft::renderChar(CharName charName, int glyph, int code)
     XftDrawDestroy(draw);
 
     map.setMask(PixmapFunctions::generateMask(map, Qt::white.rgb()));
+    success = true;
     return map;
 }
 

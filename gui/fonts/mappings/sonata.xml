@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rosegarden-font-encoding>
+
+<rosegarden-font-encoding name="Sonata">
+
+<!-- !!! check copyright -->
+<font-information
+        origin="Adobe"
+	copyright="Copyright Adobe Inc"
+        mapped-by="Chris Cannam"
+        type="scalable"
+        smooth="true"/>
+
+<font-requirements>
+	<font-requirement font-id="0" names="sonata" strategy="prefer-glyphs"/>
+	<font-requirement font-id="1" names="georgia,times new roman,times,DEFAULT" strategy="prefer-codes"/> <!-- text font -->
+</font-requirements>
+
+<font-sizes>
+	<font-scale font-height="4.3" beam-thickness="0.5" staff-line-thickness="0.1" stem-thickness="0.1" border-x="0" border-y="0"/>
+</font-sizes>
+
+<font-symbol-map>
+        <!-- Symbol names are from the Unicode code charts: see
+             http://www.unicode.org/charts/PDF/U2600.pdf
+             http://www.unicode.org/charts/PDF/U1D100.pdf -->
+
+	<symbol name="__UNKNOWN__" font-id="1" code="63"/> <!-- question mark -->
+
+        <symbol name="MUSIC SHARP SIGN" font-id="0" glyph="3"/>
+        <symbol name="MUSIC NATURAL SIGN" font-id="0" glyph="76"/>
+        <symbol name="MUSIC FLAT SIGN" font-id="0" glyph="64"/>
+
+        <symbol name="MUSICAL SYMBOL DOUBLE SHARP" font-id="0" glyph="149"/>
+        <symbol name="MUSICAL SYMBOL DOUBLE FLAT" font-id="0" glyph="121"/>
+
+        <symbol name="MUSICAL SYMBOL BREVE" font-id="0" glyph="53"/>
+        <symbol name="MUSICAL SYMBOL WHOLE NOTE" font-id="0" glyph="85"/>
+        <symbol name="MUSICAL SYMBOL VOID NOTEHEAD" font-id="0" glyph="172"/>
+        <symbol name="MUSICAL SYMBOL NOTEHEAD BLACK" font-id="0" glyph="171"/>
+
+	<symbol name="MUSICAL SYMBOL X NOTEHEAD" font-id="0" glyph="127"/>
+
+<!--	<symbol name="MUSICAL SYMBOL CIRCLE X NOTEHEAD" font-id="0" code="85" glyph="35"/> -->
+<!--
+	<symbol name="MUSICAL SYMBOL BREVIS" font-id="0" code="8250" glyph="70"/>
+	<symbol name="MUSICAL SYMBOL SEMIBREVIS WHITE" font-id="0" code="79" glyph="31"/> 
+	<symbol name="MUSICAL SYMBOL SEMIBREVIS BLACK" font-id="0" code="8218" glyph="72"/>
+-->
+<!--
+	<symbol name="MUSICAL SYMBOL TRIANGLE NOTEHEAD UP WHITE" font-id="0" code="121"/>
+	<symbol name="MUSICAL SYMBOL TRIANGLE NOTEHEAD UP BLACK" font-id="0" code="209"/>
+-->
+        <!-- There's only one Unicode point for each flag; I guess
+             you're expected to invert them yourself -->
+        <symbol name="MUSICAL SYMBOL COMBINING PARTIAL FLAG"
+                font-id="0" glyph="173" inversion-glyph="166"/>
+        <symbol name="MUSICAL SYMBOL COMBINING FLAG-1"
+                font-id="0" glyph="72" inversion-glyph="41"/>
+        <symbol name="MUSICAL SYMBOL COMBINING FLAG-2"
+                font-id="0" glyph="73" inversion-glyph="42"/>
+        <symbol name="MUSICAL SYMBOL MULTI REST" font-id="0" glyph="140"/>
+        <symbol name="MUSICAL SYMBOL WHOLE REST" font-id="0" glyph="118"/>
+        <symbol name="MUSICAL SYMBOL HALF REST" font-id="0" glyph="164"/>
+        <symbol name="MUSICAL SYMBOL QUARTER REST" font-id="0" glyph="138"/>
+        <symbol name="MUSICAL SYMBOL EIGHTH REST" font-id="0" glyph="156"/>
+        <symbol name="MUSICAL SYMBOL SIXTEENTH REST" font-id="0" glyph="132"/>
+        <symbol name="MUSICAL SYMBOL THIRTY-SECOND REST" font-id="0" glyph="105"/>
+        <symbol name="MUSICAL SYMBOL SIXTY-FOURTH REST" font-id="0" glyph="170"/>
+        <symbol name="MUSICAL SYMBOL ONE HUNDRED TWENTY-EIGHTH REST" font-id="0" glyph="157"/>
+
+        <symbol name="MUSICAL SYMBOL COMBINING AUGMENTATION DOT" font-id="0" glyph="14"/>
+
+	<symbol name="MUSICAL SYMBOL COMBINING ACCENT" font-id="0" glyph="29"/>
+	<symbol name="MUSICAL SYMBOL COMBINING TENUTO" font-id="0" glyph="13"/>
+	<symbol name="MUSICAL SYMBOL COMBINING STACCATO" font-id="0" glyph="14"/>
+	<symbol name="MUSICAL SYMBOL COMBINING STACCATISSIMO"
+                font-id="0" glyph="110"/>
+	<symbol name="MUSICAL SYMBOL COMBINING MARCATO"
+                font-id="0" glyph="50"/>
+	<symbol name="MUSICAL SYMBOL FERMATA"
+	        font-id="0" glyph="51" inversion-glyph="83"/>
+	<symbol name="MUSICAL SYMBOL TR" font-id="0" glyph="62"/>
+	<symbol name="MUSICAL SYMBOL TURN" font-id="0" glyph="50"/>
+	<symbol name="MUSICAL SYMBOL COMBINING UP BOW" font-id="0" glyph="114"/>
+	<symbol name="MUSICAL SYMBOL COMBINING DOWN BOW" font-id="0" glyph="115"/>
+
+        <symbol name="MUSICAL SYMBOL C CLEF" font-id="0" glyph="33"/>
+        <symbol name="MUSICAL SYMBOL G CLEF" font-id="0" glyph="6"/>
+        <symbol name="MUSICAL SYMBOL F CLEF" font-id="0" glyph="30"/>
+
+	<symbol	name="MUSICAL SYMBOL CUT TIME"  font-id="0" glyph="34"/>
+	<symbol	name="MUSICAL SYMBOL COMMON TIME"  font-id="0" glyph="65"/>
+	<symbol	name="DIGIT ZERO"  font-id="0" code="48" glyph="16"/>
+	<symbol	name="DIGIT ONE"   font-id="0" code="49" glyph="17"/>
+	<symbol	name="DIGIT TWO"   font-id="0" code="50" glyph="18"/>
+	<symbol	name="DIGIT THREE" font-id="0" code="51" glyph="19"/>
+	<symbol	name="DIGIT FOUR"  font-id="0" code="52" glyph="20"/>
+	<symbol	name="DIGIT FIVE"  font-id="0" code="53" glyph="21"/>
+	<symbol	name="DIGIT SIX"   font-id="0" code="54" glyph="22"/>
+	<symbol	name="DIGIT SEVEN" font-id="0" code="55" glyph="23"/>
+	<symbol	name="DIGIT EIGHT" font-id="0" code="56" glyph="24"/>
+	<symbol	name="DIGIT NINE"  font-id="0" code="57" glyph="25"/>
+</font-symbol-map>
+
+<font-hotspots>
+        <hotspot name="MUSIC FLAT SIGN">
+		<scaled y="0.74"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL DOUBLE FLAT">
+		<scaled y="0.74"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL C CLEF">
+		<scaled y="0.47"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL G CLEF">
+		<scaled y="0.64"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL F CLEF">
+		<scaled y="0.32"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL MULTI REST">
+		<scaled y="0"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL WHOLE REST">
+		<scaled y="0"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL HALF REST">
+		<scaled y="0.98"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL QUARTER REST">
+		<scaled y="0.5"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL EIGHTH REST">
+		<scaled y="0.4"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL SIXTEENTH REST">
+		<scaled y="0.28"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL THIRTY-SECOND REST">
+		<scaled y="0.45"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL SIXTY-FOURTH REST">
+		<scaled y="0.4"/>
+        </hotspot>
+</font-hotspots>
+</rosegarden-font-encoding>
