@@ -346,7 +346,50 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
     RG_DEBUG << "useInstrument() - populate Instrument\n";
 
     if (instrument == 0)
+    {
+        m_instrumentLabel->setText(i18n("<no instrument>"));
+        m_channelLabel->hide();
+        m_panLabel->hide();
+        m_programLabel->hide();
+        m_bankLabel->hide();
+        m_bankValue->hide();
+        m_channelValue->hide();
+        m_programValue->hide();
+        m_panValue->hide();
+        m_bankCheckBox->hide();
+        m_programCheckBox->hide();
+        m_panCheckBox->hide();
+        m_velocityCheckBox->hide();
+        m_velocityValue->hide();
+        m_velocityLabel->hide();
+
+        // Advanced MIDI controls
+        //
+        m_chorusRotary->hide();
+        m_reverbRotary->hide();
+        m_highPassRotary->hide();
+        m_resonanceRotary->hide();
+        m_attackRotary->hide();
+        m_releaseRotary->hide();
+        m_chorusLabel->hide();
+        m_reverbLabel->hide();
+        m_highPassLabel->hide();
+        m_resonanceLabel->hide();
+        m_attackLabel->hide();
+        m_releaseLabel->hide();
+
+        // Audio controls
+        //
+        m_volumeFader->hide();
+        m_volumeValue->hide();
+        m_volumeLabel->hide();
+        m_pluginLabel->hide();
+
+        for (unsigned int i = 0; i < m_pluginButtons.size(); i++)
+            m_pluginButtons[i]->hide();
+
         return;
+    }
 
     // ok
     m_selectedInstrument = instrument;
