@@ -1346,8 +1346,20 @@ RosegardenGUIApp::getValidWriteFile(const QString &descriptiveExtension,
     //
     QString extension = descriptiveExtension.left(descriptiveExtension.find('|')).mid(1);
 
-    QString name = KFileDialog::getSaveFileName
-        (":ROSEGARDEN", descriptiveExtension, this, label);
+    // It's too bad there isn't this functionality within 
+    // KFileDialog::getSaveFileName
+    KFileDialog saveFileDialog(":ROSEGARDEN", descriptiveExtension, this, label, true);
+    if (m_doc) {
+        QString saveFileName=m_doc->getAbsFilePath();
+        // Show filename without the old extension
+        int dotLoc=saveFileName.findRev('.');
+        if (dotLoc > saveFileName.length()-4) {
+            saveFileName=saveFileName.left(dotLoc);
+        }
+        saveFileDialog.setSelection(saveFileName);
+    }
+    saveFileDialog.exec();
+    QString name=saveFileDialog.selectedFile();
 
 //     RG_DEBUG << "RosegardenGUIApp::getValidWriteFile() : KFileDialog::getSaveFileName returned "
 //              << name << endl;
