@@ -529,11 +529,10 @@ void SegmentItem::drawShape(QPainter& painter)
 
         if (!colourset)
         {
-            if (m_segment)
+            if (m_segment) {
                 painter.setBrush(RosegardenGUIColours::convertColour(m_doc->getComposition().getSegmentColourMap().getColourByIndex(m_segment->getColourIndex())).dark(125));
-            else
-                painter.setBrush(RosegardenGUIColours::convertColour(m_doc->getComposition().getSegmentColourMap().getColourByIndex(0)).dark(125));
-            colourset = true;
+		colourset = true;
+	    }
         }
 
         if ((*it) == this) continue; // skip ourselves
