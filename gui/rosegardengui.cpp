@@ -848,17 +848,32 @@ RosegardenGUIApp::play()
   QByteArray data;
   QCString replyType;
   QByteArray replyData;
+  bool returnValue = false;
+
+  // write the start position argument to the outgoing stream
+  //
+  QDataStream streamOut(data, IO_WriteOnly);
+  streamOut << m_doc->getComposition().getPosition();
 
   // Send a Stop to the Sequencer
   if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                          ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                          "play(Rosegarden::timeT)", data,
-                          replyType, replyData))
+                                ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                "play(Rosegarden::timeT)", data,
+                                replyType, replyData))
   {
-    // failed
+    // failed - pop up and disable sequencer options
   }
   else
   {
+    // ensure the return type is ok
+    QDataStream streamIn(replyData, IO_ReadOnly);
+    QString result;
+
+    streamIn >> result;
+  
+    cout << result << endl;
+    if (result=="0")
+      cout << "PLAY COMPLETED OK" << endl;
   }
 
 }
@@ -884,12 +899,11 @@ RosegardenGUIApp::stop()
                           "stop()", data,
                           replyType, replyData))
   {
-    // failed
-    cout << "FAILED" << endl;
+    // failed - pop up and disable sequencer options
   }
   else
   {
-    cout << "COMPLETED" << endl;
+    // ensure the return type is ok
   }
                           
 }

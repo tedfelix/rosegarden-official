@@ -43,7 +43,7 @@ RosegardenSequencerApp::quit()
 bool
 RosegardenSequencerApp::play(const Rosegarden::timeT &position)
 {
-  cout << "CALLED PLAY" << endl;
+  cout << "CALLED PLAY = " << position << endl;
   return true;
 }
 
