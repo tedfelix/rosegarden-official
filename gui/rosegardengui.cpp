@@ -74,6 +74,10 @@
 #include "zoomslider.h"
 #include "audiomanagerdialog.h"
 
+//!!! ditch these when harmonize() moves out
+#include "CompositionTimeSliceAdapter.h"
+#include "AnalysisTypes.h"
+
 #define ID_STATUS_MSG 1
 
 using Rosegarden::timeT;
@@ -1162,7 +1166,17 @@ void RosegardenGUIApp::slotHarmonizeSelection()
     if (!m_view->haveSelection()) return;
 
     Rosegarden::SegmentSelection selection = m_view->getSelection();
-    //!!!
+    //!!! This should be somewhere else too
+
+    Rosegarden::CompositionTimeSliceAdapter adapter(&m_doc->getComposition(),
+						    &selection);
+
+    Rosegarden::AnalysisHelper helper;
+    Rosegarden::Segment *segment = new Segment;
+    helper.guessHarmonies(adapter, *segment);
+
+    //!!! do nothing with the results yet
+    delete segment;
 }
 
 

@@ -19,6 +19,16 @@ You're missing the kdemultimedia package (and associated -devel
 package, if appropriate to your distribution).
 
 
+"Cannot convert a null image" and other errors at startup
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you're getting a stream of errors of this sort followed by a crash
+at startup, with Rosegarden-4 0.1.6 or earlier, then you probably
+haven't run "make install", or it didn't complete successfully, or it
+installed into a non-standard place which you need to add to your
+KDEDIRS environment variable before you can start it correctly.
+
+
 The Composition View
 --------------------
 

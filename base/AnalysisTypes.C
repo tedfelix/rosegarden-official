@@ -299,9 +299,11 @@ AnalysisHelper::guessHarmonies(CompositionTimeSliceAdapter &c, Segment &s)
     // 2. Refine the list of possible harmonies by preferring chords in the
     //    current key and looking for familiar progressions and
     //    tonicizations.
-    refineHarmonyGuessList(c, l);
+    refineHarmonyGuessList(c, l, s);
 
-    // (3. Put labels in the Segment.)
+    // 3. Put labels in the Segment.  For the moment we just do the
+    //    really naive thing with the segment arg to refineHarmonyGuessList:
+    //    could do much better here
 }
 
 // #### explain how this works:
@@ -453,7 +455,7 @@ AnalysisHelper::cp_less::operator()(ChordPossibility l, ChordPossibility r)
 
 void
 AnalysisHelper::refineHarmonyGuessList(CompositionTimeSliceAdapter &c,
-                                       HarmonyGuessList &l)
+                                       HarmonyGuessList &l, Segment &segment)
 {
     // (Fetch the piece's starting key from the key guesser)
     Key key;
@@ -547,6 +549,7 @@ AnalysisHelper::refineHarmonyGuessList(CompositionTimeSliceAdapter &c,
         }
 
         // Since we're not returning any results right now, print them
+	std::cerr << "Time: " << j->first << std::endl;
         std::cerr << "Best chords: "
           << bestGuessForFirstChord.getName(Key()) << ", "
           << bestGuessForSecondChord.getName(Key()) << std::endl;
@@ -571,6 +574,18 @@ AnalysisHelper::refineHarmonyGuessList(CompositionTimeSliceAdapter &c,
             // (and possibly do the real key-setting)
 
             // If not, h.erase(second-iterator++)
+
+	// Temporary hack to get _something_ interesting out:
+	Event *e;
+	e = Text(bestGuessForFirstChord.getName(Key()), Text::ChordName).
+	    getAsEvent(j->first);
+	segment.insert(new Event(*e, e->getAbsoluteTime(),
+				 e->getDuration(), e->getSubOrdering()-1));
+	delete e;
+
+	e = Text(bestGuessForSecondChord.getName(Key()), Text::ChordName).
+	    getAsEvent(j->first);
+	segment.insert(e);
 
         // For now, just advance:
         i = j;

@@ -1992,35 +1992,43 @@ void NotationView::slotEditAddTimeSignature()
     NotationStaff *staff = m_staffs[m_currentStaff];
     Rosegarden::Event *clefEvt = 0, *keyEvt = 0;
     Segment &segment = staff->getSegment();
-    Rosegarden::Composition &composition = *segment.getComposition();
+    Rosegarden::Composition *composition = segment.getComposition();
     timeT insertionTime = getInsertionTime(clefEvt, keyEvt);
 
-    int barNo = composition.getBarNumber(insertionTime);
-    bool atStartOfBar = (insertionTime == composition.getBarStart(barNo));
-    TimeSignature timeSig = composition.getTimeSignatureAt(insertionTime);
+    int barNo = composition->getBarNumber(insertionTime);
+    bool atStartOfBar = (insertionTime == composition->getBarStart(barNo));
+//    TimeSignature timeSig = composition->getTimeSignatureAt(insertionTime);
+
+
+    //!!! experimental:
+    Rosegarden::CompositionTimeSliceAdapter adapter
+	(&m_document->getComposition(), insertionTime,
+	 m_document->getComposition().getDuration());
+    Rosegarden::AnalysisHelper helper;
+    TimeSignature timeSig = helper.guessTimeSignature(adapter);
+
 
     TimeSignatureDialog *dialog = new TimeSignatureDialog
-	(this, timeSig, barNo, atStartOfBar);
+	(this, timeSig, barNo, atStartOfBar,
+	 i18n("Estimated time signature shown"));
     
     if (dialog->exec() == QDialog::Accepted) {
 
 	TimeSignatureDialog::Location location = dialog->getLocation();
 	if (location == TimeSignatureDialog::StartOfBar) {
-	    insertionTime = composition.getBarStartForTime(insertionTime);
+	    insertionTime = composition->getBarStartForTime(insertionTime);
 	}
 	
 	if (dialog->shouldNormalizeRests()) {
 	    
 	    addCommandToHistory(new AddTimeSignatureAndNormalizeCommand
-				(segment.getComposition(),
-				 insertionTime,
+				(composition, insertionTime,
 				 dialog->getTimeSignature()));
 	    
 	} else {
 	    
 	    addCommandToHistory(new AddTimeSignatureCommand
-				(segment.getComposition(),
-				 insertionTime,
+				(composition, insertionTime,
 				 dialog->getTimeSignature()));
 	}
 
@@ -2053,7 +2061,9 @@ void NotationView::slotEditAddKeySignature()
     if (clefEvt) clef = Rosegarden::Clef(*clefEvt);
 
     KeySignatureDialog *dialog =
-	new KeySignatureDialog(this, m_notePixmapFactory, clef, key);
+	new KeySignatureDialog
+	(this, m_notePixmapFactory, clef, key, true, true,
+	 i18n("Estimated key signature shown"));
     
     if (dialog->exec() == QDialog::Accepted &&
 	dialog->isValid()) {

@@ -89,9 +89,11 @@ public:
 
 TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
 					 Rosegarden::TimeSignature sig,
-					 int barNo, bool atStartOfBar) :
+					 int barNo, bool atStartOfBar,
+					 QString explanatoryText) :
     KDialogBase(parent, "", true, i18n("Time Signature"), Ok | Cancel),
     m_timeSignature(sig),
+    m_explanatoryLabel(0),
     m_commonTimeButton(0),
     m_hideSignatureButton(0),
     m_normalizeRestsButton(0),
@@ -112,6 +114,11 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
 	(1, Horizontal, i18n("Time signature"), vbox);
     QHBox *numBox = new QHBox(groupBox);
     QHBox *denomBox = new QHBox(groupBox);
+
+    QLabel *explanatoryLabel = 0;
+    if (explanatoryText) {
+	explanatoryLabel = new QLabel(explanatoryText, groupBox);
+    }
 
     BigArrowButton *numDown   = new BigArrowButton(numBox, Qt::LeftArrow);
     BigArrowButton *denomDown = new BigArrowButton(denomBox, Qt::LeftArrow);
@@ -186,6 +193,7 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
     QObject::connect(m_hideSignatureButton, SIGNAL(clicked()), this,
 		     SLOT(slotUpdateCommonTimeButton()));
     slotUpdateCommonTimeButton();
+    m_explanatoryLabel = explanatoryLabel;
 }
 
 Rosegarden::TimeSignature
@@ -250,6 +258,7 @@ TimeSignatureDialog::slotDenomUp()
 void
 TimeSignatureDialog::slotUpdateCommonTimeButton()
 {
+    if (m_explanatoryLabel) m_explanatoryLabel->hide();
     if (!m_hideSignatureButton || !m_hideSignatureButton->isChecked()) {
 	if (m_timeSignature.getDenominator() == m_timeSignature.getNumerator()) {
 	    if (m_timeSignature.getNumerator() == 4) {
@@ -291,13 +300,15 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
 				       Rosegarden::Clef clef,
 				       Rosegarden::Key defaultKey,
 				       bool showApplyToAll,
-				       bool showConversionOptions) :
+				       bool showConversionOptions,
+				       QString explanatoryText) :
     KDialogBase(parent, "", true, i18n("Key Change"), Ok | Cancel),
     m_notePixmapFactory(npf),
     m_key(defaultKey),
     m_clef(clef),
     m_valid(true),
-    m_ignoreComboChanges(false)
+    m_ignoreComboChanges(false),
+    m_explanatoryLabel(0)
 {
     QVBox *vbox = makeVBoxMainWidget();
 
@@ -315,6 +326,11 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
 	
     keyBox = new QHBox(keyFrame);
     nameBox = new QHBox(keyFrame);
+
+    QLabel *explanatoryLabel = 0;
+    if (explanatoryText) {
+	explanatoryLabel = new QLabel(explanatoryText, keyFrame);
+    }
     
     BigArrowButton *keyDown = new BigArrowButton(keyBox, Qt::LeftArrow);
     QToolTip::add(keyDown, i18n("Flatten"));
@@ -335,6 +351,7 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
 
     regenerateKeyCombo();
     redrawKeyPixmap();
+    m_explanatoryLabel = explanatoryLabel;
 
     m_keyLabel->setMinimumWidth(m_keyLabel->pixmap()->width());
     m_keyLabel->setMinimumHeight(m_keyLabel->pixmap()->height());
@@ -459,6 +476,8 @@ struct KeyNameComparator
 void
 KeySignatureDialog::regenerateKeyCombo()
 {
+    if (m_explanatoryLabel) m_explanatoryLabel->hide();
+
     m_ignoreComboChanges = true;
     QString currentText = m_keyCombo->currentText();
     Rosegarden::Key::KeySet keys(Rosegarden::Key::getKeys(m_key.isMinor()));

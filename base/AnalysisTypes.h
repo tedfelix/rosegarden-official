@@ -178,7 +178,8 @@ protected:
 
     /// For use by guessHarmonies
     void refineHarmonyGuessList(CompositionTimeSliceAdapter &c,
-                                HarmonyGuessList& l);
+                                HarmonyGuessList& l,
+				Segment &);
 
     /// For use by guessHarmonies (makeHarmonyGuessList)
     class PitchProfile

@@ -72,7 +72,8 @@ public:
     TimeSignatureDialog(QWidget *parent,
 			Rosegarden::TimeSignature defaultSig =
 			Rosegarden::TimeSignature::DefaultTimeSignature,
-			int barNo = 0, bool atStartOfBar = true);
+			int barNo = 0, bool atStartOfBar = true,
+			QString explanatoryText = 0);
 
     Rosegarden::TimeSignature getTimeSignature() const;
 
@@ -97,6 +98,7 @@ protected:
     Rosegarden::TimeSignature m_timeSignature;
     QLabel *m_numLabel;
     QLabel *m_denomLabel;
+    QLabel *m_explanatoryLabel;
 
     QCheckBox *m_commonTimeButton;
     QCheckBox *m_hideSignatureButton;
@@ -126,7 +128,8 @@ public:
 		       Rosegarden::Key defaultKey =
 		       Rosegarden::Key::DefaultKey,
 		       bool showApplyToAll = true,
-		       bool showConversionOptions = true);
+		       bool showConversionOptions = true,
+		       QString explanatoryText = 0);
 
     bool isValid() const;
     Rosegarden::Key getKey() const;
@@ -158,6 +161,7 @@ protected:
     QLabel *m_keyLabel;
     QComboBox *m_keyCombo;
     QComboBox *m_majorMinorCombo;
+    QLabel *m_explanatoryLabel;
 
     QRadioButton *m_applyToAllButton;
 

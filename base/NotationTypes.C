@@ -127,7 +127,7 @@ using namespace Marks;
 //////////////////////////////////////////////////////////////////////
     
 const string Clef::EventType = "clefchange";
-const int Clef::EventSubOrdering = -30;
+const int Clef::EventSubOrdering = -250;
 const PropertyName Clef::ClefPropertyName = "clef";
 const string Clef::Treble = "treble";
 const string Clef::Tenor = "tenor";
@@ -224,7 +224,7 @@ Event *Clef::getAsEvent(timeT absoluteTime) const
 
 
 const string Key::EventType = "keychange";
-const int Key::EventSubOrdering = -20;
+const int Key::EventSubOrdering = -200;
 const PropertyName Key::KeyPropertyName = "key";
 const Key Key::DefaultKey = Key("C major");
 
@@ -477,7 +477,7 @@ Key::KeyDetails& Key::KeyDetails::operator=(const Key::KeyDetails &d)
 //////////////////////////////////////////////////////////////////////
 
 const std::string Indication::EventType = "indication";
-const int Indication::EventSubOrdering = -8;
+const int Indication::EventSubOrdering = -50;
 const PropertyName Indication::IndicationTypePropertyName = "indicationtype";
 const PropertyName Indication::IndicationDurationPropertyName = "indicationduration";
 
@@ -541,7 +541,7 @@ Indication::getAsEvent(timeT absoluteTime) const
 //////////////////////////////////////////////////////////////////////
 
 const std::string Text::EventType = "text";
-const int Text::EventSubOrdering = -9;
+const int Text::EventSubOrdering = -70;
 const PropertyName Text::TextPropertyName = "text";
 const PropertyName Text::TextTypePropertyName = "type";
 
@@ -606,7 +606,7 @@ Text::getAsEvent(timeT absoluteTime) const
 // PitchBend
 //////////////////////////////////////////////////////////////////////
 const std::string PitchBend::EventType = "pitchbend";
-const int PitchBend::EventSubOrdering = -9;
+const int PitchBend::EventSubOrdering = -70;
 
 const PropertyName PitchBend::MSBPropertyName = "msb";
 const PropertyName PitchBend::LSBPropertyName = "lsb";
@@ -636,7 +636,7 @@ PitchBend::getAsEvent(timeT absoluteTime) const
 // Controller
 //////////////////////////////////////////////////////////////////////
 const std::string Controller::EventType = "controller";
-const int Controller::EventSubOrdering = -9;
+const int Controller::EventSubOrdering = -70;
 
 const PropertyName Controller::Data1PropertyName = "data1";
 const PropertyName Controller::Data2PropertyName = "data2";
@@ -1062,7 +1062,7 @@ Event *Note::getAsRestEvent(timeT absoluteTime) const
 ///////////////////////////////////////////////////////////////////////
 
 const string TimeSignature::EventType = "timesignature";
-const int TimeSignature::EventSubOrdering = -10;
+const int TimeSignature::EventSubOrdering = -150;
 const PropertyName TimeSignature::NumeratorPropertyName = "numerator";
 const PropertyName TimeSignature::DenominatorPropertyName = "denominator";
 const PropertyName TimeSignature::ShowAsCommonTimePropertyName = "common";
