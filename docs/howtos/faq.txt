@@ -11,15 +11,6 @@ normally (and will in the future) be found there instead.
 General questions
 -----------------
 
-I don't want to build the thing myself.  Is there an RPM available?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Not quite yet.  The code is still changing a little too quickly and
-releases appear a little too often for us to have found the time to
-turn it into binary packages.  Hopefully we'll have one available soon
-but if you want to go ahead and roll an RPM for us, please do so, and
-let us know where you've put it so that we can test it out.
-
 
 The web page says it's a KDE application.  Can I run it under GNOME/WindowMaker etc?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -297,66 +288,56 @@ Rosegarden-4 feature that works with aRts also works with ALSA, and
 then some.
 
 
-Can I use an ALSA soft synth, such as iiwusynth or Timidity?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+My soundcard has no built-in MIDI synth and I have no external MIDI devices.  How can I get sound?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Yep.  Make sure you're running the soft synth in the alsa-seq mode and make
-sure you run it up _before_ you run up Rosegarden.  They you should get
-iiwusynth or Timidity channels available in the Instrument dropdowns (click
-and hold on the Track labels).
+You need a soft synth!  See the next question.
 
-Start up iiwusynth something like this:
 
-   $ iiwusynth -m alsa_seq path/to/soundfont.sf2
-
-Then start Rosegarden and assign some Tracks to the "Synth input port"
-Instrument.  By default RG will choose the onboard synth first so
-you'll have to manually reassign these Tracks (unless you have no
-onboard synth; users of i810 devices without onboard MIDI synth may
-find soft synths particularly valuable).
-
-For Timidity use the -iA switch:
-
-  $ timidity -iA
-
-And then select the Timidity Instruments from the dropdown.  You may
-need to fiddle with the priorities or buffer sizes with Timidity to
-get properly synchronized output.
-
-Any more clues on how to get iiwusynth working with soundfonts?
+How do I use an ALSA soft synth, such as iiwusynth or Timidity?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-(by Chris)
+Well first, here's how to get iiwusynth working with a soundfont.
+Make sure you have a fairly recent version of iiwusynth (0.2.x rather
+than 0.0.x) -- see <URL:http://www.iiwu.org/iiwusynth/>.  Then find a
+soundfont: one reasonable GM example is Musica Theoria 2, available as
+mustheory2.sf2 from the Collections area of
+<URL:http://www.hammersound.net/>, although it's large and it's packed
+using some stupid Windows-only format (common problem -- a few of the
+soundfonts on there are only zipped, though, so have a look around).
 
-Ok, here's a general intro to using iiwusynth.
+Then run up iiwusynth with
 
-Make sure you get a fairly recent version (0.2.x rather than
-0.0.x).  Then find a soundfont: a reasonable GM example is
-Musica Theoria 2, available as mustheory2.sf2 from the
-Collections area of <URL:http://www.hammersound.net/>, although it's
-large and it's packed using some stupid Windows-only format
-(common problem -- a few of the soundfonts on there are only
- zipped, though, so have a look around).  Then run up iiwusynth
-with
+  $ iiwusynth -m alsa_seq ./mustheory2.sf2
 
-  iiwusynth -m alsa_seq mustheory2.sf2
+or equivalent for whichever soundfont you want to use.
 
-If you're relatively short on CPU power, also give it "-R no"
-to turn off reverb and you'll get a bit more polyphony before
-it breaks up.  (If you're _very_ short on CPU power, forget it.)
+If you're relatively short on CPU power, also give it "-R no" to turn
+off reverb and you'll get a bit more polyphony before it breaks up.
+(If you're _very_ short on CPU power, forget it.)  You may find you
+have to run it as root or else the pitch goes awry, particularly on
+laptops with variable-speed CPUs.
 
 And then run Rosegarden, perhaps checking to make sure there
 are no spare rosegardensequencer processes hanging around from
 before you started iiwusynth (basically the synth needs to be
 started before the rosegardensequencer).
 
-You should find that one of the devices (16 instruments) is
-labelled "IIWU Synth", with a GM patch map.
+Then you should find that one of the devices (16 instruments) is
+labelled "IIWU Synth", with a GM patch map.  To set a track to one of
+the soft-synth instruments, click and hold on the track label at the
+left of the track until the instrument menu appears and select the
+instrument on there.  (If you have no other MIDI devices at all, then
+the soft-synth should be the default device.)
 
-Timidity can also be used as an ALSA soft-synth with soundfonts.
-In my experience it takes rather more CPU power than iiwusynth
-for rather lower-quality output, though I'm sure these things
-vary a lot depending on how the soundfont is made.
+You can also use Timidity as an ALSA soft-synth with soundfonts.  Run
+it in ALSA input mode:
+
+  $ timidity -iA
+
+In my experience it takes rather more CPU power than iiwusynth for
+rather lower-quality output, though I'm sure these things vary a lot
+depending on how the soundfont is made.
 
 
 How do I select an Instrument?
