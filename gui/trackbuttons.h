@@ -43,6 +43,8 @@ class RosegardenGUIDoc;
 
 class TrackButtons : public QVBox
 {
+    
+    Q_OBJECT
 
 public:
     TrackButtons(RosegardenGUIDoc* doc,
@@ -74,6 +76,10 @@ public:
     void setMutedTrack(const int &mutedTrack);
 
 
+public slots:
+    void colourRecordButton(int id);
+
+
 private:
 
     void drawButtons();
@@ -89,6 +95,7 @@ private:
     int m_tracks;
     int m_offset;
     int m_cellSize;
+    int m_lastID;
 
 };
 

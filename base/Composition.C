@@ -69,6 +69,11 @@ void Composition::swap(Composition& c)
 
     m_segments.swap(c.m_segments);
 
+    // swap tracks and instruments
+    //
+    m_tracks->swap(*(c.m_tracks));
+    m_instruments->swap(*(c.m_instruments));
+
     for (segmentcontainer::iterator i = that->m_segments.begin();
 	 i != that->m_segments.end(); ++i) {
 	(*i)->removeObserver(this);

@@ -31,7 +31,7 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
                            QHeader *hHeader,
                            const char* name,
                            WFlags):
-   QVBox(parent, name), m_doc(doc)
+   QVBox(parent, name), m_doc(doc), m_lastID(-1)
 {
     assert(vHeader != 0);
     assert(hHeader != 0);
@@ -57,7 +57,8 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
                            QWidget* parent,
                            const char* name,
                            WFlags):
-   QVBox(parent, name), m_doc(doc), m_tracks(0), m_offset(0), m_cellSize(0)
+   QVBox(parent, name), m_doc(doc), m_tracks(0), m_offset(0), m_cellSize(0),
+   m_lastID(-1)
 {
     drawButtons();
 }
@@ -65,7 +66,8 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
 TrackButtons::TrackButtons(QWidget* parent,
                            const char* name,
                            WFlags):
-   QVBox(parent, name), m_doc(0), m_tracks(0), m_offset(0), m_cellSize(0)
+   QVBox(parent, name), m_doc(0), m_tracks(0), m_offset(0), m_cellSize(0),
+   m_lastID(-1)
 {
 }
 
@@ -136,6 +138,9 @@ TrackButtons::drawButtons()
         mute = new QPushButton(track);
         record = new QPushButton(track);
 
+        mute->setFlat(true);
+        record->setFlat(true);
+
         // Create a label
         //
         label = new QLabel(track);
@@ -178,6 +183,10 @@ TrackButtons::drawButtons()
     label->setText(QString(""));
     label->setMinimumHeight(40);
     label->setMaximumHeight(40);
+
+
+    connect(m_recordButtonGroup, SIGNAL(released(int)),
+            this, SLOT(colourRecordButton(int)));
 
 }
 
@@ -240,5 +249,26 @@ TrackButtons::setMutedTrack(const int &mutedTrack)
 
     m_muteButtonGroup->find(mutedTrack)->setDown(true);
 }
+
+
+// Set a newly selected record button to a shocking red
+// palette, and unset any old record buttons we're jumping
+// from.
+//
+//
+void
+TrackButtons::colourRecordButton(int id)
+{
+    // Unset the palette if we're jumping to another button
+    if (m_lastID != id && m_lastID != -1)
+    {
+       m_recordButtonGroup->find(m_lastID)->unsetPalette();
+    }
+
+    m_recordButtonGroup->find(id)->setPalette(QPalette(red));
+    m_lastID = id;
+}
+
+
 
 
