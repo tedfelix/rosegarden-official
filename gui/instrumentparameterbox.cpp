@@ -689,14 +689,43 @@ InstrumentParameterBox::updateAllBoxes()
 void
 InstrumentParameterBox::slotSelectPlugin(int /*index*/) // no index 4 moment
 {
+    int index = 0;
+
     Rosegarden::AudioPluginDialog *aPD = 
         new Rosegarden::AudioPluginDialog(this,
                                           m_pluginManager,
-                                          m_selectedInstrument);
+                                          m_selectedInstrument,
+                                          index);
+
+    connect(aPD, SIGNAL(pluginSelected(int)),
+            this, SLOT(slotPluginSelected(int)));
+
+    connect(aPD, SIGNAL(pluginPortChanged(int, float)),
+            this, SLOT(slotPluginPortChanged(int, float)));
+
     aPD->show();
 
 }
 
+void
+InstrumentParameterBox::slotPluginSelected(int plugin)
+{
 
+    if (plugin == -1)
+    {
+        std:: cout << "InstrumentParameterBox::slotPluginSelected - "
+                   << "no plugin selected" << std::endl;
+    }
+    else
+        std::cout << "InstrumentParameterBox::slotPluginSelected" 
+                  << std::endl;
+}
+
+void
+InstrumentParameterBox::slotPluginPortChanged(int plugin, float value)
+{
+    std::cout << "InstrumentParameterBox::slotPluginPortChanged - "
+              << "value = " << value << std::endl;
+}
 
 

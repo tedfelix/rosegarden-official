@@ -47,6 +47,7 @@ class PluginPort;
 
 class PluginControl : public QHBox
 {
+    Q_OBJECT
 public:
 
     typedef enum
@@ -59,16 +60,25 @@ public:
     PluginControl(QWidget *parent,
                   ControlType type,
                   PluginPort *port,
-                  AudioPluginManager *pluginManager);
+                  AudioPluginManager *pluginManager,
+                  int index);
+ 
+public slots:
+    void slotValueChanged(int value);
+
+signals:
+    void valueChanged(float value);
 
 protected:
 
     ControlType          m_type;
     PluginPort          *m_port;
 
-    int                  m_multiplier;
+    float                m_multiplier;
     QDial               *m_dial;
     AudioPluginManager  *m_pluginManager;
+
+    int                  m_index;
 
 };
 
@@ -81,12 +91,16 @@ class AudioPluginDialog : public KDialogBase
 public:
     AudioPluginDialog(QWidget *parent,
                       AudioPluginManager *aPM,
-                      Instrument *instrument);
+                      Instrument *instrument,
+                      int index);
 
 public slots:
     void slotPluginSelected(int);
+    void slotPluginPortChanged(float value);
 
 signals:
+    void pluginSelected(int port);
+    void pluginPortChanged(int port, float value);
 
 protected:
 
@@ -98,6 +112,7 @@ protected:
     std::vector<PluginControl*> m_pluginWidgets;
 
     int                  m_headHeight;
+    int                  m_index;
 
 
 };

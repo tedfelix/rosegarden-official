@@ -35,10 +35,12 @@ namespace Rosegarden
 
 AudioPluginDialog::AudioPluginDialog(QWidget *parent,
                                      AudioPluginManager *aPM,
-                                     Instrument *instrument):
+                                     Instrument *instrument,
+                                     int index):
     KDialogBase(parent, "", false, i18n("Rosegarden Audio Plugin"), Close),
     m_pluginManager(aPM),
-    m_instrument(instrument)
+    m_instrument(instrument),
+    m_index(index)
 {
     QVBox *v = makeVBoxMainWidget();
 
@@ -73,6 +75,9 @@ AudioPluginDialog::slotPluginSelected(int number)
 {
     QString caption = strtoqstr(m_instrument->getName()) + QString(" - ");
 
+    // tell the sequencer
+    emit pluginSelected(number - 1);
+
     if (number == 0)
         setCaption(caption + i18n("<no plugin>"));
 
@@ -99,14 +104,17 @@ AudioPluginDialog::slotPluginSelected(int number)
             // Weed out non-control ports and those which have erroneous
             // looking bounds - uninitialised values?
             //
-            if ((*it)->getType() & PluginPort::Control &&
-                (fabs((*it)->getUpperBound() - (*it)->getLowerBound()) > 0.001))
+            if ((*it)->getType() & PluginPort::Control)
             {
                 PluginControl *control =
                     new PluginControl(mainWidget(),
                                       PluginControl::Rotary,
                                       *it,
-                                      m_pluginManager);
+                                      m_pluginManager,
+                                      count);
+
+                connect(control, SIGNAL(valueChanged(float)),
+                        this, SLOT(slotPluginPortChanged(float)));
                 control->show();
 
                 height += control->height();
@@ -134,16 +142,26 @@ AudioPluginDialog::slotPluginSelected(int number)
 
 }
 
+void
+AudioPluginDialog::slotPluginPortChanged(float value)
+{
+    emit pluginPortChanged(m_index, value);
+}
+
+
 // --------------------- PluginControl -------------------------
 //
 PluginControl::PluginControl(QWidget *parent,
                              ControlType type,
                              PluginPort *port,
-                             AudioPluginManager *aPM):
+                             AudioPluginManager *aPM,
+                             int index):
     QHBox(parent),
     m_type(type),
     m_port(port),
-    m_pluginManager(aPM)
+    m_multiplier(1.0),
+    m_pluginManager(aPM),
+    m_index(index)
 {
     QFont plainFont;
     plainFont.setPointSize((plainFont.pointSize() * 9 )/ 10);
@@ -182,6 +200,17 @@ PluginControl::PluginControl(QWidget *parent,
         m_dial = new QDial(this);
         setStretchFactor(m_dial, 8);
 
+        // Ensure that we always have at least fifty steps
+        //
+        while ((fabs(upperBound - lowerBound)) * m_multiplier < 50.0)
+            m_multiplier *= 10.0;
+
+        m_dial->setMinValue(int(lowerBound * m_multiplier));
+        m_dial->setMaxValue(int(upperBound * m_multiplier));
+
+        connect(m_dial, SIGNAL(valueChanged(int)),
+                this, SLOT(slotValueChanged(int)));
+
         QLabel *upp = new QLabel(QString("%1").arg(upperBound), this);
         upp->setIndent(10);
         upp->setAlignment(AlignLeft|AlignBottom);
@@ -195,6 +224,14 @@ PluginControl::PluginControl(QWidget *parent,
         */
     }
 }
+
+void
+PluginControl::slotValueChanged(int value)
+{
+    emit valueChanged((float(value))/m_multiplier);
+}
+
+
 
 
 

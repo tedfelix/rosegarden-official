@@ -75,6 +75,11 @@ public slots:
     //
     void slotSelectPlugin(int index);
 
+    // and for the signals that come back
+    //
+    void slotPluginSelected(int plugin);
+    void slotPluginPortChanged(int plugin, float value);
+
 signals:
 
     // Emit a MIDI controller for immediate processing.
