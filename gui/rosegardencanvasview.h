@@ -120,6 +120,8 @@ public slots:
     void stopAutoScroll();
     void doAutoScroll();
 
+    bool isAutoScrolling() const { return m_autoScrolling; }
+
 signals:
     void bottomWidgetHeightChanged(int);
 
@@ -151,6 +153,7 @@ protected:
     int m_autoScrollYMargin;
     ScrollDirection m_currentScrollDirection;
     int m_scrollDirectionConstraint;
+    bool m_autoScrolling;
 
     static const int DefaultSmoothScrollTimeInterval;
     static const int DefaultMinDeltaScroll;

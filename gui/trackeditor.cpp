@@ -547,10 +547,8 @@ TrackEditor::slotSetPointerPosition(Rosegarden::timeT position)
 	    if (m_playTracking) {
 		getSegmentCanvas()->slotScrollHoriz(int(double(position) / ruler->getUnitsPerPixel()));
 	    }
-	} else {
-// 	    if (getSegmentCanvas()->isTimeForSmoothScroll()) {
-// 		getSegmentCanvas()->slotScrollHorizSmallSteps(int(double(position) / ruler->getUnitsPerPixel()));
-// 	    }
+	} else if (!getSegmentCanvas()->isAutoScrolling()) {
+	    getSegmentCanvas()->slotScrollHoriz(int(double(position) / ruler->getUnitsPerPixel()));
         }
 
 	emit needUpdate();

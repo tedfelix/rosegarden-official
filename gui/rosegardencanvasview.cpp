@@ -42,7 +42,8 @@ RosegardenCanvasView::RosegardenCanvasView(QCanvas* canvas,
       m_autoScrollXMargin(0),
       m_autoScrollYMargin(0),
       m_currentScrollDirection(None),
-      m_scrollDirectionConstraint(NoFollow)
+      m_scrollDirectionConstraint(NoFollow),
+      m_autoScrolling(false)
 {
     setDragAutoScroll(true);
     connect( &m_autoScrollTimer, SIGNAL( timeout() ),
@@ -108,6 +109,7 @@ void RosegardenCanvasView::startAutoScroll()
     m_autoScrollYMargin = m_autoScrollStartPoint.y() / 10;
     m_autoScrollXMargin = m_autoScrollStartPoint.x() / 10;
 
+    m_autoScrolling = true;
 }
 
 void RosegardenCanvasView::startAutoScroll(int directionConstraint)
@@ -123,6 +125,8 @@ void RosegardenCanvasView::stopAutoScroll()
     m_autoScrollTimer.stop();
     m_minDeltaScroll = DefaultMinDeltaScroll;
     m_currentScrollDirection = None;
+
+    m_autoScrolling = false;
 }
 
 void RosegardenCanvasView::doAutoScroll()
