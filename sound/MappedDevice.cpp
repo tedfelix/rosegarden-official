@@ -68,6 +68,8 @@ MappedDevice::MappedDevice(const MappedDevice &mD):
     m_type = mD.getType();
     m_name = mD.getName();
 #ifndef EXPERIMENTAL_ALSA_DRIVER
+    m_client = mD.getClient();
+#else
     m_connection = mD.getConnection();
 #endif
 }
