@@ -40,6 +40,36 @@ using Rosegarden::TrackId;
 using Rosegarden::AudioFileManager;
 
 
+/**
+ *
+ *  *** IMPORTANT!
+ *
+ *  For a command that modifies segments to be able to undo and redo
+ *  successfully with the simplest possible implementation, it is often
+ *  necessary for it to be able to "remember" segment pointers and know
+ *  for certain that they're still valid later.  For example, it's much
+ *  easier to undo a segment copy command if it can just remember a
+ *  pointer to the segment it created, and remove that from the segment
+ *  in its unexecute method, rather than having to locate the correct
+ *  segment to remove given some other information about it.
+ *
+ *  Almost all of the existing commands already rely on this, and it
+ *  only works if _all_ segment commands do the same thing.
+ *
+ *  For this to work correctly, segment commands must:
+ *
+ *   1. Only create new segments the _first_ time execute() is run.
+ *      Thereafter they should just reuse the same pointer they created
+ *      the first time.
+ *
+ *   2. Never delete segments in unexecute(), just detach them and
+ *      save them for later.  You can delete them in the destructor.
+ *      (Never create segments in unexecute() either, though that's
+ *      a less likely mistake.)
+ *
+ */
+
+
 SegmentCommand::SegmentCommand(QString name, const std::vector<Rosegarden::Segment*>& segments)
     : KNamedCommand(name)
 {
@@ -171,9 +201,11 @@ SegmentQuickCopyCommand::~SegmentQuickCopyCommand()
 void
 SegmentQuickCopyCommand::execute()
 {
-    m_segment = new Segment(*m_segmentToCopy);
-    m_segment->setLabel(qstrtostr(i18n("%1 (copied)").arg
-				  (strtoqstr(m_segment->getLabel()))));
+    if (!m_segment) {
+	m_segment = new Segment(*m_segmentToCopy);
+	m_segment->setLabel(qstrtostr(i18n("%1 (copied)").arg
+				      (strtoqstr(m_segment->getLabel()))));
+    }
     m_composition->addSegment(m_segment);
     m_detached = false;
 }
@@ -288,10 +320,6 @@ void
 SegmentSingleRepeatToCopyCommand::execute()
 {
     if (!m_newSegment) {
-
-        Rosegarden::timeT duration =
-            m_segment->getEndMarkerTime() - m_segment->getStartTime();
-
 	m_newSegment = new Segment(*m_segment);
 	m_newSegment->setStartTime(m_time);
 	m_newSegment->setRepeating(true);
@@ -859,48 +887,54 @@ AudioSegmentAutoSplitCommand::~AudioSegmentAutoSplitCommand()
 void
 AudioSegmentAutoSplitCommand::execute()
 {
-    std::vector<AutoSplitPoint> splitPoints;
+    if (m_newSegments.size() == 0) {
 
-    if (m_segment->getType() != Rosegarden::Segment::Audio)
-        return;
+	std::vector<AutoSplitPoint> splitPoints;
 
-    std::vector<Rosegarden::SplitPointPair> rtSplitPoints =
-        m_audioFileManager->getSplitPoints(m_segment->getAudioFileId(),
-                                           m_segment->getAudioStartTime(),
-                                           m_segment->getAudioEndTime(),
-                                           m_threshold);
-
-    std::vector<Rosegarden::SplitPointPair>::iterator it;
-    Rosegarden::timeT absStartTime, absEndTime;
-
-    char splitNumber[10];
-    int splitCount = 0;
-
-    for (it = rtSplitPoints.begin(); it != rtSplitPoints.end(); it++)
-    {
-        absStartTime = m_segment->getStartTime() +
-            m_composition->getElapsedTimeForRealTime(it->first);
-
-        absEndTime = m_segment->getStartTime() +
-            m_composition->getElapsedTimeForRealTime(it->second);
-
-	Segment *newSegment = new Segment(*m_segment);
-        newSegment->setAudioStartTime(it->first);
-        newSegment->setAudioEndTime(it->second);
-
-        // label
-        sprintf(splitNumber, "%d", splitCount++);
-        newSegment->setLabel(qstrtostr(i18n("%1 (autosplit %2)").arg
-				       (strtoqstr(m_segment->getLabel())).arg
-				       (splitNumber)));
-
-	m_composition->addSegment(newSegment);
-        newSegment->setStartTime(absStartTime);
-        newSegment->setEndTime(absEndTime);
-        std::cout << "CREATING FROM " << newSegment->getAudioStartTime() << " TO "
-                                 << newSegment->getAudioEndTime() << std::endl;
-
-	m_newSegments.push_back(newSegment);
+	if (m_segment->getType() != Rosegarden::Segment::Audio)
+	    return;
+	
+	std::vector<Rosegarden::SplitPointPair> rtSplitPoints =
+	    m_audioFileManager->getSplitPoints(m_segment->getAudioFileId(),
+					       m_segment->getAudioStartTime(),
+					       m_segment->getAudioEndTime(),
+					       m_threshold);
+	
+	std::vector<Rosegarden::SplitPointPair>::iterator it;
+	Rosegarden::timeT absStartTime, absEndTime;
+	
+	char splitNumber[10];
+	int splitCount = 0;
+	
+	for (it = rtSplitPoints.begin(); it != rtSplitPoints.end(); it++)
+	{
+	    absStartTime = m_segment->getStartTime() +
+		m_composition->getElapsedTimeForRealTime(it->first);
+	    
+	    absEndTime = m_segment->getStartTime() +
+		m_composition->getElapsedTimeForRealTime(it->second);
+	    
+	    Segment *newSegment = new Segment(*m_segment);
+	    newSegment->setAudioStartTime(it->first);
+	    newSegment->setAudioEndTime(it->second);
+	    
+	    // label
+	    sprintf(splitNumber, "%d", splitCount++);
+	    newSegment->setLabel(qstrtostr(i18n("%1 (autosplit %2)").arg
+					   (strtoqstr(m_segment->getLabel())).arg
+					   (splitNumber)));
+	    
+	    newSegment->setStartTime(absStartTime);
+	    newSegment->setEndTime(absEndTime);
+	    std::cout << "CREATING FROM " << newSegment->getAudioStartTime() << " TO "
+		      << newSegment->getAudioEndTime() << std::endl;
+	    
+	    m_newSegments.push_back(newSegment);
+	}
+    }
+    
+    for (unsigned int i = 0; i < m_newSegments.size(); ++i) {
+	m_composition->addSegment(m_newSegments[i]);
     }
 	    
     m_composition->detachSegment(m_segment);
@@ -943,112 +977,115 @@ SegmentAutoSplitCommand::~SegmentAutoSplitCommand()
 void
 SegmentAutoSplitCommand::execute()
 {
-    std::vector<AutoSplitPoint> splitPoints;
+    if (m_newSegments.size() == 0) {
 
-    Rosegarden::Clef clef;
-    Rosegarden::Key key;
-    timeT segmentStart = m_segment->getStartTime();
-    timeT lastSoundTime = segmentStart;
-    timeT lastSplitTime = segmentStart - 1;
+	std::vector<AutoSplitPoint> splitPoints;
 
-    for (Segment::iterator i = m_segment->begin();
-	 m_segment->isBeforeEndMarker(i); ++i) {
+	Rosegarden::Clef clef;
+	Rosegarden::Key key;
+	timeT segmentStart = m_segment->getStartTime();
+	timeT lastSoundTime = segmentStart;
+	timeT lastSplitTime = segmentStart - 1;
 	
-	timeT myTime = (*i)->getAbsoluteTime();
-	int barNo = m_composition->getBarNumber(myTime);
-
-	if ((*i)->isa(Rosegarden::Clef::EventType)) {
-	    clef = Rosegarden::Clef(**i);
-	} else if ((*i)->isa(Rosegarden::Key::EventType)) {
-	    key = Rosegarden::Key(**i);
-	}
-
-	if (myTime <= lastSplitTime) continue;
-
-	bool newTimeSig = false;
-	Rosegarden::TimeSignature tsig =
-	    m_composition->getTimeSignatureInBar(barNo, newTimeSig);
-	
-	if (newTimeSig) {
-
-	    // If there's a new time sig in this bar and we haven't
-	    // already made a split in this bar, make one
-
-	    if (splitPoints.size() == 0 ||
-		m_composition->getBarNumber
-		(splitPoints[splitPoints.size()-1].time) < barNo) {
-
-		splitPoints.push_back(AutoSplitPoint(myTime, lastSoundTime,
-						     clef, key));
-		lastSoundTime = lastSplitTime = myTime;
-	    }
-
-	} else if ((*i)->isa(Rosegarden::Note::EventRestType)) {
-
-	    // Otherwise never start a subsegment on a rest
+	for (Segment::iterator i = m_segment->begin();
+	     m_segment->isBeforeEndMarker(i); ++i) {
 	    
-	    continue;
-
-	} else {
-
-	    // When we meet a non-rest event, start a new split
-	    // if an entire bar has passed since the last one
-
-	    int lastSoundBarNo = m_composition->getBarNumber(lastSoundTime);
-
-	    if (lastSoundBarNo < barNo - 1 ||
-		(lastSoundBarNo == barNo - 1 &&
-		 m_composition->getBarStartForTime(lastSoundTime) ==
-		 lastSoundTime &&
-		 lastSoundTime > segmentStart)) {
-
-		splitPoints.push_back
-		    (AutoSplitPoint
-		     (m_composition->getBarStartForTime(myTime), lastSoundTime,
-		      clef, key));
-		lastSplitTime = myTime;
+	    timeT myTime = (*i)->getAbsoluteTime();
+	    int barNo = m_composition->getBarNumber(myTime);
+	    
+	    if ((*i)->isa(Rosegarden::Clef::EventType)) {
+		clef = Rosegarden::Clef(**i);
+	    } else if ((*i)->isa(Rosegarden::Key::EventType)) {
+		key = Rosegarden::Key(**i);
 	    }
+	    
+	    if (myTime <= lastSplitTime) continue;
+	    
+	    bool newTimeSig = false;
+	    Rosegarden::TimeSignature tsig =
+		m_composition->getTimeSignatureInBar(barNo, newTimeSig);
+	    
+	    if (newTimeSig) {
+		
+		// If there's a new time sig in this bar and we haven't
+		// already made a split in this bar, make one
+		
+		if (splitPoints.size() == 0 ||
+		    m_composition->getBarNumber
+		    (splitPoints[splitPoints.size()-1].time) < barNo) {
+		    
+		    splitPoints.push_back(AutoSplitPoint(myTime, lastSoundTime,
+							 clef, key));
+		    lastSoundTime = lastSplitTime = myTime;
+		}
+		
+	    } else if ((*i)->isa(Rosegarden::Note::EventRestType)) {
+		
+		// Otherwise never start a subsegment on a rest
+		
+		continue;
+		
+	    } else {
+		
+		// When we meet a non-rest event, start a new split
+		// if an entire bar has passed since the last one
+		
+		int lastSoundBarNo = m_composition->getBarNumber(lastSoundTime);
+		
+		if (lastSoundBarNo < barNo - 1 ||
+		    (lastSoundBarNo == barNo - 1 &&
+		     m_composition->getBarStartForTime(lastSoundTime) ==
+		     lastSoundTime &&
+		     lastSoundTime > segmentStart)) {
+		    
+		    splitPoints.push_back
+			(AutoSplitPoint
+			 (m_composition->getBarStartForTime(myTime), lastSoundTime,
+			  clef, key));
+		    lastSplitTime = myTime;
+		}
+	    }
+	    
+	    lastSoundTime = std::max(lastSoundTime, myTime + (*i)->getDuration());
 	}
-
-	lastSoundTime = std::max(lastSoundTime, myTime + (*i)->getDuration());
-    }
 	
-    for (unsigned int split = 0; split <= splitPoints.size(); ++split) {
+	for (unsigned int split = 0; split <= splitPoints.size(); ++split) {
+	    
+	    Segment *newSegment = new Segment();
+	    newSegment->setTrack(m_segment->getTrack());
+	    newSegment->setLabel(qstrtostr(i18n("%1 (part)").arg
+					   (strtoqstr(m_segment->getLabel()))));
+	    
+	    timeT startTime = segmentStart;
+	    if (split > 0) {
+		
+		RG_DEBUG << "Auto-split point " << split-1 << ": time "
+			 << splitPoints[split-1].time << ", lastSoundTime "
+			 << splitPoints[split-1].lastSoundTime << endl;
+		
+		startTime = splitPoints[split-1].time;
+		newSegment->insert(splitPoints[split-1].clef.getAsEvent(startTime));
+		newSegment->insert(splitPoints[split-1].key.getAsEvent(startTime));
+	    }
+	    
+	    Segment::iterator i = m_segment->findTime(startTime);
 
-	Segment *newSegment = new Segment();
-	newSegment->setTrack(m_segment->getTrack());
-	newSegment->setLabel(qstrtostr(i18n("%1 (part)").arg
-				       (strtoqstr(m_segment->getLabel()))));
-
-	timeT startTime = segmentStart;
-	if (split > 0) {
-
-	    RG_DEBUG << "Auto-split point " << split-1 << ": time "
-		     << splitPoints[split-1].time << ", lastSoundTime "
-		     << splitPoints[split-1].lastSoundTime << endl;
-
-	    startTime = splitPoints[split-1].time;
-	    newSegment->insert(splitPoints[split-1].clef.getAsEvent(startTime));
-	    newSegment->insert(splitPoints[split-1].key.getAsEvent(startTime));
+	    // A segment has to contain at least one note to be a worthy
+	    // candidate for adding back into the composition
+	    bool haveNotes = false;
+	    
+	    while (m_segment->isBeforeEndMarker(i)) {
+		timeT t = (*i)->getAbsoluteTime();
+		if (split < splitPoints.size() &&
+		    t >= splitPoints[split].lastSoundTime) break;
+		if ((*i)->isa(Rosegarden::Note::EventType)) haveNotes = true;
+		newSegment->insert(new Event(**i));
+		++i;
+	    }
+	    
+	    if (haveNotes) m_newSegments.push_back(newSegment);
+	    else delete newSegment;
 	}
-
-	Segment::iterator i = m_segment->findTime(startTime);
-
-	// A segment has to contain at least one note to be a worthy
-	// candidate for adding back into the composition
-	bool haveNotes = false;
-
-	while (m_segment->isBeforeEndMarker(i)) {
-	    timeT t = (*i)->getAbsoluteTime();
-	    if (split < splitPoints.size() &&
-		t >= splitPoints[split].lastSoundTime) break;
-	    if ((*i)->isa(Rosegarden::Note::EventType)) haveNotes = true;
-	    newSegment->insert(new Event(**i));
-	    ++i;
-	}
-
-	if (haveNotes) m_newSegments.push_back(newSegment);
-	else delete newSegment;
     }
 	    
     m_composition->detachSegment(m_segment);
@@ -1176,30 +1213,34 @@ void
 SegmentRescaleCommand::execute()
 {
     timeT startTime = m_segment->getStartTime();
-    m_newSegment = new Segment();
-    m_newSegment->setTrack(m_segment->getTrack());
-    m_newSegment->setLabel(qstrtostr(i18n("%1 (rescaled)").arg
-				     (strtoqstr(m_segment->getLabel()))));
 
-    for (Segment::iterator i = m_segment->begin();
-	 m_segment->isBeforeEndMarker(i); ++i) {
+    if (!m_newSegment) {
 
-	if ((*i)->isa(Rosegarden::Note::EventRestType)) continue;
-
-	timeT dt = (*i)->getAbsoluteTime() - startTime;
-	timeT duration = (*i)->getDuration();
-
-	m_newSegment->insert
-	    (new Event(**i,
-		       startTime + (dt * m_multiplier / m_divisor),
-		       duration * m_multiplier / m_divisor));
+	m_newSegment = new Segment();
+	m_newSegment->setTrack(m_segment->getTrack());
+	m_newSegment->setLabel(qstrtostr(i18n("%1 (rescaled)").arg
+					 (strtoqstr(m_segment->getLabel()))));
+	
+	for (Segment::iterator i = m_segment->begin();
+	     m_segment->isBeforeEndMarker(i); ++i) {
+	    
+	    if ((*i)->isa(Rosegarden::Note::EventRestType)) continue;
+	    
+	    timeT dt = (*i)->getAbsoluteTime() - startTime;
+	    timeT duration = (*i)->getDuration();
+	    
+	    m_newSegment->insert
+		(new Event(**i,
+			   startTime + (dt * m_multiplier / m_divisor),
+			   duration * m_multiplier / m_divisor));
+	}
     }
-
+    
     m_segment->getComposition()->addSegment(m_newSegment);
     m_segment->getComposition()->detachSegment(m_segment);
     m_newSegment->normalizeRests(m_newSegment->getStartTime(),
 				 m_newSegment->getEndTime());
-
+    
     m_newSegment->setEndMarkerTime
 	(startTime + (m_segment->getEndMarkerTime() - startTime) *
 	 m_multiplier / m_divisor);
@@ -1786,72 +1827,84 @@ SegmentSplitByPitchCommand::~SegmentSplitByPitchCommand()
 void
 SegmentSplitByPitchCommand::execute()
 {
-    m_newSegmentA = new Segment;
-    m_newSegmentB = new Segment;
+    if (!m_newSegmentA) {
 
-    m_newSegmentA->setTrack(m_segment->getTrack());
-    m_newSegmentA->setStartTime(m_segment->getStartTime());
-    m_composition->addSegment(m_newSegmentA);
+	m_newSegmentA = new Segment;
+	m_newSegmentB = new Segment;
 
-    m_newSegmentB->setTrack(m_segment->getTrack());
-    m_newSegmentB->setStartTime(m_segment->getStartTime());
-    m_composition->addSegment(m_newSegmentB);
-    
-    int splitPitch(m_splitPitch);
-    
-    for (Segment::iterator i = m_segment->begin();
-	 m_segment->isBeforeEndMarker(i); ++i) {
+	m_newSegmentA->setTrack(m_segment->getTrack());
+	m_newSegmentA->setStartTime(m_segment->getStartTime());
 	
-	if ((*i)->isa(Rosegarden::Note::EventRestType)) continue;
-	if ((*i)->isa(Rosegarden::Clef::EventType) &&
-	    m_clefHandling != LeaveClefs) continue;
-
-	if ((*i)->isa(Rosegarden::Note::EventType)) {
+	m_newSegmentB->setTrack(m_segment->getTrack());
+	m_newSegmentB->setStartTime(m_segment->getStartTime());
+	
+	int splitPitch(m_splitPitch);
+	
+	for (Segment::iterator i = m_segment->begin();
+	     m_segment->isBeforeEndMarker(i); ++i) {
 	    
-	    if (m_ranging) {
-		splitPitch = getSplitPitchAt(i, splitPitch);
-	    }
+	    if ((*i)->isa(Rosegarden::Note::EventRestType)) continue;
+	    if ((*i)->isa(Rosegarden::Clef::EventType) &&
+		m_clefHandling != LeaveClefs) continue;
 	    
-	    if ((*i)->has(Rosegarden::BaseProperties::PITCH) &&
-		(*i)->get<Rosegarden::Int>(Rosegarden::BaseProperties::PITCH) <
-		splitPitch) {
-
-		m_newSegmentB->insert(new Event(**i));
+	    if ((*i)->isa(Rosegarden::Note::EventType)) {
+		
+		if (m_ranging) {
+		    splitPitch = getSplitPitchAt(i, splitPitch);
+		}
+		
+		if ((*i)->has(Rosegarden::BaseProperties::PITCH) &&
+		    (*i)->get<Rosegarden::Int>(Rosegarden::BaseProperties::PITCH) <
+		    splitPitch) {
+		    if (m_newSegmentB->empty()) {
+			m_newSegmentB->fillWithRests((*i)->getAbsoluteTime());
+		    }
+		    m_newSegmentB->insert(new Event(**i));
+		} else {
+		    if (m_newSegmentA->empty()) {
+			m_newSegmentA->fillWithRests((*i)->getAbsoluteTime());
+		    }
+		    m_newSegmentA->insert(new Event(**i));
+		}
+		
 	    } else {
+		
 		m_newSegmentA->insert(new Event(**i));
-	    }
-	    
-	} else {
-
-	    m_newSegmentA->insert(new Event(**i));
-
-	    if (m_dupNonNoteEvents) {
-		m_newSegmentB->insert(new Event(**i));
+		
+		if (m_dupNonNoteEvents) {
+		    m_newSegmentB->insert(new Event(**i));
+		}
 	    }
 	}
+
+	m_newSegmentA->fillWithRests(m_segment->getEndMarkerTime());
+	m_newSegmentB->fillWithRests(m_segment->getEndMarkerTime());
     }
+
+    m_composition->addSegment(m_newSegmentA);
+    m_composition->addSegment(m_newSegmentB);
     
     Rosegarden::SegmentNotationHelper helperA(*m_newSegmentA);
     Rosegarden::SegmentNotationHelper helperB(*m_newSegmentB);
-
+    
     if (m_clefHandling == RecalculateClefs) {
-
+	
 	m_newSegmentA->insert
 	    (helperA.guessClef(m_newSegmentA->begin(),
 			       m_newSegmentA->end()).getAsEvent
 	     (m_newSegmentA->getStartTime()));
-
+	
 	m_newSegmentB->insert
 	    (helperB.guessClef(m_newSegmentB->begin(),
 			       m_newSegmentB->end()).getAsEvent
 	     (m_newSegmentB->getStartTime()));
-
+	
     } else if (m_clefHandling == UseTrebleAndBassClefs) {
-
+	    
 	m_newSegmentA->insert
 	    (Rosegarden::Clef(Rosegarden::Clef::Treble).getAsEvent
 	     (m_newSegmentA->getStartTime()));
-
+	
 	m_newSegmentB->insert
 	    (Rosegarden::Clef(Rosegarden::Clef::Bass).getAsEvent
 	     (m_newSegmentB->getStartTime()));
@@ -1863,7 +1916,7 @@ SegmentSplitByPitchCommand::execute()
 		     Rosegarden::BaseProperties::GROUP_TYPE_BEAMED);
     helperB.autoBeam(m_newSegmentB->begin(), m_newSegmentB->end(),
 		     Rosegarden::BaseProperties::GROUP_TYPE_BEAMED);
-
+    
     std::string label = m_segment->getLabel();
     m_newSegmentA->setLabel(qstrtostr(i18n("%1 (upper)").arg
 				      (strtoqstr(label))));
@@ -1878,10 +1931,8 @@ void
 SegmentSplitByPitchCommand::unexecute()
 {
     m_composition->addSegment(m_segment);
-    delete m_newSegmentA;
-    delete m_newSegmentB;
-    m_newSegmentA = 0;
-    m_newSegmentB = 0;
+    m_composition->detachSegment(m_newSegmentA);
+    m_composition->detachSegment(m_newSegmentB);
     m_executed = false;
 }
 

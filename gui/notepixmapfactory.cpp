@@ -1468,7 +1468,7 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
 
     int pixmapHeight = lw * 12 + 1;
     int yoffset = lw * 3;
-    if (h > 10) {
+    if (h > 12) {
 	pixmapHeight += 6 * lw;
 	yoffset += 6 * lw;
     } else if (h < -4) {

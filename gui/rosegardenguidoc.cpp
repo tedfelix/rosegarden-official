@@ -1106,6 +1106,9 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
                     if (m_recordSegment->size() == 0 &&
                         !m_composition.contains(m_recordSegment))
                         {
+			    m_recordSegment->setStartTime
+				(m_composition.getBarStartForTime(absTime));
+			    m_recordSegment->fillWithRests(absTime);
                             m_endOfLastRecordedNote = m_composition.getPosition();
                             m_composition.addSegment(m_recordSegment);
                         }

@@ -485,6 +485,7 @@ Segment::fillWithRests(timeT startTime, timeT endTime)
     }
 
     timeT restDuration = endTime - startTime;
+    if (restDuration <= 0) return;
 
 /*
     cerr << "Segment(" << this << ")::fillWithRests: endTime "
