@@ -80,8 +80,9 @@ public:
     // Reset internal states while playing (like when looping
     // and jumping to a new time)
     //
-    void resetPlayback(const Rosegarden::RealTime &position)
-        { m_soundDriver->resetPlayback(position); }
+    void resetPlayback(const Rosegarden::RealTime &oldPosition,
+		       const Rosegarden::RealTime &position)
+        { m_soundDriver->resetPlayback(oldPosition, position); }
 
     // Control recording (input) state
     //

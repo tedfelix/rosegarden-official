@@ -58,7 +58,7 @@ public:
     virtual void initialise();
     virtual void initialisePlayback(const RealTime &position);
     virtual void stopPlayback();
-    virtual void resetPlayback(const RealTime &position);
+    virtual void resetPlayback(const RealTime &oldPosition, const RealTime &position);
     virtual void allNotesOff();
     virtual void processNotesOff(const RealTime &time);
 
@@ -268,8 +268,6 @@ private:
     int                          m_maxClients;
     int                          m_maxPorts;
     int                          m_maxQueues;
-
-    NoteOffQueue                 m_noteOffQueue;
 
     // Because this can fail even if the driver's up (if
     // another service is using the port say)

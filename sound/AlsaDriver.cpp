@@ -1349,18 +1349,14 @@ AlsaDriver::stopPlayback()
 }
 
 void
-AlsaDriver::resetPlayback(const RealTime &position)
+AlsaDriver::resetPlayback(const RealTime &oldPosition, const RealTime &position)
 {
-    // Reset note offs to correct positions
-    //
-    RealTime modifyNoteOff = m_playStartPosition - m_alsaPlayStartTime;
-
-    // set new
     m_playStartPosition = position;
     m_alsaPlayStartTime = getAlsaTime();
 
-    // add
-    modifyNoteOff = modifyNoteOff - m_playStartPosition + m_alsaPlayStartTime;
+    // Reset note offs to correct positions
+    //
+    RealTime jump = position - oldPosition;
 
     // modify the note offs that exist as they're relative to the
     // playStartPosition terms.
@@ -1368,11 +1364,10 @@ AlsaDriver::resetPlayback(const RealTime &position)
     for (NoteOffQueue::iterator i = m_noteOffQueue.begin();
                                 i != m_noteOffQueue.end(); ++i)
     {
-
         // if we're fast forwarding then we bring the note off closer
-        if (modifyNoteOff <= RealTime::zeroTime)
+	if (jump >= RealTime::zeroTime)
         {
-            (*i)->setRealTime((*i)->getRealTime() + modifyNoteOff);
+            (*i)->setRealTime((*i)->getRealTime() - jump /* + modifyNoteOff */);
         }
         else // we're rewinding - kill the note immediately
         {

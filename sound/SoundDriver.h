@@ -140,7 +140,7 @@ public:
 
     virtual void initialisePlayback(const RealTime &position) = 0;
     virtual void stopPlayback() = 0;
-    virtual void resetPlayback(const RealTime &position) = 0;
+    virtual void resetPlayback(const RealTime &oldPosition, const RealTime &position) = 0;
     virtual void allNotesOff() = 0;
     virtual void processNotesOff(const RealTime &time) = 0;
     

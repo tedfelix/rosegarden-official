@@ -357,7 +357,7 @@ ArtsDriver::stopPlayback()
 
 
 void
-ArtsDriver::resetPlayback(const RealTime &position)
+ArtsDriver::resetPlayback(const RealTime &oldPosition, const RealTime &position)
 {
     //allNotesOff();
     RealTime artsPlayStartTime = RealTime(m_artsPlayStartTime.sec,

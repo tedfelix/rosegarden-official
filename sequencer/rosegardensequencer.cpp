@@ -340,6 +340,8 @@ RosegardenSequencerApp::updateClocks()
     //
     if (isLooping() && newPosition >= m_loopEnd)
     {
+	Rosegarden::RealTime oldPosition = m_songPosition;
+
         // Remove the loop width from the song position and send
         // this position to the GUI
         //
@@ -349,7 +351,7 @@ RosegardenSequencerApp::updateClocks()
 
         // Reset playback using this jump
         //
-        m_sequencer->resetPlayback(m_songPosition);
+        m_sequencer->resetPlayback(oldPosition, m_songPosition);
 
 	m_mC.clear();
 	fetchEvents(m_mC, m_songPosition, m_songPosition + m_readAhead, true);
@@ -415,6 +417,8 @@ RosegardenSequencerApp::jumpTo(long posSec, long posNsec)
 
     m_sequencer->stopClocks();
 
+    Rosegarden::RealTime oldPosition = m_songPosition;
+
     m_songPosition = m_lastFetchSongPosition =
 	Rosegarden::RealTime(posSec, posNsec);
 
@@ -423,7 +427,7 @@ RosegardenSequencerApp::jumpTo(long posSec, long posNsec)
 	    (m_songPosition);
     }
 
-    m_sequencer->resetPlayback(m_songPosition);
+    m_sequencer->resetPlayback(oldPosition, m_songPosition);
 
     // Now prebuffer as in startPlaying:
 
@@ -474,11 +478,8 @@ RosegardenSequencerApp::processRecordedMidi()
 void
 RosegardenSequencerApp::processRecordedAudio()
 {
-    //!!! Nothing to do here: the recording time is sent back to the GUI
-    // in the sequencer mapper as a normal case.  What we probably
-    // should be doing is updating the sequencer mapper with levels,
-    // instead of sending them through mapped events.  Next thing to
-    // do I guess...
+    // Nothing to do here: the recording time is sent back to the GUI
+    // in the sequencer mapper as a normal case.
 }
 
 
@@ -720,8 +721,6 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
         m_transportStatus = STARTING_TO_PLAY;
     }
 
-    //!!! Stop the clocks while we do all the dirty work.  We'll
-    //restart them at the end of startPlaying().
     m_sequencer->stopClocks();
 
     // Set up buffer size
@@ -1060,8 +1059,7 @@ RosegardenSequencerApp::processMappedEvent(unsigned int id,
 
     Rosegarden::MappedComposition mC;
 
-    SEQUENCER_DEBUG << "processMappedEvent() - sending out single event"
-                    << endl;
+    SEQUENCER_DEBUG << "processMappedEvent(data) - sending out single event at time " << mE->getEventTime() << endl;
 
     /*
     std::cout << "ID = " << mE->getInstrument() << std::endl;
@@ -1080,6 +1078,8 @@ RosegardenSequencerApp::processMappedEvent(MappedEvent mE)
 {
     Rosegarden::MappedComposition mC;
     mC.insert(new MappedEvent(mE));
+    SEQUENCER_DEBUG << "processMappedEvent(ev) - sending out single event at time " << mE.getEventTime() << endl;
+
     m_sequencer->processEventsOut(mC, true);
 }
 
