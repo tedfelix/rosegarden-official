@@ -1,7 +1,5 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 
-SUBDIRS = po core sound gui
-
 EXTRA_DIST = rosegardengui.kdevprj AUTHORS COPYING ChangeLog INSTALL README TODO rosegardengui.lsm 
 
 ####### kdevelop will overwrite this part!!! (end)############
@@ -9,7 +7,9 @@ EXTRA_DIST = rosegardengui.kdevprj AUTHORS COPYING ChangeLog INSTALL README TODO
 # This Makefile.am initially comes from kapptemplate but kdevelop has added
 # its own stuff in it, hence the inconsistencies. - GL.
 
-SUBDIRS = $(TOPSUBDIRS)
+COMPILE_FIRST = core
+COMPILE_LAST = gui
+SUBDIRS = $(COMPILE_FIRST) $(TOPSUBDIRS) $(COMPILE_LAST)
 
 $(top_srcdir)/configure.in: configure.in.in $(top_srcdir)/subdirs
 	cd $(top_srcdir) && $(MAKE) -f admin/Makefile.common configure.in ;
