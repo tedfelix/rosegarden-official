@@ -1101,28 +1101,11 @@ NotationCanvasView* NotationView::getCanvasView()
 //
 void NotationView::slotEditCut()
 {
-//    kdDebug(KDEBUG_AREA) << "NotationView::slotEditCut()\n";
-
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Cutting selection..."), statusBar());
 
-//    kdDebug(KDEBUG_AREA) << "NotationView::slotEditCut() : cutting selection\n";
-
-    
     addCommandToHistory(new CutSelectionCommand(*m_currentEventSelection,
 						m_document->getClipboard()));
-
-//!!!
-//    m_currentEventSelection->cut();
-
-//    emit usedSelection();
-
-//    refreshSegment(&m_currentEventSelection->getSegment(),
-//		   m_currentEventSelection->getBeginTime(),
-//		   m_currentEventSelection->getEndTime());
-
-//    kdDebug(KDEBUG_AREA) << "NotationView::slotEditCut() : selection duration = "
-//                         << m_currentEventSelection->getTotalDuration() << endl;
 }
 
 void NotationView::slotEditCopy()
@@ -1133,23 +1116,18 @@ void NotationView::slotEditCopy()
     addCommandToHistory(new CopySelectionCommand(*m_currentEventSelection,
 						 m_document->getClipboard()));
 
-//!!!    m_currentEventSelection->copy();
-
     emit usedSelection();
 }
 
 void NotationView::slotEditPaste()
-{/*!!!
-    if (!m_currentEventSelection) {
+{
+    if (m_document->getClipboard()->isEmpty()) {
         slotStatusHelpMsg(i18n("Clipboard is empty"));
         slotQuarter(); //!!!why?
         return;
     }
- */
-    slotStatusHelpMsg(i18n("Inserting clipboard contents..."));
 
-    kdDebug(KDEBUG_AREA) << "NotationView::slotEditPaste() : selection duration = "
-                         << m_currentEventSelection->getTotalDuration() << endl;
+    slotStatusHelpMsg(i18n("Inserting clipboard contents..."));
 
     // Paste at cursor position
     //
@@ -1173,22 +1151,14 @@ void NotationView::slotEditPaste()
 	insertionTime = (*i)->getAbsoluteTime();
     }
 
-    //!!! how to identify if paste failed
-    addCommandToHistory(new PasteCommand(segment, m_document->getClipboard(),
-					 insertionTime));
+    PasteCommand *command = new PasteCommand
+	(segment, m_document->getClipboard(), insertionTime);
 
-/*
-    if (m_currentEventSelection->pasteToSegment(segment, insertionTime)) {
-
-	refreshSegment
-	    (&segment, 0,
-	     insertionTime + m_currentEventSelection->getTotalDuration() + 1);
-
+    if (!command->isPossible()) {
+	slotStatusHelpMsg(i18n("Couldn't paste at this point"));
     } else {
-        
-        slotStatusHelpMsg(i18n("Couldn't paste at this point"));
+	addCommandToHistory(command);
     }
-*/
 }
 
 void NotationView::slotEditSelectFromStart()

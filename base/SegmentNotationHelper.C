@@ -1061,7 +1061,7 @@ SegmentNotationHelper::guessClef(iterator from, iterator to)
 
 
 bool
-SegmentNotationHelper::removeRests(timeT time, timeT duration)
+SegmentNotationHelper::removeRests(timeT time, timeT &duration, bool testOnly)
 {
     Event dummy;
     
@@ -1082,6 +1082,10 @@ SegmentNotationHelper::removeRests(timeT time, timeT duration)
     timeT eventTime = time;
     timeT finalTime = time + duration;
 
+    //!!! We should probably not use an accumulator, but instead
+    // calculate based on each event's absolute time + duration --
+    // in case we've somehow ended up with overlapping rests
+
     // Iterate on events, checking if all are rests
     //
     while ((eventTime < finalTime) && (to != end())) {
@@ -1093,6 +1097,7 @@ SegmentNotationHelper::removeRests(timeT time, timeT duration)
             // a non-rest was found
             cerr << "SegmentNotationHelper::removeRests : an event of type "
                  << (*to)->getType() << " was found - abort\n";
+	    duration = (*to)->getAbsoluteTime() - time;
             return false;
         }
 
@@ -1101,10 +1106,10 @@ SegmentNotationHelper::removeRests(timeT time, timeT duration)
         cerr << "SegmentNotationHelper::removeRests : nextEventDuration : "
              << nextEventDuration << endl;
 
-        if ((eventTime + nextEventDuration) <= finalTime)
+        if ((eventTime + nextEventDuration) <= finalTime) {
             eventTime += nextEventDuration;
-        else
-            break;
+	    duration = eventTime - time;
+	} else break;
 
         ++to;
     }
@@ -1118,6 +1123,7 @@ SegmentNotationHelper::removeRests(timeT time, timeT duration)
 
         if (lastEvent == end()) {
             cerr << "SegmentNotationHelper::removeRests : not enough rest space\n";
+	    duration = segment().getDuration() - time;
             return false;
         }
 
@@ -1126,10 +1132,20 @@ SegmentNotationHelper::removeRests(timeT time, timeT duration)
              << (*lastEvent)->getDuration() - (finalTime - eventTime)
              << endl;
 
-        (*lastEvent)->setAbsoluteTime(finalTime);
-        (*lastEvent)->setDuration((*lastEvent)->getDuration() - (finalTime - eventTime));
-        checkLastRest = true;
+	if (!testOnly) {
+	    //!!! No! This will break Segment ordering! Y'know, there'd be
+	    // a lot to be said for removing Event::setAbsoluteTime and only
+	    // allowing time (& subordering, and possibly duration as well)
+	    // to be set at construction time -- only problem is it'd make
+	    // it painful to copy an event and change the copy's time
+	    (*lastEvent)->setAbsoluteTime(finalTime);
+	    (*lastEvent)->setDuration((*lastEvent)->getDuration() - (finalTime - eventTime));
+	    duration = finalTime + (*lastEvent)->getDuration() - time;
+	    checkLastRest = true;
+	}
     }
+
+    if (testOnly) return true;
 
     segment().erase(from, to);
 

@@ -295,15 +295,64 @@ PasteCommand::PasteCommand(Rosegarden::Segment &segment,
 			   Rosegarden::Clipboard *clipboard,
 			   Rosegarden::timeT pasteTime) :
     BasicCommand(name(), segment, pasteTime,
-		 (clipboard->isSingleSegment() ?
-		  (pasteTime +
-		   clipboard->getSingleSegment()->getEndTime() -
-		   clipboard->getSingleSegment()->getFirstEventTime()) :
-		  (pasteTime + 1))),
+		 getEffectiveEndTime(segment, clipboard, pasteTime)),
+    m_relayoutEndTime(getEndTime()),
     m_clipboard(clipboard)
 {
-    // nothing else
+    // paste clef or key -> relayout to end
+
+    if (clipboard->isSingleSegment()) {
+
+	Segment *s(clipboard->getSingleSegment());
+	for (Segment::iterator i = s->begin(); i != s->end(); ++i) {
+
+	    if ((*i)->isa(Rosegarden::Clef::EventType) ||
+		(*i)->isa(Rosegarden::Key::EventType)) {
+		m_relayoutEndTime = s->getEndTime();
+		break;
+	    }
+	}
+    }
 }
+
+timeT
+PasteCommand::getEffectiveEndTime(Rosegarden::Segment &segment,
+				  Rosegarden::Clipboard *clipboard,
+				  Rosegarden::timeT pasteTime)
+{
+    if (!clipboard->isSingleSegment()) return pasteTime;
+    
+    timeT d = clipboard->getSingleSegment()->getEndTime() -
+ 	      clipboard->getSingleSegment()->getFirstEventTime();
+
+    Segment::iterator i = segment.findTime(pasteTime + d);
+    if (i == segment.end()) return segment.getEndTime();
+    else return (*i)->getAbsoluteTime();
+}
+
+timeT
+PasteCommand::getRelayoutEndTime()
+{
+    return m_relayoutEndTime;
+}
+
+bool
+PasteCommand::isPossible() 
+{
+    if (m_clipboard->isEmpty() || !m_clipboard->isSingleSegment()) {
+	return false;
+    }
+    
+    Segment *source = m_clipboard->getSingleSegment();
+
+    timeT pasteTime = getBeginTime();
+    timeT origin = source->getFirstEventTime();
+    timeT duration = source->getDuration() - origin;
+
+    SegmentNotationHelper helper(getSegment());
+    return helper.removeRests(pasteTime, duration, true);
+}
+
 
 void
 PasteCommand::modifySegment()
@@ -319,10 +368,6 @@ PasteCommand::modifySegment()
     SegmentNotationHelper helper(getSegment());
 
     if (!helper.removeRests(pasteTime, duration)) return;
-
-    //!!! paste clef or key -> relayout to end
-    //!!! even otherwise, need to relayout a bit longer depending
-    // on where the removeRests call ended
 
     for (Segment::iterator i = source->begin(); i != source->end(); ++i) {
 	Event *e = new Event(**i);

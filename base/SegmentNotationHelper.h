@@ -306,15 +306,27 @@ public:
 
 
     /**
-     * Remove all rests starting at \a time for \a duration,
+     * Removes all rests starting at \a time for \a duration,
      * splitting the last rest if needed.
      *
-     * If there's an event which is not a rest in this interval,
-     * return false.
+     * Modifies duration to the actual duration of the series
+     * of rests that has been changed by this action (i.e. if
+     * the last rest was split, duration will be extended to
+     * include the second half of this rest).  This is intended
+     * to be of use when calculating the extents of a command
+     * for undo/refresh purposes.
      *
-     * Used for Event pasting.
+     * If there's an event which is not a rest in this interval,
+     * returns false and sets duration to the maximum duration
+     * that would have succeeded.
+     *
+     * If testOnly is true, does not actually remove any rests;
+     * just checks whether the rests can be removed and sets
+     * duration and the return value appropriately.
+     *
+     * (Used for Event pasting.)
      */ 
-    bool removeRests(timeT time, timeT duration);
+    bool removeRests(timeT time, timeT &duration, bool testOnly = false);
 
 
     /**

@@ -95,8 +95,9 @@ void EventSelection::copy()
 bool EventSelection::pasteToSegment(Segment& t, timeT atTime)
 {
     SegmentNotationHelper nt(t);
-
-    if (! nt.removeRests(atTime, getTotalDuration())) {
+    
+    timeT duration = getTotalDuration();
+    if (! nt.removeRests(atTime, duration)) {
         return false;
     }
 

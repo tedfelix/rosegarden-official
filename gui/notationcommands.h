@@ -174,9 +174,18 @@ public:
 		 Rosegarden::timeT pasteTime);
 
     static QString name() { return "&Paste"; }
+
+    /// Determine whether this paste will succeed (without executing it yet)
+    bool isPossible();
+
+    virtual Rosegarden::timeT getRelayoutEndTime();
     
 protected:
     virtual void modifySegment();
+    Rosegarden::timeT getEffectiveEndTime(Rosegarden::Segment &,
+					  Rosegarden::Clipboard *,
+					  Rosegarden::timeT);
+    Rosegarden::timeT m_relayoutEndTime;
     Rosegarden::Clipboard *m_clipboard;
 };
 
