@@ -256,6 +256,9 @@ public:
 public slots:
     void toggleRestCollapse();
     
+    void slotInsertSelected();
+    void slotSelectSelected();
+
 protected:
     NotationEraser(NotationView*);
 
@@ -328,6 +331,9 @@ public slots:
      */
     void hideSelection();
     
+    void slotInsertSelected();
+    void slotEraseSelected();
+
 protected:
     NotationSelector(NotationView*);
 

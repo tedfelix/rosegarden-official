@@ -437,6 +437,19 @@ NotationEraser::NotationEraser(NotationView* view)
                       SLOT(toggleRestCollapse()), actionCollection(),
                       "toggle_rest_collapse");
 
+    QIconSet icon
+	(m_nParentView->getToolbarNotePixmapFactory()->
+	 makeToolbarPixmap("crotchet"));
+    new KAction(i18n("Switch to Insert Tool"), icon, 0, this,
+                      SLOT(slotInsertSelected()), actionCollection(),
+                      "insert");
+
+    icon = QIconSet(m_nParentView->getToolbarNotePixmapFactory()->
+		    makeToolbarPixmap("select"));
+    new KAction(i18n("Switch to Select Tool"), icon, 0, this,
+                SLOT(slotSelectSelected()), actionCollection(),
+                "select");
+
     createMenu("notationeraser.rc");
 }
 
@@ -467,6 +480,17 @@ void NotationEraser::toggleRestCollapse()
     m_collapseRest = !m_collapseRest;
 }
 
+void NotationEraser::slotInsertSelected()
+{
+    //!!! wire up to reactivate the last note used
+    m_parentView->actionCollection()->action("quarter")->activate();
+}
+
+void NotationEraser::slotSelectSelected()
+{
+    m_parentView->actionCollection()->action("select")->activate();
+}
+
 
 //------------------------------
 
@@ -479,6 +503,17 @@ NotationSelector::NotationSelector(NotationView* view)
 {
     connect(m_parentView, SIGNAL(usedSelection()),
             this,         SLOT(hideSelection()));
+
+    QIconSet icon
+	(m_nParentView->getToolbarNotePixmapFactory()->
+	 makeToolbarPixmap("crotchet"));
+    new KToggleAction(i18n("Switch to Insert Tool"), icon, 0, this,
+                      SLOT(slotInsertSelected()), actionCollection(),
+                      "insert");
+
+    new KAction(i18n("Switch to Erase Tool"), "eraser", 0, this,
+                SLOT(slotEraseSelected()), actionCollection(),
+                "erase");
 
     createMenu("notationselector.rc");
 }
@@ -594,6 +629,17 @@ void NotationSelector::hideSelection()
     m_selectionRect->hide();
     m_selectionRect->setSize(0,0);
     m_nParentView->canvas()->update();
+}
+
+void NotationSelector::slotInsertSelected()
+{
+    //!!! wire up to reactivate the last note used
+    m_parentView->actionCollection()->action("quarter")->activate();
+}
+
+void NotationSelector::slotEraseSelected()
+{
+    m_parentView->actionCollection()->action("erase")->activate();
 }
 
 

@@ -205,20 +205,6 @@ NotationHLayout::getStartOfQuantizedSlice(const NotationElementList *notes,
 	if ((*j)->getQuantizedAbsoluteTime() < t) return i;
 	i = j;
     }
-
-/*!!!
-    if (i == notes->end()) return i;
-    NotationElementList::iterator j(i);
-
-    timeT t = (*i)->getQuantizedAbsoluteTime();
-
-    while (true) {
-	if (i == notes->begin()) return i;
-	--j;
-	if ((*j)->getQuantizedAbsoluteTime() != t) return i;
-	i = j;
-    }
-*/
 }
 
 
@@ -873,12 +859,6 @@ NotationHLayout::layout(BarDataMap::iterator i)
             to = notes->end();
         } else {
             to = nbdi->start;
-
-	    //!!!
-	    if (to != notes->end()) {
-		kdDebug(KDEBUG_AREA) << "Bar end time is " <<
-		    (*to)->getAbsoluteTime() << endl;
-	    }
         }
 
         if (from == notes->end()) {
