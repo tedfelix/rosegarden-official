@@ -743,12 +743,14 @@ MetronomeMmapper::MetronomeMmapper(RosegardenGUIDoc* doc)
         SEQMAN_DEBUG << "MetronomeMmapper : WARNING no ticks generated\n";
     }
 
-    m_mmappedSize = computeMmappedSize();
-    if (m_mmappedSize > 0) {
-        setFileSize(m_mmappedSize);
-        doMmap();
-        dump();
-    }
+    // Done by init()
+
+//     m_mmappedSize = computeMmappedSize();
+//     if (m_mmappedSize > 0) {
+//         setFileSize(m_mmappedSize);
+//         doMmap();
+//         dump();
+//     }
 }
 
 MetronomeMmapper::~MetronomeMmapper()
@@ -817,6 +819,54 @@ void MetronomeMmapper::sortTicks()
 }
 
 
+//----------------------------------------
+using Rosegarden::Composition;
+
+ReferenceSegmentMmapper::ReferenceSegmentMmapper(RosegardenGUIDoc* doc,
+                                                 const Composition::ReferenceSegment& refSeg,
+                                                 QString baseFileName)
+    : SegmentMmapper(doc, 0, createFileName(baseFileName)),
+      m_referenceSegment(refSeg)
+{
+}
+
+unsigned int ReferenceSegmentMmapper::getSegmentRepeatCount()
+{
+    return 1;
+}
+
+size_t ReferenceSegmentMmapper::computeMmappedSize()
+{
+    return m_referenceSegment.size() * sizeof(MappedEvent);
+}
+
+QString ReferenceSegmentMmapper::createFileName(QString baseFileName)
+{
+    return KGlobal::dirs()->resourceDirs("tmp").first() + "/" + baseFileName;
+}
+
+void ReferenceSegmentMmapper::dump()
+{
+    Rosegarden::RealTime eventTime;
+    static Rosegarden::RealTime noDuration(0,0);
+
+    Composition& comp = m_doc->getComposition();
+    MappedEvent* bufPos = m_mmappedBuffer;
+
+    for (Composition::ReferenceSegment::iterator i = m_referenceSegment.begin();
+         i != m_referenceSegment.end(); ++i) {
+
+        Rosegarden::Event* event = *i;
+
+        eventTime = comp.getElapsedRealTime(event->getAbsoluteTime());
+        new (bufPos) MappedEvent(0, *event, eventTime, noDuration);
+
+        ++bufPos;
+    }
+}
+
+//----------------------------------------
+
 SegmentMmapper* SegmentMmapperFactory::makeMmapperForSegment(RosegardenGUIDoc* doc,
                                                              Rosegarden::Segment* segment,
                                                              const QString& fileName)
@@ -852,5 +902,25 @@ MetronomeMmapper* SegmentMmapperFactory::makeMetronome(RosegardenGUIDoc* doc)
     MetronomeMmapper* mmapper = new MetronomeMmapper(doc);
     mmapper->init();
     
+    return mmapper;
+}
+
+ReferenceSegmentMmapper* SegmentMmapperFactory::makeTimeSig(RosegardenGUIDoc* doc)
+{
+    ReferenceSegmentMmapper* mmapper = new ReferenceSegmentMmapper(doc,
+                                                                   doc->getComposition().getTimeSigSegment(),
+                                                                   "rosegarden_timesig");
+    
+    mmapper->init();
+    return mmapper;
+}
+
+ReferenceSegmentMmapper* SegmentMmapperFactory::makeTempo(RosegardenGUIDoc* doc)
+{
+    ReferenceSegmentMmapper* mmapper = new ReferenceSegmentMmapper(doc,
+                                                                   doc->getComposition().getTempoSegment(),
+                                                                   "rosegarden_tempo");
+    
+    mmapper->init();
     return mmapper;
 }

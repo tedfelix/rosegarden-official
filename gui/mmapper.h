@@ -28,6 +28,8 @@
 
 #include "Event.h"
 #include "Track.h"
+#include "Composition.h"
+
 #include "RealTime.h"
 #include "MidiProgram.h"
 
@@ -172,6 +174,34 @@ protected:
 
 //----------------------------------------
 
+class ReferenceSegmentMmapper : public SegmentMmapper
+{
+    friend class SegmentMmapperFactory;
+
+public:
+
+    // overrides from SegmentMmapper
+    virtual unsigned int getSegmentRepeatCount();
+    virtual size_t computeMmappedSize();
+
+protected:
+    ReferenceSegmentMmapper(RosegardenGUIDoc* doc,
+                            const Rosegarden::Composition::ReferenceSegment&,
+                            QString baseFileName);
+
+    QString createFileName(QString baseFileName);
+
+    // override from SegmentMmapper
+    virtual void dump();
+
+    //--------------- Data members ---------------------------------
+
+    const Rosegarden::Composition::ReferenceSegment& m_referenceSegment;
+
+};
+
+//----------------------------------------
+
 class SegmentMmapperFactory
 {
 public:
@@ -180,7 +210,11 @@ public:
                                                  const QString& fileName);
 
     static MetronomeMmapper* makeMetronome(RosegardenGUIDoc*);
+    static ReferenceSegmentMmapper* makeTimeSig(RosegardenGUIDoc*);
+    static ReferenceSegmentMmapper* makeTempo(RosegardenGUIDoc*);
 };
+
+//----------------------------------------
 
 namespace Rosegarden { class SequenceManager; }
 

@@ -139,7 +139,12 @@ public:
         // Set Metronome device
         SystemMetronomeDevice    = 0x080000,
         // Set number Audio inputs/JACK input ports
-        SystemAudioInputs        = 0x100000
+        SystemAudioInputs        = 0x100000,
+
+        // Time sig. event (from time sig. composition reference segment)
+        TimeSignature            = 0x200000,
+        // Tempo event (from tempo composition reference segment)
+        Tempo                    = 0x200001
 
     } MappedEventType;
 
