@@ -52,7 +52,7 @@ public:
     virtual void run(const RealTime &);
 
     virtual void setPortValue(unsigned int portNumber, float value);
-    virtual void configure(QString key, QString value);
+    virtual QString configure(QString key, QString value);
     virtual void sendEvent(const RealTime &eventTime,
 			   const snd_seq_event_t *event);
 

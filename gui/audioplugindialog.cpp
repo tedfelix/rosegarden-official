@@ -164,10 +164,8 @@ AudioPluginDialog::slotDetails()
 void
 AudioPluginDialog::slotShowGUI()
 {
-    if (!m_guiShown) {
-	emit showPluginGUI(m_instrument->getId(), m_index);
-	m_guiShown = true;
-    }
+    emit showPluginGUI(m_instrument->getId(), m_index);
+    m_guiShown = true;
 }
 
 void

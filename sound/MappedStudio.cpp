@@ -1489,6 +1489,7 @@ MappedPluginSlot::setPropertyList(const MappedObjectProperty &property,
 		m_configuration[key] == value) continue;
 	    
 	    if (studio) {
+		//!!! return value!
 		studio->getSoundDriver()->configurePlugin(m_instrument,
 							  m_position,
 							  key, value);

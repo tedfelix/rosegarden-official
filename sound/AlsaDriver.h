@@ -200,13 +200,14 @@ public:
 #endif
     }
 
-    virtual void configurePlugin(InstrumentId id,
-				 int position,
-				 QString key,
-				 QString value) {
+    virtual QString configurePlugin(InstrumentId id,
+				    int position,
+				    QString key,
+				    QString value) {
 #ifdef HAVE_LIBJACK
-	if (m_jackDriver) m_jackDriver->configurePlugin(id, position, key, value);
+	if (m_jackDriver) return m_jackDriver->configurePlugin(id, position, key, value);
 #endif
+	return QString();
     }
 
     virtual void setAudioBussLevels(int bussId,

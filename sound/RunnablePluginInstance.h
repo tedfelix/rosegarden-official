@@ -81,7 +81,7 @@ public:
 
     virtual void setPortValue(unsigned int port, float value) = 0;
 
-    virtual void configure(QString key, QString value) { }
+    virtual QString configure(QString key, QString value) { return QString(); }
 
     virtual void sendEvent(const RealTime & /* eventTime */,
 			   const snd_seq_event_t * /* event */) { }

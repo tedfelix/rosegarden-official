@@ -109,9 +109,9 @@ public:
 					  int position,
 					  QString program);
 
-    virtual void configurePlugin(InstrumentId id,
-				 int position, 
-				 QString key, QString value);
+    virtual QString configurePlugin(InstrumentId id,
+				    int position, 
+				    QString key, QString value);
 
     virtual RunnablePluginInstance *getSynthPlugin(InstrumentId id);
 

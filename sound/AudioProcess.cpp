@@ -868,11 +868,12 @@ AudioInstrumentMixer::setPluginProgram(InstrumentId id, int position, QString pr
     if (instance) instance->selectProgram(program);
 }
 
-void
+QString
 AudioInstrumentMixer::configurePlugin(InstrumentId id, int position, QString key, QString value)
 {
     RunnablePluginInstance *instance = getPluginInstance(id, position);
-    if (instance) instance->configure(key, value);
+    if (instance) return instance->configure(key, value);
+    return QString();
 }
 
 void

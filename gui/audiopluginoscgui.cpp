@@ -245,6 +245,9 @@ AudioPluginOSCGUIManager::startGUI(InstrumentId instrument, int position)
 void
 AudioPluginOSCGUIManager::showGUI(InstrumentId instrument, int position)
 {
+    RG_DEBUG << "AudioPluginOSCGUIManager::showGUI: " << instrument << "," << position
+	     << endl;
+
     if (m_guis.find(instrument) != m_guis.end() &&
 	m_guis[instrument].find(position) != m_guis[instrument].end()) {
 	m_guis[instrument][position]->show();
@@ -782,6 +785,8 @@ AudioPluginOSCGUI::setGUIUrl(QString url)
 void
 AudioPluginOSCGUI::show()
 {
+    RG_DEBUG << "AudioPluginOSCGUI::show" << endl;
+
     QString path = m_basePath + "/show";
     lo_send(m_address, path, "");
 }

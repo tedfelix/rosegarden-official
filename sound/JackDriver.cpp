@@ -1840,10 +1840,11 @@ JackDriver::setPluginInstanceProgram(InstrumentId id, int position, QString prog
     if (m_instrumentMixer) m_instrumentMixer->setPluginProgram(id, position, program);
 }
 
-void
+QString
 JackDriver::configurePlugin(InstrumentId id, int position, QString key, QString value)
 {
-    if (m_instrumentMixer) m_instrumentMixer->configurePlugin(id, position, key, value);
+    if (m_instrumentMixer) return m_instrumentMixer->configurePlugin(id, position, key, value);
+    return QString();
 }
 
 RunnablePluginInstance *
