@@ -31,17 +31,17 @@ public:
                   const VUMeterType &type = Plain,
                   const int &width = 0,
                   const int &height = 0,
-                  const int &id = 0,
+                  const int &position = 0,
                   const char *name = 0);
 
-    int trackNum() const { return m_id; }
+    int getPosition() const { return m_position; }
 
 protected:
     virtual void meterStart();
     virtual void meterStop();
 
 private:
-    int m_id;
+    int m_position;
     int m_textHeight;
 
 };

@@ -68,18 +68,25 @@ class RosegardenComboBox : public QComboBox
 {
 Q_OBJECT
 public:
-    RosegardenComboBox(QWidget *parent=0, const char *name=0):
+    RosegardenComboBox(bool reverse, QWidget *parent=0, const char *name=0):
         QComboBox(parent, name) {;}
 
-    RosegardenComboBox(bool rw, QWidget *parent=0, const char *name=0):
-        QComboBox(rw, parent, name) {;}
+    RosegardenComboBox(bool reverse, bool rw,
+                       QWidget *parent=0, const char *name=0):
+        QComboBox(rw, parent, name), m_reverse(reverse) {;}
 
 
 protected:
     virtual void wheelEvent(QWheelEvent *e)
-    {  e->accept();
+    {
+        e->accept();
+
+        int value = e->delta();
+
+        if (m_reverse)
+             value = -value;
        
-        if (e->delta() < 0)
+        if (value < 0)
         {
             if (currentItem() < count() - 1)
             {
@@ -97,10 +104,11 @@ protected:
         }
     }
 
-private:
-
 signals:
     void propagate(int); // update the Segment with new value
+
+private:
+    bool m_reverse;
 
 };
 

@@ -80,8 +80,8 @@ SegmentParameterBox::initBox()
     // handle state changes
     connect(m_repeatValue, SIGNAL(pressed()), SLOT(slotRepeatPressed()));
 
-    // motif style read-only combo
-    m_quantizeValue = new RosegardenComboBox(false, this);
+    // non-reversing motif style read-only combo
+    m_quantizeValue = new RosegardenComboBox(false, false, this);
     m_quantizeValue->setFont(plainFont);
     m_quantizeValue->setFixedSize(comboWidth, comboHeight);
 
@@ -93,8 +93,8 @@ SegmentParameterBox::initBox()
     connect(m_quantizeValue, SIGNAL(propagate(int)),
             SLOT(slotQuantizeSelected(int)));
 
-    // motif style read-only combo
-    m_transposeValue = new RosegardenComboBox(true, this);
+    // reversing motif style read-write combo
+    m_transposeValue = new RosegardenComboBox(true, true, this);
     m_transposeValue->setFont(plainFont);
     m_transposeValue->setFixedSize(comboWidth, comboHeight);
 
@@ -106,8 +106,8 @@ SegmentParameterBox::initBox()
     connect(m_transposeValue, SIGNAL(textChanged(const QString&)),
             SLOT(slotTransposeTextChanged(const QString&)));
 
-    // motif style read-only combo
-    m_delayValue = new RosegardenComboBox(true, this);
+    // reversing motif style read-write combo
+    m_delayValue = new RosegardenComboBox(true, true, this);
     m_delayValue->setFont(plainFont);
     m_delayValue->setFixedSize(comboWidth, comboHeight);
 
@@ -361,7 +361,22 @@ SegmentParameterBox::populateBoxFromSegments()
     switch(transposed)
     {
         case All:
-            m_transposeValue->setEditText(QString("%1").arg(transposeLevel));
+            {
+                bool setValue = false;
+
+                for (int i = 0; i < m_transposeValue->count(); i++)
+                {
+                    if (m_transposeValue->text(i).toInt() == transposeLevel)
+                    {
+                        m_transposeValue->setCurrentItem(i);
+                        setValue = true;
+                    }
+                }
+                
+                if (!setValue)
+                    m_transposeValue->
+                        setEditText(QString("%1").arg(transposeLevel));
+            }
             break;
 
         case Some:

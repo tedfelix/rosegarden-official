@@ -30,9 +30,10 @@ TrackVUMeter::TrackVUMeter(QWidget *parent,
                            const VUMeterType &type,
                            const int &width,
                            const int &height,
-                           const int &id,
+                           const int &position,
                            const char *name):
-    VUMeter(parent, type, width, height, name), m_id(id), m_textHeight(12)
+    VUMeter(parent, type, width, height, name),
+    m_position(position), m_textHeight(12)
 {
     setAlignment(AlignCenter);
 }
@@ -52,6 +53,6 @@ TrackVUMeter::meterStop()
 {
     setMinimumHeight(m_textHeight);
     setMaximumHeight(m_textHeight);
-    setText(QString("%1").arg(m_id + 1));
+    setText(QString("%1").arg(m_position + 1));
 }
 

@@ -23,6 +23,7 @@
 
 #include <qstring.h>
 #include <qlabel.h>
+#include <qtimer.h>
 #include <qinputdialog.h>
 #include <iostream>
 
@@ -37,69 +38,27 @@ class TrackLabel : public QLabel
 {
 Q_OBJECT
 public:
-    TrackLabel(const int &trackNum,
+    TrackLabel(const int &position,
                QWidget *parent,
                const char *name=0,
-               WFlags f=0):
-               QLabel(parent, name, f), m_trackNum(trackNum) {;}
+               WFlags f=0);
 
-    ~TrackLabel() {;}
+    ~TrackLabel();
 
     // Encapsulates setting the label to highlighted or not
     //
-    void setLabelHighlight(const bool &on)
-    {
-        if (on)
-        {
-            m_selected = true;
-            setBackgroundMode(PaletteBase);
-        }
-        else
-        {
-            m_selected = false;
-            setBackgroundMode(PaletteBackground);
-        }
-    }
-
-    // Overrides virtual release event and sends upwards
-    // along with Label id - a bit like a QButtonGroup
-    //
-    virtual void mouseReleaseEvent(QMouseEvent *)
-    {
-        if (m_selected)
-            setLabelHighlight(false);
-        else
-            setLabelHighlight(true);
-
-        emit released(m_trackNum);
-    }
-
-    virtual void mouseDoubleClickEvent(QMouseEvent *)
-    {
-        // Highlight this label alone and cheat using
-        // the released signal
-        //
-        emit released(m_trackNum);
-
-        // Just in case we've got our timing wrong - reapply
-        // this label highlight
-        //
-        setLabelHighlight(true);
-
-        bool ok = false;
-        QString newText = QInputDialog::getText(
-                                     QString("Change track name"),
-                                     QString("Enter new track name"),
-                                     text(),
-                                     &ok,
-                                     this);
-
-        if ( ok && !newText.isEmpty() )
-            emit renameTrack(newText, m_trackNum);
-    }
+    void setLabelHighlight(const bool &on);
 
     bool isSelected() { return m_selected; }
-    int trackNum() { return m_trackNum; }
+    int getPosition() { return m_position; }
+
+protected:
+    virtual void mousePressEvent(QMouseEvent *e);
+    virtual void mouseReleaseEvent(QMouseEvent *e);
+    virtual void mouseDoubleClickEvent(QMouseEvent *e);
+
+public slots:
+        void slotChangeToInstrumentList();
 
 signals:
     // Our version of released() has an int id associated with it
@@ -110,10 +69,14 @@ signals:
     //
     void renameTrack(QString, int);
 
+    void changeToInstrumentList(int);
+
 private:
 
-    int  m_trackNum;
+    int  m_position;
     bool m_selected;
+
+    QTimer *m_pressTimer;
 
 };
 

@@ -61,6 +61,7 @@ rosegarden_SOURCES = \
         trackbuttons.cpp \
 	trackeditor.cpp \
         trackheader.cpp \
+        tracklabel.cpp \
 	trackseditoriface.skel \
         trackvumeter.cpp \
         vumeter.cpp \

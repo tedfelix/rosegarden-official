@@ -79,9 +79,10 @@ public slots:
     void slotSetRecordTrack(int id);
     void slotToggleMutedTrack(int mutedTrack);
     void slotLabelSelected(int id);
-    void slotRenameTrack(QString newName, int trackNum);
-    void slotSetTrackMeter(double value, int trackNum);
+    void slotRenameTrack(QString newName, int trackNumber);
+    void slotSetTrackMeter(double value, int position);
 
+    void slotInstrumentSelection(int);
 
 private:
 

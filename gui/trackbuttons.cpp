@@ -146,6 +146,9 @@ TrackButtons::drawButtons()
         trackLabel = new TrackLabel(i, trackHBox);
         hblayout->addWidget(trackLabel);
 
+        connect(trackLabel, SIGNAL(changeToInstrumentList(int)),
+                this, SLOT(slotInstrumentSelection(int)));
+
         // Set the label from the Track object on the Composition
         //
         Rosegarden::Track *track = m_doc->getComposition().getTrackByIndex(i);
@@ -293,7 +296,7 @@ TrackButtons::slotSetRecordTrack(int recordTrack)
 // Connected to the released(int) callback of the TrackLabels
 //
 void
-TrackButtons::slotLabelSelected(int trackNum)
+TrackButtons::slotLabelSelected(int position)
 {
     std::vector<TrackLabel *>::iterator tlpIt;
 
@@ -302,7 +305,7 @@ TrackButtons::slotLabelSelected(int trackNum)
          tlpIt++)
     {
         
-        if ((*tlpIt)->trackNum() != trackNum &&
+        if ((*tlpIt)->getPosition() != position &&
             (*tlpIt)->isSelected())
         {
             (*tlpIt)->setLabelHighlight(false);
@@ -311,7 +314,7 @@ TrackButtons::slotLabelSelected(int trackNum)
 
     // Propagate this message upstairs
     //
-    emit(trackSelected(trackNum));
+    emit(trackSelected(position));
 
 }
 
@@ -329,22 +332,22 @@ TrackButtons::getHighLightedTracks()
          tlpIt++)
     {
         if ((*tlpIt)->isSelected())
-            retList.push_back((*tlpIt)->trackNum());
+            retList.push_back((*tlpIt)->getPosition());
     }
 
     return retList;
 }
 
 void
-TrackButtons::slotRenameTrack(QString newName, int trackNum)
+TrackButtons::slotRenameTrack(QString newName, int trackNumber)
 {
-    Rosegarden::Track *track = m_doc->getComposition().getTrackByIndex(trackNum);
+    Rosegarden::Track *track = m_doc->getComposition().getTrackByIndex(trackNumber);
     track->setLabel(std::string(newName.data()));
 
     std::vector<TrackLabel*>::iterator it = m_trackLabels.begin();
     for (; it != m_trackLabels.end(); it++)
     {
-        if ((*it)->trackNum() == trackNum)
+        if ((*it)->getPosition() == trackNumber)
         {
             (*it)->setText(newName);
             emit widthChanged();
@@ -355,13 +358,13 @@ TrackButtons::slotRenameTrack(QString newName, int trackNum)
 
 
 void
-TrackButtons::slotSetTrackMeter(double value, int trackNum)
+TrackButtons::slotSetTrackMeter(double value, int position)
 {
     std::vector<TrackVUMeter*>::iterator it = m_trackMeters.begin();
     
     for (; it != m_trackMeters.end(); it++)
     {
-        if ((*it)->trackNum() == trackNum)
+        if ((*it)->getPosition() == position)
         {
             (*it)->setLevel(value);
             return;
@@ -369,6 +372,12 @@ TrackButtons::slotSetTrackMeter(double value, int trackNum)
     }
 }
 
+
+void
+TrackButtons::slotInstrumentSelection(int position)
+{
+    cout << "INSTRUMENT SELECTION" << endl;
+}
 
 
 
