@@ -353,6 +353,8 @@ public:
      */
     QList<RosegardenGUIView>& getViewList() { return m_viewList; }
 
+    bool isBeingDestroyed() { return m_beingDestroyed; }
+
 public slots:
     /**
      * calls repaint() on all views connected to the document object
@@ -514,6 +516,8 @@ protected:
     //
     int m_autoSavePeriod;
 
+    // Set to true when the dtor starts
+    bool m_beingDestroyed;
 };
 
 #endif // ROSEGARDENGUIDOC_H

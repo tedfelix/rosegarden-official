@@ -102,8 +102,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
       m_canvasView(0),
       m_pianoView(0),
       m_lastNote(0),
-      m_quantizations(Rosegarden::BasicQuantizer::getStandardQuantizations()),
-      m_documentDestroyed(false)
+      m_quantizations(Rosegarden::BasicQuantizer::getStandardQuantizations())
 {
     MATRIX_DEBUG << "MatrixView ctor\n";
     Rosegarden::Composition &comp = doc->getComposition();
@@ -243,9 +242,6 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 	(doc, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
 	 this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
-    QObject::connect
-	(doc, SIGNAL(destroyed()), this, SLOT(slotDocumentDestroyed()));
-
     MATRIX_DEBUG << "MatrixView : applying layout\n";
 
     bool layoutApplied = applyLayout();
@@ -342,12 +338,10 @@ MatrixView::~MatrixView()
 {
     // Give the sequencer something to suck on while we close
     //
-    if (!m_documentDestroyed) {
+    if (!getDocument()->isBeingDestroyed()) {
 	//!!! The intention here is to avoid sending the slice when the
 	// program is closed -- unfortunately we also need to do it when
-	// closing the window because we're loading a new file, but that
-	// doesn't actually destroy the doc at present.  We're planning
-	// to rework it so that it does, though
+	// closing the window because we're loading a new file
 	getDocument()->getSequenceManager()->
 	    setTemporarySequencerSliceSize(Rosegarden::RealTime(2, 0));
     }
@@ -700,8 +694,6 @@ bool MatrixView::applyLayout(int staffNo,
 void MatrixView::refreshSegment(Segment *segment,
 				timeT startTime, timeT endTime)
 {
-    if (m_documentDestroyed) return;
-
     Rosegarden::Profiler profiler("MatrixView::refreshSegment", true);
 
     MATRIX_DEBUG << "MatrixView::refreshSegment(" << startTime
@@ -2092,13 +2084,6 @@ MatrixView::slotSetVelocities()
                              dialog->getValue1(),
                              dialog->getValue2()));
     }
-}
-
-void
-MatrixView::slotDocumentDestroyed()
-{
-    MATRIX_DEBUG << "MatrixView::slotDocumentDestroyed()\n";
-    m_documentDestroyed = true;
 }
 
 void

@@ -195,7 +195,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_progressDisplayer(PROGRESS_NONE),
     m_progressEventFilterInstalled(false),
     m_inhibitRefresh(true),
-    m_documentDestroyed(false),
     m_ok(false),
     m_printMode(false)
 {
@@ -414,9 +413,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	(doc, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
 	 this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
-    QObject::connect
-	(doc, SIGNAL(destroyed()), this, SLOT(slotDocumentDestroyed()));
-
     stateChanged("have_selection", KXMLGUIClient::StateReverse);
     stateChanged("have_notes_in_selection", KXMLGUIClient::StateReverse);
     stateChanged("have_rests_in_selection", KXMLGUIClient::StateReverse);
@@ -488,7 +484,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_progressDisplayer(PROGRESS_NONE),
     m_progressEventFilterInstalled(false),
     m_inhibitRefresh(true),
-    m_documentDestroyed(false),
     m_ok(false),
     m_printMode(true)
 {
@@ -602,14 +597,12 @@ NotationView::~NotationView()
 
     // Give the sequencer something to suck on while we close
     //
-    if (!m_documentDestroyed) {
+    if (!getDocument()->isBeingDestroyed()) {
 	getDocument()->getSequenceManager()->
 	    setTemporarySequencerSliceSize(Rosegarden::RealTime(2, 0));
     }
 
     if (!m_printMode) slotSaveOptions();
-
-    if (m_documentDestroyed) return;
 
     delete m_currentEventSelection;
     m_currentEventSelection = 0;
@@ -626,58 +619,6 @@ NotationView::~NotationView()
 
     NOTATION_DEBUG << "<- ~NotationView()\n";
 }
-
-// void
-// NotationView::initialLayout()
-// {
-//     RG_DEBUG << "NotationView : setting up progress dialog\n";
-
-//     // 	progressDlg = new RosegardenProgressDialog(i18n("Starting..."),
-//     //                                                    100, this);
-//     KProgressDialog* progressDlg = new KProgressDialog(0, "progressdialog",
-//                                       i18n("Starting..."),
-//                                       i18n("Starting..."));
-//     progressDlg->setAutoClose(false);
-//     progressDlg->setAutoReset(true);
-//     progressDlg->setMinimumDuration(500);
-//     //         setupProgress(progressDlg);
-
-//     setupProgress(progressDlg->progressBar());
-
-//     m_progressDisplayer = PROGRESS_DIALOG;
-
-//     m_chordNameRuler->setComposition(&(getDocument()->getComposition()));
-
-//     positionStaffs();
-//     m_currentStaff = 0;
-//     m_staffs[0]->setCurrent(true);
-
-//     m_hlayout->setPageMode(false);
-//     m_hlayout->setPageWidth(getPageWidth());
-
-//     try {
-// 	bool layoutApplied = applyLayout();
-// 	if (!layoutApplied) {
-// 	    KMessageBox::sorry(0, i18n("Couldn't apply score layout"));
-// 	} else {
-// 	    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-		
-// 		m_staffs[i]->renderAllElements();
-// 		m_staffs[i]->positionAllElements();
-// 		m_staffs[i]->getSegment().getRefreshStatus
-// 		    (m_segmentsRefreshStatusIds[i]).setNeedsRefresh(false);
-		
-// 		canvas()->update();
-// 	    }
-// 	}
-// 	m_ok = true;
-//     } catch (ProgressReporter::Cancelled c) {
-// 	m_ok = false;
-// 	// when cancelled, m_ok is false -- checked by calling method
-//     }
-
-// }
-
 
 void
 NotationView::removeViewLocalProperties(Rosegarden::Event *e)
@@ -2121,7 +2062,7 @@ void NotationView::refreshSegment(Segment *segment,
     NOTATION_DEBUG << "*** " << endl;
     Rosegarden::Profiler foo("NotationView::refreshSegment()");
 
-    if (m_inhibitRefresh || m_documentDestroyed) return;
+    if (m_inhibitRefresh) return;
 
     getDocument()->getSequenceManager()->
 	setTemporarySequencerSliceSize(Rosegarden::RealTime(3, 0));

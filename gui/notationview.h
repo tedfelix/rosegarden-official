@@ -522,9 +522,6 @@ public slots:
     /// Changes the hlayout spacing of the staffs on the view
     void slotChangeSpacingFromAction();
 
-    /// The document has been destroyed, and we're about to go with it
-    void slotDocumentDestroyed();
-
 signals:
     /**
      * Emitted when the note selected in the palette changes
@@ -758,7 +755,6 @@ protected:
     bool m_progressEventFilterInstalled;
 
     bool m_inhibitRefresh;
-    bool m_documentDestroyed;
     bool m_ok;
 
     bool m_printMode;

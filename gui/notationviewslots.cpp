@@ -57,13 +57,6 @@ using Rosegarden::EventSelection;
 
 
 void
-NotationView::slotDocumentDestroyed()
-{
-    NOTATION_DEBUG << "NotationView::slotDocumentDestroyed()\n";
-    m_documentDestroyed = true;
-}
-
-void
 NotationView::slotUpdateInsertModeStatus()
 {
     QString message;

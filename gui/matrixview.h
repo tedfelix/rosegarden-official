@@ -375,9 +375,6 @@ public slots:
      */
     void slotInsertNoteFromAction();
 
-    /// The document has been destroyed, and we're about to go with it
-    void slotDocumentDestroyed();
-
 protected:
 
     virtual Rosegarden::Segment *getCurrentSegment();
@@ -499,8 +496,6 @@ protected:
 
     QWidget *m_chordNameRuler;
     QWidget *m_tempoRuler;
-
-    bool m_documentDestroyed; // bit of a hack, as in NotationView
 
     class NoteSender : public QObject
     {

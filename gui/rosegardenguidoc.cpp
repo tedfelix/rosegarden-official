@@ -100,7 +100,9 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
       m_recordSegment(0), m_endOfLastRecordedNote(0),
       m_commandHistory(new MultiViewCommandHistory()),
       m_clipboard(new Rosegarden::Clipboard),
-      m_pluginManager(pluginManager)
+      m_pluginManager(pluginManager),
+      m_autoSavePeriod(0),
+      m_beingDestroyed(false)
 {
     syncDevices();
 
@@ -117,6 +119,8 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
 RosegardenGUIDoc::~RosegardenGUIDoc()
 {
     RG_DEBUG << "~RosegardenGUIDoc()\n";
+    m_beingDestroyed = true;
+
     deleteEditViews();
     delete m_commandHistory; // must be deleted before the Composition is
     delete m_clipboard;
