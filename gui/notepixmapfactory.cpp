@@ -39,6 +39,7 @@
 #include "rosedebug.h"
 #include "rosegardenguiview.h"
 #include "rosegardenconfigurationpage.h"
+#include "notationstrings.h"
 #include "notepixmapfactory.h"
 #include "NotationTypes.h"
 #include "Equation.h"
@@ -1306,21 +1307,24 @@ NotePixmapFactory::makeNoteMenuLabel(Rosegarden::timeT duration,
 
     } else {
 
-	std::string noteName;
+	QString noteName;
 
 	switch (noteNameStyle) {
 
+	case Rosegarden::GeneralConfigurationPage::British:
+	    noteName = NotationStrings::getBritishName(nearestNote, plural, triplet);
+	    break;
+
 	case Rosegarden::GeneralConfigurationPage::American:
-	    noteName = nearestNote.getAmericanName();
+	    noteName = NotationStrings::getAmericanName(nearestNote, plural, triplet);
 	    break;
 
 	case Rosegarden::GeneralConfigurationPage::Local:
-	    noteName = nearestNote.getEnglishName();
+            noteName = NotationStrings::getNoteName(nearestNote, plural, triplet);
 	    break;
 	}
     
-	if (triplet) noteName += " triplet";
-	return i18n(strtoqstr(noteName) + (plural ? "s" : ""));
+        return noteName;
     }
 }
 

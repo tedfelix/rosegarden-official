@@ -47,6 +47,7 @@
 
 #include "Profiler.h"
 
+#include "notationstrings.h"
 #include "notepixmapfactory.h"
 #include "notestyle.h"
 #include "notationtool.h"
@@ -519,9 +520,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     int defaultSpacing = m_config->readNumEntry("spacing", 100);
     m_hlayout->setSpacing(defaultSpacing);
 
-    Note::Type defaultSmoothingType = 
-	m_config->readNumEntry("smoothing", Note::Shortest);
-    timeT defaultSmoothing = Note(defaultSmoothingType).getDuration();
     for (int type = Note::Shortest; type <= Note::Longest; ++type) {
 	m_legatoDurations.push_back((int)(Note(type).getDuration()));
     }
@@ -851,7 +849,7 @@ void NotationView::setupActions()
 	    std::string noteName = nearestNote.getReferenceName(); 
 	    noteName = "menu-" + noteName;
 	    pmap = NotePixmapFactory::toQPixmap(npf.makeToolbarPixmap(strtoqstr(noteName)));
-	    label = strtoqstr(nearestNote.getEnglishName());
+	    label = NotationStrings::getNoteName(nearestNote.getNoteType());
 	} else {
 	    label = QString("%1").arg(*i);
 	}
@@ -2290,16 +2288,15 @@ void NotationView::initActionDataMaps()
 
     m_noteActionDataMap = new NoteActionDataMap;
 
+    Note referenceNote(Note::Crotchet); // type doesn't matter
     for (int rest = 0; rest < 2; ++rest) {
 	for (int dots = 0; dots < 2; ++dots) {
 	    for (int type = Note::Longest; type >= Note::Shortest; --type) {
 		if (dots && (type == Note::Longest)) continue;
 
-		Note note(type, dots);
-
-		QString refName(strtoqstr(note.getReferenceName(rest)));
-		QString shortName(strtoqstr(note.getShortName()));
-		QString titleName(strtoqstr(note.getAmericanName()));
+		QString refName(strtoqstr(referenceNote.getReferenceName(rest,type,dots)));
+		QString shortName(NotationStrings::getShortNoteName(type,dots));
+		QString titleName(NotationStrings::getNoteName(type,dots));
 		titleName = titleName.left(1).upper() +
 		            titleName.right(titleName.length()-1);
 

@@ -46,6 +46,7 @@ rosegarden_SOURCES = \
 	notationproperties.cpp \
 	notationsets.cpp \
 	notationstaff.cpp \
+	notationstrings.cpp \
 	notationtool.cpp \
 	notationview.cpp \
 	notationviewslots.cpp \

@@ -690,8 +690,6 @@ NotationDisplayPitch::rawPitchToDisplayPitch(int pitch,
     if (pitch >= 5) { pitch++; } // make white keys %2=0
     height = (int)(pitch/2) - 2;
 
-    // In most cases, all the work of this function is 
-    // done already
     // The case we're handling here is a note played on a
     // white key that is the result of key-signature accidental
     if (accidental == NoAccidental) {
@@ -749,7 +747,7 @@ NotationDisplayPitch::displayPitchToRawPitch(int height,
 
     if (height > 4) ++octave;
 
-    // Height is now relative to treble clef
+    // Height is now relative to treble clef lines
     switch (height) {
 
     case 0: pitch =  4; break;	/* bottom line, treble clef: E */
@@ -762,7 +760,7 @@ NotationDisplayPitch::displayPitchToRawPitch(int height,
     }
     // Pitch is now "natural"-ized note at given height
 
-    // 3. Now add the accidental
+    // 3. Adjust pitch for accidental
 
     if (accidental != NoAccidental &&
         accidental != Natural) {
@@ -853,9 +851,7 @@ Note::Note(const string &n)
 
     Type t;
     for (t = Shortest; t <= Longest; ++t) {
-        if (name == getEnglishName(t) ||
-            name == getAmericanName(t) ||
-            name == getShortName(t)) {
+        if (name == getReferenceName(false, t)) {
             m_type = t;
             break;
         }
@@ -912,41 +908,10 @@ static string addDots(int dots, string s, bool hyphenate = false)
     return os.str();
 }
 
-string Note::getEnglishName(Type type, int dots) const {
+string Note::getReferenceName(bool isRest, Type type, int dots) const {
     static const string names[] = {
         "hemidemisemiquaver", "demisemiquaver", "semiquaver",
         "quaver", "crotchet", "minim", "semibreve", "breve"
-    };
-    if (type < 0) { type = m_type; dots = m_dots; }
-    if (dots) return addDots(dots, names[type]);
-    else return names[type];
-}
-
-string Note::getAmericanName(Type type, int dots) const {
-    static const string names[] = {
-        "sixty-fourth note", "thirty-second note", "sixteenth note",
-        "eighth note", "quarter note", "half note", "whole note",
-        "double whole note"
-    };
-    if (type < 0) { type = m_type; dots = m_dots; }
-    if (dots) return addDots(dots, names[type]);
-    else return names[type];
-}
-
-string Note::getShortName(Type type, int dots) const {
-    static const string names[] = {
-        "64th", "32nd", "16th", "8th", "quarter", "half", "whole",
-        "double whole"
-    };
-    if (type < 0) { type = m_type; dots = m_dots; }
-    if (dots) return addDots(dots, names[type]);
-    else return names[type];
-}
-
-string Note::getReferenceName(bool isRest, Type type, int dots) const {
-    static const string names[] = {
-        "hemidemisemi", "demisemi", "semiquaver", "quaver", "crotchet",
-        "minim", "semibreve", "breve"
     };
     if (type < 0) { type = m_type; dots = m_dots; }
     string name(names[type]);

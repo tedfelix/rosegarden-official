@@ -47,6 +47,7 @@
 #include "rosegardenconfiguredialog.h"
 #include "rosegardenconfigurationpage.h"
 #include "notationhlayout.h"
+#include "notationstrings.h"
 #include "notestyle.h"
 #include "rosegardenguidoc.h"
 #include "Composition.h"
@@ -429,11 +430,11 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 	m_cfg->readNumEntry("smoothing", Note::Shortest);
 
     NotePixmapFactory npf;
+    Note referenceNote(Note::Crotchet);
     for (Note::Type type = Note::Shortest; type <= Note::Longest; ++type) {
-	Note note(type);
 	QPixmap pmap = NotePixmapFactory::toQPixmap(npf.makeToolbarPixmap
-	    (strtoqstr((std::string("menu-") + note.getReferenceName()))));
-	m_smoothing->insertItem(pmap, strtoqstr(note.getEnglishName()));
+	    (strtoqstr((std::string("menu-") + referenceNote.getReferenceName(type)))));
+	m_smoothing->insertItem(pmap, NotationStrings::getNoteName(type));
 	if (defaultSmoothing == type) {
 	    m_smoothing->setCurrentItem(m_smoothing->count() - 1);
 	}

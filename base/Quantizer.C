@@ -845,7 +845,7 @@ StandardQuantization::checkStandardQuantizations()
 	    std::string name(buf);
 
 	    sprintf(buf, "%s %s",
-		    Note(nt).getEnglishName().c_str(),
+		    Note(nt).getReferenceName().c_str(),
 		    (i ? "triplet" : ""));
 	    std::string description(buf);
 

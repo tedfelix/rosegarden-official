@@ -667,27 +667,6 @@ public:
     }
 
     /**
-     * Get the English name of a note (e.g. crotchet, dotted semiquaver).
-     * The default arguments are the values of the note on which the
-     * method is called; non-default arguments specify another note type.
-     */
-    std::string getEnglishName(Type type = -1, int dots = 0) const;
-
-    /**
-     * Get the US name of a note (e.g. quarter note, dotted sixteenth note).
-     * The default arguments are the values of the note on which the
-     * method is called; non-default arguments specify another note type.
-     */
-    std::string getAmericanName(Type type = -1, int dots = 0) const;
-
-    /**
-     * Get the short US name of a note (e.g. quarter, dotted 16th).
-     * The default arguments are the values of the note on which the
-     * method is called; non-default arguments specify another note type.
-     */
-    std::string getShortName(Type type = -1, int dots = 0) const;
-
-    /**
      * Get the reference name of a note, used to refer to toolbar pixmap
      * files and suchlike.  (e.g. crotchet, dotted-demisemi).
      * The default arguments are the values of the note on which the
