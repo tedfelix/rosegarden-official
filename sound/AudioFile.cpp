@@ -486,12 +486,12 @@ AudioFile::close()
 // file or you could be waiting for a while.  Until this has been
 // optimised.
 //
-vector<float>
+std::vector<float>
 AudioFile::getPreview(const RealTime &resolution)
 {
-    vector<float> preview;
+    std::vector<float> preview;
 
-     std::ifstream *previewFile = new std::ifstream(m_fileName.c_str(),
+    std::ifstream *previewFile = new std::ifstream(m_fileName.c_str(),
                                                    std::ios::in |
                                                    std::ios::binary);
     // move past header to beginning of the data

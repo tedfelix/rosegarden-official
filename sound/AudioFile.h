@@ -82,7 +82,7 @@ public:
     // definition view of the waveform - just for overviews.  Could
     // in future be optimised with a local data file no doubt.
     // 
-    vector<float> getPreview(const RealTime &resolution);
+    std::vector<float> getPreview(const RealTime &resolution);
 
     std::string getName() const { return m_name; }
     unsigned int getId() const { return m_id; }
