@@ -87,6 +87,10 @@ protected:
     virtual void closeEvent(QCloseEvent *);
 
 private:
+
+    void toggleNamedWidgets(bool show, const char* const);
+    
+
     RosegardenGUIDoc *m_document;
     Rosegarden::Studio *m_studio;
 
@@ -103,6 +107,9 @@ private:
 	    m_stereoButton(0), m_stereoness(false), m_pluginBox(0)
 	{ }
 
+        void setVisible(bool);
+        void setPluginButtonsVisible(bool);
+        
 	bool m_populated;
 
 	AudioRouteMenu *m_input;
