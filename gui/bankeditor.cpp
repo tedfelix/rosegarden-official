@@ -709,9 +709,9 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
                                         i18n("Manage Banks..."),
                                         leftPart);
 
-    m_addBank        = new QPushButton(i18n("Add Bank"), bankBox);
-    m_deleteBank     = new QPushButton(i18n("Delete Bank"), bankBox);
-    m_deleteAllBanks = new QPushButton(i18n("Delete All Banks"), bankBox);
+    m_addBank        = new QPushButton(i18n("Add"), bankBox);
+    m_deleteBank     = new QPushButton(i18n("Delete"), bankBox);
+    m_deleteAllBanks = new QPushButton(i18n("Delete All"), bankBox);
 
     // Tips
     //
@@ -724,8 +724,8 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     QToolTip::add(m_deleteAllBanks,
                   i18n("Delete all Banks from the current Device"));
 
-    m_importBanks = new QPushButton(i18n("Import Banks"), bankBox);
-    m_exportBanks = new QPushButton(i18n("Export Banks"), bankBox);
+    m_importBanks = new QPushButton(i18n("Import"), bankBox);
+    m_exportBanks = new QPushButton(i18n("Export"), bankBox);
     bankBox->addSpace(10); // spacer
 
     // Tips
@@ -735,8 +735,8 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     QToolTip::add(m_exportBanks,
             i18n("Export all Device and Bank information to a Rosegarden format  interchange file"));
 
-    m_copyPrograms = new QPushButton(i18n("Copy Programs"), bankBox);
-    m_pastePrograms = new QPushButton(i18n("Paste Programs"), bankBox);
+    m_copyPrograms = new QPushButton(i18n("Copy"), bankBox);
+    m_pastePrograms = new QPushButton(i18n("Paste"), bankBox);
 
     // Tips
     //
@@ -794,12 +794,12 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     Rosegarden::DeviceListIterator it;
     bool haveMidiPlayDevice = false;
     for (it = devices->begin(); it != devices->end(); ++it) {
-	Rosegarden::MidiDevice *md =
-	    dynamic_cast<Rosegarden::MidiDevice *>(*it);
-	if (md && md->getDirection() == Rosegarden::MidiDevice::Play) {
-	    haveMidiPlayDevice = true;
-	    break;
-	}
+        Rosegarden::MidiDevice *md =
+            dynamic_cast<Rosegarden::MidiDevice *>(*it);
+        if (md && md->getDirection() == Rosegarden::MidiDevice::Play) {
+            haveMidiPlayDevice = true;
+            break;
+        }
     }
     if (!haveMidiPlayDevice) {
         leftPart->setDisabled(true);
@@ -869,12 +869,12 @@ BankEditorDialog::initDialog()
         if ((*it)->getType() == Rosegarden::Device::Midi)
         {
             Rosegarden::MidiDevice* midiDevice =
-		dynamic_cast<Rosegarden::MidiDevice*>(*it);
-	    if (!midiDevice) continue;
+                dynamic_cast<Rosegarden::MidiDevice*>(*it);
+            if (!midiDevice) continue;
             
-	    // skip read-only devices
-	    if (midiDevice->getDirection() == Rosegarden::MidiDevice::Record)
-		continue;
+            // skip read-only devices
+            if (midiDevice->getDirection() == Rosegarden::MidiDevice::Record)
+                continue;
 
             m_deviceNameMap[midiDevice->getId()] = midiDevice->getName();
             QString itemName = strtoqstr(midiDevice->getName());
@@ -883,7 +883,7 @@ BankEditorDialog::initDialog()
                      << itemName << endl;
 
             QListViewItem* deviceItem = new MidiDeviceListViewItem
-		(midiDevice->getId(), m_listView, itemName);
+                (midiDevice->getId(), m_listView, itemName);
             deviceItem->setOpen(true);
 
             populateDeviceItem(deviceItem, midiDevice);
@@ -1430,7 +1430,7 @@ BankEditorDialog::slotDeleteBank()
             {
                 m_pastePrograms->setEnabled(false);
                 m_copyBank = std::pair<Rosegarden::DeviceId, int>
-		    (Rosegarden::Device::NO_DEVICE, -1);
+                    (Rosegarden::Device::NO_DEVICE, -1);
             }
 
             slotApply();
@@ -1470,7 +1470,7 @@ BankEditorDialog::slotDeleteAllBanks()
         {
             m_pastePrograms->setEnabled(false);
             m_copyBank = std::pair<Rosegarden::DeviceId, int>
-		(Rosegarden::Device::NO_DEVICE, -1);
+                (Rosegarden::Device::NO_DEVICE, -1);
         }
 
         // Urgh, we have this horrible flag that we're using to frig this.
@@ -1496,7 +1496,7 @@ Rosegarden::MidiDevice*
 BankEditorDialog::getMidiDevice(QListViewItem* item)
 {
     MidiDeviceListViewItem* deviceItem =
-	dynamic_cast<MidiDeviceListViewItem*>(item);
+        dynamic_cast<MidiDeviceListViewItem*>(item);
     if (!deviceItem) return 0;
 
     return m_studio->getMidiDevice(deviceItem->getDevice());
@@ -1591,7 +1591,7 @@ BankEditorDialog::selectDeviceItem(Rosegarden::MidiDevice *device)
 }
 void
 BankEditorDialog::selectDeviceBankItem(Rosegarden::DeviceId deviceId,
-				       int bank)
+                                       int bank)
 {
     QListViewItem *deviceChild = m_listView->firstChild();
     QListViewItem *bankChild;
@@ -1602,14 +1602,14 @@ BankEditorDialog::selectDeviceBankItem(Rosegarden::DeviceId deviceId,
         bankChild = deviceChild->firstChild();
 
         MidiDeviceListViewItem *midiDeviceItem =
-	    dynamic_cast<MidiDeviceListViewItem*>(deviceChild);
+            dynamic_cast<MidiDeviceListViewItem*>(deviceChild);
 
-	if (midiDeviceItem && bankChild)
+        if (midiDeviceItem && bankChild)
         {
             do
             {
                 if (deviceId == midiDeviceItem->getDevice() &
-		    bank == bankCount)
+                    bank == bankCount)
                 {
                     m_listView->setSelected(bankChild, true);
                     return;
@@ -1670,15 +1670,15 @@ BankEditorDialog::slotImport()
     QString deviceDir = KGlobal::dirs()->findResource("appdata", "library/");
     QDir dir(deviceDir);
     if (!dir.exists()) {
-	deviceDir = ":ROSEGARDENDEVICE";
+        deviceDir = ":ROSEGARDENDEVICE";
     } else {
-	deviceDir = "file://" + deviceDir;
+        deviceDir = "file://" + deviceDir;
     }
 
     KURL url = KFileDialog::getOpenURL
-	(deviceDir,
-	 "*.rgd|Rosegarden device file\n*.rg|Rosegarden file\n*.sf2|SoundFont file",
-	 this, i18n("Import Banks from Device in File"));
+        (deviceDir,
+         "*.rgd|Rosegarden device file\n*.rg|Rosegarden file\n*.sf2|SoundFont file",
+         this, i18n("Import Banks from Device in File"));
 
     if (url.isEmpty()) return;
 
@@ -1690,8 +1690,8 @@ BankEditorDialog::slotImport()
     }
 
     if (SF2PatchExtractor::isSF2File(target.data())) {
-	importFromSF2(target);
-	return;
+        importFromSF2(target);
+        return;
     }
 
     RosegardenGUIDoc *doc = new RosegardenGUIDoc(this, 0, true); // skipAutoload
@@ -1845,83 +1845,83 @@ BankEditorDialog::importFromSF2(QString filename)
 {
     SF2PatchExtractor::Device sf2device;
     try {
-	sf2device = SF2PatchExtractor::read(filename.data());
+        sf2device = SF2PatchExtractor::read(filename.data());
 
     // These exceptions shouldn't happen -- the isSF2File call before this
     // one should have weeded them out
     } catch (SF2PatchExtractor::FileNotFoundException e) {
-	return;
+        return;
     } catch (SF2PatchExtractor::WrongFileFormatException e) {
-	return;
+        return;
     }
 
     std::vector<Rosegarden::MidiBank> banks;
     std::vector<Rosegarden::MidiProgram> programs;
 
     for (SF2PatchExtractor::Device::const_iterator i = sf2device.begin();
-	 i != sf2device.end(); ++i) {
+         i != sf2device.end(); ++i) {
 
-	int bankNumber = i->first;
-	const SF2PatchExtractor::Bank &sf2bank = i->second;
+        int bankNumber = i->first;
+        const SF2PatchExtractor::Bank &sf2bank = i->second;
 
-	Rosegarden::MidiBank bank;
-	bank.msb = bankNumber / 128;
-	bank.lsb = bankNumber % 128;
-	bank.name = qstrtostr(QString("Bank %1:%1").arg(bank.msb).arg(bank.lsb));
-	banks.push_back(bank);
+        Rosegarden::MidiBank bank;
+        bank.msb = bankNumber / 128;
+        bank.lsb = bankNumber % 128;
+        bank.name = qstrtostr(QString("Bank %1:%1").arg(bank.msb).arg(bank.lsb));
+        banks.push_back(bank);
 
-	for (SF2PatchExtractor::Bank::const_iterator j = sf2bank.begin();
-	     j != sf2bank.end(); ++j) {
+        for (SF2PatchExtractor::Bank::const_iterator j = sf2bank.begin();
+             j != sf2bank.end(); ++j) {
 
-	    int programNumber = j->first;
-	    Rosegarden::MidiProgram program;
-	    program.msb = bank.msb;
-	    program.lsb = bank.lsb;
-	    program.name = j->second;
-	    program.program = programNumber;
-	    programs.push_back(program);
-	}
+            int programNumber = j->first;
+            Rosegarden::MidiProgram program;
+            program.msb = bank.msb;
+            program.lsb = bank.lsb;
+            program.name = j->second;
+            program.program = programNumber;
+            programs.push_back(program);
+        }
     }
 
     MidiDeviceListViewItem* deviceItem =
-	dynamic_cast<MidiDeviceListViewItem*>
-	(m_listView->selectedItem());
+        dynamic_cast<MidiDeviceListViewItem*>
+        (m_listView->selectedItem());
     
     if (deviceItem)
     {
-	Rosegarden::DeviceId deviceId = deviceItem->getDevice();
-	Rosegarden::Device *device = m_studio->getDevice(deviceId);
+        Rosegarden::DeviceId deviceId = deviceItem->getDevice();
+        Rosegarden::Device *device = m_studio->getDevice(deviceId);
 
-	std::vector<QString> importList;
-	importList.push_back(filename);
-	ImportDeviceDialog *dialog = new ImportDeviceDialog(this, importList);
+        std::vector<QString> importList;
+        importList.push_back(filename);
+        ImportDeviceDialog *dialog = new ImportDeviceDialog(this, importList);
 
-	int res = dialog->exec();
+        int res = dialog->exec();
 
-	// Check for overwrite flag and reset res as necessary
-	//
-	bool overwrite = false;
-	if (res >> 24) {
-	    overwrite = true;
-	    res &= 0xffffff;
-	}
+        // Check for overwrite flag and reset res as necessary
+        //
+        bool overwrite = false;
+        if (res >> 24) {
+            overwrite = true;
+            res &= 0xffffff;
+        }
 
-	if (res > -1) {
+        if (res > -1) {
 
-	    if (device) {
-		ModifyDeviceCommand *command =
-		    new ModifyDeviceCommand(
-			m_studio,
-			deviceId,
-			device->getName(),
-			"",
-			"",
-			banks,
-			programs,
-			overwrite);
-		addCommandToHistory(command);
-	    }
-	}
+            if (device) {
+                ModifyDeviceCommand *command =
+                    new ModifyDeviceCommand(
+                        m_studio,
+                        deviceId,
+                        device->getName(),
+                        "",
+                        "",
+                        banks,
+                        programs,
+                        overwrite);
+                addCommandToHistory(command);
+            }
+        }
     }
 }
 
@@ -1937,7 +1937,7 @@ BankEditorDialog::slotEditCopy()
     if (bankItem)
     {
         m_copyBank = std::pair<Rosegarden::DeviceId, int>(bankItem->getDevice(),
-							  bankItem->getBank());
+                                                          bankItem->getBank());
         m_pastePrograms->setEnabled(true);
     }
 }
@@ -2238,20 +2238,20 @@ ImportDeviceDialog::ImportDeviceDialog(QWidget *parent,
 
     if (devices.size() > 1) {
 
-	m_deviceCombo = new KComboBox(groupBox);
+        m_deviceCombo = new KComboBox(groupBox);
 
-	// Create the combo
-	//
-	std::vector<QString>::iterator it = devices.begin();
-	for (; it != devices.end(); it++)
-	    m_deviceCombo->insertItem(*it);
+        // Create the combo
+        //
+        std::vector<QString>::iterator it = devices.begin();
+        for (; it != devices.end(); it++)
+            m_deviceCombo->insertItem(*it);
 
-	m_label = 0;
+        m_label = 0;
 
     } else {
-	
-	m_deviceCombo = 0;
-	m_label = new QLabel(devices[0], groupBox);
+        
+        m_deviceCombo = 0;
+        m_label = new QLabel(devices[0], groupBox);
     }
 
     m_buttonGroup = new QButtonGroup(1, Qt::Horizontal,
