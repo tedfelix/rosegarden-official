@@ -32,6 +32,7 @@ libRosegardenSound_la_SOURCES = AudioFile.cpp \
                                 MidiEvent.cpp \
                                 MidiFile.cpp \
                                 MP3AudioFile.cpp \
+				NPTLWorkaround.c \
                                 PeakFile.cpp \
                                 PeakFileManager.cpp \
                                 Plugins.cpp \
