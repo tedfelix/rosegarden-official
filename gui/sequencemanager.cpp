@@ -82,6 +82,22 @@ SequenceManager::~SequenceManager()
 void SequenceManager::setDocument(RosegardenGUIDoc* doc)
 {
     m_doc = doc;
+
+    // Must recreate and reconnect the countdown timer and dialog
+    // (bug 729039)
+    //
+    delete m_countdownDialog;
+    delete m_countdownTimer;
+
+    m_countdownDialog = new CountdownDialog(dynamic_cast<QWidget*>
+                                (m_doc->parent())->parentWidget());
+
+    m_countdownTimer = new QTimer(m_doc);
+
+    // Connect this for use later
+    //
+    connect(m_countdownTimer, SIGNAL(timeout()),
+            this, SLOT(slotCountdownTimerTimeout()));
 }
 
 RosegardenGUIDoc* SequenceManager::getDocument()
