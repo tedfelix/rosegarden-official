@@ -54,26 +54,49 @@
 
       <h3>Current Release</h3>
       <p>The latest release of Rosegarden-4 is the rather
-      confusingly-numbered 0.1.6, released on 6 June 2002.
+      confusingly-numbered 0.2.0, released on 9 August 2002.
     
-      <p>Changes since 0.1.5 include</p>
-
-      <ul>
-	<li class="close">experimental JACK audio driver with recording (not yet sync'd with ALSA output)</li>
-	<li class="close">audio previews on Segments (but still no audio file insertion GUI)</li>
-	<li class="close">new quantize dialog in notation view</li>
-	<li class="close">track name shown at start of staff in notation</li>
-	<li class="close">matrix now shows time signature changes correctly</li>
-	<li class="close">a few handy keyboard accelerators in notation view </li>
-	<li class="close">a couple of new notation marks (marcato, staccatissimo) </li>
-	<li class="close">first pass at Lilypond file export, courtesy of Hans Kieserman, and at Csound scorefile export </li>
-	<li class="close">internal string usage should be unicode-clean throughout </li>
-	<li class="close">many notation properties now view-local, ensuring better support for different layouts, sizes or smoothings in different views at the same time </li>
-	<li class="close">first pass at previews of contents of segments on main view, though not yet optimised enough to be usable </li>
-	<li class="close">new matrix tools (note move, note duration change) </li>
-	<li class="close">start of menu items state management </li>
-	<li class="close">rework of the configuration system</li>
-	</ul>
+      <p>Changes since 0.1.6 include:</p>
+<ul>
+<li class="close">Multiple mono audio tracks supported through JACK with audio VU meters</li>
+<li class="close">Some significant improvements to notation layout of simple
+  contrapuntal staffs</li>
+<li class="close">WAV file loading/saving including BWF format peak files</li>
+<li class="close">Audio Manager dialog: sortable list of audio files in projects including
+  child segments</li>
+<li class="close">Configuration pane for notation editor</li>
+<li class="close">Audio VU meters including live preview of audio levels</li>
+<li class="close">"smooth-move" modifier (Shift) for matrix tools</li>
+<li class="close">Event list view with event type filtering and event editing</li>
+<li class="close">Support for PitchBends, Controller events, also better but not yet complete
+  support for System Exclusives, Pressure events.</li>
+<li class="close">Various new notation commands (Cut and Close, Untie Notes)</li>
+<li class="close">Sweep selection of Segments on main canvas</li>
+<li class="close">Sweep selection and multiple event movement on matrix view</li>
+<li class="close">Progress dialogs</li>
+<li class="close">Semi-automatic syncing of audio and MIDI using JACK latency sliders</li>
+<li class="close">Audio segment splitting, including auto splitting to a threshold</li>
+<li class="close">Event playback on selection movement in Notation and Matrix view</li>
+<li class="close">Track addition/deletion</li>
+<li class="close">Added tempo ruler to main window as well as notation window</li>
+<li class="close">Non-destructive Segment resize (through Segment end markers)</li>
+<li class="close">Rescale Segment command</li>
+<li class="close">Initial support for user-configurable notation styles, such
+  as different note head shapes and tail count.  Provided
+  a selection of default styles that can be applied in the
+  notation editor.  (No style editor yet, edit the XML files.)</li>
+<li class="close">Rather flaky support for grace notes</li>
+<li class="close">Text annotations in cute yellow boxes in notation</li>
+<li class="close">Slashes now available on note stems</li>
+<li class="close">Notation can now show notes that needed smoothing quantize
+  in another colour (namely, green)</li>
+<li class="close">FAQ and the beginnings of the first Help documentation</li>
+<li class="close">Set tempo event to length of segment</li>
+<li class="close">Audio visual preview - waveform shown on Segments </li>
+<li class="close">Incomplete support for BWF files</li>
+<li class="close">Build admin/ directories tidied.</li>
+<li class="close">Repeating Segments improved</li>
+</ul>
 
       <p>Have a look
       at some <a href="pictures.html">pictures</a> of it in use, or <a href="download.html">download the source code</a> now.

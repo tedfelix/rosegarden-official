@@ -113,7 +113,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
                                           5, 2, // nbrow, nbcol
                                           10, 5);
 
-    layout->addWidget(new QLabel(i18n("Double click on segment opens..."),
+    layout->addWidget(new QLabel(i18n("Default editor (for double-click on segment)"),
                                  frame), 0, 0);
     layout->addWidget(new QLabel(i18n("Number of count-in bars when recording"),
                                  frame), 1, 0);
