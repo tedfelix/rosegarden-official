@@ -63,7 +63,7 @@ public:
     virtual void finishLayout(Rosegarden::timeT = 0,
 			      Rosegarden::timeT = 0);
 
-    static const unsigned int maxMIDIPitch;
+    static const int maxMIDIPitch;
 
 protected:
     //--------------- Data members ---------------------------------
