@@ -41,6 +41,7 @@
          <Action name="show_tracklabels"           append="show_merge" />
          <Action name="show_segment_parameters"    append="show_merge" />
          <Action name="show_instrument_parameters" append="show_merge" />
+         <Action name="show_rulers"                append="show_merge" />
   </Menu>
 
 </MenuBar>

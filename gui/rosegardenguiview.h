@@ -149,6 +149,8 @@ public slots:
 
     void slotShowInstrumentParameters(bool);
 
+    void slotShowRulers(bool);
+
     /*
      * Commands
      *

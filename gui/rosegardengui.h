@@ -539,6 +539,12 @@ public slots:
      */
     void slotToggleInstrumentParameters();
 
+    /**
+     * Toggle the rulers on the TrackEditor
+     * (aka bar buttons)
+     */
+    void slotToggleRulers();
+
     /*
      * slotSendMidiController
      **/
@@ -582,6 +588,7 @@ private:
     KToggleAction* m_viewTrackLabels;
     KToggleAction* m_viewSegmentParameters;
     KToggleAction* m_viewInstrumentParameters;
+    KToggleAction* m_viewRulers;
 
     KAction *m_playTransport;
     KAction *m_stopTransport;

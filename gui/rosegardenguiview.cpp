@@ -316,6 +316,17 @@ void RosegardenGUIView::slotShowInstrumentParameters(bool v)
         m_instrumentParameterBox->hide();
 }
 
+void RosegardenGUIView::slotShowRulers(bool v)
+{
+    if (v) {
+        m_trackEditor->getTopBarButtons()->show();
+        m_trackEditor->getBottomBarButtons()->show();
+    } else {
+        m_trackEditor->getTopBarButtons()->hide();
+        m_trackEditor->getBottomBarButtons()->hide();
+    }
+}
+
 
 
 MultiViewCommandHistory*

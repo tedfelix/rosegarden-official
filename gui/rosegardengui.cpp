@@ -185,6 +185,11 @@ void RosegardenGUIApp::setupActions()
                                                    actionCollection(),
                                                    "show_instrument_parameters");
 
+    m_viewRulers = new KToggleAction(i18n("Show Rulers"), 0, this,
+                                     SLOT(slotToggleRulers()),
+                                     actionCollection(),
+                                     "show_rulers");
+
     KStdAction::saveOptions(this, SLOT(save_options()), actionCollection());
     KStdAction::preferences(this, SLOT(customize()),    actionCollection());
 
@@ -561,6 +566,7 @@ void RosegardenGUIApp::saveOptions()
     m_config->writeEntry("Show Statusbar",               m_viewStatusBar->isChecked());
     m_config->writeEntry("Show Segment Parameters",      m_viewSegmentParameters->isChecked());
     m_config->writeEntry("Show Instrument Parameters",   m_viewInstrumentParameters->isChecked());
+    m_config->writeEntry("Show Rulers",                  m_viewRulers->isChecked());
 
 
     m_config->writeEntry("ToolBarPos", (int) toolBar("mainToolBar")->barPos());
@@ -602,6 +608,10 @@ void RosegardenGUIApp::readOptions()
     bool viewInstrumentParameters = m_config->readBoolEntry("Show Instrument Parameters", true);
     m_viewInstrumentParameters->setChecked(viewInstrumentParameters);
     slotToggleInstrumentParameters();
+
+    bool viewRulers = m_config->readBoolEntry("Show Rulers", true);
+    m_viewRulers->setChecked(viewRulers);
+    slotToggleRulers();
 
     // bar position settings
     KToolBar::BarPosition toolBarPos;
@@ -986,6 +996,11 @@ void RosegardenGUIApp::slotToggleSegmentParameters()
 void RosegardenGUIApp::slotToggleInstrumentParameters()
 {
     m_view->slotShowInstrumentParameters(m_viewInstrumentParameters->isChecked());
+}
+
+void RosegardenGUIApp::slotToggleRulers()
+{
+    m_view->slotShowRulers(m_viewRulers->isChecked());
 }
 
 
