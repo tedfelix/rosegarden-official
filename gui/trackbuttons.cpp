@@ -1053,33 +1053,6 @@ TrackButtons::slotInstrumentPopupHiding()
 void
 TrackButtons::changeTrackInstrumentLabels(InstrumentTrackLabels label)
 {
-    // Disconnect where we're coming from
-    //
-    if (m_trackInstrumentLabels != label)
-    {
-        for (int i = 0; i < (int)m_tracks; i++)
-        {
-            switch(m_trackInstrumentLabels)
-            {
-                case ShowTrack:
-                    disconnect(m_trackLabels[i],
-                               SIGNAL(changeToInstrumentList(int)),
-                               this, SLOT(slotInstrumentSelection(int)));
-                    break;
-
-                case ShowBoth:
-                case ShowInstrument:
-                    disconnect(m_instrumentLabels[i],
-                               SIGNAL(changeToInstrumentList(int)),
-                               this, SLOT(slotInstrumentSelection(int)));
-                    break;
-
-                default:
-                    break;
-            }
-        }
-    }
-
     // Set new label
     m_trackInstrumentLabels = label;
 
@@ -1090,27 +1063,24 @@ TrackButtons::changeTrackInstrumentLabels(InstrumentTrackLabels label)
         {
             case ShowInstrument:
                 m_trackLabels[i]->hide();
+                m_trackLabels[i]->blockSignals(true);
                 m_instrumentLabels[i]->show();
-                connect(m_instrumentLabels[i],
-                        SIGNAL(changeToInstrumentList(int)),
-                        this, SLOT(slotInstrumentSelection(int)));
+                m_instrumentLabels[i]->blockSignals(false);
                 break;
     
             case ShowBoth:
                 m_trackLabels[i]->show();
+                m_trackLabels[i]->blockSignals(false);
                 m_instrumentLabels[i]->show();
-                connect(m_instrumentLabels[i],
-                        SIGNAL(changeToInstrumentList(int)),
-                        this, SLOT(slotInstrumentSelection(int)));
+                m_instrumentLabels[i]->blockSignals(false);
                 break;
     
             case ShowTrack:
             default:
                 m_trackLabels[i]->show();
+                m_trackLabels[i]->blockSignals(false);
                 m_instrumentLabels[i]->hide();
-                connect(m_trackLabels[i],
-                        SIGNAL(changeToInstrumentList(int)),
-                        this, SLOT(slotInstrumentSelection(int)));
+                m_instrumentLabels[i]->blockSignals(true);
                 break;
         }
     }

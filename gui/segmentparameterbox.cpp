@@ -461,9 +461,8 @@ SegmentParameterBox::populateBoxFromSegments()
             break;
     }
 
-    disconnect(m_delayValue, SIGNAL(textChanged(const QString&)),
-               this, SLOT(slotDelayTextChanged(const QString &)));
-
+    m_delayValue->blockSignals(true);
+    
     switch(delayed)
     {
         case All:
@@ -488,9 +487,7 @@ SegmentParameterBox::populateBoxFromSegments()
             m_delayValue->setEditText("");
             break;
     }
-
-    connect(m_delayValue, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotDelayTextChanged(const QString &)));
+    m_delayValue->blockSignals(false);
 }
 
 void SegmentParameterBox::slotRepeatPressed()
