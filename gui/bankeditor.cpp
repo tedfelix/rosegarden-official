@@ -69,8 +69,11 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
                                           vBox);
 
     deviceBox->addSpace(0);
+
     m_deviceCombo = new RosegardenComboBox(false, deviceBox);
     m_deviceCombo->setEditable(true);
+    m_deviceCombo->setInsertionPolicy(QComboBox::NoInsertion);
+
     deviceBox->addSpace(0);
     deviceBox->addSpace(0);
     deviceBox->addSpace(0);
@@ -110,6 +113,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     {
         if ((*it)->getType() == Rosegarden::Device::Midi)
         {
+            m_deviceList.push_back((*it)->getName());
             m_deviceCombo->insertItem(strtoqstr((*it)->getName()));
         }
     }
@@ -275,6 +279,9 @@ BankEditorDialog::slotPopulateDeviceBank(int deviceNo, int bank)
         if (m_bankList.size() > 0)
         {
             m_mainFrame->setDisabled(false);
+            m_deleteBank->setDisabled(false);
+            m_deleteAllBanks->setDisabled(false);
+
             for (unsigned int i = 0; i < m_bankList.size(); i++)
             {
                 m_bankCombo->insertItem(strtoqstr(m_bankList[i].name));
@@ -301,6 +308,8 @@ BankEditorDialog::slotPopulateDeviceBank(int deviceNo, int bank)
         {
             // no banks
             m_mainFrame->setDisabled(true);
+            m_deleteBank->setDisabled(true);
+            m_deleteAllBanks->setDisabled(true);
         }
 
     }
@@ -321,21 +330,25 @@ BankEditorDialog::slotPopulateDevice(int devNo)
     if (m_modified)
     {
         // then ask if we want to apply the changes
-        int reply =
-            KMessageBox::questionYesNo(this, i18n("There are some changes pending for this MIDI device.  Apply these changes?"));
+        QString text = QString("\"%1\"").
+                       arg(strtoqstr(m_deviceList[m_lastDevice])) +
+                       i18n(" - there are some pending changes for this device.\n") +
+                       i18n("Apply these changes?");
+
+        int reply = KMessageBox::questionYesNo(this, text);
 
         if (reply == KMessageBox::Yes)
         {
             ModifyDeviceCommand *command =
                 new ModifyDeviceCommand(m_studio,
                                         m_lastDevice,
-                                        qstrtostr(m_deviceCombo->currentText()),
+                                        m_deviceList[m_lastDevice],
                                         m_bankList,
                                         m_programList);
 
             addCommandToHistory(command);
         }
-
+        setModified(false);
     }
 
     // Populate from actual MidiDevice
@@ -431,7 +444,7 @@ BankEditorDialog::slotOk()
         ModifyDeviceCommand *command =
             new ModifyDeviceCommand(m_studio,
                                     m_lastDevice,
-                                    qstrtostr(m_deviceCombo->currentText()),
+                                    m_deviceList[m_lastDevice],
                                     m_bankList,
                                     m_programList);
 
@@ -448,7 +461,7 @@ BankEditorDialog::slotApply()
         ModifyDeviceCommand *command =
             new ModifyDeviceCommand(m_studio,
                                     m_lastDevice,
-                                    qstrtostr(m_deviceCombo->currentText()),
+                                    m_deviceList[m_lastDevice],
                                     m_bankList,
                                     m_programList);
 
@@ -498,7 +511,22 @@ BankEditorDialog::slotDeleteBank()
         int newBank = m_bankCombo->currentItem() - 1;
         if (newBank < 0) newBank = 0;
 
+        int msb = m_bankList[m_bankCombo->currentItem()].msb;
+        int lsb = m_bankList[m_bankCombo->currentItem()].lsb;
+
+        // Copy across all programs that aren't in the doomed bank
+        //
+        std::vector<Rosegarden::MidiProgram>::iterator it;
+        std::vector<Rosegarden::MidiProgram> tempList;
+        for (it = m_programList.begin(); it != m_programList.end(); it++)
+            if (it->msb != msb || it->lsb != lsb)
+                tempList.push_back(*it);
+
+        // Erase the bank and repopulate
+        //
         m_bankList.erase(&(m_bankList[m_bankCombo->currentItem()]));
+        m_programList = tempList;
+
         slotPopulateDeviceBank(m_deviceCombo->currentItem(), newBank);
     }
 
@@ -608,12 +636,25 @@ BankEditorDialog::slotModifyDeviceName(const QString &label)
     if (comboBox) return;
     */
 
-    if (_newBank) return;
+    if (_newBank || m_deviceCombo->currentItem() > (int)(m_deviceList.size()))
+        return;
     
+    /*
     Rosegarden::DeviceList *devices = m_studio->getDevices();
     if (label != strtoqstr((*devices)[m_deviceCombo->currentItem()]->getName()))
+    */
+    if (label != strtoqstr(m_deviceList[m_deviceCombo->currentItem()]))
     {
+        /*
+        disconnect(m_deviceCombo, SIGNAL(textChanged(const QString&)),
+                   this, SLOT(slotModifyDeviceName(const QString&)));
+
+        connect(m_deviceCombo, SIGNAL(textChanged(const QString&)),
+                this, SLOT(slotModifyDeviceName(const QString&)));
+                */
+        m_deviceList[m_deviceCombo->currentItem()] = qstrtostr(label);
         m_deviceCombo->changeItem(label, m_deviceCombo->currentItem());
+
         setModified(true);
     }
 }

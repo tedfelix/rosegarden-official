@@ -200,6 +200,7 @@ MidiDevice::toXmlString()
     std::stringstream midiDevice;
 
     midiDevice << "    <device id=\""  << m_id 
+               << "\" name=\""         << m_name 
                << "\" type=\"midi\">" << std::endl << std::endl;
 
     if (m_metronome)
