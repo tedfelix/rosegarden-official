@@ -438,6 +438,9 @@ int main(int argc, char *argv[])
 
         rosegardengui = new RosegardenGUIApp(args->isSet("sequencer"),
 					     startLogo);
+
+        app.setMainWidget(rosegardengui);
+
         rosegardengui->show();
 
 	// raise start logo

@@ -240,6 +240,7 @@ void
 RosegardenProgressDialog::polish()
 {
     KProgressDialog::polish();
+    setCursor(Qt::ArrowCursor);
     installFilter();
 }
 
@@ -261,7 +262,7 @@ RosegardenProgressDialog::eventFilter(QObject *watched, QEvent *e)
 
     else
 
-        return RosegardenProgressDialog::eventFilter(watched, e);
+        return KProgressDialog::eventFilter(watched, e);
 }
 
 void

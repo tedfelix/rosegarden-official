@@ -1041,8 +1041,14 @@ private:
 class SetWaitCursor
 {
 public:
-    SetWaitCursor() { QApplication::setOverrideCursor(QCursor(Qt::waitCursor)); }
-    ~SetWaitCursor() { QApplication::restoreOverrideCursor(); }
+//     SetWaitCursor() { QApplication::setOverrideCursor(QCursor(Qt::waitCursor)); }
+//     ~SetWaitCursor() { QApplication::restoreOverrideCursor(); }
+
+    SetWaitCursor() : m_currentCursor(kapp->mainWidget()->cursor())
+    { kapp->mainWidget()->setCursor(QCursor(Qt::waitCursor)); }
+    ~SetWaitCursor() { kapp->mainWidget()->setCursor(m_currentCursor); }
+protected:
+    QCursor m_currentCursor;
 };
  
 #endif // ROSEGARDENGUI_H
