@@ -297,15 +297,18 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 
     int startX = (int)(*i)->getLayoutX(), endX = startX + 10;
     bool startStemUp = false, endStemUp = false;
+    long startMarks = 0, endMarks = 0;
     bool beamAbove = false, beamBelow = false;
 
     std::vector<Event *> stemUpNotes, stemDownNotes;
 
     // Scan the notes spanned by the slur, recording the top and
     // bottom heights of the first and last chords, plus the presence
-    // of any troublesome beams.  (We should also be recording the
-    // presence of notes that are high or low enough in the body to
-    // get in the way of our slur -- not implemented yet.)
+    // of any troublesome beams.
+
+    //!!! We should also be recording the presence of notes that are
+    //high or low enough in the body to get in the way of our slur --
+    //not implemented yet.
 
     while (scooter != staff.getViewElementList()->end()) {
 
@@ -344,6 +347,7 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 		    startTopHeight = chord.getHighestNoteHeight();
 		    startX = (int)(*scooter)->getLayoutX();
 		    startStemUp = stemUp;
+		    startMarks = chord.getMarksForChord().size();
 		    haveStart = true;
 		}
 
@@ -351,6 +355,7 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 		endTopHeight = chord.getHighestNoteHeight();
 		endX = (int)(*scooter)->getLayoutX();
 		endStemUp = stemUp;
+		endMarks = chord.getMarksForChord().size();
 	    }
 
 	    if (!beamed) {
@@ -394,11 +399,11 @@ NotationVLayout::positionSlur(NotationStaff &staff,
     int startHeight, endHeight;
 
     if (above) {
-	startHeight = startTopHeight + 3;
-	endHeight = endTopHeight + 3;
+	startHeight = startTopHeight + 2 + startMarks*2;
+	endHeight = endTopHeight + 2 + endMarks*2;
     } else {
-	startHeight = startBottomHeight - 3;
-	endHeight = endBottomHeight - 3;
+	startHeight = startBottomHeight - 2 - startMarks*2;
+	endHeight = endBottomHeight - 2 - endMarks*2;
     }
 
     int y0 = staff.getLayoutYForHeight(startHeight),

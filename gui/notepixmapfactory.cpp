@@ -915,7 +915,7 @@ NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
 
     bool first = true;
     
-    for (int i = legerLines - 1; i >= -1/*0*/; --i) { //!!! one too many for test purposes
+    for (int i = legerLines - 1; i >= 0/*-1*/; --i) { //!!! one too many for test purposes
 	if (i % 2) {
 //	    NOTATION_DEBUG << "drawing at y = " << y << endl;
 	    for (int j = 0; j < getLegerLineThickness(); ++j) {
@@ -1458,7 +1458,10 @@ NotePixmapFactory::drawTie(bool above, int length)
     }
 
 //    if (m_inPrinterMethod) {
-	//!!!experimental!
+	//!!!experimental! -- if on screen, we probably ought to be
+	//calling makeSlurPixmap and copying the results -- otherwise
+        //we can't use the faux-smoothing that drawSlurAux does
+    // 
 	QPoint hotspot;
 //	bool smooth = false;
 //	if (!m_inPrinterMethod) smooth = m_font->isSmooth() && getNoteBodyHeight() > 5;
@@ -2014,68 +2017,14 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above, bool smooth,
 	theta = atan(double(dy) / double(length)) * 180.0 / M_PI;
 	NOTATION_DEBUG << "slur: dy is " << dy << ", length " << length << ", rotating through " << theta << endl;
 	rotate = true;
-//	dy = 0;
     }
-
-    // For the purpose of our calculations, we assume the slur is
-    // above the notes.  If this is not the case, we flip the sign of
-    // the y-axis both before and after the calculation.
-
-//    if (!above) dy = -dy;
-
-    Equation::Point a(0, 0);
-    Equation::Point b(length, 0);// dy);
 
     int mx1 = length/6;
     int mx2 = length - length/6;
 
-    double my1, my2;
-    Equation::solveForYByEndPoints(a, b, mx1, my1);
-    Equation::solveForYByEndPoints(a, b, mx2, my2);
-
-    int y1 = 0, y2 = 0;//dy;
-
-    // As remarked above, we can assume here that the slur is above
-    // the notes.
-#ifdef NOT_DEFINED
-    if (length < nbw * 10) {
-	my1 -= nbh;
-	my2 -= nbh;
-//	my1 -= (nbh * length) / (nbw * 5);
-//	my2 -= (nbh * length) / (nbw * 5);
-    } else {
-	my1 -= (nbh * 3) / 2;
-	my2 -= (nbh * 3) / 2;
-    }
-    
-    if      (dy >  nbh * 4) my2 -= nbh;
-    else if (dy < -nbh * 4) my1 -= nbh;
-/*!!!
-    if      (dy >  length / 2) my1 += nbh / 2;
-    else if (dy < -length / 2) my2 += nbh / 2;
-*/
-    if      (my1 > my2 + nbh) my1 = my2 + nbh;
-    else if (my2 > my1 + nbh) my2 = my1 + nbh;
-    
-    if      (y1 > my1 + nbh*2) y1 = (int)my1 + nbh*2;
-    else if (y1 < my1 - nbh/2) my1 = y1 + nbh/2;
-    
-    if      (y2 > my2 + nbh*2) y2 = (int)my2 + nbh*2;
-    else if (y2 < my2 - nbh/2) my2 = y2 + nbh/2;
-#endif
-
-    my1 = y1 - nbh * sqrt(float(length) / nbw) / 2;
-    my2 = y2 - nbh * sqrt(float(length) / nbw) / 2;
-
-    if (!above) {
-	y1  = -y1;
-	y2  = -y2;
-	my1 = -my1;
-	my2 = -my2;
-    }
-
-
-//    NOTATION_DEBUG << "Pixmap dimensions: " << length << "x" << height << endl;
+    int y0 = 0, my = 0;
+    my = int(0 - nbh * sqrt(float(length) / nbw) / 2);
+    if (!above) my = -my;
 
     bool havePixmap = false;
     QPoint topLeft, bottomRight;
@@ -2085,19 +2034,18 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above, bool smooth,
     for (int i = 0; i < thickness; ++i) {
 
 	Spline::PointList pl;
-	pl.push_back(QPoint(mx1, (int)my1));
-	pl.push_back(QPoint(mx2, (int)my2));
+	pl.push_back(QPoint(mx1, (int)my));
+	pl.push_back(QPoint(mx2, (int)my));
 
 	Spline::PointList *polyPoints = Spline::calculate
-	    (QPoint(0, y1), QPoint(length-1, y2), pl, topLeft, bottomRight);
+	    (QPoint(0, y0), QPoint(length-1, y0), pl, topLeft, bottomRight);
 
 	if (!havePixmap) {
 	    int width  = bottomRight.x() - topLeft.x();
-	    int height = bottomRight.y() - topLeft.y() + thickness - 1 +
-		abs(dy);
+	    int height = bottomRight.y() - topLeft.y() + thickness - 1 + abs(dy);
 	    hotspot = QPoint(0, -topLeft.y() + (dy < 0 ? -dy : 0));
 
-	    NOTATION_DEBUG << "slur: bottomRight (" << bottomRight.x() << "," << bottomRight.y() << "), topLeft (" << topLeft.x() << "," << topLeft.y() << "), width " << width << ", height " << height << ", hotspot (" << hotspot.x() << "," << hotspot.y() << "), dy " << dy << endl;
+//	    NOTATION_DEBUG << "slur: bottomRight (" << bottomRight.x() << "," << bottomRight.y() << "), topLeft (" << topLeft.x() << "," << topLeft.y() << "), width " << width << ", height " << height << ", hotspot (" << hotspot.x() << "," << hotspot.y() << "), dy " << dy << endl;
 
 	    if (painter) {
 
@@ -2113,29 +2061,19 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above, bool smooth,
 		} else {
 		    m_p->painter().save();
 		    m_p->maskPainter().save();
-		    m_p->painter().translate(x/* - hotspot.x()*/, y/* - hotspot.y()*/);
-		    m_p->maskPainter().translate(x/* - hotspot.x()*/, y/* - hotspot.y()*/);
-		    NOTATION_DEBUG << "probably a tie: rotate " << rotate << ", theta " << theta << endl;
+		    m_p->painter().translate(x, y);
+		    m_p->maskPainter().translate(x, y);
 		    if (rotate) {
 			m_p->painter().rotate(theta);
 			m_p->maskPainter().rotate(theta);
 		    }
-//		    m_p->painter().translate(hotspot.x(), hotspot.y());
-//		    m_p->maskPainter().translate(hotspot.x(), hotspot.y());
 		}
 
 	    } else {
 		createPixmapAndMask(smooth ? width*2+1  : width,
 				    smooth ? height*2+thickness*2 : height + thickness,
 				    width, height);
-/*
-		m_p->drawLine(0, 0, smooth ? width*2 : width-1, 0);
-		m_p->drawLine(0, smooth ? height*2+thickness*2-1 : height+thickness-1,
-			      smooth ? width*2 : width-1,
-			      smooth ? height*2+thickness*2-1 : height+thickness-1);
 
-		m_p->drawPoint(0, hotspot.y());
-*/
 		if (rotate) {
 		    m_p->painter().rotate(theta);
 		    m_p->maskPainter().rotate(theta);
@@ -2159,14 +2097,10 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above, bool smooth,
 	QPointArray qp(ppc);
 
 	for (int j = 0; j < ppc; ++j) {
-	    qp.setPoint(j,
-			/*	hotspot.x() + */ (*polyPoints)[j].x(),
-			/*hotspot.y() + */ (*polyPoints)[j].y());
+	    qp.setPoint(j, (*polyPoints)[j].x(), (*polyPoints)[j].y());
 	}
 
 	delete polyPoints;
-
-//???	m_pm.drawPolyline(qp);
 
 	if (!smooth || (i > 0 && i < thickness-1)) {
 	    if (smooth) {
@@ -2184,11 +2118,11 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above, bool smooth,
 	}
 
 	if (above) {
-	    ++my1; ++my2;
-	    if (i % 2) { ++y1; ++y2; }
+	    ++my;
+	    if (i % 2) ++y0;
 	} else {
-	    --my1; --my2;
-	    if (i % 2) { --y1; --y2; }
+	    --my;
+	    if (i % 2) --y0;
 	}
     }
 
