@@ -1748,13 +1748,13 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
     XftFont *xfont = 0;
 
     Display *dpy = QPaintDevice::x11AppDisplay();
+    static bool haveFcDirectory = false;
 
     if (!dpy) {
 	std::cerr << "SystemFont::loadSystemFont[Xft]: Xft support requested but no X11 display available!" << std::endl;
 	goto qfont;
     }
 
-    static bool haveFcDirectory = false;
     if (!haveFcDirectory) {
 	QString fontDir = KGlobal::dirs()->findResource("appdata", "fonts/");
 	if (!FcConfigAppFontAddDir(FcConfigGetCurrent(),
