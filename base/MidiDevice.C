@@ -60,7 +60,7 @@ MidiDevice::MidiDevice(const MidiDevice &dev):
     m_programList(new ProgramList()),
     m_bankList(new BankList()),
     m_metronome(0),
-    m_duplex(isDuplex())
+    m_duplex(dev.isDuplex())
 {
     // Device
     m_label = dev.getUserLabel();
@@ -72,6 +72,9 @@ MidiDevice::MidiDevice(const MidiDevice &dev):
         m_metronome = new MidiMetronome();
         m_metronome->pitch = dev.getMetronome()->pitch;
         m_metronome->instrument = dev.getMetronome()->instrument;
+        m_metronome->msb = dev.getMetronome()->msb;
+        m_metronome->lsb = dev.getMetronome()->lsb;
+        m_metronome->program = dev.getMetronome()->program;
     }
 
     std::vector<MidiProgram> programs = dev.getPrograms();
@@ -83,6 +86,9 @@ MidiDevice::MidiDevice(const MidiDevice &dev):
     for (; it != programs.end(); it++)
     {
         MidiProgram *prog = new MidiProgram();
+        prog->name = it->name;
+        prog->msb = it->msb;
+        prog->lsb = it->lsb;
         prog->program = it->program;
 
         m_programList->push_back(prog);
@@ -108,6 +114,12 @@ MidiDevice::MidiDevice(const MidiDevice &dev):
     InstrumentList::iterator iIt = insList.begin();
     for (; iIt != insList.end(); iIt++)
         m_instruments.push_back(new Instrument(**iIt));
+
+    // Copy the presentation instruments
+    //
+    insList = dev.getPresentationInstruments();
+    for (iIt = insList.begin(); iIt != insList.end(); iIt++)
+        m_presentationInstrumentList.push_back(new Instrument(**iIt));
 
 }
 
