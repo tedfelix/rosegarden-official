@@ -19,6 +19,9 @@
     COPYING included with this distribution for more information.
 */
 
+#ifndef MATRIXHLAYOUT_H
+#define MATRIXHLAYOUT_H
+
 #include "LayoutEngine.h"
 #include "matrixelement.h"
 
@@ -84,3 +87,5 @@ protected:
     BarDataList m_barData;
     double m_totalWidth;
 };
+
+#endif
