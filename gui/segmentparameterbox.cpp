@@ -61,7 +61,8 @@ SegmentParameterBox::initBox()
     font.setPointSize(10);
 
     QFontMetrics fontMetrics(font);
-    int comboHeight = fontMetrics.height();
+    // magic numbers: 13 is the height of the menu pixmaps, 10 is just 10
+    int comboHeight = std::max(fontMetrics.height(), 13) + 10;
 
     QGridLayout *gridLayout = new QGridLayout(this, 2, 2, 4, 1);
 
@@ -72,7 +73,7 @@ SegmentParameterBox::initBox()
 
     m_repeatValue = new RosegardenTristateCheckBox(this);
     m_repeatValue->setFont(font);
-    m_repeatValue->setMinimumHeight(comboHeight);
+    m_repeatValue->setFixedHeight(comboHeight);
 
     // handle state changes
     connect(m_repeatValue, SIGNAL(pressed()), SLOT(slotRepeatPressed()));
@@ -80,7 +81,7 @@ SegmentParameterBox::initBox()
     // non-reversing motif style read-only combo
     m_quantizeValue = new RosegardenComboBox(false, false, this);
     m_quantizeValue->setFont(font);
-    m_quantizeValue->setMinimumHeight(comboHeight);
+    m_quantizeValue->setFixedHeight(comboHeight);
 
     // handle quantize changes from drop down
     connect(m_quantizeValue, SIGNAL(activated(int)),
@@ -93,7 +94,7 @@ SegmentParameterBox::initBox()
     // reversing motif style read-write combo
     m_transposeValue = new RosegardenComboBox(true, true, this);
     m_transposeValue->setFont(font);
-    m_transposeValue->setMinimumHeight(comboHeight);
+    m_transposeValue->setFixedHeight(comboHeight);
 
     // handle transpose combo changes
     connect(m_transposeValue, SIGNAL(activated(int)),
@@ -106,7 +107,7 @@ SegmentParameterBox::initBox()
     // reversing motif style read-write combo
     m_delayValue = new RosegardenComboBox(true, true, this);
     m_delayValue->setFont(font);
-    m_delayValue->setMinimumHeight(comboHeight);
+    m_delayValue->setFixedHeight(comboHeight);
 
     // handle delay combo changes
     connect(m_delayValue, SIGNAL(activated(int)),
