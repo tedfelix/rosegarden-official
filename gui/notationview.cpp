@@ -492,7 +492,7 @@ void
 NotationView::setCurrentSelectedNote(Note::Type n)
 {
     m_currentSelectedNote = n;
-    m_currentNotePixmap->setPixmap(m_notePixmapFactory.makeNotePixmap(n));
+    m_currentNotePixmap->setPixmap(m_notePixmapFactory.makeNotePixmap(n, false));
     emit changeCurrentNote(n);
 }
 
