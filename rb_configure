@@ -8,5 +8,5 @@
 
 make -f Makefile.cvs
 
-CXXFLAGS="-g3 -gstabs+ -fexceptions -DRGKDE3" ./configure --enable-debug --with-exceptions=YES --with-alsa=no --with-qt-dir=/usr/lib/qt3 --prefix=/opt/kde3 
+CXXFLAGS="-g3 -gstabs+ -fexceptions -DRGKDE3" ./configure --enable-debug --with-exceptions=YES --with-alsa=yes --with-qt-dir=/usr/lib/qt3 --prefix=/opt/kde3 
 #CXXFLAGS="-g3 -gstabs+ -fexceptions " ./configure --enable-debug --with-exceptions=YES --with-qt-dir=/usr/lib/qt2 --prefix=/opt/kde2
