@@ -80,7 +80,7 @@ double strtodouble(const std::string &s)
 	++i;
     }
 
-    return result;
+    return result * sign;
 }
 
 double qstrtodouble(const QString &s)
