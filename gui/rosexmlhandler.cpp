@@ -22,7 +22,7 @@
 #include "rosedebug.h"
 #include "rosexmlhandler.h"
 #include "xmlstorableevent.h"
-#include "TrackNotationHelper.h"
+#include "SegmentNotationHelper.h"
 #include "BaseProperties.h"
 
 #include <klocale.h>

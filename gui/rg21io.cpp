@@ -23,7 +23,7 @@
 
 #include "Event.h"
 #include "Segment.h"
-#include "TrackNotationHelper.h"
+#include "SegmentNotationHelper.h"
 #include "Composition.h"
 #include "NotationTypes.h"
 #include "BaseProperties.h"

@@ -22,7 +22,7 @@
 #include "eventselection.h"
 
 #include "Segment.h"
-#include "TrackNotationHelper.h"
+#include "SegmentNotationHelper.h"
 
 #include "rosedebug.h"
 

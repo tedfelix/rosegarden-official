@@ -21,7 +21,7 @@
 
 #include "xmlstorableevent.h"
 #include "NotationTypes.h"
-#include "TrackNotationHelper.h"
+#include "SegmentNotationHelper.h"
 
 #include "rosedebug.h"
 

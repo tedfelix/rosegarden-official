@@ -28,7 +28,7 @@
 #include "notationproperties.h"
 #include "notationsets.h"
 #include "Quantizer.h"
-#include "TrackNotationHelper.h"
+#include "SegmentNotationHelper.h"
 
 using Rosegarden::Note;
 using Rosegarden::Int;

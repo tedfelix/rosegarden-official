@@ -7,4 +7,16 @@ libbase_la_LDFLAGS = $(all_libraries)
 
 INCLUDES= $(all_includes)
 
-libbase_la_SOURCES = Property.C PropertyName.C Event.C BaseProperties.C ViewElement.C NotationTypes.C Quantizer.C Segment.C SegmentNotationHelper.C SegmentPerformanceHelper.C Composition.C Equation.C
+libbase_la_SOURCES = BaseProperties.C \
+		     Composition.C \
+		     Equation.C \
+		     Event.C \
+		     NotationTypes.C \
+                     Property.C \
+		     PropertyName.C \
+		     Quantizer.C \
+		     Segment.C \
+		     SegmentNotationHelper.C \
+		     SegmentPerformanceHelper.C \
+		     ViewElement.C
+

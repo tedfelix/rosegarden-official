@@ -41,7 +41,7 @@
 #include "xmlstorableevent.h"
 #include "Event.h"
 #include "BaseProperties.h"
-#include "TrackNotationHelper.h"
+#include "SegmentNotationHelper.h"
 
 QList<RosegardenGUIView> *RosegardenGUIDoc::pViewList = 0L;
 

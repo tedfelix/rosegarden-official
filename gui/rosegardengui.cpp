@@ -49,7 +49,7 @@
 #include "rg21io.h"
 #include "rosegardendcop.h"
 #include "ktmpstatusmsg.h"
-#include "TrackPerformanceHelper.h"
+#include "SegmentPerformanceHelper.h"
 #include "NotationTypes.h"
 
 #define ID_STATUS_MSG 1

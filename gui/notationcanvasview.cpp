@@ -259,7 +259,7 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
     if (staff)
         staffNo = staff->getId();
     else
-        kdDebug(KDEBUG_AREA) << "NotationCanvasView::handleMousePress() : big problem - couldn't find staff for staff line\n";
+        kdDebug(KDEBUG_AREA) << "NotationCanvasView::contentsMousePressEvent() : big problem - couldn't find staff for staff line\n";
 
 
     if (sprite)

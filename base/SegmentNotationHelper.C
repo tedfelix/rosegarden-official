@@ -1,7 +1,7 @@
 // -*- c-basic-offset: 4 -*-
 
 
-#include "TrackNotationHelper.h"
+#include "SegmentNotationHelper.h"
 #include "NotationTypes.h"
 #include "Quantizer.h"
 #include "BaseProperties.h"
