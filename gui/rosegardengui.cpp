@@ -1104,8 +1104,15 @@ void RosegardenGUIApp::play()
     QCString replyType;
     QByteArray replyData;
   
-    if (m_transportStatus == PLAYING)
-      return;
+    // If already playing or recording then stop
+    //
+    if (m_transportStatus == PLAYING ||
+        m_transportStatus == RECORDING_MIDI ||
+        m_transportStatus == RECORDING_AUDIO )
+    {
+        stop();
+        return;
+    }
 
     if (!m_sequencerProcess && !launchSequencer())
         return;
@@ -1191,9 +1198,6 @@ void RosegardenGUIApp::stop()
         return;
     }
 
-    // untoggle the play button
-    //
-    m_transport->PlayButton->toggle();
     QByteArray data;
 
     if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
@@ -1205,10 +1209,30 @@ void RosegardenGUIApp::stop()
         i18n("Failed to contact Rosegarden sequencer with \"Stop\" command"));
     }
 
-    // this is just a send call (async) so we don't have any
-    // return type to check - we always assume it works
+    // always untoggle the play button at this stage
+    //
+    if (m_transport->PlayButton->state() == QButton::On)
+        m_transport->PlayButton->toggle();
+
+    if (m_transportStatus == RECORDING_MIDI ||
+        m_transportStatus == RECORDING_AUDIO)
+    {
+        // untoggle the record button
+        //
+        if (m_transport->RecordButton->state() == QButton::On)
+            m_transport->RecordButton->toggle();
+
+        cout << "RosegardenGUIApp::stop() - stopped recording" << endl;
+    }
+    else
+    {
+        cout << "RosegardenGUIApp::stop() - stopped playing" << endl;
+    }
+
+    // ok, we're stopped
     //
     m_transportStatus = STOPPED;
+
 }
 
 // Jump to previous bar
@@ -1426,16 +1450,21 @@ RosegardenGUIApp::closeTransport()
 void
 RosegardenGUIApp::record()
 {
-
-    // if recording then we stop recording
+    // if already recording then stop
     //
     if (m_transportStatus == RECORDING_MIDI ||
         m_transportStatus == RECORDING_AUDIO)
     {
-        m_transportStatus = STOPPING;
+        stop();
+        return;
     }
 
-    // Some locals we need
+    // ensure these exist
+    //
+    if (!m_sequencerProcess && !launchSequencer())
+        return;
+
+    // Some locals
     //
     TransportStatus recordType;
     QByteArray data;
@@ -1449,27 +1478,27 @@ RosegardenGUIApp::record()
     {
         case Rosegarden::Track::Midi:
             recordType = STARTING_TO_RECORD_MIDI;
+            cout << "RosegardenGUIApp::record() - starting to record MIDI" << endl;
             break;
 
         case Rosegarden::Track::Audio:
             recordType = STARTING_TO_RECORD_AUDIO;
+            cout << "RosegardenGUIApp::record() - starting to record Audio" << endl;
             break;
 
         default:
-            recordType = STARTING_TO_RECORD_MIDI;
+            cout << "RosegardenGUIApp::record() - unrecognised track type" << endl;
+            return;
             break;
     }
 
-    if (!m_sequencerProcess && !launchSequencer())
-        return;
-
-    // Now send to the sequencer
-    //
-
-    // make sure we toggle the play button
+    // make sure we toggle the record button and play button
     // 
     if (m_transport->RecordButton->state() == QButton::Off)
         m_transport->RecordButton->toggle();
+
+    if (m_transport->PlayButton->state() == QButton::Off)
+        m_transport->PlayButton->toggle();
 
     // write the start position argument to the outgoing stream
     //
@@ -1545,8 +1574,19 @@ void
 RosegardenGUIApp::processRecordedMidi(const Rosegarden::MappedComposition &mC)
 {
     if (mC.size() > 0)
+    {
         std::cout << "processRecordMidi has returned a composition with " <<
                      mC.size() << " elements" << endl;
+
+        Rosegarden::MappedComposition::iterator i;
+
+        // send all events to the MIDI in label
+        //
+        for (i = mC.begin(); i != mC.end(); ++i )
+        {
+            m_transport->setMidiInLabel(*i);
+        }
+    }
 }
 
 

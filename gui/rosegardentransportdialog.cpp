@@ -70,9 +70,11 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     UnitHoursPixmap->setBackgroundColor(Qt::black);
     TenHoursPixmap->setBackgroundColor(Qt::black);
 
-    // create the playbutton as toggleable
+    // Set our toggle buttons
     //
     PlayButton->setToggleButton(true);
+    RecordButton->setToggleButton(true);
+    PauseButton->setToggleButton(true);
 
     // read only tempo
     //

@@ -127,6 +127,10 @@ RosegardenSequencerApp::play(const Rosegarden::timeT &position,
     //
     m_sequencer->setTempo(tempo);
 
+    // report
+    //
+    std::cout << "RosegardenSequencerApp::play() - starting to play" << endl;
+
     // keep it simple
     return true;
 }
@@ -148,6 +152,11 @@ RosegardenSequencerApp::stop()
     // we've stopped
     m_songPosition = 0;
     m_lastFetchSongPosition = 0;
+
+    // report
+    //
+    std::cout << "RosegardenSequencerApp::play() - stopping" << endl;
+
 }
 
 
@@ -379,11 +388,11 @@ RosegardenSequencerApp::record(const Rosegarden::timeT &position,
 
     if (localRecordMode == STARTING_TO_RECORD_MIDI)
     {
-        std::cerr << "RosegardenSequencerApp::record() - Starting to Record MIDI" << endl;
+        std::cout << "RosegardenSequencerApp::record() - starting to record MIDI" << endl;
     }
     else if (localRecordMode == STARTING_TO_RECORD_AUDIO)
     {
-        std::cerr << "RosegardenSequencerApp::record() - Starting to Record Audio" << endl;
+        std::cout << "RosegardenSequencerApp::record() - starting to record Audio" << endl;
     }
     else
     {
