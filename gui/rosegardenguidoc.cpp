@@ -47,6 +47,7 @@
 #include "MidiTypes.h"
 #include "XmlExportable.h"
 #include "segmentcommands.h"
+#include "trackbuttons.h"
 
 #include "MappedDevice.h"
 #include "MappedInstrument.h"
@@ -1396,8 +1397,19 @@ RosegardenGUIDoc::syncDevices()
                  << "Sequencer alive - Instruments synced" << endl;
 
 
-    //!!! need to force an update on the instrument parameter box if
-    //necessary -- how? -- and the instrument dropdown
+    // Force update of view on current track selection
+    //
+    kapp->config()->setGroup(Rosegarden::GeneralOptionsConfigGroup);
+    bool opt = kapp->config()->readBoolEntry("Show Track labels", true);
+    TrackLabel::InstrumentTrackLabels labels = TrackLabel::ShowInstrument;
+    if (opt) labels = TrackLabel::ShowTrack;
+
+    RosegardenGUIView *w;
+    for(w=m_viewList.first(); w!=0; w=m_viewList.next()) 
+    {
+        w->slotSelectTrackSegments(m_composition.getSelectedTrack());
+        w->getTrackEditor()->getTrackButtons()->changeTrackInstrumentLabels(labels);
+    }
 }
 
 

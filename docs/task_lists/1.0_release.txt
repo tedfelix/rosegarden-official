@@ -13,8 +13,10 @@ Features for 1.0 - updated 20030923
   o drag and drop [DONE]
 
 - banks/variations [cc]
+  Is this done? [rwb]
 
 - tidy up audio parameter box [cc/rwb/gl]
+  What does this actually mean? [rwb]
 
 - ALSA ports [cc]
 
