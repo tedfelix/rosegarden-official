@@ -20,15 +20,19 @@
 
 #include <qcanvas.h>
 
-/**This class implements QCanvasItem groups, à la GnomeCanvas.
-An item group will keep its items in a fixed relative position when moved, just like in a drawing program.
+/**
+ * This class implements QCanvasItem groups, à la GnomeCanvas.
+ 
+ An item group will keep its items in a fixed relative position when
+moved, just like in a drawing program.
 
-Proper behavior requires collaboration from the QCanvasView, though. When about to move an item,
-the QCanvasView object should first check if it's not a groupable item, and if so fetch its QCanvasItemGroup
-and move it instead.
+Proper behavior requires collaboration from the QCanvasView,
+though. When about to move an item, the QCanvasView object should
+first check if it's not a groupable item, and if so fetch its
+QCanvasItemGroup and move it instead.
 
-  *@author Guillaume Laurent
-  */
+*@author Guillaume Laurent
+*/
 
 class QCanvasItemGroup : public QCanvasItem  {
 public: 
@@ -47,7 +51,25 @@ public:
     virtual QRect boundingRect() const;
     virtual QRect boundingRectAdvanced() const;
 
+    /**
+     * Add a new item to this group.
+     * The item's coordinates are kept as is.
+     *@see addItemWithRelativeCoords()
+     */
     virtual void addItem(QCanvasItem *);
+
+    /**
+     * Add a new item to this group.
+
+     * The item's coordinates are considered relative to the group.
+     * For example, suppose you have a QCanvasItemGroup which coords
+     * are 10,10. If you call addItemWithRelativeCoords() with an item
+     * which coords are 5,5, the item is moved so that it's coords
+     * will be 5,5 relative to the group (e.g. 15,15).
+
+     *@see addItem()
+     */
+    virtual void addItemWithRelativeCoords(QCanvasItem *);
     virtual void removeItem(QCanvasItem *);
 
 private:

@@ -55,7 +55,10 @@ QCanvasItemGroup::collidesWith(const QCanvasItem *item) const
 void
 QCanvasItemGroup::draw(QPainter &p)
 {
-//     // don't think this is necessary - disabling it for now
+    // There isn't anything to do - all the items will be drawn
+    // seperately by the canvas anyway. However the function has to be
+    // implemented because it's an abstract virtual in QCanvasItem.
+
 //     QCanvasItemList::Iterator i;
 //     for(i = m_items.begin(); i != m_items.end(); ++i)
 //         (*i)->draw(p);
@@ -150,6 +153,13 @@ void
 QCanvasItemGroup::addItem(QCanvasItem *i)
 {
     m_items.append(i);
+}
+
+void
+QCanvasItemGroup::addItemWithRelativeCoords(QCanvasItem *i)
+{
+    i->moveBy(x(), y());
+    addItem(i);
 }
 
 void
