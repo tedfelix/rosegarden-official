@@ -38,7 +38,6 @@ MatrixStaff::MatrixStaff(QCanvas *canvas, Segment *segment,
     LinedStaff<MatrixElement>(canvas, segment, id, vResolution, 1),
     m_scaleFactor
         (1.5 / Rosegarden::Note(Rosegarden::Note::Shortest).getDuration()),
-    m_wrapAddedEvents(true),
     m_elementColour(0)
 {
 
@@ -137,10 +136,3 @@ QString MatrixStaff::getNoteNameForPitch(unsigned int pitch)
     return QString("%1%2").arg(noteNamesSharps[pitch]).arg(octave - 2);
 }
 
-void MatrixStaff::eventAdded(const Rosegarden::Segment *segment,
-                             Rosegarden::Event *e)
-{
-    if (!m_wrapAddedEvents) return;
-
-    LinedStaff<MatrixElement>::eventAdded(segment, e);
-}

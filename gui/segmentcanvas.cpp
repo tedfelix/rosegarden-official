@@ -192,6 +192,16 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
     int height = rect().height()/2 - 3;
     int halfRectHeight = rect().height()/2;
 
+    // Sometimes our audio file fails to get recorded properly and
+    // the number of channels fails too.  Guard against this.
+    //
+    if (m_channels == 0)
+    {
+        std::cerr << "SegmentAudioPreview::drawShape - m_channels == 0 "
+                  << "problem with audio file" <<std::endl;
+        return;
+    }
+
     int width = m_values.size() / m_channels;
     it = m_values.begin();
     float h1, h2;

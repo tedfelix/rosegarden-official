@@ -117,7 +117,6 @@ protected:
 
     MatrixStaff* m_staff;
     Rosegarden::Event* m_event;
-    bool m_firstModify;
 };
 
 MatrixInsertionCommand::MatrixInsertionCommand(Rosegarden::Segment &segment,
@@ -125,18 +124,15 @@ MatrixInsertionCommand::MatrixInsertionCommand(Rosegarden::Segment &segment,
                                                timeT endTime,
                                                MatrixStaff* staff,
                                                Event *event) :
-    BasicCommand(i18n("Insert Note"), segment, time, endTime),
+    BasicCommand(i18n("Insert Note"), segment, time, endTime, true),
     m_staff(staff),
-    m_event(event),
-    m_firstModify(true)
+    m_event(new Event(*event, event->getAbsoluteTime(), endTime - time))
 {
     // nothing
 }
 
 MatrixInsertionCommand::~MatrixInsertionCommand()
 {
-    if (!m_firstModify) // we made our own copy of the event so delete it
-        delete m_event;
 }
 
 void MatrixInsertionCommand::modifySegment()
@@ -144,24 +140,7 @@ void MatrixInsertionCommand::modifySegment()
     kdDebug(KDEBUG_AREA) << "MatrixInsertionCommand::modifySegment()\n";
 
     Rosegarden::SegmentMatrixHelper helper(getSegment());
-
-    if (m_firstModify) {
-        m_staff->setWrapAddedEvents(false); // this makes insertion not to create a new MatrixElement
-        m_firstModify = false;
-    } else
-        m_staff->setWrapAddedEvents(true);
-
     helper.insertNote(m_event);
-    m_staff->setWrapAddedEvents(true);
-
-    // We need to make a copy of the event each time
-    // because if we're called again it means the insertion has been
-    // undone, and therefore the inserted event has been deleted
-    // This copy is made so that we still have a valid event
-    // to insert if we're called again.
-    //
-    m_event = new Event(*m_event);
-    
 }
 
 //------------------------------
@@ -532,37 +511,25 @@ void MatrixPainter::handleMouseRelease(Rosegarden::timeT endTime,
     //
     timeT time = m_currentElement->getAbsoluteTime();
     endTime = (endTime / m_basicDuration) * m_basicDuration;
-    timeT duration = endTime - time;
+    if (endTime == time) endTime = time + m_basicDuration;
+    if (endTime  < time) endTime = time + (time - endTime);
 
-    if (duration != 0) {
-        
-        Rosegarden::SegmentMatrixHelper helper(m_currentStaff->getSegment());
-        kdDebug(KDEBUG_AREA) << "MatrixPainter::handleMouseRelease() : helper.insertNote()\n";
+    Rosegarden::SegmentMatrixHelper helper(m_currentStaff->getSegment());
+    kdDebug(KDEBUG_AREA) << "MatrixPainter::handleMouseRelease() : helper.insertNote()\n";
 
-        //         m_currentStaff->setWrapAddedEvents(false);
-        //         helper.insertNote(m_currentElement->event());
-        //         m_currentStaff->setWrapAddedEvents(true);
-
-        MatrixInsertionCommand* command = 
-            new MatrixInsertionCommand(m_currentStaff->getSegment(),
-                                       time, endTime,
-                                       m_currentStaff,
-                                       m_currentElement->event());
-
-
-        m_mParentView->addCommandToHistory(command);
-
-        m_currentStaff->getViewElementList()->insert(m_currentElement);
-
-        m_mParentView->update();
-        
-    } else {
-
-        Event* ev = m_currentElement->event();
-        delete m_currentElement;
-        delete ev;
-    }
+    MatrixInsertionCommand* command = 
+	new MatrixInsertionCommand(m_currentStaff->getSegment(),
+				   time, endTime,
+				   m_currentStaff,
+				   m_currentElement->event());
     
+    m_mParentView->addCommandToHistory(command);
+
+    Event* ev = m_currentElement->event();
+    delete m_currentElement;
+    delete ev;
+
+    m_mParentView->update();
     m_currentElement = 0;
 
 }
