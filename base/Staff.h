@@ -104,6 +104,9 @@ public:
 protected:
     Staff(Segment &);
 
+    virtual void buildViewElementList(Segment::iterator from,
+                                      Segment::iterator to);
+
     Segment &m_segment;
     ViewElementList<T> *m_viewElementList;
     ViewElementList<T>::iterator findEvent(Rosegarden::Event *);
@@ -137,8 +140,16 @@ ViewElementList<T> *
 Staff<T>::getViewElementList(Segment::iterator from,
 			     Segment::iterator to)
 {
-    if (m_viewElementList) return m_viewElementList;
+    if (!m_viewElementList) buildViewElementList(from, to);
 
+    return m_viewElementList;
+}
+
+template <class T>
+void
+Staff<T>::buildViewElementList(Segment::iterator from,
+                               Segment::iterator to)
+{
     m_viewElementList = new ViewElementList<T>;
 
     for (Segment::iterator i = from; i != to; ++i) {
@@ -147,7 +158,6 @@ Staff<T>::getViewElementList(Segment::iterator from,
     }
 
     m_segment.addObserver(this);
-    return m_viewElementList;
 }
 
 template <class T>
