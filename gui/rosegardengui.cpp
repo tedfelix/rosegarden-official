@@ -27,6 +27,7 @@
 #include <qinputdialog.h>
 
 // include files for KDE
+#include <kprocess.h>
 #include <kstdaccel.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
@@ -2723,13 +2724,37 @@ bool RosegardenGUIApp::launchSequencer()
         return true;
     }
 
-    // If we've already registered a sequencer then don't start another
-    // one
+    // Check to see if we're clearing down sequencer processes - 
+    // if we're not we check DCOP for an existing sequencer and
+    // try to talk to use that (that's the "developer" mode).
     //
-    if (kapp->dcopClient()->
-        isApplicationRegistered(QCString(ROSEGARDEN_SEQUENCER_APP_NAME)))
+    // User mode should clear down sequencer processes.
+    //
+    KConfig *config = kapp->config();
+    config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
+    bool cleardown = config->readBoolEntry("sequencercleardown", false);
+
+    if (cleardown)
     {
-        RG_DEBUG << "RosegardenGUIApp::launchSequencer() - already running sequencer found - returning\n";
+        KProcess *proc = new KProcess;
+        *proc << "/usr/bin/killall";
+        *proc << "-9";
+        *proc << "lt-rosegardensequencer";
+        *proc << "rosegardensequencer";
+
+        proc->start(KProcess::Block, KProcess::All);
+
+        if (proc->exitStatus())
+            RG_DEBUG << "couldn't kill any sequencer processes" << endl;
+        else
+            RG_DEBUG << "killed old sequencer processes" << endl;
+    }
+    else if (kapp->dcopClient()->isApplicationRegistered(
+                QCString(ROSEGARDEN_SEQUENCER_APP_NAME)))
+    {
+        RG_DEBUG << "RosegardenGUIApp::launchSequencer() - "
+                 << "already DCOP registered - returning\n";
+
         if (m_seqManager) m_seqManager->checkSoundDriverStatus();
         m_sequencerProcess = (KProcess*)SequencerExternal;
         return true;
@@ -2838,7 +2863,57 @@ bool RosegardenGUIApp::launchJack()
     bool startJack = config->readBoolEntry("jackstart", false);
     if (!startJack) return true; // we don't do anything
 
+    QString jackPath = config->readEntry("jackcommand", "");
+
+    emit startupStatusMessage(i18n("Clearing down jackd..."));
+
+    KProcess *proc = new KProcess;
+    *proc << "/usr/bin/killall";
+    *proc << "-9";
+    *proc << "jackd";
+
+    proc->start(KProcess::Block, KProcess::All);
+
+    if (proc->exitStatus())
+        RG_DEBUG << "couldn't kill any jackd processes" << endl;
+    else
+        RG_DEBUG << "killed old jackd processes" << endl;
+
     emit startupStatusMessage(i18n("Starting jackd..."));
+
+    if (jackPath != "")
+    {
+        RG_DEBUG << "starting jack \"" << jackPath << "\"" << endl;
+
+        QString args;
+        QStringList splitCommand;
+        splitCommand == QStringList::split(" ", jackPath);
+
+        // start jack process
+        m_jackProcess = new KProcess;
+        int i = 0;
+
+        for (QStringList::Iterator it = splitCommand.begin();
+             it != splitCommand.end(); ++it)
+        {
+            if (i == 0)
+            {
+                cout << "PROCESS = " << (*it) << endl;
+                *m_jackProcess << (*it);
+            }
+            else
+                args += (*it);
+
+            i++;
+        }
+
+        *m_jackProcess << args;
+
+        cout << "ARGS = " << args << endl;
+
+        m_jackProcess->start();
+    }
+
 
     return true;
 }

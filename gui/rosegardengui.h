@@ -1072,6 +1072,10 @@ private:
 
     KProcess* m_sequencerProcess;
 
+#ifdef HAVE_LIBJACK
+    KProcess* m_jackProcess;
+#endif // HAVE_LIBJACK
+
     ZoomSlider<double> *m_zoomSlider;
     QLabel             *m_zoomLabel;
 

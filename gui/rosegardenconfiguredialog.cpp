@@ -976,19 +976,24 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     addTab(frame, i18n("General"));
 
 
-    /*
-
-    // For the moment we don't show any of this until it's finished - rwb
-
-#ifdef HAVE_LIBJACK
-    // JACK control tab
+    // --------------------- Startup control ----------------------
     //
     frame = new QFrame(m_tabWidget);
     layout = new QGridLayout(frame, 4, 4, 10, 5);
 
+
+    label = new QLabel(i18n("Clear down all Rosegarden sequencer processes at restart"), frame);
+    m_cleardownSequencer = new QCheckBox(frame);
+    bool cleardown = m_cfg->readBoolEntry("sequencercleardown", false);
+    m_cleardownSequencer->setChecked(cleardown);
+
+    layout->addWidget(label, 0, 0);
+    layout->addMultiCellWidget(m_cleardownSequencer, 0, 0, 1, 3);
+
+#ifdef HAVE_LIBJACK
     label = new QLabel(i18n("It's possible for Rosegarden to check if the JACK audio daemon (jackd) is running when Rosegarden starts and if it isn't\n to bring it up for the current session.\n\nControlling JACK in this manner is recommended for Rosegarden beginners and for those people who use Rosegarden\nfor their main (JACK) audio application it might not be to the liking of some more advanced users.\n\nIf you want to start JACK automatically the command must include a full path (where necessary) and the command line\narguments you want to use i.e. /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2\n"), frame);
 
-    layout->addMultiCellWidget(label, 0, 0, 0, 3);
+    layout->addMultiCellWidget(label, 2, 2, 0, 3);
 
     // JACK control things
     //
@@ -999,26 +1004,25 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     connect(m_startJack, SIGNAL(released()),
             this, SLOT(slotJackToggled()));
 
-    layout->addWidget(new QLabel(i18n("Start JACK when Rosegarden starts"), frame), 1, 0);
+    layout->addWidget(new QLabel(i18n("Start JACK when Rosegarden starts"), frame), 3, 0);
 
-    layout->addWidget(m_startJack, 1, 1);
+    layout->addWidget(m_startJack, 3, 1);
 
     layout->addWidget(new QLabel(i18n("JACK command (including path as necessary)"), frame),
-                      2, 0);
+                      4, 0);
 
     QString jackPath = m_cfg->readEntry("jackcommand", 
                                         "/usr/local/bin/jackd -d alsa -d hw -r 44100 -p 2048 -n 2");
     m_jackPath = new QLineEdit(jackPath, frame);
 
-    layout->addMultiCellWidget(m_jackPath, 2, 2, 1, 3);
+    layout->addMultiCellWidget(m_jackPath, 4, 4, 1, 3);
 
     // set the initial state
     slotJackToggled();
 
-    addTab(frame, i18n("JACK control"));
+    addTab(frame, i18n("Startup"));
 
 #endif // HAVE_LIBJACK
-    */
 
 
     // ------------------ Record tab ---------------------
@@ -1263,14 +1267,16 @@ SequencerConfigurationPage::apply()
 
     m_cfg->writeEntry("midirecorddevice", device);
 
+    // sequencer clear down
+    //
+    m_cfg->writeEntry("sequencercleardown", m_cleardownSequencer->isChecked());
+
 #ifdef HAVE_LIBJACK
 
-    /*
     // Jack control
     //
     m_cfg->writeEntry("jackstart", m_startJack->isChecked());
     m_cfg->writeEntry("jackcommand", m_jackPath->text());
-    */
 
     // Jack audio inputs
     //

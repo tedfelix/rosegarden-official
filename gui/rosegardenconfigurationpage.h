@@ -445,6 +445,8 @@ protected:
     QLineEdit *m_sequencerArguments;
     QCheckBox *m_sendControllersAtPlay;
 
+    QCheckBox *m_cleardownSequencer;
+
 #ifdef HAVE_LIBJACK
     QCheckBox *m_startJack;
     QLineEdit *m_jackPath;
