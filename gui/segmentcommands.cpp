@@ -1207,16 +1207,7 @@ SegmentMergeCommand::execute()
 
 	for (unsigned int i = 1; i < m_oldSegments.size(); ++i) {
 
-	    // ensure we remove clefs or keys that just continue the
-	    // same clef or key as we were in in the previous segment
-
-	    bool usingOldClef = true;
-	    Rosegarden::Clef clef = m_newSegment->getClefAtTime
-		(m_oldSegments[i]->getStartTime());
-
-	    bool usingOldKey = true;
-	    Rosegarden::Key key = m_newSegment->getKeyAtTime
-		(m_oldSegments[i]->getStartTime());
+	    //!!! we really should normalize rests in any overlapping areas
 
 	    if (m_oldSegments[i]->getStartTime() >
 		m_newSegment->getEndMarkerTime()) {
@@ -1227,19 +1218,25 @@ SegmentMergeCommand::execute()
 	    for (Segment::iterator si = m_oldSegments[i]->begin();
 		 m_oldSegments[i]->isBeforeEndMarker(si); ++si) {
 
-		if (usingOldClef && (*si)->isa(Rosegarden::Clef::EventType)) {
+		// weed out duplicate clefs and keys
+
+		if ((*si)->isa(Rosegarden::Clef::EventType)) {
 		    try {
 			Rosegarden::Clef newClef(**si);
-			usingOldClef = false;
-			if (newClef == clef) continue;
+			if (m_newSegment->getClefAtTime
+			    ((*si)->getAbsoluteTime() + 1) == newClef) {
+			    continue;
+			}
 		    } catch (...) { }
 		}
 
-		if (usingOldKey && (*si)->isa(Rosegarden::Key::EventType)) {
+		if ((*si)->isa(Rosegarden::Key::EventType)) {
 		    try {
 			Rosegarden::Key newKey(**si);
-			usingOldKey = false;
-			if (newKey == key) continue;
+			if (m_newSegment->getKeyAtTime
+			    ((*si)->getAbsoluteTime() + 1) == newKey) {
+			    continue;
+			}
 		    } catch (...) { }
 		}
 
