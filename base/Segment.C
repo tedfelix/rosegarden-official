@@ -376,7 +376,7 @@ Segment::erase(iterator pos)
 void
 Segment::erase(iterator from, iterator to)
 {
-    timeT startTime = 0, endTime = 0;
+    timeT startTime = 0, endTime = m_endTime;
     if (from != end()) startTime = (*from)->getAbsoluteTime();
     if (to != end()) endTime = (*to)->getAbsoluteTime() + (*to)->getDuration();
 
