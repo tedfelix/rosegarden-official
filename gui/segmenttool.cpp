@@ -112,7 +112,8 @@ SegmentTool* SegmentToolBox::getTool(const QString& toolName)
 SegmentTool::SegmentTool(CompositionView* canvas, RosegardenGUIDoc *doc)
     : BaseTool("segment_tool_menu", dynamic_cast<KMainWindow*>(doc->parent())->factory(), canvas),
       m_canvas(canvas),
-      m_doc(doc)
+      m_doc(doc),
+      m_changeMade(false)
 {
 }
 
@@ -506,25 +507,25 @@ void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
 void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
 {
     if (m_currentItem) {
-	bool haveChange = false;
 
-        CompositionModel::itemcontainer& movingItems = m_canvas->getModel()->getMovingItems();
+        if (changeMade()) {
+
+            CompositionModel::itemcontainer& movingItems = m_canvas->getModel()->getMovingItems();
         
 
-	SegmentReconfigureCommand *command =
-	    new SegmentReconfigureCommand
-	    (movingItems.size() == 1 ? i18n("Move Segment") : i18n("Move Segments"));
+
+            SegmentReconfigureCommand *command =
+                new SegmentReconfigureCommand
+                (movingItems.size() == 1 ? i18n("Move Segment") : i18n("Move Segments"));
 
 
-	CompositionModel::itemcontainer::iterator it;
+            CompositionModel::itemcontainer::iterator it;
+        
+            for (it = movingItems.begin();
+                 it != movingItems.end();
+                 it++) {
 
-	for (it = movingItems.begin();
-	     it != movingItems.end();
-	     it++) {
-
-            CompositionItem item = *it;
-
-            if (CompositionItemHelper::itemHasChanged(item, m_canvas->grid())) {
+                CompositionItem item = *it;
 
                 Rosegarden::Segment* segment = CompositionItemHelper::getSegment(item);
                 Rosegarden::TrackId itemTrackId = m_canvas->grid().getYBin(item->rect().y());
@@ -535,13 +536,11 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
                                     itemStartTime,
                                     itemEndTime,
                                     itemTrackId);
-                haveChange = true;
             }
+
+            addCommandToHistory(command);
         }
-
-        if (haveChange) addCommandToHistory(command);
-        else delete command;
-
+        
         m_canvas->hideTextFloat();
         m_canvas->setDrawGuides(false);
         m_canvas->getModel()->endMove();
@@ -549,6 +548,7 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
 
     }
 
+    setChangeMade(false);
     m_currentItem = CompositionItem();
 }
 
@@ -611,6 +611,7 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
 //                      << newX << "," << newY << endl;
 
             (*it)->moveTo(newX, newY);
+            setChangeMade(true);
         }
 
         guideX = m_currentItem->rect().x();
@@ -704,7 +705,7 @@ void SegmentResizer::handleMouseButtonPress(QMouseEvent *e)
 
 void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
 {
-    if (!m_currentItem || !CompositionItemHelper::itemHasChanged(m_currentItem, m_canvas->grid())) return;
+    if (!m_currentItem || !changeMade()) return;
 
     timeT newStartTime = CompositionItemHelper::getStartTime(m_currentItem, m_canvas->grid());
     timeT newEndTime = CompositionItemHelper::getEndTime(m_currentItem, m_canvas->grid());
@@ -733,7 +734,7 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
 
     m_canvas->updateContents();
     m_canvas->getModel()->endMove();
-
+    setChangeMade(false);
     m_currentItem = CompositionItem();
 }
 
@@ -784,6 +785,8 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
                                                 itemEndTime - duration,
                                                 m_canvas->grid());
 	}
+        if (duration != 0)
+            setChangeMade(true);
 
 	// avoid updating preview, as it will update incorrectly
 	// (moving the events rather than leaving them alone and
@@ -808,6 +811,8 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
                                               duration + itemStartTime,
                                               m_canvas->grid());
 	}
+        if (duration != 0)
+            setChangeMade(true);
 
 	// update preview
 // 	if (m_currentItem->getPreview())
@@ -1000,22 +1005,20 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
         CompositionModel::itemcontainer& movingItems = m_canvas->getModel()->getMovingItems();
 	CompositionModel::itemcontainer::iterator it;
 
-	bool haveChange = false;
+        if (changeMade()) {
 
-	SegmentReconfigureCommand *command =
-	    new SegmentReconfigureCommand
-	    (m_selectedItems.size() == 1 ? i18n("Move Segment") :
-	                                   i18n("Move Segments"));
+            SegmentReconfigureCommand *command =
+                new SegmentReconfigureCommand
+                (m_selectedItems.size() == 1 ? i18n("Move Segment") :
+                 i18n("Move Segments"));
 
-        SegmentSelection newSelection;
+            SegmentSelection newSelection;
 
-	for (it = movingItems.begin();
-	     it != movingItems.end();
-	     it++) {
+            for (it = movingItems.begin();
+                 it != movingItems.end();
+                 it++) {
 
-            CompositionItem item = *it;
-
-            if (CompositionItemHelper::itemHasChanged(item, m_canvas->grid())) {
+                CompositionItem item = *it;
 
                 Rosegarden::Segment* segment = CompositionItemHelper::getSegment(item);
                 Rosegarden::TrackId itemTrackId = m_canvas->grid().getYBin(item->rect().y());
@@ -1027,13 +1030,11 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
                                     itemEndTime,
                                     itemTrackId);
 
-                haveChange = true;
             }
-	}
 
-	if (haveChange) addCommandToHistory(command);
-        else delete command;
-
+            addCommandToHistory(command);
+        }
+        
         m_canvas->getModel()->endMove();
 	m_canvas->updateContents();
 
@@ -1046,6 +1047,8 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 //        m_currentItem->setZ(2); // see SegmentItem::setSelected  --??
     }
 
+    setChangeMade(false);
+    
     m_currentItem = CompositionItem();
 }
 
@@ -1170,6 +1173,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
             newY = m_canvas->grid().getYBinCoordinate(track);
 
             (*it)->moveTo(newX, newY);
+            setChangeMade(true);
 	}
 
         guideX = m_currentItem->rect().x();

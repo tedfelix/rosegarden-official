@@ -77,10 +77,13 @@ protected:
 
     virtual void createMenu();
     virtual bool hasMenu() { return true; }
-
+    
     void setCurrentItem(CompositionItem item) { if (item != m_currentItem) { delete m_currentItem; m_currentItem = item; } }
 
     SegmentToolBox* getToolBox();
+
+    bool changeMade() { return m_changeMade; }
+    void setChangeMade(bool c) { m_changeMade = c; }
 
     //--------------- Data members ---------------------------------
 
@@ -88,6 +91,7 @@ protected:
     CompositionItem   m_currentItem;
     RosegardenGUIDoc* m_doc;
     QPoint            m_origPos;
+    bool              m_changeMade;
 };
 
 class SegmentToolBox : public BaseToolBox
