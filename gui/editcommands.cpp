@@ -55,7 +55,7 @@ using std::endl;
 
 CutCommand::CutCommand(EventSelection &selection,
 		       Rosegarden::Clipboard *clipboard) :
-    KMacroCommand(name())
+    KMacroCommand(getGlobalName())
 {
     addCommand(new CopyCommand(selection, clipboard));
     addCommand(new EraseCommand(selection));
@@ -63,7 +63,7 @@ CutCommand::CutCommand(EventSelection &selection,
 
 CutCommand::CutCommand(SegmentSelection &selection,
 		       Rosegarden::Clipboard *clipboard) :
-    KMacroCommand(name())
+    KMacroCommand(getGlobalName())
 {
     addCommand(new CopyCommand(selection, clipboard));
 
@@ -75,7 +75,7 @@ CutCommand::CutCommand(SegmentSelection &selection,
 
 CopyCommand::CopyCommand(EventSelection &selection,
 			 Rosegarden::Clipboard *clipboard) :
-    XKCommand(name()),
+    XKCommand(getGlobalName()),
     m_targetClipboard(clipboard)
 {
     m_sourceClipboard = new Rosegarden::Clipboard;
@@ -85,7 +85,7 @@ CopyCommand::CopyCommand(EventSelection &selection,
 
 CopyCommand::CopyCommand(SegmentSelection &selection,
 			 Rosegarden::Clipboard *clipboard) :
-    XKCommand(name()),
+    XKCommand(getGlobalName()),
     m_targetClipboard(clipboard)
 {
     m_sourceClipboard = new Rosegarden::Clipboard;
@@ -122,7 +122,7 @@ CopyCommand::unexecute()
 PasteSegmentsCommand::PasteSegmentsCommand(Rosegarden::Composition *composition,
 					   Rosegarden::Clipboard *clipboard,
 					   Rosegarden::timeT pasteTime) :
-    XKCommand(name()),
+    XKCommand(getGlobalName()),
     m_composition(composition),
     m_clipboard(clipboard),
     m_pasteTime(pasteTime)

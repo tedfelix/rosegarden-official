@@ -43,10 +43,7 @@ public:
     CutCommand(Rosegarden::SegmentSelection &selection,
 	       Rosegarden::Clipboard *clipboard);
 
-//     virtual QString name() { return getGlobalName(); }
-
     static QString getGlobalName() { return "Cu&t"; }
-
 };
 
 
@@ -64,8 +61,6 @@ public:
 		Rosegarden::Clipboard *clipboard);
 
     virtual ~CopyCommand();
-
-//     virtual QString name() { return getGlobalName(); }
 
     static QString getGlobalName() { return "&Copy"; }
 
@@ -88,8 +83,6 @@ public:
 			 Rosegarden::timeT pasteTime);
 
     virtual ~PasteSegmentsCommand();
-
-//     virtual QString name() { return "&Paste"; }
 
     static QString getGlobalName() { return "&Paste"; }
 
@@ -122,8 +115,6 @@ public:
 		       Rosegarden::timeT pasteTime,
 		       PasteType pasteType = getDefaultPasteType());
 
-//     virtual QString name() { return "&Paste"; }
-
     static QString getGlobalName() { return "&Paste"; }
 
     /// Determine whether this paste will succeed (without executing it yet)
@@ -154,8 +145,6 @@ class EraseCommand : public BasicSelectionCommand
 public:
     EraseCommand(Rosegarden::EventSelection &selection);
 
-//     virtual QString name() { return "&Erase"; }
-
     static QString getGlobalName() { return "&Erase"; }
 
     virtual Rosegarden::timeT getRelayoutEndTime();
@@ -180,8 +169,6 @@ public:
     EventEditCommand(Rosegarden::Segment &segment,
 		     Rosegarden::Event *eventToModify,
 		     const Rosegarden::Event &newEvent);
-
-//     virtual QString name() { return "Edit E&vent"; }
 
     static QString getGlobalName() { return "Edit E&vent"; }
 

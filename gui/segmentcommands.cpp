@@ -499,7 +499,7 @@ SegmentChangeQuantizationCommand::getGlobalName(Rosegarden::StandardQuantization
 AddTimeSignatureCommand::AddTimeSignatureCommand(Composition *composition,
 						 timeT time,
 						 Rosegarden::TimeSignature timeSig) :
-    XKCommand(name()),
+    XKCommand(getGlobalName()),
     m_composition(composition),
     m_time(time),
     m_timeSignature(timeSig),

@@ -203,8 +203,6 @@ public:
                             Rosegarden::TimeSignature timeSig);
     virtual ~AddTimeSignatureCommand();
 
-//     virtual QString name() { return i18n("Add Time Si&gnature Change..."); }
-
     static QString getGlobalName() { return i18n("Add Time Si&gnature Change..."); }
 
     virtual void execute();
@@ -237,13 +235,11 @@ class ModifyDefaultTempoCommand : public XKCommand
 public:
     ModifyDefaultTempoCommand(Rosegarden::Composition *composition,
                               double tempo):
-	XKCommand(name()),
+	XKCommand(getGlobalName()),
         m_composition(composition),
         m_tempo(tempo) {}
 
     virtual ~ModifyDefaultTempoCommand() {}
-
-//     virtual QString name() { return i18n("Modify &Default Tempo..."); }
 
     static QString getGlobalName() { return i18n("Modify &Default Tempo..."); }
 
@@ -262,15 +258,13 @@ class RemoveTempoChangeCommand : public XKCommand
 public:
     RemoveTempoChangeCommand(Rosegarden::Composition *composition,
                              int index):
-	XKCommand(name()),
+	XKCommand(getGlobalName()),
         m_composition(composition),
         m_tempoChangeIndex(index),
         m_oldTime(0),
         m_oldTempo(0){}
 
     virtual ~RemoveTempoChangeCommand() {}
-
-//     virtual QString name() { return i18n("Remove &Tempo Change..."); }
 
     static QString getGlobalName() { return i18n("Remove &Tempo Change..."); }
 
@@ -292,7 +286,7 @@ public:
     AddTempoChangeCommand(Rosegarden::Composition *composition,
                           Rosegarden::timeT time,
                           double tempo):
-	XKCommand(name()),
+	XKCommand(getGlobalName()),
         m_composition(composition),
         m_time(time),
         m_tempo(tempo),
@@ -300,8 +294,6 @@ public:
         m_tempoChangeIndex(0) {}
 
     virtual ~AddTempoChangeCommand();
-
-//     virtual QString name() { return i18n("Add &Tempo Change..."); }
 
     static QString getGlobalName() { return i18n("Add &Tempo Change..."); }
 
@@ -322,11 +314,9 @@ class AddTracksCommand : public XKCommand
 public:
     AddTracksCommand(Rosegarden::Composition *composition,
                      unsigned int nbTracks): 
-        XKCommand(name()),
+        XKCommand(getGlobalName()),
         m_composition(composition),
         m_nbNewTracks(nbTracks) {}
-
-//     virtual QString name() { return i18n("Add Tracks..."); }
 
     static QString getGlobalName() { return i18n("Add Tracks..."); }
 
