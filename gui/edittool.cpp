@@ -82,6 +82,11 @@ void EditTool::createMenu(const QString& rcFileName)
 
     QWidget* tmp =  m_parentView->factory()->container(m_menuName, this);
 
+    if (!tmp)
+        RG_DEBUG << "EditTool::createMenu(" << rcFileName
+                 << ") : menu creation failed (name : "
+                 << m_menuName << ")\n";
+
     m_menu = dynamic_cast<QPopupMenu*>(tmp);
 }
 
