@@ -29,9 +29,10 @@ using Rosegarden::Segment;
 using Rosegarden::timeT;
 
 MatrixCanvasView::MatrixCanvasView(MatrixStaff& staff,
+                                   QScrollBar* hsb,
                                    QCanvas *viewing, QWidget *parent,
                                    const char *name, WFlags f)
-    : QCanvasView(viewing, parent, name, f),
+    : RosegardenCanvasView(hsb, viewing, parent, name, f),
       m_staff(staff),
       m_previousEvTime(0),
       m_previousEvPitch(0),
