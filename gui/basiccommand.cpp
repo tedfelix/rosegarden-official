@@ -42,6 +42,8 @@ BasicCommand::BasicCommand(const QString &name, Segment &segment,
     m_doBruteForceRedo(false),
     m_redoEvents(0)
 {
+    if (end == start) ++m_endTime;
+
     if (bruteForceRedo) {
         m_redoEvents = new Segment(segment.getType(), start);
     }
