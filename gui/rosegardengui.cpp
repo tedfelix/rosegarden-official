@@ -54,6 +54,7 @@
 #include <ktip.h>
 #include <kpopupmenu.h>
 #include <kfilemetainfo.h>
+#include <kinputdialog.h> // demands KDE >= 3.2; is this a problem?
 
 // application specific includes
 
@@ -2192,6 +2193,8 @@ void RosegardenGUIApp::slotAutoSplitSelection()
                         new AudioSegmentAutoSplitCommand(m_doc,
                                                          *i,
                                                          aSD.getThreshold()));
+// dmm - verifying that widget->value() accessors *can* work without crashing
+//		std::cout << "SILVAN: getThreshold() = " << aSD.getThreshold() << std::endl;
             }
         } else {
             command->addCommand(new SegmentAutoSplitCommand(*i));
@@ -2368,9 +2371,15 @@ void RosegardenGUIApp::slotHarmonizeSelection()
     delete segment;
 }
 
+
 void RosegardenGUIApp::slotTempoToSegmentLength()
 {
-    std::cout << "RosegardenGUIApp::slotTempoToSegmentLength" << std::endl;
+    slotTempoToSegmentLength(this);
+}
+
+void RosegardenGUIApp::slotTempoToSegmentLength(QWidget* parent)
+{
+    RG_DEBUG << "RosegardenGUIApp::slotTempoToSegmentLength" << endl;
 
     if (!m_view->haveSelection()) return;
 
@@ -2386,7 +2395,27 @@ void RosegardenGUIApp::slotTempoToSegmentLength()
 
         Rosegarden::TimeSignature timeSig =
             comp.getTimeSignatureAt( seg->getStartTime());
-        int beats = timeSig.getBeatsPerBar();
+        
+	int beats = 0; 
+
+	// Get user to tell us how many beats or bars the segment contains
+        BeatsBarsDialog dialog(parent);
+        if (dialog.exec() == QDialog::Accepted)
+        {
+	    beats = dialog.getQuantity(); // beats (or bars)
+	    if (dialog.getMode() == 1)    // bars  (multiply by time sig)
+		beats *= timeSig.getBeatsPerBar();
+/*	    std::cout << "RosegardenGUIApp::slotTempoToSegmentLength - beats = " << beats
+		     << " mode = " << ((dialog.getMode() == 0) ? "bars" : "beats") << std::endl
+		     << " beats per bar = " << timeSig.getBeatsPerBar() << " user quantity = "
+		     << dialog.getQuantity() << " user mode = " << dialog.getMode() << std::endl;*/
+        }
+        else
+        {
+	    RG_DEBUG << "RosegardenGUIApp::slotTempoToSegmentLength - BeatsBarsDialog aborted"
+		     << endl;
+            return;
+        } 
 
         timeT endTime = seg->getEndTime();
 
@@ -2419,8 +2448,7 @@ void RosegardenGUIApp::slotTempoToSegmentLength()
 
         // execute
         m_doc->getCommandHistory()->addCommand(macro);
-    }
-
+    } 
 }
 
 

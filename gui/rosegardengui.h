@@ -659,6 +659,7 @@ public slots:
      * Tempo to Segment length
      */
     void slotTempoToSegmentLength();
+    void slotTempoToSegmentLength(QWidget* parent);
 
     /**
      * open the default editor for each of the currently-selected segments

@@ -1192,6 +1192,7 @@ TextEventDialog::slotTypeChanged(const QString &)
 	type == Text::LocalDirection ||
 	type == Text::UnspecifiedType ||
 	type == Text::Lyric ||
+	type == Text::Chord ||
 	type == Text::Annotation) {
 
 	m_staffAboveLabel->show();
@@ -5148,3 +5149,57 @@ TriggerSegmentDialog::slotOk()
     accept();
 }
 
+
+BeatsBarsDialog::BeatsBarsDialog(QWidget* parent) :
+    KDialogBase(parent, 0, true, i18n("Audio Segment Duration"),
+		Ok | Cancel, Ok)
+{
+//    std::cout << "Dialog ctor is running..." << std::endl;
+    QHBox *hbox = makeHBoxMainWidget();
+
+    QGroupBox *gbox = new QGroupBox(1, Horizontal,
+	    i18n("The selected audio segment contains:"), hbox);
+
+    QFrame *frame = new QFrame(gbox);
+    QGridLayout *layout = new QGridLayout(frame, 1, 2, 5, 5); 
+
+    QSpinBox *m_spinBox = new QSpinBox(1, INT_MAX, 1, frame, "glee");
+    layout->addWidget(m_spinBox, 0, 0);
+    
+   KComboBox *m_comboBox = new KComboBox(false, frame);
+    m_comboBox->insertItem(i18n("beat(s)"));
+    m_comboBox->insertItem(i18n("bar(s)"));
+    m_comboBox->setCurrentItem(0);
+    layout->addWidget(m_comboBox, 0, 1); 
+
+    //!! dmm - none of this should be necessary, but neither G. nor I could ever
+    // figure out why the version of this dialog using simple return
+    // widget->value() accessors kept returning garbage and crashing.
+    // Feel free to investigate and correct as you see fit.  In the meantime,
+    // this kludge of updating a pair of ints when the widgets change works.
+    connect(m_spinBox, SIGNAL(valueChanged(int)),
+	    SLOT(slotSpinChanged(int)));
+    connect(m_comboBox, SIGNAL(activated(int)),
+	    SLOT(slotComboChanged(int)));
+    m_number = m_spinBox->value();
+    m_item   = m_comboBox->currentItem();
+}
+
+/*BeatsBarsDialog::~BeatsBarsDialog()
+{
+    std::cout << "Dialog dtor is running..." << std::endl;
+}*/
+
+void
+BeatsBarsDialog::slotSpinChanged(int value)
+{
+//    std::cout << "SpinBox changed...  new value = " << value << std::endl;
+    m_number = value;
+}
+
+void
+BeatsBarsDialog::slotComboChanged(int item)
+{
+//    std::cout << "ComboBox changed... new item = " << item   << std::endl;
+    m_item = item;
+}    
