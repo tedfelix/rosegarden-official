@@ -816,7 +816,7 @@ void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
         }
     }
 
-    if (topItem) { // select the top item
+    if (topItem && !m_selectedItems.contains(topItem)) { // select the top item
         m_selectedItems << topItem;
         topItem->setSelected(true);
         topItem->handleMouseButtonPress(e);
