@@ -492,6 +492,8 @@ SegmentParameterBox::populateBoxFromSegments()
 
 void SegmentParameterBox::slotRepeatPressed()
 {
+    if (m_segments.size() == 0) return;
+
     bool state = false;
 
     switch(m_repeatValue->state())
