@@ -190,6 +190,9 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     connect(m_transport->TempoDisplay, SIGNAL(doubleClicked()),
             this, SLOT(slotEditTempo()));
 
+    connect(m_transport->TempoDisplay, SIGNAL(scrollWheel(int)),
+            this, SIGNAL(scrollTempo(int)));
+
     // Now the reason why we have to do the above fiddling
     connect(m_transport->TimeSigDisplay, SIGNAL(doubleClicked()),
             this, SLOT(slotEditTimeSignature()));

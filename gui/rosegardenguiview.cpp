@@ -1077,7 +1077,7 @@ RosegardenGUIView::slotDroppedNewAudio(QString audioDesc)
     QTextIStream s(&audioDesc);
 
     QString audioFile;
-    Rosegarden::TrackId trackId;
+    int trackId;
     Rosegarden::timeT time;
     s >> audioFile;
     s >> trackId;
@@ -1087,6 +1087,57 @@ RosegardenGUIView::slotDroppedNewAudio(QString audioDesc)
              << "filename = " << audioFile 
              << ", trackid = " << trackId
              << ", time = " << time << endl;
+
+    RosegardenGUIApp *app = dynamic_cast<RosegardenGUIApp*>(parent());
+    Rosegarden::AudioFileManager &aFM = getDocument()->getAudioFileManager();
+    
+    if (app)
+    {
+        Rosegarden::AudioFileId audioFileId = 0;
+
+        if (app->getAudioManagerDialog())
+        {
+            // Add audio file through manager dialog
+            //
+            if (app->getAudioManagerDialog()->addAudioFile(audioFile) == false)
+                return;
+
+            // get the last added audio file id and insert the segment
+            //
+            audioFileId = aFM.getLastAudioFile()->getId();
+
+        }
+        else
+        {
+            try
+            {
+                audioFileId = aFM.addFile(qstrtostr(audioFile));
+            }
+            catch(std::string e)
+            {
+                QString errorString = i18n("Can't add dropped file. ") + strtoqstr(e);
+                KMessageBox::sorry(this, errorString);
+                return;
+            }
+            catch(QString e)
+            {
+                QString errorString = i18n("Can't add dropped file. ") + e;
+                KMessageBox::sorry(this, errorString);
+                return;
+            }
+        }
+
+        // Now fetch file details
+        //
+        Rosegarden::AudioFile *aF = aFM.getAudioFile(audioFileId);
+
+        if (aF)
+        {
+            std::cout << "Adding dropped audio file = " << audioFile << std::endl;
+            //slotAddAudioSegment(audioFileId, trackId, position, startTime, endTime);
+            slotAddAudioSegment(audioFileId, 0, 0, Rosegarden::RealTime(0, 0), Rosegarden::RealTime(2, 0));
+        }
+    }
 }
 
 void

@@ -400,6 +400,12 @@ protected:
      */
     QString createNewAudioFile();
 
+    /*
+     * Return AudioManagerDialog
+     *
+     */
+    Rosegarden::AudioManagerDialog* getAudioManagerDialog() { return m_audioManagerDialog; }
+
     /**
      * Ask the user for a file to save to, and check that it's
      * good and that (if it exists) the user agrees to overwrite.

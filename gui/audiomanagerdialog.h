@@ -90,6 +90,10 @@ public:
     //
     QAccel* getAccelerators() { return m_accelerators; }
 
+    // Add a new file to the audio file manager
+    //
+    bool addAudioFile(const QString &filePath);
+
 
 public slots:
     void slotAdd();

@@ -1099,6 +1099,15 @@ AudioManagerDialog::setAudioSubsystemStatus(bool ok)
     m_audiblePreview = ok;
 }
 
+// Wrapper to allow external things to add files (say from drops on the main view)
+//
+bool
+AudioManagerDialog::addAudioFile(const QString &filePath)
+{
+    return addFile(QFileInfo(filePath).absFilePath());
+}
+
+
 
 }
 

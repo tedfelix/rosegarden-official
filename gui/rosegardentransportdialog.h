@@ -120,6 +120,7 @@ signals:
     void setLoop();
     void unsetLoop();
     void editTempo(QWidget *);
+    void scrollTempo(int);
     void editTimeSignature(QWidget *);
     void panic();
 

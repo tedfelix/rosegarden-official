@@ -66,7 +66,8 @@ private:
 };
 
 
-// A label that emits a double click signal
+// A label that emits a double click signal and provides scroll wheel information.
+//
 //
 class RosegardenLabel : public QLabel
 {
@@ -79,8 +80,12 @@ protected:
     virtual void mouseDoubleClickEvent(QMouseEvent * /*e*/)
         { emit doubleClicked(); }
 
+    virtual void wheelEvent(QWheelEvent * e) 
+        { emit scrollWheel(e->delta()); }
+
 signals:
     void doubleClicked();
+    void scrollWheel(int);
 
 };
 

@@ -96,6 +96,10 @@ AudioFileManager::addFile(const std::string &filePath)
             aF = new WAVAudioFile(id, getShortFilename(filePath), filePath);
         }
 
+        // Ensure we have a valid file handle
+        //
+        if (aF == 0) throw i18n("Unsupported audio file type ") + QString("\"%1\"").arg(filePath);
+
         // Add file type on extension
         try
         { 

@@ -22,8 +22,6 @@ Features for 1.0 - updated 20030923
 
 - playlists (essential for demos!) [rwb]
 
-- song markers - jumping to, creating loops between [rwb] [MAINLY DONE]
-
 - search facility for patch sounds (search all banks) [rwb]
 
 - request: notation segment expanding itself as you enter 
@@ -46,10 +44,6 @@ Features for 1.0 - updated 20030923
   eventually wean it off of the junky code it currently uses. [dmm]
 
 - fix lilypond lyric duration bug [dmm]
-
-- named controllers for studio with associated bankeditor-like dialog [rwb/dmm]
-  [ALMOST DONE - needs linking up to colours and implementing in IPBs
-                 and control rulers to complete - rwb]
 
 - find decent home for event filter toolbar icons [cc? dmm?]
 
@@ -79,6 +73,11 @@ Features for 1.0 - updated 20030923
 
 Completed
 ---------
+
+- named controllers for studio with associated bankeditor-like dialog [rwb/dmm]
+  [DONE]
+
+- song markers - jumping to, creating loops between [rwb] [DONE but no looping]
 
 - control rulers [gl/rwb] [GETTING THERE/DONE]
 

@@ -676,9 +676,9 @@ void TrackEditor::dropEvent(QDropEvent* event)
                 QString audioText;
                 QTextOStream t(&audioText);
 
-                t << uriPath;
-                t << trackPos;
-                t << time;
+                t << uriPath << "\n";
+                t << trackPos << "\n";
+                t << time << "\n";
 
                 emit droppedNewAudio(audioText);
             }
