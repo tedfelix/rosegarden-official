@@ -46,14 +46,45 @@
       <h3>Current status</h3>
 
       <p>The latest developer release of Rosegarden-4 is the rather
-      confusingly-numbered 0.1.3.
+      confusingly-numbered 0.1.4, released on 22 Mar 2002.
 
       <p>It includes complete or partial support for MIDI file I/O,
       playback and recording, a track editor, score display and
-      editing with chords, slurs, dynamics, accents, undo/redo etc,
-      and a piano-roll editor.  (Probably none of these features works
-      completely correctly yet, though.)  Have a look at some <a
-      href="pictures.html">pictures</a> of it in use.
+      editing, and a piano-roll editor.  Changes since 0.1.3 include:
+
+<ul>
+<li class="close">High (960 ppq) sequencer resolution</li>
+<li class="close">Properly working Matrix (piano roll) view</li>
+<li class="close">Much prettier Transport</li>
+<li class="close">Much improved Looping</li>
+<li class="close">Undoable Segment actions</li>
+<li class="close">Undoable and non-destructive Quantization</li>
+<li class="close">More undoable stuff generally</li>
+<li class="close">A Metronome</li>
+<li class="close">Cute coloured MIDI VU-meters with peak hold</li>
+<li class="close">Segment Parameter Box (Repeat, Quantize, Transpose, Delay)</li>
+<li class="close">Instrument Parameter Box (Bank select, Program, Channel, Pan, Velocity)</li>
+<li class="close">Segment (MIDI or Audio containers) splitting and joining</li>
+<li class="close">The beginnings of a Rosegarden "Studio" concept.  This is a MIDI and
+  Audio mapping layer similar to the Logic "Environment".  First pass
+  support includes GM patches and some XG extensions.</li>
+<li class="close">Audio playback (proof of concept bit still buggy)</li>
+<li class="close">MIDI Recording with count-in and recording segment trail</li>
+<li class="close">Fixed some leaks in the Sequencer</li>
+<li class="close">Repeating Segments -- only supported for performance, no
+  visual representation yet</li>
+<li class="close">Switchable Instrument/Track labels</li>
+<li class="close">Much faster notation rendering and update</li>
+<li class="close">Key signature and time signature dialogs in notation view</li>
+<li class="close">Chord labelling in notation view (due to Randall Farmer)</li>
+<li class="close">Playback tracking in notation and matrix views</li>
+<li class="close">More graceful notation rendering from complex performance-type MIDI files</li>
+<li class="close">Better refresh between concurrent views</li>
+<li class="close">Switched to a compressed file format</li>
+</ul>
+
+      <p>Have a look
+      at some <a href="pictures.html">pictures</a> of it in use.
 
       <p>You can <a href="download.html">download</a> the source
       package from SourceForge, or obtain more recent source code
