@@ -182,7 +182,8 @@ public:
 	TimeAndTempoChangeCommand(name()),
 	m_composition(composition),
 	m_time(time),
-	m_timeSignature(timeSig) { }
+	m_timeSignature(timeSig),
+	m_oldTimeSignature(0) { }
     virtual ~AddTimeSignatureCommand() { }
 
     static QString name() {
@@ -196,6 +197,7 @@ protected:
     Rosegarden::Composition *m_composition;
     Rosegarden::timeT m_time;
     Rosegarden::TimeSignature m_timeSignature;
+    Rosegarden::TimeSignature *m_oldTimeSignature; // for undo
     int m_timeSigIndex; // for undo
 };    
 
@@ -209,7 +211,7 @@ public:
         m_composition(composition),
         m_time(time),
         m_tempo(tempo) {}
-    virtual ~AddTempoChangeCommand() {}
+    virtual ~AddTempoChangeCommand();
 
     static QString name()
     {

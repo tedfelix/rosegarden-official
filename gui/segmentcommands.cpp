@@ -465,9 +465,24 @@ SegmentChangeQuantizationCommand::name(Rosegarden::StandardQuantization *sq)
 
 // --------- Add Time Signature --------
 // 
+
+AddTimeSignatureCommand::~AddTimeSignatureCommand()
+{
+    if (m_oldTimeSignature) delete m_oldTimeSignature;
+}
+
 void
 AddTimeSignatureCommand::execute()
 {
+    int oldIndex = m_composition->getTimeSignatureNumberAt(m_time);
+    if (oldIndex >= 0) {
+	std::pair<timeT, Rosegarden::TimeSignature> data =
+	    m_composition->getTimeSignatureChange(oldIndex);
+	if (data.first == time) {
+	    m_oldTimeSignature = new Rosegarden::TimeSignature(data.second);
+	}
+    }
+
     m_timeSigIndex = m_composition->addTimeSignature(m_time, m_timeSignature);
 }
 
@@ -475,6 +490,9 @@ void
 AddTimeSignatureCommand::unexecute()
 {
     m_composition->removeTimeSignature(m_timeSigIndex);
+    if (m_oldTimeSignature) {
+	m_composition->addTimeSignature(m_time, *m_oldTimeSignature);
+    }
 }
 
 

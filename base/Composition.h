@@ -360,16 +360,18 @@ public:
     /**
      * Add a tempo-change event at the given time, to the given
      * tempo (in beats per minute).  Removes any existing tempo
-     * event at that time.
+     * event at that time.  Returns the index of the new tempo
+     * event in a form suitable for passing to removeTempoChange.
      */
-    void addTempo(timeT time, double tempo);
+    int addTempo(timeT time, double tempo);
 
     /**
      * Add a tempo-change event at the given time, to the given
      * tempo (in beats per hour).  Removes any existing tempo
-     * event at that time.
+     * event at that time.  Returns the index of the new tempo
+     * event in a form suitable for passing to removeTempoChange.
      */
-    void addRawTempo(timeT time, int tempo);
+    int addRawTempo(timeT time, int tempo);
 
     /**
      * Return the number of tempo changes in the composition.

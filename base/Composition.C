@@ -652,30 +652,38 @@ Composition::getTempoAt(timeT t) const
     return tempo;
 }
 
-void
+int
 Composition::addTempo(timeT time, double tempo)
 {
     Event *tempoEvent = new Event(TempoEventType, time);
     tempoEvent->set<Int>(TempoProperty, (long)(tempo * 60));
-    m_tempoSegment.insert(tempoEvent);
+
+    ReferenceSegment::iterator i = m_tempoSegment.insert(tempoEvent);
+
     m_tempoTimestampsNeedCalculating = true;
 
 #ifdef DEBUG_TEMPO_STUFF
     cerr << "Composition: Added tempo " << tempo << " at " << time << endl;
 #endif
+
+    return std::distance(m_tempoSegment.begin(), i);
 }
 
-void
+int
 Composition::addRawTempo(timeT time, int tempo)
 {
     Event *tempoEvent = new Event(TempoEventType, time);
     tempoEvent->set<Int>(TempoProperty, tempo);
-    m_tempoSegment.insert(tempoEvent);
+
+    ReferenceSegment::iterator i = m_tempoSegment.insert(tempoEvent);
+
     m_tempoTimestampsNeedCalculating = true;
 
 #ifdef DEBUG_TEMPO_STUFF
     cerr << "Composition: Added tempo " << tempo << " at " << time << endl;
 #endif
+
+    return std::distance(m_tempoSegment.begin(), i);
 }
 
 int
