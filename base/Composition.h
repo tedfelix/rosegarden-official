@@ -30,10 +30,14 @@ namespace Rosegarden
 {
     
 /**
- * A set of tracks.
- * This class owns the event lists it is holding
- * It will delete them on destruction.
+ * Composition contains a complete representation of a piece of music.
+ * It is a container for multiple Tracks, as well as any associated
+ * non-Event data.
+ * 
+ * The Composition owns the Tracks it holds, and deletes them on
+ * destruction.
  */
+
 class Composition
 {
     
@@ -75,6 +79,11 @@ public:
 //     Track*       operator[](int i)       { return m_tracks[i]; }
 //     const Track* operator[](int i) const { return m_tracks[i]; }
 
+    //!!! This should arguably not be a single per-Composition value.
+    // MIDI has a tempo meta-event which can change arbitrarily often,
+    // and notation has metronome events that can also appear more than
+    // once (and indeed per Track, rather than per Composition).
+    // (We perhaps do need a per-Composition base tempo, though.)
     unsigned int getTempo() const { return m_tempo; }
     void setTempo(const int &tempo) { m_tempo = tempo; }
 

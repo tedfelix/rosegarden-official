@@ -31,8 +31,27 @@ namespace Rosegarden
 {
 
 /**
- * This class owns the Events its items are pointing at
+ * Track is the container for a set of Events that are all played on
+ * the same instrument.  Each event has an absolute starting time,
+ * which is used as the index within the track.  Multiple events may
+ * have the same absolute time.
+ * 
+ * (For example, chords are represented simply as a sequence of notes
+ * that share a starting time.  The Track can contain counterpoint --
+ * notes that overlap, rather than starting and ending together -- but
+ * in practice it's probably too hard to display so we should make
+ * more than one Track if we want to represent true counterpoint.)
+ *
+ * The Track is capable of doing various operations including
+ * inserting and removing Events, splitting notes and rests,
+ * calculating bar positions, etc.  It is aware of Note, Rest and
+ * TimeSignature events and of BeamedGroup properties, but has no
+ * awareness of any other specifically notation-related events
+ * such as Key or Clef.
+ *
+ * The Track owns the Events its items are pointing at.
  */
+
 class Track : public std::multiset<Event*, Event::EventCmp>
 {
 public:
