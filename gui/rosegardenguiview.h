@@ -125,14 +125,17 @@ public:
     void setPointerPosition(const Rosegarden::timeT &position);
 
     /**
-     * These two are just-passing-through methods
-     * called from the GUI when it has key presses
-     * that the SegmentCanvas is interested in.
-     * It's a long way down.
+     * These two are just-passing-through methods called from
+     * the GUI when it has key presses that the SegmentCanvas
+     * or anything else downstairsis interested in.
      *
      */
-    void setSelectAdd(const bool &value)  { emit signalSetSelectAdd(value); }
-    void setSelectCopy(const bool &value) { emit signalSetSelectCopy(value); }
+    void setShift(const bool &value)
+        { emit signalSetSelectAdd(value);
+          emit signalSetLoop(value); }
+
+    void setControl(const bool &value)
+        { emit signalSetSelectCopy(value); }
 
     /**
      * A newly recorded Segment has to be added to the view
@@ -179,8 +182,11 @@ signals:
     void activateTool(SegmentCanvas::ToolType);
     void selectSegments(list<Rosegarden::Segment*>);
 
+    // Activated by Shift and Control key depresses
+    //
     void signalSetSelectAdd(bool);
     void signalSetSelectCopy(bool);
+    void signalSetLoop(bool);
 
     void addSegmentItem(Rosegarden::Segment*);
 

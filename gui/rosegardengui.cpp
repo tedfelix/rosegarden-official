@@ -68,8 +68,8 @@ RosegardenGUIApp::RosegardenGUIApp()
       m_fileRecent(0),
       m_view(0),
       m_doc(0),
-      m_playLatency(0, 300000),
-      m_fetchLatency(0, 100000),
+      m_playLatency(0, 100000),
+      m_fetchLatency(0, 50000),
       m_transportStatus(STOPPED),
       m_sequencerProcess(0)
 {
@@ -1180,6 +1180,7 @@ void RosegardenGUIApp::setPointerPosition(const long &posSec,
     //
     //if (m_doc->getComposition().getPosition() == position) return;
 
+
     Rosegarden::RealTime rT(posSec, posUsec);
 
     timeT elapsedTime = m_doc->getComposition().getElapsedTimeForRealTime(rT);
@@ -1196,10 +1197,19 @@ void RosegardenGUIApp::setPointerPosition(const long &posSec,
 
     // and the tempo
     m_transport->setTempo(m_doc->getComposition().getTempoAt(elapsedTime));
+
 }
 
 void RosegardenGUIApp::setPointerPosition(timeT t)
 {
+    if ( m_transportStatus == PLAYING ||
+         m_transportStatus == RECORDING_MIDI ||
+         m_transportStatus == RECORDING_AUDIO )
+    {
+        sendSequencerJump(m_doc->getComposition().getElapsedRealTime(t));
+        return;
+    }
+
     // set the composition time
     m_doc->getComposition().setPosition(t);
 
@@ -1320,7 +1330,7 @@ void RosegardenGUIApp::stop()
 
     if (m_transportStatus == STOPPED)
     {
-        setPointerPosition(0, 0);
+        setPointerPosition(0);
         return;
     }
 
@@ -1383,16 +1393,7 @@ void RosegardenGUIApp::rewind()
     int barNumber = composition.getBarNumber(position - 1, false);
     timeT newPosition = composition.getBarRange(barNumber, false).first;
 
-    if ( m_transportStatus == PLAYING ||
-         m_transportStatus == RECORDING_MIDI ||
-         m_transportStatus == RECORDING_AUDIO )
-    {
-        sendSequencerJump(composition.getElapsedRealTime(newPosition));
-    }
-    else
-    {
-        setPointerPosition(newPosition);
-    }
+    setPointerPosition(newPosition);
 }
 
 
@@ -1411,17 +1412,7 @@ void RosegardenGUIApp::fastforward()
     // don't skip beyond it.  Generally we need extra-Composition
     // non-destructive start and end markers for the piece.
     //
-
-    if ( m_transportStatus == PLAYING ||
-         m_transportStatus == RECORDING_MIDI ||
-         m_transportStatus == RECORDING_AUDIO )
-    {
-        sendSequencerJump(composition.getElapsedRealTime(newPosition));
-    }
-    else
-    {
-        setPointerPosition(newPosition);
-    }
+    setPointerPosition(newPosition);
 
 }
 
@@ -1801,18 +1792,7 @@ void
 RosegardenGUIApp::rewindToBeginning()
 {
     cout << "RosegardenGUIApp::rewindToBeginning()" << endl;
-
-    if ( m_transportStatus == PLAYING ||
-         m_transportStatus == RECORDING_MIDI ||
-         m_transportStatus == RECORDING_AUDIO )
-    {
-        sendSequencerJump(Rosegarden::RealTime(0, 0));
-    }
-    else
-    {
-        setPointerPosition(Rosegarden::RealTime(0, 0));
-    }
-
+    setPointerPosition(0);
 
 }
 
@@ -1825,16 +1805,7 @@ RosegardenGUIApp::fastForwardToEnd()
     Rosegarden::Composition &composition = m_doc->getComposition();
     Rosegarden::RealTime jumpTo = composition.getElapsedRealTime(composition.getDuration());
 
-    if ( m_transportStatus == PLAYING ||
-         m_transportStatus == RECORDING_MIDI ||
-         m_transportStatus == RECORDING_AUDIO )
-    {
-        sendSequencerJump(jumpTo);
-    }
-    else
-    {
-        setPointerPosition(jumpTo);
-    }
+    setPointerPosition(jumpTo);
 }
 
 
@@ -1866,11 +1837,11 @@ RosegardenGUIApp::keyPressEvent(QKeyEvent *event)
     switch(event->key())
     {
         case Key_Shift:  //  select add for segments
-            m_view->setSelectAdd(true);
+            m_view->setShift(true);
             break;
 
         case Key_Control:   // select copy of segments
-            m_view->setSelectCopy(true);
+            m_view->setControl(true);
             break;
 
         default:
@@ -1887,11 +1858,11 @@ RosegardenGUIApp::keyReleaseEvent(QKeyEvent *event)
     switch(event->key())
     {
         case Key_Shift:  //  select add for segments
-            m_view->setSelectAdd(false);
+            m_view->setShift(false);
             break;
 
         case Key_Control:   // select copy of segments
-            m_view->setSelectCopy(false);
+            m_view->setControl(false);
             break;
 
         default:
@@ -1908,11 +1879,20 @@ RosegardenGUIApp::keyReleaseEvent(QKeyEvent *event)
 void
 RosegardenGUIApp::setPlayPosition(Rosegarden::timeT position)
 {
-    if (m_transportStatus == PLAYING)
+
+    // If already playing then stop
+    //
+    if (m_transportStatus == PLAYING ||
+        m_transportStatus == RECORDING_MIDI ||
+        m_transportStatus == RECORDING_AUDIO )
+    {
         stop();
-
+        return;
+    }
+    
+    // otherwise off we go
+    //
     setPointerPosition(position);
-
     play();
 }
 

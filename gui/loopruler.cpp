@@ -34,7 +34,8 @@ LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
                      const char *name):
     QCanvasView(canvas, parent, name),
     m_bars(bars), m_barWidth(barWidth), m_height(height),
-    m_barSubSections(4), m_canvas(canvas), m_doc(doc)
+    m_barSubSections(4), m_canvas(canvas), m_doc(doc),
+    m_loop(false), m_startLoop(0), m_loopMarker(0)
 {
     setMinimumSize(bars * barWidth, height);
     setMaximumSize(bars * barWidth, height);
@@ -100,23 +101,57 @@ void
 LoopRuler::contentsMousePressEvent(QMouseEvent *mE)
 {
     if (mE->button() == LeftButton)
-        emit setPointerPosition(getPointerPosition(mE->pos().x()));
+    {
+        if (m_loop)
+            m_startLoop = getPointerPosition(mE->pos().x());
+        else
+            emit setPointerPosition(getPointerPosition(mE->pos().x()));
+    }
 }
 
 void
 LoopRuler::contentsMouseReleaseEvent(QMouseEvent *mE)
 {
+    int position = mE->pos().x();
+    if (position < 0) position = 0;
+    
     if (mE->button() == LeftButton)
     {
+        if (m_loop)
+        {
+            Rosegarden::timeT endLoop = getPointerPosition(position);
+
+            emit setLoop(m_startLoop, endLoop);
+            m_startLoop = 0;
+        }
     }
 }
 
 void
 LoopRuler::contentsMouseDoubleClickEvent(QMouseEvent *mE)
 {
-    if (mE->button() == LeftButton)
-        emit setPlayPosition(getPointerPosition(mE->pos().x()));
+    int position = mE->pos().x();
+    if (position < 0) position = 0;
+    
+    if (mE->button() == LeftButton && !m_loop)
+        emit setPlayPosition(getPointerPosition(position));
 }
+
+void
+LoopRuler::contentsMouseMoveEvent(QMouseEvent *mE)
+{
+    int position = mE->pos().x();
+    if (position < 0) position = 0;
+    
+    if (m_loop)
+    {
+        m_endLoop = getPointerPosition(position);
+        drawLoopMarker();
+    }
+    else
+        emit setPointerPosition(getPointerPosition(position));
+}
+
 
 // From an x position work out the pointer position.
 // Loop through all the bars removing a calculated
@@ -148,7 +183,7 @@ LoopRuler::getPointerPosition(const int &xPos)
         if (runningWidth + barWidth > xPos)
         {
             result = runningPosition + ((times.second - times.first) *
-                                 (xPos - runningWidth)/barWidth);
+                                        (xPos - runningWidth)/barWidth);
             return result;
         }
 
@@ -159,5 +194,14 @@ LoopRuler::getPointerPosition(const int &xPos)
     return result;
 }
 
+void
+LoopRuler::drawLoopMarker()
+{
+    if (m_loopMarker == 0)
+        m_loopMarker = new QCanvasRectangle(m_canvas);
+
+    
+
+}
 
 

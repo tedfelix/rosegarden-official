@@ -100,6 +100,8 @@ BarButtons::drawButtons()
     connect(loopRuler, SIGNAL(setLoop(Rosegarden::timeT, Rosegarden::timeT)),
             this,      SLOT(slotSetLoop(Rosegarden::timeT, Rosegarden::timeT)));
 
+    connect(this,      SIGNAL(signalSetLoopingMode(bool)),
+            loopRuler, SLOT(setLoopingMode(bool)));
 
 
     // Another horizontal layout box..
@@ -148,5 +150,10 @@ BarButtons::drawButtons()
 }
 
 
+void
+BarButtons::setLoopingMode(bool value)
+{
+    emit signalSetLoopingMode(value);
+}
 
 

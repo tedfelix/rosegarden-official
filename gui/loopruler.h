@@ -54,12 +54,14 @@ public:
     ~LoopRuler();
 
 public slots:
+    void setLoopingMode(bool value) { m_loop = value; }
 
 protected:
     // ActiveItem interface
     virtual void contentsMousePressEvent(QMouseEvent *mE);
     virtual void contentsMouseReleaseEvent(QMouseEvent *mE);
     virtual void contentsMouseDoubleClickEvent(QMouseEvent *mE);
+    virtual void contentsMouseMoveEvent(QMouseEvent *mE);
 
 signals:
     // The three main functions that this class performs
@@ -80,6 +82,7 @@ signals:
 private:
 
     void drawBarSections();
+    void drawLoopMarker();  // between loop positions
     Rosegarden::timeT getPointerPosition(const int &xPos);
 
     int m_bars;
@@ -88,6 +91,12 @@ private:
     int m_barSubSections;
     QCanvas          *m_canvas;
     RosegardenGUIDoc *m_doc;
+   
+    bool m_loop;
+    Rosegarden::timeT m_startLoop;
+    Rosegarden::timeT m_endLoop;
+
+    QCanvasRectangle *m_loopMarker;
 
 };
 

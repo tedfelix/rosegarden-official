@@ -49,6 +49,8 @@ signals:
     void setPlayPosition(Rosegarden::timeT position);
     void setLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs);
 
+    void signalSetLoopingMode(bool);
+
 public slots:
 
     // Re-imit
@@ -61,6 +63,8 @@ public slots:
 
     void slotSetLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
         { emit setLoop(lhs, rhs); }
+
+    void setLoopingMode(bool value);
 
 private:
     void drawButtons();

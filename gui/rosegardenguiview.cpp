@@ -117,6 +117,9 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     barButtonsView->addChild(barButtons);
 
 
+    connect(this,       SIGNAL(signalSetLoop(bool)),
+            barButtons, SLOT(setLoopingMode(bool)));
+
     
     // Construct the top level horizontal box and drop the
     // button box (TrackButtons) and the main ScrollView
