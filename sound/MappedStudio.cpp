@@ -1687,9 +1687,22 @@ const LADSPA_Descriptor*
 MappedAudioPluginManager::getDescriptorFromHandle(unsigned long uniqueId,
                                                   void *pluginHandle)
 {
+#define DEBUG_DESCRIPTOR
+#ifdef DEBUG_DESCRIPTOR
+    std::cerr << "MappedAudioPluginManager::getDescriptorFromHandle - "
+        << "starting"
+        << std::endl;
+#endif
+
     LADSPA_Descriptor_Function descrFn = 0;
     descrFn = (LADSPA_Descriptor_Function)
                     dlsym(pluginHandle, "ladspa_descriptor");
+#ifdef DEBUG_DESCRIPTOR
+    std::cerr << "MappedAudioPluginManager::getDescriptorFromHandle - "
+        << "got descriptor"
+        << std::endl;
+#endif
+
     if (descrFn)
     {
         const LADSPA_Descriptor *descriptor;
@@ -1702,13 +1715,30 @@ MappedAudioPluginManager::getDescriptorFromHandle(unsigned long uniqueId,
                                                                                             if (descriptor)
             {
                 if (descriptor->UniqueID == uniqueId)
+                {
+#ifdef DEBUG_DESCRIPTOR
+                    std::cerr << "MappedAudioPluginManager::"
+                        << "getDescriptorFromHandle - "
+                        << "found descriptor" << std::endl;
+#endif
                     return descriptor;
+                }
             }
 
             index++;
 
+#ifdef DEBUG_DESCRIPTOR
+            std::cerr << "MappedAudioPluginManager::getDescriptorFromHandle - "
+                << "looping" << std::endl;
+#endif
+
         } while (descriptor);
     }
+
+#ifdef DEBUG_DESCRIPTOR
+    std::cerr << "MappedAudioPluginManager::getDescriptorFromHandle - "
+        << "failed to find descriptor" << std::endl;
+#endif
 
     return 0;
 }
@@ -1740,6 +1770,11 @@ MappedAudioPluginManager::getPluginDescriptor(unsigned long uniqueId)
         return 0;
     }
 
+#ifdef DEBUG_MAPPEDSTUDIO_PLUGIN
+    std::cerr << "MappedAudioPluginManager::getPluginDescriptor - "
+              << "checkin for handle" << std::endl;
+#endif
+
     // Check if we have the handle
     //
     LADSPAIterator it = m_pluginHandles.begin();
@@ -1749,6 +1784,10 @@ MappedAudioPluginManager::getPluginDescriptor(unsigned long uniqueId)
             return getDescriptorFromHandle(uniqueId, it->second);
     }
     
+#ifdef DEBUG_MAPPEDSTUDIO_PLUGIN
+    std::cerr << "MappedAudioPluginManager::getPluginDescriptor - "
+        << "creating and storing handle" << std::endl;
+#endif
 
     // Now create the handle and store it
     //
@@ -1757,6 +1796,11 @@ MappedAudioPluginManager::getPluginDescriptor(unsigned long uniqueId)
     std::pair<std::string, void*> pluginHandlePair(plugin->getLibraryName(),
                                                    pluginHandle);
     m_pluginHandles.push_back(pluginHandlePair);
+
+#ifdef DEBUG_MAPPEDSTUDIO_PLUGIN
+    std::cerr << "MappedAudioPluginManager::getPluginDescriptor - "
+        << "done, returning" << std::endl;
+#endif
 
     // now generate the descriptor
     return getDescriptorFromHandle(uniqueId, pluginHandle);

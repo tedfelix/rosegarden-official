@@ -729,7 +729,7 @@ AudioManagerDialog::slotAdd()
 {
     KURL::List kurlList =
         KFileDialog::getOpenURLs(
-#if KDE_VERSION >= 306
+#if KDE_VERSION >= 196614
                                  ":WAVS",
 #else
                                  QString::null,

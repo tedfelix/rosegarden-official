@@ -906,7 +906,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                                                 id.toInt()) == false);
 
                 if (newPath != "")
+                {
                     getAudioFileManager().setAudioPath(qstrtostr(newPath));
+                    // Set a document post-modify flag
+                    //m_doc->setModified(true);
+                }
 
                 getAudioFileManager().print();
 
@@ -915,7 +919,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             }
             else
             {
-                RG_DEBUG << "LOCATED IN FILE DIALOG PATH" << endl;
+                // AudioPath is modified so set a document post modify flag
+                //
+                //m_doc->setModified(true);
             }
 
         }

@@ -501,7 +501,7 @@ void RosegardenGUIApp::setupActions()
                 actionCollection(),
                 "toggle_all");
 
-#if KDE_VERSION >= 306 // KDE 3.1
+#if KDE_VERSION >= 196614 // KDE 3.1
     KStdAction::tipOfDay( this, SLOT( slotShowTip() ), actionCollection() );
 #else
     new KAction(i18n("Show Tip of the &Day"), 0, this,
@@ -1717,7 +1717,7 @@ void RosegardenGUIApp::slotFileOpen()
 
     KURL url = KFileDialog::getOpenURL
 	(
-#if KDE_VERSION >= 306
+#if KDE_VERSION >= 196614 
          ":ROSEGARDEN",
 #else
          QString::null,
@@ -1741,7 +1741,7 @@ void RosegardenGUIApp::slotMerge()
 {
     KURL url = KFileDialog::getOpenURL
 	(
-#if KDE_VERSION >= 306
+#if KDE_VERSION >= 196614
          ":ROSEGARDEN",
 #else
          QString::null,
@@ -2888,7 +2888,7 @@ void RosegardenGUIApp::slotImportMIDI()
 {
     KURL url = KFileDialog::getOpenURL
         (
-#if KDE_VERSION >= 306
+#if KDE_VERSION >= 196614
          ":MIDI",
 #else
          QString::null,
@@ -2908,7 +2908,7 @@ void RosegardenGUIApp::slotMergeMIDI()
 {
     KURL url = KFileDialog::getOpenURL
         (
-#if KDE_VERSION >= 306
+#if KDE_VERSION >= 196614
          ":MIDI",
 #else
          QString::null,
@@ -3061,7 +3061,7 @@ void RosegardenGUIApp::slotImportRG21()
 
     KURL url = KFileDialog::getOpenURL
         (
-#if KDE_VERSION >= 306
+#if KDE_VERSION >= 196614
          ":ROSEGARDEN21",
 #else
          QString::null,
@@ -3081,7 +3081,7 @@ void RosegardenGUIApp::slotMergeRG21()
 {
     KURL url = KFileDialog::getOpenURL
         (
-#if KDE_VERSION >= 306
+#if KDE_VERSION >= 196614
          ":ROSEGARDEN21",
 #else
          QString::null,
@@ -3153,7 +3153,7 @@ RosegardenGUIApp::slotImportHydrogen()
 
     KURL url = KFileDialog::getOpenURL
         (
-#if KDE_VERSION >= 306
+#if KDE_VERSION >= 196614
          ":HYDROGEN",
 #else
          QString::null,
@@ -5713,7 +5713,7 @@ RosegardenGUIApp::slotImportStudio()
 
     KURL url = KFileDialog::getOpenURL
         (
-#if KDE_VERSION >= 306
+#if KDE_VERSION >= 196614
          studioDir,
 #else
          QString::null,

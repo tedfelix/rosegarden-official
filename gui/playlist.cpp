@@ -184,7 +184,7 @@ void PlayList::slotOpenFiles()
 {
     KURL::List kurlList =
         KFileDialog::getOpenURLs(
-#if KDE_VERSION >= 306
+#if KDE_VERSION >= 196614
                                  ":ROSEGARDEN",
 #else
                                  QString::null,

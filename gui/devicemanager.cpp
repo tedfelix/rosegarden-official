@@ -691,7 +691,7 @@ DeviceManagerDialog::slotImport()
 
     KURL url = KFileDialog::getOpenURL
         (
-#if KDE_VERSION >= 306
+#if KDE_VERSION >= 196614
          deviceDir,
 #else
          QString::null,
