@@ -613,10 +613,10 @@ private:
     int m_heightOnStaff;
     Accidental m_accidental;
 
-    void rawPitchToDisplayPitch(int, const Clef &, const Key &,
-                                int &, Accidental &) const;
-    void displayPitchToRawPitch(int, Accidental, const Clef &, const Key &,
-				int &, bool ignoreOffset = false) const;
+    static void rawPitchToDisplayPitch(int, const Clef &, const Key &,
+				       int &, Accidental &);
+    static void displayPitchToRawPitch(int, Accidental, const Clef &, const Key &,
+				       int &, bool ignoreOffset = false);
 };
 
 
@@ -707,7 +707,7 @@ public:
      * This obviously can't take into account things like which
      * accidentals have already been displayed in the bar, etc.
      */
-    Accidental getDisplayAccidental(const Key &key = Key::DefaultKey) const;
+    Accidental getDisplayAccidental(const Key &key) const;
 
     /**
      * Return the position in the scale for this pitch, as a number in
@@ -774,6 +774,16 @@ public:
 private:
     int m_pitch;
     Accidental m_accidental;
+
+    static void rawPitchToDisplayPitch
+    (int, const Clef &, const Key &, int &, Accidental &);
+
+    static void displayPitchToRawPitch
+    (int, Accidental, const Clef &, const Key &,
+     int &, bool ignoreOffset = false);
+
+    //!!! temporarily
+    friend class NotationDisplayPitch;
 };
 
 

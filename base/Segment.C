@@ -597,6 +597,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 
     std::vector<std::pair<timeT, timeT> > gaps;
 
+    //!!! use getNotationAbsoluteTime/getNotationDuration instead
     const Quantizer *q(getComposition()->getNotationQuantizer());
     timeT lastNoteStarts = startTime;
     timeT lastNoteEnds = startTime;

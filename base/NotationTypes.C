@@ -661,6 +661,16 @@ NotationDisplayPitch::getPerformancePitchFromRG21Pitch(const Clef &clef,
 }
 
 
+void
+NotationDisplayPitch::rawPitchToDisplayPitch(int rawpitch,
+					     const Clef &clef,
+					     const Key &key,
+					     int &height,
+					     Accidental &accidental)
+{
+    Pitch::rawPitchToDisplayPitch(rawpitch, clef, key, height, accidental);
+}
+
 /**
  * Converts performance pitch to height on staff + correct accidentals
  * for current key.
@@ -679,11 +689,11 @@ NotationDisplayPitch::getPerformancePitchFromRG21Pitch(const Clef &clef,
  * This version by Michael McIntyre <dmmcintyr@users.sourceforge.net>
  */
 void
-NotationDisplayPitch::rawPitchToDisplayPitch(int rawpitch,
-                                             const Clef &clef,
-                                             const Key &key,
-                                             int &height,
-                                             Accidental &accidental) const
+Pitch::rawPitchToDisplayPitch(int rawpitch,
+			      const Clef &clef,
+			      const Key &key,
+			      int &height,
+			      Accidental &accidental) 
 {
 
     // 1. Calculate the octave (for later):
@@ -980,7 +990,19 @@ NotationDisplayPitch::displayPitchToRawPitch(int height,
                                              const Clef &clef,
                                              const Key &key,
                                              int &pitch,
-                                             bool ignoreOffset) const
+                                             bool ignoreOffset)
+{
+    Pitch::displayPitchToRawPitch(height, accidental, clef, key, pitch,
+				  ignoreOffset);
+}
+
+void
+Pitch::displayPitchToRawPitch(int height,
+			      Accidental accidental,
+			      const Clef &clef,
+			      const Key &key,
+			      int &pitch,
+			      bool ignoreOffset) 
 {
     int octave = 5;
 
@@ -1134,13 +1156,6 @@ Pitch::Pitch(int noteInScale, int octave, const Key &key,
     else m_pitch += major[noteInScale];
 
     m_pitch += Accidentals::getPitchOffset(m_accidental);
-
-    //!!! natural?
-
-    //!!!
-
-//    NotationDisplayPitch ndp(noteInScale - 2, explicitAccidental);
-//    m_pitch = ndp.getPerformancePitch(Clef(Clef::Treble), key);
 }
 
 Pitch::Pitch(char noteName, int octave, const Key &key,
@@ -1148,9 +1163,14 @@ Pitch::Pitch(char noteName, int octave, const Key &key,
     m_pitch(0),
     m_accidental(explicitAccidental)
 {
-    NotationDisplayPitch ndp(getIndexForNote(noteName) - 2, explicitAccidental);
-    m_pitch = ndp.getPerformancePitch(Clef(Clef::Treble), key);
-    // we now have the pitch within octave octaveBase + 5
+    int height = getIndexForNote(noteName) - 2;
+    displayPitchToRawPitch(height, explicitAccidental,
+			   Clef(), key, m_pitch);
+
+    // we now have the pitch within octave 5 (C == 60) -- though it
+    // might have spilled over at either end
+    if (m_pitch < 60) --octave;
+    if (m_pitch > 71) ++octave;
     m_pitch = (octave - octaveBase) * 12 + m_pitch % 12;
 }
 
@@ -1159,8 +1179,8 @@ Pitch::Pitch(int heightOnStaff, const Clef &clef, const Key &key,
     m_pitch(0),
     m_accidental(explicitAccidental)
 {
-    NotationDisplayPitch ndp(heightOnStaff, explicitAccidental);
-    m_pitch = ndp.getPerformancePitch(clef, key);
+    displayPitchToRawPitch
+	(heightOnStaff, explicitAccidental, clef, key, m_pitch);
 }
 
 int
@@ -1178,8 +1198,10 @@ Pitch::getAccidental(bool useSharps) const
 Accidental
 Pitch::getDisplayAccidental(const Key &key) const
 {
-    NotationDisplayPitch ndp(m_pitch, Clef(), key, m_accidental);
-    return ndp.getAccidental();
+    int heightOnStaff;
+    Accidental accidental(m_accidental);
+    rawPitchToDisplayPitch(m_pitch, Clef(), key, heightOnStaff, accidental);
+    return accidental;
 }
 
 int
@@ -1208,8 +1230,10 @@ Pitch::getNoteName(const Key &key) const
 int
 Pitch::getHeightOnStaff(const Clef &clef, const Key &key) const
 {
-    NotationDisplayPitch ndp(m_pitch, clef, key, m_accidental);
-    return ndp.getHeightOnStaff();
+    int heightOnStaff;
+    Accidental accidental(m_accidental);
+    rawPitchToDisplayPitch(m_pitch, clef, key, heightOnStaff, accidental);
+    return heightOnStaff;
 }
 
 int
@@ -1245,16 +1269,20 @@ Pitch::getAsString(bool useSharps, bool inclOctave, int octaveBase) const
 int
 Pitch::getIndexForNote(char noteName)
 {
-    //!!! bounds checking etc
     if (islower(noteName)) noteName = toupper(noteName);
-    if (noteName < 'C') return noteName - 'A' + 5;
-    else return noteName - 'C';
+    if (noteName < 'C') {
+	if (noteName < 'A') return 0; // error, really
+	else return noteName - 'A' + 5;
+    } else {
+	if (noteName > 'G') return 0; // error, really
+	else return noteName - 'C';
+    }
 }
 
 char
 Pitch::getNoteForIndex(int index)
 {
-    //!!! bounds checking etc
+    if (index < 0 || index > 6) return 'C'; // error, really
     return "CDEFGAB"[index];
 }
 

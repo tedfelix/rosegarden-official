@@ -394,9 +394,17 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
 	m_clickInsertX += (x - (*itr)->getCanvasX());
     }
 
-    int pitch =
-	Rosegarden::NotationDisplayPitch(height, m_accidental).
-        getPerformancePitch(clef, key);
+    Rosegarden::NotationDisplayPitch ndp(height, m_accidental);
+    int pitch = ndp.getPerformancePitch(clef, key);
+
+    //!!! TESTING
+    {
+	Rosegarden::Pitch p0(height, clef, key, m_accidental);
+	int pitch0 = p0.getPerformancePitch();
+	if (pitch0 != pitch) {
+	    std::cerr << "WARNING: Pitch/NDP discrepancy: pitch " << pitch0 << " vs " << pitch << std::endl;
+	}
+    }
 
     bool changed = false;
 

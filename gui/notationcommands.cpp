@@ -54,7 +54,6 @@ using Rosegarden::Accidentals::NoAccidental;
 using Rosegarden::Mark;
 using Rosegarden::Marks;
 using Rosegarden::Indication;
-using Rosegarden::NotationDisplayPitch;
 using Rosegarden::EventSelection;
 
 using namespace Rosegarden::BaseProperties;

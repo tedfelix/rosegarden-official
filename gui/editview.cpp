@@ -565,6 +565,8 @@ EditView::getPitchFromNoteInsertAction(QString name,
     Rosegarden::Clef clef;
     Rosegarden::timeT time = getInsertionTime(clef, key);
 
+    //!!! modify to use Pitch class
+
     if (name.left(7) == "insert_") {
 
 	name = name.right(name.length()-7);

@@ -855,8 +855,8 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                 case MIDI_SMPTE_OFFSET:
                 default:
                     std::cerr << "MidiFile::convertToRosegarden - "
-                              << "unsupported META event"
-			      << (*midiEvent)->getMetaEventCode() << endl;
+                              << "unsupported META event code "
+			      << (int)((*midiEvent)->getMetaEventCode()) << endl;
                     break;
                 } 
 

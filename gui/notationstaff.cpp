@@ -319,6 +319,7 @@ NotationStaff::getNoteNameAtCanvasCoords(double x, int y,
     config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     int baseOctave = config->readNumEntry("midipitchoctave", -2);
 
+    //!!! switch to Pitch and i18n()
     return
 	Rosegarden::NotationDisplayPitch
 	(getHeightAtCanvasY(y), acc).getAsString(clef, key, true, baseOctave);

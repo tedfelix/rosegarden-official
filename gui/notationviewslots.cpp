@@ -95,6 +95,7 @@ NotationView::slotUpdateAnnotationsStatus()
         }
     }
     m_annotationsLabel->setText("");
+    getToggleAction("show_annotations")->setChecked(areAnnotationsVisible());
 }
 
 void

@@ -35,12 +35,59 @@ int testNote(Accidental &acc, Key &key, int octave, int note)
 
     // can do special checks on C-major etc 'cos it's easy, and stuff like that
 
+    if (key == Key("C major")) {
+	if (acc == Accidentals::NoAccidental) {
+	    static int pitches[] = { 0, 2, 4, 5, 7, 9, 11 };
+	    Pitch comparative(pitches[nis], octave);
+	    if (comparative.getPerformancePitch() != p) {
+		cout << "testNote: " << note << " " << acc << ", " << key.getName() << ", octave " << octave << ": "
+		     << "comparative pitch is " << comparative.getPerformancePitch() << ", should be " << p << endl;
+		rv = 1;
+	    }
+	}
+    }
+
     prevPerformancePitch = p;
     prevOctave = octave;
     prevAcc = acc;
 
     if (!rv && verbose) {
 	cout << "testNote: " << note << " " << acc << ", " << key.getName() << ", octave " << octave << ": "
+	     << "pitch " << p << endl;
+    }
+    return rv;
+}
+
+int testNoteName(Accidental &acc, Key &key, int octave, char noteName)
+{
+    int rv = 0;
+
+    Pitch pitch(noteName, octave, key, acc);
+
+    static int prevPerformancePitch = -1;
+    static Accidental prevAcc = Accidentals::NoAccidental;
+    static int prevOctave = -2;
+
+    int p = pitch.getPerformancePitch();
+    if (p < prevPerformancePitch && (prevAcc == acc && prevOctave == octave)) {
+	cout << "testNoteName: " << noteName << " " << acc << ", " << key.getName() << ", octave " << octave << ": "
+	     << "pitch is " << p << ", should be >= " << prevPerformancePitch << endl;
+	rv = 1;
+    }
+
+    char nn = pitch.getNoteName(key);
+    if (nn != noteName) {
+	cout << "testNoteName: " << noteName << " " << acc << ", " << key.getName() << ", octave " << octave << ": "
+	     << "note is " << nn << " (not " << noteName << ") (pitch was " << p << ")" << endl;
+	rv = 1;
+    }
+
+    prevPerformancePitch = p;
+    prevOctave = octave;
+    prevAcc = acc;
+
+    if (!rv && verbose) {
+	cout << "testNoteName: " << noteName << " " << acc << ", " << key.getName() << ", octave " << octave << ": "
 	     << "pitch " << p << endl;
     }
     return rv;
@@ -98,6 +145,7 @@ int testHeight(Accidental &acc, Key &key, Clef &clef, int height)
     
     Pitch pitch(height, clef, key, acc);
     NotationDisplayPitch ndp(height, acc);
+    NotationDisplayPitch ndp2(pitch.getPerformancePitch(), clef, key, acc);
 
     int ppp = pitch.getPerformancePitch();
     int npp = ndp.getPerformancePitch(clef, key);
@@ -119,8 +167,8 @@ int testHeight(Accidental &acc, Key &key, Clef &clef, int height)
     // from the current key whereas NotationDisplayPitch will not --
     // hence we skip this test for NoAccidental
     if (acc != Accidentals::NoAccidental) {
-	Accidental nacc = ndp.getAccidental();
-	Accidental pacc = pitch.getAccidental(key.isSharp());
+	Accidental nacc = ndp2.getAccidental();
+	Accidental pacc = pitch.getDisplayAccidental(key);
 	if (nacc != pacc) {
 	    cout << "testHeight: " << height << " " << acc << ", " << key.getName() << ", " << clef.getClefType() << ": "
 		"acc " << pacc << " (ndp returns " << nacc << ")" << endl;
@@ -161,6 +209,12 @@ int main(int argc, char **argv)
 	    for (int o = -2; o < 9; ++o) {
 		for (int p = 0; p < 12; ++p) {
 		    testPitchInOctave(accidentals[a], keys[k], o, p);
+		}
+	    }
+
+	    for (int o = -2; o < 9; ++o) {
+		for (int p = 0; p < 7; ++p) {
+		    testNoteName(accidentals[a], keys[k], o, Pitch::getNoteForIndex(p));
 		}
 	    }
 	    
