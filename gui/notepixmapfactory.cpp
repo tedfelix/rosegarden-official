@@ -100,6 +100,9 @@ public:
 	m_externalPainter = painter;
 	m_useMask = false;
 
+	painter->setPen(QPen(Qt::black, 1, Qt::SolidLine,
+			     Qt::RoundCap, Qt::RoundJoin));
+
 	if (m_externalPainter) {
 	    m_painter = m_externalPainter;
 	} else {
