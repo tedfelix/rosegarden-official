@@ -26,15 +26,19 @@
 #include <qtooltip.h>
 
 #include <klocale.h>
+#include <iostream>
 
-PianoKeyboard::PianoKeyboard(QWidget *parent,
-                             const char* name, WFlags f)
-    : QWidget(parent, name, f),
+PianoKeyboard::PianoKeyboard(QWidget *parent)
+    : QWidget(parent),
       m_keySize(48, 18),
       m_blackKeySize(24, 8),
       m_nbKeys(88),
-      m_mouseDown(false)
+      m_mouseDown(false),
+      m_hoverHighlight(new QWidget(this))
 {
+    m_hoverHighlight->hide();
+    m_hoverHighlight->setPaletteBackgroundColor(Qt::red);
+
     computeKeyPos();
     setMouseTracking(true);
 }
@@ -129,8 +133,82 @@ void PianoKeyboard::paintEvent(QPaintEvent*)
                        m_blackKeySize.width(), m_blackKeySize.height());
 }
 
+void PianoKeyboard::enterEvent(QEvent*)
+{
+    m_hoverHighlight->show();
+}
+
+
+void PianoKeyboard::leaveEvent(QEvent*)
+{
+    m_hoverHighlight->hide();
+}
+
+void PianoKeyboard::drawHoverNote(unsigned int y)
+{
+    unsigned int whiteDiff;
+    unsigned int whiteYPos = 0;
+
+    for (unsigned int i = 0; i < m_whiteKeyPos.size(); ++i)
+    {
+        unsigned int diff = (m_whiteKeyPos[i] > y) ?
+            m_whiteKeyPos[i] - y : y - m_whiteKeyPos[i];
+
+        if (i == 0) 
+        whiteDiff = diff;
+        else
+        {
+            if (diff < whiteDiff)
+            {
+                whiteDiff = diff;
+                whiteYPos = m_whiteKeyPos[i];
+            }
+        }
+    }
+
+    unsigned int blackDiff;
+    unsigned int blackYPos = 0;
+
+    for (unsigned int i = 0; i < m_blackKeyPos.size(); ++i)
+    {
+        unsigned int diff = (m_blackKeyPos[i] > y) ?
+            m_blackKeyPos[i] - y : y - m_blackKeyPos[i];
+
+        if (i == 0)
+            blackDiff = diff;
+        else
+        {
+            if (diff < blackDiff)
+            {
+                blackDiff = diff;
+                blackYPos = m_blackKeyPos[i];
+            }
+        }
+    }
+
+    if (blackYPos < whiteYPos)
+    {
+        m_hoverHighlight->setFixedSize(
+                QSize(m_blackKeySize.width() - 2, 
+                      m_blackKeySize.height() - 6));
+
+        m_hoverHighlight->move(pos().x(), blackYPos + 2);
+    }
+    else
+    {
+        m_hoverHighlight->setFixedSize(
+                QSize(m_keySize.width() - 2,
+                      m_keySize.height() - 10));
+
+        m_hoverHighlight->move(pos().x(), whiteYPos + 5);
+    }
+
+}
+
 void PianoKeyboard::mouseMoveEvent(QMouseEvent* e)
 {
+    //drawHoverNote((unsigned int)e->y());
+
     if (m_mouseDown)
 	if (m_selecting)
 	    emit keySelected(e->y(), true);

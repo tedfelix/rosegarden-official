@@ -26,12 +26,13 @@
 
 #include <qwidget.h>
 
+#include "matrixstaff.h"
+
 class PianoKeyboard : public QWidget
 {
     Q_OBJECT
 public:
-    PianoKeyboard(QWidget *parent,
-                  const char* name = 0, WFlags f = 0);
+    PianoKeyboard(QWidget *parent);
 
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
@@ -72,6 +73,10 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent*);
     virtual void mousePressEvent(QMouseEvent*);
     virtual void mouseReleaseEvent(QMouseEvent*);
+    virtual void enterEvent(QEvent *);
+    virtual void leaveEvent(QEvent *);
+
+    void drawHoverNote(unsigned int y);
 
     // compute all key positions and store them
     //
@@ -88,6 +93,9 @@ protected:
 
     bool                      m_mouseDown;
     bool                      m_selecting;
+
+    // highlight element on the keyboard
+    QWidget                  *m_hoverHighlight;
 };
 
 #endif
