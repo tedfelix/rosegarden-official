@@ -179,6 +179,11 @@ public:
 
     void checkModified();
 
+    // Set the listview to select a certain device - used after adding
+    // or deleting banks.
+    //
+    void selectDeviceItem(Rosegarden::MidiDevice *device);
+
 public slots:
     void slotPopulateDevice(QListViewItem*);
 
@@ -227,6 +232,7 @@ protected:
 
     bool                     m_modified;
     bool                     m_keepBankList;
+    bool                     m_deleteAll;
 
     int                      m_lastDevice;
     int                      m_lastMSB;

@@ -466,6 +466,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_copyBank(-1, -1),
     m_modified(false),
     m_keepBankList(false),
+    m_deleteAll(false),
     m_lastDevice(0),
     m_lastMSB(0),
     m_lastLSB(0)
@@ -493,7 +494,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     m_addBank        = new QPushButton(i18n("Add Bank"),                bankBox);
     m_deleteBank     = new QPushButton(i18n("Delete Bank"),             bankBox);
-    m_deleteAllBanks = new QPushButton(i18n("Delete All Device Banks"), bankBox);
+    m_deleteAllBanks = new QPushButton(i18n("Delete All Banks"), bankBox);
 
     m_importBanks = new QPushButton(i18n("Import Banks"), bankBox);
     m_exportBanks = new QPushButton(i18n("Export Banks"), bankBox);
@@ -671,7 +672,16 @@ BankEditorDialog::slotPopulateDevice(QListViewItem* item)
     checkModified();
     
     MidiBankListViewItem* bankItem = dynamic_cast<MidiBankListViewItem*>(item);
+
     if (!bankItem) {
+
+        // Ensure we fill these lists for the new device
+        //
+        MidiDeviceListViewItem* deviceItem = getParentDeviceItem(item);
+        Rosegarden::MidiDevice *device = getMidiDevice(deviceItem);
+        m_bankList = device->getBanks();
+        m_programList = device->getPrograms();
+
         RG_DEBUG << "BankEditorDialog::slotPopulateDevice : not a bank item - disabling\n";
         m_deleteBank->setEnabled(false);
         m_programEditor->clearAll();
@@ -708,41 +718,40 @@ BankEditorDialog::slotOk()
 void
 BankEditorDialog::slotApply()
 {
-    if (m_modified)
+    ModifyDeviceCommand *command;
+
+    // Make sure that we don't delete all the banks and programs
+    // if we've not populated them here yet.
+    //
+    if (m_bankList.size() == 0 && m_programList.size() == 0 &&
+            m_deleteAll == false)
     {
-        ModifyDeviceCommand *command;
+        Rosegarden::MidiDevice *device = getMidiDevice(m_lastDevice);
 
-        // Make sure that we don't delete all the banks and programs
-        // if we've not populated them here yet.
-        //
-        if (m_bankList.size() == 0 && m_programList.size() == 0)
-        {
-            Rosegarden::MidiDevice *device = getMidiDevice(m_lastDevice);
+        std::vector<Rosegarden::MidiBank> tempBank = device->getBanks();
+        std::vector<Rosegarden::MidiProgram> tempProg =
+            device->getPrograms();
 
-            std::vector<Rosegarden::MidiBank> tempBank = device->getBanks();
-            std::vector<Rosegarden::MidiProgram> tempProg =
-                device->getPrograms();
-
-            command = new ModifyDeviceCommand(m_studio,
-                                              m_lastDevice,
-                                              m_deviceList[m_lastDevice],
-                                              tempBank,
-                                              tempProg,
-                                              true);
-        }
-        else
-        {
-            command = new ModifyDeviceCommand(m_studio,
-                                              m_lastDevice,
-                                              m_deviceList[m_lastDevice],
-                                              m_bankList,
-                                              m_programList,
-                                              true);
-        }
-
-        addCommandToHistory(command);
-        initDialog();
+        command = new ModifyDeviceCommand(m_studio,
+                                          m_lastDevice,
+                                          m_deviceList[m_lastDevice],
+                                          tempBank,
+                                          tempProg,
+                                          true);
     }
+    else
+    {
+        command = new ModifyDeviceCommand(m_studio,
+                                          m_lastDevice,
+                                          m_deviceList[m_lastDevice],
+                                          m_bankList,
+                                          m_programList,
+                                          true);
+    }
+    addCommandToHistory(command);
+
+    setModified(false);
+    initDialog();
 }
 void
 BankEditorDialog::slotClose()
@@ -808,7 +817,8 @@ BankEditorDialog::slotAddBank()
         keepBankListForNextPopulate();
         m_listView->setCurrentItem(newBankItem);
 
-        setModified(true);
+        slotApply();
+        selectDeviceItem(device);
     }
 }
 
@@ -826,31 +836,42 @@ BankEditorDialog::slotDeleteBank()
     if (device)
     {
         int currentBank = bankItem->getBank();
-        int newBank = currentBank - 1;
+
+        int reply =
+            KMessageBox::questionYesNo(this, i18n("Really delete this bank?"));
+
+        if (reply == KMessageBox::Yes)
+        {
+            int newBank = currentBank - 1;
         
-        if (newBank < 0) newBank = 0;
+            if (newBank < 0) newBank = 0;
 
-        int msb = m_bankList[currentBank].msb;
-        int lsb = m_bankList[currentBank].lsb;
+            int msb = m_bankList[currentBank].msb;
+            int lsb = m_bankList[currentBank].lsb;
 
-        // Copy across all programs that aren't in the doomed bank
-        //
-        MidiProgramsEditor::MidiProgramContainer::iterator it;
-        MidiProgramsEditor::MidiProgramContainer tempList;
-        for (it = m_programList.begin(); it != m_programList.end(); it++)
-            if (it->msb != msb || it->lsb != lsb)
-                tempList.push_back(*it);
+            // Copy across all programs that aren't in the doomed bank
+            //
+            MidiProgramsEditor::MidiProgramContainer::iterator it;
+            MidiProgramsEditor::MidiProgramContainer tempList;
+            for (it = m_programList.begin(); it != m_programList.end(); it++)
+                if (it->msb != msb || it->lsb != lsb)
+                    tempList.push_back(*it);
 
-        // Erase the bank and repopulate
-        //
-        MidiProgramsEditor::MidiBankContainer::iterator er = m_bankList.begin();
-        er += currentBank;
-        m_bankList.erase(er);
-        m_programList = tempList;
-        keepBankListForNextPopulate();
+            // Erase the bank and repopulate
+            //
+            MidiProgramsEditor::MidiBankContainer::iterator er =
+                m_bankList.begin();
+            er += currentBank;
+            m_bankList.erase(er);
+            m_programList = tempList;
+            keepBankListForNextPopulate();
 
-        delete currentItem; // the listview automatically selects a new current item
-        setModified(true);
+            // the listview automatically selects a new current item
+            delete currentItem;
+
+            slotApply();
+            selectDeviceItem(device);
+        }
     }
 }
 
@@ -860,17 +881,32 @@ BankEditorDialog::slotDeleteAllBanks()
     if (!m_listView->currentItem()) return;
 
     QListViewItem* currentItem = m_listView->currentItem();
-
     MidiDeviceListViewItem* deviceItem = getParentDeviceItem(currentItem);
+    Rosegarden::MidiDevice *device = getMidiDevice(deviceItem);
 
-    // erase all bank items
-    QListViewItem* child = 0;
-    while((child = deviceItem->firstChild())) delete child;
+    QString question = i18n("Really delete all banks for ") +
+                       strtoqstr(device->getName()) + QString(" ?");
 
-    m_bankList.clear();
-    m_programList.clear();
+    int reply = KMessageBox::questionYesNo(this, question);
 
-    setModified(true);
+    if (reply == KMessageBox::Yes)
+    {
+
+        // erase all bank items
+        QListViewItem* child = 0;
+        while((child = deviceItem->firstChild())) delete child;
+
+        m_bankList.clear();
+        m_programList.clear();
+
+        // Urgh, we have this horrible flag that we're using to frig this
+        //
+        m_deleteAll = true;
+        slotApply();
+        m_deleteAll = false;
+
+        selectDeviceItem(device);
+    }
 }
 
 Rosegarden::MidiDevice*
@@ -927,8 +963,9 @@ BankEditorDialog::slotModifyDeviceOrBankName(QListViewItem* item, const QString 
 {
     RG_DEBUG << "MidiProgramsEditor::slotModifyDeviceorBankName\n";
 
-    MidiDeviceListViewItem* deviceItem = dynamic_cast<MidiDeviceListViewItem*>(item);
-    MidiBankListViewItem* bankItem     = dynamic_cast<MidiBankListViewItem*>(item);
+    MidiDeviceListViewItem* deviceItem =
+        dynamic_cast<MidiDeviceListViewItem*>(item);
+    MidiBankListViewItem* bankItem = dynamic_cast<MidiBankListViewItem*>(item);
     
     if (bankItem) {
 
@@ -955,6 +992,32 @@ BankEditorDialog::slotModifyDeviceOrBankName(QListViewItem* item, const QString 
         }
     }
     
+}
+
+void
+BankEditorDialog::selectDeviceItem(Rosegarden::MidiDevice *device)
+{
+    QListViewItem *child = m_listView->firstChild();
+    MidiDeviceListViewItem *midiDeviceItem;
+    Rosegarden::MidiDevice *midiDevice;
+
+    do
+    {
+        midiDeviceItem = dynamic_cast<MidiDeviceListViewItem*>(child);
+
+        if (midiDeviceItem)
+        {
+            midiDevice = getMidiDevice(midiDeviceItem);
+
+            if (midiDevice == device)
+            {
+                m_listView->setSelected(child, true);
+                return;
+            }
+        }
+
+    }
+    while (child = child->nextSibling());
 }
 
 void
