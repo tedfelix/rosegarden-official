@@ -74,6 +74,9 @@ const MappedObjectProperty MappedObject::Instrument = "instrument";
 const MappedObjectProperty MappedObject::Position = "position";
 
 const MappedObjectProperty MappedAudioFader::FaderLevel = "faderLevel";
+const MappedObjectProperty MappedAudioFader::FaderRecordLevel = "faderRecordLevel";
+const MappedObjectProperty MappedAudioFader::Channels = "channels";
+const MappedObjectProperty MappedAudioFader::Pan = "pan";
 
 const MappedObjectProperty MappedAudioPluginManager::Plugins = "plugins";
 const MappedObjectProperty MappedAudioPluginManager::PluginIds = "pluginids";
@@ -619,6 +622,10 @@ MappedAudioFader::getPropertyList(const MappedObjectProperty &property)
     if (property == "")
     {
         list.push_back(MappedAudioFader::FaderLevel);
+        list.push_back(MappedAudioFader::FaderRecordLevel);
+        list.push_back(MappedObject::Instrument);
+        list.push_back(MappedAudioFader::Channels);
+        list.push_back(MappedAudioFader::Pan);
     }
     else if (property == MappedObject::Instrument)
     {
@@ -627,6 +634,18 @@ MappedAudioFader::getPropertyList(const MappedObjectProperty &property)
     else if (property == MappedAudioFader::FaderLevel)
     {
         list.push_back(MappedObjectProperty("%1").arg(m_level));
+    }
+    else if (property == MappedAudioFader::FaderRecordLevel)
+    {
+        list.push_back(MappedObjectProperty("%1").arg(m_recordLevel));
+    }
+    else if (property == MappedAudioFader::Channels)
+    {
+        list.push_back(MappedObjectProperty("%1").arg(m_channels));
+    }
+    else if (property == MappedAudioFader::Pan)
+    {
+        list.push_back(MappedObjectProperty("%1").arg(m_pan));
     }
 
     return list;
@@ -645,6 +664,24 @@ MappedAudioFader::setProperty(const MappedObjectProperty &property,
     else if (property == MappedObject::Instrument)
     {
         m_instrumentId = Rosegarden::InstrumentId(value);
+    }
+    else if (property ==  MappedAudioFader::FaderRecordLevel)
+    {
+        std::cout << "MappedAudioFader::setProperty - "
+                  << "record fader = " << value << std::endl;
+        m_recordLevel = value;
+    }
+    else if (property ==  MappedAudioFader::Channels)
+    {
+        std::cout << "MappedAudioFader::setProperty - "
+                  << "channels = " << value << std::endl;
+        m_channels = value;
+    }
+    else if (property ==  MappedAudioFader::Pan)
+    {
+        std::cout << "MappedAudioFader::setProperty - "
+                  << "pan = " << value << std::endl;
+        m_pan = value;
     }
     else
     {

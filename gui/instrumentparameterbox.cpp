@@ -965,9 +965,10 @@ AudioInstrumentParameterPanel::slotAudioChannelToggle()
             break;
 
         default:
-            break;
+            return;
     }
 
+    /*
     Rosegarden::MappedEvent *mE =
         new Rosegarden::MappedEvent(
                 m_selectedInstrument->getId(),
@@ -975,6 +976,12 @@ AudioInstrumentParameterPanel::slotAudioChannelToggle()
                 Rosegarden::MidiByte(m_selectedInstrument->getAudioChannels()));
 
     Rosegarden::StudioControl::sendMappedEvent(mE);
+    */
+
+    Rosegarden::StudioControl::setStudioObjectProperty
+        (Rosegarden::MappedObjectId(m_selectedInstrument->getMappedId()),
+         Rosegarden::MappedAudioFader::Channels,
+         Rosegarden::MappedObjectValue(m_selectedInstrument->getAudioChannels()));
 
 }
 

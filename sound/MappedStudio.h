@@ -316,7 +316,9 @@ public:
     // properties
     //
     static const MappedObjectProperty FaderLevel;
-    static const MappedObjectProperty InstrumentId;
+    static const MappedObjectProperty FaderRecordLevel;
+    static const MappedObjectProperty Channels;
+    static const MappedObjectProperty Pan;
 
     MappedAudioFader(MappedObject *parent,
                      MappedObjectId id,
@@ -344,6 +346,7 @@ public:
 protected:
 
     MappedObjectValue             m_level;
+    MappedObjectValue             m_recordLevel;
     MappedObjectValue             m_channels;
     Rosegarden::InstrumentId      m_instrumentId;
 
@@ -351,7 +354,7 @@ protected:
     // (while the plugins don't reside here we use this as
     // the central point of contact)
     //
-    bool                          m_bypassed;
+    bool                          m_bypassed; // we surely don't need this?
 
     // Stereo pan (-1.0 to +1.0)
     //
