@@ -82,6 +82,8 @@ public:
     void setSolo(bool value);
     void setRecord(bool value);
 
+    void setDocument(RosegardenGUIDoc* doc);
+
 public slots:
 
     // To update all InstrumentParameterBoxen for an Instrument.
@@ -131,6 +133,8 @@ public:
     virtual ~InstrumentParameterPanel() {};
 
     virtual void setupForInstrument(Rosegarden::Instrument*) = 0;
+
+    void setDocument(RosegardenGUIDoc* doc);
 
 signals:
     void updateAllBoxes();

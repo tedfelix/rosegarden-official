@@ -26,6 +26,7 @@
 #include <qlabel.h>
 #include <qinputdialog.h>
 #include <qobjectlist.h>
+#include <qlayout.h>
 
 // include files for KDE
 #include <kprocess.h>
@@ -108,6 +109,8 @@
 #include "rgapplication.h"
 #include "playlist.h"
 #include "sequencermapper.h"
+#include "segmentparameterbox.h"
+#include "instrumentparameterbox.h"
 
 //!!! ditch these when harmonize() moves out
 #include "CompositionTimeSliceAdapter.h"
@@ -122,11 +125,13 @@ using Rosegarden::RosegardenTransportDialog;
 
 RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
                                    QObject *startupStatusMessageReceiver)
-    : DCOPObject("RosegardenIface"), RosegardenIface(this), KMainWindow(0), 
+    : DCOPObject("RosegardenIface"), RosegardenIface(this), KDockMainWindow(0), 
       m_actionsSetup(false),
       m_fileRecent(0),
       m_view(0),
       m_swapView(0),
+      m_mainDockWidget(0),
+      m_dockLeft(0),
       m_doc(0),
       m_sequencerProcess(0),
       m_zoomSlider(0),
@@ -186,9 +191,38 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     iFaceDelayedInit(this);
     initZoomToolbar();
 
+    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+    QPixmap mainPixmap(pixmapDir + "/toolbar/matrix.xpm");
+    m_mainDockWidget = createDockWidget("Rosegarden MainDockWidget", mainPixmap, 0L, "main_dock_widget");
+    // allow others to dock to the 4 sides
+    m_mainDockWidget->setDockSite(KDockWidget::DockCorner);
+    // forbit docking abilities of m_mainDockWidget itself
+    m_mainDockWidget->setEnableDocking(KDockWidget::DockNone);
+    setView(m_mainDockWidget); // central widget in a KDE mainwindow
+    setMainDockWidget(m_mainDockWidget); // master dockwidget
+
+    m_dockLeft = createDockWidget("params dock", mainPixmap, 0L,
+                                  i18n("Segment & Instrument Parameters"));
+    m_dockLeft->manualDock(m_mainDockWidget,            // dock target
+                           KDockWidget::DockLeft, // dock site
+                           20);                   // relation target/this (in percent)
+
+
+    RosegardenGUIDoc* doc = new RosegardenGUIDoc(this, m_pluginManager);
+
+    QFrame* vbox = new QFrame(m_dockLeft);
+    QVBoxLayout* vboxLayout = new QVBoxLayout(vbox, 5);
+    m_dockLeft->setWidget(vbox);
+    m_segmentParameterBox = new SegmentParameterBox(doc, vbox);
+    vboxLayout->addWidget(m_segmentParameterBox);
+    m_instrumentParameterBox = new InstrumentParameterBox(doc, vbox);
+    vboxLayout->addWidget(m_instrumentParameterBox);
+    vboxLayout->addStretch();
+
+
     // Load the initial document (this includes doc's own autoload)
     //
-    setDocument(new RosegardenGUIDoc(this, m_pluginManager));
+    setDocument(doc);
 
     emit startupStatusMessage(i18n("Starting sequence manager..."));
 
@@ -230,7 +264,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 
     // All toolbars should be created before this is called
     setAutoSaveSettings(RosegardenGUIApp::MainWindowConfigGroup, true);
-    
+
     readOptions();
 }
 
@@ -402,6 +436,11 @@ void RosegardenGUIApp::setupActions()
                                        SLOT(slotTogglePreviews()),
                                        actionCollection(),
                                        "show_previews");
+
+    new KAction(i18n("Dock parameters back"), 0, this,
+                SLOT(slotDockParametersBack()),
+                actionCollection(),
+                "dock_parameters_back");
 
     new KAction(i18n("Toggle &All of the Above"), 0, this,
                 SLOT(slotToggleAll()),
@@ -884,7 +923,9 @@ void RosegardenGUIApp::initView()
         comp.setEndMarker(endMarker);
     }
     
-    m_swapView = new RosegardenGUIView(m_viewTrackLabels->isChecked(), this);
+    m_swapView = new RosegardenGUIView(m_viewTrackLabels->isChecked(),
+                                       m_segmentParameterBox,
+                                       m_instrumentParameterBox, this);
 
     // Connect up this signal so that we can force tool mode
     // changes from the view
@@ -902,7 +943,10 @@ void RosegardenGUIApp::initView()
     connect(m_swapView, SIGNAL(toggleSolo(bool)), SLOT(slotToggleSolo(bool)));
 
     m_doc->attachView(m_swapView);
-    setCentralWidget(m_swapView);
+
+    m_mainDockWidget->setWidget(m_swapView);
+
+//     setCentralWidget(m_swapView);
     setCaption(m_doc->getTitle());
 
     // set the pointer position
@@ -937,9 +981,6 @@ void RosegardenGUIApp::initView()
     //
     RosegardenGUIView *oldView = m_view;
     m_view = m_swapView;
-
-    // set the highlighted track
-    m_view->slotSelectTrackSegments(comp.getSelectedTrack());
 
     connect(m_view, SIGNAL(stateChange(QString, bool)),
             this,   SLOT  (slotStateChanged(QString, bool)));
@@ -979,6 +1020,9 @@ void RosegardenGUIApp::initView()
     m_view->show();
 
     delete oldView;
+
+    // set the highlighted track
+    m_view->slotSelectTrackSegments(comp.getSelectedTrack());
 
     // We have to do this to make sure that the 2nd call ("select")
     // actually has any effect. Activating the same radio action
@@ -1040,12 +1084,19 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     if (m_seqManager) // when we're called at startup, the seq. man. isn't created yet
         m_seqManager->setDocument(m_doc);
 
+
+    m_segmentParameterBox->setDocument(m_doc);
+    m_instrumentParameterBox->setDocument(m_doc);
+
     // this will delete all edit views
     //
     if (oldDoc != 0) delete oldDoc;
     
     // connect needed signals
     //
+    connect(m_segmentParameterBox, SIGNAL(documentModified()),
+            m_doc, SLOT(slotDocumentModified()));
+
     connect(m_doc, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
             this,   SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
@@ -2238,6 +2289,12 @@ void RosegardenGUIApp::slotTogglePreviews()
 {
     m_view->slotShowPreviews(m_viewPreviews->isChecked());
 }
+
+void RosegardenGUIApp::slotDockParametersBack()
+{
+    m_dockLeft->dockBack();
+}
+
 
 void RosegardenGUIApp::slotToggleAll()
 {

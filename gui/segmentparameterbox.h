@@ -41,7 +41,7 @@
 //
 
 namespace Rosegarden { class Segment; }
-class RosegardenGUIView;
+class RosegardenGUIDoc;
 class MultiViewCommandHistory;
 class KCommand;
 
@@ -62,7 +62,7 @@ public:
 	NotApplicable // no applicable segments selected
     } Tristate;
 
-    SegmentParameterBox(RosegardenGUIView *view,
+    SegmentParameterBox(RosegardenGUIDoc *doc,
                         QWidget *parent=0);
     ~SegmentParameterBox();
 
@@ -74,6 +74,8 @@ public:
     // Command history stuff
     MultiViewCommandHistory* getCommandHistory();
     void addCommandToHistory(KCommand *command);
+
+    void setDocument(RosegardenGUIDoc*);
 
 public slots:
     void slotRepeatPressed();
@@ -117,7 +119,7 @@ protected:
     std::vector<int> m_realTimeDelays;
     RosegardenColourTable::ColourList  m_colourList;
 
-    RosegardenGUIView          *m_view;
+    RosegardenGUIDoc           *m_doc;
 
     Rosegarden::MidiByte        m_tranposeRange;
 };

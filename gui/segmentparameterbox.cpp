@@ -42,11 +42,11 @@
 
 using Rosegarden::Note;
 
-SegmentParameterBox::SegmentParameterBox(RosegardenGUIView *view,
+SegmentParameterBox::SegmentParameterBox(RosegardenGUIDoc* doc,
                                          QWidget *parent)
     : RosegardenParameterBox(i18n("Segment Parameters"), parent),
       m_standardQuantizations(Rosegarden::BasicQuantizer::getStandardQuantizations()),
-      m_view(view),
+      m_doc(doc),
       m_tranposeRange(24)
 {
     initBox();
@@ -133,9 +133,9 @@ SegmentParameterBox::initBox()
     connect(m_delayValue, SIGNAL(activated(int)),
             SLOT(slotDelaySelected(int)));
 
-    // Detect when the document colours are updated
-    connect (m_view->getDocument(), SIGNAL(docColoursChanged()),
-             this, SLOT(slotDocColoursChanged()));
+//     // Detect when the document colours are updated
+//     connect (m_doc, SIGNAL(docColoursChanged()),
+//              this, SLOT(slotDocColoursChanged()));
 
     // handle text changes for delay
     connect(m_delayValue, SIGNAL(textChanged(const QString&)),
@@ -243,6 +243,17 @@ SegmentParameterBox::initBox()
 }
 
 void
+SegmentParameterBox::setDocument(RosegardenGUIDoc* doc)
+{
+    m_doc = doc;
+
+    // Detect when the document colours are updated
+    connect (m_doc, SIGNAL(docColoursChanged()),
+             this, SLOT(slotDocColoursChanged()));
+
+}
+
+void
 SegmentParameterBox::useSegment(Rosegarden::Segment *segment)
 {
     m_segments.clear();
@@ -267,7 +278,7 @@ SegmentParameterBox::slotDocColoursChanged()
     m_colourValue->clear();
     m_colourList.clear();
     // Populate it from composition.m_segmentColourMap
-    Rosegarden::ColourMap temp = m_view->getDocument()->getComposition().getSegmentColourMap();
+    Rosegarden::ColourMap temp = m_doc->getComposition().getSegmentColourMap();
 
     unsigned int i=0;
 
@@ -738,7 +749,7 @@ SegmentParameterBox::slotColourSelected(int value)
     }
     else
     {
-        Rosegarden::ColourMap newMap = m_view->getDocument()->getComposition().getSegmentColourMap();
+        Rosegarden::ColourMap newMap = m_doc->getComposition().getSegmentColourMap();
         QColor newColour;
         bool ok = false;
         QString newName = KLineEditDlg::getText(i18n("New Color Name"), i18n("Enter new name"),
@@ -753,7 +764,7 @@ SegmentParameterBox::slotColourSelected(int value)
             {
                 Rosegarden::Colour newRColour = RosegardenGUIColours::convertColour(newColour);
                 newMap.addItem(newRColour, qstrtostr(newName));
-                SegmentColourMapCommand *command = new SegmentColourMapCommand(m_view->getDocument(), newMap);
+                SegmentColourMapCommand *command = new SegmentColourMapCommand(m_doc, newMap);
                 addCommandToHistory(command);
                 slotDocColoursChanged();
             }
@@ -768,13 +779,13 @@ SegmentParameterBox::slotColourSelected(int value)
 MultiViewCommandHistory*
 SegmentParameterBox::getCommandHistory()
 {
-    return m_view->getDocument()->getCommandHistory();
+    return m_doc->getCommandHistory();
 }
 
 void
 SegmentParameterBox::addCommandToHistory(KCommand *command)
 {
-        m_view->getCommandHistory()->addCommand(command);
+    m_doc->getCommandHistory()->addCommand(command);
 }
 
 void

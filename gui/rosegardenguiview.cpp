@@ -23,8 +23,6 @@
 #include <qhbox.h>
 #include <qvbox.h>
 #include <qpushbutton.h>
-#include <qabstractlayout.h> 
-#include <qlayout.h>
 #include <qfileinfo.h>
 
 // KDE includes
@@ -71,11 +69,15 @@ using Rosegarden::timeT;
 
 
 RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
+                                     SegmentParameterBox* segmentParameterBox,
+                                     InstrumentParameterBox* instrumentParameterBox,
                                      QWidget *parent,
                                      const char* /*name*/)
     : QVBox(parent),
       m_rulerScale(0),
-      m_trackEditor(0)
+      m_trackEditor(0),
+      m_segmentParameterBox(segmentParameterBox),
+      m_instrumentParameterBox(instrumentParameterBox)
 {
     RosegardenGUIDoc* doc = getDocument();
 
@@ -92,27 +94,30 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
     Composition *comp = &doc->getComposition();
     m_rulerScale = new SimpleRulerScale(comp, 0, unitsPerPixel);
 
-    QHBox *hbox = new QHBox(this);
-    QFrame *vbox = new QFrame(hbox);
-    m_vboxLayout = new QVBoxLayout(vbox, 5);
+//     QHBox *hbox = new QHBox(this);
+
+//     m_vbox = new QFrame(parametersDock /*hbox*/);
+//     parametersDock->setWidget(m_vbox);
+
+//     m_vboxLayout = new QVBoxLayout(m_vbox, 5);
 
     // Segment and Instrument Parameter Boxes [rwb]
     //
-    m_segmentParameterBox = new SegmentParameterBox(this, vbox);
-    m_vboxLayout->addWidget(m_segmentParameterBox);
+//     m_segmentParameterBox = new SegmentParameterBox(this, m_vbox);
+//     m_vboxLayout->addWidget(m_segmentParameterBox);
 
-    connect(m_segmentParameterBox, SIGNAL(documentModified()),
-            doc, SLOT(slotDocumentModified()));
+//     connect(m_segmentParameterBox, SIGNAL(documentModified()),
+//             doc, SLOT(slotDocumentModified()));
 
-    m_instrumentParameterBox = new InstrumentParameterBox(getDocument(), vbox);
-    m_vboxLayout->addWidget(m_instrumentParameterBox);
-    m_vboxLayout->addStretch();
+//     m_instrumentParameterBox = new InstrumentParameterBox(getDocument(), m_vbox);
+//     m_vboxLayout->addWidget(m_instrumentParameterBox);
+//     m_vboxLayout->addStretch();
 
     // Construct the trackEditor first so we can then
     // query it for placement information
     //
     m_trackEditor  = new TrackEditor(doc, this,
-                                     m_rulerScale, showTrackLabels, hbox);
+                                     m_rulerScale, showTrackLabels, this /*hbox*/);
 
     connect(m_trackEditor->getSegmentCanvas(),
             SIGNAL(editSegment(Rosegarden::Segment*)),
@@ -196,21 +201,7 @@ RosegardenGUIView::~RosegardenGUIView()
 RosegardenGUIDoc*
 RosegardenGUIView::getDocument() const
 {
-    QWidget *t = parentWidget();
-    
-    if (!t) {
-        std::cerr << "CRITICAL ERROR : RosegardenGUIView::getDocument() : widget parent is 0\n";
-        return 0;
-    }
-
-    RosegardenGUIApp *theApp = dynamic_cast<RosegardenGUIApp*>(t);
-    
-    if (!theApp) {
-        std::cerr << "CRITICAL ERROR : RosegardenGUIView::getDocument() : widget parent is of the wrong type\n";
-        return 0;
-    }
-    
-    return theApp->getDocument();
+    return RosegardenGUIApp::self()->getDocument();
 }
 
 void RosegardenGUIView::print(Composition* p, bool previewOnly)
@@ -1192,62 +1183,53 @@ RosegardenGUIView::slotDroppedNewAudio(QString audioDesc)
     s >> trackId;
     s >> time;
 
-    RosegardenGUIApp *app = dynamic_cast<RosegardenGUIApp*>(parent());
+    RosegardenGUIApp *app = RosegardenGUIApp::self();
     Rosegarden::AudioFileManager &aFM = getDocument()->getAudioFileManager();
     
-    if (app)
-    {
-        Rosegarden::AudioFileId audioFileId = 0;
+    Rosegarden::AudioFileId audioFileId = 0;
 
-        if (app->getAudioManagerDialog())
-        {
-            // Add audio file through manager dialog
-            //
-            if (app->getAudioManagerDialog()->addAudioFile(audioFile) == false)
-                return;
+    if (app->getAudioManagerDialog()) {
 
-            // get the last added audio file id and insert the segment
-            //
-            audioFileId = aFM.getLastAudioFile()->getId();
-        }
-        else
-        {
-            try
-            {
-                audioFileId = aFM.addFile(qstrtostr(audioFile));
-            }
-            catch(std::string e)
-            {
-                QString errorString = i18n("Can't add dropped file. ") + strtoqstr(e);
-                KMessageBox::sorry(this, errorString);
-                return;
-            }
-            catch(QString e)
-            {
-                QString errorString = i18n("Can't add dropped file. ") + e;
-                KMessageBox::sorry(this, errorString);
-                return;
-            }
-
-            // add the file at the sequencer
-            emit addAudioFile(audioFileId);
-        }
-
-        // Now fetch file details
+        // Add audio file through manager dialog
         //
-        Rosegarden::AudioFile *aF = aFM.getAudioFile(audioFileId);
+        if (app->getAudioManagerDialog()->addAudioFile(audioFile) == false)
+            return;
 
-        if (aF)
-        {
-            slotAddAudioSegment(audioFileId, trackId, time, 
-                                Rosegarden::RealTime(0, 0), aF->getLength());
+        // get the last added audio file id and insert the segment
+        //
+        audioFileId = aFM.getLastAudioFile()->getId();
 
-            RG_DEBUG << "RosegardenGUIView::slotDroppedNewAudio("
-                     << "filename = " << audioFile 
-                     << ", trackid = " << trackId
-                     << ", time = " << time << endl;
+    } else {
 
+        try {
+            audioFileId = aFM.addFile(qstrtostr(audioFile));
+        } catch(std::string e) {
+            QString errorString = i18n("Can't add dropped file. ") + strtoqstr(e);
+            KMessageBox::sorry(this, errorString);
+            return;
+        } catch(QString e) {
+            QString errorString = i18n("Can't add dropped file. ") + e;
+            KMessageBox::sorry(this, errorString);
+            return;
         }
+
+        // add the file at the sequencer
+        emit addAudioFile(audioFileId);
+    }
+
+    // Now fetch file details
+    //
+    Rosegarden::AudioFile *aF = aFM.getAudioFile(audioFileId);
+
+    if (aF) {
+        slotAddAudioSegment(audioFileId, trackId, time, 
+                            Rosegarden::RealTime(0, 0), aF->getLength());
+
+        RG_DEBUG << "RosegardenGUIView::slotDroppedNewAudio("
+                 << "filename = " << audioFile 
+                 << ", trackid = " << trackId
+                 << ", time = " << time << endl;
+
     }
 }
 

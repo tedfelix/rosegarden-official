@@ -151,6 +151,15 @@ InstrumentParameterBox::setAudioMeter(double ch1, double ch2)
 }
 
 void
+InstrumentParameterBox::setDocument(RosegardenGUIDoc* doc)
+{
+    m_doc = doc;
+    m_midiInstrumentParameters->setDocument(m_doc);
+    m_audioInstrumentParameters->setDocument(m_doc);
+}
+
+
+void
 InstrumentParameterBox::useInstrument(Instrument *instrument)
 {
     RG_DEBUG << "useInstrument() - populate Instrument\n";
@@ -647,7 +656,11 @@ InstrumentParameterPanel::InstrumentParameterPanel(RosegardenGUIDoc *doc,
 {
 }
 
-
+void
+InstrumentParameterPanel::setDocument(RosegardenGUIDoc* doc)
+{
+    m_doc = doc;
+}
 
 AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* doc, QWidget* parent)
     : InstrumentParameterPanel(doc, parent),

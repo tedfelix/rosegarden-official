@@ -51,6 +51,7 @@ class QScrollView;
 class RosegardenGUIDoc;
 class TrackEditor;
 class KPrinter;
+class KDockWidget;
 class SegmentParameterBox;
 class InstrumentParameterBox;
 class MultiViewCommandHistory;
@@ -76,12 +77,12 @@ class RosegardenGUIView : public QVBox
     Q_OBJECT
 public:
 
-    /**
+    /**p
      * Constructor for the main view
      */
-    RosegardenGUIView(QWidget *parent = 0, const char *name=0);
-
     RosegardenGUIView(bool showTrackLabels,
+                      SegmentParameterBox*,
+                      InstrumentParameterBox*,
                       QWidget *parent = 0,
                       const char *name=0);
 
@@ -156,7 +157,7 @@ public:
     /*
      * Get the box that holds the Segment and Instrument parameter boxes
      */
-    QVBoxLayout* getParameterBox() { return m_vboxLayout; }
+//     QVBoxLayout* getParameterBox() { return m_vboxLayout; }
 
 public slots:
     void slotEditSegment(Rosegarden::Segment*);
@@ -297,7 +298,6 @@ protected:
     Rosegarden::SimpleRulerScale  *m_rulerScale;
     TrackEditor			  *m_trackEditor;
 
-    QVBoxLayout                   *m_vboxLayout;
     SegmentParameterBox		  *m_segmentParameterBox;
     InstrumentParameterBox	  *m_instrumentParameterBox;
 
