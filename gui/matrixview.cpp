@@ -309,6 +309,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
 MatrixView::~MatrixView()
 {
+    slotSaveOptions();
+
     delete m_currentEventSelection;
     m_currentEventSelection = 0;
 
@@ -344,7 +346,7 @@ MatrixView::~MatrixView()
 void MatrixView::slotSaveOptions()
 {        
     m_config->setGroup("Matrix Options");
-    EditView::slotSaveOptions();
+    // no options to save at the moment
 }
 
 void MatrixView::readOptions()
